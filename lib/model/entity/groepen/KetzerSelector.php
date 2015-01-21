@@ -13,19 +13,18 @@ require_once 'model/entity/groepen/KetzerSelectorSoort.enum.php';
 class KetzerSelector extends PersistentEntity {
 
 	/**
-	 * Selector van deze ketzer
-	 * @var int
-	 */
-	public $ketzer_id;
-	/**
 	 * Primary key
 	 * @var int
 	 */
 	public $select_id;
 	/**
-	 * Vinkje (AND) / KeuzeRondje (XOR)
-	 * @see KetzerSelectorSoort
-	 * @var string
+	 * Selector van deze ketzer
+	 * @var int
+	 */
+	public $ketzer_id;
+	/**
+	 * Single selection (KeuzeRondje) / Multiple selection (Vinkje)
+	 * @var KetzerSelectorSoort
 	 */
 	public $keuze_soort;
 	/**
@@ -33,8 +32,8 @@ class KetzerSelector extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
+		'select_id'		 => array(T::Integer, false, 'auto_increment'),
 		'ketzer_id'		 => array(T::Integer),
-		'select_id'		 => array(T::Integer),
 		'keuze_soort'	 => array(T::Enumeration, false, 'KetzerSelectorSoort')
 	);
 	/**
@@ -46,7 +45,7 @@ class KetzerSelector extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('ketzer_id', 'select_id');
+	protected static $primary_key = array('select_id');
 
 	/**
 	 * Lazy loading by foreign key.
@@ -54,18 +53,7 @@ class KetzerSelector extends PersistentEntity {
 	 * @return KetzerOptie[]
 	 */
 	public function getKetzerOpties() {
-		if (!isset($this->ketzer_selectors)) {
-			$this->setKetzerOpties(KetzerOptiesModel::instance()->getOptiesVoorSelect($this));
-		}
-		return $this->ketzer_selectors;
-	}
-
-	public function hasKetzerOpties() {
-		return count($this->getKetzerOpties()) > 0;
-	}
-
-	private function setKetzerOpties(array $opties) {
-		$this->ketzer_selectors = $opties;
+		return KetzerOptiesModel::instance()->getOptiesVoorSelect($this);
 	}
 
 }

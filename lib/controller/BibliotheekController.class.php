@@ -35,7 +35,7 @@ class BibliotheekController extends Controller {
 		$this->view->addCompressedResources('bibliotheek');
 	}
 
-	protected function mag($action, $resource) {
+	protected function mag($action, $method) {
 		//iedereen(ook uitgelogd) mag catalogus bekijken.
 		$allow = array('catalogustonen', 'catalogusdata', 'rubrieken', 'wenslijst');
 		if (LoginModel::mag('P_BIEB_READ')) {

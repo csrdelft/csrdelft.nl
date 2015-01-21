@@ -4079,7 +4079,6 @@ lib/model/PeilingenModel.class.php -text
 lib/model/ProfielModel.class.php -text
 lib/model/TimerModel.class.php -text
 lib/model/VerjaardagenModel.class.php -text
-lib/model/VerticalenModel.class.php -text
 lib/model/bibliotheek/BiebBeschrijving.class.php -text
 lib/model/bibliotheek/BiebBoek.class.php -text
 lib/model/bibliotheek/BiebCatalogus.class.php -text
@@ -4124,11 +4123,12 @@ lib/model/entity/framework/PersistentEntity.abstract.php -text
 lib/model/entity/framework/PersistentEnum.interface.php -text
 lib/model/entity/framework/Sparse.interface.php -text
 lib/model/entity/groepen/Activiteit.class.php -text
+lib/model/entity/groepen/ActiviteitSoort.enum.php -text
 lib/model/entity/groepen/Bestuur.class.php -text
 lib/model/entity/groepen/Commissie.class.php -text
+lib/model/entity/groepen/CommissieSoort.enum.php -text
 lib/model/entity/groepen/Conferentie.class.php -text
 lib/model/entity/groepen/Groep.class.php -text
-lib/model/entity/groepen/GroepCategorie.class.php -text
 lib/model/entity/groepen/GroepFunctie.enum.php -text
 lib/model/entity/groepen/GroepLid.class.php -text
 lib/model/entity/groepen/GroepStatus.enum.php -text
@@ -4140,9 +4140,11 @@ lib/model/entity/groepen/KetzerKeuze.class.php -text
 lib/model/entity/groepen/KetzerOptie.class.php -text
 lib/model/entity/groepen/KetzerSelector.php -text
 lib/model/entity/groepen/KetzerSelectorSoort.enum.php -text
+lib/model/entity/groepen/Kring.class.php -text
 lib/model/entity/groepen/OldGroep.class.php -text
 lib/model/entity/groepen/Ondervereniging.class.php -text
-lib/model/entity/groepen/Sjaarcie.class.php -text
+lib/model/entity/groepen/OnderverenigingStatus.enum.php -text
+lib/model/entity/groepen/OpvolgbareGroep.class.php -text
 lib/model/entity/groepen/Verticale.class.php -text
 lib/model/entity/groepen/Werkgroep.class.php -text
 lib/model/entity/groepen/Woonoord.class.php -text
@@ -4158,6 +4160,7 @@ lib/model/entity/maalcie/MaaltijdAanmelding.class.php -text
 lib/model/entity/maalcie/MaaltijdAbonnement.class.php -text
 lib/model/entity/maalcie/MaaltijdRepetitie.class.php -text
 lib/model/entity/maalcie/Taken[!!-~]ERD.png -text
+lib/model/entity/security/AccessAction.enum.php -text
 lib/model/entity/security/AccessControl.class.php -text
 lib/model/entity/security/AccessRoles.enum.php -text
 lib/model/entity/security/Account.class.php -text
@@ -4548,7 +4551,6 @@ lib/view/groepen/ActiviteitenView.class.php -text
 lib/view/groepen/BesturenView.class.php -text
 lib/view/groepen/CommissiesView.class.php -text
 lib/view/groepen/ConferentiesView.class.php -text
-lib/view/groepen/GroepCategorienView.class.php -text
 lib/view/groepen/GroepTabsView.class.php -text
 lib/view/groepen/GroepenView.class.php -text
 lib/view/groepen/KetzersView.class.php -text

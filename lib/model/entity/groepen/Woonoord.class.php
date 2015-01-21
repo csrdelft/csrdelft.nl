@@ -11,23 +11,22 @@
 class Woonoord extends Groep {
 
 	/**
-	 * Veranderingen van huisstatus
+	 * Woonoord / Huis
+	 * @var HuisStatus
+	 */
+	public $status;
+	/**
+	 * Veranderingen van status
 	 * @var string
 	 */
 	public $status_historie;
-	/**
-	 * woonoord / huis
-	 * @see HuisStatus
-	 * @var string
-	 */
-	public $huis_status;
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'status_historie'	 => array(T::Text, true),
-		'huis_status'		 => array(T::String, true)
+		'status'			 => array(T::Enumeration, false, 'HuisStatus'),
+		'status_historie'	 => array(T::Text)
 	);
 	/**
 	 * Database table name

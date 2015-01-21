@@ -19,16 +19,6 @@ class Groep extends PersistentEntity {
 	 */
 	public $id;
 	/**
-	 * Deze groep valt onder deze categorie
-	 * @var int
-	 */
-	public $categorie_id;
-	/**
-	 * Familie (opvolging)
-	 * @var string
-	 */
-	public $familie_id;
-	/**
 	 * Naam
 	 * @var string
 	 */
@@ -54,30 +44,15 @@ class Groep extends PersistentEntity {
 	 */
 	public $eind_moment;
 	/**
-	 * o.t. / h.t. / f.t.
-	 * @var GroepStatus
-	 */
-	public $status;
-	/**
-	 * Rechten benodigd voor bekijken
-	 * @var string
-	 */
-	public $rechten_bekijken;
-	/**
-	 * Rechten benodigd voor aanmelden
-	 * @var string
-	 */
-	public $rechten_aanmelden;
-	/**
-	 * Rechten benodigd voor beheren
-	 * @var string
-	 */
-	public $rechten_beheren;
-	/**
 	 * URL van website
 	 * @var string
 	 */
 	public $website;
+	/**
+	 * Lidnummer van aanmaker
+	 * @var string
+	 */
+	public $door_uid;
 	/**
 	 * Groepsleden
 	 * @var GroepLid[]
@@ -88,19 +63,14 @@ class Groep extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'				 => array(T::Integer, false, 'auto_increment'),
-		'categorie_id'		 => array(T::Integer),
-		'familie_id'		 => array(T::String),
-		'naam'				 => array(T::String),
-		'samenvatting'		 => array(T::Text),
-		'omschrijving'		 => array(T::Text),
-		'begin_moment'		 => array(T::DateTime, true),
-		'eind_moment'		 => array(T::DateTime, true),
-		'status'			 => array(T::Enumeration, false, 'GroepStatus'),
-		'rechten_bekijken'	 => array(T::String),
-		'rechten_aanmelden'	 => array(T::String),
-		'rechten_beheren'	 => array(T::String),
-		'website'			 => array(T::String)
+		'id'			 => array(T::Integer, false, 'auto_increment'),
+		'naam'			 => array(T::String),
+		'samenvatting'	 => array(T::Text),
+		'omschrijving'	 => array(T::Text),
+		'begin_moment'	 => array(T::DateTime, true),
+		'eind_moment'	 => array(T::DateTime, true),
+		'website'		 => array(T::String),
+		'door_uid'		 => array(T::UID)
 	);
 	/**
 	 * Database primary key
@@ -121,7 +91,8 @@ class Groep extends PersistentEntity {
 	}
 
 	public function hasGroepLeden() {
-		return count($this->getGroepLeden()) > 0;
+		$this->getGroepLeden();
+		return !empty($this->groep_leden);
 	}
 
 	private function setGroepLeden(array $leden) {
@@ -131,7 +102,7 @@ class Groep extends PersistentEntity {
 	/**
 	 * Gaat er vanuit dat er precies 1 groeplid met de gevraagde functie bestaat in deze groep.
 	 * 
-	 * @see BestuurFunctie
+	 * @see GroepFunctie
 	 * @param string $functie
 	 * @return GroepLid
 	 */
@@ -147,16 +118,22 @@ class Groep extends PersistentEntity {
 		return GroepLedenModel::instance()->getStatistieken($this);
 	}
 
-	public function magBekijken() {
-		return LoginModel::mag($this->rechten_bekijken);
-	}
-
-	public function magAanmelden() {
-		return LoginModel::mag($this->rechten_aanmelden);
-	}
-
-	public function magBeheren() {
-		return LoginModel::mag($this->rechten_beheren);
+	/**
+	 * Has permission for action?
+	 * 
+	 * @param AccessAction $action
+	 * @return boolean
+	 */
+	public function mag($action) {
+		$algemeen = AccessModel::get(get_class($this), $action, null);
+		if (LoginModel::mag($algemeen)) {
+			return true;
+		}
+		$specifiek = AccessModel::get(get_class($this), $action, $this->id);
+		if (LoginModel::mag($specifiek)) {
+			return true;
+		}
+		return false;
 	}
 
 }

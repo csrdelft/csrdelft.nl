@@ -1,32 +1,30 @@
 <?php
 
 /**
- * Commissie.class.php
+ * Kring.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een commissie is een groep waarvan de groepsleden een specifieke functie (kunnen) hebben.
- * 
  */
-class Commissie extends OpvolgbareGroep {
+class Kring extends OpvolgbareGroep {
 
 	/**
-	 * (Bestuurs-)Commissie / SjaarCie
-	 * @var CommissieSoort
+	 * Verticale-letter
+	 * @var string
 	 */
-	public $soort;
+	public $verticale;
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'soort' => array(T::Enumeration, false, 'CommissieSoort'),
+		'verticale' => array(T::Char)
 	);
 	/**
 	 * Database table name
 	 * @var string
 	 */
-	protected static $table_name = 'commissies';
+	protected static $table_name = 'kringen';
 
 	/**
 	 * Extend the persistent attributes.

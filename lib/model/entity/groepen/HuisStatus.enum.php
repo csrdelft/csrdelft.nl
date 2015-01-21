@@ -10,11 +10,27 @@
  */
 abstract class HuisStatus implements PersistentEnum {
 
-	const Woonoord = 'woonoord';
-	const Huis = 'huis';
+	const Woonoord = 'w';
+	const Huis = 'h';
 
 	public static function getTypeOptions() {
 		return array(self::Woonoord, self::Huis);
+	}
+
+	public static function getDescription($option) {
+		switch ($option) {
+			case self::Woonoord: return 'Woonoord';
+			case self::Huis: return 'Huis';
+			default: throw new Exception('HuisStatus onbekend');
+		}
+	}
+
+	public static function getChar($option) {
+		switch ($option) {
+			case self::Woonoord: return 'W';
+			case self::Huis: return 'H';
+			default: throw new Exception('HuisStatus onbekend');
+		}
 	}
 
 }

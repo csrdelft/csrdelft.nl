@@ -144,7 +144,7 @@ abstract class Controller {
 		return method_exists($this, $action);
 	}
 
-	abstract protected function mag($action, $resource);
+	abstract protected function mag($action, $method);
 
 	public function performAction(array $args = array()) {
 		if (!$this->mag($this->action, $_SERVER['REQUEST_METHOD'])) {

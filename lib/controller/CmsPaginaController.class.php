@@ -45,7 +45,7 @@ class CmsPaginaController extends Controller {
 		parent::performAction(array($naam));
 	}
 
-	protected function mag($action, $resource) {
+	protected function mag($action, $method) {
 		return true; // check permission on page itself
 	}
 

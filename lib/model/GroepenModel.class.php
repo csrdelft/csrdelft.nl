@@ -1,6 +1,7 @@
 <?php
 
 require_once 'model/entity/groepen/Groep.class.php';
+require_once 'model/entity/groepen/OpvolgbareGroep.class.php';
 
 /**
  * GroepenModel.class.php
@@ -8,95 +9,25 @@ require_once 'model/entity/groepen/Groep.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class GroepenModel extends PersistenceModel {
+class GroepenModel extends CachedPersistenceModel {
+
+	const orm = 'Groep';
+
+	protected static $instance;
 
 	protected function __construct() {
 		parent::__construct('groepen/');
 	}
 
-	public function getById($id) {
-		if (!is_int($id) OR $id <= 0) {
-			throw new Exception('Invalid groep id');
-		}
-		$groep = $this->retrieveByPrimaryKey(array($id));
-		if (!$groep instanceof Groep) {
-			throw new Exception('Groep bestaat niet');
-		}
-		return $groep;
+	public static function get($id) {
+		return static::instance()->retrieveByPrimaryKey(array($id));
 	}
-
-}
-
-class GroepLedenModel extends GroepenModel {
-
-	const orm = 'GroepLid';
-
-	protected static $instance;
-
-	public function getLedenVoorGroep(Groep $groep) {
-		return $this->find('groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), null, 'lid_sinds ASC')->fetchAll();
-	}
-
-	public function getStatistieken(Groep $groep) {
-		$uids = array_keys(group_by_distinct('uid', $groep->getGroepLeden(), false));
-		$count = count($uids);
-		if ($count < 1) {
-			return array();
-		}
-		$in = implode(', ', array_fill(0, $count, '?'));
-		$stats['Totaal'] = $count;
-		$stats['Verticale'] = Database::instance()->sqlSelect(array('verticale.naam', 'count(*)'), 'lid LEFT JOIN verticale ON(provielen.verticale = verticale.letter)', 'uid IN (' . $in . ')', $uids, 'verticale.naam', null)->fetchAll();
-		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
-		$stats['Lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
-		$stats['Opmerking'] = Database::instance()->sqlSelect(array('opmerking', 'count(*)'), GroepLid::getTableName(), 'groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), 'opmerking', null)->fetchAll();
-		return $stats;
-	}
-
-}
-
-class GroepCategorienModel extends GroepenModel {
-
-	const orm = 'GroepCategorie';
-
-	protected static $instance;
-
-}
-
-class CommissiesModel extends GroepenModel {
-
-	const orm = 'Commissie';
-
-	protected static $instance;
-
-}
-
-class BesturenModel extends GroepenModel {
-
-	const orm = 'Bestuur';
-
-	protected static $instance;
-
-}
-
-class SjaarciesModel extends GroepenModel {
-
-	const orm = 'Sjaarcie';
-
-	protected static $instance;
 
 }
 
 class OnderverenigingenModel extends GroepenModel {
 
 	const orm = 'Ondervereniging';
-
-	protected static $instance;
-
-}
-
-class WerkgroepenModel extends GroepenModel {
-
-	const orm = 'Werkgroep';
 
 	protected static $instance;
 
@@ -110,17 +41,54 @@ class WoonoordenModel extends GroepenModel {
 
 }
 
-class ActiviteitenModel extends GroepenModel {
+class VerticalenModel extends GroepenModel {
 
-	const orm = 'Activiteit';
+	const orm = 'Verticale';
+
+	protected static $instance;
+	/**
+	 * Store verticalen array as a whole in memcache
+	 * @var boolean
+	 */
+	protected $memcache_prefetch = true;
+
+}
+
+class OpvolgbareGroepenModel extends GroepenModel {
+
+	const orm = 'OpvolgbareGroep';
 
 	protected static $instance;
 
 }
 
-class ConferentiesModel extends GroepenModel {
+class KringenModel extends OpvolgbareGroepenModel {
 
-	const orm = 'Conferentie';
+	const orm = 'Kring';
+
+	protected static $instance;
+
+}
+
+class WerkgroepenModel extends OpvolgbareGroepenModel {
+
+	const orm = 'Werkgroep';
+
+	protected static $instance;
+
+}
+
+class CommissiesModel extends OpvolgbareGroepenModel {
+
+	const orm = 'Commissie';
+
+	protected static $instance;
+
+}
+
+class BesturenModel extends CommissiesModel {
+
+	const orm = 'Bestuur';
 
 	protected static $instance;
 
@@ -129,6 +97,22 @@ class ConferentiesModel extends GroepenModel {
 class KetzersModel extends GroepenModel {
 
 	const orm = 'Ketzer';
+
+	protected static $instance;
+
+}
+
+class ActiviteitenModel extends KetzersModel {
+
+	const orm = 'Activiteit';
+
+	protected static $instance;
+
+}
+
+class ConferentiesModel extends ActiviteitenModel {
+
+	const orm = 'Conferentie';
 
 	protected static $instance;
 
@@ -153,7 +137,7 @@ class KetzerOptiesModel extends GroepenModel {
 	protected static $instance;
 
 	public function getOptiesVoorSelect(KetzerSelector $select) {
-		return $this->find('ketzer_id = ? AND select_id = ?', array($select->ketzer_id, $select->select_id));
+		return $this->find('select_id = ?', array($select->select_id));
 	}
 
 }
@@ -165,15 +149,44 @@ class KetzerKeuzesModel extends GroepenModel {
 	protected static $instance;
 
 	public function getKeuzesVoorOptie(KetzerOptie $optie) {
-		return $this->find('ketzer_id = ? AND select_id = ? AND optie_id = ?', array($optie->ketzer_id, $optie->select_id, $optie->optie_id));
+		return $this->find('optie_id = ?', array($optie->optie_id));
 	}
 
-	public function getKeuzeVanLid(KetzerSelector $select, $uid) {
-		return $this->find('ketzer_id = ? AND select_id = ? AND uid = ?', array($select->ketzer_id, $select->select_id, $uid));
+}
+
+class GroepLedenModel extends GroepenModel {
+
+	const orm = 'GroepLid';
+
+	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'volgorde ASC, lid_sinds ASC';
+	/**
+	 * Store leden array as a whole in memcache
+	 * @var boolean
+	 */
+	protected $memcache_prefetch = true;
+
+	public function getLedenVoorGroep(Groep $groep) {
+		return $this->prefetch('groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id));
 	}
 
-	public function getKetzerKeuzesVanLid(Ketzer $ketzer, $uid) {
-		return $this->find('ketzer_id = ? AND uid = ?', array($ketzer->id, $uid));
+	public function getStatistieken(Groep $groep) {
+		$uids = array_keys(group_by_distinct('uid', $groep->getGroepLeden(), false));
+		$count = count($uids);
+		if ($count < 1) {
+			return array();
+		}
+		$in = implode(', ', array_fill(0, $count, '?'));
+		$stats['Totaal'] = $count;
+		$stats['Verticale'] = Database::instance()->sqlSelect(array('verticale.naam', 'count(*)'), 'lid LEFT JOIN verticale ON(provielen.verticale = verticale.letter)', 'uid IN (' . $in . ')', $uids, 'verticale.naam', null)->fetchAll();
+		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
+		$stats['Lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'lid', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
+		$stats['Opmerking'] = Database::instance()->sqlSelect(array('opmerking', 'count(*)'), GroepLid::getTableName(), 'groep_type = ? AND groep_id = ?', array(get_class($groep), $groep->id), 'opmerking', null)->fetchAll();
+		return $stats;
 	}
 
 }

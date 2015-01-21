@@ -11,4 +11,8 @@
 interface PersistentEnum {
 
 	public static function getTypeOptions();
+
+	public static function getDescription($option);
+
+	public static function getChar($option);
 }

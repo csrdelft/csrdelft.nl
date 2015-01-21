@@ -163,7 +163,12 @@ class ProfielForm extends Formulier {
 				$fields[] = new LidField('echtgenoot', $profiel->echtgenoot, 'Echtgenoot', 'allepersonen');
 				$fields[] = new Subkopje('Oudledenpost');
 				$fields[] = new TextField('adresseringechtpaar', $profiel->adresseringechtpaar, 'Tenaamstelling post echtpaar', 250);
-				$fields[] = new SelectField('ontvangtcontactueel', $profiel->ontvangtcontactueel, 'Ontvangt Contactueel?', array('ja' => 'ja', 'digitaal' => 'ja, digitaal', 'nee' => 'nee'));
+
+				$contactueel = array();
+				foreach (OntvangtContactueel::getTypeOptions() as $optie) {
+					$contactueel[$optie] = OntvangtContactueel::getDescription($optie);
+				}
+				$fields[] = new SelectField('ontvangtcontactueel', $profiel->ontvangtcontactueel, 'Ontvangt Contactueel?', $contactueel);
 			}
 		}
 

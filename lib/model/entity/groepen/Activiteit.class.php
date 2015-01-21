@@ -11,6 +11,11 @@ require_once 'model/entity/groepen/Ketzer.class.php';
 class Activiteit extends Ketzer implements Agendeerbaar {
 
 	/**
+	 * Intern / Extern / SjaarsActie
+	 * @var ActiviteitSoort
+	 */
+	public $soort;
+	/**
 	 * Locatie
 	 * @var string
 	 */
@@ -20,7 +25,8 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'locatie' => array(T::String, true)
+		'soort'		 => array(T::Enumeration, false, 'ActiviteitSoort'),
+		'locatie'	 => array(T::String, true)
 	);
 	/**
 	 * Database table name

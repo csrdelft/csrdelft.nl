@@ -56,8 +56,8 @@ class MenuItemForm extends ModalForm {
 			$fields['pid']->hidden = true;
 		}
 
-		$fields['prio'] = new IntField('prioriteit', $item->prioriteit, 'Volgorde');
-		$fields['prio']->title = 'Volgorde van menu-items';
+		$fields['v'] = new IntField('volgorde', $item->volgorde, 'Volgorde');
+		$fields['v']->title = 'Volgorde van menu-items';
 
 		$fields[] = new TextField('tekst', $item->tekst, 'Korte aanduiding', 50);
 

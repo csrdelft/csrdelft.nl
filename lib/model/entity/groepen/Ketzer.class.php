@@ -8,7 +8,7 @@
  * Een ketzer is een aanmeldbare groep.
  * 
  */
-class Ketzer extends Groep {
+class Ketzer extends OpvolgbareGroep {
 
 	/**
 	 * Maximaal aantal groepsleden

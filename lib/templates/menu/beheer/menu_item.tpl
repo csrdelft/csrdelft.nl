@@ -2,7 +2,7 @@
 	menu_item.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <li id="menu-item-{$item->item_id}" parentid="{$item->parent_id}" class="menu-item">
-	<span class="lichtgrijs">{$item->prioriteit}</span>
+	<span class="lichtgrijs">{$item->volgorde}</span>
 	<a href="/menubeheer/bewerken/{$item->item_id}" class="btn post popup" title="Dit menu-item bewerken">{icon get="bewerken"}</a>
 	{if LoginModel::mag('P_ADMIN')}
 		<a href="/menubeheer/toevoegen/{$item->item_id}" class="btn post popup" title="Sub-menu-item toevoegen">{icon get="add"}</a>

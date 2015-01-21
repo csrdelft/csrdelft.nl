@@ -12,7 +12,7 @@ class MaalcieRouterController extends AclController {
 	public function __construct($query) {
 		$query = str_replace('maaltijden/', 'maaltijden', $query);
 		$query = str_replace('corvee/', 'corvee', $query);
-		parent::__construct($query, $query); // Use model to pass through query
+		parent::__construct($query, $query); // use model to pass through query
 		$this->acl = array(
 			'maaltijdenketzer'				 => 'P_MAAL_IK',
 			'maaltijdenlijst'				 => 'P_MAAL_IK', // shortcut

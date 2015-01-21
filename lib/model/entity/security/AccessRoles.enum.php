@@ -24,8 +24,8 @@ abstract class AccessRoles implements PersistentEnum {
 		return array(self::Nobody, self::Eter, self::Oudlid, self::Lid, self::Basfcie, self::Maalcie, self::Bestuur, self::Pubcie);
 	}
 
-	public static function getDescription($status) {
-		switch ($status) {
+	public static function getDescription($option) {
+		switch ($option) {
 			case self::Nobody: return 'Ex-lid/Nobody';
 			case self::Eter: return 'Eter (inlog voor abo\'s)';
 			case self::Oudlid: return 'Oudlid';
@@ -34,7 +34,21 @@ abstract class AccessRoles implements PersistentEnum {
 			case self::Maalcie: return 'Maalcie-rechten';
 			case self::Bestuur: return 'Bestuur-rechten';
 			case self::Pubcie: return 'Pubcie-rechten';
-			default: throw new Exception('Ongeldige AccessRole');
+			default: throw new Exception('AccessRole onbekend');
+		}
+	}
+
+	public static function getChar($option) {
+		switch ($option) {
+			case self::Nobody: return 'N';
+			case self::Eter: return 'E';
+			case self::Oudlid: return 'O';
+			case self::Lid: return 'L';
+			case self::Basfcie: return 'BASF';
+			case self::Maalcie: return 'M';
+			case self::Bestuur: return 'B';
+			case self::Pubcie: return 'P';
+			default: throw new Exception('AccessRole onbekend');
 		}
 	}
 

@@ -14,16 +14,23 @@ require_once 'view/groepen/GroepenView.class.php';
 class GroepenRouterController extends Controller {
 
 	public function __construct($query) {
-		parent::__construct($query, $query); // Use model to pass through query
+		$query = str_replace('/overig', '/groepen', $query);
+		parent::__construct($query, $query); // use model to pass through query
 	}
 
 	public function performAction(array $args = array()) {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
+		} else {
+			$this->action = 'ketzers'; // default
 		}
-		$controller = parent::performAction(); // modifies action (default)
-		define('groepenUrl', '/groepen/' . $this->action);
+		$class = ucfirst($this->action) . 'Controller';
+
+		require_once 'controller/groepen/' . $class . '.class.php';
+		$controller = new $class($this->model); // query
 		$controller->performAction();
+
+		define('groepenUrl', '/groepen/' . $this->action);
 		$this->view = $controller->getView();
 	}
 
@@ -32,14 +39,19 @@ class GroepenRouterController extends Controller {
 	 * 
 	 * @return boolean
 	 */
-	protected function mag($action, $resource) {
+	protected function mag($action, $method) {
 		switch ($action) {
+			// groep
+			case 'groepen':
+			case 'onderverenigingen':
+			case 'woonoorden':
+			case 'lichtingen':
+			case 'verticalen':
+			// opvolgbare groep
+			case 'kringen':
+			case 'werkgroepen':
 			case 'commissies':
 			case 'besturen':
-			case 'sjaarcies':
-			case 'woonoorden':
-			case 'werkgroepen':
-			case 'onderverenigingen':
 			case 'ketzers':
 			case 'activiteiten':
 			case 'conferenties':
@@ -48,51 +60,6 @@ class GroepenRouterController extends Controller {
 			default:
 				return false;
 		}
-	}
-
-	public function commissies() {
-		require_once 'controller/groepen/CommissiesController.class.php';
-		return new CommissiesController($this->model);
-	}
-
-	public function besturen() {
-		require_once 'controller/groepen/BesturenController.class.php';
-		return new BesturenController($this->model);
-	}
-
-	public function sjaarcies() {
-		require_once 'controller/groepen/SjaarciesController.class.php';
-		return new SjaarciesController($this->model);
-	}
-
-	public function woonoorden() {
-		require_once 'controller/groepen/WoonoordenController.class.php';
-		return new WoonoordenController($this->model);
-	}
-
-	public function werkgroepen() {
-		require_once 'controller/groepen/WerkgroepenController.class.php';
-		return new WerkgroepenController($this->model);
-	}
-
-	public function onderverenigingen() {
-		require_once 'controller/groepen/OnderverenigingenController.class.php';
-		return new OnderverenigingenController($this->model);
-	}
-
-	public function ketzers() {
-		require_once 'controller/groepen/KetzersController.class.php';
-		return new KetzersController($this->model);
-	}
-
-	public function activiteiten() {
-		require_once 'controller/groepen/ActiviteitenController.class.php';
-		return new ActiviteitenController($this->model);
-	}
-
-	public function conferenties() {
-		require_once 'controller/groepen/ConferentiesController.class.php';
-		return new ConferentiesController($this->model);
 	}
 
 }

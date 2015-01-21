@@ -30,4 +30,40 @@ abstract class GroepFunctie implements PersistentEnum {
 		return array(self::Praeses, self::Abactis, self::Fiscus, self::VicePraeses, self::ViceAbactis, self::QQ, self::Bibliothecarus, self::Archivarus, self::Statisticus, self::Fotocommissaris, self::Leider);
 	}
 
+	public static function getDescription($option) {
+		switch ($option) {
+			case self::Praeses:
+			case self::Abactis:
+			case self::Fiscus:
+			case self::VicePraeses:
+			case self::ViceAbactis:
+			case self::QQ:
+			case self::Bibliothecarus:
+			case self::Archivarus:
+			case self::Statisticus:
+			case self::Fotocommissaris:
+			case self::Leider:
+				return $option;
+			default: throw new Exception('Ongeldige GroepFunctie');
+		}
+	}
+
+	public static function getChar($option) {
+		switch ($option) {
+			case self::Praeses:
+			case self::Abactis:
+			case self::Fiscus:
+			case self::VicePraeses:
+			case self::ViceAbactis:
+			case self::QQ:
+			case self::Bibliothecarus:
+			case self::Archivarus:
+			case self::Statisticus:
+			case self::Fotocommissaris:
+			case self::Leider:
+				return '';
+			default: throw new Exception('Ongeldige GroepFunctie');
+		}
+	}
+
 }

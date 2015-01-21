@@ -6,18 +6,13 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Verticale extends PersistentEntity {
+class Verticale extends Groep {
 
 	/**
-	 * Primary key
+	 * Letter
 	 * @var string
 	 */
 	public $letter;
-	/**
-	 * Naam
-	 * @var string
-	 */
-	public $naam;
 	/**
 	 * Kringen met kringleden
 	 * @var array
@@ -28,20 +23,25 @@ class Verticale extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'letter' => array(T::Char),
-		'naam'	 => array(T::String),
+		'letter' => array(T::Char)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('letter');
 	/**
 	 * Database table name
 	 * @var string
 	 */
 	protected static $table_name = 'verticalen';
 
+	/**
+	 * Extend the persistent attributes.
+	 */
+	public static function __constructStatic() {
+		parent::__constructStatic();
+		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
+	}
+
+	/**
+	 * @deprecated
+	 */
 	public function getKringen() {
 		if (!isset($this->kringen)) {
 			$this->kringen = array();
@@ -58,6 +58,9 @@ class Verticale extends PersistentEntity {
 		return $this->kringen;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function getKring($kring) {
 		$this->getKringen();
 		if (!isset($this->kringen[$kring])) {

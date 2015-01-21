@@ -25,7 +25,7 @@ class MenuItem extends PersistentEntity {
 	 * Volgorde van weergave
 	 * @var int
 	 */
-	public $prioriteit;
+	public $volgorde;
 	/**
 	 * Link tekst
 	 * @var string
@@ -63,7 +63,7 @@ class MenuItem extends PersistentEntity {
 	protected static $persistent_attributes = array(
 		'item_id'			 => array(T::Integer, false, 'auto_increment'),
 		'parent_id'			 => array(T::Integer),
-		'prioriteit'		 => array(T::Integer),
+		'volgorde'			 => array(T::Integer),
 		'tekst'				 => array(T::String),
 		'link'				 => array(T::String),
 		'rechten_bekijken'	 => array(T::String),

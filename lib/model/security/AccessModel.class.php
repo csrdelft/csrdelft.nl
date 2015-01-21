@@ -22,8 +22,8 @@ class AccessModel extends CachedPersistenceModel {
 
 	protected static $instance;
 
-	public static function get($environment, $action, $resource) {
-		$ac = self::instance()->getAccessControl($environment, $action, $resource);
+	public static function get($environment, $action, $method) {
+		$ac = self::instance()->getAccessControl($environment, $action, $method);
 		if ($ac) {
 			return $ac->subject;
 		}
@@ -105,8 +105,8 @@ class AccessModel extends CachedPersistenceModel {
 		$this->loadPermissions();
 	}
 
-	private function getAccessControl($environment, $action, $resource) {
-		return $this->retrieveByPrimaryKey(array($environment, $action, $resource));
+	private function getAccessControl($environment, $action, $method) {
+		return $this->retrieveByPrimaryKey(array($environment, $action, $method));
 	}
 
 	public function getDefaultPermissionRole($lidstatus) {

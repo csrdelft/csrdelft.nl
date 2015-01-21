@@ -24,8 +24,8 @@ class InstellingenBeheerController extends AclController {
 		}
 	}
 
-	protected function mag($action, $resource) {
-		if (!parent::mag($action, $resource)) {
+	protected function mag($action, $method) {
+		if (!parent::mag($action, $method)) {
 			return false;
 		}
 		if ($this->hasParam(3)) {

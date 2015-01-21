@@ -13,9 +13,29 @@ require_once 'model/entity/groepen/Commissie.class.php';
 class Bestuur extends Commissie {
 
 	/**
+	 * Bestuurstekst
+	 * @var string
+	 */
+	public $bijbeltekst;
+	/**
+	 * Database table columns
+	 * @var array
+	 */
+	protected static $persistent_attributes = array(
+		'bijbeltekst' => array(T::Text)
+	);
+	/**
 	 * Database table name
 	 * @var string
 	 */
 	protected static $table_name = 'besturen';
+
+	/**
+	 * Extend the persistent attributes.
+	 */
+	public static function __constructStatic() {
+		parent::__constructStatic();
+		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
+	}
 
 }

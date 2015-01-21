@@ -15,7 +15,7 @@ class MenuModel extends CachedPersistenceModel {
 	 * Default ORDER BY
 	 * @var string
 	 */
-	protected $default_order = 'prioriteit ASC, tekst ASC';
+	protected $default_order = 'volgorde ASC, tekst ASC';
 
 	/**
 	 * Get menu for viewing.
@@ -210,7 +210,7 @@ class MenuModel extends CachedPersistenceModel {
 	public function newMenuItem($parent_id) {
 		$item = new MenuItem();
 		$item->parent_id = $parent_id;
-		$item->prioriteit = 0;
+		$item->volgorde = 0;
 		$item->rechten_bekijken = LoginModel::getUid();
 		$item->zichtbaar = true;
 		return $item;

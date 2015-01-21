@@ -11,16 +11,6 @@
 class KetzerKeuze extends PersistentEntity {
 
 	/**
-	 * Keuze in deze ketzer
-	 * @var int
-	 */
-	public $ketzer_id;
-	/**
-	 * Keuze van deze KetzerSelector
-	 * @var int
-	 */
-	public $select_id;
-	/**
 	 * Primary key
 	 * @var array
 	 */
@@ -35,8 +25,6 @@ class KetzerKeuze extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'ketzer_id'	 => array(T::Integer),
-		'select_id'	 => array(T::Integer),
 		'optie_id'	 => array(T::Integer),
 		'uid'		 => array(T::UID)
 	);
@@ -49,6 +37,6 @@ class KetzerKeuze extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('ketzer_id', 'select_id', 'optie_id', 'uid');
+	protected static $primary_key = array('optie_id', 'uid');
 
 }

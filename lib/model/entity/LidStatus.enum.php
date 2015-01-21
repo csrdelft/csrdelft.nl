@@ -27,16 +27,16 @@ abstract class LidStatus implements PersistentEnum {
 		return array(self::Noviet, self::Lid, self::Gastlid, self::Oudlid, self::Erelid, self::Overleden, self::Exlid, self::Nobody, self::Commissie, self::Kringel);
 	}
 
-	public static function isLid($status) {
-		return $status === self::Noviet OR $status === self::Lid or $status === LidStatus::Gastlid;
+	public static function isLid($option) {
+		return $option === self::Noviet OR $option === self::Lid or $option === LidStatus::Gastlid;
 	}
 
-	public static function isOudlid($status) {
-		return $status === self::Oudlid OR $status === self::Erelid;
+	public static function isOudlid($option) {
+		return $option === self::Oudlid OR $option === self::Erelid;
 	}
 
-	public static function getDescription($status) {
-		switch ($status) {
+	public static function getDescription($option) {
+		switch ($option) {
 			case self::Noviet: return 'Noviet';
 			case self::Lid: return 'Lid';
 			case self::Gastlid: return 'Gastlid';
@@ -47,7 +47,7 @@ abstract class LidStatus implements PersistentEnum {
 			case self::Nobody: return 'Nobody';
 			case self::Commissie: return 'Commissie (LDAP)';
 			case self::Kringel: return 'Kringel';
-			default: throw new Exception('Ongeldige LidStatus');
+			default: throw new Exception('LidStatus onbekend');
 		}
 	}
 
@@ -57,8 +57,8 @@ abstract class LidStatus implements PersistentEnum {
 	 * ingeburgerd. Handig om in leden snel te zien om wat voor soort
 	 * lid het gaat.
 	 */
-	public static function getChar($status) {
-		switch ($status) {
+	public static function getChar($option) {
+		switch ($option) {
 			case self::Noviet:
 			case self::Lid:
 			case self::Gastlid: return '';
@@ -69,7 +69,7 @@ abstract class LidStatus implements PersistentEnum {
 			case self::Oudlid: return '•';
 			case self::Erelid: return '☀';
 			case self::Overleden: return '✝';
-			default: throw new Exception('Ongeldige LidStatus');
+			default: throw new Exception('LidStatus onbekend');
 		}
 	}
 
