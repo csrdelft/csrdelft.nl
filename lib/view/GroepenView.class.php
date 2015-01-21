@@ -20,6 +20,10 @@ class GroepenBeheerTable extends DataTable {
 		$this->hideColumn('omschrijving');
 		$this->hideColumn('website');
 		$this->hideColumn('door_uid');
+		$this->searchColumn('naam');
+		$this->searchColumn('jaargang');
+		$this->searchColumn('status');
+		$this->searchColumn('soort');
 
 		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . A::Aanmaken, 'post popup', null, 'Toevoegen', 'Nieuwe groep toevoegen', '/famfamfam/add.png');
 		$this->addKnop($create);
