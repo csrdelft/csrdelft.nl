@@ -271,7 +271,7 @@ function knop_ajax(knop, type) {
 	}
 	if (knop.hasClass('DataTableResponse')) {
 
-		var tableId = knop.attr('DataTableId');
+		var tableId = knop.attr('data-tableid');
 		if (!document.getElementById(tableId)) {
 			alert('DataTable not found');
 		}
@@ -450,7 +450,7 @@ function form_submit(event) {
 
 		if (form.hasClass('DataTableResponse')) {
 
-			var tableId = form.attr('DataTableId');
+			var tableId = form.attr('data-tableid');
 			if (!document.getElementById(tableId)) {
 				alert('DataTable not found');
 			}

@@ -395,7 +395,7 @@ class DataTableKnop extends FormulierKnop {
 	}
 
 	public function getHtml() {
-		return str_replace('<a ', '<a DataTableId="' . $this->tableId . '" ', parent::getHtml());
+		return str_replace('<a ', '<a data-tableid="' . $this->tableId . '" ', parent::getHtml());
 	}
 
 }

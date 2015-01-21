@@ -34,10 +34,9 @@ class GroepenModel extends CachedPersistenceModel {
 		$groep->door_uid = LoginModel::getUid();
 		return $groep;
 	}
-	
-	public function create(PersistentEntity $entity) {
-		$entity->item_id = (int) parent::create($entity);
-		$this->flushCache(true);
+
+	public function create(PersistentEntity $groep) {
+		$groep->id = (int) parent::create($groep);
 	}
 
 }

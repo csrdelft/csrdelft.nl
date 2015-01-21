@@ -330,7 +330,7 @@ class DataTableForm extends ModalForm {
 
 	protected function getFormTag() {
 		$tableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);
-		return str_replace('<form ', '<form DataTableId="' . $tableId . '" ', parent::getFormTag());
+		return str_replace('<form ', '<form data-tableid="' . $tableId . '" ', parent::getFormTag());
 	}
 
 }
