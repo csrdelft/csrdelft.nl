@@ -144,9 +144,11 @@ jQuery(document).ready(function ($) {
 		if ($('.cd-search').hasClass('is-visible')) {
 			$searchfield.focus();
 			$maintrigger.fadeOut();
+			$('#user-avatar').fadeOut();
 			$('.cd-main-overlay').addClass('is-visible');
 		} else {
 			$maintrigger.fadeIn();
+			$('#user-avatar').fadeIn();
 			if (!$maintrigger.hasClass('selected')) {
 				$('.cd-main-overlay').removeClass('is-visible');
 			}
