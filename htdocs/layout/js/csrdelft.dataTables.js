@@ -155,12 +155,12 @@ function fnGroupByColumnDraw(event, settings) {
 		$table.data('orderDraw', false);
 		return; // recursion on draw
 	}
-	if (!$table.data('collapsedGroups')) {
-		$table.data('orderDraw', true); // magic workaround child-table init
-		return;
-	}
 	var groupById = fnGetGroupByColumn($table);
 	if (groupById === false) {
+		return;
+	}
+	if (!$table.data('collapsedGroups')) {
+		$table.data('orderDraw', true); // magic workaround child-table init
 		return;
 	}
 	var collapse = $table.data('collapsedGroups').slice(); // copy by value
