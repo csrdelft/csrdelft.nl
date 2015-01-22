@@ -26,13 +26,13 @@ class GroepenBeheerTable extends DataTable {
 		$this->searchColumn('soort');
 
 		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . A::Aanmaken, 'post popup', 'Toevoegen', 'Nieuwe groep toevoegen', 'add');
-		$this->addKnop($create, 'ADMIN');
+		$this->addKnop($create);
 
 		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig geselecteerde groep', 'edit');
-		$this->addKnop($update, 'ADMIN');
+		$this->addKnop($update);
 
 		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . A::Verwijderen, 'post confirm', 'Verwijderen', 'Geselecteerde groepen definitief verwijderen', 'delete');
-		$this->addKnop($delete, 'ADMIN');
+		$this->addKnop($delete);
 	}
 
 }

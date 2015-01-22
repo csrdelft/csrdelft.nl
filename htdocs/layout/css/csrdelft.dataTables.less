@@ -22,14 +22,18 @@
 		background-color: white;
 		background-repeat: no-repeat;
 		background-position: 8px;
-		padding-left: 30px;
+		padding: 5px 10px 5px 30px;
 		line-height: 1.5em;
+		font-size: 1em;
 		font-weight: normal;
 		text-shadow: none;
+		box-shadow: none;
+		vertical-align: middle;
 	}
 	.DTTT_button_text, .DTTT_button_text:hover, .DTTT_button_text:focus {
-		padding-left: 8px;
+		padding-left: 10px;
 		background: none;
+		background-color: white;
 	}
 	.DTTT_button_user_add, .DTTT_button_user_add:hover, .DTTT_button_user_add:focus {
 		background-image: url("/plaetjes/famfamfam/user_add.png");
@@ -95,25 +99,25 @@
 			td.toggle-childrow::before {
 				font-size: 1.1em;
 				font-family: FontAwesome;
-				content: "\f0fe"; // fa-plus-square
+				content: "\f196"; // fa-plus-square-o
 			}
 		}
 		tr:hover {
 
 			td.toggle-childrow::before {
-				content: "\f196"; // fa-plus-square-o
+				content: "\f0fe"; // fa-plus-square
 			}
 		}
 		tr.expanded {
 
 			td.toggle-childrow::before {
-				content: "\f146"; // fa-minus-square
+				content: "\f147"; // fa-minus-square-o
 			}
 		}
 		tr.expanded:hover {
 
 			td.toggle-childrow::before {
-				content: "\f147"; // fa-minus-square-o
+				content: "\f146"; // fa-minus-square
 			}
 		}
 		tr.loading {

@@ -21,7 +21,7 @@ class DataTable extends TabsForm {
 	protected $defaultLength = -1;
 	private $columns = array();
 	protected $settings = array(
-		'dom'		 => 'Tfrtpli',
+		'dom'		 => 'fTrtpli',
 		'responsive' => true,
 		'tableTools' => array(
 			'sRowSelect' => 'os',
@@ -295,17 +295,14 @@ class DataTable extends TabsForm {
 				 */
 				var fnUpdateToolbar = <?= $this->getUpdateToolbarFunction(); ?>;
 				$(tableId + ' tbody').on('click', 'tr', fnUpdateToolbar);
-				// (De-)Select all
-				$('.DTTT_button_text').on('click', fnUpdateToolbar);
-				// Toolbar above table
-				$(tableId + '_toolbar').prependTo(tableId + '_wrapper');
-				$(tableId + '_toolbar h1.Titel').prependTo(tableId + '_wrapper');
-				$('.DTTT_container').children().prependTo(tableId + '_toolbar');
-				$('.DTTT_container').remove();
-				// Toolbar table filter formatting
-				$(tableId + '_filter input').attr('placeholder', 'Zoeken').unwrap();
-				$(tableId + '_filter').prependTo(tableId + '_toolbar');
-				// Opening and closing details
+				$('.DTTT_button_text').on('click', fnUpdateToolbar); // (De-)Select all
+				$(tableId + '_toolbar').prependTo(tableId + '_wrapper'); // Toolbar above table
+				$(tableId + '_toolbar h1.Titel').prependTo(tableId + '_wrapper'); // Title above toolbar
+				$('.DTTT_container').children().appendTo(tableId + '_toolbar'); // Buttons inside toolbar
+				$('.DTTT_container').remove(); // Remove buttons container
+				$(tableId + '_filter input').attr('placeholder', 'Zoeken').unwrap(); // Remove filter container
+				$(tableId + '_filter').prependTo(tableId + '_toolbar'); // Filter inside toolbar
+				// Toggle details childrow
 				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
 					fnChildRow(table, $(this));
 				});
@@ -318,9 +315,9 @@ class DataTable extends TabsForm {
 				$(tableId + '.groupByColumn thead').on('click', 'th.toggle-group:first', function (event) {
 					fnGroupExpandCollapseAll(table, $(tableId), $(this));
 				});
-		<?php if (!$this->groupByLocked): ?>
+		<?php if (!$this->groupByLocked) { ?>
 					$(tableId + '.groupByColumn').on('order.dt', fnGroupByColumn);
-		<?php endif; ?>
+		<?php } ?>
 				$(tableId + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
 				$(tableId + '.groupByColumn').data('collapsedGroups', []);
 				if ($(tableId).hasClass('groupByColumn') && fnGetGroupByColumn($(tableId))) {
