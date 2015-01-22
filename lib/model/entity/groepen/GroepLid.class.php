@@ -28,6 +28,11 @@ class GroepLid extends PersistentEntity {
 	 */
 	public $uid;
 	/**
+	 * Volgorde van weergave
+	 * @var string
+	 */
+	public $volgorde;
+	/**
 	 * CommissieFunctie of opmerking bij lidmaatschap
 	 * @var CommissieFunctie
 	 */
@@ -48,11 +53,6 @@ class GroepLid extends PersistentEntity {
 	 */
 	public $status;
 	/**
-	 * Volgorde van weergave
-	 * @var string
-	 */
-	public $volgorde;
-	/**
 	 * Lidnummer van aanmelder
 	 * @var string
 	 */
@@ -65,11 +65,11 @@ class GroepLid extends PersistentEntity {
 		'groep_class'	 => array(T::String),
 		'groep_id'		 => array(T::Integer),
 		'uid'			 => array(T::UID),
+		'volgorde'		 => array(T::Integer),
 		'opmerking'		 => array(T::String, true),
 		'lid_sinds'		 => array(T::DateTime),
 		'lid_tot'		 => array(T::DateTime, true),
 		'status'		 => array(T::Enumeration, false, 'GroepStatus'),
-		'volgorde'		 => array(T::Integer),
 		'door_uid'		 => array(T::UID)
 	);
 	/**

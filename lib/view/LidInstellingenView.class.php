@@ -10,6 +10,7 @@ class LidInstellingenView extends TabsForm {
 
 	public function __construct(LidInstellingen $model) {
 		parent::__construct($model, '/instellingen/opslaan', 'Webstekinstellingen');
+		$this->formId = 'lidinstellingenform';
 		$this->vertical = true;
 		$this->hoverintent = true;
 

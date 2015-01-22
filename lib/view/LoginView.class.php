@@ -121,6 +121,7 @@ class LoginForm extends Formulier {
 
 	public function __construct() {
 		parent::__construct(null, '/login');
+		$this->formId = 'loginform';
 
 		$fields['user'] = new TextField('user', null, null);
 		$fields['user']->placeholder = 'Bijnaam of lidnummer';

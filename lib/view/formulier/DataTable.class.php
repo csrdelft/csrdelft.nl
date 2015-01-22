@@ -225,12 +225,46 @@ class DataTable extends TabsForm {
 			var lastUpdate<?= $this->tableId; ?>;
 
 			$(document).ready(function () {
-
-				var fnAutoUpdate = function () {
-					var oTable = $('#<?= $this->tableId; ?>').DataTable();
-					oTable.ajax.reload();
+				/**
+				 * Called after row addition and row data update.
+				 * 
+				 * @param object tr
+				 * @param objectdata
+				 * @param int rowIndex
+				 */
+				var fnCreatedRowCallback = function (tr, data, rowIndex) {
+					$(tr).attr('data-UUID', data.UUID);
+					init_context(tr);
+					// Details from external source
+					if ('detailSource' in data) {
+						$(tr).children('td:first').addClass('toggle-childrow').data('detailSource', data.detailSource);
+					}
+					$(tr).children().each(function (columnIndex, td) {
+						// Init custom buttons in rows
+						$(td).children('a.post').each(function (i, a) {
+							$(a).attr('data-tableid', '<?= $this->tableId; ?>');
+						});
+						// Init InlineForms
+						if ($(td).children(':first').hasClass('InlineForm')) {
+							var edit = function (event) {
+								var form = $(td).find('form');
+								// Toggle show form
+								form.prev('.InlineFormToggle').hide();
+								form.show();
+								setTimeout(function () { // Workaround focus stealing keys plugin
+									form.find('.FormElement:first').focus();
+								}, 1);
+							};
+							$(td).addClass('editable').click(edit);
+						}
+					});
 				};
-
+				/**
+				 * Called after ajax load complete.
+				 * 
+				 * @param object json
+				 * @returns object
+				 */
 				var fnAjaxUpdateCallback = function (json) {
 					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime());
 		<?php
@@ -246,35 +280,19 @@ class DataTable extends TabsForm {
 					fnUpdateToolbar();
 					return json.data;
 				};
-
-				var fnCreatedRowCallback = function (tr, data, index) {
-					$(tr).attr('data-UUID', data.UUID);
-					init_context(tr);
-					if ('detailSource' in data) {
-						$(tr).children('td:first').addClass('toggle-childrow').data('detailSource', data.detailSource);
-					}
-					// voor elke td check of deze editable moet zijn 
-					$(tr).children().each(function (columnIndex, td) {
-						if ($(td).children(':first').hasClass('InlineForm')) {
-							var edit = function (event) {
-								var form = $(td).find('form');
-								// show form
-								form.prev('.InlineFormToggle').hide();
-								form.show();
-								setTimeout(function () { // werkomheen focus keys plugin
-									form.find('.FormElement:first').focus();
-								}, 1);
-							};
-							$(td).addClass('editable').click(edit);
-						}
-					});
-				};
-
+				// Init DataTable
 				var tableId = '#<?= $this->tableId; ?>';
 				var table = $(tableId).DataTable(<?= $settingsJson; ?>);
 				//var keys = new $.fn.dataTable.KeyTable($(tableId));
-
-				// Toolbar update on row selection
+				/**
+				 * Reload table data.
+				 */
+				var fnAutoUpdate = function () {
+					table.ajax.reload();
+				};
+				/**
+				 * Toolbar button state update on row (de-)selection.
+				 */
 				var fnUpdateToolbar = <?= $this->getUpdateToolbarFunction(); ?>;
 				// Multiple selection of group rows
 				$(tableId + ' tbody').on('click', 'tr', function (event) {
@@ -283,7 +301,7 @@ class DataTable extends TabsForm {
 					}
 					fnUpdateToolbar();
 				});
-
+				// (De-)Select all
 				$('.DTTT_button_text').on('click', fnUpdateToolbar);
 				// Toolbar above table
 				$(tableId + '_toolbar').prependTo(tableId + '_wrapper');
