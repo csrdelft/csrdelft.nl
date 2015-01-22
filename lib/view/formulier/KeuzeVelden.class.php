@@ -289,6 +289,7 @@ class RequiredKeuzeRondjeField extends KeuzeRondjeField {
  */
 class DatumField extends InputField {
 
+	public $empty_null = true;
 	protected $max_jaar;
 	protected $min_jaar;
 
@@ -389,8 +390,7 @@ JS;
 		$months = range(1, 12);
 		$days = range(1, 31);
 
-		// Als de datum al null is, moet ie dat ook weer kunnen worden
-		if ($this->value == '0000-00-00' OR empty($this->value)) {
+		if (!$this->required) {
 			array_unshift($years, 0);
 			array_unshift($months, 0);
 			array_unshift($days, 0);

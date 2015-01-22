@@ -143,7 +143,7 @@ abstract class GroepenController extends Controller {
 		$form = new GroepForm($groep, groepenUrl . $this->action);
 		if ($form->validate()) {
 			$this->model->create($groep);
-			$this->view = new GroepLedenData(array($groep));
+			$this->view = new GroepenBeheerData(array($groep));
 		} else {
 			$this->view = $form;
 		}
@@ -162,7 +162,7 @@ abstract class GroepenController extends Controller {
 		$form = new GroepForm($groep, groepenUrl . $this->action);
 		if ($form->validate()) {
 			$this->model->update($groep);
-			$this->view = new GroepLedenData(array($groep));
+			$this->view = new GroepenBeheerData(array($groep));
 		} else {
 			$this->view = $form;
 		}
