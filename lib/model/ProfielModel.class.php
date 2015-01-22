@@ -166,11 +166,15 @@ class ProfielModel extends CachedPersistenceModel {
 	public function wijzig_lidstatus(Profiel $profiel, $oudestatus) {
 		$changelog = '';
 		// Maaltijd en corvee bijwerken
-		$geenAboEnCorveeVoor = array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_EXLID', 'S_CIE', 'S_OVERLEDEN');
+		$geenAboEnCorveeVoor = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Commissie, LidStatus::Overleden);
 		if (in_array($profiel->status, $geenAboEnCorveeVoor)) {
 			//maaltijdabo's uitzetten (R_ETER is een S_NOBODY die toch een abo mag hebben)
-			if ($profiel->permissies != 'R_ETER') {
-				$changelog .= $this->disableMaaltijdabos($profiel, $oudestatus);
+			$account = AccountModel::get($profiel->uid);
+			if (!$account OR $account->perm_role !== AccessRole::Eter) {
+				$removedabos = $this->disableMaaltijdabos($profiel, $oudestatus);
+				if ($removedabos != '') {
+					$changelog .= $removedabos;
+				}
 			}
 			// Toekomstige corveetaken verwijderen
 			$removedcorvee = $this->removeToekomstigeCorvee($profiel, $oudestatus);
@@ -179,8 +183,8 @@ class ProfielModel extends CachedPersistenceModel {
 			}
 		}
 		// Mailen naar fisci,bibliothecaris...
-		$wordtinactief = array('S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_EXLID', 'S_OVERLEDEN');
-		$wasactief = array('S_NOVIET', 'S_GASTLID', 'S_LID', 'S_KRINGEL');
+		$wordtinactief = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden);
+		$wasactief = array(LidStatus::Noviet, LidStatus::Gastlid, LidStatus::Lid, LidStatus::Kringel);
 		if (in_array($profiel->status, $wordtinactief) AND in_array($oudestatus, $wasactief)) {
 			$this->notifyFisci($profiel, $oudestatus);
 			$this->notifyBibliothecaris($profiel, $oudestatus);
@@ -196,7 +200,10 @@ class ProfielModel extends CachedPersistenceModel {
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
 		require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
 		$aantal = MaaltijdAbonnementenModel::verwijderAbonnementenVoorLid($profiel->uid);
-		return 'Afmelden abo\'s: ' . $aantal . ' uitgezet.[br]';
+		if ($aantal > 0) {
+			return 'Afmelden abo\'s: ' . $aantal . ' uitgezet.[br]';
+		}
+		return null;
 	}
 
 	/**
@@ -210,10 +217,11 @@ class ProfielModel extends CachedPersistenceModel {
 		if (sizeof($taken) !== $aantal) {
 			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
 		}
-		$changelog = 'Verwijderde corveetaken';
+		$changelog = null;
 		if ($aantal > 0) {
+			$changelog = 'Verwijderde corveetaken:[br]';
 			foreach ($taken as $taak) {
-				$changelog .= '[br]' . strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->getCorveeFunctie()->naam;
+				$changelog .= strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->getCorveeFunctie()->naam . '[br]';
 			}
 			// Corveeceasar mailen over vrijvallende corveetaken.
 			$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/toekomstigcorveeverwijderd.mail');
@@ -231,7 +239,7 @@ class ProfielModel extends CachedPersistenceModel {
 			$mail->setPlaceholders($values);
 			$mail->send();
 		}
-		return $changelog . '[br]';
+		return $changelog;
 	}
 
 	/**

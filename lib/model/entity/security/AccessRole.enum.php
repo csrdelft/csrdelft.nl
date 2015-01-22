@@ -1,7 +1,7 @@
 <?php
 
 /**
- * AccessRoles.enum.php
+ * AccessRole.enum.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
@@ -9,7 +9,7 @@
  * 
  * @see AccessModel
  */
-abstract class AccessRoles implements PersistentEnum {
+abstract class AccessRole implements PersistentEnum {
 
 	const Nobody = 'R_NOBODY';
 	const Eter = 'R_ETER';

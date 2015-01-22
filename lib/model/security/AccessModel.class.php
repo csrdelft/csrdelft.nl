@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/entity/security/AccessRoles.enum.php';
+require_once 'model/entity/security/AccessRole.enum.php';
 require_once 'model/entity/security/AccessAction.enum.php';
 require_once 'model/security/LoginModel.class.php';
 require_once 'model/GroepenModel.class.php';
@@ -114,13 +114,13 @@ class AccessModel extends CachedPersistenceModel {
 			case LidStatus::Kringel:
 			case LidStatus::Noviet:
 			case LidStatus::Lid:
-			case LidStatus::Gastlid: return AccessRoles::Lid;
+			case LidStatus::Gastlid: return AccessRole::Lid;
 			case LidStatus::Oudlid:
-			case LidStatus::Erelid: return AccessRoles::Oudlid;
+			case LidStatus::Erelid: return AccessRole::Oudlid;
 			case LidStatus::Commissie:
 			case LidStatus::Overleden:
 			case LidStatus::Exlid:
-			case LidStatus::Nobody: return AccessRoles::Nobody;
+			case LidStatus::Nobody: return AccessRole::Nobody;
 			default: throw new Exception('LidStatus onbekend');
 		}
 	}
@@ -254,19 +254,19 @@ class AccessModel extends CachedPersistenceModel {
 
 		// Permission Assignment:
 		$this->roles = array(
-			AccessRoles::Nobody	 => $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'] | $p['P_ALBUM_READ'],
-			AccessRoles::Lid	 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_MOD']
+			AccessRole::Nobody	 => $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'] | $p['P_ALBUM_READ'],
+			AccessRole::Lid	 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_MOD']
 		);
 
 		// use | $p[] for hierarchical RBAC (inheritance between roles)
 		// use & ~$p[] for constrained RBAC (separation of duties)
 
-		$this->roles[AccessRoles::Eter] = $this->roles[AccessRoles::Nobody] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
-		$this->roles[AccessRoles::Oudlid] = $this->roles[AccessRoles::Lid] | $p['P_ALLEEN_OUDLID'];
-		$this->roles[AccessRoles::Basfcie] = $this->roles[AccessRoles::Lid] | $p['P_DOCS_MOD'] | $p['P_ALBUM_DEL'] | $p['P_BIEB_MOD'];
-		$this->roles[AccessRoles::Maalcie] = $this->roles[AccessRoles::Lid] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
-		$this->roles[AccessRoles::Bestuur] = $this->roles[AccessRoles::Basfcie] | $this->roles[AccessRoles::Maalcie] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_ALBUM_DEL'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
-		$this->roles[AccessRoles::Pubcie] = $this->roles[AccessRoles::Bestuur] | $p['P_ADMIN'] | $p['P_MAIL_SEND'] | $p['P_CORVEE_SCHED'] | $p['P_FORUM_ADMIN'];
+		$this->roles[AccessRole::Eter] = $this->roles[AccessRole::Nobody] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
+		$this->roles[AccessRole::Oudlid] = $this->roles[AccessRole::Lid] | $p['P_ALLEEN_OUDLID'];
+		$this->roles[AccessRole::Basfcie] = $this->roles[AccessRole::Lid] | $p['P_DOCS_MOD'] | $p['P_ALBUM_DEL'] | $p['P_BIEB_MOD'];
+		$this->roles[AccessRole::Maalcie] = $this->roles[AccessRole::Lid] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
+		$this->roles[AccessRole::Bestuur] = $this->roles[AccessRole::Basfcie] | $this->roles[AccessRole::Maalcie] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_ALBUM_DEL'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
+		$this->roles[AccessRole::Pubcie] = $this->roles[AccessRole::Bestuur] | $p['P_ADMIN'] | $p['P_MAIL_SEND'] | $p['P_CORVEE_SCHED'] | $p['P_FORUM_ADMIN'];
 
 		// save in cache
 		$this->setCache($key, $this->permissions, true);

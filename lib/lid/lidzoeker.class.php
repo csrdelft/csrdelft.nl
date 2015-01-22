@@ -164,7 +164,7 @@ class LidZoeker {
 	//(merge in de constructor)
 	private $allowVeldenLEDENMOD = array(
 		'studienr', 'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum',
-		'echtgenoot', 'adresseringechtpaar', 'land', 'permissies', 'bankrekening', 'machtiging');
+		'echtgenoot', 'adresseringechtpaar', 'land', 'bankrekening', 'machtiging');
 	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te
 	//filteren en te sorteren.
 	private $veldenNotSelectable = array('voornaam', 'achternaam', 'tussenvoegsel');

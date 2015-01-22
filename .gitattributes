@@ -4162,7 +4162,7 @@ lib/model/entity/maalcie/MaaltijdRepetitie.class.php -text
 lib/model/entity/maalcie/Taken[!!-~]ERD.png -text
 lib/model/entity/security/AccessAction.enum.php -text
 lib/model/entity/security/AccessControl.class.php -text
-lib/model/entity/security/AccessRoles.enum.php -text
+lib/model/entity/security/AccessRole.enum.php -text
 lib/model/entity/security/Account.class.php -text
 lib/model/entity/security/LoginSession.class.php -text
 lib/model/entity/security/OneTimeToken.class.php -text

@@ -196,8 +196,8 @@ class AccountForm extends Formulier {
 
 		if (LoginModel::mag('P_LEDEN_MOD')) {
 			$roles = array();
-			foreach (AccessRoles::getTypeOptions() as $optie) {
-				$roles[$optie] = AccessRoles::getDescription($optie);
+			foreach (AccessRole::getTypeOptions() as $optie) {
+				$roles[$optie] = AccessRole::getDescription($optie);
 			}
 			$fields[] = new SelectField('perm_role', $account->perm_role, 'Rechten', $roles);
 		}
