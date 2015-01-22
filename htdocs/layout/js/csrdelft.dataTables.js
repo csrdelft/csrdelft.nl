@@ -209,11 +209,6 @@ function fnChildRow(table, $td, column) {
 			});
 		}
 	}
-	else if (typeof column === 'string') { // TODO: preloaded expand
-		row.child('<div class="innerDetails verborgen"></div>').show();
-		var innerDiv = tr.next().addClass('childrow').children(':first').children(':first');
-		innerDiv.html(data).slideDown();
-	}
 	else {
 		row.child('<div class="innerDetails verborgen"></div>').show();
 		tr.addClass('expanded loading');
@@ -224,6 +219,7 @@ function fnChildRow(table, $td, column) {
 			if (row.child.isShown()) {
 				tr.removeClass('loading');
 				innerDiv.html(data).slideDown();
+				init_context(innerDiv);
 			}
 		});
 	}

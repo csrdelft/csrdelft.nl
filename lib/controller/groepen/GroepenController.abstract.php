@@ -186,25 +186,30 @@ abstract class GroepenController extends Controller {
 		if ($this->isPosted()) {
 			$this->view = new GroepLedenData($groep->getLeden());
 		} else {
-			$this->view = new GroepLedenTable(GroepLedenModel::instance(), $groep);
+			$class = $groep::leden;
+			$this->view = new GroepLedenTable($class::instance(), $groep);
 		}
 	}
 
 	public function aanmelden(Groep $groep, $uid = null) {
-		if (!$uid) {
-			$lid = GroepLedenModel::instance()->nieuw($groep, LoginModel::getUid());
+		if ($uid) {
+			$class = $groep::leden;
+			$lid = $class::instance()->nieuw($groep, LoginModel::getUid());
 			$form = new GroepAanmeldingForm($lid, $this->action);
 			if ($form->validate()) {
-				GroepLedenModel::instance()->create($lid);
+				$class = $groep::leden;
+				$class::instance()->create($lid);
 			}
 			$this->view = $form;
 		}
 		// beheren
 		else {
-			$lid = GroepLedenModel::instance()->nieuw($groep, $uid);
+			$class = $groep::leden;
+			$lid = $class::instance()->nieuw($groep, $uid);
 			$form = new GroepLidForm($lid, $this->action);
 			if ($form->validate()) {
-				GroepLedenModel::instance()->create($lid);
+				$class = $groep::leden;
+				$class::instance()->create($lid);
 				$this->view = new GroepLedenData(array($lid));
 			} else {
 				$this->view = $form;
@@ -217,7 +222,7 @@ abstract class GroepenController extends Controller {
 	}
 
 	public function afmelden(Groep $groep, $uid = null) {
-		if (!$uid) {
+		if ($uid) {
 			
 		}
 		// beheren
