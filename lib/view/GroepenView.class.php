@@ -67,6 +67,10 @@ class GroepLedenTable extends DataTable {
 	public function __construct(GroepLedenModel $model, Groep $groep) {
 		parent::__construct($model::orm, 'Leden van ' . $groep->naam, 'status');
 		$this->dataUrl = groepenUrl . $groep->id . '/leden';
+		$this->hideColumn('uid', false);
+		$this->searchColumn('uid');
+		$this->setColumnTitle('uid', 'Lidnaam');
+		$this->setColumnTitle('door_uid', 'Aangemeld door');
 
 		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . $groep->id . '/' . A::Aanmelden, 'post popup', 'Aanmelden', 'Lid aanmelden', 'user_add');
 		$this->addKnop($create);
@@ -84,6 +88,9 @@ class GroepLedenData extends DataTableResponse {
 
 	public function getJson($lid) {
 		$array = $lid->jsonSerialize();
+
+		$array['uid'] = ProfielModel::getLink($lid->uid, 'civitas');
+		$array['door_uid'] = ProfielModel::getLink($lid->uid, 'civitas');
 
 		return parent::getJson($array);
 	}

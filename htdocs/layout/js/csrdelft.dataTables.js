@@ -64,8 +64,8 @@ function fnGroupByColumn(event, settings) {
 		return;
 	}
 	var $table = $(settings.nTable);
-	if ($table.data('orderDraw')) {
-		return; // recursion on draw
+	if ($table.data('regrouping')) {
+		return; // prevent loop
 	}
 	var table = $table.DataTable();
 	var columnId = fnGetGroupByColumn($table);
@@ -77,23 +77,25 @@ function fnGroupByColumn(event, settings) {
 	$table.data('collapsedGroups', []);
 	$('thead tr th:first', $table).addClass('toggle-group  toggle-group-expanded');
 	settings.aaSortingFixed = newOrder.slice(); // copy by value
-	$table.data('orderDraw', true);
+	$table.data('regrouping', true);
 	table.draw(false);
 }
 
 function fnGroupByColumnDraw(event, settings) {
 	var $table = $(settings.nTable);
-	if ($table.data('orderDraw')) {
-		$table.data('orderDraw', false);
-		return; // recursion on draw
+	if ($table.data('lastDraw') === Date.now()) {
+		return; // workaround childrow
+	}
+	if ($table.data('regrouping')) {
+		$table.data('regrouping', false);
+		return; // prevent loop
 	}
 	var groupById = fnGetGroupByColumn($table);
 	if (groupById === false) {
 		return;
 	}
 	if (!$table.data('collapsedGroups')) {
-		$table.data('orderDraw', true); // magic workaround child-table init
-		return;
+		return; // wait for init
 	}
 	var collapse = $table.data('collapsedGroups').slice(); // copy by value
 	var colspan = '';
@@ -128,6 +130,7 @@ function fnGroupByColumnDraw(event, settings) {
 		groupRow = $('<tr class="group"><td class="toggle-group"></td><td class="group-label">' + group + '</td>' + colspan + '</tr>').data('groupData', group);
 		tbody.append(groupRow);
 	});
+	$table.data('lastDraw', Date.now());
 }
 
 function fnHideEmptyCollapsedAll($table, $th) {
@@ -154,7 +157,6 @@ function fnGroupExpandCollapse(table, $table, $tr) {
 		collapse.push(group);
 	}
 	$table.data('collapsedGroups', collapse.sort());
-	bCtrlPressed = false; // prevent order callback weird effect
 	table.draw(false);
 	fnHideEmptyCollapsedAll($table, $('thead tr th:first', $table));
 }
