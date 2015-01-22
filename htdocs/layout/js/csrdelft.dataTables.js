@@ -155,15 +155,13 @@ function fnGroupByColumnDraw(event, settings) {
 		$table.data('orderDraw', false);
 		return; // recursion on draw
 	}
-	console.log(event);
-
+	if (!$table.data('collapsedGroups')) {
+		$table.data('orderDraw', true); // magic workaround child-table init
+		return;
+	}
 	var groupById = fnGetGroupByColumn($table);
 	if (groupById === false) {
 		return;
-	}
-	if (!$table.data('collapsedGroups')) {
-		$table.data('orderDraw', true); // magic workaround
-		return; // wait for init
 	}
 	var collapse = $table.data('collapsedGroups').slice(); // copy by value
 	var colspan = '';
