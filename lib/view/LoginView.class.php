@@ -61,16 +61,16 @@ class RememberLoginTable extends DataTable implements FormElement {
 		$this->searchColumn('remember_since');
 		$this->searchColumn('device_name');
 
-		$create = new DataTableKnop('== 0', $this->tableId, '/loginremember', 'post popup', null, 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat', '/famfamfam/add.png');
+		$create = new DataTableKnop('== 0', $this->tableId, '/loginremember', 'post popup', 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat', '/famfamfam/add.png');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, '/loginremember', 'post popup', null, 'Naam wijzigen', 'Wijzig naam van apparaat', '/famfamfam/pencil.png');
+		$update = new DataTableKnop('== 1', $this->tableId, '/loginremember', 'post popup', 'Naam wijzigen', 'Wijzig naam van apparaat', '/famfamfam/pencil.png');
 		$this->addKnop($update);
 
-		$lock = new DataTableKnop('>= 1', $this->tableId, '/loginlockip', 'post', null, '(Ont)Koppel IP', 'Alleen inloggen vanaf bepaald IP-adres', '/famfamfam/lock.png');
+		$lock = new DataTableKnop('>= 1', $this->tableId, '/loginlockip', 'post', '(Ont)Koppel IP', 'Alleen inloggen vanaf bepaald IP-adres', '/famfamfam/lock.png');
 		$this->addKnop($lock);
 
-		$delte = new DataTableKnop('>= 1', $this->tableId, '/loginforget', 'post', null, 'Verwijderen', 'Stop automatische login voor dit apparaat', '/famfamfam/cross.png');
+		$delte = new DataTableKnop('>= 1', $this->tableId, '/loginforget', 'post', 'Verwijderen', 'Stop automatische login voor dit apparaat', '/famfamfam/cross.png');
 		$this->addKnop($delte);
 	}
 

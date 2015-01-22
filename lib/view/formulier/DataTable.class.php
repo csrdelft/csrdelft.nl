@@ -294,13 +294,6 @@ class DataTable extends TabsForm {
 				 * Toolbar button state update on row (de-)selection.
 				 */
 				var fnUpdateToolbar = <?= $this->getUpdateToolbarFunction(); ?>;
-				// Multiple selection of group rows
-				$(tableId + ' tbody').on('click', 'tr', function (event) {
-					if (bShiftPressed || bCtrlPressed || !$(this).hasClass('group')) {
-						fnMultiSelect(event, $(this));
-					}
-					fnUpdateToolbar();
-				});
 				// (De-)Select all
 				$('.DTTT_button_text').on('click', fnUpdateToolbar);
 				// Toolbar above table
@@ -332,46 +325,6 @@ class DataTable extends TabsForm {
 				if ($(tableId).hasClass('groupByColumn') && fnGetGroupByColumn($(tableId))) {
 					$(tableId + ' thead tr th').first().addClass('toggle-group toggle-group-expanded');
 				}
-
-				// Keyboard multiselect support with spacebar
-				$(document).keyup(function (event) {
-					// Geen keyboard shortcuts als we in een input-element of text-area zitten.
-					var element = event.target.tagName.toUpperCase();
-					if (element == 'INPUT' || element == 'TEXTAREA' || element == 'SELECT') {
-						return;
-					}
-					/*
-					 if (keyshortcuts.indexOf(event.keyCode) >= 0) {
-					 event.preventDefault();
-					 var td = keys.fnGetCurrentTD();
-					 if (td) {
-					 fnMultiSelect(event, $(td).parent());
-					 fnUpdateToolbar();
-					 if (event.keyCode === 13 || event.keyCode === 32) { // enter, space
-					 $(td).trigger('click');
-					 }
-					 }
-					 }
-					 */
-		<?php
-		$keyshortcuts = '[13,32'; // enter, space
-		foreach ($this->getFields() as $field) {
-			if ($field instanceof DataTableKnop AND is_int($field->keyshortcut)) {
-				$keyshortcuts .= ',' . $field->keyshortcut;
-				echo "if (event.keyCode === {$field->keyshortcut}) { return $('#{$field->getId()}').trigger('click'); }\n";
-			}
-		}
-		$keyshortcuts .= ']';
-		?>
-				});
-				var keyshortcuts = <?= $keyshortcuts; ?>;
-				$(document).keydown(function (event) {
-					// Geen keyboard shortcuts als we in een input-element of text-area zitten.
-					var element = event.target.tagName.toUpperCase();
-					if (element != 'INPUT' && element != 'TEXTAREA' && element != 'SELECT' && keyshortcuts.indexOf(event.keyCode) >= 0) {
-						event.preventDefault();
-					}
-				});
 			});
 		</script>
 		<?php
@@ -402,13 +355,11 @@ class DataTableKnop extends FormulierKnop {
 
 	private $multiplicity;
 	protected $tableId;
-	public $keyshortcut;
 
-	public function __construct($multiplicity, $tableId, $url, $action, $key, $label, $title, $icon) {
+	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $icon) {
 		parent::__construct($url, $action . ' DataTableResponse', $label, $title, $icon);
 		$this->multiplicity = $multiplicity;
 		$this->tableId = $tableId;
-		$this->keyshortcut = $key;
 		$this->css_classes[] = 'DTTT_button';
 	}
 
