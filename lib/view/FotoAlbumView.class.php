@@ -114,11 +114,10 @@ class PosterUploadForm extends Formulier {
 	public function view() {
 		parent::view();
 		// Uitleg foto's toevoegen
-		require_once 'controller/CmsPaginaController.class.php';
-		$c = new CmsPaginaController('');
-		$pagina = $c->getModel()->getPagina('fotostoevoegen');
-		$view = new CmsPaginaView($pagina);
-		$view->view();
+		require_once 'model/CmsPaginaModel.class.php';
+		require_once 'view/CmsPaginaView.class.php';
+		$body = new CmsPaginaView(CmsPaginaModel::get('fotostoevoegen'));
+		$body->view();
 	}
 
 }
@@ -140,11 +139,10 @@ class FotosDropzone extends Dropzone {
 		echo '<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>';
 		echo '<div class="float-right"><a class="btn" onclick="showExisting_' . $this->formId . '();$(this).remove();"><img src="/plaetjes/famfamfam/photos.png" width="16" height="16" alt="photos" class="icon"> Toon bestaande foto\'s in dit album</a></div>';
 		// Uitleg foto's toevoegen
-		require_once 'controller/CmsPaginaController.class.php';
-		$c = new CmsPaginaController('');
-		$pagina = $c->getModel()->getPagina('fotostoevoegen');
-		$view = new CmsPaginaView($pagina);
-		$view->view();
+		require_once 'model/CmsPaginaModel.class.php';
+		require_once 'view/CmsPaginaView.class.php';
+		$body = new CmsPaginaView(CmsPaginaModel::get('fotostoevoegen'));
+		$body->view();
 	}
 
 }
