@@ -6,12 +6,6 @@
  * Group by & multi-select capabilities.
  */
 
-/**
- * Fix recursion on draw inside order callback
- * @type Boolean
- */
-var bOrderDraw = false;
-
 $(document).ready(function () {
 	fnInitDataTables();
 });
@@ -122,6 +116,7 @@ function fnMultiSelect(event, tr) {
 			tr.addClass('selected');
 		}
 	}
+	$('tr.childrow').removeClass('selected');
 }
 
 function fnGetGroupByColumn($table) {
@@ -133,10 +128,13 @@ function fnGetGroupByColumn($table) {
 }
 
 function fnGroupByColumn(event, settings) {
-	if (bOrderDraw || !bCtrlPressed) {
+	if (!bCtrlPressed) {
 		return;
 	}
 	var $table = $(settings.nTable);
+	if ($table.data('orderDraw')) {
+		return; // recursion on draw
+	}
 	var table = $table.DataTable();
 	var columnId = fnGetGroupByColumn($table);
 	var newOrder = table.order();
@@ -147,19 +145,25 @@ function fnGroupByColumn(event, settings) {
 	$table.data('collapsedGroups', []);
 	$('thead tr th:first', $table).addClass('toggle-group  toggle-group-expanded');
 	settings.aaSortingFixed = newOrder.slice(); // copy by value
-	bOrderDraw = true;
+	$table.data('orderDraw', true);
 	table.draw(false);
 }
 
 function fnGroupByColumnDraw(event, settings) {
-	if (bOrderDraw) {
-		bOrderDraw = false;
+	var $table = $(settings.nTable);
+	if ($table.data('orderDraw')) {
+		$table.data('orderDraw', false);
+		return; // recursion on draw
+	}
+	console.log(event);
+
+	var groupById = fnGetGroupByColumn($table);
+	if (groupById === false) {
 		return;
 	}
-	var $table = $(settings.nTable);
-	var columnId = fnGetGroupByColumn($table);
-	if (columnId === false) {
-		return;
+	if (!$table.data('collapsedGroups')) {
+		$table.data('orderDraw', true); // magic workaround
+		return; // wait for init
 	}
 	var collapse = $table.data('collapsedGroups').slice(); // copy by value
 	var colspan = '';
@@ -173,7 +177,8 @@ function fnGroupByColumnDraw(event, settings) {
 		var table = $table.DataTable();
 		var rows = $(table.rows({page: 'current'}).nodes());
 		var last = null;
-		table.column(columnId, {page: 'current'}).data().each(function (group, i) {
+		// Iterate over data in the group by column
+		table.column(groupById, {page: 'current'}).data().each(function (group, i) {
 			if (last !== group) {
 				// Create group rows for collapsed groups
 				while (collapse.length > 0 && collapse[0].localeCompare(group) < 0) {

@@ -31,9 +31,6 @@ class GroepenBeheerTable extends DataTable {
 		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . A::Wijzigen, 'post popup', null, 'Wijzigen', 'Wijzig geselecteerde groep', '/famfamfam/pencil.png');
 		$this->addKnop($update);
 
-		$leden = new DataTableKnop('== 1', $this->tableId, groepenUrl . 'leden', 'post popup', null, 'Leden', 'Groepleden beheren', '/famfamfam/user.png');
-		$this->addKnop($leden);
-
 		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . A::Verwijderen, 'post confirm', null, 'Verwijderen', 'Geselecteerde groepen definitief verwijderen', '/famfamfam/cross.png');
 		$this->addKnop($delete);
 	}
@@ -45,6 +42,7 @@ class GroepenBeheerData extends DataTableResponse {
 	public function getJson($groep) {
 		$array = $groep->jsonSerialize();
 
+		$array['detailSource'] = groepenUrl . $groep->id . '/leden';
 		$array['samenvatting'] = null;
 		$array['omschrijving'] = null;
 		$array['website'] = null;
@@ -64,7 +62,7 @@ class GroepForm extends DataTableForm {
 
 }
 
-class GroepLedenTable extends DataTable implements FormElement {
+class GroepLedenTable extends DataTable {
 
 	public function __construct(GroepLedenModel $model, Groep $groep) {
 		parent::__construct($model::orm, 'Leden van ' . $groep->naam, 'status');
@@ -78,14 +76,6 @@ class GroepLedenTable extends DataTable implements FormElement {
 
 		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Afmelden, 'post confirm', null, 'Afmelden', 'Geselecteerde leden afmelden', '/famfamfam/user_delete.png');
 		$this->addKnop($delete);
-	}
-
-	public function getHtml() {
-		throw new Exception('unsupported');
-	}
-
-	public function getType() {
-		return get_class($this);
 	}
 
 }

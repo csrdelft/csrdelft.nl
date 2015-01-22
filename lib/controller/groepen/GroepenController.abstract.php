@@ -70,6 +70,8 @@ abstract class GroepenController extends Controller {
 	protected function mag($action, $method) {
 		switch ($action) {
 			case A::Beheren:
+			case 'leden':
+			case 'rechten':
 				return true;
 
 			case 'overzicht':
@@ -81,8 +83,6 @@ abstract class GroepenController extends Controller {
 			case GroepTab::Pasfotos:
 			case GroepTab::Statistiek:
 			case GroepTab::Emails:
-
-			case 'leden':
 			case A::Aanmaken:
 			case A::Wijzigen:
 			case A::Verwijderen:
@@ -182,22 +182,11 @@ abstract class GroepenController extends Controller {
 		$this->view = new RemoveRowsResponse($response);
 	}
 
-	public function leden(Groep $groep = null) {
-		if ($groep) {
-			$leden = $groep->getLeden();
-			$this->view = new GroepLedenData($leden);
+	public function leden(Groep $groep) {
+		if ($this->isPosted()) {
+			$this->view = new GroepLedenData($groep->getLeden());
 		} else {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-			if (isset($selection[0])) {
-				$groep = $this->model->getUUID($selection[0]);
-			}
-			if (!$groep) {
-				$this->geentoegang();
-			}
-			$table = new GroepLedenTable(GroepLedenModel::instance(), $groep);
-			$form = new ModalForm($table, null);
-			$form->addFields(array($table));
-			$this->view = $form;
+			$this->view = new GroepLedenTable(GroepLedenModel::instance(), $groep);
 		}
 	}
 
