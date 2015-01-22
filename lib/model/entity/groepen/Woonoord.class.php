@@ -12,6 +12,8 @@ require_once 'model/entity/groepen/HuisStatus.enum.php';
  */
 class Woonoord extends Groep {
 
+	const leden = 'BewonersModel';
+
 	/**
 	 * Woonoord / Huis
 	 * @var HuisStatus

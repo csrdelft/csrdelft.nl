@@ -8,6 +8,8 @@
  */
 class Werkgroep extends OpvolgbareGroep {
 
+	const leden = 'WerkgroepDeelnemersModel';
+
 	/**
 	 * Database table name
 	 * @var string

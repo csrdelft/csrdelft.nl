@@ -59,7 +59,6 @@ class GroepenRouterController extends Controller {
 			case 'besturen':
 			case 'ketzers':
 			case 'activiteiten':
-			case 'conferenties':
 				return LoginModel::mag('P_LEDEN_READ');
 
 			default:

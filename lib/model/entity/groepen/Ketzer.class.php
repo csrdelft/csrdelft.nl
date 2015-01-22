@@ -10,6 +10,8 @@
  */
 class Ketzer extends OpvolgbareGroep {
 
+	const leden = 'KetzerLedenModel';
+
 	/**
 	 * Maximaal aantal groepsleden
 	 * @var string

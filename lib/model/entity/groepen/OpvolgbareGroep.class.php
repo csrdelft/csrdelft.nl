@@ -11,6 +11,8 @@ require_once 'model/entity/groepen/Groep.class.php';
  */
 class OpvolgbareGroep extends Groep {
 
+	const leden = 'OpvolgbareGroepLedenModel';
+
 	/**
 	 * Familie (opvolging)
 	 * @var string

@@ -8,6 +8,8 @@
  */
 class Bestuur extends OpvolgbareGroep {
 
+	const leden = 'BestuursLedenModel';
+
 	/**
 	 * Bestuurstekst
 	 * @var string

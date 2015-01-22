@@ -11,6 +11,8 @@ require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
  */
 class Activiteit extends Ketzer implements Agendeerbaar {
 
+	const leden = 'ActiviteitDeelnemersModel';
+
 	/**
 	 * Intern / Extern / SjaarsActie
 	 * @var ActiviteitSoort

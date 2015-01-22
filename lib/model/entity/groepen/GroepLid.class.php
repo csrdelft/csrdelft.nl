@@ -13,11 +13,6 @@ require_once 'model/entity/groepen/CommissieFunctie.enum.php';
 class GroepLid extends PersistentEntity {
 
 	/**
-	 * Class extends Groep
-	 * @var class
-	 */
-	public $groep_class;
-	/**
 	 * Primary key of Groep
 	 * @var int
 	 */
@@ -62,21 +57,20 @@ class GroepLid extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'groep_class'	 => array(T::String),
-		'groep_id'		 => array(T::Integer),
-		'uid'			 => array(T::UID),
-		'volgorde'		 => array(T::Integer),
-		'opmerking'		 => array(T::String, true),
-		'lid_sinds'		 => array(T::DateTime),
-		'lid_tot'		 => array(T::DateTime, true),
-		'status'		 => array(T::Enumeration, false, 'GroepStatus'),
-		'door_uid'		 => array(T::UID)
+		'groep_id'	 => array(T::Integer),
+		'uid'		 => array(T::UID),
+		'volgorde'	 => array(T::Integer),
+		'opmerking'	 => array(T::String, true),
+		'lid_sinds'	 => array(T::DateTime),
+		'lid_tot'	 => array(T::DateTime, true),
+		'status'	 => array(T::Enumeration, false, 'GroepStatus'),
+		'door_uid'	 => array(T::UID)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('groep_class', 'groep_id', 'uid');
+	protected static $primary_key = array('groep_id', 'uid');
 	/**
 	 * Database table name
 	 * @var string

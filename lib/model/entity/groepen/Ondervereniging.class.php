@@ -10,6 +10,8 @@ require_once 'model/entity/groepen/OnderverenigingStatus.enum.php';
  */
 class Ondervereniging extends Groep {
 
+	const leden = 'OnderverLedenModel';
+
 	/**
 	 * (Adspirant-)Ondervereniging
 	 * @var OnderverenigingStatus

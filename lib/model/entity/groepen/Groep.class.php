@@ -13,6 +13,8 @@ require_once 'model/entity/groepen/GroepLid.class.php';
  */
 class Groep extends PersistentEntity {
 
+	const leden = 'GroepLedenModel';
+
 	/**
 	 * Primary key
 	 * @var int
@@ -79,11 +81,13 @@ class Groep extends PersistentEntity {
 	 * @return GroepLid[]
 	 */
 	public function getLeden($status = null) {
-		return GroepLedenModel::instance()->getLedenVoorGroep($this, $status);
+		$class = static::leden;
+		return $class::instance()->getLedenVoorGroep($this, $status);
 	}
 
 	public function getStatistieken() {
-		return GroepLedenModel::instance()->getStatistieken($this);
+		$class = static::leden;
+		return $class::instance()->getStatistieken($this);
 	}
 
 	/**

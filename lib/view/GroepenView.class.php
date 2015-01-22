@@ -250,10 +250,6 @@ class GroepLijstView extends GroepTabView {
 
 class GroepPasfotosView extends GroepTabView {
 
-	public function __construct(Groep $groep) {
-		parent::__construct($groep);
-	}
-
 	public function view() {
 		foreach ($this->groep->getLeden() as $lid) {
 			echo '<div class="pasfoto">' . ProfielModel::getLink($lid->uid, 'pasfoto') . '</div>';
@@ -264,13 +260,9 @@ class GroepPasfotosView extends GroepTabView {
 
 class GroepStatistiekView extends GroepTabView {
 
-	public function __construct(Groep $groep) {
-		parent::__construct($groep->getStatistieken());
-	}
-
 	public function view() {
 		echo '<table class="groepStats">';
-		foreach ($this->groep as $title => $stat) {
+		foreach ($this->groep->getStatistieken() as $title => $stat) {
 			echo '<thead><tr><th colspan="2">' . $title . '</th></tr></thead><tbody>';
 			if (!is_array($stat)) {
 				echo '<tr><td colspan="2">' . $stat . '</td></tr>';

@@ -8,6 +8,8 @@
  */
 class Kring extends OpvolgbareGroep {
 
+	const leden = 'KringLedenModel';
+
 	/**
 	 * Verticale-letter
 	 * @var string

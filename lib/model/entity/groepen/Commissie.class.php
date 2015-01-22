@@ -12,6 +12,8 @@ require_once 'model/entity/groepen/CommissieSoort.enum.php';
  */
 class Commissie extends OpvolgbareGroep {
 
+	const leden = 'CommissieLedenModel';
+
 	/**
 	 * (Bestuurs-)Commissie / SjaarCie
 	 * @var CommissieSoort
