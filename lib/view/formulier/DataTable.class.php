@@ -26,12 +26,12 @@ class DataTable extends TabsForm {
 		'tableTools' => array(
 			'sRowSelect' => 'os',
 			'aButtons'	 => array(
-				'print',
-				'pdf',
-				'xls',
 				'select_all',
 				'select_none',
-				'copy'
+				'copy',
+				'xls',
+				'pdf',
+				'print'
 			),
 			'sSwfPath'	 => '/layout/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf'
 		),
@@ -304,7 +304,7 @@ class DataTable extends TabsForm {
 				$('.DTTT_container').remove();
 				// Toolbar table filter formatting
 				$(tableId + '_filter input').attr('placeholder', 'Zoeken').unwrap();
-				$(tableId + '_filter').appendTo(tableId + '_toolbar');
+				$(tableId + '_filter').prependTo(tableId + '_toolbar');
 				// Opening and closing details
 				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
 					fnChildRow(table, $(this));
@@ -357,11 +357,11 @@ class DataTableKnop extends FormulierKnop {
 	private $multiplicity;
 	protected $tableId;
 
-	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $icon) {
-		parent::__construct($url, $action . ' DataTableResponse', $label, $title, $icon);
+	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $class) {
+		parent::__construct($url, $action . ' DataTableResponse', $label, $title, null);
 		$this->multiplicity = $multiplicity;
 		$this->tableId = $tableId;
-		$this->css_classes[] = 'DTTT_button';
+		$this->css_classes[] = 'DTTT_button DTTT_button_' . $class;
 	}
 
 	public function getUpdateToolbar() {
