@@ -4137,6 +4137,7 @@ lib/model/entity/groepen/GroepLid.class.php -text
 lib/model/entity/groepen/GroepStatus.enum.php -text
 lib/model/entity/groepen/GroepTab.enum.php -text
 lib/model/entity/groepen/Groepen[!!-~]CD.png -text
+lib/model/entity/groepen/Groepen[!!-~]FASE-1-2-3.png -text
 lib/model/entity/groepen/HuisStatus.enum.php -text
 lib/model/entity/groepen/Ketzer.class.php -text
 lib/model/entity/groepen/KetzerDeelnemer.class.php -text
