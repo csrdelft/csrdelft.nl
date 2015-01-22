@@ -1,6 +1,5 @@
 <?php
 
-require_once 'model/entity/groepen/Ketzer.class.php';
 require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
 
 /**
@@ -9,7 +8,7 @@ require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Activiteit extends Ketzer implements Agendeerbaar {
+class Activiteit extends OpvolgbareGroep implements Agendeerbaar {
 
 	const leden = 'ActiviteitDeelnemersModel';
 
@@ -24,12 +23,42 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 */
 	public $locatie;
 	/**
+	 * Maximaal aantal groepsleden
+	 * @var string
+	 */
+	public $aanmeld_limiet;
+	/**
+	 * Datum en tijd aanmeldperiode begin
+	 * @var string
+	 */
+	public $aanmelden_vanaf;
+	/**
+	 * Datum en tijd aanmeldperiode einde
+	 * @var string
+	 */
+	public $aanmelden_tot;
+	/**
+	 * Bedrag in centen
+	 * @var integer
+	 */
+	public $kosten_bedrag;
+	/**
+	 * Rekeningnummer voor machtiging 
+	 * @var string
+	 */
+	public $machtiging_rekening;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'soort'		 => array(T::Enumeration, false, 'ActiviteitSoort'),
-		'locatie'	 => array(T::String, true)
+		'soort'					 => array(T::Enumeration, false, 'ActiviteitSoort'),
+		'locatie'				 => array(T::String, true),
+		'aanmeld_limiet'		 => array(T::Integer, true),
+		'aanmelden_vanaf'		 => array(T::DateTime),
+		'aanmelden_tot'			 => array(T::DateTime),
+		'kosten_bedrag'			 => array(T::Integer, true),
+		'machtiging_rekening'	 => array(T::String, true)
 	);
 	/**
 	 * Database table name

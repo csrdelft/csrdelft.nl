@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WerkgroepenController.abstract.php
+ * WerkgroepenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 

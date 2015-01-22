@@ -1,7 +1,7 @@
 <?php
 
 /**
- * CommissiesController.abstract.php
+ * CommissiesController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 

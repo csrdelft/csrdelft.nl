@@ -1,7 +1,7 @@
 <?php
 
 /**
- * BesturenController.abstract.php
+ * BesturenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 

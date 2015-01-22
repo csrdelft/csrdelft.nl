@@ -1,7 +1,7 @@
 <?php
 
 /**
- * OnderverenigingenController.abstract.php
+ * OnderverenigingenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 

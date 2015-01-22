@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WoonoordenController.abstract.php
+ * WoonoordenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 

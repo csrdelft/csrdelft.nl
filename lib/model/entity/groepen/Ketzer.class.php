@@ -8,7 +8,7 @@
  * Een ketzer is een aanmeldbare groep.
  * 
  */
-class Ketzer extends OpvolgbareGroep {
+class Ketzer extends Groep {
 
 	const leden = 'KetzerLedenModel';
 

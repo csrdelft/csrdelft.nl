@@ -13,6 +13,7 @@ abstract class CommissieSoort implements PersistentEnum {
 	const BestuursCommissie = 'b';
 	const Commissie = 'c';
 	const SjaarCie = 's';
+	const Extern = 'e';
 
 	public static function getTypeOptions() {
 		return array(self::BestuursCommissie, self::Commissie, self::SjaarCie);
@@ -23,6 +24,7 @@ abstract class CommissieSoort implements PersistentEnum {
 			case self::BestuursCommissie: return 'Bestuurscommissie';
 			case self::Commissie: return 'Commissie';
 			case self::SjaarCie: return 'SjaarCie';
+			case self::Extern: return 'Externe commissie';
 			default: throw new Exception('CommissieSoort onbekend');
 		}
 	}
@@ -32,6 +34,7 @@ abstract class CommissieSoort implements PersistentEnum {
 			case self::BestuursCommissie:
 			case self::Commissie:
 			case self::SjaarCie:
+			case self::Extern:
 				return $option;
 			default: throw new Exception('CommissieSoort onbekend');
 		}

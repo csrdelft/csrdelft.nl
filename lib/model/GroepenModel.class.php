@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/entity/groepen/OpvolgbareGroep.class.php';
+require_once 'model/entity/groepen/OpvolgbareGroep.abstract.php';
 require_once 'model/GroepLedenModel.class.php';
 
 /**
@@ -105,7 +105,7 @@ class VerticalenModel extends GroepenModel {
 
 }
 
-class OpvolgbareGroepenModel extends GroepenModel {
+abstract class OpvolgbareGroepenModel extends GroepenModel {
 
 	const orm = 'OpvolgbareGroep';
 
@@ -157,19 +157,32 @@ class BesturenModel extends OpvolgbareGroepenModel {
 
 	protected static $instance;
 
+	public function nieuw() {
+		$bestuur = parent::nieuw();
+		$bestuur->bijbeltekst = null;
+		return $bestuur;
+	}
+
+}
+
+class ActiviteitenModel extends OpvolgbareGroepenModel {
+
+	const orm = 'Activiteit';
+
+	protected static $instance;
+
+	public function nieuw() {
+		$activiteit = parent::nieuw();
+		$activiteit->soort = ActiviteitSoort::Intern;
+		$activiteit->locatie = null;
+		return $activiteit;
+	}
+
 }
 
 class KetzersModel extends GroepenModel {
 
 	const orm = 'Ketzer';
-
-	protected static $instance;
-
-}
-
-class ActiviteitenModel extends KetzersModel {
-
-	const orm = 'Activiteit';
 
 	protected static $instance;
 

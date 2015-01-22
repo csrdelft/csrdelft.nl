@@ -98,15 +98,7 @@ class VerticaleLedenModel extends GroepLedenModel {
 
 }
 
-class OpvolgbareGroepLedenModel extends GroepLedenModel {
-
-	const orm = 'OpvGroepLid';
-
-	protected static $instance;
-
-}
-
-class KringLedenModel extends OpvolgbareGroepLedenModel {
+class KringLedenModel extends GroepLedenModel {
 
 	const orm = 'KringLid';
 
@@ -114,7 +106,7 @@ class KringLedenModel extends OpvolgbareGroepLedenModel {
 
 }
 
-class WerkgroepDeelnemersModel extends OpvolgbareGroepLedenModel {
+class WerkgroepDeelnemersModel extends GroepLedenModel {
 
 	const orm = 'WerkgroepDeelnemer';
 
@@ -122,7 +114,7 @@ class WerkgroepDeelnemersModel extends OpvolgbareGroepLedenModel {
 
 }
 
-class CommissieLedenModel extends OpvolgbareGroepLedenModel {
+class CommissieLedenModel extends GroepLedenModel {
 
 	const orm = 'CommissieLid';
 
@@ -130,9 +122,17 @@ class CommissieLedenModel extends OpvolgbareGroepLedenModel {
 
 }
 
-class BestuursLedenModel extends OpvolgbareGroepLedenModel {
+class BestuursLedenModel extends GroepLedenModel {
 
 	const orm = 'BestuursLid';
+
+	protected static $instance;
+
+}
+
+class ActiviteitDeelnemersModel extends GroepLedenModel {
+
+	const orm = 'ActiviteitDeelnemer';
 
 	protected static $instance;
 
@@ -141,14 +141,6 @@ class BestuursLedenModel extends OpvolgbareGroepLedenModel {
 class KetzerDeelnemersModel extends GroepLedenModel {
 
 	const orm = 'KetzerDeelnemer';
-
-	protected static $instance;
-
-}
-
-class ActiviteitDeelnemersModel extends KetzersModel {
-
-	const orm = 'ActiviteitDeelnemer';
 
 	protected static $instance;
 

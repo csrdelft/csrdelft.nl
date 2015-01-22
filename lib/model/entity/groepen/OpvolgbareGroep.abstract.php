@@ -3,15 +3,13 @@
 require_once 'model/entity/groepen/Groep.class.php';
 
 /**
- * OpvolgbareGroep.class.php
+ * OpvolgbareGroep.abstract.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Een groep met familie voor opvolging en status.
  */
-class OpvolgbareGroep extends Groep {
-
-	const leden = 'OpvolgbareGroepLedenModel';
+abstract class OpvolgbareGroep extends Groep {
 
 	/**
 	 * Familie (opvolging)

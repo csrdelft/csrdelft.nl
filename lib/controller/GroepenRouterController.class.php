@@ -1,7 +1,7 @@
 <?php
 
 require_once 'model/GroepenModel.class.php';
-require_once 'controller/groepen/OpvolgbareGroepenController.class.php';
+require_once 'controller/groepen/OpvolgbareGroepenController.abstract.php';
 
 /**
  * GroepenRouterController.class.php

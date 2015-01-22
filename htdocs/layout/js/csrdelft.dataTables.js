@@ -206,6 +206,7 @@ function fnChildRow(table, $td, column) {
 			var innerDiv = tr.next().children(':first').children(':first');
 			innerDiv.slideUp(400, function () {
 				row.child.hide();
+				tr.removeClass('expanded');
 			});
 		}
 	}

@@ -1,6 +1,5 @@
 <?php
 
-require_once 'controller/framework/Controller.abstract.php';
 require_once 'model/GroepenOldModel.class.php';
 
 /**

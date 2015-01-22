@@ -1,6 +1,6 @@
 <?php
 
-require_once 'controller/groepen/GroepenController.abstract.php';
+require_once 'controller/groepen/GroepenController.class.php';
 
 /**
  * OpvolgbareGroepenController.abstract.php

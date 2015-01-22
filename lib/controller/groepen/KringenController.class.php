@@ -1,7 +1,7 @@
 <?php
 
 /**
- * KringenController.abstract.php
+ * KringenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
