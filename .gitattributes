@@ -4413,8 +4413,8 @@ lib/templates/forum/stats_grafiek.tpl -text
 lib/templates/fotoalbum/album.tpl -text
 lib/templates/fotoalbum/slider.tpl -text
 lib/templates/groepen/groep.bb.tpl -text
+lib/templates/groepen/groep.old.tpl -text
 lib/templates/groepen/groep.tpl -text
-lib/templates/groepen/groep_new.tpl -text
 lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/groepen/groepleden.tpl -text

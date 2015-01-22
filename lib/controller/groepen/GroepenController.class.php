@@ -27,7 +27,6 @@ class GroepenController extends Controller {
 			case A::Aanmaken:
 			case A::Wijzigen:
 			case A::Verwijderen:
-			case 'leden':
 
 				$model = $this->model;
 				$algemeen = AccessModel::get($model::orm, $this->action, null);

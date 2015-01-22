@@ -146,14 +146,13 @@ class GroepenView extends SmartyTemplateView {
 
 }
 
-class GroepView implements View {
+class GroepView extends SmartyTemplateView {
 
-	protected $groep;
 	protected $tab;
 	protected $tabContent;
 
 	public function __construct(Groep $groep, $groepTab) {
-		$this->groep = $groep;
+		parent::__construct($groep, $groep->naam);
 		$this->tab = $groepTab;
 		switch ($this->tab) {
 			default:
@@ -172,24 +171,12 @@ class GroepView implements View {
 		}
 	}
 
-	public function getModel() {
-		return $this->groep;
-	}
-
-	public function getBreadcrumbs() {
-		return null;
-	}
-
-	public function getTitel() {
-		return $this->getModel()->naam;
-	}
-
 	public function view() {
-		$smarty = CsrSmarty::instance();
-		$smarty->assign('groep', $this->groep);
-		$smarty->assign('tab', $this->tab);
-		$smarty->assign('tabContent', $this->tabContent);
-		$smarty->display('groepen/groep_new.tpl'); //TODO: get_class($this->groep)
+		$this->smarty->assign('groep', $this->model);
+		$this->smarty->assign('groepUrl', groepenUrl . $this->model->id);
+		$this->smarty->assign('tab', $this->tab);
+		$this->smarty->assign('tabContent', $this->tabContent);
+		$this->smarty->display('groepen/groep.tpl');
 	}
 
 }

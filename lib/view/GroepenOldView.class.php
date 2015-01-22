@@ -166,7 +166,7 @@ class GroepContent extends OldGroepView {
 		if ($this->action == 'addLid') {
 			$this->smarty->assign('lidAdder', $this->getLidAdder());
 		}
-		$this->smarty->display('groepen/groep.tpl');
+		$this->smarty->display('groepen/groep.old.tpl');
 	}
 
 }

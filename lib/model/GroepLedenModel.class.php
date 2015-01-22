@@ -58,7 +58,7 @@ class GroepLedenModel extends CachedPersistenceModel {
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
 		$stats['Totaal'] = $count;
-		$stats['Verticale'] = Database::instance()->sqlSelect(array('verticale.naam', 'count(*)'), 'profielen LEFT JOIN verticale ON(provielen.verticale = verticale.letter)', 'uid IN (' . $in . ')', $uids, 'verticale.naam', null)->fetchAll();
+		$stats['Verticale'] = Database::instance()->sqlSelect(array('verticale', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'verticale', null)->fetchAll();
 		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
 		$stats['Lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
 		return $stats;
