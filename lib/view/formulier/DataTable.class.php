@@ -294,6 +294,7 @@ class DataTable extends TabsForm {
 				 * Toolbar button state update on row (de-)selection.
 				 */
 				var fnUpdateToolbar = <?= $this->getUpdateToolbarFunction(); ?>;
+				$(tableId + ' tbody').on('click', 'tr', fnUpdateToolbar);
 				// (De-)Select all
 				$('.DTTT_button_text').on('click', fnUpdateToolbar);
 				// Toolbar above table
