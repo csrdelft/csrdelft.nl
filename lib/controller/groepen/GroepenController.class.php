@@ -76,9 +76,9 @@ class GroepenController extends Controller {
 	 */
 	protected function mag($action, $method) {
 		switch ($action) {
+			case A::Rechten:
 			case A::Beheren:
 			case 'leden':
-			case 'rechten':
 				return true;
 
 			case 'overzicht':
@@ -278,6 +278,65 @@ class GroepenController extends Controller {
 				$response[] = $lid;
 			}
 			$this->view = new RemoveRowsResponse($response);
+		}
+	}
+
+	public function rechten(Groep $groep, $action = null) {
+		$model = AccessModel::instance();
+		switch ($action) {
+
+			case A::Aanmaken:
+				$ac = $model->nieuw(get_class($groep), $groep->id);
+				$form = new GroepRechtenForm($ac, $groep, $action, $this->model);
+				if ($form->validate()) {
+					$model->create($ac);
+					$this->view = new GroepRechtenData(array($ac));
+				} else {
+					$this->view = $form;
+				}
+				return;
+
+			case A::Wijzigen:
+				$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+				if (!isset($selection[0])) {
+					$this->geentoegang();
+				}
+				$ac = $model->getUUID($selection[0]);
+				if ($ac->resource === '*') {
+					// recursive permissions
+					$admin = $model->get(get_class($groep), A::Rechten, '*');
+					if (!$admin OR ! LoginModel::mag($admin)) {
+						$this->geentoegang();
+					}
+				}
+				$form = new GroepRechtenForm($ac, $groep, $action, $this->model);
+				if ($form->validate()) {
+					$model->update($ac);
+					$this->view = new GroepRechtenData(array($ac));
+				} else {
+					$this->view = $form;
+				}
+				return;
+
+			case A::Verwijderen:
+				$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+				$response = array();
+				foreach ($selection as $UUID) {
+					$ac = $model->getUUID($UUID);
+					$model->delete($ac);
+					$response[] = $ac;
+				}
+				$this->view = new RemoveRowsResponse($response);
+				return;
+
+			default:
+				if ($this->isPosted()) {
+					$acl = $model->find('environment = ? AND (resource = ? OR resource = ?)', array(get_class($groep), '*', $groep->id));
+					$this->view = new GroepRechtenData($acl);
+				} else {
+					$this->view = new GroepRechtenTable($model, $groep);
+				}
+				return;
 		}
 	}
 

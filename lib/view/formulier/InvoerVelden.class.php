@@ -716,7 +716,6 @@ class RechtenField extends TextField {
 		parent::__construct($name, $value, $description);
 		$this->suggestions[] = AccessModel::instance()->getPermissionSuggestions();
 		$this->title = 'Met , en + voor respectievelijk OR en AND. Gebruik | voor OR binnen AND (alsof er haakjes omheen staan)';
-		// Gebruik van ! voor negatie en extra : voor functie binnen groep niet vermelden.
 	}
 
 	public function validate() {
@@ -737,10 +736,6 @@ class RechtenField extends TextField {
 				// OR (secondary)
 				$or2 = explode('|', $or2);
 				foreach ($or2 as $perm) {
-					// Negatie van een permissie (gebruiker mag deze permissie niet bezitten)
-					if (startsWith($perm, '!')) {
-						$perm = substr($perm, 1);
-					}
 					if (!AccessModel::instance()->isValidPerm($perm)) {
 						$error[] = 'Ongeldig: "' . $perm . '"';
 					}

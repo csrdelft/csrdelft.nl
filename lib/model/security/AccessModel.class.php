@@ -22,8 +22,8 @@ class AccessModel extends CachedPersistenceModel {
 
 	protected static $instance;
 
-	public static function get($environment, $action, $method) {
-		$ac = self::instance()->getAccessControl($environment, $action, $method);
+	public static function get($environment, $action, $resource) {
+		$ac = self::instance()->retrieveByPrimaryKey(array($environment, $action, $resource));
 		if ($ac) {
 			return $ac->subject;
 		}
@@ -105,8 +105,11 @@ class AccessModel extends CachedPersistenceModel {
 		$this->loadPermissions();
 	}
 
-	private function getAccessControl($environment, $action, $method) {
-		return $this->retrieveByPrimaryKey(array($environment, $action, $method));
+	public function nieuw($environment, $resource) {
+		$ac = new AccessControl();
+		$ac->environment = $environment;
+		$ac->resource = $resource;
+		return $ac;
 	}
 
 	public function getDefaultPermissionRole($lidstatus) {
@@ -255,7 +258,7 @@ class AccessModel extends CachedPersistenceModel {
 		// Permission Assignment:
 		$this->roles = array(
 			AccessRole::Nobody	 => $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'] | $p['P_ALBUM_READ'],
-			AccessRole::Lid	 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_MOD']
+			AccessRole::Lid		 => $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_MOD']
 		);
 
 		// use | $p[] for hierarchical RBAC (inheritance between roles)
@@ -335,10 +338,6 @@ class AccessModel extends CachedPersistenceModel {
 			foreach ($p as $perm) {
 				$result |= $this->hasPermission($subject, $perm);
 			}
-		}
-		// Negatie van een permissie (gebruiker mag deze permissie niet bezitten)
-		elseif (startsWith($permission, '!')) {
-			$result = !$this->hasPermission($subject, substr($permission, 1));
 		}
 		// Is de gevraagde permissie het uid van de gevraagde gebruiker?
 		elseif ($subject->uid == strtolower($permission)) {
