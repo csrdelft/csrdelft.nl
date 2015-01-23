@@ -89,8 +89,8 @@ class GroepLedenData extends DataTableResponse {
 	public function getJson($lid) {
 		$array = $lid->jsonSerialize();
 
-		$array['uid'] = ProfielModel::getLink($lid->uid, 'civitas');
-		$array['door_uid'] = ProfielModel::getLink($lid->uid, 'civitas');
+		$array['uid'] = ProfielModel::getLink($array['uid'], 'civitas');
+		$array['door_uid'] = ProfielModel::getLink($array['door_uid'], 'civitas');
 
 		return parent::getJson($array);
 	}
@@ -108,6 +108,9 @@ class GroepLidForm extends DataTableForm {
 			$fields['uid']->readonly = false;
 		}
 		$fields['uid']->hidden = false;
+		$fields['door_uid']->required = true;
+		$fields['door_uid']->readonly = true;
+		$fields['door_uid']->hidden = true;
 	}
 
 }
