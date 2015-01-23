@@ -117,6 +117,7 @@ class Formulier implements View, Validator {
 		}
 		$fields[] = new FormDefaultKnoppen();
 		$this->addFields($fields);
+		return $fields;
 	}
 
 	public function getFields() {

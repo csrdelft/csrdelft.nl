@@ -64,16 +64,21 @@ JS;
 	public function getValue() {
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_INT);
+			var_dump($this->value);
+			if ($this->value !== '') {
+				$this->value = (int) $this->value;
+			}
 		}
-		if ($this->empty_null AND $this->value !== 0 AND $this->value == '') { // empty except 0
+		if ($this->empty_null AND $this->value == '' AND $this->value !== 0) {
 			$this->value = null;
-		} else {
-			$this->value = (int) $this->value;
 		}
 		return $this->value;
 	}
 
 	public function validate() {
+		if ($this->value === 0) {
+			return true;
+		}
 		if (!parent::validate()) {
 			return false;
 		}
@@ -249,6 +254,12 @@ class DecimalField extends TextField {
 
 	public function __construct($name, $value, $description, $precision, $min = null, $max = null, $step = null) {
 		parent::__construct($name, $value, $description, $min, $max);
+		if (!is_float($this->value) AND $this->value !== null) {
+			throw new Exception('value geen float');
+		}
+		if (!is_float($this->origvalue) AND $this->origvalue !== null) {
+			throw new Exception('origvalue geen float');
+		}
 		$this->precision = (int) $precision;
 		$this->pattern = '[0-9]*([\.|,][0-9]{' . $this->precision . '})?';
 		if ($min !== null) {
@@ -268,16 +279,20 @@ class DecimalField extends TextField {
 	public function getValue() {
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_FLOAT);
+			if ($this->value !== '') {
+				$this->value = (float) $this->value;
+			}
 		}
-		if ($this->empty_null AND $this->value !== 0. AND $this->value == '') { // empty except 0
+		if ($this->empty_null AND $this->value == '' AND $this->value !== 0.) {
 			$this->value = null;
-		} else {
-			$this->value = (float) $this->value;
 		}
 		return $this->value;
 	}
 
 	public function validate() {
+		if ($this->value === 0.) {
+			return true;
+		}
 		if (!parent::validate()) {
 			return false;
 		}

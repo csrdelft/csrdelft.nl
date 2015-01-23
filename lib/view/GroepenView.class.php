@@ -57,7 +57,7 @@ class GroepForm extends DataTableForm {
 
 	public function __construct(Groep $groep, $action) {
 		parent::__construct($groep, $action, get_class($groep) . ' ' . A::Wijzigen);
-		$this->generateFields();
+		$fields = $this->generateFields();
 	}
 
 }
@@ -101,7 +101,10 @@ class GroepLidForm extends DataTableForm {
 
 	public function __construct(GroepLid $lid, $action) {
 		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . $action . '/' . $lid->uid, 'Aanmelding ' . A::Bewerken);
-		$this->generateFields();
+		$fields = $this->generateFields();
+		$fields['uid']->readonly = false;
+		$fields['uid']->hidden = false;
+		$fields['uid']->required = true;
 	}
 
 }
