@@ -16,7 +16,7 @@ abstract class CommissieSoort implements PersistentEnum {
 	const Extern = 'e';
 
 	public static function getTypeOptions() {
-		return array(self::BestuursCommissie, self::Commissie, self::SjaarCie);
+		return array(self::BestuursCommissie, self::Commissie, self::SjaarCie, self::Extern);
 	}
 
 	public static function getDescription($option) {

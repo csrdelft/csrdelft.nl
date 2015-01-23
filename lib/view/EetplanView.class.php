@@ -29,7 +29,7 @@ abstract class AbstractEetplanView implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/" title="Startpagina"><img src="/plaetjes/knopjes/home-16.png" class="module-icon"></a> » <a href="/eetplan">Eetplan</a>';
+		return '<a href="/agenda" title="Agenda"><span class="fa fa-calendar module-icon"></span></a> » <a href="/eetplan">Eetplan</a>';
 	}
 
 }

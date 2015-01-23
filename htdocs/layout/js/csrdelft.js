@@ -402,7 +402,7 @@ function toggle_vertical_align(elmnt) {
 function form_inline_toggle(form) {
 	form.prev('.InlineFormToggle').toggle();
 	form.toggle();
-	form.find('.FormElement:first').focus();
+	form.find('input[id!=""][id]').focus();
 }
 
 function form_toggle(event) {
@@ -446,6 +446,7 @@ function form_submit(event) {
 
 		if (form.hasClass('InlineForm')) {
 			source = form;
+			formData.append('FormId', form.attr('id'));
 		}
 
 		if (form.hasClass('DataTableResponse')) {
@@ -513,11 +514,18 @@ function form_reset(event, form) {
 }
 
 function form_cancel(event) {
+	console.log($(this));
+
 	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
 		event.preventDefault();
 		return false;
 	}
 	var form = $(this).closest('form');
+
+	console.log(form);
+
+	console.log(event);
+
 	if (form.hasClass('InlineForm')) {
 		event.preventDefault();
 		form_inline_toggle(form);
@@ -585,8 +593,10 @@ function remove() {
 
 function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 	if (source) {
-		$(source).replaceWith('<img id="' + source.attr('id') + '" title="' + url + '" src="/plaetjes/layout/loading-arrows.gif" />');
-		source = 'img[title="' + url + '"]';
+		if (!source.hasClass('noanim')) {
+			$(source).replaceWith('<img id="' + source.attr('id') + '" title="' + url + '" src="/plaetjes/layout/loading-arrows.gif" />');
+			source = 'img[title="' + url + '"]';
+		}
 	}
 	else {
 		modal_open();

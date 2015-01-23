@@ -4050,7 +4050,6 @@ lib/lid/ledenlijstcontent.class.php -text
 lib/lid/lidzoeker.class.php -text
 lib/lid/saldi.class.php -text
 lib/model/AgendaModel.class.php -text
-lib/model/Agendeerbaar.interface.php -text
 lib/model/BijbelroosterModel.class.php -text
 lib/model/ChangeLogModel.class.php -text
 lib/model/CmsPaginaModel.class.php -text
@@ -4084,6 +4083,7 @@ lib/model/documenten/Document.class.php -text
 lib/model/entity/Adres.class.php -text
 lib/model/entity/Afbeelding.class.php -text
 lib/model/entity/AgendaItem.class.php -text
+lib/model/entity/Agendeerbaar.interface.php -text
 lib/model/entity/Bestand.class.php -text
 lib/model/entity/Bijbelrooster.class.php -text
 lib/model/entity/ChangeLogEntry.class.php -text
@@ -4411,7 +4411,6 @@ lib/templates/fotoalbum/album.tpl -text
 lib/templates/fotoalbum/slider.tpl -text
 lib/templates/groepen/groep.bb.tpl -text
 lib/templates/groepen/groep.old.tpl -text
-lib/templates/groepen/groep.tpl -text
 lib/templates/groepen/groepen.tpl -text
 lib/templates/groepen/groepformulier.tpl -text
 lib/templates/groepen/groepleden.tpl -text

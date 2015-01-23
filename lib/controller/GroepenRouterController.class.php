@@ -20,7 +20,7 @@ class GroepenRouterController extends Controller {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		} else {
-			$this->action = 'ketzers'; // default
+			$this->action = 'commissies'; // default
 		}
 		if (!$this->mag($this->action, null)) {
 			$this->geentoegang();
@@ -28,7 +28,7 @@ class GroepenRouterController extends Controller {
 		define('groepenUrl', '/groep/' . $this->action . '/');
 
 		if ($this->action === 'overig') {
-			$this->action = 'OpvolgbareGroepen';
+			$this->action = 'groepen';
 		}
 		$class = ucfirst($this->action) . 'Controller';
 
@@ -48,6 +48,7 @@ class GroepenRouterController extends Controller {
 		switch ($action) {
 			// groep
 			case 'overig':
+			case 'ketzers':
 			case 'onderverenigingen':
 			case 'woonoorden':
 			case 'lichtingen':
@@ -57,7 +58,6 @@ class GroepenRouterController extends Controller {
 			case 'werkgroepen':
 			case 'commissies':
 			case 'besturen':
-			case 'ketzers':
 			case 'activiteiten':
 				return LoginModel::mag('P_LEDEN_READ');
 

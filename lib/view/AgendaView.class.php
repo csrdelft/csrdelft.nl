@@ -11,7 +11,7 @@
 abstract class AgendaView extends SmartyTemplateView {
 
 	public function getBreadcrumbs() {
-		return '<a href="/agenda" title="Agenda"><img src="/plaetjes/knopjes/calendar-16.png" class="module-icon"></a>';
+		return '<a href="/agenda" title="Agenda"><span class="fa fa-calendar module-icon"></span></a>';
 	}
 
 }

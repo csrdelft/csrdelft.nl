@@ -55,6 +55,16 @@ class Groep extends PersistentEntity {
 	 */
 	public $door_uid;
 	/**
+	 * Verwijderd
+	 * @var boolean
+	 */
+	public $verwijderd;
+	/**
+	 * Serialized keuzelijst(en)
+	 * @var string
+	 */
+	public $keuzelijst;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -66,13 +76,20 @@ class Groep extends PersistentEntity {
 		'begin_moment'	 => array(T::DateTime),
 		'eind_moment'	 => array(T::DateTime, true),
 		'website'		 => array(T::String, true),
-		'door_uid'		 => array(T::UID)
+		'door_uid'		 => array(T::UID),
+		'verwijderd'	 => array(T::Boolean),
+		'keuzelijst'	 => array(T::String, true)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
 	protected static $primary_key = array('id');
+	/**
+	 * Database table name
+	 * @var string
+	 */
+	protected static $table_name = 'groepen';
 
 	/**
 	 * Lazy loading by foreign key.
@@ -89,6 +106,18 @@ class Groep extends PersistentEntity {
 		return $class::instance()->getStatistieken($this);
 	}
 
+	public function getSuggestions() {
+		if ($this instanceof Commissie OR $this instanceof Bestuur) {
+			$suggestions = CommissieFunctie::getTypeOptions();
+		} else {
+			$suggestions = array();
+			foreach ($this->getLeden() as $lid) {
+				$suggestions[] = $lid->opmerking;
+			}
+		}
+		return $suggestions;
+	}
+
 	/**
 	 * Has permission for action?
 	 * 
@@ -96,6 +125,9 @@ class Groep extends PersistentEntity {
 	 * @return boolean
 	 */
 	public function mag($action) {
+		if (LoginModel::getUid() === $this->door_uid OR LoginModel::mag('P_LEDEN_MOD')) {
+			return true;
+		}
 		$algemeen = AccessModel::get(get_class($this), $action, '*');
 		if ($algemeen AND LoginModel::mag($algemeen)) {
 			return true;

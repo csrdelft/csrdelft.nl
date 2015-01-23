@@ -30,7 +30,7 @@ class StamboomView implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/ledenlijst" title="Ledenlijst"><img src="/plaetjes/knopjes/people-16.png" class="module-icon"></a> » <span class="active">' . $this->getTitel() . '</span>';
+		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 
 	public function getTitel() {

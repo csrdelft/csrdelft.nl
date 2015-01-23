@@ -17,7 +17,7 @@ require_once 'model/entity/groepen/OldGroep.class.php';
 abstract class OldGroepView extends SmartyTemplateView {
 
 	public function getBreadcrumbs() {
-		return '<a href="/groepen" title="Groepen"><img src="/plaetjes/knopjes/group-16.png" class="module-icon"></a>';
+		return '<a href="/groepen" title="Groepen"><span class="fa fa-users module-icon"></span></a>';
 	}
 
 }

@@ -355,6 +355,9 @@ class InlineForm extends Formulier {
 
 	public function __construct($model, $action, $buttons = false, $labels = false, $submit_DataTableResponse = false) {
 		parent::__construct($model, $action);
+		if (isset($_POST['FormId'])) {
+			$this->formId = filter_input(INPUT_POST, 'FormId', FILTER_SANITIZE_STRING);
+		}
 		$this->css_classes[] = 'InlineForm';
 		$this->buttons = $buttons;
 		$this->labels = $labels;

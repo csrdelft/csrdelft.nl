@@ -127,6 +127,12 @@ class KringenModel extends OpvolgbareGroepenModel {
 
 	protected static $instance;
 
+	public function nieuw() {
+		$kring = parent::nieuw();
+		$kring->verticale = null;
+		return $kring;
+	}
+
 }
 
 class WerkgroepenModel extends OpvolgbareGroepenModel {
@@ -175,6 +181,11 @@ class ActiviteitenModel extends OpvolgbareGroepenModel {
 		$activiteit = parent::nieuw();
 		$activiteit->soort = ActiviteitSoort::Intern;
 		$activiteit->locatie = null;
+		$activiteit->aanmeld_limiet = null;
+		$activiteit->aanmelden_vanaf = getDateTime();
+		$activiteit->aanmelden_tot = getDateTime();
+		$activiteit->kosten_bedrag = null;
+		$activiteit->machtiging_rekening = null;
 		return $activiteit;
 	}
 
@@ -185,6 +196,16 @@ class KetzersModel extends GroepenModel {
 	const orm = 'Ketzer';
 
 	protected static $instance;
+
+	public function nieuw() {
+		$ketzer = parent::nieuw();
+		$ketzer->aanmeld_limiet = null;
+		$ketzer->aanmelden_vanaf = getDateTime();
+		$ketzer->aanmelden_tot = getDateTime();
+		$ketzer->kosten_bedrag = null;
+		$ketzer->machtiging_rekening = null;
+		return $ketzer;
+	}
 
 }
 

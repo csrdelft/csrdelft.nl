@@ -13,7 +13,7 @@ class CommissieVoorkeurenView implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/ledenlijst" title="Ledenlijst"><img src="/plaetjes/knopjes/people-16.png" class="module-icon"></a> » <a href="/commissievoorkeuren">' . $this->getTitel() . '</a>';
+		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » <a href="/commissievoorkeuren">' . $this->getTitel() . '</a>';
 	}
 
 	public function getTitel() {
@@ -57,7 +57,7 @@ class CommissieVoorkeurenProfiel implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/ledenlijst" title="Ledenlijst"><img src="/plaetjes/knopjes/people-16.png" class="module-icon"></a> » <a href="/commissievoorkeuren">Voorkeuren voor commissies</a> » <span class="active">' . $this->getTitel() . '</span>';
+		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » <a href="/commissievoorkeuren">Voorkeuren voor commissies</a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 
 	public function getTitel() {
@@ -90,7 +90,7 @@ class CommissieVoorkeurenProfiel implements View {
 class CommissieVoorkeurenForm extends Formulier {
 
 	public function getBreadcrumbs() {
-		return '<a href="/ledenlijst" title="Ledenlijst"><img src="/plaetjes/knopjes/people-16.png" class="module-icon"></a> » ' . $this->model->getLink('civitas') . ' » <span class="active">' . $this->titel . '</span>';
+		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » ' . $this->model->getLink('civitas') . ' » <span class="active">' . $this->titel . '</span>';
 	}
 
 	public function __construct(Profiel $profiel) {

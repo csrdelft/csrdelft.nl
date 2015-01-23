@@ -1,6 +1,5 @@
 <?php
 
-require_once 'model/Agendeerbaar.interface.php';
 require_once 'model/entity/Geslacht.enum.php';
 require_once 'model/entity/OntvangtContactueel.enum.php';
 require_once 'model/entity/LidStatus.enum.php';

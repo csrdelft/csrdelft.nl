@@ -14,7 +14,7 @@ class ProfielView extends SmartyTemplateView {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/ledenlijst" title="Ledenlijst"><img src="/plaetjes/knopjes/people-16.png" class="module-icon"></a> » <span class="active">' . $this->model->getNaam('civitas') . '</span>';
+		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » <span class="active">' . $this->model->getNaam('civitas') . '</span>';
 	}
 
 	function view() {
@@ -74,7 +74,7 @@ class ProfielView extends SmartyTemplateView {
 class ProfielForm extends Formulier {
 
 	public function getBreadcrumbs() {
-		return '<a href="/ledenlijst" title="Ledenlijst"><img src="/plaetjes/knopjes/people-16.png" class="module-icon"></a> » ' . $this->model->getLink('civitas');
+		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » ' . $this->model->getLink('civitas');
 	}
 
 	public function __construct(Profiel $profiel) {

@@ -11,16 +11,23 @@ require_once 'view/GroepenView.class.php';
  */
 class GroepenController extends Controller {
 
-	public function __construct($query, GroepenModel $model) {
+	public function __construct($query, GroepenModel $model = null) {
 		parent::__construct($query, $model);
+		if ($model === null) {
+			$this->model = GroepenModel::instance();
+		}
 	}
 
 	public function performAction(array $args = array()) {
+
+		//return $this->converteren();
+
 		if ($this->hasParam(3)) { // id or action
 			$this->action = $this->getParam(3);
 		} else {
 			$this->action = 'overzicht'; // default
 		}
+
 		switch ($this->action) {
 			case 'overzicht':
 			case A::Beheren:
@@ -28,6 +35,9 @@ class GroepenController extends Controller {
 			case A::Wijzigen:
 			case A::Verwijderen:
 
+				if (LoginModel::mag('P_LEDEN_MOD')) {
+					break;
+				}
 				$model = $this->model;
 				$algemeen = AccessModel::get($model::orm, $this->action, '*');
 				if ($algemeen AND LoginModel::mag($algemeen)) {
@@ -86,8 +96,8 @@ class GroepenController extends Controller {
 				return $method === 'GET';
 
 			case 'overzicht':
-			case GroepTab::Lijst:
 			case GroepTab::Pasfotos:
+			case GroepTab::Lijst:
 			case GroepTab::Statistiek:
 			case GroepTab::Emails:
 			case A::Aanmaken:
@@ -114,28 +124,24 @@ class GroepenController extends Controller {
 	}
 
 	public function bekijken(Groep $groep) {
-		$body = new GroepView($groep, GroepTab::Lijst);
+		$body = new GroepView($groep, GroepTab::Pasfotos);
 		$this->view = new CsrLayoutPage($body);
 	}
 
-	protected function groeptab(Groep $groep) {
-		$this->view = new GroepView($groep, $this->action);
+	public function pasfotos(Groep $groep) {
+		$this->view = new GroepPasfotosView($groep);
 	}
 
 	public function lijst(Groep $groep) {
-		return $this->groeptab($groep);
-	}
-
-	public function pasfotos(Groep $groep) {
-		return $this->groeptab($groep);
+		$this->view = new GroepLijstView($groep);
 	}
 
 	public function stats(Groep $groep) {
-		return $this->groeptab($groep);
+		$this->view = new GroepStatistiekView($groep);
 	}
 
 	public function emails(Groep $groep) {
-		return $this->groeptab($groep);
+		$this->view = new GroepEmailsView($groep);
 	}
 
 	public function beheren($soort = null) {
@@ -211,7 +217,7 @@ class GroepenController extends Controller {
 		$model = $class::instance();
 		if ($uid) {
 			$lid = $model->instance()->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldingForm($lid, $this->action);
+			$form = new GroepAanmeldingForm($lid->getSuggestions());
 			if ($form->validate()) {
 				$model->create($lid);
 			}
@@ -236,9 +242,9 @@ class GroepenController extends Controller {
 		$model = $class::instance();
 		if ($uid) {
 			$lid = $model->get($groep, $uid);
-			$form = new GroepAanmeldingForm($lid);
+			$form = new GroepAanmeldingForm($lid, $groep->getSuggestions());
 			if ($form->validate()) {
-				$model->create($lid);
+				$model->update($lid);
 			}
 			$this->view = $form;
 		}
@@ -338,6 +344,182 @@ class GroepenController extends Controller {
 				}
 				return;
 		}
+	}
+
+	public function converteren() {
+
+		$totaalGroepen = 0;
+		$totaalLeden = 0;
+
+		$typeModel = DynamicEntityModel::makeModel('groeptype');
+		$groepModel = DynamicEntityModel::makeModel('groep');
+		$lidModel = DynamicEntityModel::makeModel('groeplid');
+
+		foreach ($typeModel->find() as $type) {
+
+			$soort = null;
+
+			switch ($type->naam) {
+
+				case 'Commissies': $model = CommissiesModel::instance();
+					$soort = CommissieSoort::Commissie;
+					break;
+				case 'SjaarCies': $model = CommissiesModel::instance();
+					$soort = CommissieSoort::SjaarCie;
+					break;
+
+				case 'OWee': $model = ActiviteitenModel::instance();
+					$soort = ActiviteitSoort::OWee;
+					break;
+				case 'Dies': $model = ActiviteitenModel::instance();
+					$soort = ActiviteitSoort::Dies;
+					break;
+				case 'Sjaarsacties': $model = ActiviteitenModel::instance();
+					$soort = ActiviteitSoort::SjaarActie;
+					break;
+
+				case 'Overig': $model = GroepenModel::instance();
+					break;
+				case 'wikigroepen': $model = GroepenModel::instance();
+					break;
+
+				case 'Woonoorden': $model = WoonoordenModel::instance();
+					break;
+
+				case 'Onderverenigingen': $model = OnderverenigingenModel::instance();
+					break;
+
+				case 'Werkgroepen': $model = WerkgroepenModel::instance();
+					break;
+
+				case 'Besturen': $model = BesturenModel::instance();
+					break;
+
+				case 'Ketzers': $model = KetzersModel::instance();
+					break;
+
+				default:
+					echo 'skipped type ' . $type->naam;
+					exit;
+			}
+
+			if (true) {
+				$admin = DatabaseAdmin::instance();
+
+				$class = $model::orm;
+				$orm = new $class();
+				$query = $admin->prepare('TRUNCATE TABLE ' . $orm->getTableName());
+				$query->execute();
+
+				$query = $admin->prepare('UPDATE groep SET omnummering = 0 WHERE gtype = ' . $type->id);
+				$query->execute();
+
+				$leden = $orm::leden;
+				$class = $leden::orm;
+				require_once 'model/entity/groepen/' . $class . '.class.php';
+				$orm = new $class();
+				$query = $admin->prepare('TRUNCATE TABLE ' . $orm->getTableName());
+				$query->execute();
+			}
+
+			$class = $model::orm;
+			$orm = new $class();
+			$leden = $orm::leden;
+
+			$naam = str_replace('Model', '', get_class($model));
+			if (!CmsPaginaModel::get($naam)) {
+				$pagina = CmsPaginaModel::instance()->nieuw($naam);
+				$pagina->inhoud = $type->beschrijving;
+				$pagina->rechten_bekijken = $type->groepenAanmaakbaar;
+				CmsPaginaModel::instance()->create($pagina);
+			}
+
+			foreach ($groepModel->find('gtype = ?', array($type->id)) as $groep) {
+
+				$entity = $model->nieuw();
+
+				$entity->naam = $groep->naam;
+				$entity->samenvatting = $groep->sbeschrijving;
+				$entity->omschrijving = $groep->beschrijving;
+				$entity->begin_moment = $groep->begin;
+				if ($groep->einde === '0000-00-00') {
+					$entity->eind_moment = null;
+				} else {
+					$entity->eind_moment = $groep->einde;
+				}
+				$entity->website = null;
+				$entity->door_uid = substr($groep->eigenaar, 0, 4);
+				$entity->keuzelijst = $groep->functiefilter;
+				$entity->verwijderd = false;
+				if ($groep->zichtbaar === 'verwijderd') {
+					$entity->verwijderd = true;
+				} elseif ($groep->zichtbaar === 'onzichtbaar') {
+					echo 'skipped onzichtbaar ' . $groep->id . ' ' . $groep->naam;
+					exit;
+				}
+
+				if (property_exists($entity, 'soort')) {
+					if ($soort !== null) {
+						$entity->soort = $soort;
+					} else {
+						echo 'skipped soort ' . $soort . ' ' . $groep->id . ' ' . $groep->naam;
+						exit;
+					}
+				}
+
+				if (property_exists($entity, 'opvolg_naam')) {
+					$entity->opvolg_naam = $groep->snaam;
+					$entity->status = $groep->status;
+
+					$jaargang = array();
+					preg_match('/\d{4}-\d{4}/', $groep->naam, $jaargang);
+					if (isset($jaargang[0])) {
+						$entity->jaargang = $jaargang[0];
+					} else {
+						$entity->jaargang = '';
+					}
+				}
+
+				if (property_exists($entity, 'aanmeld_limiet')) {
+					$entity->aanmeld_limiet = $groep->limiet;
+					$entity->aanmelden_vanaf = $entity->begin_moment;
+					if ($entity->eind_moment === null) {
+						$entity->aanmelden_tot = $entity->begin_moment;
+					} else {
+						$entity->aanmelden_tot = $entity->eind_moment;
+					}
+				}
+
+				if (property_exists($entity, 'bijbeltekst')) {
+					$entity->bijbeltekst = '';
+				}
+
+				$model->create($entity);
+
+				$query = $admin->prepare('UPDATE groep SET omnummering = ' . $entity->id . ' WHERE id = ' . $groep->id);
+				$query->execute();
+
+				$totaalGroepen++;
+
+				foreach ($lidModel->find('groepid = ?', array($groep->id)) as $groeplid) {
+
+					$lid = $leden::instance()->nieuw($entity, $groeplid->uid);
+
+					$lid->door_uid = $groeplid->uid;
+					$lid->lid_sinds = $groeplid->moment;
+					$lid->opmerking = $groeplid->functie;
+
+					$leden::instance()->create($lid);
+
+					$totaalLeden++;
+				}
+
+				echo 'leden: ' . $totaalLeden . '<br />';
+			}
+
+			echo 'groepen: ' . $totaalGroepen . '<br />';
+		}
+		exit;
 	}
 
 }

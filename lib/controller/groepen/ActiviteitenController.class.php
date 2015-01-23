@@ -7,7 +7,7 @@
  * 
  * Controller voor activiteiten.
  */
-class ActiviteitenController extends KetzersController {
+class ActiviteitenController extends OpvolgbareGroepenController {
 
 	public function __construct($query) {
 		parent::__construct($query, ActiviteitenModel::instance());

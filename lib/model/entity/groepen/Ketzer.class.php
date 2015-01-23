@@ -10,7 +10,7 @@
  */
 class Ketzer extends Groep {
 
-	const leden = 'KetzerLedenModel';
+	const leden = 'KetzerDeelnemersModel';
 
 	/**
 	 * Maximaal aantal groepsleden

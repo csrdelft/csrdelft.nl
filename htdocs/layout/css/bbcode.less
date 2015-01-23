@@ -90,36 +90,62 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld {
 	margin: 2px;
 }
 
-.bb-groep {
-	padding: 0 10px;
+
+/* -------------------------------- 
+
+Groepen
+
+-------------------------------- */
+ul.generaties {
+    margin: 10px 0;
+    padding: 3px 20px;
 }
-.bb-groep .titel {
-	padding: 1em 0;
+.groep-samenvatting {
+	float: left;
 }
-.bb-groep .beschrijving {
-	line-height: 1.5em;
+.groep-tabs li {
+	display: inline-block;
+
+	span.fa {
+		color: white;
+		font-size: 1.1em;
+	}
 }
-.bb-groep .groepleden {
-	width: 280px;
-	float: right;
-	margin: 10px 0 0 10px;
+.groep-vorige {
+    list-style-image: url("/plaetjes/groepen/up.png");
 }
-.bb-groep .groepleden table.leden { width: 100%; }
-.bb-groep .groepleden table.leden td { padding: 0 5px 0 0; text-align: left; }
-.bb-groep .groepleden a.toonmeer { clear: left; float: left; }
-.bb-groep .groepleden .editbox { display: none; background-color: #ffffcc; border: solid 1px #000; padding: 1px; }
-.bb-groep .groepleden .inline_edit {
-	background: url("/plaetjes/famfamfam/pencil.png") right no-repeat;
-	padding-right: 18px!important;
+.groep-volgende {
+    list-style-image: url("/plaetjes/groepen/down.png");
 }
-.bb-groep .groepleden .inline_edit:hover {
-	background: url("/plaetjes/famfamfam/pencil.png") right no-repeat #f5f5f5;
-	cursor: pointer;
+.groep-leden {
+    float: right;
+    width: 300px;
 }
-.bb-groep .groepleden .inline_edit input {	width: 120px; }
-.bb-groep .groepleden .melding { color: red; }
-.bb-groep .aanmelden { clear: left; padding-top: 6px; }
-.bb-groep .aanmelden .pasfoto { margin-right: 10px; }
+table.groep-lijst td {
+    width: 150px;
+}
+table.groep-stats {
+    border-spacing: 0;
+    border: 1px solid #000;
+    float: right;
+
+	tr:nth-child(even) {
+		background-color: #ccc;
+	}
+	tr:nth-child(odd) {
+		background-color: #eee;
+	}
+	th {
+		background-color: #0A338D;
+		color: #fff;
+	}
+	td {
+		width: 150px;
+	}
+	td, th {
+		padding: 5px 10px;
+	}
+}
 
 img.pasfoto {
 	float: left;

@@ -22,7 +22,7 @@ class CourantBeheerView extends SmartyTemplateView {
 	}
 
 	public function getBreadcrumbs() {
-		$breadcrumbs = '<a href="/courant" title="Courant"><img src="/plaetjes/knopjes/email-16.png" class="module-icon"></a>';
+		$breadcrumbs = '<a href="/courant" title="Courant"><span class="fa fa-envelope module-icon"></span></a>';
 		if (isset($this->formulier['titel']) AND ! empty($this->formulier['titel'])) {
 			$breadcrumbs .= ' » ' . $this->formulier['titel'];
 		}

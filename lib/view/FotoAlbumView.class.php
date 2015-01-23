@@ -31,7 +31,7 @@ class FotoAlbumView extends SmartyTemplateView {
 	}
 
 	private function getBreadcrumbsDropdown($dropdown = false, $self = true) {
-		$breadcrumbs = '<a href="/fotoalbum" title="Fotoalbum"><img src="/plaetjes/knopjes/camera-16.png" class="module-icon"></a>';
+		$breadcrumbs = '<a href="/fotoalbum" title="Fotoalbum"><span class="fa fa-camera module-icon"></span></a>';
 		$mappen = explode('/', $this->model->subdir);
 		$subdir = 'fotoalbum/';
 		$first = true;
