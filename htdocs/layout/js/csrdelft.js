@@ -514,24 +514,21 @@ function form_reset(event, form) {
 }
 
 function form_cancel(event) {
-	console.log($(this));
-
-	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
+	var source = $(event.target);
+	if (source.length === 0) {
+		source = $(this);
+	}
+	if (source.hasClass('confirm') && !confirm(source.attr('title') + '.\n\nWeet u het zeker?')) {
 		event.preventDefault();
 		return false;
 	}
-	var form = $(this).closest('form');
-
-	console.log(form);
-
-	console.log(event);
-
+	var form = source.closest('form');
 	if (form.hasClass('InlineForm')) {
 		event.preventDefault();
 		form_inline_toggle(form);
 		return false;
 	}
-	if ($(this).hasClass('post')) {
+	if (source.hasClass('post')) {
 		event.preventDefault();
 		knop_post(event);
 		return false;
