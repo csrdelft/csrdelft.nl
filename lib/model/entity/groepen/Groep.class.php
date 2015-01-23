@@ -55,11 +55,6 @@ class Groep extends PersistentEntity {
 	 */
 	public $door_uid;
 	/**
-	 * Verwijderd
-	 * @var boolean
-	 */
-	public $verwijderd;
-	/**
 	 * Serialized keuzelijst(en)
 	 * @var string
 	 */
@@ -77,7 +72,6 @@ class Groep extends PersistentEntity {
 		'eind_moment'	 => array(T::DateTime, true),
 		'website'		 => array(T::String, true),
 		'door_uid'		 => array(T::UID),
-		'verwijderd'	 => array(T::Boolean),
 		'keuzelijst'	 => array(T::String, true)
 	);
 	/**
@@ -106,26 +100,29 @@ class Groep extends PersistentEntity {
 		return $class::instance()->getStatistieken($this);
 	}
 
-	public function getSuggestions() {
-		if ($this instanceof Commissie OR $this instanceof Bestuur) {
-			$suggestions = CommissieFunctie::getTypeOptions();
+	public function getSuggesties() {
+		if (isset($this->keuzelijst)) {
+			$suggesties = array();
+		} elseif ($this instanceof Commissie OR $this instanceof Bestuur) {
+			$suggesties = CommissieFunctie::getTypeOptions();
 		} else {
-			$suggestions = array();
+			$suggesties = array();
 			foreach ($this->getLeden() as $lid) {
-				$suggestions[] = $lid->opmerking;
+				$suggesties[] = $lid->opmerking;
 			}
 		}
-		return $suggestions;
+		return $suggesties;
 	}
 
 	/**
 	 * Has permission for action?
 	 * 
 	 * @param AccessAction $action
+	 * @param string $uid affected Lid
 	 * @return boolean
 	 */
-	public function mag($action) {
-		if (LoginModel::getUid() === $this->door_uid OR LoginModel::mag('P_LEDEN_MOD')) {
+	public function mag($action, $uid = null) {
+		if ($uid === LoginModel::getUid() OR $this->door_uid === LoginModel::getUid() OR LoginModel::mag('P_LEDEN_MOD')) {
 			return true;
 		}
 		$algemeen = AccessModel::get(get_class($this), $action, '*');

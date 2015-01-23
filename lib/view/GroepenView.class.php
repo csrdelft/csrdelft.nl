@@ -19,6 +19,8 @@ class GroepenBeheerTable extends DataTable {
 		$this->hideColumn('omschrijving');
 		$this->hideColumn('website');
 		$this->hideColumn('door_uid');
+		$this->hideColumn('keuzelijst');
+		$this->hideColumn('status_historie');
 		$this->searchColumn('naam');
 		$this->searchColumn('jaargang');
 		$this->searchColumn('status');
@@ -156,7 +158,7 @@ class GroepLedenData extends DataTableResponse {
 
 }
 
-class GroepLidForm extends DataTableForm {
+class GroepLidBeheerForm extends DataTableForm {
 
 	public function __construct(GroepLid $lid, $action, array $blacklist = null) {
 		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . $action, ucfirst($action));
@@ -174,18 +176,30 @@ class GroepLidForm extends DataTableForm {
 
 }
 
-class GroepAanmeldingForm extends InlineForm {
+class GroepLidForm extends InlineForm {
 
-	public function __construct(GroepLid $lid, array $suggestions = array()) {
+	public function __construct(GroepLid $lid, array $suggesties = array(), $keuzelijst = null) {
 		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . A::Bewerken . '/' . $lid->uid);
-		$this->field = new TextField('opmerking', $lid->opmerking, 'Functie of opmerking bij lidmaatschap');
-		$this->field->suggestions[] = $suggestions;
+
+		if ($keuzelijst) {
+			$this->buttons = true;
+			$fields = array();
+			$opmerking = explode('&&', $lid->opmerking);
+			foreach (explode('&&', $keuzelijst) as $i => $dropdown) {
+				$fields[] = new SelectField('opmerking[]', $opmerking[$i], null, explode('|', $dropdown));
+			}
+			$this->addFields($fields);
+		} else {
+			$this->field = new TextField('opmerking', $lid->opmerking, 'Functie of opmerking bij lidmaatschap');
+			$this->field->suggestions[] = $suggesties;
+		}
 	}
 
 }
 
-class GroepenView extends SmartyTemplateView {
+class GroepenView implements View {
 
+	protected $groepen;
 	/**
 	 * Toon CMS pagina
 	 * @var string
@@ -193,7 +207,7 @@ class GroepenView extends SmartyTemplateView {
 	protected $pagina;
 
 	public function __construct(GroepenModel $model, $groepen) {
-		parent::__construct($groepen);
+		$this->groepen = $groepen;
 		$naam = str_replace('Model', '', get_class($model));
 		$this->pagina = CmsPaginaModel::get($naam);
 		if (!$this->pagina) {
@@ -203,14 +217,24 @@ class GroepenView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		$this->smarty->display('groepen/menu_pagina.tpl');
-		//$this->smarty->display('groepen/inhoudsopgave.tpl'); //FIXME: cannot iterate more than once over PDO statement of groepen
 		$view = new CmsPaginaView($this->pagina);
 		$view->view();
-		foreach ($this->model as $groep) {
+		foreach ($this->groepen as $groep) {
 			$view = new GroepView($groep, GroepTab::Pasfotos);
 			$view->view();
 		}
+	}
+
+	public function getBreadcrumbs() {
+		return '<a href="/groepen" title="Groepen"><span class="fa fa-users module-icon"></span></a> » ' . $this->titel . '</div>';
+	}
+
+	public function getModel() {
+		
+	}
+
+	public function getTitel() {
+		
 	}
 
 }
@@ -331,12 +355,12 @@ abstract class GroepTabView implements View {
 			public function view() {
 				parent::view();
 				echo '<table class="groep-lijst"><tbody>';
-				$suggestions = $this->groep->getSuggestions();
+				$suggestions = $this->groep->getSuggesties();
 				foreach ($this->groep->getLeden() as $lid) {
 					echo '<tr><td>' . ProfielModel::getLink($lid->uid, 'civitas') . '</td>';
 					echo '<td>';
 					if ($this->groep->mag(A::Bewerken)) {
-						$form = new GroepAanmeldingForm($lid, $suggestions);
+						$form = new GroepLidForm($lid, $suggestions);
 						$form->view();
 					} else {
 						echo $lid->opmerking;

@@ -29,12 +29,14 @@ class GroepenController extends Controller {
 		}
 
 		switch ($this->action) {
+			// geen groep id vereist
 			case 'overzicht':
 			case A::Beheren:
-			case A::Aanmaken:
 			case A::Wijzigen:
 			case A::Verwijderen:
+				break;
 
+			case A::Aanmaken:
 				if (LoginModel::mag('P_LEDEN_MOD')) {
 					break;
 				}
@@ -52,6 +54,7 @@ class GroepenController extends Controller {
 				}
 				$this->geentoegang();
 
+			// groep id vereist
 			default:
 				$id = (int) $this->action; // id
 				$groep = $this->model->get($id);
@@ -59,20 +62,17 @@ class GroepenController extends Controller {
 					$this->geentoegang();
 				}
 				$args[] = $groep;
+				$uid = null;
 				if ($this->hasParam(4)) { // action
 					$this->action = $this->getParam(4);
 					if ($this->hasParam(5)) { // uid
 						$uid = $this->getParam(5);
-						// check of je dit alleen voor jezelf mag doen
-						if ($uid !== LoginModel::getUid() AND ! $groep->mag(A::Beheren)) {
-							$this->geentoegang();
-						}
 						$args[] = $uid;
 					}
 				} else {
 					$this->action = A::Bekijken; // default
 				}
-				if (!$groep->mag($this->action)) {
+				if (!$groep->mag($this->action, $uid)) {
 					$this->geentoegang();
 				}
 		}
@@ -177,7 +177,7 @@ class GroepenController extends Controller {
 		} else {
 			$groep = false;
 		}
-		if (!$groep) {
+		if (!$groep OR ! $groep->mag($this->action)) {
 			$this->geentoegang();
 		}
 		$form = new GroepForm($groep, groepenUrl . $this->action);
@@ -194,7 +194,7 @@ class GroepenController extends Controller {
 		$response = array();
 		foreach ($selection as $UUID) {
 			$groep = $this->model->getUUID($UUID);
-			if (!$groep) {
+			if (!$groep OR ! $groep->mag($this->action)) {
 				$this->geentoegang();
 			}
 			$this->model->delete($groep);
@@ -217,7 +217,7 @@ class GroepenController extends Controller {
 		$model = $class::instance();
 		if ($uid) {
 			$lid = $model->instance()->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldingForm($lid->getSuggestions());
+			$form = new GroepLidForm($lid, $groep->getSuggesties());
 			if ($form->validate()) {
 				$model->create($lid);
 			}
@@ -227,7 +227,7 @@ class GroepenController extends Controller {
 		else {
 			$lid = $model->nieuw($groep, $uid);
 			$uids = array_keys(group_by_distinct('uid', $groep->getLeden()));
-			$form = new GroepLidForm($lid, $this->action, $uids);
+			$form = new GroepLidBeheerForm($lid, $this->action, $uids);
 			if ($form->validate()) {
 				$model->create($lid);
 				$this->view = new GroepLedenData(array($lid));
@@ -242,7 +242,7 @@ class GroepenController extends Controller {
 		$model = $class::instance();
 		if ($uid) {
 			$lid = $model->get($groep, $uid);
-			$form = new GroepAanmeldingForm($lid, $groep->getSuggestions());
+			$form = new GroepLidForm($lid, $groep->getSuggesties());
 			if ($form->validate()) {
 				$model->update($lid);
 			}
@@ -255,7 +255,7 @@ class GroepenController extends Controller {
 				$this->geentoegang();
 			}
 			$lid = $model->getUUID($selection[0]);
-			$form = new GroepLidForm($lid, $this->action);
+			$form = new GroepLidBeheerForm($lid, $this->action);
 			if ($form->validate()) {
 				$model->update($lid);
 				$this->view = new GroepLedenData(array($lid));
@@ -271,8 +271,8 @@ class GroepenController extends Controller {
 		if ($uid) {
 			$lid = $model->get($groep, $uid);
 			$lid->status = GroepStatus::OT;
-			$model->update($lid);
-			$this->view = new GroepAanmeldingForm($lid);
+			$model->delete($lid);
+			//TODO: $this->view = 
 		}
 		// beheren
 		else {
@@ -450,13 +450,6 @@ class GroepenController extends Controller {
 				$entity->website = null;
 				$entity->door_uid = substr($groep->eigenaar, 0, 4);
 				$entity->keuzelijst = $groep->functiefilter;
-				$entity->verwijderd = false;
-				if ($groep->zichtbaar === 'verwijderd') {
-					$entity->verwijderd = true;
-				} elseif ($groep->zichtbaar === 'onzichtbaar') {
-					echo 'skipped onzichtbaar ' . $groep->id . ' ' . $groep->naam;
-					exit;
-				}
 
 				if (property_exists($entity, 'soort')) {
 					if ($soort !== null) {
