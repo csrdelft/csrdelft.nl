@@ -145,7 +145,7 @@ class ForumDelenModel extends AbstractForumModel {
 	public function maakForumDeel() {
 		$deel = new ForumDeel();
 		$deel->categorie_id = 0;
-		$deel->titel = '';
+		$deel->titel = 'Nieuw deelforum';
 		$deel->omschrijving = '';
 		$deel->rechten_lezen = 'P_FORUM_READ';
 		$deel->rechten_posten = 'P_FORUM_POST';
