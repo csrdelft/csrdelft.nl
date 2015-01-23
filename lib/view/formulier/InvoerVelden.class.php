@@ -659,7 +659,7 @@ class DateTimeField extends TextField {
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
 
-$("#{$this->getId()}").mask("9999/99/99 99:99:99", { placeholder: "jjjj/mm/dd hh:mm:ss" });
+$("#{$this->getId()}").mask("9999-99-99 99:99:99", { placeholder: "jjjj-mm-dd hh:mm:ss" });
 JS;
 	}
 

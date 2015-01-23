@@ -29,7 +29,7 @@ class GroepenController extends Controller {
 			case A::Verwijderen:
 
 				$model = $this->model;
-				$algemeen = AccessModel::get($model::orm, $this->action, '');
+				$algemeen = AccessModel::get($model::orm, $this->action, '*');
 				if ($algemeen AND LoginModel::mag($algemeen)) {
 					break;
 				}
