@@ -600,19 +600,43 @@ class RequiredTextField extends TextField {
 
 }
 
-class DateTimeField extends InputField {
+/**
+ * Partial clone of DatumField
+ */
+class DateTimeField extends TextField {
 
-	public function getValue() {
-		$value = parent::getValue();
-		if ($this->empty_null AND $value == '0000-00-00 00:00:00') {
-			return null;
+	public $empty_null = true;
+	protected $max_jaar;
+	protected $min_jaar;
+
+	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
+		parent::__construct($name, $value, $description);
+		if (is_int($maxyear)) {
+			$this->max_jaar = $maxyear;
+		} else {
+			$this->max_jaar = (int) date('Y') + 10;
 		}
-		return $value;
+		if (is_int($minyear)) {
+			$this->min_jaar = $minyear;
+		} else {
+			$this->min_jaar = (int) date('Y') - 10;
+		}
+		$jaar = (int) date('Y', strtotime($value));
+		if ($jaar > $this->max_jaar) {
+			$this->max_jaar = $jaar;
+		}
+		if ($jaar < $this->min_jaar) {
+			$this->min_jaar = $jaar;
+		}
 	}
 
 	public function validate() {
 		if (!parent::validate()) {
 			return false;
+		}
+		// parent checks not null
+		if ($this->value == '') {
+			return true;
 		}
 		$jaar = (int) substr($this->value, 0, 4);
 		$maand = (int) substr($this->value, 5, 2);
@@ -620,13 +644,9 @@ class DateTimeField extends InputField {
 		$uur = (int) substr($this->value, 11, 2);
 		$min = (int) substr($this->value, 14, 2);
 		$sec = (int) substr($this->value, 17, 2);
-		if ($this->value == '0000-00-00 00:00:00' OR empty($this->value)) {
-			if ($this->required) {
-				$this->error = 'Dit is een verplicht veld';
-			}
-		} elseif (!preg_match('/^(\d{4})-(\d\d?)-(\d\d?)/', $this->value) OR ! checkdate($maand, $dag, $jaar) OR ! checktime) {
+		if (!checkdate($maand, $dag, $jaar)) {
 			$this->error = 'Ongeldige datum';
-		} elseif (!preg_match('/(\d\d?):(\d\d?):(\d\d?)$/', $this->value) OR $uur < 0 OR $uur > 23 OR $min < 0 OR $min > 59 OR $sec < 0 OR $sec > 59) {
+		} elseif ($uur < 0 OR $uur > 23 OR $min < 0 OR $min > 59 OR $sec < 0 OR $sec > 59) {
 			$this->error = 'Ongeldig tijdstip';
 		} elseif (is_int($this->max_jaar) AND $jaar > $this->max_jaar) {
 			$this->error = 'Kies een jaar voor ' . $this->max_jaar;
