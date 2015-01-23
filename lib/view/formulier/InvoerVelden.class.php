@@ -10,6 +10,7 @@
  * Bevat de uitbreidingen van InputField:
  * 
  * 	- TextField						Simpele input
+ * 		* DateTimeField				Datum & tijdstip
  * 		* RechtenField				Rechten, zie AccessModel
  * 		* LandField					Landen
  * 		* StudieField				Opleidingen
@@ -594,6 +595,57 @@ class TextField extends InputField {
 }
 
 class RequiredTextField extends TextField {
+
+	public $required = true;
+
+}
+
+class DateTimeField extends InputField {
+
+	public function getValue() {
+		$value = parent::getValue();
+		if ($this->empty_null AND $value == '0000-00-00 00:00:00') {
+			return null;
+		}
+		return $value;
+	}
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		$jaar = (int) substr($this->value, 0, 4);
+		$maand = (int) substr($this->value, 5, 2);
+		$dag = (int) substr($this->value, 8, 2);
+		$uur = (int) substr($this->value, 11, 2);
+		$min = (int) substr($this->value, 14, 2);
+		$sec = (int) substr($this->value, 17, 2);
+		if ($this->value == '0000-00-00 00:00:00' OR empty($this->value)) {
+			if ($this->required) {
+				$this->error = 'Dit is een verplicht veld';
+			}
+		} elseif (!preg_match('/^(\d{4})-(\d\d?)-(\d\d?)/', $this->value) OR ! checkdate($maand, $dag, $jaar) OR ! checktime) {
+			$this->error = 'Ongeldige datum';
+		} elseif (!preg_match('/(\d\d?):(\d\d?):(\d\d?)$/', $this->value) OR $uur < 0 OR $uur > 23 OR $min < 0 OR $min > 59 OR $sec < 0 OR $sec > 59) {
+			$this->error = 'Ongeldig tijdstip';
+		} elseif (is_int($this->max_jaar) AND $jaar > $this->max_jaar) {
+			$this->error = 'Kies een jaar voor ' . $this->max_jaar;
+		} elseif (is_int($this->min_jaar) AND $jaar < $this->min_jaar) {
+			$this->error = 'Kies een jaar na ' . $this->min_jaar;
+		}
+		return $this->error === '';
+	}
+
+	public function getJavascript() {
+		return parent::getJavascript() . <<<JS
+
+$("#{$this->getId()}").mask("9999/99/99 99:99:99", { placeholder: "jjjj/mm/dd hh:mm:ss" });
+JS;
+	}
+
+}
+
+class RequiredDateTimeField extends DateTimeField {
 
 	public $required = true;
 

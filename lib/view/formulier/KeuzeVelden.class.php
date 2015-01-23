@@ -19,9 +19,20 @@
  * 	- VinkField						Keuzevakje
  * 	- DatumField					Datums (want data is zo ambigu)
  * 	- TijdField						Tijsstip
- *  - KleurField					Kleurkiezer
+ *  - ColorField					Kleurkiezer
  * 
  */
+class ColorField extends InputField {
+
+	public $type = 'color';
+
+}
+
+class RequiredColorField extends ColorField {
+
+	public $required = true;
+
+}
 
 /**
  * SelectField
@@ -496,8 +507,8 @@ class TijdField extends InputField {
 		}
 		$uren = (int) substr($this->value, 0, 2);
 		$minuten = (int) substr($this->value, 3, 5);
-		if (!preg_match('/^(\d\d?):(\d{2})$/', $this->value) OR $uren < 0 OR $uren > 23 OR $minuten < 0 OR $minuten > 59) {
-			$this->error = 'Ongeldige tijdstip';
+		if (!preg_match('/^(\d\d?):(\d\d?)$/', $this->value) OR $uren < 0 OR $uren > 23 OR $minuten < 0 OR $minuten > 59) {
+			$this->error = 'Ongeldig tijdstip';
 		}
 		return $this->error === '';
 	}
@@ -600,29 +611,6 @@ class VinkField extends InputField {
 }
 
 class RequiredVinkField extends VinkField {
-
-	public $required = true;
-
-}
-
-class KleurField extends InputField {
-
-	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-$('#{$this->getId()}').jPicker({
-	color: {
-		alphaSupport: true
-	},
-	images: {
-		clientPath: '/plaetjes/jpicker/'
-	}
-});
-JS;
-	}
-
-}
-
-class RequiredKleurField extends KleurField {
 
 	public $required = true;
 

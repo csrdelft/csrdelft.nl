@@ -118,8 +118,6 @@ htdocs/layout/css/fotoalbum.less -text
 htdocs/layout/css/fx-snow.css -text
 htdocs/layout/css/fx-space.css -text
 htdocs/layout/css/groepen.css -text
-htdocs/layout/css/jPicker.css -text
-htdocs/layout/css/jPicker.min.css -text
 htdocs/layout/css/jgallery.css -text
 htdocs/layout/css/jgallery.min.css -text
 htdocs/layout/css/knoppen.less -text
@@ -393,8 +391,6 @@ htdocs/layout/js/jquery/plugins/jquery.facedetection.js -text
 htdocs/layout/js/jquery/plugins/jquery.facedetection.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.hoverIntent.js -text
 htdocs/layout/js/jquery/plugins/jquery.hoverIntent.min.js -text
-htdocs/layout/js/jquery/plugins/jquery.jPicker.js -text
-htdocs/layout/js/jquery/plugins/jquery.jPicker.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.maskedinput.js -text
 htdocs/layout/js/jquery/plugins/jquery.maskedinput.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.phototag.js -text

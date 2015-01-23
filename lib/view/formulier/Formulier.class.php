@@ -81,7 +81,8 @@ class Formulier implements View, Validator {
 			}
 			$desc = ucfirst(str_replace('_', ' ', $fieldName));
 			switch ($definition[0]) {
-				case T::String: $class .= 'TextField';
+				case T::String:
+				case T::Char: $class .= 'TextField';
 					break;
 				case T::Boolean: $class .= 'VinkField';
 					break;
@@ -89,10 +90,13 @@ class Formulier implements View, Validator {
 					break;
 				case T::Float: $class .= 'DecimalField';
 					break;
-				case T::DateTime: $class .= 'DatumField';
+				case T::Date: $class .= 'DatumField';
 					break;
-				case T::Text: $class .= 'TextareaField';
+				case T::Time: $class .= 'TijdField';
 					break;
+				case T::DateTime: $class .= 'DateTimeField';
+					break;
+				case T::Text:
 				case T::LongText: $class .= 'TextareaField';
 					break;
 				case T::Enumeration: $class .= 'SelectField';
@@ -106,6 +110,8 @@ class Formulier implements View, Validator {
 					$options[$option] = $definition[2]::getDescription($option);
 				}
 				$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc, $options);
+			} elseif ($definition[0] == T::Char) {
+				$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc, 1);
 			} else {
 				$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc);
 			}
