@@ -28,10 +28,10 @@ class GroepenBeheerTable extends DataTable {
 		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . A::Aanmaken, 'post popup', 'Toevoegen', 'Nieuwe groep toevoegen', 'add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig geselecteerde groep', 'edit');
+		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig groep eigenschappen', 'edit');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . A::Verwijderen, 'post confirm', 'Verwijderen', 'Geselecteerde groepen definitief verwijderen', 'delete');
+		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . A::Verwijderen, 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
 		$this->addKnop($delete);
 	}
 
@@ -72,13 +72,13 @@ class GroepLedenTable extends DataTable {
 		$this->setColumnTitle('uid', 'Lidnaam');
 		$this->setColumnTitle('door_uid', 'Aangemeld door');
 
-		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . $groep->id . '/' . A::Aanmelden, 'post popup', 'Aanmelden', 'Lid aanmelden', 'user_add');
+		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . $groep->id . '/' . A::Aanmelden, 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Bewerken, 'post popup', 'Bewerken', 'Aanmelding bewerken', 'user_edit');
+		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Bewerken, 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Afmelden, 'post confirm', 'Afmelden', 'Geselecteerde leden afmelden', 'user_delete');
+		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Afmelden, 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
 		$this->addKnop($delete);
 	}
 
@@ -99,20 +99,23 @@ class GroepLedenData extends DataTableResponse {
 
 class GroepLidForm extends DataTableForm {
 
-	public function __construct(GroepLid $lid, $action) {
-		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . $action . '/' . $lid->uid, 'Aanmelding ' . A::Bewerken);
+	public function __construct(GroepLid $lid, $action, array $blacklist = array()) {
+		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . $action, ucfirst($action));
 		$fields = $this->generateFields();
-		$fields['uid']->readonly = false;
+		if (!empty($blacklist)) {
+			$fields['uid']->blacklist = $blacklist;
+			$fields['uid']->required = true;
+			$fields['uid']->readonly = false;
+		}
 		$fields['uid']->hidden = false;
-		$fields['uid']->required = true;
 	}
 
 }
 
 class GroepAanmeldingForm extends InlineForm {
 
-	public function __construct(GroepLid $lid, $action, array $suggestions = array()) {
-		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . $action . '/' . $lid->uid);
+	public function __construct(GroepLid $lid, array $suggestions = array()) {
+		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . A::Bewerken . '/' . $lid->uid);
 		$this->field = new TextField('opmerking', $lid->opmerking, 'Functie of opmerking bij lidmaatschap');
 		$this->field->suggestions[] = $suggestions;
 	}

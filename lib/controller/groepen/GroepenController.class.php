@@ -191,24 +191,23 @@ class GroepenController extends Controller {
 	}
 
 	public function aanmelden(Groep $groep, $uid = null) {
+		$class = $groep::leden;
+		$model = $class::instance();
 		if ($uid) {
-			$class = $groep::leden;
-			$lid = $class::instance()->nieuw($groep, LoginModel::getUid());
+			$lid = $model->instance()->nieuw($groep, LoginModel::getUid());
 			$form = new GroepAanmeldingForm($lid, $this->action);
 			if ($form->validate()) {
-				$class = $groep::leden;
-				$class::instance()->create($lid);
+				$model->create($lid);
 			}
 			$this->view = $form;
 		}
 		// beheren
 		else {
-			$class = $groep::leden;
-			$lid = $class::instance()->nieuw($groep, $uid);
-			$form = new GroepLidForm($lid, $this->action);
+			$lid = $model->nieuw($groep, $uid);
+			$uids = array_keys(group_by_distinct('uid', $groep->getLeden()));
+			$form = new GroepLidForm($lid, $this->action, $uids);
 			if ($form->validate()) {
-				$class = $groep::leden;
-				$class::instance()->create($lid);
+				$model->create($lid);
 				$this->view = new GroepLedenData(array($lid));
 			} else {
 				$this->view = $form;
@@ -217,24 +216,50 @@ class GroepenController extends Controller {
 	}
 
 	public function bewerken(Groep $groep, $uid = null) {
-		//TODO
+		$class = $groep::leden;
+		$model = $class::instance();
+		if ($uid) {
+			$lid = $model->get($groep, $uid);
+			$form = new GroepAanmeldingForm($lid);
+			if ($form->validate()) {
+				$model->create($lid);
+			}
+			$this->view = $form;
+		}
+		// beheren
+		else {
+			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			if (!isset($selection[0])) {
+				$this->geentoegang();
+			}
+			$lid = $model->getUUID($selection[0]);
+			$form = new GroepLidForm($lid, $this->action);
+			if ($form->validate()) {
+				$model->update($lid);
+				$this->view = new GroepLedenData(array($lid));
+			} else {
+				$this->view = $form;
+			}
+		}
 	}
 
 	public function afmelden(Groep $groep, $uid = null) {
+		$class = $groep::leden;
+		$model = $class::instance();
 		if ($uid) {
-			
+			$lid = $model->get($groep, $uid);
+			$lid->status = GroepStatus::OT;
+			$model->update($lid);
+			$this->view = new GroepAanmeldingForm($lid);
 		}
 		// beheren
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			$response = array();
 			foreach ($selection as $UUID) {
-				$groep = $this->model->getUUID($UUID);
-				if (!$groep) {
-					$this->geentoegang();
-				}
-				$this->model->delete($groep);
-				$response[] = $groep;
+				$lid = $model->getUUID($UUID);
+				$model->delete($lid);
+				$response[] = $lid;
 			}
 			$this->view = new RemoveRowsResponse($response);
 		}

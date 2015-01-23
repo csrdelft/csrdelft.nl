@@ -22,6 +22,10 @@ class GroepLedenModel extends CachedPersistenceModel {
 	 */
 	protected $memcache_prefetch = true;
 
+	public static function get(Groep $groep, $uid) {
+		return static::instance()->retrieveByPrimaryKey(array($groep->id, $uid));
+	}
+
 	protected function __construct() {
 		parent::__construct('groepen/');
 	}

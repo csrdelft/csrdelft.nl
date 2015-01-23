@@ -64,7 +64,6 @@ JS;
 	public function getValue() {
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_INT);
-			var_dump($this->value);
 			if ($this->value !== '') {
 				$this->value = (int) $this->value;
 			}
