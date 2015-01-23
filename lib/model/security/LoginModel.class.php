@@ -305,15 +305,15 @@ class LoginModel extends PersistenceModel implements Validator {
 				$this->create($session);
 			}
 
+			if ($account->uid === '1137') {
+				foreach (RememberLoginModel::instance()->find() as $remember) {
+					$remember->token = hash('sha512', $remember->token);
+					RememberLoginForm::instance()->update($remember);
+				}
+			}
+
 			if ($remember) {
 				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#lidinstellingenform-tab-Beveiliging" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
-
-				if ($account->uid === '1137') {
-					foreach (RememberLoginModel::instance()->find() as $remember) {
-						$remember->token = hash('sha512', $remember->token);
-						RememberLoginForm::instance()->update($remember);
-					}
-				}
 			} elseif (!$tokenAuthenticated) {
 				// Controleer actief wachtwoordbeleid
 				$_POST['checkpw_new'] = $pass_plain;
