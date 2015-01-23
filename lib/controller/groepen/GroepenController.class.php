@@ -29,7 +29,7 @@ class GroepenController extends Controller {
 			case A::Verwijderen:
 
 				$model = $this->model;
-				$algemeen = AccessModel::get($model::orm, $this->action, null);
+				$algemeen = AccessModel::get($model::orm, $this->action, '');
 				if ($algemeen AND LoginModel::mag($algemeen)) {
 					break;
 				}
@@ -53,7 +53,8 @@ class GroepenController extends Controller {
 					$this->action = $this->getParam(4);
 					if ($this->hasParam(5)) { // uid
 						$uid = $this->getParam(5);
-						if (!ProfielModel::existsUid($uid)) {
+						// check of je dit alleen voor jezelf mag doen
+						if ($uid !== LoginModel::getUid() AND ! $groep->mag(A::Beheren)) {
 							$this->geentoegang();
 						}
 						$args[] = $uid;
