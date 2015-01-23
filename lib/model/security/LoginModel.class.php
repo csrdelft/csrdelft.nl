@@ -292,7 +292,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 			// Login sessie aanmaken in database
 			$session = new LoginSession();
-			$session->session_id = hash('sha512', session_id());
+			$session->session_hash = hash('sha512', session_id());
 			$session->uid = $account->uid;
 			$session->login_moment = getDateTime();
 			$session->expire = $expire ? $expire : getDateTime(time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
