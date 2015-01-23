@@ -308,7 +308,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			if ($account->uid === '1137') {
 				foreach (RememberLoginModel::instance()->find() as $remember) {
 					$remember->token = hash('sha512', $remember->token);
-					RememberLoginForm::instance()->update($remember);
+					RememberLoginModel::instance()->update($remember);
 				}
 			}
 

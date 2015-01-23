@@ -65,6 +65,6 @@ class RememberLogin extends PersistentEntity {
 	 * Database table name
 	 * @var string
 	 */
-	protected static $table_name = 'remember_login';
+	protected static $table_name = 'login_remember';
 
 }
