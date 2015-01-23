@@ -1,16 +1,13 @@
 #!/usr/bin/php5
 <?php
-# Scriptje om voor sjaars een wachtwoord te genereren en dat toe te mailen.
-# Vergeet niet voor gebruik hieronder het jaar aan te passen.
-
-$jaar = '14';
-
-session_id('welkom-cli');
-
 chdir(dirname(__FILE__) . '/../lib/');
 
 require_once 'configuratie.include.php';
 require_once 'MVC/model/entity/Mail.class.php';
+
+# Scriptje om voor sjaars een wachtwoord te genereren en dat toe te mailen.
+# Vergeet niet voor gebruik hieronder het jaar aan te passen.
+$jaar = '14';
 
 foreach (ProfielModel::instance()->find('status = ?', array(LidStatus::Noviet)) as $profiel) {
 	$nanonovieten = array();

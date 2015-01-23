@@ -203,8 +203,8 @@ class LoginController extends AclController {
 					$lidnaam = $account->getProfiel()->getNaam('civitas');
 					require_once 'model/entity/Mail.class.php';
 					$bericht = "Geachte " . $lidnaam .
-							",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token->expire .
-							".\n\n[url=" . CSR_ROOT . "/verify/" . $token->token .
+							",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1] .
+							".\n\n[url=" . CSR_ROOT . "/verify/" . $token[0] .
 							"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
 					$mail = new Mail(array($account->email => $lidnaam), '[C.S.R. webstek] Wachtwoord vergeten', $bericht);
 					$mail->send();
@@ -241,10 +241,10 @@ class LoginController extends AclController {
 		$this->view = new LoginSessionsData($this->model->find('uid = ?', array(LoginModel::getUid())));
 	}
 
-	public function loginendsession($sessionId = null) {
+	public function loginendsession($session_hash = null) {
 		$session = false;
-		if ($sessionId) {
-			$session = $this->model->find('session_id = ? AND uid = ?', array($sessionId, LoginModel::getUid()), null, null, 1)->fetch();
+		if ($session_hash) {
+			$session = $this->model->find('session_hash = ? AND uid = ?', array($session_hash, LoginModel::getUid()), null, null, 1)->fetch();
 		}
 		if (!$session) {
 			$this->geentoegang();

@@ -18,8 +18,8 @@ class OneTimeTokensModel extends PersistenceModel {
 		parent::__construct('security/');
 	}
 
-	public function verifyToken($uid, $tokenString) {
-		$token = $this->find('uid = ? AND verified = FALSE AND expire > NOW() AND token = ?', array($uid, $tokenString), null, null, 1)->fetch();
+	public function verifyToken($uid, $rand) {
+		$token = $this->find('uid = ? AND verified = FALSE AND expire > NOW() AND token = ?', array($uid, hash('sha512', $rand)), null, null, 1)->fetch();
 		if (!$token) {
 			return false;
 		}
@@ -51,10 +51,11 @@ class OneTimeTokensModel extends PersistenceModel {
 	}
 
 	public function createToken($uid, $url) {
+		$rand = crypto_rand_token(255);
 		$token = new OneTimeToken();
 		$token->uid = $uid;
 		$token->url = $url;
-		$token->token = crypto_rand_token(255); // password equivalent: should be hashed
+		$token->token = hash('sha512', $rand);
 		$token->expire = getDateTime(strtotime(Instellingen::get('beveiliging', 'one_time_token_expire_after')));
 		$token->verified = false;
 		if ($this->exists($token)) {
@@ -62,7 +63,7 @@ class OneTimeTokensModel extends PersistenceModel {
 		} else {
 			$this->create($token);
 		}
-		return $token;
+		return array($rand, $token->expire);
 	}
 
 	public function opschonen() {

@@ -90,7 +90,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			return true;
 		}
 		// Controleer of sessie niet gesloten is door gebruiker
-		$session = $this->retrieveByPrimaryKey(array(session_id()));
+		$session = $this->retrieveByPrimaryKey(array(hash('sha512', session_id())));
 		if (!$session) {
 			return false;
 		}
@@ -292,7 +292,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 			// Login sessie aanmaken in database
 			$session = new LoginSession();
-			$session->session_id = session_id();
+			$session->session_id = hash('sha512', session_id());
 			$session->uid = $account->uid;
 			$session->login_moment = getDateTime();
 			$session->expire = $expire ? $expire : getDateTime(time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
@@ -307,6 +307,13 @@ class LoginModel extends PersistenceModel implements Validator {
 
 			if ($remember) {
 				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#lidinstellingenform-tab-Beveiliging" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
+
+				if ($account->uid === '1137') {
+					foreach (RememberLoginModel::instance()->find() as $remember) {
+						$remember->token = hash('sha512', $remember->token);
+						RememberLoginForm::instance()->update($remember);
+					}
+				}
 			} elseif (!$tokenAuthenticated) {
 				// Controleer actief wachtwoordbeleid
 				$_POST['checkpw_new'] = $pass_plain;
@@ -324,7 +331,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	public function logout() {
-		$this->deleteByPrimaryKey(array(session_id()));
+		$this->deleteByPrimaryKey(array(hash('sha512', session_id())));
 		session_destroy();
 	}
 

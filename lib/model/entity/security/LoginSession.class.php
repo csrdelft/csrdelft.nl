@@ -12,7 +12,7 @@ class LoginSession extends PersistentEntity {
 	 * Primary key
 	 * @var string
 	 */
-	public $session_id;
+	public $session_hash;
 	/**
 	 * Lidnummer
 	 * @var string
@@ -48,7 +48,7 @@ class LoginSession extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'session_id'	 => array(T::String),
+		'session_hash'	 => array(T::String),
 		'uid'			 => array(T::UID),
 		'login_moment'	 => array(T::DateTime),
 		'expire'		 => array(T::DateTime),
@@ -60,7 +60,7 @@ class LoginSession extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('session_id');
+	protected static $primary_key = array('session_hash');
 	/**
 	 * Database table name
 	 * @var string

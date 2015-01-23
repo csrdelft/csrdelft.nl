@@ -154,7 +154,7 @@ switch (constant('MODE')) {
 		// Sessie configureren
 		ini_set('session.name', 'CSRSESSID');
 		ini_set('session.save_path', SESSION_PATH);
-		ini_set('session.hash_function', 'sha256');
+		ini_set('session.hash_function', 'sha512');
 		ini_set('session.cache_limiter', 'nocache');
 		ini_set('session.use_trans_sid', 0);
 		ini_set('session.gc_maxlifetime', (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));

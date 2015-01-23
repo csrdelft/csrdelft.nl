@@ -12,16 +12,12 @@ class RememberLoginModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public static function get($id) {
-		return static::instance()->retrieveByPrimaryKey(array($id));
-	}
-
 	protected function __construct() {
 		parent::__construct('security/');
 	}
 
-	public function verifyToken($ip, $tokenString) {
-		$remember = $this->find('token = ? AND (lock_ip = FALSE OR ip = ?)', array($tokenString, $ip), null, null, 1)->fetch();
+	public function verifyToken($ip, $rand) {
+		$remember = $this->find('token = ? AND (lock_ip = FALSE OR ip = ?)', array(hash('sha512', $rand), $ip), null, null, 1)->fetch();
 		if (!$remember) {
 			return false;
 		}
@@ -40,13 +36,14 @@ class RememberLoginModel extends PersistenceModel {
 	}
 
 	public function rememberLogin(RememberLogin $remember) {
-		$remember->token = crypto_rand_token(255); // password equivalent: should be hashed
+		$rand = crypto_rand_token(255);
+		$remember->token = hash('sha512', $rand);
 		if ($this->exists($remember)) {
 			$this->update($remember);
 		} else {
 			$remember->id = $this->create($remember);
 		}
-		return setcookie('remember', $remember->token, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', 'csrdelft.nl', FORCE_HTTPS, true);
+		return setcookie('remember', $rand, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', 'csrdelft.nl', FORCE_HTTPS, true);
 	}
 
 }

@@ -35,7 +35,7 @@ class LoginSessionsData extends DataTableResponse {
 	public function getJson($session) {
 		$array = $session->jsonSerialize();
 
-		$array['details'] = '<a href="/loginendsession/' . $session->session_id . '" class="post DataTableResponse SingleRow" title="Log uit"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/door_in.png"></a>';
+		$array['details'] = '<a href="/loginendsession/' . $session->session_hash . '" class="post DataTableResponse SingleRow" title="Log uit"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/door_in.png"></a>';
 
 		$array['login_moment'] = reldate($array['login_moment']);
 
