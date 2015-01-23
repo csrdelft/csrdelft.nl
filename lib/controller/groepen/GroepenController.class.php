@@ -30,10 +30,17 @@ class GroepenController extends Controller {
 
 				$model = $this->model;
 				$algemeen = AccessModel::get($model::orm, $this->action, null);
-				if (!LoginModel::mag($algemeen) AND ! DEBUG) { // DEBUG
-					$this->geentoegang();
+				if ($algemeen AND LoginModel::mag($algemeen)) {
+					break;
 				}
-				break;
+				if ($this->hasParam(3)) { // soort
+					$soort = AccessModel::get($model::orm, $this->action, $this->getParam(3));
+					if ($soort AND LoginModel::mag($soort)) {
+						$args[] = $soort;
+						break;
+					}
+				}
+				$this->geentoegang();
 
 			default:
 				$id = (int) $this->action; // id
@@ -95,8 +102,12 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function overzicht() {
-		$groepen = $this->model->find();
+	public function overzicht($soort = null) {
+		if ($soort) {
+			$groepen = $this->model->find('soort = ?', array($soort));
+		} else {
+			$groepen = $this->model->find();
+		}
 		$body = new GroepenView($this->model, $groepen);
 		$this->view = new CsrLayoutPage($body);
 	}
@@ -126,9 +137,13 @@ class GroepenController extends Controller {
 		return $this->groeptab($groep);
 	}
 
-	public function beheren() {
+	public function beheren($soort = null) {
 		if ($this->isPosted()) {
-			$groepen = $this->model->find();
+			if ($soort) {
+				$groepen = $this->model->find('soort = ?', array($soort));
+			} else {
+				$groepen = $this->model->find();
+			}
 			$this->view = new GroepenBeheerData($groepen);
 		} else {
 			$body = new GroepenBeheerTable($this->model);
@@ -137,8 +152,8 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function aanmaken() {
-		$groep = $this->model->nieuw();
+	public function aanmaken($soort = null) {
+		$groep = $this->model->nieuw($soort);
 		$form = new GroepForm($groep, groepenUrl . $this->action);
 		if ($form->validate()) {
 			$this->model->create($groep);
@@ -148,7 +163,7 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function wijzigen() {
+	public function wijzigen($soort = null) {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (isset($selection[0])) {
 			$groep = $this->model->getUUID($selection[0]);
@@ -167,7 +182,7 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function verwijderen() {
+	public function verwijderen($soort = null) {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$response = array();
 		foreach ($selection as $UUID) {

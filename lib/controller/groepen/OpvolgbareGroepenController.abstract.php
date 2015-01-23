@@ -15,9 +15,9 @@ abstract class OpvolgbareGroepenController extends GroepenController {
 		parent::__construct($query, $model);
 	}
 
-	public function overzicht($status = null) {
-		if (in_array($status, GroepStatus::getTypeOptions())) {
-			$groepen = $this->model->find('status = ?', array($status));
+	public function overzicht($soort = null) {
+		if ($soort) {
+			$groepen = $this->model->find('status = ? AND soort = ?', array(GroepStatus::HT, $soort));
 		} else {
 			$groepen = $this->model->find('status = ?', array(GroepStatus::HT));
 		}

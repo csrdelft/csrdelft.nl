@@ -97,14 +97,20 @@ class Groep extends PersistentEntity {
 	 */
 	public function mag($action) {
 		$algemeen = AccessModel::get(get_class($this), $action, null);
-		if (LoginModel::mag($algemeen)) {
+		if ($algemeen AND LoginModel::mag($algemeen)) {
 			return true;
+		}
+		if (property_exists($this, 'soort')) {
+			$soort = AccessModel::get(get_class($this), $action, $this->soort);
+			if ($soort AND LoginModel::mag($soort)) {
+				return true;
+			}
 		}
 		$specifiek = AccessModel::get(get_class($this), $action, $this->id);
-		if (LoginModel::mag($specifiek)) {
+		if ($specifiek AND LoginModel::mag($specifiek)) {
 			return true;
 		}
-		return false OR DEBUG; // DEBUG
+		return false;
 	}
 
 }
