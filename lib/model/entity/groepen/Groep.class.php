@@ -8,8 +8,7 @@ require_once 'model/entity/groepen/GroepLid.class.php';
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een groep met leden en status.
- * Optioneel in familie voor opvolging.
+ * Een groep met leden.
  */
 class Groep extends PersistentEntity {
 
@@ -105,7 +104,7 @@ class Groep extends PersistentEntity {
 		if (LoginModel::mag($specifiek)) {
 			return true;
 		}
-		return false;
+		return false OR DEBUG; // DEBUG
 	}
 
 }

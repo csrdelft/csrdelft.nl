@@ -113,7 +113,7 @@ abstract class OpvolgbareGroepenModel extends GroepenModel {
 
 	public function nieuw() {
 		$groep = parent::nieuw();
-		$groep->familie_id = null;
+		$groep->opvolg_naam = null;
 		$groep->jaargang = LichtingenModel::getHuidigeJaargang();
 		$groep->status = GroepStatus::HT;
 		return $groep;

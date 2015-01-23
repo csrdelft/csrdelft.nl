@@ -7,7 +7,7 @@ require_once 'model/entity/groepen/Groep.class.php';
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een groep met familie voor opvolging en status.
+ * Een groep met naam voor opvolging en status.
  */
 abstract class OpvolgbareGroep extends Groep {
 
@@ -15,7 +15,7 @@ abstract class OpvolgbareGroep extends Groep {
 	 * Familie (opvolging)
 	 * @var string
 	 */
-	public $familie_id;
+	public $opvolg_naam;
 	/**
 	 * Jaargang
 	 * @var string
@@ -31,9 +31,9 @@ abstract class OpvolgbareGroep extends Groep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'familie_id' => array(T::String),
-		'jaargang'	 => array(T::String),
-		'status'	 => array(T::Enumeration, false, 'GroepStatus')
+		'opvolg_naam'	 => array(T::String),
+		'jaargang'		 => array(T::String),
+		'status'		 => array(T::Enumeration, false, 'GroepStatus')
 	);
 
 	/**

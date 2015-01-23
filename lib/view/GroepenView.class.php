@@ -13,7 +13,7 @@ require_once 'view/CmsPaginaView.class.php';
 class GroepenBeheerTable extends DataTable {
 
 	public function __construct(GroepenModel $model) {
-		parent::__construct($model::orm, null, 'familie_id');
+		parent::__construct($model::orm, null, 'opvolg_naam');
 		$this->dataUrl = groepenUrl . A::Beheren;
 		$this->titel = 'Beheer ' . lcfirst(str_replace('Model', '', get_class($model)));
 		$this->hideColumn('samenvatting');

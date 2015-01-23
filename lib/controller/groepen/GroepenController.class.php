@@ -30,7 +30,7 @@ class GroepenController extends Controller {
 
 				$model = $this->model;
 				$algemeen = AccessModel::get($model::orm, $this->action, null);
-				if (!LoginModel::mag($algemeen) AND ! DEBUG) {
+				if (!LoginModel::mag($algemeen) AND ! DEBUG) { // DEBUG
 					$this->geentoegang();
 				}
 				break;
@@ -54,7 +54,7 @@ class GroepenController extends Controller {
 				} else {
 					$this->action = A::Bekijken; // default
 				}
-				if (!$groep->mag($this->action) AND ! DEBUG) {
+				if (!$groep->mag($this->action)) {
 					$this->geentoegang();
 				}
 		}
