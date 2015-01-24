@@ -221,7 +221,7 @@ class GroepView implements View {
 			$html .= ' bb-block';
 		}
 		if ($this->groep->maker_uid == 1025) {
-			$html .= ' bb-dies2015';
+			$html .= ' bb-dies2015"><img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M" class="float-right';
 		}
 		$html .= '"><div class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
 		$html .= CsrBB::parse($this->groep->samenvatting);
@@ -242,9 +242,6 @@ class GroepView implements View {
 		}
 		$html .= '</div>';
 		$html .= $this->leden->getHtml();
-		if ($this->groep->maker_uid == 1025) {
-			$html .= '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M" style="position: absolute; bottom: 20px; left: 20px;">';
-		}
 		$html .= '<div class="clear">&nbsp</div></div>';
 		return $html;
 	}
