@@ -363,6 +363,7 @@ class InlineForm extends Formulier implements FormElement {
 			$this->formId = filter_input(INPUT_POST, 'FormId', FILTER_SANITIZE_STRING);
 		}
 		$this->css_classes[] = 'InlineForm';
+		$this->css_classes[] = $this->getType();
 		$this->buttons = $buttons;
 		$this->labels = $labels;
 		$this->datatable = $submit_DataTableResponse;
