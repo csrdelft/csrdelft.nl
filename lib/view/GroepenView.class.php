@@ -221,9 +221,12 @@ class GroepView implements View {
 			$html .= ' bb-block';
 		}
 		if ($this->groep->maker_uid == 1025) {
-			$html .= ' bb-dies2015"><img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M" class="float-right';
+			$html .= ' bb-dies2015';
 		}
 		$html .= '"><div class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
+		if ($this->groep->maker_uid == 1025) {
+			$html .= '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M" class="float-left">';
+		}
 		$html .= CsrBB::parse($this->groep->samenvatting);
 		if (!empty($this->groep->omschrijving)) {
 			$html .= '<div class="clear">&nbsp;</div><a class="groep-omschrijving-tonen" onclick="$(this).next().slideDown();$(this).remove();">Meer lezen »</a><div class="groep-omschrijving">';
