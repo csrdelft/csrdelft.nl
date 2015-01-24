@@ -245,6 +245,7 @@ class GroepEmailsView extends GroepTabView {
 class GroepOTLedenView extends GroepTabView {
 
 	public function getHtml() {
+		$html = parent::getHtml();
 		foreach ($this->groep->getLeden(GroepStatus::OT) as $lid) {
 			$html .= ProfielModel::getLink($lid->uid, 'pasfoto');
 		}
