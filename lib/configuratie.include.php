@@ -181,6 +181,11 @@ switch (constant('MODE')) {
 		VerticalenModel::instance()->prefetch();
 		ForumModel::instance()->prefetch();
 
+		if (LoginModel::getUid() !== '1137') {
+			header('location: https://csrdelft.nl/onderhoud.html');
+			exit;
+		}
+
 		// Database modus meldingen
 		if (DB_MODIFY OR DB_DROP) {
 			if (DEBUG) {
