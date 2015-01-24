@@ -142,7 +142,6 @@ class GroepenView implements View {
 		if (!$this->pagina) {
 			$this->pagina = CmsPaginaModel::get('');
 		}
-		$this->titel = $this->pagina->titel;
 	}
 
 	public function view() {
@@ -159,11 +158,11 @@ class GroepenView implements View {
 	}
 
 	public function getModel() {
-		
+		return $this->groepen;
 	}
 
 	public function getTitel() {
-		
+		return $this->pagina->titel;
 	}
 
 }
