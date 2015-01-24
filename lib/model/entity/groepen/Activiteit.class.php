@@ -151,9 +151,8 @@ class Activiteit extends OpvolgbareGroep implements Agendeerbaar {
 	public function getEindMoment() {
 		if ($this->eind_moment) {
 			return strtotime($this->eind_moment);
-		} else {
-			return $this->getBeginMoment();
 		}
+		return $this->getBeginMoment();
 	}
 
 	/**
@@ -176,7 +175,7 @@ class Activiteit extends OpvolgbareGroep implements Agendeerbaar {
 	}
 
 	public function getLink() {
-		return $this->website;
+		return $this->getUrl();
 	}
 
 	public function isHeledag() {
