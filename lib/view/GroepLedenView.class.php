@@ -127,13 +127,15 @@ abstract class GroepTabView implements View, FormElement {
 	public function getHtml() {
 		$html = '<div id="groep-leden-' . $this->groep->id . '" class="groep-leden"><ul class="groep-tabs nobullets">';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Pasfotos . '" title="Pasfoto\'s tonen"><span class="fa fa-user"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Pasfotos . '" title="' . GroepTab::getDescription(GroepTab::Pasfotos) . ' tonen"><span class="fa fa-user"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Lijst . '" title="Pasfoto\'s tonen"><span class="fa fa-align-justify"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Lijst . '" title="' . GroepTab::getDescription(GroepTab::Lijst) . ' tonen"><span class="fa fa-align-justify"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Statistiek . '" title="Pasfoto\'s tonen"><span class="fa fa-pie-chart"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Statistiek . '" title="' . GroepTab::getDescription(GroepTab::Statistiek) . ' tonen"><span class="fa fa-pie-chart"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Emails . '" title="Pasfoto\'s tonen"><span class="fa fa-envelope"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Emails . '" title="' . GroepTab::getDescription(GroepTab::Emails) . ' tonen"><span class="fa fa-envelope"></span></a></li>';
+
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepOTLedenView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::OTleden . '" title="' . GroepTab::getDescription(GroepTab::OTleden) . ' tonen"><span class="fa fa-clock-o"></span></a></li>';
 
 		return $html . '</ul><div class="groep-tab-content">';
 	}
@@ -236,6 +238,17 @@ class GroepEmailsView extends GroepTabView {
 			}
 		}
 		return $html . '</div></div></div>';
+	}
+
+}
+
+class GroepOTLedenView extends GroepTabView {
+
+	public function getHtml() {
+		foreach ($this->groep->getLeden(GroepStatus::OT) as $lid) {
+			$html .= ProfielModel::getLink($lid->uid, 'pasfoto');
+		}
+		return $html . '</div></div>';
 	}
 
 }

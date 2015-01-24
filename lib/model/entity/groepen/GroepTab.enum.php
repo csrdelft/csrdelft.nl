@@ -14,6 +14,7 @@ abstract class GroepTab implements PersistentEnum {
 	const Pasfotos = 'pasfotos';
 	const Statistiek = 'stats';
 	const Emails = 'emails';
+	const OTleden = 'ot';
 
 	public static function getTypeOptions() {
 		return array(self::Lijst, self::Pasfotos, self::Statistiek, self::Emails);
@@ -25,6 +26,7 @@ abstract class GroepTab implements PersistentEnum {
 			case self::Pasfotos: return 'Pasfoto\'s';
 			case self::Statistiek: return 'Statistiek';
 			case self::Emails: return 'E-mails';
+			case self::OTleden: return 'Oudleden';
 			default: throw new Exception('GroepTab onbekend');
 		}
 	}
@@ -35,6 +37,7 @@ abstract class GroepTab implements PersistentEnum {
 			case self::Pasfotos: return 'p';
 			case self::Statistiek: return 's';
 			case self::Emails: return 'e';
+			case self::OTleden: return 'o';
 			default: throw new Exception('GroepTab onbekend');
 		}
 	}
