@@ -12,14 +12,14 @@ abstract class ActiviteitSoort implements PersistentEnum {
 
 	const Intern = 'i';
 	const Extern = 'e';
-	const SjaarActie = 's';
+	const SjaarsActie = 's';
 	const OWee = 'o';
 	const Dies = 'd';
 	const Lustrum = 'l';
 	const IFES = 'f';
 
 	public static function getTypeOptions() {
-		return array(self::Intern, self::Extern, self::SjaarActie, self::OWee, self::Dies, self::Lustrum, self::IFES);
+		return array(self::Intern, self::Extern, self::SjaarsActie, self::OWee, self::Dies, self::Lustrum, self::IFES);
 	}
 
 	public static function getDescription($option) {
@@ -39,7 +39,7 @@ abstract class ActiviteitSoort implements PersistentEnum {
 		switch ($option) {
 			case self::Intern:
 			case self::Extern:
-			case self::SjaarActie:
+			case self::SjaarsActie:
 			case self::OWee:
 			case self::Dies:
 			case self::Lustrum:
