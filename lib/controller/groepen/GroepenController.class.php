@@ -389,7 +389,7 @@ class GroepenController extends Controller {
 					exit;
 			}
 
-			if (true) {
+			if (false) {
 				$admin = DatabaseAdmin::instance();
 
 				$class = $model::orm;
