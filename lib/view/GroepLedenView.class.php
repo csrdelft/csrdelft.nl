@@ -83,10 +83,12 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 		$this->buttons = false;
 		$this->css_classes[] = 'float-left';
 
+		$this->field->hidden;
+		$fields[] = $this->field;
+
 		if ($pasfoto) {
 			$fields[] = new PasfotoAanmeldenKnop();
 		} else {
-			$fields[] = $this->field;
 			$fields[] = new SubmitKnop(null, 'submit', 'Aanmelden', null, null);
 		}
 
