@@ -68,6 +68,7 @@ class GroepenController extends Controller {
 
 			case A::Rechten:
 			case A::Beheren:
+			case A::Wijzigen:
 			case 'leden':
 				return true;
 
@@ -82,7 +83,6 @@ class GroepenController extends Controller {
 			case GroepTab::Emails:
 			case GroepTab::OTleden:
 			case A::Aanmaken:
-			case A::Wijzigen:
 			case A::Verwijderen:
 			case A::Aanmelden:
 			case A::Afmelden:
@@ -155,26 +155,43 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function wijzigen($soort = null) {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		if (isset($selection[0])) {
-			$groep = $this->model->getUUID($selection[0]);
-		} else {
-			$groep = false;
+	public function wijzigen(Groep $groep = null) {
+		if ($groep) {
+			$form = new GroepForm($groep, $this->action);
+			if ($form->validate()) {
+				$this->model->update($groep);
+				$form = null;
+			} elseif ($this->isPosted()) {
+				$this->view = $form;
+				return;
+			}
+			$this->view = new GroepView($groep, GroepTab::Pasfotos);
+			if (!$this->isPosted()) {
+				$this->view = new CsrLayoutPage($this->view, array(), $form);
+			}
 		}
-		if (!$groep OR ! $groep->mag($this->action)) {
-			$this->geentoegang();
-		}
-		$form = new GroepForm($groep, $this->model->getUrl() . $this->action);
-		if ($form->validate()) {
-			$this->model->update($groep);
-			$this->view = new GroepenBeheerData(array($groep));
-		} else {
-			$this->view = $form;
+		// beheren
+		else {
+			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			if (isset($selection[0])) {
+				$groep = $this->model->getUUID($selection[0]);
+			} else {
+				$groep = false;
+			}
+			if (!$groep OR ! $groep->mag($this->action)) {
+				$this->geentoegang();
+			}
+			$form = new GroepForm($groep, $this->model->getUrl() . $this->action);
+			if ($form->validate()) {
+				$this->model->update($groep);
+				$this->view = new GroepenBeheerData(array($groep));
+			} else {
+				$this->view = $form;
+			}
 		}
 	}
 
-	public function verwijderen($soort = null) {
+	public function verwijderen() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$response = array();
 		foreach ($selection as $UUID) {

@@ -194,6 +194,14 @@ class GroepView implements View {
 				$this->leden = new GroepEmailsView($groep);
 				break;
 
+			case GroepTab::Emails:
+				$this->leden = new GroepEmailsView($groep);
+				break;
+
+			case GroepTab::OTleden:
+				$this->leden = new GroepOTLedenView($groep);
+				break;
+
 			default:
 				if ($groep->keuzelijst) {
 					$this->leden = new GroepLijstView($groep);
