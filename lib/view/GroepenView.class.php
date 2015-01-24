@@ -15,7 +15,8 @@ class GroepenBeheerTable extends DataTable {
 
 	public function __construct(GroepenModel $model) {
 		parent::__construct($model::orm, null, 'opvolg_naam');
-		$this->dataUrl = groepenUrl . A::Beheren;
+		$url = strtolower('/groepen/' . get_class($model) . '/');
+		$this->dataUrl = $url . A::Beheren;
 		$this->titel = 'Beheer ' . lcfirst(str_replace('Model', '', get_class($model)));
 		$this->hideColumn('samenvatting');
 		$this->hideColumn('omschrijving');
@@ -28,13 +29,13 @@ class GroepenBeheerTable extends DataTable {
 		$this->searchColumn('status');
 		$this->searchColumn('soort');
 
-		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . A::Aanmaken, 'post popup', 'Toevoegen', 'Nieuwe groep toevoegen', 'add');
+		$create = new DataTableKnop('== 0', $this->tableId, $url . A::Aanmaken, 'post popup', 'Toevoegen', 'Nieuwe groep toevoegen', 'add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig groep eigenschappen', 'edit');
+		$update = new DataTableKnop('== 1', $this->tableId, $url . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig groep eigenschappen', 'edit');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . A::Verwijderen, 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
+		$delete = new DataTableKnop('>= 1', $this->tableId, $url . A::Verwijderen, 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
 		$this->addKnop($delete);
 	}
 
@@ -45,7 +46,7 @@ class GroepenBeheerData extends DataTableResponse {
 	public function getJson($groep) {
 		$array = $groep->jsonSerialize();
 
-		$array['detailSource'] = groepenUrl . $groep->id . '/leden'; // TODO: 2 childrow's A::Rechten;
+		$array['detailSource'] = $groep->getUrl() . 'leden'; // TODO: 2 childrow's A::Rechten;
 		$array['samenvatting'] = null;
 		$array['omschrijving'] = null;
 		$array['website'] = null;
@@ -69,17 +70,17 @@ class GroepRechtenTable extends DataTable {
 
 	public function __construct(AccessModel $model, Groep $groep) {
 		parent::__construct($model::orm, 'Rechten voor ' . $groep->naam, 'resource');
-		$this->dataUrl = groepenUrl . $groep->id . '/' . A::Rechten;
+		$this->dataUrl = $groep->getUrl() . A::Rechten;
 		$this->hideColumn('action', false);
 		$this->searchColumn('action');
 
-		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . $groep->id . '/' . A::Rechten . '/' . A::Aanmaken, 'post popup', 'Geven', 'Rechten uitdelen', 'key_add');
+		$create = new DataTableKnop('== 0', $this->tableId, $groep->getUrl() . A::Rechten . '/' . A::Aanmaken, 'post popup', 'Geven', 'Rechten uitdelen', 'key_add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Rechten . '/' . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig rechten', 'key_edit');
+		$update = new DataTableKnop('== 1', $this->tableId, $groep->getUrl() . A::Rechten . '/' . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig rechten', 'key_edit');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Rechten . '/' . A::Verwijderen, 'post confirm', 'Terugtrekken', 'Rechten terugtrekken', 'key_delete');
+		$delete = new DataTableKnop('>= 1', $this->tableId, $groep->getUrl() . A::Rechten . '/' . A::Verwijderen, 'post confirm', 'Terugtrekken', 'Rechten terugtrekken', 'key_delete');
 		$this->addKnop($delete);
 	}
 
@@ -100,7 +101,7 @@ class GroepRechtenData extends DataTableResponse {
 class GroepRechtenForm extends DataTableForm {
 
 	public function __construct(AccessControl $ac, Groep $groep, $action, GroepenModel $model) {
-		parent::__construct($ac, groepenUrl . $groep->id . '/' . A::Rechten . '/' . $action, ucfirst(A::Rechten) . ' voor ');
+		parent::__construct($ac, $groep->getUrl() . A::Rechten . '/' . $action, ucfirst(A::Rechten) . ' voor ');
 		if ($ac->resource === '*') {
 			$this->titel .= 'alle ' . str_replace('Model', '', lcfirst(get_class($model)));
 		} else {

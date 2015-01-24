@@ -92,6 +92,10 @@ class Activiteit extends OpvolgbareGroep implements Agendeerbaar {
 		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
 	}
 
+	public function getUrl() {
+		return '/groepen/activiteiten/' . $this->id . '/';
+	}
+
 	/**
 	 * Has permission for action?
 	 * 

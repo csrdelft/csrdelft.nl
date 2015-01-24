@@ -143,7 +143,7 @@ class GroepenController extends Controller {
 
 	public function aanmaken($soort = null) {
 		$groep = $this->model->nieuw($soort);
-		$form = new GroepForm($groep, groepenUrl . $this->action);
+		$form = new GroepForm($groep, $this->model->getUrl() . $this->action);
 		if ($form->validate()) {
 			$this->model->create($groep);
 			$this->view = new GroepenBeheerData(array($groep));
@@ -162,7 +162,7 @@ class GroepenController extends Controller {
 		if (!$groep OR ! $groep->mag($this->action)) {
 			$this->geentoegang();
 		}
-		$form = new GroepForm($groep, groepenUrl . $this->action);
+		$form = new GroepForm($groep, $this->model->getUrl() . $this->action);
 		if ($form->validate()) {
 			$this->model->update($groep);
 			$this->view = new GroepenBeheerData(array($groep));
@@ -199,7 +199,7 @@ class GroepenController extends Controller {
 		$model = $leden::instance();
 		if ($uid) {
 			$lid = $model->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldenForm($lid, $groep->getSuggesties(), $groep->keuzelijst);
+			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
 			if ($form->validate()) {
 				$model->create($lid);
 				$this->view = new GroepView($groep);
@@ -211,7 +211,7 @@ class GroepenController extends Controller {
 		else {
 			$lid = $model->nieuw($groep, $uid);
 			$uids = array_keys(group_by_distinct('uid', $groep->getLeden()));
-			$form = new GroepLidBeheerForm($lid, $this->action, $uids);
+			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action, $uids);
 			if ($form->validate()) {
 				$model->create($lid);
 				$this->view = new GroepLedenData(array($lid));
@@ -226,7 +226,7 @@ class GroepenController extends Controller {
 		$model = $leden::instance();
 		if ($uid) {
 			$lid = $model->get($groep, $uid);
-			$form = new GroepBewerkenForm($lid, $groep->getSuggesties(), $groep->keuzelijst);
+			$form = new GroepBewerkenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
 			if ($form->validate()) {
 				$model->update($lid);
 			}
@@ -239,7 +239,7 @@ class GroepenController extends Controller {
 				$this->geentoegang();
 			}
 			$lid = $model->getUUID($selection[0]);
-			$form = new GroepLidBeheerForm($lid, $this->action);
+			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action);
 			if ($form->validate()) {
 				$model->update($lid);
 				$this->view = new GroepLedenData(array($lid));

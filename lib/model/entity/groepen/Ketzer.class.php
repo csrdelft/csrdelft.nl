@@ -80,6 +80,10 @@ class Ketzer extends Groep {
 		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
 	}
 
+	public function getUrl() {
+		return '/groepen/ketzers/' . $this->id . '/';
+	}
+
 	/**
 	 * Has permission for action?
 	 * 

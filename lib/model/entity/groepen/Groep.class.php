@@ -96,6 +96,10 @@ class Groep extends PersistentEntity {
 	 */
 	protected static $table_name = 'groepen';
 
+	public function getUrl() {
+		return '/groepen/overig/' . $this->id . '/';
+	}
+
 	/**
 	 * Is lid van deze groep?
 	 * 

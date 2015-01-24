@@ -43,6 +43,10 @@ class Verticale extends PersistentEntity {
 	 */
 	protected static $table_name = 'verticalen';
 
+	public function getUrl() {
+		return '/verticalen#' . $this->letter;
+	}
+
 	/**
 	 * TODO: Kring extend OpvolgbareGroep
 	 */

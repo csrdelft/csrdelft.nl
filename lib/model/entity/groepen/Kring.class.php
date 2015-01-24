@@ -36,4 +36,8 @@ class Kring extends OpvolgbareGroep {
 		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
 	}
 
+	public function getUrl() {
+		return '/groepen/kringen/' . $this->id . '/';
+	}
+
 }

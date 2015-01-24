@@ -16,4 +16,8 @@ class Werkgroep extends OpvolgbareGroep {
 	 */
 	protected static $table_name = 'werkgroepen';
 
+	public function getUrl() {
+		return '/groepen/werkgroepen/' . $this->id . '/';
+	}
+
 }

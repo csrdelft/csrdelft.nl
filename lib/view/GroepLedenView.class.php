@@ -10,19 +10,19 @@ class GroepLedenTable extends DataTable {
 
 	public function __construct(GroepLedenModel $model, Groep $groep) {
 		parent::__construct($model::orm, 'Leden van ' . $groep->naam, 'status');
-		$this->dataUrl = groepenUrl . $groep->id . '/leden';
+		$this->dataUrl = $groep->getUrl() . 'leden';
 		$this->hideColumn('uid', false);
 		$this->searchColumn('uid');
 		$this->setColumnTitle('uid', 'Lidnaam');
 		$this->setColumnTitle('door_uid', 'Aangemeld door');
 
-		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . $groep->id . '/' . A::Aanmelden, 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
+		$create = new DataTableKnop('== 0', $this->tableId, $groep->getUrl() . A::Aanmelden, 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Bewerken, 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
+		$update = new DataTableKnop('== 1', $this->tableId, $groep->getUrl() . A::Bewerken, 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Afmelden, 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
+		$delete = new DataTableKnop('>= 1', $this->tableId, $groep->getUrl() . A::Afmelden, 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
 		$this->addKnop($delete);
 	}
 
@@ -44,7 +44,7 @@ class GroepLedenData extends DataTableResponse {
 class GroepLidBeheerForm extends DataTableForm {
 
 	public function __construct(GroepLid $lid, $action, array $blacklist = null) {
-		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . $action, ucfirst($action));
+		parent::__construct($lid, $action, ucfirst($action));
 		$fields = $this->generateFields();
 		if ($blacklist !== null) {
 			$fields['uid']->blacklist = $blacklist;
@@ -61,8 +61,8 @@ class GroepLidBeheerForm extends DataTableForm {
 
 class GroepBewerkenForm extends InlineForm {
 
-	public function __construct(GroepLid $lid, array $suggesties = array(), $keuzelijst = null) {
-		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . A::Bewerken . '/' . $lid->uid, true);
+	public function __construct(GroepLid $lid, Groep $groep, array $suggesties = array(), $keuzelijst = null) {
+		parent::__construct($lid, $groep->getUrl() . A::Bewerken . '/' . $lid->uid, true);
 
 		if ($keuzelijst) {
 			$this->field = new MultiSelectField('opmerking', $lid->opmerking, null);
@@ -77,9 +77,9 @@ class GroepBewerkenForm extends InlineForm {
 
 class GroepAanmeldenForm extends GroepBewerkenForm {
 
-	public function __construct(GroepLid $lid, array $suggesties = array(), $keuzelijst = null) {
-		parent::__construct($lid, $suggesties, $keuzelijst);
-		$this->action = groepenUrl . $lid->groep_id . '/' . A::Aanmelden . '/' . $lid->uid;
+	public function __construct(GroepLid $lid, Groep $groep, array $suggesties = array(), $keuzelijst = null) {
+		parent::__construct($lid, $groep, $suggesties, $keuzelijst);
+		$this->action = $groep->getUrl() . A::Aanmelden . '/' . $lid->uid;
 		$this->buttons = false;
 
 		$fields[] = new PasfotoAanmeldenKnop();
@@ -124,13 +124,13 @@ abstract class GroepTabView implements View {
 	public function view() {
 		echo '<div id="groep-leden-' . $this->groep->id . '" class="groep-leden"><ul class="groep-tabs nobullets">';
 
-		echo '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'active' : '' ) . '" href="' . groepenUrl . $this->groep->id . '/' . GroepTab::Pasfotos . '" title="Pasfoto\'s tonen"><span class="fa fa-user"></span></a></li>';
+		echo '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Pasfotos . '" title="Pasfoto\'s tonen"><span class="fa fa-user"></span></a></li>';
 
-		echo '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'active' : '' ) . '" href="' . groepenUrl . $this->groep->id . '/' . GroepTab::Lijst . '" title="Pasfoto\'s tonen"><span class="fa fa-align-justify"></span></a></li>';
+		echo '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Lijst . '" title="Pasfoto\'s tonen"><span class="fa fa-align-justify"></span></a></li>';
 
-		echo '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'active' : '' ) . '" href="' . groepenUrl . $this->groep->id . '/' . GroepTab::Statistiek . '" title="Pasfoto\'s tonen"><span class="fa fa-pie-chart"></span></a></li>';
+		echo '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Statistiek . '" title="Pasfoto\'s tonen"><span class="fa fa-pie-chart"></span></a></li>';
 
-		echo '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'active' : '' ) . '" href="' . groepenUrl . $this->groep->id . '/' . GroepTab::Emails . '" title="Pasfoto\'s tonen"><span class="fa fa-envelope"></span></a></li>';
+		echo '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Emails . '" title="Pasfoto\'s tonen"><span class="fa fa-envelope"></span></a></li>';
 
 		echo '</ul><div class="groep-tab-content">';
 	}
@@ -148,7 +148,7 @@ class GroepPasfotosView extends GroepTabView {
 			$groep = $this->groep;
 			$leden = $groep::leden;
 			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldenForm($lid, $groep->getSuggesties(), $groep->keuzelijst);
+			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
 			$form->view();
 		}
 		echo '</div></div>';
@@ -166,7 +166,7 @@ class GroepLijstView extends GroepTabView {
 			echo '<tr><td>' . ProfielModel::getLink($lid->uid, 'civitas') . '</td>';
 			echo '<td>';
 			if ($this->groep->mag(A::Bewerken, $lid->uid)) {
-				$form = new GroepBewerkenForm($lid, $suggesties, $this->groep->keuzelijst);
+				$form = new GroepBewerkenForm($lid, $this->groep, $suggesties, $this->groep->keuzelijst);
 				$form->view();
 			} else {
 				echo $lid->opmerking;

@@ -18,19 +18,17 @@ class GroepenRouterController extends Controller {
 
 	public function performAction(array $args = array()) {
 		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
+			$class = $this->getParam(2);
+			if ($class === 'overig') {
+				$class = 'groepen';
+			}
 		} else {
-			$this->action = 'commissies'; // default
+			$class = 'commissies'; // default
 		}
-		if (!$this->mag($this->action, array())) {
+		if (!$this->mag($class, array())) {
 			$this->geentoegang();
 		}
-		define('groepenUrl', '/groep/' . $this->action . '/');
-
-		if ($this->action === 'overig') {
-			$this->action = 'groepen';
-		}
-		$class = ucfirst($this->action) . 'Controller';
+		$class = ucfirst($class) . 'Controller';
 
 		require_once 'controller/groepen/' . $class . '.class.php';
 		$controller = new $class(REQUEST_URI);
@@ -47,7 +45,7 @@ class GroepenRouterController extends Controller {
 	protected function mag($action, array $args) {
 		switch ($action) {
 			// groep
-			case 'overig':
+			case 'groepen':
 			case 'ketzers':
 			case 'onderverenigingen':
 			case 'woonoorden':

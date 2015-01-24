@@ -46,4 +46,8 @@ class Woonoord extends Groep {
 		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
 	}
 
+	public function getUrl() {
+		return '/groepen/woonoorden/' . $this->id . '/';
+	}
+
 }
