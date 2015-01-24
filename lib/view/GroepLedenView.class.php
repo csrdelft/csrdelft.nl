@@ -81,6 +81,7 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 		parent::__construct($lid, $groep, $suggesties, $keuzelijst);
 		$this->action = $groep->getUrl() . A::Aanmelden . '/' . $lid->uid;
 		$this->buttons = false;
+		$this->css_classes[] = 'float-left';
 
 		if ($pasfoto) {
 			$fields[] = new PasfotoAanmeldenKnop();
