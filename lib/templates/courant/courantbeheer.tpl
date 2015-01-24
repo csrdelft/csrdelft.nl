@@ -57,8 +57,7 @@
 		<br /><br />
 		<strong>Bericht:</strong> <em>(alleen [url] en [img] werken in de email)</em><br />
 		<div id="bewerkPreview" class="bbcodePreview"></div>
-		<textarea id="courantBericht" name="bericht" class="breed" rows="15">{$form.bericht|escape:'html'}</textarea>
-		<a class="btn float-right vergroot" data-vergroot="#courantBericht" title="Vergroot het invoerveld">&uarr;&darr;</a><br />
+		<textarea id="courantBericht" name="bericht" class="breed" rows="15" style="resize:vertical;">{$form.bericht|escape:'html'}</textarea>
 		<input type="submit" name="verzenden" value="Opslaan" /> 
 		<input type="button" value="Voorbeeld" onclick="CsrBBPreview('courantBericht', 'bewerkPreview');" />
 		{if $courant->magBeheren()}

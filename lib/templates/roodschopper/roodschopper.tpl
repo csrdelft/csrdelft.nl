@@ -40,12 +40,11 @@
 	<em class="small">Variabelen:<br />
 	LID = Naam van lid<br />
 	SALDO = Saldo van lid</em></label>
-	<textarea name="bericht" id="berichtInvoer" rows="10" cols="80">{$roodschopper->getBericht()}</textarea><br />
+	<textarea name="bericht" id="berichtInvoer" rows="10" cols="80" style="resize:both;">{$roodschopper->getBericht()}</textarea><br />
 	
 	<div id="submitContainer">
 		<label for="submit">&nbsp;</label>
 		<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
-		<a class="btn float-right vergroot" data-vergroot="#bericht" title="Vergroot het invoerveld">&uarr;&darr;</a>
 		<input type="button" name="submit" id="submit" value="Verder gaan" onclick="roodschopper('simulate'); return false;" />
 		<input id="forumVoorbeeld" type="button" onclick="CsrBBPreview('berichtInvoer', 'berichtPreview')" value="Voorbeeld"/>
 	</div>

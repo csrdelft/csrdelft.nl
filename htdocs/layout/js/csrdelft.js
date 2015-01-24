@@ -224,9 +224,9 @@ function init_buttons(parent) {
 	$(parent).find('.get').bind('click.get', knop_get);
 	$(parent).find('.vergroot').bind('click.vergroot', function (event) {
 		var id = $(this).attr('data-vergroot');
-		var height = $(id).height();
+		var height = $(id).css('max-height');
 		$(id).animate({
-			'height': '+=' + height
+			'max-height': '+=' + height
 		}, 600);
 	});
 }

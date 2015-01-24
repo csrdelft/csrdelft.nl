@@ -238,7 +238,7 @@ class GroepView implements View {
 		}
 		$html .= '"><div class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
 		if ($this->groep->maker_uid == 1025) {
-			$html .= '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M" class="float-left">';
+			$html .= '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M" class="float-left" style="maring-right:10px;">';
 		}
 		$html .= CsrBB::parse($this->groep->samenvatting);
 		if (!empty($this->groep->omschrijving)) {

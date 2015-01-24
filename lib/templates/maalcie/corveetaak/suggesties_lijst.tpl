@@ -1,5 +1,5 @@
 {*
-	suggesties_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
+suggesties_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {strip}
 	<br />
@@ -23,7 +23,7 @@
 				</tr>
 			</thead>
 		</table>
-		<div class="scrollpane" id="suggesties-scrollpane" style="height: 250px;">
+		<div class="scrollpane" id="suggesties-scrollpane" style="max-height:250px;">
 			<table id="suggesties-tabel" class="maalcie-tabel">
 				<tbody>
 					{foreach name="tabel" from=$suggesties key=uid item=suggestie}
@@ -97,26 +97,26 @@
 						Toon novieten/sjaars<br />
 
 						<input type="radio" id="jongste_ja" name="jongste" value="ja" onchange="
-						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
-						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
+								taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
+								taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 							   " checked="checked" />
 						<label for="jongste_ja" class="KeuzeRondjeLabel">Ja</label>
 
 						<input type="radio" id="jongste_nee" name="jongste" value="nee" onchange="
-						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
-						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
+								taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
+								taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 							   " />
 						<label for="jongste_nee" class="KeuzeRondjeLabel">Nee</label>
 
 						<input type="radio" id="jongste_alleen" name="jongste" value="alleen" onchange="
-						taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
-						taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
+								taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
+								taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 							   " />
 						<label for="jongste_alleen" class="KeuzeRondjeLabel">Alleen</label>
 					</td>
 					<td style="width: 25px;">
 						<br />
-						<a class="btn vergroot" data-vergroot="#suggesties-scrollpane" title="Vergroot de lijst met suggesties">&uarr;&darr;</a>
+						<a class="btn vergroot" data-vergroot="#suggesties-scrollpane" title="Vergroot de lijst"><span class="fa fa-expand"></span></a>
 					</td>
 				</tr>
 			</table>

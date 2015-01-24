@@ -9,10 +9,9 @@
 	<label>Tekst:</label>
 	<div class="indent">
 		<div id="bewerkPreview" class="bbcodePreview"></div>
-		<textarea id="tekst" name="tekst" class="CsrBBPreviewField breed" rows="12">{$mededeling->getTekst()|escape:'html'}</textarea><br />
+		<textarea id="tekst" name="tekst" class="CsrBBPreviewField breed" rows="12" style="resize:vertical;">{$mededeling->getTekst()|escape:'html'}</textarea><br />
 		<a id="voorbeeld" class="btn" onclick="return CsrBBPreview('tekst', 'bewerkPreview')">Voorbeeld</a>
 		<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
-		<a id="vergroot" class="btn vergroot" data-vergroot="#tekst" title="Vergroot het invoerveld">&uarr;&darr;</a>
 	</div>
 
 	<div id="instellingen">
