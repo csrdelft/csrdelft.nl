@@ -77,14 +77,16 @@ class GroepBewerkenForm extends InlineForm {
 
 class GroepAanmeldenForm extends GroepBewerkenForm {
 
-	public function __construct(GroepLid $lid, Groep $groep, array $suggesties = array(), $keuzelijst = null) {
+	public function __construct(GroepLid $lid, Groep $groep, array $suggesties = array(), $keuzelijst = null, $pasfoto = false) {
 		parent::__construct($lid, $groep, $suggesties, $keuzelijst);
 		$this->action = $groep->getUrl() . A::Aanmelden . '/' . $lid->uid;
 		$this->buttons = false;
 
-		$fields[] = new PasfotoAanmeldenKnop();
-		if ($keuzelijst) {
+		if ($pasfoto) {
+			$fields[] = new PasfotoAanmeldenKnop();
+		} else {
 			$fields[] = $this->field;
+			$fields[] = new SubmitKnop(null, 'submit', 'Aanmelden', null, null);
 		}
 
 		$this->addFields($fields);
@@ -160,7 +162,7 @@ class GroepPasfotosView extends GroepTabView {
 			$groep = $this->groep;
 			$leden = $groep::leden;
 			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
+			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst, true);
 			$html .= $form->getHtml();
 		}
 		return $html . '</div></div>';
