@@ -99,7 +99,7 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 			$html .= $field->getHtml();
 		}
 		$html .= $this->getScriptTag();
-		return $html . '</form></div>';
+		return $html . '</form>';
 	}
 
 }
