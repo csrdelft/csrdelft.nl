@@ -25,6 +25,7 @@ class GroepenRouterController extends Controller {
 		} else {
 			$class = 'commissies'; // default
 		}
+		$class = strtolower($class);
 		if (!$this->mag($class, array())) {
 			$this->geentoegang();
 		}
