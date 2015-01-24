@@ -225,7 +225,7 @@ function init_buttons(parent) {
 	$(parent).find('.vergroot').bind('click.vergroot', function (event) {
 		var id = $(this).attr('data-vergroot');
 		$(id).animate({
-			'height': $(id).scrollHeight
+			'height': $(id)[0].scrollHeight
 		}, 600);
 	});
 }
