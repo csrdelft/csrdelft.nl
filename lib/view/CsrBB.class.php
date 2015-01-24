@@ -607,6 +607,7 @@ HTML;
 
 		$groep = GroepenModel::omnummeren($groepid);
 		if ($groep) {
+			require_once 'view/GroepenView.class.php';
 			$view = new GroepView($groep);
 			return $view->getHtml();
 		}
