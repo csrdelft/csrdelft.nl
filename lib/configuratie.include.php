@@ -12,7 +12,7 @@
  * Boot framework.
  */
 // Uncomment de volgende twee regels om de boel in onderhoudsmode te ketzen:
-//header('location: http://csrdelft.nl/onderhoud.html');
+//header('location: https://csrdelft.nl/onderhoud.html');
 //exit;
 
 register_shutdown_function('fatal_handler');
@@ -182,7 +182,7 @@ switch (constant('MODE')) {
 		ForumModel::instance()->prefetch();
 
 		if (LoginModel::getUid() !== '1137') {
-			header('location: http://csrdelft.nl/onderhoud.html');
+			header('location: https://csrdelft.nl/onderhoud.html');
 			exit;
 		}
 
