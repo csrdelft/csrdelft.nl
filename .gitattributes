@@ -4401,13 +4401,6 @@ lib/templates/forum/rss_link.tpl -text
 lib/templates/forum/stats_grafiek.tpl -text
 lib/templates/fotoalbum/album.tpl -text
 lib/templates/fotoalbum/slider.tpl -text
-lib/templates/groepen/groep.bb.tpl -text
-lib/templates/groepen/groep.old.tpl -text
-lib/templates/groepen/groepen.tpl -text
-lib/templates/groepen/groepformulier.tpl -text
-lib/templates/groepen/groepleden.tpl -text
-lib/templates/groepen/inhoudsopgave.tpl -text
-lib/templates/groepen/menu_pagina.tpl -text
 lib/templates/html_head.tpl -text
 lib/templates/instellingen/beheer/instelling_row.tpl -text
 lib/templates/instellingen/beheer/instellingen_page.tpl -text

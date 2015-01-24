@@ -171,9 +171,11 @@ class GroepView implements View {
 
 	private $groep;
 	private $leden;
+	private $bb;
 
-	public function __construct(Groep $groep, $tab = null) {
+	public function __construct(Groep $groep, $tab = null, $bb = false) {
 		$this->groep = $groep;
+		$this->bb = $bb;
 		switch ($tab) {
 
 			case GroepTab::Pasfotos:
@@ -215,6 +217,9 @@ class GroepView implements View {
 
 	public function getHtml() {
 		$html = '<div id="groep-' . $this->groep->id . '" class="bb-groep';
+		if ($this->bb) {
+			$html .= ' bb-block';
+		}
 		if ($this->groep->maker_uid == 1025) {
 			$html .= ' bb-dies2015';
 		}

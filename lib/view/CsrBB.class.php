@@ -608,8 +608,8 @@ HTML;
 		$groep = GroepenModel::omnummeren($groepid);
 		if ($groep) {
 			require_once 'view/GroepenView.class.php';
-			$view = new GroepView($groep);
-			return '<div class="bb-block">' . $view->getHtml() . '</div>';
+			$view = new GroepView($groep, null, true);
+			return $view->getHtml();
 		}
 		return '[groep] Geen geldig groep-id (' . htmlspecialchars($groepid) . ')';
 	}
