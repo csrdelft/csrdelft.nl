@@ -155,15 +155,15 @@ class GroepPasfotosView extends GroepTabView {
 
 	public function getHtml() {
 		$html = parent::getHtml();
-		foreach ($this->groep->getLeden() as $lid) {
-			$html .= ProfielModel::getLink($lid->uid, 'pasfoto');
-		}
 		if (property_exists($this->groep, 'rechten_aanmelden') AND $this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
 			$groep = $this->groep;
 			$leden = $groep::leden;
 			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
 			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst, true);
 			$html .= $form->getHtml();
+		}
+		foreach ($this->groep->getLeden() as $lid) {
+			$html .= ProfielModel::getLink($lid->uid, 'pasfoto');
 		}
 		return $html . '</div></div>';
 	}
@@ -176,6 +176,15 @@ class GroepLijstView extends GroepTabView {
 		$html = parent::getHtml();
 		$html .= '<table class="groep-lijst"><tbody>';
 		$suggesties = $this->groep->getSuggesties();
+		if (property_exists($this->groep, 'rechten_aanmelden') AND $this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
+			$html .= '<tr><td colspan="2">';
+			$groep = $this->groep;
+			$leden = $groep::leden;
+			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
+			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
+			$html .= $form->getHtml();
+			$html .= '</td></tr>';
+		}
 		foreach ($this->groep->getLeden() as $lid) {
 			$html .= '<tr><td>' . ProfielModel::getLink($lid->uid, 'civitas') . '</td>';
 			$html .= '<td>';
@@ -185,15 +194,6 @@ class GroepLijstView extends GroepTabView {
 			} else {
 				$html .= $lid->opmerking;
 			}
-			$html .= '</td></tr>';
-		}
-		if (property_exists($this->groep, 'rechten_aanmelden') AND $this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
-			$html .= '<tr><td colspan="2">';
-			$groep = $this->groep;
-			$leden = $groep::leden;
-			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
-			$html .= $form->getHtml();
 			$html .= '</td></tr>';
 		}
 		return $html . '</tbody></table></div></div>';
