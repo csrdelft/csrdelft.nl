@@ -89,6 +89,10 @@ class DataTable extends TabsForm {
 		}
 	}
 
+	public function getTableId() {
+		return $this->tableId;
+	}
+
 	protected function addKnop(DataTableKnop $knop, $tab = 'head') {
 		$this->addFields(array($knop), $tab);
 	}

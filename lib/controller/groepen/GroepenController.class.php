@@ -158,16 +158,15 @@ class GroepenController extends Controller {
 	public function wijzigen(Groep $groep = null) {
 		if ($groep) {
 			$form = new GroepForm($groep, $this->action);
-			if ($form->validate()) {
-				$this->model->update($groep);
-				$form = null;
-			} elseif ($this->isPosted()) {
-				$this->view = $form;
-				return;
-			}
-			$this->view = new GroepView($groep, GroepTab::Pasfotos);
 			if (!$this->isPosted()) {
-				$this->view = new CsrLayoutPage($this->view, array(), $form);
+				$this->beheren();
+				$form->tableId = $this->view->getBody()->getTableId();
+				$this->view->modal = $form;
+			} elseif ($form->validate()) {
+				$this->model->update($groep);
+				$this->view = new GroepenBeheerData(array($groep));
+			} else {
+				$this->view = $form;
 			}
 		}
 		// beheren

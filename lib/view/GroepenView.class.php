@@ -15,9 +15,10 @@ class GroepenBeheerTable extends DataTable {
 
 	public function __construct(GroepenModel $model) {
 		parent::__construct($model::orm, null, 'opvolg_naam');
-		$url = strtolower('/groepen/' . get_class($model) . '/');
+		$naam = lcfirst(str_replace('Model', '', get_class($model)));
+		$url = strtolower('/groepen/' . $naam . '/');
 		$this->dataUrl = $url . A::Beheren;
-		$this->titel = 'Beheer ' . lcfirst(str_replace('Model', '', get_class($model)));
+		$this->titel = 'Beheer ' . $naam;
 		$this->hideColumn('samenvatting');
 		$this->hideColumn('omschrijving');
 		$this->hideColumn('website');
@@ -103,7 +104,8 @@ class GroepRechtenForm extends DataTableForm {
 	public function __construct(AccessControl $ac, Groep $groep, $action, GroepenModel $model) {
 		parent::__construct($ac, $groep->getUrl() . A::Rechten . '/' . $action, ucfirst(A::Rechten) . ' voor ');
 		if ($ac->resource === '*') {
-			$this->titel .= 'alle ' . str_replace('Model', '', lcfirst(get_class($model)));
+			$naam = str_replace('Model', '', lcfirst(get_class($model)));
+			$this->titel .= 'alle ' . $naam;
 		} else {
 			$this->titel .= $groep->naam;
 		}
