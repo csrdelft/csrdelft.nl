@@ -44,7 +44,7 @@ class GroepLedenData extends DataTableResponse {
 class GroepLidBeheerForm extends DataTableForm {
 
 	public function __construct(GroepLid $lid, $action, array $blacklist = null) {
-		parent::__construct($lid, $action, ucfirst($action));
+		parent::__construct($lid, $action, 'Aanmelding bewerken');
 		$fields = $this->generateFields();
 		if ($blacklist !== null) {
 			$fields['uid']->blacklist = $blacklist;
