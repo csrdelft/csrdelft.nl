@@ -149,7 +149,11 @@ class Activiteit extends OpvolgbareGroep implements Agendeerbaar {
 	 * Timestamp van eindmoment.
 	 */
 	public function getEindMoment() {
-		return strtotime($this->eind_moment);
+		if ($this->eind_moment) {
+			return strtotime($this->eind_moment);
+		} else {
+			return $this->getBeginMoment();
+		}
 	}
 
 	/**
