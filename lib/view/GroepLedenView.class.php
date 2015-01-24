@@ -83,8 +83,8 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 		$this->buttons = false;
 		$this->css_classes[] = 'float-left';
 
-		$this->field->hidden = true;
 		$fields[] = $this->field;
+		$this->field->hidden = $pasfoto;
 
 		if ($pasfoto) {
 			$fields[] = new PasfotoAanmeldenKnop();
