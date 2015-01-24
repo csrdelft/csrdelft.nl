@@ -12,8 +12,8 @@
 						<a href="/profiel/{$profiel->uid}/dd" class="btn" title="Wijzig de lidstatus">{icon get="group_edit"}</a>
 					{/if}
 					<a href="/profiel/{$profiel->uid}/addToGoogleContacts/" class="btn" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/></a>
-					{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_ADMIN')}
-						{if AccountModel::existsUid($profiel->uid)}
+						{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_ADMIN')}
+							{if AccountModel::existsUid($profiel->uid)}
 							<a href="/account/{$profiel->uid}" class="btn accountEdit" title="Inloggegevens bewerken"></a>
 						{elseif LoginModel::mag('P_ADMIN')}
 							<a href="/account/{$profiel->uid}" class="btn accountCreate" title="Account aanmaken"></a>
@@ -165,12 +165,14 @@
 			<div class="clear-left"></div>
 		</div>
 	</div>
-	<div id="groepen" class="profielregel clear-right">
-		<div class="gegevens">
-			{$groepen->view()}
-			<div class="clear-left"></div>
+	{if $groepen}
+		<div id="groepen" class="profielregel clear-right">
+			<div class="gegevens">
+				{$groepen->view()}
+				<div class="clear-left"></div>
+			</div>
 		</div>
-	</div>
+	{/if}
 	{if ($profiel->isLid() OR (LoginModel::mag('P_LEDEN_MOD') AND ($profiel->soccieSaldo < 0 OR $profiel->maalcieSaldo < 0))) AND (isset($saldografiek) OR $profiel->bankrekening!='')}
 		<div class="profielregel">
 			<div class="gegevens">
@@ -226,7 +228,7 @@
 			<ul class="nobullets data">
 				{foreach from=$corveevoorkeuren item=vrk}
 					<li>{$vrk->getCorveeRepetitie()->getDagVanDeWeekText()|truncate:2:""} {$vrk->getCorveeRepetitie()->getCorveeFunctie()->naam}</li>
-				{/foreach}
+					{/foreach}
 			</ul>
 			<br />
 			<div class="label">Kwalificaties:</div>
