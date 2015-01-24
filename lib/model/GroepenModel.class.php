@@ -30,7 +30,7 @@ class GroepenModel extends CachedPersistenceModel {
 			self::$old = DynamicEntityModel::makeModel('groep');
 		}
 
-		$groep = self::$old->find('id = ? OR (snaam = ? AND status = "ht")', array($id, $id))->fetch();
+		$groep = self::$old->find('id = ? OR (snaam = ? AND status = ?)', array($id, $id, 'ht'))->fetch();
 		if (!$groep) {
 			setMelding('Omnummeren mislukt: ' . htmlspecialchars($id), -1);
 			return false;
