@@ -33,7 +33,7 @@ div.groepTabContent {
     clear: both;
     width: 300px;
 }
-table.groepLeden td {
+table.groep-leden td {
     width: 150px;
 }
 table.groepStats {
@@ -58,14 +58,12 @@ table.groepStats td, table.groepStats th {
     padding: 5px 10px;
 }
 
-div.groepleden { float: right; }
-
 /* Groepenlijst */
 #groepLijst { float: right; width: 200px; background-color: #EEE; }
 #groepLijst, #groepLijst li, #groepLijst ul { text-align: right; }
 #groepLijst li { list-style-type: none; }
 .groep { border-top: 1px solid black; margin-top: 20px; }
-ul.groepledenlijst { width: 230px; float: right; padding: 10px 20px 20px 20px; margin-left: 10px; }
+ul.groep-ledenlijst { width: 230px; float: right; padding: 10px 20px 20px 20px; margin-left: 10px; }
 
 /* groep-view */
 #groepledenContainer { float: right; margin-left: 10px; }
@@ -88,7 +86,7 @@ ul.groepledenlijst { width: 230px; float: right; padding: 10px 20px 20px 20px; m
 	background-color:#0a338d; 
 
 }
-.groepleden {
+.groep-leden {
 	width: 300px;
 	clear: both;
 	float: right;
@@ -96,13 +94,13 @@ ul.groepledenlijst { width: 230px; float: right; padding: 10px 20px 20px 20px; m
 	margin-left: 10px;
 	padding: 1px 0;
 }
-.groepleden table.leden { width: 100%; }
-.groepleden table.leden td { padding: 0 5px; text-align: left; }
-.groepleden table.leden input.functie { width: 80px; }
-.groepleden .toonmeer { clear: left; display: block; padding: 0 0 10px 15px; }
-.groepleden .aanmelden { clear: left; padding: 5px 5px 4px; }
-.groepleden .aanmelden input.functie { width: 160px; }
-.groepleden .emails { margin: 5px 10px; }
+.groep-leden table.leden { width: 100%; }
+.groep-leden table.leden td { padding: 0 5px; text-align: left; }
+.groep-leden table.leden input.functie { width: 80px; }
+.groep-leden .toonmeer { clear: left; display: block; padding: 0 0 10px 15px; }
+.groep-leden .aanmelden { clear: left; padding: 5px 5px 4px; }
+.groep-leden .aanmelden input.functie { width: 160px; }
+.groep-leden .emails { margin: 5px 10px; }
 
 
 #voorgangerOpvolger { margin: 10px 0; padding: 3px 20px; border-bottom: 1px solid black; }

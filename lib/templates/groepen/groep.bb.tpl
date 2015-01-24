@@ -1,5 +1,5 @@
 <div id="groep{$groep->getId()}" class="bb-block bb-groep{if $groep->getEigenaar()==1025} bb-dies2015{/if}">
-	<div class="groepleden">
+	<div class="groep-leden">
 		{if $groep->toonPasfotos()}
 			{assign var='actie' value='pasfotos'}
 		{/if}
