@@ -104,7 +104,7 @@ class Ketzer extends Groep {
 			switch ($action) {
 
 				case A::Aanmelden:
-					if (in_array($uid, $this->getLeden())) {
+					if (array_key_exists($uid, $this->getLeden())) {
 						return false;
 					}
 					if (isset($this->aanmeld_limiet) AND $this->aantalLeden() >= $this->aanmeld_limiet) {

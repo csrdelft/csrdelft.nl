@@ -44,6 +44,13 @@ class GroepLedenModel extends CachedPersistenceModel {
 		return $lid;
 	}
 
+	/**
+	 * Get leden by uid.
+	 * 
+	 * @param Groep $groep
+	 * @param GroepStatus $status
+	 * @return array
+	 */
 	public function getLedenVoorGroep(Groep $groep, $status = null) {
 		$where = 'groep_id = ?';
 		$params = array($groep->id);
@@ -51,9 +58,15 @@ class GroepLedenModel extends CachedPersistenceModel {
 			$where .= ' AND status = ?';
 			$params[] = $status;
 		}
-		return $this->prefetch($where, $params);
+		return group_by_distinct('uid', $this->prefetch($where, $params));
 	}
 
+	/**
+	 * Bereken statistieken van de groepleden.
+	 * 
+	 * @param Groep $groep
+	 * @return array
+	 */
 	public function getStatistieken(Groep $groep) {
 		$uids = array_keys(group_by_distinct('uid', $groep->getLeden(), false));
 		$count = count($uids);
@@ -62,7 +75,7 @@ class GroepLedenModel extends CachedPersistenceModel {
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
 		$stats['Totaal'] = $count;
-		$stats['Verticale'] = Database::instance()->sqlSelect(array('verticale', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'verticale', null)->fetchAll();
+		$stats['Verticale'] = Database::instance()->sqlSelect(array('naam', 'count(*)'), 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $in . ')', $uids, 'verticale', null)->fetchAll();
 		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
 		$stats['Lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
 		return $stats;
