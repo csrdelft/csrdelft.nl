@@ -178,7 +178,7 @@ class GroepLijstView extends GroepTabView {
 			$groep = $this->groep;
 			$leden = $groep::leden;
 			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldenForm($lid, $groep->getSuggesties(), $groep->keuzelijst);
+			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
 			$form->view();
 			echo '</td></tr>';
 		}
