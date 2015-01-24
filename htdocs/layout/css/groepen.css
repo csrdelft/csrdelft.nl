@@ -58,8 +58,7 @@ table.groepStats td, table.groepStats th {
     padding: 5px 10px;
 }
 
-
-
+div.groepleden { float: right; }
 
 /* Groepenlijst */
 #groepLijst { float: right; width: 200px; background-color: #EEE; }
