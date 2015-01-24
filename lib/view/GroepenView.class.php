@@ -222,7 +222,7 @@ class GroepView implements View {
 		$html .= '"><div class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
 		$html .= CsrBB::parse($this->groep->samenvatting);
 		if (!empty($this->groep->omschrijving)) {
-			$html .= '<div class="clear">&nbsp;</div><a class="groep-omschrijving-tonen" onclick="$(this).remove();$(this).next().slideDown();">Meer lezen »</a><div class="groep-omschrijving">';
+			$html .= '<div class="clear">&nbsp;</div><a class="groep-omschrijving-tonen" onclick="$(this).next().slideDown();$(this).remove();">Meer lezen »</a><div class="groep-omschrijving">';
 			$html .= CsrBB::parse($this->groep->omschrijving);
 			$html .= '</div>';
 		}
