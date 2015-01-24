@@ -68,13 +68,16 @@ class GroepLedenModel extends CachedPersistenceModel {
 	 * @return array
 	 */
 	public function getStatistieken(Groep $groep) {
-		$uids = array_keys(group_by_distinct('uid', $groep->getLeden(), false));
+		$uids = array_keys($groep->getLeden());
 		$count = count($uids);
 		if ($count < 1) {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
 		$stats['Totaal'] = $count;
+		if (property_exists($groep, 'aanmeld_limiet')) {
+			$stats['Totaal'] .= ' van ' . $groep->aanmeld_limiet;
+		}
 		$stats['Verticale'] = Database::instance()->sqlSelect(array('naam', 'count(*)'), 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $in . ')', $uids, 'verticale', null)->fetchAll();
 		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
 		$stats['Lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
