@@ -19,7 +19,7 @@ class GroepenController extends Controller {
 	}
 
 	public function performAction(array $args = array()) {
-		//return $this->converteren();
+		return $this->converteren();
 
 		$this->action = 'overzicht'; // default
 		if ($this->hasParam(3)) { // id or action
