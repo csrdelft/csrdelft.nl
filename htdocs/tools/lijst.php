@@ -2,7 +2,6 @@
 
 require_once 'configuratie.include.php';
 require_once 'lid/ledenlijstcontent.class.php';
-require_once 'model/entity/groepen/OldGroep.class.php';
 
 if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 	# geen rechten

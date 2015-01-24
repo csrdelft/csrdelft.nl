@@ -299,10 +299,9 @@ class LidZoeker {
 		return array_intersect(array_diff($this->allowVelden, $this->veldenNotindb), $this->allowVelden);
 	}
 
-	/*
+	/**
 	 * Stel een setje WHERE-voorwaarden samen waarin standaard wordt gezocht.
 	 */
-
 	private function defaultSearch($zoekterm) {
 		$query = '';
 		$defaults = array();
@@ -314,8 +313,7 @@ class LidZoeker {
 		} elseif (preg_match('/^groep:([0-9]+|[a-z]+)$/i', $zoekterm)) { //leden van een groep
 			$uids = array();
 			try {
-				require_once 'model/entity/groepen/OldGroep.class.php';
-				$groep = new OldGroep(substr($zoekterm, 6));
+				//FIXME: $groep = new OldGroep(substr($zoekterm, 6));
 				$uids = array_keys($groep->getLeden());
 			} catch (Exception $e) {
 				//care.

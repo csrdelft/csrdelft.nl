@@ -1,7 +1,6 @@
 <?php
 
 require_once 'configuratie.include.php';
-require_once 'model/GroepenOldModel.class.php';
 
 /**
  * groepsuggesties.php    |     Gerrit Uitslag (klapinklapin@gmail.com)
@@ -27,5 +26,5 @@ if (isset($_GET['limit'])) {
 }
 
 header('Content-Type: application/json');
-echo json_encode(GroepenOldModel::zoekGroepen($zoekterm, $gtype, $limiet));
+//FIXME: echo json_encode(GroepenOldModel::zoekGroepen($zoekterm, $gtype, $limiet));
 exit;

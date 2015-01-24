@@ -605,15 +605,12 @@ HTML;
 			$groepid = $this->parseArray(array('[/groep]'), array());
 		}
 
-		require_once 'model/entity/groepen/OldGroep.class.php';
-		require_once 'view/GroepenOldView.class.php';
-		try {
-			$groep = new OldGroep($groepid);
-			$groeptag = new GroepBBContent($groep);
-			return $groeptag->getHtml();
-		} catch (Exception $e) {
-			return '[groep] Geen geldig groep-id (' . htmlspecialchars($groepid) . ')';
+		$groep = GroepenModel::omnummeren($groepid);
+		if ($groep) {
+			$view = new GroepView($groep);
+			return $view->getHtml();
 		}
+		return '[groep] Geen geldig groep-id (' . htmlspecialchars($groepid) . ')';
 	}
 
 	/**

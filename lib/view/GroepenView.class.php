@@ -213,17 +213,17 @@ class GroepView implements View {
 		return null;
 	}
 
-	public function view() {
-		echo '<hr><div id="groep-' . $this->groep->id . '" class="bb-groep';
+	public function getHtml() {
+		$html = '<div id="groep-' . $this->groep->id . '" class="bb-groep';
 		if ($this->groep->maker_uid == 1025) {
-			echo ' bb-dies2015';
+			$html .= ' bb-dies2015';
 		}
-		echo '"><div class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
-		echo CsrBB::parse($this->groep->samenvatting);
+		$html .= '"><div class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
+		$html .= CsrBB::parse($this->groep->samenvatting);
 		if (!empty($this->groep->omschrijving)) {
-			echo '<div class="groep-omschrijving-tonen" onclick="$(this).next().slideDown();">Verder lezen...</div><div class="groep-omschrijving">';
-			echo CsrBB::parse($this->groep->omschrijving);
-			echo '</div>';
+			$html .= '<div class="groep-omschrijving-tonen" onclick="$(this).next().slideDown();">Verder lezen...</div><div class="groep-omschrijving">';
+			$html .= CsrBB::parse($this->groep->omschrijving);
+			$html .= '</div>';
 		}
 		if (false AND $this->groep instanceof OpvolgbareGroep) {
 			/**
@@ -233,16 +233,21 @@ class GroepView implements View {
 			$dropdown = new SelectField('generaties', $this->groep->id, null, $generaties);
 			$dropdown->onchange = 'window.location.href="/groepen/' . get_class($this->groep) . '/' . $this->groep->id . '"';
 			$dropdown->view();
-			echo '<a>Opvolger maken</a>';
+			$html .= '<a>Opvolger maken</a>';
 		}
-		echo '</div>';
+		$html .= '</div>';
 		$this->leden->view();
-		echo '<div class="clear">';
+		$html .= '<div class="clear">';
 		if ($this->groep->maker_uid == 1025) {
-			echo '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M">';
+			$html .= '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M">';
 		}
-		echo '&nbsp;
-		</div></div>';
+		$html .= '&nbsp</div></div>';
+		return $html;
+	}
+
+	public function view() {
+		echo '<hr>';
+		echo $this->getHtml();
 	}
 
 }

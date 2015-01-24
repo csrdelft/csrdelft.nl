@@ -132,7 +132,7 @@ class ProfielModel extends CachedPersistenceModel {
 			$entry['userPassword'] = $profiel->getAccount()->pass_hash;
 
 			$woonoord = $profiel->getWoonoord();
-			if ($woonoord instanceof OldGroep) {
+			if ($woonoord) {
 				$entry['ou'] = $woonoord->getNaam();
 			}
 

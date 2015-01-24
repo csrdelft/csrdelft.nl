@@ -21,14 +21,13 @@ class ProfielView extends SmartyTemplateView {
 		$this->smarty->assign('profiel', $this->model);
 
 		$woonoord = $this->model->getWoonoord();
-		if ($woonoord instanceof OldGroep) {
+		if ($woonoord) {
 			$this->smarty->assign('woonoord', '<strong>' . $woonoord->getLink() . '</strong>');
 		} else {
 			$this->smarty->assign('woonoord', '');
 		}
 
-		require_once 'view/GroepenOldView.class.php';
-		$this->smarty->assign('groepen', new GroepenProfielContent($this->model->uid));
+		$this->smarty->assign('groepen', ''); //FIXME: new GroepenProfielContent($this->model->uid));
 
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {
 

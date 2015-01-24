@@ -97,6 +97,17 @@ class Groep extends PersistentEntity {
 	protected static $table_name = 'groepen';
 
 	/**
+	 * Is lid van deze groep?
+	 * 
+	 * @param string $uid
+	 * @return GroepLid
+	 */
+	public function getLid($uid) {
+		$leden = static::leden;
+		return $leden::get($this, $uid);
+	}
+
+	/**
 	 * Lazy loading by foreign key.
 	 * 
 	 * @param GroepStatus $status

@@ -190,11 +190,8 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 					$groepid = '';
 				}
 
-				require_once 'model/entity/groepen/OldGroep.class.php';
-				require_once 'view/GroepenOldView.class.php';
+				
 				try {
-					$groep = new OldGroep($groepid);
-					$groeptag = new GroepBBContent($groep);
 					return $groeptag->getHtml();
 				} catch (Exception $e) {
 					return '[groep] Geen geldig groep-id (' . htmlspecialchars($groepid) . ')';

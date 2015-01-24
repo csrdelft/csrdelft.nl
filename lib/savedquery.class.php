@@ -161,8 +161,7 @@ class SavedQueryContent implements View {
 		} elseif ($name == 'onderwerp_link') { //link naar het forum.
 			return '<a href="/forum/onderwerp/' . $contents . '">' . $contents . '</a>';
 		} elseif (substr($name, 0, 10) == 'groep_naam' AND $contents != '') {
-			require_once 'model/entity/groepen/OldGroep.class.php';
-			return OldGroep::ids2links($contents, '<br />');
+			return ''; //FIXME: OldGroep::ids2links($contents, '<br />');
 		} elseif ($name == 'med_link') { //link naar een mededeling.
 			return '<a href="/mededelingen/' . $contents . '">' . $contents . '</a>';
 		}

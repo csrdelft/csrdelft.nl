@@ -8,8 +8,6 @@ Zend_Loader::loadClass('Zend_Uri_Http');
 Zend_Loader::loadClass('Zend_Gdata_Query');
 Zend_Loader::loadClass('Zend_Gdata_Feed');
 
-require_once 'model/entity/groepen/OldGroep.class.php';
-
 define('GOOGLE_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/full');
 define('GOOGLE_GROUP_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/base/');
 define('GOOGLE_GROUPS_URL', 'https://www.google.com/m8/feeds/groups/default/full');
@@ -413,7 +411,7 @@ class GoogleSync {
 			$address->setAttribute('primary', 'true');
 
 			//only rel OR label (XOR) can (and must) be set
-			if ($profiel->getWoonoord() instanceof OldGroep) {
+			if ($profiel->getWoonoord()) {
 				$woonoord = $doc->createElement('gd:housename');
 				$woonoord->appendChild(new DOMText($profiel->getWoonoord()->getNaam()));
 				$address->appendChild($woonoord);

@@ -129,21 +129,23 @@ class AccessModel extends CachedPersistenceModel {
 	}
 
 	public function getPermissionSuggestions() {
-		$valid = array_keys($this->permissions);
-		$valid[] = 'groep:1234';
-		$valid[] = 'groep:KorteNaam';
-		$valid[] = 'geslacht:m';
-		$valid[] = 'geslacht:v';
-		$valid[] = 'ouderjaars';
-		$valid[] = 'eerstejaars';
+		$suggestions = array_keys($this->permissions);
+		$suggestions[] = 'ketzer:Nummer';
+		$suggestions[] = 'activiteit:Naam';
+		$suggestions[] = 'commissie:Naam:Functie';
+		$suggestions[] = 'bestuur';
+		$suggestions[] = 'geslacht:m';
+		$suggestions[] = 'geslacht:v';
+		$suggestions[] = 'ouderjaars';
+		$suggestions[] = 'eerstejaars';
 		foreach (VerticalenModel::instance()->prefetch() as $verticale) {
-			$valid[] = 'verticale:' . $verticale->naam;
+			$suggestions[] = 'verticale:' . $verticale->letter;
 		}
 		$jong = LichtingenModel::getJongsteLichting();
 		for ($jaar = $jong; $jaar > $jong - 7; $jaar--) {
-			$valid[] = 'lichting:' . $jaar;
+			$suggestions[] = 'lichting:' . $jaar;
 		}
-		return $valid;
+		return $suggestions;
 	}
 
 	public function isValidPerm($permission) {
@@ -451,28 +453,23 @@ class AccessModel extends CachedPersistenceModel {
 			 */
 			case 'GROEP':
 
-				try {
-					require_once 'model/entity/groepen/OldGroep.class.php';
-
-					$groep = new OldGroep($gevraagd); // zoek groep
-					if (!$groep->isLid($subject->uid)) {
-						return false;
-					}
-
-					// wordt er een functie gevraagd?
-					if ($role) {
-						$functie = $groep->getFunctie($subject->uid);
-						if ($role == strtoupper($functie[0])) {
-							return true;
-						}
-					} else {
-						return true;
-					}
-				} catch (Exception $e) {
-					// gevraagde groep bestaat niet
+				$groep = GroepenModel::omnummeren($gevraagd);
+				if (!$groep) {
+					return false;
 				}
 
-				return false;
+				$lid = $groep->getLid($profiel->uid);
+				if (!$lid) {
+					return false;
+				}
+
+				// wordt er een functie gevraagd?
+				if ($role) {
+					if ($role !== strtoupper($lid->opmerking)) {
+						return false;
+					}
+				}
+				return true;
 
 			/**
 			 * Is lid een verticaleleider?

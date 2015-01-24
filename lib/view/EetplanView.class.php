@@ -1,7 +1,6 @@
 <?php
 
 require_once 'model/EetplanModel.class.php';
-require_once 'model/entity/groepen/OldGroep.class.php';
 
 /**
  * EetplanView.class.php
@@ -72,25 +71,6 @@ class EetplanView extends AbstractEetplanView {
 			$row++;
 		}
 		echo '</table>';
-		//nog even een huizentabel erachteraan
-		echo '<h2>Huizen</h2>
-			<table class="eetplantabel">
-				<tr><th>Naam</th><th>Huispagina</th></tr>';
-		foreach ($aHuizenArray as $aHuis) {
-			try {
-				$huis = new OldGroep($aHuis['groepid']);
-			} catch (Exception $e) {
-				$huis = new OldGroep(0);
-			}
-			echo '<tr class="kleur' . ($row % 2) . '">';
-			echo '<td><a href="/eetplan/huis/' . $aHuis['huisID'] . '">' . htmlspecialchars($aHuis['huisNaam']) . '</a></td><td>';
-			if ($huis instanceof OldGroep AND $huis->getId() != 0) {
-				echo $huis->getLink();
-			}
-			echo '</td></tr>';
-			$row++;
-		}
-		echo '</table>';
 	}
 
 }
@@ -118,11 +98,11 @@ class EetplanNovietView extends AbstractEetplanView {
 				<tr><th style="width: 150px">Avond</th><th style="width: 200px">Huis</th></tr>';
 			$row = 0;
 			foreach ($this->aEetplan as $aEetplanData) {
-				$huis = new OldGroep($aEetplanData['groepid']);
+				$woonoord = GroepenModel::omnummeren($aEetplanData['groepid']);
 				echo '<tr class="kleur' . ($row % 2) . '">
 						<td >' . $this->model->getDatum($aEetplanData['avond']) . '</td><td>';
-				if ($huis instanceof OldGroep AND $huis->getId() != 0) {
-					echo $huis->getLink();
+				if ($woonoord) {
+					echo '<a href="/groepen/woonoorden/' . $woonoord->id . '">' . $woonoord->naam . '</a>';
 				}
 				echo '</td></tr>';
 				$row++;
@@ -135,20 +115,16 @@ class EetplanNovietView extends AbstractEetplanView {
 
 class EetplanHuisView extends AbstractEetplanView {
 
-	private $huis;
+	private $woonoord;
 
 	public function __construct(EetplanModel $model, $iHuisID) {
 		parent::__construct($model);
 		$this->aEetplan = $this->model->getEetplanVoorHuis($iHuisID);
-		try {
-			$this->huis = new OldGroep($this->aEetplan[0]['groepid']);
-		} catch (Exception $e) {
-			$this->huis = new OldGroep(0); //hmm, dirty 
-		}
+		$this->woonoord = GroepenModel::omnummeren($this->aEetplan[0]['groepid']);
 	}
 
 	public function getBreadcrumbs() {
-		return parent::getBreadcrumbs() . ' » ' . $this->huis->getLink();
+		return parent::getBreadcrumbs() . ' » <a href="/groepen/woonoorden/' . $this->woonoord->id . '">' . $woonoord->naam . '</a>';
 	}
 
 	function view() {

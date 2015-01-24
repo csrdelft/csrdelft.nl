@@ -113,7 +113,7 @@ class VoorkeurCommissie {
 		$result = $db->select($query);
 		$res = array();
 		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-			$gedaan = GroepenOldModel::isUidLidofGroup($row['uid'], $this->naam, array('ht', 'ot'));
+			$gedaan = false; //FIXME: GroepenOldModel::isUidLidofGroup($row['uid'], $this->naam, array('ht', 'ot'));
 			$res[$row['uid']] = array('voorkeur' => $row['voorkeur'], 'gedaan' => $gedaan);
 		}
 		return $res;

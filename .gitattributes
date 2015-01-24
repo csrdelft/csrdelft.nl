@@ -90,9 +90,6 @@ htdocs/dies/2014/thumbnailviewer.js -text
 htdocs/dies/index.html -text
 htdocs/dies/script.js -text
 htdocs/dies/style.css -text
-htdocs/groepen/.htaccess -text
-htdocs/groepen/groep.php -text
-htdocs/groepen/groepen.php -text
 htdocs/index.php -text
 htdocs/layout/css/agenda.css -text
 htdocs/layout/css/bbcode.less -text
@@ -117,7 +114,6 @@ htdocs/layout/css/forum.less -text
 htdocs/layout/css/fotoalbum.less -text
 htdocs/layout/css/fx-snow.css -text
 htdocs/layout/css/fx-space.css -text
-htdocs/layout/css/groepen.css -text
 htdocs/layout/css/jgallery.css -text
 htdocs/layout/css/jgallery.min.css -text
 htdocs/layout/css/knoppen.less -text
@@ -317,7 +313,6 @@ htdocs/layout/js/flot/jquery.js -text
 htdocs/layout/js/flot/jquery.min.js -text
 htdocs/layout/js/forum.js -text
 htdocs/layout/js/gmaps.js -text
-htdocs/layout/js/groepen.js -text
 htdocs/layout/js/jquery.mobile.custom.min.js -text
 htdocs/layout/js/jquery/images/animated-overlay.gif -text
 htdocs/layout/js/jquery/images/prettyPhoto/dark_rounded/btnNext.png -text
@@ -4005,7 +4000,6 @@ lib/controller/DocumentenController.class.php -text
 lib/controller/EetplanController.class.php -text
 lib/controller/ForumController.class.php -text
 lib/controller/FotoAlbumController.class.php -text
-lib/controller/GroepenController.class.php -text
 lib/controller/GroepenRouterController.class.php -text
 lib/controller/InstellingenBeheerController.class.php -text
 lib/controller/LidInstellingenController.class.php -text
@@ -4063,7 +4057,6 @@ lib/model/ForumModel.class.php -text
 lib/model/FotoAlbumModel.class.php -text
 lib/model/GroepLedenModel.class.php -text
 lib/model/GroepenModel.class.php -text
-lib/model/GroepenOldModel.class.php -text
 lib/model/InstellingenModel.class.php -text
 lib/model/LidInstellingenModel.class.php -text
 lib/model/MededelingCategorieModel.class.php -text
@@ -4144,7 +4137,6 @@ lib/model/entity/groepen/KetzerSelectorSoort.enum.php -text
 lib/model/entity/groepen/Kring.class.php -text
 lib/model/entity/groepen/KringLid.class.php -text
 lib/model/entity/groepen/LichtingsLid.class.php -text
-lib/model/entity/groepen/OldGroep.class.php -text
 lib/model/entity/groepen/OnderVerLid.class.php -text
 lib/model/entity/groepen/Ondervereniging.class.php -text
 lib/model/entity/groepen/OnderverenigingStatus.enum.php -text
@@ -4516,7 +4508,6 @@ lib/view/EetplanView.class.php -text
 lib/view/ForumView.class.php -text
 lib/view/FotoAlbumView.class.php -text
 lib/view/GroepLedenView.class.php -text
-lib/view/GroepenOldView.class.php -text
 lib/view/GroepenView.class.php -text
 lib/view/HtmlPage.abstract.php -text
 lib/view/InstantSearchForm.class.php -text

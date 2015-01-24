@@ -29,6 +29,7 @@ RewriteRule ^bibliotheek		index.php?c=Bibliotheek [QSA,L]
 
 RewriteRule ^leden				index.php?c=Profiel [QSA,L]
 RewriteRule ^profiel			index.php?c=Profiel [QSA,L]
+RewriteRule ^groepen			index.php?c=GroepenRouter [L]
 RewriteRule ^verticalen			index.php?c=Verticalen [L]
 RewriteRule ^kringen			index.php?c=Verticalen [L]
 RewriteRule ^maaltijden			index.php?c=MaalcieRouter [L]
@@ -41,7 +42,6 @@ RewriteRule ^bijbelrooster		index.php?c=Bijbelrooster [L]
 RewriteRule ^instellingenbeheer	index.php?c=InstellingenBeheer [L]
 RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
 RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
-RewriteRule ^groep				index.php?c=GroepenRouter [L]
 RewriteRule ^commissievoorkeuren index.php?c=CommissieVoorkeuren [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f

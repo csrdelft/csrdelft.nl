@@ -6,7 +6,6 @@ require_once 'model/entity/LidStatus.enum.php';
 require_once 'model/entity/Kringleider.enum.php';
 require_once 'ldap.class.php';
 require_once 'model/GroepenModel.class.php';
-require_once 'model/entity/groepen/OldGroep.class.php';
 
 /**
  * Profiel.class.php
@@ -599,25 +598,13 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	/**
-	 * Zit het huidige lid in de h.t. groep met de korte naam 'bestuur'?
+	 * TODO
 	 * 
-	 * @return boolean
-	 */
-	public function isBestuur() {
-		$bestuur = new OldGroep('bestuur');
-		return $bestuur->isLid($this->uid);
-	}
-
-	/**
 	 * Als het lid in een h.t. Woonwoord zit, geef dat woonoord terug.
 	 * 
-	 * @return OldGroep|boolean
+	 * @return Woonoord
 	 */
 	public function getWoonoord() {
-		$groepen = GroepenOldModel::getByTypeAndUid(2, $this->uid);
-		if (is_array($groepen) AND isset($groepen[0]) AND $groepen[0] instanceof OldGroep) {
-			return $groepen[0];
-		}
 		return false;
 	}
 

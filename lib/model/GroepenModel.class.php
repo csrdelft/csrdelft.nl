@@ -19,6 +19,28 @@ class GroepenModel extends CachedPersistenceModel {
 		return static::instance()->retrieveByPrimaryKey(array($id));
 	}
 
+	private static $old;
+
+	public static function omnummeren($id) {
+		if (!isset(self::$old)) {
+			self::$old = DynamicEntityModel::makeModel('groep');
+		}
+
+		$groep = self::$old->find('id = ? OR (snaam = ? AND status = "ht")', array($id, $id))->fetch();
+		if (!$groep) {
+			setMelding('Omnummeren mislukt: ' . htmlspecialchars($id), -1);
+			return false;
+		}
+
+		$model = $groep->model;
+		if (!class_exists($model)) {
+			setMelding('Model niet gevonden: ' . $model, -1);
+			return false;
+		}
+
+		return $model::get($groep->omnummering);
+	}
+
 	protected function __construct() {
 		parent::__construct('groepen/');
 	}

@@ -497,7 +497,7 @@ class GroepenController extends Controller {
 
 				$model->create($entity);
 
-				$query = $admin->prepare('UPDATE groep SET omnummering = ' . $entity->id . ' WHERE id = ' . $groep->id);
+				$query = $admin->prepare('UPDATE groep SET omnummering = ' . $entity->id . ' , model = "' . get_class($model) . '" WHERE id = ' . $groep->id);
 				$query->execute();
 
 				$totaalGroepen++;
