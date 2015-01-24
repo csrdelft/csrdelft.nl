@@ -18,7 +18,7 @@ class DataTable extends TabsForm {
 	protected $autoUpdate = false;
 	private $groupByColumn;
 	private $groupByLocked = false;
-	protected $defaultLength = -1;
+	protected $defaultLength = 50;
 	private $columns = array();
 	protected $settings = array(
 		'dom'		 => 'fTrtpli',
