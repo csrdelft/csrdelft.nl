@@ -1,54 +1,51 @@
-.floatR{ float: right; }
-.label{ text-align: left; font-weight: normal; float: left; width: 75px; color: #999; }
-.data{ margin-left: 75px; text-align: left;}
-.data li{ margin-left: 0; }
-#profiel{ margin: 20px 0 200px 0; }
-#profiel h1{ margin-bottom: 10px; }
-#profiel img.pasfoto{ border: 1px solid black; margin-left: 20px;}
-#profiel .btnjes{ margin-left: 20px; line-height: 2.5em;}
+.floatR { float: right; }
+.label { text-align: left; font-weight: normal; float: left; width: 75px; color: #999; }
+.data { margin-left: 75px; text-align: left; }
+.data li { margin-left: 0; }
+#profiel { margin: 20px 0 200px 0; }
+#profiel h1 { margin-bottom: 10px; }
+#profiel .btnjes { margin-left: 20px; line-height: 2.5em; }
 
-#profiel .profielregel{ margin-bottom: 20px; clear: left; }
-	#profiel .left{ display: none; float: left; width: 10px; text-align: right; font-style: italic; font-size: 0.9em; }
-	#profiel .gegevens{ margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
-	#profiel .half{ width: 270px; float: left;}
+#profiel .profielregel { margin-bottom: 20px; clear: left; }
+#profiel .left { display: none; float: left; width: 10px; text-align: right; font-style: italic; font-size: 0.9em; }
+#profiel .gegevens { margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
+#profiel .half { width: 270px; float: left; }
 
-#profiel .naam .status{ float: left; color: #aaa; width: 60px; padding: 0 20px;}
-#profiel .naam h1{ padding-left: 10px; }
-#profiel .adres{ margin-left: 75px; text-align: left; }
-#profiel .gegevenszelf{ float: left; width: 250px; }
-#profiel .gegevenszelf .label{ text-align: right; margin-top: 2em; }
-#profiel .gegevenszelf .label img{ margin-right: 15px; }
+#profiel .naam .status { float: left; color: #aaa; width: 60px; padding: 0 20px; }
+#profiel .naam h1 { padding-left: 10px; }
+#profiel .adres { margin-left: 75px; text-align: left; }
+#profiel .gegevenszelf { float: left; width: 250px; }
+#profiel .gegevenszelf .label { text-align: right; margin-top: 2em; }
+#profiel .gegevenszelf .label img { margin-right: 15px; }
 
-#profiel .gegevensouders{  width: 250px; margin-left: 250px; padding-left: 10px; }
-#profiel .gegevensouders .label{ width: 50px; margin-top: 2em;}
-#profiel .gegevensouders .adres{ margin-left: 50px; }
+#profiel .gegevensouders {  width: 250px; margin-left: 250px; padding-left: 10px; }
+#profiel .gegevensouders .label { width: 50px; margin-top: 2em; }
+#profiel .gegevensouders .adres { margin-left: 50px; }
 
-#profiel .familie{ padding-left: 10px; margin-left: 260px; width: 250px;}
-#profiel .familie .stamboom{ float: right; }
+#profiel .familie { padding-left: 10px; margin-left: 260px; width: 250px; }
+#profiel .familie .stamboom { float: right; }
 
-#profiel .groepht{ float: left; width: 50%; }
-#profiel .groepot{ margin-left: 50%; }
+#profiel .groepht { float: left; width: 50%; }
+#profiel .groepot { margin-left: 50%; }
 
-#profiel #corveeTaken{ width: 550px; }
-#profiel #corveeTaken tr.old{ opacity: .50; }
+#profiel #corveeTaken { width: 550px; }
+#profiel #corveeTaken tr.old { opacity: .50; }
 
-#profiel #recenteForumberichten{ width: 600px; }
-#profiel #recenteForumberichten td{ text-align: left; }
+#profiel #recenteForumberichten { width: 600px; }
+#profiel #recenteForumberichten td { text-align: left; }
 
-#profiel .boeken a { text-align: left; text-decoration: none !important;}
+#profiel .boeken a { text-align: left; text-decoration: none !important; }
 #profiel .boeken a .auteur { color: #777; margin-left:10px; }
-#profiel .boeken a .titel:hover{color: #0a338d; text-decoration: underline;}
+#profiel .boeken a .titel:hover {color: #0a338d; text-decoration: underline; }
 #profiel .boeken li {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	-o-text-overflow: ellipsis;
 	white-space: nowrap;
 }
-#profiel .boeken a.btn{margin-left: 75px;}
+#profiel .boeken a.btn {margin-left: 75px; }
 
-p.profielBewerken .pasfoto{ float: right; margin-left: 10px;}
-
-li.verborgen{ display: none; }
+li.verborgen { display: none; }
 
 #wijzigstatus label {
 	width: 153px;
@@ -62,7 +59,7 @@ li.verborgen{ display: none; }
 #wijzigstatus .novieten, #wijzigstatus .leden {
 	margin: 0 0 5px 167px;
 }
-#statusForm input#field_postfix.FormElement{
+#statusForm input#field_postfix.FormElement {
 	width: 100px;
 }
 

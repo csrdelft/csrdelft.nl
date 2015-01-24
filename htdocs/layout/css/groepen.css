@@ -103,7 +103,6 @@ ul.groepledenlijst { width: 230px; float: right; padding: 10px 20px 20px 20px; m
 .groepleden .toonmeer { clear: left; display: block; padding: 0 0 10px 15px; }
 .groepleden .aanmelden { clear: left; padding: 5px 5px 4px; }
 .groepleden .aanmelden input.functie { width: 160px; }
-.groepleden .aanmelden .pasfoto { width: 50px; height: 67px; border: 1px solid grey; margin-left: 5px; }
 .groepleden .emails { margin: 5px 10px; }
 
 
