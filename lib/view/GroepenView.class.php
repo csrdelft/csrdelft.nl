@@ -243,7 +243,7 @@ class GroepView implements View {
 		$html .= '</div>';
 		$html .= $this->leden->getHtml();
 		if ($this->groep->maker_uid == 1025) {
-			$html .= '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M" style="position: absolute; bottom: 0; left: 0;">';
+			$html .= '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M" style="position: absolute; bottom: 20px; left: 20px;">';
 		}
 		$html .= '<div class="clear">&nbsp</div></div>';
 		return $html;
