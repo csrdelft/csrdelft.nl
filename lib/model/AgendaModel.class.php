@@ -19,6 +19,11 @@ class AgendaModel extends PersistenceModel {
 	const orm = 'AgendaItem';
 
 	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'begin_moment ASC, titel ASC';
 
 	public function getAllAgendeerbaar($van, $tot, $ical = false, $zijbalk = false) {
 		$result = array();
@@ -31,7 +36,7 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// AgendaItems
-		$items = $this->find('eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)), null, 'begin_moment ASC, titel ASC');
+		$items = $this->find('eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
 		foreach ($items as $item) {
 			if ($item->magBekijken($ical)) {
 				$result[] = $item;
@@ -41,6 +46,11 @@ class AgendaModel extends PersistenceModel {
 		// Bijbelrooster
 		if (LidInstellingen::get('agenda', 'toonBijbelrooster') === 'ja' && !$zijbalk) {
 			$result = array_merge($result, BijbelroosterModel::instance()->getBijbelroosterTussen($van, $tot)->fetchAll());
+		}
+
+		// Activiteiten
+		if (LidInstellingen::get('agenda', 'toonActiviteiten') === 'ja') {
+			$result = array_merge($result, ActiviteitenModel::instance()->find('eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)))->fetchAll());
 		}
 
 		// Maaltijden
