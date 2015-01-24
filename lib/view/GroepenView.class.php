@@ -233,11 +233,11 @@ class GroepView implements View {
 			$generaties = group_by_distinct('id', $this->groep->getGeneraties());
 			$dropdown = new SelectField('generaties', $this->groep->id, null, $generaties);
 			$dropdown->onchange = 'window.location.href="/groepen/' . get_class($this->groep) . '/' . $this->groep->id . '"';
-			$dropdown->view();
+			$html .= $dropdown->getHtml();
 			$html .= '<a>Opvolger maken</a>';
 		}
 		$html .= '</div>';
-		$this->leden->view();
+		$html .= $this->leden->getHtml();
 		$html .= '<div class="clear">';
 		if ($this->groep->maker_uid == 1025) {
 			$html .= '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M">';

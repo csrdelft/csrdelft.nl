@@ -609,7 +609,7 @@ HTML;
 		if ($groep) {
 			require_once 'view/GroepenView.class.php';
 			$view = new GroepView($groep);
-			return $view->getHtml();
+			return '<div class="bb-block">' . $view->getHtml() . '</div>';
 		}
 		return '[groep] Geen geldig groep-id (' . htmlspecialchars($groepid) . ')';
 	}

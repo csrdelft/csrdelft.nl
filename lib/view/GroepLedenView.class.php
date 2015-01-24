@@ -101,7 +101,7 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 
 }
 
-abstract class GroepTabView implements View {
+abstract class GroepTabView implements View, FormElement {
 
 	protected $groep;
 
@@ -121,106 +121,118 @@ abstract class GroepTabView implements View {
 		return $this->groep->naam;
 	}
 
+	public function getHtml() {
+		$html = '<div id="groep-leden-' . $this->groep->id . '" class="groep-leden"><ul class="groep-tabs nobullets">';
+
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Pasfotos . '" title="Pasfoto\'s tonen"><span class="fa fa-user"></span></a></li>';
+
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Lijst . '" title="Pasfoto\'s tonen"><span class="fa fa-align-justify"></span></a></li>';
+
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Statistiek . '" title="Pasfoto\'s tonen"><span class="fa fa-pie-chart"></span></a></li>';
+
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Emails . '" title="Pasfoto\'s tonen"><span class="fa fa-envelope"></span></a></li>';
+
+		return $html . '</ul><div class="groep-tab-content">';
+	}
+
 	public function view() {
-		echo '<div id="groep-leden-' . $this->groep->id . '" class="groep-leden"><ul class="groep-tabs nobullets">';
+		echo $this->getHtml();
+	}
 
-		echo '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Pasfotos . '" title="Pasfoto\'s tonen"><span class="fa fa-user"></span></a></li>';
+	public function getType() {
+		return get_class($this);
+	}
 
-		echo '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Lijst . '" title="Pasfoto\'s tonen"><span class="fa fa-align-justify"></span></a></li>';
-
-		echo '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Statistiek . '" title="Pasfoto\'s tonen"><span class="fa fa-pie-chart"></span></a></li>';
-
-		echo '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Emails . '" title="Pasfoto\'s tonen"><span class="fa fa-envelope"></span></a></li>';
-
-		echo '</ul><div class="groep-tab-content">';
+	public function getJavascript() {
+		return '';
 	}
 
 }
 
 class GroepPasfotosView extends GroepTabView {
 
-	public function view() {
-		parent::view();
+	public function getHtml() {
+		$html = parent::getHtml();
 		foreach ($this->groep->getLeden() as $lid) {
-			echo ProfielModel::getLink($lid->uid, 'pasfoto');
+			$html .= ProfielModel::getLink($lid->uid, 'pasfoto');
 		}
 		if (property_exists($this->groep, 'rechten_aanmelden') AND $this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
 			$groep = $this->groep;
 			$leden = $groep::leden;
 			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
 			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
-			$form->view();
+			$html .= $form->getHtml();
 		}
-		echo '</div></div>';
+		return $html . '</div></div>';
 	}
 
 }
 
 class GroepLijstView extends GroepTabView {
 
-	public function view() {
-		parent::view();
-		echo '<table class="groep-lijst"><tbody>';
+	public function getHtml() {
+		$html = parent::getHtml();
+		$html .= '<table class="groep-lijst"><tbody>';
 		$suggesties = $this->groep->getSuggesties();
 		foreach ($this->groep->getLeden() as $lid) {
-			echo '<tr><td>' . ProfielModel::getLink($lid->uid, 'civitas') . '</td>';
-			echo '<td>';
+			$html .= '<tr><td>' . ProfielModel::getLink($lid->uid, 'civitas') . '</td>';
+			$html .= '<td>';
 			if ($this->groep->mag(A::Bewerken, $lid->uid)) {
 				$form = new GroepBewerkenForm($lid, $this->groep, $suggesties, $this->groep->keuzelijst);
-				$form->view();
+				$html .= $form->getHtml();
 			} else {
-				echo $lid->opmerking;
+				$html .= $lid->opmerking;
 			}
-			echo '</td></tr>';
+			$html .= '</td></tr>';
 		}
 		if (property_exists($this->groep, 'rechten_aanmelden') AND $this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
-			echo '<tr><td colspan="2">';
+			$html .= '<tr><td colspan="2">';
 			$groep = $this->groep;
 			$leden = $groep::leden;
 			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
 			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
-			$form->view();
-			echo '</td></tr>';
+			$html .= $form->getHtml();
+			$html .= '</td></tr>';
 		}
-		echo '</tbody></table></div></div>';
+		return $html . '</tbody></table></div></div>';
 	}
 
 }
 
 class GroepStatistiekView extends GroepTabView {
 
-	public function view() {
-		parent::view();
-		echo '<table class="groep-stats">';
+	public function getHtml() {
+		$html = parent::getHtml();
+		$html .= '<table class="groep-stats">';
 		foreach ($this->groep->getStatistieken() as $title => $stat) {
-			echo '<thead><tr><th colspan="2">' . $title . '</th></tr></thead>';
-			echo '<tbody>';
+			$html .= '<thead><tr><th colspan="2">' . $title . '</th></tr></thead>';
+			$html .= '<tbody>';
 			if (!is_array($stat)) {
-				echo '<tr><td colspan="2">' . $stat . '</td></tr>';
+				$html .= '<tr><td colspan="2">' . $stat . '</td></tr>';
 				continue;
 			}
 			foreach ($stat as $row) {
-				echo '<tr><td>' . $row[0] . '</td><td>' . $row[1] . '</td></tr>';
+				$html .= '<tr><td>' . $row[0] . '</td><td>' . $row[1] . '</td></tr>';
 			}
-			echo '</tbody>';
+			$html .= '</tbody>';
 		}
-		echo '</table></div></div>';
+		return $html . '</table></div></div>';
 	}
 
 }
 
 class GroepEmailsView extends GroepTabView {
 
-	public function view() {
-		parent::view();
-		echo '<div class="groep-emails">';
+	public function getHtml() {
+		$html = parent::getHtml();
+		$html .= '<div class="groep-emails">';
 		foreach ($this->groep->getLeden() as $lid) {
 			$profiel = ProfielModel::get($lid->uid);
 			if ($profiel AND $profiel->getPrimaryEmail() != '') {
-				echo $profiel->getPrimaryEmail() . '; ';
+				$html .= $profiel->getPrimaryEmail() . '; ';
 			}
 		}
-		echo '</div></div></div>';
+		return $html . '</div></div></div>';
 	}
 
 }
