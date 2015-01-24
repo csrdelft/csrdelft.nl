@@ -65,7 +65,7 @@ class GroepBewerkenForm extends InlineForm {
 		parent::__construct($lid, $groep->getUrl() . A::Bewerken . '/' . $lid->uid, true);
 
 		if ($keuzelijst) {
-			$this->field = new MultiSelectField('opmerking', $lid->opmerking, null);
+			$this->field = new MultiSelectField('opmerking', $lid->opmerking, null, $keuzelijst);
 		} else {
 			$this->field = new TextField('opmerking', $lid->opmerking, null);
 			$this->field->placeholder = 'Opmerking';
