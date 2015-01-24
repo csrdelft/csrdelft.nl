@@ -388,7 +388,7 @@ class GroepenController extends Controller {
 			}
 
 			$admin = DatabaseAdmin::instance();
-			if (true) {
+			if (false) {
 				$class = $model::orm;
 				$orm = new $class();
 				$query = $admin->prepare('TRUNCATE TABLE ' . $orm->getTableName());
