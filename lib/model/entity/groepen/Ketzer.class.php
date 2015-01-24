@@ -13,6 +13,11 @@ class Ketzer extends Groep {
 	const leden = 'KetzerDeelnemersModel';
 
 	/**
+	 * Rechten benodigd voor aanmelden
+	 * @var string
+	 */
+	public $rechten_aanmelden;
+	/**
 	 * Maximaal aantal groepsleden
 	 * @var string
 	 */
@@ -52,6 +57,7 @@ class Ketzer extends Groep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
+		'rechten_aanmelden'		 => array(T::String, true),
 		'aanmeld_limiet'		 => array(T::Integer, true),
 		'aanmelden_vanaf'		 => array(T::DateTime),
 		'aanmelden_tot'			 => array(T::DateTime),
@@ -94,7 +100,13 @@ class Ketzer extends Groep {
 			switch ($action) {
 
 				case A::Aanmelden:
-					return time() < strtotime($this->aanmelden_tot) AND time() > strtotime($this->aanmelden_vanaf) AND ( !isset($this->aanmeld_limiet) OR $this->aantalLeden() < $this->aanmeld_limiet );
+					if (in_array($uid, $this->getLeden())) {
+						return false;
+					}
+					if (isset($this->aanmeld_limiet) AND $this->aantalLeden() >= $this->aanmeld_limiet) {
+						return false;
+					}
+					return time() < strtotime($this->aanmelden_tot) AND time() > strtotime($this->aanmelden_vanaf);
 
 				case A::Bewerken:
 					return time() < strtotime($this->bewerken_tot);

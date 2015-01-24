@@ -88,7 +88,7 @@ class ForumDeelView extends ForumView {
 		if ($this->model->categorie_id) {
 			$dropdown .= ' » ' . $this->model->getForumCategorie()->titel;
 		}
-		$dropdown .= ' » <select name="forum_id" onchange="document.location.href=this.value;"><option value="/forum/recent">Recent gewijzigd</option>';
+		$dropdown .= ' » <select name="forum_id" onchange="window.location.href=this.value;"><option value="/forum/recent">Recent gewijzigd</option>';
 		foreach (ForumModel::instance()->getForumIndelingVoorLid() as $cat) {
 			$dropdown .= '<optgroup label="' . $cat->titel . '">';
 			foreach ($cat->getForumDelen() as $newDeel) {

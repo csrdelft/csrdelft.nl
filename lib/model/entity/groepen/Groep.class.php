@@ -60,11 +60,6 @@ class Groep extends PersistentEntity {
 	 */
 	public $keuzelijst;
 	/**
-	 * Rechten benodigd voor aanmelden
-	 * @var string
-	 */
-	public $rechten_aanmelden;
-	/**
 	 * Rechten benodigd voor beheren
 	 * @var string
 	 */
@@ -88,7 +83,6 @@ class Groep extends PersistentEntity {
 		'website'			 => array(T::String, true),
 		'maker_uid'			 => array(T::UID),
 		'keuzelijst'		 => array(T::String, true),
-		'rechten_aanmelden'	 => array(T::String, true),
 		'rechten_beheren'	 => array(T::String, true)
 	);
 	/**
@@ -109,8 +103,8 @@ class Groep extends PersistentEntity {
 	 * @return GroepLid[]
 	 */
 	public function getLeden($status = null) {
-		$class = static::leden;
-		return $class::instance()->getLedenVoorGroep($this, $status);
+		$leden = static::leden;
+		return $leden::instance()->getLedenVoorGroep($this, $status);
 	}
 
 	/**
@@ -128,8 +122,8 @@ class Groep extends PersistentEntity {
 	}
 
 	public function getStatistieken() {
-		$class = static::leden;
-		return $class::instance()->getStatistieken($this);
+		$leden = static::leden;
+		return $leden::instance()->getStatistieken($this);
 	}
 
 	public function getSuggesties() {

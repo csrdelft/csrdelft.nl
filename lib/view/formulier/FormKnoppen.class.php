@@ -139,6 +139,7 @@ class FormulierKnop implements FormElement {
 		$this->title = $title;
 		$this->icon = $icon;
 		$this->css_classes[] = $this->getType();
+		$this->css_classes[] = 'btn';
 	}
 
 	public function getId() {
@@ -162,7 +163,8 @@ class FormulierKnop implements FormElement {
 	}
 
 	public function getHtml() {
-		$html = '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="btn ' . $this->action . ' ' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '"';
+		$this->css_classes[] = $this->action;
+		$html = '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '"';
 		if (isset($this->data)) {
 			$html .= ' data="' . $this->data . '"';
 		}
@@ -194,6 +196,20 @@ class SubmitKnop extends FormulierKnop {
 
 	public function __construct($url = null, $action = 'submit', $label = 'Opslaan', $title = 'Invoer opslaan', $icon = '/famfamfam/disk.png') {
 		parent::__construct($url, $action, $label, $title, $icon);
+	}
+
+}
+
+class PasfotoAanmeldenKnop extends SubmitKnop {
+
+	public function getHtml() {
+		if (($i = array_search('btn', $this->css_classes)) !== false) {
+			unset($this->css_classes[$i]);
+		}
+		$this->label = null;
+		$this->icon = false;
+		$img = '<img class="pasfoto" src="/plaetjes/groepen/aanmelden.jpg" onmouseout="this.src=\'/plaetjes/groepen/aanmelden.jpg\'" onmouseover="this.src=\'/plaetjes/' . LoginModel::getProfiel()->getPasfotoPath() . '\'" title="Klik om u aan te melden" style="cursor:pointer;">';
+		return str_replace('</a>', $img . '</a>', parent::getHtml());
 	}
 
 }

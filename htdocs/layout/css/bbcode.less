@@ -96,15 +96,24 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld {
 Groepen
 
 -------------------------------- */
-ul.generaties {
-    margin: 10px 0;
-    padding: 3px 20px;
-}
 .groep-samenvatting {
 	float: left;
+	width: 60%;
+	padding-right: 2em;
+	line-height: 1.5em;
+	text-align: justify;
 
 	h3 {
 		margin-top: 0;
+	}
+}
+.groep-leden {
+    float: right;
+    width: 40%;
+
+	.groep-tab-content {
+		max-height: 300px;
+		overflow-y: auto;
 	}
 }
 .groep-tabs {
@@ -120,20 +129,15 @@ ul.generaties {
 		}
 	}
 }
+ul.generaties {
+    margin: 10px 0;
+    padding: 3px 20px;
+}
 .groep-vorige {
     list-style-image: url("/plaetjes/groepen/up.png");
 }
 .groep-volgende {
     list-style-image: url("/plaetjes/groepen/down.png");
-}
-.groep-leden {
-    float: right;
-    width: 300px;
-
-	.groep-tab-content {
-		max-height: 300px;
-		overflow-y: auto;
-	}
 }
 table.groep-lijst td {
     width: 150px;

@@ -125,80 +125,6 @@ class GroepRechtenForm extends DataTableForm {
 
 }
 
-class GroepLedenTable extends DataTable {
-
-	public function __construct(GroepLedenModel $model, Groep $groep) {
-		parent::__construct($model::orm, 'Leden van ' . $groep->naam, 'status');
-		$this->dataUrl = groepenUrl . $groep->id . '/leden';
-		$this->hideColumn('uid', false);
-		$this->searchColumn('uid');
-		$this->setColumnTitle('uid', 'Lidnaam');
-		$this->setColumnTitle('door_uid', 'Aangemeld door');
-
-		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . $groep->id . '/' . A::Aanmelden, 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
-		$this->addKnop($create);
-
-		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Bewerken, 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
-		$this->addKnop($update);
-
-		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Afmelden, 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
-		$this->addKnop($delete);
-	}
-
-}
-
-class GroepLedenData extends DataTableResponse {
-
-	public function getJson($lid) {
-		$array = $lid->jsonSerialize();
-
-		$array['uid'] = ProfielModel::getLink($array['uid'], 'civitas');
-		$array['door_uid'] = ProfielModel::getLink($array['door_uid'], 'civitas');
-
-		return parent::getJson($array);
-	}
-
-}
-
-class GroepLidBeheerForm extends DataTableForm {
-
-	public function __construct(GroepLid $lid, $action, array $blacklist = null) {
-		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . $action, ucfirst($action));
-		$fields = $this->generateFields();
-		if ($blacklist !== null) {
-			$fields['uid']->blacklist = $blacklist;
-			$fields['uid']->required = true;
-			$fields['uid']->readonly = false;
-		}
-		$fields['uid']->hidden = false;
-		$fields['door_uid']->required = true;
-		$fields['door_uid']->readonly = true;
-		$fields['door_uid']->hidden = true;
-	}
-
-}
-
-class GroepLidForm extends InlineForm {
-
-	public function __construct(GroepLid $lid, array $suggesties = array(), $keuzelijst = null) {
-		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . A::Bewerken . '/' . $lid->uid);
-
-		if ($keuzelijst) {
-			$this->buttons = true;
-			$fields = array();
-			$opmerking = explode('&&', $lid->opmerking);
-			foreach (explode('&&', $keuzelijst) as $i => $dropdown) {
-				$fields[] = new SelectField('opmerking[]', $opmerking[$i], null, explode('|', $dropdown));
-			}
-			$this->addFields($fields);
-		} else {
-			$this->field = new TextField('opmerking', $lid->opmerking, 'Functie of opmerking bij lidmaatschap');
-			$this->field->suggestions[] = $suggesties;
-		}
-	}
-
-}
-
 class GroepenView implements View {
 
 	protected $groepen;
@@ -244,23 +170,34 @@ class GroepenView implements View {
 class GroepView implements View {
 
 	private $groep;
-	private $content;
+	private $leden;
 
-	public function __construct(Groep $groep, $tab) {
+	public function __construct(Groep $groep, $tab = null) {
 		$this->groep = $groep;
 		switch ($tab) {
+
 			case GroepTab::Pasfotos:
-				$this->content = new GroepPasfotosView($groep);
+				$this->leden = new GroepPasfotosView($groep);
 				break;
+
 			case GroepTab::Lijst:
-				$this->content = new GroepLijstView($groep);
+				$this->leden = new GroepLijstView($groep);
 				break;
+
 			case GroepTab::Statistiek:
-				$this->content = new GroepStatistiekView($groep);
+				$this->leden = new GroepStatistiekView($groep);
 				break;
+
 			case GroepTab::Emails:
-				$this->content = new GroepEmailsView($groep);
+				$this->leden = new GroepEmailsView($groep);
 				break;
+
+			default:
+				if ($groep->keuzelijst) {
+					$this->leden = new GroepLijstView($groep);
+				} else {
+					$this->leden = new GroepPasfotosView($groep);
+				}
 		}
 	}
 
@@ -283,18 +220,23 @@ class GroepView implements View {
 		}
 		echo '"><div class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
 		echo CsrBB::parse($this->groep->samenvatting);
-		if (isset($generaties)) {
-			$url = groepenUrl;
-			echo <<<HTML
-<ul class="nobullets generaties">
-	<li class="groep-volgende"><a href="{$url}{$generaties['volgende']->id}">{$generaties['volgende']->naam}</a></li>
-	<li class="groep-huidige">{$generaties['huidig']->naam}</li>
-	<li class="groep-vorige"><a href="{$url}{$generaties['vorige']->id}">{$generaties['vorige']->naam}</a></li>
-</ul>
-HTML;
+		if (!empty($this->groep->omschrijving)) {
+			echo '<div class="groep-omschrijving-tonen" onclick="$(this).next().slideDown();">Verder lezen...</div><div class="groep-omschrijving">';
+			echo CsrBB::parse($this->groep->omschrijving);
+			echo '</div>';
+		}
+		if (false AND $this->groep instanceof OpvolgbareGroep) {
+			/**
+			 * TODO
+			 */
+			$generaties = group_by_distinct('id', $this->groep->getGeneraties());
+			$dropdown = new SelectField('generaties', $this->groep->id, null, $generaties);
+			$dropdown->onchange = 'window.location.href="/groepen/' . get_class($this->groep) . '/' . $this->groep->id . '"';
+			$dropdown->view();
+			echo '<a>Opvolger maken</a>';
 		}
 		echo '</div>';
-		$this->content->view();
+		$this->leden->view();
 		echo '<div class="clear">';
 		if ($this->groep->maker_uid == 1025) {
 			echo '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M">';

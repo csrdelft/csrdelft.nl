@@ -6,6 +6,101 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
+class GroepLedenTable extends DataTable {
+
+	public function __construct(GroepLedenModel $model, Groep $groep) {
+		parent::__construct($model::orm, 'Leden van ' . $groep->naam, 'status');
+		$this->dataUrl = groepenUrl . $groep->id . '/leden';
+		$this->hideColumn('uid', false);
+		$this->searchColumn('uid');
+		$this->setColumnTitle('uid', 'Lidnaam');
+		$this->setColumnTitle('door_uid', 'Aangemeld door');
+
+		$create = new DataTableKnop('== 0', $this->tableId, groepenUrl . $groep->id . '/' . A::Aanmelden, 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
+		$this->addKnop($create);
+
+		$update = new DataTableKnop('== 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Bewerken, 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
+		$this->addKnop($update);
+
+		$delete = new DataTableKnop('>= 1', $this->tableId, groepenUrl . $groep->id . '/' . A::Afmelden, 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
+		$this->addKnop($delete);
+	}
+
+}
+
+class GroepLedenData extends DataTableResponse {
+
+	public function getJson($lid) {
+		$array = $lid->jsonSerialize();
+
+		$array['uid'] = ProfielModel::getLink($array['uid'], 'civitas');
+		$array['door_uid'] = ProfielModel::getLink($array['door_uid'], 'civitas');
+
+		return parent::getJson($array);
+	}
+
+}
+
+class GroepLidBeheerForm extends DataTableForm {
+
+	public function __construct(GroepLid $lid, $action, array $blacklist = null) {
+		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . $action, ucfirst($action));
+		$fields = $this->generateFields();
+		if ($blacklist !== null) {
+			$fields['uid']->blacklist = $blacklist;
+			$fields['uid']->required = true;
+			$fields['uid']->readonly = false;
+		}
+		$fields['uid']->hidden = false;
+		$fields['door_uid']->required = true;
+		$fields['door_uid']->readonly = true;
+		$fields['door_uid']->hidden = true;
+	}
+
+}
+
+class GroepBewerkenForm extends InlineForm {
+
+	public function __construct(GroepLid $lid, array $suggesties = array(), $keuzelijst = null) {
+		parent::__construct($lid, groepenUrl . $lid->groep_id . '/' . A::Bewerken . '/' . $lid->uid, true);
+
+		if ($keuzelijst) {
+			$this->field = new MultiSelectField('opmerking', $lid->opmerking, null);
+		} else {
+			$this->field = new TextField('opmerking', $lid->opmerking, null);
+			$this->field->placeholder = 'Opmerking';
+			$this->field->suggestions[] = $suggesties;
+		}
+	}
+
+}
+
+class GroepAanmeldenForm extends GroepBewerkenForm {
+
+	public function __construct(GroepLid $lid, array $suggesties = array(), $keuzelijst = null) {
+		parent::__construct($lid, $suggesties, $keuzelijst);
+		$this->action = groepenUrl . $lid->groep_id . '/' . A::Aanmelden . '/' . $lid->uid;
+		$this->buttons = false;
+
+		$fields[] = new PasfotoAanmeldenKnop();
+		if ($keuzelijst) {
+			$fields[] = $this->field;
+		}
+
+		$this->addFields($fields);
+	}
+
+	public function getHtml() {
+		$html = $this->getFormTag();
+		foreach ($this->getFields() as $field) {
+			$html .= $field->getHtml();
+		}
+		$html .= $this->getScriptTag();
+		return $html . '</form></div>';
+	}
+
+}
+
 abstract class GroepTabView implements View {
 
 	protected $groep;
@@ -47,7 +142,14 @@ class GroepPasfotosView extends GroepTabView {
 	public function view() {
 		parent::view();
 		foreach ($this->groep->getLeden() as $lid) {
-			echo '<div class="pasfoto">' . ProfielModel::getLink($lid->uid, 'pasfoto') . '</div>';
+			echo ProfielModel::getLink($lid->uid, 'pasfoto');
+		}
+		if (property_exists($this->groep, 'rechten_aanmelden') AND $this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
+			$groep = $this->groep;
+			$leden = $groep::leden;
+			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
+			$form = new GroepAanmeldenForm($lid, $groep->getSuggesties(), $groep->keuzelijst);
+			$form->view();
 		}
 		echo '</div></div>';
 	}
@@ -59,16 +161,25 @@ class GroepLijstView extends GroepTabView {
 	public function view() {
 		parent::view();
 		echo '<table class="groep-lijst"><tbody>';
-		$suggestions = $this->groep->getSuggesties();
+		$suggesties = $this->groep->getSuggesties();
 		foreach ($this->groep->getLeden() as $lid) {
 			echo '<tr><td>' . ProfielModel::getLink($lid->uid, 'civitas') . '</td>';
 			echo '<td>';
-			if ($this->groep->mag(A::Bewerken)) {
-				$form = new GroepLidForm($lid, $suggestions);
+			if ($this->groep->mag(A::Bewerken, $lid->uid)) {
+				$form = new GroepBewerkenForm($lid, $suggesties, $this->groep->keuzelijst);
 				$form->view();
 			} else {
 				echo $lid->opmerking;
 			}
+			echo '</td></tr>';
+		}
+		if (property_exists($this->groep, 'rechten_aanmelden') AND $this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
+			echo '<tr><td colspan="2">';
+			$groep = $this->groep;
+			$leden = $groep::leden;
+			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
+			$form = new GroepAanmeldenForm($lid, $groep->getSuggesties(), $groep->keuzelijst);
+			$form->view();
 			echo '</td></tr>';
 		}
 		echo '</tbody></table></div></div>';
@@ -106,7 +217,7 @@ class GroepEmailsView extends GroepTabView {
 		foreach ($this->groep->getLeden() as $lid) {
 			$profiel = ProfielModel::get($lid->uid);
 			if ($profiel AND $profiel->getPrimaryEmail() != '') {
-				echo $profiel->getPrimaryEmail() . ';';
+				echo $profiel->getPrimaryEmail() . '; ';
 			}
 		}
 		echo '</div></div></div>';

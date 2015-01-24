@@ -44,4 +44,13 @@ abstract class OpvolgbareGroep extends Groep {
 		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
 	}
 
+	/**
+	 * TODO
+	 * 
+	 * @return OpvolgbareGroep[]
+	 */
+	public function getGeneraties() {
+		return array();
+	}
+
 }

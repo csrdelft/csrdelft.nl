@@ -346,7 +346,7 @@ class DataTableForm extends ModalForm {
 /**
  * InlineForm with single InputField and FormDefaultKnoppen.
  */
-class InlineForm extends Formulier {
+class InlineForm extends Formulier implements FormElement {
 
 	public $buttons;
 	public $labels;
@@ -395,6 +395,14 @@ class InlineForm extends Formulier {
 
 	public function getValue() {
 		return $this->field->getValue();
+	}
+
+	public function getType() {
+		return get_class($this);
+	}
+
+	public function getJavascript() {
+		return parent::getJavascript();
 	}
 
 }

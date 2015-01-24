@@ -33,7 +33,6 @@ class GroepenModel extends CachedPersistenceModel {
 		$groep->eind_moment = null;
 		$groep->website = null;
 		$groep->maker_uid = LoginModel::getUid();
-		$groep->rechten_aanmelden = null;
 		$groep->rechten_beheren = null;
 		return $groep;
 	}
@@ -183,6 +182,7 @@ class ActiviteitenModel extends OpvolgbareGroepenModel {
 		$activiteit = parent::nieuw();
 		$activiteit->soort = ActiviteitSoort::Intern;
 		$activiteit->locatie = null;
+		$activiteit->rechten_aanmelden = null;
 		$activiteit->aanmeld_limiet = null;
 		$activiteit->aanmelden_vanaf = getDateTime();
 		$activiteit->aanmelden_tot = getDateTime();
@@ -201,6 +201,7 @@ class KetzersModel extends GroepenModel {
 
 	public function nieuw() {
 		$ketzer = parent::nieuw();
+		$ketzer->rechten_aanmelden = null;
 		$ketzer->aanmeld_limiet = null;
 		$ketzer->aanmelden_vanaf = getDateTime();
 		$ketzer->aanmelden_tot = getDateTime();

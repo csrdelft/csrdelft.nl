@@ -151,6 +151,51 @@ class RequiredSelectField extends SelectField {
 
 }
 
+class MultiSelectField extends InputField {
+
+	private $select = array();
+
+	public function __construct($name, $value, $description, $keuzeopties) {
+		parent::__construct($name, $value, $description, $keuzeopties);
+		$array = explode('&&', $value);
+		foreach (explode($keuzeopties) as $keuze => $opties) {
+			$this->select[] = new SelectField($name . '[]', $array[$keuze], null, explode('|', $opties));
+		}
+	}
+
+	public function isPosted() {
+		return isset($_POST[$this->name . '[]']);
+	}
+
+	public function getValue() {
+		if ($this->isPosted()) {
+			$values = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			return implode('&&', $values);
+		}
+		return parent::getValue();
+	}
+
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		foreach ($this->select as $select) {
+			$select->validate();
+			$this->error .= $select->getError();
+		}
+		return $this->error === '';
+	}
+
+	public function getHtml() {
+		$html = '';
+		foreach ($this->select as $select) {
+			$html .= $select->getHtml();
+		}
+		return $html;
+	}
+
+}
+
 /**
  * Select an entity based on the primary key while showing the label attributes
  */

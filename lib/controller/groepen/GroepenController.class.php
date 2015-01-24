@@ -191,21 +191,23 @@ class GroepenController extends Controller {
 		if ($this->isPosted()) {
 			$this->view = new GroepLedenData($groep->getLeden());
 		} else {
-			$class = $groep::leden;
-			$this->view = new GroepLedenTable($class::instance(), $groep);
+			$leden = $groep::leden;
+			$this->view = new GroepLedenTable($leden::instance(), $groep);
 		}
 	}
 
 	public function aanmelden(Groep $groep, $uid = null) {
-		$class = $groep::leden;
-		$model = $class::instance();
+		$leden = $groep::leden;
+		$model = $leden::instance();
 		if ($uid) {
-			$lid = $model->instance()->nieuw($groep, LoginModel::getUid());
-			$form = new GroepLidForm($lid, $groep->getSuggesties());
+			$lid = $model->nieuw($groep, LoginModel::getUid());
+			$form = new GroepAanmeldenForm($lid, $groep->getSuggesties(), $groep->keuzelijst);
 			if ($form->validate()) {
 				$model->create($lid);
+				$this->view = new GroepView($groep);
+			} else {
+				$this->view = $form;
 			}
-			$this->view = $form;
 		}
 		// beheren
 		else {
@@ -222,11 +224,11 @@ class GroepenController extends Controller {
 	}
 
 	public function bewerken(Groep $groep, $uid = null) {
-		$class = $groep::leden;
-		$model = $class::instance();
+		$leden = $groep::leden;
+		$model = $leden::instance();
 		if ($uid) {
 			$lid = $model->get($groep, $uid);
-			$form = new GroepLidForm($lid, $groep->getSuggesties());
+			$form = new GroepBewerkenForm($lid, $groep->getSuggesties(), $groep->keuzelijst);
 			if ($form->validate()) {
 				$model->update($lid);
 			}
@@ -250,8 +252,8 @@ class GroepenController extends Controller {
 	}
 
 	public function afmelden(Groep $groep, $uid = null) {
-		$class = $groep::leden;
-		$model = $class::instance();
+		$leden = $groep::leden;
+		$model = $leden::instance();
 		if ($uid) {
 			$lid = $model->get($groep, $uid);
 			$lid->status = GroepStatus::OT;
@@ -441,10 +443,13 @@ class GroepenController extends Controller {
 					}
 				}
 				$entity->keuzelijst = $groep->functiefilter;
-				if (empty($groep->aanmeldbaar) OR $groep->aanmeldbaar = 'P_LOGGED_IN') {
-					$entity->rechten_aanmelden = null;
-				} else {
-					$entity->rechten_aanmelden = $groep->aanmeldbaar;
+
+				if (property_exists($entity, 'rechten_aanmelden')) {
+					if (empty($groep->aanmeldbaar) OR $groep->aanmeldbaar = 'P_LOGGED_IN') {
+						$entity->rechten_aanmelden = null;
+					} else {
+						$entity->rechten_aanmelden = $groep->aanmeldbaar;
+					}
 				}
 
 				if (property_exists($entity, 'soort')) {
@@ -470,7 +475,11 @@ class GroepenController extends Controller {
 				}
 
 				if (property_exists($entity, 'aanmeld_limiet')) {
-					$entity->aanmeld_limiet = $groep->limiet;
+					if ($groep->limiet < 1) {
+						$entity->aanmeld_limiet = null;
+					} else {
+						$entity->aanmeld_limiet = $groep->limiet;
+					}
 					$entity->aanmelden_vanaf = $entity->begin_moment;
 					if ($entity->eind_moment === null) {
 						$entity->aanmelden_tot = $entity->begin_moment;
@@ -499,7 +508,11 @@ class GroepenController extends Controller {
 
 					$lid->door_uid = $groeplid->uid;
 					$lid->lid_sinds = $groeplid->moment;
-					$lid->opmerking = $groeplid->functie;
+					if (empty($groeplid->functie)) {
+						$lid->opmerking = null;
+					} else {
+						$lid->opmerking = $groeplid->functie;
+					}
 
 					$leden::instance()->create($lid);
 

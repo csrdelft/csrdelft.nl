@@ -173,7 +173,6 @@ class BeheerTakenController extends AclController {
 		} else {
 			require_once 'model/maalcie/CorveeToewijzenModel.class.php';
 			require_once 'view/maalcie/forms/ToewijzenForm.class.php';
-
 			$suggesties = CorveeToewijzenModel::getSuggesties($taak);
 			$this->view = new ToewijzenForm($taak, $suggesties); // fetches POST values itself
 		}
