@@ -19,61 +19,42 @@ class GroepenController extends Controller {
 	}
 
 	public function performAction(array $args = array()) {
-
 		//return $this->converteren();
 
+		$this->action = 'overzicht'; // default
 		if ($this->hasParam(3)) { // id or action
 			$this->action = $this->getParam(3);
-		} else {
-			$this->action = 'overzicht'; // default
 		}
-
 		switch ($this->action) {
+
 			// geen groep id vereist
 			case 'overzicht':
 			case A::Beheren:
+			case A::Aanmaken:
 			case A::Wijzigen:
 			case A::Verwijderen:
 				break;
 
-			case A::Aanmaken:
-				if (LoginModel::mag('P_LEDEN_MOD')) {
-					break;
-				}
-				$model = $this->model;
-				$algemeen = AccessModel::get($model::orm, $this->action, '*');
-				if ($algemeen AND LoginModel::mag($algemeen)) {
-					break;
-				}
-				if ($this->hasParam(3)) { // soort
-					$soort = AccessModel::get($model::orm, $this->action, $this->getParam(3));
-					if ($soort AND LoginModel::mag($soort)) {
-						$args[] = $soort;
-						break;
-					}
-				}
-				$this->geentoegang();
-
 			// groep id vereist
 			default:
+				// param 3 bevat id
 				$id = (int) $this->action; // id
 				$groep = $this->model->get($id);
 				if (!$groep) {
 					$this->geentoegang();
 				}
-				$args[] = $groep;
-				$uid = null;
+				$args['groep'] = $groep;
+
+				// actie opgegeven?
+				$this->action = A::Bekijken; // default
 				if ($this->hasParam(4)) { // action
 					$this->action = $this->getParam(4);
+
+					// lidnummer opgegeven?
 					if ($this->hasParam(5)) { // uid
 						$uid = $this->getParam(5);
-						$args[] = $uid;
+						$args['uid'] = $uid;
 					}
-				} else {
-					$this->action = A::Bekijken; // default
-				}
-				if (!$groep->mag($this->action, $uid)) {
-					$this->geentoegang();
 				}
 		}
 		return parent::performAction($args);
@@ -84,7 +65,10 @@ class GroepenController extends Controller {
 	 * 
 	 * @return boolean
 	 */
-	protected function mag($action, $method) {
+	protected function mag($action, array $args) {
+
+
+
 		switch ($action) {
 			case A::Rechten:
 			case A::Beheren:
@@ -93,7 +77,7 @@ class GroepenController extends Controller {
 
 			case 'overzicht':
 			case A::Bekijken:
-				return $method === 'GET';
+				return !$this->isPosted();
 
 			case 'overzicht':
 			case GroepTab::Pasfotos:
@@ -106,7 +90,7 @@ class GroepenController extends Controller {
 			case A::Aanmelden:
 			case A::Afmelden:
 			case A::Bewerken:
-				return $method === 'POST';
+				return $this->isPosted();
 
 			default:
 				return false;
@@ -448,8 +432,20 @@ class GroepenController extends Controller {
 					$entity->eind_moment = $groep->einde;
 				}
 				$entity->website = null;
-				$entity->door_uid = substr($groep->eigenaar, 0, 4);
+				if (count($groep->eigenaar) === 4) {
+					$entity->maker_uid = $groep->eigenaar;
+				} else {
+					$entity->maker_uid = 'x999';
+					if (startsWith($groep->eigenaar, 'groep:')) {
+						$entity->rechten_beheren = $groep->eigenaar;
+					}
+				}
 				$entity->keuzelijst = $groep->functiefilter;
+				if (empty($groep->aanmeldbaar) OR $groep->aanmeldbaar = 'P_LOGGED_IN') {
+					$entity->rechten_aanmelden = null;
+				} else {
+					$entity->rechten_aanmelden = $groep->aanmeldbaar;
+				}
 
 				if (property_exists($entity, 'soort')) {
 					if ($soort !== null) {
@@ -478,9 +474,12 @@ class GroepenController extends Controller {
 					$entity->aanmelden_vanaf = $entity->begin_moment;
 					if ($entity->eind_moment === null) {
 						$entity->aanmelden_tot = $entity->begin_moment;
+						$entity->bewerken_tot = $entity->begin_moment;
 					} else {
 						$entity->aanmelden_tot = $entity->eind_moment;
+						$entity->bewerken_tot = $entity->eind_moment;
 					}
+					$entity->afmelden_tot = null;
 				}
 
 				if (property_exists($entity, 'bijbeltekst')) {

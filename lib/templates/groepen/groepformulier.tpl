@@ -51,7 +51,7 @@
 				{else}
 					<label for="groepAanmeldbaar"><strong>Aanmeldbaar?</strong></label>
 					<select name="aanmeldbaar" id="groepAanmeldbaar" onchange="groepFormUpdate();"  /> 
-					{foreach from=$aanmeldfilters key=filtervalue item=filtertekst}
+					{foreach from=$RechtenAanmelden key=filtervalue item=filtertekst}
 						<option value="{$filtervalue}" {if $filtervalue==$groep->getAanmeldbaar()}selected="selected"{/if}>
 							{$filtertekst}
 						</option>

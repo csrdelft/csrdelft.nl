@@ -38,8 +38,18 @@ class Activiteit extends OpvolgbareGroep implements Agendeerbaar {
 	 */
 	public $aanmelden_tot;
 	/**
+	 * Datum en tijd aanmelding bewerken toegestaan
+	 * @var string
+	 */
+	public $bewerken_tot;
+	/**
+	 * Datum en tijd afmelden toegestaan
+	 * @var string
+	 */
+	public $afmelden_tot;
+	/**
 	 * Bedrag in centen
-	 * @var integer
+	 * @var int
 	 */
 	public $kosten_bedrag;
 	/**
@@ -57,6 +67,8 @@ class Activiteit extends OpvolgbareGroep implements Agendeerbaar {
 		'aanmeld_limiet'		 => array(T::Integer, true),
 		'aanmelden_vanaf'		 => array(T::DateTime),
 		'aanmelden_tot'			 => array(T::DateTime),
+		'bewerken_tot'			 => array(T::DateTime),
+		'afmelden_tot'			 => array(T::DateTime, true),
 		'kosten_bedrag'			 => array(T::Integer, true),
 		'machtiging_rekening'	 => array(T::String, true)
 	);
@@ -72,6 +84,40 @@ class Activiteit extends OpvolgbareGroep implements Agendeerbaar {
 	public static function __constructStatic() {
 		parent::__constructStatic();
 		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
+	}
+
+	/**
+	 * Has permission for action?
+	 * 
+	 * @param AccessAction $action
+	 * @param string $uid affected Lid
+	 * @return boolean
+	 */
+	public function mag($action, $uid = null) {
+
+		if ($uid === LoginModel::getUid()) {
+			/**
+			 * Beheerders mogen de volgende eisen standaard negeren, maar als ze zichzelf
+			 * bijv. achteraf willen aanmelden moet je A::Beheren ipv A::Aanmelden vragen.
+			 */
+			if (isset($this->rechten_aanmelden) AND ! LoginModel::mag($this->rechten_aanmelden)) {
+				return false;
+			}
+			switch ($action) {
+
+				case A::Aanmelden:
+					return time() < strtotime($this->aanmelden_tot) AND time() > strtotime($this->aanmelden_vanaf) AND ( !isset($this->aanmeld_limiet) OR $this->aantalLeden() < $this->aanmeld_limiet );
+
+				case A::Bewerken:
+					return time() < strtotime($this->bewerken_tot);
+
+				case A::Afmelden:
+					return time() < strtotime($this->afmelden_tot);
+
+				default: // fall-through naar parent::mag
+			}
+		}
+		return parent::mag($action, $uid);
 	}
 
 	// Agendeerbaar:

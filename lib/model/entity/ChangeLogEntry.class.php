@@ -15,7 +15,7 @@ class ChangeLogEntry extends PersistentEntity {
 	public $id;
 	/**
 	 * The moment it changed
-	 * @var DateTime
+	 * @var string
 	 */
 	public $moment;
 	/**

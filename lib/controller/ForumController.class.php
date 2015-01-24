@@ -22,7 +22,7 @@ class ForumController extends Controller {
 	 * @param string $action
 	 * @return boolean
 	 */
-	protected function mag($action, $method) {
+	protected function mag($action, array $args) {
 		switch ($action) {
 			case 'zoeken':
 				return true;
@@ -36,7 +36,7 @@ class ForumController extends Controller {
 			case 'onderwerp':
 			case 'reactie':
 			case 'wacht':
-				return $method === 'GET';
+				return !$this->isPosted();
 
 			// ForumDeel
 			case 'aanmaken':
@@ -72,7 +72,7 @@ class ForumController extends Controller {
 			case 'volgenaan':
 			case 'volgenuit':
 			case 'volgniets':
-				return $method === 'POST';
+				return $this->isPosted();
 
 			default:
 				$this->action = 'forum';

@@ -35,12 +35,12 @@ class MededelingenModel extends PersistentEntity {
 	public $zichtbaar_voor;
 	/**
 	 * Vanaf dit moment zichtbaar
-	 * @var DateTime
+	 * @var string
 	 */
 	public $zichtbaar_vanaf;
 	/**
 	 * Tot dit moment zichtbaar
-	 * @var DateTime
+	 * @var string
 	 */
 	public $zichtbaar_tot;
 	/**

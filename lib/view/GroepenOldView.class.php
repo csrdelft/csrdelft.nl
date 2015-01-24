@@ -127,7 +127,7 @@ class GroepContent extends OldGroepView {
 		return $return;
 	}
 
-	public function getAanmeldfilters() {
+	public function getRechtenAanmelden() {
 		$filters = array(
 			''				 => 'Niet aanmeldbaar',
 			'P_LOGGED_IN'	 => 'Alle leden',
@@ -157,7 +157,7 @@ class GroepContent extends OldGroepView {
 		$this->smarty->assign('opvolgerVoorganger', $this->model->getOpvolgerVoorganger());
 		$this->smarty->assign('action', $this->action);
 		$this->smarty->assign('groeptypes', $this->groeptypes);
-		$this->smarty->assign('aanmeldfilters', $this->getAanmeldfilters());
+		$this->smarty->assign('RechtenAanmelden', $this->getRechtenAanmelden());
 		$oud = null;
 		if (isset($_SESSION['oudegroep'])) {
 			$oud = $_SESSION['oudegroep'];

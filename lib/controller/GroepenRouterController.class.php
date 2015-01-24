@@ -22,7 +22,7 @@ class GroepenRouterController extends Controller {
 		} else {
 			$this->action = 'commissies'; // default
 		}
-		if (!$this->mag($this->action, null)) {
+		if (!$this->mag($this->action, array())) {
 			$this->geentoegang();
 		}
 		define('groepenUrl', '/groep/' . $this->action . '/');
@@ -44,7 +44,7 @@ class GroepenRouterController extends Controller {
 	 * 
 	 * @return boolean
 	 */
-	protected function mag($action, $method) {
+	protected function mag($action, array $args) {
 		switch ($action) {
 			// groep
 			case 'overig':

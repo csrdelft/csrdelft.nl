@@ -1,7 +1,9 @@
 <?php
+
 require_once 'model/entity/groepen/GroepTab.enum.php';
 require_once 'model/CmsPaginaModel.class.php';
 require_once 'view/CmsPaginaView.class.php';
+require_once 'view/GroepLedenView.class.php';
 
 /**
  * GroepenView.class.php
@@ -18,7 +20,7 @@ class GroepenBeheerTable extends DataTable {
 		$this->hideColumn('samenvatting');
 		$this->hideColumn('omschrijving');
 		$this->hideColumn('website');
-		$this->hideColumn('door_uid');
+		$this->hideColumn('maker_uid');
 		$this->hideColumn('keuzelijst');
 		$this->hideColumn('status_historie');
 		$this->searchColumn('naam');
@@ -47,7 +49,7 @@ class GroepenBeheerData extends DataTableResponse {
 		$array['samenvatting'] = null;
 		$array['omschrijving'] = null;
 		$array['website'] = null;
-		$array['door_uid'] = null;
+		$array['maker_uid'] = null;
 
 		return parent::getJson($array);
 	}
@@ -276,7 +278,7 @@ class GroepView implements View {
 
 	public function view() {
 		echo '<hr><div id="groep-' . $this->groep->id . '" class="bb-groep';
-		if ($this->groep->door_uid == 1025) {
+		if ($this->groep->maker_uid == 1025) {
 			echo ' bb-dies2015';
 		}
 		echo '"><div class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
@@ -294,7 +296,7 @@ HTML;
 		echo '</div>';
 		$this->content->view();
 		echo '<div class="clear">';
-		if ($this->groep->door_uid == 1025) {
+		if ($this->groep->maker_uid == 1025) {
 			echo '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M">';
 		}
 		echo '&nbsp;
@@ -302,109 +304,3 @@ HTML;
 	}
 
 }
-
-abstract class GroepTabView implements View {
-
-	protected $groep;
-
-	public function __construct(Groep $groep) {
-		$this->groep = $groep;
-	}
-
-	public function getBreadcrumbs() {
-		return null;
-	}
-
-	public function getModel() {
-		return $this->groep;
-	}
-
-	public function getTitel() {
-		return $this->groep->naam;
-	}
-
-	public function view() {
-		?>
-		<div id="groep-leden-<?= $this->groep->id ?>" class="groep-leden">
-			<ul class="groep-tabs nobullets">
-				<li><a class="btn post noanim <?= ($this instanceof GroepPasfotosView ? 'active' : '' ) ?>" href="<?= groepenUrl . $this->groep->id . '/' . GroepTab::Pasfotos ?>" title="Pasfoto's tonen"><span class="fa fa-user"></span></a></li>
-				<li><a class="btn post noanim <?= ($this instanceof GroepLijstView ? 'active' : '' ) ?>" href="<?= groepenUrl . $this->groep->id . '/' . GroepTab::Lijst ?>" title="Lijst en opmerking tonen"><span class="fa fa-align-justify"></span></a></li>
-				<li><a class="btn post noanim <?= ($this instanceof GroepStatistiekView ? 'active' : '' ) ?>" href="<?= groepenUrl . $this->groep->id . '/' . GroepTab::Statistiek ?>" title="Statistiek tonen"><span class="fa fa-pie-chart"></span></a></li>
-				<li><a class="btn post noanim <?= ($this instanceof GroepEmailsView ? 'active' : '' ) ?>" href="<?= groepenUrl . $this->groep->id . '/' . GroepTab::Emails ?>" title="E-mail's tonen"><span class="fa fa-envelope"></span></a></li>
-			</ul>
-			<div class="groep-tab-content">
-				<?php
-			}
-
-		}
-
-		class GroepPasfotosView extends GroepTabView {
-
-			public function view() {
-				parent::view();
-				foreach ($this->groep->getLeden() as $lid) {
-					echo '<div class="pasfoto">' . ProfielModel::getLink($lid->uid, 'pasfoto') . '</div>';
-				}
-				echo '</div></div>';
-			}
-
-		}
-
-		class GroepLijstView extends GroepTabView {
-
-			public function view() {
-				parent::view();
-				echo '<table class="groep-lijst"><tbody>';
-				$suggestions = $this->groep->getSuggesties();
-				foreach ($this->groep->getLeden() as $lid) {
-					echo '<tr><td>' . ProfielModel::getLink($lid->uid, 'civitas') . '</td>';
-					echo '<td>';
-					if ($this->groep->mag(A::Bewerken)) {
-						$form = new GroepLidForm($lid, $suggestions);
-						$form->view();
-					} else {
-						echo $lid->opmerking;
-					}
-					echo '</td></tr>';
-				}
-				echo '</tbody></table></div></div>';
-			}
-
-		}
-
-		class GroepStatistiekView extends GroepTabView {
-
-			public function view() {
-				parent::view();
-				echo '<table class="groep-stats">';
-				foreach ($this->groep->getStatistieken() as $title => $stat) {
-					echo '<thead><tr><th colspan="2">' . $title . '</th></tr></thead><tbody>';
-					if (!is_array($stat)) {
-						echo '<tr><td colspan="2">' . $stat . '</td></tr>';
-						continue;
-					}
-					foreach ($stat as $row) {
-						echo '<tr><td>' . $row[0] . '</td><td>' . $row[1] . '</td></tr>';
-					}
-				}
-				echo '</tbody></table></div></div>';
-			}
-
-		}
-
-		class GroepEmailsView extends GroepTabView {
-
-			public function view() {
-				parent::view();
-				$emails = array();
-				foreach ($this->groep->getLeden() as $lid) {
-					$profiel = ProfielModel::get($lid->uid);
-					if ($profiel AND $profiel->getPrimaryEmail() != '') {
-						$emails[] = $profiel->getPrimaryEmail();
-					}
-				}
-				echo '<div class="groep-emails">' . implode(', ', $emails) . '</div></div></div>';
-			}
-
-		}
-		

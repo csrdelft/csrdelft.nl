@@ -4515,6 +4515,7 @@ lib/view/DocumentenView.class.php -text
 lib/view/EetplanView.class.php -text
 lib/view/ForumView.class.php -text
 lib/view/FotoAlbumView.class.php -text
+lib/view/GroepLedenView.class.php -text
 lib/view/GroepenOldView.class.php -text
 lib/view/GroepenView.class.php -text
 lib/view/HtmlPage.abstract.php -text

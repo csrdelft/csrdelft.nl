@@ -32,7 +32,9 @@ class GroepenModel extends CachedPersistenceModel {
 		$groep->begin_moment = getDateTime();
 		$groep->eind_moment = null;
 		$groep->website = null;
-		$groep->door_uid = LoginModel::getUid();
+		$groep->maker_uid = LoginModel::getUid();
+		$groep->rechten_aanmelden = null;
+		$groep->rechten_beheren = null;
 		return $groep;
 	}
 

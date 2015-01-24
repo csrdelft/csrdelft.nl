@@ -58,7 +58,7 @@ class DocumentenController extends Controller {
 	/**
 	 * Wordt op diverse plekken geregeld.
 	 */
-	protected function mag($action, $method) {
+	protected function mag($action, array $args) {
 		return true;
 	}
 

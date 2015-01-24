@@ -47,7 +47,7 @@ class GroepLedenModel extends CachedPersistenceModel {
 	public function getLedenVoorGroep(Groep $groep, $status = null) {
 		$where = 'groep_id = ?';
 		$params = array($groep->id);
-		if (in_array($status, GroepStatus::getTypeOptions())) {
+		if ($status !== null AND in_array($status, GroepStatus::getTypeOptions())) {
 			$where .= ' AND status = ?';
 			$params[] = $status;
 		}

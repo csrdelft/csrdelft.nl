@@ -70,7 +70,7 @@ class GroepController extends Controller {
 	/**
 	 * Wordt afgehandeld per actie
 	 */
-	protected function mag($action, $method) {
+	protected function mag($action, array $args) {
 		return true;
 	}
 
