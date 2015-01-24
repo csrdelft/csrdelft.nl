@@ -50,6 +50,7 @@ class GroepenBeheerData extends DataTableResponse {
 		$array = $groep->jsonSerialize();
 
 		$array['detailSource'] = $groep->getUrl() . 'leden'; // TODO: 2 childrow's A::Rechten;
+		$array['naam'] = '<span title="' . substr($groep->samenvatting, 0, 100) . '">' . $groep->naam . '</span>';
 		$array['samenvatting'] = null;
 		$array['omschrijving'] = null;
 		$array['website'] = null;
