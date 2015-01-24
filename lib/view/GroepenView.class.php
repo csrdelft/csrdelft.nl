@@ -25,6 +25,8 @@ class GroepenBeheerTable extends DataTable {
 		$this->hideColumn('maker_uid');
 		$this->hideColumn('keuzelijst');
 		$this->hideColumn('status_historie');
+		$this->hideColumn('rechten_aanmelden');
+		$this->hideColumn('rechten_beheren');
 		$this->searchColumn('naam');
 		$this->searchColumn('jaargang');
 		$this->searchColumn('status');
