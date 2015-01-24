@@ -224,9 +224,19 @@ function init_buttons(parent) {
 	$(parent).find('.get').bind('click.get', knop_get);
 	$(parent).find('.vergroot').bind('click.vergroot', function (event) {
 		var id = $(this).attr('data-vergroot');
-		$(id).animate({
-			'height': $(id).prop('scrollHeight')
-		}, 600);
+		var oud = $(this).attr('data-vergroot-oud');
+		if (oud) {
+			$(id).animate({
+				'height': oud
+			}, 600);
+			$(this).removeAttr('data-vergroot-oud');
+		}
+		else {
+			$(this).attr('data-vergroot-oud', $(id).height());
+			$(id).animate({
+				'height': $(id).prop('scrollHeight')
+			}, 600);
+		}
 	});
 }
 
