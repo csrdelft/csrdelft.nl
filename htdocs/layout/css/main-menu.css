@@ -594,14 +594,17 @@ Main components
 		overflow-y: auto;
 		-webkit-overflow-scrolling: touch;
 	}
-	.cd-primary-nav .cd-secondary-nav > li > a {
+	.cd-primary-nav .cd-secondary-nav > li > a,
+	.cd-primary-nav .cd-secondary-nav > li > a:hover {
 		/* secondary nav title */
 		color: #0a338d;
 		font-weight: bold;
 		font-size: 1.6rem;
 		margin-bottom: .6em;
+		cursor: default;
 	}
-	.cd-primary-nav .cd-secondary-nav > li > a:hover {
+	.cd-primary-nav .cd-secondary-nav > li > a:hover,
+	.cd-primary-nav .cd-secondary-nav > li > a:active {
 		text-decoration: none;
 	}
 	.cd-primary-nav .cd-secondary-nav a {
@@ -689,6 +692,7 @@ Main components
 	transform: rotate(-45deg);
 }
 @media only screen and (min-width: 960px) {
+	.has-children > a 
 	.has-children > a::before, .has-children > a::after, .go-back a::before, .go-back a::after {
 		background: #c9cbc4;
 	}
