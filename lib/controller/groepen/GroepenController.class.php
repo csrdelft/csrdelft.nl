@@ -357,7 +357,7 @@ class GroepenController extends Controller {
 			$this->geentoegang();
 		}
 		$converteer = $this->model->getUUID($selection[0]);
-		$form = new GroepConverteerForm($converteer);
+		$form = new GroepConverteerForm($converteer, $this->model);
 		if ($form->validate()) {
 			$model = $form->findByName('class')->getValue();
 			$groep = $model::instance()->converteer($converteer);
