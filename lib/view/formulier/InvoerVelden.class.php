@@ -766,7 +766,7 @@ class LidField extends TextField {
 		}
 		$this->zoekin = $zoekin;
 		if ($zoekin === 'oudleden') {
-			$this->suggestions[ucfirst($this->zoekin)] = '/tools/naamsuggesties/leden?q=';
+			$this->suggestions['leden'] = '/tools/naamsuggesties/leden?q=';
 		}
 		$this->suggestions[ucfirst($this->zoekin)] = '/tools/naamsuggesties/' . $this->zoekin . '?q=';
 	}
