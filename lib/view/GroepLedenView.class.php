@@ -153,7 +153,7 @@ abstract class GroepTabView implements View, FormElement {
 	protected function getProgressBar() {
 		$html = '</div><br />';
 		if (property_exists($this->groep, 'aanmeld_limiet') AND isset($this->groep->aanmeld_limiet)) {
-			$percent = (int) $this->groep->aantalLeden() * 100 / $this->groep->aanmeld_limiet;
+			$percent = (int) ($this->groep->aantalLeden() * 100 / $this->groep->aanmeld_limiet);
 			if (time() > strtotime($this->groep->aanmelden_vanaf) AND time() < strtotime($this->groep->aanmelden_tot)) {
 				if ($this->groep->aantalLeden() === $this->groep->aanmeld_limiet) {
 					$title = 'Inschrijvingen vol!';
