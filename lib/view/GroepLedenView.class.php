@@ -109,9 +109,11 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 abstract class GroepTabView implements View, FormElement {
 
 	protected $groep;
+	protected $javascript;
 
 	public function __construct(Groep $groep) {
 		$this->groep = $groep;
+		$this->javascript = '';
 	}
 
 	public function getBreadcrumbs() {
@@ -150,8 +152,8 @@ abstract class GroepTabView implements View, FormElement {
 		return $html . '</ul><div id="groep-leden-content-' . $this->groep->id . '" class="groep-tab-content">';
 	}
 
-	protected function getProgressBar() {
-		$html = '</div><br />';
+	protected function getCloseHtml() {
+		$html = $this->getScriptTag() . '</div><br />';
 		if (property_exists($this->groep, 'aanmeld_limiet') AND isset($this->groep->aanmeld_limiet)) {
 			$percent = round($this->groep->aantalLeden() * 100 / $this->groep->aanmeld_limiet);
 			if (time() > strtotime($this->groep->aanmelden_vanaf) AND time() < strtotime($this->groep->aanmelden_tot)) {
@@ -182,8 +184,18 @@ abstract class GroepTabView implements View, FormElement {
 		return get_class($this);
 	}
 
+	protected function getScriptTag() {
+		return <<<JS
+<script type="text/javascript">
+$(document).ready(function () {
+	{$this->getJavascript()}
+});
+</script>
+JS;
+	}
+
 	public function getJavascript() {
-		return '';
+		return $this->javascript;
 	}
 
 }
@@ -202,7 +214,7 @@ class GroepPasfotosView extends GroepTabView {
 		foreach ($this->groep->getLeden() as $lid) {
 			$html .= ProfielModel::getLink($lid->uid, 'pasfoto');
 		}
-		return $html . $this->getProgressBar();
+		return $html . parent::getCloseHtml();
 	}
 
 }
@@ -234,7 +246,7 @@ class GroepLijstView extends GroepTabView {
 			$html .= '</td></tr>';
 		}
 		$html .= '</tbody></table>';
-		return $html . $this->getProgressBar();
+		return $html . parent::getCloseHtml();
 	}
 
 }
@@ -243,21 +255,118 @@ class GroepStatistiekView extends GroepTabView {
 
 	public function getHtml() {
 		$html = parent::getHtml();
-		$html .= '<table class="groep-stats">';
-		foreach ($this->groep->getStatistieken() as $title => $stat) {
-			$html .= '<thead><tr><th colspan="2">' . $title . '</th></tr></thead>';
-			$html .= '<tbody>';
-			if (!is_array($stat)) {
-				$html .= '<tr><td colspan="2">' . $stat . '</td></tr>';
+		$html .= '<div class="groep-stats">';
+		foreach ($this->groep->getStatistieken() as $titel => $data) {
+			$html .= '<h4>' . $titel . '</h4>';
+			if (!is_array($data)) {
+				$html .= '<div>' . $data . '</div>';
 				continue;
 			}
-			foreach ($stat as $row) {
-				$html .= '<tr><td>' . $row[0] . '</td><td>' . $row[1] . '</td></tr>';
+			$html .= '<div id="groep-stat-' . $titel . '-' . $this->groep->id . '"></div>';
+			$series = array();
+			foreach ($data as $row) {
+				switch ($row[0]) {
+
+					case 'm':
+						$series[] = array(
+							'label'	 => '',
+							'data'	 => $row[1],
+							'color'	 => '#AFD8F8'
+						);
+						break;
+
+					case 'v':
+						$series[] = array(
+							'label'	 => '',
+							'data'	 => $row[1],
+							'color'	 => '#FFCBDB'
+						);
+						break;
+
+					default:
+						if ($titel === 'Lichting') {
+							$series[] = array(
+								'data' => array(array((int) $row[0], (int) $row[1]))
+							);
+						} else {
+							$series[] = array(
+								'label'	 => $row[0],
+								'data'	 => $row[1]
+							);
+						}
+				}
 			}
-			$html .= '</tbody>';
+			$data = json_encode($series);
+			$this->javascript .= <<<JS
+
+var div = $("#groep-stat-{$titel}-{$this->groep->id}");
+div.height(div.width());
+$.plot(div, {$data}, {
+JS;
+			switch ($titel) {
+				case 'Lichting':
+					$this->javascript .= <<<JS
+
+	series: {
+		bars: {
+			show: true,
+			barWidth: 0.5,
+			align: "center",
+			lineWidth: 0,
+			fill: 1
 		}
-		$html .= '</table>';
-		return $html . $this->getProgressBar();
+	}
+JS;
+					break;
+
+				case 'Geslacht':
+					$this->javascript .= <<<JS
+
+	series: {
+		pie: {
+			show: true,
+			radius: 1,
+			innerRadius: .5,
+			label: {
+				show: false
+			}
+		}
+	},
+	legend: {
+		show: false
+	}
+JS;
+					break;
+
+
+				case 'Verticale':
+				default:
+					$this->javascript .= <<<JS
+
+	series: {
+		pie: {
+			show: true,
+			radius: 1,
+			label: {
+				show: true,
+				radius: 2/3,
+				formatter: function(label, series) {
+					return '<div class="pie-chart-label">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+				},
+				threshold: 0.1
+			}
+		}
+	},
+	legend: {
+		show: false
+	}
+JS;
+			}
+			$this->javascript .= <<<JS
+});
+JS;
+		}
+		return $html . parent::getCloseHtml();
 	}
 
 }
@@ -275,7 +384,7 @@ class GroepEmailsView extends GroepTabView {
 			}
 		}
 		$html .= '</div>';
-		return $html . $this->getProgressBar();
+		return $html . parent::getCloseHtml();
 	}
 
 }
@@ -287,7 +396,7 @@ class GroepOTLedenView extends GroepTabView {
 		foreach ($this->groep->getLeden(GroepStatus::OT) as $lid) {
 			$html .= ProfielModel::getLink($lid->uid, 'pasfoto');
 		}
-		return $html . $this->getProgressBar();
+		return $html . parent::getCloseHtml();
 	}
 
 }

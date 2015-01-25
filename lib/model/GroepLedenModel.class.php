@@ -74,6 +74,9 @@ class GroepLedenModel extends CachedPersistenceModel {
 			return array();
 		}
 		$in = implode(', ', array_fill(0, $count, '?'));
+		$stats['Verticale'] = Database::instance()->sqlSelect(array('naam', 'count(*)'), 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $in . ')', $uids, 'verticale', null)->fetchAll();
+		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
+		$stats['Lichting'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
 		$stats['Totaal'] = $count;
 		if (property_exists($groep, 'aanmeld_limiet')) {
 			if ($groep->aanmeld_limiet === null) {
@@ -82,9 +85,6 @@ class GroepLedenModel extends CachedPersistenceModel {
 				$stats['Totaal'] .= ' van ' . $groep->aanmeld_limiet;
 			}
 		}
-		$stats['Verticale'] = Database::instance()->sqlSelect(array('naam', 'count(*)'), 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $in . ')', $uids, 'verticale', null)->fetchAll();
-		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
-		$stats['Lidjaar'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
 		return $stats;
 	}
 

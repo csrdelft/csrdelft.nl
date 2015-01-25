@@ -150,6 +150,7 @@ abstract class CompressedLayout extends HtmlPage {
 			// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
 			$modules[] = 'general';
 			$modules[] = 'formulier';
+			$modules[] = 'grafiek';
 
 			if ($extension == 'css') {
 				//voeg modules toe afhankelijk van instelling
