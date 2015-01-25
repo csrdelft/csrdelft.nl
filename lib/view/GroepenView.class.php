@@ -82,13 +82,13 @@ class GroepConverteerForm extends DataTableForm {
 		parent::__construct($groep, $groep->getUrl() . 'converteren', get_class($groep) . ' converteren');
 
 		$options = array(
-			'Met opvolgers:'	 => array(
+			'Met opvolgers'		 => array(
 				'ActiviteitenModel'	 => ActiviteitenModel::orm,
 				'WerkgroepenModel'	 => WerkgroepenModel::orm,
 				'CommissiesModel'	 => CommissiesModel::orm,
 				'BesturenModel'		 => BesturenModel::orm
 			),
-			'Zonder opvolgers:'	 => array(
+			'Zonder opvolgers'	 => array(
 				'KetzersModel'			 => KetzersModel::orm,
 				'WoonoordenModel'		 => WoonoordenModel::orm,
 				'OnderverenigingenModel' => OnderverenigingenModel::orm,
