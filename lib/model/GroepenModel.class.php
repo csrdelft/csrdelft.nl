@@ -78,6 +78,7 @@ class GroepenModel extends CachedPersistenceModel {
 		try {
 			$groep = $this->nieuw();
 			cast($groep, $converteer);
+			$groep->id = null;
 			$this->create($groep);
 		} catch (Exception $e) {
 			setMelding('Converteren mislukt: ' . $e->getMessage(), -1);
@@ -90,6 +91,7 @@ class GroepenModel extends CachedPersistenceModel {
 			foreach ($converteer->getLeden() as $lid) {
 				$groeplid = $model->nieuw();
 				cast($groeplid, $lid);
+				$groeplid->groep_id = $groep->id;
 				$model->create($groeplid);
 			}
 		} catch (Exception $e) {
