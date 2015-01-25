@@ -153,15 +153,15 @@ class RequiredSelectField extends SelectField {
 
 class MultiSelectField extends InputField {
 
-	private $select = array();
+	private $selects = array();
 
 	public function __construct($name, $value, $description, $keuzeopties) {
 		parent::__construct($name, $value, $description);
-		$array = explode('&&', str_replace('&amp;&amp;', '&&', $keuzeopties));
+		$selects = explode('&&', str_replace('&amp;&amp;', '&&', $keuzeopties));
 		$gekozen = explode('&&', str_replace('&amp;&amp;', '&&', $value));
-		foreach ($array as $select => $opties) {
+		foreach ($selects as $i => $opties) {
 			$opties = explode('|', $opties);
-			$this->select[] = new SelectField($name . '[]', array_search($gekozen[$select], $opties), null, $opties);
+			$this->selects[] = new SelectField($name . '[]', array_search($gekozen[$i], $opties), null, $opties);
 		}
 	}
 
@@ -181,7 +181,7 @@ class MultiSelectField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		foreach ($this->select as $select) {
+		foreach ($this->selects as $select) {
 			$select->validate();
 			$this->error .= $select->getError();
 		}
@@ -190,7 +190,7 @@ class MultiSelectField extends InputField {
 
 	public function getHtml() {
 		$html = '';
-		foreach ($this->select as $select) {
+		foreach ($this->selects as $select) {
 			$html .= $select->getHtml();
 		}
 		return $html;
