@@ -27,6 +27,7 @@ class GroepenController extends Controller {
 
 			// geen groep id vereist
 			case 'overzicht':
+			case 'converteren':
 			case A::Beheren:
 			case A::Aanmaken:
 			case A::Wijzigen:
@@ -350,7 +351,12 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function converteren(Groep $converteer) {
+	public function converteren() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		if (!isset($selection[0])) {
+			$this->geentoegang();
+		}
+		$converteer = $this->model->getUUID($selection[0]);
 		$form = new GroepConverteerForm($converteer);
 		if ($form->validate()) {
 			$model = $form->findByName('class')->getValue();
