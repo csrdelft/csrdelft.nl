@@ -759,15 +759,12 @@ class LidField extends TextField {
 	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
 	private $zoekin;
 
-	public function __construct($name, $value, $description, $zoekin = 'oudleden') {
+	public function __construct($name, $value, $description, $zoekin = 'alleleden') {
 		parent::__construct($name, $value, $description);
 		if (!in_array($zoekin, array('leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'))) {
 			$zoekin = 'leden';
 		}
 		$this->zoekin = $zoekin;
-		if ($zoekin === 'oudleden') {
-			$this->suggestions['leden'] = '/tools/naamsuggesties/leden?q=';
-		}
 		$this->suggestions[ucfirst($this->zoekin)] = '/tools/naamsuggesties/' . $this->zoekin . '?q=';
 	}
 
