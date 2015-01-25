@@ -230,14 +230,14 @@ function init_buttons(parent) {
 				'height': oud
 			}, 600);
 			$(this).removeAttr('data-vergroot-oud');
-			$(id).css('overflow-y', 'hidden');
+			$(id).css('overflow-y', 'auto');
 		}
 		else {
 			$(this).attr('data-vergroot-oud', $(id).height());
 			$(id).animate({
 				'height': $(id).prop('scrollHeight')
 			}, 600);
-			$(id).css('overflow-y', 'auto');
+			$(id).css('overflow-y', 'hidden');
 		}
 	});
 }
