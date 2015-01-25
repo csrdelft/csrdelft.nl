@@ -157,18 +157,19 @@ abstract class GroepTabView implements View, FormElement {
 		if (property_exists($this->groep, 'aanmeld_limiet') AND isset($this->groep->aanmeld_limiet)) {
 			$percent = round($this->groep->aantalLeden() * 100 / $this->groep->aanmeld_limiet);
 			if (time() > strtotime($this->groep->aanmelden_vanaf) AND time() < strtotime($this->groep->aanmelden_tot)) {
-				if ($this->groep->aantalLeden() === $this->groep->aanmeld_limiet) {
+				$verschil = $this->groep->aanmeld_limiet - $this->groep->aantalLeden();
+				if ($verschil === 0) {
 					$title = 'Inschrijvingen vol!';
 					$color = ' progress-bar-info';
 				} else {
-					$title = 'Inschrijvingen geopend!';
+					$title = 'Inschrijvingen geopend! Nog ' . $verschil . ' plek' . ($verschil === 1 ? '' : 'ken') . ' vrij.';
 					$color = ' progress-bar-success';
 				}
 			} elseif ($this->groep->getLid(LoginModel::getUid()) AND time() < strtotime($this->groep->bewerken_tot)) {
-				$title = 'Inschrijvingen gesloten, inschrijving bewerken toegestaan.';
+				$title = 'Inschrijvingen gesloten! Inschrijving bewerken is nog wel toegestaan.';
 				$color = ' progress-bar-warning';
 			} else {
-				$title = 'Inschrijvingen gesloten';
+				$title = 'Inschrijvingen gesloten!';
 				$color = ' progress-bar-info';
 			}
 			$html .= '<div class="progress" title="' . $title . '"><div class="progress-bar' . $color . '" role="progressbar" aria-valuenow="' . $percent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $percent . '%;">' . $percent . '%</div></div>';
