@@ -156,9 +156,9 @@ class MultiSelectField extends InputField {
 	private $select = array();
 
 	public function __construct($name, $value, $description, $keuzeopties) {
-		parent::__construct($name, $value, $description, $keuzeopties);
+		parent::__construct($name, $value, $description);
 		$gekozen = explode('&&', $value);
-		foreach (explode('&&', $keuzeopties) as $keuze => $opties) {
+		foreach (explode('&amp;&amp;', $keuzeopties) as $keuze => $opties) {
 			$this->select[] = new SelectField($name . '[]', $gekozen[$keuze], null, explode('|', $opties));
 		}
 	}
