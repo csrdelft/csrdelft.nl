@@ -712,6 +712,8 @@ class RequiredLandField extends LandField {
 
 class RechtenField extends TextField {
 
+	public $empty_null = true;
+
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
 		$this->suggestions[] = AccessModel::instance()->getPermissionSuggestions();
