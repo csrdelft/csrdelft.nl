@@ -26,7 +26,7 @@ abstract class GroepTab implements PersistentEnum {
 			case self::Pasfotos: return 'Pasfoto\'s';
 			case self::Statistiek: return 'Statistiek';
 			case self::Emails: return 'E-mails';
-			case self::OTleden: return 'Oudleden';
+			case self::OTleden: return 'o.t. leden';
 			default: throw new Exception('GroepTab onbekend');
 		}
 	}
