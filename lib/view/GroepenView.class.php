@@ -38,8 +38,8 @@ class GroepenBeheerTable extends DataTable {
 		$update = new DataTableKnop('== 1', $this->tableId, $url . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig groep eigenschappen', 'edit');
 		$this->addKnop($update);
 
-		$update = new DataTableKnop('== 1', $this->tableId, $url . 'converteren', 'post popup', 'Converteren', 'Converteer groep', 'lightning');
-		$this->addKnop($update);
+		$convert = new DataTableKnop('== 1', $this->tableId, $url . 'converteren', 'post popup', 'Converteren', 'Converteer groep', 'lightning');
+		//$this->addKnop($convert);
 
 		$delete = new DataTableKnop('>= 1', $this->tableId, $url . A::Verwijderen, 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
 		$this->addKnop($delete);
