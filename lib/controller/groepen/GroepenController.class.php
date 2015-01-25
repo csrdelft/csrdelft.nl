@@ -77,6 +77,7 @@ class GroepenController extends Controller {
 				return !$this->isPosted();
 
 			case 'overzicht':
+			case 'converteren':
 			case GroepTab::Pasfotos:
 			case GroepTab::Lijst:
 			case GroepTab::Statistiek:
@@ -275,7 +276,7 @@ class GroepenController extends Controller {
 			$lid = $model->get($groep, $uid);
 			$lid->status = GroepStatus::OT;
 			$model->delete($lid);
-			//TODO: $this->view = 
+			$this->view = new GroepView($groep);
 		}
 		// beheren
 		else {
@@ -347,6 +348,20 @@ class GroepenController extends Controller {
 				}
 				return;
 		}
+	}
+
+	public function converteren(Groep $converteer) {
+		$form = new GroepConverteerForm($converteer);
+		if ($form->validate()) {
+			$model = $form->findByName('class')->getValue();
+			$groep = $model::instance()->converteer($converteer);
+			if ($groep) {
+				setMelding('Converteren geslaagd', 1);
+				$this->view = new GroepForm($groep, $groep->getUrl() . A::Wijzigen);
+				return;
+			}
+		}
+		$this->view = $form;
 	}
 
 }

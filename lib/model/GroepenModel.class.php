@@ -67,6 +67,38 @@ class GroepenModel extends CachedPersistenceModel {
 		$groep->id = (int) parent::create($groep);
 	}
 
+	/**
+	 * Converteer groep inclusief leden van klasse.
+	 * 
+	 * @param Groep $converteer
+	 * @return boolean
+	 */
+	public function converteer(Groep $converteer) {
+		// groep converteren
+		try {
+			$groep = $this->nieuw();
+			cast($groep, $converteer);
+			$this->create($groep);
+		} catch (Exception $e) {
+			setMelding('Converteren mislukt: ' . $e->getMessage(), -1);
+			return false;
+		}
+		// leden converteren
+		try {
+			$leden = $groep::leden;
+			$model = $leden::instance();
+			foreach ($converteer->getLeden() as $lid) {
+				$groeplid = $model->nieuw();
+				cast($groeplid, $lid);
+				$model->create($groeplid);
+			}
+		} catch (Exception $e) {
+			setMelding('Leden converteren mislukt: ' . $e->getMessage(), -1);
+			return false;
+		}
+		return $groep;
+	}
+
 }
 
 class OnderverenigingenModel extends GroepenModel {

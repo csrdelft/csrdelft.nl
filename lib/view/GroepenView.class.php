@@ -65,7 +65,37 @@ class GroepForm extends DataTableForm {
 
 	public function __construct(Groep $groep, $action) {
 		parent::__construct($groep, $action, get_class($groep) . ' ' . ($groep->id ? A::Wijzigen : A::Aanmaken));
+
 		$fields = $this->generateFields();
+
+		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
+	}
+
+}
+
+class GroepConverteerForm extends DataTableForm {
+
+	public function __construct(Groep $groep) {
+		parent::__construct($groep, $groep->getUrl() . 'converteren', get_class($groep) . ' converteren');
+
+		$options = array(
+			'Met opvolgers:'	 => array(
+				'ActiviteitenModel'	 => ActiviteitenModel::orm,
+				'WerkgroepenModel'	 => WerkgroepenModel::orm,
+				'CommissiesModel'	 => CommissiesModel::orm,
+				'BesturenModel'		 => BesturenModel::orm
+			),
+			'Zonder opvolgers:'	 => array(
+				'KetzersModel'			 => KetzersModel::orm,
+				'WoonoordenModel'		 => WoonoordenModel::orm,
+				'OnderverenigingenModel' => OnderverenigingenModel::orm,
+				'GroepenModel'			 => GroepenModel::orm
+			)
+		);
+		$fields[] = new SelectField('class', get_class($groep), 'Converteren naar', $options, true);
+		$fields[] = new FormDefaultKnoppen();
+
+		$this->addFields($fields);
 	}
 
 }
