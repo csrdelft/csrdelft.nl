@@ -157,7 +157,7 @@ abstract class GroepTabView implements View, FormElement {
 			if (time() > strtotime($this->groep->aanmelden_vanaf) AND time() < strtotime($this->groep->aanmelden_tot)) {
 				if ($this->groep->aantalLeden() === $this->groep->aanmeld_limiet) {
 					$title = 'Inschrijvingen vol!';
-					$color = '';
+					$color = ' progress-bar-info';
 				} else {
 					$title = 'Inschrijvingen geopend!';
 					$color = ' progress-bar-success';
@@ -167,7 +167,7 @@ abstract class GroepTabView implements View, FormElement {
 				$color = ' progress-bar-warning';
 			} else {
 				$title = 'Inschrijvingen gesloten';
-				$color = '';
+				$color = ' progress-bar-info';
 			}
 			$html .= '<div class="progress" title="' . $title . '"><div class="progress-bar' . $color . '" role="progressbar" aria-valuenow="' . $percent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $percent . '%;">' . $percent . '%</div></div>';
 		}
