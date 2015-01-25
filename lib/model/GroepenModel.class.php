@@ -89,7 +89,7 @@ class GroepenModel extends CachedPersistenceModel {
 			$leden = $groep::leden;
 			$model = $leden::instance();
 			foreach ($converteer->getLeden() as $lid) {
-				$groeplid = $model->nieuw();
+				$groeplid = $model->nieuw($groep, $lid->uid);
 				cast($groeplid, $lid);
 				$groeplid->groep_id = $groep->id;
 				$model->create($groeplid);
