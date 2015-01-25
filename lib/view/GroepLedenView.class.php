@@ -155,8 +155,13 @@ abstract class GroepTabView implements View, FormElement {
 		if (property_exists($this->groep, 'aanmeld_limiet') AND isset($this->groep->aanmeld_limiet)) {
 			$percent = $this->groep->aantalLeden() * 100 / $this->groep->aanmeld_limiet;
 			if (time() > strtotime($this->groep->aanmelden_vanaf) AND time() < strtotime($this->groep->aanmelden_tot)) {
-				$title = 'Inschrijvingen geopend!';
-				$color = ' progress-bar-success';
+				if ($this->groep->aantalLeden() === $this->groep->aanmeld_limiet) {
+					$title = 'Inschrijvingen vol!';
+					$color = ' progress-bar-danger';
+				} else {
+					$title = 'Inschrijvingen geopend!';
+					$color = ' progress-bar-success';
+				}
 			} elseif ($this->groep->getLid(LoginModel::getUid()) AND time() < strtotime($this->groep->bewerken_tot)) {
 				$title = 'Inschrijvingen gesloten, inschrijving bewerken toegestaan.';
 				$color = ' progress-bar-warning';
