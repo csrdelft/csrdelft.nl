@@ -256,7 +256,8 @@ class GroepStatistiekView extends GroepTabView {
 			}
 			$html .= '</tbody>';
 		}
-		return $html . '</table></div></div>';
+		$html .= '</table>';
+		return $html . $this->getProgressBar();
 	}
 
 }
@@ -265,11 +266,12 @@ class GroepEmailsView extends GroepTabView {
 
 	public function getHtml() {
 		$html = parent::getHtml();
-		$html .= '<div class="groep-emails">';
+		$html .= '<div class = "groep-emails">';
 		foreach ($this->groep->getLeden() as $lid) {
 			$profiel = ProfielModel::get($lid->uid);
 			if ($profiel AND $profiel->getPrimaryEmail() != '') {
-				$html .= $profiel->getPrimaryEmail() . '; ';
+				$html .= $profiel->getPrimaryEmail() . ';
+		';
 			}
 		}
 		$html .= '</div>';
