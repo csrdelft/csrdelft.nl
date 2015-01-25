@@ -1,4 +1,4 @@
-html, img, .alert, .progress-bar, .progress-bar-info, #minion {
+html, img, .alert, .progress, .progress-bar-info, #minion {
 	-webkit-filter: invert(100%); 
 	filter: invert(100%);
 }
