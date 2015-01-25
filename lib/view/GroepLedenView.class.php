@@ -262,7 +262,7 @@ class GroepStatistiekView extends GroepTabView {
 				$html .= '<div>' . $data . '</div>';
 				continue;
 			}
-			$html .= '<div id="groep-stat-' . $titel . '-' . $this->groep->id . '"></div>';
+			$html .= '<div id="groep-stat-' . $titel . '-' . $this->groep->id . '" class="groep-stat"></div>';
 			$series = array();
 			foreach ($data as $row) {
 				switch ($row[0]) {
