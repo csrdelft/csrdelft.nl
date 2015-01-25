@@ -360,7 +360,15 @@ class GroepenController extends Controller {
 		$form = new GroepConverteerForm($converteer, $this->model);
 		if ($form->validate()) {
 			$model = $form->findByName('class')->getValue();
+			if (get_class($this->model) === $model) {
+				setMelding('Geen wijziging', 0);
+				$this->view = $form;
+				return;
+			}
 			$groep = $model::instance()->converteer($converteer);
+
+			setMelding(get_class($model::instance()) . print_r(Database::getQueries(), true), 0);
+
 			if ($groep) {
 				setMelding('Converteren geslaagd', 1);
 				$this->view = new GroepForm($groep, $groep->getUrl() . A::Wijzigen);

@@ -186,6 +186,7 @@ class GroepenView implements View {
 		$view = new CmsPaginaView($this->pagina);
 		$view->view();
 		foreach ($this->groepen as $groep) {
+			echo '<hr>';
 			$view = new GroepView($groep, GroepTab::Pasfotos);
 			$view->view();
 		}
@@ -296,7 +297,6 @@ class GroepView implements View {
 	}
 
 	public function view() {
-		echo '<hr>';
 		echo $this->getHtml();
 	}
 

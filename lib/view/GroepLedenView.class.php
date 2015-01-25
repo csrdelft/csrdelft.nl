@@ -150,6 +150,25 @@ abstract class GroepTabView implements View, FormElement {
 		return $html . '</ul><div id="groep-leden-content-' . $this->groep->id . '" class="groep-tab-content">';
 	}
 
+	protected function getProgressBar() {
+		$html = '</div><br />';
+		if (property_exists($this->groep, 'aanmeld_limiet') AND isset($this->groep->aanmeld_limiet)) {
+			$percent = $this->groep->aantalLeden() * 100 / $this->groep->aanmeld_limiet;
+			if (time() > strtotime($this->groep->aanmelden_vanaf) AND time() < strtotime($this->groep->aanmelden_tot)) {
+				$title = 'Inschrijvingen geopend!';
+				$color = ' progress-bar-success';
+			} elseif ($this->groep->getLid(LoginModel::getUid()) AND time() < strtotime($this->groep->bewerken_tot)) {
+				$title = 'Inschrijvingen gesloten, inschrijving bewerken toegestaan.';
+				$color = ' progress-bar-warning';
+			} else {
+				$title = 'Inschrijvingen gesloten';
+				$color = '';
+			}
+			$html .= '<div class="progress" title="' . $title . '"><div class="progress-bar' . $color . '" role="progressbar" aria-valuenow="' . $percent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $percent . '%;">' . $percent . '%</div></div>';
+		}
+		return $html . '</div>';
+	}
+
 	public function view() {
 		echo $this->getHtml();
 	}
@@ -178,7 +197,7 @@ class GroepPasfotosView extends GroepTabView {
 		foreach ($this->groep->getLeden() as $lid) {
 			$html .= ProfielModel::getLink($lid->uid, 'pasfoto');
 		}
-		return $html . '</div></div>';
+		return $html . $this->getProgressBar();
 	}
 
 }
@@ -209,7 +228,8 @@ class GroepLijstView extends GroepTabView {
 			}
 			$html .= '</td></tr>';
 		}
-		return $html . '</tbody></table></div></div>';
+		$html .= '</tbody></table>';
+		return $html . $this->getProgressBar();
 	}
 
 }
@@ -247,7 +267,8 @@ class GroepEmailsView extends GroepTabView {
 				$html .= $profiel->getPrimaryEmail() . '; ';
 			}
 		}
-		return $html . '</div></div></div>';
+		$html .= '</div>';
+		return $html . $this->getProgressBar();
 	}
 
 }
@@ -259,7 +280,7 @@ class GroepOTLedenView extends GroepTabView {
 		foreach ($this->groep->getLeden(GroepStatus::OT) as $lid) {
 			$html .= ProfielModel::getLink($lid->uid, 'pasfoto');
 		}
-		return $html . '</div></div>';
+		return $html . $this->getProgressBar();
 	}
 
 }

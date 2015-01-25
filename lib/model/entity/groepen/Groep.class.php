@@ -129,7 +129,7 @@ class Groep extends PersistentEntity {
 	 * @return int
 	 */
 	public function aantalLeden($status = null) {
-		if (isset($this->aantal_leden[$status])) {
+		if (!isset($this->aantal_leden[$status])) {
 			$leden = $this->getLeden($status);
 			$this->aantal_leden[$status] = count($leden);
 		}
