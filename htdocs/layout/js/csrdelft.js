@@ -234,7 +234,7 @@ function init_buttons(parent) {
 		else {
 			$(this).attr('data-vergroot-oud', $(id).height());
 			$(id).animate({
-				'height': $(id).prop('scrollHeight')
+				'height': $(id).prop('scrollHeight') + 1
 			}, 600);
 		}
 	});
