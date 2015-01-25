@@ -273,8 +273,6 @@ class WeekdagField extends SelectField {
  */
 class VerticaleField extends SelectField {
 
-	public $empty_null = true;
-
 	public function __construct($name, $value, $description) {
 		$verticalen = array();
 		foreach (VerticalenModel::instance()->prefetch() as $v) {
@@ -345,7 +343,6 @@ class RequiredKeuzeRondjeField extends KeuzeRondjeField {
  */
 class DatumField extends InputField {
 
-	public $empty_null = true;
 	protected $max_jaar;
 	protected $min_jaar;
 

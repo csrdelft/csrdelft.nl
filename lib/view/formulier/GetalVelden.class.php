@@ -20,7 +20,6 @@
  */
 class IntField extends InputField {
 
-	protected $empty_null = true;
 	public $type = 'number';
 	public $pattern = '[0-9]+';
 	public $step = 1;

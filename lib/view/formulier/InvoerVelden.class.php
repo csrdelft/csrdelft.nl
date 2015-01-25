@@ -42,7 +42,7 @@ abstract class InputField implements FormElement, Validator {
 	protected $name; // naam van het veld in POST
 	protected $value; // welke initiele waarde heeft het veld?
 	protected $origvalue; // welke originele waarde had het veld?
-	protected $empty_null = false; // lege waarden teruggeven als null (SET BEFORE getValue() call in constructor!)
+	protected $empty_null = true; // lege waarden teruggeven als null (SET BEFORE getValue() call in constructor!)
 	public $type = 'text'; // input type
 	public $title; // omschrijving bij mouseover title
 	public $description; // omschrijving in label
@@ -605,7 +605,6 @@ class RequiredTextField extends TextField {
  */
 class DateTimeField extends TextField {
 
-	public $empty_null = true;
 	protected $max_jaar;
 	protected $min_jaar;
 
@@ -712,8 +711,6 @@ class RequiredLandField extends LandField {
 
 class RechtenField extends TextField {
 
-	public $empty_null = true;
-
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
 		$this->suggestions[] = AccessModel::instance()->getPermissionSuggestions();
@@ -758,17 +755,19 @@ class RequiredRechtenField extends RechtenField {
 
 class LidField extends TextField {
 
-	protected $empty_null = true;
 	// zoekfilter voor door namen2uid gebruikte LidZoeker::zoekLeden. 
 	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
 	private $zoekin;
 
-	public function __construct($name, $value, $description, $zoekin = 'leden') {
+	public function __construct($name, $value, $description, $zoekin = 'oudleden') {
 		parent::__construct($name, $value, $description);
 		if (!in_array($zoekin, array('leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'))) {
 			$zoekin = 'leden';
 		}
 		$this->zoekin = $zoekin;
+		if ($zoekin === 'oudleden') {
+			$this->suggestions[ucfirst($this->zoekin)] = '/tools/naamsuggesties/leden?q=';
+		}
 		$this->suggestions[ucfirst($this->zoekin)] = '/tools/naamsuggesties/' . $this->zoekin . '?q=';
 	}
 
