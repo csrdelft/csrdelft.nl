@@ -366,6 +366,7 @@ JS;
 });
 JS;
 		}
+		$html .= '</div>';
 		return $html . parent::getCloseHtml();
 	}
 
