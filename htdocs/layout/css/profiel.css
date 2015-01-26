@@ -25,8 +25,6 @@
 #profiel .familie { padding-left: 10px; margin-left: 260px; width: 250px; }
 #profiel .familie .stamboom { float: right; }
 
-#profiel .activiteiten { float: left; max-height: 150px; overflow-y:auto; }
-
 #profiel #corveeTaken { width: 550px; }
 #profiel #corveeTaken tr.old { opacity: .50; }
 
