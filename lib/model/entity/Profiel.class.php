@@ -381,10 +381,14 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				$bestuur = BesturenModel::get($bestuurslid->groep_id);
 				$k .= '<p><a href="' . $bestuur->getUrl() . '">' . GroepStatus::getChar($bestuur->status) . ' ' . $bestuurslid->opmerking . '</a></p>';
 			}
-			foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->uid)) as $commissielid) {
+			foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->uid), null, 'lid_sinds DESC') as $commissielid) {
 				$commissie = CommissiesModel::get($commissielid->groep_id);
 				if ($commissie->status === GroepStatus::HT) {
-					$k .= '<p><a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a></p>';
+					$k .= '<p>';
+					if (!empty($commissielid->opmerking)) {
+						$k .= $commissielid->opmerking . '<br />';
+					}
+					$k .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a></p>';
 				}
 			}
 			$k .= '</div>';
