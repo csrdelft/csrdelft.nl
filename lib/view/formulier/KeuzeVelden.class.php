@@ -58,11 +58,11 @@ class SelectField extends InputField {
 	}
 
 	public function getValue() {
-		$value = parent::getValue();
-		if ($this->empty_null AND $value == '') {
+		$this->value = parent::getValue();
+		if ($this->empty_null AND $this->value == '') {
 			return null;
 		}
-		return $value;
+		return $this->value;
 	}
 
 	public function validate() {
@@ -170,11 +170,12 @@ class MultiSelectField extends InputField {
 	}
 
 	public function getValue() {
+		$this->value = parent::getValue();
 		if ($this->isPosted()) {
 			$values = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-			return implode('&&', $values);
+			$this->value = implode('&&', $values);
 		}
-		return parent::getValue();
+		return $this->value;
 	}
 
 	public function validate() {
@@ -218,11 +219,11 @@ class EntityDropDown extends SelectField {
 	}
 
 	public function getValue() {
-		$value = json_decode(parent::getValue());
+		$this->value = json_decode(parent::getValue());
 		if ($this->empty_null AND $this->value == '') {
 			return null;
 		}
-		return $value;
+		return $this->value;
 	}
 
 }
@@ -265,7 +266,8 @@ class WeekdagField extends SelectField {
 	}
 
 	public function getValue() {
-		return (int) parent::getValue();
+		$this->value = (int) parent::getValue();
+		return $this->value;
 	}
 
 }
@@ -386,15 +388,14 @@ class DatumField extends InputField {
 	}
 
 	public function getValue() {
+		$this->value = parent::getValue();
 		if ($this->isPosted()) {
-			$value = $this->getJaar() . '-' . $this->getMaand() . '-' . $this->getDag();
-		} else {
-			$value = parent::getValue();
+			$this->value = $this->getJaar() . '-' . $this->getMaand() . '-' . $this->getDag();
 		}
-		if ($this->empty_null AND $value == '0000-00-00') {
+		if ($this->empty_null AND $this->value == '0000-00-00') {
 			return null;
 		}
-		return $value;
+		return $this->value;
 	}
 
 	public function validate() {
@@ -538,11 +539,11 @@ class TijdField extends InputField {
 	}
 
 	public function getValue() {
+		$this->value = parent::getValue();
 		if ($this->isPosted()) {
-			return $this->getUur() . ':' . $this->getMinuut();
-		} else {
-			return parent::getValue();
+			$this->value = $this->getUur() . ':' . $this->getMinuut();
 		}
+		return $this->value;
 	}
 
 	public function validate() {
@@ -621,11 +622,8 @@ class VinkField extends InputField {
 	 * @return boolean
 	 */
 	public function getValue() {
-		if (parent::isPosted()) {
-			return true;
-		} else {
-			return false;
-		}
+		$this->value = parent::isPosted();
+		return $this->value;
 	}
 
 	public function validate() {

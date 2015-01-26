@@ -585,11 +585,11 @@ class TextField extends InputField {
 	}
 
 	public function getValue() {
-		$value = parent::getValue();
+		$this->value = htmlspecialchars(parent::getValue());
 		if ($this->empty_null AND $this->value == '') {
 			return null;
 		}
-		return htmlspecialchars($value);
+		return $this->value;
 	}
 
 }
@@ -771,9 +771,10 @@ class LidField extends TextField {
 	public function getValue() {
 		$this->value = parent::getValue();
 		if ($this->empty_null AND empty($this->value)) {
-			$this->value = null;
-		} elseif (!AccountModel::isValidUid($this->value)) {
-			$uid = namen2uid(parent::getValue(), $this->zoekin);
+			return null;
+		}
+		if (!AccountModel::isValidUid($this->value)) {
+			$uid = namen2uid($this->value, $this->zoekin);
 			if (isset($uid[0]['uid'])) {
 				$this->value = $uid[0]['uid'];
 			}
@@ -971,11 +972,11 @@ class RequiredEmailField extends EmailField {
 class UrlField extends TextField {
 
 	public function getValue() {
-		$value = parent::getValue();
-		if (startsWith($value, CSR_ROOT)) {
-			return str_replace(CSR_ROOT, '', $value);
+		$this->value = parent::getValue();
+		if (startsWith($this->value, CSR_ROOT)) {
+			$this->value = str_replace(CSR_ROOT, '', $this->value);
 		}
-		return $value;
+		return $this->value;
 	}
 
 	public function validate() {
@@ -1105,10 +1106,6 @@ class WachtwoordField extends TextField {
 	public $type = 'password';
 	public $enter_submit = true;
 
-	public function getHtml() {
-		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
-	}
-
 }
 
 class RequiredWachtwoordField extends WachtwoordField {
@@ -1181,14 +1178,14 @@ class WachtwoordWijzigenField extends InputField {
 
 	public function getValue() {
 		if ($this->isPosted()) {
-			$value = filter_var($_POST[$this->name . '_new'], FILTER_SANITIZE_STRING);
+			$this->value = filter_var($_POST[$this->name . '_new'], FILTER_SANITIZE_STRING);
 		} else {
-			$value = false;
+			$this->value = false;
 		}
 		if ($this->empty_null AND $this->value == '') {
 			return null;
 		}
-		return $value;
+		return $this->value;
 	}
 
 	public function checkZwarteLijst($pass_plain) {
