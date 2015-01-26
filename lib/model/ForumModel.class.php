@@ -1165,9 +1165,6 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 			$draad->wacht_goedkeuring = false;
 		}
 		$rowCount = ForumDradenModel::instance()->update($draad);
-		if ($rowCount !== 1) {
-			throw new Exception('Goedkeuren mislukt');
-		}
 	}
 
 	public function citeerForumPost(ForumPost $post) {
