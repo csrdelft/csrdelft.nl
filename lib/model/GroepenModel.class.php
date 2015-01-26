@@ -19,8 +19,12 @@ class GroepenModel extends CachedPersistenceModel {
 		return static::instance()->retrieveByPrimaryKey(array($id));
 	}
 
+	public static function getNaam() {
+		return str_replace('Model', '', get_called_class());
+	}
+
 	public static function getUrl() {
-		return '/groepen/' . get_called_class() . '/';
+		return '/groepen/' . static::getNaam() . '/';
 	}
 
 	private static $old;

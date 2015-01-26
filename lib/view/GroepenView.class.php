@@ -15,10 +15,8 @@ class GroepenBeheerTable extends DataTable {
 
 	public function __construct(GroepenModel $model) {
 		parent::__construct($model::orm, null, 'opvolg_naam');
-		$naam = lcfirst(str_replace('Model', '', get_class($model)));
-		$url = strtolower('/groepen/' . $naam . '/');
-		$this->dataUrl = $url . A::Beheren;
-		$this->titel = 'Beheer ' . $naam;
+		$this->dataUrl = $model->getUrl() . A::Beheren;
+		$this->titel = 'Beheer ' . lcfirst($model->getNaam());
 		$this->hideColumn('samenvatting');
 		$this->hideColumn('omschrijving');
 		$this->hideColumn('website');
@@ -140,8 +138,7 @@ class GroepRechtenForm extends DataTableForm {
 	public function __construct(AccessControl $ac, Groep $groep, $action, GroepenModel $model) {
 		parent::__construct($ac, $groep->getUrl() . A::Rechten . '/' . $action, ucfirst(A::Rechten) . ' voor ');
 		if ($ac->resource === '*') {
-			$naam = str_replace('Model', '', lcfirst(get_class($model)));
-			$this->titel .= 'alle ' . $naam;
+			$this->titel .= 'alle ' . lcfirst($model->getNaam());
 		} else {
 			$this->titel .= $groep->naam;
 		}
@@ -175,8 +172,7 @@ class GroepenView implements View {
 
 	public function __construct(GroepenModel $model, $groepen) {
 		$this->groepen = $groepen;
-		$naam = str_replace('Model', '', get_class($model));
-		$this->pagina = CmsPaginaModel::get($naam);
+		$this->pagina = CmsPaginaModel::get($model->getNaam());
 		if (!$this->pagina) {
 			$this->pagina = CmsPaginaModel::get('');
 		}
