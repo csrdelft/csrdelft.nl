@@ -67,6 +67,15 @@ class GroepLedenModel extends CachedPersistenceModel {
 		$stats['Verticale'] = Database::instance()->sqlSelect(array('naam', 'count(*)'), 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $in . ')', $uids, 'verticale', null)->fetchAll();
 		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
 		$stats['Lichting'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
+		$stats['Tijd'] = array();
+		foreach ($groep->getLeden() as $groeplid) {
+			$time = strtotime($groeplid->lid_sinds);
+			if (isset($stats['Tijd'][$time])) {
+				$stats['Tijd'][$time] += 1;
+			} else {
+				$stats['Tijd'][$time] = 1;
+			}
+		}
 		$stats['Totaal'] = $count;
 		if (property_exists($groep, 'aanmeld_limiet')) {
 			if ($groep->aanmeld_limiet === null) {

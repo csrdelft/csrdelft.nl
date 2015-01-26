@@ -250,95 +250,15 @@ class GroepLijstView extends GroepTabView {
 
 class GroepStatistiekView extends GroepTabView {
 
-	public function getHtml() {
-		$html = parent::getHtml();
-		$html .= '<div class="groep-stats">';
-		foreach ($this->groep->getStatistieken() as $titel => $data) {
-			$html .= '<h4>' . $titel . '</h4>';
-			if (!is_array($data)) {
-				$html .= '<div>' . $data . '</div>';
-				continue;
-			}
-			$html .= '<div id="groep-stat-' . $titel . '-' . $this->groep->id . '" class="groep-stat"></div>';
-			$series = array();
-			foreach ($data as $row) {
-				switch ($row[0]) {
-
-					case 'm':
-						$series[] = array(
-							'label'	 => '',
-							'data'	 => $row[1],
-							'color'	 => '#AFD8F8'
-						);
-						break;
-
-					case 'v':
-						$series[] = array(
-							'label'	 => '',
-							'data'	 => $row[1],
-							'color'	 => '#FFCBDB'
-						);
-						break;
-
-					default:
-						if ($titel === 'Lichting') {
-							$series[] = array(
-								'data' => array(array((int) $row[0], (int) $row[1]))
-							);
-						} else {
-							$series[] = array(
-								'label'	 => $row[0],
-								'data'	 => $row[1]
-							);
-						}
-				}
-			}
-			$data = json_encode($series);
-			$this->javascript .= <<<JS
-
-var div = $("#groep-stat-{$titel}-{$this->groep->id}");
-div.height(div.width());
-$.plot(div, {$data}, {
-JS;
-			switch ($titel) {
-				case 'Lichting':
-					$this->javascript .= <<<JS
-
-	series: {
-		bars: {
-			show: true,
-			barWidth: 0.5,
-			align: "center",
-			lineWidth: 0,
-			fill: 1
+	private function verticale($data) {
+		$series = array();
+		foreach ($data as $row) {
+			$series[] = array(
+				'label'	 => $row[0],
+				'data'	 => $row[1]
+			);
 		}
-	}
-JS;
-					break;
-
-				case 'Geslacht':
-					$this->javascript .= <<<JS
-
-	series: {
-		pie: {
-			show: true,
-			radius: 1,
-			innerRadius: .5,
-			label: {
-				show: false
-			}
-		}
-	},
-	legend: {
-		show: false
-	}
-JS;
-					break;
-
-
-				case 'Verticale':
-				default:
-					$this->javascript .= <<<JS
+		$this->javascript .= <<<JS
 
 	series: {
 		pie: {
@@ -358,11 +278,127 @@ JS;
 		show: false
 	}
 JS;
+		return $series;
+	}
+
+	private function geslacht($data) {
+		$series = array();
+		foreach ($data as $row) {
+			switch ($row[0]) {
+
+				case 'm':
+					$series[] = array(
+						'label'	 => '',
+						'data'	 => $row[1],
+						'color'	 => '#AFD8F8'
+					);
+					break;
+
+				case 'v':
+					$series[] = array(
+						'label'	 => '',
+						'data'	 => $row[1],
+						'color'	 => '#FFCBDB'
+					);
+					break;
 			}
+		}
+		$this->javascript .= <<<JS
+
+	series: {
+		pie: {
+			show: true,
+			radius: 1,
+			innerRadius: .5,
+			label: {
+				show: false
+			}
+		}
+	},
+	legend: {
+		show: false
+	}
+JS;
+		return $series;
+	}
+
+	private function lichting($data) {
+		$series = array();
+		foreach ($data as $row) {
+			$series[] = array('data' => array(array((int) $row[0], (int) $row[1])));
+		}
+		$this->javascript .= <<<JS
+
+	series: {
+		bars: {
+			show: true,
+			barWidth: 0.5,
+			align: "center",
+			lineWidth: 0,
+			fill: 1
+		}
+	}
+JS;
+		return $series;
+	}
+
+	private function tijd($data) {
+		$series = array();
+		$totaal = 0;
+		foreach ($data as $tijd => $aantal) {
+			$totaal += $aantal;
+			$series[0][] = array($tijd, $totaal);
+		}
+		$this->javascript .= <<<JS
+
+	xaxes: [{
+		mode: "time"
+	}]
+JS;
+		return $series;
+	}
+
+	public function getHtml() {
+		$html = parent::getHtml();
+		$html .= '<div class="groep-stats">';
+
+		foreach ($this->groep->getStatistieken() as $titel => $data) {
+			$html .= '<h4>' . $titel . '</h4>';
+			if (!is_array($data)) {
+				$html .= $data;
+				continue;
+			}
+			$html .= '<div id="groep-stat-' . $titel . '-' . $this->groep->id . '" class="groep-stat"></div>';
 			$this->javascript .= <<<JS
+
+var div = $("#groep-stat-{$titel}-{$this->groep->id}");
+div.height(div.width());
+$.plot(div, data{$titel}{$this->groep->id}, {
+JS;
+			switch ($titel) {
+
+				case 'Verticale': $series = $this->verticale($data);
+					break;
+
+				case 'Geslacht': $series = $this->geslacht($data);
+					break;
+
+				case 'Lichting': $series = $this->lichting($data);
+					break;
+
+				case 'Tijd': $series = $this->tijd($data);
+					break;
+			}
+			// prepend data
+			$data = json_encode($series);
+			$this->javascript = <<<JS
+
+var data{$titel}{$this->groep->id} = {$data};
+{$this->javascript}
 });
 JS;
 		}
+
 		$html .= '</div>';
 		return $html . parent::getCloseHtml();
 	}
