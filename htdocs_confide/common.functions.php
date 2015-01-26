@@ -302,7 +302,7 @@ function external_url($url, $label) {
 		}
 		$result = '<a href="' . $url . '" title="' . $url . '"' . $extern . '>' . $label . '</a>';
 	} else {
-		$result = '[Ongeldige URL, tip: gebruik tinyurl.com]';
+		$result = $url;
 	}
 	return $result;
 }

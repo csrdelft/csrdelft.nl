@@ -134,7 +134,7 @@ class CsrBB extends eamBBParser {
 		$url = $this->parseArray(array('[/img]', '[/IMG]'), array());
 		$url = filter_var($url, FILTER_SANITIZE_URL);
 		if (!$url OR ( !url_like($url) AND ! startsWith($url, '/plaetjes/') )) {
-			return '[img: Ongeldige URL]';
+			return $url;
 		}
 		if ($this->email_mode) {
 			return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';

@@ -626,7 +626,7 @@ class eamBBParser {
 
 		// only valid patterns
 		if (!url_like(urldecode($href))) {
-			$text = "[Ongeldige URL, tip: gebruik tinyurl.com]";
+			$text = $href;
 		} else {
 			$text = '<a href="' . $href . '">' . $content . '</a>';
 		}
@@ -751,7 +751,7 @@ class eamBBParser {
 
 		// only valid patterns
 		if (!url_like(urldecode($content))) {
-			$html = "[img: Ongeldige URL, tip: gebruik tinyurl.com]";
+			$html = $content;
 		} else {
 			//als de html toegestaan is hebben we genoeg vertrouwen om sommige karakters niet te encoderen
 			if (!$this->allow_html) {

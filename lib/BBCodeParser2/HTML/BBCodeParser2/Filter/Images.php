@@ -119,7 +119,7 @@ class HTML_BBCodeParser2_Filter_Images extends HTML_BBCodeParser2_Filter {
 
 				// only valid patterns & prevent CSRF
 				if (!url_like(urldecode($url)) OR startsWith($url, CSR_ROOT)) {
-					return '[img: Ongeldige URL, tip: gebruik tinyurl.com]';
+					return $url;
 				}
 				// als de html toegestaan is hebben we genoeg vertrouwen om sommige karakters niet te encoderen
 				if (!$this->_options['allowhtml']) {
