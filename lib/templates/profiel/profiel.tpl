@@ -165,16 +165,24 @@
 			<div class="clear-left"></div>
 		</div>
 	</div>
-	{if $groepen}
-		<div id="groepen" class="profielregel clear-right">
-			<div class="gegevens">
-				{foreach from=$groepen item=groep}
-					{$groep}
-				{/foreach}
-				<div class="clear-left"></div>
-			</div>
+	<div class="profielregel clear-right">
+		<div class="gegevens">
+			{$besturen}
+			<div class="clear-left"></div>
 		</div>
-	{/if}
+	</div>
+	<div class="profielregel clear-right">
+		<div class="gegevens">
+			{$commissies}
+			<div class="clear-left"></div>
+		</div>
+	</div>
+	<div class="profielregel clear-right">
+		<div class="gegevens">
+			{$activiteiten}
+			<div class="clear-left"></div>
+		</div>
+	</div>
 	{if ($profiel->isLid() OR (LoginModel::mag('P_LEDEN_MOD') AND ($profiel->soccieSaldo < 0 OR $profiel->maalcieSaldo < 0))) AND (isset($saldografiek) OR $profiel->bankrekening!='')}
 		<div class="profielregel">
 			<div class="gegevens">

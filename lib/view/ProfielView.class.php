@@ -27,20 +27,36 @@ class ProfielView extends SmartyTemplateView {
 			$this->smarty->assign('woonoord', '');
 		}
 
-		$groepen = array();
-		foreach (BestuursLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $lid) {
-			$groep = BesturenModel::get($lid->groep_id);
-			$groepen[] = '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />';
+		$besturen = '';
+		foreach (BestuursLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $bestuurslid) {
+			$bestuur = BesturenModel::get($bestuurslid->groep_id);
+			$besturen .= '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />';
 		}
-		foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $lid) {
-			$groep = CommissiesModel::get($lid->groep_id);
-			$groepen[] = '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />';
+		if ($besturen != '') {
+			$besturen .= '<div class="label">Bestuur:</div>';
 		}
-		foreach (ActiviteitDeelnemersModel::instance()->find('uid = ?', array($this->model->uid)) as $lid) {
-			$groep = ActiviteitenModel::get($lid->groep_id);
-			$groepen[] = '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />';
+		$this->smarty->assign('besturen', $besturen);
+
+		$commissies = '';
+		foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $commissielid) {
+			$commissie = CommissiesModel::get($commissielid->groep_id);
+			$commissies[] = '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />';
 		}
-		$this->smarty->assign('groepen', $groepen);
+		if ($commissies != '') {
+			$commissies .= '<div class="label">Commissies:</div>';
+		}
+		$this->smarty->assign('commissies', $commissies);
+
+		$activiteiten = '';
+		foreach (ActiviteitDeelnemersModel::instance()->find('uid = ?', array($this->model->uid)) as $deelnemer) {
+			$activiteit = ActiviteitenModel::get($deelnemer->groep_id);
+			$activiteiten[] = '<a href="' . $activiteit->getUrl() . '">' . $activiteit->naam . '</a><br />';
+		}
+		if ($activiteiten != '') {
+			$activiteiten .= '<div class="label">Activiteiten:</div>';
+		}
+		$this->smarty->assign('activiteiten', $activiteiten);
+
 
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {
 
