@@ -15,7 +15,8 @@ class GroepenBeheerTable extends DataTable {
 
 	public function __construct(GroepenModel $model) {
 		parent::__construct($model::orm, null, 'opvolg_naam');
-		$this->dataUrl = $model->getUrl() . A::Beheren;
+		$url = $model->getUrl();
+		$this->dataUrl = $url . A::Beheren;
 		$this->titel = 'Beheer ' . lcfirst($model->getNaam());
 		$this->hideColumn('samenvatting');
 		$this->hideColumn('omschrijving');
