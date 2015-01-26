@@ -63,13 +63,9 @@ class GroepenModel extends CachedPersistenceModel {
 		if (!$profiel) {
 			return $result;
 		}
-		// S_CIE's die als normaal lid mogen inloggen op de wiki
-		$hardcodedToegang = array('x271', 'x030'); // oudledenbestuur & stichting CC
-
-		if ($profiel->isLid() OR $profiel->isOudlid() OR in_array($profiel->uid, $hardcodedToegang)) {
+		if ($profiel->isLid() OR $profiel->isOudlid()) {
 			$result[] = 'htleden-oudleden';
 		}
-
 		if (BestuursLedenModel::instance()->find('uid = ?', array($uid), null, null, 1)->fetch()) {
 			$result[] = 'bestuur';
 		}
