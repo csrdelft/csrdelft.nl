@@ -171,7 +171,7 @@
 				{$besturen}
 				{$commissies}
 			</div>
-			<div>
+			<div class="activiteiten">
 				{$activiteiten}
 			</div>
 			<div class="clear-left"></div>
