@@ -165,16 +165,18 @@
 			<div class="clear-left"></div>
 		</div>
 	</div>
-	<div class="profielregel clear-right">
-		<div class="gegevens">
-			{$besturen}
-			<div class="clear-left"></div>
+	<div class="half">
+		<div class="profielregel clear-right">
+			<div class="gegevens">
+				{$besturen}
+				<div class="clear-left"></div>
+			</div>
 		</div>
-	</div>
-	<div class="profielregel clear-right">
-		<div class="gegevens">
-			{$commissies}
-			<div class="clear-left"></div>
+		<div class="profielregel clear-right">
+			<div class="gegevens">
+				{$commissies}
+				<div class="clear-left"></div>
+			</div>
 		</div>
 	</div>
 	<div class="profielregel clear-right">

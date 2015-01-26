@@ -33,7 +33,7 @@ class ProfielView extends SmartyTemplateView {
 			$besturen .= '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />';
 		}
 		if ($besturen != '') {
-			$besturen = '<div class="label">Bestuur:</div>' . $besturen;
+			$besturen = '<div class="label">Bestuur:</div><div class="data">' . $besturen . '</div>';
 		}
 		$this->smarty->assign('besturen', $besturen);
 
@@ -43,7 +43,7 @@ class ProfielView extends SmartyTemplateView {
 			$commissies .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />';
 		}
 		if ($commissies != '') {
-			$commissies = '<div class="label">Commissies:</div>' . $commissies;
+			$commissies = '<div class="label">Commissies:</div><div class="data">' . $commissies . '</div>';
 		}
 		$this->smarty->assign('commissies', $commissies);
 
@@ -53,7 +53,7 @@ class ProfielView extends SmartyTemplateView {
 			$activiteiten .= '<a href="' . $activiteit->getUrl() . '">' . $activiteit->naam . '</a><br />';
 		}
 		if ($activiteiten != '') {
-			$activiteiten = '<div class="label">Activiteiten:</div>' . $activiteiten;
+			$activiteiten = '<div class="label">Activiteiten:</div><div class="data">' . $activiteiten . '</div>';
 		}
 		$this->smarty->assign('activiteiten', $activiteiten);
 
