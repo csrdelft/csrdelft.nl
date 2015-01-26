@@ -267,8 +267,12 @@ class LoginModel extends PersistenceModel implements Validator {
 		if ($remember OR $tokenAuthenticated OR AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
 			AccountModel::instance()->successfulLoginAttempt($account);
 		} else {
-			$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
-			AccountModel::instance()->failedLoginAttempt($account);
+			if ($account->pass_hash == '') {
+				$_SESSION['auth_error'] = 'Gebruik wachtwoord vergeten of mail de PubCie';
+			} else {
+				$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
+				AccountModel::instance()->failedLoginAttempt($account);
+			}
 			return false;
 		}
 		// Clear session
@@ -305,6 +309,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			if ($remember) {
 				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#lidinstellingenform-tab-Beveiliging" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
 			} elseif (!$tokenAuthenticated) {
+
 				// Controleer actief wachtwoordbeleid
 				$_POST['checkpw_new'] = $pass_plain;
 				$_POST['checkpw_confirm'] = $pass_plain;
@@ -314,6 +319,7 @@ class LoginModel extends PersistenceModel implements Validator {
 					setMelding('Uw wachtwoord is onveilig: ' . str_replace('nieuwe', 'huidige', $field->getError()), 2);
 					redirect('/wachtwoord/wijzigen');
 				}
+
 				// Welcome message
 				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent momenteel <a href="/instellingen#lidinstellingenform-tab-Beveiliging" style="text-decoration: underline;">' . $this->count('uid = ?', array($account->uid)) . 'x ingelogd</a>.', 0);
 			}
