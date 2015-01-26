@@ -25,14 +25,20 @@ class GroepenModel extends CachedPersistenceModel {
 
 	private static $old;
 
+	/**
+	 * Oude groep-id's omnummeren. 'snaam' mag ook.
+	 * 
+	 * @param int|string $id
+	 * @return boolean
+	 */
 	public static function omnummeren($id) {
 		if (!isset(self::$old)) {
 			self::$old = DynamicEntityModel::makeModel('groep');
 		}
 
-		$groep = self::$old->find('id = ? OR (snaam = ? AND status = ?)', array($id, $id, 'ht'))->fetch();
+		$groep = self::$old->find('id = ? OR (snaam = ? AND status = ?)', array($id, $id, 'ht'), null, null, 1)->fetch();
 		if (!$groep) {
-			setMelding('Omnummeren mislukt: ' . htmlspecialchars($id), -1);
+			setMelding('Groep niet gevonden: ' . htmlspecialchars($id), -1);
 			return false;
 		}
 
@@ -43,6 +49,34 @@ class GroepenModel extends CachedPersistenceModel {
 		}
 
 		return $model::get($groep->omnummering);
+	}
+
+	/**
+	 * Groepen waarvan de gevraagde gebruiker de wikipagina's mag lezen en bewerken.
+	 * 
+	 * @param string $uid
+	 * @return string
+	 */
+	public static function getWikiToegang($uid) {
+		$result = array();
+		$profiel = ProfielModel::get($uid);
+		if (!$profiel) {
+			return $result;
+		}
+		// S_CIE's die als normaal lid mogen inloggen op de wiki
+		$hardcodedToegang = array('x271', 'x030'); // oudledenbestuur & stichting CC
+
+		if ($profiel->isLid() OR $profiel->isOudlid() OR in_array($profiel->uid, $hardcodedToegang)) {
+			$result[] = 'htleden-oudleden';
+		}
+
+		foreach (CommissieLedenModel::instance()->find('uid = ?') as $lid) {
+			$commissie = CommissiesModel::get($lid->groep_id);
+			if ($commissie->status === GroepStatus::HT) {
+				$result[] = $commissie->opvolg_naam;
+			}
+		}
+		return $result;
 	}
 
 	protected function __construct() {
@@ -174,6 +208,13 @@ abstract class OpvolgbareGroepenModel extends GroepenModel {
 	const orm = 'OpvolgbareGroep';
 
 	protected static $instance;
+
+	public static function get($id) {
+		if (is_int($id)) {
+			return parent::get($id);
+		}
+		return static::instance()->find('opvolg_naam = ? AND status = ?', array($id, GroepStatus::HT), null, null, 1)->fetch();
+	}
 
 	public function nieuw() {
 		$groep = parent::nieuw();

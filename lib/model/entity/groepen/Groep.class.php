@@ -65,10 +65,10 @@ class Groep extends PersistentEntity {
 	 */
 	public $rechten_beheren;
 	/**
-	 * Aantal leden per status
-	 * @var int[]
+	 * Local caching groepleden
+	 * @var GroepLid[]
 	 */
-	private $aantal_leden;
+	private $leden;
 	/**
 	 * Database table columns
 	 * @var array
@@ -114,26 +114,19 @@ class Groep extends PersistentEntity {
 	/**
 	 * Lazy loading by foreign key.
 	 * 
-	 * @param GroepStatus $status
 	 * @return GroepLid[]
 	 */
-	public function getLeden($status = null) {
-		$leden = static::leden;
-		return $leden::instance()->getLedenVoorGroep($this, $status);
+	public function getLeden() {
+		if (!isset($this->leden)) {
+			$leden = static::leden;
+			$this->leden = $leden::instance()->getLedenVoorGroep($this);
+		}
+		return $this->leden;
 	}
 
-	/**
-	 * Lazy loading by foreign key.
-	 * 
-	 * @param GroepStatus $status
-	 * @return int
-	 */
-	public function aantalLeden($status = null) {
-		if (!isset($this->aantal_leden[$status])) {
-			$leden = $this->getLeden($status);
-			$this->aantal_leden[$status] = count($leden);
-		}
-		return $this->aantal_leden[$status];
+	public function aantalLeden() {
+		$this->getLeden();
+		return count($this->leden);
 	}
 
 	public function getStatistieken() {

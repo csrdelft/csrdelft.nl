@@ -143,10 +143,6 @@ abstract class GroepTabView implements View, FormElement {
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Emails . '" title="' . GroepTab::getDescription(GroepTab::Emails) . ' tonen"><span class="fa fa-envelope"></span></a></li>';
 
-		if ($this->groep->aantalLeden(GroepStatus::OT) > 0) {
-			$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepOTLedenView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::OTleden . '" title="' . GroepTab::getDescription(GroepTab::OTleden) . ' tonen"><span class="fa fa-clock-o"></span></a></li>';
-		}
-
 		$html .= '<li class="float-right"><a class="btn vergroot" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Vergroot de lijst"><span class="fa fa-expand"></span></a>';
 
 		return $html . '</ul><div id="groep-leden-content-' . $this->groep->id . '" class="groep-tab-content">';
@@ -386,18 +382,6 @@ class GroepEmailsView extends GroepTabView {
 			}
 		}
 		$html .= '</div>';
-		return $html . parent::getCloseHtml();
-	}
-
-}
-
-class GroepOTLedenView extends GroepTabView {
-
-	public function getHtml() {
-		$html = parent::getHtml();
-		foreach ($this->groep->getLeden(GroepStatus::OT) as $lid) {
-			$html .= ProfielModel::getLink($lid->uid, 'pasfoto');
-		}
 		return $html . parent::getCloseHtml();
 	}
 

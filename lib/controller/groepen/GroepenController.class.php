@@ -83,7 +83,6 @@ class GroepenController extends Controller {
 			case GroepTab::Lijst:
 			case GroepTab::Statistiek:
 			case GroepTab::Emails:
-			case GroepTab::OTleden:
 			case A::Aanmaken:
 			case A::Verwijderen:
 			case A::Aanmelden:
@@ -125,10 +124,6 @@ class GroepenController extends Controller {
 
 	public function emails(Groep $groep) {
 		$this->view = new GroepEmailsView($groep);
-	}
-
-	public function ot(Groep $groep) {
-		$this->view = new GroepOTLedenView($groep);
 	}
 
 	public function beheren($soort = null) {

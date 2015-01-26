@@ -15,7 +15,7 @@ class GroepLedenModel extends CachedPersistenceModel {
 	 * Default ORDER BY
 	 * @var string
 	 */
-	protected $default_order = 'volgorde ASC, lid_sinds ASC';
+	protected $default_order = 'lid_sinds ASC';
 	/**
 	 * Store leden array as a whole in memcache
 	 * @var boolean
@@ -37,10 +37,7 @@ class GroepLedenModel extends CachedPersistenceModel {
 		$lid->uid = $uid;
 		$lid->door_uid = LoginModel::getUid();
 		$lid->lid_sinds = getDateTime();
-		$lid->lid_tot = null;
 		$lid->opmerking = null;
-		$lid->status = GroepStatus::HT;
-		$lid->volgorde = 0;
 		return $lid;
 	}
 
@@ -48,17 +45,10 @@ class GroepLedenModel extends CachedPersistenceModel {
 	 * Get leden by uid.
 	 * 
 	 * @param Groep $groep
-	 * @param GroepStatus $status
 	 * @return array
 	 */
-	public function getLedenVoorGroep(Groep $groep, $status = null) {
-		$where = 'groep_id = ?';
-		$params = array($groep->id);
-		if ($status !== null AND in_array($status, GroepStatus::getTypeOptions())) {
-			$where .= ' AND status = ?';
-			$params[] = $status;
-		}
-		return group_by_distinct('uid', $this->prefetch($where, $params));
+	public function getLedenVoorGroep(Groep $groep) {
+		return group_by_distinct('uid', $this->prefetch('groep_id = ?', array($groep->id)));
 	}
 
 	/**

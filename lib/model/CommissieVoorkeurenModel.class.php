@@ -113,7 +113,13 @@ class VoorkeurCommissie {
 		$result = $db->select($query);
 		$res = array();
 		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-			$gedaan = false; //FIXME: GroepenOldModel::isUidLidofGroup($row['uid'], $this->naam, array('ht', 'ot'));
+			$commissie = CommissiesModel::instance()->find('opvolg_naam = ?', array($this->naam), null, null, 1)->fetch();
+			$lid = $commissie->getLid($row['uid']);
+			if ($lid) {
+				$gedaan = true;
+			} else {
+				$gedaan = false;
+			}
 			$res[$row['uid']] = array('voorkeur' => $row['voorkeur'], 'gedaan' => $gedaan);
 		}
 		return $res;

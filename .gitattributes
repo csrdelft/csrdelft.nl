@@ -542,7 +542,6 @@ htdocs/tools/dragobject.php -text
 htdocs/tools/dump.php -text
 htdocs/tools/eetplan.php -text
 htdocs/tools/flushcache.php -text
-htdocs/tools/groepsuggesties.php -text
 htdocs/tools/index.php -text
 htdocs/tools/js.php -text
 htdocs/tools/leden-csv.php -text
