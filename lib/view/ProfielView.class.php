@@ -27,7 +27,9 @@ class ProfielView extends SmartyTemplateView {
 			$this->smarty->assign('woonoord', '');
 		}
 
-		$this->smarty->assign('groepen', ''); //FIXME: new GroepenProfielContent($this->model->uid));
+		$besturen = BestuursLedenModel::instance()->find('uid = ?', array($this->model->uid));
+		$commissies = CommissieLedenModel::instance()->find('uid = ?', array($this->model->uid));
+		$this->smarty->assign('groepen', array_merge($commissies, $besturen));
 
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {
 

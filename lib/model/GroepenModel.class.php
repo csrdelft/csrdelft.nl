@@ -70,6 +70,9 @@ class GroepenModel extends CachedPersistenceModel {
 			$result[] = 'htleden-oudleden';
 		}
 
+		if (BestuursLedenModel::instance()->find('uid = ?')->fetch()) {
+			$result[] = 'bestuur';
+		}
 		foreach (CommissieLedenModel::instance()->find('uid = ?') as $lid) {
 			$commissie = CommissiesModel::get($lid->groep_id);
 			if ($commissie->status === GroepStatus::HT) {

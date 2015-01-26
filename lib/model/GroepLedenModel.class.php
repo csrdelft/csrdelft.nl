@@ -42,10 +42,10 @@ class GroepLedenModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * Get leden by uid.
+	 * Return leden van groep by uid.
 	 * 
 	 * @param Groep $groep
-	 * @return array
+	 * @return GroepLid[]
 	 */
 	public function getLedenVoorGroep(Groep $groep) {
 		return group_by_distinct('uid', $this->prefetch('groep_id = ?', array($groep->id)));
