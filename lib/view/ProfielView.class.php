@@ -33,27 +33,27 @@ class ProfielView extends SmartyTemplateView {
 			$besturen .= '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />';
 		}
 		if ($besturen != '') {
-			$besturen .= '<div class="label">Bestuur:</div>';
+			$besturen = '<div class="label">Bestuur:</div>' . $besturen;
 		}
 		$this->smarty->assign('besturen', $besturen);
 
 		$commissies = '';
 		foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $commissielid) {
 			$commissie = CommissiesModel::get($commissielid->groep_id);
-			$commissies[] = '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />';
+			$commissies .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />';
 		}
 		if ($commissies != '') {
-			$commissies .= '<div class="label">Commissies:</div>';
+			$commissies = '<div class="label">Commissies:</div>' . $commissies;
 		}
 		$this->smarty->assign('commissies', $commissies);
 
 		$activiteiten = '';
 		foreach (ActiviteitDeelnemersModel::instance()->find('uid = ?', array($this->model->uid)) as $deelnemer) {
 			$activiteit = ActiviteitenModel::get($deelnemer->groep_id);
-			$activiteiten[] = '<a href="' . $activiteit->getUrl() . '">' . $activiteit->naam . '</a><br />';
+			$activiteiten .= '<a href="' . $activiteit->getUrl() . '">' . $activiteit->naam . '</a><br />';
 		}
 		if ($activiteiten != '') {
-			$activiteiten .= '<div class="label">Activiteiten:</div>';
+			$activiteiten = '<div class="label">Activiteiten:</div>' . $activiteiten;
 		}
 		$this->smarty->assign('activiteiten', $activiteiten);
 
