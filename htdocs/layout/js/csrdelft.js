@@ -230,12 +230,12 @@ function init_buttons(parent) {
 				'height': oud
 			}, 600);
 			$(this).removeAttr('data-vergroot-oud');
-			$(this).removeClass('fa-collapse').addClass('fa-expand');
+			$(this).find('span.fa').removeClass('fa-collapse').addClass('fa-expand');
 			$(this).attr('title', 'Uitklappen');
 		}
 		else {
 			$(this).attr('title', 'Inklappen');
-			$(this).removeClass('fa-expand').addClass('fa-collapse');
+			$(this).find('span.fa').removeClass('fa-expand').addClass('fa-collapse');
 			$(this).attr('data-vergroot-oud', $(id).height());
 			$(id).animate({
 				'height': $(id).prop('scrollHeight') + 1
