@@ -17,7 +17,7 @@
 			<span class="badge">{$draad->getAantalOngelezenPosts()}</span>
 		{/if}
 		{if !isset($deel->forum_id)} 
-			<span class="lichtgrijs float-right">[{$draad->getForumDeel()->titel}]</span> 
+			<span class="float-right">[<a href="/forum/deel/{$draad->getForumDeel()->forum_id}" class="lichtgrijs">{$draad->getForumDeel()->titel}</a>]</span> 
 		{/if}
 	</td>
 	<td class="laatstewijziging">
