@@ -161,9 +161,6 @@ class LoginModel extends PersistenceModel implements Validator {
 		return $error;
 	}
 
-	/**
-	 * @deprecated Remove after MVC refactor is complete
-	 */
 	public function logBezoek() {
 		$db = MijnSqli::instance();
 		if (isset($_SESSION['_suedFrom'])) {
