@@ -337,6 +337,12 @@ JS;
 			lineWidth: 0,
 			fill: 1
 		}
+	},
+	xaxis: {
+		tickDecimals: 0
+	},
+	yaxis: {
+		tickDecimals: 0
 	}
 JS;
 		return $series;
@@ -351,9 +357,12 @@ JS;
 		}
 		$this->javascript .= <<<JS
 
-	xaxes: [{
+	xaxes: {
 		mode: "time"
-	}]
+	},
+	yaxis: {
+		tickDecimals: 0
+	}
 JS;
 		return $series;
 	}
