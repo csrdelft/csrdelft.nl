@@ -25,4 +25,10 @@ abstract class OpvolgbareGroepenController extends GroepenController {
 		$this->view = new CsrLayoutPage($body);
 	}
 
+	public function bekijken(Groep $groep) {
+		$groepen = $this->model->find('opvolg_naam = ?', array($groep->opvolg_naam));
+		$body = new GroepenView($this->model, $groepen);
+		$this->view = new CsrLayoutPage($body);
+	}
+
 }
