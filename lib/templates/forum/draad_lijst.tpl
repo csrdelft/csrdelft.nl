@@ -20,7 +20,7 @@
 			<span class="float-right lichtgrijs">[<a href="/forum/deel/{$draad->getForumDeel()->forum_id}" class="lichtgrijs">{$draad->getForumDeel()->titel}</a>]</span> 
 		{/if}
 	</td>
-	<td class="laatstewijziging">
+	<td class="datumwijziging">
 		{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
 			{$draad->laatst_gewijzigd|reldate}
 		{else}
