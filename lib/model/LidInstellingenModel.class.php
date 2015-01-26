@@ -43,7 +43,7 @@ class LidInstellingen extends Instellingen {
 			'toegankelijk'	 => array('Leesbaarheid', T::Enumeration, array('standaard', 'bredere letters'), 'standaard'),
 			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'owee', 'dies', 'sineregno', 'roze'), 'normaal'),
 			'fx'			 => array('Effect', T::Enumeration, array('nee', 'sneeuw', 'space', 'wolken'), 'nee'),
-			'visitekaartjes' => array('Visitekaartjes', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'visitekaartjes' => array('Visitekaartjes', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'neuzen'		 => array('Neuzen', T::Enumeration, array('2013', 'nee'), '2013'),
 			'minion'		 => array('Minion', T::Enumeration, array('ja', 'nee'), 'nee'),
 		),

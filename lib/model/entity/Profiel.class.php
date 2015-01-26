@@ -368,21 +368,24 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			}
 			$k .= '">';
 			$k .= $this->getPasfotoTag(false);
-			$k .= '<div class="uid uitgebreid">(';
 			if (AccountModel::existsUid($this->uid) AND LoginModel::instance()->maySuTo($this->getAccount())) {
+				$k .= '<div class="uid uitgebreid">';
 				$k .= '<a href="/su/' . $this->uid . '" title="Su naar dit lid">' . $this->uid . '</a>';
-			} else {
-				$k .= $this->uid;
+				$k .= '</div>';
 			}
-			$k .= ')</div>';
-			$k .= '<p class="naam">' . $l . $this->getNaam('volledig');
-			if (!$this->isLid()) {
-				$k .= '&nbsp;' . LidStatus::getChar($this->status);
+			$k .= '<p class="naam">' . $l . $this->getNaam('volledig') . '&nbsp;' . LidStatus::getChar($this->status);
+			$k .= '</a></p>';
+			$bestuurslid = BestuursLedenModel::instance()->find('uid = ?', array($this->uid), null, null, 1)->fetch();
+			if ($bestuurslid) {
+				$bestuur = BesturenModel::get($bestuurslid->groep_id);
+				$k .= '<p><a href="' . $bestuur->getUrl() . '">' . GroepStatus::getChar($bestuur->status) . ' ' . $bestuurslid->opmerking . '</a></p>';
 			}
-			$k .= '</a></p><p style="word-break: break-all;"><a href="mailto:' . $this->getPrimaryEmail() . '">' . $this->getPrimaryEmail() . '</a><br />';
-			$k .= $this->mobiel . '</p>';
-			$k .= '<p>' . $this->adres . '<br />';
-			$k .= $this->postcode . ' ' . $this->woonplaats . '</p>';
+			foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->uid)) as $commissielid) {
+				$commissie = CommissiesModel::get($commissielid->groep_id);
+				if ($commissie->status === GroepStatus::HT) {
+					$k .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />';
+				}
+			}
 			$k .= '<p class="uitgebreid">' . $this->lidjaar . ' ' . (empty($this->verticale) ? '' : $this->getVerticale()->naam) . '</p>';
 			$k .= '</div>';
 			if ($vorm === 'leeg') {
