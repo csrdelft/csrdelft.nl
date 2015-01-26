@@ -219,11 +219,11 @@ class EntityDropDown extends SelectField {
 	}
 
 	public function getValue() {
-		$this->value = json_decode(parent::getValue());
+		$this->value = parent::getValue();
 		if ($this->empty_null AND $this->value == '') {
 			return null;
 		}
-		return $this->value;
+		return json_decode($this->value);
 	}
 
 }
@@ -261,13 +261,15 @@ class JaNeeField extends SelectField {
  */
 class WeekdagField extends SelectField {
 
+	private static $dagnamen = array('zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag');
+
 	public function __construct($name, $value, $description) {
-		parent::__construct($name, $value, $description, array('0' => 'zondag', '1' => 'maandag', '2' => 'dinsdag', '3' => 'woensdag', '4' => 'donderdag', '5' => 'vrijdag', '6' => 'zaterdag'));
+		parent::__construct($name, $value, $description, self::$dagnamen);
 	}
 
 	public function getValue() {
-		$this->value = (int) parent::getValue();
-		return $this->value;
+		$this->value = parent::getValue();
+		return (int) $this->value;
 	}
 
 }

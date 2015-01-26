@@ -585,11 +585,11 @@ class TextField extends InputField {
 	}
 
 	public function getValue() {
-		$this->value = htmlspecialchars(parent::getValue());
+		$this->value = parent::getValue();
 		if ($this->empty_null AND $this->value == '') {
 			return null;
 		}
-		return $this->value;
+		return htmlspecialchars($this->value);
 	}
 
 }
