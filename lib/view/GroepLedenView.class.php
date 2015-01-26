@@ -357,9 +357,9 @@ JS;
 		}
 		$this->javascript .= <<<JS
 
-	xaxes: {
+	xaxes: [{
 		mode: "time"
-	},
+	}],
 	yaxis: {
 		tickDecimals: 0
 	}
