@@ -267,7 +267,7 @@ class GroepView implements View {
 		if ($this->bb) {
 			$html .= ' bb-block';
 		}
-		if ($this->groep->maker_uid == 1025) {
+		if ($this->groep->maker_uid == 1025 AND $this->bb) {
 			$html .= ' bb-dies2015';
 		}
 		$html .= '"><div class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
