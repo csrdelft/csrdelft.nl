@@ -116,7 +116,7 @@ suggesties_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 					</td>
 					<td style="width: 25px;">
 						<br />
-						<a class="btn vergroot" data-vergroot="#suggesties-scrollpane" title="Vergroot de lijst"><span class="fa fa-expand"></span></a>
+						<a class="btn vergroot" data-vergroot="#suggesties-scrollpane" title="Uitklappen"><span class="fa fa-expand"></span></a>
 					</td>
 				</tr>
 			</table>

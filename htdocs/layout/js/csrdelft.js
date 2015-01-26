@@ -230,8 +230,10 @@ function init_buttons(parent) {
 				'height': oud
 			}, 600);
 			$(this).removeAttr('data-vergroot-oud');
+			$(this).attr('title', 'Uitklappen');
 		}
 		else {
+			$(this).attr('title', 'Inklappen');
 			$(this).attr('data-vergroot-oud', $(id).height());
 			$(id).animate({
 				'height': $(id).prop('scrollHeight') + 1

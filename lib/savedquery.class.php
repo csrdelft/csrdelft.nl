@@ -188,7 +188,7 @@ class SavedQueryContent implements View {
 				}
 				$return .= '</tr>';
 			}
-			$return .= '</tbody></table><a class="btn clear-right vergroot" data-vergroot="#' . $id . ' tbody" title="Vergroot de lijst"><span class="fa fa-expand"></span></a>';
+			$return .= '</tbody></table><a class="btn clear-right vergroot" data-vergroot="#' . $id . ' tbody" title="Uitklappen"><span class="fa fa-expand"></span></a>';
 		} else {
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.

@@ -143,7 +143,7 @@ abstract class GroepTabView implements View, FormElement {
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Emails . '" title="' . GroepTab::getDescription(GroepTab::Emails) . ' tonen"><span class="fa fa-envelope"></span></a></li>';
 
-		$html .= '<li class="float-right"><a class="btn vergroot" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Vergroot de lijst"><span class="fa fa-expand"></span></a>';
+		$html .= '<li class="float-right"><a class="btn vergroot" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Uitklappen"><span class="fa fa-expand"></span></a>';
 
 		return $html . '</ul><div id="groep-leden-content-' . $this->groep->id . '" class="groep-tab-content">';
 	}
