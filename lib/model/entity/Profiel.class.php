@@ -375,6 +375,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			}
 			$k .= '<p class="naam">' . $l . $this->getNaam('volledig') . '&nbsp;' . LidStatus::getChar($this->status);
 			$k .= '</a></p>';
+			$k .= '<p>' . $this->lidjaar . ' ' . (empty($this->verticale) ? '' : $this->getVerticale()->naam) . '</p>';
 			$bestuurslid = BestuursLedenModel::instance()->find('uid = ?', array($this->uid), null, null, 1)->fetch();
 			if ($bestuurslid) {
 				$bestuur = BesturenModel::get($bestuurslid->groep_id);
@@ -383,10 +384,9 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->uid)) as $commissielid) {
 				$commissie = CommissiesModel::get($commissielid->groep_id);
 				if ($commissie->status === GroepStatus::HT) {
-					$k .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />';
+					$k .= '<p><a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a></p>';
 				}
 			}
-			$k .= '<p class="uitgebreid">' . $this->lidjaar . ' ' . (empty($this->verticale) ? '' : $this->getVerticale()->naam) . '</p>';
 			$k .= '</div>';
 			if ($vorm === 'leeg') {
 				$naam = $k . $naam;
