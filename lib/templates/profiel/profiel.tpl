@@ -62,7 +62,7 @@
 				<div class="gegevenszelf">
 					<div class="label">
 						{if $profiel->adres!=''}
-							<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->adres|urlencode}+{$profiel->woonplaats|urlencode}+{$profiel->land|urlencode} ({if $woonoord != ''}{$profiel->getWoonoord()->getNaam()}{else}{$profiel->getNaam('civitas')}{/if})">
+							<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->adres|urlencode}+{$profiel->woonplaats|urlencode}+{$profiel->land|urlencode}">
 								<img src="/plaetjes/layout/googlemaps.gif" width="35" alt="googlemap voor dit adres" />
 							</a>
 						{/if}

@@ -597,14 +597,11 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		return LidStatus::isOudlid($this->status);
 	}
 
-	/**
-	 * TODO
-	 * 
-	 * Als het lid in een h.t. Woonwoord zit, geef dat woonoord terug.
-	 * 
-	 * @return Woonoord
-	 */
 	public function getWoonoord() {
+		$bewoner = BewonersModel::instance()->find('uid = ?', array($this->uid))->fetch();
+		if ($bewoner) {
+			return WoonoordenModel::get($bewoner->groep_id);
+		}
 		return false;
 	}
 

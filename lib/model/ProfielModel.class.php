@@ -133,7 +133,7 @@ class ProfielModel extends CachedPersistenceModel {
 
 			$woonoord = $profiel->getWoonoord();
 			if ($woonoord) {
-				$entry['ou'] = $woonoord->getNaam();
+				$entry['ou'] = $woonoord->naam;
 			}
 
 			# lege velden er uit gooien

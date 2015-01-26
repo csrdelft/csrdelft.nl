@@ -22,13 +22,13 @@ class ProfielView extends SmartyTemplateView {
 
 		$woonoord = $this->model->getWoonoord();
 		if ($woonoord) {
-			$this->smarty->assign('woonoord', '<strong>' . $woonoord->getLink() . '</strong>');
+			$this->smarty->assign('woonoord', '<strong><a href="' . $woonoord->getUrl() . '">' . $woonoord->naam . '</strong>');
 		} else {
 			$this->smarty->assign('woonoord', '');
 		}
 
-		$besturen = BestuursLedenModel::instance()->find('uid = ?', array($this->model->uid));
-		$commissies = CommissieLedenModel::instance()->find('uid = ?', array($this->model->uid));
+		$besturen = BestuursLedenModel::instance()->find('uid = ?', array($this->model->uid))->fetchAll();
+		$commissies = CommissieLedenModel::instance()->find('uid = ?', array($this->model->uid))->fetchAll();
 		$this->smarty->assign('groepen', array_merge($commissies, $besturen));
 
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {

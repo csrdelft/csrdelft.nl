@@ -432,7 +432,7 @@ class LLCSV extends LLweergave {
 				case 'woonoord':
 					$woonoord = $profiel->getWoonoord();
 					if ($woonoord) {
-						$return .= $woonoord->getNaam();
+						$return .= $woonoord->naam;
 					}
 					break;
 
