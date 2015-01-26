@@ -69,7 +69,7 @@ class GroepLedenModel extends CachedPersistenceModel {
 		$stats['Lichting'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
 		$stats['Tijd'] = array();
 		foreach ($groep->getLeden() as $groeplid) {
-			$time = strtotime($groeplid->lid_sinds);
+			$time = strtotime($groeplid->lid_sinds) * 1000;
 			if (isset($stats['Tijd'][$time])) {
 				$stats['Tijd'][$time] += 1;
 			} else {
