@@ -30,7 +30,7 @@ class ProfielView extends SmartyTemplateView {
 		$besturen = '';
 		foreach (BestuursLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $bestuurslid) {
 			$bestuur = BesturenModel::get($bestuurslid->groep_id);
-			$besturen .= '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />';
+			$besturen = '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />' . $besturen;
 		}
 		if ($besturen != '') {
 			$besturen = '<div class="label">Bestuur:</div><div class="data">' . $besturen . '</div>';
@@ -40,7 +40,7 @@ class ProfielView extends SmartyTemplateView {
 		$commissies = '';
 		foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $commissielid) {
 			$commissie = CommissiesModel::get($commissielid->groep_id);
-			$commissies .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />';
+			$commissies = '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />' . $commissies;
 		}
 		if ($commissies != '') {
 			$commissies = '<div class="label">Commissies:</div><div class="data">' . $commissies . '</div>';
@@ -50,13 +50,12 @@ class ProfielView extends SmartyTemplateView {
 		$activiteiten = '';
 		foreach (ActiviteitDeelnemersModel::instance()->find('uid = ?', array($this->model->uid)) as $deelnemer) {
 			$activiteit = ActiviteitenModel::get($deelnemer->groep_id);
-			$activiteiten .= '<a href="' . $activiteit->getUrl() . '">' . $activiteit->naam . '</a><br />';
+			$activiteiten = '<a href="' . $activiteit->getUrl() . '">' . $activiteit->naam . '</a><br />' . $activiteiten;
 		}
 		if ($activiteiten != '') {
 			$activiteiten = '<div class="label">Activiteiten:</div><div class="data">' . $activiteiten . '</div>';
 		}
 		$this->smarty->assign('activiteiten', $activiteiten);
-
 
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {
 
