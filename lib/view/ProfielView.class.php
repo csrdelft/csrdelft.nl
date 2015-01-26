@@ -22,14 +22,25 @@ class ProfielView extends SmartyTemplateView {
 
 		$woonoord = $this->model->getWoonoord();
 		if ($woonoord) {
-			$this->smarty->assign('woonoord', '<strong><a href="' . $woonoord->getUrl() . '">' . $woonoord->naam . '</strong>');
+			$this->smarty->assign('woonoord', '<a href="' . $woonoord->getUrl() . '" class="dikgedrukt">' . $woonoord->naam . '</a>');
 		} else {
 			$this->smarty->assign('woonoord', '');
 		}
 
-		$besturen = BestuursLedenModel::instance()->find('uid = ?', array($this->model->uid))->fetchAll();
-		$commissies = CommissieLedenModel::instance()->find('uid = ?', array($this->model->uid))->fetchAll();
-		$this->smarty->assign('groepen', array_merge($commissies, $besturen));
+		$groepen = array();
+		foreach (BestuursLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $lid) {
+			$groep = BesturenModel::get($lid->groep_id);
+			$groepen[] = '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />';
+		}
+		foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $lid) {
+			$groep = CommissiesModel::get($lid->groep_id);
+			$groepen[] = '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />';
+		}
+		foreach (ActiviteitDeelnemersModel::instance()->find('uid = ?', array($this->model->uid)) as $lid) {
+			$groep = ActiviteitenModel::get($lid->groep_id);
+			$groepen[] = '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />';
+		}
+		$this->smarty->assign('groepen', $groepen);
 
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {
 

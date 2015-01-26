@@ -168,7 +168,9 @@
 	{if $groepen}
 		<div id="groepen" class="profielregel clear-right">
 			<div class="gegevens">
-				{$groepen->view()}
+				{foreach from=$groepen item=groep}
+					{$groep}
+				{/foreach}
 				<div class="clear-left"></div>
 			</div>
 		</div>
