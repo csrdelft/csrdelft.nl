@@ -21,6 +21,16 @@ class AccessModel extends CachedPersistenceModel {
 	const orm = 'AccessControl';
 
 	protected static $instance;
+	/**
+	 * Geldige prefixes voor rechten
+	 * @var array
+	 */
+	private static $prefix = array('GROEP', 'VERTICALE', 'VERTICALELEIDER', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDERJAARS', 'EERSTEJAARS');
+	/**
+	 * Gebruikt om ledengegevens te raadplegen
+	 * @var array
+	 */
+	private static $ledengegevens = array('P_LEDEN_READ', 'P_OUDLEDEN_READ', 'P_LEDEN_MOD');
 
 	public static function get($environment, $action, $resource) {
 		$ac = self::instance()->retrieveByPrimaryKey(array($environment, $action, $resource));
@@ -94,11 +104,6 @@ class AccessModel extends CachedPersistenceModel {
 	 * Permissies die we gebruiken om te vergelijken met de permissies van een gebruiker.
 	 */
 	private $permissions = array();
-	/**
-	 * Geldige prefixes voor rechten
-	 * @var array
-	 */
-	private static $prefix = array('GROEP', 'VERTICALE', 'VERTICALELEIDER', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDERJAARS', 'EERSTEJAARS');
 
 	protected function __construct() {
 		parent::__construct('security/');
@@ -359,6 +364,11 @@ class AccessModel extends CachedPersistenceModel {
 	}
 
 	private function mandatoryAccessControl(Account $subject, $permission) {
+
+		if (isset($_SESSION['password_unsafe']) AND in_array_i($permission, self::$ledengegevens)) {
+			setMelding('U mag geen ledengegevens opvragen want wachtwoord is onveilig', 2);
+			return false;
+		}
 
 		// zoek de rechten van de gebruiker op
 		$role = $subject->perm_role;

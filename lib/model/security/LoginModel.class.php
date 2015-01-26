@@ -310,6 +310,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				$_POST['checkpw_confirm'] = $pass_plain;
 				$field = new WachtwoordWijzigenField('checkpw', $account, false); // fetches POST values itself
 				if (!$field->validate()) {
+					$_SESSION['password_unsafe'] = true;
 					setMelding('Uw wachtwoord is onveilig: ' . str_replace('nieuwe', 'huidige', $field->getError()), 2);
 					redirect('/wachtwoord/wijzigen');
 				}
