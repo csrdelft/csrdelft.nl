@@ -604,7 +604,9 @@ HTML;
 		} else {
 			$groepid = $this->parseArray(array('[/groep]'), array());
 		}
-
+		if (!LoginModel::mag('P_LEDEN_READ')) {
+			return '';
+		}
 		$groep = GroepenModel::omnummeren($groepid);
 		if ($groep) {
 			require_once 'view/GroepenView.class.php';
