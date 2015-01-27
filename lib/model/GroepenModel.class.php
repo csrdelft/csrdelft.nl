@@ -37,6 +37,23 @@ class GroepenModel extends CachedPersistenceModel {
 
 	private static $old;
 
+	public static function herstellen() {
+		if (!isset(self::$old)) {
+			self::$old = DynamicEntityModel::makeModel('groep');
+		}
+		foreach (self::$old->find() as $groep) {
+			$model = $groep->model;
+			$nieuw = $model::get($groep->omnummering);
+			if ($nieuw) {
+				$nieuw->familie = $groep->snaam;
+				$nieuw->status = $groep->status;
+				$model::instance()->update($nieuw);
+			} else {
+				echo $model . ' ' . $groep->omnummering . ' not found<br/>';
+			}
+		}
+	}
+
 	/**
 	 * Oude groep-id's omnummeren. 'snaam' mag ook.
 	 * 

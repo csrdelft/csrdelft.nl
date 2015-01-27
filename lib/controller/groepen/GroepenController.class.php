@@ -19,6 +19,13 @@ class GroepenController extends Controller {
 	}
 
 	public function performAction(array $args = array()) {
+
+		if (LoginModel::getUid() === '1137') {
+			GroepenModel::herstellen();
+			echo 'done';
+			exit;
+		}
+
 		$this->action = 'overzicht'; // default
 		if ($this->hasParam(3)) { // id or action
 			$this->action = $this->getParam(3);

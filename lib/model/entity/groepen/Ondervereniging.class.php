@@ -16,7 +16,7 @@ class Ondervereniging extends Groep {
 	 * (Adspirant-)Ondervereniging
 	 * @var OnderverenigingStatus
 	 */
-	public $status;
+	public $vereniging_status;
 	/**
 	 * Veranderingen van status
 	 * @var string
@@ -27,7 +27,7 @@ class Ondervereniging extends Groep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'status'			 => array(T::Enumeration, false, 'OnderverenigingStatus'),
+		'vereniging_status'	 => array(T::Enumeration, false, 'OnderverenigingStatus'),
 		'status_historie'	 => array(T::Text)
 	);
 	/**

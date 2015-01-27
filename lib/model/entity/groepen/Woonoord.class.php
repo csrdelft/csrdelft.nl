@@ -18,7 +18,7 @@ class Woonoord extends Groep {
 	 * Woonoord / Huis
 	 * @var HuisStatus
 	 */
-	public $status;
+	public $huis_status;
 	/**
 	 * Veranderingen van status
 	 * @var string
@@ -29,7 +29,7 @@ class Woonoord extends Groep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'status'			 => array(T::Enumeration, false, 'HuisStatus'),
+		'huis_status'		 => array(T::Enumeration, false, 'HuisStatus'),
 		'status_historie'	 => array(T::Text)
 	);
 	/**
