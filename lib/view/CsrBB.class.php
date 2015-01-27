@@ -590,6 +590,113 @@ HTML;
 		return $html;
 	}
 
+	protected function groep(Groep $groep) {
+		if (!$groep->mag(A::Bekijken)) {
+			return '';
+		}
+		require_once 'view/GroepenView.class.php';
+		$view = new GroepView($groep, null, true);
+		return $view->getHtml();
+	}
+
+	protected function bb_ketzer($arguments = array()) {
+		if (isset($arguments['ketzer'])) {
+			$id = $arguments['ketzer'];
+		} else {
+			$id = $this->parseArray(array('[/ketzer]'), array());
+		}
+		$groep = KetzersModel::get($id);
+		if ($groep) {
+			return $this->groep($groep);
+		} else {
+			return 'Ketzer met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/ketzers/beheren">Zoeken</a>';
+		}
+	}
+
+	protected function bb_activiteit($arguments = array()) {
+		if (isset($arguments['activiteit'])) {
+			$id = $arguments['activiteit'];
+		} else {
+			$id = $this->parseArray(array('[/activiteit]'), array());
+		}
+		$groep = ActiviteitenModel::get($id);
+		if ($groep) {
+			return $this->groep($groep);
+		} else {
+			return 'Activiteit met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/activiteiten/beheren">Zoeken</a>';
+		}
+	}
+
+	protected function bb_bestuur($arguments = array()) {
+		if (isset($arguments['bestuur'])) {
+			$id = $arguments['bestuur'];
+		} else {
+			$id = $this->parseArray(array('[/bestuur]'), array());
+		}
+		$groep = BesturenModel::get($id);
+		if ($groep) {
+			return $this->groep($groep);
+		} else {
+			return 'Bestuur met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/besturen/beheren">Zoeken</a>';
+		}
+	}
+
+	protected function bb_commissie($arguments = array()) {
+		if (isset($arguments['commissie'])) {
+			$id = $arguments['commissie'];
+		} else {
+			$id = $this->parseArray(array('[/commissie]'), array());
+		}
+		$groep = CommissiesModel::get($id);
+		if ($groep) {
+			return $this->groep($groep);
+		} else {
+			return 'Commissie met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/commissies/beheren">Zoeken</a>';
+		}
+	}
+
+	protected function bb_werkgroep($arguments = array()) {
+		if (isset($arguments['werkgroep'])) {
+			$id = $arguments['werkgroep'];
+		} else {
+			$id = $this->parseArray(array('[/werkgroep]'), array());
+		}
+		$groep = WerkgroepenModel::get($id);
+		if ($groep) {
+			return $this->groep($groep);
+		} else {
+			return 'Werkgroep met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/werkgroepen/beheren">Zoeken</a>';
+		}
+	}
+
+	protected function bb_woonoord($arguments = array()) {
+		if (isset($arguments['woonoord'])) {
+			$id = $arguments['woonoord'];
+		} else {
+			$id = $this->parseArray(array('[/woonoord]'), array());
+		}
+		$groep = WoonoordenModel::get($id);
+		if ($groep) {
+			return $this->groep($groep);
+		} else {
+			return 'Woonoord met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/woonoorden/beheren">Zoeken</a>';
+		}
+	}
+
+	protected function bb_ondervereniging($arguments = array()) {
+		if (isset($arguments['ondervereniging'])) {
+			$id = $arguments['ondervereniging'];
+		} else {
+			$id = $this->parseArray(array('[/ondervereniging]'), array());
+		}
+		$groep = OnderverenigingenModel::get($id);
+		if ($groep) {
+			return $this->groep($groep);
+		} else {
+			return 'Ondervereniging met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/onderverenigingen/beheren">Zoeken</a>';
+		}
+	}
+
 	/**
 	 * Geeft een groep met kortebeschrijving en een lijstje met leden weer.
 	 * Als de groep aanmeldbaar is komt er ook een aanmeldknopje bij.
@@ -600,20 +707,19 @@ HTML;
 	 */
 	protected function bb_groep($arguments = array()) {
 		if (isset($arguments['groep'])) {
-			$groepid = $arguments['groep'];
+			$id = $arguments['groep'];
 		} else {
-			$groepid = $this->parseArray(array('[/groep]'), array());
+			$id = $this->parseArray(array('[/groep]'), array());
 		}
-		if (!LoginModel::mag('P_LEDEN_READ')) {
-			return '';
+		$groep = GroepenModel::get($id);
+		if (!$groep) {
+			$groep = GroepenModel::omnummeren($id);
 		}
-		$groep = GroepenModel::omnummeren($groepid);
 		if ($groep) {
-			require_once 'view/GroepenView.class.php';
-			$view = new GroepView($groep, null, true);
-			return $view->getHtml();
+			return $this->groep($groep);
+		} else {
+			return 'Groep met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/overig/beheren">Zoeken</a>';
 		}
-		return '[groep] Geen geldig groep-id (' . htmlspecialchars($groepid) . ')';
 	}
 
 	/**
@@ -629,12 +735,11 @@ HTML;
 		} else {
 			$letter = $this->parseArray(array('[/groep]'), array());
 		}
-
 		try {
 			$verticale = VerticalenModel::get($letter);
 			return '<a href="/verticalen#' . $verticale->letter . '">' . $verticale->naam . '</a>';
 		} catch (Exception $e) {
-			return '[verticale] Geen geldige verticale-letter (' . htmlspecialchars($letter) . ')';
+			return 'Verticale met letter=' . htmlspecialchars($letter) . ' bestaat niet. <a href="/verticalen">Zoeken</a>';
 		}
 	}
 
