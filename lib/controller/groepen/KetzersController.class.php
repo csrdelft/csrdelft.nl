@@ -9,8 +9,11 @@
  */
 class KetzersController extends GroepenController {
 
-	public function __construct($query) {
-		parent::__construct($query, KetzersModel::instance());
+	public function __construct($query, KetzersModel $model = null) {
+		parent::__construct($query, $model);
+		if ($model === null) {
+			$this->model = KetzersModel::instance();
+		}
 	}
 
 }
