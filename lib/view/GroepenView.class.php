@@ -77,8 +77,8 @@ class GroepenBeheerData extends DataTableResponse {
 
 class GroepForm extends DataTableForm {
 
-	public function __construct(Groep $groep, GroepenModel $model, $action, $nocancel = false) {
-		parent::__construct($groep, $model->getUrl() . $action, $model::orm . ' ' . ($groep->id ? A::Wijzigen : A::Aanmaken));
+	public function __construct(Groep $groep, $action, $nocancel = false) {
+		parent::__construct($groep, $action, get_class($groep) . ' ' . ($groep->id ? A::Wijzigen : A::Aanmaken));
 
 		$fields = $this->generateFields();
 
