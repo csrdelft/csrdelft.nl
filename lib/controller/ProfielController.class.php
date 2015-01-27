@@ -153,11 +153,11 @@ class ProfielController extends AclController {
 		$form = new CommissieVoorkeurenForm($profiel);
 		if ($form->validate()) {
 			$model = new CommissieVoorkeurenModel($profiel->uid);
-			foreach ($form->getValues() as $fieldname => $value) {
-				if ($fieldname == 'lidOpmerking') {
+			foreach ($form->getValues() as $attr => $value) {
+				if ($attr == 'lidOpmerking') {
 					$model->setLidOpmerking($value);
 				} else {
-					$model->setCommissieVoorkeur(substr($fieldname, 4), $value);
+					$model->setCommissieVoorkeur(substr($attr, 4), $value);
 				}
 			}
 			setMelding('Voorkeuren opgeslagen', 1);

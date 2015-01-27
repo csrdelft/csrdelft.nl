@@ -382,20 +382,21 @@ function init_forms(parent) {
 
 function form_ischanged(form) {
 	var changed = false;
-	$(form).find('.FormElement').each(function () {
-		if ($(this).is('input:radio')) {
-			if ($(this).is(':checked') && $(this).attr('origvalue') !== $(this).val()) {
+	$(form).find('.FormElement').not('.tt-hint').each(function () {
+		var elmnt = $(this);
+		if (elmnt.is('input:radio')) {
+			if (elmnt.is(':checked') && elmnt.attr('origvalue') !== elmnt.val()) {
 				changed = true;
 				return false; // break each
 			}
 		}
-		else if ($(this).is('input:checkbox')) {
-			if ($(this).is(':checked') !== ($(this).attr('origvalue') === '1')) {
+		else if (elmnt.is('input:checkbox')) {
+			if (elmnt.is(':checked') !== (elmnt.attr('origvalue') === '1')) {
 				changed = true;
 				return false; // break each
 			}
 		}
-		else if ($(this).val() !== $(this).attr('origvalue')) {
+		else if (elmnt.val() !== elmnt.attr('origvalue')) {
 			changed = true;
 			return false; // break each
 		}

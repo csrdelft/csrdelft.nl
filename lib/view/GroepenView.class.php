@@ -38,7 +38,7 @@ class GroepenBeheerTable extends DataTable {
 		$this->addKnop($update);
 
 		$convert = new DataTableKnop('== 1', $this->tableId, $url . 'converteren', 'post popup', 'Converteren', 'Converteer groep', 'lightning');
-		//$this->addKnop($convert);
+		$this->addKnop($convert);
 
 		$delete = new DataTableKnop('>= 1', $this->tableId, $url . A::Verwijderen, 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
 		$this->addKnop($delete);
@@ -65,12 +65,14 @@ class GroepenBeheerData extends DataTableResponse {
 
 class GroepForm extends DataTableForm {
 
-	public function __construct(Groep $groep, $action) {
+	public function __construct(Groep $groep, $action, $nocancel = false) {
 		parent::__construct($groep, $action, get_class($groep) . ' ' . ($groep->id ? A::Wijzigen : A::Aanmaken));
 
 		$fields = $this->generateFields();
 
 		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
+
+		$this->addFields(array(new FormDefaultKnoppen($nocancel ? false : null)));
 	}
 
 }

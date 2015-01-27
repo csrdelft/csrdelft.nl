@@ -95,11 +95,13 @@ class FormDefaultKnoppen extends FormKnoppen {
 			$reset = new ResetKnop();
 			$this->addKnop($reset);
 		}
-		$cancel = new CancelKnop($cancel_url);
-		if ($reset_cancel) {
-			$cancel->action .= ' reset';
+		if ($cancel_url !== false) {
+			$cancel = new CancelKnop($cancel_url);
+			if ($reset_cancel) {
+				$cancel->action .= ' reset';
+			}
+			$this->addKnop($cancel);
 		}
-		$this->addKnop($cancel);
 		if (!$icons) {
 			foreach ($this->getModel() as $knop) {
 				$knop->icon = null;

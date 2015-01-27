@@ -65,11 +65,6 @@ class Groep extends PersistentEntity {
 	 */
 	public $rechten_beheren;
 	/**
-	 * Local caching groepleden
-	 * @var GroepLid[]
-	 */
-	private $leden;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -117,16 +112,13 @@ class Groep extends PersistentEntity {
 	 * @return GroepLid[]
 	 */
 	public function getLeden() {
-		if (!isset($this->leden)) {
-			$leden = static::leden;
-			$this->leden = $leden::instance()->getLedenVoorGroep($this);
-		}
-		return $this->leden;
+		$leden = static::leden;
+		return $leden::instance()->getLedenVoorGroep($this);
 	}
 
 	public function aantalLeden() {
-		$this->getLeden();
-		return count($this->leden);
+		$leden = $this->getLeden();
+		return count($leden);
 	}
 
 	public function getStatistieken() {

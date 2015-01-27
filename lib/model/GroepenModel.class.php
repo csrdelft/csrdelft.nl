@@ -89,8 +89,8 @@ class GroepenModel extends CachedPersistenceModel {
 	public function nieuw() {
 		$class = static::orm;
 		$groep = new $class();
-		$groep->naam = null;
-		$groep->samenvatting = null;
+		$groep->naam = '';
+		$groep->samenvatting = '';
 		$groep->omschrijving = null;
 		$groep->begin_moment = getDateTime();
 		$groep->eind_moment = null;
@@ -107,18 +107,19 @@ class GroepenModel extends CachedPersistenceModel {
 	/**
 	 * Converteer groep inclusief leden van klasse.
 	 * 
-	 * @param Groep $converteer
+	 * @param Groep $oldgroep
 	 * @return boolean
 	 */
-	public function converteer(Groep $converteer) {
+	public function converteer(Groep $oldgroep, GroepenModel $oldmodel) {
 		// groep converteren
 		try {
 			$groep = $this->nieuw();
-			cast($groep, $converteer);
+			foreach ($oldgroep->getValues() as $attr => $value) {
+				if (property_exists($groep, $attr)) {
+					$groep->$attr = $value;
+				}
+			}
 			$groep->id = null;
-
-			setMelding(get_class($groep) . '   ' . $groep->getTableName(), 2);
-
 			$this->create($groep);
 		} catch (Exception $e) {
 			setMelding('Converteren mislukt: ' . $e->getMessage(), -1);
@@ -128,14 +129,36 @@ class GroepenModel extends CachedPersistenceModel {
 		try {
 			$leden = $groep::leden;
 			$model = $leden::instance();
-			foreach ($converteer->getLeden() as $lid) {
-				$groeplid = $model->nieuw($groep, $lid->uid);
-				cast($groeplid, $lid);
-				$groeplid->groep_id = $groep->id;
-				$model->create($groeplid);
+			foreach ($oldgroep->getLeden() as $oldlid) {
+				$lid = $model->nieuw($groep, $oldlid->uid);
+				foreach ($oldlid->getValues() as $attr => $value) {
+					if (property_exists($lid, $attr)) {
+						$lid->$attr = $value;
+					}
+				}
+				$lid->groep_id = $groep->id;
+				$model->create($lid);
 			}
 		} catch (Exception $e) {
 			setMelding('Leden converteren mislukt: ' . $e->getMessage(), -1);
+			return false;
+		}
+		// leden verwijderen
+		try {
+			$oldleden = $oldgroep::leden;
+			$model = $oldleden::instance();
+			foreach ($oldgroep->getLeden() as $oldlid) {
+				$model->delete($oldlid);
+			}
+		} catch (Exception $ex) {
+			setMelding('Leden verwijderen mislukt: ' . $e->getMessage(), -1);
+			return false;
+		}
+		// groep verwijderen
+		try {
+			$oldmodel->delete($oldgroep);
+		} catch (Exception $ex) {
+			setMelding('Groep verwijderen mislukt: ' . $e->getMessage(), -1);
 			return false;
 		}
 		return $groep;
@@ -221,7 +244,7 @@ abstract class OpvolgbareGroepenModel extends GroepenModel {
 
 	public function nieuw() {
 		$groep = parent::nieuw();
-		$groep->opvolg_naam = null;
+		$groep->opvolg_naam = '';
 		$groep->jaargang = LichtingenModel::getHuidigeJaargang();
 		$groep->status = GroepStatus::HT;
 		return $groep;
@@ -237,7 +260,7 @@ class KringenModel extends OpvolgbareGroepenModel {
 
 	public function nieuw() {
 		$kring = parent::nieuw();
-		$kring->verticale = null;
+		$kring->verticale = '';
 		return $kring;
 	}
 
@@ -273,7 +296,7 @@ class BesturenModel extends OpvolgbareGroepenModel {
 
 	public function nieuw() {
 		$bestuur = parent::nieuw();
-		$bestuur->bijbeltekst = null;
+		$bestuur->bijbeltekst = '';
 		return $bestuur;
 	}
 
@@ -292,7 +315,9 @@ class ActiviteitenModel extends OpvolgbareGroepenModel {
 		$activiteit->rechten_aanmelden = null;
 		$activiteit->aanmeld_limiet = null;
 		$activiteit->aanmelden_vanaf = getDateTime();
-		$activiteit->aanmelden_tot = getDateTime();
+		$activiteit->aanmelden_tot = $activiteit->aanmelden_vanaf;
+		$activiteit->bewerken_tot = $activiteit->aanmelden_tot;
+		$activiteit->afmelden_tot = null;
 		$activiteit->kosten_bedrag = null;
 		$activiteit->machtiging_rekening = null;
 		return $activiteit;
@@ -311,7 +336,9 @@ class KetzersModel extends GroepenModel {
 		$ketzer->rechten_aanmelden = null;
 		$ketzer->aanmeld_limiet = null;
 		$ketzer->aanmelden_vanaf = getDateTime();
-		$ketzer->aanmelden_tot = getDateTime();
+		$ketzer->aanmelden_tot = $ketzer->aanmelden_vanaf;
+		$ketzer->bewerken_tot = $ketzer->aanmelden_tot;
+		$ketzer->afmelden_tot = null;
 		$ketzer->kosten_bedrag = null;
 		$ketzer->machtiging_rekening = null;
 		return $ketzer;

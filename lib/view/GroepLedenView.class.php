@@ -45,7 +45,9 @@ class GroepLidBeheerForm extends DataTableForm {
 
 	public function __construct(GroepLid $lid, $action, array $blacklist = null) {
 		parent::__construct($lid, $action, 'Aanmelding bewerken');
+
 		$fields = $this->generateFields();
+
 		if ($blacklist !== null) {
 			$fields['uid']->blacklist = $blacklist;
 			$fields['uid']->required = true;
@@ -55,6 +57,8 @@ class GroepLidBeheerForm extends DataTableForm {
 		$fields['door_uid']->required = true;
 		$fields['door_uid']->readonly = true;
 		$fields['door_uid']->hidden = true;
+
+		$this->addFields(array(new FormDefaultKnoppen()));
 	}
 
 }
@@ -87,6 +91,9 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 		$this->field->hidden = $pasfoto;
 
 		if ($pasfoto) {
+			if ($groep->keuzelijst) {
+				$fields[] = new HtmlComment('<br />');
+			}
 			$fields[] = new PasfotoAanmeldenKnop();
 		} else {
 			$fields[] = new SubmitKnop(null, 'submit', 'Aanmelden', null, null);

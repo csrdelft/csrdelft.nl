@@ -121,7 +121,6 @@ class Formulier implements View, Validator {
 			$fields[$fieldName]->hidden = true;
 			$fields[$fieldName]->required = false;
 		}
-		$fields[] = new FormDefaultKnoppen();
 		$this->addFields($fields);
 		return $fields;
 	}

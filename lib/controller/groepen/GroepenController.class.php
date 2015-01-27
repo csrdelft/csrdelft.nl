@@ -157,6 +157,7 @@ class GroepenController extends Controller {
 			$form = new GroepForm($groep, $this->action);
 			if (!$this->isPosted()) {
 				$this->beheren();
+				$this->view->getBody()->filter = $groep->naam;
 				$form->tableId = $this->view->getBody()->getTableId();
 				$this->view->modal = $form;
 			} elseif ($form->validate()) {
@@ -218,7 +219,7 @@ class GroepenController extends Controller {
 			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
 			if ($form->validate()) {
 				$model->create($lid);
-				$this->view = new GroepView($groep);
+				$this->view = new GroepPasfotosView($groep);
 			} else {
 				$this->view = $form;
 			}
@@ -360,12 +361,9 @@ class GroepenController extends Controller {
 				$this->view = $form;
 				return;
 			}
-			$groep = $model::instance()->converteer($converteer);
-
-			setMelding(get_class($model::instance()) . print_r(Database::getQueries(), true), 0);
-
+			$groep = $model::instance()->converteer($converteer, $this->model);
 			if ($groep) {
-				setMelding('Converteren geslaagd', 1);
+				setMelding('Converteren geslaagd! Vul de ontbrekende velden in.', 1);
 				$this->view = new GroepForm($groep, $groep->getUrl() . A::Wijzigen);
 				return;
 			}

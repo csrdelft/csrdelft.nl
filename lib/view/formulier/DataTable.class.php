@@ -13,6 +13,7 @@ require_once 'view/formulier/TabsForm.class.php';
 class DataTable extends TabsForm {
 
 	public $nestedForm = true;
+	public $filter = null;
 	protected $tableId;
 	protected $dataUrl;
 	protected $autoUpdate = false;
@@ -276,6 +277,10 @@ class DataTable extends TabsForm {
 				 * @returns object
 				 */
 				var fnAjaxUpdateCallback = function (json) {
+					var oTable = $('#<?= $this->tableId; ?>').dataTable();
+					if (!lastUpdate<?= $this->tableId; ?>) {
+						oTable.fnFilter('<?= $this->filter; ?>');
+					}
 					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime());
 		<?php
 		if ($this->autoUpdate > 0) {
@@ -283,7 +288,6 @@ class DataTable extends TabsForm {
 		}
 		?>
 					/* TODO: remember focus position on update
-					 var oTable = $('#example').dataTable();
 					 var keys = new $.fn.dataTable.KeyTable( oTable );
 					 keys.fnSetPosition( 1, 1 );
 					 */
