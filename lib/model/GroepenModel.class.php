@@ -254,6 +254,10 @@ class VerticalenModel extends GroepenModel {
 	 */
 	protected $default_order = 'letter ASC';
 
+	public static function get($letter) {
+		return static::instance()->retrieveByPrimaryKey(array($letter));
+	}
+
 }
 
 class KringenModel extends GroepenModel {
