@@ -143,7 +143,7 @@ class GroepenController extends Controller {
 
 	public function aanmaken($soort = null) {
 		$groep = $this->model->nieuw($soort);
-		$form = new GroepForm($groep, $this->model->getUrl() . $this->action);
+		$form = new GroepForm($groep, $this->model, $this->action);
 		if ($form->validate()) {
 			$this->model->create($groep);
 			$this->view = new GroepenBeheerData(array($groep));
@@ -154,7 +154,7 @@ class GroepenController extends Controller {
 
 	public function wijzigen(Groep $groep = null) {
 		if ($groep) {
-			$form = new GroepForm($groep, $this->action);
+			$form = new GroepForm($groep, $this->model, $this->action);
 			if (!$this->isPosted()) {
 				$this->beheren();
 				$this->view->getBody()->filter = $groep->naam;
@@ -178,7 +178,7 @@ class GroepenController extends Controller {
 			if (!$groep OR ! $groep->mag($this->action)) {
 				$this->geentoegang();
 			}
-			$form = new GroepForm($groep, $this->model->getUrl() . $this->action);
+			$form = new GroepForm($groep, $this->model, $this->action);
 			if ($form->validate()) {
 				$this->model->update($groep);
 				$this->view = new GroepenBeheerData(array($groep));
@@ -209,7 +209,7 @@ class GroepenController extends Controller {
 			$nieuw = $model::instance()->converteer($groep, $this->model);
 			if ($nieuw) {
 				setMelding('Converteren geslaagd! Vul de ontbrekende velden in.', 1);
-				$this->view = new GroepForm($nieuw, $nieuw->getUrl() . A::Wijzigen, true);
+				$this->view = new GroepForm($nieuw, $nieuw, A::Wijzigen, true);
 				return;
 			}
 		}

@@ -77,11 +77,14 @@ class GroepenBeheerData extends DataTableResponse {
 
 class GroepForm extends DataTableForm {
 
-	public function __construct(Groep $groep, $action, $nocancel = false) {
-		parent::__construct($groep, $action, get_class($groep) . ' ' . ($groep->id ? A::Wijzigen : A::Aanmaken));
+	public function __construct(Groep $groep, GroepenModel $model, $action, $nocancel = false) {
+		parent::__construct($groep, $model->getUrl() . $action, $model::orm . ' ' . ($groep->id ? A::Wijzigen : A::Aanmaken));
 
 		$fields = $this->generateFields();
 
+		if (isset($fields['opvolg_naam'])) {
+			$fields['opvolg_naam']->suggestions = group_by_distinct('opvolg_naam', Database::sqlSelect(array('opvolg_naam'), $groep->getTableName()));
+		}
 		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
 
 		$this->addFields(array(new FormDefaultKnoppen($nocancel ? false : null)));
@@ -92,7 +95,7 @@ class GroepForm extends DataTableForm {
 class GroepConverteerForm extends DataTableForm {
 
 	public function __construct(Groep $groep, GroepenModel $model) {
-		parent::__construct($groep, $groep->getUrl() . 'converteren', get_class($groep) . ' converteren');
+		parent::__construct($groep, $groep->getUrl() . 'converteren', $model::orm . ' converteren');
 
 		$options = array(
 			'Met opvolgers'		 => array(
