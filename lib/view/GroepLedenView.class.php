@@ -81,6 +81,8 @@ class GroepBewerkenForm extends InlineForm {
 
 class GroepAanmeldenForm extends GroepBewerkenForm {
 
+	private $aanmeldknop;
+
 	public function __construct(GroepLid $lid, Groep $groep, array $suggesties = array(), $keuzelijst = null, $pasfoto = false) {
 		parent::__construct($lid, $groep, $suggesties, $keuzelijst);
 		$this->action = $groep->getUrl() . A::Aanmelden . '/' . $lid->uid;
@@ -91,12 +93,9 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 		$this->field->hidden = $pasfoto;
 
 		if ($pasfoto) {
-			if ($groep->keuzelijst) {
-				$fields[] = new HtmlComment('<br />');
-			}
-			$fields[] = new PasfotoAanmeldenKnop();
+			$this->aanmeldknop = new PasfotoAanmeldenKnop();
 		} else {
-			$fields[] = new SubmitKnop(null, 'submit', 'Aanmelden', null, null);
+			$this->aanmeldknop = new SubmitKnop(null, 'submit', 'Aanmelden', null, null);
 		}
 
 		$this->addFields($fields);
@@ -104,9 +103,8 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 
 	public function getHtml() {
 		$html = $this->getFormTag();
-		foreach ($this->getFields() as $field) {
-			$html .= $field->getHtml();
-		}
+		$html .= $this->field->getHtml();
+		$html .= $this->aanmeldknop->getHtml();
 		$html .= $this->getScriptTag();
 		return $html . '</form>';
 	}

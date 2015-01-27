@@ -249,6 +249,9 @@ class GroepenController extends Controller {
 				$model->create($lid);
 				$this->view = new GroepPasfotosView($groep);
 			} else {
+
+				echo 'form error: ' . print_r($form->getError(), true); //DEBUG
+
 				$this->view = $form;
 			}
 		}

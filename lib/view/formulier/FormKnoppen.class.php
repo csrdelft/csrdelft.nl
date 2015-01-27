@@ -210,7 +210,7 @@ class PasfotoAanmeldenKnop extends SubmitKnop {
 		}
 		$this->label = null;
 		$this->icon = false;
-		$img = '<img class="pasfoto" src="/plaetjes/groepen/aanmelden.jpg" onmouseout="this.src=\'/plaetjes/groepen/aanmelden.jpg\'" onmouseover="this.src=\'/plaetjes/' . LoginModel::getProfiel()->getPasfotoPath() . '\'" title="Klik om u aan te melden" style="cursor:pointer;">';
+		$img = '<img class="pasfoto float-none" src="/plaetjes/groepen/aanmelden.jpg" onmouseout="this.src=\'/plaetjes/groepen/aanmelden.jpg\'" onmouseover="this.src=\'/plaetjes/' . LoginModel::getProfiel()->getPasfotoPath() . '\'" title="Klik om u aan te melden" style="cursor:pointer;">';
 		return str_replace('</a>', $img . '</a>', parent::getHtml());
 	}
 

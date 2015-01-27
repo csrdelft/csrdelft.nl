@@ -157,21 +157,32 @@ class MultiSelectField extends InputField {
 
 	public function __construct($name, $value, $description, $keuzeopties) {
 		parent::__construct($name, str_replace('&amp;&amp;', '&&', $value), $description);
+
+		// Splits keuzes
 		$selects = explode('&&', str_replace('&amp;&amp;', '&&', $keuzeopties));
 		$gekozen = explode('&&', $this->value);
+
 		foreach ($selects as $i => $opties) {
+
+			// Splits mogelijkheden per keuze
 			$opties = explode('|', $opties);
 			if (isset($gekozen[$i])) {
-				$keuze = array_search($gekozen[$i], $opties);
+				$keuze = $gekozen[$i];
 			} else {
 				$keuze = $opties[0];
 			}
-			$this->selects[$i] = new SelectField($name . '[]', $keuze, null, $opties);
+
+			// Value == label
+			$values = array();
+			foreach ($opties as $value) {
+				$values[$value] = $value;
+			}
+			$this->selects[$i] = new SelectField($name . '[]', $keuze, null, $values);
 		}
 	}
 
 	public function isPosted() {
-		return isset($_POST[$this->name . '[]']);
+		return isset($_POST[$this->name]);
 	}
 
 	public function getValue() {
@@ -183,20 +194,12 @@ class MultiSelectField extends InputField {
 		return $this->value;
 	}
 
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		foreach ($this->selects as $select) {
-			$select->validate();
-			$this->error .= $select->getError();
-		}
-		return $this->error === '';
-	}
-
 	public function getHtml() {
 		$html = '';
 		foreach ($this->selects as $select) {
+			if ($this->hidden) {
+				$select->css_classes[] = 'verborgen';
+			}
 			$html .= $select->getHtml();
 		}
 		return $html;
