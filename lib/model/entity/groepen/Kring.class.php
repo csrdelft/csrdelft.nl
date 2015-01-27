@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Kring extends OpvolgbareGroep {
+class Kring extends Groep {
 
 	const leden = 'KringLedenModel';
 

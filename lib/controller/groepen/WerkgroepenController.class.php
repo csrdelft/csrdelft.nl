@@ -1,5 +1,7 @@
 <?php
 
+require_once 'controller/groepen/KetzersController.class.php';
+
 /**
  * WerkgroepenController.class.php
  * 
@@ -7,7 +9,7 @@
  * 
  * Controller voor werkgroepen.
  */
-class WerkgroepenController extends OpvolgbareGroepenController {
+class WerkgroepenController extends KetzersController {
 
 	public function __construct($query) {
 		parent::__construct($query, WerkgroepenModel::instance());

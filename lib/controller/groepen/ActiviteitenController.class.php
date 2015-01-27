@@ -1,5 +1,7 @@
 <?php
 
+require_once 'controller/groepen/KetzersController.class.php';
+
 /**
  * ActiviteitenController.class.php
  * 
@@ -7,7 +9,7 @@
  * 
  * Controller voor activiteiten.
  */
-class ActiviteitenController extends OpvolgbareGroepenController {
+class ActiviteitenController extends KetzersController {
 
 	public function __construct($query) {
 		parent::__construct($query, ActiviteitenModel::instance());

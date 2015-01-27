@@ -48,7 +48,7 @@ class Verticale extends PersistentEntity {
 	}
 
 	/**
-	 * TODO: Kring extend OpvolgbareGroep
+	 * TODO: Kring extend Groep
 	 */
 	public function getKringen() {
 		if (!isset($this->kringen)) {
@@ -67,7 +67,7 @@ class Verticale extends PersistentEntity {
 	}
 
 	/**
-	 * TODO: Kring extend OpvolgbareGroep
+	 * TODO: Kring extend Groep
 	 */
 	public function getKring($kring) {
 		$this->getKringen();

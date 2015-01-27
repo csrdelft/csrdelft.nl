@@ -1,7 +1,7 @@
 <?php
 
 require_once 'model/GroepenModel.class.php';
-require_once 'controller/groepen/OpvolgbareGroepenController.abstract.php';
+require_once 'controller/groepen/GroepenController.class.php';
 
 /**
  * GroepenRouterController.class.php
@@ -45,19 +45,17 @@ class GroepenRouterController extends Controller {
 	 */
 	protected function mag($action, array $args) {
 		switch ($action) {
-			// groep
+			case 'activiteiten':
+			case 'besturen':
+			case 'commissies':
 			case 'groepen':
 			case 'ketzers':
 			case 'onderverenigingen':
-			case 'woonoorden':
-			case 'lichtingen':
-			case 'verticalen':
-			// opvolgbare groep
-			case 'kringen':
 			case 'werkgroepen':
-			case 'commissies':
-			case 'besturen':
-			case 'activiteiten':
+			case 'woonoorden':
+				//case 'lichtingen':
+				//case 'verticalen':
+				//case 'kringen':
 				return LoginModel::mag('P_LEDEN_READ');
 
 			default:

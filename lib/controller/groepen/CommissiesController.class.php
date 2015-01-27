@@ -7,7 +7,7 @@
  * 
  * Controller voor commissies.
  */
-class CommissiesController extends OpvolgbareGroepenController {
+class CommissiesController extends GroepenController {
 
 	public function __construct($query) {
 		parent::__construct($query, CommissiesModel::instance());

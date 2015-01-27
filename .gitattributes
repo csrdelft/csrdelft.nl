@@ -4016,7 +4016,6 @@ lib/controller/groepen/GroepenController.class.php -text
 lib/controller/groepen/KetzersController.class.php -text
 lib/controller/groepen/KringenController.class.php -text
 lib/controller/groepen/OnderverenigingenController.class.php -text
-lib/controller/groepen/OpvolgbareGroepenController.abstract.php -text
 lib/controller/groepen/WerkgroepenController.class.php -text
 lib/controller/groepen/WoonoordenController.class.php -text
 lib/controller/maalcie/BeheerAbonnementenController.class.php -text
@@ -4139,7 +4138,6 @@ lib/model/entity/groepen/LichtingsLid.class.php -text
 lib/model/entity/groepen/OnderverLid.class.php -text
 lib/model/entity/groepen/Ondervereniging.class.php -text
 lib/model/entity/groepen/OnderverenigingStatus.enum.php -text
-lib/model/entity/groepen/OpvolgbareGroep.abstract.php -text
 lib/model/entity/groepen/Verticale.class.php -text
 lib/model/entity/groepen/VerticaleLid.class.php -text
 lib/model/entity/groepen/Werkgroep.class.php -text

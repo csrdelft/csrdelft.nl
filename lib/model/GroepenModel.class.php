@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/entity/groepen/OpvolgbareGroep.abstract.php';
+require_once 'model/entity/groepen/Groep.class.php';
 require_once 'model/GroepLedenModel.class.php';
 
 /**
@@ -14,9 +14,17 @@ class GroepenModel extends CachedPersistenceModel {
 	const orm = 'Groep';
 
 	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'begin_moment DESC';
 
 	public static function get($id) {
-		return static::instance()->retrieveByPrimaryKey(array($id));
+		if (is_int($id)) {
+			return static::instance()->retrieveByPrimaryKey(array($id));
+		}
+		return static::instance()->find('familie = ? AND status = ?', array($id, GroepStatus::HT), null, null, 1)->fetch();
 	}
 
 	public static function getNaam() {
@@ -39,19 +47,16 @@ class GroepenModel extends CachedPersistenceModel {
 		if (!isset(self::$old)) {
 			self::$old = DynamicEntityModel::makeModel('groep');
 		}
-
 		$groep = self::$old->find('id = ? OR (snaam = ? AND status = ?)', array($id, $id, 'ht'), null, null, 1)->fetch();
 		if (!$groep) {
 			setMelding('Groep niet gevonden: ' . htmlspecialchars($id), -1);
 			return false;
 		}
-
 		$model = $groep->model;
 		if (!class_exists($model)) {
 			setMelding('Model niet gevonden: ' . $model, -1);
 			return false;
 		}
-
 		return $model::get($groep->omnummering);
 	}
 
@@ -76,7 +81,7 @@ class GroepenModel extends CachedPersistenceModel {
 		foreach (CommissieLedenModel::instance()->find('uid = ?', array($uid)) as $lid) {
 			$commissie = CommissiesModel::get($lid->groep_id);
 			if ($commissie->status === GroepStatus::HT) {
-				$result[] = $commissie->opvolg_naam;
+				$result[] = $commissie->familie;
 			}
 		}
 		return $result;
@@ -97,6 +102,8 @@ class GroepenModel extends CachedPersistenceModel {
 		$groep->website = null;
 		$groep->maker_uid = LoginModel::getUid();
 		$groep->rechten_beheren = null;
+		$groep->familie = null;
+		$groep->status = GroepStatus::HT;
 		return $groep;
 	}
 
@@ -241,33 +248,15 @@ class VerticalenModel extends GroepenModel {
 	 * @var boolean
 	 */
 	protected $memcache_prefetch = true;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'letter ASC';
 
 }
 
-abstract class OpvolgbareGroepenModel extends GroepenModel {
-
-	const orm = 'OpvolgbareGroep';
-
-	protected static $instance;
-
-	public static function get($id) {
-		if (is_int($id)) {
-			return parent::get($id);
-		}
-		return static::instance()->find('opvolg_naam = ? AND status = ?', array($id, GroepStatus::HT), null, null, 1)->fetch();
-	}
-
-	public function nieuw() {
-		$groep = parent::nieuw();
-		$groep->opvolg_naam = '';
-		$groep->jaargang = LichtingenModel::getHuidigeJaargang();
-		$groep->status = GroepStatus::HT;
-		return $groep;
-	}
-
-}
-
-class KringenModel extends OpvolgbareGroepenModel {
+class KringenModel extends GroepenModel {
 
 	const orm = 'Kring';
 
@@ -281,15 +270,7 @@ class KringenModel extends OpvolgbareGroepenModel {
 
 }
 
-class WerkgroepenModel extends OpvolgbareGroepenModel {
-
-	const orm = 'Werkgroep';
-
-	protected static $instance;
-
-}
-
-class CommissiesModel extends OpvolgbareGroepenModel {
+class CommissiesModel extends GroepenModel {
 
 	const orm = 'Commissie';
 
@@ -303,7 +284,7 @@ class CommissiesModel extends OpvolgbareGroepenModel {
 
 }
 
-class BesturenModel extends OpvolgbareGroepenModel {
+class BesturenModel extends GroepenModel {
 
 	const orm = 'Bestuur';
 
@@ -313,29 +294,6 @@ class BesturenModel extends OpvolgbareGroepenModel {
 		$bestuur = parent::nieuw();
 		$bestuur->bijbeltekst = '';
 		return $bestuur;
-	}
-
-}
-
-class ActiviteitenModel extends OpvolgbareGroepenModel {
-
-	const orm = 'Activiteit';
-
-	protected static $instance;
-
-	public function nieuw() {
-		$activiteit = parent::nieuw();
-		$activiteit->soort = ActiviteitSoort::Intern;
-		$activiteit->locatie = null;
-		$activiteit->rechten_aanmelden = null;
-		$activiteit->aanmeld_limiet = null;
-		$activiteit->aanmelden_vanaf = getDateTime();
-		$activiteit->aanmelden_tot = $activiteit->aanmelden_vanaf;
-		$activiteit->bewerken_tot = $activiteit->aanmelden_tot;
-		$activiteit->afmelden_tot = null;
-		$activiteit->kosten_bedrag = null;
-		$activiteit->machtiging_rekening = null;
-		return $activiteit;
 	}
 
 }
@@ -357,6 +315,29 @@ class KetzersModel extends GroepenModel {
 		$ketzer->kosten_bedrag = null;
 		$ketzer->machtiging_rekening = null;
 		return $ketzer;
+	}
+
+}
+
+class WerkgroepenModel extends KetzersModel {
+
+	const orm = 'Werkgroep';
+
+	protected static $instance;
+
+}
+
+class ActiviteitenModel extends KetzersModel {
+
+	const orm = 'Activiteit';
+
+	protected static $instance;
+
+	public function nieuw() {
+		$activiteit = parent::nieuw();
+		$activiteit->soort = ActiviteitSoort::Intern;
+		$activiteit->locatie = null;
+		return $activiteit;
 	}
 
 }

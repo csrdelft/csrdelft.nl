@@ -17,7 +17,7 @@ class GroepenBeheerTable extends DataTable {
 	protected $naam;
 
 	public function __construct(GroepenModel $model) {
-		parent::__construct($model::orm, null, 'opvolg_naam');
+		parent::__construct($model::orm, null, 'familie');
 
 		$this->url = $model->getUrl();
 		$this->dataUrl = $this->url . A::Beheren;
@@ -82,12 +82,12 @@ class GroepForm extends DataTableForm {
 
 		$fields = $this->generateFields();
 
-		if (isset($fields['opvolg_naam'])) {
+		if (isset($fields['familie'])) {
 			$suggesties = array();
-			foreach (Database::sqlSelect(array('DISTINCT opvolg_naam'), $groep->getTableName()) as $suggestie) {
+			foreach (Database::sqlSelect(array('DISTINCT familie'), $groep->getTableName()) as $suggestie) {
 				$suggesties[] = $suggestie[0];
 			}
-			$fields['opvolg_naam']->suggestions[] = $suggesties;
+			$fields['familie']->suggestions[] = $suggesties;
 		}
 		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
 
@@ -102,20 +102,16 @@ class GroepConverteerForm extends DataTableForm {
 		parent::__construct($groep, $groep->getUrl() . 'converteren', $model::orm . ' converteren');
 
 		$options = array(
-			'Met opvolgers'		 => array(
-				'ActiviteitenModel'	 => ActiviteitenModel::orm,
-				'WerkgroepenModel'	 => WerkgroepenModel::orm,
-				'CommissiesModel'	 => CommissiesModel::orm,
-				'BesturenModel'		 => BesturenModel::orm
-			),
-			'Zonder opvolgers'	 => array(
-				'KetzersModel'			 => KetzersModel::orm,
-				'WoonoordenModel'		 => WoonoordenModel::orm,
-				'OnderverenigingenModel' => OnderverenigingenModel::orm,
-				'GroepenModel'			 => GroepenModel::orm
-			)
+			'ActiviteitenModel'		 => ActiviteitenModel::orm,
+			'BesturenModel'			 => BesturenModel::orm,
+			'CommissiesModel'		 => CommissiesModel::orm,
+			'GroepenModel'			 => GroepenModel::orm,
+			'KetzersModel'			 => KetzersModel::orm,
+			'OnderverenigingenModel' => OnderverenigingenModel::orm,
+			'WerkgroepenModel'		 => WerkgroepenModel::orm,
+			'WoonoordenModel'		 => WoonoordenModel::orm
 		);
-		$fields[] = new SelectField('class', get_class($model), 'Converteren naar', $options, true);
+		$fields[] = new SelectField('class', get_class($model), 'Converteren naar', $options);
 		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
@@ -296,16 +292,6 @@ class GroepView implements View {
 			$html .= '<div class="clear">&nbsp;</div><a class="groep-omschrijving-tonen" onclick="$(this).next().slideDown();$(this).remove();">Meer lezen »</a><div class="groep-omschrijving">';
 			$html .= CsrBB::parse($this->groep->omschrijving);
 			$html .= '</div>';
-		}
-		if (false AND $this->groep instanceof OpvolgbareGroep) {
-			/**
-			 * TODO
-			 */
-			$generaties = group_by_distinct('id', $this->groep->getGeneraties());
-			$dropdown = new SelectField('generaties', $this->groep->id, null, $generaties);
-			$dropdown->onchange = 'window.location.href="/groepen/' . get_class($this->groep) . '/' . $this->groep->id . '"';
-			$html .= $dropdown->getHtml();
-			$html .= '<a>Opvolger maken</a>';
 		}
 		$html .= '</div>';
 		$html .= $this->leden->getHtml();

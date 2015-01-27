@@ -65,6 +65,16 @@ class Groep extends PersistentEntity {
 	 */
 	public $rechten_beheren;
 	/**
+	 * Naam voor opvolging
+	 * @var string
+	 */
+	public $familie;
+	/**
+	 * o.t. / h.t. / f.t.
+	 * @var GroepStatus
+	 */
+	public $status;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -78,7 +88,12 @@ class Groep extends PersistentEntity {
 		'website'			 => array(T::String, true),
 		'maker_uid'			 => array(T::UID),
 		'keuzelijst'		 => array(T::String, true),
-		'rechten_beheren'	 => array(T::String, true)
+		'rechten_beheren'	 => array(T::String, true),
+		'familie'			 => array(T::String, true),
+		'status'			 => array(T::Enumeration, false, 'GroepStatus')
+	);
+	protected static $rename_attributes = array(
+		'opvolg_naam' => 'familie'
 	);
 	/**
 	 * Database primary key

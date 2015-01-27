@@ -113,7 +113,7 @@ class VoorkeurCommissie {
 		$result = $db->select($query);
 		$res = array();
 		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-			$commissie = CommissiesModel::instance()->find('opvolg_naam = ?', array($this->naam), null, null, 1)->fetch();
+			$commissie = CommissiesModel::instance()->find('familie = ?', array($this->naam), null, null, 1)->fetch();
 			$lid = $commissie->getLid($row['uid']);
 			if ($lid) {
 				$gedaan = true;

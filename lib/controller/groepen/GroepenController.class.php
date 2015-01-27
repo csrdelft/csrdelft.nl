@@ -97,16 +97,17 @@ class GroepenController extends Controller {
 
 	public function overzicht($soort = null) {
 		if ($soort) {
-			$groepen = $this->model->find('soort = ?', array($soort));
+			$groepen = $this->model->find('status = ? AND soort = ?', array(GroepStatus::HT, $soort));
 		} else {
-			$groepen = $this->model->find();
+			$groepen = $this->model->find('status = ?', array(GroepStatus::HT));
 		}
 		$body = new GroepenView($this->model, $groepen);
 		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function bekijken(Groep $groep) {
-		$body = new GroepView($groep, GroepTab::Pasfotos);
+		$groepen = $this->model->find('familie = ?', array($groep->familie));
+		$body = new GroepenView($this->model, $groepen);
 		$this->view = new CsrLayoutPage($body);
 	}
 
@@ -188,6 +189,20 @@ class GroepenController extends Controller {
 		}
 	}
 
+	public function verwijderen() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$response = array();
+		foreach ($selection as $UUID) {
+			$groep = $this->model->getUUID($UUID);
+			if (!$groep OR ! $groep->mag($this->action)) {
+				$this->geentoegang();
+			}
+			$this->model->delete($groep);
+			$response[] = $groep;
+		}
+		$this->view = new RemoveRowsResponse($response);
+	}
+
 	public function converteren() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (isset($selection[0])) {
@@ -208,26 +223,12 @@ class GroepenController extends Controller {
 			}
 			$nieuw = $model::instance()->converteer($groep, $this->model);
 			if ($nieuw) {
-				setMelding('Converteren geslaagd! Vul de ontbrekende velden in.', 1);
+				setMelding('Converteren geslaagd! Nieuw ID=' . $nieuw->id . ' Vul de ontbrekende velden in.', 1);
 				$this->view = new GroepForm($nieuw, $nieuw->getUrl() . A::Wijzigen, true);
 				return;
 			}
 		}
 		$this->view = $form;
-	}
-
-	public function verwijderen() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$response = array();
-		foreach ($selection as $UUID) {
-			$groep = $this->model->getUUID($UUID);
-			if (!$groep OR ! $groep->mag($this->action)) {
-				$this->geentoegang();
-			}
-			$this->model->delete($groep);
-			$response[] = $groep;
-		}
-		$this->view = new RemoveRowsResponse($response);
 	}
 
 	public function leden(Groep $groep) {

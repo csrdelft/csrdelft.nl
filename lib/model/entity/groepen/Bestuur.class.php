@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Bestuur extends OpvolgbareGroep {
+class Bestuur extends Groep {
 
 	const leden = 'BestuursLedenModel';
 

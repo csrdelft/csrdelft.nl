@@ -129,14 +129,6 @@ class KringLedenModel extends GroepLedenModel {
 
 }
 
-class WerkgroepDeelnemersModel extends GroepLedenModel {
-
-	const orm = 'WerkgroepDeelnemer';
-
-	protected static $instance;
-
-}
-
 class CommissieLedenModel extends GroepLedenModel {
 
 	const orm = 'CommissieLid';
@@ -153,17 +145,25 @@ class BestuursLedenModel extends GroepLedenModel {
 
 }
 
-class ActiviteitDeelnemersModel extends GroepLedenModel {
+class KetzerDeelnemersModel extends GroepLedenModel {
 
-	const orm = 'ActiviteitDeelnemer';
+	const orm = 'KetzerDeelnemer';
 
 	protected static $instance;
 
 }
 
-class KetzerDeelnemersModel extends GroepLedenModel {
+class WerkgroepDeelnemersModel extends KetzerDeelnemersModel {
 
-	const orm = 'KetzerDeelnemer';
+	const orm = 'WerkgroepDeelnemer';
+
+	protected static $instance;
+
+}
+
+class ActiviteitDeelnemersModel extends KetzerDeelnemersModel {
+
+	const orm = 'ActiviteitDeelnemer';
 
 	protected static $instance;
 

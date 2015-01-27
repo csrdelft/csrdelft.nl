@@ -7,7 +7,7 @@
  * 
  * Controller voor kringen.
  */
-class KringenController extends OpvolgbareGroepenController {
+class KringenController extends GroepenController {
 
 	public function __construct($query) {
 		parent::__construct($query, KringenModel::instance());

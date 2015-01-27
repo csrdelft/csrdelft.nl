@@ -7,7 +7,7 @@
  * 
  * Controller voor besturen.
  */
-class BesturenController extends OpvolgbareGroepenController {
+class BesturenController extends GroepenController {
 
 	public function __construct($query) {
 		parent::__construct($query, BesturenModel::instance());
