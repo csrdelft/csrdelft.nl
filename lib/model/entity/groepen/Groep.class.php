@@ -92,9 +92,6 @@ class Groep extends PersistentEntity {
 		'familie'			 => array(T::String, true),
 		'status'			 => array(T::Enumeration, false, 'GroepStatus')
 	);
-	protected static $rename_attributes = array(
-		'opvolg_naam' => 'familie'
-	);
 	/**
 	 * Database primary key
 	 * @var array
