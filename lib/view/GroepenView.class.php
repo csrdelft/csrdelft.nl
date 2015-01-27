@@ -83,7 +83,7 @@ class GroepForm extends DataTableForm {
 		$fields = $this->generateFields();
 
 		if (isset($fields['opvolg_naam'])) {
-			$fields['opvolg_naam']->suggestions = group_by_distinct('opvolg_naam', Database::sqlSelect(array('opvolg_naam'), $groep->getTableName()));
+			$fields['opvolg_naam']->suggestions = group_by_distinct('opvolg_naam', Database::sqlSelect(array('opvolg_naam'), $groep->getTableName())->fetchAll());
 		}
 		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
 
