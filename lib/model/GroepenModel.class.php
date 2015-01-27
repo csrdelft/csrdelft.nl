@@ -128,27 +128,42 @@ class GroepenModel extends CachedPersistenceModel {
 		// leden converteren
 		try {
 			$leden = $groep::leden;
-			$model = $leden::instance();
+			$ledenmodel = $leden::instance();
 			foreach ($oldgroep->getLeden() as $oldlid) {
-				$lid = $model->nieuw($groep, $oldlid->uid);
+				$lid = $ledenmodel->nieuw($groep, $oldlid->uid);
 				foreach ($oldlid->getValues() as $attr => $value) {
 					if (property_exists($lid, $attr)) {
 						$lid->$attr = $value;
 					}
 				}
 				$lid->groep_id = $groep->id;
-				$model->create($lid);
+				$ledenmodel->create($lid);
 			}
 		} catch (Exception $e) {
 			setMelding('Leden converteren mislukt: ' . $e->getMessage(), -1);
 			return false;
 		}
+		// omnummeren
+		try {
+			if (!isset(self::$old)) {
+				self::$old = DynamicEntityModel::makeModel('groep');
+			}
+			$omnummeren = self::$old->find('omnummeren = ? AND model = ?', array($oldgroep->id, get_class($oldmodel)), null, null, 1)->fetch();
+			if ($omnummeren) {
+				$omnummeren->omnummeren = $groep->id;
+				$omnummeren->model = get_class($this);
+				self::$old->update($omnummeren);
+			}
+		} catch (Exception $ex) {
+			setMelding('Omnummeren mislukt: ' . $e->getMessage(), -1);
+			return false;
+		}
 		// leden verwijderen
 		try {
 			$oldleden = $oldgroep::leden;
-			$model = $oldleden::instance();
+			$oldledenmodel = $oldleden::instance();
 			foreach ($oldgroep->getLeden() as $oldlid) {
-				$model->delete($oldlid);
+				$oldledenmodel->delete($oldlid);
 			}
 		} catch (Exception $ex) {
 			setMelding('Leden verwijderen mislukt: ' . $e->getMessage(), -1);

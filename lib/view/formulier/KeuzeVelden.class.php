@@ -166,7 +166,7 @@ class MultiSelectField extends InputField {
 			} else {
 				$keuze = $opties[0];
 			}
-			$this->selects[] = new SelectField($name . '[]', $keuze, null, $opties);
+			$this->selects[$i] = new SelectField($name . '[]', $keuze, null, $opties);
 		}
 	}
 
