@@ -159,7 +159,6 @@ class GroepenController extends Controller {
 				$this->beheren();
 				$this->view->getBody()->filter = $groep->naam;
 				$form->tableId = $this->view->getBody()->getTableId();
-				$form->action = $groep->getUrl() . $this->action;
 				$this->view->modal = $form;
 			} elseif ($form->validate()) {
 				$this->model->update($groep);
