@@ -364,7 +364,7 @@ class GroepenController extends Controller {
 			$groep = $model::instance()->converteer($converteer, $this->model);
 			if ($groep) {
 				setMelding('Converteren geslaagd! Vul de ontbrekende velden in.', 1);
-				$this->view = new GroepForm($groep, $groep->getUrl() . A::Wijzigen);
+				$this->view = new GroepForm($groep, $groep->getUrl() . A::Wijzigen, true);
 				return;
 			}
 		}
