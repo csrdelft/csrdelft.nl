@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/entity/groepen/KetzerDeelnemer.class.php';
+
 /**
  * ActiviteitDeelnemer.class.php
  * 

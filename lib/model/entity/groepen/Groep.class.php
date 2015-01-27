@@ -25,6 +25,16 @@ class Groep extends PersistentEntity {
 	 */
 	public $naam;
 	/**
+	 * Naam voor opvolging
+	 * @var string
+	 */
+	public $familie;
+	/**
+	 * o.t. / h.t. / f.t.
+	 * @var GroepStatus
+	 */
+	public $status;
+	/**
 	 * Korte omschrijving
 	 * @var string
 	 */
@@ -34,6 +44,11 @@ class Groep extends PersistentEntity {
 	 * @var string
 	 */
 	public $omschrijving;
+	/**
+	 * Serialized keuzelijst(en)
+	 * @var string
+	 */
+	public $keuzelijst;
 	/**
 	 * Datum en tijd begin 
 	 * @var string
@@ -55,25 +70,10 @@ class Groep extends PersistentEntity {
 	 */
 	public $maker_uid;
 	/**
-	 * Serialized keuzelijst(en)
-	 * @var string
-	 */
-	public $keuzelijst;
-	/**
 	 * Rechten benodigd voor beheren
 	 * @var string
 	 */
 	public $rechten_beheren;
-	/**
-	 * Naam voor opvolging
-	 * @var string
-	 */
-	public $familie;
-	/**
-	 * o.t. / h.t. / f.t.
-	 * @var GroepStatus
-	 */
-	public $status;
 	/**
 	 * Database table columns
 	 * @var array
@@ -81,16 +81,16 @@ class Groep extends PersistentEntity {
 	protected static $persistent_attributes = array(
 		'id'				 => array(T::Integer, false, 'auto_increment'),
 		'naam'				 => array(T::String),
+		'familie'			 => array(T::String, true),
+		'status'			 => array(T::Enumeration, false, 'GroepStatus'),
 		'samenvatting'		 => array(T::Text),
 		'omschrijving'		 => array(T::Text, true),
+		'keuzelijst'		 => array(T::String, true),
 		'begin_moment'		 => array(T::DateTime),
 		'eind_moment'		 => array(T::DateTime, true),
 		'website'			 => array(T::String, true),
 		'maker_uid'			 => array(T::UID),
-		'keuzelijst'		 => array(T::String, true),
-		'rechten_beheren'	 => array(T::String, true),
-		'familie'			 => array(T::String, true),
-		'status'			 => array(T::Enumeration, false, 'GroepStatus')
+		'rechten_beheren'	 => array(T::String, true)
 	);
 	/**
 	 * Database primary key
