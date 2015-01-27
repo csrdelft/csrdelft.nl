@@ -25,7 +25,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
-	private static $prefix = array('GROEP', 'VERTICALE', 'VERTICALELEIDER', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDERJAARS', 'EERSTEJAARS');
+	private static $prefix = array('GROEP', 'KETZER', 'ACTIVITEIT', 'ONDERVERENIGING', 'BESTUUR', 'COMMISSIE', 'WOONOORD', 'VERTICALE', 'VERTICALELEIDER', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDERJAARS', 'EERSTEJAARS');
 	/**
 	 * Gebruikt om ledengegevens te raadplegen
 	 * @var array
@@ -462,8 +462,46 @@ class AccessModel extends CachedPersistenceModel {
 			 * Met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep.
 			 */
 			case 'GROEP':
+			case 'KETZER':
+			case 'ACTIVITEIT':
+			case 'ONDERVERENIGING':
+			case 'BESTUUR':
+			case 'COMMISSIE':
+			case 'WOONOORD':
+				switch ($prefix) {
 
-				$groep = GroepenModel::omnummeren($gevraagd);
+					case 'KETZER':
+						$groep = KetzersModel::get($gevraagd);
+						break;
+
+					case 'ACTIVITEIT':
+						$groep = ActiviteitenModel::get($gevraagd);
+						break;
+
+					case 'ONDERVERENIGING':
+						$groep = OnderverenigingenModel::get($gevraagd);
+						break;
+
+					case 'BESTUUR':
+						$groep = BesturenModel::get($gevraagd);
+						break;
+
+					case 'COMMISSIE':
+						$groep = CommissiesModel::get($gevraagd);
+						break;
+
+					case 'WOONOORD':
+						$groep = WoonoordenModel::get($gevraagd);
+						break;
+
+					case 'GROEP':
+					default:
+						$groep = GroepenModel::get($gevraagd);
+						if (!$groep) {
+							$groep = GroepenModel::omnummeren($gevraagd);
+						}
+						break;
+				}
 				if (!$groep) {
 					return false;
 				}
