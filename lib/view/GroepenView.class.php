@@ -45,6 +45,9 @@ class GroepenBeheerTable extends DataTable {
 		$update = new DataTableKnop('== 1', $this->tableId, $this->url . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig groep eigenschappen', 'edit');
 		$this->addKnop($update);
 
+		$opvolg = new DataTableKnop('>= 1', $this->tableId, $this->url . 'opvolging', 'post popup', 'Opvolging', 'Familienaam en groepstatus instellen', 'timeline');
+		$this->addKnop($opvolg);
+
 		$convert = new DataTableKnop('== 1', $this->tableId, $this->url . 'converteren', 'post popup', 'Converteren', 'Converteer groep', 'lightning');
 		$this->addKnop($convert);
 
@@ -92,6 +95,26 @@ class GroepForm extends DataTableForm {
 		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
 
 		$this->addFields(array(new FormDefaultKnoppen($nocancel ? false : null)));
+	}
+
+}
+
+class GroepOpvolgingForm extends DataTableForm {
+
+	public function __construct(Groep $groep, $action) {
+		parent::__construct($groep, $action, 'Opvolging instellen');
+
+		$fields[] = new TextField('familie', $groep->familie, 'Familienaam');
+
+		$options = array();
+		foreach (GroepStatus::getTypeOptions() as $status) {
+			$options[$status] = GroepStatus::getDescription($status);
+		}
+		$fields[] = new SelectField('status', $groep->status, 'Groepstatus', $options);
+
+		$fields[] = new FormDefaultKnoppen();
+
+		$this->addFields($fields);
 	}
 
 }

@@ -28,6 +28,7 @@ class GroepenController extends Controller {
 
 			// geen groep id vereist
 			case 'overzicht':
+			case 'opvolging':
 			case 'converteren':
 			case A::Beheren:
 			case A::Aanmaken:
@@ -79,6 +80,7 @@ class GroepenController extends Controller {
 				return !$this->isPosted();
 
 			case 'overzicht':
+			case 'opvolging':
 			case 'converteren':
 			case GroepTab::Pasfotos:
 			case GroepTab::Lijst:
@@ -202,6 +204,32 @@ class GroepenController extends Controller {
 			$response[] = $groep;
 		}
 		$this->view = new RemoveRowsResponse($response);
+	}
+
+	public function opvolging() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		if (empty($selection)) {
+			$this->geentoegang();
+		}
+		$groep = $this->model->getUUID($selection[0]);
+		$form = new GroepOpvolgingForm($groep, $this->model->getUrl() . $this->action);
+		if ($form->validate()) {
+			$values = $form->getValues();
+			$response = array();
+			foreach ($selection as $UUID) {
+				$groep = $this->model->getUUID($UUID);
+				if (!$groep OR ! $groep->mag(A::Wijzigen)) {
+					continue;
+				}
+				$groep->familie = $values['familie'];
+				$groep->status = $values['status'];
+				$this->model->update($groep);
+				$response[] = $groep;
+			}
+			$this->view = new GroepenBeheerData($response);
+		} else {
+			$this->view = $form;
+		}
 	}
 
 	public function converteren() {

@@ -473,9 +473,9 @@ function form_submit(event) {
 			formData.append('DataTableId', tableId);
 
 			var selection = fnGetSelection('#' + tableId);
-			if (selection.length > 0) {
-				formData.append('DataTableSelection[]', selection);
-			}
+			$.each(selection, function (key, value) {
+				formData.append('DataTableSelection[]', value);
+			});
 
 			done = function (response) {
 				if (typeof response === 'object') { // JSON
