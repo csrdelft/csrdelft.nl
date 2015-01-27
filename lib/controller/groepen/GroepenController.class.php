@@ -188,6 +188,34 @@ class GroepenController extends Controller {
 		}
 	}
 
+	public function converteren() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		if (isset($selection[0])) {
+			$groep = $this->model->getUUID($selection[0]);
+		} else {
+			$groep = false;
+		}
+		if (!$groep OR ! $groep->mag($this->action)) {
+			$this->geentoegang();
+		}
+		$form = new GroepConverteerForm($groep, $this->model);
+		if ($form->validate()) {
+			$model = $form->findByName('class')->getValue();
+			if (get_class($this->model) === $model) {
+				setMelding('Geen wijziging', 0);
+				$this->view = $form;
+				return;
+			}
+			$nieuw = $model::instance()->converteer($groep, $this->model);
+			if ($nieuw) {
+				setMelding('Converteren geslaagd! Vul de ontbrekende velden in.', 1);
+				$this->view = new GroepForm($nieuw, $nieuw->getUrl() . A::Wijzigen, true);
+				return;
+			}
+		}
+		$this->view = $form;
+	}
+
 	public function verwijderen() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$response = array();
@@ -345,30 +373,6 @@ class GroepenController extends Controller {
 				}
 				return;
 		}
-	}
-
-	public function converteren() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		if (!isset($selection[0])) {
-			$this->geentoegang();
-		}
-		$converteer = $this->model->getUUID($selection[0]);
-		$form = new GroepConverteerForm($converteer, $this->model);
-		if ($form->validate()) {
-			$model = $form->findByName('class')->getValue();
-			if (get_class($this->model) === $model) {
-				setMelding('Geen wijziging', 0);
-				$this->view = $form;
-				return;
-			}
-			$groep = $model::instance()->converteer($converteer, $this->model);
-			if ($groep) {
-				setMelding('Converteren geslaagd! Vul de ontbrekende velden in.', 1);
-				$this->view = new GroepForm($groep, $groep->getUrl() . A::Wijzigen, true);
-				return;
-			}
-		}
-		$this->view = $form;
 	}
 
 }
