@@ -47,15 +47,15 @@ class ProfielView extends SmartyTemplateView {
 		}
 		$this->smarty->assign('commissies', $commissies);
 
-		$activiteiten = '';
-		foreach (ActiviteitDeelnemersModel::instance()->find('uid = ?', array($this->model->uid)) as $deelnemer) {
-			$activiteit = ActiviteitenModel::get($deelnemer->groep_id);
-			$activiteiten = '<a href="' . $activiteit->getUrl() . '">' . $activiteit->naam . '</a><br />' . $activiteiten;
+		$groepen = '';
+		foreach (GroepLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $groeplid) {
+			$groep = GroepenModel::get($groeplid->groep_id);
+			$groepen = '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />' . $groepen;
 		}
-		if ($activiteiten != '') {
-			$activiteiten = '<div class="label">Activiteiten:</div><div class="data">' . $activiteiten . '</div>';
+		if ($groepen != '') {
+			$groepen = '<div class="label">Overige<br />groepen:</div><div class="data">' . $groepen . '</div>';
 		}
-		$this->smarty->assign('activiteiten', $activiteiten);
+		$this->smarty->assign('groepen', $groepen);
 
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {
 

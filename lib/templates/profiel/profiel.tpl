@@ -172,7 +172,7 @@
 				{$commissies}
 			</div>
 			<div class="half">
-				{$activiteiten}
+				{$groepen}
 			</div>
 			<div class="clear-left"></div>
 		</div>
