@@ -18,6 +18,7 @@ class GroepenBeheerTable extends DataTable {
 		$url = $model->getUrl();
 		$this->dataUrl = $url . A::Beheren;
 		$this->titel = 'Beheer ' . lcfirst($model->getNaam());
+		$this->hideColumn('id', false);
 		$this->hideColumn('samenvatting');
 		$this->hideColumn('omschrijving');
 		$this->hideColumn('website');
