@@ -13,11 +13,18 @@ require_once 'view/GroepLedenView.class.php';
  */
 class GroepenBeheerTable extends DataTable {
 
+	protected $url;
+	protected $naam;
+
 	public function __construct(GroepenModel $model) {
 		parent::__construct($model::orm, null, 'opvolg_naam');
-		$url = $model->getUrl();
-		$this->dataUrl = $url . A::Beheren;
-		$this->titel = 'Beheer ' . lcfirst($model->getNaam());
+
+		$this->url = $model->getUrl();
+		$this->dataUrl = $this->url . A::Beheren;
+
+		$this->naam = $model->getNaam();
+		$this->titel = 'Beheer ' . lcfirst($this->naam);
+
 		$this->hideColumn('id', false);
 		$this->hideColumn('samenvatting');
 		$this->hideColumn('omschrijving');
@@ -32,17 +39,21 @@ class GroepenBeheerTable extends DataTable {
 		$this->searchColumn('status');
 		$this->searchColumn('soort');
 
-		$create = new DataTableKnop('== 0', $this->tableId, $url . A::Aanmaken, 'post popup', 'Toevoegen', 'Nieuwe groep toevoegen', 'add');
+		$create = new DataTableKnop('== 0', $this->tableId, $this->url . A::Aanmaken, 'post popup', 'Toevoegen', 'Nieuwe groep toevoegen', 'add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, $url . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig groep eigenschappen', 'edit');
+		$update = new DataTableKnop('== 1', $this->tableId, $this->url . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig groep eigenschappen', 'edit');
 		$this->addKnop($update);
 
-		$convert = new DataTableKnop('== 1', $this->tableId, $url . 'converteren', 'post popup', 'Converteren', 'Converteer groep', 'lightning');
+		$convert = new DataTableKnop('== 1', $this->tableId, $this->url . 'converteren', 'post popup', 'Converteren', 'Converteer groep', 'lightning');
 		$this->addKnop($convert);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, $url . A::Verwijderen, 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
+		$delete = new DataTableKnop('>= 1', $this->tableId, $this->url . A::Verwijderen, 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
 		$this->addKnop($delete);
+	}
+
+	public function getBreadcrumbs() {
+		return '<a href="/groepen" title="Groepen"><span class="fa fa-users module-icon"></span></a> » <a href="' . $this->url . '">' . $this->naam . '</a> » <span class="active">Beheren</span>';
 	}
 
 }
@@ -196,7 +207,7 @@ class GroepenView implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/groepen" title="Groepen"><span class="fa fa-users module-icon"></span></a> » ' . $this->getTitel() . '</div>';
+		return '<a href="/groepen" title="Groepen"><span class="fa fa-users module-icon"></span></a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 
 	public function getModel() {
