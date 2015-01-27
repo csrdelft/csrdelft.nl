@@ -156,12 +156,17 @@ class MultiSelectField extends InputField {
 	private $selects = array();
 
 	public function __construct($name, $value, $description, $keuzeopties) {
-		parent::__construct($name, $value, $description);
+		parent::__construct($name, str_replace('&amp;&amp;', '&&', $value), $description);
 		$selects = explode('&&', str_replace('&amp;&amp;', '&&', $keuzeopties));
-		$gekozen = explode('&&', str_replace('&amp;&amp;', '&&', $value));
+		$gekozen = explode('&&', $this->value);
 		foreach ($selects as $i => $opties) {
 			$opties = explode('|', $opties);
-			$this->selects[] = new SelectField($name . '[]', array_search($gekozen[$i], $opties), null, $opties);
+			if (isset($gekozen[$i])) {
+				$keuze = array_search($gekozen[$i], $opties);
+			} else {
+				$keuze = $opties[0];
+			}
+			$this->selects[] = new SelectField($name . '[]', $keuze, null, $opties);
 		}
 	}
 
