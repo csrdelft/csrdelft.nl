@@ -154,6 +154,9 @@ class Groep extends PersistentEntity {
 		if (LoginModel::mag('P_LEDEN_MOD') OR LoginModel::mag($this->rechten_beheren)) {
 			return true;
 		}
+		if ($action === A::Bekijken AND LoginModel::mag('P_LEDEN_READ')) {
+			return true;
+		}
 		/**
 		 * TODO
 		 */
