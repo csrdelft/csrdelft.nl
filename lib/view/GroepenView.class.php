@@ -166,6 +166,7 @@ class GroepRechtenForm extends DataTableForm {
 
 class GroepenView implements View {
 
+	protected $url;
 	protected $groepen;
 	/**
 	 * Toon CMS pagina
@@ -175,6 +176,7 @@ class GroepenView implements View {
 
 	public function __construct(GroepenModel $model, $groepen) {
 		$this->groepen = $groepen;
+		$this->url = $model->getUrl();
 		$this->pagina = CmsPaginaModel::get($model->getNaam());
 		if (!$this->pagina) {
 			$this->pagina = CmsPaginaModel::get('');
@@ -182,6 +184,7 @@ class GroepenView implements View {
 	}
 
 	public function view() {
+		echo '<div class="float-right"><a class="btn" href="' . $this->url . 'beheren"><img class="icon" src="/plaetjes/famfamfam/table.png" width="16" height="16"> Beheren</a></div>';
 		$view = new CmsPaginaView($this->pagina);
 		$view->view();
 		foreach ($this->groepen as $groep) {

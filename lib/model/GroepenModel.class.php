@@ -24,7 +24,7 @@ class GroepenModel extends CachedPersistenceModel {
 	}
 
 	public static function getUrl() {
-		return '/groepen/' . static::getNaam() . '/';
+		return '/groepen/' . strtolower(static::getNaam()) . '/';
 	}
 
 	private static $old;
