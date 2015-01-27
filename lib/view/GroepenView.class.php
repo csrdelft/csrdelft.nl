@@ -227,7 +227,7 @@ class GroepenView implements View {
 		$view->view();
 		foreach ($this->groepen as $groep) {
 			echo '<hr>';
-			$view = new GroepView($groep, GroepTab::Pasfotos);
+			$view = new GroepView($groep);
 			$view->view();
 		}
 	}
@@ -278,7 +278,7 @@ class GroepView implements View {
 				break;
 
 			default:
-				if ($groep->keuzelijst) {
+				if ($groep->keuzelijst OR $groep instanceof Bestuur) {
 					$this->leden = new GroepLijstView($groep);
 				} else {
 					$this->leden = new GroepPasfotosView($groep);
