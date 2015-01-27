@@ -43,28 +43,16 @@ class Ketzer extends Groep {
 	 */
 	public $afmelden_tot;
 	/**
-	 * Bedrag in centen
-	 * @var int
-	 */
-	public $kosten_bedrag;
-	/**
-	 * Rekeningnummer voor machtiging 
-	 * @var string
-	 */
-	public $machtiging_rekening;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'rechten_aanmelden'		 => array(T::String, true),
-		'aanmeld_limiet'		 => array(T::Integer, true),
-		'aanmelden_vanaf'		 => array(T::DateTime),
-		'aanmelden_tot'			 => array(T::DateTime),
-		'bewerken_tot'			 => array(T::DateTime),
-		'afmelden_tot'			 => array(T::DateTime, true),
-		'kosten_bedrag'			 => array(T::Integer, true),
-		'machtiging_rekening'	 => array(T::String, true)
+		'rechten_aanmelden'	 => array(T::String, true),
+		'aanmeld_limiet'	 => array(T::Integer, true),
+		'aanmelden_vanaf'	 => array(T::DateTime),
+		'aanmelden_tot'		 => array(T::DateTime),
+		'bewerken_tot'		 => array(T::DateTime),
+		'afmelden_tot'		 => array(T::DateTime, true)
 	);
 	/**
 	 * Database table name

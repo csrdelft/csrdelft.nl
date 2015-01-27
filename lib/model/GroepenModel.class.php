@@ -316,8 +316,6 @@ class KetzersModel extends GroepenModel {
 		$ketzer->aanmelden_tot = $ketzer->aanmelden_vanaf;
 		$ketzer->bewerken_tot = $ketzer->aanmelden_tot;
 		$ketzer->afmelden_tot = null;
-		$ketzer->kosten_bedrag = null;
-		$ketzer->machtiging_rekening = null;
 		return $ketzer;
 	}
 
