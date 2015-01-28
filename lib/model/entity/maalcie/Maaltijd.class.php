@@ -47,7 +47,7 @@ class Maaltijd implements Agendeerbaar {
 	 */
 	public $maaltijdcorvee;
 
-	public function __construct($mid = 0, $mrid = null, $titel = '', $limiet = null, $datum = null, $tijd = null, $prijs = null, $gesloten = false, $wanneer_gesloten = null, $verwijderd = false, $filter = '') {
+	public function __construct($mid = 0, $mrid = null, $titel = '', $limiet = null, $datum = null, $tijd = null, $prijs = null, $gesloten = false, $wanneer_gesloten = null, $verwijderd = false, $filter = null) {
 		$this->maaltijd_id = (int) $mid;
 		if ($mrid !== null) {
 			$this->mlt_repetitie_id = (int) $mrid;
@@ -221,7 +221,7 @@ class Maaltijd implements Agendeerbaar {
 	}
 
 	public function setAanmeldFilter($filter) {
-		if (!is_string($filter)) {
+		if (!is_string($filter) AND $filter !== null) {
 			throw new Exception('Geen string: aanmeld filter');
 		}
 		$this->aanmeld_filter = $filter;

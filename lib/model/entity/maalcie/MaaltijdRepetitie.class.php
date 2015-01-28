@@ -35,7 +35,7 @@ class MaaltijdRepetitie {
 	private $standaard_limiet; # int 11
 	private $abonnement_filter; # string 255
 
-	public function __construct($mrid = 0, $dag = null, $periode = null, $titel = '', $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = '') {
+	public function __construct($mrid = 0, $dag = null, $periode = null, $titel = '', $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = null) {
 		$this->mlt_repetitie_id = (int) $mrid;
 		if ($dag === null) {
 			$dag = intval(Instellingen::get('maaltijden', 'standaard_repetitie_weekdag'));
@@ -177,7 +177,7 @@ class MaaltijdRepetitie {
 	}
 
 	public function setAbonnementFilter($filter) {
-		if (!is_string($filter)) {
+		if (!is_string($filter) AND $filter !== null) {
 			throw new Exception('Geen string: abonnement filter');
 		}
 		$this->abonnement_filter = $filter;
