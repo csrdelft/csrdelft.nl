@@ -11,6 +11,7 @@ htdocs/android/get_user.php -text
 htdocs/android/get_userlist.php -text
 htdocs/android/login.php -text
 htdocs/bar/ajax.php -text
+htdocs/bar/controller/Barsysteem.class.php -text
 htdocs/bar/css/bar.css -text
 htdocs/bar/css/bootstrap-theme.css -text
 htdocs/bar/css/bootstrap-theme.min.css -text
@@ -3898,7 +3899,6 @@ lib/Zend/Validate/Hostname/Jp.php -text
 lib/Zend/Validate/Interface.php -text
 lib/Zend/Validate/Ip.php -text
 lib/Zend/Version.php -text
-lib/barsysteem.class.php -text
 lib/bbparser/LICENSE -text
 lib/bbparser/README -text
 lib/bbparser/TODO -text
