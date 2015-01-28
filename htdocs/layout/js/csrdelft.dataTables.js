@@ -11,12 +11,13 @@ $(document).ready(function () {
 });
 
 function fnStickyToolbar() {
+	var elmnt = $('.DataTableToolbar:first');
 	var y = $(window).scrollTop();
-	var m = $('.DataTableToolbar:first').attr('origY');
+	var m = elmnt.attr('origY');
 	if (y >= m) {
-		$('.DataTableToolbar:first').css('margin-top', y - m);
+		elmnt.css('margin-top', y - m);
 	} else {
-		$('.DataTableToolbar:first').css('margin-top', 0);
+		elmnt.css('margin-top', 0);
 	}
 
 }
@@ -26,7 +27,9 @@ function fnInitDataTables() {
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
 
 	// Sticky toolbar
-	$('.DataTableToolbar:first').attr('origY', $('.DataTableToolbar:first').offset().top);
+	var elmnt = $('.DataTableToolbar:first');
+	elmnt.attr('origY', elmnt.offset().top);
+	$('<div>&nbsp;</div>').height(elmnt.height()).insertAfter(elmnt);
 	$(window).scroll(fnStickyToolbar);
 }
 
