@@ -75,14 +75,17 @@ class GroepenModel extends CachedPersistenceModel {
 		if ($profiel->isLid() OR $profiel->isOudlid()) {
 			$result[] = 'htleden-oudleden';
 		}
-		if (BestuursLedenModel::instance()->find('uid = ?', array($uid), null, null, 1)->fetch()) {
-			$result[] = 'bestuur';
+		foreach (BestuursLedenModel::instance()->find('uid = ?', array($uid)) as $lid) {
+			$bestuur = BesturenModel::get($lid->groep_id);
+			//if ($bestuur->status === GroepStatus::HT OR $bestuur->status === GroepStatus::FT) {
+			$result[] = $bestuur->familie;
+			//}
 		}
 		foreach (CommissieLedenModel::instance()->find('uid = ?', array($uid)) as $lid) {
 			$commissie = CommissiesModel::get($lid->groep_id);
-			if ($commissie->status === GroepStatus::HT) {
-				$result[] = $commissie->familie;
-			}
+			//if ($commissie->status === GroepStatus::HT OR $commissie->status === GroepStatus::FT) {
+			$result[] = $commissie->familie;
+			//}
 		}
 		return $result;
 	}
