@@ -333,7 +333,7 @@ class KeuzeRondjeField extends SelectField {
 	}
 
 	protected function getOptionHtml($value, $description) {
-		$html = '<input id="' . $this->getId() . 'Option_' . $value . '" value="' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'class', 'disabled', 'readonly'));
+		$html = '<input id="' . $this->getId() . 'Option_' . $value . '" value="' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'class', 'origvalue', 'disabled', 'readonly'));
 		if ($value === $this->value) {
 			$html .= ' checked="checked"';
 		}
