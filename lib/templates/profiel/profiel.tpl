@@ -292,7 +292,7 @@
 						<table id="recenteForumberichten">
 							{foreach from=ForumPostsModel::instance()->getRecenteForumPostsVanLid($profiel->uid, (int) LidInstellingen::get('forum', 'draden_per_pagina')) item=post}
 								<tr>
-									<td><a href="/forum/reactie/{$post->post_id}#{$post->post_id}" title="{htmlspecialchars($post->tekst)}"{if $post->getForumDraad()->onGelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>{$post->getForumDraad()->titel|truncate:75}</a></td>
+									<td><a href="/forum/reactie/{$post->post_id}#{$post->post_id}" title="{htmlspecialchars($post->tekst)}"{if $post->getForumDraad()->isOngelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>{$post->getForumDraad()->titel|truncate:75}</a></td>
 									<td>
 										{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
 											{$post->datum_tijd|reldate}

@@ -159,7 +159,7 @@ class ForumDraadView extends ForumView {
 		$this->paging = ($paging AND ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1);
 		$this->statistiek = $statistiek;
 		// cache old value for ongelezen streep
-		$this->ongelezen = $draad->onGelezen();
+		$this->ongelezen = $draad->isOngelezen();
 		if ($draad->getWanneerGelezen()) {
 			$this->gelezen_moment = strtotime($draad->getWanneerGelezen()->datum_tijd);
 		} else {

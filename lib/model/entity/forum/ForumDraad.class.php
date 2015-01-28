@@ -243,7 +243,7 @@ class ForumDraad extends PersistentEntity {
 		return ForumDradenGelezenModel::instance()->getWanneerGelezenDoorLid($this);
 	}
 
-	public function onGelezen() {
+	public function isOngelezen() {
 		if ($this->getWanneerGelezen()) {
 			if (strtotime($this->laatst_gewijzigd) > strtotime($this->getWanneerGelezen()->datum_tijd)) {
 				return true;

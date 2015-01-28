@@ -129,4 +129,20 @@ class MenuItem extends PersistentEntity {
 		return $this->rechten_bekijken == LoginModel::getUid() OR LoginModel::mag('P_ADMIN');
 	}
 
+	public function isOngelezen() {
+		$prefix = '/forum/onderwerp/';
+		if (startsWith($this->link, $prefix)) {
+			$begin = strlen($prefix);
+			$end = strpos($this->link, '/', $begin);
+			if ($end) {
+				$draad_id = substr($this->link, $begin, $end - $begin);
+			} else {
+				$draad_id = substr($this->link, $begin);
+			}
+			$draad = ForumDradenModel::instance()->get((int) $draad_id);
+			return $draad AND $draad->isOngelezen();
+		}
+		return false;
+	}
+
 }
