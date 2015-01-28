@@ -45,7 +45,7 @@ class GroepenController extends Controller {
 					$this->geentoegang();
 				}
 				$args['groep'] = $groep;
-
+				$uid = null;
 				// actie opgegeven?
 				$this->action = A::Bekijken; // default
 				if ($this->hasParam(4)) { // action
@@ -56,6 +56,9 @@ class GroepenController extends Controller {
 						$uid = $this->getParam(5);
 						$args['uid'] = $uid;
 					}
+				}
+				if (!$groep->mag($this->action, $uid)) {
+					$this->geentoegang();
 				}
 		}
 		return parent::performAction($args);
@@ -198,7 +201,7 @@ class GroepenController extends Controller {
 		foreach ($selection as $UUID) {
 			$groep = $this->model->getUUID($UUID);
 			if (!$groep OR ! $groep->mag($this->action)) {
-				$this->geentoegang();
+				continue;
 			}
 			$this->model->delete($groep);
 			$response[] = $groep;
