@@ -311,7 +311,7 @@ class DataTable extends TabsForm {
 				$(tableId + ' tbody').on('click', 'tr', fnUpdateToolbar);
 				$('.DTTT_button_text').on('click', fnUpdateToolbar); // (De-)Select all
 				$(tableId + '_toolbar').prependTo(tableId + '_wrapper'); // Toolbar above table
-				$(tableId + '_toolbar h1.Titel').prependTo(tableId + '_wrapper'); // Title above toolbar
+				$(tableId + '_toolbar h2.Titel').prependTo(tableId + '_wrapper'); // Title above toolbar
 				$('.DTTT_container').children().appendTo(tableId + '_toolbar'); // Buttons inside toolbar
 				$('.DTTT_container').remove(); // Remove buttons container
 				$(tableId + '_filter input').attr('placeholder', 'Zoeken').unwrap(); // Remove filter container

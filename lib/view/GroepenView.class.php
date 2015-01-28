@@ -59,6 +59,12 @@ class GroepenBeheerTable extends DataTable {
 		return '<a href="/groepen" title="Groepen"><span class="fa fa-users module-icon"></span></a> » <a href="' . $this->url . '">' . $this->naam . '</a> » <span class="active">Beheren</span>';
 	}
 
+	public function view() {
+		$view = new CmsPaginaView(CmsPaginaModel::get($this->naam));
+		$view->view();
+		parent::view();
+	}
+
 }
 
 class GroepenBeheerData extends DataTableResponse {
@@ -214,9 +220,6 @@ class GroepenView implements View {
 		$this->groepen = $groepen;
 		$this->url = $model->getUrl();
 		$this->pagina = CmsPaginaModel::get($model->getNaam());
-		if (!$this->pagina) {
-			$this->pagina = CmsPaginaModel::get('');
-		}
 		if ($model instanceof BesturenModel) {
 			$this->tab = GroepTab::Lijst;
 		} else {

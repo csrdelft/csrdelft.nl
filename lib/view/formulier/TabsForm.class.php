@@ -54,7 +54,7 @@ class TabsForm extends Formulier {
 			echo $this->getFormTag();
 		}
 		if ($this->getTitel()) {
-			echo '<h1 class="Titel">' . $this->getTitel() . '</h1>';
+			echo '<h2 class="Titel">' . $this->getTitel() . '</h2>';
 		}
 		// fields above tabs
 		if (isset($this->tabs['head'])) {
