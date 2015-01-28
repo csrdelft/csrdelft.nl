@@ -39,7 +39,7 @@ class Barsysteem {
 
 	function getPersonen() {
 		require_once 'model/entity/LidStatus.enum.php';
-		$terug = $this->db->query("SELECT socCieKlanten.stekUID, socCieKlanten.socCieId, socCieKlanten.naam, socCieKlanten.saldo, COUNT(socCieBestelling.totaal) AS recent FROM socCieKlanten LEFT JOIN socCieBestelling ON (socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100 AND socCieBestelling.deleted = 0) WHERE socCieKlanten.deleted = 0 GROUP BY socCieKlanten.socCieId;");
+		$terug = $this->db->query("SELECT socCieKlanten.stekUID, socCieKlanten.socCieId, socCieKlanten.naam, socCieKlanten.saldo, socCieKlanten.deleted, COUNT(socCieBestelling.totaal) AS recent FROM socCieKlanten LEFT JOIN socCieBestelling ON (socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100 AND socCieBestelling.deleted = 0) GROUP BY socCieKlanten.socCieId;");
 		$result = array();
 		foreach ($terug as $row) {
 			$persoon = array();
@@ -56,6 +56,7 @@ class Barsysteem {
 			$persoon["bijnaam"] = $row["naam"];
 			$persoon["saldo"] = $row["saldo"];
 			$persoon["recent"] = $row["recent"];
+			$persoon["deleted"] = $row["deleted"];
 			$result[$row["socCieId"]] = $persoon;
 		}
 		return $result;
@@ -118,7 +119,7 @@ class Barsysteem {
 	}
 
 	function getBestellingPersoon($socCieId) {
-		$q = $this->db->prepare("SELECT *, B.deleted AS d FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId WHERE socCieId=:socCieId");
+		$q = $this->db->prepare("SELECT *, B.deleted AS d, 0 AS oud FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId WHERE socCieId=:socCieId");
 		$q->bindValue(":socCieId", $socCieId, PDO::PARAM_INT);
 		$q->execute();
 		return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC));
