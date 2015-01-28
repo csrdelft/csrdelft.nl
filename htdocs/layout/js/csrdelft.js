@@ -114,6 +114,7 @@ function init_lazy_images(parent) {
 		$(this).html(content);
 		content.on('load', function () {
 			$(this).parent().replaceWith($(this));
+			$(this).wrap('<a class="lightbox-link" href="' + $(this).attr('src') + '" data-lightbox="page-lightbox"></a>');
 		});
 	});
 }
