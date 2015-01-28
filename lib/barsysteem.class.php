@@ -143,7 +143,7 @@ class Barsysteem {
 		$qa = "";
 		if ($persoon != "alles")
 			$qa = "B.socCieId=:socCieId AND";
-		$q = $this->db->prepare("SELECT *, B.deleted AS d FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId JOIN socCieKlanten AS K ON B.socCieId = K.socCieId WHERE " . $qa . " (tijd BETWEEN :begin AND :eind) AND K.deleted = 0");
+		$q = $this->db->prepare("SELECT *, B.deleted AS d, K.deleted AS oud FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId JOIN socCieKlanten AS K ON B.socCieId = K.socCieId WHERE " . $qa . " (tijd BETWEEN :begin AND :eind)");
 		if ($persoon != "alles")
 			$q->bindValue(":socCieId", $persoon, PDO::PARAM_INT);
 		$q->bindValue(":begin", $begin);
@@ -246,6 +246,7 @@ class Barsysteem {
 				$result[$row["bestellingId"]]["tijd"] = $row["tijd"];
 				$result[$row["bestellingId"]]["bestelId"] = $row["id"];
 				$result[$row["bestellingId"]]["deleted"] = $row["d"];
+				$result[$row["bestellingId"]]["oud"] = $row["oud"];
 			}
 			$result[$row["bestellingId"]]["bestelLijst"][$row["productId"]] = 1 * $row["aantal"];
 		}
