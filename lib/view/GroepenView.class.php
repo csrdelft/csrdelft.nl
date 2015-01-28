@@ -13,8 +13,8 @@ require_once 'view/GroepLedenView.class.php';
  */
 class GroepenBeheerTable extends DataTable {
 
-	protected $url;
-	protected $naam;
+	private $url;
+	private $naam;
 
 	public function __construct(GroepenModel $model) {
 		parent::__construct($model::orm, null, 'familie');
@@ -204,13 +204,14 @@ class GroepRechtenForm extends DataTableForm {
 
 class GroepenView implements View {
 
-	protected $url;
-	protected $groepen;
+	private $url;
+	private $tab;
+	private $groepen;
 	/**
 	 * Toon CMS pagina
 	 * @var string
 	 */
-	protected $pagina;
+	private $pagina;
 
 	public function __construct(GroepenModel $model, $groepen) {
 		$this->groepen = $groepen;
@@ -218,6 +219,11 @@ class GroepenView implements View {
 		$this->pagina = CmsPaginaModel::get($model->getNaam());
 		if (!$this->pagina) {
 			$this->pagina = CmsPaginaModel::get('');
+		}
+		if ($model instanceof BesturenModel) {
+			$this->tab = GroepTab::Lijst;
+		} else {
+			$this->tab = GroepTab::Pasfotos;
 		}
 	}
 
@@ -227,7 +233,7 @@ class GroepenView implements View {
 		$view->view();
 		foreach ($this->groepen as $groep) {
 			echo '<hr>';
-			$view = new GroepView($groep);
+			$view = new GroepView($groep, $this->tab);
 			$view->view();
 		}
 	}
@@ -278,7 +284,7 @@ class GroepView implements View {
 				break;
 
 			default:
-				if ($groep->keuzelijst OR $groep instanceof Bestuur) {
+				if ($groep->keuzelijst) {
 					$this->leden = new GroepLijstView($groep);
 				} else {
 					$this->leden = new GroepPasfotosView($groep);
