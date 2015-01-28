@@ -27,7 +27,6 @@ function fnStickyToolbar() {
 		} else {
 			$(elmnt).css('margin-top', 0);
 		}
-		$(elmnt).next('table').css('padding-top', $(elmnt).height());
 	});
 }
 

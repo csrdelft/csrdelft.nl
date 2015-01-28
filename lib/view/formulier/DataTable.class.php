@@ -320,6 +320,7 @@ class DataTable extends TabsForm {
 				$(tableId + '_filter').prependTo(tableId + '_toolbar'); // Filter inside toolbar
 				// Sticky toolbar
 				toolbar.attr('origY', toolbar.offset().top);
+				$(tableId).css('padding-top', toolbar.height());
 				// Toggle details childrow
 				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
 					fnChildRow(table, $(this));
