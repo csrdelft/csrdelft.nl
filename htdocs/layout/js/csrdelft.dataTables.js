@@ -15,18 +15,26 @@ function fnInitDataTables() {
 	// Custom global filter
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
 
+	// Sticky toolbar
+	var toolbar = $('.DataTableToolbar:first');
+	toolbar.css({
+		'position': 'absolute',
+		'z-index': '100'
+	});
+	toolbar.attr('origY', toolbar.offset().top);
+	toolbar.next('table').css('padding-top', toolbar.height());
 	$(window).scroll(fnStickyToolbar);
 }
 
 function fnStickyToolbar() {
 	var y = $(window).scrollTop();
-	var elmnt = '.DataTableToolbar:first';
-	//$('.DataTableToolbar').each(function (i, elmnt) {
-	var m = $(elmnt).attr('origY');
+	var toolbar = '.DataTableToolbar:first';
+	//$('.DataTableToolbar').each(function (i, toolbar) {
+	var m = $(toolbar).attr('origY');
 	if (y >= m) {
-		$(elmnt).css('margin-top', y - m);
+		$(toolbar).css('margin-top', y - m);
 	} else {
-		$(elmnt).css('margin-top', 0);
+		$(toolbar).css('margin-top', 0);
 	}
 	//});
 }
