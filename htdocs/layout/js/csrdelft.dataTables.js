@@ -11,12 +11,11 @@ $(document).ready(function () {
 });
 
 function fnStickyToolbar() {
-	if ($(window).scrollTop() >= $('.DataTableToolbar:first').attr('origY')) {
-		$('.DataTableToolbar:first').css('position', 'fixed');
-		$('.DataTableToolbar:first').css('bottom', '0');
+	var y = $(window).scrollTop();
+	if (y >= $('.DataTableToolbar:first').attr('origY')) {
+		$('.DataTableToolbar:first').css('margin-top', y);
 	} else {
-		$('.DataTableToolbar:first').css('position', '');
-		$('.DataTableToolbar:first').css('bottom', '');
+		$('.DataTableToolbar:first').css('margin-top', 0);
 	}
 
 }
