@@ -75,17 +75,18 @@ class GroepenModel extends CachedPersistenceModel {
 		if ($profiel->isLid() OR $profiel->isOudlid()) {
 			$result[] = 'htleden-oudleden';
 		}
-		foreach (BestuursLedenModel::instance()->find('uid = ?', array($uid)) as $lid) {
-			$bestuur = BesturenModel::get($lid->groep_id);
-			//if ($bestuur->status === GroepStatus::HT OR $bestuur->status === GroepStatus::FT) {
-			$result[] = $bestuur->familie;
-			//}
+		// 1 generatie vooruit en 1 achteruit (default order by)
+		$ft = BesturenModel::instance()->find('status = ?', array(GroepStatus::FT), null, null, 1)->fetch();
+		$ht = BesturenModel::instance()->find('status = ?', array(GroepStatus::HT), null, null, 1)->fetch();
+		$ot = BesturenModel::instance()->find('status = ?', array(GroepStatus::OT), null, null, 1)->fetch();
+		if (($ft AND $ft->getLid($uid)) OR ( $ht AND $ht->getLid($uid)) OR ( $ot AND $ot->getLid($uid))) {
+			$result[] = 'bestuur';
 		}
-		foreach (CommissieLedenModel::instance()->find('uid = ?', array($uid)) as $lid) {
-			$commissie = CommissiesModel::get($lid->groep_id);
-			//if ($commissie->status === GroepStatus::HT OR $commissie->status === GroepStatus::FT) {
-			$result[] = $commissie->familie;
-			//}
+		foreach (CommissieLedenModel::instance()->find('uid = ?', array($uid)) as $commissielid) {
+			$commissie = CommissiesModel::get($commissielid->groep_id);
+			if ($commissie->status === GroepStatus::HT OR $commissie->status === GroepStatus::FT) {
+				$result[] = $commissie->familie;
+			}
 		}
 		return $result;
 	}
