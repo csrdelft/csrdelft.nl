@@ -317,6 +317,7 @@ class DataTable extends TabsForm {
 				$('.DTTT_container').remove(); // Remove buttons container
 				$(tableId + '_filter input').attr('placeholder', 'Zoeken').unwrap(); // Remove filter container
 				$(tableId + '_filter').prependTo(tableId + '_toolbar'); // Filter inside toolbar
+				fnInitStickyToolbar(); // Init after modifying DOM
 				// Toggle details childrow
 				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
 					fnChildRow(table, $(this));

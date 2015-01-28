@@ -14,16 +14,20 @@ $(document).ready(function () {
 function fnInitDataTables() {
 	// Custom global filter
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
+}
 
+function fnInitStickyToolbar() {
 	// Sticky toolbar
 	var toolbar = $('.DataTableToolbar:first');
-	toolbar.css({
-		'position': 'absolute',
-		'z-index': '100'
-	});
-	toolbar.attr('origY', toolbar.offset().top);
-	toolbar.next('table').css('padding-top', toolbar.height());
-	$(window).scroll(fnStickyToolbar);
+	if (toolbar.css('position') !== 'absolute') {
+		toolbar.css({
+			'position': 'absolute',
+			'z-index': '100'
+		});
+		toolbar.attr('origY', toolbar.offset().top);
+		toolbar.next('table').css('padding-top', toolbar.height());
+		$(window).scroll(fnStickyToolbar);
+	}
 }
 
 function fnStickyToolbar() {
