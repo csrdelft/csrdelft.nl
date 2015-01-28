@@ -90,7 +90,7 @@ function init_timeago(parent) {
 
 function init_markitup(parent) {
 	try {
-		$(parent).find('textarea.CsrBBPreviewField').markItUp(CsrBBcodeMarkItUpSet); // CsrBBcodeMarkItUpSet is located in: /layout/js/markitup/sets/bbcode/set.js
+		$(parent).find('textarea.BBCodeField').markItUp(CsrBBcodeMarkItUpSet); // CsrBBcodeMarkItUpSet is located in: /layout/js/markitup/sets/bbcode/set.js
 	}
 	catch (err) {
 		// Missing js file

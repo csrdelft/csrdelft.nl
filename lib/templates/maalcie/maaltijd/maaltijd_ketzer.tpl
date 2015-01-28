@@ -64,6 +64,7 @@
 				{if $maaltijd->magSluiten(LoginModel::getUid())}
 					</a>
 				{/if}
+				{CsrBB::parse($maaltijd->getOmschrijving())}
 			</div>
 		</div>
 	</div>

@@ -61,7 +61,7 @@ class CmsPaginaForm extends Formulier {
 			$fields[] = new HtmlComment('<div><label>Rechten bekijken</label>' . $pagina->rechten_bekijken .
 					'</div><div class="clear-left"><label>Rechten bewerken</label>' . $pagina->rechten_bewerken . '</div>');
 		}
-		$fields[] = new CsrBBPreviewField('inhoud', $pagina->inhoud, 'Inhoud');
+		$fields[] = new BBCodeField('inhoud', $pagina->inhoud, 'Inhoud');
 		$fields['btn'] = new FormDefaultKnoppen('/pagina/' . $pagina->naam);
 		$delete = new DeleteKnop('/pagina/verwijderen/' . $pagina->naam);
 		$fields['btn']->addKnop($delete, true);

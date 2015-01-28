@@ -115,13 +115,13 @@ class MaaltijdenModel {
 		return $maaltijden[0];
 	}
 
-	public static function saveMaaltijd($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter) {
+	public static function saveMaaltijd($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving) {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$verwijderd = 0;
 			if ($mid === 0) {
-				$maaltijd = self::newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter);
+				$maaltijd = self::newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving);
 			} else {
 				$maaltijd = self::getMaaltijd($mid);
 				$maaltijd->setTitel($titel);
@@ -130,6 +130,7 @@ class MaaltijdenModel {
 				$maaltijd->setTijd($tijd);
 				$maaltijd->setPrijs($prijs);
 				$maaltijd->setAanmeldFilter($filter);
+				$maaltijd->setOmschrijving($omschrijving);
 				self::updateMaaltijd($maaltijd);
 				if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < time()) {
 					MaaltijdenModel::sluitMaaltijd($maaltijd);
@@ -224,7 +225,7 @@ class MaaltijdenModel {
 	}
 
 	private static function loadMaaltijden($where = null, $values = array(), $limit = null) {
-		$sql = 'SELECT m.maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter, COUNT(a.uid) + SUM(IFNULL(aantal_gasten, 0)) AS aantal_aanmeldingen';
+		$sql = 'SELECT m.maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter, omschrijving, COUNT(a.uid) + SUM(IFNULL(aantal_gasten, 0)) AS aantal_aanmeldingen';
 		$sql.= ' FROM mlt_maaltijden m';
 		$sql.= ' LEFT JOIN mlt_aanmeldingen a ON m.maaltijd_id = a.maaltijd_id';
 		if ($where !== null) {
@@ -247,7 +248,7 @@ class MaaltijdenModel {
 
 	private static function updateMaaltijd(Maaltijd $maaltijd) {
 		$sql = 'UPDATE mlt_maaltijden';
-		$sql.= ' SET titel=?, aanmeld_limiet=?, datum=?, tijd=?, prijs=?, gesloten=?, laatst_gesloten=?, verwijderd=?, aanmeld_filter=?';
+		$sql.= ' SET titel=?, aanmeld_limiet=?, datum=?, tijd=?, prijs=?, gesloten=?, laatst_gesloten=?, verwijderd=?, aanmeld_filter=?, omschrijving=?';
 		$sql.= ' WHERE maaltijd_id=?';
 		$values = array(
 			$maaltijd->getTitel(),
@@ -259,6 +260,7 @@ class MaaltijdenModel {
 			$maaltijd->getLaatstGesloten(),
 			werkomheen_pdo_bool($maaltijd->getIsVerwijderd()),
 			$maaltijd->getAanmeldFilter(),
+			$maaltijd->getOmschrijving(),
 			$maaltijd->getMaaltijdId()
 		);
 		$db = \Database::instance();
@@ -269,7 +271,7 @@ class MaaltijdenModel {
 		}
 	}
 
-	private static function newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter) {
+	private static function newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving) {
 		$gesloten = true;
 		$wanneer = date('Y-m-d H:i');
 		if (strtotime($datum . ' ' . $tijd) > strtotime($wanneer)) {
@@ -277,16 +279,16 @@ class MaaltijdenModel {
 			$wanneer = null;
 		}
 		$sql = 'INSERT INTO mlt_maaltijden';
-		$sql.= ' (maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter)';
-		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$values = array(null, $mrid, $titel, $limiet, $datum, $tijd, $prijs, werkomheen_pdo_bool($gesloten), $wanneer, werkomheen_pdo_bool(false), $filter);
+		$sql.= ' (maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter, omschrijving)';
+		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$values = array(null, $mrid, $titel, $limiet, $datum, $tijd, $prijs, werkomheen_pdo_bool($gesloten), $wanneer, werkomheen_pdo_bool(false), $filter, $omschrijving);
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
 		$query->execute($values);
 		if ($query->rowCount() !== 1) {
 			throw new Exception('New maaltijd faalt: $query->rowCount() =' . $query->rowCount());
 		}
-		$maaltijd = new Maaltijd(intval($db->lastInsertId()), $mrid, $titel, $limiet, $datum, $tijd, $prijs, $gesloten, $wanneer, false, $filter);
+		$maaltijd = new Maaltijd(intval($db->lastInsertId()), $mrid, $titel, $limiet, $datum, $tijd, $prijs, $gesloten, $wanneer, false, $filter, $omschrijving);
 		$aantal = 0;
 		// aanmelden van leden met abonnement op deze repetitie
 		if (!$gesloten && $mrid !== null) {
@@ -521,7 +523,7 @@ class MaaltijdenModel {
 			$maaltijden = array();
 			while ($datum <= $eindDatum) { // break after one
 				$maaltijd = self::newMaaltijd(
-								$repetitie->getMaaltijdRepetitieId(), $repetitie->getStandaardTitel(), $repetitie->getStandaardLimiet(), date('Y-m-d', $datum), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getAbonnementFilter()
+								$repetitie->getMaaltijdRepetitieId(), $repetitie->getStandaardTitel(), $repetitie->getStandaardLimiet(), date('Y-m-d', $datum), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getAbonnementFilter(), null
 				);
 				foreach ($corveerepetities as $corveerepetitie) {
 					\CorveeTakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, $maaltijd->getMaaltijdId()); // do not repeat within maaltijd period

@@ -10,7 +10,7 @@
  */
 class MaaltijdForm extends ModalForm {
 
-	public function __construct($mid, $mrid = null, $titel = null, $limiet = null, $datum = null, $tijd = null, $prijs = null, $filter = null) {
+	public function __construct($mid, $mrid = null, $titel = null, $limiet = null, $datum = null, $tijd = null, $prijs = null, $filter = null, $omschrijving = null) {
 		parent::__construct(null, maalcieUrl . '/opslaan/' . $mid);
 
 		if (!is_int($mid) || $mid < 0) {
@@ -32,6 +32,7 @@ class MaaltijdForm extends ModalForm {
 		$fields[] = new BedragField('prijs', $prijs, 'Prijs', '€', 0, 50, 0.50);
 		$fields[] = new IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 0, 200);
 		$fields[] = new RechtenField('aanmeld_filter', $filter, 'Aanmeldrestrictie');
+		$fields[] = new BBCodeField('omschrijving', $omschrijving, 'Omschrijving');
 		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);

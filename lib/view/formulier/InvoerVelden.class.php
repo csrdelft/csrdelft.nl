@@ -17,7 +17,7 @@
  * 		* EmailField				Email adressen
  * 		* UrlField					Url's
  * 		* TextareaField				Textarea die automagisch uitbreidt bij typen
- * 			- CsrBBPreviewField		Textarea met bbcode voorbeeld
+ * 			- BBCodeField		Textarea met bbcode voorbeeld
  *  	* NickField					Nicknames
  *  	* DuckField					Ducknames
  * 		* LidField					Leden selecteren

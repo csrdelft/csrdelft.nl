@@ -9,7 +9,8 @@
 				</div>
 			{/if}
 		</td>
-		<td>{$maaltijd->getTitel()}
+		<td>
+			{$maaltijd->getTitel()}
 			<div class="float-right">
 				{assign var=prijs value=$maaltijd->getPrijsFloat()|string_format:"%.2f"}
 				{if $aanmelding and $aanmelding->getSaldoStatus() < 0}
@@ -22,6 +23,7 @@
 					{icon get="money_euro" title="Maaltijdprijs: &euro; "|cat:$prijs}
 				{/if}
 			</div>
+			{CsrBB::parse($maaltijd->getOmschrijving())}
 		</td>
 		<td class="text-center">
 			{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})

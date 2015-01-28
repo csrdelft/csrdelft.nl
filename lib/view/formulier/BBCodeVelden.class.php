@@ -9,10 +9,10 @@
  * 
  * Bevat de uitbreidingen van TextareaField:
  * 
- * 	- CsrBBPreviewField		Textarea met bbcode voorbeeld
+ * 	- BBCodeField		Textarea met bbcode voorbeeld
  * 
  */
-class CsrBBPreviewField extends TextareaField {
+class BBCodeField extends TextareaField {
 
 	public $previewOnEnter = false;
 
@@ -54,7 +54,7 @@ JS;
 
 }
 
-class RequiredCsrBBPreviewField extends CsrBBPreviewField {
+class RequiredBBCodeField extends BBCodeField {
 
 	public $required = true;
 

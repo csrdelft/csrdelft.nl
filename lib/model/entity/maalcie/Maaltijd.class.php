@@ -39,6 +39,7 @@ class Maaltijd implements Agendeerbaar {
 	private $laatst_gesloten; # int 11
 	private $verwijderd; # boolean
 	private $aanmeld_filter; # string 255
+	private $omschrijving; # text
 	private $aantal_aanmeldingen;
 	private $archief;
 	/**
@@ -47,7 +48,7 @@ class Maaltijd implements Agendeerbaar {
 	 */
 	public $maaltijdcorvee;
 
-	public function __construct($mid = 0, $mrid = null, $titel = '', $limiet = null, $datum = null, $tijd = null, $prijs = null, $gesloten = false, $wanneer_gesloten = null, $verwijderd = false, $filter = null) {
+	public function __construct($mid = 0, $mrid = null, $titel = '', $limiet = null, $datum = null, $tijd = null, $prijs = null, $gesloten = false, $wanneer_gesloten = null, $verwijderd = false, $filter = null, $omschrijving = null) {
 		$this->maaltijd_id = (int) $mid;
 		if ($mrid !== null) {
 			$this->mlt_repetitie_id = (int) $mrid;
@@ -73,6 +74,7 @@ class Maaltijd implements Agendeerbaar {
 		$this->setLaatstGesloten($wanneer_gesloten);
 		$this->setVerwijderd($verwijderd);
 		$this->setAanmeldFilter($filter);
+		$this->setOmschrijving($omschrijving);
 	}
 
 	public function getMaaltijdId() {
@@ -124,6 +126,10 @@ class Maaltijd implements Agendeerbaar {
 
 	public function getAanmeldFilter() {
 		return $this->aanmeld_filter;
+	}
+
+	public function getOmschrijving() {
+		return $this->omschrijving;
 	}
 
 	public function getAantalAanmeldingen() {
@@ -220,11 +226,18 @@ class Maaltijd implements Agendeerbaar {
 		$this->verwijderd = $bool;
 	}
 
-	public function setAanmeldFilter($filter) {
-		if (!is_string($filter) AND $filter !== null) {
+	public function setAanmeldFilter($string) {
+		if (!is_string($string) AND $string !== null) {
 			throw new Exception('Geen string: aanmeld filter');
 		}
-		$this->aanmeld_filter = $filter;
+		$this->aanmeld_filter = $string;
+	}
+
+	public function setOmschrijving($string) {
+		if (!is_string($string) AND $string !== null) {
+			throw new Exception('Geen string: omschrijving');
+		}
+		$this->omschrijving = $string;
 	}
 
 	public function setAantalAanmeldingen($int) {
