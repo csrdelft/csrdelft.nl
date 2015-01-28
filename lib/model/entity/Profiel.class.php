@@ -605,9 +605,11 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getWoonoord() {
-		$bewoner = BewonersModel::instance()->find('uid = ?', array($this->uid))->fetch();
-		if ($bewoner) {
-			return WoonoordenModel::get($bewoner->groep_id);
+		foreach (BewonersModel::instance()->find('uid = ?', array($this->uid)) as $bewoner) {
+			$woonoord = WoonoordenModel::get($bewoner->groep_id);
+			if ($woonoord AND $woonoord->status === GroepStatus::HT) {
+				return $woonoord;
+			}
 		}
 		return false;
 	}
