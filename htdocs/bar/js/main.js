@@ -531,10 +531,10 @@ $(function () {
                     });
                 }
             });
-            $("#anderePersoon" + item).click(function (e) {
+            /*$("#anderePersoon" + item).click(function (e) {
 				e.preventDefault();
                 //todo
-            });
+            });*/
             $("#bewerkInhoud" + item).click(function (e) {
 				e.preventDefault();
                 zetBericht("U bewerkt een bestelling!", "warning");
