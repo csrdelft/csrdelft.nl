@@ -83,7 +83,7 @@ class Account extends PersistentEntity {
 		'last_login_success'	 => array(T::DateTime, true),
 		'last_login_attempt'	 => array(T::DateTime, true),
 		'failed_login_attempts'	 => array(T::Integer),
-		'blocked_reason'		 => array(T::String, true),
+		'blocked_reason'		 => array(T::Text, true),
 		'perm_role'				 => array(T::Enumeration, false, 'AccessRole'),
 		'private_token'			 => array(T::String, true),
 		'private_token_since'	 => array(T::DateTime, true)
