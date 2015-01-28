@@ -221,31 +221,24 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return boolean
 	 */
 	public function login($user, $pass_plain, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
+
+		if (MODE === 'CLI') {
+			if (defined('ETC_PATH')) {
+				$cred = parse_ini_file(ETC_PATH . 'cron.ini');
+			} else {
+				$cred = array(
+					'user'	 => 'cron',
+					'pass'	 => 'pw'
+				);
+			}
+			$_SERVER['HTTP_USER_AGENT'] = 'CLI';
+			$user = $cred['user'];
+			$pass_plain = $cred['pass'];
+		}
+
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
-		switch (constant('MODE')) {
-			case 'CLI':
-				return $this->loginCli();
-			case 'WEB':
-			default:
-				return $this->loginWeb($user, $pass_plain, $remember, $lockIP, $tokenAuthenticated, $expire);
-		}
-	}
 
-	private function loginCli() {
-		if (defined('ETC_PATH')) {
-			$cred = parse_ini_file(ETC_PATH . 'cron.ini');
-		} else {
-			$cred = array(
-				'user'	 => 'cron',
-				'pass'	 => 'pw'
-			);
-		}
-		$_SERVER['HTTP_USER_AGENT'] = 'CLI';
-		return $this->loginWeb($cred['user'], $cred['pass'], null);
-	}
-
-	private function loginWeb($user, $pass_plain, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
 		$account = false;
 		// Inloggen met lidnummer of gebruikersnaam
 		if (AccountModel::isValidUid($user)) {
@@ -259,7 +252,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 		// Check timeout
 		$timeout = AccountModel::instance()->moetWachten($account);
-		if (!$remember AND ! $tokenAuthenticated AND $timeout > 0) {
+		if (MODE !== 'CLI' AND ! $remember AND ! $tokenAuthenticated AND $timeout > 0) {
 			$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
 			return false;
 		}
@@ -304,6 +297,9 @@ class LoginModel extends PersistenceModel implements Validator {
 				$this->update($session);
 			} else {
 				$this->create($session);
+			}
+			if (constant('MODE') === 'CLI') {
+				return true;
 			}
 
 			if ($remember) {
