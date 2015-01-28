@@ -50,7 +50,7 @@
 					&nbsp; (&euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"})
 				{/if}
 			</div>
-			van {$maaltijd->getDatum()|date_format:"%A %e %B"} {$maaltijd->getTijd()|date_format:"%H:%M"}
+			op {$maaltijd->getDatum()|date_format:"%A %e %B"} om {$maaltijd->getTijd()|date_format:"%H:%M"}
 			{if $maaltijd->magBekijken(LoginModel::getUid())}
 				<div class="float-right">
 					{icon get="paintcan" title=$maaltijd->maaltijdcorvee->getCorveeFunctie()->naam}
@@ -64,8 +64,8 @@
 				{if $maaltijd->magSluiten(LoginModel::getUid())}
 					</a>
 				{/if}
-				{CsrBB::parse($maaltijd->getOmschrijving())}
 			</div>
+			{CsrBB::parse($maaltijd->getOmschrijving())}
 		</div>
 	</div>
 {/strip}

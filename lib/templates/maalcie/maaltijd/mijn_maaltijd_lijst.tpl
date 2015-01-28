@@ -10,7 +10,7 @@
 			{/if}
 		</td>
 		<td>
-			{$maaltijd->getTitel()}
+			<div class="titel">{$maaltijd->getTitel()}</div>
 			<div class="float-right">
 				{assign var=prijs value=$maaltijd->getPrijsFloat()|string_format:"%.2f"}
 				{if $aanmelding and $aanmelding->getSaldoStatus() < 0}
