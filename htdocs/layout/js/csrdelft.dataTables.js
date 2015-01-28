@@ -10,9 +10,24 @@ $(document).ready(function () {
 	fnInitDataTables();
 });
 
+function fnStickyToolbar() {
+	if ($(window).scrollTop() >= $('.DataTableToolbar:first').attr('origY')) {
+		$('.DataTableToolbar:first').css('position', 'fixed');
+		$('.DataTableToolbar:first').css('bottom', '0');
+	} else {
+		$('.DataTableToolbar:first').css('position', '');
+		$('.DataTableToolbar:first').css('bottom', '');
+	}
+
+}
+
 function fnInitDataTables() {
 	// Custom global filter
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
+
+	// Sticky toolbar
+	$('.DataTableToolbar:first').attr('origY', $('.DataTableToolbar:first').offset().top);
+	$(window).scroll(fnStickyToolbar);
 }
 
 function fnUpdateDataTable(table, data) {

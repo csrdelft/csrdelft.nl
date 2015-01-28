@@ -279,6 +279,7 @@ class DataTable extends TabsForm {
 				var fnAjaxUpdateCallback = function (json) {
 					var oTable = $('#<?= $this->tableId; ?>').dataTable();
 					if (!lastUpdate<?= $this->tableId; ?>) {
+						// Late initialisation
 						oTable.fnFilter('<?= $this->filter; ?>');
 					}
 					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime());
