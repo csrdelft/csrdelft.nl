@@ -350,10 +350,14 @@ if ($barsysteem->isLoggedIn()) {
 									<th>Alleen leden en oudleden</th><td id="sumSaldiLid"></td>
 								</tr>
 							</table>
-						
-							<h2>Leden die rood staan</h2>
-							<table class="table table-striped" id="red">
-							</table>
+
+                            <h2>Leden die rood staan</h2>
+                            <table class="table table-striped" id="red">
+                            </table>
+
+                            <h2>Oudleden die rood staan</h2>
+                            <table class="table table-striped" id="red-old">
+                            </table>
 							
 						</div>
 					

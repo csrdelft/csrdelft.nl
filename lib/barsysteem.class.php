@@ -22,6 +22,21 @@ class Barsysteem {
 		return $this->beheer;
 	}
 
+	function getNaam($profiel) {
+
+		if (empty($profiel->voornaam)) {
+			$naam = $profiel->voorletters . ' ';
+		} else {
+			$naam = $profiel->voornaam . ' ';
+		}
+		if (!empty($profiel->tussenvoegsel)) {
+			$naam .= $profiel->tussenvoegsel . ' ';
+		}
+		$naam .= $profiel->achternaam;
+
+		return $naam;
+	}
+
 	function getPersonen() {
 		require_once 'model/entity/LidStatus.enum.php';
 		$terug = $this->db->query("SELECT socCieKlanten.stekUID, socCieKlanten.socCieId, socCieKlanten.naam, socCieKlanten.saldo, COUNT(socCieBestelling.totaal) AS recent FROM socCieKlanten LEFT JOIN socCieBestelling ON (socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100 AND socCieBestelling.deleted = 0) WHERE socCieKlanten.deleted = 0 GROUP BY socCieKlanten.socCieId;");
@@ -33,18 +48,7 @@ class Barsysteem {
 			if ($row["stekUID"]) {
 				$profiel = ProfielModel::get($row["stekUID"]);
 				if ($profiel) {
-
-					if (empty($profiel->voornaam)) {
-						$naam = $profiel->voorletters . ' ';
-					} else {
-						$naam = $profiel->voornaam . ' ';
-					}
-					if (!empty($profiel->tussenvoegsel)) {
-						$naam .= $profiel->tussenvoegsel . ' ';
-					}
-					$naam .= $profiel->achternaam;
-
-					$persoon["naam"] = $naam;
+					$persoon["naam"] = $this->getNaam($profiel);
 					$persoon["status"] = $profiel->status;
 				}
 			}
@@ -230,7 +234,7 @@ class Barsysteem {
 		return true;
 	}
 
-	private function verwerkBestellingResultaat($queryResult, $productIDs) {
+	private function verwerkBestellingResultaat($queryResult, $productIDs = array()) {
 		$result = array();
 		foreach ($queryResult as $row) {
 			if (!array_key_exists($row["bestellingId"], $result)) {
@@ -360,9 +364,10 @@ ORDER BY yearweek DESC
 		while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
 
 			$result[] = array(
-				'naam'	 => ProfielModel::get($r['stekUID'])->getNaam(),
+				'naam'	 => $this->getNaam(ProfielModel::get($r['stekUID'])),
 				'email'	 => ProfielModel::get($r['stekUID'])->getPrimaryEmail(),
-				'saldo'	 => $r['saldo']
+				'saldo'	 => $r['saldo'],
+				'status' => ProfielModel::get($r['stekUID'])->status
 			);
 		}
 

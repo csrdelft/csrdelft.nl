@@ -319,7 +319,13 @@ $(function () {
             resetTeller();
             $("#aantalInput")[0].value = "-";
         }
-    })
+    });
+
+    function isOudLid(person) {
+
+        return person.status != 'S_LID' && person.status != 'S_GASTLID' && person.status != 'S_NOVIET';
+
+    }
 
     $("#knopConfirm").each(function() {
 	
@@ -331,7 +337,7 @@ $(function () {
 	
 		$(this).click(function () {
 
-			var oudlid = selectedPerson.status != 'S_LID' && selectedPerson.status != 'S_GASTLID' && selectedPerson.status != 'S_NOVIET';
+			var oudlid = isOudLid(selectedPerson);
 			
 			var toRed;
 			if(oudeBestelling)
@@ -858,14 +864,23 @@ $(function () {
 			
 				$("#sumSaldi").html(saldoStr(data.sum_saldi.sum));
 				$("#sumSaldiLid").html(saldoStr(data.sum_saldi_lid.sum));
-				
-				var html = '';
-				$.each(data.red, function() {
-				
-					html += '<tr><th>' + this.naam + '</th><td>' + saldoStr(this.saldo) + '</td><td>' + this.email + '</td></tr>';
-				
-				});
-				$("#red").html(html);
+
+                var html = '';
+                $.each(data.red, function() {
+
+                    html += '<tr><th>' + this.naam + '</th><td>' + saldoStr(this.saldo) + '</td><td>' + this.email + '</td></tr>';
+
+                });
+                $("#red").html(html);
+
+                var html = '';
+                $.each(data.red, function() {
+
+                    if(isOudLid(this))
+                        html += '<tr><th>' + this.naam + '</th><td>' + saldoStr(this.saldo) + '</td><td>' + this.email + '</td></tr>';
+
+                });
+                $("#red-old").html(html);
 				
 				$("#productBeheer, #persoonBeheer, #grootboekInvoer").addClass("hidden");
 				$("#tools").removeClass("hidden");
