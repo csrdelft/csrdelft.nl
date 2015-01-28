@@ -277,7 +277,8 @@ $(function () {
         var item = new RegExp($("#persoonInput").val(), "gi");
 		var orderPersonen = [];
 		$.each(personen, function (key, val) {
-			orderPersonen.push( { key: key, value: val } );
+            if(val.deleted == 0)
+			    orderPersonen.push( { key: key, value: val } );
 		});
 		orderPersonen.sort(function(a, b) { return b.value.recent - a.value.recent });
         var personenForTable = [];
