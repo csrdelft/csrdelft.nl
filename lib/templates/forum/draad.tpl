@@ -6,16 +6,17 @@
 	{capture name='kop'}
 		<div class="forumheadbtn">
 			<a title="Onderwerp toevoegen aan favorieten" class="btn post popup addfav" href="/menubeheer/toevoegen/favoriet"></a>
-			{if $draad->isVerborgen()}
-				<a href="/forum/tonen/{$draad->draad_id}" class="btn post ReloadPage tonenAan" title="Onderwerp tonen in zijbalk"></a>
-			{elseif $draad->magVerbergen()}
-				<a href="/forum/verbergen/{$draad->draad_id}" class="btn post ReloadPage tonenUit" title="Onderwerp verbergen in zijbalk"></a>
-			{/if}
 			&nbsp;&nbsp;&nbsp;
 			{if $draad->isGevolgd()}
 				<a href="/forum/volgenuit/{$draad->draad_id}" class="btn post ReloadPage volgenUit" title="Onderwerp niet meer volgen per email"></a>
 			{elseif $draad->magVolgen()}
 				<a href="/forum/volgenaan/{$draad->draad_id}" class="btn post ReloadPage volgenAan" title="Onderwerp volgen per email"></a>
+			{/if}
+			&nbsp;&nbsp;&nbsp;
+			{if $draad->isVerborgen()}
+				<a href="/forum/tonen/{$draad->draad_id}" class="btn post ReloadPage tonenAan" title="Onderwerp tonen in zijbalk"></a>
+			{elseif $draad->magVerbergen()}
+				<a href="/forum/verbergen/{$draad->draad_id}" class="btn post ReloadPage tonenUit" title="Onderwerp verbergen in zijbalk"></a>
 			{/if}
 			&nbsp;&nbsp;&nbsp;
 			{if $draad->magModereren()}
