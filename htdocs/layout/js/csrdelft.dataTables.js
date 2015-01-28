@@ -10,27 +10,25 @@ $(document).ready(function () {
 	fnInitDataTables();
 });
 
-function fnStickyToolbar() {
-	var elmnt = $('.DataTableToolbar:first');
-	var y = $(window).scrollTop();
-	var m = elmnt.attr('origY');
-	if (y >= m) {
-		elmnt.css('margin-top', y - m);
-	} else {
-		elmnt.css('margin-top', 0);
-	}
-
-}
 
 function fnInitDataTables() {
 	// Custom global filter
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
 
-	// Sticky toolbar
-	var elmnt = $('.DataTableToolbar:first');
-	elmnt.attr('origY', elmnt.offset().top);
-	elmnt.next('table').css('margin-top', elmnt.height());
 	$(window).scroll(fnStickyToolbar);
+}
+
+function fnStickyToolbar() {
+	var y = $(window).scrollTop();
+	$('.DataTableToolbar').each(function (i, elmnt) {
+		var m = $(elmnt).attr('origY');
+		if (y >= m) {
+			$(elmnt).css('margin-top', y - m);
+		} else {
+			$(elmnt).css('margin-top', 0);
+		}
+		$(elmnt).next('table').css('padding-top', $(elmnt).height());
+	});
 }
 
 function fnUpdateDataTable(table, data) {

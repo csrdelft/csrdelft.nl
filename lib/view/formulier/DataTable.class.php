@@ -309,6 +309,7 @@ class DataTable extends TabsForm {
 				 * Toolbar button state update on row (de-)selection.
 				 */
 				var fnUpdateToolbar = <?= $this->getUpdateToolbarFunction(); ?>;
+				var toolbar = $('#<?= $this->formId; ?>');
 				$(tableId + ' tbody').on('click', 'tr', fnUpdateToolbar);
 				$('.DTTT_button_text').on('click', fnUpdateToolbar); // (De-)Select all
 				$(tableId + '_toolbar').prependTo(tableId + '_wrapper'); // Toolbar above table
@@ -317,6 +318,8 @@ class DataTable extends TabsForm {
 				$('.DTTT_container').remove(); // Remove buttons container
 				$(tableId + '_filter input').attr('placeholder', 'Zoeken').unwrap(); // Remove filter container
 				$(tableId + '_filter').prependTo(tableId + '_toolbar'); // Filter inside toolbar
+				// Sticky toolbar
+				toolbar.attr('origY', toolbar.offset().top);
 				// Toggle details childrow
 				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
 					fnChildRow(table, $(this));
