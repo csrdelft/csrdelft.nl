@@ -2,7 +2,7 @@
 <p class="instelling">
 	<label class="instelling" for="inst_{$module}_{$id}">
 		{if $reset}
-			<a href="/instellingen/reset/{$module}/{$id}" class="btn round post confirm ReloadPage vooriedereen" title="Voor iedereen deze instelling resetten naar de standaardwaarde: {ucfirst($default)}&#013;(Zie LidInstellingenModel.class.php)">{icon get=arrow_rotate_anticlockwise}</a>
+			<a href="/instellingen/reset/{$module}/{$id}" class="btn post confirm ReloadPage vooriedereen" title="Voor iedereen deze instelling resetten naar de standaardwaarde: {ucfirst($default)}&#013;(Zie LidInstellingenModel.class.php)">{icon get=arrow_rotate_anticlockwise}</a>
 		{/if}
 		{$label}
 	</label>
