@@ -144,11 +144,6 @@ class LoginModel extends PersistenceModel implements Validator {
 				setMelding('Uw wachtwoord verloopt over ' . $dagen, 2);
 			}
 		}
-		// Controleer of er een ban is ingesteld
-		if (isset($account->blocked_reason)) {
-			setMelding(CsrBB::parse($account->blocked_reason), 0);
-			redirect(CSR_ROOT);
-		}
 		return true;
 	}
 
