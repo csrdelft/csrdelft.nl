@@ -111,9 +111,9 @@ class GroepOpvolgingForm extends DataTableForm {
 
 		$options = array();
 		foreach (GroepStatus::getTypeOptions() as $status) {
-			$options[$status] = GroepStatus::getDescription($status);
+			$options[$status] = GroepStatus::getChar($status);
 		}
-		$fields[] = new SelectField('status', $groep->status, 'Groepstatus', $options);
+		$fields[] = new KeuzeRondjeField('status', $groep->status, 'Groepstatus', $options);
 
 		$fields[] = new FormDefaultKnoppen();
 
