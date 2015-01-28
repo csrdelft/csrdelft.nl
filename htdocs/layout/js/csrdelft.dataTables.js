@@ -29,7 +29,7 @@ function fnInitDataTables() {
 	// Sticky toolbar
 	var elmnt = $('.DataTableToolbar:first');
 	elmnt.attr('origY', elmnt.offset().top);
-	$('<div>&nbsp;</div>').height(elmnt.height()).insertAfter(elmnt);
+	elmnt.next('table').css('margin-top', elmnt.height());
 	$(window).scroll(fnStickyToolbar);
 }
 
