@@ -48,19 +48,8 @@ class CsrLayoutPage extends CompressedLayout {
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
 		$smarty->assign('mainmenu', new MainMenuView());
-
-		// Controleer of er een ban is ingesteld
-		$account = LoginModel::getAccount();
-		if (isset($account->blocked_reason)) {
-			$msg = CsrBB::parse($account->blocked_reason);
-			setMelding($msg, 0);
-			require_once 'model/CmsPaginaModel.class.php';
-			require_once 'view/CmsPaginaView.class.php';
-			$smarty->assign('body', new CmsPaginaView(CmsPaginaModel::get('geentoegang')));
-		} else {
-			$smarty->assign('modal', $this->modal);
-			$smarty->assign('body', $this->getBody());
-		}
+		$smarty->assign('body', $this->getBody());
+		$smarty->assign('modal', $this->modal);
 
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
 		if (!$breadcrumbs) {

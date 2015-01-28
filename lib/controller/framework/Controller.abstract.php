@@ -147,7 +147,14 @@ abstract class Controller {
 	abstract protected function mag($action, array $args);
 
 	public function performAction(array $args = array()) {
-		if (!$this->mag($this->action, $args)) {
+		// Controleer of er een ban is ingesteld
+		$account = LoginModel::getAccount();
+		if (isset($account->blocked_reason)) {
+			setMelding(CsrBB::parse($account->blocked_reason), -1);
+			$this->action = 'geentoegang';
+		}
+		// Controleer of de actie uitgevoerd mag worden met de gegeven argumenten
+		elseif (!$this->mag($this->action, $args)) {
 			//DebugLogModel::instance()->log(get_class($this), $this->action, $args, 'geentoegang');
 			$this->action = 'geentoegang';
 		}
