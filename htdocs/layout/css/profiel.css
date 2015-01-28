@@ -13,14 +13,6 @@
 
 #profiel .naam .status { float: left; color: #aaa; width: 60px; padding: 0 20px; }
 #profiel .naam h1 { padding-left: 10px; }
-#profiel .adres { margin-left: 75px; text-align: left; }
-#profiel .gegevenszelf { float: left; width: 250px; }
-#profiel .gegevenszelf .label { text-align: right; margin-top: 2em; }
-#profiel .gegevenszelf .label img { margin-right: 15px; }
-
-#profiel .gegevensouders {  width: 250px; margin-left: 250px; padding-left: 10px; }
-#profiel .gegevensouders .label { width: 50px; margin-top: 2em; }
-#profiel .gegevensouders .adres { margin-left: 50px; }
 
 #profiel .familie { padding-left: 10px; margin-left: 260px; width: 250px; }
 #profiel .familie .stamboom { float: right; }

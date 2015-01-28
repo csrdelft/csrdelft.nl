@@ -59,7 +59,7 @@
 	{if $profiel->status != LidStatus::Overleden AND ($profiel->adres!='' OR $profiel->o_adres!='')}
 		<div class="profielregel">
 			<div class="gegevens">
-				<div class="gegevenszelf">
+				<div class="half">
 					<div class="label">
 						{if $profiel->adres!=''}
 							<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->adres|urlencode}+{$profiel->woonplaats|urlencode}+{$profiel->land|urlencode}">
@@ -67,7 +67,7 @@
 							</a>
 						{/if}
 					</div>
-					<div class="adres">
+					<div class="data">
 						{$woonoord}<br />
 						{$profiel->adres}<br />
 						{$profiel->postcode} {$profiel->woonplaats}<br />
@@ -77,7 +77,7 @@
 					</div>
 				</div>
 				{if $profiel->isLid()}
-					<div class="gegevensouders">
+					<div class="half">
 						{if $profiel->o_adres!=''}
 							<div class="label">
 								<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->o_adres|urlencode}+{$profiel->o_woonplaats|urlencode}+{$profiel->o_land|urlencode} (ouders van {$profiel->getNaam('civitas')})">
@@ -85,7 +85,7 @@
 								</a>
 							</div>
 						{/if}
-						<div class="adres">
+						<div class="data">
 							{if $profiel->o_adres!=''}
 								<strong>Ouders:</strong><br />
 								{$profiel->o_adres}<br />
