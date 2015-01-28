@@ -831,8 +831,9 @@ $(function () {
 					
 					var total = 0;
 					$.each(this.content, function() {
-					
-						total += parseFloat(this.total);
+
+                        var add = parseFloat(this.total);
+						total += add < 0 ? 0 : add;
 						addhtml += '<tr><td>' + this.type + '</td><td>' + saldoStr(this.total) + '</td></tr>';
 					
 					});
