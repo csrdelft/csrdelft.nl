@@ -12,8 +12,9 @@ $(document).ready(function () {
 
 function fnStickyToolbar() {
 	var y = $(window).scrollTop();
-	if (y >= $('.DataTableToolbar:first').attr('origY')) {
-		$('.DataTableToolbar:first').css('margin-top', y);
+	var m = $('.DataTableToolbar:first').attr('origY');
+	if (y >= m) {
+		$('.DataTableToolbar:first').css('margin-top', y - m);
 	} else {
 		$('.DataTableToolbar:first').css('margin-top', 0);
 	}
