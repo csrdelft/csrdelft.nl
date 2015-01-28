@@ -133,6 +133,8 @@ abstract class GroepTabView implements View, FormElement {
 		return $this->groep->naam;
 	}
 
+	protected abstract function getTabContent();
+
 	public function getHtml() {
 		$html = '<div id="groep-leden-' . $this->groep->id . '" class="groep-leden"><ul class="groep-tabs nobullets">';
 
@@ -150,13 +152,17 @@ abstract class GroepTabView implements View, FormElement {
 
 		$html .= '<li class="float-right"><a class="btn vergroot" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Uitklappen"><span class="fa fa-expand"></span></a>';
 
-		return $html . '</ul><div id="groep-leden-content-' . $this->groep->id . '" class="groep-tab-content">';
-	}
+		$html .= '</ul><div id="groep-leden-content-' . $this->groep->id . '" class="groep-tab-content">';
 
-	protected function getCloseHtml() {
-		$html = $this->getScriptTag() . '</div><br />';
+		$html .= $this->getTabContent();
+		$html .= $this->getScriptTag();
+
+		$html .= '</div><br />';
+
 		if (property_exists($this->groep, 'aanmeld_limiet') AND isset($this->groep->aanmeld_limiet)) {
+			// Progress bar
 			$percent = round($this->groep->aantalLeden() * 100 / $this->groep->aanmeld_limiet);
+			// Aanmelden mogelijk?
 			if (time() > strtotime($this->groep->aanmelden_vanaf) AND time() < strtotime($this->groep->aanmelden_tot)) {
 				$verschil = $this->groep->aanmeld_limiet - $this->groep->aantalLeden();
 				if ($verschil === 0) {
@@ -166,7 +172,9 @@ abstract class GroepTabView implements View, FormElement {
 					$title = 'Inschrijvingen geopend! Nog ' . $verschil . ' plek' . ($verschil === 1 ? '' : 'ken') . ' vrij.';
 					$color = ' progress-bar-success';
 				}
-			} elseif ($this->groep->getLid(LoginModel::getUid()) AND time() < strtotime($this->groep->bewerken_tot)) {
+			}
+			// Bewerken mogelijk?
+			elseif ($this->groep->getLid(LoginModel::getUid()) AND time() < strtotime($this->groep->bewerken_tot)) {
 				$title = 'Inschrijvingen gesloten! Inschrijving bewerken is nog wel toegestaan.';
 				$color = ' progress-bar-warning';
 			} else {
@@ -204,8 +212,8 @@ JS;
 
 class GroepPasfotosView extends GroepTabView {
 
-	public function getHtml() {
-		$html = parent::getHtml();
+	protected function getTabContent() {
+		$html = '';
 		if (property_exists($this->groep, 'rechten_aanmelden') AND $this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
 			$groep = $this->groep;
 			$leden = $groep::leden;
@@ -216,16 +224,15 @@ class GroepPasfotosView extends GroepTabView {
 		foreach ($this->groep->getLeden() as $lid) {
 			$html .= ProfielModel::getLink($lid->uid, 'pasfoto');
 		}
-		return $html . parent::getCloseHtml();
+		return $html;
 	}
 
 }
 
 class GroepLijstView extends GroepTabView {
 
-	public function getHtml() {
-		$html = parent::getHtml();
-		$html .= '<table class="groep-lijst"><tbody>';
+	public function getTabContent() {
+		$html = '<table class="groep-lijst"><tbody>';
 		$suggesties = $this->groep->getOpmerkingSuggesties();
 		if (property_exists($this->groep, 'rechten_aanmelden') AND $this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
 			$html .= '<tr><td colspan="2">';
@@ -247,8 +254,7 @@ class GroepLijstView extends GroepTabView {
 			}
 			$html .= '</td></tr>';
 		}
-		$html .= '</tbody></table>';
-		return $html . parent::getCloseHtml();
+		return $html . '</tbody></table>';
 	}
 
 }
@@ -372,9 +378,8 @@ JS;
 		return $series;
 	}
 
-	public function getHtml() {
-		$html = parent::getHtml();
-		$html .= '<div class="groep-stats">';
+	public function getTabContent() {
+		$html = '';
 
 		foreach ($this->groep->getStatistieken() as $titel => $data) {
 			$html .= '<h4>' . $titel . '</h4>';
@@ -412,27 +417,22 @@ var data{$titel}{$this->groep->id} = {$data};
 });
 JS;
 		}
-
-		$html .= '</div>';
-		return $html . parent::getCloseHtml();
+		return $html;
 	}
 
 }
 
 class GroepEmailsView extends GroepTabView {
 
-	public function getHtml() {
-		$html = parent::getHtml();
-		$html .= '<div class = "groep-emails">';
+	public function getTabContent() {
+		$html = '';
 		foreach ($this->groep->getLeden() as $lid) {
 			$profiel = ProfielModel::get($lid->uid);
 			if ($profiel AND $profiel->getPrimaryEmail() != '') {
-				$html .= $profiel->getPrimaryEmail() . ';
-		';
+				$html .= $profiel->getPrimaryEmail() . '; ';
 			}
 		}
-		$html .= '</div>';
-		return $html . parent::getCloseHtml();
+		return $html;
 	}
 
 }
