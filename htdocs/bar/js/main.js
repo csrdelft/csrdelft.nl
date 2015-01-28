@@ -87,30 +87,32 @@ $(function () {
 
     });
 
-    function zetInTabel(persoon) {
-        var naam = persoon.naam;
-        $("#selectieTabel > tbody").append("<tr id='persoon" + persoon.socCieId + "'><td>" + persoon.bijnaam + "</td><td>" + naam + "</td><td class=\"" + (persoon.saldo < 0 ? "bg-danger" : "bg-success") +"\">" + saldoStr(persoon.saldo) + "</td></tr>");
-        $("#persoon" + persoon.socCieId).click(function () {
-            cancel();
-            $.ajax({
-                url: "ajax.php",
-                method: "POST",
-                data: {"saldoSocCieId": persoon.socCieId}
-            }).done(function (data) {
-                persoon.saldo = 1 * data;
+    function zetInTabel(personen) {
+        var tbody = $("<tbody />");
+        $.each(personen, function(key, persoon) {
+            var newRow = $("<tr id='persoon" + persoon.socCieId + "'><td>" + persoon.bijnaam + "</td><td>" + persoon.naam + "</td><td class=\"" + (persoon.saldo < 0 ? "bg-danger" : "bg-success") +"\">" + saldoStr(persoon.saldo) + "</td></tr>");
+            newRow.click(function () {
+                cancel();
+                $.ajax({
+                    url: "ajax.php",
+                    method: "POST",
+                    data: {"saldoSocCieId": persoon.socCieId}
+                }).done(function (data) {
+                    persoon.saldo = 1 * data;
+                });
+                selectedPerson = persoon;
+
+                zetBericht("Geselecteerde persoon: " + persoon.naam + " | Saldo: " + saldoStr(persoon.saldo), persoon.saldo >= 0 ? 'success' : 'danger');
+
+                $("#invoerveld").trigger("click");
+                $("#persoonInput").val("");
+                updateOnKeyPress();
+                resetTeller();
+                resetLijst();
             });
-            selectedPerson = persoon;
-
-            zetBericht("Geselecteerde persoon: " + naam + " | Saldo: " + saldoStr(persoon.saldo), persoon.saldo >= 0 ? 'success' : 'danger');
-
-            $("#invoerveld").trigger("click");
-            //$("#besteLijstBeheerLaadPersoon").html("Laad bestellingen van: " + naam);
-            $("#persoonInput").val("");
-            updateOnKeyPress();
-            resetTeller();
-            resetLijst();
-
+            tbody.append(newRow);
         });
+        $("#selectieTabel").html(tbody);
     }
 
     function resetLijst() {
@@ -258,14 +260,14 @@ $(function () {
 				});
 				$("#bestelKnoppenLijst").empty();
 				$.each(sorteerbaar, function () {
-					zetProductInLijst(this[0]);
+                    if(this[0].status == 1)
+					    zetProductInLijst(this[0]);
 				});
                 setProductenBeheer();
                 // Zet producten in search pSearchContent
                 var html = '';
                 $.each(sorteerbaar, function() {
                     html += '<div class="checkbox"><label><input type="checkbox" name="productType" value="'+this[0].productId+'">'+ this[0].beschrijving +'</label></div>';
-
                 });
                 $("#pSearchContent").html(html);
 			});
@@ -273,17 +275,18 @@ $(function () {
 
     function updateOnKeyPress() {
         var item = new RegExp($("#persoonInput").val(), "gi");
-        $("#selectieTabel > tbody").empty();
 		var orderPersonen = [];
 		$.each(personen, function (key, val) {
 			orderPersonen.push( { key: key, value: val } );
 		});
 		orderPersonen.sort(function(a, b) { return b.value.recent - a.value.recent });
+        var personenForTable = [];
         $.each(orderPersonen, function () {
             if (this.value.bijnaam.match(item) || this.value.naam.match(item)) {
-                zetInTabel(this.value);
+                personenForTable.push(this.value);
             }
         });
+        zetInTabel(personenForTable);
     }
 
     $("#keyboardToggle").click(function () {
