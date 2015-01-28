@@ -834,7 +834,7 @@ $(function () {
 
                         var add = parseFloat(this.total);
 						total += add < 0 ? 0 : add;
-						addhtml += '<tr><td>' + this.type + '</td><td>' + saldoStr(this.total) + (add < 0 ? ' <strong> niet in totaal</strong>' : '') + '</td></tr>';
+						addhtml += '<tr><td>' + this.type + (add < 0 ? ' <strong> niet in totaal</strong>' : '') + '</td><td>' + saldoStr(this.total) + '</td></tr>';
 					
 					});
 					
