@@ -347,7 +347,7 @@ class MaaltijdAanmeldingenModel {
 		if (!$account) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		if ($filter === '') {
+		if (empty($filter)) {
 			return true;
 		}
 		return AccessModel::mag($account, $filter, false);
