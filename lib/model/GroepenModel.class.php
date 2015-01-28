@@ -21,7 +21,7 @@ class GroepenModel extends CachedPersistenceModel {
 	protected $default_order = 'begin_moment DESC';
 
 	public static function get($id) {
-		if (is_int($id)) {
+		if (is_numeric($id)) {
 			return static::instance()->retrieveByPrimaryKey(array($id));
 		}
 		return static::instance()->find('familie = ? AND status = ?', array($id, GroepStatus::HT), null, null, 1)->fetch();
