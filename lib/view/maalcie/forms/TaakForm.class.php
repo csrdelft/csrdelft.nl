@@ -13,7 +13,7 @@ require_once 'model/maalcie/MaaltijdenModel.class.php';
 class TaakForm extends ModalForm {
 
 	public function __construct($tid, $fid = null, $uid = null, $crid = null, $mid = null, $datum = null, $punten = null, $bonus_malus = null) {
-		parent::__construct($crid, maalcieUrl . '/opslaan/' . $tid);
+		parent::__construct(null, maalcieUrl . '/opslaan/' . $tid);
 
 		if (!is_int($tid) || $tid < 0) {
 			throw new Exception('invalid tid');
