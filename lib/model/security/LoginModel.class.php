@@ -51,6 +51,10 @@ class LoginModel extends PersistenceModel implements Validator {
 			// Subject assignment:
 			$_SESSION['_uid'] = 'x999';
 
+			if (MODE === 'CLI') {
+				die('access denied');
+			}
+
 			// Remember login
 			if (isset($_COOKIE['remember'])) {
 				$remember = RememberLoginModel::instance()->verifyToken($_SERVER['REMOTE_ADDR'], $_COOKIE['remember']);
@@ -298,7 +302,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			} else {
 				$this->create($session);
 			}
-			if (constant('MODE') === 'CLI') {
+			if (MODE === 'CLI') {
 				return true;
 			}
 
