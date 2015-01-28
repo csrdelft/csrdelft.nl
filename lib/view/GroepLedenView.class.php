@@ -210,7 +210,7 @@ class GroepPasfotosView extends GroepTabView {
 			$groep = $this->groep;
 			$leden = $groep::leden;
 			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst, true);
+			$form = new GroepAanmeldenForm($lid, $groep, $groep->getOpmerkingSuggesties(), $groep->keuzelijst, true);
 			$html .= $form->getHtml();
 		}
 		foreach ($this->groep->getLeden() as $lid) {
@@ -226,13 +226,13 @@ class GroepLijstView extends GroepTabView {
 	public function getHtml() {
 		$html = parent::getHtml();
 		$html .= '<table class="groep-lijst"><tbody>';
-		$suggesties = $this->groep->getSuggesties();
+		$suggesties = $this->groep->getOpmerkingSuggesties();
 		if (property_exists($this->groep, 'rechten_aanmelden') AND $this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
 			$html .= '<tr><td colspan="2">';
 			$groep = $this->groep;
 			$leden = $groep::leden;
 			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
+			$form = new GroepAanmeldenForm($lid, $groep, $groep->getOpmerkingSuggesties(), $groep->keuzelijst);
 			$html .= $form->getHtml();
 			$html .= '</td></tr>';
 		}

@@ -138,7 +138,15 @@ class Groep extends PersistentEntity {
 		return $leden::instance()->getStatistieken($this);
 	}
 
-	public function getSuggesties() {
+	public function getOpvolgingSuggesties() {
+		$suggesties = array();
+		foreach (Database::sqlSelect(array('DISTINCT familie'), static::$table_name) as $suggestie) {
+			$suggesties[] = $suggestie[0];
+		}
+		return $suggestie;
+	}
+
+	public function getOpmerkingSuggesties() {
 		if (isset($this->keuzelijst)) {
 			$suggesties = array();
 		} elseif ($this instanceof Commissie OR $this instanceof Bestuur) {

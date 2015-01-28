@@ -277,7 +277,7 @@ class GroepenController extends Controller {
 		$model = $leden::instance();
 		if ($uid) {
 			$lid = $model->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
+			$form = new GroepAanmeldenForm($lid, $groep, $groep->getOpmerkingSuggesties(), $groep->keuzelijst);
 			if ($form->validate()) {
 				$model->create($lid);
 				$this->view = new GroepPasfotosView($groep);
@@ -304,7 +304,7 @@ class GroepenController extends Controller {
 		$model = $leden::instance();
 		if ($uid) {
 			$lid = $model->get($groep, $uid);
-			$form = new GroepBewerkenForm($lid, $groep, $groep->getSuggesties(), $groep->keuzelijst);
+			$form = new GroepBewerkenForm($lid, $groep, $groep->getOpmerkingSuggesties(), $groep->keuzelijst);
 			if ($form->validate()) {
 				$model->update($lid);
 			}

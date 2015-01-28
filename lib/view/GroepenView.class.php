@@ -86,11 +86,7 @@ class GroepForm extends DataTableForm {
 		$fields = $this->generateFields();
 
 		if (isset($fields['familie'])) {
-			$suggesties = array();
-			foreach (Database::sqlSelect(array('DISTINCT familie'), $groep->getTableName()) as $suggestie) {
-				$suggesties[] = $suggestie[0];
-			}
-			$fields['familie']->suggestions[] = $suggesties;
+			$fields['familie']->suggestions[] = $groep->getOpvolgingSuggesties();
 		}
 		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
 
@@ -104,7 +100,8 @@ class GroepOpvolgingForm extends DataTableForm {
 	public function __construct(Groep $groep, $action) {
 		parent::__construct($groep, $action, 'Opvolging instellen');
 
-		$fields[] = new TextField('familie', $groep->familie, 'Familienaam');
+		$fields['fam'] = new TextField('familie', $groep->familie, 'Familienaam');
+		$fields['fam']->suggestions[] = $groep->getOpvolgingSuggesties();
 
 		$options = array();
 		foreach (GroepStatus::getTypeOptions() as $status) {
