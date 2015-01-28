@@ -20,14 +20,15 @@ function fnInitDataTables() {
 
 function fnStickyToolbar() {
 	var y = $(window).scrollTop();
-	$('.DataTableToolbar').each(function (i, elmnt) {
-		var m = $(elmnt).attr('origY');
-		if (y >= m) {
-			$(elmnt).css('margin-top', y - m);
-		} else {
-			$(elmnt).css('margin-top', 0);
-		}
-	});
+	var elmnt = '.DataTableToolbar:first';
+	//$('.DataTableToolbar').each(function (i, elmnt) {
+	var m = $(elmnt).attr('origY');
+	if (y >= m) {
+		$(elmnt).css('margin-top', y - m);
+	} else {
+		$(elmnt).css('margin-top', 0);
+	}
+	//});
 }
 
 function fnUpdateDataTable(table, data) {
