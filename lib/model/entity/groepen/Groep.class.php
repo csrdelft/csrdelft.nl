@@ -140,10 +140,10 @@ class Groep extends PersistentEntity {
 
 	public function getOpvolgingSuggesties() {
 		$suggesties = array();
-		foreach (Database::sqlSelect(array('DISTINCT familie'), static::$table_name) as $suggestie) {
+		foreach (Database::sqlSelect(array('DISTINCT familie'), $this->getTableName()) as $suggestie) {
 			$suggesties[] = $suggestie[0];
 		}
-		return $suggestie;
+		return $suggesties;
 	}
 
 	public function getOpmerkingSuggesties() {
