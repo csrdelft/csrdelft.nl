@@ -63,6 +63,7 @@ function fatal_handler(Exception $ex = null) {
 // alle meldingen tonen
 error_reporting(E_ALL);
 
+mb_internal_encoding('UTF-8');
 
 // datum weergave enzo
 setlocale(LC_ALL, 'nl_NL.utf8');

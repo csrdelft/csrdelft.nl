@@ -120,31 +120,31 @@ class GroepenModel extends CachedPersistenceModel {
 	public function converteer(Groep $oldgroep, GroepenModel $oldmodel) {
 		// groep converteren
 		try {
-			$groep = $this->nieuw();
+			$newgroep = $this->nieuw();
 			foreach ($oldgroep->getValues() as $attr => $value) {
-				if (property_exists($groep, $attr)) {
-					$groep->$attr = $value;
+				if (property_exists($newgroep, $attr)) {
+					$newgroep->$attr = $value;
 				}
 			}
-			$groep->id = null;
-			$this->create($groep);
+			$newgroep->id = null;
+			$this->create($newgroep);
 		} catch (Exception $e) {
 			setMelding('Converteren mislukt: ' . $e->getMessage(), -1);
 			return false;
 		}
 		// leden converteren
 		try {
-			$leden = $groep::leden;
+			$leden = $newgroep::leden;
 			$ledenmodel = $leden::instance();
 			foreach ($oldgroep->getLeden() as $oldlid) {
-				$lid = $ledenmodel->nieuw($groep, $oldlid->uid);
+				$newlid = $ledenmodel->nieuw($newgroep, $oldlid->uid);
 				foreach ($oldlid->getValues() as $attr => $value) {
-					if (property_exists($lid, $attr)) {
-						$lid->$attr = $value;
+					if (property_exists($newlid, $attr)) {
+						$newlid->$attr = $value;
 					}
 				}
-				$lid->groep_id = $groep->id;
-				$ledenmodel->create($lid);
+				$newlid->groep_id = $newgroep->id;
+				$ledenmodel->create($newlid);
 			}
 		} catch (Exception $e) {
 			setMelding('Leden converteren mislukt: ' . $e->getMessage(), -1);
@@ -155,11 +155,11 @@ class GroepenModel extends CachedPersistenceModel {
 			if (!isset(self::$old)) {
 				self::$old = DynamicEntityModel::makeModel('groep');
 			}
-			$omnummeren = self::$old->find('omnummeren = ? AND model = ?', array($oldgroep->id, get_class($oldmodel)), null, null, 1)->fetch();
-			if ($omnummeren) {
-				$omnummeren->omnummeren = $groep->id;
-				$omnummeren->model = get_class($this);
-				self::$old->update($omnummeren);
+			$omnummering = self::$old->find('omnummering = ? AND model = ?', array($oldgroep->id, get_class($oldmodel)), null, null, 1)->fetch();
+			if ($omnummering) {
+				$omnummering->omnummering = $newgroep->id;
+				$omnummering->model = get_class($this);
+				self::$old->update($omnummering);
 			}
 		} catch (Exception $ex) {
 			setMelding('Omnummeren mislukt: ' . $e->getMessage(), -1);
@@ -183,7 +183,7 @@ class GroepenModel extends CachedPersistenceModel {
 			setMelding('Groep verwijderen mislukt: ' . $e->getMessage(), -1);
 			return false;
 		}
-		return $groep;
+		return $newgroep;
 	}
 
 }
