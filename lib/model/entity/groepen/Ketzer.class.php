@@ -81,24 +81,48 @@ class Ketzer extends Groep {
 			 * bijv. achteraf wil aanmelden moet je A::Beheren ipv A::Aanmelden vragen.
 			 */
 			$ac = AccessModel::get(get_class($this), $action, $this->id);
-			if (!$ac OR ! LoginModel::mag($ac->subject)) {
-				return false;
-			}
+			$lid = array_key_exists($uid, $this->getLeden());
+
 			switch ($action) {
 
 				case A::Aanmelden:
-					if (array_key_exists($uid, $this->getLeden())) {
+					// Controleer aanmeld rechten
+					if ($ac AND ! LoginModel::mag($ac->subject)) {
 						return false;
 					}
+					// Controleer lidmaatschap
+					if ($lid) {
+						return false;
+					}
+					// Controleer maximum leden
 					if (isset($this->aanmeld_limiet) AND $this->aantalLeden() >= $this->aanmeld_limiet) {
 						return false;
 					}
+					// Controleer aanmeldperiode
 					return time() < strtotime($this->aanmelden_tot) AND time() > strtotime($this->aanmelden_vanaf);
 
 				case A::Bewerken:
+					// Controleer aanmeld rechten
+					if (!$ac OR ! LoginModel::mag($ac->subject)) {
+						return false;
+					}
+					// Controleer lidmaatschap
+					if (!$lid) {
+						return false;
+					}
+					// Controleer bewerkperiode
 					return time() < strtotime($this->bewerken_tot);
 
 				case A::Afmelden:
+					// Controleer aanmeld rechten
+					if (!$ac OR ! LoginModel::mag($ac->subject)) {
+						return false;
+					}
+					// Controleer lidmaatschap
+					if (!$lid) {
+						return false;
+					}
+					// Controleer afmeldperiode
 					return time() < strtotime($this->afmelden_tot);
 
 				default: // fall-through naar parent::mag

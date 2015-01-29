@@ -349,7 +349,6 @@ class GroepenController extends Controller {
 		$model = $leden::instance();
 		if ($uid) {
 			$lid = $model->get($groep, $uid);
-			$lid->status = GroepStatus::OT;
 			$model->delete($lid);
 			$this->view = new GroepView($groep);
 		}

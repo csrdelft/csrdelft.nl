@@ -246,7 +246,7 @@ class GroepPasfotosView extends GroepTabView {
 
 	protected function getTabContent() {
 		$html = '';
-		if (property_exists($this->groep, 'rechten_aanmelden') AND $this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
+		if ($this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
 			$groep = $this->groep;
 			$leden = $groep::leden;
 			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
@@ -267,7 +267,7 @@ class GroepLijstView extends GroepTabView {
 	public function getTabContent() {
 		$html = '<table class="groep-lijst"><tbody>';
 		$suggesties = $this->groep->getOpmerkingSuggesties();
-		if (property_exists($this->groep, 'rechten_aanmelden') AND $this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
+		if ($this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
 			$html .= '<tr><td colspan="2">';
 			$groep = $this->groep;
 			$leden = $groep::leden;
