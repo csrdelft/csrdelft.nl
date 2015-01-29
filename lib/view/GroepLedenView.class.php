@@ -196,12 +196,15 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 
 		$this->javascript .= <<<JS
 
+var tabContent = $('#groep-leden-content-{$this->groep->id}');
+var availableHeight = tabContent.parent().parent().height() - tabContent.parent().height();
 if ($('#groep-{$this->groep->id}').hasClass('leden-uitgeklapt')) {
-	knop_vergroot($('#groep-vergroot-{$this->groep->id}'));
+	var knop = $('#groep-vergroot-{$this->groep->id}');
+	knop_vergroot(knop);
+	knop.attr('data-vergroot-oud', availableHeight);
 }
 else {
-	var tabContent = $('#groep-leden-content-{$this->groep->id}');
-	tabContent.height(tabContent.parent().parent().height() - tabContent.parent().height());
+	tabContent.height(availableHeight);
 }
 JS;
 		$html .= $this->getScriptTag();

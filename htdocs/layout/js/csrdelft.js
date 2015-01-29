@@ -240,21 +240,21 @@ function init_buttons(parent) {
 	});
 }
 
-function knop_vergroot(elmnt) {
-	var id = elmnt.attr('data-vergroot');
-	var oud = elmnt.attr('data-vergroot-oud');
+function knop_vergroot(knop) {
+	var id = knop.attr('data-vergroot');
+	var oud = knop.attr('data-vergroot-oud');
 	if (oud) {
 		$(id).animate({
 			'height': oud
 		}, 600);
-		elmnt.removeAttr('data-vergroot-oud');
-		elmnt.find('span.fa').removeClass('fa-compress').addClass('fa-expand');
-		elmnt.attr('title', 'Uitklappen');
+		knop.removeAttr('data-vergroot-oud');
+		knop.find('span.fa').removeClass('fa-compress').addClass('fa-expand');
+		knop.attr('title', 'Uitklappen');
 	}
 	else {
-		elmnt.attr('title', 'Inklappen');
-		elmnt.find('span.fa').removeClass('fa-expand').addClass('fa-compress');
-		elmnt.attr('data-vergroot-oud', $(id).height());
+		knop.attr('title', 'Inklappen');
+		knop.find('span.fa').removeClass('fa-expand').addClass('fa-compress');
+		knop.attr('data-vergroot-oud', $(id).height());
 		$(id).animate({
 			'height': $(id).prop('scrollHeight') + 1
 		}, 600);
