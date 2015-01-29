@@ -99,15 +99,14 @@ class GroepenModel extends CachedPersistenceModel {
 		$class = static::orm;
 		$groep = new $class();
 		$groep->naam = '';
+		$groep->familie = null;
+		$groep->status = GroepStatus::HT;
 		$groep->samenvatting = '';
 		$groep->omschrijving = null;
 		$groep->begin_moment = getDateTime();
 		$groep->eind_moment = null;
 		$groep->website = null;
 		$groep->maker_uid = LoginModel::getUid();
-		$groep->rechten_beheren = null;
-		$groep->familie = null;
-		$groep->status = GroepStatus::HT;
 		return $groep;
 	}
 
@@ -314,7 +313,6 @@ class KetzersModel extends GroepenModel {
 
 	public function nieuw() {
 		$ketzer = parent::nieuw();
-		$ketzer->rechten_aanmelden = null;
 		$ketzer->aanmeld_limiet = null;
 		$ketzer->aanmelden_vanaf = getDateTime();
 		$ketzer->aanmelden_tot = $ketzer->aanmelden_vanaf;

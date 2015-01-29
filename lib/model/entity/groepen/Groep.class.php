@@ -70,27 +70,21 @@ class Groep extends PersistentEntity {
 	 */
 	public $maker_uid;
 	/**
-	 * Rechten benodigd voor beheren
-	 * @var string
-	 */
-	public $rechten_beheren;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'				 => array(T::Integer, false, 'auto_increment'),
-		'naam'				 => array(T::String),
-		'familie'			 => array(T::String, true),
-		'status'			 => array(T::Enumeration, false, 'GroepStatus'),
-		'samenvatting'		 => array(T::Text),
-		'omschrijving'		 => array(T::Text, true),
-		'keuzelijst'		 => array(T::String, true),
-		'begin_moment'		 => array(T::DateTime),
-		'eind_moment'		 => array(T::DateTime, true),
-		'website'			 => array(T::String, true),
-		'maker_uid'			 => array(T::UID),
-		'rechten_beheren'	 => array(T::String, true)
+		'id'			 => array(T::Integer, false, 'auto_increment'),
+		'naam'			 => array(T::String),
+		'familie'		 => array(T::String, true),
+		'status'		 => array(T::Enumeration, false, 'GroepStatus'),
+		'samenvatting'	 => array(T::Text),
+		'omschrijving'	 => array(T::Text, true),
+		'keuzelijst'	 => array(T::String, true),
+		'begin_moment'	 => array(T::DateTime),
+		'eind_moment'	 => array(T::DateTime, true),
+		'website'		 => array(T::String, true),
+		'maker_uid'		 => array(T::UID)
 	);
 	/**
 	 * Database primary key
@@ -163,49 +157,43 @@ class Groep extends PersistentEntity {
 	/**
 	 * Has permission for action?
 	 * 
-	 * @param AccessAction $action
+	 * @param string $action
 	 * @param string $uid affected Lid
 	 * @return boolean
 	 */
 	public function mag($action, $uid = null) {
-		if ($this->maker_uid === LoginModel::getUid()) {
-			return true;
-		}
-		if (LoginModel::mag('P_LEDEN_MOD') OR LoginModel::mag($this->rechten_beheren)) {
+		// default rechten?
+		if ($this->maker_uid === LoginModel::getUid() OR LoginModel::mag('P_LEDEN_MOD')) {
 			return true;
 		}
 		if ($action === A::Bekijken AND LoginModel::mag('P_LEDEN_READ')) {
-			return true;
-		}
-		/**
-		 * TODO
-		 */
-		return false;
-		// rechten voor dit type groep?
-		if (property_exists($this, 'soort') AND static::magAlgemeen($action, $this->soort)) {
-			return true;
-		} elseif (static::magAlgemeen($action)) {
 			return true;
 		}
 		// rechten voor deze specifieke groep?
 		if (LoginModel::mag(AccessModel::get(get_class($this), $action, $this->id))) {
 			return true;
 		}
+		// rechten voor deze klasse / dit soort groep?
+		if (static::magAlgemeen($action, property_exists($this, 'soort') ? $this->soort : null)) {
+			return true;
+		}
 		return false;
 	}
 
 	/**
-	 * TODO
+	 * Rechten voor de gehele klasse of soort groep?
 	 * 
 	 * @param string $action
 	 * @param string $soort
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $soort = null) {
-		if (LoginModel::mag(AccessModel::get(get_called_class(), $action, '*'))) {
+		// rechten voor dit soort groep?
+		if ($soort !== null AND LoginModel::mag(AccessModel::get(get_called_class(), $action, $soort))) {
 			return true;
 		}
-		if ($soort !== null AND property_exists($this, 'soort') AND LoginModel::mag(AccessModel::get(get_called_class(), $action, $soort))) {
+		// rechten voor dit type groep?
+		if (LoginModel::mag(AccessModel::get(get_called_class(), $action, '*'))) {
 			return true;
 		}
 		return false;

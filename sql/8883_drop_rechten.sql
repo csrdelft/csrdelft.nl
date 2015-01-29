@@ -1,0 +1,11 @@
+ALTER TABLE activiteiten DROP rechten_beheren;
+ALTER TABLE besturen DROP rechten_beheren;
+ALTER TABLE commissies DROP rechten_beheren;
+ALTER TABLE ketzers DROP rechten_beheren;
+ALTER TABLE onderverenigingen DROP rechten_beheren;
+ALTER TABLE woonoorden DROP rechten_beheren;
+ALTER TABLE werkgroepen DROP rechten_beheren;
+ALTER TABLE groepen DROP rechten_beheren;
+ALTER TABLE activiteiten DROP rechten_aanmelden;
+ALTER TABLE ketzers DROP rechten_aanmelden;
+ALTER TABLE werkgroepen DROP rechten_aanmelden;

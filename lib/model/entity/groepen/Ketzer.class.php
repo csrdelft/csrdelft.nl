@@ -13,11 +13,6 @@ class Ketzer extends Groep {
 	const leden = 'KetzerDeelnemersModel';
 
 	/**
-	 * Rechten benodigd voor aanmelden
-	 * @var string
-	 */
-	public $rechten_aanmelden;
-	/**
 	 * Maximaal aantal groepsleden
 	 * @var string
 	 */
@@ -47,7 +42,6 @@ class Ketzer extends Groep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'rechten_aanmelden'	 => array(T::String, true),
 		'aanmeld_limiet'	 => array(T::Integer, true),
 		'aanmelden_vanaf'	 => array(T::DateTime),
 		'aanmelden_tot'		 => array(T::DateTime),
@@ -83,10 +77,11 @@ class Ketzer extends Groep {
 
 		if ($uid === LoginModel::getUid()) {
 			/**
-			 * Beheerders mogen de volgende eisen standaard negeren, maar als ze zichzelf
-			 * bijv. achteraf willen aanmelden moet je A::Beheren ipv A::Aanmelden vragen.
+			 * Deze functie overschrijft de beheer-rechten. Dus als je als beheerder jezelf
+			 * bijv. achteraf wil aanmelden moet je A::Beheren ipv A::Aanmelden vragen.
 			 */
-			if (isset($this->rechten_aanmelden) AND ! LoginModel::mag($this->rechten_aanmelden)) {
+			$ac = AccessModel::get(get_class($this), $action, $this->id);
+			if (!$ac OR ! LoginModel::mag($ac->subject)) {
 				return false;
 			}
 			switch ($action) {

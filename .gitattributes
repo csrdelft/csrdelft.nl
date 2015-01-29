@@ -4649,3 +4649,4 @@ sql/8526_more_foreign_keys.sql -text
 sql/8528_token_id.sql -text
 sql/8545_rename_menu.sql -text
 sql/8695_fk_groep.sql -text
+sql/8883_drop_rechten.sql -text
