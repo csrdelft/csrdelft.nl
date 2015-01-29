@@ -207,6 +207,18 @@ function page_redirect(htmlString) {
 	window.location.href = htmlString;
 }
 
+function init_hoverIntents(parent) {
+	$(parent).find('.hoverIntent').hoverIntent({
+		over: function () {
+			$(this).find('.hoverIntentContent').fadeIn();
+		},
+		out: function () {
+			$(this).find('.hoverIntentContent').fadeOut();
+		},
+		timeout: 250
+	});
+}
+
 function init_buttons(parent) {
 	$(parent).find('.spoiler').bind('click.spoiler', function (event) {
 		event.preventDefault();
@@ -224,37 +236,29 @@ function init_buttons(parent) {
 	$(parent).find('.post').bind('click.post', knop_post);
 	$(parent).find('.get').bind('click.get', knop_get);
 	$(parent).find('.vergroot').bind('click.vergroot', function (event) {
-		var id = $(this).attr('data-vergroot');
-		var oud = $(this).attr('data-vergroot-oud');
-		if (oud) {
-			$(id).animate({
-				'height': oud
-			}, 600);
-			$(this).removeAttr('data-vergroot-oud');
-			$(this).find('span.fa').removeClass('fa-compress').addClass('fa-expand');
-			$(this).attr('title', 'Uitklappen');
-		}
-		else {
-			$(this).attr('title', 'Inklappen');
-			$(this).find('span.fa').removeClass('fa-expand').addClass('fa-compress');
-			$(this).attr('data-vergroot-oud', $(id).height());
-			$(id).animate({
-				'height': $(id).prop('scrollHeight') + 1
-			}, 600);
-		}
+		knop_vergroot($(this));
 	});
 }
 
-function init_hoverIntents(parent) {
-	$(parent).find('.hoverIntent').hoverIntent({
-		over: function () {
-			$(this).find('.hoverIntentContent').fadeIn();
-		},
-		out: function () {
-			$(this).find('.hoverIntentContent').fadeOut();
-		},
-		timeout: 250
-	});
+function knop_vergroot(elmnt) {
+	var id = elmnt.attr('data-vergroot');
+	var oud = elmnt.attr('data-vergroot-oud');
+	if (oud) {
+		$(id).animate({
+			'height': oud
+		}, 600);
+		elmnt.removeAttr('data-vergroot-oud');
+		elmnt.find('span.fa').removeClass('fa-compress').addClass('fa-expand');
+		elmnt.attr('title', 'Uitklappen');
+	}
+	else {
+		elmnt.attr('title', 'Inklappen');
+		elmnt.find('span.fa').removeClass('fa-expand').addClass('fa-compress');
+		elmnt.attr('data-vergroot-oud', $(id).height());
+		$(id).animate({
+			'height': $(id).prop('scrollHeight') + 1
+		}, 600);
+	}
 }
 
 function knop_ajax(knop, type) {

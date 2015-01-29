@@ -187,14 +187,26 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Emails . '" title="' . GroepTab::getDescription(GroepTab::Emails) . ' tonen"><span class="fa fa-envelope"></span></a></li>';
 
-		$html .= '<li class="float-right"><a class="btn vergroot" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Uitklappen"><span class="fa fa-expand"></span></a>';
+		$onclick = "$('#groep-" . $this->groep->id . "').toggleClass('leden-uitgeklapt');";
+		$html .= '<li class="float-right"><a class="btn vergroot" id="groep-vergroot-' . $this->groep->id . '" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Uitklappen" onclick="' . $onclick . '"><span class="fa fa-expand"></span></a>';
 
 		$html .= '</ul><div id="groep-leden-content-' . $this->groep->id . '" class="groep-tab-content">';
 
 		$html .= $this->getTabContent();
+
+		$this->javascript .= <<<JS
+
+if ($('#groep-{$this->groep->id}').hasClass('leden-uitgeklapt')) {
+	knop_vergroot($('#groep-vergroot-{$this->groep->id}'));
+}
+else {
+	var tabContent = $('#groep-leden-content-{$this->groep->id}');
+	tabContent.height(tabContent.parent().parent().height() - tabContent.parent().height());
+}
+JS;
 		$html .= $this->getScriptTag();
 
-		$html .= '</div><br />';
+		$html .= '</div>';
 
 		if (property_exists($this->groep, 'aanmeld_limiet') AND isset($this->groep->aanmeld_limiet)) {
 			// Progress bar
@@ -218,7 +230,7 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 				$title = 'Inschrijvingen gesloten!';
 				$color = ' progress-bar-info';
 			}
-			$html .= '<div class="progress" title="' . $title . '"><div class="progress-bar' . $color . '" role="progressbar" aria-valuenow="' . $percent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $percent . '%;">' . $percent . '%</div></div>';
+			$html .= '<br /><div class="progress" title="' . $title . '"><div class="progress-bar' . $color . '" role="progressbar" aria-valuenow="' . $percent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $percent . '%;">' . $percent . '%</div></div>';
 		}
 		return $html . '</div>';
 	}

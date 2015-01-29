@@ -312,13 +312,13 @@ class GroepView implements View {
 		if ($this->groep->maker_uid == 1025 AND $this->bb) {
 			$html .= ' bb-dies2015';
 		}
-		$html .= '"><div class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
+		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
 		if ($this->groep->maker_uid == 1025) {
 			$html .= '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M" class="float-left" style="margin-right: 10px;">';
 		}
 		$html .= CsrBB::parse($this->groep->samenvatting);
 		if (!empty($this->groep->omschrijving)) {
-			$html .= '<div class="clear">&nbsp;</div><a id="groep-omschrijving-' . $this->groep->id . '" class="post" href="' . $this->groep->getUrl() . 'omschrijving">Meer lezen »</a>';
+			$html .= '<div class="clear">&nbsp;</div><a id="groep-omschrijving-' . $this->groep->id . '" class="post noanim" href="' . $this->groep->getUrl() . 'omschrijving">Meer lezen »</a>';
 		}
 		$html .= '</div>';
 		$html .= $this->leden->getHtml();
