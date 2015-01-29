@@ -82,6 +82,10 @@ class Formulier implements View, Validator {
 			$desc = ucfirst(str_replace('_', ' ', $fieldName));
 			switch ($definition[0]) {
 				case T::String:
+					if (startsWith($fieldName, 'rechten_')) {
+						$class .= 'Rechten';
+						break;
+					}
 				case T::Char: $class .= 'TextField';
 					break;
 				case T::Boolean: $class .= 'VinkField';
