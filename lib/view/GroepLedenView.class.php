@@ -146,7 +146,7 @@ class GroepOmschrijvingView implements View, FormElement {
 
 $('#groep-omschrijving-{$this->groep->id}').hide().slideDown(600);
 JS;
-		echo '<div id="groep-omschrijving-' . $this->groep->id . '" style="display:none;">';
+		echo '<div id="groep-omschrijving-' . $this->groep->id . '">';
 		echo CsrBB::parse($this->groep->omschrijving);
 		echo $this->getScriptTag();
 		echo '</div>';
