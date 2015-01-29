@@ -83,7 +83,7 @@ class Formulier implements View, Validator {
 			switch ($definition[0]) {
 				case T::String:
 					if (startsWith($fieldName, 'rechten_')) {
-						$class .= 'Rechten';
+						$class .= 'RechtenField';
 						break;
 					}
 				case T::Char: $class .= 'TextField';
