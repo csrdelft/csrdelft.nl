@@ -91,6 +91,10 @@ class GroepForm extends DataTableForm {
 
 		$fields = $this->generateFields();
 
+		$fields['rechten_beheren'] = new RechtenField('rechten_beheren', $groep->rechten_beheren, 'Extra beheerders');
+		if (isset($fields['rechten_aanmelden'])) {
+			$fields['rechten_aanmelden'] = new RechtenField('rechten_aanmelden', $groep->rechten_aanmelden, 'Aanmeldbaar voor');
+		}
 		if (isset($fields['familie'])) {
 			$fields['familie']->suggestions[] = $groep->getOpvolgingSuggesties();
 		}
