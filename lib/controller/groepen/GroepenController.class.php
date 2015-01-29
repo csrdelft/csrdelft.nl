@@ -26,37 +26,47 @@ class GroepenController extends Controller {
 		}
 		switch ($this->action) {
 
-			// geen groep id vereist
+			// Geen groep id vereist
 			case 'overzicht':
-			case 'opvolging':
-			case 'converteren':
 			case A::Beheren:
 			case A::Aanmaken:
+
+				// Soort in param 3?
+				if ($this->hasParam(4)) {
+					$args['soort'] = $this->getParam(4);
+				}
+
 			case A::Wijzigen:
 			case A::Verwijderen:
+			case 'opvolging':
+			case 'converteren':
 				break;
 
-			// groep id vereist
+			// Groep id vereist
 			default:
-				// param 3 bevat id
-				$id = (int) $this->action; // id
+
+				// Groep id in param 3?
+				$id = (int) $this->action;
 				$groep = $this->model->get($id);
 				if (!$groep) {
 					$this->geentoegang();
 				}
 				$args['groep'] = $groep;
-				$uid = null;
-				// actie opgegeven?
 				$this->action = A::Bekijken; // default
-				if ($this->hasParam(4)) { // action
+				$uid = null;
+
+				// Actie in param 4?
+				if ($this->hasParam(4)) {
 					$this->action = $this->getParam(4);
 
-					// lidnummer opgegeven?
-					if ($this->hasParam(5)) { // uid
+					// Lidnummer in param 5?
+					if ($this->hasParam(5)) {
 						$uid = $this->getParam(5);
 						$args['uid'] = $uid;
 					}
 				}
+
+				// Controleer rechten
 				if (!$groep->mag($this->action, $uid)) {
 					$this->geentoegang();
 				}
