@@ -21,7 +21,7 @@ class MenuBeheerController extends AclController {
 			$this->acl = array(
 				'toevoegen'		 => 'P_LOGGED_IN',
 				'bewerken'		 => 'P_LOGGED_IN',
-				'verwijderen'	 => 'P_LOGGED_IN',
+				A::Verwijderen	 => 'P_LOGGED_IN',
 				'zichtbaar'		 => 'P_LOGGED_IN'
 			);
 		}

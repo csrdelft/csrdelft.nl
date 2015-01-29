@@ -26,7 +26,7 @@ class AgendaController extends AclController {
 				'courant'		 => 'P_MAIL_COMPOSE',
 				'toevoegen'		 => 'P_AGENDA_ADD,verticaleleider',
 				'bewerken'		 => 'P_AGENDA_MOD,verticaleleider',
-				'verwijderen'	 => 'P_AGENDA_MOD,verticaleleider'
+				A::Verwijderen	 => 'P_AGENDA_MOD,verticaleleider'
 			);
 		}
 	}

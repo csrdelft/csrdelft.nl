@@ -24,13 +24,13 @@ class CmsPaginaController extends Controller {
 	}
 
 	public function performAction(array $args = array()) {
-		$this->action = 'bekijken';
+		$this->action = A::Bekijken;
 		if ($this->hasParam(3) AND $this->getParam(2) === 'bewerken') {
 			$this->action = 'bewerken';
 			$naam = $this->getParam(3);
 			$this->zijbalk[] = new CmsPaginaZijbalkView($this->model);
-		} elseif ($this->hasParam(3) AND $this->getParam(2) === 'verwijderen') {
-			$this->action = 'verwijderen';
+		} elseif ($this->hasParam(3) AND $this->getParam(2) === A::Verwijderen) {
+			$this->action = A::Verwijderen;
 			$naam = $this->getParam(3);
 		} elseif ($this->hasParam(2)) {
 			$naam = $this->getParam(2);

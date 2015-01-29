@@ -21,7 +21,7 @@ class BeheerFunctiesController extends AclController {
 			$this->acl = array(
 				'toevoegen'		 => 'P_CORVEE_MOD',
 				'bewerken'		 => 'P_CORVEE_MOD',
-				'verwijderen'	 => 'P_CORVEE_MOD',
+				A::Verwijderen	 => 'P_CORVEE_MOD',
 				'kwalificeer'	 => 'P_CORVEE_MOD',
 				'dekwalificeer'	 => 'P_CORVEE_MOD'
 			);

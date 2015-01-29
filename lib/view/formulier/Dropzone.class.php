@@ -60,7 +60,7 @@ class Dropzone extends Formulier {
 
 	public function getJavascript() {
 		$maxsize = getMaximumFileUploadSize() / 1024 / 1024; // MB
-		$delete = str_replace('uploaden', 'verwijderen', $this->action);
+		$delete = str_replace('uploaden', A::Verwijderen, $this->action);
 		$existing = str_replace('uploaden', 'bestaande', $this->action);
 		$cover = str_replace('uploaden', 'albumcover', $this->action);
 		$accept = implode(',', $this->dropzone->getFilter());

@@ -17,7 +17,7 @@ class FotoAlbumController extends AclController {
 		parent::__construct($query, FotoAlbumModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'bekijken'	 => 'P_ALBUM_READ',
+				A::Bekijken	 => 'P_ALBUM_READ',
 				'download'	 => 'P_ALBUM_READ',
 				'downloaden' => 'P_ALBUM_DOWN',
 				'verwerken'	 => 'P_ALBUM_MOD',
@@ -27,7 +27,7 @@ class FotoAlbumController extends AclController {
 		} else {
 			$this->acl = array(
 				'albumcover'	 => 'P_ALBUM_ADD',
-				'verwijderen'	 => 'P_ALBUM_ADD',
+				A::Verwijderen	 => 'P_ALBUM_ADD',
 				'hernoemen'		 => 'P_ALBUM_ADD',
 				'roteren'		 => 'P_ALBUM_ADD',
 				'toevoegen'		 => 'P_ALBUM_ADD',
@@ -42,7 +42,7 @@ class FotoAlbumController extends AclController {
 			$this->action = $this->getParam(2);
 		}
 		if (!array_key_exists($this->action, $this->acl)) {
-			$this->action = 'bekijken';
+			$this->action = A::Bekijken;
 			$path = $this->getParams(1);
 		} elseif ($this->action === 'zoeken') {
 			parent::performAction($this->getParams(3));

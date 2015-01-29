@@ -3971,6 +3971,7 @@ lib/controller/LoginController.class.php -text
 lib/controller/MaalcieRouterController.class.php -text
 lib/controller/MenuBeheerController.class.php -text
 lib/controller/ProfielController.class.php -text
+lib/controller/RechtenController.class.php -text
 lib/controller/VerticalenController.class.php -text
 lib/controller/framework/AclController.abstract.php -text
 lib/controller/framework/Controller.abstract.php -text
@@ -4478,6 +4479,7 @@ lib/view/MenuBeheerView.class.php -text
 lib/view/MenuView.class.php -text
 lib/view/PeilingenView.class.php -text
 lib/view/ProfielView.class.php -text
+lib/view/RechtenView.class.php -text
 lib/view/SitemapView.class.php -text
 lib/view/SmartyTemplateView.abstract.php -text
 lib/view/StamboomView.class.php -text

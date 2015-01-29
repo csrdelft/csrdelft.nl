@@ -18,10 +18,10 @@ class CourantController extends AclController {
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'archief'		 => 'P_LEDEN_READ',
-				'bekijken'		 => 'P_LEDEN_READ',
+				A::Bekijken		 => 'P_LEDEN_READ',
 				'toevoegen'		 => 'P_MAIL_POST',
 				'bewerken'		 => 'P_MAIL_POST',
-				'verwijderen'	 => 'P_MAIL_POST',
+				A::Verwijderen	 => 'P_MAIL_POST',
 				'verzenden'		 => 'P_MAIL_SEND'
 			);
 		} else {
@@ -38,7 +38,7 @@ class CourantController extends AclController {
 			$this->action = $this->getParam(2);
 		}
 		if ($this->hasParam(3)) {
-			if ($this->action === 'archief' OR $this->action === 'bekijken') {
+			if ($this->action === 'archief' OR $this->action === A::Bekijken) {
 				$id = (int) $this->getParam(3);
 			} else {
 				$id = 0;
@@ -46,7 +46,7 @@ class CourantController extends AclController {
 			$success = $this->model->load((int) $id);
 			if ($this->action === 'archief') {
 				if ($success) {
-					$this->action = 'bekijken';
+					$this->action = A::Bekijken;
 				} else {
 					$this->geentoegang();
 				}
