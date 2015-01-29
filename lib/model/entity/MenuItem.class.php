@@ -66,7 +66,7 @@ class MenuItem extends PersistentEntity {
 		'volgorde'			 => array(T::Integer),
 		'tekst'				 => array(T::String),
 		'link'				 => array(T::String),
-		'rechten_bekijken'	 => array(T::String),
+		'rechten_bekijken'	 => array(T::String, true),
 		'zichtbaar'			 => array(T::Boolean)
 	);
 	/**
