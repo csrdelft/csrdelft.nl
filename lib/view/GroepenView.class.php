@@ -73,8 +73,7 @@ class GroepenBeheerData extends DataTableResponse {
 		$array = $groep->jsonSerialize();
 
 		$array['detailSource'] = $groep->getUrl() . 'leden';
-		$array['id'] .= ' &nbsp;<a href="/' . A::Rechten . '/' . A::Bekijken . '/' . get_class($groep) . '/' . $groep->id . '" class="" title="Rechten aanpassen"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/key.png"></a>';
-		$array['naam'] = '<span title="' . $groep->naam . (empty($groep->samenvatting) ? '' : '&#13;&#13;') . mb_substr($groep->samenvatting, 0, 100) . (strlen($groep->samenvatting) > 100 ? '...' : '' ) . '">' . $groep->naam . '</span>';
+		$array['naam'] = '<span title="' . $groep->naam . (empty($groep->samenvatting) ? '' : '&#13;&#13;') . mb_substr($groep->samenvatting, 0, 100) . (strlen($groep->samenvatting) > 100 ? '...' : '' ) . '">' . $groep->naam . '</span><a href="/' . A::Rechten . '/' . A::Bekijken . '/' . get_class($groep) . '/' . $groep->id . '" class="float-right" title="Rechten aanpassen"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/bullet_key.png"></a>';
 		$array['samenvatting'] = null;
 		$array['omschrijving'] = null;
 		$array['website'] = null;
