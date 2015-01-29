@@ -86,7 +86,7 @@ class Ketzer extends Groep {
 			switch ($action) {
 
 				case A::Aanmelden:
-					// Controleer aanmeld rechten
+					// Controleer rechten
 					if ($ac AND ! LoginModel::mag($ac->subject)) {
 						return false;
 					}
@@ -102,7 +102,7 @@ class Ketzer extends Groep {
 					return time() < strtotime($this->aanmelden_tot) AND time() > strtotime($this->aanmelden_vanaf);
 
 				case A::Bewerken:
-					// Controleer aanmeld rechten
+					// Controleer rechten
 					if (!$ac OR ! LoginModel::mag($ac->subject)) {
 						return false;
 					}
@@ -114,7 +114,7 @@ class Ketzer extends Groep {
 					return time() < strtotime($this->bewerken_tot);
 
 				case A::Afmelden:
-					// Controleer aanmeld rechten
+					// Controleer rechten
 					if (!$ac OR ! LoginModel::mag($ac->subject)) {
 						return false;
 					}

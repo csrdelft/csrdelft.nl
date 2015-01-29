@@ -166,6 +166,9 @@ class Groep extends PersistentEntity {
 		if ($this->maker_uid === LoginModel::getUid() OR LoginModel::mag('P_LEDEN_MOD')) {
 			return true;
 		}
+		/**
+		 * TODO: bepaalde actions op 1 hoop gooien:
+		 */
 		if ($action === A::Bekijken AND LoginModel::mag('P_LEDEN_READ')) {
 			return true;
 		}
