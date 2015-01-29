@@ -190,7 +190,7 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 		$onclick = "$('#groep-" . $this->groep->id . "').toggleClass('leden-uitgeklapt');";
 		$html .= '<li class="float-right"><a class="btn vergroot" id="groep-vergroot-' . $this->groep->id . '" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Uitklappen" onclick="' . $onclick . '"><span class="fa fa-expand"></span></a>';
 
-		$html .= '</ul><div id="groep-leden-content-' . $this->groep->id . '" class="groep-tab-content">';
+		$html .= '</ul><div id="groep-leden-content-' . $this->groep->id . '" class="groep-tab-content ' . $this->getType() . '">';
 
 		$html .= $this->getTabContent();
 
@@ -249,6 +249,7 @@ class GroepPasfotosView extends GroepTabView {
 			$leden = $groep::leden;
 			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
 			$form = new GroepAanmeldenForm($lid, $groep, $groep->getOpmerkingSuggesties(), $groep->keuzelijst, true);
+			$form->css_classes[] = 'pasfotos';
 			$html .= $form->getHtml();
 		}
 		foreach ($this->groep->getLeden() as $lid) {
