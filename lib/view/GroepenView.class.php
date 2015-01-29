@@ -318,9 +318,7 @@ class GroepView implements View {
 		}
 		$html .= CsrBB::parse($this->groep->samenvatting);
 		if (!empty($this->groep->omschrijving)) {
-			$html .= '<div class="clear">&nbsp;</div><a class="groep-omschrijving-tonen" onclick="$(this).next().slideDown();$(this).remove();">Meer lezen »</a><div class="groep-omschrijving">';
-			$html .= CsrBB::parse($this->groep->omschrijving);
-			$html .= '</div>';
+			$html .= '<div class="clear">&nbsp;</div><a id="groep-omschrijving-' . $this->groep->id . '" class="post" href="' . $this->groep->getUrl() . 'omschrijving">Meer lezen »</a>';
 		}
 		$html .= '</div>';
 		$html .= $this->leden->getHtml();

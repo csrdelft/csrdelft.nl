@@ -111,7 +111,7 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 
 }
 
-abstract class GroepTabView implements View, FormElement {
+class GroepOmschrijvingView implements View, FormElement {
 
 	protected $groep;
 	protected $javascript;
@@ -125,6 +125,10 @@ abstract class GroepTabView implements View, FormElement {
 		return null;
 	}
 
+	public function getType() {
+		return get_class($this);
+	}
+
 	public function getModel() {
 		return $this->groep;
 	}
@@ -132,6 +136,39 @@ abstract class GroepTabView implements View, FormElement {
 	public function getTitel() {
 		return $this->groep->naam;
 	}
+
+	public function getJavascript() {
+		return $this->javascript;
+	}
+
+	public function getHtml() {
+		$this->javascript .= <<<JS
+
+$('#groep-omschrijving-{$this->groep->id}').hide().slideDown(600);
+JS;
+		echo '<div id="groep-omschrijving-' . $this->groep->id . '" style="display:none;">';
+		echo CsrBB::parse($this->groep->omschrijving);
+		echo $this->getScriptTag();
+		echo '</div>';
+	}
+
+	public function view() {
+		echo $this->getHtml();
+	}
+
+	protected function getScriptTag() {
+		return <<<JS
+<script type="text/javascript">
+$(document).ready(function () {
+	{$this->getJavascript()}
+});
+</script>
+JS;
+	}
+
+}
+
+abstract class GroepTabView extends GroepOmschrijvingView {
 
 	protected abstract function getTabContent();
 
@@ -184,28 +221,6 @@ abstract class GroepTabView implements View, FormElement {
 			$html .= '<div class="progress" title="' . $title . '"><div class="progress-bar' . $color . '" role="progressbar" aria-valuenow="' . $percent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $percent . '%;">' . $percent . '%</div></div>';
 		}
 		return $html . '</div>';
-	}
-
-	public function view() {
-		echo $this->getHtml();
-	}
-
-	public function getType() {
-		return get_class($this);
-	}
-
-	protected function getScriptTag() {
-		return <<<JS
-<script type="text/javascript">
-$(document).ready(function () {
-	{$this->getJavascript()}
-});
-</script>
-JS;
-	}
-
-	public function getJavascript() {
-		return $this->javascript;
 	}
 
 }

@@ -95,6 +95,7 @@ class GroepenController extends Controller {
 			case 'overzicht':
 			case 'opvolging':
 			case 'converteren':
+			case 'omschrijving':
 			case GroepTab::Pasfotos:
 			case GroepTab::Lijst:
 			case GroepTab::Statistiek:
@@ -125,6 +126,10 @@ class GroepenController extends Controller {
 		$groepen = $this->model->find('familie = ?', array($groep->familie));
 		$body = new GroepenView($this->model, $groepen);
 		$this->view = new CsrLayoutPage($body);
+	}
+
+	public function omschrijving(Groep $groep) {
+		$this->view = new GroepOmschrijvingView($groep);
 	}
 
 	public function pasfotos(Groep $groep) {
