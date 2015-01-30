@@ -506,7 +506,7 @@ class ForumController extends Controller {
 			$wijziging = $property . ' = ' . $value;
 		}
 		setMelding('Wijziging geslaagd: ' . $wijziging, 1);
-		if ($property === 'forum_id' OR $property === 'titel' OR $property === 'gedeeld_met') {
+		if ($property === 'belangrijk' OR $property === 'forum_id' OR $property === 'titel' OR $property === 'gedeeld_met') {
 			redirect('/forum/onderwerp/' . $draad_id);
 		} else {
 			$this->view = new JsonResponse(true);
