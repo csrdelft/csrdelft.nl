@@ -257,7 +257,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		// Check timeout
 		$timeout = AccountModel::instance()->moetWachten($account);
 		if (MODE !== 'CLI' AND ! $remember AND ! $tokenAuthenticated AND $timeout > 0) {
-			$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden ' . $account->uid;
+			$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
 			return false;
 		}
 		// Clear session

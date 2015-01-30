@@ -122,6 +122,9 @@ class AccountModel extends CachedPersistenceModel {
 			case 2: $wacht = 15;
 			default: $wacht = 45;
 		}
+		var_dump($account->failed_login_attempts);
+		var_dump(strtotime($account->last_login_attempt));
+		var_dump(time());
 		$diff = strtotime($account->last_login_attempt) + $wacht - time();
 		if ($diff > 0) {
 			return $diff;
