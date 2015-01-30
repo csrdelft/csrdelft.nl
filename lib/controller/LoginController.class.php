@@ -63,12 +63,14 @@ class LoginController extends AclController {
 		require_once 'view/LoginView.class.php';
 		$form = new LoginForm(); // fetches POST values itself
 		$values = $form->getValues();
+
 		if ($form->validate() AND $this->model->login($values['user'], $values['pass'])) {
 
 			// Remember login form
 			if ($values['remember']) {
 				$remember = RememberLoginModel::instance()->nieuw();
 				$form = new RememberAfterLoginForm($remember);
+				$form->css_classes[] = 'redirect';
 
 				require_once 'model/CmsPaginaModel.class.php';
 				require_once 'view/CmsPaginaView.class.php';
@@ -77,7 +79,9 @@ class LoginController extends AclController {
 				$this->view = new CsrLayoutPage($body, array(), $form);
 				return;
 			}
-			redirect($values['url'], false);
+			if (isset($_COOKIE['goback'])) {
+				redirect($_COOKIE['goback']);
+			}
 		}
 		redirect(CSR_ROOT);
 	}
@@ -295,7 +299,16 @@ class LoginController extends AclController {
 			} else {
 				RememberLoginModel::instance()->rememberLogin($remember);
 			}
-			$this->view = new RememberLoginData(array($remember));
+			if (isset($_POST['DataTableId'])) {
+				$this->view = new RememberLoginData(array($remember));
+			}
+			// after login
+			elseif (isset($_COOKIE['goback'])) {
+				$this->view = new JsonResponse($_COOKIE['goback']);
+				unset($_COOKIE['goback']);
+			} else {
+				$this->view = new JsonResponse(CSR_ROOT);
+			}
 		} else {
 			$this->view = $form;
 		}

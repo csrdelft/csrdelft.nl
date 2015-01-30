@@ -148,9 +148,6 @@ class LoginForm extends Formulier {
 			$fields['remember'] = new VinkField('remember', false, null, 'Blijf ingelogd');
 		}
 
-		$fields['url'] = new UrlField('url', HTTP_REFERER, null);
-		$fields['url']->hidden = true;
-
 		$this->addFields($fields);
 	}
 

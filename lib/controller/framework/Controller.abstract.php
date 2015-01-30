@@ -169,8 +169,9 @@ abstract class Controller {
 		if ($this->isPosted()) {
 			die('403 Forbidden');
 		}
-		// Redirect to login form; http referer will bring you back :)
+		// Redirect to login form
 		elseif (LoginModel::getUid() === 'x999') {
+			setcookie('goback', REQUEST_URI, time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'), '/', 'csrdelft.nl', FORCE_HTTPS, true);
 			redirect(CSR_ROOT);
 		}
 		// GUI 403
