@@ -117,9 +117,11 @@ class GroepenModel extends CachedPersistenceModel {
 	 */
 	public function create(PersistentEntity $groep) {
 		$groep->id = (int) parent::create($groep);
-		AccessModel::instance()->setAcl(get_class($groep), $groep->id, array(
-			A::Rechten => LoginModel::getUid() // ownership rights
-		));
+		if ($groep->maker_uid !== 'x999') {
+			AccessModel::instance()->setAcl(get_class($groep), $groep->id, array(
+				A::Rechten => $groep->maker_uid // ownership rights
+			));
+		}
 	}
 
 	/**
@@ -129,9 +131,11 @@ class GroepenModel extends CachedPersistenceModel {
 	 * @return int rows affected
 	 */
 	public function update(PersistentEntity $groep) {
-		AccessModel::instance()->setAcl(get_class($groep), $groep->id, array(
-			A::Rechten => $groep->maker_uid // ownership rights
-		));
+		if ($groep->maker_uid !== 'x999') {
+			AccessModel::instance()->setAcl(get_class($groep), $groep->id, array(
+				A::Rechten => $groep->maker_uid // ownership rights
+			));
+		}
 		return parent::update($groep);
 	}
 
