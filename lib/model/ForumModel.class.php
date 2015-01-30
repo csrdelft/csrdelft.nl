@@ -645,10 +645,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		'Plaatje'	 => array(
 			'asterisk_orange'	 => 'Asterisk',
 			'ruby'				 => 'Robijn',
-			'rosette'			 => 'Rozet',
-			'newspaper'			 => 'Krant',
-			'book_open'			 => 'Open boek',
-			'coins'				 => 'Geldstapel',
+			'rosette'			 => 'Rozet'
 		)
 	);
 
