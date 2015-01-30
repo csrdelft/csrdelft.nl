@@ -37,10 +37,10 @@ abstract class A implements PersistentEnum {
 			case self::Afmelden: return 'Afmelden';
 			case self::Opvolging: return 'Opvolging aanpassen';
 			case self::Aanmaken: return 'Nieuwe aanmaken';
-			case self::Wijzigen: return 'Bestaande wijzigen';
+			case self::Wijzigen: return 'Wijzigen';
 			case self::Verwijderen: return 'Verwijderen';
 			case self::Beheren: return 'Beheren';
-			case self::Rechten: return 'Rechten aanpassen';
+			case self::Rechten: return 'Rechten instellen';
 			default: throw new Exception('AccessAction onbekend');
 		}
 	}
