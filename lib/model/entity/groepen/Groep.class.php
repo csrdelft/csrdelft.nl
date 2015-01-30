@@ -166,17 +166,20 @@ class Groep extends PersistentEntity {
 		if ($action === A::Bekijken AND LoginModel::mag('P_LEDEN_READ')) {
 			return true;
 		}
+		// Aanmaker van de groep mag alles
 		if ($this->maker_uid === LoginModel::getUid()) {
 			return true;
 		}
+		// Uitzondering als het om jezelf gaat
 		if ($uid !== LoginModel::getUid() AND LoginModel::mag('P_LEDEN_MOD')) {
 			return true;
 		}
-		// Rechten voor deze specifieke groep?
-		if (LoginModel::mag(AccessModel::get(get_class($this), $action, $this->id))) {
+		// Rechten voor deze specifieke groep
+		$ac = AccessModel::get(get_class($this), $action, $this->id);
+		if ($ac AND LoginModel::mag($ac)) {
 			return true;
 		}
-		// Rechten voor deze klasse / dit soort groep?
+		// Rechten voor deze klasse / dit soort groep
 		if (static::magAlgemeen($action, property_exists($this, 'soort') ? $this->soort : null)) {
 			return true;
 		}
@@ -191,12 +194,16 @@ class Groep extends PersistentEntity {
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $soort = null) {
-		// rechten voor dit soort groep?
-		if ($soort !== null AND LoginModel::mag(AccessModel::get(get_called_class(), $action, $soort))) {
-			return true;
+		if ($soort !== null) {
+			// Rechten voor dit soort groep
+			$ac = AccessModel::get(get_called_class(), $action, $soort);
+			if ($ac AND LoginModel::mag($ac)) {
+				return true;
+			}
 		}
-		// rechten voor dit type groep?
-		if (LoginModel::mag(AccessModel::get(get_called_class(), $action, '*'))) {
+		// Rechten voor deze groep klasse?
+		$ac = AccessModel::get(get_called_class(), $action, '*');
+		if ($ac AND LoginModel::mag($ac)) {
 			return true;
 		}
 		return false;

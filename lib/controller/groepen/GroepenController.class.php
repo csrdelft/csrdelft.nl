@@ -72,8 +72,6 @@ class GroepenController extends Controller {
 	/**
 	 * Check permissions & valid params in actions.
 	 * 
-	 * Uitzondering: groep bekijken rechten wordt gecontroleerd in GroepView.
-	 *
 	 * @param string $action
 	 * @param array $args
 	 * @return boolean
@@ -116,33 +114,48 @@ class GroepenController extends Controller {
 		} else {
 			$groepen = $this->model->find('status = ?', array(GroepStatus::HT));
 		}
-		$body = new GroepenView($this->model, $groepen);
+		$body = new GroepenView($this->model, $groepen); // checked rechten bekijken per groep
 		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function bekijken(Groep $groep) {
 		$groepen = $this->model->find('familie = ?', array($groep->familie));
-		$body = new GroepenView($this->model, $groepen);
+		$body = new GroepenView($this->model, $groepen); // checked rechten bekijken per groep
 		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function omschrijving(Groep $groep) {
+		if (!$groep->mag(A::Bekijken)) {
+			$this->geentoegang();
+		}
 		$this->view = new GroepOmschrijvingView($groep);
 	}
 
 	public function pasfotos(Groep $groep) {
+		if (!$groep->mag(A::Bekijken)) {
+			$this->geentoegang();
+		}
 		$this->view = new GroepPasfotosView($groep);
 	}
 
 	public function lijst(Groep $groep) {
+		if (!$groep->mag(A::Bekijken)) {
+			$this->geentoegang();
+		}
 		$this->view = new GroepLijstView($groep);
 	}
 
 	public function stats(Groep $groep) {
+		if (!$groep->mag(A::Bekijken)) {
+			$this->geentoegang();
+		}
 		$this->view = new GroepStatistiekView($groep);
 	}
 
 	public function emails(Groep $groep) {
+		if (!$groep->mag(A::Bekijken)) {
+			$this->geentoegang();
+		}
 		$this->view = new GroepEmailsView($groep);
 	}
 
