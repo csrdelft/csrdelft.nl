@@ -48,10 +48,11 @@
 						<input type="submit" value="Opslaan" class="btn" />
 					</form>
 					{if LoginModel::mag('P_FORUM_BELANGRIJK')}
+						<br />
 						<form action="/forum/wijzigen/{$draad->draad_id}/belangrijk" method="post">
 							<label>Belangrijk markeren &nbsp;</label>
 							<select name="belangrijk">
-								{foreach from=$belangrijk_opties key=value item=label}
+								{foreach from=ForumDradenModel::$belangrijk_opties key=value item=label}
 									<option value="{$value}"{if $value === $draad->belangrijk} selected="selected"{/if}>{$label}</option>
 								{/foreach}
 							</select>

@@ -628,6 +628,21 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 	 * @var int
 	 */
 	private $aantal_plakkerig;
+	/**
+	 * Mogelijke markeringen voor belangrijke draadjes
+	 * @var array
+	 */
+	public static $belangrijk_opties = array(
+		''					 => 'Niet belangrijk',
+		'asterisk_orange'	 => 'Oranje ster',
+		'asterisk_yellow'	 => 'Gele ster',
+		'flag_blue'			 => 'Blauwe vlag',
+		'flag_green'		 => 'Groene vlag',
+		'flag_pink'			 => 'Roze vlag',
+		'flag_purple'		 => 'Paarse vlag',
+		'flag_red'			 => 'Rode vlag',
+		'flag_yellow'		 => 'Gele vlag'
+	);
 
 	public static function get($id) {
 		$draad = static::instance()->retrieveByPrimaryKey(array($id));
@@ -790,22 +805,25 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		} else {
 			$verborgen = '';
 		}
-		if ($belangrijk !== null) {
-			$where_params[] = (boolean) $belangrijk;
-			$belangrijk = ' AND belangrijk = ?';
-		} else {
-			$belangrijk = '';
+		$where = '(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
+		if (is_bool($belangrijk)) {
+			if ($belangrijk) {
+				$where .= ' AND belangrijk IS NOT NULL';
+			} else {
+				$where .= ' AND belangrijk IS NULL';
+			}
 		}
-		$where = '(forum_id IN (' . $forum_ids_stub . ') OR gedeeld_met IN (' . $forum_ids_stub . '))' . $verborgen . ' AND wacht_goedkeuring = FALSE AND verwijderd = FALSE' . $belangrijk;
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
 			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
 		}
 		$dradenById = group_by_distinct('draad_id', $this->find($where, $where_params, null, 'laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal));
 		$count = count($dradenById);
-		$draden_ids = array_keys($dradenById);
-		array_unshift($draden_ids, LoginModel::getUid());
-		ForumDradenGelezenModel::instance()->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
+		if ($count > 0) {
+			$draden_ids = array_keys($dradenById);
+			array_unshift($draden_ids, LoginModel::getUid());
+			ForumDradenGelezenModel::instance()->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
+		}
 		return $dradenById;
 	}
 

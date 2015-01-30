@@ -493,6 +493,9 @@ class ForumController extends Controller {
 			}
 		} elseif ($property === 'titel' OR $property === 'belangrijk') {
 			$value = trim(filter_input(INPUT_POST, $property, FILTER_SANITIZE_STRING));
+			if (empty($value)) {
+				$value = null;
+			}
 		} else {
 			$this->geentoegang();
 		}
