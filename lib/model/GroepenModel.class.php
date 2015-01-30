@@ -111,7 +111,7 @@ class GroepenModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * Set primary key and ACL.
+	 * Set primary key and ownership ACL.
 	 * 
 	 * @param PersistentEntity $groep
 	 */
@@ -120,6 +120,19 @@ class GroepenModel extends CachedPersistenceModel {
 		AccessModel::instance()->setAcl(get_class($groep), $groep->id, array(
 			A::Rechten => LoginModel::getUid() // ownership rights
 		));
+	}
+
+	/**
+	 * Set ownerschip ACL.
+	 * 
+	 * @param PersistentEntity $groep
+	 * @return type
+	 */
+	public function update(PersistentEntity $groep) {
+		AccessModel::instance()->setAcl(get_class($groep), $groep->id, array(
+			A::Rechten => $groep->maker_uid // ownership rights
+		));
+		return parent::update($groep);
 	}
 
 	/**
