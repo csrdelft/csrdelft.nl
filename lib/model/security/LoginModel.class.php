@@ -260,29 +260,37 @@ class LoginModel extends PersistenceModel implements Validator {
 			$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
 			return false;
 		}
-		// If not yet authenticated by token: check password
-		if ($remember OR $tokenAuthenticated OR AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
+		// Clear session
+		session_unset();
+
+		// Autologin
+		if ($remember) {
+			$_SESSION['_authByCookie'] = true;
+		}
+		// Previously(!) verified private token or OneTimeToken
+		elseif ($tokenAuthenticated) {
+			$_SESSION['_authByToken'] = true;
+		}
+		// Check password
+		elseif (AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
 			AccountModel::instance()->successfulLoginAttempt($account);
-		} else {
+		}
+		// Wrong password
+		else {
+			// Password deleted (by admin)
 			if ($account->pass_hash == '') {
 				$_SESSION['auth_error'] = 'Gebruik wachtwoord vergeten of mail de PubCie';
-			} else {
+			}
+			// Regular failed username+password
+			else {
 				$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
 				AccountModel::instance()->failedLoginAttempt($account);
 			}
 			return false;
 		}
-		// Clear session
-		session_unset();
 
 		// Subject assignment:
 		$_SESSION['_uid'] = $account->uid;
-		if ($remember) {
-			$_SESSION['_authByCookie'] = true;
-		}
-		if ($tokenAuthenticated) {
-			$_SESSION['_authByToken'] = true;
-		}
 
 		if ($account->uid !== 'x999') {
 			// Permissions change: delete old session
@@ -328,6 +336,14 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	public function logout() {
+		// Forget autologin
+		if (isset($_COOKIE['remember'])) {
+			$remember = RememberLoginModel::instance()->find('token = ?', array(hash('sha512', $_COOKIE['remember'])), null, null, 1)->fetch();
+			if ($remember) {
+				RememberLoginModel::instance()->delete($remember);
+			}
+		}
+		// Destroy login session
 		$this->deleteByPrimaryKey(array(hash('sha512', session_id())));
 		session_destroy();
 	}
