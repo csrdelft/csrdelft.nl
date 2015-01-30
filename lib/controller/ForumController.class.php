@@ -200,10 +200,10 @@ class ForumController extends Controller {
 				} elseif (LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste') {
 					$url .= '#reageren';
 				}
-				if ($draad->gesloten) {
-					$icon = '<img src="/plaetjes/famfamfam/lock.png" width="16" height="16" alt="slotje" title="Dit onderwerp is gesloten, u kunt niet meer reageren" class="icon"> ';
-				} elseif ($draad->belangrijk) {
-					$icon = '<img src="/plaetjes/famfamfam/asterisk_orange.png" width="16" height="16" alt="belangrijk" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk." class="icon"> ';
+				if ($draad->belangrijk) {
+					$icon = '<img src="/plaetjes/famfamfam/' . $draad->belangrijk . '.png" width="16" height="16" alt="belangrijk" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk." class="icon"> ';
+				} elseif ($draad->gesloten) {
+					$icon = '<img src="/plaetjes/famfamfam/lock.png" width="16" height="16" alt="gesloten" title="Dit onderwerp is gesloten, u kunt niet meer reageren" class="icon"> ';
 				} elseif ($draad->plakkerig) {
 					$icon = '<img src="/plaetjes/famfamfam/note.png" width="16" height="16" alt="plakkerig" title="Dit onderwerp is plakkerig, het blijft bovenaan." class="icon"> ';
 				} else {
@@ -476,7 +476,7 @@ class ForumController extends Controller {
 		if (!$draad->getForumDeel()->magModereren()) {
 			$this->geentoegang();
 		}
-		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'belangrijk', 'eerste_post_plakkerig', 'pagina_per_post'))) {
+		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'eerste_post_plakkerig', 'pagina_per_post'))) {
 			$value = !$draad->$property;
 			if ($property === 'belangrijk' AND ! LoginModel::mag('P_FORUM_BELANGRIJK')) {
 				$this->geentoegang();
@@ -491,7 +491,7 @@ class ForumController extends Controller {
 			} elseif ($value === 0) {
 				$value = null;
 			}
-		} elseif ($property === 'titel') {
+		} elseif ($property === 'titel' OR $property === 'belangrijk') {
 			$value = trim(filter_input(INPUT_POST, $property, FILTER_SANITIZE_STRING));
 		} else {
 			$this->geentoegang();

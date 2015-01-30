@@ -5,12 +5,6 @@
 				<td>
 					<a href="/forum/onderwerp/{$draad->draad_id}/{ForumPostsModel::instance()->getHuidigePagina()}/statistiek" class="btn" title="Bekijk statistieken gelezen door">{icon get="chart_line"} gelezen statistiek</a>
 					<br /><br />
-					{if LoginModel::mag('P_FORUM_BELANGRIJK')}
-						<a href="/forum/wijzigen/{$draad->draad_id}/belangrijk" class="btn post ReloadPage" title="Verander belangrijkheid">
-							{icon get="asterisk_orange"} maak {if $draad->belangrijk}<span class="dikgedrukt">niet</span> {/if}belangrijk
-						</a>
-						<br /><br />
-					{/if}
 					<a href="/forum/wijzigen/{$draad->draad_id}/plakkerig" class="btn post ReloadPage" title="Verander plakkerigheid">
 						{icon get="note"} maak {if $draad->plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
 					</a>
@@ -53,6 +47,17 @@
 						<input type="text" name="titel" value="{$draad->titel}" />
 						<input type="submit" value="Opslaan" class="btn" />
 					</form>
+					{if LoginModel::mag('P_FORUM_BELANGRIJK')}
+						<form action="/forum/wijzigen/{$draad->draad_id}/belangrijk" method="post">
+							<label>Belangrijk markeren &nbsp;</label>
+							<select name="belangrijk">
+								{foreach from=$belangrijk_opties key=value item=label}
+									<option value="{$value}"{if $value === $draad->belangrijk} selected="selected"{/if}>{$label}</option>
+								{/foreach}
+							</select>
+							<input type="submit" value="Opslaan" class="btn" />
+						</form>
+					{/if}
 					{if $gedeeld_met_opties}
 						<br />
 						<form action="/forum/wijzigen/{$draad->draad_id}/gedeeld_met" method="post">

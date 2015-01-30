@@ -77,7 +77,7 @@ class ForumDraad extends PersistentEntity {
 	public $plakkerig;
 	/**
 	 * Belangrijk markering
-	 * @var boolean
+	 * @var string
 	 */
 	public $belangrijk;
 	/**
@@ -143,7 +143,7 @@ class ForumDraad extends PersistentEntity {
 		'verwijderd'			 => array(T::Boolean),
 		'wacht_goedkeuring'		 => array(T::Boolean),
 		'plakkerig'				 => array(T::Boolean),
-		'belangrijk'			 => array(T::Boolean),
+		'belangrijk'			 => array(T::String, true),
 		'eerste_post_plakkerig'	 => array(T::Boolean),
 		'pagina_per_post'		 => array(T::Boolean)
 	);

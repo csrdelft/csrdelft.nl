@@ -832,7 +832,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		$draad->verwijderd = false;
 		$draad->wacht_goedkeuring = $wacht_goedkeuring;
 		$draad->plakkerig = false;
-		$draad->belangrijk = false;
+		$draad->belangrijk = null;
 		$draad->eerste_post_plakkerig = false;
 		$draad->pagina_per_post = false;
 		$draad->draad_id = (int) $this->create($draad);
