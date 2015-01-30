@@ -63,14 +63,21 @@ class LoginController extends AclController {
 		require_once 'view/LoginView.class.php';
 		$form = new LoginForm(); // fetches POST values itself
 		$values = $form->getValues();
-		if (isset($values['mobiel'])) {
-			$this->model->setPauper($values['mobiel']);
-		}
 		if ($form->validate() AND $this->model->login($values['user'], $values['pass'])) {
-			if ($values['mobiel']) {
-				$this->pauper();
+
+			// Remember login form
+			if ($values['remember']) {
+				$remember = RememberLoginModel::instance()->nieuw();
+				$form = new RememberAfterLoginForm($remember);
+
+				require_once 'model/CmsPaginaModel.class.php';
+				require_once 'view/CmsPaginaView.class.php';
+
+				$body = new CmsPaginaView(CmsPaginaModel::get(Instellingen::get('stek', 'homepage')));
+				$this->view = new CsrLayoutPage($body, array(), $form);
 				return;
 			}
+			setMelding($values['url'], 2);
 			redirect($values['url'], false);
 		}
 		redirect(CSR_ROOT);

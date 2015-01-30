@@ -117,6 +117,19 @@ class RememberLoginForm extends DataTableForm {
 
 }
 
+class RememberAfterLoginForm extends ModalForm {
+
+	public function __construct(RememberLogin $remember) {
+		parent::__construct($remember, '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
+
+		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');
+		$fields[] = new FormDefaultKnoppen('/', false, true, true, true, true);
+
+		$this->addFields($fields);
+	}
+
+}
+
 class LoginForm extends Formulier {
 
 	public function __construct() {
@@ -132,8 +145,7 @@ class LoginForm extends Formulier {
 		if (LoginModel::instance()->hasError()) {
 			$fields[] = new HtmlComment('<p class="error">' . LoginModel::instance()->getError() . '</p>');
 		} else {
-			$fields['pauper'] = new VinkField('mobiel', LoginModel::instance()->isPauper(), null, 'Mobiel');
-			$fields['pauper']->onchange = 'this.form.submit();';
+			$fields['remember'] = new VinkField('remember', false, null, 'Blijf ingelogd');
 		}
 
 		$fields['url'] = new UrlField('url', HTTP_REFERER, null);
