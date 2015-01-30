@@ -219,6 +219,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * 
 	 * @param string $user
 	 * @param string $pass_plain
+	 * @param RememberLogin $remember
 	 * @param boolean $lockIP
 	 * @param boolean $tokenAuthenticated
 	 * @param string $expire
@@ -243,50 +244,58 @@ class LoginModel extends PersistenceModel implements Validator {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 
-		$account = false;
 		// Inloggen met lidnummer of gebruikersnaam
 		if (AccountModel::isValidUid($user)) {
 			$account = AccountModel::get($user);
 		} else {
 			$account = AccountModel::instance()->find('username = ?', array($user), null, null, 1)->fetch();
 		}
-		// Onbekende gebruiker?
+
+		// Onbekende gebruiker
 		if (!$account) {
-			$account = AccountModel::get('x999');
-		}
-		// Check timeout
-		$timeout = AccountModel::instance()->moetWachten($account);
-		if (MODE !== 'CLI' AND ! $remember AND ! $tokenAuthenticated AND $timeout > 0) {
-			$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
+			$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
 			return false;
 		}
+
 		// Clear session
 		session_unset();
 
+		if (MODE === 'CLI') {
+			// no checks
+		}
 		// Autologin
-		if ($remember) {
+		elseif ($remember) {
 			$_SESSION['_authByCookie'] = true;
 		}
 		// Previously(!) verified private token or OneTimeToken
 		elseif ($tokenAuthenticated) {
 			$_SESSION['_authByToken'] = true;
-		}
-		// Check password
-		elseif (AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
-			AccountModel::instance()->successfulLoginAttempt($account);
-		}
-		// Wrong password
-		else {
-			// Password deleted (by admin)
-			if ($account->pass_hash == '') {
-				$_SESSION['auth_error'] = 'Gebruik wachtwoord vergeten of mail de PubCie';
+		} else {
+
+			// Check timeout
+			$timeout = AccountModel::instance()->moetWachten($account);
+			if ($timeout > 0) {
+				$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
+				return false;
 			}
-			// Regular failed username+password
+
+			// Check password
+			if (AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
+				AccountModel::instance()->successfulLoginAttempt($account);
+			}
+			// Wrong password
 			else {
-				$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
-				AccountModel::instance()->failedLoginAttempt($account);
+				// Password deleted (by admin)
+				if ($account->pass_hash == '') {
+					$_SESSION['auth_error'] = 'Gebruik wachtwoord vergeten of mail de PubCie';
+				}
+				// Regular failed username+password
+				else {
+					$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
+					AccountModel::instance()->failedLoginAttempt($account);
+				}
+				return false;
 			}
-			return false;
 		}
 
 		// Subject assignment:
