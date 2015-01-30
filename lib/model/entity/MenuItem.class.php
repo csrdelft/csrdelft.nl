@@ -139,8 +139,12 @@ class MenuItem extends PersistentEntity {
 			} else {
 				$draad_id = substr($this->link, $begin);
 			}
-			$draad = ForumDradenModel::instance()->get((int) $draad_id);
-			return $draad AND $draad->isOngelezen();
+			try {
+				$draad = ForumDradenModel::instance()->get((int) $draad_id);
+				return $draad->isOngelezen();
+			} catch (Exception $e) {
+				// draad bestaat niet
+			}
 		}
 		return false;
 	}
