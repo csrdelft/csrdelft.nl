@@ -126,7 +126,7 @@ class GroepenModel extends CachedPersistenceModel {
 	 * Set ownerschip ACL.
 	 * 
 	 * @param PersistentEntity $groep
-	 * @return type
+	 * @return int rows affected
 	 */
 	public function update(PersistentEntity $groep) {
 		AccessModel::instance()->setAcl(get_class($groep), $groep->id, array(
@@ -139,6 +139,7 @@ class GroepenModel extends CachedPersistenceModel {
 	 * Delete ACL.
 	 * 
 	 * @param array $primary_key_values
+	 * @return int rows affected
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
 		AccessModel::instance()->deleteResource(static::orm, reset($primary_key_values));

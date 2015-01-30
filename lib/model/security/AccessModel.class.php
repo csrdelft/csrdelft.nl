@@ -117,6 +117,15 @@ class AccessModel extends CachedPersistenceModel {
 		return $ac;
 	}
 
+	/**
+	 * Stel rechten in voor een specifiek of gehele klasse van objecten.
+	 * Overschrijft bestaande rechten.
+	 * 
+	 * @param string $environment
+	 * @param string $resource
+	 * @param array $acl
+	 * @throws Exception
+	 */
 	public function setAcl($environment, $resource, array $acl) {
 		if (empty($environment) OR empty($resource) OR empty($acl)) {
 			throw new Exception('ACL empty');
