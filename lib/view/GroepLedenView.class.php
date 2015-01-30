@@ -277,12 +277,11 @@ class GroepLijstView extends GroepTabView {
 			$html .= '</td></tr>';
 		}
 		foreach ($this->groep->getLeden() as $lid) {
-			$html .= '<tr><td>';
+			$html .= '<tr><td>' . ProfielModel::getLink($lid->uid, 'civitas');
 			if ($this->groep->mag(A::Afmelden, $lid->uid)) {
-				$html .= '<a href="' . $this->groep->getUrl() . A::Afmelden . '" class="float-left" title="Afmelden"><img src="/plaetjes/famfamfam/bullet_delete.png" class="icon" width="16" height="16"></a>';
+				$html .= '<a href="' . $this->groep->getUrl() . A::Afmelden . '" class="float-right" title="Afmelden"><img src="/plaetjes/famfamfam/bullet_delete.png" class="icon" width="16" height="16"></a>';
 			}
-			$html .= ProfielModel::getLink($lid->uid, 'civitas') . '</td>';
-			$html .= '<td>';
+			$html .= '</td><td>';
 			if ($this->groep->mag(A::Bewerken, $lid->uid)) {
 				$form = new GroepBewerkenForm($lid, $this->groep, $suggesties, $this->groep->keuzelijst);
 				$html .= $form->getHtml();
