@@ -130,13 +130,13 @@ class AccessModel extends CachedPersistenceModel {
 			}
 			$ac = $this->get($environment, $action, $resource);
 			if ($ac) {
+				$ac->subject = $subject;
+				$this->update($ac);
+			} else {
 				$ac = $this->nieuw($environment, $resource);
 				$ac->action = $action;
 				$ac->subject = $subject;
 				$this->create($ac);
-			} else {
-				$ac->subject = $subject;
-				$this->update($ac);
 			}
 		}
 	}
