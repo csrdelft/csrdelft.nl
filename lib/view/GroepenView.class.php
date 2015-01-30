@@ -79,6 +79,7 @@ class GroepenBeheerData extends DataTableResponse {
 		}
 
 		$array['naam'] = '<span title="' . $groep->naam . (empty($groep->samenvatting) ? '' : '&#13;&#13;') . mb_substr($groep->samenvatting, 0, 100) . (strlen($groep->samenvatting) > 100 ? '...' : '' ) . '">' . $groep->naam . '</span>';
+		$array['status'] = GroepStatus::getChar($groep->status);
 		$array['samenvatting'] = null;
 		$array['omschrijving'] = null;
 		$array['website'] = null;
