@@ -276,7 +276,15 @@ class GroepLijstView extends GroepTabView {
 			$html .= $form->getHtml();
 			$html .= '</td></tr>';
 		}
+		$leden = array();
 		foreach ($this->groep->getLeden() as $lid) {
+			$achternaam = ProfielModel::instance()->findSparse(array('achternaam'), 'uid = ?', array($lid->uid), null, null, 1)->fetchColumn(1);
+			if ($achternaam) {
+				$leden[$achternaam] = $lid;
+			}
+		}
+		ksort($leden);
+		foreach ($leden as $lid) {
 			$html .= '<tr><td>';
 			if ($this->groep->mag(A::Afmelden, $lid->uid)) {
 				$html .= '<a href="' . $this->groep->getUrl() . A::Afmelden . '" class="float-left" title="Afmelden"><img src="/plaetjes/famfamfam/bullet_delete.png" class="icon" width="16" height="16"></a>';
