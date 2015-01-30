@@ -633,6 +633,11 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 	 * @var array
 	 */
 	public static $belangrijk_opties = array(
+		'Plaatje'	 => array(
+			'asterisk_orange'	 => 'Asterisk',
+			'ruby'				 => 'Robijn',
+			'rosette'			 => 'Rozet'
+		),
 		'Vlag'		 => array(
 			'flag_red'		 => 'Rood',
 			'flag_orange'	 => 'Groen',
@@ -641,11 +646,6 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 			'flag_blue'		 => 'Blauw',
 			'flag_purple'	 => 'Paars',
 			'flag_pink'		 => 'Roze'
-		),
-		'Plaatje'	 => array(
-			'asterisk_orange'	 => 'Asterisk',
-			'ruby'				 => 'Robijn',
-			'rosette'			 => 'Rozet'
 		)
 	);
 
