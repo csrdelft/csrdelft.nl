@@ -168,7 +168,13 @@ abstract class Controller {
 		http_response_code(403);
 		if ($this->isPosted()) {
 			die('403 Forbidden');
-		} else {
+		}
+		// Redirect to login form; http referer will bring you back :)
+		elseif (LoginModel::getUid() === 'x999') {
+			redirect(CSR_ROOT);
+		}
+		// GUI 403
+		else {
 			require_once 'model/CmsPaginaModel.class.php';
 			require_once 'view/CmsPaginaView.class.php';
 			$body = new CmsPaginaView(CmsPaginaModel::get('geentoegang'));

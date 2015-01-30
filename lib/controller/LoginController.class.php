@@ -77,7 +77,6 @@ class LoginController extends AclController {
 				$this->view = new CsrLayoutPage($body, array(), $form);
 				return;
 			}
-			setMelding($values['url'], 2);
 			redirect($values['url'], false);
 		}
 		redirect(CSR_ROOT);
