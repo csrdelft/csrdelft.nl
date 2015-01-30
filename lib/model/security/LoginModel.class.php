@@ -59,7 +59,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			if (isset($_COOKIE['remember'])) {
 				$remember = RememberLoginModel::instance()->verifyToken($_SERVER['REMOTE_ADDR'], $_COOKIE['remember']);
 				if ($remember) {
-					$this->login($remember->uid, null, $remember, $remember->lock_ip);
+					$this->login($remember->uid, null, false, $remember, $remember->lock_ip);
 				}
 			} else {
 				/**
@@ -69,7 +69,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 				if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 					$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
-					$this->login($account->uid, null, null, true, true, getDateTime());
+					$this->login($account->uid, null, false, null, true, true, getDateTime());
 				}
 			}
 		}
@@ -206,26 +206,30 @@ class LoginModel extends PersistenceModel implements Validator {
 	/**
 	 * Dispatch the login proces to a separate function based on MODE.
 	 * 
+	 * Als een gebruiker wordt ingelogd met $wacht == true, dan wordt gekeken of
+	 * er een timeout nodig is vanwege eerdere mislukte inlogpogingen.
+	 * 
 	 * Als een gebruiker wordt ingelogd met $lockIP == true, dan wordt het IP-adres
 	 * van de gebruiker opgeslagen in de sessie, en het sessie-cookie zal ALLEEN
 	 * vanaf dat adres toegang geven tot de website.
-	 * 
-	 * Als een gebruiker wordt ingelogd met $expire == DateTime, dan verloopt de sessie
-	 * van de gebruiker op het gegeven moment en wordt de gebruiker uigelogd.
 	 * 
 	 * Als een gebruiker wordt ingelogd met $tokenAuthenticated == true, dan wordt het wachtwoord
 	 * van de gebruiker NIET gecontroleerd en wordt er ook GEEN timeout geforceerd, er wordt
 	 * vanuit gegaan dat VOORAF een token is gecontroleerd en dat voldoende is voor authenticatie.
 	 * 
+	 * Als een gebruiker wordt ingelogd met $expire == DateTime, dan verloopt de sessie
+	 * van de gebruiker op het gegeven moment en wordt de gebruiker uigelogd.
+	 * 
 	 * @param string $user
 	 * @param string $pass_plain
+	 * @param boolean $wachten
 	 * @param RememberLogin $remember
 	 * @param boolean $lockIP
 	 * @param boolean $tokenAuthenticated
 	 * @param string $expire
 	 * @return boolean
 	 */
-	public function login($user, $pass_plain, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
+	public function login($user, $pass_plain, $wachten = true, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
 
 		if (MODE === 'CLI') {
 			if (defined('ETC_PATH')) {
@@ -272,11 +276,13 @@ class LoginModel extends PersistenceModel implements Validator {
 			$_SESSION['_authByToken'] = true;
 		} else {
 
-			// Check timeout
-			$timeout = AccountModel::instance()->moetWachten($account);
-			if ($timeout > 0) {
-				$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
-				return false;
+			if ($wachten) {
+				// Check timeout
+				$timeout = AccountModel::instance()->moetWachten($account);
+				if ($timeout > 0) {
+					$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
+					return false;
+				}
 			}
 
 			// Check password

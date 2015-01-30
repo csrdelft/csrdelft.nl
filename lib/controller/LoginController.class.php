@@ -186,7 +186,7 @@ class LoginController extends AclController {
 				// token verbruikt
 				OneTimeTokensModel::instance()->discardToken($account->uid, '/wachtwoord/reset');
 				// inloggen zonder $authByToken
-				$this->model->login($account->uid, $pass_plain);
+				$this->model->login($account->uid, $pass_plain, false);
 				// stuur bevestigingsmail
 				$lidnaam = $account->getProfiel()->getNaam('civitas');
 				require_once 'model/entity/Mail.class.php';
@@ -202,7 +202,7 @@ class LoginController extends AclController {
 			if ($form->validate()) {
 				// voorkom dat AccessModel ingelogde gebruiker blokkeerd met $allowAuthByToken == false
 				if (LoginModel::instance()->isAuthenticatedByToken()) {
-					LoginModel::instance()->login('x999', 'x999');
+					LoginModel::instance()->login('x999', 'x999', false);
 				}
 				$values = $form->getValues();
 				$account = AccountModel::get($values['user']);
@@ -233,7 +233,7 @@ class LoginController extends AclController {
 		if ($form->validate()) {
 			// voorkom dat AccessModel ingelogde gebruiker blokkeerd met $allowAuthByToken == false
 			if (LoginModel::instance()->isAuthenticatedByToken()) {
-				LoginModel::instance()->login('x999', 'x999');
+				LoginModel::instance()->login('x999', 'x999', false);
 			}
 			$uid = $form->findByName('user')->getValue();
 			$account = AccountModel::get($uid);
