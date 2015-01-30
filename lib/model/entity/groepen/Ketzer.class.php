@@ -82,17 +82,17 @@ class Ketzer extends Groep {
 			 */
 			// Als rechten ingesteld dan controleren
 			$ac = AccessModel::get(get_class($this), $action, $this->id);
-			if ($ac AND ! LoginModel::mag($ac->subject)) {
+			if ($ac AND ! LoginModel::mag($ac)) {
 				return false;
 			}
 
-			$lid = array_key_exists($uid, $this->getLeden());
+			$aangemeld = array_key_exists($uid, $this->getLeden());
 
 			switch ($action) {
 
 				case A::Aanmelden:
 					// Controleer lidmaatschap
-					if ($lid) {
+					if ($aangemeld) {
 						return false;
 					}
 					// Controleer maximum leden
@@ -104,7 +104,7 @@ class Ketzer extends Groep {
 
 				case A::Bewerken:
 					// Controleer lidmaatschap
-					if (!$lid) {
+					if (!$aangemeld) {
 						return false;
 					}
 					// Controleer bewerkperiode
@@ -112,7 +112,7 @@ class Ketzer extends Groep {
 
 				case A::Afmelden:
 					// Controleer lidmaatschap
-					if (!$lid) {
+					if (!$aangemeld) {
 						return false;
 					}
 					// Controleer afmeldperiode
