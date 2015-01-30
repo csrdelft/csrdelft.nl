@@ -143,7 +143,7 @@ class MenuItem extends PersistentEntity {
 				$draad = ForumDradenModel::instance()->get((int) $draad_id);
 				return $draad->isOngelezen();
 			} catch (Exception $e) {
-				setMelding('Uw favoriete forumdraadje bestaat helaas niet meer: ' . htmlspecialchars($this->link), 2);
+				setMelding('Uw favoriete forumdraadje bestaat helaas niet meer: ' . htmlspecialchars($this->tekst), 2);
 			}
 		}
 		return false;
