@@ -73,11 +73,7 @@ class GroepenBeheerData extends DataTableResponse {
 		$array = $groep->jsonSerialize();
 
 		$array['detailSource'] = $groep->getUrl() . 'leden';
-
-		if ($groep->mag(A::Rechten)) {
-			$array['id'] .= '<a href="/rechten/bekijken/' . get_class($groep) . '/' . $groep->id . '" class="float-right" title="Rechten aanpassen"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/bullet_key.png"></a>';
-		}
-
+		$array['id'] .= '<a href="/rechten/bekijken/' . get_class($groep) . '/' . $groep->id . '" class="float-right" title="Rechten aanpassen"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/bullet_key.png"></a>';
 		$array['naam'] = '<span title="' . $groep->naam . (empty($groep->samenvatting) ? '' : '&#13;&#13;') . mb_substr($groep->samenvatting, 0, 100) . (strlen($groep->samenvatting) > 100 ? '...' : '' ) . '">' . $groep->naam . '</span>';
 		$array['status'] = GroepStatus::getChar($groep->status);
 		$array['samenvatting'] = null;
