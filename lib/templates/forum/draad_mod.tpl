@@ -52,8 +52,13 @@
 						<form action="/forum/wijzigen/{$draad->draad_id}/belangrijk" method="post">
 							<label>Belangrijk markeren &nbsp;</label>
 							<select name="belangrijk">
-								{foreach from=ForumDradenModel::$belangrijk_opties key=value item=label}
-									<option value="{$value}"{if $value === $draad->belangrijk} selected="selected"{/if}>{$label}</option>
+								<option value=""{if !$draad->belangrijk} selected="selected"{/if}>Niet belangrijk</option>
+								{foreach from=ForumDradenModel::$belangrijk_opties key=group item=list}
+									<optgroup label="{$group}">
+										{foreach from=$list key=value item=label}
+											<option value="{$value}"{if $value === $draad->belangrijk} selected="selected"{/if}>{$label}</option>
+										{/foreach}
+									</optgroup>
 								{/foreach}
 							</select>
 							<input type="submit" value="Opslaan" class="btn" />

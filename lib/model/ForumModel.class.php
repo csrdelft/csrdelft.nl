@@ -633,15 +633,23 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 	 * @var array
 	 */
 	public static $belangrijk_opties = array(
-		''					 => 'Niet belangrijk',
-		'asterisk_orange'	 => 'Oranje ster',
-		'asterisk_yellow'	 => 'Gele ster',
-		'flag_blue'			 => 'Blauwe vlag',
-		'flag_green'		 => 'Groene vlag',
-		'flag_pink'			 => 'Roze vlag',
-		'flag_purple'		 => 'Paarse vlag',
-		'flag_red'			 => 'Rode vlag',
-		'flag_yellow'		 => 'Gele vlag'
+		'Vlag'		 => array(
+			'flag_red'		 => 'Rood',
+			'flag_orange'	 => 'Groen',
+			'flag_yellow'	 => 'Geel',
+			'flag_green'	 => 'Groen',
+			'flag_blue'		 => 'Blauw',
+			'flag_purple'	 => 'Paars',
+			'flag_pink'		 => 'Roze'
+		),
+		'Plaatje'	 => array(
+			'asterisk_orange'	 => 'Asterisk',
+			'ruby'				 => 'Robijn',
+			'rosette'			 => 'Rozet',
+			'newspaper'			 => 'Krant',
+			'book_open'			 => 'Open boek',
+			'coins'				 => 'Geldstapel',
+		)
 	);
 
 	public static function get($id) {
