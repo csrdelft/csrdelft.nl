@@ -15,7 +15,7 @@
 							<p>Delft, {$smarty.now|date_format:"%e %B %Y"}</p>
 						</td>
 						<td style="text-align:right;">
-							<img alt="Beeldmerk van de Vereniging" src="/plaetjes/layout/beeldmerk.jpg" />
+							<img alt="Beeldmerk van de Vereniging" src="{$smarty.const.CSR_ROOT}/plaetjes/layout/beeldmerk.jpg" />
 						</td>
 						<td>
 							&nbsp;
