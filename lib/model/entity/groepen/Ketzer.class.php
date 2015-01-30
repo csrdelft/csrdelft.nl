@@ -103,7 +103,7 @@ class Ketzer extends Groep {
 
 				case A::Bewerken:
 					// Controleer rechten
-					if (!$ac OR ! LoginModel::mag($ac->subject)) {
+					if ($ac AND ! LoginModel::mag($ac->subject)) {
 						return false;
 					}
 					// Controleer lidmaatschap
