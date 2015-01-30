@@ -117,6 +117,30 @@ class AccessModel extends CachedPersistenceModel {
 		return $ac;
 	}
 
+	public function setAcl($environment, $resource, array $acl) {
+		if (empty($environment) OR empty($resource) OR empty($acl)) {
+			throw new Exception('ACL empty');
+		}
+		if (!LoginModel::mag('P_LOGGED_IN') OR ( $resource === '*' AND ! LoginModel::mag('P_ADMIN') )) {
+			throw new Exception('access denied');
+		}
+		foreach ($acl as $action => $subject) {
+			if (empty($action) OR empty($subject)) {
+				continue;
+			}
+			$ac = $this->get($environment, $action, $resource);
+			if ($ac) {
+				$ac = $this->nieuw($environment, $resource);
+				$ac->action = $action;
+				$ac->subject = $subject;
+				$this->create($ac);
+			} else {
+				$ac->subject = $subject;
+				$this->update($ac);
+			}
+		}
+	}
+
 	public function getDefaultPermissionRole($lidstatus) {
 		switch ($lidstatus) {
 			case LidStatus::Kringel:

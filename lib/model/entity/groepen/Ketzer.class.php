@@ -80,16 +80,17 @@ class Ketzer extends Groep {
 			 * Deze functie overschrijft de beheer-rechten. Dus als je als beheerder jezelf
 			 * bijv. achteraf wil aanmelden moet je A::Beheren ipv A::Aanmelden vragen.
 			 */
+			// Als rechten ingesteld dan controleren
 			$ac = AccessModel::get(get_class($this), $action, $this->id);
+			if ($ac AND ! LoginModel::mag($ac->subject)) {
+				return false;
+			}
+
 			$lid = array_key_exists($uid, $this->getLeden());
 
 			switch ($action) {
 
 				case A::Aanmelden:
-					// Controleer rechten
-					if ($ac AND ! LoginModel::mag($ac->subject)) {
-						return false;
-					}
 					// Controleer lidmaatschap
 					if ($lid) {
 						return false;
@@ -102,10 +103,6 @@ class Ketzer extends Groep {
 					return time() < strtotime($this->aanmelden_tot) AND time() > strtotime($this->aanmelden_vanaf);
 
 				case A::Bewerken:
-					// Controleer rechten
-					if ($ac AND ! LoginModel::mag($ac->subject)) {
-						return false;
-					}
 					// Controleer lidmaatschap
 					if (!$lid) {
 						return false;
@@ -114,10 +111,6 @@ class Ketzer extends Groep {
 					return time() < strtotime($this->bewerken_tot);
 
 				case A::Afmelden:
-					// Controleer rechten
-					if (!$ac OR ! LoginModel::mag($ac->subject)) {
-						return false;
-					}
 					// Controleer lidmaatschap
 					if (!$lid) {
 						return false;

@@ -60,7 +60,7 @@ class ForumController extends Controller {
 			case 'wijzigen':
 			case 'posten':
 			case 'bewerken':
-			case A::Verwijderen:
+			case 'verwijderen':
 			case 'verplaatsen':
 			case 'offtopic':
 			case 'goedkeuren':

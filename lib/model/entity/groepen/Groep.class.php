@@ -163,14 +163,16 @@ class Groep extends PersistentEntity {
 	 */
 	public function mag($action, $uid = null) {
 		// Default rechten
-		if ($action === A::Bekijken AND LoginModel::mag('P_LEDEN_READ')) {
+		if (!LoginModel::mag('P_LEDEN_READ')) {
+			return false;
+		} elseif ($action === A::Bekijken) {
 			return true;
 		}
 		// Aanmaker van de groep mag alles
 		if ($this->maker_uid === LoginModel::getUid()) {
 			return true;
 		}
-		// Uitzondering als het om jezelf gaat
+		// Beheerders mogen alles; uitzondering als het om jezelf gaat
 		if ($uid !== LoginModel::getUid() AND LoginModel::mag('P_LEDEN_MOD')) {
 			return true;
 		}

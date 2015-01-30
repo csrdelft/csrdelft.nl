@@ -35,7 +35,7 @@ abstract class CommissieSoort implements PersistentEnum {
 			case self::Commissie:
 			case self::SjaarCie:
 			case self::Extern:
-				return $option;
+				return ucfirst($option);
 			default: throw new Exception('CommissieSoort onbekend');
 		}
 	}

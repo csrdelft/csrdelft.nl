@@ -44,7 +44,7 @@ abstract class ActiviteitSoort implements PersistentEnum {
 			case self::Dies:
 			case self::Lustrum:
 			case self::IFES:
-				return $option;
+				return ucfirst($option);
 			default: throw new Exception('ActiviteitSoort onbekend');
 		}
 	}

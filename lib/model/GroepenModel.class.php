@@ -110,8 +110,26 @@ class GroepenModel extends CachedPersistenceModel {
 		return $groep;
 	}
 
+	/**
+	 * Set primary key and ACL.
+	 * 
+	 * @param PersistentEntity $groep
+	 */
 	public function create(PersistentEntity $groep) {
 		$groep->id = (int) parent::create($groep);
+		AccessModel::instance()->setAcl(get_class($groep), $groep->id, array(
+			A::Rechten => LoginModel::getUid() // ownership rights
+		));
+	}
+
+	/**
+	 * Delete ACL.
+	 * 
+	 * @param array $primary_key_values
+	 */
+	protected function deleteByPrimaryKey(array $primary_key_values) {
+		AccessModel::instance()->deleteResource(static::orm, reset($primary_key_values));
+		return parent::deleteByPrimaryKey($primary_key_values);
 	}
 
 	/**

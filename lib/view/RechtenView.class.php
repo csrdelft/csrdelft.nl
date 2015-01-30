@@ -10,18 +10,18 @@ class RechtenTable extends DataTable {
 
 	public function __construct(AccessModel $model, $environment, $resource) {
 		parent::__construct($model::orm, 'Rechten voor ' . $resource, 'resource');
-		$this->dataUrl = '/' . A::Rechten . '/' . A::Bekijken . '/' . $environment . '/' . $resource;
+		$this->dataUrl = '/rechten/bekijken/' . $environment . '/' . $resource;
 
 		$this->hideColumn('action', false);
 		$this->searchColumn('aciton');
 
-		$create = new DataTableKnop('== 0', $this->tableId, '/' . A::Rechten . '/' . A::Aanmaken . '/' . $environment . '/' . $resource, 'post popup', 'Geven', 'Rechten uitdelen', 'key_add');
+		$create = new DataTableKnop('== 0', $this->tableId, '/rechten/aanmaken/' . $environment . '/' . $resource, 'post popup', 'Instellen', 'Rechten instellen', 'key_add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, '/' . A::Rechten . '/' . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig rechten', 'key_edit');
+		$update = new DataTableKnop('== 1', $this->tableId, '/rechten/wijzigen', 'post popup', 'Wijzigen', 'Rechten wijzigen', 'key_edit');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, '/' . A::Rechten . '/' . A::Verwijderen, 'post confirm', 'Terugtrekken', 'Rechten terugtrekken', 'key_delete');
+		$delete = new DataTableKnop('>= 1', $this->tableId, '/rechten/verwijderen', 'post confirm', 'Terugtrekken', 'Rechten terugtrekken', 'key_delete');
 		$this->addKnop($delete);
 	}
 
@@ -40,6 +40,7 @@ class RechtenData extends DataTableResponse {
 	public function getJson($ac) {
 		$array = $ac->jsonSerialize();
 
+		$array['action'] = A::getDescription($ac->action);
 		$array['resource'] = $ac->resource === '*' ? 'Geërfd' : null;
 
 		return parent::getJson($array);
@@ -50,23 +51,29 @@ class RechtenData extends DataTableResponse {
 class RechtenForm extends DataTableForm {
 
 	public function __construct(AccessControl $ac, $action) {
-		parent::__construct($ac, '/' . A::Rechten . '/' . $action . '/' . $ac->environment . '/' . $ac->resource, 'Rechten aanpassen voor ');
+		parent::__construct($ac, '/rechten/' . $action . '/' . $ac->environment . '/' . $ac->resource, 'Rechten aanpassen voor ');
 		if ($ac->resource === '*') {
-			$this->titel .= 'elke ';
+			$this->titel .= 'elke ' . $ac->environment;
+		} else {
+			$this->titel .= $ac->environment . ' ' . $ac->resource;
 		}
-		$this->titel .= $ac->resource;
 
-		if ($action === A::Aanmaken) {
+		if ($action === 'aanmaken') {
+
+			if (LoginModel::mag('P_ADMIN')) {
+				$fields[] = new RequiredTextField('environment', $ac->environment, 'Klasse');
+				$fields[] = new RequiredTextField('resource', $ac->resource, 'Object');
+			}
+
 			$acties = array();
 			foreach (A::getTypeOptions() as $option) {
 				$acties[$option] = A::getDescription($option);
 			}
 			$fields[] = new SelectField('action', $ac->action, 'Actie', $acties);
 		} else {
-			$fields['a'] = new TextField('action', $ac->action, 'Actie');
-			$fields['a']->readonly = true;
+			$fields[] = new HtmlComment('<label>Actie:</label><div class="dikgedrukt">' . A::getDescription($ac->action) . '</div>');
 		}
-		$fields[] = new RequiredRechtenField('subject', $ac->subject, 'Rechten');
+		$fields[] = new RequiredRechtenField('subject', $ac->subject, 'Toegestaan voor:');
 		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);

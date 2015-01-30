@@ -16,15 +16,15 @@ class RechtenController extends AclController {
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'zoeken'	 => 'P_LOGGED_IN',
-				A::Bekijken	 => 'P_LOGGED_IN'
+				'bekijken'	 => 'P_LOGGED_IN'
 			);
 		} else {
 			$this->acl = array(
 				'zoeken'		 => 'P_LOGGED_IN',
-				A::Bekijken		 => 'P_LOGGED_IN',
-				A::Aanmaken		 => 'P_LOGGED_IN',
-				A::Wijzigen		 => 'P_LOGGED_IN',
-				A::Verwijderen	 => 'P_LOGGED_IN'
+				'bekijken'		 => 'P_LOGGED_IN',
+				'aanmaken'		 => 'P_LOGGED_IN',
+				'wijzigen'		 => 'P_LOGGED_IN',
+				'verwijderen'	 => 'P_LOGGED_IN'
 			);
 		}
 	}
@@ -53,6 +53,16 @@ class RechtenController extends AclController {
 
 	public function aanmaken($environment = null, $resource = null) {
 		$ac = $this->model->nieuw($environment, $resource);
+
+		if (!LoginModel::mag('P_ADMIN')) {
+
+			// Recursive permissions
+			$rechten = $this->model->get($ac->environment, A::Rechten, $ac->resource);
+			if (!$rechten OR ! LoginModel::mag($rechten)) {
+				$this->geentoegang();
+			}
+		}
+
 		$form = new RechtenForm($ac, $this->action);
 		if ($form->validate()) {
 			$this->model->create($ac);
@@ -69,10 +79,13 @@ class RechtenController extends AclController {
 		}
 		$ac = $this->model->getUUID($selection[0]);
 
-		// Recursive permissions
-		$rechten = $this->model->get($ac->environment, A::Rechten, $ac->resource);
-		if (!$rechten OR ! LoginModel::mag($rechten)) {
-			$this->geentoegang();
+		if (!LoginModel::mag('P_ADMIN')) {
+
+			// Recursive permissions
+			$rechten = $this->model->get($ac->environment, A::Rechten, $ac->resource);
+			if (!$rechten OR ! LoginModel::mag($rechten)) {
+				$this->geentoegang();
+			}
 		}
 
 		$form = new RechtenForm($ac, $this->action);
@@ -90,10 +103,13 @@ class RechtenController extends AclController {
 		foreach ($selection as $UUID) {
 			$ac = $this->model->getUUID($UUID);
 
-			// Recursive permissions
-			$rechten = $this->model->get($ac->environment, A::Rechten, $ac->resource);
-			if (!$rechten OR ! LoginModel::mag($rechten)) {
-				continue;
+			if (!LoginModel::mag('P_ADMIN')) {
+
+				// Recursive permissions
+				$rechten = $this->model->get($ac->environment, A::Rechten, $ac->resource);
+				if (!$rechten OR ! LoginModel::mag($rechten)) {
+					continue;
+				}
 			}
 
 			$this->model->delete($ac);

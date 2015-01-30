@@ -16,13 +16,13 @@ class GroepLedenTable extends DataTable {
 		$this->setColumnTitle('uid', 'Lidnaam');
 		$this->setColumnTitle('door_uid', 'Aangemeld door');
 
-		$create = new DataTableKnop('== 0', $this->tableId, $groep->getUrl() . A::Aanmelden, 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
+		$create = new DataTableKnop('== 0', $this->tableId, $groep->getUrl() . 'aanmelden', 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, $groep->getUrl() . A::Bewerken, 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
+		$update = new DataTableKnop('== 1', $this->tableId, $groep->getUrl() . 'bewerken', 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, $groep->getUrl() . A::Afmelden, 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
+		$delete = new DataTableKnop('>= 1', $this->tableId, $groep->getUrl() . 'afmelden', 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
 		$this->addKnop($delete);
 	}
 
@@ -66,7 +66,7 @@ class GroepLidBeheerForm extends DataTableForm {
 class GroepBewerkenForm extends InlineForm {
 
 	public function __construct(GroepLid $lid, Groep $groep, array $suggesties = array(), $keuzelijst = null) {
-		parent::__construct($lid, $groep->getUrl() . A::Bewerken . '/' . $lid->uid, true);
+		parent::__construct($lid, $groep->getUrl() . 'bewerken/' . $lid->uid, true);
 
 		if ($keuzelijst) {
 			$this->field = new MultiSelectField('opmerking', $lid->opmerking, null, $keuzelijst);
@@ -85,7 +85,7 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 
 	public function __construct(GroepLid $lid, Groep $groep, array $suggesties = array(), $keuzelijst = null, $pasfoto = false) {
 		parent::__construct($lid, $groep, $suggesties, $keuzelijst);
-		$this->action = $groep->getUrl() . A::Aanmelden . '/' . $lid->uid;
+		$this->action = $groep->getUrl() . 'aanmelden/' . $lid->uid;
 		$this->buttons = false;
 		$this->css_classes[] = 'float-left';
 
@@ -176,7 +176,7 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 		$html = '<div id="groep-leden-' . $this->groep->id . '" class="groep-leden"><ul class="groep-tabs nobullets">';
 
 		if ($this->groep->mag(A::Wijzigen)) {
-			$html .= '<li class="float-left"><a class="btn" href="' . $this->groep->getUrl() . A::Wijzigen . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-pencil"></span></a></li>';
+			$html .= '<li class="float-left"><a class="btn" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-pencil"></span></a></li>';
 		}
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Pasfotos . '" title="' . GroepTab::getDescription(GroepTab::Pasfotos) . ' tonen"><span class="fa fa-user"></span></a></li>';
@@ -287,7 +287,7 @@ class GroepLijstView extends GroepTabView {
 		foreach ($leden as $lid) {
 			$html .= '<tr><td>';
 			if ($this->groep->mag(A::Afmelden, $lid->uid)) {
-				$html .= '<a href="' . $this->groep->getUrl() . A::Afmelden . '" class="float-left" title="Afmelden"><img src="/plaetjes/famfamfam/bullet_delete.png" class="icon" width="16" height="16"></a>';
+				$html .= '<a href="' . $this->groep->getUrl() . 'afmelden" class="float-left" title="Afmelden"><img src="/plaetjes/famfamfam/bullet_delete.png" class="icon" width="16" height="16"></a>';
 			}
 			$html .= ProfielModel::getLink($lid->uid, 'civitas');
 			$html .= '</td><td>';

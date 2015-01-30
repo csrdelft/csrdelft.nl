@@ -5,55 +5,59 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * CRUD + standaard groep-acties.
+ * CRUD + groepen-acties.
  * 
  */
 abstract class A implements PersistentEnum {
 
 	// lezen
-	const Bekijken = 'bekijken';
-	// schrijven
-	const Aanmelden = 'aanmelden';
-	const Bewerken = 'bewerken';
-	const Afmelden = 'afmelden';
-	const Aanmaken = 'aanmaken';
-	const Wijzigen = 'wijzigen';
-	const Verwijderen = 'verwijderen';
+	const Bekijken = 'r'; // retrieve
+	// schrijven (groepen)
+	const Aanmelden = 'j'; // join
+	const Bewerken = 'e'; // edit
+	const Afmelden = 'l'; // leave
+	const Opvolging = 's'; // sequence
+	// schrijven (algemeen)
+	const Aanmaken = 'c'; // create
+	const Wijzigen = 'u'; // update
+	const Verwijderen = 'd'; // delete
 	// beheren
-	const Beheren = 'beheren';
-	const Rechten = 'rechten';
+	const Beheren = 'm'; // manage
+	const Rechten = 'p'; // permissions
 
 	public static function getTypeOptions() {
-		return array(self::Bekijken, self::Aanmelden, self::Bewerken, self::Afmelden, self::Aanmaken, self::Wijzigen, self::Verwijderen, self::Beheren, self::Rechten);
+		return array(self::Bekijken, self::Aanmelden, self::Bewerken, self::Afmelden, self::Opvolging, self::Aanmaken, self::Wijzigen, self::Verwijderen, self::Beheren, self::Rechten);
 	}
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::Bekijken:
-			case self::Aanmelden:
-			case self::Bewerken:
-			case self::Afmelden:
-			case self::Aanmaken:
-			case self::Wijzigen:
-			case self::Verwijderen:
-			case self::Beheren:
-			case self::Rechten:
-				return $option;
+			case self::Bekijken: return 'Bekijken';
+			case self::Aanmelden: return 'Aanmelden';
+			case self::Bewerken: return 'Aanmelding bewerken';
+			case self::Afmelden: return 'Afmelden';
+			case self::Opvolging: return 'Opvolging aanpassen';
+			case self::Aanmaken: return 'Nieuwe aanmaken';
+			case self::Wijzigen: return 'Bestaande wijzigen';
+			case self::Verwijderen: return 'Verwijderen';
+			case self::Beheren: return 'Beheren';
+			case self::Rechten: return 'Rechten aanpassen';
 			default: throw new Exception('AccessAction onbekend');
 		}
 	}
 
 	public static function getChar($option) {
 		switch ($option) {
-			case self::Bekijken: return 'R'; // retrieve
-			case self::Aanmelden: return 'J'; // join
-			case self::Bewerken: return 'E'; // edit
-			case self::Afmelden: return 'L'; // leave
-			case self::Aanmaken: return 'C'; // create
-			case self::Wijzigen: return 'U'; // update
-			case self::Verwijderen: return 'D'; // delete
-			case self::Beheren: return 'M'; // manage
-			case self::Rechten: return 'P'; // permissions
+			case self::Bekijken:
+			case self::Aanmelden:
+			case self::Bewerken:
+			case self::Afmelden:
+			case self::Opvolging:
+			case self::Aanmaken:
+			case self::Wijzigen:
+			case self::Verwijderen:
+			case self::Beheren:
+			case self::Rechten:
+				return ucfirst($options);
 			default: throw new Exception('AccessAction onbekend');
 		}
 	}

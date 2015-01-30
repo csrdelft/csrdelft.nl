@@ -28,16 +28,16 @@ class GroepenController extends Controller {
 
 			// Geen groep id vereist
 			case 'overzicht':
-			case A::Beheren:
-			case A::Aanmaken:
+			case 'beheren':
+			case 'aanmaken':
 
 				// Soort in param 3?
 				if ($this->hasParam(4)) {
 					$args['soort'] = $this->getParam(4);
 				}
 
-			case A::Wijzigen:
-			case A::Verwijderen:
+			case 'wijzigen':
+			case 'verwijderen':
 			case 'opvolging':
 			case 'converteren':
 				break;
@@ -52,7 +52,7 @@ class GroepenController extends Controller {
 					$this->geentoegang();
 				}
 				$args['groep'] = $groep;
-				$this->action = A::Bekijken; // default
+				$this->action = 'bekijken'; // default
 				$uid = null;
 
 				// Actie in param 4?
@@ -80,12 +80,12 @@ class GroepenController extends Controller {
 		switch ($action) {
 
 			case 'leden':
-			case A::Beheren:
-			case A::Wijzigen:
+			case 'beheren':
+			case 'wijzigen':
 				return true;
 
 			case 'overzicht':
-			case A::Bekijken:
+			case 'bekijken':
 				return !$this->isPosted();
 
 			case 'overzicht':
@@ -96,11 +96,11 @@ class GroepenController extends Controller {
 			case GroepTab::Lijst:
 			case GroepTab::Statistiek:
 			case GroepTab::Emails:
-			case A::Aanmaken:
-			case A::Verwijderen:
-			case A::Aanmelden:
-			case A::Afmelden:
-			case A::Bewerken:
+			case 'aanmaken':
+			case 'verwijderen':
+			case 'aanmelden':
+			case 'bewerken':
+			case 'afmelden':
 				return $this->isPosted();
 
 			default:
@@ -177,7 +177,7 @@ class GroepenController extends Controller {
 	public function aanmaken($soort = null) {
 		$model = $this->model;
 		$orm = $model::orm;
-		if (!$orm::magAlgemeen($this->action, $soort)) {
+		if (!$orm::magAlgemeen(A::Aanmaken, $soort)) {
 			$this->geentoegang();
 		}
 		$groep = $this->model->nieuw($soort);
@@ -192,7 +192,7 @@ class GroepenController extends Controller {
 
 	public function wijzigen(Groep $groep = null) {
 		if ($groep) {
-			if (!$groep->mag($this->action)) {
+			if (!$groep->mag(A::Wijzigen)) {
 				$this->geentoegang();
 			}
 			$form = new GroepForm($groep, $groep->getUrl() . $this->action);
@@ -215,7 +215,7 @@ class GroepenController extends Controller {
 				$this->geentoegang();
 			}
 			$groep = $this->model->getUUID($selection[0]);
-			if (!$groep OR ! $groep->mag($this->action)) {
+			if (!$groep OR ! $groep->mag(A::Wijzigen)) {
 				$this->geentoegang();
 			}
 			$form = new GroepForm($groep, $this->model->getUrl() . $this->action);
@@ -233,7 +233,7 @@ class GroepenController extends Controller {
 		$response = array();
 		foreach ($selection as $UUID) {
 			$groep = $this->model->getUUID($UUID);
-			if (!$groep OR ! $groep->mag($this->action)) {
+			if (!$groep OR ! $groep->mag(A::Verwijderen)) {
 				continue;
 			}
 			$this->model->delete($groep);
@@ -254,7 +254,7 @@ class GroepenController extends Controller {
 			$response = array();
 			foreach ($selection as $UUID) {
 				$groep = $this->model->getUUID($UUID);
-				if (!$groep OR ! $groep->mag($this->action)) {
+				if (!$groep OR ! $groep->mag(A::Opvolging)) {
 					continue;
 				}
 				$groep->familie = $values['familie'];
@@ -282,10 +282,14 @@ class GroepenController extends Controller {
 				$this->view = $form;
 				return;
 			}
+			$orm = $model::orm;
+			if (!$orm::magAlgemeen(A::Aanmaken)) {
+				$this->geentoegang();
+			}
 			$response = array();
 			foreach ($selection as $UUID) {
 				$groep = $this->model->getUUID($UUID);
-				if (!$groep OR ! $groep->mag($this->action)) {
+				if (!$groep OR ! $groep->mag(A::Wijzigen)) {
 					continue;
 				}
 				$nieuw = $model::instance()->converteer($groep, $this->model);
@@ -300,7 +304,7 @@ class GroepenController extends Controller {
 	}
 
 	public function leden(Groep $groep) {
-		if (!$groep->mag($this->action)) {
+		if (!$groep->mag(A::Bekijken)) {
 			$this->geentoegang();
 		}
 		if ($this->isPosted()) {
@@ -312,12 +316,12 @@ class GroepenController extends Controller {
 	}
 
 	public function aanmelden(Groep $groep, $uid = null) {
-		if (!$groep->mag($this->action, $uid)) {
-			$this->geentoegang();
-		}
 		$leden = $groep::leden;
 		$model = $leden::instance();
 		if ($uid) {
+			if (!$groep->mag(A::Aanmelden, $uid)) {
+				$this->geentoegang();
+			}
 			$lid = $model->nieuw($groep, $uid);
 			$form = new GroepAanmeldenForm($lid, $groep, $groep->getOpmerkingSuggesties(), $groep->keuzelijst);
 			if ($form->validate()) {
@@ -329,6 +333,9 @@ class GroepenController extends Controller {
 		}
 		// beheren
 		else {
+			if (!$groep->mag(A::Beheren, $uid)) {
+				$this->geentoegang();
+			}
 			$lid = $model->nieuw($groep, null);
 			$uids = array_keys(group_by_distinct('uid', $groep->getLeden()));
 			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action, $uids);
@@ -345,7 +352,7 @@ class GroepenController extends Controller {
 		$leden = $groep::leden;
 		$model = $leden::instance();
 		if ($uid) {
-			if (!$groep->mag($this->action, $uid)) {
+			if (!$groep->mag(A::Bewerken, $uid)) {
 				$this->geentoegang();
 			}
 			$lid = $model->get($groep, $uid);
@@ -362,7 +369,7 @@ class GroepenController extends Controller {
 				$this->geentoegang();
 			}
 			$lid = $model->getUUID($selection[0]);
-			if (!$groep->mag($this->action, $lid->uid)) {
+			if (!$groep->mag(A::Beheren, $lid->uid)) {
 				$this->geentoegang();
 			}
 			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action);
@@ -379,7 +386,7 @@ class GroepenController extends Controller {
 		$leden = $groep::leden;
 		$model = $leden::instance();
 		if ($uid) {
-			if (!$groep->mag($this->action, $uid)) {
+			if (!$groep->mag(A::Afmelden, $uid)) {
 				$this->geentoegang();
 			}
 			$lid = $model->get($groep, $uid);
@@ -392,7 +399,7 @@ class GroepenController extends Controller {
 			$response = array();
 			foreach ($selection as $UUID) {
 				$lid = $model->getUUID($UUID);
-				if (!$groep->mag($this->action, $lid->uid)) {
+				if (!$groep->mag(A::Beheren, $lid->uid)) {
 					continue;
 				}
 				$model->delete($lid);

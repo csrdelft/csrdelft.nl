@@ -36,9 +36,9 @@ class DocumentenController extends Controller {
 			//niet alle acties mag iedereen doen, hier whitelisten voor de gebruikers
 			//zonder P_DOCS_MOD, en gebruikers met, zodat bij niet bestaande acties
 			//netjes gewoon het documentoverzicht getoond wordt.
-			$allow = array('recenttonen', A::Bekijken, 'download', 'categorie', 'zoeken');
+			$allow = array('recenttonen', 'bekijken', 'download', 'categorie', 'zoeken');
 			if (LoginModel::mag('P_DOCS_MOD')) {
-				$allow = array_merge($allow, array('bewerken', 'toevoegen', A::Verwijderen));
+				$allow = array_merge($allow, array('bewerken', 'toevoegen', 'verwijderen'));
 			}
 			if (!in_array($this->action, $allow)) {
 				$this->action = 'recenttonen';

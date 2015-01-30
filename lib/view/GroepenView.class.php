@@ -20,7 +20,7 @@ class GroepenBeheerTable extends DataTable {
 		parent::__construct($model::orm, null, 'familie');
 
 		$this->url = $model->getUrl();
-		$this->dataUrl = $this->url . A::Beheren;
+		$this->dataUrl = $this->url . 'beheren';
 
 		$this->naam = $model->getNaam();
 		$this->titel = 'Beheer ' . lcfirst($this->naam);
@@ -39,10 +39,10 @@ class GroepenBeheerTable extends DataTable {
 		$this->searchColumn('status');
 		$this->searchColumn('soort');
 
-		$create = new DataTableKnop('== 0', $this->tableId, $this->url . A::Aanmaken, 'post popup', 'Toevoegen', 'Nieuwe groep toevoegen', 'add');
+		$create = new DataTableKnop('== 0', $this->tableId, $this->url . 'aanmaken', 'post popup', 'Toevoegen', 'Nieuwe groep toevoegen', 'add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, $this->url . A::Wijzigen, 'post popup', 'Wijzigen', 'Wijzig groep eigenschappen', 'edit');
+		$update = new DataTableKnop('== 1', $this->tableId, $this->url . 'wijzigen', 'post popup', 'Wijzigen', 'Wijzig groep eigenschappen', 'edit');
 		$this->addKnop($update);
 
 		$opvolg = new DataTableKnop('>= 1', $this->tableId, $this->url . 'opvolging', 'post popup', 'Opvolging', 'Familienaam en groepstatus instellen', 'timeline');
@@ -51,7 +51,7 @@ class GroepenBeheerTable extends DataTable {
 		$convert = new DataTableKnop('>= 1', $this->tableId, $this->url . 'converteren', 'post popup', 'Converteren', 'Converteer groep', 'lightning');
 		$this->addKnop($convert);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, $this->url . A::Verwijderen, 'post confirm', A::Verwijderen, 'Definitief verwijderen', 'delete');
+		$delete = new DataTableKnop('>= 1', $this->tableId, $this->url . 'verwijderen', 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
 		$this->addKnop($delete);
 	}
 
@@ -73,7 +73,7 @@ class GroepenBeheerData extends DataTableResponse {
 		$array = $groep->jsonSerialize();
 
 		$array['detailSource'] = $groep->getUrl() . 'leden';
-		$array['id'] .= '<a href="/' . A::Rechten . '/' . A::Bekijken . '/' . get_class($groep) . '/' . $groep->id . '" class="float-right" title="Rechten aanpassen"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/bullet_key.png"></a>';
+		$array['id'] .= '<a href="/rechten/bekijken/' . get_class($groep) . '/' . $groep->id . '" class="float-right" title="Rechten aanpassen"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/bullet_key.png"></a>';
 		$array['naam'] = '<span title="' . $groep->naam . (empty($groep->samenvatting) ? '' : '&#13;&#13;') . mb_substr($groep->samenvatting, 0, 100) . (strlen($groep->samenvatting) > 100 ? '...' : '' ) . '">' . $groep->naam . '</span>';
 		$array['samenvatting'] = null;
 		$array['omschrijving'] = null;
@@ -88,7 +88,7 @@ class GroepenBeheerData extends DataTableResponse {
 class GroepForm extends DataTableForm {
 
 	public function __construct(Groep $groep, $action, $nocancel = false) {
-		parent::__construct($groep, $action, get_class($groep) . ' ' . ($groep->id ? A::Wijzigen : A::Aanmaken));
+		parent::__construct($groep, $action, get_class($groep) . ' ' . ($groep->id ? 'wijzigen' : 'aanmaken'));
 
 		$fields = $this->generateFields();
 

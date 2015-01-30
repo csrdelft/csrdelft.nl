@@ -16,7 +16,7 @@ class BijbelroosterController extends AclController {
 		parent::__construct($query, BijbelroosterModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				A::Bekijken => 'P_PUBLIC'
+				'bekijken' => 'P_PUBLIC'
 			);
 		} else {
 			$this->acl = array(
@@ -25,7 +25,7 @@ class BijbelroosterController extends AclController {
 	}
 
 	public function performAction(array $args = array()) {
-		$this->action = A::Bekijken;
+		$this->action = 'bekijken';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}

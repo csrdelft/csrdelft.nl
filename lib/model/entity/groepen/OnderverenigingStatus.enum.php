@@ -32,7 +32,7 @@ abstract class OnderverenigingStatus implements PersistentEnum {
 			case self::AdspirantOndervereniging:
 			case self::Ondervereniging:
 			case self::VoormaligOndervereniging:
-				return $option;
+				return ucfirst($option);
 			default: throw new Exception('OnderverenigingStatus onbekend');
 		}
 	}

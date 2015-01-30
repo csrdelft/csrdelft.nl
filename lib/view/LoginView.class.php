@@ -70,7 +70,7 @@ class RememberLoginTable extends DataTable implements FormElement {
 		$lock = new DataTableKnop('>= 1', $this->tableId, '/loginlockip', 'post', '(Ont)Koppel IP', 'Alleen inloggen vanaf bepaald IP-adres', 'lock');
 		$this->addKnop($lock);
 
-		$delte = new DataTableKnop('>= 1', $this->tableId, '/loginforget', 'post', A::Verwijderen, 'Stop automatische login voor dit apparaat', 'delete');
+		$delte = new DataTableKnop('>= 1', $this->tableId, '/loginforget', 'post', 'Verwijderen', 'Stop automatische login voor dit apparaat', 'delete');
 		$this->addKnop($delte);
 	}
 
