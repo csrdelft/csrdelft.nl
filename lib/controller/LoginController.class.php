@@ -207,7 +207,7 @@ class LoginController extends AclController {
 				$values = $form->getValues();
 				$account = AccountModel::get($values['user']);
 				// mag wachtwoord wijzigen?
-				if ($account AND AccessModel::mag($account, 'P_PROFIEL_EDIT') AND $account->email === $values['mail']) {
+				if ($account AND AccessModel::mag($account, 'P_PROFIEL_EDIT') AND mb_strtolower($account->email) === mb_strtolower($values['mail'])) {
 					$token = OneTimeTokensModel::instance()->createToken($account->uid, '/wachtwoord/reset');
 					// stuur resetmail
 					$lidnaam = $account->getProfiel()->getNaam('civitas');
