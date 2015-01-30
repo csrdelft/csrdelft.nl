@@ -173,6 +173,10 @@ class GroepenView implements View {
 		$view = new CmsPaginaView($this->pagina);
 		$view->view();
 		foreach ($this->groepen as $groep) {
+			// Controleer rechten
+			if (!$groep->mag(A::Bekijken)) {
+				continue;
+			}
 			echo '<hr>';
 			$view = new GroepView($groep, $this->tab);
 			$view->view();

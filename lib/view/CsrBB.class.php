@@ -591,10 +591,11 @@ HTML;
 	}
 
 	protected function groep(Groep $groep) {
+		require_once 'view/GroepenView.class.php';
+		// Controleer rechten
 		if (!$groep->mag(A::Bekijken)) {
 			return '';
 		}
-		require_once 'view/GroepenView.class.php';
 		$view = new GroepView($groep, null, true);
 		return $view->getHtml();
 	}

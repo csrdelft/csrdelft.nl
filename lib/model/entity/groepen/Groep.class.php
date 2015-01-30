@@ -162,21 +162,21 @@ class Groep extends PersistentEntity {
 	 * @return boolean
 	 */
 	public function mag($action, $uid = null) {
-		// default rechten?
-		if ($this->maker_uid === LoginModel::getUid() OR LoginModel::mag('P_LEDEN_MOD')) {
-			return true;
-		}
-		/**
-		 * TODO: bepaalde actions op 1 hoop gooien:
-		 */
+		// Default rechten
 		if ($action === A::Bekijken AND LoginModel::mag('P_LEDEN_READ')) {
 			return true;
 		}
-		// rechten voor deze specifieke groep?
+		if ($this->maker_uid === LoginModel::getUid()) {
+			return true;
+		}
+		if ($uid !== LoginModel::getUid() AND LoginModel::mag('P_LEDEN_MOD')) {
+			return true;
+		}
+		// Rechten voor deze specifieke groep?
 		if (LoginModel::mag(AccessModel::get(get_class($this), $action, $this->id))) {
 			return true;
 		}
-		// rechten voor deze klasse / dit soort groep?
+		// Rechten voor deze klasse / dit soort groep?
 		if (static::magAlgemeen($action, property_exists($this, 'soort') ? $this->soort : null)) {
 			return true;
 		}

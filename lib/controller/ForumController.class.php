@@ -20,6 +20,7 @@ class ForumController extends Controller {
 	 * Check permissions & valid params in actions.
 	 *
 	 * @param string $action
+	 * @param array $args
 	 * @return boolean
 	 */
 	protected function mag($action, array $args) {
