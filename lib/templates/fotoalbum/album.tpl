@@ -154,7 +154,7 @@
 						setTimeout(function () {
 							$('#cd-main-trigger').addClass('fade');
 							$('#cd-user-avatar').addClass('fade');
-						}), 3000);
+						}, 3000);
 						var docelem = $('body').get(0);
 						if (docelem.requestFullscreen) {
 							docelem.requestFullscreen();
