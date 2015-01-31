@@ -144,19 +144,36 @@ jQuery(document).ready(function ($) {
 		if ($('.cd-search').hasClass('is-visible')) {
 			$searchfield.focus();
 			$maintrigger.fadeOut();
-			$('#user-avatar').fadeOut();
+			$('#cd-user-avatar').fadeOut();
 			$('.cd-main-overlay').addClass('is-visible');
 		} else {
 			$maintrigger.fadeIn();
-			$('#user-avatar').fadeIn();
+			$('#cd-user-avatar').fadeIn();
 			if (!$maintrigger.hasClass('selected')) {
 				$('.cd-main-overlay').removeClass('is-visible');
 			}
 		}
 	}
 
-	// fix position on screen
+	// Fade header when leaving top of page
+	function toggleFade() {
+		if ($(window).scrollTop() > 100) {
+			$maintrigger.addClass('fade');
+			$('#cd-user-avatar').addClass('fade');
+		}
+		else {
+			$maintrigger.removeClass('fade');
+			$('#cd-user-avatar').removeClass('fade');
+		}
+		fadeTimeout = false;
+	}
+	var fadeTimeout = false;
 	$(window).on('scroll', function (event) {
+		if (!fadeTimeout) {
+			fadeTimeout = setTimeout(toggleFade, 3000);
+		}
+
+		// Fix background position on screen
 		$('.cd-main-overlay').css({
 			'margin-top': $(window).scrollTop()
 		});

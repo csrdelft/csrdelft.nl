@@ -8,15 +8,34 @@ Primary style
 		overflow: hidden;
 	}
 
-	#user-avatar {
+	#cd-user-avatar {
 		display: none;
 	}
 }
 
-#user-avatar {
+#cd-user-avatar {
 	width: 32px;
 	height: 32px;
 	border-radius: 4px;
+}
+#cd-main-trigger, #cd-user-avatar {
+	background-color: white;
+	opacity: 1;
+	transition: opacity .25s ease-in-out;
+	-moz-transition: opacity .25s ease-in-out;
+	-webkit-transition: opacity .25s ease-in-out;
+}
+#cd-main-trigger.fade {
+	opacity: 0.2;
+}
+#cd-user-avatar.fade {
+	opacity: 0.1;
+}
+header:hover {
+
+	#cd-main-trigger.fade, #cd-user-avatar.fade {
+		opacity: 1;
+	}
 }
 
 input[type="search"]::-ms-clear {
@@ -450,7 +469,6 @@ Main components
 		float: right;
 		overflow: visible;
 		background: none;
-		background-color: rgba(255, 255, 255, 0.5);
 	}
 	.cd-primary-nav:after {
 		content: "";
