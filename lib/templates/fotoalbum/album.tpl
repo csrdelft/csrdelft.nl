@@ -123,11 +123,16 @@
 					else if (event.keyCode === 37) { // arrow left
 						prev();
 					}
-					else if (event.keyCode === 27 && container.hasClass('jgallery-full-screen')) { // esc
+					else if (event.keyCode === 27) { // esc
+						if (!container.hasClass('jgallery-full-screen')) {
+							event.preventDefault();
+						}
 						$('span.change-mode').click();
 					}
-					else if (event.keyCode === 122 && !container.hasClass('jgallery-full-screen')) { // f11
-						event.preventDefault();
+					else if (event.keyCode === 122) { // f11
+						if (container.hasClass('jgallery-full-screen')) {
+							event.preventDefault();
+						}
 						container.find('span.change-mode').click();
 					}
 				});
