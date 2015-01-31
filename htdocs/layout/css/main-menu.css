@@ -19,7 +19,6 @@ Primary style
 	border-radius: 4px;
 }
 #cd-main-trigger, #cd-user-avatar {
-	background-color: white;
 	opacity: 1;
 	transition: opacity .25s ease-in-out;
 	-moz-transition: opacity .25s ease-in-out;
