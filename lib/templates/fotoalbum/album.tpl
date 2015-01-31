@@ -154,7 +154,7 @@
 						setTimeout(function () {
 							$('#cd-main-trigger').addClass('fade');
 							$('#cd-user-avatar').addClass('fade');
-						}, 3000);
+						}, 1000);
 						var docelem = $('body').get(0);
 						if (docelem.requestFullscreen) {
 							docelem.requestFullscreen();
@@ -167,6 +167,8 @@
 						}
 					}
 					else {
+						$('#cd-main-trigger').removeClass('fade');
+						$('#cd-user-avatar').removeClass('fade');
 						if (document.exitFullscreen) {
 							document.exitFullscreen();
 						}
