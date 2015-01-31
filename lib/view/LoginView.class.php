@@ -109,7 +109,7 @@ class RememberLoginForm extends DataTableForm {
 	public function __construct(RememberLogin $remember) {
 		parent::__construct($remember, '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
 
-		$fields[] = new HtmlComment('Gebruik deze functie alleen voor een veilig apparaat op een veilige locatie.');
+		$fields[] = new HtmlComment('<div class="dikgedrukt">Gebruik deze functie alleen voor een veilig apparaat op een veilige locatie.</div>');
 		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true, true);
 
@@ -123,7 +123,7 @@ class RememberAfterLoginForm extends ModalForm {
 	public function __construct(RememberLogin $remember) {
 		parent::__construct($remember, '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
 
-		$fields[] = new HtmlComment('Gebruik deze functie alleen voor een veilig apparaat op een veilige locatie.');
+		$fields[] = new HtmlComment('<div class="dikgedrukt">Gebruik deze functie alleen voor een veilig apparaat op een veilige locatie.</div>');
 		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true, true);
 
