@@ -116,7 +116,7 @@
 				container.find('div.left').on('click', prev);
 				container.find('span.next').on('click', next);
 				container.find('span.prev').on('click', prev);
-				$(document).on('keydown', function (event) {
+				$(window).on('keydown', function (event) {
 					if (event.keyCode === 39) { // arrow right
 						next();
 					}
@@ -149,6 +149,32 @@
 				container.find('span.change-mode').on('click', function (event) {
 					if (btn.hasClass('inactive') !== container.hasClass('jgallery-full-screen')) {
 						btn.click();
+					}
+					if (container.hasClass('jgallery-full-screen')) {
+						var docelem = container.get(0);
+						if (docelem.requestFullscreen) {
+							docelem.requestFullscreen();
+						} else if (docelem.webkitRequestFullscreen) {
+							docelem.webkitRequestFullscreen();
+						} else if (docelem.mozRequestFullScreen) {
+							docelem.mozRequestFullScreen();
+						} else if (docelem.msRequestFullscreen) {
+							docelem.msRequestFullscreen();
+						}
+					}
+					else {
+						if (document.exitFullscreen) {
+							document.exitFullscreen();
+						}
+						else if (document.webkitExitFullscreen) {
+							document.webkitExitFullscreen();
+						}
+						else if (document.msExitFullscreen) {
+							document.msExitFullscreen();
+						}
+						else if (document.mozCancelFullScreen) {
+							document.mozCancelFullScreen();
+						}
 					}
 				});
 				container.find('span.full-screen').on('click', function (event) {
