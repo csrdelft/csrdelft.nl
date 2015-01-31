@@ -190,7 +190,7 @@
 				// knopje map omhoog
 				$('<span class="fa fa-arrow-circle-up jgallery-btn jgallery-btn-small" tooltip="Open parent album"></span>').click(function () {
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-					window.location.href = dirname(dirname(url));
+					window.location.href = dirname(dirname(url)).replace('plaetjes/', '');
 				}).prependTo(container.find('div.icons'));
 		{if LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
 				// knopje verwijderen
