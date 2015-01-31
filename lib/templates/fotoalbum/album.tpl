@@ -187,6 +187,11 @@
 				}
 				// knopje subalbums
 				container.find('.fa-list-ul').removeClass('fa-list-ul').addClass('fa-folder-open-o');
+				// knopje map omhoog
+				$('<span class="fa fa-arrow-circle-up jgallery-btn jgallery-btn-small" tooltip="Open parent album"></span>').click(function () {
+					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+					window.location.href = dirname(dirname(url));
+				}).prependTo(container.find('div.icons'));
 		{if LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
 				// knopje verwijderen
 				$('<span class="fa fa-times jgallery-btn jgallery-btn-small" tooltip="Foto verwijderen"></span>').click(function () {
