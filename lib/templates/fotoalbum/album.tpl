@@ -126,10 +126,7 @@
 					else if (event.keyCode === 27 && container.hasClass('jgallery-full-screen')) { // esc
 						$('span.change-mode').click();
 					}
-				});
-				// toggle fullscreen F11
-				$(window).keydown(function (event) {
-					if (event.keyCode === 122) {
+					else if (event.keyCode === 122 && !container.hasClass('jgallery-full-screen')) { // f11
 						event.preventDefault();
 						container.find('span.change-mode').click();
 					}
