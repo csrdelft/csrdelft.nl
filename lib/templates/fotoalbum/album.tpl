@@ -130,6 +130,7 @@
 				// toggle fullscreen F11
 				$(window).keydown(function (event) {
 					if (event.keyCode === 122) {
+						event.preventDefault();
 						container.find('span.change-mode').click();
 					}
 				});
@@ -175,9 +176,7 @@
 					if (btn.hasClass('inactive') !== container.hasClass('jgallery-full-screen')) {
 						btn.click();
 					}
-					if (document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled) {
-						fnToggleFullscreen();
-					}
+					fnToggleFullscreen();
 				});
 				container.find('span.full-screen').on('click', function (event) {
 					if (btn.hasClass('inactive')) {
