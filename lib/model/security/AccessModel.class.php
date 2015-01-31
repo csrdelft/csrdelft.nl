@@ -25,7 +25,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
-	private static $prefix = array('GROEP', 'KETZER', 'ACTIVITEIT', 'ONDERVERENIGING', 'BESTUUR', 'COMMISSIE', 'WOONOORD', 'VERTICALE', 'VERTICALELEIDER', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDERJAARS', 'EERSTEJAARS');
+	private static $prefix = array('GROEP', 'KETZER', 'ACTIVITEIT', 'ONDERVERENIGING', 'BESTUUR', 'COMMISSIE', 'WOONOORD', 'VERTICALE', 'VERTICALELEIDER', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'ouderejaars', 'EERSTEJAARS');
 	/**
 	 * Gebruikt om ledengegevens te raadplegen
 	 * @var array
@@ -174,7 +174,7 @@ class AccessModel extends CachedPersistenceModel {
 		$suggestions[] = 'bestuur';
 		$suggestions[] = 'geslacht:m';
 		$suggestions[] = 'geslacht:v';
-		$suggestions[] = 'ouderjaars';
+		$suggestions[] = 'ouderejaars';
 		$suggestions[] = 'eerstejaars';
 		foreach (VerticalenModel::instance()->prefetch() as $verticale) {
 			$suggestions[] = 'verticale:' . $verticale->letter;
@@ -608,7 +608,7 @@ class AccessModel extends CachedPersistenceModel {
 
 				return false;
 
-			case 'OUDERJAARS':
+			case 'OUDEREJAARS':
 
 				$lidjaar = $profiel->lidjaar;
 				// Niet ingelogd heeft lichting 0
