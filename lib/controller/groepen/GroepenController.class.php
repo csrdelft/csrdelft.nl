@@ -177,6 +177,7 @@ class GroepenController extends Controller {
 	public function aanmaken($soort = null) {
 		$groep = $this->model->nieuw($soort);
 		$form = new GroepForm($groep, $this->model->getUrl() . $this->action);
+		// get posted value
 		if (property_exists($groep, 'soort')) {
 			$soort = $groep->soort;
 		}
