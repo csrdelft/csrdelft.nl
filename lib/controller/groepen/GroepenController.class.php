@@ -175,13 +175,14 @@ class GroepenController extends Controller {
 	}
 
 	public function aanmaken($soort = null) {
-		$model = $this->model;
-		$orm = $model::orm;
-		if (!$orm::magAlgemeen(A::Aanmaken, $soort)) {
-			$this->geentoegang();
-		}
 		$groep = $this->model->nieuw($soort);
 		$form = new GroepForm($groep, $this->model->getUrl() . $this->action);
+		if (property_exists($groep, 'soort')) {
+			$soort = $groep->soort;
+		}
+		if (!$groep::magAlgemeen(A::Aanmaken, $soort)) {
+			$this->geentoegang();
+		}
 		if ($form->validate()) {
 			$this->model->create($groep);
 			$this->view = new GroepenBeheerData(array($groep));
