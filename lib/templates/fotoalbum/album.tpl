@@ -144,12 +144,7 @@
 						}
 					}
 				});
-				// toggle thumbs fullscreen
-				var btn = container.find('.minimalize-thumbnails');
-				container.find('span.change-mode').on('click', function (event) {
-					if (btn.hasClass('inactive') !== container.hasClass('jgallery-full-screen')) {
-						btn.click();
-					}
+				var fnToggleFullscreen = function () {
 					if (container.hasClass('jgallery-full-screen')) {
 						window.scrollTo(0, 0);
 						window.clearTimeout($('#cd-main-trigger').data('timer'));
@@ -177,12 +172,22 @@
 						else if (document.webkitExitFullscreen) {
 							document.webkitExitFullscreen();
 						}
-						else if (document.msExitFullscreen) {
-							document.msExitFullscreen();
-						}
 						else if (document.mozCancelFullScreen) {
 							document.mozCancelFullScreen();
 						}
+						else if (document.msExitFullscreen) {
+							document.msExitFullscreen();
+						}
+					}
+				};
+				// toggle thumbs fullscreen
+				var btn = container.find('.minimalize-thumbnails');
+				container.find('span.change-mode').on('click', function (event) {
+					if (btn.hasClass('inactive') !== container.hasClass('jgallery-full-screen')) {
+						btn.click();
+					}
+					if (document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled) {
+						fnToggleFullscreen();
 					}
 				});
 				container.find('span.full-screen').on('click', function (event) {
