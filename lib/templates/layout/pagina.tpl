@@ -36,7 +36,7 @@
 			<div id="cd-main-overlay" class="cd-main-overlay"></div>
 		</main>
 		{$mainmenu->view()}
-		<div id="modal-background" {if isset($modal)} style="display: block;"{/if}></div>
+		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
 		{if isset($modal)}
 			{$modal->view()}
 		{else}
