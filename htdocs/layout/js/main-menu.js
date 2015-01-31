@@ -11,6 +11,8 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
+	var $overlay = $('.cd-main-overlay');
+
 	var $maintrigger = $('#cd-main-trigger').click(function () {
 		if ($maintrigger.hasClass('selected')) {
 			$(this).addClass('nav-is-visible');
@@ -20,7 +22,7 @@ jQuery(document).ready(function ($) {
 				$('body').addClass('overflow-hidden');
 			});
 			toggleSearch('close');
-			$('.cd-main-overlay').addClass('is-visible');
+			$overlay.addClass('is-visible');
 		}
 	});
 
@@ -29,7 +31,7 @@ jQuery(document).ready(function ($) {
 		event.preventDefault();
 		if ($('.cd-main-content').hasClass('nav-is-visible')) {
 			closeNav();
-			$('.cd-main-overlay').removeClass('is-visible');
+			$overlay.removeClass('is-visible');
 		} else {
 			//open main menu
 			if (!$maintrigger.hasClass('selected')) {
@@ -47,22 +49,22 @@ jQuery(document).ready(function ($) {
 	});
 
 	//close lateral menu on mobile 
-	$('.cd-main-overlay').on('swiperight', function () {
+	$overlay.on('swiperight', function () {
 		if ($('.cd-primary-nav').hasClass('nav-is-visible')) {
 			closeNav();
-			$('.cd-main-overlay').removeClass('is-visible');
+			$overlay.removeClass('is-visible');
 		}
 	});
 	$('.nav-on-left .cd-main-overlay').on('swipeleft', function () {
 		if ($('.cd-primary-nav').hasClass('nav-is-visible')) {
 			closeNav();
-			$('.cd-main-overlay').removeClass('is-visible');
+			$overlay.removeClass('is-visible');
 		}
 	});
-	$('.cd-main-overlay').on('click', function () {
+	$overlay.on('click', function () {
 		closeNav();
 		toggleSearch('close');
-		$('.cd-main-overlay').removeClass('is-visible');
+		$overlay.removeClass('is-visible');
 	});
 
 
@@ -79,10 +81,10 @@ jQuery(document).ready(function ($) {
 			//desktop version only
 			selected.addClass('selected').next('ul').removeClass('is-hidden').end().parent('.has-children').parent('ul').addClass('moves-out');
 			selected.parent('.has-children').siblings('.has-children').children('ul').addClass('is-hidden').end().children('a').removeClass('selected');
-			$('.cd-main-overlay').addClass('is-visible');
+			$overlay.addClass('is-visible');
 		} else {
 			selected.removeClass('selected').next('ul').addClass('is-hidden').end().parent('.has-children').parent('ul').removeClass('moves-out');
-			$('.cd-main-overlay').removeClass('is-visible');
+			$overlay.removeClass('is-visible');
 		}
 		toggleSearch('close');
 	});
@@ -145,12 +147,12 @@ jQuery(document).ready(function ($) {
 			$searchfield.focus();
 			$maintrigger.fadeOut();
 			$('#cd-user-avatar').fadeOut();
-			$('.cd-main-overlay').addClass('is-visible');
+			$overlay.addClass('is-visible');
 		} else {
 			$maintrigger.fadeIn();
 			$('#cd-user-avatar').fadeIn();
 			if (!$maintrigger.hasClass('selected')) {
-				$('.cd-main-overlay').removeClass('is-visible');
+				$overlay.removeClass('is-visible');
 			}
 		}
 	}
@@ -165,16 +167,17 @@ jQuery(document).ready(function ($) {
 			$maintrigger.removeClass('fade');
 			$('#cd-user-avatar').removeClass('fade');
 		}
-		fadeTimeout = false;
+		fadeToggle = false;
 	}
-	var fadeTimeout = false;
+	var fadeToggle = false;
 	$(window).on('scroll', function (event) {
-		if (!fadeTimeout) {
-			fadeTimeout = setTimeout(toggleFade, 3000);
+		if (!fadeToggle) {
+			fadeToggle = true;
+			$maintrigger.data('timer', setTimeout(toggleFade, 3000));
 		}
 
 		// Fix background position on screen
-		$('.cd-main-overlay').css({
+		$overlay.css({
 			'margin-top': $(window).scrollTop()
 		});
 	}).trigger('scroll');
