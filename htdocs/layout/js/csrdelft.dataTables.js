@@ -24,7 +24,7 @@ function fnInitStickyToolbar() {
 			'position': 'absolute',
 			'z-index': '100'
 		});
-		toolbar.attr('origY', toolbar.offset().top);
+		toolbar.attr('fixY', toolbar.offset().top + $('header').height());
 		toolbar.next('table').css('padding-top', toolbar.height());
 		$(window).scroll(fnStickyToolbar);
 	}
@@ -34,7 +34,7 @@ function fnStickyToolbar() {
 	var y = $(window).scrollTop();
 	var toolbar = '.DataTableToolbar:first';
 	//$('.DataTableToolbar').each(function (i, toolbar) {
-	var m = $(toolbar).attr('origY');
+	var m = $(toolbar).attr('fixY');
 	if (y >= m) {
 		$(toolbar).css('margin-top', y - m);
 	} else {
