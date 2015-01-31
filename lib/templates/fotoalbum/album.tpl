@@ -151,6 +151,8 @@
 						btn.click();
 					}
 					if (container.hasClass('jgallery-full-screen')) {
+						$('#cd-main-trigger').addClass('fade');
+						$('#cd-user-avatar').addClass('fade');
 						var docelem = container.get(0);
 						if (docelem.requestFullscreen) {
 							docelem.requestFullscreen();
