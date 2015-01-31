@@ -151,9 +151,11 @@
 						btn.click();
 					}
 					if (container.hasClass('jgallery-full-screen')) {
-						$('#cd-main-trigger').addClass('fade');
-						$('#cd-user-avatar').addClass('fade');
-						var docelem = container.get(0);
+						setTimeout(function () {
+							$('#cd-main-trigger').addClass('fade');
+							$('#cd-user-avatar').addClass('fade');
+						}), 3000);
+						var docelem = $('body').get(0);
 						if (docelem.requestFullscreen) {
 							docelem.requestFullscreen();
 						} else if (docelem.webkitRequestFullscreen) {
