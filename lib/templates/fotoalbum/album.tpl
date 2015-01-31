@@ -124,15 +124,11 @@
 						prev();
 					}
 					else if (event.keyCode === 27) { // esc
-						if (!container.hasClass('jgallery-full-screen')) {
-							event.preventDefault();
-						}
+						event.preventDefault();
 						$('span.change-mode').click();
 					}
 					else if (event.keyCode === 122) { // f11
-						if (container.hasClass('jgallery-full-screen')) {
-							event.preventDefault();
-						}
+						event.preventDefault();
 						container.find('span.change-mode').click();
 					}
 				});
