@@ -531,7 +531,7 @@ class CsrBB extends eamBBParser {
 
 		$html = <<<HTML
 <div class="bb-video">
-	<div class="bb-video-preview" onclick="event.preventDefault();bbvideoDisplay(this);" data-params="{$params}" title="Klik om de video af te spelen">
+	<div class="bb-video-preview" onclick="event.preventDefault();bbvideoDisplay(this);" data-params='{$params}' title="Klik om de video af te spelen">
 		<div class="play-button"></div>
 		<div class="bb-img-loading" src="{$previewthumb}"></div>
 	</div>
