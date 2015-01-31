@@ -226,6 +226,8 @@
 						rotation: 90
 					}, page_reload);
 				}).insertAfter(btn);
+		{/if}
+		{if LoginModel::mag('P_LOGGED_IN')}
 				// knopje downloaden
 				$('<span class="fa fa-download jgallery-btn jgallery-btn-small" tooltip="Foto in origineel formaat downloaden"></span>').click(function () {
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
