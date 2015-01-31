@@ -151,6 +151,7 @@
 						btn.click();
 					}
 					if (container.hasClass('jgallery-full-screen')) {
+						window.scrollTo(0, 0);
 						window.clearTimeout($('#cd-main-trigger').data('timer'));
 						setTimeout(function () {
 							$('#cd-main-trigger').addClass('fade');
