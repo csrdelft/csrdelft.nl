@@ -15,12 +15,10 @@ class RechtenController extends AclController {
 		parent::__construct($query, AccessModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'zoeken'	 => 'P_LOGGED_IN',
-				'bekijken'	 => 'P_LOGGED_IN'
+				'bekijken' => 'P_LOGGED_IN'
 			);
 		} else {
 			$this->acl = array(
-				'zoeken'		 => 'P_LOGGED_IN',
 				'bekijken'		 => 'P_LOGGED_IN',
 				'aanmaken'		 => 'P_LOGGED_IN',
 				'wijzigen'		 => 'P_LOGGED_IN',
@@ -34,10 +32,6 @@ class RechtenController extends AclController {
 			$this->action = $this->getParam(2);
 		}
 		parent::performAction($this->getParams(3));
-	}
-
-	public function zoeken($subject = null) {
-		
 	}
 
 	public function bekijken($environment = null, $resource = null) {
