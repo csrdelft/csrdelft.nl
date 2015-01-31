@@ -130,18 +130,7 @@
 				// toggle fullscreen F11
 				$(window).keydown(function (event) {
 					if (event.keyCode === 122) {
-						var btn = container.find('span.change-mode');
-						// is browser full screen?
-						if ((screen.availHeight || screen.height - 30) <= window.innerHeight) {
-							if (btn.hasClass('fa-compress')) {
-								btn.click();
-							}
-						}
-						else {
-							if (btn.hasClass('fa-expand')) {
-								btn.click();
-							}
-						}
+						container.find('span.change-mode').click();
 					}
 				});
 				var fnToggleFullscreen = function () {
