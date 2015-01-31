@@ -96,7 +96,10 @@ class GroepForm extends DataTableForm {
 		if (isset($fields['familie'])) {
 			$fields['familie']->suggestions[] = $groep->getOpvolgingSuggesties();
 		}
-		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
+		if (!LoginModel::mag('P_ADMIN')) {
+			$fields['maker_uid']->readonly = true;
+			$fields['maker_uid']->hidden = true;
+		}
 
 		$this->addFields(array(new FormDefaultKnoppen($nocancel ? false : null)));
 	}
