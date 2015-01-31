@@ -24,7 +24,7 @@ function fnInitStickyToolbar() {
 			'position': 'absolute',
 			'z-index': '100'
 		});
-		toolbar.attr('fixY', toolbar.offset().top + $('header').height());
+		toolbar.attr('fixY', toolbar.offset().top - $('header').height());
 		toolbar.next('table').css('padding-top', toolbar.height());
 		$(window).scroll(fnStickyToolbar);
 	}
