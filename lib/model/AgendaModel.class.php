@@ -53,7 +53,7 @@ class AgendaModel extends PersistenceModel {
 			$activiteiten = ActiviteitenModel::instance()->find('eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
 			foreach ($activiteiten as $activiteit) {
 				if ($activiteit->soort === ActiviteitSoort::Extern OR $activiteit->mag(A::Bekijken, $ical)) {
-					$result[] = $item;
+					$result[] = $activiteit;
 				}
 			}
 		}
@@ -144,11 +144,19 @@ class AgendaModel extends PersistenceModel {
 		// Items toevoegen aan het array
 		$items = $this->getAllAgendeerbaar($startMoment, $eindMoment);
 		foreach ($items as $item) {
-			$week = getWeekNumber($item->getBeginMoment());
-			$dag = date('d', $item->getEindMoment());
-			$agenda[$week][$dag]['items'][] = $item;
+			$begin = $item->getBeginMoment();
+			$eind = $item->getEindmoment();
+			// Plaats in dag(en)
+			for ($cur = $begin; $cur <= $eind; $cur += 86400) {
+				$week = getWeekNumber($cur);
+				$dag = date('d', $cur);
+				if (isset($agenda[$week][$dag])) {
+					$agenda[$week][$dag]['items'][] = $item;
+				} else {
+					continue; // FIXME: dit zou niet voor moeten mogen komen
+				}
+			}
 		}
-
 		return $agenda;
 	}
 
