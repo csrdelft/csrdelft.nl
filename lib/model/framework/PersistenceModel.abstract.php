@@ -236,7 +236,7 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Save existing entity.
-	 * Sparse attributes that have not been retrieved are excluded.
+	 * Sparse attributes that have not been retrieved are excluded by PersistentEntity->getValues().
 	 *
 	 * @param PersistentEntity $entity
 	 * @return int rows affected

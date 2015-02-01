@@ -165,24 +165,6 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	}
 
 	/**
-	 * Find and cache existing entities with optional search criteria.
-	 * Retrieves only requested attributes and the primary key values.
-	 * 
-	 * @param array $attributes to retrieve
-	 * @param string $criteria WHERE
-	 * @param array $criteria_params optional named parameters
-	 * @param string $groupby GROUP BY
-	 * @param string $orderby ORDER BY
-	 * @param int $limit max amount of results
-	 * @param int $start results from index
-	 * @return array
-	 */
-	public function prefetchSparse(array $attributes, $criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
-		$result = $this->findSparse($attributes, $criteria, $criteria_params, $groupby, $orderby, $limit, $start);
-		return $this->cacheResult($result, false);
-	}
-
-	/**
 	 * Check if enitity with primary key exists.
 	 * 
 	 * @param array $primary_key_values
@@ -245,7 +227,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 
 	/**
 	 * Save existing entity.
-	 * Sparse attributes that have not been retrieved are excluded.
+	 * Sparse attributes that have not been retrieved are excluded by PersistentEntity->getValues().
 	 *
 	 * @param PersistentEntity $entity
 	 * @return int rows affected
