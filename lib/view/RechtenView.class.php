@@ -63,6 +63,7 @@ class RechtenForm extends DataTableForm {
 			if (LoginModel::mag('P_ADMIN')) {
 				$fields[] = new RequiredTextField('environment', $ac->environment, 'Klasse');
 				$fields[] = new RequiredTextField('resource', $ac->resource, 'Object');
+				$fields[] = new TextField('parent', $ac->parent, 'Parent');
 			}
 
 			$acties = array();
