@@ -91,9 +91,9 @@ class RechtenForm extends DataTableForm {
 			}
 			$fields[] = new SelectField('action', $ac->action, 'Actie', $acties);
 		} else {
-			$fields[] = new HtmlComment('<label>Actie:</label><div class="dikgedrukt">' . A::getDescription($ac->action) . '</div>');
+			$fields[] = new HtmlComment('<label>Actie</label><div class="dikgedrukt">' . A::getDescription($ac->action) . '</div>');
 		}
-		$fields[] = new RequiredRechtenField('subject', $ac->subject, 'Toegestaan voor:');
+		$fields[] = new RequiredRechtenField('subject', $ac->subject, 'Toegestaan voor');
 		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);

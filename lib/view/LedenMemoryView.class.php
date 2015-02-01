@@ -81,7 +81,7 @@ class LedenMemoryView extends CompressedLayout {
 <div uid="{$lid['uid']}" class="flip memorycard pasfoto {$flipped}">
 	<div class="blue front">{$cheat}</div>
 	<div class="blue back">
-		<img src="/plaetjes/{$src}" title="{$title}" />
+		<img src="{$src}" title="{$title}" />
 	</div>
 </div>
 HTML;
