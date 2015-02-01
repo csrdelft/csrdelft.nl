@@ -54,12 +54,14 @@ class RechtenData extends DataTableResponse {
 			$array['resource'] = 'Elke ' . lcfirst($ac->environment);
 		} elseif ($ac->environment === ActiviteitenModel::orm) {
 			if (in_array($ac->resource, ActiviteitSoort::getTypeOptions())) {
-				$array['resource'] = 'Elke ' . ActiviteitSoort::getDescription($ac->resource);
+				$array['resource'] = 'Elke ' . lcfirst(ActiviteitSoort::getDescription($ac->resource));
 			}
 		} elseif ($ac->environment === CommissiesModel::orm) {
 			if (in_array($ac->resource, CommissieSoort::getTypeOptions())) {
-				$array['resource'] = 'Elke ' . CommissieSoort::getDescription($ac->resource);
+				$array['resource'] = 'Elke ' . lcfirst(CommissieSoort::getDescription($ac->resource));
 			}
+		} else {
+			$array['resource'] = 'Deze ' . lcfirst($ac->environment);
 		}
 
 		return parent::getJson($array);
