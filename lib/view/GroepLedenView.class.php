@@ -16,14 +16,17 @@ class GroepLedenTable extends DataTable {
 		$this->setColumnTitle('uid', 'Lidnaam');
 		$this->setColumnTitle('door_uid', 'Aangemeld door');
 
-		$create = new DataTableKnop('== 0', $this->tableId, $groep->getUrl() . 'aanmelden', 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
-		$this->addKnop($create);
+		if ($groep->mag(A::Beheren)) {
 
-		$update = new DataTableKnop('== 1', $this->tableId, $groep->getUrl() . 'bewerken', 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
-		$this->addKnop($update);
+			$create = new DataTableKnop('== 0', $this->tableId, $groep->getUrl() . 'aanmelden', 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
+			$this->addKnop($create);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, $groep->getUrl() . 'afmelden', 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
-		$this->addKnop($delete);
+			$update = new DataTableKnop('== 1', $this->tableId, $groep->getUrl() . 'bewerken', 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
+			$this->addKnop($update);
+
+			$delete = new DataTableKnop('>= 1', $this->tableId, $groep->getUrl() . 'afmelden', 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
+			$this->addKnop($delete);
+		}
 	}
 
 }
