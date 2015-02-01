@@ -36,7 +36,7 @@ class RechtenController extends AclController {
 
 	public function bekijken($environment = null, $resource = null) {
 		if ($this->isPosted()) {
-			$acl = $this->model->find('environment = ? AND (resource = ? OR resource = ?)', array($environment, '*', $resource));
+			$acl = $this->model->getTree($environment, $resource);
 			$this->view = new RechtenData($acl);
 		} else {
 			$table = new RechtenTable($this->model, $environment, $resource);

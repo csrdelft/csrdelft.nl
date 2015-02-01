@@ -114,7 +114,22 @@ class AccessModel extends CachedPersistenceModel {
 		$ac = new AccessControl();
 		$ac->environment = $environment;
 		$ac->resource = $resource;
+		$ac->action = '';
+		$ac->subject = '';
+		$ac->parent = null;
 		return $ac;
+	}
+
+	public function getTree($environment, $resource) {
+		$acl = array();
+		foreach ($this->prefetch('environment = ? AND resource = ?', array($environment, $resource)) as $ac) {
+			if ($ac->parent) {
+				$acl = array_merge($acl, $this->getTree($ac->environment, $ac->parent));
+			} elseif ($ac->resource !== '*') {
+				$acl = array_merge($acl, $this->getTree($ac->environment, '*'));
+			}
+		}
+		return $acl;
 	}
 
 	/**
