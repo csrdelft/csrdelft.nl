@@ -109,6 +109,7 @@ class GroepForm extends DataTableForm {
 		}
 
 		if (property_exists($groep, 'in_agenda')) {
+			$fields['in_agenda']->required = false;
 			$fields['in_agenda']->readonly = !LoginModel::mag('P_AGENDA_MOD');
 		}
 
