@@ -162,7 +162,13 @@ class Groep extends PersistentEntity {
 	 * @return boolean
 	 */
 	public function mag($action, $feed = false) {
-		// Default rechten
+		// Rechten voor deze specifieke groep
+		$rechten = AccessModel::getSubject(get_class($this), $action, $this->id);
+		if ($rechten) {
+			// Override algemene rechten
+			return LoginModel::mag($rechten);
+		}
+		// Default rechten bekijken
 		if (!LoginModel::mag('P_LEDEN_READ')) {
 			return false;
 		} elseif ($action === A::Bekijken) {
@@ -172,12 +178,6 @@ class Groep extends PersistentEntity {
 		// Beheerders en de maker van de groep mogen alle beheer acties
 		if ($beheer AND ( $this->maker_uid === LoginModel::getUid() OR LoginModel::mag('P_LEDEN_MOD') )) {
 			return true;
-		}
-		// Rechten voor deze specifieke groep
-		$rechten = AccessModel::getSubject(get_class($this), $action, $this->id);
-		if ($rechten) {
-			// Override algemene rechten
-			return LoginModel::mag($rechten);
 		}
 		// Rechten voor deze klasse / dit soort groep
 		return static::magAlgemeen($action, property_exists($this, 'soort') ? $this->soort : null);
