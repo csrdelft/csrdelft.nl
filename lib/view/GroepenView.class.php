@@ -136,6 +136,7 @@ class GroepConverteerForm extends DataTableForm {
 
 	public function __construct(Groep $groep, GroepenModel $model) {
 		parent::__construct($groep, $groep->getUrl() . 'converteren', $model::orm . ' converteren');
+		$huidig = get_class($model);
 
 		$options = array(
 			'ActiviteitenModel'		 => ActiviteitenModel::orm,
@@ -153,7 +154,7 @@ class GroepConverteerForm extends DataTableForm {
 				unset($options[$model]);
 			}
 		}
-		$fields[] = new SelectField('class', get_class($model), 'Converteren naar', $options);
+		$fields[] = new SelectField('class', $huidig, 'Converteren naar', $options);
 		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
