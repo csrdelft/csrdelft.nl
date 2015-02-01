@@ -620,10 +620,20 @@ class VinkField extends InputField {
 	 * Speciaal geval:
 	 * Niets gepost = niet gepost.
 	 * 
+	 * Werkomheen DataTable id & selection post.
+	 * 
 	 * @return boolean
 	 */
 	public function isPosted() {
-		return !empty($_POST);
+		if (parent::isPosted()) {
+			return true;
+		}
+		foreach ($_POST as $key => $value) {
+			if (!startsWith($key, 'DataTable')) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -633,7 +643,7 @@ class VinkField extends InputField {
 	 * @return boolean
 	 */
 	public function getValue() {
-		$this->value = parent::isPosted();
+		$this->value = $this->isPosted();
 		return $this->value;
 	}
 
