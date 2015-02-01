@@ -172,13 +172,13 @@ class Groep extends PersistentEntity {
 		if ($this->maker_uid === LoginModel::getUid()) {
 			return true;
 		}
-		// Beheerders mogen alles; uitzondering als het om jezelf gaat
-		if ($uid !== LoginModel::getUid() AND LoginModel::mag('P_LEDEN_MOD')) {
+		// Beheerders mogen alles
+		if (LoginModel::mag('P_LEDEN_MOD')) {
 			return true;
 		}
 		// Rechten voor deze specifieke groep
-		$ac = AccessModel::getSubject(get_class($this), $action, $this->id);
-		if ($ac AND LoginModel::mag($ac)) {
+		$rechten = AccessModel::getSubject(get_class($this), $action, $this->id);
+		if ($rechten AND LoginModel::mag($rechten)) {
 			return true;
 		}
 		// Rechten voor deze klasse / dit soort groep
@@ -196,16 +196,20 @@ class Groep extends PersistentEntity {
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $soort = null) {
+		// Administrator mag alles
+		if (LoginModel::mag('P_ADMIN')) {
+			return true;
+		}
 		if ($soort !== null) {
 			// Rechten voor dit soort groep
-			$ac = AccessModel::getSubject(get_called_class(), $action, $soort);
-			if ($ac AND LoginModel::mag($ac)) {
+			$rechten = AccessModel::getSubject(get_called_class(), $action, $soort);
+			if ($rechten AND LoginModel::mag($rechten)) {
 				return true;
 			}
 		}
 		// Rechten voor deze groep klasse?
-		$ac = AccessModel::getSubject(get_called_class(), $action, '*');
-		if ($ac AND LoginModel::mag($ac)) {
+		$rechten = AccessModel::getSubject(get_called_class(), $action, '*');
+		if ($rechten AND LoginModel::mag($rechten)) {
 			return true;
 		}
 		return false;

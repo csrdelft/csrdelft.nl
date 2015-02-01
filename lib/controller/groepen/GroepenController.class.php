@@ -285,6 +285,7 @@ class GroepenController extends Controller {
 				$this->view = $form;
 				return;
 			}
+			// get posted value
 			$orm = $model::orm;
 			if (!$orm::magAlgemeen(A::Aanmaken)) {
 				$this->geentoegang();
