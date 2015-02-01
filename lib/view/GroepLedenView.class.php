@@ -278,14 +278,11 @@ class GroepLijstView extends GroepTabView {
 			$html .= $form->getHtml();
 			$html .= '</td></tr>';
 		}
-		$leden = array();
-		foreach ($this->groep->getLeden() as $lid) {
-			$achternaam = ProfielModel::instance()->findSparse(array('achternaam'), 'uid = ?', array($lid->uid), null, null, 1)->fetchColumn(1);
-			if ($achternaam) {
-				$leden[$achternaam] = $lid;
-			}
-		}
-		ksort($leden);
+		$leden = $this->groep->getLeden();
+		ProfielModel::instance()->prefetch('uid IN (' . implode(', ', array_fill(0, count($leden), '?')) . ')', array_keys($leden));
+		usort($leden, function($a, $b) {
+			return strcmp($a->achternaam, $b->achternaam);
+		});
 		foreach ($leden as $lid) {
 			$html .= '<tr><td>';
 			if ($this->groep->mag(A::Afmelden, $lid->uid)) {
