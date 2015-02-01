@@ -135,6 +135,9 @@ class AgendaItemForm extends ModalForm {
 		$fields['begin_moment'] = new RequiredDateTimeField('begin_moment', $item->begin_moment, 'Begin moment');
 		$fields['eind_moment'] = new DateTimeField('eind_moment', $item->eind_moment, 'Eind moment');
 
+		$fields['eind_moment']->from_datetime = $fields['begin_moment'];
+		$fields['begin_moment']->to_datetime = $fields['eind_moment'];
+
 		$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor');
 		$fields['r']->readonly = !LoginModel::mag('P_AGENDA_MOD');
 

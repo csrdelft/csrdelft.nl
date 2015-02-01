@@ -105,6 +105,8 @@ class GroepForm extends DataTableForm {
 			$fields['maker_uid']->readonly = true;
 			$fields['maker_uid']->hidden = true;
 		}
+		$fields['eind_moment']->from_datetime = $fields['begin_moment'];
+		$fields['begin_moment']->to_datetime = $fields['eind_moment'];
 
 		$this->addFields(array(new FormDefaultKnoppen($nocancel ? false : null)));
 	}
