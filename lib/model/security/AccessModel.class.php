@@ -148,7 +148,7 @@ class AccessModel extends CachedPersistenceModel {
 		if (!LoginModel::mag('P_ADMIN')) {
 			$rechten = $this->model->get($environment, A::Rechten, $resource);
 			if (!$rechten OR ! LoginModel::mag($rechten)) {
-				throw new Exception('access denied');
+				return false;
 			}
 		}
 		// Delete entire ACL for environment
@@ -163,6 +163,7 @@ class AccessModel extends CachedPersistenceModel {
 			foreach ($this->find('environment = ? AND resource = ?', array($environment, $resource)) as $ac) {
 				$this->delete($ac);
 			}
+			return true;
 		}
 		// CRUD ACL
 		foreach ($acl as $action => $subject) {
@@ -187,6 +188,7 @@ class AccessModel extends CachedPersistenceModel {
 				$this->create($ac);
 			}
 		}
+		return true;
 	}
 
 	public function getDefaultPermissionRole($lidstatus) {

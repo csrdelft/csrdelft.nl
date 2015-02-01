@@ -15,6 +15,14 @@ class RechtenTable extends DataTable {
 		$this->hideColumn('action', false);
 		$this->searchColumn('aciton');
 
+		// Has permission to change permissions?
+		if (!LoginModel::mag('P_ADMIN')) {
+			$rechten = $this->model->get($environment, A::Rechten, $resource);
+			if (!$rechten OR ! LoginModel::mag($rechten)) {
+				return;
+			}
+		}
+
 		$create = new DataTableKnop('== 0', $this->tableId, '/rechten/aanmaken/' . $environment . '/' . $resource, 'post popup', 'Instellen', 'Rechten instellen', 'key_add');
 		$this->addKnop($create);
 
