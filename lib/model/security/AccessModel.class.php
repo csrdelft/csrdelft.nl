@@ -25,7 +25,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
-	private static $prefix = array('GROEP', 'KETZER', 'ACTIVITEIT', 'ONDERVERENIGING', 'BESTUUR', 'COMMISSIE', 'WOONOORD', 'VERTICALE', 'VERTICALELEIDER', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'ouderejaars', 'EERSTEJAARS');
+	private static $prefix = array('ACTIVITEIT', 'BESTUUR', 'COMMISSIE', 'GROEP', 'KETZER', 'ONDERVERENIGING', 'WERKGROEP', 'WOONOORD', 'VERTICALE', 'VERTICALELEIDER', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDEREJAARS', 'EERSTEJAARS');
 	/**
 	 * Gebruikt om ledengegevens te raadplegen
 	 * @var array
@@ -399,7 +399,7 @@ class AccessModel extends CachedPersistenceModel {
 	private function mandatoryAccessControl(Account $subject, $permission) {
 
 		if (isset($_SESSION['password_unsafe']) AND in_array_i($permission, self::$ledengegevens)) {
-			setMelding('U mag geen ledengegevens opvragen want wachtwoord is onveilig', 2);
+			setMelding('U mag geen ledengegevens opvragen want uw wachtwoord is onveilig', 2);
 			return false;
 		}
 
@@ -489,47 +489,79 @@ class AccessModel extends CachedPersistenceModel {
 		switch ($prefix) {
 
 			/**
-			 * Behoort een lid tot een bepaalde (h.t.) groep?
+			 * Behoort een lid tot een bepaalde groep?
 			 * Als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer de h.t.
 			 * groep met die korte naam erbij, als het getal is uiteraard de groep met dat id.
 			 * Met de toevoeging ':Fiscus' kan ook specifieke functie geëist worden binnen een groep.
 			 */
-			case 'ACTIVITEIT':
 			case 'BESTUUR':
 			case 'COMMISSIE':
-			case 'GROEP':
-			case 'KETZER':
 			case 'ONDERVERENIGING':
-			case 'WERKGROEP':
 			case 'WOONOORD':
+				if (in_array($role, GroepStatus::getTypeOptions())) {
+					switch ($prefix) {
+
+						case 'BESTUUR':
+							$l = BestuursLedenModel::getTableName();
+							$g = BesturenModel::getTableName();
+							break;
+
+						case 'COMMISSIE':
+							$l = CommissieLedenModel::getTableName();
+							$g = CommissiesModel::getTableName();
+							break;
+
+						case 'ONDERVERENIGING':
+							$l = OnderverLedenModel::getTableName();
+							$g = OnderverenigingenModel::getTableName();
+							break;
+
+						case 'WOONOORD':
+							$l = BewonersModel::getTableName();
+							$g = WoonoordenModel::getTableName();
+							break;
+					}
+					return Database::sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie_naam = ?', array($role, $gevraagd));
+				}
+			// fall through
+
+			case 'ACTIVITEIT':
+			case 'KETZER':
+			case 'WERKGROEP':
+			case 'GROEP':
+
 				switch ($prefix) {
 
-					case 'ACTIVITEIT':
-						$groep = ActiviteitenModel::get($gevraagd);
-						break;
-
 					case 'BESTUUR':
-						$groep = BesturenModel::get($gevraagd);
+						if ($gevraagd) {
+							$groep = BesturenModel::get($gevraagd);
+						} else {
+							$groep = BesturenModel::get('bestuur'); // h.t.
+						}
 						break;
 
 					case 'COMMISSIE':
 						$groep = CommissiesModel::get($gevraagd);
 						break;
 
-					case 'KETZER':
-						$groep = KetzersModel::get($gevraagd);
-						break;
-
 					case 'ONDERVERENIGING':
 						$groep = OnderverenigingenModel::get($gevraagd);
 						break;
 
-					case 'WERKGROEP':
-						$groep = WerkgroepenModel::get($gevraagd);
-						break;
-
 					case 'WOONOORD':
 						$groep = WoonoordenModel::get($gevraagd);
+						break;
+
+					case 'ACTIVITEIT':
+						$groep = ActiviteitenModel::get($gevraagd);
+						break;
+
+					case 'KETZER':
+						$groep = KetzersModel::get($gevraagd);
+						break;
+
+					case 'WERKGROEP':
+						$groep = WerkgroepenModel::get($gevraagd);
 						break;
 
 					case 'GROEP':
@@ -565,6 +597,7 @@ class AccessModel extends CachedPersistenceModel {
 
 				$gevraagd = $profiel->verticale;
 				$role = 'LEIDER';
+			// fall through
 
 			/**
 			 * Behoort een lid tot een bepaalde verticale?

@@ -23,6 +23,10 @@ abstract class PersistenceModel implements Persistence {
 		return static::$instance;
 	}
 
+	public static function getTableName() {
+		static::instance()->orm->getTableName();
+	}
+
 	/**
 	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
 	 * 

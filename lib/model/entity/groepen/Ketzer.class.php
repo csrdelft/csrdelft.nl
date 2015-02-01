@@ -118,7 +118,8 @@ class Ketzer extends Groep {
 					// Controleer afmeldperiode
 					return time() < strtotime($this->afmelden_tot);
 
-				default: // fall-through naar parent::mag
+				default:
+				// fall through naar parent::mag
 			}
 		}
 		return parent::mag($action, $uid);
