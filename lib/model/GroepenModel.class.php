@@ -357,6 +357,7 @@ class ActiviteitenModel extends KetzersModel {
 		$activiteit = parent::nieuw();
 		$activiteit->soort = ActiviteitSoort::Intern;
 		$activiteit->locatie = null;
+		$activiteit->in_agenda = true;
 		return $activiteit;
 	}
 
