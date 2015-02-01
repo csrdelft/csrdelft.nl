@@ -31,11 +31,6 @@ class AccessControl extends PersistentEntity {
 	 */
 	public $subject;
 	/**
-	 * Parent resource
-	 * @var string
-	 */
-	public $parent;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -43,8 +38,7 @@ class AccessControl extends PersistentEntity {
 		'environment'	 => array(T::String),
 		'action'		 => array(T::String),
 		'resource'		 => array(T::String),
-		'subject'		 => array(T::String),
-		'parent'		 => array(T::String, true)
+		'subject'		 => array(T::String)
 	);
 	/**
 	 * Database primary key

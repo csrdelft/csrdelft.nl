@@ -116,20 +116,22 @@ class AccessModel extends CachedPersistenceModel {
 		$ac->resource = $resource;
 		$ac->action = '';
 		$ac->subject = '';
-		$ac->parent = null;
 		return $ac;
 	}
 
 	public function getTree($environment, $resource) {
-		$acl = array();
-		foreach ($this->prefetch('environment = ? AND resource = ?', array($environment, $resource)) as $ac) {
-			if ($ac->parent) {
-				$acl = array_merge($acl, $this->getTree($ac->environment, $ac->parent));
-			} elseif ($ac->resource !== '*') {
-				$acl = array_merge($acl, $this->getTree($ac->environment, '*'));
+		if ($environment === ActiviteitenModel::orm) {
+			$activiteit = ActiviteitenModel::get($resource);
+			if ($activiteit) {
+				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $activiteit->soort, '*'));
+			}
+		} elseif ($environment === CommissiesModel::orm) {
+			$commissie = CommissiesModel::get($resource);
+			if ($commissie) {
+				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $commissie->soort, '*'));
 			}
 		}
-		return $acl;
+		return $this->prefetch('environment = ? AND (resource = ? OR resource = ?)', array($environment, $resource, '*'));
 	}
 
 	/**
