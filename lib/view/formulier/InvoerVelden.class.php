@@ -664,7 +664,7 @@ class DateTimeField extends TextField {
 			'showWeek'			 => true,
 			'showButtonPanel'	 => true,
 			'dateFormat'		 => 'yy-mm-dd',
-			'timeFormat'		 => 'HH:mm'
+			'timeFormat'		 => 'HH:mm:ss'
 		));
 		$js = parent::getJavascript() . <<<JS
 
