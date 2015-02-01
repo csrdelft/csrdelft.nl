@@ -24,9 +24,9 @@ class AgendaController extends AclController {
 		} else {
 			$this->acl = array(
 				'courant'		 => 'P_MAIL_COMPOSE',
-				'toevoegen'		 => 'P_AGENDA_ADD,verticaleleider',
-				'bewerken'		 => 'P_AGENDA_MOD,verticaleleider',
-				'verwijderen'	 => 'P_AGENDA_MOD,verticaleleider'
+				'toevoegen'		 => 'P_AGENDA_ADD',
+				'bewerken'		 => 'P_AGENDA_MOD',
+				'verwijderen'	 => 'P_AGENDA_MOD'
 			);
 		}
 	}

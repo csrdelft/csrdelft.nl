@@ -24,12 +24,18 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 */
 	public $locatie;
 	/**
+	 * Tonen in agenda
+	 * @var boolean
+	 */
+	public $in_agenda;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'soort'		 => array(T::Enumeration, false, 'ActiviteitSoort'),
-		'locatie'	 => array(T::String, true)
+		'locatie'	 => array(T::String, true),
+		'in_agenda'	 => array(T::Boolean)
 	);
 	/**
 	 * Database table name

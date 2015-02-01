@@ -78,7 +78,7 @@ class GroepenBeheerData extends DataTableResponse {
 		$array = $groep->jsonSerialize();
 
 		$array['detailSource'] = $groep->getUrl() . 'leden';
-		$array['id'] .= '<a href="/rechten/bekijken/' . get_class($groep) . '/' . $groep->id . '" class="float-right" title="Rechten beheren"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/key.png"></a>';
+		$array['id'] .= '<a href="/rechten/bekijken/' . get_class($groep) . '/' . $groep->id . '" class="float-right" title="Rechten beheren"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/key.png" alt="rechten"></a>';
 		$array['naam'] = '<span title="' . $groep->naam . (empty($groep->samenvatting) ? '' : '&#13;&#13;') . mb_substr($groep->samenvatting, 0, 100) . (strlen($groep->samenvatting) > 100 ? '...' : '' ) . '">' . $groep->naam . '</span>';
 		$array['status'] = GroepStatus::getChar($groep->status);
 		$array['samenvatting'] = null;
@@ -98,15 +98,19 @@ class GroepForm extends DataTableForm {
 
 		$fields = $this->generateFields();
 
-		if (isset($fields['familie'])) {
-			$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
-		}
+		$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
+
+		$fields['eind_moment']->from_datetime = $fields['begin_moment'];
+		$fields['begin_moment']->to_datetime = $fields['eind_moment'];
+
 		if (!LoginModel::mag('P_ADMIN')) {
 			$fields['maker_uid']->readonly = true;
 			$fields['maker_uid']->hidden = true;
 		}
-		$fields['eind_moment']->from_datetime = $fields['begin_moment'];
-		$fields['begin_moment']->to_datetime = $fields['eind_moment'];
+
+		if (property_exists($groep, 'in_agenda')) {
+			$fields['in_agenda']->readonly = LoginModel::mag('P_AGENDA_MOD');
+		}
 
 		$this->addFields(array(new FormDefaultKnoppen($nocancel ? false : null)));
 	}
