@@ -26,25 +26,35 @@ class GroepenController extends Controller {
 		}
 		switch ($this->action) {
 
-			// Geen groep id vereist
-			case 'overzicht':
-			case 'beheren':
-			case 'aanmaken':
-
-				// Soort in param 3?
-				if ($this->hasParam(4)) {
-					$args['soort'] = $this->getParam(4);
-				}
-
-			case 'wijzigen':
+			// Selectie vereist
 			case 'verwijderen':
 			case 'opvolging':
 			case 'converteren':
+			case 'sluiten':
+				$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+				if (empty($selection)) {
+					$this->geentoegang();
+				} else {
+					$args['selection'] = $selection;
+				}
+				break;
+
+			// Geen argumenten vereist
+			case 'overzicht':
+			case 'beheren':
+			case 'aanmaken':
+				// Soort in param 4?
+				if ($this->hasParam(4)) {
+					$args['soort'] = $this->getParam(4);
+				}
+				break;
+
+			// Groep id of selectie vereist
+			case 'wijzigen':
 				break;
 
 			// Groep id vereist
 			default:
-
 				// Groep id in param 3?
 				$id = (int) $this->action;
 				$groep = $this->model->get($id);
@@ -91,6 +101,7 @@ class GroepenController extends Controller {
 			case 'overzicht':
 			case 'opvolging':
 			case 'converteren':
+			case 'sluiten':
 			case 'omschrijving':
 			case GroepTab::Pasfotos:
 			case GroepTab::Lijst:
@@ -229,8 +240,7 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function verwijderen() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+	public function verwijderen(array $selection) {
 		$response = array();
 		foreach ($selection as $UUID) {
 			$groep = $this->model->getUUID($UUID);
@@ -243,11 +253,7 @@ class GroepenController extends Controller {
 		$this->view = new RemoveRowsResponse($response);
 	}
 
-	public function opvolging() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		if (empty($selection)) {
-			$this->geentoegang();
-		}
+	public function opvolging(array $selection) {
 		$groep = $this->model->getUUID($selection[0]);
 		$form = new GroepOpvolgingForm($groep, $this->model->getUrl() . $this->action);
 		if ($form->validate()) {
@@ -269,11 +275,7 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function converteren() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		if (empty($selection)) {
-			$this->geentoegang();
-		}
+	public function converteren(array $selection) {
 		$groep = $this->model->getUUID($selection[0]);
 		$form = new GroepConverteerForm($groep, $this->model);
 		if ($form->validate()) {
@@ -302,6 +304,21 @@ class GroepenController extends Controller {
 		} else {
 			$this->view = $form;
 		}
+	}
+
+	public function sluiten(array $selection) {
+		$groep = $this->model->getUUID($selection[0]);
+		$response = array();
+		foreach ($selection as $UUID) {
+			$groep = $this->model->getUUID($UUID);
+			if (!$groep OR ! property_exists($groep, 'aanmelden_tot') OR ! $groep->mag(A::Wijzigen)) {
+				continue;
+			}
+			$groep->aanmelden_tot = getDateTime();
+			$this->model->update($groep);
+			$response[] = $groep;
+		}
+		$this->view = new GroepenBeheerData($response);
 	}
 
 	public function leden(Groep $groep) {

@@ -45,6 +45,11 @@ class GroepenBeheerTable extends DataTable {
 		$update = new DataTableKnop('== 1', $this->tableId, $this->url . 'wijzigen', 'post popup', 'Wijzigen', 'Wijzig groep eigenschappen', 'edit');
 		$this->addKnop($update);
 
+		if (property_exists($model::orm, 'aanmelden_tot')) {
+			$sluiten = new DataTableKnop('>= 1', $this->tableId, $this->url . 'sluiten', 'post confirm', 'Sluiten', 'Inschrijvingen nu sluiten', 'lock');
+			$this->addKnop($sluiten);
+		}
+
 		$opvolg = new DataTableKnop('>= 1', $this->tableId, $this->url . 'opvolging', 'post popup', 'Opvolging', 'Familienaam en groepstatus instellen', 'timeline');
 		$this->addKnop($opvolg);
 
