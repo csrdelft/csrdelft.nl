@@ -50,6 +50,18 @@ class RechtenData extends DataTableResponse {
 
 		$array['action'] = A::getDescription($ac->action);
 
+		if ($ac->resource === '*') {
+			$array['resource'] = 'Elke ' . lcfirst($ac->environment);
+		} elseif ($ac->environment === ActiviteitenModel::orm) {
+			if (in_array($ac->resource, ActiviteitSoort::getTypeOptions())) {
+				$array['resource'] = 'Elke ' . ActiviteitSoort::getDescription($ac->resource);
+			}
+		} elseif ($ac->environment === CommissiesModel::orm) {
+			if (in_array($ac->resource, CommissieSoort::getTypeOptions())) {
+				$array['resource'] = 'Elke ' . CommissieSoort::getDescription($ac->resource);
+			}
+		}
+
 		return parent::getJson($array);
 	}
 
