@@ -181,8 +181,9 @@ class LoginController extends AclController {
 			if ($form->validate()) {
 				// wachtwoord opslaan
 				$pass_plain = $form->findByName('wijzigww')->getValue();
-				AccountModel::instance()->wijzigWachtwoord($account, $pass_plain);
-				setMelding('Wachtwoord instellen geslaagd', 1);
+				if (AccountModel::instance()->wijzigWachtwoord($account, $pass_plain)) {
+					setMelding('Wachtwoord instellen geslaagd', 1);
+				}
 				// token verbruikt
 				OneTimeTokensModel::instance()->discardToken($account->uid, '/wachtwoord/reset');
 				// inloggen zonder $authByToken
@@ -194,6 +195,7 @@ class LoginController extends AclController {
 						",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
 				$mail = new Mail(array($account->email => $lidnaam), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
 				$mail->send();
+				redirect(CSR_ROOT);
 			}
 		}
 		// vergeten
