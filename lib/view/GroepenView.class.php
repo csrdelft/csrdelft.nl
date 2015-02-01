@@ -109,6 +109,14 @@ class GroepForm extends DataTableForm {
 		$this->addFields(array(new FormDefaultKnoppen($nocancel ? false : null)));
 	}
 
+	public function validate() {
+		$fields = $this->getFields();
+		if ($fields['eind_moment']->getValue() !== null AND strtotime($fields['eind_moment']->getValue()) < strtotime($fields['begin_moment']->getValue())) {
+			$fields['eind_moment']->error = 'Eindmoment moet na beginmoment liggen';
+		}
+		return parent::validate();
+	}
+
 }
 
 class GroepOpvolgingForm extends DataTableForm {

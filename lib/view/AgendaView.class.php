@@ -129,13 +129,11 @@ class AgendaItemForm extends ModalForm {
 
 		$fields['titel'] = new RequiredTextField('titel', $item->titel, 'Titel');
 		$fields['titel']->suggestions[] = array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond');
-		$fields['datum'] = new DatumField('datum', date('Y-m-d', $item->getBeginMoment()), 'Datum', date('Y') + 5, date('Y') - 5);
 
-		$begin = new TijdField('begin', date('H:i', $item->getBeginMoment()), 'Van');
-		$eind = new TijdField('eind', date('H:i', $item->getEindMoment()), 'Tot');
-		$fields['tijden'] = new StandaardTijdenField('tijden', $begin, $eind);
-		$fields['begin'] = $begin;
-		$fields['eind'] = $eind;
+		//$fields['tijden'] = new StandaardTijdenField('tijden', $begin, $eind);
+
+		$fields['begin_moment'] = new RequiredDateTimeField('begin_moment', $item->begin_moment, 'Begin moment');
+		$fields['eind_moment'] = new DateTimeField('eind_moment', $item->eind_moment, 'Eind moment');
 
 		$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor');
 		$fields['r']->readonly = !LoginModel::mag('P_AGENDA_MOD');
@@ -156,19 +154,14 @@ class AgendaItemForm extends ModalForm {
 		}
 
 		$this->addFields($fields);
-
-		$this->model->begin_moment = $fields['datum']->getValue() . ' ' . $fields['begin']->getValue();
-		$this->model->eind_moment = $fields['datum']->getValue() . ' ' . $fields['eind']->getValue();
 	}
 
 	public function validate() {
-		$valid = parent::validate();
 		$fields = $this->getFields();
-		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {
-			$fields['eind']->error = 'Eindmoment moet na beginmoment liggen';
-			$valid = false;
+		if ($fields['eind_moment']->getValue() !== null AND strtotime($fields['eind_moment']->getValue()) < strtotime($fields['begin_moment']->getValue())) {
+			$fields['eind_moment']->error = 'Eindmoment moet na beginmoment liggen';
 		}
-		return $valid;
+		return parent::validate();
 	}
 
 }

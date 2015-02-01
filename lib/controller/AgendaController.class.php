@@ -109,7 +109,6 @@ class AgendaController extends AclController {
 				$_POST = array(); // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
 				$item->item_id = null;
-				$item->begin_moment = getDateTime($item->getEindMoment() + 60); // spring naar volgende dag bij 23:59
 				$this->view = new AgendaItemForm($item, $this->action); // fetches POST values itself
 			} else {
 				$this->view = new AgendaItemMaandView($item);

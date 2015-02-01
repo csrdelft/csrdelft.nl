@@ -50,7 +50,7 @@ class AgendaModel extends PersistenceModel {
 
 		// Activiteiten
 		if (LidInstellingen::get('agenda', 'toonActiviteiten') === 'ja') {
-			$result = array_merge($result, ActiviteitenModel::instance()->find('eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)))->fetchAll());
+			//$result = array_merge($result, ActiviteitenModel::instance()->find('eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)))->fetchAll());
 		}
 
 		// Maaltijden

@@ -605,6 +605,8 @@ class RequiredTextField extends TextField {
  */
 class DateTimeField extends TextField {
 
+	public $from_datetime;
+	public $to_datetime;
 	protected $max_jaar;
 	protected $min_jaar;
 
@@ -656,9 +658,32 @@ class DateTimeField extends TextField {
 	}
 
 	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
+		$settings = json_encode(array(
+			'changeYear'		 => true,
+			'changeMonth'		 => true,
+			'showWeek'			 => true,
+			'showButtonPanel'	 => true,
+			'dateFormat'		 => 'yy-mm-dd',
+			'timeFormat'		 => 'HH:mm'
+		));
+		$js = parent::getJavascript() . <<<JS
 
-$("#{$this->getId()}").mask("9999-99-99 99:99:99", { placeholder: "jjjj-mm-dd hh:mm:ss" });
+var settings{$this->getId()} = {$settings}
+settings{$this->getId()}['onClose'] = function (selectedDate) {
+	
+JS;
+		if ($this->from_datetime) {
+			$settings = ($settings);
+			$js .= '$("#' . $this->from_datetime->getId() . '").datetimepicker("option", "maxDate", selectedDate);';
+		}
+		if ($this->to_datetime) {
+			$js .= '$("#' . $this->to_datetime->getId() . '").datetimepicker("option", "minDate", selectedDate);';
+		}
+		return $js . <<<JS
+
+};
+$("#{$this->getId()}").datetimepicker(settings{$this->getId()});
+//$("#{$this->getId()}").datetimepicker("option", $.timepicker.regional.nl);
 JS;
 	}
 
