@@ -109,7 +109,7 @@ class GroepForm extends DataTableForm {
 		}
 
 		if (property_exists($groep, 'in_agenda')) {
-			$fields['in_agenda']->readonly = LoginModel::mag('P_AGENDA_MOD');
+			$fields['in_agenda']->readonly = !LoginModel::mag('P_AGENDA_MOD');
 		}
 
 		$this->addFields(array(new FormDefaultKnoppen($nocancel ? false : null)));
