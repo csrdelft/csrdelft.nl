@@ -41,7 +41,6 @@ class RechtenData extends DataTableResponse {
 		$array = $ac->jsonSerialize();
 
 		$array['action'] = A::getDescription($ac->action);
-		$array['resource'] = $ac->resource === '*' ? 'Geërfd' : null;
 
 		return parent::getJson($array);
 	}
