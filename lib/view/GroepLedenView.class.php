@@ -285,7 +285,7 @@ class GroepLijstView extends GroepTabView {
 			if ($this->groep->mag(A::Afmelden, $profiel->uid)) {
 				$html .= '<a href="' . $this->groep->getUrl() . 'afmelden" class="post confirm float-left" title="Afmelden"><img src="/plaetjes/famfamfam/bullet_delete.png" class="icon" width="16" height="16"></a>';
 			}
-			$html .= $profiel->getLink($profiel->uid, 'civitas');
+			$html .= $profiel->getLink('civitas');
 			$html .= '</td><td>';
 			if ($this->groep->mag(A::Bewerken, $profiel->uid)) {
 				$form = new GroepBewerkenForm($leden[$profiel->uid], $this->groep, $suggesties, $this->groep->keuzelijst);
