@@ -33,15 +33,24 @@
 					</div>
 					<ul id="items-{$dag.datum|date_format:"%Y-%m-%d"}" class="items">
 						{foreach from=$dag.items item=item}
-							{if $item instanceof Profiel}
+							{if $item instanceof AgendaItem}
+								{include file='agenda/maand_item.tpl'}
+							{elseif $item instanceof Profiel}
 								<li>
 									{icon get="verjaardag"}
 									{$item->getLink()}
 								</li>
+							{elseif $item instanceof Bijbelrooster}
+								<li>
+									{icon get="book_open"}
+									{$item->getLink(true)}
+								</li>
 							{elseif $item instanceof Maaltijd}
 								<li>
 									<img src="/plaetjes/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon" />
-									<div class="tijd">{$item->getBeginMoment()|date_format:"%R"}</div>
+									<div class="tijd">
+										{$item->getBeginMoment()|date_format:"%R"} - {$item->getEindMoment()|date_format:"%R"}
+									</div>
 									<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">
 										{$item->getTitel()}
 									</a>
@@ -57,13 +66,31 @@
 										{$item->getTitel()}
 									</a>
 								</li>
-							{elseif $item instanceof Bijbelrooster}
+							{elseif $item instanceof Agendeerbaar}
 								<li>
-									{icon get="book_open"}
-									{$item->getLink(true)}
+									{if !$item->isHeledag()}
+										<div class="tijd">
+											{$item->getBeginMoment()|date_format:"%R"}
+											{if $item->getBeginMoment() !== $item->getEindMoment()}
+												-
+												{$item->getEindMoment()|date_format:"%R"}
+											{/if}
+										</div>
+									{/if}
+									<div class="hoverIntent">
+										{if $item->getLink()}
+											<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">{$item->getTitel()}</a>
+										{else}
+											<span title="{$item->getBeschrijving()}">{$item->getTitel()}</span>
+										{/if}
+										{if $item->getLocatie()}
+											<a href="https://maps.google.nl/maps?q={$item->getLocatie()|htmlspecialchars}">{icon get=map title=Kaart}</a>
+											<div class="hoverIntentContent">
+												{"[kaart]"|cat:$item->getLocatie()|cat:"[/kaart]"|bbcode}
+											</div>
+										{/if}
+									</div>
 								</li>
-							{elseif $item instanceof AgendaItem}
-								{include file='agenda/maand_item.tpl'}
 							{/if}
 						{/foreach}
 					</ul>

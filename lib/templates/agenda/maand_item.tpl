@@ -11,7 +11,11 @@
 	{/if}
 	{if !$item->isHeledag()}
 		<div class="tijd">
-			{$item->getBeginMoment()|date_format:"%R"}-{$item->getEindMoment()|date_format:"%R"}
+			{$item->getBeginMoment()|date_format:"%R"}
+			{if $item->getBeginMoment() !== $item->getEindMoment()}
+				-
+				{$item->getEindMoment()|date_format:"%R"}
+			{/if}
 		</div>
 	{/if}
 	<div class="hoverIntent">

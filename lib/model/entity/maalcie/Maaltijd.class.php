@@ -262,7 +262,7 @@ class Maaltijd implements Agendeerbaar {
 	}
 
 	public function getEindMoment() {
-		return $this->getBeginMoment();
+		return $this->getBeginMoment() + 7200;
 	}
 
 	public function getBeschrijving() {
