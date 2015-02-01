@@ -285,6 +285,9 @@ class GroepLijstView extends GroepTabView {
 		$profielen = ProfielModel::instance()->prefetch('uid IN (' . implode(', ', array_fill(0, count($leden), '?')) . ')', array_keys($leden), null, 'achternaam ASC');
 		foreach ($profielen as $profiel) {
 			$html .= '<tr><td>';
+			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Afmelden, $profiel->uid)) {
+				$html .= '<a href="' . $this->groep->getUrl() . 'afmelden" class="post confirm float-left" title="Afmelden"><img src="/plaetjes/famfamfam/bullet_delete.png" class="icon" width="16" height="16"></a>';
+			}
 			$html .= $profiel->getLink('civitas');
 			$html .= '</td><td>';
 			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Bewerken, $profiel->uid)) {
