@@ -26,7 +26,7 @@ class AccessControl extends PersistentEntity {
 	 */
 	public $resource;
 	/**
-	 * Rechten
+	 * Benodigde rechten
 	 * @var string
 	 */
 	public $subject;
