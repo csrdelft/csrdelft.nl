@@ -32,7 +32,7 @@ class AccessModel extends CachedPersistenceModel {
 	 */
 	private static $ledengegevens = array('P_LEDEN_READ', 'P_OUDLEDEN_READ', 'P_LEDEN_MOD');
 
-	public static function get($environment, $action, $resource) {
+	public static function getSubject($environment, $action, $resource) {
 		$ac = self::instance()->retrieveByPrimaryKey(array($environment, $action, $resource));
 		if ($ac) {
 			return $ac->subject;
@@ -146,7 +146,7 @@ class AccessModel extends CachedPersistenceModel {
 	public function setAcl($environment, $resource, array $acl) {
 		// Has permission to change permissions?
 		if (!LoginModel::mag('P_ADMIN')) {
-			$rechten = $this->model->get($environment, A::Rechten, $resource);
+			$rechten = self::getSubject($environment, A::Rechten, $resource);
 			if (!$rechten OR ! LoginModel::mag($rechten)) {
 				return false;
 			}
@@ -168,7 +168,7 @@ class AccessModel extends CachedPersistenceModel {
 		// CRUD ACL
 		foreach ($acl as $action => $subject) {
 			// Retrieve AC
-			$ac = $this->get($environment, $action, $resource);
+			$ac = $this->retrieveByPrimaryKey(array($environment, $action, $resource));
 			// Delete AC
 			if (empty($subject)) {
 				if ($ac) {

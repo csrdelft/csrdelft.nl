@@ -177,7 +177,7 @@ class Groep extends PersistentEntity {
 			return true;
 		}
 		// Rechten voor deze specifieke groep
-		$ac = AccessModel::get(get_class($this), $action, $this->id);
+		$ac = AccessModel::getSubject(get_class($this), $action, $this->id);
 		if ($ac AND LoginModel::mag($ac)) {
 			return true;
 		}
@@ -198,13 +198,13 @@ class Groep extends PersistentEntity {
 	public static function magAlgemeen($action, $soort = null) {
 		if ($soort !== null) {
 			// Rechten voor dit soort groep
-			$ac = AccessModel::get(get_called_class(), $action, $soort);
+			$ac = AccessModel::getSubject(get_called_class(), $action, $soort);
 			if ($ac AND LoginModel::mag($ac)) {
 				return true;
 			}
 		}
 		// Rechten voor deze groep klasse?
-		$ac = AccessModel::get(get_called_class(), $action, '*');
+		$ac = AccessModel::getSubject(get_called_class(), $action, '*');
 		if ($ac AND LoginModel::mag($ac)) {
 			return true;
 		}

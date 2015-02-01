@@ -81,7 +81,7 @@ class Ketzer extends Groep {
 			 * bijv. achteraf wil aanmelden moet je A::Beheren ipv A::Aanmelden vragen.
 			 */
 			// Als rechten ingesteld dan controleren
-			$ac = AccessModel::get(get_class($this), $action, $this->id);
+			$ac = AccessModel::getSubject(get_class($this), $action, $this->id);
 			if ($ac AND ! LoginModel::mag($ac)) {
 				return false;
 			}
