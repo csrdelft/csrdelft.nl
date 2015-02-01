@@ -640,7 +640,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		),
 		'Vlag'		 => array(
 			'flag_red'		 => 'Rood',
-			'flag_orange'	 => 'Groen',
+			'flag_orange'	 => 'Oranje',
 			'flag_yellow'	 => 'Geel',
 			'flag_green'	 => 'Groen',
 			'flag_blue'		 => 'Blauw',
