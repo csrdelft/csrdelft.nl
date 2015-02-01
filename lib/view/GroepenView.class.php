@@ -94,7 +94,7 @@ class GroepForm extends DataTableForm {
 		$fields = $this->generateFields();
 
 		if (isset($fields['familie'])) {
-			$fields['familie']->suggestions[] = $groep->getOpvolgingSuggesties();
+			$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
 		}
 		if (!LoginModel::mag('P_ADMIN')) {
 			$fields['maker_uid']->readonly = true;
@@ -112,7 +112,7 @@ class GroepOpvolgingForm extends DataTableForm {
 		parent::__construct($groep, $action, 'Opvolging instellen');
 
 		$fields['fam'] = new TextField('familie', $groep->familie, 'Familienaam');
-		$fields['fam']->suggestions[] = $groep->getOpvolgingSuggesties();
+		$fields['fam']->suggestions[] = $groep->getFamilieSuggesties();
 
 		$options = array();
 		foreach (GroepStatus::getTypeOptions() as $status) {
@@ -142,6 +142,11 @@ class GroepConverteerForm extends DataTableForm {
 			'WerkgroepenModel'		 => WerkgroepenModel::orm,
 			'WoonoordenModel'		 => WoonoordenModel::orm
 		);
+		foreach ($options as $model => $orm) {
+			if (!$orm::magAlgemeen(A::Aanmaken)) {
+				unset($options[$model]);
+			}
+		}
 		$fields[] = new SelectField('class', get_class($model), 'Converteren naar', $options);
 		$fields[] = new FormDefaultKnoppen();
 

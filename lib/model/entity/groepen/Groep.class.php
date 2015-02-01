@@ -132,7 +132,7 @@ class Groep extends PersistentEntity {
 		return $leden::instance()->getStatistieken($this);
 	}
 
-	public function getOpvolgingSuggesties() {
+	public function getFamilieSuggesties() {
 		$suggesties = array();
 		foreach (Database::sqlSelect(array('DISTINCT familie'), $this->getTableName()) as $suggestie) {
 			$suggesties[] = $suggestie[0];

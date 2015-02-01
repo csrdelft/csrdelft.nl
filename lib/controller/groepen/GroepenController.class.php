@@ -182,14 +182,13 @@ class GroepenController extends Controller {
 			$soort = $groep->soort;
 		}
 		if (!$groep::magAlgemeen(A::Aanmaken, $soort)) {
-			$this->geentoegang();
-		}
-		if ($form->validate()) {
+			setMelding('U mag dit soort ' . $this->model->getNaam() . ' niet aanmaken', -1);
+		} elseif ($form->validate()) {
 			$this->model->create($groep);
 			$this->view = new GroepenBeheerData(array($groep));
-		} else {
-			$this->view = $form;
+			return;
 		}
+		$this->view = $form;
 	}
 
 	public function wijzigen(Groep $groep = null) {
