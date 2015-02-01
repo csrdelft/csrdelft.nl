@@ -245,11 +245,14 @@ function valid_filename($name) {
 	return preg_match('/^(?:[a-z0-9 \-_\(\)é]|\.(?!\.))+$/iD', $name);
 }
 
+/**
+ * @source http://www.regular-expressions.info/email.html
+ */
 function email_like($email) {
 	if (empty($email)) {
 		return false;
 	}
-	return preg_match("/^[a-z0-9]+([_\\.-][a-z0-9]+)*@([a-z0-9]+([\.-][a-z0-9]+)*)+\\.[a-z]{2,}$/i", $email);
+	return preg_match("/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,})\b$/", $email);
 }
 
 /**

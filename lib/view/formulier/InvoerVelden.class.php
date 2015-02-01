@@ -935,24 +935,12 @@ class EmailField extends TextField {
 			return true;
 		}
 		// bevat het e-mailadres een @
-		if (strpos($this->value, '@') === false) {
-			$this->error = 'Ongeldig formaat e-mailadres';
+		if (!email_like($this->value)) {
+			$this->error = 'Ongeldig e-mailadres';
 		} else {
-			# anders gaan we m ontleden en controleren
-			list ($usr, $dom) = explode('@', $this->value);
-			if (mb_strlen($usr) > 50) {
-				$this->error = 'Gebruik max. 50 karakters voor de @';
-			} elseif (mb_strlen($dom) > 50) {
-				$this->error = 'Gebruik max. 50 karakters na de @';
-				# RFC 821 <- voorlopig voor JabberID even zelfde regels aanhouden
-				# http:// www.lookuptables.com/
-				# Hmmmz, \x2E er uit gehaald ( . )
-			} elseif (preg_match('/[^\x21-\x7E]/', $usr) OR preg_match('/[\x3C\x3E\x28\x29\x5B\x5D\x5C\x2C\x3B\x40\x22]/', $usr)) {
-				$this->error = 'Het adres bevat ongeldige karakters voor de @';
-			} elseif (!preg_match('/^[a-z0-9]+([-.][a-z0-9]+)*\\.[a-z]{2,4}$/i', $dom)) {
-				$this->error = 'Het domein is ongeldig';
-			} elseif (!checkdnsrr($dom, 'A') and ! checkdnsrr($dom, 'MX')) {
-				$this->error = 'Het domein bestaat niet (IPv4)';
+			$parts = explode('@', $this->value, 2);
+			if (!checkdnsrr($parts[1], 'A') AND ! checkdnsrr($parts[1], 'MX')) {
+				$this->error = 'E-mailadres bestaat niet';
 			}
 		}
 		return $this->error === '';
