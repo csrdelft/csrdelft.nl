@@ -162,7 +162,13 @@ class Groep extends PersistentEntity {
 	 * @return boolean
 	 */
 	public function mag($action, $feed = false) {
-		$beheer = !in_array($action, array(A::Bekijken, A::Aanmelden, A::Bewerken, A::Afmelden));
+		// Default rechten
+		if (!LoginModel::mag('P_LEDEN_READ')) {
+			return false;
+		} elseif ($action === A::Bekijken) {
+			return true;
+		}
+		$beheer = !in_array($action, array(A::Aanmelden, A::Bewerken, A::Afmelden));
 		// Beheerders en de maker van de groep mogen alle beheer acties
 		if ($beheer AND ( $this->maker_uid === LoginModel::getUid() OR LoginModel::mag('P_LEDEN_MOD') )) {
 			return true;
@@ -185,7 +191,7 @@ class Groep extends PersistentEntity {
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $soort = null) {
-		$beheer = !in_array($action, array(A::Bekijken, A::Aanmelden, A::Bewerken, A::Afmelden));
+		$beheer = !in_array($action, array(A::Aanmelden, A::Bewerken, A::Afmelden));
 		// Administrator mag alle beheer acties
 		if ($beheer AND LoginModel::mag('P_ADMIN')) {
 			return true;
