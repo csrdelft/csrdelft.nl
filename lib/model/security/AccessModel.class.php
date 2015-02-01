@@ -492,27 +492,20 @@ class AccessModel extends CachedPersistenceModel {
 			 * Behoort een lid tot een bepaalde (h.t.) groep?
 			 * Als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer de h.t.
 			 * groep met die korte naam erbij, als het getal is uiteraard de groep met dat id.
-			 * Met de toevoeging '>Fiscus' kan ook specifieke functie geëist worden binnen een groep.
+			 * Met de toevoeging ':Fiscus' kan ook specifieke functie geëist worden binnen een groep.
 			 */
-			case 'GROEP':
-			case 'KETZER':
 			case 'ACTIVITEIT':
-			case 'ONDERVERENIGING':
 			case 'BESTUUR':
 			case 'COMMISSIE':
+			case 'GROEP':
+			case 'KETZER':
+			case 'ONDERVERENIGING':
+			case 'WERKGROEP':
 			case 'WOONOORD':
 				switch ($prefix) {
 
-					case 'KETZER':
-						$groep = KetzersModel::get($gevraagd);
-						break;
-
 					case 'ACTIVITEIT':
 						$groep = ActiviteitenModel::get($gevraagd);
-						break;
-
-					case 'ONDERVERENIGING':
-						$groep = OnderverenigingenModel::get($gevraagd);
 						break;
 
 					case 'BESTUUR':
@@ -521,6 +514,18 @@ class AccessModel extends CachedPersistenceModel {
 
 					case 'COMMISSIE':
 						$groep = CommissiesModel::get($gevraagd);
+						break;
+
+					case 'KETZER':
+						$groep = KetzersModel::get($gevraagd);
+						break;
+
+					case 'ONDERVERENIGING':
+						$groep = OnderverenigingenModel::get($gevraagd);
+						break;
+
+					case 'WERKGROEP':
+						$groep = WerkgroepenModel::get($gevraagd);
 						break;
 
 					case 'WOONOORD':
@@ -535,6 +540,7 @@ class AccessModel extends CachedPersistenceModel {
 						}
 						break;
 				}
+
 				if (!$groep) {
 					return false;
 				}
