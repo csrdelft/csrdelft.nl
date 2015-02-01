@@ -33,7 +33,6 @@ class LidInstellingen extends Instellingen {
 			'bijbel' => array('Bijbelvertaling', T::Enumeration, array('De Nieuwe Bijbelvertaling' => 'NBV', 'Bijbel in Gewone Taal' => 'BGT', 'Groot Nieuws Bijbel' => 'GNB96', 'Nije Fryske Bibeloersetting' => 'NFB', 'NBG-vertaling 1951' => 'NBG51', 'Statenvertaling (Jongbloed-editie)' => 'SVJ', 'Herziene Statenvertaling' => 'HSVI', 'Contemporary English Version' => 'CEVD', 'Good News Translation' => 'GNTD'), 'NBV')
 		),
 		'agenda'		 => array(
-			'toonActiviteiten'	 => array('Activiteiten weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'toonBijbelrooster'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'toonVerjaardagen'	 => array('Verjaardagen weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'toonMaaltijden'	 => array('Maaltijden weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
