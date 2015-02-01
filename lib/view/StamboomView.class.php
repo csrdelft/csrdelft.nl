@@ -42,12 +42,6 @@ class StamboomView implements View {
 		echo '<div class="lid">';
 		echo $profiel->getLink('pasfoto');
 		echo $profiel->getLink('civitas');
-		$aantalKinderen = count($profiel->getKinderen());
-		if ($aantalKinderen == 1) {
-			echo '<span class="small"> (1 kind)</span>';
-		} elseif ($aantalKinderen > 1) {
-			echo '<span class="small"> (' . $aantalKinderen . ' kinderen)</span>';
-		}
 
 		if ($viewPatroon) {
 			$patroon = ProfielModel::get($profiel->patroon);
