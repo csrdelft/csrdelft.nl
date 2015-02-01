@@ -333,6 +333,7 @@ class KeuzeRondjeField extends SelectField {
 	}
 
 	protected function getOptionHtml($value, $description) {
+		$this->disabled = $this->readonly;
 		$html = '<input id="' . $this->getId() . 'Option_' . $value . '" value="' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'class', 'origvalue', 'disabled', 'readonly'));
 		if ($value === $this->value) {
 			$html .= ' checked="checked"';
@@ -648,6 +649,7 @@ class VinkField extends InputField {
 	}
 
 	public function getHtml() {
+		$this->disabled = $this->readonly;
 		$html = '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'value', 'origvalue', 'class', 'disabled', 'readonly'));
 		if ($this->value) {
 			$html .= ' checked="checked" ';
