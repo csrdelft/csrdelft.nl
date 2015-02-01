@@ -311,7 +311,7 @@ class GroepenController extends Controller {
 		$response = array();
 		foreach ($selection as $UUID) {
 			$groep = $this->model->getUUID($UUID);
-			if (!$groep OR ! property_exists($groep, 'aanmelden_tot') OR ! $groep->mag(A::Wijzigen)) {
+			if (!$groep OR ! property_exists($groep, 'aanmelden_tot') OR time() > strtotime($groep->aanmelden_tot) OR ! $groep->mag(A::Wijzigen)) {
 				continue;
 			}
 			$groep->aanmelden_tot = getDateTime();
