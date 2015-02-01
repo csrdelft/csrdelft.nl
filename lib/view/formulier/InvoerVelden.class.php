@@ -923,9 +923,6 @@ class StudieField extends TextField {
 
 class EmailField extends TextField {
 
-	/**
-	 * Dikke valideerfunctie voor e-mails.
-	 */
 	public function validate() {
 		if (!parent::validate()) {
 			return false;
@@ -934,10 +931,12 @@ class EmailField extends TextField {
 		if ($this->value == '') {
 			return true;
 		}
-		// bevat het e-mailadres een @
+		// check format
 		if (!email_like($this->value)) {
 			$this->error = 'Ongeldig e-mailadres';
-		} else {
+		}
+		// check dns record
+		else {
 			$parts = explode('@', $this->value, 2);
 			if (!checkdnsrr($parts[1], 'A') AND ! checkdnsrr($parts[1], 'MX')) {
 				$this->error = 'E-mailadres bestaat niet';
