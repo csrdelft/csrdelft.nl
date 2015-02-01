@@ -47,19 +47,11 @@ class RechtenController extends AclController {
 
 	public function aanmaken($environment = null, $resource = null) {
 		$ac = $this->model->nieuw($environment, $resource);
-
-		if (!LoginModel::mag('P_ADMIN')) {
-
-			// Recursive permissions
-			$rechten = $this->model->get($ac->environment, A::Rechten, $ac->resource);
-			if (!$rechten OR ! LoginModel::mag($rechten)) {
-				$this->geentoegang();
-			}
-		}
-
 		$form = new RechtenForm($ac, $this->action);
 		if ($form->validate()) {
-			$this->model->create($ac);
+			$this->model->setAcl($ac->environment, $ac->resource, array(
+				$ac->action => $ac->subject
+			));
 			$this->view = new RechtenData(array($ac));
 		} else {
 			$this->view = $form;
@@ -72,19 +64,11 @@ class RechtenController extends AclController {
 			$this->geentoegang();
 		}
 		$ac = $this->model->getUUID($selection[0]);
-
-		if (!LoginModel::mag('P_ADMIN')) {
-
-			// Recursive permissions
-			$rechten = $this->model->get($ac->environment, A::Rechten, $ac->resource);
-			if (!$rechten OR ! LoginModel::mag($rechten)) {
-				$this->geentoegang();
-			}
-		}
-
 		$form = new RechtenForm($ac, $this->action);
 		if ($form->validate()) {
-			$this->model->update($ac);
+			$this->model->setAcl($ac->environment, $ac->resource, array(
+				$ac->action => $ac->subject
+			));
 			$this->view = new RechtenData(array($ac));
 		} else {
 			$this->view = $form;
@@ -96,17 +80,9 @@ class RechtenController extends AclController {
 		$response = array();
 		foreach ($selection as $UUID) {
 			$ac = $this->model->getUUID($UUID);
-
-			if (!LoginModel::mag('P_ADMIN')) {
-
-				// Recursive permissions
-				$rechten = $this->model->get($ac->environment, A::Rechten, $ac->resource);
-				if (!$rechten OR ! LoginModel::mag($rechten)) {
-					continue;
-				}
-			}
-
-			$this->model->delete($ac);
+			$this->model->setAcl($ac->environment, $ac->resource, array(
+				$ac->action => null
+			));
 			$response[] = $ac;
 		}
 		$this->view = new RemoveRowsResponse($response);

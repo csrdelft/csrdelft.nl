@@ -127,21 +127,43 @@ class AccessModel extends CachedPersistenceModel {
 	 * @throws Exception
 	 */
 	public function setAcl($environment, $resource, array $acl) {
-		if (empty($environment) OR empty($resource) OR empty($acl)) {
-			throw new Exception('ACL empty');
-		}
-		if (!LoginModel::mag('P_LOGGED_IN') OR ( $resource === '*' AND ! LoginModel::mag('P_ADMIN') )) {
-			throw new Exception('access denied');
-		}
-		foreach ($acl as $action => $subject) {
-			if (empty($action) OR empty($subject)) {
-				continue;
+		// Has permission to change permissions?
+		if (!LoginModel::mag('P_ADMIN')) {
+			$rechten = $this->model->get($environment, A::Rechten, $resource);
+			if (!$rechten OR ! LoginModel::mag($rechten)) {
+				throw new Exception('access denied');
 			}
+		}
+		// Delete entire ACL for environment
+		if (empty($resource)) {
+			foreach ($this->find('environment = ?') as $ac) {
+				$this->delete($ac);
+			}
+			return true;
+		}
+		// Delete entire ACL for object
+		if (empty($acl)) {
+			foreach ($this->find('environment = ? AND resource = ?', array($environment, $resource)) as $ac) {
+				$this->delete($ac);
+			}
+		}
+		// CRUD ACL
+		foreach ($acl as $action => $subject) {
+			// Retrieve AC
 			$ac = $this->get($environment, $action, $resource);
-			if ($ac) {
+			// Delete AC
+			if (empty($subject)) {
+				if ($ac) {
+					$this->delete($ac);
+				}
+			}
+			// Update AC
+			elseif ($ac) {
 				$ac->subject = $subject;
 				$this->update($ac);
-			} else {
+			}
+			// Create AC
+			else {
 				$ac = $this->nieuw($environment, $resource);
 				$ac->action = $action;
 				$ac->subject = $subject;
@@ -419,7 +441,7 @@ class AccessModel extends CachedPersistenceModel {
 		 * permissies zijn een string, waarin elk kararakter de
 		 * waarde heeft van een permissielevel voor een bepaald onderdeel.
 		 * 
-		 * de mogelijke *verschillende* permissies voor een onderdeel zijn machten van twee:
+		 * de mogelijke verschillende permissies voor een onderdeel zijn machten van twee:
 		 * 1, 2, 4, 8, etc
 		 * elk van deze waardes kan onderscheiden worden in een permissie, ook als je ze met elkaar combineert
 		 * bijv.  3=1+2, 7=1+2+4, 5=1+4, 6=2+4, 12=4+8, etc
@@ -432,7 +454,7 @@ class AccessModel extends CachedPersistenceModel {
 		 * 
 		 * Bij het AND-en, wordt elke karakter bitwise vergeleken, dat betekent:
 		 * - elke karakter van de string omzetten in de ASCII-waarde
-		 *   (bijv. ?=63, A=65, a=97, etc zie ook http:* www.ascii.cl/)
+		 *   (bijv. ?=63, A=65, a=97, etc zie ook www.ascii.cl)
 		 * - deze ASCII-waarde omzetten in een binaire getal
 		 *   (bijv. 2=00010, 4=00100, 5=00101, 14=01110, etc)
 		 * - de bits van het binaire getal een-voor-een vergelijken met de bits van het binaire getal uit de
