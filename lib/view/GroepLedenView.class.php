@@ -273,8 +273,8 @@ class GroepLijstView extends GroepTabView {
 			$html .= '<tr><td colspan="2">';
 			$groep = $this->groep;
 			$leden = $groep::leden;
-			$profiel = $leden::instance()->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldenForm($profiel, $groep, $groep->getOpmerkingSuggesties(), $groep->keuzelijst);
+			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
+			$form = new GroepAanmeldenForm($lid, $groep, $groep->getOpmerkingSuggesties(), $groep->keuzelijst);
 			$html .= $form->getHtml();
 			$html .= '</td></tr>';
 		}
@@ -285,7 +285,7 @@ class GroepLijstView extends GroepTabView {
 			if ($this->groep->mag(A::Afmelden, $profiel->uid)) {
 				$html .= '<a href="' . $this->groep->getUrl() . 'afmelden" class="post confirm float-left" title="Afmelden"><img src="/plaetjes/famfamfam/bullet_delete.png" class="icon" width="16" height="16"></a>';
 			}
-			$html .= ProfielModel::getLink($profiel->uid, 'civitas');
+			$html .= $profiel->getLink($profiel->uid, 'civitas');
 			$html .= '</td><td>';
 			if ($this->groep->mag(A::Bewerken, $profiel->uid)) {
 				$form = new GroepBewerkenForm($leden[$profiel->uid], $this->groep, $suggesties, $this->groep->keuzelijst);
