@@ -51,28 +51,15 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 
 	// Agendeerbaar:
 
-	/**
-	 * Timestamp van eindmoment.
-	 */
 	public function getBeginMoment() {
 		return strtotime($this->begin_moment);
 	}
 
-	/**
-	 * Timestamp van eindmoment.
-	 */
 	public function getEindMoment() {
 		if ($this->eind_moment) {
 			return strtotime($this->eind_moment);
 		}
 		return $this->getBeginMoment();
-	}
-
-	/**
-	 * Tijdstuur in minuten.
-	 */
-	public function getDuration() {
-		return ($this->getEindMoment() - $this->getBeginMoment()) / 60;
 	}
 
 	public function getTitel() {

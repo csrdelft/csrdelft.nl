@@ -308,16 +308,12 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				$jaar+=1;
 			}
 		}
-		$datum = $jaar . '-' . substr($this->gebdatum, 5, 5) . ' 01:11:11'; // 1 b'vo
+		$datum = $jaar . '-' . substr($this->gebdatum, 5, 5) . ' 00:00:00'; // 1 b'vo
 		return strtotime($datum);
 	}
 
 	public function getEindMoment() {
-		return $this->getBeginMoment() + 60;
-	}
-
-	public function getDuration() {
-		return 60 * 24;
+		return $this->getBeginMoment() + 60 * 24 - 1;
 	}
 
 	public function isHeledag() {

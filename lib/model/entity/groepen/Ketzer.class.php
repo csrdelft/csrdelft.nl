@@ -70,59 +70,46 @@ class Ketzer extends Groep {
 	 * Has permission for action?
 	 * 
 	 * @param AccessAction $action
-	 * @param string $uid affected Lid
 	 * @return boolean
 	 */
-	public function mag($action, $uid = null) {
-
-		if ($uid === LoginModel::getUid()) {
-			/**
-			 * Deze functie overschrijft de beheer-rechten. Dus als je als beheerder jezelf
-			 * bijv. achteraf wil aanmelden moet je A::Beheren ipv A::Aanmelden vragen.
-			 */
-			// Als rechten ingesteld dan controleren
-			$rechten = AccessModel::getSubject(get_class($this), $action, $this->id);
-			if ($rechten AND ! LoginModel::mag($rechten)) {
-				return false;
-			}
-
-			$aangemeld = array_key_exists($uid, $this->getLeden());
-
-			switch ($action) {
-
-				case A::Aanmelden:
-					// Controleer lidmaatschap
-					if ($aangemeld) {
-						return false;
-					}
-					// Controleer maximum leden
-					if (isset($this->aanmeld_limiet) AND $this->aantalLeden() >= $this->aanmeld_limiet) {
-						return false;
-					}
-					// Controleer aanmeldperiode
-					return time() < strtotime($this->aanmelden_tot) AND time() > strtotime($this->aanmelden_vanaf);
-
-				case A::Bewerken:
-					// Controleer lidmaatschap
-					if (!$aangemeld) {
-						return false;
-					}
-					// Controleer bewerkperiode
-					return time() < strtotime($this->bewerken_tot);
-
-				case A::Afmelden:
-					// Controleer lidmaatschap
-					if (!$aangemeld) {
-						return false;
-					}
-					// Controleer afmeldperiode
-					return time() < strtotime($this->afmelden_tot);
-
-				default:
-				// fall through naar parent::mag
-			}
+	public function mag($action, $ical = false) {
+		// parent checks specifieke en algemene rechten
+		if (!parent::mag($action, $ical)) {
+			return false;
 		}
-		return parent::mag($action, $uid);
+		$aangemeld = array_key_exists(LoginModel::getUid(), $this->getLeden());
+
+		switch ($action) {
+
+			case A::Aanmelden:
+				if ($aangemeld) {
+					return false;
+				}
+				// Controleer maximum leden
+				if (isset($this->aanmeld_limiet) AND $this->aantalLeden() >= $this->aanmeld_limiet) {
+					return false;
+				}
+				// Controleer aanmeldperiode
+				return time() < strtotime($this->aanmelden_tot) AND time() > strtotime($this->aanmelden_vanaf);
+
+			case A::Bewerken:
+				if (!$aangemeld) {
+					return false;
+				}
+				// Controleer bewerkperiode
+				return time() < strtotime($this->bewerken_tot);
+
+			case A::Afmelden:
+				if (!$aangemeld) {
+					return false;
+				}
+				// Controleer afmeldperiode
+				return time() < strtotime($this->afmelden_tot);
+
+			default:
+				// Parent is al gechecked
+				return true;
+		}
 	}
 
 	/**

@@ -22,11 +22,6 @@ interface Agendeerbaar {
 	 */
 	public function getEindMoment();
 
-	/**
-	 * Tijdstuur in minuten.
-	 */
-	public function getDuration();
-
 	public function getTitel();
 
 	public function getBeschrijving();

@@ -265,10 +265,6 @@ class Maaltijd implements Agendeerbaar {
 		return $this->getBeginMoment();
 	}
 
-	public function getDuration() {
-		return ($this->getEindMoment() - $this->getBeginMoment()) / 60;
-	}
-
 	public function getBeschrijving() {
 		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}

@@ -158,34 +158,22 @@ class Groep extends PersistentEntity {
 	 * Has permission for action?
 	 * 
 	 * @param string $action
-	 * @param string $uid affected Lid
+	 * @param boolean $feed
 	 * @return boolean
 	 */
-	public function mag($action, $uid = null) {
-		// Default rechten
-		if (!LoginModel::mag('P_LEDEN_READ')) {
-			return false;
-		} elseif ($action === A::Bekijken) {
-			return true;
-		}
-		// Aanmaker van de groep mag alles
-		if ($this->maker_uid === LoginModel::getUid()) {
-			return true;
-		}
-		// Beheerders mogen alles
-		if (LoginModel::mag('P_LEDEN_MOD')) {
+	public function mag($action, $feed = false) {
+		// Beheerders en de aanmaker van de groep mag alles
+		if ($this->maker_uid === LoginModel::getUid() OR LoginModel::mag('P_LEDEN_MOD')) {
 			return true;
 		}
 		// Rechten voor deze specifieke groep
 		$rechten = AccessModel::getSubject(get_class($this), $action, $this->id);
-		if ($rechten AND LoginModel::mag($rechten)) {
-			return true;
+		if ($rechten) {
+			// Override algemene rechten
+			return LoginModel::mag($rechten);
 		}
 		// Rechten voor deze klasse / dit soort groep
-		if (static::magAlgemeen($action, property_exists($this, 'soort') ? $this->soort : null)) {
-			return true;
-		}
-		return false;
+		return static::magAlgemeen($action, property_exists($this, 'soort') ? $this->soort : null);
 	}
 
 	/**
@@ -203,14 +191,15 @@ class Groep extends PersistentEntity {
 		if ($soort !== null) {
 			// Rechten voor dit soort groep
 			$rechten = AccessModel::getSubject(get_called_class(), $action, $soort);
-			if ($rechten AND LoginModel::mag($rechten)) {
-				return true;
+			if ($rechten) {
+				// Override algemene rechten
+				return LoginModel::mag($rechten);
 			}
 		}
 		// Rechten voor deze groep klasse?
 		$rechten = AccessModel::getSubject(get_called_class(), $action, '*');
-		if ($rechten AND LoginModel::mag($rechten)) {
-			return true;
+		if ($rechten) {
+			return LoginModel::mag($rechten);
 		}
 		return false;
 	}

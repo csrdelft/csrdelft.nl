@@ -251,7 +251,7 @@ class GroepPasfotosView extends GroepTabView {
 
 	protected function getTabContent() {
 		$html = '';
-		if ($this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
+		if ($this->groep->mag(A::Aanmelden)) {
 			$groep = $this->groep;
 			$leden = $groep::leden;
 			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
@@ -272,7 +272,7 @@ class GroepLijstView extends GroepTabView {
 	public function getTabContent() {
 		$html = '<table class="groep-lijst"><tbody>';
 		$suggesties = $this->groep->getOpmerkingSuggesties();
-		if ($this->groep->mag(A::Aanmelden, LoginModel::getUid())) {
+		if ($this->groep->mag(A::Aanmelden)) {
 			$html .= '<tr><td colspan="2">';
 			$groep = $this->groep;
 			$leden = $groep::leden;
@@ -285,12 +285,12 @@ class GroepLijstView extends GroepTabView {
 		$profielen = ProfielModel::instance()->prefetch('uid IN (' . implode(', ', array_fill(0, count($leden), '?')) . ')', array_keys($leden), null, 'achternaam ASC');
 		foreach ($profielen as $profiel) {
 			$html .= '<tr><td>';
-			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Afmelden, $profiel->uid)) {
+			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Afmelden)) {
 				$html .= '<a href="' . $this->groep->getUrl() . 'afmelden" class="post confirm float-left" title="Afmelden"><img src="/plaetjes/famfamfam/bullet_delete.png" class="icon" width="16" height="16"></a>';
 			}
 			$html .= $profiel->getLink('civitas');
 			$html .= '</td><td>';
-			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Bewerken, $profiel->uid)) {
+			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Bewerken)) {
 				$form = new GroepBewerkenForm($leden[$profiel->uid], $this->groep, $suggesties, $this->groep->keuzelijst);
 				$html .= $form->getHtml();
 			} else {

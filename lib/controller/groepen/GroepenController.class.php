@@ -338,7 +338,7 @@ class GroepenController extends Controller {
 		$leden = $groep::leden;
 		$model = $leden::instance();
 		if ($uid) {
-			if (!$groep->mag(A::Aanmelden, $uid)) {
+			if (!$groep->mag(A::Aanmelden)) {
 				$this->geentoegang();
 			}
 			$lid = $model->nieuw($groep, $uid);
@@ -352,7 +352,7 @@ class GroepenController extends Controller {
 		}
 		// beheren
 		else {
-			if (!$groep->mag(A::Beheren, $uid)) {
+			if (!$groep->mag(A::Beheren)) {
 				$this->geentoegang();
 			}
 			$lid = $model->nieuw($groep, null);
@@ -371,7 +371,7 @@ class GroepenController extends Controller {
 		$leden = $groep::leden;
 		$model = $leden::instance();
 		if ($uid) {
-			if (!$groep->mag(A::Bewerken, $uid)) {
+			if (!$groep->mag(A::Bewerken)) {
 				$this->geentoegang();
 			}
 			$lid = $model->get($groep, $uid);
@@ -388,7 +388,7 @@ class GroepenController extends Controller {
 				$this->geentoegang();
 			}
 			$lid = $model->getUUID($selection[0]);
-			if (!$groep->mag(A::Beheren, $lid->uid)) {
+			if (!$groep->mag(A::Beheren)) {
 				$this->geentoegang();
 			}
 			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action);
@@ -405,7 +405,7 @@ class GroepenController extends Controller {
 		$leden = $groep::leden;
 		$model = $leden::instance();
 		if ($uid) {
-			if (!$groep->mag(A::Afmelden, $uid)) {
+			if (!$groep->mag(A::Afmelden)) {
 				$this->geentoegang();
 			}
 			$lid = $model->get($groep, $uid);
@@ -418,7 +418,7 @@ class GroepenController extends Controller {
 			$response = array();
 			foreach ($selection as $UUID) {
 				$lid = $model->getUUID($UUID);
-				if (!$groep->mag(A::Beheren, $lid->uid)) {
+				if (!$groep->mag(A::Beheren)) {
 					continue;
 				}
 				$model->delete($lid);

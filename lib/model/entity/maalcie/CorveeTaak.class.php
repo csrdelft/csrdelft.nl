@@ -303,10 +303,6 @@ class CorveeTaak implements Agendeerbaar {
 		return $this->getBeginMoment();
 	}
 
-	public function getDuration() {
-		return ($this->getEindMoment() - $this->getBeginMoment()) / 60;
-	}
-
 	public function getTitel() {
 		if ($this->getUid()) {
 			return $this->getCorveeFunctie()->naam . ' ' . ProfielModel::getNaam($this->getUid(), 'civitas');

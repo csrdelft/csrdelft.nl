@@ -69,11 +69,10 @@ class FotoAlbumController extends AclController {
 			$album->orderByDateModified();
 		}
 		$body = new FotoAlbumView($album);
+		// uitgelogd heeft nieuwe layout
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
-			//$this->view->zijbalk = false;
 		} else {
-			// uitgelogd heeft nieuwe layout
 			$this->view = new CsrLayout2Page($body);
 		}
 		$this->view->addCompressedResources('fotoalbum');

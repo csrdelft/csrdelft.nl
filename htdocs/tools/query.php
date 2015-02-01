@@ -22,5 +22,4 @@ if (isset($_GET['id']) AND (int) $_GET['id'] == $_GET['id']) {
 }
 
 $pagina = new CsrLayoutPage(new SavedQueryContent($savedquery));
-//$pagina->zijbalk = false;
 $pagina->view();
