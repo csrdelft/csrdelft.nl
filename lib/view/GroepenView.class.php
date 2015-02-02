@@ -104,8 +104,7 @@ class GroepForm extends DataTableForm {
 		$fields['begin_moment']->to_datetime = $fields['eind_moment'];
 
 		if (!LoginModel::mag('P_ADMIN')) {
-			$fields['maker_uid']->readonly = true;
-			$fields['maker_uid']->hidden = true;
+			unset($fields['maker_uid']);
 		}
 
 		if (property_exists($groep, 'in_agenda')) {
@@ -116,15 +115,17 @@ class GroepForm extends DataTableForm {
 		if ($groep instanceof Activiteit) {
 			$options = array(
 				'Intern' => array(
-					ActiviteitSoort::Intern		 => ActiviteitSoort::getDescription(ActiviteitSoort::Intern),
+					ActiviteitSoort::Vereniging	 => ActiviteitSoort::getDescription(ActiviteitSoort::Vereniging),
+					ActiviteitSoort::Verticale	 => ActiviteitSoort::getDescription(ActiviteitSoort::Verticale),
+					ActiviteitSoort::Lichting	 => ActiviteitSoort::getDescription(ActiviteitSoort::Lichting),
 					ActiviteitSoort::SjaarsActie => ActiviteitSoort::getDescription(ActiviteitSoort::SjaarsActie),
 					ActiviteitSoort::Dies		 => ActiviteitSoort::getDescription(ActiviteitSoort::Dies),
 					ActiviteitSoort::Lustrum	 => ActiviteitSoort::getDescription(ActiviteitSoort::Lustrum)
 				),
 				'Extern' => array(
-					ActiviteitSoort::Extern	 => ActiviteitSoort::getDescription(ActiviteitSoort::Extern),
 					ActiviteitSoort::OWee	 => ActiviteitSoort::getDescription(ActiviteitSoort::OWee),
-					ActiviteitSoort::IFES	 => ActiviteitSoort::getDescription(ActiviteitSoort::IFES)
+					ActiviteitSoort::IFES	 => ActiviteitSoort::getDescription(ActiviteitSoort::IFES),
+					ActiviteitSoort::Extern	 => ActiviteitSoort::getDescription(ActiviteitSoort::Extern)
 				)
 			);
 			$fields['soort'] = new SelectField('soort', $groep->soort, 'Soort', $options, true);

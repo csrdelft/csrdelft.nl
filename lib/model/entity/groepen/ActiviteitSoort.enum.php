@@ -10,40 +10,46 @@
  */
 abstract class ActiviteitSoort implements PersistentEnum {
 
-	const Intern = 'i';
-	const Extern = 'e';
+	const Vereniging = 'i'; // intern
+	const Verticale = 'v';
+	const Lichting = 'l';
 	const SjaarsActie = 's';
-	const OWee = 'o';
 	const Dies = 'd';
-	const Lustrum = 'l';
+	const Lustrum = 'dl'; // dies lustrum
+	const OWee = 'o';
 	const IFES = 'f';
+	const Extern = 'e';
 
 	public static function getTypeOptions() {
-		return array(self::Intern, self::Extern, self::SjaarsActie, self::OWee, self::Dies, self::Lustrum, self::IFES);
+		return array(self::Vereniging, self::Verticale, self::Lichting, self::SjaarsActie, self::Dies, self::Lustrum, self::OWee, self::IFES, self::Extern);
 	}
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::Intern: return 'Interne activiteit';
-			case self::Extern: return 'Externe activiteit';
+			case self::Vereniging: return 'Verenigings-activiteit';
+			case self::Verticale: return 'Verticale-activiteit';
+			case self::Lichting: return 'Lichting-activiteit';
 			case self::SjaarsActie: return 'Sjaarsactie';
-			case self::OWee: return 'OWee-activiteit';
 			case self::Dies: return 'Dies-activiteit';
 			case self::Lustrum: return 'Lustrum-activiteit';
+			case self::OWee: return 'OWee-activiteit';
 			case self::IFES: return 'Activiteit van IFES';
+			case self::Extern: return 'Externe activiteit';
 			default: throw new Exception('ActiviteitSoort onbekend');
 		}
 	}
 
 	public static function getChar($option) {
 		switch ($option) {
-			case self::Intern:
-			case self::Extern:
+			case self::Vereniging:
+			case self::Verticale:
+			case self::Lichting:
 			case self::SjaarsActie:
-			case self::OWee:
 			case self::Dies:
 			case self::Lustrum:
+			case self::OWee:
 			case self::IFES:
+			case self::Extern:
 				return ucfirst($option);
 			default: throw new Exception('ActiviteitSoort onbekend');
 		}
