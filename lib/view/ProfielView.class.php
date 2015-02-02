@@ -233,7 +233,7 @@ class ProfielForm extends Formulier {
 		$fields[] = new Subkopje('Boekhouding');
 		$fields[] = new TextField('bankrekening', $profiel->bankrekening, 'Bankrekening', 18);
 		if ($admin) {
-			$fields[] = new VinkField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
+			$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
 		}
 		if (LoginModel::mag('P_ADMIN')) {
 			$fields[] = new IntField('soccieID', (int) $profiel->soccieID, 'SoccieID (uniek icm. bar)', 0, 10000);
@@ -268,7 +268,7 @@ class ProfielForm extends Formulier {
 				}
 				$fields[] = new SelectField('kringleider', $profiel->kringleider, 'Kringleider', $kringleider);
 				$fields[] = new VerticaleField('kringcoach', $profiel->kringcoach, 'Kringcoach');
-				$fields[] = new VinkField('verticaleleider', $profiel->verticaleleider, 'Verticaan');
+				$fields[] = new JaNeeField('verticaleleider', $profiel->verticaleleider, 'Verticaan');
 			}
 			$fields[] = new LidField('patroon', $profiel->patroon, 'Patroon', 'allepersonen');
 		}

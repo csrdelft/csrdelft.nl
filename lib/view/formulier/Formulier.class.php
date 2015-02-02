@@ -89,7 +89,7 @@ class Formulier implements View, Validator {
 					}
 				case T::Char: $class .= 'TextField';
 					break;
-				case T::Boolean: $class .= 'VinkField';
+				case T::Boolean: $class .= 'JaNeeField';
 					break;
 				case T::Integer: $class .= 'IntField';
 					break;

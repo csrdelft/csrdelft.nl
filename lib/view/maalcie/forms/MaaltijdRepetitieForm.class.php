@@ -28,7 +28,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 		$fields['dag'] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodieke maaltijden';
 		$fields[] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 0, 183);
-		$fields['abo'] = new VinkField('abonneerbaar', $abo, 'Abonneerbaar');
+		$fields['abo'] = new JaNeeField('abonneerbaar', $abo, 'Abonneerbaar');
 		if ($mrid !== 0) {
 			$fields['abo']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) if (!confirm('Alle abonnementen zullen worden verwijderd!')) this.checked = true;";
 		}

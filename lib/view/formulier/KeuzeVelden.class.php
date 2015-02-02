@@ -243,28 +243,6 @@ class RequiredEntityDropDown extends EntityDropDown {
 }
 
 /**
- * Man of vrouw
- */
-class GeslachtField extends SelectField {
-
-	public function __construct($name, $value, $description) {
-		parent::__construct($name, $value, $description, array('m' => 'Man', 'v' => 'Vrouw'));
-	}
-
-}
-
-/**
- * Ja of Nee
- */
-class JaNeeField extends SelectField {
-
-	public function __construct($name, $value, $description) {
-		parent::__construct($name, $value, $description, array('ja' => 'Ja', 'nee' => 'Nee'));
-	}
-
-}
-
-/**
  * Dag van de week
  */
 class WeekdagField extends SelectField {
@@ -344,6 +322,44 @@ class KeuzeRondjeField extends SelectField {
 }
 
 class RequiredKeuzeRondjeField extends KeuzeRondjeField {
+
+	public $required = true;
+
+}
+
+/**
+ * Man of vrouw
+ */
+class GeslachtField extends KeuzeRondjeField {
+
+	public function __construct($name, $value, $description) {
+		parent::__construct($name, $value, $description, array('m' => 'Man', 'v' => 'Vrouw'));
+	}
+
+}
+
+class RequiredGeslachtField extends GeslachtField {
+
+	public $required = true;
+
+}
+
+/**
+ * Ja of Nee
+ */
+class JaNeeField extends KeuzeRondjeField {
+
+	public function __construct($name, $value, $description) {
+		parent::__construct($name, (int) $value, $description, array(1 => 'Ja', 0 => 'Nee'));
+	}
+
+	public function getValue() {
+		return (boolean) parent::getValue();
+	}
+
+}
+
+class RequiredJaNeeField extends JaNeeField {
 
 	public $required = true;
 

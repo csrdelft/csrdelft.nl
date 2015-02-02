@@ -44,7 +44,7 @@ class CorveeRepetitieForm extends ModalForm {
 		$fields[] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
 		$fields['dag'] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 0, 183);
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';
-		$fields['vrk'] = new VinkField('voorkeurbaar', $voorkeur, 'Voorkeurbaar');
+		$fields['vrk'] = new JaNeeField('voorkeurbaar', $voorkeur, 'Voorkeurbaar');
 		if ($crid !== 0) {
 			$fields['vrk']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) if (!confirm('Alle voorkeuren zullen worden verwijderd!')) this.checked = true;";
 		}

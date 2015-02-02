@@ -71,10 +71,10 @@ class FunctieForm extends ModalForm {
 		$fields['ptn'] = new IntField('standaard_punten', $functie->standaard_punten, 'Standaard punten', 0, 10);
 		$fields['ptn']->title = 'Aantal corveepunten dat standaard voor deze functie gegeven wordt';
 
-		$fields['k'] = new VinkField('kwalificatie_benodigd', $functie->kwalificatie_benodigd, 'Kwalificatie benodigd');
+		$fields['k'] = new JaNeeField('kwalificatie_benodigd', $functie->kwalificatie_benodigd, 'Kwalificatie benodigd');
 		$fields['k']->title = 'Is er een kwalificatie benodigd om deze functie uit te mogen voeren';
 
-		$fields['m'] = new VinkField('maaltijden_sluiten', $functie->maaltijden_sluiten, 'Maaltijden sluiten');
+		$fields['m'] = new JaNeeField('maaltijden_sluiten', $functie->maaltijden_sluiten, 'Maaltijden sluiten');
 		$fields['m']->title = 'Geeft deze functie speciale rechten om maaltijden te mogen sluiten';
 
 		$fields[] = new FormDefaultKnoppen();
