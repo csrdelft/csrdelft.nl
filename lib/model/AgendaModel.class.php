@@ -105,7 +105,7 @@ class AgendaModel extends PersistenceModel {
 	}
 
 	public function getICalendarItems() {
-		return $this->getAllAgendeerbaar(strtotime('-1 year'), strtotime('+1 year'), true);
+		return $this->getAllAgendeerbaar(strtotime(Instellingen::get('agenda', 'ical_from')), strtotime(Instellingen::get('agenda', 'ical_to')), true);
 	}
 
 	public function getItemsByDay($jaar, $maand, $dag) {

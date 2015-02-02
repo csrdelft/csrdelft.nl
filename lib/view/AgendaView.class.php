@@ -130,8 +130,6 @@ class AgendaItemForm extends ModalForm {
 		$fields['titel'] = new RequiredTextField('titel', $item->titel, 'Titel');
 		$fields['titel']->suggestions[] = array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond');
 
-		//$fields['tijden'] = new StandaardTijdenField('tijden', $begin, $eind);
-
 		$fields['begin_moment'] = new RequiredDateTimeField('begin_moment', $item->begin_moment, 'Begin moment');
 		$fields['eind_moment'] = new RequiredDateTimeField('eind_moment', $item->eind_moment, 'Eind moment');
 
@@ -165,46 +163,6 @@ class AgendaItemForm extends ModalForm {
 			$fields['eind_moment']->error = 'Eindmoment moet na beginmoment liggen';
 		}
 		return parent::validate();
-	}
-
-}
-
-class StandaardTijdenField extends HtmlComment {
-
-	private $id;
-
-	public function __construct($name, TijdField $begin, TijdField $eind) {
-		$this->id = uniqid($name);
-		$html = '<div id="' . $this->id . '" class="InputField"><label>Standaard tijden</label>';
-		$tijden = explode(',', Instellingen::get('agenda', 'standaard_tijden'));
-		$aantal = count($tijden) / 2;
-		for ($i = 0; $i < $aantal; $i++) {
-			$naam = $tijden[$i * 2 + 1];
-			$standaard_tijd = 'standaard_tijd_' . ($i + 1);
-			if (!Instellingen::has('agenda', $standaard_tijd)) {
-				setMelding($standaard_tijd . ' "' . $naam . '" is niet gedefinieerd', -1);
-				continue;
-			}
-			$html .= '<a onclick="set' . $this->id . '(this);" data-begin="' . $begin->getId() . '" data-eind="' . $eind->getId() . '" data-tijden="' . Instellingen::get('agenda', $standaard_tijd) . '" style="cursor:pointer;">» ' . $naam . '</a> &nbsp;';
-		}
-		if (LoginModel::mag('P_AGENDA_MOD')) {
-			$html .= '<div class="float-right"><a class="btn" title="Wijzig standaard tijden" href="/instellingenbeheer/module/agenda"><img width="16" height="16" class="icon" alt="edit" src="/plaetjes/famfamfam/pencil.png"></a></div>';
-		}
-		parent::__construct($html . '</div>');
-	}
-
-	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-set{$this->id} = function (e) {
-	var tijden = $(e).attr('data-tijden').split('-');
-	var begin = tijden[0].split(':');
-	var eind = tijden[1].split(':');
-	document.getElementById($(e).attr('data-begin')+'_uur').value = begin[0];
-	document.getElementById($(e).attr('data-begin')+'_minuut').value = begin[1];
-	document.getElementById($(e).attr('data-eind')+'_uur').value = eind[0];
-	document.getElementById($(e).attr('data-eind')+'_minuut').value = eind[1];
-};
-JS;
 	}
 
 }

@@ -27,12 +27,8 @@ class Instellingen extends CachedPersistenceModel {
 
 	protected static $defaults = array(
 		'agenda'		 => array(
-			'standaard_zichtbaar_rechten'	 => 'P_LEDEN_READ',
-			'standaard_tijden'				 => '1,Hele dag,2,Kring,3,Lezing,4,Borrel',
-			'standaard_tijd_1'				 => '00:00-23:59',
-			'standaard_tijd_2'				 => '18:30-22:30',
-			'standaard_tijd_3'				 => '20:00-22:00',
-			'standaard_tijd_4'				 => '20:00-23:59'
+			'ical_from'	 => '-1 month',
+			'ical_to'	 => '+6 months'
 		),
 		'beveiliging'	 => array(
 			'remember_login_seconds'					 => '2592000',
