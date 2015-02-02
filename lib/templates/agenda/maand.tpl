@@ -71,7 +71,7 @@
 									{if !$item->isHeledag()}
 										<div class="tijd">
 											{$item->getBeginMoment()|date_format:"%R"}
-											{if $item->getBeginMoment() !== $item->getEindMoment()}
+											{if $item->getBeginMoment() !== $item->getEindMoment() AND date('H:i', $item->getEindMoment()) !== '00:00'}
 												-
 												{$item->getEindMoment()|date_format:"%R"}
 											{/if}
@@ -103,8 +103,8 @@
 <div id="ical">
 	{if LoginModel::getAccount()->hasPrivateToken()}
 		<a name="ICAL" href="{LoginModel::getAccount()->getICalLink()}"{if LoginModel::mag('P_LOGGED_IN')} title="Persoonlijke ICalender feed&#013;Nieuwe aanvragen kan op je profiel"{/if}>
-	{else}
-		<a name="ICAL" href="/profiel/{LoginModel::getUid()}#tokenaanvragen" title="Persoonlijke ICalender feed aanvragen">
-	{/if}
-	<img src="/plaetjes/knopjes/ical.gif" alt="ICAL" /></a>
+		{else}
+			<a name="ICAL" href="/profiel/{LoginModel::getUid()}#tokenaanvragen" title="Persoonlijke ICalender feed aanvragen">
+			{/if}
+			<img src="/plaetjes/knopjes/ical.gif" alt="ICAL" /></a>
 </div>

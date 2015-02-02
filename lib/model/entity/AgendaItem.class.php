@@ -100,7 +100,9 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function isHeledag() {
-		return date('H:i', $this->getBeginMoment()) == '00:00' AND date('H:i', $this->getEindMoment()) == '23:59';
+		$begin = date('H:i', $this->getBeginMoment());
+		$eind = date('H:i', $this->getEindMoment());
+		return $begin == '00:00' AND ( $eind == '23:59' OR $eind == '00:00' );
 	}
 
 	public function magBekijken($ical = false) {
