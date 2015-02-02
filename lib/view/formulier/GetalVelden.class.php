@@ -98,15 +98,13 @@ JS;
 	public function getHtml($showButtons = true) {
 		$html = '';
 		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
+			$class = 'fa fa-minus lichtgrijs';
 			if ($this->min !== null AND $this->getValue() === $this->min) {
-				$class = 'class="disabled"';
-			} else {
-				$class = '';
+				$class .= ' disabled"';
 			}
 			$style = $showButtons ? 'cursor:pointer;padding:7px;' : 'display:none;';
-			$icon = '/plaetjes/knopjes/min.png';
 			$html .= <<<HTML
-<span id="substract_{$this->getId()}" {$class} style="{$style}"><img src="{$icon}" alt="-" class="icon" width="20" height="20" /></span>
+<span id="substract_{$this->getId()}" class="{$class}" style="{$style}"></span>
 HTML;
 		}
 
@@ -144,14 +142,12 @@ JS;
 		$html .= ' <input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'pattern', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'min', 'max', 'step')) . ' /> ';
 
 		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
+			$class = 'fa fa-plus lichtgrijs';
 			if ($this->max !== null AND $this->getValue() === $this->max) {
-				$class = 'class="disabled"';
-			} else {
-				$class = '';
+				$class .= ' disabled';
 			}
-			$icon = '/plaetjes/knopjes/plus.png';
 			$html .= <<<HTML
-<span id="add_{$this->getId()}" {$class} style="{$style}"><img src="{$icon}" alt="+" class="icon" width="20" height="20" /></span>
+<span id="add_{$this->getId()}" class="{$class}" style="{$style}"></span>
 HTML;
 		}
 		return $html;
