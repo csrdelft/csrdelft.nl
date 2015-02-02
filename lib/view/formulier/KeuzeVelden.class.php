@@ -643,7 +643,7 @@ class VinkField extends InputField {
 	 * @return boolean
 	 */
 	public function getValue() {
-		$this->value = $this->isPosted();
+		$this->value = parent::isPosted();
 		return $this->value;
 	}
 
