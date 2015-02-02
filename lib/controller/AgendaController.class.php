@@ -119,7 +119,7 @@ class AgendaController extends AclController {
 
 	public function bewerken($aid) {
 		$item = $this->model->getAgendaItem((int) $aid);
-		if (!$item->magBeheren()) {
+		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
 		}
 		$form = new AgendaItemForm($item, $this->action); // fetches POST values itself
@@ -138,7 +138,7 @@ class AgendaController extends AclController {
 
 	public function verwijderen($aid) {
 		$item = $this->model->getAgendaItem((int) $aid);
-		if (!$item->magBeheren()) {
+		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
 		}
 		$this->model->delete($item);
