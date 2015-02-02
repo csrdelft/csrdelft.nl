@@ -27,11 +27,11 @@ function smarty_modifier_escape_ical($string, $prefix_length) {
 	$string = str_replace(';', '\;', $string);
 	$string = str_replace(',', '\,', $string);
 
-	$length = 75 - (int) $prefix_length;
+	$length = 60 - (int) $prefix_length;
 	$wrap = mb_substr($string, 0, $length);
 	$rest = mb_substr($string, $length);
 	if (!empty($rest)) {
-		$wrap .= "\n " . wordwrap($rest, 74, "\n ", true);
+		$wrap .= "\r\n " . wordwrap($rest, 59, "\r\n ", true);
 	}
 	return $wrap;
 }
