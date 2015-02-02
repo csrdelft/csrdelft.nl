@@ -60,11 +60,6 @@ class Groep extends PersistentEntity {
 	 */
 	public $eind_moment;
 	/**
-	 * URL van website
-	 * @var string
-	 */
-	public $website;
-	/**
 	 * Lidnummer van aanmaker
 	 * @var string
 	 */
@@ -83,7 +78,6 @@ class Groep extends PersistentEntity {
 		'keuzelijst'	 => array(T::String, true),
 		'begin_moment'	 => array(T::DateTime),
 		'eind_moment'	 => array(T::DateTime, true),
-		'website'		 => array(T::String, true),
 		'maker_uid'		 => array(T::UID)
 	);
 	/**

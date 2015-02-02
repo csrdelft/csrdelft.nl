@@ -129,26 +129,11 @@ class GroepForm extends DataTableForm {
 			);
 			$fields['soort'] = new SelectField('soort', $groep->soort, 'Soort', $options, true);
 		}
-		/*
-		  // Wizard
-		  $this->wizard = true;
-		  $text = array();
-		  $textarea = array();
-		  $dates = array();
-		  $etc = array();
-		  foreach ($fields as $attr => $field) {
-		  if ($field instanceof DateTimeField) {
-		  $dates[$attr] = $field;
-		  } elseif ($field instanceof TextareaField) {
-		  $textarea[$attr] = $field;
-		  } elseif ($field instanceof TextField) {
-		  $text[$attr] = $field;
-		  } else {
-		  $etc[$attr] = $field;
-		  }
-		  }
-		 */
-		$fields[] = new FormDefaultKnoppen($nocancel ? false : null);
+
+		// Wizard
+		$this->wizard = true;
+
+		$fields[] = $etc[] = new FormDefaultKnoppen($nocancel ? false : null);
 		$this->addFields($fields);
 	}
 
