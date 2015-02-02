@@ -126,7 +126,7 @@ class GroepenModel extends CachedPersistenceModel {
 	 * @return int rows affected
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
-		AccessModel::instance()->deleteResource(static::orm, reset($primary_key_values));
+		AccessModel::instance()->setAcl(static::orm, reset($primary_key_values), array());
 		return parent::deleteByPrimaryKey($primary_key_values);
 	}
 

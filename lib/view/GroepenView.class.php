@@ -150,7 +150,7 @@ class GroepOpvolgingForm extends DataTableForm {
 class GroepConverteerForm extends DataTableForm {
 
 	public function __construct(Groep $groep, GroepenModel $model) {
-		parent::__construct($groep, $groep->getUrl() . 'converteren', $model::orm . ' converteren');
+		parent::__construct($groep, $model->getUrl() . 'converteren', $model::orm . ' converteren');
 		$huidig = get_class($model);
 
 		$options = array(
