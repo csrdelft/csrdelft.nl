@@ -307,11 +307,7 @@ class GroepView implements View {
 		if ($this->groep->maker_uid == 1025 AND $this->bb) {
 			$html .= ' bb-dies2015';
 		}
-		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting">';
-		if ($this->groep->mag(A::Wijzigen)) {
-			$html .= '<a class="btn float-right" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-pencil"></span></a>';
-		}
-		$html .= '<h3>' . $this->getTitel() . '</h3>';
+		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
 		if ($this->groep->maker_uid == 1025) {
 			$html .= '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M" class="float-left" style="margin-right: 10px;">';
 		}
