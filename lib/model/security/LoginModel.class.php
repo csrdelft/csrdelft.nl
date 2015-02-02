@@ -317,8 +317,8 @@ class LoginModel extends PersistenceModel implements Validator {
 			$session->uid = $account->uid;
 			$session->login_moment = getDateTime();
 			$session->expire = $expire ? $expire : getDateTime(time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
-			$session->user_agent = filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING);
-			$session->ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING);
+			$session->user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING) : '';
+			$session->ip = isset($_SERVER['REMOTE_ADDR']) ? filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING) : '';
 			$session->lock_ip = $lockIP; // sessie koppelen aan ip?
 			if ($this->exists($session)) {
 				$this->update($session);
