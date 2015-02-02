@@ -278,7 +278,7 @@
 						{if $profiel->getAccount()->hasPrivateToken()}
 							<input type="text" value="{$profiel->getAccount()->getRssLink()}" size="50" onclick="this.setSelectionRange(0, this.value.length);" readonly />
 						{/if}
-						&nbsp; <a name="tokenaanvragen" class="btn" href="/profiel/{$profiel->uid}/resetPrivateToken#forum">Nieuwe aanvragen</a>
+						&nbsp; <a name="tokenaanvragen" class="btn" href="/profiel/{$profiel->uid}/resetPrivateToken">Nieuwe aanvragen</a>
 					</div>
 					<br />
 				{/if}
