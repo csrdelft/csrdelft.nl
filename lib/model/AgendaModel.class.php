@@ -51,7 +51,7 @@ class AgendaModel extends PersistenceModel {
 		// Activiteiten
 		$activiteiten = ActiviteitenModel::instance()->find('in_agenda = TRUE AND eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
 		foreach ($activiteiten as $activiteit) {
-			if ($activiteit->soort === ActiviteitSoort::Extern OR $activiteit->mag(A::Bekijken, $ical)) {
+			if ($activiteit->mag(A::Bekijken, $ical)) {
 				$result[] = $activiteit;
 			}
 		}
