@@ -20,7 +20,7 @@ class RechtenTable extends DataTable {
 
 		// Has permission to change permissions?
 		if (!LoginModel::mag('P_ADMIN')) {
-			$rechten = $model->get($environment, A::Rechten, $resource);
+			$rechten = $model::getSubject($environment, A::Rechten, $resource);
 			if (!$rechten OR ! LoginModel::mag($rechten)) {
 				return;
 			}
