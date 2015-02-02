@@ -4221,6 +4221,8 @@ lib/smarty/libs/plugins/modifier.date_format.php -text
 lib/smarty/libs/plugins/modifier.debug_print_var.php -text
 lib/smarty/libs/plugins/modifier.default.php -text
 lib/smarty/libs/plugins/modifier.escape.php -text
+lib/smarty/libs/plugins/modifier.escape_ical.php -text
+lib/smarty/libs/plugins/modifier.external_url.php -text
 lib/smarty/libs/plugins/modifier.filesize.php -text
 lib/smarty/libs/plugins/modifier.html_substr.php -text
 lib/smarty/libs/plugins/modifier.indent.php -text
