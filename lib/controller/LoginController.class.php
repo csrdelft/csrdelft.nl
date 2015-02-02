@@ -202,7 +202,7 @@ class LoginController extends AclController {
 		else {
 			$form = new WachtwoordVergetenForm();
 			if ($form->validate()) {
-				// voorkom dat AccessModel ingelogde gebruiker blokkeerd met $allowAuthByToken == false
+				// voorkom dat AccessModel ingelogde gebruiker blokkeerd met $allowPrivateUrl == false
 				if (LoginModel::instance()->isAuthenticatedByToken()) {
 					LoginModel::instance()->login('x999', 'x999', false);
 				}
@@ -233,7 +233,7 @@ class LoginController extends AclController {
 		$tokenString = filter_var($tokenString, FILTER_SANITIZE_STRING);
 		$form = new VerifyForm($tokenString);
 		if ($form->validate()) {
-			// voorkom dat AccessModel ingelogde gebruiker blokkeerd met $allowAuthByToken == false
+			// voorkom dat AccessModel ingelogde gebruiker blokkeerd met $allowPrivateUrl == false
 			if (LoginModel::instance()->isAuthenticatedByToken()) {
 				LoginModel::instance()->login('x999', 'x999', false);
 			}

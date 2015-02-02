@@ -37,8 +37,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		return ProfielModel::get(self::getUid());
 	}
 
-	public static function mag($permission, $allowAuthByToken = false) {
-		return AccessModel::mag(self::getAccount(), $permission, $allowAuthByToken);
+	public static function mag($permission, $allowPrivateUrl = false) {
+		return AccessModel::mag(self::getAccount(), $permission, $allowPrivateUrl);
 	}
 
 	protected function __construct() {
@@ -404,12 +404,12 @@ class LoginModel extends PersistenceModel implements Validator {
 		return !$this->isSued() AND $suNaar->uid !== self::getUid() AND AccessModel::mag($suNaar, 'P_LOGGED_IN');
 	}
 
-	public function isLoggedIn($allowAuthByToken = false) {
+	public function isLoggedIn($allowPrivateUrl = false) {
 		if (!isset($_SESSION['_uid'])) {
 			return false;
 		}
 		$account = self::getAccount();
-		return $account AND AccessModel::mag($account, 'P_LOGGED_IN', $allowAuthByToken);
+		return $account AND AccessModel::mag($account, 'P_LOGGED_IN', $allowPrivateUrl);
 	}
 
 	/**

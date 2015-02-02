@@ -43,7 +43,7 @@ class AccessModel extends CachedPersistenceModel {
 	/**
 	 * @param Account $subject Het lid dat de gevraagde permissies zou moeten bezitten.
 	 * @param string $permission Gevraagde permissie(s).
-	 * @param boolean $allowAuthByToken Of het subject geauthenticeerd mag zijn door een token,
+	 * @param boolean $allowPrivateUrl Of het subject geauthenticeerd mag zijn door een token,
 	 * 										anders werkt het alsof gebruiker x999 is.
 	 * 
 	 * Met deze functies kan op één of meerdere permissies worden getest,
@@ -72,16 +72,16 @@ class AccessModel extends CachedPersistenceModel {
 	 * 		of mensen die in het bestuur zitten
 	 * 
 	 */
-	public static function mag(Account $subject, $permission, $allowAuthByToken = false) {
+	public static function mag(Account $subject, $permission, $allowPrivateUrl = false) {
 
 		/**
 		 * Als voor het ingelogde lid een permissie gevraagd wordt
 		 * en deze sessie is ingelogd per token: doe extra check of dat mag.
-		 * Alleen als inloggen per token ($allowAuthByToken) toegestaan is
+		 * Alleen als inloggen per token ($allowPrivateUrl) toegestaan is
 		 * testen we met de permissies van het per token ingelogde account,
 		 * anders met niet-ingelogd.
 		 */
-		if (LoginModel::instance()->isAuthenticatedByToken() AND $subject->uid == LoginModel::getUid() AND ! $allowAuthByToken) {
+		if (LoginModel::instance()->isAuthenticatedByToken() AND $subject->uid == LoginModel::getUid() AND ! $allowPrivateUrl) {
 			$subject = AccountModel::get('x999');
 		}
 
