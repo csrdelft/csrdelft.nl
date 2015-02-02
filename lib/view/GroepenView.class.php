@@ -192,6 +192,7 @@ class GroepConverteerForm extends DataTableForm {
 		foreach ($options as $group) {
 			foreach ($group as $model => $orm) {
 				$model::instance(); // require once
+				$orm = $model::orm;
 				if (!$orm::magAlgemeen(A::Aanmaken)) {
 					unset($options[$model]);
 				}
