@@ -57,7 +57,7 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	protected static $persistent_attributes = array(
 		'item_id'			 => array(T::Integer, false, 'auto_increment'),
 		'titel'				 => array(T::String),
-		'beschrijving'		 => array(T::Text),
+		'beschrijving'		 => array(T::Text, true),
 		'begin_moment'		 => array(T::DateTime),
 		'eind_moment'		 => array(T::DateTime),
 		'rechten_bekijken'	 => array(T::String),
@@ -80,10 +80,7 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getEindMoment() {
-		if ($this->eind_moment) {
-			return strtotime($this->eind_moment);
-		}
-		return $this->getBeginMoment();
+		return strtotime($this->eind_moment);
 	}
 
 	public function getTitel() {
