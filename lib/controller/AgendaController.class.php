@@ -36,7 +36,7 @@ class AgendaController extends AclController {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		if ($this->action === 'ical.ics') {
+		if ($this->action === 'csrdelft.ics') {
 			$this->action = 'ical';
 		}
 		parent::performAction($this->getParams(3));

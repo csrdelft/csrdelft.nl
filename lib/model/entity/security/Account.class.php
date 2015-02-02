@@ -108,20 +108,20 @@ class Account extends PersistentEntity {
 	}
 
 	public function getICalLink() {
-		$url = CSR_ROOT . '/agenda/ical';
+		$url = CSR_ROOT . '/agenda/ical/';
 		if (empty($this->private_token)) {
-			return $url . '.ics';
+			return $url . 'csrdelft.ics';
 		} else {
-			return $url . '/' . $this->private_token . '.ics';
+			return $url . $this->private_token . '/csrdelft.ics';
 		}
 	}
 
 	public function getRssLink() {
-		$url = CSR_ROOT . '/forum/rss';
+		$url = CSR_ROOT . '/forum/rss/';
 		if (empty($this->private_token)) {
-			return $url . '.xml';
+			return $url . 'csrdelft.xml';
 		} else {
-			return $url . '/' . $this->private_token . '.xml';
+			return $url . $this->private_token . '/csrdelft.xml';
 		}
 	}
 
