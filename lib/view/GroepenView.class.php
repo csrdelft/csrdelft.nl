@@ -189,10 +189,12 @@ class GroepConverteerForm extends DataTableForm {
 				'GroepenModel'			 => 'Overige groep'
 			)
 		);
-		foreach ($options as $model => $orm) {
-			$model::instance(); // require once
-			if (!$orm::magAlgemeen(A::Aanmaken)) {
-				unset($options[$model]);
+		foreach ($options as $group) {
+			foreach ($group as $model => $orm) {
+				$model::instance(); // require once
+				if (!$orm::magAlgemeen(A::Aanmaken)) {
+					unset($options[$model]);
+				}
 			}
 		}
 		$fields[] = new SelectField('class', $huidig, 'Converteren naar', $options, true);
