@@ -8,56 +8,56 @@
 
 		var element = this;
 
-		var steps = $(element).find("fieldset");
-		var count = steps.size();
+		var wizardSteps = $(element).find("fieldset");
+		var count = wizardSteps.size();
 		var submmitButtonName = "#" + options.submitButton;
 		$(submmitButtonName).hide();
 
 		// 2
-		$(element).before("<ul id='steps'></ul>");
+		$(element).before("<ul id='wizardSteps'></ul>");
 
-		steps.each(function (i) {
-			$(this).wrap("<div id='step" + i + "'></div>");
-			$(this).append("<p id='step" + i + "commands'></p>");
+		wizardSteps.each(function (i) {
+			$(this).wrap("<div id='wizardStep" + i + "'></div>");
+			$(this).append("<p id='wizardStep" + i + "commands'></p>");
 
 			// 2
 			var name = $(this).find("legend").html();
-			$("#steps").append("<li id='stepDesc" + i + "'>Stap " + (i + 1) + "<span>" + name + "</span></li>");
+			$("#wizardSteps").append("<li id='wizardStepDesc" + i + "'>Stap " + (i + 1) + "<span>" + name + "</span></li>");
 
 			if (i == 0) {
 				createNextButton(i);
 				selectStep(i);
 			}
 			else if (i == count - 1) {
-				$("#step" + i).hide();
+				$("#wizardStep" + i).hide();
 				createPrevButton(i);
 			}
 			else {
-				$("#step" + i).hide();
+				$("#wizardStep" + i).hide();
 				createPrevButton(i);
 				createNextButton(i);
 			}
 		});
 
 		function createPrevButton(i) {
-			var stepName = "step" + i;
-			$("#" + stepName + "commands").append("<a href='#' id='" + stepName + "Prev' class='prev'>< Terug</a>");
+			var wizardStepName = "wizardStep" + i;
+			$("#" + wizardStepName + "commands").append("<a href='#' id='" + wizardStepName + "Prev' class='prev'>< Terug</a>");
 
-			$("#" + stepName + "Prev").bind("click", function (e) {
-				$("#" + stepName).hide();
-				$("#step" + (i - 1)).show();
+			$("#" + wizardStepName + "Prev").bind("click", function (e) {
+				$("#" + wizardStepName).hide();
+				$("#wizardStep" + (i - 1)).show();
 				$(submmitButtonName).hide();
 				selectStep(i - 1);
 			});
 		}
 
 		function createNextButton(i) {
-			var stepName = "step" + i;
-			$("#" + stepName + "commands").append("<a href='#' id='" + stepName + "Next' class='next'>Volgende ></a>");
+			var wizardStepName = "wizardStep" + i;
+			$("#" + wizardStepName + "commands").append("<a href='#' id='" + wizardStepName + "Next' class='next'>Volgende ></a>");
 
-			$("#" + stepName + "Next").bind("click", function (e) {
-				$("#" + stepName).hide();
-				$("#step" + (i + 1)).show();
+			$("#" + wizardStepName + "Next").bind("click", function (e) {
+				$("#" + wizardStepName).hide();
+				$("#wizardStep" + (i + 1)).show();
 				if (i + 2 == count)
 					$(submmitButtonName).show();
 				selectStep(i + 1);
@@ -65,8 +65,8 @@
 		}
 
 		function selectStep(i) {
-			$("#steps li").removeClass("current");
-			$("#stepDesc" + i).addClass("current");
+			$("#wizardSteps li").removeClass("current");
+			$("#wizardStepDesc" + i).addClass("current");
 		}
 
 	}

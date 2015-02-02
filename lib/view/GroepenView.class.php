@@ -112,7 +112,25 @@ class GroepForm extends DataTableForm {
 			$fields['in_agenda']->required = false;
 			$fields['in_agenda']->readonly = !LoginModel::mag('P_AGENDA_MOD');
 		}
-
+/*
+		// Wizard
+		$this->wizard = true;
+		$text = array();
+		$textarea = array();
+		$dates = array();
+		$etc = array();
+		foreach ($fields as $attr => $field) {
+			if ($field instanceof DateTimeField) {
+				$dates[$attr] = $field;
+			} elseif ($field instanceof TextareaField) {
+				$textarea[$attr] = $field;
+			} elseif ($field instanceof TextField) {
+				$text[$attr] = $field;
+			} else {
+				$etc[$attr] = $field;
+			}
+		}
+*/
 		$fields[] = new FormDefaultKnoppen($nocancel ? false : null);
 		$this->addFields($fields);
 	}

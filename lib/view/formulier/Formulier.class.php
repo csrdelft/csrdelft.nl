@@ -39,6 +39,7 @@ class Formulier implements View, Validator {
 	public $css_classes = array();
 	protected $javascript = '';
 	public $titel;
+	public $wizard = false;
 
 	public function __construct($model, $action, $titel = false) {
 		$this->model = $model;
@@ -240,6 +241,12 @@ class Formulier implements View, Validator {
 	protected function getJavascript() {
 		foreach ($this->fields as $field) {
 			$this->javascript .= $field->getJavascript();
+		}
+		if ($this->wizard) {
+			$this->javascript .= <<<JS
+
+$(form).formToWizard({submitButton: ""});
+JS;
 		}
 		return $this->javascript;
 	}
