@@ -1080,7 +1080,7 @@ class RequiredDuckField extends DuckField {
  */
 class TextareaField extends TextField {
 
-	public function __construct($name, $value, $description, $rows = 3, $max_len = null, $min_len = null) {
+	public function __construct($name, $value, $description, $rows = 2, $max_len = null, $min_len = null) {
 		parent::__construct($name, $value, $description, $max_len, $min_len);
 		if (is_int($rows)) {
 			$this->rows = $rows;
