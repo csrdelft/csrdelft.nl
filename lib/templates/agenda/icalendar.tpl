@@ -2,7 +2,7 @@ BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//C.S.R. Delft/Webstek C.S.R. Delft//NL
 X-WR-CALNAME:C.S.R. Agenda
-X-ORIGINAL-URL:{LoginModel::getAccount()->getICalLink()|escape_ical:15}
+X-ORIGINAL-URL:{$smarty.const.CSR_ROOT}/agenda/
 BEGIN:VTIMEZONE
 TZID:Europe/Amsterdam
 X-LIC-LOCATION:Europe/Amsterdam
