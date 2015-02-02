@@ -83,7 +83,7 @@ JS;
 			<div class="input-group-btn">
 				<?= parent::getHtml() ?>
 				<button id="cd-zoek-engines" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-					<img src="/plaetjes/knopjes/search-16.png">
+					<span class="fa fa-search"></span>
 					<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu dropdown-menu-right" role="menu">
