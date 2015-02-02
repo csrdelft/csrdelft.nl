@@ -162,6 +162,11 @@ class Groep extends PersistentEntity {
 	 * @return boolean
 	 */
 	public function mag($action, $feed = false) {
+		$beheer = !in_array($action, array(A::Aanmelden, A::Bewerken, A::Afmelden));
+		// Beheerders en de maker van de groep mogen alle beheer acties
+		if ($beheer AND ( $this->maker_uid === LoginModel::getUid() OR LoginModel::mag('P_LEDEN_MOD') )) {
+			return true;
+		}
 		// Rechten voor deze specifieke groep
 		$rechten = AccessModel::getSubject(get_class($this), $action, $this->id);
 		if ($rechten) {
@@ -172,11 +177,6 @@ class Groep extends PersistentEntity {
 		if (!LoginModel::mag('P_LEDEN_READ')) {
 			return false;
 		} elseif ($action === A::Bekijken) {
-			return true;
-		}
-		$beheer = !in_array($action, array(A::Aanmelden, A::Bewerken, A::Afmelden));
-		// Beheerders en de maker van de groep mogen alle beheer acties
-		if ($beheer AND ( $this->maker_uid === LoginModel::getUid() OR LoginModel::mag('P_LEDEN_MOD') )) {
 			return true;
 		}
 		// Rechten voor deze klasse / dit soort groep
