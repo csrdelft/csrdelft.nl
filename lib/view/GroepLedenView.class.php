@@ -48,7 +48,6 @@ class GroepLidBeheerForm extends DataTableForm {
 
 	public function __construct(GroepLid $lid, $action, array $blacklist = null) {
 		parent::__construct($lid, $action, 'Aanmelding bewerken');
-
 		$fields = $this->generateFields();
 
 		if ($blacklist !== null) {
@@ -61,7 +60,8 @@ class GroepLidBeheerForm extends DataTableForm {
 		$fields['door_uid']->readonly = true;
 		$fields['door_uid']->hidden = true;
 
-		$this->addFields(array(new FormDefaultKnoppen()));
+		$fields[] = new FormDefaultKnoppen();
+		$this->addFields($fields);
 	}
 
 }

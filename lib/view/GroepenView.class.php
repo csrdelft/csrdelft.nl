@@ -95,7 +95,6 @@ class GroepForm extends DataTableForm {
 
 	public function __construct(Groep $groep, $action, $nocancel = false) {
 		parent::__construct($groep, $action, get_class($groep) . ' ' . ($groep->id ? 'wijzigen' : 'aanmaken'));
-
 		$fields = $this->generateFields();
 
 		$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
@@ -114,7 +113,8 @@ class GroepForm extends DataTableForm {
 			$fields['in_agenda']->readonly = !LoginModel::mag('P_AGENDA_MOD');
 		}
 
-		$this->addFields(array(new FormDefaultKnoppen($nocancel ? false : null)));
+		$fields[] = new FormDefaultKnoppen($nocancel ? false : null);
+		$this->addFields($fields);
 	}
 
 	public function validate() {

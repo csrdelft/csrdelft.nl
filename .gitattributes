@@ -355,6 +355,7 @@ htdocs/layout/js/jquery/plugins/jquery.autosize.js -text
 htdocs/layout/js/jquery/plugins/jquery.autosize.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.facedetection.js -text
 htdocs/layout/js/jquery/plugins/jquery.facedetection.min.js -text
+htdocs/layout/js/jquery/plugins/jquery.formToWizard.js -text
 htdocs/layout/js/jquery/plugins/jquery.hoverIntent.js -text
 htdocs/layout/js/jquery/plugins/jquery.hoverIntent.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.maskedinput.js -text
