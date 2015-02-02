@@ -178,7 +178,7 @@ class GroepConverteerForm extends DataTableForm {
 		$options = array(
 			'Ketzers'	 => array(
 				'ActiviteitenModel'	 => ActiviteitenModel::orm,
-				'KetzersModel'		 => KetzersModel::orm,
+				'KetzersModel'		 => 'Ketzer (diversen)',
 				'WerkgroepenModel'	 => WerkgroepenModel::orm,
 			),
 			'Groepen'	 => array(
