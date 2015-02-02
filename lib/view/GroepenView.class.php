@@ -23,7 +23,7 @@ class GroepenBeheerTable extends DataTable {
 		$this->dataUrl = $this->url . 'beheren';
 
 		$this->naam = $model->getNaam();
-		$this->titel = 'Beheer ' . lcfirst($this->naam);
+		$this->titel = 'Beheer ' . $this->naam;
 
 		$this->hideColumn('id', false);
 		$this->hideColumn('samenvatting');

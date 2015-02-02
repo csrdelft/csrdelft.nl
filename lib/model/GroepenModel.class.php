@@ -28,11 +28,11 @@ class GroepenModel extends CachedPersistenceModel {
 	}
 
 	public static function getNaam() {
-		return str_replace('Model', '', get_called_class());
+		return strtolower(str_replace('Model', '', get_called_class()));
 	}
 
 	public static function getUrl() {
-		return '/groepen/' . strtolower(static::getNaam()) . '/';
+		return '/groepen/' . static::getNaam() . '/';
 	}
 
 	private static $old;

@@ -28,7 +28,7 @@ abstract class ActiviteitSoort implements PersistentEnum {
 		switch ($option) {
 			case self::Vereniging: return 'Verenigings-activiteit';
 			case self::Verticale: return 'Verticale-activiteit';
-			case self::Lichting: return 'Lichting-activiteit';
+			case self::Lichting: return 'Lichtings-activiteit';
 			case self::SjaarsActie: return 'Sjaarsactie';
 			case self::Dies: return 'Dies-activiteit';
 			case self::Lustrum: return 'Lustrum-activiteit';
