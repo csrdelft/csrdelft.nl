@@ -36,7 +36,9 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// AgendaItems
-		$items = $this->find('eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
+		$begin_moment = date('Y-m-d', $van);
+		$eind_moment = date('Y-m-d', $tot);
+		$items = $this->find('(begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
 		foreach ($items as $item) {
 			if ($item->magBekijken($ical)) {
 				$result[] = $item;
@@ -49,7 +51,7 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Activiteiten
-		$activiteiten = ActiviteitenModel::instance()->find('in_agenda = TRUE AND eind_moment >= ? AND begin_moment <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
+		$activiteiten = ActiviteitenModel::instance()->find('in_agenda = TRUE AND (begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
 		foreach ($activiteiten as $activiteit) {
 			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(A::Bekijken, $ical)) {
 				$result[] = $activiteit;
@@ -151,7 +153,7 @@ class AgendaModel extends PersistenceModel {
 				if (isset($agenda[$week][$dag])) {
 					$agenda[$week][$dag]['items'][] = $item;
 				} else {
-					continue; // FIXME: dit zou niet voor moeten mogen komen
+					continue; // multi-dag event gaat over maandgrens heen
 				}
 			}
 		}
