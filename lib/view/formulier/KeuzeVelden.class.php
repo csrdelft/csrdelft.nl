@@ -618,9 +618,10 @@ class VinkField extends InputField {
 
 	/**
 	 * Speciaal geval:
-	 * Niets gepost = niet gepost.
+	 * Veld is gepost = dit veld zit in POST
+	 * 				OF: iets is gepost maar niet dit veld.
 	 * 
-	 * Werkomheen DataTable id & selection post.
+	 * Uitzondering voor DataTable id & selection.
 	 * 
 	 * @return boolean
 	 */
@@ -630,10 +631,10 @@ class VinkField extends InputField {
 		}
 		foreach ($_POST as $key => $value) {
 			if (!startsWith($key, 'DataTable')) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	/**
