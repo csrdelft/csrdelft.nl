@@ -27,8 +27,9 @@ class Instellingen extends CachedPersistenceModel {
 
 	protected static $defaults = array(
 		'agenda'		 => array(
-			'ical_from'	 => '-1 month',
-			'ical_to'	 => '+6 months'
+			'standaard_rechten'	 => 'P_LOGGED_IN',
+			'ical_from'			 => '-1 month',
+			'ical_to'			 => '+6 months'
 		),
 		'beveiliging'	 => array(
 			'remember_login_seconds'					 => '2592000',

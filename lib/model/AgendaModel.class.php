@@ -181,7 +181,7 @@ class AgendaModel extends PersistenceModel {
 		$item->begin_moment = getDateTime(strtotime($datum) + 72000);
 		$item->eind_moment = getDateTime(strtotime($datum) + 79200);
 		if (LoginModel::mag('P_AGENDA_MOD')) {
-			$item->rechten_bekijken = Instellingen::get('agenda', 'standaard_zichtbaar_rechten');
+			$item->rechten_bekijken = Instellingen::get('agenda', 'standaard_rechten');
 		} else {
 			$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
 		}
