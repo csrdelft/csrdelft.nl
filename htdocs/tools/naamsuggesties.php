@@ -40,7 +40,7 @@ foreach ($namen as $naam) {
 
 	$result[] = array(
 		'url'	 => '/profiel/' . $naam['uid'],
-		'value'	 => $fullname
+		'value'	 => $fullname . '<span class="lichtgrijs"> - ' . $naam['uid'] . '</span>'
 	);
 }
 /*
