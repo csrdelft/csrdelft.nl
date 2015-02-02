@@ -77,13 +77,6 @@ class auth_plugin_authcsr extends DokuWiki_Auth_Plugin {
 
 		// als er een gebruiker is gegeven willen we graag proberen in te loggen via inlogformulier
 		if (!empty($user)) {
-
-			// login with:
-			// - x999
-			// - or as lid when:
-			//      * cookie available
-			//      * private_token was added to url (checking the permissions by LoginModel::hasPermission, needs setting allowPrivateUrl to true)
-
 			if (LoginModel::instance()->login(strval($user), strval($pass))) {
 				//success
 			} else {

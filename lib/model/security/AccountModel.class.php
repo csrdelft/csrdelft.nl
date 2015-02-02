@@ -107,7 +107,7 @@ class AccountModel extends CachedPersistenceModel {
 	}
 
 	public function resetPrivateToken(Account $account) {
-		$account->private_token = crypto_rand_token(100);
+		$account->private_token = crypto_rand_token(150);
 		$account->private_token_since = getDateTime();
 		$this->update($account);
 	}

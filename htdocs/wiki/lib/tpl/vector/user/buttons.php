@@ -48,7 +48,7 @@ if (auth_quickaclcheck('hoofdpagina') >= AUTH_READ) {
 
 		// tip for first-time users
 		if ($privateToken == '') {
-			$privateToken = 'Maak_EERST_een_sleutel_aan_met_knop_[Nieuwe_aanvragen]_op:_' . CSR_ROOT . '/profiel/' . LoginModel::getUid() . '#forum_gegevens';
+			$privateToken = 'Maak_EERST_een_sleutel_aan_met_knop_[Nieuwe_aanvragen]_op:_' . CSR_ROOT . '/profiel/' . LoginModel::getUid() . '#forum';
 		}
 	} else {
 		$privateToken = 'C.S.R. backend niet beschikbaar';
@@ -58,7 +58,7 @@ if (auth_quickaclcheck('hoofdpagina') >= AUTH_READ) {
 	$rss["rss_prive"]["href"] = DOKU_BASE . "feed.php?private_token=" . $privateToken;
 	$rss["rss_prive"]["width"] = 80;
 	$rss["rss_prive"]["height"] = 15;
-	$rss["rss_prive"]["title"] = "De laatste wikiwijzigingen, dit is een link met priv�-sleutel om al jouw pagina's te zien. Sleutel kun je (opnieuw) aanmaken in profiel met de knop 'Nieuwe aanvragen'";
+	$rss["rss_prive"]["title"] = "De laatste wikiwijzigingen, dit is een link met privé-link om al jouw pagina's te zien. Deze link kun je (opnieuw) aanmaken op je profiel met de knop 'Nieuwe aanvragen'";
 	$rss["rss_prive"]["nofollow"] = true;
 }
 
