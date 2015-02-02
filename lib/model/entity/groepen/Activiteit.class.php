@@ -55,19 +55,6 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 		return '/groepen/activiteiten/' . $this->id . '/';
 	}
 
-	/**
-	 * Has permission for action?
-	 * 
-	 * @param AccessAction $action
-	 * @return boolean
-	 */
-	public function mag($action, $ical = false) {
-		if ($action === A::Bekijken AND in_array($this->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES))) {
-			return true;
-		}
-		return parent::mag($action, $ical);
-	}
-
 	// Agendeerbaar:
 
 	public function getBeginMoment() {
