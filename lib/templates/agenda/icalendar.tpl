@@ -30,7 +30,7 @@ UID:{$item->getUUID()|escape_ical:4}
 {else}DTEND;TZID=Europe/Amsterdam:{$item->getEindMoment()|date_format:'%Y%m%dT%H%M%S'|escape_ical:28}
 {/if}
 SUMMARY:{$item->getTitel()|escape_ical:8}
-{if $item->getLink()}URL:{$item->getLink()|external_url|escape_ical:4}
+{if $item instanceof Activiteit}URL:{$item->getLink()|external_url|escape_ical:4}
 {/if}
 {if $item->getLocatie()}LOCATION:{$item->getLocatie()|escape_ical:9}
 {/if}
