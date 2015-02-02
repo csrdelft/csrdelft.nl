@@ -99,6 +99,7 @@ class GroepForm extends DataTableForm {
 		$fields = $this->generateFields();
 
 		$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
+		$fields['omschrijving']->description = 'Meer lezen';
 
 		$fields['eind_moment']->from_datetime = $fields['begin_moment'];
 		$fields['begin_moment']->to_datetime = $fields['eind_moment'];
