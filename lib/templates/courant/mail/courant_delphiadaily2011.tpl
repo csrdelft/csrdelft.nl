@@ -103,7 +103,7 @@ div.citaatContainer{
 		<ul>
 		{foreach from=$courant->getBerichten() item=bericht}
 			{if $bericht.categorie==$categorie}
-				<li><a href="#{$bericht.ID}" style="text-decoration: none;">{$bericht.titel|bbcode}</a></li>
+				<li><a href="#{$bericht.ID}" style="text-decoration: none;">{$bericht.titel|bbcode:true}</a></li>
 			{/if}
 		{/foreach}
 		</ul>
@@ -115,8 +115,8 @@ div.citaatContainer{
 </table>
 <font face="garamond" size="2">	
 {foreach from=$courant->getBerichten() item=bericht}
-	<h4><a name="{$bericht.ID}"></a>{$bericht.titel|bbcode}</h4>
-	<p>{$bericht.bericht|bbcode}</p>
+	<h4><a name="{$bericht.ID}"></a>{$bericht.titel|bbcode:true}</h4>
+	<p>{$bericht.bericht|bbcode:true}</p>
 {/foreach}
 </font>
 </td>

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * Smarty plugin
  * @package Smarty
  * @subpackage plugins
  */
-
 
 /**
  * Smarty cat modifier plugin
@@ -18,10 +18,14 @@
  * @link http://csrdelft.nl/feuten
  *          (svn repository)
  * @author   Jan Pieter Waagmeester < jpwaag at jpwaag dot com>
+ * @author   P.W.G. Brussee < brussee at live dot nl>
  * @version 1.0
  * @param string
  * @return string
  */
-function smarty_modifier_bbcode($string){
-	return CsrBB::parse($string);
+function smarty_modifier_bbcode($bbcode, $mail = false) {
+	if ($mail) {
+		return CsrBB::parseMail($bbcode);
+	}
+	return CsrBB::parse($bbcode);
 }

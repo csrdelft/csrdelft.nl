@@ -38,7 +38,7 @@
 			{/if}
 			</dt>
 			<dd id="courantbericht{$bericht.ID}"></dd>
-			{if !$courant->magBeheren($bericht.uid)}<dd>{$bericht.bericht|bbcode}</dd>{/if}
+			{if !$courant->magBeheren($bericht.uid)}<dd>{$bericht.bericht|bbcode:true}</dd>{/if}
 		{/foreach}
 	</dl>
 {/if}
