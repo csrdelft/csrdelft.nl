@@ -282,7 +282,11 @@ class GroepLijstView extends GroepTabView {
 			$html .= '</td></tr>';
 		}
 		$leden = $this->groep->getLeden();
+		if (empty($leden)) {
+			return $html . '</tbody></table>';
+		}
 		$profielen = ProfielModel::instance()->prefetch('uid IN (' . implode(', ', array_fill(0, count($leden), '?')) . ')', array_keys($leden), null, 'achternaam ASC');
+
 		foreach ($profielen as $profiel) {
 			$html .= '<tr><td>';
 			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Afmelden)) {
