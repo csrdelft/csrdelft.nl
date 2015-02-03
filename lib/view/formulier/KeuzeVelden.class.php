@@ -775,32 +775,43 @@ class DateTimeField extends TextField {
 	}
 
 	public function getJavascript() {
+		if ($this->from_datetime) {
+			$min = $this->from_datetime->getValue();
+		} else {
+			$min = null;
+		}
+		if ($this->to_datetime) {
+			$max = $this->to_datetime->getValue();
+		} else {
+			$max = null;
+		}
 		$settings = json_encode(array(
 			'changeYear'		 => true,
 			'changeMonth'		 => true,
 			'showWeek'			 => true,
 			'showButtonPanel'	 => true,
 			'dateFormat'		 => 'yy-mm-dd',
-			'timeFormat'		 => 'HH:mm:ss'
+			'timeFormat'		 => 'HH:mm:ss',
+			'minDate'			 => $min,
+			'maxDate'			 => $max
 		));
 		$js = parent::getJavascript() . <<<JS
 
-var settings{$this->getId()} = {$settings}
+var settings{$this->getId()} = {$settings};
 settings{$this->getId()}['onClose'] = function (selectedDate) {
 	
 JS;
 		if ($this->from_datetime) {
 			$settings = ($settings);
-			$js .= '$("#' . $this->from_datetime->getId() . '").datetimepicker("option", "maxDate", selectedDate);console.log(selectedDate);';
+			$js .= '$("#' . $this->from_datetime->getId() . '").datetimepicker("option", "maxDate", selectedDate);';
 		}
 		if ($this->to_datetime) {
-			$js .= '$("#' . $this->to_datetime->getId() . '").datetimepicker("option", "minDate", selectedDate);console.log(selectedDate);';
+			$js .= '$("#' . $this->to_datetime->getId() . '").datetimepicker("option", "minDate", selectedDate);';
 		}
 		return $js . <<<JS
 
 };
 $("#{$this->getId()}").datetimepicker(settings{$this->getId()});
-//$("#{$this->getId()}").datetimepicker("option", $.timepicker.regional.nl);
 JS;
 	}
 

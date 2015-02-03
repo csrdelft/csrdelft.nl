@@ -11,7 +11,7 @@
 abstract class ActiviteitSoort implements PersistentEnum {
 
 	const Vereniging = 'vereniging';
-	const Ondervereniging = 'onderv.';
+	const Ondervereniging = 'ondervereniging';
 	const SjaarsActie = 'sjaarsactie';
 	const Lichting = 'lichting';
 	const Verticale = 'verticale';

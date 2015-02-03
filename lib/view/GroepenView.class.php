@@ -45,7 +45,7 @@ class GroepenBeheerTable extends DataTable {
 		$update = new DataTableKnop('== 1', $this->tableId, $this->url . 'wijzigen', 'post popup', 'Wijzigen', 'Wijzig groep eigenschappen', 'edit');
 		$this->addKnop($update);
 
-		if (property_exists($model::orm, 'aanmelden_tot')) {
+		if (property_exists($model::orm, 'aanmelden_vanaf')) {
 			$sluiten = new DataTableKnop('>= 1', $this->tableId, $this->url . 'sluiten', 'post confirm', 'Sluiten', 'Inschrijvingen nu sluiten', 'lock');
 			$this->addKnop($sluiten);
 		}
@@ -100,20 +100,63 @@ class GroepForm extends DataTableForm {
 		$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
 		$fields['omschrijving']->description = 'Meer lezen';
 
-		$fields['eind_moment']->from_datetime = $fields['begin_moment'];
 		$fields['begin_moment']->to_datetime = $fields['eind_moment'];
+		$fields['eind_moment']->from_datetime = $fields['begin_moment'];
 
-		if (!LoginModel::mag('P_ADMIN')) {
-			unset($fields['maker_uid']);
-		}
+		$fields['aanmelden_vanaf']->to_datetime = $fields['afmelden_tot'];
+		$fields['bewerken_tot']->to_datetime = $fields['afmelden_tot'];
+		$fields['bewerken_tot']->from_datetime = $fields['aanmelden_vanaf'];
+		$fields['afmelden_tot']->from_datetime = $fields['aanmelden_vanaf'];
+
+		$fields['maker_uid']->readonly = LoginModel::mag('P_ADMIN');
 
 		if (property_exists($groep, 'in_agenda')) {
 			$fields['in_agenda']->required = false;
 			$fields['in_agenda']->readonly = !LoginModel::mag('P_AGENDA_MOD');
 		}
 
-		// TODO: Wizard
-		$this->wizard = true;
+		if (property_exists($groep, 'rechten_aanmelden')) {
+			$profiel = LoginModel::getProfiel();
+			$lidjaar = $profiel->lidjaar;
+			$verticale = $profiel->verticale;
+			if ($profiel->geslacht === Geslacht::Vrouw) {
+				$onder = 'geslacht:v';
+			} else {
+				$onder = 'ondervereniging:naam';
+			}
+			$fields['soort']->onchange = <<<JS
+
+$('#{$fields['rechten_aanmelden']->getId()}').val(function() {
+	switch($('#{$fields['soort']->getId()}').val()) {
+
+		case 'ondervereniging':
+			return '{$onder}';
+
+		case 'lichting':
+			return 'lichting:{$lidjaar}';
+
+		case 'verticale':
+			return 'verticale:{$verticale}';
+
+		case 'kring':
+			return 'TODO';
+
+		case 'owee':
+		case 'ifes':
+		case 'extern':
+			return 'P_PUBLIC';
+
+		case 'vereniging':
+		case 'sjaarsactie':
+		case 'dies':
+		case 'lustrum':
+		case 'huis':
+		default:
+			return '';
+	}
+});
+JS;
+		}
 
 		$fields[] = $etc[] = new FormDefaultKnoppen($nocancel ? false : null);
 		$this->addFields($fields);
@@ -141,6 +184,12 @@ class GroepForm extends DataTableForm {
 		$fields = $this->getFields();
 		if ($fields['eind_moment']->getValue() !== null AND strtotime($fields['eind_moment']->getValue()) < strtotime($fields['begin_moment']->getValue())) {
 			$fields['eind_moment']->error = 'Eindmoment moet na beginmoment liggen';
+		}
+		if ($fields['afmelden_tot']->getValue() !== null AND strtotime($fields['afmelden_tot']->getValue()) < strtotime($fields['aanmelden_vanaf']->getValue())) {
+			$fields['afmelden_tot']->error = 'Afmeldperiode moet eindigen na begin aanmeldperiode';
+		}
+		if ($fields['bewerken_tot']->getValue() !== null AND strtotime($fields['bewerken_tot']->getValue()) < strtotime($fields['aanmelden_vanaf']->getValue())) {
+			$fields['bewerken_tot']->error = 'Bewerkenperiode moet eindigen na begin aanmeldperiode';
 		}
 
 		return parent::validate();

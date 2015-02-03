@@ -19,6 +19,11 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 */
 	public $soort;
 	/**
+	 * Rechten benodigd voor aanmelden
+	 * @var string
+	 */
+	public $rechten_aanmelden;
+	/**
 	 * Locatie
 	 * @var string
 	 */
@@ -33,9 +38,10 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'soort'		 => array(T::Enumeration, false, 'ActiviteitSoort'),
-		'locatie'	 => array(T::String, true),
-		'in_agenda'	 => array(T::Boolean)
+		'soort'				 => array(T::Enumeration, false, 'ActiviteitSoort'),
+		'rechten_aanmelden'	 => array(T::String, true),
+		'locatie'			 => array(T::String, true),
+		'in_agenda'			 => array(T::Boolean)
 	);
 	/**
 	 * Database table name
@@ -62,31 +68,17 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 * @return boolean
 	 */
 	public function mag($action) {
-		switch ($this->soort) {
+		switch ($action) {
 
-			case ActiviteitSoort::Vereniging:
-			case ActiviteitSoort::SjaarsActie:
-			case ActiviteitSoort::Dies:
-			case ActiviteitSoort::Lustrum:
-				$doelgroep = 'P_LEDEN_READ';
-				break;
+			case A::Bekijken:
+				if (LoginModel::mag('P_LEDEN_MOD')) {
+					return true;
+				}
 
-			case ActiviteitSoort::Verticale:
-				$doelgroep = 'verticale:' . ProfielModel::get($this->maker_uid)->verticale;
-				break;
-
-			case ActiviteitSoort::Lichting:
-				$doelgroep = 'lidjaar:' . ProfielModel::get($this->maker_uid)->lidjaar;
-				break;
-
-			case ActiviteitSoort::OWee:
-			case ActiviteitSoort::IFES:
-			case ActiviteitSoort::Extern:
-				$doelgroep = 'P_PUBLIC';
-				break;
-		}
-		if ($action === A::Aanmelden AND ! LoginModel::mag($doelgroep)) {
-			return false;
+			case A::Aanmelden:
+				if (!empty($this->rechten_aanmelden) AND ! LoginModel::mag($this->rechten_aanmelden)) {
+					return false;
+				}
 		}
 		return parent::mag($action);
 	}
@@ -99,21 +91,11 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $soort = null) {
-		switch ($action) {
-
-			// Uitzondering zodat beheerders niet overal een aanmeldknop krijgen
-			case A::Aanmelden:
-			case A::Bewerken:
-			case A::Afmelden:
-				break;
-
-			default:
-				// Beheer over commissie-ketzers bij betreffende commissie
-				switch ($soort) {
-					case ActiviteitSoort::OWee: return LoginModel::mag('P_LEDEN_MOD,commissie:OWeeCie');
-					case ActiviteitSoort::Dies: return LoginModel::mag('P_LEDEN_MOD,commissie:DiesCie');
-					case ActiviteitSoort::Lustrum: return LoginModel::mag('P_LEDEN_MOD,commissie:LustrumCie');
-				}
+		// Beheer over commissie-ketzers bij betreffende commissie
+		switch ($soort) {
+			case ActiviteitSoort::OWee: return LoginModel::mag('P_LEDEN_MOD,commissie:OWeeCie');
+			case ActiviteitSoort::Dies: return LoginModel::mag('P_LEDEN_MOD,commissie:DiesCie');
+			case ActiviteitSoort::Lustrum: return LoginModel::mag('P_LEDEN_MOD,commissie:LustrumCie');
 		}
 		return parent::magAlgemeen($action);
 	}
