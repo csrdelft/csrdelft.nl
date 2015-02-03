@@ -11,7 +11,7 @@ require_once 'model/documenten/Document.class.php';
 abstract class DocumentenView extends SmartyTemplateView {
 
 	public function getBreadcrumbs() {
-		return '<a href="/documenten" title="Documenten"><span class="fa fa-file module-icon"></span></a>';
+		return '<a href="/documenten" title="Documenten"><span class="fa fa-file-text module-icon"></span></a>';
 	}
 
 }
