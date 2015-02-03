@@ -188,18 +188,12 @@ class GroepenController extends Controller {
 	public function aanmaken($soort = null) {
 		$groep = $this->model->nieuw($soort);
 		$form = new GroepForm($groep, $this->model->getUrl() . $this->action);
-		// get posted value
-		if (property_exists($groep, 'soort')) {
-			$soort = $groep->soort;
-		}
-		if (!$groep::magAlgemeen(A::Aanmaken, $soort)) {
-			setMelding('U mag dit soort ' . $this->model->getNaam() . ' niet aanmaken', -1);
-		} elseif ($form->validate()) {
+		if ($form->validate()) {
 			$this->model->create($groep);
 			$this->view = new GroepenBeheerData(array($groep));
-			return;
+		} else {
+			$this->view = $form;
 		}
-		$this->view = $form;
 	}
 
 	public function wijzigen(Groep $groep = null) {
@@ -279,29 +273,33 @@ class GroepenController extends Controller {
 		$groep = $this->model->getUUID($selection[0]);
 		$form = new GroepConverteerForm($groep, $this->model);
 		if ($form->validate()) {
-			$model = $form->findByName('class')->getValue();
-			if ($model === get_class($this->model)) {
-				setMelding('Geen wijziging', 0);
-				$this->view = $form;
-				return;
-			}
-			// get posted value
-			$orm = $model::orm;
-			if (!$orm::magAlgemeen(A::Aanmaken)) {
-				$this->geentoegang();
-			}
+			$values = $form->getValues();
+			$model = $values['class']::instance();
+			$converteer = get_class($model) !== get_class($this->model);
 			$response = array();
 			foreach ($selection as $UUID) {
 				$groep = $this->model->getUUID($UUID);
 				if (!$groep OR ! $groep->mag(A::Wijzigen)) {
 					continue;
 				}
-				$nieuw = $model::instance()->converteer($groep, $this->model);
-				if ($nieuw) {
-					$response[] = $groep;
+				if ($converteer) {
+					$nieuw = $model->converteer($groep, $this->model);
+					if ($nieuw) {
+						$response[] = $groep;
+					}
+				} else {
+					$groep->soort = $values['soort'];
+					$rowCount = $this->model->update($groep);
+					if ($rowCount > 0) {
+						$response[] = $groep;
+					}
 				}
 			}
-			$this->view = new RemoveRowsResponse($response);
+			if ($converteer) {
+				$this->view = new RemoveRowsResponse($response);
+			} else {
+				$this->view = new GroepenBeheerData($response);
+			}
 		} else {
 			$this->view = $form;
 		}

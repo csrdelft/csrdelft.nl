@@ -112,26 +112,7 @@ class GroepForm extends DataTableForm {
 			$fields['in_agenda']->readonly = !LoginModel::mag('P_AGENDA_MOD');
 		}
 
-		if ($groep instanceof Activiteit) {
-			$options = array(
-				'Intern' => array(
-					ActiviteitSoort::Vereniging	 => ActiviteitSoort::getDescription(ActiviteitSoort::Vereniging),
-					ActiviteitSoort::Verticale	 => ActiviteitSoort::getDescription(ActiviteitSoort::Verticale),
-					ActiviteitSoort::Lichting	 => ActiviteitSoort::getDescription(ActiviteitSoort::Lichting),
-					ActiviteitSoort::SjaarsActie => ActiviteitSoort::getDescription(ActiviteitSoort::SjaarsActie),
-					ActiviteitSoort::Dies		 => ActiviteitSoort::getDescription(ActiviteitSoort::Dies),
-					ActiviteitSoort::Lustrum	 => ActiviteitSoort::getDescription(ActiviteitSoort::Lustrum)
-				),
-				'Extern' => array(
-					ActiviteitSoort::OWee	 => ActiviteitSoort::getDescription(ActiviteitSoort::OWee),
-					ActiviteitSoort::IFES	 => ActiviteitSoort::getDescription(ActiviteitSoort::IFES),
-					ActiviteitSoort::Extern	 => ActiviteitSoort::getDescription(ActiviteitSoort::Extern)
-				)
-			);
-			$fields['soort'] = new SelectField('soort', $groep->soort, 'Soort', $options, true);
-		}
-
-		// Wizard
+		// TODO: Wizard
 		$this->wizard = true;
 
 		$fields[] = $etc[] = new FormDefaultKnoppen($nocancel ? false : null);
@@ -139,10 +120,29 @@ class GroepForm extends DataTableForm {
 	}
 
 	public function validate() {
+		$groep = $this->getModel();
+		if (property_exists($groep, 'soort')) {
+			$soort = $groep->soort;
+		} else {
+			$soort = null;
+		}
+		if (!$groep::magAlgemeen(A::Aanmaken, $soort)) {
+			if ($groep instanceof Activiteit) {
+				$soort = ActiviteitSoort::getDescription($soort);
+			} elseif ($groep instanceof Commissie) {
+				$soort = CommissieSoort::getDescription($soort);
+			} else {
+				$soort = get_class($groep);
+			}
+			setMelding('U mag geen ' . $soort . ' aanmaken', -1);
+			return false;
+		}
+
 		$fields = $this->getFields();
 		if ($fields['eind_moment']->getValue() !== null AND strtotime($fields['eind_moment']->getValue()) < strtotime($fields['begin_moment']->getValue())) {
 			$fields['eind_moment']->error = 'Eindmoment moet na beginmoment liggen';
 		}
+
 		return parent::validate();
 	}
 
@@ -171,37 +171,69 @@ class GroepOpvolgingForm extends DataTableForm {
 
 class GroepConverteerForm extends DataTableForm {
 
+	private $soort;
+
 	public function __construct(Groep $groep, GroepenModel $model) {
 		parent::__construct($groep, $model->getUrl() . 'converteren', $model::orm . ' converteren');
 		$huidig = get_class($model);
 
-		$options = array(
-			'Ketzers'	 => array(
-				'ActiviteitenModel'	 => ActiviteitenModel::orm,
-				'KetzersModel'		 => 'Ketzer (diversen)',
-				'WerkgroepenModel'	 => WerkgroepenModel::orm,
-			),
-			'Groepen'	 => array(
-				'OnderverenigingenModel' => OnderverenigingenModel::orm,
-				'WoonoordenModel'		 => WoonoordenModel::orm,
-				'BesturenModel'			 => BesturenModel::orm,
-				'CommissiesModel'		 => CommissiesModel::orm,
-				'GroepenModel'			 => 'Overige groep'
-			)
-		);
-		foreach ($options as $group) {
-			foreach ($group as $model => $orm) {
-				$model::instance(); // require once
-				$orm = $model::orm;
-				if (!$orm::magAlgemeen(A::Aanmaken)) {
-					unset($options[$model]);
-				}
-			}
+		$soorten = array();
+		foreach (ActiviteitSoort::getTypeOptions() as $soort) {
+			$soorten[$soort] = ActiviteitSoort::getDescription($soort);
 		}
-		$fields[] = new SelectField('class', $huidig, 'Converteren naar', $options, true);
-		$fields[] = new FormDefaultKnoppen();
+		$this->soort = new SelectField('soort', property_exists($groep, 'soort') ? $groep->soort : null, 'Activiteitsoort', $soorten);
 
+		$options = array(
+			'ActiviteitenModel'		 => $this->soort,
+			'KetzersModel'			 => 'Ketzer (diversen)',
+			'WerkgroepenModel'		 => WerkgroepenModel::orm,
+			'OnderverenigingenModel' => OnderverenigingenModel::orm,
+			'WoonoordenModel'		 => WoonoordenModel::orm,
+			'BesturenModel'			 => BesturenModel::orm,
+			'CommissiesModel'		 => CommissiesModel::orm,
+			'GroepenModel'			 => 'Overige groep'
+		);
+		$class = new KeuzeRondjeField('class', $huidig, 'Converteren naar', $options, true);
+		$class->newlines = true;
+
+		$this->soort->onclick = <<<JS
+
+$('#{$class->getId()}Option_ActiviteitenModel').click();
+JS;
+
+		$fields['class'] = $class;
+		$fields[] = new FormDefaultKnoppen();
 		$this->addFields($fields);
+	}
+
+	public function getValues() {
+		$values = parent::getValues();
+		$values['soort'] = $this->soort->getValue();
+		return $values;
+	}
+
+	public function validate() {
+		$values = $this->getValues();
+		$model = $values['class']::instance(); // require once
+		$orm = $model::orm;
+		if (property_exists($orm, 'soort')) {
+			$soort = $values['soort'];
+		} else {
+			$soort = null;
+		}
+		if (!$orm::magAlgemeen(A::Aanmaken, $soort)) {
+			if ($model instanceof ActiviteitenModel) {
+				$soort = ActiviteitSoort::getDescription($soort);
+			} elseif ($model instanceof CommissiesModel) {
+				$soort = CommissieSoort::getDescription($soort);
+			} else {
+				$soort = $model->getNaam();
+			}
+			setMelding('U mag geen ' . $soort . ' aanmaken', -1);
+			return false;
+		}
+
+		return parent::validate();
 	}
 
 }
