@@ -433,6 +433,9 @@ class GroepenController extends Controller {
 		// beheren
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			if (empty($selection)) {
+				$this->geentoegang();
+			}
 			$response = array();
 			foreach ($selection as $UUID) {
 				$lid = $model->getUUID($UUID);
