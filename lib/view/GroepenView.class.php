@@ -100,10 +100,12 @@ class GroepForm extends DataTableForm {
 		$fields['begin_moment']->to_datetime = $fields['eind_moment'];
 		$fields['eind_moment']->from_datetime = $fields['begin_moment'];
 
-		$fields['aanmelden_vanaf']->to_datetime = $fields['afmelden_tot'];
-		$fields['bewerken_tot']->to_datetime = $fields['afmelden_tot'];
-		$fields['bewerken_tot']->from_datetime = $fields['aanmelden_vanaf'];
-		$fields['afmelden_tot']->from_datetime = $fields['aanmelden_vanaf'];
+		if ($groep instanceof Ketzer) {
+			$fields['aanmelden_vanaf']->to_datetime = $fields['afmelden_tot'];
+			$fields['bewerken_tot']->to_datetime = $fields['afmelden_tot'];
+			$fields['bewerken_tot']->from_datetime = $fields['aanmelden_vanaf'];
+			$fields['afmelden_tot']->from_datetime = $fields['aanmelden_vanaf'];
+		}
 
 		$fields['maker_uid']->readonly = LoginModel::mag('P_ADMIN');
 
@@ -172,11 +174,13 @@ JS;
 		if ($fields['eind_moment']->getValue() !== null AND strtotime($fields['eind_moment']->getValue()) < strtotime($fields['begin_moment']->getValue())) {
 			$fields['eind_moment']->error = 'Eindmoment moet na beginmoment liggen';
 		}
-		if ($fields['afmelden_tot']->getValue() !== null AND strtotime($fields['afmelden_tot']->getValue()) < strtotime($fields['aanmelden_vanaf']->getValue())) {
-			$fields['afmelden_tot']->error = 'Afmeldperiode moet eindigen na begin aanmeldperiode';
-		}
-		if ($fields['bewerken_tot']->getValue() !== null AND strtotime($fields['bewerken_tot']->getValue()) < strtotime($fields['aanmelden_vanaf']->getValue())) {
-			$fields['bewerken_tot']->error = 'Bewerkenperiode moet eindigen na begin aanmeldperiode';
+		if ($groep instanceof Ketzer) {
+			if ($fields['afmelden_tot']->getValue() !== null AND strtotime($fields['afmelden_tot']->getValue()) < strtotime($fields['aanmelden_vanaf']->getValue())) {
+				$fields['afmelden_tot']->error = 'Afmeldperiode moet eindigen na begin aanmeldperiode';
+			}
+			if ($fields['bewerken_tot']->getValue() !== null AND strtotime($fields['bewerken_tot']->getValue()) < strtotime($fields['aanmelden_vanaf']->getValue())) {
+				$fields['bewerken_tot']->error = 'Bewerkenperiode moet eindigen na begin aanmeldperiode';
+			}
 		}
 
 		return parent::validate();
