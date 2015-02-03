@@ -50,4 +50,25 @@ class Woonoord extends Groep {
 		return '/groepen/woonoorden/' . $this->id . '/';
 	}
 
+	/**
+	 * Has permission for action?
+	 * 
+	 * @param AccessAction $action
+	 * @return boolean
+	 */
+	public function mag($action) {
+		if ($this->status === GroepStatus::HT) {
+			// Huidige bewoners mogen beheren
+			if ($this->getLid(LoginModel::getUid())) {
+				return true;
+			}
+		} elseif ($this->status === GroepStatus::OT) {
+			// Huidige bewoners mogen beheren
+			if (LoginModel::mag('woonoord:' . $this->familie)) {
+				return true;
+			}
+		}
+		return parent::mag($action);
+	}
+
 }
