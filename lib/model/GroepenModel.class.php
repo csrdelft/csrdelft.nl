@@ -360,7 +360,7 @@ class ActiviteitenModel extends KetzersModel {
 
 	public function nieuw($soort = null) {
 		if (!in_array($soort, ActiviteitSoort::getTypeOptions())) {
-			$soort = ActiviteitSoort::Verticale;
+			$soort = ActiviteitSoort::SjaarsActie;
 		}
 		$activiteit = parent::nieuw();
 		$activiteit->soort = $soort;
