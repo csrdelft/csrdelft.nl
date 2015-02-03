@@ -209,9 +209,6 @@ class AccessModel extends CachedPersistenceModel {
 
 	public function getPermissionSuggestions() {
 		$suggestions = array_keys($this->permissions);
-		$suggestions[] = 'ketzer:Nummer';
-		$suggestions[] = 'activiteit:Naam';
-		$suggestions[] = 'commissie:Naam:Functie';
 		$suggestions[] = 'bestuur';
 		$suggestions[] = 'geslacht:m';
 		$suggestions[] = 'geslacht:v';

@@ -644,6 +644,10 @@ class RechtenField extends TextField {
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
 		$this->suggestions[] = AccessModel::instance()->getPermissionSuggestions();
+		$this->suggestions['Commissie'] = '/groepen/commissies/zoeken/?q=';
+		$this->suggestions['Groep'] = '/groepen/overig/zoeken/?q=';
+		$this->suggestions['Ondervereniging'] = '/groepen/onderverenigingen/zoeken/?q=';
+		$this->suggestions['Woonoord/Huis'] = '/groepen/woonoorden/zoeken/?q=';
 		$this->title = 'Met , en + voor respectievelijk OR en AND. Gebruik | voor OR binnen AND (alsof er haakjes omheen staan)';
 	}
 

@@ -43,6 +43,7 @@ class GroepenController extends Controller {
 			case 'overzicht':
 			case 'beheren':
 			case 'aanmaken':
+			case 'zoeken':
 				// Soort in param 4?
 				if ($this->hasParam(4)) {
 					$args['soort'] = $this->getParam(4);
@@ -96,6 +97,7 @@ class GroepenController extends Controller {
 
 			case 'overzicht':
 			case 'bekijken':
+			case 'zoeken':
 				return !$this->isPosted();
 
 			case 'overzicht':
@@ -168,6 +170,24 @@ class GroepenController extends Controller {
 			$this->geentoegang();
 		}
 		$this->view = new GroepEmailsView($groep);
+	}
+
+	public function zoeken() {
+		if (!$this->hasParam('q')) {
+			$this->geentoegang();
+		}
+		$zoekterm = $this->getParam('q');
+		$limit = 5;
+		if ($this->hasParam('limit')) {
+			$limit = (int) $this->getParam('limit');
+		}
+		$result = array();
+		foreach ($this->model->find('familie = ?', array($zoekterm), null, null, $limit) as $groep) {
+			$result[$groep->familie] = array(
+				'value' => get_class($groep) . ':' . $groep->familie
+			);
+		}
+		$this->view = new JsonResponse($result);
 	}
 
 	public function beheren($soort = null) {

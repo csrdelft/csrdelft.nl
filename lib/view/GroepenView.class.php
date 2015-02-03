@@ -138,16 +138,6 @@ $('#{$fields['rechten_aanmelden']->getId()}').val(function() {
 		case 'kring':
 			return 'TODO';
 
-		case 'owee':
-		case 'ifes':
-		case 'extern':
-			return 'P_PUBLIC';
-
-		case 'vereniging':
-		case 'sjaarsactie':
-		case 'dies':
-		case 'lustrum':
-		case 'huis':
 		default:
 			return '';
 	}
