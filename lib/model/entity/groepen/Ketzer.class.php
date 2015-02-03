@@ -72,13 +72,11 @@ class Ketzer extends Groep {
 	 * @param AccessAction $action
 	 * @return boolean
 	 */
-	public function mag($action, $ical = false) {
-		// parent checks specifieke en algemene rechten
-		if (!parent::mag($action, $ical)) {
+	public function mag($action) {
+		if (!LoginModel::mag('P_LOGGED_IN')) {
 			return false;
 		}
 		$aangemeld = array_key_exists(LoginModel::getUid(), $this->getLeden());
-
 		switch ($action) {
 
 			case A::Aanmelden:
@@ -105,11 +103,21 @@ class Ketzer extends Groep {
 				}
 				// Controleer afmeldperiode
 				return time() < strtotime($this->afmelden_tot);
-
-			default:
-				// Parent is al gechecked
-				return true;
 		}
+		return parent::mag($action);
+	}
+
+	/**
+	 * Rechten voor de gehele klasse of soort groep?
+	 * 
+	 * @param AccessAction $action
+	 * @return boolean
+	 */
+	public static function magAlgemeen($action) {
+		if ($action === A::Aanmaken AND LoginModel::mag('P_LOGGED_IN')) {
+			return true;
+		}
+		return parent::magAlgemeen($action);
 	}
 
 	/**

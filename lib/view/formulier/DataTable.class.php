@@ -404,7 +404,12 @@ class DataTableResponse extends JsonResponse {
 			} else {
 				$comma = true;
 			}
-			echo $this->getJson($entity);
+			$json = $this->getJson($entity);
+			if ($json) {
+				echo $json;
+			} else {
+				$comma = false;
+			}
 		}
 		echo "\n]}";
 	}

@@ -75,10 +75,10 @@ class GroepenBeheerTable extends DataTable {
 class GroepenBeheerData extends DataTableResponse {
 
 	public function getJson($groep) {
+		// Controleer rechten
 		$array = $groep->jsonSerialize();
 
 		$array['detailSource'] = $groep->getUrl() . 'leden';
-		$array['id'] .= '<a href="/rechten/bekijken/' . get_class($groep) . '/' . $groep->id . '" class="float-right" title="Rechten beheren"><img width="16" height="16" class="icon" src="/plaetjes/famfamfam/key.png" alt="rechten"></a>';
 		$array['naam'] = '<span title="' . $groep->naam . (empty($groep->samenvatting) ? '' : '&#13;&#13;') . mb_substr($groep->samenvatting, 0, 100) . (strlen($groep->samenvatting) > 100 ? '...' : '' ) . '">' . $groep->naam . '</span>';
 		$array['status'] = GroepStatus::getChar($groep->status);
 		$array['samenvatting'] = null;
@@ -128,13 +128,13 @@ class GroepForm extends DataTableForm {
 		}
 		if (!$groep::magAlgemeen(A::Aanmaken, $soort)) {
 			if ($groep instanceof Activiteit) {
-				$soort = ActiviteitSoort::getDescription($soort);
+				$naam = ActiviteitSoort::getDescription($soort);
 			} elseif ($groep instanceof Commissie) {
-				$soort = CommissieSoort::getDescription($soort);
+				$naam = CommissieSoort::getDescription($soort);
 			} else {
-				$soort = get_class($groep);
+				$naam = get_class($groep);
 			}
-			setMelding('U mag geen ' . $soort . ' aanmaken', -1);
+			setMelding('U mag geen ' . $naam . ' aanmaken', -1);
 			return false;
 		}
 
@@ -171,65 +171,95 @@ class GroepOpvolgingForm extends DataTableForm {
 
 class GroepConverteerForm extends DataTableForm {
 
-	private $soort;
+	private $activiteit;
+	private $commissie;
 
 	public function __construct(Groep $groep, GroepenModel $model) {
 		parent::__construct($groep, $model->getUrl() . 'converteren', $model::orm . ' converteren');
 		$huidig = get_class($model);
 
+		require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
 		$soorten = array();
 		foreach (ActiviteitSoort::getTypeOptions() as $soort) {
 			$soorten[$soort] = ActiviteitSoort::getDescription($soort);
 		}
-		$this->soort = new SelectField('soort', property_exists($groep, 'soort') ? $groep->soort : null, 'Activiteitsoort', $soorten);
+		if (property_exists($groep, 'soort') AND in_array($groep->soort, $soorten)) {
+			$default = $groep->soort;
+		} else {
+			$default = ActiviteitSoort::Vereniging;
+		}
+		$this->activiteit = new SelectField('activiteit', $default, null, $soorten);
+
+		require_once 'model/entity/groepen/CommissieSoort.enum.php';
+		$soorten = array();
+		foreach (CommissieSoort::getTypeOptions() as $soort) {
+			$soorten[$soort] = CommissieSoort::getDescription($soort);
+		}
+		if (property_exists($groep, 'soort') AND in_array($groep->soort, $soorten)) {
+			$default = $groep->soort;
+		} else {
+			$default = CommissieSoort::Commissie;
+		}
+		$this->commissie = new SelectField('commissie', $default, null, $soorten);
 
 		$options = array(
-			'ActiviteitenModel'		 => $this->soort,
+			'ActiviteitenModel'		 => $this->activiteit,
 			'KetzersModel'			 => 'Ketzer (diversen)',
 			'WerkgroepenModel'		 => WerkgroepenModel::orm,
 			'OnderverenigingenModel' => OnderverenigingenModel::orm,
 			'WoonoordenModel'		 => WoonoordenModel::orm,
 			'BesturenModel'			 => BesturenModel::orm,
-			'CommissiesModel'		 => CommissiesModel::orm,
+			'CommissiesModel'		 => $this->commissie,
 			'GroepenModel'			 => 'Overige groep'
 		);
-		$class = new KeuzeRondjeField('class', $huidig, 'Converteren naar', $options, true);
-		$class->newlines = true;
+		$model = new KeuzeRondjeField('model', $huidig, 'Converteren naar', $options, true);
+		$model->newlines = true;
 
-		$this->soort->onclick = <<<JS
+		$this->activiteit->onclick = <<<JS
 
-$('#{$class->getId()}Option_ActiviteitenModel').click();
+$('#{$model->getId()}Option_ActiviteitenModel').click();
+JS;
+		$this->commissie->onclick = <<<JS
+
+$('#{$model->getId()}Option_CommissiesModel').click();
 JS;
 
-		$fields['class'] = $class;
+		$fields[] = $model;
 		$fields[] = new FormDefaultKnoppen();
 		$this->addFields($fields);
 	}
 
 	public function getValues() {
 		$values = parent::getValues();
-		$values['soort'] = $this->soort->getValue();
+		switch ($values['model']) {
+
+			case 'ActiviteitenModel':
+				$values['soort'] = $this->activiteit->getValue();
+				break;
+
+			case 'CommissiesModel':
+				$values['soort'] = $this->commissie->getValue();
+				break;
+
+			default:
+				$values['soort'] = null;
+		}
 		return $values;
 	}
 
 	public function validate() {
 		$values = $this->getValues();
-		$model = $values['class']::instance(); // require once
+		$model = $values['model']::instance(); // require once
 		$orm = $model::orm;
-		if (property_exists($orm, 'soort')) {
-			$soort = $values['soort'];
-		} else {
-			$soort = null;
-		}
-		if (!$orm::magAlgemeen(A::Aanmaken, $soort)) {
+		if (!$orm::magAlgemeen(A::Aanmaken, $values['soort'])) {
 			if ($model instanceof ActiviteitenModel) {
-				$soort = ActiviteitSoort::getDescription($soort);
+				$naam = ActiviteitSoort::getDescription($values['soort']);
 			} elseif ($model instanceof CommissiesModel) {
-				$soort = CommissieSoort::getDescription($soort);
+				$naam = CommissieSoort::getDescription($values['soort']);
 			} else {
-				$soort = $model->getNaam();
+				$naam = $model->getNaam();
 			}
-			setMelding('U mag geen ' . $soort . ' aanmaken', -1);
+			setMelding('U mag geen ' . $naam . ' aanmaken', -1);
 			return false;
 		}
 

@@ -152,56 +152,49 @@ class Groep extends PersistentEntity {
 	 * Has permission for action?
 	 * 
 	 * @param string $action
-	 * @param boolean $feed
 	 * @return boolean
 	 */
-	public function mag($action, $feed = false) {
-		$beheer = !in_array($action, array(A::Aanmelden, A::Bewerken, A::Afmelden));
-		// Beheerders en de maker van de groep mogen alle beheer acties
-		if ($beheer AND ( $this->maker_uid === LoginModel::getUid() OR LoginModel::mag('P_LEDEN_MOD') )) {
-			return true;
+	public function mag($action) {
+		switch ($action) {
+
+			// Uitzondering zodat beheerders niet overal een aanmeldknop krijgen
+			case A::Aanmelden:
+			case A::Bewerken:
+			case A::Afmelden:
+				break;
+
+			default:
+				// Maker van groep mag alles
+				if ($this->maker_uid === LoginModel::getUid()) {
+					return true;
+				}
 		}
-		// Rechten voor deze specifieke groep
-		$rechten = AccessModel::getSubject(get_class($this), $action, $this->id);
-		if ($rechten) {
-			// Override algemene rechten
-			return LoginModel::mag($rechten);
-		}
-		// Default rechten bekijken
-		if (!LoginModel::mag('P_LEDEN_READ')) {
-			return false;
-		} elseif ($action === A::Bekijken) {
-			return true;
-		}
-		// Rechten voor deze klasse / dit soort groep
-		return static::magAlgemeen($action, property_exists($this, 'soort') ? $this->soort : null);
+		return static::magAlgemeen($action);
 	}
 
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
 	 * 
 	 * @param string $action
-	 * @param string $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action, $soort = null) {
-		$beheer = !in_array($action, array(A::Aanmelden, A::Bewerken, A::Afmelden));
-		// Administrator mag alle beheer acties
-		if ($beheer AND LoginModel::mag('P_ADMIN')) {
-			return true;
-		}
-		if ($soort !== null) {
-			// Rechten voor dit soort groep
-			$rechten = AccessModel::getSubject(get_called_class(), $action, $soort);
-			if ($rechten) {
-				// Override algemene rechten
-				return LoginModel::mag($rechten);
-			}
-		}
-		// Rechten voor deze groep klasse?
-		$rechten = AccessModel::getSubject(get_called_class(), $action, '*');
-		if ($rechten) {
-			return LoginModel::mag($rechten);
+	public static function magAlgemeen($action) {
+		switch ($action) {
+
+			case A::Bekijken:
+				return LoginModel::mag('P_LEDEN_READ');
+
+			// Uitzondering zodat beheerders niet overal een aanmeldknop krijgen
+			case A::Aanmelden:
+			case A::Bewerken:
+			case A::Afmelden:
+				break;
+
+			default:
+				// Beheerder mag alles
+				if (LoginModel::getUid('P_LEDEN_MOD')) {
+					return true;
+				}
 		}
 		return false;
 	}

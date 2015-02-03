@@ -134,12 +134,14 @@ class GroepenModel extends CachedPersistenceModel {
 	 * Converteer groep inclusief leden van klasse.
 	 * 
 	 * @param Groep $oldgroep
+	 * @param GroepenModel $oldmodel
+	 * @param string $soort
 	 * @return boolean
 	 */
-	public function converteer(Groep $oldgroep, GroepenModel $oldmodel) {
+	public function converteer(Groep $oldgroep, GroepenModel $oldmodel, $soort = null) {
 		// groep converteren
 		try {
-			$newgroep = $this->nieuw();
+			$newgroep = $this->nieuw($soort);
 			foreach ($oldgroep->getValues() as $attr => $value) {
 				if (property_exists($newgroep, $attr)) {
 					$newgroep->$attr = $value;
@@ -299,9 +301,12 @@ class CommissiesModel extends GroepenModel {
 
 	protected static $instance;
 
-	public function nieuw() {
+	public function nieuw($soort = null) {
+		if (!in_array($soort, CommissieSoort::getTypeOptions())) {
+			$soort = CommissieSoort::Commissie;
+		}
 		$commissie = parent::nieuw();
-		$commissie->soort = CommissieSoort::Commissie;
+		$commissie->soort = $soort;
 		return $commissie;
 	}
 
@@ -353,9 +358,12 @@ class ActiviteitenModel extends KetzersModel {
 
 	protected static $instance;
 
-	public function nieuw() {
+	public function nieuw($soort = null) {
+		if (!in_array($soort, ActiviteitSoort::getTypeOptions())) {
+			$soort = ActiviteitSoort::Verticale;
+		}
 		$activiteit = parent::nieuw();
-		$activiteit->soort = ActiviteitSoort::Verticale;
+		$activiteit->soort = $soort;
 		$activiteit->locatie = null;
 		$activiteit->in_agenda = true;
 		return $activiteit;

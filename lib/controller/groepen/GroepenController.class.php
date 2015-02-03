@@ -125,13 +125,13 @@ class GroepenController extends Controller {
 		} else {
 			$groepen = $this->model->find('status = ?', array(GroepStatus::HT));
 		}
-		$body = new GroepenView($this->model, $groepen); // checked rechten bekijken per groep
+		$body = new GroepenView($this->model, $groepen); // controleert rechten bekijken per groep
 		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function bekijken(Groep $groep) {
 		$groepen = $this->model->find('familie = ?', array($groep->familie));
-		$body = new GroepenView($this->model, $groepen); // checked rechten bekijken per groep
+		$body = new GroepenView($this->model, $groepen); // controleert rechten bekijken per groep
 		$this->view = new CsrLayoutPage($body);
 	}
 
@@ -177,7 +177,7 @@ class GroepenController extends Controller {
 			} else {
 				$groepen = $this->model->find();
 			}
-			$this->view = new GroepenBeheerData($groepen);
+			$this->view = new GroepenBeheerData($groepen); // controleert GEEN rechten bekijken
 		} else {
 			$table = new GroepenBeheerTable($this->model);
 			$this->view = new CsrLayoutPage($table);
@@ -274,7 +274,7 @@ class GroepenController extends Controller {
 		$form = new GroepConverteerForm($groep, $this->model);
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$model = $values['class']::instance();
+			$model = $values['model']::instance();
 			$converteer = get_class($model) !== get_class($this->model);
 			$response = array();
 			foreach ($selection as $UUID) {
@@ -283,11 +283,11 @@ class GroepenController extends Controller {
 					continue;
 				}
 				if ($converteer) {
-					$nieuw = $model->converteer($groep, $this->model);
+					$nieuw = $model->converteer($groep, $this->model, $values['soort']);
 					if ($nieuw) {
 						$response[] = $groep;
 					}
-				} else {
+				} elseif (property_exists($groep, 'soort')) {
 					$groep->soort = $values['soort'];
 					$rowCount = $this->model->update($groep);
 					if ($rowCount > 0) {

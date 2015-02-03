@@ -1,8 +1,5 @@
 <?php
 
-require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
-require_once 'model/entity/groepen/CommissieSoort.enum.php';
-
 /**
  * RechtenView.class.php
  * 
@@ -55,10 +52,6 @@ class RechtenData extends DataTableResponse {
 
 		if ($ac->resource === '*') {
 			$array['resource'] = 'Elke ' . lcfirst($ac->environment);
-		} elseif ($ac->environment === ActiviteitenModel::orm AND in_array($ac->resource, ActiviteitSoort::getTypeOptions())) {
-			$array['resource'] = 'Elke ' . lcfirst(ActiviteitSoort::getDescription($ac->resource));
-		} elseif ($ac->environment === CommissiesModel::orm AND in_array($ac->resource, CommissieSoort::getTypeOptions())) {
-			$array['resource'] = 'Elke ' . lcfirst(CommissieSoort::getDescription($ac->resource));
 		} else {
 			$array['resource'] = 'Deze ' . lcfirst($ac->environment);
 		}

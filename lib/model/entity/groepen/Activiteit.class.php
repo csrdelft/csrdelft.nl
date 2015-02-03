@@ -55,6 +55,69 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 		return '/groepen/activiteiten/' . $this->id . '/';
 	}
 
+	/**
+	 * Has permission for action?
+	 * 
+	 * @param AccessAction $action
+	 * @return boolean
+	 */
+	public function mag($action) {
+		switch ($this->soort) {
+
+			case ActiviteitSoort::Vereniging:
+			case ActiviteitSoort::SjaarsActie:
+			case ActiviteitSoort::Dies:
+			case ActiviteitSoort::Lustrum:
+				$doelgroep = 'P_LEDEN_READ';
+				break;
+
+			case ActiviteitSoort::Verticale:
+				$doelgroep = 'verticale:' . ProfielModel::get($this->maker_uid)->verticale;
+				break;
+
+			case ActiviteitSoort::Lichting:
+				$doelgroep = 'lidjaar:' . ProfielModel::get($this->maker_uid)->lidjaar;
+				break;
+
+			case ActiviteitSoort::OWee:
+			case ActiviteitSoort::IFES:
+			case ActiviteitSoort::Extern:
+				$doelgroep = 'P_PUBLIC';
+				break;
+		}
+		if ($action === A::Aanmelden AND ! LoginModel::mag($doelgroep)) {
+			return false;
+		}
+		return parent::mag($action);
+	}
+
+	/**
+	 * Rechten voor de gehele klasse of soort groep?
+	 * 
+	 * @param AccessAction $action
+	 * @param string $soort
+	 * @return boolean
+	 */
+	public static function magAlgemeen($action, $soort = null) {
+		switch ($action) {
+
+			// Uitzondering zodat beheerders niet overal een aanmeldknop krijgen
+			case A::Aanmelden:
+			case A::Bewerken:
+			case A::Afmelden:
+				break;
+
+			default:
+				// Beheer over commissie-ketzers bij betreffende commissie
+				switch ($soort) {
+					case ActiviteitSoort::OWee: return LoginModel::mag('P_LEDEN_MOD,commissie:OWeeCie');
+					case ActiviteitSoort::Dies: return LoginModel::mag('P_LEDEN_MOD,commissie:DiesCie');
+					case ActiviteitSoort::Lustrum: return LoginModel::mag('P_LEDEN_MOD,commissie:LustrumCie');
+				}
+		}
+		return parent::magAlgemeen($action);
+	}
+
 	// Agendeerbaar:
 
 	public function getBeginMoment() {
