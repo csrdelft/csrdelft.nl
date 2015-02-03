@@ -138,7 +138,7 @@ JS;
 			if ($value == $this->value) {
 				$html .= ' selected="selected"';
 			}
-			$html .= '>' . htmlspecialchars($description) . '</option>';
+			$html .= '>' . htmlentities($description) . '</option>';
 		}
 		return $html;
 	}
@@ -321,7 +321,7 @@ class KeuzeRondjeField extends SelectField {
 		if ($description instanceof FormElement) {
 			$html .= $description->getHtml();
 		} else {
-			$html .= '<label for="' . $this->getId() . 'Option_' . $value . '" class="KeuzeRondjeLabel">' . htmlspecialchars($description) . '</label>';
+			$html .= '<label for="' . $this->getId() . 'Option_' . $value . '" class="KeuzeRondjeLabel">' . htmlentities($description) . '</label>';
 		}
 		if ($this->newlines) {
 			$html .= '<br />';
