@@ -170,7 +170,7 @@ class ForumDraadView extends ForumView {
 
 	public function getBreadcrumbs() {
 		$deel = $this->model->getForumDeel();
-		return parent::getBreadcrumbs() . ' » ' . $deel->getForumCategorie()->titel . ' » <a href="/forum/deel/' . $deel->forum_id . '/' . ForumDradenModel::instance()->getPaginaVoorDraad($this->model) . '#' . $this->model->draad_id . '">' . $deel->titel . '</a>';
+		return parent::getBreadcrumbs() . ' » <span class="active">' . $deel->getForumCategorie()->titel . '</span> » <a href="/forum/deel/' . $deel->forum_id . '/' . ForumDradenModel::instance()->getPaginaVoorDraad($this->model) . '#' . $this->model->draad_id . '">' . $deel->titel . '</a>';
 	}
 
 	public function view() {
