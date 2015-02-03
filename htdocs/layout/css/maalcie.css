@@ -11,6 +11,12 @@
 .maalcie-tabel .btn {
 	padding: 3px 5px;
 }
+.maalcie-tabel .groep-tabs li span.fa {
+	color: #000000;
+}
+.maalcie-tabel .groep-tabs li span.fa:hover {
+	color: #FFFFFF;
+}
 .rowColor0 {
 	background-color: #EBEBEB;
 }
