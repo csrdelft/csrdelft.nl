@@ -3,18 +3,19 @@
 		try {
 			$(function () {
 				$("#gallery").jGallery({
-					"mode": "slider",
+					mode: "slider",
 					width: "auto",
-					"slideshowInterval": "6s",
-					"autostartAtImage": randomIntFromInterval(0, $('#gallery img').length - 1),
-					//"slideshowRandom": true,
-					"hideThumbnailsOnInit": true,
-					"transition": "random",
-					"transitionBackward": "random",
-					"transitionCols": "1",
-					"transitionRows": "1",
-					"backgroundColor": "FFFFFF",
-					"textColor": "000000"
+					height: "360px",
+					slideshowInterval: "5s",
+					autostartAtImage: randomIntFromInterval(0, $('#gallery img').length - 1),
+					//slideshowRandom: true,
+					hideThumbnailsOnInit: true,
+					transition: "random",
+					transitionBackward: "random",
+					transitionCols: 1,
+					transitionRows: 1,
+					backgroundColor: "FFFFFF",
+					textColor: "000000"
 				});
 			});
 		}
