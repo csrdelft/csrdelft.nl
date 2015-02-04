@@ -36,7 +36,7 @@
 							{if $item instanceof AgendaItem}
 								{include file='agenda/maand_item.tpl'}
 							{elseif $item instanceof Profiel}
-								<li>
+								<li title="{$item->getBeschrijving()}">
 									{icon get="verjaardag"}
 									{$item->getLink()}
 								</li>
