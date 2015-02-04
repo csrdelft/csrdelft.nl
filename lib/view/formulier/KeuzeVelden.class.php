@@ -642,6 +642,9 @@ class RequiredTijdField extends TijdField {
 
 }
 
+/**
+ * @Warning: NEVER use for persistence!
+ */
 class VinkField extends InputField {
 
 	public $type = 'checkbox';
@@ -665,12 +668,7 @@ class VinkField extends InputField {
 		if (parent::isPosted()) {
 			return true;
 		}
-		foreach ($_POST as $key => $value) {
-			if (!startsWith($key, 'DataTable')) {
-				return true;
-			}
-		}
-		return false;
+		return !empty($_POST);
 	}
 
 	/**
