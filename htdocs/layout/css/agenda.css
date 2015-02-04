@@ -21,9 +21,6 @@ table.agenda th {
 table.agenda th.weeknr {
 	width: 25px;
 }
-#tijden a {
-	cursor: pointer;
-}
 
 /*** MAAND ***************************/
 div#ical {
@@ -51,24 +48,14 @@ table#maand tr td {
 table#maand tr td.dag {
 	padding: 0;
 	text-align: left;
-	position: relative;
 }
-table#maand tr td.dag a.toevoegen {
+table#maand tr td.dag a.beheren {
+	float: right;
 	display: none;
+	margin-left: 5px;
 }
-table#maand tr td.dag div.beheren {
-	display: none;
-	position: absolute;
-	right: 0;
-}
-table#maand td div a.toevoegen {
-	float: right; 
-}
-table#maand tr td.dag:hover a.toevoegen {
-	display: inline;
-}
-table#maand tr td.dag:hover div.beheren {
-	display: block;
+table#maand tr td.dag:hover a.beheren {
+	display: inline-block;
 }
 table#maand td div.meta {
 	padding: 3px 4px;
@@ -108,6 +95,6 @@ table#maand td ul li:nth-child(even) {
 table#maand td ul li .tijd {
 	color: #777;
 }
-table#maand td ul li  img.icon {
+table#maand td ul li img.icon {
 	float: right;
 }

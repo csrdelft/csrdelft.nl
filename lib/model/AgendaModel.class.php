@@ -103,12 +103,31 @@ class AgendaModel extends PersistenceModel {
 		}
 	}
 
+	public function filterVerborgen(array $items) {
+		// Items verbergen
+		$itemsByUUID = array();
+		foreach ($items as $index => $item) {
+			$itemsByUUID[$item->getUUID()] = $item;
+			unset($items[$index]);
+		}
+		$count = count($itemsByUUID);
+		if ($count > 0) {
+			$params = array_keys($itemsByUUID);
+			array_unshift($params, LoginModel::getUid());
+			$verborgen = AgendaVerbergenModel::instance()->find('uid = ? AND uuid IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $params);
+			foreach ($verborgen as $verbergen) {
+				unset($itemsByUUID[$verbergen->uuid]);
+			}
+		}
+		return $itemsByUUID;
+	}
+
 	public function getAgendaItem($itemId) {
 		return $this->retrieveByPrimaryKey(array($itemId));
 	}
 
 	public function getICalendarItems() {
-		return $this->getAllAgendeerbaar(strtotime(Instellingen::get('agenda', 'ical_from')), strtotime(Instellingen::get('agenda', 'ical_to')), true);
+		return $this->filterVerborgen($this->getAllAgendeerbaar(strtotime(Instellingen::get('agenda', 'ical_from')), strtotime(Instellingen::get('agenda', 'ical_to')), true));
 	}
 
 	public function getItemsByDay($jaar, $maand, $dag) {
@@ -187,6 +206,31 @@ class AgendaModel extends PersistenceModel {
 			$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
 		}
 		return $item;
+	}
+
+}
+
+class AgendaVerbergenModel extends PersistenceModel {
+
+	const orm = 'AgendaVerbergen';
+
+	protected static $instance;
+
+	public function toggleVerbergen(Agendeerbaar $item) {
+		$verborgen = $this->retrieveByPrimaryKey(array(LoginModel::getUid(), $item->getUUID()));
+		if (!$verborgen) {
+			$verborgen = new AgendaVerbergen();
+			$verborgen->uid = LoginModel::getUid();
+			$verborgen->uuid = $item->getUUID();
+			$verborgen->dag = date('Y-m-d', strtotime($item->getBeginMoment()));
+			$this->create($verborgen);
+		} else {
+			$this->delete($verborgen);
+		}
+	}
+
+	public function isVerborgen(Agendeerbaar $item) {
+		return $this->existsByPrimaryKey(array(LoginModel::getUid(), $item->getUUID()));
 	}
 
 }

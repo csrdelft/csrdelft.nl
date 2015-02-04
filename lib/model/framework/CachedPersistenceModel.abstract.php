@@ -118,10 +118,8 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 */
 	protected function cacheResult($resultset, $memcache = false) {
 		$cached = array();
-		if ($resultset) {
-			foreach ($resultset as $entity) {
-				$cached[] = $this->cache($entity, $memcache);
-			}
+		foreach ($resultset as $entity) {
+			$cached[] = $this->cache($entity, $memcache);
 		}
 		return $cached;
 	}
@@ -204,9 +202,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 			return $this->getCached($key);
 		}
 		$result = parent::retrieveByPrimaryKey($primary_key_values);
-		if ($result) {
-			$this->setCache($key, $result);
-		}
+		$this->setCache($key, $result);
 		return $result;
 	}
 

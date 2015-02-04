@@ -94,9 +94,9 @@ class AgendaMaandView extends AgendaView {
 
 }
 
-class AgendaItemMaandView extends AgendaView {
+class AgendeerbaarMaandView extends AgendaView {
 
-	public function __construct(AgendaItem $item) {
+	public function __construct(Agendeerbaar $item) {
 		parent::__construct($item);
 	}
 

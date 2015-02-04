@@ -10,6 +10,18 @@ require_once 'model/maalcie/CorveePuntenModel.class.php';
  */
 class CorveeTakenModel {
 
+	/**
+	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
+	 * 
+	 * @param string $UUID
+	 * @return PersistentEntity
+	 */
+	public static function getUUID($UUID) {
+		$parts = explode('@', $UUID, 2);
+		$primary_key_values = explode('.', $parts[0]);
+		return static::instance()->retrieveByPrimaryKey($primary_key_values);
+	}
+
 	public static function updateGemaild(CorveeTaak $taak) {
 		$taak->setWanneerGemaild(date('Y-m-d H:i'));
 		self::updateTaak($taak);

@@ -26,7 +26,9 @@ class AgendaController extends AclController {
 				'courant'		 => 'P_MAIL_COMPOSE',
 				'toevoegen'		 => 'P_AGENDA_ADD',
 				'bewerken'		 => 'P_AGENDA_MOD',
-				'verwijderen'	 => 'P_AGENDA_MOD'
+				'verwijderen'	 => 'P_AGENDA_MOD',
+				'verbergen'		 => 'P_LOGGED_IN',
+				'tonen'			 => 'P_LOGGED_IN'
 			);
 		}
 	}
@@ -99,7 +101,7 @@ class AgendaController extends AclController {
 		$this->view = new AgendaCourantView($this->model, 2);
 	}
 
-	public function toevoegen($datum = '') {
+	public function toevoegen($datum = null) {
 		$item = $this->model->nieuw($datum);
 		$form = new AgendaItemForm($item, $this->action); // fetches POST values itself
 		if ($form->validate()) {
@@ -110,7 +112,7 @@ class AgendaController extends AclController {
 				$item->item_id = null;
 				$this->view = new AgendaItemForm($item, $this->action); // fetches POST values itself
 			} else {
-				$this->view = new AgendaItemMaandView($item);
+				$this->view = new AgendeerbaarMaandView($item);
 			}
 		} else {
 			$this->view = $form;
@@ -124,13 +126,8 @@ class AgendaController extends AclController {
 		}
 		$form = new AgendaItemForm($item, $this->action); // fetches POST values itself
 		if ($form->validate()) {
-			$rowCount = $this->model->update($item);
-			if ($rowCount > 0) {
-				//setMelding('Bijgewerkt', 1);
-			} else {
-				//setMelding('Geen wijzigingen', 0);
-			}
-			$this->view = new AgendaItemMaandView($item);
+			$this->model->update($item);
+			$this->view = new AgendeerbaarMaandView($item);
 		} else {
 			$this->view = $form;
 		}
@@ -142,8 +139,43 @@ class AgendaController extends AclController {
 			$this->geentoegang();
 		}
 		$this->model->delete($item);
-		//setMelding('Verwijderd', 1);
 		$this->view = new AgendaItemDeleteView($item->item_id);
+	}
+
+	public function verbergen($uuid = null) {
+		$parts = explode('@', $uuid, 2);
+		$orm = explode('.', $parts[1], 2);
+		switch ($orm[0]) {
+
+			case 'csrdelft':
+				$item = ProfielModel::getUUID($uuid);
+				break;
+
+			case 'bijbelrooster':
+				$item = BijbelroosterModel::getUUID($uuid);
+				break;
+
+			case 'maaltijd':
+				$item = MaaltijdenModel::getUUID($uuid);
+				break;
+
+			case 'corveetaak':
+				$item = CorveeTakenModel::getUUID($uuid);
+				break;
+
+			case 'activiteit':
+				$item = ActiviteitenModel::getUUID($uuid);
+				break;
+
+			case 'agendaitem':
+				$item = AgendaModel::getUUID($uuid);
+				break;
+
+			default:
+				throw new Exception('invalid UUID');
+		}
+		AgendaVerbergenModel::instance()->toggleVerbergen($item);
+		$this->view = new AgendeerbaarMaandView($item);
 	}
 
 }

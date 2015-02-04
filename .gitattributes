@@ -4048,6 +4048,7 @@ lib/model/documenten/Document.class.php -text
 lib/model/entity/Adres.class.php -text
 lib/model/entity/Afbeelding.class.php -text
 lib/model/entity/AgendaItem.class.php -text
+lib/model/entity/AgendaVerbergen.class.php -text
 lib/model/entity/Agendeerbaar.interface.php -text
 lib/model/entity/Bestand.class.php -text
 lib/model/entity/Bijbelrooster.class.php -text

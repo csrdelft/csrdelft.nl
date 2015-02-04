@@ -27,76 +27,13 @@
 				<td id="dag-{$dag.datum|date_format:"%Y-%m-%d"}" class="dag {if strftime('%m', $dag.datum) != strftime('%m', $datum)}anderemaand{/if}{if date('d-m', $dag.datum)==date('d-m')} vandaag{/if}">
 					<div class="meta">
 						{if LoginModel::mag('P_AGENDA_ADD,verticaleleider')}
-							<a href="/agenda/toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}" class="toevoegen post popup" title="Agenda-item toevoegen">{icon get="add"}</a>
+							<a href="/agenda/toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}" class="beheren post popup" title="Agenda-item toevoegen">{icon get="add"}</a>
 						{/if}
 						{$dagnr}
 					</div>
 					<ul id="items-{$dag.datum|date_format:"%Y-%m-%d"}" class="items">
 						{foreach from=$dag.items item=item}
-							{if $item instanceof AgendaItem}
-								{include file='agenda/maand_item.tpl'}
-							{elseif $item instanceof Profiel}
-								<li title="{$item->getBeschrijving()}">
-									{icon get="verjaardag"}
-									{$item->getLink()}
-								</li>
-							{elseif $item instanceof Bijbelrooster}
-								<li title="{$item->getBeschrijving()}">
-									{icon get="book_open"}
-									{$item->getLink(true)}
-								</li>
-							{elseif $item instanceof Maaltijd}
-								<li title="{$item->getBeschrijving()}">
-									<img src="/plaetjes/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon" />
-									<div class="tijd">
-										{$item->getBeginMoment()|date_format:"%R"} - {$item->getEindMoment()|date_format:"%R"}
-									</div>
-									<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">
-										{$item->getTitel()}
-									</a>
-								</li>
-							{elseif $item instanceof CorveeTaak}
-								<li title="{$item->getBeschrijving()}">
-									{if $item->getCorveeFunctie()->naam|stristr:"klus"}
-										<img src="/plaetjes/maalcie/drill.png" width="16" height="16" alt="drill" class="icon" />
-									{else}
-										{icon get="paintcan"}
-									{/if}
-									<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">
-										{$item->getTitel()}
-									</a>
-								</li>
-							{elseif $item instanceof Agendeerbaar}
-								<li title="{$item->getBeschrijving()}">
-									{if $item instanceof Groep AND $item->mag(A::Wijzigen)}
-										<div class="beheren">
-											<a href="{$item->getUrl()}wijzigen" title="Wijzig {htmlspecialchars($item->naam)}">{icon get="bewerken"}</a>
-										</div>
-									{/if}
-									{if !$item->isHeledag()}
-										<div class="tijd">
-											{$item->getBeginMoment()|date_format:"%R"}
-											{if !preg_match('/(00:00|23:59):[0-9]{2}$/', $item->eind_moment)}
-												-
-												{$item->getEindMoment()|date_format:"%R"}
-											{/if}
-										</div>
-									{/if}
-									<div class="hoverIntent">
-										{if $item->getLink()}
-											<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">{$item->getTitel()}</a>
-										{else}
-											<span title="{$item->getBeschrijving()}">{$item->getTitel()}</span>
-										{/if}
-										{if $item->getLocatie()}
-											<a href="https://maps.google.nl/maps?q={$item->getLocatie()|htmlspecialchars}">{icon get=map title=Kaart}</a>
-											<div class="hoverIntentContent">
-												{"[kaart]"|cat:$item->getLocatie()|cat:"[/kaart]"|bbcode}
-											</div>
-										{/if}
-									</div>
-								</li>
-							{/if}
+							{include file='agenda/maand_item.tpl'}
 						{/foreach}
 					</ul>
 				</td>

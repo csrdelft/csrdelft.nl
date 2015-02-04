@@ -11,6 +11,18 @@ require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
  */
 class MaaltijdenModel {
 
+	/**
+	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
+	 * 
+	 * @param string $UUID
+	 * @return PersistentEntity
+	 */
+	public static function getUUID($UUID) {
+		$parts = explode('@', $UUID, 2);
+		$primary_key_values = explode('.', $parts[0]);
+		return static::instance()->retrieveByPrimaryKey($primary_key_values);
+	}
+
 	public static function openMaaltijd(Maaltijd $maaltijd) {
 		if (!$maaltijd->getIsGesloten()) {
 			throw new Exception('Maaltijd is al geopend');
