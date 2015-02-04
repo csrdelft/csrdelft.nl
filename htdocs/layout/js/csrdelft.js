@@ -35,6 +35,7 @@ function init_context(parent) {
 	init_forms(parent);
 	init_timeago(parent);
 	init_markitup(parent);
+	init_tooltips(parent);
 	init_hoverIntents(parent);
 	init_lazy_images(parent);
 }
@@ -48,6 +49,7 @@ function init_dropzone() {
 		Dropzone.autoDiscover = false;
 	}
 	catch (err) {
+		console.log(err);
 		// Missing js file
 	}
 }
@@ -75,6 +77,7 @@ function init_timeago_once() {
 		};
 	}
 	catch (err) {
+		console.log(err);
 		// Missing js file
 	}
 }
@@ -84,6 +87,7 @@ function init_timeago(parent) {
 		$(parent).find('abbr.timeago').timeago();
 	}
 	catch (err) {
+		console.log(err);
 		// Missing js file
 	}
 }
@@ -93,6 +97,19 @@ function init_markitup(parent) {
 		$(parent).find('textarea.BBCodeField').markItUp(CsrBBcodeMarkItUpSet); // CsrBBcodeMarkItUpSet is located in: /layout/js/markitup/sets/bbcode/set.js
 	}
 	catch (err) {
+		console.log(err);
+		// Missing js file
+	}
+}
+
+function init_tooltips(parent) {
+	try {
+		$(parent).tooltip({
+			track: true
+		});
+	}
+	catch (err) {
+		console.log(err);
 		// Missing js file
 	}
 }

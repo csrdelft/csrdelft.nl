@@ -169,7 +169,8 @@ try {
 	$('#toggle_kopje_{$this->id}').hoverIntent(function() {
 		$(this).trigger('click');
 	});
-} catch(e) {
+} catch(err) {
+	console.log(err);
 	// Missing js file
 }
 JS;

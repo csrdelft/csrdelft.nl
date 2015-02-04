@@ -221,8 +221,9 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 
 class FotoAlbumSliderView extends FotoAlbumZijbalkView {
 
-	public function getHtml() {
+	public function getHtml($height = '360px') {
 		$this->smarty->assign('album', $this->model);
+		$this->smarty->assign('galleryHeight', $height);
 		return $this->smarty->fetch('fotoalbum/slider.tpl');
 	}
 

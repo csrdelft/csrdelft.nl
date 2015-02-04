@@ -191,6 +191,7 @@ jQuery(document).ready(function ($) {
 		});
 	}
 	catch (err) {
+		console.log(err);
 		// Missing js file
 	}
 
@@ -220,6 +221,7 @@ jQuery(document).ready(function ($) {
 			window.open('/bibliotheek/boek/' + row.id)
 		});
 	} catch (err) {
+		console.log(err);
 		// Missing js file
 	}
 

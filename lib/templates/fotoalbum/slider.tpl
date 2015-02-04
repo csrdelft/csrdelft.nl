@@ -5,7 +5,7 @@
 				$("#gallery").jGallery({
 					mode: "slider",
 					width: "auto",
-					height: "360px",
+					height: "{$galleryHeight}",
 					slideshowInterval: "5s",
 					autostartAtImage: randomIntFromInterval(0, $('#gallery img').length - 1),
 					//slideshowRandom: true,
@@ -20,6 +20,7 @@
 			});
 		}
 		catch (err) {
+			console.log(err);
 			// Missing js file
 		}
 	</script>

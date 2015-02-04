@@ -258,6 +258,7 @@
 			 */
 		}
 		catch (err) {
+			console.log(err);
 			// Missing js file
 		}
 	</script>

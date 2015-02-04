@@ -207,7 +207,11 @@ class CsrBB extends eamBBParser {
 			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
 		}
 		if (isset($arguments['slider']) AND $arguments['slider'] === 'homepage') {
-			$view = new FotoAlbumSliderView($album);
+			if (isset($arguments['height'])) {
+				$view = new FotoAlbumSliderView($album, $arguments['height']);
+			} else {
+				$view = new FotoAlbumSliderView($album);
+			}
 		} else {
 			$view = new FotoAlbumBBView($album);
 
