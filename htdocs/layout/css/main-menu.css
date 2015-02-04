@@ -54,6 +54,15 @@ input[type="search"]::-webkit-search-results-decoration {
 Main components 
 
 -------------------------------- */
+header {
+	z-index: 3;
+}
+main {
+	z-index: 0;
+}
+nav {
+	z-index: 3;
+}
 .cd-main-content, .cd-main-header {
 	/* Force Hardware Acceleration in WebKit */
 	-webkit-transform: translateZ(0);
@@ -71,10 +80,6 @@ Main components
 	transition: transform 0.3s;
 }
 @media only screen and (max-width: 959px) {
-	.cd-main-content.nav-is-visible {
-		/* prevent main content from overlapping the menu */
-		z-index: 0;
-	}
 	.cd-main-content.nav-is-visible, .cd-main-header.nav-is-visible {
 		-webkit-transform: translateX(-260px);
 		-moz-transform: translateX(-260px);
@@ -93,12 +98,10 @@ Main components
 
 .cd-main-content {
 	min-height: 100vh;
-	z-index: 1;
 }
 
 .cd-main-header {
 	height: 50px;
-	z-index: 3;
 }
 .nav-is-fixed .cd-main-header {
 	/* add .nav-is-fixed class to body if you want a fixed navigation on > 960px */
@@ -172,7 +175,6 @@ Main components
 	white-space: nowrap;
 	/* hide text */
 	color: transparent;
-	z-index: 3;
 }
 .cd-search-trigger:hover, .cd-search-trigger:focus, .cd-nav-trigger:hover, .cd-nav-trigger:focus {
 	/* hide text */
@@ -363,6 +365,7 @@ Main components
 }
 
 .cd-primary-nav, .cd-primary-nav ul {
+	z-index: 2;
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -372,7 +375,6 @@ Main components
 	overflow-y: auto;
 	overflow-x: hidden;
 	-webkit-overflow-scrolling: touch;
-	z-index: 3;
 	/* Force Hardware Acceleration in WebKit */
 	-webkit-transform: translateZ(0);
 	-moz-transform: translateZ(0);
@@ -489,7 +491,6 @@ Main components
 		width: auto;
 		background: transparent;
 		overflow-x: hidden;
-		z-index: 2;
 	}
 	.cd-primary-nav ul.is-hidden {
 		/* reset mobile style */
@@ -810,7 +811,6 @@ Main components
 	max-width: 400px;
 	width: 80%;
 	right: 15%;
-	z-index: 2;
 	opacity: 0;
 	visibility: hidden;
 	-webkit-transition: opacity .3s 0s, visibility 0s .3s;
@@ -840,7 +840,6 @@ Main components
 	width: 100%;
 	top: 0;
 	left: 0;
-	z-index: 2;
 	visibility: hidden;
 	opacity: 0;
 	-webkit-backface-visibility: hidden;
@@ -868,7 +867,6 @@ support for no js
 	width: 100%;
 	overflow: visible;
 	visibility: visible;
-	z-index: 3;
 }
 
 .no-js .cd-search {
@@ -881,7 +879,6 @@ support for no js
 @media only screen and (min-width: 960px) {
 	.no-js .cd-primary-nav {
 		position: absolute;
-		z-index: 3;
 		display: inline-block;
 		width: auto;
 		top: 0;
