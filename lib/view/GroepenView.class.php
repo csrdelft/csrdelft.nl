@@ -101,11 +101,15 @@ class GroepForm extends DataTableForm {
 		$fields['begin_moment']->to_datetime = $fields['eind_moment'];
 		$fields['eind_moment']->from_datetime = $fields['begin_moment'];
 
+		if ($groep instanceof Activiteit) {
+			$fields['eind_moment']->required = true;
+		}
 		if ($groep instanceof Ketzer) {
 			$fields['aanmelden_vanaf']->to_datetime = $fields['afmelden_tot'];
 			$fields['bewerken_tot']->to_datetime = $fields['afmelden_tot'];
 			$fields['bewerken_tot']->from_datetime = $fields['aanmelden_vanaf'];
 			$fields['afmelden_tot']->from_datetime = $fields['aanmelden_vanaf'];
+			$fields['afmelden_tot']->title = 'Leden mogen zichzelf niet afmelden als u dit veld leeg laat';
 		}
 
 		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
