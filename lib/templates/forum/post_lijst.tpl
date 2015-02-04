@@ -36,16 +36,16 @@
 			<span class="lichtgrijs small" title="Gelezen door lezers">{ForumDradenGelezenModel::instance()->getGelezenPercentage($post)}%</span>
 		{/if}
 		<br />
-		{if $post->wacht_goedkeuring}
-			<a href="/forum/goedkeuren/{$post->post_id}" class="btn post confirm" title="Bericht goedkeuren">goedkeuren</a>
-			<br /><br />
-			<a href="/tools/stats.php?ip={$post->auteur_ip}" class="btn" title="IP-log">IP-log</a>
-			<a href="/forum/verwijderen/{$post->post_id}" class="btn post confirm" title="Verwijder bericht of draad">{icon get="cross"}</a>
-			{if $post->magBewerken()}
-				<a href="#{$post->post_id}" class="knop{if $post->uid !== LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop{/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
-			{/if}
-		{else}
-			<div class="forumpostKnoppen">
+		<div class="forumpostKnoppen">
+			{if $post->wacht_goedkeuring}
+				<a href="/forum/goedkeuren/{$post->post_id}" class="btn post confirm" title="Bericht goedkeuren">goedkeuren</a>
+				<br /><br />
+				<a href="/tools/stats.php?ip={$post->auteur_ip}" class="btn" title="IP-log">IP-log</a>
+				<a href="/forum/verwijderen/{$post->post_id}" class="btn post confirm" title="Verwijder bericht of draad">{icon get="cross"}</a>
+				{if $post->magBewerken()}
+					<a href="#{$post->post_id}" class="{if $post->uid !== LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop{/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
+				{/if}
+			{else}
 				{if $post->verwijderd}
 					<div class="post-verwijderd">Deze reactie is verwijderd.</div>
 					<a href="/forum/verwijderen/{$post->post_id}" class="btn post confirm" title="Bericht herstellen">{icon get="arrow_undo"}</a>
@@ -54,7 +54,7 @@
 					<a href="#reageren" class="btn citeren" data-citeren="{$post->post_id}" title="Citeer bericht">{icon get="comments"}</a>
 				{/if}
 				{if $post->magBewerken()}
-					<a href="#{$post->post_id}" class="knop{if $post->uid !== LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop{/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
+					<a href="#{$post->post_id}" class="{if $post->uid !== LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop{/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
 				{/if}
 				{if LoginModel::mag('P_LOGGED_IN')}
 					{assign var=timestamp value=strtotime($post->datum_tijd)}
@@ -67,8 +67,8 @@
 					{/if}
 					<a href="/forum/verplaatsen/{$post->post_id}" class="btn post prompt{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Verplaats bericht" data="Draad id={$post->draad_id}">{icon get=arrow_right}</a>
 				{/if}
-			</div>
-		{/if}
+			{/if}
+		</div>
 	</td>
 	<td class="bericht{cycle values="0,1"}" id="post{$post->post_id}">
 		<div class="bericht">
