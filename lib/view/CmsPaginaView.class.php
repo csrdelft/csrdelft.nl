@@ -57,7 +57,7 @@ class CmsPaginaForm extends Formulier {
 		if ($pagina->magRechtenWijzigen()) {
 			$fields[] = new RechtenField('rechten_bekijken', $pagina->rechten_bekijken, 'Rechten bekijken');
 			$fields[] = new RechtenField('rechten_bewerken', $pagina->rechten_bewerken, 'Rechten bewerken');
-			$fields['html'] = new KeuzeRondjeField('inline_html', $pagina->inline_html, 'Inline HTML', array('[html]', '<html>'));
+			$fields['html'] = new KeuzeRondjeField('inline_html', (int) $pagina->inline_html, 'Inline HTML', array('Tussen [html][/html]', 'Direct <html>'));
 			$fields['html']->title = 'Geen [html] nodig en zelf regeleindes plaatsen met [rn] of <br />';
 		} else {
 			$fields[] = new HtmlComment('<div><label>Rechten bekijken</label>' . $pagina->rechten_bekijken .
