@@ -113,8 +113,10 @@ function init_lazy_images(parent) {
 		content.attr('src', $(this).attr('src'));
 		$(this).html(content);
 		content.on('load', function () {
+			var foto = content.attr('src').indexOf('/plaetjes/fotoalbum/') >= 0;
+			var video = $(this).parent().hasClass('bb-video-preview');
 			$(this).parent().replaceWith($(this));
-			if (content.attr('src').indexOf('/plaetjes/fotoalbum/') === -1) {
+			if (!video && !foto) {
 				$(this).wrap('<a class="lightbox-link" href="' + $(this).attr('src') + '" data-lightbox="page-lightbox"></a>');
 			}
 		});
