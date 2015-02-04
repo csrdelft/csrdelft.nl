@@ -41,12 +41,12 @@
 									{$item->getLink()}
 								</li>
 							{elseif $item instanceof Bijbelrooster}
-								<li>
+								<li title="{$item->getBeschrijving()}">
 									{icon get="book_open"}
 									{$item->getLink(true)}
 								</li>
 							{elseif $item instanceof Maaltijd}
-								<li>
+								<li title="{$item->getBeschrijving()}">
 									<img src="/plaetjes/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon" />
 									<div class="tijd">
 										{$item->getBeginMoment()|date_format:"%R"} - {$item->getEindMoment()|date_format:"%R"}
@@ -56,7 +56,7 @@
 									</a>
 								</li>
 							{elseif $item instanceof CorveeTaak}
-								<li>
+								<li title="{$item->getBeschrijving()}">
 									{if $item->getCorveeFunctie()->naam|stristr:"klus"}
 										<img src="/plaetjes/maalcie/drill.png" width="16" height="16" alt="drill" class="icon" />
 									{else}
@@ -67,7 +67,7 @@
 									</a>
 								</li>
 							{elseif $item instanceof Agendeerbaar}
-								<li>
+								<li title="{$item->getBeschrijving()}">
 									{if !$item->isHeledag()}
 										<div class="tijd">
 											{$item->getBeginMoment()|date_format:"%R"}
