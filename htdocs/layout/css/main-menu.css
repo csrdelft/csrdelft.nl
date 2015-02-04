@@ -98,7 +98,7 @@ Main components
 
 .cd-main-header {
 	height: 50px;
-	z-index: 2;
+	z-index: 3;
 }
 .nav-is-fixed .cd-main-header {
 	/* add .nav-is-fixed class to body if you want a fixed navigation on > 960px */
@@ -868,7 +868,7 @@ support for no js
 	width: 100%;
 	overflow: visible;
 	visibility: visible;
-	z-index: 2;
+	z-index: 3;
 }
 
 .no-js .cd-search {
