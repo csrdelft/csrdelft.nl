@@ -192,7 +192,7 @@ class Groep extends PersistentEntity {
 
 			default:
 				// Beheerder mag alles
-				if (LoginModel::getUid('P_LEDEN_MOD')) {
+				if (LoginModel::mag('P_LEDEN_MOD')) {
 					return true;
 				}
 		}
