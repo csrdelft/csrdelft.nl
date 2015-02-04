@@ -67,6 +67,11 @@
 									</a>
 								</li>
 							{elseif $item instanceof Agendeerbaar}
+								{if $item instanceof Groep AND $item->mag(A::Wijzigen)}
+									<div class="beheren">
+										<a href="{$item->getUrl()}wijzigen" title="Wijzig {htmlspecialchars($item->naam)}">{icon get="bewerken"}</a>
+									</div>
+								{/if}
 								<li title="{$item->getBeschrijving()}">
 									{if !$item->isHeledag()}
 										<div class="tijd">
