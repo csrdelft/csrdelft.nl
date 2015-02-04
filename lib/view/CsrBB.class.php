@@ -16,14 +16,9 @@ class CsrBB extends eamBBParser {
 	 */
 	protected $email_mode = false;
 
-	public function __construct($allow_html = false) {
+	public function __construct() {
 		$this->eamBBParser();
 		$this->paragraph_mode = false;
-		if (LoginModel::mag('P_ADMIN')) {
-			$allow_html = true;
-		}
-		$this->allow_html = $allow_html;
-		//$this->standard_html = $allow_html; // stuk
 	}
 
 	public static function parse($bbcode) {
@@ -32,7 +27,9 @@ class CsrBB extends eamBBParser {
 	}
 
 	public static function parseHtml($bbcode) {
-		$parser = new CsrBB(true);
+		$parser = new CsrBB();
+		$parser->allow_html = true;
+		$parser->standard_html = true;
 		return $parser->getHtml($bbcode);
 	}
 
