@@ -55,15 +55,6 @@ input[type="search"]::-webkit-search-results-decoration {
 Main components 
 
 -------------------------------- */
-header {
-	z-index: 3;
-}
-main {
-	z-index: 0;
-}
-nav {
-	z-index: 3;
-}
 .cd-main-content, .cd-main-header {
 	/* Force Hardware Acceleration in WebKit */
 	-webkit-transform: translateZ(0);
@@ -98,10 +89,12 @@ nav {
 }
 
 .cd-main-content {
+	z-index: 0;
 	min-height: 100vh;
 }
 
 .cd-main-header {
+	z-index: 3;
 	height: 50px;
 }
 .nav-is-fixed .cd-main-header {
@@ -366,7 +359,6 @@ nav {
 }
 
 .cd-primary-nav, .cd-primary-nav ul {
-	z-index: 2;
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -455,6 +447,7 @@ nav {
 		transition: visibility 0s 0.3s;
 	}
 	.cd-primary-nav.nav-is-visible {
+		z-index: 2;
 		visibility: visible;
 		-webkit-transition: visibility 0s 0s;
 		-moz-transition: visibility 0s 0s;
