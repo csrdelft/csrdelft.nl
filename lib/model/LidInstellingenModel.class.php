@@ -64,13 +64,13 @@ class LidInstellingen extends Instellingen {
 		),
 		'mededelingen'	 => array(
 			'aantalPerPagina' => array('Aantal mededeling per pagina', T::Integer, array(5, 50), 10)
-		),
-		'voorpagina'	 => array(
-			'bijbelroosterblokje'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'maaltijdblokje'		 => array('Eerstvolgende maaltijd weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'laatstefotoalbum'		 => array('Laatste fotoalbum weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'twitterblokje'			 => array('Twitter-feed weergeven', T::Enumeration, array('ja', 'nee'), 'nee')
-		),
+		), /*
+		  'voorpagina'	 => array(
+		  'bijbelroosterblokje'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+		  'maaltijdblokje'		 => array('Eerstvolgende maaltijd weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+		  'laatstefotoalbum'		 => array('Laatste fotoalbum weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
+		  'twitterblokje'			 => array('Twitter-feed weergeven', T::Enumeration, array('ja', 'nee'), 'nee')
+		  ), */
 		'zijbalk'		 => array(
 			'scrollen'				 => array('Scrollen', T::Enumeration, array('met pagina mee', 'apart scrollen', 'pauper/desktop'), 'met pagina mee'),
 			'scrollbalk'			 => array('Scrollbalk tonen', T::Enumeration, array('ja', 'nee'), 'ja'),
