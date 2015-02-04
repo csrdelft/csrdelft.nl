@@ -184,7 +184,7 @@ function zijbalk_scroll_fixed() {
 		};
 		var hidescroll = function () {
 			elmnt.css({
-				'overflow-y': ''
+				'overflow-y': 'hidden'
 			});
 		};
 		elmnt.hover(showscroll, hidescroll);
