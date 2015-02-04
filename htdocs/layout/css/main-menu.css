@@ -372,7 +372,7 @@ Main components
 	overflow-y: auto;
 	overflow-x: hidden;
 	-webkit-overflow-scrolling: touch;
-	z-index: 2;
+	z-index: 3;
 	/* Force Hardware Acceleration in WebKit */
 	-webkit-transform: translateZ(0);
 	-moz-transform: translateZ(0);
