@@ -56,7 +56,7 @@ class GroepenRouterController extends Controller {
 				//case 'lichtingen':
 				//case 'verticalen':
 				//case 'kringen':
-				return true;
+				return LoginModel::mag('P_LOGGED_IN');
 
 			default:
 				return false;
