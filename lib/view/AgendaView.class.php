@@ -210,6 +210,7 @@ class AgendaICalendarView extends AgendaView {
 
 	public function view() {
 		$this->smarty->assign('items', $this->model->getICalendarItems());
+		$this->smarty->assign('published', str_replace('-', '', str_replace(':', '', str_replace('+00:00', 'Z', gmdate('c')))));
 		$this->smarty->display('agenda/icalendar.tpl');
 	}
 
