@@ -822,6 +822,7 @@ nav {
 	width: 100%;
 }
 .cd-search.is-visible {
+	z-index: 2;
 	opacity: 1;
 	visibility: visible;
 	-webkit-transition: opacity .3s 0s, visibility 0s 0s;
