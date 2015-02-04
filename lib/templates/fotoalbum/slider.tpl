@@ -4,6 +4,7 @@
 			$(function () {
 				$("#gallery").jGallery({
 					"mode": "slider",
+					width: "auto",
 					"slideshowInterval": "6s",
 					"autostartAtImage": randomIntFromInterval(0, $('#gallery img').length - 1),
 					//"slideshowRandom": true,
