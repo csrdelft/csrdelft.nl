@@ -28,9 +28,9 @@ Primary style
 	opacity: 0.2;
 }
 #cd-user-avatar.fade {
-	opacity: 0.1;
+	opacity: 0.5;
 }
-header:hover {
+.cd-main-header:hover {
 
 	#cd-main-trigger.fade, #cd-user-avatar.fade {
 		opacity: 1;

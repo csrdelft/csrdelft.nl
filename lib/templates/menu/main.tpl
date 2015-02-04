@@ -2,8 +2,10 @@
 	<ul id="cd-primary-nav" class="cd-primary-nav is-fixed"{if (LidInstellingen::get('layout', 'fx') != 'nee')} style="opacity:0.8;"{/if}>
 		{if LoginModel::mag('P_LOGGED_IN')}
 			<li class="has-children">
-				<img id="cd-user-avatar" src="/plaetjes/pasfoto/{LoginModel::getUid()}.vierkant.png">
-				<a id="cd-main-trigger" href="#0">{LoginModel::getProfiel()->getNaam('civitas')}</a>
+				<a id="cd-main-trigger" href="#0">
+					<img id="cd-user-avatar" src="/plaetjes/pasfoto/{LoginModel::getUid()}.vierkant.png">
+					{LoginModel::getProfiel()->getNaam('civitas')}
+				</a>
 				<ul class="cd-secondary-nav is-hidden">
 					{include file='menu/main_tree.tpl' parent=$root}
 				</ul>
@@ -12,7 +14,7 @@
 			<li><a href="/">Log in</a></li>
 		{/if}
 	</ul>
+	<div id="cd-search" class="cd-search">
+		{$zoekbalk->view()}
+	</div>
 </nav>
-<div id="cd-search" class="cd-search">
-	{$zoekbalk->view()}
-</div>

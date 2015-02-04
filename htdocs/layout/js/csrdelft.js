@@ -128,7 +128,7 @@ function init_sluit_meldingen() {
 }
 
 function zijbalk_scroll_fixed() {
-	var elmnt = $('#zijbalk');
+	var elmnt = $('#cd-zijbalk');
 	if (!elmnt.length || !elmnt.hasClass('scroll-fixed')) {
 		return;
 	}
@@ -140,14 +140,14 @@ function zijbalk_scroll_fixed() {
 
 	// adjust to container size
 	$(window).resize(function () {
-		elmnt.css('height', window.innerHeight);
+		elmnt.css('height', document.documentElement.clientHeight);
 	});
 	$(window).trigger('resize');
 
 	// fix position on screen
 	$(window).scroll(function () {
 		elmnt.css({
-			'margin-top': $(window).scrollTop()
+			'top': $(window).scrollTop()
 		});
 	});
 

@@ -20,6 +20,7 @@ Primary style
 html * {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	border-collapse: collapse;
 }
 html {
 	font-family: Helvetica,Arial;
@@ -30,33 +31,26 @@ body {
 	color: #000;
 	background-color: #fff;
 }
-
-#maintable {
-	width: 100%;
-	border-collapse: collapse;
+.cd-page-top {
+	position: absolute;
+	top: 25px;
+	left: 250px;
 }
-
-#mainright {
-	width: 100%;
-	min-width: 730px;
-	padding: 50px 0 0 5px;
-	vertical-align: top;
+.cd-page-content {
+	margin-left: 179px;
+	padding: 75px 0 50px 0;
 }
 @media only screen and (min-width: 960px) {
-	#mainright {
-        padding: 50px 0 0 20px;
-    }
+	.cd-page-content {
+		margin-left: 250px;
+		padding: 75px 25px 50px 0;
+	}
 }
-@media only screen and (min-width: 1170px) {
-	#mainright {
-        padding: 50px;
-    }
+.cd-footer {
+	height: 400px;
+	background-color: #333;
+	color: #fff;
 }
-#page-top {
-	position: relative;
-	top: -25px;
-}
-
 h1,h2,h3,h4,h5,h6 {
 	font-family: "Source Sans Pro Light",Helvetica,Arial,sans-serif;
 	text-align: left;
