@@ -93,12 +93,12 @@ Main components
 
 .cd-main-content {
 	min-height: 100vh;
-	z-index: 2;
+	z-index: 1;
 }
 
 .cd-main-header {
 	height: 50px;
-	z-index: 3;
+	z-index: 2;
 }
 .nav-is-fixed .cd-main-header {
 	/* add .nav-is-fixed class to body if you want a fixed navigation on > 960px */
@@ -372,7 +372,7 @@ Main components
 	overflow-y: auto;
 	overflow-x: hidden;
 	-webkit-overflow-scrolling: touch;
-	z-index: 1;
+	z-index: 3;
 	/* Force Hardware Acceleration in WebKit */
 	-webkit-transform: translateZ(0);
 	-moz-transform: translateZ(0);
