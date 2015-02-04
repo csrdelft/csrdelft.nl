@@ -45,7 +45,6 @@ class VerjaardagenView implements View {
 				</ul>
 				<hr />
 				<h1>Verjaardagen</h1>
-				<div class="verjaardagen">
 					<?php
 					# de verjaardagen die vandaag zijn krijgen een highlight
 					$nu = time();
@@ -69,7 +68,7 @@ class VerjaardagenView implements View {
 
 					for ($m = 0; $m < 12; $m++) {
 						$maand = ($dezemaand - 1 + $m) % 12 + 1;
-						echo '<table class="inline"><tr><th></th><th><h3>' . $maanden[$maand] . '</h3></th></tr>';
+						echo '<div class="col-md-3"><table class="inline"><tr><th></th><th><h3>' . $maanden[$maand] . '</h3></th></tr>';
 						$verjaardagen = VerjaardagenModel::get($maand);
 						foreach ($verjaardagen as $verjaardag) {
 							echo '<tr>';
@@ -90,9 +89,8 @@ class VerjaardagenView implements View {
 							echo '</td>';
 							echo '</tr>';
 						}
-						echo '</table>';
+						echo '</table></div>';
 					}
-					echo '</div>';
 					break;
 				case 'komende':
 					if (LoginModel::mag('P_LEDEN_READ')) {
