@@ -107,7 +107,7 @@ class GroepForm extends DataTableForm {
 			$fields['afmelden_tot']->from_datetime = $fields['aanmelden_vanaf'];
 		}
 
-		$fields['maker_uid']->readonly = LoginModel::mag('P_ADMIN');
+		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
 
 		if (property_exists($groep, 'in_agenda') AND ! LoginModel::mag('P_AGENDA_MOD')) {
 			unset($fields['in_agenda']);
