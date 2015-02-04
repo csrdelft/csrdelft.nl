@@ -12,7 +12,7 @@
 	{if !$item->isHeledag()}
 		<div class="tijd">
 			{$item->getBeginMoment()|date_format:"%R"}
-			{if $item->getBeginMoment() !== $item->getEindMoment() AND date('H:i', $item->getEindMoment()) !== '00:00'}
+			{if !preg_match('/(00:00|23:59):[0-9]{2}$/', $item->eind_moment)}
 				-
 				{$item->getEindMoment()|date_format:"%R"}
 			{/if}
