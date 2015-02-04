@@ -159,13 +159,13 @@ class CsrBB extends eamBBParser {
 		if (!$album) {
 			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
 		}
-		if (isset($arguments['poster']) AND $arguments['poster'] === 'homepage') {
-			$resize = true;
+		if (isset($arguments['responsive'])) {
+			$responsive = true;
 		} else {
-			$resize = false;
+			$responsive = false;
 		}
 		$foto = new Foto($filename, $album);
-		$fototag = new FotoBBView($foto, $groot, $resize);
+		$fototag = new FotoBBView($foto, $groot, $responsive);
 		return $fototag->getHtml();
 	}
 
