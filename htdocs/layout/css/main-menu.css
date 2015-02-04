@@ -17,6 +17,7 @@ Primary style
 	width: 32px;
 	height: 32px;
 	border-radius: 4px;
+	margin-right: 4px;
 }
 #cd-main-trigger, #cd-user-avatar {
 	opacity: 1;

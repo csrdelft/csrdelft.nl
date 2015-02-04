@@ -25,8 +25,8 @@
 			<div class="cd-page-content">
 				{$body->view()}
 			</div>
-			<footer class="">
-
+			<footer class="cd-footer">
+				{printDebug()}
 			</footer>
 		</main>
 		{$mainmenu->view()}
