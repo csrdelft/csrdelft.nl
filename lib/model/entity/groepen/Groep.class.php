@@ -142,7 +142,9 @@ class Groep extends PersistentEntity {
 		} else {
 			$suggesties = array();
 			foreach ($this->getLeden() as $lid) {
-				$suggesties[] = $lid->opmerking;
+				if (!empty($lid->opmerking)) {
+					$suggesties[] = $lid->opmerking;
+				}
 			}
 		}
 		return $suggesties;

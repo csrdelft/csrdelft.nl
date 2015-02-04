@@ -361,42 +361,45 @@ class DataTableForm extends ModalForm {
  */
 class InlineForm extends Formulier implements FormElement {
 
-	public $buttons;
-	public $labels;
-	public $datatable;
-	public $field;
+	private $field;
+	private $toggle;
 
-	public function __construct($model, $action, $buttons = false, $labels = false, $submit_DataTableResponse = false) {
+	public function __construct($model, $action, InputField $field, $toggle = true, $buttons = false, $submit_DataTableResponse = false) {
 		parent::__construct($model, $action);
 		if (isset($_POST['FormId'])) {
 			$this->formId = filter_input(INPUT_POST, 'FormId', FILTER_SANITIZE_STRING);
 		}
 		$this->css_classes[] = 'InlineForm';
 		$this->css_classes[] = $this->getType();
-		$this->buttons = $buttons;
-		$this->labels = $labels;
-		$this->datatable = $submit_DataTableResponse;
-	}
+		$this->field = $field;
+		$this->toggle = $toggle;
 
-	public function getHtml() {
-		if (!isset($this->field->title)) {
-			$this->field->title = $this->field->description;
-		}
 		$fields = array();
 		$fields[] = $this->field;
 
-		if ($this->buttons) {
-			$fields[] = new FormDefaultKnoppen(null, false, true, $this->labels, true, $this->datatable);
+		if ($buttons instanceof FormElement) {
+			$fields[] = $buttons;
+		} elseif ($buttons) {
+			$fields[] = new FormDefaultKnoppen(null, false, true, false, true, $submit_DataTableResponse);
 		} else {
 			$this->field->enter_submit = true;
 			$this->field->escape_cancel = true;
 		}
-		$this->addFields($fields);
+		if (!isset($this->field->title)) {
+			$this->field->title = $this->field->description;
+		}
 
+		$this->addFields($fields);
+	}
+
+	public function getHtml() {
 		$html = '<div id="wrapper_' . $this->formId . '" class="InlineForm">';
-		$html .= '<div id="toggle_' . $this->formId . '" class="InlineFormToggle">' . $this->field->getValue() . '</div>';
+		if ($this->toggle) {
+			$html .= '<div id="toggle_' . $this->formId . '" class="InlineFormToggle">' . $this->field->getValue() . '</div>';
+			$this->css_classes[] = 'ToggleForm';
+		}
 		$html .= $this->getFormTag();
-		foreach ($fields as $field) {
+		foreach ($this->getFields() as $field) {
 			$html .= $field->getHtml();
 		}
 		$html .= $this->getScriptTag();
@@ -407,14 +410,18 @@ class InlineForm extends Formulier implements FormElement {
 		echo $this->getHtml();
 	}
 
-	public function getValue() {
-		return $this->field->getValue();
+	public function getField() {
+		return $this->field;
 	}
 
 	public function getType() {
 		return get_class($this);
 	}
 
+	/**
+	 * Public for FormElement
+	 * @return string
+	 */
 	public function getJavascript() {
 		return parent::getJavascript();
 	}

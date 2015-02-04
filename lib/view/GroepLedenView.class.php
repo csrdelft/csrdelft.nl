@@ -68,48 +68,38 @@ class GroepLidBeheerForm extends DataTableForm {
 
 class GroepBewerkenForm extends InlineForm {
 
-	public function __construct(GroepLid $lid, Groep $groep, array $suggesties = array(), $keuzelijst = null) {
-		parent::__construct($lid, $groep->getUrl() . 'bewerken/' . $lid->uid, true);
+	public function __construct(GroepLid $lid, Groep $groep, $toggle = true, $buttons = true) {
 
-		if ($keuzelijst) {
-			$this->field = new MultiSelectField('opmerking', $lid->opmerking, null, $keuzelijst);
+		if ($groep->keuzelijst) {
+			$field = new MultiSelectField('opmerking', $lid->opmerking, null, $groep->keuzelijst);
 		} else {
-			$this->field = new TextField('opmerking', $lid->opmerking, null);
-			$this->field->placeholder = 'Opmerking';
-			$this->field->suggestions[] = $suggesties;
+			$field = new TextField('opmerking', $lid->opmerking, null);
+			$field->placeholder = 'Opmerking';
+			$field->suggestions[] = $groep->getOpmerkingSuggesties();
 		}
+
+		parent::__construct($lid, $groep->getUrl() . 'bewerken/' . $lid->uid, $field, $toggle, $buttons);
 	}
 
 }
 
 class GroepAanmeldenForm extends GroepBewerkenForm {
 
-	private $aanmeldknop;
-
-	public function __construct(GroepLid $lid, Groep $groep, array $suggesties = array(), $keuzelijst = null, $pasfoto = false) {
-		parent::__construct($lid, $groep, $suggesties, $keuzelijst);
-		$this->action = $groep->getUrl() . 'aanmelden/' . $lid->uid;
-		$this->buttons = false;
-		$this->css_classes[] = 'float-left';
-
-		$fields[] = $this->field;
-		$this->field->hidden = $pasfoto;
-
+	public function __construct(GroepLid $lid, Groep $groep, $pasfoto = true) {
 		if ($pasfoto) {
-			$this->aanmeldknop = new PasfotoAanmeldenKnop();
+			$buttons = new PasfotoAanmeldenKnop();
 		} else {
-			$this->aanmeldknop = new SubmitKnop(null, 'submit', 'Aanmelden', null, null);
+			$buttons = new SubmitKnop(null, 'submit', 'Aanmelden', null, null);
 		}
 
-		$this->addFields($fields);
-	}
+		parent::__construct($lid, $groep, false, $buttons);
 
-	public function getHtml() {
-		$html = $this->getFormTag();
-		$html .= $this->field->getHtml();
-		$html .= $this->aanmeldknop->getHtml();
-		$html .= $this->getScriptTag();
-		return $html . '</form>';
+		$this->action = $groep->getUrl() . 'aanmelden/' . $lid->uid;
+		$this->css_classes[] = 'float-left';
+
+		if ($pasfoto) {
+			$this->getField()->hidden = true;
+		}
 	}
 
 }
@@ -252,10 +242,10 @@ class GroepPasfotosView extends GroepTabView {
 	protected function getTabContent() {
 		$html = '';
 		if ($this->groep->mag(A::Aanmelden)) {
-			$groep = $this->groep;
-			$leden = $groep::leden;
-			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldenForm($lid, $groep, $groep->getOpmerkingSuggesties(), $groep->keuzelijst, true);
+			$orm = $this->groep;
+			$leden = $orm::leden;
+			$lid = $leden::instance()->nieuw($this->groep, LoginModel::getUid());
+			$form = new GroepAanmeldenForm($lid, $this->groep);
 			$form->css_classes[] = 'pasfotos';
 			$html .= $form->getHtml();
 		}
@@ -271,13 +261,12 @@ class GroepLijstView extends GroepTabView {
 
 	public function getTabContent() {
 		$html = '<table class="groep-lijst"><tbody>';
-		$suggesties = $this->groep->getOpmerkingSuggesties();
 		if ($this->groep->mag(A::Aanmelden)) {
 			$html .= '<tr><td colspan="2">';
-			$groep = $this->groep;
-			$leden = $groep::leden;
-			$lid = $leden::instance()->nieuw($groep, LoginModel::getUid());
-			$form = new GroepAanmeldenForm($lid, $groep, $groep->getOpmerkingSuggesties(), $groep->keuzelijst);
+			$orm = $this->groep;
+			$leden = $orm::leden;
+			$lid = $leden::instance()->nieuw($this->groep, LoginModel::getUid());
+			$form = new GroepAanmeldenForm($lid, $this->groep, false);
 			$html .= $form->getHtml();
 			$html .= '</td></tr>';
 		}
@@ -295,7 +284,7 @@ class GroepLijstView extends GroepTabView {
 			$html .= $profiel->getLink('civitas');
 			$html .= '</td><td>';
 			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Bewerken)) {
-				$form = new GroepBewerkenForm($leden[$profiel->uid], $this->groep, $suggesties, $this->groep->keuzelijst);
+				$form = new GroepBewerkenForm($leden[$profiel->uid], $this->groep);
 				$html .= $form->getHtml();
 			} else {
 				$html .= $leden[$profiel->uid]->opmerking;
