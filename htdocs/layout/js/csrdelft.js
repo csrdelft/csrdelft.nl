@@ -106,7 +106,7 @@ function init_tooltip_once() {
 
 function init_tooltips(parent) {
 	try {
-		$(parent).tooltip({
+		$(parent).uitooltip({
 			track: true
 		});
 	}
