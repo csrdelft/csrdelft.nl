@@ -26,6 +26,7 @@ function init_page() {
 	zijbalk_scroll_fixed();
 	init_dropzone();
 	init_timeago_once();
+	init_tooltip_once();
 	init_sluit_meldingen();
 	init_context($('body'));
 }
@@ -92,9 +93,10 @@ function init_timeago(parent) {
 	}
 }
 
-function init_markitup(parent) {
+function init_tooltip_once() {
 	try {
-		$(parent).find('textarea.BBCodeField').markItUp(CsrBBcodeMarkItUpSet); // CsrBBcodeMarkItUpSet is located in: /layout/js/markitup/sets/bbcode/set.js
+		// Change JQueryUI/tooltip plugin name to 'uitooltip' to fix name collision with Bootstrap/tooltip
+		$.widget.bridge('uitooltip', $.ui.tooltip);
 	}
 	catch (err) {
 		console.log(err);
@@ -113,6 +115,17 @@ function init_tooltips(parent) {
 		// Missing js file
 	}
 }
+
+function init_markitup(parent) {
+	try {
+		$(parent).find('textarea.BBCodeField').markItUp(CsrBBcodeMarkItUpSet); // CsrBBcodeMarkItUpSet is located in: /layout/js/markitup/sets/bbcode/set.js
+	}
+	catch (err) {
+		console.log(err);
+		// Missing js file
+	}
+}
+
 
 function init_lazy_images(parent) {
 	$(parent).find('div.bb-img-loading').each(function () {
