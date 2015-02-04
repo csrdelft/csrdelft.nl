@@ -14,7 +14,7 @@
 			<li><a href="/">Log in</a></li>
 		{/if}
 	</ul>
-	<div id="cd-search" class="cd-search">
-		{$zoekbalk->view()}
-	</div>
 </nav>
+<div id="cd-search" class="cd-search">
+	{$zoekbalk->view()}
+</div>
