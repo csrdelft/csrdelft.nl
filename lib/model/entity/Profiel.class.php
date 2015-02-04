@@ -313,7 +313,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getEindMoment() {
-		return $this->getBeginMoment() + 60 * 24 - 1;
+		return $this->getBeginMoment() + 3600;
 	}
 
 	public function isHeledag() {

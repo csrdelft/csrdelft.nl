@@ -80,7 +80,10 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getEindMoment() {
-		return strtotime($this->eind_moment);
+		if ($this->eind_moment AND $this->eind_moment !== $this->begin_moment) {
+			return strtotime($this->eind_moment);
+		}
+		return $this->getBeginMoment() + 1800;
 	}
 
 	public function getTitel() {

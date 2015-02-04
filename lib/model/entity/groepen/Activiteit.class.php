@@ -107,10 +107,10 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	}
 
 	public function getEindMoment() {
-		if ($this->eind_moment) {
+		if ($this->eind_moment AND $this->eind_moment !== $this->begin_moment) {
 			return strtotime($this->eind_moment);
 		}
-		return $this->getBeginMoment();
+		return $this->getBeginMoment() + 1800;
 	}
 
 	public function getTitel() {

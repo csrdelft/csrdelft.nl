@@ -43,7 +43,7 @@ class Bijbelrooster extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getEindMoment() {
-		return strtotime($this->dag);
+		return strtotime($this->dag) + 3600;
 	}
 
 	public function getTitel() {
