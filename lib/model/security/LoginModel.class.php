@@ -311,14 +311,25 @@ class LoginModel extends PersistenceModel implements Validator {
 			// Permissions change: delete old session
 			session_regenerate_id(true);
 
+			if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
+				$user_agent = filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING);
+			} else {
+				$user_agent = '';
+			}
+			if (array_key_exists('REMOTE_ADDR', $_SERVER)) {
+				$remote_addr = filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING);
+			} else {
+				$remote_addr = '';
+			}
+
 			// Login sessie aanmaken in database
 			$session = new LoginSession();
 			$session->session_hash = hash('sha512', session_id());
 			$session->uid = $account->uid;
 			$session->login_moment = getDateTime();
 			$session->expire = $expire ? $expire : getDateTime(time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
-			$session->user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING) : '';
-			$session->ip = isset($_SERVER['REMOTE_ADDR']) ? filter_var($_SERVER['REMOTE_ADDR'], FILTER_SANITIZE_STRING) : '';
+			$session->user_agent = $user_agent;
+			$session->ip = $remote_addr;
 			$session->lock_ip = $lockIP; // sessie koppelen aan ip?
 			if ($this->exists($session)) {
 				$this->update($session);
