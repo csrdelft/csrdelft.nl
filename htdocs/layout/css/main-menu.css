@@ -372,7 +372,7 @@ Main components
 	overflow-y: auto;
 	overflow-x: hidden;
 	-webkit-overflow-scrolling: touch;
-	z-index: 3;
+	z-index: 2;
 	/* Force Hardware Acceleration in WebKit */
 	-webkit-transform: translateZ(0);
 	-moz-transform: translateZ(0);
@@ -489,7 +489,7 @@ Main components
 		width: auto;
 		background: transparent;
 		overflow-x: hidden;
-		z-index: 3;
+		z-index: 2;
 	}
 	.cd-primary-nav ul.is-hidden {
 		/* reset mobile style */
@@ -810,7 +810,7 @@ Main components
 	max-width: 400px;
 	width: 80%;
 	right: 15%;
-	z-index: 3;
+	z-index: 2;
 	opacity: 0;
 	visibility: hidden;
 	-webkit-transition: opacity .3s 0s, visibility 0s .3s;
