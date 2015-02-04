@@ -150,18 +150,25 @@ class FotosDropzone extends Dropzone {
 class FotoBBView extends SmartyTemplateView {
 
 	private $groot;
+	private $responsive;
 
-	public function __construct(Foto $foto, $groot = false) {
+	public function __construct(Foto $foto, $groot = false, $responsive = false) {
 		parent::__construct($foto);
 		$this->groot = $groot;
+		$this->responsive = $responsive;
 	}
 
 	public function getHtml() {
-		$html = '<a href="' . $this->model->getAlbumUrl() . '?fullscreen#' . $this->model->getResizedUrl() . '"';
-		if (!$this->groot AND LidInstellingen::get('forum', 'fotoWeergave') == 'boven bericht') {
-			$html .= ' class="hoverIntent"><div class="hoverIntentContent"><div class="bb-img-loading" src="' . $this->model->getResizedUrl() . '"></div></div';
+		$html = '<a href="' . $this->model->getAlbumUrl() . '?fullscreen#' . $this->model->getResizedUrl() . ' class=""';
+		if ($this->responsive) {
+			$html .= 'responsive';
 		}
-		$html .= '><div class="bb-img-loading" src="';
+		if (!$this->groot AND LidInstellingen::get('forum', 'fotoWeergave') == 'boven bericht') {
+			$html .= ' hoverIntent"><div class="hoverIntentContent"><div class="bb-img-loading" src="' . $this->model->getResizedUrl() . '"></div></div>';
+		} else {
+			$html .= '">';
+		}
+		$html .= '<div class="bb-img-loading" src="';
 		if (($this->groot AND LidInstellingen::get('forum', 'fotoWeergave') != 'nee') OR LidInstellingen::get('forum', 'fotoWeergave') == 'in bericht') {
 			$html .= $this->model->getResizedUrl();
 		} else {
