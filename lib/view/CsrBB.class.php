@@ -927,6 +927,10 @@ HTML;
 		return '<span class="onderstreept"><ins>' . $this->parseArray(array('[/u]'), array('u')) . '</ins></span>';
 	}
 
+	function bb_rn() {
+		return '<br />';
+	}
+
 	function bb_clear($arguments = array()) {
 		$sClear = 'clear';
 		if (isset($arguments['clear']) AND ( $arguments['clear'] === 'left' OR $arguments['clear'] === 'right' )) {
