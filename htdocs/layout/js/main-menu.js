@@ -11,7 +11,7 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	var $overlay = $('.cd-main-overlay');
+	var $overlay = $('#cd-main-overlay');
 
 	var $maintrigger = $('#cd-main-trigger').click(function () {
 		if ($maintrigger.hasClass('selected')) {
@@ -55,7 +55,7 @@ jQuery(document).ready(function ($) {
 			$overlay.removeClass('is-visible');
 		}
 	});
-	$('.nav-on-left .cd-main-overlay').on('swipeleft', function () {
+	$('.nav-on-left #cd-main-overlay').on('swipeleft', function () {
 		if ($('.cd-primary-nav').hasClass('nav-is-visible')) {
 			closeNav();
 			$overlay.removeClass('is-visible');
@@ -175,11 +175,6 @@ jQuery(document).ready(function ($) {
 			fadeToggle = true;
 			$maintrigger.data('timer', setTimeout(toggleFade, 3000));
 		}
-
-		// Fix background position on screen
-		$overlay.css({
-			'margin-top': $(window).scrollTop()
-		});
 	}).trigger('scroll');
 
 	// Catch keystrokes for instant search

@@ -832,18 +832,15 @@ Main components
 .nav-is-fixed .cd-search {
 	position: fixed;
 }
-@media only screen and (max-width: 959px) {
 
-}
-
-.cd-main-overlay {
+#cd-main-overlay {
 	/* shadow layer visible when navigation is active */
 	position: fixed;
 	height: 100%;
 	width: 100%;
 	top: 0;
 	left: 0;
-	cursor: pointer;
+	z-index: 2;
 	visibility: hidden;
 	opacity: 0;
 	-webkit-backface-visibility: hidden;
@@ -852,7 +849,7 @@ Main components
 	-moz-transition: opacity .3s 0s, visibility 0s .3s;
 	transition: opacity .3s 0s, visibility 0s .3s;
 }
-.cd-main-overlay.is-visible {
+#cd-main-overlay.is-visible {
 	opacity: 1;
 	visibility: visible;
 	-webkit-transition: opacity .3s 0s, visibility 0s 0s;

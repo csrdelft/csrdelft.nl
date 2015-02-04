@@ -52,7 +52,7 @@
 
 	function initClouds() {
 
-		container = $('.cd-main-overlay');
+		container = $('#cd-main-overlay');
 
 		// Bg gradient
 

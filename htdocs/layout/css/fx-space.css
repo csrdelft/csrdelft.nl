@@ -29,11 +29,11 @@
 	100% { background-position: 0 0 }
 }
 
-.cd-main-overlay {
+#cd-main-overlay {
 	background-image:  url('/plaetjes/layout/bg/stars.jpg');
 	background-size: cover;
 }
-.cd-main-overlay.is-visible {
+#cd-main-overlay.is-visible {
 	-webkit-animation: space 360s linear infinite;
 	-moz-animation: space 360s linear infinite;
 	-ms-animation: space 360s linear infinite;
