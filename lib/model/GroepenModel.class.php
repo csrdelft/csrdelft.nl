@@ -98,12 +98,12 @@ class GroepenModel extends CachedPersistenceModel {
 	public function nieuw() {
 		$class = static::orm;
 		$groep = new $class();
-		$groep->naam = '';
+		$groep->naam = null;
 		$groep->familie = null;
 		$groep->status = GroepStatus::HT;
-		$groep->samenvatting = '';
+		$groep->samenvatting = null;
 		$groep->omschrijving = null;
-		$groep->begin_moment = getDateTime();
+		$groep->begin_moment = null;
 		$groep->eind_moment = null;
 		$groep->website = null;
 		$groep->maker_uid = LoginModel::getUid();

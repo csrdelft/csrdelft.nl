@@ -71,7 +71,7 @@ class Groep extends PersistentEntity {
 	protected static $persistent_attributes = array(
 		'id'			 => array(T::Integer, false, 'auto_increment'),
 		'naam'			 => array(T::String),
-		'familie'		 => array(T::String, true),
+		'familie'		 => array(T::String),
 		'status'		 => array(T::Enumeration, false, 'GroepStatus'),
 		'samenvatting'	 => array(T::Text),
 		'omschrijving'	 => array(T::Text, true),
