@@ -114,9 +114,9 @@ function init_lazy_images(parent) {
 		$(this).html(content);
 		content.on('load', function () {
 			var foto = content.attr('src').indexOf('/plaetjes/fotoalbum/') >= 0;
-			var video = $(this).parent().hasClass('bb-video-preview');
+			var video = $(this).parent().parent().hasClass('bb-video-preview');
 			$(this).parent().replaceWith($(this));
-			if (!video && !foto) {
+			if (!foto && !video) {
 				$(this).wrap('<a class="lightbox-link" href="' + $(this).attr('src') + '" data-lightbox="page-lightbox"></a>');
 			}
 		});
