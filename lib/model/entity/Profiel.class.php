@@ -347,7 +347,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		}
 		$k = '';
 		$geslacht = $this->geslacht === Geslacht::Man ? ' zijn' : ' haar';
-		$l = '<a href="/profiel/' . $this->uid . '" title="Klik om ' . htmlspecialchars($this->getNaam('volledig')) . $geslacht . ' profiel te openen" class="lidLink ' . htmlspecialchars($this->status) . '">';
+		$l = '<a href="/profiel/' . $this->uid . '" title="Klik om ' . htmlspecialchars($this->getNaam('volledig')) . $geslacht . ' profiel te bekijken" class="lidLink ' . htmlspecialchars($this->status) . '">';
 		if ($vorm !== 'pasfoto' AND ( $vorm === 'leeg' OR LidInstellingen::get('layout', 'visitekaartjes') == 'ja' )) {
 			$k = '<span';
 			if ($vorm !== 'leeg') {
