@@ -425,7 +425,7 @@ function toggle_vertical_align(elmnt) {
 function form_inline_toggle(form) {
 	form.prev('.InlineFormToggle').toggle();
 	form.toggle();
-	form.find('input[id!=""][id]').focus();
+	form.children(':first').focus();
 }
 
 function form_toggle(event) {

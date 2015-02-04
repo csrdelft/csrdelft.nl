@@ -1,5 +1,5 @@
 {*
-	menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
+menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {getMelding()}
 {if $menus}
@@ -16,7 +16,9 @@
 <h1>{$titel}</h1>
 <ul class="menubeheer-tree">
 	{if $root}
-		<li>{include file='menu/beheer/menu_root.tpl'}</li>
+		<li>
+			{include file='menu/beheer/menu_root.tpl'}
+		</li>
 		{if $root->children}
 			{foreach from=$root->children item=child}
 				{include file='menu/beheer/menu_item.tpl' item=$child}
@@ -24,3 +26,10 @@
 		{/if}
 	{/if}
 </ul>
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('.menu-item').click(function () {
+			$(this).children('.menubeheer-tree').slideToggle();
+		});
+	})
+</script>
