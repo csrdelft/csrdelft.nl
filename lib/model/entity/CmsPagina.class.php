@@ -41,6 +41,11 @@ class CmsPagina extends PersistentEntity {
 	 */
 	public $rechten_bewerken;
 	/**
+	 * Inline HTML
+	 * @var boolean
+	 */
+	public $inline_html;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -50,7 +55,8 @@ class CmsPagina extends PersistentEntity {
 		'inhoud'			 => array(T::LongText),
 		'laatst_gewijzigd'	 => array(T::DateTime),
 		'rechten_bekijken'	 => array(T::String),
-		'rechten_bewerken'	 => array(T::String)
+		'rechten_bewerken'	 => array(T::String),
+		'inline_html'		 => array(T::Boolean)
 	);
 	/**
 	 * Database primary key

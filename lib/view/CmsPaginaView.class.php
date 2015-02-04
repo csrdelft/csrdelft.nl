@@ -33,7 +33,7 @@ class CmsPaginaView implements View {
 		if ($this->pagina->magBewerken()) {
 			echo '<a href="/pagina/bewerken/' . $this->pagina->naam . '" class="btn float-right"title="Bewerk pagina&#013;' . $this->pagina->laatst_gewijzigd . '">' . Icon::getTag('bewerken') . '</a>';
 		}
-		echo CsrBB::parseHtml(htmlspecialchars_decode($this->pagina->inhoud));
+		echo CsrBB::parseHtml(htmlspecialchars_decode($this->pagina->inhoud), $this->pagina->inline_html);
 	}
 
 }
@@ -57,6 +57,8 @@ class CmsPaginaForm extends Formulier {
 		if ($pagina->magRechtenWijzigen()) {
 			$fields[] = new RechtenField('rechten_bekijken', $pagina->rechten_bekijken, 'Rechten bekijken');
 			$fields[] = new RechtenField('rechten_bewerken', $pagina->rechten_bewerken, 'Rechten bewerken');
+			$fields['html'] = new VinkField('inline_html', $pagina->inline_html, 'HTML');
+			$fields['html']->title = 'Geen [html] nodig en zelf regeleindes plaatsen met [rn] of <br />';
 		} else {
 			$fields[] = new HtmlComment('<div><label>Rechten bekijken</label>' . $pagina->rechten_bekijken .
 					'</div><div class="clear-left"><label>Rechten bewerken</label>' . $pagina->rechten_bewerken . '</div>');

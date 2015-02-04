@@ -26,10 +26,10 @@ class CsrBB extends eamBBParser {
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseHtml($bbcode) {
+	public static function parseHtml($bbcode, $inline = false) {
 		$parser = new CsrBB();
 		$parser->allow_html = true;
-		$parser->standard_html = true;
+		$parser->standard_html = $inline;
 		return $parser->getHtml($bbcode);
 	}
 
