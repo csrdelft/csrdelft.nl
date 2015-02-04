@@ -346,8 +346,12 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
 		$k = '';
-		$geslacht = $this->geslacht === Geslacht::Man ? ' zijn' : ' haar';
-		$l = '<a href="/profiel/' . $this->uid . '" title="' . htmlspecialchars($this->getNaam('volledig')) . ' (klik om ' . $geslacht . ' profiel te bekijken)" class="lidLink ' . htmlspecialchars($this->status) . '">';
+		if (LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
+			$title = '';
+		} else {
+			$title = ' title="' . htmlspecialchars($this->getNaam('volledig')) . '";';
+		}
+		$l = '<a href="/profiel/' . $this->uid . '"' . $title . ' class="lidLink ' . htmlspecialchars($this->status) . '">';
 		if ($vorm !== 'pasfoto' AND ( $vorm === 'leeg' OR LidInstellingen::get('layout', 'visitekaartjes') == 'ja' )) {
 			$k = '<span';
 			if ($vorm !== 'leeg') {
