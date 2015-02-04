@@ -346,7 +346,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
 		$k = '';
-		if (LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
+		if ($vorm !== 'pasfoto' AND LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
 			$title = '';
 		} else {
 			$title = ' title="' . htmlspecialchars($this->getNaam('volledig')) . '";';
