@@ -104,9 +104,22 @@ div.forumheadbtn {
 }
 #forumtabel tr.kleur0, #forumtabel td.bericht0 { background-color: #fff; }
 #forumtabel tr.kleur1, #forumtabel td.bericht1 { background-color: #f5f5f5; }
-#forumtabel td div.bericht {
-	max-width: 580px;
+#forumtabel td div.bericht, div.forumBericht, textarea.forumBericht, div.butn, #nieuweTitel, .markItUpContainer {
+	max-width: 320px;
 	word-wrap: break-word;
+}
+#forumBewerkBericht, .Formulier .BBCodeField {
+	width: 318px;
+	margin: 0;
+}
+@media only screen and (min-width: 640px) {
+
+	#forumtabel td div.bericht, div.forumBericht, textarea.forumBericht, div.butn, #nieuweTitel, .markItUpContainer {
+		max-width: 580px;
+	}
+	#forumBewerkBericht, .Formulier .BBCodeField, .markItUpContainer {
+		width: 578px;
+	}
 }
 #forumtabel tr div.forumpostKnoppen {
 	min-height: 70px;
@@ -252,13 +265,6 @@ span.togglePasfoto:hover, a.postlink:hover {
 }
 #forumBewerkReden {
 	width: 250px;
-}
-div.forumBericht, textarea.forumBericht, div.butn, #nieuweTitel {
-	width: 580px;
-}
-#forumBewerkBericht {
-	width: 578px;
-	margin: 0;
 }
 
 div.bewerkt { font-size: .8em; color: #bbb; }
