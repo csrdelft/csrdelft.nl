@@ -97,7 +97,7 @@ JS;
 
 	public function getHtml($showButtons = true) {
 		$html = '';
-		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
+		if (!$this->readonly AND ! $this->hidden) {
 			$class = 'fa fa-minus lichtgrijs';
 			if ($this->min !== null AND $this->getValue() === $this->min) {
 				$class .= ' disabled"';
@@ -141,7 +141,7 @@ JS;
 
 		$html .= ' <input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'pattern', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'min', 'max', 'step')) . ' /> ';
 
-		if (!$this->readonly AND ! $this->disabled AND ! $this->hidden) {
+		if (!$this->readonly AND ! $this->hidden) {
 			$class = 'fa fa-plus lichtgrijs';
 			if ($this->max !== null AND $this->getValue() === $this->max) {
 				$class .= ' disabled';

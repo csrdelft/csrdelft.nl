@@ -178,8 +178,8 @@ class Formulier implements View, Validator {
 	 */
 	public function isPosted() {
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField AND ! $field->disabled AND ! $field->isPosted()) {
-				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
+			if ($field instanceof InputField AND ! $field->isPosted()) {
+				setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}
 		}

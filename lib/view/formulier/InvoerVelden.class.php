@@ -46,7 +46,6 @@ abstract class InputField implements FormElement, Validator {
 	public $type = 'text'; // input type
 	public $title; // omschrijving bij mouseover title
 	public $description; // omschrijving in label
-	public $disabled = false; // veld uitgeschakeld?
 	public $hidden = false; // veld onzichtbaar voor gebruiker?
 	public $readonly = false; // veld mag niet worden aangepast door client?
 	public $required = false; // mag het veld leeg zijn?
@@ -311,11 +310,6 @@ abstract class InputField implements FormElement, Validator {
 			case 'title':
 				if ($this->title) {
 					return 'title="' . htmlspecialchars($this->title) . '"';
-				}
-				break;
-			case 'disabled':
-				if ($this->disabled) {
-					return 'disabled';
 				}
 				break;
 			case 'readonly':

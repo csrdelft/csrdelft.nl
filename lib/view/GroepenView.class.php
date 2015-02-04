@@ -109,9 +109,8 @@ class GroepForm extends DataTableForm {
 
 		$fields['maker_uid']->readonly = LoginModel::mag('P_ADMIN');
 
-		if (property_exists($groep, 'in_agenda')) {
-			$fields['in_agenda']->required = false;
-			$fields['in_agenda']->readonly = !LoginModel::mag('P_AGENDA_MOD');
+		if (property_exists($groep, 'in_agenda') AND ! LoginModel::mag('P_AGENDA_MOD')) {
+			unset($fields['in_agenda']);
 		}
 
 		if (property_exists($groep, 'rechten_aanmelden')) {
