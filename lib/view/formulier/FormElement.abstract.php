@@ -24,8 +24,10 @@
  * 
  * Uitbreidingen van HtmlComment:
  * 		- HtmlComment				invoer wordt als html weergegeven
- * 		- BBComment					invoer wordt als bbcode geparsed
+ * 		- HtmlBbComment				bbcode wordt geparsed en invoer wordt als html weergegeven
+ * 		- Fieldset					<fieldset> + <legend>invoer</legend>
  * 		- Subkopje					invoer wordt als <h3> weergegeven
+ * 		- CollapsableSubkopje		<h3> + <div>
  * 
  */
 interface FormElement extends View {
@@ -83,10 +85,24 @@ JS;
 
 }
 
-class BBComment extends HtmlComment {
+/**
+ * Html en eventuele bbcode wordt geparsed.
+ */
+class HtmlBbComment extends HtmlComment {
 
-	public function view() {
-		echo CsrBB::parse($this->comment);
+	public function getHtml() {
+		return CsrBB::parseHtml($this->comment, true);
+	}
+
+}
+
+/**
+ * Je moet zelf de fieldset sluiten!
+ */
+class FieldSet extends HtmlComment {
+
+	public function getHtml() {
+		return '<fieldset><legend>' . $this->comment . '</legend>';
 	}
 
 }

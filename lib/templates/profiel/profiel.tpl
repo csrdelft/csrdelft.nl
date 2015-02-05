@@ -328,7 +328,7 @@
 					</ul>
 				{/if}
 				{if LoginModel::getUid() === $profiel->uid}
-					<a class="btn" href="/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
+					<a class="btn" href="/bibliotheek/nieuwboek">{icon get="book_add"} Nieuw boek</a>
 					<br />
 				{/if}
 				{if $gerecenseerdeboeken}

@@ -14,11 +14,11 @@
  * 		* JaNeeField				ja/nee
  * 		* VerticaleField			Verticalen
  * 		* KerkField					Denominaties
- * 		* KeuzeRondjeField			Keuzerondje
+ * 		* RadioField				Keuzerondje
  * 
- * 	- VinkField						Keuzevakje
- * 	- DatumField					Datums (want data is zo ambigu)
- * 	- TijdField						Tijsstip
+ * 	- CheckboxField					Keuzevakje
+ * 	- DateField						Datum
+ * 	- TimeField						Tijsstip
  *  - ColorField					Kleurkiezer
  * 
  */
@@ -40,10 +40,10 @@ class RequiredColorField extends ColorField {
  */
 class SelectField extends InputField {
 
-	public $options;
-	public $groups;
 	public $size;
 	public $multiple;
+	protected $options;
+	private $groups;
 
 	public function __construct($name, $value, $description, array $options, $groups = false, $size = 1, $multiple = false) {
 		parent::__construct($name, $value, $description);
@@ -55,6 +55,10 @@ class SelectField extends InputField {
 			$this->onchange .= 'preview' . $this->getId() . '();';
 			$this->onkeyup .= 'preview' . $this->getId() . '();';
 		}
+	}
+
+	public function getOptions() {
+		return $this->options;
 	}
 
 	public function getValue() {
@@ -294,17 +298,17 @@ class KerkField extends SelectField {
  *
  * is valid als één van de opties geselecteerd is
  */
-class KeuzeRondjeField extends SelectField {
+class RadioField extends SelectField {
 
 	public $type = 'radio';
-	public $newlines = false;
+	public $columns = 0;
 
 	public function __construct($name, $value, $description, array $options) {
 		parent::__construct($name, $value, $description, $options, array(), 1, false);
 	}
 
 	public function getHtml() {
-		$html = '<div class="KeuzeRondjeOptions">';
+		$html = '<div class="KeuzeRondjeOptions columns-' . $this->columns . ($this->description ? '' : ' breed') . '">';
 		foreach ($this->options as $value => $description) {
 			$html .= $this->getOptionHtml($value, $description);
 		}
@@ -322,7 +326,7 @@ class KeuzeRondjeField extends SelectField {
 		} else {
 			$html .= '<label for="' . $this->getId() . 'Option_' . $value . '" class="KeuzeRondjeLabel">' . htmlspecialchars($description) . '</label>';
 		}
-		if ($this->newlines) {
+		if ($this->columns) {
 			$html .= '<br />';
 		}
 		return $html;
@@ -340,7 +344,7 @@ class KeuzeRondjeField extends SelectField {
 
 }
 
-class RequiredKeuzeRondjeField extends KeuzeRondjeField {
+class RequiredRadioField extends RadioField {
 
 	public $required = true;
 
@@ -349,7 +353,7 @@ class RequiredKeuzeRondjeField extends KeuzeRondjeField {
 /**
  * Man of vrouw
  */
-class GeslachtField extends KeuzeRondjeField {
+class GeslachtField extends RadioField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description, array('m' => 'Man', 'v' => 'Vrouw'));
@@ -366,7 +370,7 @@ class RequiredGeslachtField extends GeslachtField {
 /**
  * Ja of Nee
  */
-class JaNeeField extends KeuzeRondjeField {
+class JaNeeField extends RadioField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, (int) $value, $description, array(1 => 'Ja', 0 => 'Nee'));
@@ -385,13 +389,13 @@ class RequiredJaNeeField extends JaNeeField {
 }
 
 /**
- * DatumField
+ * DateField
  *
  * Selecteer een datum, met een mogelijk maximum jaar.
  *
  * Produceert drie velden.
  */
-class DatumField extends InputField {
+class DateField extends InputField {
 
 	protected $max_jaar;
 	protected $min_jaar;
@@ -553,13 +557,13 @@ JS;
 
 }
 
-class RequiredDatumField extends DatumField {
+class RequiredDateField extends DateField {
 
 	public $required = true;
 
 }
 
-class TijdField extends InputField {
+class TimeField extends InputField {
 
 	protected $minutensteps;
 
@@ -635,7 +639,7 @@ class TijdField extends InputField {
 
 }
 
-class RequiredTijdField extends TijdField {
+class RequiredTimeField extends TimeField {
 
 	public $required = true;
 
@@ -644,7 +648,7 @@ class RequiredTijdField extends TijdField {
 /**
  * @Warning: NEVER use for persistence!
  */
-class VinkField extends InputField {
+class CheckboxField extends InputField {
 
 	public $type = 'checkbox';
 	public $label;
@@ -700,14 +704,14 @@ class VinkField extends InputField {
 		$html .= '/>';
 
 		if (!empty($this->label)) {
-			$html .= '<label for="' . $this->getId() . '" class="VinkFieldLabel">' . $this->label . '</label>';
+			$html .= '<label for="' . $this->getId() . '" class="CheckboxFieldLabel">' . $this->label . '</label>';
 		}
 		return $html;
 	}
 
 }
 
-class RequiredVinkField extends VinkField {
+class RequiredCheckboxField extends CheckboxField {
 
 	public $required = true;
 

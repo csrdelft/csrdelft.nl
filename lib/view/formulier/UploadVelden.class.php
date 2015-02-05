@@ -23,7 +23,7 @@ require_once 'model/entity/Afbeelding.class.php';
  * 		* DownloadUrlField
  * 
  */
-class FileField extends KeuzeRondjeField {
+class FileField extends RadioField {
 
 	private $behoudenField;
 	private $uploadField;
@@ -453,7 +453,7 @@ class ExistingFileField extends SelectField {
 				}
 			}
 		}
-		$this->verplaats = new VinkField($this->name . '_BV', false, null, 'Bestand verplaatsen');
+		$this->verplaats = new CheckboxField($this->name . '_BV', false, null, 'Bestand verplaatsen');
 		if ($this->isPosted()) {
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
 			$mimetype = finfo_file($finfo, $this->dir->path . $this->value);

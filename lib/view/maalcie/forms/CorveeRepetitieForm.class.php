@@ -55,7 +55,7 @@ class CorveeRepetitieForm extends ModalForm {
 		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $crid, 'submit', 'Alles bijwerken', 'Opslaan & alle taken bijwerken', '/famfamfam/disk_multiple.png');
 
 		if ($crid !== 0) {
-			$fields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Verplaatsen');
+			$fields['ver'] = new CheckboxField('verplaats_dag', $verplaats, 'Verplaatsen');
 			$fields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 			$fields['ver']->onchange = <<<JS
 var btn = $('#{$bijwerken->getId()}');

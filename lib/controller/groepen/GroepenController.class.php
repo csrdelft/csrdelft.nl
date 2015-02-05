@@ -44,6 +44,7 @@ class GroepenController extends Controller {
 			case 'beheren':
 			case 'aanmaken':
 			case 'zoeken':
+			case 'nieuw':
 				// Soort in param 4?
 				if ($this->hasParam(4)) {
 					$args['soort'] = $this->getParam(4);
@@ -98,6 +99,7 @@ class GroepenController extends Controller {
 			case 'overzicht':
 			case 'bekijken':
 			case 'zoeken':
+			case 'nieuw':
 				return !$this->isPosted();
 
 			case 'overzicht':
@@ -208,6 +210,20 @@ class GroepenController extends Controller {
 			$table = new GroepenBeheerTable($this->model);
 			$this->view = new CsrLayoutPage($table);
 			$this->view->addCompressedResources('datatable');
+		}
+	}
+
+	public function nieuw() {
+		$form = new GroepAanmakenForm($this->model);
+		if (!$this->isPosted()) {
+			$this->beheren();
+			$form->tableId = $this->view->getBody()->getTableId();
+			$this->view->modal = $form;
+		} elseif ($form->validate()) {
+			//TODO
+			$this->view = $form;
+		} else {
+			$this->view = $form;
 		}
 	}
 

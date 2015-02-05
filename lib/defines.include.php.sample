@@ -27,8 +27,11 @@ define('FORCE_HTTPS', true);
 # wordt gebruikt om pagina's alleen op Confide te laten zien
 define('CONFIDE_IP', '80.112.180.123');
 
+# wordt gebruikt voor secure cookies
+define('CSR_DOMAIN', 'csrdelft.nl');
+
 # urls ZONDER trailing slash
-define('CSR_ROOT', 'https://csrdelft.nl');
+define('CSR_ROOT', 'https://' . CSR_DOMAIN);
 
 # paden MET trailing slash
 define('BASE_PATH', '/srv/www/csrdelft.nl/');

@@ -118,16 +118,11 @@ class RememberLoginForm extends DataTableForm {
 
 }
 
-class RememberAfterLoginForm extends ModalForm {
+class RememberAfterLoginForm extends RememberLoginForm {
 
 	public function __construct(RememberLogin $remember) {
-		parent::__construct($remember, '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
-
-		$fields[] = new HtmlComment('<div class="dikgedrukt">Gebruik deze functie alleen voor een veilig apparaat op een veilige locatie.</div>');
-		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');
-		$fields[] = new FormDefaultKnoppen('/', false, true, true, true, true);
-
-		$this->addFields($fields);
+		parent::__construct($remember);
+		$this->tableId = false; // same as parent but without data table
 	}
 
 }
@@ -147,7 +142,7 @@ class LoginForm extends Formulier {
 		if (LoginModel::instance()->hasError()) {
 			$fields[] = new HtmlComment('<p class="error">' . LoginModel::instance()->getError() . '</p>');
 		} else {
-			$fields['remember'] = new VinkField('remember', false, null, 'Blijf ingelogd');
+			$fields['remember'] = new CheckboxField('remember', false, null, 'Blijf ingelogd');
 		}
 
 		$this->addFields($fields);

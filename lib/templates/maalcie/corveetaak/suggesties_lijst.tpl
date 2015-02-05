@@ -84,14 +84,14 @@ suggesties_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 								   onchange="taken_toggle_suggestie('geenvoorkeur');" 
 							   {/if}
 							   />
-						<label for="voorkeur" class="VinkFieldLabel">Met voorkeur</label>
+						<label for="voorkeur" class="CheckboxFieldLabel">Met voorkeur</label>
 						<br />
 						<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');" 
 							   {if $recent}
 								   checked="checked" 
 							   {/if}
 							   />
-						<label for="recent" class="VinkFieldLabel">Niet recent gecorveed</label>
+						<label for="recent" class="CheckboxFieldLabel">Niet recent gecorveed</label>
 					</td>
 					<td>
 						Toon novieten/sjaars<br />

@@ -39,7 +39,7 @@ class TaakForm extends ModalForm {
 		$fields['fid']->onchange = $functiePunten . "$('#field_punten').val(punten[this.value]);";
 		$fields['lid'] = new LidField('uid', $uid, 'Naam of lidnummer');
 		$fields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
-		$fields[] = new DatumField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
+		$fields[] = new DateField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields[] = new IntField('punten', $punten, 'Punten', 0, 10);
 		$fields[] = new IntField('bonus_malus', $bonus_malus, 'Bonus/malus', -10, 10);
 		$fields['crid'] = new IntField('crv_repetitie_id', $crid, null);

@@ -20,7 +20,7 @@
 {if $boek->magBekijken()}
 	{* blok rechts met knopjes *}
 	<div class="controls">
-		<a class="btn" href="/bibliotheek/nieuwboek" title="Nieuw boek toevoegen">{icon get="book_add"} Boek toevoegen</a>
+		<a class="btn" href="/bibliotheek/nieuwboek">{icon get="book_add"} Nieuw boek</a>
 		{if $boek->getId()!=0}
 			<br /><br /><br />
 			{if $boek->magVerwijderen()}

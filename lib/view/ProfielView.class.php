@@ -182,9 +182,9 @@ class ProfielForm extends Formulier {
 					$fields[] = new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
 				}
 			}
-			$fields[] = new DatumField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15);
+			$fields[] = new DateField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15);
 			if ($admin AND ! $profiel->isLid() AND ! $profiel->isOudlid()) {
-				$fields[] = new DatumField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
+				$fields[] = new DateField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
 			}
 			if ($admin OR $profiel->isOudlid() OR $profiel->status === LidStatus::Overleden) {
 				$fields[] = new LidField('echtgenoot', $profiel->echtgenoot, 'Echtgenoot', 'allepersonen');
@@ -255,7 +255,7 @@ class ProfielForm extends Formulier {
 		}
 
 		if ($admin) {
-			$fields[] = new DatumField('lidafdatum', $profiel->lidafdatum, 'Lid-af sinds');
+			$fields[] = new DateField('lidafdatum', $profiel->lidafdatum, 'Lid-af sinds');
 		}
 
 		if ($admin AND ! $inschrijven) {

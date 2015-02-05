@@ -165,7 +165,7 @@ switch (constant('MODE')) {
 		ini_set('session.use_only_cookies', true);
 		ini_set('session.cookie_lifetime', 0);
 		ini_set('session.cookie_path', '/');
-		ini_set('session.cookie_domain', 'csrdelft.nl');
+		ini_set('session.cookie_domain', CSR_DOMAIN);
 		ini_set('session.cookie_secure', FORCE_HTTPS);
 		ini_set('session.cookie_httponly', true);
 

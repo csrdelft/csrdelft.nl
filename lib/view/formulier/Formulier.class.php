@@ -39,7 +39,7 @@ class Formulier implements View, Validator {
 	public $css_classes = array();
 	protected $javascript = '';
 	public $titel;
-	public $wizard = false;
+	public $stappen_submit = false;
 
 	public function __construct($model, $action, $titel = false) {
 		$this->model = $model;
@@ -95,9 +95,9 @@ class Formulier implements View, Validator {
 					break;
 				case T::Float: $class .= 'DecimalField';
 					break;
-				case T::Date: $class .= 'DatumField';
+				case T::Date: $class .= 'DateField';
 					break;
-				case T::Time: $class .= 'TijdField';
+				case T::Time: $class .= 'TimeField';
 					break;
 				case T::DateTime: $class .= 'DateTimeField';
 					break;
@@ -242,10 +242,10 @@ class Formulier implements View, Validator {
 		foreach ($this->fields as $field) {
 			$this->javascript .= $field->getJavascript();
 		}
-		if ($this->wizard) {
+		if ($this->stappen_submit) {
 			$this->javascript .= <<<JS
 
-$(form).formToWizard({submitButton: ""});
+$(form).formSteps({submitButton: "{$this->stappen_submit}"});
 JS;
 		}
 		return $this->javascript;
@@ -325,7 +325,7 @@ JS;
 }
 
 /**
- * Formulier as modal content.
+ * Form as modal content.
  */
 class ModalForm extends Formulier {
 
@@ -340,13 +340,16 @@ class ModalForm extends Formulier {
 }
 
 /**
- * Formulier linked to a DataTable.
+ * Form linked to a DataTable.
  */
 class DataTableForm extends ModalForm {
 
-	public $tableId;
+	public $tableId = null;
 
 	protected function getFormTag() {
+		if ($this->tableId === false) {
+			return parent::getFormTag();
+		}
 		$this->css_classes[] = 'DataTableResponse';
 		if (!$this->tableId) {
 			$this->tableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);

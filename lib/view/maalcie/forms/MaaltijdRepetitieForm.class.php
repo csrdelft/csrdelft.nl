@@ -24,7 +24,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 		}
 
 		$fields[] = new RequiredTextField('standaard_titel', $titel, 'Standaard titel', 255);
-		$fields[] = new TijdField('standaard_tijd', $tijd, 'Standaard tijd', 15);
+		$fields[] = new TimeField('standaard_tijd', $tijd, 'Standaard tijd', 15);
 		$fields['dag'] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodieke maaltijden';
 		$fields[] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 0, 183);
@@ -39,7 +39,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $mrid, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', '/famfamfam/disk_multiple.png');
 
 		if ($mrid !== 0) {
-			$fields['ver'] = new VinkField('verplaats_dag', $verplaats, 'Verplaatsen');
+			$fields['ver'] = new CheckboxField('verplaats_dag', $verplaats, 'Verplaatsen');
 			$fields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 			$fields['ver']->onchange = <<<JS
 var btn = $('#{$bijwerken->getId()}');

@@ -82,25 +82,29 @@ JS;
 
 class FormDefaultKnoppen extends FormKnoppen {
 
+	public $submit;
+	public $reset;
+	public $cancel;
+
 	public function __construct($cancel_url = null, $reset = true, $icons = true, $label = true, $reset_cancel = false, $submit_DataTableResponse = false) {
-		$submit = new SubmitKnop();
+		$this->submit = new SubmitKnop();
 		if ($reset_cancel) {
-			$submit->icon = '/famfamfam/accept.png';
+			$this->submit->icon = '/famfamfam/accept.png';
 		}
 		if ($submit_DataTableResponse) {
-			$submit->action .= ' DataTableResponse';
+			$this->submit->action .= ' DataTableResponse';
 		}
-		$this->addKnop($submit);
+		$this->addKnop($this->submit);
 		if ($reset) {
-			$reset = new ResetKnop();
-			$this->addKnop($reset);
+			$this->reset = new ResetKnop();
+			$this->addKnop($this->reset);
 		}
 		if ($cancel_url !== false) {
-			$cancel = new CancelKnop($cancel_url);
+			$this->cancel = new CancelKnop($cancel_url);
 			if ($reset_cancel) {
-				$cancel->action .= ' reset';
+				$this->cancel->action .= ' reset';
 			}
-			$this->addKnop($cancel);
+			$this->addKnop($this->cancel);
 		}
 		if (!$icons) {
 			foreach ($this->getModel() as $knop) {

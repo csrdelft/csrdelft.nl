@@ -15,8 +15,8 @@ class RepetitieCorveeForm extends ModalForm {
 		$this->titel = 'Periodiek corvee aanmaken';
 
 		$fields[] = new HtmlComment('<p>Aanmaken <span class="dikgedrukt">' . $repetitie->getPeriodeInDagenText() . '</span> op <span class="dikgedrukt">' . $repetitie->getDagVanDeWeekText() . '</span> in de periode:</p>');
-		$fields['begin'] = new DatumField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y'));
-		$fields['eind'] = new DatumField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
+		$fields['begin'] = new DateField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y'));
+		$fields['eind'] = new DateField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
 		$fields['mid'] = new IntField('maaltijd_id', $mid, null);
 		$fields['mid']->readonly = true;
 		$fields['mid']->hidden = true;

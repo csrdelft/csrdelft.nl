@@ -127,10 +127,10 @@ h1.Titel {
 		border: 1px solid #ddd;
 		background-color: #eee;
 	}
-	.VinkField {
+	.CheckboxField {
 		margin: 4px 0 0 4px;
 	}
-	.VinkFieldLabel, .KeuzeRondjeLabel {
+	.CheckboxFieldLabel, .KeuzeRondjeLabel {
 		float: none;
 		width: auto;
 	}
@@ -140,6 +140,14 @@ h1.Titel {
 	}
 	.KeuzeRondjeOptions {
 		display: inline-block;
+	}
+	.KeuzeRondjeOptions.breed {
+		width: 100%;
+	}
+	.KeuzeRondjeOptions.columns-2 {
+		-webkit-columns: auto 2;
+		-moz-columns: auto 2;
+		columns: auto 2;
 	}
 	.previewDiv {
 		display: inline-block;
@@ -200,47 +208,5 @@ h1.Titel {
 	}
 	.InlineForm.ToggleForm {
 		display: none;
-	}
-}
-
-/* Formulier Wizard */
-fieldset {
-	border: none;
-	width: 320px;
-
-	legend {
-		font-size: 18px;
-		margin: 0px;
-		padding: 10px 0px;
-		color: #b0232a;
-		font-weight: bold;
-	}
-
-	label {
-		display: block;
-		margin: 15px 0 5px;
-	}
-}
-
-.wizardSteps {
-	list-style: none;
-	width: 100%;
-	overflow: hidden;
-	margin: 0px;
-	padding: 0px;
-
-	li {
-		font-size: 24px;
-		float: left;
-		padding: 10px;
-		color: #b0b1b3;
-
-		span {
-			font-size: 11px;
-			display: block;
-		}
-	}
-	li.current {
-		color: #000;
 	}
 }

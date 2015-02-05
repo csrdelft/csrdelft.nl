@@ -44,66 +44,6 @@ class GroepLedenData extends DataTableResponse {
 
 }
 
-class GroepLidBeheerForm extends DataTableForm {
-
-	public function __construct(GroepLid $lid, $action, array $blacklist = null) {
-		parent::__construct($lid, $action, 'Aanmelding bewerken');
-		$fields = $this->generateFields();
-
-		if ($blacklist !== null) {
-			$fields['uid']->blacklist = $blacklist;
-			$fields['uid']->required = true;
-			$fields['uid']->readonly = false;
-		}
-		$fields['uid']->hidden = false;
-		$fields['door_uid']->required = true;
-		$fields['door_uid']->readonly = true;
-		$fields['door_uid']->hidden = true;
-
-		$fields[] = new FormDefaultKnoppen();
-		$this->addFields($fields);
-	}
-
-}
-
-class GroepBewerkenForm extends InlineForm {
-
-	public function __construct(GroepLid $lid, Groep $groep, $toggle = true, $buttons = true) {
-
-		if ($groep->keuzelijst) {
-			$field = new MultiSelectField('opmerking', $lid->opmerking, null, $groep->keuzelijst);
-		} else {
-			$field = new TextField('opmerking', $lid->opmerking, null);
-			$field->placeholder = 'Opmerking';
-			$field->suggestions[] = $groep->getOpmerkingSuggesties();
-		}
-
-		parent::__construct($lid, $groep->getUrl() . 'bewerken/' . $lid->uid, $field, $toggle, $buttons);
-	}
-
-}
-
-class GroepAanmeldenForm extends GroepBewerkenForm {
-
-	public function __construct(GroepLid $lid, Groep $groep, $pasfoto = true) {
-		if ($pasfoto) {
-			$buttons = new PasfotoAanmeldenKnop();
-		} else {
-			$buttons = new SubmitKnop(null, 'submit', 'Aanmelden', null, null);
-		}
-
-		parent::__construct($lid, $groep, false, $buttons);
-
-		$this->action = $groep->getUrl() . 'aanmelden/' . $lid->uid;
-		$this->css_classes[] = 'float-left';
-
-		if ($pasfoto) {
-			$this->getField()->hidden = true;
-		}
-	}
-
-}
-
 class GroepOmschrijvingView implements View, FormElement {
 
 	protected $groep;

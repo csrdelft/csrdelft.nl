@@ -39,8 +39,8 @@
 	<div class="float-right">
 		{if !isset($maaltijd) OR !$maaltijd->getIsVerwijderd()}
 			<a class="btn" onclick="$(this).hide(); taken_show_old();">{icon get="eye"} Toon verleden</a>
-			<a href="{$smarty.const.maalcieUrl}/prullenbak" class="btn" title="Open de prullenbak">{icon get="bin_closed"} Prullenbak</a>
-			<a href="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" title="Nieuwe taak" class="btn post popup">{icon get="add"} Nieuwe taak</a>
+			<a href="{$smarty.const.maalcieUrl}/prullenbak" class="btn">{icon get="bin_closed"} Open prullenbak</a>
+			<a href="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" class="btn post popup">{icon get="add"} Nieuwe taak</a>
 		{/if}
 	</div>
 {/if}

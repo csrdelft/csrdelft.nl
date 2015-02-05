@@ -355,7 +355,7 @@ htdocs/layout/js/jquery/plugins/jquery.autosize.js -text
 htdocs/layout/js/jquery/plugins/jquery.autosize.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.facedetection.js -text
 htdocs/layout/js/jquery/plugins/jquery.facedetection.min.js -text
-htdocs/layout/js/jquery/plugins/jquery.formToWizard.js -text
+htdocs/layout/js/jquery/plugins/jquery.formSteps.js -text
 htdocs/layout/js/jquery/plugins/jquery.hoverIntent.js -text
 htdocs/layout/js/jquery/plugins/jquery.hoverIntent.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.maskedinput.js -text
@@ -4474,6 +4474,7 @@ lib/view/DocumentenView.class.php -text
 lib/view/EetplanView.class.php -text
 lib/view/ForumView.class.php -text
 lib/view/FotoAlbumView.class.php -text
+lib/view/GroepForms.class.php -text
 lib/view/GroepLedenView.class.php -text
 lib/view/GroepenView.class.php -text
 lib/view/HtmlPage.abstract.php -text
