@@ -536,9 +536,8 @@ class GroepenDeelnameGrafiek implements View {
 						xaxes: [{
 								mode: "time",
 								minTickSize: <?= json_encode($this->step); ?>
-							}],
+							}]
 					};
-					console.log(options);
 					$.plot("#deelnamegrafiek", series, options);
 				});
 			</script>
