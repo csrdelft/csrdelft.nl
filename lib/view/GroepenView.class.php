@@ -36,10 +36,13 @@ class GroepenBeheerTable extends DataTable {
 		$this->searchColumn('status');
 		$this->searchColumn('soort');
 
-		$create = new DataTableKnop('== 0', $this->tableId, $this->url . 'aanmaken', 'post popup', 'Toevoegen', 'Nieuwe groep toevoegen', 'add');
+		$create = new DataTableKnop('== 0', $this->tableId, $this->url . 'nieuw', 'post popup', 'Nieuw', 'Nieuwe toevoegen', 'add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, $this->url . 'wijzigen', 'post popup', 'Wijzigen', 'Wijzig groep eigenschappen', 'edit');
+		$next = new DataTableKnop('== 1', $this->tableId, $this->url . 'aanmaken', 'post popup', 'Opvolger', 'Nieuwe toevoegen die de huidige opvolgt', 'add');
+		$this->addKnop($next);
+
+		$update = new DataTableKnop('== 1', $this->tableId, $this->url . 'wijzigen', 'post popup', 'Wijzigen', 'Wijzig eigenschappen', 'edit');
 		$this->addKnop($update);
 
 		if (property_exists($model::orm, 'aanmelden_vanaf')) {
@@ -50,7 +53,7 @@ class GroepenBeheerTable extends DataTable {
 		$opvolg = new DataTableKnop('>= 1', $this->tableId, $this->url . 'opvolging', 'post popup', 'Opvolging', 'Familienaam en groepstatus instellen', 'timeline');
 		$this->addKnop($opvolg);
 
-		$convert = new DataTableKnop('>= 1', $this->tableId, $this->url . 'converteren', 'post popup', 'Converteren', 'Converteer groep', 'lightning');
+		$convert = new DataTableKnop('>= 1', $this->tableId, $this->url . 'converteren', 'post popup', 'Converteren', 'Converteer naar ander soort groep', 'lightning');
 		$this->addKnop($convert);
 
 		$delete = new DataTableKnop('>= 1', $this->tableId, $this->url . 'verwijderen', 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');

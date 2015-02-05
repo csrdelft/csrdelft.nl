@@ -30,6 +30,16 @@ class Groep extends PersistentEntity {
 	 */
 	public $familie;
 	/**
+	 * Datum en tijd begin 
+	 * @var string
+	 */
+	public $begin_moment;
+	/**
+	 * Datum en tijd einde
+	 * @var string
+	 */
+	public $eind_moment;
+	/**
 	 * o.t. / h.t. / f.t.
 	 * @var GroepStatus
 	 */
@@ -50,16 +60,6 @@ class Groep extends PersistentEntity {
 	 */
 	public $keuzelijst;
 	/**
-	 * Datum en tijd begin 
-	 * @var string
-	 */
-	public $begin_moment;
-	/**
-	 * Datum en tijd einde
-	 * @var string
-	 */
-	public $eind_moment;
-	/**
 	 * Lidnummer van aanmaker
 	 * @var string
 	 */
@@ -72,12 +72,12 @@ class Groep extends PersistentEntity {
 		'id'			 => array(T::Integer, false, 'auto_increment'),
 		'naam'			 => array(T::String),
 		'familie'		 => array(T::String),
+		'begin_moment'	 => array(T::DateTime),
+		'eind_moment'	 => array(T::DateTime, true),
 		'status'		 => array(T::Enumeration, false, 'GroepStatus'),
 		'samenvatting'	 => array(T::Text),
 		'omschrijving'	 => array(T::Text, true),
 		'keuzelijst'	 => array(T::String, true),
-		'begin_moment'	 => array(T::DateTime),
-		'eind_moment'	 => array(T::DateTime, true),
 		'maker_uid'		 => array(T::UID)
 	);
 	/**

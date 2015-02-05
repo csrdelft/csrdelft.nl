@@ -42,9 +42,9 @@ class GroepenController extends Controller {
 			// Geen argumenten vereist
 			case 'overzicht':
 			case 'beheren':
-			case 'aanmaken':
 			case 'zoeken':
 			case 'nieuw':
+			case 'aanmaken':
 				// Soort in param 4?
 				if ($this->hasParam(4)) {
 					$args['soort'] = $this->getParam(4);
@@ -53,6 +53,11 @@ class GroepenController extends Controller {
 
 			// Groep id of selectie vereist
 			case 'wijzigen':
+				/**
+				 * In case of GET the url param 3
+				 * contains the ID and this
+				 * switch case is skipped.
+				 */
 				break;
 
 			// Groep id vereist
@@ -228,8 +233,23 @@ class GroepenController extends Controller {
 	}
 
 	public function aanmaken($soort = null) {
-		$groep = $this->model->nieuw($soort);
-		$form = new GroepForm($groep, $this->model->getUrl() . $this->action);
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		if (empty($selection)) {
+			$groep = $this->model->nieuw($soort);
+		}
+		// opvolger
+		else {
+			$old = $this->model->getUUID($selection[0]);
+			if (!$old) {
+				$this->geentoegang();
+			}
+			$groep = $this->model->nieuw($soort);
+			$groep->naam = $old->naam;
+			$groep->familie = $old->familie;
+			$groep->samenvatting = $old->samenvatting;
+			$groep->omschrijving = $old->omschrijving;
+		}
+		$form = new GroepForm($groep, $this->model->getUrl() . $this->action); // checks rechten aanmaken
 		if ($form->validate()) {
 			$this->model->create($groep);
 			$this->view = new GroepenBeheerData(array($groep));
@@ -243,7 +263,7 @@ class GroepenController extends Controller {
 			if (!$groep->mag(A::Wijzigen)) {
 				$this->geentoegang();
 			}
-			$form = new GroepForm($groep, $groep->getUrl() . $this->action);
+			$form = new GroepForm($groep, $groep->getUrl() . $this->action); // checks rechten aanmaken
 			if (!$this->isPosted()) {
 				$this->beheren();
 				$this->view->getBody()->filter = $groep->naam;
@@ -266,7 +286,7 @@ class GroepenController extends Controller {
 			if (!$groep OR ! $groep->mag(A::Wijzigen)) {
 				$this->geentoegang();
 			}
-			$form = new GroepForm($groep, $this->model->getUrl() . $this->action);
+			$form = new GroepForm($groep, $this->model->getUrl() . $this->action); // checks rechten aanmaken
 			if ($form->validate()) {
 				$this->model->update($groep);
 				$this->view = new GroepenBeheerData(array($groep));
