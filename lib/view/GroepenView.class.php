@@ -428,10 +428,10 @@ class GroepenView implements View {
 	}
 
 	public function view() {
+		echo '<a class="btn" href="' . $this->url . 'beheren"><img class="icon" src="/plaetjes/famfamfam/table.png" width="16" height="16"> Beheren</a>';
 		if ($this->geschiedenis) {
 			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->url . $this->geschiedenis . '/deelnamegrafiek"><img class="icon" src="/plaetjes/famfamfam/chart_bar.png" width="16" height="16"> Deelnamegrafiek</a>';
 		}
-		echo '<a class="btn" href="' . $this->url . 'beheren"><img class="icon" src="/plaetjes/famfamfam/table.png" width="16" height="16"> Beheren</a>';
 		$view = new CmsPaginaView($this->pagina);
 		$view->view();
 		foreach ($this->groepen as $groep) {
