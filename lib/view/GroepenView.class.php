@@ -510,16 +510,14 @@ class GroepenDeelnameGrafiek implements View {
 		<div id="deelnamegrafiek" style="height: 360px;">
 			<script type="text/javascript">
 				$(document).ready(function () {
-					var series = [
-						{
-							data: <?= json_encode($this->series[0]); ?>,
-							label: "",
-							color: "#AFD8F8"
-						},
-						{
+					var series = [{
 							data: <?= json_encode($this->series[1]); ?>,
 							label: "",
 							color: "#FFCBDB"
+						}, {
+							data: <?= json_encode($this->series[0]); ?>,
+							label: "",
+							color: "#AFD8F8"
 						}
 					];
 					var options = {
