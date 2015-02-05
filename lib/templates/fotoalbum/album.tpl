@@ -310,7 +310,7 @@
 		{foreach from=$album->getSubAlbums() item=subalbum}
 			{assign var=cover_url value=$subalbum->getCoverUrl()}
 			<div class="subalbum">
-				<a href="{$subalbum->getUrl()}#{$cover_url|replace:"/_thumbs/":"/_resized/"}" title="{$subalbum->getUrl()|replace:"%20":" "}">
+				<a href="{$subalbum->getUrl()}#{$cover_url|replace:"/_thumbs/":"/_resized/"}">
 					<img src="{$cover_url}" alt="{$subalbum->dirname|ucfirst}" />
 					<div class="subalbumname">{$subalbum->dirname|ucfirst}</div>
 				</a>
