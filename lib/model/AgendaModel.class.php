@@ -222,7 +222,6 @@ class AgendaVerbergenModel extends PersistenceModel {
 			$verborgen = new AgendaVerbergen();
 			$verborgen->uid = LoginModel::getUid();
 			$verborgen->uuid = $item->getUUID();
-			$verborgen->dag = date('Y-m-d', strtotime($item->getBeginMoment()));
 			$this->create($verborgen);
 		} else {
 			$this->delete($verborgen);

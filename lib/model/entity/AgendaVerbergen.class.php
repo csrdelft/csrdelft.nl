@@ -20,18 +20,12 @@ class AgendaVerbergen extends PersistentEntity {
 	 */
 	public $uuid;
 	/**
-	 * Dag
-	 * @var string
-	 */
-	public $dag;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'uid'	 => array(T::UID),
-		'uuid'	 => array(T::String),
-		'dag'	 => array(T::Date)
+		'uuid'	 => array(T::String)
 	);
 	/**
 	 * Database primary key
