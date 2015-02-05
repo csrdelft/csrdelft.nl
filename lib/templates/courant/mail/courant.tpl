@@ -103,7 +103,7 @@ li{
 		<ul>
 		{foreach from=$courant->getBerichten() item=bericht}
 			{if $bericht.categorie==$categorie}
-				<li><a href="#{$bericht.ID}" style="text-decoration: none;">{$bericht.titel|bbcode:true}</a></li>
+				<li><a href="#{$bericht.ID}" style="text-decoration: none;">{$bericht.titel|bbcode:"mail"}</a></li>
 			{/if}
 		{/foreach}
 		</ul>
@@ -115,8 +115,8 @@ li{
 </table>
 <font face="verdana" size="-1">	
 {foreach from=$courant->getBerichten() item=bericht}
-	<h4><a name="{$bericht.ID}"></a>{$bericht.titel|bbcode:true}</h4>
-	<div class="p">{$bericht.bericht|bbcode:true}</div>
+	<h4><a name="{$bericht.ID}"></a>{$bericht.titel|bbcode:"mail"}</h4>
+	<div class="p">{$bericht.bericht|bbcode:"mail"}</div>
 {/foreach}
 </font>
 </td>

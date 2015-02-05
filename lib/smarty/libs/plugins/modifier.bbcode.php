@@ -23,9 +23,11 @@
  * @param string
  * @return string
  */
-function smarty_modifier_bbcode($bbcode, $mail = false) {
-	if ($mail) {
+function smarty_modifier_bbcode($bbcode, $mode = null) {
+	if ($mode === 'mail') {
 		return CsrBB::parseMail($bbcode);
+	} elseif ($mode === 'html') {
+		return CsrBB::parseHtml($bbcode);
 	}
 	return CsrBB::parse($bbcode);
 }

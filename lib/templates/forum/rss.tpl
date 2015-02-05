@@ -30,7 +30,7 @@
 		{foreach from=$draden item=draad}<item>
 				<title>{$draad->titel|escape:'html'}</title>
 				<link>{$smarty.const.CSR_ROOT}/forum/reactie/{$draad->laatste_post_id}</link>
-				{*foreach from=$draad->getForumPosts() item=post}<description><![CDATA[ {$post->tekst|bbcode:true} ]]></description>
+				{*foreach from=$draad->getForumPosts() item=post}<description><![CDATA[ {$post->tekst|bbcode:fixme} ]]></description>
 					<pubDate>{$post->datum_tijd|rfc2822}</pubDate>
 				{/foreach*}
 				<dc:creator>{ProfielModel::getNaam($draad->laatste_wijziging_uid, 'user')}</dc:creator>
