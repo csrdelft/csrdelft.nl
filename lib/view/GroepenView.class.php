@@ -1,5 +1,4 @@
 <?php
-
 require_once 'model/entity/groepen/GroepTab.enum.php';
 require_once 'model/CmsPaginaModel.class.php';
 require_once 'view/CmsPaginaView.class.php';
@@ -312,57 +311,6 @@ JS;
 
 }
 
-class GroepenView implements View {
-
-	private $url;
-	private $tab;
-	private $groepen;
-	/**
-	 * Toon CMS pagina
-	 * @var string
-	 */
-	private $pagina;
-
-	public function __construct(GroepenModel $model, $groepen) {
-		$this->groepen = $groepen;
-		$this->url = $model->getUrl();
-		$this->pagina = CmsPaginaModel::get($model->getNaam());
-		if ($model instanceof BesturenModel) {
-			$this->tab = GroepTab::Lijst;
-		} else {
-			$this->tab = GroepTab::Pasfotos;
-		}
-	}
-
-	public function view() {
-		echo '<div class="float-right"><a class="btn" href="' . $this->url . 'beheren"><img class="icon" src="/plaetjes/famfamfam/table.png" width="16" height="16"> Beheren</a></div>';
-		$view = new CmsPaginaView($this->pagina);
-		$view->view();
-		foreach ($this->groepen as $groep) {
-			// Controleer rechten
-			if (!$groep->mag(A::Bekijken)) {
-				continue;
-			}
-			echo '<hr>';
-			$view = new GroepView($groep, $this->tab);
-			$view->view();
-		}
-	}
-
-	public function getBreadcrumbs() {
-		return '<a href="/groepen" title="Groepen"><span class="fa fa-users module-icon"></span></a> » <span class="active">' . $this->getTitel() . '</span>';
-	}
-
-	public function getModel() {
-		return $this->groepen;
-	}
-
-	public function getTitel() {
-		return $this->pagina->titel;
-	}
-
-}
-
 class GroepView implements View {
 
 	private $groep;
@@ -439,6 +387,145 @@ class GroepView implements View {
 
 	public function view() {
 		echo $this->getHtml();
+	}
+
+}
+
+class GroepenView implements View {
+
+	private $geschiedenis;
+	private $url;
+	private $tab;
+	private $groepen;
+	/**
+	 * Toon CMS pagina
+	 * @var string
+	 */
+	private $pagina;
+
+	public function __construct(GroepenModel $model, $groepen, $geschiedenis = false) {
+		$this->geschiedenis = $geschiedenis;
+		$this->groepen = $groepen;
+		$this->url = $model->getUrl();
+		$this->pagina = CmsPaginaModel::get($model->getNaam());
+		if ($model instanceof BesturenModel) {
+			$this->tab = GroepTab::Lijst;
+		} else {
+			$this->tab = GroepTab::Pasfotos;
+		}
+	}
+
+	public function getBreadcrumbs() {
+		return '<a href="/groepen" title="Groepen"><span class="fa fa-users module-icon"></span></a> » <span class="active">' . $this->getTitel() . '</span>';
+	}
+
+	public function getModel() {
+		return $this->groepen;
+	}
+
+	public function getTitel() {
+		return $this->pagina->titel;
+	}
+
+	public function view() {
+		echo '<div class="float-right">';
+		if ($this->geschiedenis) {
+			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->url . $this->geschiedenis . '/deelnamegrafiek"><img class="icon" src="/plaetjes/famfamfam/chart_bar.png" width="16" height="16"> Deelnamegrafiek</a>';
+		}
+		echo '<a class="btn" href="' . $this->url . 'beheren"><img class="icon" src="/plaetjes/famfamfam/table.png" width="16" height="16"> Beheren</a>';
+		echo '</div>';
+		$view = new CmsPaginaView($this->pagina);
+		$view->view();
+		foreach ($this->groepen as $groep) {
+			// Controleer rechten
+			if (!$groep->mag(A::Bekijken)) {
+				continue;
+			}
+			echo '<hr>';
+			$view = new GroepView($groep, $this->tab);
+			$view->view();
+		}
+	}
+
+}
+
+class GroepenDeelnameGrafiek implements View {
+
+	private $series = array();
+
+	public function __construct($groepen) {
+		$mannen = array();
+		$vrouwen = array();
+		foreach ($groepen as $groep) {
+			$tijd = strtotime($groep->begin_moment);
+			if (!isset($mannen[$tijd])) {
+				$mannen[$tijd] = 0;
+				$vrouwen[$tijd] = 0;
+			}
+			foreach ($groep->getLeden() as $lid) {
+				$profiel = ProfielModel::get($lid->uid);
+				if ($profiel->geslacht === Geslacht::Man) {
+					$mannen[$tijd] += 1;
+				} else {
+					$vrouwen[$tijd] += 1;
+				}
+			}
+		}
+		foreach ($mannen as $tijd => $aantal) {
+			$this->series[0][] = array($tijd * 1000, $aantal);
+			$this->series[1][] = array($tijd * 1000, $vrouwen[$tijd]);
+		}
+	}
+
+	public function getBreadcrumbs() {
+		return null;
+	}
+
+	public function getModel() {
+		return $this->series;
+	}
+
+	public function getTitel() {
+		return null;
+	}
+
+	public function view() {
+		?>
+		<div id="deelnamegrafiek" style="height: 360px;">
+			<script type="text/javascript">
+				$(document).ready(function () {
+					var series = [
+						{
+							data: <?= json_encode($this->series[0]); ?>,
+							label: "",
+							color: "#AFD8F8"
+						},
+						{
+							data: <?= json_encode($this->series[1]); ?>,
+							label: "",
+							color: "#FFCBDB"
+						}
+					];
+					var options = {
+						series: {
+							bars: {
+								show: true,
+								lineWidth: 5
+							},
+							stack: true
+						},
+						xaxes: [{
+								mode: "time"
+							}],
+						yaxis: {
+							tickDecimals: 0
+						}
+					};
+					$.plot("#deelnamegrafiek", series, options);
+				});
+			</script>
+		</div>
+		<?php
 	}
 
 }

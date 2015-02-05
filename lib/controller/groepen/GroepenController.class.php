@@ -105,6 +105,7 @@ class GroepenController extends Controller {
 			case 'converteren':
 			case 'sluiten':
 			case 'omschrijving':
+			case 'deelnamegrafiek':
 			case GroepTab::Pasfotos:
 			case GroepTab::Lijst:
 			case GroepTab::Statistiek:
@@ -133,8 +134,13 @@ class GroepenController extends Controller {
 
 	public function bekijken(Groep $groep) {
 		$groepen = $this->model->find('familie = ?', array($groep->familie));
-		$body = new GroepenView($this->model, $groepen); // controleert rechten bekijken per groep
+		$body = new GroepenView($this->model, $groepen, $groep->id); // controleert rechten bekijken per groep
 		$this->view = new CsrLayoutPage($body);
+	}
+
+	public function deelnamegrafiek(Groep $groep) {
+		$groepen = $this->model->find('familie = ?', array($groep->familie));
+		$this->view = new GroepenDeelnameGrafiek($groepen); // controleert GEEN rechten bekijken
 	}
 
 	public function omschrijving(Groep $groep) {
