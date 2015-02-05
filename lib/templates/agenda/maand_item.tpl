@@ -18,7 +18,7 @@
 		<div class="tijd">
 			{$item->getBeginMoment()|date_format:"%R"} - {$item->getEindMoment()|date_format:"%R"}
 		</div>
-		<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">
+		<a href="{$item->getLink()}">
 			{$item->getTitel()}
 		</a>
 	{elseif $item instanceof CorveeTaak}
@@ -27,7 +27,7 @@
 		{else}
 			{icon get="paintcan"}
 		{/if}
-		<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">
+		<a href="{$item->getLink()}">
 			{$item->getTitel()}
 		</a>
 	{elseif $item instanceof Agendeerbaar}
@@ -42,9 +42,9 @@
 		{/if}
 		<div class="hoverIntent">
 			{if $item->getLink()}
-				<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">{$item->getTitel()}</a>
+				<a href="{$item->getLink()}">{$item->getTitel()}</a>
 			{else}
-				<span title="{$item->getBeschrijving()}">{$item->getTitel()}</span>
+				{$item->getTitel()}
 			{/if}
 			{if $item->getLocatie()}
 				<a href="https://maps.google.nl/maps?q={$item->getLocatie()|htmlspecialchars}">{icon get=map title=Kaart}</a>
