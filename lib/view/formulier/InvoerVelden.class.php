@@ -1165,14 +1165,14 @@ class WachtwoordWijzigenField extends InputField {
 	public function getHtml() {
 		$html = '';
 		if ($this->require_current) {
-			$html .= '<label for="' . $this->getId() . '_current">Huidig wachtwoord' . ($this->require_current ? '<span class="required"> *</span>' : '') . '</label>';
-			$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" />';
+			$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_current">Huidig wachtwoord' . ($this->require_current ? '<span class="required"> *</span>' : '') . '</label>';
+			$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" /></div>';
 		}
 		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_new">Nieuw wachtwoord' . ($this->required ? '<span class="required"> *</span>' : '') . '</label>';
 		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_new" name="' . $this->name . '_new" /></div>';
 		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_confirm">Herhaal nieuw wachtwoord' . ($this->required ? '<span class="required"> *</span>' : '') . '</label>';
 		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_confirm" name="' . $this->name . '_confirm" /></div>';
-		return $html . '</div>';
+		return $html;
 	}
 
 }

@@ -193,7 +193,7 @@ class WachtwoordWijzigenForm extends Formulier {
 		}
 		$fields[] = new RequiredWachtwoordWijzigenField('wijzigww', $account, $require_current);
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true);
-		$fields[] = new HtmlComment('<img src="http://imgs.xkcd.com/comics/password_strength.png" title="http://xkcd.com/936/" style="margin-top: 50px;" />');
+		$fields[] = new HtmlComment('<img src="http://imgs.xkcd.com/comics/password_strength.png" title="http://xkcd.com/936/" style="margin-top: 50px;">');
 
 		$this->addFields($fields);
 	}
