@@ -81,7 +81,6 @@ img.pasfoto {
 	width: 55px;
 	height: 73px;
 }
-/* zoom effect */
 .lidLink img {
     -webkit-transition: all 1s ease; /* Safari and Chrome */
     -moz-transition: all 1s ease; /* Firefox */
@@ -90,9 +89,11 @@ img.pasfoto {
     transition: all 1s ease;
 }
 .lidLink:hover img {
-    width: 73px;
-	height: 97px;
-	margin: -9px 0 0 -9px;
+    -webkit-transform: scale(1.25); /* Safari and Chrome */
+    -moz-transform: scale(1.25); /* Firefox */
+    -ms-transform: scale(1.25); /* IE 9 */
+    -o-transform: scale(1.25); /* Opera */
+	transform: scale(1.25);
 }
 .lidLink {
 	display: inline-block;
