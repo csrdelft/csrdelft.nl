@@ -72,7 +72,8 @@
 	</td>
 	<td class="bericht{cycle values="0,1"}" id="post{$post->post_id}">
 		<div class="bericht">
-			{if AccessModel::mag(AccountModel::get($post->uid), 'P_ADMIN')}
+			{assign var=account value=AccountModel::get($post->uid)}
+			{if $account AND AccessModel::mag($account, 'P_ADMIN')}
 				{$post->tekst|bbcode:"html"}
 			{else}
 				{$post->tekst|bbcode}
