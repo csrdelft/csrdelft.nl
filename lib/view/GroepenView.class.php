@@ -15,6 +15,7 @@ class GroepenBeheerTable extends DataTable {
 
 	private $url;
 	private $naam;
+	private $pagina;
 
 	public function __construct(GroepenModel $model) {
 		parent::__construct($model::orm, null, 'familie');
@@ -24,6 +25,11 @@ class GroepenBeheerTable extends DataTable {
 
 		$this->naam = $model->getNaam();
 		$this->titel = 'Beheer ' . $this->naam;
+
+		$this->pagina = CmsPaginaModel::get($this->naam);
+		if (!$this->pagina) {
+			$this->pagina = CmsPaginaModel::get('');
+		}
 
 		$this->hideColumn('id', false);
 		$this->hideColumn('samenvatting');
@@ -65,7 +71,7 @@ class GroepenBeheerTable extends DataTable {
 	}
 
 	public function view() {
-		$view = new CmsPaginaView(CmsPaginaModel::get($this->naam));
+		$view = new CmsPaginaView($this->pagina);
 		$view->view();
 		parent::view();
 	}
