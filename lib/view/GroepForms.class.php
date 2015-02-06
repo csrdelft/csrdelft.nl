@@ -42,43 +42,6 @@ class GroepForm extends DataTableForm {
 			unset($fields['in_agenda']);
 		}
 
-		if (property_exists($groep, 'rechten_aanmelden')) {
-			$profiel = LoginModel::getProfiel();
-			$lidjaar = $profiel->lidjaar;
-			$verticale = $profiel->verticale;
-			if ($profiel->geslacht === Geslacht::Vrouw) {
-				$onder = 'geslacht:v';
-			} else {
-				$onder = 'ondervereniging:naam';
-			}
-			$fields['soort']->onchange = <<<JS
-
-$('#{$fields['rechten_aanmelden']->getId()}').val(function() {
-	switch($('#{$fields['soort']->getId()}').val()) {
-
-		case 'ondervereniging':
-			return '{$onder}';
-
-		case 'lichting':
-			return 'lichting:{$lidjaar}';
-
-		case 'verticale':
-			return 'verticale:{$verticale}';
-
-		case 'kring':
-			return 'TODO';
-			
-		case 'huis':
-			return 'woonoord:';
-
-		default:
-			return '';
-	}
-});
-			console.log('HOI');
-JS;
-		}
-
 		$fields[] = $etc[] = new FormDefaultKnoppen($nocancel ? false : null);
 		$this->addFields($fields);
 	}
