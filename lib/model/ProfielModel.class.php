@@ -48,11 +48,11 @@ class ProfielModel extends CachedPersistenceModel {
 	}
 
 	public static function existsNick($nick) {
-		return Database::sqlExists(static::instance()->orm->getTableName(), 'nickname = ?', array($nick));
+		return Database::sqlExists(static::getTableName(), 'nickname = ?', array($nick));
 	}
 
 	public static function existsDuck($duck) {
-		return Database::sqlExists(static::instance()->orm->getTableName(), 'duckname = ?', array($duck));
+		return Database::sqlExists(static::getTableName(), 'duckname = ?', array($duck));
 	}
 
 	public function nieuw($lidstatus, $lidjaar) {

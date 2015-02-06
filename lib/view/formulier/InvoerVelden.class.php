@@ -905,7 +905,7 @@ class UrlField extends TextField {
 			return true;
 		}
 		// controleren of het een geldige url is
-		if (!url_like($this->value) AND ! (startsWith($this->value, '/') AND url_like(CSR_ROOT . $this->value))) {
+		if (!url_like($this->value) AND ! startsWith($this->value, '/')) {
 			$this->error = 'Geen geldige url';
 		}
 		return $this->error === '';

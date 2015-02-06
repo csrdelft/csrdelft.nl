@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LidStatus.enum.php
+ * groepen/LidStatus.enum.php
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -23,16 +23,19 @@ abstract class LidStatus implements PersistentEnum {
 	const Commissie = 'S_CIE';
 	const Kringel = 'S_KRINGEL';
 
+	public static $lidlike = array(self::Noviet, self::Lid, self::Gastlid);
+	public static $oudlidlike = array(self::Oudlid, self::Erelid);
+
 	public static function getTypeOptions() {
 		return array(self::Noviet, self::Lid, self::Gastlid, self::Oudlid, self::Erelid, self::Overleden, self::Exlid, self::Nobody, self::Commissie, self::Kringel);
 	}
 
 	public static function isLid($option) {
-		return $option === self::Noviet OR $option === self::Lid or $option === LidStatus::Gastlid;
+		return in_array($option, self::$lidlike);
 	}
 
 	public static function isOudlid($option) {
-		return $option === self::Oudlid OR $option === self::Erelid;
+		return in_array($option, self::$oudlidlike);
 	}
 
 	public static function getDescription($option) {

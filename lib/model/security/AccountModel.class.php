@@ -30,7 +30,7 @@ class AccountModel extends CachedPersistenceModel {
 	}
 
 	public static function existsUsername($name) {
-		return Database::sqlExists(static::instance()->orm->getTableName(), 'username = ?', array($name));
+		return Database::sqlExists(static::getTableName(), 'username = ?', array($name));
 	}
 
 	protected function __construct() {

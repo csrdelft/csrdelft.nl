@@ -400,7 +400,7 @@ class GroepenController extends Controller {
 			$this->geentoegang();
 		}
 		if ($this->isPosted()) {
-			$this->view = new GroepLedenData($groep->getLeden());
+			$this->view = new GroepLedenData($this->model->getLedenVoorGroep($groep));
 		} else {
 			$leden = $groep::leden;
 			$this->view = new GroepLedenTable($leden::instance(), $groep);
@@ -429,7 +429,7 @@ class GroepenController extends Controller {
 				$this->geentoegang();
 			}
 			$lid = $model->nieuw($groep, null);
-			$uids = array_keys(group_by_distinct('uid', $groep->getLeden()));
+			$uids = Database::sqlSelect(array('DISTINCT uid'), $groep->getTableName());
 			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action, $uids);
 			if ($form->validate()) {
 				$model->create($lid);

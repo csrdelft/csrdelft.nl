@@ -117,8 +117,8 @@ class Groep extends PersistentEntity {
 	}
 
 	public function aantalLeden() {
-		$leden = $this->getLeden();
-		return count($leden);
+		$leden = static::leden;
+		return $leden::instance()->count('groep_id = ?', array($this->id));
 	}
 
 	public function getStatistieken() {
@@ -140,12 +140,7 @@ class Groep extends PersistentEntity {
 		} elseif ($this instanceof Commissie OR $this instanceof Bestuur) {
 			$suggesties = CommissieFunctie::getTypeOptions();
 		} else {
-			$suggesties = array();
-			foreach ($this->getLeden() as $lid) {
-				if (!empty($lid->opmerking)) {
-					$suggesties[] = $lid->opmerking;
-				}
-			}
+			$suggesties = Database::sqlSelect(array('DISTINCT opmerking'), static::leden);
 		}
 		return $suggesties;
 	}

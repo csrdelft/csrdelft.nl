@@ -16,19 +16,13 @@ class Ondervereniging extends Groep {
 	 * (Adspirant-)Ondervereniging
 	 * @var OnderverenigingStatus
 	 */
-	public $vereniging_status;
-	/**
-	 * Veranderingen van status
-	 * @var string
-	 */
-	public $status_historie;
+	public $soort;
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'vereniging_status'	 => array(T::Enumeration, false, 'OnderverenigingStatus'),
-		'status_historie'	 => array(T::Text)
+		'soort' => array(T::Enumeration, false, 'OnderverenigingStatus'),
 	);
 	/**
 	 * Database table name

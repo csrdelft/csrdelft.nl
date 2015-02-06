@@ -4063,7 +4063,6 @@ lib/model/entity/Geslacht.enum.php -text
 lib/model/entity/Instelling.class.php -text
 lib/model/entity/Kringleider.enum.php -text
 lib/model/entity/LidInstelling.class.php -text
-lib/model/entity/LidStatus.enum.php -text
 lib/model/entity/Mail.class.php -text
 lib/model/entity/Map.class.php -text
 lib/model/entity/Mededeling.class.php -text
@@ -4112,6 +4111,7 @@ lib/model/entity/groepen/Kring.class.php -text
 lib/model/entity/groepen/KringLid.class.php -text
 lib/model/entity/groepen/Lichting.class.php -text
 lib/model/entity/groepen/LichtingsLid.class.php -text
+lib/model/entity/groepen/LidStatus.enum.php -text
 lib/model/entity/groepen/OnderverLid.class.php -text
 lib/model/entity/groepen/Ondervereniging.class.php -text
 lib/model/entity/groepen/OnderverenigingStatus.enum.php -text

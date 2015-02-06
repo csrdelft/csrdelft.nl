@@ -42,13 +42,13 @@ class GroepLedenModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * Return leden van groep by uid.
+	 * Return leden van groep.
 	 * 
 	 * @param Groep $groep
 	 * @return GroepLid[]
 	 */
 	public function getLedenVoorGroep(Groep $groep) {
-		return group_by_distinct('uid', $this->prefetch('groep_id = ?', array($groep->id)));
+		return $this->prefetch('groep_id = ?', array($groep->id));
 	}
 
 	/**
@@ -58,7 +58,7 @@ class GroepLedenModel extends CachedPersistenceModel {
 	 * @return array
 	 */
 	public function getStatistieken(Groep $groep) {
-		$uids = array_keys($groep->getLeden());
+		$uids = Database::sqlSelect(array('DISTINCT uid'), $groep->getTableName());
 		$count = count($uids);
 		if ($count < 1) {
 			return array();
@@ -111,6 +111,25 @@ class LichtingLedenModel extends GroepLedenModel {
 
 	protected static $instance;
 
+	/**
+	 * Return leden van lichting.
+	 * 
+	 * @param int $lidjaar
+	 * @param mixed $status
+	 * @return LichtingLid[]
+	 */
+	public function getLeden($lidjaar, $status = null) {
+		if (is_array($status)) {
+			$count = count($status);
+			array_unshift($status, $lidjaar);
+			return $this->prefetch('lidjaar = ? AND lidstatus IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $status);
+		} elseif ($status !== null) {
+			return $this->prefetch('lidjaar = ? AND lidstatus = ?', array($lidjaar, $status));
+		} else {
+			return $this->prefetch('lidjaar = ?', array($lidjaar));
+		}
+	}
+
 }
 
 class VerticaleLedenModel extends GroepLedenModel {
@@ -118,6 +137,16 @@ class VerticaleLedenModel extends GroepLedenModel {
 	const orm = 'VerticaleLid';
 
 	protected static $instance;
+
+	/**
+	 * Return leders van groep.
+	 * 
+	 * @param Verticale $verticale
+	 * @return VerticaleLid[]
+	 */
+	public function getLeiders(Verticale $verticale) {
+		return $this->prefetch('groep_id = ? AND leider = TRUE', array($verticale->id));
+	}
 
 }
 

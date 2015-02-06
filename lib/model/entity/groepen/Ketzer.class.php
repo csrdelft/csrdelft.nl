@@ -76,7 +76,8 @@ class Ketzer extends Groep {
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			return false;
 		}
-		$aangemeld = array_key_exists(LoginModel::getUid(), $this->getLeden());
+		$leden = static::leden;
+		$aangemeld = Database::sqlExists($leden::getTableName(), 'groep_id = ? AND uid = ?', array($this->id, LoginModel::getUid()));
 		switch ($action) {
 
 			case A::Aanmelden:

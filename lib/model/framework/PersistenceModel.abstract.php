@@ -24,7 +24,7 @@ abstract class PersistenceModel implements Persistence {
 	}
 
 	public static function getTableName() {
-		static::instance()->orm->getTableName();
+		return static::instance()->orm->getTableName();
 	}
 
 	/**

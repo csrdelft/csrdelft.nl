@@ -244,10 +244,19 @@ class LichtingenModel extends GroepenModel {
 	const orm = 'Lichting';
 
 	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'lidjaar ASC';
+
+	public static function get($lidjaar) {
+		return static::instance()->find('lidjaar = ?', array($lidjaar), null, null, 1)->fetch();
+	}
 
 	public static function getHuidigeJaargang() {
-		$jaargang = self::getJongsteLichting();
-		return $jaargang . '-' . ($jaargang + 1);
+		$lidjaar = self::getJongsteLichting();
+		return $lidjaar . '-' . ($lidjaar + 1);
 	}
 
 	public static function getJongsteLichting() {
@@ -277,7 +286,7 @@ class VerticalenModel extends GroepenModel {
 	protected $default_order = 'letter ASC';
 
 	public static function get($letter) {
-		return static::instance()->retrieveByPrimaryKey(array($letter));
+		return static::instance()->find('letter = ?', array($letter), null, null, 1)->fetch();
 	}
 
 }

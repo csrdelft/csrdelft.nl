@@ -5,47 +5,50 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * TODO: extend Groep
  */
-class Verticale extends PersistentEntity {
+class Verticale extends Groep {
 
 	/**
-	 * Letter
+	 * Primary key
 	 * @var string
 	 */
 	public $letter;
 	/**
-	 * Naam
-	 * @var string
-	 */
-	public $naam;
-	/**
-	 * Kringen met kringleden
+	 * Kringcoach uid
 	 * @var array
 	 */
-	private $kringen;
+	public $kringcoach;
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'letter' => array(T::Char),
-		'naam'	 => array(T::String)
+		'letter'	 => array(T::Char),
+		'kringcoach' => array(T::UID)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('letter');
 	/**
 	 * Database table name
 	 * @var string
 	 */
 	protected static $table_name = 'verticalen';
 
+	/**
+	 * Extend the persistent attributes.
+	 */
+	public static function __constructStatic() {
+		parent::__constructStatic();
+		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
+	}
+
 	public function getUrl() {
 		return '/verticalen#' . $this->letter;
 	}
+
+	/**
+	 * TODO: Kring extend Groep
+	 * @var array
+	 */
+	private $kringen;
 
 	/**
 	 * TODO: Kring extend Groep

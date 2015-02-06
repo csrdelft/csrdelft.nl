@@ -185,19 +185,22 @@ class GroepenView implements View {
 	private $groepen;
 	private $soort;
 	private $geschiedenis;
-	private $pagina;
 	private $tab;
+	private $pagina;
 
 	public function __construct(GroepenModel $model, $groepen, $soort = null, $geschiedenis = false) {
 		$this->model = $model;
 		$this->groepen = $groepen;
 		$this->soort = $soort;
 		$this->geschiedenis = $geschiedenis;
-		$this->pagina = CmsPaginaModel::get($model->getNaam());
 		if ($model instanceof BesturenModel) {
 			$this->tab = GroepTab::Lijst;
 		} else {
 			$this->tab = GroepTab::Pasfotos;
+		}
+		$this->pagina = CmsPaginaModel::get($model->getNaam());
+		if (!$this->pagina) {
+			$this->pagina = CmsPaginaModel::get('');
 		}
 	}
 

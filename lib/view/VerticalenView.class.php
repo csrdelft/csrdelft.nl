@@ -1,5 +1,5 @@
 <?php
-require_once 'model/entity/LidStatus.enum.php';
+require_once 'model/entity/groepen/LidStatus.enum.php';
 
 /**
  * VerticalenView.class.php

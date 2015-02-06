@@ -5,9 +5,8 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * TODO: extend Groep
  */
-class Lichting extends PersistentEntity {
+class Lichting extends Groep {
 
 	/**
 	 * Primary key
@@ -19,18 +18,21 @@ class Lichting extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'lidjaar' => array(T::Char)
+		'lidjaar' => array(T::Integer)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('lidjaar');
 	/**
 	 * Database table name
 	 * @var string
 	 */
 	protected static $table_name = 'lichtingen';
+
+	/**
+	 * Extend the persistent attributes.
+	 */
+	public static function __constructStatic() {
+		parent::__constructStatic();
+		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
+	}
 
 	public function getUrl() {
 		return '/groepen/lichtingen/' . $this->lidjaar . '/';

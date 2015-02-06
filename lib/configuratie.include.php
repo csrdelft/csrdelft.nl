@@ -25,10 +25,10 @@ function fatal_handler(Exception $ex = null) {
 		}
 
 		if ($ex instanceof Exception) {
-			if (LoginModel::mag('P_LOGGED_IN')) {
+			if (DEBUG OR LoginModel::mag('P_LOGGED_IN')) {
 				echo str_replace('#', '<br />#', $ex); // stacktrace 
+				printDebug();
 			}
-			printDebug();
 		}
 	} catch (Exception $e) {
 		echo $e->getMessage();

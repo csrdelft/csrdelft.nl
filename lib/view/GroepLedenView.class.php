@@ -150,10 +150,11 @@ JS;
 
 		if (property_exists($this->groep, 'aanmeld_limiet') AND isset($this->groep->aanmeld_limiet)) {
 			// Progress bar
-			$percent = round($this->groep->aantalLeden() * 100 / $this->groep->aanmeld_limiet);
+			$aantal = $this->groep->aantalLeden();
+			$percent = round($aantal * 100 / $this->groep->aanmeld_limiet);
 			// Aanmelden mogelijk?
 			if (time() > strtotime($this->groep->aanmelden_vanaf) AND time() < strtotime($this->groep->aanmelden_tot)) {
-				$verschil = $this->groep->aanmeld_limiet - $this->groep->aantalLeden();
+				$verschil = $this->groep->aanmeld_limiet - $aantal;
 				if ($verschil === 0) {
 					$title = 'Inschrijvingen vol!';
 					$color = ' progress-bar-info';
