@@ -141,7 +141,7 @@ class Groep extends PersistentEntity {
 			$suggesties = CommissieFunctie::getTypeOptions();
 		} else {
 			$leden = static::leden;
-			$suggesties = Database::sqlSelect(array('DISTINCT opmerking'), $leden::getTableName());
+			$suggesties = Database::sqlSelect(array('DISTINCT opmerking'), $leden::getTableName(), 'groep_id = ?', array($this->id))->fetchAll(PDO::FETCH_COLUMN);
 		}
 		return $suggesties;
 	}

@@ -215,8 +215,9 @@ class GroepLijstView extends GroepTabView {
 		if (empty($leden)) {
 			return $html . '</tbody></table>';
 		}
-		$profielen = ProfielModel::instance()->prefetch('uid IN (' . implode(', ', array_fill(0, count($leden), '?')) . ')', array_keys($leden), null, 'achternaam ASC');
-
+		// sorteren op achernaam
+		$uids = array_keys(group_by_distinct('uid', $leden));
+		$profielen = ProfielModel::instance()->prefetch('uid IN (' . implode(', ', array_fill(0, count($uids), '?')) . ')', $uids, null, 'achternaam ASC');
 		foreach ($profielen as $profiel) {
 			$html .= '<tr><td>';
 			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Afmelden)) {
