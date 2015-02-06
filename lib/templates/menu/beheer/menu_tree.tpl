@@ -26,10 +26,3 @@ menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 		{/if}
 	{/if}
 </ul>
-<script type="text/javascript">
-	$(document).ready(function () {
-		$('.menu-item').click(function () {
-			$(this).children('.menubeheer-tree').slideToggle();
-		});
-	})
-</script>
