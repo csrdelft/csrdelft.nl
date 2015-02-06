@@ -181,18 +181,18 @@ class GroepView implements View {
 
 class GroepenView implements View {
 
+	private $model;
 	private $groepen;
 	private $soort;
 	private $geschiedenis;
-	private $url;
 	private $pagina;
 	private $tab;
 
 	public function __construct(GroepenModel $model, $groepen, $soort = null, $geschiedenis = false) {
+		$this->model = $model;
 		$this->groepen = $groepen;
 		$this->soort = $soort;
 		$this->geschiedenis = $geschiedenis;
-		$this->url = $model->getUrl();
 		$this->pagina = CmsPaginaModel::get($model->getNaam());
 		if ($model instanceof BesturenModel) {
 			$this->tab = GroepTab::Lijst;
@@ -214,10 +214,14 @@ class GroepenView implements View {
 	}
 
 	public function view() {
-		echo '<a class="btn" href="' . $this->url . 'nieuw/' . $this->soort . '"><img class="icon" src="/plaetjes/famfamfam/add.png" width="16" height="16"> Toevoegen</a>';
-		echo '<a class="btn" href="' . $this->url . 'beheren"><img class="icon" src="/plaetjes/famfamfam/table.png" width="16" height="16"> Beheren</a>';
+		$model = $this->model;
+		$orm = $model::orm;
+		if ($orm::magAlgemeen(A::Aanmaken, $this->soort)) {
+			echo '<a class="btn" href="' . $this->model->getUrl() . 'nieuw/' . $this->soort . '"><img class="icon" src="/plaetjes/famfamfam/add.png" width="16" height="16"> Toevoegen</a>';
+		}
+		echo '<a class="btn" href="' . $this->model->getUrl() . 'beheren"><img class="icon" src="/plaetjes/famfamfam/table.png" width="16" height="16"> Beheren</a>';
 		if ($this->geschiedenis) {
-			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->url . $this->geschiedenis . '/deelnamegrafiek"><img class="icon" src="/plaetjes/famfamfam/chart_bar.png" width="16" height="16"> Deelnamegrafiek</a>';
+			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->model->getUrl() . $this->geschiedenis . '/deelnamegrafiek"><img class="icon" src="/plaetjes/famfamfam/chart_bar.png" width="16" height="16"> Deelnamegrafiek</a>';
 		}
 		$view = new CmsPaginaView($this->pagina);
 		$view->view();
