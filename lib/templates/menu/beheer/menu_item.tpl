@@ -3,7 +3,7 @@
 *}
 <li id="menu-item-{$item->item_id}" parentid="{$item->parent_id}" class="menu-item">
 	{if $item->children}
-	<span onclick="$(this).parent().children('ul').slideToggle();$(this).children('img.icon').toggle();">
+	<span onclick="$(this).parent().children('ul').slideToggle();$(this).children('img.icon').toggle();" style="cursor:pointer;">
 		<img class="icon" src="/plaetjes/famfamfam/bullet_toggle_minus.png" width="16" height="16">
 		<img class="icon" src="/plaetjes/famfamfam/bullet_toggle_plus.png" width="16" height="16" style="display:none;">
 	</span>
