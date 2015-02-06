@@ -211,12 +211,12 @@ class GroepLijstView extends GroepTabView {
 			$html .= $form->getHtml();
 			$html .= '</td></tr>';
 		}
-		$leden = $this->groep->getLeden();
+		$leden = group_by_distinct('uid', $this->groep->getLeden());
 		if (empty($leden)) {
 			return $html . '</tbody></table>';
 		}
 		// sorteren op achernaam
-		$uids = array_keys(group_by_distinct('uid', $leden));
+		$uids = array_keys($leden);
 		$profielen = ProfielModel::instance()->prefetch('uid IN (' . implode(', ', array_fill(0, count($uids), '?')) . ')', $uids, null, 'achternaam ASC');
 		foreach ($profielen as $profiel) {
 			$html .= '<tr><td>';
@@ -229,7 +229,7 @@ class GroepLijstView extends GroepTabView {
 				$form = new GroepBewerkenForm($leden[$profiel->uid], $this->groep);
 				$html .= $form->getHtml();
 			} else {
-				$html .= $uids[$profiel->uid]->opmerking;
+				$html .= $leden[$profiel->uid]->opmerking;
 			}
 			$html .= '</td></tr>';
 		}
