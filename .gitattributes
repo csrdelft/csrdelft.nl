@@ -351,8 +351,6 @@ htdocs/layout/js/jquery/plugins/jquery-ui-timepicker-addon.min.css -text
 htdocs/layout/js/jquery/plugins/jquery-ui-timepicker-addon.min.js -text
 htdocs/layout/js/jquery/plugins/jquery-ui-timepicker-nl.js -text
 htdocs/layout/js/jquery/plugins/jquery-ui.datepicker-nl.js -text
-htdocs/layout/js/jquery/plugins/jquery.allofthelights.js -text
-htdocs/layout/js/jquery/plugins/jquery.allofthelights.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.autosize.js -text
 htdocs/layout/js/jquery/plugins/jquery.autosize.min.js -text
 htdocs/layout/js/jquery/plugins/jquery.facedetection.js -text
