@@ -8,6 +8,8 @@
  */
 class Verticale extends Groep {
 
+	const leden = 'VerticaleLedenModel';
+
 	/**
 	 * Primary key
 	 * @var string

@@ -182,6 +182,12 @@ class Groep extends PersistentEntity {
 			case A::Bekijken:
 				return LoginModel::mag('P_LEDEN_READ');
 
+			// Uitzondering zodat beheerders niet overal een aanmeldknop krijgen
+			case A::Aanmelden:
+			case A::Bewerken:
+			case A::Afmelden:
+				break;
+
 			default:
 				// Beheerder mag alles
 				if (LoginModel::mag('P_LEDEN_MOD')) {

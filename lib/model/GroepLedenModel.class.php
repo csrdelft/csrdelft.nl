@@ -115,16 +115,16 @@ class LichtingLedenModel extends GroepLedenModel {
 	 * Return leden van lichting.
 	 * 
 	 * @param int $lidjaar
-	 * @param mixed $status
+	 * @param LidStatus|array $lidstatus
 	 * @return LichtingLid[]
 	 */
-	public function getLeden($lidjaar, $status = null) {
-		if (is_array($status)) {
-			$count = count($status);
-			array_unshift($status, $lidjaar);
-			return $this->prefetch('lidjaar = ? AND lidstatus IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $status);
-		} elseif ($status !== null) {
-			return $this->prefetch('lidjaar = ? AND lidstatus = ?', array($lidjaar, $status));
+	public function getLeden($lidjaar, $lidstatus = null) {
+		if (is_array($lidstatus)) {
+			$count = count($lidstatus);
+			array_unshift($lidstatus, $lidjaar);
+			return $this->prefetch('lidjaar = ? AND lidstatus IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $lidstatus);
+		} elseif ($lidstatus !== null) {
+			return $this->prefetch('lidjaar = ? AND lidstatus = ?', array($lidjaar, $lidstatus));
 		} else {
 			return $this->prefetch('lidjaar = ?', array($lidjaar));
 		}
@@ -137,16 +137,6 @@ class VerticaleLedenModel extends GroepLedenModel {
 	const orm = 'VerticaleLid';
 
 	protected static $instance;
-
-	/**
-	 * Return leders van groep.
-	 * 
-	 * @param Verticale $verticale
-	 * @return VerticaleLid[]
-	 */
-	public function getLeiders(Verticale $verticale) {
-		return $this->prefetch('groep_id = ? AND leider = TRUE', array($verticale->id));
-	}
 
 }
 

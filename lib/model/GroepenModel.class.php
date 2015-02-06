@@ -207,6 +207,33 @@ class GroepenModel extends CachedPersistenceModel {
 		return $newgroep;
 	}
 
+	/**
+	 * Return groepen by GroepStatus voor lid.
+	 * 
+	 * @param string $uid
+	 * @param GroepStatus|array $status
+	 * @return Groep[]
+	 */
+	public function getGroepenVoorLid($uid, $status = null) {
+		$orm = $this->orm;
+		$leden = $orm::leden;
+		if (is_array($status)) {
+			$count = count($status);
+			array_unshift($status, $uid);
+			$groepleden = $leden::instance()->prefetch('uid = ? AND status IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $status);
+		} elseif ($status !== null) {
+			$groepleden = $leden::instance()->prefetch('uid = ? AND status = ?', array($uid, $status));
+		} else {
+			$groepleden = $leden::instance()->prefetch('uid = ?', array($uid));
+		}
+		$groepen = array();
+		foreach ($groepleden as $lid) {
+			$groep = $this->retrieveByPrimaryKey(array($lid->groep_id));
+			$groepen[$groep->status] = $groep;
+		}
+		return $groepen;
+	}
+
 }
 
 class OnderverenigingenModel extends GroepenModel {
@@ -254,17 +281,23 @@ class LichtingenModel extends GroepenModel {
 		return static::instance()->find('lidjaar = ?', array($lidjaar), null, null, 1)->fetch();
 	}
 
-	public static function getHuidigeJaargang() {
-		$lidjaar = self::getJongsteLichting();
-		return $lidjaar . '-' . ($lidjaar + 1);
+	public function getHuidigeJaargang() {
+		$jaar = (int) date('Y');
+		$maand = (int) date('m');
+		if ($maand < 8) {
+			$jaar--;
+		}
+		return $jaar . '-' . ($jaar + 1);
 	}
 
-	public static function getJongsteLichting() {
-		return (int) Database::sqlSelect(array('MAX(lidjaar)'), 'profielen')->fetchColumn();
+	public function getJongsteLichting() {
+		$jongste = (int) Database::sqlSelect(array('MAX(lidjaar)'), self::getTableName())->fetchColumn();
+		return self::get($jongste);
 	}
 
-	public static function getOudsteLichting() {
-		return (int) Database::sqlSelect(array('MIN(lidjaar)'), 'profielen', 'lidjaar > 0')->fetchColumn();
+	public function getOudsteLichting() {
+		$oudste = (int) Database::sqlSelect(array('MIN(lidjaar)'), self::getTableName(), 'lidjaar > 0')->fetchColumn();
+		return self::get($oudste);
 	}
 
 }
@@ -287,6 +320,29 @@ class VerticalenModel extends GroepenModel {
 
 	public static function get($letter) {
 		return static::instance()->find('letter = ?', array($letter), null, null, 1)->fetch();
+	}
+
+	public function getVerticaleVoorLid($uid) {
+		$verticalen = $this->getGroepenVoorLid($uid);
+		if (empty($verticalen)) {
+			return self::get('');
+		}
+		return reset($verticalen);
+	}
+
+	/**
+	 * Get Verticale waarvoor lid kringcoach is.
+	 * 
+	 * @param string $uid
+	 * @return Verticale|false
+	 */
+	public function isKringCoach($uid) {
+		foreach (VerticalenModel::instance()->prefetch() as $verticale) {
+			if ($uid === $verticale->kringcoach) {
+				return $verticale;
+			}
+		}
+		return false;
 	}
 
 }

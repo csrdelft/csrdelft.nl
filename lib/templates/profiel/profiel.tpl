@@ -132,9 +132,9 @@
 				{if $profiel->kring}
 					<div class="label">Kring:</div>
 					{$profiel->getKringLink()}<br />
-				{elseif $profiel->verticale!=0}
+				{elseif $profiel->getVerticale()->letter!=''}
 					<div class="label">Verticale:</div>
-					<a href="/ledenlijst?q=verticale:{$profiel->verticale}">{$profiel->getVerticale()->naam}</a><br />
+					<a href="/ledenlijst?q=verticale:{$profiel->getVerticale()->letter}">{$profiel->getVerticale()->naam}</a><br />
 				{/if}
 				{if $profiel->moot}
 					<div class="label">Oude moot:</div>

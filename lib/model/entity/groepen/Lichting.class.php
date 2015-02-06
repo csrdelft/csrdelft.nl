@@ -8,9 +8,11 @@
  */
 class Lichting extends Groep {
 
+	const leden = 'LichtingLedenModel';
+
 	/**
-	 * Primary key
-	 * @var string
+	 * Lidjaar
+	 * @var int
 	 */
 	public $lidjaar;
 	/**

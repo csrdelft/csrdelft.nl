@@ -121,10 +121,8 @@ class LidZoeker {
 			# standaardvelden
 			if (empty($velden)) {
 				$velden = array('uid', 'nickname', 'duckname', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix', 'adres', 'postcode', 'woonplaats', 'land', 'telefoon',
-					'mobiel', 'email', 'geslacht', 'voornamen', 'icq', 'msn', 'skype', 'jid', 'website', 'beroep', 'studie', 'studiejaar', 'lidjaar',
-					'gebdatum', 'moot', 'kring', 'kringleider', 'verticaleleider', 'verticale',
-					'o_adres', 'o_postcode', 'o_woonplaats', 'o_land', 'o_telefoon',
-					'kerk', 'muziek', 'eetwens', 'status');
+					'mobiel', 'email', 'geslacht', 'gebdatum', 'voornamen', 'icq', 'msn', 'skype', 'jid', 'website', 'beroep', 'studie', 'studiejaar',
+					'o_adres', 'o_postcode', 'o_woonplaats', 'o_land', 'o_telefoon', 'kerk', 'muziek', 'eetwens', 'status');
 			}
 
 			# velden kiezen om terug te geven

@@ -379,7 +379,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			}
 			$k .= '<p class="naam">' . $l . $this->getNaam('volledig') . '&nbsp;' . LidStatus::getChar($this->status);
 			$k .= '</a></p>';
-			$k .= '<p>' . $this->lidjaar . ' ' . (empty($this->verticale) ? '' : $this->getVerticale()->naam) . '</p>';
+			$k .= '<p>' . $this->lidjaar . ' ' . $this->getVerticale()->naam . '</p>';
 			$bestuurslid = BestuursLedenModel::instance()->find('uid = ?', array($this->uid), null, null, 1)->fetch();
 			if ($bestuurslid) {
 				$bestuur = BesturenModel::get($bestuurslid->groep_id);
@@ -609,41 +609,42 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getWoonoord() {
-		foreach (BewonersModel::instance()->find('uid = ?', array($this->uid)) as $bewoner) {
-			$woonoord = WoonoordenModel::get($bewoner->groep_id);
-			if ($woonoord AND $woonoord->status === GroepStatus::HT) {
-				return $woonoord;
-			}
+		$woonoord = WoonoordenModel::instance()->getGroepenVoorLid($this->uid, GroepStatus::HT);
+		if ($woonoord instanceof Woonoord) {
+			return $woonoord;
 		}
 		return false;
 	}
 
 	public function getVerticale() {
-		return VerticalenModel::get($this->verticale);
+		return VerticalenModel::instance()->getVerticaleVoorLid($this->uid);
 	}
 
 	public function getKring($link = false) {
-		if (empty($this->verticale)) {
+		$verticale = $this->getVerticale();
+		$verticalelid = $verticale->getLid($this->uid);
+		if (empty($verticale->letter)) {
 			return 'Geen kring';
 		}
-		$vertkring = $this->getVerticale()->letter . '.' . $this->kring;
+		$id = $verticale->letter . '.' . $this->kring;
 		$postfix = '';
 		if ($this->status === LidStatus::Kringel) {
 			$postfix = ' (kringel)';
 		}
-		if ($this->verticaleleider) {
-			$postfix = ' (verticaan)';
-		}
 		if ($this->kringleider !== Kringleider::Nee) {
 			$postfix = ' (kringleider)';
 		}
-		if ($this->kringcoach) {
-			$postfix = ' <span title="Kringcoach van verticale ' . VerticalenModel::get($this->kringcoach)->naam . '">(kringcoach)</span>';
+		if ($verticalelid->leider) {
+			$postfix = ' (leider)';
+		}
+		$kringcoach = VerticalenModel::instance()->isKringCoach($this->uid);
+		if ($kringcoach) {
+			$postfix = ' <span title="Kringcoach van verticale ' . $kringcoach->naam . '">(kringcoach)</span>';
 		}
 		if ($link) {
-			return '<a href="/verticalen#kring' . $vertkring . '" title="Verticale ' . htmlspecialchars($this->getVerticale()->naam) . ' (' . $this->getVerticale()->letter . ') - kring ' . $this->kring . '">' . $this->getVerticale()->naam . ' ' . $vertkring . '</a>' . $postfix;
+			return '<a href="/verticalen#kring' . $id . '" title="Verticale ' . htmlspecialchars($verticale->naam) . ' (' . $verticale->letter . ') - kring ' . $this->kring . '">' . $verticale->naam . ' ' . $id . '</a>' . $postfix;
 		}
-		return $vertkring . $postfix;
+		return $id . $postfix;
 	}
 
 	public function getKringLink() {

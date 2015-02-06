@@ -25,7 +25,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
-	private static $prefix = array('ACTIVITEIT', 'BESTUUR', 'COMMISSIE', 'GROEP', 'KETZER', 'ONDERVERENIGING', 'WERKGROEP', 'WOONOORD', 'VERTICALE', 'VERTICALELEIDER', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDEREJAARS', 'EERSTEJAARS');
+	private static $prefix = array('ACTIVITEIT', 'BESTUUR', 'COMMISSIE', 'GROEP', 'KETZER', 'ONDERVERENIGING', 'WERKGROEP', 'WOONOORD', 'VERTICALE', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDEREJAARS', 'EERSTEJAARS');
 	/**
 	 * Gebruikt om ledengegevens te raadplegen
 	 * @var array
@@ -520,15 +520,25 @@ class AccessModel extends CachedPersistenceModel {
 		switch ($prefix) {
 
 			/**
-			 * Behoort een lid tot een bepaalde groep?
-			 * Als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer de h.t.
-			 * groep met die korte naam erbij, als het getal is uiteraard de groep met dat id.
-			 * Met de toevoeging ':Fiscus' kan ook specifieke functie geëist worden binnen een groep.
+			 * Is lid man of vrouw?
+			 */
+			case 'GESLACHT':
+
+				if ($gevraagd == strtoupper($profiel->geslacht)) {
+					// Niet ingelogd heeft geslacht m dus check of ingelogd
+					if ($this->hasPermission($subject, 'P_LOGGED_IN')) {
+						return true;
+					}
+				}
+
+				return false;
+
+			/**
+			 * Behoort een lid tot een f.t. / h.t. / o.t. bestuur of commissie?
 			 */
 			case 'BESTUUR':
 			case 'COMMISSIE':
-			case 'ONDERVERENIGING':
-			case 'WOONOORD':
+				// Alleen als GroepStatus is opgegeven, anders: fall-through
 				if (in_array($role, GroepStatus::getTypeOptions())) {
 					switch ($prefix) {
 
@@ -541,21 +551,20 @@ class AccessModel extends CachedPersistenceModel {
 							$l = CommissieLedenModel::getTableName();
 							$g = CommissiesModel::getTableName();
 							break;
-
-						case 'ONDERVERENIGING':
-							$l = OnderverLedenModel::getTableName();
-							$g = OnderverenigingenModel::getTableName();
-							break;
-
-						case 'WOONOORD':
-							$l = BewonersModel::getTableName();
-							$g = WoonoordenModel::getTableName();
-							break;
 					}
 					return Database::sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie_naam = ?', array($role, $gevraagd));
 				}
 			// fall through
 
+			/**
+			 * Behoort een lid tot een bepaalde groep? Verticalen en lichtingen zijn ook groepen.
+			 * Als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer de h.t.
+			 * groep met die korte naam erbij, als het getal is uiteraard de groep met dat id.
+			 * Met de toevoeging ':Fiscus' kan ook specifieke functie geëist worden binnen een groep.
+			 */
+			case 'LICHTING':
+			case 'LIDJAAR':
+			case 'VERTICALE':
 			case 'ACTIVITEIT':
 			case 'KETZER':
 			case 'WERKGROEP':
@@ -563,16 +572,47 @@ class AccessModel extends CachedPersistenceModel {
 
 				switch ($prefix) {
 
+					case 'LICHTING':
+					case 'LIDJAAR':
+						/**
+						 * Super-switch-case!
+						 * 
+						 * Als Lichting:Ouderejaars wordt gevraagd dan bepalen we dat
+						 * aan de hand van de jongste lichting.
+						 */
+						switch ($gevraagd) {
+
+							case 'EERSTEJAARS':
+								if (LichtingenModel::getJongsteLichting()->getLid($profiel->uid)) {
+									return true;
+								}
+								return false;
+
+							case 'OUDEREJAARS':
+								if (LichtingenModel::getJongsteLichting()->getLid($profiel->uid)) {
+									return false;
+								}
+								return true;
+
+							default:
+								$groep = LichtingenModel::get($gevraagd);
+						}
+						break;
+
+					case 'VERTICALE':
+						$groep = VerticalenModel::get($gevraagd);
+						break;
+
+					case 'COMMISSIE':
+						$groep = CommissiesModel::get($gevraagd);
+						break;
+
 					case 'BESTUUR':
 						if ($gevraagd) {
 							$groep = BesturenModel::get($gevraagd);
 						} else {
 							$groep = BesturenModel::get('bestuur'); // h.t.
 						}
-						break;
-
-					case 'COMMISSIE':
-						$groep = CommissiesModel::get($gevraagd);
 						break;
 
 					case 'ONDERVERENIGING':
@@ -620,86 +660,6 @@ class AccessModel extends CachedPersistenceModel {
 					}
 				}
 				return true;
-
-			/**
-			 * Is lid een verticaleleider?
-			 */
-			case 'VERTICALELEIDER':
-
-				$gevraagd = $profiel->verticale;
-				$role = 'LEIDER';
-			// fall through
-
-			/**
-			 * Behoort een lid tot een bepaalde verticale?
-			 */
-			case 'VERTICALE':
-
-				// zoek verticale
-				$verticale = $profiel->getVerticale();
-
-				if (!$verticale) {
-					return false;
-				} elseif ($gevraagd == strtoupper($verticale->letter) OR $gevraagd == strtoupper($verticale->naam)) {
-
-					// wordt er een role gevraagd?
-					if (!$role) {
-						return true;
-					} elseif ($role == 'LEIDER' AND $profiel->verticaleleider) {
-						return true;
-					}
-				}
-
-				return false;
-
-			/**
-			 * Is lid man of vrouw?
-			 */
-			case 'GESLACHT':
-
-				if ($gevraagd == strtoupper($profiel->geslacht)) {
-					// Niet ingelogd heeft geslacht m dus check of ingelogd
-					if ($this->hasPermission($subject, 'P_LOGGED_IN')) {
-						return true;
-					}
-				}
-
-				return false;
-
-			/**
-			 * Behoort een lid tot een bepaalde lichting?
-			 */
-			case 'LIDJAAR':
-			case 'LICHTING':
-
-				if ($gevraagd == $profiel->lidjaar) {
-					return true;
-				}
-
-				return false;
-
-			case 'OUDEREJAARS':
-
-				$lidjaar = $profiel->lidjaar;
-				// Niet ingelogd heeft lichting 0
-				if ($lidjaar > 0 AND LichtingenModel::getJongsteLichting() > $lidjaar) {
-					return true;
-				}
-
-				return false;
-
-			case 'EERSTEJAARS':
-
-				$lidjaar = $profiel->lidjaar;
-				// Niet ingelogd heeft lichting 0
-				if ($lidjaar > 0 AND LichtingenModel::getJongsteLichting() == $lidjaar) {
-					return true;
-				}
-
-				return false;
-
-			default:
-				return false;
 		}
 
 		return false;

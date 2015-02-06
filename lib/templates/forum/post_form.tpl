@@ -69,7 +69,7 @@
 				{/if}
 				<div class="float-right">
 					{if LoginModel::mag('P_LOGGED_IN')}
-						<a href="/fotoalbum/uploaden/fotoalbum/{LichtingenModel::getHuidigeJaargang()}/Posters" target="_blank">Poster opladen</a> &nbsp;
+						<a href="/fotoalbum/uploaden/fotoalbum/{LichtingenModel::instance()->getHuidigeJaargang()}/Posters" target="_blank">Poster opladen</a> &nbsp;
 						<a href="/groepen/activiteiten/nieuw" class="post popup">Ketzer maken</a> &nbsp;
 						<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> &nbsp;
 					{/if}

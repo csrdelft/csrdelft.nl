@@ -11,16 +11,16 @@ class Kring extends Groep {
 	const leden = 'KringLedenModel';
 
 	/**
-	 * Verticale-letter
+	 * Verticaleletter
 	 * @var string
 	 */
-	public $verticale;
+	public $verticale_letter;
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'verticale' => array(T::Char)
+		'verticale_letter' => array(T::Char)
 	);
 	/**
 	 * Database table name

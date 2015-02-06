@@ -71,11 +71,13 @@ class VerticalenView implements View {
 					if ($profiel->status === LidStatus::Kringel) {
 						echo ' ~';
 					}
-					if ($profiel->verticaleleider) {
+					$verticalelid = $verticale->getLid($profiel->uid);
+					if ($verticalelid AND $verticalelid->opmerking === 'Leider') {
 						echo ' L';
 					}
-					if ($profiel->kringcoach) {
-						echo ' <span title="Kringcoach van verticale ' . VerticalenModel::get($profiel->kringcoach)->naam . '">C</span>';
+					$kringcoach = VerticalenModel::instance()->isKringCoach($profiel->uid);
+					if ($kringcoach instanceof Verticale) {
+						echo ' <span title="Kringcoach van verticale ' . $kringcoach->naam . '">C</span>';
 					}
 					if ($profiel->kringleider !== Kringleider::Nee) {
 						echo '</span>';
