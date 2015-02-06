@@ -229,7 +229,7 @@ class GroepLijstView extends GroepTabView {
 				$form = new GroepBewerkenForm($leden[$profiel->uid], $this->groep);
 				$html .= $form->getHtml();
 			} else {
-				$html .= $leden[$profiel->uid]->opmerking;
+				$html .= $uids[$profiel->uid]->opmerking;
 			}
 			$html .= '</td></tr>';
 		}
