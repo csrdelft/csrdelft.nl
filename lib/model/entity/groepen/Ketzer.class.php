@@ -108,19 +108,6 @@ class Ketzer extends Groep {
 	}
 
 	/**
-	 * Rechten voor de gehele klasse of soort groep?
-	 * 
-	 * @param AccessAction $action
-	 * @return boolean
-	 */
-	public static function magAlgemeen($action) {
-		if ($action === A::Aanmaken AND LoginModel::mag('P_LOGGED_IN')) {
-			return true;
-		}
-		return parent::magAlgemeen($action);
-	}
-
-	/**
 	 * Lazy loading by foreign key.
 	 * 
 	 * @return KetzerSelector[]

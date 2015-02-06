@@ -9,7 +9,13 @@
 class GroepForm extends DataTableForm {
 
 	public function __construct(Groep $groep, $action, $nocancel = false) {
-		parent::__construct($groep, $action, get_class($groep) . ' ' . ($groep->id ? 'wijzigen' : 'aanmaken'));
+		parent::__construct($groep, $action);
+		$this->titel = get_class($groep);
+		if ($groep->id) {
+			$this->titel .= ' wijzigen';
+		} else {
+			$this->titel .= ' aanmaken';
+		}
 		$fields = $this->generateFields();
 
 		$fields['familie']->title = 'Vul hier een \'achternaam\' in zodat de juiste ketzers elkaar opvolgen';
@@ -61,11 +67,15 @@ $('#{$fields['rechten_aanmelden']->getId()}').val(function() {
 
 		case 'kring':
 			return 'TODO';
+			
+		case 'huis':
+			return 'woonoord:';
 
 		default:
 			return '';
 	}
 });
+			console.log('HOI');
 JS;
 		}
 
@@ -133,12 +143,12 @@ class GroepOpvolgingForm extends DataTableForm {
 
 class GroepSoortField extends RadioField {
 
+	public $columns = 1;
 	protected $activiteit;
 	protected $commissie;
 
 	public function __construct($name, $value, $description, Groep $groep) {
 		parent::__construct($name, $value, $description, array());
-		$this->columns = 1;
 
 		require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
 		$activiteiten = array();
@@ -179,6 +189,7 @@ JS;
 			'GroepenModel'			 => 'Groep (overig)',
 			'OnderverenigingenModel' => OnderverenigingenModel::orm,
 			'WoonoordenModel'		 => WoonoordenModel::orm,
+			'BesturenModel'			 => BesturenModel::orm,
 			'CommissiesModel'		 => $this->commissie
 		);
 	}
@@ -198,7 +209,7 @@ JS;
 		if (!parent::validate()) {
 			return false;
 		}
-		$class = $this->getValue();
+		$class = $this->value;
 		$model = $class::instance(); // require once
 		$orm = $model::orm;
 		$soort = $this->getSoort();
@@ -219,38 +230,50 @@ JS;
 
 class KetzerSoortField extends GroepSoortField {
 
-	public function __construct($name, $value, $description, Groep $groep) {
+	public $columns = 2;
 
-		if (property_exists($groep, 'soort')) {
-			$value .= '_' . $groep->soort;
-		}
+	public function __construct($name, $value, $description, Groep $groep) {
 		parent::__construct($name, $value, $description, $groep);
 
-		$this->columns = 2;
-
-		unset($this->options['ActiviteitenModel']);
-		unset($this->options['CommissiesModel']);
-
-		$options = array();
-		foreach ($this->activiteit->getOptions() as $value => $label) {
-			$options['ActiviteitenModel_' . $value] = $label;
+		$this->options = array();
+		foreach ($this->activiteit->getOptions() as $soort => $label) {
+			$this->options['ActiviteitenModel_' . $soort] = $label;
 		}
-		foreach ($this->options as $value => $label) {
-			$options[$value] = $label;
-		}
-		$this->options = $options;
+		$this->options['KetzersModel'] = 'Aanschafketzer';
+		//$this->options['WerkgroepenModel'] = WerkgroepenModel::orm;
+		//$this->options['GroepenModel'] = 'Groep (overig)';
 	}
 
-	public function getValue() {
-		return explode('_', parent::getValue(), 2)[0];
-	}
+	/**
+	 * Super ugly
+	 * @return boolean
+	 */
+	public function validate() {
+		$class = explode('_', $this->value, 2);
+		$soort = null;
+		switch ($class[0]) {
 
-	public function getSoort() {
-		$values = explode('_', parent::getValue(), 2);
-		if ($values[0] === 'ActiviteitenModel' AND isset($values[1])) {
-			return $values[1];
+			case 'ActiviteitenModel':
+				$soort = $class[1];
+			// fall through
+
+			case 'KetzersModel':
+				$model = $class[0]::instance(); // require once
+				$orm = $model::orm;
+				if (!$orm::magAlgemeen(A::Aanmaken, $soort)) {
+					if ($model instanceof ActiviteitenModel) {
+						$naam = ActiviteitSoort::getDescription($soort);
+					} else {
+						$naam = $model->getNaam();
+					}
+					$this->error = 'U mag geen ' . $naam . ' aanmaken';
+				}
+				break;
+
+			default:
+				$this->error = 'Onbekende optie gekozen';
 		}
-		return null;
+		return $this->error === '';
 	}
 
 }
@@ -261,7 +284,10 @@ class GroepConverteerForm extends DataTableForm {
 		parent::__construct($groep, $huidig->getUrl() . 'converteren', $huidig::orm . ' converteren');
 
 		$fields[] = new GroepSoortField('model', get_class($huidig), 'Converteren naar', $groep);
-		$fields[] = new FormDefaultKnoppen();
+
+		$fields['btn'] = new FormDefaultKnoppen();
+		$fields['btn']->submit->icon = '/famfamfam/lightning.png';
+		$fields['btn']->submit->label = 'Converteren';
 
 		$this->addFields($fields);
 	}
@@ -276,13 +302,34 @@ class GroepConverteerForm extends DataTableForm {
 
 class GroepAanmakenForm extends ModalForm {
 
-	public function __construct(GroepenModel $huidig) {
-		parent::__construct($huidig->nieuw(), $huidig->getUrl() . 'nieuw', 'Nieuwe ketzer aanmaken');
+	public function __construct(GroepenModel $huidig, $soort = null) {
+		$groep = $huidig->nieuw($soort);
+		parent::__construct($groep, $huidig->getUrl() . 'nieuw', 'Nieuwe ketzer aanmaken');
 
-		$fields[] = new KetzerSoortField('model', get_class($huidig), null, $this->getModel());
+		$default = get_class($huidig);
+		if (property_exists($groep, 'soort')) {
+			$default .= '_' . $groep->soort;
+		}
+		$fields[] = new KetzerSoortField('model', $default, null, $groep);
 
-		$fields[] = new FormDefaultKnoppen();
+		$fields['btn'] = new FormDefaultKnoppen(null, false);
+		$fields['btn']->submit->icon = '/famfamfam/add.png';
+		$fields['btn']->submit->label = 'Aanmaken';
+
 		$this->addFields($fields);
+	}
+
+	public function getValues() {
+		$return = array();
+		$value = $this->findByName('model')->getValue();
+		$values = explode('_', $value, 2);
+		$return['model'] = $values[0];
+		if (isset($values[1])) {
+			$return['soort'] = $values[1];
+		} else {
+			$return['soort'] = null;
+		}
+		return $return;
 	}
 
 }

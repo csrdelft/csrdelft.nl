@@ -99,12 +99,12 @@ class GroepenController extends Controller {
 			case 'leden':
 			case 'beheren':
 			case 'wijzigen':
+			case 'nieuw':
 				return true;
 
 			case 'overzicht':
 			case 'bekijken':
 			case 'zoeken':
-			case 'nieuw':
 				return !$this->isPosted();
 
 			case 'overzicht':
@@ -135,13 +135,18 @@ class GroepenController extends Controller {
 		} else {
 			$groepen = $this->model->find('status = ?', array(GroepStatus::HT));
 		}
-		$body = new GroepenView($this->model, $groepen); // controleert rechten bekijken per groep
+		$body = new GroepenView($this->model, $groepen, $soort); // controleert rechten bekijken per groep
 		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function bekijken(Groep $groep) {
 		$groepen = $this->model->find('familie = ?', array($groep->familie));
-		$body = new GroepenView($this->model, $groepen, $groep->id); // controleert rechten bekijken per groep
+		if (property_exists($groep, 'soort')) {
+			$soort = $groep->soort;
+		} else {
+			$soort = null;
+		}
+		$body = new GroepenView($this->model, $groepen, $soort, $groep->id); // controleert rechten bekijken per groep
 		$this->view = new CsrLayoutPage($body);
 	}
 
@@ -218,23 +223,14 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function nieuw() {
-		$form = new GroepAanmakenForm($this->model);
-		if (!$this->isPosted()) {
-			$this->beheren();
-			$form->tableId = $this->view->getBody()->getTableId();
-			$this->view->modal = $form;
-		} elseif ($form->validate()) {
-			//TODO
-			$this->view = $form;
-		} else {
-			$this->view = $form;
-		}
+	public function nieuw($soort = null) {
+		return $this->aanmaken($soort);
 	}
 
 	public function aanmaken($soort = null) {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (empty($selection)) {
+			$old = null;
 			$groep = $this->model->nieuw($soort);
 		}
 		// opvolger
@@ -243,16 +239,28 @@ class GroepenController extends Controller {
 			if (!$old) {
 				$this->geentoegang();
 			}
+			if (property_exists($old, 'soort')) {
+				$soort = $old->soort;
+			}
 			$groep = $this->model->nieuw($soort);
 			$groep->naam = $old->naam;
 			$groep->familie = $old->familie;
 			$groep->samenvatting = $old->samenvatting;
 			$groep->omschrijving = $old->omschrijving;
+			if (property_exists($old, 'rechten_aanmelden')) {
+				$groep->rechten_aanmelden = $old->rechten_aanmelden;
+			}
 		}
 		$form = new GroepForm($groep, $this->model->getUrl() . $this->action); // checks rechten aanmaken
 		if ($form->validate()) {
 			$this->model->create($groep);
-			$this->view = new GroepenBeheerData(array($groep));
+			$response[] = $groep;
+			if ($old) {
+				$old->status = GroepStatus::OT;
+				$this->model->update($old);
+				$response[] = $old;
+			}
+			$this->view = new GroepenBeheerData($response);
 		} else {
 			$this->view = $form;
 		}

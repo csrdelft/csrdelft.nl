@@ -181,19 +181,17 @@ class GroepView implements View {
 
 class GroepenView implements View {
 
+	private $groepen;
+	private $soort;
 	private $geschiedenis;
 	private $url;
-	private $tab;
-	private $groepen;
-	/**
-	 * Toon CMS pagina
-	 * @var string
-	 */
 	private $pagina;
+	private $tab;
 
-	public function __construct(GroepenModel $model, $groepen, $geschiedenis = false) {
-		$this->geschiedenis = $geschiedenis;
+	public function __construct(GroepenModel $model, $groepen, $soort = null, $geschiedenis = false) {
 		$this->groepen = $groepen;
+		$this->soort = $soort;
+		$this->geschiedenis = $geschiedenis;
 		$this->url = $model->getUrl();
 		$this->pagina = CmsPaginaModel::get($model->getNaam());
 		if ($model instanceof BesturenModel) {
@@ -216,6 +214,7 @@ class GroepenView implements View {
 	}
 
 	public function view() {
+		echo '<a class="btn" href="' . $this->url . 'nieuw/' . $this->soort . '"><img class="icon" src="/plaetjes/famfamfam/add.png" width="16" height="16"> Toevoegen</a>';
 		echo '<a class="btn" href="' . $this->url . 'beheren"><img class="icon" src="/plaetjes/famfamfam/table.png" width="16" height="16"> Beheren</a>';
 		if ($this->geschiedenis) {
 			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->url . $this->geschiedenis . '/deelnamegrafiek"><img class="icon" src="/plaetjes/famfamfam/chart_bar.png" width="16" height="16"> Deelnamegrafiek</a>';

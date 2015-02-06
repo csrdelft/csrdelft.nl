@@ -44,4 +44,18 @@ class Commissie extends Groep {
 		return '/groepen/commissies/' . $this->id . '/';
 	}
 
+	/**
+	 * Rechten voor de gehele klasse of soort groep?
+	 * 
+	 * @param AccessAction $action
+	 * @param string $soort
+	 * @return boolean
+	 */
+	public static function magAlgemeen($action, $soort = null) {
+		switch ($soort) {
+			case CommissieSoort::SjaarCie: return LoginModel::mag('P_LEDEN_MOD,commissie:NovCie');
+		}
+		return parent::magAlgemeen($action);
+	}
+
 }

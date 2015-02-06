@@ -70,11 +70,6 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	public function mag($action) {
 		switch ($action) {
 
-			case A::Bekijken:
-				if (LoginModel::mag('P_LEDEN_MOD')) {
-					return true;
-				}
-
 			case A::Aanmelden:
 				if (!empty($this->rechten_aanmelden) AND ! LoginModel::mag($this->rechten_aanmelden)) {
 					return false;
@@ -91,7 +86,6 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $soort = null) {
-		// Beheer over commissie-ketzers bij betreffende commissie
 		switch ($soort) {
 			case ActiviteitSoort::OWee: return LoginModel::mag('P_LEDEN_MOD,commissie:OWeeCie');
 			case ActiviteitSoort::Dies: return LoginModel::mag('P_LEDEN_MOD,commissie:DiesCie');

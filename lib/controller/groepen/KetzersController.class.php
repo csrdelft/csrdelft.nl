@@ -16,4 +16,19 @@ class KetzersController extends GroepenController {
 		}
 	}
 
+	public function nieuw($soort = null) {
+		$form = new GroepAanmakenForm($this->model, $soort);
+		if (!$this->isPosted()) {
+			$this->beheren();
+			$form->tableId = $this->view->getBody()->getTableId();
+			$this->view->modal = $form;
+		} elseif ($form->validate()) {
+			$values = $form->getValues();
+			$model = $values['model']::instance();
+			$this->view = new GroepForm($model->nieuw($values['soort']), $model->getUrl() . 'aanmaken'); // checks rechten aanmaken
+		} else {
+			$this->view = $form;
+		}
+	}
+
 }
