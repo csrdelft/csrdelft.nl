@@ -140,7 +140,8 @@ class Groep extends PersistentEntity {
 		} elseif ($this instanceof Commissie OR $this instanceof Bestuur) {
 			$suggesties = CommissieFunctie::getTypeOptions();
 		} else {
-			$suggesties = Database::sqlSelect(array('DISTINCT opmerking'), static::leden);
+			$leden = static::leden;
+			$suggesties = Database::sqlSelect(array('DISTINCT opmerking'), $leden::getTableName());
 		}
 		return $suggesties;
 	}
@@ -180,12 +181,6 @@ class Groep extends PersistentEntity {
 
 			case A::Bekijken:
 				return LoginModel::mag('P_LEDEN_READ');
-
-			// Uitzondering zodat beheerders niet overal een aanmeldknop krijgen
-			case A::Aanmelden:
-			case A::Bewerken:
-			case A::Afmelden:
-				break;
 
 			default:
 				// Beheerder mag alles
