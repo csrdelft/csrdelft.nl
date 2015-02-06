@@ -24,8 +24,8 @@ class KetzersController extends GroepenController {
 			$this->view->modal = $form;
 		} elseif ($form->validate()) {
 			$values = $form->getValues();
-			$model = $values['model']::instance();
-			$this->view = new GroepForm($model->nieuw($values['soort']), $model->getUrl() . 'aanmaken'); // checks rechten aanmaken
+			$redirect = $values['model']::instance()->getUrl() . 'aanmaken/' . $values['soort'];
+			$this->view = new JsonResponse($redirect);
 		} else {
 			$this->view = $form;
 		}

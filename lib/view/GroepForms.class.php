@@ -305,6 +305,7 @@ class GroepAanmakenForm extends ModalForm {
 	public function __construct(GroepenModel $huidig, $soort = null) {
 		$groep = $huidig->nieuw($soort);
 		parent::__construct($groep, $huidig->getUrl() . 'nieuw', 'Nieuwe ketzer aanmaken');
+		$this->css_classes[] = 'redirect';
 
 		$default = get_class($huidig);
 		if (property_exists($groep, 'soort')) {

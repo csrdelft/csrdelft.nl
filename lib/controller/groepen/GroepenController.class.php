@@ -100,6 +100,7 @@ class GroepenController extends Controller {
 			case 'beheren':
 			case 'wijzigen':
 			case 'nieuw':
+			case 'aanmaken':
 				return true;
 
 			case 'overzicht':
@@ -117,7 +118,6 @@ class GroepenController extends Controller {
 			case GroepTab::Lijst:
 			case GroepTab::Statistiek:
 			case GroepTab::Emails:
-			case 'aanmaken':
 			case 'verwijderen':
 			case 'aanmelden':
 			case 'bewerken':
@@ -252,7 +252,12 @@ class GroepenController extends Controller {
 			}
 		}
 		$form = new GroepForm($groep, $this->model->getUrl() . $this->action); // checks rechten aanmaken
-		if ($form->validate()) {
+		if (!$this->isPosted()) {
+			$this->beheren();
+			$form->tableId = $this->view->getBody()->getTableId();
+			$this->view->modal = $form;
+			return;
+		} elseif ($form->validate()) {
 			$this->model->create($groep);
 			$response[] = $groep;
 			if ($old) {
