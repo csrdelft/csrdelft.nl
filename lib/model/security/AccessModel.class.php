@@ -214,13 +214,6 @@ class AccessModel extends CachedPersistenceModel {
 		$suggestions[] = 'geslacht:v';
 		$suggestions[] = 'ouderejaars';
 		$suggestions[] = 'eerstejaars';
-		foreach (VerticalenModel::instance()->prefetch() as $verticale) {
-			$suggestions[] = 'verticale:' . $verticale->letter;
-		}
-		$jong = LichtingenModel::getJongsteLichting();
-		for ($jaar = $jong; $jaar > $jong - 7; $jaar--) {
-			$suggestions[] = 'lichting:' . $jaar;
-		}
 		return $suggestions;
 	}
 

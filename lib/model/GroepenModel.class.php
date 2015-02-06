@@ -239,10 +239,11 @@ class WoonoordenModel extends GroepenModel {
 
 }
 
-/**
- * TODO: extend GroepenModel
- */
-class LichtingenModel {
+class LichtingenModel extends GroepenModel {
+
+	const orm = 'Lichting';
+
+	protected static $instance;
 
 	public static function getHuidigeJaargang() {
 		$jaargang = self::getJongsteLichting();

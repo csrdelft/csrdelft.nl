@@ -3989,6 +3989,7 @@ lib/controller/groepen/CommissiesController.class.php -text
 lib/controller/groepen/GroepenController.class.php -text
 lib/controller/groepen/KetzersController.class.php -text
 lib/controller/groepen/KringenController.class.php -text
+lib/controller/groepen/LichtingenController.class.php -text
 lib/controller/groepen/OnderverenigingenController.class.php -text
 lib/controller/groepen/WerkgroepenController.class.php -text
 lib/controller/groepen/WoonoordenController.class.php -text
@@ -4109,6 +4110,7 @@ lib/model/entity/groepen/KetzerSelector.php -text
 lib/model/entity/groepen/KetzerSelectorSoort.enum.php -text
 lib/model/entity/groepen/Kring.class.php -text
 lib/model/entity/groepen/KringLid.class.php -text
+lib/model/entity/groepen/Lichting.class.php -text
 lib/model/entity/groepen/LichtingsLid.class.php -text
 lib/model/entity/groepen/OnderverLid.class.php -text
 lib/model/entity/groepen/Ondervereniging.class.php -text

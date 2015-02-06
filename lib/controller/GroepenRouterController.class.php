@@ -53,7 +53,7 @@ class GroepenRouterController extends Controller {
 			case 'onderverenigingen':
 			case 'werkgroepen':
 			case 'woonoorden':
-				//case 'lichtingen':
+			case 'lichtingen':
 				//case 'verticalen':
 				//case 'kringen':
 				return LoginModel::mag('P_LOGGED_IN');

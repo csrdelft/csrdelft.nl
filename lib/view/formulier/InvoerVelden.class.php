@@ -638,6 +638,8 @@ class RechtenField extends TextField {
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
 		$this->suggestions[] = AccessModel::instance()->getPermissionSuggestions();
+		$this->suggestions['Verticale'] = '/verticalen/zoeken/?q=';
+		$this->suggestions['Lichting'] = '/groepen/lichtingen/zoeken/?q=';
 		$this->suggestions['Commissie'] = '/groepen/commissies/zoeken/?q=';
 		$this->suggestions['Groep'] = '/groepen/overig/zoeken/?q=';
 		$this->suggestions['Ondervereniging'] = '/groepen/onderverenigingen/zoeken/?q=';

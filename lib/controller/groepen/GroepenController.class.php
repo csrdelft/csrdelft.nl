@@ -194,13 +194,13 @@ class GroepenController extends Controller {
 		if (!$this->hasParam('q')) {
 			$this->geentoegang();
 		}
-		$zoekterm = $this->getParam('q');
+		$zoekterm = '%' . $this->getParam('q') . '%';
 		$limit = 5;
 		if ($this->hasParam('limit')) {
 			$limit = (int) $this->getParam('limit');
 		}
 		$result = array();
-		foreach ($this->model->find('familie = ?', array($zoekterm), null, null, $limit) as $groep) {
+		foreach ($this->model->find('familie LIKE ?', array($zoekterm), null, null, $limit) as $groep) {
 			$result[$groep->familie] = array(
 				'value' => get_class($groep) . ':' . $groep->familie
 			);
