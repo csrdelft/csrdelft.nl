@@ -87,7 +87,13 @@ class Formulier implements View, Validator {
 						$class .= 'RechtenField';
 						break;
 					}
-				case T::Char: $class .= 'TextField';
+				// fall through
+				case T::Char:
+					if ($fieldName === 'verticale') {
+						$class .= 'VerticaleField';
+						break;
+					}
+					$class .= 'TextField';
 					break;
 				case T::Boolean: $class .= 'JaNeeField';
 					break;
