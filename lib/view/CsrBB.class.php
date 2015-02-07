@@ -602,7 +602,7 @@ HTML;
 		if (!$groep->mag(A::Bekijken)) {
 			return '';
 		}
-		$view = new GroepView($groep, null, true);
+		$view = new GroepView($groep, null, false, true);
 		return $view->getHtml();
 	}
 

@@ -43,43 +43,11 @@ class Verticale extends Groep {
 	}
 
 	public function getUrl() {
-		return '/verticalen#' . $this->letter;
+		return '/groepen/verticalen/' . $this->letter . '/';
 	}
 
-	/**
-	 * TODO: Kring extend Groep
-	 * @var array
-	 */
-	private $kringen;
-
-	/**
-	 * TODO: Kring extend Groep
-	 */
 	public function getKringen() {
-		if (!isset($this->kringen)) {
-			$this->kringen = array();
-			$kringen = Database::sqlSelect(array('kring, GROUP_CONCAT(uid ORDER BY kringleider ASC, achternaam ASC, voornaam ASC) as kringleden'), ProfielModel::getTableName(), 'verticale = ? AND ( status IN (?,?,?,?) OR (status = ? AND kring > 0) )', array($this->letter, LidStatus::Noviet, LidStatus::Lid, LidStatus::Gastlid, LidStatus::Kringel, LidStatus::Oudlid), 'kring', 'kring');
-			foreach ($kringen as $result) {
-				$kring = $result['kring'];
-				$leden = explode(',', $result['kringleden']);
-				$this->kringen[$kring] = array();
-				foreach ($leden as $uid) {
-					$this->kringen[$kring][] = ProfielModel::get($uid);
-				}
-			}
-		}
-		return $this->kringen;
-	}
-
-	/**
-	 * TODO: Kring extend Groep
-	 */
-	public function getKring($kring) {
-		$this->getKringen();
-		if (!isset($this->kringen[$kring])) {
-			return false;
-		}
-		return $this->kringen[$kring];
+		return KringenModel::getKringenVoorVerticale($this);
 	}
 
 }

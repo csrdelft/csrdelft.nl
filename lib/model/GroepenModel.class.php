@@ -24,7 +24,8 @@ class GroepenModel extends CachedPersistenceModel {
 		if (is_numeric($id)) {
 			return static::instance()->retrieveByPrimaryKey(array($id));
 		}
-		return static::instance()->find('familie = ? AND status = ?', array($id, GroepStatus::HT), null, null, 1)->fetch();
+		$groepen = static::instance()->prefetch('familie = ? AND status = ?', array($id, GroepStatus::HT), null, null, 1);
+		return reset($groepen);
 	}
 
 	public static function getNaam() {
@@ -82,7 +83,7 @@ class GroepenModel extends CachedPersistenceModel {
 		if (($ft AND $ft->getLid($uid)) OR ( $ht AND $ht->getLid($uid)) OR ( $ot AND $ot->getLid($uid))) {
 			$result[] = 'bestuur';
 		}
-		foreach (CommissieLedenModel::instance()->find('uid = ?', array($uid)) as $commissielid) {
+		foreach (CommissieLedenModel::instance()->prefetch('uid = ?', array($uid)) as $commissielid) {
 			$commissie = CommissiesModel::get($commissielid->groep_id);
 			if ($commissie->status === GroepStatus::HT OR $commissie->status === GroepStatus::FT) {
 				$result[] = $commissie->familie;
@@ -345,7 +346,8 @@ class VerticalenModel extends GroepenModel {
 	protected $default_order = 'letter ASC';
 
 	public static function get($letter) {
-		return static::instance()->find('letter = ?', array($letter), null, null, 1)->fetch();
+		$verticalen = static::instance()->prefetch('letter = ?', array($letter), null, null, 1);
+		return reset($verticalen);
 	}
 
 	public function nieuw() {
@@ -389,6 +391,10 @@ class KringenModel extends GroepenModel {
 		$kring = parent::nieuw();
 		$kring->verticale_letter = null;
 		return $kring;
+	}
+
+	public function getKringenVoorVerticale(Verticale $verticale) {
+		return $this->prefetch('verticale_letter = ?', array($verticale->letter));
 	}
 
 }
@@ -476,7 +482,7 @@ class KetzerSelectorsModel extends GroepenModel {
 	protected static $instance;
 
 	public function getSelectorsVoorKetzer(Ketzer $ketzer) {
-		return $this->find('ketzer_id = ?', array($ketzer->id));
+		return $this->prefetch('ketzer_id = ?', array($ketzer->id));
 	}
 
 }
@@ -488,7 +494,7 @@ class KetzerOptiesModel extends GroepenModel {
 	protected static $instance;
 
 	public function getOptiesVoorSelect(KetzerSelector $select) {
-		return $this->find('select_id = ?', array($select->select_id));
+		return $this->prefetch('select_id = ?', array($select->select_id));
 	}
 
 }
@@ -500,7 +506,7 @@ class KetzerKeuzesModel extends GroepenModel {
 	protected static $instance;
 
 	public function getKeuzesVoorOptie(KetzerOptie $optie) {
-		return $this->find('optie_id = ?', array($optie->optie_id));
+		return $this->prefetch('optie_id = ?', array($optie->optie_id));
 	}
 
 }

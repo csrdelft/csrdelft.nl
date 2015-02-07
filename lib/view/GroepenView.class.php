@@ -111,36 +111,36 @@ class GroepView implements View {
 	private $leden;
 	private $bb;
 
-	public function __construct(Groep $groep, $tab = null, $bb = false) {
+	public function __construct(Groep $groep, $tab = null, $geschiedenis = false, $bb = false) {
 		$this->groep = $groep;
 		$this->bb = $bb;
 		switch ($tab) {
 
 			case GroepTab::Pasfotos:
-				$this->leden = new GroepPasfotosView($groep);
+				$this->leden = new GroepPasfotosView($groep, $geschiedenis);
 				break;
 
 			case GroepTab::Lijst:
-				$this->leden = new GroepLijstView($groep);
+				$this->leden = new GroepLijstView($groep, $geschiedenis);
 				break;
 
 			case GroepTab::Statistiek:
-				$this->leden = new GroepStatistiekView($groep);
+				$this->leden = new GroepStatistiekView($groep, $geschiedenis);
 				break;
 
 			case GroepTab::Emails:
-				$this->leden = new GroepEmailsView($groep);
+				$this->leden = new GroepEmailsView($groep, $geschiedenis);
 				break;
 
 			case GroepTab::Emails:
-				$this->leden = new GroepEmailsView($groep);
+				$this->leden = new GroepEmailsView($groep, $geschiedenis);
 				break;
 
 			default:
 				if ($groep->keuzelijst) {
-					$this->leden = new GroepLijstView($groep);
+					$this->leden = new GroepLijstView($groep, $geschiedenis);
 				} else {
-					$this->leden = new GroepPasfotosView($groep);
+					$this->leden = new GroepPasfotosView($groep, $geschiedenis);
 				}
 		}
 	}
@@ -240,7 +240,7 @@ class GroepenView implements View {
 				continue;
 			}
 			echo '<hr>';
-			$view = new GroepView($groep, $this->tab);
+			$view = new GroepView($groep, $this->tab, $this->geschiedenis);
 			$view->view();
 		}
 	}

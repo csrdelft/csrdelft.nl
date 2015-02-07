@@ -48,10 +48,12 @@ class GroepOmschrijvingView implements View, FormElement {
 
 	protected $groep;
 	protected $javascript;
+	protected $geschiedenis;
 
-	public function __construct(Groep $groep) {
+	public function __construct(Groep $groep, $geschiedenis = false) {
 		$this->groep = $groep;
 		$this->javascript = '';
+		$this->geschiedenis = $geschiedenis;
 	}
 
 	public function getBreadcrumbs() {
@@ -112,7 +114,9 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 			$html .= '<li class="float-left"><a class="btn" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-pencil"></span></a></li>';
 		}
 
-		$html .= '<li class="float-left"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><span class="fa fa-clock-o"></span></a></li>';
+		if (!($this->geschiedenis OR $this->groep instanceof Verticale)) {
+			$html .= '<li class="float-left"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><span class="fa fa-clock-o"></span></a></li>';
+		}
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Pasfotos . '" title="' . GroepTab::getDescription(GroepTab::Pasfotos) . ' tonen"><span class="fa fa-user"></span></a></li>';
 
