@@ -371,6 +371,11 @@ class KringenModel extends GroepenModel {
 	const orm = 'Kring';
 
 	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'verticale_letter ASC';
 
 	public function nieuw($letter = '') {
 		$kring = parent::nieuw();
