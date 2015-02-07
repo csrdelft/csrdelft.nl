@@ -145,7 +145,7 @@ switch (constant('MODE')) {
 		require_once 'model/security/CliLoginModel.class.php';
 		// Late static binding requires explicitly
 		// calling instance() before any static method!
-		if (LoginModel::instance()->isLoggedIn()) {
+		if (!LoginModel::instance()->isLoggedIn()) {
 			die('access denied');
 		}
 		break;
