@@ -29,16 +29,16 @@ class ProfielView extends SmartyTemplateView {
 
 		$besturen = '';
 		foreach (BesturenModel::instance()->getGroepenVoorLid($this->model->uid) as $bestuur) {
-			$besturen = '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />' . $besturen;
+			$besturen = '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />';
 		}
 		if ($besturen != '') {
-			$besturen = '<div class="label">Bestuur:</div><div class="data">' . $besturen . '</div>';
+			$besturen .= '<div class="label">Bestuur:</div><div class="data">' . $besturen . '</div>';
 		}
 		$this->smarty->assign('besturen', $besturen);
 
 		$commissies = '';
 		foreach (CommissiesModel::instance()->getGroepenVoorLid($this->model->uid) as $commissie) {
-			$commissies = '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />' . $commissies;
+			$commissies .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />';
 		}
 		if ($commissies != '') {
 			$commissies = '<div class="label">Commissies:</div><div class="data">' . $commissies . '</div>';
@@ -47,7 +47,7 @@ class ProfielView extends SmartyTemplateView {
 
 		$groepen = '';
 		foreach (GroepenModel::instance()->getGroepenVoorLid($this->model->uid) as $groep) {
-			$groepen = '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />' . $groepen;
+			$groepen .= '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />';
 		}
 		if ($groepen != '') {
 			$groepen = '<div class="label">Overige<br />groepen:</div><div class="data">' . $groepen . '</div>';
