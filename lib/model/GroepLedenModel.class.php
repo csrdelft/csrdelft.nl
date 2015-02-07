@@ -144,6 +144,7 @@ class VerticaleLedenModel extends GroepLedenModel {
 	 * @return VerticaleLid[]
 	 */
 	public function getLedenVoorGroep(Groep $verticale) {
+		require_once 'model/entity/groepen/LidStatus.enum.php';
 		$leden = array();
 		$status = LidStatus::$lidlike;
 		$where = 'verticale = ? AND status IN (' . implode(', ', array_fill(0, count($status), '?')) . ')';
