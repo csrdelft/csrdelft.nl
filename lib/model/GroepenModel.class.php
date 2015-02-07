@@ -289,8 +289,10 @@ class LichtingenModel extends GroepenModel {
 		}
 		$lichting = parent::nieuw();
 		$lichting->lidjaar = (int) $lidjaar;
+		$lichting->id = $lichting->lidjaar;
 		$lichting->naam = 'Lichting ' . $lichting->lidjaar;
 		$lichting->familie = 'Lichting';
+		$lichting->begin_moment = $lichting->lidjaar . '-09-01 00:00:00';
 		return $lichting;
 	}
 
