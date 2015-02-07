@@ -62,9 +62,7 @@
 				<div class="half">
 					<div class="label">
 						{if $profiel->adres!=''}
-							<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->adres|urlencode}+{$profiel->woonplaats|urlencode}+{$profiel->land|urlencode}">
-								<img src="/plaetjes/layout/googlemaps.gif" width="35" alt="googlemap voor dit adres" />
-							</a>
+							<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->adres|urlencode}+{$profiel->woonplaats|urlencode}+{$profiel->land|urlencode}" title="Open kaart" class="lichtgrijs fa fa-map-marker fa-5x"></a>
 						{/if}
 					</div>
 					<div class="data">
@@ -80,9 +78,7 @@
 					<div class="half">
 						{if $profiel->o_adres!=''}
 							<div class="label">
-								<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->o_adres|urlencode}+{$profiel->o_woonplaats|urlencode}+{$profiel->o_land|urlencode} (ouders van {$profiel->getNaam('civitas')})">
-									<img src="/plaetjes/layout/googlemaps.gif" width="35" alt="googlemap voor dit adres" />
-								</a>
+								<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->o_adres|urlencode}+{$profiel->o_woonplaats|urlencode}+{$profiel->o_land|urlencode}" title="Open kaart" class="lichtgrijs fa fa-map-marker fa-5x"></a>
 							</div>
 						{/if}
 						<div class="data">

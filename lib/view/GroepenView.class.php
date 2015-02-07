@@ -165,7 +165,11 @@ class GroepView implements View {
 		if ($this->groep->maker_uid == 1025 AND $this->bb) {
 			$html .= ' bb-dies2015';
 		}
-		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting"><h3>' . $this->getTitel() . '</h3>';
+		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting"><h3>' . $this->getTitel();
+		if (property_exists($this->groep, 'locatie') AND ! empty($this->groep->locatie)) {
+			$html .= ' &nbsp; <a target="_blank" href="https://maps.google.nl/maps?q=' . urlencode($this->groep->locatie) . '" title="' . $this->groep->locatie . '" class="lichtgrijs fa fa-map-marker fa-lg"></a>';
+		}
+		$html .= '</h3>';
 		if ($this->groep->maker_uid == 1025) {
 			$html .= '<img src="/plaetjes/nieuws/m.png" width="70" height="70" alt="M" class="float-left" style="margin-right: 10px;">';
 		}
