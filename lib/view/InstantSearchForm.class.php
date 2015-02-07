@@ -111,7 +111,7 @@ JS;
 				$html .= '<span class="fa fa-check"></span> ';
 				if ($option === 'leden') {
 					$html .= ucfirst(strtolower(LidInstellingen::get('zoeken', 'leden'))) . '</a></li>';
-					break;
+					continue;
 				}
 			} else {
 				$html .= '<span style="margin-right: 18px;"></span> ';
