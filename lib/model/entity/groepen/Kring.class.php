@@ -47,11 +47,11 @@ class Kring extends Groep {
 	}
 
 	public function mag($action) {
-		return $action === A::Bekijken OR LoginModel::mag('Bestuur:Vice-Abactis');
+		return $action === A::Bekijken OR LoginModel::mag('1137,Bestuur:Vice-Abactis');
 	}
 
 	public static function magAlgemeen($action) {
-		return $action === A::Bekijken OR LoginModel::mag('Bestuur:Vice-Abactis');
+		return $action === A::Bekijken OR LoginModel::mag('1137,Bestuur:Vice-Abactis');
 		;
 	}
 

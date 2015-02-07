@@ -584,6 +584,10 @@ class AccessModel extends CachedPersistenceModel {
 						break;
 
 					case 'BESTUUR':
+						if (in_array($gevraagd, CommissieFunctie::getTypeOptions())) {
+							$gevraagd = false;
+							$role = $gevraagd;
+						}
 						if ($gevraagd) {
 							$groep = BesturenModel::get($gevraagd);
 						} else {
