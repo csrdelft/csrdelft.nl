@@ -40,4 +40,12 @@ class Kring extends Groep {
 		return '/groepen/kringen/' . $this->id . '/';
 	}
 
+	public function mag($action) {
+		return $action === A::Bekijken;
+	}
+
+	public static function magAlgemeen($action) {
+		return $action === A::Bekijken;
+	}
+
 }

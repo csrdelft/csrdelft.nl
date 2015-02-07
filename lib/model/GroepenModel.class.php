@@ -102,7 +102,7 @@ class GroepenModel extends CachedPersistenceModel {
 		$groep->naam = null;
 		$groep->familie = null;
 		$groep->status = GroepStatus::HT;
-		$groep->samenvatting = null;
+		$groep->samenvatting = '';
 		$groep->omschrijving = null;
 		$groep->begin_moment = null;
 		$groep->eind_moment = null;
@@ -364,21 +364,6 @@ class VerticalenModel extends GroepenModel {
 		return reset($verticalen);
 	}
 
-	/**
-	 * Get Verticale waarvoor lid kringcoach is.
-	 * 
-	 * @param string $uid
-	 * @return Verticale|false
-	 */
-	public function isKringCoach($uid) {
-		foreach (VerticalenModel::instance()->prefetch() as $verticale) {
-			if ($uid === $verticale->kringcoach) {
-				return $verticale;
-			}
-		}
-		return false;
-	}
-
 }
 
 class KringenModel extends GroepenModel {
@@ -387,9 +372,9 @@ class KringenModel extends GroepenModel {
 
 	protected static $instance;
 
-	public function nieuw() {
+	public function nieuw($letter = '') {
 		$kring = parent::nieuw();
-		$kring->verticale_letter = null;
+		$kring->verticale_letter = $letter;
 		return $kring;
 	}
 

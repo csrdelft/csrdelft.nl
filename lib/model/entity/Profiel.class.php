@@ -618,7 +618,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	public function getKring($link = false) {
 		$verticale = $this->getVerticale();
-		$verticalelid = $verticale->getLid($this->uid);
 		if (empty($verticale->letter)) {
 			return 'Geen kring';
 		}
@@ -630,12 +629,11 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		if ($this->kringleider !== Kringleider::Nee) {
 			$postfix = ' (kringleider)';
 		}
-		if ($verticalelid->opmerking === 'Leider') {
+		if ($this->verticaleleider) {
 			$postfix = ' (leider)';
 		}
-		$kringcoach = VerticalenModel::instance()->isKringCoach($this->uid);
-		if ($kringcoach) {
-			$postfix = ' <span title="Kringcoach van verticale ' . $kringcoach->naam . '">(kringcoach)</span>';
+		if ($this->kringcoach) {
+			$postfix = ' <span title="Kringcoach van verticale ' . VerticaleModel::get($this->kringcoach)->naam . '">(kringcoach)</span>';
 		}
 		if ($link) {
 			return '<a href="/verticalen#kring' . $id . '" title="Verticale ' . htmlspecialchars($verticale->naam) . ' (' . $verticale->letter . ') - kring ' . $this->kring . '">' . $verticale->naam . ' ' . $id . '</a>' . $postfix;

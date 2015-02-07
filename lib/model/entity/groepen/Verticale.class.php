@@ -16,17 +16,11 @@ class Verticale extends Groep {
 	 */
 	public $letter;
 	/**
-	 * Kringcoach uid
-	 * @var array
-	 */
-	public $kringcoach;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'letter'	 => array(T::Char),
-		'kringcoach' => array(T::UID)
+		'letter' => array(T::Char)
 	);
 	/**
 	 * Database table name
@@ -48,6 +42,14 @@ class Verticale extends Groep {
 
 	public function getKringen() {
 		return KringenModel::getKringenVoorVerticale($this);
+	}
+
+	public function mag($action) {
+		return $action === A::Bekijken;
+	}
+
+	public static function magAlgemeen($action) {
+		return $action === A::Bekijken;
 	}
 
 }

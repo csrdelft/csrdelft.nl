@@ -256,6 +256,7 @@ class ProfielForm extends Formulier {
 		}
 
 		if ($admin AND ! $inschrijven) {
+			$fields[] = new VerticaleField('verticale', $profiel->verticale, 'Verticale');
 			$fields[] = new SelectField('kring', $profiel->kring, 'Kring', range(0, 9));
 			if ($profiel->isLid()) {
 				$kringleider = array();
@@ -263,6 +264,8 @@ class ProfielForm extends Formulier {
 					$kringleider[$optie] = Kringleider::getDescription($optie);
 				}
 				$fields[] = new SelectField('kringleider', $profiel->kringleider, 'Kringleider', $kringleider);
+				$fields[] = new VerticaleField('kringcoach', $profiel->kringcoach, 'Kringcoach');
+				$fields[] = new JaNeeField('verticaleleider', $profiel->verticaleleider, 'Verticaleleider');
 			}
 			$fields[] = new LidField('patroon', $profiel->patroon, 'Patroon', 'allepersonen');
 		}

@@ -19,36 +19,42 @@ class GroepenController extends Controller {
 	}
 
 	public function performAction(array $args = array()) {
-		/*
-		  if (!$this->isPosted() AND LoginModel::getUid() === '1137' AND $this->model instanceof VerticalenModel) {
+/*
+		if (LoginModel::getUid() === '1137' AND $this->model instanceof KringenModel) {
 
-		  $model = $this->model;
-		  $orm = $model::orm;
-		  $leden = $orm::leden;
-		  $ledenmodel = $leden::instance();
-		  foreach (ProfielModel::instance()->find() as $profiel) {
-		  $verticale = $profiel->getVerticale();
-		  if (!$verticale OR $verticale->letter === '') {
-		  continue;
-		  }
-		  $lid = $ledenmodel::get($verticale, $profiel->uid);
-		  if ($lid) {
-		  $ledenmodel->delete($lid);
-		  }
-		  $lid = $ledenmodel->nieuw($verticale, $profiel->uid);
-		  $lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
-		  if ($profiel->verticaleleider) {
-		  $lid->opmerking = 'Leider';
-		  }
-		  $ledenmodel->create($lid);
-		  if ($profiel->kringcoach) {
-		  $verticale = VerticalenModel::get($profiel->kringcoach);
-		  $verticale->kringcoach = $profiel->uid;
-		  VerticalenModel::instance()->update($verticale);
-		  }
-		  }
-		  }
-		 */
+			$model = $this->model;
+			$orm = $model::orm;
+			$leden = $orm::leden;
+			$ledenmodel = $leden::instance();
+
+			$kringenByVerticale = array();
+			foreach (ProfielModel::instance()->find() as $profiel) {
+				if (empty($profiel->verticale) OR empty($profiel->kring)) {
+					continue;
+				}
+				if (isset($kringenByVerticale[$profiel->verticale][$profiel->kring])) {
+					$kring = $kringenByVerticale[$profiel->verticale][$profiel->kring];
+				} else {
+					$kring = $model->nieuw($profiel->verticale);
+					$kring->begin_moment = $profiel->lidjaar . '-09-01 00:00:00';
+					$kring->naam = 'Kring ' . $profiel->verticale . '.' . $profiel->kring;
+					$kring->familie = $profiel->verticale . '.' . $profiel->kring;
+					$model->create($kring);
+					$kringenByVerticale[$profiel->verticale][$profiel->kring] = $kring;
+				}
+				$lid = $ledenmodel::get($kring, $profiel->uid);
+				if ($lid) {
+					$ledenmodel->delete($lid);
+				}
+				$lid = $ledenmodel->nieuw($kring, $profiel->uid);
+				$lid->lid_sinds = $kring->begin_moment;
+				if ($profiel->kringleider) {
+					$lid->opmerking = 'Leider';
+				}
+				$ledenmodel->create($lid);
+			}
+		}
+//*/
 
 		$this->action = 'overzicht'; // default
 

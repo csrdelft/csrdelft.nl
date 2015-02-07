@@ -137,6 +137,26 @@ class VerticaleLedenModel extends GroepLedenModel {
 
 	protected static $instance;
 
+	/**
+	 * Return leden van verticale.
+	 * 
+	 * @param Verticale $verticale
+	 * @return VerticaleLid[]
+	 */
+	public function getLedenVoorGroep(Groep $verticale) {
+		$leden = array();
+		$status = LidStatus::$lidlike;
+		$where = 'verticale = ? AND status IN (' . implode(', ', array_fill(0, count($status), '?')) . ')';
+		array_unshift($status, $verticale->letter);
+		foreach (ProfielModel::instance()->prefetch($where, $status) as $profiel) {
+			$lid = $this->nieuw($verticale, $profiel->uid);
+			$lid->door_uid = null;
+			$lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
+			$leden[] = $lid;
+		}
+		return $leden;
+	}
+
 }
 
 class KringLedenModel extends GroepLedenModel {
