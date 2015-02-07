@@ -111,19 +111,6 @@ class MenuModel extends CachedPersistenceModel {
 					$parent->children[] = $overig;
 				}
 				break;
-
-			case 'Verticalen':
-				foreach (VerticalenModel::instance()->prefetch() as $verticale) {
-					if ($verticale->letter == '') {
-						continue;
-					}
-					$item = $this->nieuw($parent->item_id);
-					$item->rechten_bekijken = $parent->rechten_bekijken;
-					$item->link = '/verticalen#' . $verticale->letter;
-					$item->tekst = $verticale->naam;
-					$parent->children[] = $item;
-				}
-				break;
 		}
 		return $parent;
 	}
