@@ -13,20 +13,4 @@ class LichtingenController extends GroepenController {
 		parent::__construct($query, LichtingenModel::instance());
 	}
 
-	public function zoeken() {
-		if (!$this->hasParam('q')) {
-			$this->geentoegang();
-		}
-		$zoekterm = $this->getParam('q');
-		$data = range($this->model->getJongste(), $this->model->getOudste());
-		$found = preg_grep('/' . (int) $zoekterm . '/', $data);
-		$result = array();
-		foreach ($found as $lidjaar) {
-			$result[] = array(
-				'value' => 'lichting:' . $lidjaar
-			);
-		}
-		$this->view = new JsonResponse($result);
-	}
-
 }

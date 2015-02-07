@@ -399,10 +399,10 @@ class GroepenController extends Controller {
 		if (!$groep->mag(A::Bekijken)) {
 			$this->geentoegang();
 		}
+		$leden = $groep::leden;
 		if ($this->isPosted()) {
-			$this->view = new GroepLedenData($this->model->getLedenVoorGroep($groep));
+			$this->view = new GroepLedenData($leden::instance()->getLedenVoorGroep($groep));
 		} else {
-			$leden = $groep::leden;
 			$this->view = new GroepLedenTable($leden::instance(), $groep);
 		}
 	}
