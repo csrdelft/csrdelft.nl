@@ -1,4 +1,71 @@
-html, img, .alert, .progress, .progress-bar-info, #minion, .groep-stat {
+/*Invert kleuren*/
+html, img, .alert, .progress, .progress-bar-info, #minion, .groep-stat, .btn::before, iframe, .aanmelddata {
 	-webkit-filter: invert(100%); 
 	filter: invert(100%);
+}
+
+/*Kleuren fixes*/
+#forumtabel tr.ongelezenvanaf td {
+	background-color: #0A3292;
+}
+#cd-zijbalk .ishetal .ja, #cd-zijbalk .ishetal .nee, .staatrood {
+	color: #5DCCF3;
+}
+#cd-zijbalk .ishetal .ja {
+	color: #F883B1;
+}
+.bb-block, .mededeling-grotebalk {
+	box-shadow: 0 1px 2px #0A3292;
+}
+div.maaltijd-aangemeld {
+	background-color: #077B4E;
+}
+div.maaltijd-afgemeld {
+	background-color: #7C2507;
+}
+
+/*Andere (optionele) aanpassingen*/
+#cd-zijbalk {
+	left: 0;
+	padding-left: 15px;
+	border-left: 10px solid #0A3292;
+}
+.bb-maaltijd .aanmelddata {
+	height: auto;
+	padding: 5px 5px 10px;
+}
+.block:nth-of-type(2) {
+	display: none;
+}
+.btn {
+	border-radius: 0;
+	background: #0A3292;
+}
+.btn:hover {
+	background: #0A3292;
+}
+.round {
+	padding: 2px;
+	width: 26px;
+	height: 26px;
+	border-radius: 15px;
+}
+.knopjes {
+	margin-top: 20px;
+}
+h1[title="Lid-status: Lid"] .status {
+	display: none;
+}
+#profiel h1 {
+	margin-bottom: 50px;
+}
+#profiel .gegevens {
+	border: none;
+}
+#profiel img.pasfoto {
+	border: none;
+	box-shadow: 0 1px 2px #BBB;
+}
+.ishetal {
+	line-height: 20px;
 }
