@@ -264,6 +264,12 @@ class WeekdagField extends SelectField {
 
 }
 
+class RequiredWeekdagField extends WeekdagField {
+
+	public $required = true;
+
+}
+
 /**
  * Selecteer een verticale. Geeft een volgnummer terug.
  */
@@ -279,6 +285,12 @@ class VerticaleField extends SelectField {
 
 }
 
+class RequiredVerticaleField extends VerticaleField {
+
+	public $required = true;
+
+}
+
 class KerkField extends SelectField {
 
 	public function __construct($name, $value, $description) {
@@ -289,6 +301,12 @@ class KerkField extends SelectField {
 			'Vergadering van gelovigen', 'Rooms-Katholiek', 'Baptist');
 		parent::__construct($name, $value, $description, $kerken);
 	}
+
+}
+
+class RequiredKerkField extends KerkField {
+
+	public $required = true;
 
 }
 
