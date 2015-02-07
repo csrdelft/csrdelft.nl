@@ -48,18 +48,18 @@ JS;
 			$this->addSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
 			$this->addSuggestions(MenuModel::instance()->flattenMenu(MenuModel::instance()->getMenu('main')));
 
-			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=&' . LidInstellingen::get('zoeken', 'leden') . 'q=';
-
-			if (LidInstellingen::get('zoeken', 'agenda') === 'ja') {
-				$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';
-			}
-
 			if (LidInstellingen::get('zoeken', 'commissies') === 'ja') {
 				$this->suggestions['Commissie'] = '/groepen/commissies/zoeken/?q=';
 			}
 
 			if (LidInstellingen::get('zoeken', 'woonoorden') === 'ja') {
 				$this->suggestions['Woonoord/Huis'] = '/groepen/woonoorden/zoeken/?q=';
+			}
+
+			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=&' . LidInstellingen::get('zoeken', 'leden') . 'q=';
+
+			if (LidInstellingen::get('zoeken', 'agenda') === 'ja') {
+				$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';
 			}
 
 			if (LidInstellingen::get('zoeken', 'forum') === 'ja') {
@@ -104,12 +104,15 @@ JS;
 	}
 
 	public function view() {
-		$html = '<li><a href="#"><span class="fa fa-check"></span> ' . ucfirst(strtolower(LidInstellingen::get('zoeken', 'leden'))) . '</a></li>';
-
-		foreach (array('agenda', 'commissies', 'woonoorden', 'forum', 'fotoalbum', 'wiki', 'documenten', 'boeken') as $option) {
+		$html = '';
+		foreach (array('commissies', 'woonoorden', 'leden', 'agenda', 'forum', 'fotoalbum', 'wiki', 'documenten', 'boeken') as $option) {
 			$html .= '<li><a href="#">';
-			if (LidInstellingen::get('zoeken', $option) === 'ja') {
+			if (LidInstellingen::get('zoeken', $option) !== 'nee') {
 				$html .= '<span class="fa fa-check"></span> ';
+				if ($option === 'leden') {
+					$html .= ucfirst(strtolower(LidInstellingen::get('zoeken', 'leden'))) . '</a></li>';
+					break;
+				}
 			} else {
 				$html .= '<span style="margin-right: 18px;"></span> ';
 			}
