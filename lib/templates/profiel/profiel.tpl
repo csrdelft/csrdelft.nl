@@ -125,21 +125,12 @@
 				{if !$profiel->isLid() AND $profiel->lidafdatum!='0000-00-00'} tot {$profiel->lidafdatum|substr:0:4}{/if}<br />
 				<div class="label">Status:</div> {LidStatus::getDescription($profiel->status)}<br />
 				<br />
-
 				{if $profiel->isOudlid()}
 					{if $profiel->beroep!=''}<div class="label">Beroep/werk:</div><div class="data">{$profiel->beroep}</div><br />{/if}
 				{/if}
-				{assign var=kring value=$profiel->getKring()}
 				{if $kring}
-					{assign var=kringlid value=$kring->getLid($profiel->uid)}
 					<div class="label">Kring:</div>
-					<a href="{$kring->getUrl()}">
-						{$kring->naam}
-						{if $profiel->status === LidStatus::Kringel}(kringel){/if}
-						{if $kringlid->opmerking === 'Leider'}(kringleider){/if}
-						{if $profiel->verticaleleider}(leider){/if}
-						{if $profiel->kringcoach}<span title="Kringcoach van verticale {VerticaleModel::get($profiel->kringcoach)->naam}">(kringcoach)</span>{/if}
-					</a><br />
+					{$kring}<br />
 				{elseif $profiel->verticale!=''}
 					<div class="label">Verticale:</div>
 					<a href="/ledenlijst?q=verticale:{$profiel->verticale}">{$profiel->getVerticale()->naam}</a><br />

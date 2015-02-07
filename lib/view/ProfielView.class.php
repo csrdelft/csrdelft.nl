@@ -20,6 +20,24 @@ class ProfielView extends SmartyTemplateView {
 	function view() {
 		$this->smarty->assign('profiel', $this->model);
 
+		$kring = $this->model->getKring();
+		if ($kring) {
+			$html = '<a href="' . $kring->getUrl() . '">' . $kring->naam;
+			if ($this->model->status === LidStatus::Kringel) {
+				$html .= ' (kringel)';
+			} elseif ($kring->getLid($this->model->uid)->opmerking === 'Leider') {
+				$html .= ' (kringleider)';
+			} elseif ($this->model->verticaleleider) {
+				$html .= ' (leider)';
+			} elseif ($this->model->kringcoach) {
+				$html .= '<span title="Kringcoach van verticale ' . VerticaleModel::get($profiel->kringcoach)->naam . '">(kringcoach)</span>';
+			}
+			$html .= '</a>';
+			$this->smarty->assign('kring', $html);
+		} else {
+			$this->smarty->assign('kring', false);
+		}
+
 		$woonoord = $this->model->getWoonoord();
 		if ($woonoord) {
 			$this->smarty->assign('woonoord', '<a href="' . $woonoord->getUrl() . '" class="dikgedrukt">' . $woonoord->naam . '</a>');

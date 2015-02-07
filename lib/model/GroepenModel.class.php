@@ -230,7 +230,7 @@ class GroepenModel extends CachedPersistenceModel {
 			return $this->prefetch($where, array_merge($ids, $status));
 		}
 		$where .= ' AND status = ?';
-		array_unshift($ids, $status);
+		$ids[] = $status;
 		return $this->prefetch($where, $ids);
 	}
 
