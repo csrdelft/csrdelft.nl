@@ -33,7 +33,6 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	public static function getUid() {
-		echo get_called_class();
 		return $_SESSION['_uid'];
 	}
 
@@ -54,13 +53,11 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	protected function __construct() {
-		echo MODE;
-		
 		parent::__construct('security/');
 		/**
 		 * CliLoginModel doet zijn eigen ding.
 		 */
-		if (MODE === 'CLI') {
+		if ($this instanceof CliLoginModel) {
 			return;
 		}
 		/**
