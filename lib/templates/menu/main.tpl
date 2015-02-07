@@ -3,7 +3,7 @@
 		{if LoginModel::mag('P_LOGGED_IN')}
 			<li class="has-children">
 				<a id="cd-main-trigger" href="#0">
-					<img id="cd-user-avatar" src="/plaetjes/pasfoto/{LoginModel::getUid()}.vierkant.png">
+					<img id="cd-user-avatar" src="/plaetjes/{LoginModel::getProfiel()->getPasfotoPath(true)}">
 					{LoginModel::getProfiel()->getNaam('civitas')}
 				</a>
 				<ul class="cd-secondary-nav is-hidden">
