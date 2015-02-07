@@ -375,7 +375,7 @@ class KringenModel extends GroepenModel {
 	 * Default ORDER BY
 	 * @var string
 	 */
-	protected $default_order = 'verticale ASC';
+	protected $default_order = 'verticale ASC, kring_nummer ASC';
 
 	public static function get($id) {
 		$kringen = static::instance()->prefetch('verticale = ? AND kring_nummer = ?', explode('.', $id), null, null, 1);
