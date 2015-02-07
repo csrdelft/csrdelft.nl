@@ -89,6 +89,12 @@ JS;
 				<ul class="dropdown-menu dropdown-menu-right" role="menu">
 					<li><a onclick="window.location.href = '/ledenlijst?status=LEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Leden</a></li>
 					<li><a onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Oudleden</a></li>
+					<!--li class="dropdown-submenu">
+						<a href="#">Groepen</a>
+						<ul class="dropdown-menu">
+							<li><a href="#">TODO</a></li>
+						</ul>
+					</li-->
 					<li><a onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Forum</a></li>
 					<li><a onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Wiki</a></li>
 				</ul>
