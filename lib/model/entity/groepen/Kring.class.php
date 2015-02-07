@@ -14,7 +14,7 @@ class Kring extends Groep {
 	 * Verticaleletter
 	 * @var string
 	 */
-	public $verticale_letter;
+	public $verticale;
 	/**
 	 * Kringnummer
 	 * @var int
@@ -25,8 +25,8 @@ class Kring extends Groep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'verticale_letter'	 => array(T::Char),
-		'kring_nummer'		 => array(T::Integer)
+		'verticale'		 => array(T::Char),
+		'kring_nummer'	 => array(T::Integer)
 	);
 	/**
 	 * Database table name
@@ -43,7 +43,7 @@ class Kring extends Groep {
 	}
 
 	public function getUrl() {
-		return '/groepen/kringen/' . $this->verticale_letter . '.' . $this->kring_nummer . '/';
+		return '/groepen/kringen/' . $this->verticale . '.' . $this->kring_nummer . '/';
 	}
 
 	public function mag($action) {

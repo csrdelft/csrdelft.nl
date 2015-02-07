@@ -375,21 +375,21 @@ class KringenModel extends GroepenModel {
 	 * Default ORDER BY
 	 * @var string
 	 */
-	protected $default_order = 'verticale_letter ASC';
+	protected $default_order = 'verticale ASC';
 
 	public static function get($id) {
-		$kringen = static::instance()->prefetch('verticale_letter = ? AND kring_nummer = ?', explode('.', $id), null, null, 1);
+		$kringen = static::instance()->prefetch('verticale = ? AND kring_nummer = ?', explode('.', $id), null, null, 1);
 		return reset($kringen);
 	}
 
 	public function nieuw($letter = '') {
 		$kring = parent::nieuw();
-		$kring->verticale_letter = $letter;
+		$kring->verticale = $letter;
 		return $kring;
 	}
 
 	public function getKringenVoorVerticale(Verticale $verticale) {
-		return $this->prefetch('verticale_letter = ?', array($verticale->letter));
+		return $this->prefetch('verticale = ?', array($verticale->letter));
 	}
 
 }
