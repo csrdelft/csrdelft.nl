@@ -203,7 +203,7 @@ class AgendaModel extends PersistenceModel {
 		if (LoginModel::mag('P_AGENDA_MOD')) {
 			$item->rechten_bekijken = Instellingen::get('agenda', 'standaard_rechten');
 		} else {
-			$item->rechten_bekijken = 'verticale:' . LoginModel::getVerticale()->letter;
+			$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
 		}
 		return $item;
 	}

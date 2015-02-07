@@ -167,8 +167,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'verticale'				 => array(T::Char),
 		'verticaleleider'		 => array(T::Boolean),
 		'kringcoach'			 => array(T::Char, true),
-		'kring'					 => array(T::Char),
-		'kringleider'			 => array(T::Enumeration, false, 'Kringleider'),
 		// civi-gegevens
 		'patroon'				 => array(T::UID, true),
 		'eetwens'				 => array(T::String),
@@ -613,7 +611,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getVerticale() {
-		return VerticalenModel::instance()->getVerticaleVoorLid($this->uid);
+		return VerticalenModel::get($this->verticale);
 	}
 
 	public function getKring($link = false) {
@@ -626,7 +624,8 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		if ($this->status === LidStatus::Kringel) {
 			$postfix = ' (kringel)';
 		}
-		if ($this->kringleider !== Kringleider::Nee) {
+		$kringlid = KringLedenModel::get($this->getKring(), $this->uid);
+		if ($kringlid AND $kringlid->opmerking === 'Leider') {
 			$postfix = ' (kringleider)';
 		}
 		if ($this->verticaleleider) {

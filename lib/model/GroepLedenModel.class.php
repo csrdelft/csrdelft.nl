@@ -150,6 +150,9 @@ class VerticaleLedenModel extends GroepLedenModel {
 		array_unshift($status, $verticale->letter);
 		foreach (ProfielModel::instance()->prefetch($where, $status) as $profiel) {
 			$lid = $this->nieuw($verticale, $profiel->uid);
+			if ($profiel->verticaleleider) {
+				$lid->opmerking = 'Leider';
+			}
 			$lid->door_uid = null;
 			$lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
 			$leden[] = $lid;

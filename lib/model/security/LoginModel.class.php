@@ -37,10 +37,6 @@ class LoginModel extends PersistenceModel implements Validator {
 		return ProfielModel::get(self::getUid());
 	}
 
-	public static function getVerticale() {
-		return VerticalenModel::instance()->getVerticaleVoorLid(self::getUid());
-	}
-
 	public static function mag($permission, $allowPrivateUrl = false) {
 		return AccessModel::mag(self::getAccount(), $permission, $allowPrivateUrl);
 	}

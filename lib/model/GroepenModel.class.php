@@ -356,14 +356,6 @@ class VerticalenModel extends GroepenModel {
 		return $verticale;
 	}
 
-	public function getVerticaleVoorLid($uid) {
-		$verticalen = $this->getGroepenVoorLid($uid);
-		if (empty($verticalen)) {
-			return self::get('');
-		}
-		return reset($verticalen);
-	}
-
 }
 
 class KringenModel extends GroepenModel {
