@@ -23,6 +23,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	public static function instance() {
 		if (!isset(static::$instance)) {
+			echo MODE;
 			if (MODE === 'CLI') {
 				static::$instance = new CliLoginModel();
 			} else {
@@ -33,6 +34,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	public static function getUid() {
+		echo get_called_class();
 		return $_SESSION['_uid'];
 	}
 
