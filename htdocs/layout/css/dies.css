@@ -1,5 +1,5 @@
 /*Invert kleuren*/
-html, img, .alert, .progress, .progress-bar-info, #minion, .groep-stat, .markItUpButton a, .btn::before, iframe, .aanmelddata {
+html, img, .alert, .ongelezenvanaf, .progress, .progress-bar-info, #minion, .groep-stat, .markItUpButton a, .btn::before, iframe, .aanmelddata {
 	-webkit-filter: invert(100%); 
 	filter: invert(100%);
 }
