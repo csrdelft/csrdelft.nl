@@ -29,7 +29,7 @@ class ProfielView extends SmartyTemplateView {
 
 		$besturen = '';
 		foreach (BesturenModel::instance()->getGroepenVoorLid($this->model->uid) as $bestuur) {
-			$besturen = '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />';
+			$besturen .= '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />';
 		}
 		if ($besturen != '') {
 			$besturen = '<div class="label">Bestuur:</div><div class="data">' . $besturen . '</div>';
