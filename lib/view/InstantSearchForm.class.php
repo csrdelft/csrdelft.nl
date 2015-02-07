@@ -56,7 +56,7 @@ JS;
 				$this->suggestions['Woonoord/Huis'] = '/groepen/woonoorden/zoeken/?q=';
 			}
 
-			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=&' . LidInstellingen::get('zoeken', 'leden') . 'q=';
+			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=' . LidInstellingen::get('zoeken', 'leden') . '&q=';
 
 			if (LidInstellingen::get('zoeken', 'agenda') === 'ja') {
 				$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';
