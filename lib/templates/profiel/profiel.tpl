@@ -129,12 +129,20 @@
 				{if $profiel->isOudlid()}
 					{if $profiel->beroep!=''}<div class="label">Beroep/werk:</div><div class="data">{$profiel->beroep}</div><br />{/if}
 				{/if}
-				{if $profiel->kring}
+				{assign var=kring value=$profiel->getKring()}
+				{if $kring}
+					{assign var=kringlid value=$kring->getLid($profiel->uid)}
 					<div class="label">Kring:</div>
-					{$profiel->getKringLink()}<br />
-				{elseif $profiel->getVerticale()->letter!=''}
+					<a href="{$kring->getUrl()}">
+						{$kring->naam}
+						{if $profiel->status === LidStatus::Kringel}(kringel){/if}
+						{if $kringlid->opmerking === 'Leider'}(kringleider){/if}
+						{if $profiel->verticaleleider}(leider){/if}
+						{if $profiel->kringcoach}<span title="Kringcoach van verticale {VerticaleModel::get($profiel->kringcoach)->naam}">(kringcoach)</span>{/if}
+					</a><br />
+				{elseif $profiel->verticale!=''}
 					<div class="label">Verticale:</div>
-					<a href="/ledenlijst?q=verticale:{$profiel->getVerticale()->letter}">{$profiel->getVerticale()->naam}</a><br />
+					<a href="/ledenlijst?q=verticale:{$profiel->verticale}">{$profiel->getVerticale()->naam}</a><br />
 				{/if}
 				{if $profiel->moot}
 					<div class="label">Oude moot:</div>

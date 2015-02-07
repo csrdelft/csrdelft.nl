@@ -76,8 +76,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $verticale;
 	public $verticaleleider;
 	public $kringcoach;
-	public $kring;
-	public $kringleider;
 	// civi-gegevens
 	public $patroon;
 	public $eetwens;
@@ -607,41 +605,23 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getWoonoord() {
-		return WoonoordenModel::instance()->getWoonoordVoorLid($this->uid);
+		$woonoorden = WoonoordenModel::instance()->getGroepenVoorLid($this->uid, GroepStatus::HT);
+		if (empty($woonoorden)) {
+			return false;
+		}
+		return reset($woonoorden);
 	}
 
 	public function getVerticale() {
 		return VerticalenModel::get($this->verticale);
 	}
 
-	public function getKring($link = false) {
-		$verticale = $this->getVerticale();
-		if (empty($verticale->letter)) {
-			return 'Geen kring';
+	public function getKring() {
+		$kringen = KringenModel::instance()->getGroepenVoorLid($this->uid, GroepStatus::HT);
+		if (empty($kringen)) {
+			return false;
 		}
-		$id = $verticale->letter . '.' . $this->kring;
-		$postfix = '';
-		if ($this->status === LidStatus::Kringel) {
-			$postfix = ' (kringel)';
-		}
-		$kringlid = KringLedenModel::get($this->getKring(), $this->uid);
-		if ($kringlid AND $kringlid->opmerking === 'Leider') {
-			$postfix = ' (kringleider)';
-		}
-		if ($this->verticaleleider) {
-			$postfix = ' (leider)';
-		}
-		if ($this->kringcoach) {
-			$postfix = ' <span title="Kringcoach van verticale ' . VerticaleModel::get($this->kringcoach)->naam . '">(kringcoach)</span>';
-		}
-		if ($link) {
-			return '<a href="/verticalen#kring' . $id . '" title="Verticale ' . htmlspecialchars($verticale->naam) . ' (' . $verticale->letter . ') - kring ' . $this->kring . '">' . $verticale->naam . ' ' . $id . '</a>' . $postfix;
-		}
-		return $id . $postfix;
-	}
-
-	public function getKringLink() {
-		return $this->getKring(true);
+		return reset($kringen);
 	}
 
 	/**

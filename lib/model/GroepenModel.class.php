@@ -264,14 +264,6 @@ class WoonoordenModel extends GroepenModel {
 		return $woonoord;
 	}
 
-	public function getWoonoordVoorLid($uid) {
-		$woonoorden = $this->getGroepenVoorLid($uid, GroepStatus::HT);
-		if (empty($woonoorden)) {
-			return false;
-		}
-		return reset($woonoorden);
-	}
-
 }
 
 class LichtingenModel extends GroepenModel {

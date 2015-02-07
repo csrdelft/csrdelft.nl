@@ -281,7 +281,10 @@ class LLLijst extends LLweergave {
 					break;
 
 				case 'kring':
-					echo $profiel->getKringLink();
+					$kring = $profiel->getKring();
+					if ($kring) {
+						echo '<a href="' . $kring->getUrl() . '">' . $kring->naam . '</a>';
+					}
 					break;
 
 				case 'naam':
@@ -396,7 +399,10 @@ class LLCSV extends LLweergave {
 					break;
 
 				case 'kring':
-					$return .= $profiel->getKring();
+					$kring = $profiel->getKring();
+					if ($kring) {
+						$return .= $kring->naam;
+					}
 					break;
 
 				case 'pasfoto':
