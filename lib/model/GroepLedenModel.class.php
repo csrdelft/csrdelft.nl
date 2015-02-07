@@ -121,7 +121,10 @@ class LichtingLedenModel extends GroepLedenModel {
 	public function getLedenVoorGroep(Groep $lichting) {
 		$leden = array();
 		foreach (ProfielModel::instance()->prefetch('lidjaar = ?', array($lichting->lidjaar)) as $profiel) {
-			$leden[] = $this->nieuw($lichting, $profiel->uid);
+			$lid = $this->nieuw($lichting, $profiel->uid);
+			$lid->door_uid = null;
+			$lid->lid_sinds = $lichting->begin_moment;
+			$leden[] = $lid;
 		}
 		return $leden;
 	}
