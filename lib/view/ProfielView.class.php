@@ -32,7 +32,7 @@ class ProfielView extends SmartyTemplateView {
 			$besturen = '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />';
 		}
 		if ($besturen != '') {
-			$besturen .= '<div class="label">Bestuur:</div><div class="data">' . $besturen . '</div>';
+			$besturen = '<div class="label">Bestuur:</div><div class="data">' . $besturen . '</div>';
 		}
 		$this->smarty->assign('besturen', $besturen);
 
