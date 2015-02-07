@@ -12,10 +12,10 @@ require_once 'model/security/LoginModel.class.php';
  */
 class CliLoginModel extends LoginModel {
 
-	private static $uid = 'x999';
+	private $uid = 'x999';
 
 	public static function getUid() {
-		return self::$uid;
+		return static::instance()->uid;
 	}
 
 	public static function getSuedFrom() {
@@ -84,7 +84,7 @@ class CliLoginModel extends LoginModel {
 		}
 
 		// Subject assignment:
-		self::$uid = $account->uid;
+		$this->uid = $account->uid;
 
 		// Permissions change: delete old session
 		session_regenerate_id(true);
@@ -108,7 +108,7 @@ class CliLoginModel extends LoginModel {
 	}
 
 	public function logout() {
-		self::$uid = null;
+		$this->uid = 'x999';
 	}
 
 	public function isSued() {
