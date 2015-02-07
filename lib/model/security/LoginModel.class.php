@@ -23,6 +23,9 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	public static function instance() {
 		if (!isset(static::$instance)) {
+			/**
+			 * Dispatch the login proces to a separate class based on MODE.
+			 */
 			if (MODE === 'CLI') {
 				static::$instance = new CliLoginModel();
 			} else {
@@ -217,7 +220,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	/**
-	 * Dispatch the login proces to a separate function based on MODE.
+	 * Inloggen met verschillende mogelijkheden:
 	 * 
 	 * Als een gebruiker wordt ingelogd met $wacht == true, dan wordt gekeken of
 	 * er een timeout nodig is vanwege eerdere mislukte inlogpogingen.

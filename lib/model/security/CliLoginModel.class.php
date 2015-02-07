@@ -58,8 +58,7 @@ class CliLoginModel extends LoginModel {
 
 		// Onbekende gebruiker
 		if (!$account) {
-			echo 'Inloggen niet geslaagd';
-			return false;
+			die('Inloggen niet geslaagd');
 		}
 
 		// Clear session
@@ -73,14 +72,13 @@ class CliLoginModel extends LoginModel {
 		else {
 			// Password deleted (by admin)
 			if ($account->pass_hash == '') {
-				echo 'Gebruik wachtwoord vergeten of mail de PubCie';
+				die('Gebruik wachtwoord vergeten of mail de PubCie');
 			}
 			// Regular failed username+password
 			else {
-				echo 'Inloggen niet geslaagd';
 				AccountModel::instance()->failedLoginAttempt($account);
+				die('Inloggen niet geslaagd');
 			}
-			return false;
 		}
 
 		// Subject assignment:
