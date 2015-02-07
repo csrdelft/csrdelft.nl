@@ -46,13 +46,55 @@ class Kring extends Groep {
 		return '/groepen/kringen/' . $this->verticale . '.' . $this->kring_nummer . '/';
 	}
 
+	/**
+	 * Has permission for action?
+	 * 
+	 * @param string $action
+	 * @return boolean
+	 */
 	public function mag($action) {
-		return $action === A::Bekijken OR LoginModel::mag('1137,Bestuur:Vice-Abactis');
+		switch ($action) {
+
+			// Uitzondering zodat beheerders niet overal een aanmeldknop krijgen
+			case A::Aanmelden:
+			case A::Bewerken:
+			case A::Afmelden:
+				break;
+
+			default:
+				// Maker van groep mag alles
+				if ($this->maker_uid === LoginModel::getUid()) {
+					return true;
+				}
+		}
+		return static::magAlgemeen($action);
 	}
 
+	/**
+	 * Rechten voor de gehele klasse of soort groep?
+	 * 
+	 * @param string $action
+	 * @return boolean
+	 */
 	public static function magAlgemeen($action) {
-		return $action === A::Bekijken OR LoginModel::mag('1137,Bestuur:Vice-Abactis');
-		;
+		switch ($action) {
+
+			case A::Bekijken:
+				return LoginModel::mag('P_LEDEN_READ');
+
+			// Uitzondering zodat beheerders niet overal een aanmeldknop krijgen
+			case A::Aanmelden:
+			case A::Bewerken:
+			case A::Afmelden:
+				break;
+
+			default:
+				// Beheerder mag alles
+				if (LoginModel::mag('Bestuur:Vice-Abactis')) {
+					return true;
+				}
+		}
+		return false;
 	}
 
 }
