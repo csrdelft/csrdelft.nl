@@ -15,7 +15,9 @@ html, img, .alert, .ongelezenvanaf, .progress, .progress-bar-info, #minion, .gro
 #cd-zijbalk .ishetal .ja {
 	color: #F883B1;
 }
-.bb-block {
+.bb-block:hover {
+	-webkit-box-shadow: 0 0 10px #0A3292;
+	-moz-box-shadow: 0 0 10px #0A3292;
 	box-shadow: 0 0 10px #0A3292;
 }
 div.maaltijd-aangemeld {
