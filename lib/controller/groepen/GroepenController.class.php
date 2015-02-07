@@ -19,6 +19,37 @@ class GroepenController extends Controller {
 	}
 
 	public function performAction(array $args = array()) {
+		/*
+		  if (!$this->isPosted() AND LoginModel::getUid() === '1137' AND $this->model instanceof VerticalenModel) {
+
+		  $model = $this->model;
+		  $orm = $model::orm;
+		  $leden = $orm::leden;
+		  $ledenmodel = $leden::instance();
+		  foreach (ProfielModel::instance()->find() as $profiel) {
+		  $verticale = $profiel->getVerticale();
+		  if (!$verticale OR $verticale->letter === '') {
+		  continue;
+		  }
+		  $lid = $ledenmodel::get($verticale, $profiel->uid);
+		  if ($lid) {
+		  $ledenmodel->delete($lid);
+		  }
+		  $lid = $ledenmodel->nieuw($verticale, $profiel->uid);
+		  $lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
+		  if ($profiel->verticaleleider) {
+		  $lid->opmerking = 'Leider';
+		  }
+		  $ledenmodel->create($lid);
+		  if ($profiel->kringcoach) {
+		  $verticale = VerticalenModel::get($profiel->kringcoach);
+		  $verticale->kringcoach = $profiel->uid;
+		  VerticalenModel::instance()->update($verticale);
+		  }
+		  }
+		  }
+		 */
+
 		$this->action = 'overzicht'; // default
 
 		if ($this->hasParam(3)) { // id or action

@@ -630,7 +630,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		if ($this->kringleider !== Kringleider::Nee) {
 			$postfix = ' (kringleider)';
 		}
-		if ($verticalelid->leider) {
+		if ($verticalelid->opmerking === 'Leider') {
 			$postfix = ' (leider)';
 		}
 		$kringcoach = VerticalenModel::instance()->isKringCoach($this->uid);
