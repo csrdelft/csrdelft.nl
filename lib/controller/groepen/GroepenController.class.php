@@ -54,9 +54,10 @@ class GroepenController extends Controller {
 
 			// Groep id of selectie vereist
 			case 'wijzigen':
+			case 'logboek':
 				/**
-				 * In case of GET the url param 3
-				 * contains the ID and this
+				 * In case url param 3
+				 * contains the ID this
 				 * switch case is skipped.
 				 */
 				break;
@@ -113,6 +114,7 @@ class GroepenController extends Controller {
 			case 'opvolging':
 			case 'converteren':
 			case 'sluiten':
+			case 'logboek':
 			case 'omschrijving':
 			case 'deelnamegrafiek':
 			case GroepTab::Pasfotos:
@@ -403,6 +405,26 @@ class GroepenController extends Controller {
 			$response[] = $groep;
 		}
 		$this->view = new GroepenBeheerData($response);
+	}
+
+	public function logboek(Groep $groep = null) {
+		// data request
+		if ($groep) {
+			if (!$groep->mag(A::Bekijken)) {
+				$this->geentoegang();
+			}
+			$data = ChangeLogModel::instance()->find('subject = ?', array($groep->getUUID()));
+			$this->view = new DataTableResponse($data);
+		}
+		// popup request
+		else {
+			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			$groep = $this->model->getUUID($selection[0]);
+			if (!$groep->mag(A::Bekijken)) {
+				$this->geentoegang();
+			}
+			$this->view = new GroepLogboekForm($groep);
+		}
 	}
 
 	public function leden(Groep $groep) {

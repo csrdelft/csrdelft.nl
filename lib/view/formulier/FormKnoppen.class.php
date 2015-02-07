@@ -80,6 +80,18 @@ JS;
 
 }
 
+class ModalCloseButtons extends FormKnoppen {
+
+	public $close_top;
+	public $close_bottom;
+
+	public function __construct() {
+		$this->close_bottom = new FormulierKnop(null, 'cancel', 'Sluiten', 'Venster sluiten', null);
+		$this->addKnop($this->close_bottom);
+	}
+
+}
+
 class FormDefaultKnoppen extends FormKnoppen {
 
 	public $submit;

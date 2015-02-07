@@ -360,3 +360,16 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 	}
 
 }
+
+class GroepLogboekForm extends DataTableForm {
+
+	public function __construct(Groep $groep) {
+		parent::__construct($groep, null, $groep->naam . ' logboek');
+
+		$fields[] = new GroepLogboekTable($groep);
+		$fields[] = new ModalCloseButtons();
+
+		$this->addFields($fields);
+	}
+
+}

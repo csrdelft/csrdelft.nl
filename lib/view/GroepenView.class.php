@@ -64,6 +64,9 @@ class GroepenBeheerTable extends DataTable {
 
 		$delete = new DataTableKnop('>= 1', $this->tableId, $this->url . 'verwijderen', 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
 		$this->addKnop($delete);
+
+		$log = new DataTableKnop('== 1', $this->tableId, $this->url . 'logboek', 'post popup', 'Logboek', 'Logboek bekijken', 'log');
+		$this->addKnop($log);
 	}
 
 	public function getBreadcrumbs() {
@@ -105,6 +108,30 @@ class GroepenBeheerData extends DataTableResponse {
 		}
 
 		return parent::getJson($array);
+	}
+
+}
+
+class GroepLogboekTable extends DataTable implements FormElement {
+
+	public function __construct(Groep $groep) {
+		require_once 'model/entity/ChangeLogEntry.class.php';
+		parent::__construct(ChangeLogModel::orm, false, 'moment');
+		$this->dataUrl = $groep->getUrl() . 'logboek';
+		$this->hideColumn('subject');
+		$this->searchColumn('property');
+		$this->searchColumn('old_value');
+		$this->searchColumn('new_value');
+		$this->searchColumn('uid');
+		$this->setColumnTitle('uid', 'Door');
+	}
+
+	public function getHtml() {
+		throw new Exception('not implemented');
+	}
+
+	public function getType() {
+		return get_class($this);
 	}
 
 }
