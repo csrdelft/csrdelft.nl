@@ -12,7 +12,7 @@ require_once 'model/security/LoginModel.class.php';
  */
 class CliLoginModel extends LoginModel {
 
-	private static $uid;
+	private static $uid = 'x999';
 
 	public static function getUid() {
 		return self::$uid;
@@ -37,7 +37,7 @@ class CliLoginModel extends LoginModel {
 		return false;
 	}
 
-	public function login() {
+	public function login($user, $pass_plain, $wachten = true, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
 		if (defined('ETC_PATH')) {
 			$cred = parse_ini_file(ETC_PATH . 'cron.ini');
 		} else {
@@ -115,7 +115,7 @@ class CliLoginModel extends LoginModel {
 		return false;
 	}
 
-	public function isLoggedIn() {
+	public function isLoggedIn($allowPrivateUrl = false) {
 		$account = static::getAccount();
 		return $account AND AccessModel::mag($account, 'P_ADMIN');
 	}

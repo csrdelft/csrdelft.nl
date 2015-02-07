@@ -62,10 +62,6 @@ class LoginModel extends PersistenceModel implements Validator {
 			// Subject assignment:
 			$_SESSION['_uid'] = 'x999';
 
-			if (MODE === 'CLI') {
-				die('access denied');
-			}
-
 			// Remember login
 			if (isset($_COOKIE['remember'])) {
 				$remember = RememberLoginModel::instance()->verifyToken($_SERVER['REMOTE_ADDR'], $_COOKIE['remember']);
@@ -241,21 +237,6 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return boolean
 	 */
 	public function login($user, $pass_plain, $wachten = true, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
-
-		if (MODE === 'CLI') {
-			if (defined('ETC_PATH')) {
-				$cred = parse_ini_file(ETC_PATH . 'cron.ini');
-			} else {
-				$cred = array(
-					'user'	 => 'cron',
-					'pass'	 => 'pw'
-				);
-			}
-			$_SERVER['HTTP_USER_AGENT'] = 'CLI';
-			$user = $cred['user'];
-			$pass_plain = $cred['pass'];
-		}
-
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 
@@ -275,11 +256,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		// Clear session
 		session_unset();
 
-		if (MODE === 'CLI') {
-			// no checks
-		}
 		// Autologin
-		elseif ($remember) {
+		if ($remember) {
 			$_SESSION['_authByCookie'] = true;
 		}
 		// Previously(!) verified private token or OneTimeToken
@@ -346,9 +324,6 @@ class LoginModel extends PersistenceModel implements Validator {
 				$this->update($session);
 			} else {
 				$this->create($session);
-			}
-			if (MODE === 'CLI') {
-				return true;
 			}
 
 			if ($remember) {
