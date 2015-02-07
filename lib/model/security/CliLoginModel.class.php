@@ -12,11 +12,7 @@ require_once 'model/security/LoginModel.class.php';
  */
 class CliLoginModel extends LoginModel {
 
-	private static $uid = 'x999';
-
-	public static function getUid() {
-		return self::$uid;
-	}
+	protected static $uid = 'x999';
 
 	public static function getSuedFrom() {
 		return false;
