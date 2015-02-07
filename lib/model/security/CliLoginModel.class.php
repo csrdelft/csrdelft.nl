@@ -116,7 +116,7 @@ class CliLoginModel extends LoginModel {
 	}
 
 	public function isLoggedIn() {
-		$account = self::getAccount();
+		$account = static::getAccount();
 		return $account AND AccessModel::mag($account, 'P_ADMIN');
 	}
 

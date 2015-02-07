@@ -24,12 +24,12 @@ class LoginModel extends PersistenceModel implements Validator {
 	public static function instance() {
 		if (!isset(static::$instance)) {
 			if (MODE === 'CLI') {
-				static::$instance = new CliLoginModel();
+				self::$instance = new CliLoginModel();
 			} else {
-				static::$instance = new LoginModel();
+				self::$instance = new LoginModel();
 			}
 		}
-		return static::$instance;
+		return self::$instance;
 	}
 
 	public static function getUid() {
@@ -41,15 +41,15 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	public static function getAccount() {
-		return AccountModel::get(self::getUid());
+		return AccountModel::get(static::getUid());
 	}
 
 	public static function getProfiel() {
-		return ProfielModel::get(self::getUid());
+		return ProfielModel::get(static::getUid());
 	}
 
 	public static function mag($permission, $allowPrivateUrl = false) {
-		return AccessModel::mag(self::getAccount(), $permission, $allowPrivateUrl);
+		return AccessModel::mag(static::getAccount(), $permission, $allowPrivateUrl);
 	}
 
 	protected function __construct() {
@@ -84,7 +84,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				}
 			}
 		}
-		if (!self::getAccount()) {
+		if (!static::getAccount()) {
 			// public gebruiker stuk?
 			header('Retry-After: 3600');
 			http_response_code(503);
@@ -119,18 +119,18 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 		// Controleer switch user status
 		if (isset($_SESSION['_suedFrom'])) {
-			$suedFrom = self::getSuedFrom();
+			$suedFrom = static::getSuedFrom();
 			if (!$suedFrom OR $session->uid !== $suedFrom->uid) {
 				return false;
 			}
 			// Controleer of account bestaat
-			if (!self::getAccount()) {
+			if (!static::getAccount()) {
 				return false;
 			}
 			return true;
 		}
 		// Controleer of sessie van gebruiker is
-		$account = self::getAccount();
+		$account = static::getAccount();
 		if (!$account OR $session->uid !== $account->uid) {
 			return false;
 		}
@@ -393,7 +393,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		if (!$this->maySuTo($suNaar)) {
 			throw new Exception('Deze gebruiker mag niet inloggen!');
 		}
-		$suedFrom = self::getAccount();
+		$suedFrom = static::getAccount();
 
 		// Clear session
 		session_unset();
@@ -404,7 +404,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	public function endSwitchUser() {
-		$suedFrom = self::getSuedFrom();
+		$suedFrom = static::getSuedFrom();
 
 		// Clear session
 		session_unset();
@@ -418,19 +418,19 @@ class LoginModel extends PersistenceModel implements Validator {
 		if (!isset($_SESSION['_suedFrom'])) {
 			return false;
 		}
-		$suedFrom = self::getSuedFrom();
+		$suedFrom = static::getSuedFrom();
 		return $suedFrom AND AccessModel::mag($suedFrom, 'P_ADMIN');
 	}
 
 	public function maySuTo(Account $suNaar) {
-		return !$this->isSued() AND $suNaar->uid !== self::getUid() AND AccessModel::mag($suNaar, 'P_LOGGED_IN');
+		return !$this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, 'P_LOGGED_IN');
 	}
 
 	public function isLoggedIn($allowPrivateUrl = false) {
 		if (!isset($_SESSION['_uid'])) {
 			return false;
 		}
-		$account = self::getAccount();
+		$account = static::getAccount();
 		return $account AND AccessModel::mag($account, 'P_LOGGED_IN', $allowPrivateUrl);
 	}
 
