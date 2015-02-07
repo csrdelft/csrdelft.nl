@@ -36,8 +36,7 @@ class GroepForm extends DataTableForm {
 			$fields['afmelden_tot']->title = 'Leden mogen zichzelf niet afmelden als u dit veld leeg laat';
 		}
 		if ($groep instanceof Kring) {
-			$fields['samenvatting']->required = false;
-			$fields['samenvatting']->empty_null = false;
+			unset($fields['samenvatting']);
 		}
 
 		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
