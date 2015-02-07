@@ -100,6 +100,10 @@ class GroepenBeheerData extends DataTableResponse {
 		$array['website'] = null;
 		$array['maker_uid'] = null;
 
+		if (property_exists($groep, 'in_agenda')) {
+			$array['in_agenda'] = $groep->in_agenda ? 'ja' : 'nee';
+		}
+
 		return parent::getJson($array);
 	}
 

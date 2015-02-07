@@ -19,11 +19,6 @@ class ChangeLogEntry extends PersistentEntity {
 	 */
 	public $moment;
 	/**
-	 * Time elapsed since last change
-	 * @var int
-	 */
-	public $elapsed;
-	/**
 	 * The thing that changed
 	 * @var string
 	 */
@@ -55,7 +50,6 @@ class ChangeLogEntry extends PersistentEntity {
 	protected static $persistent_attributes = array(
 		'id'		 => array(T::Integer, false, 'auto_increment'),
 		'moment'	 => array(T::DateTime),
-		'elapsed'	 => array(T::Integer, true),
 		'subject'	 => array(T::String),
 		'property'	 => array(T::String),
 		'old_value'	 => array(T::String, true),

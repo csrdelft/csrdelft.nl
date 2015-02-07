@@ -1,5 +1,6 @@
 <?php
 
+require_once 'model/ChangeLogModel.class.php';
 require_once 'view/GroepenView.class.php';
 
 /**
@@ -258,6 +259,7 @@ class GroepenController extends Controller {
 			$this->view->modal = $form;
 			return;
 		} elseif ($form->validate()) {
+			ChangeLogModel::instance()->log($groep, 'create', null, print_r($groep, true));
 			$this->model->create($groep);
 			$response[] = $groep;
 			if ($old) {
@@ -283,6 +285,7 @@ class GroepenController extends Controller {
 				$form->tableId = $this->view->getBody()->getTableId();
 				$this->view->modal = $form;
 			} elseif ($form->validate()) {
+				ChangeLogModel::instance()->logChanges($form->diff());
 				$this->model->update($groep);
 				$this->view = new GroepenBeheerData(array($groep));
 			} else {
@@ -301,6 +304,7 @@ class GroepenController extends Controller {
 			}
 			$form = new GroepForm($groep, $this->model->getUrl() . $this->action); // checks rechten aanmaken
 			if ($form->validate()) {
+				ChangeLogModel::instance()->logChanges($form->diff());
 				$this->model->update($groep);
 				$this->view = new GroepenBeheerData(array($groep));
 			} else {
@@ -316,6 +320,7 @@ class GroepenController extends Controller {
 			if (!$groep OR ! $groep->mag(A::Verwijderen)) {
 				continue;
 			}
+			ChangeLogModel::instance()->log($groep, 'delete', print_r($groep, true), null);
 			$this->model->delete($groep);
 			$response[] = $groep;
 		}
@@ -333,6 +338,8 @@ class GroepenController extends Controller {
 				if (!$groep OR ! $groep->mag(A::Opvolging)) {
 					continue;
 				}
+				ChangeLogModel::instance()->log($groep, 'familie', $groep->familie, $values['familie']);
+				ChangeLogModel::instance()->log($groep, 'status', $groep->status, $values['status']);
 				$groep->familie = $values['familie'];
 				$groep->status = $values['status'];
 				$this->model->update($groep);
@@ -358,11 +365,13 @@ class GroepenController extends Controller {
 					continue;
 				}
 				if ($converteer) {
+					ChangeLogModel::instance()->log($groep, 'class', get_class($groep), $model::orm);
 					$nieuw = $model->converteer($groep, $this->model, $values['soort']);
 					if ($nieuw) {
 						$response[] = $groep;
 					}
 				} elseif (property_exists($groep, 'soort')) {
+					ChangeLogModel::instance()->log($groep, 'soort', $groep->soort, $values['soort']);
 					$groep->soort = $values['soort'];
 					$rowCount = $this->model->update($groep);
 					if ($rowCount > 0) {
@@ -388,6 +397,7 @@ class GroepenController extends Controller {
 			if (!$groep OR ! property_exists($groep, 'aanmelden_tot') OR time() > strtotime($groep->aanmelden_tot) OR ! $groep->mag(A::Wijzigen)) {
 				continue;
 			}
+			ChangeLogModel::instance()->log($groep, 'aanmelden_tot', $groep->aanmelden_tot, getDateTime());
 			$groep->aanmelden_tot = getDateTime();
 			$this->model->update($groep);
 			$response[] = $groep;
@@ -417,6 +427,7 @@ class GroepenController extends Controller {
 			$lid = $model->nieuw($groep, $uid);
 			$form = new GroepAanmeldenForm($lid, $groep);
 			if ($form->validate()) {
+				ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
 				$model->create($lid);
 				$this->view = new GroepPasfotosView($groep);
 			} else {
@@ -432,6 +443,7 @@ class GroepenController extends Controller {
 			$leden = group_by_distinct('uid', $groep->getLeden());
 			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action, array_keys($leden));
 			if ($form->validate()) {
+				ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
 				$model->create($lid);
 				$this->view = new GroepLedenData(array($lid));
 			} else {
@@ -450,6 +462,7 @@ class GroepenController extends Controller {
 			$lid = $model->get($groep, $uid);
 			$form = new GroepBewerkenForm($lid, $groep);
 			if ($form->validate()) {
+				ChangeLogModel::instance()->logChanges($form->diff());
 				$model->update($lid);
 			}
 			$this->view = $form;
@@ -466,6 +479,7 @@ class GroepenController extends Controller {
 			}
 			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action);
 			if ($form->validate()) {
+				ChangeLogModel::instance()->logChanges($form->diff());
 				$model->update($lid);
 				$this->view = new GroepLedenData(array($lid));
 			} else {
@@ -482,6 +496,7 @@ class GroepenController extends Controller {
 				$this->geentoegang();
 			}
 			$lid = $model->get($groep, $uid);
+			ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
 			$model->delete($lid);
 			$this->view = new GroepView($groep);
 		}
@@ -497,6 +512,7 @@ class GroepenController extends Controller {
 				if (!$groep->mag(A::Beheren)) {
 					continue;
 				}
+				ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
 				$model->delete($lid);
 				$response[] = $lid;
 			}

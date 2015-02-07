@@ -70,6 +70,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	public function mag($action) {
 		switch ($action) {
 
+			case A::Bekijken:
 			case A::Aanmelden:
 				if (!empty($this->rechten_aanmelden) AND ! LoginModel::mag($this->rechten_aanmelden)) {
 					return false;

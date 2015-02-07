@@ -12,25 +12,39 @@ class ChangeLogModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function log($subject, $property, $old, $new) {
-		$last = $this->find('subject = ? AND property = ?', array($subject, $property), null, 'id DESC', 1)->fetch();
-		$log = new ChangeLogEntry();
-		$log->moment = getDateTime();
-		if ($last) {
-			$log->elapsed = strtotime($log->moment) - strtotime($last->moment);
+	public function nieuw($subject, $property, $old, $new) {
+		$change = new ChangeLogEntry();
+		$change->moment = getDateTime();
+		if ($subject instanceof PersistentEntity) {
+			$change->subject = $subject->getUUID();
 		} else {
-			$log->elapsed = null;
+			$change->subject = $subject;
 		}
-		$log->subject = $subject;
-		$log->property = $property;
-		$log->old_value = $old;
-		$log->new_value = $new;
-		$log->uid = LoginModel::getUid();
+		$change->property = $property;
+		$change->old_value = $old;
+		$change->new_value = $new;
 		if (LoginModel::instance()->isSued()) {
-			$log->su_uid = LoginModel::getSuedFrom()->uid;
+			$change->uid = LoginModel::getSuedFrom()->uid;
+		} else {
+			$change->uid = LoginModel::getUid();
 		}
-		$log->id = $this->create($log);
-		return $log;
+		return $change;
+	}
+
+	public function create(PersistentEntity $change) {
+		$change->id = (int) parent::create($change);
+	}
+
+	public function log($subject, $property, $old, $new) {
+		$change = $this->nieuw($subject, $property, $old, $new);
+		$this->create($change);
+		return $change;
+	}
+
+	public function logChanges(array $diff) {
+		foreach ($diff as $change) {
+			$this->create($change);
+		}
 	}
 
 }

@@ -295,16 +295,16 @@ JS;
 	 * @returns ChangeLogEntry
 	 */
 	public function diff() {
-		require_once 'model/entity/ChangeLogEntry.class.php';
+		require_once 'model/ChangeLogModel.class.php';
 		$diff = array();
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField AND $field->getOrigValue() !== $field->getValue()) {
-				$change = new ChangeLogEntry();
-				$change->subject = $field->getModel();
-				$change->property = $field->getName();
-				$change->old_value = $field->getOrigValue();
-				$change->new_value = $field->getValue();
-				$diff[$field->getName()] = $change;
+			if ($field instanceof InputField) {
+				$old = $field->getOrigValue();
+				$new = $field->getValue();
+				if ($old !== $new) {
+					$prop = $field->getName();
+					$diff[$prop] = ChangeLogModel::instance()->nieuw($this->getModel(), $prop, $old, $new);
+				}
 			}
 		}
 		return $diff;

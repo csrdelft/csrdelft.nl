@@ -386,7 +386,7 @@ class RequiredGeslachtField extends GeslachtField {
 }
 
 /**
- * Ja of Nee
+ * Ja (1) of Nee (0)
  */
 class JaNeeField extends RadioField {
 
@@ -395,7 +395,7 @@ class JaNeeField extends RadioField {
 	}
 
 	public function getValue() {
-		return (boolean) parent::getValue();
+		return (int) parent::getValue();
 	}
 
 }
