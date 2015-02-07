@@ -30,14 +30,6 @@ class CliLoginModel extends LoginModel {
 	}
 
 	public function validate() {
-		return $this->login();
-	}
-
-	public function hasError() {
-		return false;
-	}
-
-	public function login($user, $pass_plain, $wachten = true, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
 		if (defined('ETC_PATH')) {
 			$cred = parse_ini_file(ETC_PATH . 'cron.ini');
 		} else {
@@ -46,8 +38,16 @@ class CliLoginModel extends LoginModel {
 				'pass'	 => 'pw'
 			);
 		}
-		$user = filter_var($cred['user'], FILTER_SANITIZE_STRING);
-		$pass_plain = filter_var($cred['pass'], FILTER_SANITIZE_STRING);
+		return $this->login($cred['user'], $cred['pass']);
+	}
+
+	public function hasError() {
+		return false;
+	}
+
+	public function login($user, $pass_plain, $wachten = true, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
+		$user = filter_var($user, FILTER_SANITIZE_STRING);
+		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 
 		// Inloggen met lidnummer of gebruikersnaam
 		if (AccountModel::isValidUid($user)) {
