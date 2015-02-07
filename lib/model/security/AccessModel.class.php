@@ -564,24 +564,13 @@ class AccessModel extends CachedPersistenceModel {
 			 */
 			case 'VERTICALE':
 			case 'KRING':
+			case 'ONDERVERENIGING':
+			case 'WOONOORD':
 			case 'ACTIVITEIT':
 			case 'KETZER':
 			case 'WERKGROEP':
 			case 'GROEP':
-
 				switch ($prefix) {
-
-					case 'VERTICALE':
-						$groep = VerticalenModel::get($gevraagd);
-						break;
-
-					case 'KRING':
-						$groep = KringenModel::get($gevraagd);
-						break;
-
-					case 'COMMISSIE':
-						$groep = CommissiesModel::get($gevraagd);
-						break;
 
 					case 'BESTUUR':
 						if (in_array($gevraagd, CommissieFunctie::getTypeOptions())) {
@@ -593,6 +582,18 @@ class AccessModel extends CachedPersistenceModel {
 						} else {
 							$groep = BesturenModel::get('bestuur'); // h.t.
 						}
+						break;
+
+					case 'COMMISSIE':
+						$groep = CommissiesModel::get($gevraagd);
+						break;
+
+					case 'VERTICALE':
+						$groep = VerticalenModel::get($gevraagd);
+						break;
+
+					case 'KRING':
+						$groep = KringenModel::get($gevraagd);
 						break;
 
 					case 'ONDERVERENIGING':
