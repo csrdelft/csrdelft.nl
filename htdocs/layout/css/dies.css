@@ -1,5 +1,9 @@
 /*Invert kleuren*/
-html, img, .alert, .progress, .progress-bar-info, #minion, .groep-stat, .btn::before, iframe, .aanmelddata {
+html, img, .alert, .progress, .progress-bar-info, #minion, .groep-stat, .markItUpButton a, .btn::before, iframe, .aanmelddata {
+	-webkit-filter: invert(100%); 
+	filter: invert(100%);
+}
+.bb-dies2015, .bb-dies2015 img, .bb-dies2015 .progress, .bb-dies2015 .progress-bar-info, .bb-dies2015 .groep-stat {
 	-webkit-filter: invert(100%); 
 	filter: invert(100%);
 }
