@@ -646,7 +646,7 @@ class AccessModel extends CachedPersistenceModel {
 			 */
 			case 'LICHTING':
 			case 'LIDJAAR':
-				return $profiel->lidjaar === $gevraagd;
+				return (string) $profiel->lidjaar === $gevraagd;
 
 			case 'EERSTEJAARS':
 				if ($profiel->lidaar === LichtingenModel::getJongsteLidjaar()) {
