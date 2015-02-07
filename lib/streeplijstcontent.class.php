@@ -9,8 +9,8 @@
 
 class Streeplijstcontent implements View {
 
-	private $verticale_id = 'alle';
-	private $lidjaar = '';
+	private $sVerticale = 'alle';
+	private $sLidjaar = '';
 	private $aGoederen;
 	private $aLeden;
 
@@ -39,14 +39,14 @@ class Streeplijstcontent implements View {
 		$this->parseGoederen($sGoederen);
 
 		if (isset($_GET['moot']) AND (int) $_GET['moot'] == $_GET['moot']) {
-			$this->verticale_id = (int) $_GET['moot'];
+			$this->sVerticale = (int) $_GET['moot'];
 		}
 		if (isset($_GET['lichting']) AND preg_match('/^\d{2}$/', $_GET['lichting']) == 1) {
-			$this->lidjaar = $_GET['lichting'];
+			$this->sLidjaar = $_GET['lichting'];
 		}
 		//leden welke in de lijst moeten laden.
 		require_once 'lid/lidzoeker.class.php';
-		$this->aLeden = LidZoeker::zoekLeden($this->lidjaar, 'uid', $this->verticale_id, 'achternaam', 'leden');
+		$this->aLeden = LidZoeker::zoekLeden($this->sLidjaar, 'uid', $this->sVerticale, 'achternaam', 'leden');
 	}
 
 	function parseGoederen($sGoederen) {
@@ -141,7 +141,7 @@ class Streeplijstcontent implements View {
 
 	function getUrl() {
 		$sReturn = 'streeplijst.php?goederen=' . urlencode($this->getGoederen()) .
-				'&moot=' . $this->verticale_id . '&lichting=' . $this->lidjaar . '&';
+				'&moot=' . $this->sVerticale . '&lichting=' . $this->sLidjaar . '&';
 		if (isset($_GET['colorCols'])) {
 			$sReturn .= 'colorCols&';
 		}
@@ -169,7 +169,7 @@ class Streeplijstcontent implements View {
 		$verticalen = array('alle', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I');
 		foreach ($verticalen as $letter) {
 			echo '<input type="radio" name="moot" id="m' . $letter . '" value="' . $letter . '" ';
-			if ($letter == $this->verticale_id) {
+			if ($letter == $this->sVerticale) {
 				echo 'checked="checked" ';
 			}
 			echo '/> <label for="m' . $letter . '">';
@@ -186,7 +186,7 @@ class Streeplijstcontent implements View {
 		$jaren = array_merge(array('alle'), range(date('Y') - 7, date('Y')));
 		foreach ($jaren as $jaar) {
 			echo '<input type="radio" name="lichting" id="l' . $jaar . '" value="' . substr($jaar, 2) . '" ';
-			if (substr($jaar, 2) == $this->lidjaar) {
+			if (substr($jaar, 2) == $this->sLidjaar) {
 				echo 'checked="checked" ';
 			}
 			echo '/> <label for="l' . $jaar . '">' . $jaar . '</label>';

@@ -79,7 +79,7 @@ class ForumModel extends AbstractForumModel {
 		}
 
 		// Voor alle ex-leden settings opschonen
-		$uids = Database::instance()->sqlSelect(array('uid'), 'profielen', 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
+		$uids = Database::instance()->sqlSelect(array('uid'), ProfielModel::getTableName(), 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
 		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($uids as $uid) {
 			ForumDradenGelezenModel::instance()->verwijderDraadGelezenVoorLid($uid);

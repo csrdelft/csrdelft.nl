@@ -18,7 +18,7 @@ class LichtingenController extends GroepenController {
 			$this->geentoegang();
 		}
 		$zoekterm = $this->getParam('q');
-		$data = range($this->model->getJongsteLichting()->lidjaar, $this->model->getOudsteLichting()->lidjaar);
+		$data = range($this->model->getJongste(), $this->model->getOudste());
 		$found = preg_grep('/' . (int) $zoekterm . '/', $data);
 		$result = array();
 		foreach ($found as $lidjaar) {

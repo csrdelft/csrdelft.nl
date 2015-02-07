@@ -66,8 +66,8 @@ class GroepLedenModel extends CachedPersistenceModel {
 		$count = count($uids);
 		$in = implode(', ', array_fill(0, $count, '?'));
 		$stats['Verticale'] = Database::instance()->sqlSelect(array('naam', 'count(*)'), 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $in . ')', $uids, 'verticale', null)->fetchAll();
-		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
-		$stats['Lichting'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
+		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), ProfielModel::getTableName(), 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
+		$stats['Lichting'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), ProfielModel::getTableName(), 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
 		$stats['Tijd'] = array();
 		foreach ($leden as $groeplid) {
 			$time = strtotime($groeplid->lid_sinds) * 1000;
@@ -115,20 +115,15 @@ class LichtingLedenModel extends GroepLedenModel {
 	/**
 	 * Return leden van lichting.
 	 * 
-	 * @param int $lidjaar
-	 * @param LidStatus|array $lidstatus
+	 * @param Lichting $lichting
 	 * @return LichtingLid[]
 	 */
-	public function getLeden($lidjaar, $lidstatus = null) {
-		if (is_array($lidstatus)) {
-			$count = count($lidstatus);
-			array_unshift($lidstatus, $lidjaar);
-			return $this->prefetch('lidjaar = ? AND lidstatus IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $lidstatus);
-		} elseif ($lidstatus !== null) {
-			return $this->prefetch('lidjaar = ? AND lidstatus = ?', array($lidjaar, $lidstatus));
-		} else {
-			return $this->prefetch('lidjaar = ?', array($lidjaar));
+	public function getLedenVoorGroep(Groep $lichting) {
+		$leden = array();
+		foreach (ProfielModel::instance()->prefetch('lidjaar = ?', array($lichting->lidjaar)) as $profiel) {
+			$leden[] = $this->nieuw($lichting, $profiel->uid);
 		}
+		return $leden;
 	}
 
 }

@@ -313,7 +313,7 @@ class LLLijst extends LLweergave {
 					break;
 
 				case 'status':
-					echo LidStatus::getDescription($profiel->getLidStatus());
+					echo LidStatus::getDescription($profiel->status);
 					break;
 
 				case 'verticale':

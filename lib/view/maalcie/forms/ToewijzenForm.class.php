@@ -55,7 +55,7 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 
 	public function getHtml() {
 		$this->smarty->assign('suggesties', $this->model);
-		$this->smarty->assign('jongsteLichting', LichtingenModel::getJongsteLichting()->lidjaar);
+		$this->smarty->assign('jongsteLichting', LichtingenModel::getJongsteLidjaar());
 		$this->smarty->assign('voorkeur', $this->voorkeur);
 		$this->smarty->assign('recent', $this->recent);
 		if (isset($this->voorkeurbaar)) {

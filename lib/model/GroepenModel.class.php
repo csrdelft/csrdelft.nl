@@ -278,31 +278,36 @@ class LichtingenModel extends GroepenModel {
 	const orm = 'Lichting';
 
 	protected static $instance;
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'lidjaar ASC';
 
 	public static function get($lidjaar) {
-		return static::instance()->find('lidjaar = ?', array($lidjaar), null, null, 1)->fetch();
+		return self::instance()->nieuw($lidjaar);
 	}
 
-	public function nieuw() {
+	public function nieuw($lidjaar = null) {
+		if ($lidjaar === null) {
+			$lidjaar = date('Y');
+		}
 		$lichting = parent::nieuw();
-		$lichting->lidjaar = (int) date('Y');
+		$lichting->lidjaar = (int) $lidjaar;
+		$lichting->naam = 'Lichting ' . $lichting->lidjaar;
+		$lichting->familie = 'Lichting';
 		return $lichting;
 	}
 
-	public function getLichtingVoorLid($uid) {
-		$lichtingen = $this->getGroepenVoorLid($uid);
-		if (empty($lichtingen)) {
-			return false;
+	/**
+	 * Override normal behaviour.
+	 */
+	public function find($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
+		$jongste = self::getJongsteLidjaar();
+		$oudste = self::getOudsteLidjaar();
+		$lichtingen = array();
+		for ($lidjaar = $jongste; $lidjaar >= $oudste; $lidjaar--) {
+			$lichtingen[] = $this->nieuw($lidjaar);
 		}
-		return reset($lichtingen);
+		return $lichtingen;
 	}
 
-	public function getHuidigeJaargang() {
+	public static function getHuidigeJaargang() {
 		$jaar = (int) date('Y');
 		$maand = (int) date('m');
 		if ($maand < 8) {
@@ -311,14 +316,12 @@ class LichtingenModel extends GroepenModel {
 		return $jaar . '-' . ($jaar + 1);
 	}
 
-	public function getJongsteLichting() {
-		$jongste = (int) Database::sqlSelect(array('MAX(lidjaar)'), self::getTableName())->fetchColumn();
-		return self::get($jongste);
+	public static function getJongsteLidjaar() {
+		return (int) Database::sqlSelect(array('MAX(lidjaar)'), ProfielModel::getTableName())->fetchColumn();
 	}
 
-	public function getOudsteLichting() {
-		$oudste = (int) Database::sqlSelect(array('MIN(lidjaar)'), self::getTableName(), 'lidjaar > 0')->fetchColumn();
-		return self::get($oudste);
+	public static function getOudsteLidjaar() {
+		return (int) Database::sqlSelect(array('MIN(lidjaar)'), ProfielModel::getTableName(), 'lidjaar > 0')->fetchColumn();
 	}
 
 }

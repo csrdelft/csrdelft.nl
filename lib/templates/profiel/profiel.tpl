@@ -119,7 +119,7 @@
 					<div class="label">Studie sinds:</div> {$profiel->studiejaar}<br />
 				{/if}
 				<div class="label">Lid sinds:</div>
-				{if $profiel->lidjaar!=0}
+				{if $profiel->lidjaar>0}
 					<a href="/ledenlijst?q=lichting:{$profiel->lidjaar}&amp;status=ALL" title="Bekijk de leden van lichting {$profiel->lidjaar}">{$profiel->lidjaar}</a>
 				{/if}
 				{if !$profiel->isLid() AND $profiel->lidafdatum!='0000-00-00'} tot {$profiel->lidafdatum|substr:0:4}{/if}<br />

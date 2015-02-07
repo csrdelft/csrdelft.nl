@@ -342,7 +342,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		$naam = $this->getNaam($vorm);
 		if ($vorm === 'pasfoto') {
 			$naam = $this->getPasfotoTag();
-		} elseif ($this->getLidjaar() === 2013) {
+		} elseif ($this->lidjaar === 2013) {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
 		$k = '';
@@ -379,7 +379,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			}
 			$k .= '<p class="naam">' . $l . $this->getNaam('volledig') . '&nbsp;' . LidStatus::getChar($this->status);
 			$k .= '</a></p>';
-			$k .= '<p>' . $this->getLidjaar() . ' ' . $this->getVerticale()->naam . '</p>';
+			$k .= '<p>' . $this->lidjaar . ' ' . $this->getVerticale()->naam . '</p>';
 			$bestuurslid = BestuursLedenModel::instance()->find('uid = ?', array($this->uid), null, null, 1)->fetch();
 			if ($bestuurslid) {
 				$bestuur = BesturenModel::get($bestuurslid->groep_id);
@@ -606,26 +606,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	public function isOudlid() {
 		return LidStatus::isOudlid($this->status);
-	}
-
-	public function getLichting() {
-		return LichtingenModel::instance()->getLichtingVoorLid($this->uid);
-	}
-
-	public function getLidjaar() {
-		$lichting = $this->getLichting();
-		if ($lichting) {
-			return $lichting->lidjaar;
-		}
-		return null;
-	}
-
-	public function getLidStatus() {
-		$lichting = $this->getLichting();
-		if ($lichting) {
-			return $lichting->status;
-		}
-		return LidStatus::Nobody;
 	}
 
 	public function getWoonoord() {
