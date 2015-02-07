@@ -142,6 +142,7 @@ require_once 'controller/framework/AclController.abstract.php';
 // Router
 switch (constant('MODE')) {
 	case 'CLI':
+		require_once 'model/security/CliLoginModel.class.php';
 		if (!LoginModel::mag('P_ADMIN')) {
 			die('access denied');
 		}

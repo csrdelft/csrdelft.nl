@@ -21,6 +21,17 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	protected static $instance;
 
+	public static function instance() {
+		if (!isset(static::$instance)) {
+			if (MODE === 'CLI') {
+				static::$instance = new CliLoginModel();
+			} else {
+				static::$instance = new LoginModel();
+			}
+		}
+		return static::$instance;
+	}
+
 	public static function getUid() {
 		return $_SESSION['_uid'];
 	}

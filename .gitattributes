@@ -4160,6 +4160,7 @@ lib/model/maalcie/MaaltijdRepetitiesModel.class.php -text
 lib/model/maalcie/MaaltijdenModel.class.php -text
 lib/model/security/AccessModel.class.php -text
 lib/model/security/AccountModel.class.php -text
+lib/model/security/CliLoginModel.class.php -text
 lib/model/security/LoginModel.class.php -text
 lib/model/security/OneTimeTokensModel.class.php -text
 lib/model/security/RememberLoginModel.class.php -text
