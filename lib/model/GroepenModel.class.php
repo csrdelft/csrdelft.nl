@@ -265,7 +265,7 @@ class WoonoordenModel extends GroepenModel {
 	}
 
 	public function getWoonoordVoorLid($uid) {
-		$woonoorden = $this->getGroepenVoorLid($uid);
+		$woonoorden = $this->getGroepenVoorLid($uid, GroepStatus::HT);
 		if (empty($woonoorden)) {
 			return false;
 		}
