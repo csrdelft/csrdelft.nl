@@ -86,6 +86,28 @@ class LidInstellingen extends Instellingen {
 			'fotos'					 => array('Aantal foto\'s weergeven', T::Integer, array(0, 50), 6),
 			'verjaardagen'			 => array('Aantal verjaardagen weergeven', T::Integer, array(0, 50), 9),
 			'verjaardagen_pasfotos'	 => array('Pasfoto\'s bij verjaardagen', T::Enumeration, array('ja', 'nee'), 'ja')
+		),
+		'zoeken'		 => array(
+			'leden'		 => array(
+				'Leden',
+				T::Enumeration,
+				array(
+					'LEDEN'			 => 'Huidige leden',
+					'OUDLEDEN'		 => 'Alleen oudleden',
+					'LEDEN|OUDLEDEN' => 'Leden en oudleden',
+					'ALL'			 => 'Ook niet-leden',
+					'NOVIET'		 => 'Alleen novieten',
+					'GASTLID'		 => 'Alleen gastleden'
+				),
+				'LEDEN'),
+			'agenda'	 => array('Agenda', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'commissies' => array('Commissies', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'woonoorden' => array('Woonoorden', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'forum'		 => array('Forum', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'fotoalbum'	 => array('Fotoalbum', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'wiki'		 => array('Wiki', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'documenten' => array('Documenten', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'boeken'	 => array('Boeken', T::Enumeration, array('ja', 'nee'), 'nee')
 		)
 	);
 
@@ -128,15 +150,6 @@ class LidInstellingen extends Instellingen {
 
 	public function getDefault($module, $id) {
 		return static::$defaults[$module][$id][3];
-	}
-
-	public function getTechnicalValue($module, $id) {
-		$waarde = static::get($module, $id);
-		$index = array_search($waarde, static::$defaults[$module][$id][2]);
-		if (isset(static::$defaults[$module][$id][4]) AND isset(static::$defaults[$module][$id][4][$index])) {
-			return static::$defaults[$module][$id][4][$index];
-		}
-		return $waarde;
 	}
 
 	public function isValidValue($module, $id, $waarde) {

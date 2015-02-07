@@ -205,7 +205,8 @@ class GroepenController extends Controller {
 		$result = array();
 		foreach ($this->model->find('familie LIKE ?', array($zoekterm), null, null, $limit) as $groep) {
 			$result[$groep->familie] = array(
-				'value' => get_class($groep) . ':' . $groep->familie
+				'url'	 => $groep->getUrl(),
+				'value'	 => get_class($groep) . ':' . $groep->familie
 			);
 		}
 		$this->view = new JsonResponse($result);

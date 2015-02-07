@@ -9,7 +9,7 @@
 class InstantSearchForm extends Formulier {
 
 	public function __construct() {
-		parent::__construct(null, null);
+		parent::__construct(null, '/ledenlijst?status=ALL');
 		$this->post = false;
 		$fields[] = new ZoekInputGroup('q');
 		$this->addFields($fields);
@@ -48,13 +48,39 @@ JS;
 			$this->addSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
 			$this->addSuggestions(MenuModel::instance()->flattenMenu(MenuModel::instance()->getMenu('main')));
 
-			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?q=';
-			$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';
-			$this->suggestions['Forum'] = '/forum/titelzoeken/?q=';
-			$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/?q=';
-			$this->suggestions['Wiki'] = '/tools/wikisuggesties/?q=';
-			$this->suggestions['Documenten'] = '/documenten/zoeken/?q=';
-			//$this->suggestions['Boeken'] = '/bibliotheek/zoeken/?q=';
+			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=&' . LidInstellingen::get('zoeken', 'leden') . 'q=';
+
+			if (LidInstellingen::get('zoeken', 'agenda') === 'ja') {
+				$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';
+			}
+
+			if (LidInstellingen::get('zoeken', 'commissies') === 'ja') {
+				$this->suggestions['Commissie'] = '/groepen/commissies/zoeken/?q=';
+			}
+
+			if (LidInstellingen::get('zoeken', 'woonoorden') === 'ja') {
+				$this->suggestions['Woonoord/Huis'] = '/groepen/woonoorden/zoeken/?q=';
+			}
+
+			if (LidInstellingen::get('zoeken', 'forum') === 'ja') {
+				$this->suggestions['Forum'] = '/forum/titelzoeken/?q=';
+			}
+
+			if (LidInstellingen::get('zoeken', 'fotoalbum') === 'ja') {
+				$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/?q=';
+			}
+
+			if (LidInstellingen::get('zoeken', 'wiki') === 'ja') {
+				$this->suggestions['Wiki'] = '/tools/wikisuggesties/?q=';
+			}
+
+			if (LidInstellingen::get('zoeken', 'documenten') === 'ja') {
+				$this->suggestions['Documenten'] = '/documenten/zoeken/?q=';
+			}
+
+			if (LidInstellingen::get('zoeken', 'boeken') === 'ja') {
+				$this->suggestions['Boeken'] = '/bibliotheek/zoeken/?q=';
+			}
 		}
 	}
 
@@ -78,6 +104,17 @@ JS;
 	}
 
 	public function view() {
+		$html = '<li><a href="#"><span class="fa fa-check"></span> ' . ucfirst(strtolower(LidInstellingen::get('zoeken', 'leden'))) . '</a></li>';
+
+		foreach (array('agenda', 'commissies', 'woonoorden', 'forum', 'fotoalbum', 'wiki', 'documenten', 'boeken') as $option) {
+			$html .= '<li><a href="#">';
+			if (LidInstellingen::get('zoeken', $option) === 'ja') {
+				$html .= '<span class="fa fa-check"></span> ';
+			} else {
+				$html .= '<span style="margin-right: 18px;"></span> ';
+			}
+			$html .= ucfirst($option) . '</a></li>';
+		}
 		?>
 		<div class="input-group">
 			<div class="input-group-btn">
@@ -89,14 +126,17 @@ JS;
 				<ul class="dropdown-menu dropdown-menu-right" role="menu">
 					<li><a onclick="window.location.href = '/ledenlijst?status=LEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Leden</a></li>
 					<li><a onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Oudleden</a></li>
-					<!--li class="dropdown-submenu">
-						<a href="#">Groepen</a>
+					<li><a onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Forum reacties</a></li>
+					<li><a onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Wiki inhoud</a></li>
+					<li class="divider"></li>
+					<li class="dropdown-submenu">
+						<a href="#">Snelzoeken</a>
 						<ul class="dropdown-menu">
-							<li><a href="#">TODO</a></li>
+							<li><a href="/instellingen#lidinstellingenform-tab-Zoeken">Aanpassen...</a></li>
+							<li class="divider"></li>
+								<?= $html; ?>
 						</ul>
-					</li-->
-					<li><a onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Forum</a></li>
-					<li><a onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Wiki</a></li>
+					</li>
 				</ul>
 			</div>
 		</div>
