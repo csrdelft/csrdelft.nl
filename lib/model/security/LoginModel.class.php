@@ -23,7 +23,6 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	public static function instance() {
 		if (!isset(static::$instance)) {
-			echo MODE;
 			if (MODE === 'CLI') {
 				static::$instance = new CliLoginModel();
 			} else {
@@ -55,6 +54,8 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	protected function __construct() {
+		echo MODE;
+		
 		parent::__construct('security/');
 		/**
 		 * CliLoginModel doet zijn eigen ding.
