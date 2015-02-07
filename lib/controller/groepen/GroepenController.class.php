@@ -19,7 +19,7 @@ class GroepenController extends Controller {
 	}
 
 	public function performAction(array $args = array()) {
-/*
+//*
 		if (LoginModel::getUid() === '1137' AND $this->model instanceof KringenModel) {
 
 			$model = $this->model;
