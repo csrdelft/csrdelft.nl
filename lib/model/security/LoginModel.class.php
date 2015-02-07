@@ -55,6 +55,12 @@ class LoginModel extends PersistenceModel implements Validator {
 	protected function __construct() {
 		parent::__construct('security/');
 		/**
+		 * CliLoginModel doet zijn eigen ding.
+		 */
+		if (MODE === 'CLI') {
+			return;
+		}
+		/**
 		 * Sessie valideren: is er iemand ingelogd en zo ja, is alles ok?
 		 * Zo nee, dan public gebruiker er in gooien.
 		 */
