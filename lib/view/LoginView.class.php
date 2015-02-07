@@ -188,7 +188,7 @@ class WachtwoordWijzigenForm extends Formulier {
 		}
 		$fields[] = new RequiredWachtwoordWijzigenField('wijzigww', $account, $require_current);
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true);
-		$fields[] = new HtmlComment('<img src="http://imgs.xkcd.com/comics/password_strength.png" title="http://xkcd.com/936/" style="margin-top: 50px;">');
+		$fields[] = new HtmlBbComment('[div h=50][/div][h=5]Wat is een goed wachtwoord?[/h][video]www.youtube.com/watch?v=0SkdP36wiAU[/video]');
 
 		$this->addFields($fields);
 	}
