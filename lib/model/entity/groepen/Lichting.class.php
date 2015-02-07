@@ -40,4 +40,24 @@ class Lichting extends Groep {
 		return '/groepen/lichtingen/' . $this->lidjaar . '/';
 	}
 
+	/**
+	 * Has permission for action?
+	 * 
+	 * @param string $action
+	 * @return boolean
+	 */
+	public function mag($action) {
+		return $action === A::Bekijken;
+	}
+
+	/**
+	 * Rechten voor de gehele klasse of soort groep?
+	 * 
+	 * @param string $action
+	 * @return boolean
+	 */
+	public static function magAlgemeen($action) {
+		return $action === A::Bekijken;
+	}
+
 }
