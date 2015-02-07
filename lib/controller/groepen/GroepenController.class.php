@@ -94,7 +94,7 @@ class GroepenController extends Controller {
 			// Groep id vereist
 			default:
 				// Groep id in param 3?
-				$id = (int) $this->action;
+				$id = $this->action;
 				$groep = $this->model->get($id);
 				if (!$groep) {
 					$this->geentoegang();
