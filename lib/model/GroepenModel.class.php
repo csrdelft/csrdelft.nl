@@ -377,6 +377,11 @@ class KringenModel extends GroepenModel {
 	 */
 	protected $default_order = 'verticale_letter ASC';
 
+	public static function get($id) {
+		$kringen = static::instance()->prefetch('verticale_letter = ? AND kring_nummer = ?', explode('.', $id), null, null, 1);
+		return reset($kringen);
+	}
+
 	public function nieuw($letter = '') {
 		$kring = parent::nieuw();
 		$kring->verticale_letter = $letter;

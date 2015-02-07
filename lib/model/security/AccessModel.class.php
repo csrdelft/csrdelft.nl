@@ -25,7 +25,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
-	private static $prefix = array('ACTIVITEIT', 'BESTUUR', 'COMMISSIE', 'GROEP', 'KETZER', 'ONDERVERENIGING', 'WERKGROEP', 'WOONOORD', 'VERTICALE', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDEREJAARS', 'EERSTEJAARS');
+	private static $prefix = array('ACTIVITEIT', 'BESTUUR', 'COMMISSIE', 'GROEP', 'KETZER', 'ONDERVERENIGING', 'WERKGROEP', 'WOONOORD', 'VERTICALE', 'KRING', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDEREJAARS', 'EERSTEJAARS');
 	/**
 	 * Gebruikt om ledengegevens te raadplegen
 	 * @var array

@@ -16,11 +16,17 @@ class Kring extends Groep {
 	 */
 	public $verticale_letter;
 	/**
+	 * Kringnummer
+	 * @var int
+	 */
+	public $kring_nummer;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'verticale_letter' => array(T::Char)
+		'verticale_letter'	 => array(T::Char),
+		'kring_nummer'		 => array(T::Integer)
 	);
 	/**
 	 * Database table name
@@ -37,7 +43,16 @@ class Kring extends Groep {
 	}
 
 	public function getUrl() {
-		return '/groepen/kringen/' . $this->id . '/';
+		return '/groepen/kringen/' . $this->verticale_letter . '.' . $this->kring_nummer . '/';
+	}
+
+	public function mag($action) {
+		return $action === A::Bekijken OR LoginModel::mag('Bestuur:Vice-Abactis');
+	}
+
+	public static function magAlgemeen($action) {
+		return $action === A::Bekijken OR LoginModel::mag('Bestuur:Vice-Abactis');
+		;
 	}
 
 }
