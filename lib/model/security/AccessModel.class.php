@@ -534,6 +534,38 @@ class AccessModel extends CachedPersistenceModel {
 				return false;
 
 			/**
+			 *  Behoort een lid tot een bepaalde lichting?
+			 */
+			case 'LICHTING':
+			case 'LIDJAAR':
+				return (string) $profiel->lidjaar === $gevraagd;
+
+			case 'EERSTEJAARS':
+				if ($profiel->lidaar === LichtingenModel::getJongsteLidjaar()) {
+					return true;
+				}
+				return false;
+
+			case 'OUDEREJAARS':
+				if ($profiel->lidjaar === LichtingenModel::getJongsteLidjaar()) {
+					return false;
+				}
+				return true;
+
+			/**
+			 *  Behoort een lid tot een bepaalde verticale?
+			 */
+			case 'VERTICALE':
+				if ($profiel->verticale === $gevraagd) {
+					if (!$role) {
+						return true;
+					} elseif ($role === 'LEIDER' AND $profiel->verticaleleider) {
+						return true;
+					}
+				}
+				return false;
+
+			/**
 			 * Behoort een lid tot een f.t. / h.t. / o.t. bestuur of commissie?
 			 */
 			case 'BESTUUR':
@@ -556,13 +588,13 @@ class AccessModel extends CachedPersistenceModel {
 				}
 			// fall through
 
+
 			/**
 			 * Behoort een lid tot een bepaalde groep? Verticalen en kringen zijn ook groepen.
 			 * Als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer de h.t.
 			 * groep met die korte naam erbij, als het getal is uiteraard de groep met dat id.
 			 * Met de toevoeging ':Fiscus' kan ook specifieke functie geëist worden binnen een groep.
 			 */
-			case 'VERTICALE':
 			case 'KRING':
 			case 'ONDERVERENIGING':
 			case 'WOONOORD':
@@ -586,10 +618,6 @@ class AccessModel extends CachedPersistenceModel {
 
 					case 'COMMISSIE':
 						$groep = CommissiesModel::get($gevraagd);
-						break;
-
-					case 'VERTICALE':
-						$groep = VerticalenModel::get($gevraagd);
 						break;
 
 					case 'KRING':
@@ -639,25 +667,6 @@ class AccessModel extends CachedPersistenceModel {
 					if ($role !== strtoupper($lid->opmerking)) {
 						return false;
 					}
-				}
-				return true;
-
-			/**
-			 *  Behoort een lid tot een bepaalde lichting?
-			 */
-			case 'LICHTING':
-			case 'LIDJAAR':
-				return (string) $profiel->lidjaar === $gevraagd;
-
-			case 'EERSTEJAARS':
-				if ($profiel->lidaar === LichtingenModel::getJongsteLidjaar()) {
-					return true;
-				}
-				return false;
-
-			case 'OUDEREJAARS':
-				if ($profiel->lidjaar === LichtingenModel::getJongsteLidjaar()) {
-					return false;
 				}
 				return true;
 		}

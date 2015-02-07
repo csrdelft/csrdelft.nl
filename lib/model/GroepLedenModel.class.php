@@ -113,6 +113,24 @@ class LichtingLedenModel extends GroepLedenModel {
 	protected static $instance;
 
 	/**
+	 * Create LichtingLid on the fly.
+	 * 
+	 * @param Lichting $lichting
+	 * @param string $uid
+	 * @return LichtingLid|false
+	 */
+	public static function get(Groep $lichting, $uid) {
+		$profiel = ProfielModel::get($uid);
+		if ($profiel AND $profiel->lidjaar === $lichting->lidjaar) {
+			$lid = static::instance()->nieuw($lichting, $uid);
+			$lid->door_uid = null;
+			$lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
+			return $lid;
+		}
+		return false;
+	}
+
+	/**
 	 * Return leden van lichting.
 	 * 
 	 * @param Lichting $lichting
@@ -121,10 +139,10 @@ class LichtingLedenModel extends GroepLedenModel {
 	public function getLedenVoorGroep(Groep $lichting) {
 		$leden = array();
 		foreach (ProfielModel::instance()->prefetch('lidjaar = ?', array($lichting->lidjaar)) as $profiel) {
-			$lid = $this->nieuw($lichting, $profiel->uid);
-			$lid->door_uid = null;
-			$lid->lid_sinds = $lichting->begin_moment;
-			$leden[] = $lid;
+			$lid = static::get($lichting, $profiel->uid);
+			if ($lid) {
+				$leden[] = $lid;
+			}
 		}
 		return $leden;
 	}
@@ -136,6 +154,27 @@ class VerticaleLedenModel extends GroepLedenModel {
 	const orm = 'VerticaleLid';
 
 	protected static $instance;
+
+	/**
+	 * Create VerticaleLid on the fly.
+	 * 
+	 * @param Verticale $verticale
+	 * @param string $uid
+	 * @return VerticaleLid|false
+	 */
+	public static function get(Groep $verticale, $uid) {
+		$profiel = ProfielModel::get($uid);
+		if ($profiel AND $profiel->verticale === $verticale->letter) {
+			$lid = static::instance()->nieuw($verticale, $uid);
+			if ($profiel->verticaleleider) {
+				$lid->opmerking = 'Leider';
+			}
+			$lid->door_uid = null;
+			$lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
+			return $lid;
+		}
+		return false;
+	}
 
 	/**
 	 * Return leden van verticale.
@@ -150,13 +189,10 @@ class VerticaleLedenModel extends GroepLedenModel {
 		$where = 'verticale = ? AND status IN (' . implode(', ', array_fill(0, count($status), '?')) . ')';
 		array_unshift($status, $verticale->letter);
 		foreach (ProfielModel::instance()->prefetch($where, $status) as $profiel) {
-			$lid = $this->nieuw($verticale, $profiel->uid);
-			if ($profiel->verticaleleider) {
-				$lid->opmerking = 'Leider';
+			$lid = static::get($verticale, $profiel->uid);
+			if ($lid) {
+				$leden[] = $lid;
 			}
-			$lid->door_uid = null;
-			$lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
-			$leden[] = $lid;
 		}
 		return $leden;
 	}
