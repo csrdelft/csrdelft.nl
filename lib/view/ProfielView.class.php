@@ -28,8 +28,7 @@ class ProfielView extends SmartyTemplateView {
 		}
 
 		$besturen = '';
-		foreach (BestuursLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $bestuurslid) {
-			$bestuur = BesturenModel::get($bestuurslid->groep_id);
+		foreach (BesturenModel::instance()->getGroepenVoorLid($this->model->uid) as $bestuur) {
 			$besturen = '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />' . $besturen;
 		}
 		if ($besturen != '') {
@@ -38,8 +37,7 @@ class ProfielView extends SmartyTemplateView {
 		$this->smarty->assign('besturen', $besturen);
 
 		$commissies = '';
-		foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $commissielid) {
-			$commissie = CommissiesModel::get($commissielid->groep_id);
+		foreach (CommissiesModel::instance()->getGroepenVoorLid($this->model->uid) as $commissie) {
 			$commissies = '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />' . $commissies;
 		}
 		if ($commissies != '') {
@@ -48,8 +46,7 @@ class ProfielView extends SmartyTemplateView {
 		$this->smarty->assign('commissies', $commissies);
 
 		$groepen = '';
-		foreach (GroepLedenModel::instance()->find('uid = ?', array($this->model->uid)) as $groeplid) {
-			$groep = GroepenModel::get($groeplid->groep_id);
+		foreach (GroepenModel::instance()->getGroepenVoorLid($this->model->uid) as $groep) {
 			$groepen = '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />' . $groepen;
 		}
 		if ($groepen != '') {

@@ -403,7 +403,6 @@ htdocs/layout/js/modernizr.js -text
 htdocs/layout/js/peilingbeheer.js -text
 htdocs/layout/js/roodschopper.js -text
 htdocs/layout/js/three.min.js -text
-htdocs/layout/js/verticalen.js -text
 htdocs/layout/script.ini -text
 htdocs/layout/style.ini -text
 htdocs/layout2/css/foundation.css -text
@@ -3980,7 +3979,6 @@ lib/controller/MaalcieRouterController.class.php -text
 lib/controller/MenuBeheerController.class.php -text
 lib/controller/ProfielController.class.php -text
 lib/controller/RechtenController.class.php -text
-lib/controller/VerticalenController.class.php -text
 lib/controller/framework/AclController.abstract.php -text
 lib/controller/framework/Controller.abstract.php -text
 lib/controller/groepen/ActiviteitenController.class.php -text
@@ -3991,6 +3989,7 @@ lib/controller/groepen/KetzersController.class.php -text
 lib/controller/groepen/KringenController.class.php -text
 lib/controller/groepen/LichtingenController.class.php -text
 lib/controller/groepen/OnderverenigingenController.class.php -text
+lib/controller/groepen/VerticalenController.class.php -text
 lib/controller/groepen/WerkgroepenController.class.php -text
 lib/controller/groepen/WoonoordenController.class.php -text
 lib/controller/maalcie/BeheerAbonnementenController.class.php -text
@@ -4499,7 +4498,6 @@ lib/view/SmartyTemplateView.abstract.php -text
 lib/view/StamboomView.class.php -text
 lib/view/Validator.interface.php -text
 lib/view/VerjaardagenView.class.php -text
-lib/view/VerticalenView.class.php -text
 lib/view/View.interface.php -text
 lib/view/Zijbalk.static.php -text
 lib/view/courant/CourantArchiefView.class.php -text

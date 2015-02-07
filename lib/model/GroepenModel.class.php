@@ -217,21 +217,20 @@ class GroepenModel extends CachedPersistenceModel {
 	public function getGroepenVoorLid($uid, $status = null) {
 		$orm = $this->orm;
 		$leden = $orm::leden;
-		if (is_array($status)) {
-			$count = count($status);
-			array_unshift($status, $uid);
-			$groepleden = $leden::instance()->prefetch('uid = ? AND status IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $status);
-		} elseif ($status !== null) {
-			$groepleden = $leden::instance()->prefetch('uid = ? AND status = ?', array($uid, $status));
-		} else {
-			$groepleden = $leden::instance()->prefetch('uid = ?', array($uid));
+		$ids = Database::sqlSelect(array('DISTINCT groep_id'), $leden::getTableName(), 'uid = ?', array($uid))->fetchAll(PDO::FETCH_COLUMN);
+		if (empty($ids)) {
+			return array();
 		}
-		$groepen = array();
-		foreach ($groepleden as $lid) {
-			$groep = $this->retrieveByPrimaryKey(array($lid->groep_id));
-			$groepen[$groep->status] = $groep;
+		$where = 'id IN (' . implode(', ', array_fill(0, count($ids), '?')) . ')';
+		if ($status === null) {
+			return $this->prefetch($where, $ids);
+		} elseif (is_array($status)) {
+			$where .= ' AND status IN (' . implode(', ', array_fill(0, count($status), '?')) . ')';
+			return $this->prefetch($where, array_merge($ids, $status));
 		}
-		return $groepen;
+		$where .= ' AND status = ?';
+		array_unshift($ids, $status);
+		return $this->prefetch($where, $ids);
 	}
 
 }
@@ -264,6 +263,14 @@ class WoonoordenModel extends GroepenModel {
 		return $woonoord;
 	}
 
+	public function getWoonoordVoorLid($uid) {
+		$woonoorden = $this->getGroepenVoorLid($uid);
+		if (empty($woonoorden)) {
+			return false;
+		}
+		return reset($woonoorden);
+	}
+
 }
 
 class LichtingenModel extends GroepenModel {
@@ -279,6 +286,20 @@ class LichtingenModel extends GroepenModel {
 
 	public static function get($lidjaar) {
 		return static::instance()->find('lidjaar = ?', array($lidjaar), null, null, 1)->fetch();
+	}
+
+	public function nieuw() {
+		$lichting = parent::nieuw();
+		$lichting->lidjaar = (int) date('Y');
+		return $lichting;
+	}
+
+	public function getLichtingVoorLid($uid) {
+		$lichtingen = $this->getGroepenVoorLid($uid);
+		if (empty($lichtingen)) {
+			return false;
+		}
+		return reset($lichtingen);
 	}
 
 	public function getHuidigeJaargang() {
@@ -322,6 +343,12 @@ class VerticalenModel extends GroepenModel {
 		return static::instance()->find('letter = ?', array($letter), null, null, 1)->fetch();
 	}
 
+	public function nieuw() {
+		$verticale = parent::nieuw();
+		$verticale->letter = null;
+		return $verticale;
+	}
+
 	public function getVerticaleVoorLid($uid) {
 		$verticalen = $this->getGroepenVoorLid($uid);
 		if (empty($verticalen)) {
@@ -355,7 +382,7 @@ class KringenModel extends GroepenModel {
 
 	public function nieuw() {
 		$kring = parent::nieuw();
-		$kring->verticale = '';
+		$kring->verticale_letter = null;
 		return $kring;
 	}
 

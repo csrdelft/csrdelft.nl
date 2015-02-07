@@ -26,7 +26,7 @@ class LedenMemoryView extends CompressedLayout {
 				$verticale = VerticalenModel::get($v);
 			}
 			if ($verticale) {
-				$this->titel = 'Ledenmemory verticale ' . $this->verticale->naam . ($this->learnmode ? 'oefenen' : '');
+				$this->titel = 'Ledenmemory verticale ' . $verticale->naam . ($this->learnmode ? 'oefenen' : '');
 				foreach ($verticale->getLeden() as $lid) {
 					if (in_array($lid->getLidStatus(), $lidstatus)) {
 						$this->leden[] = ProfielModel::get($lid->uid);

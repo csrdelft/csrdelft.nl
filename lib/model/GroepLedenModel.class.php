@@ -58,17 +58,18 @@ class GroepLedenModel extends CachedPersistenceModel {
 	 * @return array
 	 */
 	public function getStatistieken(Groep $groep) {
-		$uids = Database::sqlSelect(array('DISTINCT uid'), $groep->getTableName());
-		$count = count($uids);
-		if ($count < 1) {
+		$leden = group_by_distinct('uid', $groep->getLeden());
+		if (empty($leden)) {
 			return array();
 		}
+		$uids = array_keys($leden);
+		$count = count($uids);
 		$in = implode(', ', array_fill(0, $count, '?'));
 		$stats['Verticale'] = Database::instance()->sqlSelect(array('naam', 'count(*)'), 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $in . ')', $uids, 'verticale', null)->fetchAll();
 		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
 		$stats['Lichting'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), 'profielen', 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
 		$stats['Tijd'] = array();
-		foreach ($groep->getLeden() as $groeplid) {
+		foreach ($leden as $groeplid) {
 			$time = strtotime($groeplid->lid_sinds) * 1000;
 			if (isset($stats['Tijd'][$time])) {
 				$stats['Tijd'][$time] += 1;

@@ -429,8 +429,8 @@ class GroepenController extends Controller {
 				$this->geentoegang();
 			}
 			$lid = $model->nieuw($groep, null);
-			$uids = Database::sqlSelect(array('DISTINCT uid'), $groep->getTableName());
-			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action, $uids);
+			$leden = group_by_distinct('uid', $groep->getLeden());
+			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action, array_keys($leden));
 			if ($form->validate()) {
 				$model->create($lid);
 				$this->view = new GroepLedenData(array($lid));

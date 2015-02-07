@@ -127,11 +127,7 @@ class Groep extends PersistentEntity {
 	}
 
 	public function getFamilieSuggesties() {
-		$suggesties = array();
-		foreach (Database::sqlSelect(array('DISTINCT familie'), $this->getTableName()) as $suggestie) {
-			$suggesties[] = $suggestie[0];
-		}
-		return $suggesties;
+		return Database::sqlSelect(array('DISTINCT familie'), $this->getTableName())->fetchAll(PDO::FETCH_COLUMN);
 	}
 
 	public function getOpmerkingSuggesties() {

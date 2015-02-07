@@ -411,11 +411,12 @@ class GoogleSync {
 			$address->setAttribute('primary', 'true');
 
 			//only rel OR label (XOR) can (and must) be set
-			if ($profiel->getWoonoord()) {
-				$woonoord = $doc->createElement('gd:housename');
-				$woonoord->appendChild(new DOMText($profiel->getWoonoord()->naam));
-				$address->appendChild($woonoord);
-				$address->setAttribute('label', $profiel->getWoonoord()->naam);
+			$woonoord = $profiel->getWoonoord();
+			if ($woonoord) {
+				$house = $doc->createElement('gd:housename');
+				$house->appendChild(new DOMText($woonoord->naam));
+				$address->appendChild($house);
+				$address->setAttribute('label', $woonoord->naam);
 			} else {
 				$address->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
 			}
