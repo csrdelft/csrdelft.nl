@@ -3,6 +3,7 @@
 require_once 'view/Validator.interface.php';
 require_once 'model/security/RememberLoginModel.class.php';
 require_once 'model/security/AccountModel.class.php';
+require_once 'model/security/OneTimeTokensModel.class.php';
 require_once 'model/ProfielModel.class.php';
 
 /**

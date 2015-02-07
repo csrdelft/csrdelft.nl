@@ -1,7 +1,5 @@
 <?php
 
-require_once 'model/security/OneTimeTokensModel.class.php';
-
 /**
  * LoginController.class.php
  * 
