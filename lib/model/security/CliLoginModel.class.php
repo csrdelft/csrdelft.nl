@@ -14,6 +14,10 @@ class CliLoginModel extends LoginModel {
 
 	protected static $uid = 'x999';
 
+	public static function getUid() {
+		return self::$uid;
+	}
+
 	public static function getSuedFrom() {
 		return false;
 	}
