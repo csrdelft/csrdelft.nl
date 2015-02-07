@@ -37,7 +37,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	public static function getUid() {
 		if (MODE === 'CLI') {
-			return static::getUid();
+			return CliLoginModel::getUid();
 		}
 		return $_SESSION['_uid'];
 	}
