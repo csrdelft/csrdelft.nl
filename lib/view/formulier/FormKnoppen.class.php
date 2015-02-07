@@ -212,6 +212,7 @@ class PasfotoAanmeldenKnop extends SubmitKnop {
 		if (($i = array_search('btn', $this->css_classes)) !== false) {
 			unset($this->css_classes[$i]);
 		}
+		$this->css_classes[] = 'lidLink';
 		$this->label = null;
 		$this->icon = false;
 		$img = '<img class="pasfoto float-none" src="/plaetjes/groepen/aanmelden.jpg" onmouseout="this.src=\'/plaetjes/groepen/aanmelden.jpg\'" onmouseover="this.src=\'/plaetjes/' . LoginModel::getProfiel()->getPasfotoPath() . '\'" title="Klik om u aan te melden" style="cursor:pointer;">';
