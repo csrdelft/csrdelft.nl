@@ -19,19 +19,19 @@ html, img, .alert, .ongelezenvanaf, .progress, .progress-bar-info, #minion, .gro
 	box-shadow: 0 0 10px #0A3292;
 }
 div.maaltijd-aangemeld {
-	background-image: -webkit-linear-gradient(top,#5cb85c 0,#449d44 100%);
-	background-image: -o-linear-gradient(top,#5cb85c 0,#449d44 100%);
-	background-image: -webkit-gradient(linear,left top,left bottom,from(#5cb85c),to(#449d44));
-	background-image: linear-gradient(to bottom,#5cb85c 0,#449d44 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c',endColorstr='#ff449d44',GradientType=0);
+	background-image: -webkit-linear-gradient(top,#5cb85c 0,#077b4e 100%);
+	background-image: -o-linear-gradient(top,#5cb85c 0,#077b4e 100%);
+	background-image: -webkit-gradient(linear,left top,left bottom,from(#5cb85c),to(#077b4e));
+	background-image: linear-gradient(to bottom,#5cb85c 0,#077b4e 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c',endColorstr='#ff077b4e',GradientType=0);
 	background-repeat: repeat-x;
 }
 div.maaltijd-afgemeld {
-	background-image: -webkit-linear-gradient(top,#d9534f 0,#c9302c 100%);
-	background-image: -o-linear-gradient(top,#d9534f 0,#c9302c 100%);
-	background-image: -webkit-gradient(linear,left top,left bottom,from(#d9534f),to(#c9302c));
-	background-image: linear-gradient(to bottom,#d9534f 0,#c9302c 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f',endColorstr='#ffc9302c',GradientType=0);
+	background-image: -webkit-linear-gradient(top,#d9534f 0,#7c2507 100%);
+	background-image: -o-linear-gradient(top,#d9534f 0,#7c2507 100%);
+	background-image: -webkit-gradient(linear,left top,left bottom,from(#d9534f),to(#7c2507));
+	background-image: linear-gradient(to bottom,#d9534f 0,#7c2507 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f',endColorstr='#ff7c2507',GradientType=0);
 	background-repeat: repeat-x;
 }
 
