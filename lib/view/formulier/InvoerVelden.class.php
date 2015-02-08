@@ -569,7 +569,8 @@ class TextField extends InputField {
 		$this->typeahead_selected = <<<JS
 
 if (suggestion) {
-	$(this).val($(suggestion.value).text());
+	var index = suggestion.value.indexOf('<span');
+	this.value = suggestion.value.substring(0, index);
 }
 JS;
 	}
