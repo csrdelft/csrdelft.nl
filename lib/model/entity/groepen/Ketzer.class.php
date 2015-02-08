@@ -67,6 +67,15 @@ class Ketzer extends Groep {
 	}
 
 	/**
+	 * Lazy loading by foreign key.
+	 * 
+	 * @return KetzerSelector[]
+	 */
+	public function getSelectors() {
+		return KetzerSelectorsModel::instance()->getSelectorsVoorKetzer($this);
+	}
+
+	/**
 	 * Has permission for action?
 	 * 
 	 * @param AccessAction $action
@@ -104,12 +113,21 @@ class Ketzer extends Groep {
 	}
 
 	/**
-	 * Lazy loading by foreign key.
+	 * Rechten voor de gehele klasse of soort groep?
 	 * 
-	 * @return KetzerSelector[]
+	 * @param string $action
+	 * @return boolean
 	 */
-	public function getSelectors() {
-		return KetzerSelectorsModel::instance()->getSelectorsVoorKetzer($this);
+	public static function magAlgemeen($action) {
+		switch ($action) {
+
+			case A::Aanmaken:
+			case A::Aanmelden:
+			case A::Bewerken:
+			case A::Afmelden:
+				return true;
+		}
+		return parent::magAlgemeen($action);
 	}
 
 }

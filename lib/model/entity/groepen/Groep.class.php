@@ -192,28 +192,17 @@ class Groep extends PersistentEntity {
 	public static function magAlgemeen($action) {
 		switch ($action) {
 
-			case A::Aanmaken:
+			case A::Bekijken:
+				return LoginModel::mag('P_LEDEN_READ');
+
+			// Voorkom dat moderators overal een normale aanmeldknop krijgen
 			case A::Aanmelden:
 			case A::Bewerken:
 			case A::Afmelden:
-				if (!in_array(get_called_class(), array('Ketzer', 'Activiteit', 'Werkgroep'))) {
-					return false;
-				}
-			// fall through
-
-			case A::Bekijken:
-				if (LoginModel::mag('P_LEDEN_READ')) {
-					return true;
-				}
-				break;
-
-			default:
-				// Moderators mogen alles
-				if (LoginModel::mag('P_LEDEN_MOD,groep:P_GROEP:_MOD')) {
-					return true;
-				}
+				return false;
 		}
-		return false;
+		// Moderators mogen alles
+		return LoginModel::mag('P_LEDEN_MOD,groep:P_GROEP:_MOD');
 	}
 
 }
