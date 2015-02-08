@@ -26,7 +26,7 @@
 								<small class="niet-dik">[{$draad->getForumDeel()->titel}]</small>
 								{$draad->titel}
 								{if $draad->belangrijk}
-									{icon get=$draad->belangrijk title="Dit onderwerp is door het bestuur aangemerkt als belangrijk."}
+									{icon get=$draad->belangrijk title="Dit onderwerp is door het bestuur aangemerkt als belangrijk"}
 								{elseif $draad->gesloten}
 									{icon get="lock" title="Dit onderwerp is gesloten, u kunt niet meer reageren"}
 								{/if}

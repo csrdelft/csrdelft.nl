@@ -522,7 +522,11 @@ JS;
 	templates: {
 		{$header}
 		suggestion: function (suggestion) {
-			var html = '<p><a class="suggestionUrl" href="' + suggestion.url + '">';
+			var html = '<p';
+			if (suggestion.title) {
+				html += ' title="' + suggestion.title + '"';
+			}
+			html += '><a class="suggestionUrl" href="' + suggestion.url + '">';
 			if (suggestion.icon) {
 				html += suggestion.icon;
 			}

@@ -202,17 +202,22 @@ class ForumController extends Controller {
 					$url .= '#reageren';
 				}
 				if ($draad->belangrijk) {
-					$icon = '<img src="/plaetjes/famfamfam/' . $draad->belangrijk . '.png" width="16" height="16" alt="belangrijk" title="Dit onderwerp is door het bestuur aangemerkt als belangrijk." class="icon">';
+					$icon = '<img src="/plaetjes/famfamfam/' . $draad->belangrijk . '.png" class="icon">';
+					$title = 'Dit onderwerp is door het bestuur aangemerkt als belangrijk';
 				} elseif ($draad->gesloten) {
-					$icon = '<img src="/plaetjes/famfamfam/lock.png" width="16" height="16" alt="gesloten" title="Dit onderwerp is gesloten, u kunt niet meer reageren" class="icon">';
+					$icon = '<img src="/plaetjes/famfamfam/lock.png" class="icon">';
+					$title = 'Dit onderwerp is gesloten, u kunt niet meer reageren';
 				} elseif ($draad->plakkerig) {
-					$icon = '<img src="/plaetjes/famfamfam/note.png" width="16" height="16" alt="plakkerig" title="Dit onderwerp is plakkerig, het blijft bovenaan." class="icon">';
+					$icon = '<img src="/plaetjes/famfamfam/note.png" class="icon">';
+					$title = 'Dit onderwerp is plakkerig, het blijft bovenaan';
 				} else {
 					$icon = false;
+					$title = false;
 				}
 				$result[] = array(
 					'url'	 => $url,
 					'icon'	 => $icon,
+					'title'	 => $title,
 					'label'	 => $draad->getForumDeel()->titel,
 					'value'	 => $draad->titel
 				);
@@ -221,7 +226,8 @@ class ForumController extends Controller {
 		if (empty($result)) {
 			$result[] = array(
 				'url'	 => '/forum/zoeken/' . urlencode($query),
-				'icon'	 => '<img src="/plaetjes/famfamfam/magnifier.png" width="16" height="16" alt="zoeken" title="Zoeken in reacties" class="icon">',
+				'icon'	 => '<img src="/plaetjes/famfamfam/magnifier.png" class="icon">',
+				'title'	 => 'Zoeken in forumreacties',
 				'label'	 => 'Zoeken in reacties',
 				'value'	 => htmlspecialchars($query)
 			);

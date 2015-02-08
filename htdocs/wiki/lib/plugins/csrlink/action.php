@@ -74,7 +74,8 @@ class action_plugin_csrlink extends DokuWiki_Action_Plugin {
 		if (empty($result)) {
 			$result[] = array(
 				'url'	 => '/wiki/hoofdpagina?do=search&id=' . urlencode($query),
-				'icon'	 => '<img src="/plaetjes/famfamfam/magnifier.png" width="16" height="16" alt="zoeken" title="Zoeken in paginainhoud" class="icon">',
+				'icon'	 => '<img src="/plaetjes/famfamfam/magnifier.png" class="icon">',
+				'title'	 => 'Zoeken in wiki inhoud',
 				'label'	 => 'Zoeken in paginainhoud',
 				'value'	 => htmlspecialchars($query)
 			);

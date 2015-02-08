@@ -4,9 +4,9 @@
 			<small class="niet-dik">[ter goedkeuring...]</small>
 		{/if}
 		{if $draad->belangrijk}
-			{icon get=$draad->belangrijk title="Dit onderwerp is door het bestuur aangemerkt als belangrijk."}
+			{icon get=$draad->belangrijk title="Dit onderwerp is door het bestuur aangemerkt als belangrijk"}
 		{elseif $draad->plakkerig}
-			{icon get="note" title="Dit onderwerp is plakkerig, het blijft bovenaan."}
+			{icon get="note" title="Dit onderwerp is plakkerig, het blijft bovenaan"}
 		{elseif $draad->gesloten}
 			{icon get="lock" title="Dit onderwerp is gesloten, u kunt niet meer reageren"}
 		{else}
