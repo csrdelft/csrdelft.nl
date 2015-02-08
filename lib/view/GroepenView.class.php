@@ -189,7 +189,7 @@ class GroepView implements View {
 	}
 
 	public function getHtml() {
-		$html = '<div id="groep-' . $this->groep->id . '" class="bb-groep';
+		$html = '<a name="' . $this->groep->id . '"></a><div id="groep-' . $this->groep->id . '" class="bb-groep';
 		if ($this->bb) {
 			$html .= ' bb-block';
 		}

@@ -203,9 +203,9 @@ class GroepenController extends Controller {
 			$limit = (int) $this->getParam('limit');
 		}
 		$result = array();
-		foreach ($this->model->find('familie LIKE ?', array($zoekterm), null, null, $limit) as $groep) {
+		foreach ($this->model->find('familie LIKE ? OR naam LIKE ?', array($zoekterm, $zoekterm), null, null, $limit) as $groep) {
 			$result[$groep->familie] = array(
-				'url'	 => $groep->getUrl(),
+				'url'	 => $groep->getUrl() . '#' . $groep->id,
 				'value'	 => get_class($groep) . ':' . $groep->familie
 			);
 		}
@@ -240,29 +240,29 @@ class GroepenController extends Controller {
 				switch ($groep->soort) {
 
 					case ActiviteitSoort::Lichting:
-						$groep->rechten_aanmelden = 'lichting:' . LoginModel::getProfiel()->lidjaar;
+						$groep->rechten_aanmelden = 'Lichting:' . LoginModel::getProfiel()->lidjaar;
 						break;
 
 					case ActiviteitSoort::Verticale:
-						$groep->rechten_aanmelden = 'verticale:' . LoginModel::getProfiel()->verticale;
+						$groep->rechten_aanmelden = 'Verticale:' . LoginModel::getProfiel()->verticale;
 						break;
 
 					case ActiviteitSoort::Kring:
 						$kring = LoginModel::getProfiel()->getKring();
 						if ($kring) {
-							$groep->rechten_aanmelden = 'kring:' . $kring->verticale . '.' . $kring->kring_nummer;
+							$groep->rechten_aanmelden = 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer;
 						}
 						break;
 
 					case ActiviteitSoort::Huis:
 						$woonoord = LoginModel::getProfiel()->getWoonoord();
 						if ($woonoord) {
-							$groep->rechten_aanmelden = 'woonoord:' . $woonoord->familie;
+							$groep->rechten_aanmelden = 'Woonoord:' . $woonoord->familie;
 						}
 						break;
 
 					case ActiviteitSoort::Ondervereniging:
-						$groep->rechten_aanmelden = 'lichting:' . LoginModel::getProfiel()->lidjaar;
+						$groep->rechten_aanmelden = 'Lichting:' . LoginModel::getProfiel()->lidjaar;
 						break;
 				}
 			}
