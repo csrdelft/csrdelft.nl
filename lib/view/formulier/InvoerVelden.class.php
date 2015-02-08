@@ -569,7 +569,7 @@ class TextField extends InputField {
 		$this->typeahead_selected = <<<JS
 
 if (suggestion) {
-	this.value = $(suggestion.value).text();
+	$(this).val($(suggestion.value).text());
 }
 JS;
 	}
