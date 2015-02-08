@@ -52,21 +52,21 @@ class action_plugin_csrlink extends DokuWiki_Action_Plugin {
 
 		$result = array();
 		foreach ($data as $id => $title) {
-			$label = '';
+			$label = false;
 			if (useHeading('navigation')) {
 				$name = $title;
 			} else {
 				$namespace = getNS($id);
 				if ($namespace) {
 					$name = noNS($id);
-					$label = '<span class="lichtgrijs"> - ' . ucfirst($namespace) . '</span>';
+					$label = ucfirst($namespace);
 				} else {
 					$name = $id;
 				}
 			}
 			$result[] = array(
 				'url'	 => wl($id),
-				'label'	 => ucfirst($name) . $label,
+				'label'	 => $label,
 				'value'	 => ucfirst($name)
 			);
 		}
@@ -74,8 +74,9 @@ class action_plugin_csrlink extends DokuWiki_Action_Plugin {
 		if (empty($result)) {
 			$result[] = array(
 				'url'	 => '/wiki/hoofdpagina?do=search&id=' . urlencode($query),
-				'label'	 => htmlspecialchars($query) . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">paginainhoud</span></span>',
-				'value'	 => $query
+				'icon'	 => '<img src="/plaetjes/famfamfam/magnifier.png" width="16" height="16" alt="zoeken" title="Zoeken in paginainhoud" class="icon">',
+				'label'	 => 'Zoeken in paginainhoud',
+				'value'	 => htmlspecialchars($query)
 			);
 		}
 
