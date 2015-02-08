@@ -15,7 +15,6 @@
 #profiel .naam h1 { padding-left: 10px; }
 
 #profiel .familie { padding-left: 10px; margin-left: 260px; width: 250px; }
-#profiel .familie .stamboom { float: right; }
 
 #profiel #corveeTaken { width: 550px; }
 #profiel #corveeTaken tr.old { opacity: .50; }

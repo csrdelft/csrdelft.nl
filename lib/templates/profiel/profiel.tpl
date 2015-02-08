@@ -138,9 +138,7 @@
 			</div>
 			<div class="familie">
 				{if ProfielModel::get($profiel->patroon) OR $profiel->hasKinderen()}
-					<a class="stamboom" href="/leden/stamboom/{$profiel->uid}" title="Stamboom van {$profiel->getNaam()}">
-						<img src="/plaetjes/knopjes/stamboom.jpg" alt="Stamboom van {$profiel->getNaam()}" />
-					</a>
+					<a class="float-right lichtgrijs fa fa-tree fa-3x" href="/leden/stamboom/{$profiel->uid}" title="Stamboom van {$profiel->getNaam()}"></a>
 				{/if}
 				{if ProfielModel::get($profiel->patroon)}
 					<div class="label">{if ProfielModel::get($profiel->patroon)->geslacht === Geslacht::Vrouw}M{else}P{/if}atroon:</div>
