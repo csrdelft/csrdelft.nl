@@ -30,7 +30,7 @@ class LidInstellingen extends Instellingen {
 	 */
 	protected static $defaults = array(
 		'algemeen'		 => array(
-			'bijbel' => array('Bijbelvertaling', T::Enumeration, array('De Nieuwe Bijbelvertaling' => 'NBV', 'Bijbel in Gewone Taal' => 'BGT', 'Groot Nieuws Bijbel' => 'GNB96', 'Nije Fryske Bibeloersetting' => 'NFB', 'NBG-vertaling 1951' => 'NBG51', 'Statenvertaling (Jongbloed-editie)' => 'SVJ', 'Herziene Statenvertaling' => 'HSVI', 'Contemporary English Version' => 'CEVD', 'Good News Translation' => 'GNTD'), 'NBV')
+			'bijbel' => array('Bijbelvertaling', T::Enumeration, array('NBV' => 'De Nieuwe Bijbelvertaling', 'BGT' => 'Bijbel in Gewone Taal', 'GNB96' => 'Groot Nieuws Bijbel', 'NFB' => 'Nije Fryske Bibeloersetting', 'NBG51' => 'NBG-vertaling 1951', 'SVJ' => 'Statenvertaling (Jongbloed-editie)', 'HSVI' => 'Herziene Statenvertaling', 'CEVD' => 'Contemporary English Version', 'GNTD' => 'Good News Translation'), 'NBV')
 		),
 		'agenda'		 => array(
 			'toonBijbelrooster'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
