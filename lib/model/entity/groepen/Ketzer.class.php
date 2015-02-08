@@ -73,37 +73,32 @@ class Ketzer extends Groep {
 	 * @return boolean
 	 */
 	public function mag($action) {
-		if (!LoginModel::mag('P_LOGGED_IN')) {
-			return false;
-		}
-		$leden = static::leden;
-		$aangemeld = Database::sqlExists($leden::getTableName(), 'groep_id = ? AND uid = ?', array($this->id, LoginModel::getUid()));
 		switch ($action) {
 
 			case A::Aanmelden:
-				if ($aangemeld) {
-					return false;
-				}
 				// Controleer maximum leden
 				if (isset($this->aanmeld_limiet) AND $this->aantalLeden() >= $this->aanmeld_limiet) {
 					return false;
 				}
 				// Controleer aanmeldperiode
-				return time() < strtotime($this->aanmelden_tot) AND time() > strtotime($this->aanmelden_vanaf);
+				if (time() > strtotime($this->aanmelden_tot) OR time() < strtotime($this->aanmelden_vanaf)) {
+					return false;
+				}
+				break;
 
 			case A::Bewerken:
-				if (!$aangemeld) {
+				// Controleer bewerkperiode
+				if (time() > strtotime($this->bewerken_tot)) {
 					return false;
 				}
-				// Controleer bewerkperiode
-				return time() < strtotime($this->bewerken_tot);
+				break;
 
 			case A::Afmelden:
-				if (!$aangemeld) {
+				// Controleer afmeldperiode
+				if (time() > strtotime($this->afmelden_tot)) {
 					return false;
 				}
-				// Controleer afmeldperiode
-				return time() < strtotime($this->afmelden_tot);
+				break;
 		}
 		return parent::mag($action);
 	}

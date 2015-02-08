@@ -75,6 +75,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 				if (!empty($this->rechten_aanmelden) AND ! LoginModel::mag($this->rechten_aanmelden)) {
 					return false;
 				}
+				break;
 		}
 		return parent::mag($action);
 	}

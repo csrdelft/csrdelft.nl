@@ -149,16 +149,30 @@ class Groep extends PersistentEntity {
 	 * @return boolean
 	 */
 	public function mag($action) {
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			return false;
+		}
+		$leden = static::leden;
+		$aangemeld = Database::sqlExists($leden::getTableName(), 'groep_id = ? AND uid = ?', array($this->id, LoginModel::getUid()));
 		switch ($action) {
 
-			// Uitzondering zodat beheerders niet overal een aanmeldknop krijgen
 			case A::Aanmelden:
-			case A::Bewerken:
-			case A::Afmelden:
-				// Een overige groep mag iedereen aanmelden/bewerken/afmelden.
-				if (get_class($this) !== 'Groep') {
-					break;
+				if ($aangemeld) {
+					return false;
 				}
+				break;
+
+			case A::Bewerken:
+				if (!$aangemeld) {
+					return false;
+				}
+				break;
+
+			case A::Afmelden:
+				if (!$aangemeld) {
+					return false;
+				}
+				break;
 
 			default:
 				// Maker van groep mag alles
@@ -178,21 +192,24 @@ class Groep extends PersistentEntity {
 	public static function magAlgemeen($action) {
 		switch ($action) {
 
-			// Uitzondering zodat beheerders niet overal een aanmeldknop krijgen
+			case A::Aanmaken:
 			case A::Aanmelden:
 			case A::Bewerken:
 			case A::Afmelden:
-				// Een overige groep mag iedereen aanmelden/bewerken/afmelden.
-				if (get_called_class() !== 'Groep') {
-					break;
+				if (!in_array(get_called_class(), array('Ketzer', 'Activiteit', 'Groep'))) {
+					return false;
 				}
+			// fall through
 
 			case A::Bekijken:
-				return LoginModel::mag('P_LEDEN_READ');
+				if (LoginModel::mag('P_LEDEN_READ')) {
+					return true;
+				}
+				break;
 
 			default:
-				// Beheerder mag alles
-				if (LoginModel::mag('P_LEDEN_MOD')) {
+				// Moderators mogen alles
+				if (LoginModel::mag('P_LEDEN_MOD,groep:P_GROEP:_MOD')) {
 					return true;
 				}
 		}

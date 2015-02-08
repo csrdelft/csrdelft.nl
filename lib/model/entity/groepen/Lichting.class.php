@@ -40,10 +40,16 @@ class Lichting extends Groep {
 		return '/groepen/lichtingen/' . $this->lidjaar . '/';
 	}
 
+	/**
+	 * Read-only: generated group
+	 */
 	public function mag($action) {
 		return $action === A::Bekijken;
 	}
 
+	/**
+	 * Read-only: generated group
+	 */
 	public static function magAlgemeen($action) {
 		return $action === A::Bekijken;
 	}

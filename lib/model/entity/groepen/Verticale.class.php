@@ -44,12 +44,32 @@ class Verticale extends Groep {
 		return KringenModel::getKringenVoorVerticale($this);
 	}
 
+	/**
+	 * Limit functionality: leden generated
+	 */
 	public function mag($action) {
-		return $action === A::Bekijken;
+		switch ($action) {
+
+			case A::Bekijken:
+			case A::Aanmaken:
+			case A::Wijzigen:
+				return parent::mag($action);
+		}
+		return false;
 	}
 
+	/**
+	 * Limit functionality: leden generated
+	 */
 	public static function magAlgemeen($action) {
-		return $action === A::Bekijken;
+		switch ($action) {
+
+			case A::Bekijken:
+			case A::Aanmaken:
+			case A::Wijzigen:
+				return parent::mag($action);
+		}
+		return false;
 	}
 
 }
