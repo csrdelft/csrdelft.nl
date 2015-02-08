@@ -52,8 +52,8 @@ class ChangeLogEntry extends PersistentEntity {
 		'moment'	 => array(T::DateTime),
 		'subject'	 => array(T::String),
 		'property'	 => array(T::String),
-		'old_value'	 => array(T::String, true),
-		'new_value'	 => array(T::String, true),
+		'old_value'	 => array(T::Text, true),
+		'new_value'	 => array(T::Text, true),
 		'uid'		 => array(T::UID)
 	);
 	/**
