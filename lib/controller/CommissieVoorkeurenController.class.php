@@ -17,12 +17,12 @@ class CommissieVoorkeurenController extends AclController {
 		parent::__construct($query, null);
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'overzicht'	 => 'groep:bestuur,1137',
-				'lidpagina'	 => 'groep:bestuur,1137'
+				'overzicht'	 => 'bestuur',
+				'lidpagina'	 => 'bestuur'
 			);
 		} else {
 			$this->acl = array(
-				'lidpagina' => 'groep:bestuur,1137'
+				'lidpagina' => 'bestuur'
 			);
 		}
 	}

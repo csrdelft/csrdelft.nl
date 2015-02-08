@@ -28,7 +28,7 @@ if (isset($_GET['timespan']) AND $_GET['timespan'] == (int) $_GET['timespan']) {
 	$timespan = $_GET['timespan'];
 }
 
-if (LoginModel::mag('P_LEDEN_MOD,groep:' . $cie) OR LoginModel::getUid() === $uid) {
+if (LoginModel::mag('P_LEDEN_MOD,commissie:' . $cie) OR LoginModel::getUid() === $uid) {
 	$saldi = new Saldi($uid, $cie, $timespan);
 
 	$chart = new chart(500, 200);

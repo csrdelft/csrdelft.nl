@@ -47,7 +47,7 @@ class Roodschopper {
 	public static function getDefaults() {
 		$cie = 'soccie';
 		$naam = 'SocCie';
-		if (LoginModel::mag('groep:MaalCie')) {
+		if (LoginModel::mag('commissie:MaalCie')) {
 			$cie = 'maalcie';
 			$naam = 'MaalCie';
 		}

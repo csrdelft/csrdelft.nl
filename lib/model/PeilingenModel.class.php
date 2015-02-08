@@ -197,7 +197,7 @@ class PeilingenModel {
 
 	public static function magBewerken() {
 		//Elk BASFCie-lid heeft voorlopig peilingbeheerrechten.
-		return LoginModel::mag('P_ADMIN,groep:bestuur,groep:BASFCie');
+		return LoginModel::mag('P_ADMIN,bestuur,commissie:BASFCie');
 	}
 
 	public static function getLijst() {

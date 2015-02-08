@@ -53,18 +53,18 @@ class AccessModel extends CachedPersistenceModel {
 	 * permissie kan met een uitroepteken geïnverteerd worden.
 	 * 
 	 * Voorbeeldjes:
-	 *  groep:novcie				geeft true leden van de h.t. NovCie.
-	 *  groep:pubcie,groep:bestuur	geeft true voor leden van h.t. bestuur en h.t. novcie
-	 *  groep:SocCie>Fiscus			geeft true voor h.t. Soccielid met functie fiscus
+	 *  commissie:NovCie			geeft true leden van de h.t. NovCie.
+	 *  commissie:SocCie:ot			geeft true voor alle leden die ooit SocCie hebben gedaan
+	 *  commissie:PubCie,bestuur	geeft true voor leden van h.t. bestuur en h.t. pubcie
+	 *  commissie:SocCie>Fiscus		geeft true voor h.t. Soccielid met functie fiscus
 	 *  geslacht:m					geeft true voor alle mannelijke leden
 	 *  verticale:d					geeft true voor alle leden van verticale d.
-	 *  !lichting:2009				geeft true voor iedereen behalve lichting 2009.
 	 * 
 	 * Gecompliceerde voorbeeld:
-	 * 		groep:novcie+groep:maalcie|1337,groep:bestuur
+	 * 		commissie:NovCie+commissie:MaalCie|1337,bestuur
 	 * 
 	 * Equivalent met haakjes:
-	 * 		(groep:novcie AND (groep:maalcie OR 1337)) OR groep:bestuur
+	 * 		(commissie:NovCie AND (commissie:MaalCie OR 1337)) OR bestuur
 	 * 
 	 * Geeft toegang aan:
 	 * 		de mensen die én in de NovCie zitten én in de MaalCie zitten

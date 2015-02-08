@@ -212,7 +212,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		if (LoginModel::mag('P_LEDEN_MOD')) {
 			return true;
 		}
-		if ($this->status === LidStatus::Noviet AND LoginModel::mag('groep:NovCie')) {
+		if ($this->status === LidStatus::Noviet AND LoginModel::mag('commissie:NovCie')) {
 			return true;
 		}
 		return false;

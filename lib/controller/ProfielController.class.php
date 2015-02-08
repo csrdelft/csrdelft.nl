@@ -22,7 +22,7 @@ class ProfielController extends AclController {
 				'resetPrivateToken'		 => 'P_PROFIEL_EDIT',
 				'addToGoogleContacts'	 => 'P_LEDEN_READ',
 				// Leden
-				'nieuw'					 => 'P_LEDEN_MOD,groep:NovCie',
+				'nieuw'					 => 'P_LEDEN_MOD,commissie:NovCie',
 				'lijst'					 => 'P_OUDLEDEN_READ',
 				'stamboom'				 => 'P_OUDLEDEN_READ',
 				'verjaardagen'			 => 'P_LEDEN_READ',

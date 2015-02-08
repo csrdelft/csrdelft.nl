@@ -115,9 +115,9 @@ class Saldi {
 	public static function magGrafiekZien($uid, $cie = null) {
 		//mogen we uberhaupt een grafiek zien?
 		if ($cie === null) {
-			return LoginModel::getUid() === $uid OR LoginModel::mag('P_LEDEN_MOD,groep:soccie,groep:maalcie');
+			return LoginModel::getUid() === $uid OR LoginModel::mag('P_LEDEN_MOD,commissie:SocCie,commissie:MaalCie');
 		}
-		if (LoginModel::getUid() === $uid OR LoginModel::mag('P_LEDEN_MOD,groep:' . $cie)) {
+		if (LoginModel::getUid() === $uid OR LoginModel::mag('P_LEDEN_MOD,commissie:' . $cie)) {
 			return true;
 		}
 		return false;

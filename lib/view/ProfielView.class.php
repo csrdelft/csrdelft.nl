@@ -305,7 +305,7 @@ class ProfielForm extends Formulier {
 			$fields[] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
 		}
 
-		if ($admin OR LoginModel::mag('groep:NovCie')) {
+		if ($admin OR LoginModel::mag('commissie:NovCie')) {
 			$fields[] = new TextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht je van het novitiaat?');
 			$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
 			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);

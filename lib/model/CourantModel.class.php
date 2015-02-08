@@ -109,7 +109,7 @@ class CourantModel {
 			unset($return[3]);
 		}
 		//Sponsors eruitgooien, behalve voor beheerders en/of AcqCiee
-		if (!$this->magBeheren() && !LoginModel::mag('groep:AcqCie')) {
+		if (!$this->magBeheren() && !LoginModel::mag('commissie:AcqCie')) {
 			unset($return[4]);
 		}
 		return $return;
@@ -273,7 +273,7 @@ class CourantModel {
 		if ($this->isCache()) {
 			$userCache = array();
 			//mods en bestuur zien alle berichten
-			if ($this->magBeheren() OR LoginModel::mag('groep:bestuur')) {
+			if ($this->magBeheren() OR LoginModel::mag('bestuur')) {
 				return $this->berichten;
 			} else {
 				foreach ($this->berichten as $bericht) {
