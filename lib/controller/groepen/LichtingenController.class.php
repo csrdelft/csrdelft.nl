@@ -18,14 +18,18 @@ class LichtingenController extends GroepenController {
 			$this->geentoegang();
 		}
 		$zoekterm = $this->getParam('q');
-		$data = range($this->model->getJongsteLidjaar(), $this->model->getOudsteLidjaar());
-		$found = preg_grep('/' . (int) $zoekterm . '/', $data);
 		$result = array();
-		foreach ($found as $lidjaar) {
-			$result[] = array(
-				'url'	 => '/groepen/lichtingen/' . $lidjaar . '#' . $lidjaar,
-				'value'	 => 'Lichting:' . $lidjaar
-			);
+		if (is_numeric($zoekterm)) {
+
+			$data = range($this->model->getJongsteLidjaar(), $this->model->getOudsteLidjaar());
+			$found = preg_grep('/' . (int) $zoekterm . '/', $data);
+
+			foreach ($found as $lidjaar) {
+				$result[] = array(
+					'url'	 => '/groepen/lichtingen/' . $lidjaar . '#' . $lidjaar,
+					'value'	 => 'Lichting:' . $lidjaar
+				);
+			}
 		}
 		$this->view = new JsonResponse($result);
 	}
