@@ -88,6 +88,8 @@ class LidInstellingen extends Instellingen {
 			'verjaardagen_pasfotos'	 => array('Pasfoto\'s bij verjaardagen', T::Enumeration, array('ja', 'nee'), 'ja')
 		),
 		'zoeken'		 => array(
+			'favorieten'		 => array('Favorieten', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'menu'				 => array('Menu', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'leden'				 => array(
 				'Leden',
 				T::Enumeration,
@@ -97,7 +99,8 @@ class LidInstellingen extends Instellingen {
 					'LEDEN|OUDLEDEN' => 'Leden en oudleden',
 					'ALL'			 => 'Ook niet-leden',
 					'NOVIET'		 => 'Alleen novieten',
-					'GASTLID'		 => 'Alleen gastleden'
+					'GASTLID'		 => 'Alleen gastleden',
+					'nee'			 => 'Nee'
 				),
 				'LEDEN'),
 			'commissies'		 => array('Commissies', T::Enumeration, array('ja', 'nee'), 'ja'),

@@ -45,14 +45,19 @@ else {
 JS;
 		if (LoginModel::mag('P_LEDEN_READ')) {
 
-			$this->addSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
-			$this->addSuggestions(MenuModel::instance()->flattenMenu(MenuModel::instance()->getMenu('main')));
+			if (LidInstellingen::get('zoeken', 'favorieten') === 'ja') {
+				$this->addSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
+			}
+			if (LidInstellingen::get('zoeken', 'menu') === 'ja') {
+				$this->addSuggestions(MenuModel::instance()->flattenMenu(MenuModel::instance()->getMenu('main')));
+			}
 
 			$instelling = LidInstellingen::get('zoeken', 'leden');
 			if ($instelling !== 'nee') {
 				$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=' . $instelling . '&q=';
 			}
 
+			// TODO: bundelen om simultane verbindingen te sparen
 			foreach (array('commissies', 'kringen', 'onderverenigingen', 'werkgroepen', 'woonoorden', 'groepen') as $option) {
 				if (LidInstellingen::get('zoeken', $option) === 'ja') {
 					$this->suggestions[ucfirst($option)] = '/groepen/' . $option . '/zoeken/?q=';
@@ -82,6 +87,15 @@ JS;
 			if (LidInstellingen::get('zoeken', 'boeken') === 'ja') {
 				$this->suggestions['Boeken'] = '/bibliotheek/zoeken/?q=';
 			}
+
+			// Favorieten en menu tellen niet
+			$max = 6;
+			if (isset($this->suggestions[''])) {
+				$max++;
+			}
+			if (count($this->suggestions) > $max) {
+				setMelding('Meer dan 6 zoekbronnen tegelijk wordt niet ondersteund', 0);
+			}
 		}
 	}
 
@@ -106,7 +120,7 @@ JS;
 
 	public function view() {
 		$html = '';
-		foreach (array('leden', 'commissies', 'kringen', 'onderverenigingen', 'werkgroepen', 'woonoorden', 'groepen', 'agenda', 'forum', 'fotoalbum', 'wiki', 'documenten', 'boeken') as $option) {
+		foreach (array('favorieten', 'menu', 'leden', 'commissies', 'kringen', 'onderverenigingen', 'werkgroepen', 'woonoorden', 'groepen', 'agenda', 'forum', 'fotoalbum', 'wiki', 'documenten', 'boeken') as $option) {
 			$html .= '<li><a href="#">';
 			$instelling = LidInstellingen::get('zoeken', $option);
 			if ($instelling !== 'nee') {
