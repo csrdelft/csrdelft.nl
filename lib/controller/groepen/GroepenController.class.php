@@ -203,7 +203,7 @@ class GroepenController extends Controller {
 			$limit = (int) $this->getParam('limit');
 		}
 		$result = array();
-		foreach ($this->model->find('familie LIKE ? OR naam LIKE ?', array($zoekterm, $zoekterm), null, null, $limit) as $groep) {
+		foreach ($this->model->find('familie LIKE ?', array($zoekterm), null, null, $limit) as $groep) {
 			$result[$groep->familie] = array(
 				'url'	 => $groep->getUrl() . '#' . $groep->id,
 				'value'	 => get_class($groep) . ':' . $groep->familie
