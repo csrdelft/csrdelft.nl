@@ -177,7 +177,7 @@ class BiebBoek {
 	 * 		boek mag alleen door admins verwijdert worden
 	 */
 	public function magVerwijderen() {
-		return LoginModel::mag('groep:BASFCIE,P_BIEB_MOD,P_ADMIN');
+		return LoginModel::mag('groep:BASFCie,P_BIEB_MOD,P_ADMIN');
 	}
 
 	/**
@@ -199,7 +199,7 @@ class BiebBoek {
 
 	/**
 	 * Controleert of ingelogd eigenaar is van boek/exemplaar
-	 *  - Basfcieleden zijn eigenaar van boeken van de bibliotheek
+	 *  - BASFCieleden zijn eigenaar van boeken van de bibliotheek
 	 *
 	 * @param null|int geen of $exemplaarid integer
 	 * @return bool true
@@ -221,7 +221,7 @@ class BiebBoek {
 	}
 
 	public function isBASFCie() {
-		return LoginModel::mag('groep:BASFCIE');
+		return LoginModel::mag('groep:BASFCie');
 	}
 
 	public function isBiebboek($exemplaarid = null) {

@@ -21,7 +21,7 @@ x200;AcqCie;AcquisitieCommissie;;acqcie@
 x201;ArCie;Arro Kopij Commissie;;arcie@
 x202;AlmanakCie;AlmanakCommissie;;almanakcie@
 x203;Alpha;Alpha Cursus;;info@studentalphadelft.nl
-x204;BASFCie;Bibliotheek, Archief, Statistiek en FotoCommissie;;basfcie@
+x204;BASFCie;Bibliotheek, Archief, Statistiek en FotoCommissie;;BASFCie@
 x205;DiesCie;DiesCommissie;;diescie@
 x206;LeOCie;Laudate et Orate Commissie;;leocie@
 x207;Donacie;DonatieCommissie;;donacie@

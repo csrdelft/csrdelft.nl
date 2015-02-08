@@ -146,7 +146,7 @@
 							<div>
 								{if $exemplaar.status=='beschikbaar'}
 									{if $exemplaar.eigenaar_uid=='x222'} {* bibliothecaris werkt met kaartjes *}
-										{if !$boek->isEigenaar($exemplaar.id)} {* basfcie hoeft opmerking niet te zien *}
+										{if !$boek->isEigenaar($exemplaar.id)} {* BASFCie hoeft opmerking niet te zien *}
 											<span class="suggestie recht">Biebboek lenen: laat het kaartje achter voor de bibliothecaris.</span><br />
 										{/if}
 									{else}
