@@ -23,7 +23,7 @@ class VerticalenController extends GroepenController {
 			$limit = (int) $this->getParam('limit');
 		}
 		$result = array();
-		foreach ($this->model->find('naam LIKE ? OR letter LIKE ?', array($zoekterm, $zoekterm), null, null, $limit) as $verticale) {
+		foreach ($this->model->find('naam LIKE ?', array($zoekterm), null, null, $limit) as $verticale) {
 			$result[] = array(
 				'url'	 => $verticale->getUrl() . '#' . $verticale->id,
 				'value'	 => 'Verticale:' . $verticale->letter
