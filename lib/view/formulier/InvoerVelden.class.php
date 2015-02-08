@@ -700,6 +700,11 @@ class LidField extends TextField {
 
 	public function getValue() {
 		$this->value = parent::getValue();
+		// filter <span...
+		$pos = mb_strpos($this->value, '<');
+		if ($pos !== false) {
+			$this->value = trim(mb_substr($this->value, 0, $pos));
+		}
 		if ($this->empty_null AND empty($this->value)) {
 			return null;
 		}
@@ -721,11 +726,6 @@ class LidField extends TextField {
 			return true;
 		}
 		$value = parent::getValue();
-		// filter <span...
-		$pos = mb_strpos($value, '<');
-		if ($pos !== false) {
-			$value = trim(mb_substr($value, 0, $pos));
-		}
 		// geldig uid?
 		if (AccountModel::isValidUid($value) AND ProfielModel::existsUid($value)) {
 			return true;
