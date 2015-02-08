@@ -88,8 +88,8 @@ class LidInstellingen extends Instellingen {
 			'verjaardagen_pasfotos'	 => array('Pasfoto\'s bij verjaardagen', T::Enumeration, array('ja', 'nee'), 'ja')
 		),
 		'zoeken'		 => array(
-			'favorieten'		 => array('Favorieten', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'menu'				 => array('Menu', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'favorieten'		 => array('Favorieten<span class="offtopic"> (telt niet mee voor max.)</span>', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'menu'				 => array('Menu<span class="offtopic"> (telt niet mee voor max.)</span>', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'leden'				 => array(
 				'Leden',
 				T::Enumeration,
