@@ -25,14 +25,7 @@ if (isset($_GET['uid'])) {
 } elseif (isset($_POST['naam'])) {
 	$string = $_POST['naam'];
 	$given = 'naam';
-	// filter <span...
-	$pos = mb_strpos($string, '<');
-	if ($pos !== false) {
-		$string = trim(mb_substr($string, 0, $pos));
-	}
-}
-//geen input
-else {
+} else { //geen input
 	echo 'Fout in invoer in tools/naamlink.php';
 	exit;
 }
