@@ -22,4 +22,17 @@ class Werkgroep extends Ketzer {
 		return '/groepen/werkgroepen/' . $this->id . '/';
 	}
 
+	/**
+	 * Rechten voor de gehele klasse of soort groep?
+	 * 
+	 * @param string $action
+	 * @return boolean
+	 */
+	public static function magAlgemeen($action) {
+		if ($action === A::Aanmaken AND ! LoginModel::mag('P_LEDEN_MOD')) {
+			return false;
+		}
+		return parent::magAlgemeen($action);
+	}
+
 }

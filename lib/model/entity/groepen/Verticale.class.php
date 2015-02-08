@@ -67,7 +67,7 @@ class Verticale extends Groep {
 			case A::Bekijken:
 			case A::Aanmaken:
 			case A::Wijzigen:
-				return parent::mag($action);
+				return parent::magAlgemeen($action);
 		}
 		return false;
 	}

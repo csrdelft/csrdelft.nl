@@ -196,7 +196,7 @@ class Groep extends PersistentEntity {
 			case A::Aanmelden:
 			case A::Bewerken:
 			case A::Afmelden:
-				if (!in_array(get_called_class(), array('Ketzer', 'Activiteit', 'Groep'))) {
+				if (!in_array(get_called_class(), array('Ketzer', 'Activiteit', 'Werkgroep', 'Groep'))) {
 					return false;
 				}
 			// fall through
