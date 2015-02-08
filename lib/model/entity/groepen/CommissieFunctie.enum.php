@@ -18,7 +18,7 @@ abstract class CommissieFunctie implements PersistentEnum {
 	const ViceAbactis = 'Vice-Abactis';
 	// Commissie
 	const QQ = 'Q.Q.';
-	// BAS-FCie
+	// BASFCIE
 	const Bibliothecarus = 'Bibliothecarus';
 	const Archivarus = 'Archivarus';
 	const Statisticus = 'Statisticus';
