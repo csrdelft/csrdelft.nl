@@ -102,17 +102,19 @@ JS;
 	private function addSuggestions(array $list) {
 		foreach ($list as $item) {
 			if ($item->magBekijken()) {
-				$label = $item->tekst;
 				$parent = $item->getParent();
 				if ($parent AND $parent->tekst != 'main') {
 					if ($parent->tekst == LoginModel::getUid()) { // werkomheen
 						$parent->tekst = 'Favorieten';
 					}
-					$label .= '<span class="lichtgrijs"> - ' . $parent->tekst . '</span>';
+					$label = $parent->tekst;
+				} else {
+					$label = 'Menu';
 				}
 				$this->suggestions[''][] = array(
 					'url'	 => $item->link,
-					'value'	 => $label
+					'label'	 => $label,
+					'value'	 => $item->tekst
 				);
 			}
 		}

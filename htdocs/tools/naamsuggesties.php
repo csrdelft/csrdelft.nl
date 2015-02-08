@@ -40,14 +40,16 @@ foreach ($namen as $naam) {
 
 	$result[] = array(
 		'url'	 => '/profiel/' . $naam['uid'],
-		'value'	 => $fullname . '<span class="lichtgrijs"> - ' . $naam['uid'] . '</span>'
+		'label'	 => $naam['uid'],
+		'value'	 => $fullname
 	);
 }
 /*
   if (empty($result)) {
   $result[] = array(
-  'url'	 => '/ledenlijst?status=LEDEN|OUDLEDEN&q=' . urlencode($query),
-  'value'	 => htmlspecialchars($query) . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">leden & oudleden</span></span>'
+  'url' => '/ledenlijst?status=LEDEN|OUDLEDEN&q=' . urlencode($query),
+  'label' => 'Zoeken in <span class="dikgedrukt">leden & oudleden</span>',
+  'value' => htmlspecialchars($query)
   );
   }
  */

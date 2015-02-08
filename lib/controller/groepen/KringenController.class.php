@@ -26,6 +26,7 @@ class KringenController extends GroepenController {
 		foreach ($this->model->find('naam LIKE ?', array($zoekterm), null, null, $limit) as $kring) {
 			$result[] = array(
 				'url'	 => $kring->getUrl() . '#' . $kring->id,
+				'label'	 => $kring->familie,
 				'value'	 => 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer
 			);
 		}

@@ -27,6 +27,7 @@ class LichtingenController extends GroepenController {
 			foreach ($found as $lidjaar) {
 				$result[] = array(
 					'url'	 => '/groepen/lichtingen/' . $lidjaar . '#' . $lidjaar,
+					'label'	 => 'Groepen',
 					'value'	 => 'Lichting:' . $lidjaar
 				);
 			}

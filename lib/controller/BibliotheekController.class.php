@@ -436,7 +436,8 @@ class BibliotheekController extends Controller {
 		foreach (BiebCatalogus::getAutocompleteSuggesties('biebboek', $zoekterm, $categorie) as $prop) {
 			$result[] = array(
 				'url'	 => '/bibliotheek/boek/' . $prop['id'],
-				'value'	 => $prop['titel'] . '<span class="lichtgrijs"> - ' . $prop['auteur'] . '</span>'
+				'label'	 => $prop['auteur'],
+				'value'	 => $prop['titel']
 			);
 		}
 		$this->view = new JsonResponse($result);

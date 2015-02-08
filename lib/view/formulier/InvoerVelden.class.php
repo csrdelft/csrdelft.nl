@@ -512,7 +512,7 @@ JS;
 			if (is_int($name)) {
 				$header = '';
 			} else {
-				$header = 'header: "<h3>' . $name . '</h3>"';
+				$header = 'header: "<h3>' . $name . '</h3>",';
 			}
 			$js .= <<<JS
 , {
@@ -521,6 +521,9 @@ JS;
 	source: {$dataset[$name]}.ttAdapter(),
 	templates: {
 		{$header}
+		suggestion: function (suggestion) {
+			return '<p>' + suggestion.value + '<span class="lichtgrijs"> - ' + suggestion.label + '</span></p>';
+		}
 	}
 }
 JS;
@@ -566,17 +569,6 @@ class TextField extends InputField {
 			// reverse InputField constructor $this->getValue()
 			$this->value = htmlspecialchars_decode($this->value);
 		}
-		$this->typeahead_selected = <<<JS
-
-// filter <span...
-if (suggestion) {
-	this.value = suggestion.value;
-	var index = this.value.indexOf('<span');
-	if (index !== false) {
-		this.value = this.value.substring(0, index);
-	}
-}
-JS;
 	}
 
 	public function validate() {
@@ -591,11 +583,6 @@ JS;
 
 	public function getValue() {
 		$this->value = parent::getValue();
-		// filter <span... 
-		$index = mb_strpos($this->value, '<span');
-		if ($index !== false) {
-			$this->value = mb_substr($this->value, 0, $index);
-		}
 		if ($this->empty_null AND $this->value == '') {
 			return null;
 		}

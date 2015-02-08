@@ -34,6 +34,7 @@ class GroepForm extends DataTableForm {
 			$fields['bewerken_tot']->from_datetime = $fields['aanmelden_vanaf'];
 			$fields['afmelden_tot']->from_datetime = $fields['aanmelden_vanaf'];
 			$fields['afmelden_tot']->title = 'Leden mogen zichzelf niet afmelden als u dit veld leeg laat';
+			$fields['keuzelijst']->title = 'Zet | tussen de opties en gebruik && voor meerdere keuzelijsten';
 		}
 		if ($groep instanceof Kring) {
 			unset($fields['samenvatting']);

@@ -26,6 +26,7 @@ class VerticalenController extends GroepenController {
 		foreach ($this->model->find('naam LIKE ?', array($zoekterm), null, null, $limit) as $verticale) {
 			$result[] = array(
 				'url'	 => $verticale->getUrl() . '#' . $verticale->id,
+				'label'	 => $verticale->naam,
 				'value'	 => 'Verticale:' . $verticale->letter
 			);
 		}

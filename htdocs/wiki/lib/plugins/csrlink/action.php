@@ -66,14 +66,16 @@ class action_plugin_csrlink extends DokuWiki_Action_Plugin {
 			}
 			$result[] = array(
 				'url'	 => wl($id),
-				'value'	 => ucfirst($name) . $label
+				'label'	 => ucfirst($name) . $label,
+				'value'	 => ucfirst($name)
 			);
 		}
 
 		if (empty($result)) {
 			$result[] = array(
 				'url'	 => '/wiki/hoofdpagina?do=search&id=' . urlencode($query),
-				'value'	 => htmlspecialchars($query) . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">paginainhoud</span></span>'
+				'label'	 => htmlspecialchars($query) . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">paginainhoud</span></span>',
+				'value'	 => $query
 			);
 		}
 

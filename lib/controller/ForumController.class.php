@@ -212,14 +212,16 @@ class ForumController extends Controller {
 				}
 				$result[] = array(
 					'url'	 => $url,
-					'value'	 => $icon . $draad->titel . '<span class="lichtgrijs"> - ' . $draad->getForumDeel()->titel . '</span>'
+					'label'	 => $icon . ' ' . $draad->getForumDeel()->titel,
+					'value'	 => $draad->titel
 				);
 			}
 		}
 		if (empty($result)) {
 			$result[] = array(
 				'url'	 => '/forum/zoeken/' . urlencode($query),
-				'value'	 => htmlspecialchars($query) . '<span class="lichtgrijs"> - Zoeken in <span class="dikgedrukt">reacties</span></span>'
+				'label'	 => 'Zoeken in <span class="dikgedrukt">reacties</span>',
+				'value'	 => htmlspecialchars($query)
 			);
 		}
 		$this->view = new JsonResponse($result);
