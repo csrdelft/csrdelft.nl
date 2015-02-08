@@ -18,7 +18,7 @@ class GroepenModel extends CachedPersistenceModel {
 	 * Default ORDER BY
 	 * @var string
 	 */
-	protected $default_order = 'status ASC, begin_moment DESC';
+	protected $default_order = 'begin_moment DESC';
 
 	public static function get($id) {
 		if (is_numeric($id)) {

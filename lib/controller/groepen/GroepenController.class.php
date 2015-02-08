@@ -204,11 +204,13 @@ class GroepenController extends Controller {
 		}
 		$result = array();
 		foreach ($this->model->find('familie LIKE ?', array($zoekterm), null, null, $limit) as $groep) {
-			$result[$groep->familie] = array(
-				'url'	 => $groep->getUrl() . '#' . $groep->id,
-				'label'	 => 'Groepen',
-				'value'	 => get_class($groep) . ':' . $groep->familie
-			);
+			if (!isset($result[$groep->familie])) {
+				$result[$groep->familie] = array(
+					'url'	 => $groep->getUrl() . '#' . $groep->id,
+					'label'	 => 'Groepen',
+					'value'	 => get_class($groep) . ':' . $groep->familie
+				);
+			}
 		}
 		$this->view = new JsonResponse($result);
 	}
