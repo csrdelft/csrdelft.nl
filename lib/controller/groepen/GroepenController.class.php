@@ -236,6 +236,36 @@ class GroepenController extends Controller {
 		if (empty($selection)) {
 			$old = null;
 			$groep = $this->model->nieuw($soort);
+			if (property_exists($groep, 'rechten_aanmelden') AND empty($groep->rechten_aanmelden)) {
+				switch ($groep->soort) {
+
+					case ActiviteitSoort::Lichting:
+						$groep->rechten_aanmelden = 'lichting:' . LoginModel::getProfiel()->lidjaar;
+						break;
+
+					case ActiviteitSoort::Verticale:
+						$groep->rechten_aanmelden = 'verticale:' . LoginModel::getProfiel()->verticale;
+						break;
+
+					case ActiviteitSoort::Kring:
+						$kring = LoginModel::getProfiel()->getKring();
+						if ($kring) {
+							$groep->rechten_aanmelden = 'kring:' . $kring->verticale . '.' . $kring->kring_nummer;
+						}
+						break;
+
+					case ActiviteitSoort::Huis:
+						$woonoord = LoginModel::getProfiel()->getWoonoord();
+						if ($woonoord) {
+							$groep->rechten_aanmelden = 'woonoord:' . $woonoord->familie;
+						}
+						break;
+
+					case ActiviteitSoort::Ondervereniging:
+						$groep->rechten_aanmelden = 'lichting:' . LoginModel::getProfiel()->lidjaar;
+						break;
+				}
+			}
 		}
 		// opvolger
 		else {
