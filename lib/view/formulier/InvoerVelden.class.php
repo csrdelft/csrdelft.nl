@@ -570,9 +570,10 @@ class TextField extends InputField {
 
 // filter <span...
 if (suggestion) {
-	var index = suggestion.value.indexOf('<span');
+	this.value = suggestion.value;
+	var index = this.value.indexOf('<span');
 	if (index !== false) {
-		this.value = suggestion.value.substring(0, index);
+		this.value = this.value.substring(0, index);
 	}
 }
 JS;
