@@ -657,9 +657,7 @@ class RechtenField extends TextField {
 
 		// TODO: bundelen om simultane verbindingen te sparen
 		foreach (array('verticalen', 'lichtingen', 'commissies', 'groepen', 'onderverenigingen', 'woonoorden') as $option) {
-			if (LidInstellingen::get('zoeken', $option) === 'ja') {
-				$this->suggestions[ucfirst($option)] = '/groepen/' . $option . '/zoeken/?q=';
-			}
+			$this->suggestions[ucfirst($option)] = '/groepen/' . $option . '/zoeken/?q=';
 		}
 
 		$this->title = 'Met , en + voor respectievelijk OR en AND. Gebruik | voor OR binnen AND (alsof er haakjes omheen staan)';
