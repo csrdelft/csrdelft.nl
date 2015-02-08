@@ -208,11 +208,12 @@ class ForumController extends Controller {
 				} elseif ($draad->plakkerig) {
 					$icon = '<img src="/plaetjes/famfamfam/note.png" width="16" height="16" alt="plakkerig" title="Dit onderwerp is plakkerig, het blijft bovenaan." class="icon"> ';
 				} else {
-					$icon = '';
+					$icon = false;
 				}
 				$result[] = array(
 					'url'	 => $url,
-					'label'	 => $icon . ' ' . $draad->getForumDeel()->titel,
+					'icon'	 => $icon,
+					'label'	 => $draad->getForumDeel()->titel,
 					'value'	 => $draad->titel
 				);
 			}

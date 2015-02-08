@@ -522,7 +522,15 @@ JS;
 	templates: {
 		{$header}
 		suggestion: function (suggestion) {
-			return '<p>' + suggestion.value + '<span class="lichtgrijs"> - ' + suggestion.label + '</span></p>';
+			var html = '<p><a class="suggestionUrl" href="' + suggestion.url + '">';
+			if (suggestion.icon) {
+				html += suggestion.icon;
+			}
+			html += suggestion.value;
+			if (suggestion.label) {
+				html += '<span class="lichtgrijs"> - ' + suggestion.label + '</span>';
+			}
+			return html + '</a></p>';
 		}
 	}
 }
