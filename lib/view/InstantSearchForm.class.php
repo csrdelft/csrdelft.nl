@@ -48,15 +48,16 @@ JS;
 			$this->addSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
 			$this->addSuggestions(MenuModel::instance()->flattenMenu(MenuModel::instance()->getMenu('main')));
 
-			if (LidInstellingen::get('zoeken', 'commissies') === 'ja') {
-				$this->suggestions['Commissie'] = '/groepen/commissies/zoeken/?q=';
+			$instelling = LidInstellingen::get('zoeken', 'leden');
+			if ($instelling !== 'nee') {
+				$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=' . $instelling . '&q=';
 			}
 
-			if (LidInstellingen::get('zoeken', 'woonoorden') === 'ja') {
-				$this->suggestions['Woonoord/Huis'] = '/groepen/woonoorden/zoeken/?q=';
+			foreach (array('besturen', 'commissies', 'ketzers', 'kringen', 'lichtingen', 'onderverenigingen', 'verticalen', 'werkgroepen', 'woonoorden', 'groepen') as $option) {
+				if (LidInstellingen::get('zoeken', $option) === 'ja') {
+					$this->suggestions[ucfirst($option)] = '/groepen/' . $option . '/zoeken/?q=';
+				}
 			}
-
-			$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=' . LidInstellingen::get('zoeken', 'leden') . '&q=';
 
 			if (LidInstellingen::get('zoeken', 'agenda') === 'ja') {
 				$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';
@@ -105,12 +106,13 @@ JS;
 
 	public function view() {
 		$html = '';
-		foreach (array('commissies', 'woonoorden', 'leden', 'agenda', 'forum', 'fotoalbum', 'wiki', 'documenten', 'boeken') as $option) {
+		foreach (array('leden', 'besturen', 'commissies', 'ketzers', 'kringen', 'lichtingen', 'onderverenigingen', 'verticalen', 'werkgroepen', 'woonoorden', 'groepen', 'agenda', 'forum', 'fotoalbum', 'wiki', 'documenten', 'boeken') as $option) {
 			$html .= '<li><a href="#">';
-			if (LidInstellingen::get('zoeken', $option) !== 'nee') {
+			$instelling = LidInstellingen::get('zoeken', $option);
+			if ($instelling !== 'nee') {
 				$html .= '<span class="fa fa-check"></span> ';
 				if ($option === 'leden') {
-					$html .= ucfirst(strtolower(LidInstellingen::get('zoeken', 'leden'))) . '</a></li>';
+					$html .= ucfirst(strtolower($instelling)) . '</a></li>';
 					continue;
 				}
 			} else {

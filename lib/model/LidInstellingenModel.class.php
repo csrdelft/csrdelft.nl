@@ -88,7 +88,7 @@ class LidInstellingen extends Instellingen {
 			'verjaardagen_pasfotos'	 => array('Pasfoto\'s bij verjaardagen', T::Enumeration, array('ja', 'nee'), 'ja')
 		),
 		'zoeken'		 => array(
-			'leden'		 => array(
+			'leden'				 => array(
 				'Leden',
 				T::Enumeration,
 				array(
@@ -100,14 +100,22 @@ class LidInstellingen extends Instellingen {
 					'GASTLID'		 => 'Alleen gastleden'
 				),
 				'LEDEN'),
-			'agenda'	 => array('Agenda', T::Enumeration, array('ja', 'nee'), 'nee'),
-			'commissies' => array('Commissies', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'woonoorden' => array('Woonoorden', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'forum'		 => array('Forum', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'fotoalbum'	 => array('Fotoalbum', T::Enumeration, array('ja', 'nee'), 'nee'),
-			'wiki'		 => array('Wiki', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'documenten' => array('Documenten', T::Enumeration, array('ja', 'nee'), 'nee'),
-			'boeken'	 => array('Boeken', T::Enumeration, array('ja', 'nee'), 'nee')
+			'besturen'			 => array('Besturen', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'commissies'		 => array('Commissies', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'ketzers'			 => array('Aanschafketzers', T::Enumeration, array('nee'), 'nee'),
+			'kringen'			 => array('Kringen', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'lichtingen'		 => array('Lichtingen', T::Enumeration, array('nee'), 'nee'),
+			'onderverenigingen'	 => array('Onderverenigingen', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'verticalen'		 => array('Verticalen', T::Enumeration, array('nee'), 'nee'),
+			'werkgroepen'		 => array('Werkgroepen', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'woonoorden'		 => array('Woonoorden', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'groepen'			 => array('Overige groepen', T::Enumeration, array('nee'), 'nee'),
+			'agenda'			 => array('Agenda', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'forum'				 => array('Forum', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'fotoalbum'			 => array('Fotoalbum', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'wiki'				 => array('Wiki', T::Enumeration, array('ja', 'nee'), 'ja'),
+			'documenten'		 => array('Documenten', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'boeken'			 => array('Boeken', T::Enumeration, array('ja', 'nee'), 'nee')
 		)
 	);
 
