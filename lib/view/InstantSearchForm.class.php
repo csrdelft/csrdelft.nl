@@ -53,7 +53,7 @@ JS;
 				$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=' . $instelling . '&q=';
 			}
 
-			foreach (array('besturen', 'commissies', 'ketzers', 'kringen', 'lichtingen', 'onderverenigingen', 'verticalen', 'werkgroepen', 'woonoorden', 'groepen') as $option) {
+			foreach (array('commissies', 'kringen', 'onderverenigingen', 'werkgroepen', 'woonoorden', 'groepen') as $option) {
 				if (LidInstellingen::get('zoeken', $option) === 'ja') {
 					$this->suggestions[ucfirst($option)] = '/groepen/' . $option . '/zoeken/?q=';
 				}
@@ -106,7 +106,7 @@ JS;
 
 	public function view() {
 		$html = '';
-		foreach (array('leden', 'besturen', 'commissies', 'ketzers', 'kringen', 'lichtingen', 'onderverenigingen', 'verticalen', 'werkgroepen', 'woonoorden', 'groepen', 'agenda', 'forum', 'fotoalbum', 'wiki', 'documenten', 'boeken') as $option) {
+		foreach (array('leden', 'commissies', 'kringen', 'onderverenigingen', 'werkgroepen', 'woonoorden', 'groepen', 'agenda', 'forum', 'fotoalbum', 'wiki', 'documenten', 'boeken') as $option) {
 			$html .= '<li><a href="#">';
 			$instelling = LidInstellingen::get('zoeken', $option);
 			if ($instelling !== 'nee') {
