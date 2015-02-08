@@ -568,9 +568,12 @@ class TextField extends InputField {
 		}
 		$this->typeahead_selected = <<<JS
 
+// filter <span...
 if (suggestion) {
 	var index = suggestion.value.indexOf('<span');
-	this.value = suggestion.value.substring(0, index);
+	if (index !== false) {
+		this.value = suggestion.value.substring(0, index);
+	}
 }
 JS;
 	}
@@ -587,6 +590,11 @@ JS;
 
 	public function getValue() {
 		$this->value = parent::getValue();
+		// filter <span... 
+		$index = mb_strpos($this->value, '<span');
+		if ($index !== false) {
+			$this->value = mb_substr($this->value, 0, $index);
+		}
 		if ($this->empty_null AND $this->value == '') {
 			return null;
 		}
