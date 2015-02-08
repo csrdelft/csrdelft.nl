@@ -374,7 +374,8 @@ class DataTableKnop extends FormulierKnop {
 		parent::__construct($url, $action . ' DataTableResponse', $label, $title, null);
 		$this->multiplicity = $multiplicity;
 		$this->tableId = $tableId;
-		$this->css_classes[] = 'DTTT_button DTTT_button_' . $class;
+		$this->css_classes[] = 'DTTT_button';
+		$this->css_classes[] = 'DTTT_button_' . $class;
 	}
 
 	public function getUpdateToolbar() {

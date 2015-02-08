@@ -122,7 +122,8 @@ class ForumDeelForm extends ModalForm {
 	public function __construct(ForumDeel $deel) {
 		parent::__construct($deel, '/forum/beheren/' . $deel->forum_id);
 		$this->titel = 'Deelforum beheren';
-		$this->css_classes[] = 'ReloadPage PreventUnchanged';
+		$this->css_classes[] = 'ReloadPage';
+		$this->css_classes[] = 'PreventUnchanged';
 
 		$lijst = array();
 		foreach (ForumModel::instance()->prefetch() as $cat) {

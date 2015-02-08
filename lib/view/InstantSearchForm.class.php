@@ -24,6 +24,7 @@ class ZoekInputGroup extends TextField {
 	public function __construct($name) {
 		parent::__construct($name, null, null);
 		$this->css_classes[] = 'form-control';
+		$this->css_classes[] = 'clicktogo';
 		$this->placeholder = 'Zoek op titel';
 		$this->onkeydown = <<<JS
 

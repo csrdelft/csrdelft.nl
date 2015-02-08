@@ -514,6 +514,11 @@ JS;
 			} else {
 				$header = 'header: "<h3>' . $name . '</h3>",';
 			}
+			if (array_search('clicktogo', $this->css_classes)) {
+				$clicktogo = '';
+			} else {
+				$clicktogo = ' onclick="event.preventDefault();return false;"';
+			}
 			$js .= <<<JS
 , {
 	name: "{$dataset[$name]}",
@@ -526,7 +531,7 @@ JS;
 			if (suggestion.title) {
 				html += ' title="' + suggestion.title + '"';
 			}
-			html += '><a class="suggestionUrl" href="' + suggestion.url + '">';
+			html += '><a class="suggestionUrl" href="' + suggestion . url + '"{$clicktogo}>';
 			if (suggestion.icon) {
 				html += suggestion.icon;
 			}
@@ -1005,7 +1010,8 @@ class TextareaField extends TextField {
 		if (is_int($rows)) {
 			$this->rows = $rows;
 		}
-		$this->css_classes[] = 'AutoSize textarea-transition';
+		$this->css_classes[] = 'AutoSize';
+		$this->css_classes[] = 'textarea-transition';
 	}
 
 	public function getHtml() {
