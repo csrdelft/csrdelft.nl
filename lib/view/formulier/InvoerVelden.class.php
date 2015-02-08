@@ -566,6 +566,12 @@ class TextField extends InputField {
 			// reverse InputField constructor $this->getValue()
 			$this->value = htmlspecialchars_decode($this->value);
 		}
+		$this->typeahead_selected = <<<JS
+
+if (suggestion) {
+	this.value = $(suggestion.value).text();
+}
+JS;
 	}
 
 	public function validate() {
@@ -700,11 +706,6 @@ class LidField extends TextField {
 
 	public function getValue() {
 		$this->value = parent::getValue();
-		// filter <span...
-		$pos = mb_strpos($this->value, '<');
-		if ($pos !== false) {
-			$this->value = trim(mb_substr($this->value, 0, $pos));
-		}
 		if ($this->empty_null AND empty($this->value)) {
 			return null;
 		}
