@@ -43,7 +43,7 @@ class RememberLoginModel extends PersistenceModel {
 		} else {
 			$remember->id = $this->create($remember);
 		}
-		return setcookie('remember', $rand, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', 'csrdelft.nl', FORCE_HTTPS, true);
+		return setcookie('remember', $rand, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	}
 
 }

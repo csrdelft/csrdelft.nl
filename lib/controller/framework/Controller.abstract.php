@@ -171,7 +171,7 @@ abstract class Controller {
 		}
 		// Redirect to login form
 		elseif (LoginModel::getUid() === 'x999') {
-			setcookie('goback', REQUEST_URI, time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'), '/', 'csrdelft.nl', FORCE_HTTPS, true);
+			setcookie('goback', REQUEST_URI, time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
 			redirect(CSR_ROOT);
 		}
 		// GUI 403

@@ -155,7 +155,10 @@ class Groep extends PersistentEntity {
 			case A::Aanmelden:
 			case A::Bewerken:
 			case A::Afmelden:
-				break;
+				// Een overige groep mag iedereen aanmelden/bewerken/afmelden.
+				if (get_class($this) !== 'Groep') {
+					break;
+				}
 
 			default:
 				// Maker van groep mag alles
@@ -175,14 +178,17 @@ class Groep extends PersistentEntity {
 	public static function magAlgemeen($action) {
 		switch ($action) {
 
-			case A::Bekijken:
-				return LoginModel::mag('P_LEDEN_READ');
-
 			// Uitzondering zodat beheerders niet overal een aanmeldknop krijgen
 			case A::Aanmelden:
 			case A::Bewerken:
 			case A::Afmelden:
-				break;
+				// Een overige groep mag iedereen aanmelden/bewerken/afmelden.
+				if (get_called_class() !== 'Groep') {
+					break;
+				}
+
+			case A::Bekijken:
+				return LoginModel::mag('P_LEDEN_READ');
 
 			default:
 				// Beheerder mag alles
