@@ -1,1 +1,0 @@
-CREATE TABLE login_sessions (session_id varchar(255) NOT NULL, uid varchar(4) NOT NULL, login_moment datetime NOT NULL, user_agent varchar(255) NULL DEFAULT NULL, ip varchar(255) NULL DEFAULT NULL, PRIMARY KEY (session_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1;

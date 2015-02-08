@@ -1,1 +1,0 @@
-ALTER TABLE `mlt_abonnementen` ADD `wanneer_ingeschakeld` DATETIME NOT NULL ;

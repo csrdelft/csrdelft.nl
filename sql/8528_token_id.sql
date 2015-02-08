@@ -1,2 +1,0 @@
-ALTER TABLE remember_login DROP PRIMARY KEY;
-ALTER TABLE `remember_login`  ADD `id` INT(11) NOT NULL AUTO_INCREMENT  FIRST,  ADD   PRIMARY KEY  (`id`) ;

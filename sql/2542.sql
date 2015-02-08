@@ -1,1 +1,0 @@
-ALTER TABLE  `forum_topic` ADD  `belangrijk` ENUM(  '1',  '0' ) NOT NULL DEFAULT  '0' AFTER  `zichtbaar` ;

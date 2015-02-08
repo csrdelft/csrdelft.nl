@@ -1,1 +1,0 @@
-CREATE TABLE execution_times (request varchar(255) NOT NULL, counter int(11) NOT NULL, total_time float NOT NULL, total_time_view float NOT NULL, PRIMARY KEY (request)) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1;

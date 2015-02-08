@@ -1,1 +1,0 @@
-DELETE FROM `forum_draden_gelezen` WHERE `datum_tijd` = "0000-00-00 00:00:00";

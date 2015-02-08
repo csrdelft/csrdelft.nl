@@ -1,1 +1,0 @@
-ALTER TABLE `crv_functies` DROP `omschrijving` ;

@@ -1,1 +1,0 @@
-CREATE TABLE remember_login (token varchar(255) NOT NULL, uid varchar(4) NOT NULL, remember_since datetime NOT NULL, device_name varchar(255) NOT NULL, ip varchar(255) NOT NULL, lock_ip tinyint(1) NOT NULL, PRIMARY KEY (token)) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1;

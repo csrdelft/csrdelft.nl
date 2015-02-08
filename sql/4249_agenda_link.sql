@@ -1,1 +1,0 @@
-ALTER TABLE `agenda` ADD `link` VARCHAR( 255 ) NULL DEFAULT NULL ;

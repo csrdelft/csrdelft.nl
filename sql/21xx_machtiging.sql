@@ -1,1 +1,0 @@
-ALTER TABLE `lid` ADD `machtiging` ENUM( 'ja', 'nee' ) NOT NULL DEFAULT 'nee' AFTER `bankrekening`

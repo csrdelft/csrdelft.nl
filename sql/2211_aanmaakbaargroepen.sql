@@ -1,1 +1,0 @@
-ALTER TABLE  `groeptype` CHANGE  `groepenAanmaakbaar`  `groepenAanmaakbaar` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  'P_LEDEN_MOD' COMMENT  'permissie(s) voor aanmaken van groepen';

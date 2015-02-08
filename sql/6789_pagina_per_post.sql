@@ -1,1 +1,0 @@
-ALTER TABLE forum_draden ADD pagina_per_post tinyint(1) NOT NULL AFTER eerste_post_plakkerig;

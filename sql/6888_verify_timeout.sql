@@ -1,2 +1,0 @@
-CREATE TABLE verify_timeout (uid varchar(4) NOT NULL, count int(11) NOT NULL, last_try datetime NOT NULL, PRIMARY KEY (uid)) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1;
-CREATE TABLE onetime_tokens (uid varchar(4) NOT NULL, url varchar(255) NOT NULL, token VARCHAR(255) NOT NULL, expire datetime NOT NULL, verified tinyint(1) NOT NULL, PRIMARY KEY (uid, url)) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1;
