@@ -644,7 +644,7 @@ class BewerkBoek extends BiebBoek {
 				}
 			}
 		}
-		$this->ajaxformuliervelden = new Formulier(null, null);
+		$this->ajaxformuliervelden = new BiebFormulier();
 		$this->ajaxformuliervelden->addFields($ajaxformuliervelden);
 	}
 
@@ -1114,6 +1114,21 @@ class TitelField extends RequiredTextField {
 			$this->error = 'Titel bestaat al.';
 		}
 		return $this->error == '';
+	}
+
+}
+
+/**
+ * Werkomheen
+ */
+class BiebFormulier extends Formulier {
+
+	public function __construct() {
+		parent::__construct(null, null);
+	}
+
+	public function getScriptTag() {
+		parent::getScriptTag();
 	}
 
 }
