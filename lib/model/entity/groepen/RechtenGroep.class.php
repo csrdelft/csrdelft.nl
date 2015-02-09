@@ -52,7 +52,7 @@ class RechtenGroep extends AbstractGroep {
 
 			case A::Bekijken:
 			case A::Aanmelden:
-				if (!empty($this->rechten_aanmelden) AND ! LoginModel::mag($this->rechten_aanmelden)) {
+				if (!LoginModel::mag($this->rechten_aanmelden)) {
 					return false;
 				}
 				break;
