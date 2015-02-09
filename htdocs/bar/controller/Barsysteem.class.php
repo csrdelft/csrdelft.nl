@@ -299,7 +299,7 @@ class Barsysteem {
 		$q = $this->db->prepare("
 SELECT G.type,
 	SUM(I.aantal * PR.prijs) AS total,
-	WEEK(B.tijd, 3) AS week,
+	WEEK(B.tijd) AS week,
 	YEARWEEK(B.tijd) AS yearweek
 FROM socCieBestelling AS B
 JOIN socCieBestellingInhoud AS I ON
