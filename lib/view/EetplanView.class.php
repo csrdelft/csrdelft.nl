@@ -98,7 +98,7 @@ class EetplanNovietView extends AbstractEetplanView {
 				<tr><th style="width: 150px">Avond</th><th style="width: 200px">Huis</th></tr>';
 			$row = 0;
 			foreach ($this->aEetplan as $aEetplanData) {
-				$woonoord = AbstractGroepenModel::omnummeren($aEetplanData['groepid']);
+				$woonoord = WoonoordenModel::omnummeren($aEetplanData['groepid']);
 				echo '<tr class="kleur' . ($row % 2) . '">
 						<td >' . $this->model->getDatum($aEetplanData['avond']) . '</td><td>';
 				if ($woonoord) {
@@ -120,7 +120,7 @@ class EetplanHuisView extends AbstractEetplanView {
 	public function __construct(EetplanModel $model, $iHuisID) {
 		parent::__construct($model);
 		$this->aEetplan = $this->model->getEetplanVoorHuis($iHuisID);
-		$this->woonoord = AbstractGroepenModel::omnummeren($this->aEetplan[0]['groepid']);
+		$this->woonoord = WoonoordenModel::omnummeren($this->aEetplan[0]['groepid']);
 	}
 
 	public function getBreadcrumbs() {
