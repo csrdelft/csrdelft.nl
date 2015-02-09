@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/entity/Mail.class.php';
+
 /**
  * ProfielModel.class.php
  * 
