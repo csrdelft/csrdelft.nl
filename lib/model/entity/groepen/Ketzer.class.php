@@ -45,7 +45,7 @@ class Ketzer extends AbstractGroep {
 		'aanmeld_limiet'	 => array(T::Integer, true),
 		'aanmelden_vanaf'	 => array(T::DateTime),
 		'aanmelden_tot'		 => array(T::DateTime),
-		'bewerken_tot'		 => array(T::DateTime),
+		'bewerken_tot'		 => array(T::DateTime, true),
 		'afmelden_tot'		 => array(T::DateTime, true)
 	);
 	/**

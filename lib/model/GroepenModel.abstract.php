@@ -430,8 +430,8 @@ class KetzersModel extends AbstractGroepenModel {
 		$ketzer = parent::nieuw();
 		$ketzer->aanmeld_limiet = null;
 		$ketzer->aanmelden_vanaf = getDateTime();
-		$ketzer->aanmelden_tot = $ketzer->aanmelden_vanaf;
-		$ketzer->bewerken_tot = $ketzer->aanmelden_tot;
+		$ketzer->aanmelden_tot = null;
+		$ketzer->bewerken_tot = null;
 		$ketzer->afmelden_tot = null;
 		return $ketzer;
 	}

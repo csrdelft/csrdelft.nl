@@ -32,6 +32,7 @@ class GroepForm extends DataTableForm {
 			$fields['aanmelden_vanaf']->to_datetime = $fields['afmelden_tot'];
 			$fields['bewerken_tot']->to_datetime = $fields['afmelden_tot'];
 			$fields['bewerken_tot']->from_datetime = $fields['aanmelden_vanaf'];
+			$fields['bewerken_tot']->title = 'Leden mogen hun eigen opmerking of keuze niet aanpassen als u dit veld leeg laat';
 			$fields['afmelden_tot']->from_datetime = $fields['aanmelden_vanaf'];
 			$fields['afmelden_tot']->title = 'Leden mogen zichzelf niet afmelden als u dit veld leeg laat';
 			$fields['keuzelijst']->title = 'Zet | tussen de opties en gebruik && voor meerdere keuzelijsten';
