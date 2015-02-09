@@ -1,5 +1,8 @@
 /*Invert kleuren*/
-html, img, .alert, .ongelezenvanaf, .progress, .progress-bar-info, #minion, .groep-stat, .markItUpButton a, .btn::before, iframe, .aanmelddata {
+html, img, .alert, .ongelezenvanaf, .progress, .progress-bar-info, #minion,
+.groep-stat, .markItUpButton a, .btn::before, iframe, .aanmelddata,
+td.maaltijd-aangemeld, td.maaltijd-afgemeld, td.abonnement-ingeschakeld,
+td.abonnement-uitgeschakeld, ul.ui-tabs-nav, li[role=tab], li[role=tab] a {
 	-webkit-filter: invert(100%); 
 	filter: invert(100%);
 }
@@ -40,6 +43,12 @@ div.maaltijd-afgemeld {
 	background-image: linear-gradient(to bottom,#d9534f 0,#7c2507 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f',endColorstr='#ff7c2507',GradientType=0);
 	background-repeat: repeat-x;
+}
+td.maaltijd-aangemeld, td.abonnement-ingeschakeld {
+	background-color: #077b4e;
+}
+td.maaltijd-afgemeld, td.abonnement-uitgeschakeld {
+	background-color: #7c2507;
 }
 
 /*Andere (optionele) aanpassingen*/
