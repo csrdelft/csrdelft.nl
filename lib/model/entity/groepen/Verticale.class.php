@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Verticale extends Groep {
+class Verticale extends AbstractGroep {
 
 	const leden = 'VerticaleLedenModel';
 

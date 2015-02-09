@@ -1,16 +1,16 @@
 <?php
 
 require_once 'model/entity/groepen/GroepStatus.enum.php';
-require_once 'model/entity/groepen/GroepLid.class.php';
+require_once 'model/entity/groepen/GroepLid.abstract.php';
 
 /**
- * Groep.class.php
+ * AbstractGroep.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Een groep met leden.
  */
-class Groep extends PersistentEntity {
+abstract class AbstractGroep extends PersistentEntity {
 
 	const leden = 'GroepLedenModel';
 
@@ -85,21 +85,12 @@ class Groep extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $primary_key = array('id');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'groepen';
-
-	public function getUrl() {
-		return '/groepen/overig/' . $this->id . '/';
-	}
 
 	/**
 	 * Is lid van deze groep?
 	 * 
 	 * @param string $uid
-	 * @return GroepLid
+	 * @return AbstractGroepLid
 	 */
 	public function getLid($uid) {
 		$leden = static::leden;
@@ -109,7 +100,7 @@ class Groep extends PersistentEntity {
 	/**
 	 * Lazy loading by foreign key.
 	 * 
-	 * @return GroepLid[]
+	 * @return AbstractGroepLid[]
 	 */
 	public function getLeden() {
 		$leden = static::leden;

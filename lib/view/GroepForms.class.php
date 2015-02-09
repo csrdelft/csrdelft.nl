@@ -8,7 +8,7 @@
  */
 class GroepForm extends DataTableForm {
 
-	public function __construct(Groep $groep, $action, $nocancel = false) {
+	public function __construct(AbstractGroep $groep, $action, $nocancel = false) {
 		parent::__construct($groep, $action);
 		$this->titel = get_class($groep);
 		if ($groep->id) {
@@ -89,7 +89,7 @@ class GroepForm extends DataTableForm {
 
 class GroepOpvolgingForm extends DataTableForm {
 
-	public function __construct(Groep $groep, $action) {
+	public function __construct(AbstractGroep $groep, $action) {
 		parent::__construct($groep, $action, 'Opvolging instellen');
 
 		$fields['fam'] = new TextField('familie', $groep->familie, 'Familienaam');
@@ -114,7 +114,7 @@ class GroepSoortField extends RadioField {
 	protected $activiteit;
 	protected $commissie;
 
-	public function __construct($name, $value, $description, Groep $groep) {
+	public function __construct($name, $value, $description, AbstractGroep $groep) {
 		parent::__construct($name, $value, $description, array());
 
 		require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
@@ -199,7 +199,7 @@ class KetzerSoortField extends GroepSoortField {
 
 	public $columns = 2;
 
-	public function __construct($name, $value, $description, Groep $groep) {
+	public function __construct($name, $value, $description, AbstractGroep $groep) {
 		parent::__construct($name, $value, $description, $groep);
 
 		$this->options = array();
@@ -247,7 +247,7 @@ class KetzerSoortField extends GroepSoortField {
 
 class GroepConverteerForm extends DataTableForm {
 
-	public function __construct(Groep $groep, GroepenModel $huidig) {
+	public function __construct(AbstractGroep $groep, AbstractGroepenModel $huidig) {
 		parent::__construct($groep, $huidig->getUrl() . 'converteren', $huidig::orm . ' converteren');
 
 		$fields[] = new GroepSoortField('model', get_class($huidig), 'Converteren naar', $groep);
@@ -269,7 +269,7 @@ class GroepConverteerForm extends DataTableForm {
 
 class GroepAanmakenForm extends ModalForm {
 
-	public function __construct(GroepenModel $huidig, $soort = null) {
+	public function __construct(AbstractGroepenModel $huidig, $soort = null) {
 		$groep = $huidig->nieuw($soort);
 		parent::__construct($groep, $huidig->getUrl() . 'nieuw', 'Nieuwe ketzer aanmaken');
 		$this->css_classes[] = 'redirect';
@@ -304,7 +304,7 @@ class GroepAanmakenForm extends ModalForm {
 
 class GroepLidBeheerForm extends DataTableForm {
 
-	public function __construct(GroepLid $lid, $action, array $blacklist = null) {
+	public function __construct(AbstractGroepLid $lid, $action, array $blacklist = null) {
 		parent::__construct($lid, $action, 'Aanmelding bewerken');
 		$fields = $this->generateFields();
 
@@ -326,7 +326,7 @@ class GroepLidBeheerForm extends DataTableForm {
 
 class GroepBewerkenForm extends InlineForm {
 
-	public function __construct(GroepLid $lid, Groep $groep, $toggle = true, $buttons = true) {
+	public function __construct(AbstractGroepLid $lid, AbstractGroep $groep, $toggle = true, $buttons = true) {
 
 		if ($groep->keuzelijst) {
 			$field = new MultiSelectField('opmerking', $lid->opmerking, null, $groep->keuzelijst);
@@ -343,7 +343,7 @@ class GroepBewerkenForm extends InlineForm {
 
 class GroepAanmeldenForm extends GroepBewerkenForm {
 
-	public function __construct(GroepLid $lid, Groep $groep, $pasfoto = true) {
+	public function __construct(AbstractGroepLid $lid, AbstractGroep $groep, $pasfoto = true) {
 		if ($pasfoto) {
 			$buttons = new PasfotoAanmeldenKnop();
 		} else {
@@ -364,7 +364,7 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 
 class GroepLogboekForm extends DataTableForm {
 
-	public function __construct(Groep $groep) {
+	public function __construct(AbstractGroep $groep) {
 		parent::__construct($groep, null, $groep->naam . ' logboek');
 
 		$fields[] = new GroepLogboekTable($groep);

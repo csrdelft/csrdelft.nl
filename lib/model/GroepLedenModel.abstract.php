@@ -1,16 +1,13 @@
 <?php
 
 /**
- * GroepLedenModel.class.php
+ * GroepLedenModel.abstract.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class GroepLedenModel extends CachedPersistenceModel {
+abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 
-	const orm = 'GroepLid';
-
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string
@@ -22,7 +19,7 @@ class GroepLedenModel extends CachedPersistenceModel {
 	 */
 	protected $memcache_prefetch = true;
 
-	public static function get(Groep $groep, $uid) {
+	public static function get(AbstractGroep $groep, $uid) {
 		return static::instance()->retrieveByPrimaryKey(array($groep->id, $uid));
 	}
 
@@ -30,7 +27,7 @@ class GroepLedenModel extends CachedPersistenceModel {
 		parent::__construct('groepen/');
 	}
 
-	public function nieuw(Groep $groep, $uid) {
+	public function nieuw(AbstractGroep $groep, $uid) {
 		$class = static::orm;
 		$lid = new $class();
 		$lid->groep_id = $groep->id;
@@ -44,20 +41,20 @@ class GroepLedenModel extends CachedPersistenceModel {
 	/**
 	 * Return leden van groep.
 	 * 
-	 * @param Groep $groep
-	 * @return GroepLid[]
+	 * @param AbstractGroep $groep
+	 * @return AbstractGroepLid[]
 	 */
-	public function getLedenVoorGroep(Groep $groep) {
+	public function getLedenVoorGroep(AbstractGroep $groep) {
 		return $this->prefetch('groep_id = ?', array($groep->id));
 	}
 
 	/**
 	 * Bereken statistieken van de groepleden.
 	 * 
-	 * @param Groep $groep
+	 * @param AbstractGroep $groep
 	 * @return array
 	 */
-	public function getStatistieken(Groep $groep) {
+	public function getStatistieken(AbstractGroep $groep) {
 		$leden = group_by_distinct('uid', $groep->getLeden());
 		if (empty($leden)) {
 			return array();
@@ -90,15 +87,23 @@ class GroepLedenModel extends CachedPersistenceModel {
 
 }
 
-class OnderverLedenModel extends GroepLedenModel {
+class RechtenGroepLedenModel extends AbstractGroepLedenModel {
 
-	const orm = 'OnderverLid';
+	const orm = 'RechtenGroepLid';
 
 	protected static $instance;
 
 }
 
-class BewonersModel extends GroepLedenModel {
+class OnderverenigingsLedenModel extends AbstractGroepLedenModel {
+
+	const orm = 'OnderverenigingsLid';
+
+	protected static $instance;
+
+}
+
+class BewonersModel extends AbstractGroepLedenModel {
 
 	const orm = 'Bewoner';
 
@@ -106,7 +111,7 @@ class BewonersModel extends GroepLedenModel {
 
 }
 
-class LichtingLedenModel extends GroepLedenModel {
+class LichtingLedenModel extends AbstractGroepLedenModel {
 
 	const orm = 'LichtingsLid';
 
@@ -119,7 +124,7 @@ class LichtingLedenModel extends GroepLedenModel {
 	 * @param string $uid
 	 * @return LichtingLid|false
 	 */
-	public static function get(Groep $lichting, $uid) {
+	public static function get(AbstractGroep $lichting, $uid) {
 		$profiel = ProfielModel::get($uid);
 		if ($profiel AND $profiel->lidjaar === $lichting->lidjaar) {
 			$lid = static::instance()->nieuw($lichting, $uid);
@@ -136,7 +141,7 @@ class LichtingLedenModel extends GroepLedenModel {
 	 * @param Lichting $lichting
 	 * @return LichtingLid[]
 	 */
-	public function getLedenVoorGroep(Groep $lichting) {
+	public function getLedenVoorGroep(AbstractGroep $lichting) {
 		$leden = array();
 		foreach (ProfielModel::instance()->prefetch('lidjaar = ?', array($lichting->lidjaar)) as $profiel) {
 			$lid = static::get($lichting, $profiel->uid);
@@ -149,7 +154,7 @@ class LichtingLedenModel extends GroepLedenModel {
 
 }
 
-class VerticaleLedenModel extends GroepLedenModel {
+class VerticaleLedenModel extends AbstractGroepLedenModel {
 
 	const orm = 'VerticaleLid';
 
@@ -162,7 +167,7 @@ class VerticaleLedenModel extends GroepLedenModel {
 	 * @param string $uid
 	 * @return VerticaleLid|false
 	 */
-	public static function get(Groep $verticale, $uid) {
+	public static function get(AbstractGroep $verticale, $uid) {
 		$profiel = ProfielModel::get($uid);
 		if ($profiel AND $profiel->verticale === $verticale->letter) {
 			$lid = static::instance()->nieuw($verticale, $uid);
@@ -182,7 +187,7 @@ class VerticaleLedenModel extends GroepLedenModel {
 	 * @param Verticale $verticale
 	 * @return VerticaleLid[]
 	 */
-	public function getLedenVoorGroep(Groep $verticale) {
+	public function getLedenVoorGroep(AbstractGroep $verticale) {
 		require_once 'model/entity/groepen/LidStatus.enum.php';
 		$leden = array();
 		$status = LidStatus::$lidlike;
@@ -199,7 +204,7 @@ class VerticaleLedenModel extends GroepLedenModel {
 
 }
 
-class KringLedenModel extends GroepLedenModel {
+class KringLedenModel extends AbstractGroepLedenModel {
 
 	const orm = 'KringLid';
 
@@ -207,7 +212,7 @@ class KringLedenModel extends GroepLedenModel {
 
 }
 
-class CommissieLedenModel extends GroepLedenModel {
+class CommissieLedenModel extends AbstractGroepLedenModel {
 
 	const orm = 'CommissieLid';
 
@@ -215,7 +220,7 @@ class CommissieLedenModel extends GroepLedenModel {
 
 }
 
-class BestuursLedenModel extends GroepLedenModel {
+class BestuursLedenModel extends AbstractGroepLedenModel {
 
 	const orm = 'BestuursLid';
 
@@ -223,7 +228,7 @@ class BestuursLedenModel extends GroepLedenModel {
 
 }
 
-class KetzerDeelnemersModel extends GroepLedenModel {
+class KetzerDeelnemersModel extends AbstractGroepLedenModel {
 
 	const orm = 'KetzerDeelnemer';
 

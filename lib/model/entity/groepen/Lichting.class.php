@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Lichting extends Groep {
+class Lichting extends AbstractGroep {
 
 	const leden = 'LichtingLedenModel';
 

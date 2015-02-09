@@ -10,7 +10,7 @@ require_once 'model/entity/groepen/LidStatus.enum.php';
  * Een lid van een lichting.
  * 
  */
-class LichtingsLid extends GroepLid {
+class LichtingsLid extends AbstractGroepLid {
 
 	protected static $table_name = 'lichting_leden';
 

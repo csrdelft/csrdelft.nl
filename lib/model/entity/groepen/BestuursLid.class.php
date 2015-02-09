@@ -8,7 +8,7 @@
  * Een lid van een bestuur.
  * 
  */
-class BestuursLid extends GroepLid {
+class BestuursLid extends AbstractGroepLid {
 
 	protected static $table_name = 'bestuurs_leden';
 

@@ -596,7 +596,7 @@ HTML;
 		return $html;
 	}
 
-	protected function groep(Groep $groep) {
+	protected function groep(AbstractGroep $groep) {
 		require_once 'view/GroepenView.class.php';
 		// Controleer rechten
 		if (!$groep->mag(A::Bekijken)) {
@@ -718,9 +718,9 @@ HTML;
 		} else {
 			$id = $this->parseArray(array('[/groep]'), array());
 		}
-		$groep = GroepenModel::get($id);
+		$groep = AbstractGroepenModel::get($id);
 		if (!$groep) {
-			$groep = GroepenModel::omnummeren($id);
+			$groep = AbstractGroepenModel::omnummeren($id);
 		}
 		if ($groep) {
 			return $this->groep($groep);

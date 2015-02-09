@@ -8,7 +8,7 @@
  * Een deelnemer van een ketzer.
  * 
  */
-class KetzerDeelnemer extends GroepLid {
+class KetzerDeelnemer extends AbstractGroepLid {
 
 	protected static $table_name = 'ketzer_deelnemers';
 

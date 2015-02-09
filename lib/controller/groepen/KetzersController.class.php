@@ -7,7 +7,7 @@
  * 
  * Controller voor ketzers.
  */
-class KetzersController extends GroepenController {
+class KetzersController extends AbstractGroepenController {
 
 	public function __construct($query, KetzersModel $model = null) {
 		parent::__construct($query, $model);

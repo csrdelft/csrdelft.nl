@@ -3,14 +3,14 @@
 require_once 'model/entity/groepen/CommissieFunctie.enum.php';
 
 /**
- * GroepLid.class.php
+ * GroepLid.abstract.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Een lid van een groep.
  * 
  */
-class GroepLid extends PersistentEntity {
+abstract class AbstractGroepLid extends PersistentEntity {
 
 	/**
 	 * Primary key of Groep
@@ -53,10 +53,5 @@ class GroepLid extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $primary_key = array('groep_id', 'uid');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'groep_leden';
 
 }

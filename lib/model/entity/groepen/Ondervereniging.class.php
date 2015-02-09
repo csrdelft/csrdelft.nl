@@ -8,9 +8,9 @@ require_once 'model/entity/groepen/OnderverenigingStatus.enum.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Ondervereniging extends Groep {
+class Ondervereniging extends AbstractGroep {
 
-	const leden = 'OnderverLedenModel';
+	const leden = 'OnderverenigingsLedenModel';
 
 	/**
 	 * (Adspirant-)Ondervereniging

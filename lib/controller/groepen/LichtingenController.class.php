@@ -7,7 +7,7 @@
  * 
  * Controller voor lichtingen.
  */
-class LichtingenController extends GroepenController {
+class LichtingenController extends AbstractGroepenController {
 
 	public function __construct($query) {
 		parent::__construct($query, LichtingenModel::instance());

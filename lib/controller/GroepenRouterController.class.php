@@ -1,7 +1,7 @@
 <?php
 
-require_once 'model/GroepenModel.class.php';
-require_once 'controller/groepen/GroepenController.class.php';
+require_once 'model/GroepenModel.abstract.php';
+require_once 'controller/groepen/GroepenController.abstract.php';
 
 /**
  * GroepenRouterController.class.php
@@ -20,7 +20,7 @@ class GroepenRouterController extends Controller {
 		if ($this->hasParam(2)) {
 			$class = $this->getParam(2);
 			if ($class === 'overig') {
-				$class = 'groepen';
+				$class = 'rechtengroepen';
 			}
 		} else {
 			$class = 'commissies'; // default
@@ -48,7 +48,7 @@ class GroepenRouterController extends Controller {
 			case 'activiteiten':
 			case 'besturen':
 			case 'commissies':
-			case 'groepen':
+			case 'rechtengroepen':
 			case 'ketzers':
 			case 'onderverenigingen':
 			case 'werkgroepen':

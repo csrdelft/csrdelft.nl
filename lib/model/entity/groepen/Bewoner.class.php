@@ -8,7 +8,7 @@
  * Een bewoner van een woonoord / huis.
  * 
  */
-class Bewoner extends GroepLid {
+class Bewoner extends AbstractGroepLid {
 
 	protected static $table_name = 'bewoners';
 

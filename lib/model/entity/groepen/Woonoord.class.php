@@ -10,7 +10,7 @@ require_once 'model/entity/groepen/HuisStatus.enum.php';
  * Een woonoord is waar C.S.R.-ers bij elkaar wonen.
  * 
  */
-class Woonoord extends Groep {
+class Woonoord extends AbstractGroep {
 
 	const leden = 'BewonersModel';
 

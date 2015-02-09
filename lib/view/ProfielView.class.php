@@ -64,7 +64,7 @@ class ProfielView extends SmartyTemplateView {
 		$this->smarty->assign('commissies', $commissies);
 
 		$groepen = '';
-		foreach (GroepenModel::instance()->getGroepenVoorLid($this->model->uid) as $groep) {
+		foreach (AbstractGroepenModel::instance()->getGroepenVoorLid($this->model->uid) as $groep) {
 			$groepen .= '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />';
 		}
 		if ($groepen != '') {

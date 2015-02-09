@@ -10,7 +10,7 @@ require_once 'model/entity/groepen/CommissieSoort.enum.php';
  * Een commissie is een groep waarvan de groepsleden een specifieke functie (kunnen) hebben.
  * 
  */
-class Commissie extends Groep {
+class Commissie extends AbstractGroep {
 
 	const leden = 'CommissieLedenModel';
 

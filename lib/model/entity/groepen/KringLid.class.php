@@ -8,7 +8,7 @@
  * Een lid van een kring.
  * 
  */
-class KringLid extends GroepLid {
+class KringLid extends AbstractGroepLid {
 
 	protected static $table_name = 'kring_leden';
 

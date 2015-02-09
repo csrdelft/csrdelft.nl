@@ -7,7 +7,7 @@
  * 
  * Controller voor verticalen.
  */
-class VerticalenController extends GroepenController {
+class VerticalenController extends AbstractGroepenController {
 
 	public function __construct($query) {
 		parent::__construct($query, VerticalenModel::instance());

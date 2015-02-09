@@ -1,19 +1,16 @@
 <?php
 
-require_once 'model/entity/groepen/Groep.class.php';
-require_once 'model/GroepLedenModel.class.php';
+require_once 'model/entity/groepen/Groep.abstract.php';
+require_once 'model/GroepLedenModel.abstract.php';
 
 /**
- * GroepenModel.class.php
+ * GroepenModel.abstract.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class GroepenModel extends CachedPersistenceModel {
+abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
-	const orm = 'Groep';
-
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string
@@ -134,12 +131,12 @@ class GroepenModel extends CachedPersistenceModel {
 	/**
 	 * Converteer groep inclusief leden van klasse.
 	 * 
-	 * @param Groep $oldgroep
-	 * @param GroepenModel $oldmodel
+	 * @param AbstractGroep $oldgroep
+	 * @param AbstractGroepenModel $oldmodel
 	 * @param string $soort
 	 * @return boolean
 	 */
-	public function converteer(Groep $oldgroep, GroepenModel $oldmodel, $soort = null) {
+	public function converteer(AbstractGroep $oldgroep, AbstractGroepenModel $oldmodel, $soort = null) {
 		// groep converteren
 		try {
 			$newgroep = $this->nieuw($soort);
@@ -213,7 +210,7 @@ class GroepenModel extends CachedPersistenceModel {
 	 * 
 	 * @param string $uid
 	 * @param GroepStatus|array $status
-	 * @return Groep[]
+	 * @return AbstractGroep[]
 	 */
 	public function getGroepenVoorLid($uid, $status = null) {
 		$orm = $this->orm;
@@ -236,7 +233,21 @@ class GroepenModel extends CachedPersistenceModel {
 
 }
 
-class OnderverenigingenModel extends GroepenModel {
+class RechtenGroepenModel extends AbstractGroepenModel {
+
+	const orm = 'RechtenGroep';
+
+	protected static $instance;
+
+	public function nieuw() {
+		$groep = parent::nieuw();
+		$groep->rechten_aanmelden = 'P_LOGGED_IN';
+		return $groep;
+	}
+
+}
+
+class OnderverenigingenModel extends AbstractGroepenModel {
 
 	const orm = 'Ondervereniging';
 
@@ -251,7 +262,7 @@ class OnderverenigingenModel extends GroepenModel {
 
 }
 
-class WoonoordenModel extends GroepenModel {
+class WoonoordenModel extends AbstractGroepenModel {
 
 	const orm = 'Woonoord';
 
@@ -266,7 +277,7 @@ class WoonoordenModel extends GroepenModel {
 
 }
 
-class LichtingenModel extends GroepenModel {
+class LichtingenModel extends AbstractGroepenModel {
 
 	const orm = 'Lichting';
 
@@ -321,7 +332,7 @@ class LichtingenModel extends GroepenModel {
 
 }
 
-class VerticalenModel extends GroepenModel {
+class VerticalenModel extends AbstractGroepenModel {
 
 	const orm = 'Verticale';
 
@@ -350,7 +361,7 @@ class VerticalenModel extends GroepenModel {
 
 }
 
-class KringenModel extends GroepenModel {
+class KringenModel extends AbstractGroepenModel {
 
 	const orm = 'Kring';
 
@@ -378,7 +389,7 @@ class KringenModel extends GroepenModel {
 
 }
 
-class CommissiesModel extends GroepenModel {
+class CommissiesModel extends AbstractGroepenModel {
 
 	const orm = 'Commissie';
 
@@ -395,7 +406,7 @@ class CommissiesModel extends GroepenModel {
 
 }
 
-class BesturenModel extends GroepenModel {
+class BesturenModel extends AbstractGroepenModel {
 
 	const orm = 'Bestuur';
 
@@ -409,7 +420,7 @@ class BesturenModel extends GroepenModel {
 
 }
 
-class KetzersModel extends GroepenModel {
+class KetzersModel extends AbstractGroepenModel {
 
 	const orm = 'Ketzer';
 
@@ -447,6 +458,7 @@ class ActiviteitenModel extends KetzersModel {
 		}
 		$activiteit = parent::nieuw();
 		$activiteit->soort = $soort;
+		$activiteit->rechten_aanmelden = null;
 		$activiteit->locatie = null;
 		$activiteit->in_agenda = true;
 		return $activiteit;
@@ -454,7 +466,7 @@ class ActiviteitenModel extends KetzersModel {
 
 }
 
-class KetzerSelectorsModel extends GroepenModel {
+class KetzerSelectorsModel extends AbstractGroepenModel {
 
 	const orm = 'KetzerSelector';
 
@@ -466,7 +478,7 @@ class KetzerSelectorsModel extends GroepenModel {
 
 }
 
-class KetzerOptiesModel extends GroepenModel {
+class KetzerOptiesModel extends AbstractGroepenModel {
 
 	const orm = 'KetzerOptie';
 
@@ -478,7 +490,7 @@ class KetzerOptiesModel extends GroepenModel {
 
 }
 
-class KetzerKeuzesModel extends GroepenModel {
+class KetzerKeuzesModel extends AbstractGroepenModel {
 
 	const orm = 'KetzerKeuze';
 

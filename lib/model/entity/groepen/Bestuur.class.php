@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Bestuur extends Groep {
+class Bestuur extends AbstractGroep {
 
 	const leden = 'BestuursLedenModel';
 

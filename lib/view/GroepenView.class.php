@@ -17,7 +17,7 @@ class GroepenBeheerTable extends DataTable {
 	private $naam;
 	private $pagina;
 
-	public function __construct(GroepenModel $model) {
+	public function __construct(AbstractGroepenModel $model) {
 		parent::__construct($model::orm, null, 'familie');
 
 		$this->url = $model->getUrl();
@@ -114,7 +114,7 @@ class GroepenBeheerData extends DataTableResponse {
 
 class GroepLogboekTable extends DataTable implements FormElement {
 
-	public function __construct(Groep $groep) {
+	public function __construct(AbstractGroep $groep) {
 		require_once 'model/entity/ChangeLogEntry.class.php';
 		parent::__construct(ChangeLogModel::orm, false, 'moment');
 		$this->dataUrl = $groep->getUrl() . 'logboek';
@@ -142,7 +142,7 @@ class GroepView implements View {
 	private $leden;
 	private $bb;
 
-	public function __construct(Groep $groep, $tab = null, $geschiedenis = false, $bb = false) {
+	public function __construct(AbstractGroep $groep, $tab = null, $geschiedenis = false, $bb = false) {
 		$this->groep = $groep;
 		$this->bb = $bb;
 		switch ($tab) {
@@ -230,7 +230,7 @@ class GroepenView implements View {
 	private $tab;
 	private $pagina;
 
-	public function __construct(GroepenModel $model, $groepen, $soort = null, $geschiedenis = false) {
+	public function __construct(AbstractGroepenModel $model, $groepen, $soort = null, $geschiedenis = false) {
 		$this->model = $model;
 		$this->groepen = $groepen;
 		$this->soort = $soort;

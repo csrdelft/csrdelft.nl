@@ -8,7 +8,7 @@
  * Een lid van een verticale.
  * 
  */
-class VerticaleLid extends GroepLid {
+class VerticaleLid extends AbstractGroepLid {
 
 	protected static $table_name = 'verticale_leden';
 

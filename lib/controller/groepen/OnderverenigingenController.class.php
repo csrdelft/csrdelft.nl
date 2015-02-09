@@ -7,7 +7,7 @@
  * 
  * Controller voor onderverenigingen.
  */
-class OnderverenigingenController extends GroepenController {
+class OnderverenigingenController extends AbstractGroepenController {
 
 	public function __construct($query) {
 		parent::__construct($query, OnderverenigingenModel::instance());

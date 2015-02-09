@@ -7,7 +7,7 @@
  * 
  * Controller voor woonoorden en huizen.
  */
-class WoonoordenController extends GroepenController {
+class WoonoordenController extends AbstractGroepenController {
 
 	public function __construct($query) {
 		parent::__construct($query, WoonoordenModel::instance());

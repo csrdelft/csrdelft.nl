@@ -3,7 +3,7 @@
 require_once 'model/entity/security/AccessRole.enum.php';
 require_once 'model/entity/security/AccessAction.enum.php';
 require_once 'model/security/LoginModel.class.php';
-require_once 'model/GroepenModel.class.php';
+require_once 'model/GroepenModel.abstract.php';
 
 /**
  * AccessModel.class.php
@@ -646,9 +646,9 @@ class AccessModel extends CachedPersistenceModel {
 
 					case 'GROEP':
 					default:
-						$groep = GroepenModel::get($gevraagd);
+						$groep = RechtenGroepenModel::get($gevraagd);
 						if (!$groep) {
-							$groep = GroepenModel::omnummeren($gevraagd);
+							$groep = RechtenGroepenModel::omnummeren($gevraagd);
 						}
 						break;
 				}

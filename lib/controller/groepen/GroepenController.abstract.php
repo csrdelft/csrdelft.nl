@@ -10,13 +10,10 @@ require_once 'view/GroepenView.class.php';
  * 
  * Controller voor groepen.
  */
-class GroepenController extends Controller {
+class AbstractGroepenController extends Controller {
 
-	public function __construct($query, GroepenModel $model = null) {
+	public function __construct($query, AbstractGroepenModel $model) {
 		parent::__construct($query, $model);
-		if ($model === null) {
-			$this->model = GroepenModel::instance();
-		}
 	}
 
 	public function performAction(array $args = array()) {
@@ -142,7 +139,7 @@ class GroepenController extends Controller {
 		$this->view = new CsrLayoutPage($body);
 	}
 
-	public function bekijken(Groep $groep) {
+	public function bekijken(AbstractGroep $groep) {
 		$groepen = $this->model->find('familie = ?', array($groep->familie));
 		if (property_exists($groep, 'soort')) {
 			$soort = $groep->soort;
@@ -153,40 +150,40 @@ class GroepenController extends Controller {
 		$this->view = new CsrLayoutPage($body);
 	}
 
-	public function deelnamegrafiek(Groep $groep) {
+	public function deelnamegrafiek(AbstractGroep $groep) {
 		$groepen = $this->model->find('familie = ?', array($groep->familie));
 		$this->view = new GroepenDeelnameGrafiek($groepen); // controleert GEEN rechten bekijken
 	}
 
-	public function omschrijving(Groep $groep) {
+	public function omschrijving(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
 			$this->geentoegang();
 		}
 		$this->view = new GroepOmschrijvingView($groep);
 	}
 
-	public function pasfotos(Groep $groep) {
+	public function pasfotos(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
 			$this->geentoegang();
 		}
 		$this->view = new GroepPasfotosView($groep);
 	}
 
-	public function lijst(Groep $groep) {
+	public function lijst(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
 			$this->geentoegang();
 		}
 		$this->view = new GroepLijstView($groep);
 	}
 
-	public function stats(Groep $groep) {
+	public function stats(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
 			$this->geentoegang();
 		}
 		$this->view = new GroepStatistiekView($groep);
 	}
 
-	public function emails(Groep $groep) {
+	public function emails(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
 			$this->geentoegang();
 		}
@@ -309,7 +306,7 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function wijzigen(Groep $groep = null) {
+	public function wijzigen(AbstractGroep $groep = null) {
 		if ($groep) {
 			if (!$groep->mag(A::Wijzigen)) {
 				$this->geentoegang();
@@ -441,7 +438,7 @@ class GroepenController extends Controller {
 		$this->view = new GroepenBeheerData($response);
 	}
 
-	public function logboek(Groep $groep = null) {
+	public function logboek(AbstractGroep $groep = null) {
 		// data request
 		if ($groep) {
 			if (!$groep->mag(A::Bekijken)) {
@@ -461,7 +458,7 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function leden(Groep $groep) {
+	public function leden(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
 			$this->geentoegang();
 		}
@@ -473,7 +470,7 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function aanmelden(Groep $groep, $uid = null) {
+	public function aanmelden(AbstractGroep $groep, $uid = null) {
 		$leden = $groep::leden;
 		$model = $leden::instance();
 		if ($uid) {
@@ -508,7 +505,7 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function bewerken(Groep $groep, $uid = null) {
+	public function bewerken(AbstractGroep $groep, $uid = null) {
 		$leden = $groep::leden;
 		$model = $leden::instance();
 		if ($uid) {
@@ -544,7 +541,7 @@ class GroepenController extends Controller {
 		}
 	}
 
-	public function afmelden(Groep $groep, $uid = null) {
+	public function afmelden(AbstractGroep $groep, $uid = null) {
 		$leden = $groep::leden;
 		$model = $leden::instance();
 		if ($uid) {

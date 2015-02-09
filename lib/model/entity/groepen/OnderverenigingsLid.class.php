@@ -1,14 +1,14 @@
 <?php
 
 /**
- * OnderverLid.class.php
+ * OnderverenigingsLid.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Een lid van een ondervereniging.
  * 
  */
-class OnderverLid extends GroepLid {
+class OnderverenigingsLid extends AbstractGroepLid {
 
 	protected static $table_name = 'ondervereniging_leden';
 

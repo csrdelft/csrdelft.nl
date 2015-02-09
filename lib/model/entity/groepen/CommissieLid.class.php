@@ -8,7 +8,7 @@
  * Een lid van een commissie.
  * 
  */
-class CommissieLid extends GroepLid {
+class CommissieLid extends AbstractGroepLid {
 
 	protected static $table_name = 'commissie_leden';
 

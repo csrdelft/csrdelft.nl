@@ -8,7 +8,7 @@
  */
 class GroepLedenTable extends DataTable {
 
-	public function __construct(GroepLedenModel $model, Groep $groep) {
+	public function __construct(AbstractGroepLedenModel $model, AbstractGroep $groep) {
 		parent::__construct($model::orm, 'Leden van ' . $groep->naam, 'status');
 		$this->dataUrl = $groep->getUrl() . 'leden';
 		$this->hideColumn('uid', false);
@@ -50,7 +50,7 @@ class GroepOmschrijvingView implements View, FormElement {
 	protected $javascript;
 	protected $geschiedenis;
 
-	public function __construct(Groep $groep, $geschiedenis = false) {
+	public function __construct(AbstractGroep $groep, $geschiedenis = false) {
 		$this->groep = $groep;
 		$this->javascript = '';
 		$this->geschiedenis = $geschiedenis;
