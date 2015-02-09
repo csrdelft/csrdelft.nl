@@ -124,7 +124,7 @@ class EetplanHuisView extends AbstractEetplanView {
 	}
 
 	public function getBreadcrumbs() {
-		return parent::getBreadcrumbs() . ' » <a href="/groepen/woonoorden/' . $this->woonoord->id . '">' . $woonoord->naam . '</a>';
+		return parent::getBreadcrumbs() . ' » <a href="/groepen/woonoorden/' . $this->woonoord->id . '">' . $this->woonoord->naam . '</a>';
 	}
 
 	function view() {
