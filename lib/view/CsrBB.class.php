@@ -718,9 +718,9 @@ HTML;
 		} else {
 			$id = $this->parseArray(array('[/groep]'), array());
 		}
-		$groep = AbstractGroepenModel::get($id);
+		$groep = RechtenGroepenModel::get($id);
 		if (!$groep) {
-			$groep = AbstractGroepenModel::omnummeren($id);
+			$groep = RechtenGroepenModel::omnummeren($id);
 		}
 		if ($groep) {
 			return $this->groep($groep);
