@@ -30,7 +30,7 @@ class ProfielView extends SmartyTemplateView {
 			} elseif ($this->model->verticaleleider) {
 				$html .= ' (leider)';
 			} elseif ($this->model->kringcoach) {
-				$html .= '<span title="Kringcoach van verticale ' . VerticalenModel::get($profiel->kringcoach)->naam . '">(kringcoach)</span>';
+				$html .= '<span title="Kringcoach van verticale ' . VerticalenModel::get($this->model->kringcoach)->naam . '">(kringcoach)</span>';
 			}
 			$html .= '</a>';
 			$this->smarty->assign('kring', $html);
