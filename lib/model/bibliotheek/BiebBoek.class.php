@@ -908,7 +908,7 @@ class BewerkBoek extends BiebBoek {
 		$db = MijnSqli::instance();
 		$query = "
 			UPDATE biebexemplaar SET
-				uitgeleend_uid = '',
+				uitgeleend_uid = null,
 				status = 'beschikbaar'
 			WHERE id = " . (int) $exemplaarid . "
 			LIMIT 1;";
