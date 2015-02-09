@@ -1,0 +1,1 @@
+ALTER TABLE groepen ADD rechten_aanmelden varchar(255) NOT NULL AFTER maker_uid;

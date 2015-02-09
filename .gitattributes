@@ -4550,3 +4550,4 @@ lib/view/maalcie/forms/ToewijzenForm.class.php -text
 lib/view/maalcie/forms/VrijstellingForm.class.php -text
 sql/9317_TABLE_CONSTRAINTS.sql -text
 sql/9317_csrdelft.sql -text
+sql/9318_rechten_groepen.sql -text
