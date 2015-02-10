@@ -166,11 +166,15 @@ class ProfielController extends AclController {
 	}
 
 	public function addToGoogleContacts(Profiel $profiel) {
-		require_once 'googlesync.class.php';
-		GoogleSync::doRequestToken(CSR_ROOT . '/profiel/' . $profiel->uid . '/addToGoogleContacts');
-		$gSync = GoogleSync::instance();
-		$msg = $gSync->syncLid($profiel->uid);
-		setMelding('Opgeslagen in Google Contacts: ' . $msg, 2);
+		try {
+			require_once 'googlesync.class.php';
+			GoogleSync::doRequestToken(CSR_ROOT . '/profiel/' . $profiel->uid . '/addToGoogleContacts');
+			$gSync = GoogleSync::instance();
+			$msg = $gSync->syncLid($profiel->uid);
+			setMelding('Opgeslagen in Google Contacts: ' . $msg, 2);
+		} catch (Zend_Gdata_App_AuthException $e) {
+			setMelding($e->getMessage(), -1);
+		}
 		return $this->profiel($profiel);
 	}
 
