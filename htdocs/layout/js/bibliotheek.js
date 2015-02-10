@@ -234,7 +234,7 @@ jQuery(document).ready(function ($) {
 			var fieldname = input.id.substring(6);
 			var waarde = $("#" + input.id).val();
 			var boekid = jQuery(".boek").attr('id');
-			var dataString = 'id=' + fieldname + '&' + fieldname + '=' + waarde;
+			var dataString = 'id=' + input.name + '&' + input.name + '=' + waarde;
 			jQuery.ajax({
 				type: "POST",
 				url: '/bibliotheek/bewerkboek/' + boekid,
