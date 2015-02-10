@@ -674,13 +674,16 @@ class AccessModel extends CachedPersistenceModel {
 			 * Is een lid aangemeld voor een bepaalde maaltijd?
 			 */
 			case 'MAALTIJD':
+				// Geldig maaltijd id?
 				if (!is_numeric($gevraagd)) {
 					return false;
 				}
-				if (MaaltijdAanmeldingenModel::getIsAangemeld((int) $gevraagd, $profiel->uid)) {
+				// Aangemeld voor maaltijd?
+				if (!$role AND MaaltijdAanmeldingenModel::getIsAangemeld((int) $gevraagd, $profiel->uid)) {
 					return true;
 				}
-				if ($role === 'SLUITEN') {
+				// Mag maaltijd sluiten?
+				elseif ($role === 'SLUITEN') {
 					if (self::mag('P_MAAL_MOD')) {
 						return true;
 					}
@@ -692,11 +695,10 @@ class AccessModel extends CachedPersistenceModel {
 					} catch (Exception $e) {
 						// Maaltijd bestaat niet
 					}
-					return false;
 				}
-
-				return false;
+			// fall through
 		}
+		return false;
 	}
 
 }
