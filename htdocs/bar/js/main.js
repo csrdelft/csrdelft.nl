@@ -231,7 +231,7 @@ $(function () {
 					var html = '';
 					$.each(personen, function() {
 
-                        if(personen.deleted == 0)
+                        if(this.deleted == 0)
 						    html += '<option value="' + this.socCieId + '">' + this.naam + '</option>';
 					
 					});
