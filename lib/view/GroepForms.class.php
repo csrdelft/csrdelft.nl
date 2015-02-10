@@ -376,7 +376,7 @@ class GroepLogboekForm extends DataTableForm {
 
 }
 
-class GroepPreviewForm extends DataTableForm {
+class GroepPreviewForm extends ModalForm implements FormElement {
 
 	public function __construct(AbstractGroep $groep) {
 		parent::__construct($groep, null, 'Voorbeeldweergave');
@@ -387,6 +387,22 @@ class GroepPreviewForm extends DataTableForm {
 		$fields[] = new ModalCloseButtons();
 
 		$this->addFields($fields);
+	}
+
+	public function getHtml() {
+		$html = getMelding();
+		foreach ($this->getFields() as $field) {
+			$html .= $field->getHtml();
+		}
+		return $html;
+	}
+
+	public function getJavascript() {
+		parent::getJavascript();
+	}
+
+	public function getType() {
+		return get_class($this->model);
 	}
 
 }

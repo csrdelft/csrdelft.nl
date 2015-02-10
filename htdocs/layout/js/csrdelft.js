@@ -343,8 +343,9 @@ function knop_ajax(knop, type) {
 		done = function (response) {
 			if (typeof response === 'object') { // JSON
 				fnUpdateDataTable(table, response);
-				if (response.html) {
-					dom_update(response.html);
+				if (response.modal) {
+					modal_open(response.modal);
+					init_context('#modal');
 				}
 				else {
 					modal_close();
@@ -524,8 +525,9 @@ function form_submit(event) {
 			done = function (response) {
 				if (typeof response === 'object') { // JSON
 					fnUpdateDataTable(table, response);
-					if (response.html) {
-						dom_update(response.html);
+					if (response.modal) {
+						modal_open(response.modal);
+						init_context('#modal');
 					}
 					else {
 						modal_close();

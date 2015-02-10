@@ -373,7 +373,7 @@ class InlineForm extends Formulier implements FormElement {
 	private $field;
 	private $toggle;
 
-	public function __construct($model, $action, InputField $field, $toggle = true, $buttons = false, $submit_DataTableResponse = false) {
+	public function __construct($model, $action, FormElement $field, $toggle = true, $buttons = false, $submit_DataTableResponse = false) {
 		parent::__construct($model, $action);
 		if (isset($_POST['FormId'])) {
 			$this->formId = filter_input(INPUT_POST, 'FormId', FILTER_SANITIZE_STRING);
@@ -386,7 +386,7 @@ class InlineForm extends Formulier implements FormElement {
 		$fields = array();
 		$fields[] = $this->field;
 
-		if ($buttons instanceof FormElement) {
+		if ($buttons instanceof FormKnoppen) {
 			$fields[] = $buttons;
 		} elseif ($buttons) {
 			$fields[] = new FormDefaultKnoppen(null, false, true, false, true, $submit_DataTableResponse);
@@ -394,7 +394,7 @@ class InlineForm extends Formulier implements FormElement {
 			$this->field->enter_submit = true;
 			$this->field->escape_cancel = true;
 		}
-		if (!isset($this->field->title)) {
+		if (!isset($this->field->title) AND property_exists($this->field, 'description')) {
 			$this->field->title = $this->field->description;
 		}
 
