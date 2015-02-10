@@ -140,38 +140,40 @@ class GroepView implements View {
 
 	private $groep;
 	private $leden;
+	private $geschiedenis;
 	private $bb;
 
 	public function __construct(AbstractGroep $groep, $tab = null, $geschiedenis = false, $bb = false) {
 		$this->groep = $groep;
+		$this->geschiedenis = $geschiedenis;
 		$this->bb = $bb;
 		switch ($tab) {
 
 			case GroepTab::Pasfotos:
-				$this->leden = new GroepPasfotosView($groep, $geschiedenis);
+				$this->leden = new GroepPasfotosView($groep);
 				break;
 
 			case GroepTab::Lijst:
-				$this->leden = new GroepLijstView($groep, $geschiedenis);
+				$this->leden = new GroepLijstView($groep);
 				break;
 
 			case GroepTab::Statistiek:
-				$this->leden = new GroepStatistiekView($groep, $geschiedenis);
+				$this->leden = new GroepStatistiekView($groep);
 				break;
 
 			case GroepTab::Emails:
-				$this->leden = new GroepEmailsView($groep, $geschiedenis);
+				$this->leden = new GroepEmailsView($groep);
 				break;
 
 			case GroepTab::Emails:
-				$this->leden = new GroepEmailsView($groep, $geschiedenis);
+				$this->leden = new GroepEmailsView($groep);
 				break;
 
 			default:
 				if ($groep->keuzelijst) {
-					$this->leden = new GroepLijstView($groep, $geschiedenis);
+					$this->leden = new GroepLijstView($groep);
 				} else {
-					$this->leden = new GroepPasfotosView($groep, $geschiedenis);
+					$this->leden = new GroepPasfotosView($groep);
 				}
 		}
 	}
@@ -190,10 +192,13 @@ class GroepView implements View {
 
 	public function getHtml() {
 		$html = '<a name="' . $this->groep->id . '"></a><div id="groep-' . $this->groep->id . '" class="bb-groep';
+		if ($this->geschiedenis) {
+			$html .= ' state-geschiedenis';
+		}
 		if ($this->bb) {
 			$html .= ' bb-block';
 		}
-		$diesopmaak = in_array($this->groep->maker_uid, array('1025', '0933'));
+		$diesopmaak = strtotime($this->groep->begin_moment) > strtotime('2015-02-10 00:00:00') AND strtotime('2015-02-21 23:59:59') < strtotime($this->groep->eind_moment);
 		if ($diesopmaak AND $this->bb) {
 			$html .= ' bb-dies2015';
 		}
