@@ -390,11 +390,17 @@ class GroepPreviewForm extends ModalForm implements FormElement {
 	}
 
 	public function getHtml() {
+		$this->css_classes[] = 'ModalForm';
 		$html = getMelding();
+		$html .= $this->getFormTag();
+		if ($this->getTitel()) {
+			$html .= '<h1 class="Titel">' . $this->getTitel() . '</h1>';
+		}
 		foreach ($this->getFields() as $field) {
 			$html .= $field->getHtml();
 		}
-		return $html;
+		$html .= $this->getScriptTag();
+		return $html . '</form>';
 	}
 
 	public function getJavascript() {

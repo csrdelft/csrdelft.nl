@@ -345,7 +345,7 @@ function knop_ajax(knop, type) {
 				fnUpdateDataTable(table, response);
 				if (response.modal) {
 					modal_open(response.modal);
-					init_context('#modal');
+					init_context($('#modal'));
 				}
 				else {
 					modal_close();
@@ -527,7 +527,7 @@ function form_submit(event) {
 					fnUpdateDataTable(table, response);
 					if (response.modal) {
 						modal_open(response.modal);
-						init_context('#modal');
+						init_context($('#modal'));
 					}
 					else {
 						modal_close();
