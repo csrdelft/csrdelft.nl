@@ -25,7 +25,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
-	private static $prefix = array('ACTIVITEIT', 'BESTUUR', 'COMMISSIE', 'GROEP', 'KETZER', 'ONDERVERENIGING', 'WERKGROEP', 'WOONOORD', 'VERTICALE', 'KRING', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDEREJAARS', 'EERSTEJAARS');
+	private static $prefix = array('ACTIVITEIT', 'BESTUUR', 'COMMISSIE', 'GROEP', 'KETZER', 'ONDERVERENIGING', 'WERKGROEP', 'WOONOORD', 'VERTICALE', 'KRING', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDEREJAARS', 'EERSTEJAARS', 'MAALTIJD');
 	/**
 	 * Gebruikt om ledengegevens te raadplegen
 	 * @var array
@@ -669,6 +669,15 @@ class AccessModel extends CachedPersistenceModel {
 					}
 				}
 				return true;
+
+			/**
+			 * Is een lid aangemeld voor een bepaalde maaltijd?
+			 */
+			case 'MAALTIJD':
+				if (is_numeric($gevraagd)) {
+					return MaaltijdAanmeldingenModel::getIsAangemeld((int) $gevraagd, $profiel->uid);
+				}
+				return false;
 		}
 
 		return false;
