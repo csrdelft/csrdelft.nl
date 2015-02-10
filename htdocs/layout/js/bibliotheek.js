@@ -231,10 +231,10 @@ jQuery(document).ready(function ($) {
 		$(this).after('<div class="melding"></div>'
 				).after(
 				$('<a class="btn opslaan">Opslaan</a>').mousedown(function () {
-			var fieldname = input.id.substring(6);
-			var waarde = $("#" + input.id).val();
 			var boekid = jQuery(".boek").attr('id');
-			var dataString = 'id=' + input.name + '&' + input.name + '=' + waarde;
+			var fieldname = $("#" + input.id).attr('name');
+			var waarde = $("#" + input.id).val();
+			var dataString = 'id=' + fieldname + '&' + fieldname + '=' + waarde;
 			jQuery.ajax({
 				type: "POST",
 				url: '/bibliotheek/bewerkboek/' + boekid,
@@ -242,7 +242,7 @@ jQuery(document).ready(function ($) {
 				cache: false,
 				dataType: "json",
 				success: function (result) {
-					var field = $("#" + fieldname);
+					var field = $("#" + input.id.substring(6));
 					var $inputelem = $("#" + input.id);
 					if (result.value) {
 						//opgeslagen waarde in input zetten en een tijdelijke succesmelding
