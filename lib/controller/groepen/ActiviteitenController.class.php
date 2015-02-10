@@ -12,7 +12,8 @@ require_once 'controller/groepen/KetzersController.class.php';
 class ActiviteitenController extends KetzersController {
 
 	public function __construct($query) {
-		parent::__construct($query, ActiviteitenModel::instance());
+		parent::__construct($query);
+		$this->model = ActiviteitenModel::instance();
 	}
 
 }
