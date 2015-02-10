@@ -17,7 +17,7 @@
 	<td>
 		<div class="InlineForm">
 			<div class="InstellingToggle">{$waarde}</div>
-			<form id="form-{$id}" method="post" action="/instellingenbeheer/opslaan/{$module}/{$id}" class="Formulier InlineForm">
+			<form id="form-{$id}" method="post" action="/instellingenbeheer/opslaan/{$module}/{$id}" class="Formulier InlineForm ToggleForm">
 				<textarea name="waarde" origvalue="{htmlspecialchars($waarde)}" class="FormElement" rows="1">{$waarde}</textarea>
 				<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"} Opslaan</a>
 				<a class="btn reset cancel" title="Annuleren" onclick="

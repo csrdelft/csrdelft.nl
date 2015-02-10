@@ -55,7 +55,7 @@
 				{else}
 					<div class="InlineForm">
 						<div class="InlineFormToggle maaltijd-gasten">{$aanmelding->getAantalGasten()}</div>
-						<form action="{$smarty.const.maalcieUrl}/gasten/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm">
+						<form action="{$smarty.const.maalcieUrl}/gasten/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm ToggleForm">
 							<input type="text" name="aantal_gasten" value="{$aanmelding->getAantalGasten()}" origvalue="{$aanmelding->getAantalGasten()}" class="FormElement" maxlength="4" size="4" />
 							<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
 							<a class="btn reset cancel" title="Annuleren">{icon get="delete"}</a>
@@ -78,7 +78,7 @@
 									<a class="btn">{icon get="comment_add" title="Gasten allergie/diëet"}</a>
 								{/if}
 							</div>
-							<form action="{$smarty.const.maalcieUrl}/opmerking/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm">
+							<form action="{$smarty.const.maalcieUrl}/opmerking/{$maaltijd->getMaaltijdId()}" method="post" class="Formulier InlineForm ToggleForm">
 								<input type="text" name="gasten_eetwens" value="{$aanmelding->getGastenEetwens()}" origvalue="{$aanmelding->getGastenEetwens()}" class="FormElement" maxlength="255" size="20" />
 								<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
 								<a class="btn reset cancel" title="Annuleren">{icon get="delete"}</a>
