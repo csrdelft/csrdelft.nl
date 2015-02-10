@@ -684,7 +684,7 @@ class AccessModel extends CachedPersistenceModel {
 				}
 				// Mag maaltijd sluiten?
 				elseif ($role === 'SLUITEN') {
-					if (self::mag('P_MAAL_MOD')) {
+					if ($this->hasPermission($subject, 'P_MAAL_MOD')) {
 						return true;
 					}
 					try {
