@@ -343,7 +343,12 @@ function knop_ajax(knop, type) {
 		done = function (response) {
 			if (typeof response === 'object') { // JSON
 				fnUpdateDataTable(table, response);
-				modal_close();
+				if (response.html) {
+					dom_update(response.html);
+				}
+				else {
+					modal_close();
+				}
 			}
 			else { // HTML
 				dom_update(response);
@@ -519,7 +524,12 @@ function form_submit(event) {
 			done = function (response) {
 				if (typeof response === 'object') { // JSON
 					fnUpdateDataTable(table, response);
-					modal_close();
+					if (response.html) {
+						dom_update(response.html);
+					}
+					else {
+						modal_close();
+					}
 				}
 				else { // HTML
 					dom_update(response);

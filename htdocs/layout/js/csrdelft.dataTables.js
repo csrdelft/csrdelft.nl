@@ -43,9 +43,9 @@ function fnStickyToolbar() {
 	//});
 }
 
-function fnUpdateDataTable(table, data) {
+function fnUpdateDataTable(table, response) {
 	// update or remove existing rows or add new rows
-	data.data.forEach(function (row) {
+	response.data.forEach(function (row) {
 		var $tr = $('tr[data-UUID="' + row.UUID + '"]');
 		if ($tr.length === 1) {
 			if ('remove'in row) {

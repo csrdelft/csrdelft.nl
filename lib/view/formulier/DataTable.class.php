@@ -390,6 +390,8 @@ class DataTableKnop extends FormulierKnop {
 
 class DataTableResponse extends JsonResponse {
 
+	public $html;
+
 	public function getJson($entity) {
 		return json_encode($entity);
 	}
@@ -397,7 +399,8 @@ class DataTableResponse extends JsonResponse {
 	public function view() {
 		http_response_code($this->code);
 		header('Content-Type: application/json');
-		echo '{"data":[' . "\n";
+		echo '{"html":' . json_encode($this->html) . ",\n";
+		echo '"data":[' . "\n";
 		$comma = false;
 		foreach ($this->model as $entity) {
 			if ($comma) {

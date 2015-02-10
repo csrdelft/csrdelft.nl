@@ -44,7 +44,7 @@ class GroepLedenData extends DataTableResponse {
 
 }
 
-class GroepOmschrijvingView implements View, FormElement {
+class GroepOmschrijvingView implements FormElement {
 
 	protected $groep;
 	protected $javascript;

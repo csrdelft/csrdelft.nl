@@ -42,6 +42,9 @@ class GroepenBeheerTable extends DataTable {
 		$this->searchColumn('status');
 		$this->searchColumn('soort');
 
+		$preview = new DataTableKnop('== 1', $this->tableId, $this->url . 'voorbeeld', 'post popup', 'Voorbeeld', 'Voorbeeldweergave van de ketzer', 'show');
+		$this->addKnop($preview);
+
 		$create = new DataTableKnop('== 0', $this->tableId, $this->url . 'nieuw', 'post popup', 'Nieuw', 'Nieuwe toevoegen', 'add');
 		$this->addKnop($create);
 
@@ -136,7 +139,7 @@ class GroepLogboekTable extends DataTable implements FormElement {
 
 }
 
-class GroepView implements View {
+class GroepView implements FormElement {
 
 	private $groep;
 	private $leden;
@@ -222,6 +225,14 @@ class GroepView implements View {
 
 	public function view() {
 		echo $this->getHtml();
+	}
+
+	public function getJavascript() {
+		return null;
+	}
+
+	public function getType() {
+		return get_class($this->groep);
 	}
 
 }

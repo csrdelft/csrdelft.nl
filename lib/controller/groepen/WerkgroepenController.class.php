@@ -12,7 +12,8 @@ require_once 'controller/groepen/KetzersController.class.php';
 class WerkgroepenController extends KetzersController {
 
 	public function __construct($query) {
-		parent::__construct($query, WerkgroepenModel::instance());
+		parent::__construct($query);
+		$this->model = WerkgroepenModel::instance();
 	}
 
 }

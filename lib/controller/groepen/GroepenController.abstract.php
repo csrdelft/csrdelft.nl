@@ -29,6 +29,7 @@ class AbstractGroepenController extends Controller {
 			case 'opvolging':
 			case 'converteren':
 			case 'sluiten':
+			case 'voorbeeld':
 				$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 				if (empty($selection)) {
 					$this->geentoegang();
@@ -108,6 +109,7 @@ class AbstractGroepenController extends Controller {
 				return !$this->isPosted();
 
 			case 'overzicht':
+			case 'voorbeeld':
 			case 'opvolging':
 			case 'converteren':
 			case 'sluiten':
@@ -301,6 +303,9 @@ class AbstractGroepenController extends Controller {
 				$response[] = $old;
 			}
 			$this->view = new GroepenBeheerData($response);
+			setMelding(get_class($groep) . ' succesvol aangemaakt!', 1);
+			$form = new GroepPreviewForm($groep);
+			$this->view->html = $form->getHtml();
 		} else {
 			$this->view = $form;
 		}
@@ -436,6 +441,17 @@ class AbstractGroepenController extends Controller {
 			$response[] = $groep;
 		}
 		$this->view = new GroepenBeheerData($response);
+	}
+
+	public function voorbeeld(array $selection) {
+		if (empty($selection)) {
+			$this->geentoegang();
+		}
+		$groep = $this->model->getUUID($selection[0]);
+		if (!$groep OR ! $groep->mag(A::Bekijken)) {
+			$this->geentoegang();
+		}
+		$this->view = new GroepPreviewForm($groep);
 	}
 
 	public function logboek(AbstractGroep $groep = null) {
