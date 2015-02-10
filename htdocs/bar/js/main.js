@@ -230,8 +230,9 @@ $(function () {
 				if(pl.size() > 0) {
 					var html = '';
 					$.each(personen, function() {
-					
-						html += '<option value="' + this.socCieId + '">' + this.naam + '</option>';
+
+                        if(personen.deleted == 0)
+						    html += '<option value="' + this.socCieId + '">' + this.naam + '</option>';
 					
 					});
 					pl.html(html);
