@@ -100,7 +100,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $kerk;
 	public $muziek;
 	public $zingen;
-	public $rijbewijs;
 	// lazy loading
 	private $kinderen;
 	/**
@@ -189,8 +188,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'ovkaart'				 => array(T::String),
 		'kerk'					 => array(T::String),
 		'muziek'				 => array(T::String),
-		'zingen'				 => array(T::String),
-		'rijbewijs'				 => array(T::String)
+		'zingen'				 => array(T::String)
 	);
 	/**
 	 * Database primary key

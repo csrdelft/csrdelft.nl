@@ -240,6 +240,11 @@
 						{/foreach}
 				</ul>
 			</div>
+			<br />
+			<div class="half">
+				<div class="label">Corveepunten:</div>
+				<div class="data">{$corveepunten}{if $corveebonus > 0}+{/if}{if $corveebonus != 0}{$corveebonus}{/if}</div>
+			</div>
 			<div class="half">
 				<div class="label">Kwalificaties:</div>
 				<ul class="nobullets data">
@@ -249,8 +254,6 @@
 				</ul>
 			</div>
 			<br />
-			<div class="label">Corveepunten:</div>
-			<div class="data">{$corveepunten}{if $corveebonus > 0}+{/if}{if $corveebonus != 0}{$corveebonus}{/if}</div>
 		</div>
 	</div>
 
