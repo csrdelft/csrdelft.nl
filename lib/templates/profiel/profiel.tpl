@@ -136,7 +136,7 @@
 					<a href="/ledenlijst?q=moot:{$profiel->moot}">{$profiel->moot}</a>
 				{/if}
 			</div>
-			<div class="familie">
+			<div class="half">
 				{if ProfielModel::get($profiel->patroon) OR $profiel->hasKinderen()}
 					<a class="float-right lichtgrijs fa fa-tree fa-3x" href="/leden/stamboom/{$profiel->uid}" title="Stamboom van {$profiel->getNaam()}"></a>
 				{/if}
@@ -188,7 +188,6 @@
 			</div>
 		</div>
 	{/if}
-
 	<div class="profielregel" id="maaltijden">
 		<div class="gegevens">
 			<div class="label">Allergie/dieet:</div>
@@ -202,6 +201,14 @@
 					&nbsp;<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="btn">{icon get="pencil"}</a></div>
 					{/if}
 			</div>{/strip}
+			{if $abos}
+				<div class="label">Abo's:</div>
+				<ul class="nobullets data">
+					{foreach from=$abos item=abonnement}
+						<li>{$abonnement->getMaaltijdRepetitie()->getStandaardTitel()}</li>
+						{/foreach}
+				</ul>
+			{/if}
 			<br />
 			<div class="half">
 				<div class="label">Corvee-<br />voorkeuren:</div>
@@ -211,25 +218,15 @@
 						{/foreach}
 				</ul>
 			</div>
-			<br />
-			{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_MAAL_MOD')}
-				<div class="half">
+			<div class="half">
+				{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_MAAL_MOD')}
 					<div class="label">Recent:</div>
 					<ul class="nobullets data">
 						{foreach from=$recenteAanmeldingen item=aanmelding}
 							<li>{$aanmelding->getMaaltijd()->getTitel()} <span class="lichtgrijs">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
 							{/foreach}
 					</ul>
-				</div>
-			{/if}
-			<br />
-			<div class="half">
-				<div class="label">Corveetaken:</div>
-				<ul class="nobullets data">
-					{foreach from=$corveetaken item=taak}
-						<li>{$taak->getCorveeFunctie()->naam} <span class="lichtgrijs">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
-						{/foreach}
-				</ul>
+				{/if}
 			</div>
 			<br />
 			<div class="half">
@@ -244,6 +241,13 @@
 						{/foreach}
 				</ul>
 			</div>
+			<br />
+			<div class="label">Corveetaken:</div>
+			<ul class="nobullets data">
+				{foreach from=$corveetaken item=taak}
+					<li>{$taak->getCorveeFunctie()->naam} <span class="lichtgrijs">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
+					{/foreach}
+			</ul>
 			<br />
 		</div>
 	</div>
