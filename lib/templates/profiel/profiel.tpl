@@ -191,24 +191,6 @@
 
 	<div class="profielregel" id="maaltijden">
 		<div class="gegevens">
-			{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_MAAL_MOD')}
-				<div class="label">Recent:</div>
-				<ul class="nobullets data">
-					{foreach from=$recenteAanmeldingen item=aanmelding}
-						<li>{$aanmelding->getMaaltijd()->getTitel()} <span class="lichtgrijs">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
-						{/foreach}
-				</ul>
-				<br />
-				{if $abos}
-					<div class="label">Abo's:</div>
-					<ul class="nobullets data">
-						{foreach from=$abos item=abonnement}
-							<li>{$abonnement->getMaaltijdRepetitie()->getStandaardTitel()}</li>
-							{/foreach}
-					</ul>
-				{/if}
-				<br />
-			{/if}
 			<div class="label">Allergie/dieet:</div>
 			<div class="data">{strip}
 				{if $profiel->eetwens!=''}
@@ -221,26 +203,51 @@
 					{/if}
 			</div>{/strip}
 			<br />
-			<div class="label">Corvee-<br />voorkeuren:</div>
-			<ul class="nobullets data">
-				{foreach from=$corveevoorkeuren item=vrk}
-					<li>{$vrk->getCorveeRepetitie()->getDagVanDeWeekText()|truncate:2:""} {$vrk->getCorveeRepetitie()->getCorveeFunctie()->naam}</li>
-					{/foreach}
-			</ul>
+			<div class="half">
+				<div class="label">Corvee-<br />voorkeuren:</div>
+				<ul class="nobullets data">
+					{foreach from=$corveevoorkeuren item=vrk}
+						<li>{$vrk->getCorveeRepetitie()->getDagVanDeWeekText()|truncate:2:""} {$vrk->getCorveeRepetitie()->getCorveeFunctie()->naam}</li>
+						{/foreach}
+				</ul>
+			</div>
+
+			{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_MAAL_MOD')}
+				<div class="half">
+					<div class="label">Recent:</div>
+					<ul class="nobullets data">
+						{foreach from=$recenteAanmeldingen item=aanmelding}
+							<li>{$aanmelding->getMaaltijd()->getTitel()} <span class="lichtgrijs">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
+							{/foreach}
+					</ul>
+					<br />
+					{if $abos}
+						<div class="label">Abo's:</div>
+						<ul class="nobullets data">
+							{foreach from=$abos item=abonnement}
+								<li>{$abonnement->getMaaltijdRepetitie()->getStandaardTitel()}</li>
+								{/foreach}
+						</ul>
+					{/if}
+				</div>
+			{/if}
 			<br />
-			<div class="label">Kwalificaties:</div>
-			<ul class="nobullets data">
-				{foreach from=$corveekwalificaties item=kwali}
-					<li>{$kwali->getCorveeFunctie()->naam}<span class="lichtgrijs"> (sinds {$kwali->wanneer_toegewezen})</span></li>
-					{/foreach}
-			</ul>
-			<br />
-			<div class="label">Corveetaken:</div>
-			<ul class="nobullets data">
-				{foreach from=$corveetaken item=taak}
-					<li>{$taak->getCorveeFunctie()->naam} <span class="lichtgrijs">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
-					{/foreach}
-			</ul>
+			<div class="half">
+				<div class="label">Corveetaken:</div>
+				<ul class="nobullets data">
+					{foreach from=$corveetaken item=taak}
+						<li>{$taak->getCorveeFunctie()->naam} <span class="lichtgrijs">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
+						{/foreach}
+				</ul>
+			</div>
+			<div class="half">
+				<div class="label">Kwalificaties:</div>
+				<ul class="nobullets data">
+					{foreach from=$corveekwalificaties item=kwali}
+						<li>{$kwali->getCorveeFunctie()->naam}<span class="lichtgrijs"> (sinds {$kwali->wanneer_toegewezen})</span></li>
+						{/foreach}
+				</ul>
+			</div>
 			<br />
 			<div class="label">Corveepunten:</div>
 			<div class="data">{$corveepunten}{if $corveebonus > 0}+{/if}{if $corveebonus != 0}{$corveebonus}{/if}</div>
