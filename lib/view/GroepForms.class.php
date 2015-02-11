@@ -342,16 +342,26 @@ class GroepBewerkenForm extends InlineForm {
 
 }
 
+class GroepAanmeldKnoppen extends FormKnoppen {
+
+	public $submit;
+
+	public function __construct($pasfoto = false) {
+		parent::__construct();
+		if ($pasfoto) {
+			$this->submit = new PasfotoAanmeldenKnop();
+		} else {
+			$this->submit = new SubmitKnop(null, 'submit', 'Aanmelden', null, null);
+		}
+		$this->addKnop($this->submit, true);
+	}
+
+}
+
 class GroepAanmeldenForm extends GroepBewerkenForm {
 
 	public function __construct(AbstractGroepLid $lid, AbstractGroep $groep, $pasfoto = true) {
-		if ($pasfoto) {
-			$buttons = new PasfotoAanmeldenKnop();
-		} else {
-			$buttons = new SubmitKnop(null, 'submit', 'Aanmelden', null, null);
-		}
-
-		parent::__construct($lid, $groep, false, $buttons);
+		parent::__construct($lid, $groep, false, new GroepAanmeldKnoppen($pasfoto));
 
 		$this->action = $groep->getUrl() . 'aanmelden/' . $lid->uid;
 		$this->css_classes[] = 'float-left';

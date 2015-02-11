@@ -17,7 +17,12 @@ abstract class FormKnoppen implements FormElement {
 
 	private $knoppen_left = array();
 	private $knoppen_right = array();
-	public $css_classes = array('FormKnoppen', 'clear-left');
+	public $css_classes = array();
+
+	public function __construct() {
+		$this->css_classes[] = 'FormKnoppen';
+		$this->css_classes[] = $this->getType();
+	}
 
 	public function getModel() {
 		return array_merge($this->knoppen_left, $this->knoppen_right);
@@ -52,15 +57,23 @@ abstract class FormKnoppen implements FormElement {
 	}
 
 	public function getHtml() {
-		$html = '<div class="' . implode(' ', $this->css_classes) . '"><div class="float-left">';
-		foreach ($this->knoppen_left as $knop) {
-			$html .= $knop->getHtml();
+		$html = '<div class="' . implode(' ', $this->css_classes) . '">';
+		if (!empty($this->knoppen_left)) {
+			$html .= '<div class="float-left">';
+
+			foreach ($this->knoppen_left as $knop) {
+				$html .= $knop->getHtml();
+			}
+			$html .= '</div>';
 		}
-		$html .= '</div><div class="float-right">';
-		foreach ($this->knoppen_right as $knop) {
-			$html .= $knop->getHtml();
+		if (!empty($this->knoppen_right)) {
+			$html .= '<div class="float-right">';
+			foreach ($this->knoppen_right as $knop) {
+				$html .= $knop->getHtml();
+			}
+			$html .= '</div>';
 		}
-		return $html . '</div></div>';
+		return $html . '</div>';
 	}
 
 	public function view() {
@@ -86,6 +99,7 @@ class ModalCloseButtons extends FormKnoppen {
 	public $close_bottom;
 
 	public function __construct() {
+		parent::__construct();
 		$this->close_bottom = new FormulierKnop(null, 'cancel', 'Sluiten', 'Venster sluiten', null);
 		$this->addKnop($this->close_bottom);
 	}
@@ -99,6 +113,7 @@ class FormDefaultKnoppen extends FormKnoppen {
 	public $cancel;
 
 	public function __construct($cancel_url = null, $reset = true, $icons = true, $label = true, $reset_cancel = false, $submit_DataTableResponse = false) {
+		parent::__construct();
 		$this->submit = new SubmitKnop();
 		if ($reset_cancel) {
 			$this->submit->icon = '/famfamfam/accept.png';
