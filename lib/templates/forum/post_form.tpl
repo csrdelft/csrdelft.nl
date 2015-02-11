@@ -56,11 +56,11 @@
 				<br /><br />
 			{/if}
 			{if $draad === null}
-				<input type="text" id="nieuweTitel" name="titel" value="{$post_form_titel}" origvalue="{$post_form_titel}" class="FormElement TextField" placeholder="Onderwerp titel" />
+				<input type="text" id="nieuweTitel" name="titel" class="FormElement TextField" tabindex="1" placeholder="Onderwerp titel" value="{$post_form_titel}" origvalue="{$post_form_titel}" />
 				<br /><br />
 			{/if}
 			<div id="berichtPreview" class="bbcodePreview forumBericht"></div>
-			<textarea name="forumBericht" id="forumBericht" class="FormElement BBCodeField forumBericht" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
+			<textarea name="forumBericht" id="forumBericht" class="FormElement BBCodeField forumBericht" tabindex="2" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
 			<div class="butn">
 				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" class="btn" />
 				<input type="button" value="Voorbeeld" id="forumVoorbeeld" class="btn" onclick="CsrBBPreview('forumBericht', 'berichtPreview');" />
