@@ -3971,6 +3971,7 @@ lib/controller/DocumentenController.class.php -text
 lib/controller/EetplanController.class.php -text
 lib/controller/ForumController.class.php -text
 lib/controller/FotoAlbumController.class.php -text
+lib/controller/GesprekkenController.class.php -text
 lib/controller/GroepenRouterController.class.php -text
 lib/controller/InstellingenBeheerController.class.php -text
 lib/controller/LidInstellingenController.class.php -text
@@ -4028,6 +4029,7 @@ lib/model/DragObjectModel.class.php -text
 lib/model/EetplanModel.class.php -text
 lib/model/ForumModel.class.php -text
 lib/model/FotoAlbumModel.class.php -text
+lib/model/GesprekkenModel.class.php -text
 lib/model/GroepLedenModel.abstract.php -text
 lib/model/GroepenModel.abstract.php -text
 lib/model/InstellingenModel.class.php -text
@@ -4060,6 +4062,9 @@ lib/model/entity/ExecutionTime.class.php -text
 lib/model/entity/Foto.class.php -text
 lib/model/entity/FotoAlbum.class.php -text
 lib/model/entity/Geslacht.enum.php -text
+lib/model/entity/Gesprek.class.php -text
+lib/model/entity/GesprekBericht.class.php -text
+lib/model/entity/GesprekDeelnemer.class.php -text
 lib/model/entity/Instelling.class.php -text
 lib/model/entity/Kringleider.enum.php -text
 lib/model/entity/LidInstelling.class.php -text
@@ -4479,6 +4484,7 @@ lib/view/DocumentenView.class.php -text
 lib/view/EetplanView.class.php -text
 lib/view/ForumView.class.php -text
 lib/view/FotoAlbumView.class.php -text
+lib/view/GesprekkenView.class.php -text
 lib/view/GroepForms.class.php -text
 lib/view/GroepLedenView.class.php -text
 lib/view/GroepenView.class.php -text
