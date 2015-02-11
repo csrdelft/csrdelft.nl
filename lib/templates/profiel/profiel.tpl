@@ -211,7 +211,7 @@
 						{/foreach}
 				</ul>
 			</div>
-
+			<br />
 			{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_MAAL_MOD')}
 				<div class="half">
 					<div class="label">Recent:</div>
@@ -220,15 +220,6 @@
 							<li>{$aanmelding->getMaaltijd()->getTitel()} <span class="lichtgrijs">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
 							{/foreach}
 					</ul>
-					<br />
-					{if $abos}
-						<div class="label">Abo's:</div>
-						<ul class="nobullets data">
-							{foreach from=$abos item=abonnement}
-								<li>{$abonnement->getMaaltijdRepetitie()->getStandaardTitel()}</li>
-								{/foreach}
-						</ul>
-					{/if}
 				</div>
 			{/if}
 			<br />
