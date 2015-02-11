@@ -52,7 +52,9 @@ class CorveePuntenModel {
 		if (!$profiel) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		self::savePuntenVoorLid($profiel, (int) $profiel->corvee_punten + $punten, (int) $profiel->corvee_punten_bonus + $bonus_malus);
+		if ($punten !== 0 AND $bonus_malus !== 0) {
+			self::savePuntenVoorLid($profiel, (int) $profiel->corvee_punten + $punten, (int) $profiel->corvee_punten_bonus + $bonus_malus);
+		}
 	}
 
 	public static function puntenIntrekken($uid, $punten, $bonus_malus) {
@@ -63,7 +65,9 @@ class CorveePuntenModel {
 		if (!$profiel) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		self::savePuntenVoorLid($profiel, (int) $profiel->corvee_punten - $punten, (int) $profiel->corvee_punten_bonus - $bonus_malus);
+		if ($punten !== 0 AND $bonus_malus !== 0) {
+			self::savePuntenVoorLid($profiel, (int) $profiel->corvee_punten - $punten, (int) $profiel->corvee_punten_bonus - $bonus_malus);
+		}
 	}
 
 	public static function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null) {
