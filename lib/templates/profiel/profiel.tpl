@@ -191,16 +191,19 @@
 	<div class="profielregel" id="maaltijden">
 		<div class="gegevens">
 			<div class="label">Allergie/dieet:</div>
-			<div class="data">{strip}
-				{if $profiel->eetwens!=''}
-					{$profiel->eetwens}
-				{else}
-					-
-				{/if}
-				{if LoginModel::getUid() === $profiel->uid}
-					&nbsp;<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="btn">{icon get="pencil"}</a></div>
+			<div class="data">
+				{strip}
+					{if $profiel->eetwens!=''}
+						{$profiel->eetwens}
+					{else}
+						-
 					{/if}
-			</div>{/strip}
+					{if LoginModel::getUid() === $profiel->uid}
+						&nbsp;<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="btn">{icon get="pencil"}</a></div>
+						{/if}
+				</div>
+			{/strip}
+			<br />
 			{if $abos}
 				<div class="label">Abo's:</div>
 				<ul class="nobullets data">
@@ -209,7 +212,7 @@
 						{/foreach}
 				</ul>
 			{/if}
-			<br />
+			<div class="clear"></div>
 			<div class="half">
 				<div class="label">Corvee-<br />voorkeuren:</div>
 				<ul class="nobullets data">
@@ -228,7 +231,7 @@
 					</ul>
 				{/if}
 			</div>
-			<br />
+			<div class="clear"></div>
 			<div class="half">
 				<div class="label">Corveepunten:</div>
 				<div class="data">{$corveepunten}{if $corveebonus > 0}+{/if}{if $corveebonus != 0}{$corveebonus}{/if}</div>
@@ -241,7 +244,7 @@
 						{/foreach}
 				</ul>
 			</div>
-			<br />
+			<div class="clear"></div>
 			<div class="label">Corveetaken:</div>
 			<ul class="nobullets data">
 				{foreach from=$corveetaken item=taak}
@@ -357,7 +360,7 @@
 		<div class="profielregel" id="changelog">
 			<div class="gegevens">
 				<div style="cursor: pointer;" onclick="$('#changelog_gegevens').toggle();
-						this.remove()">Bewerklog &raquo;</div>
+							this.remove()">Bewerklog &raquo;</div>
 				<div class="verborgen" id="changelog_gegevens">
 					{$profiel->changelog|bbcode}
 				</div>
