@@ -92,7 +92,7 @@ class CorveeRepetitiesModel {
 				$repetitie->setFunctieId($fid);
 				$repetitie->setStandaardPunten($punten);
 				$repetitie->setStandaardAantal($aantal);
-				$repetitie->setVoorkeurbaar($voorkeur);
+				$repetitie->setVoorkeurbaar(werkomheen_pdo_bool($voorkeur));
 				self::updateRepetitie($repetitie);
 				if (!$voorkeur) { // niet (meer) voorkeurbaar
 					$voorkeuren = CorveeVoorkeurenModel::verwijderVoorkeuren($crid);

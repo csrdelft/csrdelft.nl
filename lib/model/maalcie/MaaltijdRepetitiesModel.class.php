@@ -96,7 +96,7 @@ class MaaltijdRepetitiesModel {
 				$repetitie->setStandaardTitel($titel);
 				$repetitie->setStandaardTijd($tijd);
 				$repetitie->setStandaardPrijs($prijs);
-				$repetitie->setAbonneerbaar($abo);
+				$repetitie->setAbonneerbaar(werkomheen_pdo_bool($abo));
 				$repetitie->setStandaardLimiet($limiet);
 				$repetitie->setAbonnementFilter($filter);
 				self::updateRepetitie($repetitie);
