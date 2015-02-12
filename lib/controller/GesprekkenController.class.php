@@ -21,8 +21,9 @@ class GesprekkenController extends AclController {
 		} else {
 			$this->acl = array(
 				'gesprekken' => 'P_LOGGED_IN',
-				'zeg'		 => 'P_LOGGED_IN',
+				'nieuw'		 => 'P_LOGGED_IN',
 				'lees'		 => 'P_LOGGED_IN',
+				'zeg'		 => 'P_LOGGED_IN',
 				'toevoegen'	 => 'P_LOGGED_IN',
 				'sluiten'	 => 'P_LOGGED_IN',
 			);
@@ -37,30 +38,74 @@ class GesprekkenController extends AclController {
 		parent::performAction($this->getParams(3));
 	}
 
-	public function view() {
-		$body = new GesprekkenView($this->model);
+	public function view($gesprek_id = null) {
+		$body = new GesprekkenView($this->model, $gesprek_id);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addCompressedResources('gesprekken');
 	}
 
-	public function gesprekken() {
-		//TODO
+	public function gesprekken($timestamp = null) {
+		$gesprekken = GesprekDeelnemersModel::instance()->getGesprekkenVoorLid(LoginModel::getUid(), (int) $timestamp);
+		$this->view = new DataTableResponse($gesprekken);
 	}
 
-	public function zeg() {
-		//TODO
+	public function lees($gesprek_id = null, $timestamp = null) {
+		$gesprek = $this->model->get($gesprek_id);
+		$deelnemer = GesprekDeelnemersModel::get(LoginModel::getUid());
+		if (!$gesprek OR ! $deelnemer OR ! is_numeric($timestamp)) {
+			$this->geentoegang();
+		}
+		$berichten = GesprekBerichtenModel::instance()->getBerichtenVoorGesprek($gesprek, (int) $timestamp);
+		$this->view = new DataTableResponse($berichten);
 	}
 
-	public function lees() {
-		//TODO
+	public function nieuw() {
+		$gesprek = $this->model->nieuw();
+		$form = new GesprekForm($gesprek);
+		if ($form->validate()) {
+			$values = $form->getValues();
+			$account = AccountModel::get($values['to_uid']);
+			if (!$account) {
+				$this->geentoegang();
+			}
+			$deelnemer = $this->model->startGesprek($gesprek, LoginModel::getAccount(), $account);
+			GesprekBerichtenModel::instance()->maakBericht($gesprek, $deelnemer, $values['inhoud']);
+			$this->view = '/gesprekken/view/' . $gesprek->gesprek_id;
+		} else {
+			$this->view = $form;
+		}
 	}
 
-	public function toevoegen() {
-		//TODO
+	public function zeg($gesprek_id = null) {
+		$gesprek = $this->model->get($gesprek_id);
+		$deelnemer = GesprekDeelnemersModel::get(LoginModel::getUid());
+		if (!$gesprek OR ! $deelnemer) {
+			$this->geentoegang();
+		}
+		$form = new GesprekBerichtForm($gesprek);
+		if ($form->validate()) {
+			$bericht = GesprekBerichtenModel::instance()->maakBericht($gesprek, $deelnemer, $inhoud);
+			$this->view = new DataTableResponse($bericht);
+		} else {
+			$this->view = $form;
+		}
 	}
 
-	public function sluiten() {
-		//TODO
+	public function toevoegen($gesprek_id = null, $uid = null) {
+		$gesprek = $this->model->get($gesprek_id);
+		$account = AccountModel::get($uid);
+		if (!$gesprek OR ! $account) {
+			$this->geentoegang();
+		}
+		GesprekDeelnemersModel::instance()->voegToeAanGesprek($gesprek, $account);
+	}
+
+	public function sluiten($gesprek_id = null) {
+		$deelnemer = GesprekDeelnemersModel::get($gesprek_id, LoginModel::getUid());
+		if (!$deelnemer) {
+			$this->geentoegang();
+		}
+		GesprekDeelnemersModel::instance()->sluitGesprek($deelnemer);
 	}
 
 }

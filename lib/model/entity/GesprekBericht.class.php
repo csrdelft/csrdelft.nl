@@ -1,36 +1,48 @@
 <?php
 
 /**
- * GesprekGelezen.class.php
+ * GesprekBericht.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class GesprekGelezen extends PersistentEntity {
+class GesprekBericht extends PersistentEntity {
 
 	/**
 	 * Primary key
 	 * @var int
 	 */
+	public $bericht_id;
+	/**
+	 * Foreign key
+	 * @var int
+	 */
 	public $gesprek_id;
 	/**
-	 * DateTime last message
+	 * DateTime
 	 * @var string
 	 */
 	public $moment;
 	/**
-	 * Laatste bericht door
+	 * Lidnummer auteur
 	 * @var string
 	 */
-	public $door_uid;
+	public $auteur_uid;
+	/**
+	 * Bericht inhoud
+	 * @var string
+	 */
+	public $inhoud;
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'bericht_id' => array(T::Integer, false, 'auto_increment'),
+		'gesprek_id' => array(T::Integer),
 		'moment'	 => array(T::DateTime),
-		'auteur_uid' => array(T::UID)
+		'auteur_uid' => array(T::UID),
+		'inhoud'	 => array(T::Text)
 	);
 	/**
 	 * Database primary key

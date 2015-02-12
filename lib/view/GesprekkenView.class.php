@@ -6,28 +6,18 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class GesprekkenView implements View {
+class GesprekkenView extends DataTable {
+	//TODO
+}
 
-	protected $gesprekken;
+class GesprekView extends DataTable {
+	//TODO
+}
 
-	public function __construct($gesprekken) {
-		$this->gesprekken = $gesprekken;
-	}
+class GesprekBerichtForm extends DataTableForm {
+	//TODO
+}
 
-	public function getBreadcrumbs() {
-		return null;
-	}
-
-	public function getModel() {
-		return $this->gesprekken;
-	}
-
-	public function getTitel() {
-		return 'Gesprekken';
-	}
-
-	public function view() {
-		//TODO
-	}
-
+class GesprekForm extends GesprekBerichtForm {
+	//TODO
 }
