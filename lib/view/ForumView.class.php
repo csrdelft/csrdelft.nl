@@ -166,7 +166,6 @@ class ForumDraadView extends ForumView {
 		} else {
 			$this->gelezen_moment = false;
 		}
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($this->model);
 	}
 
 	public function getBreadcrumbs() {

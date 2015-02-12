@@ -244,8 +244,9 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function isOngelezen() {
-		if ($this->getWanneerGelezen()) {
-			if (strtotime($this->laatst_gewijzigd) > strtotime($this->getWanneerGelezen()->datum_tijd)) {
+		$gelezen = $this->getWanneerGelezen();
+		if ($gelezen) {
+			if (strtotime($this->laatst_gewijzigd) > strtotime($gelezen->datum_tijd)) {
 				return true;
 			}
 			return false;
