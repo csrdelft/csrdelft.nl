@@ -319,7 +319,7 @@ class ForumController extends Controller {
 			$statistiek = false;
 		}
 		$this->view = new ForumDraadView($draad, $paging, $statistiek); // lazy loading ForumPost[]
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($this->model);
+		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 	}
 
 	/**
