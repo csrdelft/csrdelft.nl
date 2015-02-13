@@ -6,10 +6,10 @@ etc/ldap.ini.sample -text
 etc/mysql.ini.sample -text
 etc/soccie.ini.sample -text
 htdocs/.htaccess -text
+htdocs/API/1.0/get_user.php -text
+htdocs/API/1.0/get_userlist.php -text
+htdocs/API/1.0/login.php -text
 htdocs/actueel/.htaccess -text
-htdocs/android/get_user.php -text
-htdocs/android/get_userlist.php -text
-htdocs/android/login.php -text
 htdocs/bar/ajax.php -text
 htdocs/bar/controller/Barsysteem.class.php -text
 htdocs/bar/css/bar.css -text
