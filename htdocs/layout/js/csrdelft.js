@@ -562,7 +562,9 @@ function form_submit(event) {
 				}
 			};
 
-			source = false;
+			if (!form.hasClass('noanim')) {
+				source = false;
+			}
 		}
 
 		if (form.hasClass('ReloadPage')) {
@@ -683,6 +685,13 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 			$(source).replaceWith('<img id="' + source.attr('id') + '" title="' + url + '" src="/plaetjes/layout/loading-arrows.gif" />');
 			source = 'img[title="' + url + '"]';
 		}
+		else if (source.hasClass('InlineForm')) {
+			$(source).find('.FormElement:first').css({
+				'background-image': 'url("/plaetjes/layout/loading-fb.gif")',
+				'background-repeat': 'no-repeat',
+				'background-position': 'center right'
+			});
+		}
 	}
 	else {
 		modal_open();
@@ -703,6 +712,13 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 	});
 	jqXHR.done(function (data, textStatus, jqXHR) {
 		onsuccess(data);
+		if (source && source.hasClass('InlineForm') && source.hasClass('noanim')) {
+			$(source).find('.FormElement:first').css({
+				'background-image': '',
+				'background-repeat': '',
+				'background-position': ''
+			});
+		}
 	});
 	jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
 		if (errorThrown === '') {

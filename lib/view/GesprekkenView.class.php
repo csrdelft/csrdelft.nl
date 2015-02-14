@@ -157,6 +157,7 @@ class GesprekBerichtForm extends InlineForm {
 		$field->placeholder = 'Bericht';
 		parent::__construct(null, '/gesprekken/zeg/' . $gesprek->gesprek_id, $field, false, false, $dataTableId);
 		$this->css_classes[] = 'SubmitReset';
+		$this->css_classes[] = 'noanim';
 	}
 
 }
