@@ -14,12 +14,14 @@ class GesprekkenView implements View {
 	private $berichtForm;
 
 	public function __construct(Gesprek $gesprek = null) {
-		$this->gesprek = $gesprek;
-		$this->gesprekkenTable = new GesprekkenTable();
 		if ($gesprek) {
+			$this->gesprek = $gesprek;
 			GesprekBerichtenModel::instance(); // require_once
 			$this->berichtenTable = new GesprekBerichtenTable($gesprek);
 			$this->berichtForm = new GesprekBerichtForm($gesprek, $this->berichtenTable->getTableId());
+		} else {
+
+			$this->gesprekkenTable = new GesprekkenTable();
 		}
 	}
 
@@ -42,13 +44,14 @@ class GesprekkenView implements View {
 
 	public function view() {
 		echo getMelding();
-		echo '<div class="Gesprekken">';
-		echo '<h1>' . $this->getTitel() . '</h1>';
-		$this->gesprekkenTable->view();
-		echo '</div><div class="GesprekBerichten">';
 		if ($this->gesprek) {
+			echo '<div class="GesprekBerichten">';
 			$this->berichtenTable->view();
 			$this->berichtForm->view();
+		} else {
+			echo '<div class="Gesprekken">';
+			echo '<h1>' . $this->getTitel() . '</h1>';
+			$this->gesprekkenTable->view();
 		}
 		echo '</div>';
 	}
@@ -116,13 +119,13 @@ class GesprekBerichtenTable extends DataTable {
 class BerichtenResponse extends DataTableResponse {
 
 	public $page = 'last';
-	private $previous;
 
 	public function getJson($bericht) {
 		$array = $bericht->jsonSerialize();
 
-		if ($this->previous !== $bericht->auteur_uid) {
-			$this->previous = $bericht->auteur_uid;
+		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ?', array($bericht->gesprek_id), null, 'moment DESC', 1, 1)->fetch();
+		if ($previous AND $previous->auteur_uid !== $bericht->auteur_uid) {
+			$previous = $bericht->auteur_uid;
 			$bbcode = '[b]' . ProfielModel::get($bericht->auteur_uid)->getNaam() . '[/b][rn]' . $bericht->inhoud;
 		} else {
 			$bbcode = $bericht->inhoud;

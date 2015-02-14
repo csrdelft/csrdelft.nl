@@ -241,7 +241,7 @@ abstract class DataTable extends TabsForm {
 				 * @param int rowIndex
 				 */
 				var fnCreatedRowCallback = function (tr, data, rowIndex) {
-					$(tr).attr('data-UUID', data.UUID);
+					$(tr).attr('data-uuid', data.UUID);
 					init_context(tr);
 					// Details from external source
 					if ('detailSource' in data) {
@@ -266,14 +266,31 @@ abstract class DataTable extends TabsForm {
 						console.log('autoUpdate = ' + json.autoUpdate);
 						setTimeout(fnAutoUpdate, json.autoUpdate);
 					}
+					var $table = $('#<?= $this->dataTableId; ?>');
 					if (json.page) {
-						var table = $('#<?= $this->dataTableId; ?>').DataTable();
-						var info = table.page.info();
+						var info = $table.DataTable().page.info();
 						// Stay on last page
 						if (json.page !== 'last' || info.page + 1 === info.pages) {
+							console.log(info.page + 1);
+							console.log(info.pages);
 							window.setTimeout(function () {
 								table.page(json.page).draw(false);
-							}, 100);
+							}, 500);
+						}
+					}
+					var $scroll = $table.parent();
+					if ($scroll.hasClass('dataTables_scrollBody')) {
+
+						console.log($scroll[0].scrollTop);
+						console.log($scroll[0].scrollHeight);
+
+						if ($scroll[0].scrollTop === $scroll[0].scrollHeight - 20) {
+							window.setTimeout(function () {
+								$scroll.animate({
+									scrollTop: $scroll[0].scrollHeight
+								}, 1000);
+
+							}, 500);
 						}
 					}
 					fnUpdateToolbar();

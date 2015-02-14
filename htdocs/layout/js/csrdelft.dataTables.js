@@ -46,7 +46,7 @@ function fnStickyToolbar() {
 function fnUpdateDataTable(table, response) {
 	// update or remove existing rows or add new rows
 	response.data.forEach(function (row) {
-		var $tr = $('tr[data-UUID="' + row.UUID + '"]');
+		var $tr = $('tr[data-uuid="' + row.UUID + '"]');
 		if ($tr.length === 1) {
 			if ('remove'in row) {
 				table.row($tr).remove();
@@ -56,8 +56,11 @@ function fnUpdateDataTable(table, response) {
 				init_context($tr);
 			}
 		}
-		else {
+		else if ($tr.length === 0) {
 			table.row.add(row);
+		}
+		else {
+			alert($tr.length);
 		}
 	});
 	table.draw(false);
@@ -70,13 +73,13 @@ function fnGetSelectionSize(tableId) {
 function fnGetSelection(tableId) {
 	var selection = [];
 	$(tableId + ' tbody tr.selected').each(function () {
-		selection.push($(this).attr('data-UUID'));
+		selection.push($(this).attr('data-uuid'));
 	});
 	return selection;
 }
 
 function fnGetSelectedUUID(tableId) {
-	return $(tableId + ' tbody tr.selected:first').attr('data-UUID');
+	return $(tableId + ' tbody tr.selected:first').attr('data-uuid');
 }
 
 function fnGetGroupByColumn($table) {

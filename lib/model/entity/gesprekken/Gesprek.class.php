@@ -72,6 +72,7 @@ class Gesprek extends PersistentEntity {
 	}
 
 	public function getBerichten(GesprekDeelnemer $deelnemer, $timestamp) {
+		$timestamp = (int) $timestamp - 1;
 		$toegevoegd = strtotime($deelnemer->toegevoegd_moment);
 		if ($timestamp < $toegevoegd) {
 			$timestamp = $toegevoegd;

@@ -13,7 +13,7 @@ Primary style
 	}
 }
 
-#cd-user-avatar {
+.cd-user-avatar {
 	width: 32px;
 	height: 32px;
 	border-radius: 4px;
