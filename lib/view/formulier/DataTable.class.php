@@ -398,7 +398,7 @@ abstract class DataTableResponse extends JsonResponse {
 		echo "{\n";
 		echo '"modal":' . json_encode($this->modal) . ",\n";
 		echo '"autoUpdate":' . json_encode($this->autoUpdate) . ",\n";
-		echo '"lastUpdate":' . json_encode(time()) . ",\n";
+		echo '"lastUpdate":' . json_encode(time() - 1) . ",\n";
 		echo '"data":[' . "\n";
 		$comma = false;
 		foreach ($this->model as $entity) {
