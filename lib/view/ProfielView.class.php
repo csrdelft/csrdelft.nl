@@ -50,7 +50,7 @@ class ProfielView extends SmartyTemplateView {
 			$besturen .= '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />';
 		}
 		if ($besturen != '') {
-			$besturen = '<div class="label">Bestuur:</div><div class="data scroll">' . $besturen . '</div><br />';
+			$besturen = '<div class="label">Bestuur:</div><div class="data">' . $besturen . '</div><br />';
 		}
 		$this->smarty->assign('besturen', $besturen);
 
@@ -59,7 +59,7 @@ class ProfielView extends SmartyTemplateView {
 			$commissies .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />';
 		}
 		if ($commissies != '') {
-			$commissies = '<div class="label">Commissies:</div><div class="data scroll">' . $commissies . '</div><br />';
+			$commissies = '<div class="label">Commissies:</div><div class="data">' . $commissies . '</div><br />';
 		}
 		$this->smarty->assign('commissies', $commissies);
 
@@ -69,7 +69,7 @@ class ProfielView extends SmartyTemplateView {
 			$werkgroepen .= '<a href="' . $werkgroep->getUrl() . '">' . $werkgroep->naam . '</a><br />';
 		}
 		if ($werkgroepen != '') {
-			$werkgroepen = '<div class="label">Werkgroepen:</div><div class="data scroll">' . $werkgroepen . '</div><br />';
+			$werkgroepen = '<div class="label">Werkgroepen:</div><div class="data">' . $werkgroepen . '</div><br />';
 		}
 		$this->smarty->assign('werkgroepen', $werkgroepen);
 
@@ -78,7 +78,7 @@ class ProfielView extends SmartyTemplateView {
 			$onderverenigingen .= '<a href="' . $ondervereniging->getUrl() . '">' . $ondervereniging->naam . '</a><br />';
 		}
 		if ($onderverenigingen != '') {
-			$onderverenigingen = '<div class="label">Onder-<br />verenigingen:</div><div class="data scroll">' . $onderverenigingen . '</div><br />';
+			$onderverenigingen = '<div class="label">Onder-<br />verenigingen:</div><div class="data">' . $onderverenigingen . '</div><br />';
 		}
 		$this->smarty->assign('onderverenigingen', $onderverenigingen);
 
@@ -87,7 +87,7 @@ class ProfielView extends SmartyTemplateView {
 			$groepen .= '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />';
 		}
 		if ($groepen != '') {
-			$groepen = '<div class="label">Overige<br />groepen:</div><div class="data scroll">' . $groepen . '</div><br />';
+			$groepen = '<div class="label">Overige<br />groepen:</div><div class="data">' . $groepen . '</div><br />';
 		}
 		$this->smarty->assign('groepen', $groepen);
 

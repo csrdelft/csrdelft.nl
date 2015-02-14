@@ -124,17 +124,6 @@
 				{if $profiel->isOudlid()}
 					{if $profiel->beroep!=''}<div class="label">Beroep/werk:</div><div class="data">{$profiel->beroep}</div><br />{/if}
 				{/if}
-				{if $kring}
-					<div class="label">Kring:</div>
-					{$kring}<br />
-				{elseif $profiel->verticale!=''}
-					<div class="label">Verticale:</div>
-					<a href="/ledenlijst?q=verticale:{$profiel->verticale}">{$profiel->getVerticale()->naam}</a><br />
-				{/if}
-				{if $profiel->moot}
-					<div class="label">Oude moot:</div>
-					<a href="/ledenlijst?q=moot:{$profiel->moot}">{$profiel->moot}</a>
-				{/if}
 			</div>
 			<div class="half">
 				{if ProfielModel::get($profiel->patroon) OR $profiel->hasKinderen()}
@@ -153,6 +142,28 @@
 							{$kind->getLink('civitas')}<br />
 						{/foreach}
 					</div>
+				{/if}
+			</div>
+			<div class="clear-left"></div>
+		</div>
+	</div>
+
+	<div class="profielregel clear-right">
+		<div class="gegevens">
+			<div class="half">
+				{if $profiel->verticale!=''}
+					<div class="label">Verticale:</div>
+					<div class="data"><a href="/ledenlijst?q=verticale:{$profiel->verticale}">{$profiel->getVerticale()->naam}</a></div>
+				{/if}
+				{if $profiel->moot}
+					<div class="label">Oude moot:</div>
+					<div class="data"><a href="/ledenlijst?q=moot:{$profiel->moot}">{$profiel->moot}</a></div>
+					{/if}
+			</div>
+			<div class="half">
+				{if $kring}
+					<div class="label">Kring:</div>
+					<div class="data">{$kring}</div>
 				{/if}
 			</div>
 			<div class="clear-left"></div>
