@@ -9,9 +9,7 @@
 class GroepForm extends ModalForm {
 
 	public function __construct(AbstractGroep $groep, $action, $nocancel = false) {
-		parent::__construct($groep, $action);
-		$this->dataTableId = true;
-		$this->titel = get_class($groep);
+		parent::__construct($groep, $action, get_class($groep), true);
 		if ($groep->id) {
 			$this->titel .= ' wijzigen';
 		} else {
@@ -92,8 +90,7 @@ class GroepForm extends ModalForm {
 class GroepOpvolgingForm extends ModalForm {
 
 	public function __construct(AbstractGroep $groep, $action) {
-		parent::__construct($groep, $action, 'Opvolging instellen');
-		$this->dataTableId = true;
+		parent::__construct($groep, $action, 'Opvolging instellen', true);
 
 		$fields['fam'] = new TextField('familie', $groep->familie, 'Familienaam');
 		$fields['fam']->suggestions[] = $groep->getFamilieSuggesties();
@@ -251,8 +248,7 @@ class KetzerSoortField extends GroepSoortField {
 class GroepConverteerForm extends ModalForm {
 
 	public function __construct(AbstractGroep $groep, AbstractGroepenModel $huidig) {
-		parent::__construct($groep, $huidig->getUrl() . 'converteren', $huidig::orm . ' converteren');
-		$this->dataTableId = true;
+		parent::__construct($groep, $huidig->getUrl() . 'converteren', $huidig::orm . ' converteren', true);
 
 		$fields[] = new GroepSoortField('model', get_class($huidig), 'Converteren naar', $groep);
 
@@ -309,8 +305,7 @@ class GroepAanmakenForm extends ModalForm {
 class GroepLidBeheerForm extends ModalForm {
 
 	public function __construct(AbstractGroepLid $lid, $action, array $blacklist = null) {
-		parent::__construct($lid, $action, 'Aanmelding bewerken');
-		$this->dataTableId = true;
+		parent::__construct($lid, $action, 'Aanmelding bewerken', true);
 		$fields = $this->generateFields();
 
 		if ($blacklist !== null) {
@@ -380,8 +375,7 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 class GroepLogboekForm extends ModalForm {
 
 	public function __construct(AbstractGroep $groep) {
-		parent::__construct($groep, null, $groep->naam . ' logboek');
-		$this->dataTableId = true;
+		parent::__construct($groep, null, $groep->naam . ' logboek', true);
 
 		$fields[] = new GroepLogboekTable($groep);
 		$fields[] = new ModalCloseButtons();

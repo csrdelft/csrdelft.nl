@@ -90,7 +90,7 @@ class GesprekkenController extends AclController {
 		if (!$gesprek OR ! $deelnemer) {
 			$this->geentoegang();
 		}
-		$form = new GesprekDeelnemerToevoegenForm();
+		$form = new GesprekDeelnemerToevoegenForm($gesprek);
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$account = AccountModel::get($values['to']);

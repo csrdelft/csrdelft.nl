@@ -63,8 +63,7 @@ class RechtenData extends DataTableResponse {
 class RechtenForm extends ModalForm {
 
 	public function __construct(AccessControl $ac, $action) {
-		parent::__construct($ac, '/rechten/' . $action . '/' . $ac->environment . '/' . $ac->resource, 'Rechten aanpassen voor ');
-		$this->dataTableId = true;
+		parent::__construct($ac, '/rechten/' . $action . '/' . $ac->environment . '/' . $ac->resource, 'Rechten aanpassen voor ', true);
 		if ($ac->resource === '*') {
 			$this->titel .= 'elke ' . $ac->environment;
 		} else {
