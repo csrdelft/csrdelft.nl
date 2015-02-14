@@ -59,10 +59,10 @@ class GesprekkenTable extends DataTable {
 
 	public function __construct() {
 		parent::__construct(GesprekkenModel::orm, '/gesprekken/gesprekken');
-		$this->defaultLength = 25;
 		$this->settings['tableTools']['aButtons'] = array();
 
-		$this->addColumn('deelnemers', 'laatste_bericht');
+		$this->hideColumn('laatste_update');
+		$this->addColumn('deelnemers');
 
 		$create = new DataTableKnop('== 0', $this->dataTableId, '/gesprekken/start', 'post popup', 'Nieuw', 'Nieuw gesprek starten', 'add');
 		$this->addKnop($create);
@@ -72,6 +72,12 @@ class GesprekkenTable extends DataTable {
 
 		$add = new DataTableKnop('== 1', $this->dataTableId, '/gesprekken/toevoegen', 'post popup', 'Toevoegen', 'Deelnemer toevoegen aan het gesprek', 'user_add');
 		$this->addKnop($add);
+
+		$this->javascript .= <<<JS
+$('#{$this->dataTableId}').on('click', 'tr', function (event) {
+	location.href = $(this).children('td:first').children('a:first').attr('href');
+});
+JS;
 	}
 
 }
@@ -81,12 +87,16 @@ class GesprekkenResponse extends DataTableResponse {
 	public function getJson($gesprek) {
 		$array = $gesprek->jsonSerialize();
 
+		$array['details'] = '<a class="lichtgrijs" href="/gesprekken/web/' . $gesprek->gesprek_id . '">';
 		if ($gesprek->aantal_nieuw > 0) {
-			$array['details'] = '<span class="badge">' . $gesprek->aantal_nieuw . '</span>';
+			$array['details'] .= '<span class="badge">' . $gesprek->aantal_nieuw . '</span>';
+		} else {
+			$array['details'] .= '<span class="fa fa-envelope fa-lg"></span>';
 		}
-		$array['laatste_update'] = reldate($gesprek->laatste_update);
+		$array['details'] .= '</a>';
 		$array['deelnemers'] = $gesprek->getDeelnemersFormatted();
-		$array['laatste_bericht'] = CsrBB::parse($gesprek->laatste_bericht);
+		$moment = '<span class="lichtgrijs float-right">' . reldate($gesprek->laatste_update) . '</span>';
+		$array['laatste_bericht'] = $moment . CsrBB::parse($gesprek->laatste_bericht);
 
 		return parent::getJson($array);
 	}
@@ -97,11 +107,11 @@ class GesprekBerichtenTable extends DataTable {
 
 	public function __construct(Gesprek $gesprek) {
 		parent::__construct(GesprekBerichtenModel::orm, '/gesprekken/lees/' . $gesprek->gesprek_id, 'Gesprek met ' . $gesprek->getDeelnemersFormatted());
-		$this->defaultLength = 25;
 
 		$this->hideColumn('details');
 		$this->hideColumn('gesprek_id');
 		$this->hideColumn('auteur_uid');
+		$this->hideColumn('moment');
 	}
 
 }
@@ -113,15 +123,14 @@ class BerichtenResponse extends DataTableResponse {
 	public function getJson($bericht) {
 		$array = $bericht->jsonSerialize();
 
-		$array['moment'] = reldate($bericht->moment);
-
 		if ($this->previous !== $bericht->auteur_uid) {
 			$this->previous = $bericht->auteur_uid;
 			$bbcode = '[b]' . ProfielModel::get($bericht->auteur_uid)->getNaam() . '[/b][rn]' . $bericht->inhoud;
 		} else {
 			$bbcode = $bericht->inhoud;
 		}
-		$array['inhoud'] = CsrBB::parse($bbcode);
+		$moment = '<span class="lichtgrijs float-right">' . reldate($bericht->moment) . '</span>';
+		$array['inhoud'] = $moment . CsrBB::parse($bbcode);
 
 		return parent::getJson($array);
 	}

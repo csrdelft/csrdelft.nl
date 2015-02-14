@@ -264,16 +264,30 @@ form#streeplijst input, form#streeplijst label { text-align: left; margin: 3px; 
 #peilingOpties input { width: 400px; }
 
 /* Gesprekken */
-.Gesprekken {
-	float: left;
-	width: 450px;
-	margin-right: 25px;
-}
-.GesprekBerichten {
-	float: left;
-	width: 700px;
+.Gesprekken, .GesprekBerichten {
 
 	thead {
 		display: none;
 	}
+
+	table.dataTable.display tbody tr.odd > .sorting_1,
+	table.dataTable.order-column.stripe tbody tr.odd > .sorting_1,
+	table.dataTable.display tbody tr.even > .sorting_1,
+	table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
+		background-color: #fff;
+	}
+}
+.Gesprekken {
+	float: left;
+	width: 450px;
+	margin-right: 25px;
+
+	table.dataTable tbody tr td {
+		padding-top: 25px;
+		padding-bottom: 15px;
+	}
+}
+.GesprekBerichten {
+	float: left;
+	width: 700px;
 }
