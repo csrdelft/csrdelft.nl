@@ -86,9 +86,9 @@ class Gesprek extends PersistentEntity {
 		} else {
 			$diff = time() - strtotime($andere_deelnemer->gelezen_moment);
 			$this->auto_update = 1000 * $diff;
-
-			if ($this->auto_update < 2000) {
-				$this->auto_update = 2000;
+			$min = (int) Instellingen::get('gesprekken', 'min_delay_milisec');
+			if ($this->auto_update < $min) {
+				$this->auto_update = $min;
 			}
 		}
 		// Update deelnemer

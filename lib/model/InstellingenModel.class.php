@@ -68,6 +68,9 @@ class Instellingen extends CachedPersistenceModel {
 			'grafiek_periode'				 => '-3 months',
 			'externen_geentoegang_gesloten'	 => '-1 year'
 		),
+		'gesprekken'	 => array(
+			'min_delay_milisec' => '3000'
+		),
 		'maaltijden'	 => array(
 			'budget_maalcie'					 => '100',
 			'toon_ketzer_vooraf'				 => '+1 month',
