@@ -130,6 +130,13 @@ class GesprekBerichtenTable extends DataTable {
 		$this->hideColumn('gesprek_id');
 		$this->hideColumn('auteur_uid');
 		$this->hideColumn('moment');
+
+		$this->javascript .= <<<JS
+
+$(document).ready(function (event) {
+	$('textarea[name="inhoud"]').focus();
+});
+JS;
 	}
 
 }
