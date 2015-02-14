@@ -97,7 +97,7 @@ class GesprekkenController extends AclController {
 			if (!$account) {
 				$this->geentoegang();
 			}
-			GesprekDeelnemersModel::instance()->voegToeAanGesprek($gesprek, $account, LoginModel::getAccount());
+			GesprekDeelnemersModel::instance()->voegToeAanGesprek($gesprek, $account, $deelnemer);
 			$this->view = new GesprekkenResponse(array($gesprek));
 		} else {
 			$this->view = $form;

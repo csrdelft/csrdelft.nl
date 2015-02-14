@@ -98,7 +98,7 @@ class GesprekDeelnemersModel extends PersistenceModel {
 		return $totaal;
 	}
 
-	public function voegToeAanGesprek(Gesprek $gesprek, Account $account, Account $door = null) {
+	public function voegToeAanGesprek(Gesprek $gesprek, Account $account, GesprekDeelnemer $door = null) {
 		if (count($gesprek->getDeelnemers()) >= (int) Instellingen::get('gesprekken', 'max_aantal_deelnemers')) {
 			return false;
 		}
