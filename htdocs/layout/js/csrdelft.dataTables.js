@@ -19,6 +19,7 @@ function fnInitDataTables() {
 function fnInitStickyToolbar() {
 	// Sticky toolbar
 	var toolbar = $('.DataTableToolbar:first');
+	toolbar.next().css('padding-top', toolbar.height()); // Create whitespace
 	if (toolbar.css('position') !== 'absolute') {
 		toolbar.css({
 			'position': 'absolute',

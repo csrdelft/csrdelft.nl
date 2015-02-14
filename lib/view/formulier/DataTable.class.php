@@ -239,7 +239,7 @@ abstract class DataTable extends TabsForm {
 					return Number($('#<?= $this->dataTableId; ?>').attr('data-lastupdate'));
 				}
 				var fnSetLastUpdate = function () {
-					return $('#<?= $this->dataTableId; ?>').attr('data-lastupdate', Math.round(new Date().getTime()));
+					$('#<?= $this->dataTableId; ?>').attr('data-lastupdate', Math.round(new Date().getTime()));
 				}
 				/**
 				 * Called after row addition and row data update.
@@ -272,8 +272,14 @@ abstract class DataTable extends TabsForm {
 					fnSetLastUpdate();
 
 					if (json.autoUpdate) {
-						setTimeout(function () {
-							$('#<?= $this->dataTableId; ?>').DataTable().ajax.reload();
+						var $table = $('#<?= $this->dataTableId; ?>');
+						var ajax = $table.DataTable().ajax;
+						window.setTimeout(function () {
+							$.post(ajax.url(), {
+								'lastUpdate': fnGetLastUpdate()
+							}, function (data, textStatus, jqXHR) {
+								fnAjaxUpdateCallback(data);
+							});
 						}, json.autoUpdate);
 					}
 					if (json.page) {
