@@ -64,7 +64,7 @@ class GesprekkenTable extends DataTable {
 		$this->hideColumn('laatste_update');
 		$this->addColumn('deelnemers');
 
-		$create = new DataTableKnop('== 0', $this->dataTableId, '/gesprekken/start', 'post popup', 'Nieuw', 'Nieuw gesprek starten', 'add');
+		$create = new DataTableKnop('== 0', $this->dataTableId, '/gesprekken/start', 'post popup', 'Nieuw', 'Nieuw gesprek starten', 'email_add');
 		$this->addKnop($create);
 
 		$sluiten = new DataTableKnop('== 1', $this->dataTableId, '/gesprekken/sluiten', 'post confirm', 'Sluiten', 'Gesprek verlaten', 'delete');
