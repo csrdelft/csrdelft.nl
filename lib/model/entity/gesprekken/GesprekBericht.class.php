@@ -66,7 +66,7 @@ class GesprekBericht extends PersistentEntity {
 		} else {
 			$auteur = $this->getAuteurFormatted();
 		}
-		$moment = '<span data-order="' . $this->bericht_id . '" class="lichtgrijs float-right">' . reldate($this->moment) . '</span>';
+		$moment = '<span data-order="' . $this->moment . '" class="lichtgrijs float-right">' . reldate($this->moment) . '</span>';
 
 		if (is_int($max)) {
 			$inhoud = mb_substr($this->inhoud, 0, $max);
