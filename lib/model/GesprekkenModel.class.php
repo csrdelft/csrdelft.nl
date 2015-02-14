@@ -17,30 +17,31 @@ class GesprekkenModel extends PersistenceModel {
 	 */
 	protected $default_order = 'laatste_update ASC';
 
+	protected function __construct() {
+		parent::__construct('gesprek/');
+	}
+
 	public static function get($gesprek_id) {
 		return self::instance()->retrieveByPrimaryKey(array($gesprek_id));
 	}
 
-	public function nieuw($uid) {
+	public function startGesprek(Account $from, Account $to, $inhoud) {
+		// Maak gesprek
 		$gesprek = new Gesprek();
-		$gesprek->laatste_uid = $uid;
 		$gesprek->laatste_update = getDateTime();
+		$gesprek->laatste_bericht = '';
+		$gesprek->gesprek_id = (int) $this->create($gesprek);
+		// Deelnemers toevoegen
+		$deelnemer = GesprekDeelnemersModel::instance()->voegToeAanGesprek($gesprek, $from);
+		GesprekDeelnemersModel::instance()->voegToeAanGesprek($gesprek, $to);
+		// Maak bericht
+		GesprekBerichtenModel::instance()->maakBericht($gesprek, $deelnemer, $inhoud);
 		return $gesprek;
 	}
 
-	public function create(PersistentEntity $gesprek) {
-		$gesprek->gesprek_id = (int) parent::create($gesprek);
-	}
-
-	public function delete(PersistentEntity $gesprek) {
+	public function verwijderGesprek(Gesprek $gesprek) {
 		GesprekBerichtenModel::instance()->verwijderBerichtenVoorGesprek($gesprek);
-		return parent::delete($gesprek);
-	}
-
-	public function startGesprek(Gesprek $gesprek, Account $from, Account $to) {
-		$this->create($gesprek);
-		GesprekDeelnemersModel::instance()->voegToeAanGesprek($to);
-		return GesprekDeelnemersModel::instance()->voegToeAanGesprek($from);
+		return $this->delete($gesprek);
 	}
 
 }
@@ -57,12 +58,20 @@ class GesprekDeelnemersModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function get($gesprek_id, $uid) {
+	protected function __construct() {
+		parent::__construct('gesprek/');
+	}
+
+	public static function get($gesprek_id, $uid) {
 		return self::instance()->retrieveByPrimaryKey(array($gesprek_id, $uid));
 	}
 
-	public function getDeelnemersVoorGesprek(Gesprek $gesprek) {
-		return group_by_distinct('uid', $this->find('gesprek_id = ? ', array($gesprek->gesprek_id)));
+	public function getDeelnemersVanGesprek(Gesprek $gesprek) {
+		return $this->find('gesprek_id = ? ', array($gesprek->gesprek_id));
+	}
+
+	public function getAantalDeelnemersVanGesprek(Gesprek $gesprek) {
+		return $this->count('gesprek_id = ?', array($gesprek->gesprek_id));
 	}
 
 	public function getGesprekkenVoorLid($uid, $timestamp) {
@@ -72,6 +81,7 @@ class GesprekDeelnemersModel extends PersistenceModel {
 			if ($gesprek AND $gesprek->laatste_update > $timestamp) {
 				$gesprekken[] = $gesprek;
 			}
+			$gesprek->getAantalNieuweBerichten($deelnemer, strtotime($deelnemer->gelezen_moment));
 		}
 		return $gesprekken;
 	}
@@ -84,20 +94,26 @@ class GesprekDeelnemersModel extends PersistenceModel {
 		return $deelnemer->gelezen_moment >= $gesprek->laatste_update;
 	}
 
-	public function sluitGesprek(GesprekDeelnemer $deelnemer) {
-		if ($this->count('gesprek_id = ?', array($deelnemer->gesprek_id)) <= 1) {
-			$gesprek = GesprekkenModel::get($deelnemer->gesprek_id);
-			GesprekkenModel::instance()->verwijderGesprek($gesprek);
-		}
-	}
-
-	public function voegToeAanGesprek(Gesprek $gesprek, Account $account) {
+	public function voegToeAanGesprek(Gesprek $gesprek, Account $account, Account $door = null) {
 		$deelnemer = new GesprekDeelnemer();
 		$deelnemer->gesprek_id = $gesprek->gesprek_id;
 		$deelnemer->uid = $account->uid;
-		$deelnemer->gelezen_moment = getDateTime(time() - 1);
+		$deelnemer->toegevoegd_moment = getDateTime();
+		$deelnemer->gelezen_moment = getDateTime(0);
 		parent::create($deelnemer);
+		if ($door) {
+			$inhoud = 'Ik heb ' . $account->getProfiel()->getNaam() . ' toegevoegd aan het gesprek.';
+			GesprekBerichtenModel::instance()->maakBericht($gesprek, $door, $inhoud);
+		}
 		return $deelnemer;
+	}
+
+	public function sluitGesprek(Gesprek $gesprek, GesprekDeelnemer $deelnemer) {
+		$rowCount = $this->delete($deelnemer);
+		if ($this->count('gesprek_id = ?', array($gesprek->gesprek_id)) === 0) {
+			GesprekkenModel::instance()->delete($gesprek);
+		}
+		return $rowCount === 1;
 	}
 
 }
@@ -119,12 +135,20 @@ class GesprekBerichtenModel extends PersistenceModel {
 	 */
 	protected $default_order = 'moment ASC';
 
+	protected function __construct() {
+		parent::__construct('gesprek/');
+	}
+
 	public static function get($bericht_id) {
 		return $this->retrieveByPrimaryKey(array($bericht_id));
 	}
 
-	public function getBerichtenVoorGesprek(Gesprek $gesprek, $timestamp) {
-		return $this->find('gesprek_id = ? AND moment > ?', array($gesprek->gesprek_id, getDateTime((int) $timestamp)));
+	public function getBerichtenSinds(Gesprek $gesprek, $timestamp) {
+		return $this->find('gesprek_id = ? AND moment > ?', array($gesprek->gesprek_id, getDateTime($timestamp)));
+	}
+
+	public function getAantalBerichtenSinds(Gesprek $gesprek, $timestamp) {
+		return $this->count('gesprek_id = ? AND moment > ?', array($gesprek->gesprek_id, getDateTime($timestamp)));
 	}
 
 	public function maakBericht(Gesprek $gesprek, GesprekDeelnemer $deelnemer, $inhoud) {
@@ -137,7 +161,10 @@ class GesprekBerichtenModel extends PersistenceModel {
 		$bericht->id = $this->create($bericht);
 		// Update gesprek
 		$gesprek->laatste_update = $bericht->moment;
-		$gesprek->laatste_uid = $bericht->door_uid;
+		$gesprek->laatste_bericht = '[b]' . ProfielModel::get($bericht->auteur_uid)->getNaam() . ':[/b][rn]' . mb_substr($bericht->inhoud, 0, 30);
+		if (mb_strlen($bericht->inhoud) > 30) {
+			$gesprek->laatste_bericht .= '...';
+		}
 		GesprekkenModel::instance()->update($gesprek);
 		// Update deelnemer
 		$deelnemer->gelezen_moment = $bericht->moment;

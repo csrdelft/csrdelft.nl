@@ -9,8 +9,7 @@
 class RechtenTable extends DataTable {
 
 	public function __construct(AccessModel $model, $environment, $resource) {
-		parent::__construct($model::orm, 'Rechten voor ' . $environment . ' ' . $resource, 'resource');
-		$this->dataUrl = '/rechten/bekijken/' . $environment . '/' . $resource;
+		parent::__construct($model::orm, '/rechten/bekijken/' . $environment . '/' . $resource, 'Rechten voor ' . $environment . ' ' . $resource, 'resource');
 
 		$this->hideColumn('action', false);
 		$this->searchColumn('aciton');
@@ -23,13 +22,13 @@ class RechtenTable extends DataTable {
 			}
 		}
 
-		$create = new DataTableKnop('== 0', $this->tableId, '/rechten/aanmaken/' . $environment . '/' . $resource, 'post popup', 'Instellen', 'Rechten instellen', 'key_add');
+		$create = new DataTableKnop('== 0', $this->dataTableId, '/rechten/aanmaken/' . $environment . '/' . $resource, 'post popup', 'Instellen', 'Rechten instellen', 'key_add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->tableId, '/rechten/wijzigen', 'post popup', 'Wijzigen', 'Rechten wijzigen', 'key_edit');
+		$update = new DataTableKnop('== 1', $this->dataTableId, '/rechten/wijzigen', 'post popup', 'Wijzigen', 'Rechten wijzigen', 'key_edit');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, '/rechten/verwijderen', 'post confirm', 'Terugtrekken', 'Rechten terugtrekken', 'key_delete');
+		$delete = new DataTableKnop('>= 1', $this->dataTableId, '/rechten/verwijderen', 'post confirm', 'Terugtrekken', 'Rechten terugtrekken', 'key_delete');
 		$this->addKnop($delete);
 	}
 
@@ -61,10 +60,11 @@ class RechtenData extends DataTableResponse {
 
 }
 
-class RechtenForm extends DataTableForm {
+class RechtenForm extends ModalForm {
 
 	public function __construct(AccessControl $ac, $action) {
 		parent::__construct($ac, '/rechten/' . $action . '/' . $ac->environment . '/' . $ac->resource, 'Rechten aanpassen voor ');
+		$this->dataTableId = true;
 		if ($ac->resource === '*') {
 			$this->titel .= 'elke ' . $ac->environment;
 		} else {

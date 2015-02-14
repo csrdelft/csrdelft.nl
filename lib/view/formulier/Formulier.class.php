@@ -25,6 +25,7 @@ class Formulier implements View, Validator {
 
 	protected $model;
 	protected $formId;
+	protected $dataTableId;
 	protected $action = null;
 	public $post = true;
 	private $enctype = 'multipart/form-data';
@@ -41,12 +42,22 @@ class Formulier implements View, Validator {
 	public $titel;
 	public $stappen_submit = false;
 
-	public function __construct($model, $action, $titel = false) {
+	public function __construct($model, $action, $titel = false, $dataTableId = false) {
 		$this->model = $model;
 		$this->formId = uniqid(get_class($this->model));
 		$this->action = $action;
 		$this->titel = $titel;
 		$this->css_classes[] = 'Formulier';
+		// Link with DataTable?
+		if ($this->dataTableId === true) {
+			$this->dataTableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);
+		} else {
+			$this->dataTableId = $dataTableId;
+		}
+	}
+
+	public function getFormId() {
+		return $this->formId;
 	}
 
 	public function getTitel() {
@@ -258,7 +269,10 @@ JS;
 	}
 
 	protected function getFormTag() {
-		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
+		if ($this->dataTableId) {
+			$this->css_classes[] = 'DataTableResponse';
+		}
+		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->formId . '" data-tableid="' . $this->dataTableId . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
 	}
 
 	protected function getScriptTag() {
@@ -346,37 +360,17 @@ class ModalForm extends Formulier {
 }
 
 /**
- * Form linked to a DataTable.
- */
-class DataTableForm extends ModalForm {
-
-	public $tableId = null;
-
-	protected function getFormTag() {
-		if ($this->tableId === false) {
-			return parent::getFormTag();
-		}
-		$this->css_classes[] = 'DataTableResponse';
-		if (!$this->tableId) {
-			$this->tableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);
-		}
-		return str_replace('<form ', '<form data-tableid="' . $this->tableId . '" ', parent::getFormTag());
-	}
-
-}
-
-/**
  * InlineForm with single InputField and FormDefaultKnoppen.
  */
-class InlineForm extends Formulier implements FormElement {
+abstract class InlineForm extends Formulier implements FormElement {
 
 	private $field;
 	private $toggle;
 
-	public function __construct($model, $action, FormElement $field, $toggle = true, $buttons = false, $submit_DataTableResponse = false) {
+	public function __construct($model, $action, InputField $field, $toggle = true, $buttons = false, $submit_DataTableResponse = false) {
 		parent::__construct($model, $action);
-		if (isset($_POST['FormId'])) {
-			$this->formId = filter_input(INPUT_POST, 'FormId', FILTER_SANITIZE_STRING);
+		if (isset($_POST['InlineFormId'])) {
+			$this->formId = filter_input(INPUT_POST, 'InlineFormId', FILTER_SANITIZE_STRING);
 		}
 		$this->css_classes[] = 'InlineForm';
 		$this->css_classes[] = $this->getType();
@@ -389,7 +383,7 @@ class InlineForm extends Formulier implements FormElement {
 		if ($buttons instanceof FormKnoppen) {
 			$fields[] = $buttons;
 		} elseif ($buttons) {
-			$fields[] = new FormDefaultKnoppen(null, false, true, false, true, $submit_DataTableResponse);
+			$fields[] = new FormDefaultKnoppen(null, false, true, false, true, false, $submit_DataTableResponse);
 		} else {
 			$this->field->enter_submit = true;
 			$this->field->escape_cancel = true;

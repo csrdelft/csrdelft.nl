@@ -18,10 +18,8 @@ class GroepenBeheerTable extends DataTable {
 	private $pagina;
 
 	public function __construct(AbstractGroepenModel $model) {
-		parent::__construct($model::orm, null, 'familie');
-
 		$this->url = $model->getUrl();
-		$this->dataUrl = $this->url . 'beheren';
+		parent::__construct($model::orm, $this->url . 'beheren', null, 'familie');
 
 		$this->naam = $model->getNaam();
 		$this->titel = 'Beheer ' . $this->naam;
@@ -42,33 +40,33 @@ class GroepenBeheerTable extends DataTable {
 		$this->searchColumn('status');
 		$this->searchColumn('soort');
 
-		$preview = new DataTableKnop('== 1', $this->tableId, $this->url . 'voorbeeld', 'post popup', 'Voorbeeld', 'Voorbeeldweergave van de ketzer', 'show');
+		$preview = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'voorbeeld', 'post popup', 'Voorbeeld', 'Voorbeeldweergave van de ketzer', 'show');
 		$this->addKnop($preview);
 
-		$create = new DataTableKnop('== 0', $this->tableId, $this->url . 'nieuw', 'post popup', 'Nieuw', 'Nieuwe toevoegen', 'add');
+		$create = new DataTableKnop('== 0', $this->dataTableId, $this->url . 'nieuw', 'post popup', 'Nieuw', 'Nieuwe toevoegen', 'add');
 		$this->addKnop($create);
 
-		$next = new DataTableKnop('== 1', $this->tableId, $this->url . 'aanmaken', 'post popup', 'Opvolger', 'Nieuwe toevoegen die de huidige opvolgt', 'add');
+		$next = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'aanmaken', 'post popup', 'Opvolger', 'Nieuwe toevoegen die de huidige opvolgt', 'add');
 		$this->addKnop($next);
 
-		$update = new DataTableKnop('== 1', $this->tableId, $this->url . 'wijzigen', 'post popup', 'Wijzigen', 'Wijzig eigenschappen', 'edit');
+		$update = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'wijzigen', 'post popup', 'Wijzigen', 'Wijzig eigenschappen', 'edit');
 		$this->addKnop($update);
 
 		if (property_exists($model::orm, 'aanmelden_vanaf')) {
-			$sluiten = new DataTableKnop('>= 1', $this->tableId, $this->url . 'sluiten', 'post confirm', 'Sluiten', 'Inschrijvingen nu sluiten', 'lock');
+			$sluiten = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'sluiten', 'post confirm', 'Sluiten', 'Inschrijvingen nu sluiten', 'lock');
 			$this->addKnop($sluiten);
 		}
 
-		$opvolg = new DataTableKnop('>= 1', $this->tableId, $this->url . 'opvolging', 'post popup', 'Opvolging', 'Familienaam en groepstatus instellen', 'timeline');
+		$opvolg = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'opvolging', 'post popup', 'Opvolging', 'Familienaam en groepstatus instellen', 'timeline');
 		$this->addKnop($opvolg);
 
-		$convert = new DataTableKnop('>= 1', $this->tableId, $this->url . 'converteren', 'post popup', 'Converteren', 'Converteer naar ander soort groep', 'lightning');
+		$convert = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'converteren', 'post popup', 'Converteren', 'Converteer naar ander soort groep', 'lightning');
 		$this->addKnop($convert);
 
-		$delete = new DataTableKnop('>= 1', $this->tableId, $this->url . 'verwijderen', 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
+		$delete = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'verwijderen', 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
 		$this->addKnop($delete);
 
-		$log = new DataTableKnop('== 1', $this->tableId, $this->url . 'logboek', 'post popup', 'Logboek', 'Logboek bekijken', 'log');
+		$log = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'logboek', 'post popup', 'Logboek', 'Logboek bekijken', 'log');
 		$this->addKnop($log);
 	}
 
@@ -119,8 +117,7 @@ class GroepLogboekTable extends DataTable implements FormElement {
 
 	public function __construct(AbstractGroep $groep) {
 		require_once 'model/entity/ChangeLogEntry.class.php';
-		parent::__construct(ChangeLogModel::orm, false, 'moment');
-		$this->dataUrl = $groep->getUrl() . 'logboek';
+		parent::__construct(ChangeLogModel::orm, $groep->getUrl() . 'logboek', false, 'moment');
 		$this->hideColumn('subject');
 		$this->searchColumn('property');
 		$this->searchColumn('old_value');
@@ -135,6 +132,18 @@ class GroepLogboekTable extends DataTable implements FormElement {
 
 	public function getType() {
 		return get_class($this);
+	}
+
+}
+
+class GroepLogboekData extends DataTableResponse {
+
+	public function getJson($log) {
+		$array = $log->jsonSerialize();
+
+		$array['uid'] = ProfielModel::getLink($log->uid, 'civitas');
+
+		return parent::getJson($array);
 	}
 
 }

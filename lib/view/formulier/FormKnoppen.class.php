@@ -112,11 +112,15 @@ class FormDefaultKnoppen extends FormKnoppen {
 	public $reset;
 	public $cancel;
 
-	public function __construct($cancel_url = null, $reset = true, $icons = true, $label = true, $reset_cancel = false, $submit_DataTableResponse = false) {
+	public function __construct($cancel_url = null, $reset = true, $icons = true, $labels = true, $cancel_reset = false, $submit_reset = false, $submit_DataTableResponse = false) {
 		parent::__construct();
+
 		$this->submit = new SubmitKnop();
-		if ($reset_cancel) {
+		if ($cancel_reset) {
 			$this->submit->icon = '/famfamfam/accept.png';
+		}
+		if ($submit_reset) {
+			$this->submit->action .= ' reset';
 		}
 		if ($submit_DataTableResponse) {
 			$this->submit->action .= ' DataTableResponse';
@@ -128,7 +132,7 @@ class FormDefaultKnoppen extends FormKnoppen {
 		}
 		if ($cancel_url !== false) {
 			$this->cancel = new CancelKnop($cancel_url);
-			if ($reset_cancel) {
+			if ($cancel_reset) {
 				$this->cancel->action .= ' reset';
 			}
 			$this->addKnop($this->cancel);
@@ -138,7 +142,7 @@ class FormDefaultKnoppen extends FormKnoppen {
 				$knop->icon = null;
 			}
 		}
-		if (!$label) {
+		if (!$labels) {
 			foreach ($this->getModel() as $knop) {
 				$knop->label = null;
 			}

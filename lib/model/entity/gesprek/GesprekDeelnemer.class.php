@@ -22,21 +22,27 @@ class GesprekDeelnemer extends PersistentEntity {
 	 * DateTime
 	 * @var string
 	 */
+	public $toegevoegd_moment;
+	/**
+	 * DateTime
+	 * @var string
+	 */
 	public $gelezen_moment;
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'gesprek_id'	 => array(T::Integer, false, 'auto_increment'),
-		'uid'			 => array(T::UID),
-		'gelezen_moment' => array(T::DateTime)
+		'gesprek_id'		 => array(T::Integer, false, 'auto_increment'),
+		'uid'				 => array(T::UID),
+		'toegevoegd_moment'	 => array(T::DateTime),
+		'gelezen_moment'	 => array(T::DateTime)
 	);
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('gesprek_id, uid');
+	protected static $primary_key = array('gesprek_id', 'uid');
 	/**
 	 * Database table name
 	 * @var string

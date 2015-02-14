@@ -9,8 +9,7 @@
 class GroepLedenTable extends DataTable {
 
 	public function __construct(AbstractGroepLedenModel $model, AbstractGroep $groep) {
-		parent::__construct($model::orm, 'Leden van ' . $groep->naam, 'status');
-		$this->dataUrl = $groep->getUrl() . 'leden';
+		parent::__construct($model::orm, $groep->getUrl() . 'leden', 'Leden van ' . $groep->naam, 'status');
 		$this->hideColumn('uid', false);
 		$this->searchColumn('uid');
 		$this->setColumnTitle('uid', 'Lidnaam');
@@ -18,13 +17,13 @@ class GroepLedenTable extends DataTable {
 
 		if ($groep->mag(A::Beheren)) {
 
-			$create = new DataTableKnop('== 0', $this->tableId, $groep->getUrl() . 'aanmelden', 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
+			$create = new DataTableKnop('== 0', $this->dataTableId, $groep->getUrl() . 'aanmelden', 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
 			$this->addKnop($create);
 
-			$update = new DataTableKnop('== 1', $this->tableId, $groep->getUrl() . 'bewerken', 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
+			$update = new DataTableKnop('== 1', $this->dataTableId, $groep->getUrl() . 'bewerken', 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
 			$this->addKnop($update);
 
-			$delete = new DataTableKnop('>= 1', $this->tableId, $groep->getUrl() . 'afmelden', 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
+			$delete = new DataTableKnop('>= 1', $this->dataTableId, $groep->getUrl() . 'afmelden', 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
 			$this->addKnop($delete);
 		}
 	}

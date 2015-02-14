@@ -505,7 +505,7 @@ function form_submit(event) {
 
 		if (form.hasClass('InlineForm')) {
 			source = form;
-			formData.append('FormId', form.attr('id'));
+			formData.append('InlineFormId', form.attr('id'));
 		}
 
 		if (form.hasClass('DataTableResponse')) {

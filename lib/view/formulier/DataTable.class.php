@@ -10,11 +10,10 @@ require_once 'view/formulier/TabsForm.class.php';
  * @see http://www.datatables.net/
  * 
  */
-class DataTable extends TabsForm {
+abstract class DataTable extends TabsForm {
 
 	public $nestedForm = true;
 	public $filter = null;
-	protected $tableId;
 	protected $dataUrl;
 	protected $autoUpdate = false;
 	private $groupByColumn;
@@ -61,9 +60,10 @@ class DataTable extends TabsForm {
 		)
 	);
 
-	public function __construct($orm, $titel = false, $groupByColumn = null) {
-		parent::__construct(new $orm(), null, $titel);
-		$this->tableId = $this->formId;
+	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null) {
+		parent::__construct(new $orm(), null, $titel, true);
+		$this->dataUrl = $dataUrl;
+		$this->dataTableId = $this->formId;
 		$this->formId .= '_toolbar';
 		$this->css_classes[] = 'DataTableToolbar';
 		$this->groupByColumn = $groupByColumn;
@@ -91,7 +91,7 @@ class DataTable extends TabsForm {
 	}
 
 	public function getTableId() {
-		return $this->tableId;
+		return $this->dataTableId;
 	}
 
 	protected function addKnop(DataTableKnop $knop, $tab = 'head') {
@@ -224,16 +224,16 @@ class DataTable extends TabsForm {
 		$settingsJson = json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0);
 
 		// js function calls
-		$settingsJson = str_replace('"lastUpdate"', '{"lastUpdate":lastUpdate' . $this->tableId . '}', $settingsJson);
+		$settingsJson = str_replace('"lastUpdate"', '{"lastUpdate":lastUpdate' . $this->dataTableId . '}', $settingsJson);
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
 
 		// toolbar
 		parent::view();
 		?>
-		<table id="<?= $this->tableId; ?>" class="display <?= ($this->groupByColumn !== false ? 'groupByColumn' : ''); ?>" groupbycolumn="<?= $this->groupByColumn; ?>"></table>
+		<table id="<?= $this->dataTableId; ?>" class="display <?= ($this->groupByColumn !== false ? 'groupByColumn' : ''); ?>" groupbycolumn="<?= $this->groupByColumn; ?>"></table>
 		<script type="text/javascript">
-			var lastUpdate<?= $this->tableId; ?>;
+			var lastUpdate<?= $this->dataTableId; ?> = 0;
 
 			$(document).ready(function () {
 				/**
@@ -253,7 +253,7 @@ class DataTable extends TabsForm {
 					$(tr).children().each(function (columnIndex, td) {
 						// Init custom buttons in rows
 						$(td).children('a.post').each(function (i, a) {
-							$(a).attr('data-tableid', '<?= $this->tableId; ?>');
+							$(a).attr('data-tableid', '<?= $this->dataTableId; ?>');
 						});
 						// Init InlineForms
 						if ($(td).children(':first').hasClass('InlineForm')) {
@@ -277,12 +277,7 @@ class DataTable extends TabsForm {
 				 * @returns object
 				 */
 				var fnAjaxUpdateCallback = function (json) {
-					var oTable = $('#<?= $this->tableId; ?>').dataTable();
-					if (!lastUpdate<?= $this->tableId; ?>) {
-						// Late initialisation
-						oTable.fnFilter('<?= $this->filter; ?>');
-					}
-					lastUpdate<?= $this->tableId; ?> = Math.round(new Date().getTime());
+					lastUpdate<?= $this->dataTableId; ?> = Math.round(new Date().getTime());
 		<?php
 		if ($this->autoUpdate > 0) {
 			echo "setTimeout(fnAutoUpdate, {$this->autoUpdate});";
@@ -296,9 +291,10 @@ class DataTable extends TabsForm {
 					return json.data;
 				};
 				// Init DataTable
-				var tableId = '#<?= $this->tableId; ?>';
-				var table = $(tableId).DataTable(<?= $settingsJson; ?>);
+				var tableId = '#<?= $this->dataTableId; ?>';
+				var table = $(tableId).dataTable(<?= $settingsJson; ?>);
 				//var keys = new $.fn.dataTable.KeyTable($(tableId));
+				table.fnFilter('<?= $this->filter; ?>');
 				/**
 				 * Reload table data.
 				 */
@@ -388,7 +384,7 @@ class DataTableKnop extends FormulierKnop {
 
 }
 
-class DataTableResponse extends JsonResponse {
+abstract class DataTableResponse extends JsonResponse {
 
 	public $modal;
 
