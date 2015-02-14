@@ -425,7 +425,7 @@ class GroepEetwensView extends GroepTabView {
 				$html .= '<tr><td>' . $profiel->getLink() . '</td><td>' . $profiel->eetwens . '</td></tr>';
 			}
 		}
-		return $html . '</tbody></html>';
+		return $html . '</tbody></table>';
 	}
 
 }
