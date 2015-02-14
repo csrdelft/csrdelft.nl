@@ -18,7 +18,7 @@ class GesprekkenModel extends PersistenceModel {
 	protected $default_order = 'laatste_update DESC';
 
 	protected function __construct() {
-		parent::__construct('gesprek/');
+		parent::__construct('gesprekken/');
 	}
 
 	public static function get($gesprek_id) {
@@ -59,7 +59,7 @@ class GesprekDeelnemersModel extends PersistenceModel {
 	protected static $instance;
 
 	protected function __construct() {
-		parent::__construct('gesprek/');
+		parent::__construct('gesprekken/');
 	}
 
 	public static function get($gesprek_id, $uid) {
@@ -136,7 +136,7 @@ class GesprekBerichtenModel extends PersistenceModel {
 	protected $default_order = 'moment ASC';
 
 	protected function __construct() {
-		parent::__construct('gesprek/');
+		parent::__construct('gesprekken/');
 	}
 
 	public static function get($bericht_id) {

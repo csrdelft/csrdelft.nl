@@ -45,6 +45,8 @@ class GesprekkenController extends AclController {
 			if (!$gesprek OR ! $deelnemer) {
 				$this->geentoegang();
 			}
+			$deelnemer->gelezen_moment = getDateTime();
+			GesprekDeelnemersModel::instance()->update($deelnemer);
 		} else {
 			$gesprek = null;
 		}
@@ -114,6 +116,7 @@ class GesprekkenController extends AclController {
 			GesprekBerichtenModel::instance()->maakBericht($gesprek, $deelnemer, $values['inhoud']);
 			$berichten = $gesprek->getBerichten($deelnemer, $deelnemer->gelezen_moment);
 			$this->view = new BerichtenResponse($berichten);
+			$this->view->autoUpdate = $gesprek->auto_update;
 		} else {
 			$this->view = $form;
 		}
@@ -128,6 +131,7 @@ class GesprekkenController extends AclController {
 		$timestamp = (int) filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
 		$berichten = $gesprek->getBerichten($deelnemer, $timestamp);
 		$this->view = new BerichtenResponse($berichten);
+		$this->view->autoUpdate = $gesprek->auto_update;
 	}
 
 	public function verlaten($gesprek_id = null) {

@@ -75,11 +75,6 @@ class GesprekkenTable extends DataTable {
 
 		$add = new DataTableKnop('== 1', $this->dataTableId, '/gesprekken/toevoegen', 'post popup', 'Toevoegen', 'Deelnemer toevoegen aan het gesprek', 'user_add');
 		$this->addKnop($add);
-
-		$this->javascript .= <<<JS
-
-//TODO: auto update
-JS;
 	}
 
 }
@@ -109,26 +104,18 @@ class GesprekBerichtenTable extends DataTable {
 
 	public function __construct(Gesprek $gesprek) {
 		parent::__construct(GesprekBerichtenModel::orm, '/gesprekken/lees/' . $gesprek->gesprek_id, 'Gesprek met ' . $gesprek->getDeelnemersFormatted());
-		$this->defaultLength = -1;
-		$this->settings['scrollY'] = '600px';
-		$this->settings['scrollCollapse'] = true;
 
 		$this->hideColumn('details');
 		$this->hideColumn('gesprek_id');
 		$this->hideColumn('auteur_uid');
 		$this->hideColumn('moment');
-
-		$this->javascript .= <<<JS
-
-//TODO: auto update
-JS;
 	}
 
 }
 
 class BerichtenResponse extends DataTableResponse {
 
-	//public $page = 'last';
+	public $page = 'last';
 	private $previous;
 
 	public function getJson($bericht) {

@@ -29,6 +29,11 @@ class Gesprek extends PersistentEntity {
 	 */
 	public $aantal_nieuw;
 	/**
+	 * Aantal seconden delay
+	 * @var int
+	 */
+	public $auto_update;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -72,10 +77,33 @@ class Gesprek extends PersistentEntity {
 			$timestamp = $toegevoegd;
 		}
 		$gelezen = strtotime($deelnemer->gelezen_moment);
-		if ($timestamp > $gelezen) {
-			$deelnemer->gelezen_moment = getDateTime();
-			GesprekDeelnemersModel::instance()->update($deelnemer);
+
+		// Auto update
+		$max_interval = (int) Instellingen::get('gesprekken', 'max_interval_actief_milisec');
+		$min_interval = (int) Instellingen::get('gesprekken', 'min_interval_actief_milisec');
+		$actieve_deelnemers = 0;
+		foreach ($this->getDeelnemers() as $andere_deelnemer) {
+			if ($deelnemer->uid !== $andere_deelnemer->uid AND time() - strtotime($andere_deelnemer->gelezen_moment) < $max_interval) {
+				$actieve_deelnemers++;
+			}
 		}
+		if ($actieve_deelnemers > 0) {
+			$laatst = max($timestamp, $gelezen);
+			$nieuw = $this->getAantalNieuweBerichten($deelnemer, $timestamp);
+			if ($nieuw > 0) {
+				$this->auto_update = (time() - $laatst) / $nieuw;
+			} else {
+				$this->auto_update = (time() - $laatst) / $actieve_deelnemers;
+			}
+			if ($this->auto_update < $min_interval) {
+				$this->auto_update = $min_interval;
+			}
+		} else {
+			$this->auto_update = false;
+		}
+
+		$deelnemer->gelezen_moment = getDateTime();
+		GesprekDeelnemersModel::instance()->update($deelnemer);
 		return GesprekBerichtenModel::instance()->getBerichtenSinds($this, $timestamp);
 	}
 

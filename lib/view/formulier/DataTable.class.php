@@ -15,14 +15,13 @@ abstract class DataTable extends TabsForm {
 	public $nestedForm = true;
 	public $filter = null;
 	protected $dataUrl;
-	protected $autoUpdate = false;
 	private $groupByColumn;
 	private $groupByLocked = false;
 	protected $defaultLength = 10;
 	private $columns = array();
 	protected $settings = array(
-		'dom'		 => 'fTrtpli',
-		'tableTools' => array(
+		'dom'			 => 'fTrtpli',
+		'tableTools'	 => array(
 			'sRowSelect' => 'os',
 			'aButtons'	 => array(
 				'select_all',
@@ -34,11 +33,11 @@ abstract class DataTable extends TabsForm {
 			),
 			'sSwfPath'	 => '/layout/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf'
 		),
-		'lengthMenu' => array(
+		'lengthMenu'	 => array(
 			array(10, 25, 50, 100, -1),
 			array(10, 25, 50, 100, 'Alles')
 		),
-		'language'	 => array(
+		'language'		 => array(
 			'sProcessing'		 => 'Bezig...',
 			'sLengthMenu'		 => '_MENU_ resultaten weergeven',
 			'sZeroRecords'		 => 'Geen resultaten gevonden',
@@ -263,16 +262,17 @@ abstract class DataTable extends TabsForm {
 				 */
 				var fnAjaxUpdateCallback = function (json) {
 					lastUpdate<?= $this->dataTableId; ?> = Math.round(new Date().getTime());
-		<?php
-		if ($this->autoUpdate > 0) {
-			echo "setTimeout(fnAutoUpdate, {$this->autoUpdate});";
-		}
-		?>
+					if (json.autoUpdate) {
+						setTimeout(fnAutoUpdate, json.autoUpdate);
+					}
 					if (json.page) {
-						window.setTimeout(function () {
-							var table = $('#<?= $this->dataTableId; ?>').DataTable();
-							table.page(json.page).draw(false);
-						}, 100);
+						var table = $('#<?= $this->dataTableId; ?>').DataTable();
+						// Stay on last page
+						if (json.page !== 'last' || table.page.len() === table.page()) {
+							window.setTimeout(function () {
+								table.page(json.page).draw(false);
+							}, 100);
+						}
 					}
 					fnUpdateToolbar();
 					return json.data;
@@ -372,8 +372,9 @@ class DataTableKnop extends FormulierKnop {
 
 abstract class DataTableResponse extends JsonResponse {
 
-	public $modal = null;
+	public $autoUpate = false;
 	public $page = false;
+	public $modal = null;
 
 	public function getJson($entity) {
 		return json_encode($entity);
@@ -385,6 +386,7 @@ abstract class DataTableResponse extends JsonResponse {
 		echo "{\n";
 		echo '"modal":' . json_encode($this->modal) . ",\n";
 		echo '"page":' . json_encode($this->page) . ",\n";
+		echo '"autoUpdate":' . json_encode($this->autoUpate) . ",\n";
 		echo '"data":[' . "\n";
 		$comma = false;
 		foreach ($this->model as $entity) {
