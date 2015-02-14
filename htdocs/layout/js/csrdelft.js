@@ -348,7 +348,10 @@ function knop_ajax(knop, type) {
 
 		var tableId = knop.attr('data-tableid');
 		if (!document.getElementById(tableId)) {
-			alert('DataTable not found');
+			tableId = knop.closest('form').attr('data-tableid');
+			if (!document.getElementById(tableId)) {
+				alert('DataTable not found');
+			}
 		}
 
 		data = {

@@ -18,7 +18,7 @@ class GesprekkenView implements View {
 			$this->gesprek = $gesprek;
 			GesprekBerichtenModel::instance(); // require_once
 			$this->berichtenTable = new GesprekBerichtenTable($gesprek);
-			$this->berichtForm = new GesprekBerichtForm($gesprek, $this->berichtenTable->getTableId());
+			$this->berichtForm = new GesprekBerichtForm($gesprek, $this->berichtenTable->getDataTableId());
 		} else {
 
 			$this->gesprekkenTable = new GesprekkenTable();

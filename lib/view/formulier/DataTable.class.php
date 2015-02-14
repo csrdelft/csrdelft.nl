@@ -88,10 +88,6 @@ abstract class DataTable extends TabsForm {
 		}
 	}
 
-	public function getTableId() {
-		return $this->dataTableId;
-	}
-
 	protected function addKnop(DataTableKnop $knop, $tab = 'head') {
 		$this->addFields(array($knop), $tab);
 	}

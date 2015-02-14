@@ -49,7 +49,7 @@ class Formulier implements View, Validator {
 		$this->titel = $titel;
 		$this->css_classes[] = 'Formulier';
 		// Link with DataTable?
-		if ($this->dataTableId === true) {
+		if ($dataTableId === true) {
 			$this->dataTableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);
 		} else {
 			$this->dataTableId = $dataTableId;
@@ -58,6 +58,10 @@ class Formulier implements View, Validator {
 
 	public function getFormId() {
 		return $this->formId;
+	}
+
+	public function getDataTableId() {
+		return $this->dataTableId;
 	}
 
 	public function getTitel() {
@@ -367,8 +371,8 @@ abstract class InlineForm extends Formulier implements FormElement {
 	private $field;
 	private $toggle;
 
-	public function __construct($model, $action, InputField $field, $toggle = true, $buttons = false, $submit_DataTableResponse = false) {
-		parent::__construct($model, $action);
+	public function __construct($model, $action, InputField $field, $toggle = true, $buttons = false, $dataTableId = false) {
+		parent::__construct($model, $action, null, $dataTableId);
 		if (isset($_POST['InlineFormId'])) {
 			$this->formId = filter_input(INPUT_POST, 'InlineFormId', FILTER_SANITIZE_STRING);
 		}
@@ -383,7 +387,7 @@ abstract class InlineForm extends Formulier implements FormElement {
 		if ($buttons instanceof FormKnoppen) {
 			$fields[] = $buttons;
 		} elseif ($buttons) {
-			$fields[] = new FormDefaultKnoppen(null, false, true, false, true, false, $submit_DataTableResponse);
+			$fields[] = new FormDefaultKnoppen(null, false, true, false, true, false, $dataTableId);
 		} else {
 			$this->field->enter_submit = true;
 			$this->field->escape_cancel = true;
