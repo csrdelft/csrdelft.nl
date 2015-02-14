@@ -71,11 +71,20 @@ class GeoLocationController extends AclController {
 
 							var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 							var html = '<?= $profiel->getLink('pasfoto'); ?><div style="max-width: 173px; word-wrap: break-word;">' + JSON.stringify(position) + '</div>';
-							var infowindow = new google.maps.InfoWindow({
-								map: map,
+
+							var marker = new google.maps.Marker({
 								position: geolocate,
+								map: map
+							});
+
+							var infowindow = new google.maps.InfoWindow({
 								content: html
 							});
+
+							google.maps.event.addListener(marker, 'click', function () {
+								infowindow.open(map, marker);
+							});
+							infowindow.open(map, marker);
 
 							map.setCenter(geolocate);
 
