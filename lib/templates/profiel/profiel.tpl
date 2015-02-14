@@ -154,8 +154,8 @@
 				{if $profiel->verticale!=''}
 					<div class="label">Verticale:</div>
 					<div class="data"><a href="/ledenlijst?q=verticale:{$profiel->verticale}">{$profiel->getVerticale()->naam}</a></div>
-				{/if}
-				{if $profiel->moot}
+					{/if}
+					{if $profiel->moot}
 					<div class="label">Oude moot:</div>
 					<div class="data"><a href="/ledenlijst?q=moot:{$profiel->moot}">{$profiel->moot}</a></div>
 					{/if}
@@ -180,7 +180,7 @@
 			</div>
 			<div class="half">
 				{$werkgroepen}
-				<div class="label">&nbsp;</div><a class="btn" onclick="$(this).slideUp();
+				<div class="label">&nbsp;</div><a class="btn" onclick="$(this).remove();
 						$('#meerGroepenContainer').slideDown();">Toon activiteiten</a>
 			</div>
 			<div class="clear-left"></div>
