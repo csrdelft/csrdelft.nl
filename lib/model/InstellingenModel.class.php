@@ -65,12 +65,8 @@ class Instellingen extends CachedPersistenceModel {
 		),
 		'forum'			 => array(
 			'reageren_tijd'					 => '-2 minutes',
-			'grafiek_periode'				 => '-2 months',
+			'grafiek_periode'				 => '-3 months',
 			'externen_geentoegang_gesloten'	 => '-1 year'
-		),
-		'gesprekken'	 => array(
-			'min_interval_actief_milisec'	 => '1000',
-			'max_interval_actief_milisec'	 => '30000'
 		),
 		'maaltijden'	 => array(
 			'budget_maalcie'					 => '100',

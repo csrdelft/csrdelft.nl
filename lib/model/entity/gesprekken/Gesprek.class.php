@@ -80,30 +80,25 @@ class Gesprek extends PersistentEntity {
 			$lastUpdate = $toegevoegd;
 		}
 		// Auto update
-		$max_interval = (int) Instellingen::get('gesprekken', 'max_interval_actief_milisec');
-		$min_interval = (int) Instellingen::get('gesprekken', 'min_interval_actief_milisec');
-		$actieve_deelnemers = 0;
-		foreach ($this->getDeelnemers() as $andere_deelnemer) {
-			if ($deelnemer->uid !== $andere_deelnemer->uid) {
-				$diff = time() - strtotime($andere_deelnemer->gelezen_moment);
-				if ($diff * 1000 < $max_interval) {
-					$actieve_deelnemers++;
-				}
+		$diff = time() - strtotime($deelnemer->gelezen_moment);
+		$aantal_nieuw = $this->getAantalNieuweBerichten($deelnemer, $lastUpdate);
+		if ($aantal_nieuw > 0) {
+			$this->auto_update = 1000 * $diff / $aantal_nieuw;
+		} else {
+			$total_delay = 0;
+			$total_amount = 0;
+			foreach (GesprekBerichtenModel::instance()->find('gesprek_id = ? AND auteur_uid != ?', array($deelnemer->gesprek_id, $deelnemer->uid), null, 'moment DESC', 5) as $bericht) {
+				$total_amount++;
+				$total_delay += time() - strtotime($bericht->moment);
+			}
+			if ($total_amount > 0) {
+				$this->auto_update = 1000 * $total_delay / $total_amount;
+			} else {
+				$this->auto_update = 1000 * 10;
 			}
 		}
-		if ($actieve_deelnemers > 0) {
-			$diff = time() - strtotime($deelnemer->gelezen_moment);
-			$nieuw = $this->getAantalNieuweBerichten($deelnemer, $lastUpdate);
-			if ($nieuw > 0) {
-				$this->auto_update = 1000 * $diff / $nieuw;
-			} else {
-				$this->auto_update = 1000 * $diff / $actieve_deelnemers;
-			}
-			if ($this->auto_update < $min_interval) {
-				$this->auto_update = $min_interval;
-			}
-		} else {
-			$this->auto_update = false;
+		if ($this->auto_update < 1000) {
+			$this->auto_update = 1000;
 		}
 		// Update deelnemer
 		$deelnemer->gelezen_moment = getDateTime();
