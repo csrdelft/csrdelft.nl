@@ -31,27 +31,40 @@ class GeoLocationController extends AclController {
 	}
 
 	public function save() {
-		$position = filter_input(INPUT_POST, 'position', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$location = $this->model->savePosition(LoginModel::getUid(), $position);
+		$timestamp = (int) filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
+		$coords = filter_input(INPUT_POST, 'coords', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$location = $this->model->savePosition(LoginModel::getUid(), $timestamp, $coords);
 		$this->view = new JsonResponse($location);
 	}
 
 	public function get() {
 		$uid = filter_input(INPUT_POST, 'uid', FILTER_SANITIZE_STRING);
-		$location = $this->model->getLastPosition($uid);
-		if ($location) {
-			echo $location->position;
-			exit;
+		if ($uid) {
+			$last = array($uid => $this->model->getLastLocation($uid));
 		} else {
-			$this->view = new JsonResponse(false, 404);
+			$last = $this->model->getAllLastLocations();
 		}
+		header('Content-Type: application/json');
+		$comma = false;
+		echo '[';
+		foreach ($last as $uid => $loc) {
+			if ($comma) {
+				echo ',' . "\n";
+			} else {
+				$comma = true;
+			}
+			$profiel = ProfielModel::get($loc->uid);
+			echo '{' . "\n";
+			echo '"pasfoto": ' . json_encode($profiel->getPasfotoTag('pasfoto', true)) . ',' . "\n";
+			echo '"datetime": ' . json_encode(reldate($loc->moment)) . ',' . "\n";
+			echo '"position": ' . $loc->position . "\n";
+			echo '}';
+		}
+		echo ']';
+		exit;
 	}
 
 	public function map($uid = null) {
-		$profiel = ProfielModel::get($uid);
-		if (!$profiel) {
-			die('invalid uid');
-		}
 		?>
 		<html>
 			<body>
@@ -67,10 +80,11 @@ class GeoLocationController extends AclController {
 							mapTypeId: google.maps.MapTypeId.ROADMAP
 						});
 
-						var drawPosition = function (position) {
+						var drawLocation = function (location) {
 
-							var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-							var html = '<?= $profiel->getLink('pasfoto'); ?><div style="max-width: 173px; word-wrap: break-word;">' + JSON.stringify(position) + '</div>';
+							var geolocate = new google.maps.LatLng(location.position.coords.latitude, location.position.coords.longitude);
+							var html = location.pasfoto + '<p style="text-align: right;">' + location.datetime + '</p>';
+							html += '<div style="max-width: 173px; word-wrap: break-word;">' + JSON.stringify(location.position.coords) + '</div>';
 
 							var marker = new google.maps.Marker({
 								position: geolocate,
@@ -90,20 +104,21 @@ class GeoLocationController extends AclController {
 
 						};
 
-						var getPosition = function () {
+						var getLocation = function () {
 
 							$.post('/geolocation/get', {
-								uid: <?= $profiel->uid; ?>
+								uid: <?= $uid; ?>
 							}, function (data, textStatus, jqXHR) {
 
-								var position = $.parseJSON(data);
-								window.setTimeout(getPosition, Math.round(new Date()) - position.timestamp); // auto update
-								drawPosition(position);
+								$.each(data, function (index) {
+									drawLocation(data[index]);
+								});
+								//window.setTimeout(getLocation, Math.round(new Date()) - locations.timestamp); // auto update
 							});
 
 						};
 
-						getPosition();
+						getLocation();
 
 					})();
 

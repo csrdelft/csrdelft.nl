@@ -135,7 +135,8 @@ function init_geolocation() {
 		if (!prev_pos || ($(prev_pos.coords).not(position.coords).length === 0 && $(position.coords).not(prev_pos.coords).length === 0)) {
 			prev_pos = position;
 			$.post('/geolocation/save', {
-				position: position
+				coords: position.coords,
+				timestamp: position.timestamp
 			});
 		}
 	};
