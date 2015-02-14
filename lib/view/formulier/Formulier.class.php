@@ -25,7 +25,7 @@ class Formulier implements View, Validator {
 
 	protected $model;
 	protected $formId;
-	protected $dataTableId;
+	private $dataTableId;
 	protected $action = null;
 	public $post = true;
 	private $enctype = 'multipart/form-data';
@@ -64,6 +64,12 @@ class Formulier implements View, Validator {
 		return $this->dataTableId;
 	}
 
+	/**
+	 * Set the id late (after constructor).
+	 * Use in case it is not POSTed.
+	 * 
+	 * @param string $dataTableId
+	 */
 	public function setDataTableId($dataTableId) {
 		$this->dataTableId = $dataTableId;
 	}
