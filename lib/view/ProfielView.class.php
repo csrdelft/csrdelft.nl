@@ -50,7 +50,7 @@ class ProfielView extends SmartyTemplateView {
 			$besturen .= '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />';
 		}
 		if ($besturen != '') {
-			$besturen = '<div class="label">Bestuur:</div><div class="data">' . $besturen . '</div>';
+			$besturen = '<div class="label">Bestuur:</div><div class="data">' . $besturen . '</div><br />';
 		}
 		$this->smarty->assign('besturen', $besturen);
 
@@ -59,18 +59,55 @@ class ProfielView extends SmartyTemplateView {
 			$commissies .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />';
 		}
 		if ($commissies != '') {
-			$commissies = '<div class="label">Commissies:</div><div class="data">' . $commissies . '</div>';
+			$commissies = '<div class="label">Commissies:</div><div class="data">' . $commissies . '</div><br />';
 		}
 		$this->smarty->assign('commissies', $commissies);
+
+
+		$werkgroepen = '';
+		foreach (WerkgroepenModel::instance()->getGroepenVoorLid($this->model->uid) as $werkgroep) {
+			$werkgroepen .= '<a href="' . $werkgroep->getUrl() . '">' . $werkgroep->naam . '</a><br />';
+		}
+		if ($werkgroepen != '') {
+			$werkgroepen = '<div class="label">Werkgroepen:</div><div class="data">' . $werkgroepen . '</div><br />';
+		}
+		$this->smarty->assign('werkgroepen', $werkgroepen);
+
+		$onderverenigingen = '';
+		foreach (OnderverenigingenModel::instance()->getGroepenVoorLid($this->model->uid) as $ondervereniging) {
+			$onderverenigingen .= '<a href="' . $ondervereniging->getUrl() . '">' . $ondervereniging->naam . '</a><br />';
+		}
+		if ($onderverenigingen != '') {
+			$onderverenigingen = '<div class="label">Onderverenigingen:</div><div class="data">' . $onderverenigingen . '</div><br />';
+		}
+		$this->smarty->assign('onderverenigingen', $onderverenigingen);
 
 		$groepen = '';
 		foreach (RechtenGroepenModel::instance()->getGroepenVoorLid($this->model->uid) as $groep) {
 			$groepen .= '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />';
 		}
 		if ($groepen != '') {
-			$groepen = '<div class="label">Overige<br />groepen:</div><div class="data">' . $groepen . '</div>';
+			$groepen = '<div class="label">Overige<br />groepen:</div><div class="data">' . $groepen . '</div><br />';
 		}
 		$this->smarty->assign('groepen', $groepen);
+
+		$ketzers = '';
+		foreach (KetzersModel::instance()->getGroepenVoorLid($this->model->uid) as $ketzer) {
+			$ketzers .= '<a href="' . $ketzer->getUrl() . '">' . $ketzer->naam . '</a><br />';
+		}
+		if ($ketzers != '') {
+			$ketzers = '<div class="label">Aanschafketzers:</div><div class="data scroll">' . $ketzers . '</div><br />';
+		}
+		$this->smarty->assign('ketzers', $ketzers);
+
+		$activiteiten = '';
+		foreach (ActiviteitenModel::instance()->getGroepenVoorLid($this->model->uid) as $activiteit) {
+			$activiteiten .= '<a href="' . $activiteit->getUrl() . '">' . $activiteit->naam . '</a><br />';
+		}
+		if ($activiteiten != '') {
+			$activiteiten = '<div class="label">Activiteiten:</div><div class="data">' . $activiteiten . '</div><br />';
+		}
+		$this->smarty->assign('activiteiten', $activiteiten);
 
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {
 

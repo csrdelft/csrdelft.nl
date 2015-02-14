@@ -163,9 +163,18 @@
 			<div class="half">
 				{$besturen}
 				{$commissies}
+				{$onderverenigingen}
 			</div>
 			<div class="half">
+				{$werkgroepen}
+			</div>
+			<div class="clear-left"></div>
+			<div class="half">
 				{$groepen}
+				{$ketzers}
+			</div>
+			<div class="half">
+				{$activiteiten}
 			</div>
 			<div class="clear-left"></div>
 		</div>
@@ -360,7 +369,7 @@
 		<div class="profielregel" id="changelog">
 			<div class="gegevens">
 				<div style="cursor: pointer;" onclick="$('#changelog_gegevens').toggle();
-							this.remove()">Bewerklog &raquo;</div>
+						this.remove()">Bewerklog &raquo;</div>
 				<div class="verborgen" id="changelog_gegevens">
 					{$profiel->changelog|bbcode}
 				</div>

@@ -2,6 +2,7 @@
 .label { text-align: left; font-weight: normal; float: left; width: 75px; color: #999; }
 .data { margin-left: 75px; text-align: left; }
 .data li { margin-left: 0; }
+.data.scroll { max-height: 200px; overflow: auto; }
 #profiel { margin: 20px 0 200px 0; }
 #profiel h1 { margin-bottom: 10px; }
 #profiel .btnjes { margin-left: 20px; line-height: 2.5em; }
