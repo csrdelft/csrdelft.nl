@@ -1,6 +1,5 @@
 <?php
 require_once 'model/GeoLocationModel.class.php';
-//require_once 'view/GeoLocationView.class.php';
 
 /**
  * GeoLocationController.class.php
@@ -71,14 +70,11 @@ class GeoLocationController extends AclController {
 						var drawPosition = function (position) {
 
 							var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
+							var html = '<?= $profiel->getLink('pasfoto'); ?><div style="max-width: 173px; word-wrap: break-word;">' + JSON.stringify(position) + '</div>';
 							var infowindow = new google.maps.InfoWindow({
 								map: map,
 								position: geolocate,
-								content:
-										'<h4>Lat: ' + position.coords.latitude + '</h4>' +
-										'<h4>Lon: ' + position.coords.longitude + '</h4>' +
-										'<?= $profiel->getLink('pasfoto'); ?>'
+								content: html
 							});
 
 							map.setCenter(geolocate);
