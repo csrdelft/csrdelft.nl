@@ -298,7 +298,7 @@ class AbstractGroepenController extends Controller {
 		$form = new GroepForm($groep, $this->model->getUrl() . $this->action); // checks rechten aanmaken
 		if (!$this->isPosted()) {
 			$this->beheren();
-			$form->dataTableId = $this->view->getBody()->getDataTableId();
+			$form->setDataTableId($this->view->getBody()->getDataTableId());
 			$this->view->modal = $form;
 			return;
 		} elseif ($form->validate()) {
@@ -328,7 +328,7 @@ class AbstractGroepenController extends Controller {
 			if (!$this->isPosted()) {
 				$this->beheren();
 				$this->view->getBody()->filter = $groep->naam;
-				$form->dataTableId = $this->view->getBody()->getDataTableId();
+				$form->setDataTableId($this->view->getBody()->getDataTableId());
 				$this->view->modal = $form;
 			} elseif ($form->validate()) {
 				ChangeLogModel::instance()->logChanges($form->diff());

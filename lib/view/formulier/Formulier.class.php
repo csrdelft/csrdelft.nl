@@ -64,6 +64,10 @@ class Formulier implements View, Validator {
 		return $this->dataTableId;
 	}
 
+	public function setDataTableId($dataTableId) {
+		$this->dataTableId = $dataTableId;
+	}
+
 	public function getTitel() {
 		return $this->titel;
 	}

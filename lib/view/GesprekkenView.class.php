@@ -152,11 +152,10 @@ class BerichtenResponse extends DataTableResponse {
 
 class GesprekBerichtForm extends InlineForm {
 
-	public function __construct(Gesprek $gesprek, $tableId = true) {
+	public function __construct(Gesprek $gesprek, $dataTableId = true) {
 		$field = new RequiredTextareaField('inhoud', null, null);
 		$field->placeholder = 'Bericht';
-		parent::__construct(null, '/gesprekken/zeg/' . $gesprek->gesprek_id, $field, false, false);
-		$this->dataTableId = $tableId;
+		parent::__construct(null, '/gesprekken/zeg/' . $gesprek->gesprek_id, $field, false, false, $dataTableId);
 		$this->css_classes[] = 'SubmitReset';
 	}
 
