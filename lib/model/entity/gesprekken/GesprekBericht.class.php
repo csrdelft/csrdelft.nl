@@ -55,4 +55,9 @@ class GesprekBericht extends PersistentEntity {
 	 */
 	protected static $table_name = 'gesprek_berichten';
 
+	public function getAuteurFormatted() {
+		$profiel = ProfielModel::get($this->auteur_uid);
+		return '<img class="cd-user-avatar float-left" src="/plaetjes/' . $profiel->getPasfotoPath(true) . '"/><span class="dikgedrukt">' . $profiel->getLink('volledig') . '</span><br />';
+	}
+
 }

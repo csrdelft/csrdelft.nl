@@ -96,7 +96,7 @@ class GesprekkenResponse extends DataTableResponse {
 		$array['details'] .= '</a>';
 		$array['deelnemers'] = $gesprek->getDeelnemersFormatted();
 		$moment = '<span class="lichtgrijs float-right">' . reldate($gesprek->laatste_update) . '</span>';
-		$array['laatste_bericht'] = $moment . CsrBB::parse($gesprek->laatste_bericht);
+		$array['laatste_bericht'] = $moment . CsrBB::parseHtml($gesprek->laatste_bericht);
 
 		return parent::getJson($array);
 	}
@@ -127,12 +127,12 @@ class BerichtenResponse extends DataTableResponse {
 
 		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ? AND bericht_id < ?', array($bericht->gesprek_id, $bericht->bericht_id), null, 'bericht_id DESC', 1)->fetch();
 		if ($previous AND $previous->auteur_uid === $bericht->auteur_uid) {
-			$bbcode = $bericht->inhoud;
+			$auteur = '';
 		} else {
-			$bbcode = '[b]' . ProfielModel::getNaam($bericht->auteur_uid, 'volledig') . '[/b][rn]' . $bericht->inhoud;
+			$auteur = $bericht->getAuteurFormatted();
 		}
 		$moment = '<span data-order="' . $bericht->moment . '" class="lichtgrijs float-right">' . reldate($bericht->moment) . '</span>';
-		$array['inhoud'] = $moment . CsrBB::parse($bbcode);
+		$array['inhoud'] = $moment . $auteur . CsrBB::parse($bericht->inhoud);
 
 		return parent::getJson($array);
 	}

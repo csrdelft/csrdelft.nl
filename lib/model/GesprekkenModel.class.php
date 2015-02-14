@@ -169,7 +169,7 @@ class GesprekBerichtenModel extends PersistenceModel {
 		$bericht->id = $this->create($bericht);
 		// Update gesprek
 		$gesprek->laatste_update = $bericht->moment;
-		$gesprek->laatste_bericht = '[b]' . ProfielModel::get($bericht->auteur_uid)->getNaam() . '[/b][rn]' . mb_substr($bericht->inhoud, 0, 30);
+		$gesprek->laatste_bericht = $bericht->getAuteurFormatted() . CsrBB::parse(mb_substr($bericht->inhoud, 0, 30));
 		if (mb_strlen($bericht->inhoud) > 30) {
 			$gesprek->laatste_bericht .= '...';
 		}
