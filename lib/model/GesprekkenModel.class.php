@@ -100,6 +100,9 @@ class GesprekDeelnemersModel extends PersistenceModel {
 	}
 
 	public function voegToeAanGesprek(Gesprek $gesprek, Account $account, Account $door = null) {
+		if (count($gesprek->getDeelnemers()) >= (int) Instellingen::get('gesprekken', 'max_aantal_deelnemers')) {
+			return false;
+		}
 		$deelnemer = new GesprekDeelnemer();
 		$deelnemer->gesprek_id = $gesprek->gesprek_id;
 		$deelnemer->uid = $account->uid;
