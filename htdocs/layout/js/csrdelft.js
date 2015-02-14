@@ -132,7 +132,8 @@ function init_geolocation() {
 	var prev_pos = false;
 
 	var position_save = function (position) {
-		if (!prev_pos || prev_pos.coords.latitude !== position.coords.latitude || prev_pos.coords.longitude !== position.coords.longitude) {
+		if (!prev_pos || $(prev_pos.coords).not(position.coords).length === 0 && $(position.coords).not(prev_pos.coords).length === 0) {
+			prev_pos = position;
 			$.post('/geolocation/save', {
 				position: position
 			});
