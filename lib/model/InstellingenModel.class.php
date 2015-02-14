@@ -69,7 +69,7 @@ class Instellingen extends CachedPersistenceModel {
 			'externen_geentoegang_gesloten'	 => '-1 year'
 		),
 		'gesprekken'	 => array(
-			'min_delay_milisec' => '3000'
+			'min_delay_seconds' => '3'
 		),
 		'maaltijden'	 => array(
 			'budget_maalcie'					 => '100',
