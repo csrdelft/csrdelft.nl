@@ -132,7 +132,7 @@ class BerichtenResponse extends DataTableResponse {
 		} else {
 			$bbcode = $bericht->inhoud;
 		}
-		$moment = '<span class="lichtgrijs float-right">' . reldate($bericht->moment) . '</span>';
+		$moment = '<span data-order="' . $bericht->moment . '" class="lichtgrijs float-right">' . reldate($bericht->moment) . '</span>';
 		$array['inhoud'] = $moment . CsrBB::parse($bbcode);
 
 		return parent::getJson($array);
