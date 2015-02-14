@@ -80,7 +80,7 @@ class GesprekkenTable extends DataTable {
 
 		$this->javascript .= <<<JS
 
-$('#{$this->dataTableId}').on('click', 'td:first, td:nth-child(2)', function (event) {
+$('#{$this->dataTableId}').on('click', 'td:nth-child(2)', function (event) {
 	window.location.href = $(this).parent().children('td:first').children('a:first').attr('href');
 });
 JS;
