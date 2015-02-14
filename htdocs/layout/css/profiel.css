@@ -3,9 +3,6 @@
 .data { margin-left: 75px; text-align: left; }
 .data li { margin-left: 0; }
 .data.scroll { max-height: 200px; overflow: auto; }
-#profiel { margin: 20px 0 200px 0; }
-#profiel h1 { margin-bottom: 10px; }
-#profiel .btnjes { margin-left: 20px; line-height: 2.5em; }
 
 #profiel .profielregel { margin-bottom: 20px; clear: left; }
 #profiel .left { display: none; float: left; width: 10px; text-align: right; font-style: italic; font-size: 0.9em; }
@@ -18,9 +15,8 @@
 	-webkit-box-shadow: 0 0 11px #000;
 	box-shadow: 0 0 11px #000;
 }
-
 #profiel .naam .status { float: left; color: #aaa; width: 60px; padding: 0 20px; }
-#profiel .naam h1 { padding-left: 10px; }
+#profiel .naam h1 { padding-left: 20px; }
 
 #profiel #corveeTaken { width: 550px; }
 #profiel #corveeTaken tr.old { opacity: .50; }

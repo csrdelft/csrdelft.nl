@@ -2,16 +2,18 @@
 	<div id="profielregel">
 		<div class="naam">
 			<div class="float-right">
-				<div class="pasfoto">{$profiel->getPasfotoTag(false)}</div>
+				<div class="pasfoto float-left">{$profiel->getPasfotoTag(false)}</div>
 				<div class="knopjes">
+					<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>
+					<a href="/profiel/{$profiel->uid}/addToGoogleContacts/" class="btn" title="{if $profiel->isInGoogleContacts()}Dit profiel opdateren in mijn google adresboek updaten{else}Dit profiel toevoegen aan mijn google adresboek{/if}">
+						<img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/>
+					</a>
 					{if $profiel->magBewerken()}
-						<a href="/profiel/{$profiel->uid}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="bewerken"}</a>
+						<a href="/profiel/{$profiel->uid}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="pencil"}</a>
 						<a href="/profiel/{$profiel->uid}/voorkeuren" class="btn" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
 					{/if}
-					<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>
-					<a href="/profiel/{$profiel->uid}/addToGoogleContacts/" class="btn" title="{*if $profiel->isInGoogleContacts()}Er bestaat al een contact met deze naam in je Google-contacts. Klik om te updaten.{else*}Voeg dit profiel toe aan mijn google adresboek{*/if*}"><img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/></a>
-						{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_ADMIN')}
-							{if AccountModel::existsUid($profiel->uid)}
+					{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_ADMIN')}
+						{if AccountModel::existsUid($profiel->uid)}
 							<a href="/account/{$profiel->uid}" class="btn accountEdit" title="Inloggegevens bewerken"></a>
 						{elseif LoginModel::mag('P_ADMIN')}
 							<a href="/account/{$profiel->uid}" class="btn accountCreate" title="Account aanmaken"></a>
@@ -20,40 +22,38 @@
 							<a href="/tools/stats.php?uid={$profiel->uid}" class="btn" title="Toon bezoeklog">{icon get="server_chart"}</a>
 						{/if}
 					{/if}
-					{if $profiel->status === LidStatus::Noviet AND LoginModel::mag('commissie:NovCie')}
-						<a href="/profiel/{$profiel->uid}/bewerken" class="btn"><img src="/plaetjes/forum/bewerken.png" title="Bewerk dit profiel" alt="bewerken" />Noviet bewerken</a><br />
-						{/if}
 				</div>
 			</div>
 			{getMelding()}
 			<h1 title="Lid-status: {LidStatus::getDescription($profiel->status)}">
-				<span class="status">{LidStatus::getChar($profiel->status)}&nbsp;</span>
+				{if LidStatus::getChar($profiel->status)!=''}<span class="status">{LidStatus::getChar($profiel->status)}&nbsp;</span>{/if}
 				{$profiel->getNaam('volledig')}
 			</h1>
 		</div>
 	</div>
 
 	<div class="profielregel">
-		<div class="left">Naam</div>
 		<div class="gegevens">
-			<div class="label">&nbsp;</div> {$profiel->getNaam('civitas')}<br />
-			<div class="label">Lidnummer:</div>
-			{if AccountModel::existsUid($profiel->uid) AND LoginModel::instance()->maySuTo($profiel->getAccount())}
-				<a href="/su/{$profiel->uid}/" title="Su naar dit lid">{$profiel->uid}</a>
-			{else}
-				{$profiel->uid}
-			{/if}<br />
-			{if $profiel->nickname!=''}<div class="label">Bijnaam:</div> {$profiel->nickname}<br />{/if}
-			{if $profiel->duckname!=''}<div class="label">Duckstad-naam:</div> {$profiel->duckname}<br /><br />{/if}
-			{if $profiel->voorletters!=''}<div class="label">Voorletters:</div> {$profiel->voorletters}<br />{/if}
-			{if $profiel->gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div> {$profiel->gebdatum|date_format:"%d-%m-%Y"}<br />{/if}
-			{if $profiel->status === LidStatus::Overleden AND $profiel->sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div> {$profiel->sterfdatum|date_format:"%d-%m-%Y"}<br />{/if}
+			<div class="label">Naam:</div><div class="data">{$profiel->getNaam('civitas')}</div>
+			<div class="label">Lidnummer:</div><div class="data">
+				{if AccountModel::existsUid($profiel->uid) AND LoginModel::instance()->maySuTo($profiel->getAccount())}
+					<a href="/su/{$profiel->uid}/" title="Su naar dit lid">{$profiel->uid}</a>
+				{else}
+					{$profiel->uid}
+				{/if}</div>
+			{if $profiel->nickname!=''}<div class="label">Bijnaam:</div><div class="data">{$profiel->nickname}</div>{/if}
+			{if $profiel->duckname!=''}<div class="label">Duckstad-naam:</div><div class="data">{$profiel->duckname}</div>{/if}
+			<br />
+			{if $profiel->voorletters!=''}<div class="label">Voorletters:</div><div class="data">{$profiel->voorletters}</div>{/if}
+			{if $profiel->gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div><div class="data">{$profiel->gebdatum|date_format:"%d-%m-%Y"}</div>{/if}
+			{if $profiel->status === LidStatus::Overleden AND $profiel->sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div><div class="data">{$profiel->sterfdatum|date_format:"%d-%m-%Y"}</div>{/if}
 			{if ProfielModel::get($profiel->echtgenoot)}
 				<div class="label">{if ProfielModel::get($profiel->echtgenoot)->geslacht === Geslacht::Vrouw}Echtgenote{else}Echtgenoot{/if}:</div>
-				{ProfielModel::get($profiel->echtgenoot)->getLink('civitas')}<br />
+				<div class="data">{ProfielModel::get($profiel->echtgenoot)->getLink('civitas')}</div>
 			{/if}
 		</div>
 	</div>
+
 	{if $profiel->status != LidStatus::Overleden AND ($profiel->adres!='' OR $profiel->o_adres!='')}
 		<div class="profielregel">
 			<div class="gegevens">
@@ -94,6 +94,7 @@
 			</div>
 		</div>
 	{/if}
+
 	<div class="profielregel">
 		<div class="gegevens">
 			{foreach from=$profiel->getContactgegevens() key=key item=contact}
@@ -104,6 +105,7 @@
 			{/foreach}
 		</div>
 	</div>
+
 	<div class="profielregel">
 		<div class="gegevens">
 			<div class="half">
@@ -156,27 +158,32 @@
 			<div class="clear-left"></div>
 		</div>
 	</div>
+
 	<div class="profielregel clear-right">
 		<div class="gegevens">
 			<div class="half">
 				{$besturen}
 				{$commissies}
 				{$onderverenigingen}
+				{$groepen}
 			</div>
 			<div class="half">
 				{$werkgroepen}
+				<div class="label">&nbsp;</div><a class="btn" onclick="$('#meerGroepenContainer').slideDown()">Toon activiteiten</a>
 			</div>
 			<div class="clear-left"></div>
-			<div class="half">
-				{$groepen}
-				{$ketzers}
+			<div id="meerGroepenContainer" style="display: none;">
+				<div class="half">
+					{$ketzers}
+				</div>
+				<div class="half">
+					{$activiteiten}
+				</div>
+				<div class="clear-left"></div>
 			</div>
-			<div class="half">
-				{$activiteiten}
-			</div>
-			<div class="clear-left"></div>
 		</div>
 	</div>
+
 	{if ($profiel->isLid() OR (LoginModel::mag('P_LEDEN_MOD') AND ($profiel->soccieSaldo < 0 OR $profiel->maalcieSaldo < 0))) AND (isset($saldografiek) OR $profiel->bankrekening!='')}
 		<div class="profielregel">
 			<div class="gegevens">
@@ -195,6 +202,7 @@
 			</div>
 		</div>
 	{/if}
+
 	<div class="profielregel" id="maaltijden">
 		<div class="gegevens">
 			<div class="label">Allergie/dieet:</div>
@@ -318,6 +326,7 @@
 			</div>
 		</div>
 	{/if}
+
 	{if $boeken OR LoginModel::getUid() === $profiel->uid OR $gerecenseerdeboeken}
 		<div class="profielregel boeken" id="boeken">
 			<div class="gegevens">
@@ -357,12 +366,14 @@
 			</div>
 		</div>
 	{/if}
+
 	{if LoginModel::mag('P_ADMIN,bestuur,commissie:NovCie') AND $profiel->status === LidStatus::Noviet AND $profiel->kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
 			<div style="cursor: pointer;" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
 			<div class="gegevens verborgen" id="novcie_gegevens">{$profiel->kgb|bbcode}</div>
 		</div>
 	{/if}
+
 	{if LoginModel::mag('P_LEDEN_MOD')}
 		<div class="profielregel" id="changelog">
 			<div class="gegevens">
@@ -374,4 +385,5 @@
 			</div>
 		</div>
 	{/if}
+
 </div>
