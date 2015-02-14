@@ -120,6 +120,7 @@ class AbstractGroepenController extends Controller {
 			case GroepTab::Lijst:
 			case GroepTab::Statistiek:
 			case GroepTab::Emails:
+			case GroepTab::Eetwens:
 			case 'verwijderen':
 			case 'aanmelden':
 			case 'bewerken':
@@ -190,6 +191,13 @@ class AbstractGroepenController extends Controller {
 			$this->geentoegang();
 		}
 		$this->view = new GroepEmailsView($groep);
+	}
+
+	public function eetwens(AbstractGroep $groep) {
+		if (!$groep->mag(A::Bekijken)) {
+			$this->geentoegang();
+		}
+		$this->view = new GroepEetwensView($groep);
 	}
 
 	public function zoeken() {

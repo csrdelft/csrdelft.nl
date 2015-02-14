@@ -14,9 +14,10 @@ abstract class GroepTab implements PersistentEnum {
 	const Pasfotos = 'pasfotos';
 	const Statistiek = 'stats';
 	const Emails = 'emails';
+	const Eetwens = 'eetwens';
 
 	public static function getTypeOptions() {
-		return array(self::Lijst, self::Pasfotos, self::Statistiek, self::Emails);
+		return array(self::Lijst, self::Pasfotos, self::Statistiek, self::Emails, self::Eetwens);
 	}
 
 	public static function getDescription($option) {
@@ -25,6 +26,7 @@ abstract class GroepTab implements PersistentEnum {
 			case self::Pasfotos: return 'Pasfoto\'s';
 			case self::Statistiek: return 'Statistiek';
 			case self::Emails: return 'E-mails';
+			case self::Eetwens: return 'Allergie/dieet';
 			default: throw new Exception('GroepTab onbekend');
 		}
 	}
@@ -35,6 +37,7 @@ abstract class GroepTab implements PersistentEnum {
 			case self::Pasfotos: return 'p';
 			case self::Statistiek: return 's';
 			case self::Emails: return 'e';
+			case self::Eetwens: return 'a';
 			default: throw new Exception('GroepTab onbekend');
 		}
 	}

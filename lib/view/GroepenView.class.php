@@ -181,6 +181,10 @@ class GroepView implements FormElement {
 				$this->leden = new GroepEmailsView($groep);
 				break;
 
+			case GroepTab::Eetwens:
+				$this->leden = new GroepEetwensView($groep);
+				break;
+
 			default:
 				if ($groep->keuzelijst) {
 					$this->leden = new GroepLijstView($groep);
@@ -214,7 +218,11 @@ class GroepView implements FormElement {
 		if ($diesopmaak AND $this->bb) {
 			$html .= ' bb-dies2015';
 		}
-		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting"><h3>' . $this->getTitel();
+		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting">';
+		if ($this->groep->mag(A::Wijzigen)) {
+			$html .= '<div class="float-right"><a class="btn" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-pencil"></span></a></div>';
+		}
+		$html .= '<h3>' . $this->getTitel();
 		if (property_exists($this->groep, 'locatie') AND ! empty($this->groep->locatie)) {
 			$html .= ' &nbsp; <a target="_blank" href="https://maps.google.nl/maps?q=' . urlencode($this->groep->locatie) . '" title="' . $this->groep->locatie . '" class="lichtgrijs fa fa-map-marker fa-lg"></a>';
 		}

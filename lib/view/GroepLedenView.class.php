@@ -107,10 +107,6 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 	public function getHtml() {
 		$html = '<div id="groep-leden-' . $this->groep->id . '" class="groep-leden"><ul class="groep-tabs nobullets">';
 
-		if ($this->groep->mag(A::Wijzigen)) {
-			$html .= '<li class="float-left"><a class="btn" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-pencil"></span></a></li>';
-		}
-
 		if (!$this->groep instanceof Verticale) {
 			$html .= '<li class="geschiedenis float-left"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><span class="fa fa-clock-o"></span></a></li>';
 		}
@@ -122,6 +118,8 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Statistiek . '" title="' . GroepTab::getDescription(GroepTab::Statistiek) . ' tonen"><span class="fa fa-pie-chart"></span></a></li>';
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Emails . '" title="' . GroepTab::getDescription(GroepTab::Emails) . ' tonen"><span class="fa fa-envelope"></span></a></li>';
+
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEetwensView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Eetwens . '" title="' . GroepTab::getDescription(GroepTab::Eetwens) . ' tonen"><span class="fa fa-heartbeat"></span></a></li>';
 
 		$onclick = "$('#groep-" . $this->groep->id . "').toggleClass('leden-uitgeklapt');";
 		$html .= '<li class="float-right"><a class="btn vergroot" id="groep-vergroot-' . $this->groep->id . '" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Uitklappen" onclick="' . $onclick . '"><span class="fa fa-expand"></span></a>';
@@ -413,6 +411,21 @@ class GroepEmailsView extends GroepTabView {
 			}
 		}
 		return $html;
+	}
+
+}
+
+class GroepEetwensView extends GroepTabView {
+
+	public function getTabContent() {
+		$html = '<table class="groep-lijst"><tbody>';
+		foreach ($this->groep->getLeden() as $lid) {
+			$profiel = ProfielModel::get($lid->uid);
+			if ($profiel AND $profiel->eetwens != '') {
+				$html .= '<tr><td>' . $profiel->getLink() . '</td><td>' . $profiel->eetwens . '</td></tr>';
+			}
+		}
+		return $html . '</tbody></html>';
 	}
 
 }
