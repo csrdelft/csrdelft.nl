@@ -21,4 +21,8 @@ class GeoLocationModel extends PersistenceModel {
 		return $location;
 	}
 
+	public function getLastPosition($uid) {
+		return $this->find('uid = ?', array($uid), null, 'moment DESC', 1)->fetch();
+	}
+
 }

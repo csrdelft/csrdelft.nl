@@ -1,5 +1,4 @@
 <?php
-
 require_once 'model/GeoLocationModel.class.php';
 //require_once 'view/GeoLocationView.class.php';
 
@@ -15,11 +14,12 @@ class GeoLocationController extends AclController {
 		parent::__construct($query, GeoLocationModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-					//'map' => 'P_ADMIN'
+				'map' => 'P_LOGGED_IN'
 			);
 		} else {
 			$this->acl = array(
-				'save' => 'P_LOGGED_IN'
+				'save'	 => 'P_LOGGED_IN',
+				'get'	 => 'ouderejaars'
 			);
 		}
 	}
@@ -37,8 +37,76 @@ class GeoLocationController extends AclController {
 		$this->view = new JsonResponse($location);
 	}
 
-	public function map() {
-		//TODO
+	public function get() {
+		$uid = filter_input(INPUT_POST, 'uid', FILTER_SANITIZE_STRING);
+		$location = $this->model->getLastPosition($uid);
+		if ($location) {
+			echo $location->position;
+			exit;
+		} else {
+			$this->view = new JsonResponse(false, 404);
+		}
+	}
+
+	public function map($uid = null) {
+		$profiel = ProfielModel::get($uid);
+		if (!$profiel) {
+			die('invalid uid');
+		}
+		?>
+		<html>
+			<body>
+				<div id="google_canvas" style="height: 100%;"></div>
+				<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+				<script src="//maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+				<script type="text/javascript">
+
+					(function () {
+
+						var map = new google.maps.Map(document.getElementById('google_canvas'), {
+							zoom: 15,
+							mapTypeId: google.maps.MapTypeId.ROADMAP
+						});
+
+						var drawPosition = function (position) {
+
+							var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+							var infowindow = new google.maps.InfoWindow({
+								map: map,
+								position: geolocate,
+								content:
+										'<h4>Lat: ' + position.coords.latitude + '</h4>' +
+										'<h4>Lon: ' + position.coords.longitude + '</h4>' +
+										'<?= $profiel->getLink('pasfoto'); ?>'
+							});
+
+							map.setCenter(geolocate);
+
+						};
+
+						var getPosition = function () {
+
+							$.post('/geolocation/get', {
+								uid: <?= $profiel->uid; ?>
+							}, function (data, textStatus, jqXHR) {
+
+								var position = $.parseJSON(data);
+								window.setTimeout(getPosition, Math.round(new Date()) - position.timestamp); // auto update
+								drawPosition(position);
+							});
+
+						};
+
+						getPosition();
+
+					})();
+
+				</script>
+			</body>
+		</html>
+		<?php
+		exit;
 	}
 
 }
