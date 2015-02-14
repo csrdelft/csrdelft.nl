@@ -110,6 +110,7 @@ class GesprekBerichtenTable extends DataTable {
 		$this->defaultLength = -1;
 		$this->settings['scrollY'] = '600px';
 		$this->settings['scrollCollapse'] = true;
+		$this->settings['tableTools']['aButtons'] = array('select_all', 'select_none', 'copy', 'xls', 'pdf');
 
 		$this->hideColumn('details');
 		$this->hideColumn('gesprek_id');
