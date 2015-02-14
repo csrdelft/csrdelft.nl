@@ -109,7 +109,7 @@ class GesprekDeelnemersModel extends PersistenceModel {
 		$deelnemer->gelezen_moment = getDateTime(0);
 		parent::create($deelnemer);
 		if ($door) {
-			$inhoud = 'Ik heb ' . $account->getProfiel()->getNaam() . ' toegevoegd aan het gesprek.';
+			$inhoud = 'Ik heb ' . $account->getProfiel()->getLink() . ' toegevoegd aan het gesprek.';
 			GesprekBerichtenModel::instance()->maakBericht($gesprek, $door, $inhoud);
 		}
 		return $deelnemer;
