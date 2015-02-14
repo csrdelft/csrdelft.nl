@@ -59,6 +59,9 @@ class GesprekkenTable extends DataTable {
 
 	public function __construct() {
 		parent::__construct(GesprekkenModel::orm, '/gesprekken/gesprekken');
+		$this->defaultLength = -1;
+		$this->settings['scrollY'] = '600px';
+		$this->settings['scrollCollapse'] = true;
 		$this->settings['tableTools']['aButtons'] = array();
 
 		$this->hideColumn('laatste_update');
@@ -67,7 +70,7 @@ class GesprekkenTable extends DataTable {
 		$create = new DataTableKnop('== 0', $this->dataTableId, '/gesprekken/start', 'post popup', 'Nieuw', 'Nieuw gesprek starten', 'email_add');
 		$this->addKnop($create);
 
-		$sluiten = new DataTableKnop('== 1', $this->dataTableId, '/gesprekken/sluiten', 'post confirm', 'Sluiten', 'Gesprek verlaten', 'delete');
+		$sluiten = new DataTableKnop('== 1', $this->dataTableId, '/gesprekken/verlaten', 'post confirm', 'Verlaten', 'Gesprek verlaten', 'delete');
 		$this->addKnop($sluiten);
 
 		$add = new DataTableKnop('== 1', $this->dataTableId, '/gesprekken/toevoegen', 'post popup', 'Toevoegen', 'Deelnemer toevoegen aan het gesprek', 'user_add');
@@ -106,6 +109,9 @@ class GesprekBerichtenTable extends DataTable {
 
 	public function __construct(Gesprek $gesprek) {
 		parent::__construct(GesprekBerichtenModel::orm, '/gesprekken/lees/' . $gesprek->gesprek_id, 'Gesprek met ' . $gesprek->getDeelnemersFormatted());
+		$this->defaultLength = -1;
+		$this->settings['scrollY'] = '600px';
+		$this->settings['scrollCollapse'] = true;
 
 		$this->hideColumn('details');
 		$this->hideColumn('gesprek_id');
@@ -122,6 +128,7 @@ JS;
 
 class BerichtenResponse extends DataTableResponse {
 
+	//public $page = 'last';
 	private $previous;
 
 	public function getJson($bericht) {

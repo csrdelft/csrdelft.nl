@@ -5,6 +5,7 @@
 	{if LoginModel::instance()->isSued()}
 		<li><a href="/endsu" class="error" title="Switch user actie beeindingen">SU {ProfielModel::getNaam(LoginModel::getSuedFrom()->uid, 'civitas')}</a></li>
 	{/if}
+		<li><a href="/gesprekken" title="{$gesprekOngelezen} ongelezen bericht{if $gesprekOngelezen !== 1}en{/if}">Gesprekken{if $gesprekOngelezen > 0}&nbsp;<span class="badge">{$gesprekOngelezen}</span>{/if}</a></li>
 		<li>
 			<a href="/profiel/{LoginModel::getUid()}#SocCieSaldo" title="Bekijk SocCie saldo historie">
 				{assign var=saldo value=LoginModel::getProfiel()->getSoccieSaldo()}

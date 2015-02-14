@@ -15,7 +15,7 @@ class GesprekkenModel extends PersistenceModel {
 	 * Default ORDER BY
 	 * @var string
 	 */
-	protected $default_order = 'laatste_update ASC';
+	protected $default_order = 'laatste_update DESC';
 
 	protected function __construct() {
 		parent::__construct('gesprek/');
@@ -108,7 +108,7 @@ class GesprekDeelnemersModel extends PersistenceModel {
 		return $deelnemer;
 	}
 
-	public function sluitGesprek(Gesprek $gesprek, GesprekDeelnemer $deelnemer) {
+	public function verlaatGesprek(Gesprek $gesprek, GesprekDeelnemer $deelnemer) {
 		$rowCount = $this->delete($deelnemer);
 		if ($this->count('gesprek_id = ?', array($gesprek->gesprek_id)) === 0) {
 			GesprekkenModel::instance()->delete($gesprek);
@@ -161,7 +161,7 @@ class GesprekBerichtenModel extends PersistenceModel {
 		$bericht->id = $this->create($bericht);
 		// Update gesprek
 		$gesprek->laatste_update = $bericht->moment;
-		$gesprek->laatste_bericht = '[b]' . ProfielModel::get($bericht->auteur_uid)->getNaam() . ':[/b][rn]' . mb_substr($bericht->inhoud, 0, 30);
+		$gesprek->laatste_bericht = '[b]' . ProfielModel::get($bericht->auteur_uid)->getNaam() . ': [/b]' . mb_substr($bericht->inhoud, 0, 30);
 		if (mb_strlen($bericht->inhoud) > 30) {
 			$gesprek->laatste_bericht .= '...';
 		}

@@ -25,7 +25,7 @@ class GesprekkenController extends AclController {
 				'toevoegen'	 => 'P_LOGGED_IN',
 				'zeg'		 => 'P_LOGGED_IN',
 				'lees'		 => 'P_LOGGED_IN',
-				'sluiten'	 => 'P_LOGGED_IN'
+				'verlaten'	 => 'P_LOGGED_IN'
 			);
 		}
 	}
@@ -130,7 +130,7 @@ class GesprekkenController extends AclController {
 		$this->view = new BerichtenResponse($berichten);
 	}
 
-	public function sluiten($gesprek_id = null) {
+	public function verlaten($gesprek_id = null) {
 		if ($gesprek_id === null) {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			$gesprek_id = $selection[0];
@@ -140,7 +140,7 @@ class GesprekkenController extends AclController {
 		if (!$gesprek OR ! $deelnemer) {
 			$this->geentoegang();
 		}
-		$gesloten = GesprekDeelnemersModel::instance()->sluitGesprek($gesprek, $deelnemer);
+		$gesloten = GesprekDeelnemersModel::instance()->verlaatGesprek($gesprek, $deelnemer);
 		$this->view = new JsonResponse($gesloten);
 	}
 

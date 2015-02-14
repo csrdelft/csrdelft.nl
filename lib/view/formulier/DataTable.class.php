@@ -22,7 +22,6 @@ abstract class DataTable extends TabsForm {
 	private $columns = array();
 	protected $settings = array(
 		'dom'		 => 'fTrtpli',
-		'responsive' => true,
 		'tableTools' => array(
 			'sRowSelect' => 'os',
 			'aButtons'	 => array(
@@ -158,12 +157,11 @@ abstract class DataTable extends TabsForm {
 
 		// set view modus: paging or scrolling
 		if ($this->defaultLength > 0) {
-			$this->settings['iDisplayLength'] = $this->defaultLength;
 			$this->settings['paging'] = true;
+			$this->settings['iDisplayLength'] = $this->defaultLength;
 		} else {
 			$this->settings['paging'] = false;
-			//$settings['scrollX'] = '100%';
-			//$settings['scrollY'] = '100%';
+			$this->settings['dom'] = str_replace('i', '', $this->settings['dom']);
 		}
 
 		// set ajax url
@@ -255,19 +253,6 @@ abstract class DataTable extends TabsForm {
 						$(td).children('a.post').each(function (i, a) {
 							$(a).attr('data-tableid', '<?= $this->dataTableId; ?>');
 						});
-						// Init InlineForms
-						if ($(td).children(':first').hasClass('InlineForm')) {
-							var edit = function (event) {
-								var form = $(td).find('form');
-								// Toggle show form
-								form.prev('.InlineFormToggle').hide();
-								form.show();
-								setTimeout(function () { // Workaround focus stealing keys plugin
-									form.find('.FormElement:first').focus();
-								}, 1);
-							};
-							$(td).addClass('editable').click(edit);
-						}
 					});
 				};
 				/**
@@ -283,17 +268,18 @@ abstract class DataTable extends TabsForm {
 			echo "setTimeout(fnAutoUpdate, {$this->autoUpdate});";
 		}
 		?>
-					/* TODO: remember focus position on update
-					 var keys = new $.fn.dataTable.KeyTable( oTable );
-					 keys.fnSetPosition( 1, 1 );
-					 */
+					if (json.page) {
+						window.setTimeout(function () {
+							var table = $('#<?= $this->dataTableId; ?>').DataTable();
+							table.page(json.page).draw(false);
+						}, 100);
+					}
 					fnUpdateToolbar();
 					return json.data;
 				};
 				// Init DataTable
 				var tableId = '#<?= $this->dataTableId; ?>';
 				var table = $(tableId).dataTable(<?= $settingsJson; ?>);
-				//var keys = new $.fn.dataTable.KeyTable($(tableId));
 				table.fnFilter('<?= $this->filter; ?>');
 				/**
 				 * Reload table data.
@@ -386,7 +372,8 @@ class DataTableKnop extends FormulierKnop {
 
 abstract class DataTableResponse extends JsonResponse {
 
-	public $modal;
+	public $modal = null;
+	public $page = false;
 
 	public function getJson($entity) {
 		return json_encode($entity);
@@ -395,7 +382,9 @@ abstract class DataTableResponse extends JsonResponse {
 	public function view() {
 		http_response_code($this->code);
 		header('Content-Type: application/json');
-		echo '{"modal":' . json_encode($this->modal) . ",\n";
+		echo "{\n";
+		echo '"modal":' . json_encode($this->modal) . ",\n";
+		echo '"page":' . json_encode($this->page) . ",\n";
 		echo '"data":[' . "\n";
 		$comma = false;
 		foreach ($this->model as $entity) {
