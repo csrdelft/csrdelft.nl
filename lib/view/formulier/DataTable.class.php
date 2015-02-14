@@ -268,14 +268,17 @@ abstract class DataTable extends TabsForm {
 					fnSetLastUpdate(json.lastUpdate);
 
 					if (json.autoUpdate) {
-						window.setTimeout(function () {
-							$.post($('#<?= $this->dataTableId; ?>').DataTable().ajax.url(), {
-								'lastUpdate': fnGetLastUpdate()
-							}, function (data, textStatus, jqXHR) {
-								fnAjaxUpdateCallback(data);
-								fnUpdateDataTable('<?= $this->dataTableId; ?>', data);
-							});
-						}, json.autoUpdate);
+						var timeout = parseInt(json.autoUpdate);
+						if (!isNaN(timeout) && timeout < 600000) { // max 10 min
+							window.setTimeout(function () {
+								$.post($('#<?= $this->dataTableId; ?>').DataTable().ajax.url(), {
+									'lastUpdate': fnGetLastUpdate()
+								}, function (data, textStatus, jqXHR) {
+									fnAjaxUpdateCallback(data);
+									fnUpdateDataTable('<?= $this->dataTableId; ?>', data);
+								});
+							}, timeout);
+						}
 					}
 					if (json.page) {
 						var info = $('#<?= $this->dataTableId; ?>').DataTable().page.info();
