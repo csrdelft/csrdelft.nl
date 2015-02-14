@@ -327,11 +327,10 @@ function knop_ajax(knop, type) {
 		if (!document.getElementById(tableId)) {
 			alert('DataTable not found');
 		}
-		var table = $('#' + tableId).DataTable();
+
 		data = {
 			'DataTableId': tableId
 		};
-
 		var selection = fnGetSelection('#' + tableId);
 		if (selection.length > 0) {
 			data = {
@@ -342,7 +341,7 @@ function knop_ajax(knop, type) {
 
 		done = function (response) {
 			if (typeof response === 'object') { // JSON
-				fnUpdateDataTable(table, response);
+				fnUpdateDataTable(tableId, response);
 				if (response.modal) {
 					modal_open(response.modal);
 					init_context($('#modal'));
@@ -514,9 +513,8 @@ function form_submit(event) {
 			if (!document.getElementById(tableId)) {
 				alert('DataTable not found');
 			}
-			var table = $('#' + tableId).DataTable();
-			formData.append('DataTableId', tableId);
 
+			formData.append('DataTableId', tableId);
 			var selection = fnGetSelection('#' + tableId);
 			$.each(selection, function (key, value) {
 				formData.append('DataTableSelection[]', value);
@@ -524,7 +522,7 @@ function form_submit(event) {
 
 			done = function (response) {
 				if (typeof response === 'object') { // JSON
-					fnUpdateDataTable(table, response);
+					fnUpdateDataTable(tableId, response);
 					if (response.modal) {
 						modal_open(response.modal);
 						init_context($('#modal'));

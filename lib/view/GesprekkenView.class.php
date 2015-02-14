@@ -107,6 +107,9 @@ class GesprekBerichtenTable extends DataTable {
 
 	public function __construct(Gesprek $gesprek) {
 		parent::__construct(GesprekBerichtenModel::orm, '/gesprekken/lees/' . $gesprek->gesprek_id, 'Gesprek met ' . $gesprek->getDeelnemersFormatted());
+		$this->defaultLength = -1;
+		$this->settings['scrollY'] = '600px';
+		$this->settings['scrollCollapse'] = true;
 
 		$this->hideColumn('details');
 		$this->hideColumn('gesprek_id');
@@ -118,12 +121,12 @@ class GesprekBerichtenTable extends DataTable {
 
 class BerichtenResponse extends DataTableResponse {
 
-	public $page = 'last';
+	//public $page = 'last';
 
 	public function getJson($bericht) {
 		$array = $bericht->jsonSerialize();
 
-		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ?', array($bericht->gesprek_id), null, 'moment DESC', 1, 1)->fetch();
+		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ? AND moment < ?', array($bericht->gesprek_id, $bericht->moment), null, 'moment DESC', 1, 1)->fetch();
 		if ($previous AND $previous->auteur_uid !== $bericht->auteur_uid) {
 			$previous = $bericht->auteur_uid;
 			$bbcode = '[b]' . ProfielModel::get($bericht->auteur_uid)->getNaam() . '[/b][rn]' . $bericht->inhoud;

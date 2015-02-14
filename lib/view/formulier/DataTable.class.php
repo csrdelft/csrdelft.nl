@@ -266,33 +266,18 @@ abstract class DataTable extends TabsForm {
 						console.log('autoUpdate = ' + json.autoUpdate);
 						setTimeout(fnAutoUpdate, json.autoUpdate);
 					}
-					var $table = $('#<?= $this->dataTableId; ?>');
 					if (json.page) {
-						var info = $table.DataTable().page.info();
+						var info = $('#<?= $this->dataTableId; ?>').DataTable().page.info();
 						// Stay on last page
 						if (json.page !== 'last' || info.page + 1 === info.pages) {
 							console.log(info.page + 1);
 							console.log(info.pages);
 							window.setTimeout(function () {
 								table.page(json.page).draw(false);
-							}, 500);
+							}, 100);
 						}
 					}
-					var $scroll = $table.parent();
-					if ($scroll.hasClass('dataTables_scrollBody')) {
-
-						console.log($scroll[0].scrollTop);
-						console.log($scroll[0].scrollHeight);
-
-						if ($scroll[0].scrollTop === $scroll[0].scrollHeight - 20) {
-							window.setTimeout(function () {
-								$scroll.animate({
-									scrollTop: $scroll[0].scrollHeight
-								}, 1000);
-
-							}, 500);
-						}
-					}
+					fnAutoScroll($('#<?= $this->dataTableId; ?>'));
 					fnUpdateToolbar();
 					return json.data;
 				};

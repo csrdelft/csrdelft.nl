@@ -43,7 +43,25 @@ function fnStickyToolbar() {
 	//});
 }
 
-function fnUpdateDataTable(table, response) {
+function fnAutoScroll($table) {
+	var $scroll = $table.parent();
+	if ($scroll.hasClass('dataTables_scrollBody')) {
+		// autoscroll if already on bottom
+		if ($scroll.scrollTop() + $scroll.innerHeight() >= $scroll[0].scrollHeight - 20) {
+			// check before draw and scroll after
+			window.setTimeout(function () {
+				$scroll.animate({
+					scrollTop: $scroll[0].scrollHeight
+				}, 800);
+			}, 200);
+		}
+	}
+}
+
+function fnUpdateDataTable(tableId, response) {
+	var $table = $('#' + tableId);
+	fnAutoScroll($table);
+	var table = $table.DataTable();
 	// update or remove existing rows or add new rows
 	response.data.forEach(function (row) {
 		var $tr = $('tr[data-uuid="' + row.UUID + '"]');
