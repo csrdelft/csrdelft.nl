@@ -57,7 +57,7 @@ class GesprekBericht extends PersistentEntity {
 
 	public function getAuteurFormatted() {
 		$profiel = ProfielModel::get($this->auteur_uid);
-		return '<img class="cd-user-avatar float-left" src="/plaetjes/' . $profiel->getPasfotoPath(true) . '"/><span class="dikgedrukt">' . $profiel->getLink('volledig') . '</span><br />';
+		return '<img class="cd-user-avatar float-left" src="/plaetjes/' . $profiel->getPasfotoPath(true) . '"/><div class="dikgedrukt">' . $profiel->getLink('volledig') . '</div>';
 	}
 
 	public function getFormatted($previous, $max = false) {
@@ -66,7 +66,7 @@ class GesprekBericht extends PersistentEntity {
 		} else {
 			$auteur = $this->getAuteurFormatted();
 		}
-		$moment = '<span data-order="' . $this->moment . '" class="lichtgrijs float-right">' . reldate($this->moment) . '</span>';
+		$moment = '<span data-order="' . $this->bericht_id . '" class="lichtgrijs float-right">' . reldate($this->moment) . '</span>';
 
 		if (is_int($max)) {
 			$inhoud = mb_substr($this->inhoud, 0, $max);
