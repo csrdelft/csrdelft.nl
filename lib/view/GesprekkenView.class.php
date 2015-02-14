@@ -74,9 +74,8 @@ class GesprekkenTable extends DataTable {
 		$this->addKnop($add);
 
 		$this->javascript .= <<<JS
-$('#{$this->dataTableId}').on('click', 'tr', function (event) {
-	location.href = $(this).children('td:first').children('a:first').attr('href');
-});
+
+//TODO: auto update
 JS;
 	}
 
@@ -112,6 +111,11 @@ class GesprekBerichtenTable extends DataTable {
 		$this->hideColumn('gesprek_id');
 		$this->hideColumn('auteur_uid');
 		$this->hideColumn('moment');
+
+		$this->javascript .= <<<JS
+
+//TODO: auto update
+JS;
 	}
 
 }
