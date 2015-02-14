@@ -2,7 +2,7 @@
 .label { text-align: left; font-weight: normal; float: left; width: 75px; color: #999; }
 .data { margin-left: 75px; text-align: left; }
 .data li { margin-left: 0; }
-.data.scroll { max-height: 200px; overflow: auto; }
+.data.scroll { max-height: 150px; overflow-y: auto; }
 
 #profiel .profielregel { margin-bottom: 20px; clear: left; }
 #profiel .left { display: none; float: left; width: 10px; text-align: right; font-style: italic; font-size: 0.9em; }

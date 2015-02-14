@@ -96,7 +96,7 @@ class ProfielView extends SmartyTemplateView {
 			$ketzers .= '<a href="' . $ketzer->getUrl() . '">' . $ketzer->naam . '</a><br />';
 		}
 		if ($ketzers != '') {
-			$ketzers = '<div class="label">Aanschaf-<br />ketzers:</div><div class="data scroll">' . $ketzers . '</div><br />';
+			$ketzers = '<div class="label">Aanschaf-<br />ketzers:</div><div class="data">' . $ketzers . '</div><br />';
 		}
 		$this->smarty->assign('ketzers', $ketzers);
 
@@ -105,7 +105,7 @@ class ProfielView extends SmartyTemplateView {
 			$activiteiten .= '<a href="' . $activiteit->getUrl() . '">' . $activiteit->naam . '</a><br />';
 		}
 		if ($activiteiten != '') {
-			$activiteiten = '<div class="label">Activiteiten:</div><div class="data scroll">' . $activiteiten . '</div><br />';
+			$activiteiten = '<div class="label">Activiteiten:</div><div class="data">' . $activiteiten . '</div><br />';
 		}
 		$this->smarty->assign('activiteiten', $activiteiten);
 
