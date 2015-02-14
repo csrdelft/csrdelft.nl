@@ -169,7 +169,8 @@
 			</div>
 			<div class="half">
 				{$werkgroepen}
-				<div class="label">&nbsp;</div><a class="btn" onclick="$('#meerGroepenContainer').slideDown()">Toon activiteiten</a>
+				<div class="label">&nbsp;</div><a class="btn" onclick="$(this).slideUp();
+						$('#meerGroepenContainer').slideDown();">Toon activiteiten</a>
 			</div>
 			<div class="clear-left"></div>
 			<div id="meerGroepenContainer" style="display: none;">
