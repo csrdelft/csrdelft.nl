@@ -239,7 +239,7 @@ abstract class DataTable extends TabsForm {
 					return Number($('#<?= $this->dataTableId; ?>').attr('data-lastupdate'));
 				}
 				var fnSetLastUpdate = function () {
-					$('#<?= $this->dataTableId; ?>').attr('data-lastupdate', Math.round(new Date().getTime()));
+					$('#<?= $this->dataTableId; ?>').attr('data-lastupdate', Math.round(new Date().getTime() / 1000));
 				}
 				/**
 				 * Called after row addition and row data update.

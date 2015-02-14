@@ -80,25 +80,16 @@ class Gesprek extends PersistentEntity {
 			$lastUpdate = $toegevoegd;
 		}
 		// Auto update
-		$diff = time() - strtotime($deelnemer->gelezen_moment);
-		$aantal_nieuw = $this->getAantalNieuweBerichten($deelnemer, $lastUpdate);
-		if ($aantal_nieuw > 0) {
-			$this->auto_update = 1000 * $diff / $aantal_nieuw;
+		$andere_deelnemer = GesprekDeelnemersModel::instance()->find('gesprek_id = ? AND uid != ?', array($deelnemer->gesprek_id, $deelnemer->uid), null, 'gelezen_moment DESC', 1)->fetch();
+		if (!$andere_deelnemer) {
+			$this->auto_update = false;
 		} else {
-			$total_delay = 0;
-			$total_amount = 0;
-			foreach (GesprekBerichtenModel::instance()->find('gesprek_id = ? AND auteur_uid != ?', array($deelnemer->gesprek_id, $deelnemer->uid), null, 'moment DESC', 5) as $bericht) {
-				$total_amount++;
-				$total_delay += time() - strtotime($bericht->moment);
+			$diff = time() - strtotime($andere_deelnemer->gelezen_moment);
+			$this->auto_update = 1000 * $diff;
+
+			if ($this->auto_update < 1000) {
+				$this->auto_update = 1000;
 			}
-			if ($total_amount > 0) {
-				$this->auto_update = 1000 * $total_delay / $total_amount;
-			} else {
-				$this->auto_update = 1000 * 10;
-			}
-		}
-		if ($this->auto_update < 1000) {
-			$this->auto_update = 1000;
 		}
 		// Update deelnemer
 		$deelnemer->gelezen_moment = getDateTime();
