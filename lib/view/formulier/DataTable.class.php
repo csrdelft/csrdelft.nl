@@ -20,8 +20,8 @@ abstract class DataTable extends TabsForm {
 	protected $defaultLength = 10;
 	private $columns = array();
 	protected $settings = array(
-		'dom'			 => 'fTrtpli',
-		'tableTools'	 => array(
+		'dom'		 => 'fTrtpli',
+		'tableTools' => array(
 			'sRowSelect' => 'os',
 			'aButtons'	 => array(
 				'select_all',
@@ -33,11 +33,11 @@ abstract class DataTable extends TabsForm {
 			),
 			'sSwfPath'	 => '/layout/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf'
 		),
-		'lengthMenu'	 => array(
+		'lengthMenu' => array(
 			array(10, 25, 50, 100, -1),
 			array(10, 25, 50, 100, 'Alles')
 		),
-		'language'		 => array(
+		'language'	 => array(
 			'sProcessing'		 => 'Bezig...',
 			'sLengthMenu'		 => '_MENU_ resultaten weergeven',
 			'sZeroRecords'		 => 'Geen resultaten gevonden',
@@ -263,12 +263,14 @@ abstract class DataTable extends TabsForm {
 				var fnAjaxUpdateCallback = function (json) {
 					lastUpdate<?= $this->dataTableId; ?> = Math.round(new Date().getTime());
 					if (json.autoUpdate) {
+						console.log('autoUpdate = ' + json.autoUpdate);
 						setTimeout(fnAutoUpdate, json.autoUpdate);
 					}
 					if (json.page) {
 						var table = $('#<?= $this->dataTableId; ?>').DataTable();
+						var info = table.page.info();
 						// Stay on last page
-						if (json.page !== 'last' || table.page.len() === table.page()) {
+						if (json.page !== 'last' || info.page + 1 === info.pages) {
 							window.setTimeout(function () {
 								table.page(json.page).draw(false);
 							}, 100);
