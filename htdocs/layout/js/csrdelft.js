@@ -29,6 +29,7 @@ function init_page() {
 	init_tooltip_once();
 	init_sluit_meldingen();
 	init_context($('body'));
+	init_geolocation();
 }
 
 function init_context(parent) {
@@ -126,6 +127,28 @@ function init_markitup(parent) {
 	}
 }
 
+function init_geolocation() {
+	if (navigator.geolocation) {
+		navigator.geolocation.watchPosition(position_save, position_error);
+	}
+}
+function position_save(position) {
+	$.post('/geolocation/save', {
+		position: position
+	});
+}
+function position_error(error) {
+	switch (error.code) {
+		case error.PERMISSION_DENIED:
+			break;
+		case error.POSITION_UNAVAILABLE:
+			break;
+		case error.TIMEOUT:
+			break;
+		case error.UNKNOWN_ERROR:
+			break;
+	}
+}
 
 function init_lazy_images(parent) {
 	$(parent).find('div.bb-img-loading').each(function () {

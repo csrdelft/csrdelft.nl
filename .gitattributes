@@ -3971,6 +3971,7 @@ lib/controller/DocumentenController.class.php -text
 lib/controller/EetplanController.class.php -text
 lib/controller/ForumController.class.php -text
 lib/controller/FotoAlbumController.class.php -text
+lib/controller/GeoLocationController.class.php -text
 lib/controller/GesprekkenController.class.php -text
 lib/controller/GroepenRouterController.class.php -text
 lib/controller/InstellingenBeheerController.class.php -text
@@ -4029,6 +4030,7 @@ lib/model/DragObjectModel.class.php -text
 lib/model/EetplanModel.class.php -text
 lib/model/ForumModel.class.php -text
 lib/model/FotoAlbumModel.class.php -text
+lib/model/GeoLocationModel.class.php -text
 lib/model/GesprekkenModel.class.php -text
 lib/model/GroepLedenModel.abstract.php -text
 lib/model/GroepenModel.abstract.php -text
@@ -4061,6 +4063,7 @@ lib/model/entity/DebugLogEntry.class.php -text
 lib/model/entity/ExecutionTime.class.php -text
 lib/model/entity/Foto.class.php -text
 lib/model/entity/FotoAlbum.class.php -text
+lib/model/entity/GeoLocation.class.php -text
 lib/model/entity/Geslacht.enum.php -text
 lib/model/entity/Instelling.class.php -text
 lib/model/entity/Kringleider.enum.php -text
