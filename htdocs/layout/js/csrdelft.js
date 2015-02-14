@@ -128,25 +128,32 @@ function init_markitup(parent) {
 }
 
 function init_geolocation() {
+
+	var prev_pos = false;
+
+	var position_save = function (position) {
+		if (!prev_pos || prev_pos.coords !== position.coords) {
+			$.post('/geolocation/save', {
+				position: position
+			});
+		}
+	};
+
+	var position_error = function (error) {
+		switch (error.code) {
+			case error.PERMISSION_DENIED:
+				break;
+			case error.POSITION_UNAVAILABLE:
+				break;
+			case error.TIMEOUT:
+				break;
+			case error.UNKNOWN_ERROR:
+				break;
+		}
+	};
+
 	if (navigator.geolocation) {
 		navigator.geolocation.watchPosition(position_save, position_error);
-	}
-}
-function position_save(position) {
-	$.post('/geolocation/save', {
-		position: position
-	});
-}
-function position_error(error) {
-	switch (error.code) {
-		case error.PERMISSION_DENIED:
-			break;
-		case error.POSITION_UNAVAILABLE:
-			break;
-		case error.TIMEOUT:
-			break;
-		case error.UNKNOWN_ERROR:
-			break;
 	}
 }
 
