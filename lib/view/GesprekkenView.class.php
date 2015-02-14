@@ -121,8 +121,6 @@ class GesprekBerichtenTable extends DataTable {
 
 class BerichtenResponse extends DataTableResponse {
 
-	//public $page = 'last';
-
 	public function getJson($bericht) {
 		$array = $bericht->jsonSerialize();
 

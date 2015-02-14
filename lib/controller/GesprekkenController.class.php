@@ -57,8 +57,8 @@ class GesprekkenController extends AclController {
 	}
 
 	public function gesprekken() {
-		$timestamp = (int) filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
-		$gesprekken = GesprekDeelnemersModel::instance()->getGesprekkenVoorLid(LoginModel::getUid(), $timestamp);
+		$lastUpdate = (int) filter_input(INPUT_POST, 'lastUpdate', FILTER_SANITIZE_NUMBER_INT);
+		$gesprekken = GesprekDeelnemersModel::instance()->getGesprekkenVoorLid(LoginModel::getUid(), $lastUpdate);
 		$this->view = new GesprekkenResponse($gesprekken);
 	}
 
@@ -128,8 +128,8 @@ class GesprekkenController extends AclController {
 		if (!$gesprek OR ! $deelnemer) {
 			$this->geentoegang();
 		}
-		$timestamp = (int) filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
-		$berichten = $gesprek->getBerichten($deelnemer, $timestamp);
+		$lastUpdate = (int) filter_input(INPUT_POST, 'lastUpdate', FILTER_SANITIZE_NUMBER_INT);
+		$berichten = $gesprek->getBerichten($deelnemer, $lastUpdate);
 		$this->view = new BerichtenResponse($berichten);
 		$this->view->autoUpdate = $gesprek->auto_update;
 	}

@@ -168,7 +168,9 @@ abstract class DataTable extends TabsForm {
 			$this->settings['ajax'] = array(
 				'url'		 => $this->dataUrl,
 				'type'		 => 'POST',
-				'data'		 => 'lastUpdate',
+				'data'		 => array(
+					'lastUpdate' => 'fnGetLastUpdate'
+				),
 				'dataSrc'	 => 'fnAjaxUpdateCallback'
 			);
 		}
@@ -221,7 +223,7 @@ abstract class DataTable extends TabsForm {
 		$settingsJson = json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0);
 
 		// js function calls
-		$settingsJson = str_replace('"lastUpdate"', '{"lastUpdate":lastUpdate' . $this->dataTableId . '}', $settingsJson);
+		$settingsJson = str_replace('"fnGetLastUpdate"', 'fnGetLastUpdate', $settingsJson);
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
 
@@ -230,9 +232,15 @@ abstract class DataTable extends TabsForm {
 		?>
 		<table id="<?= $this->dataTableId; ?>" class="display <?= ($this->groupByColumn !== false ? 'groupByColumn' : ''); ?>" groupbycolumn="<?= $this->groupByColumn; ?>"></table>
 		<script type="text/javascript">
-			var lastUpdate<?= $this->dataTableId; ?> = 0;
 
 			$(document).ready(function () {
+
+				var fnGetLastUpdate = function () {
+					return Number($('#<?= $this->dataTableId; ?>').attr('data-lastupdate'));
+				}
+				var fnSetLastUpdate = function () {
+					return $('#<?= $this->dataTableId; ?>').attr('data-lastupdate', Math.round(new Date().getTime()));
+				}
 				/**
 				 * Called after row addition and row data update.
 				 * 
@@ -261,23 +269,25 @@ abstract class DataTable extends TabsForm {
 				 * @returns object
 				 */
 				var fnAjaxUpdateCallback = function (json) {
-					lastUpdate<?= $this->dataTableId; ?> = Math.round(new Date().getTime());
+					fnSetLastUpdate();
+
 					if (json.autoUpdate) {
-						console.log('autoUpdate = ' + json.autoUpdate);
-						setTimeout(fnAutoUpdate, json.autoUpdate);
+						setTimeout(function () {
+							$('#<?= $this->dataTableId; ?>').DataTable().ajax.reload();
+						}, json.autoUpdate);
 					}
 					if (json.page) {
 						var info = $('#<?= $this->dataTableId; ?>').DataTable().page.info();
 						// Stay on last page
 						if (json.page !== 'last' || info.page + 1 === info.pages) {
-							console.log(info.page + 1);
-							console.log(info.pages);
 							window.setTimeout(function () {
 								table.page(json.page).draw(false);
-							}, 100);
+							}, 200);
 						}
 					}
-					fnAutoScroll($('#<?= $this->dataTableId; ?>'));
+					else {
+						fnAutoScroll($('#<?= $this->dataTableId; ?>'));
+					}
 					fnUpdateToolbar();
 					return json.data;
 				};
@@ -285,12 +295,6 @@ abstract class DataTable extends TabsForm {
 				var tableId = '#<?= $this->dataTableId; ?>';
 				var table = $(tableId).dataTable(<?= $settingsJson; ?>);
 				table.fnFilter('<?= $this->filter; ?>');
-				/**
-				 * Reload table data.
-				 */
-				var fnAutoUpdate = function () {
-					table.ajax.reload();
-				};
 				/**
 				 * Toolbar button state update on row (de-)selection.
 				 */
@@ -376,8 +380,7 @@ class DataTableKnop extends FormulierKnop {
 
 abstract class DataTableResponse extends JsonResponse {
 
-	public $autoUpate = false;
-	public $page = false;
+	public $autoUpdate = false;
 	public $modal = null;
 
 	public function getJson($entity) {
@@ -389,8 +392,7 @@ abstract class DataTableResponse extends JsonResponse {
 		header('Content-Type: application/json');
 		echo "{\n";
 		echo '"modal":' . json_encode($this->modal) . ",\n";
-		echo '"page":' . json_encode($this->page) . ",\n";
-		echo '"autoUpdate":' . json_encode($this->autoUpate) . ",\n";
+		echo '"autoUpdate":' . json_encode($this->autoUpdate) . ",\n";
 		echo '"data":[' . "\n";
 		$comma = false;
 		foreach ($this->model as $entity) {
