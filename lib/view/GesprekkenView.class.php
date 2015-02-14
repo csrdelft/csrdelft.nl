@@ -126,11 +126,10 @@ class BerichtenResponse extends DataTableResponse {
 		$array = $bericht->jsonSerialize();
 
 		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ? AND bericht_id < ?', array($bericht->gesprek_id, $bericht->bericht_id), null, 'bericht_id DESC', 1)->fetch();
-		if ($previous AND $previous->auteur_uid !== $bericht->auteur_uid) {
-			$previous = $bericht->auteur_uid;
-			$bbcode = '[b]' . ProfielModel::getNaam($bericht->auteur_uid, 'volledig') . '[/b][rn]' . $bericht->inhoud;
-		} else {
+		if ($previous AND $previous->auteur_uid === $bericht->auteur_uid) {
 			$bbcode = $bericht->inhoud;
+		} else {
+			$bbcode = '[b]' . ProfielModel::getNaam($bericht->auteur_uid, 'volledig') . '[/b][rn]' . $bericht->inhoud;
 		}
 		$moment = '<span data-order="' . $bericht->moment . '" class="lichtgrijs float-right">' . reldate($bericht->moment) . '</span>';
 		$array['inhoud'] = $moment . CsrBB::parse($bbcode);
