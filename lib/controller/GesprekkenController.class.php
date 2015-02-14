@@ -145,7 +145,11 @@ class GesprekkenController extends AclController {
 			$this->geentoegang();
 		}
 		$gesloten = GesprekDeelnemersModel::instance()->verlaatGesprek($gesprek, $deelnemer);
-		$this->view = new JsonResponse($gesloten);
+		$response = array();
+		if ($gesloten) {
+			$response[] = $gesprek;
+		}
+		$this->view = new RemoveRowsResponse($response);
 	}
 
 }
