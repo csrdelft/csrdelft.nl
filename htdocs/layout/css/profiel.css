@@ -1,4 +1,4 @@
-.floatR { float: right; }
+
 .label { text-align: left; font-weight: normal; float: left; width: 75px; color: #999; }
 .data { margin-left: 75px; text-align: left; }
 .data li { margin-left: 0; }
@@ -10,6 +10,13 @@
 #profiel .left { display: none; float: left; width: 10px; text-align: right; font-style: italic; font-size: 0.9em; }
 #profiel .gegevens { margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
 #profiel .half { width: 270px; float: left; }
+#profiel .knopjes { text-align: center; }
+#profiel .pasfoto {
+	margin: 25px;
+	-moz-box-shadow: 0 0 11px #000;
+	-webkit-box-shadow: 0 0 11px #000;
+	box-shadow: 0 0 11px #000;
+}
 
 #profiel .naam .status { float: left; color: #aaa; width: 60px; padding: 0 20px; }
 #profiel .naam h1 { padding-left: 10px; }

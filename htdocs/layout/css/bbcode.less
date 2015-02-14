@@ -67,15 +67,29 @@
 	text-align: center;
 	float: right;
 	width: 90px;
-	height: 50px;
-	padding: 5px;
+	height: auto;
+	padding: 5px 5px 10px;
 	margin: 10px;
 }
 div.maaltijd-aangemeld {
-	background-color: #AAEEAA;
+	background-image: -webkit-linear-gradient(top,#5cb85c 0,#077b4e 100%);
+	background-image: -o-linear-gradient(top,#5cb85c 0,#077b4e 100%);
+	background-image: -webkit-gradient(linear,left top,left bottom,from(#5cb85c),to(#077b4e));
+	background-image: linear-gradient(to bottom,#5cb85c 0,#077b4e 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c',endColorstr='#ff077b4e',GradientType=0);
+	background-repeat: repeat-x;
+	color: white;
+	font-weight: bold;
 }
 div.maaltijd-afgemeld {
-	background-color: #EEAAAA;
+	background-image: -webkit-linear-gradient(top,#d9534f 0,#7c2507 100%);
+	background-image: -o-linear-gradient(top,#d9534f 0,#7c2507 100%);
+	background-image: -webkit-gradient(linear,left top,left bottom,from(#d9534f),to(#7c2507));
+	background-image: linear-gradient(to bottom,#d9534f 0,#7c2507 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f',endColorstr='#ff7c2507',GradientType=0);
+	background-repeat: repeat-x;
+	color: white;
+	font-weight: bold;
 }
 a.maaltijd-aangemeld, span.maaltijd-aangemeld {
 	font-weight: bold;

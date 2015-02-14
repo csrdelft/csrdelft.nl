@@ -1,8 +1,8 @@
 <div id="profiel" {if $profiel->isJarig()}class="jarig"{/if}>
 	<div id="profielregel">
 		<div class="naam">
-			<div class="floatR">
-				{$profiel->getPasfotoTag(false)}<br />
+			<div class="float-right">
+				<div class="pasfoto">{$profiel->getPasfotoTag(false)}</div>
 				<div class="knopjes">
 					{if $profiel->magBewerken()}
 						<a href="/profiel/{$profiel->uid}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="bewerken"}</a>

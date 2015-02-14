@@ -86,12 +86,12 @@ class GesprekDeelnemersModel extends PersistenceModel {
 		return $gesprekken;
 	}
 
-	public function getGesprekGelezen(Gesprek $gesprek, $uid) {
-		$deelnemer = self::get($gesprek->gesprek_id, $uid);
-		if (!$deelnemer) {
-			throw new Exception('Geen deelnemer van gesprek');
+	public function getAantalNieuweBerichtenVoorLid($uid) {
+		$totaal = 0;
+		foreach ($this->getGesprekkenVoorLid($uid, 0) as $gesprek) {
+			$totaal += $gesprek->aantal_nieuw;
 		}
-		return $deelnemer->gelezen_moment >= $gesprek->laatste_update;
+		return $totaal;
 	}
 
 	public function voegToeAanGesprek(Gesprek $gesprek, Account $account, Account $door = null) {

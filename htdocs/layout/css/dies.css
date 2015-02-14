@@ -2,7 +2,7 @@
 html, img, .alert, .ongelezenvanaf, .progress, .progress-bar-info, #minion,
 .groep-stat, .markItUpButton a, .btn::before, iframe, .aanmelddata, #saldografiek,
 td.maaltijd-aangemeld, td.maaltijd-afgemeld, td.abonnement-ingeschakeld,
-td.abonnement-uitgeschakeld, ul.ui-tabs-nav, li[role=tab], li[role=tab] a {
+td.abonnement-uitgeschakeld, ul.ui-tabs-nav, li[role=tab], li[role=tab] a, .badge-red {
 	-webkit-filter: invert(100%); 
 	filter: invert(100%);
 }
@@ -28,74 +28,6 @@ td.abonnement-uitgeschakeld, ul.ui-tabs-nav, li[role=tab], li[role=tab] a {
 	-moz-box-shadow: none;
 	box-shadow: none;
 }
-div.maaltijd-aangemeld {
-	background-image: -webkit-linear-gradient(top,#5cb85c 0,#077b4e 100%);
-	background-image: -o-linear-gradient(top,#5cb85c 0,#077b4e 100%);
-	background-image: -webkit-gradient(linear,left top,left bottom,from(#5cb85c),to(#077b4e));
-	background-image: linear-gradient(to bottom,#5cb85c 0,#077b4e 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c',endColorstr='#ff077b4e',GradientType=0);
-	background-repeat: repeat-x;
-}
-div.maaltijd-afgemeld {
-	background-image: -webkit-linear-gradient(top,#d9534f 0,#7c2507 100%);
-	background-image: -o-linear-gradient(top,#d9534f 0,#7c2507 100%);
-	background-image: -webkit-gradient(linear,left top,left bottom,from(#d9534f),to(#7c2507));
-	background-image: linear-gradient(to bottom,#d9534f 0,#7c2507 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f',endColorstr='#ff7c2507',GradientType=0);
-	background-repeat: repeat-x;
-}
 td.maaltijd-aangemeld, td.abonnement-ingeschakeld, td.maaltijd-afgemeld, td.abonnement-uitgeschakeld {
 	color: #fff;
-}
-td.maaltijd-aangemeld, td.abonnement-ingeschakeld {
-	background-color: #077b4e;
-}
-td.maaltijd-afgemeld, td.abonnement-uitgeschakeld {
-	background-color: #7c2507;
-}
-
-/*Andere (optionele) aanpassingen*/
-#cd-zijbalk {
-	left: 0;
-	padding-left: 15px;
-	border-left: 10px solid #0A3292;
-}
-.bb-maaltijd .aanmelddata {
-	height: auto;
-	padding: 5px 5px 10px;
-}
-.block:nth-of-type(2) {
-	display: none;
-}
-.btn {
-	border-radius: 0;
-	background: #0A3292;
-}
-.btn:hover {
-	background: #0A3292;
-}
-.round {
-	padding: 2px;
-	width: 26px;
-	height: 26px;
-	border-radius: 15px;
-}
-.knopjes {
-	margin-top: 20px;
-}
-h1[title="Lid-status: Lid"] .status {
-	display: none;
-}
-#profiel h1 {
-	margin-bottom: 50px;
-}
-#profiel .gegevens {
-	border: none;
-}
-#profiel img.pasfoto {
-	border: none;
-	box-shadow: 0 1px 2px #BBB;
-}
-.ishetal {
-	line-height: 20px;
 }
