@@ -96,7 +96,7 @@ class GesprekkenResponse extends DataTableResponse {
 		$array['details'] .= '</a>';
 		$array['deelnemers'] = $gesprek->getDeelnemersFormatted();
 		$moment = '<span class="lichtgrijs float-right">' . reldate($gesprek->laatste_update) . '</span>';
-		$array['laatste_bericht'] = $moment . CsrBB::parseHtml($gesprek->laatste_bericht);
+		$array['laatste_bericht'] = $moment . CsrBB::parseHtml($gesprek->laatste_bericht, true);
 
 		return parent::getJson($array);
 	}
