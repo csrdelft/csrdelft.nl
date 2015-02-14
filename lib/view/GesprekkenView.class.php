@@ -124,7 +124,7 @@ class BerichtenResponse extends DataTableResponse {
 	public function getJson($bericht) {
 		$array = $bericht->jsonSerialize();
 
-		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ? AND moment < ?', array($bericht->gesprek_id, $bericht->moment), null, 'moment DESC', 1, 1)->fetch();
+		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ? AND bericht_id < ?', array($bericht->gesprek_id, $bericht->bericht_id), null, 'bericht_id DESC', 1)->fetch();
 		if ($previous AND $previous->auteur_uid !== $bericht->auteur_uid) {
 			$previous = $bericht->auteur_uid;
 			$bbcode = '[b]' . ProfielModel::get($bericht->auteur_uid)->getNaam() . '[/b][rn]' . $bericht->inhoud;

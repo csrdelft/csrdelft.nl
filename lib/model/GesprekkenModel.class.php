@@ -57,6 +57,11 @@ class GesprekDeelnemersModel extends PersistenceModel {
 	const orm = 'GesprekDeelnemer';
 
 	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'toegevoegd_moment ASC';
 
 	protected function __construct() {
 		parent::__construct('gesprekken/');
@@ -133,7 +138,7 @@ class GesprekBerichtenModel extends PersistenceModel {
 	 * Default ORDER BY
 	 * @var string
 	 */
-	protected $default_order = 'moment ASC';
+	protected $default_order = 'bericht_id ASC';
 
 	protected function __construct() {
 		parent::__construct('gesprekken/');
