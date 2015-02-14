@@ -106,7 +106,7 @@ class GesprekDeelnemersModel extends PersistenceModel {
 		$deelnemer = new GesprekDeelnemer();
 		$deelnemer->gesprek_id = $gesprek->gesprek_id;
 		$deelnemer->uid = $account->uid;
-		$deelnemer->toegevoegd_moment = getDateTime();
+		$deelnemer->toegevoegd_moment = getDateTime(time() - 1);
 		$deelnemer->gelezen_moment = getDateTime(0);
 		parent::create($deelnemer);
 		if ($door) {
