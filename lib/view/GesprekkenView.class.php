@@ -103,13 +103,9 @@ class GesprekkenResponse extends DataTableResponse {
 
 		$array['deelnemers'] = $gesprek->getDeelnemersFormatted();
 
-		$moment = '<span class="lichtgrijs float-right">' . reldate($gesprek->laatste_update) . '</span><div class="clear"></div>';
-		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ?', array($gesprek->gesprek_id), null, 'bericht_id DESC', 1)->fetch();
-		if ($previous) {
-			$array['laatste_update'] = $moment . $previous->getAuteurFormatted() . CsrBB::parse(mb_substr($previous->inhoud, 0, 30));
-			if (mb_strlen($previous->inhoud) > 30) {
-				$array['laatste_update'] .= '...';
-			}
+		$laatste_bericht = GesprekBerichtenModel::instance()->find('gesprek_id = ?', array($gesprek->gesprek_id), null, 'bericht_id DESC', 1)->fetch();
+		if ($laatste_bericht) {
+			$array['laatste_update'] = $laatste_bericht->getFormatted(false, 30);
 		}
 
 		return parent::getJson($array);
@@ -147,13 +143,7 @@ class BerichtenResponse extends DataTableResponse {
 		$array = $bericht->jsonSerialize();
 
 		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ? AND bericht_id < ?', array($bericht->gesprek_id, $bericht->bericht_id), null, 'bericht_id DESC', 1)->fetch();
-		if ($previous AND $previous->auteur_uid === $bericht->auteur_uid) {
-			$auteur = '';
-		} else {
-			$auteur = $bericht->getAuteurFormatted();
-		}
-		$moment = '<span data-order="' . $bericht->moment . '" class="lichtgrijs float-right">' . reldate($bericht->moment) . '</span>';
-		$array['inhoud'] = $moment . $auteur . CsrBB::parse($bericht->inhoud);
+		$array['inhoud'] = $bericht->getFormatted($previous);
 
 		return parent::getJson($array);
 	}

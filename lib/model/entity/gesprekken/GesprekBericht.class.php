@@ -60,4 +60,24 @@ class GesprekBericht extends PersistentEntity {
 		return '<img class="cd-user-avatar float-left" src="/plaetjes/' . $profiel->getPasfotoPath(true) . '"/><span class="dikgedrukt">' . $profiel->getLink('volledig') . '</span><br />';
 	}
 
+	public function getFormatted($previous, $max = false) {
+		if ($previous AND $previous->auteur_uid === $this->auteur_uid) {
+			$auteur = '';
+		} else {
+			$auteur = $this->getAuteurFormatted();
+		}
+		$moment = '<span data-order="' . $this->moment . '" class="lichtgrijs float-right">' . reldate($this->moment) . '</span>';
+
+		if (is_int($max)) {
+			$inhoud = mb_substr($this->inhoud, 0, $max);
+			if (mb_strlen($this->inhoud) > $max) {
+				$inhoud .= '...';
+			}
+		} else {
+			$inhoud = $this->inhoud;
+		}
+
+		return $moment . $auteur . CsrBB::parse($inhoud);
+	}
+
 }
