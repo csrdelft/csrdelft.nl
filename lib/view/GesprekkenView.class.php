@@ -128,7 +128,7 @@ class BerichtenResponse extends DataTableResponse {
 		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ? AND bericht_id < ?', array($bericht->gesprek_id, $bericht->bericht_id), null, 'bericht_id DESC', 1)->fetch();
 		if ($previous AND $previous->auteur_uid !== $bericht->auteur_uid) {
 			$previous = $bericht->auteur_uid;
-			$bbcode = '[b]' . ProfielModel::get($bericht->auteur_uid)->getNaam() . '[/b][rn]' . $bericht->inhoud;
+			$bbcode = '[b]' . ProfielModel::getNaam($bericht->auteur_uid, 'volledig') . '[/b][rn]' . $bericht->inhoud;
 		} else {
 			$bbcode = $bericht->inhoud;
 		}
