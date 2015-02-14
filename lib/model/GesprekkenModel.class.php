@@ -119,6 +119,9 @@ class GesprekDeelnemersModel extends PersistenceModel {
 		$rowCount = $this->delete($deelnemer);
 		if ($this->count('gesprek_id = ?', array($gesprek->gesprek_id)) === 0) {
 			GesprekkenModel::instance()->verwijderGesprek($gesprek);
+		} else {
+			$inhoud = 'Ik heb het gesprek verlaten.';
+			GesprekBerichtenModel::instance()->maakBericht($gesprek, $deelnemer, $inhoud);
 		}
 		return $rowCount === 1;
 	}
