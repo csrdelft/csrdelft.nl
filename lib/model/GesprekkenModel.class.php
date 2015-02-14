@@ -29,7 +29,6 @@ class GesprekkenModel extends PersistenceModel {
 		// Maak gesprek
 		$gesprek = new Gesprek();
 		$gesprek->laatste_update = getDateTime();
-		$gesprek->laatste_bericht = '';
 		$gesprek->gesprek_id = (int) $this->create($gesprek);
 		// Deelnemers toevoegen
 		$deelnemer = GesprekDeelnemersModel::instance()->voegToeAanGesprek($gesprek, $from);
@@ -169,10 +168,6 @@ class GesprekBerichtenModel extends PersistenceModel {
 		$bericht->id = $this->create($bericht);
 		// Update gesprek
 		$gesprek->laatste_update = $bericht->moment;
-		$gesprek->laatste_bericht = $bericht->getAuteurFormatted() . CsrBB::parse(mb_substr($bericht->inhoud, 0, 30));
-		if (mb_strlen($bericht->inhoud) > 30) {
-			$gesprek->laatste_bericht .= '...';
-		}
 		GesprekkenModel::instance()->update($gesprek);
 		return $bericht;
 	}

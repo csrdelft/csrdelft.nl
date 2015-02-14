@@ -19,11 +19,6 @@ class Gesprek extends PersistentEntity {
 	 */
 	public $laatste_update;
 	/**
-	 * Laatste bericht
-	 * @var string
-	 */
-	public $laatste_bericht;
-	/**
 	 * Aantal nieuwe berichten sinds laatst gelezen
 	 * @var int
 	 */
@@ -38,9 +33,8 @@ class Gesprek extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'gesprek_id'		 => array(T::Integer, false, 'auto_increment'),
-		'laatste_update'	 => array(T::DateTime),
-		'laatste_bericht'	 => array(T::String)
+		'gesprek_id'	 => array(T::Integer, false, 'auto_increment'),
+		'laatste_update' => array(T::DateTime)
 	);
 	/**
 	 * Database primary key

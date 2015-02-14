@@ -67,7 +67,6 @@ class GesprekkenTable extends DataTable {
 		$this->settings['scrollCollapse'] = true;
 		$this->settings['tableTools']['aButtons'] = array();
 
-		$this->hideColumn('laatste_update');
 		$this->addColumn('deelnemers');
 
 		$create = new DataTableKnop('== 0', $this->dataTableId, '/gesprekken/start', 'post popup', 'Nieuw', 'Nieuw gesprek starten', 'email_add');
@@ -94,9 +93,17 @@ class GesprekkenResponse extends DataTableResponse {
 			$array['details'] .= '<span class="fa fa-envelope fa-lg"></span>';
 		}
 		$array['details'] .= '</a>';
+
 		$array['deelnemers'] = $gesprek->getDeelnemersFormatted();
-		$moment = '<span class="lichtgrijs float-right">' . reldate($gesprek->laatste_update) . '</span>';
-		$array['laatste_bericht'] = $moment . CsrBB::parseHtml($gesprek->laatste_bericht, true);
+
+		$moment = '<span class="lichtgrijs float-right">' . reldate($gesprek->laatste_update) . '</span><div class="clear"></div>';
+		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ?', array($gesprek->gesprek_id), null, 'bericht_id DESC', 1)->fetch();
+		if ($previous) {
+			$array['laatste_update'] = $moment . $previous->getAuteurFormatted() . CsrBB::parse(mb_substr($previous->inhoud, 0, 30));
+			if (mb_strlen($previous->inhoud) > 30) {
+				$array['laatste_update'] .= '...';
+			}
+		}
 
 		return parent::getJson($array);
 	}
