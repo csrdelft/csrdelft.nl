@@ -50,7 +50,7 @@ class ProfielView extends SmartyTemplateView {
 			$besturen .= '<a href="' . $bestuur->getUrl() . '">' . $bestuur->naam . '</a><br />';
 		}
 		if ($besturen != '') {
-			$besturen = '<div class="label">Bestuur:</div><div class="data">' . $besturen . '</div><br />';
+			$besturen = '<div class="label">Bestuur:</div><div class="data scroll">' . $besturen . '</div><br />';
 		}
 		$this->smarty->assign('besturen', $besturen);
 
@@ -59,7 +59,7 @@ class ProfielView extends SmartyTemplateView {
 			$commissies .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a><br />';
 		}
 		if ($commissies != '') {
-			$commissies = '<div class="label">Commissies:</div><div class="data">' . $commissies . '</div><br />';
+			$commissies = '<div class="label">Commissies:</div><div class="data scroll">' . $commissies . '</div><br />';
 		}
 		$this->smarty->assign('commissies', $commissies);
 
@@ -69,7 +69,7 @@ class ProfielView extends SmartyTemplateView {
 			$werkgroepen .= '<a href="' . $werkgroep->getUrl() . '">' . $werkgroep->naam . '</a><br />';
 		}
 		if ($werkgroepen != '') {
-			$werkgroepen = '<div class="label">Werkgroepen:</div><div class="data">' . $werkgroepen . '</div><br />';
+			$werkgroepen = '<div class="label">Werkgroepen:</div><div class="data scroll">' . $werkgroepen . '</div><br />';
 		}
 		$this->smarty->assign('werkgroepen', $werkgroepen);
 
@@ -78,7 +78,7 @@ class ProfielView extends SmartyTemplateView {
 			$onderverenigingen .= '<a href="' . $ondervereniging->getUrl() . '">' . $ondervereniging->naam . '</a><br />';
 		}
 		if ($onderverenigingen != '') {
-			$onderverenigingen = '<div class="label">Onderverenigingen:</div><div class="data">' . $onderverenigingen . '</div><br />';
+			$onderverenigingen = '<div class="label">Onder-<br />verenigingen:</div><div class="data scroll">' . $onderverenigingen . '</div><br />';
 		}
 		$this->smarty->assign('onderverenigingen', $onderverenigingen);
 
@@ -87,7 +87,7 @@ class ProfielView extends SmartyTemplateView {
 			$groepen .= '<a href="' . $groep->getUrl() . '">' . $groep->naam . '</a><br />';
 		}
 		if ($groepen != '') {
-			$groepen = '<div class="label">Overige<br />groepen:</div><div class="data">' . $groepen . '</div><br />';
+			$groepen = '<div class="label">Overige<br />groepen:</div><div class="data scroll">' . $groepen . '</div><br />';
 		}
 		$this->smarty->assign('groepen', $groepen);
 
@@ -96,7 +96,7 @@ class ProfielView extends SmartyTemplateView {
 			$ketzers .= '<a href="' . $ketzer->getUrl() . '">' . $ketzer->naam . '</a><br />';
 		}
 		if ($ketzers != '') {
-			$ketzers = '<div class="label">Aanschafketzers:</div><div class="data scroll">' . $ketzers . '</div><br />';
+			$ketzers = '<div class="label">Aanschaf-<br />ketzers:</div><div class="data scroll">' . $ketzers . '</div><br />';
 		}
 		$this->smarty->assign('ketzers', $ketzers);
 
@@ -105,7 +105,7 @@ class ProfielView extends SmartyTemplateView {
 			$activiteiten .= '<a href="' . $activiteit->getUrl() . '">' . $activiteit->naam . '</a><br />';
 		}
 		if ($activiteiten != '') {
-			$activiteiten = '<div class="label">Activiteiten:</div><div class="data">' . $activiteiten . '</div><br />';
+			$activiteiten = '<div class="label">Activiteiten:</div><div class="data scroll">' . $activiteiten . '</div><br />';
 		}
 		$this->smarty->assign('activiteiten', $activiteiten);
 
