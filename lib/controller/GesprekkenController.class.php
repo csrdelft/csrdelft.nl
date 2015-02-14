@@ -114,7 +114,8 @@ class GesprekkenController extends AclController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			GesprekBerichtenModel::instance()->maakBericht($gesprek, $deelnemer, $values['inhoud']);
-			$berichten = $gesprek->getBerichten($deelnemer, strtotime($deelnemer->gelezen_moment) - 1);
+			$lastUpdate = (int) filter_input(INPUT_POST, 'lastUpdate', FILTER_SANITIZE_NUMBER_INT);
+			$berichten = $gesprek->getBerichten($deelnemer, $lastUpdate);
 			$this->view = new BerichtenResponse($berichten);
 			$this->view->autoUpdate = $gesprek->auto_update;
 		} else {

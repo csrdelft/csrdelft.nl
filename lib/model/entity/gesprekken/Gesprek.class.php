@@ -87,8 +87,8 @@ class Gesprek extends PersistentEntity {
 			$diff = time() - strtotime($andere_deelnemer->gelezen_moment);
 			$this->auto_update = 1000 * $diff;
 
-			if ($this->auto_update < 1000) {
-				$this->auto_update = 1000;
+			if ($this->auto_update < 2000) {
+				$this->auto_update = 2000;
 			}
 		}
 		// Update deelnemer

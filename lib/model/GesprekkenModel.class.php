@@ -156,7 +156,7 @@ class GesprekBerichtenModel extends PersistenceModel {
 		$bericht = new GesprekBericht();
 		$bericht->gesprek_id = $gesprek->gesprek_id;
 		$bericht->moment = getDateTime();
-		$bericht->auteur_uid = LoginModel::getUid();
+		$bericht->auteur_uid = $deelnemer->uid;
 		$bericht->inhoud = $inhoud;
 		$bericht->id = $this->create($bericht);
 		// Update gesprek

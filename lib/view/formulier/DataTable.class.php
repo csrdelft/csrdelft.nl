@@ -238,8 +238,8 @@ abstract class DataTable extends TabsForm {
 				var fnGetLastUpdate = function () {
 					return Number($('#<?= $this->dataTableId; ?>').attr('data-lastupdate'));
 				}
-				var fnSetLastUpdate = function () {
-					$('#<?= $this->dataTableId; ?>').attr('data-lastupdate', Math.round(new Date().getTime() / 1000));
+				var fnSetLastUpdate = function (lastUpdate) {
+					$('#<?= $this->dataTableId; ?>').attr('data-lastupdate', lastUpdate);
 				}
 				/**
 				 * Called after row addition and row data update.
@@ -269,16 +269,15 @@ abstract class DataTable extends TabsForm {
 				 * @returns object
 				 */
 				var fnAjaxUpdateCallback = function (json) {
-					fnSetLastUpdate();
+					fnSetLastUpdate(json.lastUpdate);
 
 					if (json.autoUpdate) {
-						var $table = $('#<?= $this->dataTableId; ?>');
-						var ajax = $table.DataTable().ajax;
 						window.setTimeout(function () {
-							$.post(ajax.url(), {
+							$.post($('#<?= $this->dataTableId; ?>').DataTable().ajax.url(), {
 								'lastUpdate': fnGetLastUpdate()
 							}, function (data, textStatus, jqXHR) {
 								fnAjaxUpdateCallback(data);
+								fnUpdateDataTable('<?= $this->dataTableId; ?>', data);
 							});
 						}, json.autoUpdate);
 					}
@@ -399,6 +398,7 @@ abstract class DataTableResponse extends JsonResponse {
 		echo "{\n";
 		echo '"modal":' . json_encode($this->modal) . ",\n";
 		echo '"autoUpdate":' . json_encode($this->autoUpdate) . ",\n";
+		echo '"lastUpdate":' . json_encode(time()) . ",\n";
 		echo '"data":[' . "\n";
 		$comma = false;
 		foreach ($this->model as $entity) {
