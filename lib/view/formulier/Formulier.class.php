@@ -25,7 +25,7 @@ class Formulier implements View, Validator {
 
 	protected $model;
 	protected $formId;
-	private $dataTableId;
+	protected $dataTableId;
 	protected $action = null;
 	public $post = true;
 	private $enctype = 'multipart/form-data';

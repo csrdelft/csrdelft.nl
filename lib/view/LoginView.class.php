@@ -120,7 +120,7 @@ class RememberAfterLoginForm extends RememberLoginForm {
 
 	public function __construct(RememberLogin $remember) {
 		parent::__construct($remember);
-		$this->setDataTableId(false); // same as parent but without data table
+		$this->dataTableId = false; // same as parent but without data table
 	}
 
 }
