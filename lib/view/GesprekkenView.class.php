@@ -77,6 +77,13 @@ class GesprekkenTable extends DataTable {
 
 		$add = new DataTableKnop('== 1', $this->dataTableId, '/gesprekken/toevoegen', 'post popup', 'Toevoegen', 'Deelnemer toevoegen aan het gesprek', 'user_add');
 		$this->addKnop($add);
+
+		$this->javascript .= <<<JS
+
+$('#{$this->dataTableId}').on('dblclick', 'tr', function (event) {
+	window.location.href = $(this).children('td:first').children('a:first').attr('href');
+});
+JS;
 	}
 
 }
