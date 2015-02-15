@@ -139,7 +139,7 @@ class GeoLocationController extends AclController {
 								markers[location.uid] = marker;
 							}
 
-							var html = '<table><tr><td>' + location.pasfoto + '</td><td>';
+							var html = '<table><tr><td>' + location.pasfoto + '</td><td style="max-width: 200px;">';
 							html += location.adres + '<br /><br />';
 							html += 'Latitude: ' + location.position.latitude + '<br />';
 							html += 'Longitude: ' + location.position.longitude + '<br />';
@@ -155,7 +155,7 @@ class GeoLocationController extends AclController {
 							if (location.position.altitudeAccuracy) {
 								html += ' ±' + location.position.altitudeAccuracy;
 							}
-							html += '<p style="text-align: right;">' + location.datetime + '</p></td><tr></table>';
+							html += '<br /><p style="text-align: right;">' + location.datetime + '</p></td><tr></table>';
 
 							var infowindow = new google.maps.InfoWindow({
 								content: html
