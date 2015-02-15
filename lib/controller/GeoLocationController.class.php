@@ -118,7 +118,7 @@ class GeoLocationController extends AclController {
 								});
 
 								if (last) {
-									map.setCenter(last.position);
+									map.setCenter(last.getPosition());
 									new google.maps.event.trigger(last, 'click');
 								}
 								//window.setTimeout(getLocation, Math.round(new Date()) - locations.timestamp); // auto update
