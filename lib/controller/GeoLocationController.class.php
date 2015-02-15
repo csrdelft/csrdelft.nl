@@ -76,8 +76,8 @@ class GeoLocationController extends AclController {
 		<html>
 			<body>
 				<div id="google_canvas" style="height: 100%;"></div>
-				<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-				<script src="//maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+				<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+				<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
 				<script type="text/javascript">
 
 					(function () {
@@ -117,7 +117,7 @@ class GeoLocationController extends AclController {
 									return (~~(Math.random() * 16)).toString(16);
 								});
 
-								var pinImage = new google.maps.MarkerImage("//chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + randomColor,
+								var pinImage = new google.maps.MarkerImage("https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + randomColor,
 										new google.maps.Size(21, 34),
 										new google.maps.Point(0, 0),
 										new google.maps.Point(10, 34)
