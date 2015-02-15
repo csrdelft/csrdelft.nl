@@ -104,19 +104,23 @@ class GeoLocationController extends AclController {
 								infowindow.open(map, marker);
 							});
 
-							if (<?= $data; ?>) {
-								infowindow.open(map, marker);
-								map.setCenter(geolocate);
-							}
+							return marker;
 						};
 
 						var getLocation = function () {
 
 							$.post('/geolocation/get', <?= $data; ?>, function (data, textStatus, jqXHR) {
 
+								var last = false;
+
 								$.each(data, function (index) {
-									drawLocation(data[index]);
+									last = drawLocation(data[index]);
 								});
+
+								if (last) {
+									map.setCenter(last.position);
+									new google.maps.event.trigger(last, 'click');
+								}
 								//window.setTimeout(getLocation, Math.round(new Date()) - locations.timestamp); // auto update
 							});
 
