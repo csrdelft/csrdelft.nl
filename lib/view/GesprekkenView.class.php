@@ -68,6 +68,7 @@ class GesprekkenTable extends DataTable {
 		$this->settings['tableTools']['aButtons'] = array();
 
 		$this->addColumn('deelnemers');
+		$this->searchColumn('deelnemers');
 
 		$create = new DataTableKnop('== 0', $this->dataTableId, '/gesprekken/start', 'post popup', 'Nieuw', 'Nieuw gesprek starten', 'email_add');
 		$this->addKnop($create);
@@ -126,6 +127,7 @@ class GesprekBerichtenTable extends DataTable {
 		$this->hideColumn('gesprek_id');
 		$this->hideColumn('auteur_uid');
 		$this->hideColumn('moment');
+		$this->searchColumn('inhoud');
 
 		$this->javascript .= <<<JS
 
