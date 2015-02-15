@@ -100,17 +100,18 @@ class GeoLocationController extends AclController {
 						var markers = {};
 						var infowindows = {};
 						var openwindow = '<?= $uid; ?>';
+						var radius;
 
 						var drawLocation = function (location) {
 
-							var geolocate;
+							var latlon;
 
 							if (location.position.coords) { // backwards compatibility
-								geolocate = new google.maps.LatLng(location.position.coords.latitude, location.position.coords.longitude);
+								location.position = location.position.coords;
 							}
-							else {
-								geolocate = new google.maps.LatLng(location.position.latitude, location.position.longitude);
-							}
+
+							latlon = new google.maps.LatLng(location.position.latitude, location.position.longitude);
+
 
 							if (markers[location.uid]) {
 								marker = markers[location.uid];
@@ -119,7 +120,7 @@ class GeoLocationController extends AclController {
 								infowindows[location.uid].close();
 								delete infowindows[location.uid];
 
-								marker.setPosition(geolocate);
+								marker.setPosition(latlon);
 							}
 							else {
 								var styleIconClass = new StyledIcon(StyledIconTypes.CLASS, {
@@ -131,7 +132,7 @@ class GeoLocationController extends AclController {
 
 								var marker = new StyledMarker({
 									styleIcon: new StyledIcon(StyledIconTypes.MARKER, {text: location.uid}, styleIconClass),
-									position: geolocate,
+									position: latlon,
 									map: map,
 									title: location.naam
 								});
@@ -160,6 +161,23 @@ class GeoLocationController extends AclController {
 
 							google.maps.event.addListener(marker, 'click', function () {
 
+								if (radius) {
+									radius.setCenter(latlon);
+									radius.setRadius(parseInt(location.position.accuracy));
+								}
+								else {
+									radius = new google.maps.Circle({
+										strokeColor: marker.styleIcon.color,
+										strokeOpacity: 0.5,
+										strokeWeight: 2,
+										fillColor: marker.styleIcon.color,
+										fillOpacity: 0.15,
+										map: map,
+										center: latlon,
+										radius: parseInt(location.position.accuracy)
+									});
+								}
+
 								if (openwindow) {
 									infowindows[openwindow].close();
 								}
@@ -170,7 +188,7 @@ class GeoLocationController extends AclController {
 							});
 
 							if (openwindow === location.uid) {
-								infowindow.open(map, marker);
+								google.maps.event.trigger(marker, 'click');
 							}
 
 						};
