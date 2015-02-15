@@ -90,6 +90,21 @@ class GeoLocationController extends AclController {
 
 					(function () {
 
+						var colors = {};
+						var createColor = new function (uid) {
+
+							var lichting = str.substring(0, 2);
+
+							if (!colors[lichting]) {
+
+								colors[lichting] = Please.make_color({
+									value: 1,
+									saturation: .5
+								});
+							}
+							return colors[lichting];
+						};
+
 						// Draw
 						var map = new google.maps.Map(document.getElementById('google_canvas'), {
 							zoom: 15,
@@ -102,67 +117,64 @@ class GeoLocationController extends AclController {
 						var openwindow = '<?= $uid; ?>';
 						var radius;
 
-						var drawLocation = function (location) {
+						var drawLocation = function (data) {
 
 							var latlon;
 
-							if (location.position.coords) { // backwards compatibility
-								location.position = location.position.coords;
+							if (data.position.coords) { // backwards compatibility
+								data.position = data.position.coords;
 							}
 
-							latlon = new google.maps.LatLng(location.position.latitude, location.position.longitude);
+							latlon = new google.maps.LatLng(data.position.latitude, data.position.longitude);
 
-							if (markers[location.uid]) {
-								marker = markers[location.uid];
+							if (markers[data.uid]) {
+								marker = markers[data.uid];
 
 								google.maps.event.clearListeners(marker, 'click');
-								infowindows[location.uid].close();
-								delete infowindows[location.uid];
+								infowindows[data.uid].close();
+								delete infowindows[data.uid];
 
 								marker.setPosition(latlon);
 							}
 							else {
 								var styleIconClass = new StyledIcon(StyledIconTypes.CLASS, {
-									color: Please.make_color({
-										value: 1,
-										saturation: .5
-									})
+									color: createColor(data.uid)
 								});
 
 								var marker = new StyledMarker({
-									styleIcon: new StyledIcon(StyledIconTypes.MARKER, {text: location.uid}, styleIconClass),
+									styleIcon: new StyledIcon(StyledIconTypes.MARKER, {text: data.uid}, styleIconClass),
 									position: latlon,
 									map: map,
-									title: location.naam
+									title: data.naam
 								});
 
-								markers[location.uid] = marker;
+								markers[data.uid] = marker;
 							}
 
-							var html = '<table><tr><td>' + location.pasfoto + '</td><td style="max-width: 200px;">';
-							html += location.adres + '<br /><br />';
-							html += 'Latitude: ' + location.position.latitude + '<br />';
-							html += 'Longitude: ' + location.position.longitude + '<br />';
-							if (location.position.speed) {
-								html += 'Snelheid: ' + Math.round(location.position.speed) + ' m/s<br />';
+							var html = '<table><tr><td>' + data.pasfoto + '</td><td style="max-width: 200px;">';
+							html += data.adres + '<br /><br />';
+							html += 'Latitude: ' + data.position.latitude + '<br />';
+							html += 'Longitude: ' + data.position.longitude + '<br />';
+							if (data.position.speed) {
+								html += 'Snelheid: ' + Math.round(data.position.speed) + ' m/s<br />';
 							}
-							if (location.position.heading) {
-								html += 'Richting: ' + Math.round(location.position.heading) + '°<br />';
+							if (data.position.heading) {
+								html += 'Richting: ' + Math.round(data.position.heading) + '°<br />';
 							}
-							if (location.position.altitude && typeof location.position.altitude === 'number') {
-								html += 'Hoogte: ' + location.position.altitide + ' m';
-								if (location.position.altitudeAccuracy) {
-									html += ' ±' + location.position.altitudeAccuracy;
+							if (data.position.altitude && typeof data.position.altitude === 'number') {
+								html += 'Hoogte: ' + data.position.altitide + ' m';
+								if (data.position.altitudeAccuracy) {
+									html += ' ±' + data.position.altitudeAccuracy;
 								}
 								html += '(above WGS84)';
 							}
-							html += '<br /><p style="text-align: right;">' + location.datetime + '</p></td><tr></table>';
+							html += '<br /><p style="text-align: right;">' + data.datetime + '</p></td><tr></table>';
 
 							var infowindow = new google.maps.InfoWindow({
 								content: html
 							});
 
-							infowindows[location.uid] = infowindow;
+							infowindows[data.uid] = infowindow;
 
 							google.maps.event.addListener(infowindow, 'closeclick', function () {
 								openwindow = false;
@@ -186,7 +198,7 @@ class GeoLocationController extends AclController {
 									fillOpacity: 0.15,
 									map: map,
 									center: latlon,
-									radius: parseInt(location.position.accuracy)
+									radius: parseInt(data.position.accuracy)
 								};
 								if (radius) {
 									radius.setOptions(options);
@@ -200,11 +212,11 @@ class GeoLocationController extends AclController {
 								}
 
 								infowindow.open(map, marker);
-								openwindow = location.uid;
+								openwindow = data.uid;
 
 							});
 
-							if (openwindow === location.uid) {
+							if (openwindow === data.uid) {
 								google.maps.event.trigger(marker, 'click');
 							}
 
