@@ -841,7 +841,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 		$html = <<<HTML
 <div class="bb-video">
 	<div class="bb-video-preview" onclick="event.preventDefault();bbvideoDisplay(this);" data-params='{$params}' title="Klik om de video af te spelen">
-		<div class="play-button"></div>
+		<div class="play-button fa  fa-play-circle-o fa-5x"></div>
 		<div class="bb-img-loading" src="{$previewthumb}"></div>
 	</div>
 </div>
