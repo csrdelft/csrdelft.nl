@@ -106,8 +106,8 @@ class GeoLocationController extends AclController {
 							}
 
 							var html = '<table><tr><td>' + location.pasfoto + '<p>' + location.datetime + '</p></td>';
-							html += '<td style="max-width: 173px; word-wrap: break-word;">' + location.woonadres + '<br />' + JSON.stringify(location.position, undefined, 4) + '</td>';
-							html += '</tr></table>';
+							html += '<td style="max-width: 173px; word-wrap: break-word;">' + location.woonadres + '<br /><br />';
+							html += JSON.stringify(location.position, undefined, 4) + '</td></tr></table>';
 
 							if (markers[location.uid]) {
 								marker = markers[location.uid];
