@@ -65,6 +65,11 @@ class GeoLocationController extends AclController {
 	}
 
 	public function map($uid = null) {
+		if (ProfielModel::existsUid($uid)) {
+			$data = json_encode(array('uid' => $uid));
+		} else {
+			$data = '{}';
+		}
 		?>
 		<html>
 			<body>
@@ -106,9 +111,7 @@ class GeoLocationController extends AclController {
 
 						var getLocation = function () {
 
-							$.post('/geolocation/get', {
-								uid: <?= $uid; ?>
-							}, function (data, textStatus, jqXHR) {
+							$.post('/geolocation/get', <?= $data; ?>, function (data, textStatus, jqXHR) {
 
 								$.each(data, function (index) {
 									drawLocation(data[index]);
