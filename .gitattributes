@@ -165,6 +165,7 @@ htdocs/layout/fonts/glyphicons-halflings-regular.svg -text
 htdocs/layout/fonts/glyphicons-halflings-regular.ttf -text
 htdocs/layout/fonts/glyphicons-halflings-regular.woff -text
 htdocs/layout/js/Detector.js -text
+htdocs/layout/js/Please.min.js -text
 htdocs/layout/js/bb-slideshow.js -text
 htdocs/layout/js/bbcode.js -text
 htdocs/layout/js/bibliotheek.js -text

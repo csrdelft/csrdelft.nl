@@ -80,6 +80,7 @@ class GeoLocationController extends AclController {
 				<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 				<script src="//maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
 				<script src="//<?= CSR_DOMAIN; ?>/layout/js/google.maps.v3.StyledMarker.js"></script>
+				<script src="//<?= CSR_DOMAIN; ?>/layout/js/Please.min.js"></script>
 				<script type="text/javascript">
 
 					(function () {
@@ -115,12 +116,8 @@ class GeoLocationController extends AclController {
 								marker.setPosition(geolocate);
 							}
 							else {
-								var randomColor = "#000000".replace(/0/g, function () {
-									return (~~(Math.random() * (16 - 8) + 8)).toString(16);
-								});
-
 								var styleIconClass = new StyledIcon(StyledIconTypes.CLASS, {
-									color: randomColor
+									color: Please.make_color()
 								});
 
 								var marker = new StyledMarker({
