@@ -82,9 +82,9 @@ class GeoLocationController extends AclController {
 
 						var drawLocation = function (location) {
 
-							var geolocate = new google.maps.LatLng(location.position.coords.latitude, location.position.coords.longitude);
+							var geolocate = new google.maps.LatLng(location.position.latitude, location.position.longitude);
 							var html = location.pasfoto + '<p style="text-align: right;">' + location.datetime + '</p>';
-							html += '<div style="max-width: 173px; word-wrap: break-word;">' + JSON.stringify(location.position.coords) + '</div>';
+							html += '<div style="max-width: 173px; word-wrap: break-word;">' + JSON.stringify(location.position) + '</div>';
 
 							var marker = new google.maps.Marker({
 								position: geolocate,
