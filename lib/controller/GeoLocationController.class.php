@@ -103,12 +103,11 @@ class GeoLocationController extends AclController {
 							google.maps.event.addListener(marker, 'click', function () {
 								infowindow.open(map, marker);
 							});
+
 							if (<?= $data; ?>) {
 								infowindow.open(map, marker);
+								map.setCenter(geolocate);
 							}
-
-							map.setCenter(geolocate);
-
 						};
 
 						var getLocation = function () {
