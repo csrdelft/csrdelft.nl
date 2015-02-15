@@ -95,7 +95,7 @@ class GeoLocationController extends AclController {
 						var infowindows = {};
 
 						var drawLocation = function (location) {
-							var openwindow = <?= $data ? 'true' : 'false'; ?>;
+							var openwindow = <?= $data === 'null' ? 'false' : 'true'; ?>;
 
 							var geolocate;
 							// backwards compatibility
