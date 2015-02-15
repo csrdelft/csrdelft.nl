@@ -58,7 +58,7 @@ class GeoLocationController extends AclController {
 			echo '"uid": "' . $loc->uid . '",' . "\n";
 			echo '"woonadres": ' . json_encode(nl2br(str_replace('Nederland', '', $profiel->getFormattedAddress()))) . ',' . "\n";
 			echo '"ouders": ' . json_encode(nl2br(str_replace('Nederland', '', $profiel->getFormattedAddressOuders()))) . ',' . "\n";
-			echo '"pasfoto": ' . json_encode($profiel->getPasfotoTag('pasfoto', true)) . ',' . "\n";
+			echo '"pasfoto": ' . json_encode($profiel->getLink('pasfoto')) . ',' . "\n";
 			echo '"datetime": ' . json_encode(reldate($loc->moment)) . ',' . "\n";
 			echo '"position": ' . $loc->position . ',' . "\n";
 			echo '"timestamp": ' . strtotime($loc->moment) . "\n";
