@@ -112,7 +112,6 @@ class GeoLocationController extends AclController {
 
 							latlon = new google.maps.LatLng(location.position.latitude, location.position.longitude);
 
-
 							if (markers[location.uid]) {
 								marker = markers[location.uid];
 
@@ -140,9 +139,23 @@ class GeoLocationController extends AclController {
 								markers[location.uid] = marker;
 							}
 
-							var html = '<table><tr><td>' + location.pasfoto + '<p>' + location.datetime + '</p></td>';
-							html += '<td style="max-width: 173px; word-wrap: break-word;">' + location.adres + '<br /><br />';
-							html += JSON.stringify(location.position, undefined, 4) + '</td></tr></table>';
+							var html = '<table><tr><td>' + location.pasfoto + '</td><td>';
+							html += location.adres + '<br /><br />';
+							html += 'Latitude: ' + location.position.latitude + '<br />';
+							html += 'Longitude: ' + location.position.longitude + '<br />';
+							if (location.position.speed) {
+								html += 'Snelheid: ' + location.position.speed + '<br />';
+							}
+							if (location.position.heading) {
+								html += 'Richting: ' + location.position.heading + '<br />';
+							}
+							if (location.position.altitude) {
+								html += 'Hoogte: ' + location.position.altitide;
+							}
+							if (location.position.altitudeAccuracy) {
+								html += ' ±' + location.position.altitudeAccuracy;
+							}
+							html += '<p style="text-align: right;">' + location.datetime + '</p></td><tr></table>';
 
 							var infowindow = new google.maps.InfoWindow({
 								content: html
