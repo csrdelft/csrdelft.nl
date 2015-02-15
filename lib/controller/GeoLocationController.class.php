@@ -91,9 +91,9 @@ class GeoLocationController extends AclController {
 					(function () {
 
 						var colors = {};
-						var createColor = new function (uid) {
+						var createColor = function (uid) {
 
-							var lichting = str.substring(0, 2);
+							var lichting = uid.substring(0, 2);
 
 							if (!colors[lichting]) {
 
