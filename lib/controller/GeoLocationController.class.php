@@ -80,7 +80,7 @@ class GeoLocationController extends AclController {
 		}
 		?>
 		<html>
-			<body>
+			<body style="margin: 0;">
 				<div id="google_canvas" style="height: 100%;"></div>
 				<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 				<script src="//maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
