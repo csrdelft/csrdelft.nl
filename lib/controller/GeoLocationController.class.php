@@ -87,6 +87,38 @@ class GeoLocationController extends AclController {
 				<script src="//<?= CSR_DOMAIN; ?>/layout/js/Please.min.js"></script>
 				<script type="text/javascript">
 
+					function init_geolocation() { // duplicated code from csrdelft.js
+
+						var prev_pos = false;
+
+						var position_save = function (position) {
+							if (!prev_pos || ($(prev_pos.coords).not(position.coords).length === 0 && $(position.coords).not(prev_pos.coords).length === 0)) {
+								prev_pos = position;
+								$.post('/geolocation/save', {
+									coords: position.coords,
+									timestamp: Math.round(position.timestamp / 1000)
+								});
+							}
+						};
+
+						var position_error = function (error) {
+							switch (error.code) {
+								case error.PERMISSION_DENIED:
+									break;
+								case error.POSITION_UNAVAILABLE:
+									break;
+								case error.TIMEOUT:
+									break;
+								case error.UNKNOWN_ERROR:
+									break;
+							}
+						};
+
+						if (navigator.geolocation) {
+							navigator.geolocation.watchPosition(position_save, position_error);
+						}
+					}
+
 					(function () {
 
 						var map = new google.maps.Map(document.getElementById('google_canvas'), {
@@ -182,6 +214,7 @@ class GeoLocationController extends AclController {
 
 						};
 
+						init_geolocation();
 						getLocation(<?= $data; ?>);
 
 					})();
