@@ -152,9 +152,11 @@ class GeoLocationController extends AclController {
 								$.each(data, function (index) {
 									last = drawLocation(data[index]);
 
-									var autoUpdate = Math.round(new Date()) - data[index].timestamp;
+									var autoUpdate = Math.round(new Date() / 1000) - data[index].timestamp;
 									if (autoUpdate < 86400000) { // binnen 24h
-
+										if (autoUpdate < 10000) { // min delay 10s
+											autoUpdate = 10000;
+										}
 										window.setTimeout(function () {
 											getLocation({
 												uid: data[index].uid
