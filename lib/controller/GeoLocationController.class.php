@@ -155,6 +155,7 @@ class GeoLocationController extends AclController {
 
 							if (openwindow) {
 								infowindow.open(map, marker);
+								infowindow.set('isopen', true);
 							}
 
 						};
