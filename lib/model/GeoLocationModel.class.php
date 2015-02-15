@@ -20,9 +20,13 @@ class GeoLocationModel extends PersistenceModel {
 	public function savePosition($uid, $timestamp, array $position) {
 		$location = new GeoLocation();
 		$location->uid = $uid;
-		$location->moment = getDateTime($timestamp / 1000);
+		$location->moment = getDateTime($timestamp);
 		$location->position = json_encode($position);
-		$this->create($location);
+		if ($this->exists($location)) {
+			$this->update($location);
+		} else {
+			$this->create($location);
+		}
 		return $location;
 	}
 

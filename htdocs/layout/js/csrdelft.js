@@ -136,7 +136,7 @@ function init_geolocation() {
 			prev_pos = position;
 			$.post('/geolocation/save', {
 				coords: position.coords,
-				timestamp: position.timestamp
+				timestamp: Math.round(position.timestamp / 1000)
 			});
 		}
 	};
