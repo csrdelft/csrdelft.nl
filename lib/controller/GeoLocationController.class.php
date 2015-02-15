@@ -71,7 +71,7 @@ class GeoLocationController extends AclController {
 		if (ProfielModel::existsUid($uid)) {
 			$data = json_encode(array('uid' => $uid));
 		} else {
-			$data = 'null';
+			$data = json_encode(false);
 		}
 		?>
 		<html>
@@ -92,29 +92,21 @@ class GeoLocationController extends AclController {
 
 						var markers = {};
 						var infowindows = {};
+						var openwindow = '<?= $uid; ?>';
 
 						var drawLocation = function (location) {
-							var openwindow = <?= $data === 'null' ? 'false' : 'true'; ?>;
 
 							var geolocate;
-							// backwards compatibility
-							if (location.position.coords) {
+
+							if (location.position.coords) { // backwards compatibility
 								geolocate = new google.maps.LatLng(location.position.coords.latitude, location.position.coords.longitude);
 							}
 							else {
 								geolocate = new google.maps.LatLng(location.position.latitude, location.position.longitude);
 							}
 
-							var html = '<table><tr><td>' + location.pasfoto + '<p>' + location.datetime + '</p></td>';
-							html += '<td style="max-width: 173px; word-wrap: break-word;">' + location.woonadres + '<br /><br />';
-							html += JSON.stringify(location.position, undefined, 4) + '</td></tr></table>';
-
 							if (markers[location.uid]) {
 								marker = markers[location.uid];
-
-								if (infowindows[location.uid].get('isopen')) {
-									openwindow = true;
-								}
 
 								google.maps.event.clearListeners(marker, 'click');
 								infowindows[location.uid].close();
@@ -136,25 +128,37 @@ class GeoLocationController extends AclController {
 									position: geolocate,
 									map: map
 								});
+
 								markers[location.uid] = marker;
 							}
+
+							var html = '<table><tr><td>' + location.pasfoto + '<p>' + location.datetime + '</p></td>';
+							html += '<td style="max-width: 173px; word-wrap: break-word;">' + location.woonadres + '<br /><br />';
+							html += JSON.stringify(location.position, undefined, 4) + '</td></tr></table>';
 
 							var infowindow = new google.maps.InfoWindow({
 								content: html
 							});
+
 							infowindows[location.uid] = infowindow;
 
 							google.maps.event.addListener(infowindow, 'closeclick', function () {
-								infowindow.set('isopen', false);
-							});
-							google.maps.event.addListener(marker, 'click', function () {
-								infowindow.open(map, marker);
-								infowindow.set('isopen', true);
+								openwindow = false;
 							});
 
-							if (openwindow) {
+							google.maps.event.addListener(marker, 'click', function () {
+
+								if (openwindow) {
+									infowindows[openwindow].close();
+								}
+
 								infowindow.open(map, marker);
-								infowindow.set('isopen', true);
+								openwindow = location.uid;
+
+							});
+
+							if (openwindow === location.uid) {
+								infowindow.open(map, marker);
 							}
 
 						};
