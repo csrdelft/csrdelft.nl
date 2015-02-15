@@ -77,7 +77,7 @@ class GesprekBericht extends PersistentEntity {
 			$inhoud = $this->inhoud;
 		}
 
-		return $moment . $auteur . CsrBB::parse($inhoud);
+		return $moment . $auteur . $inhoud;
 	}
 
 }
