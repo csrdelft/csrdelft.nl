@@ -117,7 +117,10 @@ class GeoLocationController extends AclController {
 							}
 							else {
 								var styleIconClass = new StyledIcon(StyledIconTypes.CLASS, {
-									color: Please.make_color()
+									color: Please.make_color({
+										golden: true,
+										full_random: true
+									})
 								});
 
 								var marker = new StyledMarker({
