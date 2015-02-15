@@ -156,6 +156,7 @@ class GeoLocationController extends AclController {
 							if (openwindow) {
 								infowindow.open(map, marker);
 							}
+
 						};
 
 						var getLocation = function (uid) {
@@ -164,20 +165,11 @@ class GeoLocationController extends AclController {
 
 								$.each(data, function (index) {
 									drawLocation(data[index]);
-
-									var autoUpdate = Math.round(new Date() / 1000) - data[index].timestamp;
-									if (autoUpdate < 86400000) { // binnen 24h
-										if (autoUpdate < 10000) { // min delay 10s
-											autoUpdate = 10000;
-										}
-
-										window.setTimeout(function () {
-											getLocation({
-												uid: data[index].uid
-											});
-										}, autoUpdate);
-									}
 								});
+
+								window.setTimeout(function () {
+									getLocation(<?= $data; ?>);
+								}, 10000); //TODO: server set auto update delay
 							});
 
 						};
