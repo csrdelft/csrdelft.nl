@@ -95,6 +95,7 @@ class GeoLocationController extends AclController {
 						var infowindows = {};
 
 						var drawLocation = function (location) {
+							var openwindow = <?= $data ? 'true' : 'false'; ?>;
 
 							var geolocate;
 							// backwards compatibility
@@ -111,6 +112,10 @@ class GeoLocationController extends AclController {
 
 							if (markers[location.uid]) {
 								marker = markers[location.uid];
+
+								if (infowindows[location.uid].get('isopen')) {
+									openwindow = true;
+								}
 
 								google.maps.event.clearListeners(marker, 'click');
 								infowindows[location.uid].close();
@@ -140,11 +145,15 @@ class GeoLocationController extends AclController {
 							});
 							infowindows[location.uid] = infowindow;
 
+							google.maps.event.addListener(infowindow, 'closeclick', function () {
+								infowindow.set('isopen', false);
+							});
 							google.maps.event.addListener(marker, 'click', function () {
 								infowindow.open(map, marker);
+								infowindow.set('isopen', true);
 							});
 
-							if (<?= $data; ?>) {
+							if (openwindow) {
 								infowindow.open(map, marker);
 							}
 						};
