@@ -144,10 +144,10 @@ class GeoLocationController extends AclController {
 							html += 'Latitude: ' + location.position.latitude + '<br />';
 							html += 'Longitude: ' + location.position.longitude + '<br />';
 							if (location.position.speed) {
-								html += 'Snelheid: ' + location.position.speed + '<br />';
+								html += 'Snelheid: ' + Math.round(location.position.speed, 2) + '<br />';
 							}
 							if (location.position.heading) {
-								html += 'Richting: ' + location.position.heading + '<br />';
+								html += 'Richting: ' + Math.round(location.position.heading, 2) + '<br />';
 							}
 							if (location.position.altitude && typeof location.position.altitude === 'number') {
 								html += 'Hoogte: ' + location.position.altitide;
