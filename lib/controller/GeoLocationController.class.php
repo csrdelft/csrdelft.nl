@@ -60,6 +60,7 @@ class GeoLocationController extends AclController {
 			}
 			echo '{' . "\n";
 			echo '"uid": "' . $loc->uid . '",' . "\n";
+			echo '"naam": ' . json_encode($profiel->getNaam('civitas')) . ',' . "\n";
 			echo '"adres": ' . json_encode($adres) . ',' . "\n";
 			echo '"pasfoto": ' . json_encode($profiel->getLink('pasfoto')) . ',' . "\n";
 			echo '"datetime": ' . json_encode(reldate($loc->moment)) . ',' . "\n";
@@ -162,7 +163,8 @@ class GeoLocationController extends AclController {
 								var marker = new StyledMarker({
 									styleIcon: new StyledIcon(StyledIconTypes.MARKER, {text: location.uid}, styleIconClass),
 									position: geolocate,
-									map: map
+									map: map,
+									title: location.naam
 								});
 
 								markers[location.uid] = marker;
@@ -180,6 +182,11 @@ class GeoLocationController extends AclController {
 
 							google.maps.event.addListener(infowindow, 'closeclick', function () {
 								openwindow = false;
+							});
+
+							google.maps.event.addListener(marker, 'dblclick', function () {
+								map.setZoom(17);
+								map.panTo(marker.position);
 							});
 
 							google.maps.event.addListener(marker, 'click', function () {
