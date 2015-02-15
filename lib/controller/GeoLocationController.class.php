@@ -68,7 +68,7 @@ class GeoLocationController extends AclController {
 		if (ProfielModel::existsUid($uid)) {
 			$data = json_encode(array('uid' => $uid));
 		} else {
-			$data = '{}';
+			$data = 'null';
 		}
 		?>
 		<html>
@@ -103,7 +103,9 @@ class GeoLocationController extends AclController {
 							google.maps.event.addListener(marker, 'click', function () {
 								infowindow.open(map, marker);
 							});
-							infowindow.open(map, marker);
+							if (<?= $data; ?>) {
+								infowindow.open(map, marker);
+							}
 
 							map.setCenter(geolocate);
 
