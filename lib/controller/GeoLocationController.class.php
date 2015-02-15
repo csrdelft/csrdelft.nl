@@ -13,12 +13,12 @@ class GeoLocationController extends AclController {
 		parent::__construct($query, GeoLocationModel::instance());
 		if (!$this->isPosted()) {
 			$this->acl = array(
-				'map' => 'P_LOGGED_IN'
+				'map' => 'P_LEDEN_READ'
 			);
 		} else {
 			$this->acl = array(
 				'save'	 => 'P_LOGGED_IN',
-				'get'	 => 'ouderejaars'
+				'get'	 => 'P_LEDEN_READ'
 			);
 		}
 	}
