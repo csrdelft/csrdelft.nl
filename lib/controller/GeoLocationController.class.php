@@ -89,7 +89,7 @@ class GeoLocationController extends AclController {
 
 							var geolocate;
 							// backwards compatibility
-							if (location.coords) {
+							if (location.position.coords) {
 								geolocate = new google.maps.LatLng(location.position.coords.latitude, location.position.coords.longitude);
 							}
 							else {
