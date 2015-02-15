@@ -76,8 +76,9 @@ class GeoLocationController extends AclController {
 		<html>
 			<body>
 				<div id="google_canvas" style="height: 100%;"></div>
-				<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-				<script src="http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+				<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+				<script src="//maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+				<script src="//<?= CSR_DOMAIN; ?>/layout/js/google.maps.v3.StyledMarker.js"></script>
 				<script type="text/javascript">
 
 					(function () {
@@ -106,29 +107,29 @@ class GeoLocationController extends AclController {
 							html += '<div style="max-width: 173px; word-wrap: break-word;">' + JSON.stringify(location.position) + '</div>';
 
 							if (markers[location.uid]) {
-								google.maps.event.clearListeners(markers[location.uid], 'click');
+								marker = markers[location.uid];
+
+								google.maps.event.clearListeners(marker, 'click');
+								infowindows[location.uid].close();
 								delete infowindows[location.uid];
 
 								marker.setPosition(geolocate);
 							}
 							else {
-
-								var randomColor = "000000".replace(/0/g, function () {
+								var randomColor = "#000000".replace(/0/g, function () {
 									return (~~(Math.random() * 16)).toString(16);
 								});
 
-								var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + randomColor,
-										new google.maps.Size(21, 34),
-										new google.maps.Point(0, 0),
-										new google.maps.Point(10, 34)
-										);
-
-								var marker = new google.maps.Marker({
-									position: geolocate,
-									map: map,
-									icon: pinImage
+								var styleIconClass = new StyledIcon(StyledIconTypes.CLASS, {
+									color: randomColor
 								});
-								marker[location.uid] = marker;
+
+								var marker = new StyledMarker({
+									styleIcon: new StyledIcon(StyledIconTypes.MARKER, {text: location.uid}, styleIconClass),
+									position: geolocate,
+									map: map
+								});
+								markers[location.uid] = marker;
 							}
 
 							var infowindow = new google.maps.InfoWindow({

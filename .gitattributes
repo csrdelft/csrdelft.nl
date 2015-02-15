@@ -316,6 +316,7 @@ htdocs/layout/js/flot/jquery.js -text
 htdocs/layout/js/flot/jquery.min.js -text
 htdocs/layout/js/forum.js -text
 htdocs/layout/js/gmaps.js -text
+htdocs/layout/js/google.maps.v3.StyledMarker.js -text
 htdocs/layout/js/jquery.mobile.custom.min.js -text
 htdocs/layout/js/jquery/images/animated-overlay.gif -text
 htdocs/layout/js/jquery/images/ui-bg_diagonals-thick_18_b81900_40x40.png -text
