@@ -152,6 +152,9 @@ class GeoLocationController extends AclController {
 
 							google.maps.event.addListener(infowindow, 'closeclick', function () {
 								openwindow = false;
+								if (radius) {
+									radius.setMap(null);
+								}
 							});
 
 							google.maps.event.addListener(marker, 'dblclick', function () {
