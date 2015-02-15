@@ -54,9 +54,13 @@ class GeoLocationController extends AclController {
 				$comma = true;
 			}
 			$profiel = ProfielModel::get($loc->uid);
+			$adres = $profiel->adres . ', ' . $profiel->woonplaats;
+			if ($profiel->woonplaats !== $profiel->o_woonplaats) {
+				$adres .= '<br /><br />' . $profiel->o_adres . ', ' . $profiel->o_woonplaats;
+			}
 			echo '{' . "\n";
 			echo '"uid": "' . $loc->uid . '",' . "\n";
-			echo '"woonadres": ' . json_encode($profiel->getAdres()) . ',' . "\n";
+			echo '"adres": ' . json_encode($adres) . ',' . "\n";
 			echo '"pasfoto": ' . json_encode($profiel->getLink('pasfoto')) . ',' . "\n";
 			echo '"datetime": ' . json_encode(reldate($loc->moment)) . ',' . "\n";
 			echo '"position": ' . $loc->position . ',' . "\n";
@@ -133,7 +137,7 @@ class GeoLocationController extends AclController {
 							}
 
 							var html = '<table><tr><td>' + location.pasfoto + '<p>' + location.datetime + '</p></td>';
-							html += '<td style="max-width: 173px; word-wrap: break-word;">' + location.woonadres + '<br /><br />';
+							html += '<td style="max-width: 173px; word-wrap: break-word;">' + location.adres + '<br /><br />';
 							html += JSON.stringify(location.position, undefined, 4) + '</td></tr></table>';
 
 							var infowindow = new google.maps.InfoWindow({
