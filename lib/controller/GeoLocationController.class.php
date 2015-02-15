@@ -112,6 +112,10 @@ class GeoLocationController extends AclController {
 								infowindow.open(map, marker);
 							});
 
+							if (<?= $data; ?>) {
+								infowindow.open(map, marker);
+							}
+
 							return marker;
 						};
 
