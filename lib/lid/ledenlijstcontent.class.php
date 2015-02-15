@@ -67,13 +67,6 @@ class LedenlijstContent implements View {
 	}
 
 	public function view() {
-		echo '<ul class="horizontal nobullets">
-	<li class="active"><a href="/ledenlijst">Ledenlijst</a></li>
-	<li><a href="/leden/verjaardagen" title="Overzicht verjaardagen">Verjaardagen</a></li>
-	<li><a href="/verticalen">Kringen</a></li>
-</ul>';
-		echo '<hr />';
-
 		if ($this->lidzoeker->count() > 0) {
 			if (strstr(REQUEST_URI, '?') !== false) {
 				$url = REQUEST_URI . '&amp;addToGoogle=true';
