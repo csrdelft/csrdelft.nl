@@ -84,14 +84,14 @@ class GeoLocationController extends AclController {
 
 						var map = new google.maps.Map(document.getElementById('google_canvas'), {
 							zoom: 15,
-							mapTypeId: google.maps.MapTypeId.ROADMAP
+							mapTypeId: google.maps.MapTypeId.ROADMAP,
+							center: new google.maps.LatLng(52.006066, 4.360246)
 						});
 
 						var markers = {};
 						var infowindows = {};
 
 						var drawLocation = function (location) {
-
 
 							var geolocate;
 							// backwards compatibility
@@ -112,8 +112,12 @@ class GeoLocationController extends AclController {
 								marker.setPosition(geolocate);
 							}
 							else {
-								var pinColor = Math.floor(Math.random() * 16777215).toString(16);
-								var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+
+								var randomColor = "000000".replace(/0/g, function () {
+									return (~~(Math.random() * 16)).toString(16);
+								});
+
+								var pinImage = new google.maps.MarkerImage("//chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + randomColor,
 										new google.maps.Size(21, 34),
 										new google.maps.Point(0, 0),
 										new google.maps.Point(10, 34)
@@ -139,24 +143,21 @@ class GeoLocationController extends AclController {
 							if (<?= $data; ?>) {
 								infowindow.open(map, marker);
 							}
-
-							return marker;
 						};
 
 						var getLocation = function (uid) {
 
 							$.post('/geolocation/get', uid, function (data, textStatus, jqXHR) {
 
-								var last = false;
-
 								$.each(data, function (index) {
-									last = drawLocation(data[index]);
+									drawLocation(data[index]);
 
 									var autoUpdate = Math.round(new Date() / 1000) - data[index].timestamp;
 									if (autoUpdate < 86400000) { // binnen 24h
 										if (autoUpdate < 10000) { // min delay 10s
 											autoUpdate = 10000;
 										}
+
 										window.setTimeout(function () {
 											getLocation({
 												uid: data[index].uid
@@ -164,10 +165,6 @@ class GeoLocationController extends AclController {
 										}, autoUpdate);
 									}
 								});
-
-								if (<?= $data; ?> && last) {
-									map.setCenter(last.getPosition());
-								}
 							});
 
 						};
