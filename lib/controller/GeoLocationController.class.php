@@ -149,11 +149,11 @@ class GeoLocationController extends AclController {
 							if (location.position.heading) {
 								html += 'Richting: ' + location.position.heading + '<br />';
 							}
-							if (location.position.altitude) {
+							if (location.position.altitude && typeof location.position.altitude === 'number') {
 								html += 'Hoogte: ' + location.position.altitide;
-							}
-							if (location.position.altitudeAccuracy) {
-								html += ' ±' + location.position.altitudeAccuracy;
+								if (location.position.altitudeAccuracy) {
+									html += ' ±' + location.position.altitudeAccuracy;
+								}
 							}
 							html += '<br /><p style="text-align: right;">' + location.datetime + '</p></td><tr></table>';
 
