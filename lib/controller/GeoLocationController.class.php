@@ -161,21 +161,21 @@ class GeoLocationController extends AclController {
 
 							google.maps.event.addListener(marker, 'click', function () {
 
+								var options = {
+									strokeColor: marker.styleIcon.color,
+									strokeOpacity: 0.5,
+									strokeWeight: 2,
+									fillColor: marker.styleIcon.color,
+									fillOpacity: 0.15,
+									map: map,
+									center: latlon,
+									radius: parseInt(location.position.accuracy)
+								};
 								if (radius) {
-									radius.setCenter(latlon);
-									radius.setRadius(parseInt(location.position.accuracy));
+									radius.setOptions(options);
 								}
 								else {
-									radius = new google.maps.Circle({
-										strokeColor: marker.styleIcon.color,
-										strokeOpacity: 0.5,
-										strokeWeight: 2,
-										fillColor: marker.styleIcon.color,
-										fillOpacity: 0.15,
-										map: map,
-										center: latlon,
-										radius: parseInt(location.position.accuracy)
-									});
+									radius = new google.maps.Circle(options);
 								}
 
 								if (openwindow) {
