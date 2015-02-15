@@ -56,8 +56,7 @@ class GeoLocationController extends AclController {
 			$profiel = ProfielModel::get($loc->uid);
 			echo '{' . "\n";
 			echo '"uid": "' . $loc->uid . '",' . "\n";
-			echo '"woonadres": ' . json_encode(nl2br(str_replace('Nederland', '', $profiel->getFormattedAddress()))) . ',' . "\n";
-			echo '"ouders": ' . json_encode(nl2br(str_replace('Nederland', '', $profiel->getFormattedAddressOuders()))) . ',' . "\n";
+			echo '"woonadres": ' . json_encode($profiel->getAdres()) . ',' . "\n";
 			echo '"pasfoto": ' . json_encode($profiel->getLink('pasfoto')) . ',' . "\n";
 			echo '"datetime": ' . json_encode(reldate($loc->moment)) . ',' . "\n";
 			echo '"position": ' . $loc->position . ',' . "\n";
@@ -107,7 +106,7 @@ class GeoLocationController extends AclController {
 							}
 
 							var html = '<table><tr><td>' + location.pasfoto + '<p>' + location.datetime + '</p></td>';
-							html += '<td style="max-width: 173px; word-wrap: break-word;">' + location.woonadres + '<br />' + location.ouders + '<br />' + JSON.stringify(location.position, undefined, 4) + '</td>';
+							html += '<td style="max-width: 173px; word-wrap: break-word;">' + location.woonadres + '<br />' + JSON.stringify(location.position, undefined, 4) + '</td>';
 							html += '</tr></table>';
 
 							if (markers[location.uid]) {
