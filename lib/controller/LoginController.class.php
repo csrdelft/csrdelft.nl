@@ -67,6 +67,7 @@ class LoginController extends AclController {
 			// Switch to mobile webstek
 			if ($values['pauper']) {
 				$this->pauper();
+				return;
 			}
 			// Remember login form
 			if ($values['remember']) {
