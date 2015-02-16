@@ -28,7 +28,7 @@
 			<br />
 			<a name="mainmenu"><h1>Menu</h1></a>
 			<ul>
-				{foreach from=$mainmenu->children item=item}
+				{foreach from=$mainmenu->getChildren() item=item}
 					{if $item->magBekijken()}
 						<li>
 							<h3>
@@ -37,7 +37,7 @@
 								</a>
 							</h3>
 							<ul>
-								{foreach from=$item->children item=subitem}
+								{foreach from=$item->getChildren() item=subitem}
 									{if $subitem->magBekijken()}
 										<li>
 											<a href="{$subitem->link}">
