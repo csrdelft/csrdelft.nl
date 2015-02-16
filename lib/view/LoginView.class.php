@@ -1,5 +1,4 @@
 <?php
-
 require_once 'model/entity/security/RememberLogin.class.php';
 
 /**
@@ -140,10 +139,29 @@ class LoginForm extends Formulier {
 		if (LoginModel::instance()->hasError()) {
 			$fields[] = new HtmlComment('<p class="error">' . LoginModel::instance()->getError() . '</p>');
 		} else {
+			$fields[] = new HtmlComment('<div class="float-left">');
+
+			$fields['pauper'] = new CheckboxField('pauper', false, null, 'Mobiel');
+
+			$fields[] = new HtmlComment('</div>');
+
 			$fields['remember'] = new CheckboxField('remember', false, null, 'Blijf ingelogd');
 		}
 
 		$this->addFields($fields);
+	}
+
+	public function view() {
+		parent::view();
+		?>
+		<ul>
+			<li>
+				<a href="#" class="login-submit" onclick="document.getElementById('loginform').submit();">Inloggen</a> &raquo;
+				&nbsp; <a href="/accountaanvragen">Account aanvragen</a> &raquo;
+			</li>
+			<li><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a></li>
+		</ul>
+		<?php
 	}
 
 }

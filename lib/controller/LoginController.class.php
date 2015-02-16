@@ -64,6 +64,10 @@ class LoginController extends AclController {
 
 		if ($form->validate() AND $this->model->login($values['user'], $values['pass'])) {
 
+			// Switch to mobile webstek
+			if ($values['pauper']) {
+				$this->pauper();
+			}
 			// Remember login form
 			if ($values['remember']) {
 				$remember = RememberLoginModel::instance()->nieuw();
