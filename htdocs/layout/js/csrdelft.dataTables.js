@@ -44,7 +44,8 @@ function fnStickyToolbar() {
 	//});
 }
 
-function fnAutoScroll($table) {
+function fnAutoScroll(tableId) {
+	var $table = $(tableId);
 	var $scroll = $table.parent();
 	if ($scroll.hasClass('dataTables_scrollBody')) {
 		// autoscroll if already on bottom
@@ -60,8 +61,8 @@ function fnAutoScroll($table) {
 }
 
 function fnUpdateDataTable(tableId, response) {
-	var $table = $('#' + tableId);
-	fnAutoScroll($table);
+	fnAutoScroll(tableId);
+	var $table = $(tableId);
 	var table = $table.DataTable();
 	// update or remove existing rows or add new rows
 	response.data.forEach(function (row) {
@@ -101,7 +102,8 @@ function fnGetSelectedUUID(tableId) {
 	return $(tableId + ' tbody tr.selected:first').attr('data-uuid');
 }
 
-function fnGetGroupByColumn($table) {
+function fnGetGroupByColumn(tableId) {
+	var $table = $(tableId);
 	var columnId = parseInt($table.attr('groupbycolumn'));
 	if (isNaN(columnId)) {
 		return false;
@@ -183,7 +185,8 @@ function fnGroupByColumnDraw(event, settings) {
 	$table.data('lastDraw', Date.now());
 }
 
-function fnHideEmptyCollapsedAll($table, $th) {
+function fnHideEmptyCollapsedAll(tableId, $th) {
+	var $table = $(tableId);
 	if ($('tr.group', $table).length == $table.data('collapsedGroups').length) {
 		$('td.dataTables_empty', $table).parent().remove();
 		$th.removeClass('toggle-group-expanded');
@@ -193,7 +196,9 @@ function fnHideEmptyCollapsedAll($table, $th) {
 	}
 }
 
-function fnGroupExpandCollapse(table, $table, $tr) {
+function fnGroupExpandCollapse(tableId, $tr) {
+	var $table = $(tableId);
+	var table = $table.DataTable();
 	var collapse = $table.data('collapsedGroups');
 	var td = $('td:first', $tr);
 	td.toggleClass('toggle-group-expanded');
@@ -211,7 +216,9 @@ function fnGroupExpandCollapse(table, $table, $tr) {
 	fnHideEmptyCollapsedAll($table, $('thead tr th:first', $table));
 }
 
-function fnGroupExpandCollapseAll(table, $table, $th) {
+function fnGroupExpandCollapseAll(tableId, $th) {
+	var $table = $(tableId);
+	var table = $table.DataTable();
 	var columnId = fnGetGroupByColumn($table);
 	if (columnId === false) {
 		return;
@@ -245,9 +252,9 @@ function fnGroupExpandCollapseDraw(settings, data, index) {
 	return true;
 }
 
-function fnChildRow(table, $td, column) {
+function fnChildRow(tableId, $td, column) {
 	var tr = $td.closest('tr');
-	var row = table.row(tr);
+	var row = $(tableId).DataTable().row(tr);
 	if (row.child.isShown()) {
 		if (tr.hasClass('loading')) {
 			// TODO: abort ajax

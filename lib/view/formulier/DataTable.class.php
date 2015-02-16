@@ -20,8 +20,9 @@ abstract class DataTable extends TabsForm {
 	protected $defaultLength = 10;
 	private $columns = array();
 	protected $settings = array(
-		'dom'		 => 'fTrtpli',
-		'tableTools' => array(
+		'deferRender'	 => true,
+		'dom'			 => 'fTrtpli',
+		'tableTools'	 => array(
 			'sRowSelect' => 'os',
 			'aButtons'	 => array(
 				'select_all',
@@ -33,11 +34,11 @@ abstract class DataTable extends TabsForm {
 			),
 			'sSwfPath'	 => '/layout/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf'
 		),
-		'lengthMenu' => array(
+		'lengthMenu'	 => array(
 			array(10, 25, 50, 100, -1),
 			array(10, 25, 50, 100, 'Alles')
 		),
-		'language'	 => array(
+		'language'		 => array(
 			'sProcessing'		 => 'Bezig...',
 			'sLengthMenu'		 => '_MENU_ resultaten weergeven',
 			'sZeroRecords'		 => 'Geen resultaten gevonden',
@@ -266,22 +267,25 @@ abstract class DataTable extends TabsForm {
 				 */
 				var fnAjaxUpdateCallback = function (json) {
 					fnSetLastUpdate(json.lastUpdate);
+					var tableId = '#<?= $this->dataTableId; ?>';
+					var $table = $(tableId);
+					var table = $table.DataTable();
 
 					if (json.autoUpdate) {
 						var timeout = parseInt(json.autoUpdate);
 						if (!isNaN(timeout) && timeout < 600000) { // max 10 min
 							window.setTimeout(function () {
-								$.post($('#<?= $this->dataTableId; ?>').DataTable().ajax.url(), {
+								$.post(table.ajax.url(), {
 									'lastUpdate': fnGetLastUpdate()
 								}, function (data, textStatus, jqXHR) {
 									fnAjaxUpdateCallback(data);
-									fnUpdateDataTable('<?= $this->dataTableId; ?>', data);
+									fnUpdateDataTable('#<?= $this->dataTableId; ?>', data);
 								});
 							}, timeout);
 						}
 					}
 					if (json.page) {
-						var info = $('#<?= $this->dataTableId; ?>').DataTable().page.info();
+						var info = table.page.info();
 						// Stay on last page
 						if (json.page !== 'last' || info.page + 1 === info.pages) {
 							window.setTimeout(function () {
@@ -290,7 +294,7 @@ abstract class DataTable extends TabsForm {
 						}
 					}
 					else {
-						fnAutoScroll($('#<?= $this->dataTableId; ?>'));
+						fnAutoScroll(tableId);
 					}
 					fnUpdateToolbar();
 					return json.data;
@@ -314,23 +318,23 @@ abstract class DataTable extends TabsForm {
 				fnInitStickyToolbar(); // Init after modifying DOM
 				// Toggle details childrow
 				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
-					fnChildRow(table, $(this));
+					fnChildRow(tableId, $(this));
 				});
 				// Group by column
 				$(tableId + '.groupByColumn tbody').on('click', 'tr.group', function (event) {
 					if (!bShiftPressed && !bCtrlPressed) {
-						fnGroupExpandCollapse(table, $(tableId), $(this));
+						fnGroupExpandCollapse(tableId, $(this));
 					}
 				});
 				$(tableId + '.groupByColumn thead').on('click', 'th.toggle-group:first', function (event) {
-					fnGroupExpandCollapseAll(table, $(tableId), $(this));
+					fnGroupExpandCollapseAll(tableId, $(this));
 				});
 		<?php if (!$this->groupByLocked) { ?>
 					$(tableId + '.groupByColumn').on('order.dt', fnGroupByColumn);
 		<?php } ?>
 				$(tableId + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
 				$(tableId + '.groupByColumn').data('collapsedGroups', []);
-				if ($(tableId).hasClass('groupByColumn') && fnGetGroupByColumn($(tableId))) {
+				if ($(tableId).hasClass('groupByColumn') && fnGetGroupByColumn(tableId)) {
 					$(tableId + ' thead tr th').first().addClass('toggle-group toggle-group-expanded');
 				}
 			});
