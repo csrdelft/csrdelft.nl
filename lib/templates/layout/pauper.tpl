@@ -26,7 +26,7 @@
 		<br />
 		<div id="paupermenu" class="clear">
 			<br />
-			<a name="mainmenu"><h1>Menu</h1></a>
+			<a name="mainmenu"><h2>Menu</h2></a>
 			{$mainmenu->view()}
 		</div>
 	</body>
