@@ -47,7 +47,7 @@ class SitemapView implements View {
 				$this->javascript .= $kopje->getJavascript();
 				echo '<ul>';
 				foreach ($item->getChildren() as $child) {
-					echo $this->viewTree($child, $level++);
+					echo $this->viewTree($child, $level + 1);
 				}
 				echo '</ul></div>';
 			} else {
