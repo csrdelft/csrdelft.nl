@@ -29,7 +29,7 @@ function init_page() {
 	init_tooltip_once();
 	init_sluit_meldingen();
 	init_context($('body'));
-	init_geolocation();
+	//init_geolocation();
 }
 
 function init_context(parent) {
