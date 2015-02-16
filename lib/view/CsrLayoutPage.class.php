@@ -75,6 +75,7 @@ class CsrLayoutPage extends CompressedLayout {
 
 		if (LoginModel::instance()->isPauper()) {
 			$smarty->assign('loginform', new LoginForm());
+			$smarty->assign('mainmenu', new SitemapView());
 			$smarty->display('layout/pauper.tpl');
 		} else {
 			$smarty->display('layout/pagina.tpl');

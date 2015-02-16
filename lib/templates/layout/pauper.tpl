@@ -27,30 +27,7 @@
 		<div id="paupermenu" class="clear">
 			<br />
 			<a name="mainmenu"><h1>Menu</h1></a>
-			<ul>
-				{foreach from=$mainmenu->getChildren() item=item}
-					{if $item->magBekijken()}
-						<li>
-							<h3>
-								<a href="{$item->link}">
-									{$item->tekst}
-								</a>
-							</h3>
-							<ul>
-								{foreach from=$item->getChildren() item=subitem}
-									{if $subitem->magBekijken()}
-										<li>
-											<a href="{$subitem->link}">
-												{$subitem->tekst}
-											</a>
-										</li>
-									{/if}
-								{/foreach}
-							</ul>
-						</li>
-					{/if}
-				{/foreach}
-			</ul>
+			{$mainmenu->view()}
 		</div>
 	</body>
 </html>
