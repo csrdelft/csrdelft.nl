@@ -42,7 +42,7 @@ class SitemapView implements View {
 		if ($item->magBekijken()) {
 			if ($item->hasChildren() AND $level < $this->levels) {
 				$kopje = new CollapsableSubkopje($item->item_id, $item->tekst);
-				$kopje->h += $level - 1;
+				$kopje->h += ($level - 1) * 2;
 				$kopje->view();
 				$this->javascript .= $kopje->getJavascript();
 				echo '<ul>';
