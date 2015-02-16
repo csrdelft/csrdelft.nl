@@ -51,18 +51,15 @@ class Woonoord extends AbstractGroep {
 	 * @return boolean
 	 */
 	public function mag($action) {
-		if ($action === A::Beheren) {
-			if ($this->status === GroepStatus::HT) {
-				// Huidige bewoners mogen beheren
-				if ($this->getLid(LoginModel::getUid())) {
-					return true;
-				}
-			} elseif ($this->status === GroepStatus::OT) {
+		switch ($action) {
+
+			case A::Beheren:
+			case A::Wijzigen:
 				// Huidige bewoners mogen beheren
 				if (LoginModel::mag('woonoord:' . $this->familie)) {
 					return true;
 				}
-			}
+				break;
 		}
 		return parent::mag($action);
 	}

@@ -170,6 +170,7 @@ abstract class AbstractGroep extends PersistentEntity {
 				if ($this->maker_uid === LoginModel::getUid()) {
 					return true;
 				}
+				break;
 		}
 		return static::magAlgemeen($action);
 	}

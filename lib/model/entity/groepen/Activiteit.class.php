@@ -89,9 +89,24 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 */
 	public static function magAlgemeen($action, $soort = null) {
 		switch ($soort) {
-			case ActiviteitSoort::OWee: return LoginModel::mag('P_LEDEN_MOD,commissie:OWeeCie');
-			case ActiviteitSoort::Dies: return LoginModel::mag('P_LEDEN_MOD,commissie:DiesCie');
-			case ActiviteitSoort::Lustrum: return LoginModel::mag('P_LEDEN_MOD,commissie:LustrumCie');
+
+			case ActiviteitSoort::OWee:
+				if (LoginModel::mag('commissie:OWeeCie')) {
+					return true;
+				}
+				break;
+
+			case ActiviteitSoort::Dies:
+				if (LoginModel::mag('commissie:DiesCie')) {
+					return true;
+				}
+				break;
+
+			case ActiviteitSoort::Lustrum:
+				if (LoginModel::mag('commissie:LustrumCie')) {
+					return true;
+				}
+				break;
 		}
 		return parent::magAlgemeen($action);
 	}
