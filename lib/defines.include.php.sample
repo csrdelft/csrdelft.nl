@@ -25,7 +25,7 @@ define('TIME_MEASURE', false);
 define('FORCE_HTTPS', true);
 
 # wordt gebruikt om pagina's alleen op Confide te laten zien
-define('CONFIDE_IP', '80.112.180.173');
+#define('CONFIDE_IP', '80.112.180.173');
 
 # wordt gebruikt voor secure cookies
 define('CSR_DOMAIN', 'csrdelft.nl');

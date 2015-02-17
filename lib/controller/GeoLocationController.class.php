@@ -6,7 +6,7 @@ require_once 'model/GeoLocationModel.class.php';
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * @Remember to also enable geolocation.watchPosition in csrdelft.
+ * @Remember to also enable geolocation.watchPosition in /htdocs/layout/js/csrdelft.js
  */
 class GeoLocationController extends AclController {
 
