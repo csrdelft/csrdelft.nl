@@ -22,7 +22,7 @@ abstract class GroepStatus implements PersistentEnum {
 		switch ($option) {
 			case self::FT: return 'future tempore'; // 'in de toekomstige tijd'
 			case self::HT: return 'hoc tempore'; // 'in de huidige tijd' (lett. 'in deze tijd') 
-			case self::OT: return 'ex tempore'; // 'in de verleden tijd' (lett. 'uit de tijd')
+			case self::OT: return 'olim tempore'; // 'in de verleden tijd' (lett. 'uit de tijd')
 			default: throw new Exception('GroepStatus onbekend');
 		}
 	}
