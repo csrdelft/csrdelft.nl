@@ -53,7 +53,12 @@ class Commissie extends AbstractGroep {
 	 */
 	public static function magAlgemeen($action, $soort = null) {
 		switch ($soort) {
-			case CommissieSoort::SjaarCie: return LoginModel::mag('P_LEDEN_MOD,commissie:NovCie');
+
+			case CommissieSoort::SjaarCie:
+				if (LoginModel::mag('commissie:NovCie')) {
+					return true;
+				}
+				break;
 		}
 		return parent::magAlgemeen($action);
 	}

@@ -8,8 +8,15 @@
  */
 class GroepForm extends ModalForm {
 
-	public function __construct(AbstractGroep $groep, $action, $nocancel = false) {
+	/**
+	 * Aanmaken/Wijzigen
+	 * @var AccessAction
+	 */
+	private $mode;
+
+	public function __construct(AbstractGroep $groep, $action, $mode, $nocancel = false) {
 		parent::__construct($groep, $action, get_class($groep), true);
+		$this->mode = $mode;
 		if ($groep->id) {
 			$this->titel .= ' wijzigen';
 		} else {
@@ -57,16 +64,37 @@ class GroepForm extends ModalForm {
 		} else {
 			$soort = null;
 		}
-		if (!$groep::magAlgemeen(A::Aanmaken, $soort)) {
-			if ($groep instanceof Activiteit) {
-				$naam = ActiviteitSoort::getDescription($soort);
-			} elseif ($groep instanceof Commissie) {
-				$naam = CommissieSoort::getDescription($soort);
-			} else {
-				$naam = get_class($groep);
+		/**
+		 * @Notice: Similar function in GroepSoortField->validate()
+		 */
+		if (!$groep::magAlgemeen($this->mode, $soort)) {
+			if (!$groep->mag($this->mode, $soort)) {
+				// beide aanroepen vanwege niet doorsturen van param $soort door mag() naar magAlgemeen()
+				if ($groep instanceof Activiteit) {
+					$naam = ActiviteitSoort::getDescription($soort);
+				} elseif ($groep instanceof Commissie) {
+					$naam = CommissieSoort::getDescription($soort);
+				} else {
+					$naam = get_class($groep);
+				}
+				setMelding('U mag geen ' . $naam . ' aanmaken', -1);
+				return false;
 			}
-			setMelding('U mag geen ' . $naam . ' aanmaken', -1);
-			return false;
+			/**
+			 * Omdat wijzigen wel is toegestaan met hetzelfde formulier
+			 * en groep->mag() @runtime niet weet wat de orig value was (door form auto property set)
+			 * op moment van uitvoeren van deze funtie, hier een extra check:
+			 * 
+			 * N.B.: Deze check staat binnen de !magAlgemeen zodat P_LEDEN_MOD deze check overslaat
+			 */
+			elseif ($this->mode === A::Wijzigen AND $groep instanceof Woonoord) {
+
+				$origvalue = $this->findByName('soort')->getOrigValue();
+				if ($origvalue !== $soort) {
+					setMelding('U mag de huisstatus niet wijzigen', -1);
+					return false;
+				}
+			}
 		}
 
 		$fields = $this->getFields();
@@ -153,7 +181,7 @@ JS;
 			'ActiviteitenModel'		 => $this->activiteit,
 			'KetzersModel'			 => 'Aanschafketzer',
 			'WerkgroepenModel'		 => WerkgroepenModel::orm,
-			'GroepenModel'			 => 'Groep (overig)',
+			'RechtenGroepenModel'	 => 'Groep (overig)',
 			'OnderverenigingenModel' => OnderverenigingenModel::orm,
 			'WoonoordenModel'		 => WoonoordenModel::orm,
 			'BesturenModel'			 => BesturenModel::orm,
@@ -180,11 +208,16 @@ JS;
 		$model = $class::instance(); // require once
 		$orm = $model::orm;
 		$soort = $this->getSoort();
-		if (!$orm::magAlgemeen(A::Aanmaken, $soort)) {
+		/**
+		 * @Warning: Duplicate function in GroepForm->validate()
+		 */
+		if (!$orm::magAlgemeen($this->mode, $soort)) {
 			if ($model instanceof ActiviteitenModel) {
 				$naam = ActiviteitSoort::getDescription($soort);
 			} elseif ($model instanceof CommissiesModel) {
 				$naam = CommissieSoort::getDescription($soort);
+			} elseif ($model instanceof WoonoordenModel) {
+				$naam = HuisStatus::getDescription($soort);
 			} else {
 				$naam = $model->getNaam();
 			}
@@ -208,7 +241,7 @@ class KetzerSoortField extends GroepSoortField {
 		}
 		$this->options['KetzersModel'] = 'Aanschafketzer';
 		//$this->options['WerkgroepenModel'] = WerkgroepenModel::orm;
-		//$this->options['GroepenModel'] = 'Groep (overig)';
+		//$this->options['RechtenGroepenModel'] = 'Groep (overig)';
 	}
 
 	/**

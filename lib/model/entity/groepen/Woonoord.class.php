@@ -48,15 +48,17 @@ class Woonoord extends AbstractGroep {
 	 * Has permission for action?
 	 * 
 	 * @param AccessAction $action
+	 * @param string $soort
 	 * @return boolean
 	 */
-	public function mag($action) {
+	public function mag($action, $soort = null) {
 		switch ($action) {
 
 			case A::Beheren:
 			case A::Wijzigen:
 				// Huidige bewoners mogen beheren
 				if (LoginModel::mag('woonoord:' . $this->familie)) {
+					// HuisStatus wijzigen wordt geblokkeerd in GroepForm->validate()
 					return true;
 				}
 				break;

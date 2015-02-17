@@ -295,7 +295,7 @@ class AbstractGroepenController extends Controller {
 				$groep->rechten_aanmelden = $old->rechten_aanmelden;
 			}
 		}
-		$form = new GroepForm($groep, $this->model->getUrl() . $this->action); // checks rechten aanmaken
+		$form = new GroepForm($groep, $this->model->getUrl() . $this->action, A::Aanmaken); // checks rechten aanmaken
 		if (!$this->isPosted()) {
 			$this->beheren();
 			$form->setDataTableId($this->view->getBody()->getDataTableId());
@@ -324,7 +324,7 @@ class AbstractGroepenController extends Controller {
 			if (!$groep->mag(A::Wijzigen)) {
 				$this->geentoegang();
 			}
-			$form = new GroepForm($groep, $groep->getUrl() . $this->action); // checks rechten aanmaken
+			$form = new GroepForm($groep, $groep->getUrl() . $this->action, A::Wijzigen); // checks rechten wijzigen
 			if (!$this->isPosted()) {
 				$this->beheren();
 				$this->view->getBody()->filter = $groep->naam;
@@ -348,7 +348,7 @@ class AbstractGroepenController extends Controller {
 			if (!$groep OR ! $groep->mag(A::Wijzigen)) {
 				$this->geentoegang();
 			}
-			$form = new GroepForm($groep, $this->model->getUrl() . $this->action); // checks rechten aanmaken
+			$form = new GroepForm($groep, $this->model->getUrl() . $this->action, A::Wijzigen); // checks rechten wijzigen
 			if ($form->validate()) {
 				ChangeLogModel::instance()->logChanges($form->diff());
 				$this->model->update($groep);
