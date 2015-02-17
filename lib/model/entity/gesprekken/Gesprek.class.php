@@ -74,33 +74,23 @@ class Gesprek extends PersistentEntity {
 			$lastUpdate = $toegevoegd;
 		}
 		// Auto update
-		if (0 === GesprekDeelnemersModel::instance()->getAantalAndereDeelnemers($deelnemer)) {
-			$this->auto_update = false;
-		} else {
-			$max = 1000 * (int) Instellingen::get('gesprekken', 'max_delay_seconds');
-
-			$berichten = GesprekBerichtenModel::instance()->find('gesprek_id = ? AND auteur_uid != ?', array($deelnemer->gesprek_id, $deelnemer->uid), null, 'bericht_id DESC', 2);
-			$laatste = $berichten->fetch();
-			$eennalaatste = $berichten->fetch();
-
-			if ($laatste) {
-				if ($eennalaatste) {
-					$diff = strtotime($laatste->moment) - strtotime($eennalaatste->moment);
-				} else {
-					$diff = time() - strtotime($laatste->moment);
+		$threshold = (int) Instellingen::get('gesprekken', 'active_threshold_seconds');
+		$anderen = 0;
+		$active = 0;
+		foreach ($this->getDeelnemers() as $d) {
+			if ($d->uid !== $deelnemer->uid) {
+				$anderen++;
+				if (time() - strtotime($d->gelezen_moment) < $threshold) {
+					$active++;
 				}
-				$this->auto_update = 1000 * $diff;
-
-				$min = 1000 * (int) Instellingen::get('gesprekken', 'min_delay_seconds');
-				if ($this->auto_update < $min) {
-					$this->auto_update = $min;
-				}
-				if ($this->auto_update > $max) {
-					$this->auto_update = $max;
-				}
-			} else {
-				$this->auto_update = $max;
 			}
+		}
+		if ($active > 0) {
+			$this->auto_update = 1000 * (int) Instellingen::get('gesprekken', 'active_interval_seconds');
+		} elseif ($anderen > 0) {
+			$this->auto_update = 1000 * (int) Instellingen::get('gesprekken', 'slow_interval_seconds');
+		} else {
+			$this->auto_update = false;
 		}
 		// Update deelnemer
 		$deelnemer->gelezen_moment = getDateTime();
