@@ -469,7 +469,7 @@ class AbstractGroepenController extends Controller {
 				$this->geentoegang();
 			}
 			$data = ChangeLogModel::instance()->find('subject = ?', array($groep->getUUID()));
-			$this->view = new DataTableResponse($data);
+			$this->view = new GroepLogboekData($data);
 		}
 		// popup request
 		else {
