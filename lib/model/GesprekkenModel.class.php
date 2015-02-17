@@ -74,8 +74,8 @@ class GesprekDeelnemersModel extends PersistenceModel {
 		return $this->find('gesprek_id = ? ', array($gesprek->gesprek_id));
 	}
 
-	public function getAantalDeelnemersVanGesprek(Gesprek $gesprek) {
-		return $this->count('gesprek_id = ?', array($gesprek->gesprek_id));
+	public function getAantalAndereDeelnemers(GesprekDeelnemer $deelnemer) {
+		return $this->count('gesprek_id = ? AND uid != ?', array($deelnemer->gesprek_id, $deelnemer->uid));
 	}
 
 	public function getGesprekkenVoorLid($uid, $lastUpdate) {

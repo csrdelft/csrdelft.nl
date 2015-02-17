@@ -69,8 +69,9 @@ class Instellingen extends CachedPersistenceModel {
 			'externen_geentoegang_gesloten'	 => '-1 year'
 		),
 		'gesprekken'	 => array(
-			'max_aantal_deelnemers'	 => '8',
-			'min_delay_seconds'		 => '3'
+			'max_aantal_deelnemers'	 => '50',
+			'min_delay_seconds'		 => '3',
+			'max_delay_seconds'		 => '10'
 		),
 		'maaltijden'	 => array(
 			'budget_maalcie'					 => '100',
