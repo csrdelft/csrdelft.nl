@@ -653,7 +653,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			if (!GoogleSync::isAuthenticated()) {
 				return null;
 			}
-			return GoogleSync::instance()->existsInGoogleContacts($this->getNaam());
+			return GoogleSync::instance()->existsInGoogleContacts($this);
 		} catch (Zend_Gdata_App_AuthException $e) {
 			setMelding($e->getMessage(), 0);
 			return null;

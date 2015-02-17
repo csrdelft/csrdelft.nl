@@ -311,11 +311,11 @@ class GoogleSync {
 	/**
 	 * Een enkel lid syncen naar Google contacts.
 	 *
-	 * @param $profiel uid of Lid-object
+	 * @param $profiel Profiel
 	 *
 	 * @return string met foutmelding of naam van lid bij succes.
 	 */
-	public function syncLid($profiel) {
+	public function syncLid(Profiel $profiel) {
 		if (!$profiel instanceof Profiel) {
 			$profiel = ProfielModel::get($profiel);
 		}

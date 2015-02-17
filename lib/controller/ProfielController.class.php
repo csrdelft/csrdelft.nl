@@ -170,7 +170,7 @@ class ProfielController extends AclController {
 			require_once 'googlesync.class.php';
 			GoogleSync::doRequestToken(CSR_ROOT . '/profiel/' . $profiel->uid . '/addToGoogleContacts');
 			$gSync = GoogleSync::instance();
-			$msg = $gSync->syncLid($profiel->uid);
+			$msg = $gSync->syncLid($profiel);
 			setMelding('Opgeslagen in Google Contacts: ' . $msg, 2);
 		} catch (Zend_Gdata_App_AuthException $e) {
 			setMelding($e->getMessage(), -1);
