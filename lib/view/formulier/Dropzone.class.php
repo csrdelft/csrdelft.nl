@@ -95,7 +95,7 @@ thisDropzone = new Dropzone('#{$this->formId}', {
 	dictResponseError: "Server responded with {{statusCode}} code.",
 	dictCancelUpload: "Annuleren",
 	dictCancelUploadConfirmation: "Toevoegen annuleren. Weet u het zeker?",
-	dictRemoveFile: "<span class=\"fa fa-times\"></span>",
+	dictRemoveFile: "X",
 	dictRemoveFileConfirmation: "Bestand verwijderen. Weet u het zeker?",
 	dictMaxFilesExceeded: "You can not upload any more files.",
 	init: function() {
