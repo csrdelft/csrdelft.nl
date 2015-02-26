@@ -2,6 +2,9 @@
 
 ## Docker
 
+On linux you should be able to run this natively.
+On any other platform, resort to boot2docker.
+
 Build the image:
 
     docker build -t stek .
