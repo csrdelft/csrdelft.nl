@@ -412,3 +412,6 @@ sessie/*
 /tmp
 tmp/*
 /wiki
+
+# Compiled python file LDAP
+bin/ldap/settings.pyc
