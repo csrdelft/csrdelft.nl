@@ -12,6 +12,8 @@ Try to get these:
 
 ## Docker
 
+This does **NOT** work yet!
+
 On linux you should be able to run this natively.
 On any other platform, resort to boot2docker.
 
