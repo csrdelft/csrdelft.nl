@@ -556,7 +556,7 @@ class AccessModel extends CachedPersistenceModel {
 			 *  Behoort een lid tot een bepaalde verticale?
 			 */
 			case 'VERTICALE':
-				if ($profiel->verticale === $gevraagd) {
+				if ($profiel->verticale === $gevraagd || $gevraagd == strtoupper($profiel->getVerticale()->naam)) {
 					if (!$role) {
 						return true;
 					} elseif ($role === 'LEIDER' AND $profiel->verticaleleider) {
