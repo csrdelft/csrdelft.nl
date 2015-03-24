@@ -2,3 +2,4 @@
 <a href="http://www.mechdes.nl"><img src="/plaetjes/banners/mechdes.gif" alt="Mechdes advertentie"></a>
 <a href="https://www.goedkoopprinten.nl/"><img src="/plaetjes/banners/goedkoopprinten-banner-234x60.gif" alt="Goedkoopprinten advertentie"></a>
 <a href="http://www.galjemadetachering.nl/"><img src="/plaetjes/banners/galjema_banner.jpg" alt="Galjema advertentie"></a>
+<a href="http://www.solidtechniek.nl/"><img src="/plaetjes/banners/logo_solid_techniek_CSR.jpg" alt="Solid techniek advertentie"></a>
