@@ -28,7 +28,7 @@ define('FORCE_HTTPS', false);
 #define('CONFIDE_IP', '80.112.180.173');
 
 # wordt gebruikt voor secure cookies
-define('CSR_DOMAIN', 'alpha.csrdelft.nl:8080');
+define('CSR_DOMAIN', 'dev.csrdelft.nl:8080');
 
 # urls ZONDER trailing slash
 define('CSR_ROOT', 'http://' . CSR_DOMAIN);
