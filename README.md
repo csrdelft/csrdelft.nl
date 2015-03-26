@@ -9,21 +9,19 @@ Try to get these:
 * /htdocs/plaetjes/famfamfam/
 * /htdocs/plaetjes/pasfoto/geen-foto.jpg
 * /htdocs/pleatjes/layout/
+* /htdocs/pleatjes/layout2/
 
 ## Docker
-
-This does **NOT** work yet!
 
 On linux you should be able to run this natively.
 On any other platform, resort to boot2docker.
 
-Build the image:
+    # Run the stek and database
+    docker-compose up stek
 
-    docker build -t stek .
+    # initialize the database (only need to do this once)
+    # make sure you have the dump.sql in the root of your repo
+    docker run -ti --rm --link <reponame>_stekdb_1:db -v `pwd`:/mnt mariadb bash -c 'exec mysql  -h"$DB_PORT_3306_TCP_ADDR" -u root -p csrdelft < /mnt/dump.sql'
 
-Run the image:
-
-    docker run -it --rm \
-      -p 8080:80 \
-      -v `pwd`:/var/www/csrdelft.nl/:ro \
-      --name running-stek stek
+The plaetjes are not in the repo by default, but if you get them into `htdocs/plaetjes`, docker will
+use those!
