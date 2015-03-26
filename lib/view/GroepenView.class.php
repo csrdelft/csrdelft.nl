@@ -214,8 +214,8 @@ class GroepView implements FormElement {
 		if ($this->bb) {
 			$html .= ' bb-block';
 		}
-		$diesopmaak = strtotime($this->groep->begin_moment) > strtotime('2015-02-10 00:00:00') AND strtotime('2015-02-21 23:59:59') < strtotime($this->groep->eind_moment);
-		if ($diesopmaak AND $this->bb) {
+		$diesopmaak = strtotime($this->groep->begin_moment) > strtotime('2015-02-10 00:00:00') && strtotime('2015-02-21 23:59:59') > strtotime($this->groep->eind_moment);
+		if ($diesopmaak && $this->bb) {
 			$html .= ' bb-dies2015';
 		}
 		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting">';
@@ -223,7 +223,7 @@ class GroepView implements FormElement {
 			$html .= '<div class="float-right"><a class="btn" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-pencil"></span></a></div>';
 		}
 		$html .= '<h3>' . $this->getTitel();
-		if (property_exists($this->groep, 'locatie') AND ! empty($this->groep->locatie)) {
+		if (property_exists($this->groep, 'locatie') && ! empty($this->groep->locatie)) {
 			$html .= ' &nbsp; <a target="_blank" href="https://maps.google.nl/maps?q=' . urlencode($this->groep->locatie) . '" title="' . $this->groep->locatie . '" class="lichtgrijs fa fa-map-marker fa-lg"></a>';
 		}
 		$html .= '</h3>';
