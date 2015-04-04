@@ -231,7 +231,7 @@
 				</div>
 			{/strip}
 			<br />
-			{if $abos}
+			{if isset($abos)}
 				<div class="label">Abo's:</div>
 				<ul class="nobullets data">
 					{foreach from=$abos item=abonnement}
