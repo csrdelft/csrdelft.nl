@@ -214,7 +214,7 @@ class GroepView implements FormElement {
 		if ($this->bb) {
 			$html .= ' bb-block';
 		}
-		$diesopmaak = strtotime($this->groep->begin_moment) > strtotime('2015-02-10 00:00:00') && strtotime('2015-02-21 23:59:59') > strtotime($this->groep->eind_moment);
+		$diesopmaak = $this->groep->eind_moment && strtotime($this->groep->begin_moment) > strtotime('2015-02-10 00:00:00') && strtotime('2015-02-21 23:59:59') > strtotime($this->groep->eind_moment);
 		if ($diesopmaak && $this->bb) {
 			$html .= ' bb-dies2015';
 		}
