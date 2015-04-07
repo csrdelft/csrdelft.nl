@@ -14,6 +14,10 @@ So your workflow should be, depending on the code you're submitting:
 
 Make sure you delete a branch on the repo when it is merged into the mainline.
 
+The **ticket** should *not be closed* until your commit makes it into master.
+So please make sure you mention the ticket number in your commit message.
+Gogs will automagically update the issue when you reference it like #n, where n is the ticket no.
+
 ## External developers
 
 We might have some external devs that don't have write-access to the repo.
