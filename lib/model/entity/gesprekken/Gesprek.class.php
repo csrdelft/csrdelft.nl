@@ -58,7 +58,7 @@ class Gesprek extends PersistentEntity {
 				continue;
 			}
 			if (!empty($deelnemers)) {
-				$deelnemers .= ', ';
+				$deelnemers .= ', <br />';
 			}
 			$deelnemers .= ProfielModel::getNaam($deelnemer->uid, 'civitas');
 		}
