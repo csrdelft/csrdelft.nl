@@ -52,7 +52,7 @@ class ProfielController extends AclController {
 			} else {
 				$this->action = 'profiel';
 			}
-			if (!ProfielModel::existsUid($uid)) {
+			if (!ProfielModel::existsUid($uid) AND $this->action != 'nieuw') {
 				setMelding('Dit profiel bestaat niet', -1);
 				redirect('/ledenlijst');
 			}
