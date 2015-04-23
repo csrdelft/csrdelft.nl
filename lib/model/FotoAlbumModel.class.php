@@ -12,6 +12,10 @@ class FotoAlbumModel extends PersistenceModel {
 
 	protected static $instance;
 
+	protected function __construct() {
+		parent::__construct('fotoalbum/');
+	}
+
 	public function create(PersistentEntity $album) {
 		if (!file_exists($album->path)) {
 			mkdir($album->path);
@@ -232,6 +236,10 @@ class FotoModel extends PersistenceModel {
 
 	protected static $instance;
 
+	protected function __construct() {
+		parent::__construct('fotoalbum/');
+	}
+
 	/**
 	 * Create database entry if foto does not exist.
 	 * 
@@ -278,6 +286,41 @@ class FotoModel extends PersistenceModel {
 			$this->delete($foto);
 		}
 		return $ret;
+	}
+
+}
+
+class FotoTagsModel extends PersistenceModel {
+
+	const orm = 'FotoTag';
+
+	protected static $instance;
+
+	protected function __construct() {
+		parent::__construct('fotoalbum/');
+	}
+
+	public function getTags(Foto $foto) {
+		return $this->find('uuid = ?', array($foto->getUUID()));
+	}
+
+	public function addTag(Foto $foto, $uid, $x, $y, $size) {
+		if (!ProfielModel::existsUid($uid)) {
+			throw new Exception('Profiel bestaat niet');
+		}
+		$tag = new FotoTag();
+		$tag->uuid = $foto->getUUID();
+		$tag->keyword = $uid;
+		$tag->door = LoginModel::getUid();
+		$tag->x = (float) $x;
+		$tag->y = (float) $y;
+		$tag->size = (float) $size;
+		parent::create($foto);
+		return $tag;
+	}
+
+	public function removeTag(Foto $foto, $uid) {
+		return $this->deleteByPrimaryKey(array($foto->getUUID(), $uid));
 	}
 
 }

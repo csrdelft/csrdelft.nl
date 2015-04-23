@@ -26,9 +26,10 @@
 					"titleExpanded": false,
 					"tooltipSeeAllPhotos": "Grid",
 					"tooltipSeeOtherAlbums": "Toon sub-albums",
-					"slideshowInterval": "4s"
+					"slideshowInterval": "3s"
 				});
 				$('#gallery').css('max-height', 0);
+				var tagmode = false;
 				var container = $('div.jgallery');
 				// foto url
 				container.find('div.title').off();
@@ -86,22 +87,79 @@
 						showHiRes();
 					}
 				});
+				var drawTag = function (tag) {
+					var img = container.find('img.active');
+					// TODO
+					console.log(tag);
+				};
+				var drawTags = function (array) {
+					$.each(array, drawTag);
+				};
+				var showTags = function () {
+					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+					$.post('/fotoalbum/gettags' + dirname(url), {
+						foto: basename(url)
+					}, drawTags);
+				};
+				var drawTagForm = function (html, relX, relY, size) {
+					var img = container.find('img.active');
+					var formDiv = $(html).appendTo(img.parent());
+					formDiv.css({
+						position: 'absolute',
+						left: relX * img.width() / 100,
+						top: relY * img.height() / 100,
+						'z-index': 10000
+					});
+				};
+				var onAddTag = function (e) {
+					var img = container.find('img.active');
+					var offset = $(this).offset();
+					var relX = (e.pageX - offset.left) * 100 / img.width();
+					var relY = (e.pageY - offset.top) * 100 / img.height();
+					var size = 50; // fixed pixel size for now
+					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+					$.post('/fotoalbum/addtag' + dirname(url), {
+						foto: basename(url),
+						x: relX,
+						y: relY,
+						size: size
+					}, function (data) {
+						if (typeof response === 'object') { // JSON
+							drawTag(data);
+						}
+						else { // HTML
+							drawTagForm(data, relX, relY, size);
+						}
+					});
+				};
+				var duringTagMode = function () {
+					// disable nav area on img
+					container.find('div.right').hide();
+					container.find('div.left').hide();
+					// click handler
+					var img = container.find('img.active');
+					img.css('cursor', 'crosshair');
+					img.on('click', onAddTag);
+				};
 				// preload next/prev
 				var onNextPrev = function (anchor) {
-					container.find('div.overlay').css('display', 'none');
+					container.find('div.overlay').css('display', 'none'); // hide loading div
+					if (tagmode) {
+						duringTagMode();
+					}
 					if (anchor.length === 1) {
-						preloadImg(anchor.attr('href'));
+						preloadImg(anchor.attr('href')); // preload image from url param
 					}
 					var zoom = container.find('div.zoom-container');
-					if (zoom.attr('data-size') !== 'fit') {
-						setTimeout(showHiRes, 1);
-						if (zoom.attr('data-size') === 'fill') {
-							$('span.resize.jgallery-btn').removeClass('fa-search-minus').addClass('fa-search-plus');
+					if (zoom.attr('data-size') !== 'fit') { // if zoomed in
+						setTimeout(showHiRes, 1); // show hi-res via background process
+						if (zoom.attr('data-size') === 'fill') { // workaround zoom mode display icon for hi-res img replacement hack
+							$('span.resize.jgallery-btn').removeClass('fa-search-minus').addClass('fa-search-plus'); // change zoom button icon
 						}
 						if (anchor.length === 1) {
-							var href = $('#gallery').find('a[href="' + anchor.attr('href') + '"]').attr('data-href');
+							var href = $('#gallery').find('a[href="' + anchor.attr('href') + '"]').attr('data-href'); // replace full-res href in data attr
 							if (typeof href === 'string') {
-								preloadImg(href);
+								preloadImg(href); // preload hi-res image
 							}
 						}
 					}
@@ -236,6 +294,19 @@
 				$('<span class="fa fa-download jgallery-btn jgallery-btn-small" tooltip="Foto in origineel formaat downloaden"></span>').click(function () {
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
 					window.location.href = '/fotoalbum/download' + url;
+				}).insertAfter(btn);
+				// knopje taggen
+				$('<span class="fa fa-tags jgallery-btn jgallery-btn-small" tooltip="Leden etiketteren"></span>').click(function () {
+					if (tagmode) {
+						tagmode = false;
+						// enable nav area on img
+						container.find('div.right').show();
+						container.find('div.left').show();
+					}
+					else {
+						tagmode = true;
+						duringTagMode();
+					}
 				}).insertAfter(btn);
 		{/if}
 			});

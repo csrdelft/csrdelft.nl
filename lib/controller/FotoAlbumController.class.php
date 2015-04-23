@@ -33,6 +33,9 @@ class FotoAlbumController extends AclController {
 				'toevoegen'		 => 'P_ALBUM_ADD',
 				'bestaande'		 => 'P_ALBUM_ADD',
 				'uploaden'		 => 'P_ALBUM_ADD',
+				'gettags'		 => 'P_LEDEN_READ',
+				'addtag'		 => 'P_LEDEN_READ',
+				'removetag'		 => 'P_LEDEN_READ'
 			);
 		}
 	}
@@ -290,6 +293,43 @@ class FotoAlbumController extends AclController {
 			);
 		}
 		$this->view = new JsonResponse($result);
+	}
+
+	public function gettags(FotoAlbum $album) {
+		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$foto = new Foto($filename, $album);
+		if (!$foto->exists()) {
+			$this->geentoegang();
+		}
+		$tags = FotoTagsModel::instance()->getTags($foto);
+		$this->view = new JsonResponse($tags);
+	}
+
+	public function addtag(FotoAlbum $album) {
+		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$foto = new Foto($filename, $album);
+		if (!$foto->exists()) {
+			$this->geentoegang();
+		}
+		$formulier = new FotoTagToevoegenForm($foto);
+		if ($this->isPosted() AND $formulier->validate()) {
+			$uid = $formulier->findByName('uid')->getValue();
+			$tag = FotoTagsModel::instance()->addTag($foto, $uid);
+			$this->view = new JsonResponse($tag);
+			return;
+		}
+		$this->view = $formulier;
+	}
+
+	public function removetag(FotoAlbum $album) {
+		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$foto = new Foto($filename, $album);
+		if (!$foto->exists()) {
+			$this->geentoegang();
+		}
+		$uid = filter_input(INPUT_POST, 'uid', FILTER_SANITIZE_STRING);
+		FotoTagsModel::instance()->removeTag($foto, $uid);
+		$this->view = new JsonResponse(true);
 	}
 
 }
