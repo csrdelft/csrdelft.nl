@@ -1,7 +1,7 @@
 <?php
 
 /**
- * lidvoorkeur.class.php
+ * CommissieVoorkeurenModel.class.php
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  *
@@ -113,13 +113,8 @@ class VoorkeurCommissie {
 		$result = $db->select($query);
 		$res = array();
 		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-			$commissie = CommissiesModel::instance()->find('familie = ?', array($this->naam), null, null, 1)->fetch();
-			$lid = $commissie->getLid($row['uid']);
-			if ($lid) {
-				$gedaan = true;
-			} else {
-				$gedaan = false;
-			}
+			$account = AccountModel::get($row['uid']);
+			$gedaan = AccessModel::mag($account, 'commissie:' . $this->naam . ',commissie:' . $this->naam . ':ot');
 			$res[$row['uid']] = array('voorkeur' => $row['voorkeur'], 'gedaan' => $gedaan);
 		}
 		return $res;
