@@ -326,8 +326,12 @@ class FotoTagsModel extends PersistenceModel {
 		$tag->x = (int) $x;
 		$tag->y = (int) $y;
 		$tag->size = (int) $size;
-		parent::create($tag);
-		return $tag;
+		if ($this->exists($tag)) {
+			return $this->retrieve($tag);
+		} else {
+			parent::create($tag);
+			return $tag;
+		}
 	}
 
 	public function removeTag(Foto $foto, $uid) {

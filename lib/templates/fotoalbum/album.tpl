@@ -130,6 +130,7 @@
 						console.log(event);
 						console.log(jqXHR);
 						console.log(ajaxOptions);
+						alert();
 					});
 					// set focus
 					tagFormDiv.find('input').focus();

@@ -96,7 +96,7 @@ class FotoAlbumToevoegenForm extends ModalForm {
 class FotoTagToevoegenForm extends InlineForm {
 
 	public function __construct(Foto $foto) {
-		$field = new LidField('uid', null, null, 'allepersonen');
+		$field = new LidField('uid', null, null, LidInstellingen::get('fotoalbum', 'tag_suggestions'));
 		$field->placeholder = 'Naam of lidnummer';
 		parent::__construct(null, '/fotoalbum/addtag/' . $foto->subdir, $field, false, false);
 		$fields[] = new RequiredTextField('foto', $foto->filename, null);
