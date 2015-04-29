@@ -29,7 +29,7 @@
 					"slideshowInterval": "3s"
 				});
 				$('#gallery').css('max-height', 0);
-				var tagmode = false;
+				var tagMode = false;
 				var container = $('div.jgallery');
 				// foto url
 				container.find('div.title').off();
@@ -87,9 +87,18 @@
 						showHiRes();
 					}
 				});
+				// BEGIN tagging code
+				var getFotoTopLeft = function () {
+					var img = container.find('img.active');
+					return {
+						x: (img.parent().width() - img.width()) / 2,
+						y: (img.parent().height() - img.height()) / 2
+					};
+				};
 				var drawTag = function (tag) {
 					var img = container.find('img.active');
 					// TODO
+					alert(tag);
 					console.log(tag);
 				};
 				var drawTags = function (array) {
@@ -101,17 +110,38 @@
 						foto: basename(url)
 					}, drawTags);
 				};
+				var tagFormDiv = false;
 				var drawTagForm = function (html, relX, relY, size) {
 					var img = container.find('img.active');
-					var formDiv = $(html).appendTo(img.parent());
-					formDiv.css({
+					var offset = getFotoTopLeft();
+					tagFormDiv = $(html).appendTo(img.parent());
+					tagFormDiv.css({
 						position: 'absolute',
-						left: relX * img.width() / 100,
-						top: relY * img.height() / 100,
+						top: offset.y + relY * img.height() / 100,
+						left: offset.x + relX * img.width() / 100,
 						'z-index': 10000
+					});
+					// set attr for move/resize
+					tagFormDiv.attr('data-relY', relY);
+					tagFormDiv.attr('data-relX', relX);
+					tagFormDiv.attr('data-size', size);
+				};
+				var moveTagForm = function () {
+					if (!tagFormDiv) {
+						return;
+					}
+					var img = container.find('img.active');
+					var offset = getFotoTopLeft();
+					tagFormDiv.css({
+						top: offset.y + tagFormDiv.attr('data-relY') * img.height() / 100,
+						left: offset.x + tagFormDiv.attr('data-relX') * img.width() / 100,
 					});
 				};
 				var onAddTag = function (e) {
+					if (tagFormDiv) {
+						tagFormDiv.remove();
+						tagFormDiv = false;
+					}
 					var img = container.find('img.active');
 					var offset = $(this).offset();
 					var relX = (e.pageX - offset.left) * 100 / img.width();
@@ -141,10 +171,18 @@
 					img.css('cursor', 'crosshair');
 					img.on('click', onAddTag);
 				};
+				$(window).resize(function () {
+					if (tagMode) {
+						if (tagFormDiv) {
+							moveTagForm();
+						}
+					}
+				});
+				// END tagging code
 				// preload next/prev
 				var onNextPrev = function (anchor) {
 					container.find('div.overlay').css('display', 'none'); // hide loading div
-					if (tagmode) {
+					if (tagMode) {
 						duringTagMode();
 					}
 					if (anchor.length === 1) {
@@ -297,14 +335,14 @@
 				}).insertAfter(btn);
 				// knopje taggen
 				$('<span class="fa fa-tags jgallery-btn jgallery-btn-small" tooltip="Leden etiketteren"></span>').click(function () {
-					if (tagmode) {
-						tagmode = false;
+					if (tagMode) {
+						tagMode = false;
 						// enable nav area on img
 						container.find('div.right').show();
 						container.find('div.left').show();
 					}
 					else {
-						tagmode = true;
+						tagMode = true;
 						duringTagMode();
 					}
 				}).insertAfter(btn);
