@@ -721,7 +721,7 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 	});
 	jqXHR.done(function (data, textStatus, jqXHR) {
 		onsuccess(data);
-		if (source && source.hasClass('InlineForm') && source.hasClass('noanim')) {
+		if (source && $(source).hasClass('noanim') && $(source).hasClass('InlineForm')) {
 			$(source).find('.FormElement:first').css({
 				'background-image': '',
 				'background-repeat': '',
