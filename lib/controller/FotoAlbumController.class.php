@@ -314,7 +314,10 @@ class FotoAlbumController extends AclController {
 		$formulier = new FotoTagToevoegenForm($foto);
 		if ($this->isPosted() AND $formulier->validate()) {
 			$uid = $formulier->findByName('uid')->getValue();
-			$tag = FotoTagsModel::instance()->addTag($foto, $uid);
+			$x = $formulier->findByName('x')->getValue();
+			$y = $formulier->findByName('y')->getValue();
+			$size = $formulier->findByName('size')->getValue();
+			$tag = FotoTagsModel::instance()->addTag($foto, $uid, $x, $y, $size);
 			$this->view = new JsonResponse($tag);
 			return;
 		}

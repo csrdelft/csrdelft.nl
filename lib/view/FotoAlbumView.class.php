@@ -100,9 +100,9 @@ class FotoTagToevoegenForm extends InlineForm {
 		$field->placeholder = 'Naam of lidnummer';
 		parent::__construct(null, '/fotoalbum/addtag/' . $foto->subdir, $field, false, false);
 		$fields[] = new RequiredTextField('foto', $foto->filename, null);
-		$fields[] = new RequiredIntField('x', null, null);
-		$fields[] = new RequiredIntField('y', null, null);
-		$fields[] = new RequiredIntField('size', null, null);
+		$fields[] = new RequiredIntField('x', null, null, 0, 100);
+		$fields[] = new RequiredIntField('y', null, null, 0, 100);
+		$fields[] = new RequiredIntField('size', null, null, 50);
 		foreach ($fields as $field) {
 			$field->hidden = true;
 		}

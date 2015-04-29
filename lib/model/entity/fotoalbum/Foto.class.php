@@ -58,6 +58,10 @@ class Foto extends Afbeelding {
 		parent::__construct(null, $parse);
 	}
 
+	public function getUUID() {
+		return $this->subdir . $this->filename . '@' . get_class($this) . '.csrdelft.nl';
+	}
+
 	public function getAlbumPath() {
 		return $this->directory;
 	}

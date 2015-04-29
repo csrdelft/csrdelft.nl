@@ -236,6 +236,17 @@ class FotoModel extends PersistenceModel {
 
 	protected static $instance;
 
+	/**
+	 * @override PersistenceModel->getUUID($)
+	 */
+	public static function getUUID($UUID) {
+		$parts = explode('@', $UUID, 2);
+		$path = explode('/', $parts[0]);
+		$filename = array_pop($path);
+		$subdir = implode('/', $path) . '/';
+		return static::instance()->retrieveByPrimaryKey(array($subdir, $filename));
+	}
+
 	protected function __construct() {
 		parent::__construct('fotoalbum/');
 	}
@@ -312,10 +323,10 @@ class FotoTagsModel extends PersistenceModel {
 		$tag->uuid = $foto->getUUID();
 		$tag->keyword = $uid;
 		$tag->door = LoginModel::getUid();
-		$tag->x = (float) $x;
-		$tag->y = (float) $y;
-		$tag->size = (float) $size;
-		parent::create($foto);
+		$tag->x = (int) $x;
+		$tag->y = (int) $y;
+		$tag->size = (int) $size;
+		parent::create($tag);
 		return $tag;
 	}
 

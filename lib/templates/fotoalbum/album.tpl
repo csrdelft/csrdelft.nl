@@ -125,6 +125,12 @@
 					tagFormDiv.attr('data-relY', relY);
 					tagFormDiv.attr('data-relX', relX);
 					tagFormDiv.attr('data-size', size);
+					// set submit handler
+					tagFormDiv.find('form').bind('ajax:complete', function (event, jqXHR, ajaxOptions) {
+						console.log(event);
+						console.log(jqXHR);
+						console.log(ajaxOptions);
+					});
 					// set focus
 					tagFormDiv.find('input').focus();
 				};
@@ -136,7 +142,7 @@
 					var offset = getFotoTopLeft();
 					tagFormDiv.css({
 						top: offset.y + tagFormDiv.attr('data-relY') * img.height() / 100,
-						left: offset.x + tagFormDiv.attr('data-relX') * img.width() / 100,
+						left: offset.x + tagFormDiv.attr('data-relX') * img.width() / 100
 					});
 				};
 				var resizeTag = function () {
@@ -154,13 +160,13 @@
 					var offset = $(this).offset();
 					var relX = (e.pageX - offset.left) * 100 / img.width();
 					var relY = (e.pageY - offset.top) * 100 / img.height();
-					var size = 50; // fixed pixel size for now
+					var size = 50; // TODO: dynamic
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
 					$.post('/fotoalbum/addtag' + dirname(url), {
 						foto: basename(url),
-						x: relX,
-						y: relY,
-						size: size
+						x: Math.round(relX),
+						y: Math.round(relY),
+						size: Math.round(size)
 					}, function (data) {
 						if (typeof response === 'object') { // JSON
 							drawTag(data);
