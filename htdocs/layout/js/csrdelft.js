@@ -720,14 +720,19 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 		data: data
 	});
 	jqXHR.done(function (data, textStatus, jqXHR) {
-		onsuccess(data);
-		if (source && $(source).hasClass('noanim') && $(source).hasClass('InlineForm')) {
-			$(source).find('.FormElement:first').css({
-				'background-image': '',
-				'background-repeat': '',
-				'background-position': ''
-			});
+		if (source) {
+			if (!$(source).hasClass('noanim')) {
+				$(source).hide();
+			}
+			else if ($(source).hasClass('InlineForm')) {
+				$(source).find('.FormElement:first').css({
+					'background-image': '',
+					'background-repeat': '',
+					'background-position': ''
+				});
+			}
 		}
+		onsuccess(data);
 	});
 	jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
 		if (errorThrown === '') {
