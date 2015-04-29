@@ -6,7 +6,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class KeywordTag {
+class KeywordTag extends PersistentEntity {
 
 	/**
 	 * @see PersistentEntity Unique Universal Identifier

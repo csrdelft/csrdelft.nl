@@ -99,7 +99,6 @@ class FotoTagToevoegenForm extends InlineForm {
 		$field = new LidField('uid', null, null, 'allepersonen');
 		$field->placeholder = 'Naam of lidnummer';
 		parent::__construct(null, '/fotoalbum/addtag/' . $foto->subdir, $field, false, false);
-		//$this->css_classes[] = 'noanim';
 		$fields[] = new RequiredTextField('foto', $foto->filename, null);
 		$fields[] = new RequiredIntField('x', null, null);
 		$fields[] = new RequiredIntField('y', null, null);

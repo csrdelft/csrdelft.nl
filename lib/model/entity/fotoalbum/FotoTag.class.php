@@ -40,4 +40,12 @@ class FotoTag extends KeywordTag {
 	 */
 	protected static $table_name = 'foto_tags';
 
+	/**
+	 * Extend the persistent attributes.
+	 */
+	public static function __constructStatic() {
+		parent::__constructStatic();
+		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
+	}
+
 }
