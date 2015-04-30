@@ -1,6 +1,5 @@
 <?php
 
-require_once 'model/FotoAlbumModel.class.php';
 require_once 'view/FotoAlbumView.class.php';
 
 /**

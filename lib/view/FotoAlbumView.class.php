@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/FotoAlbumModel.class.php';
+
 require_once 'view/formulier/Dropzone.class.php';
 
 /**
