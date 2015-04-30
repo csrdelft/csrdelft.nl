@@ -88,18 +88,24 @@
 					}
 				});
 				// BEGIN tagging code
-				var getFotoTopLeft = function () {
+				var getScreenPos = function (relX, relY, size) {
 					var img = container.find('img.active');
+					var parent = img.parent();
+					var w = img.width();
+					var h = img.height();
+					var fotoTopLeft = {
+						x: (parent.width() - w) / 2,
+						y: (parent.height() - h) / 2
+					};
 					return {
-						x: (img.parent().width() - img.width()) / 2,
-						y: (img.parent().height() - img.height()) / 2
+						x: relX * w / 100 + fotoTopLeft.x,
+						y: relY * h / 100 + fotoTopLeft.y,
+						size: (w + h) / 200 * size
 					};
 				};
 				var drawTag = function (tag) {
-					var img = container.find('img.active');
-					// TODO
-					alert(tag);
-					console.log(tag);
+					var pos = getScreenPos(tag.x, tag.y, tag.size);
+					console.log(pos);
 				};
 				var drawTags = function (array) {
 					$.each(array, drawTag);
@@ -113,12 +119,12 @@
 				var tagFormDiv = false;
 				var drawTagForm = function (html, relX, relY, size) {
 					var img = container.find('img.active');
-					var offset = getFotoTopLeft();
+					var pos = getScreenPos(relX, relY, size);
 					tagFormDiv = $(html).appendTo(img.parent());
 					tagFormDiv.css({
 						position: 'absolute',
-						top: offset.y + relY * img.height() / 100,
-						left: offset.x + relX * img.width() / 100,
+						top: pos.y,
+						left: pos.x,
 						'z-index': 10000
 					});
 					// set attr for move/resize
@@ -126,11 +132,16 @@
 					tagFormDiv.attr('data-relX', relX);
 					tagFormDiv.attr('data-size', size);
 					// set submit handler
-					tagFormDiv.find('form').bind('ajax:complete', function (event, jqXHR, ajaxOptions) {
-						console.log(event);
-						console.log(jqXHR);
-						console.log(ajaxOptions);
-						alert();
+					tagFormDiv.find('form').data('submitCallback', function (response) {
+						if (tagFormDiv) {
+							exitTagForm();
+						}
+						if (typeof response === 'object') { // JSON tag
+							drawTag(response);
+						}
+						else { // HTML form
+							drawTagForm(response, relX, relY, size);
+						}
 					});
 					// set focus
 					tagFormDiv.find('input').focus();
@@ -139,11 +150,10 @@
 					if (!tagFormDiv) {
 						return;
 					}
-					var img = container.find('img.active');
-					var offset = getFotoTopLeft();
+					var pos = getScreenPos(tagFormDiv.attr('data-relX'), tagFormDiv.attr('data-relY'), tagFormDiv.attr('data-size'))
 					tagFormDiv.css({
-						top: offset.y + tagFormDiv.attr('data-relY') * img.height() / 100,
-						left: offset.x + tagFormDiv.attr('data-relX') * img.width() / 100
+						top: pos.y,
+						left: pos.x
 					});
 				};
 				var resizeTag = function () {
@@ -159,21 +169,24 @@
 					}
 					var img = container.find('img.active');
 					var offset = $(this).offset();
-					var relX = (e.pageX - offset.left) * 100 / img.width();
-					var relY = (e.pageY - offset.top) * 100 / img.height();
-					var size = 50; // TODO: dynamic
+					var relX = (e.pageX - offset.left) * 100 / img.width(); // %
+					var relY = (e.pageY - offset.top) * 100 / img.height(); // %
+					var size = 7; // %
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
 					$.post('/fotoalbum/addtag' + dirname(url), {
 						foto: basename(url),
 						x: Math.round(relX),
 						y: Math.round(relY),
 						size: Math.round(size)
-					}, function (data) {
-						if (typeof response === 'object') { // JSON
-							drawTag(data);
+					}, function (response) {
+						if (tagFormDiv) {
+							exitTagForm();
 						}
-						else { // HTML
-							drawTagForm(data, relX, relY, size);
+						if (typeof response === 'object') { // JSON tag
+							drawTag(response);
+						}
+						else { // HTML form
+							drawTagForm(response, relX, relY, size);
 						}
 					});
 				};
