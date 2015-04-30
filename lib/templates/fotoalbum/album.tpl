@@ -406,8 +406,10 @@
 					if (tagMode) {
 						tagMode = false;
 						$(this).css('background-color', '');
-						exitTagForm();
 						hideTags();
+						if (tagFormDiv) {
+							exitTagForm();
+						}
 						var imgs = container.find('img');
 						imgs.css('cursor', '');
 						imgs.unbind('click.tag');
