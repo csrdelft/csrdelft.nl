@@ -103,6 +103,16 @@
 						size: (w + h) / 200 * size
 					};
 				};
+				var removeTag = function (tag, tagDiv) {
+					if (confirm('Etiket verwijderen?')) {
+						$.post('/fotoalbum/removetag', {
+							refuuid: tag.refuuid,
+							keyword: tag.keyword
+						}, function () {
+							tagDiv.remove();
+						});
+					}
+				};
 				var drawTag = function (tag) {
 					var img = container.find('img.active');
 					var pos = getScreenPos(tag.x, tag.y, tag.size);
@@ -122,14 +132,7 @@
 					tagDiv.attr('data-size', tag.size);
 					// remove tag handler
 					tagDiv.bind('click.tag', function () {
-						if (confirm('Etiket verwijderen?')) {
-							$.post('/fotoalbum/removetag', {
-								refuuid: tag.refuuid,
-								keyword: tag.keyword
-							}, function () {
-								tagDiv.remove();
-							});
-						}
+						removeTag(tag, tagDiv);
 					});
 				};
 				var showTags = function () {
