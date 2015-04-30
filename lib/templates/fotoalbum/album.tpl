@@ -104,8 +104,18 @@
 					};
 				};
 				var drawTag = function (tag) {
+					var img = container.find('img.active');
 					var pos = getScreenPos(tag.x, tag.y, tag.size);
-					console.log(pos);
+					var tagDiv = $('<div id="tag' + tag.keyword + '"class="fototag" title="' + tag.naam + '"></div>').appendTo(img.parent());
+					tagDiv.css({
+						top: pos.y,
+						left: pos.x
+					});
+					// set attr for move/resize
+					tagDiv.attr('data-relY', tag.x);
+					tagDiv.attr('data-relX', tag.y);
+					tagDiv.attr('data-size', tag.size);
+
 				};
 				var drawTags = function (array) {
 					$.each(array, drawTag);
