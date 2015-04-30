@@ -18,10 +18,14 @@ class JsonResponse implements View {
 		$this->code = $code;
 	}
 
+	public function getJson($entity) {
+		return json_encode($entity);
+	}
+
 	public function view() {
 		http_response_code($this->code);
 		header('Content-Type: application/json');
-		echo json_encode($this->model);
+		echo $this->getJson($this->model);
 	}
 
 	public function getModel() {

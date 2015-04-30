@@ -48,4 +48,10 @@ class FotoTag extends KeywordTag {
 		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
 	}
 
+	public function jsonSerialize() {
+		$array = parent::jsonSerialize();
+		$array['name'] = ProfielModel::getNaam($this->keyword, 'user');
+		return $array;
+	}
+
 }
