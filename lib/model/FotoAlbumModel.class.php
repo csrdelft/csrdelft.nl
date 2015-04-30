@@ -334,8 +334,8 @@ class FotoTagsModel extends PersistenceModel {
 		}
 	}
 
-	public function removeTag(Foto $foto, $uid) {
-		return $this->deleteByPrimaryKey(array($foto->getUUID(), $uid));
+	public function removeTag($refuuid, $keyword) {
+		return $this->deleteByPrimaryKey(array($refuuid, $keyword));
 	}
 
 }

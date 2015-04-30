@@ -47,6 +47,9 @@ class FotoAlbumController extends AclController {
 		if (!array_key_exists($this->action, $this->acl)) {
 			$this->action = 'bekijken';
 			$path = $this->getParams(1);
+		} elseif ($this->action === 'removetag') {
+			parent::performAction();
+			return;
 		} elseif ($this->action === 'zoeken') {
 			parent::performAction($this->getParams(3));
 			return;
@@ -324,14 +327,13 @@ class FotoAlbumController extends AclController {
 		$this->view = $formulier;
 	}
 
-	public function removetag(FotoAlbum $album) {
-		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
-		$foto = new Foto($filename, $album);
-		if (!$foto->exists()) {
+	public function removetag() {
+		$refuuid = filter_input(INPUT_POST, 'refuuid', FILTER_SANITIZE_STRING);
+		$keyword = filter_input(INPUT_POST, 'keyword', FILTER_SANITIZE_STRING);
+		if (!LoginModel::mag('P_ALBUM_MOD') AND ! LoginModel::mag($keyword)) {
 			$this->geentoegang();
 		}
-		$uid = filter_input(INPUT_POST, 'uid', FILTER_SANITIZE_STRING);
-		FotoTagsModel::instance()->removeTag($foto, $uid);
+		FotoTagsModel::instance()->removeTag($refuuid, $keyword);
 		$this->view = new JsonResponse(true);
 	}
 

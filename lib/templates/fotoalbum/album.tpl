@@ -117,7 +117,17 @@
 					tagDiv.attr('data-relY', tag.x);
 					tagDiv.attr('data-relX', tag.y);
 					tagDiv.attr('data-size', tag.size);
-
+					// remove tag handler
+					tagDiv.bind('click.tag', function () {
+						if (confirm('Etiket verwijderen?')) {
+							$.post('/fotoalbum/removetag', {
+								refuuid: tag.refuuid,
+								keyword: tag.keyword
+							}, function () {
+								tagDiv.remove();
+							});
+						}
+					});
 				};
 				var showTags = function () {
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
