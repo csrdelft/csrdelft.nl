@@ -124,8 +124,17 @@
 .fototag {
 	position: absolute;
 	z-index: 10000;
-	border: 1px solid blue;
+	border-radius: 50%;
+	border: 2px solid transparent;
+	-webkit-transition : border 200ms ease-out;
+	-moz-transition : border 200ms ease-out;
+	-o-transition : border 200ms ease-out;
+	transition : border 200ms ease-out;
+}
+.fototag.showborder {
+	border: 2px solid #fff;
 }
 .fototag:hover {
-	border: 1px dashed red;
+	border: 2px solid #e8cf2a;
+
 }

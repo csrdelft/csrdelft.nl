@@ -106,16 +106,19 @@
 				var drawTag = function (tag) {
 					var img = container.find('img.active');
 					var pos = getScreenPos(tag.x, tag.y, tag.size);
-					var tagDiv = $('<div id="tag' + tag.keyword + '" class="fototag" title="' + tag.name + '"></div>').appendTo(img.parent());
+					var tagDiv = $('<div id="tag' + tag.keyword + '" class="fototag" title="' + tag.name + '"></div>').appendTo(container);
 					tagDiv.css({
 						top: pos.y - pos.size / 2,
 						left: pos.x - pos.size / 2,
 						width: pos.size,
 						height: pos.size
 					});
+					if (tagMode) {
+						tagDiv.addClass('showborder');
+					}
 					// set attr for move/resize
-					tagDiv.attr('data-relY', tag.x);
-					tagDiv.attr('data-relX', tag.y);
+					tagDiv.attr('data-relX', tag.x);
+					tagDiv.attr('data-relY', tag.y);
 					tagDiv.attr('data-size', tag.size);
 					// remove tag handler
 					tagDiv.bind('click.tag', function () {
@@ -130,6 +133,26 @@
 					});
 				};
 				var showTags = function () {
+					$('div.fototag').addClass('showborder');
+				};
+				var hideTags = function () {
+					$('div.fototag').removeClass('showborder');
+				};
+				var moveTagDivs = function () {
+					$('div.fototag').each(function () {
+						var pos = getScreenPos($(this).attr('data-relX'), $(this).attr('data-relY'), $(this).attr('data-size'))
+						$(this).css({
+							top: pos.y - pos.size / 2,
+							left: pos.x - pos.size / 2,
+							width: pos.size,
+							height: pos.size
+						});
+					});
+				};
+				var drawTags = function () {
+					// remove old ones
+					$('div.fototag').remove();
+					// get new ones
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
 					$.post('/fotoalbum/gettags' + dirname(url), {
 						foto: basename(url)
@@ -143,7 +166,7 @@
 				var drawTagForm = function (html, relX, relY, size) {
 					var img = container.find('img.active');
 					var pos = getScreenPos(relX, relY, size);
-					tagFormDiv = $(html).appendTo(img.parent());
+					tagFormDiv = $(html).appendTo(container);
 					tagFormDiv.css({
 						position: 'absolute',
 						top: pos.y,
@@ -181,9 +204,6 @@
 				};
 				var resizeTag = function () {
 					//TODO
-				};
-				var hideTags = function () {
-					$('div.fototag').remove();
 				};
 				var exitTagForm = function () {
 					tagFormDiv.remove();
@@ -227,6 +247,7 @@
 					img.bind('click.tag', onAddTag);
 				};
 				$(window).resize(function () {
+					moveTagDivs();
 					if (tagMode) {
 						duringTagMode();
 						if (tagFormDiv) {
@@ -246,6 +267,7 @@
 					if (tagMode) {
 						duringTagMode();
 					}
+					drawTags();
 					if (anchor.length === 1) {
 						preloadImg(anchor.attr('href')); // preload image from url param
 					}
@@ -401,6 +423,8 @@
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
 					window.location.href = '/fotoalbum/download' + url;
 				}).insertAfter(btn);
+		{/if}
+		{if LoginModel::mag('P_LEDEN_READ')}
 				// knopje taggen
 				$('<span class="fa fa-tags jgallery-btn jgallery-btn-small" tooltip="Leden etiketteren"></span>').click(function () {
 					if (tagMode) {
@@ -423,6 +447,7 @@
 						duringTagMode();
 					}
 				}).insertAfter(btn);
+				drawTags();
 		{/if}
 			});
 			/* img class="photoTag" data-fotoalbum="$album->subdir"
