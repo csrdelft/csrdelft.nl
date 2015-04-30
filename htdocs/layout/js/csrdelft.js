@@ -540,6 +540,9 @@ function form_submit(event) {
 		if (form.hasClass('InlineForm')) {
 			source = form;
 			formData.append('InlineFormId', form.attr('id'));
+			if (form.data('submitCallback')) {
+				done = form.data('submitCallback');
+			}
 		}
 
 		if (form.hasClass('DataTableResponse')) {
