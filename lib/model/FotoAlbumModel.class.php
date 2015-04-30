@@ -312,7 +312,7 @@ class FotoTagsModel extends PersistenceModel {
 	}
 
 	public function getTags(Foto $foto) {
-		return $this->find('uuid = ?', array($foto->getUUID()));
+		return $this->find('refuuid = ?', array($foto->getUUID()));
 	}
 
 	public function addTag(Foto $foto, $uid, $x, $y, $size) {
@@ -320,7 +320,7 @@ class FotoTagsModel extends PersistenceModel {
 			throw new Exception('Profiel bestaat niet');
 		}
 		$tag = new FotoTag();
-		$tag->uuid = $foto->getUUID();
+		$tag->refuuid = $foto->getUUID();
 		$tag->keyword = $uid;
 		$tag->door = LoginModel::getUid();
 		$tag->x = (int) $x;

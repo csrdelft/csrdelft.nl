@@ -12,7 +12,7 @@ class KeywordTag extends PersistentEntity {
 	 * @see PersistentEntity Unique Universal Identifier
 	 * @var string 
 	 */
-	public $uuid;
+	public $refuuid;
 	/**
 	 * Single keyword
 	 * @var string
@@ -28,7 +28,7 @@ class KeywordTag extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'uuid'		 => array(T::String),
+		'refuuid'	 => array(T::String),
 		'keyword'	 => array(T::String),
 		'door'		 => array(T::UID)
 	);
@@ -36,7 +36,7 @@ class KeywordTag extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('uuid', 'keyword');
+	protected static $primary_key = array('refuuid', 'keyword');
 	/**
 	 * Database table name
 	 * @var string
