@@ -405,6 +405,8 @@
 				$('<span class="fa fa-tags jgallery-btn jgallery-btn-small" tooltip="Leden etiketteren"></span>').click(function () {
 					if (tagMode) {
 						tagMode = false;
+						$(this).css('background-color', '');
+						exitTagForm();
 						hideTags();
 						var imgs = container.find('img');
 						imgs.css('cursor', '');
@@ -415,6 +417,7 @@
 					}
 					else {
 						tagMode = true;
+						$(this).css('background-color', '#e8cf2a');
 						duringTagMode();
 					}
 				}).insertAfter(btn);
