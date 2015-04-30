@@ -106,10 +106,12 @@
 				var drawTag = function (tag) {
 					var img = container.find('img.active');
 					var pos = getScreenPos(tag.x, tag.y, tag.size);
-					var tagDiv = $('<div id="tag' + tag.keyword + '"class="fototag" title="' + tag.naam + '"></div>').appendTo(img.parent());
+					var tagDiv = $('<div id="tag' + tag.keyword + '" class="fototag" title="' + tag.name + '"></div>').appendTo(img.parent());
 					tagDiv.css({
-						top: pos.y,
-						left: pos.x
+						top: pos.y - pos.size / 2,
+						left: pos.x - pos.size / 2,
+						width: pos.size,
+						height: pos.size
 					});
 					// set attr for move/resize
 					tagDiv.attr('data-relY', tag.x);
@@ -117,14 +119,15 @@
 					tagDiv.attr('data-size', tag.size);
 
 				};
-				var drawTags = function (array) {
-					$.each(array, drawTag);
-				};
 				var showTags = function () {
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
 					$.post('/fotoalbum/gettags' + dirname(url), {
 						foto: basename(url)
-					}, drawTags);
+					}, function (tags) {
+						$.each(tags, function (i, tag) {
+							drawTag(tag);
+						});
+					});
 				};
 				var tagFormDiv = false;
 				var drawTagForm = function (html, relX, relY, size) {
@@ -169,6 +172,9 @@
 				var resizeTag = function () {
 					//TODO
 				};
+				var hideTags = function () {
+					$('div.fototag').remove();
+				};
 				var exitTagForm = function () {
 					tagFormDiv.remove();
 					tagFormDiv = false;
@@ -201,13 +207,14 @@
 					});
 				};
 				var duringTagMode = function () {
+					showTags();
 					// disable nav area on img
 					container.find('div.right').hide();
 					container.find('div.left').hide();
 					// click handler
 					var img = container.find('img.active');
 					img.css('cursor', 'crosshair');
-					img.on('click', onAddTag);
+					img.bind('click.tag', onAddTag);
 				};
 				$(window).resize(function () {
 					if (tagMode) {
@@ -388,6 +395,10 @@
 				$('<span class="fa fa-tags jgallery-btn jgallery-btn-small" tooltip="Leden etiketteren"></span>').click(function () {
 					if (tagMode) {
 						tagMode = false;
+						hideTags();
+						var imgs = container.find('img');
+						imgs.css('cursor', '');
+						imgs.unbind('click.tag');
 						// enable nav area on img
 						container.find('div.right').show();
 						container.find('div.left').show();
