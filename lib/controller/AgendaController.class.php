@@ -143,33 +143,33 @@ class AgendaController extends AclController {
 		$this->view = new AgendaItemDeleteView($item->item_id);
 	}
 
-	public function verbergen($uuid = null) {
-		$parts = explode('@', $uuid, 2);
+	public function verbergen($refuuid = null) {
+		$parts = explode('@', $refuuid, 2);
 		$orm = explode('.', $parts[1], 2);
 		switch ($orm[0]) {
 
 			case 'csrdelft':
-				$item = ProfielModel::getUUID($uuid);
+				$item = ProfielModel::getUUID($refuuid);
 				break;
 
 			case 'bijbelrooster':
-				$item = BijbelroosterModel::getUUID($uuid);
+				$item = BijbelroosterModel::getUUID($refuuid);
 				break;
 
 			case 'maaltijd':
-				$item = MaaltijdenModel::getUUID($uuid);
+				$item = MaaltijdenModel::getUUID($refuuid);
 				break;
 
 			case 'corveetaak':
-				$item = CorveeTakenModel::getUUID($uuid);
+				$item = CorveeTakenModel::getUUID($refuuid);
 				break;
 
 			case 'activiteit':
-				$item = ActiviteitenModel::getUUID($uuid);
+				$item = ActiviteitenModel::getUUID($refuuid);
 				break;
 
 			case 'agendaitem':
-				$item = AgendaModel::getUUID($uuid);
+				$item = AgendaModel::getUUID($refuuid);
 				break;
 
 			default:

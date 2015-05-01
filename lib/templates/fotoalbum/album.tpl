@@ -26,9 +26,10 @@
 					"titleExpanded": false,
 					"tooltipSeeAllPhotos": "Grid",
 					"tooltipSeeOtherAlbums": "Toon sub-albums",
-					"slideshowInterval": "4s"
+					"slideshowInterval": "3s"
 				});
 				$('#gallery').css('max-height', 0);
+				var tagMode = false;
 				var container = $('div.jgallery');
 				// foto url
 				container.find('div.title').off();
@@ -86,22 +87,252 @@
 						showHiRes();
 					}
 				});
+				// BEGIN tagging code
+				var getScreenPos = function (relX, relY, size) {
+					var img = container.find('img.active');
+					var parent = img.parent();
+					var w = img.width();
+					var h = img.height();
+					var fotoTopLeft = {
+						x: (parent.width() - w) / 2,
+						y: (parent.height() - h) / 2
+					};
+					return {
+						x: relX * w / 100 + fotoTopLeft.x,
+						y: relY * h / 100 + fotoTopLeft.y,
+						size: (w + h) / 200 * size
+					};
+				};
+				var drawTag = function (tag) {
+					var pos = getScreenPos(tag.x, tag.y, tag.size);
+					var tagDiv = $('<div id="tag' + tag.keyword + '" class="fototag" title="' + tag.name + '"></div>').appendTo(container);
+					tagDiv.css({
+						top: pos.y - pos.size / 2,
+						left: pos.x - pos.size / 2,
+						width: pos.size,
+						height: pos.size
+					});
+					if (tagMode) {
+						tagDiv.addClass('showborder');
+					}
+					// set attr for move/resize
+					tagDiv.data('tag', tag);
+					// remove tag handler
+					tagDiv.bind('click.tag', function () {
+						// single selection
+						$('div.fototag.active').removeClass('active');
+						$(this).addClass('active');
+					});
+					return tagDiv;
+				};
+				var removeTag = function (tagDiv) {
+					if (confirm('Etiket verwijderen?')) {
+						var tag = tagDiv.data('tag');
+						$.post('/fotoalbum/removetag', {
+							refuuid: tag.refuuid,
+							keyword: tag.keyword
+						}, function () {
+							tagDiv.remove();
+						});
+					}
+				};
+				var showTags = function () {
+					$('div.fototag').addClass('showborder');
+				};
+				var hideTags = function () {
+					$('div.fototag').removeClass('showborder');
+				};
+				var moveTagDivs = function () {
+					$('div.fototag').each(function () {
+						var tag = $(this).data('tag')
+						var pos = getScreenPos(tag.x, tag.y, tag.size);
+						$(this).css({
+							top: pos.y - pos.size / 2,
+							left: pos.x - pos.size / 2,
+							width: pos.size,
+							height: pos.size
+						});
+					});
+				};
+				var drawTags = function () {
+					// remove old ones
+					$('div.fototag').remove();
+					// get new ones
+					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+					$.post('/fotoalbum/gettags' + dirname(url), {
+						foto: basename(url)
+					}, function (tags) {
+						$.each(tags, function (i, tag) {
+							drawTag(tag);
+						});
+					});
+				};
+				var tagFormDiv = false;
+				var drawTagForm = function (html, relX, relY, size) {
+					var pos = getScreenPos(relX, relY, size);
+					tagFormDiv = $(html).appendTo(container);
+					tagFormDiv.css({
+						position: "absolute",
+						top: pos.y + pos.size,
+						left: pos.x - pos.size / 2,
+						"z-index": 10000
+					});
+					// set attr for move/resize
+					tagFormDiv.attr('data-relY', relY);
+					tagFormDiv.attr('data-relX', relX);
+					tagFormDiv.attr('data-size', size);
+					// set submit handler
+					tagFormDiv.find('form').data('submitCallback', function (response) {
+						if (tagFormDiv) {
+							exitTagForm();
+						}
+						if (typeof response === 'object') { // JSON tag
+							drawTag(response);
+						}
+						else { // HTML form
+							drawTagForm(response, relX, relY, size);
+						}
+					});
+					// set focus
+					tagFormDiv.find('input').focus();
+				};
+				var moveTagForm = function () {
+					if (!tagFormDiv) {
+						return;
+					}
+					var pos = getScreenPos(tagFormDiv.attr('data-relX'), tagFormDiv.attr('data-relY'), tagFormDiv.attr('data-size'))
+					tagFormDiv.css({
+						top: pos.y + pos.size,
+						left: pos.x - (pos.size / 2)
+					});
+				};
+				var exitTagForm = function () {
+					$('div[id="tagNew"]').remove();
+					tagFormDiv.remove();
+					tagFormDiv = false;
+				};
+				var addTag = function (relX, relY, size) {
+					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+					$.post('/fotoalbum/addtag' + dirname(url), {
+						foto: basename(url),
+						x: Math.round(relX),
+						y: Math.round(relY),
+						size: Math.round(size)
+					}, function (response) {
+						if (typeof response === 'object') { // JSON tag
+							drawTag(response);
+						}
+						else { // HTML form
+							drawTagForm(response, relX, relY, size);
+						}
+					});
+				};
+				var newTagStart = function (e) {
+					var img = container.find('img.active');
+					// calculate relative position to image top left
+					var offset = $(this).offset();
+					var newTag = {
+						x: (e.pageX - offset.left) * 100 / img.width(), // %,
+						y: (e.pageY - offset.top) * 100 / img.height(), // %,
+						size: 7, // %
+						name: "",
+						keyword: "New"
+					};
+					// show form
+					if (tagFormDiv) {
+						exitTagForm();
+					}
+					addTag(newTag.x, newTag.y, newTag.size);
+					// show new resizable tag
+					var tagDiv = drawTag(newTag);
+					// not remove-able
+					tagDiv.unbind('click.tag');
+					// resize-able
+					tagDiv.css('cursor', 'nw-resize');
+					$(window).unbind('mouseup.newtag');
+					$(window).bind('mouseup.newtag', function (e1) {
+						$(window).unbind('mousemove.newtag');
+					});
+					tagDiv.bind('mousedown.newtag', function (e1) {
+						var img = container.find('img.active');
+						$(window).bind('mousemove.newtag', function (e2) {
+							newTag.size += (e2.pageX - e1.pageX) * 10 / img.width();
+							newTag.size += (e2.pageY - e1.pageY) * 10 / img.height();
+							if (newTag.size < 1) {
+								newTag.size = 1;
+							}
+							else if (newTag.size > 99) {
+								newTag.size = 99;
+							}
+							tagFormDiv.find('input[name="size"]').val(Math.round(newTag.size));
+							var pos = getScreenPos(newTag.x, newTag.y, newTag.size);
+							tagDiv.css({
+								top: pos.y - pos.size / 2,
+								left: pos.x - pos.size / 2,
+								width: pos.size,
+								height: pos.size
+							});
+							// update attr for move/resize
+							tagDiv.attr('data-size', newTag.size);
+						});
+					});
+				};
+				var duringTagMode = function () {
+					var zoom = container.find('div.zoom-container');
+					if (zoom.attr('data-size') !== 'fit') { // if zoomed in
+						alert('Je kunt niet inzoomen tijdens het etiketteren, dat werkt nog niet.');
+					}
+					if (tagFormDiv) {
+						exitTagForm();
+					}
+					showTags();
+					// disable nav area on img
+					container.find('div.right').hide();
+					container.find('div.left').hide();
+					// click handler
+					var img = container.find('img.active');
+					img.css('cursor', 'crosshair');
+					// (re-)bind add new tag handler
+					img.unbind('click.newtag');
+					img.bind('click.newtag', newTagStart);
+				};
+				$(window).resize(function () {
+					moveTagDivs();
+					if (tagMode) {
+						duringTagMode();
+						if (tagFormDiv) {
+							moveTagForm();
+						}
+					}
+					else {
+						if (tagFormDiv) {
+							exitTagForm();
+						}
+					}
+				});
+				// END tagging code
 				// preload next/prev
 				var onNextPrev = function (anchor) {
-					container.find('div.overlay').css('display', 'none');
+					container.find('div.overlay').css('display', 'none'); // hide loading div
+		{if LoginModel::mag('P_LEDEN_READ')}
+					if (tagMode) {
+						duringTagMode();
+					}
+					drawTags();
+		{/if}
 					if (anchor.length === 1) {
-						preloadImg(anchor.attr('href'));
+						preloadImg(anchor.attr('href')); // preload image from url param
 					}
 					var zoom = container.find('div.zoom-container');
-					if (zoom.attr('data-size') !== 'fit') {
-						setTimeout(showHiRes, 1);
-						if (zoom.attr('data-size') === 'fill') {
-							$('span.resize.jgallery-btn').removeClass('fa-search-minus').addClass('fa-search-plus');
+					if (zoom.attr('data-size') !== 'fit') { // if zoomed in
+						setTimeout(showHiRes, 1); // show hi-res via background process
+						if (zoom.attr('data-size') === 'fill') { // workaround zoom mode display icon for hi-res img replacement hack
+							$('span.resize.jgallery-btn').removeClass('fa-search-minus').addClass('fa-search-plus'); // change zoom button icon
 						}
 						if (anchor.length === 1) {
-							var href = $('#gallery').find('a[href="' + anchor.attr('href') + '"]').attr('data-href');
+							var href = $('#gallery').find('a[href="' + anchor.attr('href') + '"]').attr('data-href'); // replace full-res href in data attr
 							if (typeof href === 'string') {
-								preloadImg(href);
+								preloadImg(href); // preload hi-res image
 							}
 						}
 					}
@@ -123,9 +354,24 @@
 					else if (event.keyCode === 37) { // arrow left
 						prev();
 					}
+					else if (event.keyCode === 46) { // delete
+						$('div.fototag.active').each(function () {
+							removeTag($(this));
+						});
+					}
 					else if (event.keyCode === 27) { // esc
 						event.preventDefault();
-						$('span.change-mode').click();
+						if (tagMode) {
+							if (tagFormDiv) {
+								exitTagForm();
+							}
+							else {
+								moveTagDivs();
+							}
+						}
+						else {
+							$('span.change-mode').click();
+						}
 					}
 					else if (event.keyCode === 122) { // f11
 						event.preventDefault();
@@ -133,6 +379,7 @@
 					}
 				});
 				var fnToggleFullscreen = function () {
+					moveTagDivs();
 					if (container.hasClass('jgallery-full-screen')) {
 						window.scrollTo(0, 0);
 						window.clearTimeout($('#cd-main-trigger').data('timer'));
@@ -237,6 +484,31 @@
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
 					window.location.href = '/fotoalbum/download' + url;
 				}).insertAfter(btn);
+		{/if}
+		{if LoginModel::mag('P_LEDEN_READ')}
+				// knopje taggen
+				$('<span class="fa fa-tags jgallery-btn jgallery-btn-small" tooltip="Leden etiketteren"></span>').click(function () {
+					if (tagMode) {
+						tagMode = false;
+						$(this).css('background-color', '');
+						hideTags();
+						if (tagFormDiv) {
+							exitTagForm();
+						}
+						var imgs = container.find('img');
+						imgs.css('cursor', '');
+						imgs.unbind('click.newtag');
+						// enable nav area on img
+						container.find('div.right').show();
+						container.find('div.left').show();
+					}
+					else {
+						tagMode = true;
+						$(this).css('background-color', '#e8cf2a');
+						duringTagMode();
+					}
+				}).insertAfter(btn);
+				drawTags();
 		{/if}
 			});
 			/* img class="photoTag" data-fotoalbum="$album->subdir"
