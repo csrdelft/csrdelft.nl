@@ -205,9 +205,6 @@
 						left: pos.x
 					});
 				};
-				var resizeTag = function () {
-					//TODO
-				};
 				var exitTagForm = function () {
 					tagFormDiv.remove();
 					tagFormDiv = false;
@@ -267,10 +264,12 @@
 				// preload next/prev
 				var onNextPrev = function (anchor) {
 					container.find('div.overlay').css('display', 'none'); // hide loading div
+		{if LoginModel::mag('P_LEDEN_READ')}
 					if (tagMode) {
 						duringTagMode();
 					}
 					drawTags();
+		{/if}
 					if (anchor.length === 1) {
 						preloadImg(anchor.attr('href')); // preload image from url param
 					}
@@ -311,6 +310,9 @@
 							if (tagFormDiv) {
 								exitTagForm();
 							}
+							else {
+								moveTagDivs();
+							}
 						}
 						else {
 							$('span.change-mode').click();
@@ -322,6 +324,7 @@
 					}
 				});
 				var fnToggleFullscreen = function () {
+					moveTagDivs();
 					if (container.hasClass('jgallery-full-screen')) {
 						window.scrollTo(0, 0);
 						window.clearTimeout($('#cd-main-trigger').data('timer'));
