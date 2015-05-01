@@ -103,16 +103,6 @@
 						size: (w + h) / 200 * size
 					};
 				};
-				var removeTag = function (tag, tagDiv) {
-					if (confirm('Etiket verwijderen?')) {
-						$.post('/fotoalbum/removetag', {
-							refuuid: tag.refuuid,
-							keyword: tag.keyword
-						}, function () {
-							tagDiv.remove();
-						});
-					}
-				};
 				var drawTag = function (tag) {
 					var pos = getScreenPos(tag.x, tag.y, tag.size);
 					var tagDiv = $('<div id="tag' + tag.keyword + '" class="fototag" title="' + tag.name + '"></div>').appendTo(container);
@@ -126,14 +116,25 @@
 						tagDiv.addClass('showborder');
 					}
 					// set attr for move/resize
-					tagDiv.attr('data-relX', tag.x);
-					tagDiv.attr('data-relY', tag.y);
-					tagDiv.attr('data-size', tag.size);
+					tagDiv.data('tag', tag);
 					// remove tag handler
 					tagDiv.bind('click.tag', function () {
-						removeTag(tag, tagDiv);
+						// single selection
+						$('div.fototag.active').removeClass('active');
+						$(this).addClass('active');
 					});
 					return tagDiv;
+				};
+				var removeTag = function (tagDiv) {
+					if (confirm('Etiket verwijderen?')) {
+						var tag = tagDiv.data('tag');
+						$.post('/fotoalbum/removetag', {
+							refuuid: tag.refuuid,
+							keyword: tag.keyword
+						}, function () {
+							tagDiv.remove();
+						});
+					}
 				};
 				var showTags = function () {
 					$('div.fototag').addClass('showborder');
@@ -143,7 +144,8 @@
 				};
 				var moveTagDivs = function () {
 					$('div.fototag').each(function () {
-						var pos = getScreenPos($(this).attr('data-relX'), $(this).attr('data-relY'), $(this).attr('data-size'))
+						var tag = $(this).data('tag')
+						var pos = getScreenPos(tag.x, tag.y, tag.size);
 						$(this).css({
 							top: pos.y - pos.size / 2,
 							left: pos.x - pos.size / 2,
@@ -247,6 +249,7 @@
 					tagDiv.unbind('click.tag');
 					// resize-able
 					tagDiv.css('cursor', 'nw-resize');
+					$(window).unbind('mouseup.newtag');
 					$(window).bind('mouseup.newtag', function (e1) {
 						$(window).unbind('mousemove.newtag');
 					});
@@ -350,6 +353,11 @@
 					}
 					else if (event.keyCode === 37) { // arrow left
 						prev();
+					}
+					else if (event.keyCode === 46) { // delete
+						$('div.fototag.active').each(function () {
+							removeTag($(this));
+						});
 					}
 					else if (event.keyCode === 27) { // esc
 						event.preventDefault();
