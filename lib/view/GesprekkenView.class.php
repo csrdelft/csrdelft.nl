@@ -13,15 +13,15 @@ class GesprekkenView implements View {
 	private $berichtenTable;
 	private $berichtForm;
 
-	public function __construct(Gesprek $gesprek = null) {
+	public function __construct(Gesprek $gesprek = null, $filter = null) {
 		if ($gesprek) {
 			$this->gesprek = $gesprek;
 			GesprekBerichtenModel::instance(); // require_once
 			$this->berichtenTable = new GesprekBerichtenTable($gesprek);
 			$this->berichtForm = new GesprekBerichtForm($gesprek, $this->berichtenTable->getDataTableId());
 		} else {
-
 			$this->gesprekkenTable = new GesprekkenTable();
+			$this->gesprekkenTable->filter = $filter;
 		}
 	}
 
