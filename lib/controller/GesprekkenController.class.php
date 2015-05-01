@@ -50,7 +50,12 @@ class GesprekkenController extends AclController {
 		} else {
 			$gesprek = null;
 		}
-		$body = new GesprekkenView($gesprek);
+		if ($this->hasParam('zoek')) {
+			$filter = $this->getParam('zoek');
+		} else {
+			$filter = null;
+		}
+		$body = new GesprekkenView($gesprek, $filter);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addCompressedResources('datatable');
 		$this->view->addCompressedResources('gesprekken');
