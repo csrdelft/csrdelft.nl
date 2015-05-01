@@ -411,7 +411,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	public function maySuTo(Account $suNaar) {
-		return !$this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, 'P_LOGGED_IN');
+		return LoginModel::mag('P_ADMIN') AND ! $this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, 'P_LOGGED_IN');
 	}
 
 	public function isLoggedIn($allowPrivateUrl = false) {
