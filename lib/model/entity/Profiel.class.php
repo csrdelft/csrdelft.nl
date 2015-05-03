@@ -9,12 +9,12 @@ require_once 'model/GroepenModel.abstract.php';
 
 /**
  * Profiel.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Profiel van een lid. Agendeerbaar vanwege verjaardag in agenda.
- * 
+ *
  */
 class Profiel extends PersistentEntity implements Agendeerbaar {
 
@@ -231,7 +231,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Geef een array met contactgegevens terug, als de velden niet leeg zijn.
-	 * 
+	 *
 	 * TODO: aparte tabellen voor multiple email, telefoon, etc...
 	 */
 	public function getContactgegevens() {
@@ -287,7 +287,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * een beetje vieze hack omdat Agendeerbaar een enkele activiteit
 	 * verwacht, terwijl een verjaardag een periodieke activiteit (elk
 	 * jaar) is.
-	 * 
+	 *
 	 * @return int timestamp
 	 */
 	public function getBeginMoment() {
@@ -369,11 +369,13 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			$k .= '">';
 			$k .= $this->getPasfotoTag(false);
 			$k .= '<div class="uid uitgebreid"><a href="/gesprekken/?zoek=' . urlencode($this->getNaam('civitas')) . '" class="lichtgrijs" title="Gesprek"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span></a></div>';
-			if (AccountModel::existsUid($this->uid) AND LoginModel::instance()->maySuTo($this->getAccount())) {
-				$k .= '<div class="uid uitgebreid">';
-				$k .= '<a href="/su/' . $this->uid . '" title="Su naar dit lid">' . $this->uid . '</a>';
-				$k .= '</div>';
-			}
+      if($this->getStatus() == ('S_LID')) {
+        if (AccountModel::existsUid($this->uid) AND LoginModel::instance()->maySuTo($this->getAccount())) {
+          $k .= '<div class="uid uitgebreid">';
+          $k .= '<a href="/su/' . $this->uid . '" title="Su naar dit lid">' . $this->uid . '</a>';
+          $k .= '</div>';
+        }
+      }
 			$k .= '<p class="naam">' . $l . $this->getNaam('volledig') . '&nbsp;' . LidStatus::getChar($this->status);
 			$k .= '</a></p>';
 			$k .= '<p>' . $this->lidjaar . ' ' . $this->getVerticale()->naam . '</p>';
@@ -407,7 +409,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Naam met verschillende weergave-mogelijkheden.
-	 * 
+	 *
 	 * @param string $vorm volledig, streeplijst, civitas, user, nick, bijnaam, aaidrom, Duckstad
 	 * @return string
 	 */
@@ -535,7 +537,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	/**
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
 	 * Geef anders een standaard-plaatje terug.
-	 * 	
+	 *
 	 * @param boolean $square Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 * @return string
 	 */
@@ -627,7 +629,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Vraag SocCie saldo aan SocCie systeem (staat gewoon in klant-tabel).
-	 * 
+	 *
 	 * @return float
 	 */
 	public function getSoccieSaldo() {
@@ -636,7 +638,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Vraag MaalCie saldo aan MaalCie systeem (staat gewoon in lid-tabel).
-	 * 
+	 *
 	 * @return float
 	 */
 	public function getMaalCieSaldo() {
@@ -645,7 +647,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Controleer of een lid al in de google-contacts-lijst staat.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function isInGoogleContacts() {
@@ -661,4 +663,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		}
 	}
 
+  public function getStatus(){
+    return $this->status;
+  }
 }
