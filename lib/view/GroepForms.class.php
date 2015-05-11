@@ -35,6 +35,8 @@ class GroepForm extends ModalForm {
 			$fields['eind_moment']->required = true;
 		}
 		if ($groep instanceof Ketzer) {
+			$fields['begin_moment']->title = 'Dit is NIET het moment van openstellen voor aanmeldingen';
+			$fields['eind_moment']->title = 'Dit is NIET het moment van sluiten voor aanmeldingen';
 			$fields['aanmelden_vanaf']->to_datetime = $fields['afmelden_tot'];
 			$fields['bewerken_tot']->to_datetime = $fields['afmelden_tot'];
 			$fields['bewerken_tot']->from_datetime = $fields['aanmelden_vanaf'];
