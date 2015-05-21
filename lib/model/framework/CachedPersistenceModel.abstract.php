@@ -171,7 +171,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	protected function existsByPrimaryKey(array $primary_key_values) {
 		$key = $this->cacheKey($primary_key_values);
 		if ($this->isCached($key)) {
-			return true;
+			return $this->getCached($key) !== false;
 		} else {
 			return parent::existsByPrimaryKey($primary_key_values);
 		}
