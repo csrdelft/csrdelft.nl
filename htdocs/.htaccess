@@ -45,6 +45,12 @@ RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
 RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
 RewriteRule ^commissievoorkeuren index.php?c=CommissieVoorkeuren [L]
 
+# business club
+RewriteRule ^bc$ bc/index.html [L]
+RewriteRule ^bc/partners$ bc/partners.html [L]
+RewriteRule ^bc/mogelijkheden$ bc/mogelijkheden.html [L]
+RewriteRule ^bc/contact$ bc/contact.html [L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^                   index.php
