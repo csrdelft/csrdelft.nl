@@ -8,34 +8,23 @@
  */
 class FlotTimeSeries extends JsonResponse {
 
-	public function getJson($data) {
+	public function getJson($model) {
 		$array = array();
-		foreach ($data as $entry) {
-			$array[] = array((int) $entry['timestamp'], (int) $entry['count']);
+		foreach ($model as $label => $data) {
+			$entry = array();
+			foreach ($data as $row) {
+				if (isset($row['timestamp'], $row['count'])) {
+					$entry[] = array((int) $row['timestamp'], (int) $row['count']);
+				} else {
+					//var_dump($row);
+				}
+			}
+			$array[] = array(
+				'label'	 => $label,
+				'data'	 => $entry
+			);
 		}
 		return json_encode($array);
-	}
-
-	public function view() {
-		http_response_code($this->code);
-		header('Content-Type: application/json');
-		echo '[' . "\n";
-		$comma = false;
-		foreach ($this->model as $label => $data) {
-			if ($comma) {
-				echo ',';
-			} else {
-				$comma = true;
-			}
-			echo <<<JSON
-{
-	"label": "{$label}",
-	"data":
-JSON;
-			echo $this->getJson($data);
-			echo "\n}";
-		}
-		echo "\n]";
 	}
 
 }
