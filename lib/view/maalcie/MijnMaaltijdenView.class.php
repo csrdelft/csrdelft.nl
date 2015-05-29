@@ -33,8 +33,8 @@ class MijnMaaltijdenView extends SmartyTemplateView {
 			if (!$beoordeling) {
 				$beoordeling = MaaltijdBeoordelingenModel::instance()->nieuw($maaltijd);
 			}
-			$this->kwantiteit_forms[$maaltijd->getMaaltijdId()] = new MaaltijdKwantiteitBeoordelingForm($beoordeling);
-			$this->kwaliteit_forms[$maaltijd->getMaaltijdId()] = new MaaltijdKwaliteitBeoordelingForm($beoordeling);
+			$this->kwantiteit_forms[$maaltijd->getMaaltijdId()] = new MaaltijdKwantiteitBeoordelingForm($maaltijd, $beoordeling);
+			$this->kwaliteit_forms[$maaltijd->getMaaltijdId()] = new MaaltijdKwaliteitBeoordelingForm($maaltijd, $beoordeling);
 		}
 	}
 

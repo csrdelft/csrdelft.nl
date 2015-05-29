@@ -112,13 +112,14 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function beoordeling($mid) {
+		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
 		$beoordeling = MaaltijdBeoordelingenModel::instance()->find('maaltijd_id = ? AND uid = ?', array($mid, LoginModel::getUid()))->fetch();
 		if (!$beoordeling) {
-			$beoordeling = MaaltijdBeoordelingenModel::instance()->nieuw(MaaltijdenModel::getMaaltijd($mid));
+			$beoordeling = MaaltijdBeoordelingenModel::instance()->nieuw($maaltijd);
 		}
-		$form = new MaaltijdKwantiteitBeoordelingForm($beoordeling);
+		$form = new MaaltijdKwantiteitBeoordelingForm($maaltijd, $beoordeling);
 		if (!$form->validate()) {
-			$form = new MaaltijdKwaliteitBeoordelingForm($beoordeling);
+			$form = new MaaltijdKwaliteitBeoordelingForm($maaltijd, $beoordeling);
 		}
 		if ($form->validate()) {
 			MaaltijdBeoordelingenModel::instance()->update($beoordeling);
