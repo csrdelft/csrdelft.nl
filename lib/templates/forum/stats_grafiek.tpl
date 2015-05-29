@@ -2,8 +2,6 @@
 
 	$.post('/forum/grafiekdata').done(function (data, textStatus, jqXHR) {
 
-		var d = data;
-
 		// helper for returning the weekends in a period
 
 		function weekendAreas(axes) {
@@ -35,24 +33,37 @@
 			return markings;
 		}
 
-		var options = {
+		var plot = $.plot("#placeholder", data, {
+			grid: {
+				markings: weekendAreas
+			},
+			selection: {
+				mode: "x"
+			},
 			xaxis: {
 				mode: "time",
 				timeformat: "%d %b 20%y",
 				monthNames: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
 				tickLength: 5
 			},
+			yaxis: {
+				// log scale
+				transform: function (v) {
+					return Math.log(v);
+				},
+				inverseTransform: function (v) {
+					return Math.exp(v);
+				}
+			}
+		});
+
+		var overview = $.plot("#overview", data, {
+			legend: {
+				show: false
+			},
 			selection: {
 				mode: "x"
 			},
-			grid: {
-				markings: weekendAreas
-			}
-		};
-
-		var plot = $.plot("#placeholder", [d], options);
-
-		var overview = $.plot("#overview", [d], {
 			series: {
 				lines: {
 					show: true,
@@ -66,12 +77,15 @@
 			},
 			yaxis: {
 				ticks: [],
-				min: 0,
-				autoscaleMargin: 0.1
-			},
-			selection: {
-				mode: "x"
+				// log scale
+				transform: function (v) {
+					return Math.log(v);
+				},
+				inverseTransform: function (v) {
+					return Math.exp(v);
+				}
 			}
+
 		});
 
 		// now connect the two
