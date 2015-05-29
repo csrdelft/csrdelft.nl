@@ -849,16 +849,16 @@ class SterrenField extends FloatField {
 	public $click_submit = false;
 	public $reset;
 	public $half;
-	public $hints = array();
+	public $hints = array('1 ster', '2 sterren', '3 sterren', '4 sterren', '5 sterren');
 
-	public function __construct($name, $value, $description, $min = 1, $max = 5, $half = false, $reset = false) {
-		parent::__construct($name, $value, $description, $half ? 1 : 0, $min, $max);
+	public function __construct($name, $value, $description, $max_stars = 5, $half = false, $reset = false) {
+		parent::__construct($name, $value, $description, $half ? 1 : 0, 1, $max_stars);
 		$this->reset = $reset;
 		$this->half = $half;
 	}
 
 	public function getHtml() {
-		return '<div ' . $this->getInputAttribute(array('id', 'name', 'class', 'value', 'origvalue')) . ' />';
+		return '<div ' . $this->getInputAttribute(array('id', 'name', 'class')) . ' />';
 	}
 
 	public function getJavascript() {

@@ -12,12 +12,13 @@ class MaaltijdKwantiteitBeoordelingForm extends InlineForm {
 
 	public function __construct(MaaltijdBeoordeling $b) {
 
-		$field = new SterrenField('kwanti', $b->kwantiteit, null, 1, 4, false, $b->kwantiteit !== null);
+		$field = new SterrenField('kwantiteit', $b->kwantiteit, null, 4);
 		$field->hints = array('ruim onvoldoende', 'onvoldoende', 'voldoende', 'ruim voldoende');
 		$field->click_submit = true;
+		$field->readonly = $b->kwantiteit !== null; // niet wijzigbaar na page refresh
 
-		parent::__construct(null, maalcieUrl . '/beoordeling/' . $b->maaltijd_id, $field, false);
-		$this->css_classes[] = 'confirm noanim';
+		parent::__construct($b, maalcieUrl . '/beoordeling/' . $b->maaltijd_id, $field, false);
+		$this->css_classes[] = 'noanim';
 	}
 
 }
@@ -26,12 +27,13 @@ class MaaltijdKwaliteitBeoordelingForm extends InlineForm {
 
 	public function __construct(MaaltijdBeoordeling $b) {
 
-		$field = new SterrenField('kwali', $b->kwaliteit, null, 1, 4, false, $b->kwaliteit !== null);
+		$field = new SterrenField('kwaliteit', $b->kwaliteit, null, 4);
 		$field->hints = array('ruim onvoldoende', 'onvoldoende', 'voldoende', 'ruim voldoende');
 		$field->click_submit = true;
+		$field->readonly = $b->kwaliteit !== null; // niet wijzigbaar na page refresh
 
-		parent::__construct(null, maalcieUrl . '/beoordeling/' . $b->maaltijd_id, $field, false);
-		$this->css_classes[] = 'confirm noanim';
+		parent::__construct($b, maalcieUrl . '/beoordeling/' . $b->maaltijd_id, $field, false);
+		$this->css_classes[] = 'noanim';
 	}
 
 }

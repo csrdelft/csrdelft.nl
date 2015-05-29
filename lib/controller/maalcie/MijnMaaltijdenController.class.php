@@ -116,24 +116,14 @@ class MijnMaaltijdenController extends AclController {
 		if (!$beoordeling) {
 			$beoordeling = MaaltijdBeoordelingenModel::instance()->nieuw(MaaltijdenModel::getMaaltijd($mid));
 		}
-		if (isset($_POST['kwanti'])) {
-			$kwanti = filter_input(INPUT_POST, 'kwanti', FILTER_SANITIZE_NUMBER_FLOAT);
-			if ($kwanti === '') {
-				$beoordeling->kwantiteit = null;
-			} else {
-				$beoordeling->kwantiteit = (float) $kwanti;
-			}
+		$form = new MaaltijdKwantiteitBeoordelingForm($beoordeling);
+		if (!$form->validate()) {
+			$form = new MaaltijdKwaliteitBeoordelingForm($beoordeling);
 		}
-		if (isset($_POST['kwali'])) {
-			$kwali = filter_input(INPUT_POST, 'kwali', FILTER_SANITIZE_NUMBER_FLOAT);
-			if ($kwali === '') {
-				$beoordeling->kwaliteit = null;
-			} else {
-				$beoordeling->kwaliteit = (float) $kwali;
-			}
+		if ($form->validate()) {
+			MaaltijdBeoordelingenModel::instance()->update($beoordeling);
 		}
-		$result = MaaltijdBeoordelingenModel::instance()->update($beoordeling);
-		$this->view = new JsonResponse('');
+		$this->view = new JsonResponse(null);
 	}
 
 }
