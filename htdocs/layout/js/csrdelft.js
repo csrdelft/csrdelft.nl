@@ -506,9 +506,18 @@ function form_toggle(event) {
 }
 
 function form_submit(event) {
-	if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
-		event.preventDefault();
-		return false;
+	if ($(this).hasClass('confirm')) {
+		var q = $(this).attr('title');
+		if (q) {
+			q += '.\n\n';
+		}
+		else {
+			q = 'Weet u het zeker?';
+		}
+		if (!confirm(q)) {
+			event.preventDefault();
+			return false;
+		}
 	}
 
 	var form = $(this).closest('form');

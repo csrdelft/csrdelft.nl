@@ -10,7 +10,7 @@
  * Bevat de uitbreidingen van TextField:
  * 
  * 	- IntField					Integers 
- * 		* DecimalField				Kommagetallen
+ * 		* FloatField				Kommagetallen
  * 			- BedragField			Bedragen met 2 cijfers achter de komma
  * 	- TelefoonField				Telefoonnummers
  */
@@ -239,7 +239,7 @@ class RequiredTelefoonField extends TelefoonField {
 /**
  * Invoeren van een decimaal getal. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
-class DecimalField extends InputField {
+class FloatField extends InputField {
 
 	public $precision;
 	public $min = null;
@@ -308,7 +308,7 @@ class DecimalField extends InputField {
 
 }
 
-class RequiredDecimalField extends DecimalField {
+class RequiredFloatField extends FloatField {
 
 	public $required = true;
 

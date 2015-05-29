@@ -2,6 +2,7 @@
 
 require_once 'model/maalcie/MaaltijdenModel.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
+require_once 'model/maalcie/MaaltijdBeoordelingenModel.class.php';
 require_once 'model/maalcie/CorveeTakenModel.class.php';
 require_once 'view/maalcie/MijnMaaltijdenView.class.php';
 
@@ -24,11 +25,12 @@ class MijnMaaltijdenController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'sluit'		 => 'P_MAAL_IK',
-				'aanmelden'	 => 'P_MAAL_IK',
-				'afmelden'	 => 'P_MAAL_IK',
-				'gasten'	 => 'P_MAAL_IK',
-				'opmerking'	 => 'P_MAAL_IK'
+				'sluit'			 => 'P_MAAL_IK',
+				'aanmelden'		 => 'P_MAAL_IK',
+				'afmelden'		 => 'P_MAAL_IK',
+				'gasten'		 => 'P_MAAL_IK',
+				'opmerking'		 => 'P_MAAL_IK',
+				'beoordeling'	 => 'P_MAAL_IK'
 			);
 		}
 	}
@@ -48,7 +50,8 @@ class MijnMaaltijdenController extends AclController {
 	public function ketzer() {
 		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(LoginModel::getUid());
 		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($maaltijden, LoginModel::getUid());
-		$this->view = new MijnMaaltijdenView($maaltijden, $aanmeldingen);
+		$recent = MaaltijdenModel::getRecentBezochteMaaltijden();
+		$this->view = new MijnMaaltijdenView($maaltijden, $aanmeldingen, $recent);
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 	}
@@ -106,6 +109,31 @@ class MijnMaaltijdenController extends AclController {
 		$opmerking = filter_input(INPUT_POST, 'gasten_eetwens', FILTER_SANITIZE_STRING);
 		$aanmelding = MaaltijdAanmeldingenModel::saveGastenEetwens($mid, LoginModel::getUid(), $opmerking);
 		$this->view = new MijnMaaltijdView($aanmelding->getMaaltijd(), $aanmelding);
+	}
+
+	public function beoordeling($mid) {
+		$beoordeling = MaaltijdBeoordelingenModel::instance()->find('maaltijd_id = ? AND uid = ?', array($mid, LoginModel::getUid()))->fetch();
+		if (!$beoordeling) {
+			$beoordeling = MaaltijdBeoordelingenModel::instance()->nieuw(MaaltijdenModel::getMaaltijd($mid));
+		}
+		if (isset($_POST['kwanti'])) {
+			$kwanti = filter_input(INPUT_POST, 'kwanti', FILTER_SANITIZE_NUMBER_FLOAT);
+			if ($kwanti === '') {
+				$beoordeling->kwantiteit = null;
+			} else {
+				$beoordeling->kwantiteit = (float) $kwanti;
+			}
+		}
+		if (isset($_POST['kwali'])) {
+			$kwali = filter_input(INPUT_POST, 'kwali', FILTER_SANITIZE_NUMBER_FLOAT);
+			if ($kwali === '') {
+				$beoordeling->kwaliteit = null;
+			} else {
+				$beoordeling->kwaliteit = (float) $kwali;
+			}
+		}
+		$result = MaaltijdBeoordelingenModel::instance()->update($beoordeling);
+		$this->view = new JsonResponse('');
 	}
 
 }
