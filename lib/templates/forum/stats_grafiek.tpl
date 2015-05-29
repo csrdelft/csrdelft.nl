@@ -34,6 +34,12 @@
 		}
 
 		var plot = $.plot("#placeholder", data, {
+			legend: {
+				sorted: function (a, b) {
+					// sort alphabetically in ascending order
+					return a.label === b.label ? 0 : (a.label > b.label ? 1 : -1);
+				}
+			},
 			grid: {
 				markings: weekendAreas
 			},
