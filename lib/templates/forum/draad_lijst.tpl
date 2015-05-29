@@ -31,4 +31,30 @@
 		<a href="/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}">bericht</a>
 		door {ProfielModel::getLink($draad->laatste_wijziging_uid, 'user')}
 	</td>
+	<td>
+		<div id="grafiekdraad{$draad->draad_id}"  class="recentgrafiek"></div>
+		<script type="text/javascript">
+
+			$.plot("#grafiekdraad{$draad->draad_id}", {$draad->getStatsJson()}, {
+				series: {
+					bars: {
+						show: true,
+						fill: 1,
+						lineWith: 0
+					},
+					color: "#DDEEFF"
+				},
+				xaxis: {
+					mode: "time"
+				},
+				grid: {
+					show: false
+				},
+				legend: {
+					show: false
+				}
+			});
+
+		</script>
+	</td>
 </tr>

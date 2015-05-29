@@ -294,4 +294,14 @@ class ForumDraad extends PersistentEntity {
 		return $this->aantal_ongelezen_posts;
 	}
 
+	public function getStats() {
+		return ForumPostsModel::instance()->getStatsVoorDraad($this);
+	}
+
+	public function getStatsJson() {
+		require_once 'view/FlotTimeSeries.class.php';
+		$formatter = new FlotTimeSeries(array($this->getStats()));
+		return $formatter->getJson($formatter->getModel());
+	}
+
 }
