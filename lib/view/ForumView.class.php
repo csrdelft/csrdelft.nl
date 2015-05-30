@@ -103,15 +103,17 @@ class ForumDeelView extends ForumView {
 			}
 			$dropdown .= '</optgroup>';
 		}
-
 		foreach (MenuModel::instance()->getMenu('remotefora')->getChildren() as $remotecat) {
-			$dropdown .= '<optgroup label="' . $remotecat->tekst . '">';
-			foreach ($remotecat->getChildren() as $remoteforum) {
-				$dropdown .= '<option value="' . $remoteforum->link . '">' . $remoteforum->tekst . '</option>';
+			if ($remotecat->magBekijken()) {
+				$dropdown .= '<optgroup label="' . $remotecat->tekst . '">';
+				foreach ($remotecat->getChildren() as $remoteforum) {
+					if ($remoteforum->magBekijken()) {
+						$dropdown .= '<option value="' . $remoteforum->link . '">' . $remoteforum->tekst . '</option>';
+					}
+				}
+				$dropdown .= '</optgroup>';
 			}
-			$dropdown .= '</optgroup>';
 		}
-
 		$dropdown .='</select>';
 		return $dropdown;
 	}
