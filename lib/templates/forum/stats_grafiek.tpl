@@ -74,28 +74,41 @@
 		};
 		var plot = $.plot("#details", data, options);
 
+		var getMaxY = function (rangeFrom, rangeTo) {
+			var maxy = 0;
+			$.each(data, function (key, val) {
+				$.each(val['data'], function () {
+					if (this[0] > rangeFrom && this[0] < rangeTo) {
+						maxy = this[1] > maxy ? this[1] : maxy;
+					}
+				});
+			});
+			return maxy;
+		};
+
 		// now connect the two
 
 		$("#details").bind("plotselected", function (event, ranges) {
 
 			// do the zooming
 			$.each(plot.getXAxes(), function (_, axis) {
-				var options = axis.options;
-				options.min = ranges.xaxis.from;
-				options.max = ranges.xaxis.to;
+				axis.options.min = ranges.xaxis.from;
+				axis.options.max = ranges.xaxis.to;
 			});
+
 			// update scale
+			var maxy = 1.05 * getMaxY(ranges.xaxis.from, ranges.xaxis.to);
+
 			$.each(plot.getYAxes(), function (_, axis) {
-				var options = axis.options;
-				options.min = ranges.yaxis.from;
-				options.max = ranges.yaxis.to;
+				axis.options.min = 0;
+				axis.options.max = maxy;
 			});
+
 			plot.setupGrid();
 			plot.draw();
 			plot.clearSelection();
 
 			// don't fire event on the overview to prevent eternal loop
-
 			overview.setSelection(ranges, true);
 		});
 
