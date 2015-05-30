@@ -849,12 +849,13 @@ class SterrenField extends FloatField {
 	public $click_submit = false;
 	public $reset;
 	public $half;
-	public $hints = array('1 ster', '2 sterren', '3 sterren', '4 sterren', '5 sterren');
+	public $hints;
 
 	public function __construct($name, $value, $description, $max_stars = 5, $half = false, $reset = false) {
 		parent::__construct($name, $value, $description, $half ? 1 : 0, 1, $max_stars);
 		$this->reset = $reset;
 		$this->half = $half;
+		$this->hints = array_fill(0, $max_stars, '');
 	}
 
 	public function getHtml() {
@@ -872,7 +873,8 @@ class SterrenField extends FloatField {
 			'readOnly'		 => (boolean) $this->readonly,
 			'cancel'		 => (boolean) $this->reset,
 			'cancelHint'	 => 'Wis beoordeling',
-			'cancelPlace'	 => 'right'
+			'cancelPlace'	 => 'right',
+			'noRatedMsg'	 => ''
 		));
 		$js = parent::getJavascript() . <<<JS
 
