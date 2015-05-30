@@ -11,7 +11,7 @@
 				</ul>
 			</li>
 		{else}
-			<li><a href="{$item->link}">{$item->tekst}</a></li>
+			<li><a href="{$item->link}"{if startsWith($item->link, 'http')} target="_blank"{/if}>{$item->tekst}</a></li>
 		{/if}
 	{/if}
 {/foreach}
