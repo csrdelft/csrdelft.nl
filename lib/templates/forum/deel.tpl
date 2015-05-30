@@ -56,6 +56,7 @@
 					{$deel->omschrijving}
 
 					{if !isset($deel->forum_id) AND LoginModel::mag('P_LOGGED_IN')}
+						Berichten per dag: (sleep om te zoomen)
 						<div class="grafiek">
 							{include file='forum/stats_grafiek.tpl'}
 						</div>
