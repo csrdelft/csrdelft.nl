@@ -14,7 +14,7 @@ class FlotTimeSeries extends JsonResponse {
 			$entry = array();
 			foreach ($data as $row) {
 				if (isset($row['timestamp'], $row['count'])) {
-					$entry[] = array((int) $row['timestamp'], (int) $row['count']);
+					$entry[] = array((int) $row['timestamp'] * 1000, (int) $row['count']);
 				} else {
 					//var_dump($row);
 				}

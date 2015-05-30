@@ -33,42 +33,20 @@
 			return markings;
 		}
 
-		var plot = $.plot("#placeholder", data, {
-			legend: {
-				sorted: function (a, b) {
-					// sort alphabetically in ascending order
-					return a.label === b.label ? 0 : (a.label > b.label ? 1 : -1);
-				}
-			},
+
+		var options = {
 			grid: {
-				markings: weekendAreas
+				markings: weekendAreas,
+				backgroundColor: "#FFFFFF"
 			},
 			selection: {
 				mode: "x"
 			},
 			xaxis: {
 				mode: "time",
-				timeformat: "%d %b 20%y",
+				timeformat: "%d %b", // 20%y
 				monthNames: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
 				tickLength: 5
-			},
-			yaxis: {
-				// log scale
-				transform: function (v) {
-					return Math.log(v);
-				},
-				inverseTransform: function (v) {
-					return Math.exp(v);
-				}
-			}
-		});
-
-		var overview = $.plot("#overview", data, {
-			legend: {
-				show: false
-			},
-			selection: {
-				mode: "x"
 			},
 			series: {
 				lines: {
@@ -76,33 +54,41 @@
 					lineWidth: 1
 				},
 				shadowSize: 0
-			},
-			xaxis: {
-				ticks: [],
-				mode: "time"
-			},
-			yaxis: {
-				ticks: [],
-				// log scale
-				transform: function (v) {
-					return Math.log(v);
-				},
-				inverseTransform: function (v) {
-					return Math.exp(v);
-				}
 			}
+		};
 
-		});
+		// toon totaal alleen in overview
+		var totaal = [data[0]];
+		data.splice(0, 1);
+
+		options["legend"] = {
+			show: false
+		};
+		var overview = $.plot("#overview", totaal, options);
+
+		options["legend"] = {
+			sorted: function (a, b) {
+				// sort alphabetically in ascending order
+				return a.label === b.label ? 0 : (a.label > b.label ? 1 : -1);
+			}
+		};
+		var plot = $.plot("#details", data, options);
 
 		// now connect the two
 
-		$("#placeholder").bind("plotselected", function (event, ranges) {
+		$("#details").bind("plotselected", function (event, ranges) {
 
 			// do the zooming
 			$.each(plot.getXAxes(), function (_, axis) {
-				var opts = axis.options;
-				opts.min = ranges.xaxis.from;
-				opts.max = ranges.xaxis.to;
+				var options = axis.options;
+				options.min = ranges.xaxis.from;
+				options.max = ranges.xaxis.to;
+			});
+			// update scale
+			$.each(plot.getYAxes(), function (_, axis) {
+				var options = axis.options;
+				options.min = ranges.yaxis.from;
+				options.max = ranges.yaxis.to;
 			});
 			plot.setupGrid();
 			plot.draw();
@@ -125,10 +111,12 @@
 
 </script>
 
-<div class="grafiek-container" style="height: 450px;">
-	<div id="placeholder" class="grafiek-placeholder"></div>
-</div>
+<br>
 
-<div class="grafiek-container" style="height: 150px;">
-	<div id="overview" class="grafiek-placeholder"></div>
-</div>
+<div id="overview" style="height: 200px;"></div>
+
+<br>
+
+<div id="details" style="height: 500px;"></div>
+
+<br>

@@ -1197,19 +1197,19 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 
 	public function getStatsTotal() {
 		$terug = getDateTime(strtotime(Instellingen::get('forum', 'grafiek_stats_periode')));
-		$fields = array('(UNIX_TIMESTAMP(DATE(datum_tijd)) * 1000) AS timestamp', 'COUNT(*) AS count'); // flot date format
-		return Database::sqlSelect($fields, $this->getTableName(), 'datum_tijd > ?', array($terug), 'timestamp');
+		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
+		return Database::sqlSelect($fields, $this->orm->getTableName(), 'datum_tijd > ?', array($terug), 'timestamp');
 	}
 
 	public function getStatsVoorForumDeel(ForumDeel $deel) {
 		$terug = getDateTime(strtotime(Instellingen::get('forum', 'grafiek_stats_periode')));
-		$fields = array('(UNIX_TIMESTAMP(DATE(p.datum_tijd)) * 1000) AS timestamp', 'COUNT(*) AS count'); // flot date format
+		$fields = array('UNIX_TIMESTAMP(DATE(p.datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
 		return Database::sqlSelect($fields, $this->orm->getTableName() . ' AS p RIGHT JOIN ' . ForumDradenModel::getTableName() . ' AS d ON p.draad_id = d.draad_id', 'd.forum_id = ? AND p.datum_tijd > ?', array($deel->forum_id, $terug), 'timestamp');
 	}
 
 	public function getStatsVoorDraad(ForumDraad $draad) {
 		$terug = getDateTime(strtotime(Instellingen::get('forum', 'grafiek_draad_recent'), strtotime($draad->laatst_gewijzigd)));
-		$fields = array('(UNIX_TIMESTAMP(DATE(datum_tijd)) * 1000) AS timestamp', 'COUNT(*) AS count'); // flot date format
+		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
 		return Database::sqlSelect($fields, $this->orm->getTableName(), 'draad_id = ? AND datum_tijd > ?', array($draad->draad_id, $terug), 'timestamp');
 	}
 
