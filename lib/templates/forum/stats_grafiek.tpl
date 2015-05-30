@@ -116,10 +116,6 @@
 			plot.setSelection(ranges);
 		});
 
-		// Add the Flot version string to the footer
-
-		$("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
-
 	}).fail(alert);
 
 </script>
