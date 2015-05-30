@@ -33,13 +33,14 @@ mijn_maaltijden.tpl	|	P.W.G. Brussee (brussee@live.nl)
 		</tr>
 	</thead>
 	<tbody>
-		{foreach from=$maaltijden item=maaltijd}
-			{assign var="mid" value=$maaltijd->getMaaltijdId()}
+		{foreach from=$maaltijden key=mid item=maaltijd}
 			{include file='maalcie/maaltijd/mijn_maaltijd_lijst.tpl' aanmelding=$aanmeldingen.$mid}
 		{/foreach}
 	</tbody>
 </table>
-<h3>Maaltijden beoordelen</h3>
+
+<h3>Maaltijd beoordelen</h3>
+Om inzicht te krijgen in de kwantiteit en kwaliteit van de maaltijden kunt u hier uw terukoppeling geven.
 <table id="beoordelingen-tabel" class="maalcie-tabel">
 	<thead>
 		<tr>
@@ -50,8 +51,7 @@ mijn_maaltijden.tpl	|	P.W.G. Brussee (brussee@live.nl)
 		</tr>
 	</thead>
 	<tbody>
-		{foreach from=$recent_bezocht item=maaltijd}
-			{assign var="mid" value=$maaltijd->getMaaltijdId()}
+		{foreach from=$beoordelen key=mid item=maaltijd}
 			<tr>
 				<td>{$maaltijd->getDatum()|date_format:"%a %e %b"}</td>
 				<td>{$maaltijd->getTitel()}</td>

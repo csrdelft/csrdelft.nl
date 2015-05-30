@@ -13,11 +13,11 @@ require_once 'view/maalcie/forms/MaaltijdBeoordelingForm.class.php';
 class MijnMaaltijdenView extends SmartyTemplateView {
 
 	private $aanmeldingen;
-	private $recent_bezocht;
+	private $beoordelen;
 	private $kwantiteit_forms;
 	private $kwaliteit_forms;
 
-	public function __construct(array $maaltijden, array $aanmeldingen = null, array $recent_bezocht = array()) {
+	public function __construct(array $maaltijden, array $aanmeldingen = null, array $beoordelen = array()) {
 		parent::__construct($maaltijden, 'Maaltijdenketzer');
 		$this->aanmeldingen = $aanmeldingen;
 		foreach ($this->model as $maaltijd) {
@@ -26,9 +26,9 @@ class MijnMaaltijdenView extends SmartyTemplateView {
 				$this->aanmeldingen[$mid] = false;
 			}
 		}
-		$this->recent_bezocht = $recent_bezocht;
+		$this->beoordelen = $beoordelen;
 		$this->kwantiteit_forms = array();
-		foreach ($recent_bezocht as $maaltijd) {
+		foreach ($beoordelen as $maaltijd) {
 			$beoordeling = MaaltijdBeoordelingenModel::instance()->find('maaltijd_id = ? AND uid = ?', array($maaltijd->getMaaltijdId(), LoginModel::getUid()))->fetch();
 			if (!$beoordeling) {
 				$beoordeling = MaaltijdBeoordelingenModel::instance()->nieuw($maaltijd);
@@ -42,7 +42,7 @@ class MijnMaaltijdenView extends SmartyTemplateView {
 		$this->smarty->assign('standaardprijs', intval(Instellingen::get('maaltijden', 'standaard_prijs')));
 		$this->smarty->assign('maaltijden', $this->model);
 		$this->smarty->assign('aanmeldingen', $this->aanmeldingen);
-		$this->smarty->assign('recent_bezocht', $this->recent_bezocht);
+		$this->smarty->assign('beoordelen', $this->beoordelen);
 		$this->smarty->assign('kwantiteit', $this->kwantiteit_forms);
 		$this->smarty->assign('kwaliteit', $this->kwaliteit_forms);
 
