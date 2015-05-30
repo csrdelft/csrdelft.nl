@@ -29,7 +29,7 @@ class MaaltijdBeoordelingenModel extends PersistenceModel {
 	public function getNormalizedBeoordelingen(Maaltijd $maaltijd) {
 		$beoordelingen = $this->find('maaltijd_id = ?', array($maaltijd->getMaaltijdId()));
 		foreach ($beoordelingen as $b) {
-			$normalize = Database::sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), $this->getTableName(), 'uid = ?', array($b->uid));
+			$normalize = Database::sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), $this->orm->getTableName(), 'uid = ?', array($b->uid));
 			foreach ($normalize as $avg) {
 				$b->kwantiteit /= $avg[0];
 				$b->kwaliteit /= $avg[1];
