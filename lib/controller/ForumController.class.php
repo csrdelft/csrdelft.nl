@@ -129,7 +129,13 @@ class ForumController extends Controller {
 	}
 
 	public function grafiekdata() {
-		$this->view = new FlotDataResponse(ForumPostsModel::instance()->getStats(Instellingen::get('forum', 'grafiek_periode')));
+		$model = ForumPostsModel::instance();
+		$series['Totaal'] = $model->getStatsTotal();
+		foreach (ForumDelenModel::instance()->getForumDelenVoorLid() as $deel) {
+			$series[$deel->titel] = $model->getStatsVoorForumDeel($deel);
+		}
+		require_once 'view/FlotTimeSeries.class.php';
+		$this->view = new FlotTimeSeries($series);
 	}
 
 	/**
