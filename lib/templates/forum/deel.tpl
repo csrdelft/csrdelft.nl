@@ -51,7 +51,7 @@
 		<tr>
 			<td colspan="3">
 				<div class="forumdeel-omschrijving">
-					<div class="float-right">{$breadcrumbs}</div>
+					<div class="breadcrumbs float-right">{$breadcrumbs}</div>
 					<h2>{$deel->titel}</h2>
 					{$deel->omschrijving}
 				</div>
