@@ -8,10 +8,10 @@ require_once 'model/maalcie/CorveeTakenModel.class.php';
 
 /**
  * AgendaModel.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * De Agenda bevat alle Agendeerbare objecten die voorkomen in de webstek.
  */
 class AgendaModel extends PersistenceModel {
@@ -51,7 +51,10 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Activiteiten
-		$activiteiten = ActiviteitenModel::instance()->find('in_agenda = TRUE AND (begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
+		$activiteiten = ActiviteitenModel::instance()->find(
+		  'in_agenda = TRUE AND (
+		    (begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)
+		  )', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
 		foreach ($activiteiten as $activiteit) {
 			// Alleen bekijken in agenda (leden bekijken mag dus niet)
 			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(A::Bekijken)) {
