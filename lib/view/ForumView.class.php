@@ -88,7 +88,10 @@ class ForumDeelView extends ForumView {
 		if ($this->model->categorie_id) {
 			$dropdown .= ' » ' . $this->model->getForumCategorie()->titel;
 		}
-		$dropdown .= ' » <select name="forum_id" onchange="window.location.href=this.value;"><option value="/forum/recent">Recent gewijzigd</option>';
+		$js = "if (this.value.substr(0,4) === 'http') { window.open(this.value); } else { window.location.href = this.value; }";
+		$dropdown .= ' » <select name="forum_id" onchange="' . $js . '">';
+		//$dropdown .= '<option value="/forum/recent/belangrijk">Belangrijk recent gewijzigd</option>';
+		$dropdown .= '<option value="/forum/recent">Recent gewijzigd</option>'; //FIXME: selected
 		foreach (ForumModel::instance()->getForumIndelingVoorLid() as $cat) {
 			$dropdown .= '<optgroup label="' . $cat->titel . '">';
 			foreach ($cat->getForumDelen() as $newDeel) {
@@ -99,6 +102,17 @@ class ForumDeelView extends ForumView {
 				$dropdown .= '>' . $newDeel->titel . '</option>';
 			}
 			$dropdown .= '</optgroup>';
+		}
+		foreach (MenuModel::instance()->getMenu('remotefora')->getChildren() as $remotecat) {
+			if ($remotecat->magBekijken()) {
+				$dropdown .= '<optgroup label="' . $remotecat->tekst . '">';
+				foreach ($remotecat->getChildren() as $remoteforum) {
+					if ($remoteforum->magBekijken()) {
+						$dropdown .= '<option value="' . $remoteforum->link . '">' . $remoteforum->tekst . '</option>';
+					}
+				}
+				$dropdown .= '</optgroup>';
+			}
 		}
 		$dropdown .='</select>';
 		return $dropdown;

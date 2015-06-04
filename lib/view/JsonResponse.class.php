@@ -18,10 +18,14 @@ class JsonResponse implements View {
 		$this->code = $code;
 	}
 
+	public function getJson($entity) {
+		return json_encode($entity);
+	}
+
 	public function view() {
 		http_response_code($this->code);
 		header('Content-Type: application/json');
-		echo json_encode($this->model);
+		echo $this->getJson($this->model);
 	}
 
 	public function getModel() {
@@ -34,36 +38,6 @@ class JsonResponse implements View {
 
 	public function getTitel() {
 		return null;
-	}
-
-}
-
-class FlotDataResponse extends JsonResponse {
-
-	public function getJson($data) {
-		$array = array();
-		foreach ($data as $key => $entry) {
-			if (is_int($key)) {
-				$array[$key] = (int) $entry;
-			}
-		}
-		return json_encode($array);
-	}
-
-	public function view() {
-		http_response_code($this->code);
-		header('Content-Type: application/json');
-		echo '[' . "\n";
-		$comma = false;
-		foreach ($this->model as $data) {
-			if ($comma) {
-				echo ",\n";
-			} else {
-				$comma = true;
-			}
-			echo $this->getJson($data);
-		}
-		echo "\n]";
 	}
 
 }

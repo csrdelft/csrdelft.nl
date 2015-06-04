@@ -91,6 +91,9 @@ class MenuModel extends CachedPersistenceModel {
 						$item->children[] = $subitem;
 					}
 				}
+				foreach (MenuModel::instance()->getMenu('remotefora')->getChildren() as $remotecat) {
+					$parent->children[] = $remotecat;
+				}
 				break;
 
 			case 'Documenten':

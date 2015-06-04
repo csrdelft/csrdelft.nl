@@ -26,9 +26,16 @@
 	</div>
 {/foreach}
 
-<div class="grafiek">
-	<h2>Berichten per dag</h2>
-	{if LoginModel::mag('P_LOGGED_IN')}
-		{include file='forum/stats_grafiek.tpl'}
-	{/if}
-</div>
+{foreach from=MenuModel::instance()->getMenu('remotefora')->getChildren() item=remotecat}
+	<div class="forumcategorie">
+		<h3><a name="{$remotecat->tekst}">{$remotecat->tekst}</a></h3>
+		<div class="forumdelen">
+			{foreach from=$remotecat->getChildren() item=remoteforum}
+				<div class="forumdeel bb-block col-md-2">
+					<h4><a href="{$remoteforum->link}" target="_blank">{$remoteforum->tekst}</a></h4>
+					<p class="forumdeel-omschrijving">Het forum van onze {$remotecat->tekst|lcfirst} bij {$remoteforum->tekst}.</p>
+				</div>
+			{/foreach}
+		</div>
+	</div>
+{/foreach}

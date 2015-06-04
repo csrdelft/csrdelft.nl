@@ -2,8 +2,6 @@
 
 	$.post('/forum/grafiekdata').done(function (data, textStatus, jqXHR) {
 
-		var d = data;
-
 		// helper for returning the weekends in a period
 
 		function weekendAreas(axes) {
@@ -35,61 +33,82 @@
 			return markings;
 		}
 
+
 		var options = {
-			xaxis: {
-				mode: "time",
-				timeformat: "%d %b 20%y",
-				monthNames: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
-				tickLength: 5
+			grid: {
+				markings: weekendAreas,
+				backgroundColor: "#FFFFFF"
 			},
 			selection: {
 				mode: "x"
 			},
-			grid: {
-				markings: weekendAreas
-			}
-		};
-
-		var plot = $.plot("#placeholder", [d], options);
-
-		var overview = $.plot("#overview", [d], {
+			xaxis: {
+				mode: "time",
+				timeformat: "%d %b", // 20%y
+				monthNames: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
+				tickLength: 5
+			},
 			series: {
 				lines: {
 					show: true,
 					lineWidth: 1
 				},
 				shadowSize: 0
-			},
-			xaxis: {
-				ticks: [],
-				mode: "time"
-			},
-			yaxis: {
-				ticks: [],
-				min: 0,
-				autoscaleMargin: 0.1
-			},
-			selection: {
-				mode: "x"
 			}
-		});
+		};
+
+		// toon totaal alleen in overview
+		var totaal = [data[0]];
+		data.splice(0, 1);
+
+		options["legend"] = {
+			show: false
+		};
+		var overview = $.plot("#overview", totaal, options);
+
+		options["legend"] = {
+			sorted: function (a, b) {
+				// sort alphabetically in ascending order
+				return a.label === b.label ? 0 : (a.label > b.label ? 1 : -1);
+			}
+		};
+		var plot = $.plot("#details", data, options);
+
+		var getMaxY = function (rangeFrom, rangeTo) {
+			var maxy = 0;
+			$.each(data, function (key, val) {
+				$.each(val['data'], function () {
+					if (this[0] > rangeFrom && this[0] < rangeTo) {
+						maxy = this[1] > maxy ? this[1] : maxy;
+					}
+				});
+			});
+			return maxy;
+		};
 
 		// now connect the two
 
-		$("#placeholder").bind("plotselected", function (event, ranges) {
+		$("#details").bind("plotselected", function (event, ranges) {
 
 			// do the zooming
 			$.each(plot.getXAxes(), function (_, axis) {
-				var opts = axis.options;
-				opts.min = ranges.xaxis.from;
-				opts.max = ranges.xaxis.to;
+				axis.options.min = ranges.xaxis.from;
+				axis.options.max = ranges.xaxis.to;
 			});
+
+			// update scale
+			var maxy = 1.05 * getMaxY(ranges.xaxis.from, ranges.xaxis.to);
+
+			$.each(plot.getYAxes(), function (_, axis) {
+				axis.options.min = 0;
+				axis.options.max = maxy;
+			});
+
 			plot.setupGrid();
 			plot.draw();
 			plot.clearSelection();
 
 			// don't fire event on the overview to prevent eternal loop
-
 			overview.setSelection(ranges, true);
 		});
 
@@ -97,18 +116,16 @@
 			plot.setSelection(ranges);
 		});
 
-		// Add the Flot version string to the footer
-
-		$("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
-
 	}).fail(alert);
 
 </script>
 
-<div class="grafiek-container" style="height: 450px;">
-	<div id="placeholder" class="grafiek-placeholder"></div>
-</div>
+<br>
 
-<div class="grafiek-container" style="height: 150px;">
-	<div id="overview" class="grafiek-placeholder"></div>
-</div>
+<div id="overview" style="height: 200px;"></div>
+
+<br>
+
+<div id="details" style="height: 500px;"></div>
+
+<br>

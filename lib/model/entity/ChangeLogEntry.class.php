@@ -40,7 +40,7 @@ class ChangeLogEntry extends PersistentEntity {
 	public $new_value;
 	/**
 	 * Who did it
-	 * @var UID
+	 * @var string
 	 */
 	public $uid;
 	/**

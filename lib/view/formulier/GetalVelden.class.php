@@ -10,7 +10,7 @@
  * Bevat de uitbreidingen van TextField:
  * 
  * 	- IntField					Integers 
- * 		* DecimalField				Kommagetallen
+ * 		* FloatField				Kommagetallen
  * 			- BedragField			Bedragen met 2 cijfers achter de komma
  * 	- TelefoonField				Telefoonnummers
  */
@@ -29,7 +29,6 @@ class IntField extends InputField {
 	public $max_alert = null;
 
 	public function __construct($name, $value, $description, $min = null, $max = null) {
-
 		parent::__construct($name, $value, $description, 11);
 		if (!is_int($this->value) AND $this->value !== null) {
 			throw new Exception('value geen int');
@@ -240,7 +239,7 @@ class RequiredTelefoonField extends TelefoonField {
 /**
  * Invoeren van een decimaal getal. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
-class DecimalField extends TextField {
+class FloatField extends InputField {
 
 	public $precision;
 	public $min = null;
@@ -254,8 +253,12 @@ class DecimalField extends TextField {
 		if (!is_float($this->origvalue) AND $this->origvalue !== null) {
 			throw new Exception('origvalue geen float');
 		}
-		$this->precision = (int) $precision;
-		$this->pattern = '[0-9]*([\.|,][0-9]{' . $this->precision . '})?';
+		if (is_int($precision)) {
+			$this->precision = $precision;
+			$this->pattern = '[0-9]*([\.|,][0-9]{' . $this->precision . '})?';
+		} else {
+			$this->pattern = '[0-9]*([\.|,][0-9]*)?';
+		}
 		if ($min !== null) {
 			$this->min = (float) $min;
 		}
@@ -305,7 +308,7 @@ class DecimalField extends TextField {
 
 }
 
-class RequiredDecimalField extends DecimalField {
+class RequiredFloatField extends FloatField {
 
 	public $required = true;
 

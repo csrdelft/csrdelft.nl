@@ -124,7 +124,7 @@ class Formulier implements View, Validator {
 					break;
 				case T::Integer: $class .= 'IntField';
 					break;
-				case T::Float: $class .= 'DecimalField';
+				case T::Float: $class .= 'FloatField';
 					break;
 				case T::Date: $class .= 'DateField';
 					break;

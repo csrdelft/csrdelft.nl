@@ -822,7 +822,7 @@ HTML;
 		require_once 'view/maalcie/MaaltijdKetzerView.class.php';
 		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginModel::getUid()); // met filter
+				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(LoginModel::getUid()); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
 					return 'Geen aankomende maaltijd.';
@@ -847,7 +847,7 @@ HTML;
 		if (!isset($maaltijd)) {
 			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 		}
-		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginModel::getUid());
+		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), LoginModel::getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		} else {
@@ -857,7 +857,7 @@ HTML;
 		$result = $ketzer->getHtml();
 
 		if ($maaltijd2 !== null) {
-			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginModel::getUid());
+			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), LoginModel::getUid());
 			if (empty($aanmeldingen2)) {
 				$aanmelding2 = null;
 			} else {

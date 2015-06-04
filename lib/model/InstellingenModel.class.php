@@ -65,7 +65,8 @@ class Instellingen extends CachedPersistenceModel {
 		),
 		'forum'			 => array(
 			'reageren_tijd'					 => '-2 minutes',
-			'grafiek_periode'				 => '-3 months',
+			'grafiek_draad_recent'			 => '-1 month',
+			'grafiek_stats_periode'			 => '-6 months',
 			'externen_geentoegang_gesloten'	 => '-1 year'
 		),
 		'gesprekken'	 => array(
@@ -75,6 +76,7 @@ class Instellingen extends CachedPersistenceModel {
 			'slow_interval_seconds'		 => '30'
 		),
 		'maaltijden'	 => array(
+			'beoordeling_periode'				 => '-1 week',
 			'budget_maalcie'					 => '100',
 			'toon_ketzer_vooraf'				 => '+1 month',
 			'recent_lidprofiel'					 => '-2 months',

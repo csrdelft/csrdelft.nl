@@ -60,7 +60,7 @@ class MaaltijdenModel {
 			throw new Exception('Invalid timestamp: $tot getMaaltijdenVoorAgenda()');
 		}
 		$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
-		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginModel::getUid());
+		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, LoginModel::getUid());
 		return $maaltijden;
 	}
 
@@ -81,8 +81,22 @@ class MaaltijdenModel {
 	 * 
 	 * @return Maaltijd[]
 	 */
-	public static function getRecentBezochteMaaltijden() {
-		$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', strtotime(Instellingen::get('maaltijden', 'recent_lidprofiel'))), date('Y-m-d')));
+	public static function getRecentBezochteMaaltijden($limit = null) {
+		$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', strtotime(Instellingen::get('maaltijden', 'recent_lidprofiel'))), date('Y-m-d')), $limit);
+		$maaltijdenById = array();
+		foreach ($maaltijden as $maaltijd) {
+			$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;
+		}
+		return $maaltijdenById;
+	}
+
+	/**
+	 * Haalt de maaltijden in het verleden op voor de beoordelings-periode.
+	 * 
+	 * @return Maaltijd[]
+	 */
+	public static function getBeoordeelbareMaaltijden() {
+		$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', strtotime(Instellingen::get('maaltijden', 'beoordeling_periode'))), date('Y-m-d')));
 		$maaltijdenById = array();
 		foreach ($maaltijden as $maaltijd) {
 			$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;
@@ -97,7 +111,7 @@ class MaaltijdenModel {
 	 */
 	public static function getMaaltijdVoorKetzer($mid) {
 		$maaltijden = array(self::getMaaltijd($mid));
-		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, \LoginModel::getUid());
+		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, LoginModel::getUid());
 		if (!empty($maaltijden)) {
 			return reset($maaltijden);
 		}
