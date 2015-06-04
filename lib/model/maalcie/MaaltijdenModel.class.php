@@ -81,22 +81,8 @@ class MaaltijdenModel {
 	 * 
 	 * @return Maaltijd[]
 	 */
-	public static function getRecentBezochteMaaltijden($limit = null) {
-		$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', strtotime(Instellingen::get('maaltijden', 'recent_lidprofiel'))), date('Y-m-d')), $limit);
-		$maaltijdenById = array();
-		foreach ($maaltijden as $maaltijd) {
-			$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;
-		}
-		return $maaltijdenById;
-	}
-
-	/**
-	 * Haalt de maaltijden in het verleden op voor de beoordelings-periode.
-	 * 
-	 * @return Maaltijd[]
-	 */
-	public static function getBeoordeelbareMaaltijden() {
-		$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', strtotime(Instellingen::get('maaltijden', 'beoordeling_periode'))), date('Y-m-d')));
+	public static function getRecenteMaaltijden($timestamp, $limit = null) {
+		$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $timestamp), date('Y-m-d')), $limit);
 		$maaltijdenById = array();
 		foreach ($maaltijden as $maaltijd) {
 			$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;

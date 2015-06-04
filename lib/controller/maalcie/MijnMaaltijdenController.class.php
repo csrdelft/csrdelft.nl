@@ -50,8 +50,9 @@ class MijnMaaltijdenController extends AclController {
 	public function ketzer() {
 		$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(LoginModel::getUid());
 		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($maaltijden, LoginModel::getUid());
-		$beoordelen = MaaltijdenModel::getBeoordeelbareMaaltijden();
-		$this->view = new MijnMaaltijdenView($maaltijden, $aanmeldingen, $beoordelen);
+		$timestamp = strtotime(Instellingen::get('maaltijden', 'beoordeling_periode'));
+		$recent = MaaltijdAanmeldingenModel::getRecenteAanmeldingenVoorLid(LoginModel::getUid(), $timestamp);
+		$this->view = new MijnMaaltijdenView($maaltijden, $aanmeldingen, $recent);
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 	}
