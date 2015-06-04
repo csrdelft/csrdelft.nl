@@ -13,28 +13,30 @@ require_once 'view/maalcie/forms/MaaltijdBeoordelingForm.class.php';
 class MijnMaaltijdenView extends SmartyTemplateView {
 
 	private $aanmeldingen;
-	private $beoordelen;
-	private $kwantiteit_forms;
-	private $kwaliteit_forms;
+	private $beoordelen = array();
+	private $kwantiteit_forms = array();
+	private $kwaliteit_forms = array();
 
-	public function __construct(array $maaltijden, array $aanmeldingen = null, array $beoordelen = array()) {
+	public function __construct(array $maaltijden, array $aanmeldingen = null, array $recent) {
 		parent::__construct($maaltijden, 'Maaltijdenketzer');
 		$this->aanmeldingen = $aanmeldingen;
+
 		foreach ($this->model as $maaltijd) {
 			$mid = $maaltijd->getMaaltijdId();
 			if (!array_key_exists($mid, $this->aanmeldingen)) {
 				$this->aanmeldingen[$mid] = false;
 			}
 		}
-		$this->beoordelen = $beoordelen;
-		$this->kwantiteit_forms = array();
-		foreach ($beoordelen as $maaltijd) {
-			$beoordeling = MaaltijdBeoordelingenModel::instance()->find('maaltijd_id = ? AND uid = ?', array($maaltijd->getMaaltijdId(), LoginModel::getUid()))->fetch();
+		foreach ($recent as $aanmelding) {
+			$maaltijd = $aanmelding->getMaaltijd();
+			$mid = $aanmelding->getMaaltijdId();
+			$this->beoordelen[$mid] = $maaltijd;
+			$beoordeling = MaaltijdBeoordelingenModel::instance()->find('maaltijd_id = ? AND uid = ?', array($mid, LoginModel::getUid()))->fetch();
 			if (!$beoordeling) {
 				$beoordeling = MaaltijdBeoordelingenModel::instance()->nieuw($maaltijd);
 			}
-			$this->kwantiteit_forms[$maaltijd->getMaaltijdId()] = new MaaltijdKwantiteitBeoordelingForm($maaltijd, $beoordeling);
-			$this->kwaliteit_forms[$maaltijd->getMaaltijdId()] = new MaaltijdKwaliteitBeoordelingForm($maaltijd, $beoordeling);
+			$this->kwantiteit_forms[$mid] = new MaaltijdKwantiteitBeoordelingForm($maaltijd, $beoordeling);
+			$this->kwaliteit_forms[$mid] = new MaaltijdKwaliteitBeoordelingForm($maaltijd, $beoordeling);
 		}
 	}
 

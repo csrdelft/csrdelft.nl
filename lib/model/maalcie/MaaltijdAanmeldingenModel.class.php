@@ -180,8 +180,8 @@ class MaaltijdAanmeldingenModel {
 		return $lijst;
 	}
 
-	public static function getRecenteAanmeldingenVoorLid($uid) {
-		$maaltijdenById = MaaltijdenModel::getRecentBezochteMaaltijden();
+	public static function getRecenteAanmeldingenVoorLid($uid, $timestamp) {
+		$maaltijdenById = MaaltijdenModel::getRecenteMaaltijden($timestamp);
 		return MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($maaltijdenById, $uid);
 	}
 
