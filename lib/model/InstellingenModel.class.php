@@ -96,6 +96,8 @@ class Instellingen extends CachedPersistenceModel {
 <li>Maaltijdprijs: &euro; MAALTIJDPRIJS</li>
 <li>Niet betaald = nb</li>
 <li>Betaald met machtiging = omcirkel "m" en vul bedrag in.</li>
+<li>Contant betaald = bedrag invullen.</li>
+<li>Schrijf duidelijk in het hokje hoeveel je in de helm hebt gegooid.</li>
 <li>Bevat derde kolom "ok"? Dan heeft u nog voldoende tegoed voor deze maaltijd.</li>
 <li>Als u onvoldoende saldo hebt bij de MaalCie en u betaalt niet voor deze maaltijd dan krijgt u een boete van 20 cent, 1 euro of 2 euro, afhankelijk van hoe negatief uw saldo is!</li>
 </ul>'),
