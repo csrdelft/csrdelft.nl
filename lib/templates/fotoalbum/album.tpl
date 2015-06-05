@@ -313,11 +313,11 @@
 				});
 				$('#gallery').css('max-height', 0);
 				container = $('div.jgallery');
+				container.addClass('noselect');
 				// foto url
-				container.find('div.title').off();
-				container.find('div.title').on('click', function (event) {
+				container.find('div.title').off().on('click', function (event) {
 					selectText(this);
-				});
+				}).addClass('select-text');
 				// zoom full resolution
 				var showHiRes = function () {
 					var zoom = container.find('div.zoom-container');
