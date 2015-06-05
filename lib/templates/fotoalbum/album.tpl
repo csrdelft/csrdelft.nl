@@ -3,13 +3,25 @@
 		try {
 			$(function () {
 				$('#gallery').jGallery({
+					"width": "100%",
 					"height": "897px",
 					"mode": "standard",
 					"canChangeMode": true,
+					"swipeEvents": true,
+					"browserHistory": true,
+					"disabledOnIE8AndOlder": true,
+					"preloadAll": false,
+					"maxMobileWidth": 767,
+					"draggableZoomHideNavigationOnMobile": true,
+					"autostart": true,
+					"autostartAtAlbum": 1,
 					"canZoom": true,
+					"draggableZoom": true,
+					"zoomSize": "fit",
 					"zoomSize:": "original",
 					"backgroundColor": "fff",
 					"textColor": "193b61",
+					"thumbnails": true,
 					"thumbType": "image",
 					"thumbWidth": 150,
 					"thumbHeight": 150,
@@ -18,15 +30,43 @@
 					"thumbnailsPosition": "bottom",
 					"hideThumbnailsOnInit": false,
 					"canMinimalizeThumbnails": true,
+					"thumbnailsHideOnMobile": true,
+					"thumbnailsFullScreen": true,
 					"transition": "moveToLeft_scaleUp",
 					"transitionBackward": "moveToRight_scaleUp",
+					"transitionTimingFunction": "cubic-bezier(0,1,1,1)",
+					"transitionDuration": "0.7s",
 					"transitionCols": "1",
 					"transitionRows": "1",
 					"title": true,
 					"titleExpanded": false,
+					"tooltips": true,
+					"tooltipZoom": "Zoom",
+					"tooltipToggleThumbnails": "Toggle thumbnails",
 					"tooltipSeeAllPhotos": "Grid",
 					"tooltipSeeOtherAlbums": "Toon sub-albums",
-					"slideshowInterval": "3s"
+					"tooltipSlideshow": "Slideshow",
+					"slideshowInterval": "3s",
+					"slideshow": true,
+					"slideshowAutostart": false,
+					"slideshowRandom": false,
+					"slideshowCanRandom": true,
+					"tooltipRandom": "Random",
+					"tooltipFullScreen": "Full screen",
+					"tooltipClose": "Close",
+					"canClose": false,
+					showPhoto: function () {
+					},
+					showGallery: function () {
+					},
+					initGallery: function () {
+					},
+					closeGallery: function () {
+					},
+					beforeLoadPhoto: function () {
+					},
+					afterLoadPhoto: function () {
+					},
 				});
 				$('#gallery').css('max-height', 0);
 				var tagMode = false;
