@@ -6,6 +6,7 @@
 		<li><a href="/corveerooster">Corveerooster</a></li>
 		<li><a href="/corvee">Mijn corveeoverzicht</a></li>
 		<li><a href="/corveevoorkeuren">Mijn voorkeuren</a></li>
+{if LoginModel::mag('P_MAAL_MOD,P_CORVEE_MOD')}
 		<li>
 			<select onchange="window.location.href = this.value;">
 				<option value="">Beheermenu</option>
@@ -26,6 +27,7 @@
 				</optgroup>
 			</select>
 		</li>
+{/if}
 	</ul>
 </div>
 <hr/>
