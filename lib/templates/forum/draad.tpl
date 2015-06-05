@@ -109,7 +109,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 			{* als posts gewijzigd zijn zonder draad gewijzigd te triggeren voorkomt $draad->isOngelezen() dat de gele lijn wordt getoond *}
 			{if !$vanaf AND $draad_ongelezen AND (!$gelezen_moment OR strtotime($post->laatst_gewijzigd) > $gelezen_moment)}
 				{assign var=vanaf value=true}
-				<tr class="tussenschot ongelezenvanaf" title="Ongelezen reacties vanaf hier">
+				<tr class="tussenschot ongelezenvanaf">
 					<td colspan="2">
 						<a id="ongelezen">&nbsp;</a>
 					</td>
@@ -136,7 +136,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 
 		{* Geen ongelezen berichten op de laatste pagina betekend in het geheel geen ongelezen berichten *}
 		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() === ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
-			<tr class="tussenschot ongelezenvanaf" title="Geen ongelezen berichten">
+			<tr class="tussenschot ongelezenvanaf">
 				<td colspan="2">
 					<a id="ongelezen">&nbsp;</a>
 				</td>
