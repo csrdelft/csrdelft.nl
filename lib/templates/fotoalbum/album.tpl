@@ -178,9 +178,13 @@
 					});
 					tagDiv.bind('mousedown.newtag', function (e1) {
 						var img = container.find('img.active');
+						var prevX = e1.pageX;
+						var prevY = e1.pageY;
 						$(window).bind('mousemove.newtag', function (e2) {
-							newTag.size += (e2.pageX - e1.pageX) * 10 / img.width();
-							newTag.size += (e2.pageY - e1.pageY) * 10 / img.height();
+							newTag.size += (e2.pageX - prevX) * 100 / img.width();
+							newTag.size += (e2.pageY - prevY) * 100 / img.height();
+							prevX = e2.pageX;
+							prevY = e2.pageY;
 							if (newTag.size < 1) {
 								newTag.size = 1;
 							}
