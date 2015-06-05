@@ -40,7 +40,7 @@ mijn_maaltijden.tpl	|	P.W.G. Brussee (brussee@live.nl)
 </table>
 
 <h3>Maaltijd beoordelen</h3>
-Om inzicht te krijgen in de kwantiteit en kwaliteit van de maaltijden kunt u hier uw terukoppeling geven.
+Om inzicht te krijgen in de kwantiteit en kwaliteit van de maaltijden kunt u hier uw terugkoppeling geven over de recente maaltijden die u bezocht heeft.
 <table id="beoordelingen-tabel" class="maalcie-tabel">
 	<thead>
 		<tr>
