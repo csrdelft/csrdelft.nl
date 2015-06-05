@@ -190,7 +190,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 					$groepid = '';
 				}
 
-				
+
 				try {
 					return $groeptag->getHtml();
 				} catch (Exception $e) {
@@ -1029,6 +1029,9 @@ HTML;
 							$view->setBig($arguments['big']);
 						}
 					}
+				}
+				if (isset($arguments['height'])) {
+					return $fotoalbumtag->getHtml($arguments['height']);
 				}
 				return $fotoalbumtag->getHtml();
 		}

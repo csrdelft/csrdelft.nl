@@ -207,14 +207,9 @@ class CsrBB extends eamBBParser {
 			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
 		}
 		if (isset($arguments['slider']) AND $arguments['slider'] === 'homepage') {
-			if (isset($arguments['height'])) {
-				$view = new FotoAlbumSliderView($album, $arguments['height']);
-			} else {
-				$view = new FotoAlbumSliderView($album);
-			}
+			$view = new FotoAlbumSliderView($album);
 		} else {
 			$view = new FotoAlbumBBView($album);
-
 			if ($this->quote_level > 0 || isset($arguments['compact'])) {
 				$view->makeCompact();
 			}
@@ -234,6 +229,9 @@ class CsrBB extends eamBBParser {
 					$view->setBig($arguments['big']);
 				}
 			}
+		}
+		if (isset($arguments['height'])) {
+			return $view->getHtml($arguments['height']);
 		}
 		return $view->getHtml();
 	}
