@@ -239,12 +239,109 @@
 				});
 				// END tagging code
 
+				// BEGIN toggle full screen
+				var toggleFullScreen = function () {
+					moveTagDivs();
+					var thumbs = container.find('.minimalize-thumbnails');
+					if (container.hasClass('jgallery-full-screen')) {
+						window.scrollTo(0, 0);
+						window.clearTimeout($('#cd-main-trigger').data('timer'));
+						setTimeout(function () {
+							$('#cd-main-trigger').addClass('fade');
+							$('#cd-user-avatar').addClass('fade');
+						}, 1000);
+						var docelem = $('body').get(0);
+						if (docelem.requestFullscreen) {
+							docelem.requestFullscreen();
+						} else if (docelem.webkitRequestFullscreen) {
+							docelem.webkitRequestFullscreen();
+						} else if (docelem.mozRequestFullScreen) {
+							docelem.mozRequestFullScreen();
+						} else if (docelem.msRequestFullscreen) {
+							docelem.msRequestFullscreen();
+						}
+						if (thumbs.hasClass('inactive')) {
+							thumbs.click();
+						}
+					}
+					else {
+						$('#cd-main-trigger').removeClass('fade');
+						$('#cd-user-avatar').removeClass('fade');
+						if (document.exitFullscreen) {
+							document.exitFullscreen();
+						}
+						else if (document.webkitExitFullscreen) {
+							document.webkitExitFullscreen();
+						}
+						else if (document.mozCancelFullScreen) {
+							document.mozCancelFullScreen();
+						}
+						else if (document.msExitFullscreen) {
+							document.msExitFullscreen();
+						}
+						if (!thumbs.hasClass('inactive')) {
+							thumbs.click();
+						}
+					}
+				};
+				// END toggle full screen
+
+				// BEGIN zoom full resolution
+				var showFullRes = function () {
+					var zoom = container.find('div.zoom-container');
+					var foto = zoom.find('img.active');
+					var setDimensions = function (img) {
+						if (zoom.attr('data-size') === 'original') {
+							foto.css({
+								"max-width": "",
+								"max-height": "",
+								"width": img.naturalWidth,
+								"height": img.naturalHeight,
+								"margin-left": -img.naturalWidth / 2,
+								"margin-top": -img.naturalHeight / 2
+							});
+							foto.attr('data-width', img.naturalWidth);
+							foto.attr('data-height', img.naturalHeight);
+							$(window).resize();
+						}
+					};
+					// get the full res url
+					var href = $('#gallery').find('a[href="' + foto.attr('src') + '"]').attr('data-href');
+					// only load if valid url is not loaded yet
+					if (typeof href === 'string' && foto.attr('src') !== href) {
+						// show loading indicator after waiting longer than 400ms
+						var timer = setTimeout(function () {
+							if (zoom.attr('data-size') === 'original') {
+								container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeIn();
+							}
+						}, 400);
+						// load full res in background process
+						preloadImg(href).one('load', function () {
+							// replace with full res image
+							foto.attr('src', href).one('load', function () {
+								// stop timer for loading indicator
+								clearTimeout(timer);
+								setDimensions(this);
+								// remove loading indicator
+								container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeOut();
+							});
+						});
+					}
+					else if (zoom.attr('data-size') === 'original') {
+						setDimensions(foto[0]);
+					}
+					if (zoom.attr('data-size') === 'fill') {
+						$('span.resize.jgallery-btn').removeClass('fa-search-minus').addClass('fa-search-plus');
+					}
+				};
+				// END zoom full resolution
+
 				$('#gallery').jGallery({
 					"width": "100%",
 					"height": "897px",
 					"mode": "standard",
 					"canChangeMode": true,
-					"swipeEvents": false,
+					"swipeEvents": true,
 					"browserHistory": true,
 					"disabledOnIE8AndOlder": true,
 					"preloadAll": false,
@@ -303,6 +400,11 @@
 					},
 					"afterLoadPhoto": function () {
 						container = $('div.jgallery');
+						var zoom = container.find('div.zoom-container');
+						// if zoomed in
+						if (zoom.attr('data-size') !== 'fit') {
+							showFullRes();
+						}
 		{if LoginModel::mag('P_LEDEN_READ')}
 						if (tagMode) {
 							duringTagMode();
@@ -311,102 +413,14 @@
 		{/if}
 					}
 				});
-				$('#gallery').css('max-height', 0);
 				container = $('div.jgallery');
 				container.addClass('noselect');
-				// foto url
+				// user selectable foto url
 				container.find('div.title').off().on('click', function (event) {
 					selectText(this);
 				}).addClass('select-text');
-				// zoom full resolution
-				var showHiRes = function () {
-					var zoom = container.find('div.zoom-container');
-					var foto = zoom.find('img.active');
-					var href = $('#gallery').find('a[href="' + foto.attr('src') + '"]').attr('data-href');
-					if (typeof href === 'string' && foto.attr('src') !== href) {
-						var timer = setTimeout(function () {
-							if (zoom.attr('data-size') === 'original') {
-								container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeIn();
-							}
-						}, 400);
-						foto.attr('src', href).one('load', function () {
-							clearTimeout(timer);
-							if (zoom.attr('data-size') === 'original') {
-								foto.css({
-									"width": this.naturalWidth,
-									"height": this.naturalHeight,
-									"margin-left": -this.naturalWidth / 2,
-									"margin-top": -this.naturalHeight / 2
-								});
-								foto.attr('data-width', this.naturalWidth);
-								foto.attr('data-height', this.naturalHeight);
-								$(window).resize();
-							}
-							container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeOut();
-						});
-					}
-					else if (zoom.attr('data-size') === 'original') {
-						var foto = zoom.find('img.active');
-						foto.css({
-							"max-width": "",
-							"max-height": "",
-							"width": foto[0].naturalWidth,
-							"height": foto[0].naturalHeight,
-							"margin-left": -foto[0].naturalWidth / 2,
-							"margin-top": -foto[0].naturalHeight / 2
-						});
-						foto.attr('data-width', foto[0].naturalWidth);
-						foto.attr('data-height', foto[0].naturalHeight);
-						$(window).resize();
-					}
-				};
-				$('span.resize.jgallery-btn').on('click', function () {
-					var zoom = container.find('div.zoom-container');
-					if (zoom.attr('data-size') === 'fill') {
-						$(this).removeClass('fa-search-minus').addClass('fa-search-plus');
-					}
-					if (zoom.attr('data-size') !== 'fit') {
-						showHiRes();
-					}
-				});
-				// preload next/prev
-				var onNextPrev = function (anchor) {
-					container.find('div.overlay').css('display', 'none'); // hide loading div
-					if (anchor.length === 1) {
-						preloadImg(anchor.attr('href')); // preload image from url param
-					}
-					var zoom = container.find('div.zoom-container');
-					if (zoom.attr('data-size') !== 'fit') { // if zoomed in
-						setTimeout(showHiRes, 1); // show hi-res via background process
-						if (zoom.attr('data-size') === 'fill') { // workaround zoom mode display icon for hi-res img replacement hack
-							$('span.resize.jgallery-btn').removeClass('fa-search-minus').addClass('fa-search-plus'); // change zoom button icon
-						}
-						if (anchor.length === 1) {
-							var href = $('#gallery').find('a[href="' + anchor.attr('href') + '"]').attr('data-href'); // replace full-res href in data attr
-							if (typeof href === 'string') {
-								preloadImg(href); // preload hi-res image
-							}
-						}
-					}
-				};
-				var next = function () {
-					onNextPrev(container.find('a.active').next('a'));
-				};
-				var prev = function () {
-					onNextPrev(container.find('a.active').prev('a'));
-				};
-				container.find('div.right').on('click', next);
-				container.find('div.left').on('click', prev);
-				container.find('span.next').on('click', next);
-				container.find('span.prev').on('click', prev);
 				$(window).on('keydown', function (event) {
-					if (event.keyCode === 39) { // arrow right
-						next();
-					}
-					else if (event.keyCode === 37) { // arrow left
-						prev();
-					}
-					else if (event.keyCode === 46) { // delete
+					if (event.keyCode === 46) { // delete
 						$('div.fototag.active').each(function () {
 							removeTag($(this));
 						});
@@ -430,60 +444,19 @@
 						container.find('span.change-mode').click();
 					}
 				});
-				var fnToggleFullscreen = function () {
-					moveTagDivs();
-					if (container.hasClass('jgallery-full-screen')) {
-						window.scrollTo(0, 0);
-						window.clearTimeout($('#cd-main-trigger').data('timer'));
-						setTimeout(function () {
-							$('#cd-main-trigger').addClass('fade');
-							$('#cd-user-avatar').addClass('fade');
-						}, 1000);
-						var docelem = $('body').get(0);
-						if (docelem.requestFullscreen) {
-							docelem.requestFullscreen();
-						} else if (docelem.webkitRequestFullscreen) {
-							docelem.webkitRequestFullscreen();
-						} else if (docelem.mozRequestFullScreen) {
-							docelem.mozRequestFullScreen();
-						} else if (docelem.msRequestFullscreen) {
-							docelem.msRequestFullscreen();
-						}
-					}
-					else {
-						$('#cd-main-trigger').removeClass('fade');
-						$('#cd-user-avatar').removeClass('fade');
-						if (document.exitFullscreen) {
-							document.exitFullscreen();
-						}
-						else if (document.webkitExitFullscreen) {
-							document.webkitExitFullscreen();
-						}
-						else if (document.mozCancelFullScreen) {
-							document.mozCancelFullScreen();
-						}
-						else if (document.msExitFullscreen) {
-							document.msExitFullscreen();
-						}
-					}
-				};
-				// toggle thumbs fullscreen
-				var btn = container.find('.minimalize-thumbnails');
-				container.find('span.change-mode').on('click', function (event) {
-					if (btn.hasClass('inactive') !== container.hasClass('jgallery-full-screen')) {
-						btn.click();
-					}
-					fnToggleFullscreen();
-				});
-				container.find('span.full-screen').on('click', function (event) {
-					if (btn.hasClass('inactive')) {
-						btn.click();
-					}
-				});
+				// toggle full screen
+				container.find('span.change-mode').on('click', toggleFullScreen);
 				// fullscreen GET param
 				if (window.location.href.indexOf('?fullscreen') > 0 && !container.hasClass('jgallery-full-screen')) {
 					$('span.change-mode').click();
 				}
+				// zoom button
+				$('span.resize.jgallery-btn').on('click', function () {
+					var zoom = container.find('div.zoom-container');
+					if (zoom.attr('data-size') !== 'fit') {
+						showFullRes();
+					}
+				});
 				// knopje subalbums
 				container.find('.fa-list-ul').removeClass('fa-list-ul').addClass('fa-folder-open-o');
 				// knopje map omhoog
@@ -495,6 +468,9 @@
 					}
 					window.location.href = dirname(dirname(url)).replace('plaetjes/', '') + fullscreen;
 				}).prependTo(container.find('div.icons'));
+
+				// BEGIN context menu
+				var thumbs = container.find('.minimalize-thumbnails');
 		{if LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
 				// knopje verwijderen
 				$('<span class="fa fa-times jgallery-btn jgallery-btn-small" tooltip="Foto verwijderen"></span>').click(function () {
@@ -505,14 +481,14 @@
 					$.post('/fotoalbum/verwijderen' + dirname(url), {
 						foto: basename(url)
 					}, page_reload);
-				}).insertAfter(btn);
+				}).insertAfter(thumbs);
 				// knopje albumcover
 				$('<span class="fa fa-folder jgallery-btn jgallery-btn-small" tooltip="Foto instellen als albumcover"></span>').click(function () {
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
 					$.post('/fotoalbum/albumcover' + dirname(url), {
 						foto: basename(url)
 					}, page_redirect);
-				}).insertAfter(btn);
+				}).insertAfter(thumbs);
 				// knopje linksom draaien
 				$('<span class="fa fa-undo jgallery-btn jgallery-btn-small" tooltip="Foto tegen de klok in draaien"></span>').click(function () {
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
@@ -520,7 +496,7 @@
 						foto: basename(url),
 						rotation: -90
 					}, page_reload);
-				}).insertAfter(btn);
+				}).insertAfter(thumbs);
 				// knopje rechtsom draaien
 				$('<span class="fa fa-repeat jgallery-btn jgallery-btn-small" tooltip="Foto met de klok mee draaien"></span>').click(function () {
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
@@ -528,14 +504,14 @@
 						foto: basename(url),
 						rotation: 90
 					}, page_reload);
-				}).insertAfter(btn);
+				}).insertAfter(thumbs);
 		{/if}
 		{if LoginModel::mag('P_LOGGED_IN')}
 				// knopje downloaden
 				$('<span class="fa fa-download jgallery-btn jgallery-btn-small" tooltip="Foto in origineel formaat downloaden"></span>').click(function () {
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
 					window.location.href = '/fotoalbum/download' + url;
-				}).insertAfter(btn);
+				}).insertAfter(thumbs);
 		{/if}
 		{if LoginModel::mag('P_LEDEN_READ')}
 				// knopje taggen
@@ -559,9 +535,10 @@
 						$(this).css('background-color', '#e8cf2a');
 						duringTagMode();
 					}
-				}).insertAfter(btn);
+				}).insertAfter(thumbs);
 				drawTags();
 		{/if}
+				// END context menu
 			});
 			/* img class="photoTag" data-fotoalbum="$album->subdir"
 			 $(document).ready(function () {
@@ -611,7 +588,7 @@
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
 			<h2>{$album->dirname|ucfirst}</h2>
 			{foreach from=$album->getFotos() item=foto}
-				<a class="foto" href="{$foto->getResizedUrl()}" data-href="{$foto->getFullUrl()}">
+				<a class="foto" href="{$foto->getResizedUrl()}" data-href="{$foto->getFullUrl()}" data-mod="{$foto->isOwner()}">
 					<img src="{$foto->getThumbUrl()}" alt="{$smarty.const.CSR_ROOT}{$foto->getFullUrl()|replace:"%20":" "}" />
 				</a>
 			{/foreach}
