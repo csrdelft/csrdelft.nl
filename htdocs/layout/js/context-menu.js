@@ -4,7 +4,7 @@
  * Example usage:
  * 
 
-$("#myTable td").contextMenu({
+$("#something").contextMenu({
 	menuSelector: "#contextMenu",
 	menuSelected: function (invokedOn, selectedMenu) {
 		var msg = "You selected the menu item '" + selectedMenu.text() +
@@ -13,7 +13,7 @@ $("#myTable td").contextMenu({
 	}
 });
 
-<ul id="contextMenu" class="dropdown-menu" role="menu" style="display:none" >
+<ul id="contextMenu" class="dropdown-menu" role="menu">
     <li><a tabindex="-1" href="#">Action</a></li>
     <li><a tabindex="-1" href="#">Another action</a></li>
     <li><a tabindex="-1" href="#">Something else here</a></li>
@@ -30,6 +30,7 @@ $("#myTable td").contextMenu({
 
 			// Open context menu
 			$(this).on("contextmenu", function (e) {
+
 				// return native menu if pressing control
 				if (e.ctrlKey)
 					return;
