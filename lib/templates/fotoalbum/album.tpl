@@ -127,8 +127,8 @@
 						if (tagFormDiv) {
 							exitTagForm();
 						}
-						if (typeof response === 'object') { // JSON tag
-							drawTag(response);
+						if (typeof response === 'object') { // JSON tags
+							drawTags(response);
 						}
 						else { // HTML form
 							drawTagForm(response, relX, relY, size);
@@ -160,7 +160,6 @@
 						y: Math.round(relY),
 						size: Math.round(size)
 					}, function (response) {
-						console.log(response);
 						if (typeof response === 'object') { // JSON tags
 							drawTags(response);
 						}
