@@ -10,7 +10,9 @@
 var http = new XMLHttpRequest();
 
 function preloadImg(href) {
-	$('<img/>')[0].src = href;
+	var img = $('<img/>');
+	img[0].src = href;
+	return img;
 }
 
 preloadImg('/plaetjes/layout/loading-fb.gif');
