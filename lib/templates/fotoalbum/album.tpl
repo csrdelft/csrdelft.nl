@@ -26,7 +26,7 @@
 					"titleExpanded": false,
 					"tooltipSeeAllPhotos": "Grid",
 					"tooltipSeeOtherAlbums": "Toon sub-albums",
-					"slideshowInterval": "4s"
+					"slideshowInterval": "{Instellingen::get('fotoalbum', 'slideshow_interval')}"
 				});
 				$('#gallery').css('max-height', 0);
 				var container = $('div.jgallery');
