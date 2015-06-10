@@ -68,6 +68,11 @@ class Instellingen extends CachedPersistenceModel {
 			'grafiek_periode'				 => '-3 months',
 			'externen_geentoegang_gesloten'	 => '-1 year'
 		),
+		'fotoalbum'		 => array(
+			'slider_interval'	 => '5s',
+			'slideshow_interval' => '3s',
+			'slider_random'		 => 'true'
+		),
 		'gesprekken'	 => array(
 			'max_aantal_deelnemers'		 => '8',
 			'active_threshold_seconds'	 => '60',

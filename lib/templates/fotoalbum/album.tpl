@@ -282,7 +282,7 @@
 					"tooltipSeeAllPhotos": "Grid",
 					"tooltipSeeOtherAlbums": "Toon sub-albums",
 					"tooltipSlideshow": "Slideshow",
-					"slideshowInterval": "3s",
+					"slideshowInterval": "{Instellingen::get('fotoalbum', 'slideshow_interval')}",
 					"slideshow": true,
 					"slideshowAutostart": false,
 					"slideshowRandom": false,
