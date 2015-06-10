@@ -1,3 +1,5 @@
+<ul id="contextMenu" class="dropdown-menu" role="menu"></ul>
+<ul id="tagMenu" class="dropdown-menu" role="menu"></ul>
 {if $album->hasFotos()}
 	<script type="text/javascript">
 		try {
@@ -42,7 +44,42 @@
 						$('div.fototag.active').removeClass('active');
 						$(this).addClass('active');
 					});
+					// tag context menu
+					tagDiv.contextMenu({
+						menuSelector: "#tagMenu",
+						menuSelected: function (invokedOn, selectedMenu) {
+							removeTag(tagDiv);
+						}
+					});
 					return tagDiv;
+				};
+				var drawTags = function (tags) {
+					// remove old ones
+					$('div.fototag').remove();
+					if (!$.isArray(tags)) {
+						console.log('invalid tags');
+						return;
+					}
+					$.each(tags, function (i, tag) {
+						drawTag(tag);
+					});
+					// verberg tags tijdens zoomen
+					var zoom = container.find('div.zoom-container');
+					if (zoom.attr('data-size') !== 'fit') {
+						$('div.fototag').addClass('verborgen');
+					}
+					else {
+						$('div.fototag').removeClass('verborgen');
+					}
+				};
+				var loadTags = function () {
+					// remove old ones
+					$('div.fototag').remove();
+					// get new ones
+					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+					$.post('/fotoalbum/gettags' + dirname(url), {
+						foto: basename(url)
+					}, drawTags);
 				};
 				var removeTag = function (tagDiv) {
 					if (confirm('Etiket verwijderen?')) {
@@ -50,9 +87,7 @@
 						$.post('/fotoalbum/removetag', {
 							refuuid: tag.refuuid,
 							keyword: tag.keyword
-						}, function () {
-							tagDiv.remove();
-						});
+						}, drawTags);
 					}
 				};
 				var showTags = function () {
@@ -70,23 +105,6 @@
 							left: pos.x - pos.size / 2,
 							width: pos.size,
 							height: pos.size
-						});
-					});
-				};
-				var drawTags = function () {
-					// remove old ones
-					$('div.fototag').remove();
-					// get new ones
-					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-					$.post('/fotoalbum/gettags' + dirname(url), {
-						foto: basename(url)
-					}, function (tags) {
-						if (!$.isArray(tags)) {
-							console.log('loading tags failed');
-							return;
-						}
-						$.each(tags, function (i, tag) {
-							drawTag(tag);
 						});
 					});
 				};
@@ -142,8 +160,9 @@
 						y: Math.round(relY),
 						size: Math.round(size)
 					}, function (response) {
-						if (typeof response === 'object') { // JSON tag
-							drawTag(response);
+						console.log(response);
+						if (typeof response === 'object') { // JSON tags
+							drawTags(response);
 						}
 						else { // HTML form
 							drawTagForm(response, relX, relY, size);
@@ -237,12 +256,14 @@
 						}
 					}
 				});
+				// tag context menu
+				var btnDelTag = $('<a id="btnDelTag" tabindex="-1"><span class="fa fa-user-times"></span> &nbsp; Etiket verwijderen</a>');
+				$('<li></li>').append(btnDelTag).appendTo('#tagMenu');
 				// END tagging code
 
 				// BEGIN toggle full screen
 				var toggleFullScreen = function () {
 					moveTagDivs();
-					var thumbs = container.find('.minimalize-thumbnails');
 					if (container.hasClass('jgallery-full-screen')) {
 						window.scrollTo(0, 0);
 						window.clearTimeout($('#cd-main-trigger').data('timer'));
@@ -260,9 +281,6 @@
 						} else if (docelem.msRequestFullscreen) {
 							docelem.msRequestFullscreen();
 						}
-						if (thumbs.hasClass('inactive')) {
-							thumbs.click();
-						}
 					}
 					else {
 						$('#cd-main-trigger').removeClass('fade');
@@ -278,9 +296,6 @@
 						}
 						else if (document.msExitFullscreen) {
 							document.msExitFullscreen();
-						}
-						if (!thumbs.hasClass('inactive')) {
-							thumbs.click();
 						}
 					}
 				};
@@ -335,6 +350,155 @@
 					}
 				};
 				// END zoom full resolution
+
+				// BEGIN dynamic context menu
+				var updateContextMenu = function () {
+					var foto = container.find('img.active');
+					var mod = '1' === $('#gallery').find('a[href="' + foto.attr('src') + '"]').attr('data-mod');
+
+					var cm = $('#contextMenu').empty();
+					var addCMI = function (item, divider) {
+						if (divider) {
+							$('<li class="divider"></li>').appendTo(cm);
+						}
+						$('<li></li>').append(item).appendTo(cm);
+						if (item.hasClass('disabled')) {
+							item.parent().addClass('disabled');
+						}
+					};
+		{if LoginModel::mag('P_LOGGED_IN')}
+
+					// knopje downloaden
+					var btnDown = $('<a id="btnDown" tabindex="-1"><span class="fa fa-download"></span> &nbsp; Downloaden</a>');
+					btnDown.click(function () {
+						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+						window.location.href = '/fotoalbum/download' + url;
+					});
+					addCMI(btnDown);
+		{/if}
+		{if LoginModel::mag('P_LEDEN_READ')}
+
+					// knopje taggen
+					var btnTag = $('<a id="btnTag" tabindex="-1"><span class="fa fa-smile-o"></span> &nbsp; Leden etiketteren</a>');
+					btnTag.click(function () {
+						container.find('span.fa-smile-o.jgallery-btn').click();
+					});
+					addCMI(btnTag);
+		{/if}
+
+					// knopje full screen
+					var btnFS = $('<a id="btnFS" tabindex="-1"><span class="fa"></span> &nbsp; Volledig scherm</a>');
+					btnFS.click(function () {
+						var btn = container.find('span.change-mode');
+						btn.click();
+						// sync state
+						if (btn.hasClass('fa-expand')) {
+							btnFS.find('span.fa').removeClass('fa-compress').addClass('fa-expand');
+						}
+						else {
+							btnFS.find('span.fa').addClass('fa-compress').removeClass('fa-expand');
+						}
+					});
+					addCMI(btnFS);
+					// sync state
+					if (container.find('span.change-mode').hasClass('fa-expand')) {
+						btnFS.find('span.fa').addClass('fa-expand');
+					}
+					else {
+						btnFS.find('span.fa').addClass('fa-compress');
+					}
+
+					// knopje zoomen
+					var btnZoom = $('<a id="btnZoom" tabindex="-1"><span class="fa"></span> &nbsp; Zoomen</a>');
+					btnZoom.click(function () {
+						var btn = container.find('span.resize.jgallery-btn');
+						btn.click();
+						// sync state
+						if (btn.hasClass('fa-search-minus')) {
+							btnZoom.find('span.fa').removeClass('fa-search-minus').addClass('fa-search-plus');
+						}
+						else {
+							btnZoom.find('span.fa').addClass('fa-search-minus').removeClass('fa-search-plus');
+						}
+					});
+					addCMI(btnZoom);
+					// sync state
+					if (container.find('span.resize.jgallery-btn').hasClass('fa-search-plus')) {
+						btnZoom.find('span.fa').addClass('fa-search-plus');
+					}
+					else {
+						btnZoom.find('span.fa').addClass('fa-search-minus');
+					}
+
+		{if LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
+
+					// knopje rechtsom draaien
+					var btnRight = $('<a id="btnRight" tabindex="-1"><span class="fa fa-repeat"></span> &nbsp; Draai met de klok mee</a>');
+					if (mod) {
+						btnRight.click(function () {
+							var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+							$.post('/fotoalbum/roteren' + dirname(url), {
+								foto: basename(url),
+								rotation: 90
+							}, page_reload);
+						});
+					}
+					else {
+						btnRight.addClass('disabled');
+					}
+					addCMI(btnRight, true);
+
+					// knopje linksom draaien
+					var btnLeft = $('<a id="btnLeft" tabindex="-1"><span class="fa fa-undo"></span> &nbsp; Draai tegen de klok in</a>');
+					if (mod) {
+						btnLeft.click(function () {
+							var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+							$.post('/fotoalbum/roteren' + dirname(url), {
+								foto: basename(url),
+								rotation: -90
+							}, page_reload);
+						});
+					}
+					else {
+						btnLeft.addClass('disabled');
+					}
+					addCMI(btnLeft);
+
+					// knopje albumcover
+					var btnCover = $('<a id="btnCover" tabindex="-1"><span class="fa fa-folder"></span> &nbsp; Instellen als albumcover</a>');
+					if (mod) {
+						btnCover.click(function () {
+							var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+							$.post('/fotoalbum/albumcover' + dirname(url), {
+								foto: basename(url)
+							}, page_redirect);
+						});
+					}
+					else {
+						btnCover.addClass('disabled');
+					}
+					addCMI(btnCover);
+
+					// knopje verwijderen
+					var btnDel = $('<a id="btnDel" tabindex="-1"><span class="fa fa-times"></span> &nbsp; Verwijderen</a>');
+					if (mod) {
+						btnDel.click(function () {
+							if (!confirm('Foto definitief verwijderen. Weet u het zeker?')) {
+								return false;
+							}
+							var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+							$.post('/fotoalbum/verwijderen' + dirname(url), {
+								foto: basename(url)
+							}, page_reload);
+						});
+					}
+					else {
+						btnDel.addClass('disabled');
+					}
+					addCMI(btnDel, true);
+		{/if}
+				};
+				// END dynamic context menu
 
 				$('#gallery').jGallery({
 					"width": "100%",
@@ -400,6 +564,8 @@
 					},
 					"afterLoadPhoto": function () {
 						container = $('div.jgallery');
+						// dynamic context menu
+						updateContextMenu();
 						var zoom = container.find('div.zoom-container');
 						// if zoomed in
 						if (zoom.attr('data-size') !== 'fit') {
@@ -409,7 +575,7 @@
 						if (tagMode) {
 							duringTagMode();
 						}
-						drawTags();
+						loadTags();
 		{/if}
 					}
 				});
@@ -458,11 +624,22 @@
 					window.location.href = dirname(dirname(url)).replace('plaetjes/', '') + fullscreen;
 				}).prependTo(container.find('div.icons'));
 
+				// toggle thumbnails
+				container.find('.minimalize-thumbnails.jgallery-btn').click(moveTagDivs);
+
+				// knopje subalbums
+				container.find('.fa-list-ul').removeClass('fa-list-ul').addClass('fa-folder-open-o');
+
 				// zoom button
-				var zoom = container.find('div.zoom-container');
 				$('span.resize.jgallery-btn').on('click', function () {
+					var zoom = container.find('div.zoom-container');
 					if (zoom.attr('data-size') !== 'fit') {
 						showFullRes();
+						// verberg tags tijdens zoomen
+						$('div.fototag').addClass('verborgen');
+					}
+					else {
+						$('div.fototag').removeClass('verborgen');
 					}
 				}).appendTo(container.find('div.icons'));
 
@@ -473,43 +650,22 @@
 					$('span.change-mode').click();
 				}
 
-				// knopje subalbums
-				container.find('.fa-list-ul').removeClass('fa-list-ul').addClass('fa-folder-open-o');
-
-
-				// BEGIN context menu
-				zoom.contextMenu({
+				// foto context menu
+				container.find('div.zoom').contextMenu({
 					menuSelector: "#contextMenu",
 					menuSelected: function (invokedOn, selectedMenu) {
-						var msg = "You selected the menu item '" + selectedMenu.text() +
-								"' on the value '" + invokedOn.text() + "'";
-						alert(msg);
 					}
 				});
-				var cm = $('<ul id="contextMenu" class="dropdown-menu" role="menu"></ul>');
-				$('div.cd-page-content').prepend(cm);
-				var addCMI = function (item, divider) {
-					if (divider) {
-						$('<li class="divider"></li>').appendTo(cm);
-					}
-					$('<li></li>').append(item).appendTo(cm);
-				};
-		{if LoginModel::mag('P_LOGGED_IN')}
 
-				// knopje downloaden
-				var btnDown = $('<a tabindex="-1"><span class="fa fa-download"></span> &nbsp; Origineel formaat downloaden</a>').click(function () {
-					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-					window.location.href = '/fotoalbum/download' + url;
-				});
-				addCMI(btnDown);
-		{/if}
+				// toggle tag mode
 		{if LoginModel::mag('P_LEDEN_READ')}
 
 				// knopje taggen
-				var btnTag = $('<a tabindex="-1"><span class="fa fa-tags"></span> &nbsp; Leden etiketteren</a>').click(function () {
+				var btnTag = $('<span class="fa fa-smile-o jgallery-btn jgallery-btn-small" tooltip="Leden etiketteren"></span>');
+				btnTag.click(function () {
 					if (tagMode) {
 						tagMode = false;
-						$(this).css('background-color', '');
+						$(this).removeClass('fa-toggle-on').addClass('fa-toggle-off');
 						hideTags();
 						if (tagFormDiv) {
 							exitTagForm();
@@ -523,59 +679,23 @@
 					}
 					else {
 						tagMode = true;
-						$(this).css('background-color', '#e8cf2a');
+						$(this).addClass('fa-toggle-on').removeClass('fa-toggle-off');
 						duringTagMode();
 					}
 				});
-				addCMI(btnTag);
-
-				drawTags();
-		{/if}
-		{if LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
-
-				// knopje rechtsom draaien
-				var btnRight = $('<a tabindex="-1"><span class="fa fa-repeat"></span> &nbsp; Met de klok mee draaien</a>').click(function () {
-					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-					$.post('/fotoalbum/roteren' + dirname(url), {
-						foto: basename(url),
-						rotation: 90
-					}, page_reload);
-				});
-				addCMI(btnRight, true);
-
-				// knopje linksom draaien
-				var btnLeft = $('<a tabindex="-1"><span class="fa fa-undo"></span> &nbsp; Tegen de klok in draaien</a>').click(function () {
-					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-					$.post('/fotoalbum/roteren' + dirname(url), {
-						foto: basename(url),
-						rotation: -90
-					}, page_reload);
-				});
-				addCMI(btnLeft);
-
-				// knopje albumcover
-				var btnCover = $('<a tabindex="-1"><span class="fa fa-folder"></span> &nbsp; Instellen als albumcover</a>').click(function () {
-					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-					$.post('/fotoalbum/albumcover' + dirname(url), {
-						foto: basename(url)
-					}, page_redirect);
-				});
-				addCMI(btnCover);
-
-				// knopje verwijderen
-				var btnDel = $('<a tabindex="-1"><span class="fa fa-times"></span> &nbsp; Definitief verwijderen</a>').click(function () {
-					if (!confirm('Foto definitief verwijderen. Weet u het zeker?')) {
-						return false;
+				btnTag.mouseenter(function () {
+					if (tagMode) {
+						$(this).addClass('fa-toggle-on').removeClass('fa-toggle-off');
 					}
-					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-					$.post('/fotoalbum/verwijderen' + dirname(url), {
-						foto: basename(url)
-					}, page_reload);
+					else {
+						$(this).removeClass('fa-toggle-on').addClass('fa-toggle-off');
+					}
 				});
-				addCMI(btnDel, true);
-
+				btnTag.mouseout(function () {
+					$(this).removeClass('fa-toggle-on').removeClass('fa-toggle-off').addClass('fa-smile-o');
+				});
+				btnTag.appendTo(container.find('div.icons'));
 		{/if}
-				// END context menu
 			});
 			/* img class="photoTag" data-fotoalbum="$album->subdir"
 			 $(document).ready(function () {

@@ -303,8 +303,9 @@ class FotoAlbumController extends AclController {
 		if (!$foto->exists()) {
 			$this->geentoegang();
 		}
-		$tags = FotoTagsModel::instance()->getTags($foto)->fetchAll();
-		$this->view = new JsonResponse($tags);
+		// return all tags
+		$tags = FotoTagsModel::instance()->getTags($foto);
+		$this->view = new JsonResponse($tags->fetchAll());
 	}
 
 	public function addtag(FotoAlbum $album) {
@@ -320,10 +321,12 @@ class FotoAlbumController extends AclController {
 			$y = $formulier->findByName('y')->getValue();
 			$size = $formulier->findByName('size')->getValue();
 			$tag = FotoTagsModel::instance()->addTag($foto, $uid, $x, $y, $size);
-			$this->view = new JsonResponse($tag);
-			return;
+			// return all tags
+			$tags = FotoTagsModel::instance()->getTags($foto);
+			$this->view = new JsonResponse($tags->fetchAll());
+		} else {
+			$this->view = $formulier;
 		}
-		$this->view = $formulier;
 	}
 
 	public function removetag() {
@@ -333,7 +336,10 @@ class FotoAlbumController extends AclController {
 			$this->geentoegang();
 		}
 		FotoTagsModel::instance()->removeTag($refuuid, $keyword);
-		$this->view = new JsonResponse(true);
+		$foto = FotoModel::getUUID($refuuid);
+		// return all tags
+		$tags = FotoTagsModel::instance()->getTags($foto);
+		$this->view = new JsonResponse($tags->fetchAll());
 	}
 
 }
