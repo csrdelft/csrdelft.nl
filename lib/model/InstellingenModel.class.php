@@ -70,9 +70,7 @@ class Instellingen extends CachedPersistenceModel {
 			'externen_geentoegang_gesloten'	 => '-1 year'
 		),
 		'fotoalbum'		 => array(
-			'slider_interval'	 => '5s',
-			'slideshow_interval' => '3s',
-			'slider_random'		 => 'true'
+			'slideshow_interval' => '3s'
 		),
 		'gesprekken'	 => array(
 			'max_aantal_deelnemers'		 => '8',
