@@ -206,11 +206,16 @@ class CsrBB extends eamBBParser {
 		if (!$album) {
 			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
 		}
-		if (isset($arguments['slider']) AND $arguments['slider'] === 'homepage') {
+		if (isset($arguments['slider'])) {
+			$view = new FotoAlbumSliderView($album);
 			if (isset($arguments['height'])) {
-				$view = new FotoAlbumSliderView($album, $arguments['height']);
-			} else {
-				$view = new FotoAlbumSliderView($album);
+				$view->height = (int) $arguments['height'];
+			}
+			if (isset($arguments['interval'])) {
+				$view->interval = (int) $arguments['interval'];
+			}
+			if (isset($arguments['random'])) {
+				$view->random = $arguments['random'] !== 'false';
 			}
 		} else {
 			$view = new FotoAlbumBBView($album);

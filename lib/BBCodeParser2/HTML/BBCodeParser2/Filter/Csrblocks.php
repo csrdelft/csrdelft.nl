@@ -190,7 +190,7 @@ class HTML_BBCodeParser2_Filter_Csrblocks extends HTML_BBCodeParser2_Filter {
 					$groepid = '';
 				}
 
-				
+
 				try {
 					return $groeptag->getHtml();
 				} catch (Exception $e) {
@@ -1005,8 +1005,17 @@ HTML;
 				if (!$album) {
 					return '<div class="bb-block">Fotoalbum niet gevonden: /' . $url . '</div>';
 				}
-				if (isset($arguments['slider']) AND $arguments['slider'] === 'homepage') {
+				if (isset($arguments['slider'])) {
 					$view = new FotoAlbumSliderView($album);
+					if (isset($arguments['height'])) {
+						$view->height = (int) $arguments['height'];
+					}
+					if (isset($arguments['interval'])) {
+						$view->interval = (int) $arguments['interval'];
+					}
+					if (isset($arguments['random'])) {
+						$view->random = $arguments['random'] !== 'false';
+					}
 				} else {
 					$view = new FotoAlbumBBView($album);
 
