@@ -50,7 +50,7 @@
 	</div>
 
 	<div class="box w2 h2 link"><a href="/csrindeowee">
-		<img src="/plaetjes/owee/2014/owee-thema.jpg" class="border">
+		<img src="/plaetjes/owee/2015/thema.png" class="border">
 	</a></div>
 
 	<div class="box w2 link"><a href="/vereniging/filmpjes">
