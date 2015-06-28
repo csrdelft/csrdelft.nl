@@ -569,7 +569,7 @@ class AbstractGroepenController extends Controller {
 		$leden = $groep::leden;
 		$model = $leden::instance();
 		if ($uid) {
-			if (!$groep->mag(A::Afmelden)) {
+			if (!$groep->mag(A::Afmelden) AND ! $groep->mag(A::Beheren)) { // A::Beheren voor afmelden via context-menu
 				$this->geentoegang();
 			}
 			$lid = $model->get($groep, $uid);
