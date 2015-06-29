@@ -117,9 +117,9 @@ class AgendaModel extends PersistenceModel {
 		if ($count > 0) {
 			$params = array_keys($itemsByUUID);
 			array_unshift($params, LoginModel::getUid());
-			$verborgen = AgendaVerbergenModel::instance()->find('uid = ? AND uuid IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $params);
+			$verborgen = AgendaVerbergenModel::instance()->find('uid = ? AND refuuid IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $params);
 			foreach ($verborgen as $verbergen) {
-				unset($itemsByUUID[$verbergen->uuid]);
+				unset($itemsByUUID[$verbergen->refuuid]);
 			}
 		}
 		return $itemsByUUID;
@@ -224,7 +224,7 @@ class AgendaVerbergenModel extends PersistenceModel {
 		if (!$verborgen) {
 			$verborgen = new AgendaVerbergen();
 			$verborgen->uid = LoginModel::getUid();
-			$verborgen->uuid = $item->getUUID();
+			$verborgen->refuuid = $item->getUUID();
 			$this->create($verborgen);
 		} else {
 			$this->delete($verborgen);
