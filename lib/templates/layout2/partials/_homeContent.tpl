@@ -11,7 +11,7 @@
 			<div class="columns large-2 hide-for-small">
 				<a href="/csrindeowee">
 					<figure class="box">
-						<img src="/plaetjes/owee/2014/owee-thema.jpg" class="rotate" alt="C.S.R. in de Owee">
+						<img src="/plaetjes/owee/2015/thema.png" class="rotate" alt="C.S.R. in de Owee">
 					</figure>
 				</a>
 			</div>
@@ -131,7 +131,7 @@
 		{* <div class="columns large-2 small-2">
 		<div class="box h2 link">
 		<a href="/lidworden">
-		<img src="/plaetjes/owee/owee-thema.jpg" class="border">
+		<img src="/plaetjes/owee/2015/thema.png" class="border">
 		<h2 class="overlay">OWee pagina!</h2>
 		</a>
 		</div>
