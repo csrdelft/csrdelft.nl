@@ -551,6 +551,9 @@ function form_submit(event) {
 		if (form.hasClass('InlineForm')) {
 			source = form;
 			formData.append('InlineFormId', form.attr('id'));
+			if (form.data('submitCallback')) {
+				done = form.data('submitCallback');
+			}
 		}
 
 		if (form.hasClass('DataTableResponse')) {
@@ -731,14 +734,19 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 		data: data
 	});
 	jqXHR.done(function (data, textStatus, jqXHR) {
-		onsuccess(data);
-		if (source && source.hasClass('InlineForm') && source.hasClass('noanim')) {
-			$(source).find('.FormElement:first').css({
-				'background-image': '',
-				'background-repeat': '',
-				'background-position': ''
-			});
+		if (source) {
+			if (!$(source).hasClass('noanim')) {
+				$(source).hide();
+			}
+			else if ($(source).hasClass('InlineForm')) {
+				$(source).find('.FormElement:first').css({
+					'background-image': '',
+					'background-repeat': '',
+					'background-position': ''
+				});
+			}
 		}
+		onsuccess(data);
 	});
 	jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
 		if (errorThrown === '') {
