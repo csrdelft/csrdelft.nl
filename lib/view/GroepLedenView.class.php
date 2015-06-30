@@ -126,6 +126,8 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 
 		$html .= '</ul><div id="groep-leden-content-' . $this->groep->id . '" class="groep-tab-content ' . $this->getType() . '">';
 
+		$html .= '<ul id="groep-context-menu-' . $this->groep->id . '" class="dropdown-menu" role="menu"><li><a id="groep-lid-remove-' . $this->groep->id . '" tabindex="-1"><span class="fa fa-user-times"></span> &nbsp; Uit de ketzer halen</a></li></ul>';
+
 		$html .= $this->getTabContent();
 
 		$this->javascript .= <<<JS
@@ -143,6 +145,22 @@ else {
 	tabContent.height(availableHeight);
 }
 JS;
+		if ($this->groep->mag(A::Beheren)) {
+
+			$this->javascript .= <<<JS
+
+$('#groep-leden-content-{$this->groep->id} a.lidLink').contextMenu({
+	menuSelector: "#groep-context-menu-{$this->groep->id}",
+	menuSelected: function (invokedOn, selectedMenu) {
+		var a = $(invokedOn).closest('a.lidLink');
+		if (confirm('Weet u zeker dat u ' + a.attr('title') + ' uit de ketzer wilt halen?')) {
+			var url = a.attr('href').replace('/profiel/', 'afmelden/');
+			$.post('{$this->groep->getUrl()}' + url, {}, dom_update);
+		}
+	}
+});
+JS;
+		}
 		$html .= $this->getScriptTag();
 
 		$html .= '</div>';

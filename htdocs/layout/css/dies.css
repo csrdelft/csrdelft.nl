@@ -6,10 +6,6 @@ td.abonnement-uitgeschakeld, ul.ui-tabs-nav, li[role=tab], li[role=tab] a, .badg
 	-webkit-filter: invert(100%); 
 	filter: invert(100%);
 }
-.bb-dies2015 {
-	-webkit-filter: invert(0%); 
-	filter: invert(0%);
-}
 
 /*Kleuren fixes*/
 #cd-zijbalk .ishetal .ja, #cd-zijbalk .ishetal .nee, .staatrood {
