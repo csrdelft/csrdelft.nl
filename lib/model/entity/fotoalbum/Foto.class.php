@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/entity/FotoAlbum.class.php';
+require_once 'model/entity/fotoalbum/FotoAlbum.class.php';
 
 /**
  * Foto.class.php
@@ -23,7 +23,7 @@ class Foto extends Afbeelding {
 	public $rotation;
 	/**
 	 * Uploader
-	 * @var Profiel
+	 * @var string
 	 */
 	public $owner;
 	/**
@@ -56,6 +56,10 @@ class Foto extends Afbeelding {
 			$this->subdir = $album->subdir;
 		}
 		parent::__construct(null, $parse);
+	}
+
+	public function getUUID() {
+		return $this->subdir . $this->filename . '@' . get_class($this) . '.csrdelft.nl';
 	}
 
 	public function getAlbumPath() {

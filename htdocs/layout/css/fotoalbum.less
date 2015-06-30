@@ -90,24 +90,24 @@
 @media only screen and (min-width: 960px) {
 	.jgallery.jgallery-full-screen {
 
-	.zoom-container {
+		.zoom-container {
 
-		.nav {
-			top: 50px;
+			.nav {
+				top: 50px;
+			}
 		}
 	}
-}
 }
 @media only screen and (max-width: 959px) {
 	.jgallery.jgallery-full-screen {
 
-	.zoom-container {
+		.zoom-container {
 
-		.nav {
-			right: 50px;
+			.nav {
+				right: 50px;
+			}
 		}
 	}
-}
 }
 .jgallery.jgallery-slider::after {
 	background: none;
@@ -119,4 +119,21 @@
 	.imageLoaderPositionAbsolute {
 		display: none !important;
 	}
+}
+
+.fototag {
+	position: absolute;
+	z-index: 10000;
+	border-radius: 50%;
+	border: 2px solid transparent;
+	-webkit-transition : border 200ms ease-out;
+	-moz-transition : border 200ms ease-out;
+	-o-transition : border 200ms ease-out;
+	transition : border 200ms ease-out;
+}
+.fototag.showborder {
+	border: 2px solid #fff;
+}
+.fototag.active, .fototag:hover {
+	border: 2px solid #e8cf2a;
 }

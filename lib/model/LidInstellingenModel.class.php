@@ -58,6 +58,9 @@ class LidInstellingen extends Instellingen {
 			'fotoWeergave'			 => array('Toon groter formaat foto\'s', T::Enumeration, array('nee', 'boven bericht', 'in bericht'), 'boven bericht'),
 			'filter2008'			 => array('Berichten van 2008 eerst verbergen', T::Enumeration, array('ja', 'nee'), 'nee')
 		),
+		'fotoalbum'		 => array(
+			'tag_suggestions' => array('Etiket suggesties', T::Enumeration, array('leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'), 'leden')
+		),
 		'googleContacts' => array(
 			'groepnaam'	 => array('Naam van groep voor contacten in Google contacts', T::String, array(1, 100), 'C.S.R.-leden'),
 			'extended'	 => array('Uitgebreide export (nickname, duckname, voorletters, adres/tel ouders, website, chataccounts, eetwens) ', T::Enumeration, array('ja', 'nee'), 'ja')

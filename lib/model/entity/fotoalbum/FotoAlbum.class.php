@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/entity/Foto.class.php';
+require_once 'model/entity/fotoalbum/Foto.class.php';
 
 /**
  * FotoAlbum.class.php
@@ -38,7 +38,7 @@ class FotoAlbum extends Map {
 	private $fotos_incompleet;
 	/**
 	 * Creator
-	 * @var Profiel
+	 * @var string
 	 */
 	public $owner;
 	/**

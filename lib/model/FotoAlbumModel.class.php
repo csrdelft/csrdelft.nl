@@ -12,6 +12,10 @@ class FotoAlbumModel extends PersistenceModel {
 
 	protected static $instance;
 
+	protected function __construct() {
+		parent::__construct('fotoalbum/');
+	}
+
 	public function create(PersistentEntity $album) {
 		if (!file_exists($album->path)) {
 			mkdir($album->path);
@@ -233,6 +237,21 @@ class FotoModel extends PersistenceModel {
 	protected static $instance;
 
 	/**
+	 * @override PersistenceModel->getUUID($)
+	 */
+	public static function getUUID($UUID) {
+		$parts = explode('@', $UUID, 2);
+		$path = explode('/', $parts[0]);
+		$filename = array_pop($path);
+		$subdir = implode('/', $path) . '/';
+		return static::instance()->retrieveByPrimaryKey(array($subdir, $filename));
+	}
+
+	protected function __construct() {
+		parent::__construct('fotoalbum/');
+	}
+
+	/**
 	 * Create database entry if foto does not exist.
 	 * 
 	 * @param PersistentEntity $foto
@@ -278,6 +297,45 @@ class FotoModel extends PersistenceModel {
 			$this->delete($foto);
 		}
 		return $ret;
+	}
+
+}
+
+class FotoTagsModel extends PersistenceModel {
+
+	const orm = 'FotoTag';
+
+	protected static $instance;
+
+	protected function __construct() {
+		parent::__construct('fotoalbum/');
+	}
+
+	public function getTags(Foto $foto) {
+		return $this->find('refuuid = ?', array($foto->getUUID()));
+	}
+
+	public function addTag(Foto $foto, $uid, $x, $y, $size) {
+		if (!ProfielModel::existsUid($uid)) {
+			throw new Exception('Profiel bestaat niet');
+		}
+		$tag = new FotoTag();
+		$tag->refuuid = $foto->getUUID();
+		$tag->keyword = $uid;
+		$tag->door = LoginModel::getUid();
+		$tag->x = (int) $x;
+		$tag->y = (int) $y;
+		$tag->size = (int) $size;
+		if ($this->exists($tag)) {
+			return $this->retrieve($tag);
+		} else {
+			parent::create($tag);
+			return $tag;
+		}
+	}
+
+	public function removeTag($refuuid, $keyword) {
+		return $this->deleteByPrimaryKey(array($refuuid, $keyword));
 	}
 
 }
