@@ -1,86 +1,33 @@
 /* owee 2015*/
- /** rood: #ed1c24*/
+ /** rood: #EE343F*/
  /** donker-turquoise : #05877d*/
  /**/
 
-/*Overal de achtergrond kleur doorvoeren, met de !important notatie*/
-* {
-    background: #05877d !important;
+/*Achtergrond kleur*/
+#cd-zijbalk {
+    background: #05877d;
 }
 
-/*Een boel elementen in het rood*/
-a, a:hover, .cd-primary-nav .cd-secondary-nav > li > a, .cd-primary-nav .cd-secondary-nav > li > a:hover, .cd-primary-nav .cd-secondary-nav > li > a,
-.cd-primary-nav .cd-secondary-nav > li > a:hover, a#cd-main-trigger.selected, .cd-primary-nav > li > a:hover, .visitekaartje p a,
-.ui-widget-header{
-	color: #ed1c24;
+/*Koppen in het rood*/
+h1, a, a:hover {
+	color: #EE343F;
 }
 
-/*Een boel elementen in het wit*/
-body,h1,h2,h3,h4,h5,h6,textarea,input,select,label,select option, #cd-zijbalk .ishetal .ja, #cd-zijbalk .ishetal .nee, .staatrood,
-#cd-zijbalk .blok .item a, a.maaltijd-aangemeld, a.maaltijd-afgemeld, .cd-primary-nav > li > a,
-.cd-primary-nav .cd-secondary-nav a, .visitekaartje p, .visitekaartje p.naam a, .visitekaartje p a,
-.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited{
+/*Veel tekst van de zijbalk in het wit*/
+#cd-zijbalk .ishetal .ja, #cd-zijbalk .ishetal .nee, .staatrood,
+#cd-zijbalk .blok .item a, #cd-zijbalk .ishetal, #cd-zijbalk .blok .item {
     color: #ffffff !important;
 }
 
 /*Zijbalk grens van het scherm in rood*/
 #cd-zijbalk {
-	border-color: #ed1c24;
-}
-
-/*Onderkant van profiel-menu, indien geopend*/
-.cd-primary-nav > li > a:hover, .cd-primary-nav > li > a.selected {
-    box-shadow: inset 0 -2px 0 #ed1c24;
+	border-color: #EE343F;
 }
 
 /*OWee logo met gradient*/
 #cd-zijbalk .cd-beeldmerk {
-    /*-webkit-filter: invert(100%);*/
-    /*filter: invert(100%);*/
-    /*background-color: #FA7882 !important;*/
-    background: radial-gradient(#3CA08C 30%,#05877d 70%) !important;
+    /*TODO: add logo*/
+    background: radial-gradient(#3CA08C 10%, transparent 70%);
 }
-
-/*Kleurfix omdat deze overridden moet worden*/
-#forumtabel tr.tussenschot td {
-    background: lightgrey !important;
-}
-
-/*Kleurfix omdat deze overridden moet worden*/
-#forumtabel tr.tussenschot.ongelezenvanaf td {
-    background: #ed1c24 !important;
-}
-
-/*TODO: Fix dit ding*/
-/*.markItUpHeader {*/
-    /*background: #ffffff !important;*/
-/*}*/
-
-/*Rand van knop in wit*/
-.btn, input[type=submit], input[type=button]{
-    border: 1px solid #ffffff;
-}
-
-/*Rand van knop in rood indien geselecteerd*/
-.btn:hover{
-    border: 1px solid #ed1c24;
-}
-
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
-    border: 1px solid #ed1c24;
-}
-
-/*Progres bar*/
-.progress-bar-info {
-    background: #ed1c24 !important;
-    border: none !important;
-}
-
-/*TODO: Fix dit ding*/
-/*Selectie fixes*/
-/*table.dataTable tr.DTTT_selected.odd, table.dataTable tbody tr.selected {*/
-    /*background-color: #3CA08C !important;*/
-/*}*/
-
 
 
