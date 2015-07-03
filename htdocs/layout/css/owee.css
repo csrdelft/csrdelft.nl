@@ -10,14 +10,16 @@
 
 /*Een boel elementen in het rood*/
 a, a:hover, .cd-primary-nav .cd-secondary-nav > li > a, .cd-primary-nav .cd-secondary-nav > li > a:hover, .cd-primary-nav .cd-secondary-nav > li > a,
-.cd-primary-nav .cd-secondary-nav > li > a:hover, a#cd-main-trigger.selected, .cd-primary-nav > li > a:hover, .visitekaartje p a{
+.cd-primary-nav .cd-secondary-nav > li > a:hover, a#cd-main-trigger.selected, .cd-primary-nav > li > a:hover, .visitekaartje p a,
+.ui-widget-header{
 	color: #ed1c24;
 }
 
 /*Een boel elementen in het wit*/
 body,h1,h2,h3,h4,h5,h6,textarea,input,select,label,select option, #cd-zijbalk .ishetal .ja, #cd-zijbalk .ishetal .nee, .staatrood,
 #cd-zijbalk .blok .item a, a.maaltijd-aangemeld, a.maaltijd-afgemeld, .cd-primary-nav > li > a,
-.cd-primary-nav .cd-secondary-nav a, .visitekaartje p, .visitekaartje p.naam a, .visitekaartje p a{
+.cd-primary-nav .cd-secondary-nav a, .visitekaartje p, .visitekaartje p.naam a, .visitekaartje p a,
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited{
     color: #ffffff !important;
 }
 
@@ -61,6 +63,10 @@ body,h1,h2,h3,h4,h5,h6,textarea,input,select,label,select option, #cd-zijbalk .i
 
 /*Rand van knop in rood indien geselecteerd*/
 .btn:hover{
+    border: 1px solid #ed1c24;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
     border: 1px solid #ed1c24;
 }
 
