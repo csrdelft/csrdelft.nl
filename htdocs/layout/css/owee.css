@@ -49,9 +49,10 @@ body,h1,h2,h3,h4,h5,h6,textarea,input,select,label,select option, #cd-zijbalk .i
     background: #ed1c24 !important;
 }
 
-.markItUpHeader {
-    background: #ffffff !important;
-}
+/*TODO: Fix dit ding*/
+/*.markItUpHeader {*/
+    /*background: #ffffff !important;*/
+/*}*/
 
 /*Rand van knop in wit*/
 .btn, input[type=submit], input[type=button]{
@@ -69,10 +70,11 @@ body,h1,h2,h3,h4,h5,h6,textarea,input,select,label,select option, #cd-zijbalk .i
     border: none !important;
 }
 
+/*TODO: Fix dit ding*/
 /*Selectie fixes*/
-table.dataTable tr.DTTT_selected.odd, table.dataTable tbody tr.selected {
-    background-color: #3CA08C !important;
-}
+/*table.dataTable tr.DTTT_selected.odd, table.dataTable tbody tr.selected {*/
+    /*background-color: #3CA08C !important;*/
+/*}*/
 
 
 
