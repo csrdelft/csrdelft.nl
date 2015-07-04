@@ -3,20 +3,49 @@
  /** donker-turquoise : #05877d*/
  /**/
 
-/*Achtergrond kleur*/
-#cd-zijbalk {
-    background: #05877d;
+/*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
+#cd-zijbalk, #forumtabel th, .cd-primary-nav ul {
+    background-color: #05877d !important;
 }
 
 /*Koppen in het rood*/
-h1, a, a:hover {
+h1, a, a:hover,
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
 	color: #EE343F;
 }
+
+
+        /*NAVIGATIE MENU*/
+
+
+/*Andere koppen in het wit*/
+.cd-primary-nav .cd-secondary-nav a,
+.cd-primary-nav .cd-secondary-nav > li > a:hover,
+.cd-primary-nav .cd-secondary-nav > li > a {
+    color: #ffffff;
+}
+
+/*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
+.cd-primary-nav .cd-secondary-nav a:hover {
+    text-decoration: underline !important;
+    color: #ffffff;
+}
+
+/*Streepje onder naam*/
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+    box-shadow: inset 0 -2px 0 #EE343F;
+}
+
+
+        /*ZIJBALK*/
+
 
 /*Veel tekst van de zijbalk in het wit*/
 #cd-zijbalk .ishetal .ja, #cd-zijbalk .ishetal .nee, .staatrood,
 #cd-zijbalk .blok .item a, #cd-zijbalk .ishetal, #cd-zijbalk .blok .item {
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 /*Zijbalk grens van het scherm in rood*/
@@ -27,4 +56,27 @@ h1, a, a:hover {
 /*OWee logo met gradient*/
 #cd-zijbalk .cd-beeldmerk {
     background-image: url("/plaetjes/owee/2015/logo.png"), radial-gradient(#3CA08C 20%, transparent 60%);
+}
+
+
+        /*KNOPPEN*/
+
+
+/*Knoppen in blauw gradient*/
+.btn, input[type=submit], input[type=button], .progress-bar-info, .btn:focus,
+input[type=submit]:focus, input[type=button]:focus {
+    background-image: linear-gradient(to bottom, #05877d, #5fc6aa);
+    border: none !important;
+}
+
+/*Voor een mouse hover wordt de gradient omgedraaid*/
+.btn:hover, input[type=submit]:hover, input[type=button]:hover {
+    background-image: linear-gradient(to bottom, #5fc6aa, #05877d);
+    border: none !important;
+}
+
+/*Actieve knoppen iets ruimere kleuren -> zo ontstaat verschil tussen hover en active*/
+.btn.active {
+    background-image: linear-gradient(to bottom, #5fd1aa, #077b72);
+    border: none !important;
 }
