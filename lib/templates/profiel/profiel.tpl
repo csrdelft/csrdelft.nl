@@ -379,6 +379,17 @@
 		</div>
 	{/if}
 
+	<div class="profielregel fotos" id="fotos">
+		<div class="gegevens">
+			<div class="label">Fotoalbum:</div>
+			<div>
+				{foreach from=$fotos item=foto}
+					{$foto->view()}
+				{/foreach}
+			</div>
+		</div>
+	</div>
+
 	{if LoginModel::mag('P_ADMIN,bestuur,commissie:NovCie') AND $profiel->status === LidStatus::Noviet AND $profiel->kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
 			<div style="cursor: pointer;" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>

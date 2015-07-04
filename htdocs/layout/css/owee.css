@@ -1,43 +1,30 @@
-/* owee 2014
- * rood: #ed1c24
- * oranje: #fcb040
- * donkergrijs: #231f20
- */
+/* owee 2015*/
+ /** rood: #EE343F*/
+ /** donker-turquoise : #05877d*/
+ /**/
 
-body {
-	background-image: url("/plaetjes/owee/2014/body.png");
-	background-repeat: repeat-x;
-}
-#mainright {
-	background-image: url("/plaetjes/owee/2014/banner.png");
-	background-repeat: no-repeat;
-	background-position-x: 33%;
-	background-position-y: 33px;
-}
-h1,h2,h3,h4,h5,h6 {
-	color: #231f20;
-}
-a, a:hover {
-	color: #ed1c24;
-}
-a[href^="http://"], a[href^="https://"] {
-	background: url("/plaetjes/layout/external-link-red.png") no-repeat center right;
-}
-a[href^="mailto:"] {
-	background: url("/plaetjes/layout/email-link-blue.png") no-repeat center right;
+/*Achtergrond kleur*/
+#cd-zijbalk {
+    background: #05877d;
 }
 
-.cd-primary-nav > li > a:hover, .cd-primary-nav > li > a.selected {
-	color: #fcb040;
-	box-shadow: inset 0 -2px 0 #fcb040;
+/*Koppen in het rood*/
+h1, a, a:hover {
+	color: #EE343F;
 }
 
-#zijbalk {
-	border-color: #fcb040;
+/*Veel tekst van de zijbalk in het wit*/
+#cd-zijbalk .ishetal .ja, #cd-zijbalk .ishetal .nee, .staatrood,
+#cd-zijbalk .blok .item a, #cd-zijbalk .ishetal, #cd-zijbalk .blok .item {
+    color: #ffffff !important;
 }
-#zijbalk .block .zijbalk-kopje a {
-	color: #ed1c24;
+
+/*Zijbalk grens van het scherm in rood*/
+#cd-zijbalk {
+	border-color: #EE343F;
 }
-#zijbalk .block .item a {
-	color: #231f20;
+
+/*OWee logo met gradient*/
+#cd-zijbalk .cd-beeldmerk {
+    background-image: url("/plaetjes/owee/2015/logo.png"), radial-gradient(#3CA08C 20%, transparent 60%);
 }
