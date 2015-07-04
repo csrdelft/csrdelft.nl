@@ -90,8 +90,16 @@ class ForumDeelView extends ForumView {
 		}
 		$js = "if (this.value.substr(0,4) === 'http') { window.open(this.value); } else { window.location.href = this.value; }";
 		$dropdown .= ' » <select name="forum_id" onchange="' . $js . '">';
-		//$dropdown .= '<option value="/forum/recent/belangrijk">Belangrijk recent gewijzigd</option>';
-		$dropdown .= '<option value="/forum/recent">Recent gewijzigd</option>'; //FIXME: selected
+		$dropdown .= '<option value="/forum/recent/belangrijk"';
+		if ($this->model->titel === 'Belangrijk recent gewijzigd') {
+			$dropdown .= ' selected="selected"';
+		}
+		$dropdown .= '>Belangrijk recent gewijzigd</option>';
+		$dropdown .= '<option value="/forum/recent"';
+		if ($this->model->titel === 'Recent gewijzigd') {
+			$dropdown .= ' selected="selected"';
+		}
+		$dropdown .= '>Recent gewijzigd</option>';
 		foreach (ForumModel::instance()->getForumIndelingVoorLid() as $cat) {
 			$dropdown .= '<optgroup label="' . $cat->titel . '">';
 			foreach ($cat->getForumDelen() as $newDeel) {
