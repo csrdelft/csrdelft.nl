@@ -1,10 +1,10 @@
 /*!
-* jgallery v1.5.3
+* jgallery v1.5.4
 * http://jgallery.jakubkowalczyk.pl/
 *
 * Released under the MIT license
 *
-* Date: 2015-02-11
+* Date: 2015-07-02
 */
 ( function() {
     "use strict";
@@ -375,33 +375,29 @@ var jLoader = ( function( overlay ) {
 
             function check() {
                 var boolComplete = true;
-                var intI = 0;
                 var intComplete = 0;
                 var intPercent;
 
                 $images.each( function() {
-                     intI++;
-                     if ( $( this )[0].complete ) {
+                     if ( $( this )[0].complete && $( this )[0].naturalWidth > 0 ) {
                          intComplete++;
                      }
                      else {
                          boolComplete = false;
                      }
-                     if ( intI === intCount ) {
-                         intPercent = parseInt( intComplete * 100 / intCount );
-                         options.progress( {
-                             percent: intPercent
-                         } );
-                         if ( boolComplete ) {
-                             clearTimeout( timeout );
-                             $tmp.remove();
-                             options.success();
-                         }
-                         else {
-                             timeout = setTimeout( check, options.interval );
-                         }
-                     }
                 } );
+                intPercent = parseInt( intComplete * 100 / intCount );
+                options.progress( {
+                    percent: intPercent
+                } );
+                if ( boolComplete ) {
+                    clearTimeout( timeout );
+                    $tmp.remove();
+                    options.success();
+                }
+                else {
+                    timeout = setTimeout( check, options.interval );
+                }
             }
 
             $this.append( '<div class="jLoaderTmp" style="position: absolute; width: 0; height: 0; line-height: 0; font-size: 0; visibility: hidden; overflow: hidden; z-index: -1;"></div>' );
@@ -1410,6 +1406,8 @@ var Zoom = ( function( jLoader, overlay, historyPushState, jGalleryTransitions, 
                         }
                     }
                 }
+            } ).on( 'mouseleave', function() {
+                translate( 0 );
             } );
         },
 
@@ -1499,11 +1497,17 @@ var Zoom = ( function( jLoader, overlay, historyPushState, jGalleryTransitions, 
                         stopDrag();
                     }
                 } );
+                if ( self.jGallery.options.zoomSize === 'fill' ) {
+                    self.$dragNav.removeClass( 'hide' ).addClass( 'show' );
+                }
                 drag( 0, 0 );
             };
 
             var stopDrag = function() {
                 self.$element.off( 'mousemove touchmove' );
+                if ( self.jGallery.options.zoomSize === 'fill' ) {
+                    self.$dragNav.removeClass( 'show' ).addClass( 'hide' );
+                }
                 self.draggedHorizontal = draggedHorizontal;
                 self.draggedVertical = draggedVertical;
             };
@@ -1782,8 +1786,20 @@ var Zoom = ( function( jLoader, overlay, historyPushState, jGalleryTransitions, 
             } );
         },
 
-        isLoaded: function( $a ) {
+        isAddedToLoad: function( $a ) {
             return this.$element.find( 'img' ).filter( '[src="' + $a.attr( 'href' ) + '"]' ).length > 0;
+        },
+
+        isLoaded: function( $a ) {
+            var img = this.$element.find( 'img' ).filter( '[src="' + $a.attr( 'href' ) + '"]' ).get( 0 );
+            
+            if ( img ) {
+                return this.imgIsLoaded( img );               
+            }
+        },
+
+        imgIsLoaded: function( img ) {
+            return img.complete && img.naturalWidth > 0;         
         },
 
         refreshNav: function() {
@@ -1888,13 +1904,13 @@ var Zoom = ( function( jLoader, overlay, historyPushState, jGalleryTransitions, 
             //preload images next prev
             var $nexta=$a.next();
             if ($nexta.length>0){
-                if ( ! self.isLoaded( $nexta ) ) {
+                if ( ! self.isAddedToLoad( $nexta ) ) {
                     this.appendPhoto( $nexta );
                 }
             }
             var $preva=$a.prev();
             if ($preva.length>0){
-                if ( ! self.isLoaded( $preva ) ) {
+                if ( ! self.isAddedToLoad( $preva ) ) {
                     this.appendPhoto( $preva );
                 }
             }
@@ -1964,7 +1980,7 @@ var Zoom = ( function( jLoader, overlay, historyPushState, jGalleryTransitions, 
                 if ( self.jGallery.options.preloadAll && ! self.booLoadedAll ) {
                     this.appendAllPhotos();
                 }
-                else {
+                else if ( ! this.isAddedToLoad( $a ) ) {
                     this.appendPhoto( $a );
                 }
             }
@@ -2000,7 +2016,7 @@ var Zoom = ( function( jLoader, overlay, historyPushState, jGalleryTransitions, 
             }                
             this.thumbnails.$a.each( function() {
                 var $a = $( this );
-                if ( ! self.isLoaded( $a ) ) {
+                if ( ! self.isAddedToLoad( $a ) ) {
                     self.$element.find( '.pt-part' ).append( '<div class="jgallery-container pt-page"><div class="pt-item"><img src="' + $a.attr( 'href' ) + '" /></div></div>' );
                 }
             } );
@@ -2030,7 +2046,13 @@ var Zoom = ( function( jLoader, overlay, historyPushState, jGalleryTransitions, 
                 start: function() {
                 },
                 success: function() {
-                    $zoom.find( 'img' ).addClass( 'loaded' );
+                    $zoom.find( 'img' ).each( function() {
+                        var $this = $( this );
+                        
+                        if ( self.imgIsLoaded( $this.get( 0 ) ) ) {
+                            $this.addClass( 'loaded' );
+                        }
+                    } );
                     self.$container.overlay( {'hide': true, 'hideLoader': true} );
                     self.showPhotoSuccess( $imgThumb, options );
                 },
