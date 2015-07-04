@@ -206,10 +206,20 @@ class CsrBB extends eamBBParser {
 		if (!$album) {
 			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
 		}
-		if (isset($arguments['slider']) AND $arguments['slider'] === 'homepage') {
+		if (isset($arguments['slider'])) {
 			$view = new FotoAlbumSliderView($album);
+			if (isset($arguments['height'])) {
+				$view->height = (int) $arguments['height'];
+			}
+			if (isset($arguments['interval'])) {
+				$view->interval = (int) $arguments['interval'];
+			}
+			if (isset($arguments['random'])) {
+				$view->random = $arguments['random'] !== 'false';
+			}
 		} else {
 			$view = new FotoAlbumBBView($album);
+
 			if ($this->quote_level > 0 || isset($arguments['compact'])) {
 				$view->makeCompact();
 			}
@@ -229,9 +239,6 @@ class CsrBB extends eamBBParser {
 					$view->setBig($arguments['big']);
 				}
 			}
-		}
-		if (isset($arguments['height'])) {
-			return $view->getHtml($arguments['height']);
 		}
 		return $view->getHtml();
 	}
@@ -820,7 +827,7 @@ HTML;
 		require_once 'view/maalcie/MaaltijdKetzerView.class.php';
 		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(LoginModel::getUid()); // met filter
+				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginModel::getUid()); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
 					return 'Geen aankomende maaltijd.';
@@ -845,7 +852,7 @@ HTML;
 		if (!isset($maaltijd)) {
 			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 		}
-		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), LoginModel::getUid());
+		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginModel::getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		} else {
@@ -855,7 +862,7 @@ HTML;
 		$result = $ketzer->getHtml();
 
 		if ($maaltijd2 !== null) {
-			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), LoginModel::getUid());
+			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginModel::getUid());
 			if (empty($aanmeldingen2)) {
 				$aanmelding2 = null;
 			} else {

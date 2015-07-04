@@ -52,23 +52,17 @@ class CorveePuntenModel {
 		if (!$profiel) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		if ($punten !== 0 AND $bonus_malus !== 0) {
+		if ($punten !== 0 OR $bonus_malus !== 0) {
 			self::savePuntenVoorLid($profiel, (int) $profiel->corvee_punten + $punten, (int) $profiel->corvee_punten_bonus + $bonus_malus);
 		}
 	}
 
-	public static function puntenIntrekken($uid, $punten, $bonus_malus) {
-		if (!is_int($punten) || !is_int($bonus_malus)) {
-			throw new Exception('Punten intrekken faalt: geen integer');
-		}
-		$profiel = ProfielModel::get($uid); // false if lid does not exist
-		if (!$profiel) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
-		}
-		if ($punten !== 0 AND $bonus_malus !== 0) {
-			self::savePuntenVoorLid($profiel, (int) $profiel->corvee_punten - $punten, (int) $profiel->corvee_punten_bonus - $bonus_malus);
-		}
-	}
+    public static function puntenIntrekken($uid, $punten, $bonus_malus) {
+        if (!is_int($punten) || !is_int($bonus_malus)) {
+            throw new Exception('Punten intrekken faalt: geen integer');
+        }
+        self::puntenToekennen($uid, -$punten, -$bonus_malus);
+    }
 
 	public static function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null) {
 		if (!is_int($punten) && !is_int($bonus_malus)) {
