@@ -695,6 +695,8 @@
 				});
 				btnTag.appendTo(container.find('div.icons'));
 		{/if}
+				// mode change album selector to last position
+				container.find('div.icons .jgallery-btn.change-album').appendTo(container.find('div.icons'));
 			});
 			/* img class="photoTag" data-fotoalbum="$album->subdir"
 			 $(document).ready(function () {
