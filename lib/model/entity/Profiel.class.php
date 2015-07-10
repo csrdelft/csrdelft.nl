@@ -116,7 +116,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'voornaam'				 => array(T::String),
 		'tussenvoegsel'			 => array(T::String),
 		'achternaam'			 => array(T::String),
-		'postfix'				 => array(T::String),
+		'postfix'				 => array(T::String, true),
 		'nickname'				 => array(T::String),
 		'duckname'				 => array(T::String),
 		// fysiek

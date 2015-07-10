@@ -169,7 +169,7 @@ class ProfielForm extends Formulier {
 		if ($profiel->uid) {
 			parent::__construct($profiel, '/profiel/' . $profiel->uid . '/bewerken');
 		} else {
-			parent::__construct($profiel, '/profiel/' . $profiel->lidjaar . '/nieuw/' . Lidstatus::getDescription($profiel->status));
+			parent::__construct($profiel, '/profiel/' . $profiel->lidjaar . '/nieuw/' . strtolower(substr($profiel->status, 2)));
 		}
 
 		$admin = LoginModel::mag('P_LEDEN_MOD');
