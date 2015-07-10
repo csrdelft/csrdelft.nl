@@ -57,10 +57,10 @@ class ProfielModel extends CachedPersistenceModel {
 		return Database::sqlExists(static::getTableName(), 'duckname = ?', array($duck));
 	}
 
-	public function nieuw($lidstatus, $lidjaar) {
+	public function nieuw($lidjaar, $lidstatus) {
 		$profiel = new Profiel();
-		$profiel->status = $lidstatus;
 		$profiel->lidjaar = $lidjaar;
+		$profiel->status = $lidstatus;
 		$profiel->changelog = '[div]Aangemaakt als ' . LidStatus::getDescription($profiel->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $profiel;
 	}

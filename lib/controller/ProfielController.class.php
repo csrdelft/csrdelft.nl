@@ -52,12 +52,16 @@ class ProfielController extends AclController {
 			} else {
 				$this->action = 'profiel';
 			}
-			if (!ProfielModel::existsUid($uid) AND $this->action != 'nieuw') {
+			if ($this->action === 'nieuw' AND $this->hasParam(2)) {
+				$args = $this->getParams(4); // status
+				array_unshift($args, $uid); // lidjaar
+			} elseif (ProfielModel::existsUid($uid)) {
+				$args = $this->getParams(4);
+				array_unshift($args, ProfielModel::get($uid));
+			} else {
 				setMelding('Dit profiel bestaat niet', -1);
 				redirect('/ledenlijst');
 			}
-			$args = $this->getParams(4);
-			array_unshift($args, ProfielModel::get($uid));
 			$body = parent::performAction($args);
 			$this->view = new CsrLayoutPage($body);
 			$this->view->addCompressedResources('profiel');

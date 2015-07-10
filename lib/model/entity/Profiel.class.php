@@ -376,7 +376,12 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			}
 			$k .= '<p class="naam">' . $l . $this->getNaam('volledig') . '&nbsp;' . LidStatus::getChar($this->status);
 			$k .= '</a></p>';
-			$k .= '<p>' . $this->lidjaar . ' ' . $this->getVerticale()->naam . '</p>';
+			$k .= '<p>' . $this->lidjaar;
+			$verticale = $this->getVerticale();
+			if ($verticale) {
+				$k .= ' ' . $verticale->naam;
+			}
+			$k .= '</p>';
 			$bestuurslid = BestuursLedenModel::instance()->find('uid = ?', array($this->uid), null, null, 1)->fetch();
 			if ($bestuurslid) {
 				$bestuur = BesturenModel::get($bestuurslid->groep_id);
