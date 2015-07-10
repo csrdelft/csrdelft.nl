@@ -166,7 +166,11 @@ class ProfielForm extends Formulier {
 	}
 
 	public function __construct(Profiel $profiel) {
-		parent::__construct($profiel, '/profiel/' . $profiel->uid . '/bewerken');
+		if ($profiel->uid) {
+			parent::__construct($profiel, '/profiel/' . $profiel->uid . '/bewerken');
+		} else {
+			parent::__construct($profiel, '/profiel/' . $profiel->lidjaar . '/nieuw/' . Lidstatus::getDescription($profiel->status));
+		}
 
 		$admin = LoginModel::mag('P_LEDEN_MOD');
 		$inschrijven = !$profiel->getAccount();

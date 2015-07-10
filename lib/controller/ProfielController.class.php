@@ -34,7 +34,7 @@ class ProfielController extends AclController {
 				'bewerken'	 => 'P_PROFIEL_EDIT',
 				'voorkeuren' => 'P_PROFIEL_EDIT',
 				// Leden
-				'nieuw'		 => 'P_LEDEN_MOD'
+				'nieuw'		 => 'P_LEDEN_MOD,commissie:NovCie'
 			);
 		}
 	}
