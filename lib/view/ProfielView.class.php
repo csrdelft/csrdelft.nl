@@ -248,18 +248,18 @@ class ProfielForm extends Formulier {
 			$fields[] = new TextField('tussenvoegsel', $profiel->tussenvoegsel, 'Tussenvoegsel', 15);
 			$fields[] = new RequiredTextField('achternaam', $profiel->achternaam, 'Achternaam', 50);
 			if ($admin OR $inschrijven) {
-				$fields[] = new GeslachtField('geslacht', $profiel->geslacht, 'Geslacht');
+				$fields[] = new RequiredGeslachtField('geslacht', $profiel->geslacht, 'Geslacht');
 				$fields[] = new TextField('voornamen', $profiel->voornamen, 'Voornamen', 100);
 				if (!$inschrijven) {
 					$fields[] = new TextField('postfix', $profiel->postfix, 'Postfix', 7);
 					$fields[] = new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
 				}
 			}
-			$fields[] = new DateField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15);
-			if ($admin AND ! $profiel->isLid() AND ! $profiel->isOudlid()) {
+			$fields[] = new RequiredDateField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15);
+			if ($admin AND $profiel->status === LidStatus::Overleden) {
 				$fields[] = new DateField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
 			}
-			if ($admin OR $profiel->isOudlid() OR $profiel->status === LidStatus::Overleden) {
+			if (($admin OR $profiel->isOudlid() OR $profiel->status === LidStatus::Overleden) AND ! $inschrijven) {
 				$fields[] = new LidField('echtgenoot', $profiel->echtgenoot, 'Echtgenoot', 'allepersonen');
 				$fields[] = new Subkopje('Oudledenpost');
 				$fields[] = new TextField('adresseringechtpaar', $profiel->adresseringechtpaar, 'Tenaamstelling post echtpaar', 250);
@@ -277,12 +277,10 @@ class ProfielForm extends Formulier {
 		$fields[] = new RequiredTextField('postcode', $profiel->postcode, 'Postcode', 20);
 		$fields[] = new RequiredTextField('woonplaats', $profiel->woonplaats, 'Woonplaats', 50);
 		$fields[] = new RequiredLandField('land', $profiel->land, 'Land');
-		$fields[] = new TelefoonField('telefoon', $profiel->telefoon, 'Telefoonnummer (vast)', 20);
-		$fields[] = new TelefoonField('mobiel', $profiel->mobiel, 'Paupernummer', 20);
 
 		if (!$profiel->isOudlid()) {
 			$fields[] = new Subkopje('Adres ouders');
-			$fields[] = new TextField('o_adres', $profiel->o_adres, 'Straatnaam', 100);
+			$fields[] = new TextField('o_adres', $profiel->o_adres, 'Straatnaam + Huisnummer', 100);
 			$fields[] = new TextField('o_postcode', $profiel->o_postcode, 'Postcode', 20);
 			$fields[] = new TextField('o_woonplaats', $profiel->o_woonplaats, 'Woonplaats', 50);
 			$fields[] = new LandField('o_land', $profiel->o_land, 'Land', 50);
@@ -293,18 +291,20 @@ class ProfielForm extends Formulier {
 		//TODO: email & multiple contacts
 		$fields['email'] = new RequiredEmailField('email', $profiel->email, 'E-mailadres');
 		if (!$inschrijven) {
-			$fields['email']->readonly = true;
-			$fields['email']->title = 'Wijzig je e-mailadres met het inloggegevens-formulier.';
-		}
-		$fields[] = new EmailField('msn', $profiel->msn, 'MSN');
-		$fields[] = new TextField('icq', $profiel->icq, 'ICQ', 10);
-		$fields[] = new EmailField('jid', $profiel->jid, 'Jabber/Google-talk');
-		$fields[] = new TextField('skype', $profiel->skype, 'Skype', 20);
-		$fields[] = new UrlField('linkedin', $profiel->linkedin, 'Publiek LinkedIn-profiel');
-		$fields[] = new UrlField('website', $profiel->website, 'Website');
+            $fields['email']->readonly = true;
+            $fields['email']->title = 'Wijzig je e-mailadres met het inloggegevens-formulier.';
+            $fields[] = new EmailField('msn', $profiel->msn, 'MSN');
+            $fields[] = new TextField('icq', $profiel->icq, 'ICQ', 10);
+            $fields[] = new EmailField('jid', $profiel->jid, 'Jabber/Google-talk');
+            $fields[] = new TextField('skype', $profiel->skype, 'Skype', 20);
+            $fields[] = new UrlField('linkedin', $profiel->linkedin, 'Publiek LinkedIn-profiel');
+            $fields[] = new UrlField('website', $profiel->website, 'Website');
+        }
+        $fields[] = new RequiredTelefoonField('mobiel', $profiel->mobiel, 'Mobiel', 20);
+        $fields[] = new TelefoonField('telefoon', $profiel->telefoon, 'Telefoonnummer (vast)', 20);
 
 		$fields[] = new Subkopje('Boekhouding');
-		$fields[] = new TextField('bankrekening', $profiel->bankrekening, 'Bankrekening', 18);
+		$fields[] = new RequiredTextField('bankrekening', $profiel->bankrekening, 'Bankrekening', 18);
 		if ($admin) {
 			$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
 		}
@@ -325,9 +325,6 @@ class ProfielForm extends Formulier {
 		if (!$inschrijven AND ( $admin OR $profiel->isOudlid() )) {
 			$fields[] = new TextField('beroep', $profiel->beroep, 'Beroep/werk', 4096);
 			$fields[] = new IntField('lidjaar', (int) $profiel->lidjaar, 'Lid sinds', 1950, date('Y'));
-		}
-
-		if ($admin) {
 			$fields[] = new DateField('lidafdatum', $profiel->lidafdatum, 'Lid-af sinds');
 		}
 
@@ -351,26 +348,26 @@ class ProfielForm extends Formulier {
 		}
 
 		$fields[] = new Subkopje('Persoonlijk');
-		$fields[] = new TextField('eetwens', $profiel->eetwens, 'Dieet/allergie');
-		$fields[] = new IntField('lengte', (int) $profiel->lengte, 'Lengte (cm)', 50, 250);
-		$fields[] = new SelectField('ovkaart', $profiel->ovkaart, 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
+		$fields[] = new TextField('eetwens', $profiel->eetwens, 'Dieet/voedselallergie');
+		$fields[] = new RequiredIntField('lengte', (int) $profiel->lengte, 'Lengte (cm)', 50, 250);
+		$fields[] = new RequiredSelectField('ovkaart', $profiel->ovkaart, 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
 		$fields[] = new TextField('kerk', $profiel->kerk, 'Kerk', 50);
 		$fields[] = new TextField('muziek', $profiel->muziek, 'Muziekinstrument', 50);
 		$fields[] = new SelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 
 		if ($admin OR $inschrijven) {
 			$fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
-			$fields[] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
+			$fields[] = new RequiredTextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
 		}
 
+        $fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
 		if ($admin OR LoginModel::mag('commissie:NovCie')) {
-			$fields[] = new TextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht je van het novitiaat?');
-			$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
 			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);
-			$fields[] = new SelectField('novietSoort', $profiel->novietSoort, 'Soort Noviet', array('noviet', 'nanoviet'));
-			$fields[] = new SelectField('matrixPlek', $profiel->matrixPlek, 'Matrix plek', array('voor', 'midden', 'achter'));
-			$fields[] = new SelectField('startkamp', $profiel->startkamp, 'Startkamp', array('ja', 'nee'));
-			$fields[] = new TextareaField('medisch', $profiel->medisch, 'medisch (NB alleen als relevant voor hele NovCie)');
+            $fields[] = new RequiredTextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht Noviet van novitiaat?');
+			$fields[] = new RequiredSelectField('novietSoort', $profiel->novietSoort, 'Soort Noviet', array('noviet', 'nanoviet'));
+			$fields[] = new RequiredSelectField('matrixPlek', $profiel->matrixPlek, 'Matrix plek', array('voor', 'midden', 'achter'));
+			$fields[] = new RequiredSelectField('startkamp', $profiel->startkamp, 'Startkamp', array('ja', 'nee'));
+			$fields[] = new TextareaField('medisch', $profiel->medisch, 'medisch (NB alleen als relevant voor hele NovCie, bijv. allergieen)');
 			$fields[] = new TextareaField('novitiaatBijz', $profiel->novitiaatBijz, 'Bijzonderheden novitiaat (op dag x ...)');
 			$fields[] = new TextareaField('kgb', $profiel->kgb, 'Overige NovCie-opmerking');
 			$fields[] = new HtmlComment('</div>');

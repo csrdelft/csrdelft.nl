@@ -61,6 +61,7 @@ class ProfielModel extends CachedPersistenceModel {
 		$profiel = new Profiel();
 		$profiel->lidjaar = $lidjaar;
 		$profiel->status = $lidstatus;
+        $profiel->ontvangtcontactueel = OntvangtContactueel::Nee;
 		$profiel->changelog = '[div]Aangemaakt als ' . LidStatus::getDescription($profiel->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $profiel;
 	}
