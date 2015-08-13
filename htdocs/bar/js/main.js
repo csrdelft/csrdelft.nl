@@ -649,26 +649,46 @@ $(function () {
 
                     html += '<div class="col-xs-6">';
                     html += '<h3>Update prijs</h3>';
-                    html += '<form method="post" action="ajax.php" class="form-horizontal" role="form">';
+                    html += '<form id="editPrice" method="post" action="ajax.php" class="form-horizontal" role="form">';
+                        html += '<input type="hidden" name="productId" value="' + product.productId + '" />';
+                        html += '<input type="hidden" name="q" value="updatePrice" />';
+
+                        html += '<div class="input-group">';
+                            html += '<label class="input-group-addon" for="product' + product.productId + '">Nieuwe prijs in centen</label>';
+                            html += '<input id="product' + product.productId + '" name="price" type="text" class="form-control" placeholder="' + producten[product.productId].prijs + '" />';
+                            html += '<div class="input-group-btn"><button type="submit" class="btn btn-primary">Prijs aanpassen</button></div>';
+                        html += '</div>';
+                    html += '</form>';
+                    html += '</div>';
+
+                    html += '</div>';
+
+                    html += '<div class="row">';
+
+                    html += '<div class="col-xs-6">';
+                    html += '<h3>Update zichtbaarheid</h3>';
+                    html += '<form id="editVisibility" method="post" action="ajax.php" class="form-horizontal" role="form">';
                     html += '<input type="hidden" name="productId" value="' + product.productId + '" />';
-                    html += '<input type="hidden" name="q" value="updatePrice" />';
+                    html += '<input type="hidden" name="q" value="updateVisibility" />';
 
                     html += '<div class="input-group">';
-                    html += '<label class="input-group-addon" for="product' + product.productId + '">Nieuwe prijs in centen</label>';
-                    html += '<input id="product' + product.productId + '" name="price" type="text" class="form-control" placeholder="' + producten[product.productId].prijs + '" />';
-                    html += '<div class="input-group-btn"><button type="submit" class="btn btn-primary">Prijs aanpassen</button></div>';
+                    html += '<label class="input-group-addon" for="product' + product.productId + 'visibility">Zichtbaarheid</label>';
+                    html += '<select id="product' + product.productId + 'visibility" name="visibility" class="form-control">';
+                    html += '<option value="1"' + (product.status == 1 ? ' selected="selected"' : '') +'>Zichtbaar</option>';
+                    html += '<option value="0"' + (product.status == 0 ? ' selected="selected"' : '') +'>Niet zichtbaar</option>';
+                    html += '</select>';
+                    html += '<div class="input-group-btn"><button type="submit" class="btn btn-primary">Zichtbaarheid aanpassen</button></div>';
                     html += '</div>';
-                    html += '</div>';
-
-                    html += '</div>';
-
                     html += '</form>';
+                    html += '</div>';
+
+                    html += '</div>';
 
                     $(this).html(html);
 
                 });
 
-                $("#editProduct form").submit(function(e) {
+                $("#editPrice").submit(function(e) {
 
                     e.preventDefault();
                     var $this = $(this);
@@ -683,16 +703,45 @@ $(function () {
 
                             if(data == "1") {
                                 zetBericht("Prijs van '" + product.beschrijving + "' gewijziged.", "success");
-                                $("#editProduct form input[name=price]").attr("placeholder", postdata[2].value);
+                                $this.find("input[name=price]").attr("placeholder", postdata[2].value);
                                 $this.trigger("reset");
                                 laadProducten();
                             } else {
-                                zetBericht("Er is iets misgegeaan met het wijzigen van een prijs!", "danger");
+                                zetBericht("Er is iets misgegeaan met het wijzigen van de prijs!", "danger");
                             }
 
                         },
                         error: function() {
-                            zetBericht("Er is iets misgegeaan met het wijzigen van een prijs!", "danger");
+                            zetBericht("Er is iets misgegeaan met het wijzigen van de prijs!", "danger");
+                        }
+                    });
+
+                });
+
+                $("#editVisibility").submit(function(e) {
+
+                    e.preventDefault();
+                    var $this = $(this);
+
+                    var postdata = $(this).serializeArray();
+
+                    $.ajax({
+                        url: $(this).attr("action"),
+                        method: $(this).attr("method"),
+                        data: postdata,
+                        success: function(data) {
+
+                            if(data == "1") {
+                                zetBericht("Zichtbaarheid van '" + product.beschrijving + "' gewijziged.", "success");
+                                $this.find("input[name=visibility]").attr("placeholder", postdata[2].value);
+                                laadProducten();
+                            } else {
+                                zetBericht("Er is iets misgegeaan met het wijzigen van de zichtbaarheid!", "danger");
+                            }
+
+                        },
+                        error: function() {
+                            zetBericht("Er is iets misgegeaan met het wijzigen van de zichtbaarheid!", "danger");
                         }
                     });
 

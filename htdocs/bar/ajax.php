@@ -33,6 +33,9 @@ if ($barsysteem->isLoggedIn()){
 		if(isset($_POST['q']) && $_POST['q'] == 'updatePrice') {
 			echo $barsysteem->updatePrice($_POST['productId'], $_POST['price']);
 		}
+		if(isset($_POST['q']) && $_POST['q'] == 'updateVisibility') {
+			echo $barsysteem->updateVisibility($_POST['productId'], $_POST['visibility']);
+		}
 		if(isset($_POST["add_person"])) {
 			echo $barsysteem->addPerson($_POST['name'], $_POST['saldo'], $_POST['uid']);
 		}
