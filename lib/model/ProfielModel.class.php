@@ -67,8 +67,8 @@ class ProfielModel extends CachedPersistenceModel {
 	}
 
 	public function create(PersistentEntity $profiel) {
-		// Lichting zijn de eerste 2 cijfers van uid
-		$jj = substr($profiel->lidjaar, 0, 2);
+		// Lichting zijn de laatste 2 cijfers van lidjaar
+		$jj = substr($profiel->lidjaar, 2, 2);
 		$laatste_uid = Database::sqlSelect(array('MAX(uid)'), ProfielModel::getTableName(), 'LEFT(uid, 2) = ?', array($jj), null, null, 1)->fetchColumn();
 		if ($laatste_uid) {
 			// Volgnummer zijn de laatste 2 cijfers van uid
