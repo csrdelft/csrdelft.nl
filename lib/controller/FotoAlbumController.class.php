@@ -346,10 +346,10 @@ class FotoAlbumController extends AclController {
 		if ($foto) {
 			// return all tags
 			$tags = FotoTagsModel::instance()->getTags($foto);
+			$this->view = new JsonResponse($tags->fetchAll());
 		} else {
-			$tags = array();
+			$this->view = new JsonResponse(array());
 		}
-		$this->view = new JsonResponse($tags->fetchAll());
 	}
 
 }

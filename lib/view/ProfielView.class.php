@@ -147,14 +147,14 @@ class ProfielView extends SmartyTemplateView {
 		$this->smarty->assign('gerecenseerdeboeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'gerecenseerd'));
 
 		require_once 'view/FotoAlbumView.class.php';
-		$tags = array();
+		$fotos = array();
 		foreach (FotoTagsModel::instance()->find('keyword = ?', array($this->model->uid), null, null, 3) as $tag) {
 			$foto = FotoModel::getUUID($tag->refuuid);
 			if ($foto) {
-				$tags[] = new FotoBBView($foto);
+				$fotos[] = new FotoBBView($foto);
 			}
 		}
-		$this->smarty->assign('fotos', $tags);
+		$this->smarty->assign('fotos', $fotos);
 
 		$this->smarty->display('profiel/profiel.tpl');
 	}
