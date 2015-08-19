@@ -383,6 +383,7 @@
 		<div class="gegevens">
 			<div class="label">Fotoalbum:</div>
 			<div>
+				<a class="btn" href="/fotoalbum/{LoginModel::getUid()}">Toon alle foto's</a>
 				{foreach from=$fotos item=foto}
 					{$foto->view()}
 				{/foreach}

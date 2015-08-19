@@ -306,6 +306,11 @@ class FotoTagsModel extends PersistenceModel {
 	const orm = 'FotoTag';
 
 	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'wanneer DESC';
 
 	protected function __construct() {
 		parent::__construct('fotoalbum/');

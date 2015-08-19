@@ -55,12 +55,17 @@ class FotoAlbumController extends AclController {
 		} else {
 			$path = $this->getParams(3);
 		}
-		$path = PICS_PATH . urldecode(implode('/', $path));
-		if ($this->action === 'download') {
-			parent::performAction(array($path));
-			return;
+		if (isset($path[2]) AND ProfielModel::existsUid($path[2])) {
+			require_once 'model/entity/fotoalbum/FotoTagAlbum.class.php';
+			$album = new FotoTagAlbum($path[2]);
+		} else {
+			$path = PICS_PATH . urldecode(implode('/', $path));
+			if ($this->action === 'download') {
+				parent::performAction(array($path));
+				return;
+			}
+			$album = $this->model->getFotoAlbum($path);
 		}
-		$album = $this->model->getFotoAlbum($path);
 		if (!$album) {
 			setMelding('Fotoalbum bestaat niet' . (DEBUG ? ': ' . $path : ''), -1);
 			redirect('/fotoalbum');
