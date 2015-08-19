@@ -55,10 +55,11 @@ class FotoAlbumController extends AclController {
 		} else {
 			$path = $this->getParams(3);
 		}
-		if (isset($path[2]) AND ProfielModel::existsUid($path[2])) {
-			require_once 'model/entity/fotoalbum/FotoTagAlbum.class.php';
-			$album = new FotoTagAlbum($path[2]);
-		} else {
+		$album = null;
+		if (sizeof($path) === 2) {
+			$album = $this->model->getFotoAlbum($path[2]);
+		}
+		if (!$album) {
 			$path = PICS_PATH . urldecode(implode('/', $path));
 			if ($this->action === 'download') {
 				parent::performAction(array($path));

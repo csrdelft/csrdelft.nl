@@ -30,6 +30,10 @@ class FotoTagAlbum extends FotoAlbum {
 		return '/fotoalbum/' . $this->uid;
 	}
 
+	public function exists() {
+		return true;
+	}
+
 	public function isEmpty() {
 		return false;
 	}
