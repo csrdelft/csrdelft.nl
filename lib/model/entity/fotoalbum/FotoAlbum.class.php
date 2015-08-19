@@ -25,17 +25,17 @@ class FotoAlbum extends Map {
 	 * Subalbums in dit album
 	 * @var FotoAlbum[]
 	 */
-	private $subalbums;
+	protected $subalbums;
 	/**
 	 * Fotos in dit album
 	 * @var Foto[]
 	 */
-	private $fotos;
+	protected $fotos;
 	/**
 	 * Fotos zonder thumb of resized
 	 * @var Foto[]
 	 */
-	private $fotos_incompleet;
+	protected $fotos_incompleet;
 	/**
 	 * Creator
 	 * @var string

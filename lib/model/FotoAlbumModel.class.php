@@ -46,7 +46,12 @@ class FotoAlbumModel extends PersistenceModel {
 		if (strpos($path, '/_') !== false) {
 			return null;
 		}
-		$album = new FotoAlbum($path);
+		if (ProfielModel::existsUid($path)) {
+			require_once 'model/entity/fotoalbum/FotoTagAlbum.class.php';
+			$album = new FotoTagAlbum($path);
+		} else {
+			$album = new FotoAlbum($path);
+		}
 		if (!$album->exists()) {
 			return null;
 		}
@@ -306,6 +311,11 @@ class FotoTagsModel extends PersistenceModel {
 	const orm = 'FotoTag';
 
 	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'wanneer DESC';
 
 	protected function __construct() {
 		parent::__construct('fotoalbum/');

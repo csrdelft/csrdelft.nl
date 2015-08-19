@@ -24,13 +24,19 @@ class KeywordTag extends PersistentEntity {
 	 */
 	public $door;
 	/**
+	 * Wanneer gemaakt
+	 * @var datetime
+	 */
+	public $wanneer;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'refuuid'	 => array(T::String),
 		'keyword'	 => array(T::String),
-		'door'		 => array(T::UID)
+		'door'		 => array(T::UID),
+		'wanneer'	 => array(T::DateTime)
 	);
 	/**
 	 * Database primary key
