@@ -165,7 +165,11 @@ class CsrBB extends eamBBParser {
 			$responsive = false;
 		}
 		$foto = new Foto($filename, $album);
-		$fototag = new FotoBBView($foto, $groot, $responsive);
+		if ($foto) {
+			$fototag = new FotoBBView($foto, $groot, $responsive);
+		} else {
+			return '';
+		}
 		return $fototag->getHtml();
 	}
 

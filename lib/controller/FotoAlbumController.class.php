@@ -343,8 +343,12 @@ class FotoAlbumController extends AclController {
 		}
 		FotoTagsModel::instance()->removeTag($refuuid, $keyword);
 		$foto = FotoModel::getUUID($refuuid);
-		// return all tags
-		$tags = FotoTagsModel::instance()->getTags($foto);
+		if ($foto) {
+			// return all tags
+			$tags = FotoTagsModel::instance()->getTags($foto);
+		} else {
+			$tags = array();
+		}
 		$this->view = new JsonResponse($tags->fetchAll());
 	}
 

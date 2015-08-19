@@ -150,7 +150,9 @@ class ProfielView extends SmartyTemplateView {
 		$tags = array();
 		foreach (FotoTagsModel::instance()->find('keyword = ?', array($this->model->uid), null, null, 3) as $tag) {
 			$foto = FotoModel::getUUID($tag->refuuid);
-			$tags[] = new FotoBBView($foto);
+			if ($foto) {
+				$tags[] = new FotoBBView($foto);
+			}
 		}
 		$this->smarty->assign('fotos', $tags);
 

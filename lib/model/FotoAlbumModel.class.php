@@ -300,6 +300,7 @@ class FotoModel extends PersistenceModel {
 		}
 		if ($ret) {
 			$this->delete($foto);
+			FotoTagsModel::instance()->verwijderFotoTags($foto);
 		}
 		return $ret;
 	}
@@ -346,6 +347,12 @@ class FotoTagsModel extends PersistenceModel {
 
 	public function removeTag($refuuid, $keyword) {
 		return $this->deleteByPrimaryKey(array($refuuid, $keyword));
+	}
+
+	public function verwijderFotoTags(Foto $foto) {
+		foreach ($this->getTags($foto) as $tag) {
+			$this->delete($tag);
+		}
 	}
 
 }

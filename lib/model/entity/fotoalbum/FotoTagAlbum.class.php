@@ -46,7 +46,10 @@ class FotoTagAlbum extends FotoAlbum {
 		if (!isset($this->fotos)) {
 			// find tagged fotos
 			foreach (FotoTagsModel::instance()->find('keyword = ?', array($this->uid)) as $tag) {
-				$this->fotos[] = FotoModel::getUUID($tag->refuuid);
+				$foto = FotoModel::getUUID($tag->refuuid);
+				if ($foto) {
+					$this->fotos[] = $foto;
+				}
 			}
 		}
 		return $this->fotos;
