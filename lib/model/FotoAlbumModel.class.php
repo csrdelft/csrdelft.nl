@@ -334,6 +334,7 @@ class FotoTagsModel extends PersistenceModel {
 		$tag->refuuid = $foto->getUUID();
 		$tag->keyword = $uid;
 		$tag->door = LoginModel::getUid();
+		$tag->wanneer = getDateTime();
 		$tag->x = (int) $x;
 		$tag->y = (int) $y;
 		$tag->size = (int) $size;
