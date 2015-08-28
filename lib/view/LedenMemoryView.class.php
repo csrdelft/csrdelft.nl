@@ -168,9 +168,10 @@ class LedenMemoryScoreForm extends Formulier {
 class LedenMemoryScoreTable extends DataTable {
 
 	public function __construct() {
-		parent::__construct(LedenMemoryScoresModel::orm, '/leden/memoryscores', 'Topscores ledenmemory', 'groep');
+		parent::__construct(LedenMemoryScoresModel::orm, '/leden/memoryscores', 'Topscores ledenmemory');
 
 		$this->hideColumn('goed');
+		$this->hideColumn('groep');
 		$this->hideColumn('eerlijk');
 		$this->hideColumn('wanneer');
 
@@ -184,14 +185,9 @@ class LedenMemoryScoreResponse extends DataTableResponse {
 	public function getJson($score) {
 		$array = $score->jsonSerialize();
 
-		$minutes = (int) ($score->tijd / 60);
-		$seconds = (int) ($score->tijd % 60);
+		$minutes = floor($score->tijd / 60);
+		$seconds = $score->tijd % 60;
 		$array['tijd'] = $minutes . ':' . ($seconds < 10 ? '0' : '') . $seconds;
-
-		$groep = explode('@', $score->groep);
-		if (preg_match('/^[0-9]{4}$/', $groep[0])) {
-			$array['groep'] = '<a href="/leden/memory?lichting=' . $groep[0] . '">' . $groep[0] . '</a>';
-		}
 
 		$array['door_uid'] = ProfielModel::getLink($score->door_uid, 'civitas');
 

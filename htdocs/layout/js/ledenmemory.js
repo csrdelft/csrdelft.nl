@@ -195,7 +195,7 @@ $(document).ready(function () {
 			dialog['buttons'] = {
 				'Ja': function () {
 					$.post('/leden/memoryscore/', {
-						tijd: (nu - starttijd) / 1000,
+						tijd: minutes * 60 + seconds,
 						beurten: beurten,
 						goed: goed,
 						groep: $('body').data('groep'),
