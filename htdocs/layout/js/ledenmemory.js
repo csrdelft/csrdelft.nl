@@ -169,7 +169,7 @@ $(document).ready(function () {
 
 		document.title = goed + '/' + beurten + ' (' + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + ')';
 
-		if (finished) {
+		if (!finished) {
 			return window.setTimeout(update_title, 1000);
 		}
 		// einde: stop de tijd
