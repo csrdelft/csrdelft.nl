@@ -35,7 +35,6 @@ class LidInstellingenController extends AclController {
 	public function beheer() {
 		$body = new LidInstellingenView($this->model);
 		$this->view = new CsrLayoutPage($body);
-		$this->view->addCompressedResources('datatable');
 	}
 
 	public function opslaan() {

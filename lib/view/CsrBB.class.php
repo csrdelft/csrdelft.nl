@@ -1170,4 +1170,12 @@ HTML;
 		}
 	}
 
+	function bb_ledenmemoryscores($arguments = array()) {
+		require_once 'model/LedenMemoryScoresModel.class.php';
+		require_once 'view/LedenMemoryView.class.php';
+		LedenMemoryScoresModel::instance();
+		$table = new LedenMemoryScoreTable();
+		return $table->view();
+	}
+
 }

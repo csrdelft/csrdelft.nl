@@ -1,5 +1,5 @@
 
-$(document).ready(function() {
+$(document).ready(function () {
 
 	$.backstretch('/plaetjes/layout2/bg-image-16.jpg');
 
@@ -10,7 +10,7 @@ $(document).ready(function() {
 	var flip1 = false;
 	var flip2 = false;
 
-	$('.memorycard').click(function() {
+	$('.memorycard').click(function () {
 
 		flipback(); // gebruiker hoeft niet te wachten op delayed flipback
 
@@ -167,20 +167,50 @@ $(document).ready(function() {
 		var minutes = parseInt(seconds / 60);
 		seconds = parseInt(seconds % 60);
 
-		if (seconds < 10) {
-			seconds = '0' + seconds;
-		}
-		if (minutes < 10) {
-			minutes = '0' + minutes;
-		}
-		document.title = goed + '/' + beurten + ' (' + minutes + ':' + seconds + ')';
+		document.title = goed + '/' + beurten + ' (' + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + ')';
 
-		if (finished) { // einde: stop de tijd
-			alert('Gefeliciteerd!\n\n' + document.title);
+		if (finished) {
+			return window.setTimeout(update_title, 1000);
 		}
-		else {
-			window.setTimeout(update_title, 1000);
+		// einde: stop de tijd
+
+		var dialog = {
+			modal: true,
+			width: 484,
+			height: 334,
+			resizable: false
+		};
+		var content = 'Gefeliciteerd! U heeft alle ' + goed + ' namen goed in ' + beurten + ' beurten';
+		content += ' en heeft daar in totaal ' + minutes + ' minuten en ' + seconds + ' seconden over gedaan.';
+
+		if (!learnmode) {
+			content += '<p>Wilt u deze score toevoegen aan de lijst met hoogste scores?</p>';
+			content += '<input name="eerlijk" id="eerlijk" type="checkbox" /><label for="eerlijk"> Ik heb deze score eerlijk verkregen</label>';
+
+			var eerlijk = false;
+			$(document).on('change', '#eerlijk', function () {
+				eerlijk = this.checked;
+			});
+
+			dialog['buttons'] = {
+				'Ja': function () {
+					$.post('/leden/memoryscore/', {
+						tijd: (nu - starttijd) / 1000,
+						beurten: beurten,
+						goed: goed,
+						groep: $('body').data('groep'),
+						eerlijk: eerlijk ? 1 : 0
+					});
+					$(this).dialog('close');
+				},
+				'Nee': function () {
+					$(this).dialog('close');
+				}
+			};
 		}
+		$('<div id="dialog-finish" class="blue">' + content + '</div>').appendTo('body');
+
+		$("#dialog-finish").dialog(dialog);
 	}
 
 	function show_reel() {
@@ -200,13 +230,13 @@ $(document).ready(function() {
 		var box = $(content).appendTo('body');
 		box.animate({
 			left: '60%'
-		}, 'slow', function() {
+		}, 'slow', function () {
 			$(this).css('left', '60%');
 		});
 
 		$(box).delay(1200).animate({
 			left: '-50%'
-		}, 'slow', function() {
+		}, 'slow', function () {
 			$(box).remove();
 		});
 	}

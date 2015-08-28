@@ -233,7 +233,6 @@ class AbstractGroepenController extends Controller {
 		} else {
 			$table = new GroepenBeheerTable($this->model);
 			$this->view = new CsrLayoutPage($table);
-			$this->view->addCompressedResources('datatable');
 		}
 	}
 

@@ -31,10 +31,12 @@ class ProfielController extends AclController {
 		} else {
 			$this->acl = array(
 				// Profiel
-				'bewerken'	 => 'P_PROFIEL_EDIT',
-				'voorkeuren' => 'P_PROFIEL_EDIT',
+				'bewerken'		 => 'P_PROFIEL_EDIT',
+				'voorkeuren'	 => 'P_PROFIEL_EDIT',
 				// Leden
-				'nieuw'		 => 'P_LEDEN_MOD,commissie:NovCie'
+				'nieuw'			 => 'P_LEDEN_MOD,commissie:NovCie',
+				'memoryscore'	 => 'P_LEDEN_READ',
+				'memoryscores'	 => 'P_LEDEN_READ'
 			);
 		}
 	}
@@ -72,6 +74,10 @@ class ProfielController extends AclController {
 			$this->action = 'lijst';
 			if ($this->hasParam(2)) {
 				$this->action = $this->getParam(2);
+			}
+			if (startsWith($this->action, 'memory')) {
+				require_once 'model/LedenMemoryScoresModel.class.php';
+				require_once 'view/LedenMemoryView.class.php';
 			}
 			return parent::performAction($this->getParams(3));
 		}
@@ -200,9 +206,21 @@ class ProfielController extends AclController {
 	}
 
 	public function memory() {
-		require_once 'view/LedenMemoryView.class.php';
 		$this->view = new LedenMemoryView();
 		$this->view->addCompressedResources('ledenmemory');
+	}
+
+	public function memoryscore() {
+		$score = LedenMemoryScoresModel::instance()->nieuw();
+		$form = new LedenMemoryScoreForm($score);
+		if ($form->validate()) {
+			LedenMemoryScoresModel::instance()->create($score);
+		}
+		$this->view = new JsonResponse($score);
+	}
+
+	public function memoryscores() {
+		$this->view = new LedenMemoryScoreResponse(LedenMemoryScoresModel::instance()->getScores(LichtingenModel::get(LichtingenModel::getJongsteLidjaar())));
 	}
 
 }

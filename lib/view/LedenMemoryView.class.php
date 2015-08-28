@@ -12,11 +12,12 @@ class LedenMemoryView extends CompressedLayout {
 	private $leden = array();
 	private $learnmode;
 	private $cheat;
+	private $groep;
 
 	public function __construct() {
 		$lidstatus = array_merge(LidStatus::$lidlike, LidStatus::$oudlidlike);
 		$lidstatus[] = LidStatus::Overleden;
-		$groep = array();
+		$this->groep = array();
 		$this->cheat = isset($_GET['rosebud']);
 		$this->learnmode = isset($_GET['oefenen']);
 		if (isset($_GET['verticale'])) {
@@ -28,7 +29,7 @@ class LedenMemoryView extends CompressedLayout {
 			}
 			if ($verticale) {
 				$this->titel = 'Ledenmemory verticale ' . $verticale->naam . ($this->learnmode ? 'oefenen' : '');
-				$groep = $verticale;
+				$this->groep = $verticale;
 			}
 		} else {
 			$l = (int) filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
@@ -38,10 +39,10 @@ class LedenMemoryView extends CompressedLayout {
 			$lichting = LichtingenModel::get($l);
 			if ($lichting) {
 				$this->titel = 'Ledenmemory lichting ' . $lichting->lidjaar . ($this->learnmode ? 'oefenen' : '');
-				$groep = $lichting;
+				$this->groep = $lichting;
 			}
 		}
-		foreach ($groep->getLeden() as $lid) {
+		foreach ($this->groep->getLeden() as $lid) {
 			$profiel = ProfielModel::get($lid->uid);
 			if (in_array($profiel->status, $lidstatus)) {
 				$this->leden[] = $profiel;
@@ -113,7 +114,7 @@ HTML;
 			<head>
 				<?= $smarty->fetch('html_head.tpl') ?>
 			</head>
-			<body>
+			<body data-groep="<?= $this->groep->getUUID() ?>">
 				<table>
 					<tbody>
 						<tr>
@@ -144,6 +145,57 @@ HTML;
 			</body>
 		</html>
 		<?php
+	}
+
+}
+
+class LedenMemoryScoreForm extends Formulier {
+
+	public function __construct(LedenMemoryScore $score) {
+		parent::__construct($score, '/leden/memoryscore');
+
+		$fields[] = new RequiredIntField('tijd', $score->tijd, null, 1);
+		$fields[] = new RequiredIntField('beurten', $score->beurten, null, 1);
+		$fields[] = new RequiredIntField('goed', $score->goed, null, 1);
+		$fields[] = new TextField('groep', $score->groep, null);
+		$fields[] = new RequiredIntField('eerlijk', $score->eerlijk, null, 0, 1);
+
+		$this->addFields($fields);
+	}
+
+}
+
+class LedenMemoryScoreTable extends DataTable {
+
+	public function __construct() {
+		parent::__construct(LedenMemoryScoresModel::orm, '/leden/memoryscores', 'Topscores ledenmemory', 'groep');
+
+		$this->hideColumn('goed');
+		$this->hideColumn('eerlijk');
+		$this->hideColumn('wanneer');
+
+		$this->setColumnTitle('door_uid', 'Naam');
+	}
+
+}
+
+class LedenMemoryScoreResponse extends DataTableResponse {
+
+	public function getJson($score) {
+		$array = $score->jsonSerialize();
+
+		$minutes = (int) ($score->tijd / 60);
+		$seconds = (int) ($score->tijd % 60);
+		$array['tijd'] = $minutes . ':' . ($seconds < 10 ? '0' : '') . $seconds;
+
+		$groep = explode('@', $score->groep);
+		if (preg_match('/^[0-9]{4}$/', $groep[0])) {
+			$array['groep'] = '<a href="/leden/memory?lichting=' . $groep[0] . '">' . $groep[0] . '</a>';
+		}
+
+		$array['door_uid'] = ProfielModel::getLink($score->door_uid, 'civitas');
+
+		return parent::getJson($array);
 	}
 
 }

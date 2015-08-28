@@ -51,7 +51,6 @@ class DocumentenController extends Controller {
 	public function performAction(array $args = array()) {
 		parent::performAction($args);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('datatable');
 		$this->view->addCompressedResources('documenten');
 	}
 

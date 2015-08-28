@@ -41,7 +41,6 @@ class RechtenController extends AclController {
 		} else {
 			$table = new RechtenTable($this->model, $environment, $resource);
 			$this->view = new CsrLayoutPage($table);
-			$this->view->addCompressedResources('datatable');
 		}
 	}
 
