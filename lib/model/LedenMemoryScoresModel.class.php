@@ -20,11 +20,11 @@ class LedenMemoryScoresModel extends PersistenceModel {
 	}
 
 	public function getAllScores() {
-		return $this->find('eerlijk = 1', null, 'door_uid', 'tijd');
+		return $this->find('eerlijk = 1');
 	}
 
 	public function getScores(AbstractGroep $groep) {
-		return $this->find('eerlijk = 1 AND groep = ?', array($groep->getUUID()), 'door_uid', 'tijd');
+		return $this->find('eerlijk = 1 AND groep = ?', array($groep->getUUID()));
 	}
 
 }
