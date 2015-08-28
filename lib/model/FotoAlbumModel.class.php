@@ -166,10 +166,17 @@ HTML;
 			$this->create($subdir);
 		}
 		foreach (FotoModel::instance()->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
+			$oldUUID = $foto->getUUID();
 			// updaten gaat niet vanwege primary key
 			FotoModel::instance()->delete($foto);
 			$foto->subdir = str_replace($oldDir, $newDir, $foto->subdir);
 			FotoModel::instance()->create($foto);
+			foreach (FotoTagsModel::instance()->find('refuuid = ?', array($oldUUID)) as $tag) {
+				// updaten gaat niet vanwege primary key
+				FotoTagsModel::instance()->delete($tag);
+				$tag->refuuid = $foto->getUUID();
+				FotoTagsModel::instance()->create($tag);
+			}
 		}
 		if (false === @rmdir(PICS_PATH . $oldDir)) {
 			$error = error_get_last();
@@ -227,6 +234,7 @@ HTML;
 			if (!$album->exists()) {
 				foreach (FotoModel::instance()->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {
 					FotoModel::instance()->delete($foto);
+					FotoTagsModel::instance()->verwijderFotoTags($foto);
 				}
 				$this->delete($album);
 			}
