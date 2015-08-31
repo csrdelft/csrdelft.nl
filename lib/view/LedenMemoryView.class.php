@@ -167,11 +167,12 @@ class LedenMemoryScoreForm extends Formulier {
 
 class LedenMemoryScoreTable extends DataTable {
 
-	public function __construct() {
-		parent::__construct(LedenMemoryScoresModel::orm, '/leden/memoryscores', 'Topscores ledenmemory');
+	public function __construct(AbstractGroep $groep = null) {
+		parent::__construct(LedenMemoryScoresModel::orm, '/leden/memoryscores/' . ($groep ? $groep->getUUID() : null), 'Topscores Ledenmemory', 'groep');
+		$this->settings['tableTools']['aButtons'] = array();
+		$this->settings['dom'] = 'rtpli';
 
 		$this->hideColumn('goed');
-		$this->hideColumn('groep');
 		$this->hideColumn('eerlijk');
 		$this->hideColumn('wanneer');
 
@@ -182,6 +183,8 @@ class LedenMemoryScoreTable extends DataTable {
 
 class LedenMemoryScoreResponse extends DataTableResponse {
 
+	private $titles = array();
+
 	public function getJson($score) {
 		$array = $score->jsonSerialize();
 
@@ -190,6 +193,27 @@ class LedenMemoryScoreResponse extends DataTableResponse {
 		$array['tijd'] = $minutes . ':' . ($seconds < 10 ? '0' : '') . $seconds;
 
 		$array['door_uid'] = ProfielModel::getLink($score->door_uid, 'civitas');
+
+		if (!isset($this->titles[$score->groep])) {
+			$this->titles[$score->groep] = '';
+
+			// Cache the title of the group
+			$parts = explode('@', $score->groep);
+			if (isset($parts[0], $parts[1])) {
+				switch ($parts[1]) {
+
+					case 'verticale.csrdelft.nl':
+						$groep = VerticalenModel::getUUID($score->groep);
+						$this->titles[$score->groep] = 'Verticale ' . $groep->naam;
+						break;
+
+					case 'lichting.csrdelft.nl':
+						$this->titles[$score->groep] = 'Lichting ' . $parts[0];
+						break;
+				}
+			}
+		}
+		$array['groep'] = $this->titles[$score->groep];
 
 		return parent::getJson($array);
 	}

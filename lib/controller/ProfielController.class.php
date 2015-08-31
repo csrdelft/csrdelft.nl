@@ -219,8 +219,26 @@ class ProfielController extends AclController {
 		$this->view = new JsonResponse($score);
 	}
 
-	public function memoryscores() {
-		$this->view = new LedenMemoryScoreResponse(LedenMemoryScoresModel::instance()->getScores(LichtingenModel::get(LichtingenModel::getJongsteLidjaar())));
+	public function memoryscores($groep = null) {
+		$parts = explode('@', $groep);
+		if (isset($parts[0], $parts[1])) {
+			switch ($parts[1]) {
+
+				case 'verticale.csrdelft.nl':
+					$groep = VerticalenModel::getUUID($groep);
+					break;
+
+				case 'lichting.csrdelft.nl':
+					$groep = LichtingenModel::get($parts[0]);
+					break;
+			}
+		}
+		if ($groep) {
+			$data = LedenMemoryScoresModel::instance()->getScores($groep);
+		} else {
+			$data = LedenMemoryScoresModel::instance()->getAllScores();
+		}
+		$this->view = new LedenMemoryScoreResponse($data);
 	}
 
 }
