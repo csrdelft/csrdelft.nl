@@ -190,7 +190,7 @@ class LedenMemoryScoreResponse extends DataTableResponse {
 
 		$minutes = floor($score->tijd / 60);
 		$seconds = $score->tijd % 60;
-		$array['tijd'] = $minutes . ':' . ($seconds < 10 ? '0' : '') . $seconds;
+		$array['tijd'] = ($minutes < 10 ? '0' : '') . $minutes . ':' . ($seconds < 10 ? '0' : '') . $seconds;
 
 		$array['door_uid'] = ProfielModel::getLink($score->door_uid, 'civitas');
 
