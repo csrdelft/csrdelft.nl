@@ -339,11 +339,18 @@ class GoogleSync {
 		if ($googleid != '') {
 			try {
 				//post to original entry's link[rel=self], set ETag in HTTP-headers for versioning
-				$header = array('If-None-Match' => $this->getEtag($googleid));
-				$entryResult = $this->gdata->updateEntry($doc->saveXML(), $this->getLinkSelf($googleid), null, $header);
-
-				$photolink = $entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
-				$this->putPhoto($photolink, PICS_PATH . $profiel->getPasfotoPath(true));
+                $ch = curl_init($googleid . '?alt=json&v=3.0&oauth_token=' . $this->access_token);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $doc->saveXML());
+                curl_setopt($ch, CURLOPT_NOBODY, false);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/atom+xml',
+                    'Connection: Keep-Alive',
+                    'If-None-Match: '.$this->getEtag($googleid)
+                ));
+                $entryResult = curl_exec($ch);
 
 				return 'Update: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
@@ -367,21 +374,21 @@ class GoogleSync {
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $doc->saveXML());
                     curl_setopt($ch, CURLOPT_NOBODY, false);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        'Content-Type: application/atom+xml',
+                        'Connection: Keep-Alive'
+                    ));
                     $entryResult = curl_exec($ch);
 
                     if (FALSE === $entryResult)
                         throw new Exception(curl_error($ch), curl_errno($ch));
-
-                    var_dump($entryResult);
                 } catch (Exception $e) {
                     trigger_error(sprintf(
                         'Curl failed with error #%d: %s',
                         $e->getCode(), $e->getMessage()),
                         E_USER_ERROR);
                 }
-
-				$photolink = $entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
-				$this->putPhoto($photolink, PICS_PATH . $profiel->getPasfotoPath(true));
 
 				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
