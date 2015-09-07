@@ -332,7 +332,8 @@ JOIN socCiePrijs AS PR ON
 JOIN socCieGrootboekType AS G ON
 	P.grootboekId = G.id
 WHERE
-	B.deleted = 0
+	B.deleted = 0 AND
+	G.status = 1
 GROUP BY
 	yearweek,
 	G.id
