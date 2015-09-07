@@ -48,6 +48,7 @@ class AccountModel extends CachedPersistenceModel {
 		$account->email = $profiel->email;
 		$account->pass_hash = '';
 		$account->pass_since = '';
+		$account->failed_login_attempts = 0;
 		$account->perm_role = AccessModel::instance()->getDefaultPermissionRole($profiel->status);
 		$this->create($account);
 		return $account;

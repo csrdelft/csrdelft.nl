@@ -31,10 +31,12 @@ class ProfielController extends AclController {
 		} else {
 			$this->acl = array(
 				// Profiel
-				'bewerken'	 => 'P_PROFIEL_EDIT',
-				'voorkeuren' => 'P_PROFIEL_EDIT',
+				'bewerken'		 => 'P_PROFIEL_EDIT',
+				'voorkeuren'	 => 'P_PROFIEL_EDIT',
 				// Leden
-				'nieuw'		 => 'P_LEDEN_MOD'
+				'nieuw'			 => 'P_LEDEN_MOD,commissie:NovCie',
+				'memoryscore'	 => 'P_LEDEN_READ',
+				'memoryscores'	 => 'P_LEDEN_READ'
 			);
 		}
 	}
@@ -52,12 +54,16 @@ class ProfielController extends AclController {
 			} else {
 				$this->action = 'profiel';
 			}
-			if (!ProfielModel::existsUid($uid) AND $this->action != 'nieuw') {
+			if ($this->action === 'nieuw' AND $this->hasParam(2)) {
+				$args = $this->getParams(4); // status
+				array_unshift($args, $uid); // lidjaar
+			} elseif (ProfielModel::existsUid($uid)) {
+				$args = $this->getParams(4);
+				array_unshift($args, ProfielModel::get($uid));
+			} else {
 				setMelding('Dit profiel bestaat niet', -1);
 				redirect('/ledenlijst');
 			}
-			$args = $this->getParams(4);
-			array_unshift($args, ProfielModel::get($uid));
 			$body = parent::performAction($args);
 			$this->view = new CsrLayoutPage($body);
 			$this->view->addCompressedResources('profiel');
@@ -68,6 +74,10 @@ class ProfielController extends AclController {
 			$this->action = 'lijst';
 			if ($this->hasParam(2)) {
 				$this->action = $this->getParam(2);
+			}
+			if (startsWith($this->action, 'memory')) {
+				require_once 'model/LedenMemoryScoresModel.class.php';
+				require_once 'view/LedenMemoryView.class.php';
 			}
 			return parent::performAction($this->getParams(3));
 		}
@@ -168,7 +178,7 @@ class ProfielController extends AclController {
 	public function addToGoogleContacts(Profiel $profiel) {
 		try {
 			require_once 'googlesync.class.php';
-			GoogleSync::doRequestToken(CSR_ROOT . '/profiel/' . $profiel->uid . '/addToGoogleContacts');
+			GoogleSync::doRequestToken(strval($profiel->uid));
 			$gSync = GoogleSync::instance();
 			$msg = $gSync->syncLid($profiel);
 			setMelding('Opgeslagen in Google Contacts: ' . $msg, 2);
@@ -196,9 +206,39 @@ class ProfielController extends AclController {
 	}
 
 	public function memory() {
-		require_once 'view/LedenMemoryView.class.php';
 		$this->view = new LedenMemoryView();
 		$this->view->addCompressedResources('ledenmemory');
+	}
+
+	public function memoryscore() {
+		$score = LedenMemoryScoresModel::instance()->nieuw();
+		$form = new LedenMemoryScoreForm($score);
+		if ($form->validate()) {
+			LedenMemoryScoresModel::instance()->create($score);
+		}
+		$this->view = new JsonResponse($score);
+	}
+
+	public function memoryscores($groep = null) {
+		$parts = explode('@', $groep);
+		if (isset($parts[0], $parts[1])) {
+			switch ($parts[1]) {
+
+				case 'verticale.csrdelft.nl':
+					$groep = VerticalenModel::getUUID($groep);
+					break;
+
+				case 'lichting.csrdelft.nl':
+					$groep = LichtingenModel::get($parts[0]);
+					break;
+			}
+		}
+		if ($groep) {
+			$data = LedenMemoryScoresModel::instance()->getScores($groep);
+		} else {
+			$data = LedenMemoryScoresModel::instance()->getAllScores();
+		}
+		$this->view = new LedenMemoryScoreResponse($data);
 	}
 
 }

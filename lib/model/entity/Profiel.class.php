@@ -111,84 +111,85 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'uid'					 => array(T::UID),
 		'changelog'				 => array(T::Text),
 		// naam
-		'voornamen'				 => array(T::String),
+		'voornamen'				 => array(T::String, true),
 		'voorletters'			 => array(T::String),
 		'voornaam'				 => array(T::String),
-		'tussenvoegsel'			 => array(T::String),
+		'tussenvoegsel'			 => array(T::String, true),
 		'achternaam'			 => array(T::String),
-		'postfix'				 => array(T::String),
-		'nickname'				 => array(T::String),
-		'duckname'				 => array(T::String),
+		'postfix'				 => array(T::String, true),
+		'nickname'				 => array(T::String, true),
+		'duckname'				 => array(T::String, true),
 		// fysiek
 		'geslacht'				 => array(T::Enumeration, false, 'Geslacht'),
 		'gebdatum'				 => array(T::Date),
 		'sterfdatum'			 => array(T::Date, true),
-		'lengte'				 => array(T::Integer),
 		// getrouwd
 		'echtgenoot'			 => array(T::UID, true),
-		'adresseringechtpaar'	 => array(T::String),
+		'adresseringechtpaar'	 => array(T::String, true),
 		'ontvangtcontactueel'	 => array(T::Enumeration, false, 'OntvangtContactueel'),
 		// adres
 		'adres'					 => array(T::String),
 		'postcode'				 => array(T::String),
 		'woonplaats'			 => array(T::String),
 		'land'					 => array(T::String),
-		'telefoon'				 => array(T::String),
-		'o_adres'				 => array(T::String),
-		'o_postcode'			 => array(T::String),
-		'o_woonplaats'			 => array(T::String),
-		'o_land'				 => array(T::String),
-		'o_telefoon'			 => array(T::String),
+        'mobiel'				 => array(T::String),
+		'telefoon'				 => array(T::String, true),
+		'o_adres'				 => array(T::String, true),
+		'o_postcode'			 => array(T::String, true),
+		'o_woonplaats'			 => array(T::String, true),
+		'o_land'				 => array(T::String, true),
+		'o_telefoon'			 => array(T::String, true),
 		// contact
 		'email'					 => array(T::String),
-		'mobiel'				 => array(T::String),
-		'icq'					 => array(T::String),
-		'msn'					 => array(T::String),
-		'skype'					 => array(T::String),
-		'jid'					 => array(T::String),
-		'linkedin'				 => array(T::String),
-		'website'				 => array(T::String),
+		'icq'					 => array(T::String, true),
+		'msn'					 => array(T::String, true),
+		'skype'					 => array(T::String, true),
+		'jid'					 => array(T::String, true),
+		'linkedin'				 => array(T::String, true),
+		'website'				 => array(T::String, true),
 		// studie
-		'studie'				 => array(T::String),
+        //RequiredStudieField bestaat niet, dus mag NULL zijn (voor de duidelijkheid naar gebruiker)
+		'studie'				 => array(T::String, true),
 		'studienr'				 => array(T::Integer, true),
 		'studiejaar'			 => array(T::Integer, true),
-		'beroep'				 => array(T::String),
+		'beroep'				 => array(T::String, true),
 		// lidmaatschap
 		'lidjaar'				 => array(T::Integer),
 		'lidafdatum'			 => array(T::Date, true),
 		'status'				 => array(T::Enumeration, false, 'LidStatus'),
 		// geld
-		'bankrekening'			 => array(T::String),
-		'machtiging'			 => array(T::Boolean),
+		'bankrekening'			 => array(T::String, true),
+		'machtiging'			 => array(T::Boolean, true),
 		// verticale
-		'moot'					 => array(T::Char),
-		'verticale'				 => array(T::Char),
-		'verticaleleider'		 => array(T::Boolean),
+		'moot'					 => array(T::Char, true),
+		'verticale'				 => array(T::Char, true),
+		'verticaleleider'		 => array(T::Boolean, true),
 		'kringcoach'			 => array(T::Char, true),
 		// civi-gegevens
 		'patroon'				 => array(T::UID, true),
-		'eetwens'				 => array(T::String),
-		'corvee_punten'			 => array(T::Integer),
-		'corvee_punten_bonus'	 => array(T::Integer),
-		'soccieID'				 => array(T::Integer),
-		'soccieSaldo'			 => array(T::Float),
-		'maalcieSaldo'			 => array(T::Float),
+		'corvee_punten'			 => array(T::Integer, true),
+		'corvee_punten_bonus'	 => array(T::Integer, true),
+		'soccieID'				 => array(T::Integer, true),
+        'createTerm'			 => array(T::String, true),
+		'soccieSaldo'			 => array(T::Float, true),
+		'maalcieSaldo'			 => array(T::Float, true),
+        // Persoonlijk
+        'eetwens'				 => array(T::String, true),
+        'lengte'				 => array(T::Integer),
+        'ovkaart'				 => array(T::String),
+        'kerk'					 => array(T::String, true),
+        'muziek'				 => array(T::String, true),
+        'zingen'				 => array(T::String, true),
+        'vrienden'				 => array(T::Text, true),
+        'middelbareSchool'		 => array(T::String),
 		// novitiaat
-		'createTerm'			 => array(T::String),
 		'novitiaat'				 => array(T::Text),
-		'novitiaatBijz'			 => array(T::Text),
-		'medisch'				 => array(T::Text),
+		'novitiaatBijz'			 => array(T::Text, true),
+		'medisch'				 => array(T::Text, true),
 		'startkamp'				 => array(T::String),
 		'matrixPlek'			 => array(T::String),
 		'novietSoort'			 => array(T::String),
-		'kgb'					 => array(T::Text),
-		'vrienden'				 => array(T::Text),
-		'middelbareSchool'		 => array(T::String),
-		// overig
-		'ovkaart'				 => array(T::String),
-		'kerk'					 => array(T::String),
-		'muziek'				 => array(T::String),
-		'zingen'				 => array(T::String)
+		'kgb'					 => array(T::Text, true)
 	);
 	/**
 	 * Database primary key
@@ -376,7 +377,12 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			}
 			$k .= '<p class="naam">' . $l . $this->getNaam('volledig') . '&nbsp;' . LidStatus::getChar($this->status);
 			$k .= '</a></p>';
-			$k .= '<p>' . $this->lidjaar . ' ' . $this->getVerticale()->naam . '</p>';
+			$k .= '<p>' . $this->lidjaar;
+			$verticale = $this->getVerticale();
+			if ($verticale) {
+				$k .= ' ' . $verticale->naam;
+			}
+			$k .= '</p>';
 			$bestuurslid = BestuursLedenModel::instance()->find('uid = ?', array($this->uid), null, null, 1)->fetch();
 			if ($bestuurslid) {
 				$bestuur = BesturenModel::get($bestuurslid->groep_id);

@@ -179,7 +179,11 @@ class FotoBBView extends SmartyTemplateView {
 	}
 
 	public function getHtml() {
-		$html = '<a href="' . $this->model->getAlbumUrl() . '?fullscreen#' . $this->model->getResizedUrl() . '" class="';
+		$html = '<a href="' . $this->model->getAlbumUrl();
+		if ($this->groot) {
+			$html .= '?fullscreen';
+		}
+		$html .= '#' . $this->model->getResizedUrl() . '" class="';
 		if ($this->responsive) {
 			$html .= 'responsive';
 		}

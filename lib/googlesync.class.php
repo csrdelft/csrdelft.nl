@@ -1,5 +1,6 @@
 <?php
 
+require_once 'Google/autoload.php';
 require_once 'Zend/Loader.php';
 Zend_Loader::loadClass('Zend_Gdata');
 Zend_Loader::loadClass('Zend_Gdata_AuthSub');
@@ -31,8 +32,11 @@ class GoogleSync {
 	private $contactData = null; // an array containing array's with some data for each contact.
 	//sigleton pattern
 	private static $instance;
+    private $client; // GoogleClient
 
-	public static function instance() {
+    private $access_token;
+
+    public static function instance() {
 		if (!isset(self::$instance)) {
 			self::$instance = new GoogleSync();
 		}
@@ -50,13 +54,34 @@ class GoogleSync {
 				$this->groupname = 'C.S.R.-import';
 			}
 		}
-		$client = Zend_Gdata_AuthSub::getHttpClient($_SESSION['google_token']);
+
+        $google_client_id = '833326410856-12693ose5ecsrghrsftmeeu3b02rlevu.apps.googleusercontent.com';
+        $google_client_secret = '1LwghAmfTdREGHRuL-Gcy7tX';
+        $redirect_uri = CSR_ROOT . '/googlecallback';
+        $client = new Google_Client();
+        $client -> setApplicationName('Stek');
+        $client -> setClientid($google_client_id);
+        $client -> setClientSecret($google_client_secret);
+        $client -> setRedirectUri($redirect_uri);
+        $client -> setAccessType('online');
+        $client -> setScopes('https://www.google.com/m8/feeds');
+        if (!isset($_SESSION['access_token'])) {
+            $client->authenticate($_SESSION['google_token']);
+            $_SESSION['access_token'] = $client->getAccessToken();
+        }
+
+        $client->setAccessToken($_SESSION['access_token']);
+
+        $this->access_token = json_decode($_SESSION['access_token'])->access_token;
+
+        $this->client = $client;
 
 		//$client->setHeaders('If-Match: *'); //delete or update only if not changed since it was last read.
-		$this->gdata = new Zend_Gdata($client);
-		$this->gdata->setMajorProtocolVersion(3);
+		//$this->gdata = new Zend_Gdata($this->client);
+		//$this->gdata->setMajorProtocolVersion(3);
 
-		//first load group feed, find or create the groupname from the user settings.
+
+        //first load group feed, find or create the groupname from the user settings.
 		$this->loadGroupFeed();
 		$this->groupid = $this->getGroupId();
 
@@ -65,35 +90,25 @@ class GoogleSync {
 
 		//copy setting from settings manager.
 		$this->extendedExport = LidInstellingen::get('googleContacts', 'extended') == 'ja';
+
+
 	}
 
 	/**
 	 * Load all contactgroups.
 	 */
 	private function loadGroupFeed() {
-		$query = new Zend_Gdata_Query(GOOGLE_GROUPS_URL);
-		$this->groupFeed = $this->gdata->getFeed($query);
-	}
-
-	/**
-	 * Load all google contacts.
-	 */
-	private function loadContactFeed() {
-		$url = GOOGLE_CONTACTS_URL . '?max-results=' . GOOGLE_CONTACTS_MAX_RESULTS;
-
-		$query = new Zend_Gdata_Query($url);
-		$this->contactFeed = $this->gdata->getFeed($query);
+		$this->groupFeed = json_decode(file_get_contents(GOOGLE_GROUPS_URL.'?alt=json&v=3.0&oauth_token='.$this->access_token))->feed->entry;
 	}
 
 	/**
 	 * Load contacts from certain contact group.
 	 */
 	private function loadContactsForGroup($groupId) {
-		$url = GOOGLE_CONTACTS_URL . '?max-results=' . GOOGLE_CONTACTS_MAX_RESULTS;
+		$url = GOOGLE_CONTACTS_URL .'?alt=json&v=3.0&oauth_token='.$this->access_token.'&max-results=' . GOOGLE_CONTACTS_MAX_RESULTS;
 		$url .= '&group=' . urlencode($groupId);
 
-		$query = new Zend_Gdata_Query($url);
-		$this->contactFeed = $this->gdata->getFeed($query);
+		$this->contactFeed = json_decode(file_get_contents($url))->feed->entry;
 	}
 
 	/**
@@ -105,23 +120,26 @@ class GoogleSync {
 			$this->contactData = array();
 			foreach ($this->contactFeed as $contact) {
 
-				//digg up uid.
-				$uid = null;
-				foreach ($contact->getExtensionElements() as $ext) {
-					if ($ext->rootElement == 'userDefinedField') {
-						$attr = $ext->getExtensionAttributes();
-						if (isset($attr['key']['value']) && $attr['key']['value'] == 'csruid') {
-							$uid = $attr['value']['value'];
-						}
-					}
-				}
+                //digg up uid.
+                $uid = null;
+                foreach($contact->{'gContact$userDefinedField'} as $field) {
+                    if ($field->key == 'csruid') {
+                        $uid = $field->value;
+                    }
+                }
+                $link = null;
+                foreach($contact->link as $user_link) {
+                    if ($user_link->rel == 'self') {
+                        $link = $user_link;
+                    }
+                }
 
-				$etag = substr($contact->getEtag(), 1, strlen($contact->getEtag()) - 2);
+				$etag = substr($contact->{'gd$etag'}, 1, strlen($contact->{'gd$etag'}) - 2);
 				$this->contactData[] = array(
-					'name'	 => (string) $contact->title,
+					'name'	 => (string) $contact->title->{'$t'},
 					'etag'	 => $etag,
-					'id'	 => (string) $contact->id,
-					'self'	 => $contact->getLink('self')->href,
+					'id'	 => (string) $contact->id->{'$t'},
+					'self'	 => $link->href,
 					'csruid' => $uid
 						//, 'xml'=>htmlspecialchars(str_replace('><', ">\n<", $contact->getXML()))
 				);
@@ -190,7 +208,7 @@ class GoogleSync {
 	function getGroups() {
 		$return = array();
 		foreach ($this->groupFeed as $group) {
-			$title = (string) $group->title;
+			$title = (string) $group->title->{'$t'};
 
 			if (substr($title, 0, 13) == 'System Group:') {
 				$title = substr($title, 14);
@@ -200,21 +218,12 @@ class GoogleSync {
 			//Dit ID hebben we nodig om onafhankelijk van de ingestelde taal @google de system
 			//group 'My Contacts' te kunnen gebruiken
 			$systemgroup = null;
-			if (is_array($group->getExtensionElements())) {
-				$extensions = $group->getExtensionElements();
-				if (count($extensions) > 0) {
-					$systag = $extensions[0];
-					if ($systag->rootElement) {
-						$sysattr = $systag->getExtensionAttributes();
-						if (isset($sysattr['id'])) {
-							$systemgroup = $sysattr['id']['value'];
-						}
-					}
-				}
-			}
+            if (isset($group->{'gContact$systemGroup'})) {
+                $systemgroup = $group->{'gContact$systemGroup'}->id;
+            }
 
 			$return[] = array(
-				'id'			 => $group->id->getText(),
+				'id'			 => $group->id->{'$t'},
 				'name'			 => $title,
 				'systemgroup'	 => $systemgroup
 			);
@@ -224,7 +233,7 @@ class GoogleSync {
 
 	/**
 	 * id van de systemgroup aan de hand van de system-group-id ophalen
-	 * 
+	 *
 	 * http://code.google.com/apis/contacts/docs/2.0/reference.html#GroupElements
 	 */
 	private function getSystemGroupId($name) {
@@ -265,7 +274,7 @@ class GoogleSync {
 		$title->setAttribute('type', 'text');
 		$entry->appendChild($title);
 
-		$response = $this->gdata->insertEntry($doc->saveXML(), GOOGLE_GROUPS_URL);
+		$response = $this->gdata->insertEntry($doc->saveXML(), GOOGLE_GROUPS_URL.'?alt=json&v=3.0&oauth_token='.$this->access_token);
 
 		//herlaad groupFeed om de nieuw gemaakte daar ook in te hebben.
 		$this->loadGroupFeed();
@@ -330,11 +339,18 @@ class GoogleSync {
 		if ($googleid != '') {
 			try {
 				//post to original entry's link[rel=self], set ETag in HTTP-headers for versioning
-				$header = array('If-None-Match' => $this->getEtag($googleid));
-				$entryResult = $this->gdata->updateEntry($doc->saveXML(), $this->getLinkSelf($googleid), null, $header);
-
-				$photolink = $entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
-				$this->putPhoto($photolink, PICS_PATH . $profiel->getPasfotoPath(true));
+                $ch = curl_init($googleid . '?alt=json&v=3.0&oauth_token=' . $this->access_token);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $doc->saveXML());
+                curl_setopt($ch, CURLOPT_NOBODY, false);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/atom+xml',
+                    'Connection: Keep-Alive',
+                    'If-None-Match: '.$this->getEtag($googleid)
+                ));
+                $entryResult = curl_exec($ch);
 
 				return 'Update: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
@@ -342,19 +358,37 @@ class GoogleSync {
 			}
 		} else {
 			try {
-				/* IF we insert an entry AFTER updating one, the Zend HttpClient 
+				/* IF we insert an entry AFTER updating one, the Zend HttpClient
 				 * does not clear the headers and sends a If-None-Math along with
-				 * the insert-request. Google complains about the method not 
+				 * the insert-request. Google complains about the method not
 				 * supporting concurrency:
 				 * 		"501 POST method does not support concurrency"
-				 * 
+				 *
 				 * Fixed by resetting the paramters with this magic line:
 				 */
-				$this->gdata->getHttpClient()->resetParameters($clearAll = true);
+				//$this->gdata->getHttpClient()->resetParameters($clearAll = true);
 
-				$entryResult = $this->gdata->insertEntry($doc->saveXML(), GOOGLE_CONTACTS_URL);
-				$photolink = $entryResult->getLink('http://schemas.google.com/contacts/2008/rel#photo')->getHref();
-				$this->putPhoto($photolink, PICS_PATH . $profiel->getPasfotoPath(true));
+                try {
+                    $ch = curl_init(GOOGLE_CONTACTS_URL . '?alt=json&v=3.0&oauth_token=' . $this->access_token);
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $doc->saveXML());
+                    curl_setopt($ch, CURLOPT_NOBODY, false);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        'Content-Type: application/atom+xml',
+                        'Connection: Keep-Alive'
+                    ));
+                    $entryResult = curl_exec($ch);
+
+                    if (FALSE === $entryResult)
+                        throw new Exception(curl_error($ch), curl_errno($ch));
+                } catch (Exception $e) {
+                    trigger_error(sprintf(
+                        'Curl failed with error #%d: %s',
+                        $e->getCode(), $e->getMessage()),
+                        E_USER_ERROR);
+                }
 
 				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
@@ -565,14 +599,23 @@ class GoogleSync {
 	 * Vraag een Authsub-token aan bij google, plaats bij ontvangen in _SESSION['google_token'].
 	 */
 	public static function doRequestToken($self) {
-		if (isset($_GET['token'])) {
-			$_SESSION['google_token'] = Zend_Gdata_AuthSub::getAuthSubSessionToken($_GET['token']);
-		}
+        $google_client_id = '833326410856-12693ose5ecsrghrsftmeeu3b02rlevu.apps.googleusercontent.com';
+        $google_client_secret = '1LwghAmfTdREGHRuL-Gcy7tX';
+        $redirect_uri = CSR_ROOT . '/googlecallback';
+        $client = new Google_Client();
+        $client -> setApplicationName('Stek');
+        $client -> setClientid($google_client_id);
+        $client -> setClientSecret($google_client_secret);
+        $client -> setRedirectUri($redirect_uri);
+        $client -> setAccessType('online');
+        $client -> setScopes('https://www.google.com/m8/feeds');
+
 		if (!isset($_SESSION['google_token'])) {
-			$scope = 'https://www.google.com/m8/feeds';
-			header('Location: ' . Zend_Gdata_AuthSub::getAuthSubTokenUri($self, $scope, 0, 1));
+            $googleImportUrl = $client -> createAuthUrl();
+            //print $googleImportUrl;
+            header("HTTP/1.0 307 Temporary Redirect");
+			header("Location: $googleImportUrl&state=$self");
 			exit;
 		}
 	}
-
 }

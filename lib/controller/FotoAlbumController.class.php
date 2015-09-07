@@ -55,12 +55,18 @@ class FotoAlbumController extends AclController {
 		} else {
 			$path = $this->getParams(3);
 		}
-		$path = PICS_PATH . urldecode(implode('/', $path));
-		if ($this->action === 'download') {
-			parent::performAction(array($path));
-			return;
+		$album = null;
+		if (sizeof($path) === 2) {
+			$album = $this->model->getFotoAlbum($path[2]);
 		}
-		$album = $this->model->getFotoAlbum($path);
+		if (!$album) {
+			$path = PICS_PATH . urldecode(implode('/', $path));
+			if ($this->action === 'download') {
+				parent::performAction(array($path));
+				return;
+			}
+			$album = $this->model->getFotoAlbum($path);
+		}
 		if (!$album) {
 			setMelding('Fotoalbum bestaat niet' . (DEBUG ? ': ' . $path : ''), -1);
 			redirect('/fotoalbum');
@@ -337,9 +343,13 @@ class FotoAlbumController extends AclController {
 		}
 		FotoTagsModel::instance()->removeTag($refuuid, $keyword);
 		$foto = FotoModel::getUUID($refuuid);
-		// return all tags
-		$tags = FotoTagsModel::instance()->getTags($foto);
-		$this->view = new JsonResponse($tags->fetchAll());
+		if ($foto) {
+			// return all tags
+			$tags = FotoTagsModel::instance()->getTags($foto);
+			$this->view = new JsonResponse($tags->fetchAll());
+		} else {
+			$this->view = new JsonResponse(array());
+		}
 	}
 
 }

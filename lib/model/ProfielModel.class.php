@@ -57,17 +57,18 @@ class ProfielModel extends CachedPersistenceModel {
 		return Database::sqlExists(static::getTableName(), 'duckname = ?', array($duck));
 	}
 
-	public function nieuw($lidstatus, $lidjaar) {
+	public function nieuw($lidjaar, $lidstatus) {
 		$profiel = new Profiel();
-		$profiel->status = $lidstatus;
 		$profiel->lidjaar = $lidjaar;
+		$profiel->status = $lidstatus;
+        $profiel->ontvangtcontactueel = OntvangtContactueel::Nee;
 		$profiel->changelog = '[div]Aangemaakt als ' . LidStatus::getDescription($profiel->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $profiel;
 	}
 
 	public function create(PersistentEntity $profiel) {
-		// Lichting zijn de eerste 2 cijfers van uid
-		$jj = substr($profiel->lidjaar, 0, 2);
+		// Lichting zijn de laatste 2 cijfers van lidjaar
+		$jj = substr($profiel->lidjaar, 2, 2);
 		$laatste_uid = Database::sqlSelect(array('MAX(uid)'), ProfielModel::getTableName(), 'LEFT(uid, 2) = ?', array($jj), null, null, 1)->fetchColumn();
 		if ($laatste_uid) {
 			// Volgnummer zijn de laatste 2 cijfers van uid

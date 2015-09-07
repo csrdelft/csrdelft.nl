@@ -46,7 +46,12 @@ class FotoAlbumModel extends PersistenceModel {
 		if (strpos($path, '/_') !== false) {
 			return null;
 		}
-		$album = new FotoAlbum($path);
+		if (ProfielModel::existsUid($path)) {
+			require_once 'model/entity/fotoalbum/FotoTagAlbum.class.php';
+			$album = new FotoTagAlbum($path);
+		} else {
+			$album = new FotoAlbum($path);
+		}
 		if (!$album->exists()) {
 			return null;
 		}
@@ -161,10 +166,17 @@ HTML;
 			$this->create($subdir);
 		}
 		foreach (FotoModel::instance()->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
+			$oldUUID = $foto->getUUID();
 			// updaten gaat niet vanwege primary key
 			FotoModel::instance()->delete($foto);
 			$foto->subdir = str_replace($oldDir, $newDir, $foto->subdir);
 			FotoModel::instance()->create($foto);
+			foreach (FotoTagsModel::instance()->find('refuuid = ?', array($oldUUID)) as $tag) {
+				// updaten gaat niet vanwege primary key
+				FotoTagsModel::instance()->delete($tag);
+				$tag->refuuid = $foto->getUUID();
+				FotoTagsModel::instance()->create($tag);
+			}
 		}
 		if (false === @rmdir(PICS_PATH . $oldDir)) {
 			$error = error_get_last();
@@ -222,6 +234,7 @@ HTML;
 			if (!$album->exists()) {
 				foreach (FotoModel::instance()->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {
 					FotoModel::instance()->delete($foto);
+					FotoTagsModel::instance()->verwijderFotoTags($foto);
 				}
 				$this->delete($album);
 			}
@@ -295,6 +308,7 @@ class FotoModel extends PersistenceModel {
 		}
 		if ($ret) {
 			$this->delete($foto);
+			FotoTagsModel::instance()->verwijderFotoTags($foto);
 		}
 		return $ret;
 	}
@@ -306,6 +320,11 @@ class FotoTagsModel extends PersistenceModel {
 	const orm = 'FotoTag';
 
 	protected static $instance;
+	/**
+	 * Default ORDER BY
+	 * @var string
+	 */
+	protected $default_order = 'wanneer DESC';
 
 	protected function __construct() {
 		parent::__construct('fotoalbum/');
@@ -323,6 +342,7 @@ class FotoTagsModel extends PersistenceModel {
 		$tag->refuuid = $foto->getUUID();
 		$tag->keyword = $uid;
 		$tag->door = LoginModel::getUid();
+		$tag->wanneer = getDateTime();
 		$tag->x = (int) $x;
 		$tag->y = (int) $y;
 		$tag->size = (int) $size;
@@ -336,6 +356,12 @@ class FotoTagsModel extends PersistenceModel {
 
 	public function removeTag($refuuid, $keyword) {
 		return $this->deleteByPrimaryKey(array($refuuid, $keyword));
+	}
+
+	public function verwijderFotoTags(Foto $foto) {
+		foreach ($this->getTags($foto) as $tag) {
+			$this->delete($tag);
+		}
 	}
 
 }

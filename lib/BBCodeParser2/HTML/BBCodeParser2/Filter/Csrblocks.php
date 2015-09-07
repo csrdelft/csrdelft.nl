@@ -948,7 +948,11 @@ HTML;
 					return '<div class="bb-block">Fotoalbum niet gevonden: ' . $url . '</div>';
 				}
 				$foto = new Foto($filename, $album);
-				$fototag = new FotoBBView($foto, $groot);
+				if ($foto) {
+					$fototag = new FotoBBView($foto, $groot);
+				} else {
+					return '';
+				}
 				return $fototag->getHtml();
 		}
 		return false;

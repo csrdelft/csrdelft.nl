@@ -51,6 +51,8 @@ RewriteRule ^bc/partners$ bc/partners.html [L]
 RewriteRule ^bc/mogelijkheden$ bc/mogelijkheden.html [L]
 RewriteRule ^bc/contact$ bc/contact.html [L]
 
+RewriteRule ^googlecallback    tools/googleauthorize.php [QSA,L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^                   index.php
