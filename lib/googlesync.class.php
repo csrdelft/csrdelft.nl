@@ -274,12 +274,34 @@ class GoogleSync {
 		$title->setAttribute('type', 'text');
 		$entry->appendChild($title);
 
-		$response = $this->gdata->insertEntry($doc->saveXML(), GOOGLE_GROUPS_URL.'?alt=json&v=3.0&oauth_token='.$this->access_token);
+		try {
+			$ch = curl_init(GOOGLE_GROUPS_URL . '?alt=json&v=3.0&oauth_token=' . $this->access_token);
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $doc->saveXML());
+			curl_setopt($ch, CURLOPT_NOBODY, false);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Content-Type: application/atom+xml',
+				'Connection: Keep-Alive'
+			));
+			$entryResult = curl_exec($ch);
+
+			if (FALSE === $entryResult)
+				throw new Exception(curl_error($ch), curl_errno($ch));
+		} catch (Exception $e) {
+			trigger_error(sprintf(
+				'Curl failed with error #%d: %s',
+				$e->getCode(), $e->getMessage()),
+				E_USER_ERROR);
+		}
+
+		$data = json_decode($entryResult);
 
 		//herlaad groupFeed om de nieuw gemaakte daar ook in te hebben.
 		$this->loadGroupFeed();
 
-		return (string) $response->id;
+		return (string) $data->entry->id;
 	}
 
 	/**
