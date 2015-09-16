@@ -20,6 +20,14 @@ abstract class Zijbalk {
 			require_once 'view/IsHetAlView.class.php';
 			array_unshift($zijbalk, new IsHetAlView(LidInstellingen::get('zijbalk', 'ishetal')));
 		}
+
+		// Sponsors
+		if (LoginModel::mag('P_LOGGED_IN')) {
+			$sponsor_menu = MenuModel::instance()->getMenu("sponsors");
+			$sponsor_menu->tekst = 'Sponsors';
+			$zijbalk[] = new BlockMenuView($sponsor_menu);
+		}
+
 		// Agenda
 		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0 && LidInstellingen::get('zijbalk', 'agenda_max') > 0) {
 			require_once 'model/AgendaModel.class.php';
