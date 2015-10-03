@@ -85,7 +85,8 @@ class CorveeRepetitiesController extends AclController {
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
 			$mrid = empty($values['mlt_repetitie_id']) ? null : (int) $values['mlt_repetitie_id'];
-			$repetitie_aantal = CorveeRepetitiesModel::saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_punten'], $values['standaard_aantal'], $values['voorkeurbaar']);
+			$voorkeurbaar = empty($values['voorkeurbaar']) ? false : (bool) $values['voorkeurbaar'];
+			$repetitie_aantal = CorveeRepetitiesModel::saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_punten'], $values['standaard_aantal'], $voorkeurbaar);
 			$maaltijdrepetitie = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], maalcieUrl . '/maaltijd/' . $mrid)) { // state of gui
 				$maaltijdrepetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
