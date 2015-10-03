@@ -88,8 +88,6 @@ class MaaltijdAbonnementenModel {
 				$abonnement->setFoutmelding('Niet abonneerbaar');
 			} elseif ($abo['status_err']) {
 				$abonnement->setWaarschuwing('Geen huidig lid');
-			} elseif ($abo['kring_err']) {
-				$abonnement->setWaarschuwing('Geen actief kringlid');
 			} elseif (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $abo['filter'])) {
 				$abonnement->setFoutmelding('Niet toegestaan vanwege aanmeldrestrictie: ' . $abo['filter']);
 			} elseif ($alleenWaarschuwingen) {
@@ -115,12 +113,12 @@ class MaaltijdAbonnementenModel {
 	private static function loadLedenAbonnementen($alleenNovieten = false, $alleenWaarschuwingen = false, $ingeschakeld = null, $voorLid = null) {
 		$sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
 		$sql.= ' r.abonnement_filter AS filter,'; // controleer later
-		$sql.= ' (r.abonneerbaar = false) AS abo_err, (lid.kring = 0) AS kring_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
+		$sql.= ' (r.abonneerbaar = false) AS abo_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
 		$sql.= ' (EXISTS ( SELECT * FROM mlt_abonnementen AS a WHERE a.mlt_repetitie_id = mrid AND a.uid = van )) AS abo';
 		$sql.= ' FROM profielen AS lid, mlt_repetities AS r';
 		$values = array();
 		if ($alleenWaarschuwingen) {
-			$sql.= ' HAVING abo AND (filter != "" OR abo_err OR kring_err OR status_err)'; // niet-(kring)-leden met abo
+			$sql.= ' HAVING abo AND (filter != "" OR abo_err OR status_err)'; // niet-leden met abo
 		} elseif ($voorLid !== null) { // alles voor specifiek lid
 			$sql.= ' WHERE lid.uid = ?';
 			$values[] = $voorLid;
