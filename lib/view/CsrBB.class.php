@@ -456,7 +456,7 @@ class CsrBB extends eamBBParser {
 			$attr['iframe'] = true;
 
 			$attr['src'] = '//www.youtube.com/embed/' . $id . '?autoplay=1';
-			$previewthumb = 'http://img.youtube.com/vi/' . $id . '/0.jpg';
+			$previewthumb = 'https://img.youtube.com/vi/' . $id . '/0.jpg';
 
 			return $this->video_preview($attr, $previewthumb);
 		} else {
@@ -498,7 +498,7 @@ class CsrBB extends eamBBParser {
 				$id = $matches[1];
 			}
 			$params['src'] = '//www.youtube.com/embed/' . $id . '?autoplay=1';
-			$previewthumb = 'http://img.youtube.com/vi/' . $id . '/0.jpg';
+			$previewthumb = 'https://img.youtube.com/vi/' . $id . '/0.jpg';
 		} elseif (strstr($content, 'vimeo')) {
 			$type = 'vimeo';
 			if (preg_match('#vimeo\.com/(?:clip\:)?(\d+)#', $content, $matches) > 0) {
