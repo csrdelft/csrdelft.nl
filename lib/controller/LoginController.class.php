@@ -2,9 +2,9 @@
 
 /**
  * LoginController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van de agenda.
  */
 class LoginController extends AclController {
@@ -192,7 +192,7 @@ class LoginController extends AclController {
 				// inloggen zonder $authByToken
 				$this->model->login($account->uid, $pass_plain, false);
 				// stuur bevestigingsmail
-				$lidnaam = $account->getProfiel()->getNaam('civitas');
+				$lidnaam = $account->getProfiel()->getNaam('volledig');
 				require_once 'model/entity/Mail.class.php';
 				$bericht = "Geachte " . $lidnaam .
 						",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
