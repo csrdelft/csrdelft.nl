@@ -215,7 +215,7 @@ class LoginController extends AclController {
 				if ($account AND AccessModel::mag($account, 'P_PROFIEL_EDIT') AND mb_strtolower($account->email) === mb_strtolower($values['mail'])) {
 					$token = OneTimeTokensModel::instance()->createToken($account->uid, '/wachtwoord/reset');
 					// stuur resetmail
-					$lidnaam = $account->getProfiel()->getNaam('civitas');
+					$lidnaam = $account->getProfiel()->getNaam('volledig');
 					require_once 'model/entity/Mail.class.php';
 					$bericht = "Geachte " . $lidnaam .
 							",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1] .
