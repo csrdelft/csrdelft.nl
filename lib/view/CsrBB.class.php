@@ -444,6 +444,43 @@ class CsrBB extends eamBBParser {
 		}
 	}
 
+	/**
+	 * Laat de embedded spotify player zien
+	 */
+	function bb_spotify($arguments = array()) {
+		$id = $this->parseArray(array('[/spotify]'), array());
+		if (isset($arguments['spotify'])) { // [spotify=
+			$id = $arguments['spotify'];
+		}
+
+		if (startsWith($id, 'spotify')) { // Spotify uri
+			$uri = $id;
+		} else if (startsWith($id, 'https')) { // Link naar afspeellijst
+			$uri = preg_replace('/.+\/(\w+)\/(\w+)\/(\w+)\/(\w+)$/', 'spotify:$1:$2:$3:$4', $id);
+		} else {
+			return '[spotify] Geen geldige url (' . htmlspecialchars($id) .')';
+		}
+
+		$uri = html_entity_decode($uri);
+
+		# stiekem is het formaat altijd breed ?
+		$width = 580;
+		$height = 80;
+
+		if (isset($arguments['formaat']) AND $arguments['formaat'] == 'hoog') {
+			$formaat = $arguments['formaat'];
+			if ($formaat == "hoog") {
+				$width = 300;
+				$height = 380;
+			}
+		}
+
+		return "<iframe
+					src=\"https://embed.spotify.com/?uri=$uri\"
+					width=\"$width\" height=\"$height\"
+					frameborder=\"0\" allowtransparency=\"true\"></iframe>";
+	}
+
 	function bb_youtube($arguments = array()) {
 		$id = $this->parseArray(array('[/youtube]'), array());
 		if (isset($arguments['youtube'])) { // [youtube=
