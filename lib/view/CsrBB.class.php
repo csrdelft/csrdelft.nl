@@ -466,16 +466,21 @@ class CsrBB extends eamBBParser {
 		# stiekem is het formaat altijd breed ?
 		$width = 580;
 		$height = 80;
+		$class = '';
 
-		if (isset($arguments['formaat']) AND $arguments['formaat'] == 'hoog') {
+		if (isset($arguments['formaat'])) {
 			$formaat = $arguments['formaat'];
 			if ($formaat == "hoog") {
 				$width = 300;
 				$height = 380;
+			} else if ($formaat == "blok") {
+				$width = 80;
+				$height = 80;
+				$class = "class='float-left'"; # Blokje float in tekst
 			}
 		}
 
-		return "<iframe
+		return "<iframe $class
 					src=\"https://embed.spotify.com/?uri=$uri\"
 					width=\"$width\" height=\"$height\"
 					frameborder=\"0\" allowtransparency=\"true\"></iframe>";
