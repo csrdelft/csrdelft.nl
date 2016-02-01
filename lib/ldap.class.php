@@ -38,6 +38,7 @@ class LDAP {
 		$ldapini = parse_ini_file(ETC_PATH . "ldap.ini");
 		$conn = ldap_connect($ldapini['ldap_host'], $ldapini['ldap_port']);
 		ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
+		ldap_start_tls($conn);
 		if ($dobind === true) {
 			$bind = ldap_bind($conn, $ldapini['ldap_binddn'], $ldapini['ldap_passwd']);
 			if ($bind !== true)
