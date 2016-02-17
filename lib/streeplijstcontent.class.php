@@ -34,7 +34,7 @@ class Streeplijstcontent implements View {
 		if (isset($_GET['goederen']) AND trim($_GET['goederen']) != '') {
 			$sGoederen = htmlspecialchars($_GET['goederen']);
 		} else {
-			$sGoederen = 'Grolschbier, S.bier, frisfris, reep, mix, sig., wijnF, sterk, B.noot, WW';
+			$sGoederen = 'Gulpenerbier,Frisdrank,normSB,luxeSB,NeuB,Wijn,Wky,dWky,Sterk,Mix,Port,Repen,Noot,Koek,Tost,FWijn';
 		}
 		$this->parseGoederen($sGoederen);
 
@@ -136,7 +136,7 @@ class Streeplijstcontent implements View {
 	}
 
 	function getPdf() {
-		
+
 	}
 
 	function getUrl() {
