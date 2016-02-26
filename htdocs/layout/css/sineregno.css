@@ -1,29 +1,83 @@
-/* Sine regno 2014
- * paars: #C744FF
- * donkergroen: #166F11
- * geel: #fbea14
- * blauw: #1470b8
- */
+/* sine regno 2016*/
+/** rood: #EE343F*/
+/** donker-turquoise : #05877d*/
+/**/
 
-body {
-	background-image: url("/plaetjes/layout/sineregno/2014/body.png");
-	background-repeat: repeat-x;
+/*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
+#cd-zijbalk, #forumtabel th, .cd-primary-nav ul {
+	background-color: #0b8849 !important;
 }
-#mainright {
-	background-image: url("/plaetjes/layout/sineregno/2014/puinhopen.png");
-	background-repeat: no-repeat;
-	background-position-x: 33%;
-	background-position-y: 50px;
+
+/*Koppen in het rood*/
+h1, a, a:hover,
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+	color: #fd892c;
 }
-h1,h2,h3,h4,h5,h6 {
-	color: #fbea14;
+
+
+/*NAVIGATIE MENU*/
+
+
+/*Andere koppen in het wit*/
+.cd-primary-nav .cd-secondary-nav a,
+.cd-primary-nav .cd-secondary-nav > li > a:hover,
+.cd-primary-nav .cd-secondary-nav > li > a {
+	color: #ffffff;
 }
-a, a:hover {
-	color: #C744FF;
+
+/*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
+.cd-primary-nav .cd-secondary-nav a:hover {
+	text-decoration: underline !important;
+	color: #ffffff;
 }
-#zijbalk .block .zijbalk-kopje a {
-	color: #166F11;
+
+/*Streepje onder naam*/
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+	box-shadow: inset 0 -2px 0 #fd892c;
 }
-#zijbalk .block .item a {
-	color: #1470b8;
+
+
+/*ZIJBALK*/
+
+
+/*Veel tekst van de zijbalk in het wit*/
+#cd-zijbalk .ishetal .ja, #cd-zijbalk .ishetal .nee, .staatrood,
+#cd-zijbalk .blok .item a, #cd-zijbalk .ishetal, #cd-zijbalk .blok .item {
+	color: #ffffff;
+}
+
+/*Zijbalk grens van het scherm in rood*/
+#cd-zijbalk {
+	border-color: #fd892c;
+}
+
+/*OWee logo met gradient*/
+#cd-zijbalk .cd-beeldmerk {
+	-webkit-filter: invert(100%);
+	filter: invert(100%);
+}
+
+
+/*KNOPPEN*/
+
+
+/*Knoppen in blauw gradient*/
+.btn, input[type=submit], input[type=button], .progress-bar-info, .btn:focus,
+input[type=submit]:focus, input[type=button]:focus {
+	background-image: linear-gradient(to bottom, #0b8849, #15b062);
+	border: none !important;
+}
+
+/*Voor een mouse hover wordt de gradient omgedraaid*/
+.btn:hover, input[type=submit]:hover, input[type=button]:hover {
+	background-image: linear-gradient(to bottom, #15b062, #0b8849);
+	border: none !important;
+}
+
+/*Actieve knoppen iets ruimere kleuren -> zo ontstaat verschil tussen hover en active*/
+.btn.active {
+	background-image: linear-gradient(to bottom, #18bb69, #10663a);
+	border: none !important;
 }
