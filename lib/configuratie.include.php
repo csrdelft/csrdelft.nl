@@ -66,7 +66,7 @@ error_reporting(E_ALL);
 mb_internal_encoding('UTF-8');
 
 // datum weergave enzo
-setlocale(LC_ALL, 'nl_NL.UTF8');
+setlocale(LC_ALL, 'nl_NL.utf8');
 setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Amsterdam');
 
@@ -100,7 +100,7 @@ define('HTTP_REFERER', $ref);
 
 // Use HTTP Strict Transport Security to force client to use secure connections only
 if (FORCE_HTTPS) {
-	if (MODE !== 'CLI') {
+	if (!(isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') && MODE !== 'CLI') {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
