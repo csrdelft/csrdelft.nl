@@ -302,7 +302,7 @@ abstract class DataTable extends TabsForm {
 				// Init DataTable
 				var tableId = '#<?= $this->dataTableId; ?>';
 				var table = $(tableId).dataTable(<?= $settingsJson; ?>);
-				table.fnFilter('<?= $this->filter; ?>');
+				table.fnFilter('<?= str_replace("'", "\'", $this->filter); ?>');
 				/**
 				 * Toolbar button state update on row (de-)selection.
 				 */
