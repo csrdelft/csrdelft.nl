@@ -746,7 +746,7 @@
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
 			<h2>{$album->dirname|ucfirst}</h2>
 			{foreach from=$album->getFotos() item=foto}
-				<a class="foto" href="{$foto->getResizedUrl()}" data-href="{$foto->getFullUrl()}" data-mod="{$foto->isOwner()}">
+				<a class="foto" href="{$foto->getResizedUrl()}" data-href="{$foto->getFullUrl()}" data-mod="{$foto->isOwner() || LoginModel::mag('P_ALBUM_MOD')}">
 					<img src="{$foto->getThumbUrl()}" alt="{$smarty.const.CSR_ROOT}{$foto->getFullUrl()|replace:"%20":" "}" />
 				</a>
 			{/foreach}
