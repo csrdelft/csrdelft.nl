@@ -585,7 +585,7 @@ class AccessModel extends CachedPersistenceModel {
 							$g = CommissiesModel::getTableName();
 							break;
 					}
-					return Database::sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie_naam = ?', array($role, $gevraagd));
+					return Database::sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie = ?', array($role, $gevraagd));
 				}
 			// fall through
 
