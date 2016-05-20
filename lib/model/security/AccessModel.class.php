@@ -570,6 +570,7 @@ class AccessModel extends CachedPersistenceModel {
 			 */
 			case 'BESTUUR':
 			case 'COMMISSIE':
+				$role = strtolower($role);
 				// Alleen als GroepStatus is opgegeven, anders: fall through
 				if (in_array($role, GroepStatus::getTypeOptions())) {
 					switch ($prefix) {
