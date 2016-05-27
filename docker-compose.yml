@@ -5,7 +5,7 @@ stek:
   ports:
     - "8080:80"
   volumes:
-    - htdocs/plaetjes:/var/www/csrdelft.nl/htdocs/plaetjes
+    - ./htdocs/plaetjes:/var/www/csrdelft.nl/htdocs/plaetjes
 
 stekdb:
   image: mariadb
