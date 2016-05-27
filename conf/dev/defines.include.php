@@ -28,10 +28,10 @@ define('FORCE_HTTPS', false);
 #define('CONFIDE_IP', '80.112.180.173');
 
 # wordt gebruikt voor secure cookies
-define('CSR_DOMAIN', 'dev.csrdelft.nl:8080');
+define('CSR_DOMAIN', 'dev.csrdelft.nl');
 
 # urls ZONDER trailing slash
-define('CSR_ROOT', 'http://' . CSR_DOMAIN);
+define('CSR_ROOT', 'http://' . CSR_DOMAIN . ':8080');
 
 # JWT secret key for API
 define('JWT_SECRET', 'BjG\0_;,OY5k)w-frmSpgleH"*^6Q_t{M=uh.<:nH8n<Xrs!FZY=TGhi}{)B"Wa');
