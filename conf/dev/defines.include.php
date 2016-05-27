@@ -33,6 +33,12 @@ define('CSR_DOMAIN', 'dev.csrdelft.nl:8080');
 # urls ZONDER trailing slash
 define('CSR_ROOT', 'http://' . CSR_DOMAIN);
 
+# JWT secret key for API
+define('JWT_SECRET', 'BjG\0_;,OY5k)w-frmSpgleH"*^6Q_t{M=uh.<:nH8n<Xrs!FZY=TGhi}{)B"Wa');
+
+# JWT lifetime for API, in seconds
+define('JWT_LIFETIME', 30);
+
 # paden MET trailing slash
 define('BASE_PATH', realpath(dirname(__FILE__)) . "/../");
 define('ETC_PATH', BASE_PATH . 'etc/');
