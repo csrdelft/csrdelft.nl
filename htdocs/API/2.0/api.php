@@ -14,7 +14,7 @@ if (DEBUG === true && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // Get the authorization http header
 $headers = apache_request_headers();
-$authHeader = $headers['X-CSR-Authorization'];
+$authHeader = $headers['X-Csr-Authorization'];
 
 if ($authHeader) {
 
