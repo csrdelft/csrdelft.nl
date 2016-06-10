@@ -1,166 +1,243 @@
 /*
-	Solid State by HTML5 UP
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
+ Solid State by HTML5 UP
+ html5up.net | @n33co
+ Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+ */
 
-(function($) {
+(function ($) {
 
-	"use strict";
+    "use strict";
 
-	skel.breakpoints({
-		xlarge:	'(max-width: 1680px)',
-		large:	'(max-width: 1280px)',
-		medium:	'(max-width: 980px)',
-		small:	'(max-width: 736px)',
-		xsmall:	'(max-width: 480px)'
-	});
+    $(function () {
 
-	$(function() {
+        var $window = $(window),
+            $body = $('body'),
+            $header = $('#header'),
+            $banner = $('#banner');
 
-		var	$window = $(window),
-			$body = $('body'),
-			$header = $('#header'),
-			$banner = $('#banner');
+        // Disable animations/transitions until the page has loaded.
+        $body.addClass('is-loading');
 
-		// Disable animations/transitions until the page has loaded.
-			$body.addClass('is-loading');
+        $window.on('load', function () {
+            window.setTimeout(function () {
+                $body.removeClass('is-loading');
+            }, 100);
+        });
 
-			$window.on('load', function() {
-				window.setTimeout(function() {
-					$body.removeClass('is-loading');
-				}, 100);
-			});
+        // Fix: Placeholder polyfill.
+        $('form').placeholder();
 
-		// Fix: Placeholder polyfill.
-			$('form').placeholder();
+        if ($banner.length > 0
+            && $header.hasClass('alt')) {
 
-		// Prioritize "important" elements on medium.
-			skel.on('+medium -medium', function() {
-				$.prioritize(
-					'.important\\28 medium\\29',
-					skel.breakpoint('medium').active
-				);
-			});
+            $window.on('resize', function () {
+                $window.trigger('scroll');
+            });
 
-		// Header.
-			if (skel.vars.IEVersion < 9)
-				$header.removeClass('alt');
+            $banner.scrollex({
+                bottom: $header.outerHeight(),
+                terminate: function () {
+                    $header.removeClass('alt');
+                },
+                enter: function () {
+                    $header.addClass('alt');
+                },
+                leave: function () {
+                    $header.removeClass('alt');
+                }
+            });
 
-			if ($banner.length > 0
-			&&	$header.hasClass('alt')) {
+        }
 
-				$window.on('resize', function() { $window.trigger('scroll'); });
+        // Menu.
+        var $menu = $('#menu');
 
-				$banner.scrollex({
-					bottom:		$header.outerHeight(),
-					terminate:	function() { $header.removeClass('alt'); },
-					enter:		function() { $header.addClass('alt'); },
-					leave:		function() { $header.removeClass('alt'); }
-				});
+        $menu._locked = false;
 
-			}
+        $menu._lock = function () {
 
-		// Menu.
-			var $menu = $('#menu');
+            if ($menu._locked)
+                return false;
 
-			$menu._locked = false;
+            $menu._locked = true;
 
-			$menu._lock = function() {
+            window.setTimeout(function () {
+                $menu._locked = false;
+            }, 350);
 
-				if ($menu._locked)
-					return false;
+            return true;
 
-				$menu._locked = true;
+        };
 
-				window.setTimeout(function() {
-					$menu._locked = false;
-				}, 350);
+        $menu._show = function () {
 
-				return true;
+            if ($menu._lock())
+                $body.addClass('is-menu-visible');
 
-			};
+        };
 
-			$menu._show = function() {
+        $menu._hide = function () {
 
-				if ($menu._lock())
-					$body.addClass('is-menu-visible');
+            if ($menu._lock())
+                $body.removeClass('is-menu-visible');
 
-			};
+        };
 
-			$menu._hide = function() {
+        $menu._toggle = function () {
 
-				if ($menu._lock())
-					$body.removeClass('is-menu-visible');
+            if ($menu._lock())
+                $body.toggleClass('is-menu-visible');
 
-			};
+        };
 
-			$menu._toggle = function() {
+        $menu
+            .appendTo($body)
+            .on('click', function (event) {
 
-				if ($menu._lock())
-					$body.toggleClass('is-menu-visible');
+                event.stopPropagation();
 
-			};
+                // Hide.
+                $menu._hide();
 
-			$menu
-				.appendTo($body)
-				.on('click', function(event) {
+            })
+            .find('.inner')
+            .on('click', '.close', function (event) {
 
-					event.stopPropagation();
+                event.preventDefault();
+                event.stopPropagation();
+                event.stopImmediatePropagation();
 
-					// Hide.
-						$menu._hide();
+                // Hide.
+                $menu._hide();
 
-				})
-				.find('.inner')
-					.on('click', '.close', function(event) {
+            })
+            .on('click', function (event) {
+                event.stopPropagation();
+            })
+            .on('click', 'a', function (event) {
 
-						event.preventDefault();
-						event.stopPropagation();
-						event.stopImmediatePropagation();
+                var href = $(this).attr('href');
 
-						// Hide.
-							$menu._hide();
+                event.preventDefault();
+                event.stopPropagation();
 
-					})
-					.on('click', function(event) {
-						event.stopPropagation();
-					})
-					.on('click', 'a', function(event) {
+                // Hide.
+                $menu._hide();
 
-						var href = $(this).attr('href');
+                // Redirect.
+                window.setTimeout(function () {
+                    window.location.href = href;
+                }, 350);
 
-						event.preventDefault();
-						event.stopPropagation();
+            });
 
-						// Hide.
-							$menu._hide();
+        var $login = $('#login');
 
-						// Redirect.
-							window.setTimeout(function() {
-								window.location.href = href;
-							}, 350);
+        $login._locked = false;
 
-					});
+        $login._lock = function () {
 
-			$body
-				.on('click', 'a[href="#menu"]', function(event) {
+            if ($login._locked)
+                return false;
 
-					event.stopPropagation();
-					event.preventDefault();
+            $login._locked = true;
 
-					// Toggle.
-						$menu._toggle();
+            window.setTimeout(function () {
+                $login._locked = false;
+            }, 350);
 
-				})
-				.on('keydown', function(event) {
+            return true;
 
-					// Hide on escape.
-						if (event.keyCode == 27)
-							$menu._hide();
+        };
 
-				});
+        $login._show = function () {
 
-	});
+            if ($login._lock())
+                $body.addClass('is-login-visible');
+
+        };
+
+        $login._hide = function () {
+
+            if ($login._lock())
+                $body.removeClass('is-login-visible');
+
+        };
+
+        $login._toggle = function () {
+
+            if ($login._lock())
+                $body.toggleClass('is-login-visible');
+
+        };
+
+        $login
+            .appendTo($body)
+            .on('click', function (event) {
+
+                event.stopPropagation();
+
+                // Hide.
+                $login._hide();
+
+            })
+            .find('.inner')
+            .on('click', '.close', function (event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+                event.stopImmediatePropagation();
+
+                // Hide.
+                $login._hide();
+
+            })
+            .on('click', function (event) {
+                event.stopPropagation();
+            })
+            .on('click', 'a', function (event) {
+
+                var href = $(this).attr('href');
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                // Hide.
+                $login._hide();
+
+                // Redirect.
+                window.setTimeout(function () {
+                    window.location.href = href;
+                }, 350);
+
+            });
+
+        $body
+            .on('click', 'a[href="#menu"]', function (event) {
+
+                event.stopPropagation();
+                event.preventDefault();
+
+                // Toggle.
+                $menu._toggle();
+
+            })
+            .on('click', 'a[href="#login"]', function (event) {
+                event.stopPropagation();
+                event.preventDefault();
+
+                $login._toggle();
+            })
+            .on('keydown', function (event) {
+
+                // Hide on escape.
+                if (event.keyCode == 27) {
+                    $menu._hide();
+                    $login._hide();
+                }
+
+            });
+
+    });
 
 })(jQuery);
