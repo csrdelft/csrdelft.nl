@@ -1899,11 +1899,19 @@
 
 /* Form */
 
-	form {
-		margin: 0 0 2em 0;
+	.float-left {
+		float: left;
 	}
 
-		form .field {
+	.FormElement.CheckBoxField {
+		display:none;
+	}
+
+	form {
+		margin: 0 0 0 0;
+	}
+
+		form .field, form .InputField {
 			margin: 0 0 2em 0;
 		}
 
