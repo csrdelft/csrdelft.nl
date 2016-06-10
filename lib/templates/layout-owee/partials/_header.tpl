@@ -2,11 +2,27 @@
 <html>
 
 <head>
-	{include file='html_head.tpl'}
-  <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-	<link rel="stylesheet" href="assets/css/main.css" />
-	<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
-	<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+	<meta name="description" content="{Instellingen::get('stek', 'beschrijving')}">
+	<meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE" />
+	<meta property="og:url" content="{$smarty.const.CSR_ROOT}{$REQUEST_URI}" />
+	<meta property="og:title" content="C.S.R. Delft | {$titel}" />
+	<meta property="og:locale" content="nl_nl" />
+	<meta property="og:image" content="{$smarty.const.CSR_ROOT}/plaetjes/layout/beeldmerk.png" />
+	<meta property="og:description" content="{Instellingen::get('stek', 'beschrijving')}" />
+	<title>C.S.R. Delft - {$titel}</title>
+	<link rel="shortcut icon" href="{$smarty.const.CSR_ROOT}/plaetjes/layout/favicon.ico" />
+	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{$smarty.const.CSR_ROOT}/forum/rss.xml" />
+  <!--[if lte IE 8]><script src="/layout-owee/js/ie/html5shiv.js"></script><![endif]-->
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic" />
+	<link rel="stylesheet" type="text/css" href="/layout-owee/css/main.css" />
+	{foreach from=$stylesheets item=sheet}
+		<link rel="stylesheet" href="{$sheet}" type="text/css" />
+	{/foreach}
+	{foreach from=$scripts item=script}
+		<script type="text/javascript" src="{$script}"></script>
+	{/foreach}
+	<!--[if lte IE 9]><link rel="stylesheet" href="/layout-owee/css/ie9.css" /><![endif]-->
+	<!--[if lte IE 8]><link rel="stylesheet" href="/layout-owee/css/ie8.css" /><![endif]-->
 </head>
 
 <body>
