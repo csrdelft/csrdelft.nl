@@ -13,5 +13,12 @@
                 {$body->view()}
             </div>
         </section>
+        <section id="footer">
+            <div class="inner">
+                <ul class="copyright">
+                    <li>&copy; 2016 - C.S.R. Delft</li>
+                </ul>
+            </div>
+        </section>
     </section>
 {include file='layout-owee/partials/_footer.tpl'}
