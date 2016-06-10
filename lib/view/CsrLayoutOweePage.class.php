@@ -3,7 +3,7 @@
 require_once 'view/LoginView.class.php';
 
 /**
- * CsrLayout2Page.class.php
+ * CsrLayoutOweePage.class.php
  *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -28,6 +28,9 @@ class CsrLayoutOweePage extends CompressedLayout {
 		$this->tmpl = $template;
 		$this->menutmpl = $menu;
 		$this->addCompressedResources('general');
+		$this->addCompressedResources('formulier');
+		$this->addCompressedResources('fotoalbum');
+		$this->addCompressedResources('forum');
 	}
 
 	public function getBreadcrumbs() {
@@ -42,10 +45,6 @@ class CsrLayoutOweePage extends CompressedLayout {
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
 		$smarty->assign('loginform', new LoginForm());
-
-		if ($this->menutmpl !== '') {
-			$smarty->assign('menutpl', $this->menutmpl);
-		}
 		$smarty->assign('body', $this->getBody());
 
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
@@ -54,12 +53,7 @@ class CsrLayoutOweePage extends CompressedLayout {
 		}
 		$smarty->assign('breadcrumbs', $breadcrumbs);
 
-		if (LoginModel::instance()->isPauper()) {
-			$smarty->assign('mainmenu', new SitemapView());
-			$smarty->display('layout/pauper.tpl');
-		} else {
-			$smarty->display('layout-owee/' . $this->tmpl . '.tpl');
-		}
+		$smarty->display('layout-owee/' . $this->tmpl . '.tpl');
 	}
 
 }
