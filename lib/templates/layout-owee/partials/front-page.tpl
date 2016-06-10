@@ -78,26 +78,26 @@ Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hi
 					<section id="footer">
 						<div class="inner">
 							<h2 class="major">Interesseformulier</h2>
-							<form method="post" action="#">
+							<form method="post" action="mailto:oweecie@csrdelft.nl?SUBJECT=Interesseformulier">
 								<div class="field">
 									<label for="name">Naam</label>
-									<input type="text" name="naam" id="naam" />
+									<input type="text" name="naam" id="naam" required />
 								</div>
 								<div class="field">
 									<label for="email">Email</label>
-									<input type="email" name="submit_by" id="submit_by" />
+									<input type="email" name="submit_by" id="submit_by" required />
 								</div>
 								<div class="field">
 									<label for="adres">Adres</label>
-									<input type="text" name="straat" id="straat" />
+									<input type="text" name="straat" id="straat" required />
 								</div>
 								<div class="field">
 									<label for="postcode">Postcode</label>
-									<input type="text" name="postcode" id="postcode" />
+									<input type="text" name="postcode" id="postcode" required />
 								</div>
 								<div class="field">
 									<label for="woonplaats">Woonplaats</label>
-									<input type="text" name="plaats" id="plaats" />
+									<input type="text" name="plaats" id="plaats" required />
 								</div>
 								<div class="field">
 									<label for="telefoon">Telefoon</label>
