@@ -18,7 +18,7 @@
 										<h2 class="major">C.S.R. Delft</h2>
 										<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in Delft, rijk aan tradities die zijn ontstaan in haar 55-jarig bestaan. Het is een breed gezelschap van zo‘n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen uithalen.
 </p>
-										<a href="https://csrdelft.nl/vereniging" class="special">Lees meer over C.S.R.</a>
+										<a href="/vereniging" class="special">Lees meer over C.S.R.</a>
 									</div>
 								</div>
 							</section>
@@ -30,7 +30,7 @@
 									<div class="content">
 										<h2 class="major">C.S.R. in de OWee</h2>
 										<p>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee. Dit jaar duurt de OWee van 17 t/m 20 augustus met op zondag 16 augustus de onofficiële opening. Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al deze groepen en dus ook C.S.R. zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.</p>
-										<a href="images/Programmaposter.jpg" class="special">Bekijk het programma</a>
+										<a href="/oweeprogramma" class="special">Bekijk het programma</a>
 										<h3>Interesseborrel 25 juni</h3>
 										<p>Op deze avond krijg je de mogelijkheid om alvast een kijkje te nemen bij C.S.R. Een mooie gelegenheid om wat leden te spreken en de sfeer te proeven! De borrel begint om 20:30 op onze Sociëteit. </p>
 									</div>
