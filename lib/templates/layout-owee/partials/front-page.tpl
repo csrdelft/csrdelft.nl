@@ -58,16 +58,15 @@ Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hi
 									<h2 class="major">Foto's</h2>
 									<div class="box alt">
 										<div class="row uniform">
-<!-- 											<div class="12u$"><span class="image fit"><img src="images/pic08.jpg" alt="" /></span></div> -->
-											<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
-											<div class="4u"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></div>
-											<div class="4u$"><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></div>
-											<div class="4u"><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></div>
-											<div class="4u"><span class="image fit"><img src="images/pic05.jpg" alt="" /></span></div>
-											<div class="4u$"><span class="image fit"><img src="images/pic06.jpg" alt="" /></span></div>
-											<div class="4u"><span class="image fit"><img src="images/pic07.jpg" alt="" /></span></div>
-											<div class="4u"><span class="image fit"><img src="images/pic08.jpg" alt="" /></span></div>
-											<div class="4u$"><span class="image fit"><img src="images/pic09.jpg" alt="" /></span></div>
+											<div class="4u"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic01.jpg" alt="" /></span></div>
+											<div class="4u"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic02.jpg" alt="" /></span></div>
+											<div class="4u$"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic03.jpg" alt="" /></span></div>
+											<div class="4u"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic04.jpg" alt="" /></span></div>
+											<div class="4u"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic05.jpg" alt="" /></span></div>
+											<div class="4u$"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic06.jpg" alt="" /></span></div>
+											<div class="4u"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic07.jpg" alt="" /></span></div>
+											<div class="4u"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic08.jpg" alt="" /></span></div>
+											<div class="4u$"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic09.jpg" alt="" /></span></div>
 										</div>
 									</div>
 								</div>
