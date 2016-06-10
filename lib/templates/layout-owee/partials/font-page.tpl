@@ -3,10 +3,7 @@
 				<!-- Banner -->
 					<section id="banner">
 						<div class="inner">
-<!-- 							<div class="logo"><span class="icon fa-diamond"></span></div> -->
 							<img src="/plaetjes/layout-owee/Logo.svg">
-<!-- 							<h2>This is Solid State</h2> -->
-<!-- 							<p>Another free + fully responsive site template by <a href="http://html5up.net">HTML5 UP</a></p> -->
 						</div>
 					</section>
 
@@ -81,7 +78,6 @@ Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hi
 					<section id="footer">
 						<div class="inner">
 							<h2 class="major">Interesseformulier</h2>
-<!-- 							<p>Cras mattis ante fermentum, malesuada neque vitae, eleifend erat. Phasellus non pulvinar erat. Fusce tincidunt, nisl eget mattis egestas, purus ipsum consequat orci, sit amet lobortis lorem lacus in tellus. Sed ac elementum arcu. Quisque placerat auctor laoreet.</p> -->
 							<form method="post" action="#">
 								<div class="field">
 									<label for="name">Naam</label>
@@ -140,7 +136,6 @@ Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hi
 								<li class="fa-phone">015-2135681</li>
 								<li class="fa-envelope"><a href="mailto:owee@csrdelft.nl">owee@csrdelft.nl</a></li>
 								<li class="fa-facebook"><a href="https://www.facebook.com/OWee-CSR-Delft-1570871723180451/?fref=ts">Like de Facebookpagina om de laatste updates te ontvangen</a></li>
-<!-- 								<li class="fa-instagram"><a href="#">instagram.com/untitled-tld</a></li> -->
 								<li class="fa-map-marker"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2456.0445350385166!2d4.360246300000008!3d52.0060664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5b5c03dabb5b3%3A0xea6a437036970629!2sOude+Delft+9!5e0!3m2!1sen!2s!4v1404470858468" height="300" frameborder="0" style="border:0"></iframe></li>
 							</ul>
 							<ul class="copyright">
