@@ -77,7 +77,7 @@ Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hi
 					<section id="footer">
 						<div class="inner">
 							<h2 class="major">Interesseformulier</h2>
-							<form method="post" action="mailto:oweecie@csrdelft.nl?SUBJECT=Interesseformulier">
+							<form method="post" action="/tools/interesse.php">
 								<div class="field">
 									<label for="name">Naam</label>
 									<input type="text" name="naam" id="naam" required />
@@ -121,6 +121,9 @@ Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hi
 								<div class="field">
 									<label for="opmerking">Opmerking</label>
 									<textarea name="opmerking" id="opmerking" rows="4"></textarea>
+								</div>
+								<div class="field">
+									<div class="g-recaptcha" data-sitekey="6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX"></div>
 								</div>
 								<ul class="actions">
 									<li><input type="submit" value="Verzenden" /></li>
