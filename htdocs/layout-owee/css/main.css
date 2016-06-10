@@ -3052,7 +3052,6 @@
 		opacity: 1;
 		visibility: visible;
 	}
-
 		body.is-menu-visible #menu .inner {
 			-moz-transform: translateY(0);
 			-webkit-transform: translateY(0);
@@ -3081,6 +3080,27 @@
 
 
 /* Banner */
+
+	#banner-small {
+	}
+
+		#banner-small .inner {
+
+			margin: 0 auto;
+			margin-bottom: -4em;
+			width: 55em;
+		}
+
+		#banner-small a {
+			z-index: 10001;
+			position: relative;
+			border-bottom: none;
+		}
+
+		#banner-small img {
+			width: 10em;
+			padding: 1em;
+		}
 
 	#banner {
 		padding: 7em 0 2em 0 ;
