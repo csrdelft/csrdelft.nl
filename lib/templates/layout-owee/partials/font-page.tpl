@@ -1,36 +1,10 @@
-    <!-- Page Wrapper -->
-			<div id="page-wrapper">
 
-				<!-- Header -->
-					<header id="header" class="alt">
-						<h1><a href="index.html">C.S.R. in de OWee</a></h1>
-						<nav>
-							<a class="inloggen" href="https://csrdelft.nl/inloggen">Inloggen</a>
-							<a href="#menu">Menu</a>
-						</nav>
-					</header>n
-
-				<!-- Menu -->
-					<nav id="menu">
-						<div class="inner">
-							<h2>Menu</h2>
-							<ul class="links">
-								<li><a href="https://csrdelft.nl/vereniging">Informatie over C.S.R.</a></li>
-								<li><a href="https://csrdelft.nl/fotoalbum">Fotoalbum</a></li>
-								<li><a href="https://csrdelft.nl/forum/deel/2">Extern forum</a></li>
-								<li><a href="https://csrdelft.nl/forum/deel/12">Kamers zoeken/aanbieden</a></li>
-								<li><a href="https://csrdelft.nl/contact">Contactinformatie</a></li>
-								<li><a href="https://csrdelft.nl/contact/sponsoring">Bedrijven</a></li>
-							</ul>
-							<a href="#" class="close">Close</a>
-						</div>
-					</nav>
 
 				<!-- Banner -->
 					<section id="banner">
 						<div class="inner">
 <!-- 							<div class="logo"><span class="icon fa-diamond"></span></div> -->
-							<img src="images/Logo.svg">
+							<img src="/plaetjes/layout-owee/Logo.svg">
 <!-- 							<h2>This is Solid State</h2> -->
 <!-- 							<p>Another free + fully responsive site template by <a href="http://html5up.net">HTML5 UP</a></p> -->
 						</div>
@@ -42,7 +16,7 @@
 						<!-- One -->
 							<section id="one" class="wrapper spotlight style1">
 								<div class="inner">
-									<a href="#" class="image"><img src="images/vereniging.jpg" alt="" /></a>
+									<a href="#" class="image"><img src="/plaetjes/layout-owee/vereniging.jpg" alt="" /></a>
 									<div class="content">
 										<h2 class="major">C.S.R. Delft</h2>
 										<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in Delft, rijk aan tradities die zijn ontstaan in haar 55-jarig bestaan. Het is een breed gezelschap van zo‘n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen uithalen.
@@ -55,7 +29,7 @@
 						<!-- Two -->
 							<section id="two" class="wrapper alt spotlight style2">
 								<div class="inner">
-									<a href="#" class="image"><img src="images/podium.jpg" alt="" /></a>
+									<a href="#" class="image"><img src="/plaetjes/layout-owee/podium.jpg" alt="" /></a>
 									<div class="content">
 										<h2 class="major">C.S.R. in de OWee</h2>
 										<p>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee. Dit jaar duurt de OWee van 17 t/m 20 augustus met op zondag 16 augustus de onofficiële opening. Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al deze groepen en dus ook C.S.R. zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.</p>
@@ -69,7 +43,7 @@
 						<!-- Three -->
 							<section id="three" class="wrapper spotlight style3">
 								<div class="inner">
-									<a href="#" class="image"><img src="images/OC.jpg" alt="" /></a>
+									<a href="#" class="image"><img src="/plaetjes/layout-owee/OC.jpg" alt="" /></a>
 									<div class="content">
 										<h2 class="major">Interesse/vragen</h2>
 										<p>Uiteraard ben je welkom om tijdens de OWee langs te komen op onze sociëteit Confide aan de Oude Delft 9. Ook is het mogelijk om dan in een C.S.R. huis te overnachten. Dit kun je aangeven tijdens het aanmelden voor de OWee op owee.nl.
@@ -183,4 +157,4 @@ Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hi
 						</div>
 					</section>
 
-			</div>
+			</section>
