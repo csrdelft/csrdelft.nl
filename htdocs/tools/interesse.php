@@ -77,7 +77,7 @@ Met vriendelijke groeten,
 De PubCie.
 ";
 
-$mail = new Mail(array("pubcie@csrdelft.nl" => "OweeCie", $email => $naam), "Interesseformulier", $bericht);
+$mail = new Mail(array("oweecie@csrdelft.nl" => "OweeCie", $email => $naam), "Interesseformulier", $bericht);
 $mail->setFrom($email);
 $mail->send();
 ?>
