@@ -2969,6 +2969,10 @@
 		transition: filter 0.25s ease;
 	}
 
+	#login ul {
+		list-style: none;
+	}
+
 	#menu, #login {
 		-moz-align-items: center;
 		-webkit-align-items: center;
