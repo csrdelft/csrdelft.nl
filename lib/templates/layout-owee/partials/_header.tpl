@@ -9,6 +9,7 @@
 	<meta property="og:locale" content="nl_nl" />
 	<meta property="og:image" content="{$smarty.const.CSR_ROOT}/plaetjes/layout/beeldmerk.png" />
 	<meta property="og:description" content="{Instellingen::get('stek', 'beschrijving')}" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>C.S.R. Delft - {$titel}</title>
 	<link rel="shortcut icon" href="{$smarty.const.CSR_ROOT}/plaetjes/layout/favicon.ico" />
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{$smarty.const.CSR_ROOT}/forum/rss.xml" />
