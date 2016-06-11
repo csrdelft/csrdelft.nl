@@ -29,10 +29,10 @@
 									<a href="#" class="image"><img src="/plaetjes/layout-owee/podium.jpg" alt="" /></a>
 									<div class="content">
 										<h2 class="major">C.S.R. in de OWee</h2>
-										<p>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee. Dit jaar duurt de OWee van 17 t/m 20 augustus met op zondag 16 augustus de onofficiële opening. Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al deze groepen en dus ook C.S.R. zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.</p>
-										<a href="/oweeprogramma" class="special">Bekijk het programma</a>
-										<h3>Interesseborrel 25 juni</h3>
-										<p>Op deze avond krijg je de mogelijkheid om alvast een kijkje te nemen bij C.S.R. Een mooie gelegenheid om wat leden te spreken en de sfeer te proeven! De borrel begint om 20:30 op onze Sociëteit. </p>
+										<p>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee. Dit jaar duurt de OWee van 21 t/m 25 augustus met op zondag 16 augustus de officiële opening. Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al deze groepen en dus ook C.S.R. zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.</p>
+										<a href="images/Programmaposter.jpg" class="special">Bekijk het programma</a>
+										<h3>Interesseavond 23 juni</h3>
+										<p>Op deze avond krijg je de mogelijkheid om alvast een kijkje te nemen bij C.S.R. Een mooie gelegenheid om wat leden te spreken en de sfeer te proeven! Om 18:30 is er een maaltijd en vanaf 20:30 is er een borrel op onze Sociëteit. </p>
 									</div>
 								</div>
 							</section>
