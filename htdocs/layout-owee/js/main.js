@@ -15,6 +15,10 @@
             $header = $('#header'),
             $banner = $('#banner');
 
+        if (typeof $banner[0] == "undefined") {
+            $banner = $('#banner-small');
+        }
+
         // Disable animations/transitions until the page has loaded.
         $body.addClass('is-loading');
 
