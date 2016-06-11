@@ -1794,6 +1794,10 @@
 			border-bottom: solid 2px rgba(255, 255, 255, 0.5);
 		}
 
+	h1 {
+		font-size: 1.5em;
+	}
+
 	h2 {
 		font-size: 1.2em;
 	}
