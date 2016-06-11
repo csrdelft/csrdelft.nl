@@ -101,7 +101,7 @@ function csr_css_out() {
 
 	// decide from where to get the layout
 	$layout = $INPUT->str('l');
-	$allowedlayouts = array('layout', 'layout2', 'layout3');
+	$allowedlayouts = array('layout', 'layout2', 'layout3', 'layout-owee');
 	if (!in_array($layout, $allowedlayouts)) {
 		$layout = $allowedlayouts[0];
 	}
