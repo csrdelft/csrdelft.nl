@@ -10,6 +10,7 @@
     <section id="wrapper">
         <section class="wrapper spotlight detail style1">
             <div class="inner">
+                {if isset($menutpl)}{include file="layout-owee/partials/_menu$menutpl.tpl"}{/if}
                 {$body->view()}
             </div>
         </section>

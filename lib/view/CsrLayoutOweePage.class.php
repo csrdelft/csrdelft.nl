@@ -47,6 +47,9 @@ class CsrLayoutOweePage extends CompressedLayout {
 		$smarty->assign('loginform', new LoginForm());
 		$smarty->assign('body', $this->getBody());
 
+		if ($this->menutmpl !== '') {
+			$smarty->assign('menutpl', $this->menutmpl);
+		}
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
 		if (!$breadcrumbs) {
 			$breadcrumbs = $this->getBreadcrumbs();

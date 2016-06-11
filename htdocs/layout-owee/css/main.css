@@ -1641,6 +1641,41 @@
 			transition: none !important;
 		}
 
+		.submenu {
+			display: flex;
+			justify-content: space-around;
+			list-style: none;
+			flex-flow: row wrap;
+
+			font-family: Raleway, Helvetica, sans-serif;
+			font-size: 0.8em;
+			font-weight: 700;
+			height: 3em;
+			letter-spacing: 0.1em;
+			line-height: 3em;
+			text-transform: uppercase;
+
+		}
+
+		.submenu li {
+			margin: 0;
+			padding: 0;
+		}
+
+		.submenu a {
+			margin: 0.2em;
+			display: inline-block;
+			border-bottom: none;
+			text-decoration: none;
+			-moz-transition: background-color 0.2s ease-in-out;
+			-webkit-transition: background-color 0.2s ease-in-out;
+			-ms-transition: background-color 0.2s ease-in-out;
+			transition: background-color 0.2s ease-in-out;
+			border-radius: 5px;
+			box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+			padding: 0 1.35em;
+		}
+
 /* Type */
 
 	body, input, select, textarea {
