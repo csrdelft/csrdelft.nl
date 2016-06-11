@@ -15,7 +15,7 @@
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{$smarty.const.CSR_ROOT}/forum/rss.xml" />
   <!--[if lte IE 8]><script src="/layout-owee/js/ie/html5shiv.js"></script><![endif]-->
 	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic" />
-	<script src='https://www.google.com/recaptcha/api.js'></script>
+	<script src='https://www.google.com/recaptcha/api.js?hl=nl'></script>
 	<link rel="stylesheet" type="text/css" href="/layout-owee/css/main.css" />
 	{foreach from=$stylesheets item=sheet}
 		<link rel="stylesheet" href="{$sheet}" type="text/css" />
