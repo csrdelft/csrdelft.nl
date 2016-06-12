@@ -61,9 +61,7 @@ class CmsPaginaController extends Controller {
 		if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde bezoekers
 			$tmpl = 'content';
 			$menu = '';
-			if ($naam === 'lidworden') {
-				$tmpl = 'lidworden';
-			} elseif ($pagina->naam === 'thuis') {
+			if ($pagina->naam === 'thuis') {
 				$tmpl = 'index';
 			} elseif ($this->hasParam(1) AND $this->getParam(1) === 'vereniging') {
 				$menu = 'Vereniging';
