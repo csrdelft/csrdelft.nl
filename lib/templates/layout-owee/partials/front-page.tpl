@@ -46,8 +46,9 @@
 										<p>Uiteraard ben je welkom om tijdens de OWee langs te komen op onze sociëteit Confide aan de Oude Delft 9. Ook is het mogelijk om dan in een C.S.R. huis te overnachten. Dit kun je aangeven tijdens het aanmelden voor de OWee op owee.nl.
 
 Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hieronder voor de mogelijkheden of voor het opvragen van een informatiepakket.</p>
-										<p class="lidworden">Wil je lid worden? Zorg ervoor dat je de week van 29 augustus t/m 4 september vrij houdt voor de novitiaatsweek.</p>
 										<a href="#footer" class="special">Vul interesseformulier in</a>
+										<p class="lidworden">Wil je lid worden? Zorg ervoor dat je de week van 29 augustus t/m 4 september vrij houdt voor de novitiaatsweek.</p>
+										<a href-="/lidworden" class="special">Meer informatie over lid worden</a>
 									</div>
 								</div>
 							</section>
