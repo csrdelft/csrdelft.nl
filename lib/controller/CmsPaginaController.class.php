@@ -66,7 +66,7 @@ class CmsPaginaController extends Controller {
 			} elseif ($this->hasParam(1) AND $this->getParam(1) === 'vereniging') {
 				$menu = 'Vereniging';
 			}
-			$this->view = new CsrLayout2Page($body, $tmpl, $menu);
+			$this->view = new CsrLayoutOweePage($body, $tmpl, $menu);
 		} else {
 			$this->view = new CsrLayoutPage($body, $this->zijbalk);
 			if ($pagina->naam === 'thuis') {

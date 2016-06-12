@@ -116,7 +116,7 @@ class ForumController extends Controller {
 				$this->view->addCompressedResources('grafiek');
 			}
 		} else {
-			$this->view = new CsrLayout2Page($this->view);
+			$this->view = new CsrLayoutOweePage($this->view);
 		}
 		$this->view->addCompressedResources('forum');
 	}
