@@ -1548,6 +1548,7 @@
 				padding: 0 2em 3em 2em;
 				margin-bottom: -1.5em;
 			}
+
 			#banner {
 				padding: 5em 2em 3em 2em ;
 				margin-bottom: -2.5em;
@@ -1605,4 +1606,8 @@
 
 #wrapper .detail img {
 	margin: 1em;
+}
+
+.clear {
+	clear: both;
 }
