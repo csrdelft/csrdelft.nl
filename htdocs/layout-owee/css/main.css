@@ -954,8 +954,7 @@
 
 		#banner-small .inner {
 
-			margin: 0 auto;
-			margin-bottom: -4em;
+			margin: 0 auto -4em;
 			width: 55em;
 		}
 
@@ -963,6 +962,7 @@
 			z-index: 10001;
 			position: relative;
 			border-bottom: none;
+			display: inline-block;
 		}
 
 		#banner-small img {
