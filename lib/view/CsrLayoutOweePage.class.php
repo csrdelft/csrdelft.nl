@@ -28,9 +28,6 @@ class CsrLayoutOweePage extends CompressedLayout {
 		$this->tmpl = $template;
 		$this->menutmpl = $menu;
 		$this->addCompressedResources('general');
-		$this->addCompressedResources('formulier');
-		$this->addCompressedResources('fotoalbum');
-		$this->addCompressedResources('forum');
 	}
 
 	public function getBreadcrumbs() {
