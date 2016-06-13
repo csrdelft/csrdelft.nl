@@ -215,11 +215,9 @@
 	}
 
 	body {
-		background-color: #ffcc33;
-/* 		background-image: linear-gradient(to top, rgba(252, 211, 98, 0.8), rgba(255, 199, 44, 0.8)), url("../../images/bg.jpg"); */
+		/* 		background-image: linear-gradient(to top, rgba(252, 211, 98, 0.8), rgba(255, 199, 44, 0.8)), url("../../images/bg.jpg"); */
 		background-size: auto, cover;
-		background-attachment: fixed, fixed;
-		background-position: center, center;
+		background: #ffcc33 fixed, fixed center, center;
 	}
 
 		body.is-loading *, body.is-loading *:before, body.is-loading *:after {
@@ -870,7 +868,6 @@
 			.image.main img {
 				width: 100%;
 			}
-
 
 /* Button */
 
@@ -1563,8 +1560,6 @@
 			-ms-filter: blur(2px);
 			filter: blur(2px);
 		}
-
-
 
 #wrapper img {
 	margin: 1em;
