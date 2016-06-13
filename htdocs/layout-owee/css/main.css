@@ -264,6 +264,36 @@
 			padding: 0 1.35em;
 		}
 
+		@media screen and (max-width: 736px){
+			.submenu {
+				flex-direction: column;
+			}
+
+			.submenu a {
+				width: 100%;
+				text-align: center;
+			}
+		}
+
+		@media screen and (max-width: 980px) {
+			.submenu {
+
+			}
+
+			.submenu li {
+				box-sizing: border-box;
+				flex-grow: 1;
+				min-width: calc(25% - 2em);
+				margin: 0 1em;
+			}
+
+			.submenu a {
+				width: 100%;
+				text-align: center;
+				padding: 0;
+			}
+		}
+
 /* Type */
 
 	body, input, select, textarea {
