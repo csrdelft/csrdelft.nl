@@ -45,6 +45,7 @@
 		<div class="inner">
 			<h2>Inloggen</h2>
 			{$loginform->view()}
+			<a href="#" class="close">Close</a>
 		</div>
 	</nav>
 
