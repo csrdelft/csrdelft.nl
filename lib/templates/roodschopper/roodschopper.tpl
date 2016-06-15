@@ -56,4 +56,4 @@
 <br />
 {* TODO: dit ding met javascript mee laten veranderen met het kiezen van een commissie *}
 <p>Kijk aan, hier doen we het voor!</p>
-<img src="/tools/saldografiek.php?uid=000&timespan=100&{$roodschopper->getCommissie()}" />
+<!-- Stuk! <img src="/tools/saldografiek.php?uid=000&timespan=100&{$roodschopper->getCommissie()}" />-->
