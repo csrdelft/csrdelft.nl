@@ -1,0 +1,12 @@
+{
+    "name": "csr/csrdelft.nl",
+    "authors": [
+        {
+            "name": "PubCie",
+            "email": "pubcie@csrdelft.nl"
+        }
+    ],
+    "require": {
+        "smarty/smarty": "~3.1"
+    }
+}

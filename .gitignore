@@ -255,3 +255,4 @@ tmp/*
 
 # Compiled python file LDAP
 bin/ldap/settings.pyc
+/vendor/

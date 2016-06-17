@@ -78,6 +78,8 @@ if (php_sapi_name() === 'cli') {
 	define('MODE', 'WEB');
 }
 
+// Composer autoload
+require __DIR__ . '/../vendor/autoload.php';
 
 // Defines
 require_once 'defines.include.php';
