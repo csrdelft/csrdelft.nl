@@ -1151,7 +1151,7 @@ class WachtwoordWijzigenField extends InputField {
 			$this->error = 'U moet uw huidige wachtwoord invoeren';
 		} elseif ($this->required AND empty($new)) {
 			$this->error = 'U moet een nieuw wachtwoord invoeren';
-		} elseif (!$this->require_current OR ! empty($new)) {
+		} elseif (!empty($new)) {
 			if ($this->require_current AND $current == $new) {
 				$this->error = 'Het nieuwe wachtwoord is hetzelfde als het huidige wachtwoord';
 			} elseif ($length < 10) {
