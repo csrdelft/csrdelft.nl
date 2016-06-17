@@ -227,7 +227,7 @@ class AccountForm extends Formulier {
 		$fields[] = new UsernameField('username', $account->username);
 		$fields[] = new RequiredEmailField('email', $account->email, 'E-mailadres');
 		$fields[] = new WachtwoordWijzigenField('wijzigww', $account, true);
-		$fields['btn'] = new FormDefaultKnoppen('/', false, true, true, true);
+		$fields['btn'] = new FormDefaultKnoppen('/profiel/' . $account->uid, false, true, true, true);
 
 		$delete = new DeleteKnop($this->action . '/delete');
 		$fields['btn']->addKnop($delete, true);
