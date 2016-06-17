@@ -26,6 +26,7 @@ class CsrSmarty extends Smarty {
 
 			self::$instance->setTemplateDir(SMARTY_TEMPLATE_DIR);
 			self::$instance->setCompileDir(SMARTY_COMPILE_DIR);
+			self::$instance->addPluginsDir(SMARTY_PLUGIN_DIR);
 			//self::$instance->setConfigDir(SMARTY_CONFIG_DIR); 
 			self::$instance->setCacheDir(SMARTY_CACHE_DIR);
 			self::$instance->caching = false;
