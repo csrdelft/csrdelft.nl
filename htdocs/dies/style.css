@@ -1,175 +1,123 @@
-body {
-    font-family: 'Montserrat', sans-serif;
-    color: #DDD;
-    background: black;
-    -webkit-font-smoothing: antialiased;
-    padding: 0;
+html, body {
     margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    box-sizing: border-box;
+    font: 16px/1 "Actor",sans-serif;
+    letter-spacing: 0.48px;
+    background: #fff url("img/poster.jpg") 49.83% 97.53% fixed;
+    background-size: cover;
+    text-align: center;
+
+    padding: 98px;
+}
+
+/* koppen */
+h1, h2, h3 {
+    text-transform: uppercase;
 }
 h1 {
-    text-transform: uppercase;
-    font-size: 3em;
-}
-.script {
-    font-family: 'Great Vibes', cursive;
-    text-transform: lowercase;
-}
-.clear {
-    clear: both;
-}
-#m {
-    display: none;
-    width: 50px;
-    top: 30px;
-    left: 50%;
-    margin-left: -25px;
-    position: fixed;
-}
-header {
-    position: fixed;
-    bottom: 0;
-    padding: 30px 0;
-    width: 100vw;
-    background: rgba(0,0,0,0.9);
-}
-header nav ul {
-    margin: 0 auto;
-    padding: 0;
-    text-align: center;
-}
-header nav ul li {
-    display: inline;
-    padding: 0 15px;
-    margin: 0;
-    list-style: none;
-    text-transform: uppercase;
-}
-header a {
     color: white;
-    text-decoration: none;
-    transition: 0.5s;
+    font: normal 4em "Cabin";
 }
-header a:hover, h2.inschrijven a:hover, header a.selected {
-    color: #D6960F;
+h2 {
+    color: #9d1c20;
+    font: 700 1.5em "Cantarell";
 }
-section, #spark, #logo {
-    min-height: 100vh;
+h3 {
+    color: #1b65bc;
+    font-family: "Cantarell";
 }
-section h1, h2.inschrijven {
-    text-align: center;
+h1, h2, h3, p {
+    box-sizing: border-box;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+p {
     color: white;
-    text-shadow: 1px 1px 3px #000;    
+    font: normal 18px "Cantarell";
 }
-#welkom {
-    background: url("/plaetjes/layout/dies/2015/spark1.jpg") no-repeat fixed;
+
+p:last-of-type {
+    margin-bottom: 98px;
 }
-#spark {
-    background: url("/plaetjes/layout/dies/2015/spark2.png") no-repeat fixed;
+
+img {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 10% 98px 10%;
 }
-#logo {
-    background: url("/plaetjes/layout/dies/2015/logo.png") no-repeat fixed;
+
+#thema {
+    background-position: 40% 38.31%;
 }
-#etiquette, #programma {
-    background-size: cover;
-    padding: 70px 0 100px;
-}
+
 #etiquette {
-    background: url("/plaetjes/layout/dies/2015/etiquette.jpg") no-repeat fixed;
+    background-image: url('img/poster-blur.jpg');
+    background-position: 37.39% 46.44%;
 }
-#programma {
-    background: url("/plaetjes/layout/dies/2015/programma.jpg") no-repeat fixed;
+
+ul {
+    position: fixed;
+    bottom: 25px;
+    left: 0;
+    right: 0;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+    /*flex*/
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-end;
 }
-.colbox {
-    width: 90%;
-    margin: auto;
-    max-width: 1300px;
-}
-#programma .colbox {
-    max-width: 1000px;
-}
-.col {
-    display: inline;
-    width: 30%;
-    min-width: 300px;
-    margin-right: 5%;
-    float: left;
-}
-.omega {
-    margin-right: 0;
-}
-.col h2 {
-    color: #CC931A;
-    text-transform: uppercase;
-    margin-bottom: 0;
-}
-.col h3 {
-    margin-top: 0;
-    text-transform: uppercase;
-    font-size: 1em;
-    font-weight: 100;
-}
-.col p {
-    font-size: 0.85em;
-    line-height: 1.4em;
-    font-weight: 100;
-}
-.tijd {
+
+li > a {
     display: inline-block;
-    width: 75px;
-}
-h2.inschrijven {
-    margin-top: 75px;
-    text-transform: uppercase;
-}
-h2.inschrijven a {
+    box-sizing: border-box;
+    font: 700 14px "Cantarell";
     color: white;
+    text-transform: uppercase;
+    background: #7DB06F;
+    transition: background-color 0.2s ease-in-out 0s;
+    min-height: 32px;
+    line-height:32px;
+    padding: 3px 31px;
+    border-radius: 2px;
     text-decoration: none;
+    margin: 5px 0;
 }
-#commissie {
-    background: url("/plaetjes/layout/dies/2015/commissie.jpg") no-repeat fixed;
-    background-size: 105%;
+
+li > a:hover {
+    background: #6A9D5C;
 }
-#commissie div {
-    height: 100vh;
-    float: left;
-}
-.ruben, .ilze {
-    width: 20%;
-}
-.kirsten, .andreas {
-    width: 15%;
-}
-.niels {
-    width: 12%;
-}
-.laura {
-    width: 18%;
-}
-#commissie div p {
-    opacity: 0;
-    text-align: center;
-    width: 100px;
-    margin: 75vh auto 0;
-    padding: 15px 0;
-    background: rgba(0,0,0,0.8);
-    border-radius: 3px;
-    transition: 0.5s;
-}
-#commissie div:hover p {
-    opacity: 1;
-    margin-top: 70vh;
-}
-@media screen and (max-width: 1280px) {
-    #welkom {
-        background-size: 826px;
+
+@media (max-width: 768px) {
+    ul {
+        /* Items go in column */
+        flex-direction: column;
+        align-items: center;
     }
-    #spark {
-        background-size: 960px;
+
+    body {
+        padding: 0;
     }
-    #logo {
-        background-size: 600px;
+
+    img {
+        padding: 10px;
+        padding-bottom: 222px;
     }
-}
-#video {
-    height: 100vh;
+
+    iframe {
+        width: 100vw;
+        height: 56.25vw;
+        margin-top: 10%;
+        margin-bottom: 222px;
+    }
 }
