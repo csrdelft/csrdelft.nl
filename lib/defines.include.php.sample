@@ -52,7 +52,7 @@ define('ICON_PATH', PICS_PATH . 'famfamfam/');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
 
 # smarty template engine
-define('SMARTY_DIR', LIB_PATH . 'smarty/libs/');
+define('SMARTY_PLUGIN_DIR', LIB_PATH. 'smarty_plugins');
 define('SMARTY_TEMPLATE_DIR', LIB_PATH . 'templates/');
 define('SMARTY_COMPILE_DIR', DATA_PATH . 'smarty/compiled/');
 define('SMARTY_CACHE_DIR', DATA_PATH . 'smarty/cache/');
