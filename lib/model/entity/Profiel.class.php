@@ -648,4 +648,23 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public function getMaalCieSaldo() {
 		return $this->maalcieSaldo;
 	}
+
+	/**
+	 * Controleer of een lid al in de google-contacts-lijst staat.
+	 * 
+	 * @return boolean
+	 */
+	public function isInGoogleContacts() {
+		try {
+			require_once 'googlesync.class.php';
+			if (!GoogleSync::isAuthenticated()) {
+				return null;
+			}
+			return GoogleSync::instance()->existsInGoogleContacts($this);
+		} catch (Zend_Gdata_App_AuthException $e) {
+			setMelding($e->getMessage(), 0);
+			return null;
+		}
+	}
+
 }

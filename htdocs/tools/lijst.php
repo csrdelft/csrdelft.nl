@@ -61,7 +61,7 @@ if (isset($_GET['addToGoogle'])) {
 		if (LoginModel::mag('P_ADMIN')) {
 			setMelding('<hr />Tijd nodig voor deze sync: ' . $elapsed . 'ms', 0);
 		}
-	} catch (Exception $e) {
+	} catch (Zend_Gdata_App_AuthException $e) {
 		$m = $e->getMessage();
 		$title = substr($m, strpos($m, '<title>') + 7, strpos($m, '</title>'));
 		setMelding($title, -1);
