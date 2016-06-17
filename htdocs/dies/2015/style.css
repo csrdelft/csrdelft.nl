@@ -1,0 +1,175 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: #DDD;
+    background: black;
+    -webkit-font-smoothing: antialiased;
+    padding: 0;
+    margin: 0;
+}
+h1 {
+    text-transform: uppercase;
+    font-size: 3em;
+}
+.script {
+    font-family: 'Great Vibes', cursive;
+    text-transform: lowercase;
+}
+.clear {
+    clear: both;
+}
+#m {
+    display: none;
+    width: 50px;
+    top: 30px;
+    left: 50%;
+    margin-left: -25px;
+    position: fixed;
+}
+header {
+    position: fixed;
+    bottom: 0;
+    padding: 30px 0;
+    width: 100vw;
+    background: rgba(0,0,0,0.9);
+}
+header nav ul {
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+}
+header nav ul li {
+    display: inline;
+    padding: 0 15px;
+    margin: 0;
+    list-style: none;
+    text-transform: uppercase;
+}
+header a {
+    color: white;
+    text-decoration: none;
+    transition: 0.5s;
+}
+header a:hover, h2.inschrijven a:hover, header a.selected {
+    color: #D6960F;
+}
+section, #spark, #logo {
+    min-height: 100vh;
+}
+section h1, h2.inschrijven {
+    text-align: center;
+    color: white;
+    text-shadow: 1px 1px 3px #000;
+}
+#welkom {
+    background: url("/plaetjes/layout/dies/2015/spark1.jpg") no-repeat fixed;
+}
+#spark {
+    background: url("/plaetjes/layout/dies/2015/spark2.png") no-repeat fixed;
+}
+#logo {
+    background: url("/plaetjes/layout/dies/2015/logo.png") no-repeat fixed;
+}
+#etiquette, #programma {
+    background-size: cover;
+    padding: 70px 0 100px;
+}
+#etiquette {
+    background: url("/plaetjes/layout/dies/2015/etiquette.jpg") no-repeat fixed;
+}
+#programma {
+    background: url("/plaetjes/layout/dies/2015/programma.jpg") no-repeat fixed;
+}
+.colbox {
+    width: 90%;
+    margin: auto;
+    max-width: 1300px;
+}
+#programma .colbox {
+    max-width: 1000px;
+}
+.col {
+    display: inline;
+    width: 30%;
+    min-width: 300px;
+    margin-right: 5%;
+    float: left;
+}
+.omega {
+    margin-right: 0;
+}
+.col h2 {
+    color: #CC931A;
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+.col h3 {
+    margin-top: 0;
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: 100;
+}
+.col p {
+    font-size: 0.85em;
+    line-height: 1.4em;
+    font-weight: 100;
+}
+.tijd {
+    display: inline-block;
+    width: 75px;
+}
+h2.inschrijven {
+    margin-top: 75px;
+    text-transform: uppercase;
+}
+h2.inschrijven a {
+    color: white;
+    text-decoration: none;
+}
+#commissie {
+    background: url("/plaetjes/layout/dies/2015/commissie.jpg") no-repeat fixed;
+    background-size: 105%;
+}
+#commissie div {
+    height: 100vh;
+    float: left;
+}
+.ruben, .ilze {
+    width: 20%;
+}
+.kirsten, .andreas {
+    width: 15%;
+}
+.niels {
+    width: 12%;
+}
+.laura {
+    width: 18%;
+}
+#commissie div p {
+    opacity: 0;
+    text-align: center;
+    width: 100px;
+    margin: 75vh auto 0;
+    padding: 15px 0;
+    background: rgba(0,0,0,0.8);
+    border-radius: 3px;
+    transition: 0.5s;
+}
+#commissie div:hover p {
+    opacity: 1;
+    margin-top: 70vh;
+}
+@media screen and (max-width: 1280px) {
+    #welkom {
+        background-size: 826px;
+    }
+    #spark {
+        background-size: 960px;
+    }
+    #logo {
+        background-size: 600px;
+    }
+}
+#video {
+    height: 100vh;
+}
