@@ -1,7 +1,5 @@
 <?php
 
-require_once 'smarty/libs/Smarty.class.php';
-
 /**
  * CsrSmarty.singleton.php
  *
