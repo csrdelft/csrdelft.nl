@@ -226,7 +226,7 @@ class AccountForm extends Formulier {
 
 		$fields[] = new UsernameField('username', $account->username);
 		$fields[] = new RequiredEmailField('email', $account->email, 'E-mailadres');
-		$fields[] = new WachtwoordWijzigenField('wijzigww', $account, true);
+		$fields[] = new WachtwoordWijzigenField('wijzigww', $account, !LoginModel::mag('P_LEDEN_MOD'));
 		$fields['btn'] = new FormDefaultKnoppen('/profiel/' . $account->uid, false, true, true, true);
 
 		$delete = new DeleteKnop($this->action . '/delete');
