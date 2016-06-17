@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Google/autoload.php';
-
 define('GOOGLE_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/full');
 define('GOOGLE_GROUP_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/base/');
 define('GOOGLE_GROUPS_URL', 'https://www.google.com/m8/feeds/groups/default/full');
@@ -53,7 +51,7 @@ class GoogleSync {
         $redirect_uri = CSR_ROOT . '/googlecallback';
         $client = new Google_Client();
         $client -> setApplicationName('Stek');
-        $client -> setClientid($google_client_id);
+        $client -> setClientId($google_client_id);
         $client -> setClientSecret($google_client_secret);
         $client -> setRedirectUri($redirect_uri);
         $client -> setAccessType('online');
@@ -619,7 +617,7 @@ class GoogleSync {
         $redirect_uri = CSR_ROOT . '/googlecallback';
         $client = new Google_Client();
         $client -> setApplicationName('Stek');
-        $client -> setClientid($google_client_id);
+        $client -> setClientId($google_client_id);
         $client -> setClientSecret($google_client_secret);
         $client -> setRedirectUri($redirect_uri);
         $client -> setAccessType('online');
