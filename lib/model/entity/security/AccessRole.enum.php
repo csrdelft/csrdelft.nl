@@ -24,6 +24,14 @@ abstract class AccessRole implements PersistentEnum {
 		return array(self::Nobody, self::Eter, self::Oudlid, self::Lid, self::BASFCie, self::MaalCie, self::Bestuur, self::PubCie);
 	}
 
+	public static function canChangeAccessRoleTo($from) {
+		switch ($from) {
+			case self::PubCie: return self::getTypeOptions();
+			case self::Bestuur: return array_diff(self::getTypeOptions(), [self::PubCie]); // Bestuurder kan geen PubCie rechten geven
+			default: throw new Exception('Cannot change AccessRole');
+		}
+	}
+
 	public static function getDescription($option) {
 		switch ($option) {
 			case self::Nobody: return 'Ex-lid/Nobody';
