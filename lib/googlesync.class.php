@@ -1,13 +1,6 @@
 <?php
 
 require_once 'Google/autoload.php';
-require_once 'Zend/Loader.php';
-Zend_Loader::loadClass('Zend_Gdata');
-Zend_Loader::loadClass('Zend_Gdata_AuthSub');
-Zend_Loader::loadClass('Zend_Http_Client');
-Zend_Loader::loadClass('Zend_Uri_Http');
-Zend_Loader::loadClass('Zend_Gdata_Query');
-Zend_Loader::loadClass('Zend_Gdata_Feed');
 
 define('GOOGLE_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/full');
 define('GOOGLE_GROUP_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/base/');
