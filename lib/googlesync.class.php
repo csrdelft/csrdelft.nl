@@ -126,6 +126,23 @@ class GoogleSync {
         $this->contactFeed = GoogleSync::doGoogleRequest(GOOGLE_CONTACTS_URL . '?max-results=1000&group=' . urlencode($groupId), $this->access_token)->entry;
 	}
 
+    /**
+     * Zorg ervoor dat $xml met xpath doorzocht kan worden. Dit werkt alleen voor het huidige element,
+     * diepere elementen moeten opnieuw gefixt worden.
+     *
+     * De standaard namespace wordt _, omdat deze niet leeg kan zijn.
+     *
+     * @param $xml SimpleXMLElement
+     */
+    private function fixSimpleXMLNameSpace($xml) {
+        foreach ($xml->getDocNamespaces() as $strPrefix => $strNamespace) {
+            if (strlen($strPrefix)==0) {
+                $strPrefix = "_";
+            }
+            $xml->registerXPathNamespace($strPrefix, $strNamespace);
+        }
+    }
+
 	/**
 	 * Trek naam googleId en wat andere relevante meuk uit de feed-objecten
 	 * en stop dat in een array.
@@ -134,29 +151,18 @@ class GoogleSync {
 		if ($this->contactData == null) {
 			$this->contactData = array();
 			foreach ($this->contactFeed as $contact) {
+                $this->fixSimpleXMLNameSpace($contact);
 
-                //digg up uid.
-                $uid = null;
-                foreach($contact->{'gContact$userDefinedField'} as $field) {
-                    if ($field->key == 'csruid') {
-                        $uid = $field->value;
-                    }
-                }
-                $link = null;
-                foreach($contact->link as $user_link) {
-                    if ($user_link->rel == 'self') {
-                        $link = $user_link;
-                    }
-                }
+                $uid = $contact->xpath('gContact:userDefinedField[@key="csruid"]')[0];
+                $link = $contact->xpath('_:link[@rel="self"]')[0];
+				$etag = trim($contact->attributes('gd', true)->etag, "\"");
 
-				$etag = substr($contact->{'gd$etag'}, 1, strlen($contact->{'gd$etag'}) - 2);
 				$this->contactData[] = array(
-					'name'	 => (string) $contact->title->{'$t'},
+					'name'	 => (string) $contact->title,
 					'etag'	 => $etag,
-					'id'	 => (string) $contact->id->{'$t'},
-					'self'	 => $link->href,
-					'csruid' => $uid
-						//, 'xml'=>htmlspecialchars(str_replace('><', ">\n<", $contact->getXML()))
+					'id'	 => (string) $contact->id,
+					'self'	 => (string) $link->attributes()->href,
+					'csruid' => (string) $uid->attributes()->value
 				);
 			}
 		}
