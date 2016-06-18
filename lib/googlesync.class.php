@@ -17,10 +17,15 @@ class GoogleSync {
 
 	private $gdata = null;
 	private $groupname = 'C.S.R.-import';
-	//feed contents
+    /**
+     * @var SimpleXMLElement[]
+     */
 	private $groupFeed = null; // Zend GData feed object for groups
 	private $groupid = null;  // google-id van de groep waar alles in terecht moet komen...
-	private $contactFeed = null; // Zend GData feed object for contacts
+    /**
+     * @var SimpleXMLElement[]
+     */
+	private $contactFeed = null;
 	private $contactData = null; // an array containing array's with some data for each contact.
 	//sigleton pattern
 	private static $instance;
