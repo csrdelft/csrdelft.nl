@@ -229,7 +229,9 @@ class GoogleSync {
 	function getGroups() {
 		$return = array();
 		foreach ($this->groupFeed as $group) {
-			$title = (string) $group->title->{'$t'};
+            $this->fixSimpleXMLNameSpace($group);
+
+			$title = (string) $group->title;
 
 			if (substr($title, 0, 13) == 'System Group:') {
 				$title = substr($title, 14);
@@ -238,13 +240,15 @@ class GoogleSync {
 			//opslaan in de array.
 			//Dit ID hebben we nodig om onafhankelijk van de ingestelde taal @google de system
 			//group 'My Contacts' te kunnen gebruiken
-			$systemgroup = null;
-            if (isset($group->{'gContact$systemGroup'})) {
-                $systemgroup = $group->{'gContact$systemGroup'}->id;
+            $systemgroup = $group->xpath('gContact:systemGroup');
+            if (count($systemgroup) == 1) {
+                $systemgroup = (string) $systemgroup[0]->id;
+            } else {
+                $systemgroup = null;
             }
 
 			$return[] = array(
-				'id'			 => $group->id->{'$t'},
+				'id'			 => (string) $group->id,
 				'name'			 => $title,
 				'systemgroup'	 => $systemgroup
 			);
