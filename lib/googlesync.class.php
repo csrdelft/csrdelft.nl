@@ -311,6 +311,13 @@ class GoogleSync {
 
 			if (FALSE === $entryResult)
 				throw new Exception(curl_error($ch), curl_errno($ch));
+
+			$data = simplexml_load_string($entryResult);
+
+			//herlaad groupFeed om de nieuw gemaakte daar ook in te hebben.
+			$this->loadGroupFeed();
+
+			return (string) $data->id;
 		} catch (Exception $e) {
 			trigger_error(sprintf(
 				'Curl failed with error #%d: %s',
@@ -318,12 +325,7 @@ class GoogleSync {
 				E_USER_ERROR);
 		}
 
-		$data = json_decode($entryResult);
-
-		//herlaad groupFeed om de nieuw gemaakte daar ook in te hebben.
-		$this->loadGroupFeed();
-
-		return (string) $data->entry->id;
+		return '';
 	}
 
 	/**
