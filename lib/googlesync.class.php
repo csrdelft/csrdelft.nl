@@ -9,10 +9,9 @@ define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
 require_once 'configuratie.include.php';
 
 /**
- * Documentatie voor google GData protocol:
- * algemeen, interactie: http://code.google.com/apis/contacts/docs/3.0/developers_guide_protocol.html
- * gd-namespace: http://code.google.com/apis/gdata/docs/2.0/elements.html
- * gContact-namespace: http://code.google.com/apis/contacts/docs/3.0/reference.html
+ * Documentatie voor Google Contacts API:
+ * algemeen, interactie: https://developers.google.com/google-apps/contacts/v3/
+ * alle referentie https://developers.google.com/google-apps/contacts/v3/reference
  */
 class GoogleSync {
 
