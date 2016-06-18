@@ -1,8 +1,6 @@
 <?php
 require_once 'configuratie.include.php';
 
-require_once "Google/autoload.php";
-
 $google_redirect_uri = CSR_ROOT . '/googlecallback';
 
 //setup new google client
