@@ -6,6 +6,8 @@ define('GOOGLE_GROUPS_URL', 'https://www.google.com/m8/feeds/groups/default/full
 
 define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
 
+require_once 'configuratie.include.php';
+
 /**
  * Documentatie voor google GData protocol:
  * algemeen, interactie: http://code.google.com/apis/contacts/docs/3.0/developers_guide_protocol.html
@@ -46,13 +48,11 @@ class GoogleSync {
 			}
 		}
 
-        $google_client_id = '833326410856-12693ose5ecsrghrsftmeeu3b02rlevu.apps.googleusercontent.com';
-        $google_client_secret = '1LwghAmfTdREGHRuL-Gcy7tX';
         $redirect_uri = CSR_ROOT . '/googlecallback';
         $client = new Google_Client();
         $client -> setApplicationName('Stek');
-        $client -> setClientId($google_client_id);
-        $client -> setClientSecret($google_client_secret);
+        $client -> setClientId(GOOGLE_CLIENT_ID);
+        $client -> setClientSecret(GOOGLE_CLIENT_SECRET);
         $client -> setRedirectUri($redirect_uri);
         $client -> setAccessType('online');
         $client -> setScopes('https://www.google.com/m8/feeds');
@@ -81,8 +81,6 @@ class GoogleSync {
 
 		//copy setting from settings manager.
 		$this->extendedExport = LidInstellingen::get('googleContacts', 'extended') == 'ja';
-
-
 	}
 
 	/**
@@ -612,20 +610,17 @@ class GoogleSync {
 	 * Vraag een Authsub-token aan bij google, plaats bij ontvangen in _SESSION['google_token'].
 	 */
 	public static function doRequestToken($self) {
-        $google_client_id = '833326410856-12693ose5ecsrghrsftmeeu3b02rlevu.apps.googleusercontent.com';
-        $google_client_secret = '1LwghAmfTdREGHRuL-Gcy7tX';
         $redirect_uri = CSR_ROOT . '/googlecallback';
         $client = new Google_Client();
         $client -> setApplicationName('Stek');
-        $client -> setClientId($google_client_id);
-        $client -> setClientSecret($google_client_secret);
+        $client -> setClientId(GOOGLE_CLIENT_ID);
+        $client -> setClientSecret(GOOGLE_CLIENT_SECRET);
         $client -> setRedirectUri($redirect_uri);
         $client -> setAccessType('online');
         $client -> setScopes('https://www.google.com/m8/feeds');
 
 		if (!isset($_SESSION['google_token'])) {
             $googleImportUrl = $client -> createAuthUrl();
-            //print $googleImportUrl;
             header("HTTP/1.0 307 Temporary Redirect");
 			header("Location: $googleImportUrl&state=$self");
 			exit;
