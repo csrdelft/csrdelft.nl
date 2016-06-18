@@ -376,13 +376,15 @@ class GoogleSync {
 		if ($googleid != '') {
 			try {
 				//post to original entry's link[rel=self], set ETag in HTTP-headers for versioning
-                $ch = curl_init($googleid . '?alt=json&v=3.0&oauth_token=' . $this->access_token);
+                $ch = curl_init($googleid);
                 curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $doc->saveXML());
                 curl_setopt($ch, CURLOPT_NOBODY, false);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+					'Authorization: Bearer ' . $this->access_token,
+					'GData-Version: 3.0',
                     'Content-Type: application/atom+xml',
                     'Connection: Keep-Alive',
                     'If-None-Match: '.$this->getEtag($googleid)
@@ -406,13 +408,15 @@ class GoogleSync {
 				//$this->gdata->getHttpClient()->resetParameters($clearAll = true);
 
                 try {
-                    $ch = curl_init(GOOGLE_CONTACTS_URL . '?alt=json&v=3.0&oauth_token=' . $this->access_token);
+                    $ch = curl_init(GOOGLE_CONTACTS_URL);
                     curl_setopt($ch, CURLOPT_POST, true);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $doc->saveXML());
                     curl_setopt($ch, CURLOPT_NOBODY, false);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+						'Authorization: Bearer ' . $this->access_token,
+						'GData-Version: 3.0',
                         'Content-Type: application/atom+xml',
                         'Connection: Keep-Alive'
                     ));
