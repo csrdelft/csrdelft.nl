@@ -397,16 +397,6 @@ class GoogleSync {
 			}
 		} else {
 			try {
-				/* IF we insert an entry AFTER updating one, the Zend HttpClient
-				 * does not clear the headers and sends a If-None-Math along with
-				 * the insert-request. Google complains about the method not
-				 * supporting concurrency:
-				 * 		"501 POST method does not support concurrency"
-				 *
-				 * Fixed by resetting the paramters with this magic line:
-				 */
-				//$this->gdata->getHttpClient()->resetParameters($clearAll = true);
-
                 try {
                     $ch = curl_init(GOOGLE_CONTACTS_URL);
                     curl_setopt($ch, CURLOPT_POST, true);
