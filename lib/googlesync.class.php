@@ -300,13 +300,15 @@ class GoogleSync {
 		$entry->appendChild($title);
 
 		try {
-			$ch = curl_init(GOOGLE_GROUPS_URL . '?alt=json&v=3.0&oauth_token=' . $this->access_token);
+			$ch = curl_init(GOOGLE_GROUPS_URL);
 			curl_setopt($ch, CURLOPT_POST, true);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $doc->saveXML());
 			curl_setopt($ch, CURLOPT_NOBODY, false);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Authorization: Bearer ' . $this->access_token,
+				'GData-Version: 3.0',
 				'Content-Type: application/atom+xml',
 				'Connection: Keep-Alive'
 			));
