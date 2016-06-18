@@ -71,11 +71,6 @@ class GoogleSync {
 
         $this->client = $client;
 
-		//$client->setHeaders('If-Match: *'); //delete or update only if not changed since it was last read.
-		//$this->gdata = new Zend_Gdata($this->client);
-		//$this->gdata->setMajorProtocolVersion(3);
-
-
         //first load group feed, find or create the groupname from the user settings.
 		$this->loadGroupFeed();
 		$this->groupid = $this->getGroupId();
@@ -377,6 +372,7 @@ class GoogleSync {
 		if (!$profiel instanceof Profiel) {
 			$profiel = ProfielModel::get($profiel);
 		}
+
 		//kijk of het lid al bestaat in de googlecontacs-feed.
 		$googleid = $this->existsInGoogleContacts($profiel);
 
