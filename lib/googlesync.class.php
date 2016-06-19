@@ -340,12 +340,12 @@ class GoogleSync {
 		$error_message = '<div>Fout in Google-sync#%s: <br />' .
 				'Lid: %s<br />Foutmelding: %s</div>';
 
+		$doc = $this->createXML($profiel);
 
 		$auth = $this->client->getAuth();
 
 		if ($googleid != '') {
 			try {
-				$doc = $this->createXML($profiel, true);
 				//post to original entry's link[rel=self], set ETag in HTTP-headers for versioning
 				$req = new Google_Http_Request($googleid, 'PUT', array('GData-Version' => '3.0', 'Content-Type' => 'application/atom+xml', 'If-Match' => $this->getEtag($googleid)), $doc->saveXML());
 				$response = $auth->authenticatedRequest($req);
@@ -356,7 +356,6 @@ class GoogleSync {
 			}
 		} else {
 			try {
-				$doc = $this->createXML($profiel);
 				$req = new Google_Http_Request(GOOGLE_CONTACTS_URL, 'POST', array('Content-Type' => 'application/atom+xml'), $doc->saveXML());
 				$response = $auth->authenticatedRequest($req);
 
@@ -372,7 +371,7 @@ class GoogleSync {
 	 * @param $profiel Profiel create XML feed for this object
 	 * @return DOMDocument XML document voor dit Profiel
 	 */
-	private function createXML(Profiel $profiel, $patch=false) {
+	private function createXML(Profiel $profiel) {
 
 		$doc = new DOMDocument();
 		$doc->formatOutput = true;
@@ -541,11 +540,9 @@ class GoogleSync {
 
 		//in de groep $this->groepname
 		// Veranderen van een contact kan dit element niet bevatten.
-		if (!$patch) {
-			$group = $doc->createElement('gContact:groupMembershipInfo');
-			$group->setAttribute('href', $this->groupid);
-			$entry->appendChild($group);
-		}
+		$group = $doc->createElement('gContact:groupMembershipInfo');
+		$group->setAttribute('href', $this->groupid);
+		$entry->appendChild($group);
 
 
 		//last updated
