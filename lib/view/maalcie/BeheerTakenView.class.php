@@ -14,6 +14,13 @@ class BeheerTakenView extends SmartyTemplateView {
 	private $prullenbak;
 	private $repetities;
 
+	/**
+	 * BeheerTakenView constructor.
+	 * @param array $taken
+	 * @param Maaltijd $maaltijd
+	 * @param bool $prullenbak
+	 * @param null $repetities
+	 */
 	public function __construct(array $taken, $maaltijd = null, $prullenbak = false, $repetities = null) {
 		parent::__construct(array());
 		$this->maaltijd = $maaltijd;

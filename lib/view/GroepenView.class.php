@@ -250,6 +250,9 @@ class GroepView implements FormElement {
 class GroepenView implements View {
 
 	private $model;
+	/**
+	 * @var Groep
+	 */
 	private $groepen;
 	private $soort;
 	private $geschiedenis;

@@ -60,6 +60,12 @@ class CorveeRepetitiesModel {
 		return $repetities[0];
 	}
 
+	/**
+	 * @param string $where
+	 * @param array $values
+	 * @param int $limit
+	 * @return CorveeRepetitie[]
+	 */
 	private static function loadRepetities($where = null, $values = array(), $limit = null) {
 		$sql = 'SELECT crv_repetitie_id, mlt_repetitie_id, dag_vd_week, periode_in_dagen, functie_id, standaard_punten, standaard_aantal, voorkeurbaar';
 		$sql.= ' FROM crv_repetities';

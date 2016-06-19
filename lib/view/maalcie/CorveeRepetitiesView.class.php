@@ -12,6 +12,11 @@ class CorveeRepetitiesView extends SmartyTemplateView {
 
 	private $maaltijdrepetitie;
 
+	/**
+	 * CorveeRepetitiesView constructor.
+	 * @param $repetities
+	 * @param MaaltijdRepetitie $maaltijdrepetitie
+	 */
 	public function __construct($repetities, $maaltijdrepetitie = null) {
 		parent::__construct($repetities);
 		$this->maaltijdrepetitie = $maaltijdrepetitie;

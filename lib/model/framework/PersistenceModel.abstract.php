@@ -16,6 +16,9 @@ require_once 'model/entity/framework/PersistentEntity.abstract.php';
  */
 abstract class PersistenceModel implements Persistence {
 
+	/**
+	 * @return $this
+	 */
 	public static function instance() {
 		if (!isset(static::$instance)) {
 			static::$instance = new static();

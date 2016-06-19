@@ -65,6 +65,12 @@ class MaaltijdRepetitiesModel {
 		return $repetities[0];
 	}
 
+	/**
+	 * @param string $where
+	 * @param array $values
+	 * @param int $limit
+	 * @return MaaltijdRepetitie[]
+	 */
 	private static function loadRepetities($where = null, $values = array(), $limit = null) {
 		$sql = 'SELECT mlt_repetitie_id, dag_vd_week, periode_in_dagen, standaard_titel, standaard_tijd, standaard_prijs, abonneerbaar, standaard_limiet, abonnement_filter';
 		$sql.= ' FROM mlt_repetities';

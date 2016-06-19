@@ -44,6 +44,11 @@ class RechtenTable extends DataTable {
 
 class RechtenData extends DataTableResponse {
 
+	/**
+	 * @param AccessControl $ac
+	 * @return string
+	 * @throws Exception
+	 */
 	public function getJson($ac) {
 		$array = $ac->jsonSerialize();
 

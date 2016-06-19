@@ -17,6 +17,12 @@ class MijnMaaltijdenView extends SmartyTemplateView {
 	private $kwantiteit_forms = array();
 	private $kwaliteit_forms = array();
 
+	/**
+	 * MijnMaaltijdenView constructor.
+	 * @param Maaltijd[] $maaltijden
+	 * @param array|null $aanmeldingen
+	 * @param array $recent
+	 */
 	public function __construct(array $maaltijden, array $aanmeldingen = null, array $recent) {
 		parent::__construct($maaltijden, 'Maaltijdenketzer');
 		$this->aanmeldingen = $aanmeldingen;

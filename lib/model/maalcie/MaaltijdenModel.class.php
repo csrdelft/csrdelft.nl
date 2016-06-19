@@ -236,6 +236,12 @@ class MaaltijdenModel {
 		return $result;
 	}
 
+	/**
+	 * @param string $where
+	 * @param array $values
+	 * @param int $limit
+	 * @return Maaltijd[]
+	 */
 	private static function loadMaaltijden($where = null, $values = array(), $limit = null) {
 		$sql = 'SELECT m.maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter, omschrijving, COUNT(a.uid) + SUM(IFNULL(aantal_gasten, 0)) AS aantal_aanmeldingen';
 		$sql.= ' FROM mlt_maaltijden m';

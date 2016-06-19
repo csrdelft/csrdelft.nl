@@ -37,8 +37,8 @@ function endsWith($haystack, $needle) {
 
 /**
  * @source http://stackoverflow.com/a/3654335
- * @param type $array
- * @return type
+ * @param array $array
+ * @return array
  */
 function array_filter_empty($array) {
 	return array_filter($array, 'not_empty');

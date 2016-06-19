@@ -24,7 +24,7 @@ class CsrMemcache {
 	/**
 	 * Get singleton CsrMemcache instance.
 	 * 
-	 * @return CsrMemcache
+	 * @return Memcache
 	 */
 	public static function instance() {
 		if (!isset(self::$instance)) {

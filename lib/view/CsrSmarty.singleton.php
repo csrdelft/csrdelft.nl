@@ -14,9 +14,9 @@ class CsrSmarty extends Smarty {
 	private static $instance;
 
 	/**
-	 * Get singleton Database instance.
+	 * Get singleton CsrSmarty instance.
 	 * 
-	 * @return Database
+	 * @return CsrSmarty
 	 */
 	public static function instance() {
 		if (!isset(self::$instance)) {
