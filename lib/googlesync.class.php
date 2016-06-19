@@ -317,8 +317,6 @@ class GoogleSync {
 		}
 		$message = '';
 
-		print_r("Syncing leden!\n");
-
 		# Google contacts api kan max 100 per keer.
 		$chunks = array_chunk($profielBatch, 100);
 		foreach ($chunks as $profielBatch) {
@@ -364,15 +362,12 @@ class GoogleSync {
 			$req = new Google_Http_Request(GOOGLE_CONTACTS_BATCH_URL, 'POST', array('Content-Type' => 'application/atom+xml', 'GData-Version' => '3.0'), $doc->saveXML());
 			$response = $this->client->getAuth()->authenticatedRequest($req);
 
-			print_r($response->getResponseBody());
-
 			$newContacts = simplexml_load_string($response->getResponseBody());
 
 			foreach ($newContacts->entry as $contact) {
 				$this->fixSimpleXMLNameSpace($contact);
 
 				$contact = $this->unpackGoogleContact($contact);
-				print_r($contact);
 				$profiel = ProfielModel::get($contact['csruid']);
 				$this->updatePhoto($contact, $profiel);
 			}
