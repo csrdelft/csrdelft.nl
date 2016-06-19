@@ -65,15 +65,21 @@ class GoogleSync {
 
         $this->client = $client;
 
-        //first load group feed, find or create the groupname from the user settings.
-		$this->loadGroupFeed();
-		$this->groupid = $this->getGroupId();
+		try {
 
-		//then load the contacts for this group.
-		$this->loadContactsForGroup($this->groupid);
+			//first load group feed, find or create the groupname from the user settings.
+			$this->loadGroupFeed();
+			$this->groupid = $this->getGroupId();
 
-		//copy setting from settings manager.
-		$this->extendedExport = LidInstellingen::get('googleContacts', 'extended') == 'ja';
+			//then load the contacts for this group.
+			$this->loadContactsForGroup($this->groupid);
+
+			//copy setting from settings manager.
+			$this->extendedExport = LidInstellingen::get('googleContacts', 'extended') == 'ja';
+		} catch (Exception $ex) {
+			setMelding("Verbinding met Google verbroken.", 2);
+			unset($_SESSION['google_token'], $_SESSION['google_access_token']);
+		}
 	}
 
 	/**
