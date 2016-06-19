@@ -598,14 +598,6 @@ class GoogleSync {
         $client -> setAccessType('online');
         $client -> setScopes('https://www.google.com/m8/feeds');
 
-        if (isset($_SESSION['google_token']) && isset($_SESSION['access_token'])) {
-            // Result is NULL als de google_token gerevoked is door de gebruiker.
-            $result = static::doGoogleRequest(GOOGLE_CONTACTS_URL, json_decode($_SESSION['access_token'])->access_token);
-
-            if ($result === NULL) {
-                unset($_SESSION['google_token'], $_SESSION['access_token']);
-            }
-		}
 
 		if (!isset($_SESSION['google_token'])) {
             $googleImportUrl = $client -> createAuthUrl();
