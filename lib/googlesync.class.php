@@ -118,8 +118,10 @@ class GoogleSync {
 	 * Load contacts from certain contact group.
 	 */
 	private function loadContactsForGroup($groupId) {
-        // Default max-results is 25, laad alles in 1 keer
-        $this->contactFeed = GoogleSync::doGoogleRequest(GOOGLE_CONTACTS_URL . '?max-results=1000&group=' . urlencode($groupId), $this->access_token)->entry;
+		// Default max-results is 25, laad alles in 1 keer
+		$req = new Google_Http_Request(GOOGLE_CONTACTS_URL . '&max-results=1000&group=' . urlencode($groupId));
+		$response = $this->client->getAuth()->authenticatedRequest($req);
+		$this->contactFeed = simplexml_load_string($response->getResponseBody())->entry;
 	}
 
     /**
