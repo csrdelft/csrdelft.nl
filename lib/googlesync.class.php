@@ -17,11 +17,15 @@ class GoogleSync {
 	private $gdata = null;
 	private $groupname = 'C.S.R.-import';
     /**
+	 * Alle groepen van de gebruiker
+	 *
      * @var SimpleXMLElement[]
      */
-	private $groupFeed = null; // Zend GData feed object for groups
+	private $groupFeed = null;
 	private $groupid = null;  // google-id van de groep waar alles in terecht moet komen...
     /**
+	 * Alle contacten in de 'Stek-groep' van de gebruiker
+	 *
      * @var SimpleXMLElement[]
      */
 	private $contactFeed = null;
@@ -165,7 +169,7 @@ class GoogleSync {
 	/**
 	 * Check of een Lid al voorkomt in de lijst met contacten zoals ingeladen van google.
 	 *
-	 * @param $profiel Lid waarvan de aanwezigheid gechecked moet worden.
+	 * @param $profiel Profiel waarvan de aanwezigheid gechecked moet worden.
 	 *
 	 * @return string met het google-id in het geval van voorkomen, anders null.
 	 */
@@ -365,7 +369,8 @@ class GoogleSync {
 
 	/**
 	 * Create a XML document for this Lid.
-	 * @param $profiel create XML feed for this object
+	 * @param $profiel Profiel create XML feed for this object
+	 * @return DOMDocument XML document voor dit Profiel
 	 */
 	private function createXML(Profiel $profiel, $patch=false) {
 
