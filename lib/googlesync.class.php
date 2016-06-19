@@ -30,8 +30,6 @@ class GoogleSync {
 	private static $instance;
     private $client; // GoogleClient
 
-    private $access_token;
-
     public static function instance() {
 		if (!isset(self::$instance)) {
 			self::$instance = new GoogleSync();
@@ -59,14 +57,11 @@ class GoogleSync {
         $client -> setRedirectUri($redirect_uri);
         $client -> setAccessType('online');
         $client -> setScopes('https://www.google.com/m8/feeds');
-        if (!isset($_SESSION['access_token'])) {
-            $client->authenticate($_SESSION['google_token']);
-            $_SESSION['access_token'] = $client->getAccessToken();
+        if (!isset($_SESSION['google_access_token'])) {
+			$_SESSION['google_access_token'] = $client->authenticate($_SESSION['google_token']);
         }
 
-        $client->setAccessToken($_SESSION['access_token']);
-
-        $this->access_token = json_decode($_SESSION['access_token'])->access_token;
+        $client->setAccessToken($_SESSION['google_access_token']);
 
         $this->client = $client;
 
