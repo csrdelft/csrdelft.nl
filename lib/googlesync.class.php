@@ -76,30 +76,6 @@ class GoogleSync {
 		$this->extendedExport = LidInstellingen::get('googleContacts', 'extended') == 'ja';
 	}
 
-	private static function doGoogleRequest($url, $token) {
-        $ch = curl_init($url);
-        $headers = array(
-            'Authorization: Bearer ' . $token,
-            'GData-Version: 3.0'
-        );
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-        $response = curl_exec($ch);
-
-        if (curl_getinfo($ch, CURLINFO_HTTP_CODE) === 401)
-        {
-            curl_close($ch);
-            return NULL;
-        }
-
-        curl_close($ch);
-
-        return simplexml_load_string($response);
-
-    }
-
 	/**
 	 * Load all contactgroups.
 	 */
@@ -204,15 +180,6 @@ class GoogleSync {
 		foreach ($this->getGoogleContacts() as $contact) {
 			if (strtolower($contact['id']) == $googleid) {
 				return $contact['etag'];
-			}
-		}
-		return null;
-	}
-
-	public function getLinkSelf($googleid) {
-		foreach ($this->getGoogleContacts() as $contact) {
-			if (strtolower($contact['id']) == $googleid) {
-				return $contact['self'];
 			}
 		}
 		return null;
