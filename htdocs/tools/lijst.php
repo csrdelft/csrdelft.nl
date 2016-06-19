@@ -49,9 +49,9 @@ if (isset($_GET['addToGoogle'])) {
 
 		$gSync = GoogleSync::instance();
 
-		$start = microtime();
+		$start = microtime(true);
 		$message = $gSync->syncLidBatch($zoeker->getLeden());
-		$elapsed = microtime() - $start;
+		$elapsed = microtime(true) - $start;
 
 		setMelding(
 				'<h3>Google-sync-resultaat:</h3>' . $message . '<br />' .
