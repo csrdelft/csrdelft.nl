@@ -585,8 +585,9 @@ class GoogleSync {
 	/**
 	 * Vraag een Authsub-token aan bij google, plaats bij ontvangen in _SESSION['google_token'].
 	 */
-	public static function doRequestToken($self) {
+	public static function doRequestToken($state) {
         $redirect_uri = CSR_ROOT . '/googlecallback';
+		$state = urlencode($state);
         $client = new Google_Client();
         $client -> setApplicationName('Stek');
         $client -> setClientId(GOOGLE_CLIENT_ID);
@@ -598,7 +599,7 @@ class GoogleSync {
 		if (!isset($_SESSION['google_token'])) {
             $googleImportUrl = $client->createAuthUrl();
             header("HTTP/1.0 307 Temporary Redirect");
-			header("Location: $googleImportUrl&state=$self");
+			header("Location: $googleImportUrl&state=$state");
 			exit;
 		}
 	}
