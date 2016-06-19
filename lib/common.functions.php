@@ -36,24 +36,6 @@ function endsWith($haystack, $needle) {
 }
 
 /**
- * @source http://stackoverflow.com/a/9826656
- * @param string $string
- * @param string $start
- * @param string $end
- * @return string
- */
-function betweenString($string, $start, $end) {
-	$string = ' ' . $string;
-	$pos = strpos($string, $start);
-	if ($pos == 0) {
-		return '';
-	}
-	$pos += strlen($start);
-	$len = strpos($string, $end, $pos) - $pos;
-	return substr($string, $pos, $len);
-}
-
-/**
  * @source http://stackoverflow.com/a/3654335
  * @param type $array
  * @return type
@@ -119,42 +101,6 @@ function group_by_distinct($prop, $in, $del = true) {
 }
 
 /**
- * @source http://nl.php.net/manual/en/function.in_array.php
- */
-function array_values_in_array($needles, $haystack) {
-	if (is_array($needles)) {
-		$found = true;
-		foreach ($needles as $needle) {
-			if (!in_array($needle, $haystack)) {
-				$found = false;
-			}
-		}
-		return $found;
-	} else {
-		return in_array($needles, $haystack);
-	}
-}
-
-/**
- * Geeft een array terug met alleen de opgegeven keys.
- *
- * @param	$in		ééndimensionele array.
- * @param	$keys	Keys die uit de in-array gereturned moeten worden.
- * @return			Array met alleen keys die in $keys zitten
- *
- * @author			Jan Pieter Waagmeester (jieter@jpwaag.com)
- */
-function array_get_keys(array $in, array $keys) {
-	$out = array();
-	foreach ($keys as $key) {
-		if (isset($in[$key])) {
-			$out[$key] = $in[$key];
-		}
-	}
-	return $out;
-}
-
-/**
  * Invokes a client page (re)load the url.
  * 
  * @param string $url
@@ -191,19 +137,6 @@ function checkEncoding($string, $string_encoding) {
 	$fs = $string_encoding == 'UTF-8' ? 'UTF-32' : $string_encoding;
 	$ts = $string_encoding == 'UTF-32' ? 'UTF-8' : $string_encoding;
 	return $string === mb_convert_encoding(mb_convert_encoding($string, $fs, $ts), $ts, $fs);
-}
-
-/**
- * User Contributed Notes
- * @source http://nl.php.net/manual/en/function.ip2long.php
- * @param string $addr IP address
- * @param array $cidr CIDR
- * @return boolean
- */
-function matchCIDR($addr, array $cidr) {
-	list($ip, $mask) = explode('/', $cidr);
-	$bitmask = ($mask != 0) ? 0xffffffff >> (32 - $mask) : 0x00000000;
-	return ((ip2long($addr) & $bitmask) == (ip2long($ip) & $bitmask));
 }
 
 /**
@@ -278,14 +211,6 @@ function external_url($url, $label) {
 		$result = $url;
 	}
 	return $result;
-}
-
-/**
- * Komt de request vanaf Confide?
- * @return boolean
- */
-function opConfide() {
-	return defined('CONFIDE_IP') AND isset($_SERVER['REMOTE_ADDR']) and CONFIDE_IP === $_SERVER['REMOTE_ADDR'];
 }
 
 /**
@@ -419,63 +344,6 @@ function namen2uid($sNamen, $filter = 'leden') {
 		}
 	}
 	return $return;
-}
-
-/**
- * Gebruik om alléén post of alléén get te checken.
- * @param string $key
- * @param string $type null/post/get
- */
-function getOrPost($key, $type = null, $default = '') {
-	if ($type != 'get' && isset($_POST[$key])) {
-		return $_POST[$key];
-	} elseif ($type != 'post' && isset($_GET[$key])) {
-		return $_GET[$key];
-	} else {
-		return $default;
-	}
-}
-
-/**
- * Sorteer op achternaam ASC, uid DESC.
- * @param string $a
- * @param string $b
- * @return int
- */
-function sort_achternaam_uid($a, $b) {
-	$vals = array('achternaam' => 'ASC', 'uid' => 'DESC');
-	while (list($key, $val) = each($vals)) {
-		if ($val == 'DESC') {
-			if ($a[$key] > $b[$key]) {
-				return -1;
-			}
-			if ($a[$key] < $b[$key]) {
-				return 1;
-			}
-		}
-		if ($val == 'ASC') {
-			if ($a[$key] < $b[$key]) {
-				return -1;
-			}
-			if ($a[$key] > $b[$key]) {
-				return 1;
-			}
-		}
-	}
-}
-
-function strNthPos($haystack, $needle, $nth = 1) {
-	//Fixes a null return if the position is at the beginning of input
-	//It also changes all input to that of a string ^.~
-	$haystack = ' ' . $haystack;
-	if (!strpos($haystack, $needle)) {
-		return false;
-	}
-	$offset = 0;
-	for ($i = 1; $i < $nth; $i++) {
-		$offset = strpos($haystack, $needle, $offset) + 1;
-	}
-	return strpos($haystack, $needle, $offset) - 1;
 }
 
 function reldate($datum) {
