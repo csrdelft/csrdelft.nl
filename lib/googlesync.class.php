@@ -138,11 +138,10 @@ class GoogleSync {
 				if (count($uid) === 0) continue; // Geen Uid, niet van ons.
 				$uid = $uid[0];
                 $link = $contact->xpath('_:link[@rel="self"]')[0];
-				$etag = trim($contact->attributes('gd', true)->etag, "\"");
 
 				$this->contactData[] = array(
 					'name'	 => (string) $contact->title,
-					'etag'	 => $etag,
+					'etag'	 => (string) $contact->attributes('gd', true)->etag,
 					'id'	 => (string) $contact->id,
 					'self'	 => (string) $link->attributes()->href,
 					'csruid' => (string) $uid->attributes()->value
@@ -181,7 +180,7 @@ class GoogleSync {
 					strtolower($contact['name']) == $name OR
 					str_replace(' ', '', strtolower($contact['name'])) == str_replace(' ', '', $name)
 			) {
-				return $contact['id'];
+				return $contact['self'];
 			}
 		}
 		return null;
@@ -192,7 +191,7 @@ class GoogleSync {
 	 */
 	public function getEtag($googleid) {
 		foreach ($this->getGoogleContacts() as $contact) {
-			if (strtolower($contact['id']) == $googleid) {
+			if (strtolower($contact['self']) == $googleid) {
 				return $contact['etag'];
 			}
 		}
@@ -337,15 +336,15 @@ class GoogleSync {
 		$error_message = '<div>Fout in Google-sync#%s: <br />' .
 				'Lid: %s<br />Foutmelding: %s</div>';
 
-		$doc = $this->createXML($profiel);
 
 		$auth = $this->client->getAuth();
 
 		if ($googleid != '') {
 			try {
+				$doc = $this->createXML($profiel, true);
 				//post to original entry's link[rel=self], set ETag in HTTP-headers for versioning
-				$req = new Google_Http_Request($googleid, 'POST', array('If-None-Match: '.$this->getEtag($googleid)), $doc->saveXML());
-				$auth->authenticatedRequest($req);
+				$req = new Google_Http_Request($googleid, 'PUT', array('GData-Version' => '3.0', 'Content-Type' => 'application/atom+xml', 'If-Match' => $this->getEtag($googleid)), $doc->saveXML());
+				$response = $auth->authenticatedRequest($req);
 
 				return 'Update: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
@@ -353,8 +352,9 @@ class GoogleSync {
 			}
 		} else {
 			try {
-				$req = new Google_Http_Request(GOOGLE_CONTACTS_URL, 'POST', array(), $doc->saveXML());
-				$auth->authenticatedRequest($req);
+				$doc = $this->createXML($profiel);
+				$req = new Google_Http_Request(GOOGLE_CONTACTS_URL, 'POST', array('Content-Type' => 'application/atom+xml'), $doc->saveXML());
+				$response = $auth->authenticatedRequest($req);
 
 				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
@@ -367,7 +367,7 @@ class GoogleSync {
 	 * Create a XML document for this Lid.
 	 * @param $profiel create XML feed for this object
 	 */
-	private function createXML(Profiel $profiel) {
+	private function createXML(Profiel $profiel, $patch=false) {
 
 		$doc = new DOMDocument();
 		$doc->formatOutput = true;
@@ -535,9 +535,12 @@ class GoogleSync {
 		}
 
 		//in de groep $this->groepname
-		$group = $doc->createElement('gContact:groupMembershipInfo');
-		$group->setAttribute('href', $this->groupid);
-		$entry->appendChild($group);
+		// Veranderen van een contact kan dit element niet bevatten.
+		if (!$patch) {
+			$group = $doc->createElement('gContact:groupMembershipInfo');
+			$group->setAttribute('href', $this->groupid);
+			$entry->appendChild($group);
+		}
 
 
 		//last updated
