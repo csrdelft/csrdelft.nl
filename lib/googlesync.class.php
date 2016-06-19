@@ -55,7 +55,7 @@ class GoogleSync {
         $client->setClientId(GOOGLE_CLIENT_ID);
         $client->setClientSecret(GOOGLE_CLIENT_SECRET);
         $client->setRedirectUri($redirect_uri);
-        $client->setAccessType('online');
+        $client->setAccessType('offline');
         $client->setScopes('https://www.google.com/m8/feeds');
         if (!isset($_SESSION['google_access_token'])) {
 			$_SESSION['google_access_token'] = $client->authenticate($_SESSION['google_token']);
@@ -557,7 +557,7 @@ class GoogleSync {
         $client -> setClientId(GOOGLE_CLIENT_ID);
         $client -> setClientSecret(GOOGLE_CLIENT_SECRET);
         $client -> setRedirectUri($redirect_uri);
-        $client -> setAccessType('online');
+        $client -> setAccessType('offline');
         $client -> setScopes('https://www.google.com/m8/feeds');
 
 		if (!isset($_SESSION['google_token'])) {
