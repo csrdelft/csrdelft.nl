@@ -129,7 +129,8 @@ class LoginController extends AclController {
 	}
 
 	public function accountaanvragen() {
-		return $this->geentoegang();
+		$this->geentoegang();
+		return;
 	}
 
 	public function account($uid = null, $delete = null) {
