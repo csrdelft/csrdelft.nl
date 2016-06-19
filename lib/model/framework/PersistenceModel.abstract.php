@@ -15,6 +15,7 @@ require_once 'model/entity/framework/PersistentEntity.abstract.php';
  * 
  */
 abstract class PersistenceModel implements Persistence {
+	private static $instance;
 
 	/**
 	 * @return $this
