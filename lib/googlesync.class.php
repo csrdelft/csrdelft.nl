@@ -82,6 +82,9 @@ class GoogleSync {
 	private function loadGroupFeed() {
 		$req = new Google_Http_Request(GOOGLE_GROUPS_URL);
 		$response = $this->client->getAuth()->authenticatedRequest($req);
+		if ($response->getResponseHttpCode() === 401) {
+			throw new Exception();
+		}
 		$this->groupFeed = simplexml_load_string($response->getResponseBody())->entry;
 	}
 
@@ -92,6 +95,9 @@ class GoogleSync {
 		// Default max-results is 25, laad alles in 1 keer
 		$req = new Google_Http_Request(GOOGLE_CONTACTS_URL . '&max-results=1000&group=' . urlencode($groupId));
 		$response = $this->client->getAuth()->authenticatedRequest($req);
+		if ($response->getResponseHttpCode() === 401) {
+			throw new Exception();
+		}
 		$this->contactFeed = simplexml_load_string($response->getResponseBody())->entry;
 	}
 
