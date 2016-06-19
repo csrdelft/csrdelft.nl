@@ -1,8 +1,7 @@
 <?php
 
-define('GOOGLE_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/full');
-define('GOOGLE_GROUP_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/base/');
-define('GOOGLE_GROUPS_URL', 'https://www.google.com/m8/feeds/groups/default/full');
+define('GOOGLE_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/full?v=3.0');
+define('GOOGLE_GROUPS_URL', 'https://www.google.com/m8/feeds/groups/default/full?v=3.0');
 
 define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
 
