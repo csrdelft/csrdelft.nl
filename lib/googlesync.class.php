@@ -363,23 +363,13 @@ class GoogleSync {
 
 		$doc = $this->createXML($profiel);
 
+		$auth = $this->client->getAuth();
+
 		if ($googleid != '') {
 			try {
 				//post to original entry's link[rel=self], set ETag in HTTP-headers for versioning
-                $ch = curl_init($googleid);
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $doc->saveXML());
-                curl_setopt($ch, CURLOPT_NOBODY, false);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-					'Authorization: Bearer ' . $this->access_token,
-					'GData-Version: 3.0',
-                    'Content-Type: application/atom+xml',
-                    'Connection: Keep-Alive',
-                    'If-None-Match: '.$this->getEtag($googleid)
-                ));
-                $entryResult = curl_exec($ch);
+				$req = new Google_Http_Request($googleid, 'POST', array('If-None-Match: '.$this->getEtag($googleid)), $doc->saveXML());
+				$auth->authenticatedRequest($req);
 
 				return 'Update: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
@@ -387,29 +377,8 @@ class GoogleSync {
 			}
 		} else {
 			try {
-                try {
-                    $ch = curl_init(GOOGLE_CONTACTS_URL);
-                    curl_setopt($ch, CURLOPT_POST, true);
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $doc->saveXML());
-                    curl_setopt($ch, CURLOPT_NOBODY, false);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-						'Authorization: Bearer ' . $this->access_token,
-						'GData-Version: 3.0',
-                        'Content-Type: application/atom+xml',
-                        'Connection: Keep-Alive'
-                    ));
-                    $entryResult = curl_exec($ch);
-
-                    if (FALSE === $entryResult)
-                        throw new Exception(curl_error($ch), curl_errno($ch));
-                } catch (Exception $e) {
-                    trigger_error(sprintf(
-                        'Curl failed with error #%d: %s',
-                        $e->getCode(), $e->getMessage()),
-                        E_USER_ERROR);
-                }
+				$req = new Google_Http_Request(GOOGLE_CONTACTS_URL, 'POST', array(), $doc->saveXML());
+				$auth->authenticatedRequest($req);
 
 				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
