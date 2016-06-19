@@ -2,6 +2,7 @@
 
 define('GOOGLE_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/full?v=3.0');
 define('GOOGLE_GROUPS_URL', 'https://www.google.com/m8/feeds/groups/default/full?v=3.0');
+define('GOOGLE_CONTACTS_BATCH_URL', 'https://www.google.com/m8/feeds/contacts/default/full/batch?v=3.0');
 
 define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
 
@@ -135,20 +136,8 @@ class GoogleSync {
 		if ($this->contactData == null) {
 			$this->contactData = array();
 			foreach ($this->contactFeed as $contact) {
-                $this->fixSimpleXMLNameSpace($contact);
-
-                $uid = $contact->xpath('gContact:userDefinedField[@key="csruid"]');
-				if (count($uid) === 0) continue; // Geen Uid, niet van ons.
-				$uid = $uid[0];
-                $link = $contact->xpath('_:link[@rel="self"]')[0];
-
-				$this->contactData[] = array(
-					'name'	 => (string) $contact->title,
-					'etag'	 => (string) $contact->attributes('gd', true)->etag,
-					'id'	 => (string) $contact->id,
-					'self'	 => (string) $link->attributes()->href,
-					'csruid' => (string) $uid->attributes()->value
-				);
+				$unpacked = $this->unpackGoogleContact($contact);
+				if ($unpacked) $this->contactData[] = $unpacked;
 			}
 		}
 
@@ -156,11 +145,38 @@ class GoogleSync {
 	}
 
 	/**
+	 * Maak een behapbaar object van een contact.
+	 *
+	 * @param $contact SimpleXMLElement
+	 * @return array|null Een array als de contact een csruid heeft, anders null
+	 */
+	private function unpackGoogleContact($contact) {
+		$this->fixSimpleXMLNameSpace($contact);
+
+		$uid = $contact->xpath('gContact:userDefinedField[@key="csruid"]');
+		if (count($uid) === 0) return null; // Geen Uid, niet van ons.
+		$uid = $uid[0];
+		$link = $contact->xpath('_:link[@rel="self"]')[0];
+		$photoLink = $contact->xpath('_:link[@rel="http://schemas.google.com/contacts/2008/rel#photo"]')[0];
+
+		return array(
+			'name'	 => (string) $contact->title,
+			'etag'	 => (string) $contact->attributes('gd', true)->etag,
+			'id'	 => (string) $contact->id,
+			'self'	 => (string) $link->attributes()->href,
+			'photo'  => array(
+				'href' => (string) $photoLink->attributes()->href,
+				'etag' => (string) $photoLink->attributes('gd', true)->etag),
+			'csruid' => (string) $uid->attributes()->value
+		);
+	}
+
+	/**
 	 * Check of een Lid al voorkomt in de lijst met contacten zoals ingeladen van google.
 	 *
 	 * @param $profiel Profiel waarvan de aanwezigheid gechecked moet worden.
 	 *
-	 * @return string met het google-id in het geval van voorkomen, anders null.
+	 * @return array() met het google-id in het geval van voorkomen, anders null.
 	 */
 	public function existsInGoogleContacts(Profiel $profiel) {
 		if (!static::isAuthenticated()) return null;
@@ -173,7 +189,7 @@ class GoogleSync {
 					strtolower($contact['name']) == $name OR
 					str_replace(' ', '', strtolower($contact['name'])) == str_replace(' ', '', $name)
 			) {
-				return $contact['self'];
+				return $contact;
 			}
 		}
 		return null;
@@ -301,13 +317,67 @@ class GoogleSync {
 		}
 		$message = '';
 
-		//dit zou netjes kunnen door één xml-bestand te maken en dat één
-		//keer te posten, maar daar heb ik nu even geen zin in.
-		//btw: google heeft een batch-limit van 100 acties.
-		//zie ook: http://code.google.com/apis/gdata/docs/batch.html
-		foreach ($profielBatch as $profiel) {
-			$message.=$this->syncLid($profiel) . ', ';
+		print_r("Syncing leden!\n");
+
+		# Google contacts api kan max 100 per keer.
+		$chunks = array_chunk($profielBatch, 100);
+		foreach ($chunks as $profielBatch) {
+			$doc = new DOMDocument();
+			$doc->formatOutput = true;
+			$feed = $doc->createElement('atom:feed');
+			$feed->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:batch', 'http://schemas.google.com/gdata/batch');
+			$feed->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:atom', 'http://www.w3.org/2005/Atom');
+			$feed->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:gd', 'http://schemas.google.com/g/2005');
+			$feed->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:gContact', 'http://schemas.google.com/contact/2008');
+
+
+			$doc->appendChild($feed);
+
+			foreach ($profielBatch as $profiel) {
+				$profielXml = $doc->importNode($this->createXML($profiel)->documentElement,true);
+				$feed->appendChild($profielXml);
+
+				$batchOperation = $doc->createElement('batch:operation');
+
+				$contact = $this->existsInGoogleContacts($profiel);
+
+				if ($contact != null) {
+					$etag = $this->getEtag($contact['self']);
+					$etagAttribute = $doc->createAttribute('gd:etag');
+					$etagAttribute->nodeValue = $etag;
+					$profielXml->appendChild($etagAttribute);
+
+					$id = $doc->createElement('atom:id');
+					$id->nodeValue = $contact['id'];
+					$profielXml->appendChild($id);
+
+					$batchOperation->setAttribute('type', 'update');
+					$message.='Update: ' . $profiel->getNaam() . ' ';
+				} else {
+					$batchOperation->setAttribute('type', 'insert');
+					$message.='Ingevoegd: ' . $profiel->getNaam() . ' ';
+				}
+
+				$profielXml->appendChild($batchOperation);
+			}
+
+			$req = new Google_Http_Request(GOOGLE_CONTACTS_BATCH_URL, 'POST', array('Content-Type' => 'application/atom+xml', 'GData-Version' => '3.0'), $doc->saveXML());
+			$response = $this->client->getAuth()->authenticatedRequest($req);
+
+			print_r($response->getResponseBody());
+
+			$newContacts = simplexml_load_string($response->getResponseBody());
+
+			foreach ($newContacts->entry as $contact) {
+				$this->fixSimpleXMLNameSpace($contact);
+
+				$contact = $this->unpackGoogleContact($contact);
+				print_r($contact);
+				$profiel = ProfielModel::get($contact['csruid']);
+				$this->updatePhoto($contact, $profiel);
+			}
 		}
+
 		return $message;
 	}
 
@@ -339,7 +409,8 @@ class GoogleSync {
 				$req = new Google_Http_Request($googleid, 'PUT', array('GData-Version' => '3.0', 'Content-Type' => 'application/atom+xml', 'If-Match' => $this->getEtag($googleid)), $doc->saveXML());
 				$response = $auth->authenticatedRequest($req);
 
-				$this->updatePicture($response->getResponseBody(), $profiel);
+				$contact = $this->unpackGoogleContact(simplexml_load_string($response->getResponseBody()));
+				$this->updatePhoto($contact, $profiel);
 
 				return 'Update: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
@@ -350,7 +421,8 @@ class GoogleSync {
 				$req = new Google_Http_Request(GOOGLE_CONTACTS_URL, 'POST', array('Content-Type' => 'application/atom+xml'), $doc->saveXML());
 				$response = $auth->authenticatedRequest($req);
 
-				$this->updatePicture($response->getResponseBody(), $profiel);
+				$contact = $this->unpackGoogleContact(simplexml_load_string($response->getResponseBody()));
+				$this->updatePhoto($contact, $profiel);
 
 				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
@@ -361,24 +433,22 @@ class GoogleSync {
 
 	/**
 	 * Haal de link naar de contact foto uit een contact xml-string en post de foto van $profiel er naar toe.
-	 * @param $response string
+	 * @param $contact string
 	 * @param $profiel Profiel
 	 */
-	private function updatePicture($response, $profiel) {
-		$xml = simplexml_load_string($response);
-		$this->fixSimpleXMLNameSpace($xml);
+	private function updatePhoto($contact, $profiel) {
 
-		$photoLink = $xml->xpath('_:link[@rel="http://schemas.google.com/contacts/2008/rel#photo"]')[0];
-		$photoUrl = (string) $photoLink->attributes()->href;
-		$photoEtag = (string) $photoLink->attributes('gd', true)->etag;
+		$url = $contact['photo']['href'];
 
-		$headers = array('GData-Version' => '3.0', 'Content-Type' => 'image/*');
+		$path  = PICS_PATH . $profiel->getPasfotoPath(true);
 
-		if ($photoEtag != '') {
-			$headers = array('If-Match' => $photoEtag) + $headers;
+		$headers = array('GData-Version' => '3.0', 'Content-Type' => "image/*");
+
+		if ($contact['photo']['etag'] != '') {
+			$headers = array('If-Match' => $contact['photo']['etag']) + $headers;
 		}
 
-		$req = new Google_Http_Request($photoUrl, 'PUT', $headers, file_get_contents(PICS_PATH . $profiel->getPasfotoPath(true)));
+		$req = new Google_Http_Request($url, 'PUT', $headers, file_get_contents($path));
 		$this->client->getAuth()->authenticatedRequest($req);
 	}
 
