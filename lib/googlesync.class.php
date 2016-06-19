@@ -14,7 +14,6 @@ require_once 'configuratie.include.php';
  */
 class GoogleSync {
 
-	private $gdata = null;
 	private $groupname = 'C.S.R.-import';
     /**
 	 * Alle groepen van de gebruiker
@@ -154,16 +153,6 @@ class GoogleSync {
 		}
 
 		return $this->contactData;
-	}
-
-	/**
-	 * Plaats een foto voor een google contact.
-	 *
-	 * @param $photolink link uit een google-entry waar de foto naartoe moet.
-	 * @param $filename bestandsnaam van de foto die moet worden opgestuurd.
-	 */
-	private function putPhoto($photolink, $filename) {
-		$this->gdata->put(file_get_contents($filename), $photolink, null, 'image/*');
 	}
 
 	/**
@@ -350,6 +339,8 @@ class GoogleSync {
 				$req = new Google_Http_Request($googleid, 'PUT', array('GData-Version' => '3.0', 'Content-Type' => 'application/atom+xml', 'If-Match' => $this->getEtag($googleid)), $doc->saveXML());
 				$response = $auth->authenticatedRequest($req);
 
+				$this->updatePicture($response->getResponseBody(), $profiel);
+
 				return 'Update: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
 				return sprintf($error_message, 'update', $profiel->getNaam(), $e->getMessage());
@@ -359,11 +350,36 @@ class GoogleSync {
 				$req = new Google_Http_Request(GOOGLE_CONTACTS_URL, 'POST', array('Content-Type' => 'application/atom+xml'), $doc->saveXML());
 				$response = $auth->authenticatedRequest($req);
 
+				$this->updatePicture($response->getResponseBody(), $profiel);
+
 				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
 				return sprintf($error_message, 'insert', $profiel->getNaam(), $e->getMessage());
 			}
 		}
+	}
+
+	/**
+	 * Haal de link naar de contact foto uit een contact xml-string en post de foto van $profiel er naar toe.
+	 * @param $response string
+	 * @param $profiel Profiel
+	 */
+	private function updatePicture($response, $profiel) {
+		$xml = simplexml_load_string($response);
+		$this->fixSimpleXMLNameSpace($xml);
+
+		$photoLink = $xml->xpath('_:link[@rel="http://schemas.google.com/contacts/2008/rel#photo"]')[0];
+		$photoUrl = (string) $photoLink->attributes()->href;
+		$photoEtag = (string) $photoLink->attributes('gd', true)->etag;
+
+		$headers = array('GData-Version' => '3.0', 'Content-Type' => 'image/*');
+
+		if ($photoEtag != '') {
+			$headers = array('If-Match' => $photoEtag) + $headers;
+		}
+
+		$req = new Google_Http_Request($photoUrl, 'PUT', $headers, file_get_contents(PICS_PATH . $profiel->getPasfotoPath(true)));
+		$this->client->getAuth()->authenticatedRequest($req);
 	}
 
 	/**
