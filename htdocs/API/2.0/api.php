@@ -1,7 +1,8 @@
 <?php
 
+use Firebase\JWT\JWT;
+
 require_once 'configuratie.include.php';
-require_once 'php-jwt/JWT.php';
 
 // Handle preflight requests for local development CORS
 if (DEBUG === true && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -246,7 +247,7 @@ function maaltijdAanmelden($id) {
 	} catch (Exception $e) {
 		http_response_code(403);
 		return $e->getMessage();
-	};
+	}
 }
 
 function maaltijdAfmelden($id) {
@@ -260,8 +261,6 @@ function maaltijdAfmelden($id) {
 		http_response_code(403);
 		return $e->getMessage();
 	}
-
-	return $aanmelding;
 }
 
 

@@ -1,7 +1,8 @@
 <?php
 
+use Firebase\JWT\JWT;
+
 require_once 'configuratie.include.php';
-require_once 'php-jwt/JWT.php';
 require_once 'model/security/RememberLoginModel.class.php';
 
 // Check for token

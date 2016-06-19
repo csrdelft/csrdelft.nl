@@ -1,10 +1,12 @@
 <?php
 
+use Firebase\JWT\JWT;
+
 require_once 'configuratie.include.php';
-require_once 'php-jwt/JWT.php';
 require_once 'model/security/RememberLoginModel.class.php';
 
 $credentialsAreValid = false;
+$account = null;
 
 // Check credentials
 if (isset($_POST['user']) && isset($_POST['pass'])) {
@@ -68,7 +70,7 @@ if ($credentialsAreValid) {
 	// Save the refresh token
 	$remember = RememberLoginModel::instance()->nieuw();
 	$remember->lock_ip = false;
-	$remember->device_name = 'API 2.0: ' + filter_var(strval($_SERVER['HTTP_USER_AGENT']), FILTER_SANITIZE_STRING);
+	$remember->device_name = 'API 2.0: ' . filter_var(strval($_SERVER['HTTP_USER_AGENT']), FILTER_SANITIZE_STRING);
 	$remember->token = hash('sha512', $rand);
 	RememberLoginModel::instance()->create($remember);
 
