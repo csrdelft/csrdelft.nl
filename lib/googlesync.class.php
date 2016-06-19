@@ -171,6 +171,8 @@ class GoogleSync {
 	 * @return string met het google-id in het geval van voorkomen, anders null.
 	 */
 	public function existsInGoogleContacts(Profiel $profiel) {
+		if (!static::isAuthenticated()) return null;
+
 		$name = strtolower($profiel->getNaam());
 		foreach ($this->getGoogleContacts() as $contact) {
 
