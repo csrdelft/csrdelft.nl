@@ -566,15 +566,5 @@ class GoogleSync {
 			header("Location: $googleImportUrl&state=$self");
 			exit;
 		}
-
-		if (isset($_SESSION['google_access_token']))
-			$client->setAccessToken($_SESSION['google_access_token']);
-
-		if ($client->isAccessTokenExpired()) {
-			$googleImportUrl = $client->createAuthUrl();
-			header("HTTP/1.0 307 Temporary Redirect");
-			header("Location: $googleImportUrl&state=$self");
-			exit;
-		}
 	}
 }
