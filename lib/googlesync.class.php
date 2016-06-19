@@ -50,13 +50,13 @@ class GoogleSync {
 		}
 
         $redirect_uri = CSR_ROOT . '/googlecallback';
-        $client = new Google_Client();
-        $client -> setApplicationName('Stek');
-        $client -> setClientId(GOOGLE_CLIENT_ID);
-        $client -> setClientSecret(GOOGLE_CLIENT_SECRET);
-        $client -> setRedirectUri($redirect_uri);
-        $client -> setAccessType('online');
-        $client -> setScopes('https://www.google.com/m8/feeds');
+        $client= new Google_Client();
+        $client->setApplicationName('Stek');
+        $client->setClientId(GOOGLE_CLIENT_ID);
+        $client->setClientSecret(GOOGLE_CLIENT_SECRET);
+        $client->setRedirectUri($redirect_uri);
+        $client->setAccessType('online');
+        $client->setScopes('https://www.google.com/m8/feeds');
         if (!isset($_SESSION['google_access_token'])) {
 			$_SESSION['google_access_token'] = $client->authenticate($_SESSION['google_token']);
         }
@@ -593,13 +593,13 @@ class GoogleSync {
         $client -> setAccessType('online');
         $client -> setScopes('https://www.google.com/m8/feeds');
 
-
 		if (!isset($_SESSION['google_token'])) {
-            $googleImportUrl = $client -> createAuthUrl();
+            $googleImportUrl = $client->createAuthUrl();
             header("HTTP/1.0 307 Temporary Redirect");
 			header("Location: $googleImportUrl&state=$self");
 			exit;
 		}
+
 		if (isset($_SESSION['google_access_token']))
 			$client->setAccessToken($_SESSION['google_access_token']);
 
