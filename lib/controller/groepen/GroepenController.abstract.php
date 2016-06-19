@@ -108,7 +108,6 @@ class AbstractGroepenController extends Controller {
 			case 'zoeken':
 				return !$this->isPosted();
 
-			case 'overzicht':
 			case 'voorbeeld':
 			case 'opvolging':
 			case 'converteren':
