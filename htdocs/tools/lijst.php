@@ -59,7 +59,7 @@ if (isset($_GET['addToGoogle'])) {
 				, 0);
 
 		if (LoginModel::mag('P_ADMIN')) {
-			setMelding('<hr />Tijd nodig voor deze sync: ' . $elapsed . 'ms', 0);
+			setMelding('Tijd nodig voor deze sync: ' . $elapsed . 's', 0);
 		}
 	} catch (Exception $e) {
 		$m = $e->getMessage();
