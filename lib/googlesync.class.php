@@ -109,7 +109,9 @@ class GoogleSync {
 	 * Load all contactgroups.
 	 */
 	private function loadGroupFeed() {
-		$this->groupFeed = GoogleSync::doGoogleRequest(GOOGLE_GROUPS_URL, $this->access_token)->entry;
+		$req = new Google_Http_Request(GOOGLE_GROUPS_URL);
+		$response = $this->client->getAuth()->authenticatedRequest($req);
+		$this->groupFeed = simplexml_load_string($response->getResponseBody())->entry;
 	}
 
 	/**
