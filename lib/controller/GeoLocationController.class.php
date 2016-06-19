@@ -129,7 +129,7 @@ class GeoLocationController extends AclController {
 							latlon = new google.maps.LatLng(data.position.latitude, data.position.longitude);
 
 							if (markers[data.uid]) {
-								marker = markers[data.uid];
+								var marker = markers[data.uid];
 
 								google.maps.event.clearListeners(marker, 'click');
 								infowindows[data.uid].close();
@@ -142,14 +142,12 @@ class GeoLocationController extends AclController {
 									color: createColor(data.uid)
 								});
 
-								var marker = new StyledMarker({
+								markers[data.uid] = new StyledMarker({
 									styleIcon: new StyledIcon(StyledIconTypes.MARKER, {text: data.uid}, styleIconClass),
 									position: latlon,
 									map: map,
 									title: data.naam
 								});
-
-								markers[data.uid] = marker;
 							}
 
 							var html = '<table><tr><td>' + data.pasfoto + '</td><td style="max-width: 200px;">';
