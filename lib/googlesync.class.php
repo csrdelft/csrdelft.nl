@@ -147,7 +147,9 @@ class GoogleSync {
 			foreach ($this->contactFeed as $contact) {
                 $this->fixSimpleXMLNameSpace($contact);
 
-                $uid = $contact->xpath('gContact:userDefinedField[@key="csruid"]')[0];
+                $uid = $contact->xpath('gContact:userDefinedField[@key="csruid"]');
+				if (count($uid) === 0) continue; // Geen Uid, niet van ons.
+				$uid = $uid[0];
                 $link = $contact->xpath('_:link[@rel="self"]')[0];
 				$etag = trim($contact->attributes('gd', true)->etag, "\"");
 
