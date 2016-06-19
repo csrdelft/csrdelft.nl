@@ -172,7 +172,7 @@ abstract class InputField implements FormElement, Validator {
 	 * @param boolean $overwrite allowed to overwrite existing file
 	 * @throws Exception Ongeldige bestandsnaam, doelmap niet schrijfbaar of naam ingebruik
 	 */
-	protected function opslaan($directory, $filename, $overwrite = false) {
+	public function opslaan($directory, $filename, $overwrite = false) {
 		if (!$this->isAvailable()) {
 			throw new Exception('Uploadmethode niet beschikbaar: ' . get_class($this));
 		}
