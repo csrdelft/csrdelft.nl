@@ -181,7 +181,7 @@ class ProfielController extends AclController {
 			GoogleSync::doRequestToken(strval($profiel->uid));
 			$gSync = GoogleSync::instance();
 			$msg = $gSync->syncLid($profiel);
-			setMelding('Opgeslagen in Google Contacts: ' . $msg, 2);
+			setMelding('Opgeslagen in Google Contacts: ' . $msg, 1);
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), -1);
 		}
