@@ -318,7 +318,6 @@ function namen2uid($sNamen, $filter = 'leden') {
 	$sNamen = trim($sNamen);
 	$sNamen = str_replace(array(', ', "\r\n", "\n"), ',', $sNamen);
 	$aNamen = explode(',', $sNamen);
-	$return = false;
 	foreach ($aNamen as $sNaam) {
 		$aNaamOpties = array();
 		require_once 'lid/lidzoeker.class.php';
@@ -343,6 +342,7 @@ function namen2uid($sNamen, $filter = 'leden') {
 			$return[]['naamOpties'] = $aNaamOpties;
 		}
 	}
+	if (count($return) === 0) return false;
 	return $return;
 }
 
