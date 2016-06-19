@@ -20,3 +20,8 @@ if (isset($_GET['code'])) {
     $_SESSION['google_access_token'] = $client->authenticate($_GET["code"]);
     header("Location: " . CSR_ROOT . "/profiel/" . $_GET['state'] . "/addToGoogleContacts");
 }
+
+if (isset($_GET['error'])) {
+    setMelding("Verbinding met Google niet geaccepteerd", 2);
+    header("Location: " . CSR_ROOT . "/profiel/" . $_GET['state']);
+}
