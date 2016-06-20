@@ -154,7 +154,7 @@ switch ($actie) {
 
 			// Check categorie.
 			$categorieValid = false;
-			foreach (MededelingCategorieModel::getCategorieen() as $categorie) {
+			foreach (Categorie::getCategorieen() as $categorie) {
 				$hetIsDeze = ($mededelingProperties['categorie'] == $categorie->getId());
 				$categorieOnveranderd = ($tijdelijkeMededeling !== null AND $tijdelijkeMededeling->getCategorieId() == $mededelingProperties['categorie']);
 				if ($hetIsDeze AND ( $categorie->magUitbreiden() OR $categorieOnveranderd)) {

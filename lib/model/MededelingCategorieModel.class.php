@@ -119,7 +119,7 @@ class MededelingCategorieModel {
 	}
 
 	public static function getAll() {
-		return MededelingCategorieModel::getCategorieen();
+		return Categorie::getCategorieen();
 	}
 
 	public static function getCategorieen() {
@@ -133,7 +133,7 @@ class MededelingCategorieModel {
 		if (is_array($cats)) {
 			$return = array();
 			foreach ($cats as $categorie) {
-				$return[] = new MededelingCategorieModel($categorie);
+				$return[] = new Categorie($categorie);
 			}
 			return $return;
 		}

@@ -24,6 +24,7 @@ try {
 		case 'Forum':
 		case 'FotoAlbum':
 		case 'Agenda':
+		case 'Mededelingen':
 			break;
 
 		// de rest alleen voor ingelogde gebruikers:

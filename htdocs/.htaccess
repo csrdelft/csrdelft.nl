@@ -26,6 +26,7 @@ RewriteRule ^account			index.php?c=Login [L]
 RewriteRule ^eetplan			index.php?c=Eetplan		[QSA,L]
 RewriteRule ^documenten			index.php?c=Documenten	[QSA,L]
 RewriteRule ^bibliotheek		index.php?c=Bibliotheek [QSA,L]
+RewriteRule ^mededelingen       index.php?c=Mededelingen [QSA,L]
 
 RewriteRule ^leden				index.php?c=Profiel [QSA,L]
 RewriteRule ^profiel			index.php?c=Profiel [QSA,L]

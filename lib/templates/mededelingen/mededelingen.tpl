@@ -1,4 +1,4 @@
-{if $geselecteerdeMededeling->isModerator()}
+{if $model->isModerator()}
 	<ul class="horizontal nobullets">
 		<li{if !$prullenbak} class="active"{/if}>
 			<a href="{$mededelingenketser_root}" title="Mededelingenketzer">Mededelingenketzer</a>
@@ -23,10 +23,10 @@
 		is de database leeg en geven we een nette foutmelding.	*}
 		<div id="kolomlinks">
 			{* Knoppen bovenaan *}
-			{if !$prullenbak AND $geselecteerdeMededeling->magToevoegen()}
+			{if !$prullenbak AND $model->magToevoegen()}
 				<a class="btn" href="{$pagina_root}toevoegen">{icon get="toevoegen"} Toevoegen</a>
 			{/if}
-			{if $geselecteerdeMededeling->isModerator()}
+			{if $model->isModerator()}
 				<a class="btn" href="#" onclick="$('#legenda').toggle();">{icon get="legenda"} Legenda</a>
 				<div id="legenda" class="dragobject verborgen">
 					<div class="float-right" onclick="$('#legenda').fadeOut();" title="Legenda verbergen">&times;</div>
@@ -45,7 +45,7 @@
 					<br />
 				</div>
 			{/if}
-			{if (!$prullenbak AND $geselecteerdeMededeling->magToevoegen()) OR $geselecteerdeMededeling->isModerator()}
+			{if (!$prullenbak AND $model->magToevoegen()) OR $model->isModerator()}
 				<br />
 				<br />	
 			{/if}
@@ -61,17 +61,17 @@
 						<div class="mededelingenlijst-block">
 							<div class="mededelingenlijst-block-titel">{$groepering}</div>
 							{foreach from=$mededelingen item=mededeling}
-								<div {if $mededeling->getId()==$geselecteerdeMededeling->getId()}id="actief" {/if}class="mededelingenlijst-item{if $mededeling->isVerborgen()} verborgen-item{/if}">
-									{if $mededeling->getCategorie()->getPlaatje() !=''}
+								<div {if $mededeling->id==$geselecteerdeMededeling->id}id="actief" {/if}class="mededelingenlijst-item{if $mededeling->verborgen} verborgen-item{/if}">
+									{if $mededeling->getCategorie()->plaatje !=''}
 										<div class="mededelingenlijst-plaatje">
-											<a href="{$pagina_root}{$mededeling->getId()}">
-												<img src="/plaetjes/nieuws/{$mededeling->getCategorie()->getPlaatje()}" width="10px" height="10px" />
+											<a href="{$pagina_root}{$mededeling->id}">
+												<img src="/plaetjes/nieuws/{$mededeling->getCategorie()->plaatje}" width="10px" height="10px" />
 											</a>
 										</div>
 									{/if}
 									<div class="itemtitel">
 										{* {$mededeling->getDatum()} *}
-										<a href="{$pagina_root}{$mededeling->getId()}"{if $mededeling->isModerator()} class="{if !$mededeling->isPrive()}cursief{/if} {if $mededeling->getZichtbaarheid()=='wacht_goedkeuring'}dikgedrukt{/if}"{/if}>{$mededeling->getTitel()|bbcode|html_substr:"40":"…"}</a>
+										<a href="{$pagina_root}{$mededeling->id}"{if $model->isModerator()} class="{if !$mededeling->prive}cursief{/if} {if $mededeling->zichtbaarheid=='wacht_goedkeuring'}dikgedrukt{/if}"{/if}>{$mededeling->titel|bbcode|html_substr:"40":"…"}</a>
 									</div>
 								</div>
 							{/foreach}
@@ -85,33 +85,33 @@
 			{* De mededeling rechtsbovenaan *}
 			<div class="nieuwsbericht">
 				<div class="nieuwsbody">
-					<div class="nieuwstitel">{$geselecteerdeMededeling->getTitel()|escape:'html'}</div>
-					<img class="nieuwsplaatje" src="/plaetjes/nieuws/{$geselecteerdeMededeling->getPlaatje()}" width="200px" height="200px" alt="{$geselecteerdeMededeling->getPlaatje()}" />
-					{$geselecteerdeMededeling->getTekst()|bbcode}<br />
+					<div class="nieuwstitel">{$geselecteerdeMededeling->titel|escape:'html'}</div>
+					<img class="nieuwsplaatje" src="/plaetjes/nieuws/{$geselecteerdeMededeling->plaatje}" width="200px" height="200px" alt="{$geselecteerdeMededeling->plaatje}" />
+					{$geselecteerdeMededeling->tekst|bbcode}<br />
 				</div>
 				<div class="informatie">
 					<hr />
-					Geplaatst op {$geselecteerdeMededeling->getDatum()|date_format:'%d-%m-%Y'}{if $geselecteerdeMededeling->isModerator()} door {ProfielModel::getLink($geselecteerdeMededeling->getUid(), 'civitas')}{/if}<br />
-					Categorie: {$geselecteerdeMededeling->getCategorie()->getNaam()}<br />
-					{if $geselecteerdeMededeling->isModerator()}
-						Doelgroep: {$geselecteerdeMededeling->getDoelgroep()}<br />
-						Prioriteit: {$geselecteerdeMededeling->getPrioriteit()}<br />
+					Geplaatst op {$geselecteerdeMededeling->datum|date_format:'%d-%m-%Y'}{if $model->isModerator()} door {ProfielModel::getLink($geselecteerdeMededeling->uid, 'civitas')}{/if}<br />
+					Categorie: {$geselecteerdeMededeling->getCategorie()->naam}<br />
+					{if $model->isModerator()}
+						Doelgroep: {$geselecteerdeMededeling->doelgroep}<br />
+						Prioriteit: {$geselecteerdeMededeling->prioriteit}<br />
 					{/if}
-					{if $geselecteerdeMededeling->isModerator() OR $geselecteerdeMededeling->magBewerken()}
-						Vervalt {if $geselecteerdeMededeling->getVervaltijd()===null}nooit{else}op: {$geselecteerdeMededeling->getVervaltijd()|date_format:$datumtijdFormaat}{/if}<br />
+					{if $model->isModerator() OR $model->magBewerken()}
+						Vervalt {if $geselecteerdeMededeling->vervaltijd===null}nooit{else}op: {$geselecteerdeMededeling->vervaltijd|date_format:$datumtijdFormaat}{/if}<br />
 					{/if}
-					{if $geselecteerdeMededeling->isModerator() AND $geselecteerdeMededeling->isVerborgen()}
+					{if $model->isModerator() AND $geselecteerdeMededeling->verborgen}
 						Verborgen: ja<br />
 					{/if}
-					{if $geselecteerdeMededeling->magBewerken()}
-						<a href="{$pagina_root}bewerken/{$geselecteerdeMededeling->getId()}">
+					{if $model->magBewerken()}
+						<a href="{$pagina_root}bewerken/{$geselecteerdeMededeling->id}">
 							{icon get="bewerken"}
 						</a>
-						<a href="{$pagina_root}verwijderen/{$geselecteerdeMededeling->getId()}" onclick="return confirm('Weet u zeker dat u deze mededeling wilt verwijderen?');">
+						<a href="{$pagina_root}verwijderen/{$geselecteerdeMededeling->id}" onclick="return confirm('Weet u zeker dat u deze mededeling wilt verwijderen?');">
 							{icon get="verwijderen"}
 						</a>
-						{if $geselecteerdeMededeling->isModerator() AND $geselecteerdeMededeling->getZichtbaarheid()=='wacht_goedkeuring'}
-							<a onclick="return confirm('Weet u zeker dat u deze mededeling wilt goedkeuren?')" href="{$pagina_root}keur-goed/{$geselecteerdeMededeling->getId()}">
+						{if $model->isModerator() AND $geselecteerdeMededeling->zichtbaarheid=='wacht_goedkeuring'}
+							<a onclick="return confirm('Weet u zeker dat u deze mededeling wilt goedkeuren?')" href="{$pagina_root}keur-goed/{$geselecteerdeMededeling->id}">
 								{icon get="goedkeuren"}
 							</a>
 						{/if}
