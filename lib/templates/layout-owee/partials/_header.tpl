@@ -37,7 +37,7 @@
 
     <!-- Header -->
     <header id="header" class="alt">
-        <h1><a href="/">C.S.R. in de OWee</a></h1>
+        <h1><a href="/">C.S.R. Delft</a></h1>
         <nav>
             <a class="inloggen" href="#login">Inloggen</a>
             <a href="#menu">Menu</a>
