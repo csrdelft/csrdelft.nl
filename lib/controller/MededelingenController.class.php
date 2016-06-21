@@ -73,6 +73,19 @@ class MededelingenController extends AclController {
         return new MededelingView(new Mededeling());
     }
 
+    public function verwijderen($id) {
+        $mededeling = $this->model->getUUID($id);
+
+        $this->model->delete($mededeling);
+
+        setMelding("Mededeling is verwijderd.", 1);
+        if ($this->prullenbak) {
+            redirect(MededelingenView::mededelingenRoot . 'prullenbak');
+        } else {
+            redirect(MededelingenView::mededelingenRoot);
+        }
+    }
+
     public function bewerken($id = 0) {
         if ($id == 0) {
             $mededeling = new Mededeling();
