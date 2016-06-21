@@ -86,7 +86,7 @@
 			<div class="nieuwsbericht">
 				<div class="nieuwsbody">
 					<div class="nieuwstitel">{$geselecteerdeMededeling->titel|escape:'html'}</div>
-					<img class="nieuwsplaatje" src="/plaetjes/nieuws/{$geselecteerdeMededeling->plaatje}" width="200px" height="200px" alt="{$geselecteerdeMededeling->plaatje}" />
+					<img class="nieuwsplaatje" src="/plaetjes/mededelingen/{$geselecteerdeMededeling->plaatje}" width="200px" height="200px" alt="{$geselecteerdeMededeling->plaatje}" />
 					{$geselecteerdeMededeling->tekst|bbcode}<br />
 				</div>
 				<div class="informatie">

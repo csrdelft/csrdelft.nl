@@ -61,6 +61,27 @@ class MededelingenModel extends PersistenceModel {
 		return $errors;
 	}
 
+	public function savePlaatje($image, $mededeling) {
+		$img_errors = '';
+		if ($image['error'] == UPLOAD_ERR_OK) {
+			$image_info = getimagesize($image['tmp_name']);
+			if ($image_info[0] == 0 || $image_info[1] == 0) {
+				$img_errors .= 'Het is niet gelukt om de resolutie van het plaatje te bepalen.<br/>';
+			} else {
+				$image_name = $image['name'];
+				$image_path = PICS_PATH . 'mededelingen/' . $image_name;
+				if (move_uploaded_file($image['tmp_name'], $image_path) === false) {
+					$img_errors .= 'Plaatje verplaatsen is mislukt.<br/>';
+				} else {
+					$mededeling->plaatje = $image_name;
+					chmod($image_path, 0644);
+				}
+
+			}
+		}
+		return $img_errors;
+	}
+
 //
 //	public function save() {
 //		$db = MijnSqli::instance();

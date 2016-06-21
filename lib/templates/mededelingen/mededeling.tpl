@@ -54,7 +54,7 @@
 			<strong>Afbeelding</strong><br />
 		{/if}
 		{if $mededeling->plaatje != ''}
-			<img src="/plaetjes/nieuws/{$mededeling->plaatje|escape:'html'}" width="200px" height="200px" alt="Afbeelding" style="margin: 5px 0 15px 0;" /><br />
+			<img src="/plaetjes/mededeling/{$mededeling->plaatje|escape:'html'}" width="200px" height="200px" alt="Afbeelding" style="margin: 5px 0 15px 0;" /><br />
 			<strong>Vervangende afbeelding</strong><br />
 		{/if}
 		<input type="file" name="plaatje" size="40" /><br />
