@@ -125,16 +125,18 @@ class MededelingenController extends AclController {
             } else {
                 if ($mededeling->id) {
                     $this->model->update($mededeling);
+                    $id = $mededeling->id;
                 } else {
-                    $nieuweId = $this->model->create($mededeling);
-                    $nieuweLocatie = MededelingenView::mededelingenRoot;
-                    if ($this->prullenbak) {
-                        $nieuweLocatie .= '/prullenbak';
-                    }
-
-                    $nieuweLocatie .= '/'.$nieuweId;
-                    redirect($nieuweLocatie);
+                    $id = $this->model->create($mededeling);
                 }
+
+                $nieuweLocatie = MededelingenView::mededelingenRoot;
+                if ($mededeling->verborgen) {
+                    $nieuweLocatie .= 'prullenbak/';
+                }
+
+                $nieuweLocatie .= $id;
+                redirect($nieuweLocatie);
 
 
             }
