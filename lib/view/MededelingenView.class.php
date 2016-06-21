@@ -68,7 +68,7 @@ class MededelingenView extends SmartyTemplateView {
 	protected $model;
 
 	public function __construct($mededelingId, $paginanummer = null, $prullenbak = false) {
-		parent::__construct(MededelingenModel::instance(), 'Mededelingen overzicht');
+		parent::__construct(MededelingenModel::instance(), 'Mededelingen');
 		$this->prullenbak = $prullenbak;
 
 
@@ -115,6 +115,14 @@ class MededelingenView extends SmartyTemplateView {
 		}
 
 		$this->smarty->assign('prullenbak', $this->prullenbak);
+	}
+
+	public function getBreadcrumbs()
+	{
+		if ($this->prullenbak) {
+			return parent::getBreadcrumbs() . '<a href="/" tile="Startpagina"><span class="fa fa-home module-icon"></span></a> » <a href="/mededelingen/">Mededelingen</a> » <span class="active">Prullenbak</span>';
+		}
+		return parent::getBreadcrumbs();
 	}
 
 	public function view() {
