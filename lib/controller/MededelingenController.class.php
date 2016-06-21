@@ -4,9 +4,9 @@ require_once 'model/mededelingen/MededelingenModel.class.php';
 require_once 'view/MededelingenView.class.php';
 
 /**
- * BijbelroosterController.class.php
- *
- * @author P.W.G. Brussee <brussee@live.nl>
+ * Class MededelingenController
+ * 
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  * Controller van het bijbelrooster.
  */
@@ -44,7 +44,6 @@ class MededelingenController extends AclController {
             $this->prullenbak = true;
             $base = 3;
         }
-
 
         if ($this->hasParam($base)){
             if ($this->getParam($base) == 'pagina') {
@@ -139,8 +138,6 @@ class MededelingenController extends AclController {
 
                 $nieuweLocatie .= $id;
                 redirect($nieuweLocatie);
-
-
             }
         }
         return new MededelingView($mededeling);
