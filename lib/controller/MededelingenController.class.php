@@ -114,8 +114,10 @@ class MededelingenController extends AclController {
             }else {
                 $mededeling->zichtbaarheid = isset($_POST['verborgen']) ? 'onzichtbaar':'zichtbaar';
             }
-            if (isset($_POST['verborgen'])) { // slechts voor frontend
+            if (isset($_POST['verborgen'])) {
                 $mededeling->verborgen = true;
+            } else {
+                $mededeling->verborgen = false;
             }
 
             // TODO: Plaatje
