@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class MededelingView
+ * 
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ */
 class MededelingView extends SmartyTemplateView {
 
 	private $prullenbak;
@@ -20,8 +25,6 @@ class MededelingView extends SmartyTemplateView {
 		$this->mededeling = $mededeling;
 
 		$this->smarty->assign('prullenbak', $this->prullenbak);
-
-		
 	}
 
 	public function getBreadcrumbs() {
@@ -49,6 +52,11 @@ class MededelingView extends SmartyTemplateView {
 
 }
 
+/**
+ * Class MededelingenView
+ * 
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ */
 class MededelingenView extends SmartyTemplateView {
 
 	/**
@@ -70,7 +78,6 @@ class MededelingenView extends SmartyTemplateView {
 	public function __construct($mededelingId, $paginanummer = null, $prullenbak = false) {
 		parent::__construct(MededelingenModel::instance(), 'Mededelingen');
 		$this->prullenbak = $prullenbak;
-
 
 		$this->geselecteerdeMededeling = null;
 		if ($paginanummer !== null) {
