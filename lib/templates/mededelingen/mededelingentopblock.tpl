@@ -9,7 +9,7 @@
 			</div>
 			<div class="plaatje">
 				<a href="{MededelingenView::mededelingenRoot}{$mededeling->id}">
-					<img src="/plaetjes/nieuws/{$mededeling->plaatje}" width="70px" height="70px" alt="{$mededeling->plaatje|escape:'html'}" />
+					<img src="/plaetjes/mededelingen/{$mededeling->plaatje}" width="70px" height="70px" alt="{$mededeling->plaatje|escape:'html'}" />
 				</a>
 			</div>
 			<div class="bericht">
