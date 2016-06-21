@@ -111,7 +111,7 @@
 							{icon get="verwijderen"}
 						</a>
 						{if $model->isModerator() AND $geselecteerdeMededeling->zichtbaarheid=='wacht_goedkeuring'}
-							<a onclick="return confirm('Weet u zeker dat u deze mededeling wilt goedkeuren?')" href="{$pagina_root}keur-goed/{$geselecteerdeMededeling->id}">
+							<a onclick="return confirm('Weet u zeker dat u deze mededeling wilt goedkeuren?')" href="{$pagina_root}goedkeuren/{$geselecteerdeMededeling->id}">
 								{icon get="goedkeuren"}
 							</a>
 						{/if}
