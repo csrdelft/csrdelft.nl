@@ -131,6 +131,9 @@ class MededelingenController extends AclController {
                     $id = $mededeling->id;
                 } else {
                     $id = $this->model->create($mededeling);
+                    // Mail de PubCie
+                    mail('pubcie@csrdelft.nl', 'Nieuwe mededeling wacht op goedkeuring', CSR_ROOT . '/mededelingen/' . $id . "\r\n" .
+						"\r\nDe inhoud van de mededeling is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $mededeling->tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $this->uid . "@csrdelft.nl");
                 }
 
                 $nieuweLocatie = MededelingenView::mededelingenRoot;
