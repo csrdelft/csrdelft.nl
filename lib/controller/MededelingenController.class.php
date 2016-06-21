@@ -119,9 +119,27 @@ class MededelingenController extends AclController {
                 $mededeling->verborgen = false;
             }
 
-            // TODO: Plaatje
+            $img_errors = '';
+            if (isset($_FILES['plaatje']) && $_FILES['plaatje']['error'] == UPLOAD_ERR_OK) {
+                $image_info = getimagesize($_FILES['plaatje']['tmp_name']);
+                if ($image_info[0] == 0 || $image_info[1] == 0) {
+                    $img_errors .= 'Het is niet gelukt om de resolutie van het plaatje te bepalen.<br/>';
+                } else {
+                    $image_name = $_FILES['plaatje']['name'];
+                    $image_path = PICS_PATH . 'mededelingen/' . $image_name;
+                    if (move_uploaded_file($_FILES['plaatje']['tmp_name'], $image_path) === false) {
+                        $img_errors .= 'Plaatje verplaatsen is mislukt.<br/>';
+                    } else {
+                        $mededeling->plaatje = $image_name;
+                        chmod($image_path, 0644);
+                    }
 
-            if (($errors = $this->model->validate($mededeling)) != '') {
+                }
+            }
+
+            if ($img_errors != '') {
+                setMelding($img_errors, -1);
+            } else if (($errors = $this->model->validate($mededeling)) != '') {
                 setMelding('<h3>Niet opgeslagen</h3>'. $errors, -1);
             } else {
                 if ($mededeling->id) {
