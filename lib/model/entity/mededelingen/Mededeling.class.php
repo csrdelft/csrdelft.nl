@@ -98,4 +98,12 @@ class Mededeling extends PersistentEntity {
 		return CategorieModel::get($this->categorie);
 	}
 
+	//	// function magBewerken()
+//	// post: geeft true terug als het huidige lid deze Mededeling mag bewerken of verwijderen. Anders, false.
+	public function magBewerken() {
+		// het huidige lid mag dit bericht alleen bewerken als hij moderator is of als dit zijn eigen bericht
+		// is (en hij dus het toevoeg-recht heeft).
+		return MededelingenModel::isModerator() OR ( MededelingenModel::magToevoegen() AND $this->uid == LoginModel::getUid());
+	}
+
 }

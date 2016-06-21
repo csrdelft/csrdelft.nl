@@ -435,19 +435,11 @@ class MededelingenModel extends PersistenceModel {
 		}
 		return $prioriteiten;
 	}
-//
+
 	public static function getDoelgroepen() {
 		return array('iedereen', '(oud)leden', 'leden');
 	}
-//
-//	// function magBewerken()
-//	// post: geeft true terug als het huidige lid deze Mededeling mag bewerken of verwijderen. Anders, false.
-	public function magBewerken() {
-		// het huidige lid mag dit bericht alleen bewerken als hij moderator is of als dit zijn eigen bericht
-		// is (en hij dus het toevoeg-recht heeft).
-		return MededelingenModel::isModerator() OR ( MededelingenModel::magToevoegen() AND $this->getUid() == LoginModel::getUid());
-	}
-//
+
 	public static function isModerator() {
 		return LoginModel::mag('P_NEWS_MOD');
 	}
