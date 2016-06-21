@@ -97,13 +97,13 @@
 						Doelgroep: {$geselecteerdeMededeling->doelgroep}<br />
 						Prioriteit: {$geselecteerdeMededeling->prioriteit}<br />
 					{/if}
-					{if $model->isModerator() OR $model->magBewerken()}
+					{if $geselecteerdeMededeling->magBewerken()}
 						Vervalt {if $geselecteerdeMededeling->vervaltijd===null}nooit{else}op: {$geselecteerdeMededeling->vervaltijd|date_format:$datumtijdFormaat}{/if}<br />
 					{/if}
 					{if $model->isModerator() AND $geselecteerdeMededeling->verborgen}
 						Verborgen: ja<br />
 					{/if}
-					{if $model->magBewerken()}
+					{if $geselecteerdeMededeling->magBewerken()}
 						<a href="{$pagina_root}bewerken/{$geselecteerdeMededeling->id}">
 							{icon get="bewerken"}
 						</a>
