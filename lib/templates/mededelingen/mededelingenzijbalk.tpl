@@ -1,8 +1,8 @@
 <div class="zijbalk-kopje"><a href="{MededelingenView::mededelingenRoot}">Mededelingen{if isset($mcount) AND $mcount > 0} &nbsp;<span class="badge" title="{$mcount} mededeling(en) wachten op goedkeuring">{$mcount}</span>{/if}</a></div>
 {foreach from=$mededelingen item=mededeling}
 	<div class="item">
-		{$mededeling->getDatum()|date_format:"%d-%m"}
-		<a href="{MededelingenView::mededelingenRoot}{$mededeling->getId()}"
-			title="[{$mededeling->getTitel()|escape:'html'}] {$mededeling->getTekstVoorZijbalk()|escape:'html'}">{$mededeling->getTitelVoorZijbalk()|escape:'html'}</a>
+		{$mededeling->datum|date_format:"%d-%m"}
+		<a href="{MededelingenView::mededelingenRoot}{$mededeling->id}"
+			title="[{$mededeling->titel|escape:'html'}] {$mededeling->getTekstVoorZijbalk()|escape:'html'}">{$mededeling->getTitelVoorZijbalk()|escape:'html'}</a>
 	</div>
 {/foreach}
