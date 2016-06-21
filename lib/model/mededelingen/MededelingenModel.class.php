@@ -192,10 +192,9 @@ class MededelingenModel extends PersistenceModel {
 
 		// Initialisaties.
 		$mededelingen = array();
-		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = MededelingenModel::getClauses($prullenbak);
 
 		$resultaat = $this->find(
-			'('.$vervalClause.' '.$operator.' '.$verborgenClause.')'.$doelgroepClause,
+			MededelingenModel::getClauses($prullenbak),
 			array(),
 			null,
 			'datum DESC',
@@ -232,23 +231,21 @@ class MededelingenModel extends PersistenceModel {
 	}
 
 	public function getAantal($prullenbak) {
-		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = MededelingenModel::getClauses($prullenbak);
-
-		return $this->count('('.$vervalClause.' '.$operator.' '.$verborgenClause.')'.$doelgroepClause);
+		return $this->count(MededelingenModel::getClauses($prullenbak));
 	}
 
 	public function getPaginaNummer($mededeling, $prullenbak) {
-		list($vervalClause, $operator, $verborgenClause, $doelgroepClause) = MededelingenModel::getClauses($prullenbak);
+		$clauses = MededelingenModel::getClauses($prullenbak);
 
 		$positie = $this->count(
-			'('.$vervalClause.' '.$operator.' '.$verborgenClause.' ) '.$doelgroepClause.' AND datum >= ?',
+			$clauses.' AND datum >= ?',
 			array($mededeling->datum));
 		
 		$paginaNummer = (int) ceil($positie / LidInstellingen::get('mededelingen', 'aantalPerPagina'));
 		$paginaNummer = $paginaNummer >= 1 ? $paginaNummer : 1; // Het moet natuurlijk wel groter dan 0 zijn.
 		return $paginaNummer;
 	}
-//
+
 	public static function getLaatsteMededelingen($aantal) {
 
 		$zichtbaarheidClause = "zichtbaarheid='zichtbaar'";
@@ -320,7 +317,6 @@ class MededelingenModel extends PersistenceModel {
 			$doelgroepClause = " AND doelgroep!='leden'";
 		}
 
-		return array($vervalClause, $operator, $verborgenClause, $doelgroepClause);
+		return '('.$vervalClause.' '.$operator.' '.$verborgenClause.')'.$doelgroepClause;
 	}
-
 }
