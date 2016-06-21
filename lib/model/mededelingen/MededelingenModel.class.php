@@ -1,6 +1,5 @@
 <?php
 
-require_once 'model/MededelingCategorieModel.class.php';
 require_once 'model/mededelingen/CategorieModel.class.php';
 
 /**
