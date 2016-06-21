@@ -26,7 +26,8 @@ class MededelingenController extends AclController {
                 'bewerken' => 'P_NEWS_POST',
                 'verwijderen' => 'P_NEWS_POST',
                 'toevoegen' => 'P_NEWS_POST',
-                'top3overzicht' => 'P_NEWS_MOD'
+                'top3overzicht' => 'P_NEWS_MOD',
+                'goedkeuren' => 'P_NEWS_MOD'
             );
         } else {
             $this->acl = array(
@@ -126,6 +127,14 @@ class MededelingenController extends AclController {
             }
         }
         return new MededelingView($mededeling);
+    }
+
+    public function goedkeuren($id) {
+        $mededeling = $this->model->getUUID($id);
+        $mededeling->zichtbaarheid = 'zichtbaar';
+        $this->model->update($mededeling);
+        setMelding("Mededeling is goedgekeurd.", 1);
+        redirect(MededelingenView::mededelingenRoot . $mededeling->id);
     }
 
 }
