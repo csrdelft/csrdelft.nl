@@ -300,8 +300,6 @@ class MededelingenModel extends PersistenceModel {
 			return $topmost;
 		}
 
-		$db = MijnSqli::instance();
-
 		// Doelgroep bepalen en checken.
 		$doelgroepClause = " AND ";
 		switch ($doelgroep) {
