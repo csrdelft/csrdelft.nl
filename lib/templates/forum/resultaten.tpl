@@ -22,9 +22,10 @@
 								{icon get="new"}
 							</span>
 						{else}
-							<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}"{if $draad->isOngelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>
 								<small class="niet-dik">[<a href="/forum/deel/{$draad->forum_id}">{$draad->getForumDeel()->titel}</a>]</small>
-								{$draad->titel}
+								<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}"{if $draad->isOngelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>
+									{$draad->titel}
+								</a>
 								{if $draad->belangrijk}
 									{icon get=$draad->belangrijk title="Dit onderwerp is door het bestuur aangemerkt als belangrijk"}
 								{elseif $draad->gesloten}
