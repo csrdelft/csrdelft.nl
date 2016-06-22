@@ -3,17 +3,17 @@
 		<div class="mededelingenlijst-block">
 			<div class="mededelingenlijst-block-titel">{$groepering|ucfirst}</div>
 			{foreach from=$mededelingen item=mededeling}
-				<div {if $mededeling->getId()==$geselecteerdeMededeling->getId()}id="actief" {/if}class="mededelingenlijst-item{if $mededeling->isVerborgen()} verborgen-item{/if}{if $mededeling->isVerwijderd()} verwijderd-item{/if}">
-					{if $mededeling->getCategorie()->getPlaatje() !=''}
+				<div {if $mededeling->id==$geselecteerdeMededeling->id}id="actief" {/if}class="mededelingenlijst-item{if $mededeling->zichtbaarheid == 'onzichtbaar'} verborgen-item{/if}{if $mededeling->zichtbaarheid == 'verwijderd'} verwijderd-item{/if}">
+					{if $mededeling->getCategorie()->plaatje !=''}
 						<div class="mededelingenlijst-plaatje">
-							<a href="{$pagina_root}{$mededeling->getId()}">
-								<img src="/plaetjes/nieuws/{$mededeling->getCategorie()->getPlaatje()}" width="10px" height="10px" />
+							<a href="{$pagina_root}{$mededeling->id}">
+								<img src="/plaetjes/nieuws/{$mededeling->getCategorie()->plaatje}" width="10px" height="10px" />
 							</a>
 						</div>
 					{/if}
 					<div class="itemtitel">
 						{* {$mededeling->getDatum()} *}
-						<a href="{$pagina_root}{$mededeling->getId()}"{if $mededeling->isModerator()} class="{if !$mededeling->isPrive()}cursief{/if} {if $mededeling->getZichtbaarheid()=='wacht_goedkeuring'}dikgedrukt{/if}"{/if}>{$mededeling->getTitel()|bbcode|html_substr:"40":"…"}</a>
+						<a href="{$pagina_root}{$mededeling->id}"{if LoginModel::mag('P_NEWS_MOD')} class="{if !$mededeling->prive}cursief{/if} {if $mededeling->zichtbaarheid=='wacht_goedkeuring'}dikgedrukt{/if}"{/if}>{$mededeling->titel|bbcode|html_substr:"40":"…"}</a>
 					</div>
 				</div>
 			{/foreach}

@@ -4,6 +4,7 @@
 /.idea
 /.project
 /.settings
+/.sonar
 /C.S.R.[!!-~]Delft.phpproj
 bin/ldap/bla
 bin/ldap/settings.py
