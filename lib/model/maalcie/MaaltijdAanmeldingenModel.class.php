@@ -299,6 +299,8 @@ class MaaltijdAanmeldingenModel {
 		if ($uid !== null && $query->rowCount() !== 1) {
 			throw new Exception('Delete aanmelding faalt: $query->rowCount() =' . $query->rowCount());
 		}
+
+		return 1;
 	}
 
 	private static function updateAanmelding(MaaltijdAanmelding $aanmelding) {
