@@ -92,7 +92,10 @@ class MededelingenController extends AclController {
             $mededeling = $this->model->getUUID($id);
         }
         if ($this->isPosted() && isset($_POST['titel'], $_POST['tekst'], $_POST['categorie'])) {
-            $mededeling->datum = getDateTime();
+            if ($mededeling->datum == null) {
+                $mededeling->datum = getDateTime();
+            }
+
             $mededeling->titel = $_POST['titel'];
             $mededeling->tekst = $_POST['tekst'];
             $mededeling->categorie = $_POST['categorie'];

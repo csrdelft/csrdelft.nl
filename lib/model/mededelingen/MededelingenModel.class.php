@@ -40,9 +40,10 @@ class MededelingenModel extends PersistenceModel {
 
 		if ($mededeling->vervaltijd) {
 			$vervaltijd = strtotime($mededeling->vervaltijd);
+			$tijd = strtotime($mededeling->datum);
 			if ($vervaltijd === false || !isGeldigeDatum($mededeling->vervaltijd)) {
 				$errors .= 'Vervaltijd is ongeldig.<br/>';
-			} else if ($vervaltijd <= time()) {
+			} else if ($vervaltijd <= $tijd) {
 				$errors .= 'Vervaltijd moet groter zijn dan de huidige tijd.<br/>';
 			}
 		}
