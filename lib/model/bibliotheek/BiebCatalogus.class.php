@@ -223,7 +223,7 @@ class BiebCatalogus {
 	/**
 	 * geeft alle waardes in db voor $key
 	 * 
-	 * @param $key waarvoor waardes gezocht moeten worden
+	 * @param $key string waarvoor waardes gezocht moeten worden
 	 * @return array van alle waardes, alfabetisch gesorteerd
 	 */
 	public static function getAllValuesOfProperty($key) {
@@ -245,6 +245,7 @@ class BiebCatalogus {
 			$result = $db->query($query);
 			echo $db->error();
 			if ($db->numRows($result) > 0) {
+				$properties = array();
 				while ($prop = $db->next($result)) {
 					$properties[] = $prop[$key];
 				}
@@ -256,10 +257,12 @@ class BiebCatalogus {
 
 	/**
 	 * @param string $zoek is kolom in tabel biebboek, of om via titel&auteur naar id's te zoeken: 'biebboek'
+	 * @param $zoekterm
+	 * @param int $categorie
 	 * @return array json_encodeerde array(
 	 *         array(data=>array(...met meuk...), value=>waarde, result=>dit komt in input na kiezen van iets in suggestielijst),
-	 *         array(..)
-	 *  )
+	 * array(..)
+	 * )
 	 * met formatItem (optie voor jquery.autocomplete) kan uit data-array inhoud worden gegenereerd voor in de li-elementen van de suggestielijst
 	 */
 	public static function getAutocompleteSuggesties($zoek, $zoekterm, $categorie = 0) {
@@ -272,7 +275,7 @@ class BiebCatalogus {
 		}
 		$wherelimit = "";
 		if ((int) $limiet > 0) {
-			$wherelimit = "LIMIT 0, " . (int) $limiet;
+			$wherelimit = " LIMIT 0, " . (int) $limiet;
 		}
 		$properties = array();
 		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'auteur', 'biebboek');
@@ -286,8 +289,7 @@ class BiebCatalogus {
 					SELECT titel, auteur, id, categorie_id
 					FROM biebboek
 					WHERE " . $wherecat . "(titel LIKE  '%" . $zoekterm . "%' OR auteur LIKE  '%" . $zoekterm . "%')
-					ORDER BY titel
-					" . $wherelimit;
+					ORDER BY titel" . $wherelimit;
 				$query .= ";";
 			} else {
 				$query = "
@@ -413,6 +415,7 @@ class BiebCatalogus {
 		$result = $db->query($query);
 
 		if ($db->numRows($result) > 0) {
+			$boeken = array();
 			while ($boek = $db->next($result)) {
 				$boeken[] = $boek;
 			}

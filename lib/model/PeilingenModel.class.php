@@ -190,7 +190,7 @@ class PeilingenModel {
 				VALUES
 					(" . $pid . ",'" . $db->escape($optie) . "',0)
 				";
-			$r = $db->query($sCreateOptie);
+			$db->query($sCreateOptie);
 		}
 		return $pid;
 	}

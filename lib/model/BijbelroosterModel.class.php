@@ -15,9 +15,9 @@ class BijbelroosterModel extends PersistenceModel {
 	/**
 	 * Haalt het bijbelrooster op tussen de opgegeven data.
 	 * 
-	 * @param timestamp $van
-	 * @param timestamp $tot
-	 * @return Bijbelrooster[] (implements Agendeerbaar)
+	 * @param int $van Timestamp
+	 * @param int $tot Timestamp
+	 * @return Bijbelrooster[]|Bijbelrooster (implements Agendeerbaar)
 	 */
 	public function getBijbelroosterTussen($van, $tot) {
 		return $this->find('dag >= ? AND dag <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));

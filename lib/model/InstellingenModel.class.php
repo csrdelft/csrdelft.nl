@@ -157,7 +157,6 @@ class Instellingen extends CachedPersistenceModel {
 			}
 			throw new Exception('Instelling bestaat niet: ' . $id . ' module: ' . $module);
 		}
-		return $instelling;
 	}
 
 	protected function newInstelling($module, $id) {

@@ -280,6 +280,9 @@ class Document extends Bestand {
 
 	/**
 	 * Bestand opslaan vanuit een string in de juiste map.
+	 * @param $file
+	 * @return int
+	 * @throws Exception
 	 */
 	public function putFile($file) {
 		$this->throwExceptionWhenUnsaved();
@@ -290,6 +293,9 @@ class Document extends Bestand {
 
 	/**
 	 * Bestand kopieren naar de juiste map.
+	 * @param $source
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function copyFile($source) {
 		$this->throwExceptionWhenUnsaved();
@@ -304,6 +310,9 @@ class Document extends Bestand {
 
 	/**
 	 * Bestand opslaan vanuit upload-tempdir.
+	 * @param $source
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function moveUploaded($source) {
 		$this->throwExceptionWhenUnsaved();
@@ -317,6 +326,9 @@ class Document extends Bestand {
 
 	/**
 	 * Aangehangen bestand verwijderen van file system.
+	 * @param bool $throwWhenNotFound
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function deleteFile($throwWhenNotFound = true) {
 		if (!$this->hasFile()) {
@@ -336,7 +348,6 @@ class Document extends Bestand {
 				throw new Exception('Kan bestand niet verwijderen, niet beschrijfbaar');
 			}
 		}
-		return false;
 	}
 
 	private function throwExceptionWhenUnsaved() {

@@ -59,7 +59,7 @@ class CorveeTakenModel {
 			self::updateTaak($taak);
 			$db->commit();
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}
@@ -75,7 +75,7 @@ class CorveeTakenModel {
 			self::updateTaak($taak);
 			$db->commit();
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}
@@ -138,10 +138,12 @@ class CorveeTakenModel {
 
 	/**
 	 * Haalt de taken op voor het ingelode lid of alle leden tussen de opgegeven data.
-	 * 
-	 * @param timestamp $van
-	 * @param timestamp $tot
+	 *
+	 * @param int $van Timestamp
+	 * @param int $tot Timestamp
+	 * @param bool $iedereen
 	 * @return CorveeTaak[] (implements Agendeerbaar)
+	 * @throws Exception
 	 */
 	public static function getTakenVoorAgenda($van, $tot, $iedereen = false) {
 		if (!is_int($van)) {
@@ -216,7 +218,7 @@ class CorveeTakenModel {
 			$db->commit();
 			return $taak;
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}
@@ -285,6 +287,13 @@ class CorveeTakenModel {
 		}
 	}
 
+	/**
+	 * @param null $where
+	 * @param array $values
+	 * @param null $limit
+	 * @param bool $orderAsc
+	 * @return CorveeTaak[]
+	 */
 	private static function loadTaken($where = null, $values = array(), $limit = null, $orderAsc = true) {
 		$sql = 'SELECT taak_id, functie_id, uid, crv_repetitie_id, maaltijd_id, datum, punten, bonus_malus, punten_toegekend, bonus_toegekend, wanneer_toegekend, wanneer_gemaild, verwijderd';
 		$sql.= ' FROM crv_taken';
@@ -352,9 +361,11 @@ class CorveeTakenModel {
 	/**
 	 * Haalt de taken op die gekoppeld zijn aan een maaltijd.
 	 * Eventueel ook alle verwijderde taken.
-	 * 
+	 *
 	 * @param int $mid
+	 * @param bool $verwijderd
 	 * @return CorveeTaak[]
+	 * @throws Exception
 	 */
 	public static function getTakenVoorMaaltijd($mid, $verwijderd = false) {
 		if (!is_int($mid) || $mid <= 0) {
@@ -368,9 +379,10 @@ class CorveeTakenModel {
 
 	/**
 	 * Called when a Maaltijd is going to be deleted.
-	 * 
+	 *
 	 * @param int $mid
-	 * @return boolean
+	 * @return bool
+	 * @throws Exception
 	 */
 	public static function existMaaltijdCorvee($mid) {
 		if (!is_int($mid) || $mid <= 0) {
@@ -386,8 +398,9 @@ class CorveeTakenModel {
 
 	/**
 	 * Called when a Maaltijd is going to be deleted.
-	 * 
+	 *
 	 * @param int $mid
+	 * @return int
 	 */
 	public static function verwijderMaaltijdCorvee($mid) {
 		if (!is_int($mid) || $mid <= 0) {
@@ -404,9 +417,10 @@ class CorveeTakenModel {
 
 	/**
 	 * Haalt de taken op van een bepaalde functie.
-	 * 
+	 *
 	 * @param int $fid
 	 * @return CorveeTaak[]
+	 * @throws Exception
 	 */
 	public static function getTakenVanFunctie($fid) {
 		if (!is_int($fid) || $fid <= 0) {
@@ -417,9 +431,10 @@ class CorveeTakenModel {
 
 	/**
 	 * Called when a CorveeFunctie is going to be deleted.
-	 * 
+	 *
 	 * @param int $fid
-	 * @return boolean
+	 * @return bool
+	 * @throws Exception
 	 */
 	public static function existFunctieTaken($fid) {
 		if (!is_int($fid) || $fid <= 0) {
@@ -446,7 +461,7 @@ class CorveeTakenModel {
 			$db->commit();
 			return $taken;
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}
@@ -489,9 +504,10 @@ class CorveeTakenModel {
 
 	/**
 	 * Called when a CorveeRepetitie is updated or is going to be deleted.
-	 * 
+	 *
 	 * @param int $crid
-	 * @return boolean
+	 * @return bool
+	 * @throws Exception
 	 */
 	public static function existRepetitieTaken($crid) {
 		if (!is_int($crid) || $crid <= 0) {
@@ -525,7 +541,7 @@ class CorveeTakenModel {
 			$takenPerDatum = array(); // taken per datum indien geen maaltijd
 			$takenPerMaaltijd = array(); // taken per maaltijd
 			require_once 'model/maalcie/MaaltijdenModel.class.php';
-			$maaltijden = MaaltijdenModel::getKomendeRepetitieMaaltijden($repetitie->getMaaltijdRepetitieId(), true);
+			$maaltijden = MaaltijdenModel::getKomendeRepetitieMaaltijden($repetitie->getMaaltijdRepetitieId());
 			$maaltijdenById = array();
 			foreach ($maaltijden as $maaltijd) {
 				$takenPerMaaltijd[$maaltijd->getMaaltijdId()] = array();
@@ -581,7 +597,7 @@ class CorveeTakenModel {
 			$db->commit();
 			return array('update' => $updatecount, 'day' => $daycount, 'datum' => $datumcount, 'maaltijd' => $maaltijdcount);
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}

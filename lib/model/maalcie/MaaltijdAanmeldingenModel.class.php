@@ -223,6 +223,12 @@ class MaaltijdAanmeldingenModel {
 		return $aanmeldingen[0];
 	}
 
+	/**
+	 * @param array $mids
+	 * @param null $uid
+	 * @param null $limit
+	 * @return MaaltijdAanmelding[]
+	 */
 	private static function loadAanmeldingen(array $mids, $uid = null, $limit = null) {
 		$sql = 'SELECT maaltijd_id, uid, aantal_gasten, gasten_eetwens, door_abonnement, door_uid, laatst_gewijzigd';
 		$sql.= ' FROM mlt_aanmeldingen';
@@ -318,8 +324,9 @@ class MaaltijdAanmeldingenModel {
 
 	/**
 	 * Controleer of alle aanmeldingen voor de maaltijden nog in overeenstemming zijn met het aanmeldfilter.
-	 * 
+	 *
 	 * @param Maaltijd[] $maaltijden
+	 * @return int|void
 	 */
 	public static function checkAanmeldingenFilter($filter, array $maaltijden) {
 		$mids = array();
@@ -360,7 +367,7 @@ class MaaltijdAanmeldingenModel {
 	 * 
 	 * @param int $mrid
 	 * @param string $uid
-	 * @return aantal aanmeldingen or false
+	 * @return int|false aantal aanmeldingen or false
 	 * @throws Exception indien niet toegestaan vanwege aanmeldrestrictie
 	 */
 	public static function aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid) {

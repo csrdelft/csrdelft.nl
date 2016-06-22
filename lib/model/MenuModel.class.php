@@ -229,7 +229,7 @@ class MenuModel extends CachedPersistenceModel {
 			$this->flushCache(true);
 			return $rowCount;
 		} catch (Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}

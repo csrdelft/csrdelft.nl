@@ -441,7 +441,7 @@ class BiebBoek {
 	 * @return bool
 	 */
 	public function validFormulier() {
-		return $this->getFormulier()->validate('');
+		return $this->getFormulier()->validate();
 	}
 
 	/**

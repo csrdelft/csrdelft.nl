@@ -47,10 +47,11 @@ class MaaltijdenModel {
 
 	/**
 	 * Haalt de maaltijden op voor het ingelode lid tussen de opgegeven data.
-	 * 
-	 * @param timestamp $van
-	 * @param timestamp $tot
+	 *
+	 * @param int $van Timestamp
+	 * @param int $tot Timestamp
 	 * @return Maaltijd[] (implements Agendeerbaar)
+	 * @throws Exception
 	 */
 	public static function getMaaltijdenVoorAgenda($van, $tot) {
 		if (!is_int($van)) {
@@ -203,7 +204,7 @@ class MaaltijdenModel {
 			}
 			$db->commit();
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}
@@ -324,12 +325,16 @@ class MaaltijdenModel {
 
 	// Archief-Maaltijden ############################################################
 
+	/**
+	 * @param Maaltijd[] $maaltijden
+	 */
 	public static function existArchiefMaaltijden(array $maaltijden) {
 		$where = '(maaltijd_id=?';
 		for ($i = sizeof($maaltijden); $i > 1; $i--) {
 			$where.= ' OR maaltijd_id=?';
 		}
 		$where.= ')';
+		$maaltijdenById = array();
 		foreach ($maaltijden as $maaltijd) {
 			$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;
 		}
@@ -341,10 +346,11 @@ class MaaltijdenModel {
 
 	/**
 	 * Haalt de archiefmaaltijden op tussen de opgegeven data.
-	 * 
-	 * @param timestamp $van
-	 * @param timestamp $tot
+	 *
+	 * @param int $van Timestamp
+	 * @param int $tot Timestamp
 	 * @return ArchiefMaaltijd[] (implements Agendeerbaar)
+	 * @throws Exception
 	 */
 	public static function getArchiefMaaltijdenTussen($van = null, $tot = null) {
 		if ($van === null) { // RSS
@@ -360,6 +366,12 @@ class MaaltijdenModel {
 		return self::loadArchiefMaaltijden('datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
 	}
 
+	/**
+	 * @param null $where
+	 * @param array $values
+	 * @param null $limit
+	 * @return Maaltijd[]
+	 */
 	private static function loadArchiefMaaltijden($where = null, $values = array(), $limit = null) {
 		$sql = 'SELECT maaltijd_id, titel, datum, tijd, prijs, aanmeldingen';
 		$sql.= ' FROM mlt_archief';
@@ -424,12 +436,12 @@ class MaaltijdenModel {
 			$query = $db->prepare($sql);
 			$query->execute($values);
 			if ($query->rowCount() !== 1) {
-				$db->rollback();
+				$db->rollBack();
 				throw new Exception('New archief-maaltijd faalt: $query->rowCount() =' . $query->rowCount());
 			}
 			$db->commit();
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}
@@ -458,9 +470,10 @@ class MaaltijdenModel {
 
 	/**
 	 * Called when a MaaltijdRepetitie is updated or is going to be deleted.
-	 * 
+	 *
 	 * @param int $mrid
-	 * @return boolean
+	 * @return bool
+	 * @throws Exception
 	 */
 	public static function existRepetitieMaaltijden($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
@@ -512,7 +525,7 @@ class MaaltijdenModel {
 			$db->commit();
 			return array($updated, $aanmeldingen);
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}
@@ -520,8 +533,12 @@ class MaaltijdenModel {
 	/**
 	 * Maakt nieuwe maaltijden aan volgens de definitie van de maaltijd-repetitie.
 	 * Alle leden met een abonnement hierop worden automatisch aangemeld.
-	 * 
-	 * @return Maaltijden[]
+	 *
+	 * @param MaaltijdRepetitie $repetitie
+	 * @param $beginDatum
+	 * @param $eindDatum
+	 * @return Maaltijd[]
+	 * @throws Exception
 	 */
 	public static function maakRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $beginDatum, $eindDatum) {
 		if ($repetitie->getPeriodeInDagen() < 1) {
@@ -555,7 +572,7 @@ class MaaltijdenModel {
 			$db->commit();
 			return $maaltijden;
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}
