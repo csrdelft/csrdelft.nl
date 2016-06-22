@@ -61,6 +61,11 @@ class MededelingenModel extends PersistenceModel {
 		return $errors;
 	}
 
+	/**
+	 * @param $image
+	 * @param $mededeling Mededeling
+	 * @return string
+	 */
 	public function savePlaatje($image, $mededeling) {
 		$img_errors = '';
 		if ($image['error'] == UPLOAD_ERR_OK) {
@@ -69,7 +74,7 @@ class MededelingenModel extends PersistenceModel {
 				$img_errors .= 'Het is niet gelukt om de resolutie van het plaatje te bepalen.<br/>';
 			} else {
 				$image_name = $image['name'];
-				$image_path = PICS_PATH . 'mededelingen/' . $image_name;
+				$image_path = PICS_PATH . 'mededelingen/' . time() . '_' . $image_name;
 				if (move_uploaded_file($image['tmp_name'], $image_path) === false) {
 					$img_errors .= 'Plaatje verplaatsen is mislukt.<br/>';
 				} else {
