@@ -73,12 +73,17 @@ class MededelingenModel extends PersistenceModel {
 			if ($image_info[0] == 0 || $image_info[1] == 0) {
 				$img_errors .= 'Het is niet gelukt om de resolutie van het plaatje te bepalen.<br/>';
 			} else {
-				$image_name = $image['name'];
-				$image_path = PICS_PATH . 'mededelingen/' . time() . '_' . $image_name;
+				$image_extension = pathinfo($image['name'], PATHINFO_EXTENSION);
+				$image_path = PICS_PATH . 'mededelingen/' . substr(md5(time()), 0, 8) . '.' . $image_extension;
+				$i = 1;
+				while (file_exists($image_path)) {
+					// Vind een unieke hash
+					$image_path = PICS_PATH . 'mededelingen/' .substr(md5(time() + $i++), 0, 8) . '.' . $image_extension;
+				}
 				if (move_uploaded_file($image['tmp_name'], $image_path) === false) {
 					$img_errors .= 'Plaatje verplaatsen is mislukt.<br/>';
 				} else {
-					$mededeling->plaatje = $image_name;
+					$mededeling->plaatje = pathinfo($image_path, PATHINFO_BASENAME);
 					chmod($image_path, 0644);
 				}
 
