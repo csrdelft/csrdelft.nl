@@ -57,7 +57,7 @@
 			<img src="/plaetjes/mededeling/{$mededeling->plaatje|escape:'html'}" width="200px" height="200px" alt="Afbeelding" style="margin: 5px 0 15px 0;" /><br />
 			<strong>Vervangende afbeelding</strong><br />
 		{/if}
-		<input type="file" name="plaatje" size="40" /><br />
+		<input type="file" name="plaatje" /><br />
 		<span>(png, gif of jpg, 200x200 of groter in die verhouding)</span>
 	</div>
 	<div class="clear">
