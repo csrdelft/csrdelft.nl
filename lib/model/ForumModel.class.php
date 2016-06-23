@@ -130,6 +130,11 @@ class ForumDelenModel extends AbstractForumModel {
 	 */
 	protected $memcache_prefetch = true;
 
+	/**
+	 * @param $id
+	 * @return ForumDeel
+	 * @throws Exception
+	 */
 	public static function get($id) {
 		$deel = static::instance()->retrieveByPrimaryKey(array($id));
 		if (!$deel) {
@@ -210,7 +215,7 @@ class ForumDelenModel extends AbstractForumModel {
 	 * Laadt de posts die wachten op goedkeuring en de draadjes en forumdelen die erbij horen.
 	 * Check modrechten van gebruiker.
 	 * 
-	 * @return ForumDraden[]
+	 * @return ForumDraad[]
 	 */
 	public function getWachtOpGoedkeuring() {
 		$postsByDraadId = group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
@@ -249,7 +254,7 @@ class ForumDelenModel extends AbstractForumModel {
 	 * Zoek op titel van draadjes en tekst van posts en laad forumdelen die erbij horen.
 	 * Check leesrechten van gebruiker.
 	 * 
-	 * @return ForumDraden[]
+	 * @return ForumDraad[]
 	 */
 	public function zoeken($query, $titel, $datum, $ouder, $jaar, $limit) {
 		$gevonden_draden = group_by_distinct('draad_id', ForumDradenModel::instance()->zoeken($query, $datum, $ouder, $jaar, $limit)); // zoek op titel in draden
@@ -649,6 +654,11 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 		)
 	);
 
+	/**
+	 * @param $id
+	 * @return ForumDraad
+	 * @throws Exception
+	 */
 	public static function get($id) {
 		$draad = static::instance()->retrieveByPrimaryKey(array($id));
 		if (!$draad) {
@@ -934,6 +944,11 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	 */
 	private $aantal_wacht;
 
+	/**
+	 * @param $id
+	 * @return ForumPost
+	 * @throws Exception
+	 */
 	public static function get($id) {
 		$post = static::instance()->retrieveByPrimaryKey(array($id));
 		if (!$post) {
@@ -1187,7 +1202,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 		if ($draad->wacht_goedkeuring) {
 			$draad->wacht_goedkeuring = false;
 		}
-		$rowCount = ForumDradenModel::instance()->update($draad);
+		ForumDradenModel::instance()->update($draad);
 	}
 
 	public function citeerForumPost(ForumPost $post) {

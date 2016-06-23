@@ -70,7 +70,8 @@ class AccessModel extends CachedPersistenceModel {
 	 * 		de mensen die én in de NovCie zitten én in de MaalCie zitten
 	 * 		of mensen die in de NovCie zitten en lidnummer 1337 hebben
 	 * 		of mensen die in het bestuur zitten
-	 * 
+	 *
+	 * @return bool Of $subject $permission heeft.
 	 */
 	public static function mag(Account $subject, $permission, $allowPrivateUrl = false) {
 
@@ -137,10 +138,11 @@ class AccessModel extends CachedPersistenceModel {
 	/**
 	 * Stel rechten in voor een specifiek of gehele klasse van objecten.
 	 * Overschrijft bestaande rechten.
-	 * 
+	 *
 	 * @param string $environment
 	 * @param string $resource
 	 * @param array $acl
+	 * @return bool
 	 * @throws Exception
 	 */
 	public function setAcl($environment, $resource, array $acl) {

@@ -117,7 +117,7 @@ class DocCategorie {
 		return $this->naam;
 	}
 
-	public function getZichtbaaar() {
+	public function getZichtbaar() {
 		return $this->zichtbaar;
 	}
 
@@ -159,6 +159,9 @@ class DocCategorie {
 		return false;
 	}
 
+	/**
+	 * @return DocCategorie[]|false
+	 */
 	public static function getAll() {
 		$db = MijnSqli::instance();
 		$query = "

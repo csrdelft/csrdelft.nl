@@ -23,9 +23,10 @@ class MaaltijdRepetitiesModel {
 	/**
 	 * Filtert de repetities met het abonnement-filter van de maaltijd-repetitie op de permissies van het ingelogde lid.
 	 *
-	 * @param MaaltijdRepetitie[] $repetities
 	 * @param string $uid
 	 * @return MaaltijdRepetitie[]
+	 * @throws Exception
+	 * @internal param MaaltijdRepetitie[] $repetities
 	 */
 	public static function getAbonneerbareRepetitiesVoorLid($uid) {
 		$repetities = self::loadRepetities('abonneerbaar = true');
@@ -113,7 +114,7 @@ class MaaltijdRepetitiesModel {
 			$db->commit();
 			return array($repetitie, $abos);
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}
@@ -185,11 +186,9 @@ class MaaltijdRepetitiesModel {
 			$db->commit();
 			return $aantal;
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}
 
 }
-
-?>

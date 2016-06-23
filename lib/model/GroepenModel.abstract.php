@@ -181,7 +181,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 				self::$old->update($omnummering);
 			}
 		} catch (Exception $ex) {
-			setMelding('Omnummeren mislukt: ' . $e->getMessage(), -1);
+			setMelding('Omnummeren mislukt: ' . $ex->getMessage(), -1);
 			return false;
 		}
 		// leden verwijderen
@@ -192,14 +192,14 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 				$oldledenmodel->delete($oldlid);
 			}
 		} catch (Exception $ex) {
-			setMelding('Leden verwijderen mislukt: ' . $e->getMessage(), -1);
+			setMelding('Leden verwijderen mislukt: ' . $ex->getMessage(), -1);
 			return false;
 		}
 		// groep verwijderen
 		try {
 			$oldmodel->delete($oldgroep);
 		} catch (Exception $ex) {
-			setMelding('Groep verwijderen mislukt: ' . $e->getMessage(), -1);
+			setMelding('Groep verwijderen mislukt: ' . $ex->getMessage(), -1);
 			return false;
 		}
 		return $newgroep;

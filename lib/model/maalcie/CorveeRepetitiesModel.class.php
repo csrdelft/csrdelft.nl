@@ -38,9 +38,10 @@ class CorveeRepetitiesModel {
 
 	/**
 	 * Haalt de periodieke taken op die gekoppeld zijn aan een periodieke maaltijd.
-	 * 
+	 *
 	 * @param int $mrid
-	 * @return CorveeTaak[]
+	 * @return CorveeRepetitie[]
+	 * @throws Exception
 	 */
 	public static function getRepetitiesVoorMaaltijdRepetitie($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
@@ -107,7 +108,7 @@ class CorveeRepetitiesModel {
 			$db->commit();
 			return array($repetitie, $voorkeuren);
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}
@@ -184,9 +185,10 @@ class CorveeRepetitiesModel {
 
 	/**
 	 * Called when a MaaltijdRepetitie is going to be deleted.
-	 * 
+	 *
 	 * @param int $mrid
-	 * @return boolean
+	 * @return bool
+	 * @throws Exception
 	 */
 	public static function existMaaltijdRepetitieCorvee($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
@@ -204,9 +206,10 @@ class CorveeRepetitiesModel {
 
 	/**
 	 * Called when a CorveeFunctie is going to be deleted.
-	 * 
+	 *
 	 * @param int $fid
-	 * @return boolean
+	 * @return bool
+	 * @throws Exception
 	 */
 	public static function existFunctieRepetities($fid) {
 		if (!is_int($fid) || $fid <= 0) {

@@ -92,9 +92,10 @@ class ProfielModel extends CachedPersistenceModel {
 
 	/**
 	 * Sla huidige objectstatus op in LDAP.
-	 * 
+	 *
+	 * @param Profiel $profiel
 	 * @param LDAP $ldap persistent connection
-	 * @return boolean success
+	 * @return bool success
 	 */
 	public function save_ldap(Profiel $profiel, LDAP $ldap = null) {
 		$success = true;

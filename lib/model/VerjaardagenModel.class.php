@@ -53,7 +53,7 @@ class VerjaardagenModel {
 			ORDER BY verjaardag ASC, lidjaar, gebdatum, achternaam
 			LIMIT " . (int) $aantal;
 
-		$leden = MijnSqli::instance()->query2array($query);
+		$leden = $db->query2array($query);
 
 		$return = array();
 		if (is_array($leden)) {

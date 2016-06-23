@@ -28,7 +28,13 @@ class CorveeVrijstellingenModel {
 		}
 		return $vrijstellingen[0];
 	}
-	
+
+	/**
+	 * @param null $where
+	 * @param array $values
+	 * @param null $limit
+	 * @return CorveeVrijstelling[]
+	 */
 	private static function loadVrijstellingen($where=null, $values=array(), $limit=null) {
 		$sql = 'SELECT uid, begin_datum, eind_datum, percentage';
 		$sql.= ' FROM crv_vrijstellingen';
@@ -64,7 +70,7 @@ class CorveeVrijstellingenModel {
 			return $vrijstelling;
 		}
 		catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}

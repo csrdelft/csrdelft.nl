@@ -15,7 +15,7 @@ abstract class Controller {
 
 	/**
 	 * Data model
-	 * @var mixed
+	 * @var PersistenceModel
 	 */
 	protected $model;
 	/**

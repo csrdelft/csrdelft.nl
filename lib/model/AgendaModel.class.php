@@ -25,6 +25,14 @@ class AgendaModel extends PersistenceModel {
 	 */
 	protected $default_order = 'begin_moment ASC, titel ASC';
 
+	/**
+	 * @param $van
+	 * @param $tot
+	 * @param bool $ical
+	 * @param bool $zijbalk
+	 * @return Agendeerbaar[]
+	 * @throws Exception
+	 */
 	public function getAllAgendeerbaar($van, $tot, $ical = false, $zijbalk = false) {
 		$result = array();
 
@@ -93,6 +101,9 @@ class AgendaModel extends PersistenceModel {
 
 	/**
 	 * Vergelijkt twee Agendeerbaars op beginMoment t.b.v. sorteren.
+	 * @param Agendeerbaar $foo
+	 * @param Agendeerbaar $bar
+	 * @return int
 	 */
 	public static function vergelijkAgendeerbaars(Agendeerbaar $foo, Agendeerbaar $bar) {
 		$a = $foo->getBeginMoment();
@@ -168,7 +179,7 @@ class AgendaModel extends PersistenceModel {
 		$items = $this->getAllAgendeerbaar($startMoment, $eindMoment);
 		foreach ($items as $item) {
 			$begin = $item->getBeginMoment();
-			$eind = $item->getEindmoment();
+			$eind = $item->getEindMoment();
 			// Plaats in dag(en)
 			for ($cur = $begin; $cur <= $eind; $cur += 86400) {
 				$week = getWeekNumber($cur);
@@ -186,6 +197,8 @@ class AgendaModel extends PersistenceModel {
 	/**
 	 * Zoek in de activiteiten (titel en beschrijving) van vandaag
 	 * naar het woord $woord, geef de eerste terug.
+	 * @param $woord string
+	 * @return mixed|null
 	 */
 	public function zoekWoordAgenda($woord) {
 		foreach ($this->getItemsByDay(date('Y'), date('m'), date('d')) as $item) {

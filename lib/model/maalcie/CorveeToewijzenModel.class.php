@@ -15,9 +15,10 @@ class CorveeToewijzenModel {
 	 * Bepaald de suggesties voor het toewijzen van een corveetaak.
 	 * Als er een kwalificatie benodigd is worden alleen de
 	 * gekwalificeerde leden teruggegeven.
-	 * 
+	 *
 	 * @param CorveeTaak $taak
-	 * @return type
+	 * @return array
+	 * @throws Exception
 	 */
 	public static function getSuggesties(CorveeTaak $taak) {
 		$vrijstellingen = CorveeVrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid

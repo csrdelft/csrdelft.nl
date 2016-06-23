@@ -66,8 +66,13 @@ class MaaltijdAbonnementenModel {
 
 	/**
 	 * Bouwt matrix voor alle repetities en abonnementen van alle leden
-	 * 
-	 * @return MaaltijdAbonnement[uid][mrid]
+	 *
+	 * @param bool $alleenNovieten
+	 * @param bool $alleenWaarschuwingen
+	 * @param null $ingeschakeld
+	 * @param null $voorLid
+	 * @return MaaltijdAbonnement [uid][mrid]
+	 * @throws Exception
 	 */
 	public static function getAbonnementenMatrix($alleenNovieten = false, $alleenWaarschuwingen = false, $ingeschakeld = null, $voorLid = null) {
 		$repById = MaaltijdRepetitiesModel::getAlleRepetities(true); // grouped by mrid
@@ -202,10 +207,11 @@ class MaaltijdAbonnementenModel {
 	 * Slaat nieuwe abonnement(en) op voor de opgegeven maaltijd-repetitie
 	 * voor een specifiek lid of alle novieten (als $uid=null).
 	 * En meld het lid / de novieten aan voor de komende repetitie-maaltijden.
-	 * 
+	 *
 	 * @param int $mrid
 	 * @param String $uid
-	 * @return MaaltijdAbonnement OR aantal nieuwe abonnementen novieten
+	 * @return MaaltijdAbonnement[]|int OR aantal nieuwe abonnementen novieten
+	 * @throws Exception
 	 */
 	private static function newAbonnement($mrid, $uid = null) {
 		$db = \Database::instance();
@@ -251,7 +257,7 @@ class MaaltijdAbonnementenModel {
 				return array(new MaaltijdAbonnement($mrid, $uid, $wanneer), $aantal);
 			}
 		} catch (\Exception $e) {
-			$db->rollback();
+			$db->rollBack();
 			throw $e; // rethrow to controller
 		}
 	}
@@ -270,8 +276,10 @@ class MaaltijdAbonnementenModel {
 	 * Called when a MaaltijdRepetitie is being deleted.
 	 * This is only possible after all MaaltijdAanmeldingen are deleted of this MaaltijdAbonnement,
 	 * by deleting the Maaltijden (db foreign key door_abonnement)
-	 * 
+	 *
+	 * @param $mrid
 	 * @return int amount of deleted abos
+	 * @throws Exception
 	 */
 	public static function verwijderAbonnementen($mrid) {
 		if (!is_int($mrid) || $mrid < 0) {
