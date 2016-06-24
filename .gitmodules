@@ -1,3 +1,6 @@
 [submodule "htdocs/beaufort"]
 	path = htdocs/beaufort
 	url = git@github.com:csrdelft/beaufort.git
+[submodule "htdocs/ccd"]
+	path = htdocs/ccd
+	url = git@github.com:csrdelft/ccd.git
