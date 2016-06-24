@@ -4,3 +4,6 @@
 [submodule "htdocs/ccd"]
 	path = htdocs/ccd
 	url = git@github.com:csrdelft/ccd.git
+[submodule "htdocs/bakeliet"]
+	path = htdocs/bakeliet
+	url = git@github.com:csrdelft/bakeliet.git
