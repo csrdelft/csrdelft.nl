@@ -1,0 +1,3 @@
+[submodule "htdocs/beaufort"]
+	path = htdocs/beaufort
+	url = git@github.com:csrdelft/beaufort.git
