@@ -141,6 +141,7 @@ input[type="radio"] {
   opacity: 0;
   width: 1em;
   z-index: -1;
+
   & + label {
     text-decoration: none;
     color: #ffffff;
@@ -174,15 +175,16 @@ input[type="radio"] {
       top: 0;
       width: 1.65em;
     }
-    &:checked + label:before {
-      background: #ffffff;
-      border-color: #ffffff;
-      content: '\f00c';
-      color: #2e3141;
-    }
-    &:focus + label:before {
-      border-color: #4c5c96;
-    }
+  }
+
+  &:checked + label:before {
+    background: #ffffff;
+    border-color: #ffffff;
+    content: '\f00c';
+    color: #2e3141;
+  }
+  &:focus + label:before {
+    border-color: #4c5c96;
   }
 }
 
