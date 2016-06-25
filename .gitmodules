@@ -7,3 +7,6 @@
 [submodule "htdocs/bakeliet"]
 	path = htdocs/bakeliet
 	url = git@github.com:csrdelft/bakeliet.git
+[submodule "htdocs/dies/2013"]
+	path = htdocs/dies/2013
+	url = git@github.com:csrdelft/dies2013.git
