@@ -16,3 +16,6 @@
 [submodule "htdocs/dies/2016"]
 	path = htdocs/dies/2016
 	url = git@github.com:csrdelft/dies2016.git
+[submodule "htdocs/lustrum"]
+	path = htdocs/lustrum
+	url = git@github.com:csrdelft/lustrum.git
