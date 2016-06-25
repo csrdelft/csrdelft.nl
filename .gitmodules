@@ -1,0 +1,21 @@
+[submodule "htdocs/beaufort"]
+	path = htdocs/beaufort
+	url = git@github.com:csrdelft/beaufort.git
+[submodule "htdocs/ccd"]
+	path = htdocs/ccd
+	url = git@github.com:csrdelft/ccd.git
+[submodule "htdocs/bakeliet"]
+	path = htdocs/bakeliet
+	url = git@github.com:csrdelft/bakeliet.git
+[submodule "htdocs/dies/2013"]
+	path = htdocs/dies/2013
+	url = git@github.com:csrdelft/dies2013.git
+[submodule "htdocs/dies/2015"]
+	path = htdocs/dies/2015
+	url = git@github.com:csrdelft/dies2015.git
+[submodule "htdocs/dies/2016"]
+	path = htdocs/dies/2016
+	url = git@github.com:csrdelft/dies2016.git
+[submodule "htdocs/lustrum"]
+	path = htdocs/lustrum
+	url = git@github.com:csrdelft/lustrum.git
