@@ -1,38 +1,39 @@
-<div class="bb-block bb-peiling" id="peiling{$peiling->getId()}">
+<div class="bb-block bb-peiling" id="peiling{$peiling->id}">
 	{if $beheer AND $peiling->magBewerken()}
-		<a href="/tools/peilingbeheer.php?action=verwijder&amp;id={$peiling->getId()}" class="btn beheer" >Verwijder</a>
+		<a href="/tools/peilingbeheer.php?action=verwijder&amp;id={$peiling->id}" class="btn beheer" >Verwijder</a>
 	{/if}
 	{if $peiling->getStemmenAantal() > 0}
-		<div class="totaal">({$peiling->getStemmenAantal()} stem{if $peiling->getStemmenAantal()!=1}men{/if})</div>
+		<span class="totaal">({$peiling->getStemmenAantal()} stem{if $peiling->getStemmenAantal()!=1}men{/if})</span>
 	{/if}
 	<h3>
-		{if $peiling->magBewerken()}<a href="/tools/peilingbeheer.php">#{$peiling->getId()} {/if}
-			{$peiling->getTitel()|escape:'html'}
-			{if $peiling->magBewerken()}</a>{/if}
+		{if $peiling->magBewerken()}<a href="/tools/peilingbeheer.php">#{$peiling->id}{/if}
+			{$peiling->titel|escape:'html'}
+		{if $peiling->magBewerken()}</a>{/if}
 	</h3>
-	<div class="vraag">{$peiling->getTekst()}</div>
+	<div class="vraag">{$peiling->tekst}</div>
 	{if $peiling->magStemmen()}
-		<form id="peilingForm{$peiling->getId()}" action="/tools/peilingbeheer.php?action=stem" method="post">
-			<input type="hidden" name="id" value="{$peiling->getId()}"/>
+		<form id="peilingForm{$peiling->id}" action="/peilingen/stem" method="post">
+			<input type="hidden" name="id" value="{$peiling->id}"/>
 	{/if}
 			<ul class="peilingopties">
 				{foreach from=$peiling->getOpties() item=optie}
+					{assign var="percentage" value=$optie->stemmen/$peiling->getStemmenAantal()*100}
 					<li>
 						{if $peiling->magStemmen()}
-							<input type="radio" name="optie" value="{$optie.id}" id="optie{$optie.id}" />
-							<label for="optie{$optie.id}" id="label{$optie.id}">{$optie.optie}</label>
+							<input type="radio" name="optie" value="{$optie->id}" id="optie{$optie->id}" />
+							<label for="optie{$optie->id}" id="label{$optie->id}">{$optie->optie}</label>
 						{else}
-							<div class="optie">{$optie.optie}</div>
-							<div class="stemmen">({$optie.stemmen})</div>
-							<div class="percentage">{$optie.percentage|string_format:'%01.1f'}%</div>
-							<div class="grafisch"><div class="balk" style="width: {$optie.percentage|string_format:'%d'}%;">&nbsp;</div></div>
+							<div class="optie">{$optie->optie}</div>
+							<div class="stemmen">({$optie->stemmen})</div>
+							<div class="percentage">{$percentage|string_format:'%01.1f'}%</div>
+							<div class="grafisch"><div class="balk" style="width: {$percentage|string_format:'%d'}%;">&nbsp;</div></div>
 						{/if}
 					</li>
 				{/foreach}
 			</ul>
 			<br /><br />
 	{if $peiling->magStemmen()}
-			<input type="button" value="Stem" onclick="peiling_bevestig_stem('#peilingForm{$peiling->getId()}');" />
+			<input type="button" value="Stem" onclick="peiling_bevestig_stem('#peilingForm{$peiling->id}');" />
 		</form>
 	{/if}
 </div>
