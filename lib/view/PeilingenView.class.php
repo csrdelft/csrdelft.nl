@@ -24,7 +24,11 @@ class PeilingenBeheerView implements View {
 
 	private $pijlingen;
 
-	public function __construct(array $pijlingen) {
+	/**
+	 * PeilingenBeheerView constructor.
+	 * @param $pijlingen Peiling[]
+	 */
+	public function __construct($pijlingen) {
 		$this->pijlingen = $pijlingen;
 	}
 
@@ -43,7 +47,7 @@ class PeilingenBeheerView implements View {
 	public function getHtml() {
 		$lijst = '<h3>Peilingen:</h3>';
 		foreach ($this->pijlingen as $peiling) {
-			$pcontent = new PeilingView(new PeilingenModel($peiling['id']));
+			$pcontent = new PeilingView($peiling);
 			$lijst.=$pcontent->getHtml($beheer = true);
 		}
 		$html = '
