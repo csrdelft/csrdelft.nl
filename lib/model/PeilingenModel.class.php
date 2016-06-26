@@ -15,6 +15,18 @@ class PeilingenModel extends PersistenceModel
 {
 	const orm = 'Peiling';
 	protected static $instance;
+
+	public function update(PersistentEntity $entity) {
+		foreach ($entity->getOpties() as $optie) {
+			PeilingOptiesModel::instance()->update($optie);
+		}
+
+		return parent::update($entity);
+	}
+
+	public function get($id) {
+		return $this->retrieveByPrimaryKey(array($id));
+	}
 }
 
 class PeilingOptiesModel extends PersistenceModel
