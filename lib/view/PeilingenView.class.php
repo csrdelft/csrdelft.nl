@@ -3,19 +3,23 @@
 require_once 'model/PeilingenModel.class.php';
 
 class PeilingView extends SmartyTemplateView {
+	private $beheer;
 
-	function PeilingView(Peiling $peiling) {
+	function PeilingView(Peiling $peiling, $beheer = false) {
 		parent::__construct($peiling);
+		$this->beheer = $beheer;
 	}
 
-	public function getHtml($beheer = false) {
+	public function getHtml() {
 		$this->smarty->assign('peiling', $this->model);
-		$this->smarty->assign('beheer', $beheer);
+		$this->smarty->assign('beheer', $this->beheer);
 		return $this->smarty->fetch('peiling/peiling.bb.tpl');
 	}
 
 	public function view() {
-		echo $this->getHtml();
+		$this->smarty->assign('peiling', $this->model);
+		$this->smarty->assign('beheer', $this->beheer);
+		$this->smarty->display('peiling/peiling.bb.tpl');
 	}
 
 }

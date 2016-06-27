@@ -1,6 +1,6 @@
 <div class="bb-block bb-peiling" id="peiling{$peiling->id}">
 	{if $beheer AND $peiling->magBewerken()}
-		<a href="/tools/peilingbeheer.php?action=verwijder&amp;id={$peiling->id}" class="btn beheer" >Verwijder</a>
+		<a href="/peilingen/verwijderen/{$peiling->id}" class="btn beheer" >Verwijder</a>
 	{/if}
 	{if $peiling->getStemmenAantal() > 0}
 		<span class="totaal">({$peiling->getStemmenAantal()} stem{if $peiling->getStemmenAantal()!=1}men{/if})</span>
@@ -17,12 +17,12 @@
 	{/if}
 			<ul class="peilingopties">
 				{foreach from=$peiling->getOpties() item=optie}
-					{assign var="percentage" value=$optie->stemmen/$peiling->getStemmenAantal()*100}
 					<li>
 						{if $peiling->magStemmen()}
 							<input type="radio" name="optie" value="{$optie->id}" id="optie{$optie->id}" />
 							<label for="optie{$optie->id}" id="label{$optie->id}">{$optie->optie}</label>
 						{else}
+							{assign var="percentage" value=$optie->stemmen/$peiling->getStemmenAantal()*100}
 							<div class="optie">{$optie->optie}</div>
 							<div class="stemmen">({$optie->stemmen})</div>
 							<div class="percentage">{$percentage|string_format:'%01.1f'}%</div>
