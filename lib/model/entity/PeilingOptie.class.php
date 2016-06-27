@@ -11,6 +11,12 @@ class PeilingOptie extends PersistentEntity {
     public $stemmen;
     public $percentage = 0;
 
+    public static function init($optie) {
+        $peilingoptie = new PeilingOptie();
+        $peilingoptie->optie = $optie;
+        return $peilingoptie;
+    }
+
     protected static $table_name = 'peilingoptie';
     protected static $primary_key = array('id');
     protected static $persistent_attributes = array(
