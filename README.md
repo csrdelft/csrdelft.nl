@@ -1,3 +1,5 @@
+[![Dependency Status](https://www.versioneye.com/user/projects/5774370f99ed29003b2812ba/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5774370f99ed29003b2812ba)
+
 # csrdelft.nl stek
 
 ## Plaetjes
