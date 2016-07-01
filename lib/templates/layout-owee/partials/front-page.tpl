@@ -39,10 +39,9 @@
                         deze groepen en dus ook C.S.R. zullen zichzelf tijdens deze week op verschillende momenten en
                         manieren presenteren.</p>
                     <a href="images/Programmaposter.jpg" class="special">Bekijk het programma</a>
-                    <h3>Interesseavond 23 juni</h3>
-                    <p>Op deze avond krijg je de mogelijkheid om alvast een kijkje te nemen bij C.S.R. Een mooie gelegenheid
-                        om wat leden te spreken en de sfeer te proeven! Om 18:30 is er een maaltijd en vanaf 20:30 is er een
-                        borrel op onze Sociëteit. </p>
+                    <div class="video">
+                        <iframe src="https://www.youtube.com/embed/3YOMos8tPu0" frameborder="0" allowfullscreen></iframe>
+                    </div>
                 </div>
             </div>
         </section>
