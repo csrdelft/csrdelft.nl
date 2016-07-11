@@ -1,5 +1,0 @@
-인터넷은 더 이상 예전과 같은 공간이 아닙니다. 언제든지 Spam 등으로 오염될 수 있습니다. 블로그나 메일 등의 Spam과 마찬가지로 위키도 Spam 의 대상이 됩니다. (페이지 참조: [[meatball>WikiSpam]]) 만약 [[doku>DokuWiki]] 을 인트라넷에서만 사용한다면 문제가 되지 않습니다. 인터넷 상에 공개하려고 하는 경우에, 알려진 Spam 단어를 "차단 목록"에 등록할 수 있습니다.
-
-"단어 차단 목록"을 사용하기 위해서는 ''conf/local.php'' 파일의 ''$conf['usewordblock'] = 1;'' 옵션을 활성화해야 합니다. 기본값은 1로 되어 있습니다. ''conf/wordblock.local.conf''에 차단할 단어 목록을 입력할 수 있고, ''conf/wordblock.conf''에서 기본적으로 설정된 차단 단어 목록을 볼 수 있습니다.  Perl 언어의 정규표현식과 호환되는 [[wp>Regular Expressions]] 도 지원합니다.
-
-더 자세한 내용은 [[doku>blacklist]]을 참조하세요.

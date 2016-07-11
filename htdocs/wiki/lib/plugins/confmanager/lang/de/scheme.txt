@@ -1,4 +1,0 @@
-DokuWiki ermöglicht es, auf externe URLs zu verweisen, jedoch nur bei bekannten Protokollen.
-[[doku>urlschema|Weitere Informationen zur URL]].
-
-Die folgenden Protokolle sind derzeit aktiviert:

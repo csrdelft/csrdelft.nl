@@ -1,3 +1,0 @@
-author=Andreas Neuhold <office [at] hd-recording [dot] at>
-url=
-description=

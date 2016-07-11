@@ -1,5 +1,0 @@
-Het internet is niet beter dan iets anders. Al het goede raakt bedorven en zo is het ook met Wiki's. [[meatball>WikiSpam]], zoals Spam in blogs en email nemen toe. Als je [[doku>DokuWiki]] in je Intranet gebruikt is dit geen probleem voor jou, maar als je van plan bent het op het open internet te plaatsen wil je sommige bekende Spamwoorden blacklisten.
-
-Om een blacklist in DokuWiki te gebruiken moet je de configuratieoptie [[doku>config:usewordblock]] inschakelen (standaard aan) en bewerk het ''conf/wordblock.local.conf''-bestand. Je kunt een blik werpen in het bestand'' conf/wordblock.conf'' voor een lijst met bestaande geblokkeerde woorden. Het bestand bevat [[wp>Regular Expressions]] (Perl compatibel) als een van deze overeenkomt is opslaan niet mogelijk.
-
-Meer informatie kan worden gevonden op [[doku>nl:blacklist]].

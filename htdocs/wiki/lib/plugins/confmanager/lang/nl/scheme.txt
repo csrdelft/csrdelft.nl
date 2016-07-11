@@ -1,3 +1,0 @@
-DokuWiki staat het toe om te verwijzen naar externe URLs maar alleen voor bekende protocollen. [[doku>nl:urlschemes|Meer informatie over URL schema's]].
-
-De volgende protocollen zijn op dit moment toegestaan:

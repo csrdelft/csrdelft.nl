@@ -1,7 +1,0 @@
-base   csrgroepgeschiedenis
-author Gerrit Uitslag
-email  klapinklapin@gmail.com
-date   2012-05-01
-name   csrgroepgeschiedenis plugin
-desc   Lists groups from C.S.R.-site with same short name
-url    http://trac.knorrie.org/csrdelft.nl/browser/trunk/htdocs/wiki/lib/plugins/csrgroepgeschiedenis

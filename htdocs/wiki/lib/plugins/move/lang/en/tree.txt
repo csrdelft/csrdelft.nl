@@ -1,3 +1,0 @@
-====== Move Manager =====
-
-This interface allows you to rearrange your wiki's namespaces, pages and media files via Drag'n'Drop.

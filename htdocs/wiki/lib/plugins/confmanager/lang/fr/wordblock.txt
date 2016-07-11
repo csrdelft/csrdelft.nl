@@ -1,7 +1,0 @@
-Internet n'est plus le lieu qu'il a été. Toute bonne chose est corrompue, et il en va de même pour les wikis. Le [[meatball>WikiSpam]], comme le [[wpfr>spam]] dans les blogs et courriels est en augmentation. Si vous utilisez [[doku>fr:dokuwiki|DokuWiki]] sur votre intranet, alors il n'y a aucun problème. Mais si vous voulez l'utiliser sur l'internet ouvert, vous pourriez vouloir bannir certains mots de spam connus.
-
-Ce mécanisme empêche l'enregistrement de pages contenant un mot placé en liste noire.
-
-Pour utiliser une liste noire dans DokuWiki, activez l'option ''$conf['usewordblock'] = 1;'' dans le fichier ''conf/local.php'' (par défaut cette option est activée puisque réglée sur 1) et éditez le fichier ''conf/wordblock.local.conf''. Vous pouvez voir la liste des termes bannis par défaut dans le fichier ''conf/wordblock.conf''. Le fichier contient des [[wpfr>Expression_rationnelle|expressions régulières]] (compatible perl -- PCRE). Si l'une d'elles correspond, l'enregistrement d'une page esr refusé.
-
-Pour de plus amples informations, voir [[doku>fr:blacklist]]

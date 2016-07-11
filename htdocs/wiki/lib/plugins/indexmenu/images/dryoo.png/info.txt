@@ -1,2 +1,0 @@
-author=Kudesnick <kudesnick [at] gmail [dot] com>
-url=http://kudesnick.blogspot.com

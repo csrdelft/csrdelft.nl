@@ -1,7 +1,0 @@
-base   csrlink
-author Gerrit Uitslag
-email  klapinklapin@gmail.com
-date   2014-01-30
-name   csrlink plugin (modified unblink)
-desc   Verwijzen van lid, boek, groep en document op csrdelft.nl, inclusief toolbarinsertwizard.
-url    http://trac.knorrie.org/csrdelft.nl/

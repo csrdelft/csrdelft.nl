@@ -1,7 +1,0 @@
-base   docnavigation
-author Gerrit Uitslag
-email  klapinklapin@gmail.com
-date   2014-12-27
-name   DocNavigation plugin
-desc   Add navigation for documentation
-url    https://www.dokuwiki.org/plugin:docnavigation

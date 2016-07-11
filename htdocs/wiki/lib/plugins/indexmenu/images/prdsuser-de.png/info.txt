@@ -1,3 +1,0 @@
-author=LinuxFanatic <linuxfanatic [at] gmx [dot] net>
-url=www.pardususer.de/dokuwiki
-description=This is a combination of Silk and Tulliana icons for our Wiki.

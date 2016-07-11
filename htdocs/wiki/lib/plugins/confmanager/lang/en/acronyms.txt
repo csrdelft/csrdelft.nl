@@ -1,5 +1,0 @@
-[[doku>DokuWiki]] can mark abbreviations and acronyms (terminology) automatically. If your browser supports the <acronym> tag, you can hover your mouse on an abbreviation to see a short explanation, shown as a tooltip. For example, if the mouse is positioned over ''CMS'' (which is included in the default acronyms list), the tooltip displays ''Content Management System''.
-
-Note: only full words will be marked. Eg. an acronym that is used within a word will not result in a acronym tooltip. Example: CMS is an acronym, myCMS is not.
-
-More information can be found at [[doku>abbreviations]].

@@ -1,5 +1,0 @@
-
-DokuWiki 允许链接到外部 URL，但只允许已知的协议。
-[[doku>urlschemes|URL 模式的更多信息]]。
-
-目前启用了以下协议：

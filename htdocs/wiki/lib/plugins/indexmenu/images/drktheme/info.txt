@@ -1,3 +1,0 @@
-author=Marco Laner <marco [at] laner [dot] org>
-url=http://brk-test.oc-tuning.de/
-description=Marco Laner <marco@laner.org>

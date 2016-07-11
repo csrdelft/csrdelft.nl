@@ -1,7 +1,0 @@
-base   imagereference
-author Gerrit Uitslag (previous: Martin Heinemann)
-email  klapinklapin@gmail.com, info@martinheinemann.net
-date   2014-06-18
-name   imagereference plugin
-desc   Creates references to images/tables in your text, like the LaTeX figure references.
-url    https://www.dokuwiki.org/plugin:imagereference

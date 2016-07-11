@@ -1,5 +1,0 @@
-[[doku>DokuWiki]] kann Abkürzungen und Akronyme automatisch markieren. Wenn dein Browser den <acronym>-Tag unterstützt, siehst du einen kleinen Tooltip, wenn du mit der Maus über die Abkürzung fährst. Wenn sich die Maus z.B. über der Abkürzung "CMS" (in der Standard-Liste der Akronyme bereits aufgeführt) befindet, zeigt der Tooltip "Content Management System" an.
-
-Anmerkung: Nur ganze Wörter werden markiert. Ein Akronym das z.B. innerhalb eines anderen Wortes geschrieben ist, wird nicht erkannt. Beispiel: CMS funktioniert, myCMS nicht.
-
-Weitere Informationen können unter [[doku>abbreviations]] gefunden werden. 

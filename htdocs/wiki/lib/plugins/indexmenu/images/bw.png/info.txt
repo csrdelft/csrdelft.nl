@@ -1,2 +1,0 @@
-author=Dric
-description=Black and White PNG icons.

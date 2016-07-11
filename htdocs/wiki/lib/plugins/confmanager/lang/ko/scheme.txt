@@ -1,3 +1,0 @@
-DokuWiki는 알려진 protocol에 한하여, 외부 URL을 링크하는 것을 허용합니다. [[doku>urlschemes|URL 형식에 대해 알아보기]].
-
-현재 활성화된 protocol 입니다:

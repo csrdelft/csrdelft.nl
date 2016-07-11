@@ -1,8 +1,0 @@
-base   xhtmlniceurltitles
-author Gerrit Uitslag
-email  klapinklapin@gmail.com
-date   2014-10-09
-name   XHTML Renderer with Nice url titles
-desc   As the default XHTML Renderer, but with Nice url titles
-url    https://trac.knorrie.org/csrdelft.nl/browser/trunk/htdocs/wiki/lib/plugins/xhtmlniceurltitles
-

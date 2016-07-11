@@ -1,3 +1,0 @@
-author=Katharina Kainz <kk [at] pccaddie [dot] com>
-url=http://online.pccaddie.com/
-description=Katharina Kainz <kk@pccaddie.com>
