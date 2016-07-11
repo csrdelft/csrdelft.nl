@@ -19,3 +19,6 @@
 [submodule "htdocs/lustrum"]
 	path = htdocs/lustrum
 	url = https://github.com/csrdelft/lustrum.git
+[submodule "htdocs/wiki"]
+	path = htdocs/wiki
+	url = https://github.com/csrdelft/wiki.git
