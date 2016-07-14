@@ -57,7 +57,7 @@ class PeilingenController extends AclController
             }
         }
 
-        return new PeilingenBeheerView($this->model, $peiling);
+        return new PeilingenBeheerView($this->model->lijst(), $peiling);
     }
 
     public function verwijderen($id) {

@@ -24,20 +24,21 @@ class PeilingView extends SmartyTemplateView {
 
 }
 
-class PeilingenBeheerView implements View {
+class PeilingenBeheerView extends SmartyTemplateView {
 
-	private $pijlingen;
+	private $peiling;
 
 	/**
 	 * PeilingenBeheerView constructor.
-	 * @param $pijlingen Peiling[]
+	 * @param $model Peiling[]
 	 */
-	public function __construct($pijlingen) {
-		$this->pijlingen = $pijlingen;
+	public function __construct($model, $peiling) {
+		parent::__construct($model);
+		$this->peiling = $peiling;
 	}
 
 	public function getModel() {
-		return $this->pijlingen;
+		return $this->peiling;
 	}
 
 	public function getBreadcrumbs() {
@@ -50,7 +51,7 @@ class PeilingenBeheerView implements View {
 
 	public function getHtml() {
 		$lijst = '<h3>Peilingen:</h3>';
-		foreach ($this->pijlingen as $peiling) {
+		foreach ($this->model as $peiling) {
 			$pcontent = new PeilingView($peiling);
 			$lijst.=$pcontent->getHtml($beheer = true);
 		}

@@ -76,6 +76,10 @@ class PeilingenModel extends PersistenceModel
 	public function get($id) {
 		return $this->retrieveByPrimaryKey(array($id));
 	}
+
+	public function lijst() {
+		return $this->find(null, array(), null, 'id DESC');
+	}
 }
 
 class PeilingOptiesModel extends PersistenceModel
