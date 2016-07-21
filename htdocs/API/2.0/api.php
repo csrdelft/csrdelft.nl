@@ -4,14 +4,18 @@ use Firebase\JWT\JWT;
 
 require_once 'configuratie.include.php';
 
+// Handle preflight requests for local development CORS
+if (DEBUG === true && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+	if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']) && ($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'] === 'GET' || $_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'] === 'POST')) {
+		header('Access-Control-Allow-Origin: *');
+		header('Access-Control-Allow-Headers: X-CSR-Authorization');
+	}
+	exit;
+}
+
 // Get the authorization http header
 $headers = apache_request_headers();
-$authHeader = $headers['Authorization'];
-
-if (!authHeader) {
-    // Use deprecated auth header
-    $authHeader = $headers['X-Csr-Authorization'];
-}
+$authHeader = $headers['X-Csr-Authorization'];
 
 if ($authHeader) {
 
