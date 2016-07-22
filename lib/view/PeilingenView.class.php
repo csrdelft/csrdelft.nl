@@ -10,6 +10,11 @@ class PeilingView extends SmartyTemplateView {
 		$this->beheer = $beheer;
 	}
 
+    /**
+     * Wordt gebruikt door de CsrBB parser
+     *
+     * @return string HTML van de peiling
+     */
 	public function getHtml() {
 		$this->smarty->assign('peiling', $this->model);
 		$this->smarty->assign('beheer', $this->beheer);
@@ -17,9 +22,7 @@ class PeilingView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('peiling', $this->model);
-		$this->smarty->assign('beheer', $this->beheer);
-		$this->smarty->display('peiling/peiling.bb.tpl');
+	    echo $this->getHtml();
 	}
 
 }
