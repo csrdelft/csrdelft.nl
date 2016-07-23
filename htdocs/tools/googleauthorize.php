@@ -5,12 +5,12 @@ $google_redirect_uri = CSR_ROOT . '/googlecallback';
 
 //setup new google client
 $client = new Google_Client();
-$client -> setApplicationName('Stek');
-$client -> setClientId(GOOGLE_CLIENT_ID);
-$client -> setClientSecret(GOOGLE_CLIENT_SECRET);
-$client -> setRedirectUri($google_redirect_uri);
-$client -> setAccessType('offline');
-$client -> setScopes('https://www.google.com/m8/feeds');
+$client->setApplicationName('Stek');
+$client->setClientId(GOOGLE_CLIENT_ID);
+$client->setClientSecret(GOOGLE_CLIENT_SECRET);
+$client->setRedirectUri($google_redirect_uri);
+$client->setAccessType('offline');
+$client->setScopes('https://www.google.com/m8/feeds');
 
 $googleImportUrl = $client->createAuthUrl();
 
