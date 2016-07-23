@@ -27,8 +27,7 @@ class PeilingenController extends AclController
         if ($this->action == 'verwijderen') {
             $args = $this->getParams(3);
         }
-        $body = parent::performAction($args);
-        $this->view = new CsrLayoutPage($body);
+        $this->view = parent::performAction($args);
     }
 
     public function beheer()
@@ -57,7 +56,10 @@ class PeilingenController extends AclController
             }
         }
 
-        return new PeilingenBeheerView($this->model->lijst(), $peiling);
+        $view = new CsrLayoutPage(new PeilingenBeheerView($this->model->lijst(), $peiling));
+        $view->addCompressedResources('peilingbeheer');
+
+        return $view;
     }
 
     public function verwijderen($id) {
