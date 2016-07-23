@@ -53,7 +53,7 @@ class PeilingenModel extends PersistenceModel
 	public function stem($peilingid, $optieid) {
 	    $peiling = $this->find('id = ?', array($peilingid))->fetch();
         if ($peiling->magStemmen()) {
-            $optie = PeilingOptiesModel::instance()->find('peilingid = ? AND id = ?', array($peilingid, $optieid));
+            $optie = PeilingOptiesModel::instance()->find('peilingid = ? AND id = ?', array($peilingid, $optieid))->fetch();
             $optie->stemmen += 1;
 
             $stem = new PeilingStem();
