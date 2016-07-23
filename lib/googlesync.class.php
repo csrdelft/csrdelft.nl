@@ -670,9 +670,13 @@ class GoogleSync {
 		return isset($_SESSION['google_token']);
 	}
 
-	/**
-	 * Vraag een Authsub-token aan bij google, plaats bij ontvangen in _SESSION['google_token'].
-	 */
+    /**
+     * Vraag een Authsub-token aan bij google, plaats bij ontvangen in _SESSION['google_token'].
+     *
+     * @param $state string, moet de url bevatten waar naar geredirect moet worden als
+     * de authenticatie gelukt is, de url zonder `addToGoogleContacts` wordt gebruikt als
+     * de authenticatie mislukt.
+     */
 	public static function doRequestToken($state) {
         $redirect_uri = CSR_ROOT . '/googlecallback';
         $client = new Google_Client();

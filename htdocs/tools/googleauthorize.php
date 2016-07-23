@@ -25,6 +25,7 @@ if (isset($_GET['code'])) {
 
 if (isset($_GET['error'])) {
     setMelding("Verbinding met Google niet geaccepteerd", 2);
+    $state = substr(strstr($state, 'addToGoogleContacts', true), 0, -1);
 
     redirect($state);
 }
