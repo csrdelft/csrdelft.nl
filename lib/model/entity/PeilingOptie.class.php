@@ -8,8 +8,7 @@ class PeilingOptie extends PersistentEntity {
     public $id;
     public $peilingid;
     public $optie;
-    public $stemmen;
-    public $percentage = 0;
+    public $stemmen = 0;
 
     public static function init($optie) {
         $peilingoptie = new PeilingOptie();
