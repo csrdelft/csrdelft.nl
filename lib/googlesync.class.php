@@ -90,12 +90,12 @@ class GoogleSync {
 	 * Load all contactgroups.
 	 */
 	private function loadGroupFeed() {
-		$req = new Google_Http_Request(GOOGLE_GROUPS_URL);
-		$response = $this->client->getAuth()->authenticatedRequest($req);
-		if ($response->getResponseHttpCode() === 401) {
+	    $httpClient = $this->client->authorize();
+		$response = $httpClient->request("GET", GOOGLE_GROUPS_URL);
+		if ($response->getStatusCode() === 401) {
 			throw new Exception();
 		}
-		$this->groupFeed = simplexml_load_string($response->getResponseBody())->entry;
+		$this->groupFeed = simplexml_load_string($response->getBody())->entry;
 	}
 
 	/**
@@ -103,12 +103,12 @@ class GoogleSync {
 	 */
 	private function loadContactsForGroup($groupId) {
 		// Default max-results is 25, laad alles in 1 keer
-		$req = new Google_Http_Request(GOOGLE_CONTACTS_URL . '&max-results=1000&group=' . urlencode($groupId));
-		$response = $this->client->getAuth()->authenticatedRequest($req);
-		if ($response->getResponseHttpCode() === 401) {
+        $httpClient = $this->client->authorize();
+        $response = $httpClient->request("GET", GOOGLE_CONTACTS_URL . '&max-results=1000&group=' . urlencode($groupId));
+		if ($response->getStatusCode() === 401) {
 			throw new Exception();
 		}
-		$this->contactFeed = simplexml_load_string($response->getResponseBody())->entry;
+		$this->contactFeed = simplexml_load_string($response->getBody())->entry;
 	}
 
     /**
@@ -283,19 +283,22 @@ class GoogleSync {
 		$title->setAttribute('type', 'text');
 		$entry->appendChild($title);
 
-		$req = new Google_Http_Request(GOOGLE_GROUPS_URL, 'POST', array(), $doc->saveXML());
-		$response = $this->client->getAuth()->authenticatedRequest($req);
+        $httpClient = $this->client->authorize();
+        $response = $httpClient->request("POST", GOOGLE_GROUPS_URL, [
+            'headers' => ['Content-Type' => 'application/atom+xml'],
+            'body' => $doc->saveXML()
+        ]);
 
 		//herlaad groupFeed om de nieuw gemaakte daar ook in te hebben.
 		$this->loadGroupFeed();
 
-		return (string) simplexml_load_string($response->getResponseBody())->id;
+		return (string) simplexml_load_string($response->getBody())->id;
 	}
 
 	/**
 	 * Een hele serie leden syncen naar google contacts.
 	 *
-	 * @param $leden array van uid's of Lid-objecten die moeten worden gesynced
+	 * @param $leden Profiel[] array van uid's of Lid-objecten die moeten worden gesynced
 	 *
 	 * @return string met foutmeldingen en de namen van de gesyncte leden.
 	 */
@@ -359,10 +362,15 @@ class GoogleSync {
 				$profielXml->appendChild($batchOperation);
 			}
 
-			$req = new Google_Http_Request(GOOGLE_CONTACTS_BATCH_URL, 'POST', array('Content-Type' => 'application/atom+xml', 'GData-Version' => '3.0'), $doc->saveXML());
-			$response = $this->client->getAuth()->authenticatedRequest($req);
+			$httpClient = $this->client->authorize();
+            $response = $httpClient->request("POST", GOOGLE_CONTACTS_BATCH_URL, [
+                'headers' => [
+                    'Content-Type' => 'application/atom+xml',
+                    'GData-Version' => '3.0'],
+                'body' => $doc->saveXML()
+            ]);
 
-			$newContacts = simplexml_load_string($response->getResponseBody());
+			$newContacts = simplexml_load_string($response->getBody());
 
 			foreach ($newContacts->entry as $contact) {
 				$this->fixSimpleXMLNameSpace($contact);
@@ -396,15 +404,22 @@ class GoogleSync {
 
 		$doc = $this->createXML($profiel);
 
-		$auth = $this->client->getAuth();
+        $httpClient = $this->client->authorize();
 
-		if ($googleid != '') {
+		if ($googleid != null) {
+		    print_r( $googleid);
 			try {
 				//post to original entry's link[rel=self], set ETag in HTTP-headers for versioning
-				$req = new Google_Http_Request($googleid, 'PUT', array('GData-Version' => '3.0', 'Content-Type' => 'application/atom+xml', 'If-Match' => $this->getEtag($googleid)), $doc->saveXML());
-				$response = $auth->authenticatedRequest($req);
+                $response = $httpClient->request("PUT", $googleid['self'], [
+                    'headers' => [
+                        'GData-Version' => '3.0',
+                        'Content-Type' => 'application/atom+xml',
+                        'If-Match' => $googleid['etag']
+                    ],
+                    'body' => $doc->saveXML()
+                ]);
 
-				$contact = $this->unpackGoogleContact(simplexml_load_string($response->getResponseBody()));
+				$contact = $this->unpackGoogleContact(simplexml_load_string($response->getBody()));
 				$this->updatePhoto($contact, $profiel);
 
 				return 'Update: ' . $profiel->getNaam() . ' ';
@@ -413,10 +428,14 @@ class GoogleSync {
 			}
 		} else {
 			try {
-				$req = new Google_Http_Request(GOOGLE_CONTACTS_URL, 'POST', array('Content-Type' => 'application/atom+xml'), $doc->saveXML());
-				$response = $auth->authenticatedRequest($req);
+			    $response = $httpClient->request('POST', GOOGLE_CONTACTS_URL, [
+			        'headers' => [
+			            'Content-Type' => 'application/atom+xml'
+                    ],
+                    'body' => $doc->saveXML()
+                ]);
 
-				$contact = $this->unpackGoogleContact(simplexml_load_string($response->getResponseBody()));
+				$contact = $this->unpackGoogleContact(simplexml_load_string($response->getBody()));
 				$this->updatePhoto($contact, $profiel);
 
 				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
@@ -443,8 +462,13 @@ class GoogleSync {
 			$headers = array('If-Match' => $contact['photo']['etag']) + $headers;
 		}
 
-		$req = new Google_Http_Request($url, 'PUT', $headers, file_get_contents($path));
-		$this->client->getAuth()->authenticatedRequest($req);
+		$httpClient = $this->client->authorize();
+
+        $httpClient->request('PUT', $url, [
+            'headers' => $headers,
+            'body' => file_get_contents($path)
+        ]);
+
 	}
 
 	/**
