@@ -50,6 +50,27 @@ class PeilingenModel extends PersistenceModel
 		return $peilingid;
 	}
 
+	public function stem($peilingid, $optieid) {
+	    $peiling = $this->find('id = ?', array($peilingid))->fetch();
+        if ($peiling->magStemmen()) {
+            $optie = PeilingOptiesModel::instance()->find('peilingid = ? AND id = ?', array($peilingid, $optieid));
+            $optie->stemmen += 1;
+
+            $stem = new PeilingStem();
+            $stem->peilingid = $peiling->id;
+            $stem->uid = LoginModel::getUid();
+
+            try {
+                PeilingStemmenModel::instance()->create($stem);
+                PeilingOptiesModel::instance()->update($optie);
+            } catch (Exception $e) {
+                setMelding($e->getMessage(), -1);
+            }
+        } else {
+            setMelding("Stemmen niet toegestaan", -1);
+        }
+    }
+
 	public function validate(Peiling $entity) {
 		$errors = '';
 		if ($entity == null) throw new Exception('Peiling is leeg');

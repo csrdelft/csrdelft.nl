@@ -30,12 +30,6 @@ class Peiling extends PersistentEntity {
 		return $this->hasVoted() == '';
 	}
 
-    public function stem() {
-        $optie = PeilingOptiesModel::instance()->find('peilingid = ?', array($this->id))->fetch();
-        $optie->stemmen += 1;
-        PeilingOptiesModel::instance()->update($optie);
-    }
-
     public function hasVoted() {
         return PeilingStemmenModel::instance()->exist('peilingid = ? AND uid = ?', array($this->id, LoginModel::getUid()));
     }

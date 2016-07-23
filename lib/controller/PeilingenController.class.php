@@ -75,23 +75,13 @@ class PeilingenController extends AclController
 
     public function stem()
     {
-        if (isset($_POST['id']) && isset($_POST['optie']) && is_numeric($_POST['optie'])) {
-            $peiling = PeilingenModel::instance()->get((int)$_POST['id']);
+        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $optie = filter_input(INPUT_POST, 'optie', FILTER_VALIDATE_INT);
+        // optie en id zijn null of false als filter_input faalt
+        if (is_numeric($id) && is_numeric($optie)) {
+            $peiling = PeilingenModel::instance()->stem($id, $optie);
 
-            $peiling->stem((int)$_POST['optie']);
-            $this->model->update($peiling);;
-
-            $stem = new PeilingStem();
-            $stem->peilingid = $peiling->id;
-            $stem->uid = LoginModel::getUid();
-
-            try {
-                PeilingStemmenModel::instance()->create($stem);
-            } catch (Exception $e) {
-                setMelding($e->getMessage(), -1);
-            }
-
-            redirect(HTTP_REFERER . '#peiling' . $peiling->id);
+            redirect(HTTP_REFERER . '#peiling' . $id);
         } else {
             setMelding("Kies een optie om op te stemmen", 0);
         }
