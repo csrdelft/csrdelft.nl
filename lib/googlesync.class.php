@@ -678,7 +678,7 @@ class GoogleSync {
      * de authenticatie mislukt.
      */
 	public static function doRequestToken($state) {
-		if (!isset($_SESSION['google_token'])) {
+		if (!static::isAuthenticated()) {
             $redirect_uri = CSR_ROOT . '/googlecallback';
             $client = new Google_Client();
             $client->setApplicationName('Stek');
