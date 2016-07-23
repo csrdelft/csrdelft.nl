@@ -53,7 +53,7 @@ class GoogleSync {
 			}
 		}
 
-        $redirect_uri = CSR_ROOT . '/googlecallback';
+        $redirect_uri = CSR_ROOT . '/google/callback';
         $client= new Google_Client();
         $client->setApplicationName('Stek');
         $client->setClientId(GOOGLE_CLIENT_ID);
@@ -679,7 +679,7 @@ class GoogleSync {
      */
 	public static function doRequestToken($state) {
 		if (!static::isAuthenticated()) {
-            $redirect_uri = CSR_ROOT . '/googlecallback';
+            $redirect_uri = CSR_ROOT . '/google/callback';
             $client = new Google_Client();
             $client->setApplicationName('Stek');
             $client->setClientId(GOOGLE_CLIENT_ID);
