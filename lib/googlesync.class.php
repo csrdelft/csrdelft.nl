@@ -675,7 +675,6 @@ class GoogleSync {
 	 */
 	public static function doRequestToken($state) {
         $redirect_uri = CSR_ROOT . '/googlecallback';
-		$state = urlencode($state);
         $client = new Google_Client();
         $client -> setApplicationName('Stek');
         $client -> setClientId(GOOGLE_CLIENT_ID);
@@ -683,11 +682,12 @@ class GoogleSync {
         $client -> setRedirectUri($redirect_uri);
         $client -> setAccessType('offline');
         $client -> setScopes('https://www.google.com/m8/feeds');
+        $client->setState($state);
 
 		if (!isset($_SESSION['google_token'])) {
             $googleImportUrl = $client->createAuthUrl();
             header("HTTP/1.0 307 Temporary Redirect");
-			header("Location: $googleImportUrl&state=$state");
+			header("Location: $googleImportUrl");
 			exit;
 		}
 	}

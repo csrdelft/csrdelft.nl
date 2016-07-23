@@ -178,7 +178,7 @@ class ProfielController extends AclController {
 	public function addToGoogleContacts(Profiel $profiel) {
 		try {
 			require_once 'googlesync.class.php';
-			GoogleSync::doRequestToken(CSR_ROOT . "/profiel/" . $profiel->uid . "/addToGoogleContacts");
+			GoogleSync::doRequestToken($profiel->uid);
 			$gSync = GoogleSync::instance();
 			$msg = $gSync->syncLid($profiel);
 			setMelding('Opgeslagen in Google Contacts: ' . $msg, 1);

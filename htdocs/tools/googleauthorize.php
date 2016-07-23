@@ -18,7 +18,7 @@ $googleImportUrl = $client->createAuthUrl();
 if (isset($_GET['code'])) {
     $_SESSION['google_token'] = $_GET['code'];
     $_SESSION['google_access_token'] = $client->authenticate($_GET["code"]);
-    header("Location: " . $_GET['state']);
+    header("Location: " . CSR_ROOT . "/profiel/" . $_GET['state'] . '/addToGoogleContacts');
 }
 
 if (isset($_GET['error'])) {
