@@ -2,7 +2,7 @@
 <div>
     {getMelding()}
     <span class="dikgedrukt">Nieuwe peiling:</span><br/>
-    <form id="nieuwePeiling" action="/tools/peilingbeheer.php?action=toevoegen" method="post">
+    <form id="nieuwePeiling" action="/peilingen/beheer" method="post">
         <label for="titel">Titel:</label><input name="titel" type="text"/><br />
         <label for="verhaal">Verhaal:</label><textarea name="verhaal" rows="2"></textarea><br />
         <div id="peilingOpties">
