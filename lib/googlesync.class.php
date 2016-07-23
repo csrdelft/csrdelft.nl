@@ -678,17 +678,17 @@ class GoogleSync {
      * de authenticatie mislukt.
      */
 	public static function doRequestToken($state) {
-        $redirect_uri = CSR_ROOT . '/googlecallback';
-        $client = new Google_Client();
-        $client -> setApplicationName('Stek');
-        $client -> setClientId(GOOGLE_CLIENT_ID);
-        $client -> setClientSecret(GOOGLE_CLIENT_SECRET);
-        $client -> setRedirectUri($redirect_uri);
-        $client -> setAccessType('offline');
-        $client -> setScopes('https://www.google.com/m8/feeds');
-        $client->setState(urlencode($state));
-
 		if (!isset($_SESSION['google_token'])) {
+            $redirect_uri = CSR_ROOT . '/googlecallback';
+            $client = new Google_Client();
+            $client->setApplicationName('Stek');
+            $client->setClientId(GOOGLE_CLIENT_ID);
+            $client->setClientSecret(GOOGLE_CLIENT_SECRET);
+            $client->setRedirectUri($redirect_uri);
+            $client->setAccessType('offline');
+            $client->setScopes('https://www.google.com/m8/feeds');
+            $client->setState(urlencode($state));
+            
             $googleImportUrl = $client->createAuthUrl();
             header("HTTP/1.0 307 Temporary Redirect");
 			header("Location: $googleImportUrl");
