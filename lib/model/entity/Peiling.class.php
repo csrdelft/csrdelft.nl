@@ -10,12 +10,21 @@ class Peiling extends PersistentEntity {
     public $titel;
     public $tekst;
 
+    private $opties;
+
     public function getStemmenAantal() {
         return PeilingStemmenModel::instance()->count('peilingid = ?', array($this->id));
     }
 
     public function getOpties() {
-        return PeilingOptiesModel::instance()->find('peilingid = ?', array($this->id));
+        if ($this->opties == null) {
+            $this->opties = PeilingOptiesModel::instance()->find('peilingid = ?', array($this->id))->fetchAll();
+        }
+        return $this->opties;
+    }
+
+    public function nieuwOptie($optie) {
+        $this->opties[] = $optie;
     }
 
     public static function magBewerken() {

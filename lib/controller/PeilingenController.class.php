@@ -41,7 +41,9 @@ class PeilingenController extends AclController
 
             if (count($opties) > 0) {
                 foreach ($opties as $optie_tekst) {
-                    $peiling->addOptie(PeilingOptie::init($optie_tekst));
+                    if (trim($optie_tekst) != '') {
+                        $peiling->nieuwOptie(PeilingOptie::init($optie_tekst));
+                    }
                 }
             }
             
