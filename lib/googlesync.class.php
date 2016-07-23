@@ -407,7 +407,6 @@ class GoogleSync {
         $httpClient = $this->client->authorize();
 
 		if ($googleid != null) {
-		    print_r( $googleid);
 			try {
 				//post to original entry's link[rel=self], set ETag in HTTP-headers for versioning
                 $response = $httpClient->request("PUT", $googleid['self'], [
