@@ -55,7 +55,7 @@ class PeilingenBeheerView extends SmartyTemplateView {
 	public function view() {
 		$peilingen = array();
 		foreach ($this->model as $peiling) {
-			$peilingen[] = new PeilingView($peiling);
+			$peilingen[] = new PeilingView($peiling, true);
 		}
 		$this->smarty->assign("peilingen", $peilingen);
 		$this->smarty->display('peiling/beheer.tpl');
