@@ -682,7 +682,7 @@ class GoogleSync {
         $client -> setRedirectUri($redirect_uri);
         $client -> setAccessType('offline');
         $client -> setScopes('https://www.google.com/m8/feeds');
-        $client->setState($state);
+        $client->setState(urlencode($state));
 
 		if (!isset($_SESSION['google_token'])) {
             $googleImportUrl = $client->createAuthUrl();

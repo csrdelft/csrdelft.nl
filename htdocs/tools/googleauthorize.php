@@ -14,14 +14,17 @@ $client -> setScopes('https://www.google.com/m8/feeds');
 
 $googleImportUrl = $client->createAuthUrl();
 
+$state = urldecode(filter_input(INPUT_GET, 'state', FILTER_SANITIZE_URL));
+
 //google response with contact. We set a session and redirect back
 if (isset($_GET['code'])) {
     $_SESSION['google_token'] = $_GET['code'];
     $_SESSION['google_access_token'] = $client->authenticate($_GET["code"]);
-    header("Location: " . CSR_ROOT . "/profiel/" . $_GET['state'] . '/addToGoogleContacts');
+    redirect($state);
 }
 
 if (isset($_GET['error'])) {
     setMelding("Verbinding met Google niet geaccepteerd", 2);
-    header("Location: " . CSR_ROOT . "/profiel/" . $_GET['state']);
+
+    redirect($state);
 }
