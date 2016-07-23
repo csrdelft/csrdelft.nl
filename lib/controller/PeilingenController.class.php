@@ -71,7 +71,6 @@ class PeilingenController extends AclController
         } else {
             $this->model->delete($peiling);
             setMelding('Peiling is verwijderd!', 1);
-
         }
 
         redirect('/peilingen/beheer');
