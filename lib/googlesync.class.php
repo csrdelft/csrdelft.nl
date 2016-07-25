@@ -91,7 +91,7 @@ class GoogleSync {
 	 */
 	private function loadGroupFeed() {
 	    $httpClient = $this->client->authorize();
-		$response = $httpClient->request("GET", GOOGLE_GROUPS_URL);
+		$response = $httpClient->get(GOOGLE_GROUPS_URL);
 		if ($response->getStatusCode() === 401) {
 			throw new Exception();
 		}
@@ -104,7 +104,7 @@ class GoogleSync {
 	private function loadContactsForGroup($groupId) {
 		// Default max-results is 25, laad alles in 1 keer
         $httpClient = $this->client->authorize();
-        $response = $httpClient->request("GET", GOOGLE_CONTACTS_URL . '&max-results=1000&group=' . urlencode($groupId));
+        $response = $httpClient->get(GOOGLE_CONTACTS_URL . '&max-results=1000&group=' . urlencode($groupId));
 		if ($response->getStatusCode() === 401) {
 			throw new Exception();
 		}
@@ -284,7 +284,7 @@ class GoogleSync {
 		$entry->appendChild($title);
 
         $httpClient = $this->client->authorize();
-        $response = $httpClient->request("POST", GOOGLE_GROUPS_URL, [
+        $response = $httpClient->post(GOOGLE_GROUPS_URL, [
             'headers' => ['Content-Type' => 'application/atom+xml'],
             'body' => $doc->saveXML()
         ]);
@@ -363,7 +363,7 @@ class GoogleSync {
 			}
 
 			$httpClient = $this->client->authorize();
-            $response = $httpClient->request("POST", GOOGLE_CONTACTS_BATCH_URL, [
+            $response = $httpClient->post(GOOGLE_CONTACTS_BATCH_URL, [
                 'headers' => [
                     'Content-Type' => 'application/atom+xml',
                     'GData-Version' => '3.0'],
@@ -409,7 +409,7 @@ class GoogleSync {
 		if ($googleid != null) {
 			try {
 				//post to original entry's link[rel=self], set ETag in HTTP-headers for versioning
-                $response = $httpClient->request("PUT", $googleid['self'], [
+                $response = $httpClient->put($googleid['self'], [
                     'headers' => [
                         'GData-Version' => '3.0',
                         'Content-Type' => 'application/atom+xml',
@@ -427,7 +427,7 @@ class GoogleSync {
 			}
 		} else {
 			try {
-			    $response = $httpClient->request('POST', GOOGLE_CONTACTS_URL, [
+			    $response = $httpClient->post(GOOGLE_CONTACTS_URL, [
 			        'headers' => [
 			            'Content-Type' => 'application/atom+xml'
                     ],
@@ -463,7 +463,7 @@ class GoogleSync {
 
 		$httpClient = $this->client->authorize();
 
-        $httpClient->request('PUT', $url, [
+        $httpClient->put($url, [
             'headers' => $headers,
             'body' => file_get_contents($path)
         ]);
