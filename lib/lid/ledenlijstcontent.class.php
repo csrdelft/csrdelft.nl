@@ -69,9 +69,9 @@ class LedenlijstContent implements View {
 	public function view() {
 		if ($this->lidzoeker->count() > 0) {
 			if (strstr(REQUEST_URI, '?') !== false) {
-				$url = REQUEST_URI . '&amp;addToGoogle=true';
+				$url = REQUEST_URI . '&amp;addToGoogleContacts=true';
 			} else {
-				$url = REQUEST_URI . '?addToGoogle=true';
+				$url = REQUEST_URI . '?addToGoogleContacts=true';
 			}
 			echo '<a href="' . $url . '" class="btn float-right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts" /></a>';
 		}
