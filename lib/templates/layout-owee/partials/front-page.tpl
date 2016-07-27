@@ -38,7 +38,7 @@
                         studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
                         deze groepen en dus ook C.S.R. zullen zichzelf tijdens deze week op verschillende momenten en
                         manieren presenteren.</p>
-                    <a href="images/Programmaposter.jpg" class="special">Bekijk het programma</a>
+                    <a href="/plaetjes/fotoalbum/2015-2016/Posters/Programmaposter%20OWee.jpg.jpg" class="special">Bekijk het programma</a>
                     <div class="video">
                         <iframe src="https://www.youtube.com/embed/3YOMos8tPu0" frameborder="0" allowfullscreen></iframe>
                     </div>
