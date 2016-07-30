@@ -17,7 +17,7 @@ class CsrBB extends eamBBParser {
 	protected $email_mode = false;
 
 	public function __construct() {
-		$this->eamBBParser();
+	    parent::__construct();
 		$this->paragraph_mode = false;
 	}
 

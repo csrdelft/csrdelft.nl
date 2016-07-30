@@ -18,7 +18,7 @@ class LDAP {
 	var $_base_leden;
 	var $_base_groepen;
 
-	function LDAP($dobind = true) {
+	public function __construct($dobind = true) {
 		# bepaal of we alleen verbinding maken, of ook meteen inloggen.
 		# standaard is dit gewenst, in het geval dat deze klasse gebruikt
 		# wordt om met een ldap bind gebruikersinfo te controleren niet.
