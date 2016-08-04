@@ -136,6 +136,9 @@
                     <br>
                     <li><a href="http://zoover.nl/"><img src="https://csrdelft.nl/plaetjes/banners/Zoover.jpg"
                                                          alt="Zooveradvertentie"></a></li>
+                    <br>
+                    <li><a href="https://www.maxilia.nl/banners-drukken/"><img src="https://csrdelft.nl/plaetjes/banners/maxilia.png"
+                                                                               alt="Maxiliaadvertentie"/></a></li>
                 </ul>
                 <ul class="copyright">
                     <li>&copy; 2016 - C.S.R. Delft</li>
