@@ -220,11 +220,12 @@ pre.bbcode {
 .bb-peiling .beheer { float: right; }
 .bb-peiling .totaal { float: right; color: #666; padding-left: 20px; }
 .bb-peiling ul { list-style-type: none; padding: 5px; }
-.bb-peiling ul li { border-bottom: 1px solid #eee; margin-left: 0; clear: both;  padding: 4px; }
+.bb-peiling ul li { overflow: auto; border-bottom: 1px solid #eee; margin-left: 0; clear: both;  padding: 4px; }
+.bb-peiling input, .bb-peiling label { margin: 0; padding: 4px; }
 .bb-peiling ul li .stemmen { float: right; color: #666; width: 30px; text-align: right; }
 .bb-peiling ul li .percentage { float: right; color: #666; width: 50px; text-align: right; }
-.bb-peiling .vraag { margin: 10px 0; text-align: left; line-height: 2em; }
-.bb-peiling .optie { float: left; width: 300px; }
+.bb-peiling .vraag { margin: 10px 0; }
+.bb-peiling .optie { float: left; width: 300px; vertical-align: middle; min-height: 18px; }
 .bb-peiling .grafisch { float: right; width: 300px; vertical-align: top; padding: 4px; }
 .bb-peiling .balk { height: 10px; background-color: #6060FF;  border: 1px outset #0a338d; float: right; }
 

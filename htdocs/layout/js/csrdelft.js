@@ -795,7 +795,7 @@ function ketzer_ajax(url, ketzer) {
 function peiling_bevestig_stem(peiling) {
 	var id = $('input[name=optie]:checked', peiling).val();
 	var waarde = $('#label' + id).text();
-	if (confirm('Bevestig uw stem:\n\n' + waarde + '\n\n')) {
+	if (waarde.length > 0 && confirm('Bevestig uw stem:\n\n' + waarde + '\n\n')) {
 		$(peiling).submit();
 	}
 }

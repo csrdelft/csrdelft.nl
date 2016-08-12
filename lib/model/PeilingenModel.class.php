@@ -1,5 +1,9 @@
 <?php
 
+require_once 'model/entity/Peiling.class.php';
+require_once 'model/entity/PeilingOptie.class.php';
+require_once 'model/entity/PeilingStem.class.php';
+
 /**
  * PeilingenModel.class.php
  * 
@@ -9,207 +13,104 @@
  * Verzorgt het opvragen en opslaan van peilingen en stemmen in de database.
  * 
  */
-class PeilingenModel {
+class PeilingenModel extends PersistenceModel
+{
+	const orm = 'Peiling';
+	protected static $instance;
 
-	private $id = 0;
-	private $titel = '';
-	private $tekst = '';
-	private $totaal = 0; //totaal aantal stemmen voor deze peiling.
-	private $opties = array();
-	private $hasvoted = false;
-
-	function __construct($init) {
-		$init = (int) $init;
-		if ($init != 0) {
-			$this->load($init);
-		} else {
-			//nieuwe peiling
-		}
-	}
-
-	public function load($id) {
-		$this->id = (int) $id;
-
-		$sPeilingQuery = "
-			SELECT
-				id, titel, tekst, (
-					SELECT uid FROM peiling_stemmen
-					WHERE peilingid=" . $this->getId() . " AND uid='" . LoginModel::getUid() . "'
-					LIMIT 1) as has_voted
-			FROM peiling
-			WHERE peiling.id = " . $this->getId() . ';';
-
-		$db = MijnSqli::instance();
-		$rPeiling = $db->query($sPeilingQuery);
-
-		if ($db->numRows($rPeiling) == 1) {
-			$data = $db->next($rPeiling);
-			$this->titel = $data['titel'];
-			$this->tekst = $data['tekst'];
-			$this->hasvoted = $data['has_voted'];
-		} else {
-			throw new Exception('Peiling bestaat niet met (id:' . $this->getId() . ')');
+	public function update(PersistentEntity $entity) {
+		foreach ($entity->getOpties() as $optie) {
+			PeilingOptiesModel::instance()->update($optie);
 		}
 
-		$this->loadOptions();
+		return parent::update($entity);
 	}
 
-	public function loadOptions() {
-		$optiesQuery = "
-			SELECT id, optie, stemmen
-			FROM peilingoptie
-			WHERE peilingid=" . $this->getId() . "
-			ORDER BY id ASC;";
-		$db = MijnSqli::instance();
-		$opties = $db->query2array($optiesQuery);
-
-		if (!is_array($opties)) {
-			$opties = array();
-		}
-		//reken totaal aantal stemmen uit.
-		foreach ($opties as $optie) {
-			$this->totaal+=$optie['stemmen'];
+	public function delete(PersistentEntity $entity) {
+		foreach ($entity->getOpties() as $optie) {
+			PeilingOptiesModel::instance()->delete($optie);
 		}
 
-		foreach ($opties as $optie) {
-			if ($this->totaal == 0) {
-				$optie['percentage'] = 0;
-			} else {
-				$optie['percentage'] = ($optie['stemmen'] / $this->totaal) * 100;
-			}
-			$this->opties[] = $optie;
+		$stemmen = PeilingStemmenModel::instance()->find('peilingid = ?', array($entity->id))->fetchAll();
+		foreach ($stemmen as $stem) {
+			echo PeilingStemmenModel::instance()->delete($stem);
 		}
+
+		return parent::delete($entity);
 	}
+	
+	public function create(PersistentEntity $entity) {
+		$peilingid = parent::create($entity);
 
-	public function getId() {
-		return $this->id;
-	}
-
-	public function getTitel() {
-		return $this->titel;
-	}
-
-	public function getTekst() {
-		return $this->tekst;
-	}
-
-	public function hasVoted() {
-		return $this->hasvoted;
-	}
-
-	public function getOpties() {
-		return $this->opties;
-	}
-
-	public function getStemmenAantal() {
-		return $this->totaal;
-	}
-
-//wth is dit voor methodenaam
-
-	public function magStemmen() {
-		if (!LoginModel::mag('P_LOGGED_IN')) {
-			return false;
+		foreach ($entity->getOpties() as $optie) {
+			$optie->peilingid = $peilingid;
+			PeilingOptiesModel::instance()->create($optie);
 		}
-		return $this->hasVoted() == '';
+
+		return $peilingid;
 	}
 
-	public function stem($optieId) {
-		if ($this->magStemmen()) {
-			return $this->addStem((int) $optieId);
+	public function stem($peilingid, $optieid) {
+	    $peiling = $this->find('id = ?', array($peilingid))->fetch();
+        if ($peiling->magStemmen()) {
+            $optie = PeilingOptiesModel::instance()->find('peilingid = ? AND id = ?', array($peilingid, $optieid))->fetch();
+            $optie->stemmen += 1;
+
+            $stem = new PeilingStem();
+            $stem->peilingid = $peiling->id;
+            $stem->uid = LoginModel::getUid();
+
+            try {
+                PeilingStemmenModel::instance()->create($stem);
+                PeilingOptiesModel::instance()->update($optie);
+            } catch (Exception $e) {
+                setMelding($e->getMessage(), -1);
+            }
+        } else {
+            setMelding("Stemmen niet toegestaan", -1);
+        }
+    }
+
+	public function validate(Peiling $entity) {
+		$errors = '';
+		if ($entity == null) throw new Exception('Peiling is leeg');
+
+		if (trim($entity->tekst) == '') {
+			$errors .= 'Tekst mag niet leeg zijn.<br />';
 		}
-		return false;
-	}
 
-	private function addStem($optieId) {
-		$db = MijnSqli::instance();
-
-		$updateOptie = "
-			UPDATE peilingoptie
-			SET stemmen = stemmen + 1
-			WHERE id=" . $optieId . ';';
-		$logStem = "
-			INSERT INTO peiling_stemmen (peilingid, uid) VALUES
-			(" . $this->getId() . ",'" . LoginModel::getUid() . "');";
-
-		return $db->query($updateOptie) AND $db->query($logStem);
-	}
-
-	public function deletePeiling() {
-		if ($this->magBewerken()) {
-			return $this->delete();
+		if (trim($entity->titel) == '') {
+			$errors .= 'Titel mag niet leeg zijn.<br />';
 		}
-		return 0;
-	}
 
-	private function delete() {
-
-		$db = MijnSqli::instance();
-
-		$sDelete = "DELETE FROM `peiling` WHERE `id`=" . $this->getId() . ";";
-		$sDeleteOpties = " DELETE FROM  `peilingoptie` WHERE `peilingid`=" . $this->getId() . ";";
-		$sDeleteLog = "DELETE FROM `peiling_stemmen` WHERE `peilingid`=" . $this->getId() . ";";
-
-		return $db->query($sDelete) AND $db->query($sDeleteOpties) AND $db->query($sDeleteLog);
-	}
-
-	public static function maakPeiling($properties) {
-		if (PeilingenModel::magBewerken() && is_array($properties)) {
-			return new PeilingenModel(PeilingenModel::create($properties));
+		if (count($entity->getOpties()) == 0) {
+			$errors .= 'Er moet tenminste 1 optie zijn.<br />';
 		}
-		return 0;
+
+		return $errors;
 	}
 
-	//INSERT INTO `peiling` (`id`,`titel`,`tekst`) VALUES (NULL,'titel','verhaal')
-	//INSERT INTO `peilingoptie` (`id`,`peilingid`,`optie`,`stemmen`) VALUES (NULL,pid,'optietekst',0)
-	//Geeft het id van de nieuwe peiling terug, of NULL.
-	private static function create($properties) {
-		$titel = $properties['titel'];
-		$verhaal = $properties['verhaal'];
-		$opties = array();
-
-		if (is_array($properties['opties'])) {
-			$opties = $properties['opties'];
-		}
-		$db = MijnSqli::instance();
-
-		$sCreate = "
-			INSERT INTO `peiling` (`titel`,`tekst`) VALUES
-				('" . $db->escape($titel) . "','" . $db->escape($verhaal) . "');";
-		$r = $db->query($sCreate);
-		if (!$r) {
-			return NULL;
-		}
-		$pid = $db->insert_id();
-
-		foreach ($opties as $optie) {
-			$sCreateOptie = "
-				INSERT INTO
-					`peilingoptie`
-					(`peilingid`,`optie`,`stemmen`)
-				VALUES
-					(" . $pid . ",'" . $db->escape($optie) . "',0)
-				";
-			$db->query($sCreateOptie);
-		}
-		return $pid;
+	/**
+	 * @param $id
+	 * @return Peiling
+	 */
+	public function get($id) {
+		return $this->retrieveByPrimaryKey(array($id));
 	}
 
-	public static function magBewerken() {
-		//Elk BASFCie-lid heeft voorlopig peilingbeheerrechten.
-		return LoginModel::mag('P_ADMIN,bestuur,commissie:BASFCie');
+	public function lijst() {
+		return $this->find(null, array(), null, 'id DESC');
 	}
+}
 
-	public static function getLijst() {
-		$sSelectQuery = "
-			SELECT *
-			FROM peiling
-			ORDER BY id DESC";
+class PeilingOptiesModel extends PersistenceModel
+{
+	const orm = 'PeilingOptie';
+	protected static $instance;
+}
 
-		$sSelectQuery .= ';';
-		$db = MijnSqli::instance();
-		$rPeilingen = $db->query($sSelectQuery);
-		return $db->result2array($rPeilingen);
-	}
-
+class PeilingStemmenModel extends PersistenceModel
+{
+	const orm = 'PeilingStem';
+	protected static $instance;
 }
