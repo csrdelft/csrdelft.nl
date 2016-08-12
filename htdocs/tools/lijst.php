@@ -42,7 +42,7 @@ if (isset($_GET['q'])) {
 
 $ledenlijstcontent = new LedenlijstContent($zoeker);
 
-if (isset($_GET['addToGoogle'])) {
+if (isset($_GET['addToGoogleContacts'])) {
 	try {
 		require_once 'googlesync.class.php';
 		GoogleSync::doRequestToken(CSR_ROOT . REQUEST_URI);

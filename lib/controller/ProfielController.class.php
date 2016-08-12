@@ -185,7 +185,8 @@ class ProfielController extends AclController {
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), -1);
 		}
-		return $this->profiel($profiel);
+
+		redirect(CSR_ROOT . '/profiel/'. $profiel->uid);
 	}
 
 	public function lijst() {

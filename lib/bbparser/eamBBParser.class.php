@@ -137,7 +137,7 @@ class eamBBParser {
 	/**
 	 * eamBBParser constructor
 	 */
-	function eamBBParser() {
+	function __construct() {
 		// Initialize the parseArray0
 		$this->parseArray = array();
 		// Define aliasses

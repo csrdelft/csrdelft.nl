@@ -22,3 +22,6 @@
 [submodule "htdocs/wiki"]
 	path = htdocs/wiki
 	url = https://github.com/csrdelft/wiki.git
+[submodule "htdocs/bc"]
+	path = htdocs/bc
+	url = https://github.com/csrdelft/bc.git
