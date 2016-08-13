@@ -18,7 +18,8 @@ class EetplanController extends AclController {
 			$this->acl = array(
 				'view'	 => 'P_LEDEN_READ',
 				'noviet' => 'P_LEDEN_READ',
-				'huis'	 => 'P_LEDEN_READ'
+				'huis'	 => 'P_LEDEN_READ',
+                'beheer' => 'P_ADMIN'
 			);
 		} else {
 			$this->acl = array();
@@ -47,5 +48,10 @@ class EetplanController extends AclController {
 		$body = new EetplanHuisView($this->model, $id);
 		$this->view = new CsrLayoutPage($body);
 	}
+
+	public function beheer() {
+	    $body = new EetplanBeheerView($this->model);
+        $this->view = new CsrLayoutPage($body);
+    }
 
 }

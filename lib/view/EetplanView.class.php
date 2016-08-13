@@ -160,5 +160,20 @@ class EetplanHuisView extends AbstractEetplanView {
 			echo '</table>';
 		}
 	}
+}
 
+class EetplanBeheerView extends AbstractEetplanView {
+    public function __construct(EetplanModel $model)
+    {
+        parent::__construct($model);
+        $this->aEetplan = $this->model->getEetplan();
+    }
+
+    public function getBreadcrumbs() {
+        return parent::getBreadcrumbs() . ' » <span>Beheer</span>';
+    }
+
+    public function view() {
+        echo "eetplanbeheer";
+    }
 }
