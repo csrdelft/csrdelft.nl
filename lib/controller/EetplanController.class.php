@@ -40,6 +40,10 @@ class EetplanController extends AclController {
 	}
 
 	public function noviet($uid = null) {
+	    $eetplan = $this->model->getEetplanVoorPheut($uid);
+        if ($eetplan === false) {
+            $this->geentoegang();
+        }
 		$body = new EetplanNovietView($this->model, $uid);
 		$this->view = new CsrLayoutPage($body);
 	}

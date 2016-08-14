@@ -82,24 +82,9 @@ class EetplanNovietView extends AbstractEetplanView {
 
 	function view() {
 		//huizen voor een feut tonen
-		if ($this->aEetplan === false) {
-			echo '<h3>Ongeldig uid</h3>';
-		} else {
-			echo '<table class="eetplantabel">
-				<tr><th style="width: 150px">Avond</th><th style="width: 200px">Huis</th></tr>';
-			$row = 0;
-			foreach ($this->aEetplan as $aEetplanData) {
-				$woonoord = WoonoordenModel::omnummeren($aEetplanData['groepid']);
-				echo '<tr class="kleur' . ($row % 2) . '">
-						<td >' . $this->model->getDatum($aEetplanData['avond']) . '</td><td>';
-				if ($woonoord) {
-					echo '<a href="/groepen/woonoorden/' . $woonoord->id . '">' . $woonoord->naam . '</a>';
-				}
-				echo '</td></tr>';
-				$row++;
-			}
-			echo '</table>';
-		}
+        $this->smarty->assign('eetplan', $this->aEetplan);
+        $this->smarty->assign('model', $this->model);
+        $this->smarty->display('eetplan/noviet.tpl');
 	}
 
 }
