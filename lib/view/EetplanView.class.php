@@ -10,18 +10,9 @@ require_once 'model/EetplanModel.class.php';
  * 
  * Weergeven van eetplan.
  */
-abstract class AbstractEetplanView implements View {
+abstract class AbstractEetplanView extends SmartyTemplateView {
 
-	protected $model;
 	protected $aEetplan;
-
-	public function __construct(EetplanModel $model) {
-		$this->model = $model;
-	}
-
-	public function getModel() {
-		return $this->model;
-	}
 
 	public function getTitel() {
 		return 'Eetplan';
@@ -129,36 +120,9 @@ class EetplanHuisView extends AbstractEetplanView {
 
 	function view() {
 		//feuten voor een huis tonen
-		if ($this->aEetplan === false) {
-			echo '<h3>Ongeldig huisID</h3>';
-		} else {
-			echo '<table class="eetplantabel">
-				<tr>
-				<th style="width: 150px">Avond</th>
-				<th style="width: 200px">&Uuml;bersjaarsch </th>
-				<th>Mobiel</th>
-				<th>E-mail</th>
-				<th>Eetwens</th>
-				</tr>';
-			$iHuidigAvond = 0;
-			$row = 0;
-			foreach ($this->aEetplan as $aEetplanData) {
-				if ($aEetplanData['avond'] == $iHuidigAvond) {
-					$ertussen = '&nbsp;';
-				} else {
-					$ertussen = $this->model->getDatum($aEetplanData['avond']);
-					$iHuidigAvond = $aEetplanData['avond'];
-					$row++;
-				}
-				echo '<tr class="kleur' . ($row % 2) . '"><td>' . $ertussen . '</td>
-					<td>' . ProfielModel::getLink($aEetplanData['pheut'], 'civitas') . '</td>
-					<td>' . htmlspecialchars($aEetplanData['mobiel']) . '</td>
-					<td>' . htmlspecialchars($aEetplanData['email']) . '</td>
-					<td>' . htmlspecialchars($aEetplanData['eetwens']) . '</td>
-					</tr>';
-			}
-			echo '</table>';
-		}
+        $this->smarty->assign('model', $this->model);
+        $this->smarty->assign('eetplan', $this->aEetplan);
+        $this->smarty->display('eetplan/huis.tpl');
 	}
 }
 

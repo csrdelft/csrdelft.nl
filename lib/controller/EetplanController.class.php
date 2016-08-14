@@ -45,6 +45,10 @@ class EetplanController extends AclController {
 	}
 
 	public function huis($id = null) {
+	    $eetplan = $this->model->getEetplanVoorHuis($id);
+        if ($eetplan === false) {
+            $this->geentoegang();
+        }
 		$body = new EetplanHuisView($this->model, $id);
 		$this->view = new CsrLayoutPage($body);
 	}
