@@ -32,36 +32,11 @@ class EetplanView extends AbstractEetplanView {
 	}
 
 	function view() {
-		$aToonAvonden = array(1, 2, 3, 4);
-		$aHuizenArray = $this->model->getHuizen();
-		echo '
-			<h1>Eetplan</h1>
-			<div class="geelblokje"><h3>LET OP: </h3>
-				Van novieten die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen koken op het huis waarbij zij gefaeld hebben.
-			</div>
-			<table class="eetplantabel">
-			<tr><th style="width: 200px;">Noviet/Avond</td>';
-		//kopjes voor tabel
-		foreach ($aToonAvonden as $iTeller) {
-			echo '<th class="huis">' . $this->model->getDatum($iTeller) . '</th>';
-		}
-		echo '</tr>';
-		$row = 0;
-		foreach ($this->aEetplan as $aEetplanVoorPheut) {
-			echo '<tr class="kleur' . ($row % 2) . '"><td><a href="/eetplan/noviet/' . $aEetplanVoorPheut[0]['uid'] . '">' . $aEetplanVoorPheut[0]['naam'] . '</a></td>';
-			foreach ($aToonAvonden as $iTeller) {
-				$huisnaam = $aHuizenArray[$aEetplanVoorPheut[$iTeller] - 1]['huisNaam'];
-				$huisnaam = str_replace(array('Huize ', 'De ', 'Villa '), '', $huisnaam);
-				$huisnaam = substr($huisnaam, 0, 18);
-
-				echo '<td class="huis"><a href="/eetplan/huis/' . $aEetplanVoorPheut[$iTeller] . '">' .
-				htmlspecialchars($huisnaam) .
-				'</a></td>';
-			}
-			echo '</tr>';
-			$row++;
-		}
-		echo '</table>';
+	    $this->smarty->assign('huizen', $this->model->getHuizen());
+        $this->smarty->assign('avonden', array(1, 2, 3));
+        $this->smarty->assign('eetplan', $this->aEetplan);
+        $this->smarty->assign('model', $this->model);
+        $this->smarty->display('eetplan/overzicht.tpl');
 	}
 
 }
