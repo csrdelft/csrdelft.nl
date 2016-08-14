@@ -1,0 +1,93 @@
+.transform(@value) {
+  -webkit-transform: @value;
+  -moz-transform: @value;
+  -ms-transform: @value;
+  -o-transform: @value;
+  transform: @value;
+}
+
+.fadeIn(@duration; @translate; @filter; ) {
+  transition: opacity @duration ease, transform @duration ease, filter @duration/2 ease;
+  -moz-transition: opacity @duration ease, -moz-transform @duration ease, -moz-filter @duration/2 ease;
+  -webkit-transition: opacity @duration ease, -webkit-transform @duration ease, -webkit-filter @duration/2 ease;
+  -ms-transition: opacity @duration ease, -ms-transform @duration ease, -ms-filter @duration/2 ease;
+  -webkit-transform: none;
+  -moz-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -moz-transition-delay: 0.8s;
+  -webkit-transition-delay: 0.8s;
+  -ms-transition-delay: 0.8s;
+  transition-delay: 0.8s;
+  -moz-filter: none;
+  -webkit-filter: blur(0);
+  -ms-filter: none;
+  filter: blur(0);
+
+  body.is-loading & {
+    opacity: 0;
+    -moz-transform: @translate;
+    -webkit-transform: @translate;
+    -ms-transform: @translate;
+    transform: @translate;
+    -moz-filter: @filter;
+    -webkit-filter: @filter;
+    -ms-filter: @filter;
+    filter: @filter;
+  }
+}
+
+nav {
+  .fadeIn(1s; translateY(-3.7em); blur(2px))
+}
+
+#banner img {
+  .fadeIn(3s; translateY(40px); blur(10px));
+}
+
+#banner-small img {
+  .fadeIn(3s; translateY(20px); blur(10px));
+}
+
+.wrapper:not(.alt) {
+  img {
+    .fadeIn(0.5s; translateX(2em) scale(0.1); blur(2px));
+  }
+  .inner {
+    .fadeIn(0.5s; translateX(-2em); blur(2px));
+  }
+}
+
+.wrapper.alt {
+  img {
+    .fadeIn(0.5s; translateX(-2em) scale(0.1); blur(2px))
+  }
+  .inner {
+    .fadeIn(0.5s; translateX(2em); blur(2px))
+  }
+}
+
+//#wrapper h2 {
+//  -moz-transition: opacity 0.5s ease, -moz-transform 0.5s ease, -moz-filter 0.25s ease;
+//  -webkit-transition: opacity 0.5s ease, -webkit-transform 0.5s ease, -webkit-filter 0.25s ease;
+//  -ms-transition: opacity 0.5s ease, -ms-transform 0.5s ease, -ms-filter 0.25s ease;
+//  transition: opacity 0.5s ease, transform 0.5s ease, filter 0.25s ease;
+//  .transform(translateX(0));
+//
+//  -moz-filter: blur(0);
+//  -webkit-filter: blur(0);
+//  -ms-filter: blur(0);
+//  filter: blur(0);
+//
+//  body.is-loading & {
+//    opacity: 0;
+//    -moz-transform: translateX(-0.25em);
+//    -webkit-transform: translateX(-0.25em);
+//    -ms-transform: translateX(-0.25em);
+//    transform: translateX(-0.25em);
+//    -moz-filter: blur(2px);
+//    -webkit-filter: blur(2px);
+//    -ms-filter: blur(2px);
+//    filter: blur(2px);
+//  }
+//}
