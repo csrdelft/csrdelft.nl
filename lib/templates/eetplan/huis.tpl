@@ -8,8 +8,9 @@
     </tr>
     {assign 'oude_datum' ''}
     {assign 'row' 0}
-    {foreach from=$eetplan item=eetplanData}
-        {assign 'datum' $model->getDatum($eetplanData['avond'])}
+    {foreach from=$eetplan item=sessie}
+        {assign 'datum' $sessie->avond}
+        {assign 'noviet' $sessie->getNoviet()}
         {if $datum != $oude_datum}{$row=$row+1}{/if}
         <tr class="kleur{$row%2}">
             {if $datum == $oude_datum}
@@ -17,11 +18,11 @@
             {else}
                 <td>{$datum}</td>
             {/if}
-            <td>{ProfielModel::getLink($eetplanData['pheut'], 'civitas')}</td>
-            <td>{htmlspecialchars($eetplanData['mobiel'])}</td>
-            <td>{htmlspecialchars($eetplanData['email'])}</td>
-            <td>{htmlspecialchars($eetplanData['eetwens'])}</td>
+            <td>{ProfielModel::getLink($noviet->uid, 'civitas')}</td>
+            <td>{$noviet->mobiel}</td>
+            <td>{$noviet->email}</td>
+            <td>{$noviet->eetwens}</td>
         </tr>
-        {assign 'oude_datum' $model->getDatum($eetplanData['avond'])}
+        {assign 'oude_datum' $datum}
     {/foreach}
 </table>
