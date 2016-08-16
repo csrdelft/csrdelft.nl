@@ -29,13 +29,14 @@ class EetplanView extends AbstractEetplanView {
 	public function __construct(EetplanModel $model) {
 		parent::__construct($model);
 		$this->aEetplan = $this->model->getEetplan();
+
+        #var_dump($this->model->getAvonden());
 	}
 
 	function view() {
 	    $this->smarty->assign('huizen', $this->model->getHuizen());
-        $this->smarty->assign('avonden', array(1, 2, 3));
+        $this->smarty->assign('avonden', $this->model->getAvonden());
         $this->smarty->assign('eetplan', $this->aEetplan);
-        $this->smarty->assign('model', $this->model);
         $this->smarty->display('eetplan/overzicht.tpl');
 	}
 
@@ -98,6 +99,7 @@ class EetplanBeheerView extends AbstractEetplanView {
     }
 
     public function view() {
-        echo "eetplanbeheer";
+        $this->smarty->assign("eetplan", $this->aEetplan);
+        $this->smarty->display('eetplan/beheer.tpl');
     }
 }

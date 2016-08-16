@@ -8,17 +8,19 @@
 <table class="eetplantabel">
     <tr>
         <th style="width: 200px;">Noviet/Avond</th>
-        {foreach from=$avonden item=avond}
-            <th class="huis">{$model->getDatum($avond)}</th>
+        {foreach from=$avonden item=sessie}
+            <th class="huis">{$sessie->avond}</th>
         {/foreach}
     </tr>
 
-    {foreach from=$eetplan item=$eetplanData key=row}
-        <tr class="kleur{$row%2}">
-            <td><a href="/eetplan/noviet/{$eetplanData[0]['uid']}">{$eetplanData[0]['naam']}</a></td>
-            {foreach from=$avonden item=avond}
-                {assign 'huis' $huizen[$eetplanData[$avond] - 1]['huisNaam']}
-                <td class="huis"><a href="/eetplan/huis/{$eetplanData[$avond]}">{$huis}</a></td>
+
+    {foreach from=$eetplan item=feut key=row name=feut}
+        <tr class="kleur{$smarty.foreach.feut.iteration%2}">
+            {assign 'noviet' $feut[0]->getNoviet()}
+            <td><a href="/eetplan/noviet/{$noviet->uid}">{$noviet->getNaam('volledig')}</a></td>
+            {foreach from=$feut item=avond}
+                {assign 'huis' $avond->getWoonoord()}
+                <td class="huis"><a href="/eetplan/huis/{$huis->id}">{$huis->naam}</a></td>
             {/foreach}
         </tr>
     {/foreach}

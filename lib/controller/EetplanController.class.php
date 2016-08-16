@@ -13,7 +13,7 @@ require_once 'view/EetplanView.class.php';
 class EetplanController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, new EetplanModel());
+		parent::__construct($query, new EetplanModel('15'));
 		if (!$this->isPosted()) {
 			$this->acl = array(
 				'view'	 => 'P_LEDEN_READ',

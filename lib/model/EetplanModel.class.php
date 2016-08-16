@@ -1,5 +1,8 @@
 <?php
 
+require_once 'model/entity/Eetplan.class.php';
+require_once 'model/entity/EetplanRelatie.class.php';
+
 /**
  * EetplanModel.class.php
  * 
@@ -7,7 +10,50 @@
  * 
  * Verzorgt het opvragen van eetplangegevens
  */
-class EetplanModel {
+class EetplanModel extends PersistenceModel {
+
+    const orm = 'Eetplan';
+
+    private $lichting;
+
+    public function __construct($lichting)
+    {
+        parent::__construct('');
+        $this->lichting = $lichting;
+    }
+
+    public function getAvonden() {
+        return $this->findSparse(array('avond'), 'uid LIKE ?', array("$this->lichting%"), 'avond');
+    }
+
+    public function getNovieten() {
+        return $this->find('uid LIKE ?', array("$this->lichting%"))->fetchAll();
+    }
+
+    public function getEetplanVoorAvond($avond) {
+        return $this->find('avond = ?', array($avond))->fetchAll();
+    }
+
+    /**
+     * Haal het volledige eetplan op (voor de huidige lichting)
+     *
+     * Uitvoer is een array met 'uid' => [Eetplan, Eetplan, ...]
+     *
+     * @return array Het eetplan
+     */
+    public function getEetplan() {
+
+        $eetplan = $this->find('uid LIKE ?', array("$this->lichting%"));
+        $eetplanFeut = array();
+        foreach ($eetplan as $sessie) {
+            if (!isset($eetplanFeut[$sessie->uid])) {
+                $eetplanFeut[$sessie->uid] = array();
+            }
+            $eetplanFeut[$sessie->uid][] = $sessie;
+        }
+
+        return $eetplanFeut;
+    }
 
 	function getDatum($iAvond) {
 		$aAvonden = array(
@@ -23,7 +69,7 @@ class EetplanModel {
 		}
 	}
 
-	function getEetplan() {
+	function getEetplan_oud() {
 		//huizen laden
 		$rEetplan = MijnSqli::instance()->select("
 			SELECT
