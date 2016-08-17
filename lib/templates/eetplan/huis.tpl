@@ -8,11 +8,12 @@
     </tr>
     {assign 'oude_datum' ''}
     {assign 'row' 0}
+    {assign 'kleuren' array('licht', 'donker')}
     {foreach from=$eetplan item=sessie}
         {assign 'datum' $sessie->avond}
         {assign 'noviet' $sessie->getNoviet()}
         {if $datum != $oude_datum}{$row=$row+1}{/if}
-        <tr class="kleur{$row%2}">
+        <tr class="{$kleuren[$row%2]}">
             {if $datum == $oude_datum}
                 <td>&nbsp;</td>
             {else}

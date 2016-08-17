@@ -14,8 +14,8 @@
     </tr>
 
 
-    {foreach from=$eetplan item=feut key=row name=feut}
-        <tr class="kleur{$smarty.foreach.feut.iteration%2}">
+    {foreach from=$eetplan item=feut key=row}
+        <tr class="{cycle values="donker,licht"}">
             {assign 'noviet' $feut[0]->getNoviet()}
             <td><a href="/eetplan/noviet/{$noviet->uid}">{$noviet->getNaam('volledig')}</a></td>
             {foreach from=$feut item=avond}

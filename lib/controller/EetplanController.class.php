@@ -40,7 +40,7 @@ class EetplanController extends AclController {
 	}
 
 	public function noviet($uid = null) {
-	    $eetplan = $this->model->getEetplanVoorPheut($uid);
+	    $eetplan = $this->model->getEetplanVoorNoviet($uid);
         if ($eetplan === false) {
             $this->geentoegang();
         }
