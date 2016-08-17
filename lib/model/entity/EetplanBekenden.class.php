@@ -1,5 +1,5 @@
 <?php
-class EetplanRelatie extends PersistentEntity {
+class EetplanBekenden extends PersistentEntity {
     public $uid1;
     public $uid2;
 
