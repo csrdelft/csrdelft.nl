@@ -1,7 +1,7 @@
 <?php
 
 require_once 'model/entity/Eetplan.class.php';
-require_once 'model/entity/EetplanRelatie.class.php';
+require_once 'model/entity/EetplanBekenden.class.php';
 
 /**
  * EetplanModel.class.php

@@ -19,12 +19,18 @@ class Woonoord extends AbstractGroep {
 	 * @var HuisStatus
 	 */
 	public $soort;
+
+    /**
+     * Doet mee met Eetplan
+     */
+    public $eetplan;
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'soort' => array(T::Enumeration, false, 'HuisStatus')
+		'soort' => array(T::Enumeration, false, 'HuisStatus'),
+        'eetplan' => array(T::Boolean)
 	);
 	/**
 	 * Database table name

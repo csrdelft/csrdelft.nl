@@ -29,3 +29,6 @@ INSERT INTO eetplan (avond, uid, woonoord_id)
   FROM eetplan_oud
     INNER JOIN eetplanhuis ON eetplanhuis.id = eetplan_oud.huis
     INNER JOIN groep ON eetplanhuis.groepid = groep.id;
+
+-- Een huis kan uitgesloten worden van eetplan
+ALTER TABLE woonoorden ADD eetplan tinyint(1) NOT NULL AFTER soort

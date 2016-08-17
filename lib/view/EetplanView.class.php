@@ -77,10 +77,12 @@ class EetplanHuisView extends AbstractEetplanView {
 }
 
 class EetplanBeheerView extends AbstractEetplanView {
-    public function __construct(EetplanModel $model)
+    private $woonoorden;
+    public function __construct(EetplanModel $model, WoonoordenModel $woonoordenModel)
     {
         parent::__construct($model);
         $this->eetplan = $this->model->getEetplan();
+        $this->woonoorden = $woonoordenModel->find('status = ?', array(GroepStatus::HT))->fetchAll();
     }
 
     public function getBreadcrumbs() {
@@ -88,6 +90,7 @@ class EetplanBeheerView extends AbstractEetplanView {
     }
 
     public function view() {
+        $this->smarty->assign("woonoorden", $this->woonoorden);
         $this->smarty->assign("eetplan", $this->eetplan);
         $this->smarty->display('eetplan/beheer.tpl');
     }

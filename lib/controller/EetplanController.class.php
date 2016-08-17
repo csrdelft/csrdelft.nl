@@ -58,7 +58,7 @@ class EetplanController extends AclController {
 	}
 
 	public function beheer() {
-	    $body = new EetplanBeheerView($this->model);
+	    $body = new EetplanBeheerView($this->model, WoonoordenModel::instance());
         $this->view = new CsrLayoutPage($body);
     }
 
