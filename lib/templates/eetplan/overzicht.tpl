@@ -14,7 +14,7 @@
     </tr>
 
 
-    {foreach from=$eetplan item=feut key=row}
+    {foreach from=$eetplan item=feut}
         <tr class="{cycle values="donker,licht"}">
             {assign 'noviet' $feut[0]->getNoviet()}
             <td><a href="/eetplan/noviet/{$noviet->uid}">{$noviet->getNaam('volledig')}</a></td>
