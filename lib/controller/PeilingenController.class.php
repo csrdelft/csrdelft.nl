@@ -42,7 +42,9 @@ class PeilingenController extends AclController
             if (count($opties) > 0) {
                 foreach ($opties as $optie_tekst) {
                     if (trim($optie_tekst) != '') {
-                        $peiling->nieuwOptie(PeilingOptie::init($optie_tekst));
+                        $peilingOptie = new PeilingOptie();
+                        $peilingOptie->optie = $optie_tekst;
+                        $peiling->nieuwOptie($peilingOptie);
                     }
                 }
             }
@@ -64,8 +66,8 @@ class PeilingenController extends AclController
         return $view;
     }
 
-    public function verwijderen($id) {
-        $peiling = $this->model->get($id);
+    public function verwijderen($peilingid) {
+        $peiling = $this->model->get($peilingid);
         if ($peiling === false) {
             setMelding('Peiling al verwijderd!', 2);
         } else {
@@ -78,13 +80,11 @@ class PeilingenController extends AclController
 
     public function stem()
     {
-        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $peilingid = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $optie = filter_input(INPUT_POST, 'optie', FILTER_VALIDATE_INT);
         // optie en id zijn null of false als filter_input faalt
-        if (is_numeric($id) && is_numeric($optie)) {
-            $peiling = PeilingenModel::instance()->stem($id, $optie);
-
-            redirect(HTTP_REFERER . '#peiling' . $id);
+        if (is_numeric($peilingid) && is_numeric($optie)) {
+            redirect(HTTP_REFERER . '#peiling' . $peilingid);
         } else {
             setMelding("Kies een optie om op te stemmen", 0);
         }
