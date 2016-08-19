@@ -95,3 +95,13 @@ class EetplanBeheerView extends AbstractEetplanView {
         $this->smarty->display('eetplan/beheer.tpl');
     }
 }
+
+class EetplanHuisStatusView extends JsonResponse {
+    public function getJson($entity)
+    {
+        return parent::getJson(array(
+            'id' => $entity->id,
+            'eetplan' => $entity->eetplan
+        ));
+    }
+}
