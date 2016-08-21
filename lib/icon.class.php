@@ -3,12 +3,11 @@
 /**
  * Icon dingetje voor csrdelft.nl.
  *
- * Icon::get('bewerken'); geeft bijvoorbeeld /plaetjes/famfamfam/pencil.png
+ * Gaat samen met 'layout/css/icons.less' en 'layout/css/icons.png'
+ *
+ * Icon::getTag('bewerken'); geeft <span class="ico pencil"></span>
  */
 class Icon {
-
-	//array met alle icons
-	public static $index = null;
 	//handige dingen die we graag gebruiken in csrdelft.nl. Moeten geen namen zijn die al voorkomen
 	//in de lijst met icons.
 	public static $alias = array(
@@ -53,67 +52,30 @@ class Icon {
 		'legenda'					 => 'tag_yellow'
 	);
 
-	private static function loadIndex() {
-		if (!file_exists(ICON_PATH . '.index')) {
-			self::generateIndex();
-		}
-		self::$index = explode(',', file_get_contents(ICON_PATH . '.index'));
-	}
-
-	public static function has($key) {
-		if (self::$index === null) {
-			self::loadIndex();
-		}
-		//Bestaat er een $key in de index of een alias met met $key?
-		return in_array($key, self::$index) OR ( self::isAlias($key) AND self::has(self::getKeyForAlias($key)));
-	}
-
-	public static function isAlias($alias) {
-		return array_key_exists($alias, self::$alias);
-	}
-
-	public static function getKeyForAlias($alias) {
-		if (!self::isAlias($alias)) {
-			throw new Exception('Alias (' . $alias . ') bestaat niet');
-		}
-		return self::$alias[$alias];
-	}
-
-	public static function get($key, $title = null) {
-		if (!self::has($key)) {
-			throw new Exception('Icon (' . $key . ') bestaat niet in ' . ICON_PATH);
-		}
-		if (in_array($key, self::$index)) {
-			return '/plaetjes/famfamfam/' . $key . '.png';
+	private static function get($key) {
+		if (in_array($key, self::$alias)) {
+		    return self::$alias[$key];
 		} else {
-			return '/plaetjes/famfamfam/' . self::$alias[$key] . '.png';
+		    return $key;
 		}
 	}
 
-	public static function getTag($key, $title = null, $class = 'icon') {
+    /**
+     * @param $key string Naam van het icoon, mag een alias zijn
+     * @param null $hover string Naam van het icoon bij muis-over
+     * @param null $title string Titel van het icoon
+     * @param string $class
+     * @return string
+     */
+	public static function getTag($key, $hover = null, $title = null, $class = null) {
 		$icon = self::get($key);
+        if ($hover !== null) {
+            $hover = 'hover-' . self::get($hover);
+        }
 		if ($title !== null) {
 			$title = 'title="' . str_replace('&amp;', '&', htmlspecialchars($title)) . '" ';
 		}
-		return '<img src="' . $icon . '" width="16" height="16" alt="' . $key . '" ' . $title . 'class="' . htmlspecialchars($class) . '" />';
-	}
 
-	/**
-	 * Bouw de index op in een bestand in de image-map.
-	 */
-	public static function generateIndex() {
-		$handle = opendir(ICON_PATH);
-		if (!$handle) {
-			return;
-		}
-		while ($file = readdir($handle)) {
-			//we willen geen directories en geen verborgen bestanden.
-			if (!is_dir(ICON_PATH . $file) AND substr($file, 0, 1) != '.' AND substr($file, -3) == 'png') {
-				$icons[] = substr($file, 0, (strlen($file) - 4));
-			}
-		}
-		closedir($handle);
-		file_put_contents(ICON_PATH . '.index', implode($icons, ','));
+		return sprintf('<span class="ico %s %s %s" %s></span>', htmlspecialchars($icon), htmlspecialchars($hover), htmlspecialchars($class), $title);
 	}
-
 }
