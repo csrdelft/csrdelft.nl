@@ -3,9 +3,8 @@
 *}
 <li id="menu-item-{$item->item_id}" parentid="{$item->parent_id}" class="menu-item">
 	{if $item->children}
-	<span onclick="$(this).parent().children('ul').slideToggle();$(this).children('img.icon').toggle();" style="cursor:pointer;">
-		<img class="icon" src="/plaetjes/famfamfam/bullet_toggle_minus.png" width="16" height="16">
-		<img class="icon" src="/plaetjes/famfamfam/bullet_toggle_plus.png" width="16" height="16" style="display:none;">
+	<span onclick="$(this).parent().children('ul').slideToggle();$(this).children('span.ico').toggleClass('bullet_toggle_minus bullet_toggle_plus');" style="cursor:pointer;">
+		{icon get='bullet_toggle_minus'}
 	</span>
 	{/if}
 	<span class="lichtgrijs">{$item->volgorde}</span>
@@ -13,7 +12,7 @@
 	{if LoginModel::mag('P_ADMIN')}
 		<a href="/menubeheer/toevoegen/{$item->item_id}" class="btn post popup" title="Sub-menu-item toevoegen">{icon get="add"}</a>
 	{/if}
-	<a href="/menubeheer/zichtbaar/{$item->item_id}" class="btn post ReloadPage" title="Menu-item is nu {if !$item->zichtbaar}on{/if}zichtbaar"><img class="icon" src="/plaetjes/famfamfam/{if $item->zichtbaar}eye{else}shading{/if}.png" width="16" height="16"></a>
+	<a href="/menubeheer/zichtbaar/{$item->item_id}" class="btn post ReloadPage" title="Menu-item is nu {if !$item->zichtbaar}on{/if}zichtbaar">{if $item->zichtbaar}{icon get="eye"}{else}{icon get="shading"}{/if}</a>
 	<span>{$item->tekst}</span>
 	{if LoginModel::mag('P_ADMIN')}
 		<span class="lichtgrijs">{$item->item_id}</span>
