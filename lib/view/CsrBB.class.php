@@ -300,7 +300,7 @@ class CsrBB extends eamBBParser {
 			$content = $arguments;
 		}
 		if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
-			$neus = '<img src="/plaetjes/famfamfam/bullet_red.png" alt="o" class="neus2013">';
+			$neus = Icon::getTag('bullet_red', null, null, 'neus2013');
 			$content = str_replace('o', $neus, $content);
 		}
 		return $content;
