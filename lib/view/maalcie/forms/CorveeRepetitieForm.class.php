@@ -52,7 +52,7 @@ class CorveeRepetitieForm extends ModalForm {
 		$fields[] = new IntField('standaard_punten', $punten, 'Standaard punten', 0, 10);
 		$fields[] = new IntField('standaard_aantal', $aantal, 'Aantal corveeërs', 1, 10);
 
-		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $crid, 'submit', 'Alles bijwerken', 'Opslaan & alle taken bijwerken', '/famfamfam/disk_multiple.png');
+		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $crid, 'submit', 'Alles bijwerken', 'Opslaan & alle taken bijwerken', 'disk_multiple');
 
 		if ($crid !== 0) {
 			$fields['ver'] = new CheckboxField('verplaats_dag', $verplaats, 'Verplaatsen');

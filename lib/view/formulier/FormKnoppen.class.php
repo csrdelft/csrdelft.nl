@@ -210,7 +210,7 @@ class FormulierKnop implements FormElement {
 		}
 		$html .= '>';
 		if ($this->icon) {
-			$html .= '<img src="/plaetjes' . $this->icon . '" class="icon" width="16" height="16" /> ';
+			$html .= Icon::getTag($this->icon);
 		}
 		$html .= $this->label;
 		return $html . '</a> ';

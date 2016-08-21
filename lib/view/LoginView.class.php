@@ -38,7 +38,7 @@ class LoginSessionsData extends DataTableResponse {
 		$array['login_moment'] = reldate($array['login_moment']);
 
 		if ($session->lock_ip) {
-			$array['lock_ip'] = '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';
+			$array['lock_ip'] = Icon::getTag('lock', null, 'Gekoppeld aan IP-adres');
 		} else {
 			$array['lock_ip'] = null;
 		}
@@ -91,7 +91,7 @@ class RememberLoginData extends DataTableResponse {
 		$array['remember_since'] = reldate($array['remember_since']);
 
 		if ($remember->lock_ip) {
-			$array['lock_ip'] = '<img width="16" height="16" class="icon" src="/plaetjes/famfamfam/lock.png" title="Gekoppeld aan IP-adres">';
+			$array['lock_ip'] = Icon::getTag('lock', null, 'Gekoppeld aan IP-adres');
 		} else {
 			$array['lock_ip'] = '';
 		}

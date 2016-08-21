@@ -36,7 +36,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 		$fields[] = new IntField('standaard_limiet', $limiet, 'Standaard limiet', 0, 200);
 		$fields[] = new RechtenField('abonnement_filter', $filter, 'Aanmeldrestrictie');
 
-		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $mrid, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', '/famfamfam/disk_multiple.png');
+		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $mrid, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', 'disk_multiple');
 
 		if ($mrid !== 0) {
 			$fields['ver'] = new CheckboxField('verplaats_dag', $verplaats, 'Verplaatsen');
