@@ -53,7 +53,7 @@ class Icon {
 	);
 
 	private static function get($key) {
-		if (in_array($key, self::$alias)) {
+		if (array_key_exists($key, self::$alias)) {
 		    return self::$alias[$key];
 		} else {
 		    return $key;
