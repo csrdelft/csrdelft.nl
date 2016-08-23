@@ -47,13 +47,13 @@ class ProfielModel extends CachedPersistenceModel {
 
 	public function find($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0)
     {
-        if (!LoginModel::mag('commissie:NovCie')) $criteria .= " AND uid NOT LIKE '16%'";
+        $criteria .= " AND uid NOT LIKE '16%'";
         return parent::find($criteria, $criteria_params, $groupby, $orderby, $limit, $start);
     }
 
     public function exist($criteria = null, array $criteria_params = array())
     {
-        if (!LoginModel::mag('commissie:NovCie')) $criteria .= " AND uid NOT LIKE '16%'";
+        $criteria .= " AND uid NOT LIKE '16%'";
         return parent::exist($criteria, $criteria_params);
     }
 
