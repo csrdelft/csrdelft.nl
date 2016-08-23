@@ -45,19 +45,7 @@ class ProfielModel extends CachedPersistenceModel {
 		return $profiel->getLink($vorm);
 	}
 
-	public function find($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0)
-    {
-        $criteria .= " AND uid NOT LIKE '16%'";
-        return parent::find($criteria, $criteria_params, $groupby, $orderby, $limit, $start);
-    }
-
-    public function exist($criteria = null, array $criteria_params = array())
-    {
-        $criteria .= " AND uid NOT LIKE '16%'";
-        return parent::exist($criteria, $criteria_params);
-    }
-
-    public static function existsUid($uid) {
+	public static function existsUid($uid) {
 		return static::instance()->existsByPrimaryKey(array($uid));
 	}
 
