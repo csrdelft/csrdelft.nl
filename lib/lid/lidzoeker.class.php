@@ -135,7 +135,7 @@ class LidZoeker {
 				WHERE
 					(" . $zoekfilter . ")
 				AND
-					($statusfilter)
+					($statusfilter)  AND uid NOT LIKE '16%'
 				{$mootfilter}
 				ORDER BY
 					{$sort}
@@ -402,6 +402,7 @@ class LidZoeker {
 			$query .= $this->defaultSearch($this->query);
 		}
 		$query .= $this->getFilterSQL();
+        $query .= "AND uid NOT LIKE '16%'";
 		$query .= ' ORDER BY ' . implode($this->sort) . ';';
 
 		$this->sqlquery = $query;
