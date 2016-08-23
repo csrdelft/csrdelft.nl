@@ -17,7 +17,7 @@ $content .= '<table class="table"><tr><th>UID</th><th>Voornaam</th><th>Tussenvoe
 foreach (Database::sqlSelect(array('*'), 'profielen', 'status = ?', array('S_NOVIET')) as $item) {
     $string = <<<NOV
 <tr>
-<td>%s</td>
+<td><a href="/profiel/%s">%s</a></td>
 <td>%s</td>
 <td>%s</td>
 <td>%s</td>
@@ -26,7 +26,7 @@ foreach (Database::sqlSelect(array('*'), 'profielen', 'status = ?', array('S_NOV
 </tr>
 NOV;
 
-    $content .= sprintf($string, $item['uid'], $item['voornaam'], $item['tussenvoegsel'], $item['achternaam'], $item['mobiel'], $item['studie']);
+    $content .= sprintf($string, $item['uid'], $item['uid'], $item['voornaam'], $item['tussenvoegsel'], $item['achternaam'], $item['mobiel'], $item['studie']);
 }
 
 class NovietenView implements View {
