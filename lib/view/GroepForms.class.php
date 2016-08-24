@@ -288,7 +288,7 @@ class GroepConverteerForm extends ModalForm {
 		$fields[] = new GroepSoortField('model', get_class($huidig), 'Converteren naar', $groep);
 
 		$fields['btn'] = new FormDefaultKnoppen();
-		$fields['btn']->submit->icon = '/famfamfam/lightning.png';
+		$fields['btn']->submit->icon = 'lightning';
 		$fields['btn']->submit->label = 'Converteren';
 
 		$this->addFields($fields);
@@ -316,7 +316,7 @@ class GroepAanmakenForm extends ModalForm {
 		$fields[] = new KetzerSoortField('model', $default, null, $groep);
 
 		$fields['btn'] = new FormDefaultKnoppen(null, false);
-		$fields['btn']->submit->icon = '/famfamfam/add.png';
+		$fields['btn']->submit->icon = 'add';
 		$fields['btn']->submit->label = 'Aanmaken';
 
 		$this->addFields($fields);

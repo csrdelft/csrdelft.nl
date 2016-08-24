@@ -49,7 +49,14 @@ class Icon {
 		'resetpassword'				 => 'user_gray',
 		'instellingen'				 => 'cog',
 		// mededelingen
-		'legenda'					 => 'tag_yellow'
+		'legenda'					 => 'tag_yellow',
+        // Melding
+        'alert-danger'               => 'exlamation',
+        'alert-info'                 => 'information',
+        'alert-success'              => 'accept',
+        'alert-warning'              => 'bell',
+        // Overig
+        'table'                      => 'table_normal'
 	);
 
 	private static function get($key) {
