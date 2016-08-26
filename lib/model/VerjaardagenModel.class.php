@@ -19,7 +19,7 @@ class VerjaardagenModel {
 			WHERE
 				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')
 			AND
-				EXTRACT( MONTH FROM gebdatum)= '{$maand}'";
+				EXTRACT( MONTH FROM gebdatum)= '{$maand}' AND uid NOT LIKE '16%'";
 		if ($dag != 0)
 			$query.=" AND gebdag=" . $dag;
 		$query.=" ORDER BY gebdag;";
@@ -49,7 +49,7 @@ class VerjaardagenModel {
 			WHERE
 				(status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL')
 			AND
-				NOT gebdatum = '0000-00-00'
+				NOT gebdatum = '0000-00-00'  AND uid NOT LIKE '16%'
 			ORDER BY verjaardag ASC, lidjaar, gebdatum, achternaam
 			LIMIT " . (int) $aantal;
 
@@ -95,7 +95,7 @@ class VerjaardagenModel {
 			OR
 				(CONCAT('" . $totjaar . "', SUBSTRING(gebdatum, 5))>='" . $van . "' AND CONCAT('" . $totjaar . "', SUBSTRING(gebdatum, 5))<'" . $tot . "')
 			) AND
-			(status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL') AND
+			(status='S_NOVIET' OR status='S_GASTLID' OR status='S_LID' OR status='S_KRINGEL')  AND uid NOT LIKE '16%' AND
 			NOT gebdatum = '0000-00-00'
 			ORDER BY verjaardag ASC, lidjaar, gebdatum, achternaam
 			" . $limitclause . ";";

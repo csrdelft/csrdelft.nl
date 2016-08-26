@@ -777,13 +777,8 @@ function ketzer_ajax(url, ketzer) {
 		url: url,
 		data: ''
 	});
-	jqXHR.done(function (data, textStatus, jqXHR) {
-		var html = $.parseHTML(data);
-		$('.bb-maaltijd').each(function () {
-			if ($(this).attr('id') === $(html).attr('id')) {
-				$(this).replaceWith(data);
-			}
-		});
+	jqXHR.done(function (data) {
+		$(ketzer).replaceWith(data);
 	});
 	jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
 		$(ketzer + ' .aanmelddata').html('<span class="error">Error: </span>' + errorThrown);

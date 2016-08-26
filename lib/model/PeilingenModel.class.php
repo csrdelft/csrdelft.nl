@@ -91,11 +91,11 @@ class PeilingenModel extends PersistenceModel
 	}
 
 	/**
-	 * @param $id
+	 * @param $peilingid
 	 * @return Peiling
 	 */
-	public function get($id) {
-		return $this->retrieveByPrimaryKey(array($id));
+	public function get($peilingid) {
+		return $this->retrieveByPrimaryKey(array($peilingid));
 	}
 
 	public function lijst() {
