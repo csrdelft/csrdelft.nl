@@ -16,7 +16,7 @@ if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 
 //welke subset van leden?
 $zoekin = array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID', 'S_ERELID');
-$toegestanezoekfilters = array('leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies');
+$toegestanezoekfilters = array('leden', 'oudleden', 'novieten', 'alleleden', 'allepersonen', 'nobodies');
 if (isset($_GET['zoekin']) AND in_array($_GET['zoekin'], $toegestanezoekfilters)) {
 	$zoekin = $_GET['zoekin'];
 }

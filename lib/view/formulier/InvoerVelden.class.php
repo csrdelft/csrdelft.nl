@@ -711,7 +711,7 @@ class LidField extends TextField {
 
 	public function __construct($name, $value, $description, $zoekin = 'alleleden') {
 		parent::__construct($name, $value, $description);
-		if (!in_array($zoekin, array('leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'))) {
+		if (!in_array($zoekin, array('leden', 'oudleden', 'novieten', 'alleleden', 'allepersonen', 'nobodies'))) {
 			$zoekin = 'leden';
 		}
 		$this->zoekin = $zoekin;

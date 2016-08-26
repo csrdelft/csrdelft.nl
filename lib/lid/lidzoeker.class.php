@@ -104,6 +104,10 @@ class LidZoeker {
 				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
 				$statusfilter = "status='S_NOBODY' OR status='S_EXLID'";
 			}
+
+			if (LoginModel::mag('P_LEDEN_READ') and $zoekstatus === 'novieten') {
+			    $statusfilter = "status='S_NOVIET'";
+            }
 		}
 
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
