@@ -31,4 +31,16 @@ INSERT INTO eetplan (avond, uid, woonoord_id)
     INNER JOIN groep ON eetplanhuis.groepid = groep.id;
 
 -- Een huis kan uitgesloten worden van eetplan
-ALTER TABLE woonoorden ADD eetplan tinyint(1) NOT NULL AFTER soort
+ALTER TABLE woonoorden
+  ADD eetplan TINYINT(1) NOT NULL
+  AFTER soort;
+
+-- EetplanBekenden
+CREATE TABLE eetplan_bekenden (
+  uid1 VARCHAR(4) NOT NULL,
+  uid2 VARCHAR(4) NOT NULL,
+  PRIMARY KEY (uid1, uid2)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  AUTO_INCREMENT = 1
