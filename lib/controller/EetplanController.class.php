@@ -68,6 +68,38 @@ class EetplanController extends AclController {
         $woonoord->eetplan = $status;
         WoonoordenModel::instance()->update($woonoord);
         $this->view = new EetplanHuisStatusView($woonoord);
+    public function novietrelatie($actie = null) {
+
+        if ($actie == 'toevoegen') {
+            $uid1 = filter_input(INPUT_POST, 'uid1');
+            $uid2 = filter_input(INPUT_POST, 'uid2');
+            $bekenden = new EetplanBekenden();
+            $bekenden->uid1 = namen2uid($uid1)[0]['uid'];
+            $bekenden->uid2 = namen2uid($uid2)[0]['uid'];
+            $form = new EetplanBekendenForm($bekenden);
+            if ($form->validate()) {
+                $this->model->getBekendenModel()->create($bekenden);
+                $this->view = new EetplanRelatieView($this->model->getBekendenModel()->getBekenden());
+            } else {
+                $this->view = $form;
+            }
+        } elseif ($actie == 'verwijderen') {
+            $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+            $verwijderd = array();
+            foreach ($selection as $uuid) {
+                $uids = explode(".", explode("@", $uuid)[0]);
+                $uid1 = $uids[0];
+                $uid2 = $uids[1];
+                $bekenden = new EetplanBekenden();
+                $bekenden->uid1 = namen2uid($uid1)[0]['uid'];
+                $bekenden->uid2 = namen2uid($uid2)[0]['uid'];
+                $this->model->getBekendenModel()->delete($bekenden);
+                $verwijderd[] = $bekenden;
+            }
+            $this->view = new RemoveRowsResponse($verwijderd);
+        } else {
+            $this->view = new EetplanRelatieView($this->model->getBekendenModel()->getBekenden());
+        }
     }
 
     /**

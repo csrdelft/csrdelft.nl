@@ -16,6 +16,7 @@ class EetplanModel extends PersistenceModel {
     const orm = 'Eetplan';
 
     private $lichting;
+    private $bekendenModel;
 
     /**
      * EetplanModel constructor.
@@ -25,6 +26,7 @@ class EetplanModel extends PersistenceModel {
     {
         parent::__construct();
         $this->lichting = $lichting;
+        $this->bekendenModel = new EetplanBekendenModel($lichting);
     }
 
     /**
@@ -71,5 +73,30 @@ class EetplanModel extends PersistenceModel {
      */
     public function getEetplanVoorHuis($id) {
         return $this->find('uid LIKE ? AND woonoord_id = ?', array("$this->lichting%", $id), null, 'avond')->fetchAll();
+    }
+
+    public function getBekendenModel() {
+        return $this->bekendenModel;
+    }
+}
+
+class EetplanBekendenModel extends PersistenceModel {
+
+    private $lichting;
+
+    const orm = "EetplanBekenden";
+
+    /**
+     * EetplanBekenden constructor.
+     * @param string $lichting Lichting om eetplan voor op te halen, 2 cijfers.
+     */
+    public function __construct($lichting)
+    {
+        parent::__construct();
+        $this->lichting = $lichting;
+    }
+
+    public function getBekenden() {
+        return $this->find('uid1 LIKE ?', array("$this->lichting%"))->fetchAll();
     }
 }

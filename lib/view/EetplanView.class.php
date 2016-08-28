@@ -76,6 +76,32 @@ class EetplanHuisView extends AbstractEetplanView {
 	}
 }
 
+
+class EetplanBekendenTable extends DataTable {
+    public function __construct() {
+        parent::__construct(EetplanBekendenModel::orm, '/eetplan/novietrelatie', 'Novieten die elkaar kennen');
+        $this->settings['tableTools']['aButtons'] = array('select_all', 'select_none', 'copy', 'xls', 'pdf');
+        $this->addColumn('noviet1');
+        $this->addColumn('noviet2');
+        $this->searchColumn('noviet1');
+        $this->searchColumn('noviet2');
+        $this->addColumn('Verwijderen', null, '<input type="button" value="Verwijderen"/>');
+
+        $this->addKnop(new DataTableKnop("== 0", $this->dataTableId, '/eetplan/novietrelatie/toevoegen', 'post popup', 'Toevoegen', 'Bekenden toevoegen', 'cross'));
+        $this->addKnop(new DataTableKnop(">= 1", $this->dataTableId, '/eetplan/novietrelatie/verwijderen', 'post confirm', 'Verwijderen', 'Bekenden verwijderen', 'cross'));
+    }
+}
+
+class EetplanBekendenForm extends ModalForm {
+    function __construct(EetplanBekenden $model) {
+        parent::__construct($model, '/eetplan/novietrelatie/toevoegen', false, true);
+        $fields[] = new RequiredLidField('uid1', $model->uid1, 'Noviet 1', 'novieten');
+        $fields[] = new RequiredLidField('uid2', $model->uid2, 'Noviet 2', 'novieten');
+        $fields['btn'] = new FormDefaultKnoppen();
+
+        $this->addFields($fields);
+    }
+}
 class EetplanBeheerView extends AbstractEetplanView {
     private $woonoorden;
     public function __construct(EetplanModel $model, WoonoordenModel $woonoordenModel)
@@ -90,8 +116,10 @@ class EetplanBeheerView extends AbstractEetplanView {
     }
 
     public function view() {
+        $bekendenTable = new EetplanBekendenTable();
         $this->smarty->assign("woonoorden", $this->woonoorden);
         $this->smarty->assign("eetplan", $this->eetplan);
+        $this->smarty->assign("bekendentable", $bekendenTable);
         $this->smarty->display('eetplan/beheer.tpl');
     }
 }
@@ -103,5 +131,14 @@ class EetplanHuisStatusView extends JsonResponse {
             'id' => $entity->id,
             'eetplan' => $entity->eetplan
         ));
+    }
+}
+
+class EetplanRelatieView extends DataTableResponse {
+    public function getJson($entity) {
+        $array = $entity->jsonSerialize();
+        $array['noviet1'] = $entity->getNoviet1()->getNaam();
+        $array['noviet2'] = $entity->getNoviet2()->getNaam();
+        return parent::getJson($array);
     }
 }
