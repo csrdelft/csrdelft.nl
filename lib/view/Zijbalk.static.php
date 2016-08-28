@@ -63,6 +63,15 @@ abstract class Zijbalk {
 			$posts = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginModel::getUid(), (int) LidInstellingen::get('zijbalk', 'forum_zelf'), true);
 			$zijbalk[] = new ForumPostZijbalkView($posts);
 		}
+		// Ledenmemory topscores
+		if (LoginModel::mag('P_LEDEN_READ') AND LidInstellingen::get('zijbalk', 'ledenmemory_topscores') == 'ja') {
+			require_once 'model/LedenMemoryScoresModel.class.php';
+			require_once 'view/LedenMemoryView.class.php';
+			$lidjaar = LichtingenModel::getJongsteLidjaar();
+			$lichting = LichtingenModel::get($lidjaar);
+			$scores = LedenMemoryScoresModel::instance()->getGroepTopScores($lichting);
+			$zijbalk[] = new LedenMemoryZijbalkView($scores, $lidjaar);
+		}
 		// Nieuwste fotoalbum
 		if (LidInstellingen::get('zijbalk', 'fotoalbum') == 'ja') {
 			require_once 'controller/FotoAlbumController.class.php';

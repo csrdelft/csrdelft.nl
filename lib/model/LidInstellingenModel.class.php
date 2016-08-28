@@ -85,6 +85,7 @@ class LidInstellingen extends Instellingen {
 			'forum_belangrijk'		 => array('Aantal belangrijke forumberichten', T::Integer, array(0, 50), 5),
 			'forum'					 => array('Aantal forumberichten', T::Integer, array(0, 50), 10),
 			'forum_zelf'			 => array('Aantal zelf geposte forumberichten', T::Integer, array(0, 50), 0),
+			'ledenmemory_topscores'	 => array('Ledenmemory topscores weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'fotoalbum'				 => array('Laatste fotoalbum weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'fotos'					 => array('Aantal foto\'s weergeven', T::Integer, array(0, 50), 6),
 			'verjaardagen'			 => array('Aantal verjaardagen weergeven', T::Integer, array(0, 50), 9),
