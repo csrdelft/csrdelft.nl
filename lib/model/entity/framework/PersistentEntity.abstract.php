@@ -90,15 +90,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	}
 
 	public function jsonSerialize() {
-		$array = (array) $this;
-		// strip non-public attribute prefixes
-		foreach ($array as $key => $value) {
-			$pos = strrpos($key, 0);
-			if ($pos !== false) {
-				$array[substr($key, $pos + 1)] = $value;
-				unset($array[$key]);
-			}
-		}
+		$array = get_object_vars($this);
 		$array['UUID'] = $this->getUUID();
 		return $array;
 	}
