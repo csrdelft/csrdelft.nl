@@ -49,8 +49,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Met deze functies kan op één of meerdere permissies worden getest,
 	 * onderling gescheiden door komma's. Als een lid één van de
 	 * permissies 'heeft', geeft de functie true terug. Het is dus een
-	 * logische OF tussen de verschillende te testen permissies. Een
-	 * permissie kan met een uitroepteken geïnverteerd worden.
+	 * logische OF tussen de verschillende te testen permissies.
 	 * 
 	 * Voorbeeldjes:
 	 *  commissie:NovCie			geeft true leden van de h.t. NovCie.
@@ -457,7 +456,7 @@ class AccessModel extends CachedPersistenceModel {
 		// zoek de rechten van de gebruiker op
 		$role = $subject->perm_role;
 
-		// ga alleen verder als er een geldige permissie wordt teruggegeven
+		// ga alleen verder als er een geldige AccessRole wordt teruggegeven
 		if (!$this->isValidRole($role)) {
 			return false;
 		}
