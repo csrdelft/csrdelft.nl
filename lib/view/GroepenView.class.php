@@ -290,23 +290,32 @@ class GroepenView implements View {
 	public function view() {
 		$model = $this->model;
 		$orm = $model::ORM;
+		echo '<div style="float: right;">';
 		if ($orm::magAlgemeen(A::Aanmaken, $this->soort)) {
-			echo '<a class="btn" href="' . $this->model->getUrl() . 'nieuw/' . $this->soort . '">'.Icon::getTag('add').' Toevoegen</a>';
+			echo '<a class="btn" href="' . $this->model->getUrl() . 'nieuw/' . $this->soort . '">' . Icon::getTag('add') . ' Toevoegen</a>';
 		}
-		echo '<a class="btn" href="' . $this->model->getUrl() . 'beheren">'.Icon::getTag('table').' Beheren</a>';
-		if ($this->geschiedenis) {
-			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->model->getUrl() . $this->geschiedenis . '/deelnamegrafiek">'.Icon::getTag('chart_bar').' Deelnamegrafiek</a>';
-		}
+		echo '<a class="btn" href="' . $this->model->getUrl() . 'beheren">' . Icon::getTag('table') . ' Beheren</a>';
+		echo '</div>';
 		$view = new CmsPaginaView($this->pagina);
 		$view->view();
+		if ($this->geschiedenis) {
+			echo GroepenDeelnameGrafiek::getHtml();
+			$groepen = array();
+		}
 		foreach ($this->groepen as $groep) {
 			// Controleer rechten
-			if (!$groep->mag(A::Bekijken)) {
-				continue;
+			if ($groep->mag(A::Bekijken)) {
+				if ($this->geschiedenis) {
+					$groepen[] = $groep;
+				}
+				echo '<hr>';
+				$view = new GroepView($groep, $this->tab, $this->geschiedenis);
+				$view->view();
 			}
-			echo '<hr>';
-			$view = new GroepView($groep, $this->tab, $this->geschiedenis);
-			$view->view();
+		}
+		if ($this->geschiedenis) {
+			$grafiek = new GroepenDeelnameGrafiek($groepen);
+			$grafiek->view();
 		}
 	}
 
@@ -370,44 +379,51 @@ class GroepenDeelnameGrafiek implements View {
 		return null;
 	}
 
+	public static function getHtml() {
+		return '<div id="deelnamegrafiek" style="height: 360px;"></div>';
+	}
+
+	public function getJavascript() {
+		$mannen = json_encode($this->series[0]);
+		$vrouwen = json_encode($this->series[1]);
+		$step = json_encode($this->step);
+		return <<<JS
+$(document).ready(function () {
+	var series = [{
+			data: $vrouwen,
+			label: "",
+			color: "#FFCBDB"
+		}, {
+			data: $mannen,
+			label: "",
+			color: "#AFD8F8"
+		}
+	];
+	var options = {
+		series: {
+			bars: {
+				show: true,
+				lineWidth: 20
+			},
+			stack: true
+		}, yaxis: {
+			tickDecimals: 0
+		},
+		xaxis: {
+			autoscaleMargin: .01
+		},
+		xaxes: [{
+				mode: "time",
+				minTickSize: $step
+			}]
+	};
+	$.plot("#deelnamegrafiek", series, options);
+});
+JS;
+	}
+
 	public function view() {
-		?>
-		<div id="deelnamegrafiek" style="height: 360px;">
-			<script type="text/javascript">
-				$(document).ready(function () {
-					var series = [{
-							data: <?= json_encode($this->series[1]); ?>,
-							label: "",
-							color: "#FFCBDB"
-						}, {
-							data: <?= json_encode($this->series[0]); ?>,
-							label: "",
-							color: "#AFD8F8"
-						}
-					];
-					var options = {
-						series: {
-							bars: {
-								show: true,
-								lineWidth: 20
-							},
-							stack: true
-						}, yaxis: {
-							tickDecimals: 0
-						},
-						xaxis: {
-							autoscaleMargin: .01
-						},
-						xaxes: [{
-								mode: "time",
-								minTickSize: <?= json_encode($this->step); ?>
-							}]
-					};
-					$.plot("#deelnamegrafiek", series, options);
-				});
-			</script>
-		</div>
-		<?php
+		echo '<script type="text/javascript">' . $this->getJavascript() . '</script>';
 	}
 
 }
