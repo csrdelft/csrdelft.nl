@@ -75,7 +75,7 @@ abstract class PersistenceModel implements Persistence {
 	 * @param string $orderby ORDER BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
-	 * @return PDOStatement
+	 * @return PDOStatement implements Traversable using foreach does NOT require ->fetchAll()
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
 		if ($orderby == null) {
@@ -101,7 +101,7 @@ abstract class PersistenceModel implements Persistence {
 	 * @param string $orderby ORDER BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
-	 * @return PDOStatement
+	 * @return PDOStatement implements Traversable using foreach does NOT require ->fetchAll()
 	 */
 	public function findSparse(array $attributes, $criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
 		if ($orderby == null) {
