@@ -75,6 +75,10 @@ class EetplanModel extends PersistenceModel {
         return $this->find('uid LIKE ? AND woonoord_id = ?', array("$this->lichting%", $id), null, 'avond')->fetchAll();
     }
 
+    public function getBekendeHuizen() {
+        return $this->find('uid LIKE ? AND avond = DATE(0)', array("$this->lichting%"))->fetchAll();
+    }
+
     public function getBekendenModel() {
         return $this->bekendenModel;
     }

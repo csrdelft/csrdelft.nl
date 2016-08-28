@@ -2,3 +2,4 @@
 
 {$huizentable->view()}
 {$bekendentable->view()}
+{$bekendehuizentable->view()}

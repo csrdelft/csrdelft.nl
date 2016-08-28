@@ -838,7 +838,8 @@ class EntityField extends InputField {
 		$html = '<input name="' . $this->name . '_show" value="' . $show_value . '" origvalue="' . $this->show_value . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 
 		// actual values
-		$class = $this->model->orm;
+        $model = $this->model;
+		$class = $model::orm;
 		$orm = new $class();
 		foreach ($orm->getPrimaryKey() as $i => $key) {
 			$html .= '<input type="hidden" name="' . $this->name . '[]" id="' . $this->getId() . '_' . $key . '" value="' . $this->value[$i] . '" origvalue="' . $this->origvalue[$i] . '" />';
@@ -848,7 +849,7 @@ class EntityField extends InputField {
 
 }
 
-abstract class RequiredEntityField extends EntityField {
+class RequiredEntityField extends EntityField {
 
 	public $required = true;
 

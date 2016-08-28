@@ -11,6 +11,10 @@ require_once 'view/EetplanView.class.php';
  * Controller voor eetplan.
  */
 class EetplanController extends AclController {
+    /**
+     * @var EetplanModel
+     */
+    protected $model;
 
     public function __construct($query) {
         parent::__construct($query, new EetplanModel('15'));
@@ -18,7 +22,8 @@ class EetplanController extends AclController {
             $this->acl = array(
                 'beheer' => 'P_ADMIN',
                 'woonoorden' => 'P_ADMIN',
-                'novietrelatie' => 'P_ADMIN'
+                'novietrelatie' => 'P_ADMIN',
+                'bekendehuizen' => 'P_ADMIN'
             );
         } else {
             $this->acl = array(
@@ -89,6 +94,27 @@ class EetplanController extends AclController {
         if ($this->isPosted()) {
             $woonoorden = WoonoordenModel::instance()->find('status = ?', array(GroepStatus::HT));
             $this->view = new EetplanHuizenView($woonoorden);
+        }
+    }
+
+    public function bekendehuizen($actie = null) {
+        if ($actie == 'toevoegen') {
+            $woonoord = filter_input(INPUT_POST, 'woonoord');
+            $uid = filter_input(INPUT_POST, 'uid');
+
+            $eetplan = new Eetplan();
+            $eetplan->avond = 0;
+            $eetplan->uid = $uid;
+            $eetplan->woonoord_id = $woonoord;
+            $form = new EetplanBekendeHuizenForm($eetplan);
+            if ($form->validate()) {
+
+            } else {
+                $this->view = $form;
+            }
+
+        } elseif ($this->isPosted()) {
+            $this->view = new EetplanBekendeHuizenResponse($this->model->getBekendeHuizen());
         }
     }
 
