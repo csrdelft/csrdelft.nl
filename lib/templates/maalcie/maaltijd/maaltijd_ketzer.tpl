@@ -1,20 +1,20 @@
 {* maaltijd_ketzer.tpl	|	P.W.G. Brussee (brussee@live.nl) *}
 {strip}
-	<div class="bb-block bb-maaltijd" id="maaltijdketzer-{$maaltijd->getMaaltijdId()}">
+	<div class="bb-block bb-maaltijd maaltijdketzer-{$maaltijd->getMaaltijdId()}">
 		{if LoginModel::mag('P_LOGGED_IN')}
 			<div class="aanmelddata maaltijd-{if $aanmelding}aan{else}af{/if}gemeld">Aangemeld:<br />
 
 				{if !$maaltijd->getIsGesloten() && LoginModel::mag('P_MAAL_IK')}
 
 					{if $aanmelding}
-						<a onclick="ketzer_ajax('/maaltijdenketzer/afmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');" class="btn maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
+						<a onclick="ketzer_ajax('/maaltijdenketzer/afmelden/{$maaltijd->getMaaltijdId()}', '.maaltijdketzer-{$maaltijd->getMaaltijdId()}');" class="btn maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
 
 					{elseif $maaltijd->getAantalAanmeldingen() >= $maaltijd->getAanmeldLimiet()}
 						{icon get="stop" title="Maaltijd is vol"}&nbsp;
 						<span class="maaltijd-afgemeld">Nee</span>
 
 					{else}
-						<a onclick="ketzer_ajax('/maaltijdenketzer/aanmelden/{$maaltijd->getMaaltijdId()}', '#maaltijdketzer-{$maaltijd->getMaaltijdId()}');" class="btn maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
+						<a onclick="ketzer_ajax('/maaltijdenketzer/aanmelden/{$maaltijd->getMaaltijdId()}', '.maaltijdketzer-{$maaltijd->getMaaltijdId()}');" class="btn maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
 
 					{/if}
 
