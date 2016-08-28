@@ -113,7 +113,6 @@ abstract class AbstractGroepenController extends Controller {
 			case 'sluiten':
 			case 'logboek':
 			case 'omschrijving':
-			case 'deelnamegrafiek':
 			case GroepTab::Pasfotos:
 			case GroepTab::Lijst:
 			case GroepTab::Statistiek:
@@ -149,11 +148,6 @@ abstract class AbstractGroepenController extends Controller {
 		}
 		$body = new GroepenView($this->model, $groepen, $soort, $groep->id); // controleert rechten bekijken per groep
 		$this->view = new CsrLayoutPage($body);
-	}
-
-	public function deelnamegrafiek(AbstractGroep $groep) {
-		$groepen = $this->model->find('familie = ?', array($groep->familie));
-		$this->view = new GroepenDeelnameGrafiek($groepen); // controleert GEEN rechten bekijken
 	}
 
 	public function omschrijving(AbstractGroep $groep) {
