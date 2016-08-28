@@ -76,6 +76,46 @@ class EetplanHuisView extends AbstractEetplanView {
 	}
 }
 
+class EetplanHuizenData {
+    public function getPrimaryKey() {
+        return array('id');
+    }
+
+    public function getAttributes() {
+        return array('id', 'naam', 'eetplan');
+    }
+}
+
+class EetplanHuizenTable extends DataTable {
+    public function __construct() {
+        parent::__construct('EetplanHuizenData', '/eetplan/woonoorden/', 'Woonoorden die meedoen');
+        $this->settings['tableTools']['aButtons'] = array('select_all', 'select_none', 'copy', 'xls', 'pdf');
+        $this->searchColumn('naam');
+        $this->addColumn('eetplan', null, null, 'switchButton_' . $this->dataTableId);
+        $this->addKnop(new DataTableKnop(">= 1", $this->dataTableId, $this->dataUrl . 'aan', 'post', 'Aanmelden', 'Woonoorden aanmelden voor eetplan', 'text'));
+        $this->addKnop(new DataTableKnop(">= 1", $this->dataTableId, $this->dataUrl . 'uit', 'post', 'Afmelden', 'Woonoorden afmelden voor eetplan', 'text'));
+    }
+
+    public function getJavascript() {
+        return parent::getJavascript() . <<<JS
+function switchButton_{$this->dataTableId} (data) {
+    return '<span class="'+(data?'ja':'nee')+'"></span>';
+}
+JS;
+
+    }
+}
+
+class EetplanHuizenView extends DataTableResponse {
+    public function getJson($entity) {
+        return parent::getJson(array(
+            'UUID' => $entity->getUUID(),
+            'id' => $entity->id,
+            'naam' => $entity->naam,
+            'eetplan' => $entity->eetplan
+        ));
+    }
+}
 
 class EetplanBekendenTable extends DataTable {
     public function __construct() {
@@ -102,13 +142,11 @@ class EetplanBekendenForm extends ModalForm {
         $this->addFields($fields);
     }
 }
+
 class EetplanBeheerView extends AbstractEetplanView {
-    private $woonoorden;
-    public function __construct(EetplanModel $model, WoonoordenModel $woonoordenModel)
-    {
+    public function __construct(EetplanModel $model) {
         parent::__construct($model);
         $this->eetplan = $this->model->getEetplan();
-        $this->woonoorden = $woonoordenModel->find('status = ?', array(GroepStatus::HT))->fetchAll();
     }
 
     public function getBreadcrumbs() {
@@ -117,16 +155,15 @@ class EetplanBeheerView extends AbstractEetplanView {
 
     public function view() {
         $bekendenTable = new EetplanBekendenTable();
-        $this->smarty->assign("woonoorden", $this->woonoorden);
         $this->smarty->assign("eetplan", $this->eetplan);
         $this->smarty->assign("bekendentable", $bekendenTable);
+        $this->smarty->assign("huizentable", new EetplanHuizenTable()); // TODO: consistentie huizen-woonoorden
         $this->smarty->display('eetplan/beheer.tpl');
     }
 }
 
 class EetplanHuisStatusView extends JsonResponse {
-    public function getJson($entity)
-    {
+    public function getJson($entity) {
         return parent::getJson(array(
             'id' => $entity->id,
             'eetplan' => $entity->eetplan

@@ -12,19 +12,20 @@ require_once 'view/EetplanView.class.php';
  */
 class EetplanController extends AclController {
 
-	public function __construct($query) {
-		parent::__construct($query, new EetplanModel('15'));
-		if (!$this->isPosted()) {
-			$this->acl = array(
-				'view'	 => 'P_LEDEN_READ',
-				'noviet' => 'P_LEDEN_READ',
-				'huis'	 => 'P_LEDEN_READ',
-                'beheer' => 'P_ADMIN'
+    public function __construct($query) {
+        parent::__construct($query, new EetplanModel('15'));
+        if ($this->isPosted()) {
+            $this->acl = array(
+                'beheer' => 'P_ADMIN',
+                'woonoorden' => 'P_ADMIN',
+                'novietrelatie' => 'P_ADMIN'
             );
         } else {
             $this->acl = array(
-                'beheer' => 'P_ADMIN',
-                'huisstatus' => 'P_ADMIN'
+                'view' => 'P_LEDEN_READ',
+                'noviet' => 'P_LEDEN_READ',
+                'huis' => 'P_LEDEN_READ',
+                'beheer' => 'P_ADMIN'
             );
         }
     }
@@ -60,14 +61,38 @@ class EetplanController extends AclController {
 		$this->view = new CsrLayoutPage($body);
 	}
 
-    public function huisstatus() {
-        $id = filter_input(INPUT_POST, 'woonoordid', FILTER_VALIDATE_INT);
-        $status = filter_input(INPUT_POST, 'eetplanstatus', FILTER_VALIDATE_BOOLEAN);
-        $woonoord = WoonoordenModel::instance()->find('id = ?', array($id))->fetch();
+    public function woonoorden($actie = null) {
+        if ($actie == 'aan') {
+            $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+            $woonoorden = array();
+            foreach ($selection as $woonoord) {
+                $woonoord = WoonoordenModel::getUUID($woonoord);
+                $woonoord->eetplan = true;
+                WoonoordenModel::instance()->update($woonoord);
+                $woonoorden[] = $woonoord;
+            }
+            $this->view = new EetplanHuizenView($woonoorden);
+            return;
+        } elseif ($actie == 'uit') {
+            $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+            $woonoorden = array();
+            foreach ($selection as $woonoord) {
+                $woonoord = WoonoordenModel::getUUID($woonoord);
+                $woonoord->eetplan = false;
+                WoonoordenModel::instance()->update($woonoord);
+                $woonoorden[] = $woonoord;
+            }
+            $this->view = new EetplanHuizenView($woonoorden);
+            return;
+        }
 
-        $woonoord->eetplan = $status;
-        WoonoordenModel::instance()->update($woonoord);
-        $this->view = new EetplanHuisStatusView($woonoord);
+        if ($this->isPosted()) {
+            $woonoorden = WoonoordenModel::instance()->find('status = ?', array(GroepStatus::HT));
+            $this->view = new EetplanHuizenView($woonoorden);
+        }
+    }
+
+
     public function novietrelatie($actie = null) {
 
         if ($actie == 'toevoegen') {
