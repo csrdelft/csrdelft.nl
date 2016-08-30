@@ -32,7 +32,7 @@ class LedenMemoryView extends CompressedLayout {
 					$verticale = VerticalenModel::instance()->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
 				}
 				if ($verticale) {
-					$this->titel = 'Ledenmemory verticale ' . $verticale->naam . ($this->learnmode ? 'oefenen' : '');
+					$this->titel = $verticale->naam . ' verticale ledenmemory' . ($this->learnmode ? ' (oefenen)' : '');
 					$this->groep = $verticale;
 					break;
 				}
@@ -47,7 +47,7 @@ class LedenMemoryView extends CompressedLayout {
 				}
 				$lichting = LichtingenModel::get($l);
 				if ($lichting) {
-					$this->titel = 'Ledenmemory lichting ' . $lichting->lidjaar . ($this->learnmode ? 'oefenen' : '');
+					$this->titel = $lichting->lidjaar . ' lichting ledenmemory' . ($this->learnmode ? ' (oefenen)' : '');
 					$this->groep = $lichting;
 				}
 		}
