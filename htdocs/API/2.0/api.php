@@ -32,7 +32,7 @@ if ($authHeader) {
 			$_SESSION['_uid'] = $token->data->userId;
 
 			// Leden
-			if (isset($_GET['cat']) && $_GET['cat'] === 'leden') {
+			if (LoginModel::mag('P_OUDLEDEN_READ') && isset($_GET['cat']) && $_GET['cat'] === 'leden') {
 				if (isset($_GET['id'])) {
 					$get = getLid($_GET['id']);
 				} else {
@@ -41,7 +41,7 @@ if ($authHeader) {
 			}
 
 			// Agenda
-			else if (isset($_GET['cat']) && $_GET['cat'] === 'agenda') {
+			elseif (LoginModel::mag('P_AGENDA_READ') && isset($_GET['cat']) && $_GET['cat'] === 'agenda') {
 				if (isset($_GET['from']) && isset($_GET['to'])) {
 					$from = strtotime($_GET['from']);
 					$to = strtotime($_GET['to']);
@@ -52,22 +52,22 @@ if ($authHeader) {
 			}
 
 			// Maaltijden
-			else if (isset($_GET['cat']) && $_GET['cat'] === 'maaltijden') {
+			elseif (LoginModel::mag('P_MAAL_IK') && isset($_GET['cat']) && $_GET['cat'] === 'maaltijden') {
 				if (isset($_GET['id']) && isset($_GET['action'])) {
 					if ($_GET['action'] === 'aanmelden') {
 						$get = maaltijdAanmelden(intval($_GET['id']));
-					} else if ($_GET['action'] === 'afmelden') {
+					} elseif ($_GET['action'] === 'afmelden') {
 						$get = maaltijdAfmelden(intval($_GET['id']));
 					}
 				}
 			}
 
 			// Activiteiten
-			else if (isset($_GET['cat']) && $_GET['cat'] === 'activiteiten') {
+			elseif (LoginModel::mag('P_LEDEN_READ') && isset($_GET['cat']) && $_GET['cat'] === 'activiteiten') {
 				if (isset($_GET['id']) && isset($_GET['action'])) {
 					if ($_GET['action'] === 'aanmelden') {
 						$get = activiteitAanmelden(intval($_GET['id']));
-					} else if ($_GET['action'] === 'afmelden') {
+					} elseif ($_GET['action'] === 'afmelden') {
 						$get = activiteitAfmelden(intval($_GET['id']));
 					}
 				}
@@ -271,7 +271,7 @@ function activiteitAanmelden($id) {
 
 	$activiteit = ActiviteitenModel::get($id);
 
-	if (!$activiteit) {
+	if (!$activiteit || !$activiteit->mag(A::Bekijken)) {
 		http_response_code(404);
 		return 'Activiteit bestaat niet.';
 	}
@@ -298,7 +298,7 @@ function activiteitAfmelden($id) {
 
 	$activiteit = ActiviteitenModel::get($id);
 
-	if (!$activiteit) {
+	if (!$activiteit || !$activiteit->mag(A::Bekijken)) {
 		http_response_code(404);
 		return 'Activiteit bestaat niet';
 	}
