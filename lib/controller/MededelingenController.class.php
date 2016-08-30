@@ -48,7 +48,7 @@ class MededelingenController extends AclController {
         if ($this->hasParam($base)){
             if ($this->getParam($base) == 'pagina') {
                 $args = array(0) + $this->getParams($base + 1); // Id is 0
-            } else if (ctype_digit($this->getParam($base))) { // /mededelingen/{prullenbak}/xxx
+            } elseif (ctype_digit($this->getParam($base))) { // /mededelingen/{prullenbak}/xxx
                 $args = $this->getParams($base);
             } else { // /mededelingen/{prullenbak?}/{bekijken|bewerken|verwijderen}/xxx
                 $this->action = $this->getParam($base);
@@ -126,7 +126,7 @@ class MededelingenController extends AclController {
 
             if (isset($_FILES['plaatje']) && ($img_errors = $this->model->savePlaatje($_FILES['plaatje'], $mededeling)) != '') {
                 setMelding('<h3>Niet opgeslagen</h3>'. $img_errors, -1);
-            } else if (($errors = $this->model->validate($mededeling)) != '') {
+            } elseif (($errors = $this->model->validate($mededeling)) != '') {
                 setMelding('<h3>Niet opgeslagen</h3>'. $errors, -1);
             } else {
                 if ($mededeling->id) {
