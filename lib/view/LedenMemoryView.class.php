@@ -20,32 +20,42 @@ class LedenMemoryView extends CompressedLayout {
 		$this->groep = array();
 		$this->cheat = isset($_GET['rosebud']);
 		$this->learnmode = isset($_GET['oefenen']);
-		if (isset($_GET['verticale'])) {
-			$v = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
-			if (strlen($v) > 1) {
-				$verticale = VerticalenModel::instance()->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
-			} else {
-				$verticale = VerticalenModel::get($v);
-			}
-			if ($verticale) {
-				$this->titel = 'Ledenmemory verticale ' . $verticale->naam . ($this->learnmode ? 'oefenen' : '');
-				$this->groep = $verticale;
-			}
-		} else {
-			$l = (int) filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
-			if ($l < 1950) {
-				$l = LichtingenModel::getJongsteLidjaar();
-			}
-			$lichting = LichtingenModel::get($l);
-			if ($lichting) {
-				$this->titel = 'Ledenmemory lichting ' . $lichting->lidjaar . ($this->learnmode ? 'oefenen' : '');
-				$this->groep = $lichting;
-			}
+		switch (isset($_GET['verticale'])) {
+
+			case true:
+				$v = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
+				if (strlen($v) == 1) {
+					$verticale = VerticalenModel::get($v);
+				}
+				if (!$verticale) {
+					$verticale = VerticalenModel::instance()->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
+				}
+				if ($verticale) {
+					$this->titel = 'Ledenmemory verticale ' . $verticale->naam . ($this->learnmode ? 'oefenen' : '');
+					$this->groep = $verticale;
+					break;
+				}
+			// fall through
+
+			case false:
+				$l = (int) filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
+				$min = LichtingenModel::getOudsteLidjaar();
+				$max = LichtingenModel::getJongsteLidjaar();
+				if ($l < $min OR $l > $max) {
+					$l = $max;
+				}
+				$lichting = LichtingenModel::get($l);
+				if ($lichting) {
+					$this->titel = 'Ledenmemory lichting ' . $lichting->lidjaar . ($this->learnmode ? 'oefenen' : '');
+					$this->groep = $lichting;
+				}
 		}
-		foreach ($this->groep->getLeden() as $lid) {
-			$profiel = ProfielModel::get($lid->uid);
-			if (in_array($profiel->status, $lidstatus)) {
-				$this->leden[] = $profiel;
+		if ($this->groep instanceof AbstractGroep) {
+			foreach ($this->groep->getLeden() as $lid) {
+				$profiel = ProfielModel::get($lid->uid);
+				if (in_array($profiel->status, $lidstatus)) {
+					$this->leden[] = $profiel;
+				}
 			}
 		}
 	}
@@ -217,6 +227,7 @@ class LedenMemoryScoreResponse extends DataTableResponse {
 
 		return parent::getJson($array);
 	}
+
 }
 
 class LedenMemoryZijbalkView implements View {
@@ -256,7 +267,7 @@ class LedenMemoryZijbalkView implements View {
 				echo '<span class="cursief">';
 			}
 			echo ProfielModel::getLink($score->door_uid, 'civitas');
-			echo  ' (';
+			echo ' (';
 			echo $score->beurten;
 			echo ')';
 			if ($first) {
@@ -267,4 +278,5 @@ class LedenMemoryZijbalkView implements View {
 		}
 		echo '</div>'; //einde wrapperdiv
 	}
+
 }
