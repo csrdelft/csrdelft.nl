@@ -24,6 +24,7 @@ class LedenMemoryView extends CompressedLayout {
 
 			case true:
 				$v = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
+				$verticale = false;
 				if (strlen($v) == 1) {
 					$verticale = VerticalenModel::get($v);
 				}
