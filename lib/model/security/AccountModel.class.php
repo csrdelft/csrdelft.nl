@@ -118,10 +118,10 @@ class AccountModel extends CachedPersistenceModel {
 		 * @source OWASP best-practice
 		 */
 		switch ($account->failed_login_attempts) {
-			case 0: $wacht = 0;
-			case 1: $wacht = 5;
-			case 2: $wacht = 15;
-			default: $wacht = 45;
+			case 0: $wacht = 0; break;
+			case 1: $wacht = 5; break;
+			case 2: $wacht = 15; break;
+			default: $wacht = 45; break;
 		}
 		$diff = strtotime($account->last_login_attempt) + $wacht - time();
 		if ($diff > 0) {
