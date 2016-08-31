@@ -19,7 +19,7 @@
 		<br />
 	{/if}
 	{getMelding()}
-	{if $geselecteerdeMededeling!==null}		{*	Check of er een mededeling geselecteerd is.	Zo niet, dan
+	{if !empty($geselecteerdeMededeling)}		{*	Check of er een mededeling geselecteerd is.	Zo niet, dan
 		is de database leeg en geven we een nette foutmelding.	*}
 		<div id="kolomlinks">
 			{* Knoppen bovenaan *}
