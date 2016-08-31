@@ -1,0 +1,7 @@
+ExpiresActive On
+ExpiresDefault A0
+<FilesMatch ".*">
+# 2 weeks
+ExpiresDefault A1209600
+Header append Cache-Control "proxy-revalidate"
+</FilesMatch>
