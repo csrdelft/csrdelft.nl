@@ -23,9 +23,13 @@
         $body.addClass('is-loading');
 
         $window.on('load', function () {
-            window.setTimeout(function () {
-                $body.removeClass('is-loading');
-            }, 100);
+            $body.removeClass('is-loading');
+
+            // Als er een error in de loginform is, dan heeft de gebruiker net geprobeerd in te loggen
+            // Laat dan het loginscherm zien.
+            if ($('#loginform').find('.error').length) {
+                $login._show();
+            }
         });
 
         // Fix: Placeholder polyfill.
