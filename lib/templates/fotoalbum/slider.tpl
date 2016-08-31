@@ -26,7 +26,7 @@
 	</script>
 	<div id="{$sliderId}">
 		{foreach from=$album->getFotos() item=foto}
-			<img src="{$foto->getResizedUrl()}" />
+			<img src="{$foto->getResizedUrl()}" height="{$height}" />
 		{/foreach}
 	</div>
 {/if}
