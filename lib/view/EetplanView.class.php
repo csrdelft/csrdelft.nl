@@ -149,8 +149,8 @@ class EetplanBekendenTable extends DataTable {
         $this->searchColumn('noviet1');
         $this->searchColumn('noviet2');
 
-        $this->addKnop(new DataTableKnop("== 0", $this->dataTableId, $this->dataUrl . 'toevoegen', 'post popup', 'Toevoegen', 'Bekenden toevoegen', 'cross'));
-        $this->addKnop(new DataTableKnop(">= 1", $this->dataTableId, $this->dataUrl . 'verwijderen', 'post confirm', 'Verwijderen', 'Bekenden verwijderen', 'cross'));
+        $this->addKnop(new DataTableKnop("== 0", $this->dataTableId, $this->dataUrl . 'toevoegen', 'post popup', 'Toevoegen', 'Bekenden toevoegen', 'text', 'add'));
+        $this->addKnop(new DataTableKnop(">= 1", $this->dataTableId, $this->dataUrl . 'verwijderen', 'post confirm', 'Verwijderen', 'Bekenden verwijderen', 'text', 'cross'));
     }
 }
 
@@ -194,8 +194,8 @@ class EetplanBekendeHuizenTable extends DataTable {
         $this->addColumn('woonoord');
         $this->addColumn('naam');
 
-        $this->addKnop(new DataTableKnop("== 0", $this->dataTableId, $this->dataUrl . 'toevoegen', 'post popup', 'Toevoegen', 'Bekende toevoegen', 'cross'));
-        $this->addKnop(new DataTableKnop("== 1", $this->dataTableId, $this->dataUrl . 'verwijderen', 'post confirm', 'Verwijderen', 'Bekende verwijderen', 'cross'));
+        $this->addKnop(new DataTableKnop("== 0", $this->dataTableId, $this->dataUrl . 'toevoegen', 'post popup', 'Toevoegen', 'Bekende toevoegen', 'text', 'add'));
+        $this->addKnop(new DataTableKnop("== 1", $this->dataTableId, $this->dataUrl . 'verwijderen', 'post confirm', 'Verwijderen', 'Bekende verwijderen', 'text', 'cross'));
     }
 }
 

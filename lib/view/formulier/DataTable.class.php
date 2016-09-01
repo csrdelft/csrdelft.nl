@@ -372,8 +372,8 @@ class DataTableKnop extends FormulierKnop {
 	private $multiplicity;
 	protected $tableId;
 
-	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $class) {
-		parent::__construct($url, $action . ' DataTableResponse', $label, $title, null);
+	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $class, $icon = null) {
+		parent::__construct($url, $action . ' DataTableResponse', $label, $title, $icon);
 		$this->multiplicity = $multiplicity;
 		$this->tableId = $tableId;
 		$this->css_classes[] = 'DTTT_button';
