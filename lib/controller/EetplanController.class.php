@@ -114,7 +114,15 @@ class EetplanController extends AclController {
             } else {
                 $this->view = $form;
             }
-
+        } elseif ($actie == 'verwijderen') {
+            $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+            $verwijderd = array();
+            foreach ($selection as $uuid) {
+                $eetplan = $this->model->getUUID($uuid);
+                $this->model->delete($eetplan);
+                $verwijderd[] = $eetplan;
+            }
+            $this->view = new RemoveRowsResponse($verwijderd);
         } elseif ($this->isPosted()) {
             $this->view = new EetplanBekendeHuizenResponse($this->model->getBekendeHuizen());
         }

@@ -126,6 +126,7 @@ class EetplanBekendeHuizenTable extends DataTable {
         $this->addColumn('naam');
 
         $this->addKnop(new DataTableKnop("== 0", $this->dataTableId, '/eetplan/bekendehuizen/toevoegen', 'post popup', 'Toevoegen', 'Bekende toevoegen', 'cross'));
+        $this->addKnop(new DataTableKnop("== 1", $this->dataTableId, '/eetplan/bekendehuizen/verwijderen', 'post confirm', 'Verwijderen', 'Bekende verwijderen', 'cross'));
     }
 }
 
