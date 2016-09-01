@@ -796,18 +796,51 @@ class RequiredLidField extends LidField {
 
 /**
  * Select an entity based on primary key values in hidden input fields, supplied by remote data source.
+ *
+ * NOTE: support alleen entities met een enkele primary key.
  */
 class EntityField extends InputField {
 
-	private $show_value;
+	private $show_value, $entity, $orm;
 
-	public function __construct($name, array $primary_key_values, $description, PersistenceModel $model, $show_value, $find_url = null) {
-		parent::__construct($name, $primary_key_values, $description, $model);
-		$this->show_value = $show_value;
-		$this->suggestions[] = $find_url;
-	}
+    /**
+     * @var PersistenceModel
+     */
+    protected $model;
 
-	public function validate() {
+    /**
+     * EntityField constructor.
+     * @param $name string Prefix van de input
+     * @param $show string Attribuut van $model om in de input weer te geven
+     * @param $description string Beschrijvijng van de input
+     * @param PersistentEntity $entity
+     * @param PersistenceModel $model Model
+     * @param $url string Url waar aanvullingen te vinden zijn
+     */
+    public function __construct($name, $show, $description, PersistenceModel $model, $url) {
+        $this->orm = $model::orm;
+        $this->entity = new $this->orm();
+        foreach ($this->entity->getPrimaryKey() as $key) {
+            $this->entity->$key = filter_input(INPUT_POST, $name . '_'. $key, FILTER_DEFAULT);
+        }
+
+        parent::__construct($name, $this->entity->$show, $description, $model);
+        $this->suggestions[] = $url;
+        $this->show_value = $show;
+    }
+
+    public function getName() {
+        // TODO: Dit moet de volledige pk kunnen zijn.
+        return $this->name . '_' . $this->entity->getPrimaryKey()[0];
+    }
+
+    public function getValue() {
+        // TODO: Dit moet de volledige pk kunnen zijn.
+        $key = $this->entity->getPrimaryKey()[0];
+        return $this->entity->$key;
+    }
+
+    public function validate() {
 		if (!parent::validate()) {
 			return false;
 		}
@@ -815,35 +848,46 @@ class EntityField extends InputField {
 		if ($this->value == '') {
 			return true;
 		}
-		// bestaat er een entity met opgegeven primary key?
-		$where = array();
-		$class = $this->model->orm;
-		$orm = new $class();
-		foreach ($orm->getPrimaryKey() as $key) {
-			$where[] = $key . ' = ?';
-		}
-		if (!$this->model->exist(implode(' AND ', $where), $this->value)) {
+
+		if (!$this->model->exists($this->entity)) {
 			$this->error = 'Niet gevonden';
 		}
+
 		return $this->error === '';
 	}
 
-	public function getHtml() {
-		// value to show
-		if ($this->isPosted()) {
-			$show_value = filter_input(INPUT_POST, $this->name . '_show', FILTER_SANITIZE_STRING);
-		} else {
-			$show_value = $this->show_value;
-		}
-		$html = '<input name="' . $this->name . '_show" value="' . $show_value . '" origvalue="' . $this->show_value . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
+    /**
+     * Dit veld is gepost als show en de hele pk is gepost.
+     *
+     * @return bool Of alles gepost is
+     */
+	public function isPosted() {
+        if (false === filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)) {
+            return false;
+        }
 
-		// actual values
-        $model = $this->model;
-		$class = $model::orm;
-		$orm = new $class();
-		foreach ($orm->getPrimaryKey() as $i => $key) {
-			$html .= '<input type="hidden" name="' . $this->name . '[]" id="' . $this->getId() . '_' . $key . '" value="' . $this->value[$i] . '" origvalue="' . $this->origvalue[$i] . '" />';
-		}
+        foreach ($this->entity->getPrimaryKey() as $key) {
+            if (false === filter_input(INPUT_POST, $this->name . '_' . $key, FILTER_DEFAULT)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function getHtml() {
+	    if ($this->isPosted()) {
+	        $this->value = filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT);
+        }
+
+		$html = '<input name="' . $this->name . '_show" value="' . $this->value . '" origvalue="' . $this->value . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
+
+		foreach ($this->entity->getPrimaryKey() as $i => $key) {
+		    $id = $this->getId() . '_' . $key;
+            $name = $this->name . '_' . $key;
+            $this->typeahead_selected .= '$("#' . $id . '").val(suggestion["' . $key . '"]);';
+            $html .= '<input type="hidden" name="' . $name . '" id="' . $id . '" value="' . $this->entity->$key . '" />';
+        }
 		return $html;
 	}
 
