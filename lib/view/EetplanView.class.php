@@ -82,7 +82,7 @@ class EetplanHuizenData {
     }
 
     public function getAttributes() {
-        return array('id', 'naam', 'eetplan');
+        return array('id', 'naam', 'soort', 'eetplan');
     }
 }
 
@@ -111,6 +111,7 @@ class EetplanHuizenView extends DataTableResponse {
             'UUID' => $entity->getUUID(),
             'id' => $entity->id,
             'naam' => $entity->naam,
+            'soort' => $entity->soort,
             'eetplan' => $entity->eetplan
         ));
     }
@@ -216,15 +217,6 @@ class EetplanHuizenResponse extends JsonResponse {
             'label' => $entity->id,
             'value' => $entity->naam,
             'id' => $entity->id,
-        ));
-    }
-}
-
-class EetplanHuisStatusView extends JsonResponse {
-    public function getJson($entity) {
-        return parent::getJson(array(
-            'id' => $entity->id,
-            'eetplan' => $entity->eetplan
         ));
     }
 }
