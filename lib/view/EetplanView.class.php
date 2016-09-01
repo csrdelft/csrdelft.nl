@@ -107,7 +107,7 @@ class EetplanHuizenTable extends DataTable {
     public function getJavascript() {
         return parent::getJavascript() . <<<JS
 function switchButton_{$this->dataTableId} (data) {
-    return '<span class="'+(data?'ja':'nee')+'"></span>';
+    return '<span class="ico '+(data?'tick':'cross')+'"></span>';
 }
 JS;
 
