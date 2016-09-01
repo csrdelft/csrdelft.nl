@@ -252,12 +252,12 @@ class FotoModel extends PersistenceModel {
 	/**
 	 * @override PersistenceModel->getUUID($)
 	 */
-	public static function getUUID($UUID) {
+	public function getUUID($UUID) {
 		$parts = explode('@', $UUID, 2);
 		$path = explode('/', $parts[0]);
 		$filename = array_pop($path);
 		$subdir = implode('/', $path) . '/';
-		return static::instance()->retrieveByPrimaryKey(array($subdir, $filename));
+		return $this->retrieveByPrimaryKey(array($subdir, $filename));
 	}
 
 	protected function __construct() {

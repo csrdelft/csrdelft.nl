@@ -203,7 +203,7 @@ class LedenMemoryScoreResponse extends DataTableResponse {
 				switch ($parts[1]) {
 
 					case 'verticale.csrdelft.nl':
-						$groep = VerticalenModel::getUUID($score->groep);
+						$groep = VerticalenModel::instance()->getUUID($score->groep);
 						$this->titles[$score->groep] = 'Verticale ' . $groep->naam;
 						break;
 

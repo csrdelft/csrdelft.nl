@@ -36,12 +36,13 @@ abstract class PersistenceModel implements Persistence {
 	 * 
 	 * @param string $UUID
 	 * @return PersistentEntity
-	 */
-	public static function getUUID($UUID) {
-		$parts = explode('@', $UUID, 2);
-		$primary_key_values = explode('.', $parts[0]);
-		return static::instance()->retrieveByPrimaryKey($primary_key_values);
-	}
+	 */	
+	public function getUUID($UUID) {
+	    $parts = explode('@', $UUID, 2);
+        $primary_key_values = explode('.', $parts[0]);
+        return $this->retrieveByPrimaryKey($primary_key_values);
+    }
+
 
 	/**
 	 * Object relational mapping

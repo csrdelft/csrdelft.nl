@@ -72,7 +72,7 @@ class EetplanController extends AclController {
             $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
             $woonoorden = array();
             foreach ($selection as $woonoord) {
-                $woonoord = WoonoordenModel::getUUID($woonoord);
+                $woonoord = WoonoordenModel::instance()->getUUID($woonoord);
                 $woonoord->eetplan = true;
                 WoonoordenModel::instance()->update($woonoord);
                 $woonoorden[] = $woonoord;
@@ -83,7 +83,7 @@ class EetplanController extends AclController {
             $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
             $woonoorden = array();
             foreach ($selection as $woonoord) {
-                $woonoord = WoonoordenModel::getUUID($woonoord);
+                $woonoord = WoonoordenModel::instance()->getUUID($woonoord);
                 $woonoord->eetplan = false;
                 WoonoordenModel::instance()->update($woonoord);
                 $woonoorden[] = $woonoord;

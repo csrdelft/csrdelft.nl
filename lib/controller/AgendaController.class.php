@@ -149,11 +149,11 @@ class AgendaController extends AclController {
 		switch ($orm[0]) {
 
 			case 'csrdelft':
-				$item = ProfielModel::getUUID($refuuid);
+				$item = ProfielModel::instance()->getUUID($refuuid);
 				break;
 
 			case 'bijbelrooster':
-				$item = BijbelroosterModel::getUUID($refuuid);
+				$item = BijbelroosterModel::instance()->getUUID($refuuid);
 				break;
 
 			case 'maaltijd':
@@ -165,11 +165,11 @@ class AgendaController extends AclController {
 				break;
 
 			case 'activiteit':
-				$item = ActiviteitenModel::getUUID($refuuid);
+				$item = ActiviteitenModel::instance()->getUUID($refuuid);
 				break;
 
 			case 'agendaitem':
-				$item = AgendaModel::getUUID($refuuid);
+				$item = AgendaModel::instance()->getUUID($refuuid);
 				break;
 
 			default:
