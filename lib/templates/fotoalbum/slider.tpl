@@ -24,7 +24,7 @@
 			// Missing js file
 		}
 	</script>
-	<div id="{$sliderId}">
+	<div id="{$sliderId}" class="hidden">
 		{foreach from=$album->getFotos() item=foto}
 			<img src="{$foto->getResizedUrl()}" />
 		{/foreach}

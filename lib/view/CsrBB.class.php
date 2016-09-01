@@ -300,7 +300,7 @@ class CsrBB extends eamBBParser {
 			$content = $arguments;
 		}
 		if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
-			$neus = '<img src="/plaetjes/famfamfam/bullet_red.png" alt="o" class="neus2013">';
+			$neus = Icon::getTag('bullet_red', null, null, 'neus2013');
 			$content = str_replace('o', $neus, $content);
 		}
 		return $content;
@@ -455,7 +455,7 @@ class CsrBB extends eamBBParser {
 
 		if (startsWith($id, 'spotify')) { // Spotify uri
 			$uri = $id;
-		} else if (startsWith($id, 'https')) { // Link naar afspeellijst
+		} elseif (startsWith($id, 'https')) { // Link naar afspeellijst
 			$uri = preg_replace('/.+\/(\w+)\/(\w+)\/(\w+)\/(\w+)$/', 'spotify:$1:$2:$3:$4', $id);
 		} else {
 			return '[spotify] Geen geldige url (' . htmlspecialchars($id) .')';
@@ -473,7 +473,7 @@ class CsrBB extends eamBBParser {
 			if ($formaat == "hoog") {
 				$width = 300;
 				$height = 380;
-			} else if ($formaat == "blok") {
+			} elseif ($formaat == "blok") {
 				$width = 80;
 				$height = 80;
 				$class = "class='float-left'"; # Blokje float in tekst

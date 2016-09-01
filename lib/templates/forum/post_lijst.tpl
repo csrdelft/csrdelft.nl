@@ -58,7 +58,7 @@
 				{/if}
 				{if LoginModel::mag('P_LOGGED_IN')}
 					{assign var=timestamp value=strtotime($post->datum_tijd)}
-					<a id="timestamp{$timestamp}" href="/forum/bladwijzer/{$post->draad_id}" class="btn post forummodknop bladwijzer" data="timestamp={$timestamp}" title="Bladwijzer bij dit bericht leggen"></a>
+					<a id="timestamp{$timestamp}" href="/forum/bladwijzer/{$post->draad_id}" class="btn post forummodknop bladwijzer" data="timestamp={$timestamp}" title="Bladwijzer bij dit bericht leggen">{icon get="tab"}</a>
 				{/if}
 				{if $post->getForumDraad()->magModereren()}
 					<a href="/forum/offtopic/{$post->post_id}" class="btn post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Offtopic markeren">{icon get="thumb_down"}</a>

@@ -80,17 +80,20 @@ class MededelingenView extends SmartyTemplateView {
 		$this->prullenbak = $prullenbak;
 
 		$this->geselecteerdeMededeling = null;
-		if ($paginanummer !== null) {
+		if (empty($paginanummer)) {
+			$this->paginaNummer = 1;
+		} else {
 			$this->paginaNummer = $paginanummer;
 			$this->paginaNummerOpgevraagd = true;
-		} else {
-			$this->paginaNummer = 1;
 		}
 
 		if ($mededelingId != 0) {
 			try {
 				$this->geselecteerdeMededeling = $this->model->getUUID($mededelingId);;
-				if (!$this->prullenbak OR ! LoginModel::mag('P_NEWS_MOD')) {
+				if (!$this->geselecteerdeMededeling) {
+					throw new Exception('Mededeling bestaat niet!');
+				}
+				elseif (!$this->prullenbak OR ! LoginModel::mag('P_NEWS_MOD')) {
 					// In de volgende gevallen heeft de gebruiker geen rechten om deze mededeling te bekijken:
 					// 1. Indien deze mededeling reeds verwijderd is.
 					// 2. Indien deze mededeling niet bestemd is voor iedereen en de gebruiker geen leden-lees rechten heeft.

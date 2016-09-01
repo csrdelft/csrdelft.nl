@@ -2,6 +2,14 @@
 [![Codacy grade](https://img.shields.io/codacy/grade/70ed86243f82444790e463c24c2a3a0c.svg?style=flat-square)](https://www.codacy.com/app/qurben/csrdelft-nl?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=csrdelft/csrdelft.nl&amp;utm_campaign=Badge_Grade)
 # csrdelft.nl stek
 
+## Deps
+
+Gebruik [Composer](https://getcomposer.org/) om de dependencies te installeren door het volgende commando in de projectmap uit te voeren.
+
+```bash
+composer install
+```
+
 ## Plaetjes
 
 In order for your development build to function correctly you'll need a bunch of images

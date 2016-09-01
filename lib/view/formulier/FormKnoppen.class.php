@@ -117,7 +117,7 @@ class FormDefaultKnoppen extends FormKnoppen {
 
 		$this->submit = new SubmitKnop();
 		if ($cancel_reset) {
-			$this->submit->icon = '/famfamfam/accept.png';
+			$this->submit->icon = 'accept';
 		}
 		if ($submit_reset) {
 			$this->submit->action .= ' reset';
@@ -210,7 +210,7 @@ class FormulierKnop implements FormElement {
 		}
 		$html .= '>';
 		if ($this->icon) {
-			$html .= '<img src="/plaetjes' . $this->icon . '" class="icon" width="16" height="16" /> ';
+			$html .= Icon::getTag($this->icon);
 		}
 		$html .= $this->label;
 		return $html . '</a> ';
@@ -231,7 +231,7 @@ JS;
 
 class SubmitKnop extends FormulierKnop {
 
-	public function __construct($url = null, $action = 'submit', $label = 'Opslaan', $title = 'Invoer opslaan', $icon = '/famfamfam/disk.png') {
+	public function __construct($url = null, $action = 'submit', $label = 'Opslaan', $title = 'Invoer opslaan', $icon = 'disk') {
 		parent::__construct($url, $action, $label, $title, $icon);
 	}
 

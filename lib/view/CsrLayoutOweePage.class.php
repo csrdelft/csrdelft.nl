@@ -36,6 +36,8 @@ class CsrLayoutOweePage extends CompressedLayout {
 
 	function view() {
 		header('Content-Type: text/html; charset=UTF-8');
+        header('Cache-Control: max-age=1209600');
+        header('Pragma: public');
 
 		$smarty = CsrSmarty::instance();
 		$smarty->assign('stylesheets', $this->getStylesheets());

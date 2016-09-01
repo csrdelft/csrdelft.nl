@@ -2,7 +2,7 @@
     <!-- Banner -->
     <section id="banner-small">
         <div class="inner">
-            <a href="/"><img src="/plaetjes/layout-owee/Logo.svg"></a>
+            <a href="/"><img src="/plaetjes/layout-owee/Logo.svg" height="140"></a>
         </div>
     </section>
 

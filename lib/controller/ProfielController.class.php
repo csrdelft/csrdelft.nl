@@ -235,9 +235,9 @@ class ProfielController extends AclController {
 			}
 		}
 		if ($groep) {
-			$data = LedenMemoryScoresModel::instance()->getScores($groep);
+			$data = LedenMemoryScoresModel::instance()->getGroepTopScores($groep);
 		} else {
-			$data = LedenMemoryScoresModel::instance()->getAllScores();
+			$data = LedenMemoryScoresModel::instance()->getAllTopScores();
 		}
 		$this->view = new LedenMemoryScoreResponse($data);
 	}

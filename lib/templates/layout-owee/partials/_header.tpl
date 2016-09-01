@@ -31,7 +31,7 @@
     {/foreach}
 </head>
 
-<body>
+<body class="is-loading">
 <!-- Page Wrapper -->
 <div id="page-wrapper">
 
