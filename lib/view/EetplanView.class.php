@@ -195,6 +195,30 @@ class EetplanBeheerView extends AbstractEetplanView {
     }
 }
 
+class EetplanHuizenResponse extends JsonResponse {
+    public function view() {
+        http_response_code($this->code);
+        header('Content-Type: application/json');
+
+        echo "[\n";
+        $entities = array();
+        foreach ($this->model as $entity) {
+            $entities[] = $this->getJson($entity);
+        }
+        echo implode(" \n", $entities);
+        echo "\n]";
+    }
+
+    public function getJson($entity) {
+        return parent::getJson(array(
+            'url' => $entity->getUrl(),
+            'label' => $entity->id,
+            'value' => $entity->naam,
+            'id' => $entity->id,
+        ));
+    }
+}
+
 class EetplanHuisStatusView extends JsonResponse {
     public function getJson($entity) {
         return parent::getJson(array(

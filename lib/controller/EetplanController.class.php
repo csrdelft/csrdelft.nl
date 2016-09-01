@@ -30,7 +30,8 @@ class EetplanController extends AclController {
                 'view' => 'P_LEDEN_READ',
                 'noviet' => 'P_LEDEN_READ',
                 'huis' => 'P_LEDEN_READ',
-                'beheer' => 'P_ADMIN'
+                'beheer' => 'P_ADMIN',
+                'bekendehuizen' => 'P_ADMIN',
             );
         }
     }
@@ -98,17 +99,18 @@ class EetplanController extends AclController {
     }
 
     public function bekendehuizen($actie = null) {
-        if ($actie == 'toevoegen') {
-            $woonoord = filter_input(INPUT_POST, 'woonoord');
-            $uid = filter_input(INPUT_POST, 'uid');
-
+        if ($actie == 'zoeken') {
+            $huisnaam = filter_input(INPUT_GET, 'q');
+            $huisnaam = '%' . $huisnaam . '%';
+            $woonoorden = WoonoordenModel::instance()->find('status = ? AND naam LIKE ?', array(GroepStatus::HT, $huisnaam))->fetchAll();
+            $this->view = new EetplanHuizenResponse($woonoorden);
+        } elseif ($actie == 'toevoegen') {
             $eetplan = new Eetplan();
-            $eetplan->avond = 0;
-            $eetplan->uid = $uid;
-            $eetplan->woonoord_id = $woonoord;
+            $eetplan->avond = '0000-00-00';
             $form = new EetplanBekendeHuizenForm($eetplan);
             if ($form->validate()) {
-
+                $this->model->create($eetplan);
+                $this->view = new EetplanBekendeHuizenResponse($this->model->getBekendeHuizen());
             } else {
                 $this->view = $form;
             }
