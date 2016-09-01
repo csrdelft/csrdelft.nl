@@ -16,7 +16,7 @@ require_once 'model/maalcie/CorveeTakenModel.class.php';
  */
 class AgendaModel extends PersistenceModel {
 
-	const orm = 'AgendaItem';
+	const ORM = 'AgendaItem';
 
 	protected static $instance;
 	/**
@@ -228,7 +228,7 @@ class AgendaModel extends PersistenceModel {
 
 class AgendaVerbergenModel extends PersistenceModel {
 
-	const orm = 'AgendaVerbergen';
+	const ORM = 'AgendaVerbergen';
 
 	protected static $instance;
 

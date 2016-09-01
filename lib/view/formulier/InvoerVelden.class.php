@@ -817,9 +817,7 @@ class EntityField extends InputField {
 		}
 		// bestaat er een entity met opgegeven primary key?
 		$where = array();
-		$class = $this->model->orm;
-		$orm = new $class();
-		foreach ($orm->getPrimaryKey() as $key) {
+		foreach ($this->model->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
 		if (!$this->model->exist(implode(' AND ', $where), $this->value)) {
@@ -838,9 +836,7 @@ class EntityField extends InputField {
 		$html = '<input name="' . $this->name . '_show" value="' . $show_value . '" origvalue="' . $this->show_value . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 
 		// actual values
-		$class = $this->model->orm;
-		$orm = new $class();
-		foreach ($orm->getPrimaryKey() as $i => $key) {
+		foreach ($this->model->getPrimaryKey() as $i => $key) {
 			$html .= '<input type="hidden" name="' . $this->name . '[]" id="' . $this->getId() . '_' . $key . '" value="' . $this->value[$i] . '" origvalue="' . $this->origvalue[$i] . '" />';
 		}
 		return $html;

@@ -18,7 +18,8 @@ require_once 'model/GroepenModel.abstract.php';
  */
 class AccessModel extends CachedPersistenceModel {
 
-	const orm = 'AccessControl';
+	const ORM = 'AccessControl';
+	const DIR = 'security/';
 
 	protected static $instance;
 	/**
@@ -106,7 +107,6 @@ class AccessModel extends CachedPersistenceModel {
 	private $permissions = array();
 
 	protected function __construct() {
-		parent::__construct('security/');
 		$this->loadPermissions();
 	}
 
@@ -120,12 +120,12 @@ class AccessModel extends CachedPersistenceModel {
 	}
 
 	public function getTree($environment, $resource) {
-		if ($environment === ActiviteitenModel::orm) {
+		if ($environment === ActiviteitenModel::ORM) {
 			$activiteit = ActiviteitenModel::get($resource);
 			if ($activiteit) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $activiteit->soort, '*'));
 			}
-		} elseif ($environment === CommissiesModel::orm) {
+		} elseif ($environment === CommissiesModel::ORM) {
 			$commissie = CommissiesModel::get($resource);
 			if ($commissie) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $commissie->soort, '*'));
@@ -595,13 +595,13 @@ class AccessModel extends CachedPersistenceModel {
 					switch ($prefix) {
 
 						case 'BESTUUR':
-							$l = BestuursLedenModel::getTableName();
-							$g = BesturenModel::getTableName();
+							$l = BestuursLedenModel::instance()->getTableName();
+							$g = BesturenModel::instance()->getTableName();
 							break;
 
 						case 'COMMISSIE':
-							$l = CommissieLedenModel::getTableName();
-							$g = CommissiesModel::getTableName();
+							$l = CommissieLedenModel::instance()->getTableName();
+							$g = CommissiesModel::instance()->getTableName();
 							break;
 					}
 					return Database::sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie = ? AND l.uid = ?', array($role, $gevraagd, $profiel->uid));

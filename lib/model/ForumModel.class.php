@@ -10,15 +10,13 @@ require_once 'model/Paging.interface.php';
  */
 abstract class AbstractForumModel extends CachedPersistenceModel {
 
-	protected function __construct() {
-		parent::__construct('forum/');
-	}
+	const DIR = 'forum/';
 
 }
 
 class ForumModel extends AbstractForumModel {
 
-	const orm = 'ForumCategorie';
+	const ORM = 'ForumCategorie';
 
 	protected static $instance;
 	/**
@@ -79,7 +77,7 @@ class ForumModel extends AbstractForumModel {
 		}
 
 		// Voor alle ex-leden settings opschonen
-		$uids = Database::instance()->sqlSelect(array('uid'), ProfielModel::getTableName(), 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
+		$uids = Database::instance()->sqlSelect(array('uid'), ProfielModel::instance()->getTableName(), 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
 		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($uids as $uid) {
 			ForumDradenGelezenModel::instance()->verwijderDraadGelezenVoorLid($uid);
@@ -116,7 +114,7 @@ class ForumModel extends AbstractForumModel {
 
 class ForumDelenModel extends AbstractForumModel {
 
-	const orm = 'ForumDeel';
+	const ORM = 'ForumDeel';
 
 	protected static $instance;
 	/**
@@ -305,7 +303,7 @@ class ForumDelenModel extends AbstractForumModel {
 
 class ForumDradenReagerenModel extends AbstractForumModel {
 
-	const orm = 'ForumDraadReageren';
+	const ORM = 'ForumDraadReageren';
 
 	protected static $instance;
 
@@ -405,7 +403,7 @@ class ForumDradenReagerenModel extends AbstractForumModel {
 
 class ForumDradenGelezenModel extends AbstractForumModel {
 
-	const orm = 'ForumDraadGelezen';
+	const ORM = 'ForumDraadGelezen';
 
 	protected static $instance;
 
@@ -501,7 +499,7 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 
 class ForumDradenVerbergenModel extends AbstractForumModel {
 
-	const orm = 'ForumDraadVerbergen';
+	const ORM = 'ForumDraadVerbergen';
 
 	protected static $instance;
 
@@ -551,7 +549,7 @@ class ForumDradenVerbergenModel extends AbstractForumModel {
 
 class ForumDradenVolgenModel extends AbstractForumModel {
 
-	const orm = 'ForumDraadVolgen';
+	const ORM = 'ForumDraadVolgen';
 
 	protected static $instance;
 
@@ -605,7 +603,7 @@ class ForumDradenVolgenModel extends AbstractForumModel {
 
 class ForumDradenModel extends AbstractForumModel implements Paging {
 
-	const orm = 'ForumDraad';
+	const ORM = 'ForumDraad';
 
 	protected static $instance;
 	/**
@@ -756,8 +754,8 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 			}
 		}
 		$where .= ' HAVING score > 0';
-		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, $where_params, null, $order, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
-		$results->setFetchMode(PDO::FETCH_CLASS, self::orm, array($cast = true));
+		$results = Database::sqlSelect($attributes, $this->getTableName(), $where, $where_params, null, $order, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true));
 		return $results;
 	}
 
@@ -915,7 +913,7 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 
 class ForumPostsModel extends AbstractForumModel implements Paging {
 
-	const orm = 'ForumPost';
+	const ORM = 'ForumPost';
 
 	protected static $instance;
 	/**
@@ -1036,8 +1034,8 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 			}
 		}
 		$where .= ' HAVING score > 0';
-		$results = Database::sqlSelect($attributes, $this->orm->getTableName(), $where, $where_params, null, $order, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
-		$results->setFetchMode(PDO::FETCH_CLASS, self::orm, array($cast = true));
+		$results = Database::sqlSelect($attributes, $this->getTableName(), $where, $where_params, null, $order, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true));
 		return $results;
 	}
 
@@ -1133,7 +1131,7 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	}
 
 	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
-		Database::sqlUpdate($this->orm->getTableName(), array('verwijderd' => $draad->verwijderd), 'draad_id = :id', array(':id' => $draad->draad_id));
+		Database::sqlUpdate($this->getTableName(), array('verwijderd' => $draad->verwijderd), 'draad_id = :id', array(':id' => $draad->draad_id));
 	}
 
 	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post) {
@@ -1213,19 +1211,19 @@ class ForumPostsModel extends AbstractForumModel implements Paging {
 	public function getStatsTotal() {
 		$terug = getDateTime(strtotime(Instellingen::get('forum', 'grafiek_stats_periode')));
 		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
-		return Database::sqlSelect($fields, $this->orm->getTableName(), 'datum_tijd > ?', array($terug), 'timestamp');
+		return Database::sqlSelect($fields, $this->getTableName(), 'datum_tijd > ?', array($terug), 'timestamp');
 	}
 
 	public function getStatsVoorForumDeel(ForumDeel $deel) {
 		$terug = getDateTime(strtotime(Instellingen::get('forum', 'grafiek_stats_periode')));
 		$fields = array('UNIX_TIMESTAMP(DATE(p.datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
-		return Database::sqlSelect($fields, $this->orm->getTableName() . ' AS p RIGHT JOIN ' . ForumDradenModel::getTableName() . ' AS d ON p.draad_id = d.draad_id', 'd.forum_id = ? AND p.datum_tijd > ?', array($deel->forum_id, $terug), 'timestamp');
+		return Database::sqlSelect($fields, $this->getTableName() . ' AS p RIGHT JOIN ' . ForumDradenModel::instance()->getTableName() . ' AS d ON p.draad_id = d.draad_id', 'd.forum_id = ? AND p.datum_tijd > ?', array($deel->forum_id, $terug), 'timestamp');
 	}
 
 	public function getStatsVoorDraad(ForumDraad $draad) {
 		$terug = getDateTime(strtotime(Instellingen::get('forum', 'grafiek_draad_recent'), strtotime($draad->laatst_gewijzigd)));
 		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
-		return Database::sqlSelect($fields, $this->orm->getTableName(), 'draad_id = ? AND datum_tijd > ?', array($draad->draad_id, $terug), 'timestamp');
+		return Database::sqlSelect($fields, $this->getTableName(), 'draad_id = ? AND datum_tijd > ?', array($draad->draad_id, $terug), 'timestamp');
 	}
 
 }

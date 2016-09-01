@@ -1,33 +1,31 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: gerbe
- * Date: 20-6-2016
- * Time: 20:31
+ * MededelingenModel.class.php
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ *
  */
-
 class CategorieModel extends PersistenceModel {
-    const orm = 'Categorie';
-    protected static $instance;
 
-    public function __construct()
-    {
-        parent::__construct("mededelingen/");
-    }
+	const ORM = 'Categorie';
+	const DIR = 'mededelingen/';
 
-    /**
-     * @param $categorie
-     * @return false|Categorie
-     */
-    public static function get($categorie)
-    {
-        return static::instance()->retrieveByPrimaryKey(array($categorie));
-    }
+	protected static $instance;
 
-    /**
-     * @return Categorie[]
-     */
-    public static function getAll() {
-        return static::instance()->find();
-    }
+	/**
+	 * @param $categorie
+	 * @return false|Categorie
+	 */
+	public static function get($categorie) {
+		return static::instance()->retrieveByPrimaryKey(array($categorie));
+	}
+
+	/**
+	 * @return Categorie[]
+	 */
+	public static function getAll() {
+		return static::instance()->find();
+	}
+
 }

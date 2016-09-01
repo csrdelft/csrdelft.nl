@@ -145,8 +145,8 @@ class AgendaController extends AclController {
 
 	public function verbergen($refuuid = null) {
 		$parts = explode('@', $refuuid, 2);
-		$orm = explode('.', $parts[1], 2);
-		switch ($orm[0]) {
+		$module = explode('.', $parts[1], 2);
+		switch ($module[0]) {
 
 			case 'csrdelft':
 				$item = ProfielModel::getUUID($refuuid);

@@ -10,7 +10,8 @@
  */
 class AccountModel extends CachedPersistenceModel {
 
-	const orm = 'Account';
+	const ORM = 'Account';
+	const DIR = 'security/';
 
 	protected static $instance;
 
@@ -30,11 +31,7 @@ class AccountModel extends CachedPersistenceModel {
 	}
 
 	public static function existsUsername($name) {
-		return Database::sqlExists(static::getTableName(), 'username = ?', array($name));
-	}
-
-	protected function __construct() {
-		parent::__construct('security/');
+		return Database::sqlExists($this->getTableName(), 'username = ?', array($name));
 	}
 
 	public function maakAccount($uid) {

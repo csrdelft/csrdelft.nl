@@ -11,6 +11,8 @@ require_once 'model/GroepLedenModel.abstract.php';
  */
 abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
+	const DIR = 'groepen/';
+
 	/**
 	 * Default ORDER BY
 	 * @var string
@@ -89,13 +91,9 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 		return $result;
 	}
 
-	protected function __construct() {
-		parent::__construct('groepen/');
-	}
-
 	public function nieuw() {
-		$class = static::orm;
-		$groep = new $class();
+		$orm = static::ORM;
+		$groep = new $orm();
 		$groep->naam = null;
 		$groep->familie = null;
 		$groep->status = GroepStatus::HT;
@@ -124,7 +122,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 * @return int rows affected
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
-		AccessModel::instance()->setAcl(static::orm, reset($primary_key_values), array());
+		AccessModel::instance()->setAcl(static::ORM, reset($primary_key_values), array());
 		return parent::deleteByPrimaryKey($primary_key_values);
 	}
 
@@ -213,9 +211,9 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 * @return AbstractGroep[]
 	 */
 	public function getGroepenVoorLid($uid, $status = null) {
-		$orm = $this->orm;
+		$orm = static::ORM;
 		$leden = $orm::leden;
-		$ids = Database::sqlSelect(array('DISTINCT groep_id'), $leden::getTableName(), 'uid = ?', array($uid))->fetchAll(PDO::FETCH_COLUMN);
+		$ids = Database::sqlSelect(array('DISTINCT groep_id'), $leden::instance()->getTableName(), 'uid = ?', array($uid))->fetchAll(PDO::FETCH_COLUMN);
 		if (empty($ids)) {
 			return array();
 		}
@@ -235,7 +233,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
 class RechtenGroepenModel extends AbstractGroepenModel {
 
-	const orm = 'RechtenGroep';
+	const ORM = 'RechtenGroep';
 
 	protected static $instance;
 
@@ -249,7 +247,7 @@ class RechtenGroepenModel extends AbstractGroepenModel {
 
 class OnderverenigingenModel extends AbstractGroepenModel {
 
-	const orm = 'Ondervereniging';
+	const ORM = 'Ondervereniging';
 
 	protected static $instance;
 
@@ -264,7 +262,7 @@ class OnderverenigingenModel extends AbstractGroepenModel {
 
 class WoonoordenModel extends AbstractGroepenModel {
 
-	const orm = 'Woonoord';
+	const ORM = 'Woonoord';
 
 	protected static $instance;
 
@@ -279,12 +277,12 @@ class WoonoordenModel extends AbstractGroepenModel {
 
 class LichtingenModel extends AbstractGroepenModel {
 
-	const orm = 'Lichting';
+	const ORM = 'Lichting';
 
 	protected static $instance;
 
 	public static function get($lidjaar) {
-		return self::instance()->nieuw($lidjaar);
+		return static::instance()->nieuw($lidjaar);
 	}
 
 	public function nieuw($lidjaar = null) {
@@ -304,8 +302,8 @@ class LichtingenModel extends AbstractGroepenModel {
 	 * Override normal behaviour.
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
-		$jongste = self::getJongsteLidjaar();
-		$oudste = self::getOudsteLidjaar();
+		$jongste = static::getJongsteLidjaar();
+		$oudste = static::getOudsteLidjaar();
 		$lichtingen = array();
 		for ($lidjaar = $jongste; $lidjaar >= $oudste; $lidjaar--) {
 			$lichtingen[] = $this->nieuw($lidjaar);
@@ -323,18 +321,18 @@ class LichtingenModel extends AbstractGroepenModel {
 	}
 
 	public static function getJongsteLidjaar() {
-		return (int) Database::sqlSelect(array('MAX(lidjaar)'), ProfielModel::getTableName())->fetchColumn();
+		return (int) Database::sqlSelect(array('MAX(lidjaar)'), ProfielModel::instance()->getTableName())->fetchColumn();
 	}
 
 	public static function getOudsteLidjaar() {
-		return (int) Database::sqlSelect(array('MIN(lidjaar)'), ProfielModel::getTableName(), 'lidjaar > 0')->fetchColumn();
+		return (int) Database::sqlSelect(array('MIN(lidjaar)'), ProfielModel::instance()->getTableName(), 'lidjaar > 0')->fetchColumn();
 	}
 
 }
 
 class VerticalenModel extends AbstractGroepenModel {
 
-	const orm = 'Verticale';
+	const ORM = 'Verticale';
 
 	protected static $instance;
 	/**
@@ -363,7 +361,7 @@ class VerticalenModel extends AbstractGroepenModel {
 
 class KringenModel extends AbstractGroepenModel {
 
-	const orm = 'Kring';
+	const ORM = 'Kring';
 
 	protected static $instance;
 	/**
@@ -391,7 +389,7 @@ class KringenModel extends AbstractGroepenModel {
 
 class CommissiesModel extends AbstractGroepenModel {
 
-	const orm = 'Commissie';
+	const ORM = 'Commissie';
 
 	protected static $instance;
 
@@ -408,7 +406,7 @@ class CommissiesModel extends AbstractGroepenModel {
 
 class BesturenModel extends AbstractGroepenModel {
 
-	const orm = 'Bestuur';
+	const ORM = 'Bestuur';
 
 	protected static $instance;
 
@@ -422,7 +420,7 @@ class BesturenModel extends AbstractGroepenModel {
 
 class KetzersModel extends AbstractGroepenModel {
 
-	const orm = 'Ketzer';
+	const ORM = 'Ketzer';
 
 	protected static $instance;
 
@@ -440,7 +438,7 @@ class KetzersModel extends AbstractGroepenModel {
 
 class WerkgroepenModel extends KetzersModel {
 
-	const orm = 'Werkgroep';
+	const ORM = 'Werkgroep';
 
 	protected static $instance;
 
@@ -448,7 +446,7 @@ class WerkgroepenModel extends KetzersModel {
 
 class ActiviteitenModel extends KetzersModel {
 
-	const orm = 'Activiteit';
+	const ORM = 'Activiteit';
 
 	protected static $instance;
 
@@ -468,7 +466,7 @@ class ActiviteitenModel extends KetzersModel {
 
 class KetzerSelectorsModel extends AbstractGroepenModel {
 
-	const orm = 'KetzerSelector';
+	const ORM = 'KetzerSelector';
 
 	protected static $instance;
 
@@ -480,7 +478,7 @@ class KetzerSelectorsModel extends AbstractGroepenModel {
 
 class KetzerOptiesModel extends AbstractGroepenModel {
 
-	const orm = 'KetzerOptie';
+	const ORM = 'KetzerOptie';
 
 	protected static $instance;
 
@@ -492,7 +490,7 @@ class KetzerOptiesModel extends AbstractGroepenModel {
 
 class KetzerKeuzesModel extends AbstractGroepenModel {
 
-	const orm = 'KetzerKeuze';
+	const ORM = 'KetzerKeuze';
 
 	protected static $instance;
 

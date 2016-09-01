@@ -8,13 +8,10 @@
  */
 class FotoAlbumModel extends PersistenceModel {
 
-	const orm = 'FotoAlbum';
+	const ORM = 'FotoAlbum';
+	const DIR = 'fotoalbum/';
 
 	protected static $instance;
-
-	protected function __construct() {
-		parent::__construct('fotoalbum/');
-	}
 
 	public function create(PersistentEntity $album) {
 		if (!file_exists($album->path)) {
@@ -245,7 +242,8 @@ HTML;
 
 class FotoModel extends PersistenceModel {
 
-	const orm = 'Foto';
+	const ORM = 'Foto';
+	const DIR = 'fotoalbum/';
 
 	protected static $instance;
 
@@ -258,10 +256,6 @@ class FotoModel extends PersistenceModel {
 		$filename = array_pop($path);
 		$subdir = implode('/', $path) . '/';
 		return static::instance()->retrieveByPrimaryKey(array($subdir, $filename));
-	}
-
-	protected function __construct() {
-		parent::__construct('fotoalbum/');
 	}
 
 	/**
@@ -317,7 +311,8 @@ class FotoModel extends PersistenceModel {
 
 class FotoTagsModel extends PersistenceModel {
 
-	const orm = 'FotoTag';
+	const ORM = 'FotoTag';
+	const DIR = 'fotoalbum/';
 
 	protected static $instance;
 	/**
@@ -325,10 +320,6 @@ class FotoTagsModel extends PersistenceModel {
 	 * @var string
 	 */
 	protected $default_order = 'wanneer DESC';
-
-	protected function __construct() {
-		parent::__construct('fotoalbum/');
-	}
 
 	public function getTags(Foto $foto) {
 		return $this->find('refuuid = ?', array($foto->getUUID()));

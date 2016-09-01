@@ -15,7 +15,7 @@ require_once 'model/entity/PeilingStem.class.php';
  */
 class PeilingenModel extends PersistenceModel
 {
-	const orm = 'Peiling';
+	const ORM = 'Peiling';
 	protected static $instance;
 
 	public function update(PersistentEntity $entity) {
@@ -105,12 +105,14 @@ class PeilingenModel extends PersistenceModel
 
 class PeilingOptiesModel extends PersistenceModel
 {
-	const orm = 'PeilingOptie';
+	const ORM = 'PeilingOptie';
+
 	protected static $instance;
 }
 
 class PeilingStemmenModel extends PersistenceModel
 {
-	const orm = 'PeilingStem';
+	const ORM = 'PeilingStem';
+
 	protected static $instance;
 }

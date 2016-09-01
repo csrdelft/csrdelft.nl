@@ -409,7 +409,7 @@ class AbstractGroepenController extends Controller {
 					continue;
 				}
 				if ($converteer) {
-					ChangeLogModel::instance()->log($groep, 'class', get_class($groep), $model::orm);
+					ChangeLogModel::instance()->log($groep, 'class', get_class($groep), $model::ORM);
 					$nieuw = $model->converteer($groep, $this->model, $values['soort']);
 					if ($nieuw) {
 						$response[] = $groep;

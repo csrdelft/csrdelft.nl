@@ -8,13 +8,10 @@
  */
 class MaaltijdBeoordelingenModel extends PersistenceModel {
 
-	const orm = 'MaaltijdBeoordeling';
+	const ORM = 'MaaltijdBeoordeling';
+	const DIR = 'maalcie/';
 
 	protected static $instance;
-
-	protected function __construct() {
-		parent::__construct('maalcie/');
-	}
 
 	public function nieuw(Maaltijd $maaltijd) {
 		$b = new MaaltijdBeoordeling();
@@ -29,7 +26,7 @@ class MaaltijdBeoordelingenModel extends PersistenceModel {
 	public function getNormalizedBeoordelingen(Maaltijd $maaltijd) {
 		$beoordelingen = $this->find('maaltijd_id = ?', array($maaltijd->getMaaltijdId()));
 		foreach ($beoordelingen as $b) {
-			$normalize = Database::sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), $this->orm->getTableName(), 'uid = ?', array($b->uid));
+			$normalize = Database::sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), $this->getTableName(), 'uid = ?', array($b->uid));
 			foreach ($normalize as $avg) {
 				$b->kwantiteit /= $avg[0];
 				$b->kwaliteit /= $avg[1];

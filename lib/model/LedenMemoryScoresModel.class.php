@@ -8,7 +8,7 @@
  */
 class LedenMemoryScoresModel extends PersistenceModel {
 
-	const orm = 'LedenMemoryScore';
+	const ORM = 'LedenMemoryScore';
 
 	protected static $instance;
 	/**
@@ -32,7 +32,7 @@ class LedenMemoryScoresModel extends PersistenceModel {
 		$fields = $this->orm->getAttributes();
 		$fields[1] = 'MIN(tijd) as tijd';
 		$results = Database::sqlSelect($fields, $this->orm->getTableName(), 'eerlijk = 1', array(), 'groep, door_uid');
-		$results->setFetchMode(PDO::FETCH_CLASS, self::orm, array($cast = true));
+		$results->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true));
 		return $results;
 	}
 

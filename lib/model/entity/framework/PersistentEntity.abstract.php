@@ -21,18 +21,16 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 
 	/**
 	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
+	 * 
+	 * Optional: run conversion code before checkTables() here
 	 */
-	public static function __constructStatic() {
+	public static function __static() {
 		/*
 		 * Override this to extend the persistent attributes:
 		 * 
-		  parent::__constructStatic();
+		  parent::__static();
 		  self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
 		 * 
-		 */
-
-		/*
-		 * Optional: run conversion code before checkTables()
 		 */
 	}
 
@@ -82,7 +80,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	}
 
 	public function getPrimaryKey() {
-		return static::$primary_key;
+		return array_values(static::$primary_key);
 	}
 
 	public function getUUID() {
@@ -172,7 +170,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	 * @unsupported INDEX check; FOREIGN KEY check;
 	 */
 	public static function checkTable() {
-		$orm = get_called_class();
+		$class = get_called_class();
 		$attributes = array();
 		foreach (static::$persistent_attributes as $name => $definition) {
 			$attributes[$name] = PersistentAttribute::makeAttribute($name, $definition);
@@ -193,10 +191,10 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 			}
 		}
 		// Rename attributes
-		if (property_exists($orm, 'rename_attributes')) {
+		if (property_exists($class, 'rename_attributes')) {
 			$rename = static::$rename_attributes;
 			foreach ($rename as $oldname => $newname) {
-				if (property_exists($orm, $newname)) {
+				if (property_exists($class, $newname)) {
 					DatabaseAdmin::instance()->sqlChangeAttribute(static::$table_name, $attributes[$newname], $oldname);
 				}
 			}
@@ -215,8 +213,8 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 				$diff = false;
 				if ($attributes[$name]->type !== $database_attributes[$name]->type) {
 					if ($definition[0] === T::Enumeration) {
-						$class = $definition[2];
-						if ($database_attributes[$name]->type !== "enum('" . implode("','", $class::getTypeOptions()) . "')") {
+						$enum = $definition[2];
+						if ($database_attributes[$name]->type !== "enum('" . implode("','", $enum::getTypeOptions()) . "')") {
 							$diff = true;
 						}
 					} else {
