@@ -132,14 +132,9 @@ class EetplanController extends AclController {
     public function novietrelatie($actie = null) {
 
         if ($actie == 'toevoegen') {
-            $uid1 = filter_input(INPUT_POST, 'uid1');
-            $uid2 = filter_input(INPUT_POST, 'uid2');
-            $bekenden = new EetplanBekenden();
-            $bekenden->uid1 = namen2uid($uid1)[0]['uid'];
-            $bekenden->uid2 = namen2uid($uid2)[0]['uid'];
-            $form = new EetplanBekendenForm($bekenden);
+            $form = new EetplanBekendenForm(new EetplanBekenden());
             if ($form->validate()) {
-                $this->model->getBekendenModel()->create($bekenden);
+                $this->model->getBekendenModel()->create($form->getModel());
                 $this->view = new EetplanRelatieView($this->model->getBekendenModel()->getBekenden());
             } else {
                 $this->view = $form;
@@ -148,12 +143,7 @@ class EetplanController extends AclController {
             $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
             $verwijderd = array();
             foreach ($selection as $uuid) {
-                $uids = explode(".", explode("@", $uuid)[0]);
-                $uid1 = $uids[0];
-                $uid2 = $uids[1];
-                $bekenden = new EetplanBekenden();
-                $bekenden->uid1 = namen2uid($uid1)[0]['uid'];
-                $bekenden->uid2 = namen2uid($uid2)[0]['uid'];
+                $bekenden = $this->model->getBekendenModel()->getUUID($uuid);
                 $this->model->getBekendenModel()->delete($bekenden);
                 $verwijderd[] = $bekenden;
             }
