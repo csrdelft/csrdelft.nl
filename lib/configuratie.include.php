@@ -20,12 +20,12 @@ register_shutdown_function('fatal_handler');
 function fatal_handler(Exception $ex = null) {
 
 	try {
-		if (TIME_MEASURE) {
+		if (defined('TIME_MEASURE') AND TIME_MEASURE) {
 			TimerModel::instance()->log();
 		}
 
 		if ($ex instanceof Exception) {
-			if (DEBUG OR LoginModel::mag('P_LOGGED_IN')) {
+			if ((defined('DEBUG') AND DEBUG) OR LoginModel::mag('P_LOGGED_IN')) {
 				echo str_replace('#', '<br />#', $ex); // stacktrace 
 				printDebug();
 			}
@@ -44,7 +44,7 @@ function fatal_handler(Exception $ex = null) {
 		$debug['SERVER'] = $_SERVER;
 		if ($error['type'] === E_CORE_ERROR OR $error['type'] === E_ERROR) {
 
-			if (DEBUG) {
+			if (defined('DEBUG') AND DEBUG) {
 				DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
 			} else {
 				$headers[] = 'From: Fatal error handler <pubcie@csrdelft.nl>';
