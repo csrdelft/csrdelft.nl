@@ -598,6 +598,7 @@ function getMelding() {
 			//if (isset($shown[$hash]))
 			//	continue; // skip double messages
 			$sMelding .= '<div class="alert alert-' . $msg['lvl'] . '">';
+            $sMelding .= Icon::getTag('alert-'.$msg['lvl']);
 			$sMelding .= $msg['msg'];
 			$sMelding .= '</div>';
 			$shown[$hash] = 1;

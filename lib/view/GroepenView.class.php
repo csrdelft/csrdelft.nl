@@ -291,11 +291,11 @@ class GroepenView implements View {
 		$model = $this->model;
 		$orm = $model::orm;
 		if ($orm::magAlgemeen(A::Aanmaken, $this->soort)) {
-			echo '<a class="btn" href="' . $this->model->getUrl() . 'nieuw/' . $this->soort . '"><img class="icon" src="/plaetjes/famfamfam/add.png" width="16" height="16"> Toevoegen</a>';
+			echo '<a class="btn" href="' . $this->model->getUrl() . 'nieuw/' . $this->soort . '">'.Icon::getTag('add').' Toevoegen</a>';
 		}
-		echo '<a class="btn" href="' . $this->model->getUrl() . 'beheren"><img class="icon" src="/plaetjes/famfamfam/table.png" width="16" height="16"> Beheren</a>';
+		echo '<a class="btn" href="' . $this->model->getUrl() . 'beheren">'.Icon::getTag('table').' Beheren</a>';
 		if ($this->geschiedenis) {
-			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->model->getUrl() . $this->geschiedenis . '/deelnamegrafiek"><img class="icon" src="/plaetjes/famfamfam/chart_bar.png" width="16" height="16"> Deelnamegrafiek</a>';
+			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->model->getUrl() . $this->geschiedenis . '/deelnamegrafiek">'.Icon::getTag('chart_bar').' Deelnamegrafiek</a>';
 		}
 		$view = new CmsPaginaView($this->pagina);
 		$view->view();

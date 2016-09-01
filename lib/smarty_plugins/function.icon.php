@@ -17,7 +17,7 @@
  * Examples:
  * <pre>
  * 	{icon get='verwijderen'}
- * 	{icon get='verwijderen' notag}
+ *  {icon get='email' hover='email_add'}
  * </pre>
  * @link http://feuten.csrdelft.nl
  * @version  1.1
@@ -36,11 +36,11 @@ function smarty_function_icon($params, &$smarty) {
 		if (array_key_exists('title', $params)) {
 			$title = $params['title'];
 		}
+		$hover = null;
+		if (array_key_exists('hover', $params)) {
+		    $hover = $params['hover'];
+        }
 
-		if (array_key_exists('notag', $params)) {
-			return Icon::get($params['get'], $title);
-		} else {
-			return Icon::getTag($params['get'], $title);
-		}
+        return Icon::getTag($params['get'], $hover, $title);
 	}
 }

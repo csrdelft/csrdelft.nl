@@ -208,13 +208,13 @@ class ForumController extends Controller {
 					$url .= '#reageren';
 				}
 				if ($draad->belangrijk) {
-					$icon = '<img src="/plaetjes/famfamfam/' . $draad->belangrijk . '.png" class="icon">';
+				    $icon = Icon::getTag('lock');
 					$title = 'Dit onderwerp is door het bestuur aangemerkt als belangrijk';
 				} elseif ($draad->gesloten) {
-					$icon = '<img src="/plaetjes/famfamfam/lock.png" class="icon">';
+                    $icon = Icon::getTag('lock');
 					$title = 'Dit onderwerp is gesloten, u kunt niet meer reageren';
 				} elseif ($draad->plakkerig) {
-					$icon = '<img src="/plaetjes/famfamfam/note.png" class="icon">';
+				    $icon = Icon::getTag('note');
 					$title = 'Dit onderwerp is plakkerig, het blijft bovenaan';
 				} else {
 					$icon = false;
@@ -232,7 +232,7 @@ class ForumController extends Controller {
 		if (empty($result)) {
 			$result[] = array(
 				'url'	 => '/forum/zoeken/' . urlencode($query),
-				'icon'	 => '<img src="/plaetjes/famfamfam/magnifier.png" class="icon">',
+				'icon'	 => Icon::getTag('magnifier'),
 				'title'	 => 'Zoeken in forumreacties',
 				'label'	 => 'Zoeken in reacties',
 				'value'	 => htmlspecialchars($query)

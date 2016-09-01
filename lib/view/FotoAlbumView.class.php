@@ -157,7 +157,7 @@ class FotosDropzone extends Dropzone {
 	public function view() {
 		echo parent::view();
 		echo '<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>';
-		echo '<div class="float-right"><a class="btn" onclick="showExisting_' . $this->formId . '();$(this).remove();"><img src="/plaetjes/famfamfam/photos.png" width="16" height="16" alt="photos" class="icon"> Toon bestaande foto\'s in dit album</a></div>';
+		echo '<div class="float-right"><a class="btn" onclick="showExisting_' . $this->formId . '();$(this).remove();">'.Icon::getTag('photos').' Toon bestaande foto\'s in dit album</a></div>';
 		// Uitleg foto's toevoegen
 		require_once 'model/CmsPaginaModel.class.php';
 		require_once 'view/CmsPaginaView.class.php';
