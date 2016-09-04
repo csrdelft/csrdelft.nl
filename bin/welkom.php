@@ -45,5 +45,9 @@ TEXT;
     $mail = new Mail(array($profiel->email => $profiel->voornaam), 'Inloggegevens C.S.R.-webstek', $tekst);
     $mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
     $mail->send();
+
+    // Maak een account aan voor deze noviet
+    AccountModel::instance()->maakAccount($profiel->uid);
+
     echo $profiel->email . " SEND!\n";
 }
