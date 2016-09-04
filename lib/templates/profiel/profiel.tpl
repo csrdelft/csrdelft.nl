@@ -14,9 +14,9 @@
 					{/if}
 					{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_ADMIN')}
 						{if AccountModel::existsUid($profiel->uid)}
-							<a href="/account/{$profiel->uid}" class="btn accountEdit" title="Inloggegevens bewerken"></a>
+							<a href="/account/{$profiel->uid}" class="btn" title="Inloggegevens bewerken">{icon get="key"}</a>
 						{elseif LoginModel::mag('P_ADMIN')}
-							<a href="/account/{$profiel->uid}" class="btn accountCreate" title="Account aanmaken"></a>
+							<a href="/account/{$profiel->uid}" class="btn" title="Account aanmaken">{icon get="key_delete" hover="key_add"}</a>
 						{/if}
 						{if LoginModel::mag('P_ADMIN')}
 							<a href="/tools/stats.php?uid={$profiel->uid}" class="btn" title="Toon bezoeklog">{icon get="server_chart"}</a>
