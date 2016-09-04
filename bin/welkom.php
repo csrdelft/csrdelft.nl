@@ -10,10 +10,6 @@ require_once 'model/entity/Mail.class.php';
 $jaar = '16';
 
 foreach (ProfielModel::instance()->find('status = ?', array(LidStatus::Noviet)) as $profiel) {
-    $nanonovieten = array("1519", "1536", "1545");
-    if (in_array($profiel->uid, $nanonovieten)) {
-        continue;
-    }
     $url = CSR_ROOT . '/wachtwoord/aanvragen';
     $tekst = <<<TEXT
 Beste noviet {$profiel->voornaam},
@@ -39,8 +35,8 @@ Stuur dan een e-mail.
 
 Met vriendelijke groet,
 
-Arjen Rouvoet,
-h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
+Robin van Heukelum,
+i.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 TEXT;
     $mail = new Mail(array($profiel->email => $profiel->voornaam), 'Inloggegevens C.S.R.-webstek', $tekst);
     $mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
