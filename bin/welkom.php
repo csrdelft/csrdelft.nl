@@ -27,7 +27,7 @@ Waarom is dit belangrijk? Omdat een maaltijd €3,50 kost en als je jezelf verge
 Voor verdere vragen of opmerkingen of je maalcie-saldo je kun de MaalCie fiscus altijd mailen op maalcief@csrdelft.nl
 
 Gebruik je lidnummer om in te loggen op de webstek: {$profiel->uid}
-Gebruik de eerste keer de [url={$url}]wachtwoord vergeten[/url] functie om je eigen wachtwoord in te stellen.
+Gebruik de eerste keer de [url={$url}]wachtwoord aanvragen[/url] functie om je eigen wachtwoord in te stellen.
 Nadat je bent ingelogd kun een bijnaam instellen die je in plaats van je lidnummer kunt gebruiken om in te loggen.
 
 Wanneer je problemen hebt met inloggen, of andere vragen over de webstek, kun je terecht bij de PubCie.
