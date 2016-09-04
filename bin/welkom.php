@@ -9,7 +9,7 @@ require_once 'model/entity/Mail.class.php';
 # Vergeet niet voor gebruik hieronder het jaar aan te passen.
 $jaar = '16';
 
-foreach (ProfielModel::instance()->find('status = ?', array(LidStatus::Noviet)) as $profiel) {
+foreach (ProfielModel::instance()->find('status = ? AND uid LIKE ?', array(LidStatus::Noviet, sprintf("%s%%", $jaar))) as $profiel) {
     $url = CSR_ROOT . '/wachtwoord/aanvragen';
     $tekst = <<<TEXT
 Beste noviet {$profiel->voornaam},
