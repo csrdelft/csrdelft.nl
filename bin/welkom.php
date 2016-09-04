@@ -3,19 +3,19 @@
 chdir(dirname(__FILE__) . '/../lib/');
 
 require_once 'configuratie.include.php';
-require_once 'MVC/model/entity/Mail.class.php';
+require_once 'model/entity/Mail.class.php';
 
 # Scriptje om voor sjaars een wachtwoord te genereren en dat toe te mailen.
 # Vergeet niet voor gebruik hieronder het jaar aan te passen.
-$jaar = '14';
+$jaar = '15';
 
 foreach (ProfielModel::instance()->find('status = ?', array(LidStatus::Noviet)) as $profiel) {
-	$nanonovieten = array();
-	if (in_array($profiel->uid, $nanonovieten)) {
-		continue;
-	}
-	$url = CSR_ROOT . '/wachtwoord/vergeten';
-	$tekst = <<<TEXT
+    $nanonovieten = array("1519", "1536", "1545");
+    if (in_array($profiel->uid, $nanonovieten)) {
+        continue;
+    }
+    $url = CSR_ROOT . '/wachtwoord/vergeten';
+    $tekst = <<<TEXT
 Beste noviet {$profiel->voornaam},
 
 Bij je lidmaatschap van C.S.R. hoort ook de mogelijkheid om in te loggen op de C.S.R.-webstek.
@@ -41,11 +41,11 @@ Stuur dan een e-mail.
 
 Met vriendelijke groet,
 
-Gerben Oolbekkink
+Arjen Rouvoet,
 h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 TEXT;
-	$mail = new Mail(array($profiel->email => $profiel->voornaam), 'Inloggegevens C.S.R.-webstek', $tekst);
-	$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
-	$mail->send();
-	echo $profiel->email . "\n";
+    $mail = new Mail(array($profiel->email => $profiel->voornaam), 'Inloggegevens C.S.R.-webstek', $tekst);
+    $mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
+    $mail->send();
+    echo $profiel->email . " SEND!\n";
 }
