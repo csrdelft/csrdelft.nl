@@ -10,13 +10,10 @@
  */
 class OneTimeTokensModel extends PersistenceModel {
 
-	const orm = 'OneTimeToken';
+	const ORM = 'OneTimeToken';
+	const DIR = 'security/';
 
 	protected static $instance;
-
-	protected function __construct() {
-		parent::__construct('security/');
-	}
 
 	public function verifyToken($uid, $rand) {
 		$token = $this->find('uid = ? AND verified = FALSE AND expire > NOW() AND token = ?', array($uid, hash('sha512', $rand)), null, null, 1)->fetch();

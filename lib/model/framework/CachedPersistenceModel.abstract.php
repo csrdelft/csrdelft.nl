@@ -33,7 +33,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * @return string
 	 */
 	private function cacheKey(array $primary_key_values) {
-		return static::orm . crc32(implode('-', $primary_key_values));
+		return static::ORM . crc32(implode('-', $primary_key_values));
 	}
 
 	protected function isCached($key, $memcache = false) {

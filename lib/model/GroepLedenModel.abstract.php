@@ -8,6 +8,8 @@
  */
 abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 
+	const DIR = 'groepen/';
+
 	/**
 	 * Default ORDER BY
 	 * @var string
@@ -23,13 +25,9 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 		return static::instance()->retrieveByPrimaryKey(array($groep->id, $uid));
 	}
 
-	protected function __construct() {
-		parent::__construct('groepen/');
-	}
-
 	public function nieuw(AbstractGroep $groep, $uid) {
-		$class = static::orm;
-		$lid = new $class();
+		$orm = static::ORM;
+		$lid = new $orm();
 		$lid->groep_id = $groep->id;
 		$lid->uid = $uid;
 		$lid->door_uid = LoginModel::getUid();
@@ -63,8 +61,8 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 		$count = count($uids);
 		$in = implode(', ', array_fill(0, $count, '?'));
 		$stats['Verticale'] = Database::instance()->sqlSelect(array('naam', 'count(*)'), 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $in . ')', $uids, 'verticale', null)->fetchAll();
-		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), ProfielModel::getTableName(), 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
-		$stats['Lichting'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), ProfielModel::getTableName(), 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
+		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), ProfielModel::instance()->getTableName(), 'uid IN (' . $in . ')', $uids, 'geslacht', null)->fetchAll();
+		$stats['Lichting'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), ProfielModel::instance()->getTableName(), 'uid IN (' . $in . ')', $uids, 'lidjaar', null)->fetchAll();
 		$stats['Tijd'] = array();
 		foreach ($leden as $groeplid) {
 			$time = strtotime($groeplid->lid_sinds) * 1000;
@@ -89,7 +87,7 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 
 class RechtenGroepLedenModel extends AbstractGroepLedenModel {
 
-	const orm = 'RechtenGroepLid';
+	const ORM = 'RechtenGroepLid';
 
 	protected static $instance;
 
@@ -97,7 +95,7 @@ class RechtenGroepLedenModel extends AbstractGroepLedenModel {
 
 class OnderverenigingsLedenModel extends AbstractGroepLedenModel {
 
-	const orm = 'OnderverenigingsLid';
+	const ORM = 'OnderverenigingsLid';
 
 	protected static $instance;
 
@@ -105,7 +103,7 @@ class OnderverenigingsLedenModel extends AbstractGroepLedenModel {
 
 class BewonersModel extends AbstractGroepLedenModel {
 
-	const orm = 'Bewoner';
+	const ORM = 'Bewoner';
 
 	protected static $instance;
 
@@ -113,7 +111,7 @@ class BewonersModel extends AbstractGroepLedenModel {
 
 class LichtingLedenModel extends AbstractGroepLedenModel {
 
-	const orm = 'LichtingsLid';
+	const ORM = 'LichtingsLid';
 
 	protected static $instance;
 
@@ -156,7 +154,7 @@ class LichtingLedenModel extends AbstractGroepLedenModel {
 
 class VerticaleLedenModel extends AbstractGroepLedenModel {
 
-	const orm = 'VerticaleLid';
+	const ORM = 'VerticaleLid';
 
 	protected static $instance;
 
@@ -206,7 +204,7 @@ class VerticaleLedenModel extends AbstractGroepLedenModel {
 
 class KringLedenModel extends AbstractGroepLedenModel {
 
-	const orm = 'KringLid';
+	const ORM = 'KringLid';
 
 	protected static $instance;
 
@@ -214,7 +212,7 @@ class KringLedenModel extends AbstractGroepLedenModel {
 
 class CommissieLedenModel extends AbstractGroepLedenModel {
 
-	const orm = 'CommissieLid';
+	const ORM = 'CommissieLid';
 
 	protected static $instance;
 
@@ -222,7 +220,7 @@ class CommissieLedenModel extends AbstractGroepLedenModel {
 
 class BestuursLedenModel extends AbstractGroepLedenModel {
 
-	const orm = 'BestuursLid';
+	const ORM = 'BestuursLid';
 
 	protected static $instance;
 
@@ -230,7 +228,7 @@ class BestuursLedenModel extends AbstractGroepLedenModel {
 
 class KetzerDeelnemersModel extends AbstractGroepLedenModel {
 
-	const orm = 'KetzerDeelnemer';
+	const ORM = 'KetzerDeelnemer';
 
 	protected static $instance;
 
@@ -238,7 +236,7 @@ class KetzerDeelnemersModel extends AbstractGroepLedenModel {
 
 class WerkgroepDeelnemersModel extends KetzerDeelnemersModel {
 
-	const orm = 'WerkgroepDeelnemer';
+	const ORM = 'WerkgroepDeelnemer';
 
 	protected static $instance;
 
@@ -246,7 +244,7 @@ class WerkgroepDeelnemersModel extends KetzerDeelnemersModel {
 
 class ActiviteitDeelnemersModel extends KetzerDeelnemersModel {
 
-	const orm = 'ActiviteitDeelnemer';
+	const ORM = 'ActiviteitDeelnemer';
 
 	protected static $instance;
 

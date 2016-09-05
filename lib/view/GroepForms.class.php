@@ -182,11 +182,11 @@ JS;
 		$this->options = array(
 			'ActiviteitenModel'		 => $this->activiteit,
 			'KetzersModel'			 => 'Aanschafketzer',
-			'WerkgroepenModel'		 => WerkgroepenModel::orm,
+			'WerkgroepenModel'		 => WerkgroepenModel::ORM,
 			'RechtenGroepenModel'	 => 'Groep (overig)',
-			'OnderverenigingenModel' => OnderverenigingenModel::orm,
-			'WoonoordenModel'		 => WoonoordenModel::orm,
-			'BesturenModel'			 => BesturenModel::orm,
+			'OnderverenigingenModel' => OnderverenigingenModel::ORM,
+			'WoonoordenModel'		 => WoonoordenModel::ORM,
+			'BesturenModel'			 => BesturenModel::ORM,
 			'CommissiesModel'		 => $this->commissie
 		);
 	}
@@ -208,7 +208,7 @@ JS;
 		}
 		$class = $this->value;
 		$model = $class::instance(); // require once
-		$orm = $model::orm;
+		$orm = $model::ORM;
 		$soort = $this->getSoort();
 		/**
 		 * @Warning: Duplicate function in GroepForm->validate()
@@ -242,7 +242,7 @@ class KetzerSoortField extends GroepSoortField {
 			$this->options['ActiviteitenModel_' . $soort] = $label;
 		}
 		$this->options['KetzersModel'] = 'Aanschafketzer';
-		//$this->options['WerkgroepenModel'] = WerkgroepenModel::orm;
+		//$this->options['WerkgroepenModel'] = WerkgroepenModel::ORM;
 		//$this->options['RechtenGroepenModel'] = 'Groep (overig)';
 	}
 
@@ -261,7 +261,7 @@ class KetzerSoortField extends GroepSoortField {
 
 			case 'KetzersModel':
 				$model = $class[0]::instance(); // require once
-				$orm = $model::orm;
+				$orm = $model::ORM;
 				if (!$orm::magAlgemeen(A::Aanmaken, $soort)) {
 					if ($model instanceof ActiviteitenModel) {
 						$naam = ActiviteitSoort::getDescription($soort);
@@ -283,7 +283,7 @@ class KetzerSoortField extends GroepSoortField {
 class GroepConverteerForm extends ModalForm {
 
 	public function __construct(AbstractGroep $groep, AbstractGroepenModel $huidig) {
-		parent::__construct($groep, $huidig->getUrl() . 'converteren', $huidig::orm . ' converteren', true);
+		parent::__construct($groep, $huidig->getUrl() . 'converteren', $huidig::ORM . ' converteren', true);
 
 		$fields[] = new GroepSoortField('model', get_class($huidig), 'Converteren naar', $groep);
 

@@ -18,7 +18,8 @@ require_once 'model/ProfielModel.class.php';
  */
 class LoginModel extends PersistenceModel implements Validator {
 
-	const orm = 'LoginSession';
+	const ORM = 'LoginSession';
+	const DIR = 'security/';
 
 	protected static $instance;
 
@@ -30,7 +31,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			if (MODE === 'CLI') {
 				static::$instance = new CliLoginModel();
 			} else {
-				static::$instance = new LoginModel();
+				static::$instance = parent::instance();
 			}
 		}
 		return static::$instance;
@@ -60,7 +61,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	protected function __construct() {
-		parent::__construct('security/');
+		parent::__construct();
 		/**
 		 * CliLoginModel doet zijn eigen ding.
 		 */

@@ -11,7 +11,7 @@ require_once 'model/entity/security/RememberLogin.class.php';
 class LoginSessionsTable extends DataTable implements FormElement {
 
 	public function __construct() {
-		parent::__construct(LoginModel::orm, '/loginsessionsdata', 'Sessiebeheer', 'ip');
+		parent::__construct(LoginModel::ORM, '/loginsessionsdata', 'Sessiebeheer', 'ip');
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->hideColumn('uid');
 		$this->searchColumn('login_moment');
@@ -51,7 +51,7 @@ class LoginSessionsData extends DataTableResponse {
 class RememberLoginTable extends DataTable implements FormElement {
 
 	public function __construct() {
-		parent::__construct(RememberLoginModel::orm, '/loginrememberdata', 'Automatisch inloggen', 'ip');
+		parent::__construct(RememberLoginModel::ORM, '/loginrememberdata', 'Automatisch inloggen', 'ip');
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->hideColumn('token');
 		$this->hideColumn('uid');

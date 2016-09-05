@@ -149,7 +149,7 @@ class ProfielView extends SmartyTemplateView {
 		require_once 'view/FotoAlbumView.class.php';
 		$fotos = array();
 		foreach (FotoTagsModel::instance()->find('keyword = ?', array($this->model->uid), null, null, 3) as $tag) {
-			$foto = FotoModel::getUUID($tag->refuuid);
+			$foto = FotoModel::instance()->retrieveByUUID($tag->refuuid);
 			if ($foto) {
 				$fotos[] = new FotoBBView($foto);
 			}

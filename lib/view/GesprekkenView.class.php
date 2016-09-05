@@ -61,7 +61,7 @@ class GesprekkenView implements View {
 class GesprekkenTable extends DataTable {
 
 	public function __construct() {
-		parent::__construct(GesprekkenModel::orm, '/gesprekken/gesprekken');
+		parent::__construct(GesprekkenModel::ORM, '/gesprekken/gesprekken');
 		$this->defaultLength = -1;
 		$this->settings['scrollY'] = '600px';
 		$this->settings['scrollCollapse'] = true;
@@ -117,7 +117,7 @@ class GesprekkenResponse extends DataTableResponse {
 class GesprekBerichtenTable extends DataTable {
 
 	public function __construct(Gesprek $gesprek) {
-		parent::__construct(GesprekBerichtenModel::orm, '/gesprekken/lees/' . $gesprek->gesprek_id, 'Gesprek met ' . $gesprek->getDeelnemersFormatted());
+		parent::__construct(GesprekBerichtenModel::ORM, '/gesprekken/lees/' . $gesprek->gesprek_id, 'Gesprek met ' . $gesprek->getDeelnemersFormatted());
 		$this->defaultLength = -1;
 		$this->settings['scrollY'] = '600px';
 		$this->settings['scrollCollapse'] = true;

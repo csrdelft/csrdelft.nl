@@ -8,7 +8,8 @@
  */
 class GesprekkenModel extends PersistenceModel {
 
-	const orm = 'Gesprek';
+	const ORM = 'Gesprek';
+	const DIR = 'gesprekken/';
 
 	protected static $instance;
 	/**
@@ -17,12 +18,8 @@ class GesprekkenModel extends PersistenceModel {
 	 */
 	protected $default_order = 'laatste_update DESC';
 
-	protected function __construct() {
-		parent::__construct('gesprekken/');
-	}
-
 	public static function get($gesprek_id) {
-		return self::instance()->retrieveByPrimaryKey(array($gesprek_id));
+		return static::instance()->retrieveByPrimaryKey(array($gesprek_id));
 	}
 
 	public function startGesprek(Account $from, Account $to, $inhoud) {
@@ -53,7 +50,8 @@ class GesprekkenModel extends PersistenceModel {
  */
 class GesprekDeelnemersModel extends PersistenceModel {
 
-	const orm = 'GesprekDeelnemer';
+	const ORM = 'GesprekDeelnemer';
+	const DIR = 'gesprekken/';
 
 	protected static $instance;
 	/**
@@ -62,12 +60,8 @@ class GesprekDeelnemersModel extends PersistenceModel {
 	 */
 	protected $default_order = 'toegevoegd_moment ASC';
 
-	protected function __construct() {
-		parent::__construct('gesprekken/');
-	}
-
 	public static function get($gesprek_id, $uid) {
-		return self::instance()->retrieveByPrimaryKey(array($gesprek_id, $uid));
+		return static::instance()->retrieveByPrimaryKey(array($gesprek_id, $uid));
 	}
 
 	public function getDeelnemersVanGesprek(Gesprek $gesprek) {
@@ -132,7 +126,8 @@ class GesprekDeelnemersModel extends PersistenceModel {
  */
 class GesprekBerichtenModel extends PersistenceModel {
 
-	const orm = 'GesprekBericht';
+	const ORM = 'GesprekBericht';
+	const DIR = 'gesprekken/';
 
 	protected static $instance;
 	/**
@@ -141,12 +136,8 @@ class GesprekBerichtenModel extends PersistenceModel {
 	 */
 	protected $default_order = 'bericht_id ASC';
 
-	protected function __construct() {
-		parent::__construct('gesprekken/');
-	}
-
 	public static function get($bericht_id) {
-		return $this->retrieveByPrimaryKey(array($bericht_id));
+		return static::instance()->retrieveByPrimaryKey(array($bericht_id));
 	}
 
 	public function getBerichtenSinds(Gesprek $gesprek, $lastUpdate) {

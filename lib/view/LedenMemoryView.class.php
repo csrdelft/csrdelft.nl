@@ -179,7 +179,7 @@ class LedenMemoryScoreForm extends Formulier {
 class LedenMemoryScoreTable extends DataTable {
 
 	public function __construct(AbstractGroep $groep = null) {
-		parent::__construct(LedenMemoryScoresModel::orm, '/leden/memoryscores/' . ($groep ? $groep->getUUID() : null), 'Topscores Ledenmemory', 'groep');
+		parent::__construct(LedenMemoryScoresModel::ORM, '/leden/memoryscores/' . ($groep ? $groep->getUUID() : null), 'Topscores Ledenmemory', 'groep');
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->settings['dom'] = 'rtpli';
 
@@ -214,7 +214,7 @@ class LedenMemoryScoreResponse extends DataTableResponse {
 				switch ($parts[1]) {
 
 					case 'verticale.csrdelft.nl':
-						$groep = VerticalenModel::getUUID($score->groep);
+						$groep = VerticalenModel::instance()->retrieveByUUID($score->groep);
 						$this->titles[$score->groep] = 'Verticale ' . $groep->naam;
 						break;
 

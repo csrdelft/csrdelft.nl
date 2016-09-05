@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/entity/framework/DynamicEntityDefinition.class.php';
+
 /**
  * DynamicEntity.class.php
  * 
@@ -12,7 +14,7 @@
 class DynamicEntity extends PersistentEntity {
 
 	/**
-	 * The definition of this entity
+	 * Definition of the DynamicEntity
 	 * @var DynamicEntityDefinition
 	 */
 	public $definition;
@@ -40,7 +42,7 @@ class DynamicEntity extends PersistentEntity {
 	}
 
 	public function getPrimaryKey() {
-		return $this->definition->primary_key;
+		return array_values($this->definition->primary_key);
 	}
 
 	public function __set($attribute, $value) {
@@ -62,6 +64,10 @@ class DynamicEntity extends PersistentEntity {
 		if ($this->__isset($attribute)) {
 			unset($this->$attribute);
 		}
+	}
+
+	public static function checkTable() {
+		// Definition is generated from table and not checked again for modifications
 	}
 
 }

@@ -3,11 +3,13 @@
 require_once 'model/entity/mededelingen/MededelingAccess.enum.php';
 
 /**
- * MededelingCategorieModel.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
- *
+ * MededelingCategorie.class.php
+ * 
+ * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
+ * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class Categorie extends PersistentEntity {
+class MededelingCategorie extends PersistentEntity {
 
     public $id;
     public $naam;
@@ -15,7 +17,6 @@ class Categorie extends PersistentEntity {
     public $permissie;
     public $plaatje;
     public $beschrijving;
-    public $mededelingen = null;
 
     protected static $persistent_attributes = array(
         'id'		    => array(T::Integer, false, 'auto_increment'),
@@ -33,4 +34,5 @@ class Categorie extends PersistentEntity {
     public function magUitbreiden() {
         return LoginModel::mag($this->permissie);
     }
+
 }

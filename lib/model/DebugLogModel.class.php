@@ -8,7 +8,7 @@
  */
 class DebugLogModel extends PersistenceModel {
 
-	const orm = 'DebugLogEntry';
+	const ORM = 'DebugLogEntry';
 
 	protected static $instance;
 

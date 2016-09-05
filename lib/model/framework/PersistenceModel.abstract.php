@@ -12,57 +12,80 @@ require_once 'model/entity/framework/PersistentEntity.abstract.php';
  * Uses the database to provide persistence.
  * Requires an ORM class constant to be defined in superclass. 
  * Requires a static property $instance in superclass.
+ * Optional DIR class constant for location of ORM class.
  * 
  */
 abstract class PersistenceModel implements Persistence {
-	private static $instance;
 
 	/**
+	 * Unfortunately PHP does not support static constructors.
+	 * This is the next best thing for now.
+	 */
+	public static function __static() {
+		$orm = static::ORM;
+		if (defined('static::DIR')) {
+			$dir = static::DIR;
+		} else {
+			$dir = '';
+		}
+		require_once 'model/entity/' . $dir . $orm . '.class.php';
+		$orm::__static(); // extend persistent attributes
+		if (DB_CHECK) {
+			require_once 'model/framework/DatabaseAdmin.singleton.php';
+			$orm::checkTable();
+		}
+	}
+
+	/**
+	 * This has to be called once before using static methods due to
+	 * static constructor emulation.
+	 * 
 	 * @return $this
 	 */
 	public static function instance() {
 		if (!isset(static::$instance)) {
+			static::__static();
 			static::$instance = new static();
 		}
 		return static::$instance;
 	}
 
-	public static function getTableName() {
-		return static::instance()->orm->getTableName();
-	}
-
-	/**
-	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
-	 * 
-	 * @param string $UUID
-	 * @return PersistentEntity
-	 */
-	public static function getUUID($UUID) {
-		$parts = explode('@', $UUID, 2);
-		$primary_key_values = explode('.', $parts[0]);
-		return static::instance()->retrieveByPrimaryKey($primary_key_values);
-	}
-
-	/**
-	 * Object relational mapping
-	 * @var PersistentEntity
-	 */
-	protected $orm;
 	/**
 	 * Default ORDER BY
 	 * @var string
 	 */
 	protected $default_order = null;
 
-	protected function __construct($subdir = '') {
-		$orm = static::orm;
-		require_once 'model/entity/' . $subdir . $orm . '.class.php';
-		$orm::__constructStatic(); // extend persistent attributes
-		if (DB_CHECK) {
-			require_once 'model/framework/DatabaseAdmin.singleton.php';
-			$orm::checkTable();
-		}
+	/**
+	 * Object relational mapping
+	 * @var PersistentEntity
+	 */
+	private $orm;
+
+	protected function __construct() {
+		$orm = static::ORM;
 		$this->orm = new $orm();
+	}
+
+	public function getTableName() {
+		return $this->orm->getTableName();
+	}
+
+	/**
+	 * Get all attribute names.
+	 * 
+	 * @return array
+	 */
+	public function getAttributes() {
+		return $this->orm->getAttributes();
+	}
+
+	public function getAttributeDefinition($attribute_name) {
+		return $this->orm->getAttributeDefinition($attribute_name);
+	}
+
+	public function getPrimaryKey() {
+		return $this->orm->getPrimaryKey();
 	}
 
 	/**
@@ -75,15 +98,15 @@ abstract class PersistenceModel implements Persistence {
 	 * @param string $orderby ORDER BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
-	 * @return PDOStatement
+	 * @return PDOStatement implements Traversable using foreach does NOT require ->fetchAll()
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
 		if ($orderby == null) {
 			$orderby = $this->default_order;
 		}
 		try {
-			$result = Database::sqlSelect(array('*'), $this->orm->getTableName(), $criteria, $criteria_params, $groupby, $orderby, $limit, $start);
-			$result->setFetchMode(PDO::FETCH_CLASS, static::orm, array($cast = true));
+			$result = Database::sqlSelect(array('*'), $this->getTableName(), $criteria, $criteria_params, $groupby, $orderby, $limit, $start);
+			$result->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true));
 			return $result;
 		} catch (PDOException $ex) {
 			fatal_handler($ex);
@@ -101,15 +124,15 @@ abstract class PersistenceModel implements Persistence {
 	 * @param string $orderby ORDER BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
-	 * @return PDOStatement
+	 * @return PDOStatement implements Traversable using foreach does NOT require ->fetchAll()
 	 */
 	public function findSparse(array $attributes, $criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
 		if ($orderby == null) {
 			$orderby = $this->default_order;
 		}
-		$attributes = array_merge($this->orm->getPrimaryKey(), $attributes);
-		$result = Database::sqlSelect($attributes, $this->orm->getTableName(), $criteria, $criteria_params, $groupby, $orderby, $limit, $start);
-		$result->setFetchMode(PDO::FETCH_CLASS, static::orm, array($cast = true, $attributes));
+		$attributes = array_merge($this->getPrimaryKey(), $attributes);
+		$result = Database::sqlSelect($attributes, $this->getTableName(), $criteria, $criteria_params, $groupby, $orderby, $limit, $start);
+		$result->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true, $attributes));
 		return $result;
 	}
 
@@ -121,19 +144,8 @@ abstract class PersistenceModel implements Persistence {
 	 * @return int count
 	 */
 	public function count($criteria = null, array $criteria_params = array()) {
-		$result = Database::sqlSelect(array('COUNT(*)'), $this->orm->getTableName(), $criteria, $criteria_params);
+		$result = Database::sqlSelect(array('COUNT(*)'), $this->getTableName(), $criteria, $criteria_params);
 		return (int) $result->fetchColumn();
-	}
-
-	/**
-	 * Check if entities with optional search criteria exist.
-	 * 
-	 * @param string $criteria
-	 * @param array $criteria_params
-	 * @return boolean entities with search criteria exist
-	 */
-	public function exist($criteria = null, array $criteria_params = array()) {
-		return Database::sqlExists($this->orm->getTableName(), $criteria, $criteria_params);
 	}
 
 	/**
@@ -154,10 +166,10 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	protected function existsByPrimaryKey(array $primary_key_values) {
 		$where = array();
-		foreach ($this->orm->getPrimaryKey() as $key) {
+		foreach ($this->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		return $this->exist(implode(' AND ', $where), $primary_key_values);
+		return Database::sqlExists($this->getTableName(), implode(' AND ', $where), $primary_key_values);
 	}
 
 	/**
@@ -193,11 +205,23 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
 		$where = array();
-		foreach ($this->orm->getPrimaryKey() as $key) {
+		foreach ($this->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		$result = Database::sqlSelect(array('*'), $this->orm->getTableName(), implode(' AND ', $where), $primary_key_values, null, null, 1);
-		return $result->fetchObject(static::orm, array($cast = true));
+		$result = Database::sqlSelect(array('*'), $this->getTableName(), implode(' AND ', $where), $primary_key_values, null, null, 1);
+		return $result->fetchObject(static::ORM, array($cast = true));
+	}
+
+	/**
+	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
+	 * 
+	 * @param string $UUID
+	 * @return PersistentEntity|false
+	 */
+	public function retrieveByUUID($UUID) {
+		$parts = explode('@', $UUID, 2);
+		$primary_key_values = explode('.', $parts[0]);
+		return $this->retrieveByPrimaryKey($primary_key_values);
 	}
 
 	/**
@@ -275,10 +299,10 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
 		$where = array();
-		foreach ($this->orm->getPrimaryKey() as $key) {
+		foreach ($this->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		return Database::sqlDelete($this->orm->getTableName(), implode(' AND ', $where), $primary_key_values, 1);
+		return Database::sqlDelete($this->getTableName(), implode(' AND ', $where), $primary_key_values, 1);
 	}
 
 }

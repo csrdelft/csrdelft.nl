@@ -18,7 +18,8 @@ require_once 'model/GroepenModel.abstract.php';
  */
 class AccessModel extends CachedPersistenceModel {
 
-	const orm = 'AccessControl';
+	const ORM = 'AccessControl';
+	const DIR = 'security/';
 
 	protected static $instance;
 	/**
@@ -49,8 +50,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Met deze functies kan op één of meerdere permissies worden getest,
 	 * onderling gescheiden door komma's. Als een lid één van de
 	 * permissies 'heeft', geeft de functie true terug. Het is dus een
-	 * logische OF tussen de verschillende te testen permissies. Een
-	 * permissie kan met een uitroepteken geïnverteerd worden.
+	 * logische OF tussen de verschillende te testen permissies.
 	 * 
 	 * Voorbeeldjes:
 	 *  commissie:NovCie			geeft true leden van de h.t. NovCie.
@@ -107,7 +107,6 @@ class AccessModel extends CachedPersistenceModel {
 	private $permissions = array();
 
 	protected function __construct() {
-		parent::__construct('security/');
 		$this->loadPermissions();
 	}
 
@@ -121,12 +120,12 @@ class AccessModel extends CachedPersistenceModel {
 	}
 
 	public function getTree($environment, $resource) {
-		if ($environment === ActiviteitenModel::orm) {
+		if ($environment === ActiviteitenModel::ORM) {
 			$activiteit = ActiviteitenModel::get($resource);
 			if ($activiteit) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $activiteit->soort, '*'));
 			}
-		} elseif ($environment === CommissiesModel::orm) {
+		} elseif ($environment === CommissiesModel::ORM) {
 			$commissie = CommissiesModel::get($resource);
 			if ($commissie) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $commissie->soort, '*'));
@@ -457,7 +456,7 @@ class AccessModel extends CachedPersistenceModel {
 		// zoek de rechten van de gebruiker op
 		$role = $subject->perm_role;
 
-		// ga alleen verder als er een geldige permissie wordt teruggegeven
+		// ga alleen verder als er een geldige AccessRole wordt teruggegeven
 		if (!$this->isValidRole($role)) {
 			return false;
 		}
@@ -596,13 +595,13 @@ class AccessModel extends CachedPersistenceModel {
 					switch ($prefix) {
 
 						case 'BESTUUR':
-							$l = BestuursLedenModel::getTableName();
-							$g = BesturenModel::getTableName();
+							$l = BestuursLedenModel::instance()->getTableName();
+							$g = BesturenModel::instance()->getTableName();
 							break;
 
 						case 'COMMISSIE':
-							$l = CommissieLedenModel::getTableName();
-							$g = CommissiesModel::getTableName();
+							$l = CommissieLedenModel::instance()->getTableName();
+							$g = CommissiesModel::instance()->getTableName();
 							break;
 					}
 					return Database::sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie = ? AND l.uid = ?', array($role, $gevraagd, $profiel->uid));

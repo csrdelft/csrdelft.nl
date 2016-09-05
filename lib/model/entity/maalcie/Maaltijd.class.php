@@ -25,7 +25,7 @@
  * Zie ook MaaltijdAanmelding.class.php
  * 
  */
-class Maaltijd implements Agendeerbaar, \JsonSerializable {
+class Maaltijd implements Agendeerbaar, JsonSerializable {
 	# primary key
 
 	private $maaltijd_id; # int 11
@@ -77,10 +77,9 @@ class Maaltijd implements Agendeerbaar, \JsonSerializable {
 		$this->setOmschrijving($omschrijving);
 	}
 
-    public function JsonSerialize()
-    {
-        return get_object_vars($this);
-    }
+	public function jsonSerialize() {
+		return get_object_vars($this);
+	}
 
 	public function getMaaltijdId() {
 		return (int) $this->maaltijd_id;

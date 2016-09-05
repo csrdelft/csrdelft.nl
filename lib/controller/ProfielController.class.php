@@ -226,7 +226,7 @@ class ProfielController extends AclController {
 			switch ($parts[1]) {
 
 				case 'verticale.csrdelft.nl':
-					$groep = VerticalenModel::getUUID($groep);
+					$groep = VerticalenModel::instance()->retrieveByUUID($groep);
 					break;
 
 				case 'lichting.csrdelft.nl':

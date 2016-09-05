@@ -8,7 +8,7 @@
  */
 class TimerModel extends PersistenceModel {
 
-	const orm = 'ExecutionTime';
+	const ORM = 'ExecutionTime';
 
 	protected static $instance;
 	/**

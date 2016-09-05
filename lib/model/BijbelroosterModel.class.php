@@ -8,7 +8,7 @@
  */
 class BijbelroosterModel extends PersistenceModel {
 
-	const orm = 'Bijbelrooster';
+	const ORM = 'Bijbelrooster';
 
 	protected static $instance;
 
