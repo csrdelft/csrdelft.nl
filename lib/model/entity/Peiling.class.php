@@ -46,7 +46,7 @@ class Peiling extends PersistentEntity {
     protected static $table_name = 'peiling';
     protected static $primary_key = array('id');
     protected static $persistent_attributes = array(
-        'id'    => array(T::Integer, false, 'auto_increment'),
+        'id'    => array(T::UnsignedInteger, false, 'auto_increment'),
         'titel' => array(T::String),
         'tekst' => array(T::Text)
     );

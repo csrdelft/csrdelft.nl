@@ -37,7 +37,7 @@ class MaaltijdBeoordeling extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'maaltijd_id'	 => array(T::Integer),
+		'maaltijd_id'	 => array(T::UnsignedInteger),
 		'uid'			 => array(T::UID),
 		'kwantiteit'	 => array(T::Float, true),
 		'kwaliteit'		 => array(T::Float, true)

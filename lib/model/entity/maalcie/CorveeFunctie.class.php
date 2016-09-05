@@ -70,7 +70,7 @@ class CorveeFunctie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'functie_id'			 => array(T::Integer, false, 'auto_increment'),
+		'functie_id'			 => array(T::UnsignedInteger, false, 'auto_increment'),
 		'naam'					 => array(T::String),
 		'afkorting'				 => array(T::String),
 		'email_bericht'			 => array(T::Text),

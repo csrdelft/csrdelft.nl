@@ -32,8 +32,8 @@ class KetzerSelector extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'select_id'		 => array(T::Integer, false, 'auto_increment'),
-		'ketzer_id'		 => array(T::Integer),
+		'select_id'		 => array(T::UnsignedInteger, false, 'auto_increment'),
+		'ketzer_id'		 => array(T::UnsignedInteger),
 		'keuze_soort'	 => array(T::Enumeration, false, 'KetzerSelectorSoort')
 	);
 	/**

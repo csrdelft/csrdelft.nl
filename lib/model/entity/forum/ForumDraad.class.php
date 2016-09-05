@@ -130,14 +130,14 @@ class ForumDraad extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'draad_id'				 => array(T::Integer, false, 'auto_increment'),
-		'forum_id'				 => array(T::Integer),
+		'draad_id'				 => array(T::UnsignedInteger, false, 'auto_increment'),
+		'forum_id'				 => array(T::UnsignedInteger),
 		'gedeeld_met'			 => array(T::Integer, true),
 		'uid'					 => array(T::UID),
 		'titel'					 => array(T::String),
 		'datum_tijd'			 => array(T::DateTime),
 		'laatst_gewijzigd'		 => array(T::DateTime, true),
-		'laatste_post_id'		 => array(T::Integer, true),
+		'laatste_post_id'		 => array(T::UnsignedInteger, true),
 		'laatste_wijziging_uid'	 => array(T::UID, true),
 		'gesloten'				 => array(T::Boolean),
 		'verwijderd'			 => array(T::Boolean),

@@ -70,8 +70,8 @@ class ForumPost extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'post_id'			 => array(T::Integer, false, 'auto_increment'),
-		'draad_id'			 => array(T::Integer),
+		'post_id'			 => array(T::UnsignedInteger, false, 'auto_increment'),
+		'draad_id'			 => array(T::UnsignedInteger),
 		'uid'				 => array(T::UID),
 		'tekst'				 => array(T::Text),
 		'datum_tijd'		 => array(T::DateTime),

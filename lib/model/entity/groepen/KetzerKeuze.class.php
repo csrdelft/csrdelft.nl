@@ -25,7 +25,7 @@ class KetzerKeuze extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'optie_id'	 => array(T::Integer),
+		'optie_id'	 => array(T::UnsignedInteger),
 		'uid'		 => array(T::UID)
 	);
 	/**

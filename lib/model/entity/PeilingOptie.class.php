@@ -19,8 +19,8 @@ class PeilingOptie extends PersistentEntity {
     protected static $table_name = 'peilingoptie';
     protected static $primary_key = array('id');
     protected static $persistent_attributes = array(
-        'id'        => array(T::Integer, false, 'auto_increment'),
-        'peilingid' => array(T::Integer),
+        'id'        => array(T::UnsignedInteger, false, 'auto_increment'),
+        'peilingid' => array(T::UnsignedInteger),
         'optie'     => array(T::String),
         'stemmen'   => array(T::Integer)
     );

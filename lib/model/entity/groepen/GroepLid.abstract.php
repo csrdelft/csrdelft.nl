@@ -42,7 +42,7 @@ abstract class AbstractGroepLid extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'groep_id'	 => array(T::Integer),
+		'groep_id'	 => array(T::UnsignedInteger),
 		'uid'		 => array(T::UID),
 		'opmerking'	 => array(T::String, true),
 		'lid_sinds'	 => array(T::DateTime),

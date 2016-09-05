@@ -14,6 +14,7 @@ abstract class T implements PersistentEnum {
 	const Char = 'char(1)';
 	const Boolean = 'tinyint(1)';
 	const Integer = 'int(11)';
+	const UnsignedInteger = 'int(11) unsigned';
 	const Float = 'float';
 	const Date = 'date';
 	const Time = 'time';
@@ -25,7 +26,7 @@ abstract class T implements PersistentEnum {
 	const UID = 'varchar(4)';
 
 	public static function getTypeOptions() {
-		return array(self::String, self::Char, self::Boolean, self::Integer, self::Float, self::Date, self::Time, self::DateTime, self::Timestamp, self::Text, self::LongText, self::Enumeration, self::UID);
+		return array(self::String, self::Char, self::Boolean, self::Integer, self::UnsignedInteger, self::Float, self::Date, self::Time, self::DateTime, self::Timestamp, self::Text, self::LongText, self::Enumeration, self::UID);
 	}
 
 	public static function getDescription($option) {
@@ -34,6 +35,7 @@ abstract class T implements PersistentEnum {
 			case self::Char: return 'Karakter (1 teken)';
 			case self::Boolean: return 'Ja/Nee-waarde';
 			case self::Integer: return 'Geheel getal';
+			case self::UnsignedInteger: return 'Geheel getal >=0';
 			case self::Float: return 'Kommagetal';
 			case self::Date: return 'Datum';
 			case self::Time: return 'Tijd';
@@ -53,6 +55,7 @@ abstract class T implements PersistentEnum {
 			case self::Char: return 'c';
 			case self::Boolean: return 'b';
 			case self::Integer: return 'i';
+			case self::UnsignedInteger: return 'ui';
 			case self::Float: return 'f';
 			case self::Date: return 'd';
 			case self::Time: return 't';

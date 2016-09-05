@@ -36,7 +36,7 @@ class CorveeKwalificatie extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'uid'				 => array(T::UID),
-		'functie_id'		 => array(T::Integer),
+		'functie_id'		 => array(T::UnsignedInteger),
 		'wanneer_toegewezen' => array(T::DateTime)
 	);
 	/**
