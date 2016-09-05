@@ -32,6 +32,7 @@ class EetplanController extends AclController {
                 'huis' => 'P_LEDEN_READ',
                 'beheer' => 'P_ADMIN',
                 'bekendehuizen' => 'P_ADMIN',
+                'json' => 'P_ADMIN',
             );
         }
     }
@@ -162,5 +163,10 @@ class EetplanController extends AclController {
         $body = new EetplanBeheerView($this->model, WoonoordenModel::instance());
         $this->view = new CsrLayoutPage($body);
         $this->view->addCompressedResources('eetplan');
+    }
+
+    public function json() {
+        $eetplan = $this->model->getEetplan();
+        $this->view = new JsonResponse($eetplan);
     }
 }

@@ -87,7 +87,6 @@ class EetplanBeheerView extends AbstractEetplanView {
     }
 
     public function view() {
-        $this->smarty->assign("eetplan", $this->eetplan);
         $this->smarty->assign("bekendentable", new EetplanBekendenTable());
         $this->smarty->assign("huizentable", new EetplanHuizenTable()); // TODO: consistentie huizen-woonoorden
         $this->smarty->assign("bekendehuizentable", new EetplanBekendeHuizenTable());

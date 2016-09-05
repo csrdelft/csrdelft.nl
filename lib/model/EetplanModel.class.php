@@ -29,6 +29,14 @@ class EetplanModel extends PersistenceModel {
         $this->bekendenModel = new EetplanBekendenModel($lichting);
     }
 
+    public function getEetplanVoorAvond($avond) {
+        return $this->find('avond = ?', array($avond));
+    }
+
+    public function getNovieten() {
+        return $this->findSparse(array('uid'), 'uid LIKE ?', array(sprintf("%s%%", $this->lichting)), 'uid');
+    }
+
     /**
      * Haal alle avonden op die voor deze lichting gelden.
      *
@@ -49,14 +57,33 @@ class EetplanModel extends PersistenceModel {
 
         $eetplan = $this->find('uid LIKE ?', array("$this->lichting%"));
         $eetplanFeut = array();
+        $avonden = array();
         foreach ($eetplan as $sessie) {
-            if (!isset($eetplanFeut[$sessie->uid])) {
-                $eetplanFeut[$sessie->uid] = array();
+            if ($sessie->avond == '0000-00-00') {
+                continue;
             }
-            $eetplanFeut[$sessie->uid][] = $sessie;
+            if (!isset($eetplanFeut[$sessie->uid])) {
+                $eetplanFeut[$sessie->uid] = array(
+                    'avonden' => array(),
+                    'uid' => $sessie->uid,
+                    'naam' => $sessie->getNoviet()->getNaam()
+                );
+            }
+
+            $eetplanFeut[$sessie->uid]['avonden'][] = array(
+                'datum' => $sessie->avond,
+                'woonoord' => $sessie->getWoonoord()->naam
+            );
+
+            if (!isset($avonden[$sessie->avond])) {
+                $avonden[$sessie->avond] = $sessie->avond;
+            }
         }
 
-        return $eetplanFeut;
+        return array(
+            'novieten' => array_values($eetplanFeut),
+            'avonden' => array_values($avonden)
+    );
     }
 
     /**
