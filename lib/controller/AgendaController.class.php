@@ -149,27 +149,27 @@ class AgendaController extends AclController {
 		switch ($module[0]) {
 
 			case 'csrdelft':
-				$item = ProfielModel::getUUID($refuuid);
+				$item = ProfielModel::instance()->retrieveByUUID($refuuid);
 				break;
 
 			case 'bijbelrooster':
-				$item = BijbelroosterModel::getUUID($refuuid);
+				$item = BijbelroosterModel::instance()->retrieveByUUID($refuuid);
 				break;
 
 			case 'maaltijd':
-				$item = MaaltijdenModel::getUUID($refuuid);
+				$item = MaaltijdenModel::instance()->retrieveByUUID($refuuid);
 				break;
 
 			case 'corveetaak':
-				$item = CorveeTakenModel::getUUID($refuuid);
+				$item = CorveeTakenModel::instance()->retrieveByUUID($refuuid);
 				break;
 
 			case 'activiteit':
-				$item = ActiviteitenModel::getUUID($refuuid);
+				$item = ActiviteitenModel::instance()->retrieveByUUID($refuuid);
 				break;
 
 			case 'agendaitem':
-				$item = AgendaModel::getUUID($refuuid);
+				$item = AgendaModel::instance()->retrieveByUUID($refuuid);
 				break;
 
 			default:

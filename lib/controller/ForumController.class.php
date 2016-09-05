@@ -375,8 +375,9 @@ class ForumController extends Controller {
 	 */
 	public function opheffen($forum_id) {
 		$deel = ForumDelenModel::get((int) $forum_id);
-		if (ForumDradenModel::instance()->exist('forum_id = ?', array($deel->forum_id))) {
-			setMelding('Verwijder eerst alle draadjes van dit deelforum uit de database!', -1);
+		$count = ForumDradenModel::instance()->count('forum_id = ?', array($deel->forum_id));
+		if ($count > 0) {
+			setMelding('Verwijder eerst alle ' . $count . ' draadjes van dit deelforum uit de database!', -1);
 		} else {
 			ForumDelenModel::instance()->verwijderForumDeel($deel->forum_id);
 			setMelding('Deelforum verwijderd', 1);

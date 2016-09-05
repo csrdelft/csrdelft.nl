@@ -51,22 +51,11 @@ abstract class PersistenceModel implements Persistence {
 	}
 
 	/**
-	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
-	 * 
-	 * @param string $UUID
-	 * @return PersistentEntity
-	 */
-	public static function getUUID($UUID) {
-		$parts = explode('@', $UUID, 2);
-		$primary_key_values = explode('.', $parts[0]);
-		return static::instance()->retrieveByPrimaryKey($primary_key_values);
-	}
-
-	/**
 	 * Default ORDER BY
 	 * @var string
 	 */
 	protected $default_order = null;
+
 	/**
 	 * Object relational mapping
 	 * @var PersistentEntity
@@ -160,17 +149,6 @@ abstract class PersistenceModel implements Persistence {
 	}
 
 	/**
-	 * Check if entities with optional search criteria exist.
-	 * 
-	 * @param string $criteria
-	 * @param array $criteria_params
-	 * @return boolean entities with search criteria exist
-	 */
-	public function exist($criteria = null, array $criteria_params = array()) {
-		return Database::sqlExists($this->getTableName(), $criteria, $criteria_params);
-	}
-
-	/**
 	 * Check if enitity exists.
 	 * 
 	 * @param PersistentEntity $entity
@@ -191,7 +169,7 @@ abstract class PersistenceModel implements Persistence {
 		foreach ($this->getPrimaryKey() as $key) {
 			$where[] = $key . ' = ?';
 		}
-		return $this->exist(implode(' AND ', $where), $primary_key_values);
+		return Database::sqlExists($this->getTableName(), implode(' AND ', $where), $primary_key_values);
 	}
 
 	/**
@@ -232,6 +210,18 @@ abstract class PersistenceModel implements Persistence {
 		}
 		$result = Database::sqlSelect(array('*'), $this->getTableName(), implode(' AND ', $where), $primary_key_values, null, null, 1);
 		return $result->fetchObject(static::ORM, array($cast = true));
+	}
+
+	/**
+	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
+	 * 
+	 * @param string $UUID
+	 * @return PersistentEntity|false
+	 */
+	public function retrieveByUUID($UUID) {
+		$parts = explode('@', $UUID, 2);
+		$primary_key_values = explode('.', $parts[0]);
+		return $this->retrieveByPrimaryKey($primary_key_values);
 	}
 
 	/**
