@@ -2238,8 +2238,8 @@
                 html: '<div class="jgallery" style="display: none;">\
                         <div class="jgallery-thumbnails hidden">\
                             <div class="jgallery-container"><div class="jgallery-container-inner"></div></div>\
-                            <span class="prev jgallery-btn"><span class="fa fa-chevron-left"></span></span>\
-                            <span class="next jgallery-btn"><span class="fa fa-chevron-right"></span></span>\
+                            <span class="prev jgallery-btn"><span class="fa fa-chevron-left ico"></span></span>\
+                            <span class="next jgallery-btn"><span class="fa fa-chevron-right ico"></span></span>\
                         </div>\
                         <div class="zoom-container">\
                             <div class="zoom before pt-perspective"></div>\
