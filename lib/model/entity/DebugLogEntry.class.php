@@ -68,7 +68,7 @@ class DebugLogEntry extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'			 => array(T::Integer, false, 'auto_increment'),
+		'id'			 => array(T::UnsignedInteger, false, 'auto_increment'),
 		'class_function' => array(T::String),
 		'dump'			 => array(T::LongText, true),
 		'call_trace'	 => array(T::Text),

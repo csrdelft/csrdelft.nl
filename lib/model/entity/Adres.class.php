@@ -22,7 +22,7 @@ class Adres extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'adres_id'	 => array(T::Integer, false, 'auto_increment'),
+		'adres_id'	 => array(T::UnsignedInteger, false, 'auto_increment'),
 		'naam'		 => array(T::String),
 		'straat'	 => array(T::String),
 		'plaats'	 => array(T::String),

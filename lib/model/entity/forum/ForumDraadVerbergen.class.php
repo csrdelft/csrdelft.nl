@@ -25,7 +25,7 @@ class ForumDraadVerbergen extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'draad_id'	 => array(T::Integer),
+		'draad_id'	 => array(T::UnsignedInteger),
 		'uid'		 => array(T::UID)
 	);
 	/**

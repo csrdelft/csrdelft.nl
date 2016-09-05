@@ -46,8 +46,8 @@ class ForumDraadReageren extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'forum_id'	 => array(T::Integer),
-		'draad_id'	 => array(T::Integer),
+		'forum_id'	 => array(T::UnsignedInteger),
+		'draad_id'	 => array(T::UnsignedInteger),
 		'uid'		 => array(T::UID),
 		'datum_tijd' => array(T::DateTime),
 		'concept'	 => array(T::Text, true),

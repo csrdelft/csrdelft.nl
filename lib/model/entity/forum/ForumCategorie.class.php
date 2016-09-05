@@ -40,7 +40,7 @@ class ForumCategorie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'categorie_id'	 => array(T::Integer, false, 'auto_increment'),
+		'categorie_id'	 => array(T::UnsignedInteger, false, 'auto_increment'),
 		'titel'			 => array(T::String),
 		'rechten_lezen'	 => array(T::String),
 		'volgorde'		 => array(T::Integer)

@@ -18,7 +18,7 @@ class Categorie extends PersistentEntity {
     public $mededelingen = null;
 
     protected static $persistent_attributes = array(
-        'id'		    => array(T::Integer, false, 'auto_increment'),
+        'id'		    => array(T::UnsignedInteger, false, 'auto_increment'),
         'naam'	        => array(T::String),
         'prioriteit'    => array(T::Integer),
         'permissie'     => array(T::Enumeration, false, 'MededelingAccess'),

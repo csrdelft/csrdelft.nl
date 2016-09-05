@@ -38,8 +38,8 @@ class GesprekBericht extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'bericht_id' => array(T::Integer, false, 'auto_increment'),
-		'gesprek_id' => array(T::Integer),
+		'bericht_id' => array(T::UnsignedInteger, false, 'auto_increment'),
+		'gesprek_id' => array(T::UnsignedInteger),
 		'moment'	 => array(T::DateTime),
 		'auteur_uid' => array(T::UID),
 		'inhoud'	 => array(T::Text)

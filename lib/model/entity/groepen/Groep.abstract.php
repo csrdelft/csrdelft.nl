@@ -69,7 +69,7 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'			 => array(T::Integer, false, 'auto_increment'),
+		'id'			 => array(T::UnsignedInteger, false, 'auto_increment'),
 		'naam'			 => array(T::String),
 		'familie'		 => array(T::String),
 		'begin_moment'	 => array(T::DateTime),

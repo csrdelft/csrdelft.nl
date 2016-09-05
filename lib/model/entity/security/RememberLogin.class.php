@@ -48,7 +48,7 @@ class RememberLogin extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'			 => array(T::Integer, false, 'auto_increment'),
+		'id'			 => array(T::UnsignedInteger, false, 'auto_increment'),
 		'token'			 => array(T::String),
 		'uid'			 => array(T::UID),
 		'remember_since' => array(T::DateTime),

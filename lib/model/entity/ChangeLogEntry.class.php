@@ -48,7 +48,7 @@ class ChangeLogEntry extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'		 => array(T::Integer, false, 'auto_increment'),
+		'id'		 => array(T::UnsignedInteger, false, 'auto_increment'),
 		'moment'	 => array(T::DateTime),
 		'subject'	 => array(T::String),
 		'property'	 => array(T::String),

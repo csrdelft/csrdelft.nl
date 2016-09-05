@@ -30,8 +30,8 @@ class KetzerOptie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'optie_id'	 => array(T::Integer, false, 'auto_increment'),
-		'select_id'	 => array(T::Integer),
+		'optie_id'	 => array(T::UnsignedInteger, false, 'auto_increment'),
+		'select_id'	 => array(T::UnsignedInteger),
 		'waarde'	 => array(T::String)
 	);
 	/**
