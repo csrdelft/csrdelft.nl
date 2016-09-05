@@ -248,14 +248,14 @@ class FotoModel extends PersistenceModel {
 	protected static $instance;
 
 	/**
-	 * @override PersistenceModel->getUUID($)
+	 * @override parent::retrieveByUUID($UUID)
 	 */
-	public static function retrieveByUUID($UUID) {
+	public function retrieveByUUID($UUID) {
 		$parts = explode('@', $UUID, 2);
 		$path = explode('/', $parts[0]);
 		$filename = array_pop($path);
 		$subdir = implode('/', $path) . '/';
-		return static::instance()->retrieveByPrimaryKey(array($subdir, $filename));
+		return $this->retrieveByPrimaryKey(array($subdir, $filename));
 	}
 
 	/**
