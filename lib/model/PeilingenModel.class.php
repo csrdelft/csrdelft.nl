@@ -33,7 +33,7 @@ class PeilingenModel extends PersistenceModel {
 			PeilingOptiesModel::instance()->delete($optie);
 		}
 
-		$stemmen = PeilingStemmenModel::instance()->find('peilingid = ?', array($entity->id))->fetchAll();
+		$stemmen = PeilingStemmenModel::instance()->find('peiling_id = ?', array($entity->id))->fetchAll();
 		foreach ($stemmen as $stem) {
 			echo PeilingStemmenModel::instance()->delete($stem);
 		}
@@ -42,24 +42,24 @@ class PeilingenModel extends PersistenceModel {
 	}
 
 	public function create(PersistentEntity $entity) {
-		$peilingid = parent::create($entity);
+		$peiling_id = parent::create($entity);
 
 		foreach ($entity->getOpties() as $optie) {
-			$optie->peilingid = $peilingid;
+			$optie->peiling_id = $peiling_id;
 			PeilingOptiesModel::instance()->create($optie);
 		}
 
-		return $peilingid;
+		return $peiling_id;
 	}
 
-	public function stem($peilingid, $optieid) {
-		$peiling = $this->find('id = ?', array($peilingid))->fetch();
+	public function stem($peiling_id, $optieid) {
+		$peiling = $this->find('id = ?', array($peiling_id))->fetch();
 		if ($peiling->magStemmen()) {
-			$optie = PeilingOptiesModel::instance()->find('peilingid = ? AND id = ?', array($peilingid, $optieid))->fetch();
+			$optie = PeilingOptiesModel::instance()->find('peiling_id = ? AND id = ?', array($peiling_id, $optieid))->fetch();
 			$optie->stemmen += 1;
 
 			$stem = new PeilingStem();
-			$stem->peilingid = $peiling->id;
+			$stem->peiling_id = $peiling->id;
 			$stem->uid = LoginModel::getUid();
 
 			try {
@@ -91,11 +91,11 @@ class PeilingenModel extends PersistenceModel {
 	}
 
 	/**
-	 * @param $peilingid
+	 * @param $peiling_id
 	 * @return Peiling
 	 */
-	public function get($peilingid) {
-		return $this->retrieveByPrimaryKey(array($peilingid));
+	public function get($peiling_id) {
+		return $this->retrieveByPrimaryKey(array($peiling_id));
 	}
 
 	public function lijst() {
@@ -120,8 +120,8 @@ class PeilingStemmenModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function heeftGestemd($peilingid, $uid) {
-		return $this->existsByPrimaryKey(array($peilingid, $uid));
+	public function heeftGestemd($peiling_id, $uid) {
+		return $this->existsByPrimaryKey(array($peiling_id, $uid));
 	}
 
 }

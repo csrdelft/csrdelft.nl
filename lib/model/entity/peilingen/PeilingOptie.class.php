@@ -3,12 +3,30 @@
  * Class PeilingOptie
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ *
  */
 class PeilingOptie extends PersistentEntity {
+
+	/**
+	 * Primary key
+	 * @var int
+	 */
     public $id;
-    public $peilingid;
+	/**
+	 * Foreign key
+	 * @var int
+	 */
+    public $peiling_id;
+	/**
+	 * Titel
+	 * @var string
+	 */
     public $optie;
-    public $stemmen = 0;
+	/**
+	 * Aantal stemmen
+	 * @var int
+	 */
+    public $stemmen;
 
     public static function init($optie) {
         $peilingoptie = new PeilingOptie();
@@ -16,12 +34,15 @@ class PeilingOptie extends PersistentEntity {
         return $peilingoptie;
     }
 
-    protected static $table_name = 'peilingoptie';
-    protected static $primary_key = array('id');
     protected static $persistent_attributes = array(
         'id'        => array(T::Integer, false, 'auto_increment'),
-        'peilingid' => array(T::Integer),
+        'peiling_id' => array(T::Integer),
         'optie'     => array(T::String),
         'stemmen'   => array(T::Integer)
     );
+
+    protected static $primary_key = array('id');
+
+	protected static $table_name = 'peiling_optie';
+
 }
