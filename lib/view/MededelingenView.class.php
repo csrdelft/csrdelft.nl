@@ -89,7 +89,7 @@ class MededelingenView extends SmartyTemplateView {
 
 		if ($mededelingId != 0) {
 			try {
-				$this->geselecteerdeMededeling = $this->model->getUUID($mededelingId);;
+				$this->geselecteerdeMededeling = $this->model->retrieveByUUID($mededelingId);;
 				if (!$this->geselecteerdeMededeling) {
 					throw new Exception('Mededeling bestaat niet!');
 				}
