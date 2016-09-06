@@ -277,7 +277,7 @@ class AbstractGroepenController extends Controller {
 		}
 		// opvolger
 		else {
-			$old = $this->model->getUUID($selection[0]);
+			$old = $this->model->retrieveByUUID($selection[0]);
 			if (!$old) {
 				$this->geentoegang();
 			}
@@ -342,7 +342,7 @@ class AbstractGroepenController extends Controller {
 			if (empty($selection)) {
 				$this->geentoegang();
 			}
-			$groep = $this->model->getUUID($selection[0]);
+			$groep = $this->model->retrieveByUUID($selection[0]);
 			if (!$groep OR ! $groep->mag(A::Wijzigen)) {
 				$this->geentoegang();
 			}
@@ -360,7 +360,7 @@ class AbstractGroepenController extends Controller {
 	public function verwijderen(array $selection) {
 		$response = array();
 		foreach ($selection as $UUID) {
-			$groep = $this->model->getUUID($UUID);
+			$groep = $this->model->retrieveByUUID($UUID);
 			if (!$groep OR ! $groep->mag(A::Verwijderen)) {
 				continue;
 			}
@@ -372,13 +372,13 @@ class AbstractGroepenController extends Controller {
 	}
 
 	public function opvolging(array $selection) {
-		$groep = $this->model->getUUID($selection[0]);
+		$groep = $this->model->retrieveByUUID($selection[0]);
 		$form = new GroepOpvolgingForm($groep, $this->model->getUrl() . $this->action);
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$response = array();
 			foreach ($selection as $UUID) {
-				$groep = $this->model->getUUID($UUID);
+				$groep = $this->model->retrieveByUUID($UUID);
 				if (!$groep OR ! $groep->mag(A::Opvolging)) {
 					continue;
 				}
@@ -396,7 +396,7 @@ class AbstractGroepenController extends Controller {
 	}
 
 	public function converteren(array $selection) {
-		$groep = $this->model->getUUID($selection[0]);
+		$groep = $this->model->retrieveByUUID($selection[0]);
 		$form = new GroepConverteerForm($groep, $this->model);
 		if ($form->validate()) {
 			$values = $form->getValues();
@@ -404,7 +404,7 @@ class AbstractGroepenController extends Controller {
 			$converteer = get_class($model) !== get_class($this->model);
 			$response = array();
 			foreach ($selection as $UUID) {
-				$groep = $this->model->getUUID($UUID);
+				$groep = $this->model->retrieveByUUID($UUID);
 				if (!$groep OR ! $groep->mag(A::Wijzigen)) {
 					continue;
 				}
@@ -434,10 +434,10 @@ class AbstractGroepenController extends Controller {
 	}
 
 	public function sluiten(array $selection) {
-		$groep = $this->model->getUUID($selection[0]);
+		$groep = $this->model->retrieveByUUID($selection[0]);
 		$response = array();
 		foreach ($selection as $UUID) {
-			$groep = $this->model->getUUID($UUID);
+			$groep = $this->model->retrieveByUUID($UUID);
 			if (!$groep OR ! property_exists($groep, 'aanmelden_tot') OR time() > strtotime($groep->aanmelden_tot) OR ! $groep->mag(A::Wijzigen)) {
 				continue;
 			}
@@ -453,7 +453,7 @@ class AbstractGroepenController extends Controller {
 		if (empty($selection)) {
 			$this->geentoegang();
 		}
-		$groep = $this->model->getUUID($selection[0]);
+		$groep = $this->model->retrieveByUUID($selection[0]);
 		if (!$groep OR ! $groep->mag(A::Bekijken)) {
 			$this->geentoegang();
 		}
@@ -472,7 +472,7 @@ class AbstractGroepenController extends Controller {
 		// popup request
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-			$groep = $this->model->getUUID($selection[0]);
+			$groep = $this->model->retrieveByUUID($selection[0]);
 			if (!$groep->mag(A::Bekijken)) {
 				$this->geentoegang();
 			}
@@ -548,7 +548,7 @@ class AbstractGroepenController extends Controller {
 			if (empty($selection)) {
 				$this->geentoegang();
 			}
-			$lid = $model->getUUID($selection[0]);
+			$lid = $model->retrieveByUUID($selection[0]);
 			if (!$groep->mag(A::Beheren)) {
 				$this->geentoegang();
 			}
@@ -583,7 +583,7 @@ class AbstractGroepenController extends Controller {
 			}
 			$response = array();
 			foreach ($selection as $UUID) {
-				$lid = $model->getUUID($UUID);
+				$lid = $model->retrieveByUUID($UUID);
 				if (!$groep->mag(A::Beheren)) {
 					continue;
 				}
