@@ -19,9 +19,9 @@ class DynamicEntity extends PersistentEntity {
 	 */
 	public $definition;
 
-	public function __construct($cast = false, array $attr_retrieved = null, DynamicEntityDefinition $definition = null) {
+	public function __construct($cast = false, array $attributes_retrieved = null, DynamicEntityDefinition $definition = null) {
 		$this->definition = $definition;
-		parent::__construct($cast, $attr_retrieved);
+		parent::__construct($cast, $attributes_retrieved);
 	}
 
 	public function getTableName() {

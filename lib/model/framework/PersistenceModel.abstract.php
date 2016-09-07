@@ -183,7 +183,7 @@ abstract class PersistenceModel implements Persistence {
 	}
 
 	/**
-	 * Load saved enitity data and replace entity object.
+	 * Load saved enitity data and replace current entity object values.
 	 * 
 	 * @see retrieveAttributes
 	 * 
@@ -226,21 +226,36 @@ abstract class PersistenceModel implements Persistence {
 	 * 
 	 * Usage example:
 	 * 
-	 * $users = UserModel::instance()->findSparse(array('naam'), ...); // retrieves only naam attribute
+	 * $model = UserModel::instance();
+	 * $users = $model->findSparse(array('naam'), ...); // retrieves only naam attribute
 	 * foreach ($users as $user) {
 	 *   echo $user->getAddress(); // address is sparse: retrieve address
 	 * }
-	 * class User {
+	 * 
+	 * class User extends PersitentEntity {
 	 *   public function getAddress() {
 	 *     $attributes = array('city' 'street', 'number', 'postalcode');
 	 *     UserModel::instance()->retrieveAttributes($this, $attributes);
 	 *   }
 	 * }
 	 * 
-	 * $model = UserModel::instance();
-	 * $user = $model->getUser($uid); // retrieves non-sparse attributes
-	 * $model->retrieveAttributes($user, array('city' 'street', 'number', 'postalcode')); // suppose address is sparse: retrieve address
-	 * echo ...
+	 * Foreign key example:
+	 * 
+	 * if ($user->isSparse('address')) {
+	 *   $user->getAddress();
+	 * }
+	 * 
+	 * class User extends PersitentEntity {
+	 *   public $address_uuid; // foreign key
+	 *   public $address;
+	 *   public function getAddress() {
+	 *     if (!isset($this->address)) {
+	 *       $this->address = AddressesModel::instance()->retrieveByUUID($this->address_uuid);
+	 *       $this->attributes_retrieved[] = 'address'; // Bookkeeping
+	 *     }
+	 *     return $this->address;
+	 *   }
+	 * }
 	 * 
 	 * @param PersistentEntity $entity
 	 * @param array $attributes
