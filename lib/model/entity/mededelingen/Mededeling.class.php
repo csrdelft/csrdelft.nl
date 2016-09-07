@@ -9,11 +9,6 @@
 class Mededeling extends PersistentEntity {
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $id;
-	/**
 	 * Datum van plaatsen
 	 * @var string
 	 */
@@ -55,7 +50,6 @@ class Mededeling extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'		    => array(T::Integer, false, 'auto_increment'),
 		'datum'	        => array(T::DateTime),
 		'vervaltijd'    => array(T::DateTime, true),
 		'titel'         => array(T::String),
@@ -69,11 +63,6 @@ class Mededeling extends PersistentEntity {
 		'verwijderd'    => array(T::Boolean),
 		'plaatje'       => array(T::String, true)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('id');
 	/**
 	 * Database table name
 	 * @var string

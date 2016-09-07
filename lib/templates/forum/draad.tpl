@@ -8,22 +8,22 @@
 			<a title="Onderwerp toevoegen aan favorieten" class="btn post popup addfav" href="/menubeheer/toevoegen/favoriet">{icon get="star"}</a>
 			&nbsp;&nbsp;&nbsp;
 			{if $draad->isGevolgd()}
-				<a href="/forum/volgenuit/{$draad->draad_id}" class="btn post ReloadPage volgenUit" title="Onderwerp niet meer volgen per email">{icon get="email_go" hover="email_delete"}</a>
+				<a href="/forum/volgenuit/{$draad->id}" class="btn post ReloadPage volgenUit" title="Onderwerp niet meer volgen per email">{icon get="email_go" hover="email_delete"}</a>
 			{elseif $draad->magVolgen()}
-				<a href="/forum/volgenaan/{$draad->draad_id}" class="btn post ReloadPage volgenAan" title="Onderwerp volgen per email">{icon get="email" hover="email_add"}</a>
+				<a href="/forum/volgenaan/{$draad->id}" class="btn post ReloadPage volgenAan" title="Onderwerp volgen per email">{icon get="email" hover="email_add"}</a>
 			{/if}
 			&nbsp;&nbsp;&nbsp;
 			{if $draad->isVerborgen()}
-				<a href="/forum/tonen/{$draad->draad_id}" class="btn post ReloadPage tonenAan" title="Onderwerp tonen in zijbalk">{icon get="layout" hover="layout_add"}</a>
+				<a href="/forum/tonen/{$draad->id}" class="btn post ReloadPage tonenAan" title="Onderwerp tonen in zijbalk">{icon get="layout" hover="layout_add"}</a>
 			{elseif $draad->magVerbergen()}
-				<a href="/forum/verbergen/{$draad->draad_id}" class="btn post ReloadPage tonenUit" title="Onderwerp verbergen in zijbalk">{icon get="layout_sidebar" hover="layout_delete"}</a>
+				<a href="/forum/verbergen/{$draad->id}" class="btn post ReloadPage tonenUit" title="Onderwerp verbergen in zijbalk">{icon get="layout_sidebar" hover="layout_delete"}</a>
 			{/if}
 			&nbsp;&nbsp;&nbsp;
 			{if $draad->magModereren()}
 				{if $draad->gesloten}
-					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="btn post ReloadPage slotjeUit" title="Openen (reactie mogelijk)">{icon get="lock" hover="lock_break"}</a>
+					<a href="/forum/wijzigen/{$draad->id}/gesloten" class="btn post ReloadPage slotjeUit" title="Openen (reactie mogelijk)">{icon get="lock" hover="lock_break"}</a>
 				{else}
-					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="btn post ReloadPage slotjeAan" title="Sluiten (geen reactie mogelijk)">{icon get="lock_open" hover="lock"}</a>
+					<a href="/forum/wijzigen/{$draad->id}/gesloten" class="btn post ReloadPage slotjeAan" title="Sluiten (geen reactie mogelijk)">{icon get="lock_open" hover="lock"}</a>
 				{/if}
 				&nbsp;&nbsp;&nbsp;
 				<a class="btn" title="Moderatie-functies weergeven" onclick="$('#forumtabel a.forummodknop').fadeIn();
@@ -91,8 +91,8 @@
 						{else}
 							{assign var="append" value=""}
 						{/if}
-						{sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/" url_append=$append
-pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
+						{sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->id|cat:"/" url_append=$append
+pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
 			</tr>
@@ -135,7 +135,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 		{/if}
 
 		{* Geen ongelezen berichten op de laatste pagina betekend in het geheel geen ongelezen berichten *}
-		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() === ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
+		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() === ForumPostsModel::instance()->getAantalPaginas($draad->id)}
 			<tr class="tussenschot ongelezenvanaf">
 				<td colspan="2">
 					<a id="ongelezen">&nbsp;</a>
@@ -162,7 +162,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 		</tr>
 
 		{if $draad->magPosten()}
-			{include file='forum/post_form.tpl' deel=$draad->getForumDeel()}
+			{include file='forum/post_form.tpl' forum=$draad->getForumDeel()}
 		{/if}
 
 	</tbody>

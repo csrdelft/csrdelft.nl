@@ -24,7 +24,7 @@
 		{/if}
 
 		<div id="forummeldingen">
-			{if $deel->isOpenbaar()}
+			{if $forum->isOpenbaar()}
 				<div id="public-melding">
 					<div class="dikgedrukt">Openbaar forum</div>
 					Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br />
@@ -42,7 +42,7 @@
 	</td>
 	<td class="bericht0">
 
-		<form id="forumForm" class="Formulier" action="/forum/posten/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" method="post">
+		<form id="forumForm" class="Formulier" action="/forum/posten/{$forum->id}{if isset($draad)}/{$draad->id}{/if}" method="post">
 
 			{if !LoginModel::mag('P_LOGGED_IN')}
 				<div class="bericht">
@@ -65,7 +65,7 @@
 				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" class="btn" />
 				<input type="button" value="Voorbeeld" id="forumVoorbeeld" class="btn" onclick="CsrBBPreview('forumBericht', 'berichtPreview');" />
 				{if LoginModel::mag('P_LOGGED_IN')}
-					<input type="button" value="Concept opslaan" id="forumConcept" class="btn" onclick="saveConceptForumBericht();" data-url="/forum/concept/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" />
+					<input type="button" value="Concept opslaan" id="forumConcept" class="btn" onclick="saveConceptForumBericht();" data-url="/forum/concept/{$forum->id}{if isset($draad)}/{$draad->id}{/if}" />
 				{/if}
 				<div class="float-right">
 					{if LoginModel::mag('P_LOGGED_IN')}

@@ -9,11 +9,6 @@
 class GesprekBericht extends PersistentEntity {
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $bericht_id;
-	/**
 	 * Foreign key
 	 * @var int
 	 */
@@ -38,17 +33,11 @@ class GesprekBericht extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'bericht_id' => array(T::Integer, false, 'auto_increment'),
 		'gesprek_id' => array(T::Integer),
 		'moment'	 => array(T::DateTime),
 		'auteur_uid' => array(T::UID),
 		'inhoud'	 => array(T::Text)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('bericht_id');
 	/**
 	 * Database table name
 	 * @var string

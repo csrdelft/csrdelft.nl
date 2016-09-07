@@ -23,7 +23,7 @@
 							</span>
 						{else}
 							<small class="niet-dik">[<a href="/forum/deel/{$draad->forum_id}">{$draad->getForumDeel()->titel}</a>]</small>
-							<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}"{if $draad->isOngelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>
+							<a id="{$draad->id}" href="/forum/onderwerp/{$draad->id}"{if $draad->isOngelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>
 								{$draad->titel}
 							</a>
 							{if $draad->belangrijk}
@@ -37,7 +37,7 @@
 			</thead>
 			<tbody>
 				{foreach from=$draad->getForumPosts() item=post}
-					{include file='forum/post_lijst.tpl' deel=$draad->getForumDeel()}
+					{include file='forum/post_lijst.tpl' forum=$draad->getForumDeel()}
 					<tr class="tussenschot">
 						<td colspan="2"></td>
 					</tr>

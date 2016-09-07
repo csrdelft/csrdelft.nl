@@ -21,6 +21,15 @@ class DynamicEntityDefinition {
 	 */
 	public $primary_key;
 	/**
+	 * Database foreign keys
+	 */
+	public $foreign_keys;
+	/**
+	 * Database indexes
+	 * @var array
+	 */
+	public $indexes;
+	/**
 	 * Database table name
 	 * @var string
 	 */

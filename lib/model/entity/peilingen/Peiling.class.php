@@ -6,10 +6,9 @@
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class Peiling extends PersistentEntity {
-    public $id;
+
     public $titel;
     public $tekst;
-
     private $opties;
 
     public function getStemmenAantal() {
@@ -43,13 +42,11 @@ class Peiling extends PersistentEntity {
         return PeilingStemmenModel::instance()->heeftGestemd($this->id, $uid);
     }
 
-    protected static $table_name = 'peiling';
-    protected static $primary_key = array('id');
     protected static $persistent_attributes = array(
-        'id'    => array(T::Integer, false, 'auto_increment'),
         'titel' => array(T::String),
         'tekst' => array(T::Text)
     );
+
+	protected static $table_name = 'peiling';
+
 }
-
-

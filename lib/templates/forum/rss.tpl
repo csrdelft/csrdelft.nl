@@ -35,7 +35,7 @@
 				{/foreach*}
 				<dc:creator>{ProfielModel::getNaam($draad->laatste_wijziging_uid, 'user')}</dc:creator>
 				<category>{$draad->getForumDeel()->getForumCategorie()->titel} » {$draad->getForumDeel()->titel}</category>
-				<comments>{$smarty.const.CSR_ROOT}/forum/onderwerp/{$draad->draad_id}</comments>
+				<comments>{$smarty.const.CSR_ROOT}/forum/onderwerp/{$draad->id}</comments>
 				<guid isPermaLink="true">{$smarty.const.CSR_ROOT}/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}</guid>
 			</item>
 		{/foreach}

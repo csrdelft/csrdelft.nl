@@ -26,7 +26,7 @@ class GesprekkenModel extends PersistenceModel {
 		// Maak gesprek
 		$gesprek = new Gesprek();
 		$gesprek->laatste_update = getDateTime();
-		$gesprek->gesprek_id = (int) $this->create($gesprek);
+		$gesprek->id = (int) $this->create($gesprek);
 		// Deelnemers toevoegen
 		$deelnemer = GesprekDeelnemersModel::instance()->voegToeAanGesprek($gesprek, $from);
 		GesprekDeelnemersModel::instance()->voegToeAanGesprek($gesprek, $to);
@@ -65,7 +65,7 @@ class GesprekDeelnemersModel extends PersistenceModel {
 	}
 
 	public function getDeelnemersVanGesprek(Gesprek $gesprek) {
-		return $this->find('gesprek_id = ? ', array($gesprek->gesprek_id));
+		return $this->find('gesprek_id = ? ', array($gesprek->id));
 	}
 
 	public function getGesprekkenVoorLid($uid, $lastUpdate) {
@@ -93,7 +93,7 @@ class GesprekDeelnemersModel extends PersistenceModel {
 			return false;
 		}
 		$deelnemer = new GesprekDeelnemer();
-		$deelnemer->gesprek_id = $gesprek->gesprek_id;
+		$deelnemer->gesprek_id = $gesprek->id;
 		$deelnemer->uid = $account->uid;
 		$deelnemer->toegevoegd_moment = getDateTime(time() - 1);
 		$deelnemer->gelezen_moment = getDateTime(0);
@@ -107,7 +107,7 @@ class GesprekDeelnemersModel extends PersistenceModel {
 
 	public function verlaatGesprek(Gesprek $gesprek, GesprekDeelnemer $deelnemer) {
 		$rowCount = $this->delete($deelnemer);
-		if ($this->count('gesprek_id = ?', array($gesprek->gesprek_id)) === 0) {
+		if ($this->count('gesprek_id = ?', array($gesprek->id)) === 0) {
 			GesprekkenModel::instance()->verwijderGesprek($gesprek);
 		} else {
 			$inhoud = 'Ik heb het gesprek verlaten.';
@@ -130,28 +130,23 @@ class GesprekBerichtenModel extends PersistenceModel {
 	const DIR = 'gesprekken/';
 
 	protected static $instance;
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'bericht_id ASC';
 
 	public static function get($bericht_id) {
 		return static::instance()->retrieveByPrimaryKey(array($bericht_id));
 	}
 
 	public function getBerichtenSinds(Gesprek $gesprek, $lastUpdate) {
-		return $this->find('gesprek_id = ? AND moment > ?', array($gesprek->gesprek_id, getDateTime($lastUpdate)));
+		return $this->find('gesprek_id = ? AND moment > ?', array($gesprek->id, getDateTime($lastUpdate)));
 	}
 
 	public function getAantalBerichtenSinds(Gesprek $gesprek, $lastUpdate) {
-		return $this->count('gesprek_id = ? AND moment > ?', array($gesprek->gesprek_id, getDateTime($lastUpdate)));
+		return $this->count('gesprek_id = ? AND moment > ?', array($gesprek->id, getDateTime($lastUpdate)));
 	}
 
 	public function maakBericht(Gesprek $gesprek, GesprekDeelnemer $deelnemer, $inhoud) {
 		// Maak bericht
 		$bericht = new GesprekBericht();
-		$bericht->gesprek_id = $gesprek->gesprek_id;
+		$bericht->gesprek_id = $gesprek->id;
 		$bericht->moment = getDateTime();
 		$bericht->auteur_uid = $deelnemer->uid;
 		$bericht->inhoud = $inhoud;
@@ -163,7 +158,7 @@ class GesprekBerichtenModel extends PersistenceModel {
 	}
 
 	public function verwijderBerichtenVoorGesprek(Gesprek $gesprek) {
-		foreach ($this->find('gesprek_id = ?', array($gesprek->gesprek_id)) as $bericht) {
+		foreach ($this->find('gesprek_id = ?', array($gesprek->id)) as $bericht) {
 			$this->delete($bericht);
 		}
 	}

@@ -10,14 +10,42 @@ require_once 'model/entity/framework/PersistentAttribute.class.php';
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Requires static properties in subclass: $table_name, $persistent_attributes, $primary_key
  * Requires getters and setters for every sparse attribute to update: $attr_retrieved
  * 
  * @see documentation of PersistenceModel->retrieveAttributes() for usage of sparse attributes
  * 
+ * Optional: override $primary_key
  * Optional: static $rename_attributes = array('oldname' => 'newname');
  */
 abstract class PersistentEntity implements Sparse, JsonSerializable {
+
+	/**
+	 * Database table columns
+	 * @var array
+	 */
+	protected static $persistent_attributes = array(
+		'id' => array(T::Integer, false, 'auto_increment')
+	);
+	/**
+	 * Database primary key
+	 * @var array 
+	 */
+	protected static $primary_key = array('id');
+	/**
+	 * Database foreign keys
+	 * @var string
+	 */
+	protected static $foreign_keys = array();
+	/**
+	 * Database indexes
+	 * @var array
+	 */
+	protected static $indexes = array();
+	/**
+	 * Database table name
+	 * @var string
+	 */
+	protected static $table_name;
 
 	/**
 	 * Static constructor is called (by inheritance) once and only from PersistenceModel.
@@ -25,15 +53,24 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	 * Optional: run conversion code before checkTables() here
 	 */
 	public static function __static() {
-		/*
-		 * Override this to extend the persistent attributes:
-		 * 
-		  parent::__static();
-		  self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
-		 * 
-		 */
+		$class = get_called_class();
+		// Extend the persistent attributes with all parent persistent attributes
+		while ($class = get_parent_class($class)) {
+			$parent = get_class_vars($class);
+			if ($class == 'PersistentEntity' AND static::$primary_key != self::$primary_key) {
+				// Primary key is overridden: skip auto_increment id
+			}
+			elseif (isset($parent['persistent_attributes'])) {
+				static::$persistent_attributes = $parent['persistent_attributes'] + static::$persistent_attributes;
+			}
+		}
 	}
 
+	/**
+	 * Database primary key
+	 * @var int
+	 */
+	public $id;
 	/**
 	 * The names of attributes that have been retrieved for this instance.
 	 * Relies on getters and setters to update this in case of sparse retrieval.
@@ -81,6 +118,14 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 
 	public function getPrimaryKey() {
 		return array_values(static::$primary_key);
+	}
+
+	public function getForeignKeys() {
+		return array_keys(static::$foreign_keys);
+	}
+
+	public function getIndexes() {
+		return array_keys(static::$indexes);
 	}
 
 	public function getUUID() {

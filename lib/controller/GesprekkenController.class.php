@@ -75,7 +75,7 @@ class GesprekkenController extends AclController {
 				$this->geentoegang();
 			}
 			$gesprek = $this->model->startGesprek(LoginModel::getAccount(), $account, $values['inhoud']);
-			$this->view = new JsonResponse('/gesprekken/web/' . $gesprek->gesprek_id);
+			$this->view = new JsonResponse('/gesprekken/web/' . $gesprek->id);
 		} else {
 			$this->view = $form;
 		}

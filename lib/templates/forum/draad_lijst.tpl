@@ -12,11 +12,11 @@
 		{else}
 			<div class="inline" style="width: 16px;"></div>
 		{/if}
-		<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}{if LidInstellingen::get('forum', 'open_draad_op_pagina') == 'ongelezen'}#ongelezen{elseif LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste'}#reageren{/if}"{if $draad->isOngelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>{$draad->titel}</a>
+		<a id="{$draad->id}" href="/forum/onderwerp/{$draad->id}{if LidInstellingen::get('forum', 'open_draad_op_pagina') == 'ongelezen'}#ongelezen{elseif LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste'}#reageren{/if}"{if $draad->isOngelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>{$draad->titel}</a>
 		{if $draad->getAantalOngelezenPosts() > 0}
 			<span class="badge">{$draad->getAantalOngelezenPosts()}</span>
 		{/if}
-		{if !isset($deel->forum_id)} 
+		{if !isset($forum->id)} 
 			<span class="float-right lichtgrijs">[<a href="/forum/deel/{$draad->getForumDeel()->forum_id}" class="lichtgrijs">{$draad->getForumDeel()->titel}</a>]</span> 
 		{/if}
 	</td>

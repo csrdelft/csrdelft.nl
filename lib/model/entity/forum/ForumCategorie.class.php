@@ -11,11 +11,6 @@
 class ForumCategorie extends PersistentEntity {
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $categorie_id;
-	/**
 	 * Titel
 	 * @var string
 	 */
@@ -40,16 +35,10 @@ class ForumCategorie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'categorie_id'	 => array(T::Integer, false, 'auto_increment'),
 		'titel'			 => array(T::String),
 		'rechten_lezen'	 => array(T::String),
 		'volgorde'		 => array(T::Integer)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('categorie_id');
 	/**
 	 * Database table name
 	 * @var string

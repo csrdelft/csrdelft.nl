@@ -8,7 +8,6 @@
  */
 class Adres extends PersistentEntity {
 
-	public $adres_id;
 	public $naam;
 	public $straat;
 	public $plaats;
@@ -22,7 +21,6 @@ class Adres extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'adres_id'	 => array(T::Integer, false, 'auto_increment'),
 		'naam'		 => array(T::String),
 		'straat'	 => array(T::String),
 		'plaats'	 => array(T::String),
@@ -32,11 +30,6 @@ class Adres extends PersistentEntity {
 		'land'		 => array(T::String),
 		'telefoon'	 => array(T::String)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('adres_id');
 	/**
 	 * Database table name
 	 * @var string

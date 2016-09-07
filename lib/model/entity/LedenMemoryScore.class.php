@@ -9,11 +9,6 @@
 class LedenMemoryScore extends PersistentEntity {
 
 	/**
-	 * Id
-	 * @var int
-	 */
-	public $id;
-	/**
 	 * Seconden
 	 * @var int
 	 */
@@ -54,7 +49,6 @@ class LedenMemoryScore extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'		 => array(T::Integer, false, 'auto_increment'),
 		'tijd'		 => array(T::Integer),
 		'beurten'	 => array(T::Integer),
 		'goed'		 => array(T::Integer),
@@ -63,11 +57,6 @@ class LedenMemoryScore extends PersistentEntity {
 		'door_uid'	 => array(T::UID),
 		'wanneer'	 => array(T::DateTime)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('id');
 	/**
 	 * Database table name
 	 * @var string

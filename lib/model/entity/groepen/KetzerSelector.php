@@ -13,11 +13,6 @@ require_once 'model/entity/groepen/KetzerSelectorSoort.enum.php';
 class KetzerSelector extends PersistentEntity {
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $select_id;
-	/**
 	 * Selector van deze ketzer
 	 * @var int
 	 */
@@ -32,7 +27,6 @@ class KetzerSelector extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'select_id'		 => array(T::Integer, false, 'auto_increment'),
 		'ketzer_id'		 => array(T::Integer),
 		'keuze_soort'	 => array(T::Enumeration, false, 'KetzerSelectorSoort')
 	);
@@ -41,11 +35,6 @@ class KetzerSelector extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'ketzer_selectors';
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('select_id');
 
 	/**
 	 * Lazy loading by foreign key.

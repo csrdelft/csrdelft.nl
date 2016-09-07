@@ -1,0 +1,9 @@
+ALTER TABLE `agenda` CHANGE `item_id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `crv_functies` CHANGE `functie_id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `forum_categorien` CHANGE `categorie_id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `forum_delen` CHANGE `forum_id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `forum_draden` CHANGE `draad_id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `forum_posts` CHANGE `post_id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `gesprekken` CHANGE `gesprek_id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `gesprek_berichten` CHANGE `bericht_id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `menus` CHANGE `item_id` `id` INT(11) NOT NULL AUTO_INCREMENT;

@@ -106,11 +106,11 @@ class AgendaController extends AclController {
 		$item = $this->model->nieuw($datum);
 		$form = new AgendaItemForm($item, $this->action); // fetches POST values itself
 		if ($form->validate()) {
-			$item->item_id = (int) $this->model->create($item);
+			$item->id = (int) $this->model->create($item);
 			if ($datum === 'doorgaan') {
 				$_POST = array(); // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
-				$item->item_id = null;
+				$item->id = null;
 				$this->view = new AgendaItemForm($item, $this->action); // fetches POST values itself
 			} else {
 				$this->view = new AgendeerbaarMaandView($item);
@@ -140,7 +140,7 @@ class AgendaController extends AclController {
 			$this->geentoegang();
 		}
 		$this->model->delete($item);
-		$this->view = new AgendaItemDeleteView($item->item_id);
+		$this->view = new AgendaItemDeleteView($item->id);
 	}
 
 	public function verbergen($refuuid = null) {
