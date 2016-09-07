@@ -148,7 +148,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	 * 
 	 * @param boolean $attributes Attributes to cast
 	 */
-	protected function castValues(array $attributes) {
+	private function castValues(array $attributes) {
 		foreach ($attributes as $attribute) {
 			$definition = $this->getAttributeDefinition($attribute);
 			if (isset($definition[1]) AND $definition[1] AND $this->$attribute === null) {
