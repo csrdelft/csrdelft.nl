@@ -7,7 +7,7 @@ require_once 'model/framework/Database.singleton.php';
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Separate login credentials in the future perhaps.
+ * 
  */
 class DatabaseAdmin extends Database {
 
@@ -24,7 +24,7 @@ class DatabaseAdmin extends Database {
 	 */
 	public static function instance() {
 		if (!isset(self::$instance)) {
-			$cred = parse_ini_file(ETC_PATH . 'mysql.ini');
+			$cred = parse_ini_file(ETC_PATH . 'mysql.ini'); // Separate login credentials in the future perhaps.
 			if ($cred === false) {
 				$cred = array(
 					'host'	 => 'localhost',
@@ -92,9 +92,9 @@ class DatabaseAdmin extends Database {
 	public static function sqlDescribeTable($name) {
 		$sql = 'DESCRIBE ' . $name;
 		$query = self::instance()->prepare($sql);
-		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER); // lowercase attribute properties
+		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER); // Force column names to lower case.
 		$query->execute();
-		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL); // reset
+		self::instance()->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL); // Leave column names as returned by the database driver.
 		$query->setFetchMode(PDO::FETCH_CLASS, 'PersistentAttribute');
 		return $query;
 	}

@@ -39,13 +39,14 @@ class LedenMemoryScore extends PersistentEntity {
 	 */
 	public $eerlijk;
 	/**
-	 * Door lid
+	 * Door lidnummer
+	 * Foreign key
 	 * @var string
 	 */
 	public $door_uid;
 	/**
-	 * Wanneer
-	 * @var datetime
+	 * Behaald op datum en tijd
+	 * @var string
 	 */
 	public $wanneer;
 	/**

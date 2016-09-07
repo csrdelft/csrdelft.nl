@@ -26,7 +26,7 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public $gedeeld_met;
 	/**
-	 * Uid van auteur
+	 * Lidnummer van auteur
 	 * @var string
 	 */
 	public $uid;

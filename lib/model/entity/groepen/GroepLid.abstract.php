@@ -13,12 +13,15 @@ require_once 'model/entity/groepen/CommissieFunctie.enum.php';
 abstract class AbstractGroepLid extends PersistentEntity {
 
 	/**
-	 * Primary key of Groep
+	 * Shared primary key
+	 * Foreign key
 	 * @var int
 	 */
 	public $groep_id;
 	/**
 	 * Lidnummer
+	 * Shared primary key
+	 * Foreign key
 	 * @var string
 	 */
 	public $uid;

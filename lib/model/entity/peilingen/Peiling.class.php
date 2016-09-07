@@ -13,12 +13,12 @@ class Peiling extends PersistentEntity {
     private $opties;
 
     public function getStemmenAantal() {
-        return PeilingStemmenModel::instance()->count('peilingid = ?', array($this->id));
+        return PeilingStemmenModel::instance()->count('peiling_id = ?', array($this->id));
     }
 
     public function getOpties() {
         if ($this->opties == null) {
-            $this->opties = PeilingOptiesModel::instance()->find('peilingid = ?', array($this->id))->fetchAll();
+            $this->opties = PeilingOptiesModel::instance()->find('peiling_id = ?', array($this->id))->fetchAll();
         }
         return $this->opties;
     }

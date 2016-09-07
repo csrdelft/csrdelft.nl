@@ -36,11 +36,11 @@ class ForumModel extends AbstractForumModel {
 	private $indeling;
 
 	public static function get($id) {
-		$cat = static::instance()->retrieveByPrimaryKey(array($id));
-		if (!$cat) {
+		$categorie = static::instance()->retrieveByPrimaryKey(array($id));
+		if (!$categorie) {
 			throw new Exception('Forum-categorie bestaat niet!');
 		}
-		return $cat;
+		return $categorie;
 	}
 
 	/**
@@ -50,15 +50,15 @@ class ForumModel extends AbstractForumModel {
 	 */
 	public function getForumIndelingVoorLid() {
 		if (!isset($this->indeling)) {
-			$delenByCatId = group_by('categorie_id', ForumDelenModel::instance()->getForumDelenVoorLid());
+			$delenByCategorieId = group_by('categorie_id', ForumDelenModel::instance()->getForumDelenVoorLid());
 			$this->indeling = array();
-			foreach ($this->prefetch() as $cat) {
-				if ($cat->magLezen()) {
-					$this->indeling[] = $cat;
-					if (isset($delenByCatId[$cat->categorie_id])) {
-						$cat->setForumDelen($delenByCatId[$cat->categorie_id]);
+			foreach ($this->prefetch() as $categorie) {
+				if ($categorie->magLezen()) {
+					$this->indeling[] = $categorie;
+					if (isset($delenByCategorieId[$categorie->categorie_id])) {
+						$categorie->setForumDelen($delenByCategorieId[$categorie->categorie_id]);
 					} else {
-						$cat->setForumDelen(array());
+						$categorie->setForumDelen(array());
 					}
 				}
 			}
@@ -165,8 +165,8 @@ class ForumDelenModel extends AbstractForumModel {
 		}
 	}
 
-	public function getForumDelenVoorCategorie(ForumCategorie $cat) {
-		return $this->prefetch('categorie_id = ?', array($cat->categorie_id));
+	public function getForumDelenVoorCategorie(ForumCategorie $categorie) {
+		return $this->prefetch('categorie_id = ?', array($categorie->categorie_id));
 	}
 
 	public function getForumDelenVoorLid($rss = false) {

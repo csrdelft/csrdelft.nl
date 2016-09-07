@@ -271,13 +271,20 @@ function fnChildRow(tableId, $td, column) {
 		row.child('<div class="innerDetails verborgen"></div>').show();
 		tr.addClass('expanded loading');
 		var innerDiv = tr.next().addClass('childrow').children(':first').children(':first');
-		$.ajax({
+		var jqXHR = $.ajax({
 			url: $td.data('detailSource')
-		}).done(function (data) {
+		});
+		jqXHR.done(function (data, textStatus, jqXHR) {
 			if (row.child.isShown()) {
 				tr.removeClass('loading');
 				innerDiv.html(data).slideDown();
 				init_context(innerDiv);
+			}
+		});
+		jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
+			if (row.child.isShown()) {
+				tr.removeClass('loading');
+				tr.find('td.toggle-childrow').html('<img title="' + errorThrown + '" src="/plaetjes/famfamfam/cancel.png" />');
 			}
 		});
 	}

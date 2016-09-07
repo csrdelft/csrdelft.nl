@@ -10,21 +10,24 @@ class GesprekDeelnemer extends PersistentEntity {
 
 	/**
 	 * Shared primary key
+	 * Foreign key
 	 * @var int
 	 */
 	public $gesprek_id;
 	/**
+	 * Lidnummer
 	 * Shared primary key
+	 * Foreign key
 	 * @var string
 	 */
 	public $uid;
 	/**
-	 * DateTime
+	 * Datum en tijd
 	 * @var string
 	 */
 	public $toegevoegd_moment;
 	/**
-	 * DateTime
+	 * Datum en tijd
 	 * @var string
 	 */
 	public $gelezen_moment;
@@ -33,7 +36,7 @@ class GesprekDeelnemer extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'gesprek_id'		 => array(T::Integer, false, 'auto_increment'),
+		'gesprek_id'		 => array(T::Integer),
 		'uid'				 => array(T::UID),
 		'toegevoegd_moment'	 => array(T::DateTime),
 		'gelezen_moment'	 => array(T::DateTime)

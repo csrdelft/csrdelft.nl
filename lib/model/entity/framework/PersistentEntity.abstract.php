@@ -10,7 +10,7 @@ require_once 'model/entity/framework/PersistentAttribute.class.php';
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Requires static properties in superclass: $table_name, $persistent_attributes, $primary_key
+ * Requires static properties in subclass: $table_name, $persistent_attributes, $primary_key
  * Requires getters and setters for every sparse attribute to update: $attr_retrieved
  * 
  * @see documentation of PersistenceModel->retrieveAttributes() for usage of sparse attributes
@@ -20,7 +20,7 @@ require_once 'model/entity/framework/PersistentAttribute.class.php';
 abstract class PersistentEntity implements Sparse, JsonSerializable {
 
 	/**
-	 * Static constructor is called (by inheritance) first and only from PersistenceModel.
+	 * Static constructor is called (by inheritance) once and only from PersistenceModel.
 	 * 
 	 * Optional: run conversion code before checkTables() here
 	 */

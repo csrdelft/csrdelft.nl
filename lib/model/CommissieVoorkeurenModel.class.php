@@ -9,6 +9,10 @@
  */
 class CommissieVoorkeurenModel {
 
+	/**
+	 * Lidnummer
+	 * @var string
+	 */
 	private $uid;
 
 	public function __construct($uid) {

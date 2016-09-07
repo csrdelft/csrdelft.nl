@@ -119,11 +119,11 @@ class BiebRubriek {
 		$result = $db->query($query);
 		echo $db->error();
 		if ($db->numRows($result) > 0) {
-			while ($catid = $db->next($result)) {
-				$catids[] = $catid['id'];
+			while ($categorieId = $db->next($result)) {
+				$categorieIds[] = $categorieId['id'];
 			}
-			sort($catids);
-			return array_filter($catids);
+			sort($categorieIds);
+			return array_filter($categorieIds);
 		} else {
 			return array();
 		}

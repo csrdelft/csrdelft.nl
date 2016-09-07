@@ -146,15 +146,15 @@ class DocCategorie {
 		return $this->documenten;
 	}
 
-	public static function existsCategorie($catID) {
-		$cat = new DocCategorie((int) $catID);
-		return $cat->getID() != 0;
+	public static function existsCategorie($categorie_id) {
+		$categorie = new DocCategorie((int) $categorie_id);
+		return $categorie->getID() != 0;
 	}
 
-	public static function getLeesrechtenVoorCatID($catID) {
-		$cat = new DocCategorie((int) $catID);
-		if ($cat->getID() != 0) {
-			return $cat->getLeesrechten();
+	public static function getLeesrechtenVoorCatID($categorie_id) {
+		$categorie = new DocCategorie((int) $categorie_id);
+		if ($categorie->getID() != 0) {
+			return $categorie->getLeesrechten();
 		}
 		return false;
 	}

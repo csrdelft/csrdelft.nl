@@ -6,7 +6,7 @@
 		<span class="totaal">({$peiling->getStemmenAantal()} stem{if $peiling->getStemmenAantal()!=1}men{/if})</span>
 	{/if}
 	<h3>
-		{if $peiling->magBewerken()}<a href="/tools/peilingbeheer.php">#{$peiling->id}{/if}
+		{if $peiling->magBewerken()}<a href="/peilingen/beheer">#{$peiling->id}{/if}
 			{$peiling->titel|escape:'html'}
 		{if $peiling->magBewerken()}</a>{/if}
 	</h3>

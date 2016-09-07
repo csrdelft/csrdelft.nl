@@ -1,7 +1,7 @@
 <?php
 
 /**
- * PersistentType.enum.php
+ * PersistentAttributeType.enum.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
