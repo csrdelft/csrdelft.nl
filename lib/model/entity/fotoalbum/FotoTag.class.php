@@ -40,14 +40,6 @@ class FotoTag extends KeywordTag {
 	 */
 	protected static $table_name = 'foto_tags';
 
-	/**
-	 * Extend the persistent attributes.
-	 */
-	public static function __static() {
-		parent::__static();
-		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
-	}
-
 	public function jsonSerialize() {
 		$array = parent::jsonSerialize();
 		$array['name'] = ProfielModel::getNaam($this->keyword, 'user');

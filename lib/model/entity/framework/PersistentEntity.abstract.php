@@ -24,13 +24,14 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 	 * Optional: run conversion code before checkTables() here
 	 */
 	public static function __static() {
-		/*
-		 * Override this to extend the persistent attributes:
-		 *
-		  parent::__static();
-		  self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
-		 * 
-		 */
+		// Extend the persistent attributes with all parent persistent attributes
+		$class = get_called_class();
+		while ($class = get_parent_class($class)) {
+			$parent = get_class_vars($class);
+			if (isset($parent['persistent_attributes'])) {
+				static::$persistent_attributes = $parent['persistent_attributes'] + static::$persistent_attributes;
+			}
+		}
 	}
 
 	/**
