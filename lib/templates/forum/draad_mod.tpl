@@ -31,9 +31,9 @@
 					<form action="/forum/wijzigen/{$draad->draad_id}/forum_id" method="post">
 						<label>Verplaats naar &nbsp;</label>
 						<select name="forum_id">
-							{foreach from=$categorien item=cat}
-								<optgroup label="{$cat->titel}">
-									{foreach from=$cat->getForumDelen() item=newDeel}
+							{foreach from=$categorien item=categorie}
+								<optgroup label="{$categorie->titel}">
+									{foreach from=$categorie->getForumDelen() item=newDeel}
 										<option value="{$newDeel->forum_id}"{if $newDeel->forum_id === $draad->getForumDeel()->forum_id} selected="selected"{/if}>{$newDeel->titel}</option>
 									{/foreach}
 								</optgroup>

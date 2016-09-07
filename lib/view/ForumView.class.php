@@ -100,9 +100,9 @@ class ForumDeelView extends ForumView {
 			$dropdown .= ' selected="selected"';
 		}
 		$dropdown .= '>Recent gewijzigd</option>';
-		foreach (ForumModel::instance()->getForumIndelingVoorLid() as $cat) {
-			$dropdown .= '<optgroup label="' . $cat->titel . '">';
-			foreach ($cat->getForumDelen() as $newDeel) {
+		foreach (ForumModel::instance()->getForumIndelingVoorLid() as $categorie) {
+			$dropdown .= '<optgroup label="' . $categorie->titel . '">';
+			foreach ($categorie->getForumDelen() as $newDeel) {
 				$dropdown .= '<option value="/forum/deel/' . $newDeel->forum_id . '"';
 				if ($newDeel->forum_id === $this->model->forum_id) {
 					$dropdown .= ' selected="selected"';
@@ -148,8 +148,8 @@ class ForumDeelForm extends ModalForm {
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$lijst = array();
-		foreach (ForumModel::instance()->prefetch() as $cat) {
-			$lijst[$cat->categorie_id] = $cat->titel;
+		foreach (ForumModel::instance()->prefetch() as $categorie) {
+			$lijst[$categorie->categorie_id] = $categorie->titel;
 		}
 
 		$fields[] = new SelectField('categorie_id', $deel->categorie_id, 'Categorie', $lijst);
