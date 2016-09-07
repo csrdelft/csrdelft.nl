@@ -84,6 +84,7 @@ class PeilingenController extends AclController
         $optie = filter_input(INPUT_POST, 'optie', FILTER_VALIDATE_INT);
         // optie en id zijn null of false als filter_input faalt
         if (is_numeric($peiling_id) && is_numeric($optie)) {
+            PeilingenModel::instance()->stem($peiling_id, $optie);
             redirect(HTTP_REFERER . '#peiling' . $peiling_id);
         } else {
             setMelding("Kies een optie om op te stemmen", 0);
