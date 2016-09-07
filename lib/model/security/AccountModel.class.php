@@ -31,7 +31,7 @@ class AccountModel extends CachedPersistenceModel {
 	}
 
 	public static function existsUsername($name) {
-		return Database::sqlExists($this->getTableName(), 'username = ?', array($name));
+		return Database::sqlExists(static::instance()->getTableName(), 'username = ?', array($name));
 	}
 
 	public function maakAccount($uid) {
