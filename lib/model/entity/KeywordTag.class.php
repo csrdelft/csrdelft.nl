@@ -24,8 +24,8 @@ class KeywordTag extends PersistentEntity {
 	 */
 	public $door;
 	/**
-	 * Wanneer gemaakt
-	 * @var datetime
+	 * Gemaakt op datum en tijd
+	 * @var string
 	 */
 	public $wanneer;
 	/**

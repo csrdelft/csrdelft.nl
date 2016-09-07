@@ -13,12 +13,12 @@ class Peiling extends PersistentEntity {
     private $opties;
 
     public function getStemmenAantal() {
-        return PeilingStemmenModel::instance()->count('peilingid = ?', array($this->id));
+        return PeilingStemmenModel::instance()->count('peiling_id = ?', array($this->id));
     }
 
     public function getOpties() {
         if ($this->opties == null) {
-            $this->opties = PeilingOptiesModel::instance()->find('peilingid = ?', array($this->id))->fetchAll();
+            $this->opties = PeilingOptiesModel::instance()->find('peiling_id = ?', array($this->id))->fetchAll();
         }
         return $this->opties;
     }
@@ -36,11 +36,11 @@ class Peiling extends PersistentEntity {
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			return false;
 		}
-		return $this->hasVoted() == '';
+		return !$this->heeftGestemd(LoginModel::getUid());
 	}
 
-    public function hasVoted() {
-        return PeilingStemmenModel::instance()->exist('peilingid = ? AND uid = ?', array($this->id, LoginModel::getUid()));
+    public function heeftGestemd($uid) {
+        return PeilingStemmenModel::instance()->heeftGestemd($this->id, $uid);
     }
 
     protected static $table_name = 'peiling';

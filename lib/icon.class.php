@@ -72,9 +72,11 @@ class Icon {
      * @param null $hover string Naam van het icoon bij muis-over
      * @param null $title string Titel van het icoon
      * @param string $class
+     * @param null $content string Inhoud van dit icoon, is verborgen in de browser, maar wordt wel
+     * geselecteerd en door eventuele schermlezers opgevangen
      * @return string
      */
-	public static function getTag($key, $hover = null, $title = null, $class = null) {
+	public static function getTag($key, $hover = null, $title = null, $class = null, $content = null) {
 		$icon = self::get($key);
         if ($hover !== null) {
             $hover = 'hover-' . self::get($hover);
@@ -83,6 +85,6 @@ class Icon {
 			$title = 'title="' . str_replace('&amp;', '&', htmlspecialchars($title)) . '" ';
 		}
 
-		return sprintf('<span class="ico %s %s %s" %s></span>', htmlspecialchars($icon), htmlspecialchars($hover), htmlspecialchars($class), $title);
+		return sprintf('<span class="ico %s %s %s" %s>%s</span>', htmlspecialchars($icon), htmlspecialchars($hover), htmlspecialchars($class), $title, htmlspecialchars($content));
 	}
 }

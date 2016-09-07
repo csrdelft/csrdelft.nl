@@ -62,7 +62,7 @@ class RechtenController extends AclController {
 		if (!isset($selection[0])) {
 			$this->geentoegang();
 		}
-		$ac = $this->model->getUUID($selection[0]);
+		$ac = $this->model->retrieveByUUID($selection[0]);
 		$form = new RechtenForm($ac, $this->action);
 		if ($form->validate()) {
 			$this->model->setAcl($ac->environment, $ac->resource, array(
@@ -78,7 +78,7 @@ class RechtenController extends AclController {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$response = array();
 		foreach ($selection as $UUID) {
-			$ac = $this->model->getUUID($UUID);
+			$ac = $this->model->retrieveByUUID($UUID);
 			$this->model->setAcl($ac->environment, $ac->resource, array(
 				$ac->action => null
 			));

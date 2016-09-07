@@ -2,8 +2,6 @@
 
 require_once 'model/framework/PersistenceModel.abstract.php';
 require_once 'model/framework/DatabaseAdmin.singleton.php';
-require_once 'model/entity/framework/DynamicEntityDefinition.class.php';
-require_once 'model/entity/framework/DynamicEntity.class.php';
 
 /**
  * DynamicEntityModel.class.php
@@ -16,25 +14,27 @@ require_once 'model/entity/framework/DynamicEntity.class.php';
  */
 class DynamicEntityModel extends PersistenceModel {
 
-	const orm = 'DynamicEntity';
+	const ORM = 'DynamicEntity';
+	const DIR = 'framework/';
 
 	/**
 	 * Factory pattern instead of singleton.
 	 * @see ::makeModel()
 	 */
 	public static function instance() {
-		// use makeModel
+		throw new Exception('Use makeModel');
 	}
 
 	public static function makeModel($table_name) {
-		return new DynamicEntityModel($table_name);
+		parent::__static();
+		return new static($table_name);
 	}
 
 	/**
 	 * Definition of the DynamicEntity
 	 * @var DynamicEntityDefinition
 	 */
-	protected $definition;
+	private $definition;
 
 	/**
 	 * Override the constructor of PersistentModel and create DynamicEntityDefinition from table structure.
@@ -50,7 +50,27 @@ class DynamicEntityModel extends PersistenceModel {
 				$this->definition->primary_key[] = $attribute->field;
 			}
 		}
-		$this->orm = new DynamicEntity(false, null, $this->definition);
+	}
+
+	public function getTableName() {
+		return $this->definition->table_name;
+	}
+
+	/**
+	 * Get all attribute names.
+	 * 
+	 * @return array
+	 */
+	public function getAttributes() {
+		return array_keys($this->definition->persistent_attributes);
+	}
+
+	public function getAttributeDefinition($attribute_name) {
+		return $this->definition->persistent_attributes[$attribute_name];
+	}
+
+	public function getPrimaryKey() {
+		return array_values($this->definition->primary_key);
 	}
 
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
@@ -64,7 +84,7 @@ class DynamicEntityModel extends PersistenceModel {
 	public function find($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
 		$result = parent::find($criteria, $criteria_params, $groupby, $orderby, $limit, $start);
 		if ($result) {
-			$result->setFetchMode(PDO::FETCH_CLASS, static::orm, array($cast = true, null, $this->definition));
+			$result->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true, null, $this->definition));
 		}
 		return $result;
 	}
@@ -72,7 +92,7 @@ class DynamicEntityModel extends PersistenceModel {
 	public function findSparse(array $attributes, $criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
 		$result = parent::findSparse($attributes, $criteria, $criteria_params, $groupby, $orderby, $limit, $start);
 		if ($result) {
-			$result->setFetchMode(PDO::FETCH_CLASS, self::orm, array($cast = true, $attributes, $this->definition));
+			$result->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true, $attributes, $this->definition));
 		}
 		return $result;
 	}

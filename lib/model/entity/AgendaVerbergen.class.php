@@ -10,12 +10,14 @@
 class AgendaVerbergen extends PersistentEntity {
 
 	/**
-	 * Primary key
+	 * Lidnummer
+	 * Shared primary key
 	 * @var string
 	 */
 	public $uid;
 	/**
-	 * Primary key
+	 * UUID of Agendeerbaar entity
+	 * Shared primary key
 	 * @var string
 	 */
 	public $refuuid;

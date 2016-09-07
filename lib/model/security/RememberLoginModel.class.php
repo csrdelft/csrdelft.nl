@@ -8,13 +8,10 @@
  */
 class RememberLoginModel extends PersistenceModel {
 
-	const orm = 'RememberLogin';
+	const ORM = 'RememberLogin';
+	const DIR = 'security/';
 
 	protected static $instance;
-
-	protected function __construct() {
-		parent::__construct('security/');
-	}
 
 	public function verifyToken($ip, $rand) {
 		$remember = $this->find('token = ? AND (lock_ip = FALSE OR ip = ?)', array(hash('sha512', $rand), $ip), null, null, 1)->fetch();

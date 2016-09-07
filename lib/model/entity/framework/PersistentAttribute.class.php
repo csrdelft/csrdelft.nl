@@ -26,7 +26,7 @@ class PersistentAttribute {
 	 */
 	public $null;
 	/**
-	 * Key type: 'PRI' or 'MUL' or empty
+	 * Key type: 'PRI' or 'UNI' or 'MUL' or empty
 	 * @var string
 	 */
 	public $key;

@@ -38,7 +38,7 @@ class Mededeling extends PersistentEntity {
 	public $zichtbaarheid;
 	public $prioriteit = 255;
 	/**
-	 * Uid van auteur
+	 * Lidnummer van auteur
 	 * @var string
 	 */
 	public $uid;
@@ -93,9 +93,9 @@ class Mededeling extends PersistentEntity {
 		$resultaat = substr(str_replace(array("\n", "\r", ' '), ' ', $tijdelijk), 0, 40); //TODO: constanten van maken?
 		return $resultaat;
 	}
-	
+
 	public function getCategorie() {
-		return CategorieModel::get($this->categorie);
+		return MededelingCategorieenModel::get($this->categorie);
 	}
 
 	//	// function magBewerken()

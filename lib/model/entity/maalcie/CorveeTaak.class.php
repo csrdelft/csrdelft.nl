@@ -14,7 +14,7 @@
  *  - extra punten: bonus (positief) of malus (negatief) punten aantal
  *  - aantal punten dat is toegekend (exclusief bonus/malus)
  *  - aantal bonuspunten dat is toegekend
- *  - moment wanneer de punten zijn toegekend (datum + tijd)
+ *  - moment wanneer de punten zijn toegekend (datum en tijd)
  *  - of er een controle van de taak heeft plaatsgevonden (door de hyco) en zo ja of het ok was (anders null)
  * 
  * Het aanmaken van een corveetaak kan vanuit CorveeRepetitie gebeuren, maar ook vanuit MaaltijdCorvee bij het indelen van leden voor corvee-functies bij maaltijden; beide in verband met corvee-voorkeuren van leden, gewone danwel maaltijd-gerelateerde corvee-functies. (join Maaltijd.repetitie_id === MaaltijdCorvee.maaltijd_repetitie_id && join MaaltijdCorvee.corvee_repetitie_id === CorveeRepetitie.id)

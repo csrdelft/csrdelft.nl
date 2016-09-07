@@ -300,7 +300,7 @@ class CsrBB extends eamBBParser {
 			$content = $arguments;
 		}
 		if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
-			$neus = Icon::getTag('bullet_red', null, null, 'neus2013');
+			$neus = Icon::getTag('bullet_red', null, null, 'neus2013', 'o');
 			$content = str_replace('o', $neus, $content);
 		}
 		return $content;
@@ -1110,17 +1110,17 @@ HTML;
 	 */
 	public function bb_peiling($arguments = array()) {
 		if (isset($arguments['peiling'])) {
-			$peilingid = $arguments['peiling'];
+			$peiling_id = $arguments['peiling'];
 		} else {
-			$peilingid = $this->parseArray(array('[/peiling]'), array());
+			$peiling_id = $this->parseArray(array('[/peiling]'), array());
 		}
 		require_once 'view/PeilingenView.class.php';
 		try {
-			$peiling = PeilingenModel::instance()->get((int) $peilingid);
+			$peiling = PeilingenModel::instance()->get((int) $peiling_id);
 			$peilingcontent = new PeilingView($peiling);
 			return $peilingcontent->getHtml();
 		} catch (Exception $e) {
-			return '[peiling] Er bestaat geen peiling met (id:' . (int) $peilingid . ')';
+			return '[peiling] Er bestaat geen peiling met (id:' . (int) $peiling_id . ')';
 		}
 	}
 

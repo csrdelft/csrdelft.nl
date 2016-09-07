@@ -21,12 +21,12 @@
 class Instelling extends PersistentEntity {
 
 	/**
-	 * Module
+	 * Shared primary key
 	 * @var string
 	 */
 	public $module;
 	/**
-	 * Key
+	 * Shared primary key
 	 * @var string
 	 */
 	public $instelling_id;

@@ -8,7 +8,7 @@
  */
 class MenuModel extends CachedPersistenceModel {
 
-	const orm = 'MenuItem';
+	const ORM = 'MenuItem';
 
 	protected static $instance;
 	/**
@@ -223,7 +223,7 @@ class MenuModel extends CachedPersistenceModel {
 			// give new parent to otherwise future orphans
 			$update = array('parent_id' => $item->parent_id);
 			$where = 'parent_id = :oldid';
-			$rowCount = Database::sqlUpdate($this->orm->getTableName(), $update, $where, array(':oldid' => $item->item_id));
+			$rowCount = Database::sqlUpdate($this->getTableName(), $update, $where, array(':oldid' => $item->item_id));
 			$this->delete($item);
 			$db->commit();
 			$this->flushCache(true);

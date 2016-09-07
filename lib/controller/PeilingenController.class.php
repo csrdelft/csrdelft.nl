@@ -52,11 +52,11 @@ class PeilingenController extends AclController
             if (($errors = PeilingenModel::instance()->validate($peiling)) != '') {
                 setMelding($errors, -1);
             } else {
-                $peilingid = PeilingenModel::instance()->create($peiling);
+                $peiling_id = PeilingenModel::instance()->create($peiling);
                 setMelding('Peiling is aangemaakt', 1);
 
                 // Voorkom dubbele submit
-                redirect(HTTP_REFERER . "#peiling" . $peilingid);
+                redirect(HTTP_REFERER . "#peiling" . $peiling_id);
             }
         }
 
@@ -66,8 +66,8 @@ class PeilingenController extends AclController
         return $view;
     }
 
-    public function verwijderen($peilingid) {
-        $peiling = $this->model->get($peilingid);
+    public function verwijderen($peiling_id) {
+        $peiling = $this->model->get($peiling_id);
         if ($peiling === false) {
             setMelding('Peiling al verwijderd!', 2);
         } else {
@@ -80,11 +80,11 @@ class PeilingenController extends AclController
 
     public function stem()
     {
-        $peilingid = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $peiling_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $optie = filter_input(INPUT_POST, 'optie', FILTER_VALIDATE_INT);
         // optie en id zijn null of false als filter_input faalt
-        if (is_numeric($peilingid) && is_numeric($optie)) {
-            redirect(HTTP_REFERER . '#peiling' . $peilingid);
+        if (is_numeric($peiling_id) && is_numeric($optie)) {
+            redirect(HTTP_REFERER . '#peiling' . $peiling_id);
         } else {
             setMelding("Kies een optie om op te stemmen", 0);
         }

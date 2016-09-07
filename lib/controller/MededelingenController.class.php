@@ -73,7 +73,7 @@ class MededelingenController extends AclController {
     }
 
     public function verwijderen($id) {
-        $mededeling = $this->model->getUUID($id);
+        $mededeling = $this->model->retrieveByUUID($id);
 
         $this->model->delete($mededeling);
 
@@ -89,7 +89,7 @@ class MededelingenController extends AclController {
         if ($id == 0) {
             $mededeling = new Mededeling();
         } else {
-            $mededeling = $this->model->getUUID($id);
+            $mededeling = $this->model->retrieveByUUID($id);
         }
         if ($this->isPosted() && isset($_POST['titel'], $_POST['tekst'], $_POST['categorie'])) {
             if ($mededeling->datum == null) {
@@ -152,7 +152,7 @@ class MededelingenController extends AclController {
     }
 
     public function goedkeuren($id) {
-        $mededeling = $this->model->getUUID($id);
+        $mededeling = $this->model->retrieveByUUID($id);
         $mededeling->zichtbaarheid = 'zichtbaar';
         $this->model->update($mededeling);
         setMelding("Mededeling is goedgekeurd.", 1);

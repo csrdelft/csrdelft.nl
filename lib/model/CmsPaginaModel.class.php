@@ -10,7 +10,7 @@
  */
 class CmsPaginaModel extends PersistenceModel {
 
-	const orm = 'CmsPagina';
+	const ORM = 'CmsPagina';
 
 	protected static $instance;
 

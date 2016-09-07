@@ -12,11 +12,14 @@ class OneTimeToken extends PersistentEntity {
 
 	/**
 	 * Lidnummer
+	 * Shared primary key
+	 * Foreign key
 	 * @var string
 	 */
 	public $uid;
 	/**
 	 * Protected action url
+	 * Shared primary key
 	 * @var string
 	 */
 	public $url;

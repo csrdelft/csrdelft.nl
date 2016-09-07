@@ -9,7 +9,7 @@
 class RechtenTable extends DataTable {
 
 	public function __construct(AccessModel $model, $environment, $resource) {
-		parent::__construct($model::orm, '/rechten/bekijken/' . $environment . '/' . $resource, 'Rechten voor ' . $environment . ' ' . $resource, 'resource');
+		parent::__construct($model::ORM, '/rechten/bekijken/' . $environment . '/' . $resource, 'Rechten voor ' . $environment . ' ' . $resource, 'resource');
 
 		$this->hideColumn('action', false);
 		$this->searchColumn('aciton');

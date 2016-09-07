@@ -273,7 +273,7 @@ class LoginController extends AclController {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$response = array();
 		foreach ($selection as $UUID) {
-			$remember = RememberLoginModel::instance()->getUUID($UUID);
+			$remember = RememberLoginModel::instance()->retrieveByUUID($UUID);
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
 				$this->geentoegang();
 			}
@@ -291,7 +291,7 @@ class LoginController extends AclController {
 	public function loginremember() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (isset($selection[0])) {
-			$remember = RememberLoginModel::instance()->getUUID($selection[0]);
+			$remember = RememberLoginModel::instance()->retrieveByUUID($selection[0]);
 		} else {
 			$remember = RememberLoginModel::instance()->nieuw();
 		}
@@ -324,7 +324,7 @@ class LoginController extends AclController {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$response = array();
 		foreach ($selection as $UUID) {
-			$remember = RememberLoginModel::instance()->getUUID($UUID);
+			$remember = RememberLoginModel::instance()->retrieveByUUID($UUID);
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
 				$this->geentoegang();
 			}

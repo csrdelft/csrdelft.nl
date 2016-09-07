@@ -11,17 +11,17 @@
 class DynamicEntityDefinition {
 
 	/**
-	 * Non-static attribute of PersistentEntity
+	 * Database table columns
 	 * @var array
 	 */
 	public $persistent_attributes;
 	/**
-	 * Non-static attribute of PersistentEntity
+	 * Database primary key
 	 * @var array
 	 */
 	public $primary_key;
 	/**
-	 * Non-static attribute of PersistentEntity
+	 * Database table name
 	 * @var string
 	 */
 	public $table_name;

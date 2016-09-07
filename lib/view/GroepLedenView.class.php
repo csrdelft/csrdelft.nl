@@ -9,7 +9,7 @@
 class GroepLedenTable extends DataTable {
 
 	public function __construct(AbstractGroepLedenModel $model, AbstractGroep $groep) {
-		parent::__construct($model::orm, $groep->getUrl() . 'leden', 'Leden van ' . $groep->naam, 'status');
+		parent::__construct($model::ORM, $groep->getUrl() . 'leden', 'Leden van ' . $groep->naam, 'status');
 		$this->hideColumn('uid', false);
 		$this->searchColumn('uid');
 		$this->setColumnTitle('uid', 'Lidnaam');
@@ -200,7 +200,7 @@ class GroepPasfotosView extends GroepTabView {
 	protected function getTabContent() {
 		$html = '';
 		if ($this->groep->mag(A::Aanmelden)) {
-			$orm = $this->groep;
+			$orm = get_class($this->groep);
 			$leden = $orm::leden;
 			$lid = $leden::instance()->nieuw($this->groep, LoginModel::getUid());
 			$form = new GroepAanmeldenForm($lid, $this->groep);
@@ -221,7 +221,7 @@ class GroepLijstView extends GroepTabView {
 		$html = '<table class="groep-lijst"><tbody>';
 		if ($this->groep->mag(A::Aanmelden)) {
 			$html .= '<tr><td colspan="2">';
-			$orm = $this->groep;
+			$orm = get_class($this->groep);
 			$leden = $orm::leden;
 			$lid = $leden::instance()->nieuw($this->groep, LoginModel::getUid());
 			$form = new GroepAanmeldenForm($lid, $this->groep, false);

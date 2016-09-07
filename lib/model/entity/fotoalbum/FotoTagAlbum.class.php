@@ -8,6 +8,11 @@
  */
 class FotoTagAlbum extends FotoAlbum {
 
+	/**
+	 * Lidnummer
+	 * Foreign key
+	 * @var string
+	 */
 	public $uid;
 
 	public function __construct($uid) {
@@ -46,7 +51,7 @@ class FotoTagAlbum extends FotoAlbum {
 		if (!isset($this->fotos)) {
 			// find tagged fotos
 			foreach (FotoTagsModel::instance()->find('keyword = ?', array($this->uid)) as $tag) {
-				$foto = FotoModel::getUUID($tag->refuuid);
+				$foto = FotoModel::instance()->retrieveByUUID($tag->refuuid);
 				if ($foto) {
 					$this->fotos[] = $foto;
 				}

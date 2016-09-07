@@ -12,7 +12,7 @@ require_once 'model/InstellingenModel.class.php';
  */
 class LidInstellingen extends Instellingen {
 
-	const orm = 'LidInstelling';
+	const ORM = 'LidInstelling';
 
 	protected static $instance;
 	/**
@@ -189,8 +189,7 @@ class LidInstellingen extends Instellingen {
 
 	public function save() {
 		// create matrix for sqlInsertMultiple
-		$properties[] = $this->orm->getAttributes();
-
+		$properties[] = $this->getAttributes();
 		foreach (static::$defaults as $module => $instellingen) {
 			foreach ($instellingen as $id => $waarde) {
 				if ($this->getType($module, $id) === T::Integer) {
@@ -205,12 +204,12 @@ class LidInstellingen extends Instellingen {
 				$properties[] = array($module, $id, $waarde, LoginModel::getUid());
 			}
 		}
-		Database::sqlInsertMultiple($this->orm->getTableName(), $properties, true);
+		Database::sqlInsertMultiple($this->getTableName(), $properties, true);
 		$this->flushCache(true);
 	}
 
 	public function resetForAll($module, $id) {
-		Database::sqlDelete($this->orm->getTableName(), 'module = ? AND instelling_id = ?', array($module, $id));
+		Database::sqlDelete($this->getTableName(), 'module = ? AND instelling_id = ?', array($module, $id));
 		$this->flushCache(true);
 	}
 

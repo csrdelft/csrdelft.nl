@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/mededelingen/CategorieModel.class.php';
+require_once 'model/mededelingen/MededelingCategorieenModel.class.php';
 
 /**
  * MededelingenModel.class.php
@@ -11,15 +11,11 @@ require_once 'model/mededelingen/CategorieModel.class.php';
  */
 class MededelingenModel extends PersistenceModel {
 
-	const orm = 'Mededeling';
+	const ORM = 'Mededeling';
+	const DIR = 'mededelingen/';
 	const defaultPrioriteit = 255;
 
 	protected static $instance;
-
-	public function __construct()
-	{
-		parent::__construct("mededelingen/");
-	}
 
 	/**
 	 * Valideer een gegeven mededeling.

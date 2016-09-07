@@ -19,7 +19,7 @@ class GroepenBeheerTable extends DataTable {
 
 	public function __construct(AbstractGroepenModel $model) {
 		$this->url = $model->getUrl();
-		parent::__construct($model::orm, $this->url . 'beheren', null, 'familie');
+		parent::__construct($model::ORM, $this->url . 'beheren', null, 'familie');
 
 		$this->naam = $model->getNaam();
 		$this->titel = 'Beheer ' . $this->naam;
@@ -52,7 +52,7 @@ class GroepenBeheerTable extends DataTable {
 		$update = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'wijzigen', 'post popup', 'Wijzigen', 'Wijzig eigenschappen', 'edit');
 		$this->addKnop($update);
 
-		if (property_exists($model::orm, 'aanmelden_vanaf')) {
+		if (property_exists($model::ORM, 'aanmelden_vanaf')) {
 			$sluiten = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'sluiten', 'post confirm', 'Sluiten', 'Inschrijvingen nu sluiten', 'lock');
 			$this->addKnop($sluiten);
 		}
@@ -117,7 +117,7 @@ class GroepLogboekTable extends DataTable implements FormElement {
 
 	public function __construct(AbstractGroep $groep) {
 		require_once 'model/entity/ChangeLogEntry.class.php';
-		parent::__construct(ChangeLogModel::orm, $groep->getUrl() . 'logboek', false, 'moment');
+		parent::__construct(ChangeLogModel::ORM, $groep->getUrl() . 'logboek', false, 'moment');
 		$this->hideColumn('subject');
 		$this->searchColumn('property');
 		$this->searchColumn('old_value');
@@ -289,7 +289,7 @@ class GroepenView implements View {
 
 	public function view() {
 		$model = $this->model;
-		$orm = $model::orm;
+		$orm = $model::ORM;
 		if ($orm::magAlgemeen(A::Aanmaken, $this->soort)) {
 			echo '<a class="btn" href="' . $this->model->getUrl() . 'nieuw/' . $this->soort . '">'.Icon::getTag('add').' Toevoegen</a>';
 		}

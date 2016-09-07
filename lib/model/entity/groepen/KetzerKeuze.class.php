@@ -11,12 +11,15 @@
 class KetzerKeuze extends PersistentEntity {
 
 	/**
-	 * Primary key
+	 * Shared primary key
+	 * Foreign key
 	 * @var array
 	 */
 	public $optie_id;
 	/**
-	 * Primary key
+	 * Lidnummer
+	 * Shared primary key
+	 * Foreign key
 	 * @var int
 	 */
 	public $uid;

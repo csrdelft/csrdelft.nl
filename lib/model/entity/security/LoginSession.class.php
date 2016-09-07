@@ -15,6 +15,7 @@ class LoginSession extends PersistentEntity {
 	public $session_hash;
 	/**
 	 * Lidnummer
+	 * Foreign key
 	 * @var string
 	 */
 	public $uid;

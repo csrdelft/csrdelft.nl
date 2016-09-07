@@ -21,7 +21,7 @@ class ForumPost extends PersistentEntity {
 	 */
 	public $draad_id;
 	/**
-	 * Uid van auteur
+	 * Lidnummer van auteur
 	 * @var string
 	 */
 	public $uid;

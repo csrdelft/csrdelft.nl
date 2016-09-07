@@ -162,9 +162,9 @@ class DocumentenController extends Controller {
 			$this->document->setCatID($_GET['catID']);
 		}
 		$namen = array();
-		foreach (DocCategorie::getAll() as $cat) {
-			if ($cat->magBekijken()) {
-				$namen[$cat->getID()] = $cat->getNaam();
+		foreach (DocCategorie::getAll() as $categorie) {
+			if ($categorie->magBekijken()) {
+				$namen[$categorie->getID()] = $categorie->getNaam();
 			}
 		}
 		$bestand = $this->document->getBestand();

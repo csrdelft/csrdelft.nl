@@ -8,7 +8,7 @@
  */
 class Instellingen extends CachedPersistenceModel {
 
-	const orm = 'Instelling';
+	const ORM = 'Instelling';
 
 	protected static $instance;
 	/**

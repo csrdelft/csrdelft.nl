@@ -10,7 +10,8 @@ require_once 'model/maalcie/KwalificatiesModel.class.php';
  */
 class FunctiesModel extends CachedPersistenceModel {
 
-	const orm = 'CorveeFunctie';
+	const ORM = 'CorveeFunctie';
+	const DIR = 'maalcie/';
 
 	protected static $instance;
 
@@ -22,10 +23,6 @@ class FunctiesModel extends CachedPersistenceModel {
 	 */
 	public static function get($fid) {
 		return static::instance()->retrieveByPrimaryKey(array($fid));
-	}
-
-	protected function __construct() {
-		parent::__construct('maalcie/');
 	}
 
 	/**

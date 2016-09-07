@@ -12,6 +12,7 @@ class Account extends PersistentEntity {
 
 	/**
 	 * Lidnummer
+	 * Foreign key
 	 * @var string
 	 */
 	public $uid;

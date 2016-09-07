@@ -8,7 +8,7 @@
  */
 class GeoLocationModel extends PersistenceModel {
 
-	const orm = 'GeoLocation';
+	const ORM = 'GeoLocation';
 
 	protected static $instance;
 	/**

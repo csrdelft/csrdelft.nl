@@ -8,13 +8,10 @@
  */
 class KwalificatiesModel extends CachedPersistenceModel {
 
-	const orm = 'CorveeKwalificatie';
+	const ORM = 'CorveeKwalificatie';
+	const DIR = 'maalcie/';
 
 	protected static $instance;
-
-	protected function __construct() {
-		parent::__construct('maalcie/');
-	}
 
 	/**
 	 * Lazy loading of corveefunctie.

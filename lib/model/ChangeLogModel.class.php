@@ -8,7 +8,7 @@
  */
 class ChangeLogModel extends PersistenceModel {
 
-	const orm = 'ChangeLogEntry';
+	const ORM = 'ChangeLogEntry';
 
 	protected static $instance;
 

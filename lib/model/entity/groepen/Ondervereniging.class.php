@@ -33,8 +33,8 @@ class Ondervereniging extends AbstractGroep {
 	/**
 	 * Extend the persistent attributes.
 	 */
-	public static function __constructStatic() {
-		parent::__constructStatic();
+	public static function __static() {
+		parent::__static();
 		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
 	}
 
