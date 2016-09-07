@@ -493,14 +493,14 @@ class CsrBB extends eamBBParser {
 		}
 		if (preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
 
-			$attr['width'] = 570;
-			$attr['height'] = 360;
-			$attr['iframe'] = true;
+			$attributes['width'] = 570;
+			$attributes['height'] = 360;
+			$attributes['iframe'] = true;
 
-			$attr['src'] = '//www.youtube.com/embed/' . $id . '?autoplay=1';
+			$attributes['src'] = '//www.youtube.com/embed/' . $id . '?autoplay=1';
 			$previewthumb = 'https://img.youtube.com/vi/' . $id . '/0.jpg';
 
-			return $this->video_preview($attr, $previewthumb);
+			return $this->video_preview($attributes, $previewthumb);
 		} else {
 			return '[youtube] Geen geldig youtube-id (' . htmlspecialchars($id) . ')';
 		}

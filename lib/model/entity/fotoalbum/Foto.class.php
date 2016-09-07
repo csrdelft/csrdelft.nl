@@ -167,9 +167,9 @@ class Foto extends Afbeelding {
 	 */
 	public function rotate($degrees) {
 		if (!isset($this->rotation)) {
-			$attr = array('rotation', 'owner');
-			FotoModel::instance()->retrieveAttributes($this, $attr);
-			$this->castValues($attr);
+			$attributes = array('rotation', 'owner');
+			FotoModel::instance()->retrieveAttributes($this, $attributes);
+			$this->castValues($attributes);
 		}
 		$this->rotation += $degrees;
 		$this->rotation %= 360;
@@ -186,9 +186,9 @@ class Foto extends Afbeelding {
 
 	public function isOwner() {
 		if (!isset($this->owner)) {
-			$attr = array('rotation', 'owner');
-			FotoModel::instance()->retrieveAttributes($this, $attr);
-			$this->castValues($attr);
+			$attributes = array('rotation', 'owner');
+			FotoModel::instance()->retrieveAttributes($this, $attributes);
+			$this->castValues($attributes);
 		}
 		return LoginModel::mag($this->owner);
 	}

@@ -232,8 +232,8 @@ abstract class PersistenceModel implements Persistence {
 	 * }
 	 * class User {
 	 *   public function getAddress() {
-	 *     $attr = array('city' 'street', 'number', 'postalcode');
-	 *     UserModel::instance()->retrieveAttributes($this, $attr);
+	 *     $attributes = array('city' 'street', 'number', 'postalcode');
+	 *     UserModel::instance()->retrieveAttributes($this, $attributes);
 	 *   }
 	 * }
 	 * 
