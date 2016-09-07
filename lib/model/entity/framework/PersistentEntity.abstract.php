@@ -110,6 +110,11 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 		return false;
 	}
 
+	public function onRetrieveAttributes(array $attributes) {
+		$this->attr_retrieved = array_merge($this->attr_retrieved, $attributes); // Bookkeeping
+		$this->castValues($attributes); // PDO does not cast values automatically (yet)
+	}
+
 	/**
 	 * Get the (non-sparse) attributes and their values of this object.
 	 * Relies on getters and setters to update $attr_retrieved
@@ -139,7 +144,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 
 	/**
 	 * Cast values to defined type.
-	 * PDO does not do this automatically (yet).
+	 * PDO does not cast values automatically (yet).
 	 * 
 	 * @param boolean $attributes Attributes to cast
 	 */
@@ -147,7 +152,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 		foreach ($attributes as $attribute) {
 			$definition = $this->getAttributeDefinition($attribute);
 			if (isset($definition[1]) AND $definition[1] AND $this->$attribute === null) {
-				// do not cast allowed null fields
+				// Do not cast allowed null fields
 			} elseif ($definition[0] === T::Boolean) {
 				$this->$attribute = (boolean) $this->$attribute;
 			} elseif ($definition[0] === T::Integer) {
@@ -187,7 +192,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 				DatabaseAdmin::instance()->sqlCreateTable(static::$table_name, $attributes, static::$primary_key);
 				return;
 			} else {
-				throw $e; // rethrow to controller
+				throw $e; // Rethrow to controller
 			}
 		}
 		// Rename attributes
