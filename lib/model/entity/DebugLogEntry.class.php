@@ -34,12 +34,12 @@ class DebugLogEntry extends PersistentEntity {
 	 */
 	public $moment;
 	/**
-	 * UID
+	 * Lidnummer
 	 * @var string
 	 */
 	public $uid;
 	/**
-	 * SU UID
+	 * Lidnummer of original user
 	 * @var string
 	 */
 	public $su_uid;

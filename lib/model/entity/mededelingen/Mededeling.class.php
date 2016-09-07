@@ -38,7 +38,7 @@ class Mededeling extends PersistentEntity {
 	public $zichtbaarheid;
 	public $prioriteit = 255;
 	/**
-	 * Uid van auteur
+	 * Lidnummer van auteur
 	 * @var string
 	 */
 	public $uid;

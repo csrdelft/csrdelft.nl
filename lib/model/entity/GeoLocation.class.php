@@ -9,13 +9,15 @@
 class GeoLocation extends PersistentEntity {
 
 	/**
-	 * Primary key
+	 * Lidnummer
+	 * Shared primary key
 	 * @var string
 	 */
 	public $uid;
 	/**
-	 * Primary key
-	 * @var DateTime
+	 * Datum en tijd
+	 * Shared primary key
+	 * @var string
 	 */
 	public $moment;
 	/**

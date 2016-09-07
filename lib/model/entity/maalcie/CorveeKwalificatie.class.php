@@ -16,17 +16,20 @@
 class CorveeKwalificatie extends PersistentEntity {
 
 	/**
-	 * Lid id
+	 * Lidnummer
+	 * Shared primary key
+	 * Foreign key
 	 * @var string
 	 */
 	public $uid;
 	/**
-	 * Functie id
+	 * Shared primary key
+	 * Foreign key
 	 * @var int
 	 */
 	public $functie_id;
 	/**
-	 * Datum + tijd
+	 * Datum en tijd
 	 * @var string
 	 */
 	public $wanneer_toegewezen;

@@ -13,12 +13,15 @@
 class MaaltijdBeoordeling extends PersistentEntity {
 
 	/**
-	 * Primary key
+	 * Shared primary key
+	 * Foreign key
 	 * @var int 
 	 */
 	public $maaltijd_id;
 	/**
 	 * Lidnummer
+	 * Shared primary key
+	 * Foreign key
 	 * @var string
 	 */
 	public $uid;

@@ -12,11 +12,14 @@ class ForumDraadVerbergen extends PersistentEntity {
 
 	/**
 	 * Shared primary key
+	 * Foreign key
 	 * @var int
 	 */
 	public $draad_id;
 	/**
+	 * Lidnummer
 	 * Shared primary key
+	 * Foreign key
 	 * @var string
 	 */
 	public $uid;

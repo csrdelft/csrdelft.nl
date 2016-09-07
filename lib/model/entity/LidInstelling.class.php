@@ -13,7 +13,8 @@
 class LidInstelling extends Instelling {
 
 	/**
-	 * Uid
+	 * Lidnummer
+	 * Foreign key
 	 * @var string
 	 */
 	public $uid;

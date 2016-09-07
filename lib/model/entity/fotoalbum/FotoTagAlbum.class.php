@@ -8,6 +8,11 @@
  */
 class FotoTagAlbum extends FotoAlbum {
 
+	/**
+	 * Lidnummer
+	 * Foreign key
+	 * @var string
+	 */
 	public $uid;
 
 	public function __construct($uid) {

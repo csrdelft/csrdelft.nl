@@ -8,19 +8,22 @@
 class PeilingStem extends PersistentEntity {
 
 	/**
+	 * Shared primary key
 	 * Foreign key
 	 * @var int
 	 */
 	public $peiling_id;
 	/**
+	 * Lidnummer
+	 * Shared primary key
 	 * Foreign key
 	 * @var string
 	 */
 	public $uid;
 
 	protected static $persistent_attributes = array(
-		'peiling_id' => array(T::Integer),
-		'uid'       => array(T::UID)
+		'peiling_id'	=> array(T::Integer),
+		'uid'			=> array(T::UID)
 	);
 
 	protected static $primary_key = array('peiling_id', 'uid');

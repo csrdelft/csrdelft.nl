@@ -10,21 +10,24 @@ class GesprekDeelnemer extends PersistentEntity {
 
 	/**
 	 * Shared primary key
+	 * Foreign key
 	 * @var int
 	 */
 	public $gesprek_id;
 	/**
+	 * Lidnummer
 	 * Shared primary key
+	 * Foreign key
 	 * @var string
 	 */
 	public $uid;
 	/**
-	 * DateTime
+	 * Datum en tijd
 	 * @var string
 	 */
 	public $toegevoegd_moment;
 	/**
-	 * DateTime
+	 * Datum en tijd
 	 * @var string
 	 */
 	public $gelezen_moment;
