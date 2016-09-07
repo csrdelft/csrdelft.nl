@@ -818,7 +818,7 @@ class EntityField extends InputField {
      * @param $url string Url waar aanvullingen te vinden zijn
      */
     public function __construct($name, $show, $description, PersistenceModel $model, $url) {
-        $this->orm = $model::orm;
+        $this->orm = $model::ORM;
         $this->entity = new $this->orm();
         foreach ($this->entity->getPrimaryKey() as $key) {
             $this->entity->$key = filter_input(INPUT_POST, $name . '_'. $key, FILTER_DEFAULT);
