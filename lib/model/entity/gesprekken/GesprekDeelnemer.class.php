@@ -33,7 +33,7 @@ class GesprekDeelnemer extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'gesprek_id'		 => array(T::Integer, false, 'auto_increment'),
+		'gesprek_id'		 => array(T::Integer),
 		'uid'				 => array(T::UID),
 		'toegevoegd_moment'	 => array(T::DateTime),
 		'gelezen_moment'	 => array(T::DateTime)
