@@ -73,7 +73,7 @@ class EetplanController extends AclController {
             $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
             $woonoorden = array();
             foreach ($selection as $woonoord) {
-                $woonoord = WoonoordenModel::instance()->getUUID($woonoord);
+                $woonoord = WoonoordenModel::instance()->retrieveByUUID($woonoord);
                 $woonoord->eetplan = true;
                 WoonoordenModel::instance()->update($woonoord);
                 $woonoorden[] = $woonoord;
@@ -84,7 +84,7 @@ class EetplanController extends AclController {
             $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
             $woonoorden = array();
             foreach ($selection as $woonoord) {
-                $woonoord = WoonoordenModel::instance()->getUUID($woonoord);
+                $woonoord = WoonoordenModel::instance()->retrieveByUUID($woonoord);
                 $woonoord->eetplan = false;
                 WoonoordenModel::instance()->update($woonoord);
                 $woonoorden[] = $woonoord;
@@ -119,7 +119,7 @@ class EetplanController extends AclController {
             $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
             $verwijderd = array();
             foreach ($selection as $uuid) {
-                $eetplan = $this->model->getUUID($uuid);
+                $eetplan = $this->model->retrieveByUUID($uuid);
                 $this->model->delete($eetplan);
                 $verwijderd[] = $eetplan;
             }
@@ -144,7 +144,7 @@ class EetplanController extends AclController {
             $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
             $verwijderd = array();
             foreach ($selection as $uuid) {
-                $bekenden = $this->model->getBekendenModel()->getUUID($uuid);
+                $bekenden = $this->model->getBekendenModel()->retrieveByUUID($uuid);
                 $this->model->getBekendenModel()->delete($bekenden);
                 $verwijderd[] = $bekenden;
             }

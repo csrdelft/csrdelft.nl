@@ -13,7 +13,7 @@ require_once 'model/entity/EetplanBekenden.class.php';
  */
 class EetplanModel extends PersistenceModel {
 
-    const orm = 'Eetplan';
+    const ORM = 'Eetplan';
 
     private $lichting;
     private $bekendenModel;
@@ -115,7 +115,7 @@ class EetplanBekendenModel extends PersistenceModel {
 
     private $lichting;
 
-    const orm = "EetplanBekenden";
+    const ORM = "EetplanBekenden";
 
     /**
      * EetplanBekenden constructor.

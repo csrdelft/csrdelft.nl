@@ -142,7 +142,7 @@ class EetplanHuizenView extends DataTableResponse {
 
 class EetplanBekendenTable extends DataTable {
     public function __construct() {
-        parent::__construct(EetplanBekendenModel::orm, '/eetplan/novietrelatie/', 'Novieten die elkaar kennen');
+        parent::__construct(EetplanBekendenModel::ORM, '/eetplan/novietrelatie/', 'Novieten die elkaar kennen');
         $this->addColumn('noviet1');
         $this->addColumn('noviet2');
         $this->searchColumn('noviet1');
@@ -186,7 +186,7 @@ class EetplanBekendenForm extends ModalForm {
 
 class EetplanBekendeHuizenTable extends DataTable {
     public function __construct() {
-        parent::__construct(EetplanModel::orm, '/eetplan/bekendehuizen/', 'Novieten die huizen kennen');
+        parent::__construct(EetplanModel::ORM, '/eetplan/bekendehuizen/', 'Novieten die huizen kennen');
         $this->hideColumn('avond');
         $this->hideColumn('woonoord_id');
         $this->hideColumn('uid');
