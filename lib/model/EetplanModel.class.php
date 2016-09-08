@@ -2,13 +2,14 @@
 
 require_once 'model/entity/Eetplan.class.php';
 require_once 'model/entity/EetplanBekenden.class.php';
+require_once 'model/EetplanFactory.class.php';
 
 /**
  * EetplanModel.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * 
+ *
  * Verzorgt het opvragen van eetplangegevens
  */
 class EetplanModel extends PersistenceModel {
@@ -22,8 +23,7 @@ class EetplanModel extends PersistenceModel {
      * EetplanModel constructor.
      * @param string $lichting Lichting om eetplan voor op te halen, 2 cijfers.
      */
-    public function __construct($lichting)
-    {
+    public function __construct($lichting) {
         parent::__construct();
         $this->lichting = $lichting;
         $this->bekendenModel = new EetplanBekendenModel($lichting);
@@ -83,7 +83,17 @@ class EetplanModel extends PersistenceModel {
         return array(
             'novieten' => array_values($eetplanFeut),
             'avonden' => array_values($avonden)
-    );
+        );
+    }
+
+    public function maakEetplan($avond) {
+        // Laad oude dingen in
+        // Laad sjaars die elkaar kennen in
+
+        $bekenden = $this->bekendenModel->getBekenden();
+        foreach ($bekenden as $bekende) {
+
+        }
     }
 
     /**
@@ -121,8 +131,7 @@ class EetplanBekendenModel extends PersistenceModel {
      * EetplanBekenden constructor.
      * @param string $lichting Lichting om eetplan voor op te halen, 2 cijfers.
      */
-    public function __construct($lichting)
-    {
+    public function __construct($lichting) {
         parent::__construct();
         $this->lichting = $lichting;
     }
