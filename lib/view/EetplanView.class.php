@@ -228,6 +228,18 @@ class EetplanBekendeHuizenForm extends ModalForm {
 
         $this->addFields($fields);
     }
+
+    public function validate() {
+        if (!parent::validate()) {
+            return false;
+        }
+        
+        if (EetplanModel::instance()->exists($this->getModel())) {
+            return false;
+        }
+
+        return true;
+    }
 }
 
 /**
