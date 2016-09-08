@@ -109,7 +109,7 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 		return false;
 	}
 
-	public function onRetrieveAttributes(array $attributes) {
+	public function onAttributesRetrieved(array $attributes) {
 		$this->attributes_retrieved = array_merge($this->attributes_retrieved, $attributes); // Bookkeeping
 		$this->castValues($attributes); // PDO does not cast values automatically (yet)
 	}

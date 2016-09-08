@@ -241,17 +241,18 @@ abstract class PersistenceModel implements Persistence {
 	 * 
 	 * Foreign key example:
 	 * 
-	 * if ($user->isSparse('address')) {
-	 *   $user->getAddress();
-	 * }
+	 * $user->getAddress();
 	 * 
 	 * class User extends PersitentEntity {
 	 *   public $address_uuid; // foreign key
 	 *   public $address;
 	 *   public function getAddress() {
 	 *     if (!isset($this->address)) {
+	 *       $fk = array('address_uuid')
+	 *       if ($this->isSparse($fk) {
+	 *         UserModel::instance()->retrieveAttributes($this, $fk);
+	 *       }
 	 *       $this->address = AddressesModel::instance()->retrieveByUUID($this->address_uuid);
-	 *       $this->attributes_retrieved[] = 'address'; // Bookkeeping
 	 *     }
 	 *     return $this->address;
 	 *   }
@@ -270,7 +271,7 @@ abstract class PersistenceModel implements Persistence {
 		$result->setFetchMode(PDO::FETCH_INTO, $entity);
 		$success = $result->fetch();
 		if ($success) {
-			$entity->onRetrieveAttributes($attributes);
+			$entity->onAttributesRetrieved($attributes);
 		}
 		return $success;
 	}
