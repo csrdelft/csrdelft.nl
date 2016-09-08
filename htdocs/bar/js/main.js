@@ -379,6 +379,8 @@ $(function () {
 			
 					// Set submitting state on true
 					submitting = true;
+					$this.addClass("loading");
+					$this.prop("disabled", true);
 				
 					var result = {};
 					result["bestelLijst"] = bestelLijst;
@@ -404,6 +406,8 @@ $(function () {
 						// After AJAX always set submitting on false
 						submitting = false;
 						warningGiven = false;
+						$this.removeClass("loading");
+						$this.prop("disabled", false);
 					
 					});
 
