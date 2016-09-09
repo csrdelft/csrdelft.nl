@@ -19,7 +19,7 @@ class MededelingenController extends AclController {
 
     public function __construct($query) {
         parent::__construct($query, MededelingenModel::instance());
-        if (!$this->isPosted()) {
+        if ($this->getMethod() == 'GET') {
             $this->acl = array(
                 'lijst' => 'P_PUBLIC',
                 'bekijken' => 'P_PUBLIC',
@@ -91,7 +91,7 @@ class MededelingenController extends AclController {
         } else {
             $mededeling = $this->model->retrieveByUUID($id);
         }
-        if ($this->isPosted() && isset($_POST['titel'], $_POST['tekst'], $_POST['categorie'])) {
+        if ($this->getMethod() == 'POST' && isset($_POST['titel'], $_POST['tekst'], $_POST['categorie'])) {
             if ($mededeling->datum == null) {
                 $mededeling->datum = getDateTime();
             }

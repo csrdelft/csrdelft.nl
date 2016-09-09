@@ -11,7 +11,7 @@ class LoginController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, LoginModel::instance());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'logout'			 => 'P_LOGGED_IN',
 				'su'				 => 'P_ADMIN',
@@ -50,7 +50,7 @@ class LoginController extends AclController {
 	protected function geentoegang() {
 		require_once 'model/CmsPaginaModel.class.php';
 		require_once 'view/CmsPaginaView.class.php';
-		if ($this->isPosted()) {
+		if ($this->getMethod() == 'POST') {
 			parent::geentoegang();
 		}
 		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));

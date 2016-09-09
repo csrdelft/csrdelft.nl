@@ -14,7 +14,7 @@ class EetplanController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, new EetplanModel());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'view'	 => 'P_LEDEN_READ',
 				'noviet' => 'P_LEDEN_READ',

@@ -13,7 +13,7 @@ class MenuBeheerController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, MenuModel::instance());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'beheer' => 'P_LOGGED_IN'
 			);

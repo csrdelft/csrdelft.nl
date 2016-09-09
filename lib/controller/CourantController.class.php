@@ -15,7 +15,7 @@ class CourantController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, new CourantModel());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'archief'		 => 'P_LEDEN_READ',
 				'bekijken'		 => 'P_LEDEN_READ',
@@ -66,7 +66,7 @@ class CourantController extends AclController {
 	}
 
 	public function toevoegen() {
-		if ($this->isPosted()) {
+		if ($this->getMethod() == 'POST') {
 			if ($this->model->valideerBerichtInvoer()) {
 				$success = $this->model->addBericht($_POST['titel'], $_POST['categorie'], $_POST['bericht']);
 				if ($success) {
@@ -90,7 +90,7 @@ class CourantController extends AclController {
 		if (!$bericht OR ! isset($bericht['uid']) OR ! $this->model->magBeheren($bericht['uid'])) {
 			$this->geentoegang();
 		}
-		if ($this->isPosted()) {
+		if ($this->getMethod() == 'POST') {
 			$success = $this->model->bewerkBericht($iBerichtID, $_POST['titel'], $_POST['categorie'], $_POST['bericht']);
 			if ($success) {
 				setMelding('Uw bewerkte bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);

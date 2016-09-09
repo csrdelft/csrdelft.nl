@@ -13,7 +13,7 @@ class ProfielController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, ProfielModel::instance());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				// Profiel
 				'profiel'				 => 'P_OUDLEDEN_READ',

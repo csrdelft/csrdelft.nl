@@ -15,7 +15,7 @@ class AgendaController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, AgendaModel::instance());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'maand'	 => 'P_AGENDA_READ',
 				'ical'	 => 'P_AGENDA_READ',
