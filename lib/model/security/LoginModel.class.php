@@ -368,6 +368,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			if ($remember) {
 				RememberLoginModel::instance()->delete($remember);
 			}
+			setRememberCookie(null);
 		}
 		// Destroy login session
 		$this->deleteByPrimaryKey(array(hash('sha512', session_id())));
