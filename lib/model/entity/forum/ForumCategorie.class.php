@@ -34,7 +34,7 @@ class ForumCategorie extends PersistentEntity {
 	 * Forumdelen
 	 * @var ForumDeel[]
 	 */
-	private $forum_delen;
+	public $forum_delen;
 	/**
 	 * Database table columns
 	 * @var array
@@ -67,7 +67,7 @@ class ForumCategorie extends PersistentEntity {
 	 */
 	public function getForumDelen() {
 		if (!isset($this->forum_delen)) {
-			$this->setForumDelen(ForumDelenModel::instance()->getForumDelenVoorCategorie($this));
+			$this->forum_delen = ForumDelenModel::instance()->getForumDelenVoorCategorie($this);
 		}
 		return $this->forum_delen;
 	}
@@ -75,15 +75,6 @@ class ForumCategorie extends PersistentEntity {
 	public function hasForumDelen() {
 		$this->getForumDelen();
 		return !empty($this->forum_delen);
-	}
-
-	/**
-	 * Public for search results and all sorts of prefetching.
-	 * 
-	 * @param array $forum_delen
-	 */
-	public function setForumDelen(array $forum_delen) {
-		$this->forum_delen = $forum_delen;
 	}
 
 }

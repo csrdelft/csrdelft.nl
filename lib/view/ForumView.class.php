@@ -17,8 +17,8 @@ abstract class ForumView extends SmartyTemplateView {
 
 class ForumOverzichtView extends ForumView {
 
-	public function __construct() {
-		parent::__construct(ForumModel::instance()->getForumIndelingVoorLid(), 'Forum');
+	public function __construct($forum) {
+		parent::__construct($forum, 'Forum');
 	}
 
 	public function getBreadcrumbs() {

@@ -51,9 +51,9 @@ class ForumModel extends CachedPersistenceModel {
 				if ($categorie->magLezen()) {
 					$this->indeling[] = $categorie;
 					if (isset($delenByCategorieId[$categorie->categorie_id])) {
-						$categorie->setForumDelen($delenByCategorieId[$categorie->categorie_id]);
+						$categorie->forum_delen = $delenByCategorieId[$categorie->categorie_id];
 					} else {
-						$categorie->setForumDelen(array());
+						$categorie->forum_delen = array();
 					}
 				}
 			}
@@ -207,7 +207,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 		} else {
 			$deel->titel = 'Recent gewijzigd';
 		}
-		$deel->setForumDraden(ForumDradenModel::instance()->getRecenteForumDraden(null, $belangrijk));
+		$deel->forum_draden = ForumDradenModel::instance()->getRecenteForumDraden(null, $belangrijk);
 		return $deel;
 	}
 
@@ -223,7 +223,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 		$dradenById += ForumDradenModel::instance()->getForumDradenById(array_keys($postsByDraadId)); // laad draden bij posts
 		foreach ($dradenById as $draad) { // laad posts bij draden
 			if (array_key_exists($draad->draad_id, $postsByDraadId)) { // post is al gevonden
-				$draad->setForumPosts($postsByDraadId[$draad->draad_id]);
+				$draad->forum_posts = $postsByDraadId[$draad->draad_id];
 			} else {
 				$melding = 'Draad ' . $draad->draad_id . ' niet goedgekeurd, maar alle posts wel. Automatische actie: ';
 				$draad->wacht_goedkeuring = false;
@@ -271,13 +271,13 @@ class ForumDelenModel extends CachedPersistenceModel {
 					$draad->score = (float) 0;
 				}
 				if (array_key_exists($draad->draad_id, $gevonden_posts)) { // posts al gevonden
-					$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
+					$draad->forum_posts = $gevonden_posts[$draad->draad_id];
 					foreach ($draad->getForumPosts() as $post) {
 						$draad->score += (float) $post->score;
 					}
 				} else { // laad eerste post
 					$array_first_post = ForumPostsModel::instance()->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, null, 1);
-					$draad->setForumPosts($array_first_post);
+					$draad->forum_posts = $array_first_post;
 				}
 			}
 		}
