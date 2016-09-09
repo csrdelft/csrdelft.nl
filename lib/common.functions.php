@@ -101,9 +101,38 @@ function group_by_distinct($prop, $in, $del = true) {
 }
 
 /**
+ * Set cookie with url to go back to after login.
+ * 
+ * @param string $url
+ */
+function setGoBackCookie($url) {
+	if ($url == null) {
+		unset($_COOKIE['goback']);
+		setcookie('goback', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
+	} else {
+		setcookie('goback', $url, time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+	}
+}
+
+/**
+ * Set cookie with token to automatically login.
+ * 
+ * @param string $token
+ */
+function setRememberCookie($token) {
+	if ($token == null) {
+		unset($_COOKIE['remember']);
+		setcookie('remember', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
+	} else {
+		setcookie('remember', $token, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+	}
+}
+
+/**
  * Invokes a client page (re)load the url.
  * 
  * @param string $url
+ * @param boolean $refresh allow a refresh; redirect to CSR_ROOT otherwise
  */
 function redirect($url = null, $refresh = true) {
 	if (empty($url)) {

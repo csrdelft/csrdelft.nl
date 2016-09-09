@@ -83,7 +83,9 @@ class LoginController extends AclController {
 				return;
 			}
 			if (isset($_COOKIE['goback'])) {
-				redirect($_COOKIE['goback']);
+				$url = $_COOKIE['goback'];
+				setGoBackCookie(null);
+				redirect($url);
 			}
 		}
 		redirect(CSR_ROOT);
