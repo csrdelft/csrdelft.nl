@@ -94,7 +94,7 @@ class GesprekkenResponse extends DataTableResponse {
 	public function getJson($gesprek) {
 		$array = $gesprek->jsonSerialize();
 
-		$array['details'] = '<a class="lichtgrijs" href="/gesprekken/web/' . $gesprek->gesprek_id . '">';
+		$array['details'] = '<a class="lichtgrijs" href="/gesprekken/web/' . $gesprek->id . '">';
 		if ($gesprek->aantal_nieuw > 0) {
 			$array['details'] .= '<span class="badge">' . $gesprek->aantal_nieuw . '</span>';
 		} else {
@@ -104,7 +104,7 @@ class GesprekkenResponse extends DataTableResponse {
 
 		$array['deelnemers'] = $gesprek->getDeelnemersFormatted();
 
-		$laatste_bericht = GesprekBerichtenModel::instance()->find('gesprek_id = ?', array($gesprek->gesprek_id), null, 'bericht_id DESC', 1)->fetch();
+		$laatste_bericht = GesprekBerichtenModel::instance()->find('gesprek_id = ?', array($gesprek->id), null, 'id DESC', 1)->fetch();
 		if ($laatste_bericht) {
 			$array['laatste_update'] = $laatste_bericht->getFormatted(false, 30);
 		}
@@ -117,7 +117,7 @@ class GesprekkenResponse extends DataTableResponse {
 class GesprekBerichtenTable extends DataTable {
 
 	public function __construct(Gesprek $gesprek) {
-		parent::__construct(GesprekBerichtenModel::ORM, '/gesprekken/lees/' . $gesprek->gesprek_id, 'Gesprek met ' . $gesprek->getDeelnemersFormatted());
+		parent::__construct(GesprekBerichtenModel::ORM, '/gesprekken/lees/' . $gesprek->id, 'Gesprek met ' . $gesprek->getDeelnemersFormatted());
 		$this->defaultLength = -1;
 		$this->settings['scrollY'] = '600px';
 		$this->settings['scrollCollapse'] = true;
@@ -144,7 +144,7 @@ class BerichtenResponse extends DataTableResponse {
 	public function getJson($bericht) {
 		$array = $bericht->jsonSerialize();
 
-		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ? AND bericht_id < ?', array($bericht->gesprek_id, $bericht->bericht_id), null, 'bericht_id DESC', 1)->fetch();
+		$previous = GesprekBerichtenModel::instance()->find('gesprek_id = ? AND id < ?', array($bericht->gesprek_id, $bericht->id), null, 'id DESC', 1)->fetch();
 		$array['inhoud'] = $bericht->getFormatted($previous);
 
 		return parent::getJson($array);
@@ -157,7 +157,7 @@ class GesprekBerichtForm extends InlineForm {
 	public function __construct(Gesprek $gesprek, $dataTableId = true) {
 		$field = new RequiredTextareaField('inhoud', null, null);
 		$field->placeholder = 'Bericht';
-		parent::__construct(null, '/gesprekken/zeg/' . $gesprek->gesprek_id, $field, false, false, $dataTableId);
+		parent::__construct(null, '/gesprekken/zeg/' . $gesprek->id, $field, false, false, $dataTableId);
 		$this->css_classes[] = 'SubmitReset';
 		$this->css_classes[] = 'noanim';
 	}
@@ -183,7 +183,7 @@ class GesprekForm extends ModalForm {
 class GesprekDeelnemerToevoegenForm extends ModalForm {
 
 	public function __construct(Gesprek $gesprek) {
-		parent::__construct(null, '/gesprekken/toevoegen/' . $gesprek->gesprek_id, 'Deelnemer toevoegen', true);
+		parent::__construct(null, '/gesprekken/toevoegen/' . $gesprek->id, 'Deelnemer toevoegen', true);
 
 		$fields['to'] = new RequiredLidField('to', null, 'Naam of lidnummer');
 		$fields['to']->blacklist = array_keys(group_by_distinct('uid', $gesprek->getDeelnemers()));

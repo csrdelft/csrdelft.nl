@@ -15,11 +15,6 @@ abstract class AbstractGroep extends PersistentEntity {
 	const leden = 'GroepLedenModel';
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $id;
-	/**
 	 * Naam
 	 * @var string
 	 */
@@ -69,7 +64,6 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'			 => array(T::Integer, false, 'auto_increment'),
 		'naam'			 => array(T::String),
 		'familie'		 => array(T::String),
 		'begin_moment'	 => array(T::DateTime),
@@ -80,11 +74,6 @@ abstract class AbstractGroep extends PersistentEntity {
 		'keuzelijst'	 => array(T::String, true),
 		'maker_uid'		 => array(T::UID)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('id');
 
 	/**
 	 * Is lid van deze groep?

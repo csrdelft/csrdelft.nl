@@ -14,12 +14,12 @@
 
 {foreach from=$categorien item=categorie}
 	<div class="forumcategorie">
-		<h3><a name="{$categorie->categorie_id}">{$categorie->titel}</a></h3>
+		<h3><a name="{$categorie->id}">{$categorie->titel}</a></h3>
 		<div class="forumdelen">
-			{foreach from=$categorie->getForumDelen() item=deel}
+			{foreach from=$categorie->getForumDelen() item=forum}
 				<div class="forumdeel bb-block col-md-2">
-					<h4><a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a></h4>
-					<p class="forumdeel-omschrijving">{$deel->omschrijving}</p>
+					<h4><a href="/forum/deel/{$forum->id}">{$forum->titel}</a></h4>
+					<p class="forumdeel-omschrijving">{$forum->omschrijving}</p>
 				</div>
 			{/foreach}
 		</div>

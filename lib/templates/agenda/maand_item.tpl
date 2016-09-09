@@ -4,8 +4,8 @@
 	{if $item instanceof Groep AND $item->mag(A::Wijzigen)}
 		<a href="{$item->getUrl()}wijzigen" class="beheren" title="Wijzig {htmlspecialchars($item->naam)}">{icon get="bewerken"}</a>
 	{elseif $item instanceof AgendaItem AND $item->magBeheren()}
-		<a href="/agenda/bewerken/{$item->item_id}" class="beheren post popup" title="Dit agenda-item bewerken">{icon get="bewerken"}</a>
-		<a href="/agenda/verwijderen/{$item->item_id}" class="beheren post confirm" title="Dit agenda-item definitief verwijderen">{icon get="verwijderen"}</a>
+		<a href="/agenda/bewerken/{$item->id}" class="beheren post popup" title="Dit agenda-item bewerken">{icon get="bewerken"}</a>
+		<a href="/agenda/verwijderen/{$item->id}" class="beheren post confirm" title="Dit agenda-item definitief verwijderen">{icon get="verwijderen"}</a>
 	{/if}
 	{if $item instanceof Profiel}
 		{icon get="verjaardag"}

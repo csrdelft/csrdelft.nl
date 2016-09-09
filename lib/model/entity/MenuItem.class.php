@@ -12,11 +12,6 @@
 class MenuItem extends PersistentEntity {
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $item_id;
-	/**
 	 * Dit menu-item is een sub-item van
 	 * @var int
 	 */
@@ -61,7 +56,6 @@ class MenuItem extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'item_id'			 => array(T::Integer, false, 'auto_increment'),
 		'parent_id'			 => array(T::Integer),
 		'volgorde'			 => array(T::Integer),
 		'tekst'				 => array(T::String),
@@ -69,11 +63,6 @@ class MenuItem extends PersistentEntity {
 		'rechten_bekijken'	 => array(T::String, true),
 		'zichtbaar'			 => array(T::Boolean)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('item_id');
 	/**
 	 * Database table name
 	 * @var string

@@ -45,6 +45,14 @@ class DynamicEntity extends PersistentEntity {
 		return array_values($this->definition->primary_key);
 	}
 
+	public function getForeignKeys() {
+		return array_keys($this->definition->foreign_keys);
+	}
+
+	public function getIndexes() {
+		return array_keys($this->definition->indexes);
+	}
+
 	public function __set($attribute, $value) {
 		$this->$attribute = $value;
 	}

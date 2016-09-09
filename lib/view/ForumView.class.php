@@ -77,9 +77,9 @@ class ForumDeelView extends ForumView {
 	private $paging;
 	private $belangrijk;
 
-	public function __construct(ForumDeel $deel, $paging = true, $belangrijk = null) {
-		parent::__construct($deel, $deel->titel);
-		$this->paging = ($paging AND ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) > 1);
+	public function __construct(ForumDeel $forum, $paging = true, $belangrijk = null) {
+		parent::__construct($forum, $forum->titel);
+		$this->paging = ($paging AND ForumDradenModel::instance()->getAantalPaginas($forum->id) > 1);
 		$this->belangrijk = ($belangrijk ? '/belangrijk' : '');
 	}
 
@@ -102,12 +102,12 @@ class ForumDeelView extends ForumView {
 		$dropdown .= '>Recent gewijzigd</option>';
 		foreach (ForumModel::instance()->getForumIndelingVoorLid() as $categorie) {
 			$dropdown .= '<optgroup label="' . $categorie->titel . '">';
-			foreach ($categorie->getForumDelen() as $newDeel) {
-				$dropdown .= '<option value="/forum/deel/' . $newDeel->forum_id . '"';
-				if ($newDeel->forum_id === $this->model->forum_id) {
+			foreach ($categorie->getForumDelen() as $newForum) {
+				$dropdown .= '<option value="/forum/deel/' . $newForum->id . '"';
+				if ($newForum->id === $this->model->id) {
 					$dropdown .= ' selected="selected"';
 				}
-				$dropdown .= '>' . $newDeel->titel . '</option>';
+				$dropdown .= '>' . $newForum->titel . '</option>';
 			}
 			$dropdown .= '</optgroup>';
 		}
@@ -128,7 +128,7 @@ class ForumDeelView extends ForumView {
 
 	public function view() {
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
-		$this->smarty->assign('deel', $this->model);
+		$this->smarty->assign('forum', $this->model);
 		$this->smarty->assign('paging', $this->paging);
 		$this->smarty->assign('belangrijk', $this->belangrijk);
 		$this->smarty->assign('post_form_titel', ForumDradenReagerenModel::instance()->getConceptTitel($this->model));
@@ -141,28 +141,28 @@ class ForumDeelView extends ForumView {
 
 class ForumDeelForm extends ModalForm {
 
-	public function __construct(ForumDeel $deel) {
-		parent::__construct($deel, '/forum/beheren/' . $deel->forum_id);
+	public function __construct(ForumDeel $forum) {
+		parent::__construct($forum, '/forum/beheren/' . $forum->id);
 		$this->titel = 'Deelforum beheren';
 		$this->css_classes[] = 'ReloadPage';
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$lijst = array();
 		foreach (ForumModel::instance()->prefetch() as $categorie) {
-			$lijst[$categorie->categorie_id] = $categorie->titel;
+			$lijst[$categorie->id] = $categorie->titel;
 		}
 
-		$fields[] = new SelectField('categorie_id', $deel->categorie_id, 'Categorie', $lijst);
-		$fields[] = new RequiredTextField('titel', $deel->titel, 'Titel');
-		$fields[] = new TextareaField('omschrijving', $deel->omschrijving, 'Omschrijving');
-		$fields[] = new RechtenField('rechten_lezen', $deel->rechten_lezen, 'Lees-rechten');
-		$fields[] = new RechtenField('rechten_posten', $deel->rechten_posten, 'Post-rechten');
-		$fields[] = new RechtenField('rechten_modereren', $deel->rechten_modereren, 'Mod-rechten');
-		$fields[] = new IntField('volgorde', $deel->volgorde, 'Volgorde');
+		$fields[] = new SelectField('categorie_id', $forum->categorie_id, 'Categorie', $lijst);
+		$fields[] = new RequiredTextField('titel', $forum->titel, 'Titel');
+		$fields[] = new TextareaField('omschrijving', $forum->omschrijving, 'Omschrijving');
+		$fields[] = new RechtenField('rechten_lezen', $forum->rechten_lezen, 'Lees-rechten');
+		$fields[] = new RechtenField('rechten_posten', $forum->rechten_posten, 'Post-rechten');
+		$fields[] = new RechtenField('rechten_modereren', $forum->rechten_modereren, 'Mod-rechten');
+		$fields[] = new IntField('volgorde', $forum->volgorde, 'Volgorde');
 
 		$fields['btn'] = new FormDefaultKnoppen();
 
-		$delete = new DeleteKnop('/forum/opheffen/' . $deel->forum_id);
+		$delete = new DeleteKnop('/forum/opheffen/' . $forum->id);
 		$fields['btn']->addKnop($delete, true);
 
 		$this->addFields($fields);
@@ -179,7 +179,7 @@ class ForumDraadView extends ForumView {
 
 	public function __construct(ForumDraad $draad, $paging = true, $statistiek = false) {
 		parent::__construct($draad, $draad->titel);
-		$this->paging = ($paging AND ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1);
+		$this->paging = ($paging AND ForumPostsModel::instance()->getAantalPaginas($draad->id) > 1);
 		$this->statistiek = $statistiek;
 		// cache old value for ongelezen streep
 		$this->ongelezen = $draad->isOngelezen();
@@ -191,15 +191,15 @@ class ForumDraadView extends ForumView {
 	}
 
 	public function getBreadcrumbs() {
-		$deel = $this->model->getForumDeel();
-		return parent::getBreadcrumbs() . ' » <span class="active">' . $deel->getForumCategorie()->titel . '</span> » <a href="/forum/deel/' . $deel->forum_id . '/' . ForumDradenModel::instance()->getPaginaVoorDraad($this->model) . '#' . $this->model->draad_id . '">' . $deel->titel . '</a>';
+		$forum = $this->model->getForumDeel();
+		return parent::getBreadcrumbs() . ' » <span class="active">' . $forum->getForumCategorie()->titel . '</span> » <a href="/forum/deel/' . $forum->id . '/' . ForumDradenModel::instance()->getPaginaVoorDraad($this->model) . '#' . $this->model->id . '">' . $forum->titel . '</a>';
 	}
 
 	public function view() {
 		$this->smarty->assign('zoekform', new ForumZoekenForm());
 		$this->smarty->assign('draad', $this->model);
 		$this->smarty->assign('paging', $this->paging);
-		$this->smarty->assign('post_form_tekst', ForumDradenReagerenModel::instance()->getConcept($this->model->getForumDeel(), $this->model->draad_id));
+		$this->smarty->assign('post_form_tekst', ForumDradenReagerenModel::instance()->getConcept($this->model->getForumDeel(), $this->model->id));
 		$this->smarty->assign('reageren', ForumDradenReagerenModel::instance()->getReagerenVoorDraad($this->model));
 		$this->smarty->assign('categorien', ForumModel::instance()->getForumIndelingVoorLid());
 		$this->smarty->assign('gedeeld_met_opties', ForumDelenModel::instance()->getForumDelenOptiesOmTeDelen($this->model->getForumDeel()));

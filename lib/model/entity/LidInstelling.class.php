@@ -37,14 +37,6 @@ class LidInstelling extends Instelling {
 	protected static $table_name = 'lidinstellingen';
 
 	/**
-	 * Extend the persistent attributes.
-	 */
-	public static function __static() {
-		parent::__static();
-		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
-	}
-
-	/**
 	 * Cast values to defined type.
 	 * 
 	 * @param boolean $attributes Attributes to cast

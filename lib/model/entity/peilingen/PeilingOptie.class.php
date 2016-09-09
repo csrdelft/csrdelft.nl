@@ -8,11 +8,6 @@
 class PeilingOptie extends PersistentEntity {
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-    public $id;
-	/**
 	 * Foreign key
 	 * @var int
 	 */
@@ -35,13 +30,10 @@ class PeilingOptie extends PersistentEntity {
     }
 
     protected static $persistent_attributes = array(
-        'id'        => array(T::Integer, false, 'auto_increment'),
         'peiling_id' => array(T::Integer),
         'optie'     => array(T::String),
         'stemmen'   => array(T::Integer)
     );
-
-    protected static $primary_key = array('id');
 
 	protected static $table_name = 'peiling_optie';
 

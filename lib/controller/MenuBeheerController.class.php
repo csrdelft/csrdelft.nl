@@ -76,7 +76,7 @@ class MenuBeheerController extends AclController {
 		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
 		}
-		$form = new MenuItemForm($item, $this->action, $item->item_id); // fetches POST values itself
+		$form = new MenuItemForm($item, $this->action, $item->id); // fetches POST values itself
 		if ($form->validate()) { // form checks if hidden fields are modified
 			$rowCount = $this->model->update($item);
 			if ($rowCount > 0) {

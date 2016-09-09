@@ -11,11 +11,6 @@
 class ForumPost extends PersistentEntity {
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $post_id;
-	/**
 	 * Deze post is van dit draadje
 	 * @var int
 	 */
@@ -70,7 +65,6 @@ class ForumPost extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'post_id'			 => array(T::Integer, false, 'auto_increment'),
 		'draad_id'			 => array(T::Integer),
 		'uid'				 => array(T::UID),
 		'tekst'				 => array(T::Text),
@@ -81,11 +75,6 @@ class ForumPost extends PersistentEntity {
 		'auteur_ip'			 => array(T::String),
 		'wacht_goedkeuring'	 => array(T::Boolean)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('post_id');
 	/**
 	 * Database table name
 	 * @var string

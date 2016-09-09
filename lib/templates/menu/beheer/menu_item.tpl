@@ -1,28 +1,28 @@
 {*
 	menu_item.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-<li id="menu-item-{$item->item_id}" parentid="{$item->parent_id}" class="menu-item">
+<li id="menu-item-{$item->id}" parentid="{$item->parent_id}" class="menu-item">
 	{if $item->children}
 	<span onclick="$(this).parent().children('ul').slideToggle();$(this).children('span.ico').toggleClass('bullet_toggle_minus bullet_toggle_plus');" style="cursor:pointer;">
 		{icon get='bullet_toggle_minus'}
 	</span>
 	{/if}
 	<span class="lichtgrijs">{$item->volgorde}</span>
-	<a href="/menubeheer/bewerken/{$item->item_id}" class="btn post popup" title="Dit menu-item bewerken">{icon get="bewerken"}</a>
+	<a href="/menubeheer/bewerken/{$item->id}" class="btn post popup" title="Dit menu-item bewerken">{icon get="bewerken"}</a>
 	{if LoginModel::mag('P_ADMIN')}
-		<a href="/menubeheer/toevoegen/{$item->item_id}" class="btn post popup" title="Sub-menu-item toevoegen">{icon get="add"}</a>
+		<a href="/menubeheer/toevoegen/{$item->id}" class="btn post popup" title="Sub-menu-item toevoegen">{icon get="add"}</a>
 	{/if}
-	<a href="/menubeheer/zichtbaar/{$item->item_id}" class="btn post ReloadPage" title="Menu-item is nu {if !$item->zichtbaar}on{/if}zichtbaar">{if $item->zichtbaar}{icon get="eye"}{else}{icon get="shading"}{/if}</a>
+	<a href="/menubeheer/zichtbaar/{$item->id}" class="btn post ReloadPage" title="Menu-item is nu {if !$item->zichtbaar}on{/if}zichtbaar">{if $item->zichtbaar}{icon get="eye"}{else}{icon get="shading"}{/if}</a>
 	<span>{$item->tekst}</span>
 	{if LoginModel::mag('P_ADMIN')}
-		<span class="lichtgrijs">{$item->item_id}</span>
+		<span class="lichtgrijs">{$item->id}</span>
 	{/if}
 	<div class="float-right">
 		{if $item->rechten_bekijken !== 'P_PUBLIC' and $item->rechten_bekijken != LoginModel::getUid()}
 			&nbsp;{icon get="group_key" title="Rechten bekijken:&#013;"|cat:$item->rechten_bekijken}&nbsp;
 		{/if}
 		<a href="{$item->link}">{$item->link}</a>
-		<a href="/menubeheer/verwijderen/{$item->item_id}" class="btn post confirm ReloadPage" title="Dit menu-item definitief verwijderen">{icon get="cross"}</a>
+		<a href="/menubeheer/verwijderen/{$item->id}" class="btn post confirm ReloadPage" title="Dit menu-item definitief verwijderen">{icon get="cross"}</a>
 	</div>
 	{if $item->children}
 		<ul class="menubeheer-tree">

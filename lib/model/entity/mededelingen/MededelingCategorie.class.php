@@ -11,7 +11,6 @@ require_once 'model/entity/mededelingen/MededelingAccess.enum.php';
  */
 class MededelingCategorie extends PersistentEntity {
 
-    public $id;
     public $naam;
     public $prioriteit;
     public $permissie;
@@ -19,15 +18,12 @@ class MededelingCategorie extends PersistentEntity {
     public $beschrijving;
 
     protected static $persistent_attributes = array(
-        'id'		    => array(T::Integer, false, 'auto_increment'),
         'naam'	        => array(T::String),
         'prioriteit'    => array(T::Integer),
         'permissie'     => array(T::Enumeration, false, 'MededelingAccess'),
         'plaatje'       => array(T::String),
         'beschrijving'  => array(T::Text, true)
     );
-
-    protected static $primary_key = array('id');
 
     protected static $table_name = 'mededelingcategorie';
 

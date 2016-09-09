@@ -11,11 +11,6 @@
 class ForumDraad extends PersistentEntity {
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $draad_id;
-	/**
 	 * Forum waaronder dit topic valt
 	 * @var int
 	 */
@@ -130,7 +125,6 @@ class ForumDraad extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'draad_id'				 => array(T::Integer, false, 'auto_increment'),
 		'forum_id'				 => array(T::Integer),
 		'gedeeld_met'			 => array(T::Integer, true),
 		'uid'					 => array(T::UID),
@@ -147,11 +141,6 @@ class ForumDraad extends PersistentEntity {
 		'eerste_post_plakkerig'	 => array(T::Boolean),
 		'pagina_per_post'		 => array(T::Boolean)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('draad_id');
 	/**
 	 * Database table name
 	 * @var string
@@ -282,8 +271,8 @@ class ForumDraad extends PersistentEntity {
 
 	public function getAantalOngelezenPosts() {
 		if (!isset($this->aantal_ongelezen_posts)) {
-			$where = 'draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
-			$params = array($this->draad_id);
+			$where = 'id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
+			$params = array($this->id);
 			$wanneer = $this->getWanneerGelezen();
 			if ($wanneer) {
 				$where .= ' AND laatst_gewijzigd > ?';

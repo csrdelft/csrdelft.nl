@@ -11,11 +11,6 @@
 class ForumDeel extends PersistentEntity {
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $forum_id;
-	/**
 	 * Dit forum valt onder deze categorie
 	 * @var int
 	 */
@@ -60,7 +55,6 @@ class ForumDeel extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'forum_id'			 => array(T::Integer, false, 'auto_increment'),
 		'categorie_id'		 => array(T::Integer),
 		'titel'				 => array(T::String),
 		'omschrijving'		 => array(T::Text),
@@ -69,11 +63,6 @@ class ForumDeel extends PersistentEntity {
 		'rechten_modereren'	 => array(T::String),
 		'volgorde'			 => array(T::Integer)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('forum_id');
 	/**
 	 * Database table name
 	 * @var string

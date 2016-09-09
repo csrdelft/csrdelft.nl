@@ -49,14 +49,6 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 */
 	protected static $table_name = 'activiteiten';
 
-	/**
-	 * Extend the persistent attributes.
-	 */
-	public static function __static() {
-		parent::__static();
-		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
-	}
-
 	public function getUrl() {
 		return '/groepen/activiteiten/' . $this->id . '/';
 	}

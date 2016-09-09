@@ -75,19 +75,19 @@ class MenuModel extends CachedPersistenceModel {
 			case 'Forum':
 				require_once 'model/ForumModel.class.php';
 				foreach (ForumModel::instance()->prefetch() as $categorie) {
-					$item = $this->nieuw($parent->item_id);
-					$item->item_id = - $categorie->categorie_id; // nodig voor getParent()
+					$item = $this->nieuw($parent->id);
+					$item->id = - $categorie->id; // nodig voor getParent()
 					$item->rechten_bekijken = $categorie->rechten_lezen;
-					$item->link = '/forum#' . $categorie->categorie_id;
+					$item->link = '/forum#' . $categorie->id;
 					$item->tekst = $categorie->titel;
 					$parent->children[] = $item;
 					$this->cache($item);
 
-					foreach ($categorie->getForumDelen() as $deel) {
-						$subitem = $this->nieuw($item->item_id);
-						$subitem->rechten_bekijken = $deel->rechten_lezen;
-						$subitem->link = '/forum/deel/' . $deel->forum_id;
-						$subitem->tekst = $deel->titel;
+					foreach ($categorie->getForumDelen() as $forum) {
+						$subitem = $this->nieuw($item->id);
+						$subitem->rechten_bekijken = $forum->rechten_lezen;
+						$subitem->link = '/forum/deel/' . $forum->id;
+						$subitem->tekst = $forum->titel;
 						$item->children[] = $subitem;
 					}
 				}
@@ -100,7 +100,7 @@ class MenuModel extends CachedPersistenceModel {
 				require_once 'model/documenten/DocCategorie.class.php';
 				$overig = false;
 				foreach (DocCategorie::getAll() as $categorie) {
-					$item = $this->nieuw($parent->item_id);
+					$item = $this->nieuw($parent->id);
 					$item->rechten_bekijken = $categorie->getLeesrechten();
 					$item->link = '/documenten/categorie/' . $categorie->getID();
 					$item->tekst = $categorie->getNaam();
@@ -154,7 +154,7 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function getChildren(MenuItem $parent) {
-		return $this->prefetch('parent_id = ?', array($parent->item_id)); // cache for getParent()
+		return $this->prefetch('parent_id = ?', array($parent->id)); // cache for getParent()
 	}
 
 	/**
@@ -207,7 +207,7 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function create(PersistentEntity $entity) {
-		$entity->item_id = (int) parent::create($entity);
+		$entity->id = (int) parent::create($entity);
 		$this->flushCache(true);
 	}
 
@@ -223,7 +223,7 @@ class MenuModel extends CachedPersistenceModel {
 			// give new parent to otherwise future orphans
 			$update = array('parent_id' => $item->parent_id);
 			$where = 'parent_id = :oldid';
-			$rowCount = Database::sqlUpdate($this->getTableName(), $update, $where, array(':oldid' => $item->item_id));
+			$rowCount = Database::sqlUpdate($this->getTableName(), $update, $where, array(':oldid' => $item->id));
 			$this->delete($item);
 			$db->commit();
 			$this->flushCache(true);

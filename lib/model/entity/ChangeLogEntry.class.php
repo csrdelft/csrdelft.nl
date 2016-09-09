@@ -9,11 +9,6 @@
 class ChangeLogEntry extends PersistentEntity {
 
 	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $id;
-	/**
 	 * The moment it changed
 	 * @var string
 	 */
@@ -48,7 +43,6 @@ class ChangeLogEntry extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'		 => array(T::Integer, false, 'auto_increment'),
 		'moment'	 => array(T::DateTime),
 		'subject'	 => array(T::String),
 		'property'	 => array(T::String),
@@ -56,11 +50,6 @@ class ChangeLogEntry extends PersistentEntity {
 		'new_value'	 => array(T::Text, true),
 		'uid'		 => array(T::UID)
 	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('id');
 	/**
 	 * Database table name
 	 * @var string
