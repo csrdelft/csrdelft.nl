@@ -152,7 +152,7 @@ class LoginForm extends Formulier {
 	}
 
 	public function view() {
-		parent::view();
+		parent::view($showMelding = false);
 		?>
 		<ul>
 			<li>
