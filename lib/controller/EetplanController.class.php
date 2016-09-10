@@ -23,7 +23,8 @@ class EetplanController extends AclController {
                 'beheer' => 'P_ADMIN',
                 'woonoorden' => 'P_ADMIN',
                 'novietrelatie' => 'P_ADMIN',
-                'bekendehuizen' => 'P_ADMIN'
+                'bekendehuizen' => 'P_ADMIN',
+                'nieuw' => 'P_ADMIN'
             );
         } else {
             $this->acl = array(
@@ -168,5 +169,17 @@ class EetplanController extends AclController {
     public function json() {
         $eetplan = $this->model->getEetplan();
         $this->view = new JsonResponse($eetplan);
+    }
+
+    public function nieuw() {
+        $avond = filter_input(INPUT_POST, 'avond', FILTER_SANITIZE_STRING);
+
+        $eetplan = $this->model->maakEetplan($avond);
+
+        foreach ($eetplan as $sessie) {
+            $this->model->create($sessie);
+            echo "uid: " . $sessie->uid . "\n";
+            echo "woonoord: " . $sessie->woonoord_id . "\n\n";
+        }
     }
 }

@@ -90,10 +90,21 @@ class EetplanModel extends PersistenceModel {
         // Laad oude dingen in
         // Laad sjaars die elkaar kennen in
 
-        $bekenden = $this->bekendenModel->getBekenden();
-        foreach ($bekenden as $bekende) {
+        $factory = new EetplanFactory();
 
-        }
+        $bekenden = $this->bekendenModel->getBekenden();
+        $factory->setBekenden($bekenden);
+
+        $bezocht = $this->find("uid LIKE ?", array(sprintf("%s%%", $this->lichting)));
+        $factory->setBezocht($bezocht);
+
+        $novieten = ProfielModel::instance()->find("uid LIKE ?", array(sprintf("%s%%", $this->lichting)))->fetchAll();
+        $factory->setNovieten($novieten);
+
+        $huizen = WoonoordenModel::instance()->find("eetplan = true")->fetchAll();
+        $factory->setHuizen($huizen);
+
+        return $factory->genereer($avond);
     }
 
     /**

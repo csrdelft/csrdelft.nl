@@ -85,7 +85,7 @@ class EetplanFactory {
     /**
      * @param EetplanBekenden[] $bekenden
      */
-    public function setBekenden(array $bekenden) {
+    public function setBekenden($bekenden) {
         $this->bekenden = array();
         foreach ($bekenden as $eetplanBekenden) {
             $noviet1 = $eetplanBekenden->uid1;
@@ -98,7 +98,7 @@ class EetplanFactory {
     /**
      * @param Eetplan[] $bezochten
      */
-    public function setBezocht(array $bezochten) {
+    public function setBezocht($bezochten) {
         $this->bezocht = array();
         $this->bezocht_ah = array();
         $this->bezocht_sh = array();
@@ -117,14 +117,14 @@ class EetplanFactory {
     /**
      * @param Profiel[] $novieten
      */
-    public function setNovieten(array $novieten) {
+    public function setNovieten($novieten) {
         $this->novieten = $novieten;
     }
 
     /**
      * @param Woonoord[] $huizen
      */
-    public function setHuizen(array $huizen) {
+    public function setHuizen($huizen) {
         $this->huizen = $huizen;
     }
 
@@ -142,13 +142,15 @@ class EetplanFactory {
         $eetplan = array();
 
         $s = count($this->novieten);
-        $h = count($this->huizen);
+        $h = count($this->huizen) - 1;
 
         if ($random == 0) {
             $ih = 1;
         } else {
             $ih = rand(1, $h);
         }
+
+        $this->bezocht_ah[$avond] = array();
 
         foreach ($this->novieten as $noviet) {
             $uid = $noviet->uid;
@@ -157,6 +159,8 @@ class EetplanFactory {
                 $this->ahs[$avond][$ih] = array();
             if (!isset($this->bekenden[$uid]))
                 $this->bekenden[$uid] = array();
+            if (!isset($this->bezocht_ah[$avond][$ih]))
+                $this->bezocht_ah[$avond][$ih] = array();
             # we hebben nu een avond en een sjaars, nu nog een huis voor m vinden...
             # zolang
             # - deze sjaars dit huis al bezocht heeft, of
@@ -204,7 +208,7 @@ class EetplanFactory {
             $nieuweetplan = new Eetplan();
             $nieuweetplan->avond = $avond;
             $nieuweetplan->uid = $uid;
-            $nieuweetplan->woonoord_id = $this->huizen[$ih];
+            $nieuweetplan->woonoord_id = $this->huizen[$ih]->id;
 
             $eetplan[] = $nieuweetplan;
 
