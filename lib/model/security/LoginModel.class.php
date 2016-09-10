@@ -244,14 +244,14 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * 
 	 * @param string $user
 	 * @param string $pass_plain
-	 * @param boolean $wachten
+	 * @param boolean $evtWachten
 	 * @param RememberLogin $remember
 	 * @param boolean $lockIP
 	 * @param boolean $tokenAuthenticated
 	 * @param string $expire
 	 * @return boolean
 	 */
-	public function login($user, $pass_plain, $wachten = true, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
+	public function login($user, $pass_plain, $evtWachten = true, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 
@@ -279,8 +279,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		elseif ($tokenAuthenticated) {
 			$_SESSION['_authByToken'] = true;
 		} else {
-
-			if ($wachten) {
+			// Moet eventueel wachten?
+			if ($evtWachten) {
 				// Check timeout
 				$timeout = AccountModel::instance()->moetWachten($account);
 				if ($timeout > 0) {

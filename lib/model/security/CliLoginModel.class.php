@@ -46,7 +46,7 @@ class CliLoginModel extends LoginModel {
 		return false;
 	}
 
-	public function login($user, $pass_plain, $wachten = true, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
+	public function login($user, $pass_plain, $evtWachten = true, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 
