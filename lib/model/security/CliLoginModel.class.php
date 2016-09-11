@@ -23,6 +23,7 @@ class CliLoginModel extends LoginModel {
 	}
 
 	protected function __construct() {
+	    parent::__static();
 		parent::__construct();
 		if (!$this->validate()) {
 			die('access denied');
