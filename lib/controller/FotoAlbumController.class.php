@@ -57,7 +57,7 @@ class FotoAlbumController extends AclController {
 		}
 		$album = null;
 		if (sizeof($path) === 2) {
-			$album = $this->model->getFotoAlbum($path[2]);
+			$album = $this->model->getFotoAlbum(end($path));
 		}
 		if (!$album) {
 			$path = PICS_PATH . urldecode(implode('/', $path));

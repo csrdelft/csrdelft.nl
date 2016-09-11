@@ -487,7 +487,7 @@
 							}
 							var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
 							$.post('/fotoalbum/verwijderen' + dirname(url), {
-								foto: basename(url)
+								foto: decodeURI(basename(url))
 							}, page_reload);
 						});
 					}
