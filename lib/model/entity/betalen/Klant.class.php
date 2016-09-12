@@ -20,18 +20,30 @@ class Klant extends PersistentEntity {
 	 */
 	public $uid;
 	/**
-	 * Saldo in centen
+	 * CiviSaldo in centen
 	 * @var int
 	 */
-	public $saldo;
+	public $civi_saldo;
+	/**
+	 * SoccieSaldo in centen
+	 * @var int
+	 */
+	public $soccie_saldo;
+	/**
+	 * MaalcieSaldo in centen
+	 * @var int
+	 */
+	public $maalcie_saldo;
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'klant_id'	 => array(T::Integer, false, 'auto_increment'),
-		'uid'		 => array(T::UID, true),
-		'saldo'		 => array(T::Integer)
+		'klant_id'		 => array(T::Integer, false, 'auto_increment'),
+		'uid'			 => array(T::UID, true),
+		'civi_saldo'	 => array(T::Integer, true),
+		'soccie_saldo'	 => array(T::Integer, true),
+		'maalcie_saldo'	 => array(T::Integer, true)
 	);
 	/**
 	 * Database primary key
