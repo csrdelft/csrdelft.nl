@@ -14,6 +14,12 @@ class Transactie extends PersistentEntity {
 	 */
 	public $transactie_id;
 	/**
+	 * Link transactie ID
+	 * Foreign key
+	 * @var int
+	 */
+	public $link_transactie_id;
+	/**
 	 * Factuur ID
 	 * Foreign key
 	 * @var int
@@ -55,6 +61,7 @@ class Transactie extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'transactie_id'		 => array(T::Integer, false, 'auto_increment'),
+		'link_transactie_id' => array(T::Integer, true),
 		'factuur_id'		 => array(T::Integer),
 		'moment'			 => array(T::DateTime),
 		'betalingsmethode'	 => array(T::Enumeration, false, 'BetalingsMethode'),
