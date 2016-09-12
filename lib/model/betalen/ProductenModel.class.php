@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ProducetenModel.class.php
+ * ProductenModel.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
