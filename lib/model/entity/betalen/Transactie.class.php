@@ -74,7 +74,7 @@ class Transactie extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('transactie');
+	protected static $primary_key = array('transactie_id');
 	/**
 	 * Database table name
 	 * @var string
