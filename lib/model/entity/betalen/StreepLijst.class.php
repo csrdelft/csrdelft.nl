@@ -19,12 +19,19 @@ class StreepLijst extends PersistentEntity {
 	 */
 	public $titel;
 	/**
+	 * ProductPrijsLijst ID
+	 * Foreign key
+	 * @var int
+	 */
+	public $prijslijst_id;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'streeplijst_id' => array(T::Integer, false, 'auto_increment'),
-		'titel'			 => array(T::String)
+		'titel'			 => array(T::String),
+		'prijslijst_id'	 => array(T::Integer, true)
 	);
 	/**
 	 * Database primary key

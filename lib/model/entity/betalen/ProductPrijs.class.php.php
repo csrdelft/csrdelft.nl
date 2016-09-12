@@ -18,7 +18,7 @@ class ProductPrijs extends PersistentEntity {
 	 * Foreign key
 	 * @var int
 	 */
-	public $lijst_id;
+	public $prijslijst_id;
 	/**
 	 * Product ID
 	 * Foreign key
@@ -46,7 +46,7 @@ class ProductPrijs extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'prijs_id'		 => array(T::Integer, false, 'auto_increment'),
-		'lijst_id'		 => array(T::Integer),
+		'prijslijst_id'	 => array(T::Integer),
 		'product_id'	 => array(T::Integer),
 		'prijs'			 => array(T::Integer),
 		'begin_moment'	 => array(T::DateTime),
