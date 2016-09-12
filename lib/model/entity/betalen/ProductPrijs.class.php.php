@@ -14,7 +14,7 @@ class ProductPrijs extends PersistentEntity {
 	 */
 	public $prijs_id;
 	/**
-	 * PrijsLijst ID
+	 * ProductPrijsLijst ID
 	 * Foreign key
 	 * @var int
 	 */
