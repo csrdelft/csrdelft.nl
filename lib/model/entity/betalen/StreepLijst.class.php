@@ -25,13 +25,26 @@ class StreepLijst extends PersistentEntity {
 	 */
 	public $prijslijst_id;
 	/**
+	 * Beheer-rechten
+	 * @var string
+	 */
+	public $beheer_rechten;
+	/**
+	 * Gemaakt door lidnummer
+	 * Foreign key
+	 * @var string
+	 */
+	public $gemaakt_uid;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'streeplijst_id' => array(T::Integer, false, 'auto_increment'),
 		'titel'			 => array(T::String),
-		'prijslijst_id'	 => array(T::Integer, true)
+		'prijslijst_id'	 => array(T::Integer, true),
+		'beheer_rechten' => array(T::String),
+		'gemaakt_uid'	 => array(T::UID)
 	);
 	/**
 	 * Database primary key
