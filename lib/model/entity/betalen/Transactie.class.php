@@ -20,6 +20,11 @@ class Transactie extends PersistentEntity {
 	 */
 	public $factuur_id;
 	/**
+	 * DateTime moment
+	 * @var string
+	 */
+	public $moment;
+	/**
 	 * BetalingsMethode
 	 * @var string
 	 */
@@ -51,6 +56,7 @@ class Transactie extends PersistentEntity {
 	protected static $persistent_attributes = array(
 		'transactie_id'		 => array(T::Integer, false, 'auto_increment'),
 		'factuur_id'		 => array(T::Integer),
+		'moment'			 => array(T::DateTime),
 		'betalingsmethode'	 => array(T::Enumeration, false, 'BetalingsMethode'),
 		'bedrag'			 => array(T::Integer),
 		'ontvangst_iban'	 => array(T::String, true),
