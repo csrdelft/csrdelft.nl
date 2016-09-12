@@ -14,17 +14,17 @@ class ProductPrijsLijst extends PersistentEntity {
 	 */
 	public $lijst_id;
 	/**
-	 * Naam
+	 * Titel
 	 * @var string
 	 */
-	public $naam;
+	public $titel;
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'lijst_id'	 => array(T::Integer, false, 'auto_increment'),
-		'naam'		 => array(T::String)
+		'titel'		 => array(T::String)
 	);
 	/**
 	 * Database primary key
