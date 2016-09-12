@@ -30,7 +30,7 @@ class Factuur extends PersistentEntity {
 	 */
 	public $toelichting;
 	/**
-	 * IBAN rekeningnummer ontvanger
+	 * IBAN rekening ontvanger
 	 * @var string
 	 */
 	public $ontvangst_iban;
@@ -58,10 +58,10 @@ class Factuur extends PersistentEntity {
 		'klant_id'			 => array(T::Integer),
 		'titel'				 => array(T::String),
 		'toelichting'		 => array(T::Text, true),
-		'ontvangst_iban'	 => array(T::String),
+		'ontvangst_iban'	 => array(T::String, true),
 		'termijnen'			 => array(T::Integer),
-		'doodlijn_moment'	 => array(T::DateTime),
-		'voldaan_moment'	 => array(T::DateTime)
+		'doodlijn_moment'	 => array(T::DateTime, true),
+		'voldaan_moment'	 => array(T::DateTime, true)
 	);
 	/**
 	 * Database primary key
