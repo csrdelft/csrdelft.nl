@@ -20,12 +20,6 @@ class Product extends PersistentEntity {
 	 */
 	public $categorie_id;
 	/**
-	 * Leverancier ID
-	 * Foreign key
-	 * @var int
-	 */
-	public $leverancier_id;
-	/**
 	 * Naam
 	 * @var string
 	 */
@@ -39,30 +33,23 @@ class Product extends PersistentEntity {
 	 * Voorraad aantal
 	 * @var int
 	 */
-	public $voorraad;
+	public $aantal_voorraad;
 	/**
 	 * DateTime uitverkocht
 	 * @var string
 	 */
 	public $uitverkocht_moment;
 	/**
-	 * DateTime bevoorrading
-	 * @var string
-	 */
-	public $bevoorrading_moment;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'product_id'			 => array(T::Integer, false, 'auto_increment'),
-		'categorie_id'			 => array(T::Integer),
-		'leverancier_id'		 => array(T::Integer, true),
-		'naam'					 => array(T::String),
-		'beschrijving'			 => array(T::Text, true),
-		'voorraad'				 => array(T::Integer, true),
-		'uitverkocht_moment'	 => array(T::DateTime, true),
-		'bevoorrading_moment'	 => array(T::DateTime, true)
+		'product_id'		 => array(T::Integer, false, 'auto_increment'),
+		'categorie_id'		 => array(T::Integer),
+		'naam'				 => array(T::String),
+		'beschrijving'		 => array(T::Text, true),
+		'aantal_voorraad'	 => array(T::Integer, true),
+		'uitverkocht_moment' => array(T::DateTime, true)
 	);
 	/**
 	 * Database primary key
