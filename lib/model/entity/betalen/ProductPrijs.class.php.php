@@ -49,7 +49,7 @@ class ProductPrijs extends PersistentEntity {
 		'lijst_id'		 => array(T::Integer),
 		'product_id'	 => array(T::Integer),
 		'prijs'			 => array(T::Integer),
-		'begin_moment'	 => array(T::DateTime, true),
+		'begin_moment'	 => array(T::DateTime),
 		'eind_moment'	 => array(T::DateTime, true)
 	);
 	/**
