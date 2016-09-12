@@ -14,9 +14,15 @@ class Product extends PersistentEntity {
 	 */
 	public $product_id;
 	/**
+	 * ProductCategorie ID
+	 * Foreign key
+	 * @var int
+	 */
+	public $categorie_id;
+	/**
 	 * Leverancier ID
 	 * Foreign key
-	 * @var string
+	 * @var int
 	 */
 	public $leverancier_id;
 	/**
@@ -50,6 +56,7 @@ class Product extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'product_id'			 => array(T::Integer, false, 'auto_increment'),
+		'categorie_id'			 => array(T::Integer),
 		'leverancier_id'		 => array(T::Integer, true),
 		'naam'					 => array(T::String),
 		'beschrijving'			 => array(T::Text, true),
