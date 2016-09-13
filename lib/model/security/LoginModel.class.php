@@ -57,8 +57,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		return ProfielModel::get(static::getUid());
 	}
 
-	public static function mag($permission, $allowPrivateUrl = false) {
-		return AccessModel::mag(static::getAccount(), $permission, $allowPrivateUrl);
+	public static function mag($permission, array $allowedAuthenticationMethods = null) {
+		return AccessModel::mag(static::getAccount(), $permission, $allowedAuthenticationMethods);
 	}
 
 	protected function __construct() {
@@ -280,11 +280,11 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// Autologin
 		if ($remember) {
-			$_SESSION['_authByCookie'] = true;
+			$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
 		}
 		// Previously(!) verified private token or OneTimeToken
 		elseif ($alreadyAuthenticatedByUrlToken) {
-			$_SESSION['_authByToken'] = true;
+			$_SESSION['_authenticationMethod'] = AuthenticationMethod::url_token;
 		} else {
 			// Moet eventueel wachten?
 			if ($evtWachten) {
@@ -299,6 +299,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			// Check password
 			if (AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
 				AccountModel::instance()->successfulLoginAttempt($account);
+				$_SESSION['_authenticationMethod'] = AuthenticationMethod::password_login;
 			}
 			// Wrong password
 			else {
@@ -342,6 +343,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			$session->user_agent = $user_agent;
 			$session->ip = $remote_addr;
 			$session->lock_ip = $lockIP; // sessie koppelen aan ip?
+			$session->authentication_method = $_SESSION['_authenticationMethod'];
 			if ($this->exists($session)) {
 				$this->update($session);
 			} else {
@@ -429,12 +431,24 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	/**
-	 * Is de huidige gebruiker is geauthenticeerd door middel van een token in de url?
-	 * Permissies worden hierdoor beperkt voor de veiligheid.
+	 * Indien de huidige gebruiker is geauthenticeerd door middel van een token in de url
+	 * worden Permissies hierdoor beperkt voor de veiligheid.
 	 * @see AccessModel::mag()
+	 * 
+	 * @return AuthenticationMethod|null
 	 */
-	public function isAuthenticatedByToken() {
-		return isset($_SESSION['_authByToken']);
+	public function getAuthenticationMethod() {
+		if (!isset($_SESSION['_authenticationMethod'])) {
+			return null;
+		}
+		$method = $_SESSION['_authenticationMethod'];
+		if ($method === AuthenticationMethod::password_login) {
+			$session = $this->getCurrentSession();
+			if ($session AND $session->isRecent()) {
+				return AuthenticationMethod::recent_password_login;
+			}
+		}
+		return $method;
 	}
 
 	public function isPauper() {

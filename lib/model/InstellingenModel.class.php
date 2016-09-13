@@ -34,6 +34,7 @@ class Instellingen extends CachedPersistenceModel {
 		'beveiliging'	 => array(
 			'remember_login_seconds'					 => '2592000',
 			'session_lifetime_seconds'					 => '1440',
+			'recent_login_seconds'						 => '600',
 			'one_time_token_expire_after'				 => '+1 hour',
 			'wachtwoorden_verlopen_ouder_dan'			 => '-1 year',
 			'wachtwoorden_verlopen_waarschuwing_vooraf'	 => '-2 weeks'

@@ -32,6 +32,11 @@ class AccessModel extends CachedPersistenceModel {
 	 * @var array
 	 */
 	private static $ledengegevens = array('P_LEDEN_READ', 'P_OUDLEDEN_READ', 'P_LEDEN_MOD');
+	/**
+	 * Standaard toegestane authenticatie methoden
+	 * @var array
+	 */
+	private static $defaultAllowedAuthenticationMethods = array(AuthenticationMethod::cookie_token, AuthenticationMethod::password_login, AuthenticationMethod::recent_password_login, AuthenticationMethod::password_login_and_one_time_token);
 
 	public static function getSubject($environment, $action, $resource) {
 		$ac = self::instance()->retrieveByPrimaryKey(array($environment, $action, $resource));
@@ -44,8 +49,7 @@ class AccessModel extends CachedPersistenceModel {
 	/**
 	 * @param Account $subject Het lid dat de gevraagde permissies zou moeten bezitten.
 	 * @param string $permission Gevraagde permissie(s).
-	 * @param boolean $allowPrivateUrl Of het subject geauthenticeerd mag zijn door een token,
-	 * 										anders werkt het alsof gebruiker x999 is.
+	 * @param array $allowedAuthenticationMethods Bij niet toegestane methode doen alsof gebruiker x999 is.
 	 * 
 	 * Met deze functies kan op één of meerdere permissies worden getest,
 	 * onderling gescheiden door komma's. Als een lid één van de
@@ -73,17 +77,19 @@ class AccessModel extends CachedPersistenceModel {
 	 *
 	 * @return bool Of $subject $permission heeft.
 	 */
-	public static function mag(Account $subject, $permission, $allowPrivateUrl = false) {
+	public static function mag(Account $subject, $permission, array $allowedAuthenticationMethods = null) {
 
-		/**
-		 * Als voor het ingelogde lid een permissie gevraagd wordt
-		 * en deze sessie is ingelogd per token: doe extra check of dat mag.
-		 * Alleen als inloggen per token ($allowPrivateUrl) toegestaan is
-		 * testen we met de permissies van het per token ingelogde account,
-		 * anders met niet-ingelogd.
-		 */
-		if (LoginModel::instance()->isAuthenticatedByToken() AND $subject->uid == LoginModel::getUid() AND ! $allowPrivateUrl) {
-			$subject = AccountModel::get('x999');
+		// Als voor het ingelogde lid een permissie gevraagd wordt
+		if ($subject->uid == LoginModel::getUid()) {
+			// Controlleer hoe de gebruiker ge-authenticeerd is
+			$method = LoginModel::instance()->getAuthenticationMethod();
+			if ($allowedAuthenticationMethods == null) {
+				$allowedAuthenticationMethods = self::$defaultAllowedAuthenticationMethods;
+			}
+			// Als de methode niet toegestaan is testen we met de permissies van niet-ingelogd
+			if (!in_array($method, $allowedAuthenticationMethods)) {
+				$subject = AccountModel::get('x999');
+			}
 		}
 
 		// case insensitive

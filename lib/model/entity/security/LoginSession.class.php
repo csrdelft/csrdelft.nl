@@ -74,4 +74,12 @@ class LoginSession extends PersistentEntity {
 	 */
 	protected static $table_name = 'login_sessions';
 
+	public function isRecent() {
+		$recent = (int) Instellingen::get('beveiliging', 'recent_login_seconds');
+		if (time() - strtotime($this->login_moment) < $recent) {
+			return true;
+		}
+		return false;
+	}
+
 }

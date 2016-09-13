@@ -97,6 +97,7 @@ class CliLoginModel extends LoginModel {
 		$session->user_agent = MODE;
 		$session->ip = '';
 		$session->lock_ip = true; // sessie koppelen aan ip?
+		$session->authentication_method = $this->getAuthenticationMethod();
 		if ($this->exists($session)) {
 			$this->update($session);
 		} else {
@@ -114,13 +115,8 @@ class CliLoginModel extends LoginModel {
 		return false;
 	}
 
-	public function isLoggedIn($allowPrivateUrl = false) {
-		$account = static::getAccount();
-		return $account AND AccessModel::mag($account, 'P_ADMIN');
-	}
-
-	public function isAuthenticatedByToken() {
-		return false;
+	public function getAuthenticationMethod() {
+		return AuthenticationMethod::password_login;
 	}
 
 	public function isPauper() {
