@@ -247,11 +247,11 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @param boolean $evtWachten
 	 * @param RememberLogin $remember
 	 * @param boolean $lockIP
-	 * @param boolean $tokenAuthenticated
+	 * @param boolean $alreadyAuthenticatedByUrlToken
 	 * @param string $expire
 	 * @return boolean
 	 */
-	public function login($user, $pass_plain, $evtWachten = true, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
+	public function login($user, $pass_plain, $evtWachten = true, RememberLogin $remember = null, $lockIP = false, $alreadyAuthenticatedByUrlToken = false, $expire = null) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 
@@ -276,7 +276,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			$_SESSION['_authByCookie'] = true;
 		}
 		// Previously(!) verified private token or OneTimeToken
-		elseif ($tokenAuthenticated) {
+		elseif ($alreadyAuthenticatedByUrlToken) {
 			$_SESSION['_authByToken'] = true;
 		} else {
 			// Moet eventueel wachten?
@@ -343,7 +343,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 			if ($remember) {
 				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#lidinstellingenform-tab-Beveiliging" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
-			} elseif (!$tokenAuthenticated) {
+			} elseif (!$alreadyAuthenticatedByUrlToken) {
 
 				// Controleer actief wachtwoordbeleid
 				$_POST['checkpw_new'] = $pass_plain;
