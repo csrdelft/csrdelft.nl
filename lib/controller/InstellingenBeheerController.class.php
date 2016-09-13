@@ -12,7 +12,7 @@ class InstellingenBeheerController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, Instellingen::instance());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'module' => 'P_LOGGED_IN'
 			);

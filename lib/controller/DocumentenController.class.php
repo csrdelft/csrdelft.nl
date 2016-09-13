@@ -5,15 +5,16 @@ require_once 'model/documenten/DocCategorie.class.php';
 require_once 'view/DocumentenView.class.php';
 
 /**
- * documentcontroller.class.php
+ * DocumentenController.class.php
  * 
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  *
  */
-class DocumentenController extends Controller {
+class DocumentenController extends AclController {
 
-	public $document;
-	public $baseurl;
+	const baseurl = '/documenten/';
+
+	public $document = null;
 	protected $valid = true;
 	protected $errors = '';
 
@@ -24,41 +25,27 @@ class DocumentenController extends Controller {
 	 */
 	public function __construct($query) {
 		parent::__construct($query, null);
-		$this->baseurl = '/documenten/';
-		//wat zullen we eens gaan doen? Hier bepalen we welke actie we gaan uitvoeren
-		//en of de ingelogde persoon dat mag.
-		if (LoginModel::mag('P_DOCS_READ')) {
-			if ($this->hasParam(2)) {
-				$this->action = $this->getParam(2);
-			} else {
-				$this->action = 'recenttonen';
-			}
-			//niet alle acties mag iedereen doen, hier whitelisten voor de gebruikers
-			//zonder P_DOCS_MOD, en gebruikers met, zodat bij niet bestaande acties
-			//netjes gewoon het documentoverzicht getoond wordt.
-			$allow = array('recenttonen', 'bekijken', 'download', 'categorie', 'zoeken');
-			if (LoginModel::mag('P_DOCS_MOD')) {
-				$allow = array_merge($allow, array('bewerken', 'toevoegen', 'verwijderen'));
-			}
-			if (!in_array($this->action, $allow)) {
-				$this->action = 'recenttonen';
-			}
-		} else {
-			$this->action = 'geentoegang';
-		}
+		$this->acl = array(
+			'recenttonen'	=> 'P_DOCS_READ',
+			'bekijken'		=> 'P_DOCS_READ',
+			'download'		=> 'P_DOCS_READ',
+			'categorie'		=> 'P_DOCS_READ',
+			'zoeken'		=> 'P_DOCS_READ',
+			'bewerken'		=> 'P_DOCS_MOD',
+			'toevoegen'		=> 'P_DOCS_MOD',
+			'verwijderen'	=> 'P_DOCS_MOD'
+		);
 	}
 
 	public function performAction(array $args = array()) {
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
+		} else {
+			$this->action = 'recenttonen';
+		}
 		parent::performAction($args);
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('documenten');
-	}
-
-	/**
-	 * Wordt op diverse plekken geregeld.
-	 */
-	protected function mag($action, array $args) {
-		return true;
 	}
 
 	public function addError($error) {
@@ -188,7 +175,7 @@ class DocumentenController extends Controller {
 		} else {
 			$formulier->titel = 'Document bewerken';
 		}
-		if ($this->isPosted() AND $formulier->validate()) {
+		if ($this->getMethod() == 'POST' AND $formulier->validate()) {
 			$this->document->setNaam($fields['naam']->getValue());
 			$this->document->setCatID($fields['catID']->getValue());
 			// Als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.

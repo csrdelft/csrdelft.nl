@@ -106,7 +106,7 @@ class AbstractGroepenController extends Controller {
 			case 'overzicht':
 			case 'bekijken':
 			case 'zoeken':
-				return !$this->isPosted();
+				return $this->getMethod() == 'GET';
 
 			case 'voorbeeld':
 			case 'opvolging':
@@ -124,7 +124,7 @@ class AbstractGroepenController extends Controller {
 			case 'aanmelden':
 			case 'bewerken':
 			case 'afmelden':
-				return $this->isPosted();
+				return $this->getMethod() == 'POST';
 
 			default:
 				return false;
@@ -222,7 +222,7 @@ class AbstractGroepenController extends Controller {
 	}
 
 	public function beheren($soort = null) {
-		if ($this->isPosted()) {
+		if ($this->getMethod() == 'POST') {
 			if ($soort) {
 				$groepen = $this->model->find('soort = ?', array($soort));
 			} else {
@@ -294,7 +294,7 @@ class AbstractGroepenController extends Controller {
 			}
 		}
 		$form = new GroepForm($groep, $this->model->getUrl() . $this->action, A::Aanmaken); // checks rechten aanmaken
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->beheren();
 			$form->setDataTableId($this->view->getBody()->getDataTableId());
 			$this->view->modal = $form;
@@ -323,7 +323,7 @@ class AbstractGroepenController extends Controller {
 				$this->geentoegang();
 			}
 			$form = new GroepForm($groep, $groep->getUrl() . $this->action, A::Wijzigen); // checks rechten wijzigen
-			if (!$this->isPosted()) {
+			if ($this->getMethod() == 'GET') {
 				$this->beheren();
 				$this->view->getBody()->filter = $groep->naam;
 				$form->setDataTableId($this->view->getBody()->getDataTableId());
@@ -485,7 +485,7 @@ class AbstractGroepenController extends Controller {
 			$this->geentoegang();
 		}
 		$leden = $groep::leden;
-		if ($this->isPosted()) {
+		if ($this->getMethod() == 'POST') {
 			$this->view = new GroepLedenData($leden::instance()->getLedenVoorGroep($groep));
 		} else {
 			$this->view = new GroepLedenTable($leden::instance(), $groep);

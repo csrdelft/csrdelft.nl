@@ -12,7 +12,7 @@ class GeoLocationController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, GeoLocationModel::instance());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				//'map' => 'P_LEDEN_READ'
 			);

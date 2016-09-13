@@ -13,7 +13,7 @@ class BeheerFunctiesController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, FunctiesModel::instance());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD'
 			);

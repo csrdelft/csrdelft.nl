@@ -13,7 +13,7 @@ class RechtenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, AccessModel::instance());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'bekijken' => 'P_LOGGED_IN'
 			);
@@ -35,7 +35,7 @@ class RechtenController extends AclController {
 	}
 
 	public function bekijken($environment = null, $resource = null) {
-		if ($this->isPosted()) {
+		if ($this->getMethod() == 'POST') {
 			$acl = $this->model->getTree($environment, $resource);
 			$this->view = new RechtenData($acl);
 		} else {

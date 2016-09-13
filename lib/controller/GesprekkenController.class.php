@@ -14,7 +14,7 @@ class GesprekkenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, GesprekkenModel::instance());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'web' => 'P_LOGGED_IN'
 			);
