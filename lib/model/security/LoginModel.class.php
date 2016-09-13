@@ -70,10 +70,17 @@ class LoginModel extends PersistenceModel implements Validator {
 			return;
 		}
 		/**
-		 * Sessie valideren: is er iemand ingelogd en zo ja, is alles ok?
+		 * Sessie valideren: is er iemand ingelogd en is alles OK?
+		 * Zo ja, sessie verlengen.
 		 * Zo nee, dan public gebruiker er in gooien.
 		 */
-		if (!$this->validate()) {
+		if ($this->validate()) {
+			// Public gebruiker heeft geen DB sessie
+			if ($_SESSION['_uid'] != 'x999') {
+				$session = $this->getCurrentSession();
+				$session->expire = getDateTime(time() + getSessionMaxLifeTime());
+			}
+		} else {
 			// Subject assignment:
 			$_SESSION['_uid'] = 'x999';
 
@@ -116,7 +123,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			return true;
 		}
 		// Controleer of sessie niet gesloten is door gebruiker
-		$session = $this->retrieveByPrimaryKey(array(hash('sha512', session_id())));
+		$session = $this->getCurrentSession();
 		if (!$session) {
 			return false;
 		}
@@ -331,7 +338,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			$session->session_hash = hash('sha512', session_id());
 			$session->uid = $account->uid;
 			$session->login_moment = getDateTime();
-			$session->expire = $expire ? $expire : getDateTime(time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
+			$session->expire = $expire ? $expire : getDateTime(time() + getSessionMaxLifeTime());
 			$session->user_agent = $user_agent;
 			$session->ip = $remote_addr;
 			$session->lock_ip = $lockIP; // sessie koppelen aan ip?
@@ -417,12 +424,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		return LoginModel::mag('P_ADMIN') AND ! $this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, 'P_LOGGED_IN');
 	}
 
-	public function isLoggedIn($allowPrivateUrl = false) {
-		if (!isset($_SESSION['_uid'])) {
-			return false;
-		}
-		$account = static::getAccount();
-		return $account AND AccessModel::mag($account, 'P_LOGGED_IN', $allowPrivateUrl);
+	protected function getCurrentSession() {
+		return $this->retrieveByPrimaryKey(array(hash('sha512', session_id())));
 	}
 
 	/**
