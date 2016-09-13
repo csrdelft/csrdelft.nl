@@ -14,12 +14,6 @@ class Transactie extends PersistentEntity {
 	 */
 	public $transactie_id;
 	/**
-	 * Link transactie ID
-	 * Foreign key
-	 * @var int
-	 */
-	public $link_transactie_id;
-	/**
 	 * Factuur ID
 	 * Foreign key
 	 * @var int
@@ -56,19 +50,25 @@ class Transactie extends PersistentEntity {
 	 */
 	public $geslaagd;
 	/**
+	 * Link transactie ID
+	 * Foreign key
+	 * @var int
+	 */
+	public $link_transactie_id;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'transactie_id'		 => array(T::Integer, false, 'auto_increment'),
-		'link_transactie_id' => array(T::Integer, true),
 		'factuur_id'		 => array(T::Integer),
 		'moment'			 => array(T::DateTime),
 		'betalingsmethode'	 => array(T::Enumeration, false, 'BetalingsMethode'),
 		'bedrag'			 => array(T::Integer),
 		'ontvangst_iban'	 => array(T::String, true),
 		'betaler_iban'		 => array(T::String, true),
-		'geslaagd'			 => array(T::Boolean, true)
+		'geslaagd'			 => array(T::Boolean, true),
+		'link_transactie_id' => array(T::Integer, true)
 	);
 	/**
 	 * Database primary key

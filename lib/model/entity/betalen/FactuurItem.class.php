@@ -25,15 +25,15 @@ class FactuurItem extends PersistentEntity {
 	 */
 	public $titel;
 	/**
-	 * Aantal stuks
-	 * @var int
-	 */
-	public $aantal;
-	/**
 	 * Prijs per stuk in centen
 	 * @var string
 	 */
 	public $prijs_per_stuk;
+	/**
+	 * Aantal stuks
+	 * @var int
+	 */
+	public $aantal;
 	/**
 	 * Database table columns
 	 * @var array
@@ -42,8 +42,8 @@ class FactuurItem extends PersistentEntity {
 		'item_id'		 => array(T::Integer, false, 'auto_increment'),
 		'factuur_id'	 => array(T::Integer),
 		'titel'			 => array(T::String),
-		'aantal'		 => array(T::Integer),
-		'prijs_per_stuk' => array(T::Integer)
+		'prijs_per_stuk' => array(T::Integer),
+		'aantal'		 => array(T::Integer)
 	);
 	/**
 	 * Database primary key

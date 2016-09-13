@@ -14,6 +14,11 @@ class Klant extends PersistentEntity {
 	 */
 	public $klant_id;
 	/**
+	 * Naam
+	 * @var string
+	 */
+	public $naam;
+	/**
 	 * Lidnummer
 	 * Foreign key
 	 * @var int
@@ -40,6 +45,7 @@ class Klant extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'klant_id'		 => array(T::Integer, false, 'auto_increment'),
+		'naam'			 => array(T::String),
 		'uid'			 => array(T::UID, true),
 		'civi_saldo'	 => array(T::Integer, true),
 		'soccie_saldo'	 => array(T::Integer, true),

@@ -12,4 +12,14 @@ class FactuurItemsModel extends PersistenceModel {
 
 	protected static $instance;
 
+	public function maakFactuurItem($factuur_id, $titel, $prijs_per_stuk, $aantal = 1) {
+		$item = new FactuurItem();
+		$item->factuur_id = $factuur_id;
+		$item->titel = $titel;
+		$item->prijs_per_stuk = $prijs_per_stuk;
+		$item->aantal = $aantal;
+		$item->item_id = (int) $this->create($item);
+		return $item;
+	}
+
 }

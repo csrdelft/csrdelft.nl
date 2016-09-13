@@ -19,7 +19,7 @@ class ProductCategorie extends PersistentEntity {
 	 */
 	public $titel;
 	/**
-	 * Beheer-rechten
+	 * Rechten benodigd voor beheren
 	 * @var string
 	 */
 	public $beheer_rechten;

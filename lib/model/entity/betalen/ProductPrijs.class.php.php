@@ -26,10 +26,10 @@ class ProductPrijs extends PersistentEntity {
 	 */
 	public $product_id;
 	/**
-	 * Prijs in centen
+	 * Bedrag in centen
 	 * @var int
 	 */
-	public $prijs;
+	public $bedrag;
 	/**
 	 * DateTime begin
 	 * @var string
@@ -48,7 +48,7 @@ class ProductPrijs extends PersistentEntity {
 		'prijs_id'		 => array(T::Integer, false, 'auto_increment'),
 		'prijslijst_id'	 => array(T::Integer),
 		'product_id'	 => array(T::Integer),
-		'prijs'			 => array(T::Integer),
+		'bedrag'		 => array(T::Integer),
 		'begin_moment'	 => array(T::DateTime),
 		'eind_moment'	 => array(T::DateTime, true)
 	);
