@@ -30,7 +30,7 @@ class BetalenController extends AclController {
 
 	public function GET_facturen() {
 		$facturen = FacturenModel::instance()->find();
-		$this->view = new JsonResponse($facturen);
+		$this->view = new JsonLijstResponse($facturen);
 	}
 
 }
