@@ -370,7 +370,7 @@ class AccessModel extends CachedPersistenceModel {
 			'P_BETALEN_ADMIN'	 => $this->createPermStr(12, 1 + 2 + 4 + 8), // Facturen beheren van iedereen (Fiscus)
 			'P_STREPEN_IK'		 => $this->createPermStr(13, 1), // Strepen op eigen naam
 			'P_STREPEN_ADD'		 => $this->createPermStr(13, 1 + 2), // Strepen voor iedereen en eigen streeplijsten aanmaken en beheren
-			'P_STREPEN_MOD'		 => $this->createPermStr(12, 1 + 2 + 4), // Producten beheren en prijzen beheren
+			'P_STREPEN_MOD'		 => $this->createPermStr(13, 1 + 2 + 4), // Producten beheren en prijzen beheren
 			'P_STREPEN_ADMIN'	 => $this->createPermStr(13, 1 + 2 + 4 + 8), // Streeplijsten beheren van iedereen
 		);
 		/**
