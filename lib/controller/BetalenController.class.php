@@ -14,7 +14,8 @@ class BetalenController extends AclController {
 		parent::__construct($query, null);
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'facturen' => 'P_FORUM_READ'
+				'application'	 => 'P_BETALEN_IK',
+				'facturen'		 => 'P_BETALEN_IK'
 			);
 		}
 	}
@@ -23,9 +24,15 @@ class BetalenController extends AclController {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		} else {
-			$this->action = 'facturen';
+			$this->action = 'application';
 		}
 		parent::performAction($this->getParams(3));
+	}
+
+	public function GET_application() {
+		$body = new BetalenView();
+		$this->view = new CsrLayoutPage($body);
+		$this->view->addCompressedResources('betalen');
 	}
 
 	public function GET_facturen() {
