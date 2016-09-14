@@ -286,47 +286,47 @@ class AccessModel extends CachedPersistenceModel {
 		// build permissions
 		$this->permissions = array(
 			'P_PUBLIC'			 => $this->createPermStr(0, 0), // Iedereen op het Internet
-			'P_LOGGED_IN'		 => $this->createPermStr(1, 0), // Eigen profiel raadplegen
-			'P_PROFIEL_EDIT'	 => $this->createPermStr(1 + 2, 0), // Eigen gegevens aanpassen
-			'P_ALLEEN_OUDLID'	 => $this->createPermStr(4, 0), // Specifiek voor oudleden [[let op: niet cumulatief]]
+			'P_LOGGED_IN'		 => $this->createPermStr(0, 1), // Eigen profiel raadplegen
+			'P_PROFIEL_EDIT'	 => $this->createPermStr(0, 1 + 2), // Eigen gegevens aanpassen
+			'P_ALLEEN_OUDLID'	 => $this->createPermStr(0, 4), // Specifiek voor oudleden [[let op: niet cumulatief]]
+			'P_ADMIN'			 => $this->createPermStr(0, 1 + 2 + 4 + 8), // Super-admin
 			'P_VERJAARDAGEN'	 => $this->createPermStr(1, 1), // Verjaardagen van leden zien
-			'P_LEDEN_READ'		 => $this->createPermStr(1 + 2, 1), // Gegevens van leden raadplegen
-			'P_OUDLEDEN_READ'	 => $this->createPermStr(1 + 2 + 4, 1), // Gegevens van oudleden raadplegen
-			'P_LEDEN_MOD'		 => $this->createPermStr(1 + 2 + 4 + 8, 1), // (Oud)ledengegevens aanpassen
-			'P_FORUM_READ'		 => $this->createPermStr(1, 2), // Forum lezen
-			'P_FORUM_POST'		 => $this->createPermStr(1 + 2, 2), // Berichten plaatsen op het forum en eigen berichten wijzigen
-			'P_FORUM_MOD'		 => $this->createPermStr(1 + 2 + 4, 2), // Forum-moderator mag berichten van anderen wijzigen of verwijderen
-			'P_FORUM_BELANGRIJK' => $this->createPermStr(8, 2), // Forum belangrijk (de)markeren  [[let op: niet cumulatief]]
-			'P_FORUM_ADMIN'		 => $this->createPermStr(16, 2), // Forum-admin mag deel-fora aanmaken en rechten wijzigen  [[let op: niet cumulatief]]
-			'P_AGENDA_READ'		 => $this->createPermStr(1, 3), // Agenda bekijken
-			'P_AGENDA_ADD'		 => $this->createPermStr(1 + 2, 3), // Items toevoegen aan de agenda
-			'P_AGENDA_MOD'		 => $this->createPermStr(1 + 2 + 4, 3), // Items beheren in de agenda
-			'P_DOCS_READ'		 => $this->createPermStr(1, 4), // Documenten-rubriek lezen
-			'P_DOCS_POST'		 => $this->createPermStr(1 + 2, 4), // Documenten verwijderen of erbij plaatsen
-			'P_DOCS_MOD'		 => $this->createPermStr(1 + 2 + 4, 4), // Documenten aanpassen
-			'P_ALBUM_READ'		 => $this->createPermStr(1, 5), // Foto-album bekijken
-			'P_ALBUM_DOWN'		 => $this->createPermStr(1 + 2, 5), // Foto-album downloaden
-			'P_ALBUM_ADD'		 => $this->createPermStr(1 + 2 + 4, 5), // Fotos uploaden en albums toevoegen
-			'P_ALBUM_MOD'		 => $this->createPermStr(1 + 2 + 4 + 8, 5), // Foto-albums aanpassen
-			'P_ALBUM_DEL'		 => $this->createPermStr(1 + 2 + 4 + 8 + 16, 5), // Fotos uit fotoalbum verwijderen
-			'P_BIEB_READ'		 => $this->createPermStr(1, 6), // Bibliotheek lezen
-			'P_BIEB_EDIT'		 => $this->createPermStr(1 + 2, 6), // Bibliotheek wijzigen
-			'P_BIEB_MOD'		 => $this->createPermStr(1 + 2 + 4, 6), // Bibliotheek zowel wijzigen als lezen
-			'P_NEWS_POST'		 => $this->createPermStr(1, 7), // Nieuws plaatsen en wijzigen van jezelf
-			'P_NEWS_MOD'		 => $this->createPermStr(1 + 2, 7), // Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
-			'P_NEWS_PUBLISH'	 => $this->createPermStr(1 + 2 + 4, 7), // Nieuws publiceren en rechten bepalen
-			'P_MAAL_IK'			 => $this->createPermStr(1, 8), // kan zich aan en afmelden voor maaltijd en eigen abo wijzigen
-			'P_MAAL_MOD'		 => $this->createPermStr(1 + 2, 8), // mag maaltijden beheren (MaalCie P)
-			'P_MAAL_SALDI'		 => $this->createPermStr(1 + 2 + 4, 8), // mag het MaalCie saldo aanpassen van iedereen (MaalCie fiscus)
-			'P_CORVEE_IK'		 => $this->createPermStr(1, 9), // kan voorkeuren aangeven voor corveetaken
-			'P_CORVEE_MOD'		 => $this->createPermStr(1 + 2, 9), // mag corveetaken beheren (CorveeCaesar)
-			'P_CORVEE_SCHED'	 => $this->createPermStr(1 + 2 + 4, 9), // mag de automatische corvee-indeler beheren
-			'P_MAIL_POST'		 => $this->createPermStr(1, 10), // mag berichtjes in de courant rossen
-			'P_MAIL_COMPOSE'	 => $this->createPermStr(1 + 2, 10), // mag alle berichtjes in de courant bewerken, en volgorde wijzigen
-			'P_MAIL_SEND'		 => $this->createPermStr(1 + 2 + 4, 10), // mag de courant verzenden
-			'P_PEILING_VOTE'     => $this->createPermStr(1, 11), // Mag op peilingen stemmen
-			'P_PEILING_MOD'		 => $this->createPermStr(1 + 2, 11), // Mag peilingen aanmaken en verwijderen
-			'P_ADMIN'			 => $this->createPermStr(1, 12) // Super-admin
+			'P_LEDEN_READ'		 => $this->createPermStr(1, 1 + 2), // Gegevens van leden raadplegen
+			'P_OUDLEDEN_READ'	 => $this->createPermStr(1, 1 + 2 + 4), // Gegevens van oudleden raadplegen
+			'P_LEDEN_MOD'		 => $this->createPermStr(1, 1 + 2 + 4 + 8), // (Oud)ledengegevens aanpassen
+			'P_FORUM_READ'		 => $this->createPermStr(2, 1), // Forum lezen
+			'P_FORUM_POST'		 => $this->createPermStr(2, 1 + 2), // Berichten plaatsen op het forum en eigen berichten wijzigen
+			'P_FORUM_MOD'		 => $this->createPermStr(2, 1 + 2 + 4), // Forum-moderator mag berichten van anderen wijzigen of verwijderen
+			'P_FORUM_BELANGRIJK' => $this->createPermStr(2, 8), // Forum belangrijk (de)markeren  [[let op: niet cumulatief]]
+			'P_FORUM_ADMIN'		 => $this->createPermStr(2, 16), // Forum-admin mag deel-fora aanmaken en rechten wijzigen  [[let op: niet cumulatief]]
+			'P_AGENDA_READ'		 => $this->createPermStr(3, 1), // Agenda bekijken
+			'P_AGENDA_ADD'		 => $this->createPermStr(3, 1 + 2), // Items toevoegen aan de agenda
+			'P_AGENDA_MOD'		 => $this->createPermStr(3, 1 + 2 + 4), // Items beheren in de agenda
+			'P_DOCS_READ'		 => $this->createPermStr(4, 1), // Documenten-rubriek lezen
+			'P_DOCS_POST'		 => $this->createPermStr(4, 1 + 2), // Documenten verwijderen of erbij plaatsen
+			'P_DOCS_MOD'		 => $this->createPermStr(4, 1 + 2 + 4), // Documenten aanpassen
+			'P_ALBUM_READ'		 => $this->createPermStr(5, 1), // Foto-album bekijken
+			'P_ALBUM_DOWN'		 => $this->createPermStr(5, 1 + 2), // Foto-album downloaden
+			'P_ALBUM_ADD'		 => $this->createPermStr(5, 1 + 2 + 4), // Fotos uploaden en albums toevoegen
+			'P_ALBUM_MOD'		 => $this->createPermStr(5, 1 + 2 + 4 + 8), // Foto-albums aanpassen
+			'P_ALBUM_DEL'		 => $this->createPermStr(5, 1 + 2 + 4 + 8 + 16), // Fotos uit fotoalbum verwijderen
+			'P_BIEB_READ'		 => $this->createPermStr(6, 1), // Bibliotheek lezen
+			'P_BIEB_EDIT'		 => $this->createPermStr(6, 1 + 2), // Bibliotheek wijzigen
+			'P_BIEB_MOD'		 => $this->createPermStr(6, 1 + 2 + 4), // Bibliotheek zowel wijzigen als lezen
+			'P_NEWS_POST'		 => $this->createPermStr(7, 1), // Nieuws plaatsen en wijzigen van jezelf
+			'P_NEWS_MOD'		 => $this->createPermStr(7, 1 + 2), // Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
+			'P_NEWS_PUBLISH'	 => $this->createPermStr(7, 1 + 2 + 4), // Nieuws publiceren en rechten bepalen
+			'P_MAAL_IK'			 => $this->createPermStr(8, 1), // Jezelf aan en afmelden voor maaltijd en eigen abo wijzigen
+			'P_MAAL_MOD'		 => $this->createPermStr(8, 1 + 2), // Maaltijden beheren (MaalCie P)
+			'P_MAAL_SALDI'		 => $this->createPermStr(8, 1 + 2 + 4), // MaalCie saldo aanpassen van iedereen (MaalCie fiscus)
+			'P_CORVEE_IK'		 => $this->createPermStr(9, 1), // Eigen voorkeuren aangeven voor corveetaken
+			'P_CORVEE_MOD'		 => $this->createPermStr(9, 1 + 2), // Corveetaken beheren (CorveeCaesar)
+			'P_CORVEE_SCHED'	 => $this->createPermStr(9, 1 + 2 + 4), // Automatische corvee-indeler beheren
+			'P_MAIL_POST'		 => $this->createPermStr(10, 1), // Berichten aan de courant toevoegen
+			'P_MAIL_COMPOSE'	 => $this->createPermStr(10, 1 + 2), // Alle berichtjes in de courant bewerken en volgorde wijzigen
+			'P_MAIL_SEND'		 => $this->createPermStr(10, 1 + 2 + 4), // Courant verzenden
+			'P_PEILING_VOTE'	 => $this->createPermStr(11, 1), // Stemmen op peilingen
+			'P_PEILING_MOD'		 => $this->createPermStr(11, 1 + 2), // Peilingen aanmaken en verwijderen
 		);
 		/**
 		 * Deze waarden worden samengesteld uit bovenstaande permissies en
@@ -336,34 +336,19 @@ class AccessModel extends CachedPersistenceModel {
 		$p = $this->permissions;
 
 		// Permission Assignment:
-		$this->roles = array(
-			AccessRole::Nobody	 =>
-				$p['P_PUBLIC'] |
-				$p['P_FORUM_READ'] |
-				$p['P_AGENDA_READ'] |
-				$p['P_ALBUM_READ'],
-			AccessRole::Lid		 =>
-				$p['P_PROFIEL_EDIT'] |
-				$p['P_OUDLEDEN_READ'] |
-				$p['P_FORUM_POST'] |
-				$p['P_AGENDA_READ'] |
-				$p['P_DOCS_READ'] |
-				$p['P_BIEB_READ'] |
-				$p['P_MAAL_IK'] |
-				$p['P_CORVEE_IK'] |
-				$p['P_MAIL_POST'] |
-				$p['P_NEWS_POST'] |
-				$p['P_ALBUM_ADD'] |
-				$p['P_PEILING_VOTE']
-		);
+		$this->roles = array();
 
 		// use | $p[] for hierarchical RBAC (inheritance between roles)
 		// use & ~$p[] for constrained RBAC (separation of duties)
 
+		$this->roles[AccessRole::Nobody] = $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'] | $p['P_ALBUM_READ'];
 		$this->roles[AccessRole::Eter] = $this->roles[AccessRole::Nobody] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
+
+		$this->roles[AccessRole::Lid] = $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_ADD'] | $p['P_PEILING_VOTE'];
 		$this->roles[AccessRole::Oudlid] = $this->roles[AccessRole::Lid] | $p['P_ALLEEN_OUDLID'];
 		$this->roles[AccessRole::BASFCie] = $this->roles[AccessRole::Lid] | $p['P_DOCS_MOD'] | $p['P_ALBUM_DEL'] | $p['P_BIEB_MOD'] | $p['P_PEILING_MOD'];
 		$this->roles[AccessRole::MaalCie] = $this->roles[AccessRole::Lid] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
+
 		$this->roles[AccessRole::Bestuur] = $this->roles[AccessRole::BASFCie] | $this->roles[AccessRole::MaalCie] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_ALBUM_DEL'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
 		$this->roles[AccessRole::PubCie] = $this->roles[AccessRole::Bestuur] | $p['P_ADMIN'] | $p['P_MAIL_SEND'] | $p['P_CORVEE_SCHED'] | $p['P_FORUM_ADMIN'];
 
@@ -374,12 +359,12 @@ class AccessModel extends CachedPersistenceModel {
 
 	/**
 	 * Create permission string with character which has ascii value of request level.
-	 *
-	 * @param int $level           permissiewaarde
+	 * 
 	 * @param int $onderdeelnummer starts at zero
+	 * @param int $level           permissiewaarde
 	 * @return string permission string
 	 */
-	private function createPermStr($level, $onderdeelnummer) {
+	private function createPermStr($onderdeelnummer, $level) {
 		$nulperm = str_repeat(chr(0), 15);
 		return substr_replace($nulperm, chr($level), $onderdeelnummer, 1);
 	}
