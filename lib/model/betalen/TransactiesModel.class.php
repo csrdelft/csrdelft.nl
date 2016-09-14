@@ -9,6 +9,7 @@
 class TransactiesModel extends PersistenceModel {
 
 	const ORM = 'Transactie';
+	const DIR = 'betalen/';
 
 	protected static $instance;
 

@@ -9,6 +9,7 @@
 class FacturenModel extends PersistenceModel {
 
 	const ORM = 'Factuur';
+	const DIR = 'betalen/';
 
 	protected static $instance;
 

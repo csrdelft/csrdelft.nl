@@ -9,6 +9,7 @@
 class KlantenModel extends PersistenceModel {
 
 	const ORM = 'Klant';
+	const DIR = 'betalen/';
 
 	protected static $instance;
 

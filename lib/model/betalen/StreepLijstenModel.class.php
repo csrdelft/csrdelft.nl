@@ -9,6 +9,7 @@
 class StreepLijstenModel extends PersistenceModel {
 
 	const ORM = 'StreepLijst';
+	const DIR = 'betalen/';
 
 	protected static $instance;
 
