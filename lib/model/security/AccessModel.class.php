@@ -358,9 +358,13 @@ class AccessModel extends CachedPersistenceModel {
 			'P_PEILING_VOTE'	 => $this->createPermStr(11, 1), // Stemmen op peilingen
 			'P_PEILING_MOD'		 => $this->createPermStr(11, 1 + 2), // Peilingen aanmaken en verwijderen
 			'P_BETALEN_IK'		 => $this->createPermStr(12, 1), // Eigen facturen bekijken en betalen
-			'P_BETALEN_STREEP'	 => $this->createPermStr(12, 1 + 2), // Strepen en eigen streeplijsten aanmaken en beheren
-			'P_BETALEN_ADD'		 => $this->createPermStr(12, 1 + 2 + 4), // Facturen aanmaken (voor anderen)
-			'P_BETALEN_MOD'		 => $this->createPermStr(12, 1 + 2 + 4 + 8), // Producten beheren en prijzen beheren
+			'P_BETALEN_ADD'		 => $this->createPermStr(12, 1 + 2), // Facturen aanmaken (voor iedereen)
+			'P_BETALEN_MOD'		 => $this->createPermStr(12, 1 + 2 + 4), // Kassa bedienen en betalingen verwerken (voor iedereen)
+			'P_BETALEN_ADMIN'	 => $this->createPermStr(12, 1 + 2 + 4 + 8), // Facturen beheren van iedereen (Fiscus)
+			'P_STREPEN_IK'		 => $this->createPermStr(13, 1), // Strepen op eigen naam
+			'P_STREPEN_ADD'		 => $this->createPermStr(13, 1 + 2), // Strepen voor iedereen en eigen streeplijsten aanmaken en beheren
+			'P_STREPEN_MOD'		 => $this->createPermStr(12, 1 + 2 + 4), // Producten beheren en prijzen beheren
+			'P_STREPEN_ADMIN'	 => $this->createPermStr(13, 1 + 2 + 4 + 8), // Streeplijsten beheren van iedereen
 		);
 		/**
 		 * Deze waarden worden samengesteld uit bovenstaande permissies en
