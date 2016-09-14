@@ -16,12 +16,13 @@ abstract class AccessRole implements PersistentEnum {
 	const Oudlid = 'R_OUDLID';
 	const Lid = 'R_LID';
 	const BASFCie = 'R_BASF';
+	const SocCie = 'R_SOCCIE';
 	const MaalCie = 'R_MAALCIE';
 	const Bestuur = 'R_BESTUUR';
 	const PubCie = 'R_PUBCIE';
 
 	public static function getTypeOptions() {
-		return array(self::Nobody, self::Eter, self::Oudlid, self::Lid, self::BASFCie, self::MaalCie, self::Bestuur, self::PubCie);
+		return array(self::Nobody, self::Eter, self::Oudlid, self::Lid, self::BASFCie, self::SocCie, self::MaalCie, self::Bestuur, self::PubCie);
 	}
 
 	public static function canChangeAccessRoleTo($from) {
@@ -39,6 +40,7 @@ abstract class AccessRole implements PersistentEnum {
 			case self::Oudlid: return 'Oudlid';
 			case self::Lid: return 'Lid';
 			case self::BASFCie: return 'BASFCie-rechten';
+			case self::SocCie: return 'SocCie-rechten';
 			case self::MaalCie: return 'MaalCie-rechten';
 			case self::Bestuur: return 'Bestuur-rechten';
 			case self::PubCie: return 'PubCie-rechten';
@@ -53,6 +55,7 @@ abstract class AccessRole implements PersistentEnum {
 			case self::Oudlid: return 'O';
 			case self::Lid: return 'L';
 			case self::BASFCie: return 'BASF';
+			case self::SocCie: return 'S';
 			case self::MaalCie: return 'M';
 			case self::Bestuur: return 'B';
 			case self::PubCie: return 'P';
