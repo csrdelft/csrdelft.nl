@@ -1,6 +1,7 @@
 <?php
 
 require_once 'model/betalen/FacturenModel.class.php';
+require_once 'view/BetalenView.class.php';
 
 /**
  * BetalenController.class.php
@@ -30,7 +31,7 @@ class BetalenController extends AclController {
 	}
 
 	public function GET_application() {
-		$body = new BetalenView();
+		$body = new BetalenView(null);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addCompressedResources('betalen');
 	}
