@@ -50,6 +50,37 @@ class CmsPaginaController extends Controller {
 	}
 
 	public function bekijken($naam) {
+		// BEGIN example
+		$pagina = new CmsPagina();
+		$pagina->titel = 'Basic Example with JSX';
+		$pagina->inline_html = true;
+		$pagina->inhoud = <<<HTML
+<h2 class="Titel">{$pagina->titel}</h2>
+<div id="react_example">
+  <p>
+	To install React, follow the instructions on
+	<a href="https://github.com/facebook/react/">GitHub</a>.
+  </p>
+  <p>
+	If you can see this, React is <strong>not</strong> working right.
+	If you checked out the source from GitHub make sure to run <code>grunt</code>.
+  </p>
+</div>
+<h4>Example Details</h4>
+<p>This is written with JSX and transformed in the browser.</p>
+<p>
+  Learn more about React at
+  <a href="https://facebook.github.io/react" target="_blank">facebook.github.io/react</a>.
+</p>
+<script type="text/babel" src="/layout/jsx/react_example.js"></script>
+HTML;
+		$body = new CmsPaginaView($pagina);
+		$this->view = new CsrLayoutPage($body, $this->zijbalk);
+		$this->view->addCompressedResources('react');
+		$this->view->addScript('https://unpkg.com/babel-core@5.8.38/browser.min.js', true);
+		// END example
+		return;
+
 		$pagina = $this->model->get($naam);
 		if (!$pagina) { // 404
 			$pagina = $this->model->get('thuis');
