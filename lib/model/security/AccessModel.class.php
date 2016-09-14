@@ -357,10 +357,10 @@ class AccessModel extends CachedPersistenceModel {
 			'P_MAIL_SEND'		 => $this->createPermStr(10, 1 + 2 + 4), // Courant verzenden
 			'P_PEILING_VOTE'	 => $this->createPermStr(11, 1), // Stemmen op peilingen
 			'P_PEILING_MOD'		 => $this->createPermStr(11, 1 + 2), // Peilingen aanmaken en verwijderen
-			'P_BETALEN_IK'		 => $this->createPermStr(12, 1), // Mag eigen facturen bekijken en betalen
-			'P_BETALEN_STREEP'	 => $this->createPermStr(12, 1 + 2), // Mag strepen en eigen streeplijsten aanmaken en beheren
-			'P_BETALEN_ADD'		 => $this->createPermStr(12, 1 + 2 + 4), // Mag facturen aanmaken (voor anderen)
-			'P_BETALEN_MOD'		 => $this->createPermStr(12, 1 + 2 + 4 + 8), // Mag producten beheren en prijzen beheren
+			'P_BETALEN_IK'		 => $this->createPermStr(12, 1), // Eigen facturen bekijken en betalen
+			'P_BETALEN_STREEP'	 => $this->createPermStr(12, 1 + 2), // Strepen en eigen streeplijsten aanmaken en beheren
+			'P_BETALEN_ADD'		 => $this->createPermStr(12, 1 + 2 + 4), // Facturen aanmaken (voor anderen)
+			'P_BETALEN_MOD'		 => $this->createPermStr(12, 1 + 2 + 4 + 8), // Producten beheren en prijzen beheren
 		);
 		/**
 		 * Deze waarden worden samengesteld uit bovenstaande permissies en
