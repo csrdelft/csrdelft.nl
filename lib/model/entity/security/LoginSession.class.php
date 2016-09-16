@@ -45,6 +45,11 @@ class LoginSession extends PersistentEntity {
 	 */
 	public $lock_ip;
 	/**
+	 * AuthenticationMethod
+	 * @var string
+	 */
+	public $authentication_method;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -55,7 +60,8 @@ class LoginSession extends PersistentEntity {
 		'expire'		 => array(T::DateTime),
 		'user_agent'	 => array(T::String),
 		'ip'			 => array(T::String),
-		'lock_ip'		 => array(T::Boolean)
+		'lock_ip'		 => array(T::Boolean),
+		'authentication_method' => array(T::Enumeration, false, 'AuthenticationMethod')
 	);
 	/**
 	 * Database primary key
@@ -67,5 +73,13 @@ class LoginSession extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'login_sessions';
+
+	public function isRecent() {
+		$recent = (int) Instellingen::get('beveiliging', 'recent_login_seconds');
+		if (time() - strtotime($this->login_moment) < $recent) {
+			return true;
+		}
+		return false;
+	}
 
 }

@@ -85,7 +85,8 @@ class ForumDeel extends PersistentEntity {
 	}
 
 	public function magLezen($rss = false) {
-		return LoginModel::mag('P_FORUM_READ', $rss) AND LoginModel::mag($this->rechten_lezen, $rss) AND $this->getForumCategorie()->magLezen();
+		$auth = ($rss ? AuthenticationMethod::getTypeOptions() : null);
+		return LoginModel::mag('P_FORUM_READ', $auth) AND LoginModel::mag($this->rechten_lezen, $auth) AND $this->getForumCategorie()->magLezen();
 	}
 
 	public function magPosten() {

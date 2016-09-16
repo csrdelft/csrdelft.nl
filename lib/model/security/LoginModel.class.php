@@ -1,6 +1,7 @@
 <?php
 
 require_once 'view/Validator.interface.php';
+require_once 'model/entity/security/AuthenticationMethod.enum.php';
 require_once 'model/security/RememberLoginModel.class.php';
 require_once 'model/security/AccountModel.class.php';
 require_once 'model/security/OneTimeTokensModel.class.php';
@@ -56,8 +57,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		return ProfielModel::get(static::getUid());
 	}
 
-	public static function mag($permission, $allowPrivateUrl = false) {
-		return AccessModel::mag(static::getAccount(), $permission, $allowPrivateUrl);
+	public static function mag($permission, array $allowedAuthenticationMethods = null) {
+		return AccessModel::mag(static::getAccount(), $permission, $allowedAuthenticationMethods);
 	}
 
 	protected function __construct() {
@@ -69,10 +70,17 @@ class LoginModel extends PersistenceModel implements Validator {
 			return;
 		}
 		/**
-		 * Sessie valideren: is er iemand ingelogd en zo ja, is alles ok?
+		 * Sessie valideren: is er iemand ingelogd en is alles OK?
+		 * Zo ja, sessie verlengen.
 		 * Zo nee, dan public gebruiker er in gooien.
 		 */
-		if (!$this->validate()) {
+		if ($this->validate()) {
+			// Public gebruiker heeft geen DB sessie
+			if ($_SESSION['_uid'] != 'x999') {
+				$session = $this->getCurrentSession();
+				$session->expire = getDateTime(time() + getSessionMaxLifeTime());
+			}
+		} else {
 			// Subject assignment:
 			$_SESSION['_uid'] = 'x999';
 
@@ -115,7 +123,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			return true;
 		}
 		// Controleer of sessie niet gesloten is door gebruiker
-		$session = $this->retrieveByPrimaryKey(array(hash('sha512', session_id())));
+		$session = $this->getCurrentSession();
 		if (!$session) {
 			return false;
 		}
@@ -243,14 +251,14 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * 
 	 * @param string $user
 	 * @param string $pass_plain
-	 * @param boolean $wachten
+	 * @param boolean $evtWachten
 	 * @param RememberLogin $remember
 	 * @param boolean $lockIP
-	 * @param boolean $tokenAuthenticated
+	 * @param boolean $alreadyAuthenticatedByUrlToken
 	 * @param string $expire
 	 * @return boolean
 	 */
-	public function login($user, $pass_plain, $wachten = true, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
+	public function login($user, $pass_plain, $evtWachten = true, RememberLogin $remember = null, $lockIP = false, $alreadyAuthenticatedByUrlToken = false, $expire = null) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 
@@ -272,14 +280,14 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// Autologin
 		if ($remember) {
-			$_SESSION['_authByCookie'] = true;
+			$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
 		}
 		// Previously(!) verified private token or OneTimeToken
-		elseif ($tokenAuthenticated) {
-			$_SESSION['_authByToken'] = true;
+		elseif ($alreadyAuthenticatedByUrlToken) {
+			$_SESSION['_authenticationMethod'] = AuthenticationMethod::url_token;
 		} else {
-
-			if ($wachten) {
+			// Moet eventueel wachten?
+			if ($evtWachten) {
 				// Check timeout
 				$timeout = AccountModel::instance()->moetWachten($account);
 				if ($timeout > 0) {
@@ -291,6 +299,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			// Check password
 			if (AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
 				AccountModel::instance()->successfulLoginAttempt($account);
+				$_SESSION['_authenticationMethod'] = AuthenticationMethod::password_login;
 			}
 			// Wrong password
 			else {
@@ -330,10 +339,11 @@ class LoginModel extends PersistenceModel implements Validator {
 			$session->session_hash = hash('sha512', session_id());
 			$session->uid = $account->uid;
 			$session->login_moment = getDateTime();
-			$session->expire = $expire ? $expire : getDateTime(time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
+			$session->expire = $expire ? $expire : getDateTime(time() + getSessionMaxLifeTime());
 			$session->user_agent = $user_agent;
 			$session->ip = $remote_addr;
 			$session->lock_ip = $lockIP; // sessie koppelen aan ip?
+			$session->authentication_method = $_SESSION['_authenticationMethod'];
 			if ($this->exists($session)) {
 				$this->update($session);
 			} else {
@@ -342,7 +352,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 			if ($remember) {
 				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#lidinstellingenform-tab-Beveiliging" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
-			} elseif (!$tokenAuthenticated) {
+			} elseif (!$alreadyAuthenticatedByUrlToken) {
 
 				// Controleer actief wachtwoordbeleid
 				$_POST['checkpw_new'] = $pass_plain;
@@ -416,21 +426,29 @@ class LoginModel extends PersistenceModel implements Validator {
 		return LoginModel::mag('P_ADMIN') AND ! $this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, 'P_LOGGED_IN');
 	}
 
-	public function isLoggedIn($allowPrivateUrl = false) {
-		if (!isset($_SESSION['_uid'])) {
-			return false;
-		}
-		$account = static::getAccount();
-		return $account AND AccessModel::mag($account, 'P_LOGGED_IN', $allowPrivateUrl);
+	protected function getCurrentSession() {
+		return $this->retrieveByPrimaryKey(array(hash('sha512', session_id())));
 	}
 
 	/**
-	 * Is de huidige gebruiker is geauthenticeerd door middel van een token in de url?
-	 * Permissies worden hierdoor beperkt voor de veiligheid.
+	 * Indien de huidige gebruiker is geauthenticeerd door middel van een token in de url
+	 * worden Permissies hierdoor beperkt voor de veiligheid.
 	 * @see AccessModel::mag()
+	 * 
+	 * @return AuthenticationMethod|null
 	 */
-	public function isAuthenticatedByToken() {
-		return isset($_SESSION['_authByToken']);
+	public function getAuthenticationMethod() {
+		if (!isset($_SESSION['_authenticationMethod'])) {
+			return null;
+		}
+		$method = $_SESSION['_authenticationMethod'];
+		if ($method === AuthenticationMethod::password_login) {
+			$session = $this->getCurrentSession();
+			if ($session AND $session->isRecent()) {
+				return AuthenticationMethod::recent_password_login;
+			}
+		}
+		return $method;
 	}
 
 	public function isPauper() {
