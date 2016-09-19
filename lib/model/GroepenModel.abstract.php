@@ -119,7 +119,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 * Delete ACL.
 	 * 
 	 * @param array $primary_key_values
-	 * @return int rows affected
+	 * @return int number of rows affected
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
 		AccessModel::instance()->setAcl(static::ORM, reset($primary_key_values), array());

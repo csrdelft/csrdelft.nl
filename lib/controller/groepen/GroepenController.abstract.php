@@ -4,13 +4,12 @@ require_once 'model/ChangeLogModel.class.php';
 require_once 'view/GroepenView.class.php';
 
 /**
- * GroepenController.class.php
- * 
+ * GroepenController.abstract.php
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
- * Controller voor groepen.
+ *
  */
-class AbstractGroepenController extends Controller {
+abstract class AbstractGroepenController extends Controller {
 
 	public function __construct($query, AbstractGroepenModel $model) {
 		parent::__construct($query, $model);
