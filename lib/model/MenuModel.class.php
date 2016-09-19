@@ -211,7 +211,9 @@ class MenuModel extends CachedPersistenceModel {
 		$set = array('parent_id' => $item->parent_id);
 		$where = 'parent_id = :oldid';
 		$rowCount = Database::sqlUpdate($this->getTableName(), $set, $where, array(':oldid' => $item->item_id));
-		$this->delete($item);
+		// Remove menu item
+		require_once 'model/PrullenbakModel.class.php';
+		PrullenbakModel::instance()->remove($this, $item);
 		$this->flushCache(true);
 		return $rowCount;
 	}
