@@ -139,7 +139,8 @@ class AgendaController extends AclController {
 		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
 		}
-		$this->model->delete($item);
+		require_once 'model/PrullenbakModel.class.php';
+		PrullenbakModel::transaction()->remove($this->model, $item, 'P_AGENDA_MOD', 'P_AGENDA_MOD');
 		$this->view = new AgendaItemDeleteView($item->item_id);
 	}
 
