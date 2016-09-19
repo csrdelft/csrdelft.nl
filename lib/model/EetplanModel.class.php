@@ -13,28 +13,16 @@ require_once 'model/EetplanFactory.class.php';
  * Verzorgt het opvragen van eetplangegevens
  */
 class EetplanModel extends PersistenceModel {
+    protected static $instance;
 
     const ORM = 'Eetplan';
-
-    private $lichting;
-    private $bekendenModel;
-
-    /**
-     * EetplanModel constructor.
-     * @param string $lichting Lichting om eetplan voor op te halen, 2 cijfers.
-     */
-    public function __construct($lichting) {
-        parent::__construct();
-        $this->lichting = $lichting;
-        $this->bekendenModel = new EetplanBekendenModel($lichting);
-    }
 
     public function getEetplanVoorAvond($avond) {
         return $this->find('avond = ?', array($avond));
     }
 
-    public function getNovieten() {
-        return $this->findSparse(array('uid'), 'uid LIKE ?', array(sprintf("%s%%", $this->lichting)), 'uid');
+    public function getNovieten($lichting) {
+        return $this->findSparse(array('uid'), 'uid LIKE ?', array(sprintf("%s%%", $lichting)), 'uid');
     }
 
     /**
@@ -42,8 +30,8 @@ class EetplanModel extends PersistenceModel {
      *
      * @return Eetplan[] Lijst met sparse(!) eetplan objecten met alleen een avond.
      */
-    public function getAvonden() {
-        return $this->findSparse(array('avond'), 'uid LIKE ?', array("$this->lichting%"), 'avond')->fetchAll();
+    public function getAvonden($lichting) {
+        return $this->findSparse(array('avond'), 'uid LIKE ?', array(sprintf("%s%%", $lichting)), 'avond')->fetchAll();
     }
 
     /**
@@ -53,9 +41,8 @@ class EetplanModel extends PersistenceModel {
      *
      * @return array Het eetplan
      */
-    public function getEetplan() {
-
-        $eetplan = $this->find('uid LIKE ?', array("$this->lichting%"));
+    public function getEetplan($lichting) {
+        $eetplan = $this->find('uid LIKE ?', array(sprintf("%s%%", $lichting)));
         $eetplanFeut = array();
         $avonden = array();
         foreach ($eetplan as $sessie) {
@@ -72,6 +59,7 @@ class EetplanModel extends PersistenceModel {
 
             $eetplanFeut[$sessie->uid]['avonden'][] = array(
                 'datum' => $sessie->avond,
+                'woonoord_id' => $sessie->woonoord_id,
                 'woonoord' => $sessie->getWoonoord()->naam
             );
 
@@ -86,19 +74,19 @@ class EetplanModel extends PersistenceModel {
         );
     }
 
-    public function maakEetplan($avond) {
+    public function maakEetplan($avond, $lichting) {
         // Laad oude dingen in
         // Laad sjaars die elkaar kennen in
 
         $factory = new EetplanFactory();
 
-        $bekenden = $this->bekendenModel->getBekenden();
+        $bekenden = EetplanBekendenModel::instance()->getBekenden($lichting);
         $factory->setBekenden($bekenden);
 
-        $bezocht = $this->find("uid LIKE ?", array(sprintf("%s%%", $this->lichting)));
+        $bezocht = $this->find("uid LIKE ?", array(sprintf("%s%%", $lichting)));
         $factory->setBezocht($bezocht);
 
-        $novieten = ProfielModel::instance()->find("uid LIKE ?", array(sprintf("%s%%", $this->lichting)))->fetchAll();
+        $novieten = ProfielModel::instance()->find("uid LIKE ?", array(sprintf("%s%%", $lichting)))->fetchAll();
         $factory->setNovieten($novieten);
 
         $huizen = WoonoordenModel::instance()->find("eetplan = true")->fetchAll();
@@ -119,35 +107,28 @@ class EetplanModel extends PersistenceModel {
      * @param $id int Id van het huis
      * @return Eetplan[] lijst van eetplansessies voor dit huis, gesorteerd op datum (oplopend)
      */
-    public function getEetplanVoorHuis($id) {
-        return $this->find('uid LIKE ? AND woonoord_id = ?', array("$this->lichting%", $id), null, 'avond')->fetchAll();
+    public function getEetplanVoorHuis($id, $lichting) {
+        return $this->find('uid LIKE ? AND woonoord_id = ?', array(sprintf("%s%%", $lichting), $id), null, 'avond')->fetchAll();
     }
 
-    public function getBekendeHuizen() {
-        return $this->find('uid LIKE ? AND avond = DATE(0)', array("$this->lichting%"))->fetchAll();
-    }
-
-    public function getBekendenModel() {
-        return $this->bekendenModel;
+    public function getBekendeHuizen($lichting) {
+        return $this->find('uid LIKE ? AND avond = DATE(0)', array(sprintf("%s%%", $lichting)))->fetchAll();
     }
 }
 
 class EetplanBekendenModel extends PersistenceModel {
-
-    private $lichting;
+    protected static $instance;
 
     const ORM = "EetplanBekenden";
 
     /**
      * EetplanBekenden constructor.
-     * @param string $lichting Lichting om eetplan voor op te halen, 2 cijfers.
      */
-    public function __construct($lichting) {
+    public function __construct() {
         parent::__construct();
-        $this->lichting = $lichting;
     }
 
-    public function getBekenden() {
-        return $this->find('uid1 LIKE ?', array("$this->lichting%"))->fetchAll();
+    public function getBekenden($lichting) {
+        return $this->find('uid1 LIKE ?', array(sprintf("%s%%", $lichting)))->fetchAll();
     }
 }

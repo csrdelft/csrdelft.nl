@@ -141,13 +141,13 @@ class EetplanFactory {
 
         $eetplan = array();
 
-        $s = count($this->novieten);
-        $h = count($this->huizen) - 1;
+        $aantal_sjaars = count($this->novieten);
+        $aantal_huizen = count($this->huizen) - 1;
 
         if ($random == 0) {
-            $ih = 1;
+            $huis_index = 1;
         } else {
-            $ih = rand(1, $h);
+            $huis_index = rand(1, $aantal_huizen);
         }
 
         $this->bezocht_ah[$avond] = array();
@@ -155,68 +155,70 @@ class EetplanFactory {
         foreach ($this->novieten as $noviet) {
             $uid = $noviet->uid;
             # wat foutmeldingen voorkomen
-            if (!isset($this->ahs[$avond][$ih]))
-                $this->ahs[$avond][$ih] = array();
+            if (!isset($this->ahs[$avond][$huis_index]))
+                $this->ahs[$avond][$huis_index] = array();
             if (!isset($this->bekenden[$uid]))
                 $this->bekenden[$uid] = array();
-            if (!isset($this->bezocht_ah[$avond][$ih]))
-                $this->bezocht_ah[$avond][$ih] = array();
+            if (!isset($this->bezocht_ah[$avond][$huis_index]))
+                $this->bezocht_ah[$avond][$huis_index] = array();
             # we hebben nu een avond en een sjaars, nu nog een huis voor m vinden...
             # zolang
             # - deze sjaars dit huis al bezocht heeft, of
-            # - in het huidige huis (ih) een sjaars zit die deze sjaars (is) al ontmoet heeft
+            # - in het huidige huis (huis_index) een sjaars zit die deze sjaars (noviet) al ontmoet heeft
             # - het huis nog niet aan zn max sjaars is voor deze avond
             # nemen we het volgende huis
-            $startih = $ih;
+            $startih = $huis_index;
             # nieuw: begin met het max aantal sjaars per huis net iets te laag in te stellen, zodat
             # de huizen eerst goed vol komen, en daarna pas extra sjaars bij huizen
-            $m = (int) floor($s / $h);
+            $max = (int) floor($aantal_sjaars / $aantal_huizen);
             $nofm = 0; # aantal huizen dat aan de max zit.
-            while (isset($this->bezocht_sh[$uid][$ih])
-                or count(array_intersect($this->ahs[$avond][$ih], $this->bekenden[$uid])) > 0
-                or count($this->bezocht_ah[$avond][$ih]) >= $m) {
-                $ih = $ih % $h + 1;
-                if ($ih == $startih) {
-                    $m++; #die ('whraagh!!!');
+            while (isset($this->bezocht_sh[$uid][$huis_index])
+                or count(array_intersect($this->ahs[$avond][$huis_index], $this->bekenden[$uid])) > 0
+                or count($this->bezocht_ah[$avond][$huis_index]) >= $max) {
+                $huis_index = $huis_index % $aantal_huizen + 1;
+                if ($huis_index == $startih) {
+                    $max++; #die ('whraagh!!!');
                 }
-                if (!isset($this->ahs[$avond][$ih])) {
-                    $this->ahs[$avond][$ih] = array();
+                if (!isset($this->ahs[$avond][$huis_index])) {
+                    $this->ahs[$avond][$huis_index] = array();
                 }
 
                 # nieuw: als alle huizen zijn langsgelopen en ze allemaal max sjaars hebben
                 # dan de max ophogen
-                if (count($this->bezocht_ah[$avond][$ih]) == $m)
+                if (count($this->bezocht_ah[$avond][$huis_index]) == $max) {
                     $nofm++;
-                if ($nofm == $h)
-                    $m++;
+                }
+                if ($nofm == $aantal_huizen) {
+                    $max++;
+                }
             }
 
             # deze sjaars heeft op deze avond een huis gevonden
-            $this->sah[$uid][$avond] = $ih;
+            $this->sah[$uid][$avond] = $huis_index;
             # en gaat alle sjaars die op deze avond in dit huis zitten dat melden
-            foreach ($this->ahs[$avond][$ih] as $sjaars) {
+            foreach ($this->ahs[$avond][$huis_index] as $sjaars) {
                 $this->bekenden[$uid][] = $sjaars; # alle sjaars in mijn seen
                 $this->bekenden[$sjaars][] = $uid; # ik in alle sjaars' seen
             }
-            $this->ahs[$avond][$ih][] = $uid;
+            $this->ahs[$avond][$huis_index][] = $uid;
             # de sjaars heeft het huis bezocht
-            $this->bezocht[$ih][] = $uid;
-            $this->bezocht_sh[$uid][$ih] = true;
-            $this->bezocht_ah[$avond][$ih][] = $uid;
+            $this->bezocht[$huis_index][] = $uid;
+            $this->bezocht_sh[$uid][$huis_index] = true;
+            $this->bezocht_ah[$avond][$huis_index][] = $uid;
 
             # Maak een entity voor deze sessie
             $nieuweetplan = new Eetplan();
             $nieuweetplan->avond = $avond;
             $nieuweetplan->uid = $uid;
-            $nieuweetplan->woonoord_id = $this->huizen[$ih]->id;
+            $nieuweetplan->woonoord_id = $this->huizen[$huis_index]->id;
 
             $eetplan[] = $nieuweetplan;
 
             # huis ophogen
             if ($random == 0)
-                $ih = $ih % $h + 1;
+                $huis_index = $huis_index % $aantal_huizen + 1;
             else
-                $ih = rand(1, $h);
+                $huis_index = rand(1, $aantal_huizen);
         }
 
         return $eetplan;

@@ -4,7 +4,8 @@ require_once 'model/EetplanModel.class.php';
 
 /**
  * EetplanView.class.php
- * 
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
@@ -13,8 +14,14 @@ require_once 'model/EetplanModel.class.php';
 abstract class AbstractEetplanView extends SmartyTemplateView {
 
 	protected $eetplan;
+    protected $lichting;
 
-	public function getTitel() {
+    public function __construct($model, $lichting) {
+        parent::__construct($model);
+        $this->lichting = $lichting;
+    }
+
+    public function getTitel() {
 		return 'Eetplan';
 	}
 
@@ -26,8 +33,8 @@ abstract class AbstractEetplanView extends SmartyTemplateView {
 
 class EetplanView extends AbstractEetplanView {
 	function view() {
-        $this->smarty->assign('avonden', $this->model->getAvonden());
-        $this->smarty->assign('eetplan', $this->model->getEetplan());
+        $this->smarty->assign('avonden', $this->model->getAvonden($this->lichting));
+        $this->smarty->assign('eetplan', $this->model->getEetplan($this->lichting));
         $this->smarty->display('eetplan/overzicht.tpl');
 	}
 }
@@ -36,8 +43,8 @@ class EetplanNovietView extends AbstractEetplanView {
 
 	private $uid;
 
-	public function __construct(EetplanModel $model, $uid) {
-		parent::__construct($model);
+	public function __construct(EetplanModel $model, $lichting, $uid) {
+		parent::__construct($model, $lichting);
 		$this->uid = $uid;
 		$this->eetplan = $this->model->getEetplanVoorNoviet($this->uid);
 	}
@@ -58,8 +65,8 @@ class EetplanHuisView extends AbstractEetplanView {
 
 	private $woonoord;
 
-	public function __construct(EetplanModel $model, $iHuisID) {
-		parent::__construct($model);
+	public function __construct(EetplanModel $model, $lichting, $iHuisID) {
+		parent::__construct($model, $lichting);
 		$this->eetplan = $this->model->getEetplanVoorHuis($iHuisID);
         $this->woonoord = WoonoordenModel::get($iHuisID);
 	}
@@ -77,9 +84,9 @@ class EetplanHuisView extends AbstractEetplanView {
 }
 
 class EetplanBeheerView extends AbstractEetplanView {
-    public function __construct(EetplanModel $model) {
-        parent::__construct($model);
-        $this->eetplan = $this->model->getEetplan();
+    public function __construct(EetplanModel $model, $lichting) {
+        parent::__construct($model, $lichting);
+        $this->eetplan = $this->model->getEetplan($this->lichting);
     }
 
     public function getBreadcrumbs() {
@@ -87,16 +94,16 @@ class EetplanBeheerView extends AbstractEetplanView {
     }
 
     public function view() {
-        $this->smarty->assign("bekendentable", new EetplanBekendenTable());
-        $this->smarty->assign("huizentable", new EetplanHuizenTable()); // TODO: consistentie huizen-woonoorden
-        $this->smarty->assign("bekendehuizentable", new EetplanBekendeHuizenTable());
+        $this->smarty->assign("bekendentable", new EetplanBekendenTable($this->lichting));
+        $this->smarty->assign("huizentable", new EetplanHuizenTable($this->lichting)); // TODO: consistentie huizen-woonoorden
+        $this->smarty->assign("bekendehuizentable", new EetplanBekendeHuizenTable($this->lichting));
         $this->smarty->display('eetplan/beheer.tpl');
     }
 }
 
 class EetplanHuizenTable extends DataTable {
-    public function __construct() {
-        parent::__construct('EetplanHuizenData', '/eetplan/woonoorden/', 'Woonoorden die meedoen');
+    public function __construct($lichting) {
+        parent::__construct('EetplanHuizenData', '/eetplan/woonoorden/' . $lichting . '/', 'Woonoorden die meedoen');
         $this->searchColumn('naam');
         $this->addColumn('eetplan', null, null, 'switchButton_' . $this->dataTableId);
         $this->addKnop(new DataTableKnop(">= 1", $this->dataTableId, $this->dataUrl . 'aan', 'post', 'Aanmelden', 'Woonoorden aanmelden voor eetplan', 'text'));
@@ -141,8 +148,8 @@ class EetplanHuizenView extends DataTableResponse {
 }
 
 class EetplanBekendenTable extends DataTable {
-    public function __construct() {
-        parent::__construct(EetplanBekendenModel::ORM, '/eetplan/novietrelatie/', 'Novieten die elkaar kennen');
+    public function __construct($lichting) {
+        parent::__construct(EetplanBekendenModel::ORM, '/eetplan/novietrelatie/' . $lichting . '/', 'Novieten die elkaar kennen');
         $this->addColumn('noviet1');
         $this->addColumn('noviet2');
         $this->searchColumn('noviet1');
@@ -173,8 +180,8 @@ class EetplanRelatieView extends DataTableResponse {
  * Class EetplanBekendenForm
  */
 class EetplanBekendenForm extends ModalForm {
-    function __construct(EetplanBekenden $model) {
-        parent::__construct($model, '/eetplan/novietrelatie/toevoegen', false, true);
+    function __construct(EetplanBekenden $model, $lichting) {
+        parent::__construct($model, '/eetplan/novietrelatie/' . $lichting . '/toevoegen', false, true);
         $fields[] = new RequiredLidField('uid1', $model->uid1, 'Noviet 1', 'novieten');
         $fields[] = new RequiredLidField('uid2', $model->uid2, 'Noviet 2', 'novieten');
         $fields['btn'] = new FormDefaultKnoppen();
@@ -185,8 +192,8 @@ class EetplanBekendenForm extends ModalForm {
 
 
 class EetplanBekendeHuizenTable extends DataTable {
-    public function __construct() {
-        parent::__construct(EetplanModel::ORM, '/eetplan/bekendehuizen/', 'Novieten die huizen kennen');
+    public function __construct($lichting) {
+        parent::__construct(EetplanModel::ORM, '/eetplan/bekendehuizen/' . $lichting . '/', 'Novieten die huizen kennen');
         $this->hideColumn('avond');
         $this->hideColumn('woonoord_id');
         $this->hideColumn('uid');
@@ -256,5 +263,16 @@ class EetplanHuizenResponse extends JsonLijstResponse  {
             'value' => $entity->naam,
             'id' => $entity->id,
         ));
+    }
+}
+
+class NieuwEetplanForm extends ModalForm {
+    public function __construct() {
+        parent::__construct(null, '/eetplan/nieuw', 'Nieuw eetplan toevoegen');
+
+        $fields[] = new RequiredDateField('avond', date(DATE_ISO8601), 'Avond', (int) date('Y') + 1, (int) date('Y') - 1);
+        $fields['btn'] = new FormDefaultKnoppen();
+
+        $this->addFields($fields);
     }
 }

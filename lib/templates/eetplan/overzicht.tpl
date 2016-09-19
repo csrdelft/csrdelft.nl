@@ -5,23 +5,7 @@
         koken op het huis waarbij zij gefaeld hebben.</p>
 </div>
 
-<table class="eetplantabel">
-    <tr>
-        <th style="width: 200px;">Noviet/Avond</th>
-        {foreach from=$avonden item=sessie}
-            <th class="huis">{$sessie->avond}</th>
-        {/foreach}
-    </tr>
-
-
-    {foreach from=$eetplan item=feut}
-        <tr class="{cycle values="donker,licht"}">
-            {assign 'noviet' $feut[0]->getNoviet()}
-            <td><a href="/eetplan/noviet/{$noviet->uid}">{$noviet->getNaam('volledig')}</a></td>
-            {foreach from=$feut item=avond}
-                {assign 'huis' $avond->getWoonoord()}
-                <td class="huis"><a href="/eetplan/huis/{$huis->id}">{$huis->naam}</a></td>
-            {/foreach}
-        </tr>
-    {/foreach}
-</table>
+<div class="eetplan">
+    <table class="novietentabel"></table>
+    <table class="eetplantabel"></table>
+</div>

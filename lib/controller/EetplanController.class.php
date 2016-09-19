@@ -15,9 +15,10 @@ class EetplanController extends AclController {
      * @var EetplanModel
      */
     protected $model;
+    private $lichting;
 
     public function __construct($query) {
-        parent::__construct($query, new EetplanModel('15'));
+        parent::__construct($query, EetplanModel::instance());
         if ($this->isPosted()) {
             $this->acl = array(
                 'beheer' => 'P_ADMIN',
@@ -33,22 +34,36 @@ class EetplanController extends AclController {
                 'huis' => 'P_LEDEN_READ',
                 'beheer' => 'P_ADMIN',
                 'bekendehuizen' => 'P_ADMIN',
-                'json' => 'P_ADMIN',
+                'json' => 'P_LEDEN_READ',
             );
         }
     }
 
+    /**
+     * /eetplan/<$this->action>/<$this->lichting>|huidig/<$args>
+     *
+     * @param array $args
+     * @return mixed
+     */
 	public function performAction(array $args = array()) {
 		$this->action = 'view';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		parent::performAction($this->getParams(3));
+
+		if ($this->hasParam(3) AND !($this->getParam(3) == 'huidig')) {
+		    $this->lichting = $this->getParam(3);
+        } else {
+            $this->lichting = substr((string) LichtingenModel::getJongsteLidjaar(), 2, 2);
+        }
+
+		return parent::performAction($this->getParams(4));
 	}
 
 	public function view() {
-		$body = new EetplanView($this->model);
+		$body = new EetplanView($this->model, $this->lichting);
 		$this->view = new CsrLayoutPage($body);
+        $this->view->addCompressedResources('eetplan');
 	}
 
 	public function noviet($uid = null) {
@@ -56,88 +71,80 @@ class EetplanController extends AclController {
         if ($eetplan === false) {
             $this->geentoegang();
         }
-		$body = new EetplanNovietView($this->model, $uid);
+		$body = new EetplanNovietView($this->model, $this->lichting, $uid);
 		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function huis($id = null) {
-	    $eetplan = $this->model->getEetplanVoorHuis($id);
+	    $eetplan = $this->model->getEetplanVoorHuis($id, $this->lichting);
         if ($eetplan === false) {
             $this->geentoegang();
         }
-		$body = new EetplanHuisView($this->model, $id);
+		$body = new EetplanHuisView($this->model, $this->lichting, $id);
 		$this->view = new CsrLayoutPage($body);
 	}
 
     public function woonoorden($actie = null) {
-        if ($actie == 'aan') {
+        if ($actie == 'aan' OR $actie == 'uit') {
             $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
             $woonoorden = array();
             foreach ($selection as $woonoord) {
                 $woonoord = WoonoordenModel::instance()->retrieveByUUID($woonoord);
-                $woonoord->eetplan = true;
+                $woonoord->eetplan = $actie == 'aan';
                 WoonoordenModel::instance()->update($woonoord);
                 $woonoorden[] = $woonoord;
             }
             $this->view = new EetplanHuizenView($woonoorden);
-            return;
-        } elseif ($actie == 'uit') {
-            $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-            $woonoorden = array();
-            foreach ($selection as $woonoord) {
-                $woonoord = WoonoordenModel::instance()->retrieveByUUID($woonoord);
-                $woonoord->eetplan = false;
-                WoonoordenModel::instance()->update($woonoord);
-                $woonoorden[] = $woonoord;
-            }
-            $this->view = new EetplanHuizenView($woonoorden);
-            return;
-        }
-
-        if ($this->isPosted()) {
+        } else {
             $woonoorden = WoonoordenModel::instance()->find('status = ?', array(GroepStatus::HT));
             $this->view = new EetplanHuizenView($woonoorden);
         }
     }
 
     public function bekendehuizen($actie = null) {
-        if ($actie == 'zoeken') {
-            $huisnaam = filter_input(INPUT_GET, 'q');
-            $huisnaam = '%' . $huisnaam . '%';
-            $woonoorden = WoonoordenModel::instance()->find('status = ? AND naam LIKE ?', array(GroepStatus::HT, $huisnaam))->fetchAll();
-            $this->view = new EetplanHuizenResponse($woonoorden);
-        } elseif ($actie == 'toevoegen') {
-            $eetplan = new Eetplan();
-            $eetplan->avond = '0000-00-00';
-            $form = new EetplanBekendeHuizenForm($eetplan);
-            if ($form->validate()) {
-                $this->model->create($eetplan);
-                $this->view = new EetplanBekendeHuizenResponse($this->model->getBekendeHuizen());
+        if ($this->isPosted()) {
+            if ($actie == 'toevoegen') {
+                $eetplan = new Eetplan();
+                $eetplan->avond = '0000-00-00';
+                $form = new EetplanBekendeHuizenForm($eetplan);
+                if ($form->validate()) {
+                    $this->model->create($eetplan);
+                    $this->view = new EetplanBekendeHuizenResponse($this->model->getBekendeHuizen($this->lichting));
+                } else {
+                    $this->view = $form;
+                }
+            } elseif ($actie == 'verwijderen') {
+                $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+                $verwijderd = array();
+                foreach ($selection as $uuid) {
+                    $eetplan = $this->model->retrieveByUUID($uuid);
+                    $this->model->delete($eetplan);
+                    $verwijderd[] = $eetplan;
+                }
+                $this->view = new RemoveRowsResponse($verwijderd);
             } else {
-                $this->view = $form;
+                $this->view = new EetplanBekendeHuizenResponse($this->model->getBekendeHuizen($this->lichting));
             }
-        } elseif ($actie == 'verwijderen') {
-            $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-            $verwijderd = array();
-            foreach ($selection as $uuid) {
-                $eetplan = $this->model->retrieveByUUID($uuid);
-                $this->model->delete($eetplan);
-                $verwijderd[] = $eetplan;
+        } else {
+            if ($actie == 'zoeken') {
+                $huisnaam = filter_input(INPUT_GET, 'q');
+                $huisnaam = '%' . $huisnaam . '%';
+                $woonoorden = WoonoordenModel::instance()->find('status = ? AND naam LIKE ?', array(GroepStatus::HT, $huisnaam))->fetchAll();
+                $this->view = new EetplanHuizenResponse($woonoorden);
+            } else {
+                $this->geentoegang();
             }
-            $this->view = new RemoveRowsResponse($verwijderd);
-        } elseif ($this->isPosted()) {
-            $this->view = new EetplanBekendeHuizenResponse($this->model->getBekendeHuizen());
         }
     }
 
 
     public function novietrelatie($actie = null) {
-
+        $model = EetplanBekendenModel::instance();
         if ($actie == 'toevoegen') {
             $form = new EetplanBekendenForm(new EetplanBekenden());
             if ($form->validate()) {
-                $this->model->getBekendenModel()->create($form->getModel());
-                $this->view = new EetplanRelatieView($this->model->getBekendenModel()->getBekenden());
+                $model->create($form->getModel());
+                $this->view = new EetplanRelatieView($model->getBekenden($this->lichting));
             } else {
                 $this->view = $form;
             }
@@ -145,13 +152,13 @@ class EetplanController extends AclController {
             $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
             $verwijderd = array();
             foreach ($selection as $uuid) {
-                $bekenden = $this->model->getBekendenModel()->retrieveByUUID($uuid);
-                $this->model->getBekendenModel()->delete($bekenden);
+                $bekenden = $model->retrieveByUUID($uuid);
+                EetplanBekendenModel::instance()->delete($bekenden);
                 $verwijderd[] = $bekenden;
             }
             $this->view = new RemoveRowsResponse($verwijderd);
         } else {
-            $this->view = new EetplanRelatieView($this->model->getBekendenModel()->getBekenden());
+            $this->view = new EetplanRelatieView($model->getBekenden($this->lichting));
         }
     }
 
@@ -161,25 +168,32 @@ class EetplanController extends AclController {
      * POST een json body om dingen te doen.
      */
     public function beheer() {
-        $body = new EetplanBeheerView($this->model, WoonoordenModel::instance());
+        $body = new EetplanBeheerView($this->model, $this->lichting);
         $this->view = new CsrLayoutPage($body);
         $this->view->addCompressedResources('eetplan');
     }
 
     public function json() {
-        $eetplan = $this->model->getEetplan();
+        $eetplan = $this->model->getEetplan($this->lichting);
         $this->view = new JsonResponse($eetplan);
     }
 
     public function nieuw() {
-        $avond = filter_input(INPUT_POST, 'avond', FILTER_SANITIZE_STRING);
+        $form = new NieuwEetplanForm();
 
-        $eetplan = $this->model->maakEetplan($avond);
+        if ($form->validate()) {
+            $avond = filter_input(INPUT_POST, 'avond', FILTER_SANITIZE_STRING);
+            $eetplan = $this->model->maakEetplan($avond, $this->lichting);
 
-        foreach ($eetplan as $sessie) {
-            $this->model->create($sessie);
-            echo "uid: " . $sessie->uid . "\n";
-            echo "woonoord: " . $sessie->woonoord_id . "\n\n";
+            echo "Aantal: " . count($eetplan) . "\n";
+
+            foreach ($eetplan as $sessie) {
+                //$this->model->create($sessie);
+                echo "uid: " . $sessie->uid . "\n";
+                echo "woonoord: " . $sessie->woonoord_id . "\n\n";
+            }
+        } else {
+            $this->view = $form;
         }
     }
 }

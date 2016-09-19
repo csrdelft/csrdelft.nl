@@ -1,6 +1,12 @@
 .eetplan {
   table {
     float: left;
+    tr td { text-align: left; }
+    tr th { border-bottom: 1px solid black; }
+    tr:nth-child(2n-1) td { background-color: #fff; }
+    tr:nth-child(2n) td { background-color: #f5f5f5; }
+    tr .huis { border-left: 1px solid #000; padding:3px 4px; }
+    tr td.leeg { background-color: #ffb9ab; }
   }
 }
 
@@ -18,8 +24,3 @@
 .eetplantabel {
   border-collapse: collapse;
 }
-.eetplan table tr td { text-align: left; }
-.eetplan table tr th { border-bottom: 1px solid black; }
-.eetplan table tr:nth-child(2n-1) td { background-color: #fff; }
-.eetplan table tr:nth-child(2n) td { background-color: #f5f5f5; }
-.eetplan table tr .huis { border-left: 1px solid #000; padding:3px 4px; }
