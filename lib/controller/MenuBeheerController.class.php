@@ -95,10 +95,18 @@ class MenuBeheerController extends AclController {
 		if (!$item OR ! $item->magBeheren()) {
 			$this->geentoegang();
 		}
-		$rowCount = $this->model->removeMenuItem($item);
-		setMelding($item->tekst . ' verwijderd', 1);
-		if ($rowCount > 0) {
-			setMelding($rowCount . ' menu-items niveau omhoog verplaatst.', 2);
+		$db = Database::instance();
+		try {
+			$db->beginTransaction();
+			$rowCount = $this->model->removeMenuItem($item);
+			$db->commit();
+			setMelding($item->tekst . ' verwijderd', 1);
+			if ($rowCount > 0) {
+				setMelding($rowCount . ' menu-items niveau omhoog verplaatst.', 2);
+			}
+		} catch (Exception $ex) {
+			$db->rollBack();
+			setMelding('Verwijderen mislukt: ' . $ex->getMessage(), -1);
 		}
 		$this->view = new JsonResponse(true);
 	}
