@@ -1,6 +1,7 @@
 <?php
 
 require_once 'model/framework/Database.singleton.php';
+require_once 'model/framework/TransactionWrapper.class.php';
 require_once 'model/framework/Persistence.interface.php';
 require_once 'model/entity/framework/PersistentEntity.abstract.php';
 
@@ -48,12 +49,19 @@ abstract class PersistenceModel implements Persistence {
 	}
 
 	/**
+	 * Wrap all method calls to this model inside a database transaction.
+	 *
+	 * @return TransactionWrapper
+	 */
+	public static function transaction() {
+		return new TransactionWrapper(static::instance());
+	}
+
+	/**
 	 * Default ORDER BY
 	 * @var string
 	 */
 	protected $default_order = null;
-
-
 	/**
 	 * Object relational mapping
 	 * @var PersistentEntity
