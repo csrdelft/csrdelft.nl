@@ -224,7 +224,33 @@ class AccessModel extends CachedPersistenceModel {
 		return $suggestions;
 	}
 
-	public function isValidPerm($permission) {
+	/**
+	 * Get error(s) in permission string, if any.
+	 *
+	 * @param type $permissions
+	 * @return array empty if no errors; substring(s) of $permissions containing error(s) otherwise
+	 */
+	public function getPermissionStringErrors($permissions) {
+		$errors = array();
+		// OR
+		$or = explode(',', $permissions);
+		foreach ($or as $and) {
+			// AND
+			$and = explode('+', $and);
+			foreach ($and as $or2) {
+				// OR (secondary)
+				$or2 = explode('|', $or2);
+				foreach ($or2 as $perm) {
+					if (!$this->isValidPermission($perm)) {
+						$errors[] = $perm;
+					}
+				}
+			}
+		}
+		return $errors;
+	}
+
+	public function isValidPermission($permission) {
 		// case insensitive
 		$permission = strtoupper($permission);
 
