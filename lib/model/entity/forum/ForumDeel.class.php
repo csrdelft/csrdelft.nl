@@ -8,7 +8,7 @@
  * Een deelforum zit in een forumcategorie bevat ForumDraden.
  * 
  */
-class ForumDeel extends PersistentEntity {
+class ForumDeel extends PersistentEntity implements TreeNode {
 
 	/**
 	 * Primary key
@@ -125,6 +125,22 @@ class ForumDeel extends PersistentEntity {
 	 */
 	public function setForumDraden(array $forum_draden) {
 		$this->forum_draden = $forum_draden;
+	}
+
+	public function hasParent() {
+		return $this->categorie_id != null;
+	}
+
+	public function getParent() {
+		return $this->getForumCategorie();
+	}
+
+	public function hasChildren() {
+		return $this->hasForumDraden();
+	}
+
+	public function getChildren() {
+		return $this->getForumDraden();
 	}
 
 }

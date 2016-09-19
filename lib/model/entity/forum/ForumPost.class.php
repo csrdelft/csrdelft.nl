@@ -8,7 +8,7 @@
  * Een forumpost zit in een ForumDraad.
  * 
  */
-class ForumPost extends PersistentEntity {
+class ForumPost extends PersistentEntity implements Treenode {
 
 	/**
 	 * Primary key
@@ -130,6 +130,22 @@ class ForumPost extends PersistentEntity {
 
 	public function getGelezenPercentage() {
 		return $this->getAantalGelezen() * 100 / $this->getForumDraad()->getAantalLezers();
+	}
+
+	public function hasParent() {
+		return $this->draad_id != null;
+	}
+
+	public function getParent() {
+		return $this->getForumDraad();
+	}
+
+	public function hasChildren() {
+		return false;
+	}
+
+	public function getChildren() {
+		return null;
 	}
 
 }
