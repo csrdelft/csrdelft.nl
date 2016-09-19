@@ -1,0 +1,2 @@
+CREATE TABLE approve_objects (object_id int(11) NOT NULL auto_increment, parent_id int(11) NULL DEFAULT NULL, model_class varchar(255) NOT NULL, queued_moment varchar(255) NOT NULL, queued_by_uid varchar(4) NOT NULL, permission_approve varchar(255) NOT NULL, permission_deny varchar(255) NOT NULL, PRIMARY KEY (object_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 auto_increment=1;
+CREATE TABLE approve_attributes (object_id int(11) NOT NULL, name varchar(255) NOT NULL, value longtext NULL DEFAULT NULL, PRIMARY KEY (object_id,name)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
