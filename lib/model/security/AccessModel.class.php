@@ -571,22 +571,22 @@ class AccessModel extends CachedPersistenceModel {
 					switch ($prefix) {
 
 						case 'BESTUUR':
-							$l = BestuursLedenModel::instance()->getTableName();
 							$g = BesturenModel::instance()->getTableName();
+							$l = BestuursLedenModel::instance()->getTableName();
 							break;
 
 						case 'COMMISSIE':
-							$l = CommissieLedenModel::instance()->getTableName();
 							$g = CommissiesModel::instance()->getTableName();
+							$l = CommissieLedenModel::instance()->getTableName();
 							break;
 					}
 					return Database::sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie = ? AND l.uid = ?', array($role, $gevraagd, $profiel->uid));
 				}
 			// fall through
 
-
 			/**
-			 * Behoort een lid tot een bepaalde groep? Verticalen en kringen zijn ook groepen.
+			 * Behoort een lid tot een bepaalde (h.t.) groep?
+			 * Verticalen en kringen zijn ook groepen.
 			 * Als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer de h.t.
 			 * groep met die korte naam erbij, als het getal is uiteraard de groep met dat id.
 			 * Met de toevoeging ':Fiscus' kan ook specifieke functie geëist worden binnen een groep.
@@ -605,46 +605,88 @@ class AccessModel extends CachedPersistenceModel {
 							$gevraagd = false;
 							$role = $gevraagd;
 						}
-						if ($gevraagd) {
+						if (is_numeric($gevraagd)) {
 							$groep = BesturenModel::get($gevraagd);
 						} else {
-							$groep = BesturenModel::get('bestuur'); // h.t.
+							$familie = BesturenModel::getFamilie('bestuur', GroepStatus::HT);
+							$groep = reset($familie);
 						}
 						break;
 
 					case 'COMMISSIE':
-						$groep = CommissiesModel::get($gevraagd);
+						if (is_numeric($gevraagd)) {
+							$groep = CommissiesModel::get($gevraagd);
+						} else {
+							$familie = CommissiesModel::getFamilie($gevraagd, GroepStatus::HT);
+							$groep = reset($familie);
+						}
 						break;
 
 					case 'KRING':
-						$groep = KringenModel::get($gevraagd);
+						if (is_numeric($gevraagd)) {
+							$groep = KringenModel::get($gevraagd);
+						} else {
+							$familie = KringenModel::getFamilie($gevraagd, GroepStatus::HT);
+							$groep = reset($familie);
+						}
 						break;
 
 					case 'ONDERVERENIGING':
-						$groep = OnderverenigingenModel::get($gevraagd);
+						if (is_numeric($gevraagd)) {
+							$groep = OnderverenigingenModel::get($gevraagd);
+						} else {
+							$familie = OnderverenigingenModel::getFamilie($gevraagd, GroepStatus::HT);
+							$groep = reset($familie);
+						}
 						break;
 
 					case 'WOONOORD':
-						$groep = WoonoordenModel::get($gevraagd);
+						if (is_numeric($gevraagd)) {
+							$groep = WoonoordenModel::get($gevraagd);
+						} else {
+							$familie = WoonoordenModel::getFamilie($gevraagd, GroepStatus::HT);
+							$groep = reset($familie);
+						}
 						break;
 
 					case 'ACTIVITEIT':
-						$groep = ActiviteitenModel::get($gevraagd);
+						if (is_numeric($gevraagd)) {
+							$groep = ActiviteitenModel::get($gevraagd);
+						} else {
+							$familie = ActiviteitenModel::getFamilie($gevraagd, GroepStatus::HT);
+							$groep = reset($familie);
+						}
 						break;
 
 					case 'KETZER':
-						$groep = KetzersModel::get($gevraagd);
+						if (is_numeric($gevraagd)) {
+							$groep = KetzersModel::get($gevraagd);
+						} else {
+							$familie = KetzersModel::getFamilie($gevraagd, GroepStatus::HT);
+							$groep = reset($familie);
+						}
 						break;
 
 					case 'WERKGROEP':
-						$groep = WerkgroepenModel::get($gevraagd);
+						if (is_numeric($gevraagd)) {
+							$groep = WerkgroepenModel::get($gevraagd);
+						} else {
+							$familie = WerkgroepenModel::getFamilie($gevraagd, GroepStatus::HT);
+							$groep = reset($familie);
+						}
 						break;
 
 					case 'GROEP':
 					default:
-						$groep = RechtenGroepenModel::get($gevraagd);
-						if (!$groep) {
-							$groep = RechtenGroepenModel::omnummeren($gevraagd);
+						if (is_numeric($gevraagd)) {
+							$groep = RechtenGroepenModel::get($gevraagd);
+							// oud groepnummer?
+							if (!$groep) {
+								$groep = RechtenGroepenModel::omnummeren($gevraagd);
+							}
+						} else {
+							$familie = RechtenGroepenModel::getFamilie($gevraagd, GroepStatus::HT);
+							$groep = reset($familie);
 						}
 						break;
 				}
