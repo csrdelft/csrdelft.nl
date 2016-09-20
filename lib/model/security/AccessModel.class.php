@@ -125,21 +125,6 @@ class AccessModel extends CachedPersistenceModel {
 		return $ac;
 	}
 
-	public function getTree($environment, $resource) {
-		if ($environment === ActiviteitenModel::ORM) {
-			$activiteit = ActiviteitenModel::get($resource);
-			if ($activiteit) {
-				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $activiteit->soort, '*'));
-			}
-		} elseif ($environment === CommissiesModel::ORM) {
-			$commissie = CommissiesModel::get($resource);
-			if ($commissie) {
-				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $commissie->soort, '*'));
-			}
-		}
-		return $this->prefetch('environment = ? AND (resource = ? OR resource = ?)', array($environment, $resource, '*'));
-	}
-
 	/**
 	 * Stel rechten in voor een specifiek of gehele klasse van objecten.
 	 * Overschrijft bestaande rechten.
