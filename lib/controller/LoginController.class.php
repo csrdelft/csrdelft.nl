@@ -240,9 +240,9 @@ class LoginController extends AclController {
 		$form = new VerifyForm($tokenString);
 		if ($form->validate()) {
 			// voorkom dat AccessModel ingelogde gebruiker blokkeerd als AuthenticationMethod::token_url niet toegestaan is
-			if (LoginModel::instance()->getAuthenticationMethod() === AuthenticationMethod::token_url) {
-				LoginModel::instance()->login('x999', 'x999', false);
-			}
+//			if (LoginModel::instance()->getAuthenticationMethod() === AuthenticationMethod::token_url) {
+//				LoginModel::instance()->login('x999', 'x999', false);
+//			}
 			$uid = $form->findByName('user')->getValue();
 			$account = AccountModel::get($uid);
 			// mag inloggen?
