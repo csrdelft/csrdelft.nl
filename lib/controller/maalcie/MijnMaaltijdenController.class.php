@@ -16,7 +16,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, null);
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'ketzer'	 => 'P_MAAL_IK',
 				'lijst'		 => 'P_MAAL_IK',
@@ -82,7 +82,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function aanmelden($mid) {
 		$aanmelding = MaaltijdAanmeldingenModel::aanmeldenVoorMaaltijd($mid, LoginModel::getUid(), LoginModel::getUid());
-		if ($this->isPosted()) {
+		if ($this->getMethod() == 'POST') {
 			$this->view = new MijnMaaltijdView($aanmelding->getMaaltijd(), $aanmelding);
 		} else {
 			require_once 'view/maalcie/MaaltijdKetzerView.class.php';
@@ -92,7 +92,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function afmelden($mid) {
 		$maaltijd = MaaltijdAanmeldingenModel::afmeldenDoorLid($mid, LoginModel::getUid());
-		if ($this->isPosted()) {
+		if ($this->getMethod() == 'POST') {
 			$this->view = new MijnMaaltijdView($maaltijd);
 		} else {
 			require_once 'view/maalcie/MaaltijdKetzerView.class.php';

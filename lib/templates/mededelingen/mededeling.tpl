@@ -17,7 +17,7 @@
 	<div id="instellingen">
 		<label for="categorie">Categorie: <a title="De categorie bepaalt welk kleurtje erv&oacute;&oacute;r komt in de overzichtspagina.">{icon get="vraagteken"}</a></label>
 		<select name="categorie">
-			{foreach from=CategorieModel::getAll() item=categorie}
+			{foreach from=MededelingCategorieenModel::getAll() item=categorie}
 				{if $categorie->magUitbreiden() OR $categorie->id==$mededeling->categorie}
 					<option value="{$categorie->id}"{if $mededeling->categorie==$categorie->id} selected="selected"{/if}>{$categorie->naam|escape:'html'}</option>
 				{/if}

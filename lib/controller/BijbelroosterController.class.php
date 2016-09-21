@@ -14,7 +14,7 @@ class BijbelroosterController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, BijbelroosterModel::instance());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'bekijken' => 'P_PUBLIC'
 			);

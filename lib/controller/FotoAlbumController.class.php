@@ -14,7 +14,7 @@ class FotoAlbumController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, FotoAlbumModel::instance());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'bekijken'	 => 'P_ALBUM_READ',
 				'download'	 => 'P_ALBUM_READ',
@@ -57,7 +57,7 @@ class FotoAlbumController extends AclController {
 		}
 		$album = null;
 		if (sizeof($path) === 2) {
-			$album = $this->model->getFotoAlbum($path[2]);
+			$album = $this->model->getFotoAlbum(end($path));
 		}
 		if (!$album) {
 			$path = PICS_PATH . urldecode(implode('/', $path));
@@ -100,7 +100,7 @@ class FotoAlbumController extends AclController {
 
 	public function toevoegen(FotoAlbum $album) {
 		$formulier = new FotoAlbumToevoegenForm($album);
-		if ($this->isPosted() AND $formulier->validate()) {
+		if ($this->getMethod() == 'POST' AND $formulier->validate()) {
 			$subalbum = $formulier->findByName('subalbum')->getValue();
 			$album->path .= $subalbum . '/';
 			$album->subdir .= $subalbum . '/';
@@ -122,7 +122,7 @@ class FotoAlbumController extends AclController {
 			$formulier = new FotosDropzone($album);
 			$uploader = $formulier->getPostedUploader();
 		}
-		if ($this->isPosted()) {
+		if ($this->getMethod() == 'POST') {
 			if ($formulier->validate()) {
 				try {
 					if ($poster) {
@@ -321,7 +321,7 @@ class FotoAlbumController extends AclController {
 			$this->geentoegang();
 		}
 		$formulier = new FotoTagToevoegenForm($foto);
-		if ($this->isPosted() AND $formulier->validate()) {
+		if ($this->getMethod() == 'POST' AND $formulier->validate()) {
 			$uid = $formulier->findByName('uid')->getValue();
 			$x = $formulier->findByName('x')->getValue();
 			$y = $formulier->findByName('y')->getValue();

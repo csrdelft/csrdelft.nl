@@ -101,9 +101,55 @@ function group_by_distinct($prop, $in, $del = true) {
 }
 
 /**
+ * Set cookie with url to go back to after login.
+ * 
+ * @param string $url
+ */
+function setGoBackCookie($url) {
+	if ($url == null) {
+		unset($_COOKIE['goback']);
+		setcookie('goback', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
+	} else {
+		setcookie('goback', $url, time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+	}
+}
+
+/**
+ * Set cookie with token to automatically login.
+ * 
+ * @param string $token
+ */
+function setRememberCookie($token) {
+	if ($token == null) {
+		unset($_COOKIE['remember']);
+		setcookie('remember', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
+	} else {
+		setcookie('remember', $token, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+	}
+}
+
+/**
+ * Set cookie paramters of current session.
+ */
+function setSessionCookieParams() {
+	session_set_cookie_params(getSessionMaxLifeTime(), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+}
+
+function getSessionMaxLifeTime() {
+	$lifetime = (int) Instellingen::get('beveiliging', 'session_lifetime_seconds');
+	// Sync lifetime of FS based PHP session with DB based C.S.R. session
+	$gc = (int) ini_get('session.gc_maxlifetime');
+	if ($gc > 0 AND $gc < $lifetime) {
+		$lifetime = $gc;
+	}
+	return $lifetime;
+}
+
+/**
  * Invokes a client page (re)load the url.
  * 
  * @param string $url
+ * @param boolean $refresh allow a refresh; redirect to CSR_ROOT otherwise
  */
 function redirect($url = null, $refresh = true) {
 	if (empty($url)) {
@@ -342,7 +388,8 @@ function namen2uid($sNamen, $filter = 'leden') {
 			$return[]['naamOpties'] = $aNaamOpties;
 		}
 	}
-	if (count($return) === 0) return false;
+	if (count($return) === 0)
+		return false;
 	return $return;
 }
 
@@ -598,7 +645,7 @@ function getMelding() {
 			//if (isset($shown[$hash]))
 			//	continue; // skip double messages
 			$sMelding .= '<div class="alert alert-' . $msg['lvl'] . '">';
-            $sMelding .= Icon::getTag('alert-'.$msg['lvl']);
+			$sMelding .= Icon::getTag('alert-' . $msg['lvl']);
 			$sMelding .= $msg['msg'];
 			$sMelding .= '</div>';
 			$shown[$hash] = 1;

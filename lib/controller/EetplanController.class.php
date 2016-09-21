@@ -19,7 +19,7 @@ class EetplanController extends AclController {
 
     public function __construct($query) {
         parent::__construct($query, EetplanModel::instance());
-        if ($this->isPosted()) {
+        if ($this->getMethod() == 'GET') {
             $this->acl = array(
                 'beheer' => 'P_ADMIN',
                 'woonoorden' => 'P_ADMIN',

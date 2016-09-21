@@ -29,6 +29,11 @@ abstract class Controller {
 	 */
 	protected $action;
 	/**
+	 * Allowed request methods
+	 * @var array
+	 */
+	protected $methods;
+	/**
 	 * Query broken down to positional (REST) parameters
 	 * @var array
 	 */
@@ -39,8 +44,9 @@ abstract class Controller {
 	 */
 	private $kvp = array();
 
-	public function __construct($query, $model) {
+	public function __construct($query, $model, $methods = array('GET', 'POST')) {
 		$this->model = $model;
+		$this->methods = $methods;
 
 		// split into REST and KVP query part
 		$queryparts = explode('?', $query, 2);
@@ -114,12 +120,8 @@ abstract class Controller {
 		return $params;
 	}
 
-	/**
-	 * Is the current request posted?
-	 * @return boolean
-	 */
-	public function isPosted() {
-		return $_SERVER['REQUEST_METHOD'] === 'POST';
+	public function getMethod() {
+		return $_SERVER['REQUEST_METHOD'];
 	}
 
 	public function getModel() {
@@ -151,14 +153,24 @@ abstract class Controller {
 		$account = LoginModel::getAccount();
 		if (isset($account->blocked_reason)) {
 			setMelding(CsrBB::parse($account->blocked_reason), -1);
-			$this->action = 'geentoegang';
+			return $this->geentoegang();
+		}
+		// Controleer of de request method toegestaan is
+		if (!in_array($this->getMethod(), $this->methods)) {
+			return $this->geentoegang();
 		}
 		// Controleer of de actie uitgevoerd mag worden met de gegeven argumenten
-		elseif (!$this->mag($this->action, $args)) {
+		if (!$this->mag($this->action, $args)) {
 			//DebugLogModel::instance()->log(get_class($this), $this->action, $args, 'geentoegang');
-			$this->action = 'geentoegang';
+			return $this->geentoegang();
 		}
-		if (!$this->hasAction($this->action)) {
+		// Specific action function is preferred
+		$action = $this->getMethod() . '_' . $this->action;
+		if ($this->hasAction($action)) {
+			$this->action = $action;
+		}
+		// Controleer of de actie bestaat
+		elseif (!$this->hasAction($this->action)) {
 			throw new Exception('Action undefined: ' . $this->action);
 		}
 		return call_user_func_array(array($this, $this->action), $args);
@@ -166,12 +178,12 @@ abstract class Controller {
 
 	protected function geentoegang() {
 		http_response_code(403);
-		if ($this->isPosted()) {
+		if ($this->getMethod() == 'POST') {
 			die('403 Forbidden');
 		}
 		// Redirect to login form
 		elseif (LoginModel::getUid() === 'x999') {
-			setcookie('goback', REQUEST_URI, time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+			setGoBackCookie(REQUEST_URI);
 			redirect(CSR_ROOT);
 		}
 		// GUI 403

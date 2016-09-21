@@ -8,7 +8,7 @@ class PeilingenController extends AclController
     public function __construct($query)
     {
         parent::__construct($query, PeilingenModel::instance());
-        if (!$this->isPosted()) {
+        if ($this->getMethod() == 'GET') {
             $this->acl = array(
                 'beheer' => 'P_PEILING_MOD',
                 'verwijderen' => 'P_PEILING_MOD',
@@ -34,7 +34,7 @@ class PeilingenController extends AclController
     {
         $peiling = new Peiling();
 
-        if ($this->isPosted()) {
+        if ($this->getMethod() == 'POST') {
             $peiling->tekst = filter_input(INPUT_POST, 'verhaal', FILTER_SANITIZE_STRING);
             $peiling->titel = filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING);
             $opties = filter_input(INPUT_POST, 'opties', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
@@ -84,6 +84,7 @@ class PeilingenController extends AclController
         $optie = filter_input(INPUT_POST, 'optie', FILTER_VALIDATE_INT);
         // optie en id zijn null of false als filter_input faalt
         if (is_numeric($peiling_id) && is_numeric($optie)) {
+            PeilingenModel::instance()->stem($peiling_id, $optie);
             redirect(HTTP_REFERER . '#peiling' . $peiling_id);
         } else {
             setMelding("Kies een optie om op te stemmen", 0);

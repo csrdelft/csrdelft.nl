@@ -11,7 +11,7 @@ class LoginController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, LoginModel::instance());
-		if (!$this->isPosted()) {
+		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'logout'			 => 'P_LOGGED_IN',
 				'su'				 => 'P_ADMIN',
@@ -50,7 +50,7 @@ class LoginController extends AclController {
 	protected function geentoegang() {
 		require_once 'model/CmsPaginaModel.class.php';
 		require_once 'view/CmsPaginaView.class.php';
-		if ($this->isPosted()) {
+		if ($this->getMethod() == 'POST') {
 			parent::geentoegang();
 		}
 		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
@@ -83,7 +83,9 @@ class LoginController extends AclController {
 				return;
 			}
 			if (isset($_COOKIE['goback'])) {
-				redirect($_COOKIE['goback']);
+				$url = $_COOKIE['goback'];
+				setGoBackCookie(null);
+				redirect($url);
 			}
 		}
 		redirect(CSR_ROOT);
@@ -180,7 +182,7 @@ class LoginController extends AclController {
 			}
 		}
 		// resetten
-		elseif ($action === 'reset' AND LoginModel::mag('P_PROFIEL_EDIT', true) AND OneTimeTokensModel::instance()->isVerified($account->uid, '/wachtwoord/reset')) {
+		elseif ($action === 'reset' AND LoginModel::mag('P_PROFIEL_EDIT', AuthenticationMethod::getTypeOptions()) AND OneTimeTokensModel::instance()->isVerified($account->uid, '/wachtwoord/reset')) {
 			$form = new WachtwoordWijzigenForm($account, $action, false);
 			if ($form->validate()) {
 				// wachtwoord opslaan
@@ -206,8 +208,8 @@ class LoginController extends AclController {
 		else {
 			$form = new WachtwoordVergetenForm();
 			if ($form->validate()) {
-				// voorkom dat AccessModel ingelogde gebruiker blokkeerd met $allowPrivateUrl == false
-				if (LoginModel::instance()->isAuthenticatedByToken()) {
+				// voorkom dat AccessModel ingelogde gebruiker blokkeerd als AuthenticationMethod::token_url niet toegestaan is
+				if (LoginModel::instance()->getAuthenticationMethod() === AuthenticationMethod::token_url) {
 					LoginModel::instance()->login('x999', 'x999', false);
 				}
 				$values = $form->getValues();
@@ -237,8 +239,8 @@ class LoginController extends AclController {
 		$tokenString = filter_var($tokenString, FILTER_SANITIZE_STRING);
 		$form = new VerifyForm($tokenString);
 		if ($form->validate()) {
-			// voorkom dat AccessModel ingelogde gebruiker blokkeerd met $allowPrivateUrl == false
-			if (LoginModel::instance()->isAuthenticatedByToken()) {
+			// voorkom dat AccessModel ingelogde gebruiker blokkeerd als AuthenticationMethod::token_url niet toegestaan is
+			if (LoginModel::instance()->getAuthenticationMethod() === AuthenticationMethod::token_url) {
 				LoginModel::instance()->login('x999', 'x999', false);
 			}
 			$uid = $form->findByName('user')->getValue();

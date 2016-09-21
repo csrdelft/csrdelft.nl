@@ -28,7 +28,7 @@ class RememberLoginModel extends PersistenceModel {
 		$remember->remember_since = getDateTime();
 		$remember->device_name = '';
 		$remember->ip = $_SERVER['REMOTE_ADDR'];
-		$remember->lock_ip = true;
+		$remember->lock_ip = false;
 		return $remember;
 	}
 
@@ -40,7 +40,7 @@ class RememberLoginModel extends PersistenceModel {
 		} else {
 			$remember->id = $this->create($remember);
 		}
-		return setcookie('remember', $rand, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+		return setRememberCookie($rand);
 	}
 
 }
