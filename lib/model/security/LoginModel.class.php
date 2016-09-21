@@ -394,6 +394,8 @@ class LoginModel extends PersistenceModel implements Validator {
 			throw new Exception('Deze gebruiker mag niet inloggen!');
 		}
 		$suedFrom = static::getAccount();
+		// Keep authentication method
+		$authMethod = $this->getAuthenticationMethod();
 
 		// Clear session
 		session_unset();
@@ -401,10 +403,13 @@ class LoginModel extends PersistenceModel implements Validator {
 		// Subject assignment:
 		$_SESSION['_suedFrom'] = $suedFrom->uid;
 		$_SESSION['_uid'] = $suNaar->uid;
+		$_SESSION['_authenticationMethod'] = $authMethod;
 	}
 
 	public function endSwitchUser() {
 		$suedFrom = static::getSuedFrom();
+		// Keep authentication method
+		$authMethod = $this->getAuthenticationMethod();
 
 		// Clear session
 		session_unset();
@@ -412,6 +417,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		// Subject assignment:
 		$_SESSION['_uid'] = $suedFrom->uid;
 		$_SESSION['_suedFrom'] = null;
+		$_SESSION['_authenticationMethod'] = $authMethod;
 	}
 
 	public function isSued() {
