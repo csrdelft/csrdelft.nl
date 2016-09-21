@@ -57,7 +57,7 @@ abstract class A implements PersistentEnum {
 			case self::Verwijderen:
 			case self::Beheren:
 			case self::Rechten:
-				return ucfirst($option);
+				return ucfirst($options);
 			default: throw new Exception('AccessAction onbekend');
 		}
 	}

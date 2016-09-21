@@ -65,8 +65,7 @@ class VerjaardagenModel {
 	}
 
 	public static function getTussen($van, $tot, $limiet = 0, $ical = false) {
-		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
-		if (!LoginModel::mag('P_VERJAARDAGEN', $auth)) {
+		if (!LoginModel::mag('P_VERJAARDAGEN', $ical)) {
 			return array();
 		}
 

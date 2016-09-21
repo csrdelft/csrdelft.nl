@@ -359,7 +359,7 @@ class MaaltijdAanmeldingenModel {
 		if (empty($filter)) {
 			return true;
 		}
-		return AccessModel::mag($account, $filter);
+		return AccessModel::mag($account, $filter, false);
 	}
 
 	// Repetitie-Maaltijden ############################################################

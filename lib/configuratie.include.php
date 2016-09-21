@@ -145,8 +145,7 @@ switch (constant('MODE')) {
 		require_once 'model/security/CliLoginModel.class.php';
 		// Late static binding requires explicitly
 		// calling instance() before any static method!
-		LoginModel::instance();
-		if (!LoginModel::mag('P_ADMIN')) {
+		if (!LoginModel::instance()->isLoggedIn()) {
 			die('access denied');
 		}
 		break;
@@ -173,8 +172,6 @@ switch (constant('MODE')) {
 		ini_set('session.cookie_secure', FORCE_HTTPS);
 		ini_set('session.cookie_httponly', true);
 
-		// Sync lifetime of FS based PHP session with DB based C.S.R. session
-		setSessionCookieParams();
 		session_start();
 		if (session_id() == 'deleted') {
 			// Deletes old session

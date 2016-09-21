@@ -46,7 +46,7 @@ class CliLoginModel extends LoginModel {
 		return false;
 	}
 
-	public function login($user, $pass_plain, $evtWachten = true, RememberLogin $remember = null, $lockIP = false, $alreadyAuthenticatedByUrlToken = false, $expire = null) {
+	public function login($user, $pass_plain, $wachten = true, RememberLogin $remember = null, $lockIP = false, $tokenAuthenticated = false, $expire = null) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 
@@ -97,7 +97,6 @@ class CliLoginModel extends LoginModel {
 		$session->user_agent = MODE;
 		$session->ip = '';
 		$session->lock_ip = true; // sessie koppelen aan ip?
-		$session->authentication_method = $this->getAuthenticationMethod();
 		if ($this->exists($session)) {
 			$this->update($session);
 		} else {
@@ -115,8 +114,13 @@ class CliLoginModel extends LoginModel {
 		return false;
 	}
 
-	public function getAuthenticationMethod() {
-		return AuthenticationMethod::password_login;
+	public function isLoggedIn($allowPrivateUrl = false) {
+		$account = static::getAccount();
+		return $account AND AccessModel::mag($account, 'P_ADMIN');
+	}
+
+	public function isAuthenticatedByToken() {
+		return false;
 	}
 
 	public function isPauper() {
