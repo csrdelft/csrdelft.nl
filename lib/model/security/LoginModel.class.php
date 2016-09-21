@@ -17,7 +17,7 @@ require_once 'model/ProfielModel.class.php';
  * 
  * @see AccountModel.class.php
  */
-class LoginModel extends PersistenceModel implements Validator {
+class LoginModel extends CachedPersistenceModel implements Validator {
 
 	const ORM = 'LoginSession';
 	const DIR = 'security/';
