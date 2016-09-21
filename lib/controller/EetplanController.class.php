@@ -51,13 +51,9 @@ class EetplanController extends AclController {
 			$this->action = $this->getParam(2);
 		}
 
-		if ($this->hasParam(3) AND !($this->getParam(3) == 'huidig')) {
-		    $this->lichting = $this->getParam(3);
-        } else {
-            $this->lichting = substr((string) LichtingenModel::getJongsteLidjaar(), 2, 2);
-        }
+        $this->lichting = substr((string) LichtingenModel::getJongsteLidjaar(), 2, 2);
 
-		return parent::performAction($this->getParams(4));
+		return parent::performAction($this->getParams(3));
 	}
 
 	public function view() {

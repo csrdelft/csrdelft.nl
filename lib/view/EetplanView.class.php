@@ -103,7 +103,7 @@ class EetplanBeheerView extends AbstractEetplanView {
 
 class EetplanHuizenTable extends DataTable {
     public function __construct($lichting) {
-        parent::__construct('EetplanHuizenData', '/eetplan/woonoorden/' . $lichting . '/', 'Woonoorden die meedoen');
+        parent::__construct('EetplanHuizenData', '/eetplan/woonoorden/', 'Woonoorden die meedoen');
         $this->searchColumn('naam');
         $this->addColumn('eetplan', null, null, 'switchButton_' . $this->dataTableId);
         $this->addKnop(new DataTableKnop(">= 1", $this->dataTableId, $this->dataUrl . 'aan', 'post', 'Aanmelden', 'Woonoorden aanmelden voor eetplan', 'text'));
@@ -148,8 +148,8 @@ class EetplanHuizenView extends DataTableResponse {
 }
 
 class EetplanBekendenTable extends DataTable {
-    public function __construct($lichting) {
-        parent::__construct(EetplanBekendenModel::ORM, '/eetplan/novietrelatie/' . $lichting . '/', 'Novieten die elkaar kennen');
+    public function __construct() {
+        parent::__construct(EetplanBekendenModel::ORM, '/eetplan/novietrelatie/', 'Novieten die elkaar kennen');
         $this->addColumn('noviet1');
         $this->addColumn('noviet2');
         $this->searchColumn('noviet1');
@@ -180,8 +180,8 @@ class EetplanRelatieView extends DataTableResponse {
  * Class EetplanBekendenForm
  */
 class EetplanBekendenForm extends ModalForm {
-    function __construct(EetplanBekenden $model, $lichting) {
-        parent::__construct($model, '/eetplan/novietrelatie/' . $lichting . '/toevoegen', false, true);
+    function __construct(EetplanBekenden $model) {
+        parent::__construct($model, '/eetplan/novietrelatie/toevoegen', false, true);
         $fields[] = new RequiredLidField('uid1', $model->uid1, 'Noviet 1', 'novieten');
         $fields[] = new RequiredLidField('uid2', $model->uid2, 'Noviet 2', 'novieten');
         $fields['btn'] = new FormDefaultKnoppen();
@@ -205,8 +205,8 @@ class EetplanBekendenForm extends ModalForm {
 
 
 class EetplanBekendeHuizenTable extends DataTable {
-    public function __construct($lichting) {
-        parent::__construct(EetplanModel::ORM, '/eetplan/bekendehuizen/' . $lichting . '/', 'Novieten die huizen kennen');
+    public function __construct() {
+        parent::__construct(EetplanModel::ORM, '/eetplan/bekendehuizen/', 'Novieten die huizen kennen');
         $this->hideColumn('avond');
         $this->hideColumn('woonoord_id');
         $this->hideColumn('uid');
