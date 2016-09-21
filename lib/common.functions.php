@@ -129,6 +129,23 @@ function setRememberCookie($token) {
 }
 
 /**
+ * Set cookie paramters of current session.
+ */
+function setSessionCookieParams() {
+	session_set_cookie_params(getSessionMaxLifeTime(), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+}
+
+function getSessionMaxLifeTime() {
+	$lifetime = (int) Instellingen::get('beveiliging', 'session_lifetime_seconds');
+	// Sync lifetime of FS based PHP session with DB based C.S.R. session
+	$gc = (int) ini_get('session.gc_maxlifetime');
+	if ($gc > 0 AND $gc < $lifetime) {
+		$lifetime = $gc;
+	}
+	return $lifetime;
+}
+
+/**
  * Invokes a client page (re)load the url.
  * 
  * @param string $url
@@ -371,7 +388,8 @@ function namen2uid($sNamen, $filter = 'leden') {
 			$return[]['naamOpties'] = $aNaamOpties;
 		}
 	}
-	if (count($return) === 0) return false;
+	if (count($return) === 0)
+		return false;
 	return $return;
 }
 
@@ -627,7 +645,7 @@ function getMelding() {
 			//if (isset($shown[$hash]))
 			//	continue; // skip double messages
 			$sMelding .= '<div class="alert alert-' . $msg['lvl'] . '">';
-            $sMelding .= Icon::getTag('alert-'.$msg['lvl']);
+			$sMelding .= Icon::getTag('alert-' . $msg['lvl']);
 			$sMelding .= $msg['msg'];
 			$sMelding .= '</div>';
 			$shown[$hash] = 1;
