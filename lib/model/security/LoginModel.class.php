@@ -79,6 +79,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			if ($_SESSION['_uid'] != 'x999') {
 				$session = $this->getCurrentSession();
 				$session->expire = getDateTime(time() + getSessionMaxLifeTime());
+				$this->update($session);
 			}
 		} else {
 			// Subject assignment:
