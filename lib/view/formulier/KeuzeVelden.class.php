@@ -438,9 +438,7 @@ class DateField extends InputField {
 		if ($jaar < $this->min_jaar) {
 			$this->min_jaar = $jaar;
 		}
-
-		echo "min_jaar = " . $jaar . "\n";
-	}
+    }
 
 	public function isPosted() {
 		return isset($_POST[$this->name . '_jaar'], $_POST[$this->name . '_maand'], $_POST[$this->name . '_dag']);
@@ -488,7 +486,6 @@ class DateField extends InputField {
 			$this->error = 'Kies een jaar na ' . $this->min_jaar;
 		}
 
-		echo $this->min_jaar;
 		return $this->error === '';
 	}
 

@@ -294,7 +294,7 @@ class NieuwEetplanForm extends ModalForm {
             return false;
         }
 
-        if (EetplanModel::instance()->count("avond = ?", $this->getValues()['avond']) > 0) {
+        if (EetplanModel::instance()->count("avond = ?", array($this->getValues()['avond'])) > 0) {
             $this->error = 'Er bestaat al een eetplan met deze datum';
             return false;
         }
