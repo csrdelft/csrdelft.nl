@@ -141,7 +141,7 @@ class EetplanController extends AclController {
     public function novietrelatie($actie = null) {
         $model = EetplanBekendenModel::instance();
         if ($actie == 'toevoegen') {
-            $form = new EetplanBekendenForm(new EetplanBekenden());
+            $form = new EetplanBekendenForm(new EetplanBekenden(), $this->lichting);
             if ($form->validate()) {
                 $model->create($form->getModel());
                 $this->view = new EetplanRelatieView($model->getBekenden($this->lichting));

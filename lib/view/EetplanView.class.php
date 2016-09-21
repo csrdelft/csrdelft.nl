@@ -188,6 +188,19 @@ class EetplanBekendenForm extends ModalForm {
 
         $this->addFields($fields);
     }
+
+    public function validate() {
+        if (!parent::validate()) {
+            return false;
+        }
+
+        if (EetplanBekendenModel::instance()->exists($this->model)) {
+            $this->error = 'Bekenden bestaan al';
+            return false;
+        }
+
+        return true;
+    }
 }
 
 
