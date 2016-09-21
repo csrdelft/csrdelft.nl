@@ -4,11 +4,10 @@ ALTER TABLE eetplan
 
 -- Maak de nieuwe eetplan tabel aan
 CREATE TABLE eetplan (
-  id          INT(11)    NOT NULL AUTO_INCREMENT,
   uid         VARCHAR(4) NOT NULL,
   woonoord_id INT(11)    NOT NULL,
   avond       DATE       NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (uid, woonoord_id)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8

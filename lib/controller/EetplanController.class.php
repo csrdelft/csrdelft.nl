@@ -102,7 +102,7 @@ class EetplanController extends AclController {
     }
 
     public function bekendehuizen($actie = null) {
-        if ($this->isPosted()) {
+        if ($this->getMethod() == 'POST') {
             if ($actie == 'toevoegen') {
                 $eetplan = new Eetplan();
                 $eetplan->avond = '0000-00-00';
