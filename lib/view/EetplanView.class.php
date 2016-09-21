@@ -288,4 +288,17 @@ class NieuwEetplanForm extends ModalForm {
 
         $this->addFields($fields);
     }
+
+    public function validate() {
+        if (!parent::validate()) {
+            return false;
+        }
+
+        if (EetplanModel::instance()->count("avond = ?", $this->getValues()['avond']) > 0) {
+            $this->error = 'Er bestaat al een eetplan met deze datum';
+            return false;
+        }
+
+        return true;
+    }
 }
