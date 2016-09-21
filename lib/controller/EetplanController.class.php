@@ -21,20 +21,20 @@ class EetplanController extends AclController {
         parent::__construct($query, EetplanModel::instance());
         if ($this->getMethod() == 'GET') {
             $this->acl = array(
-                'beheer' => 'P_ADMIN',
-                'woonoorden' => 'P_ADMIN',
-                'novietrelatie' => 'P_ADMIN',
-                'bekendehuizen' => 'P_ADMIN',
-                'nieuw' => 'P_ADMIN'
-            );
-        } else {
-            $this->acl = array(
                 'view' => 'P_LEDEN_READ',
                 'noviet' => 'P_LEDEN_READ',
                 'huis' => 'P_LEDEN_READ',
                 'beheer' => 'P_ADMIN',
                 'bekendehuizen' => 'P_ADMIN',
                 'json' => 'P_LEDEN_READ',
+            );
+        } else {
+            $this->acl = array(
+                'beheer' => 'P_ADMIN',
+                'woonoorden' => 'P_ADMIN',
+                'novietrelatie' => 'P_ADMIN',
+                'bekendehuizen' => 'P_ADMIN',
+                'nieuw' => 'P_ADMIN'
             );
         }
     }
