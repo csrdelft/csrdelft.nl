@@ -183,18 +183,15 @@ abstract class PersistenceModel implements Persistence {
 	}
 
 	/**
-	 * Load saved enitity data and replace entity object.
+	 * Load saved enitity data and replace current entity object values.
 	 * 
-	 * @WARNING: returns new object!
 	 * @see retrieveAttributes
-	 * 
-	 * Todo: something clever with references
 	 * 
 	 * @param PersistentEntity $entity
 	 * @return PersistentEntity|false
 	 */
 	public function retrieve(PersistentEntity $entity) {
-		return $this->retrieveByPrimaryKey($entity->getValues(true));
+		return $this->retrieveAttributes($entity, $entity->getAttributes());
 	}
 
 	/**
@@ -229,24 +226,37 @@ abstract class PersistenceModel implements Persistence {
 	 * 
 	 * Usage example:
 	 * 
-	 * $users = UserModel::instance()->findSparse(array('naam'), ...); // retrieves only naam attribute
+	 * $model = UserModel::instance();
+	 * $users = $model->findSparse(array('naam'), ...); // retrieves only naam attribute
 	 * foreach ($users as $user) {
 	 *   echo $user->getAddress(); // address is sparse: retrieve address
 	 * }
-	 * class User {
-	 * public function getAddress() {
-	 *   $attr = array('city' 'street', 'number', 'postalcode');
-	 *   UserModel::instance()->retrieveAttributes($this, $attr);
-	 *   $this->castValues($attr); // because PDO does not do this automatically (yet)
-	 *   $this->attr_retrieved = array_merge($this->attr_retrieved, $attr); // bookkeeping
+	 * 
+	 * class User extends PersitentEntity {
+	 *   public function getAddress() {
+	 *     $attributes = array('city' 'street', 'number', 'postalcode');
+	 *     UserModel::instance()->retrieveAttributes($this, $attributes);
+	 *   }
 	 * }
 	 * 
-	 * Wrong usage: forget to register retrieved atributes and to cast the values, problematic for $entity->getValues() and $entity->isSparse()
+	 * Foreign key example:
 	 * 
-	 * $model = UserModel::instance();
-	 * $user = $model->getUser($uid); // retrieves non-sparse attributes
-	 * $model->retrieveAttributes($user, array('city' 'street', 'number', 'postalcode')); // suppose address is sparse: retrieve address
-	 * echo ...
+	 * $user->getAddress();
+	 * 
+	 * class User extends PersitentEntity {
+	 *   public $address_uuid; // foreign key
+	 *   public $address;
+	 *   public function getAddress() {
+	 *     if (!isset($this->address)) {
+	 *       $fk = array('address_uuid')
+	 *       if ($this->isSparse($fk) {
+	 *         UserModel::instance()->retrieveAttributes($this, $fk);
+	 *       }
+	 *       $this->address = AddressesModel::instance()->retrieveByUUID($this->address_uuid);
+	 *     }
+	 *     return $this->address;
+	 *   }
+	 * }
 	 * 
 	 * @param PersistentEntity $entity
 	 * @param array $attributes
@@ -259,7 +269,11 @@ abstract class PersistenceModel implements Persistence {
 		}
 		$result = Database::sqlSelect($attributes, $entity->getTableName(), implode(' AND ', $where), $entity->getValues(true), null, null, 1);
 		$result->setFetchMode(PDO::FETCH_INTO, $entity);
-		return $result->fetch();
+		$success = $result->fetch();
+		if ($success) {
+			$entity->onAttributesRetrieved($attributes);
+		}
+		return $success;
 	}
 
 	/**
