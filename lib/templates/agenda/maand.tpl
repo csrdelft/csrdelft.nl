@@ -43,10 +43,12 @@
 </table>
 {$smarty.capture.navlinks}
 <div id="ical">
-	{if LoginModel::getAccount()->hasPrivateToken()}
-		<a name="ICAL" href="{LoginModel::getAccount()->getICalLink()}"{if LoginModel::mag('P_LOGGED_IN')} title="Persoonlijke ICalender feed&#013;Nieuwe aanvragen kan op je profiel"{/if}>
-		{else}
-			<a name="ICAL" href="/profiel/{LoginModel::getUid()}#tokenaanvragen" title="Persoonlijke ICalender feed aanvragen">
-			{/if}
-			<img src="/plaetjes/knopjes/ical.gif" alt="ICAL" /></a>
+{if LoginModel::getAccount()->hasPrivateToken()}
+	<a name="ICAL" href="{LoginModel::getAccount()->getICalLink()}"{if LoginModel::mag('P_LOGGED_IN')} title="Persoonlijke ICalender feed&#013;Nieuwe aanvragen kan op je profiel"{/if}>
+{else}
+	<a name="ICAL" href="/profiel/{LoginModel::getUid()}#tokenaanvragen" title="Persoonlijke ICalender feed aanvragen">
+{/if}
+		<img src="/plaetjes/knopjes/ical.gif" alt="ICAL" /></a>
+	<a href="https://www.google.com/calendar/render?cid={LoginModel::getAccount()->getICalLink()|escape:'url'}" target="_blank">
+		<img src="//www.google.com/calendar/images/ext/gc_button6.gif" border=0></a>
 </div>
