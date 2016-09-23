@@ -67,7 +67,7 @@ class EetplanHuisView extends AbstractEetplanView {
 
 	public function __construct(EetplanModel $model, $lichting, $iHuisID) {
 		parent::__construct($model, $lichting);
-		$this->eetplan = $this->model->getEetplanVoorHuis($iHuisID);
+		$this->eetplan = $this->model->getEetplanVoorHuis($iHuisID, $lichting);
         $this->woonoord = WoonoordenModel::get($iHuisID);
 	}
 
