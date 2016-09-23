@@ -172,6 +172,7 @@ abstract class DataTable extends TabsForm {
 			);
 		}
 		$this->settings['createdRow'] = 'fnCreatedRowCallback';
+		$this->settings['drawCallback'] = 'fnUpdateToolbar';
 
 		// get columns index
 		$columns = array_keys($this->columns);
@@ -242,6 +243,7 @@ JS;
 		$settingsJson = str_replace('"fnGetLastUpdate"', 'fnGetLastUpdate', $settingsJson);
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
+		$settingsJson = str_replace('"fnUpdateToolbar"', 'fnUpdateToolbar', $settingsJson);
 
 		// toolbar
 		parent::view();
@@ -298,8 +300,8 @@ JS;
 								$.post(table.ajax.url(), {
 									'lastUpdate': fnGetLastUpdate()
 								}, function (data, textStatus, jqXHR) {
-									fnAjaxUpdateCallback(data);
 									fnUpdateDataTable('#<?= $this->dataTableId; ?>', data);
+									fnAjaxUpdateCallback(data);
 								});
 							}, timeout);
 						}
@@ -312,11 +314,9 @@ JS;
 								table.page(json.page).draw(false);
 							}, 200);
 						}
-					}
-					else {
+					} else {
 						fnAutoScroll(tableId);
 					}
-					fnUpdateToolbar();
 					return json.data;
 				};
 				// Init DataTable
