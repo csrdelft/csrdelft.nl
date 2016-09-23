@@ -844,7 +844,7 @@ class EntityField extends InputField {
 
 }
 
-abstract class RequiredEntityField extends EntityField {
+class RequiredEntityField extends EntityField {
 
 	public $required = true;
 
@@ -864,6 +864,12 @@ class StudieField extends TextField {
 		$this->suggestions['TU Delft'] = array_map(create_function('$value', 'return "TU Delft - ".$value;'), $tustudies);
 		$this->suggestions[] = array('INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden');
 	}
+
+}
+
+class RequiredStudieField extends StudieField {
+
+	public $required = true;
 
 }
 
