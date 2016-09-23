@@ -53,7 +53,7 @@ class PeilingenModel extends PersistenceModel {
 	}
 
 	public function stem($peiling_id, $optieid) {
-		$peiling = $this->find('id = ?', array($peiling_id))->fetch();
+		$peiling = $this->getPeilingById((int) $peiling_id);
 		if ($peiling->magStemmen()) {
 			$optie = PeilingOptiesModel::instance()->find('peiling_id = ? AND id = ?', array($peiling_id, $optieid))->fetch();
 			$optie->stemmen += 1;
@@ -94,11 +94,11 @@ class PeilingenModel extends PersistenceModel {
 	 * @param $peiling_id
 	 * @return Peiling
 	 */
-	public function get($peiling_id) {
+	public function getPeilingById($peiling_id) {
 		return $this->retrieveByPrimaryKey(array($peiling_id));
 	}
 
-	public function lijst() {
+	public function getLijst() {
 		return $this->find(null, array(), null, 'id DESC');
 	}
 
