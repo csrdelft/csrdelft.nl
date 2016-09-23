@@ -24,17 +24,17 @@ class EetplanController extends AclController {
                 'view' => 'P_LEDEN_READ',
                 'noviet' => 'P_LEDEN_READ',
                 'huis' => 'P_LEDEN_READ',
-                'beheer' => 'P_ADMIN',
-                'bekendehuizen' => 'P_ADMIN',
+                'beheer' => 'P_ADMIN,commissie:NovCie',
+                'bekendehuizen' => 'P_ADMIN,commissie:NovCie',
                 'json' => 'P_LEDEN_READ',
             );
         } else {
             $this->acl = array(
-                'beheer' => 'P_ADMIN',
-                'woonoorden' => 'P_ADMIN',
-                'novietrelatie' => 'P_ADMIN',
-                'bekendehuizen' => 'P_ADMIN',
-                'nieuw' => 'P_ADMIN'
+                'beheer' => 'P_ADMIN,commissie:NovCie',
+                'woonoorden' => 'P_ADMIN,commissie:NovCie',
+                'novietrelatie' => 'P_ADMIN,commissie:NovCie',
+                'bekendehuizen' => 'P_ADMIN,commissie:NovCie',
+                'nieuw' => 'P_ADMIN,commissie:NovCie'
             );
         }
     }
