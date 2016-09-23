@@ -8,15 +8,10 @@ require_once 'model/Paging.interface.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-abstract class AbstractForumModel extends CachedPersistenceModel {
-
-	const DIR = 'forum/';
-
-}
-
-class ForumModel extends AbstractForumModel {
+class ForumModel extends CachedPersistenceModel {
 
 	const ORM = 'ForumCategorie';
+	const DIR = 'forum/';
 
 	protected static $instance;
 	/**
@@ -112,9 +107,10 @@ class ForumModel extends AbstractForumModel {
 
 }
 
-class ForumDelenModel extends AbstractForumModel {
+class ForumDelenModel extends CachedPersistenceModel {
 
 	const ORM = 'ForumDeel';
+	const DIR = 'forum/';
 
 	protected static $instance;
 	/**
@@ -301,9 +297,10 @@ class ForumDelenModel extends AbstractForumModel {
 
 }
 
-class ForumDradenReagerenModel extends AbstractForumModel {
+class ForumDradenReagerenModel extends PersistenceModel {
 
 	const ORM = 'ForumDraadReageren';
+	const DIR = 'forum/';
 
 	protected static $instance;
 
@@ -331,11 +328,11 @@ class ForumDradenReagerenModel extends AbstractForumModel {
 	}
 
 	public function getReagerenVoorDraad(ForumDraad $draad) {
-		return $this->prefetch('draad_id = ? AND uid != ? AND datum_tijd > ?', array($draad->draad_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
+		return $this->find('draad_id = ? AND uid != ? AND datum_tijd > ?', array($draad->draad_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
 	}
 
 	public function getReagerenVoorDeel(ForumDeel $deel) {
-		return $this->prefetch('forum_id = ? AND draad_id = 0 AND uid != ? AND datum_tijd > ?', array($deel->forum_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
+		return $this->find('forum_id = ? AND draad_id = 0 AND uid != ? AND datum_tijd > ?', array($deel->forum_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
 	}
 
 	public function verwijderLegeConcepten() {
@@ -401,9 +398,10 @@ class ForumDradenReagerenModel extends AbstractForumModel {
 
 }
 
-class ForumDradenGelezenModel extends AbstractForumModel {
+class ForumDradenGelezenModel extends CachedPersistenceModel {
 
 	const ORM = 'ForumDraadGelezen';
+	const DIR = 'forum/';
 
 	protected static $instance;
 
@@ -497,9 +495,10 @@ class ForumDradenGelezenModel extends AbstractForumModel {
 
 }
 
-class ForumDradenVerbergenModel extends AbstractForumModel {
+class ForumDradenVerbergenModel extends CachedPersistenceModel {
 
 	const ORM = 'ForumDraadVerbergen';
+	const DIR = 'forum/';
 
 	protected static $instance;
 
@@ -547,9 +546,10 @@ class ForumDradenVerbergenModel extends AbstractForumModel {
 
 }
 
-class ForumDradenVolgenModel extends AbstractForumModel {
+class ForumDradenVolgenModel extends CachedPersistenceModel {
 
 	const ORM = 'ForumDraadVolgen';
+	const DIR = 'forum/';
 
 	protected static $instance;
 
@@ -601,9 +601,10 @@ class ForumDradenVolgenModel extends AbstractForumModel {
 
 }
 
-class ForumDradenModel extends AbstractForumModel implements Paging {
+class ForumDradenModel extends CachedPersistenceModel implements Paging {
 
 	const ORM = 'ForumDraad';
+	const DIR = 'forum/';
 
 	protected static $instance;
 	/**
@@ -911,9 +912,10 @@ class ForumDradenModel extends AbstractForumModel implements Paging {
 
 }
 
-class ForumPostsModel extends AbstractForumModel implements Paging {
+class ForumPostsModel extends CachedPersistenceModel implements Paging {
 
 	const ORM = 'ForumPost';
+	const DIR = 'forum/';
 
 	protected static $instance;
 	/**
