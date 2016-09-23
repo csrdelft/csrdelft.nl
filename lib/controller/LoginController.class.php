@@ -218,9 +218,12 @@ class LoginController extends AclController {
 				if ($account AND AccessModel::mag($account, 'P_PROFIEL_EDIT') AND mb_strtolower($account->email) === mb_strtolower($values['mail'])) {
 					$token = OneTimeTokensModel::instance()->createToken($account->uid, '/wachtwoord/reset');
 					// stuur resetmail
-					$lidnaam = $account->getProfiel()->getNaam('volledig');
+                    $civitasnaam = $account->getProfiel()->getNaam('civitas');
+                    // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
+                    // Dit zorgt voor een • in het 'aan' veld van de mail, sommige spamfilters gaan hiervan over hun nek
+					$lidnaam = $account->getProfiel()->getNaam('volledig', true);
 					require_once 'model/entity/Mail.class.php';
-					$bericht = "Geachte " . $lidnaam .
+					$bericht = "Geachte " . $civitasnaam .
 							",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1] .
 							".\n\n[url=" . CSR_ROOT . "/verify/" . $token[0] .
 							"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";

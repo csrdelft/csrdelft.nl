@@ -415,13 +415,14 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * Naam met verschillende weergave-mogelijkheden.
 	 * 
 	 * @param string $vorm volledig, streeplijst, civitas, user, nick, bijnaam, aaidrom, Duckstad
+     * @param bool $force Forceer een type ongeacht of de gebruiker ingelogd is.
 	 * @return string
 	 */
-	public function getNaam($vorm = 'volledig') {
+	public function getNaam($vorm = 'volledig', $force = false) {
 		if ($vorm === 'user') {
 			$vorm = LidInstellingen::get('forum', 'naamWeergave');
 		}
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+		if (!LoginModel::mag('P_LOGGED_IN') AND !$force) {
 			$vorm = 'civitas';
 		}
 		switch ($vorm) {
