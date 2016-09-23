@@ -284,10 +284,10 @@ class ForumDraad extends PersistentEntity {
 		if (!isset($this->aantal_ongelezen_posts)) {
 			$where = 'draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 			$params = array($this->draad_id);
-			$wanneer = $this->getWanneerGelezen();
-			if ($wanneer) {
+			$gelezen = $this->getWanneerGelezen();
+			if ($gelezen) {
 				$where .= ' AND laatst_gewijzigd > ?';
-				$params[] = $wanneer->datum_tijd;
+				$params[] = $gelezen->datum_tijd;
 			}
 			$this->aantal_ongelezen_posts = ForumPostsModel::instance()->count($where, $params);
 		}

@@ -75,10 +75,12 @@ class ForumModel extends CachedPersistenceModel {
 		$uids = Database::instance()->sqlSelect(array('uid'), ProfielModel::instance()->getTableName(), 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
 		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($uids as $uid) {
-			ForumDradenGelezenModel::instance()->verwijderDraadGelezenVoorLid($uid);
-			ForumDradenVerbergenModel::instance()->toonAllesVoorLid($uid);
-			ForumDradenVolgenModel::instance()->volgNietsVoorLid($uid);
-			ForumDradenReagerenModel::instance()->verwijderReagerenVoorLid($uid);
+			if (AccountModel::isValidUid($uid)) {
+				ForumDradenGelezenModel::instance()->verwijderDraadGelezenVoorLid($uid);
+				ForumDradenVerbergenModel::instance()->toonAllesVoorLid($uid);
+				ForumDradenVolgenModel::instance()->volgNietsVoorLid($uid);
+				ForumDradenReagerenModel::instance()->verwijderReagerenVoorLid($uid);
+			}
 		}
 
 		// Settings voor oude topics opschonen en oude/verwijderde topics en posts definitief verwijderen
@@ -406,9 +408,6 @@ class ForumDradenGelezenModel extends CachedPersistenceModel {
 	protected static $instance;
 
 	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
-		if (!LoginModel::mag('P_LOGGED_IN')) {
-			return false;
-		}
 		return $this->retrieveByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
 	}
 
@@ -419,9 +418,6 @@ class ForumDradenGelezenModel extends CachedPersistenceModel {
 	 * @param int $timestamp
 	 */
 	public function setWanneerGelezenDoorLid(ForumDraad $draad, $timestamp = null) {
-		if (!LoginModel::mag('P_LOGGED_IN')) {
-			return false;
-		}
 		$gelezen = $this->getWanneerGelezenDoorLid($draad);
 		if ($gelezen) {
 			$create = false;
@@ -462,20 +458,19 @@ class ForumDradenGelezenModel extends CachedPersistenceModel {
 	 * @return int percentage
 	 */
 	public function getGelezenPercentage(Forumpost $post) {
-		$lezers = $post->getForumDraad()->getLezers();
-		$counter = 0;
-		foreach ($lezers as $gelezen) {
-			if ($post->laatst_gewijzigd) {
-				if ($post->laatst_gewijzigd <= $gelezen->datum_tijd) {
-					$counter++;
-				}
+		$draad = $post->getForumDraad();
+		$totaal = $draad->getAantalLezers();
+		$aantal = 0;
+		foreach ($draad->getLezers() as $gelezen) {
+			if ($post->laatst_gewijzigd AND $post->laatst_gewijzigd <= $gelezen->datum_tijd) {
+				$aantal++;
 			}
 		}
-		return (int) ($counter * 100 / $post->getForumDraad()->getAantalLezers());
+		return (int) ($aantal * 100 / $totaal);
 	}
 
 	public function getLezersVanDraad(ForumDraad $draad) {
-		return $this->prefetch('draad_id = ?', array($draad->draad_id));
+		return $this->find('draad_id = ?', array($draad->draad_id));
 	}
 
 	public function verwijderDraadGelezen(ForumDraad $draad) {
@@ -485,9 +480,6 @@ class ForumDradenGelezenModel extends CachedPersistenceModel {
 	}
 
 	public function verwijderDraadGelezenVoorLid($uid) {
-		if (!AccountModel::isValidUid($uid)) {
-			throw new Exception('invalid lid id');
-		}
 		foreach ($this->find('uid = ?', array($uid)) as $gelezen) {
 			$this->delete($gelezen);
 		}
@@ -530,9 +522,6 @@ class ForumDradenVerbergenModel extends CachedPersistenceModel {
 	}
 
 	public function toonAllesVoorLid($uid) {
-		if (!AccountModel::isValidUid($uid)) {
-			throw new Exception('invalid lid id');
-		}
 		foreach ($this->find('uid = ?', array($uid)) as $verborgen) {
 			$this->delete($verborgen);
 		}
@@ -585,9 +574,6 @@ class ForumDradenVolgenModel extends CachedPersistenceModel {
 	}
 
 	public function volgNietsVoorLid($uid) {
-		if (!AccountModel::isValidUid($uid)) {
-			throw new Exception('invalid lid id');
-		}
 		foreach ($this->find('uid = ?', array($uid)) as $volgen) {
 			$this->delete($volgen);
 		}

@@ -183,8 +183,9 @@ class ForumDraadView extends ForumView {
 		$this->statistiek = $statistiek;
 		// cache old value for ongelezen streep
 		$this->ongelezen = $draad->isOngelezen();
-		if ($draad->getWanneerGelezen()) {
-			$this->gelezen_moment = strtotime($draad->getWanneerGelezen()->datum_tijd);
+		$gelezen = $draad->getWanneerGelezen();
+		if ($gelezen) {
+			$this->gelezen_moment = strtotime($gelezen->datum_tijd);
 		} else {
 			$this->gelezen_moment = false;
 		}
