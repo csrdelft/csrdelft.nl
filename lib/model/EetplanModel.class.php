@@ -131,4 +131,16 @@ class EetplanBekendenModel extends PersistenceModel {
     public function getBekenden($lichting) {
         return $this->find('uid1 LIKE ?', array(sprintf("%s%%", $lichting)))->fetchAll();
     }
+
+    public function exists(PersistentEntity $entity) {
+        if (parent::exists($entity)) {
+            return true;
+        }
+
+        $omgekeerd = new EetplanBekenden();
+        $omgekeerd->uid1 = $entity->uid2;
+        $omgekeerd->uid2 = $entity->uid1;
+
+        return parent::exists($omgekeerd);
+    }
 }
