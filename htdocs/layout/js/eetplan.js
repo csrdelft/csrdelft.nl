@@ -15,6 +15,8 @@ $(function () {
 
         var avonden = [];
 
+        data.avonden.sort();
+
         $.each(data.avonden, function (key, avond) {
             avonden.push(avond);
             $eetplanHeader.append($('<th>').text(avond));
@@ -49,5 +51,5 @@ $(function () {
         url: '/eetplan/json'
     }).done(function (data) {
         bouwEetplanTabel($novieten, $eetplan, data);
-    })
+    });
 });
