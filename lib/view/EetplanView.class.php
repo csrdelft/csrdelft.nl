@@ -188,19 +188,6 @@ class EetplanBekendenForm extends ModalForm {
 
         $this->addFields($fields);
     }
-
-    public function validate() {
-        if (!parent::validate()) {
-            return false;
-        }
-
-        if (EetplanBekendenModel::instance()->exists($this->model)) {
-            $this->error = 'Bekenden bestaan al';
-            return false;
-        }
-
-        return true;
-    }
 }
 
 
@@ -248,18 +235,6 @@ class EetplanBekendeHuizenForm extends ModalForm {
 
         $this->addFields($fields);
     }
-
-    public function validate() {
-        if (!parent::validate()) {
-            return false;
-        }
-        
-        if (EetplanModel::instance()->exists($this->getModel())) {
-            return false;
-        }
-
-        return true;
-    }
 }
 
 /**
@@ -287,18 +262,5 @@ class NieuwEetplanForm extends ModalForm {
         $fields['btn'] = new FormDefaultKnoppen();
 
         $this->addFields($fields);
-    }
-
-    public function validate() {
-        if (!parent::validate()) {
-            return false;
-        }
-
-        if (EetplanModel::instance()->count("avond = ?", array($this->getValues()['avond'])) > 0) {
-            $this->error = 'Er bestaat al een eetplan met deze datum';
-            return false;
-        }
-
-        return true;
     }
 }

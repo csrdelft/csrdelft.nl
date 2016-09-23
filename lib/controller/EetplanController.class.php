@@ -5,9 +5,9 @@ require_once 'view/EetplanView.class.php';
 
 /**
  * EetplanController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller voor eetplan.
  */
 class EetplanController extends AclController {
@@ -103,11 +103,14 @@ class EetplanController extends AclController {
                 $eetplan = new Eetplan();
                 $eetplan->avond = '0000-00-00';
                 $form = new EetplanBekendeHuizenForm($eetplan);
-                if ($form->validate()) {
+                if (!$form->validate()) {
+                    $this->view = $form;
+                } elseif ($this->model->exists($eetplan)) {
+                    setMelding('Deze noviet is al eens op dit huis geweest', -1);
+                    $this->view = $form;
+                } else {
                     $this->model->create($eetplan);
                     $this->view = new EetplanBekendeHuizenResponse($this->model->getBekendeHuizen($this->lichting));
-                } else {
-                    $this->view = $form;
                 }
             } elseif ($actie == 'verwijderen') {
                 $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
@@ -137,12 +140,16 @@ class EetplanController extends AclController {
     public function novietrelatie($actie = null) {
         $model = EetplanBekendenModel::instance();
         if ($actie == 'toevoegen') {
-            $form = new EetplanBekendenForm(new EetplanBekenden(), $this->lichting);
-            if ($form->validate()) {
-                $model->create($form->getModel());
-                $this->view = new EetplanRelatieView($model->getBekenden($this->lichting));
-            } else {
+            $eetplanbekenden = new EetplanBekenden();
+            $form = new EetplanBekendenForm($eetplanbekenden, $this->lichting);
+            if (!$form->validate()) {
                 $this->view = $form;
+            } elseif (EetplanBekendenModel::instance()->exists($eetplanbekenden)) {
+                setMelding('Bekenden bestaan al', -1);
+                $this->view = $form;
+            } else {
+                $model->create($eetplanbekenden);
+                $this->view = new EetplanRelatieView($model->getBekenden($this->lichting));
             }
         } elseif ($actie == 'verwijderen') {
             $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
@@ -177,19 +184,22 @@ class EetplanController extends AclController {
     public function nieuw() {
         $form = new NieuwEetplanForm();
 
-        if ($form->validate()) {
-            $avond = filter_input(INPUT_POST, 'avond', FILTER_SANITIZE_STRING);
+        if (!$form->validate()) {
+            $this->view = $form;
+        } elseif ($this->model->count("avond = ?", array($form->getValues()['avond'])) > 0) {
+            setMelding('Er bestaat al een eetplan met deze datum', -1);
+            $this->view = $form;
+        } else {
+            $avond = $form->getValues()['avond'];
             $eetplan = $this->model->maakEetplan($avond, $this->lichting);
 
             echo "Aantal: " . count($eetplan) . "\n";
 
             foreach ($eetplan as $sessie) {
-                //$this->model->create($sessie);
+                $this->model->create($sessie);
                 echo "uid: " . $sessie->uid . "\n";
                 echo "woonoord: " . $sessie->woonoord_id . "\n\n";
             }
-        } else {
-            $this->view = $form;
         }
     }
 }
