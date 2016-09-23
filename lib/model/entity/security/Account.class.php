@@ -105,7 +105,7 @@ class Account extends PersistentEntity {
 	}
 
 	public function hasPrivateToken() {
-		return !empty($this->private_token) OR $this->uid === 'x999';
+		return !empty($this->private_token);
 	}
 
 	public function getICalLink() {

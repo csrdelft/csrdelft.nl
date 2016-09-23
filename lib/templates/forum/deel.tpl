@@ -10,7 +10,7 @@
 
 {include file='forum/head_buttons.tpl'}
 
-<h1>{$deel->titel}{if !isset($deel->forum_id)}{include file='forum/rss_link.tpl'}{/if}</h1>
+<h1>{$deel->titel}</h1>
 
 <table id="forumtabel">
 	<thead>
@@ -78,3 +78,5 @@
 
 	</tbody>
 </table>
+
+{include file='forum/rss_link.tpl'}
