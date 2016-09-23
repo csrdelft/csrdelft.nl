@@ -83,14 +83,15 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Verjaardagen
-		if (LoginModel::mag('P_LOGGED_IN') AND LidInstellingen::get('agenda', 'toonVerjaardagen') === 'ja') {
+		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
+		if (LoginModel::mag('P_VERJAARDAGEN', $auth) AND LidInstellingen::get('agenda', 'toonVerjaardagen') === 'ja') {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.
 			$GLOBALS['agenda_jaar'] = date('Y', $van);
 			$GLOBALS['agenda_maand'] = date('m', ($van + $tot) / 2);
 
-			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0, $ical));
+			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0));
 		}
 
 		// Sorteren
