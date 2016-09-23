@@ -107,8 +107,6 @@ class EetplanFactory {
             $noviet = $sessie->uid;
             $this->bezocht_sh[$noviet][$huis] = true;
         }
-
-        var_dump($this->bezocht_sh);
     }
 
     /**
@@ -173,7 +171,6 @@ class EetplanFactory {
             # de huizen eerst goed vol komen, en daarna pas extra sjaars bij huizen
             $max = (int) floor($aantal_sjaars / $aantal_huizen);
             $nofm = 0; # aantal huizen dat aan de max zit.
-            echo $uid . " en " . $this->huizen[$huis_index]->id . " en " . isset($this->bezocht_sh[$uid][$huis_index]) . "\n";
             while (isset($this->bezocht_sh[$uid][$huis_id])
                 or count(array_intersect($this->ahs[$avond][$huis_id], $this->bekenden[$uid])) > 0
                 or count($this->bezocht_ah[$avond][$huis_id]) >= $max) {
