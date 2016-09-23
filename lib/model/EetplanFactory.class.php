@@ -182,6 +182,8 @@ class EetplanFactory {
                 if (!isset($this->ahs[$avond][$huis_index])) {
                     $this->ahs[$avond][$huis_index] = array();
                 }
+                if (!isset($this->bezocht_ah[$avond][$huis_index]))
+                    $this->bezocht_ah[$avond][$huis_index] = array();
 
                 # nieuw: als alle huizen zijn langsgelopen en ze allemaal max sjaars hebben
                 # dan de max ophogen
