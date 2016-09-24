@@ -4,7 +4,7 @@
         <th style="width: 200px">&Uuml;bersjaarsch</th>
         <th>Mobiel</th>
         <th>E-mail</th>
-        <th>Eetwens</th>
+        <th>Allergie</th>
     </tr>
     {assign 'oude_datum' ''}
     {assign 'row' 0}
