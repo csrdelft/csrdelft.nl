@@ -69,6 +69,7 @@ class EetplanController extends AclController {
         }
 		$body = new EetplanNovietView($this->model, $this->lichting, $uid);
 		$this->view = new CsrLayoutPage($body);
+        $this->view->addCompressedResources('eetplan');
 	}
 
 	public function huis($id = null) {
@@ -78,6 +79,7 @@ class EetplanController extends AclController {
         }
 		$body = new EetplanHuisView($this->model, $this->lichting, $id);
 		$this->view = new CsrLayoutPage($body);
+        $this->view->addCompressedResources('eetplan');
 	}
 
     public function woonoorden($actie = null) {
