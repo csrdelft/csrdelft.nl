@@ -328,7 +328,7 @@ class ForumController extends Controller {
 		} else {
 			$statistiek = false;
 		}
-		$this->view = new ForumDraadView($draad, $gelezen, $paging, $statistiek); // lazy loading ForumPost[]
+		$this->view = new ForumDraadView($draad, $paging, $statistiek); // lazy loading ForumPost[]
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		}

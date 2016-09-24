@@ -306,18 +306,7 @@ class ForumDradenReagerenModel extends PersistenceModel {
 
 	protected static $instance;
 
-	/**
-	 * Fetch reageren object voor deel of draad.
-	 * 
-	 * @param ForumDeel $deel
-	 * @param int $draad_id
-	 * @return ForumDraadReageren
-	 */
-	private function getReagerenDoorLid(ForumDeel $deel, $draad_id = null) {
-		return $this->retrieveByPrimaryKey(array($deel->forum_id, (int) $draad_id, LoginModel::getUid()));
-	}
-
-	private function nieuwReagerenDoorLid(ForumDeel $deel, $draad_id = null, $concept = null, $titel = null) {
+	protected function maakForumDraadReageren(ForumDeel $deel, $draad_id = null, $concept = null, $titel = null) {
 		$reageren = new ForumDraadReageren();
 		$reageren->forum_id = $deel->forum_id;
 		$reageren->draad_id = (int) $draad_id;
@@ -327,6 +316,17 @@ class ForumDradenReagerenModel extends PersistenceModel {
 		$reageren->titel = $titel;
 		$this->create($reageren);
 		return $reageren;
+	}
+
+	/**
+	 * Fetch reageren object voor deel of draad.
+	 * 
+	 * @param ForumDeel $deel
+	 * @param int $draad_id
+	 * @return ForumDraadReageren
+	 */
+	protected function getReagerenDoorLid(ForumDeel $deel, $draad_id = null) {
+		return $this->retrieveByPrimaryKey(array($deel->forum_id, (int) $draad_id, LoginModel::getUid()));
 	}
 
 	public function getReagerenVoorDraad(ForumDraad $draad) {
@@ -357,11 +357,11 @@ class ForumDradenReagerenModel extends PersistenceModel {
 
 	public function setWanneerReagerenDoorLid(ForumDeel $deel, $draad_id = null) {
 		$reageren = $this->getReagerenDoorLid($deel, $draad_id);
-		if (!$reageren) {
-			$this->nieuwReagerenDoorLid($deel, $draad_id);
-		} else {
+		if ($reageren) {
 			$reageren->datum_tijd = getDateTime();
 			$this->update($reageren);
+		} else {
+			$this->maakForumDraadReageren($deel, $draad_id);
 		}
 	}
 
@@ -387,14 +387,12 @@ class ForumDradenReagerenModel extends PersistenceModel {
 			if ($reageren) {
 				$this->delete($reageren);
 			}
+		} elseif ($reageren) {
+			$reageren->concept = $concept;
+			$reageren->titel = $titel;
+			$this->update($reageren);
 		} else {
-			if (!$reageren) {
-				$this->nieuwReagerenDoorLid($deel, $draad_id, $concept, $titel);
-			} else {
-				$reageren->concept = $concept;
-				$reageren->titel = $titel;
-				$this->update($reageren);
-			}
+			$this->maakForumDraadReageren($deel, $draad_id, $concept, $titel);
 		}
 	}
 
@@ -407,6 +405,15 @@ class ForumDradenGelezenModel extends CachedPersistenceModel {
 
 	protected static $instance;
 
+	protected function maakForumDraadGelezen($draad_id) {
+		$gelezen = new ForumDraadGelezen();
+		$gelezen->draad_id = $draad_id;
+		$gelezen->uid = LoginModel::getUid();
+		$gelezen->datum_tijd = getDateTime();
+		$this->create($gelezen);
+		return $gelezen;
+	}
+
 	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
 		return $this->retrieveByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
 	}
@@ -416,38 +423,23 @@ class ForumDradenGelezenModel extends CachedPersistenceModel {
 	 * 
 	 * @param ForumDraad $draad
 	 * @param int $timestamp
+	 * @return int number of rows affected
 	 */
 	public function setWanneerGelezenDoorLid(ForumDraad $draad, $timestamp = null) {
 		$gelezen = $this->getWanneerGelezenDoorLid($draad);
-		if ($gelezen) {
-			$create = false;
-		} else {
-			$gelezen = new ForumDraadGelezen();
-			$gelezen->draad_id = $draad->draad_id;
-			$gelezen->uid = LoginModel::getUid();
-			$create = true;
+		if (!$gelezen) {
+			$gelezen = $this->maakForumDraadGelezen($draad->draad_id);
 		}
-		if ($timestamp === null) {
+		if (is_int($timestamp)) {
+			$gelezen->datum_tijd = getDateTime($timestamp);
+		} else {
 			foreach ($draad->getForumPosts() as $post) {
 				if (strtotime($post->laatst_gewijzigd) > strtotime($gelezen->datum_tijd)) {
 					$gelezen->datum_tijd = $post->laatst_gewijzigd;
 				}
 			}
-		} else {
-			if (is_int($timestamp)) {
-				$gelezen->datum_tijd = getDateTime($timestamp);
-			} else {
-				throw new Exception('Geen int: $timestamp');
-			}
 		}
-		if ($gelezen->datum_tijd) { // > 0 posts?
-			if ($create) {
-				$this->create($gelezen);
-			} else {
-				$this->update($gelezen);
-			}
-		}
-		return true;
+		return $this->update($gelezen);
 	}
 
 	public function getLezersVanDraad(ForumDraad $draad) {
@@ -475,6 +467,14 @@ class ForumDradenVerbergenModel extends CachedPersistenceModel {
 
 	protected static $instance;
 
+	protected function maakForumDraadVerbergen($draad_id) {
+		$verbergen = new ForumDraadVerbergen();
+		$verbergen->draad_id = $draad_id;
+		$verbergen->uid = LoginModel::getUid();
+		$this->create($verbergen);
+		return $verbergen;
+	}
+
 	public function getAantalVerborgenVoorLid() {
 		return $this->count('uid = ?', array(LoginModel::getUid()));
 	}
@@ -484,20 +484,14 @@ class ForumDradenVerbergenModel extends CachedPersistenceModel {
 	}
 
 	public function setVerbergenVoorLid(ForumDraad $draad, $verbergen = true) {
-		$verborgen = $this->getVerbergenVoorLid($draad);
 		if ($verbergen) {
-			if (!$verborgen) {
-				$verborgen = new ForumDraadVerbergen();
-				$verborgen->draad_id = $draad->draad_id;
-				$verborgen->uid = LoginModel::getUid();
-				$this->create($verborgen);
+			if (!$this->getVerbergenVoorLid($draad)) {
+				$this->maakForumDraadVerbergen($draad->draad_id);
 			}
-		} else {
-			if ($verborgen) {
-				$rowCount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
-				if ($rowCount !== 1) {
-					throw new Exception('Weer tonen mislukt');
-				}
+		} elseif ($this->getVerbergenVoorLid($draad)) {
+			$rowCount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+			if ($rowCount !== 1) {
+				throw new Exception('Weer tonen mislukt');
 			}
 		}
 	}
@@ -523,6 +517,14 @@ class ForumDradenVolgenModel extends CachedPersistenceModel {
 
 	protected static $instance;
 
+	protected function maakForumDraadVolgen($draad_id) {
+		$volgen = new ForumDraadVolgen();
+		$volgen->draad_id = $draad_id;
+		$volgen->uid = LoginModel::getUid();
+		$this->create($volgen);
+		return $volgen;
+	}
+
 	public function getAantalVolgenVoorLid() {
 		return $this->count('uid = ?', array(LoginModel::getUid()));
 	}
@@ -536,20 +538,14 @@ class ForumDradenVolgenModel extends CachedPersistenceModel {
 	}
 
 	public function setVolgenVoorLid(ForumDraad $draad, $volgen = true) {
-		$gevolgd = $this->getVolgenVoorLid($draad);
 		if ($volgen) {
-			if (!$gevolgd) {
-				$gevolgd = new ForumDraadVolgen();
-				$gevolgd->draad_id = $draad->draad_id;
-				$gevolgd->uid = LoginModel::getUid();
-				$this->create($gevolgd);
+			if (!$this->getVolgenVoorLid($draad)) {
+				$this->maakwForumDraadVolgen($draad->draad_id);
 			}
-		} else {
-			if ($gevolgd) {
-				$rowCount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
-				if ($rowCount !== 1) {
-					throw new Exception('Volgen stoppen mislukt');
-				}
+		} elseif ($this->getVolgenVoorLid($draad)) {
+			$rowCount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
+			if ($rowCount !== 1) {
+				throw new Exception('Volgen stoppen mislukt');
 			}
 		}
 	}

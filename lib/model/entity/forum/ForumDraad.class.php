@@ -96,6 +96,11 @@ class ForumDraad extends PersistentEntity {
 	 */
 	private $forum_posts;
 	/**
+	 * Aantal ongelezen posts
+	 * @var int
+	 */
+	private $aantal_ongelezen_posts;
+	/**
 	 * Lijst van lezers (wanneer)
 	 * @var ForumDraadGelezen[]
 	 */
@@ -120,11 +125,6 @@ class ForumDraad extends PersistentEntity {
 	 * @var ForumDraadVolgen[]
 	 */
 	private $volgers;
-	/**
-	 * Aantal ongelezen posts
-	 * @var int
-	 */
-	private $aantal_ongelezen_posts;
 	/**
 	 * Database table columns
 	 * @var array

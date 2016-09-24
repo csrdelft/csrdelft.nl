@@ -232,7 +232,9 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 		if ($this->memcache_prefetch) {
 			$this->flushCache(true);
 		}
-		return parent::update($entity);
+		$result = parent::update($entity);
+		$this->cache($entity, false, true);
+		return $result;
 	}
 
 }
