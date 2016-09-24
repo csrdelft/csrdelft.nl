@@ -102,7 +102,7 @@ class MededelingenView extends SmartyTemplateView {
 					// 5. Indien deze mededeling wacht op goedkeuring en de gebruiker geen moderator is EN deze mededeling niet van hem is.
 					if (($this->geselecteerdeMededeling->zichtbaarheid == 'verwijderd')
 						OR ( $this->geselecteerdeMededeling->prive AND ! LoginModel::mag('P_LEDEN_READ'))
-						OR ( $this->geselecteerdeMededeling->doelgroep == 'leden' AND LoginModel::mag('P_ALLEEN_OUDLID'))
+						OR ( $this->geselecteerdeMededeling->doelgroep == 'leden' AND LoginModel::mag('status:oudlid'))
 						OR ( $this->geselecteerdeMededeling->zichtbaarheid == 'onzichtbaar' AND ! LoginModel::mag('P_NEWS_MOD'))
 						OR ( $this->geselecteerdeMededeling->zichtbaarheid == 'wacht_goedkeuring' AND ( (LoginModel::getUid() != $this->geselecteerdeMededeling->uid) AND !LoginModel::mag('P_NEWS_MOD') )
 							)

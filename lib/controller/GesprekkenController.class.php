@@ -43,7 +43,7 @@ class GesprekkenController extends AclController {
 			$gesprek = GesprekkenModel::get($gesprek_id);
 			$deelnemer = GesprekDeelnemersModel::get($gesprek_id, LoginModel::getUid());
 			if (!$gesprek OR ! $deelnemer) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$deelnemer->gelezen_moment = getDateTime();
 			GesprekDeelnemersModel::instance()->update($deelnemer);
@@ -72,7 +72,7 @@ class GesprekkenController extends AclController {
 			$values = $form->getValues();
 			$account = AccountModel::get($values['to']);
 			if (!$account) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$gesprek = $this->model->startGesprek(LoginModel::getAccount(), $account, $values['inhoud']);
 			$this->view = new JsonResponse('/gesprekken/web/' . $gesprek->gesprek_id);
@@ -85,21 +85,21 @@ class GesprekkenController extends AclController {
 		if ($gesprek_id === null) {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			if (!isset($selection[0])) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$gesprek_id = $selection[0];
 		}
 		$gesprek = GesprekkenModel::get($gesprek_id);
 		$deelnemer = GesprekDeelnemersModel::get($gesprek_id, LoginModel::getUid());
 		if (!$gesprek OR ! $deelnemer) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$form = new GesprekDeelnemerToevoegenForm($gesprek);
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$account = AccountModel::get($values['to']);
 			if (!$account) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			GesprekDeelnemersModel::instance()->voegToeAanGesprek($gesprek, $account, $deelnemer);
 			$this->view = new GesprekkenResponse(array($gesprek));
@@ -112,7 +112,7 @@ class GesprekkenController extends AclController {
 		$gesprek = GesprekkenModel::get($gesprek_id);
 		$deelnemer = GesprekDeelnemersModel::get($gesprek_id, LoginModel::getUid());
 		if (!$gesprek OR ! $deelnemer) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$form = new GesprekBerichtForm($gesprek);
 		if ($form->validate()) {
@@ -131,7 +131,7 @@ class GesprekkenController extends AclController {
 		$gesprek = GesprekkenModel::get($gesprek_id);
 		$deelnemer = GesprekDeelnemersModel::get($gesprek_id, LoginModel::getUid());
 		if (!$gesprek OR ! $deelnemer) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$lastUpdate = (int) filter_input(INPUT_POST, 'lastUpdate', FILTER_SANITIZE_NUMBER_INT);
 		$berichten = $gesprek->getBerichten($deelnemer, $lastUpdate);
@@ -147,7 +147,7 @@ class GesprekkenController extends AclController {
 		$gesprek = GesprekkenModel::get($gesprek_id);
 		$deelnemer = GesprekDeelnemersModel::get($gesprek_id, LoginModel::getUid());
 		if (!$gesprek OR ! $deelnemer) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$gesloten = GesprekDeelnemersModel::instance()->verlaatGesprek($gesprek, $deelnemer);
 		$response = array();

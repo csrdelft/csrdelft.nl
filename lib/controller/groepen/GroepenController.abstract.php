@@ -31,7 +31,7 @@ abstract class AbstractGroepenController extends Controller {
 			case 'voorbeeld':
 				$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 				if (empty($selection)) {
-					$this->geentoegang();
+					return $this->geentoegang();
 				} else {
 					$args['selection'] = $selection;
 				}
@@ -65,7 +65,7 @@ abstract class AbstractGroepenController extends Controller {
 				$id = $this->action;
 				$groep = $this->model->get($id);
 				if (!$groep) {
-					$this->geentoegang();
+					return $this->geentoegang();
 				}
 				$args['groep'] = $groep;
 				$this->action = 'bekijken'; // default
@@ -158,49 +158,49 @@ abstract class AbstractGroepenController extends Controller {
 
 	public function omschrijving(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$this->view = new GroepOmschrijvingView($groep);
 	}
 
 	public function pasfotos(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$this->view = new GroepPasfotosView($groep);
 	}
 
 	public function lijst(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$this->view = new GroepLijstView($groep);
 	}
 
 	public function stats(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$this->view = new GroepStatistiekView($groep);
 	}
 
 	public function emails(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$this->view = new GroepEmailsView($groep);
 	}
 
 	public function eetwens(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$this->view = new GroepEetwensView($groep);
 	}
 
 	public function zoeken() {
 		if (!$this->hasParam('q')) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$zoekterm = '%' . $this->getParam('q') . '%';
 		$limit = 5;
@@ -278,7 +278,7 @@ abstract class AbstractGroepenController extends Controller {
 		else {
 			$old = $this->model->retrieveByUUID($selection[0]);
 			if (!$old) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			if (property_exists($old, 'soort')) {
 				$soort = $old->soort;
@@ -319,7 +319,7 @@ abstract class AbstractGroepenController extends Controller {
 	public function wijzigen(AbstractGroep $groep = null) {
 		if ($groep) {
 			if (!$groep->mag(A::Wijzigen)) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$form = new GroepForm($groep, $groep->getUrl() . $this->action, A::Wijzigen); // checks rechten wijzigen
 			if ($this->getMethod() == 'GET') {
@@ -339,11 +339,11 @@ abstract class AbstractGroepenController extends Controller {
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			if (empty($selection)) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$groep = $this->model->retrieveByUUID($selection[0]);
 			if (!$groep OR ! $groep->mag(A::Wijzigen)) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$form = new GroepForm($groep, $this->model->getUrl() . $this->action, A::Wijzigen); // checks rechten wijzigen
 			if ($form->validate()) {
@@ -450,11 +450,11 @@ abstract class AbstractGroepenController extends Controller {
 
 	public function voorbeeld(array $selection) {
 		if (empty($selection)) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$groep = $this->model->retrieveByUUID($selection[0]);
 		if (!$groep OR ! $groep->mag(A::Bekijken)) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$this->view = new GroepPreviewForm($groep);
 	}
@@ -463,7 +463,7 @@ abstract class AbstractGroepenController extends Controller {
 		// data request
 		if ($groep) {
 			if (!$groep->mag(A::Bekijken)) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$data = ChangeLogModel::instance()->find('subject = ?', array($groep->getUUID()));
 			$this->view = new GroepLogboekData($data);
@@ -473,7 +473,7 @@ abstract class AbstractGroepenController extends Controller {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			$groep = $this->model->retrieveByUUID($selection[0]);
 			if (!$groep->mag(A::Bekijken)) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$this->view = new GroepLogboekForm($groep);
 		}
@@ -481,7 +481,7 @@ abstract class AbstractGroepenController extends Controller {
 
 	public function leden(AbstractGroep $groep) {
 		if (!$groep->mag(A::Bekijken)) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$leden = $groep::leden;
 		if ($this->getMethod() == 'POST') {
@@ -496,7 +496,7 @@ abstract class AbstractGroepenController extends Controller {
 		$model = $leden::instance();
 		if ($uid) {
 			if (!$groep->mag(A::Aanmelden)) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$lid = $model->nieuw($groep, $uid);
 			$form = new GroepAanmeldenForm($lid, $groep);
@@ -511,7 +511,7 @@ abstract class AbstractGroepenController extends Controller {
 		// beheren
 		else {
 			if (!$groep->mag(A::Beheren)) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$lid = $model->nieuw($groep, null);
 			$leden = group_by_distinct('uid', $groep->getLeden());
@@ -531,7 +531,7 @@ abstract class AbstractGroepenController extends Controller {
 		$model = $leden::instance();
 		if ($uid) {
 			if (!$groep->mag(A::Bewerken)) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$lid = $model->get($groep, $uid);
 			$form = new GroepBewerkenForm($lid, $groep);
@@ -545,11 +545,11 @@ abstract class AbstractGroepenController extends Controller {
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			if (empty($selection)) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$lid = $model->retrieveByUUID($selection[0]);
 			if (!$groep->mag(A::Beheren)) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action);
 			if ($form->validate()) {
@@ -567,7 +567,7 @@ abstract class AbstractGroepenController extends Controller {
 		$model = $leden::instance();
 		if ($uid) {
 			if (!$groep->mag(A::Afmelden) AND ! $groep->mag(A::Beheren)) { // A::Beheren voor afmelden via context-menu
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$lid = $model->get($groep, $uid);
 			ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
@@ -578,7 +578,7 @@ abstract class AbstractGroepenController extends Controller {
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			if (empty($selection)) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$response = array();
 			foreach ($selection as $UUID) {

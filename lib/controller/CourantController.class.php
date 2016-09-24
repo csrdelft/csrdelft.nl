@@ -48,7 +48,7 @@ class CourantController extends AclController {
 				if ($success) {
 					$this->action = 'bekijken';
 				} else {
-					$this->geentoegang();
+					return $this->geentoegang();
 				}
 			}
 		}
@@ -88,7 +88,7 @@ class CourantController extends AclController {
 	public function bewerken($iBerichtID) {
 		$bericht = $this->model->getBericht($iBerichtID);
 		if (!$bericht OR ! isset($bericht['uid']) OR ! $this->model->magBeheren($bericht['uid'])) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		if ($this->getMethod() == 'POST') {
 			$success = $this->model->bewerkBericht($iBerichtID, $_POST['titel'], $_POST['categorie'], $_POST['bericht']);
@@ -109,7 +109,7 @@ class CourantController extends AclController {
 	public function verwijderen($iBerichtID) {
 		$bericht = $this->model->getBericht($iBerichtID);
 		if (!$bericht OR ! isset($bericht['uid']) OR ! $this->model->magBeheren($bericht['uid'])) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		if ($this->model->verwijderBericht($iBerichtID)) {
 			setMelding('Uw bericht is verwijderd.', 1);

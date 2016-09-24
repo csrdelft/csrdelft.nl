@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/entity/groepen/LidStatus.enum.php';
+require_once 'model/entity/LidStatus.enum.php';
 
 /**
  * LichtingsLid.class.php

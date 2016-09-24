@@ -15,7 +15,7 @@ class LichtingenController extends AbstractGroepenController {
 
 	public function zoeken() {
 		if (!$this->hasParam('q')) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$zoekterm = $this->getParam('q');
 		$result = array();

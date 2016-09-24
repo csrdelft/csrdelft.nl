@@ -17,7 +17,7 @@ class CsrBB extends eamBBParser {
 	protected $email_mode = false;
 
 	public function __construct() {
-	    parent::__construct();
+		parent::__construct();
 		$this->paragraph_mode = false;
 	}
 
@@ -376,13 +376,13 @@ class CsrBB extends eamBBParser {
 		} else {
 			$permissie = 'P_LOGGED_IN';
 		}
-//content moet altijd geparsed worden, anders blijft de inhoud van de
-//tag gewoon staan.
-		$forbidden = array();
 		if (!LoginModel::mag($permissie)) {
 			$this->bb_mode = false;
 			$forbidden = array('prive');
+		} else {
+			$forbidden = array();
 		}
+		// content moet altijd geparsed worden, anders blijft de inhoud van de tag gewoon staan
 		$content = '<span class="bb-prive">' . $this->parseArray(array('[/prive]'), $forbidden) . '</span>';
 		if (!LoginModel::mag($permissie)) {
 			$content = '';
@@ -458,7 +458,7 @@ class CsrBB extends eamBBParser {
 		} elseif (startsWith($id, 'https')) { // Link naar afspeellijst
 			$uri = preg_replace('/.+\/(\w+)\/(\w+)\/(\w+)\/(\w+)$/', 'spotify:$1:$2:$3:$4', $id);
 		} else {
-			return '[spotify] Geen geldige url (' . htmlspecialchars($id) .')';
+			return '[spotify] Geen geldige url (' . htmlspecialchars($id) . ')';
 		}
 
 		$uri = html_entity_decode($uri);

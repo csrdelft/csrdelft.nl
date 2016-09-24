@@ -27,7 +27,7 @@ class GroepenRouterController extends Controller {
 		}
 		$class = strtolower($class);
 		if (!$this->mag($class, array())) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$class = ucfirst($class) . 'Controller';
 

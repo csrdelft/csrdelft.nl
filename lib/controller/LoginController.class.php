@@ -48,11 +48,11 @@ class LoginController extends AclController {
 	}
 
 	protected function geentoegang() {
-		require_once 'model/CmsPaginaModel.class.php';
-		require_once 'view/CmsPaginaView.class.php';
 		if ($this->getMethod() == 'POST') {
 			parent::geentoegang();
 		}
+		require_once 'model/CmsPaginaModel.class.php';
+		require_once 'view/CmsPaginaView.class.php';
 		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
 		$this->view = new CsrLayoutPage($body);
 	}
@@ -131,8 +131,7 @@ class LoginController extends AclController {
 	}
 
 	public function accountaanvragen() {
-		$this->geentoegang();
-		return;
+		return $this->geentoegang();
 	}
 
 	public function account($uid = null, $delete = null) {
@@ -141,9 +140,13 @@ class LoginController extends AclController {
 		}
 		// aanvragen
 		if ($uid === 'x999') {
-			return $this->aanvragen();
+			return $this->accountaanvragen();
 		}
 		// bewerken
+		if (LoginModel::instance()->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
+			setMelding('U mag geen account wijzigen want u bent niet recent met wachtwoord ingelogd', 2);
+			return $this->geentoegang();
+		}
 		$account = AccountModel::get($uid);
 		if (!$account AND LoginModel::mag('P_ADMIN')) {
 			$account = AccountModel::instance()->maakAccount($uid);
@@ -268,7 +271,7 @@ class LoginController extends AclController {
 			$session = $this->model->find('session_hash = ? AND uid = ?', array($session_hash, LoginModel::getUid()), null, null, 1)->fetch();
 		}
 		if (!$session) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$deleted = $this->model->delete($session);
 		$this->view = new RemoveRowsResponse(array($session), $deleted === 1 ? 200 : 404);
@@ -277,13 +280,13 @@ class LoginController extends AclController {
 	public function loginlockip() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (!$selection) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$response = array();
 		foreach ($selection as $UUID) {
 			$remember = RememberLoginModel::instance()->retrieveByUUID($UUID);
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			$remember->lock_ip = !$remember->lock_ip;
 			RememberLoginModel::instance()->update($remember);
@@ -304,7 +307,7 @@ class LoginController extends AclController {
 			$remember = RememberLoginModel::instance()->nieuw();
 		}
 		if (!$remember OR $remember->uid !== LoginModel::getUid()) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$form = new RememberLoginForm($remember);
 		if ($form->validate()) {
@@ -331,13 +334,13 @@ class LoginController extends AclController {
 	public function loginforget() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (!$selection) {
-			$this->geentoegang();
+			return $this->geentoegang();
 		}
 		$response = array();
 		foreach ($selection as $UUID) {
 			$remember = RememberLoginModel::instance()->retrieveByUUID($UUID);
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
-				$this->geentoegang();
+				return $this->geentoegang();
 			}
 			RememberLoginModel::instance()->delete($remember);
 			$response[] = $remember;

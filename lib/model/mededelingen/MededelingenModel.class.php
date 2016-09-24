@@ -104,7 +104,7 @@ class MededelingenModel extends PersistenceModel {
 				$doelgroepClause.=LoginModel::mag('P_LEDEN_READ') ? "doelgroep!='oudleden'" : "doelgroep='iedereen'"; // Let op de != en =
 				break;
 			case 'oudleden': // De gebruiker mag alleen oudlid-berichten zien als hij oudlid of moderator is.
-				if (LoginModel::mag('P_ALLEEN_OUDLID') OR LoginModel::mag('P_NEWS_MOD')) {
+				if (LoginModel::mag('status:oudlid') OR LoginModel::mag('P_NEWS_MOD')) {
 					$doelgroepClause.="doelgroep!='leden'";
 				} elseif (LoginModel::mag('P_LEDEN_READ')) { // Anders mag een normaal lid ledenberichten zien én de berichten voor iedereen.
 					$doelgroepClause.="doelgroep!='oudleden'";
@@ -114,7 +114,7 @@ class MededelingenModel extends PersistenceModel {
 				break;
 			default:
 				// Indien $doelgroep niet is opgegeven of ongeldig is, kijken we wat het beste past bij de huidige gebruiker.
-				if (LoginModel::mag('P_ALLEEN_OUDLID')) {
+				if (LoginModel::mag('status:oudlid')) {
 					$doelgroepClause.="doelgroep!='leden'";
 				} elseif (LoginModel::mag('P_LEDEN_READ')) {
 					$doelgroepClause.="doelgroep!='oudleden'";
@@ -228,7 +228,7 @@ class MededelingenModel extends PersistenceModel {
 	}
 
 	public static function isOudlid() {
-		return LoginModel::mag('P_ALLEEN_OUDLID');
+		return LoginModel::mag('status:oudlid');
 	}
 
 	public static function magPriveLezen() {
@@ -261,7 +261,7 @@ class MededelingenModel extends PersistenceModel {
 		$doelgroepClause = "";
 		if (!LoginModel::mag('P_LEDEN_READ')) {
 			$doelgroepClause = " AND doelgroep='iedereen'";
-		} elseif (LoginModel::mag('P_ALLEEN_OUDLID')) {
+		} elseif (LoginModel::mag('status:oudlid')) {
 			$doelgroepClause = " AND doelgroep!='leden'";
 		}
 
