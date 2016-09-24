@@ -1,3 +1,6 @@
+{if LoginModel::mag('P_ADMIN,commissie:NovCie')}
+    <a href="/eetplan/beheer" class="btn float-right"><span class="ico wrench"></span> Eetplanbeheer</a>
+{/if}
 <h1>Eetplan</h1>
 <div class="geelblokje">
     <h3>LET OP: </h3>
