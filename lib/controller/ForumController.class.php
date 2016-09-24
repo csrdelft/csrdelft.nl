@@ -351,8 +351,17 @@ class ForumController extends Controller {
 	 * Forum deel aanmaken.
 	 */
 	public function aanmaken() {
-		$deel = ForumDelenModel::instance()->maakForumDeel();
-		$this->beheren($deel->forum_id);
+		$deel = ForumDelenModel::instance()->nieuwForumDeel();
+		$form = new ForumDeelForm($deel); // fetches POST values itself
+		if ($form->validate()) {
+			$rowCount = ForumDelenModel::instance()->create($deel);
+			if ($rowCount !== 1) {
+				throw new Exception('Forum aanmaken mislukt!');
+			}
+			$this->view = new JsonResponse(true);
+		} else {
+			$this->view = $form;
+		}
 	}
 
 	/**

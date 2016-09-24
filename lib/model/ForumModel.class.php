@@ -139,11 +139,12 @@ class ForumDelenModel extends CachedPersistenceModel {
 		return $deel;
 	}
 
-	public function bestaatForumDeel($id) {
-		return $this->existsByPrimaryKey(array($id));
+	public function create(PersistentEntity $entity) {
+		$entity->forum_id = (int) parent::create($entity);
+		return $entity->forum_id;
 	}
 
-	public function maakForumDeel() {
+	public function nieuwForumDeel() {
 		$deel = new ForumDeel();
 		$deel->categorie_id = 0;
 		$deel->titel = 'Nieuw deelforum';
@@ -152,8 +153,11 @@ class ForumDelenModel extends CachedPersistenceModel {
 		$deel->rechten_posten = 'P_FORUM_POST';
 		$deel->rechten_modereren = 'P_FORUM_MOD';
 		$deel->volgorde = 0;
-		$deel->forum_id = (int) $this->create($deel);
 		return $deel;
+	}
+
+	public function bestaatForumDeel($id) {
+		return $this->existsByPrimaryKey(array($id));
 	}
 
 	public function verwijderForumDeel($id) {
