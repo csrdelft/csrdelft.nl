@@ -117,7 +117,7 @@ class ForumDraad extends PersistentEntity {
 	private $volgen;
 	/**
 	 * Volgers
-	 * @var array
+	 * @var ForumDraadVolgen[]
 	 */
 	private $volgers;
 	/**
@@ -189,6 +189,10 @@ class ForumDraad extends PersistentEntity {
 
 	public function magModereren() {
 		return $this->getForumDeel()->magModereren() OR ( $this->isGedeeld() AND $this->getGedeeldMet()->magModereren() );
+	}
+
+	public function magStatistiekBekijken() {
+		return $this->magModereren() OR ( $this->uid != 'x999' AND $this->uid === LoginModel::getUid() );
 	}
 
 	public function magVerbergen() {

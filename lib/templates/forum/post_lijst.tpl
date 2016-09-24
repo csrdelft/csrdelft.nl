@@ -33,7 +33,7 @@
 		{/if}
 		<br />
 		{if isset($statistiek)}
-			<span class="lichtgrijs small" title="Gelezen door lezers">{ForumDradenGelezenModel::instance()->getGelezenPercentage($post)}%</span>
+			<span class="lichtgrijs small" title="Gelezen door {$post->getAantalGelezen()} van de {$draad->getAantalLezers()} lezers">{$post->getGelezenPercentage()|string_format:"%.0f"}% gelezen</span>
 		{/if}
 		<br />
 		<div class="forumpostKnoppen">

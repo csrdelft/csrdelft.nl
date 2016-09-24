@@ -66,6 +66,11 @@ class ForumPost extends PersistentEntity {
 	 */
 	public $gefilterd;
 	/**
+	 * Aantal lezers dat deze post gelezen heeft
+	 * @var int
+	 */
+	private $aantal_gelezen;
+	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -109,6 +114,22 @@ class ForumPost extends PersistentEntity {
 			return false;
 		}
 		return $this->uid === LoginModel::getUid() AND LoginModel::mag('P_LOGGED_IN');
+	}
+
+	public function getAantalGelezen() {
+		if (!isset($this->aantal_gelezen)) {
+			$this->aantal_gelezen = 0;
+			foreach ($this->getForumDraad()->getLezers() as $gelezen) {
+				if ($this->laatst_gewijzigd AND $this->laatst_gewijzigd <= $gelezen->datum_tijd) {
+					$this->aantal_gelezen++;
+				}
+			}
+		}
+		return $this->aantal_gelezen;
+	}
+
+	public function getGelezenPercentage() {
+		return $this->getAantalGelezen() * 100 / $this->getForumDraad()->getAantalLezers();
 	}
 
 }

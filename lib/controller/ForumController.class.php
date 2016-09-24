@@ -323,12 +323,12 @@ class ForumController extends Controller {
 		} else {
 			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id);
 		}
-		if ($statistiek === 'statistiek' AND $draad->magModereren()) {
+		if ($statistiek === 'statistiek' AND $draad->magStatistiekBekijken()) {
 			$statistiek = true;
 		} else {
 			$statistiek = false;
 		}
-		$this->view = new ForumDraadView($draad, $paging, $statistiek); // lazy loading ForumPost[]
+		$this->view = new ForumDraadView($draad, $gelezen, $paging, $statistiek); // lazy loading ForumPost[]
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		}

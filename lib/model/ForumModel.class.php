@@ -450,27 +450,8 @@ class ForumDradenGelezenModel extends CachedPersistenceModel {
 		return true;
 	}
 
-	/**
-	 * Bereken het percentage lezers dat een post heeft gelezen.
-	 * 
-	 * @param ForumPost $post
-	 * @param array $draad
-	 * @return int percentage
-	 */
-	public function getGelezenPercentage(Forumpost $post) {
-		$draad = $post->getForumDraad();
-		$totaal = $draad->getAantalLezers();
-		$aantal = 0;
-		foreach ($draad->getLezers() as $gelezen) {
-			if ($post->laatst_gewijzigd AND $post->laatst_gewijzigd <= $gelezen->datum_tijd) {
-				$aantal++;
-			}
-		}
-		return (int) ($aantal * 100 / $totaal);
-	}
-
 	public function getLezersVanDraad(ForumDraad $draad) {
-		return $this->find('draad_id = ?', array($draad->draad_id));
+		return $this->prefetch('draad_id = ?', array($draad->draad_id));
 	}
 
 	public function verwijderDraadGelezen(ForumDraad $draad) {
@@ -547,7 +528,7 @@ class ForumDradenVolgenModel extends CachedPersistenceModel {
 	}
 
 	public function getVolgersVanDraad(ForumDraad $draad) {
-		return $this->find('draad_id = ?', array($draad->draad_id))->fetchAll(PDO::FETCH_COLUMN, 1);
+		return $this->prefetch('draad_id = ?', array($draad->draad_id))->fetchAll(PDO::FETCH_COLUMN, 1);
 	}
 
 	public function getVolgenVoorLid(ForumDraad $draad) {

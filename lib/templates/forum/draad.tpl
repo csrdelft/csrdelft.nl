@@ -5,6 +5,10 @@
 
 	{capture name='kop'}
 		<div class="forumheadbtn">
+			{if !isset($statistiek) AND $draad->magStatistiekBekijken()}
+				<a href="/forum/onderwerp/{$draad->draad_id}/{ForumPostsModel::instance()->getHuidigePagina()}/statistiek" class="btn" title="Toon statistieken">{icon get="chart_line"}</a>
+				&nbsp;&nbsp;&nbsp;
+			{/if}
 			<a title="Onderwerp toevoegen aan favorieten" class="btn post popup addfav" href="/menubeheer/toevoegen/favoriet">{icon get="star"}</a>
 			&nbsp;&nbsp;&nbsp;
 			{if $draad->isGevolgd()}
@@ -42,7 +46,8 @@
 		<h1>
 			{$draad->titel}
 			{if isset($statistiek)}
-				<span class="lichtgrijs small" title="Aantal lezers"> {$draad->getAantalLezers()}</span>
+				&nbsp;&nbsp;&nbsp;
+				<span class="lichtgrijs small" title="Aantal lezers">{$draad->getAantalLezers()} lezers</span>
 			{/if}
 		</h1>
 	{/capture}
