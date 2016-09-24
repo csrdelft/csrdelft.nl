@@ -86,13 +86,13 @@ class EetplanModel extends PersistenceModel {
         $bezocht = $this->find("uid LIKE ?", array(sprintf("%s%%", $lichting)));
         $factory->setBezocht($bezocht);
 
-        $novieten = ProfielModel::instance()->find("uid LIKE ?", array(sprintf("%s%%", $lichting)))->fetchAll();
+        $novieten = ProfielModel::instance()->find("uid LIKE ? AND status = 'S_NOVIET'", array(sprintf("%s%%", $lichting)))->fetchAll();
         $factory->setNovieten($novieten);
 
         $huizen = WoonoordenModel::instance()->find("eetplan = true")->fetchAll();
         $factory->setHuizen($huizen);
 
-        return $factory->genereer($avond);
+        return $factory->genereer($avond, true);
     }
 
     /**
