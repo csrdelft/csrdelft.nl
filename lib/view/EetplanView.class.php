@@ -89,6 +89,10 @@ class EetplanBeheerView extends AbstractEetplanView {
         $this->eetplan = $this->model->getEetplan($this->lichting);
     }
 
+    public function getTitel() {
+        return 'Eetplanbeheer';
+    }
+
     public function getBreadcrumbs() {
         return parent::getBreadcrumbs() . ' » <span>Beheer</span>';
     }
