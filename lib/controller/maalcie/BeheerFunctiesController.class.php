@@ -99,7 +99,7 @@ class BeheerFunctiesController extends AclController {
 
 	public function dekwalificeer($fid, $uid) {
 		$functie = $this->model->get((int) $fid);
-		KwalificatiesModel::instance()->kwalificatieTerugtrekken($uid, $functie->functie_id);
+		KwalificatiesModel::instance()->kwalificatieIntrekken($uid, $functie->functie_id);
 		$this->view = new FunctieView($functie);
 	}
 

@@ -23,7 +23,7 @@ class KwalificatiesModel extends CachedPersistenceModel {
 	}
 
 	public function getKwalificatiesVoorFunctie($fid) {
-		return $this->find('functie_id = ?', array($fid))->fetchAll();
+		return $this->prefetch('functie_id = ?', array($fid))->fetchAll();
 	}
 
 	/**
@@ -33,7 +33,7 @@ class KwalificatiesModel extends CachedPersistenceModel {
 	 * @return CorveeFunctie[]
 	 */
 	public function getKwalificatiesVanLid($uid) {
-		return $this->find('uid = ?', array($uid));
+		return $this->prefetch('uid = ?', array($uid));
 	}
 
 	public function isLidGekwalificeerdVoorFunctie($uid, $fid) {
@@ -54,7 +54,7 @@ class KwalificatiesModel extends CachedPersistenceModel {
 		$this->create($kwali);
 	}
 
-	public function kwalificatieTerugtrekken($uid, $fid) {
+	public function kwalificatieIntrekken($uid, $fid) {
 		$rowCount = $this->deleteByPrimaryKey(array($uid, $fid));
 		if ($rowCount !== 1) {
 			throw new Exception('Is niet gekwalificeerd!');

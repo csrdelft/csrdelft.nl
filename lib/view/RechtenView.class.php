@@ -28,7 +28,7 @@ class RechtenTable extends DataTable {
 		$update = new DataTableKnop('== 1', $this->dataTableId, '/rechten/wijzigen', 'post popup', 'Wijzigen', 'Rechten wijzigen', 'key_edit');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', $this->dataTableId, '/rechten/verwijderen', 'post confirm', 'Terugtrekken', 'Rechten terugtrekken', 'key_delete');
+		$delete = new DataTableKnop('>= 1', $this->dataTableId, '/rechten/verwijderen', 'post confirm', 'Intrekken', 'Rechten intrekken', 'key_delete');
 		$this->addKnop($delete);
 	}
 

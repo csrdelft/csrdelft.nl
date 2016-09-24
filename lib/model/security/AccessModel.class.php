@@ -26,7 +26,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
-	private static $prefix = array('ACTIVITEIT', 'BESTUUR', 'COMMISSIE', 'GROEP', 'KETZER', 'ONDERVERENIGING', 'WERKGROEP', 'WOONOORD', 'VERTICALE', 'KRING', 'GESLACHT', 'STATUS', 'LICHTING', 'LIDJAAR', 'OUDEREJAARS', 'EERSTEJAARS', 'MAALTIJD');
+	private static $prefix = array('ACTIVITEIT', 'BESTUUR', 'COMMISSIE', 'GROEP', 'KETZER', 'ONDERVERENIGING', 'WERKGROEP', 'WOONOORD', 'VERTICALE', 'KRING', 'GESLACHT', 'STATUS', 'LICHTING', 'LIDJAAR', 'OUDEREJAARS', 'EERSTEJAARS', 'MAALTIJD', 'KWALIFICATIE');
 	/**
 	 * Gebruikt om ledengegevens te raadplegen
 	 * @var array
@@ -751,7 +751,27 @@ class AccessModel extends CachedPersistenceModel {
 						// Maaltijd bestaat niet
 					}
 				}
-			// fall through
+
+				return false;
+
+			/**
+			 * Heeft een lid een kwalficatie voor een functie in het covee-systeem?
+			 */
+			case 'KWALIFICATIE':
+				require_once 'model/maalcie/FunctiesModel.class.php';
+
+				if (is_numeric($gevraagd)) {
+					$functie_id = (int) $gevraagd;
+				} else {
+					$functie = FunctiesModel::instance()->prefetch('afkorting = ? OR naam = ?', array($gevraagd, $gevraagd), null, null, 1);
+					if (isset($functie[0])) {
+						$functie_id = $functie[0]->functie_id;
+					} else {
+						return false;
+					}
+				}
+
+				return KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($profiel->uid, $functie_id);
 		}
 		return false;
 	}
