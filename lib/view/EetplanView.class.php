@@ -33,6 +33,8 @@ abstract class AbstractEetplanView extends SmartyTemplateView {
 
 class EetplanView extends AbstractEetplanView {
 	function view() {
+	    $eetplantable = new EetplanTableView($this->model->getEetplan($this->lichting));
+        $this->smarty->assign('table', $eetplantable);
         $this->smarty->assign('avonden', $this->model->getAvonden($this->lichting));
         $this->smarty->assign('eetplan', $this->model->getEetplan($this->lichting));
         $this->smarty->display('eetplan/overzicht.tpl');
@@ -267,4 +269,14 @@ class NieuwEetplanForm extends ModalForm {
 
         $this->addFields($fields);
     }
+}
+
+class EetplanTableView extends SmartyTemplateView {
+
+    function view() {
+        $this->smarty->assign('avonden', $this->model['avonden']);
+        $this->smarty->assign('novieten', $this->model['novieten']);
+        $this->smarty->display('eetplan/table.tpl');
+    }
+}
 }

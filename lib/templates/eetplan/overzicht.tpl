@@ -8,17 +8,4 @@
         koken op het huis waarbij zij gefaeld hebben.</p>
 </div>
 
-<div class="eetplan">
-    <table class="novietentabel"></table>
-    <table class="eetplantabel"></table>
-</div>
-
-<script type="text/javascript">
-    var $novieten = $('.novietentabel'), $eetplan = $('.eetplantabel');
-    $.ajax({
-        method: 'GET',
-        url: '/eetplan/json'
-    }).done(function (data) {
-        bouwEetplanTabel($novieten, $eetplan, data);
-    });
-</script>
+{$table->view()}
