@@ -178,11 +178,6 @@ class EetplanController extends AclController {
         $this->view->addCompressedResources('eetplan');
     }
 
-    public function json() {
-        $eetplan = $this->model->getEetplan($this->lichting);
-        $this->view = new JsonResponse($eetplan);
-    }
-
     public function nieuw() {
         $form = new NieuwEetplanForm();
 
