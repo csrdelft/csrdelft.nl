@@ -13,7 +13,6 @@ require_once 'model/EetplanModel.class.php';
  */
 abstract class AbstractEetplanView extends SmartyTemplateView {
 
-	protected $eetplan;
     protected $lichting;
 
     public function __construct($model, $lichting) {
@@ -48,7 +47,6 @@ class EetplanNovietView extends AbstractEetplanView {
 	public function __construct(EetplanModel $model, $lichting, $uid) {
 		parent::__construct($model, $lichting);
 		$this->uid = $uid;
-		$this->eetplan = $this->model->getEetplanVoorNoviet($this->uid);
 	}
 
 	public function getBreadcrumbs() {
@@ -57,7 +55,7 @@ class EetplanNovietView extends AbstractEetplanView {
 
 	function view() {
 		//huizen voor een feut tonen
-        $this->smarty->assign('eetplan', $this->eetplan);
+        $this->smarty->assign('eetplan', $this->model);
         $this->smarty->display('eetplan/noviet.tpl');
 	}
 
@@ -69,7 +67,6 @@ class EetplanHuisView extends AbstractEetplanView {
 
 	public function __construct(EetplanModel $model, $lichting, $iHuisID) {
 		parent::__construct($model, $lichting);
-		$this->eetplan = $this->model->getEetplanVoorHuis($iHuisID, $lichting);
         $this->woonoord = WoonoordenModel::get($iHuisID);
 	}
 
@@ -80,16 +77,12 @@ class EetplanHuisView extends AbstractEetplanView {
 	function view() {
 		//feuten voor een huis tonen
         $this->smarty->assign('model', $this->model);
-        $this->smarty->assign('eetplan', $this->eetplan);
+        $this->smarty->assign('eetplan', $this->model);
         $this->smarty->display('eetplan/huis.tpl');
 	}
 }
 
 class EetplanBeheerView extends AbstractEetplanView {
-    public function __construct(EetplanModel $model, $lichting) {
-        parent::__construct($model, $lichting);
-    }
-
     public function getTitel() {
         return 'Eetplanbeheer';
     }
@@ -99,16 +92,16 @@ class EetplanBeheerView extends AbstractEetplanView {
     }
 
     public function view() {
-        $this->smarty->assign("bekendentable", new EetplanBekendenTable($this->lichting));
-        $this->smarty->assign("huizentable", new EetplanHuizenTable($this->lichting)); // TODO: consistentie huizen-woonoorden
-        $this->smarty->assign("bekendehuizentable", new EetplanBekendeHuizenTable($this->lichting));
+        $this->smarty->assign("bekendentable", new EetplanBekendenTable());
+        $this->smarty->assign("huizentable", new EetplanHuizenTable()); // TODO: consistentie huizen-woonoorden
+        $this->smarty->assign("bekendehuizentable", new EetplanBekendeHuizenTable());
         $this->smarty->assign("table", new EetplanTableView($this->model));
         $this->smarty->display('eetplan/beheer.tpl');
     }
 }
 
 class EetplanHuizenTable extends DataTable {
-    public function __construct($lichting) {
+    public function __construct() {
         parent::__construct('EetplanHuizenData', '/eetplan/woonoorden/', 'Woonoorden die meedoen');
         $this->searchColumn('naam');
         $this->addColumn('eetplan', null, null, 'switchButton_' . $this->dataTableId);

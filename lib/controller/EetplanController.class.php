@@ -67,7 +67,7 @@ class EetplanController extends AclController {
         if ($eetplan === false) {
             $this->geentoegang();
         }
-		$body = new EetplanNovietView($this->model, $this->lichting, $uid);
+		$body = new EetplanNovietView($this->model->getEetplanVoorNoviet($uid), $this->lichting, $uid);
 		$this->view = new CsrLayoutPage($body);
         $this->view->addCompressedResources('eetplan');
 	}
@@ -77,7 +77,7 @@ class EetplanController extends AclController {
         if ($eetplan === false) {
             $this->geentoegang();
         }
-		$body = new EetplanHuisView($this->model, $this->lichting, $id);
+		$body = new EetplanHuisView($this->model->getEetplanVoorHuis($id, $this->lichting), $this->lichting, $id);
 		$this->view = new CsrLayoutPage($body);
         $this->view->addCompressedResources('eetplan');
 	}
