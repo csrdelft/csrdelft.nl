@@ -42,13 +42,11 @@ class EetplanModel extends PersistenceModel {
      * @return array Het eetplan
      */
     public function getEetplan($lichting) {
-        $eetplan = $this->find('uid LIKE ?', array(sprintf("%s%%", $lichting)));
+        // Avond 0000-00-00 wordt gebruikt voor novieten die huizen kennen
+        $eetplan = $this->find('uid LIKE ? AND avond <> "0000-00-00"', array(sprintf("%s%%", $lichting)));
         $eetplanFeut = array();
         $avonden = array();
         foreach ($eetplan as $sessie) {
-            if ($sessie->avond == '0000-00-00') {
-                continue;
-            }
             if (!isset($eetplanFeut[$sessie->uid])) {
                 $eetplanFeut[$sessie->uid] = array(
                     'avonden' => array(),
