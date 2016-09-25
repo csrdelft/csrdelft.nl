@@ -22,7 +22,7 @@ class EetplanModel extends PersistenceModel {
     }
 
     public function getNovieten($lichting) {
-        return $this->findSparse(array('uid'), 'uid LIKE ?', array(sprintf("%s%%", $lichting)), 'uid');
+        return $this->findSparse(array('uid'), 'uid LIKE ?', array($lichting . "%"), 'uid');
     }
 
     /**
@@ -31,7 +31,7 @@ class EetplanModel extends PersistenceModel {
      * @return Eetplan[] Lijst met sparse(!) eetplan objecten met alleen een avond.
      */
     public function getAvonden($lichting) {
-        return $this->findSparse(array('avond'), 'uid LIKE ?', array(sprintf("%s%%", $lichting)), 'avond')->fetchAll();
+        return $this->findSparse(array('avond'), 'uid LIKE ?', array($lichting . "%"), 'avond')->fetchAll();
     }
 
     /**
@@ -44,7 +44,7 @@ class EetplanModel extends PersistenceModel {
     public function getEetplan($lichting) {
         // Avond 0000-00-00 wordt gebruikt voor novieten die huizen kennen
         // Orderen bij avond, zodat de avondvolgorde per noviet klopt
-        $eetplan = $this->find('uid LIKE ? AND avond <> "0000-00-00"', array(sprintf("%s%%", $lichting)), null, 'avond');
+        $eetplan = $this->find('uid LIKE ? AND avond <> "0000-00-00"', array($lichting . "%"), null, 'avond');
         $eetplanFeut = array();
         $avonden = array();
         foreach ($eetplan as $sessie) {
@@ -82,10 +82,10 @@ class EetplanModel extends PersistenceModel {
         $bekenden = EetplanBekendenModel::instance()->getBekenden($lichting);
         $factory->setBekenden($bekenden);
 
-        $bezocht = $this->find("uid LIKE ?", array(sprintf("%s%%", $lichting)));
+        $bezocht = $this->find("uid LIKE ?", array($lichting . "%"));
         $factory->setBezocht($bezocht);
 
-        $novieten = ProfielModel::instance()->find("uid LIKE ? AND status = 'S_NOVIET'", array(sprintf("%s%%", $lichting)))->fetchAll();
+        $novieten = ProfielModel::instance()->find("uid LIKE ? AND status = 'S_NOVIET'", array($lichting . "%"))->fetchAll();
         $factory->setNovieten($novieten);
 
         $huizen = WoonoordenModel::instance()->find("eetplan = true")->fetchAll();
@@ -107,11 +107,11 @@ class EetplanModel extends PersistenceModel {
      * @return Eetplan[] lijst van eetplansessies voor dit huis, gesorteerd op datum (oplopend)
      */
     public function getEetplanVoorHuis($id, $lichting) {
-        return $this->find('uid LIKE ? AND woonoord_id = ?', array(sprintf("%s%%", $lichting), $id), null, 'avond')->fetchAll();
+        return $this->find('uid LIKE ? AND woonoord_id = ?', array($lichting . "%", $id), null, 'avond')->fetchAll();
     }
 
     public function getBekendeHuizen($lichting) {
-        return $this->find('uid LIKE ? AND avond = DATE(0)', array(sprintf("%s%%", $lichting)))->fetchAll();
+        return $this->find('uid LIKE ? AND avond = DATE(0)', array($lichting . "%"))->fetchAll();
     }
 }
 
@@ -128,7 +128,7 @@ class EetplanBekendenModel extends PersistenceModel {
     }
 
     public function getBekenden($lichting) {
-        return $this->find('uid1 LIKE ?', array(sprintf("%s%%", $lichting)))->fetchAll();
+        return $this->find('uid1 LIKE ?', array($lichting . "%"))->fetchAll();
     }
 
     public function exists(PersistentEntity $entity) {
