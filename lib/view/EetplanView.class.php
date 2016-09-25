@@ -44,7 +44,7 @@ class EetplanNovietView extends AbstractEetplanView {
 
 	private $uid;
 
-	public function __construct(EetplanModel $model, $lichting, $uid) {
+	public function __construct($model, $lichting, $uid) {
 		parent::__construct($model, $lichting);
 		$this->uid = $uid;
 	}
@@ -65,7 +65,7 @@ class EetplanHuisView extends AbstractEetplanView {
 
 	private $woonoord;
 
-	public function __construct(EetplanModel $model, $lichting, $iHuisID) {
+	public function __construct($model, $lichting, $iHuisID) {
 		parent::__construct($model, $lichting);
         $this->woonoord = WoonoordenModel::get($iHuisID);
 	}
