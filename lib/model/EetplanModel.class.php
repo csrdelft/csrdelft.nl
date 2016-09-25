@@ -43,7 +43,8 @@ class EetplanModel extends PersistenceModel {
      */
     public function getEetplan($lichting) {
         // Avond 0000-00-00 wordt gebruikt voor novieten die huizen kennen
-        $eetplan = $this->find('uid LIKE ? AND avond <> "0000-00-00"', array(sprintf("%s%%", $lichting)));
+        // Orderen bij avond, zodat de avondvolgorde per noviet klopt
+        $eetplan = $this->find('uid LIKE ? AND avond <> "0000-00-00"', array(sprintf("%s%%", $lichting)), null, 'avond');
         $eetplanFeut = array();
         $avonden = array();
         foreach ($eetplan as $sessie) {
