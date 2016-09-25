@@ -173,7 +173,7 @@ class EetplanController extends AclController {
      * POST een json body om dingen te doen.
      */
     public function beheer() {
-        $body = new EetplanBeheerView($this->model, $this->lichting);
+        $body = new EetplanBeheerView($this->model->getEetplan($this->lichting), $this->lichting);
         $this->view = new CsrLayoutPage($body);
         $this->view->addCompressedResources('eetplan');
     }
