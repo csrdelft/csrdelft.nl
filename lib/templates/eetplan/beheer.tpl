@@ -6,7 +6,5 @@
 
 <a href="/eetplan/nieuw" class="btn post popup">Nieuw Eetplan</a>
 
-<div class="eetplan">
-    <table class="novietentabel"></table>
-    <table class="eetplantabel"></table>
-</div>
+{$table->view()}
+

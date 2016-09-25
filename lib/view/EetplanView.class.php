@@ -103,6 +103,7 @@ class EetplanBeheerView extends AbstractEetplanView {
         $this->smarty->assign("bekendentable", new EetplanBekendenTable($this->lichting));
         $this->smarty->assign("huizentable", new EetplanHuizenTable($this->lichting)); // TODO: consistentie huizen-woonoorden
         $this->smarty->assign("bekendehuizentable", new EetplanBekendeHuizenTable($this->lichting));
+        $this->smarty->assign("table", new EetplanTableView($this->eetplan));
         $this->smarty->display('eetplan/beheer.tpl');
     }
 }
@@ -272,11 +273,9 @@ class NieuwEetplanForm extends ModalForm {
 }
 
 class EetplanTableView extends SmartyTemplateView {
-
     function view() {
         $this->smarty->assign('avonden', $this->model['avonden']);
         $this->smarty->assign('novieten', $this->model['novieten']);
         $this->smarty->display('eetplan/table.tpl');
     }
-}
 }

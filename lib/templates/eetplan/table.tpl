@@ -1,4 +1,4 @@
-<div class="eetplan">
+<div id="eetplan">
     <table class="novietentable">
         <thead>
         <tr>

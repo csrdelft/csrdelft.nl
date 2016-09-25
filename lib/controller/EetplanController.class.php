@@ -195,13 +195,11 @@ class EetplanController extends AclController {
             $avond = $form->getValues()['avond'];
             $eetplan = $this->model->maakEetplan($avond, $this->lichting);
 
-            echo "Aantal: " . count($eetplan) . "\n";
-
             foreach ($eetplan as $sessie) {
                 $this->model->create($sessie);
-                echo "uid: " . $sessie->uid . "\n";
-                echo "woonoord: " . $sessie->woonoord_id . "\n\n";
             }
+
+            $this->view = new EetplanTableView($this->model->getEetplan($this->lichting));
         }
     }
 }
