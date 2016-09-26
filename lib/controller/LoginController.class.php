@@ -324,7 +324,7 @@ class LoginController extends AclController {
 			// after login
 			elseif (isset($_COOKIE['goback'])) {
 				$this->view = new JsonResponse($_COOKIE['goback']);
-				unset($_COOKIE['goback']);
+				setGoBackCookie(null);
 			} else {
 				$this->view = new JsonResponse(CSR_ROOT);
 			}
