@@ -30,6 +30,7 @@ if ($authHeader) {
 
 			// Register uid for this session
 			$_SESSION['_uid'] = $token->data->userId;
+			$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
 
 			// Leden
 			if (LoginModel::mag('P_OUDLEDEN_READ') && isset($_GET['cat']) && $_GET['cat'] === 'leden') {
