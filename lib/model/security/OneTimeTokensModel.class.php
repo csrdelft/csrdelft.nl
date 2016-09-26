@@ -5,7 +5,7 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Model voor two-step authentication.
+ * Model voor two-step verification (2SV).
  * 
  */
 class OneTimeTokensModel extends PersistenceModel {
@@ -15,6 +15,13 @@ class OneTimeTokensModel extends PersistenceModel {
 
 	protected static $instance;
 
+	/**
+	 * Verify a one time token for a user and redirect to the url.
+	 *
+	 * @param string $uid
+	 * @param string $rand
+	 * @return boolean
+	 */
 	public function verifyToken($uid, $rand) {
 		$token = $this->find('uid = ? AND verified = FALSE AND expire > NOW() AND token = ?', array($uid, hash('sha512', $rand)), null, null, 1)->fetch();
 		if (!$token) {
@@ -29,8 +36,8 @@ class OneTimeTokensModel extends PersistenceModel {
 	}
 
 	/**
-	 * Is current session verified by onetime token to execute a certain url on behalf of the user given uid?
-	 * 
+	 * Is current session verified by an one time token to execute a certain url on behalf of the given user uid?
+	 *
 	 * @param string $uid
 	 * @param string $url
 	 * @return boolean
