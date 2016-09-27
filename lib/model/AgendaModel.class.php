@@ -17,6 +17,7 @@ require_once 'model/maalcie/CorveeTakenModel.class.php';
 class AgendaModel extends PersistenceModel {
 
 	const ORM = 'AgendaItem';
+	const DIR = 'agenda/';
 
 	protected static $instance;
 	/**
@@ -59,8 +60,7 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Activiteiten
-		$activiteiten = ActiviteitenModel::instance()->find(
-		  'in_agenda = TRUE AND (
+		$activiteiten = ActiviteitenModel::instance()->find('in_agenda = TRUE AND (
 		    (begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)
 		  )', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
 		foreach ($activiteiten as $activiteit) {
@@ -229,6 +229,7 @@ class AgendaModel extends PersistenceModel {
 class AgendaVerbergenModel extends PersistenceModel {
 
 	const ORM = 'AgendaVerbergen';
+	const DIR = 'agenda/';
 
 	protected static $instance;
 

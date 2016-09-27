@@ -24,7 +24,7 @@ class FlotTimeSeries extends JsonResponse {
 				'data'	 => $entry
 			);
 		}
-		return json_encode($array);
+		return parent::getJson($array);
 	}
 
 }

@@ -1116,7 +1116,7 @@ HTML;
 		}
 		require_once 'view/PeilingenView.class.php';
 		try {
-			$peiling = PeilingenModel::instance()->get((int) $peiling_id);
+			$peiling = PeilingenModel::instance()->getPeilingById((int) $peiling_id);
 			$peilingcontent = new PeilingView($peiling);
 			return $peilingcontent->getHtml();
 		} catch (Exception $e) {

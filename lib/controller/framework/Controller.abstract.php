@@ -2,14 +2,15 @@
 
 /**
  * Controller.abstract.php
- * 
+ *
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
- * Een controller zorgt ervoor dat de juiste acties uitgevoerd worden,
- * dat er gecontroleerd wordt of de gebruiker mag doen dat hij probeert
- * te doen, en dat er een View aangemaakt wordt.
- * 
+ *
+ * De controller bepaalt welke actie er uitgevoerd moet worden aan de hand van
+ * de request method en query.
+ * Ook dient de controller te controleren of de gebruiker geauthorizeerd is.
+ * Tenslotte moet er een View aangemaakt worden door de actie.
+ *
  */
 abstract class Controller {
 
@@ -95,7 +96,7 @@ abstract class Controller {
 	 * KVP: named parameters
 	 * 
 	 * @param string $key
-	 * @return boolean
+	 * @return string
 	 */
 	protected function getParam($key) {
 		if (array_key_exists($key, $this->kvp)) {

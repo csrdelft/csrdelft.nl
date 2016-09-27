@@ -36,16 +36,16 @@ abstract class HtmlPage implements View {
 		$this->titel = $titel;
 	}
 
-	function getModel() {
-		return $this->body;
-	}
-
-	function getTitel() {
+	public function getTitel() {
 		return $this->titel;
 	}
 
-	function getBody() {
+	public function getBody() {
 		return $this->body;
+	}
+
+	public function getModel() {
+		return null;
 	}
 
 	/**

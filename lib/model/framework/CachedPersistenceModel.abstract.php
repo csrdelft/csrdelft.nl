@@ -210,7 +210,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * Requires positional values.
 	 * 
 	 * @param array $primary_key_values
-	 * @return boolean rows affected
+	 * @return int number of rows affected
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
 		if ($this->memcache_prefetch) {
@@ -226,7 +226,7 @@ abstract class CachedPersistenceModel extends PersistenceModel {
 	 * Sparse attributes that have not been retrieved are excluded by PersistentEntity->getValues().
 	 *
 	 * @param PersistentEntity $entity
-	 * @return int rows affected
+	 * @return int number of rows affected
 	 */
 	public function update(PersistentEntity $entity) {
 		if ($this->memcache_prefetch) {

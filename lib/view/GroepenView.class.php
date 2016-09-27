@@ -1,4 +1,5 @@
 <?php
+
 require_once 'model/entity/groepen/GroepTab.enum.php';
 require_once 'model/CmsPaginaModel.class.php';
 require_once 'view/CmsPaginaView.class.php';
@@ -85,7 +86,6 @@ class GroepenBeheerTable extends DataTable {
 class GroepenBeheerData extends DataTableResponse {
 
 	public function getJson($groep) {
-		// Controleer rechten
 		$array = $groep->jsonSerialize();
 
 		$array['detailSource'] = $groep->getUrl() . 'leden';

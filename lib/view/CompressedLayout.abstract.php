@@ -22,6 +22,10 @@ abstract class CompressedLayout extends HtmlPage {
 		$this->layout = $layout;
 	}
 
+	protected function getLayout() {
+		return $this->layout;
+	}
+
 	/**
 	 * Add compressed css en js to page for module.
 	 * 
