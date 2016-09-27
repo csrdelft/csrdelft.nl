@@ -17,10 +17,6 @@ require_once 'model/entity/framework/PersistentEntity.abstract.php';
  */
 abstract class PersistenceModel implements Persistence {
 
-	/**
-	 * Unfortunately PHP does not support static constructors.
-	 * This is the next best thing for now.
-	 */
 	public static function __static() {
 		$orm = static::ORM;
 		if (defined('static::DIR')) {
@@ -29,7 +25,7 @@ abstract class PersistenceModel implements Persistence {
 			$dir = '';
 		}
 		require_once 'model/entity/' . $dir . $orm . '.class.php';
-		$orm::__static(); // extend persistent attributes
+		$orm::__static(); // Extend the persistent attributes
 		if (DB_CHECK) {
 			require_once 'model/framework/DatabaseAdmin.singleton.php';
 			$orm::checkTable();
@@ -44,7 +40,8 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	public static function instance() {
 		if (!isset(static::$instance)) {
-			static::__static();
+			// Unfortunately PHP does not support static constructors
+			static::__static(); // This is the next best thing for now
 			static::$instance = new static();
 		}
 		return static::$instance;

@@ -32,14 +32,6 @@ class Commissie extends AbstractGroep {
 	 */
 	protected static $table_name = 'commissies';
 
-	/**
-	 * Extend the persistent attributes.
-	 */
-	public static function __static() {
-		parent::__static();
-		self::$persistent_attributes = parent::$persistent_attributes + self::$persistent_attributes;
-	}
-
 	public function getUrl() {
 		return '/groepen/commissies/' . $this->id . '/';
 	}
