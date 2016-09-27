@@ -365,16 +365,11 @@ function knop_ajax(knop, type) {
 			}
 		}
 
-		data = {
-			'DataTableId': tableId
-		};
 		var selection = fnGetSelection('#' + tableId);
-		if (selection.length > 0) {
-			data = {
-				'DataTableId': tableId,
-				'DataTableSelection[]': selection
-			};
-		}
+		data = {
+			'DataTableId': tableId,
+			'DataTableSelection[]': selection
+		};
 
 		done = function (response) {
 			if (typeof response === 'object') { // JSON

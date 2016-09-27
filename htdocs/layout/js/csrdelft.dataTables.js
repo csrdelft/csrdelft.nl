@@ -61,7 +61,6 @@ function fnAutoScroll(tableId) {
 }
 
 function fnUpdateDataTable(tableId, response) {
-	fnAutoScroll(tableId);
 	var $table = $(tableId);
 	var table = $table.DataTable();
 	// update or remove existing rows or add new rows
@@ -84,10 +83,6 @@ function fnUpdateDataTable(tableId, response) {
 		}
 	});
 	table.draw(false);
-}
-
-function fnGetSelectionSize(tableId) {
-	return $(tableId + ' tbody tr.selected').length;
 }
 
 function fnGetSelection(tableId) {

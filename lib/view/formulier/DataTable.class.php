@@ -172,6 +172,7 @@ abstract class DataTable extends TabsForm {
 			);
 		}
 		$this->settings['createdRow'] = 'fnCreatedRowCallback';
+		$this->settings['drawCallback'] = 'fnUpdateToolbar';
 
 		// get columns index
 		$columns = array_keys($this->columns);
@@ -215,6 +216,25 @@ abstract class DataTable extends TabsForm {
 		return $this->settings;
 	}
 
+	/**
+	 * Update datatable knoppen based on selection (count).
+	 * 
+	 * @return javascript
+	 */
+	private function getUpdateToolbarFunction() {
+		$js = <<<JS
+function () {
+	var selectie = fnGetSelection(tableId);
+	var aantal = selectie.length;
+JS;
+		foreach ($this->getFields() as $field) {
+			if ($field instanceof DataTableKnop) {
+				$js .= "\n" . $field->getUpdateToolbar() . "\n";
+			}
+		}
+		return $js . '}';
+	}
+
 	public function view() {
 		// encode settings
 		$settingsJson = json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0);
@@ -223,6 +243,7 @@ abstract class DataTable extends TabsForm {
 		$settingsJson = str_replace('"fnGetLastUpdate"', 'fnGetLastUpdate', $settingsJson);
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
+		$settingsJson = str_replace('"fnUpdateToolbar"', 'fnUpdateToolbar', $settingsJson);
 
 		// toolbar
 		parent::view();
@@ -232,6 +253,7 @@ abstract class DataTable extends TabsForm {
 
 			$(document).ready(function () {
 
+				var fnUpdateToolbar = <?= $this->getUpdateToolbarFunction(); ?>;
 				var fnGetLastUpdate = function () {
 					return Number($('#<?= $this->dataTableId; ?>').attr('data-lastupdate'));
 				}
@@ -278,8 +300,8 @@ abstract class DataTable extends TabsForm {
 								$.post(table.ajax.url(), {
 									'lastUpdate': fnGetLastUpdate()
 								}, function (data, textStatus, jqXHR) {
-									fnAjaxUpdateCallback(data);
 									fnUpdateDataTable('#<?= $this->dataTableId; ?>', data);
+									fnAjaxUpdateCallback(data);
 								});
 							}, timeout);
 						}
@@ -292,11 +314,9 @@ abstract class DataTable extends TabsForm {
 								table.page(json.page).draw(false);
 							}, 200);
 						}
-					}
-					else {
+					} else {
 						fnAutoScroll(tableId);
 					}
-					fnUpdateToolbar();
 					return json.data;
 				};
 				// Init DataTable
@@ -306,7 +326,6 @@ abstract class DataTable extends TabsForm {
 				/**
 				 * Toolbar button state update on row (de-)selection.
 				 */
-				var fnUpdateToolbar = <?= $this->getUpdateToolbarFunction(); ?>;
 				$(tableId + ' tbody').on('click', 'tr', fnUpdateToolbar);
 				$('.DTTT_button_text').on('click', fnUpdateToolbar); // (De-)Select all
 				$(tableId + '_toolbar').prependTo(tableId + '_wrapper'); // Toolbar above table
@@ -340,25 +359,6 @@ abstract class DataTable extends TabsForm {
 			});
 		</script>
 		<?php
-	}
-
-	/**
-	 * Update datatable knoppen based on selection (count).
-	 * 
-	 * @return javascript
-	 */
-	private function getUpdateToolbarFunction() {
-		$js = <<<JS
-function () {
-	var selectie = fnGetSelection(tableId);
-	var aantal = selectie.length;
-JS;
-		foreach ($this->getFields() as $field) {
-			if ($field instanceof DataTableKnop) {
-				$js .= "\n" . $field->getUpdateToolbar() . "\n";
-			}
-		}
-		return $js . '}';
 	}
 
 }

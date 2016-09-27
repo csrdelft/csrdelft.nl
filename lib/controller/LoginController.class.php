@@ -276,6 +276,9 @@ class LoginController extends AclController {
 
 	public function loginlockip() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		if (!$selection) {
+			$this->geentoegang();
+		}
 		$response = array();
 		foreach ($selection as $UUID) {
 			$remember = RememberLoginModel::instance()->retrieveByUUID($UUID);
@@ -327,6 +330,9 @@ class LoginController extends AclController {
 
 	public function loginforget() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		if (!$selection) {
+			$this->geentoegang();
+		}
 		$response = array();
 		foreach ($selection as $UUID) {
 			$remember = RememberLoginModel::instance()->retrieveByUUID($UUID);
