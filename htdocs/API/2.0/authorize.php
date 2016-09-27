@@ -33,6 +33,7 @@ if (isset($_POST['user']) && isset($_POST['pass'])) {
 
 			if ($validPassword) {
 				AccountModel::instance()->successfulLoginAttempt($account);
+                $_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
 				$credentialsAreValid = true;
 			} else {
 				AccountModel::instance()->failedLoginAttempt($account);

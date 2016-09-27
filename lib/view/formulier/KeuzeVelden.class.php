@@ -224,8 +224,8 @@ class EntityDropDown extends SelectField {
 		}
 		foreach ($options as $option) {
 			$label = array();
-			foreach ($label_attributes as $attr) {
-				$label[] = $option->$attr;
+			foreach ($label_attributes as $attribute) {
+				$label[] = $option->$attribute;
 			}
 			$this->options[json_encode($option->getValues(true))] = implode(' ', $label);
 		}

@@ -119,7 +119,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 * Delete ACL.
 	 * 
 	 * @param array $primary_key_values
-	 * @return int rows affected
+	 * @return int number of rows affected
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
 		AccessModel::instance()->setAcl(static::ORM, reset($primary_key_values), array());
@@ -138,9 +138,9 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 		// groep converteren
 		try {
 			$newgroep = $this->nieuw($soort);
-			foreach ($oldgroep->getValues() as $attr => $value) {
-				if (property_exists($newgroep, $attr)) {
-					$newgroep->$attr = $value;
+			foreach ($oldgroep->getValues() as $attribute => $value) {
+				if (property_exists($newgroep, $attribute)) {
+					$newgroep->$attribute = $value;
 				}
 			}
 			$newgroep->id = null;
@@ -155,9 +155,9 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 			$ledenmodel = $leden::instance();
 			foreach ($oldgroep->getLeden() as $oldlid) {
 				$newlid = $ledenmodel->nieuw($newgroep, $oldlid->uid);
-				foreach ($oldlid->getValues() as $attr => $value) {
-					if (property_exists($newlid, $attr)) {
-						$newlid->$attr = $value;
+				foreach ($oldlid->getValues() as $attribute => $value) {
+					if (property_exists($newlid, $attribute)) {
+						$newlid->$attribute = $value;
 					}
 				}
 				$newlid->groep_id = $newgroep->id;

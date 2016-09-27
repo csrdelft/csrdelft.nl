@@ -303,12 +303,17 @@ JS;
 
 	/**
 	 * Toont het formulier en javascript van alle fields.
+	 * 
+	 * @param boolean $showMelding Toon meldingen bovenaan formulier
 	 */
-	public function view() {
-		echo getMelding();
+	public function view($showMelding = true) {
+		if ($showMelding) {
+			echo getMelding();
+		}
 		echo $this->getFormTag();
-		if ($this->getTitel()) {
-			echo '<h1 class="Titel">' . $this->getTitel() . '</h1>';
+		$titel = $this->getTitel();
+		if (!empty($titel)) {
+			echo '<h1 class="Titel">' . $titel . '</h1>';
 		}
         if (isset($this->error)) {
             echo '<span class="error">' . $this->error . '</span>';

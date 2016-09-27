@@ -286,15 +286,15 @@ abstract class InputField implements FormElement, Validator {
 	 * elke instantie dan bijvoorbeeld de prefix van het id-veld te
 	 * moeten aanpassen. Niet meer nodig dus.
 	 */
-	protected function getInputAttribute($attr) {
-		if (is_array($attr)) {
+	protected function getInputAttribute($attribute) {
+		if (is_array($attribute)) {
 			$return = '';
-			foreach ($attr as $a) {
+			foreach ($attribute as $a) {
 				$return .= ' ' . $this->getInputAttribute($a);
 			}
 			return $return;
 		}
-		switch ($attr) {
+		switch ($attribute) {
 			case 'id': return 'id="' . $this->getId() . '"';
 			case 'class': return 'class="' . implode(' ', $this->getCssClasses()) . '"';
 			case 'value': return 'value="' . htmlspecialchars($this->value) . '"';
@@ -913,6 +913,12 @@ class StudieField extends TextField {
 		$this->suggestions['TU Delft'] = array_map(create_function('$value', 'return "TU Delft - ".$value;'), $tustudies);
 		$this->suggestions[] = array('INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden');
 	}
+
+}
+
+class RequiredStudieField extends StudieField {
+
+	public $required = true;
 
 }
 

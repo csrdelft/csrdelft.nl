@@ -17,7 +17,7 @@ require_once 'model/ProfielModel.class.php';
  * 
  * @see AccountModel.class.php
  */
-class LoginModel extends CachedPersistenceModel implements Validator {
+class LoginModel extends PersistenceModel implements Validator {
 
 	const ORM = 'LoginSession';
 	const DIR = 'security/';
@@ -61,6 +61,8 @@ class LoginModel extends CachedPersistenceModel implements Validator {
 		return AccessModel::mag(static::getAccount(), $permission, $allowedAuthenticationMethods);
 	}
 
+	private $current_session;
+
 	protected function __construct() {
 		parent::__construct();
 		/**
@@ -74,11 +76,12 @@ class LoginModel extends CachedPersistenceModel implements Validator {
 		 * Zo ja, sessie verlengen.
 		 * Zo nee, dan public gebruiker er in gooien.
 		 */
+		$this->current_session = $this->getCurrentSession();
 		if ($this->validate()) {
 			// Public gebruiker heeft geen DB sessie
 			if ($_SESSION['_uid'] != 'x999') {
-				$session = $this->getCurrentSession();
-				$session->expire = getDateTime(time() + getSessionMaxLifeTime());
+				$this->current_session->expire = getDateTime(time() + getSessionMaxLifeTime());
+				$this->update($this->current_session);
 			}
 		} else {
 			// Subject assignment:
@@ -123,22 +126,21 @@ class LoginModel extends CachedPersistenceModel implements Validator {
 			return true;
 		}
 		// Controleer of sessie niet gesloten is door gebruiker
-		$session = $this->getCurrentSession();
-		if (!$session) {
+		if (!$this->current_session) {
 			return false;
 		}
 		// Controleer of sessie is verlopen
-		if ($session->expire AND strtotime($session->expire) <= time()) {
+		if ($this->current_session->expire AND strtotime($this->current_session->expire) <= time()) {
 			return false;
 		}
 		// Controleer gekoppeld ip
-		if ($session->lock_ip AND $session->ip !== $_SERVER['REMOTE_ADDR']) {
+		if ($this->current_session->lock_ip AND $this->current_session->ip !== $_SERVER['REMOTE_ADDR']) {
 			return false;
 		}
 		// Controleer switch user status
 		if (isset($_SESSION['_suedFrom'])) {
 			$suedFrom = static::getSuedFrom();
-			if (!$suedFrom OR $session->uid !== $suedFrom->uid) {
+			if (!$suedFrom OR $this->current_session->uid !== $suedFrom->uid) {
 				return false;
 			}
 			// Controleer of account bestaat
@@ -149,7 +151,7 @@ class LoginModel extends CachedPersistenceModel implements Validator {
 		}
 		// Controleer of sessie van gebruiker is
 		$account = static::getAccount();
-		if (!$account OR $session->uid !== $account->uid) {
+		if (!$account OR $this->current_session->uid !== $account->uid) {
 			return false;
 		}
 		// Controleer of wachtwoord is verlopen
@@ -335,19 +337,19 @@ class LoginModel extends CachedPersistenceModel implements Validator {
 			}
 
 			// Login sessie aanmaken in database
-			$session = new LoginSession();
-			$session->session_hash = hash('sha512', session_id());
-			$session->uid = $account->uid;
-			$session->login_moment = getDateTime();
-			$session->expire = $expire ? $expire : getDateTime(time() + getSessionMaxLifeTime());
-			$session->user_agent = $user_agent;
-			$session->ip = $remote_addr;
-			$session->lock_ip = $lockIP; // sessie koppelen aan ip?
-			$session->authentication_method = $_SESSION['_authenticationMethod'];
-			if ($this->exists($session)) {
-				$this->update($session);
+			$this->current_session = new LoginSession();
+			$this->current_session->session_hash = hash('sha512', session_id());
+			$this->current_session->uid = $account->uid;
+			$this->current_session->login_moment = getDateTime();
+			$this->current_session->expire = $expire ? $expire : getDateTime(time() + getSessionMaxLifeTime());
+			$this->current_session->user_agent = $user_agent;
+			$this->current_session->ip = $remote_addr;
+			$this->current_session->lock_ip = $lockIP; // sessie koppelen aan ip?
+			$this->current_session->authentication_method = $_SESSION['_authenticationMethod'];
+			if ($this->exists($this->current_session)) {
+				$this->update($this->current_session);
 			} else {
-				$this->create($session);
+				$this->create($this->current_session);
 			}
 
 			if ($remember) {
@@ -449,8 +451,7 @@ class LoginModel extends CachedPersistenceModel implements Validator {
 		}
 		$method = $_SESSION['_authenticationMethod'];
 		if ($method === AuthenticationMethod::password_login) {
-			$session = $this->getCurrentSession();
-			if ($session AND $session->isRecent()) {
+			if ($this->current_session AND $this->current_session->isRecent()) {
 				return AuthenticationMethod::recent_password_login;
 			}
 		}
@@ -470,8 +471,8 @@ class LoginModel extends CachedPersistenceModel implements Validator {
 	}
 
 	public function opschonen() {
-		foreach ($this->find('expire <= ?', array(getDateTime())) as $session) {
-			$this->delete($session);
+		foreach ($this->find('expire <= ?', array(getDateTime())) as $this->current_session) {
+			$this->delete($this->current_session);
 		}
 	}
 

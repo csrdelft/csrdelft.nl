@@ -1,7 +1,5 @@
 <?php
 
-require_once 'model/framework/Persistence.interface.php';
-
 /**
  * Sparse.interface.php
  * 
