@@ -377,7 +377,7 @@ class DataTableKnop extends FormulierKnop {
 	}
 
 	public function getUpdateToolbar() {
-		return "$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity})).toggleClass('DTTT_disabled', !(aantal {$this->multiplicity}));";
+		return "$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity})).blur().toggleClass('DTTT_disabled', !(aantal {$this->multiplicity}));";
 	}
 
 	public function getHtml() {
