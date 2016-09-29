@@ -208,7 +208,7 @@ class ForumController extends Controller {
 					$url .= '#reageren';
 				}
 				if ($draad->belangrijk) {
-					$icon = Icon::getTag('lock');
+				    $icon = Icon::getTag($draad->belangrijk);
 					$title = 'Dit onderwerp is door het bestuur aangemerkt als belangrijk';
 				} elseif ($draad->gesloten) {
 					$icon = Icon::getTag('lock');
