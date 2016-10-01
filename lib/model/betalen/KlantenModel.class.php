@@ -13,6 +13,10 @@ class KlantenModel extends PersistenceModel {
 
 	protected static $instance;
 
+	public static function getKlant($uid) {
+		return static::instance()->find('uid = ?', array($uid), null, null, 1)->fetch();
+	}
+
 	public function newKlant($naam, $uid = null, $civi_saldo = null, $soccie_saldo = null, $maalcie_saldo = null) {
 		$klant = new Klant();
 		$klant->naam = $naam;
