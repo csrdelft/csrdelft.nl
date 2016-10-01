@@ -246,7 +246,7 @@ JS;
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
         $settingsJson = str_replace('"fnUpdateToolbar"', 'fnUpdateToolbar', $settingsJson);
-        $settingsJson = preg_replace('/"render": "(.+)"/', '"render": $1', $settingsJson);
+        $settingsJson = preg_replace('/"render":\w?"(.+)"/', '"render": $1', $settingsJson);
 
 		// toolbar
 		parent::view();
