@@ -415,9 +415,9 @@ class DataTableResponse extends JsonResponse {
 
 class RemoveRowsResponse extends DataTableResponse {
 
-	public function getJson($entity) {
+	public function getJson($model) {
 		return parent::getJson(array(
-					'UUID'	 => $entity->getUUID(),
+					'UUID'	 => ( method_exists($entity, 'getUUID') ? $model->getUUID() : $model ),
 					'remove' => true
 		));
 	}
