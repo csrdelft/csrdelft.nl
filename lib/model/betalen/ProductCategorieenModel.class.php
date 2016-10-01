@@ -13,12 +13,22 @@ class ProductCategorieenModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function maakProductCategorie($titel, $beheer_rechten) {
+	public function newProductCategorie($titel, $beheer_rechten) {
 		$categorie = new ProductCategorie();
 		$categorie->titel = $titel;
 		$categorie->beheer_rechten = $beheer_rechten;
-		$categorie->categorie_id = (int) $this->create($categorie);
 		return $categorie;
+	}
+
+	/**
+	 * Set primary key.
+	 *
+	 * @param PersistentEntity $categorie
+	 * @return int categorie_id
+	 */
+	public function create(PersistentEntity $categorie) {
+		$categorie->categorie_id = (int) parent::create($categorie);
+		return $categorie->categorie_id;
 	}
 
 }

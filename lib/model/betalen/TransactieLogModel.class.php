@@ -13,7 +13,7 @@ class TransactieLogModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function maakTransactieLogEntry($transactie_id, Transactie $transactie, Factuur $factuur) {
+	public function logTransactie($transactie_id, Transactie $transactie, Factuur $factuur) {
 		$entry = new TransactieLogEntry();
 		$entry->transactie_id = $transactie_id;
 		$entry->transactie_serialized = serialize($transactie);

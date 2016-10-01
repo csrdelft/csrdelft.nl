@@ -13,11 +13,21 @@ class ProductPrijsLijstenModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function maakProductPrijsLijst($titel) {
+	public function newProductPrijsLijst($titel) {
 		$prijslijst = new ProductPrijsLijst();
 		$prijslijst->titel = $titel;
-		$prijslijst->prijslijst_id = (int) $this->create($prijslijst);
 		return $prijslijst;
+	}
+
+	/**
+	 * Set primary key.
+	 *
+	 * @param PersistentEntity $prijslijst
+	 * @return int prijslijst_id
+	 */
+	public function create(PersistentEntity $prijslijst) {
+		$prijslijst->prijslijst_id = (int) parent::create($prijslijst);
+		return $prijslijst->prijslijst_id;
 	}
 
 }

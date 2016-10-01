@@ -13,7 +13,7 @@ class TransactiesModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function maakTransactie($factuur_id, $betalingsmethode, $bedrag, $ontvangst_iban = null, $betaler_iban = null, $geslaagd = null, $link_transactie_id = null) {
+	public function newTransactie($factuur_id, $betalingsmethode, $bedrag, $ontvangst_iban = null, $betaler_iban = null, $geslaagd = null, $link_transactie_id = null) {
 		$transactie = new Transactie();
 		$transactie->factuur_id = $factuur_id;
 		$transactie->moment = getDateTime();
@@ -23,8 +23,18 @@ class TransactiesModel extends PersistenceModel {
 		$transactie->betaler_iban = $betaler_iban;
 		$transactie->geslaagd = $geslaagd;
 		$transactie->link_transactie_id = $link_transactie_id;
-		$transactie->transactie_id = (int) $this->create($transactie);
 		return $transactie;
+	}
+
+	/**
+	 * Set primary key.
+	 *
+	 * @param PersistentEntity $transactie
+	 * @return int transactie_id
+	 */
+	public function create(PersistentEntity $transactie) {
+		$transactie->transactie_id = (int) parent::create($transactie);
+		return $transactie->transactie_id;
 	}
 
 }

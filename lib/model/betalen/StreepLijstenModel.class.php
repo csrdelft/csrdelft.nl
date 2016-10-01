@@ -13,14 +13,24 @@ class StreepLijstenModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function maakStreepLijst($titel, $streep_rechten, $prijslijst_id = null) {
+	public function newStreepLijst($titel, $streep_rechten, $prijslijst_id = null) {
 		$streeplijst = new StreepLijst();
 		$streeplijst->titel = $titel;
 		$streeplijst->streep_rechten = $streep_rechten;
 		$streeplijst->gemaakt_uid = LoginModel::getUid();
 		$streeplijst->prijslijst_id = $prijslijst_id;
-		$streeplijst->streeplijst_id = (int) $this->create($streeplijst);
 		return $streeplijst;
+	}
+
+	/**
+	 * Set primary key.
+	 *
+	 * @param PersistentEntity $streeplijst
+	 * @return int streeplijst_id
+	 */
+	public function create(PersistentEntity $streeplijst) {
+		$streeplijst->streeplijst_id = (int) parent::create($streeplijst);
+		return $streeplijst->streeplijst_id;
 	}
 
 }
