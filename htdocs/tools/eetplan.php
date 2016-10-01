@@ -1,7 +1,7 @@
 <?php
 $hist_a = 0;
 
-$lichting = 1400;
+$lichting = 1500;
 
 # koppel de sjaarsnummers aan de sjaars
 #
@@ -12,8 +12,8 @@ $lichting = 1400;
 
 # nummers die missen in 13:
 # eerste semester: 14,42,56,57,58,62,63,68
-for ($es = 1; $es <= 47; $es++) {
-	if (!in_array($es, array())) {
+for ($es = 1; $es <= 60; $es++) {
+	if (!in_array($es, array(39,59))) {
 		$uid = str_pad($es + $lichting, 4, "0", STR_PAD_LEFT);
 		$ks[$uid] = $uid;
 	}
@@ -21,31 +21,35 @@ for ($es = 1; $es <= 47; $es++) {
 
 # datums staan in /lib/model/EetplanModel.class.php
 # koppel de huizennummers aan huizen
-$kh = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23);
+$kh = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26);
 $khd = array(
-	1	 => array('Huize Ihnshthabhielh', 1438),
-	2	 => array("Huize Den Hertog", 52),
-	3	 => array("De Molshoop", 34),
-	4	 => array("Sonnenvanck", 36),
-	5	 => array("De Gouden Leeuw", 8),
-	6	 => array("C.C.V.", 1303),
-	7	 => array("H.U.P.", 2116),
-	8	 => array("Theloneum", 1441),
-	9	 => array("Huize A.D.A.M. & Villa E.V.A.", 554),
-	10	 => array("De Preekstoel", 62),
-	11	 => array("Lachai-Roi", 57),
-	12	 => array("De Koornmarkt", 33),
-	13	 => array('t Internaat', 9),
-	14	 => array("Verdieping 1", 1683),
-	15	 => array('De Zilveren Hinde', 1017),
-	16	 => array('Oranje Boven', 1016),
-	17	 => array("Huize Van Speijk", 39),
-	18	 => array("Hotel Vlaams Gaius", 32),
-	19	 => array("De Zuidpool", 2120),
-	20	 => array("Villa Delphia", 37),
-	21	 => array('Huize * Asterix', 46),
-	22	 => array("OD11", 14),
-	23	 => array("De Balpolgroep", 13)
+	0	 => array("NULL",null),
+	1	 => array("Huize Den Hertog", 52),
+	2	 => array("Paplepel", 2152),
+	3	 => array("OD11", 14),
+	4	 => array('Huize Ihnshthabhielh', 1438),
+	5	 => array("Huize Van Speijk", 39),
+	6	 => array("De Gouden Leeuw", 8),
+	7	 => array("De Molshoop", 34),
+	8	 => array('Huize * Asterix', 46),
+	9	 => array("H.U.P.", 2116),
+	10	 => array("Verdieping 1", 1683),
+	11	 => array("Villa Delphia", 37),
+	12	 => array("Boomhut", 2390),
+	13	 => array("De Koornmarkt", 33),
+	14	 => array("Huize A.D.A.M.", 554),
+	15	 => array("Hotel Vlaams Gaius", 32),
+	16	 => array('t Internaat', 9),
+	17	 => array("De Balpolgroep", 48),
+	18	 => array("De Zuidpool", 2120),
+	19	 => array("C.C.V.", 1303),
+	20	 => array("GGZ", 2323),
+	21	 => array("Theloneum", 1441),
+	22	 => array("VVV", 954),
+	23	 => array("Lachai-Roi", 57),
+	24	 => array("De Nachtwacht", 1178),
+	25	 => array("Sonnenvanck", 36),
+	26	 => array("De Preekstoel", 62)
 );
 
 # namen opzoeken in de database
@@ -57,12 +61,12 @@ require_once 'configuratie.include.php';
 #}
 echo '<pre>';
 
-$s = 47; //(int)$_GET['s']; # aantal sjaars
-$h = 23; // $h = (int)$_GET['h']; # aantal huizen
+$s = 58; //(int)$_GET['s']; # aantal sjaars
+$h = 26; // $h = (int)$_GET['h']; # aantal huizen
 $a = 3;  // $a = (int)$_GET['a']; # aantal avonden
 //$m = (int)floor($s/$h);
 //$m = (int)$_GET['m']; # max aantal sjaars per huis per avond
-$r = 0;  // $r = (int)$_GET['r']; # wel of niet random
+$r = 1;  // $r = (int)$_GET['r']; # wel of niet random
 
 echo "<b>Parameterisatie:</b>\nAantal Sjaars: $s\nAantal Huizen: $h\nAantal Avonden: $a\n\n";
 
@@ -74,23 +78,50 @@ $visited_sh = array(); # $visited_sh[sjaars][huis] = true
 # ... en welke sjaars welke andere al heeft ontmoet
 $seen = array(); # $seen[sjaars][] = sjaars
 # sjaars die elkaar gezien hebben
-$seen[1411][1445] = true; // Annemijn, Henria (Huisgenoten)
+$seen[1546][1547] = true; // 3 vriendjes
+$seen[1547][1548] = true;
+$seen[1546][1548] = true;
+
+$seen[1524][1525] = true; // Sjaarshuis A (3 sjaars)
+$seen[1525][1544] = true;
+$seen[1524][1544] = true;
+
+$seen[1531][1532] = true; // Sjaarshuis B (5 sjaars)
+$seen[1531][1533] = true;
+$seen[1531][1534] = true;
+$seen[1531][1537] = true;
+$seen[1532][1533] = true;
+$seen[1532][1534] = true;
+$seen[1532][1537] = true;
+$seen[1533][1534] = true;
+$seen[1533][1537] = true;
+$seen[1534][1537] = true;
+
+$seen[1529][1542] = true; // Kaartenhuis huisgenoten
+
+$seen[1501][1502] = true; // GGZ sjaars
+$seen[1501][1504] = true;
+$seen[1501][1510] = true;
+$seen[1501][1530] = true;
+$seen[1502][1504] = true;
+$seen[1502][1510] = true;
+$seen[1502][1530] = true;
+$seen[1504][1510] = true;
+$seen[1504][1530] = true;
+$seen[1510][1530] = true;
+
 # sjaars die al in huizen wonen alvast rekening mee houden
 # voorbeeld: $visited_sh[$sjaarsuid][$huisuid]=true;
-$visited_sh[1401][1] = true; // Rico, Instabiel
-$visited_sh[1411][16] = true; // Annemijn, Oranje Boven
-$visited_sh[1419][9] = true; // Gerianne, E.V.A.
-$visited_sh[1415][2] = true; // Jacko, HdH
-$visited_sh[1412][22] = true; // Mirjam, OD11
-$visited_sh[1444][17] = true; // Daan, van Speijk
-$visited_sh[1414][20] = true; // Robin, Villa Delphia
-$visited_sh[1424][10] = true; // rupSTER, Preekstoel
-$visited_sh[1416][21] = true; // Bert, Asterix
-$visited_sh[1423][4] = true; // Bram, Sonnenvanck
-$visited_sh[1417][12] = true; // Paul, Koornmarkt
-$visited_sh[1441][11] = true; // Thirza, Lachai-Roi
-$visited_sh[1427][5] = true; // Wessel, DGL
-$visited_sh[1445][16] = true; // Henria, Oranje Boven
+$visited_sh[1526][4] = true; // Marco, Instabiel
+$visited_sh[1503][9] = true; // Anne, HUP
+$visited_sh[1506][13] = true; // Pip, KMT
+$visited_sh[1516][15] = true; // Louis, HVG
+$visited_sh[1504][20] = true; // Christine, GGZ
+$visited_sh[1502][20] = true; // Jette, GGZ
+$visited_sh[1501][20] = true; // Chiel, GGZ
+$visited_sh[1530][20] = true; // Reon, GGZ
+$visited_sh[1510][20] = true; // Desta, GGZ
+
 # het uiteindelijke rooster
 # $sah[sjaars][avond] = huis.. etc...
 $sah = array();
@@ -147,8 +178,8 @@ for ($ia = 1 + $hist_a; $ia <= $a + $hist_a; $ia++) {
 		$m = (int) floor($s / $h);
 		$nofm = 0; # aantal huizen dat aan de max zit.
 		while (isset($visited_sh[$is][$ih])
-		or count(array_intersect($ahs[$ia][$ih], $seen[$is])) > 0
-		or count($visited_ah[$ia][$ih]) >= $m) {
+			or count(array_intersect($ahs[$ia][$ih], $seen[$is])) > 0
+			or count($visited_ah[$ia][$ih]) >= $m) {
 			$ih = $ih % $h + 1;
 			if ($ih == $startih) {
 				$m++; #die ('whraagh!!!');
@@ -204,7 +235,7 @@ foreach ($ks as $is => $foo) {
 }
 
 echo "\n<b>De Woonoorden</b>\n\n";
-for ($ih = 1; $ih <= $h; $ih++) {
+for ($ih = 0; $ih <= $h; $ih++) {
 	echo str_pad($ih, 10);
 	echo str_pad($khd[$kh[$ih]][0], 28);
 	echo str_pad($khd[$kh[$ih]][1], 40);

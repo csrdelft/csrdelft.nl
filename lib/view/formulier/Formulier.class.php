@@ -28,6 +28,7 @@ class Formulier implements View, Validator {
 	protected $dataTableId;
 	protected $action = null;
 	public $post = true;
+    protected $error;
 	private $enctype = 'multipart/form-data';
 	/**
 	 * Fields must be added via addFields()
@@ -314,6 +315,9 @@ JS;
 		if (!empty($titel)) {
 			echo '<h1 class="Titel">' . $titel . '</h1>';
 		}
+        if (isset($this->error)) {
+            echo '<span class="error">' . $this->error . '</span>';
+        }
 		//debugprint($this->getError()); //DEBUG
 		foreach ($this->fields as $field) {
 			$field->view();

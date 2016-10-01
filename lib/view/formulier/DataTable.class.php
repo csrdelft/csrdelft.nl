@@ -245,8 +245,8 @@ JS;
 		$settingsJson = str_replace('"fnGetLastUpdate"', 'fnGetLastUpdate', $settingsJson);
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
-		$settingsJson = str_replace('"fnUpdateToolbar"', 'fnUpdateToolbar', $settingsJson);
-		$settingsJson = preg_replace('/"render": "(.+)"/', '"render": $1', $settingsJson);
+        $settingsJson = str_replace('"fnUpdateToolbar"', 'fnUpdateToolbar', $settingsJson);
+        $settingsJson = preg_replace('/"render": "(.+)"/', '"render": $1', $settingsJson);
 
 		// toolbar
 		parent::view();
@@ -372,8 +372,8 @@ class DataTableKnop extends FormulierKnop {
 	private $multiplicity;
 	protected $tableId;
 
-	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $class) {
-		parent::__construct($url, $action . ' DataTableResponse', $label, $title, null);
+	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $class, $icon = null) {
+		parent::__construct($url, $action . ' DataTableResponse', $label, $title, $icon);
 		$this->multiplicity = $multiplicity;
 		$this->tableId = $tableId;
 		$this->css_classes[] = 'DTTT_button';

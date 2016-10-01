@@ -53,6 +53,7 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	protected $default_order = null;
 
+
 	/**
 	 * Object relational mapping
 	 * @var PersistentEntity

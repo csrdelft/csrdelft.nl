@@ -1,141 +1,145 @@
 <?php
 
+require_once 'model/entity/Eetplan.class.php';
+require_once 'model/entity/EetplanBekenden.class.php';
+require_once 'model/EetplanFactory.class.php';
+
 /**
  * EetplanModel.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
- * 
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ *
  * Verzorgt het opvragen van eetplangegevens
  */
-class EetplanModel {
+class EetplanModel extends PersistenceModel {
+    protected static $instance;
 
-	function getDatum($iAvond) {
-		$aAvonden = array(
-			'28-10-2014',
-			'25-11-2014',
-			'20-01-2015',
-			'17-02-2015',
-			'12-05-2015',
-			'09-06-2015'
-		);
-		if ($iAvond > 0 AND $iAvond <= sizeof($aAvonden)) {
-			return $aAvonden[$iAvond - 1];
-		}
-	}
+    const ORM = 'Eetplan';
 
-	function getEetplan() {
-		//huizen laden
-		$rEetplan = MijnSqli::instance()->select("
-			SELECT
-  			eetplan.uid AS uid,
-  			eetplan.huis AS huis,
-  			eetplan.avond AS avond
-			FROM
-				eetplan
-			INNER JOIN profielen AS lid ON(eetplan.uid=lid.uid)
-			ORDER BY
- 				lid.achternaam, uid, avond;
-		");
-		$aEetplan = array();
-		$aEetplanRegel = array();
-		while ($aEetplanData = MijnSqli::instance()->next($rEetplan)) {
-			//nieuwe regel beginnen als nodig
-			if ($aEetplanData['avond'] == 1) {
-				$aEetplan[] = $aEetplanRegel;
-				$aEetplanRegel = array();
-				//eerste element van de regel is het uid
-				$aEetplanRegel[] = array(
-					'uid'	 => $aEetplanData['uid'],
-					'naam'	 => ProfielModel::getNaam($aEetplanData['uid'], 'volledig'));
-			}
-			$aEetplanRegel[] = $aEetplanData['huis'];
-		}
-		//ook de laaste regel toevoegen
-		$aEetplan[] = $aEetplanRegel;
-		//eerste regel eruit slopen, die is toch nutteloos.
-		unset($aEetplan[0]);
-		return $aEetplan;
-	}
+    public function getEetplanVoorAvond($avond) {
+        return $this->find('avond = ?', array($avond));
+    }
 
-	function getEetplanVoorPheut($iPheutID) {
-		if (!AccountModel::isValidUid($iPheutID)) {
-			return false;
-		}
-		$sEetplanQuery = "
-			SELECT DISTINCT
-				eetplan.avond AS avond,
-				eetplanhuis.id AS huisID,
-				eetplanhuis.naam AS huisnaam,
-				eetplanhuis.groepid AS groepid
-			FROM
-				eetplanhuis, eetplan
-			WHERE
-				eetplan.huis=eetplanhuis.id AND
-				eetplan.uid='" . MijnSqli::instance()->escape($iPheutID) . "'
-			ORDER BY
-				eetplan.avond;
-		";
-		$rEetplanVoorPheut = MijnSqli::instance()->select($sEetplanQuery);
-		if (MijnSqli::instance()->numRows($rEetplanVoorPheut) == 0) {
-			//deze feut bestaat niet
-			return false;
-		} else {
-			$aEetplan = array();
-			while ($aEetplanData = MijnSqli::instance()->next($rEetplanVoorPheut)) {
-				$aEetplan[] = $aEetplanData;
-			}
-			return $aEetplan;
-		}
-	}
+    public function getNovieten($lichting) {
+        return $this->findSparse(array('uid'), 'uid LIKE ?', array($lichting . "%"), 'uid');
+    }
 
-	function getEetplanVoorHuis($iHuisID) {
-		$sEetplanQuery = "
-			SELECT DISTINCT
-				eetplan.avond AS avond,
-				eetplanhuis.naam AS huisnaam,
-				eetplanhuis.groepid AS groepid,
-				eetplan.uid AS pheut,
-				lid.eetwens AS eetwens,
-				lid.mobiel AS mobiel,
-				lid.email AS email
-			FROM
-				eetplanhuis, eetplan
-			INNER JOIN profielen AS lid ON(eetplan.uid=lid.uid)
-			WHERE
-				eetplan.huis=eetplanhuis.id AND
-				eetplanhuis.id=" . $iHuisID . "
-			ORDER BY
-				eetplan.avond;
-		";
-		$rEetplanVoorHuis = MijnSqli::instance()->select($sEetplanQuery);
-		if (MijnSqli::instance()->numRows($rEetplanVoorHuis) == 0) {
-			//geen huis met dit ID
-			return false;
-		} else {
-			$aEetplan = array();
-			while ($aEetplanData = MijnSqli::instance()->next($rEetplanVoorHuis)) {
-				$aEetplan[] = $aEetplanData;
-			}
-			return $aEetplan;
-		}
-	}
+    /**
+     * Haal alle avonden op die voor deze lichting gelden.
+     *
+     * @return Eetplan[] Lijst met sparse(!) eetplan objecten met alleen een avond.
+     */
+    public function getAvonden($lichting) {
+        return $this->findSparse(array('avond'), 'uid LIKE ?', array($lichting . "%"), 'avond')->fetchAll();
+    }
 
-	function getHuizen() {
-		$sHuizenQuery = "
-			SELECT DISTINCT
-				id AS huisID,
-				naam AS huisNaam,
-				groepid
-			FROM
-				eetplanhuis
-			ORDER BY
-				id;
-		";
-		$rHuizen = MijnSqli::instance()->select($sHuizenQuery);
-		while ($aHuizenData = MijnSqli::instance()->next($rHuizen)) {
-			$aHuizen[] = $aHuizenData;
-		}
-		return $aHuizen;
-	}
+    /**
+     * Haal het volledige eetplan op (voor de huidige lichting)
+     *
+     * Uitvoer is een array met 'uid' => [Eetplan, Eetplan, ...]
+     *
+     * @return array Het eetplan
+     */
+    public function getEetplan($lichting) {
+        // Avond 0000-00-00 wordt gebruikt voor novieten die huizen kennen
+        // Orderen bij avond, zodat de avondvolgorde per noviet klopt
+        $eetplan = $this->find('uid LIKE ? AND avond <> "0000-00-00"', array($lichting . "%"), null, 'avond');
+        $eetplanFeut = array();
+        $avonden = array();
+        foreach ($eetplan as $sessie) {
+            if (!isset($eetplanFeut[$sessie->uid])) {
+                $eetplanFeut[$sessie->uid] = array(
+                    'avonden' => array(),
+                    'uid' => $sessie->uid,
+                    'naam' => $sessie->getNoviet()->getNaam()
+                );
+            }
 
+            $eetplanFeut[$sessie->uid]['avonden'][] = array(
+                'datum' => $sessie->avond,
+                'woonoord_id' => $sessie->woonoord_id,
+                'woonoord' => $sessie->getWoonoord()->naam
+            );
+
+            if (!isset($avonden[$sessie->avond])) {
+                $avonden[$sessie->avond] = $sessie->avond;
+            }
+        }
+
+        return array(
+            'novieten' => array_values($eetplanFeut),
+            'avonden' => array_values($avonden)
+        );
+    }
+
+    public function maakEetplan($avond, $lichting) {
+        // Laad oude dingen in
+        // Laad sjaars die elkaar kennen in
+
+        $factory = new EetplanFactory();
+
+        $bekenden = EetplanBekendenModel::instance()->getBekenden($lichting);
+        $factory->setBekenden($bekenden);
+
+        $bezocht = $this->find("uid LIKE ?", array($lichting . "%"));
+        $factory->setBezocht($bezocht);
+
+        $novieten = ProfielModel::instance()->find("uid LIKE ? AND status = 'S_NOVIET'", array($lichting . "%"))->fetchAll();
+        $factory->setNovieten($novieten);
+
+        $huizen = WoonoordenModel::instance()->find("eetplan = true")->fetchAll();
+        $factory->setHuizen($huizen);
+
+        return $factory->genereer($avond, true);
+    }
+
+    /**
+     * @param $uid string Uid van de feut
+     * @return Eetplan[] lijst van eetplansessies voor deze feut, gesorteerd op datum (oplopend)
+     */
+    public function getEetplanVoorNoviet($uid) {
+        return $this->find('uid = ?', array($uid), null, 'avond')->fetchAll();
+    }
+
+    /**
+     * @param $id int Id van het huis
+     * @return Eetplan[] lijst van eetplansessies voor dit huis, gesorteerd op datum (oplopend)
+     */
+    public function getEetplanVoorHuis($id, $lichting) {
+        return $this->find('uid LIKE ? AND woonoord_id = ?', array($lichting . "%", $id), null, 'avond')->fetchAll();
+    }
+
+    public function getBekendeHuizen($lichting) {
+        return $this->find('uid LIKE ? AND avond = DATE(0)', array($lichting . "%"))->fetchAll();
+    }
+}
+
+class EetplanBekendenModel extends PersistenceModel {
+    protected static $instance;
+
+    const ORM = "EetplanBekenden";
+
+    /**
+     * EetplanBekenden constructor.
+     */
+    public function __construct() {
+        parent::__construct();
+    }
+
+    public function getBekenden($lichting) {
+        return $this->find('uid1 LIKE ?', array($lichting . "%"))->fetchAll();
+    }
+
+    public function exists(PersistentEntity $entity) {
+        if (parent::exists($entity)) {
+            return true;
+        }
+
+        $omgekeerd = new EetplanBekenden();
+        $omgekeerd->uid1 = $entity->uid2;
+        $omgekeerd->uid2 = $entity->uid1;
+
+        return parent::exists($omgekeerd);
+    }
 }
