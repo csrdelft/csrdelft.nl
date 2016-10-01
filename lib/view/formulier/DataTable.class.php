@@ -93,14 +93,16 @@ abstract class DataTable extends TabsForm {
 		$this->addFields(array($knop), $tab);
 	}
 
-	protected function addColumn($newName, $before = null) {
+	protected function addColumn($newName, $before = null, $defaultContent = null, $render = null) {
 		// column definition
 		$newColumn = array(
 			'name'		 => $newName,
 			'data'		 => $newName,
 			'title'		 => ucfirst(str_replace('_', ' ', $newName)),
+			'defaultContent' => $defaultContent,
 			'type'		 => 'string',
-			'searchable' => false
+			'searchable' => false,
+			'render' => $render
 				/*
 				  //TODO: sort by other column
 				  { "iDataSort": 1 },
@@ -244,12 +246,14 @@ JS;
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
 		$settingsJson = str_replace('"fnUpdateToolbar"', 'fnUpdateToolbar', $settingsJson);
+		$settingsJson = preg_replace('/"render": "(.+)"/', '"render": $1', $settingsJson);
 
 		// toolbar
 		parent::view();
 		?>
 		<table id="<?= $this->dataTableId; ?>" class="display <?= ($this->groupByColumn !== false ? 'groupByColumn' : ''); ?>" groupbycolumn="<?= $this->groupByColumn; ?>"></table>
 		<script type="text/javascript">
+			<?= $this->getJavascript(); ?>
 
 			$(document).ready(function () {
 
