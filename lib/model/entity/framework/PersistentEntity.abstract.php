@@ -80,8 +80,30 @@ abstract class PersistentEntity implements Sparse, JsonSerializable {
 		return array_values(static::$primary_key);
 	}
 
+	/**
+	 * Encode primary key values.
+	 *
+	 * @return string
+	 */
 	public function getUUID() {
 		return strtolower(implode('.', $this->getValues(true)) . '@' . get_class($this) . '.csrdelft.nl');
+	}
+
+	/**
+	 * Decode UUID to primary key values and class name.
+	 *
+	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
+	 *
+	 * @param string $UUID
+	 * @return array
+	 */
+	public static function decodeUUID($UUID) {
+		$parts = explode('@', $UUID, 2);
+		$domain = explode('.', $parts[1], 2);
+		return array(
+			'pk'	 => explode('.', $parts[0]),
+			'class'	 => $domain[0]
+		);
 	}
 
 	public function jsonSerialize() {
