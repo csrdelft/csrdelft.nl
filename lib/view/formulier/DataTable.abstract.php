@@ -1,16 +1,18 @@
 <?php
-require_once 'view/formulier/TabsForm.class.php';
+
+require_once 'view/formulier/DataTableKnop.class.php';
+require_once 'view/formulier/DataTableResponse.class.php';
 
 /**
- * DataTable.class.php
- * 
+ * DataTable.abstract.php
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Uses DataTables plug-in for jQuery.
  * @see http://www.datatables.net/
- * 
+ *
  */
-abstract class DataTable extends TabsForm {
+abstract class DataTable extends Formulier {
 
 	public $nestedForm = true;
 	public $filter = null;
@@ -89,8 +91,8 @@ abstract class DataTable extends TabsForm {
 		}
 	}
 
-	protected function addKnop(DataTableKnop $knop, $tab = 'head') {
-		$this->addFields(array($knop), $tab);
+	protected function addKnop(DataTableKnop $knop) {
+		$this->addFields(array($knop));
 	}
 
 	protected function addColumn($newName, $before = null, $defaultContent = null, $render = null) {
@@ -354,72 +356,6 @@ JS;
 			});
 		</script>
 		<?php
-	}
-
-}
-
-class DataTableKnop extends FormulierKnop {
-
-	private $multiplicity;
-	protected $tableId;
-
-	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $class, $icon = null) {
-		parent::__construct($url, $action . ' DataTableResponse', $label, $title, $icon);
-		$this->multiplicity = $multiplicity;
-		$this->tableId = $tableId;
-		$this->css_classes[] = 'DTTT_button';
-		$this->css_classes[] = 'DTTT_button_' . $class;
-	}
-
-	public function getUpdateToolbar() {
-		return "$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity})).blur().toggleClass('DTTT_disabled', !(aantal {$this->multiplicity}));";
-	}
-
-	public function getHtml() {
-		return str_replace('<a ', '<a data-tableid="' . $this->tableId . '" ', parent::getHtml());
-	}
-
-}
-
-class DataTableResponse extends JsonResponse {
-
-	public $autoUpdate = false;
-	public $modal = null;
-
-	public function view() {
-		http_response_code($this->code);
-		header('Content-Type: application/json');
-		echo "{\n";
-		echo '"modal":' . json_encode($this->modal) . ",\n";
-		echo '"autoUpdate":' . json_encode($this->autoUpdate) . ",\n";
-		echo '"lastUpdate":' . json_encode(time() - 1) . ",\n";
-		echo '"data":[' . "\n";
-		$comma = false;
-		foreach ($this->model as $model) {
-			if ($comma) {
-				echo ",\n";
-			} else {
-				$comma = true;
-			}
-			$json = $this->getJson($model);
-			if ($json) {
-				echo $json;
-			} else {
-				$comma = false;
-			}
-		}
-		echo "\n]}";
-	}
-
-}
-
-class RemoveRowsResponse extends DataTableResponse {
-
-	public function getJson($model) {
-		return parent::getJson(array(
-					'UUID'	 => ( method_exists($entity, 'getUUID') ? $model->getUUID() : $model ),
-					'remove' => true
-		));
 	}
 
 }

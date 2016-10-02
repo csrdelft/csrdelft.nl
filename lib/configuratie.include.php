@@ -130,6 +130,7 @@ require_once 'model/ForumModel.class.php';
 // View
 require_once 'view/JsonResponse.class.php';
 require_once 'view/SmartyTemplateView.abstract.php';
+require_once 'view/formulier/TabsForm.class.php';
 require_once 'view/formulier/DataTable.abstract.php';
 require_once 'view/CsrBB.class.php';
 require_once 'view/CsrLayoutPage.class.php';

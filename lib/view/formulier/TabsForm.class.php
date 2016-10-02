@@ -98,7 +98,7 @@ class TabsForm extends Formulier {
 		}
 	}
 
-	public function getJavascript() {
+	protected function getJavascript() {
 		$js = <<<JS
 
 $('#{$this->formId}-tabs').tabs();
