@@ -544,7 +544,7 @@ class ForumDradenVolgenModel extends CachedPersistenceModel {
 	public function setVolgenVoorLid(ForumDraad $draad, $volgen = true) {
 		if ($volgen) {
 			if (!$this->getVolgenVoorLid($draad)) {
-				$this->maakwForumDraadVolgen($draad->draad_id);
+				$this->maakForumDraadVolgen($draad->draad_id);
 			}
 		} elseif ($this->getVolgenVoorLid($draad)) {
 			$rowCount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
