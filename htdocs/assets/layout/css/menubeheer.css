@@ -1,0 +1,19 @@
+@CHARSET "ISO-8859-1";
+/**
+ * menubeheer.css	| 	P.W.G. Brussee (brussee@live.nl)
+ *
+ */
+ul.menubeheer-tree {
+	list-style: none;
+}
+ul.menubeheer-tree li {
+	background-color: #EBEBEB;
+	line-height: 30px;
+	margin-left: 25px;
+}
+ul.menubeheer-tree li:nth-child(even) {
+	background-color: #FAFAFA;
+}
+ul.menubeheer-tree li:hover {
+	background-color: #DDEEFF;
+}
