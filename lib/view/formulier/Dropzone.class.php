@@ -14,7 +14,7 @@ class Dropzone extends Formulier {
 	private $dropzone;
 	private $fallback;
 
-	public function __construct($model, $action, FileField $fallback, $cancel_url, $titel = false) {
+	public function __construct($model, $action, FileField $fallback, $cancel_url, $titel = null) {
 		parent::__construct($model, $action, $titel);
 		$this->css_classes[] = 'dropzone';
 		$this->fallback = $fallback;
@@ -66,7 +66,7 @@ class Dropzone extends Formulier {
 		$accept = implode(',', $this->dropzone->getFilter());
 		return parent::getJavascript() . <<<JS
 
-thisDropzone = new Dropzone('#{$this->formId}', {
+thisDropzone = new Dropzone('#{$this->getFormId()}', {
 	paramName: "{$this->dropzone->getName()}",
 	url: "{$this->action}",
 	acceptedFiles: "{$accept}",
@@ -124,7 +124,7 @@ thisDropzone = new Dropzone('#{$this->formId}', {
 		});
 	}
 });
-showExisting_{$this->formId} = function (){
+showExisting_{$this->getFormId()} = function (){
 	$.post('{$existing}', function (data) {
 		$.each(data, function (key, value) {
 			mockFile = { name: value.name, size: value.size, type: value.type };

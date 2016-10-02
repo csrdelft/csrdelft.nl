@@ -37,7 +37,6 @@ class ForumZoekenForm extends Formulier {
 
 	public function __construct() {
 		parent::__construct(null, '/forum/zoeken');
-		$this->formId = 'forumZoekenForm';
 		$this->css_classes[] = 'hoverIntent';
 
 		$fields[] = new HtmlComment('<div class="forumZoekenGeavanceerd hoverIntentContent verborgen">');
@@ -54,6 +53,10 @@ class ForumZoekenForm extends Formulier {
 		$fields['z']->enter_submit = true;
 
 		$this->addFields($fields);
+	}
+
+	public function getFormId() {
+		return 'forumZoekenForm';
 	}
 
 }

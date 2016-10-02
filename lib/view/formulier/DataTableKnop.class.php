@@ -8,13 +8,12 @@
  */
 class DataTableKnop extends FormulierKnop {
 
+	public $dataTableId;
 	private $multiplicity;
-	protected $tableId;
 
-	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $class = 'text') {
+	public function __construct($multiplicity, $url, $action, $label, $title, $class = 'text') {
 		parent::__construct($url, $action . ' DataTableResponse', $label, $title, null);
 		$this->multiplicity = $multiplicity;
-		$this->tableId = $tableId;
 		$this->css_classes[] = 'DTTT_button';
 		$this->css_classes[] = 'DTTT_button_' . $class;
 	}
@@ -24,7 +23,7 @@ class DataTableKnop extends FormulierKnop {
 	}
 
 	public function getHtml() {
-		return str_replace('<a ', '<a data-tableid="' . $this->tableId . '" ', parent::getHtml());
+		return str_replace('<a ', '<a data-tableid="' . $this->dataTableId . '" ', parent::getHtml());
 	}
 
 }
