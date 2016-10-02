@@ -646,9 +646,9 @@ class ForumController extends Controller {
 			// direct goedkeuren voor ingelogd
 			ForumPostsModel::instance()->goedkeurenForumPost($post);
 			$self = LoginModel::getUid();
-			foreach ($draad->getVolgers() as $uid) {
-				$profiel = ProfielModel::get($uid);
-				if ($uid === $self OR ! $profiel) {
+			foreach ($draad->getVolgers() as $volger) {
+				$profiel = ProfielModel::get($volger->uid);
+				if ($volger === $self OR ! $profiel) {
 					continue;
 				}
 				$lidnaam = $profiel->getNaam('civitas');
