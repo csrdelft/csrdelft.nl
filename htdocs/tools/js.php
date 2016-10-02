@@ -40,7 +40,7 @@ function csr_js_out() {
 
 	// decide from where to get the layout
 	$layout = $INPUT->str('l');
-	$allowedlayouts = array('layout', 'layout2', 'layout3', 'layout-owee');
+	$allowedlayouts = array('layout', 'layout2', 'layout3', 'layout-owee', 'layout-extern');
 	if (!in_array($layout, $allowedlayouts)) {
 		$layout = $allowedlayouts[0];
 	}

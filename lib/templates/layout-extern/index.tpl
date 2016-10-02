@@ -1,3 +1,3 @@
-{include file='layout-owee/partials/_header.tpl'}
-{include file='layout-owee/partials/front-page.tpl'}
-{include file='layout-owee/partials/_footer.tpl'}
+{include file='layout-extern/partials/_header.tpl'}
+{include file='layout-extern/partials/front-page.tpl'}
+{include file='layout-extern/partials/_footer.tpl'}

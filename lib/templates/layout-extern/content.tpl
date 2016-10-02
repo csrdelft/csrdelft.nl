@@ -1,8 +1,8 @@
-{include file='layout-owee/partials/_header.tpl'}
+{include file='layout-extern/partials/_header.tpl'}
     <!-- Banner -->
     <section id="banner-small">
         <div class="inner">
-            <a href="/"><img src="/plaetjes/layout-owee/Logo.svg" height="140"></a>
+            <a href="/"><img src="/plaetjes/layout-extern/Logo.svg" height="140"></a>
         </div>
     </section>
 
@@ -10,7 +10,7 @@
     <section id="wrapper">
         <section class="wrapper spotlight detail style1">
             <div class="inner">
-                {if isset($menutpl)}{include file="layout-owee/partials/_menu$menutpl.tpl"}{/if}
+                {if isset($menutpl)}{include file="layout-extern/partials/_menu$menutpl.tpl"}{/if}
                 {$body->view()}
             </div>
         </section>
@@ -22,4 +22,4 @@
             </div>
         </section>
     </section>
-{include file='layout-owee/partials/_footer.tpl'}
+{include file='layout-extern/partials/_footer.tpl'}

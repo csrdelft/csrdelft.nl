@@ -137,7 +137,7 @@ require_once 'view/SmartyTemplateView.abstract.php';
 require_once 'view/formulier/DataTable.class.php';
 require_once 'view/CsrBB.class.php';
 require_once 'view/CsrLayoutPage.class.php';
-require_once 'view/CsrLayoutOweePage.class.php';
+require_once 'view/CsrLayoutExternPage.class.php';
 require_once 'icon.class.php';
 
 // Controller

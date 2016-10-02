@@ -84,7 +84,7 @@ class FotoAlbumController extends AclController {
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
 		} else {
-			$this->view = new CsrLayoutOweePage($body);
+			$this->view = new CsrLayoutExternPage($body);
 		}
 		$this->view->addCompressedResources('fotoalbum');
 	}

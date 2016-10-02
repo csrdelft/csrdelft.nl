@@ -3,7 +3,7 @@
 require_once 'view/LoginView.class.php';
 
 /**
- * CsrLayoutOweePage.class.php
+ * CsrLayoutExternPage.class.php
  *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

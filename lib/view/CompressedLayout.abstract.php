@@ -84,7 +84,7 @@ abstract class CompressedLayout extends HtmlPage {
 		}
 
 		// decide from where to get the layout
-		$allowedlayouts = array('layout', 'layout2', 'layout3', 'layout-owee');
+		$allowedlayouts = array('layout', 'layout2', 'layout3', 'layout-owee', 'layout-extern');
 		if (!in_array($layout, $allowedlayouts)) {
 			$layout = $allowedlayouts[0];
 		}
