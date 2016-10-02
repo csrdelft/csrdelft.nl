@@ -27,7 +27,6 @@ class Formulier implements View, Validator, FormElement {
 	protected $action;
 	private $formId;
 	public $post = true;
-	protected $error;
 	private $enctype = 'multipart/form-data';
 	private $linkedDataTableId;
 	/**
@@ -328,9 +327,6 @@ JS;
 		$titel = $this->getTitel();
 		if (!empty($titel)) {
 			echo '<h2 class="Titel">' . $titel . '</h2>';
-		}
-		if (isset($this->error)) {
-			echo '<span class="error">' . $this->error . '</span>';
 		}
 		//debugprint($this->getError()); //DEBUG
 		foreach ($this->fields as $field) {
