@@ -107,15 +107,6 @@ abstract class DataTable extends TabsForm {
 				  //TODO: sort by other column
 				  { "iDataSort": 1 },
 				  reldate(getDateTime());
-
-				  //TODO: custom rendering
-				  /*
-				  // The `data` parameter refers to the data for the cell (defined by the
-				  // `data` option, which defaults to the column being worked with, in
-				  // this case `data: 0`.
-				  "render": function ( data, type, row ) {
-				  return data +' ('+ row[3]+')';
-				  }
 				 */
 		);
 		// append or insert at position
@@ -246,7 +237,7 @@ JS;
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
         $settingsJson = str_replace('"fnUpdateToolbar"', 'fnUpdateToolbar', $settingsJson);
-        $settingsJson = preg_replace('/"render":\w?"(.+)"/', '"render": $1', $settingsJson);
+        $settingsJson = preg_replace('/"render":\s?"(.+)"/', '"render": $1', $settingsJson);
 
 		// toolbar
 		parent::view();
