@@ -381,7 +381,7 @@ class DataTableKnop extends FormulierKnop {
 
 }
 
-abstract class DataTableResponse extends JsonResponse {
+class DataTableResponse extends JsonResponse {
 
 	public $autoUpdate = false;
 	public $modal = null;
@@ -395,13 +395,13 @@ abstract class DataTableResponse extends JsonResponse {
 		echo '"lastUpdate":' . json_encode(time() - 1) . ",\n";
 		echo '"data":[' . "\n";
 		$comma = false;
-		foreach ($this->model as $entity) {
+		foreach ($this->model as $model) {
 			if ($comma) {
 				echo ",\n";
 			} else {
 				$comma = true;
 			}
-			$json = $this->getJson($entity);
+			$json = $this->getJson($model);
 			if ($json) {
 				echo $json;
 			} else {
