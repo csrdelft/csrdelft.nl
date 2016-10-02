@@ -96,6 +96,11 @@ class ForumDraad extends PersistentEntity {
 	 */
 	private $forum_posts;
 	/**
+	 * Aantal ongelezen posts
+	 * @var int
+	 */
+	private $aantal_ongelezen_posts;
+	/**
 	 * Lijst van lezers (wanneer)
 	 * @var ForumDraadGelezen[]
 	 */
@@ -117,14 +122,9 @@ class ForumDraad extends PersistentEntity {
 	private $volgen;
 	/**
 	 * Volgers
-	 * @var array
+	 * @var ForumDraadVolgen[]
 	 */
 	private $volgers;
-	/**
-	 * Aantal ongelezen posts
-	 * @var int
-	 */
-	private $aantal_ongelezen_posts;
 	/**
 	 * Database table columns
 	 * @var array
@@ -189,6 +189,10 @@ class ForumDraad extends PersistentEntity {
 
 	public function magModereren() {
 		return $this->getForumDeel()->magModereren() OR ( $this->isGedeeld() AND $this->getGedeeldMet()->magModereren() );
+	}
+
+	public function magStatistiekBekijken() {
+		return $this->magModereren() OR ( $this->uid != 'x999' AND $this->uid === LoginModel::getUid() );
 	}
 
 	public function magVerbergen() {
@@ -284,10 +288,10 @@ class ForumDraad extends PersistentEntity {
 		if (!isset($this->aantal_ongelezen_posts)) {
 			$where = 'draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 			$params = array($this->draad_id);
-			$wanneer = $this->getWanneerGelezen();
-			if ($wanneer) {
+			$gelezen = $this->getWanneerGelezen();
+			if ($gelezen) {
 				$where .= ' AND laatst_gewijzigd > ?';
-				$params[] = $wanneer->datum_tijd;
+				$params[] = $gelezen->datum_tijd;
 			}
 			$this->aantal_ongelezen_posts = ForumPostsModel::instance()->count($where, $params);
 		}

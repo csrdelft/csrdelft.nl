@@ -48,6 +48,7 @@ class ForumController extends Controller {
 				}
 
 			// ForumPost
+			case 'bewerken':
 			case 'citeren':
 			case 'bladwijzer':
 			case 'concept':
@@ -59,7 +60,6 @@ class ForumController extends Controller {
 			// ForumDraad
 			case 'wijzigen':
 			case 'posten':
-			case 'bewerken':
 			case 'verwijderen':
 			case 'verplaatsen':
 			case 'offtopic':
@@ -208,13 +208,13 @@ class ForumController extends Controller {
 					$url .= '#reageren';
 				}
 				if ($draad->belangrijk) {
-				    $icon = Icon::getTag('lock');
+				    $icon = Icon::getTag($draad->belangrijk);
 					$title = 'Dit onderwerp is door het bestuur aangemerkt als belangrijk';
 				} elseif ($draad->gesloten) {
-                    $icon = Icon::getTag('lock');
+					$icon = Icon::getTag('lock');
 					$title = 'Dit onderwerp is gesloten, u kunt niet meer reageren';
 				} elseif ($draad->plakkerig) {
-				    $icon = Icon::getTag('note');
+					$icon = Icon::getTag('note');
 					$title = 'Dit onderwerp is plakkerig, het blijft bovenaan';
 				} else {
 					$icon = false;
@@ -304,7 +304,11 @@ class ForumController extends Controller {
 		if (!$draad->magLezen()) {
 			$this->geentoegang();
 		}
-		$gelezen = $draad->getWanneerGelezen();
+		if (LoginModel::mag('P_LOGGED_IN')) {
+			$gelezen = $draad->getWanneerGelezen();
+		} else {
+			$gelezen = false;
+		}
 		if ($pagina === null) {
 			$pagina = LidInstellingen::get('forum', 'open_draad_op_pagina');
 		}
@@ -319,13 +323,15 @@ class ForumController extends Controller {
 		} else {
 			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id);
 		}
-		if ($statistiek === 'statistiek' AND $draad->magModereren()) {
+		if ($statistiek === 'statistiek' AND $draad->magStatistiekBekijken()) {
 			$statistiek = true;
 		} else {
 			$statistiek = false;
 		}
 		$this->view = new ForumDraadView($draad, $paging, $statistiek); // lazy loading ForumPost[]
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
+		if (LoginModel::mag('P_LOGGED_IN')) {
+			ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
+		}
 	}
 
 	/**
@@ -345,8 +351,17 @@ class ForumController extends Controller {
 	 * Forum deel aanmaken.
 	 */
 	public function aanmaken() {
-		$deel = ForumDelenModel::instance()->maakForumDeel();
-		$this->beheren($deel->forum_id);
+		$deel = ForumDelenModel::instance()->nieuwForumDeel();
+		$form = new ForumDeelForm($deel); // fetches POST values itself
+		if ($form->validate()) {
+			$rowCount = ForumDelenModel::instance()->create($deel);
+			if ($rowCount !== 1) {
+				throw new Exception('Forum aanmaken mislukt!');
+			}
+			$this->view = new JsonResponse(true);
+		} else {
+			$this->view = $form;
+		}
 	}
 
 	/**
@@ -655,7 +670,9 @@ class ForumController extends Controller {
 		}
 
 		// markeer als gelezen
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
+		if (LoginModel::mag('P_LOGGED_IN')) {
+			ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
+		}
 
 		// voorkom dubbelposts
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;

@@ -3,8 +3,6 @@
 		<tbody>
 			<tr>
 				<td>
-					<a href="/forum/onderwerp/{$draad->draad_id}/{ForumPostsModel::instance()->getHuidigePagina()}/statistiek" class="btn" title="Bekijk statistieken gelezen door">{icon get="chart_line"} gelezen statistiek</a>
-					<br /><br />
 					<a href="/forum/wijzigen/{$draad->draad_id}/plakkerig" class="btn post ReloadPage" title="Verander plakkerigheid">
 						{icon get="note"} maak {if $draad->plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
 					</a>
@@ -18,8 +16,6 @@
 					</a>
 				</td>
 				<td>
-					<a href="/forum/onderwerp/{$draad->draad_id}/prullenbak" class="btn" title="Bekijk de reacties die zijn verwijderd">{icon get="bin_closed"} verwijderde reacties</a>
-					&nbsp;
 					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="btn post confirm ReloadPage" title="Verander status verwijderd (incl. alle reacties)">
 						{if $draad->verwijderd}
 							{icon get="arrow_undo"} draad herstellen
@@ -27,6 +23,8 @@
 							{icon get="cross"} draad verwijderen
 						{/if}
 					</a>
+					&nbsp;
+					<a href="/forum/onderwerp/{$draad->draad_id}/prullenbak" class="btn" title="Bekijk de reacties die zijn verwijderd">{icon get="bin_closed"} verwijderde reacties</a>
 					<br /><br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/forum_id" method="post">
 						<label>Verplaats naar &nbsp;</label>

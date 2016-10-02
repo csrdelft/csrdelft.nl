@@ -5,6 +5,10 @@
 
 	{capture name='kop'}
 		<div class="forumheadbtn">
+			{if !isset($statistiek) AND $draad->magStatistiekBekijken()}
+				<a href="/forum/onderwerp/{$draad->draad_id}/{ForumPostsModel::instance()->getHuidigePagina()}/statistiek" class="btn" title="Toon statistieken">{icon get="chart_line"}</a>
+				&nbsp;&nbsp;&nbsp;
+			{/if}
 			<a title="Onderwerp toevoegen aan favorieten" class="btn post popup addfav" href="/menubeheer/toevoegen/favoriet">{icon get="star"}</a>
 			&nbsp;&nbsp;&nbsp;
 			{if $draad->isGevolgd()}
@@ -42,7 +46,8 @@
 		<h1>
 			{$draad->titel}
 			{if isset($statistiek)}
-				<span class="lichtgrijs small" title="Aantal lezers"> {$draad->getAantalLezers()}</span>
+				&nbsp;&nbsp;&nbsp;
+				<span class="lichtgrijs small" title="Aantal lezers">{$draad->getAantalLezers()} lezers</span>
 			{/if}
 		</h1>
 	{/capture}
@@ -106,7 +111,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 		{assign var=vanaf value=false}
 		{foreach from=$draad->getForumPosts() item=post name=posts}
 
-			{* als posts gewijzigd zijn zonder draad gewijzigd te triggeren voorkomt $draad->isOngelezen() dat de gele lijn wordt getoond *}
+			{* Als posts gewijzigd zijn zonder draad gewijzigd te triggeren voorkomt $draad->isOngelezen() dat de gele lijn wordt getoond *}
 			{if !$vanaf AND $draad_ongelezen AND (!$gelezen_moment OR strtotime($post->laatst_gewijzigd) > $gelezen_moment)}
 				{assign var=vanaf value=true}
 				<tr class="tussenschot ongelezenvanaf">

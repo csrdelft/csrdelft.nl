@@ -181,12 +181,14 @@ class ForumDraadView extends ForumView {
 		parent::__construct($draad, $draad->titel);
 		$this->paging = ($paging AND ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1);
 		$this->statistiek = $statistiek;
-		// cache old value for ongelezen streep
-		$this->ongelezen = $draad->isOngelezen();
-		if ($draad->getWanneerGelezen()) {
-			$this->gelezen_moment = strtotime($draad->getWanneerGelezen()->datum_tijd);
+		// Cache original gelezen moment before setting gelezen voor ongelezen streep
+		$gelezen = $draad->getWanneerGelezen();
+		if ($gelezen) {
+			$this->gelezen_moment = strtotime($gelezen->datum_tijd);
+			$this->ongelezen = $draad->isOngelezen();
 		} else {
 			$this->gelezen_moment = false;
+			$this->ongelezen = true;
 		}
 	}
 
