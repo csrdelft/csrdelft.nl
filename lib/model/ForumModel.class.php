@@ -534,7 +534,7 @@ class ForumDradenVolgenModel extends CachedPersistenceModel {
 	}
 
 	public function getVolgersVanDraad(ForumDraad $draad) {
-		return $this->prefetch('draad_id = ?', array($draad->draad_id))->fetchAll(PDO::FETCH_COLUMN, 1);
+		return $this->prefetch('draad_id = ?', array($draad->draad_id));
 	}
 
 	public function getVolgenVoorLid(ForumDraad $draad) {
