@@ -68,7 +68,7 @@ class AgendaController extends AclController {
 
 	public function zoeken() {
 		if (!$this->hasParam('q')) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$query = '%' . $this->getParam('q') . '%';
 		$limit = 5;
@@ -123,7 +123,7 @@ class AgendaController extends AclController {
 	public function bewerken($aid) {
 		$item = $this->model->getAgendaItem((int) $aid);
 		if (!$item OR ! $item->magBeheren()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$form = new AgendaItemForm($item, $this->action); // fetches POST values itself
 		if ($form->validate()) {
@@ -137,7 +137,7 @@ class AgendaController extends AclController {
 	public function verwijderen($aid) {
 		$item = $this->model->getAgendaItem((int) $aid);
 		if (!$item OR ! $item->magBeheren()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$this->model->delete($item);
 		$this->view = new AgendaItemDeleteView($item->item_id);

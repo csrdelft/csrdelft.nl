@@ -96,11 +96,11 @@ class ProfielController extends AclController {
 		// Controleer invoer
 		$lidstatus = 'S_' . strtoupper($status);
 		if (!preg_match('/^[0-9]{4}$/', $lidjaar) OR ! in_array($lidstatus, LidStatus::getTypeOptions())) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		// NovCie mag novieten aanmaken
 		if ($lidstatus !== LidStatus::Noviet AND ! LoginModel::mag('P_LEDEN_MOD')) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		// Maak nieuw profiel zonder op te slaan
 		$profiel = ProfielModel::instance()->nieuw((int) $lidjaar, $lidstatus);
@@ -109,7 +109,7 @@ class ProfielController extends AclController {
 
 	public function bewerken(Profiel $profiel) {
 		if (!$profiel->magBewerken()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$form = new ProfielForm($profiel);
 		if ($form->validate()) {
@@ -156,7 +156,7 @@ class ProfielController extends AclController {
 
 	public function voorkeuren(Profiel $profiel) {
 		if (!$profiel->magBewerken()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		require_once 'model/CommissieVoorkeurenModel.class.php';
 		require_once 'view/CommissieVoorkeurenView.class.php';

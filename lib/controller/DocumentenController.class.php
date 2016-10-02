@@ -91,7 +91,7 @@ class DocumentenController extends AclController {
 	public function bekijken() {
 		$this->loadDocument();
 		if (!$this->document->magBekijken()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		if ($this->document->hasFile()) {
 			$this->view = new DocumentContent($this->document);
@@ -106,7 +106,7 @@ class DocumentenController extends AclController {
 	public function download() {
 		$this->loadDocument();
 		if (!$this->document->magBekijken()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		if ($this->document->hasFile()) {
 			$this->view = new DocumentDownloadContent($this->document);
@@ -213,7 +213,7 @@ class DocumentenController extends AclController {
 
 	public function zoeken() {
 		if (!$this->hasParam('q')) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$zoekterm = $this->getParam('q');
 		$categorie = 0;

@@ -15,7 +15,7 @@ class KringenController extends AbstractGroepenController {
 
 	public function zoeken() {
 		if (!$this->hasParam('q')) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$zoekterm = '%' . $this->getParam('q') . '%';
 		$limit = 5;

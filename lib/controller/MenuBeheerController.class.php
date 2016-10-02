@@ -37,11 +37,11 @@ class MenuBeheerController extends AclController {
 
 	public function beheer($menu_name = 'main') {
 		if ($menu_name != LoginModel::getUid() AND ! LoginModel::mag('P_ADMIN')) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$root = $this->model->getMenu($menu_name);
 		if (!$root OR ! $root->magBeheren()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$body = new MenuBeheerView($root);
 		$this->view = new CsrLayoutPage($body);
@@ -55,11 +55,11 @@ class MenuBeheerController extends AclController {
 			$parent = $this->model->getMenuItem((int) $parent_id);
 		}
 		if (!$parent OR ! $parent->magBeheren()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$item = $this->model->nieuw($parent->item_id);
 		if (!$item OR ! $item->magBeheren()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$form = new MenuItemForm($item, $this->action, $parent_id); // fetches POST values itself
 		if ($form->validate()) { // form checks if hidden fields are modified
@@ -74,7 +74,7 @@ class MenuBeheerController extends AclController {
 	public function bewerken($item_id) {
 		$item = $this->model->getMenuItem((int) $item_id);
 		if (!$item OR ! $item->magBeheren()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$form = new MenuItemForm($item, $this->action, $item->item_id); // fetches POST values itself
 		if ($form->validate()) { // form checks if hidden fields are modified
@@ -93,7 +93,7 @@ class MenuBeheerController extends AclController {
 	public function verwijderen($item_id) {
 		$item = $this->model->getMenuItem((int) $item_id);
 		if (!$item OR ! $item->magBeheren()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$rowCount = $this->model->removeMenuItem($item);
 		setMelding($item->tekst . ' verwijderd', 1);
@@ -106,7 +106,7 @@ class MenuBeheerController extends AclController {
 	public function zichtbaar($item_id) {
 		$item = $this->model->getMenuItem((int) $item_id);
 		if (!$item OR ! $item->magBeheren()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$item->zichtbaar = !$item->zichtbaar;
 		$rowCount = $this->model->update($item);

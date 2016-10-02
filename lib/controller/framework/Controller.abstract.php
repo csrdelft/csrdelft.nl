@@ -154,16 +154,16 @@ abstract class Controller {
 		$account = LoginModel::getAccount();
 		if (isset($account->blocked_reason)) {
 			setMelding(CsrBB::parse($account->blocked_reason), -1);
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		// Controleer of de request method toegestaan is
 		if (!in_array($this->getMethod(), $this->methods)) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		// Controleer of de actie uitgevoerd mag worden met de gegeven argumenten
 		if (!$this->mag($this->action, $args)) {
 			//DebugLogModel::instance()->log(get_class($this), $this->action, $args, 'geentoegang');
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		// Specific action function is preferred
 		$action = $this->getMethod() . '_' . $this->action;
@@ -177,10 +177,10 @@ abstract class Controller {
 		return call_user_func_array(array($this, $this->action), $args);
 	}
 
-	protected function geentoegang() {
-		http_response_code(403);
+	protected function exit_http($response_code) {
+		http_response_code($response_code);
 		if ($this->getMethod() == 'POST') {
-			die('403 Forbidden');
+			die($response_code);
 		}
 		// Redirect to login form
 		elseif (LoginModel::getUid() === 'x999') {
@@ -188,13 +188,11 @@ abstract class Controller {
 			redirect(CSR_ROOT);
 		}
 		// GUI 403
-		else {
-			require_once 'model/CmsPaginaModel.class.php';
-			require_once 'view/CmsPaginaView.class.php';
-			$body = new CmsPaginaView(CmsPaginaModel::get('geentoegang'));
-			$this->view = new CsrLayoutPage($body);
-			$this->view->view();
-		}
+		require_once 'model/CmsPaginaModel.class.php';
+		require_once 'view/CmsPaginaView.class.php';
+		$body = new CmsPaginaView(CmsPaginaModel::get($response_code));
+		$this->view = new CsrLayoutPage($body);
+		$this->view->view();
 		exit;
 	}
 

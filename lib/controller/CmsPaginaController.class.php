@@ -55,7 +55,7 @@ class CmsPaginaController extends Controller {
 			$pagina = $this->model->get('thuis');
 		}
 		if (!$pagina->magBekijken()) { // 403
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$body = new CmsPaginaView($pagina);
 		if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde bezoekers
@@ -81,7 +81,7 @@ class CmsPaginaController extends Controller {
 			$pagina = $this->model->nieuw($naam);
 		}
 		if (!$pagina->magBewerken()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		$form = new CmsPaginaForm($pagina); // fetches POST values itself
 		if ($form->validate()) {
@@ -101,7 +101,7 @@ class CmsPaginaController extends Controller {
 	public function verwijderen($naam) {
 		$pagina = $this->model->get($naam);
 		if (!$pagina OR ! $pagina->magVerwijderen()) {
-			return $this->geentoegang();
+			$this->exit_http(403);
 		}
 		if ($this->model->delete($pagina)) {
 			setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
