@@ -9,7 +9,7 @@
 <section id="wrapper">
 
     <!-- Vereniging -->
-    <section class="wrapper spotlight style1">
+    <section class="wrapper spotlight kleur2">
         <div class="inner">
             <span class="image"><img src="/plaetjes/layout-extern/vereniging.jpg" alt=""/></span>
             <div class="content">
@@ -27,7 +27,7 @@
     </section>
 
     <!-- Interesse -->
-    <section class="wrapper alt style3">
+    <section class="wrapper alt kleur1">
         <div class="inner">
             <span class="image"><img src="/plaetjes/layout-extern/OC.jpg" alt=""/></span>
             <div class="content">
@@ -47,7 +47,7 @@
     </section>
 
     <!-- Four -->
-    <section id="four" class="wrapper spotlight style3">
+    <section id="four" class="wrapper spotlight kleur2">
         <div class="inner">
             <div class="content">
                 <h2 class="major">Foto's</h2>

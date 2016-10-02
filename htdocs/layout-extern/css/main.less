@@ -31,7 +31,7 @@ body {
 }
 
 body {
-  background-color: #ffcc33;
+  background-color: @basiskleur;
 
   &.is-loading {
     *, *:before, *:after {
@@ -57,7 +57,7 @@ body, input, select, textarea {
   line-height: 1.65;
 }
 
-@media screen and (max-width: 1680px) {
+@media screen and (max-width: @scherm-extrabreed) {
 
   body, input, select, textarea {
     font-size: 13pt;
@@ -65,7 +65,7 @@ body, input, select, textarea {
 
 }
 
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: @scherm-smal) {
 
   body, input, select, textarea {
     font-size: 12pt;
