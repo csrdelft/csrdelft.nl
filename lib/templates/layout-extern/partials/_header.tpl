@@ -60,7 +60,7 @@
             <ul class="links">
                 <li><a href="/">Begin</a></li>
                 <li><a href="/vereniging">Informatie over C.S.R.</a></li>
-                <li><a href="/fotoalbum">Fotoalbum</a></li>
+                <li><a href="/fotoalbum/{LichtingenModel::getHuidigeJaargang()}">Fotoalbum</a></li>
                 <li><a href="/forum">Forum</a></li>
                 <li><a href="/forum/deel/12">Kamers zoeken/aanbieden</a></li>
                 <li><a href="/contact">Contactinformatie</a></li>
