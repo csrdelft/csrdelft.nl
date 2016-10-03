@@ -866,7 +866,7 @@ class SterrenField extends FloatField {
 	public function getJavascript() {
 		$settings = json_encode(array(
 			'scoreName'		 => $this->name,
-			'path'			 => '/plaetjes/layout/raty/',
+			'path'			 => '/assets/layout/plaetjes/raty/',
 			'score'			 => $this->getValue(),
 			'number'		 => $this->max,
 			'half'			 => (boolean) $this->half,

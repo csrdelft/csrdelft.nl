@@ -297,7 +297,7 @@ img.bb-img{
 div.bb-img-loading{
 	min-width: 16px;
 	min-height: 11px;
-	background-image: url("/plaetjes/layout/loading-fb.gif");
+	background-image: url("/assets/layout/plaetjes/loading-fb.gif");
 	background-repeat: no-repeat;
 	background-position: bottom left;
 }

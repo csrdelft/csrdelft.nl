@@ -15,9 +15,9 @@ function preloadImg(href) {
 	return img;
 }
 
-preloadImg('/plaetjes/layout/loading-fb.gif');
-preloadImg('/plaetjes/layout/loading-arrows.gif');
-preloadImg('/plaetjes/layout/loading_bar_black.gif');
+preloadImg('/assets/layout/plaetjes/loading-fb.gif');
+preloadImg('/assets/layout/plaetjes/loading-arrows.gif');
+preloadImg('/assets/layout/plaetjes/loading_bar_black.gif');
 
 $(document).ready(function () {
 	init_page();
@@ -434,7 +434,7 @@ function modal_open(htmlString) {
 		$('#modal input:visible:first').focus();
 	}
 	else {
-		$('#modal-background').css('background-image', 'url("/plaetjes/layout/loading_bar_black.gif")');
+		$('#modal-background').css('background-image', 'url("/assets/layout/plaetjes/loading_bar_black.gif")');
 		$('#modal').hide();
 		$('#modal').html('');
 	}
@@ -700,12 +700,12 @@ function remove() {
 function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 	if (source) {
 		if (!source.hasClass('noanim')) {
-			$(source).replaceWith('<img id="' + source.attr('id') + '" title="' + url + '" src="/plaetjes/layout/loading-arrows.gif" />');
+			$(source).replaceWith('<img id="' + source.attr('id') + '" title="' + url + '" src="/assets/layout/plaetjes/loading-arrows.gif" />');
 			source = 'img[title="' + url + '"]';
 		}
 		else if (source.hasClass('InlineForm')) {
 			$(source).find('.FormElement:first').css({
-				'background-image': 'url("/plaetjes/layout/loading-fb.gif")',
+				'background-image': 'url("/assets/layout/plaetjes/loading-fb.gif")',
 				'background-repeat': 'no-repeat',
 				'background-position': 'center right'
 			});
@@ -765,7 +765,7 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 }
 
 function ketzer_ajax(url, ketzer) {
-	$(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img src="/plaetjes/layout/loading-arrows.gif" />');
+	$(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img src="/assets/layout/plaetjes/loading-arrows.gif" />');
 	var jqXHR = $.ajax({
 		type: 'GET',
 		cache: false,

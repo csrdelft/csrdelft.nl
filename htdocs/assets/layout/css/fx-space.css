@@ -30,7 +30,7 @@
 }
 
 #cd-main-overlay {
-	background-image:  url('/plaetjes/layout/bg/stars.jpg');
+	background-image:  url('/assets/layout/plaetjes/bg/stars.jpg');
 	background-size: cover;
 }
 #cd-main-overlay.is-visible {

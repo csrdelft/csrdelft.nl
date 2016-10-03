@@ -31,7 +31,7 @@
 }
 
 #cd-main-overlay {
-	background-image:  url('/plaetjes/layout/snow/snowh.png'), url('/plaetjes/layout/snow/snow3q.png'), url('/plaetjes/layout/snow/snow2l.png'), url('/plaetjes/layout/bg/kristallen.jpg');
+	background-image:  url('/assets/layout/plaetjes/snow/snowh.png'), url('/assets/layout/plaetjes/snow/snow3q.png'), url('/assets/layout/plaetjes/snow/snow2l.png'), url('/assets/layout/plaetjes/bg/kristallen.jpg');
 }
 #cd-main-overlay.is-visible {
 	-webkit-animation: snow 20s linear infinite;
