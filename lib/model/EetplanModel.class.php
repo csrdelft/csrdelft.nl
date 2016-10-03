@@ -99,7 +99,7 @@ class EetplanModel extends PersistenceModel {
      * @return Eetplan[] lijst van eetplansessies voor deze feut, gesorteerd op datum (oplopend)
      */
     public function getEetplanVoorNoviet($uid) {
-        return $this->find('uid = ?', array($uid), null, 'avond')->fetchAll();
+        return $this->find('uid = ? AND avond <> "0000-00-00"', array($uid), null, 'avond')->fetchAll();
     }
 
     /**
@@ -107,7 +107,7 @@ class EetplanModel extends PersistenceModel {
      * @return Eetplan[] lijst van eetplansessies voor dit huis, gesorteerd op datum (oplopend)
      */
     public function getEetplanVoorHuis($id, $lichting) {
-        return $this->find('uid LIKE ? AND woonoord_id = ?', array($lichting . "%", $id), null, 'avond')->fetchAll();
+        return $this->find('uid LIKE ? AND woonoord_id = ? AND avond <> "0000-00-00"', array($lichting . "%", $id), null, 'avond')->fetchAll();
     }
 
     public function getBekendeHuizen($lichting) {
