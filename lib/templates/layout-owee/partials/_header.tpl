@@ -23,8 +23,6 @@
           href="https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic"/>
     <!--[if lte IE 9]>
     <link rel="stylesheet" href="/assets/layout-owee/css/ie9.css"/><![endif]-->
-    <!--[if lte IE 8]>
-    <link rel="stylesheet" href="/assets/layout-owee/css/ie8.css"/><![endif]-->
     <script src='https://www.google.com/recaptcha/api.js?hl=nl'></script>
     {foreach from=$scripts item=script}
         <script type="text/javascript" src="{$script}"></script>
