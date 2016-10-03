@@ -854,7 +854,7 @@
 		}
 
 		#menu .close, #login .close {
-			background: url("/layout-owee/close.svg") no-repeat 75% 25%;
+			background: url("/assets/layout-owee/plaetjes/close.svg") no-repeat 75% 25%;
 			background-size: 2em 2em;
 			border: 0;
 			content: '';
