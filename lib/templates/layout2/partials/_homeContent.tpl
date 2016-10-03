@@ -3,7 +3,7 @@
 		<div class="columns large-2 small-2">
 			<header class="blue box h2">
 				<a href="/" alt="Thuis">
-					<img src="/plaetjes/layout2/box-logo.png" alt="C.S.R. Delft">
+					<img src="/assets/layout2/plaetjes/box-logo.png" alt="C.S.R. Delft">
 				</a>
 			</header>
 		</div>
@@ -17,7 +17,7 @@
 			</div>
 			<div class="columns large-2">
 				<figure class="box">
-					<img src="/plaetjes/layout2/box-picture-3.jpg" class="rotate" alt="Foto">
+					<img src="/assets/layout2/plaetjes/box-picture-3.jpg" class="rotate" alt="Foto">
 				</figure>
 			</div>
 		</div>
@@ -26,7 +26,7 @@
 				<div class="box flip fliphover">
 					<div class="blue front">
 						<h2 class="overlay">Lid worden?</h2>
-						<img src="/plaetjes/layout2/box-icon-lid.png" alt="Lid worden">
+						<img src="/assets/layout2/plaetjes/box-icon-lid.png" alt="Lid worden">
 					</div>
 					<div class="blue back">
 						<p>Ga je studeren in Delft? Word lid bij een vereniging!</p>
@@ -38,21 +38,21 @@
 			</div>
 			<div class="columns large-2">
 				<figure class="box">
-					<img src="/plaetjes/layout2/box-picture-4.jpg" class="rotate" alt="Foto">
+					<img src="/assets/layout2/plaetjes/box-picture-4.jpg" class="rotate" alt="Foto">
 				</figure>
 			</div>
 		</div>
 		<div class="columns large-2 small-2">
 			<div class="columns large-2">
 				<figure class="box">
-					<img src="/plaetjes/layout2/box-picture-2.jpg" class="rotate" alt="Foto">
+					<img src="/assets/layout2/plaetjes/box-picture-2.jpg" class="rotate" alt="Foto">
 				</figure>
 			</div>
 			<div class="columns large-2">
 				<div class="box flip fliphover">
 					<div class="blue front">
 						<h2 class="overlay">Bedrijven</h2>
-						<img src="/plaetjes/layout2/box-icon-bedrijven.png" alt="Bedrijven">
+						<img src="/assets/layout2/plaetjes/box-icon-bedrijven.png" alt="Bedrijven">
 					</div>
 					<div class="blue back">
 						<p>Trek de aandacht van ruim 270 technisch ge&ouml;rienteerde studenten!</p>
@@ -68,7 +68,7 @@
 				<div class="box flip fliphover">
 					<div class="blue front">
 						<h2 class="overlay">(Oud)leden</h2>
-						<img src="/plaetjes/layout2/box-icon-oudleden.png" alt="(Oud)leden">
+						<img src="/assets/layout2/plaetjes/box-icon-oudleden.png" alt="(Oud)leden">
 					</div>
 					<div class="blue back login-form">{include file='layout2/partials/_loginForm.tpl'}</div>
 				</div>
@@ -80,7 +80,7 @@
 		</div>
 		<div class="columns large-2 small-2 hide-for-small">
 			<figure class="box pad-top">
-				<img src="/plaetjes/layout2/box-picture-5.jpg" class="rotate" alt="Foto">
+				<img src="/assets/layout2/plaetjes/box-picture-5.jpg" class="rotate" alt="Foto">
 			</figure>
 		</div>
 
@@ -110,14 +110,14 @@
 		</div>
 		<div class="columns large-2 small-2">
 			<figure class="box">
-				<img src="/plaetjes/layout2/box-picture-1.jpg" class="rotate" alt="Foto">
+				<img src="/assets/layout2/plaetjes/box-picture-1.jpg" class="rotate" alt="Foto">
 			</figure>
 		</div>
 		<div class="columns large-2 small-2">
 			<div class="blue box link">
 				<a href="/english" title="English">
 					<h2 class="overlay">English</h2>
-					<img src="/plaetjes/layout2/icon-flag-english.png" alt="English" style="width: 120px; height: 67px; position: absolute; top: 60px; right: 40px;">
+					<img src="/assets/layout2/plaetjes/icon-flag-english.png" alt="English" style="width: 120px; height: 67px; position: absolute; top: 60px; right: 40px;">
 				</a>
 			</div>
 		</div>

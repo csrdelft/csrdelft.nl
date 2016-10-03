@@ -3,7 +3,7 @@ body { color: #fff; overflow-x: hidden; }
 
 .blue {
     background: #1255a3;
-    background-image: url("/plaetjes/layout2/blue-box.png");
+    background-image: url("/assets/layout2/plaetjes/blue-box.png");
     background: -webkit-linear-gradient(#1255a3 0%, #063379 100%);
     background: linear-gradient(#1255a3 0%, #063379 100%);
     background: -moz-linear-gradient(#1255a3 0%, #063379 100%);
@@ -19,7 +19,7 @@ body { color: #fff; overflow-x: hidden; }
 	height: 222px;
 }
 .box, #dialog-finish {
-	background-image: url("/plaetjes/layout2/blue-box-h2-w2.png");
+	background-image: url("/assets/layout2/plaetjes/blue-box-h2-w2.png");
 }
 
 

@@ -16,7 +16,7 @@ $(function () {
 
 
 	// Background image
-	$.backstretch('/plaetjes/layout2/bg-image-16.jpg');
+	$.backstretch('/assets/layout2/plaetjes/bg-image-16.jpg');
 
 
 	// Login form enhancing
