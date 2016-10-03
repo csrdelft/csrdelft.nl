@@ -101,7 +101,7 @@ abstract class CompressedLayout extends HtmlPage {
 
 		// cache influencers
 		$cache_files = array();
-		$cache_files[] = HTDOCS_PATH . "assets/" . $layout . '/' . ($extension == 'js' ? 'script' : 'style') . '.ini';
+		$cache_files[] = ASSETS_PATH . $layout . '/' . ($extension == 'js' ? 'script' : 'style') . '.ini';
 		$cache_files[] = HTDOCS_PATH . 'tools/' . $extension . '.php';
 		$cache_files[] = LIB_PATH . 'defines.include.php';
 
@@ -211,8 +211,8 @@ abstract class CompressedLayout extends HtmlPage {
 		$includes = array(); // mode, file => base
 		$replacements = array(); // placeholder => value
 		// load style.ini/script.ini
-		$incbase = HTDOCS_PATH . "assets/";
-		$webbase = CSR_ROOT . "/assets";
+		$incbase = ASSETS_PATH;
+		$webbase = ASSETS_DIR;
 		$ini = $incbase . $layout . '/' . $ininame . '.ini';
 		if (file_exists($ini)) {
 			$data = parse_ini_file($ini, true);
