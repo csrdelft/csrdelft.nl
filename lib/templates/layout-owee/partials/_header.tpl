@@ -7,24 +7,22 @@
     <meta property="og:url" content="{$smarty.const.CSR_ROOT}{$REQUEST_URI}"/>
     <meta property="og:title" content="C.S.R. Delft | {$titel}"/>
     <meta property="og:locale" content="nl_nl"/>
-    <meta property="og:image" content="{$smarty.const.CSR_ROOT}/plaetjes/layout/beeldmerk.png"/>
+    <meta property="og:image" content="{$smarty.const.CSR_ROOT}/assets/layout/plaetjes/beeldmerk.png"/>
     <meta property="og:description" content="{Instellingen::get('stek', 'beschrijving')}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C.S.R. Delft - {$titel}</title>
-    <link rel="shortcut icon" href="{$smarty.const.CSR_ROOT}/plaetjes/layout/favicon.ico"/>
+    <link rel="shortcut icon" href="{$smarty.const.CSR_ROOT}/assets/layout/plaetjes/favicon.ico"/>
     <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"
           href="{$smarty.const.CSR_ROOT}/forum/rss.xml"/>
     <!--[if lte IE 8]>
-    <script src="/layout-owee/js/ie/html5shiv.js"></script><![endif]-->
+    <script src="/assets/layout-owee/js/html5shiv.js"></script><![endif]-->
     {foreach from=$stylesheets item=sheet}
         <link rel="stylesheet" href="{$sheet}" type="text/css"/>
     {/foreach}
     <link rel="stylesheet" type="text/css"
           href="https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic"/>
     <!--[if lte IE 9]>
-    <link rel="stylesheet" href="/layout-owee/css/ie9.css"/><![endif]-->
-    <!--[if lte IE 8]>
-    <link rel="stylesheet" href="/layout-owee/css/ie8.css"/><![endif]-->
+    <link rel="stylesheet" href="/assets/layout-owee/css/ie9.css"/><![endif]-->
     <script src='https://www.google.com/recaptcha/api.js?hl=nl'></script>
     {foreach from=$scripts item=script}
         <script type="text/javascript" src="{$script}"></script>

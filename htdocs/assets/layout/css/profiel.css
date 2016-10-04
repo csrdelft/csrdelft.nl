@@ -1,0 +1,58 @@
+
+.label { text-align: left; font-weight: normal; float: left; width: 75px; color: #999; }
+.data { margin-left: 75px; text-align: left; }
+.data li { margin-left: 0; }
+
+#profiel .profielregel { margin-bottom: 20px; clear: left; }
+#profiel .left { display: none; float: left; width: 10px; text-align: right; font-style: italic; font-size: 0.9em; }
+#profiel .gegevens { margin-left: 20px; padding-left: 15px; border-left: 1px solid #0a338d; }
+#profiel .half { width: 270px; float: left; }
+#profiel .knopjes { text-align: center; }
+#profiel .pasfoto {
+	margin: 25px;
+	-moz-box-shadow: 0 0 11px #000;
+	-webkit-box-shadow: 0 0 11px #000;
+	box-shadow: 0 0 11px #000;
+}
+#profiel .naam .status { float: left; color: #aaa; width: 60px; padding: 0 20px; }
+#profiel .naam h1 { padding-left: 20px; }
+
+#profiel #corveeTaken { width: 550px; }
+#profiel #corveeTaken tr.old { opacity: .50; }
+
+#profiel #recenteForumberichten { width: 600px; }
+#profiel #recenteForumberichten td { text-align: left; }
+
+#profiel .boeken a { text-align: left; text-decoration: none !important; }
+#profiel .boeken a .auteur { color: #777; margin-left:10px; }
+#profiel .boeken a .titel:hover {color: #0a338d; text-decoration: underline; }
+#profiel .boeken li {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	white-space: nowrap;
+}
+#profiel .boeken a.btn {margin-left: 75px; }
+
+li.verborgen { display: none; }
+
+#wijzigstatus label {
+	width: 153px;
+	margin: 0;
+	float: left;
+}
+#wijzigstatus .lidgegevens {
+	margin: 10px 0 15px 13px;
+	padding: 2px;
+}
+#wijzigstatus .novieten, #wijzigstatus .leden {
+	margin: 0 0 5px 167px;
+}
+#statusForm input#field_postfix.FormElement {
+	width: 100px;
+}
+
+
+.jarig {
+    background-image: url("/assets/layout/plaetjes/jarig.jpg");
+}

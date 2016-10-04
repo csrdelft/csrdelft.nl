@@ -80,7 +80,7 @@
 
 		geometry = new THREE.Geometry();
 
-		var texture = THREE.ImageUtils.loadTexture('/plaetjes/layout/bg/cloud10.png', null, animateClouds);
+		var texture = THREE.ImageUtils.loadTexture('/assets/layout/plaetjes/bg/cloud10.png', null, animateClouds);
 		texture.magFilter = THREE.LinearMipMapLinearFilter;
 		texture.minFilter = THREE.LinearMipMapLinearFilter;
 

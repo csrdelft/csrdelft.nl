@@ -16,7 +16,7 @@
 		<image>
 			<link>{$smarty.const.CSR_ROOT}</link>
 			<title>C.S.R. Delft</title>
-			<url>{$smarty.const.CSR_ROOT}/plaetjes/layout/beeldmerk.jpg</url>
+			<url>{$smarty.const.CSR_ROOT}/assets/layout/plaetjes/beeldmerk.jpg</url>
 			<height>150</height>
 			<width>118</width>
 			<description>Beeldmerk der C.S.R. Delft</description>

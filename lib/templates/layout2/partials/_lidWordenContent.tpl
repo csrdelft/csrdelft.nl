@@ -2,11 +2,11 @@
 
 
 	<header class="blue box h2 link"><a href="/">
-		<img src="/plaetjes/layout2/box-logo.png" alt="C.S.R. Delft">
+		<img src="/assets/layout2/plaetjes/box-logo.png" alt="C.S.R. Delft">
 	</a></header>
 
 	<figure class="box pad-btm">
-		<img src="/plaetjes/layout2/box-picture-2.jpg" class="rotate">
+		<img src="/assets/layout2/plaetjes/box-picture-2.jpg" class="rotate">
 	</figure>
 
 	<div class="list box w2 h2">
@@ -30,7 +30,7 @@
 	</a></div>
 
 	<figure class="box">
-		<img src="/plaetjes/layout2/box-picture-1.jpg" class="rotate">
+		<img src="/assets/layout2/plaetjes/box-picture-1.jpg" class="rotate">
 	</figure>
 
 	<div class="list box h2">
@@ -54,12 +54,12 @@
 	</a></div>
 
 	<div class="box w2 link"><a href="/vereniging/filmpjes">
-		<img src="/plaetjes/layout2/box-groep.jpg">
+		<img src="/assets/layout2/plaetjes/box-groep.jpg">
 		<h2 class="overlay">7 filmpjes over C.S.R.</h2>
 	</a></div>
 
 	<div class="blue box pad-left link"><a href="/fotoalbum">
-		<img src="/plaetjes/layout2/box-icon-fotos.png">
+		<img src="/assets/layout2/plaetjes/box-icon-fotos.png">
 		<h2 class="overlay">Foto's</h2>
 	</a></div>
 

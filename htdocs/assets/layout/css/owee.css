@@ -1,0 +1,98 @@
+/* owee 2016*/
+/** blauw: #101d61*/
+/** geel: #fec524*/
+
+/*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
+
+#cd-zijbalk,
+#forumtabel th,
+.cd-primary-nav ul {
+    background-color: #fec524 !important;
+}
+
+/*Koppen in blauw*/
+
+h1,
+a,
+a:hover,
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+    color: #101d61;
+}
+
+/*NAVIGATIE MENU*/
+/*Andere koppen in het blauw*/
+
+.cd-primary-nav .cd-secondary-nav a,
+.cd-primary-nav .cd-secondary-nav > li > a:hover,
+.cd-primary-nav .cd-secondary-nav > li > a {
+    color: #101d61;
+}
+
+/*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
+
+.cd-primary-nav .cd-secondary-nav a:hover {
+    text-decoration: underline !important;
+    color: #101d61;
+}
+
+/*Streepje onder naam*/
+
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+    box-shadow: inset 0 -2px 0 #101d61;
+}
+
+/*ZIJBALK*/
+/*Veel tekst van de zijbalk in het blauw*/
+
+#cd-zijbalk .ishetal .ja,
+#cd-zijbalk .ishetal .nee,
+.staatrood,
+#cd-zijbalk .blok .item a,
+#cd-zijbalk .ishetal,
+#cd-zijbalk .blok .item {
+    color: #101d61;
+}
+
+/*Zijbalk grens van het scherm in blauw*/
+
+#cd-zijbalk {
+    border-color: #101d61;
+}
+
+/*OWee logo*/
+
+#cd-zijbalk .cd-beeldmerk {
+    background-image: url("/plaetjes/owee/2016/logo.png");
+}
+
+/*KNOPPEN*/
+/*Knoppen in blauw gradient*/
+
+.btn,
+input[type=submit],
+input[type=button],
+.progress-bar-info,
+.btn:focus,
+input[type=submit]:focus,
+input[type=button]:focus {
+    background-image: linear-gradient(to bottom, #101d61, #1045be);
+    border: none !important;
+}
+
+/*Voor een mouse hover wordt de gradient omgedraaid*/
+
+.btn:hover,
+input[type=submit]:hover,
+input[type=button]:hover {
+    background-image: linear-gradient(to bottom, #1045be, #101d61);
+    border: none !important;
+}
+
+/*Actieve knoppen in geel gradient -> zo ontstaat verschil tussen hover en active*/
+
+.btn.active {
+    background-image: linear-gradient(to bottom, #fec524, #ffd45c);
+    border: none !important;
+}

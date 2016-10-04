@@ -154,7 +154,7 @@ class CsrBB extends eamBBParser {
 			$groot = false;
 		}
 		$filename = str_replace('#', '', array_pop($parts)); // replace # (foolproof)
-		$path = PICS_PATH . 'fotoalbum' . implode('/', $parts);
+		$path = PHOTOS_PATH . 'fotoalbum' . implode('/', $parts);
 		$album = FotoAlbumModel::instance()->getFotoAlbum($path);
 		if (!$album) {
 			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
@@ -196,7 +196,7 @@ class CsrBB extends eamBBParser {
 		} else {
 			//vervang url met pad
 			$url = str_ireplace(CSR_ROOT, '', $url);
-			$path = PICS_PATH;
+			$path = PHOTOS_PATH;
 			//check fotoalbum in url
 			$url = str_ireplace('fotoalbum/', '', $url);
 			$path .= 'fotoalbum/';
