@@ -19,7 +19,7 @@ class FotoTagAlbum extends FotoAlbum {
 		// no parent constructor
 		$this->uid = $uid;
 		$this->subalbums = array();
-		$this->path = PICS_PATH;
+		$this->path = PHOTOS_PATH;
 		$this->dirname = 'Foto\'s met ' . ProfielModel::getNaam($uid, 'civitas');
 	}
 

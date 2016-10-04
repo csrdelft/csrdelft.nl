@@ -38,7 +38,7 @@ if (isset($_GET['string'])) {
 	//we geven de pasfoto voor het gegeven uid direct aan de browser, als we lid-leesrechten hebben
 	if (!LoginModel::mag('P_OUDLEDEN_READ') OR ! AccountModel::isValidUid($uid)) {
 		header('Content-Type: image/jpeg');
-		echo file_get_contents(PICS_PATH . 'pasfoto/geen-foto.jpg');
+		echo file_get_contents(PHOTOS_PATH . 'pasfoto/geen-foto.jpg');
 	} else {
 		$profiel = ProfielModel::get($uid);
 		$types = array('jpg', 'png', 'gif');
@@ -50,6 +50,6 @@ if (isset($_GET['string'])) {
 		} else { //assumption is the mother of all...
 			header('Content-Type: image/jpeg');
 		}
-		echo file_get_contents(PICS_PATH . $pasfoto);
+		echo file_get_contents(PHOTOS_PATH . $pasfoto);
 	}
 }

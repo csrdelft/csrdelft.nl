@@ -49,7 +49,7 @@ class Foto extends Afbeelding {
 
 	public function __construct($filename = null, FotoAlbum $album = null, $parse = false) {
 		if ($filename === true) { // called from PersistenceModel
-			$this->directory = PICS_PATH . $this->subdir;
+			$this->directory = PHOTOS_PATH . $this->subdir;
 		} elseif ($album !== null) {
 			$this->filename = $filename;
 			$this->directory = $album->path;

@@ -63,13 +63,13 @@ class FotoAlbum extends Map {
 	public function __construct($path = null) {
 		parent::__construct();
 		if ($path === true) { // called from PersistenceModel
-			$this->path = PICS_PATH . $this->subdir;
+			$this->path = PHOTOS_PATH . $this->subdir;
 		} else {
 			if (!endsWith($path, '/')) {
 				$path .= '/';
 			}
 			$this->path = $path;
-			$this->subdir = str_replace(PICS_PATH, '', $this->path);
+			$this->subdir = str_replace(PHOTOS_PATH, '', $this->path);
 		}
 		$this->dirname = basename($this->path);
 	}
@@ -201,7 +201,7 @@ class FotoAlbum extends Map {
 	}
 
 	public function magBekijken() {
-		if (!startsWith($this->path, PICS_PATH . 'fotoalbum/')) {
+		if (!startsWith($this->path, PHOTOS_PATH . 'fotoalbum/')) {
 			return false;
 		}
 		if (LoginModel::mag('P_LEDEN_READ')) {

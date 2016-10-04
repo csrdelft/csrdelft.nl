@@ -561,7 +561,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
 			foreach ($folders as $subfolder) {
 				foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
-					if (file_exists(PICS_PATH . 'pasfoto/' . $subfolder . $this->uid . '.' . $validExtension)) {
+					if (file_exists(PHOTOS_PATH . 'pasfoto/' . $subfolder . $this->uid . '.' . $validExtension)) {
 						$path = 'pasfoto/' . $subfolder . $this->uid . '.' . $validExtension;
 						break;
 					}
@@ -580,8 +580,8 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		// als het vierkant moet, kijken of de vierkante bestaat, en anders maken
 		if ($vierkant) {
 			$crop = 'pasfoto/' . $this->uid . '.vierkant.png';
-			if (!file_exists(PICS_PATH . $crop)) {
-				square_crop(PICS_PATH . $path, PICS_PATH . $crop, 150);
+			if (!file_exists(PHOTOS_PATH . $crop)) {
+				square_crop(PHOTOS_PATH . $path, PHOTOS_PATH . $crop, 150);
 			}
 			return $crop;
 		}

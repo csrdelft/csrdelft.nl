@@ -342,7 +342,7 @@ class ProfielForm extends Formulier {
 		if (!$inschrijven) {
 			$fields[] = new Subkopje('Duckstad');
 			$fields[] = new DuckField('duckname', $profiel->duckname);
-			$duckfoto = new Afbeelding(PICS_PATH . $profiel->getPasfotoPath(false, 'Duckstad'));
+			$duckfoto = new Afbeelding(PHOTOS_PATH . $profiel->getPasfotoPath(false, 'Duckstad'));
 			if (!$duckfoto->exists() OR strpos($duckfoto->directory, '/Duckstad/') === false) {
 				$duckfoto = null;
 			}

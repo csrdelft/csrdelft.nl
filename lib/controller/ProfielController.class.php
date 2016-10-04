@@ -120,7 +120,7 @@ class ProfielController extends AclController {
 				$filename = $duckfoto->getModel()->filename;
 				if ($filename !== 'eend.jpg') {
 					$ext = '.' . pathinfo($filename, PATHINFO_EXTENSION);
-					$duckfoto->opslaan(PICS_PATH . 'pasfoto/Duckstad/', $profiel->uid . $ext, true);
+					$duckfoto->opslaan(PHOTOS_PATH . 'pasfoto/Duckstad/', $profiel->uid . $ext, true);
 				}
 			}
 

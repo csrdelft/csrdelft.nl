@@ -72,15 +72,15 @@ class LedenMemoryView extends CompressedLayout {
 	private function getPasfotoPath($uid) {
 		$pasfoto = 'pasfoto/geen-foto.jpg';
 		foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
-			if (file_exists(PICS_PATH . 'pasfoto/' . $uid . '.' . $validExtension)) {
+			if (file_exists(PHOTOS_PATH . 'pasfoto/' . $uid . '.' . $validExtension)) {
 				$pasfoto = 'pasfoto/' . $uid . '.' . $validExtension;
 				break;
 			}
 		}
 		// kijken of de vierkante bestaat, en anders maken.
-		$vierkant = PICS_PATH . 'pasfoto/' . $uid . '.vierkant.png';
+		$vierkant = PHOTOS_PATH . 'pasfoto/' . $uid . '.vierkant.png';
 		if (!file_exists($vierkant)) {
-			square_crop(PICS_PATH . $pasfoto, $vierkant, 150);
+			square_crop(PHOTOS_PATH . $pasfoto, $vierkant, 150);
 		}
 		return CSR_ROOT . '/plaetjes/pasfoto/' . $uid . '.vierkant.png';
 	}

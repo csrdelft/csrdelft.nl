@@ -60,7 +60,7 @@ class FotoAlbumController extends AclController {
 			$album = $this->model->getFotoAlbum(end($path));
 		}
 		if (!$album) {
-			$path = PICS_PATH . urldecode(implode('/', $path));
+			$path = PHOTOS_PATH . urldecode(implode('/', $path));
 			if ($this->action === 'download') {
 				parent::performAction(array($path));
 				return;

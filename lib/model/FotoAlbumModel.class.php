@@ -123,7 +123,7 @@ HTML;
 	}
 
 	public function getMostRecentFotoAlbum() {
-		$album = $this->getFotoAlbum(PICS_PATH . 'fotoalbum/');
+		$album = $this->getFotoAlbum(PHOTOS_PATH . 'fotoalbum/');
 		if (!$album) {
 			return null;
 		}
@@ -136,25 +136,25 @@ HTML;
 		}
 		// controleer rechten
 		$oldDir = $album->subdir;
-		if (false === @chmod(PICS_PATH . $oldDir, 0755)) {
-			throw new Exception('Geen eigenaar van album: ' . htmlspecialchars(PICS_PATH . $oldDir));
+		if (false === @chmod(PHOTOS_PATH . $oldDir, 0755)) {
+			throw new Exception('Geen eigenaar van album: ' . htmlspecialchars(PHOTOS_PATH . $oldDir));
 		}
 
 		// nieuwe subdir op basis van path
 		$newDir = dirname($oldDir) . '/' . $newName . '/';
-		if (false === @rename($album->path, PICS_PATH . $newDir)) {
+		if (false === @rename($album->path, PHOTOS_PATH . $newDir)) {
 			$error = error_get_last();
 			throw new Exception($error['message']);
 		}
 		// controleer rechten
-		if (false === @chmod(PICS_PATH . $newDir, 0755)) {
-			throw new Exception('Geen eigenaar van album: ' . htmlspecialchars(PICS_PATH . $newDir));
+		if (false === @chmod(PHOTOS_PATH . $newDir, 0755)) {
+			throw new Exception('Geen eigenaar van album: ' . htmlspecialchars(PHOTOS_PATH . $newDir));
 		}
 
 		// database in sync houden
 		$album->dirname = basename($newDir);
 		$album->subdir = $newDir;
-		$album->path = PICS_PATH . $newDir;
+		$album->path = PHOTOS_PATH . $newDir;
 
 		foreach ($this->find('subdir LIKE ?', array($oldDir . '%')) as $subdir) {
 			// updaten gaat niet vanwege primary key
@@ -175,7 +175,7 @@ HTML;
 				FotoTagsModel::instance()->create($tag);
 			}
 		}
-		if (false === @rmdir(PICS_PATH . $oldDir)) {
+		if (false === @rmdir(PHOTOS_PATH . $oldDir)) {
 			$error = error_get_last();
 			setMelding($error['message'], -1);
 		}

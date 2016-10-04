@@ -32,6 +32,7 @@ define('CSR_DOMAIN', 'dev.csrdelft.nl');
 
 # urls ZONDER trailing slash
 define('CSR_ROOT', 'http://' . CSR_DOMAIN . ':8080');
+define('ASSETS_DIR', CSR_ROOT . '/assets');
 
 # JWT secret key for API
 define('JWT_SECRET', 'BjG\0_;,OY5k)w-frmSpgleH"*^6Q_t{M=uh.<:nH8n<Xrs!FZY=TGhi}{)B"Wa');
@@ -47,8 +48,8 @@ define('SESSION_PATH', BASE_PATH . 'sessie/');
 define('TMP_PATH', BASE_PATH . 'tmp/');
 define('LIB_PATH', BASE_PATH . 'lib/');
 define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
-define('PICS_PATH', HTDOCS_PATH . 'plaetjes/');
-define('ICON_PATH', PICS_PATH . 'famfamfam/');
+define('ASSETS_PATH', HTDOCS_PATH . 'assets/');
+define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
 
 # smarty template engine
