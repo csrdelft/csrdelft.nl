@@ -1,7 +1,7 @@
 <!-- Banner -->
 <section id="banner">
     <div class="inner">
-        <img src="/plaetjes/layout-extern/Logo.svg">
+        <img src="/assets/layout-extern/plaetjes/Logo.svg">
     </div>
 </section>
 
@@ -11,7 +11,7 @@
     <!-- Vereniging -->
     <section class="wrapper spotlight kleur2">
         <div class="inner">
-            <span class="image"><img src="/plaetjes/layout-extern/vereniging.jpg" alt=""/></span>
+            <span class="image"><img src="/assets/layout-extern/plaetjes/vereniging.jpg" alt=""/></span>
             <div class="content">
                 <h2 class="major">C.S.R. Delft</h2>
                 <p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
@@ -29,7 +29,7 @@
     <!-- Interesse -->
     <section class="wrapper alt kleur1">
         <div class="inner">
-            <span class="image"><img src="/plaetjes/layout-extern/OC.jpg" alt=""/></span>
+            <span class="image"><img src="/assets/layout-extern/plaetjes/OC.jpg" alt=""/></span>
             <div class="content">
                 <h2 class="major">Interesse/vragen</h2>
                 <p>Uiteraard ben je welkom om tijdens de OWee langs te komen op onze sociëteit Confide aan de Oude Delft
@@ -126,24 +126,18 @@
             <ul class="copyright">
                 <li><a href="https://dosign.nl/"><img src="https://csrdelft.nl/plaetjes/banners/dosign.gif"
                                                       alt="Dosignadvertentie"></a></li>
-                <br>
                 <li><a href="http://mechdes.nl/"><img src="https://csrdelft.nl/plaetjes/banners/mechdes.gif"
                                                       alt="Mechdesadvertentie"></a></li>
-                <br>
                 <li><a href="https://goedkoopprinten.nl/"><img
                                 src="https://csrdelft.nl/plaetjes/banners/goedkoopprinten-banner-234x60.gif"
                                 alt="Goedkoopprintenadvertentie"></a></li>
-                <br>
                 <li><a href="http://galjemadetachering.nl/"><img
                                 src="https://csrdelft.nl/plaetjes/banners/galjema_banner.jpg" alt="Galjemaadvertentie">
                 </li>
-                <br>
                 <li><a href="http://stcgroep.nl/"><img src="https://csrdelft.nl/plaetjes/banners/STC-groep-banner.gif"
                                                        alt="STC-advertentie"></a></li>
-                <br>
                 <li><a href="http://zoover.nl/"><img src="https://csrdelft.nl/plaetjes/banners/Zoover.jpg"
                                                      alt="Zooveradvertentie"></a></li>
-                <br>
                 <li><a href="https://www.maxilia.nl/banners-drukken/"><img
                                 src="https://csrdelft.nl/plaetjes/banners/maxilia.png"
                                 alt="Maxiliaadvertentie"/></a></li>

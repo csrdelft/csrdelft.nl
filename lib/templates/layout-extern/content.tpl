@@ -2,7 +2,7 @@
 <!-- Banner -->
 <section id="banner-small">
     <div class="inner">
-        <a href="/"><img src="/plaetjes/layout-extern/Logo.svg"></a>
+        <a href="/"><img src="/assets/layout-extern/plaetjes/Logo.svg"></a>
     </div>
 </section>
 
