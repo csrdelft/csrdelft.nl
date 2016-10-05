@@ -54,14 +54,15 @@ class MaalcieRouterController extends AclController {
 		}
 	}
 
-	protected function geentoegang() {
+	protected function exit_http($response_code) {
+		if ($this->getMethod() == 'POST') {
+			parent::exit_http($response_code);
+		}
 		require_once 'model/CmsPaginaModel.class.php';
 		require_once 'view/CmsPaginaView.class.php';
-		if ($this->getMethod() == 'POST') {
-			parent::geentoegang();
-		}
 		$body = new CmsPaginaView(CmsPaginaModel::get('maaltijden'));
 		$this->view = new CsrLayoutPage($body);
+		exit;
 	}
 
 	public function maaltijdenketzer() {

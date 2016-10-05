@@ -414,13 +414,13 @@ class BibliotheekController extends Controller {
 
 			$this->view = new JsonResponse(BiebCatalogus::getAutocompleteSuggesties($this->getParam(3), $zoekterm, $categorie));
 		} else {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 	}
 
 	protected function zoeken() {
 		if (!$this->hasParam('q')) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$zoekterm = $this->getParam('q');
 		$categorie = 0;

@@ -100,7 +100,7 @@ class LidZoeker {
 			}
 			# we zoeken in nobodies als
 			# de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if (LoginModel::mag('P_LEDEN_MOD') and $zoekstatus === 'nobodies') {
+			if ($zoekstatus === 'nobodies' and LoginModel::mag('P_LEDEN_MOD')) {
 				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
 				$statusfilter = "status='S_NOBODY' OR status='S_EXLID'";
 			}

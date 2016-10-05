@@ -60,7 +60,7 @@ class RechtenController extends AclController {
 	public function wijzigen() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (!isset($selection[0])) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$ac = $this->model->retrieveByUUID($selection[0]);
 		$form = new RechtenForm($ac, $this->action);

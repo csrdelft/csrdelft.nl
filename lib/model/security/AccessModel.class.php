@@ -26,12 +26,17 @@ class AccessModel extends CachedPersistenceModel {
 	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
-	private static $prefix = array('ACTIVITEIT', 'BESTUUR', 'COMMISSIE', 'GROEP', 'KETZER', 'ONDERVERENIGING', 'WERKGROEP', 'WOONOORD', 'VERTICALE', 'KRING', 'GESLACHT', 'LICHTING', 'LIDJAAR', 'OUDEREJAARS', 'EERSTEJAARS', 'MAALTIJD');
+	private static $prefix = array('ACTIVITEIT', 'BESTUUR', 'COMMISSIE', 'GROEP', 'KETZER', 'ONDERVERENIGING', 'WERKGROEP', 'WOONOORD', 'VERTICALE', 'KRING', 'GESLACHT', 'STATUS', 'LICHTING', 'LIDJAAR', 'OUDEREJAARS', 'EERSTEJAARS', 'MAALTIJD', 'KWALIFICATIE');
 	/**
 	 * Gebruikt om ledengegevens te raadplegen
 	 * @var array
 	 */
-	private static $ledengegevens = array('P_LEDEN_READ', 'P_OUDLEDEN_READ', 'P_LEDEN_MOD');
+	private static $ledenRead = array('P_LEDEN_READ', 'P_OUDLEDEN_READ');
+	/**
+	 * Gebruikt om ledengegevens te wijzigen
+	 * @var type array
+	 */
+	private static $ledenWrite = array('P_PROFIEL_EDIT', 'P_LEDEN_MOD');
 	/**
 	 * Standaard toegestane authenticatie methoden
 	 * @var array
@@ -224,7 +229,33 @@ class AccessModel extends CachedPersistenceModel {
 		return $suggestions;
 	}
 
-	public function isValidPerm($permission) {
+	/**
+	 * Get error(s) in permission string, if any.
+	 *
+	 * @param type $permissions
+	 * @return array empty if no errors; substring(s) of $permissions containing error(s) otherwise
+	 */
+	public function getPermissionStringErrors($permissions) {
+		$errors = array();
+		// OR
+		$or = explode(',', $permissions);
+		foreach ($or as $and) {
+			// AND
+			$and = explode('+', $and);
+			foreach ($and as $or2) {
+				// OR (secondary)
+				$or2 = explode('|', $or2);
+				foreach ($or2 as $perm) {
+					if (!$this->isValidPermission($perm)) {
+						$errors[] = $perm;
+					}
+				}
+			}
+		}
+		return $errors;
+	}
+
+	public function isValidPermission($permission) {
 		// case insensitive
 		$permission = strtoupper($permission);
 
@@ -287,13 +318,12 @@ class AccessModel extends CachedPersistenceModel {
 		$this->permissions = array(
 			'P_PUBLIC'			 => $this->createPermStr(0, 0), // Iedereen op het Internet
 			'P_LOGGED_IN'		 => $this->createPermStr(0, 1), // Eigen profiel raadplegen
-			'P_PROFIEL_EDIT'	 => $this->createPermStr(0, 1 + 2), // Eigen gegevens aanpassen
-			'P_ALLEEN_OUDLID'	 => $this->createPermStr(0, 4), // Specifiek voor oudleden [[let op: niet cumulatief]]
-			'P_ADMIN'			 => $this->createPermStr(0, 1 + 2 + 4 + 8), // Super-admin
+			'P_ADMIN'			 => $this->createPermStr(0, 1 + 2), // Super-admin
 			'P_VERJAARDAGEN'	 => $this->createPermStr(1, 1), // Verjaardagen van leden zien
-			'P_LEDEN_READ'		 => $this->createPermStr(1, 1 + 2), // Gegevens van leden raadplegen
-			'P_OUDLEDEN_READ'	 => $this->createPermStr(1, 1 + 2 + 4), // Gegevens van oudleden raadplegen
-			'P_LEDEN_MOD'		 => $this->createPermStr(1, 1 + 2 + 4 + 8), // (Oud)ledengegevens aanpassen
+			'P_PROFIEL_EDIT'	 => $this->createPermStr(1, 1 + 2), // Eigen gegevens aanpassen
+			'P_LEDEN_READ'		 => $this->createPermStr(1, 1 + 2 + 4), // Gegevens van leden raadplegen
+			'P_OUDLEDEN_READ'	 => $this->createPermStr(1, 1 + 2 + 4 + 8), // Gegevens van oudleden raadplegen
+			'P_LEDEN_MOD'		 => $this->createPermStr(1, 1 + 2 + 4 + 8 + 16), // (Oud)ledengegevens aanpassen
 			'P_FORUM_READ'		 => $this->createPermStr(2, 1), // Forum lezen
 			'P_FORUM_POST'		 => $this->createPermStr(2, 1 + 2), // Berichten plaatsen op het forum en eigen berichten wijzigen
 			'P_FORUM_MOD'		 => $this->createPermStr(2, 1 + 2 + 4), // Forum-moderator mag berichten van anderen wijzigen of verwijderen
@@ -343,12 +373,10 @@ class AccessModel extends CachedPersistenceModel {
 
 		$this->roles[AccessRole::Nobody] = $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'] | $p['P_ALBUM_READ'];
 		$this->roles[AccessRole::Eter] = $this->roles[AccessRole::Nobody] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
-
-		$this->roles[AccessRole::Lid] = $p['P_PROFIEL_EDIT'] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_AGENDA_READ'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_MAAL_IK'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_ADD'] | $p['P_PEILING_VOTE'];
-		$this->roles[AccessRole::Oudlid] = $this->roles[AccessRole::Lid] | $p['P_ALLEEN_OUDLID'];
-		$this->roles[AccessRole::BASFCie] = $this->roles[AccessRole::Lid] | $p['P_DOCS_MOD'] | $p['P_ALBUM_DEL'] | $p['P_BIEB_MOD'] | $p['P_PEILING_MOD'];
+		$this->roles[AccessRole::Lid] = $this->roles[AccessRole::Eter] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_ADD'] | $p['P_PEILING_VOTE'];
+		$this->roles[AccessRole::Oudlid] = $this->roles[AccessRole::Lid];
 		$this->roles[AccessRole::MaalCie] = $this->roles[AccessRole::Lid] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
-
+		$this->roles[AccessRole::BASFCie] = $this->roles[AccessRole::Lid] | $p['P_DOCS_MOD'] | $p['P_ALBUM_DEL'] | $p['P_BIEB_MOD'] | $p['P_PEILING_MOD'];
 		$this->roles[AccessRole::Bestuur] = $this->roles[AccessRole::BASFCie] | $this->roles[AccessRole::MaalCie] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_ALBUM_DEL'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
 		$this->roles[AccessRole::PubCie] = $this->roles[AccessRole::Bestuur] | $p['P_ADMIN'] | $p['P_MAIL_SEND'] | $p['P_CORVEE_SCHED'] | $p['P_FORUM_ADMIN'];
 
@@ -439,9 +467,11 @@ class AccessModel extends CachedPersistenceModel {
 
 	private function mandatoryAccessControl(Account $subject, $permission) {
 
-		if (isset($_SESSION['password_unsafe']) AND in_array_i($permission, self::$ledengegevens)) {
-			setMelding('U mag geen ledengegevens opvragen want uw wachtwoord is onveilig', 2);
-			return false;
+		if (isset($_SESSION['password_unsafe'])) {
+			if (in_array_i($permission, self::$ledenRead) OR in_array_i($permission, self::$ledenWrite)) {
+				setMelding('U mag geen ledengegevens opvragen want uw wachtwoord is onveilig', 2);
+				return false;
+			}
 		}
 
 		// zoek de rechten van de gebruiker op
@@ -533,12 +563,26 @@ class AccessModel extends CachedPersistenceModel {
 			 * Is lid man of vrouw?
 			 */
 			case 'GESLACHT':
-
 				if ($gevraagd == strtoupper($profiel->geslacht)) {
 					// Niet ingelogd heeft geslacht m dus check of ingelogd
 					if ($this->hasPermission($subject, 'P_LOGGED_IN')) {
 						return true;
 					}
+				}
+
+				return false;
+
+			/**
+			 * Heeft lid status?
+			 */
+			case 'STATUS':
+				$gevraagd = 'S_' . $gevraagd;
+				if ($gevraagd == $profiel->status) {
+					return true;
+				} elseif ($gevraagd == LidStatus::Lid AND LidStatus::isLidLike($profiel->status)) {
+					return true;
+				} elseif ($gevraagd == LidStatus::Oudlid AND LidStatus::isOudlidLike($profiel->status)) {
+					return true;
 				}
 
 				return false;
@@ -707,7 +751,27 @@ class AccessModel extends CachedPersistenceModel {
 						// Maaltijd bestaat niet
 					}
 				}
-			// fall through
+
+				return false;
+
+			/**
+			 * Heeft een lid een kwalficatie voor een functie in het covee-systeem?
+			 */
+			case 'KWALIFICATIE':
+				require_once 'model/maalcie/FunctiesModel.class.php';
+
+				if (is_numeric($gevraagd)) {
+					$functie_id = (int) $gevraagd;
+				} else {
+					$functie = FunctiesModel::instance()->prefetch('afkorting = ? OR naam = ?', array($gevraagd, $gevraagd), null, null, 1);
+					if (isset($functie[0])) {
+						$functie_id = $functie[0]->functie_id;
+					} else {
+						return false;
+					}
+				}
+
+				return KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($profiel->uid, $functie_id);
 		}
 		return false;
 	}

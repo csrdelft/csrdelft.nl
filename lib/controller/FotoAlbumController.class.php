@@ -225,7 +225,7 @@ class FotoAlbumController extends AclController {
 
 	public function hernoemen(FotoAlbum $album) {
 		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $album->isOwner()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
 		if ($album !== null AND $this->model->hernoemAlbum($album, $naam)) {
@@ -237,7 +237,7 @@ class FotoAlbumController extends AclController {
 
 	public function albumcover(FotoAlbum $album) {
 		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $album->isOwner()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$cover = new Foto($filename, $album);
@@ -262,7 +262,7 @@ class FotoAlbumController extends AclController {
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
 		if (!$foto->exists() OR ! LoginModel::mag('P_ALBUM_DEL') AND ! $foto->isOwner()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		if (FotoModel::instance()->verwijderFoto($foto)) {
 			echo '<div id="' . md5($filename) . '" class="remove"></div>';
@@ -276,7 +276,7 @@ class FotoAlbumController extends AclController {
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
 		if (!$foto->exists() OR ! LoginModel::mag('P_ALBUM_MOD') AND ! $foto->isOwner()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$degrees = (int) filter_input(INPUT_POST, 'rotation', FILTER_SANITIZE_NUMBER_INT);
 		$foto->rotate($degrees);
@@ -285,7 +285,7 @@ class FotoAlbumController extends AclController {
 
 	public function zoeken() {
 		if (!$this->hasParam('q')) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$query = iconv('utf-8', 'ascii//TRANSLIT', $this->getParam('q')); // convert accented characters to regular 
 		$limit = 5;
@@ -307,7 +307,7 @@ class FotoAlbumController extends AclController {
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
 		if (!$foto->exists()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		// return all tags
 		$tags = FotoTagsModel::instance()->getTags($foto);
@@ -318,7 +318,7 @@ class FotoAlbumController extends AclController {
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
 		if (!$foto->exists()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$formulier = new FotoTagToevoegenForm($foto);
 		if ($this->getMethod() == 'POST' AND $formulier->validate()) {
@@ -339,7 +339,7 @@ class FotoAlbumController extends AclController {
 		$refuuid = filter_input(INPUT_POST, 'refuuid', FILTER_SANITIZE_STRING);
 		$keyword = filter_input(INPUT_POST, 'keyword', FILTER_SANITIZE_STRING);
 		if (!LoginModel::mag('P_ALBUM_MOD') AND ! LoginModel::mag($keyword)) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		FotoTagsModel::instance()->removeTag($refuuid, $keyword);
 		$foto = FotoModel::instance()->retrieveByUUID($refuuid);

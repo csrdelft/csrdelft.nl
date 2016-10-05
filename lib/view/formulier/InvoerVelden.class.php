@@ -234,7 +234,7 @@ abstract class InputField implements FormElement, Validator {
 			}
 			$help = '';
 			if ($this->title) {
-				$help = '<div class="help" onclick="alert(\'' . addslashes($this->title) . '\');">'.Icon::getTag('help', null, null, 'icon hoverIntentContent').'</div>';
+				$help = '<div class="help" onclick="alert(\'' . addslashes($this->title) . '\');">' . Icon::getTag('help', null, null, 'icon hoverIntentContent') . '</div>';
 			}
 			return '<label for="' . $this->getId() . '">' . $help . $this->description . $required . '</label>';
 		}
@@ -675,23 +675,10 @@ class RechtenField extends TextField {
 		if ($this->value == '') {
 			return true;
 		}
-		$error = array();
-		// OR
-		$or = explode(',', $this->value);
-		foreach ($or as $and) {
-			// AND
-			$and = explode('+', $and);
-			foreach ($and as $or2) {
-				// OR (secondary)
-				$or2 = explode('|', $or2);
-				foreach ($or2 as $perm) {
-					if (!AccessModel::instance()->isValidPerm($perm)) {
-						$error[] = 'Ongeldig: "' . $perm . '"';
-					}
-				}
-			}
+		$errors = AccessModel::instance()->getPermissionStringErrors($this->value);
+		if (!empty($errors)) {
+			$this->error = 'Ongeldig: "' . implode('" & "', $errors) . '"';
 		}
-		$this->error = implode(' & ', $error);
 		return $this->error === '';
 	}
 

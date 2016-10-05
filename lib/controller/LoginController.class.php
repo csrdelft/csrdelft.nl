@@ -47,14 +47,15 @@ class LoginController extends AclController {
 		parent::performAction($this->getParams(2));
 	}
 
-	protected function geentoegang() {
+	protected function exit_http($response_code) {
+		if ($this->getMethod() == 'POST') {
+			parent::exit_http($response_code);
+		}
 		require_once 'model/CmsPaginaModel.class.php';
 		require_once 'view/CmsPaginaView.class.php';
-		if ($this->getMethod() == 'POST') {
-			parent::geentoegang();
-		}
 		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
 		$this->view = new CsrLayoutPage($body);
+		exit;
 	}
 
 	public function login() {
@@ -131,8 +132,7 @@ class LoginController extends AclController {
 	}
 
 	public function accountaanvragen() {
-		$this->geentoegang();
-		return;
+		$this->exit_http(403);
 	}
 
 	public function account($uid = null, $delete = null) {
@@ -141,9 +141,13 @@ class LoginController extends AclController {
 		}
 		// aanvragen
 		if ($uid === 'x999') {
-			return $this->aanvragen();
+			return $this->accountaanvragen();
 		}
 		// bewerken
+		if (LoginModel::instance()->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
+			setMelding('U mag geen account wijzigen want u bent niet recent met wachtwoord ingelogd', 2);
+			$this->exit_http(403);
+		}
 		$account = AccountModel::get($uid);
 		if (!$account AND LoginModel::mag('P_ADMIN')) {
 			$account = AccountModel::instance()->maakAccount($uid);
@@ -218,9 +222,9 @@ class LoginController extends AclController {
 				if ($account AND AccessModel::mag($account, 'P_PROFIEL_EDIT') AND mb_strtolower($account->email) === mb_strtolower($values['mail'])) {
 					$token = OneTimeTokensModel::instance()->createToken($account->uid, '/wachtwoord/reset');
 					// stuur resetmail
-                    $civitasnaam = $account->getProfiel()->getNaam('civitas');
-                    // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
-                    // Dit zorgt voor een • in het 'aan' veld van de mail, sommige spamfilters gaan hiervan over hun nek
+					$civitasnaam = $account->getProfiel()->getNaam('civitas');
+					// Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
+					// Dit zorgt voor een • in het 'aan' veld van de mail, sommige spamfilters gaan hiervan over hun nek
 					$lidnaam = $account->getProfiel()->getNaam('volledig', true);
 					require_once 'model/entity/Mail.class.php';
 					$bericht = "Geachte " . $civitasnaam .
@@ -268,7 +272,7 @@ class LoginController extends AclController {
 			$session = $this->model->find('session_hash = ? AND uid = ?', array($session_hash, LoginModel::getUid()), null, null, 1)->fetch();
 		}
 		if (!$session) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$deleted = $this->model->delete($session);
 		$this->view = new RemoveRowsResponse(array($session), $deleted === 1 ? 200 : 404);
@@ -277,13 +281,13 @@ class LoginController extends AclController {
 	public function loginlockip() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (!$selection) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$response = array();
 		foreach ($selection as $UUID) {
 			$remember = RememberLoginModel::instance()->retrieveByUUID($UUID);
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
-				$this->geentoegang();
+				$this->exit_http(403);
 			}
 			$remember->lock_ip = !$remember->lock_ip;
 			RememberLoginModel::instance()->update($remember);
@@ -304,7 +308,7 @@ class LoginController extends AclController {
 			$remember = RememberLoginModel::instance()->nieuw();
 		}
 		if (!$remember OR $remember->uid !== LoginModel::getUid()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$form = new RememberLoginForm($remember);
 		if ($form->validate()) {
@@ -331,13 +335,13 @@ class LoginController extends AclController {
 	public function loginforget() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (!$selection) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$response = array();
 		foreach ($selection as $UUID) {
 			$remember = RememberLoginModel::instance()->retrieveByUUID($UUID);
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
-				$this->geentoegang();
+				$this->exit_http(403);
 			}
 			RememberLoginModel::instance()->delete($remember);
 			$response[] = $remember;

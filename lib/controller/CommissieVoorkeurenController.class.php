@@ -42,7 +42,7 @@ class CommissieVoorkeurenController extends AclController {
 
 	public function lidpagina($uid = -1) {
 		if (!ProfielModel::existsUid($uid)) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		if (isset($_POST['opmerkingen'])) {
 			$voorkeur = new CommissieVoorkeurenModel($uid);

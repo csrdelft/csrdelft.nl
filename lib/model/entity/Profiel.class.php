@@ -2,7 +2,7 @@
 
 require_once 'model/entity/Geslacht.enum.php';
 require_once 'model/entity/OntvangtContactueel.enum.php';
-require_once 'model/entity/groepen/LidStatus.enum.php';
+require_once 'model/entity/LidStatus.enum.php';
 require_once 'model/entity/Kringleider.enum.php';
 require_once 'ldap.class.php';
 require_once 'model/GroepenModel.abstract.php';
@@ -132,7 +132,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'postcode'				 => array(T::String),
 		'woonplaats'			 => array(T::String),
 		'land'					 => array(T::String),
-        'mobiel'				 => array(T::String),
+		'mobiel'				 => array(T::String),
 		'telefoon'				 => array(T::String, true),
 		'o_adres'				 => array(T::String, true),
 		'o_postcode'			 => array(T::String, true),
@@ -148,7 +148,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'linkedin'				 => array(T::String, true),
 		'website'				 => array(T::String, true),
 		// studie
-        //RequiredStudieField bestaat niet, dus mag NULL zijn (voor de duidelijkheid naar gebruiker)
 		'studie'				 => array(T::String, true),
 		'studienr'				 => array(T::Integer, true),
 		'studiejaar'			 => array(T::Integer, true),
@@ -170,18 +169,18 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'corvee_punten'			 => array(T::Integer, true),
 		'corvee_punten_bonus'	 => array(T::Integer, true),
 		'soccieID'				 => array(T::Integer, true),
-        'createTerm'			 => array(T::String, true),
+		'createTerm'			 => array(T::String, true),
 		'soccieSaldo'			 => array(T::Float, true),
 		'maalcieSaldo'			 => array(T::Float, true),
-        // Persoonlijk
-        'eetwens'				 => array(T::String, true),
-        'lengte'				 => array(T::Integer),
-        'ovkaart'				 => array(T::String),
-        'kerk'					 => array(T::String, true),
-        'muziek'				 => array(T::String, true),
-        'zingen'				 => array(T::String, true),
-        'vrienden'				 => array(T::Text, true),
-        'middelbareSchool'		 => array(T::String),
+		// Persoonlijk
+		'eetwens'				 => array(T::String, true),
+		'lengte'				 => array(T::Integer),
+		'ovkaart'				 => array(T::String),
+		'kerk'					 => array(T::String, true),
+		'muziek'				 => array(T::String, true),
+		'zingen'				 => array(T::String, true),
+		'vrienden'				 => array(T::Text, true),
+		'middelbareSchool'		 => array(T::String),
 		// novitiaat
 		'novitiaat'				 => array(T::Text),
 		'novitiaatBijz'			 => array(T::Text, true),
@@ -605,11 +604,11 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function isLid() {
-		return LidStatus::isLid($this->status);
+		return LidStatus::isLidLike($this->status);
 	}
 
 	public function isOudlid() {
-		return LidStatus::isOudlid($this->status);
+		return LidStatus::isOudlidLike($this->status);
 	}
 
 	public function getWoonoord() {

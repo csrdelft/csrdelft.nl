@@ -276,7 +276,7 @@ class ForumController extends Controller {
 	public function deel($forum_id, $pagina = 1) {
 		$deel = ForumDelenModel::get((int) $forum_id);
 		if (!$deel->magLezen()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$paging = true;
 		if ($pagina === 'laatste') {
@@ -302,7 +302,7 @@ class ForumController extends Controller {
 	public function onderwerp($draad_id, $pagina = null, $statistiek = null) {
 		$draad = ForumDradenModel::get((int) $draad_id);
 		if (!$draad->magLezen()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			$gelezen = $draad->getWanneerGelezen();
@@ -508,19 +508,19 @@ class ForumController extends Controller {
 		$draad = ForumDradenModel::get((int) $draad_id);
 		// gedeelde moderators mogen dit niet
 		if (!$draad->getForumDeel()->magModereren()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'eerste_post_plakkerig', 'pagina_per_post'))) {
 			$value = !$draad->$property;
 			if ($property === 'belangrijk' AND ! LoginModel::mag('P_FORUM_BELANGRIJK')) {
-				$this->geentoegang();
+				$this->exit_http(403);
 			}
 		} elseif ($property === 'forum_id' OR $property === 'gedeeld_met') {
 			$value = (int) filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
 			if ($property === 'forum_id') {
 				$deel = ForumDelenModel::get($value);
 				if (!$deel->magModereren()) {
-					$this->geentoegang();
+					$this->exit_http(403);
 				}
 			} elseif ($value === 0) {
 				$value = null;
@@ -531,7 +531,7 @@ class ForumController extends Controller {
 				$value = null;
 			}
 		} else {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
 		if (is_bool($value)) {
@@ -562,13 +562,13 @@ class ForumController extends Controller {
 
 			// check draad in forum deel
 			if (!$draad OR $draad->forum_id !== $deel->forum_id OR ! $draad->magPosten()) {
-				$this->geentoegang();
+				$this->exit_http(403);
 			}
 			$url = '/forum/onderwerp/' . $draad->draad_id;
 			$nieuw = false;
 		} else {
 			if (!$deel->magPosten()) {
-				$this->geentoegang();
+				$this->exit_http(403);
 			}
 			$url = '/forum/deel/' . $deel->forum_id;
 			$nieuw = true;
@@ -583,7 +583,7 @@ class ForumController extends Controller {
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
 		if (!empty($spamtrap) OR $filter->isSpam($tekst) OR ( isset($titel) AND $filter->isSpam($titel) )) { //TODO: logging
 			setMelding('SPAM', -1);
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 
 		// voorkom dubbelposts
@@ -619,7 +619,7 @@ class ForumController extends Controller {
 			}
 			if ($filter->isSpam($mailadres)) { //TODO: logging
 				setMelding('SPAM', -1);
-				$this->geentoegang();
+				$this->exit_http(403);
 			}
 		}
 
@@ -684,7 +684,7 @@ class ForumController extends Controller {
 	public function citeren($post_id) {
 		$post = ForumPostsModel::get((int) $post_id);
 		if (!$post->magCiteren()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		echo ForumPostsModel::instance()->citeerForumPost($post);
 		exit; //TODO: JsonResponse
@@ -693,7 +693,7 @@ class ForumController extends Controller {
 	public function tekst($post_id) {
 		$post = ForumPostsModel::get((int) $post_id);
 		if (!$post->magBewerken()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		echo $post->tekst;
 		exit; //TODO: JsonResponse
@@ -702,7 +702,7 @@ class ForumController extends Controller {
 	public function bewerken($post_id) {
 		$post = ForumPostsModel::get((int) $post_id);
 		if (!$post->magBewerken()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
@@ -715,12 +715,12 @@ class ForumController extends Controller {
 		$post = ForumPostsModel::get((int) $post_id);
 		$oudDraad = $post->getForumDraad();
 		if (!$oudDraad->magModereren()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
 		$nieuwDraad = ForumDradenModel::get((int) $nieuw);
 		if (!$nieuwDraad->magModereren()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		ForumPostsModel::instance()->verplaatsForumPost($nieuwDraad, $post);
 		ForumPostsModel::instance()->goedkeurenForumPost($post);
@@ -730,7 +730,7 @@ class ForumController extends Controller {
 	public function verwijderen($post_id) {
 		$post = ForumPostsModel::get((int) $post_id);
 		if (!$post->getForumDraad()->magModereren()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		ForumPostsModel::instance()->verwijderForumPost($post);
 		$this->view = new ForumPostDeleteView($post->post_id);
@@ -739,7 +739,7 @@ class ForumController extends Controller {
 	public function offtopic($post_id) {
 		$post = ForumPostsModel::get((int) $post_id);
 		if (!$post->getForumDraad()->magModereren()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		ForumPostsModel::instance()->offtopicForumPost($post);
 		$this->view = new ForumPostView($post);
@@ -748,7 +748,7 @@ class ForumController extends Controller {
 	public function goedkeuren($post_id) {
 		$post = ForumPostsModel::get((int) $post_id);
 		if (!$post->getForumDraad()->magModereren()) {
-			$this->geentoegang();
+			$this->exit_http(403);
 		}
 		ForumPostsModel::instance()->goedkeurenForumPost($post);
 		$this->view = new ForumPostView($post);
@@ -769,7 +769,7 @@ class ForumController extends Controller {
 			$draad_id = $draad->draad_id;
 			// check draad in forum deel
 			if (!$draad OR $draad->forum_id !== $deel->forum_id OR ! $draad->magPosten()) {
-				$this->geentoegang();
+				$this->exit_http(403);
 			}
 			if (empty($ping)) {
 				ForumDradenReagerenModel::instance()->setConcept($deel, $draad_id, $concept);
@@ -779,7 +779,7 @@ class ForumController extends Controller {
 			$reageren = ForumDradenReagerenModel::instance()->getReagerenVoorDraad($draad);
 		} else {
 			if (!$deel->magPosten()) {
-				$this->geentoegang();
+				$this->exit_http(403);
 			}
 			if (empty($ping)) {
 				ForumDradenReagerenModel::instance()->setConcept($deel, null, $concept, $titel);

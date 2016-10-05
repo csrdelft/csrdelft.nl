@@ -44,7 +44,7 @@ class Barsysteem
 
     function getPersonen()
     {
-        require_once 'model/entity/groepen/LidStatus.enum.php';
+        require_once 'model/entity/LidStatus.enum.php';
         $terug = $this->db->query("SELECT socCieKlanten.stekUID, socCieKlanten.socCieId, socCieKlanten.naam, socCieKlanten.saldo, socCieKlanten.deleted, COUNT(socCieBestelling.totaal) AS recent FROM socCieKlanten LEFT JOIN socCieBestelling ON (socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100 AND socCieBestelling.deleted = 0) GROUP BY socCieKlanten.socCieId;");
         $result = array();
         foreach ($terug as $row) {
