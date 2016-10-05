@@ -78,7 +78,6 @@ input[type=button],
 input[type=submit]:focus,
 input[type=button]:focus {
     background-image: linear-gradient(to bottom, #101d61, #1045be);
-    border: none !important;
 }
 
 /*Voor een mouse hover wordt de gradient omgedraaid*/
@@ -87,12 +86,10 @@ input[type=button]:focus {
 input[type=submit]:hover,
 input[type=button]:hover {
     background-image: linear-gradient(to bottom, #1045be, #101d61);
-    border: none !important;
 }
 
 /*Actieve knoppen in geel gradient -> zo ontstaat verschil tussen hover en active*/
 
 .btn.active {
     background-image: linear-gradient(to bottom, #fec524, #ffd45c);
-    border: none !important;
 }
