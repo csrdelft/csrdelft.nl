@@ -7,7 +7,7 @@ if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 	# geen rechten
 	require_once 'model/CmsPaginaModel.class.php';
 	require_once 'view/CmsPaginaView.class.php';
-	$body = new CmsPaginaView(CmsPaginaModel::get('geentoegang'));
+	$body = new CmsPaginaView(CmsPaginaModel::get('403'));
 	$pagina = new CsrLayoutPage($body);
 	$pagina->view();
 	exit;

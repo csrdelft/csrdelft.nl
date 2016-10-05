@@ -65,7 +65,7 @@ class EetplanController extends AclController {
 	public function noviet($uid = null) {
 	    $eetplan = $this->model->getEetplanVoorNoviet($uid);
         if ($eetplan === false) {
-            $this->geentoegang();
+            $this->exit_http(403);
         }
 		$body = new EetplanNovietView($this->model->getEetplanVoorNoviet($uid), $this->lichting, $uid);
 		$this->view = new CsrLayoutPage($body);
@@ -75,7 +75,7 @@ class EetplanController extends AclController {
 	public function huis($id = null) {
 	    $eetplan = $this->model->getEetplanVoorHuis($id, $this->lichting);
         if ($eetplan === false) {
-            $this->geentoegang();
+            $this->exit_http(403);
         }
 		$body = new EetplanHuisView($this->model->getEetplanVoorHuis($id, $this->lichting), $this->lichting, $id);
 		$this->view = new CsrLayoutPage($body);
@@ -133,7 +133,7 @@ class EetplanController extends AclController {
                 $woonoorden = WoonoordenModel::instance()->find('status = ? AND naam LIKE ?', array(GroepStatus::HT, $huisnaam))->fetchAll();
                 $this->view = new EetplanHuizenResponse($woonoorden);
             } else {
-                $this->geentoegang();
+                $this->exit_http(403);
             }
         }
     }
