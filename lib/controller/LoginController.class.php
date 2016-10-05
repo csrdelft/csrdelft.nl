@@ -55,6 +55,7 @@ class LoginController extends AclController {
 		require_once 'view/CmsPaginaView.class.php';
 		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
 		$this->view = new CsrLayoutPage($body);
+        $this->view->view();
 		exit;
 	}
 
