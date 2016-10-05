@@ -42,6 +42,7 @@
 
     <!-- Loginform -->
     <nav id="login">
+        <a href="#_" class="overlay"></a>
         <div class="inner">
             <h2>Inloggen</h2>
             {$loginform->view()}
@@ -51,6 +52,7 @@
 
     <!-- Menu -->
     <nav id="menu">
+        <a href="#_" class="overlay"></a>
         <div class="inner">
             <h2>Menu</h2>
             <ul class="links">

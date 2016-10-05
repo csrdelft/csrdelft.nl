@@ -185,7 +185,7 @@ abstract class Controller {
 		// Redirect to login form
 		elseif (LoginModel::getUid() === 'x999') {
 			setGoBackCookie(REQUEST_URI);
-			redirect(CSR_ROOT);
+			redirect(CSR_ROOT . "#login");
 		}
 		// GUI 403
 		require_once 'model/CmsPaginaModel.class.php';

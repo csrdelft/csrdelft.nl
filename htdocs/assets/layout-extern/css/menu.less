@@ -3,6 +3,7 @@
 }
 
 #menu, #login {
+  z-index: 9999;
   -moz-align-items: center;
   -webkit-align-items: center;
   -ms-align-items: center;
@@ -100,6 +101,37 @@
           background: #45558d;
         }
       }
+    }
+  }
+
+  &:target {
+
+    -moz-pointer-events: auto;
+    -webkit-pointer-events: auto;
+    -ms-pointer-events: auto;
+    pointer-events: auto;
+
+    opacity: 1;
+    visibility: visible;
+
+    & ~ section {
+      filter: blur(1.5px);
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    .inner {
+      -moz-transform: translateY(0);
+      -webkit-transform: translateY(0);
+      -ms-transform: translateY(0);
+      transform: translateY(0);
+      opacity: 1;
     }
   }
 }
