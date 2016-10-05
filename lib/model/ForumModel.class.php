@@ -303,7 +303,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 
 }
 
-class ForumDradenReagerenModel extends PersistenceModel {
+class ForumDradenReagerenModel extends CachedPersistenceModel {
 
 	const ORM = 'ForumDraadReageren';
 	const DIR = 'forum/';
@@ -334,11 +334,11 @@ class ForumDradenReagerenModel extends PersistenceModel {
 	}
 
 	public function getReagerenVoorDraad(ForumDraad $draad) {
-		return $this->find('draad_id = ? AND uid != ? AND datum_tijd > ?', array($draad->draad_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
+		return $this->prefetch('draad_id = ? AND uid != ? AND datum_tijd > ?', array($draad->draad_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
 	}
 
 	public function getReagerenVoorDeel(ForumDeel $deel) {
-		return $this->find('forum_id = ? AND draad_id = 0 AND uid != ? AND datum_tijd > ?', array($deel->forum_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
+		return $this->prefetch('forum_id = ? AND draad_id = 0 AND uid != ? AND datum_tijd > ?', array($deel->forum_id, LoginModel::getUid(), getDateTime(strtotime(Instellingen::get('forum', 'reageren_tijd')))));
 	}
 
 	public function verwijderLegeConcepten() {
