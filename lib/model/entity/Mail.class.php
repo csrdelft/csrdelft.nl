@@ -203,6 +203,7 @@ class Mail {
 				throw new Exception('unknown mail type: "' . $this->type . '"');
 		}
 		if ($this->inDebugMode() AND ! $debug) {
+			setMelding($body, 0);
 			return false;
 		}
 		return mail($this->getTo(), $this->getSubject(), $body, $this->getHeaders(), $this->getExtraparameters());
