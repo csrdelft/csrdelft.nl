@@ -62,6 +62,7 @@ class MaalcieRouterController extends AclController {
 		require_once 'view/CmsPaginaView.class.php';
 		$body = new CmsPaginaView(CmsPaginaModel::get('maaltijden'));
 		$this->view = new CsrLayoutPage($body);
+		$this->view->view();
 		exit;
 	}
 
