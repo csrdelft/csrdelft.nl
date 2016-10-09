@@ -1,5 +1,12 @@
 // Zorgt voor de schuine balken op de pagina's en de kleuren in de paginas
 
+.angleEdge(@kleur) {
+  background-color: @kleur;
+  &:before, &:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' fill='@{kleur}' /%3E%3C/svg%3E");
+  }
+}
+
 .wrapper {
   background-color: #001e62;
   margin: 6.5em 0;
@@ -17,7 +24,6 @@
   }
 
   &:before, &:after {
-    background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%23001e62;' /%3E%3C/svg%3E") no-repeat;
     background-size: 100% 100%;
     content: '';
     display: block;
@@ -60,27 +66,16 @@
     width: 55em;
   }
 
-
-
   &.kleur1 {
-    background-color: @kleur2;
-    &:before, &:after {
-      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%23001e62;' /%3E%3C/svg%3E");
-    }
+    .angleEdge(@kleur2)
   }
 
   &.kleur2 {
-    background-color: @kleur3;
-    &:before, &:after {
-      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%23429EDE;;' /%3E%3C/svg%3E");
-    }
+    .angleEdge(@kleur3);
   }
 
   &.kleur3 {
-    background-color: @kleur4;
-    &:before, &:after {
-      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%23454858;' /%3E%3C/svg%3E");
-    }
+    .angleEdge(@kleur4);
   }
 
   .image {
