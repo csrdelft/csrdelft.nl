@@ -6,16 +6,7 @@
 
 /* Basic */
 
-	body {
-		background-color: #2e3141;
-		background-image: url("../../images/bg.jpg");
-		background-size: cover;
-		background-attachment: fixed;
-		background-position: center;
-	}
-
 		body:before {
-			background: rgba(46, 49, 65, 0.8);
 			content: '';
 			display: block;
 			height: 100%;
@@ -39,7 +30,7 @@
 
 /* Menu */
 
-	#menu .inner {
+	#menu .inner, #login .inner {
 		margin: 4em auto;
 	}
 
@@ -87,3 +78,10 @@
 			display: inline-block;
 			width: 45%;
 		}
+
+/* Grid */
+
+	.grid a {
+		display: block;
+		float: left;
+	}
