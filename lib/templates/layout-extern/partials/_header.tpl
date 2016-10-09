@@ -46,7 +46,7 @@
         <div class="inner">
             <h2>Inloggen</h2>
             {$loginform->view()}
-            <a href="#" class="close">Close</a>
+            <a href="#_" class="close">Close</a>
         </div>
     </nav>
 
@@ -64,6 +64,6 @@
                 <li><a href="/contact">Contactinformatie</a></li>
                 <li><a href="/contact/sponsoring">Bedrijven</a></li>
             </ul>
-            <a href="#" class="close">Close</a>
+            <a href="#_" class="close">Close</a>
         </div>
     </nav>
