@@ -48,7 +48,7 @@
 											</td>
 											<td class="saldo">{$aanmelding->getSaldoMelding()}</td>
 										{elseif $aanmelding->getDoorUid()}
-											<td>Gast van {ProfielModel::getNaam($aanmelding->getDoorUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
+											<td>Gast van {ProfielModel::getLink($aanmelding->getDoorUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
 											<td class="saldo">-</td>
 										{else}
 											<td style="line-height: 2.2em;">&nbsp;</td>
