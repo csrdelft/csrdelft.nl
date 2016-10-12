@@ -25,8 +25,16 @@ a:hover,
 /*NAVIGATIE MENU*/
 
 /*Zijbalk kopjes net wat dikker*/
+#cd-zijbalk .blok .zijbalk-kopje {
+    border-width: 0px 0px 2px 0px;
+    border-style: solid;
+    border-color: #c52d30;
+    margin-right: 40px;
+    background-image: none;
+}
+
 #cd-zijbalk .blok .zijbalk-kopje a {
-    font-weight: bolder;
+    color: #ffffff;
 }
 
 /*Veel tekst van de zijbalk in het blauw*/
