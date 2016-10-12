@@ -1,50 +1,46 @@
-/* owee 2016*/
-/** blauw: #101d61*/
-/** geel: #fec524*/
+/* Lustrum 2016*/
+/** licht blauw: #d7e3e7 */
+/** normaal blauw: #20648f */
+/** donker blauw: #151b29 */
+/** rode letters: #c52d30 */
 
 /*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
 
 #cd-zijbalk,
 #forumtabel th,
 .cd-primary-nav ul {
-  background-color: #ACD6AB !important;
+  background-color: #20648f !important;
 }
 
-/*Koppen in blauw*/
+/*Koppen in rood*/
 
 h1,
 a,
 a:hover,
 .cd-primary-nav > li > a:hover,
 .cd-primary-nav > li > a.selected {
-  color: #101d61;
+  color: #c52d30;
 }
 
 /*NAVIGATIE MENU*/
-/*Andere koppen in het blauw*/
 
-.cd-primary-nav .cd-secondary-nav a,
-.cd-primary-nav .cd-secondary-nav > li > a:hover,
-.cd-primary-nav .cd-secondary-nav > li > a {
-  color: #101d61;
+/*Zorg voor rode borders*/
+
+#cd-zijbalk .blok .zijbalk-kopje {
+  border-width: 0px 0px 2px 0px;
+  border-style: solid;
+  border-color: #c52d30;
+  margin-right: 40px;
+  background-image: none;
 }
 
-/*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
+/* letters moeten wit */
 
-.cd-primary-nav .cd-secondary-nav a:hover {
-  text-decoration: underline !important;
-  color: #101d61;
+#cd-zijbalk .blok .zijbalk-kopje a {
+  color: #ffffff;
 }
 
-/*Streepje onder naam*/
-
-.cd-primary-nav > li > a:hover,
-.cd-primary-nav > li > a.selected {
-  box-shadow: inset 0 -2px 0 #101d61;
-}
-
-/*ZIJBALK*/
-/*Veel tekst van de zijbalk in het blauw*/
+/*Veel tekst van de zijbalk in het wit*/
 
 #cd-zijbalk .ishetal .ja,
 #cd-zijbalk .ishetal .nee,
@@ -52,19 +48,41 @@ a:hover,
 #cd-zijbalk .blok .item a,
 #cd-zijbalk .ishetal,
 #cd-zijbalk .blok .item {
-  color: #101d61;
+  color: #ffffff;
 }
 
-/*Zijbalk grens van het scherm in blauw*/
+/*Andere koppen ook in het wit*/
+
+.cd-primary-nav .cd-secondary-nav a,
+.cd-primary-nav .cd-secondary-nav > li > a:hover,
+.cd-primary-nav .cd-secondary-nav > li > a {
+  color: #ffffff;
+}
+
+/*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
+
+.cd-primary-nav .cd-secondary-nav a:hover {
+  text-decoration: underline !important;
+  color: #ffffff;
+}
+
+/*Streepje onder naam*/
+
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+  box-shadow: inset 0 -2px 0 #ffffff;
+}
+
+/*Zijbalk grens van het scherm in donkerblauw*/
 
 #cd-zijbalk {
-  border-color: #C52D30;
+  border-color: #151b29;
 }
 
-/*OWee logo*/
+/*Logo*/
 
 #cd-zijbalk .cd-beeldmerk {
-  background-image: url("/assets/layout/plaetjes/onontdekt_beeldmerk.png");
+  background-image: url("/plaetjes/lustrum/2016/logo_groot.png");
 }
 
 /*KNOPPEN*/
@@ -77,7 +95,7 @@ input[type=button],
 .btn:focus,
 input[type=submit]:focus,
 input[type=button]:focus {
-  background-image: linear-gradient(to bottom, #101d61, #1045be);
+  background-image: linear-gradient(to bottom, #151b29, #2d7eb2);
 }
 
 /*Voor een mouse hover wordt de gradient omgedraaid*/
@@ -85,11 +103,11 @@ input[type=button]:focus {
 .btn:hover,
 input[type=submit]:hover,
 input[type=button]:hover {
-  background-image: linear-gradient(to bottom, #1045be, #101d61);
+  background-image: linear-gradient(to bottom, #2d7eb2, #151b29);
 }
 
-/*Actieve knoppen in geel gradient -> zo ontstaat verschil tussen hover en active*/
+/*Actieve knoppen in rood gradient -> zo ontstaat verschil tussen hover en active*/
 
 .btn.active {
-  background-image: linear-gradient(to bottom, #fec524, #ffd45c);
+  background-image: linear-gradient(to bottom, #c52d30, #f0262a);
 }
