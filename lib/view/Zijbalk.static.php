@@ -23,8 +23,8 @@ abstract class Zijbalk {
 
 		// Sponsors
 		if (LoginModel::mag('P_LOGGED_IN')) {
-			$sponsor_menu = MenuModel::instance()->getMenu("mogelijkheden");
-			$sponsor_menu->tekst = 'Sponsors';
+			$sponsor_menu = MenuModel::instance()->getMenu("sponsors");
+			$sponsor_menu->tekst = 'Mogelijkheden';
 			$zijbalk[] = new BlockMenuView($sponsor_menu);
 		}
 
