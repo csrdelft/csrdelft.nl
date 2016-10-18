@@ -1047,7 +1047,7 @@ HTML;
 	function bb_locatie($arguments = array()) {
 		$address = $this->parseArray(array('[/locatie]'), array());
 		$map = $this->maps(htmlspecialchars($address), $arguments);
-		return '<span class="hoverIntent"><a href="https://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . ' <img src="/plaetjes/famfamfam/map.png" alt="map" title="Kaart" /></a><div class="hoverIntentContent">' . $map . '</div></span>';
+		return '<span class="hoverIntent"><a href="https://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . Icon::getTag('map', null, 'Kaart', 'text') . '</a><div class="hoverIntentContent">' . $map . '</div></span>';
 	}
 
 	/**
