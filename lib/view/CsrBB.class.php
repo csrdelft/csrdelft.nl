@@ -1062,7 +1062,7 @@ HTML;
 	 * 
 	 * @author Piet-Jan Spaans
 	 * 
-	 * [map dynamic=false w=100 h=100]Oude Delft 9[/map]
+	 * [map h=100]Oude Delft 9[/map]
 	 */
 	public function bb_map($arguments = array()) {
 		$address = $this->parseArray(array('[/map]', '[/kaart]'), array());
