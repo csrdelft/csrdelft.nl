@@ -1073,11 +1073,6 @@ HTML;
 		if (trim($address) == '') {
 			return 'Geen adres opgegeven';
 		}
-		if (isset($arguments['w']) AND $arguments['w'] <= 580) {
-			$width = (int) $arguments['w'];
-		} else {
-			$width = 580;
-		}
 		// Hoogte maakt niet veel uit
 		if (isset($arguments['h']) AND $arguments['h'] <= 900) {
 			$height = (int) $arguments['h'];
@@ -1085,7 +1080,7 @@ HTML;
 			$height = 450;
 		}
 
-		return '<iframe width="' . $width . '" height="' . $height . '" frameborder="0" style="border:0"
+		return '<iframe height="' . $height . '" frameborder="0" style="border:0;width:100%"
 src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOGLE_EMBED_KEY . '"></iframe>';
 	}
 
