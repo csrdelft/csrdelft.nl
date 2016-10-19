@@ -167,9 +167,7 @@ abstract class CompressedLayout extends HtmlPage {
 					$modules[] = 'fxsnow';
 				} elseif (LidInstellingen::get('layout', 'fx') == 'space') {
 					$modules[] = 'fxspace';
-				} elseif (LidInstellingen::get('layout', 'fx') == 'onontdekt') {
-                    $modules[] = 'fxonontdekt';
-                }
+				}
 			} elseif ($extension == 'js') {
 
 				if (LidInstellingen::get('layout', 'fx') == 'wolken') {
@@ -179,7 +177,10 @@ abstract class CompressedLayout extends HtmlPage {
 
 			if (LidInstellingen::get('layout', 'minion') == 'ja') {
 				$modules[] = 'minion';
-			}
+			} elseif (LidInstellingen::get('layout', 'fx') == 'onontdekt') {
+                $modules[] = 'fxonontdekt';
+            }
+
 			return $modules;
 		} else {
 			// een niet-algemene module gevraagd

@@ -47,6 +47,5 @@
 		{if LidInstellingen::get('layout', 'fx') == 'wolken'}
 			{include file='layout/fx-clouds.tpl'}
 		{/if}
-
 	</body>
 </html>
