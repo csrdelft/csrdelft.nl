@@ -1,0 +1,9 @@
+.layer {
+    /* Maak een layer groter dan het scherm, om te compenseren voor de verplaatsing */
+    width: 120%;
+    height: 120%;
+    margin-top: -10%;
+    margin-left: -10%;
+    background-size: cover;
+    background-position: center center;
+}

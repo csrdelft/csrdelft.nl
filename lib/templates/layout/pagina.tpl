@@ -30,7 +30,11 @@
 			</footer>
 		</main>
 		{$mainmenu->view()}
-		<div id="cd-main-overlay"></div>
+		<div id="cd-main-overlay">
+			{if LidInstellingen::get('layout', 'fx') == 'onontdekt'}
+				{include file='layout/fx-onontdekt.tpl'}
+			{/if}
+		</div>
 		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
 		{if isset($modal)}
 			{$modal->view()}
@@ -43,8 +47,6 @@
 		{if LidInstellingen::get('layout', 'fx') == 'wolken'}
 			{include file='layout/fx-clouds.tpl'}
 		{/if}
-		{if LidInstellingen::get('layout', 'fx') == 'onontdekt'}
-			{include file='layout/fx-onontdekt.tpl'}
-		{/if}
+
 	</body>
 </html>

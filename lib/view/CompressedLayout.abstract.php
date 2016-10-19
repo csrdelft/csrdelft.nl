@@ -167,7 +167,9 @@ abstract class CompressedLayout extends HtmlPage {
 					$modules[] = 'fxsnow';
 				} elseif (LidInstellingen::get('layout', 'fx') == 'space') {
 					$modules[] = 'fxspace';
-				}
+				} elseif (LidInstellingen::get('layout', 'fx') == 'onontdekt') {
+                    $modules[] = 'fxonontdekt';
+                }
 			} elseif ($extension == 'js') {
 
 				if (LidInstellingen::get('layout', 'fx') == 'wolken') {
