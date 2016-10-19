@@ -177,7 +177,10 @@ abstract class CompressedLayout extends HtmlPage {
 
 			if (LidInstellingen::get('layout', 'minion') == 'ja') {
 				$modules[] = 'minion';
-			}
+			} elseif (LidInstellingen::get('layout', 'fx') == 'onontdekt') {
+                $modules[] = 'fxonontdekt';
+            }
+
 			return $modules;
 		} else {
 			// een niet-algemene module gevraagd
