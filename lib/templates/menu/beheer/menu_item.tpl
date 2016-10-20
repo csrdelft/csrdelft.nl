@@ -22,7 +22,7 @@
 			&nbsp;{icon get="group_key" title="Rechten bekijken:&#013;"|cat:$item->rechten_bekijken}&nbsp;
 		{/if}
 		<a href="{$item->link}">{$item->link}</a>
-		<a href="/menubeheer/verwijderen/{$item->item_id}" class="btn post confirm ReloadPage" title="Dit menu-item definitief verwijderen">{icon get="cross"}</a>
+		<a href="/menubeheer/verwijderen/{$item->item_id}" class="btn post confirm ReloadPage" title="Dit menu-item verwijderen">{icon get="cross"}</a>
 	</div>
 	{if $item->children}
 		<ul class="menubeheer-tree">
