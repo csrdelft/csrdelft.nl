@@ -26,7 +26,7 @@ abstract class AuthenticationMethod implements PersistentEnum {
 			case self::cookie_token: return 'Auto-login';
 			case self::password_login: return 'Normal login';
 			case self::recent_password_login: return 'Confirm password';
-			case self::password_login_and_one_time_token: return 'Two-factor authentication (2FA)';
+			case self::password_login_and_one_time_token: return 'Two-step verification (2SV)';
 			default: throw new Exception('AuthenticationMethod onbekend');
 		}
 	}

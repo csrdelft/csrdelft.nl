@@ -16,20 +16,32 @@ class LoginController extends AclController {
 				'logout'			 => 'P_LOGGED_IN',
 				'su'				 => 'P_ADMIN',
 				'endsu'				 => 'P_LOGGED_IN',
+				'verify'			 => 'P_PUBLIC',
 				'pauper'			 => 'P_PUBLIC',
 				'account'			 => 'P_LOGGED_IN',
 				'accountaanvragen'	 => 'P_PUBLIC',
+				'accountaanmaken'	 => 'P_ADMIN',
+				'accountbewerken'	 => 'P_LOGGED_IN',
+				'accountverwijderen' => 'P_LOGGED_IN',
 				'wachtwoord'		 => 'P_PUBLIC',
-				'verify'			 => 'P_PUBLIC'
+				'wachtwoordwijzigen' => 'P_LOGGED_IN',
+				'wachtwoordreset'	 => 'P_LOGGED_IN',
+				'wachtwoordvergeten' => 'P_PUBLIC',
 			);
 		} else {
 			$this->acl = array(
 				'login'				 => 'P_PUBLIC',
 				'logout'			 => 'P_LOGGED_IN',
+				'verify'			 => 'P_PUBLIC',
 				'pauper'			 => 'P_PUBLIC',
 				'account'			 => 'P_LOGGED_IN',
+				'accountaanmaken'	 => 'P_ADMIN',
+				'accountbewerken'	 => 'P_LOGGED_IN',
+				'accountverwijderen' => 'P_LOGGED_IN',
 				'wachtwoord'		 => 'P_PUBLIC',
-				'verify'			 => 'P_PUBLIC',
+				'wachtwoordwijzigen' => 'P_LOGGED_IN',
+				'wachtwoordreset'	 => 'P_LOGGED_IN',
+				'wachtwoordvergeten' => 'P_PUBLIC',
 				'loginsessionsdata'	 => 'P_LOGGED_IN',
 				'loginendsession'	 => 'P_LOGGED_IN',
 				'loginlockip'		 => 'P_LOGGED_IN',
@@ -51,11 +63,8 @@ class LoginController extends AclController {
 		if ($this->getMethod() == 'POST') {
 			parent::exit_http($response_code);
 		}
-		require_once 'model/CmsPaginaModel.class.php';
-		require_once 'view/CmsPaginaView.class.php';
-		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
-		$this->view = new CsrLayoutPage($body);
-        $this->view->view();
+		$this->GET_accountaanvragen();
+		$this->view->view();
 		exit;
 	}
 
@@ -132,17 +141,56 @@ class LoginController extends AclController {
 		$this->view = new CsrLayoutPage($body);
 	}
 
-	public function accountaanvragen() {
-		$this->exit_http(403);
+	public function account($uid = null, $action = 'bewerken') {
+		switch ($action) {
+			case 'aanvragen':
+				return $this->GET_accountaanvragen();
+			case 'aanmaken':
+				return $this->accountaanmaken($uid);
+			case 'verwijderen':
+				return $this->accountverwijderen($uid);
+			case 'bewerken':
+			default:
+				return $this->accountbewerken($uid);
+		}
 	}
 
-	public function account($uid = null, $delete = null) {
-		if ($uid === null OR ! LoginModel::mag('P_ADMIN')) {
-			$uid = LoginModel::getUid();
+	public function GET_accountaanvragen() {
+		require_once 'model/CmsPaginaModel.class.php';
+		require_once 'view/CmsPaginaView.class.php';
+		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
+		$this->view = new CsrLayoutPage($body);
+	}
+
+	public function accountaanmaken($uid = null) {
+		if (!LoginModel::mag('P_ADMIN')) {
+			$this->exit_http(403);
 		}
-		// aanvragen
+		if ($uid == null) {
+			$uid = $this->model->getUid();
+		}
+		if (AccountModel::get($uid)) {
+			setMelding('Account bestaat al', -1);
+			$this->exit_http(403);
+		}
+		$account = AccountModel::instance()->maakAccount($uid);
+		setMelding('Account succesvol aangemaakt', 1);
+		if (!AccessModel::mag($account, 'P_LOGGED_IN')) {
+			setMelding('Account mag niet inloggen', 2);
+		}
+		return $this->accountbewerken($uid);
+	}
+
+	public function accountbewerken($uid = null) {
+		if ($uid == null) {
+			$uid = $this->model->getUid();
+		}
 		if ($uid === 'x999') {
-			return $this->accountaanvragen();
+			$this->GET_accountaanvragen();
+			return;
+		}
+		if ($uid !== $this->model->getUid() AND ! LoginModel::mag('P_ADMIN')) {
+			$this->exit_http(403);
 		}
 		// bewerken
 		if (LoginModel::instance()->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
@@ -150,16 +198,12 @@ class LoginController extends AclController {
 			$this->exit_http(403);
 		}
 		$account = AccountModel::get($uid);
-		if (!$account AND LoginModel::mag('P_ADMIN')) {
-			$account = AccountModel::instance()->maakAccount($uid);
+		if (!$account) {
+			setMelding('Account bestaat niet', -1);
+			$this->exit_http(403);
 		}
-		if ($delete === 'delete' AND LoginModel::mag('P_ADMIN')) {
-			$result = AccountModel::instance()->delete($account);
-			if ($result === 1) {
-				setMelding('Account succesvol verwijderd', 1);
-				redirect('/profiel/' . $uid);
-			}
-			setMelding('Account verwijderen mislukt', -1);
+		if (!AccessModel::mag($account, 'P_LOGGED_IN')) {
+			setMelding('Account mag niet inloggen', 2);
 		}
 		$form = new AccountForm($account);
 		if ($form->validate()) {
@@ -174,91 +218,123 @@ class LoginController extends AclController {
 		$this->view = new CsrLayoutPage($form);
 	}
 
-	public function wachtwoord($action = null) {
+	public function accountverwijderen($uid = null) {
+		if ($uid == null) {
+			$uid = $this->model->getUid();
+		}
+		if ($uid !== $this->model->getUid() AND ! LoginModel::mag('P_ADMIN')) {
+			$this->exit_http(403);
+		}
+		$account = AccountModel::get($uid);
+		if (!$account) {
+			setMelding('Account bestaat niet', -1);
+		} else {
+			$result = AccountModel::instance()->delete($account);
+			if ($result === 1) {
+				setMelding('Account succesvol verwijderd', 1);
+			} else {
+				setMelding('Account verwijderen mislukt', -1);
+			}
+		}
+		redirect('/profiel/' . $uid);
+	}
+
+	public function wachtwoord($action = 'vergeten') {
+		switch ($action) {
+			case 'wijzigen':
+				return $this->wachtwoordwijzigen();
+			case 'reset':
+				return $this->wachtwoordreset();
+			case 'vergeten':
+			default:
+				return $this->wachtwoordvergeten();
+		}
+	}
+
+	public function wachtwoordwijzigen() {
 		$account = LoginModel::getAccount();
-		// wijzigen
-		if ($action !== 'vergeten' AND LoginModel::mag('P_PROFIEL_EDIT')) {
-			$form = new WachtwoordWijzigenForm($account, $action);
-			if ($form->validate()) {
-				// wachtwoord opslaan
-				$pass_plain = $form->findByName('wijzigww')->getValue();
-				AccountModel::instance()->wijzigWachtwoord($account, $pass_plain);
+		// mag inloggen?
+		if (!$account OR ! AccessModel::mag($account, 'P_LOGGED_IN')) {
+			$this->exit_http(403);
+		}
+		$form = new WachtwoordWijzigenForm($account, 'wijzigen');
+		if ($form->validate()) {
+			// wachtwoord opslaan
+			$pass_plain = $form->findByName('wijzigww')->getValue();
+			AccountModel::instance()->wijzigWachtwoord($account, $pass_plain);
+			setMelding('Wachtwoord instellen geslaagd', 1);
+		}
+		$this->view = new CsrLayoutPage($form);
+	}
+
+	public function wachtwoordreset() {
+		$account = LoginModel::getAccount();
+		// mag inloggen met url_token?
+		if (!$account OR ! AccessModel::mag($account, 'P_LOGGED_IN', AuthenticationMethod::getTypeOptions()) OR ! OneTimeTokensModel::instance()->isVerified($account->uid, '/wachtwoord/reset')) {
+			$this->exit_http(403);
+		}
+		$form = new WachtwoordWijzigenForm($account, 'reset', false);
+		if ($form->validate()) {
+			// wachtwoord opslaan
+			$pass_plain = $form->findByName('wijzigww')->getValue();
+			if (AccountModel::instance()->wijzigWachtwoord($account, $pass_plain)) {
 				setMelding('Wachtwoord instellen geslaagd', 1);
 			}
-		}
-		// resetten
-		elseif ($action === 'reset' AND LoginModel::mag('P_PROFIEL_EDIT', AuthenticationMethod::getTypeOptions()) AND OneTimeTokensModel::instance()->isVerified($account->uid, '/wachtwoord/reset')) {
-			$form = new WachtwoordWijzigenForm($account, $action, false);
-			if ($form->validate()) {
-				// wachtwoord opslaan
-				$pass_plain = $form->findByName('wijzigww')->getValue();
-				if (AccountModel::instance()->wijzigWachtwoord($account, $pass_plain)) {
-					setMelding('Wachtwoord instellen geslaagd', 1);
-				}
-				// token verbruikt
-				OneTimeTokensModel::instance()->discardToken($account->uid, '/wachtwoord/reset');
-				// inloggen zonder $authByToken
-				$this->model->login($account->uid, $pass_plain, false);
-				// stuur bevestigingsmail
-				$lidnaam = $account->getProfiel()->getNaam('volledig');
-				require_once 'model/entity/Mail.class.php';
-				$bericht = "Geachte " . $lidnaam .
-						",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
-				$mail = new Mail(array($account->email => $lidnaam), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
-				$mail->send();
-				redirect(CSR_ROOT);
+			// token verbruikt
+			OneTimeTokensModel::instance()->discardToken($account->uid, '/wachtwoord/reset');
+			// inloggen alsof gebruiker wachtwoord heeft ingevoerd
+			$loggedin = $this->model->login($account->uid, $pass_plain, false);
+			if (!$loggedin) {
+				throw new Exception('Inloggen met nieuw wachtwoord mislukt');
 			}
+			// stuur bevestigingsmail
+			$lidnaam = $account->getProfiel()->getNaam('volledig');
+			require_once 'model/entity/Mail.class.php';
+			$bericht = "Geachte " . $lidnaam .
+					",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
+			$mail = new Mail(array($account->email => $lidnaam), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
+			$mail->send();
+			redirect(CSR_ROOT);
 		}
-		// vergeten
-		else {
-			$form = new WachtwoordVergetenForm();
-			if ($form->validate()) {
-				// voorkom dat AccessModel ingelogde gebruiker blokkeerd als AuthenticationMethod::token_url niet toegestaan is
-				if (LoginModel::instance()->getAuthenticationMethod() === AuthenticationMethod::url_token) {
-					LoginModel::instance()->login('x999', 'x999', false);
-				}
-				$values = $form->getValues();
-				$account = AccountModel::get($values['user']);
-				// mag wachtwoord wijzigen?
-				if ($account AND AccessModel::mag($account, 'P_PROFIEL_EDIT') AND mb_strtolower($account->email) === mb_strtolower($values['mail'])) {
-					$token = OneTimeTokensModel::instance()->createToken($account->uid, '/wachtwoord/reset');
-					// stuur resetmail
-					$civitasnaam = $account->getProfiel()->getNaam('civitas');
-					// Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
-					// Dit zorgt voor een • in het 'aan' veld van de mail, sommige spamfilters gaan hiervan over hun nek
-					$lidnaam = $account->getProfiel()->getNaam('volledig', true);
-					require_once 'model/entity/Mail.class.php';
-					$bericht = "Geachte " . $civitasnaam .
-							",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1] .
-							".\n\n[url=" . CSR_ROOT . "/verify/" . $token[0] .
-							"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
-					$mail = new Mail(array($account->email => $lidnaam), '[C.S.R. webstek] Wachtwoord vergeten', $bericht);
-					$mail->send();
-					setMelding('Wachtwoord reset email verzonden', 1);
-				} else {
-					setMelding('Lidnummer en/of e-mailadres onjuist', -1);
-				}
+		$this->view = new CsrLayoutPage($form);
+	}
+
+	public function wachtwoordvergeten() {
+		$form = new WachtwoordVergetenForm();
+		if ($form->validate()) {
+			$values = $form->getValues();
+			$account = AccountModel::get($values['user']);
+			// mag wachtwoord wijzigen?
+			if (!$account OR ! AccessModel::mag($account, 'P_LOGGED_IN') OR mb_strtolower($account->email) !== mb_strtolower($values['mail'])) {
+				setMelding('Lidnummer en/of e-mailadres onjuist', -1);
+			} else {
+				$token = OneTimeTokensModel::instance()->createToken($account->uid, '/wachtwoord/reset');
+				// stuur resetmail
+				$profiel = $account->getProfiel();
+				require_once 'model/entity/Mail.class.php';
+				$bericht = "Geachte " . $profiel->getNaam('civitas') .
+						",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1] .
+						".\n\n[url=" . CSR_ROOT . "/verify/" . $token[0] .
+						"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
+				$emailNaam = $account->getProfiel()->getNaam('volledig', true); // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
+				$mail = new Mail(array($account->email => $emailNaam), '[C.S.R. webstek] Wachtwoord vergeten', $bericht);
+				$mail->send();
+				setMelding('Wachtwoord reset email verzonden', 1);
 			}
 		}
 		$this->view = new CsrLayoutPage($form);
 	}
 
 	public function verify($tokenString = null) {
-		$tokenString = filter_var($tokenString, FILTER_SANITIZE_STRING);
 		$form = new VerifyForm($tokenString);
 		if ($form->validate()) {
-			// voorkom dat AccessModel ingelogde gebruiker blokkeerd als AuthenticationMethod::token_url niet toegestaan is
-			if (LoginModel::instance()->getAuthenticationMethod() === AuthenticationMethod::url_token) {
-				LoginModel::instance()->login('x999', 'x999', false);
-			}
 			$uid = $form->findByName('user')->getValue();
 			$account = AccountModel::get($uid);
-			// mag inloggen?
-			if ($account AND AccessModel::mag($account, 'P_LOGGED_IN') AND OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenString)) {
-				// redirect by verifyToken
-			} else {
-				setMelding('Deze link is niet meer geldig', -1);
+			// mag inloggen met url_token?
+			if (!$account OR ! AccessModel::mag($account, 'P_LOGGED_IN', AuthenticationMethod::getTypeOptions()) OR ! OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenString)) {
+				setMelding('Deze link is niet (meer) geldig', -1);
 			}
+			// verifyToken() redirects on success
 		}
 		$this->view = new CsrLayoutPage($form);
 	}
@@ -324,7 +400,7 @@ class LoginController extends AclController {
 			// after login
 			elseif (isset($_COOKIE['goback'])) {
 				$this->view = new JsonResponse($_COOKIE['goback']);
-				unset($_COOKIE['goback']);
+				setGoBackCookie(null);
 			} else {
 				$this->view = new JsonResponse(CSR_ROOT);
 			}
