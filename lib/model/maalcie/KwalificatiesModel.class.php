@@ -23,7 +23,7 @@ class KwalificatiesModel extends CachedPersistenceModel {
 	}
 
 	public function getKwalificatiesVoorFunctie($fid) {
-		return $this->prefetch('functie_id = ?', array($fid))->fetchAll();
+		return $this->prefetch('functie_id = ?', array($fid));
 	}
 
 	/**
