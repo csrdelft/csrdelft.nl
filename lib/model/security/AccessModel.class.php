@@ -7,14 +7,14 @@ require_once 'model/GroepenModel.abstract.php';
 
 /**
  * AccessModel.class.php
- * 
+ *
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * RBAC met MAC en DAC implementatie.
- * 
+ *
  * @see http://csrc.nist.gov/groups/SNS/rbac/faq.html
- * 
+ *
  */
 class AccessModel extends CachedPersistenceModel {
 
@@ -55,12 +55,12 @@ class AccessModel extends CachedPersistenceModel {
 	 * @param Account $subject Het lid dat de gevraagde permissies zou moeten bezitten.
 	 * @param string $permission Gevraagde permissie(s).
 	 * @param array $allowedAuthenticationMethods Bij niet toegestane methode doen alsof gebruiker x999 is.
-	 * 
+	 *
 	 * Met deze functies kan op één of meerdere permissies worden getest,
 	 * onderling gescheiden door komma's. Als een lid één van de
 	 * permissies 'heeft', geeft de functie true terug. Het is dus een
 	 * logische OF tussen de verschillende te testen permissies.
-	 * 
+	 *
 	 * Voorbeeldjes:
 	 *  commissie:NovCie			geeft true leden van de h.t. NovCie.
 	 *  commissie:SocCie:ot			geeft true voor alle leden die ooit SocCie hebben gedaan
@@ -71,7 +71,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * 
 	 * Gecompliceerde voorbeeld:
 	 * 		commissie:NovCie+commissie:MaalCie|1337,bestuur
-	 * 
+	 *
 	 * Equivalent met haakjes:
 	 * 		(commissie:NovCie AND (commissie:MaalCie OR 1337)) OR bestuur
 	 * 
@@ -92,7 +92,7 @@ class AccessModel extends CachedPersistenceModel {
 				$allowedAuthenticationMethods = self::$defaultAllowedAuthenticationMethods;
 			}
 			// Als de methode niet toegestaan is testen we met de permissies van niet-ingelogd
-			if (!in_array($method, $allowedAuthenticationMethods)) {
+			if (! in_array($method, $allowedAuthenticationMethods)) {
 				$subject = AccountModel::get('x999');
 			}
 		}
@@ -136,7 +136,8 @@ class AccessModel extends CachedPersistenceModel {
 			if ($activiteit) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $activiteit->soort, '*'));
 			}
-		} elseif ($environment === CommissiesModel::ORM) {
+		}
+		elseif ($environment === CommissiesModel::ORM) {
 			$commissie = CommissiesModel::get($resource);
 			if ($commissie) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $commissie->soort, '*'));
@@ -152,14 +153,15 @@ class AccessModel extends CachedPersistenceModel {
 	 * @param string $environment
 	 * @param string $resource
 	 * @param array $acl
+	 *
 	 * @return bool
 	 * @throws Exception
 	 */
 	public function setAcl($environment, $resource, array $acl) {
 		// Has permission to change permissions?
-		if (!LoginModel::mag('P_ADMIN')) {
+		if (! LoginModel::mag('P_ADMIN')) {
 			$rechten = self::getSubject($environment, A::Rechten, $resource);
-			if (!$rechten OR ! LoginModel::mag($rechten)) {
+			if (! $rechten OR ! LoginModel::mag($rechten)) {
 				return false;
 			}
 		}
@@ -208,14 +210,18 @@ class AccessModel extends CachedPersistenceModel {
 			case LidStatus::Kringel:
 			case LidStatus::Noviet:
 			case LidStatus::Lid:
-			case LidStatus::Gastlid: return AccessRole::Lid;
+			case LidStatus::Gastlid:
+				return AccessRole::Lid;
 			case LidStatus::Oudlid:
-			case LidStatus::Erelid: return AccessRole::Oudlid;
+			case LidStatus::Erelid:
+				return AccessRole::Oudlid;
 			case LidStatus::Commissie:
 			case LidStatus::Overleden:
 			case LidStatus::Exlid:
-			case LidStatus::Nobody: return AccessRole::Nobody;
-			default: throw new Exception('LidStatus onbekend');
+			case LidStatus::Nobody:
+				return AccessRole::Nobody;
+			default:
+				throw new Exception('LidStatus onbekend');
 		}
 	}
 
@@ -233,6 +239,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Get error(s) in permission string, if any.
 	 *
 	 * @param type $permissions
+	 *
 	 * @return array empty if no errors; substring(s) of $permissions containing error(s) otherwise
 	 */
 	public function getPermissionStringErrors($permissions) {
@@ -246,7 +253,7 @@ class AccessModel extends CachedPersistenceModel {
 				// OR (secondary)
 				$or2 = explode('|', $or2);
 				foreach ($or2 as $perm) {
-					if (!$this->isValidPermission($perm)) {
+					if (! $this->isValidPermission($perm)) {
 						$errors[] = $perm;
 					}
 				}
@@ -294,15 +301,15 @@ class AccessModel extends CachedPersistenceModel {
 	/**
 	 * Hier staan de 'vaste' permissies, die gegeven worden door de PubCie.
 	 * In tegenstelling tot de variabele permissies zoals lidmaatschap van een groep.
-	 * 
+	 *
 	 * READ = Rechten om het onderdeel in te zien
 	 * POST = Rechten om iets toe te voegen
 	 * MOD  = Moderate rechten, dus verwijderen enzo
-	 * 
+	 *
 	 * Let op: de rechten zijn cumulatief (bijv: 7=4+2+1, 3=2+1)
 	 * als je hiervan afwijkt, kun je (bewust) niveau's uitsluiten (bijv 5=4+1, sluit 2 uit)
-	 * de levels worden omgezet in een karakter met die ASCII waarde (dit zijn vaak niet-leesbare symbolen, bijv #8=backspace)
-	 * elke karakter van een string representeert een onderdeel
+	 * de levels worden omgezet in een karakter met die ASCII waarde (dit zijn vaak niet-leesbare symbolen, bijv
+	 * #8=backspace) elke karakter van een string representeert een onderdeel
 	 *
 	 */
 	private function loadPermissions() {
@@ -357,6 +364,14 @@ class AccessModel extends CachedPersistenceModel {
 			'P_MAIL_SEND'		 => $this->createPermStr(10, 1 + 2 + 4), // Courant verzenden
 			'P_PEILING_VOTE'	 => $this->createPermStr(11, 1), // Stemmen op peilingen
 			'P_PEILING_MOD'		 => $this->createPermStr(11, 1 + 2), // Peilingen aanmaken en verwijderen
+			'P_BETALEN_IK'		 => $this->createPermStr(12, 1), // Eigen facturen bekijken en betalen
+			'P_BETALEN_ADD'		 => $this->createPermStr(12, 1 + 2), // Facturen aanmaken (voor iedereen)
+			'P_BETALEN_MOD'		 => $this->createPermStr(12, 1 + 2 + 4), // Kassa bedienen en betalingen verwerken (voor iedereen)
+			'P_BETALEN_ADMIN'	 => $this->createPermStr(12, 1 + 2 + 4 + 8), // Facturen beheren van iedereen (Fiscus)
+			'P_STREPEN_IK'		 => $this->createPermStr(13, 1), // Strepen op eigen naam
+			'P_STREPEN_ADD'		 => $this->createPermStr(13, 1 + 2), // Strepen voor iedereen en eigen streeplijsten aanmaken en beheren
+			'P_STREPEN_MOD'		 => $this->createPermStr(13, 1 + 2 + 4), // Producten beheren en prijzen beheren
+			'P_STREPEN_ADMIN'	 => $this->createPermStr(13, 1 + 2 + 4 + 8), // Streeplijsten beheren van iedereen
 		);
 		/**
 		 * Deze waarden worden samengesteld uit bovenstaande permissies en
@@ -371,14 +386,52 @@ class AccessModel extends CachedPersistenceModel {
 		// use | $p[] for hierarchical RBAC (inheritance between roles)
 		// use & ~$p[] for constrained RBAC (separation of duties)
 
-		$this->roles[AccessRole::Nobody] = $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'] | $p['P_ALBUM_READ'];
-		$this->roles[AccessRole::Eter] = $this->roles[AccessRole::Nobody] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
-		$this->roles[AccessRole::Lid] = $this->roles[AccessRole::Eter] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_ADD'] | $p['P_PEILING_VOTE'];
+		$this->roles[AccessRole::Nobody] =
+			$p['P_PUBLIC'] |
+			$p['P_FORUM_READ'] |
+			$p['P_AGENDA_READ'] |
+			$p['P_ALBUM_READ'];
+		$this->roles[AccessRole::Eter] = $this->roles[AccessRole::Nobody] |
+		                                 $p['P_LOGGED_IN'] |
+		                                 $p['P_PROFIEL_EDIT'] |
+		                                 $p['P_MAAL_IK'];
+		$this->roles[AccessRole::Lid] = $this->roles[AccessRole::Eter] |
+		                                $p['P_OUDLEDEN_READ'] |
+		                                $p['P_FORUM_POST'] |
+		                                $p['P_DOCS_READ'] |
+		                                $p['P_BIEB_READ'] |
+		                                $p['P_CORVEE_IK'] |
+		                                $p['P_MAIL_POST'] |
+		                                $p['P_NEWS_POST'] |
+		                                $p['P_ALBUM_ADD'] |
+		                                $p['P_PEILING_VOTE'];
 		$this->roles[AccessRole::Oudlid] = $this->roles[AccessRole::Lid];
-		$this->roles[AccessRole::MaalCie] = $this->roles[AccessRole::Lid] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
-		$this->roles[AccessRole::BASFCie] = $this->roles[AccessRole::Lid] | $p['P_DOCS_MOD'] | $p['P_ALBUM_DEL'] | $p['P_BIEB_MOD'] | $p['P_PEILING_MOD'];
-		$this->roles[AccessRole::Bestuur] = $this->roles[AccessRole::BASFCie] | $this->roles[AccessRole::MaalCie] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_ALBUM_DEL'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
-		$this->roles[AccessRole::PubCie] = $this->roles[AccessRole::Bestuur] | $p['P_ADMIN'] | $p['P_MAIL_SEND'] | $p['P_CORVEE_SCHED'] | $p['P_FORUM_ADMIN'];
+		$this->roles[AccessRole::MaalCie] = $this->roles[AccessRole::Lid] |
+		                                    $p['P_MAAL_MOD'] |
+		                                    $p['P_CORVEE_MOD'] |
+		                                    $p['P_MAAL_SALDI'];
+		$this->roles[AccessRole::BASFCie] = $this->roles[AccessRole::Lid] |
+		                                    $p['P_DOCS_MOD'] |
+		                                    $p['P_ALBUM_DEL'] |
+		                                    $p['P_BIEB_MOD'] |
+		                                    $p['P_PEILING_MOD'];
+		$this->roles[AccessRole::Bestuur] = $this->roles[AccessRole::BASFCie] | $this->roles[AccessRole::MaalCie] |
+		                                    $p['P_LEDEN_MOD'] |
+		                                    $p['P_FORUM_MOD'] |
+		                                    $p['P_DOCS_MOD'] |
+		                                    $p['P_AGENDA_MOD'] |
+		                                    $p['P_NEWS_MOD'] |
+		                                    $p['P_MAIL_COMPOSE'] |
+		                                    $p['P_ALBUM_DEL'] |
+		                                    $p['P_MAAL_MOD'] |
+		                                    $p['P_CORVEE_MOD'] |
+		                                    $p['P_MAIL_COMPOSE'] |
+		                                    $p['P_FORUM_BELANGRIJK'];
+		$this->roles[AccessRole::PubCie] = $this->roles[AccessRole::Bestuur] |
+		                                   $p['P_ADMIN'] |
+		                                   $p['P_MAIL_SEND'] |
+		                                   $p['P_CORVEE_SCHED'] |
+		                                   $p['P_FORUM_ADMIN'];
 
 		// save in cache
 		$this->setCache($key, $this->permissions, true);
@@ -387,9 +440,10 @@ class AccessModel extends CachedPersistenceModel {
 
 	/**
 	 * Create permission string with character which has ascii value of request level.
-	 * 
+	 *
 	 * @param int $onderdeelnummer starts at zero
 	 * @param int $level           permissiewaarde
+	 *
 	 * @return string permission string
 	 */
 	private function createPermStr($onderdeelnummer, $level) {
@@ -455,7 +509,8 @@ class AccessModel extends CachedPersistenceModel {
 		// Is de gevraagde permissie voorgedefinieerd?
 		elseif (isset($this->permissions[$permission])) {
 			$result = $this->mandatoryAccessControl($subject, $permission);
-		} else {
+		}
+		else {
 			$result = $this->discretionaryAccessControl($subject, $permission);
 		}
 
@@ -478,7 +533,7 @@ class AccessModel extends CachedPersistenceModel {
 		$role = $subject->perm_role;
 
 		// ga alleen verder als er een geldige AccessRole wordt teruggegeven
-		if (!$this->isValidRole($role)) {
+		if (! $this->isValidRole($role)) {
 			return false;
 		}
 
@@ -489,18 +544,18 @@ class AccessModel extends CachedPersistenceModel {
 		/**
 		 * permissies zijn een string, waarin elk kararakter de
 		 * waarde heeft van een permissielevel voor een bepaald onderdeel.
-		 * 
+		 *
 		 * de mogelijke verschillende permissies voor een onderdeel zijn machten van twee:
 		 * 1, 2, 4, 8, etc
 		 * elk van deze waardes kan onderscheiden worden in een permissie, ook als je ze met elkaar combineert
 		 * bijv.  3=1+2, 7=1+2+4, 5=1+4, 6=2+4, 12=4+8, etc
-		 * 
+		 *
 		 * $gevraagd is de gevraagde permissie als string,
 		 * de permissies van de gebruiker $lidheeft kunnen we bij $this->lid opvragen
 		 * als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
 		 * zijn aan de gevraagde permissie. In dat geval bestaat de permissie
 		 * van het account dus minimaal uit de gevraagde permissie
-		 * 
+		 *
 		 * Bij het AND-en, wordt elke karakter bitwise vergeleken, dat betekent:
 		 * - elke karakter van de string omzetten in de ASCII-waarde
 		 *   (bijv. ?=63, A=65, a=97, etc zie ook www.ascii.cl)
@@ -509,16 +564,16 @@ class AccessModel extends CachedPersistenceModel {
 		 * - de bits van het binaire getal een-voor-een vergelijken met de bits van het binaire getal uit de
 		 *   andere string. Als ze overeenkomen worden ze bewaard.
 		 *   (bijv. 3&5=1 => 00011&00101=00001)
-		 * 
+		 *
 		 * voorbeeld (met de getallen 0 tot 7 als ASCII-waardes ipv de symbolen, voor de leesbaarheid)
 		 * gevraagd:  P_FORUM_MOD : 0000000700
 		 * account heeft: R_LID   : 0005544500
 		 * AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
-		 * 
+		 *
 		 * gevraagd:  P_DOCS_READ : 0000004000
 		 * account heeft: R_LID   : 0005544500
 		 * AND resultaat          : 0000004000 -> ja!
-		 * 
+		 *
 		 */
 		$resultaat = $gevraagd & $lidheeft;
 
@@ -535,7 +590,7 @@ class AccessModel extends CachedPersistenceModel {
 		$profiel = ProfielModel::get($subject->uid);
 
 		// ga alleen verder als er een geldig profiel wordt teruggegeven
-		if (!$profiel) {
+		if (! $profiel) {
 			return false;
 		}
 
@@ -543,17 +598,20 @@ class AccessModel extends CachedPersistenceModel {
 		$p = explode(':', $permission, 3);
 		if (isset($p[0])) {
 			$prefix = $p[0];
-		} else {
+		}
+		else {
 			return false;
 		}
 		if (isset($p[1])) {
 			$gevraagd = $p[1];
-		} else {
+		}
+		else {
 			$gevraagd = false;
 		}
 		if (isset($p[2])) {
 			$role = $p[2];
-		} else {
+		}
+		else {
 			$role = false;
 		}
 
@@ -579,9 +637,11 @@ class AccessModel extends CachedPersistenceModel {
 				$gevraagd = 'S_' . $gevraagd;
 				if ($gevraagd == $profiel->status) {
 					return true;
-				} elseif ($gevraagd == LidStatus::Lid AND LidStatus::isLidLike($profiel->status)) {
+				}
+				elseif ($gevraagd == LidStatus::Lid AND LidStatus::isLidLike($profiel->status)) {
 					return true;
-				} elseif ($gevraagd == LidStatus::Oudlid AND LidStatus::isOudlidLike($profiel->status)) {
+				}
+				elseif ($gevraagd == LidStatus::Oudlid AND LidStatus::isOudlidLike($profiel->status)) {
 					return true;
 				}
 
@@ -611,9 +671,10 @@ class AccessModel extends CachedPersistenceModel {
 			 */
 			case 'VERTICALE':
 				if ($profiel->verticale === $gevraagd || $gevraagd == strtoupper($profiel->getVerticale()->naam)) {
-					if (!$role) {
+					if (! $role) {
 						return true;
-					} elseif ($role === 'LEIDER' AND $profiel->verticaleleider) {
+					}
+					elseif ($role === 'LEIDER' AND $profiel->verticaleleider) {
 						return true;
 					}
 				}
@@ -666,7 +727,8 @@ class AccessModel extends CachedPersistenceModel {
 						}
 						if ($gevraagd) {
 							$groep = BesturenModel::get($gevraagd);
-						} else {
+						}
+						else {
 							$groep = BesturenModel::get('bestuur'); // h.t.
 						}
 						break;
@@ -702,18 +764,18 @@ class AccessModel extends CachedPersistenceModel {
 					case 'GROEP':
 					default:
 						$groep = RechtenGroepenModel::get($gevraagd);
-						if (!$groep) {
+						if (! $groep) {
 							$groep = RechtenGroepenModel::omnummeren($gevraagd);
 						}
 						break;
 				}
 
-				if (!$groep) {
+				if (! $groep) {
 					return false;
 				}
 
 				$lid = $groep->getLid($profiel->uid);
-				if (!$lid) {
+				if (! $lid) {
 					return false;
 				}
 
@@ -730,11 +792,11 @@ class AccessModel extends CachedPersistenceModel {
 			 */
 			case 'MAALTIJD':
 				// Geldig maaltijd id?
-				if (!is_numeric($gevraagd)) {
+				if (! is_numeric($gevraagd)) {
 					return false;
 				}
 				// Aangemeld voor maaltijd?
-				if (!$role AND MaaltijdAanmeldingenModel::getIsAangemeld((int) $gevraagd, $profiel->uid)) {
+				if (! $role AND MaaltijdAanmeldingenModel::getIsAangemeld((int) $gevraagd, $profiel->uid)) {
 					return true;
 				}
 				// Mag maaltijd sluiten?
@@ -747,7 +809,8 @@ class AccessModel extends CachedPersistenceModel {
 						if ($maaltijd AND $maaltijd->magSluiten($profiel->uid)) {
 							return true;
 						}
-					} catch (Exception $e) {
+					}
+					catch (Exception $e) {
 						// Maaltijd bestaat niet
 					}
 				}
@@ -762,11 +825,13 @@ class AccessModel extends CachedPersistenceModel {
 
 				if (is_numeric($gevraagd)) {
 					$functie_id = (int) $gevraagd;
-				} else {
+				}
+				else {
 					$functie = FunctiesModel::instance()->prefetch('afkorting = ? OR naam = ?', array($gevraagd, $gevraagd), null, null, 1);
 					if (isset($functie[0])) {
 						$functie_id = $functie[0]->functie_id;
-					} else {
+					}
+					else {
 						return false;
 					}
 				}

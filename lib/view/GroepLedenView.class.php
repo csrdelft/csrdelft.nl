@@ -17,13 +17,13 @@ class GroepLedenTable extends DataTable {
 
 		if ($groep->mag(A::Beheren)) {
 
-			$create = new DataTableKnop('== 0', $this->dataTableId, $groep->getUrl() . 'aanmelden', 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
+			$create = new DataTableKnop('== 0', $groep->getUrl() . 'aanmelden', 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
 			$this->addKnop($create);
 
-			$update = new DataTableKnop('== 1', $this->dataTableId, $groep->getUrl() . 'bewerken', 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
+			$update = new DataTableKnop('== 1', $groep->getUrl() . 'bewerken', 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
 			$this->addKnop($update);
 
-			$delete = new DataTableKnop('>= 1', $this->dataTableId, $groep->getUrl() . 'afmelden', 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
+			$delete = new DataTableKnop('>= 1', $groep->getUrl() . 'afmelden', 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
 			$this->addKnop($delete);
 		}
 	}
@@ -74,12 +74,12 @@ class GroepOmschrijvingView implements FormElement {
 	}
 
 	public function getHtml() {
+		echo '<div id="groep-omschrijving-' . $this->groep->id . '">';
+		echo CsrBB::parse($this->groep->omschrijving);
 		$this->javascript .= <<<JS
 
 $('#groep-omschrijving-{$this->groep->id}').hide().slideDown(600);
 JS;
-		echo '<div id="groep-omschrijving-' . $this->groep->id . '">';
-		echo CsrBB::parse($this->groep->omschrijving);
 		echo $this->getScriptTag();
 		echo '</div>';
 	}
@@ -238,7 +238,7 @@ class GroepLijstView extends GroepTabView {
 		foreach ($profielen as $profiel) {
 			$html .= '<tr><td>';
 			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Afmelden)) {
-				$html .= '<a href="' . $this->groep->getUrl() . 'afmelden/' . $profiel->uid . '" class="post confirm float-left" title="Afmelden">'.Icon::getTag('bullet_delete').'</a>';
+				$html .= '<a href="' . $this->groep->getUrl() . 'afmelden/' . $profiel->uid . '" class="post confirm float-left" title="Afmelden">' . Icon::getTag('bullet_delete') . '</a>';
 			}
 			$html .= $profiel->getLink('civitas');
 			$html .= '</td><td>';
