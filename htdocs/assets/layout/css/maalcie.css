@@ -8,9 +8,6 @@
 	text-shadow: none;
 	background-image: none;
 }
-.maalcie-tabel .btn {
-	padding: 3px 5px;
-}
 .maalcie-tabel .groep-tabs li span.fa {
 	color: #a9a9a9;
 }
@@ -62,6 +59,8 @@
 }
 .maalcie-tabel td {
 	vertical-align: middle;
+	padding: 0 1em;
+	white-space: nowrap;
 }
 .maalcie-tabel .col-del { 
 	text-align: center;

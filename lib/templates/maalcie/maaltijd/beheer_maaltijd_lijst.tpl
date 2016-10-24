@@ -29,18 +29,17 @@
 	</td>
 	<td class="text-center">
 		{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})
+
+		{if !$maaltijd->getIsVerwijderd() and $maaltijd->getArchief() === null}
+			<div style="float: right;">
+				<a href="{$smarty.const.maalcieUrl}/anderaanmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding toevoegen" class="btn post popup">{icon get="user_add"}</a>
+				<a href="{$smarty.const.maalcieUrl}/anderafmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding verwijderen" class="btn post popup">{icon get="user_delete"}</a>
+			</div>
+		{/if}
 	</td>
 	<td>
-{if !$maaltijd->getIsVerwijderd() and $maaltijd->getArchief() === null}
-		<div class="float-right">
-			<a href="{$smarty.const.maalcieUrl}/anderaanmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding toevoegen" class="btn post popup">{icon get="user_add"}</a>
-			<a href="{$smarty.const.maalcieUrl}/anderafmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding verwijderen" class="btn post popup">{icon get="user_delete"}</a>
-		</div>
-{/if}
 {if $maaltijd->getAanmeldFilter()}
-		<div class="float-right">
 			&nbsp;{icon get="group_key" title="Aanmeldfilter actief:&#013;"|cat:$maaltijd->getAanmeldFilter()}&nbsp;
-		</div>
 {/if}
 	</td>
 {if $maaltijd->getIsVerwijderd() or $maaltijd->getArchief() !== null}
@@ -62,9 +61,9 @@
 	</td>
 	<td class="col-del">
 {if $maaltijd->getIsVerwijderd()}
-		<a href="{$smarty.const.maalcieUrl}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd definitief verwijderen" class="btn post confirm range"><input type=checkbox id="box-{$maaltijd->getMaaltijdId()}" name="del-maaltijd" />{icon get="cross"}</a>
+		<a href="{$smarty.const.maalcieUrl}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd definitief verwijderen" class="btn post confirm">{icon get="cross"}</a>
 {else}
-		<a href="{$smarty.const.maalcieUrl}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd naar de prullenbak verplaatsen" class="btn post range"><input type=checkbox id="box-{$maaltijd->getMaaltijdId()}" name="del-maaltijd" />{icon get="bin_closed"}</a>
+		<a href="{$smarty.const.maalcieUrl}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd naar de prullenbak verplaatsen" class="btn post">{icon get="bin_closed"}</a>
 {/if}
 	</td>
 </tr>
