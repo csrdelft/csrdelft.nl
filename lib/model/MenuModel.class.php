@@ -153,10 +153,6 @@ class MenuModel extends CachedPersistenceModel {
 		return false;
 	}
 
-	public function getChildren(MenuItem $parent) {
-		return $this->prefetch('parent_id = ?', array($parent->item_id)); // cache for getParent()
-	}
-
 	/**
 	 * Lijst van alle menu roots om te beheren.
 	 * 
@@ -168,13 +164,6 @@ class MenuModel extends CachedPersistenceModel {
 		} else {
 			return false;
 		}
-	}
-
-	public function getRoot(MenuItem $item) {
-		if ($item->parent_id === 0) {
-			return $item;
-		}
-		return $this->getRoot($item->getParent());
 	}
 
 	/**
@@ -209,6 +198,7 @@ class MenuModel extends CachedPersistenceModel {
 	public function create(PersistentEntity $entity) {
 		$entity->item_id = (int) parent::create($entity);
 		$this->flushCache(true);
+		return $entity->item_id;
 	}
 
 	public function update(PersistentEntity $entity) {
@@ -217,21 +207,20 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function removeMenuItem(MenuItem $item) {
-		$db = Database::instance();
-		try {
-			$db->beginTransaction();
-			// give new parent to otherwise future orphans
-			$update = array('parent_id' => $item->parent_id);
-			$where = 'parent_id = :oldid';
-			$rowCount = Database::sqlUpdate($this->getTableName(), $update, $where, array(':oldid' => $item->item_id));
-			$this->delete($item);
-			$db->commit();
-			$this->flushCache(true);
-			return $rowCount;
-		} catch (Exception $e) {
-			$db->rollBack();
-			throw $e; // rethrow to controller
-		}
+		// Give new parent to otherwise future orphans
+		$set = array('parent_id' => $item->parent_id);
+		$where = 'parent_id = :oldid';
+		$rowCount = Database::sqlUpdate($this->getTableName(), $set, $where, array(':oldid' => $item->item_id));
+		// Remove menu item
+		require_once 'model/PrullenbakModel.class.php';
+		PrullenbakModel::instance()->remove($this, $item);
+		$this->flushCache(true);
+		return $rowCount;
+	}
+
+	public function onRestored(MenuItem $item) {
+		// Restore original children not possible due to merge on remove
+		$this->flushCache(true);
 	}
 
 }

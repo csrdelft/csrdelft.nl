@@ -45,6 +45,8 @@ RewriteRule ^rechten			index.php?c=Rechten [L]
 RewriteRule ^instellingenbeheer	index.php?c=InstellingenBeheer [L]
 RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
 RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
+RewriteRule ^prullenbak			index.php?c=Prullenbak [L]
+RewriteRule ^goedkeuren			index.php?c=Goedkeuren [L]
 RewriteRule ^commissievoorkeuren index.php?c=CommissieVoorkeuren [L]
 
 # business club
