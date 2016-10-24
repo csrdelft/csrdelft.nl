@@ -62,9 +62,9 @@
 	</td>
 	<td class="col-del">
 {if $maaltijd->getIsVerwijderd()}
-		<a href="{$smarty.const.maalcieUrl}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd definitief verwijderen" class="btn post confirm range"><input type=checkbox id="box-{$maaltijd->getMaaltijdId()}" name="del-maaltijd" />{icon get="cross"}</a>
+		<a href="{$smarty.const.maalcieUrl}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd definitief verwijderen" class="btn post confirm">{icon get="cross"}</a>
 {else}
-		<a href="{$smarty.const.maalcieUrl}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd naar de prullenbak verplaatsen" class="btn post range"><input type=checkbox id="box-{$maaltijd->getMaaltijdId()}" name="del-maaltijd" />{icon get="bin_closed"}</a>
+		<a href="{$smarty.const.maalcieUrl}/verwijder/{$maaltijd->getMaaltijdId()}" title="Maaltijd naar de prullenbak verplaatsen" class="btn post">{icon get="bin_closed"}</a>
 {/if}
 	</td>
 </tr>
