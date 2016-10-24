@@ -29,18 +29,17 @@
 	</td>
 	<td class="text-center">
 		{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->getAanmeldLimiet()})
+
+		{if !$maaltijd->getIsVerwijderd() and $maaltijd->getArchief() === null}
+			<div style="float: right;">
+				<a href="{$smarty.const.maalcieUrl}/anderaanmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding toevoegen" class="btn post popup">{icon get="user_add"}</a>
+				<a href="{$smarty.const.maalcieUrl}/anderafmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding verwijderen" class="btn post popup">{icon get="user_delete"}</a>
+			</div>
+		{/if}
 	</td>
 	<td>
-{if !$maaltijd->getIsVerwijderd() and $maaltijd->getArchief() === null}
-		<div class="float-right">
-			<a href="{$smarty.const.maalcieUrl}/anderaanmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding toevoegen" class="btn post popup">{icon get="user_add"}</a>
-			<a href="{$smarty.const.maalcieUrl}/anderafmelden/{$maaltijd->getMaaltijdId()}" title="Aanmelding verwijderen" class="btn post popup">{icon get="user_delete"}</a>
-		</div>
-{/if}
 {if $maaltijd->getAanmeldFilter()}
-		<div class="float-right">
 			&nbsp;{icon get="group_key" title="Aanmeldfilter actief:&#013;"|cat:$maaltijd->getAanmeldFilter()}&nbsp;
-		</div>
 {/if}
 	</td>
 {if $maaltijd->getIsVerwijderd() or $maaltijd->getArchief() !== null}
