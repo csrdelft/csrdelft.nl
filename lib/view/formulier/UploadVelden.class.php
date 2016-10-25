@@ -425,7 +425,8 @@ class ExistingFileField extends SelectField {
 		parent::__construct($name, null, 'Uit publieke FTP-map', array());
 		$this->filterMime = $filterMime;
 		if ($root === null) {
-			$this->dir = new Map(PUBLIC_FTP);
+			$this->dir = new Map();
+            $this->dir->path = PUBLIC_FTP;
 		} else {
 			$this->dir = $root;
 		}
