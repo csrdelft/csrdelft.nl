@@ -2,6 +2,8 @@
 
 ## Installatie
 
+### Apache2
+
 Installeer een stack met Apache2 en MySQL.
 
 Maak in je `hosts` bestand een verwijzing van `dev.csrdelft.nl` naar `localhost`.
@@ -25,4 +27,21 @@ De volgende configuratie werkt goed voor Apache2, let op de `php_value include_p
 </VirtualHost>
 ```
 
+### PHP
+
 Enable `mod_ldap` en .. in `php.ini`
+
+
+### MySQL
+
+Maak een database `csrdelft` aan.
+
+```SQL
+CREATE USER 'csrdelft'@'localhost' IDENTIFIED BY 'wachtwoord';
+CREATE DATABASE `csrdelft` ;
+GRANT ALL PRIVILEGES ON `csrdelft` . * TO 'csrdelft'@'localhost';
+``` 
+
+Hernoem `etc/mysql.ini.sample` naar `etc/mysql.ini` en voer de goede waarden in.
+
+Fix een export van de database en plaats deze in je lokale database.
