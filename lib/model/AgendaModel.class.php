@@ -91,7 +91,7 @@ class AgendaModel extends PersistenceModel {
 			$GLOBALS['agenda_jaar'] = date('Y', $van);
 			$GLOBALS['agenda_maand'] = date('m', ($van + $tot) / 2);
 
-			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0));
+			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0)->fetchAll());
 		}
 
 		// Sorteren

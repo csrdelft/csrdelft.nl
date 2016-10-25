@@ -83,7 +83,7 @@ abstract class Zijbalk {
 		// Komende verjaardagen
 		if (LoginModel::mag('P_LOGGED_IN') AND LidInstellingen::get('zijbalk', 'verjaardagen') > 0) {
 			require_once 'view/VerjaardagenView.class.php';
-			$zijbalk[] = new VerjaardagenView('komende');
+			$zijbalk[] = new KomendeVerjaardagenView(null);
 		}
 		return $zijbalk;
 	}
