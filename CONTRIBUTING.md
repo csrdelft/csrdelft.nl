@@ -4,6 +4,8 @@
 
 Installeer een stack met Apache2 en MySQL.
 
+Maak in je `hosts` bestand een verwijzing van `dev.csrdelft.nl` naar `localhost`.
+
 De volgende configuratie werkt goed voor Apache2, let op de `php_value include_path ...`.
 
 ```
@@ -22,3 +24,5 @@ De volgende configuratie werkt goed voor Apache2, let op de `php_value include_p
     </Directory>
 </VirtualHost>
 ```
+
+Enable `mod_ldap` en .. in `php.ini`
