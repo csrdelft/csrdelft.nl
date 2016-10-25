@@ -956,8 +956,8 @@ class IBANField extends TextField {
             return true;
         }
         // check format
-        if (verify_iban($this->value)) {
-            $this->error = "Ongeldig IBAN adres";
+        if (!verify_iban($this->value)) {
+            $this->error = "Ongeldige IBAN";
         }
         return $this->error === '';
     }
