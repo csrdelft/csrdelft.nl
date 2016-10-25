@@ -941,6 +941,33 @@ class RequiredEmailField extends EmailField {
 
 }
 
+
+/**
+ * Class IBANField checked of de ingevulde bankrekening een valide IBAN is.
+ */
+class IBANField extends TextField {
+
+    public function validate() {
+        if (!parent::validate()) {
+            return false;
+        }
+        // parent checks not null
+        if ($this->value == '') {
+            return true;
+        }
+        // check format
+        if (!verify_iban($this->value)) {
+            $this->error = "Ongeldige IBAN";
+        }
+        return $this->error === '';
+    }
+
+}
+
+class RequiredIBANField extends IBANField {
+    public $required = true;
+}
+
 /**
  * UrlField checked of de invoer op een url lijkt.
  */
