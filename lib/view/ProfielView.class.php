@@ -352,14 +352,14 @@ class ProfielForm extends Formulier {
 		$fields[] = new Subkopje('Persoonlijk');
 		$fields[] = new TextField('eetwens', $profiel->eetwens, 'Dieet/voedselallergie');
 		$fields[] = new RequiredIntField('lengte', (int) $profiel->lengte, 'Lengte (cm)', 50, 250);
-		$fields[] = new RequiredSelectField('ovkaart', $profiel->ovkaart, 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
+		$fields[] = new SelectField('ovkaart', $profiel->ovkaart, 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
 		$fields[] = new TextField('kerk', $profiel->kerk, 'Kerk', 50);
 		$fields[] = new TextField('muziek', $profiel->muziek, 'Muziekinstrument', 50);
 		$fields[] = new SelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 
 		if ($admin OR $inschrijven) {
 			$fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
-			$fields[] = new RequiredTextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
+			$fields[] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
 		}
 
         $fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
