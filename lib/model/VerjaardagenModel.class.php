@@ -8,6 +8,10 @@
  */
 class VerjaardagenModel {
 
+    public static function getJaar() {
+        return array_map('static::get', range(1,12));
+    }
+
 	public static function get($maand) {
         return ProfielModel::instance()->find("status in ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND EXTRACT(MONTH FROM gebdatum) = ? ", array($maand), null, 'EXTRACT(DAY FROM gebdatum)');
 	}

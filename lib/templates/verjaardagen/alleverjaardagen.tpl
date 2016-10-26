@@ -7,7 +7,7 @@
                 <th></th>
                 <th><h3>{mktime(0, 0, 0, $maand, 10)|date_format:'%B'|ucfirst}</h3></th>
             </tr>
-            {foreach from=VerjaardagenModel::get($maand) item=$verjaardag}
+            {foreach from=$verjaardagen[$maand - 1] item=verjaardag}
                 {assign gebdag date('j', strtotime($verjaardag->gebdatum))}
                 <tr>
                     {if $gebdag == $dezedag && $maand == $dezemaand}
