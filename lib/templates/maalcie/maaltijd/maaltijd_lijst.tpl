@@ -22,33 +22,33 @@
 		{/if}
 		<table class="container">
 			<tr>
-				{if $maaltijd->aantal_aanmeldingen > 0}
+				{if $maaltijd->getAantalAanmeldingen() > 0}
 					{foreach from=$aanmeldingen item="tabel" name="tabellen"}
 						<td>
 							<table class="aanmeldingen">
 								{foreach from=$tabel item="aanmelding"}
 									<tr>
-										{if $aanmelding->getUid()}
-											<td>{ProfielModel::getLink($aanmelding->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}<br />
-												{assign var=eetwens value=ProfielModel::get($aanmelding->getUid())->eetwens}
+										{if $aanmelding->uid}
+											<td>{ProfielModel::getLink($aanmelding->uid, Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}<br />
+												{assign var=eetwens value=ProfielModel::get($aanmelding->uid)->eetwens}
 												{if $eetwens !== ''}
 													<span class="eetwens">
 														{$eetwens}
 													</span>
 												{/if}
-												{if $aanmelding->getGastenEetwens() !== ''}
+												{if $aanmelding->gasten_eetwens !== ''}
 													{if $eetwens !== ''}
 														<br />
 													{/if}
 													<span class="opmerking">Gasten: </span>
 													<span class="eetwens">
-														{$aanmelding->getGastenEetwens()}
+														{$aanmelding->gasten_eetwens}
 													</span>
 												{/if}
 											</td>
 											<td class="saldo">{$aanmelding->getSaldoMelding()}</td>
-										{elseif $aanmelding->getDoorUid()}
-											<td>Gast van {ProfielModel::getLink($aanmelding->getDoorUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
+										{elseif $aanmelding->door_uid}
+											<td>Gast van {ProfielModel::getLink($aanmelding->door_uid, Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
 											<td class="saldo">-</td>
 										{else}
 											<td style="line-height: 2.2em;">&nbsp;</td>
@@ -74,7 +74,7 @@
 			<td class="maaltijdgegevens">
 				<h3>Maaltijdgegevens</h3>
 				<table>
-					<tr><td>Inschrijvingen:</td><td>{$maaltijd->aantal_aanmeldingen}</td></tr>
+					<tr><td>Inschrijvingen:</td><td>{$maaltijd->getAantalAanmeldingen()}</td></tr>
 					<tr><td>Marge:</td><td>{$maaltijd->getMarge()}</td></tr>
 					<tr><td>Eters:</td><td>{$eterstotaal}</td></tr>
 					<tr><td>Budget koks:</td><td>&euro; {$maaltijd->getBudget()|string_format:"%.2f"}</td></tr>

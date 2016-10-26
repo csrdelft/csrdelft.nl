@@ -37,16 +37,16 @@ class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
         $this->prijs = $prijs;
         $this->aanmeldingen = '';
         foreach ($aanmeldingen as $aanmelding) {
-            if ($aanmelding->getUid() === '') {
+            if ($aanmelding->uid === '') {
                 $this->aanmeldingen .= 'gast';
             } else {
-                $this->aanmeldingen .= $aanmelding->getUid();
+                $this->aanmeldingen .= $aanmelding->uid;
             }
-            if ($aanmelding->getDoorAbonnement()) {
+            if ($aanmelding->door_abonnement) {
                 $this->aanmeldingen .= '_abo';
             }
-            if ($aanmelding->getDoorUid() !== null) {
-                $this->aanmeldingen .= '_' . $aanmelding->getDoorUid();
+            if ($aanmelding->door_uid !== null) {
+                $this->aanmeldingen .= '_' . $aanmelding->door_uid;
             }
             $this->aanmeldingen .= ',';
         }
@@ -78,7 +78,7 @@ class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
     }
 
 	public function getBeginMoment() {
-		return strtotime($this->getDatum() . ' ' . $this->getTijd());
+		return strtotime($this->datum . ' ' . $this->tijd);
 	}
 
 	public function getEindMoment() {

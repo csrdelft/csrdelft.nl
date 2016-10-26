@@ -83,10 +83,10 @@ class MijnMaaltijdenController extends AclController {
 	public function aanmelden($mid) {
 		$aanmelding = MaaltijdAanmeldingenModel::aanmeldenVoorMaaltijd($mid, LoginModel::getUid(), LoginModel::getUid());
 		if ($this->getMethod() == 'POST') {
-			$this->view = new MijnMaaltijdView($aanmelding->getMaaltijd(), $aanmelding);
+			$this->view = new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
 		} else {
 			require_once 'view/maalcie/MaaltijdKetzerView.class.php';
-			$this->view = new MaaltijdKetzerView($aanmelding->getMaaltijd(), $aanmelding);
+			$this->view = new MaaltijdKetzerView($aanmelding->maaltijd, $aanmelding);
 		}
 	}
 
@@ -103,13 +103,13 @@ class MijnMaaltijdenController extends AclController {
 	public function gasten($mid) {
 		$gasten = (int) filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
 		$aanmelding = MaaltijdAanmeldingenModel::saveGasten($mid, LoginModel::getUid(), $gasten);
-		$this->view = new MijnMaaltijdView($aanmelding->getMaaltijd(), $aanmelding);
+		$this->view = new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
 	}
 
 	public function opmerking($mid) {
 		$opmerking = filter_input(INPUT_POST, 'gasten_eetwens', FILTER_SANITIZE_STRING);
 		$aanmelding = MaaltijdAanmeldingenModel::saveGastenEetwens($mid, LoginModel::getUid(), $opmerking);
-		$this->view = new MijnMaaltijdView($aanmelding->getMaaltijd(), $aanmelding);
+		$this->view = new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
 	}
 
 	public function beoordeling($mid) {

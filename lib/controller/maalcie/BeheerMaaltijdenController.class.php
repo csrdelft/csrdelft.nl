@@ -150,7 +150,7 @@ class BeheerMaaltijdenController extends AclController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$aanmelding = MaaltijdAanmeldingenModel::aanmeldenVoorMaaltijd($mid, $values['voor_lid'], LoginModel::getUid(), $values['aantal_gasten'], true);
-			$this->view = new BeheerMaaltijdView($aanmelding->getMaaltijd());
+			$this->view = new BeheerMaaltijdView($aanmelding->maaltijd);
 		} else {
 			$this->view = $form;
 		}

@@ -61,6 +61,16 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
         return (float) $this->prijs / 100.0;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAantalAanmeldingen() {
+        if ($this->aantal_aanmeldingen == null) {
+            $this->aantal_aanmeldingen = MaaltijdAanmeldingenModel::instance()->count('maaltijd_id = ?', array($this->maaltijd_id));
+        }
+        return $this->aantal_aanmeldingen;
+    }
+
 	/**
 	 * Bereken de marge in verband met niet aangemelde gasten.
 	 * 

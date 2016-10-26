@@ -9,10 +9,10 @@
 	<td>&euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"}</td>
 	<td>
 		<div class="aanmeldingen-{$maaltijd->maaltijd_id} inline">
-			<a title="Toon aanmeldingen" class="btn" onclick="$('div.aanmeldingen-{$maaltijd->maaltijd_id}').toggle();">{icon get="eye"} Toon <span class="dikgedrukt">{$maaltijd->aantal_aanmeldingen}</span></a>
+			<a title="Toon aanmeldingen" class="btn" onclick="$('div.aanmeldingen-{$maaltijd->maaltijd_id}').toggle();">{icon get="eye"} Toon <span class="dikgedrukt">{$maaltijd->getAantalAanmeldingen()}</span></a>
 		</div>
 		<div class="aanmeldingen-{$maaltijd->maaltijd_id} verborgen">
-			<a title="Toon aanmeldingen" class="btn" onclick="$('div.aanmeldingen-{$maaltijd->maaltijd_id}').toggle();">{icon get="eye"} Verberg <span class="dikgedrukt">{$maaltijd->aantal_aanmeldingen}</span></a>
+			<a title="Toon aanmeldingen" class="btn" onclick="$('div.aanmeldingen-{$maaltijd->maaltijd_id}').toggle();">{icon get="eye"} Verberg <span class="dikgedrukt">{$maaltijd->getAantalAanmeldingen()}</span></a>
 		{foreach from=$maaltijd->getAanmeldingenArray() item=aanmelding}
 			<li>
 				{if $aanmelding[0] === 'gast'}Gast van

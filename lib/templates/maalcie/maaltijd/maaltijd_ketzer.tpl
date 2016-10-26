@@ -9,7 +9,7 @@
 					{if $aanmelding}
 						<a onclick="ketzer_ajax('/maaltijdenketzer/afmelden/{$maaltijd->maaltijd_id}', '.maaltijdketzer-{$maaltijd->maaltijd_id}');" class="btn maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
 
-					{elseif $maaltijd->aantal_aanmeldingen >= $maaltijd->aanmeld_limiet}
+					{elseif $maaltijd->getAantalAanmeldingen() >= $maaltijd->aanmeld_limiet}
 						{icon get="stop" title="Maaltijd is vol"}&nbsp;
 						<span class="maaltijd-afgemeld">Nee</span>
 
@@ -21,19 +21,19 @@
 				{else}
 
 					{if $aanmelding}
-						<span class="maaltijd-aangemeld">Ja{if $aanmelding->getDoorAbonnement()} (abo){/if}</span>
+						<span class="maaltijd-aangemeld">Ja{if $aanmelding->door_abonnement} (abo){/if}</span>
 					{else}
 						<span class="maaltijd-afgemeld">Nee</span>
 					{/if}
 
 				{/if}
 
-				{if $aanmelding and $aanmelding->getAantalGasten() > 0}
-					+{$aanmelding->getAantalGasten()}
+				{if $aanmelding and $aanmelding->aantal_gasten > 0}
+					+{$aanmelding->aantal_gasten}
 				{/if}
 
-				{if $aanmelding and $aanmelding->getGastenEetwens()}
-					{icon get="comment" title=$aanmelding->getGastenEetwens()}
+				{if $aanmelding and $aanmelding->gasten_eetwens}
+					{icon get="comment" title=$aanmelding->gasten_eetwens}
 				{/if}
 
 				{if $maaltijd->gesloten}&nbsp;
@@ -60,7 +60,7 @@
 				{if $maaltijd->magSluiten(LoginModel::getUid())}
 					<a href="/maaltijdenlijst/{$maaltijd->maaltijd_id}" title="Toon maaltijdlijst">
 				{/if}
-				Inschrijvingen: <em>{$maaltijd->aantal_aanmeldingen}</em> van <em>{$maaltijd->aanmeld_limiet}</em>
+				Inschrijvingen: <em>{$maaltijd->getAantalAanmeldingen()}</em> van <em>{$maaltijd->aanmeld_limiet}</em>
 				{if $maaltijd->magSluiten(LoginModel::getUid())}
 					</a>
 				{/if}

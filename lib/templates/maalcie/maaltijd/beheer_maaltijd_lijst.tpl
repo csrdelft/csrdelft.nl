@@ -28,7 +28,7 @@
 		<a href="/maaltijdenlijst/{$maaltijd->maaltijd_id}" title="Toon maaltijdlijst" class="btn" style="margin-right:10px;">{icon get="table"}</a>
 	</td>
 	<td class="text-center">
-		{$maaltijd->aantal_aanmeldingen} ({$maaltijd->aanmeld_limiet})
+		{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->aanmeld_limiet})
 
 		{if !$maaltijd->verwijderd and $maaltijd->archief === null}
 			<div style="float: right;">

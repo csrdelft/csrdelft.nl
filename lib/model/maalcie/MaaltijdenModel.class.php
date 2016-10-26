@@ -14,7 +14,7 @@ class MaaltijdenModel extends PersistenceModel {
     const ORM = 'Maaltijd';
     const DIR = 'maalcie/';
 
-
+    protected static $instance;
 
 	/**
 	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
@@ -126,7 +126,7 @@ class MaaltijdenModel extends PersistenceModel {
 		if (!is_int($mid) || $mid <= 0) {
 			throw new Exception('Load maaltijd faalt: Invalid $mid =' . $mid);
 		}
-		$maaltijden = self::loadMaaltijden('m.maaltijd_id = ?', array($mid), 1);
+		$maaltijden = self::loadMaaltijden('maaltijd_id = ?', array($mid), 1);
 		if (!array_key_exists(0, $maaltijden)) {
 			throw new Exception('Load maaltijd faalt: Not found $mid =' . $mid);
 		}
@@ -155,7 +155,7 @@ class MaaltijdenModel extends PersistenceModel {
 				}
 				if (!$maaltijd->gesloten && !$maaltijd->verwijderd && !empty($filter)) {
 					$verwijderd = MaaltijdAanmeldingenModel::checkAanmeldingenFilter($filter, array($maaltijd));
-					$maaltijd->aantal_aanmeldingen = $maaltijd->aantal_aanmeldingen - $verwijderd;
+					$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() - $verwijderd;
 				}
 			}
 			$db->commit();
@@ -249,6 +249,8 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @return Maaltijd[]
 	 */
 	private static function loadMaaltijden($where = null, $values = array(), $limit = null) {
+        return static::instance()->find($where, $values, 'maaltijd_id', 'datum ASC, tijd ASC', $limit)->fetchAll();
+
 		$sql = 'SELECT m.maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter, omschrijving, COUNT(a.uid) + SUM(IFNULL(aantal_gasten, 0)) AS aantal_aanmeldingen';
 		$sql.= ' FROM mlt_maaltijden m';
 		$sql.= ' LEFT JOIN mlt_aanmeldingen a ON m.maaltijd_id = a.maaltijd_id';

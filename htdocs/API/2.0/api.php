@@ -244,7 +244,7 @@ function maaltijdAanmelden($id) {
 
 	try {
 		$aanmelding = MaaltijdAanmeldingenModel::aanmeldenVoorMaaltijd($id, $_SESSION['_uid'], $_SESSION['_uid']);
-		return $aanmelding->getMaaltijd();
+		return $aanmelding->maaltijd;
 	} catch (Exception $e) {
 		http_response_code(403);
 		return $e->getMessage();
