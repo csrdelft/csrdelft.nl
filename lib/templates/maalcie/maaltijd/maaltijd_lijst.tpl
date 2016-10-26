@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>{strip}
 	<head>
-		<title>{$titel} {$maaltijd->getDatum()|date_format:"%A %e %B"}</title>
+		<title>{$titel} {$maaltijd->datum|date_format:"%A %e %B"}</title>
 		{foreach from=$stylesheets item=sheet}
 			<link rel="stylesheet" href="{$sheet}" type="text/css" />
 		{/foreach}
@@ -11,18 +11,18 @@
 	</head>
 	<body>
 		<a href="/" class="float-right"><img alt="Beeldmerk van de Vereniging" src="/assets/layout/plaetjes/beeldmerk.jpg" /></a>
-		<h1>{$titel} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
+		<h1>{$titel} op {$maaltijd->datum|date_format:"%A %e %B %Y"}</h1>
 		<div class="header">{Instellingen::get('maaltijden', 'maaltijdlijst_tekst')|replace:'MAALTIJDPRIJS':$prijs}</div>
-		{if !$maaltijd->getIsGesloten()}
+		{if !$maaltijd->gesloten}
 			<h1 id="gesloten-melding">De maaltijd is nog niet gesloten
-				{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten()}
-					&nbsp;<button href="{$smarty.const.maalcieUrl}/sluit/{$maaltijd->getMaaltijdId()}" class="btn post confirm" title="Het sluiten van de maaltijd betekent dat niemand zich meer kan aanmelden voor deze maaltijd">Inschrijving sluiten</button>
+				{if !$maaltijd->verwijderd and !$maaltijd->gesloten}
+					&nbsp;<button href="{$smarty.const.maalcieUrl}/sluit/{$maaltijd->maaltijd_id}" class="btn post confirm" title="Het sluiten van de maaltijd betekent dat niemand zich meer kan aanmelden voor deze maaltijd">Inschrijving sluiten</button>
 				{/if}
 			</h1>
 		{/if}
 		<table class="container">
 			<tr>
-				{if $maaltijd->getAantalAanmeldingen() > 0}
+				{if $maaltijd->aantal_aanmeldingen > 0}
 					{foreach from=$aanmeldingen item="tabel" name="tabellen"}
 						<td>
 							<table class="aanmeldingen">
@@ -74,7 +74,7 @@
 			<td class="maaltijdgegevens">
 				<h3>Maaltijdgegevens</h3>
 				<table>
-					<tr><td>Inschrijvingen:</td><td>{$maaltijd->getAantalAanmeldingen()}</td></tr>
+					<tr><td>Inschrijvingen:</td><td>{$maaltijd->aantal_aanmeldingen}</td></tr>
 					<tr><td>Marge:</td><td>{$maaltijd->getMarge()}</td></tr>
 					<tr><td>Eters:</td><td>{$eterstotaal}</td></tr>
 					<tr><td>Budget koks:</td><td>&euro; {$maaltijd->getBudget()|string_format:"%.2f"}</td></tr>

@@ -9,7 +9,12 @@ require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
  * MaaltijdenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MaaltijdenModel {
+class MaaltijdenModel extends PersistenceModel {
+
+    const ORM = 'Maaltijd';
+    const DIR = 'maalcie/';
+
+
 
 	/**
 	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
@@ -24,20 +29,20 @@ class MaaltijdenModel {
 	}
 
 	public static function openMaaltijd(Maaltijd $maaltijd) {
-		if (!$maaltijd->getIsGesloten()) {
+		if (!$maaltijd->gesloten) {
 			throw new Exception('Maaltijd is al geopend');
 		}
-		$maaltijd->setGesloten(false);
+		$maaltijd->gesloten = false;
 		self::updateMaaltijd($maaltijd);
 		return $maaltijd;
 	}
 
 	public static function sluitMaaltijd(Maaltijd $maaltijd) {
-		if ($maaltijd->getIsGesloten()) {
+		if ($maaltijd->gesloten) {
 			throw new Exception('Maaltijd is al gesloten');
 		}
-		$maaltijd->setGesloten(true);
-		$maaltijd->setLaatstGesloten(date('Y-m-d H:i'));
+		$maaltijd->gesloten = true;
+		$maaltijd->laatst_gesloten = date('Y-m-d H:i');
 		self::updateMaaltijd($maaltijd);
 	}
 
@@ -86,7 +91,7 @@ class MaaltijdenModel {
 		$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $timestamp), date('Y-m-d')), $limit);
 		$maaltijdenById = array();
 		foreach ($maaltijden as $maaltijd) {
-			$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;
+			$maaltijdenById[$maaltijd->maaltijd_id] = $maaltijd;
 		}
 		return $maaltijdenById;
 	}
@@ -111,7 +116,7 @@ class MaaltijdenModel {
 
 	public static function getMaaltijd($mid, $verwijderd = false) {
 		$maaltijd = self::loadMaaltijd($mid);
-		if (!$verwijderd && $maaltijd->getIsVerwijderd()) {
+		if (!$verwijderd && $maaltijd->verwijderd) {
 			throw new Exception('Maaltijd is verwijderd');
 		}
 		return $maaltijd;
@@ -137,20 +142,20 @@ class MaaltijdenModel {
 				$maaltijd = self::newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving);
 			} else {
 				$maaltijd = self::getMaaltijd($mid);
-				$maaltijd->setTitel($titel);
-				$maaltijd->setAanmeldLimiet($limiet);
-				$maaltijd->setDatum($datum);
-				$maaltijd->setTijd($tijd);
-				$maaltijd->setPrijs($prijs);
-				$maaltijd->setAanmeldFilter($filter);
-				$maaltijd->setOmschrijving($omschrijving);
+				$maaltijd->titel = $titel;
+				$maaltijd->aanmeld_limiet = $limiet;
+				$maaltijd->datum = $datum;
+				$maaltijd->tijd = $tijd;
+				$maaltijd->prijs = $prijs;
+				$maaltijd->aanmeld_filter = $filter;
+				$maaltijd->omschrijving = $omschrijving;
 				self::updateMaaltijd($maaltijd);
-				if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < time()) {
+				if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
 					MaaltijdenModel::sluitMaaltijd($maaltijd);
 				}
-				if (!$maaltijd->getIsGesloten() && !$maaltijd->getIsVerwijderd() && !empty($filter)) {
+				if (!$maaltijd->gesloten && !$maaltijd->verwijderd && !empty($filter)) {
 					$verwijderd = MaaltijdAanmeldingenModel::checkAanmeldingenFilter($filter, array($maaltijd));
-					$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() - $verwijderd);
+					$maaltijd->aantal_aanmeldingen = $maaltijd->aantal_aanmeldingen - $verwijderd;
 				}
 			}
 			$db->commit();
@@ -166,7 +171,7 @@ class MaaltijdenModel {
 		$maaltijden = self::getVerwijderdeMaaltijden();
 		foreach ($maaltijden as $maaltijd) {
 			try {
-				self::verwijderMaaltijd($maaltijd->getMaaltijdId());
+				self::verwijderMaaltijd($maaltijd->maaltijd_id);
 				$aantal++;
 			} catch (\Exception $e) {
 				setMelding($e->getMessage(), -1);
@@ -178,13 +183,13 @@ class MaaltijdenModel {
 	public static function verwijderMaaltijd($mid) {
 		$maaltijd = self::loadMaaltijd($mid);
 		\CorveeTakenModel::verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
-		if ($maaltijd->getIsVerwijderd()) {
+		if ($maaltijd->verwijderd) {
 			if (\CorveeTakenModel::existMaaltijdCorvee($mid)) {
 				throw new Exception('Er zitten nog bijbehorende corveetaken in de prullenbak. Verwijder die eerst definitief!');
 			}
 			self::deleteMaaltijd($mid); // definitief verwijderen
 		} else {
-			$maaltijd->setVerwijderd(true);
+			$maaltijd->verwijderd = true;
 			self::updateMaaltijd($maaltijd);
 		}
 	}
@@ -211,10 +216,10 @@ class MaaltijdenModel {
 
 	public static function herstelMaaltijd($mid) {
 		$maaltijd = self::loadMaaltijd($mid);
-		if (!$maaltijd->getIsVerwijderd()) {
+		if (!$maaltijd->verwijderd) {
 			throw new Exception('Maaltijd is niet verwijderd');
 		}
-		$maaltijd->setVerwijderd(false);
+		$maaltijd->verwijderd = false;
 		self::updateMaaltijd($maaltijd);
 		return $maaltijd;
 	}
@@ -230,8 +235,8 @@ class MaaltijdenModel {
 		$result = array();
 		foreach ($maaltijden as $maaltijd) {
 			// Kan en mag aanmelden of mag maaltijdlijst zien en sluiten? Dan maaltijd ook zien.
-			if (($maaltijd->getAanmeldLimiet() > 0 AND MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $maaltijd->getAanmeldFilter())) OR $maaltijd->magBekijken($uid)) {
-				$result[$maaltijd->getMaaltijdId()] = $maaltijd;
+			if (($maaltijd->aanmeld_limiet > 0 AND MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) OR $maaltijd->magBekijken($uid)) {
+				$result[$maaltijd->maaltijd_id] = $maaltijd;
 			}
 		}
 		return $result;
@@ -271,16 +276,16 @@ class MaaltijdenModel {
 		$sql.= ' WHERE maaltijd_id=?';
 		$values = array(
 			$maaltijd->getTitel(),
-			$maaltijd->getAanmeldLimiet(),
-			$maaltijd->getDatum(),
-			$maaltijd->getTijd(),
-			$maaltijd->getPrijs(),
-			werkomheen_pdo_bool($maaltijd->getIsGesloten()),
-			$maaltijd->getLaatstGesloten(),
-			werkomheen_pdo_bool($maaltijd->getIsVerwijderd()),
-			$maaltijd->getAanmeldFilter(),
-			$maaltijd->getOmschrijving(),
-			$maaltijd->getMaaltijdId()
+			$maaltijd->aanmeld_limiet,
+			$maaltijd->datum,
+			$maaltijd->tijd,
+			$maaltijd->prijs,
+			werkomheen_pdo_bool($maaltijd->gesloten),
+			$maaltijd->laatst_gesloten,
+			werkomheen_pdo_bool($maaltijd->verwijderd),
+			$maaltijd->aanmeld_filter,
+			$maaltijd->omschrijving,
+			$maaltijd->maaltijd_id
 		);
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
@@ -313,13 +318,13 @@ class MaaltijdenModel {
 		if (!$gesloten && $mrid !== null) {
 			$abonnementen = MaaltijdAbonnementenModel::getAbonnementenVoorRepetitie($mrid);
 			foreach ($abonnementen as $abo) {
-				if (MaaltijdAanmeldingenModel::checkAanmeldFilter($abo->getUid(), $maaltijd->getAanmeldFilter())) {
-					MaaltijdAanmeldingenModel::aanmeldenDoorAbonnement($maaltijd->getMaaltijdId(), $abo->getMaaltijdRepetitieId(), $abo->getUid());
+				if (MaaltijdAanmeldingenModel::checkAanmeldFilter($abo->getUid(), $maaltijd->aanmeld_filter)) {
+					MaaltijdAanmeldingenModel::aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $abo->getMaaltijdRepetitieId(), $abo->getUid());
 					$aantal++;
 				}
 			}
 		}
-		$maaltijd->setAantalAanmeldingen($aantal);
+		$maaltijd->aantal_aanmeldingen = $aantal;
 		return $maaltijd;
 	}
 
@@ -336,11 +341,11 @@ class MaaltijdenModel {
 		$where.= ')';
 		$maaltijdenById = array();
 		foreach ($maaltijden as $maaltijd) {
-			$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;
+			$maaltijdenById[$maaltijd->maaltijd_id] = $maaltijd;
 		}
 		$archief = self::loadArchiefMaaltijden($where, array_keys($maaltijdenById));
 		foreach ($archief as $maaltijd) {
-			$maaltijdenById[$maaltijd->getMaaltijdId()]->setArchief($maaltijd);
+			$maaltijdenById[$maaltijd->maaltijd_id]->setArchief($maaltijd);
 		}
 	}
 
@@ -398,8 +403,8 @@ class MaaltijdenModel {
 		foreach ($maaltijden as $maaltijd) {
 			try {
 				self::verplaatsNaarArchief($maaltijd);
-				if (\CorveeTakenModel::existMaaltijdCorvee($maaltijd->getMaaltijdId())) {
-					setMelding($maaltijd->getDatum() . ' ' . $maaltijd->getTitel() . ' heeft nog gekoppelde corveetaken!', 2);
+				if (\CorveeTakenModel::existMaaltijdCorvee($maaltijd->maaltijd_id)) {
+					setMelding($maaltijd->datum . ' ' . $maaltijd->titel . ' heeft nog gekoppelde corveetaken!', 2);
 				}
 			} catch (\Exception $e) {
 				$errors[] = $e;
@@ -411,9 +416,9 @@ class MaaltijdenModel {
 
 	private static function verplaatsNaarArchief(Maaltijd $maaltijd) {
 		$archief = new ArchiefMaaltijd(
-				$maaltijd->getMaaltijdId(), $maaltijd->getTitel(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), MaaltijdAanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd)
+				$maaltijd->maaltijd_id, $maaltijd->titel, $maaltijd->datum, $maaltijd->tijd, $maaltijd->prijs, MaaltijdAanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd)
 		);
-		self::verwijderMaaltijd($maaltijd->getMaaltijdId());
+		self::verwijderMaaltijd($maaltijd->maaltijd_id);
 		self::newArchiefMaaltijd($archief); // alleen als de maaltijd definitief verwijderd is
 		return $archief;
 	}
@@ -501,20 +506,20 @@ class MaaltijdenModel {
 			}
 			foreach ($maaltijden as $maaltijd) {
 				if ($verplaats) {
-					$datum = strtotime($maaltijd->getDatum());
+					$datum = strtotime($maaltijd->datum);
 					$shift = $repetitie->getDagVanDeWeek() - date('w', $datum);
 					if ($shift > 0) {
 						$datum = strtotime('+' . $shift . ' days', $datum);
 					} elseif ($shift < 0) {
 						$datum = strtotime($shift . ' days', $datum);
 					}
-					$maaltijd->setDatum(date('Y-m-d', $datum));
+					$maaltijd->datum = date('Y-m-d', $datum);
 				}
-				$maaltijd->setTitel($repetitie->getStandaardTitel());
-				$maaltijd->setAanmeldLimiet($repetitie->getStandaardLimiet());
-				$repetitie->setStandaardTijd($maaltijd->getTijd());
-				$maaltijd->setPrijs($repetitie->getStandaardPrijs());
-				$maaltijd->setAanmeldFilter($filter);
+				$maaltijd->titel = $repetitie->getStandaardTitel();
+				$maaltijd->aanmeld_limiet = $repetitie->getStandaardLimiet();
+				$repetitie->setStandaardTijd($maaltijd->tijd);
+				$maaltijd->prijs = $repetitie->getStandaardPrijs();
+				$maaltijd->aanmeld_filter = $filter;
 				try {
 					self::updateMaaltijd($maaltijd);
 					$updated++;
@@ -561,7 +566,7 @@ class MaaltijdenModel {
 								$repetitie->getMaaltijdRepetitieId(), $repetitie->getStandaardTitel(), $repetitie->getStandaardLimiet(), date('Y-m-d', $datum), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getAbonnementFilter(), null
 				);
 				foreach ($corveerepetities as $corveerepetitie) {
-					\CorveeTakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, $maaltijd->getMaaltijdId()); // do not repeat within maaltijd period
+					\CorveeTakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, $maaltijd->maaltijd_id); // do not repeat within maaltijd period
 				}
 				$maaltijden[] = $maaltijd;
 				if ($repetitie->getPeriodeInDagen() < 1) {

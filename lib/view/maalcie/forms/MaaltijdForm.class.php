@@ -13,10 +13,12 @@ class MaaltijdForm extends ModalForm {
 	public function __construct($mid, $mrid = null, $titel = null, $limiet = null, $datum = null, $tijd = null, $prijs = null, $filter = null, $omschrijving = null) {
 		parent::__construct(null, maalcieUrl . '/opslaan/' . $mid);
 
-		if (!is_int($mid) || $mid < 0) {
+        var_dump($mid);
+
+		if ($mid < 0) {
 			throw new Exception('invalid mid');
 		}
-		if ($mid === 0) {
+		if ($mid == 0) {
 			$this->titel = 'Maaltijd aanmaken';
 		} else {
 			$this->titel = 'Maaltijd wijzigen';

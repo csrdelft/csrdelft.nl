@@ -220,7 +220,7 @@ function getAgenda($from, $to) {
 	// Maaltijd aanmeldingen
 	$mids = array();
 	foreach ($maaltijden as $maaltijd) {
-		$id = $maaltijd->getMaaltijdId();
+		$id = $maaltijd->maaltijd_id;
 		$mids[$id] = $maaltijd;
 	}
 	$maaltijdAanmeldingen = array_keys(MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($mids, $_SESSION['_uid']));

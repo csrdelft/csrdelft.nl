@@ -2,17 +2,17 @@
 	beheer_maaltijd_archief.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 {strip}
-<tr id="maaltijd-row-{$maaltijd->getMaaltijdId()}">
-	<td>{$maaltijd->getDatum()|date_format:"%d-%m-%Y"} {$maaltijd->getTijd()|date_format:"%H:%M"}</td>
-	<td>{$maaltijd->getTitel()}</td>
-	<td class="lichtgrijs">{$maaltijd->getMaaltijdId()}</td>
+<tr id="maaltijd-row-{$maaltijd->maaltijd_id}">
+	<td>{$maaltijd->datum|date_format:"%d-%m-%Y"} {$maaltijd->tijd|date_format:"%H:%M"}</td>
+	<td>{$maaltijd->titel}</td>
+	<td class="lichtgrijs">{$maaltijd->maaltijd_id}</td>
 	<td>&euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"}</td>
 	<td>
-		<div class="aanmeldingen-{$maaltijd->getMaaltijdId()} inline">
-			<a title="Toon aanmeldingen" class="btn" onclick="$('div.aanmeldingen-{$maaltijd->getMaaltijdId()}').toggle();">{icon get="eye"} Toon <span class="dikgedrukt">{$maaltijd->getAantalAanmeldingen()}</span></a>
+		<div class="aanmeldingen-{$maaltijd->maaltijd_id} inline">
+			<a title="Toon aanmeldingen" class="btn" onclick="$('div.aanmeldingen-{$maaltijd->maaltijd_id}').toggle();">{icon get="eye"} Toon <span class="dikgedrukt">{$maaltijd->aantal_aanmeldingen}</span></a>
 		</div>
-		<div class="aanmeldingen-{$maaltijd->getMaaltijdId()} verborgen">
-			<a title="Toon aanmeldingen" class="btn" onclick="$('div.aanmeldingen-{$maaltijd->getMaaltijdId()}').toggle();">{icon get="eye"} Verberg <span class="dikgedrukt">{$maaltijd->getAantalAanmeldingen()}</span></a>
+		<div class="aanmeldingen-{$maaltijd->maaltijd_id} verborgen">
+			<a title="Toon aanmeldingen" class="btn" onclick="$('div.aanmeldingen-{$maaltijd->maaltijd_id}').toggle();">{icon get="eye"} Verberg <span class="dikgedrukt">{$maaltijd->aantal_aanmeldingen}</span></a>
 		{foreach from=$maaltijd->getAanmeldingenArray() item=aanmelding}
 			<li>
 				{if $aanmelding[0] === 'gast'}Gast van

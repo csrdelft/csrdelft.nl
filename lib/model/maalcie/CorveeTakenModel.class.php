@@ -544,8 +544,8 @@ class CorveeTakenModel {
 			$maaltijden = MaaltijdenModel::getKomendeRepetitieMaaltijden($repetitie->getMaaltijdRepetitieId());
 			$maaltijdenById = array();
 			foreach ($maaltijden as $maaltijd) {
-				$takenPerMaaltijd[$maaltijd->getMaaltijdId()] = array();
-				$maaltijdenById[$maaltijd->getMaaltijdId()] = $maaltijd;
+				$takenPerMaaltijd[$maaltijd->maaltijd_id] = array();
+				$maaltijdenById[$maaltijd->maaltijd_id] = $maaltijd;
 			}
 			// update day of the week
 			$daycount = 0;

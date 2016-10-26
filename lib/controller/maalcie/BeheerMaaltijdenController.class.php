@@ -108,13 +108,13 @@ class BeheerMaaltijdenController extends AclController {
 			}
 		} else {
 			$maaltijd = new Maaltijd();
-			$this->view = new MaaltijdForm($maaltijd->getMaaltijdId(), $maaltijd->getMaaltijdRepetitieId(), $maaltijd->getTitel(), $maaltijd->getAanmeldLimiet(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $maaltijd->getAanmeldFilter(), $maaltijd->getOmschrijving()); // fetches POST values itself
+			$this->view = new MaaltijdForm($maaltijd->maaltijd_id, $maaltijd->mlt_repetitie_id, $maaltijd->titel, $maaltijd->aanmeld_limiet, $maaltijd->datum, $maaltijd->tijd, $maaltijd->prijs, $maaltijd->aanmeld_filter, $maaltijd->omschrijving); // fetches POST values itself
 		}
 	}
 
 	public function bewerk($mid) {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-		$this->view = new MaaltijdForm($maaltijd->getMaaltijdId(), $maaltijd->getMaaltijdRepetitieId(), $maaltijd->getTitel(), $maaltijd->getAanmeldLimiet(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $maaltijd->getAanmeldFilter(), $maaltijd->getOmschrijving()); // fetches POST values itself
+		$this->view = new MaaltijdForm($maaltijd->maaltijd_id, $maaltijd->mlt_repetitie_id, $maaltijd->titel, $maaltijd->aanmeld_limiet, $maaltijd->datum, $maaltijd->tijd, $maaltijd->prijs, $maaltijd->aanmeld_filter, $maaltijd->omschrijving); // fetches POST values itself
 	}
 
 	public function opslaan($mid) {
@@ -128,7 +128,7 @@ class BeheerMaaltijdenController extends AclController {
 			$maaltijd_aanmeldingen = MaaltijdenModel::saveMaaltijd($mid, $values['mlt_repetitie_id'], $values['titel'], $values['aanmeld_limiet'], $values['datum'], $values['tijd'], $values['prijs'], $values['aanmeld_filter'], $values['omschrijving']);
 			$this->view = new BeheerMaaltijdView($maaltijd_aanmeldingen[0]);
 			if ($maaltijd_aanmeldingen[1] > 0) {
-				setMelding($maaltijd_aanmeldingen[1] . ' aanmelding' . ($maaltijd_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd_aanmeldingen[0]->getAanmeldFilter(), 2);
+				setMelding($maaltijd_aanmeldingen[1] . ' aanmelding' . ($maaltijd_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd_aanmeldingen[0]->aanmeld_filter, 2);
 			}
 		}
 	}

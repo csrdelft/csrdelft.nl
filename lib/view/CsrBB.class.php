@@ -880,7 +880,7 @@ HTML;
 				}
 				$maaltijd = reset($maaltijden);
 				if (endsWith($mid, '2') && $aantal >= 2) {
-					unset($maaltijden[$maaltijd->getMaaltijdId()]);
+					unset($maaltijden[$maaltijd->maaltijd_id]);
 					$maaltijd2 = reset($maaltijden);
 				}
 			} elseif (preg_match('/\d+/', $mid)) {
@@ -898,21 +898,21 @@ HTML;
 		if (!isset($maaltijd)) {
 			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 		}
-		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginModel::getUid());
+		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), \LoginModel::getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		} else {
-			$aanmelding = $aanmeldingen[$maaltijd->getMaaltijdId()];
+			$aanmelding = $aanmeldingen[$maaltijd->maaltijd_id];
 		}
 		$ketzer = new MaaltijdKetzerView($maaltijd, $aanmelding);
 		$result = $ketzer->getHtml();
 
 		if ($maaltijd2 !== null) {
-			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginModel::getUid());
+			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->maaltijd_id => $maaltijd2), \LoginModel::getUid());
 			if (empty($aanmeldingen2)) {
 				$aanmelding2 = null;
 			} else {
-				$aanmelding2 = $aanmeldingen2[$maaltijd2->getMaaltijdId()];
+				$aanmelding2 = $aanmeldingen2[$maaltijd2->maaltijd_id];
 			}
 			$ketzer2 = new MaaltijdKetzerView($maaltijd2, $aanmelding2);
 			$result .= $ketzer2->getHtml();

@@ -15,7 +15,7 @@ class MaaltijdBeoordelingenModel extends PersistenceModel {
 
 	public function nieuw(Maaltijd $maaltijd) {
 		$b = new MaaltijdBeoordeling();
-		$b->maaltijd_id = $maaltijd->getMaaltijdId();
+		$b->maaltijd_id = $maaltijd->maaltijd_id;
 		$b->uid = LoginModel::getUid();
 		$b->kwantiteit = null;
 		$b->kwaliteit = null;
@@ -24,7 +24,7 @@ class MaaltijdBeoordelingenModel extends PersistenceModel {
 	}
 
 	public function getNormalizedBeoordelingen(Maaltijd $maaltijd) {
-		$beoordelingen = $this->find('maaltijd_id = ?', array($maaltijd->getMaaltijdId()));
+		$beoordelingen = $this->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
 		foreach ($beoordelingen as $b) {
 			$normalize = Database::sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), $this->getTableName(), 'uid = ?', array($b->uid));
 			foreach ($normalize as $avg) {

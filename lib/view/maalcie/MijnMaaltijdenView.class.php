@@ -28,7 +28,7 @@ class MijnMaaltijdenView extends SmartyTemplateView {
 		$this->aanmeldingen = $aanmeldingen;
 
 		foreach ($this->model as $maaltijd) {
-			$mid = $maaltijd->getMaaltijdId();
+			$mid = $maaltijd->maaltijd_id;
 			if (!array_key_exists($mid, $this->aanmeldingen)) {
 				$this->aanmeldingen[$mid] = false;
 			}

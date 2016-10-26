@@ -28,8 +28,8 @@ class ConversieModel {
 		self::queryDb('TRUNCATE TABLE mlt_abonnementen');
 		$maaltijden = MaaltijdenModel::getAlleMaaltijden();
 		foreach ($maaltijden as $maaltijd) {
-			MaaltijdenModel::verwijderMaaltijd($maaltijd->getMaaltijdId());
-			MaaltijdenModel::verwijderMaaltijd($maaltijd->getMaaltijdId());
+			MaaltijdenModel::verwijderMaaltijd($maaltijd->maaltijd_id);
+			MaaltijdenModel::verwijderMaaltijd($maaltijd->maaltijd_id);
 		}
 		$repetities = MaaltijdRepetitiesModel::getAlleRepetities();
 		foreach ($repetities as $repetitie) {
@@ -43,10 +43,10 @@ class ConversieModel {
 		$rows = self::queryDb('SELECT maalid, uid, door, gasten FROM maaltijdgesloten ORDER BY maalid');
 		foreach ($rows as $row) {
 			$mid = (int) $row['maalid'];
-			if ($maaltijd === null || $maaltijd->getMaaltijdId() !== $mid) {
+			if ($maaltijd === null || $maaltijd->maaltijd_id !== $mid) {
 				if ($maaltijd !== null) {
 					self::archiefMaaltijd(new ArchiefMaaltijd(
-							$maaltijd->getMaaltijdId(), $maaltijd->getTitel(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $aanmeldingen
+							$maaltijd->maaltijd_id, $maaltijd->getTitel(), $maaltijd->datum, $maaltijd->tijd, $maaltijd->prijs, $aanmeldingen
 					));
 					unset($maaltijd);
 					unset($aanmeldingen);
@@ -71,7 +71,7 @@ class ConversieModel {
 		}
 		if ($maaltijd !== null) {
 			self::archiefMaaltijd(new ArchiefMaaltijd(
-					$maaltijd->getMaaltijdId(), $maaltijd->getTitel(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $aanmeldingen
+					$maaltijd->maaltijd_id, $maaltijd->getTitel(), $maaltijd->datum, $maaltijd->tijd, $maaltijd->prijs, $aanmeldingen
 			));
 			unset($maaltijd);
 			unset($aanmeldingen);
@@ -82,13 +82,13 @@ class ConversieModel {
 		$rows = self::queryDb('SELECT maalid, uid, status, door, gasten FROM maaltijdaanmelding ORDER BY maalid');
 		foreach ($rows as $row) {
 			$mid = (int) $row['maalid'];
-			if ($maaltijd === null || $maaltijd->getMaaltijdId() !== $mid) {
+			if ($maaltijd === null || $maaltijd->maaltijd_id !== $mid) {
 				if ($row['status'] !== 'AAN') {
 					continue;
 				}
 				if ($maaltijd !== null) {
 					self::archiefMaaltijd(new ArchiefMaaltijd(
-							$maaltijd->getMaaltijdId(), $maaltijd->getTitel(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $aanmeldingen
+							$maaltijd->maaltijd_id, $maaltijd->getTitel(), $maaltijd->datum, $maaltijd->tijd, $maaltijd->prijs, $aanmeldingen
 					));
 					unset($maaltijd);
 					unset($aanmeldingen);
@@ -113,7 +113,7 @@ class ConversieModel {
 		}
 		if ($maaltijd !== null) {
 			self::archiefMaaltijd(new ArchiefMaaltijd(
-					$maaltijd->getMaaltijdId(), $maaltijd->getTitel(), $maaltijd->getDatum(), $maaltijd->getTijd(), $maaltijd->getPrijs(), $aanmeldingen
+					$maaltijd->maaltijd_id, $maaltijd->getTitel(), $maaltijd->datum, $maaltijd->tijd, $maaltijd->prijs, $aanmeldingen
 			));
 		}
 	}
@@ -364,7 +364,7 @@ class ConversieModel {
 					$crid = $corvee[3]->getCorveeRepetitieId();
 				}
 				$maaltijd = self::conversieMaaltijd(intval($row['id']), $mrid, $titel, intval($row['max']), date('Y-m-d', $datum), date('H:i', $datum), intval(Instellingen::get('maaltijden', 'standaard_prijs')), $filter);
-				$mid = $maaltijd->getMaaltijdId();
+				$mid = $maaltijd->maaltijd_id;
 				$maaltijden[$mid] = $maaltijd;
 
 				$uid = $row['tp'];

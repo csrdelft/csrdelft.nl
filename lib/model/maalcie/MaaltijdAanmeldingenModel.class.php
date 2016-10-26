@@ -11,17 +11,17 @@ class MaaltijdAanmeldingenModel {
 
 	public static function aanmeldenVoorMaaltijd($mid, $uid, $doorUid, $aantalGasten = 0, $beheer = false, $gastenEetwens = '') {
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
+		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
 			MaaltijdenModel::sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer) {
-			if (!self::checkAanmeldFilter($uid, $maaltijd->getAanmeldFilter())) {
-				throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $maaltijd->getAanmeldFilter());
+			if (!self::checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) {
+				throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $maaltijd->aanmeld_filter);
 			}
-			if ($maaltijd->getIsGesloten()) {
+			if ($maaltijd->gesloten) {
 				throw new Exception('Maaltijd is gesloten');
 			}
-			if ($maaltijd->getAantalAanmeldingen() >= $maaltijd->getAanmeldLimiet()) {
+			if ($maaltijd->aantal_aanmeldingen >= $maaltijd->aanmeld_limiet) {
 				throw new Exception('Maaltijd zit al vol');
 			}
 		}
@@ -38,10 +38,10 @@ class MaaltijdAanmeldingenModel {
 			$aanmelding->setAantalGasten($aantalGasten);
 			$aanmelding->setLaatstGewijzigd(date('Y-m-d H:i'));
 			self::updateAanmelding($aanmelding);
-			$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() + $verschil);
+			$maaltijd->aantal_aanmeldingen = $maaltijd->aantal_aanmeldingen + $verschil;
 		} else {
 			$aanmelding = self::newAanmelding($mid, $uid, $aantalGasten, $gastenEetwens, null, $doorUid);
-			$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() + 1 + $aantalGasten);
+			$maaltijd->aantal_aanmeldingen = $maaltijd->aantal_aanmeldingen + 1 + $aantalGasten;
 		}
 		$aanmelding->setMaaltijd($maaltijd);
 		return $aanmelding;
@@ -65,8 +65,8 @@ class MaaltijdAanmeldingenModel {
 		}
 		$byMid = array();
 		foreach ($maaltijden as $maaltijd) {
-			if (!$maaltijd->getIsGesloten() && !$maaltijd->getIsVerwijderd()) {
-				$byMid[$maaltijd->getMaaltijdId()] = $maaltijd;
+			if (!$maaltijd->gesloten && !$maaltijd->verwijderd) {
+				$byMid[$maaltijd->maaltijd_id] = $maaltijd;
 			}
 		}
 		$aanmeldingen = self::getAanmeldingenVoorLid($byMid, $uid);
@@ -85,15 +85,15 @@ class MaaltijdAanmeldingenModel {
 			throw new Exception('Niet aangemeld');
 		}
 		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < time()) {
+		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
 			MaaltijdenModel::sluitMaaltijd($maaltijd);
 		}
-		if (!$beheer && $maaltijd->getIsGesloten()) {
+		if (!$beheer && $maaltijd->gesloten) {
 			throw new Exception('Maaltijd is gesloten');
 		}
 		$aanmelding = self::loadAanmelding($mid, $uid);
 		self::deleteAanmeldingen($mid, $uid);
-		$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() - 1 - $aanmelding->getAantalGasten());
+		$maaltijd->aantal_aanmeldingen = $maaltijd->aantal_aanmeldingen - 1 - $aanmelding->getAantalGasten();
 		return $maaltijd;
 	}
 
@@ -111,12 +111,12 @@ class MaaltijdAanmeldingenModel {
 		try {
 			$db->beginTransaction();
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-			if ($maaltijd->getIsGesloten()) {
+			if ($maaltijd->gesloten) {
 				throw new Exception('Maaltijd is gesloten');
 			}
 			$aanmelding = self::loadAanmelding($mid, $uid);
 			$verschil = $gasten - $aanmelding->getAantalGasten();
-			if ($maaltijd->getAantalAanmeldingen() + $verschil > $maaltijd->getAanmeldLimiet()) {
+			if ($maaltijd->aantal_aanmeldingen + $verschil > $maaltijd->aanmeld_limiet) {
 				throw new Exception('Maaltijd zit te vol');
 			}
 			if ($aanmelding->getAantalGasten() !== $gasten) {
@@ -124,7 +124,7 @@ class MaaltijdAanmeldingenModel {
 			}
 			$aanmelding->setAantalGasten($gasten);
 			self::updateAanmelding($aanmelding);
-			$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() + $verschil);
+			$maaltijd->aantal_aanmeldingen = $maaltijd->aantal_aanmeldingen + $verschil;
 			$aanmelding->setMaaltijd($maaltijd);
 			$db->commit();
 			return $aanmelding;
@@ -145,7 +145,7 @@ class MaaltijdAanmeldingenModel {
 		try {
 			$db->beginTransaction();
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-			if ($maaltijd->getIsGesloten()) {
+			if ($maaltijd->gesloten) {
 				throw new Exception('Maaltijd is gesloten');
 			}
 			$aanmelding = self::loadAanmelding($mid, $uid);
@@ -164,7 +164,7 @@ class MaaltijdAanmeldingenModel {
 	}
 
 	public static function getAanmeldingenVoorMaaltijd(Maaltijd $maaltijd) {
-		$aanmeldingen = self::loadAanmeldingen(array($maaltijd->getMaaltijdId()));
+		$aanmeldingen = self::loadAanmeldingen(array($maaltijd->maaltijd_id));
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
 			$aanmelding->setMaaltijd($maaltijd);
@@ -333,8 +333,8 @@ class MaaltijdAanmeldingenModel {
 	public static function checkAanmeldingenFilter($filter, array $maaltijden) {
 		$mids = array();
 		foreach ($maaltijden as $maaltijd) {
-			if (!$maaltijd->getIsGesloten() && !$maaltijd->getIsVerwijderd()) {
-				$mids[] = $maaltijd->getMaaltijdId();
+			if (!$maaltijd->gesloten && !$maaltijd->verwijderd) {
+				$mids[] = $maaltijd->maaltijd_id;
 			}
 		}
 		if (empty($mids)) {

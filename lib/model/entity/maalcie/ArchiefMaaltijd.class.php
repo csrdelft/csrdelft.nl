@@ -18,65 +18,42 @@
  * Zie ook Maaltijd.class.php
  * 
  */
-class ArchiefMaaltijd implements Agendeerbaar {
+class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
 	# primary key
 
-	private $maaltijd_id; # int 11
-	private $titel; # string 255
-	private $datum; # date
-	private $tijd; # time
-	private $prijs; # int 11
-	private $aanmeldingen; # text
+	public $maaltijd_id; # int 11
+	public $titel; # string 255
+	public $datum; # date
+	public $tijd; # time
+	public $prijs; # int 11
+	public $aanmeldingen; # text
 
 	public function __construct($mid = 0, $titel = null, $datum = null, $tijd = null, $prijs = null, $aanmeldingen = array()) {
-		$this->maaltijd_id = (int) $mid;
-		$this->titel = $titel;
-		$this->datum = $datum;
-		$this->tijd = $tijd;
-		$this->prijs = $prijs;
-		$this->aanmeldingen = '';
-		foreach ($aanmeldingen as $aanmelding) {
-			if ($aanmelding->getUid() === '') {
-				$this->aanmeldingen .= 'gast';
-			} else {
-				$this->aanmeldingen .= $aanmelding->getUid();
-			}
-			if ($aanmelding->getDoorAbonnement()) {
-				$this->aanmeldingen .= '_abo';
-			}
-			if ($aanmelding->getDoorUid() !== null) {
-				$this->aanmeldingen .= '_' . $aanmelding->getDoorUid();
-			}
-			$this->aanmeldingen .= ',';
-		}
-	}
-
-	public function getMaaltijdId() {
-		return (int) $this->maaltijd_id;
-	}
-
-	public function getTitel() {
-		return $this->titel;
-	}
-
-	public function getDatum() {
-		return $this->datum;
-	}
-
-	public function getTijd() {
-		return $this->tijd;
-	}
-
-	public function getPrijs() {
-		return (int) $this->prijs;
-	}
+        parent::__construct();
+        $this->maaltijd_id = (int)$mid;
+        $this->titel = $titel;
+        $this->datum = $datum;
+        $this->tijd = $tijd;
+        $this->prijs = $prijs;
+        $this->aanmeldingen = '';
+        foreach ($aanmeldingen as $aanmelding) {
+            if ($aanmelding->getUid() === '') {
+                $this->aanmeldingen .= 'gast';
+            } else {
+                $this->aanmeldingen .= $aanmelding->getUid();
+            }
+            if ($aanmelding->getDoorAbonnement()) {
+                $this->aanmeldingen .= '_abo';
+            }
+            if ($aanmelding->getDoorUid() !== null) {
+                $this->aanmeldingen .= '_' . $aanmelding->getDoorUid();
+            }
+            $this->aanmeldingen .= ',';
+        }
+    }
 
 	public function getPrijsFloat() {
-		return (float) $this->getPrijs() / 100.0;
-	}
-
-	public function getAanmeldingen() {
-		return $this->aanmeldingen;
+		return (float) $this->prijs / 100.0;
 	}
 
 	public function getAanmeldingenArray() {
@@ -96,9 +73,9 @@ class ArchiefMaaltijd implements Agendeerbaar {
 
 	// Agendeerbaar ############################################################
 
-	public function getUUID() {
-		return $this->maaltijd_id . '@archiefmaaltijd.csrdelft.nl';
-	}
+    public function getTitel() {
+        return $this->titel;
+    }
 
 	public function getBeginMoment() {
 		return strtotime($this->getDatum() . ' ' . $this->getTijd());
@@ -123,6 +100,18 @@ class ArchiefMaaltijd implements Agendeerbaar {
 	public function isHeledag() {
 		return false;
 	}
+
+    protected static $table_name = 'mlt_archief';
+    protected static $persistent_attributes = array(
+        'maaltijd_id' => array(T::Integer, false, 'auto_increment'),
+        'titel' => array(T::String),
+        'datum' => array(T::Date),
+        'tijd' => array(T::Time),
+        'prijs' => array(T::Integer),
+        'aanmeldingen' => array(T::Text),
+    );
+
+    protected static $primary_key = array('maaltijd_id');
 
 }
 

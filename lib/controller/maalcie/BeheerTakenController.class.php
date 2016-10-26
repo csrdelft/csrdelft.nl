@@ -107,7 +107,7 @@ class BeheerTakenController extends AclController {
 	public function nieuw($mid = null) {
 		if ($mid !== null) {
 			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-			$beginDatum = $maaltijd->getDatum();
+			$beginDatum = $maaltijd->datum;
 		}
 		$crid = filter_input(INPUT_POST, 'crv_repetitie_id', FILTER_SANITIZE_NUMBER_INT);
 		if (!empty($crid)) {
