@@ -163,7 +163,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'moot'					 => array(T::Char, true),
 		'verticale'				 => array(T::Char, true),
 		'verticaleleider'		 => array(T::Boolean, true),
-		'kringcoach'			 => array(T::Char, true),
+		'kringcoach'			 => array(T::Boolean, true),
 		// civi-gegevens
 		'patroon'				 => array(T::UID, true),
 		'corvee_punten'			 => array(T::Integer, true),

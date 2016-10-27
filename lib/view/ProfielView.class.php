@@ -30,7 +30,7 @@ class ProfielView extends SmartyTemplateView {
 			} elseif ($this->model->verticaleleider) {
 				$html .= ' (leider)';
 			} elseif ($this->model->kringcoach) {
-				$html .= '<span title="Kringcoach van verticale ' . VerticalenModel::get($this->model->kringcoach)->naam . '">(kringcoach)</span>';
+				$html .= ' <span title="Kringcoach van verticale ' . VerticalenModel::get($this->model->verticale)->naam . '">(kringcoach)</span>';
 			}
 			$html .= '</a>';
 			$this->smarty->assign('kring', $html);
@@ -334,7 +334,7 @@ class ProfielForm extends Formulier {
 			$fields[] = new VerticaleField('verticale', $profiel->verticale, 'Verticale');
 			if ($profiel->isLid()) {
 				$fields[] = new JaNeeField('verticaleleider', $profiel->verticaleleider, 'Verticaleleider');
-				$fields[] = new VerticaleField('kringcoach', $profiel->kringcoach, 'Kringcoach');
+				$fields[] = new JaNeeField('kringcoach', $profiel->kringcoach, 'Kringcoach');
 			}
 			$fields[] = new LidField('patroon', $profiel->patroon, 'Patroon', 'allepersonen');
 		}
