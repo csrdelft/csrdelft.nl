@@ -397,7 +397,7 @@ class ForumController extends Controller {
 			ForumDelenModel::instance()->verwijderForumDeel($deel->forum_id);
 			setMelding('Deelforum verwijderd', 1);
 		}
-		$this->view = new JsonResponse(true);
+		$this->view = new JsonResponse('/forum'); // redirect
 	}
 
 	/**

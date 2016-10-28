@@ -270,7 +270,7 @@ class CancelKnop extends FormulierKnop {
 
 class DeleteKnop extends FormulierKnop {
 
-	public function __construct($url, $action = 'post confirm ReloadPage', $label = 'Verwijderen', $title = 'Definitief verwijderen', $icon = 'cross') {
+	public function __construct($url, $action = 'post confirm redirect', $label = 'Verwijderen', $title = 'Definitief verwijderen', $icon = 'cross') {
 		parent::__construct($url, $action, $label, $title, $icon);
 	}
 
