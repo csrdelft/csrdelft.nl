@@ -172,8 +172,8 @@ class VerticaleLedenModel extends AbstractGroepLedenModel {
 			if ($profiel->verticaleleider) {
 				$lid->opmerking = 'Leider';
 			} elseif ($profiel->kringcoach) {
-                $lid->opmerking = 'Kringcoach';
-            }
+                		$lid->opmerking = 'Kringcoach';
+            		}
 			$lid->door_uid = null;
 			$lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
 			return $lid;
