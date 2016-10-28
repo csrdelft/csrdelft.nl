@@ -86,6 +86,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		} else {
 			// Subject assignment:
 			$_SESSION['_uid'] = 'x999';
+			$_SESSION['_authenticationMethod'] = null;
 
 			// Remember login
 			if (isset($_COOKIE['remember'])) {
