@@ -216,7 +216,7 @@ class WachtwoordWijzigenForm extends Formulier {
 class AccountForm extends Formulier {
 
 	public function __construct(Account $account) {
-		parent::__construct($account, '/account/' . $account->uid, 'Inloggegevens aanpassen');
+		parent::__construct($account, '/account/' . $account->uid . '/bewerken', 'Inloggegevens aanpassen');
 
 		if (LoginModel::mag('P_LEDEN_MOD')) {
 			$roles = array();
@@ -231,7 +231,7 @@ class AccountForm extends Formulier {
 		$fields[] = new WachtwoordWijzigenField('wijzigww', $account, !LoginModel::mag('P_LEDEN_MOD'));
 		$fields['btn'] = new FormDefaultKnoppen('/profiel/' . $account->uid, false, true, true, true);
 
-		$delete = new DeleteKnop($this->action . '/delete');
+		$delete = new DeleteKnop('/account/' . $account->uid . '/verwijderen');
 		$fields['btn']->addKnop($delete, true);
 
 		$this->addFields($fields);
