@@ -173,7 +173,7 @@ switch (constant('MODE')) {
 		ini_set('session.cookie_domain', CSR_DOMAIN);
 		ini_set('session.cookie_secure', FORCE_HTTPS);
 		ini_set('session.cookie_httponly', true);
-		session_set_cookie_params(getSessionMaxLifeTime(), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+		session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 
 		session_start();
 		if (session_id() == 'deleted') {
