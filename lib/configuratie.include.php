@@ -163,6 +163,7 @@ switch (constant('MODE')) {
 		ini_set('session.hash_function', 'sha512');
 		ini_set('session.cache_limiter', 'nocache');
 		ini_set('session.use_trans_sid', 0);
+		// Sync lifetime of FS based PHP session with DB based C.S.R. session
 		ini_set('session.gc_maxlifetime', (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
 		ini_set('session.use_strict_mode', true);
 		ini_set('session.use_cookies', true);
@@ -172,9 +173,8 @@ switch (constant('MODE')) {
 		ini_set('session.cookie_domain', CSR_DOMAIN);
 		ini_set('session.cookie_secure', FORCE_HTTPS);
 		ini_set('session.cookie_httponly', true);
+		session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 
-		// Sync lifetime of FS based PHP session with DB based C.S.R. session
-		setSessionCookieParams();
 		session_start();
 		if (session_id() == 'deleted') {
 			// Deletes old session

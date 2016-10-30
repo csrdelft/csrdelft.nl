@@ -128,13 +128,6 @@ function setRememberCookie($token) {
 	}
 }
 
-/**
- * Set cookie paramters of current session.
- */
-function setSessionCookieParams() {
-	session_set_cookie_params(getSessionMaxLifeTime(), '/', CSR_DOMAIN, FORCE_HTTPS, true);
-}
-
 function getSessionMaxLifeTime() {
 	$lifetime = (int) Instellingen::get('beveiliging', 'session_lifetime_seconds');
 	// Sync lifetime of FS based PHP session with DB based C.S.R. session
