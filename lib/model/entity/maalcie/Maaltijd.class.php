@@ -49,12 +49,11 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	public $maaltijdcorvee;
 
 	public function __construct($mid = 0, $mrid = null, $titel = '', $limiet = null, $datum = null, $tijd = null, $prijs = null, $gesloten = false, $wanneer_gesloten = null, $verwijderd = false, $filter = null, $omschrijving = null) {
-        parent::__construct();
-
         $this->limiet = intval(Instellingen::get('maaltijden', 'standaard_limiet'));
-        $this->datum = date('Y-m-d');
         $this->tijd = Instellingen::get('maaltijden', 'standaard_aanvang');
         $this->prijs = intval(Instellingen::get('maaltijden', 'standaard_prijs'));
+
+        parent::__construct();
 	}
 
 	public function getPrijsFloat() {
@@ -168,19 +167,17 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
     protected static $table_name = 'mlt_maaltijden';
     protected static $persistent_attributes = array(
         'maaltijd_id' => array(T::Integer, false, 'auto_increment'),
-        'mlt_repetitie_id' => array(T::Integer),
+        'mlt_repetitie_id' => array(T::Integer, true),
         'titel' => array(T::String),
         'aanmeld_limiet' => array(T::Integer),
         'datum' => array(T::Date),
         'tijd' => array(T::Time),
         'prijs' => array(T::Integer),
         'gesloten' => array(T::Boolean),
-        'laatst_gesloten' => array(T::Integer),
+        'laatst_gesloten' => array(T::Integer, true),
         'verwijderd' => array(T::Boolean),
-        'aanmeld_filter' => array(T::String),
-        'omschrijving' => array(T::Text),
-        'aantal_aanmeldingen' => array(T::Integer),
-        'archief' => array(T::Boolean)
+        'aanmeld_filter' => array(T::String, true),
+        'omschrijving' => array(T::Text, true),
     );
 
     protected static $primary_key = array('maaltijd_id');

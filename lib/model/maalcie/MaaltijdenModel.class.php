@@ -249,7 +249,7 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @return Maaltijd[]
 	 */
 	private static function loadMaaltijden($where = null, $values = array(), $limit = null) {
-        return static::instance()->find($where, $values, 'maaltijd_id', 'datum ASC, tijd ASC', $limit)->fetchAll();
+        return static::instance()->find($where, $values, null, 'datum ASC, tijd ASC', $limit)->fetchAll();
 
 		$sql = 'SELECT m.maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter, omschrijving, COUNT(a.uid) + SUM(IFNULL(aantal_gasten, 0)) AS aantal_aanmeldingen';
 		$sql.= ' FROM mlt_maaltijden m';
@@ -564,9 +564,17 @@ class MaaltijdenModel extends PersistenceModel {
 			$corveerepetities = \CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->getMaaltijdRepetitieId());
 			$maaltijden = array();
 			while ($datum <= $eindDatum) { // break after one
-				$maaltijd = self::newMaaltijd(
-								$repetitie->getMaaltijdRepetitieId(), $repetitie->getStandaardTitel(), $repetitie->getStandaardLimiet(), date('Y-m-d', $datum), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getAbonnementFilter(), null
-				);
+                $maaltijd = new Maaltijd();
+                $maaltijd->mlt_repetitie_id = $repetitie->getMaaltijdRepetitieId();
+                $maaltijd->titel = $repetitie->getStandaardTitel();
+                $maaltijd->limiet = $repetitie->getStandaardLimiet();
+                $maaltijd->datum = date('Y-m-d', $datum);
+                $maaltijd->tijd = $repetitie->getStandaardTijd();
+                $maaltijd->prijs = $repetitie->getStandaardPrijs();
+                $maaltijd->aanmeld_filter = $repetitie->getAbonnementFilter();
+
+                static::instance()->create($maaltijd);
+
 				foreach ($corveerepetities as $corveerepetitie) {
 					\CorveeTakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, $maaltijd->maaltijd_id); // do not repeat within maaltijd period
 				}

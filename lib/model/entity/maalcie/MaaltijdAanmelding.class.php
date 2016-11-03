@@ -108,10 +108,10 @@ class MaaltijdAanmelding extends PersistentEntity  {
         'maaltijd_id' => array(T::Integer),
         'uid' => array(T::UID),
         'aantal_gasten' => array(T::Integer),
-        'gasten_eetwens' => array(T::String),
-        'door_abonnement' => array(T::Integer),
-        'door_uid' => array(T::UID),
-        'laatst_gewijzigd' => array(T::Date),
+        'gasten_eetwens' => array(T::String, true),
+        'door_abonnement' => array(T::Integer, true),
+        'door_uid' => array(T::UID, true),
+        'laatst_gewijzigd' => array(T::DateTime),
     );
 
     protected static $primary_key = array('maaltijd_id', 'uid');
