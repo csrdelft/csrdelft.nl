@@ -14,8 +14,13 @@ require_once 'view/maalcie/MijnMaaltijdenView.class.php';
  */
 class MijnMaaltijdenController extends AclController {
 
+    /**
+     * @var MaaltijdenModel
+     */
+    protected $model;
+
 	public function __construct($query) {
-		parent::__construct($query, null);
+		parent::__construct($query, MaaltijdenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'ketzer'	 => 'P_MAAL_IK',
@@ -48,7 +53,7 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function ketzer() {
-		$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(LoginModel::getUid());
+		$maaltijden = $this->model->getKomendeMaaltijdenVoorLid(LoginModel::getUid());
 		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($maaltijden, LoginModel::getUid());
 		$timestamp = strtotime(Instellingen::get('maaltijden', 'beoordeling_periode'));
 		$recent = MaaltijdAanmeldingenModel::getRecenteAanmeldingenVoorLid(LoginModel::getUid(), $timestamp);
@@ -58,7 +63,7 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function lijst($mid) {
-		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid, true);
+		$maaltijd = $this->model->getMaaltijd($mid, true);
 		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND ! LoginModel::mag('P_MAAL_MOD')) {
 			$this->exit_http(403);
 			return;
@@ -70,12 +75,12 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function sluit($mid) {
-		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+		$maaltijd = $this->model->getMaaltijd($mid);
 		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND ! LoginModel::mag('P_MAAL_MOD')) {
 			$this->exit_http(403);
 			return;
 		}
-		MaaltijdenModel::instance()->sluitMaaltijd($maaltijd);
+        $this->model->sluitMaaltijd($maaltijd);
 		echo '<h3 id="gesloten-melding" class="remove"></div>';
 		exit;
 	}
@@ -113,7 +118,7 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function beoordeling($mid) {
-		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+		$maaltijd = $this->model->getMaaltijd($mid);
 		$beoordeling = MaaltijdBeoordelingenModel::instance()->find('maaltijd_id = ? AND uid = ?', array($mid, LoginModel::getUid()))->fetch();
 		if (!$beoordeling) {
 			$beoordeling = MaaltijdBeoordelingenModel::instance()->nieuw($maaltijd);
