@@ -567,7 +567,7 @@ class MaaltijdenModel extends PersistenceModel {
                 $maaltijd = new Maaltijd();
                 $maaltijd->mlt_repetitie_id = $repetitie->getMaaltijdRepetitieId();
                 $maaltijd->titel = $repetitie->getStandaardTitel();
-                $maaltijd->limiet = $repetitie->getStandaardLimiet();
+                $maaltijd->aanmeld_limiet = $repetitie->getStandaardLimiet();
                 $maaltijd->datum = date('Y-m-d', $datum);
                 $maaltijd->tijd = $repetitie->getStandaardTijd();
                 $maaltijd->prijs = $repetitie->getStandaardPrijs();
