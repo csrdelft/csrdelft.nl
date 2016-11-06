@@ -48,14 +48,6 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	 */
 	public $maaltijdcorvee;
 
-	public function __construct($mid = 0, $mrid = null, $titel = '', $limiet = null, $datum = null, $tijd = null, $prijs = null, $gesloten = false, $wanneer_gesloten = null, $verwijderd = false, $filter = null, $omschrijving = null) {
-        $this->limiet = intval(Instellingen::get('maaltijden', 'standaard_limiet'));
-        $this->tijd = Instellingen::get('maaltijden', 'standaard_aanvang');
-        $this->prijs = intval(Instellingen::get('maaltijden', 'standaard_prijs'));
-
-        parent::__construct();
-	}
-
 	public function getPrijsFloat() {
         return (float) $this->prijs / 100.0;
     }
