@@ -204,20 +204,13 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	}
 
 	public static function getIsAangemeld($mid, $uid, $doorAbo = null) {
-		if (!is_int($mid) || $mid <= 0) {
-			throw new Exception('Load maaltijd faalt: Invalid $mid =' . $mid);
-		}
-		$sql = 'SELECT EXISTS (SELECT * FROM mlt_aanmeldingen WHERE maaltijd_id=? AND uid=?';
-		$values = array($mid, $uid);
-		if ($doorAbo !== null) {
-			$sql.= ' AND door_abonnement=?';
-			$values[] = $doorAbo;
-		}
-		$sql.= ')';
-		$query = \Database::instance()->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchColumn();
-		return (boolean) $result;
+        $aanmelding = new MaaltijdAanmelding();
+        $aanmelding->maaltijd_id = $mid;
+        $aanmelding->uid = $uid;
+        if ($doorAbo) {
+            $aanmelding->door_abonnement = $doorAbo;
+        }
+        return static::instance()->exists($aanmelding);
 	}
 
 	private static function loadAanmelding($mid, $uid) {
