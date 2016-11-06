@@ -33,7 +33,7 @@ class MaaltijdenModel extends PersistenceModel {
 			throw new Exception('Maaltijd is al geopend');
 		}
 		$maaltijd->gesloten = false;
-		self::updateMaaltijd($maaltijd);
+		static::instance()->update($maaltijd);
 		return $maaltijd;
 	}
 
@@ -43,7 +43,7 @@ class MaaltijdenModel extends PersistenceModel {
 		}
 		$maaltijd->gesloten = true;
 		$maaltijd->laatst_gesloten = date('Y-m-d H:i');
-		self::updateMaaltijd($maaltijd);
+        static::instance()->update($maaltijd);
 	}
 
 	public static function getAlleMaaltijden() {
@@ -149,7 +149,7 @@ class MaaltijdenModel extends PersistenceModel {
 				$maaltijd->prijs = $prijs;
 				$maaltijd->aanmeld_filter = $filter;
 				$maaltijd->omschrijving = $omschrijving;
-				self::updateMaaltijd($maaltijd);
+                static::instance()->update($maaltijd);
 				if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
 					MaaltijdenModel::sluitMaaltijd($maaltijd);
 				}
@@ -190,7 +190,7 @@ class MaaltijdenModel extends PersistenceModel {
 			self::deleteMaaltijd($mid); // definitief verwijderen
 		} else {
 			$maaltijd->verwijderd = true;
-			self::updateMaaltijd($maaltijd);
+            static::instance()->update($maaltijd);
 		}
 	}
 
@@ -220,7 +220,7 @@ class MaaltijdenModel extends PersistenceModel {
 			throw new Exception('Maaltijd is niet verwijderd');
 		}
 		$maaltijd->verwijderd = false;
-		self::updateMaaltijd($maaltijd);
+        static::instance()->update($maaltijd);
 		return $maaltijd;
 	}
 
@@ -270,31 +270,6 @@ class MaaltijdenModel extends PersistenceModel {
 			self::existArchiefMaaltijden($result);
 		}
 		return $result;
-	}
-
-	private static function updateMaaltijd(Maaltijd $maaltijd) {
-		$sql = 'UPDATE mlt_maaltijden';
-		$sql.= ' SET titel=?, aanmeld_limiet=?, datum=?, tijd=?, prijs=?, gesloten=?, laatst_gesloten=?, verwijderd=?, aanmeld_filter=?, omschrijving=?';
-		$sql.= ' WHERE maaltijd_id=?';
-		$values = array(
-			$maaltijd->getTitel(),
-			$maaltijd->aanmeld_limiet,
-			$maaltijd->datum,
-			$maaltijd->tijd,
-			$maaltijd->prijs,
-			werkomheen_pdo_bool($maaltijd->gesloten),
-			$maaltijd->laatst_gesloten,
-			werkomheen_pdo_bool($maaltijd->verwijderd),
-			$maaltijd->aanmeld_filter,
-			$maaltijd->omschrijving,
-			$maaltijd->maaltijd_id
-		);
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($query->rowCount() !== 1) {
-			throw new Exception('Update maaltijd faalt: $query->rowCount() =' . $query->rowCount());
-		}
 	}
 
 	private static function newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving) {
@@ -528,7 +503,7 @@ class MaaltijdenModel extends PersistenceModel {
 				$maaltijd->prijs = $repetitie->getStandaardPrijs();
 				$maaltijd->aanmeld_filter = $filter;
 				try {
-					self::updateMaaltijd($maaltijd);
+                    static::instance()->update($maaltijd);
 					$updated++;
 				} catch (\Exception $e) {
 					
