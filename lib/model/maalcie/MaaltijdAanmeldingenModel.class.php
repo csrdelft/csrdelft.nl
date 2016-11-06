@@ -251,27 +251,27 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	}
 
 	private static function newAanmelding($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid) {
-		$sql = 'INSERT IGNORE INTO mlt_aanmeldingen';
-		$sql.= ' (maaltijd_id, uid, aantal_gasten, gasten_eetwens, door_abonnement, door_uid, laatst_gewijzigd)';
-		$wanneer = date('Y-m-d H:i');
-		if ($mid === null) { // niet voor specifieke maaltijd? dan voor alle komende repetitie-maaltijden
-			$sql.= ' SELECT maaltijd_id, ?, ?, ?, ?, ?, ? FROM mlt_maaltijden';
-			$sql.= ' WHERE mlt_repetitie_id = ? AND gesloten = FALSE AND verwijderd = FALSE AND datum >= ?';
-			$values = array($uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer, $doorAbo, date('Y-m-d'));
-		} else {
-			$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?)';
-			$values = array($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer);
-		}
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($mid !== null) {
-			if ($query->rowCount() !== 1) {
-				throw new Exception('New aanmelding faalt: $query->rowCount() =' . $query->rowCount());
-			}
-			return new MaaltijdAanmelding($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer);
-		}
-		return $query->rowCount();
+        $aanmelding = new MaaltijdAanmelding();
+        $aanmelding->uid = $uid;
+        $aanmelding->gasten = $gasten;
+        $aanmelding->gasten_eetwens = $opmerking;
+        $aanmelding->door_abonnement = $doorAbo;
+        $aanmelding->door_uid = $doorUid;
+        $aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+        if ($mid == null) {  // Alle komende maaltijden
+            $maaltijden = MaaltijdenModel::instance()->find("mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?", array($doorAbo, date('Y-m-d')));
+            foreach ($maaltijden as $maaltijd) {
+                $aanmelding->maaltijd_id = $maaltijd->maaltijd_id;
+                if (!static::instance()->exists($aanmelding)) {
+                    static::instance()->create($aanmelding);
+                }
+            }
+            return $maaltijden->rowCount();
+        } else {
+            $aanmelding->maaltijd_id = $mid;
+            static::instance()->create($aanmelding);
+            return $aanmelding;
+        }
 	}
 
 	/**
