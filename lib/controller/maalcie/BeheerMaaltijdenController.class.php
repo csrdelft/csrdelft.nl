@@ -138,8 +138,8 @@ class BeheerMaaltijdenController extends AclController {
 			$this->nieuw();
 		}
 		if ($this->view->validate()) {
-			$values = $this->view->getValues();
-			$maaltijd_aanmeldingen = $this->model->saveMaaltijd($mid, $values['mlt_repetitie_id'], $values['titel'], $values['aanmeld_limiet'], $values['datum'], $values['tijd'], $values['prijs'], $values['aanmeld_filter'], $values['omschrijving']);
+			$maaltijd = $this->view->getModel();
+			$maaltijd_aanmeldingen = $this->model->saveMaaltijd($maaltijd);
 			$this->view = new BeheerMaaltijdView($maaltijd_aanmeldingen[0]);
 			if ($maaltijd_aanmeldingen[1] > 0) {
 				setMelding($maaltijd_aanmeldingen[1] . ' aanmelding' . ($maaltijd_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd_aanmeldingen[0]->aanmeld_filter, 2);

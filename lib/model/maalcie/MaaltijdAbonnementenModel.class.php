@@ -144,9 +144,6 @@ class MaaltijdAbonnementenModel {
 	}
 
 	public static function getAbonnementenVoorRepetitie($mrid) {
-		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Get abonnementen voor repetitie faalt: Invalid $mrid =' . $mrid);
-		}
 		return self::loadAbonnementen($mrid);
 	}
 

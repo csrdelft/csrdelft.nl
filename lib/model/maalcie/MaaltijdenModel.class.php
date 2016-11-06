@@ -18,6 +18,20 @@ class MaaltijdenModel extends PersistenceModel {
 
     protected static $instance;
 
+    public function vanRepetitie(MaaltijdRepetitie $repetitie, $datum) {
+        $maaltijd = new Maaltijd();
+        $maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+        $maaltijd->titel = $repetitie->standaard_titel;
+        $maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
+        $maaltijd->datum = date('Y-m-d', $datum);
+        $maaltijd->tijd = $repetitie->standaard_tijd;
+        $maaltijd->prijs = $repetitie->standaard_prijs;
+        $maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
+        $maaltijd->omschrijving = null;
+
+        return $maaltijd;
+    }
+
 	public function openMaaltijd(Maaltijd $maaltijd) {
 		if (!$maaltijd->gesloten) {
 			throw new Exception('Maaltijd is al geopend');
@@ -124,19 +138,16 @@ class MaaltijdenModel extends PersistenceModel {
         return $maaltijd;
 	}
 
-	public function saveMaaltijd($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving) {
+    /**
+     * @param Maaltijd $maaltijd
+     * @return array
+     */
+	public function saveMaaltijd($maaltijd) {
         $verwijderd = 0;
-        if ($mid === null) {
-            $maaltijd = $this->newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving);
+        if ($maaltijd->maaltijd_id == 0) {
+            $maaltijd->maaltijd_id = $this->create($maaltijd);
+            $this->meldAboAan($maaltijd);
         } else {
-            $maaltijd = $this->getMaaltijd($mid);
-            $maaltijd->titel = $titel;
-            $maaltijd->aanmeld_limiet = $limiet;
-            $maaltijd->datum = $datum;
-            $maaltijd->tijd = $tijd;
-            $maaltijd->prijs = $prijs;
-            $maaltijd->aanmeld_filter = $filter;
-            $maaltijd->omschrijving = $omschrijving;
             $this->update($maaltijd);
             if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
                 $this->sluitMaaltijd($maaltijd);
@@ -206,43 +217,23 @@ class MaaltijdenModel extends PersistenceModel {
 		return $result;
 	}
 
-	private function newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving) {
-		$gesloten = true;
-		$wanneer = date('Y-m-d H:i');
-		if (strtotime($datum . ' ' . $tijd) > strtotime($wanneer)) {
-			$gesloten = false;
-			$wanneer = null;
-		}
-
-		$maaltijd = new Maaltijd();
-        $maaltijd->mlt_repetitie_id = $mrid;
-        $maaltijd->titel = $titel;
-        $maaltijd->datum = $datum;
-        $maaltijd->tijd = $tijd;
-        $maaltijd->prijs = $prijs;
-        $maaltijd->gesloten = $gesloten;
-        $maaltijd->laatst_gesloten = $wanneer;
-        $maaltijd->gesloten = false;
-        $maaltijd->aanmeld_filter = $filter;
-        $maaltijd->aanmeld_limiet = $limiet;
-        $maaltijd->omschrijving = $omschrijving;
-
-        $maaltijd->maaltijd_id = $this->create($maaltijd);
-
-		$aantal = 0;
-		// aanmelden van leden met abonnement op deze repetitie
-		if (!$gesloten && $mrid !== null) {
-			$abonnementen = MaaltijdAbonnementenModel::getAbonnementenVoorRepetitie($mrid);
-			foreach ($abonnementen as $abo) {
-				if (MaaltijdAanmeldingenModel::checkAanmeldFilter($abo->getUid(), $maaltijd->aanmeld_filter)) {
-					MaaltijdAanmeldingenModel::aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $abo->getMaaltijdRepetitieId(), $abo->getUid());
-					$aantal++;
-				}
-			}
-		}
-		$maaltijd->aantal_aanmeldingen = $aantal;
-		return $maaltijd;
-	}
+    /**
+     * @param Maaltijd $maaltijd
+     */
+	public function meldAboAan($maaltijd) {
+        $aantal = 0;
+        // aanmelden van leden met abonnement op deze repetitie
+        if (!$maaltijd->gesloten && $maaltijd->mlt_repetitie_id !== null) {
+            $abonnementen = MaaltijdAbonnementenModel::getAbonnementenVoorRepetitie($maaltijd->mlt_repetitie_id);
+            foreach ($abonnementen as $abo) {
+                if (MaaltijdAanmeldingenModel::checkAanmeldFilter($abo->getUid(), $maaltijd->aanmeld_filter)) {
+                    MaaltijdAanmeldingenModel::aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $abo->getMaaltijdRepetitieId(), $abo->getUid());
+                    $aantal++;
+                }
+            }
+        }
+        $maaltijd->aantal_aanmeldingen = $aantal;
+    }
 
 	// Archief-Maaltijden ############################################################
 
@@ -358,15 +349,10 @@ class MaaltijdenModel extends PersistenceModel {
         $corveerepetities = \CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id);
         $maaltijden = array();
         while ($datum <= $eindDatum) { // break after one
-            $maaltijd = $this->newMaaltijd(
-                $repetitie->mlt_repetitie_id,
-                $repetitie->standaard_titel,
-                $repetitie->standaard_limiet,
-                date('Y-m-d', $datum),
-                $repetitie->standaard_tijd,
-                $repetitie->standaard_prijs,
-                $repetitie->abonnement_filter,
-                null);
+
+            $maaltijd = $this->vanRepetitie($repetitie, $datum);
+            $maaltijd->maaltijd_id = $this->create($maaltijd);
+            $this->meldAboAan($maaltijd);
 
             foreach ($corveerepetities as $corveerepetitie) {
                 \CorveeTakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period

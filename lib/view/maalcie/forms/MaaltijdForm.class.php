@@ -23,7 +23,7 @@ class MaaltijdForm extends ModalForm {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
-		$fields['mrid'] = new IntField('mlt_repetitie_id', $maaltijd->maaltijd_id, null);
+		$fields['mrid'] = new IntField('mlt_repetitie_id', $maaltijd->mlt_repetitie_id, null);
 		$fields['mrid']->readonly = true;
 		$fields['mrid']->hidden = true;
 		$fields[] = new RequiredTextField('titel', $maaltijd->titel, 'Titel', 255, 5);
