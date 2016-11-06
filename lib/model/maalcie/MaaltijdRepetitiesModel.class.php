@@ -163,7 +163,7 @@ class MaaltijdRepetitiesModel {
 		if (CorveeRepetitiesModel::existMaaltijdRepetitieCorvee($mrid)) {
 			throw new Exception('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
 		}
-		if (MaaltijdenModel::existRepetitieMaaltijden($mrid)) {
+		if (MaaltijdenModel::instance()->existRepetitieMaaltijden($mrid)) {
 			MaaltijdenModel::verwijderRepetitieMaaltijden($mrid); // delete maaltijden first (foreign key)
 			throw new Exception('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}

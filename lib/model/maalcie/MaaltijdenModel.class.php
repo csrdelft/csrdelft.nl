@@ -438,56 +438,50 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @return bool
 	 * @throws Exception
 	 */
-	public static function existRepetitieMaaltijden($mrid) {
-        return static::instance()->find('mlt_repetitie_id = ?', array($mrid))->rowCount() > 0;
+	public function existRepetitieMaaltijden($mrid) {
+        return $this->find('mlt_repetitie_id = ?', array($mrid))->rowCount() > 0;
 	}
 
-	public static function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $verplaats) {
-		$db = \Database::instance();
-		try {
-			$db->beginTransaction();
-			// update day of the week & check filter
-			$updated = 0;
-			$aanmeldingen = 0;
-			$maaltijden = self::loadMaaltijden('verwijderd = FALSE AND mlt_repetitie_id = ?', array($repetitie->getMaaltijdRepetitieId()));
-			$filter = $repetitie->getAbonnementFilter();
-			if (!empty($filter)) {
-				$aanmeldingen = MaaltijdAanmeldingenModel::checkAanmeldingenFilter($filter, $maaltijden);
-			}
-			foreach ($maaltijden as $maaltijd) {
-				if ($verplaats) {
-					$datum = strtotime($maaltijd->datum);
-					$shift = $repetitie->getDagVanDeWeek() - date('w', $datum);
-					if ($shift > 0) {
-						$datum = strtotime('+' . $shift . ' days', $datum);
-					} elseif ($shift < 0) {
-						$datum = strtotime($shift . ' days', $datum);
-					}
-					$maaltijd->datum = date('Y-m-d', $datum);
-				}
-				$maaltijd->titel = $repetitie->getStandaardTitel();
-				$maaltijd->aanmeld_limiet = $repetitie->getStandaardLimiet();
-				$repetitie->setStandaardTijd($maaltijd->tijd);
-				$maaltijd->prijs = $repetitie->getStandaardPrijs();
-				$maaltijd->aanmeld_filter = $filter;
-				try {
-                    static::instance()->update($maaltijd);
-					$updated++;
-				} catch (\Exception $e) {
-					
-				}
-			}
-			$db->commit();
-			return array($updated, $aanmeldingen);
-		} catch (\Exception $e) {
-			$db->rollBack();
-			throw $e; // rethrow to controller
-		}
+	public function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $verplaats) {
+        // update day of the week & check filter
+        $updated = 0;
+        $aanmeldingen = 0;
+        $maaltijden = self::loadMaaltijden('verwijderd = FALSE AND mlt_repetitie_id = ?', array($repetitie->getMaaltijdRepetitieId()));
+        $filter = $repetitie->getAbonnementFilter();
+        if (!empty($filter)) {
+            $aanmeldingen = MaaltijdAanmeldingenModel::checkAanmeldingenFilter($filter, $maaltijden);
+        }
+        foreach ($maaltijden as $maaltijd) {
+            if ($verplaats) {
+                $datum = strtotime($maaltijd->datum);
+                $shift = $repetitie->getDagVanDeWeek() - date('w', $datum);
+                if ($shift > 0) {
+                    $datum = strtotime('+' . $shift . ' days', $datum);
+                } elseif ($shift < 0) {
+                    $datum = strtotime($shift . ' days', $datum);
+                }
+                $maaltijd->datum = date('Y-m-d', $datum);
+            }
+            $maaltijd->titel = $repetitie->getStandaardTitel();
+            $maaltijd->aanmeld_limiet = $repetitie->getStandaardLimiet();
+            $repetitie->setStandaardTijd($maaltijd->tijd);
+            $maaltijd->prijs = $repetitie->getStandaardPrijs();
+            $maaltijd->aanmeld_filter = $filter;
+            try {
+                $this->update($maaltijd);
+                $updated++;
+            } catch (\Exception $e) {
+
+            }
+        }
+        return array($updated, $aanmeldingen);
 	}
 
 	/**
 	 * Maakt nieuwe maaltijden aan volgens de definitie van de maaltijd-repetitie.
 	 * Alle leden met een abonnement hierop worden automatisch aangemeld.
+     *
+     * Moet in een transactie gedraaid worden.
 	 *
 	 * @param MaaltijdRepetitie $repetitie
 	 * @param $beginDatum
