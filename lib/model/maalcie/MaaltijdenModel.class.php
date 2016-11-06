@@ -138,7 +138,7 @@ class MaaltijdenModel extends PersistenceModel {
 		try {
 			$db->beginTransaction();
 			$verwijderd = 0;
-			if ($mid === 0) {
+			if ($mid === null) {
 				$maaltijd = self::newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving);
 			} else {
 				$maaltijd = self::getMaaltijd($mid);
@@ -304,17 +304,22 @@ class MaaltijdenModel extends PersistenceModel {
 			$gesloten = false;
 			$wanneer = null;
 		}
-		$sql = 'INSERT INTO mlt_maaltijden';
-		$sql.= ' (maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter, omschrijving)';
-		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$values = array(null, $mrid, $titel, $limiet, $datum, $tijd, $prijs, werkomheen_pdo_bool($gesloten), $wanneer, werkomheen_pdo_bool(false), $filter, $omschrijving);
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($query->rowCount() !== 1) {
-			throw new Exception('New maaltijd faalt: $query->rowCount() =' . $query->rowCount());
-		}
-		$maaltijd = new Maaltijd(intval($db->lastInsertId()), $mrid, $titel, $limiet, $datum, $tijd, $prijs, $gesloten, $wanneer, false, $filter, $omschrijving);
+
+		$maaltijd = new Maaltijd();
+        $maaltijd->mlt_repetitie_id = $mrid;
+        $maaltijd->titel = $titel;
+        $maaltijd->datum = $datum;
+        $maaltijd->tijd = $tijd;
+        $maaltijd->prijs = $prijs;
+        $maaltijd->gesloten = $gesloten;
+        $maaltijd->laatst_gesloten = $wanneer;
+        $maaltijd->gesloten = false;
+        $maaltijd->aanmeld_filter = $filter;
+        $maaltijd->aanmeld_limiet = $limiet;
+        $maaltijd->omschrijving = $omschrijving;
+
+        $maaltijd->maaltijd_id = static::instance()->create($maaltijd);
+
 		$aantal = 0;
 		// aanmelden van leden met abonnement op deze repetitie
 		if (!$gesloten && $mrid !== null) {
