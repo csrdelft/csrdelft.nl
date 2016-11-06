@@ -51,7 +51,7 @@ abstract class PersistenceModel implements Persistence {
 	/**
 	 * Wrap all method calls to this model inside a database transaction.
 	 *
-	 * @return TransactionWrapper
+	 * @return $this
 	 */
 	public static function transaction() {
 		return new TransactionWrapper(static::instance());
