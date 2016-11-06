@@ -202,7 +202,7 @@ class ProfielController extends AclController {
 
 	public function verjaardagen() {
 		require_once 'view/VerjaardagenView.class.php';
-		$body = new VerjaardagenView('alleverjaardagen');
+		$body = new AlleVerjaardagenView(VerjaardagenModel::getJaar());
 		$this->view = new CsrLayoutPage($body);
 	}
 

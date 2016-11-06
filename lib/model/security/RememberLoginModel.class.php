@@ -13,7 +13,12 @@ class RememberLoginModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function verifyToken($ip, $rand) {
+	public function verifyToken($rand) {
+		if (isset($_SERVER['REMOTE_ADDR'])) {
+			$ip = $_SERVER['REMOTE_ADDR'];
+		} else {
+			$ip = '';
+		}
 		$remember = $this->find('token = ? AND (lock_ip = FALSE OR ip = ?)', array(hash('sha512', $rand), $ip), null, null, 1)->fetch();
 		if (!$remember) {
 			return false;
@@ -27,7 +32,11 @@ class RememberLoginModel extends PersistenceModel {
 		$remember->uid = LoginModel::getUid();
 		$remember->remember_since = getDateTime();
 		$remember->device_name = '';
-		$remember->ip = $_SERVER['REMOTE_ADDR'];
+		if (isset($_SERVER['REMOTE_ADDR'])) {
+			$remember->ip = $_SERVER['REMOTE_ADDR'];
+		} else {
+			$remember->ip = '';
+		}
 		$remember->lock_ip = false;
 		return $remember;
 	}

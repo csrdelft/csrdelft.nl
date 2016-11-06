@@ -33,7 +33,7 @@ class LoginSessionsData extends DataTableResponse {
 	public function getJson($session) {
 		$array = $session->jsonSerialize();
 
-		$array['details'] = '<a href="/loginendsession/' . $session->session_hash . '" class="post DataTableResponse SingleRow" title="Log uit">'.Icon::getTag('door_in').'</a>';
+		$array['details'] = '<a href="/loginendsession/' . $session->session_hash . '" class="post DataTableResponse SingleRow" title="Log uit">' . Icon::getTag('door_in') . '</a>';
 
 		$array['login_moment'] = reldate($array['login_moment']);
         
