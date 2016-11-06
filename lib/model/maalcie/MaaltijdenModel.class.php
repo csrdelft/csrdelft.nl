@@ -569,19 +569,18 @@ class MaaltijdenModel extends PersistenceModel {
 			$corveerepetities = \CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->getMaaltijdRepetitieId());
 			$maaltijden = array();
 			while ($datum <= $eindDatum) { // break after one
-                $maaltijd = new Maaltijd();
-                $maaltijd->mlt_repetitie_id = $repetitie->getMaaltijdRepetitieId();
-                $maaltijd->titel = $repetitie->getStandaardTitel();
-                $maaltijd->aanmeld_limiet = $repetitie->getStandaardLimiet();
-                $maaltijd->datum = date('Y-m-d', $datum);
-                $maaltijd->tijd = $repetitie->getStandaardTijd();
-                $maaltijd->prijs = $repetitie->getStandaardPrijs();
-                $maaltijd->aanmeld_filter = $repetitie->getAbonnementFilter();
-
-                static::instance()->create($maaltijd);
+                $maaltijd = static::newMaaltijd(
+                    $repetitie->getMaaltijdRepetitieId(),
+                    $repetitie->getStandaardTitel(),
+                    $repetitie->getStandaardLimiet(),
+                    date('Y-m-d', $datum),
+                    $repetitie->getStandaardTijd(),
+                    $repetitie->getStandaardPrijs(),
+                    $repetitie->getAbonnementFilter(),
+                    null);
 
 				foreach ($corveerepetities as $corveerepetitie) {
-					\CorveeTakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, $maaltijd->maaltijd_id); // do not repeat within maaltijd period
+					\CorveeTakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
 				}
 				$maaltijden[] = $maaltijd;
 				if ($repetitie->getPeriodeInDagen() < 1) {
