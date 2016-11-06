@@ -138,7 +138,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 			throw new Exception('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
 		}
 		if (MaaltijdenModel::instance()->existRepetitieMaaltijden($mrid)) {
-			MaaltijdenModel::verwijderRepetitieMaaltijden($mrid); // delete maaltijden first (foreign key)
+			MaaltijdenModel::instance()->verwijderRepetitieMaaltijden($mrid); // delete maaltijden first (foreign key)
 			throw new Exception('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 		$aantalAbos = MaaltijdAbonnementenModel::verwijderAbonnementen($mrid);

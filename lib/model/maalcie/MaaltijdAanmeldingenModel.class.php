@@ -15,9 +15,9 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
     protected static $instance;
 
 	public static function aanmeldenVoorMaaltijd($mid, $uid, $doorUid, $aantalGasten = 0, $beheer = false, $gastenEetwens = '') {
-		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
+		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
 		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
-			MaaltijdenModel::sluitMaaltijd($maaltijd);
+			MaaltijdenModel::instance()->sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer) {
 			if (!self::checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) {
@@ -64,7 +64,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	 */
 	public static function afmeldenDoorAbonnement($mrid, $uid = null) {
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
-		$maaltijden = MaaltijdenModel::getKomendeOpenRepetitieMaaltijden($mrid);
+		$maaltijden = MaaltijdenModel::instance()->getKomendeOpenRepetitieMaaltijden($mrid);
 		if (empty($maaltijden)) {
 			return;
 		}
@@ -89,9 +89,9 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 		if (!self::getIsAangemeld($mid, $uid)) {
 			throw new Exception('Niet aangemeld');
 		}
-		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
+		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
 		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
-			MaaltijdenModel::sluitMaaltijd($maaltijd);
+			MaaltijdenModel::instance()->sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer && $maaltijd->gesloten) {
 			throw new Exception('Maaltijd is gesloten');
@@ -115,7 +115,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
-			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
+			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
 			if ($maaltijd->gesloten) {
 				throw new Exception('Maaltijd is gesloten');
 			}
@@ -149,7 +149,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
-			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
+			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
 			if ($maaltijd->gesloten) {
 				throw new Exception('Maaltijd is gesloten');
 			}
@@ -186,7 +186,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	}
 
 	public static function getRecenteAanmeldingenVoorLid($uid, $timestamp) {
-		$maaltijdenById = MaaltijdenModel::getRecenteMaaltijden($timestamp);
+		$maaltijdenById = MaaltijdenModel::instance()->getRecenteMaaltijden($timestamp);
 		return MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($maaltijdenById, $uid);
 	}
 

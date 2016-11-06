@@ -541,7 +541,7 @@ class CorveeTakenModel {
 			$takenPerDatum = array(); // taken per datum indien geen maaltijd
 			$takenPerMaaltijd = array(); // taken per maaltijd
 			require_once 'model/maalcie/MaaltijdenModel.class.php';
-			$maaltijden = MaaltijdenModel::getKomendeRepetitieMaaltijden($repetitie->getMaaltijdRepetitieId());
+			$maaltijden = MaaltijdenModel::instance()->getKomendeRepetitieMaaltijden($repetitie->getMaaltijdRepetitieId());
 			$maaltijdenById = array();
 			foreach ($maaltijden as $maaltijd) {
 				$takenPerMaaltijd[$maaltijd->maaltijd_id] = array();

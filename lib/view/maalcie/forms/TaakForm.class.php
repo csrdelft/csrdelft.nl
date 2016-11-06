@@ -57,7 +57,7 @@ class TaakForm extends ModalForm {
 		$fields = $this->getFields();
 		if (is_int($fields['mid']->getValue())) {
 			try {
-				MaaltijdenModel::getMaaltijd($fields['mid']->getValue(), true);
+				MaaltijdenModel::instance()->getMaaltijd($fields['mid']->getValue(), true);
 			} catch (Exception $e) {
 				$fields['mid']->error = 'Maaltijd bestaat niet.';
 				$valid = false;

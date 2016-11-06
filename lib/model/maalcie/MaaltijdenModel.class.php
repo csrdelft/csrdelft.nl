@@ -18,22 +18,22 @@ class MaaltijdenModel extends PersistenceModel {
 
     protected static $instance;
 
-	public static function openMaaltijd(Maaltijd $maaltijd) {
+	public function openMaaltijd(Maaltijd $maaltijd) {
 		if (!$maaltijd->gesloten) {
 			throw new Exception('Maaltijd is al geopend');
 		}
 		$maaltijd->gesloten = false;
-		static::instance()->update($maaltijd);
+		$this->update($maaltijd);
 		return $maaltijd;
 	}
 
-	public static function sluitMaaltijd(Maaltijd $maaltijd) {
+	public function sluitMaaltijd(Maaltijd $maaltijd) {
 		if ($maaltijd->gesloten) {
 			throw new Exception('Maaltijd is al gesloten');
 		}
 		$maaltijd->gesloten = true;
 		$maaltijd->laatst_gesloten = date('Y-m-d H:i');
-        static::instance()->update($maaltijd);
+        $this->update($maaltijd);
 	}
 
 	public function getAlleMaaltijden() {
@@ -56,7 +56,7 @@ class MaaltijdenModel extends PersistenceModel {
 			throw new Exception('Invalid timestamp: $tot getMaaltijdenVoorAgenda()');
 		}
 		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
-		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, LoginModel::getUid());
+		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, LoginModel::getUid());
 		return $maaltijden;
 	}
 
@@ -66,9 +66,9 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @param string $uid
 	 * @return Maaltijd[]
 	 */
-	public static function getKomendeMaaltijdenVoorLid($uid) {
-		$maaltijden = static::instance()->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime(Instellingen::get('maaltijden', 'toon_ketzer_vooraf')))));
-		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, $uid);
+	public function getKomendeMaaltijdenVoorLid($uid) {
+		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime(Instellingen::get('maaltijden', 'toon_ketzer_vooraf')))));
+		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, $uid);
 		return $maaltijden;
 	}
 
@@ -77,8 +77,8 @@ class MaaltijdenModel extends PersistenceModel {
 	 * 
 	 * @return Maaltijd[]
 	 */
-	public static function getRecenteMaaltijden($timestamp, $limit = null) {
-		$maaltijden = static::instance()->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $timestamp), date('Y-m-d')), null, null, $limit);
+	public function getRecenteMaaltijden($timestamp, $limit = null) {
+		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $timestamp), date('Y-m-d')), null, null, $limit);
 		$maaltijdenById = array();
 		foreach ($maaltijden as $maaltijd) {
 			$maaltijdenById[$maaltijd->maaltijd_id] = $maaltijd;
@@ -89,23 +89,29 @@ class MaaltijdenModel extends PersistenceModel {
 	/**
 	 * Haalt de maaltijd op die in een ketzer zal worden weergegeven.
 	 * 
-	 * @return Maaltijd
+	 * @return Maaltijd|false
 	 */
-	public static function getMaaltijdVoorKetzer($mid) {
-		$maaltijden = array(self::getMaaltijd($mid));
-		$maaltijden = self::filterMaaltijdenVoorLid($maaltijden, LoginModel::getUid());
+	public function getMaaltijdVoorKetzer($mid) {
+		$maaltijden = array($this->getMaaltijd($mid));
+		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, LoginModel::getUid());
 		if (!empty($maaltijden)) {
 			return reset($maaltijden);
 		}
 		return false;
 	}
 
-	public static function getVerwijderdeMaaltijden() {
-		return static::instance()->find('verwijderd = true');
+	public function getVerwijderdeMaaltijden() {
+		return $this->find('verwijderd = true');
 	}
 
-	public static function getMaaltijd($mid, $verwijderd = false) {
-		$maaltijd = static::instance()->loadMaaltijd($mid);
+    /**
+     * @param $mid
+     * @param bool $verwijderd
+     * @return Maaltijd
+     * @throws Exception
+     */
+	public function getMaaltijd($mid, $verwijderd = false) {
+		$maaltijd = $this->loadMaaltijd($mid);
 		if (!$verwijderd && $maaltijd->verwijderd) {
 			throw new Exception('Maaltijd is verwijderd');
 		}
@@ -118,15 +124,15 @@ class MaaltijdenModel extends PersistenceModel {
         return $maaltijd;
 	}
 
-	public static function saveMaaltijd($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving) {
+	public function saveMaaltijd($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving) {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$verwijderd = 0;
 			if ($mid === null) {
-				$maaltijd = self::newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving);
+				$maaltijd = $this->newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving);
 			} else {
-				$maaltijd = self::getMaaltijd($mid);
+				$maaltijd = $this->getMaaltijd($mid);
 				$maaltijd->titel = $titel;
 				$maaltijd->aanmeld_limiet = $limiet;
 				$maaltijd->datum = $datum;
@@ -134,9 +140,9 @@ class MaaltijdenModel extends PersistenceModel {
 				$maaltijd->prijs = $prijs;
 				$maaltijd->aanmeld_filter = $filter;
 				$maaltijd->omschrijving = $omschrijving;
-                static::instance()->update($maaltijd);
+                $this->update($maaltijd);
 				if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
-					MaaltijdenModel::sluitMaaltijd($maaltijd);
+					$this->sluitMaaltijd($maaltijd);
 				}
 				if (!$maaltijd->gesloten && !$maaltijd->verwijderd && !empty($filter)) {
 					$verwijderd = MaaltijdAanmeldingenModel::checkAanmeldingenFilter($filter, array($maaltijd));
@@ -151,12 +157,12 @@ class MaaltijdenModel extends PersistenceModel {
 		}
 	}
 
-	public static function prullenbakLeegmaken() {
+	public function prullenbakLeegmaken() {
 		$aantal = 0;
-		$maaltijden = self::getVerwijderdeMaaltijden();
+		$maaltijden = $this->getVerwijderdeMaaltijden();
 		foreach ($maaltijden as $maaltijd) {
 			try {
-				self::verwijderMaaltijd($maaltijd->maaltijd_id);
+				$this->verwijderMaaltijd($maaltijd->maaltijd_id);
 				$aantal++;
 			} catch (\Exception $e) {
 				setMelding($e->getMessage(), -1);
@@ -165,29 +171,28 @@ class MaaltijdenModel extends PersistenceModel {
 		return $aantal;
 	}
 
-	public static function verwijderMaaltijd($mid) {
-		$maaltijd = static::instance()->loadMaaltijd($mid);
+	public function verwijderMaaltijd($mid) {
+		$maaltijd = $this->loadMaaltijd($mid);
 		\CorveeTakenModel::verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
 		if ($maaltijd->verwijderd) {
 			if (\CorveeTakenModel::existMaaltijdCorvee($mid)) {
 				throw new Exception('Er zitten nog bijbehorende corveetaken in de prullenbak. Verwijder die eerst definitief!');
 			}
 			MaaltijdAanmeldingenModel::deleteAanmeldingenVoorMaaltijd($mid);
-            static::instance()->deleteByPrimaryKey(array($mid));
-			self::deleteMaaltijd($mid); // definitief verwijderen
+            $this->deleteByPrimaryKey(array($mid));
 		} else {
 			$maaltijd->verwijderd = true;
-            static::instance()->update($maaltijd);
+            $this->update($maaltijd);
 		}
 	}
 
-	public static function herstelMaaltijd($mid) {
-		$maaltijd = static::instance()->loadMaaltijd($mid);
+	public function herstelMaaltijd($mid) {
+		$maaltijd = $this->loadMaaltijd($mid);
 		if (!$maaltijd->verwijderd) {
 			throw new Exception('Maaltijd is niet verwijderd');
 		}
 		$maaltijd->verwijderd = false;
-        static::instance()->update($maaltijd);
+        $this->update($maaltijd);
 		return $maaltijd;
 	}
 
@@ -198,7 +203,7 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @param string $uid
 	 * @return Maaltijd[]
 	 */
-	private static function filterMaaltijdenVoorLid($maaltijden, $uid) {
+	private function filterMaaltijdenVoorLid($maaltijden, $uid) {
 		$result = array();
 		foreach ($maaltijden as $maaltijd) {
 			// Kan en mag aanmelden of mag maaltijdlijst zien en sluiten? Dan maaltijd ook zien.
@@ -209,17 +214,7 @@ class MaaltijdenModel extends PersistenceModel {
 		return $result;
 	}
 
-	/**
-	 * @param string $where
-	 * @param array $values
-	 * @param int $limit
-	 * @return Maaltijd[]
-	 */
-	private static function loadMaaltijden($where = null, $values = array(), $limit = null) {
-        return static::instance()->find($where, $values, null, null, $limit)->fetchAll();
-	}
-
-	private static function newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving) {
+	private function newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving) {
 		$gesloten = true;
 		$wanneer = date('Y-m-d H:i');
 		if (strtotime($datum . ' ' . $tijd) > strtotime($wanneer)) {
@@ -240,7 +235,7 @@ class MaaltijdenModel extends PersistenceModel {
         $maaltijd->aanmeld_limiet = $limiet;
         $maaltijd->omschrijving = $omschrijving;
 
-        $maaltijd->maaltijd_id = static::instance()->create($maaltijd);
+        $maaltijd->maaltijd_id = $this->create($maaltijd);
 
 		$aantal = 0;
 		// aanmelden van leden met abonnement op deze repetitie
@@ -282,19 +277,19 @@ class MaaltijdenModel extends PersistenceModel {
 
 	// Repetitie-Maaltijden ############################################################
 
-	public static function getKomendeRepetitieMaaltijden($mrid) {
-		return static::instance()->find('mlt_repetitie_id = ? AND verwijderd = FALSE AND datum >= ?', array($mrid, date('Y-m-d')));
+	public function getKomendeRepetitieMaaltijden($mrid) {
+		return $this->find('mlt_repetitie_id = ? AND verwijderd = FALSE AND datum >= ?', array($mrid, date('Y-m-d')));
 	}
 
-	public static function getKomendeOpenRepetitieMaaltijden($mrid) {
-		return static::instance()->find('mlt_repetitie_id = ? AND gesloten = FALSE AND verwijderd = FALSE AND datum >= ?', array($mrid, date('Y-m-d')));
+	public function getKomendeOpenRepetitieMaaltijden($mrid) {
+		return $this->find('mlt_repetitie_id = ? AND gesloten = FALSE AND verwijderd = FALSE AND datum >= ?', array($mrid, date('Y-m-d')));
 	}
 
-	public static function verwijderRepetitieMaaltijden($mrid) {
-        $maaltijden = static::instance()->find('mlt_repetitie_id = ?', array($mrid));
+	public function verwijderRepetitieMaaltijden($mrid) {
+        $maaltijden = $this->find('mlt_repetitie_id = ?', array($mrid));
         foreach ($maaltijden as $maaltijd) {
             $maaltijd->verwijderd = true;
-            static::instance()->update($maaltijd);
+            $this->update($maaltijd);
         }
 	}
 
@@ -313,7 +308,7 @@ class MaaltijdenModel extends PersistenceModel {
         // update day of the week & check filter
         $updated = 0;
         $aanmeldingen = 0;
-        $maaltijden = static::instance()->find('verwijderd = FALSE AND mlt_repetitie_id = ?', array($repetitie->mlt_repetitie_id));
+        $maaltijden = $this->find('verwijderd = FALSE AND mlt_repetitie_id = ?', array($repetitie->mlt_repetitie_id));
         $filter = $repetitie->abonnement_filter;
         if (!empty($filter)) {
             $aanmeldingen = MaaltijdAanmeldingenModel::checkAanmeldingenFilter($filter, $maaltijden);
@@ -371,7 +366,7 @@ class MaaltijdenModel extends PersistenceModel {
         $corveerepetities = \CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id);
         $maaltijden = array();
         while ($datum <= $eindDatum) { // break after one
-            $maaltijd = static::newMaaltijd(
+            $maaltijd = $this->newMaaltijd(
                 $repetitie->mlt_repetitie_id,
                 $repetitie->standaard_titel,
                 $repetitie->standaard_limiet,

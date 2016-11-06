@@ -873,7 +873,7 @@ HTML;
 		require_once 'view/maalcie/MaaltijdKetzerView.class.php';
 		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginModel::getUid()); // met filter
+				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(\LoginModel::getUid()); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
 					return 'Geen aankomende maaltijd.';
@@ -884,7 +884,7 @@ HTML;
 					$maaltijd2 = reset($maaltijden);
 				}
 			} elseif (preg_match('/\d+/', $mid)) {
-				$maaltijd = MaaltijdenModel::getMaaltijdVoorKetzer((int) $mid); // met filter
+				$maaltijd = MaaltijdenModel::instance()->getMaaltijdVoorKetzer((int) $mid); // met filter
 				if (!$maaltijd) {
 					return '';
 				}

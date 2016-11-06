@@ -743,7 +743,7 @@ class AccessModel extends CachedPersistenceModel {
 						return true;
 					}
 					try {
-						$maaltijd = MaaltijdenModel::getMaaltijd((int) $gevraagd);
+						$maaltijd = MaaltijdenModel::instance()->getMaaltijd((int) $gevraagd);
 						if ($maaltijd AND $maaltijd->magSluiten($profiel->uid)) {
 							return true;
 						}
