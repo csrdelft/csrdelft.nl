@@ -495,49 +495,42 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @return Maaltijd[]
 	 * @throws Exception
 	 */
-	public static function maakRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $beginDatum, $eindDatum) {
+	public function maakRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $beginDatum, $eindDatum) {
 		if ($repetitie->getPeriodeInDagen() < 1) {
 			throw new Exception('New repetitie-maaltijden faalt: $periode =' . $repetitie->getPeriodeInDagen());
 		}
-		$db = \Database::instance();
-		try {
-			$db->beginTransaction();
-			// start at first occurence
-			$shift = $repetitie->getDagVanDeWeek() - date('w', $beginDatum) + 7;
-			$shift %= 7;
-			if ($shift > 0) {
-				$beginDatum = strtotime('+' . $shift . ' days', $beginDatum);
-			}
-			$datum = $beginDatum;
-			$corveerepetities = \CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->getMaaltijdRepetitieId());
-			$maaltijden = array();
-			while ($datum <= $eindDatum) { // break after one
-                $maaltijd = static::newMaaltijd(
-                    $repetitie->getMaaltijdRepetitieId(),
-                    $repetitie->getStandaardTitel(),
-                    $repetitie->getStandaardLimiet(),
-                    date('Y-m-d', $datum),
-                    $repetitie->getStandaardTijd(),
-                    $repetitie->getStandaardPrijs(),
-                    $repetitie->getAbonnementFilter(),
-                    null);
 
-				foreach ($corveerepetities as $corveerepetitie) {
-					\CorveeTakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
-				}
-				$maaltijden[] = $maaltijd;
-				if ($repetitie->getPeriodeInDagen() < 1) {
-					break;
-				}
-				$datum = strtotime('+' . $repetitie->getPeriodeInDagen() . ' days', $datum);
-			}
-			$db->commit();
-			return $maaltijden;
-		} catch (\Exception $e) {
-			$db->rollBack();
-			throw $e; // rethrow to controller
-		}
-	}
+        // start at first occurence
+        $shift = $repetitie->getDagVanDeWeek() - date('w', $beginDatum) + 7;
+        $shift %= 7;
+        if ($shift > 0) {
+            $beginDatum = strtotime('+' . $shift . ' days', $beginDatum);
+        }
+        $datum = $beginDatum;
+        $corveerepetities = \CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->getMaaltijdRepetitieId());
+        $maaltijden = array();
+        while ($datum <= $eindDatum) { // break after one
+            $maaltijd = static::newMaaltijd(
+                $repetitie->getMaaltijdRepetitieId(),
+                $repetitie->getStandaardTitel(),
+                $repetitie->getStandaardLimiet(),
+                date('Y-m-d', $datum),
+                $repetitie->getStandaardTijd(),
+                $repetitie->getStandaardPrijs(),
+                $repetitie->getAbonnementFilter(),
+                null);
+
+            foreach ($corveerepetities as $corveerepetitie) {
+                \CorveeTakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
+            }
+            $maaltijden[] = $maaltijd;
+            if ($repetitie->getPeriodeInDagen() < 1) {
+                break;
+            }
+            $datum = strtotime('+' . $repetitie->getPeriodeInDagen() . ' days', $datum);
+        }
+        return $maaltijden;
+    }
 
 }
 
