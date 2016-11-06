@@ -39,9 +39,9 @@ class MaaltijdAbonnementenModel {
 		}
 		if ($uitgeschakeld) {
 			foreach ($repById as $repetitie) {
-				$mrid = $repetitie->getMaaltijdRepetitieId();
+				$mrid = $repetitie->mlt_repetitie_id;
 				if (!array_key_exists($mrid, $lijst)) { // uitgeschakelde abonnementen weergeven
-					$abo = new MaaltijdAbonnement($repetitie->getMaaltijdRepetitieId(), null);
+					$abo = new MaaltijdAbonnement($repetitie->mlt_repetitie_id, null);
 					$abo->setMaaltijdRepetitie($repetitie);
 					$abo->setVanUid($uid);
 					$lijst[$mrid] = $abo;
@@ -182,14 +182,14 @@ class MaaltijdAbonnementenModel {
 
 	public static function inschakelenAbonnement($mrid, $uid) {
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
-		if (!$repetitie->getIsAbonneerbaar()) {
+		if (!$repetitie->abonneerbaar) {
 			throw new Exception('Niet abonneerbaar');
 		}
 		if (self::getHeeftAbonnement($mrid, $uid)) {
 			throw new Exception('Abonnement al ingeschakeld');
 		}
-		if (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $repetitie->getAbonnementFilter())) {
-			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->getAbonnementFilter());
+		if (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
+			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
 		}
 		$abo_aantal = self::newAbonnement($mrid, $uid);
 		$abo_aantal[0]->setVanUid($uid);

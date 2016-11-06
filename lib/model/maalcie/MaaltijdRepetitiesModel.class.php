@@ -8,11 +8,47 @@ require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
  * MaaltijdRepetitiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MaaltijdRepetitiesModel {
+class MaaltijdRepetitiesModel extends PersistenceModel {
+
+    const ORM = 'MaaltijdRepetitie';
+    const DIR = 'maalcie/';
+
+    protected static $instance;
+    
+    public function nieuwMaaltijdRepetitie($mrid = 0, $dag = null, $periode = null, $titel = '', $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = null) {
+        $repetitie = new MaaltijdRepetitie();
+        $this->mlt_repetitie_id = (int) $mrid;
+        if ($dag === null) {
+            $dag = intval(Instellingen::get('maaltijden', 'standaard_repetitie_weekdag'));
+        }
+        $repetitie->dag_vd_week = $dag;
+        if ($periode === null) {
+            $periode = intval(Instellingen::get('maaltijden', 'standaard_repetitie_periode'));
+        }
+        $repetitie->periode_in_dagen = $periode;
+        $repetitie->standaard_titel = $titel;
+        if ($tijd === null) {
+            $tijd = Instellingen::get('maaltijden', 'standaard_aanvang');
+        }
+        $repetitie->standaard_tijd = $tijd;
+        if ($prijs === null) {
+            $prijs = intval(Instellingen::get('maaltijden', 'standaard_prijs'));
+        }
+        $repetitie->standaard_prijs = $prijs;
+        if ($abo === null) {
+            $abo = (boolean) Instellingen::get('maaltijden', 'standaard_abonneerbaar');
+        }
+        $repetitie->abonneerbaar = $abo;
+        if ($limiet === null) {
+            $limiet = intval(Instellingen::get('maaltijden', 'standaard_limiet'));
+        }
+        $repetitie->standaard_limiet = $limiet;
+        $repetitie->abonnement_filter = $filter;
+    }
 
 	public static function getFirstOccurrence(MaaltijdRepetitie $repetitie) {
 		$datum = time();
-		$shift = $repetitie->getDagVanDeWeek() - date('w', $datum) + 7;
+		$shift = $repetitie->dag_vd_week - date('w', $datum) + 7;
 		$shift %= 7;
 		if ($shift > 0) {
 			$datum = strtotime('+' . $shift . ' days', $datum);
@@ -32,8 +68,8 @@ class MaaltijdRepetitiesModel {
 		$repetities = self::loadRepetities('abonneerbaar = true');
 		$result = array();
 		foreach ($repetities as $repetitie) {
-			if (MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $repetitie->getAbonnementFilter())) {
-				$result[$repetitie->getMaaltijdRepetitieId()] = $repetitie;
+			if (MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
+				$result[$repetitie->mlt_repetitie_id] = $repetitie;
 			}
 		}
 		return $result;
@@ -48,7 +84,7 @@ class MaaltijdRepetitiesModel {
 		if ($groupById) {
 			$result = array();
 			foreach ($repetities as $repetitie) {
-				$result[$repetitie->getMaaltijdRepetitieId()] = $repetitie;
+				$result[$repetitie->mlt_repetitie_id] = $repetitie;
 			}
 			return $result;
 		}
@@ -73,20 +109,7 @@ class MaaltijdRepetitiesModel {
 	 * @return MaaltijdRepetitie[]
 	 */
 	private static function loadRepetities($where = null, $values = array(), $limit = null) {
-		$sql = 'SELECT mlt_repetitie_id, dag_vd_week, periode_in_dagen, standaard_titel, standaard_tijd, standaard_prijs, abonneerbaar, standaard_limiet, abonnement_filter';
-		$sql.= ' FROM mlt_repetities';
-		if ($where !== null) {
-			$sql.= ' WHERE ' . $where;
-		}
-		$sql.= ' ORDER BY periode_in_dagen ASC, dag_vd_week ASC';
-		if (is_int($limit)) {
-			$sql.= ' LIMIT ' . $limit;
-		}
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, 'MaaltijdRepetitie');
-		return $result;
+        return static::instance()->find($where, $values, null, 'periode_in_dagen ASC, dag_vd_week ASC', $limit)->fetchAll();
 	}
 
 	public static function saveRepetitie($mrid, $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter) {
@@ -98,14 +121,14 @@ class MaaltijdRepetitiesModel {
 				$repetitie = self::newRepetitie($dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter);
 			} else {
 				$repetitie = self::getRepetitie($mrid);
-				$repetitie->setDagVanDeWeek($dag);
-				$repetitie->setPeriodeInDagen($periode);
-				$repetitie->setStandaardTitel($titel);
-				$repetitie->setStandaardTijd($tijd);
-				$repetitie->setStandaardPrijs($prijs);
-				$repetitie->setAbonneerbaar((boolean) $abo);
-				$repetitie->setStandaardLimiet($limiet);
-				$repetitie->setAbonnementFilter($filter);
+				$repetitie->dag_vd_week = $dag;
+				$repetitie->periode_in_dagen = $periode;
+				$repetitie->standaard_titel = $titel;
+				$repetitie->standaard_tijd = $tijd;
+				$repetitie->standaard_prijs = $prijs;
+				$repetitie->abonneerbaar = (boolean) $abo;
+				$repetitie->standaard_limiet = $limiet;
+				$repetitie->abonnement_filter = $filter;
 				self::updateRepetitie($repetitie);
 				if (!$abo) { // niet (meer) abonneerbaar
 					$abos = MaaltijdAbonnementenModel::verwijderAbonnementen($mrid);
@@ -124,15 +147,15 @@ class MaaltijdRepetitiesModel {
 		$sql.= ' SET dag_vd_week=?, periode_in_dagen=?, standaard_titel=?, standaard_tijd=?, standaard_prijs=?, abonneerbaar=?, standaard_limiet=?, abonnement_filter=?';
 		$sql.= ' WHERE mlt_repetitie_id=?';
 		$values = array(
-			$repetitie->getDagVanDeWeek(),
-			$repetitie->getPeriodeInDagen(),
-			$repetitie->getStandaardTitel(),
-			$repetitie->getStandaardTijd(),
-			$repetitie->getStandaardPrijs(),
-			werkomheen_pdo_bool($repetitie->getIsAbonneerbaar()),
-			$repetitie->getStandaardLimiet(),
-			$repetitie->getAbonnementFilter(),
-			$repetitie->getMaaltijdRepetitieId()
+			$repetitie->dag_vd_week,
+			$repetitie->periode_in_dagen,
+			$repetitie->standaard_titel,
+			$repetitie->standaard_tijd,
+			$repetitie->standaard_prijs,
+			werkomheen_pdo_bool($repetitie->abonneerbaar),
+			$repetitie->standaard_limiet,
+			$repetitie->abonnement_filter,
+			$repetitie->mlt_repetitie_id
 		);
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
@@ -153,7 +176,7 @@ class MaaltijdRepetitiesModel {
 		if ($query->rowCount() !== 1) {
 			throw new Exception('New maaltijd-repetitie faalt: $query->rowCount() =' . $query->rowCount());
 		}
-		return new MaaltijdRepetitie(intval($db->lastInsertId()), $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter);
+		return static::instance()->nieuwMaaltijdRepetitie(intval($db->lastInsertId()), $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter);
 	}
 
 	public static function verwijderRepetitie($mrid) {

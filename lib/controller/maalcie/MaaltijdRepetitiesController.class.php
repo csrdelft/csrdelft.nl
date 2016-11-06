@@ -55,12 +55,12 @@ class MaaltijdRepetitiesController extends AclController {
 
 	public function nieuw() {
 		$repetitie = new MaaltijdRepetitie();
-		$this->view = new MaaltijdRepetitieForm($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter()); // fetches POST values itself
+		$this->view = new MaaltijdRepetitieForm($repetitie->mlt_repetitie_id, $repetitie->dag_vd_week, $repetitie->periode_in_dagen, $repetitie->standaard_titel, $repetitie->standaard_tijd, $repetitie->standaard_prijs, $repetitie->abonneerbaar, $repetitie->standaard_limiet, $repetitie->abonnement_filter); // fetches POST values itself
 	}
 
 	public function bewerk($mrid) {
 		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
-		$this->view = new MaaltijdRepetitieForm($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter()); // fetches POST values itself
+		$this->view = new MaaltijdRepetitieForm($repetitie->mlt_repetitie_id, $repetitie->dag_vd_week, $repetitie->periode_in_dagen, $repetitie->standaard_titel, $repetitie->standaard_tijd, $repetitie->standaard_prijs, $repetitie->abonneerbaar, $repetitie->standaard_limiet, $repetitie->abonnement_filter); // fetches POST values itself
 	}
 
 	public function opslaan($mrid) {
@@ -96,7 +96,7 @@ class MaaltijdRepetitiesController extends AclController {
 			$updated_aanmeldingen = MaaltijdenModel::transaction()->updateRepetitieMaaltijden($this->view->getModel(), $verplaats);
 			setMelding($updated_aanmeldingen[0] . ' maaltijd' . ($updated_aanmeldingen[0] !== 1 ? 'en' : '') . ' bijgewerkt' . ($verplaats ? ' en eventueel verplaatst.' : '.'), 1);
 			if ($updated_aanmeldingen[1] > 0) {
-				setMelding($updated_aanmeldingen[1] . ' aanmelding' . ($updated_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $this->view->getModel()->getAbonnementFilter(), 2);
+				setMelding($updated_aanmeldingen[1] . ' aanmelding' . ($updated_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $this->view->getModel()->abonnement_filter, 2);
 			}
 		}
 	}

@@ -22,167 +22,58 @@
  * Zie ook MaaltijdAbonnement.class.php
  * 
  */
-class MaaltijdRepetitie {
+class MaaltijdRepetitie extends PersistentEntity {
 	# primary key
 
-	private $mlt_repetitie_id; # int 11
-	private $dag_vd_week; # int 1
-	private $periode_in_dagen; # int 11
-	private $standaard_titel; # string 255
-	private $standaard_tijd; # time
-	private $standaard_prijs; # double
-	private $abonneerbaar; # boolean
-	private $standaard_limiet; # int 11
-	private $abonnement_filter; # string 255
+	public $mlt_repetitie_id; # int 11
+    /**
+     * 0: Sunday
+     * 6: Saturday
+     */
+	public $dag_vd_week; # int 1
+	public $periode_in_dagen; # int 11
+	public $standaard_titel; # string 255
+	public $standaard_tijd; # time
+	public $standaard_prijs; # double
+	public $abonneerbaar; # boolean
+	public $standaard_limiet; # int 11
+	public $abonnement_filter; # string 255
 
-	public function __construct($mrid = 0, $dag = null, $periode = null, $titel = '', $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = null) {
-		$this->mlt_repetitie_id = (int) $mrid;
-		if ($dag === null) {
-			$dag = intval(Instellingen::get('maaltijden', 'standaard_repetitie_weekdag'));
-		}
-		$this->setDagVanDeWeek($dag);
-		if ($periode === null) {
-			$periode = intval(Instellingen::get('maaltijden', 'standaard_repetitie_periode'));
-		}
-		$this->setPeriodeInDagen($periode);
-		$this->setStandaardTitel($titel);
-		if ($tijd === null) {
-			$tijd = Instellingen::get('maaltijden', 'standaard_aanvang');
-		}
-		$this->setStandaardTijd($tijd);
-		if ($prijs === null) {
-			$prijs = intval(Instellingen::get('maaltijden', 'standaard_prijs'));
-		}
-		$this->setStandaardPrijs($prijs);
-		if ($abo === null) {
-			$abo = (boolean) Instellingen::get('maaltijden', 'standaard_abonneerbaar');
-		}
-		$this->setAbonneerbaar($abo);
-		if ($limiet === null) {
-			$limiet = intval(Instellingen::get('maaltijden', 'standaard_limiet'));
-		}
-		$this->setStandaardLimiet($limiet);
-		$this->setAbonnementFilter($filter);
-	}
-
-	public function getMaaltijdRepetitieId() {
-		return (int) $this->mlt_repetitie_id;
-	}
-
-	/**
-	 * 0: Sunday
-	 * 6: Saturday
-	 */
-	public function getDagVanDeWeek() {
-		return (int) $this->dag_vd_week;
-	}
+    protected static $table_name = 'mlt_repetities';
+    protected static $persistent_attributes = array(
+        'mlt_repetitie_id' => array(T::Integer, false, 'auto_increment'),
+        'dag_vd_week' => array(T::Boolean),
+        'periode_in_dagen' => array(T::Integer),
+        'standaard_titel' => array(T::String),
+        'standaard_tijd' => array(T::Time),
+        'standaard_prijs' => array(T::Integer),
+        'abonneerbaar' => array(T::Boolean),
+        'standaard_limiet' => array(T::Integer),
+        'abonnement_filter' => array(T::String, true)
+    );
+    protected static $primary_key = array('mlt_repetitie_id');
 
 	public function getDagVanDeWeekText() {
-		return strftime('%A', ($this->getDagVanDeWeek() + 3) * 24 * 3600);
-	}
-
-	public function getPeriodeInDagen() {
-		return (int) $this->periode_in_dagen;
+		return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
 	}
 
 	public function getPeriodeInDagenText() {
-		switch ($this->getPeriodeInDagen()) {
+		switch ($this->periode_in_dagen) {
 			case 0: return '-';
 			case 1: return 'elke dag';
 			case 7: return 'elke week';
 			default:
-				if ($this->getPeriodeInDagen() % 7 === 0) {
-					return 'elke ' . ($this->getPeriodeInDagen() / 7) . ' weken';
+				if ($this->periode_in_dagen % 7 === 0) {
+					return 'elke ' . ($this->periode_in_dagen / 7) . ' weken';
 				} else {
-					return 'elke ' . $this->getPeriodeInDagen() . ' dagen';
+					return 'elke ' . $this->periode_in_dagen . ' dagen';
 				}
 		}
 	}
 
-	public function getStandaardTitel() {
-		return $this->standaard_titel;
-	}
-
-	public function getStandaardTijd() {
-		return $this->standaard_tijd;
-	}
-
-	public function getStandaardPrijs() {
-		return (int) $this->standaard_prijs;
-	}
-
 	public function getStandaardPrijsFloat() {
-		return (float) $this->getStandaardPrijs() / 100.0;
+		return (float) $this->standaard_prijs / 100.0;
 	}
-
-	public function getIsAbonneerbaar() {
-		return (boolean) $this->abonneerbaar;
-	}
-
-	public function getStandaardLimiet() {
-		return (int) $this->standaard_limiet;
-	}
-
-	public function getAbonnementFilter() {
-		return $this->abonnement_filter;
-	}
-
-	public function setDagVanDeWeek($int) {
-		if (!is_int($int) || $int < 0 || $int > 6) {
-			throw new Exception('Geen integer: dag van de week');
-		}
-		$this->dag_vd_week = $int;
-	}
-
-	public function setPeriodeInDagen($int) {
-		if (!is_int($int) || $int < 0) {
-			throw new Exception('Geen integer: periode in dagen');
-		}
-		$this->periode_in_dagen = $int;
-	}
-
-	public function setStandaardTitel($titel) {
-		if (!is_string($titel)) {
-			throw new Exception('Geen string: standaard titel');
-		}
-		$this->standaard_titel = $titel;
-	}
-
-	public function setStandaardTijd($time) {
-		if (!is_string($time)) {
-			throw new Exception('Geen string: standaard tijd');
-		}
-		$this->standaard_tijd = $time;
-	}
-
-	public function setStandaardPrijs($prijs) {
-		if (!is_int($prijs)) {
-			throw new Exception('Geen integer: standaard prijs: ' . $prijs);
-		}
-		$this->standaard_prijs = $prijs;
-	}
-
-	public function setAbonneerbaar($bool) {
-		if (!is_bool($bool)) {
-			throw new Exception('Geen boolean: abonneerbaar');
-		}
-		$this->abonneerbaar = $bool;
-	}
-
-	public function setStandaardLimiet($int) {
-		if (!is_int($int) || $int < 0) {
-			throw new Exception('Geen integer: standaard limiet');
-		}
-		$this->standaard_limiet = $int;
-	}
-
-	public function setAbonnementFilter($filter) {
-		if (!is_string($filter) AND $filter !== null) {
-			throw new Exception('Geen string: abonnement filter');
-		}
-		$this->abonnement_filter = $filter;
-	}
-
 }
 
 ?>

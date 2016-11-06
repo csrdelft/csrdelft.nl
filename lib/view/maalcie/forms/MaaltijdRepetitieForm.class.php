@@ -13,10 +13,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 	public function __construct($mrid, $dag = null, $periode = null, $titel = null, $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = null, $verplaats = null) {
 		parent::__construct(null, maalcieUrl . '/opslaan/' . $mrid);
 
-		if (!is_int($mrid) || $mrid < 0) {
-			throw new Exception('invalid mrid');
-		}
-		if ($mrid === 0) {
+		if ($mrid === null) {
 			$this->titel = 'Maaltijdrepetitie aanmaken';
 		} else {
 			$this->titel = 'Maaltijdrepetitie wijzigen';

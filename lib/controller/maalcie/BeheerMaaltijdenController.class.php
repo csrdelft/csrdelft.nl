@@ -101,10 +101,10 @@ class BeheerMaaltijdenController extends AclController {
 		if (!empty($mrid)) {
 			$repetitie = MaaltijdRepetitiesModel::getRepetitie((int) $mrid);
 			$beginDatum = MaaltijdRepetitiesModel::getFirstOccurrence($repetitie);
-			if ($repetitie->getPeriodeInDagen() > 0) {
+			if ($repetitie->periode_in_dagen > 0) {
 				$this->view = new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 			} else {
-				$this->view = new MaaltijdForm(0, $repetitie->getMaaltijdRepetitieId(), $repetitie->getStandaardTitel(), $repetitie->getStandaardLimiet(), $beginDatum, $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getAbonnementFilter(), null); // fetches POST values itself
+				$this->view = new MaaltijdForm(0, $repetitie->mlt_repetitie_id, $repetitie->standaard_titel(), $repetitie->standaard_limiet, $beginDatum, $repetitie->standaard_tijd, $repetitie->standaard_prijs, $repetitie->abonnement_filter, null); // fetches POST values itself
 			}
 		} else {
 			$maaltijd = new Maaltijd();

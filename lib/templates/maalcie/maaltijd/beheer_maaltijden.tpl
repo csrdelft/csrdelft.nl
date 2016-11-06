@@ -32,7 +32,7 @@ Onderstaande tabel toont alle maaltijden die niet verwijderd zijn.
 	<select id="mrid" name="mlt_repetitie_id" origvalue="kies" class="FormElement SubmitChange">
 		<option selected="selected">kies</option>
 	{foreach from=$repetities item=repetitie}
-		<option value="{$repetitie->getMaaltijdRepetitieId()}">{$repetitie->getStandaardTitel()}</option>
+		<option value="{$repetitie->mlt_repetitie_id}">{$repetitie->standaard_titel}</option>
 	{/foreach}
 	</select>
 	<a href="/maaltijdenrepetities" class="btn" title="Periodieke maaltijden beheren">{icon get="calendar_edit"}</a>

@@ -446,15 +446,15 @@ class MaaltijdenModel extends PersistenceModel {
         // update day of the week & check filter
         $updated = 0;
         $aanmeldingen = 0;
-        $maaltijden = self::loadMaaltijden('verwijderd = FALSE AND mlt_repetitie_id = ?', array($repetitie->getMaaltijdRepetitieId()));
-        $filter = $repetitie->getAbonnementFilter();
+        $maaltijden = self::loadMaaltijden('verwijderd = FALSE AND mlt_repetitie_id = ?', array($repetitie->mlt_repetitie_id));
+        $filter = $repetitie->abonnement_filter;
         if (!empty($filter)) {
             $aanmeldingen = MaaltijdAanmeldingenModel::checkAanmeldingenFilter($filter, $maaltijden);
         }
         foreach ($maaltijden as $maaltijd) {
             if ($verplaats) {
                 $datum = strtotime($maaltijd->datum);
-                $shift = $repetitie->getDagVanDeWeek() - date('w', $datum);
+                $shift = $repetitie->dag_vd_week - date('w', $datum);
                 if ($shift > 0) {
                     $datum = strtotime('+' . $shift . ' days', $datum);
                 } elseif ($shift < 0) {
@@ -462,10 +462,10 @@ class MaaltijdenModel extends PersistenceModel {
                 }
                 $maaltijd->datum = date('Y-m-d', $datum);
             }
-            $maaltijd->titel = $repetitie->getStandaardTitel();
-            $maaltijd->aanmeld_limiet = $repetitie->getStandaardLimiet();
-            $repetitie->setStandaardTijd($maaltijd->tijd);
-            $maaltijd->prijs = $repetitie->getStandaardPrijs();
+            $maaltijd->titel = $repetitie->standaard_titel;
+            $maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
+            $repetitie->standaard_tijd = $maaltijd->tijd;
+            $maaltijd->prijs = $repetitie->standaard_prijs;
             $maaltijd->aanmeld_filter = $filter;
             try {
                 $this->update($maaltijd);
@@ -490,38 +490,38 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @throws Exception
 	 */
 	public function maakRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $beginDatum, $eindDatum) {
-		if ($repetitie->getPeriodeInDagen() < 1) {
-			throw new Exception('New repetitie-maaltijden faalt: $periode =' . $repetitie->getPeriodeInDagen());
+		if ($repetitie->periode_in_dagen < 1) {
+			throw new Exception('New repetitie-maaltijden faalt: $periode =' . $repetitie->periode_in_dagen);
 		}
 
         // start at first occurence
-        $shift = $repetitie->getDagVanDeWeek() - date('w', $beginDatum) + 7;
+        $shift = $repetitie->dag_vd_week - date('w', $beginDatum) + 7;
         $shift %= 7;
         if ($shift > 0) {
             $beginDatum = strtotime('+' . $shift . ' days', $beginDatum);
         }
         $datum = $beginDatum;
-        $corveerepetities = \CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->getMaaltijdRepetitieId());
+        $corveerepetities = \CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id);
         $maaltijden = array();
         while ($datum <= $eindDatum) { // break after one
             $maaltijd = static::newMaaltijd(
-                $repetitie->getMaaltijdRepetitieId(),
-                $repetitie->getStandaardTitel(),
-                $repetitie->getStandaardLimiet(),
+                $repetitie->mlt_repetitie_id,
+                $repetitie->standaard_titel,
+                $repetitie->standaard_limiet,
                 date('Y-m-d', $datum),
-                $repetitie->getStandaardTijd(),
-                $repetitie->getStandaardPrijs(),
-                $repetitie->getAbonnementFilter(),
+                $repetitie->standaard_tijd,
+                $repetitie->standaard_prijs,
+                $repetitie->abonnement_filter,
                 null);
 
             foreach ($corveerepetities as $corveerepetitie) {
                 \CorveeTakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
             }
             $maaltijden[] = $maaltijd;
-            if ($repetitie->getPeriodeInDagen() < 1) {
+            if ($repetitie->periode_in_dagen < 1) {
                 break;
             }
-            $datum = strtotime('+' . $repetitie->getPeriodeInDagen() . ' days', $datum);
+            $datum = strtotime('+' . $repetitie->periode_in_dagen . ' days', $datum);
         }
         return $maaltijden;
     }
