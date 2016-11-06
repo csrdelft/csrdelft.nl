@@ -439,7 +439,7 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @throws Exception
 	 */
 	public function existRepetitieMaaltijden($mrid) {
-        return $this->find('mlt_repetitie_id = ?', array($mrid))->rowCount() > 0;
+        return $this->count('mlt_repetitie_id = ?', array($mrid)) > 0;
 	}
 
 	public function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $verplaats) {
