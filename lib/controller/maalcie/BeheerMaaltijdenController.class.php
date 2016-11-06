@@ -60,7 +60,7 @@ class BeheerMaaltijdenController extends AclController {
 			$this->bewerk($mid);
 			$modal = $this->view;
 		}
-		$body = new BeheerMaaltijdenView(MaaltijdenModel::getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::getAlleRepetities());
+		$body = new BeheerMaaltijdenView(MaaltijdenModel::instance()->getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::getAlleRepetities());
 		$this->view = new CsrLayoutPage($body, array(), $modal);
 		$this->view->addCompressedResources('maalcie');
 	}
@@ -72,7 +72,7 @@ class BeheerMaaltijdenController extends AclController {
 	}
 
 	public function archief() {
-		$body = new BeheerMaaltijdenView(MaaltijdenModel::getArchiefMaaltijdenTussen(), false, true);
+		$body = new BeheerMaaltijdenView(ArchiefMaaltijdModel::instance()->getArchiefMaaltijdenTussen(), false, true);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addCompressedResources('maalcie');
 	}

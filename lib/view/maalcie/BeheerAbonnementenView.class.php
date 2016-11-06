@@ -29,7 +29,7 @@ class BeheerAbonnementenView extends SmartyTemplateView {
 	public function view() {
 		$this->smarty->assign('toon', $this->status);
 
-		$this->smarty->assign('aborepetities', MaaltijdRepetitiesModel::getAbonneerbareRepetities());
+		$this->smarty->assign('aborepetities', MaaltijdRepetitiesModel::instance()->find('abonneerbaar = true'));
 		$this->smarty->assign('repetities', $this->repetities);
 		$this->smarty->assign('matrix', $this->model);
 

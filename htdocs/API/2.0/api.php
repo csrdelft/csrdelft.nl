@@ -214,7 +214,7 @@ function getAgenda($from, $to) {
 	}
 
 	// Maaltijden
-	$maaltijden = MaaltijdenModel::getMaaltijdenVoorAgenda($from, $to);
+	$maaltijden = MaaltijdenModel::instance()->getMaaltijdenVoorAgenda($from, $to);
 	$result = array_merge($result, $maaltijden);
 
 	// Maaltijd aanmeldingen

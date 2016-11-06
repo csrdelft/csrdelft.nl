@@ -28,30 +28,6 @@ class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
 	public $prijs; # int 11
 	public $aanmeldingen; # text
 
-	public function __construct($mid = 0, $titel = null, $datum = null, $tijd = null, $prijs = null, $aanmeldingen = array()) {
-        parent::__construct();
-        $this->maaltijd_id = (int)$mid;
-        $this->titel = $titel;
-        $this->datum = $datum;
-        $this->tijd = $tijd;
-        $this->prijs = $prijs;
-        $this->aanmeldingen = '';
-        foreach ($aanmeldingen as $aanmelding) {
-            if ($aanmelding->uid === '') {
-                $this->aanmeldingen .= 'gast';
-            } else {
-                $this->aanmeldingen .= $aanmelding->uid;
-            }
-            if ($aanmelding->door_abonnement) {
-                $this->aanmeldingen .= '_abo';
-            }
-            if ($aanmelding->door_uid !== null) {
-                $this->aanmeldingen .= '_' . $aanmelding->door_uid;
-            }
-            $this->aanmeldingen .= ',';
-        }
-    }
-
 	public function getPrijsFloat() {
 		return (float) $this->prijs / 100.0;
 	}

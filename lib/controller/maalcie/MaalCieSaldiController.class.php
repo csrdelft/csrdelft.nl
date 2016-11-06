@@ -49,7 +49,7 @@ class MaalCieSaldiController extends AclController {
 		$form = new BoekjaarSluitenForm(date('Y-m-d', strtotime('-1 year')), date('Y-m-d')); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$errors_aantal = MaaltijdenModel::archiveerOudeMaaltijden(strtotime($values['begindatum']), strtotime($values['einddatum']));
+			$errors_aantal = MaaltijdenModel::instance()->archiveerOudeMaaltijden(strtotime($values['begindatum']), strtotime($values['einddatum']));
 			$this->view = new MaalCieSaldiView();
 			if (sizeof($errors_aantal[0]) === 0) {
 				setMelding('Boekjaar succesvol gesloten: ' . $errors_aantal[1] . ' maaltijden naar het archief verplaatst.', 1);
