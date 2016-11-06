@@ -35,9 +35,9 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	public $datum; # date
 	public $tijd; # time
 	public $prijs; # int 11
-	public $gesloten; # boolean
+	public $gesloten = false; # boolean
 	public $laatst_gesloten; # int 11
-	public $verwijderd; # boolean
+	public $verwijderd = false; # boolean
 	public $aanmeld_filter; # string 255
 	public $omschrijving; # text
 	public $aantal_aanmeldingen;
