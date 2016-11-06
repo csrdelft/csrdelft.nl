@@ -250,26 +250,6 @@ class MaaltijdenModel extends PersistenceModel {
 	 */
 	private static function loadMaaltijden($where = null, $values = array(), $limit = null) {
         return static::instance()->find($where, $values, null, 'datum ASC, tijd ASC', $limit)->fetchAll();
-
-		$sql = 'SELECT m.maaltijd_id, mlt_repetitie_id, titel, aanmeld_limiet, datum, tijd, prijs, gesloten, laatst_gesloten, verwijderd, aanmeld_filter, omschrijving, COUNT(a.uid) + SUM(IFNULL(aantal_gasten, 0)) AS aantal_aanmeldingen';
-		$sql.= ' FROM mlt_maaltijden m';
-		$sql.= ' LEFT JOIN mlt_aanmeldingen a ON m.maaltijd_id = a.maaltijd_id';
-		if ($where !== null) {
-			$sql.= ' WHERE ' . $where;
-		}
-		$sql.= ' GROUP BY m.maaltijd_id';
-		$sql.= ' ORDER BY datum ASC, tijd ASC';
-		if (is_int($limit) && $limit > 0) {
-			$sql.= ' LIMIT ' . $limit;
-		}
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, 'Maaltijd');
-		if ($query->rowCount() > 0) {
-			self::existArchiefMaaltijden($result);
-		}
-		return $result;
 	}
 
 	private static function newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving) {
@@ -444,15 +424,11 @@ class MaaltijdenModel extends PersistenceModel {
 	}
 
 	public static function verwijderRepetitieMaaltijden($mrid) {
-		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Verwijder repetitie-maaltijden faalt: Invalid $mrid =' . $mrid);
-		}
-		$sql = 'UPDATE mlt_maaltijden SET verwijderd = true WHERE mlt_repetitie_id = ?';
-		$values = array($mrid);
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		return $query->rowCount();
+        $maaltijden = static::instance()->find('mlt_repetitie_id = ?', array($mrid));
+        foreach ($maaltijden as $maaltijd) {
+            $maaltijd->verwijderd = true;
+            static::instance()->update($maaltijd);
+        }
 	}
 
 	/**
@@ -463,15 +439,7 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @throws Exception
 	 */
 	public static function existRepetitieMaaltijden($mrid) {
-		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Exist repetitie-maaltijden faalt: Invalid $mrid =' . $mrid);
-		}
-		$sql = 'SELECT EXISTS (SELECT * FROM mlt_maaltijden WHERE mlt_repetitie_id = ?)';
-		$values = array($mrid);
-		$query = \Database::instance()->prepare($sql);
-		$query->execute($values);
-		$result = (boolean) $query->fetchColumn();
-		return $result;
+        return static::instance()->find('mlt_repetitie_id = ?', array($mrid))->rowCount() > 0;
 	}
 
 	public static function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $verplaats) {
