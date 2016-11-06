@@ -91,6 +91,11 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 		return $repetities;
 	}
 
+    /**
+     * @param $mrid
+     * @return MaaltijdRepetitie
+     * @throws Exception
+     */
 	public static function getRepetitie($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
 			throw new Exception('Get maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);

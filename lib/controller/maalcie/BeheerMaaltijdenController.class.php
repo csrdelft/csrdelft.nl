@@ -109,17 +109,26 @@ class BeheerMaaltijdenController extends AclController {
 			if ($repetitie->periode_in_dagen > 0) {
 				$this->view = new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 			} else {
-				$this->view = new MaaltijdForm(0, $repetitie->mlt_repetitie_id, $repetitie->standaard_titel, $repetitie->standaard_limiet, $beginDatum, $repetitie->standaard_tijd, $repetitie->standaard_prijs, $repetitie->abonnement_filter, null); // fetches POST values itself
+                $maaltijd = new Maaltijd();
+                $maaltijd->maaltijd_id = 0;
+                $maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+                $maaltijd->titel = $repetitie->standaard_titel;
+                $maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
+                $maaltijd->tijd = $repetitie->standaard_tijd;
+                $maaltijd->prijs = $repetitie->standaard_prijs;
+                $maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
+
+				$this->view = new MaaltijdForm($maaltijd); // fetches POST values itself
 			}
 		} else {
 			$maaltijd = new Maaltijd();
-			$this->view = new MaaltijdForm($maaltijd->maaltijd_id, $maaltijd->mlt_repetitie_id, $maaltijd->titel, $maaltijd->aanmeld_limiet, $maaltijd->datum, $maaltijd->tijd, $maaltijd->prijs, $maaltijd->aanmeld_filter, $maaltijd->omschrijving); // fetches POST values itself
+			$this->view = new MaaltijdForm($maaltijd); // fetches POST values itself
 		}
 	}
 
 	public function bewerk($mid) {
 		$maaltijd = $this->model->getMaaltijd($mid);
-		$this->view = new MaaltijdForm($maaltijd->maaltijd_id, $maaltijd->mlt_repetitie_id, $maaltijd->titel, $maaltijd->aanmeld_limiet, $maaltijd->datum, $maaltijd->tijd, $maaltijd->prijs, $maaltijd->aanmeld_filter, $maaltijd->omschrijving); // fetches POST values itself
+		$this->view = new MaaltijdForm($maaltijd); // fetches POST values itself
 	}
 
 	public function opslaan($mid) {

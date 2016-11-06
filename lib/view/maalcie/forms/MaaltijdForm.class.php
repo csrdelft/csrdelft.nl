@@ -10,29 +10,29 @@
  */
 class MaaltijdForm extends ModalForm {
 
-	public function __construct($mid, $mrid = null, $titel = null, $limiet = null, $datum = null, $tijd = null, $prijs = null, $filter = null, $omschrijving = null) {
-		parent::__construct(null, maalcieUrl . '/opslaan/' . $mid);
+	public function __construct(Maaltijd $maaltijd) {
+		parent::__construct($maaltijd, maalcieUrl . '/opslaan/' . $maaltijd->maaltijd_id);
         
-		if ($mid < 0) {
+		if ($maaltijd->maaltijd_id < 0) {
 			throw new Exception('invalid mid');
 		}
-		if ($mid == 0) {
+		if ($maaltijd->maaltijd_id == 0) {
 			$this->titel = 'Maaltijd aanmaken';
 		} else {
 			$this->titel = 'Maaltijd wijzigen';
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
-		$fields['mrid'] = new IntField('mlt_repetitie_id', $mrid, null);
+		$fields['mrid'] = new IntField('mlt_repetitie_id', $maaltijd->maaltijd_id, null);
 		$fields['mrid']->readonly = true;
 		$fields['mrid']->hidden = true;
-		$fields[] = new TextField('titel', $titel, 'Titel', 255, 5);
-		$fields[] = new DateField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
-		$fields[] = new TimeField('tijd', $tijd, 'Tijd', 15);
-		$fields[] = new BedragField('prijs', $prijs, 'Prijs', '€', 0, 50, 0.50);
-		$fields[] = new IntField('aanmeld_limiet', $limiet, 'Aanmeldlimiet', 0, 200);
-		$fields[] = new RechtenField('aanmeld_filter', $filter, 'Aanmeldrestrictie');
-		$fields[] = new BBCodeField('omschrijving', $omschrijving, 'Omschrijving');
+		$fields[] = new RequiredTextField('titel', $maaltijd->titel, 'Titel', 255, 5);
+		$fields[] = new RequiredDateField('datum', $maaltijd->datum, 'Datum', date('Y') + 2, date('Y') - 2);
+		$fields[] = new RequiredTimeField('tijd', $maaltijd->tijd, 'Tijd', 15);
+		$fields[] = new RequiredBedragField('prijs', $maaltijd->prijs, 'Prijs', '€', 0, 50, 0.50);
+		$fields[] = new RequiredIntField('aanmeld_limiet', $maaltijd->aanmeld_limiet, 'Aanmeldlimiet', 0, 200);
+		$fields[] = new RechtenField('aanmeld_filter', $maaltijd->aanmeld_filter, 'Aanmeldrestrictie');
+		$fields[] = new BBCodeField('omschrijving', $maaltijd->omschrijving, 'Omschrijving');
 		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);

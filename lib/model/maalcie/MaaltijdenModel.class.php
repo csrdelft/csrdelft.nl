@@ -125,36 +125,28 @@ class MaaltijdenModel extends PersistenceModel {
 	}
 
 	public function saveMaaltijd($mid, $mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving) {
-		$db = \Database::instance();
-		try {
-			$db->beginTransaction();
-			$verwijderd = 0;
-			if ($mid === null) {
-				$maaltijd = $this->newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving);
-			} else {
-				$maaltijd = $this->getMaaltijd($mid);
-				$maaltijd->titel = $titel;
-				$maaltijd->aanmeld_limiet = $limiet;
-				$maaltijd->datum = $datum;
-				$maaltijd->tijd = $tijd;
-				$maaltijd->prijs = $prijs;
-				$maaltijd->aanmeld_filter = $filter;
-				$maaltijd->omschrijving = $omschrijving;
-                $this->update($maaltijd);
-				if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
-					$this->sluitMaaltijd($maaltijd);
-				}
-				if (!$maaltijd->gesloten && !$maaltijd->verwijderd && !empty($filter)) {
-					$verwijderd = MaaltijdAanmeldingenModel::checkAanmeldingenFilter($filter, array($maaltijd));
-					$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() - $verwijderd;
-				}
-			}
-			$db->commit();
-			return array($maaltijd, $verwijderd);
-		} catch (\Exception $e) {
-			$db->rollback();
-			throw $e; // rethrow to controller
-		}
+        $verwijderd = 0;
+        if ($mid === null) {
+            $maaltijd = $this->newMaaltijd($mrid, $titel, $limiet, $datum, $tijd, $prijs, $filter, $omschrijving);
+        } else {
+            $maaltijd = $this->getMaaltijd($mid);
+            $maaltijd->titel = $titel;
+            $maaltijd->aanmeld_limiet = $limiet;
+            $maaltijd->datum = $datum;
+            $maaltijd->tijd = $tijd;
+            $maaltijd->prijs = $prijs;
+            $maaltijd->aanmeld_filter = $filter;
+            $maaltijd->omschrijving = $omschrijving;
+            $this->update($maaltijd);
+            if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
+                $this->sluitMaaltijd($maaltijd);
+            }
+            if (!$maaltijd->gesloten && !$maaltijd->verwijderd && !empty($filter)) {
+                $verwijderd = MaaltijdAanmeldingenModel::checkAanmeldingenFilter($filter, array($maaltijd));
+                $maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() - $verwijderd;
+            }
+        }
+        return array($maaltijd, $verwijderd);
 	}
 
 	public function prullenbakLeegmaken() {
