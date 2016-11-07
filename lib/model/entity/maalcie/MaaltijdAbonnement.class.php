@@ -26,22 +26,25 @@
  * Zie ook MaaltijdAanmelding.class.php
  * 
  */
-class MaaltijdAbonnement {
+class MaaltijdAbonnement extends PersistentEntity  {
 	# shared primary key
 
-	private $mlt_repetitie_id; # foreign key mlt_repetitie.id
-	private $uid; # foreign key lid.uid
-	private $wanneer_ingeschakeld; # datetime
-	private $maaltijd_repetitie;
-	private $van_uid;
-	private $waarschuwing;
-	private $foutmelding;
+	public $mlt_repetitie_id; # foreign key mlt_repetitie.id
+	public $uid; # foreign key lid.uid
+	public $wanneer_ingeschakeld; # datetime
+	public $maaltijd_repetitie;
+	public $van_uid;
+	public $waarschuwing;
+	public $foutmelding;
 
-	public function __construct($mrid = 0, $uid = '', $wanneer = '') {
-		$this->mlt_repetitie_id = (int) $mrid;
-		$this->uid = $uid;
-		$this->setWanneerIngeschakeld($wanneer);
-	}
+    protected static $table_name = 'mlt_abonnementen';
+    protected static $persistent_attributes = array(
+        'mlt_repetitie_id' => array(T::Integer),
+        'uid' => array(T::UID),
+        'wanneer_ingeschakeld' => array(T::DateTime),
+    );
+
+    protected static $primary_key = array('mlt_repetitie_id', 'uid');
 
 	public function getMaaltijdRepetitieId() {
 		return (int) $this->mlt_repetitie_id;

@@ -8,7 +8,12 @@ require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
  * MaaltijdAbonnementenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MaaltijdAbonnementenModel {
+class MaaltijdAbonnementenModel extends PersistenceModel {
+
+    const ORM = 'MaaltijdAbonnement';
+    const DIR = 'maalcie/';
+
+    protected static $instance;
 
 	/**
 	 * Geeft de ingeschakelde abonnementen voor een lid terug plus
@@ -41,7 +46,8 @@ class MaaltijdAbonnementenModel {
 			foreach ($repById as $repetitie) {
 				$mrid = $repetitie->mlt_repetitie_id;
 				if (!array_key_exists($mrid, $lijst)) { // uitgeschakelde abonnementen weergeven
-					$abo = new MaaltijdAbonnement($repetitie->mlt_repetitie_id, null);
+					$abo = new MaaltijdAbonnement();
+                    $abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
 					$abo->setMaaltijdRepetitie($repetitie);
 					$abo->setVanUid($uid);
 					$lijst[$mrid] = $abo;
@@ -82,9 +88,12 @@ class MaaltijdAbonnementenModel {
 			$mrid = $abo['mrid'];
 			$uid = $abo['van'];
 			if ($abo['abo']) { // ingeschakelde abonnementen
-				$abonnement = new MaaltijdAbonnement($mrid, $uid);
+				$abonnement = new MaaltijdAbonnement();
+                $abonnement->mlt_repetitie_id = $mrid;
+                $abonnement->uid = $uid;
 			} else { // uitgeschakelde abonnementen
-				$abonnement = new MaaltijdAbonnement($mrid, null);
+				$abonnement = new MaaltijdAbonnement();
+                $abonnement->mlt_repetitie_id = $mrid;
 			}
 			$abonnement->setVanUid($uid);
 			$abonnement->setMaaltijdRepetitie($repById[$mrid]);
@@ -103,7 +112,8 @@ class MaaltijdAbonnementenModel {
 		foreach ($repById as $mrid => $repetitie) { // vul gaten in matrix vanwege uitgeschakelde abonnementen
 			foreach ($matrix as $uid => $abos) {
 				if (!array_key_exists($mrid, $abos)) {
-					$abonnement = new MaaltijdAbonnement(($ingeschakeld ? $mrid : null), null);
+					$abonnement = new MaaltijdAbonnement();
+                    $abonnement->mlt_repetitie_id = $ingeschakeld ? $mrid : null;
 					$abonnement->setVanUid($uid);
 					$abonnement->setMaaltijdRepetitie($repetitie);
 					$matrix[$uid][$mrid] = $abonnement;
@@ -251,7 +261,11 @@ class MaaltijdAbonnementenModel {
 				}
 				$aantal = MaaltijdAanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid);
 				$db->commit();
-				return array(new MaaltijdAbonnement($mrid, $uid, $wanneer), $aantal);
+                $abo = new MaaltijdAbonnement();
+                $abo->mlt_repetitie_id = $mrid;
+                $abo->uid = $uid;
+                $abo->wanneer_ingeschakeld = $wanneer;
+				return array($abo, $aantal);
 			}
 		} catch (\Exception $e) {
 			$db->rollBack();
@@ -264,7 +278,8 @@ class MaaltijdAbonnementenModel {
 			throw new Exception('Abonnement al uitgeschakeld');
 		}
 		$aantal = self::deleteAbonnementen($mrid, $uid);
-		$abo = new MaaltijdAbonnement($mrid, null);
+		$abo = new MaaltijdAbonnement();
+        $abo->mlt_repetitie_id = $mrid;
 		$abo->setVanUid($uid);
 		return array($abo, $aantal);
 	}
