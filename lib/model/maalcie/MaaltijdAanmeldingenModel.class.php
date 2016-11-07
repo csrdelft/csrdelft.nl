@@ -42,7 +42,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 			}
 			$aanmelding->aantal_gasten = $aantalGasten;
 			$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
-			self::updateAanmelding($aanmelding);
+            static::instance()->update($aanmelding);
 			$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
 		} else {
 			$aanmelding = self::newAanmelding($mid, $uid, $aantalGasten, $gastenEetwens, null, $doorUid);
@@ -62,7 +62,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	 * @param int $mrid id van de betreffede MaaltijdRepetitie
 	 * @param type $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
 	 */
-	public static function afmeldenDoorAbonnement($mrid, $uid = null) {
+	public static function afmeldenDoorAbonnement($mrid, $uid) {
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
 		$maaltijden = MaaltijdenModel::instance()->getKomendeOpenRepetitieMaaltijden($mrid);
 		if (empty($maaltijden)) {
@@ -78,7 +78,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 		$aantal = 0;
 		foreach ($aanmeldingen as $mid => $aanmelding) {
 			if ($mrid === $aanmelding->door_abonnement) {
-				self::deleteAanmeldingen($mid, $uid);
+                static::instance()->deleteByPrimaryKey(array($mid, $uid));
 				$aantal++;
 			}
 		}
@@ -97,7 +97,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 			throw new Exception('Maaltijd is gesloten');
 		}
 		$aanmelding = self::loadAanmelding($mid, $uid);
-		self::deleteAanmeldingen($mid, $uid);
+		static::instance()->deleteByPrimaryKey(array($mid, $uid));
 		$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() - 1 - $aanmelding->aantal_gasten;
 		return $maaltijd;
 	}
@@ -128,7 +128,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 				$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
 			}
 			$aanmelding->aantal_gasten = $gasten;
-			self::updateAanmelding($aanmelding);
+            static::instance()->update($aanmelding);
 			$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
 			$aanmelding->maaltijd = $maaltijd;
 			$db->commit();
@@ -159,7 +159,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 			}
 			$aanmelding->maaltijd = $maaltijd;
 			$aanmelding->gasten_eetwens = $opmerking;
-			self::updateAanmelding($aanmelding);
+            static::instance()->update($aanmelding);
 			$db->commit();
 			return $aanmelding;
 		} catch (\Exception $e) {
@@ -169,7 +169,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	}
 
 	public static function getAanmeldingenVoorMaaltijd(Maaltijd $maaltijd) {
-		$aanmeldingen = self::loadAanmeldingen(array($maaltijd->maaltijd_id));
+        $aanmeldingen = static::instance()->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
 			$aanmelding->maaltijd = $maaltijd;
@@ -214,11 +214,11 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	}
 
 	private static function loadAanmelding($mid, $uid) {
-		$aanmeldingen = self::loadAanmeldingen(array($mid), $uid, 1);
-		if (!array_key_exists(0, $aanmeldingen)) {
+        $aanmelding = static::instance()->retrieveByPrimaryKey(array($mid, $uid));
+		if ($aanmelding === false) {
 			throw new Exception('Load aanmelding faalt: Not found $mid =' . $mid);
 		}
-		return $aanmeldingen[0];
+		return $aanmelding;
 	}
 
 	/**
@@ -280,46 +280,10 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	 * @param int $mid maaltijd-id
 	 */
 	public static function deleteAanmeldingenVoorMaaltijd($mid) {
-		self::deleteAanmeldingen($mid);
-	}
-
-	private static function deleteAanmeldingen($mid, $uid = null) {
-		$sql = 'DELETE FROM mlt_aanmeldingen';
-		$sql.= ' WHERE maaltijd_id=?';
-		$values = array($mid);
-		if ($uid !== null) {
-			$sql.= ' AND uid=?';
-			$values[] = $uid;
-		}
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($uid !== null && $query->rowCount() !== 1) {
-			throw new Exception('Delete aanmelding faalt: $query->rowCount() =' . $query->rowCount());
-		}
-
-		return 1;
-	}
-
-	private static function updateAanmelding(MaaltijdAanmelding $aanmelding) {
-		$sql = 'UPDATE mlt_aanmeldingen';
-		$sql.= ' SET aantal_gasten=?, gasten_eetwens=?, door_abonnement=?, door_uid=?, laatst_gewijzigd=?';
-		$sql.= ' WHERE maaltijd_id=? AND uid=?';
-		$values = array(
-			$aanmelding->aantal_gasten,
-			$aanmelding->gasten_eetwens,
-			$aanmelding->door_abonnement,
-			$aanmelding->door_uid,
-			$aanmelding->laatst_gewijzigd,
-			$aanmelding->maaltijd_id,
-			$aanmelding->uid
-		);
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($query->rowCount() !== 1) {
-			throw new Exception('Update aanmelding faalt: $query->rowCount() =' . $query->rowCount());
-		}
+        $aanmeldingen = static::instance()->find('maaltijd_id = ?', array($mid));
+        foreach ($aanmeldingen as $aanmelding) {
+            static::instance()->delete($aanmelding);
+        }
 	}
 
 	/**
@@ -343,7 +307,8 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 		foreach ($aanmeldingen as $aanmelding) { // check filter voor elk aangemeld lid
 			$uid = $aanmelding->uid;
 			if (!self::checkAanmeldFilter($uid, $filter)) { // verwijder aanmelding indien niet toegestaan
-				$aantal += self::deleteAanmeldingen($aanmelding->maaltijd_id, $uid);
+                $aantal += 1 + $aanmelding->aantal_gasten;
+                static::instance()->delete($aanmelding);
 			}
 		}
 		return $aantal;
