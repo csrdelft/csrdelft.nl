@@ -263,7 +263,6 @@ class LoginModel extends PersistenceModel implements Validator {
 	 */
 	public function login($user, $pass_plain, $evtWachten = true, RememberLogin $remember = null, $lockIP = false, $alreadyAuthenticatedByUrlToken = false, $expire = null) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
-		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 
 		// Inloggen met lidnummer of gebruikersnaam
 		if (AccountModel::isValidUid($user)) {

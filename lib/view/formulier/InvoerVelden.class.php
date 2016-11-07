@@ -1109,6 +1109,19 @@ class WachtwoordField extends TextField {
 	public $type = 'password';
 	public $enter_submit = true;
 
+    // Override TextField getValue as passwords do not need to be sanitised here
+    public function getValue() {
+        if ($this->isPosted()) {
+            $this->value = $_POST[$this->name];
+        } else {
+            $this->value = false;
+        }
+        if ($this->empty_null AND $this->value == '') {
+            return null;
+        }
+        return $this->value;
+    }
+
 }
 
 class RequiredWachtwoordField extends WachtwoordField {
@@ -1181,7 +1194,7 @@ class WachtwoordWijzigenField extends InputField {
 
 	public function getValue() {
 		if ($this->isPosted()) {
-			$this->value = filter_var($_POST[$this->name . '_new'], FILTER_SANITIZE_STRING);
+			$this->value = $_POST[$this->name . '_new'];
 		} else {
 			$this->value = false;
 		}
@@ -1206,11 +1219,11 @@ class WachtwoordWijzigenField extends InputField {
 			return false;
 		}
 		if ($this->require_current) {
-			$current = filter_input(INPUT_POST, $this->name . '_current', FILTER_SANITIZE_STRING);
+			$current = $_POST[$this->name . '_current'];
 		}
 		// filter_input does not use current value in $_POST 
-		$new = filter_var($_POST[$this->name . '_new'], FILTER_SANITIZE_STRING);
-		$confirm = filter_var($_POST[$this->name . '_confirm'], FILTER_SANITIZE_STRING);
+		$new = $_POST[$this->name . '_new'];
+		$confirm = $_POST[$this->name . '_confirm'];
 		$length = strlen(utf8_decode($new));
 		if ($this->require_current AND empty($current)) {
 			$this->error = 'U moet uw huidige wachtwoord invoeren';
