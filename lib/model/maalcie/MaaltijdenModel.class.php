@@ -226,8 +226,8 @@ class MaaltijdenModel extends PersistenceModel {
         if (!$maaltijd->gesloten && $maaltijd->mlt_repetitie_id !== null) {
             $abonnementen = MaaltijdAbonnementenModel::getAbonnementenVoorRepetitie($maaltijd->mlt_repetitie_id);
             foreach ($abonnementen as $abo) {
-                if (MaaltijdAanmeldingenModel::checkAanmeldFilter($abo->getUid(), $maaltijd->aanmeld_filter)) {
-                    MaaltijdAanmeldingenModel::aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $abo->getMaaltijdRepetitieId(), $abo->getUid());
+                if (MaaltijdAanmeldingenModel::checkAanmeldFilter($abo->uid, $maaltijd->aanmeld_filter)) {
+                    MaaltijdAanmeldingenModel::aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $abo->mlt_repetitie_id, $abo->uid);
                     $aantal++;
                 }
             }
