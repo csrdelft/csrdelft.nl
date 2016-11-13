@@ -235,7 +235,7 @@
 				<div class="label">Abo's:</div>
 				<ul class="nobullets data">
 					{foreach from=$abos item=abonnement}
-						<li>{$abonnement->getMaaltijdRepetitie()->standaard_titel}</li>
+						<li>{$abonnement->maaltijd_repetitie->standaard_titel}</li>
 						{/foreach}
 				</ul>
 			{/if}
