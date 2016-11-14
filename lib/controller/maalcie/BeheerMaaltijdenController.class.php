@@ -65,7 +65,7 @@ class BeheerMaaltijdenController extends AclController {
 			$this->bewerk($mid);
 			$modal = $this->view;
 		}
-		$body = new BeheerMaaltijdenView($this->model->getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::getAlleRepetities());
+		$body = new BeheerMaaltijdenView($this->model->getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::instance()->getAlleRepetities());
 		$this->view = new CsrLayoutPage($body, array(), $modal);
 		$this->view->addCompressedResources('maalcie');
 	}
@@ -104,8 +104,8 @@ class BeheerMaaltijdenController extends AclController {
 	public function nieuw() {
 		$mrid = filter_input(INPUT_POST, 'mlt_repetitie_id', FILTER_SANITIZE_NUMBER_INT);
 		if (!empty($mrid)) {
-			$repetitie = MaaltijdRepetitiesModel::getRepetitie((int) $mrid);
-			$beginDatum = MaaltijdRepetitiesModel::getFirstOccurrence($repetitie);
+			$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie((int) $mrid);
+			$beginDatum = $repetitie->getFirstOccurrence();
 			if ($repetitie->periode_in_dagen > 0) {
 				$this->view = new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 			} else {
@@ -190,7 +190,7 @@ class BeheerMaaltijdenController extends AclController {
 	// Repetitie-Maaltijden ############################################################
 
 	public function aanmaken($mrid) {
-		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
+		$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
 		$form = new RepetitieMaaltijdenForm($repetitie); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();

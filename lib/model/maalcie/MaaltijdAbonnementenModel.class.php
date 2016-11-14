@@ -27,16 +27,16 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 */
 	public static function getAbonnementenVoorLid($uid, $abonneerbaar = false, $uitgeschakeld = false) {
 		if ($abonneerbaar) {
-			$repById = MaaltijdRepetitiesModel::getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
+			$repById = MaaltijdRepetitiesModel::instance()->getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
 		} else {
-			$repById = MaaltijdRepetitiesModel::getAlleRepetities(true); // grouped by mrid
+			$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
 		}
 		$lijst = array();
         $abos = static::instance()->find('uid = ?', array($uid));
 		foreach ($abos as $abo) { // ingeschakelde abonnementen
 			$mrid = $abo->mlt_repetitie_id;
 			if (!array_key_exists($mrid, $repById)) { // ingeschakelde abonnementen altijd weergeven
-				$repById[$mrid] = MaaltijdRepetitiesModel::getRepetitie($mrid);
+				$repById[$mrid] = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
 			}
 			$abo->maaltijd_repetitie = $repById[$mrid];
 			$abo->van_uid = $uid;
@@ -76,7 +76,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 * @throws Exception
 	 */
 	public static function getAbonnementenMatrix($alleenNovieten = false, $alleenWaarschuwingen = false, $ingeschakeld = null, $voorLid = null) {
-		$repById = MaaltijdRepetitiesModel::getAlleRepetities(true); // grouped by mrid
+		$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
 		$abos = self::loadLedenAbonnementen($alleenNovieten, $alleenWaarschuwingen, $ingeschakeld, $voorLid);
 		$matrix = array();
 		foreach ($abos as $abo) { // build matrix
@@ -158,7 +158,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	}
 
 	public static function inschakelenAbonnement($mrid, $uid) {
-		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
+		$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
 		if (!$repetitie->abonneerbaar) {
 			throw new Exception('Niet abonneerbaar');
 		}

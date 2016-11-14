@@ -74,6 +74,16 @@ class MaaltijdRepetitie extends PersistentEntity {
 	public function getStandaardPrijsFloat() {
 		return (float) $this->standaard_prijs / 100.0;
 	}
+
+	public function getFirstOccurrence() {
+        $datum = time();
+        $shift = $this->dag_vd_week - date('w', $datum) + 7;
+        $shift %= 7;
+        if ($shift > 0) {
+            $datum = strtotime('+' . $shift . ' days', $datum);
+        }
+        return date('Y-m-d', $datum);
+    }
 }
 
 ?>

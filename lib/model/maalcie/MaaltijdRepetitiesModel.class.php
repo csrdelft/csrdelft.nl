@@ -50,16 +50,6 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
         return $repetitie;
     }
 
-	public static function getFirstOccurrence(MaaltijdRepetitie $repetitie) {
-		$datum = time();
-		$shift = $repetitie->dag_vd_week - date('w', $datum) + 7;
-		$shift %= 7;
-		if ($shift > 0) {
-			$datum = strtotime('+' . $shift . ' days', $datum);
-		}
-		return date('Y-m-d', $datum);
-	}
-
 	/**
 	 * Filtert de repetities met het abonnement-filter van de maaltijd-repetitie op de permissies van het ingelogde lid.
 	 *
@@ -68,8 +58,8 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 	 * @throws Exception
 	 * @internal param MaaltijdRepetitie[] $repetities
 	 */
-	public static function getAbonneerbareRepetitiesVoorLid($uid) {
-		$repetities = static::instance()->find('abonneerbaar = true');
+	public function getAbonneerbareRepetitiesVoorLid($uid) {
+		$repetities = $this->find('abonneerbaar = true');
 		$result = array();
 		foreach ($repetities as $repetitie) {
 			if (MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
@@ -79,8 +69,8 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 		return $result;
 	}
 
-	public static function getAlleRepetities($groupById = false) {
-		$repetities = static::instance()->find()->fetchAll();
+	public function getAlleRepetities($groupById = false) {
+		$repetities = $this->find();
 		if ($groupById) {
 			$result = array();
 			foreach ($repetities as $repetitie) {
@@ -96,11 +86,11 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
      * @return MaaltijdRepetitie
      * @throws Exception
      */
-	public static function getRepetitie($mrid) {
+	public function getRepetitie($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
 			throw new Exception('Get maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);
 		}
-		$repetitie = static::instance()->retrieveByPrimaryKey(array($mrid));
+		$repetitie = $this->retrieveByPrimaryKey(array($mrid));
 		if ($repetitie === false) {
 			throw new Exception('Get maaltijd-repetitie faalt: Not found $mrid =' . $mrid);
 		}
@@ -111,12 +101,12 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
      * @param $repetitie MaaltijdRepetitie
      * @return array
      */
-	public function saveRepetitie($repetitie) { //$mrid, $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter) {
+	public function saveRepetitie($repetitie) {
         $abos = 0;
         if ($repetitie->mlt_repetitie_id === 0) {
-            $repetitie->mlt_repetitie_id = static::instance()->create($repetitie);
+            $repetitie->mlt_repetitie_id = $this->create($repetitie);
         } else {
-            static::instance()->update($repetitie);
+            $this->update($repetitie);
             if (!$repetitie->abonneerbaar) { // niet (meer) abonneerbaar
                 $abos = MaaltijdAbonnementenModel::verwijderAbonnementen($repetitie->mlt_repetitie_id);
             }
@@ -124,13 +114,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
         return $abos;
 	}
 
-	private function newRepetitie($dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter) {
-        $repetitie = $this->nieuwMaaltijdRepetitie(0, $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter);
-        $repetitie->mlt_repetitie_id = $this->create($repetitie);
-        return $repetitie;
-	}
-
-	public static function verwijderRepetitie($mrid) {
+	public function verwijderRepetitie($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
 			throw new Exception('Verwijder maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);
 		}
@@ -142,7 +126,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 			throw new Exception('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 		$aantalAbos = MaaltijdAbonnementenModel::verwijderAbonnementen($mrid);
-        static::instance()->deleteByPrimaryKey(array($mrid));
+        $this->deleteByPrimaryKey(array($mrid));
 		return $aantalAbos;
 	}
 }

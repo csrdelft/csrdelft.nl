@@ -33,7 +33,7 @@ class CorveeRepetitieForm extends ModalForm {
 			}
 		}
 
-		$mlt_repetities = MaaltijdRepetitiesModel::getAlleRepetities();
+		$mlt_repetities = MaaltijdRepetitiesModel::instance()->getAlleRepetities();
 		$repetitieNamen = array('' => '');
 		foreach ($mlt_repetities as $rep) {
 			$repetitieNamen[$rep->mlt_repetitie_id] = $rep->standaard_titel;

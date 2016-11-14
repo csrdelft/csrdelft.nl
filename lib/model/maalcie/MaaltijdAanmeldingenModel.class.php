@@ -339,7 +339,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 		if (!is_int($mrid) || $mrid <= 0) {
 			throw new Exception('Invalid abonnement: $voorAbo =' . $mrid);
 		}
-		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
+		$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
 		if (!self::checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
 			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
 		}

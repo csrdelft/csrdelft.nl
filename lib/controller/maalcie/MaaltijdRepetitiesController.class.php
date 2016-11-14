@@ -47,7 +47,7 @@ class MaaltijdRepetitiesController extends AclController {
 			$this->bewerk($mrid);
 			$modal = $this->view;
 		}
-		$this->view = new MaaltijdRepetitiesView(MaaltijdRepetitiesModel::getAlleRepetities());
+		$this->view = new MaaltijdRepetitiesView(MaaltijdRepetitiesModel::instance()->getAlleRepetities());
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 		$this->view->modal = $modal;
@@ -58,7 +58,7 @@ class MaaltijdRepetitiesController extends AclController {
 	}
 
 	public function bewerk($mrid) {
-		$this->view = new MaaltijdRepetitieForm(MaaltijdRepetitiesModel::getRepetitie($mrid)); // fetches POST values itself
+		$this->view = new MaaltijdRepetitieForm(MaaltijdRepetitiesModel::instance()->getRepetitie($mrid)); // fetches POST values itself
 	}
 
 	public function opslaan($mrid) {
@@ -79,7 +79,7 @@ class MaaltijdRepetitiesController extends AclController {
 	}
 
 	public function verwijder($mrid) {
-		$aantal = MaaltijdRepetitiesModel::verwijderRepetitie($mrid);
+		$aantal = MaaltijdRepetitiesModel::instance()->verwijderRepetitie($mrid);
 		if ($aantal > 0) {
 			setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 		}
