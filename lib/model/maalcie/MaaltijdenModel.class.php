@@ -224,7 +224,7 @@ class MaaltijdenModel extends PersistenceModel {
         $aantal = 0;
         // aanmelden van leden met abonnement op deze repetitie
         if (!$maaltijd->gesloten && $maaltijd->mlt_repetitie_id !== null) {
-            $abonnementen = MaaltijdAbonnementenModel::getAbonnementenVoorRepetitie($maaltijd->mlt_repetitie_id);
+            $abonnementen = MaaltijdAbonnementenModel::instance()->getAbonnementenVoorRepetitie($maaltijd->mlt_repetitie_id);
             foreach ($abonnementen as $abo) {
                 if (MaaltijdAanmeldingenModel::checkAanmeldFilter($abo->uid, $maaltijd->aanmeld_filter)) {
                     MaaltijdAanmeldingenModel::aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $abo->mlt_repetitie_id, $abo->uid);

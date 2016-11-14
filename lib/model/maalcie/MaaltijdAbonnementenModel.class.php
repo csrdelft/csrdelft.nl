@@ -58,11 +58,11 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 		return $lijst;
 	}
 
-	public static function getHeeftAbonnement($mrid, $uid) {
+	public function getHeeftAbonnement($mrid, $uid) {
         $abonnement = new MaaltijdAbonnement();
         $abonnement->mlt_repetitie_id = $mrid;
         $abonnement->uid = $uid;
-        return static::instance()->exists($abonnement);
+        return $this->exists($abonnement);
 	}
 
 	/**
@@ -148,8 +148,8 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 		return $result;
 	}
 
-	public static function getAbonnementenVoorRepetitie($mrid) {
-        return static::instance()->find('mlt_repetitie_id = ?', array($mrid));
+	public function getAbonnementenVoorRepetitie($mrid) {
+        return $this->find('mlt_repetitie_id = ?', array($mrid));
 	}
 
 	public static function getAbonnementenVanNovieten() {
@@ -157,68 +157,56 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 		return $matrix_repetities[0];
 	}
 
-	public static function inschakelenAbonnement($mrid, $uid) {
-		$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
+    /**
+     * @param $abo MaaltijdAbonnement
+     * @return false|int
+     * @throws Exception
+     */
+	public function inschakelenAbonnement($abo) {
+		$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($abo->mlt_repetitie_id);
 		if (!$repetitie->abonneerbaar) {
 			throw new Exception('Niet abonneerbaar');
 		}
-		if (self::getHeeftAbonnement($mrid, $uid)) {
+		if ($this->exists($abo)) {
 			throw new Exception('Abonnement al ingeschakeld');
 		}
-		if (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
+		if (!MaaltijdAanmeldingenModel::checkAanmeldFilter($abo->uid, $repetitie->abonnement_filter)) {
 			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
 		}
-		$abo_aantal = self::newAbonnement($mrid, $uid);
-		$abo_aantal[0]->van_uid = $uid;
-		return $abo_aantal;
+
+        $abo->van_uid = $abo->uid;
+        $abo->wanneer_ingeschakeld = date('Y-m-d H:i');
+        static::instance()->create($abo);
+
+        $aantal = MaaltijdAanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($abo->mlt_repetitie_id, $abo->uid);
+		return $aantal;
 	}
 
-	public static function inschakelenAbonnementVoorNovieten($mrid) {
+	public function inschakelenAbonnementVoorNovieten($mrid) {
 		$novieten = ProfielModel::instance()->find('status = "S_NOVIET"');
 
         $aantal = 0;
         foreach ($novieten as $noviet) {
-            try {
-                self::newAbonnement($mrid, $noviet->uid);
-                $aantal += 1;
-            } catch (Exception $e) {
-                // Noviet mag niet aanmelden voor deze repetitie
+            $repetitie = MaaltijdRepetitiesModel::instance()->retrieveByPrimaryKey(array($mrid));
+            if (!MaaltijdAanmeldingenModel::checkAanmeldFilter($noviet->uid, $repetitie->abonnement_filter)) {
+                continue;
             }
+
+            $abo = new MaaltijdAbonnement();
+            $abo->mlt_repetitie_id = $mrid;
+            $abo->uid = $noviet->uid;
+            $abo->wanneer_ingeschakeld = date('Y-m-d H:i');
+
+            $this->create($abo);
+            MaaltijdAanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid);
+            $aantal += 1;
         }
 
         return $aantal;
 	}
 
-	/**
-	 * Slaat nieuwe abonnement(en) op voor de opgegeven maaltijd-repetitie
-	 * voor een specifiek lid of alle novieten (als $uid=null).
-	 * En meld het lid / de novieten aan voor de komende repetitie-maaltijden.
-	 *
-	 * @param int $mrid
-	 * @param String $uid
-	 * @return MaaltijdAbonnement[]|int OR aantal nieuwe abonnementen novieten
-	 * @throws Exception
-	 */
-	private static function newAbonnement($mrid, $uid) {
-        $repetitie = MaaltijdRepetitiesModel::instance()->retrieveByPrimaryKey(array($mrid));
-        if (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
-            throw new Exception("Geen rechten om abonnement voor deze repetitie te maken.");
-        }
-
-        $abonnement = new MaaltijdAbonnement();
-        $abonnement->mlt_repetitie_id = $mrid;
-        $abonnement->uid = $uid;
-        $abonnement->wanneer_ingeschakeld = date('Y-m-d H:i');
-
-        static::instance()->create($abonnement);
-
-        $aantal = MaaltijdAanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid);
-
-        return array($abonnement, $aantal);
-	}
-
 	public static function uitschakelenAbonnement($mrid, $uid) {
-		if (!self::getHeeftAbonnement($mrid, $uid)) {
+		if (!static::instance()->getHeeftAbonnement($mrid, $uid)) {
 			throw new Exception('Abonnement al uitgeschakeld');
 		}
 		$aantal = static::instance()->deleteByPrimaryKey(array($mrid, $uid));
