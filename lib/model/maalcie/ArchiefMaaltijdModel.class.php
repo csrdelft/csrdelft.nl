@@ -28,7 +28,7 @@ class ArchiefMaaltijdModel extends PersistenceModel {
         $archief->tijd = $maaltijd->tijd;
         $archief->prijs = $maaltijd->prijs;
         $archief->aanmeldingen = '';
-        foreach (MaaltijdAanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd) as $aanmelding) {
+        foreach (MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd) as $aanmelding) {
             if ($aanmelding->uid === '') {
                 $archief->aanmeldingen .= 'gast';
             } else {

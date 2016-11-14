@@ -734,7 +734,7 @@ class AccessModel extends CachedPersistenceModel {
 					return false;
 				}
 				// Aangemeld voor maaltijd?
-				if (!$role AND MaaltijdAanmeldingenModel::getIsAangemeld((int) $gevraagd, $profiel->uid)) {
+				if (!$role AND MaaltijdAanmeldingenModel::instance()->getIsAangemeld((int) $gevraagd, $profiel->uid)) {
 					return true;
 				}
 				// Mag maaltijd sluiten?

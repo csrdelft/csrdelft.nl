@@ -102,7 +102,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 				$abonnement->foutmelding = 'Niet abonneerbaar';
 			} elseif ($abo['status_err']) {
 				$abonnement->waarschuwing = 'Geen huidig lid';
-			} elseif (!MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $abo['filter'])) {
+			} elseif (!MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($uid, $abo['filter'])) {
 				$abonnement->foutmelding = 'Niet toegestaan vanwege aanmeldrestrictie: ' . $abo['filter'];
 			} elseif ($alleenWaarschuwingen) {
 				continue;
@@ -183,7 +183,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 		if ($this->exists($abo)) {
 			throw new Exception('Abonnement al ingeschakeld');
 		}
-		if (!MaaltijdAanmeldingenModel::checkAanmeldFilter($abo->uid, $repetitie->abonnement_filter)) {
+		if (!MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($abo->uid, $repetitie->abonnement_filter)) {
 			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
 		}
 
@@ -191,7 +191,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
         $abo->wanneer_ingeschakeld = date('Y-m-d H:i');
         static::instance()->create($abo);
 
-        $aantal = MaaltijdAanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($abo->mlt_repetitie_id, $abo->uid);
+        $aantal = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorKomendeRepetitieMaaltijden($abo->mlt_repetitie_id, $abo->uid);
 		return $aantal;
 	}
 
@@ -201,7 +201,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
         $aantal = 0;
         foreach ($novieten as $noviet) {
             $repetitie = MaaltijdRepetitiesModel::instance()->retrieveByPrimaryKey(array($mrid));
-            if (!MaaltijdAanmeldingenModel::checkAanmeldFilter($noviet->uid, $repetitie->abonnement_filter)) {
+            if (!MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($noviet->uid, $repetitie->abonnement_filter)) {
                 continue;
             }
 
@@ -214,7 +214,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
                 continue;
             }
             $this->create($abo);
-            MaaltijdAanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $noviet->uid);
+            MaaltijdAanmeldingenModel::instance()->aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $noviet->uid);
             $aantal += 1;
         }
 
@@ -245,6 +245,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 		$abos = $this->find('mlt_repetitie_id = ?', array($mrid));
         $aantal = count($abos);
         foreach ($abos as $abo) {
+            MaaltijdAanmeldingenModel::instance()->afmeldenDoorAbonnement($mrid, $abo->uid);
             $this->delete($abo);
         }
 		return $aantal;

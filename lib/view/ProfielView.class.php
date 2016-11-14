@@ -113,7 +113,7 @@ class ProfielView extends SmartyTemplateView {
 
 			require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 			$timestamp = strtotime(Instellingen::get('maaltijden', 'recent_lidprofiel'));
-			$this->smarty->assign('recenteAanmeldingen', MaaltijdAanmeldingenModel::getRecenteAanmeldingenVoorLid($this->model->uid, $timestamp));
+			$this->smarty->assign('recenteAanmeldingen', MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid($this->model->uid, $timestamp));
 
 			require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
 			$this->smarty->assign('abos', MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($this->model->uid));

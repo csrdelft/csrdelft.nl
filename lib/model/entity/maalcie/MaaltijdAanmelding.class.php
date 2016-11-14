@@ -27,23 +27,12 @@ class MaaltijdAanmelding extends PersistentEntity  {
 
 	public $maaltijd_id; # foreign key maaltijd.id
 	public $uid; # foreign key lid.uid
-	public $aantal_gasten; # int 11
+	public $aantal_gasten = 0; # int 11
 	public $gasten_eetwens; # string 255
 	public $door_abonnement; # foreign key mlt_repetitie.id
 	public $door_uid; # foreign key lid.uid
 	public $laatst_gewijzigd; # datetime
 	public $maaltijd;
-
-	public function __construct($mid = 0, $uid = '', $gasten = 0, $opmerking = '', $door_abo = null, $door_uid = null, $wanneer = '') {
-        parent::__construct();
-		$this->maaltijd_id = (int) $mid;
-		$this->uid = $uid;
-		$this->aantal_gasten = $gasten;
-		$this->gasten_eetwens = $opmerking;
-		$this->door_abonnement = $door_abo;
-		$this->door_uid = $door_uid;
-		$this->laatst_gewijzigd = $wanneer;
-	}
 
 	/**
 	 * Haal het MaalCie saldo op van het lid van deze aanmelding.

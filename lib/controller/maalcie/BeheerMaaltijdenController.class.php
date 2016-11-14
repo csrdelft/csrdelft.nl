@@ -84,7 +84,7 @@ class BeheerMaaltijdenController extends AclController {
 
 	public function fiscaal($mid) {
 		$maaltijd = $this->model->getMaaltijd($mid, true);
-		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorMaaltijd($maaltijd);
+		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
 		require_once 'view/maalcie/MaaltijdLijstView.class.php';
 		$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, null, true);
 	}
@@ -163,7 +163,7 @@ class BeheerMaaltijdenController extends AclController {
 		$form = new AanmeldingForm($mid, true); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$aanmelding = MaaltijdAanmeldingenModel::aanmeldenVoorMaaltijd($mid, $values['voor_lid'], LoginModel::getUid(), $values['aantal_gasten'], true);
+			$aanmelding = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($mid, $values['voor_lid'], LoginModel::getUid(), $values['aantal_gasten'], true);
 			$this->view = new BeheerMaaltijdView($aanmelding->maaltijd);
 		} else {
 			$this->view = $form;
@@ -174,7 +174,7 @@ class BeheerMaaltijdenController extends AclController {
 		$form = new AanmeldingForm($mid, false); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$maaltijd = MaaltijdAanmeldingenModel::afmeldenDoorLid($mid, $values['voor_lid'], true);
+			$maaltijd = MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($mid, $values['voor_lid'], true);
 			$this->view = new BeheerMaaltijdView($maaltijd);
 		} else {
 			$this->view = $form;

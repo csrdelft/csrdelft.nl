@@ -153,7 +153,7 @@ class MaaltijdenModel extends PersistenceModel {
                 $this->sluitMaaltijd($maaltijd);
             }
             if (!$maaltijd->gesloten && !$maaltijd->verwijderd && !empty($filter)) {
-                $verwijderd = MaaltijdAanmeldingenModel::checkAanmeldingenFilter($filter, array($maaltijd));
+                $verwijderd = MaaltijdAanmeldingenModel::instance()->checkAanmeldingenFilter($filter, array($maaltijd));
                 $maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() - $verwijderd;
             }
         }
@@ -181,7 +181,7 @@ class MaaltijdenModel extends PersistenceModel {
 			if (\CorveeTakenModel::existMaaltijdCorvee($mid)) {
 				throw new Exception('Er zitten nog bijbehorende corveetaken in de prullenbak. Verwijder die eerst definitief!');
 			}
-			MaaltijdAanmeldingenModel::deleteAanmeldingenVoorMaaltijd($mid);
+			MaaltijdAanmeldingenModel::instance()->deleteAanmeldingenVoorMaaltijd($mid);
             $this->deleteByPrimaryKey(array($mid));
 		} else {
 			$maaltijd->verwijderd = true;
@@ -210,7 +210,7 @@ class MaaltijdenModel extends PersistenceModel {
 		$result = array();
 		foreach ($maaltijden as $maaltijd) {
 			// Kan en mag aanmelden of mag maaltijdlijst zien en sluiten? Dan maaltijd ook zien.
-			if (($maaltijd->aanmeld_limiet > 0 AND MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) OR $maaltijd->magBekijken($uid)) {
+			if (($maaltijd->aanmeld_limiet > 0 AND MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) OR $maaltijd->magBekijken($uid)) {
 				$result[$maaltijd->maaltijd_id] = $maaltijd;
 			}
 		}
@@ -226,8 +226,8 @@ class MaaltijdenModel extends PersistenceModel {
         if (!$maaltijd->gesloten && $maaltijd->mlt_repetitie_id !== null) {
             $abonnementen = MaaltijdAbonnementenModel::instance()->getAbonnementenVoorRepetitie($maaltijd->mlt_repetitie_id);
             foreach ($abonnementen as $abo) {
-                if (MaaltijdAanmeldingenModel::checkAanmeldFilter($abo->uid, $maaltijd->aanmeld_filter)) {
-                    MaaltijdAanmeldingenModel::aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $abo->mlt_repetitie_id, $abo->uid);
+                if (MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($abo->uid, $maaltijd->aanmeld_filter)) {
+                    MaaltijdAanmeldingenModel::instance()->aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $abo->mlt_repetitie_id, $abo->uid);
                     $aantal++;
                 }
             }
@@ -294,7 +294,7 @@ class MaaltijdenModel extends PersistenceModel {
         $maaltijden = $this->find('verwijderd = FALSE AND mlt_repetitie_id = ?', array($repetitie->mlt_repetitie_id));
         $filter = $repetitie->abonnement_filter;
         if (!empty($filter)) {
-            $aanmeldingen = MaaltijdAanmeldingenModel::checkAanmeldingenFilter($filter, $maaltijden);
+            $aanmeldingen = MaaltijdAanmeldingenModel::instance()->checkAanmeldingenFilter($filter, $maaltijden);
         }
         foreach ($maaltijden as $maaltijd) {
             if ($verplaats) {

@@ -62,7 +62,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 		$repetities = $this->find('abonneerbaar = true');
 		$result = array();
 		foreach ($repetities as $repetitie) {
-			if (MaaltijdAanmeldingenModel::checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
+			if (MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
 				$result[$repetitie->mlt_repetitie_id] = $repetitie;
 			}
 		}
