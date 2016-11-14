@@ -292,7 +292,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	 * @param Maaltijd[] $maaltijden
 	 * @return int|void
 	 */
-	public static function checkAanmeldingenFilter($filter, array $maaltijden) {
+	public static function checkAanmeldingenFilter($filter, $maaltijden) {
 		$mids = array();
 		foreach ($maaltijden as $maaltijd) {
 			if (!$maaltijd->gesloten && !$maaltijd->verwijderd) {
@@ -303,7 +303,10 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 			return 0;
 		}
 		$aantal = 0;
-		$aanmeldingen = self::loadAanmeldingen($mids);
+        $aanmeldingen = array();
+        foreach ($mids as $mid) {
+            array_merge($aanmeldingen, static::instance()->find('maaltijd_id = ?', array($mid))->fetchAll());
+        }
 		foreach ($aanmeldingen as $aanmelding) { // check filter voor elk aangemeld lid
 			$uid = $aanmelding->uid;
 			if (!self::checkAanmeldFilter($uid, $filter)) { // verwijder aanmelding indien niet toegestaan

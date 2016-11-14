@@ -75,9 +75,14 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 * @return MaaltijdAbonnement [uid][mrid]
 	 * @throws Exception
 	 */
-	public static function getAbonnementenMatrix($alleenNovieten = false, $alleenWaarschuwingen = false, $ingeschakeld = null, $voorLid = null) {
+	public static function getAbonnementenMatrix($alleenWaarschuwingen = false, $ingeschakeld = null) {
 		$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
-		$abos = self::loadLedenAbonnementen($alleenNovieten, $alleenWaarschuwingen, $ingeschakeld, $voorLid);
+//        if ($alleenWaarschuwingen) {
+//            $abos = static::instance()->loadWaarschuwingen();
+//        } elseif  {
+//
+//        }
+		$abos = self::loadLedenAbonnementen($alleenWaarschuwingen, $ingeschakeld);
 		$matrix = array();
 		foreach ($abos as $abo) { // build matrix
 			$mrid = $abo['mrid'];
@@ -120,7 +125,16 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 		return array($matrix, $repById);
 	}
 
-	private static function loadLedenAbonnementen($alleenNovieten = false, $alleenWaarschuwingen = false, $ingeschakeld = null, $voorLid = null) {
+	public function loadWaarschuwingenMatrix() {
+        $repetities = MaaltijdRepetitiesModel::instance()->find('abonneerbaar = false');
+        $abos = array();
+        foreach ($repetities as $repetitie) {
+            array_merge($abos, $this->find('mlt_repetitie_id = ?', array($repetitie->mlt_repetitie_id))->fetchAll());
+        }
+        return $abos;
+    }
+
+	private static function loadLedenAbonnementen($alleenWaarschuwingen = false, $ingeschakeld = null) {
 		$sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
 		$sql.= ' r.abonnement_filter AS filter,'; // controleer later
 		$sql.= ' (r.abonneerbaar = false) AS abo_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
@@ -129,11 +143,6 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 		$values = array();
 		if ($alleenWaarschuwingen) {
 			$sql.= ' HAVING abo AND (filter != "" OR abo_err OR status_err)'; // niet-leden met abo
-		} elseif ($voorLid !== null) { // alles voor specifiek lid
-			$sql.= ' WHERE lid.uid = ?';
-			$values[] = $voorLid;
-		} elseif ($alleenNovieten) { // alles voor novieten
-			$sql.= ' WHERE lid.status = "S_NOVIET"';
 		} elseif ($ingeschakeld === true) {
 			$sql.= ' HAVING abo = ?';
 			$values[] = $ingeschakeld;
@@ -153,8 +162,12 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	}
 
 	public function getAbonnementenVanNovieten() {
-		$matrix_repetities = static::getAbonnementenMatrix(true);
-		return $matrix_repetities[0];
+        $novieten = ProfielModel::instance()->find('status = "S_NOVIET"');
+        $matrix = array();
+        foreach ($novieten as $noviet) {
+            $matrix[$noviet->uid] = $this->find('uid = ?', array($noviet->uid), null, 'mlt_repetitie_id')->fetchAll();
+        }
+		return $matrix;
 	}
 
     /**
@@ -197,8 +210,11 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
             $abo->uid = $noviet->uid;
             $abo->wanneer_ingeschakeld = date('Y-m-d H:i');
 
+            if ($this->exists($abo)) {
+                continue;
+            }
             $this->create($abo);
-            MaaltijdAanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid);
+            MaaltijdAanmeldingenModel::aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $noviet->uid);
             $aantal += 1;
         }
 
