@@ -25,14 +25,14 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 * @param boolean $uitgeschakeld ook uitgeschakelde abonnementen
 	 * @return MaaltijdAbonnement[]
 	 */
-	public static function getAbonnementenVoorLid($uid, $abonneerbaar = false, $uitgeschakeld = false) {
+	public function getAbonnementenVoorLid($uid, $abonneerbaar = false, $uitgeschakeld = false) {
 		if ($abonneerbaar) {
 			$repById = MaaltijdRepetitiesModel::instance()->getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
 		} else {
 			$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
 		}
 		$lijst = array();
-        $abos = static::instance()->find('uid = ?', array($uid));
+        $abos = $this->find('uid = ?', array($uid));
 		foreach ($abos as $abo) { // ingeschakelde abonnementen
 			$mrid = $abo->mlt_repetitie_id;
 			if (!array_key_exists($mrid, $repById)) { // ingeschakelde abonnementen altijd weergeven
@@ -152,8 +152,8 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
         return $this->find('mlt_repetitie_id = ?', array($mrid));
 	}
 
-	public static function getAbonnementenVanNovieten() {
-		$matrix_repetities = self::getAbonnementenMatrix(true);
+	public function getAbonnementenVanNovieten() {
+		$matrix_repetities = static::getAbonnementenMatrix(true);
 		return $matrix_repetities[0];
 	}
 
@@ -205,11 +205,11 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
         return $aantal;
 	}
 
-	public static function uitschakelenAbonnement($mrid, $uid) {
-		if (!static::instance()->getHeeftAbonnement($mrid, $uid)) {
+	public function uitschakelenAbonnement($mrid, $uid) {
+		if (!$this->getHeeftAbonnement($mrid, $uid)) {
 			throw new Exception('Abonnement al uitgeschakeld');
 		}
-		$aantal = static::instance()->deleteByPrimaryKey(array($mrid, $uid));
+		$aantal = $this->deleteByPrimaryKey(array($mrid, $uid));
 		$abo = new MaaltijdAbonnement();
         $abo->mlt_repetitie_id = $mrid;
 		$abo->van_uid = $uid;
@@ -225,11 +225,11 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 * @return int amount of deleted abos
 	 * @throws Exception
 	 */
-	public static function verwijderAbonnementen($mrid) {
-		$abos = static::instance()->find('mlt_repetitie_id = ?', array($mrid));
+	public function verwijderAbonnementen($mrid) {
+		$abos = $this->find('mlt_repetitie_id = ?', array($mrid));
         $aantal = count($abos);
         foreach ($abos as $abo) {
-            static::instance()->delete($abo);
+            $this->delete($abo);
         }
 		return $aantal;
 	}
@@ -240,11 +240,11 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 * 
 	 * @return int amount of deleted abos
 	 */
-	public static function verwijderAbonnementenVoorLid($uid) {
-		$abos = self::getAbonnementenVoorLid($uid);
+	public function verwijderAbonnementenVoorLid($uid) {
+		$abos = $this->getAbonnementenVoorLid($uid);
 		$aantal = 0;
 		foreach ($abos as $abo) {
-			$aantal += static::instance()->delete($abo);
+			$aantal += $this->delete($abo);
 		}
 		if (sizeof($abos) !== $aantal) {
 			setMelding('Niet alle abonnementen zijn uitgeschakeld!', -1);

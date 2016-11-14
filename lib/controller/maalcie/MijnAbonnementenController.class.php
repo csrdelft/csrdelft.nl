@@ -39,7 +39,7 @@ class MijnAbonnementenController extends AclController {
 	}
 
 	public function mijn() {
-		$abonnementen = MaaltijdAbonnementenModel::getAbonnementenVoorLid(LoginModel::getUid(), true, true);
+		$abonnementen = MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid(LoginModel::getUid(), true, true);
 		$this->view = new MijnAbonnementenView($abonnementen);
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
@@ -58,7 +58,7 @@ class MijnAbonnementenController extends AclController {
 	}
 
 	public function uitschakelen($mrid) {
-		$abo_aantal = MaaltijdAbonnementenModel::uitschakelenAbonnement($mrid, LoginModel::getUid());
+		$abo_aantal = MaaltijdAbonnementenModel::instance()->uitschakelenAbonnement($mrid, LoginModel::getUid());
 		$this->view = new MijnAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');

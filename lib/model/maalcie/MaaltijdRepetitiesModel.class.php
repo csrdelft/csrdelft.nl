@@ -108,7 +108,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
         } else {
             $this->update($repetitie);
             if (!$repetitie->abonneerbaar) { // niet (meer) abonneerbaar
-                $abos = MaaltijdAbonnementenModel::verwijderAbonnementen($repetitie->mlt_repetitie_id);
+                $abos = MaaltijdAbonnementenModel::instance()->verwijderAbonnementen($repetitie->mlt_repetitie_id);
             }
         }
         return $abos;
@@ -125,7 +125,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 			MaaltijdenModel::instance()->verwijderRepetitieMaaltijden($mrid); // delete maaltijden first (foreign key)
 			throw new Exception('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
-		$aantalAbos = MaaltijdAbonnementenModel::verwijderAbonnementen($mrid);
+		$aantalAbos = MaaltijdAbonnementenModel::instance()->verwijderAbonnementen($mrid);
         $this->deleteByPrimaryKey(array($mrid));
 		return $aantalAbos;
 	}

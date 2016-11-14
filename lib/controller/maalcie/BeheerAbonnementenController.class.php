@@ -59,7 +59,7 @@ class BeheerAbonnementenController extends AclController {
 	public function novieten() {
 		$mrid = filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
 		$aantal = MaaltijdAbonnementenModel::instance()->inschakelenAbonnementVoorNovieten((int) $mrid);
-		$matrix = MaaltijdAbonnementenModel::getAbonnementenVanNovieten();
+		$matrix = MaaltijdAbonnementenModel::instance()->getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
 		$this->view = new BeheerAbonnementenLijstView($matrix);
 		setMelding(
@@ -86,7 +86,7 @@ class BeheerAbonnementenController extends AclController {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		$abo_aantal = MaaltijdAbonnementenModel::uitschakelenAbonnement((int) $mrid, $uid);
+		$abo_aantal = MaaltijdAbonnementenModel::instance()->uitschakelenAbonnement((int) $mrid, $uid);
 		$this->view = new BeheerAbonnementView($abo_aantal[0]);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
