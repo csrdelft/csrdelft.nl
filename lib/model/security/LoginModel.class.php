@@ -92,7 +92,6 @@ class LoginModel extends PersistenceModel implements Validator {
 			if (isset($_COOKIE['remember'])) {
 				$remember = RememberLoginModel::instance()->verifyToken($_COOKIE['remember']);
 				if ($remember) {
-                    RememberLoginModel::instance()->rememberLogin($remember);
 					$this->login($remember->uid, null, false, $remember, $remember->lock_ip);
 				}
 			} else {
@@ -354,6 +353,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			}
 
 			if ($remember) {
+				RememberLoginModel::instance()->rememberLogin($remember);
 				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#lidinstellingenform-tab-Beveiliging" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
 			} elseif (!$alreadyAuthenticatedByUrlToken) {
 
