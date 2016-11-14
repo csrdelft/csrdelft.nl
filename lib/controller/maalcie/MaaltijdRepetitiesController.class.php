@@ -54,13 +54,11 @@ class MaaltijdRepetitiesController extends AclController {
 	}
 
 	public function nieuw() {
-		$repetitie = new MaaltijdRepetitie();
-		$this->view = new MaaltijdRepetitieForm($repetitie->mlt_repetitie_id, $repetitie->dag_vd_week, $repetitie->periode_in_dagen, $repetitie->standaard_titel, $repetitie->standaard_tijd, $repetitie->standaard_prijs, $repetitie->abonneerbaar, $repetitie->standaard_limiet, $repetitie->abonnement_filter); // fetches POST values itself
+		$this->view = new MaaltijdRepetitieForm(new MaaltijdRepetitie()); // fetches POST values itself
 	}
 
 	public function bewerk($mrid) {
-		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
-		$this->view = new MaaltijdRepetitieForm($repetitie->mlt_repetitie_id, $repetitie->dag_vd_week, $repetitie->periode_in_dagen, $repetitie->standaard_titel, $repetitie->standaard_tijd, $repetitie->standaard_prijs, $repetitie->abonneerbaar, $repetitie->standaard_limiet, $repetitie->abonnement_filter); // fetches POST values itself
+		$this->view = new MaaltijdRepetitieForm(MaaltijdRepetitiesModel::getRepetitie($mrid)); // fetches POST values itself
 	}
 
 	public function opslaan($mrid) {
@@ -70,11 +68,12 @@ class MaaltijdRepetitiesController extends AclController {
 			$this->nieuw();
 		}
 		if ($this->view->validate()) {
-			$values = $this->view->getValues();
-			$repetitie_aantal = MaaltijdRepetitiesModel::saveRepetitie($mrid, $values['dag_vd_week'], $values['periode_in_dagen'], $values['standaard_titel'], $values['standaard_tijd'], $values['standaard_prijs'], $values['abonneerbaar'], $values['standaard_limiet'], $values['abonnement_filter']);
-			$this->view = new MaaltijdRepetitieView($repetitie_aantal[0]);
-			if ($repetitie_aantal[1] > 0) {
-				setMelding($repetitie_aantal[1] . ' abonnement' . ($repetitie_aantal[1] !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
+            $repetitie = $this->view->getModel();
+
+            $aantal = MaaltijdRepetitiesModel::instance()->saveRepetitie($repetitie);
+            $this->view = new MaaltijdRepetitieView($repetitie);
+			if ($aantal > 0) {
+				setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 			}
 		}
 	}

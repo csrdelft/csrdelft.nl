@@ -10,32 +10,36 @@
  */
 class MaaltijdRepetitieForm extends ModalForm {
 
-	public function __construct($mrid, $dag = null, $periode = null, $titel = null, $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = null, $verplaats = null) {
-		parent::__construct(null, maalcieUrl . '/opslaan/' . $mrid);
+    /**
+     * MaaltijdRepetitieForm constructor.
+     * @param $model MaaltijdRepetitie
+     */
+	public function __construct($model, $verplaats = null) {
+		parent::__construct($model, maalcieUrl . '/opslaan/' . $model->mlt_repetitie_id);
 
-		if ($mrid === null) {
+		if ($model->mlt_repetitie_id === null) {
 			$this->titel = 'Maaltijdrepetitie aanmaken';
 		} else {
 			$this->titel = 'Maaltijdrepetitie wijzigen';
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
-		$fields[] = new RequiredTextField('standaard_titel', $titel, 'Standaard titel', 255);
-		$fields[] = new TimeField('standaard_tijd', $tijd, 'Standaard tijd', 15);
-		$fields['dag'] = new WeekdagField('dag_vd_week', $dag, 'Dag v/d week');
+		$fields[] = new RequiredTextField('standaard_titel', $model->standaard_titel, 'Standaard titel', 255);
+		$fields[] = new TimeField('standaard_tijd', $model->standaard_tijd, 'Standaard tijd', 15);
+		$fields['dag'] = new WeekdagField('dag_vd_week', $model->dag_vd_week, 'Dag v/d week');
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodieke maaltijden';
-		$fields[] = new IntField('periode_in_dagen', $periode, 'Periode (in dagen)', 0, 183);
-		$fields['abo'] = new JaNeeField('abonneerbaar', $abo, 'Abonneerbaar');
-		if ($mrid !== 0) {
+		$fields[] = new IntField('periode_in_dagen', $model->periode_in_dagen, 'Periode (in dagen)', 0, 183);
+		$fields['abo'] = new JaNeeField('abonneerbaar', $model->abonneerbaar, 'Abonneerbaar');
+		if ($model->mlt_repetitie_id !== 0) {
 			$fields['abo']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) if (!confirm('Alle abonnementen zullen worden verwijderd!')) this.checked = true;";
 		}
-		$fields[] = new BedragField('standaard_prijs', $prijs, 'Standaard prijs', '€', 0, 50, 0.50);
-		$fields[] = new IntField('standaard_limiet', $limiet, 'Standaard limiet', 0, 200);
-		$fields[] = new RechtenField('abonnement_filter', $filter, 'Aanmeldrestrictie');
+		$fields[] = new BedragField('standaard_prijs', $model->standaard_prijs, 'Standaard prijs', '€', 0, 50, 0.50);
+		$fields[] = new IntField('standaard_limiet', $model->standaard_limiet, 'Standaard limiet', 0, 200);
+		$fields[] = new RechtenField('abonnement_filter', $model->abonnement_filter, 'Aanmeldrestrictie');
 
-		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $mrid, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', 'disk_multiple');
+		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $model->mlt_repetitie_id, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', 'disk_multiple');
 
-		if ($mrid !== 0) {
+		if ($model->mlt_repetitie_id !== 0) {
 			$fields['ver'] = new CheckboxField('verplaats_dag', $verplaats, 'Verplaatsen');
 			$fields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
 			$fields['ver']->onchange = <<<JS

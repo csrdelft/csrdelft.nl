@@ -107,26 +107,21 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 		return $repetitie;
 	}
 
-	public static function saveRepetitie($mrid, $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter) {
+    /**
+     * @param $repetitie MaaltijdRepetitie
+     * @return array
+     */
+	public function saveRepetitie($repetitie) { //$mrid, $dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter) {
         $abos = 0;
-        if ($mrid === 0) {
-            $repetitie = static::instance()->newRepetitie($dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter);
+        if ($repetitie->mlt_repetitie_id === 0) {
+            $repetitie->mlt_repetitie_id = static::instance()->create($repetitie);
         } else {
-            $repetitie = self::getRepetitie($mrid);
-            $repetitie->dag_vd_week = $dag;
-            $repetitie->periode_in_dagen = $periode;
-            $repetitie->standaard_titel = $titel;
-            $repetitie->standaard_tijd = $tijd;
-            $repetitie->standaard_prijs = $prijs;
-            $repetitie->abonneerbaar = (boolean)$abo;
-            $repetitie->standaard_limiet = $limiet;
-            $repetitie->abonnement_filter = $filter;
             static::instance()->update($repetitie);
-            if (!$abo) { // niet (meer) abonneerbaar
-                $abos = MaaltijdAbonnementenModel::verwijderAbonnementen($mrid);
+            if (!$repetitie->abonneerbaar) { // niet (meer) abonneerbaar
+                $abos = MaaltijdAbonnementenModel::verwijderAbonnementen($repetitie->mlt_repetitie_id);
             }
         }
-        return array($repetitie, $abos);
+        return $abos;
 	}
 
 	private function newRepetitie($dag, $periode, $titel, $tijd, $prijs, $abo, $limiet, $filter) {

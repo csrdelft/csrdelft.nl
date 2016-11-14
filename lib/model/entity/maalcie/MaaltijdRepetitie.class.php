@@ -42,7 +42,7 @@ class MaaltijdRepetitie extends PersistentEntity {
     protected static $table_name = 'mlt_repetities';
     protected static $persistent_attributes = array(
         'mlt_repetitie_id' => array(T::Integer, false, 'auto_increment'),
-        'dag_vd_week' => array(T::Boolean),
+        'dag_vd_week' => array(T::Integer),
         'periode_in_dagen' => array(T::Integer),
         'standaard_titel' => array(T::String),
         'standaard_tijd' => array(T::Time),
