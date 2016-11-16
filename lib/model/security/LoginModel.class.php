@@ -263,7 +263,6 @@ class LoginModel extends PersistenceModel implements Validator {
 	 */
 	public function login($user, $pass_plain, $evtWachten = true, RememberLogin $remember = null, $lockIP = false, $alreadyAuthenticatedByUrlToken = false, $expire = null) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
-		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 
 		// Inloggen met lidnummer of gebruikersnaam
 		if (AccountModel::isValidUid($user)) {
@@ -354,6 +353,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			}
 
 			if ($remember) {
+				RememberLoginModel::instance()->rememberLogin($remember);
 				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#lidinstellingenform-tab-Beveiliging" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
 			} elseif (!$alreadyAuthenticatedByUrlToken) {
 
