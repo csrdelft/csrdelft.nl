@@ -324,7 +324,8 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getBeschrijving() {
-		return $this->getTitel() . ' wordt ' . (date('Y') - date('Y', strtotime($this->gebdatum))) . ' jaar';
+		$jaar = isset($GLOBALS['agenda_jaar']) ? $GLOBALS['agenda_jaar'] : date('Y');
+		return $this->getTitel() . ' wordt ' . ($jaar - date('Y', strtotime($this->gebdatum))) . ' jaar';
 	}
 
 	public function getLocatie() {
