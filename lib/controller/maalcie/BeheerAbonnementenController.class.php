@@ -68,7 +68,10 @@ class BeheerAbonnementenController extends AclController {
 	}
 
 	public function abonneerbaar() {
-		$this->beheer(false, false);
+        $matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenAbonneerbaarMatrix();
+        $this->view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], true, null);
+        $this->view = new CsrLayoutPage($this->view);
+        $this->view->addCompressedResources('maalcie');
 	}
 
 	public function novieten() {

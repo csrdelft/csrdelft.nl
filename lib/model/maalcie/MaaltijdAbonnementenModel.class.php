@@ -86,28 +86,46 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 
         $repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true);
 
-        foreach ($repById as $mrid => $repetitie) { // vul gaten in matrix vanwege uitgeschakelde abonnementen
-            foreach ($waarschuwingen as $uid => $abos) {
-                if (!array_key_exists($mrid, $abos)) {
-                    $abonnement = new MaaltijdAbonnement();
-                    $abonnement->mlt_repetitie_id = null;
-                    $abonnement->van_uid = $uid;
-                    $abonnement->maaltijd_repetitie = $repetitie;
-                    $matrix[$uid][$mrid] = $abonnement;
+        return $this->fillHoles($waarschuwingen, $repById);
+    }
+
+    public function getAbonnementenAbonneerbaarMatrix() {
+        $repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
+        $sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
+        $sql.= ' r.abonnement_filter AS filter,'; // controleer later
+        $sql.= ' (r.abonneerbaar = false) AS abo_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
+        $sql.= ' (EXISTS ( SELECT * FROM mlt_abonnementen AS a WHERE a.mlt_repetitie_id = mrid AND a.uid = van )) AS abo';
+        $sql.= ' FROM profielen AS lid, mlt_repetities AS r';
+        $values = array();
+        $sql.= ' WHERE lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")';
+        $sql.= ' ORDER BY lid.achternaam, lid.voornaam ASC';
+        $db = \Database::instance();
+        $query = $db->prepare($sql);
+        $query->execute($values);
+
+        require_once 'model/entity/LidStatus.enum.php';
+
+        $leden = ProfielModel::instance()->find("status = ? OR status = ? OR status = ?", LidStatus::$lidlike);
+
+        $matrix = array();
+        foreach ($leden as $lid) {
+            $abos = $this->find("uid = ?", array($lid->uid));
+            foreach ($abos as $abo) {
+                $rep = $repById[$abo->mlt_repetitie_id];
+                $abo->maaltijd_repetitie = $rep;
+                if (!MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($lid->uid, $rep->abonnement_filter)) {
+                    $abo->foutmelding = 'Niet toegestaan vanwege aanmeldrestrictie: ' . $rep->abonnement_filter;
                 }
-                ksort($repById);
-                ksort($waarschuwingen[$uid]);
+                $matrix[$lid->uid][$abo->mlt_repetitie_id] = $abo;
             }
         }
 
-        return array($waarschuwingen, $repById);
+        return $this->fillHoles($matrix, $repById);
     }
 
 	/**
 	 * Bouwt matrix voor alle repetities en abonnementen van alle leden
 	 *
-	 * @param bool $alleenNovieten
-	 * @param bool $alleenWaarschuwingen
 	 * @param null $ingeschakeld
 	 * @param null $voorLid
 	 * @return MaaltijdAbonnement [uid][mrid]
@@ -157,44 +175,31 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 			}
 			$matrix[$uid][$mrid] = $abonnement;
 		}
-		foreach ($repById as $mrid => $repetitie) { // vul gaten in matrix vanwege uitgeschakelde abonnementen
-			foreach ($matrix as $uid => $abos) {
-				if (!array_key_exists($mrid, $abos)) {
-					$abonnement = new MaaltijdAbonnement();
-                    $abonnement->mlt_repetitie_id = $ingeschakeld ? $mrid : null;
-					$abonnement->van_uid = $uid;
-					$abonnement->maaltijd_repetitie = $repetitie;
-					$matrix[$uid][$mrid] = $abonnement;
-				}
-				ksort($repById);
-				ksort($matrix[$uid]);
-			}
-		}
-		return array($matrix, $repById);
+		return $this->fillHoles($matrix, $repById, $ingeschakeld);
 	}
 
-	private static function loadLedenAbonnementen($alleenWaarschuwingen = false, $ingeschakeld = null) {
-		$sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
-		$sql.= ' r.abonnement_filter AS filter,'; // controleer later
-		$sql.= ' (r.abonneerbaar = false) AS abo_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
-		$sql.= ' (EXISTS ( SELECT * FROM mlt_abonnementen AS a WHERE a.mlt_repetitie_id = mrid AND a.uid = van )) AS abo';
-		$sql.= ' FROM profielen AS lid, mlt_repetities AS r';
-		$values = array();
-		if ($alleenWaarschuwingen) {
-			$sql.= ' HAVING abo AND (filter != "" OR abo_err OR status_err)'; // niet-leden met abo
-		} elseif ($ingeschakeld === true) {
-			$sql.= ' HAVING abo = ?';
-			$values[] = $ingeschakeld;
-		} else { // abonneerbaar alleen voor leden
-			$sql.= ' WHERE lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")';
-		}
-		$sql.= ' ORDER BY lid.achternaam, lid.voornaam ASC';
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchAll();
-		return $result;
-	}
+    /**
+     * @param $matrix
+     * @param $repById
+     * @param bool $ingeschakeld
+     * @return array
+     */
+    private function fillHoles($matrix, $repById, $ingeschakeld = false) {
+        foreach ($repById as $mrid => $repetitie) { // vul gaten in matrix vanwege uitgeschakelde abonnementen
+            foreach ($matrix as $uid => $abos) {
+                if (!array_key_exists($mrid, $abos)) {
+                    $abonnement = new MaaltijdAbonnement();
+                    $abonnement->mlt_repetitie_id = $ingeschakeld ? $mrid : null;
+                    $abonnement->van_uid = $uid;
+                    $abonnement->maaltijd_repetitie = $repetitie;
+                    $matrix[$uid][$mrid] = $abonnement;
+                }
+                ksort($repById);
+                ksort($matrix[$uid]);
+            }
+        }
+        return array($matrix, $repById);
+    }
 
 	public function getAbonnementenVoorRepetitie($mrid) {
         return $this->find('mlt_repetitie_id = ?', array($mrid));
@@ -239,7 +244,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 
         $aantal = 0;
         foreach ($novieten as $noviet) {
-            $repetitie = MaaltijdRepetitiesModel::instance()->retrieveByPrimaryKey(array($mrid));
+            $repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
             if (!MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($noviet->uid, $repetitie->abonnement_filter)) {
                 continue;
             }

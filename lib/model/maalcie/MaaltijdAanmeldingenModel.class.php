@@ -201,8 +201,8 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 		}
 
 		$aanmeldingen = array();
-		foreach ($maaltijdenById as $mid) {
-            array_merge($aanmeldingen, $this->find('maaltijd_id = ? AND uid = ?', array($mid, $uid)));
+		foreach ($maaltijdenById as $maaltijd) {
+            array_merge($aanmeldingen, $this->find('maaltijd_id = ? AND uid = ?', array($maaltijd->maaltijd_id, $uid))->fetchAll());
         }
 		$result = array();
 		foreach ($aanmeldingen as $aanmelding) {

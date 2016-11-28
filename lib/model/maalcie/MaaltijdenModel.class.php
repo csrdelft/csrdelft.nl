@@ -59,7 +59,7 @@ class MaaltijdenModel extends PersistenceModel {
 	 *
 	 * @param int $van Timestamp
 	 * @param int $tot Timestamp
-	 * @return Maaltijd[] (implements Agendeerbaar)
+	 * @return Maaltijd[] implements Agendeerbaar
 	 * @throws Exception
 	 */
 	public function getMaaltijdenVoorAgenda($van, $tot) {
