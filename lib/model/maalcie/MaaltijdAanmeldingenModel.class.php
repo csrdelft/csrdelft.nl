@@ -52,6 +52,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
             $aanmelding->door_uid = $doorUid;
             $aanmelding->aantal_gasten = $aantalGasten;
             $aanmelding->gasten_eetwens = $gastenEetwens;
+            $aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
 
             $this->create($aanmelding);
 
@@ -202,8 +203,9 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 
 		$aanmeldingen = array();
 		foreach ($maaltijdenById as $maaltijd) {
-            array_merge($aanmeldingen, $this->find('maaltijd_id = ? AND uid = ?', array($maaltijd->maaltijd_id, $uid))->fetchAll());
+            $aanmeldingen = array_merge($aanmeldingen, $this->find('maaltijd_id = ? AND uid = ?', array($maaltijd->maaltijd_id, $uid))->fetchAll());
         }
+
 		$result = array();
 		foreach ($aanmeldingen as $aanmelding) {
 			$aanmelding->maaltijd = $maaltijdenById[$aanmelding->maaltijd_id];
