@@ -53,10 +53,11 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getAantalAanmeldingen() {
-        return MaaltijdAanmeldingenModel::instance()->count('maaltijd_id = ?', array($this->maaltijd_id));
+        $aantal = MaaltijdAanmeldingenModel::instance()->select(array('SUM(aantal_gasten) + COUNT(*)'), 'maaltijd_id = ?', array($this->maaltijd_id));
+        return (int) $aantal->fetchColumn();
     }
 
 	/**
