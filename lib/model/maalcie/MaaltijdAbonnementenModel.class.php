@@ -269,10 +269,12 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 		if (!$this->getHeeftAbonnement($mrid, $uid)) {
 			throw new Exception('Abonnement al uitgeschakeld');
 		}
-		$aantal = $this->deleteByPrimaryKey(array($mrid, $uid));
+		$this->deleteByPrimaryKey(array($mrid, $uid));
 		$abo = new MaaltijdAbonnement();
         $abo->mlt_repetitie_id = $mrid;
 		$abo->van_uid = $uid;
+
+        $aantal = MaaltijdAanmeldingenModel::instance()->afmeldenDoorAbonnement($mrid, $uid);
 		return array($abo, $aantal);
 	}
 
