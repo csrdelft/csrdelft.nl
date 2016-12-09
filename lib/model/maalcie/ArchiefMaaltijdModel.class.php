@@ -4,6 +4,8 @@ class ArchiefMaaltijdModel extends PersistenceModel {
     const ORM = 'ArchiefMaaltijd';
     const DIR = 'maalcie/';
 
+    protected static $instance;
+
     protected $default_order = 'datum DESC, tijd DESC';
 
     public function getArchiefMaaltijdenTussen($van = null, $tot = null) {

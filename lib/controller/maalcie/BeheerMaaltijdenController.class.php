@@ -1,6 +1,7 @@
 <?php
 
 require_once 'model/maalcie/MaaltijdenModel.class.php';
+require_once 'model/maalcie/ArchiefMaaltijdModel.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
 require_once 'view/maalcie/BeheerMaaltijdenView.class.php';
