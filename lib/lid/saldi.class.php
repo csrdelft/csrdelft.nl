@@ -20,21 +20,12 @@ class Saldi {
 	}
 
 	private function load($timespan) {
-		if ($this->uid == '0000') {
-			$sQuery = "
-				SELECT LEFT(moment, 16) AS moment, SUM(saldo) AS saldo
-				FROM saldolog
-				WHERE cie='" . $this->cie . "'
-				  AND moment>(NOW() - INTERVAL " . $timespan . " DAY)
-				GROUP BY LEFT(moment, 16);";
-		} else {
-			$sQuery = "
-				SELECT moment, saldo
-				FROM saldolog
-				WHERE uid='" . $this->uid . "'
-				  AND cie='" . $this->cie . "'
-				  AND moment>(NOW() - INTERVAL " . $timespan . " DAY);";
-		}
+        $sQuery = "
+            SELECT moment, saldo
+            FROM saldolog
+            WHERE uid='" . $this->uid . "'
+              AND cie='" . $this->cie . "'
+              AND moment>(NOW() - INTERVAL " . $timespan . " DAY);";
 		$this->data = MijnSqli::instance()->query2array($sQuery);
 		if (!is_array($this->data)) {
 			$this->data = array();
@@ -56,22 +47,20 @@ class Saldi {
 			}
 		} elseif ($this->cie == 'maalcie') {
 			if (empty($this->data)) {
-				if ($this->uid != '0000') {
-					$sQuery = "
-					SELECT moment, saldo
-					FROM saldolog
-					WHERE uid='" . $this->uid . "'
-					  AND cie='" . $this->cie . "'
-					ORDER BY moment DESC
-					LIMIT 1;";
-					$this->data = MijnSqli::instance()->query2array($sQuery);
-					if (!is_array($this->data)) {
-						$this->data = array();
-					}
-					if (isset($this->data[0]['moment'])) {
-						$this->data[0]['moment'] = getDateTime();
-					}
-				}
+                $sQuery = "
+                SELECT moment, saldo
+                FROM saldolog
+                WHERE uid='" . $this->uid . "'
+                  AND cie='" . $this->cie . "'
+                ORDER BY moment DESC
+                LIMIT 1;";
+                $this->data = MijnSqli::instance()->query2array($sQuery);
+                if (!is_array($this->data)) {
+                    $this->data = array();
+                }
+                if (isset($this->data[0]['moment'])) {
+                    $this->data[0]['moment'] = getDateTime();
+                }
 			} else {
 				//herhaal laatste datapunt om grafiek te tekenen tot aan vandaag
 				$row = end($this->data);
