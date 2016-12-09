@@ -6,7 +6,7 @@
  */
 
 require_once 'configuratie.include.php';
-require_once 'lid/saldi.class.php';
+require_once 'model/fiscaal/SaldoModel.class.php';
 
 if(!isset($_GET['uid'])){
 	echo 'no valid uid';
@@ -29,8 +29,8 @@ if($timespan>(10*365)){
 	$timespan=(10*365);
 }
 
-if(Saldi::magGrafiekZien($uid)){
-	echo Saldi::getDatapoints($uid, $timespan);
+if(SaldoModel::instance()->magGrafiekZien($uid)){
+	echo SaldoModel::instance()->getDataPoints($uid, $timespan);
 }
 
 ?>
