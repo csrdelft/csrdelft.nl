@@ -328,11 +328,16 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
 		}
 
+		$aantal = 0;
+
         $maaltijden = MaaltijdenModel::instance()->find("mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?", array($mrid, date('Y-m-d')));
         foreach ($maaltijden as $maaltijd) {
-            $this->aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $mrid, $uid);
+            if (!$this->existsByPrimaryKey(array($maaltijd->maaltijd_id, $uid))) {
+                $this->aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $mrid, $uid);
+                $aantal++;
+            }
         }
-        return $maaltijden->rowCount();
+        return $aantal;
 	}
 
 }
