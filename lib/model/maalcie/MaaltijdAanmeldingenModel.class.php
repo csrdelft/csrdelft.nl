@@ -231,30 +231,6 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 		return $aanmelding;
 	}
 
-	private static function newAanmelding($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid) {
-        $aanmelding = new MaaltijdAanmelding();
-        $aanmelding->uid = $uid;
-        $aanmelding->gasten = $gasten;
-        $aanmelding->gasten_eetwens = $opmerking;
-        $aanmelding->door_abonnement = $doorAbo;
-        $aanmelding->door_uid = $doorUid;
-        $aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
-        if ($mid == null) {  // Alle komende maaltijden
-            $maaltijden = MaaltijdenModel::instance()->find("mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?", array($doorAbo, date('Y-m-d')));
-            foreach ($maaltijden as $maaltijd) {
-                $aanmelding->maaltijd_id = $maaltijd->maaltijd_id;
-                if (!static::instance()->exists($aanmelding)) {
-                    static::instance()->create($aanmelding);
-                }
-            }
-            return $maaltijden->rowCount();
-        } else {
-            $aanmelding->maaltijd_id = $mid;
-            static::instance()->create($aanmelding);
-            return $aanmelding;
-        }
-	}
-
 	/**
 	 * Called when a Maaltijd is being deleted.
 	 * 
