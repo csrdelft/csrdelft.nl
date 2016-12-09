@@ -121,7 +121,7 @@ class ProfielView extends SmartyTemplateView {
 
 		require_once 'lid/saldi.class.php';
 		if (Saldi::magGrafiekZien($this->model->uid)) {
-			$this->smarty->assign('saldografiek', Saldi::getDatapoints($this->model->uid, 60));
+			$this->smarty->assign('saldografiek', 'ja');
 		}
 
 		$this->smarty->assign('corveepunten', $this->model->corvee_punten);
