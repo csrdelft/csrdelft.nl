@@ -4,6 +4,7 @@
  * saldi.class.php
  * 
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
+ * @deprecated 
  *
  */
 class Saldi {
