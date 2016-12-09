@@ -89,7 +89,7 @@
 						{if $taak->getUid()}
 							{ProfielModel::getLink($taak->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}
 						{else}
-							<span class="cursief">vacature</i>
+							<span class="cursief">vacature</span>
 						{/if}
 						&nbsp;({$taak->getCorveeFunctie()->naam})
 					{/table_foreach}

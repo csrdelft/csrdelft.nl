@@ -69,6 +69,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
         $aanmelding->door_uid = $uid;
         $aanmelding->door_abonnement = $mrid;
         $aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+        $aanmelding->gasten_eetwens = '';
 
         if (!$this->exists($aanmelding)) {
             $this->create($aanmelding);
