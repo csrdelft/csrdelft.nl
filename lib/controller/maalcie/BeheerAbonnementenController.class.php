@@ -79,7 +79,7 @@ class BeheerAbonnementenController extends AclController {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$abo = new MaaltijdAbonnement();
-        $abo->mlt_repetitie_id = $abo;
+        $abo->mlt_repetitie_id = $mrid;
         $abo->uid = $uid;
         $aantal = $this->model->inschakelenAbonnement($abo);
 		$this->view = new BeheerAbonnementView($abo);

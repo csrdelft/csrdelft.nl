@@ -87,9 +87,6 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
      * @throws Exception
      */
 	public function getRepetitie($mrid) {
-		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Get maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);
-		}
 		$repetitie = $this->retrieveByPrimaryKey(array($mrid));
 		if ($repetitie === false) {
 			throw new Exception('Get maaltijd-repetitie faalt: Not found $mrid =' . $mrid);
