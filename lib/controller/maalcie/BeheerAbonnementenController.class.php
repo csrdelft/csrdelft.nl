@@ -42,20 +42,6 @@ class BeheerAbonnementenController extends AclController {
 		parent::performAction($this->getParams(3));
 	}
 
-	private function beheer($alleenWaarschuwingen, $ingeschakeld = null) {
-//        if ($alleenWaarschuwingen) {
-//            $matrix_repetities = MaaltijdAbonnementenModel::instance()->loadWaarschuwingenMatrix();
-//        } elseif ($ingeschakeld) {
-//
-//        } else {
-//
-//        }
-		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenMatrix($ingeschakeld);
-		$this->view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], $alleenWaarschuwingen, $ingeschakeld);
-		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
-	}
-
 	public function waarschuwingen() {
         $matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenWaarschuwingenMatrix();
         $this->view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], true, null);
@@ -64,7 +50,10 @@ class BeheerAbonnementenController extends AclController {
 	}
 
 	public function ingeschakeld() {
-		$this->beheer(false, true);
+        $matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenMatrix(true);
+        $this->view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], false, true);
+        $this->view = new CsrLayoutPage($this->view);
+        $this->view->addCompressedResources('maalcie');
 	}
 
 	public function abonneerbaar() {

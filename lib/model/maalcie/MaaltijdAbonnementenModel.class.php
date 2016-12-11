@@ -131,24 +131,18 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 * @return MaaltijdAbonnement [uid][mrid]
 	 * @throws Exception
 	 */
-	public function getAbonnementenMatrix($ingeschakeld = null) {
+	public function getAbonnementenMatrix() {
 		$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
         $sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
         $sql.= ' r.abonnement_filter AS filter,'; // controleer later
         $sql.= ' (r.abonneerbaar = false) AS abo_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
         $sql.= ' (EXISTS ( SELECT * FROM mlt_abonnementen AS a WHERE a.mlt_repetitie_id = mrid AND a.uid = van )) AS abo';
         $sql.= ' FROM profielen AS lid, mlt_repetities AS r';
-        $values = array();
-        if ($ingeschakeld === true) {
-            $sql.= ' HAVING abo = ?';
-            $values[] = $ingeschakeld;
-        } else { // abonneerbaar alleen voor leden
-            $sql.= ' WHERE lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")';
-        }
+        $sql.= ' HAVING abo = true';
         $sql.= ' ORDER BY lid.achternaam, lid.voornaam ASC';
         $db = \Database::instance();
         $query = $db->prepare($sql);
-        $query->execute($values);
+        $query->execute();
         $abos = $query->fetchAll();
 
 		$matrix = array();
@@ -175,7 +169,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 			}
 			$matrix[$uid][$mrid] = $abonnement;
 		}
-		return $this->fillHoles($matrix, $repById, $ingeschakeld);
+		return $this->fillHoles($matrix, $repById, true);
 	}
 
     /**
