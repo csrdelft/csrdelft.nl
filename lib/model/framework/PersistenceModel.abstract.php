@@ -154,6 +154,20 @@ abstract class PersistenceModel implements Persistence {
 		return (int) $result->fetchColumn();
 	}
 
+    /**
+     * Select existing entities with optional criteria.
+     *
+     * Allows for selecting specific sums, averages and counts
+     *
+     * @param array $columns SELECT
+     * @param string $criteria WHERE
+     * @param array $criteria_params optional named parameters
+     * @return PDOStatement
+     */
+    public function select(array $columns, $criteria = null, array $criteria_params = array()) {
+        return Database::sqlSelect($columns, $this->getTableName(), $criteria, $criteria_params);
+    }
+
 	/**
 	 * Check if enitity exists.
 	 *

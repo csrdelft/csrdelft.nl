@@ -72,7 +72,7 @@ class AgendaModel extends PersistenceModel {
 
 		// Maaltijden
 		if (LidInstellingen::get('agenda', 'toonMaaltijden') === 'ja') {
-			$result = array_merge($result, MaaltijdenModel::getMaaltijdenVoorAgenda($van, $tot));
+			$result = array_merge($result, MaaltijdenModel::instance()->getMaaltijdenVoorAgenda($van, $tot));
 		}
 
 		// CorveeTaken

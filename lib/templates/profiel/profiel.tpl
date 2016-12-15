@@ -235,7 +235,7 @@
 				<div class="label">Abo's:</div>
 				<ul class="nobullets data">
 					{foreach from=$abos item=abonnement}
-						<li>{$abonnement->getMaaltijdRepetitie()->getStandaardTitel()}</li>
+						<li>{$abonnement->maaltijd_repetitie->standaard_titel}</li>
 						{/foreach}
 				</ul>
 			{/if}
@@ -253,7 +253,7 @@
 					<div class="label">Recent:</div>
 					<ul class="nobullets data">
 						{foreach from=$recenteAanmeldingen item=aanmelding}
-							<li>{$aanmelding->getMaaltijd()->getTitel()} <span class="lichtgrijs">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
+							<li>{$aanmelding->maaltijd->getTitel()} <span class="lichtgrijs">({$aanmelding->maaltijd->datum|date_format:"%a %e %b"})</span></li>
 							{/foreach}
 					</ul>
 				{/if}

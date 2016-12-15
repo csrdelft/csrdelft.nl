@@ -22,7 +22,7 @@
 	</td>
 	<td class="text-center" style="width: 50px;">
 {assign var=aantal value=$taak->getAantalKeerGemaild()}
-{if !$taak->getIsVerwijderd() and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
+{if !$taak->getIsVerwijderd() and (!isset($maaltijd) or !$maaltijd->verwijderd)}
 	{assign var="wijzigbaar" value="true"}
 	{if $taak->getUid()}
 		{$aantal}x

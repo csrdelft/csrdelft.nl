@@ -29,7 +29,7 @@ class BeheerAbonnementenView extends SmartyTemplateView {
 	public function view() {
 		$this->smarty->assign('toon', $this->status);
 
-		$this->smarty->assign('aborepetities', MaaltijdRepetitiesModel::getAbonneerbareRepetities());
+		$this->smarty->assign('aborepetities', MaaltijdRepetitiesModel::instance()->find('abonneerbaar = true'));
 		$this->smarty->assign('repetities', $this->repetities);
 		$this->smarty->assign('matrix', $this->model);
 
@@ -64,8 +64,8 @@ class BeheerAbonnementView extends SmartyTemplateView {
 
 	public function view() {
 		$this->smarty->assign('abonnement', $this->model);
-		$this->smarty->assign('uid', $this->model->getUid());
-		$this->smarty->assign('vanuid', $this->model->getVanUid());
+		$this->smarty->assign('uid', $this->model->uid);
+		$this->smarty->assign('vanuid', $this->model->van_uid);
 		echo '<td id="maalcie-melding-veld">' . getMelding() . '</td>';
 		$this->smarty->display('maalcie/abonnement/beheer_abonnement_veld.tpl');
 	}

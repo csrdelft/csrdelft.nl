@@ -214,16 +214,16 @@ function getAgenda($from, $to) {
 	}
 
 	// Maaltijden
-	$maaltijden = MaaltijdenModel::getMaaltijdenVoorAgenda($from, $to);
+	$maaltijden = MaaltijdenModel::instance()->getMaaltijdenVoorAgenda($from, $to);
 	$result = array_merge($result, $maaltijden);
 
 	// Maaltijd aanmeldingen
 	$mids = array();
 	foreach ($maaltijden as $maaltijd) {
-		$id = $maaltijd->getMaaltijdId();
+		$id = $maaltijd->maaltijd_id;
 		$mids[$id] = $maaltijd;
 	}
-	$maaltijdAanmeldingen = array_keys(MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($mids, $_SESSION['_uid']));
+	$maaltijdAanmeldingen = array_keys(MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid($mids, $_SESSION['_uid']));
 
 	// Sorteren
 	usort($result, array('AgendaModel', 'vergelijkAgendeerbaars'));
@@ -243,8 +243,8 @@ function maaltijdAanmelden($id) {
 	require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 
 	try {
-		$aanmelding = MaaltijdAanmeldingenModel::aanmeldenVoorMaaltijd($id, $_SESSION['_uid'], $_SESSION['_uid']);
-		return $aanmelding->getMaaltijd();
+		$aanmelding = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($id, $_SESSION['_uid'], $_SESSION['_uid']);
+		return $aanmelding->maaltijd;
 	} catch (Exception $e) {
 		http_response_code(403);
 		return $e->getMessage();
@@ -256,7 +256,7 @@ function maaltijdAfmelden($id) {
 	require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 
 	try {
-		$maaltijd = MaaltijdAanmeldingenModel::afmeldenDoorLid($id, $_SESSION['_uid']);
+		$maaltijd = MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($id, $_SESSION['_uid']);
 		return $maaltijd;
 	} catch (Exception $e) {
 		http_response_code(403);

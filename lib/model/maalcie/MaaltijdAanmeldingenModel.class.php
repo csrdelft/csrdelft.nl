@@ -7,172 +7,184 @@ require_once 'model/maalcie/MaaltijdenModel.class.php';
  * MaaltijdAanmeldingenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class MaaltijdAanmeldingenModel {
+class MaaltijdAanmeldingenModel extends PersistenceModel  {
 
-	public static function aanmeldenVoorMaaltijd($mid, $uid, $doorUid, $aantalGasten = 0, $beheer = false, $gastenEetwens = '') {
-		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
-			MaaltijdenModel::sluitMaaltijd($maaltijd);
+    const ORM = 'MaaltijdAanmelding';
+    const DIR = 'maalcie/';
+
+    protected static $instance;
+
+	public function aanmeldenVoorMaaltijd($mid, $uid, $doorUid, $aantalGasten = 0, $beheer = false, $gastenEetwens = '') {
+		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
+			MaaltijdenModel::instance()->sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer) {
-			if (!self::checkAanmeldFilter($uid, $maaltijd->getAanmeldFilter())) {
-				throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $maaltijd->getAanmeldFilter());
+			if (!$this->checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) {
+				throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $maaltijd->aanmeld_filter);
 			}
-			if ($maaltijd->getIsGesloten()) {
+			if ($maaltijd->gesloten) {
 				throw new Exception('Maaltijd is gesloten');
 			}
-			if ($maaltijd->getAantalAanmeldingen() >= $maaltijd->getAanmeldLimiet()) {
+			if ($maaltijd->getAantalAanmeldingen() >= $maaltijd->aanmeld_limiet) {
 				throw new Exception('Maaltijd zit al vol');
 			}
 		}
-		if (self::getIsAangemeld($mid, $uid)) {
+
+		if ($this->getIsAangemeld($mid, $uid)) {
 			if (!$beheer) {
 				throw new Exception('Al aangemeld');
 			}
-			// aanmelding van lid updaten met aantal gasen door beheerder
-			$aanmelding = self::loadAanmelding($mid, $uid);
-			$verschil = $aantalGasten - $aanmelding->getAantalGasten();
+			// aanmelding van lid updaten met aantal gasten door beheerder
+			$aanmelding = $this->loadAanmelding($mid, $uid);
+			$verschil = $aantalGasten - $aanmelding->aantal_gasten;
 			if ($verschil === 0) {
 				throw new Exception('Al aangemeld met ' . $aantalGasten . ' gasten');
 			}
-			$aanmelding->setAantalGasten($aantalGasten);
-			$aanmelding->setLaatstGewijzigd(date('Y-m-d H:i'));
-			self::updateAanmelding($aanmelding);
-			$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() + $verschil);
+			$aanmelding->aantal_gasten = $aantalGasten;
+			$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+            $this->update($aanmelding);
+			$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
 		} else {
-			$aanmelding = self::newAanmelding($mid, $uid, $aantalGasten, $gastenEetwens, null, $doorUid);
-			$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() + 1 + $aantalGasten);
+            $aanmelding = new MaaltijdAanmelding();
+            $aanmelding->maaltijd_id = $mid;
+            $aanmelding->uid = $uid;
+            $aanmelding->door_uid = $doorUid;
+            $aanmelding->aantal_gasten = $aantalGasten;
+            $aanmelding->gasten_eetwens = $gastenEetwens;
+            $aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+
+            $this->create($aanmelding);
+
+			$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + 1 + $aantalGasten;
 		}
-		$aanmelding->setMaaltijd($maaltijd);
+		$aanmelding->maaltijd = $maaltijd;
 		return $aanmelding;
 	}
 
-	public static function aanmeldenDoorAbonnement($mid, $mrid, $uid) {
-		return self::newAanmelding($mid, $uid, 0, '', $mrid, null);
-	}
+	public function aanmeldenDoorAbonnement($mid, $mrid, $uid) {
+        $aanmelding = new MaaltijdAanmelding();
+        $aanmelding->maaltijd_id = $mid;
+        $aanmelding->uid = $uid;
+        $aanmelding->door_uid = $uid;
+        $aanmelding->door_abonnement = $mrid;
+        $aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+        $aanmelding->gasten_eetwens = '';
 
-	/**
-	 * Called when a MaaltijdAbonnement is being deleted (turned off) or a MaaltijdRepetitie is being deleted.
-	 * 
-	 * @param int $mrid id van de betreffede MaaltijdRepetitie
-	 * @param type $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
-	 */
-	public static function afmeldenDoorAbonnement($mrid, $uid = null) {
+        if (!$this->exists($aanmelding)) {
+            $this->create($aanmelding);
+        }
+    }
+
+    /**
+     * Called when a MaaltijdAbonnement is being deleted (turned off) or a MaaltijdRepetitie is being deleted.
+     *
+     * @param int $mrid id van de betreffede MaaltijdRepetitie
+     * @param type $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
+     * @return int|void
+     */
+	public function afmeldenDoorAbonnement($mrid, $uid) {
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
-		$maaltijden = MaaltijdenModel::getKomendeOpenRepetitieMaaltijden($mrid);
+		$maaltijden = MaaltijdenModel::instance()->getKomendeOpenRepetitieMaaltijden($mrid);
 		if (empty($maaltijden)) {
 			return;
 		}
 		$byMid = array();
 		foreach ($maaltijden as $maaltijd) {
-			if (!$maaltijd->getIsGesloten() && !$maaltijd->getIsVerwijderd()) {
-				$byMid[$maaltijd->getMaaltijdId()] = $maaltijd;
+			if (!$maaltijd->gesloten && !$maaltijd->verwijderd) {
+				$byMid[$maaltijd->maaltijd_id] = $maaltijd;
 			}
 		}
-		$aanmeldingen = self::getAanmeldingenVoorLid($byMid, $uid);
+		$aanmeldingen = $this->getAanmeldingenVoorLid($byMid, $uid);
 		$aantal = 0;
 		foreach ($aanmeldingen as $mid => $aanmelding) {
-			if ($mrid === $aanmelding->getDoorAbonnement()) {
-				self::deleteAanmeldingen($mid, $uid);
+			if ($mrid === $aanmelding->door_abonnement) {
+                $this->deleteByPrimaryKey(array($mid, $uid));
 				$aantal++;
 			}
 		}
 		return $aantal;
 	}
 
-	public static function afmeldenDoorLid($mid, $uid, $beheer = false) {
-		if (!self::getIsAangemeld($mid, $uid)) {
+	public function afmeldenDoorLid($mid, $uid, $beheer = false) {
+		if (!$this->getIsAangemeld($mid, $uid)) {
 			throw new Exception('Niet aangemeld');
 		}
-		$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-		if (!$maaltijd->getIsGesloten() && $maaltijd->getBeginMoment() < time()) {
-			MaaltijdenModel::sluitMaaltijd($maaltijd);
+		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
+			MaaltijdenModel::instance()->sluitMaaltijd($maaltijd);
 		}
-		if (!$beheer && $maaltijd->getIsGesloten()) {
+		if (!$beheer && $maaltijd->gesloten) {
 			throw new Exception('Maaltijd is gesloten');
 		}
-		$aanmelding = self::loadAanmelding($mid, $uid);
-		self::deleteAanmeldingen($mid, $uid);
-		$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() - 1 - $aanmelding->getAantalGasten());
+		$aanmelding = $this->loadAanmelding($mid, $uid);
+		$this->deleteByPrimaryKey(array($mid, $uid));
+		$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() - 1 - $aanmelding->aantal_gasten;
 		return $maaltijd;
 	}
 
-	public static function saveGasten($mid, $uid, $gasten) {
+	public function saveGasten($mid, $uid, $gasten) {
 		if (!is_int($mid) || $mid <= 0) {
 			throw new Exception('Save gasten faalt: Invalid $mid =' . $mid);
 		}
 		if (!is_int($gasten) || $gasten < 0) {
 			throw new Exception('Save gasten faalt: Invalid $gasten =' . $gasten);
 		}
-		if (!self::getIsAangemeld($mid, $uid)) {
+		if (!$this->getIsAangemeld($mid, $uid)) {
 			throw new Exception('Niet aangemeld');
 		}
-		$db = \Database::instance();
-		try {
-			$db->beginTransaction();
-			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-			if ($maaltijd->getIsGesloten()) {
-				throw new Exception('Maaltijd is gesloten');
-			}
-			$aanmelding = self::loadAanmelding($mid, $uid);
-			$verschil = $gasten - $aanmelding->getAantalGasten();
-			if ($maaltijd->getAantalAanmeldingen() + $verschil > $maaltijd->getAanmeldLimiet()) {
-				throw new Exception('Maaltijd zit te vol');
-			}
-			if ($aanmelding->getAantalGasten() !== $gasten) {
-				$aanmelding->setLaatstGewijzigd(date('Y-m-d H:i'));
-			}
-			$aanmelding->setAantalGasten($gasten);
-			self::updateAanmelding($aanmelding);
-			$maaltijd->setAantalAanmeldingen($maaltijd->getAantalAanmeldingen() + $verschil);
-			$aanmelding->setMaaltijd($maaltijd);
-			$db->commit();
-			return $aanmelding;
-		} catch (\Exception $e) {
-			$db->rollback();
-			throw $e; // rethrow to controller
-		}
+
+        $maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+        if ($maaltijd->gesloten) {
+            throw new Exception('Maaltijd is gesloten');
+        }
+        $aanmelding = $this->loadAanmelding($mid, $uid);
+        $verschil = $gasten - $aanmelding->aantal_gasten;
+        if ($maaltijd->getAantalAanmeldingen() + $verschil > $maaltijd->aanmeld_limiet) {
+            throw new Exception('Maaltijd zit te vol');
+        }
+        if ($aanmelding->aantal_gasten !== $gasten) {
+            $aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+        }
+        $aanmelding->aantal_gasten = $gasten;
+        $this->update($aanmelding);
+        $maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
+        $aanmelding->maaltijd = $maaltijd;
+        return $aanmelding;
 	}
 
-	public static function saveGastenEetwens($mid, $uid, $opmerking) {
+	public function saveGastenEetwens($mid, $uid, $opmerking) {
 		if (!is_int($mid) || $mid <= 0) {
 			throw new Exception('Save gasten eetwens faalt: Invalid $mid =' . $mid);
 		}
-		if (!self::getIsAangemeld($mid, $uid)) {
+		if (!$this->getIsAangemeld($mid, $uid)) {
 			throw new Exception('Niet aangemeld');
 		}
-		$db = \Database::instance();
-		try {
-			$db->beginTransaction();
-			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-			if ($maaltijd->getIsGesloten()) {
-				throw new Exception('Maaltijd is gesloten');
-			}
-			$aanmelding = self::loadAanmelding($mid, $uid);
-			if ($aanmelding->getAantalGasten() <= 0) {
-				throw new Exception('Geen gasten aangemeld');
-			}
-			$aanmelding->setMaaltijd($maaltijd);
-			$aanmelding->setGastenEetwens($opmerking);
-			self::updateAanmelding($aanmelding);
-			$db->commit();
-			return $aanmelding;
-		} catch (\Exception $e) {
-			$db->rollback();
-			throw $e; // rethrow to controller
-		}
+
+        $maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+        if ($maaltijd->gesloten) {
+            throw new Exception('Maaltijd is gesloten');
+        }
+        $aanmelding = $this->loadAanmelding($mid, $uid);
+        if ($aanmelding->aantal_gasten <= 0) {
+            throw new Exception('Geen gasten aangemeld');
+        }
+        $aanmelding->maaltijd = $maaltijd;
+        $aanmelding->gasten_eetwens = $opmerking;
+        $this->update($aanmelding);
+        return $aanmelding;
 	}
 
-	public static function getAanmeldingenVoorMaaltijd(Maaltijd $maaltijd) {
-		$aanmeldingen = self::loadAanmeldingen(array($maaltijd->getMaaltijdId()));
+	public function getAanmeldingenVoorMaaltijd(Maaltijd $maaltijd) {
+        $aanmeldingen = $this->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
-			$aanmelding->setMaaltijd($maaltijd);
-			$naam = ProfielModel::getNaam($aanmelding->getUid(), 'streeplijst');
+			$aanmelding->maaltijd = $maaltijd;
+			$naam = ProfielModel::getNaam($aanmelding->uid, 'streeplijst');
 			$lijst[$naam] = $aanmelding;
-			for ($i = $aanmelding->getAantalGasten(); $i > 0; $i--) {
+			for ($i = $aanmelding->aantal_gasten; $i > 0; $i--) {
 				$gast = new MaaltijdAanmelding();
-				$gast->setDoorUid($aanmelding->getUid());
+				$gast->door_uid = ($aanmelding->uid);
 				$lijst[$naam . 'gast' . $i] = $gast;
 			}
 		}
@@ -180,100 +192,43 @@ class MaaltijdAanmeldingenModel {
 		return $lijst;
 	}
 
-	public static function getRecenteAanmeldingenVoorLid($uid, $timestamp) {
-		$maaltijdenById = MaaltijdenModel::getRecenteMaaltijden($timestamp);
-		return MaaltijdAanmeldingenModel::getAanmeldingenVoorLid($maaltijdenById, $uid);
+	public function getRecenteAanmeldingenVoorLid($uid, $timestamp) {
+		$maaltijdenById = MaaltijdenModel::instance()->getRecenteMaaltijden($timestamp);
+		return $this->getAanmeldingenVoorLid($maaltijdenById, $uid);
 	}
 
-	public static function getAanmeldingenVoorLid($maaltijdenById, $uid) {
+	public function getAanmeldingenVoorLid($maaltijdenById, $uid) {
 		if (empty($maaltijdenById)) {
 			return $maaltijdenById; // array()
 		}
-		$aanmeldingen = self::loadAanmeldingen(array_keys($maaltijdenById), $uid);
+
+		$aanmeldingen = array();
+		foreach ($maaltijdenById as $maaltijd) {
+            $aanmeldingen = array_merge($aanmeldingen, $this->find('maaltijd_id = ? AND uid = ?', array($maaltijd->maaltijd_id, $uid))->fetchAll());
+        }
+
 		$result = array();
 		foreach ($aanmeldingen as $aanmelding) {
-			$aanmelding->setMaaltijd($maaltijdenById[$aanmelding->getMaaltijdId()]);
-			$result[$aanmelding->getMaaltijdId()] = $aanmelding;
+			$aanmelding->maaltijd = $maaltijdenById[$aanmelding->maaltijd_id];
+			$result[$aanmelding->maaltijd_id] = $aanmelding;
 		}
 		return $result;
 	}
 
-	public static function getIsAangemeld($mid, $uid, $doorAbo = null) {
-		if (!is_int($mid) || $mid <= 0) {
-			throw new Exception('Load maaltijd faalt: Invalid $mid =' . $mid);
-		}
-		$sql = 'SELECT EXISTS (SELECT * FROM mlt_aanmeldingen WHERE maaltijd_id=? AND uid=?';
-		$values = array($mid, $uid);
-		if ($doorAbo !== null) {
-			$sql.= ' AND door_abonnement=?';
-			$values[] = $doorAbo;
-		}
-		$sql.= ')';
-		$query = \Database::instance()->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchColumn();
-		return (boolean) $result;
+	public function getIsAangemeld($mid, $uid) {
+        $aanmelding = new MaaltijdAanmelding();
+        $aanmelding->maaltijd_id = $mid;
+        $aanmelding->uid = $uid;
+
+        return $this->exists($aanmelding);
 	}
 
-	private static function loadAanmelding($mid, $uid) {
-		$aanmeldingen = self::loadAanmeldingen(array($mid), $uid, 1);
-		if (!array_key_exists(0, $aanmeldingen)) {
+	public function loadAanmelding($mid, $uid) {
+        $aanmelding = $this->retrieveByPrimaryKey(array($mid, $uid));
+		if ($aanmelding === false) {
 			throw new Exception('Load aanmelding faalt: Not found $mid =' . $mid);
 		}
-		return $aanmeldingen[0];
-	}
-
-	/**
-	 * @param array $mids
-	 * @param null $uid
-	 * @param null $limit
-	 * @return MaaltijdAanmelding[]
-	 */
-	private static function loadAanmeldingen(array $mids, $uid = null, $limit = null) {
-		$sql = 'SELECT maaltijd_id, uid, aantal_gasten, gasten_eetwens, door_abonnement, door_uid, laatst_gewijzigd';
-		$sql.= ' FROM mlt_aanmeldingen';
-		$sql.= ' WHERE (maaltijd_id=?';
-		for ($i = sizeof($mids); $i > 1; $i--) {
-			$sql.= ' OR maaltijd_id=?';
-		}
-		$sql.= ')';
-		$values = $mids;
-		if ($uid !== null) {
-			$sql.= ' AND uid=?';
-			$values[] = $uid;
-		}
-		if (is_int($limit)) {
-			$sql.= ' LIMIT ' . $limit;
-		}
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, 'MaaltijdAanmelding');
-		return $result;
-	}
-
-	private static function newAanmelding($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid) {
-		$sql = 'INSERT IGNORE INTO mlt_aanmeldingen';
-		$sql.= ' (maaltijd_id, uid, aantal_gasten, gasten_eetwens, door_abonnement, door_uid, laatst_gewijzigd)';
-		$wanneer = date('Y-m-d H:i');
-		if ($mid === null) { // niet voor specifieke maaltijd? dan voor alle komende repetitie-maaltijden
-			$sql.= ' SELECT maaltijd_id, ?, ?, ?, ?, ?, ? FROM mlt_maaltijden';
-			$sql.= ' WHERE mlt_repetitie_id = ? AND gesloten = FALSE AND verwijderd = FALSE AND datum >= ?';
-			$values = array($uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer, $doorAbo, date('Y-m-d'));
-		} else {
-			$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?)';
-			$values = array($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer);
-		}
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($mid !== null) {
-			if ($query->rowCount() !== 1) {
-				throw new Exception('New aanmelding faalt: $query->rowCount() =' . $query->rowCount());
-			}
-			return new MaaltijdAanmelding($mid, $uid, $gasten, $opmerking, $doorAbo, $doorUid, $wanneer);
-		}
-		return $query->rowCount();
+		return $aanmelding;
 	}
 
 	/**
@@ -281,47 +236,11 @@ class MaaltijdAanmeldingenModel {
 	 * 
 	 * @param int $mid maaltijd-id
 	 */
-	public static function deleteAanmeldingenVoorMaaltijd($mid) {
-		self::deleteAanmeldingen($mid);
-	}
-
-	private static function deleteAanmeldingen($mid, $uid = null) {
-		$sql = 'DELETE FROM mlt_aanmeldingen';
-		$sql.= ' WHERE maaltijd_id=?';
-		$values = array($mid);
-		if ($uid !== null) {
-			$sql.= ' AND uid=?';
-			$values[] = $uid;
-		}
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($uid !== null && $query->rowCount() !== 1) {
-			throw new Exception('Delete aanmelding faalt: $query->rowCount() =' . $query->rowCount());
-		}
-
-		return 1;
-	}
-
-	private static function updateAanmelding(MaaltijdAanmelding $aanmelding) {
-		$sql = 'UPDATE mlt_aanmeldingen';
-		$sql.= ' SET aantal_gasten=?, gasten_eetwens=?, door_abonnement=?, door_uid=?, laatst_gewijzigd=?';
-		$sql.= ' WHERE maaltijd_id=? AND uid=?';
-		$values = array(
-			$aanmelding->getAantalGasten(),
-			$aanmelding->getGastenEetwens(),
-			$aanmelding->getDoorAbonnement(),
-			$aanmelding->getDoorUid(),
-			$aanmelding->getLaatstGewijzigd(),
-			$aanmelding->getMaaltijdId(),
-			$aanmelding->getUid()
-		);
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($query->rowCount() !== 1) {
-			throw new Exception('Update aanmelding faalt: $query->rowCount() =' . $query->rowCount());
-		}
+	public function deleteAanmeldingenVoorMaaltijd($mid) {
+        $aanmeldingen = $this->find('maaltijd_id = ?', array($mid));
+        foreach ($aanmeldingen as $aanmelding) {
+            $this->delete($aanmelding);
+        }
 	}
 
 	/**
@@ -330,28 +249,32 @@ class MaaltijdAanmeldingenModel {
 	 * @param Maaltijd[] $maaltijden
 	 * @return int|void
 	 */
-	public static function checkAanmeldingenFilter($filter, array $maaltijden) {
+	public function checkAanmeldingenFilter($filter, $maaltijden) {
 		$mids = array();
 		foreach ($maaltijden as $maaltijd) {
-			if (!$maaltijd->getIsGesloten() && !$maaltijd->getIsVerwijderd()) {
-				$mids[] = $maaltijd->getMaaltijdId();
+			if (!$maaltijd->gesloten && !$maaltijd->verwijderd) {
+				$mids[] = $maaltijd->maaltijd_id;
 			}
 		}
 		if (empty($mids)) {
 			return 0;
 		}
 		$aantal = 0;
-		$aanmeldingen = self::loadAanmeldingen($mids);
+        $aanmeldingen = array();
+        foreach ($mids as $mid) {
+            array_merge($aanmeldingen, $this->find('maaltijd_id = ?', array($mid))->fetchAll());
+        }
 		foreach ($aanmeldingen as $aanmelding) { // check filter voor elk aangemeld lid
-			$uid = $aanmelding->getUid();
-			if (!self::checkAanmeldFilter($uid, $filter)) { // verwijder aanmelding indien niet toegestaan
-				$aantal += self::deleteAanmeldingen($aanmelding->getMaaltijdId(), $uid);
+			$uid = $aanmelding->uid;
+			if (!$this->checkAanmeldFilter($uid, $filter)) { // verwijder aanmelding indien niet toegestaan
+                $aantal += 1 + $aanmelding->aantal_gasten;
+                $this->delete($aanmelding);
 			}
 		}
 		return $aantal;
 	}
 
-	public static function checkAanmeldFilter($uid, $filter) {
+	public function checkAanmeldFilter($uid, $filter) {
 		$account = AccountModel::get($uid); // false if account does not exist
 		if (!$account) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
@@ -372,15 +295,22 @@ class MaaltijdAanmeldingenModel {
 	 * @return int|false aantal aanmeldingen or false
 	 * @throws Exception indien niet toegestaan vanwege aanmeldrestrictie
 	 */
-	public static function aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid) {
-		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Invalid abonnement: $voorAbo =' . $mrid);
+	public function aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid) {
+		$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
+		if (!$this->checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
+			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
 		}
-		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
-		if (!self::checkAanmeldFilter($uid, $repetitie->getAbonnementFilter())) {
-			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->getAbonnementFilter());
-		}
-		return self::newAanmelding(null, $uid, 0, '', $mrid, null);
+
+		$aantal = 0;
+
+        $maaltijden = MaaltijdenModel::instance()->find("mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?", array($mrid, date('Y-m-d')));
+        foreach ($maaltijden as $maaltijd) {
+            if (!$this->existsByPrimaryKey(array($maaltijd->maaltijd_id, $uid))) {
+                $this->aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $mrid, $uid);
+                $aantal++;
+            }
+        }
+        return $aantal;
 	}
 
 }

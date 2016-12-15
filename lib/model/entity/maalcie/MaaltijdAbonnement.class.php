@@ -26,78 +26,23 @@
  * Zie ook MaaltijdAanmelding.class.php
  * 
  */
-class MaaltijdAbonnement {
+class MaaltijdAbonnement extends PersistentEntity  {
 	# shared primary key
 
-	private $mlt_repetitie_id; # foreign key mlt_repetitie.id
-	private $uid; # foreign key lid.uid
-	private $wanneer_ingeschakeld; # datetime
-	private $maaltijd_repetitie;
-	private $van_uid;
-	private $waarschuwing;
-	private $foutmelding;
+	public $mlt_repetitie_id; # foreign key mlt_repetitie.id
+	public $uid; # foreign key lid.uid
+	public $wanneer_ingeschakeld; # datetime
+	public $maaltijd_repetitie;
+	public $van_uid;
+	public $waarschuwing;
+	public $foutmelding;
 
-	public function __construct($mrid = 0, $uid = '', $wanneer = '') {
-		$this->mlt_repetitie_id = (int) $mrid;
-		$this->uid = $uid;
-		$this->setWanneerIngeschakeld($wanneer);
-	}
+    protected static $table_name = 'mlt_abonnementen';
+    protected static $persistent_attributes = array(
+        'mlt_repetitie_id' => array(T::Integer),
+        'uid' => array(T::UID),
+        'wanneer_ingeschakeld' => array(T::DateTime),
+    );
 
-	public function getMaaltijdRepetitieId() {
-		return (int) $this->mlt_repetitie_id;
-	}
-
-	public function getUid() {
-		return $this->uid;
-	}
-
-	public function getVanUid() {
-		return $this->van_uid;
-	}
-
-	public function getWanneerIngeschakeld() {
-		return $this->wanneer_ingeschakeld;
-	}
-
-	public function getMaaltijdRepetitie() {
-		return $this->maaltijd_repetitie;
-	}
-
-	public function getWaarschuwing() {
-		return $this->waarschuwing;
-	}
-
-	public function getFoutmelding() {
-		return $this->foutmelding;
-	}
-
-	public function setWanneerIngeschakeld($datumtijd) {
-		if (!is_string($datumtijd)) {
-			throw new Exception('Geen string: wanneer ingeschakeld');
-		}
-		$this->wanneer_ingeschakeld = $datumtijd;
-	}
-
-	public function setMaaltijdRepetitie(MaaltijdRepetitie $repetitie) {
-		$this->maaltijd_repetitie = $repetitie;
-	}
-
-	public function setVanUid($uid) {
-		$this->van_uid = $uid;
-	}
-
-	public function setWaarschuwing($string) {
-		if (!is_string($string)) {
-			throw new Exception('Geen string: set waarschuwing');
-		}
-		$this->waarschuwing = $string;
-	}
-
-	public function setFoutmelding($string) {
-		if (!is_string($string)) {
-			throw new Exception('Geen string: set foutmelding');
-		}
-		$this->foutmelding = $string;
-	}
-
+    protected static $primary_key = array('mlt_repetitie_id', 'uid');
 }

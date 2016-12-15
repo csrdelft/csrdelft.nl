@@ -14,7 +14,7 @@ class BeheerMaaltijdenView extends SmartyTemplateView {
 	private $archief;
 	private $repetities;
 
-	public function __construct(array $maaltijden, $prullenbak = false, $archief = false, $repetities = null) {
+	public function __construct($maaltijden, $prullenbak = false, $archief = false, $repetities = null) {
 		parent::__construct($maaltijden);
 		$this->prullenbak = $prullenbak;
 		$this->archief = $archief;

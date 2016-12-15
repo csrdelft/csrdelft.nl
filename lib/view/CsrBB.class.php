@@ -873,18 +873,18 @@ HTML;
 		require_once 'view/maalcie/MaaltijdKetzerView.class.php';
 		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginModel::getUid()); // met filter
+				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(\LoginModel::getUid()); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
 					return 'Geen aankomende maaltijd.';
 				}
 				$maaltijd = reset($maaltijden);
 				if (endsWith($mid, '2') && $aantal >= 2) {
-					unset($maaltijden[$maaltijd->getMaaltijdId()]);
+					unset($maaltijden[$maaltijd->maaltijd_id]);
 					$maaltijd2 = reset($maaltijden);
 				}
 			} elseif (preg_match('/\d+/', $mid)) {
-				$maaltijd = MaaltijdenModel::getMaaltijdVoorKetzer((int) $mid); // met filter
+				$maaltijd = MaaltijdenModel::instance()->getMaaltijdVoorKetzer((int) $mid); // met filter
 				if (!$maaltijd) {
 					return '';
 				}
@@ -898,21 +898,21 @@ HTML;
 		if (!isset($maaltijd)) {
 			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 		}
-		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginModel::getUid());
+		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), \LoginModel::getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		} else {
-			$aanmelding = $aanmeldingen[$maaltijd->getMaaltijdId()];
+			$aanmelding = $aanmeldingen[$maaltijd->maaltijd_id];
 		}
 		$ketzer = new MaaltijdKetzerView($maaltijd, $aanmelding);
 		$result = $ketzer->getHtml();
 
 		if ($maaltijd2 !== null) {
-			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginModel::getUid());
+			$aanmeldingen2 = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd2->maaltijd_id => $maaltijd2), \LoginModel::getUid());
 			if (empty($aanmeldingen2)) {
 				$aanmelding2 = null;
 			} else {
-				$aanmelding2 = $aanmeldingen2[$maaltijd2->getMaaltijdId()];
+				$aanmelding2 = $aanmeldingen2[$maaltijd2->maaltijd_id];
 			}
 			$ketzer2 = new MaaltijdKetzerView($maaltijd2, $aanmelding2);
 			$result .= $ketzer2->getHtml();

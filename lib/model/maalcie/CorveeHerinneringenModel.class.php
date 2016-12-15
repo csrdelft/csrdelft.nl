@@ -25,7 +25,7 @@ class CorveeHerinneringenModel {
 		$bericht = $taak->getCorveeFunctie()->email_bericht;
 		$eten = '';
 		if ($taak->getMaaltijdId() !== null) {
-			$aangemeld = MaaltijdAanmeldingenModel::getIsAangemeld($taak->getMaaltijdId(), $uid);
+			$aangemeld = MaaltijdAanmeldingenModel::instance()->getIsAangemeld($taak->getMaaltijdId(), $uid);
 			if ($aangemeld) {
 				$eten = Instellingen::get('corvee', 'mail_wel_meeeten');
 			} else {

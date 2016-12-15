@@ -5,22 +5,22 @@
 {else}
 	<p>Op deze pagina kunt u de corveetaken aanmaken, wijzigen en verwijderen
 		{if isset($maaltijd)} voor de
-			{if $maaltijd->getArchief() !== null}
+			{if $maaltijd->archief !== null}
 				<span class="dikgedrukt">gearchiveerde</span>
-			{elseif $maaltijd->getIsVerwijderd()}
+			{elseif $maaltijd->verwijderd}
 				<span class="dikgedrukt">verwijderde</span>
 			{/if}
 			maaltijd:<br />
-			{if $maaltijd->getArchief() !== null}
+			{if $maaltijd->archief !== null}
 				{icon get="compress" title="Maaltijd is gearchiveerd"}
-			{elseif $maaltijd->getIsVerwijderd()}
+			{elseif $maaltijd->verwijderd}
 				{icon get="bin" title="Maaltijd is verwijderd"}
 			{else}
-				<a href="/maaltijdenbeheer/beheer/{$maaltijd->getMaaltijdId()}" title="Wijzig gekoppelde maaltijd" class="btn popup">{icon get="cup_edit"}</a>
+				<a href="/maaltijdenbeheer/beheer/{$maaltijd->maaltijd_id}" title="Wijzig gekoppelde maaltijd" class="btn popup">{icon get="cup_edit"}</a>
 			{/if}
-			<span class="dikgedrukt">{$maaltijd->getTitel()} op {$maaltijd->getDatum()|date_format:"%A %e %B"} om {$maaltijd->getTijd()|date_format:"%H:%M"}</span>
+			<span class="dikgedrukt">{$maaltijd->getTitel()} op {$maaltijd->datum|date_format:"%A %e %B"} om {$maaltijd->tijd|date_format:"%H:%M"}</span>
 		</p>
-		{if $maaltijd->getIsVerwijderd()}
+		{if $maaltijd->verwijderd}
 			<p>Onderstaande tabel toont de corveetaken voor deze maaltijd, ook die verwijderd zijn.
 			{else}
 			<p>Onderstaande tabel toont <span class="cursief">alleen</span> de corveetaken voor deze maaltijd die <span class="cursief">niet verwijderd</span> zijn.
@@ -37,15 +37,15 @@
 	<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="btn">{icon get="clock"} Herinneringen versturen</a>
 	*}
 	<div class="float-right">
-		{if !isset($maaltijd) OR !$maaltijd->getIsVerwijderd()}
+		{if !isset($maaltijd) OR !$maaltijd->verwijderd}
 			<a class="btn" onclick="$(this).hide(); taken_show_old();">{icon get="eye"} Toon verleden</a>
 			<a href="{$smarty.const.maalcieUrl}/prullenbak" class="btn">{icon get="bin_closed"} Open prullenbak</a>
-			<a href="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" class="btn post popup">{icon get="add"} Nieuwe taak</a>
+			<a href="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->maaltijd_id}{/if}" class="btn post popup">{icon get="add"} Nieuwe taak</a>
 		{/if}
 	</div>
 {/if}
-{if isset($repetities) and (!isset($maaltijd) or !$maaltijd->getIsVerwijderd())}
-	<form action="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->getMaaltijdId()}{/if}" method="post" class="Formulier ModalForm SubmitReset">
+{if isset($repetities) and (!isset($maaltijd) or !$maaltijd->verwijderd)}
+	<form action="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->maaltijd_id}{/if}" method="post" class="Formulier ModalForm SubmitReset">
 		<label for="crid" style="width: auto;">{icon get="calendar_add"} Periodieke taken aanmaken:</label>&nbsp;
 		<select id="crid" name="crv_repetitie_id" value="kies" origvalue="kies" class="FormElement SubmitChange">
 			<option selected="selected">kies</option>
