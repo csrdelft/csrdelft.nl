@@ -172,4 +172,15 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 
     protected static $primary_key = array('maaltijd_id');
 
+    /**
+     * De API voor de app verwacht een string voor de prijs.
+     *
+     * @return array|mixed
+     */
+    public function jsonSerialize() {
+        $json = parent::jsonSerialize();
+        $json['prijs'] = strval($json['prijs']);
+        return $json;
+    }
+
 }
