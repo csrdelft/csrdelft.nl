@@ -105,4 +105,54 @@ class SaldoModel extends PersistenceModel {
         }
         return false;
     }
+
+    /**
+     * @param string $key
+     * @deprecated
+     */
+    public static function putMaalcieCsv($key = 'CSVSaldi') {
+        $db = MijnSqli::instance();
+        if (is_array($_FILES) AND isset($_FILES[$key])) {
+            //bestandje uploaden en verwerken...
+            $bCorrect = true;
+            //niet met csv functies omdat dat misging met OS-X regeleinden...
+            $aRegels = preg_split("/[\s]+/", file_get_contents($_FILES['CSVSaldi']['tmp_name']));
+            $row = 0;
+            foreach ($aRegels as $regel) {
+                $regel = str_replace(array('"', ' ', "\n", "\r"), '', $regel);
+                $aRegel = explode(',', $regel);
+                if (array_key_exists(0, $aRegel) AND array_key_exists(1, $aRegel) AND
+                    AccountModel::isValidUid($aRegel[0]) AND is_numeric($aRegel[1])
+                ) {
+                    $sQuery = "
+						UPDATE profielen
+						SET maalcieSaldo=" . $aRegel[1] . "
+						WHERE uid='" . $aRegel[0] . "'
+						LIMIT 1;";
+                    if ($db->query($sQuery)) {
+                        //nu ook nog even naar het saldolog schrijven
+                        $logQuery = "
+							INSERT INTO saldolog (
+								uid, moment, cie, saldo
+							)VALUES(
+								'" . $aRegel[0] . "',
+								'" . getDateTime() . "',
+								'maalcie',
+								" . $aRegel[1] . "
+							);";
+                        $db->query($logQuery);
+                    } else {
+                        $bCorrect = false;
+                    }
+                    $row++;
+                }
+            }
+            CsrMemcache::instance()->flush();
+            if ($bCorrect === true) {
+                setMelding('Er zijn ' . $row . ' regels ingevoerd. Als dit er minder zijn dan u verwacht zitten er ongeldige regels in uw bestand.', 0);
+            } else {
+                setMelding('Helaas, er ging iets mis. Controleer uw bestand! mysql gaf terug <' . $db->error() . '>', -1);
+            }
+        }
+    }
 }

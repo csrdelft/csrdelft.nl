@@ -42,7 +42,7 @@ class MaalCieSaldiController extends AclController {
 
 	public function upload() {
 		$this->beheer();
-		Saldi::putMaalcieCsv();
+		SaldoModel::putMaalcieCsv();
 	}
 
 	public function sluitboekjaar() {
