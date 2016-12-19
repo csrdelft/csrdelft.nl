@@ -8,13 +8,22 @@ class SaldoModel extends PersistenceModel {
 
     public function getDataPointsForMaalCie($uid, $timespan) {
         if (!$this->magGrafiekZien($uid, "maalcie")) {
-            return '';
+            return null;
         }
-        $saldi = $this->find('uid = ? AND cie = "maalcie" AND moment > (NOW() - INTERVAL ? DAY)', array($uid, $timespan));
 
-        $points = array();
-        foreach ($saldi as $saldo) {
-            $points[] = json_encode($saldo);
+        $points = $this->find('uid = ? AND cie = "maalcie" AND moment > (NOW() - INTERVAL ' . $timespan . ' DAY)', array($uid))->fetchAll();
+
+        if (!empty($points)) {
+            //herhaal laatste datapunt om grafiek te tekenen tot aan vandaag
+            $row = clone end($points);
+            $row->moment = getDateTime();
+            array_push($points, $row);
+        } else {
+            // haal de het meest recente saldo op
+            $points[] = $this->find('uid = ? AND cie = "maalcie"', array($uid), null, 'moment', 1)->fetch();
+            if (isset($points[0]->moment)) {
+                $points[0]->moment = getDateTime();
+            }
         }
 
         if (!empty($points)) {
@@ -27,23 +36,24 @@ class SaldoModel extends PersistenceModel {
             array_unshift($points, $saldo);
         }
 
-        return '{
-	"label": "maalcie", 
-	"data": [ ' . implode(", ", $points) . ' ],
-	"threshold": { "below": 0, "color": "red" },
-	"lines": { "steps": true }
-}';
+        return array(
+            "label" => "MaalCie",
+            "data" => $points,
+            "threshold" => array("below" => 0, "color" => "red"),
+            "lines" => array("steps" => true)
+        );
     }
 
     public function getDataPointsForSocCie($uid, $timespan) {
         if (!$this->magGrafiekZien($uid, "soccie")) {
-            return '';
+            return null;
         }
         $model = DynamicEntityModel::makeModel('socCieKlanten');
         $klant = $model->findSparse(array('socCieId', 'saldo'), 'stekUID = ?', array($uid), null, null, 1)->fetch();
         if (!$klant) {
-            return '';
+            return null;
         }
+
         $saldo = $klant->saldo;
         $data = array(array('moment' => getDateTime(), 'saldo' => round($saldo / 100, 2)));
         $model = DynamicEntityModel::makeModel('socCieBestelling');
@@ -55,9 +65,10 @@ class SaldoModel extends PersistenceModel {
 
         if (!empty($data)) {
             // herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan
-            $row = reset($data);
+            // Pas op, soccie is omgedraaid van maalcie omdat saldo's op runtime berekend worden
+            $row = end($data);
             $time = strtotime('-' . $timespan . ' days');
-            array_unshift($data, array('moment' => getDateTime($time + 3600), 'saldo' => $row['saldo']));
+            array_push($data, array('moment' => getDateTime($time + 3600), 'saldo' => $row['saldo']));
         }
 
         $points = array();
@@ -65,31 +76,23 @@ class SaldoModel extends PersistenceModel {
             $saldo = new Saldo();
             $saldo->moment = $entry['moment'];
             $saldo->saldo = $entry['saldo'];
-            $points[] = $saldo->jsonSerialize();
+            $points[] = $saldo;
         }
 
-        return '{
-	"label": "soccie", 
-	"data": [ ' . implode(", ", $points) . ' ],
-	"threshold": { "below": 0, "color": "red" },
-	"lines": { "steps": true }
-}';
+        return array(
+            "label" => "SocCie",
+            "data" => $points,
+            "threshold" => array("below" => 0, "color" => "red"),
+            "lines" => array("steps" => true)
+        );
     }
 
     public function getDataPoints($uid, $timespan) {
-        $series = array();
-
-        $maalcieSaldi = $this->getDataPointsForMaalCie($uid, $timespan);
-        if ($maalcieSaldi != '') {
-            $series[] = $maalcieSaldi;
-        }
-
-        $soccieSaldi = $this->getDataPointsForSocCie($uid, $timespan);
-        if ($soccieSaldi != '') {
-            $series[] = $soccieSaldi;
-        }
-
-        return '[' . implode(', ', $series) . ']';
+        // array_filter haalt grafieken die niet gezien mogen worden eruit.
+        return json_encode(array_filter(array(
+            $this->getDataPointsForMaalCie($uid, $timespan),
+            $this->getDataPointsForSocCie($uid, $timespan)
+        )));
     }
 
     public function magGrafiekZien($uid, $cie = null) {

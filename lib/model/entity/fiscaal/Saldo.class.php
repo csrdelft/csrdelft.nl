@@ -37,7 +37,7 @@ class Saldo extends PersistentEntity implements JsonSerializable {
 
     public function jsonSerialize() {
         // Time * 1000 voor flot
-        return sprintf('[%d, %.2F]', strtotime($this->moment) * 1000, $this->saldo);
+        return array(strtotime($this->moment) * 1000, $this->saldo);
     }
 
 }
