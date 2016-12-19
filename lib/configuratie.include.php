@@ -126,6 +126,7 @@ require_once 'model/entity/agenda/Agendeerbaar.interface.php';
 require_once 'model/security/AccessModel.class.php';
 require_once 'model/LidInstellingenModel.class.php';
 require_once 'model/ForumModel.class.php';
+require_once 'model/LogModel.class.php';
 
 // View
 require_once 'view/JsonResponse.class.php';
@@ -181,7 +182,7 @@ switch (constant('MODE')) {
 			session_regenerate_id(true);
 		}
 		// Validate login
-		LoginModel::instance()->logBezoek();
+        LogModel::instance()->log();
 
 		// Prefetch
 		LidInstellingen::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
