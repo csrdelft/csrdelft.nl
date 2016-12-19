@@ -11,7 +11,7 @@ class SaldoModel extends PersistenceModel {
             return null;
         }
 
-        $points = $this->find('uid = ? AND cie = "maalcie" AND moment > (NOW() - INTERVAL ' . $timespan . ' DAY)', array($uid))->fetchAll();
+        $points = $this->find('uid = ? AND cie = "maalcie" AND moment > (NOW() - INTERVAL ? DAY)', array($uid, $timespan))->fetchAll();
 
         if (!empty($points)) {
             //herhaal laatste datapunt om grafiek te tekenen tot aan vandaag
@@ -89,10 +89,10 @@ class SaldoModel extends PersistenceModel {
 
     public function getDataPoints($uid, $timespan) {
         // array_filter haalt grafieken die niet gezien mogen worden eruit.
-        return json_encode(array_filter(array(
+        return array_filter(array(
             $this->getDataPointsForMaalCie($uid, $timespan),
             $this->getDataPointsForSocCie($uid, $timespan)
-        )));
+        ));
     }
 
     public function magGrafiekZien($uid, $cie = null) {

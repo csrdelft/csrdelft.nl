@@ -26,7 +26,8 @@ class ProfielController extends AclController {
 				'lijst'					 => 'P_OUDLEDEN_READ',
 				'stamboom'				 => 'P_OUDLEDEN_READ',
 				'verjaardagen'			 => 'P_LEDEN_READ',
-				'memory'				 => 'P_OUDLEDEN_READ'
+				'memory'				 => 'P_OUDLEDEN_READ',
+                'saldo'                  => 'P_LEDEN_READ'
 			);
 		} else {
 			$this->acl = array(
@@ -205,6 +206,16 @@ class ProfielController extends AclController {
 		$body = new AlleVerjaardagenView(VerjaardagenModel::getJaar());
 		$this->view = new CsrLayoutPage($body);
 	}
+
+	public function saldo($uid, $timespan) {
+        require_once 'model/fiscaal/SaldoModel.class.php';
+        if(SaldoModel::instance()->magGrafiekZien($uid)){
+            $data = SaldoModel::instance()->getDataPoints($uid, $timespan);
+            $this->view = new JsonResponse($data);
+        } else {
+            $this->exit_http(403);
+        }
+    }
 
 	public function memory() {
 		$this->view = new LedenMemoryView();

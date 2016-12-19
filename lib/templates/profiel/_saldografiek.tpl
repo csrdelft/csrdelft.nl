@@ -31,7 +31,7 @@
 
 		function updateData(timespan) {
 			jQuery.ajax({
-				url: '/tools/saldodata.php?uid={$profiel->uid}&timespan=' + timespan,
+				url: '/leden/saldo/{$profiel->uid}/' + timespan,
 				dataType: 'json',
 				success: function (data) {
 					plot.setData(data);
