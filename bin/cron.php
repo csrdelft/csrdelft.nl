@@ -29,6 +29,13 @@ try {
 	DebugLogModel::instance()->log('cron.php', 'DebugLogModel::opschonen()', array(), $e);
 }
 
+// Log
+try {
+    LogModel::instance()->opschonen();
+} catch (Exception $e) {
+    DebugLogModel::instance()->log('cron.php', 'LogModel::opschonen()', array(), $e);
+}
+
 // LoginModel
 try {
 	LoginModel::instance()->opschonen();

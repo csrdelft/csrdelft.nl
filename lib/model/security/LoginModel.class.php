@@ -197,44 +197,6 @@ class LoginModel extends PersistenceModel implements Validator {
 		return $error;
 	}
 
-	public function logBezoek() {
-		$db = MijnSqli::instance();
-		if (isset($_SESSION['_suedFrom'])) {
-			$uid = $_SESSION['_suedFrom'];
-		} else {
-			$uid = $_SESSION['_uid'];
-		}
-		$datumtijd = getDateTime();
-		$locatie = '';
-		if (isset($_SERVER['REMOTE_ADDR'])) {
-			$ip = $db->escape($_SERVER['REMOTE_ADDR']);
-		} else {
-			$ip = '0.0.0.0';
-			$locatie = '';
-		}
-		if (isset($_SERVER['REQUEST_URI'])) {
-			$url = $db->escape($_SERVER['REQUEST_URI']);
-		} else {
-			$url = '';
-		}
-		if (isset($_SERVER['HTTP_REFERER'])) {
-			$referer = $db->escape($_SERVER['HTTP_REFERER']);
-		} else {
-			$referer = '';
-		}
-		$agent = '';
-		if (isset($_SERVER['HTTP_USER_AGENT'])) {
-			$agent = $db->escape($_SERVER['HTTP_USER_AGENT']);
-		}
-		$sLogQuery = "
-			INSERT INTO log (uid, ip, locatie, moment, url, referer, useragent)
-			VALUES ('" . $uid . "', '" . $ip . "', '" . $locatie . "', '" . $datumtijd . "', '" . $url . "', '" . $referer . "', '" . $agent . "')
-		;";
-		if (!preg_match('/stats.php/', $url) AND $ip !== '0.0.0.0') {
-			$db->query($sLogQuery);
-		}
-	}
-
 	/**
 	 * Inloggen met verschillende mogelijkheden:
 	 * 
