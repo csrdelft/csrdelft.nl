@@ -182,6 +182,8 @@ switch (constant('MODE')) {
 			session_regenerate_id(true);
 		}
 		// Validate login
+        LoginModel::instance();
+
         LogModel::instance()->log();
 
 		// Prefetch
