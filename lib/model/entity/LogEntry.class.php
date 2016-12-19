@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DebugLogEntry.class.php
+ * LogEntry.class.php
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
