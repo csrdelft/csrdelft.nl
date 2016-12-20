@@ -21,8 +21,10 @@ class LogModel extends PersistenceModel {
         $entry = new LogEntry();
         if (isset($_SESSION['_suedFrom'])) {
             $entry->uid = $_SESSION['_suedFrom'];
-        } else {
+        } elseif (isset($_SESSION['_uid'])) {
             $entry->uid = $_SESSION['_uid'];
+        } else {
+            $entry->uid = '';
         }
         $entry->moment = getDateTime();
         $entry->locatie = '';
