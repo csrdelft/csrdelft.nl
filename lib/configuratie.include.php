@@ -106,7 +106,10 @@ if (FORCE_HTTPS) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-			//TODO: invalidate compromised token
+            $account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
+            // Reset private token, user has to get a new one
+            AccountModel::instance()->resetPrivateToken($account);
+            // TODO: Log dit
 		}
 		// redirect to https
 		header('Location: ' . CSR_ROOT . REQUEST_URI, true, 301);
