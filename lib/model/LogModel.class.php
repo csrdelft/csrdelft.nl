@@ -24,7 +24,7 @@ class LogModel extends PersistenceModel {
         } elseif (isset($_SESSION['_uid'])) {
             $entry->uid = $_SESSION['_uid'];
         } else {
-            $entry->uid = '';
+            $entry->uid = 'fout';
         }
         $entry->moment = getDateTime();
         $entry->locatie = '';
