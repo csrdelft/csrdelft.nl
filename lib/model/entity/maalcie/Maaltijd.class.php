@@ -66,7 +66,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	 * @return int
 	 */
 	public function getMarge() {
-		$aantal = $this->aantal_aanmeldingen;
+		$aantal = $this->getAantalAanmeldingen();
 		$marge = floor($aantal / floatval(Instellingen::get('maaltijden', 'marge_gasten_verhouding')));
 		$min = intval(Instellingen::get('maaltijden', 'marge_gasten_min'));
 		if ($marge < $min) {
@@ -85,7 +85,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	 * @return double
 	 */
 	public function getBudget() {
-		$budget = $this->aantal_aanmeldingen + $this->getMarge();
+		$budget = $this->getAantalAanmeldingen() + $this->getMarge();
 		$budget *= $this->prijs - intval(Instellingen::get('maaltijden', 'budget_maalcie'));
 		return floatval($budget) / 100.0;
 	}
@@ -105,7 +105,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getBeschrijving() {
-		return 'Maaltijd met ' . $this->aantal_aanmeldingen . ' eters';
+		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
 
 	public function getLocatie() {
