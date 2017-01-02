@@ -11,7 +11,7 @@
 		<th style="width: 70px;">Datum</th>
 		<th>Titel</th>
 		<th style="width: 100px;">Lijst</th>
-		<th style="text-align: right;">Eters</th>
+		<th class="text-center">Eters</th>
 		<th style="width: 100px;">(Limiet)</th>
 		<th>Status</th>
 		<th class="text-center">{if $prullenbak}{icon get="cross" title="Definitief verwijderen"}{else}{icon get="bin_empty" title="Naar de prullenbak verplaatsen"}{/if}</th>

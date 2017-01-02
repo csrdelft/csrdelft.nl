@@ -43,6 +43,7 @@ define('JWT_LIFETIME', 3600);
 define('CAPTCHA_SECRET', '<Zet mij>');
 define('GOOGLE_CLIENT_ID', '<Zet mij>');
 define('GOOGLE_CLIENT_SECRET', '<Zet mij>');
+define('GOOGLE_EMBED_KEY', '<Zet mij>');
 
 # paden MET trailing slash
 define('BASE_PATH', '/srv/www/csrdelft.nl/');

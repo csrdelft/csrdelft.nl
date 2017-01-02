@@ -1,6 +1,9 @@
-{if LoginModel::getAccount()->hasPrivateToken()}
-	<a class="float-right" href="{LoginModel::getAccount()->getRssLink()}"{if LoginModel::mag('P_LOGGED_IN')} title="Persoonlijke RSS-feed forum&#013;Nieuwe aanvragen kan op je profiel"{/if}>
+<div class="clear" title="Houd deze url privé!&#013;Nieuwe aanvragen: zie je profiel">
+	<a name="RSS"></a>
+	{icon get="feed"}
+{if LoginModel::getUid() == 'x999' OR LoginModel::getAccount()->hasPrivateToken()}
+	<input type="text" value="{LoginModel::getAccount()->getRssLink()}" size="35" onclick="this.setSelectionRange(0, this.value.length);" readonly />
 {else}
-	<a class="float-right" href="/profiel/{LoginModel::getUid()}#tokenaanvragen" title="Persoonlijke RSS-feed aanvragen">
+	<a href="/profiel/{LoginModel::getUid()}#tokenaanvragen">Privé url aanvragen</a>
 {/if}
-{icon get="feed"}</a>
+</div>

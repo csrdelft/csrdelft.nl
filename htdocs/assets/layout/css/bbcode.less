@@ -39,6 +39,12 @@
 	padding: 2px;
 	background-color: #ffffc1;
 	border: 1px solid #ccc;
+
+	&::after {
+		content:"";
+		display:block;
+		clear:both;
+	}
 }
 .bbcodePreview, .bbcodePreview div, .Formulier .bbcodePreview {
 	line-height: inherit;

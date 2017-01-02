@@ -106,7 +106,10 @@ if (FORCE_HTTPS) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-			//TODO: invalidate compromised token
+            $account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
+            // Reset private token, user has to get a new one
+            AccountModel::instance()->resetPrivateToken($account);
+            // TODO: Log dit
 		}
 		// redirect to https
 		header('Location: ' . CSR_ROOT . REQUEST_URI, true, 301);
@@ -126,6 +129,7 @@ require_once 'model/entity/agenda/Agendeerbaar.interface.php';
 require_once 'model/security/AccessModel.class.php';
 require_once 'model/LidInstellingenModel.class.php';
 require_once 'model/ForumModel.class.php';
+require_once 'model/LogModel.class.php';
 
 // View
 require_once 'view/JsonResponse.class.php';
@@ -164,6 +168,7 @@ switch (constant('MODE')) {
 		ini_set('session.hash_function', 'sha512');
 		ini_set('session.cache_limiter', 'nocache');
 		ini_set('session.use_trans_sid', 0);
+		// Sync lifetime of FS based PHP session with DB based C.S.R. session
 		ini_set('session.gc_maxlifetime', (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
 		ini_set('session.use_strict_mode', true);
 		ini_set('session.use_cookies', true);
@@ -173,16 +178,17 @@ switch (constant('MODE')) {
 		ini_set('session.cookie_domain', CSR_DOMAIN);
 		ini_set('session.cookie_secure', FORCE_HTTPS);
 		ini_set('session.cookie_httponly', true);
+		session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 
-		// Sync lifetime of FS based PHP session with DB based C.S.R. session
-		setSessionCookieParams();
 		session_start();
 		if (session_id() == 'deleted') {
 			// Deletes old session
 			session_regenerate_id(true);
 		}
 		// Validate login
-		LoginModel::instance()->logBezoek();
+        LoginModel::instance();
+
+        LogModel::instance()->log();
 
 		// Prefetch
 		LidInstellingen::instance()->prefetch('uid = ?', array(LoginModel::getUid()));

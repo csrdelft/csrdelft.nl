@@ -172,3 +172,5 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 
 	</tbody>
 </table>
+
+{include file='forum/rss_link.tpl'}

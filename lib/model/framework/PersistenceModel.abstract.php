@@ -1,19 +1,20 @@
 <?php
 
 require_once 'model/framework/Database.singleton.php';
+require_once 'model/framework/TransactionWrapper.class.php';
 require_once 'model/framework/Persistence.interface.php';
 require_once 'model/entity/framework/PersistentEntity.abstract.php';
 
 /**
  * PersistenceModel.abstract.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Uses the database to provide persistence.
  * Requires an ORM class constant to be defined in superclass. 
  * Requires a static property $instance in superclass.
  * Optional DIR class constant for location of ORM class.
- * 
+ *
  */
 abstract class PersistenceModel implements Persistence {
 
@@ -35,7 +36,7 @@ abstract class PersistenceModel implements Persistence {
 	/**
 	 * This has to be called once before using static methods due to
 	 * static constructor emulation.
-	 * 
+	 *
 	 * @return $this
 	 */
 	public static function instance() {
@@ -45,6 +46,15 @@ abstract class PersistenceModel implements Persistence {
 			static::$instance = new static();
 		}
 		return static::$instance;
+	}
+
+	/**
+	 * Wrap all method calls to this model inside a database transaction.
+	 *
+	 * @return $this
+	 */
+	public static function transaction() {
+		return new TransactionWrapper(static::instance());
 	}
 
 	/**
@@ -69,7 +79,7 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Get all attribute names.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function getAttributes() {
@@ -91,7 +101,7 @@ abstract class PersistenceModel implements Persistence {
 	/**
 	 * Find existing entities with optional search criteria.
 	 * Retrieves all attributes.
-	 * 
+	 *
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
 	 * @param string $groupby GROUP BY
@@ -116,7 +126,7 @@ abstract class PersistenceModel implements Persistence {
 	/**
 	 * Find existing entities with optional search criteria.
 	 * Retrieves only requested attributes and the primary key values.
-	 * 
+	 *
 	 * @param array $attributes to retrieve
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
@@ -138,7 +148,7 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Count existing entities with optional criteria.
-	 * 
+	 *
 	 * @param string $criteria WHERE
 	 * @param array $criteria_params optional named parameters
 	 * @return int count
@@ -148,9 +158,23 @@ abstract class PersistenceModel implements Persistence {
 		return (int) $result->fetchColumn();
 	}
 
+    /**
+     * Select existing entities with optional criteria.
+     *
+     * Allows for selecting specific sums, averages and counts
+     *
+     * @param array $columns SELECT
+     * @param string $criteria WHERE
+     * @param array $criteria_params optional named parameters
+     * @return PDOStatement
+     */
+    public function select(array $columns, $criteria = null, array $criteria_params = array()) {
+        return Database::sqlSelect($columns, $this->getTableName(), $criteria, $criteria_params);
+    }
+
 	/**
 	 * Check if enitity exists.
-	 * 
+	 *
 	 * @param PersistentEntity $entity
 	 * @return boolean entity exists
 	 */
@@ -160,7 +184,7 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Check if enitity with primary key exists.
-	 * 
+	 *
 	 * @param array $primary_key_values
 	 * @return boolean primary key exists
 	 */
@@ -174,7 +198,7 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Save new entity.
-	 * 
+	 *
 	 * @param PersistentEntity $entity
 	 * @return string last insert id
 	 */
@@ -184,9 +208,9 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Load saved enitity data and replace current entity object values.
-	 * 
+	 *
 	 * @see retrieveAttributes
-	 * 
+	 *
 	 * @param PersistentEntity $entity
 	 * @return PersistentEntity|false
 	 */
@@ -196,7 +220,7 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Load saved entity data and create new object.
-	 * 
+	 *
 	 * @param array $primary_key_values
 	 * @return PersistentEntity|false
 	 */
@@ -211,7 +235,7 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
-	 * 
+	 *
 	 * @param string $UUID
 	 * @return PersistentEntity|false
 	 */
@@ -225,9 +249,9 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Retrieve the value of sparse attributes.
-	 * 
+	 *
 	 * Usage example:
-	 * 
+	 *
 	 * $model = UserModel::instance();
 	 * $users = $model->findSparse(array('naam'), ...); // retrieves only naam attribute
 	 * foreach ($users as $user) {
@@ -240,11 +264,11 @@ abstract class PersistenceModel implements Persistence {
 	 *     UserModel::instance()->retrieveAttributes($this, $attributes);
 	 *   }
 	 * }
-	 * 
+	 *
 	 * Foreign key example:
-	 * 
+	 *
 	 * $user->getAddress();
-	 * 
+	 *
 	 * class User extends PersitentEntity {
 	 *   public $address_uuid; // foreign key
 	 *   public $address;
@@ -259,10 +283,10 @@ abstract class PersistenceModel implements Persistence {
 	 *     return $this->address;
 	 *   }
 	 * }
-	 * 
+	 *
 	 * @param PersistentEntity $entity
 	 * @param array $attributes
-	 * @return mixed false on failure
+	 * @return PersistentEntity|false
 	 */
 	public function retrieveAttributes(PersistentEntity $entity, array $attributes) {
 		$where = array();
@@ -283,7 +307,7 @@ abstract class PersistenceModel implements Persistence {
 	 * Sparse attributes that have not been retrieved are excluded by PersistentEntity->getValues().
 	 *
 	 * @param PersistentEntity $entity
-	 * @return int rows affected
+	 * @return int number of rows affected
 	 */
 	public function update(PersistentEntity $entity) {
 		$properties = $entity->getValues();
@@ -298,10 +322,10 @@ abstract class PersistenceModel implements Persistence {
 	}
 
 	/**
-	 * Remove existing entity.
-	 * 
+	 * Delete existing entity.
+	 *
 	 * @param PersistentEntity $entity
-	 * @return boolean rows affected
+	 * @return int number of rows affected
 	 */
 	public function delete(PersistentEntity $entity) {
 		return $this->deleteByPrimaryKey($entity->getValues(true));
@@ -309,9 +333,9 @@ abstract class PersistenceModel implements Persistence {
 
 	/**
 	 * Requires positional values.
-	 * 
+	 *
 	 * @param array $primary_key_values
-	 * @return boolean rows affected
+	 * @return int number of rows affected
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
 		$where = array();

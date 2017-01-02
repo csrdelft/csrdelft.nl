@@ -22,62 +22,17 @@
  * Zie ook MaaltijdAbonnement.class.php
  * 
  */
-class MaaltijdAanmelding {
+class MaaltijdAanmelding extends PersistentEntity  {
 	# shared primary key
 
-	private $maaltijd_id; # foreign key maaltijd.id
-	private $uid; # foreign key lid.uid
-	private $aantal_gasten; # int 11
-	private $gasten_eetwens; # string 255
-	private $door_abonnement; # foreign key mlt_repetitie.id
-	private $door_uid; # foreign key lid.uid
-	private $laatst_gewijzigd; # datetime
-	private $maaltijd;
-
-	public function __construct($mid = 0, $uid = '', $gasten = 0, $opmerking = '', $door_abo = null, $door_uid = null, $wanneer = '') {
-		$this->maaltijd_id = (int) $mid;
-		$this->uid = $uid;
-		$this->setAantalGasten($gasten);
-		$this->setGastenEetwens($opmerking);
-		$this->setDoorAbonnement($door_abo);
-		$this->setDoorUid($door_uid);
-		$this->setLaatstGewijzigd($wanneer);
-	}
-
-	public function getMaaltijdId() {
-		return (int) $this->maaltijd_id;
-	}
-
-	public function getUid() {
-		return $this->uid;
-	}
-
-	public function getAantalGasten() {
-		return (int) $this->aantal_gasten;
-	}
-
-	public function getGastenEetwens() {
-		return $this->gasten_eetwens;
-	}
-
-	public function getDoorAbonnement() {
-		if ($this->door_abonnement === null) {
-			return null;
-		}
-		return (int) $this->door_abonnement;
-	}
-
-	public function getDoorUid() {
-		return $this->door_uid;
-	}
-
-	public function getLaatstGewijzigd() {
-		return $this->laatst_gewijzigd;
-	}
-
-	public function getMaaltijd() {
-		return $this->maaltijd;
-	}
+	public $maaltijd_id; # foreign key maaltijd.id
+	public $uid; # foreign key lid.uid
+	public $aantal_gasten = 0; # int 11
+	public $gasten_eetwens; # string 255
+	public $door_abonnement; # foreign key mlt_repetitie.id
+	public $door_uid; # foreign key lid.uid
+	public $laatst_gewijzigd; # datetime
+	public $maaltijd;
 
 	/**
 	 * Haal het MaalCie saldo op van het lid van deze aanmelding.
@@ -85,7 +40,7 @@ class MaaltijdAanmelding {
 	 * @return float if lid exists, false otherwise
 	 */
 	public function getSaldo() {
-		return ProfielModel::get($this->getUid())->maalcieSaldo;
+		return ProfielModel::get($this->uid)->maalcieSaldo;
 	}
 
 	/**
@@ -105,7 +60,7 @@ class MaaltijdAanmelding {
 	 */
 	public function getSaldoStatus() {
 		$saldo = $this->getSaldo();
-		$prijs = $this->getMaaltijd()->getPrijsFloat();
+		$prijs = $this->maaltijd->getPrijsFloat();
 
 		if ($saldo > $prijs) { // saldo meer dan genoeg
 			return 3;
@@ -127,7 +82,7 @@ class MaaltijdAanmelding {
 	 */
 	public function getSaldoMelding() {
 		$status = $this->getSaldoStatus();
-		$prijs = sprintf('%.2f', $this->getMaaltijd()->getPrijsFloat());
+		$prijs = sprintf('%.2f', $this->maaltijd->getPrijsFloat());
 		switch ($status) {
 			case 3: return 'ok';
 			case 2: return $prijs;
@@ -137,38 +92,18 @@ class MaaltijdAanmelding {
 		}
 	}
 
-	public function setAantalGasten($int) {
-		if (!is_int($int) || $int < 0) {
-			throw new Exception('Geen integer: aantal gasten');
-		}
-		$this->aantal_gasten = $int;
-	}
+    protected static $table_name = 'mlt_aanmeldingen';
+    protected static $persistent_attributes = array(
+        'maaltijd_id' => array(T::Integer),
+        'uid' => array(T::UID),
+        'aantal_gasten' => array(T::Integer),
+        'gasten_eetwens' => array(T::String, true),
+        'door_abonnement' => array(T::Integer, true),
+        'door_uid' => array(T::UID, true),
+        'laatst_gewijzigd' => array(T::DateTime),
+    );
 
-	public function setGastenEetwens($text) {
-		$this->gasten_eetwens = $text;
-	}
-
-	public function setDoorAbonnement($mrid) {
-		if ($mrid !== null && !is_int($mrid)) {
-			throw new Exception('Ongeldig id: door abonnement');
-		}
-		$this->door_abonnement = $mrid;
-	}
-
-	public function setDoorUid($uid) {
-		$this->door_uid = $uid;
-	}
-
-	public function setLaatstGewijzigd($datumtijd) {
-		if (!is_string($datumtijd)) {
-			throw new Exception('Geen string: laatst gewijzigd');
-		}
-		$this->laatst_gewijzigd = $datumtijd;
-	}
-
-	public function setMaaltijd(Maaltijd $maaltijd) {
-		$this->maaltijd = $maaltijd;
-	}
+    protected static $primary_key = array('maaltijd_id', 'uid');
 
 }
 

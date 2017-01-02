@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9c582d904dbedda991d86e9b3176cfce",
-    "content-hash": "5df90904cb598c4f045d97be55317000",
+    "hash": "ffa3d23c994fb55d50264c61d92e7da6",
+    "content-hash": "343e71a8650cee886895da2c3f5f56b3",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -49,6 +49,34 @@
             "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
             "homepage": "https://github.com/firebase/php-jwt",
             "time": "2015-07-22 18:31:08"
+        },
+        {
+            "name": "globalcitizen/php-iban",
+            "version": "v2.5.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/globalcitizen/php-iban.git",
+                "reference": "605202092da1160c7f61d7e8158b5bf54b8f5d93"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/globalcitizen/php-iban/zipball/605202092da1160c7f61d7e8158b5bf54b8f5d93",
+                "reference": "605202092da1160c7f61d7e8158b5bf54b8f5d93",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "oophp-iban.php",
+                    "php-iban.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "description": "php-iban is a library for parsing and validating IBAN (and IIBAN) bank account information.",
+            "time": "2016-10-02 16:00:06"
         },
         {
             "name": "google/apiclient",

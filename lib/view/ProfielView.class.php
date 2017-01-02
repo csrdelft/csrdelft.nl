@@ -30,7 +30,7 @@ class ProfielView extends SmartyTemplateView {
 			} elseif ($this->model->verticaleleider) {
 				$html .= ' (leider)';
 			} elseif ($this->model->kringcoach) {
-				$html .= '<span title="Kringcoach van verticale ' . VerticalenModel::get($this->model->kringcoach)->naam . '">(kringcoach)</span>';
+				$html .= ' <span title="Kringcoach van verticale ' . VerticalenModel::get($this->model->verticale)->naam . '">(kringcoach)</span>';
 			}
 			$html .= '</a>';
 			$this->smarty->assign('kring', $html);
@@ -113,10 +113,10 @@ class ProfielView extends SmartyTemplateView {
 
 			require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 			$timestamp = strtotime(Instellingen::get('maaltijden', 'recent_lidprofiel'));
-			$this->smarty->assign('recenteAanmeldingen', MaaltijdAanmeldingenModel::getRecenteAanmeldingenVoorLid($this->model->uid, $timestamp));
+			$this->smarty->assign('recenteAanmeldingen', MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid($this->model->uid, $timestamp));
 
 			require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
-			$this->smarty->assign('abos', MaaltijdAbonnementenModel::getAbonnementenVoorLid($this->model->uid));
+			$this->smarty->assign('abos', MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($this->model->uid));
 		}
 
 		require_once 'lid/saldi.class.php';
@@ -306,7 +306,7 @@ class ProfielForm extends Formulier {
         $fields[] = new TelefoonField('telefoon', $profiel->telefoon, 'Telefoonnummer (vast)', 20);
 
 		$fields[] = new Subkopje('Boekhouding');
-		$fields[] = new RequiredTextField('bankrekening', $profiel->bankrekening, 'Bankrekening', 18);
+		$fields[] = new RequiredIBANField('bankrekening', $profiel->bankrekening, 'Bankrekening', 18);
 		if ($admin) {
 			$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
 		}
@@ -334,7 +334,7 @@ class ProfielForm extends Formulier {
 			$fields[] = new VerticaleField('verticale', $profiel->verticale, 'Verticale');
 			if ($profiel->isLid()) {
 				$fields[] = new JaNeeField('verticaleleider', $profiel->verticaleleider, 'Verticaleleider');
-				$fields[] = new VerticaleField('kringcoach', $profiel->kringcoach, 'Kringcoach');
+				$fields[] = new JaNeeField('kringcoach', $profiel->kringcoach, 'Kringcoach');
 			}
 			$fields[] = new LidField('patroon', $profiel->patroon, 'Patroon', 'allepersonen');
 		}
@@ -352,14 +352,14 @@ class ProfielForm extends Formulier {
 		$fields[] = new Subkopje('Persoonlijk');
 		$fields[] = new TextField('eetwens', $profiel->eetwens, 'Dieet/voedselallergie');
 		$fields[] = new RequiredIntField('lengte', (int) $profiel->lengte, 'Lengte (cm)', 50, 250);
-		$fields[] = new RequiredSelectField('ovkaart', $profiel->ovkaart, 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
+		$fields[] = new SelectField('ovkaart', $profiel->ovkaart, 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
 		$fields[] = new TextField('kerk', $profiel->kerk, 'Kerk', 50);
 		$fields[] = new TextField('muziek', $profiel->muziek, 'Muziekinstrument', 50);
 		$fields[] = new SelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 
 		if ($admin OR $inschrijven) {
 			$fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
-			$fields[] = new RequiredTextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
+			$fields[] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
 		}
 
         $fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');

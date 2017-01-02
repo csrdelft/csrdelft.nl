@@ -29,8 +29,8 @@ class MijnAbonnementView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('uid', $this->model->getUid());
-		$this->smarty->assign('mrid', $this->model->getMaaltijdRepetitieId());
+		$this->smarty->assign('uid', $this->model->uid);
+		$this->smarty->assign('mrid', $this->model->mlt_repetitie_id);
 		echo '<td id="maalcie-melding-veld">' . getMelding() . '</td>';
 		$this->smarty->display('maalcie/abonnement/mijn_abonnement_veld.tpl');
 	}

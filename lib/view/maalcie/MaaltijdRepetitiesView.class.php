@@ -10,7 +10,7 @@
  */
 class MaaltijdRepetitiesView extends SmartyTemplateView {
 
-	public function __construct(array $repetities) {
+	public function __construct($repetities) {
 		parent::__construct($repetities, 'Beheer maaltijdrepetities');
 	}
 

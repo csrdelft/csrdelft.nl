@@ -72,7 +72,7 @@ class AgendaModel extends PersistenceModel {
 
 		// Maaltijden
 		if (LidInstellingen::get('agenda', 'toonMaaltijden') === 'ja') {
-			$result = array_merge($result, MaaltijdenModel::getMaaltijdenVoorAgenda($van, $tot));
+			$result = array_merge($result, MaaltijdenModel::instance()->getMaaltijdenVoorAgenda($van, $tot));
 		}
 
 		// CorveeTaken
@@ -91,7 +91,7 @@ class AgendaModel extends PersistenceModel {
 			$GLOBALS['agenda_jaar'] = date('Y', $van);
 			$GLOBALS['agenda_maand'] = date('m', ($van + $tot) / 2);
 
-			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0));
+			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0)->fetchAll());
 		}
 
 		// Sorteren

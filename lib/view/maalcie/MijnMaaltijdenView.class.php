@@ -28,14 +28,14 @@ class MijnMaaltijdenView extends SmartyTemplateView {
 		$this->aanmeldingen = $aanmeldingen;
 
 		foreach ($this->model as $maaltijd) {
-			$mid = $maaltijd->getMaaltijdId();
+			$mid = $maaltijd->maaltijd_id;
 			if (!array_key_exists($mid, $this->aanmeldingen)) {
 				$this->aanmeldingen[$mid] = false;
 			}
 		}
 		foreach ($recent as $aanmelding) {
-			$maaltijd = $aanmelding->getMaaltijd();
-			$mid = $aanmelding->getMaaltijdId();
+			$maaltijd = $aanmelding->maaltijd;
+			$mid = $aanmelding->maaltijd_id;
 			$this->beoordelen[$mid] = $maaltijd;
 			$beoordeling = MaaltijdBeoordelingenModel::instance()->find('maaltijd_id = ? AND uid = ?', array($mid, LoginModel::getUid()))->fetch();
 			if (!$beoordeling) {

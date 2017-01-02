@@ -11,7 +11,7 @@
 class RepetitieMaaltijdenForm extends ModalForm {
 
 	public function __construct(MaaltijdRepetitie $repetitie, $beginDatum = null, $eindDatum = null) {
-		parent::__construct(null, maalcieUrl . '/aanmaken/' . $repetitie->getMaaltijdRepetitieId());
+		parent::__construct(null, maalcieUrl . '/aanmaken/' . $repetitie->mlt_repetitie_id);
 		$this->titel = 'Periodieke maaltijden aanmaken';
 
 		$fields[] = new HtmlComment('<p>Aanmaken <span class="dikgedrukt">' . $repetitie->getPeriodeInDagenText() . '</span> op <span class="dikgedrukt">' . $repetitie->getDagVanDeWeekText() . '</span> in de periode:</p>');

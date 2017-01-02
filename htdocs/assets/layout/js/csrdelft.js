@@ -670,7 +670,7 @@ function dom_update(htmlString) {
 		var elmnt = $('#' + id);
 		if (elmnt.length === 1) {
 			if ($(this).hasClass('remove')) {
-				elmnt.effect('puff', {}, 400, remove);
+				elmnt.effect('fade', {}, 400, remove);
 			}
 			else {
 				elmnt.replaceWith($(this).show()).effect('highlight');

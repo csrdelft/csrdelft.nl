@@ -26,7 +26,7 @@ class PeilingOptie extends PersistentEntity {
 	 * Aantal stemmen
 	 * @var int
 	 */
-    public $stemmen;
+    public $stemmen = 0;
 
     public static function init($optie) {
         $peilingoptie = new PeilingOptie();

@@ -123,10 +123,6 @@
                     <li><a href="http://mechdes.nl/"><img src="https://csrdelft.nl/plaetjes/banners/mechdes.gif"
                                                           alt="Mechdesadvertentie"></a></li>
                     <br>
-                    <li><a href="https://goedkoopprinten.nl/"><img
-                                    src="https://csrdelft.nl/plaetjes/banners/goedkoopprinten-banner-234x60.gif"
-                                    alt="Goedkoopprintenadvertentie"></a></li>
-                    <br>
                     <li><a href="http://galjemadetachering.nl/"><img
                                     src="https://csrdelft.nl/plaetjes/banners/galjema_banner.jpg" alt="Galjemaadvertentie">
                     </li>
@@ -139,6 +135,9 @@
                     <br>
                     <li><a href="https://www.maxilia.nl/banners-drukken/"><img src="https://csrdelft.nl/plaetjes/banners/maxilia.png"
                                                                                alt="Maxiliaadvertentie"/></a></li>
+                    <br>
+                    <li><a href="http://www.tudelft.nl/"><img src="https://csrdelft.nl/plaetjes/banners/TU_Delft_logo_White.png"
+                                                              alt="TUDelft"></a></li>
                 </ul>
                 <ul class="copyright">
                     <li>&copy; 2016 - C.S.R. Delft</li>

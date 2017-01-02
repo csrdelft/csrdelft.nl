@@ -21,7 +21,7 @@ class CorveeRepetitiesView extends SmartyTemplateView {
 		parent::__construct($repetities);
 		$this->maaltijdrepetitie = $maaltijdrepetitie;
 		if ($this->maaltijdrepetitie !== null) {
-			$this->titel = 'Corveebeheer maaltijdrepetitie: ' . $this->maaltijdrepetitie->getStandaardTitel();
+			$this->titel = 'Corveebeheer maaltijdrepetitie: ' . $this->maaltijdrepetitie->standaard_titel;
 		} else {
 			$this->titel = 'Beheer corveerepetities';
 		}

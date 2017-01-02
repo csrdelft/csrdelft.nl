@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>{strip}
 	<head>
-		<title>{$titel} {$maaltijd->getDatum()|date_format:"%A %e %B"}</title>
+		<title>{$titel} {$maaltijd->datum|date_format:"%A %e %B"}</title>
 		{foreach from=$stylesheets item=sheet}
 			<link rel="stylesheet" href="{$sheet}" type="text/css" />
 		{/foreach}
@@ -11,12 +11,12 @@
 	</head>
 	<body>
 		<a href="/" class="float-right"><img alt="Beeldmerk van de Vereniging" src="/assets/layout/plaetjes/beeldmerk.jpg" /></a>
-		<h1>{$titel} op {$maaltijd->getDatum()|date_format:"%A %e %B %Y"}</h1>
+		<h1>{$titel} op {$maaltijd->datum|date_format:"%A %e %B %Y"}</h1>
 		<div class="header">{Instellingen::get('maaltijden', 'maaltijdlijst_tekst')|replace:'MAALTIJDPRIJS':$prijs}</div>
-		{if !$maaltijd->getIsGesloten()}
+		{if !$maaltijd->gesloten}
 			<h1 id="gesloten-melding">De maaltijd is nog niet gesloten
-				{if !$maaltijd->getIsVerwijderd() and !$maaltijd->getIsGesloten()}
-					&nbsp;<button href="{$smarty.const.maalcieUrl}/sluit/{$maaltijd->getMaaltijdId()}" class="btn post confirm" title="Het sluiten van de maaltijd betekent dat niemand zich meer kan aanmelden voor deze maaltijd">Inschrijving sluiten</button>
+				{if !$maaltijd->verwijderd and !$maaltijd->gesloten}
+					&nbsp;<button href="{$smarty.const.maalcieUrl}/sluit/{$maaltijd->maaltijd_id}" class="btn post confirm" title="Het sluiten van de maaltijd betekent dat niemand zich meer kan aanmelden voor deze maaltijd">Inschrijving sluiten</button>
 				{/if}
 			</h1>
 		{/if}
@@ -28,27 +28,27 @@
 							<table class="aanmeldingen">
 								{foreach from=$tabel item="aanmelding"}
 									<tr>
-										{if $aanmelding->getUid()}
-											<td>{ProfielModel::getLink($aanmelding->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}<br />
-												{assign var=eetwens value=ProfielModel::get($aanmelding->getUid())->eetwens}
+										{if $aanmelding->uid}
+											<td>{ProfielModel::getLink($aanmelding->uid, Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}<br />
+												{assign var=eetwens value=ProfielModel::get($aanmelding->uid)->eetwens}
 												{if $eetwens !== ''}
 													<span class="eetwens">
 														{$eetwens}
 													</span>
 												{/if}
-												{if $aanmelding->getGastenEetwens() !== ''}
+												{if $aanmelding->gasten_eetwens !== ''}
 													{if $eetwens !== ''}
 														<br />
 													{/if}
 													<span class="opmerking">Gasten: </span>
 													<span class="eetwens">
-														{$aanmelding->getGastenEetwens()}
+														{$aanmelding->gasten_eetwens}
 													</span>
 												{/if}
 											</td>
 											<td class="saldo">{$aanmelding->getSaldoMelding()}</td>
-										{elseif $aanmelding->getDoorUid()}
-											<td>Gast van {ProfielModel::getNaam($aanmelding->getDoorUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
+										{elseif $aanmelding->door_uid}
+											<td>Gast van {ProfielModel::getLink($aanmelding->door_uid, Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
 											<td class="saldo">-</td>
 										{else}
 											<td style="line-height: 2.2em;">&nbsp;</td>
@@ -89,7 +89,7 @@
 						{if $taak->getUid()}
 							{ProfielModel::getLink($taak->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}
 						{else}
-							<span class="cursief">vacature</i>
+							<span class="cursief">vacature</span>
 						{/if}
 						&nbsp;({$taak->getCorveeFunctie()->naam})
 					{/table_foreach}

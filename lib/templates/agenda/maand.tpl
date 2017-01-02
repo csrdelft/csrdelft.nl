@@ -42,13 +42,12 @@
 	{/foreach}
 </table>
 {$smarty.capture.navlinks}
-<div id="ical">
-{if LoginModel::getAccount()->hasPrivateToken()}
-	<a name="ICAL" href="{LoginModel::getAccount()->getICalLink()}"{if LoginModel::mag('P_LOGGED_IN')} title="Persoonlijke ICalender feed&#013;Nieuwe aanvragen kan op je profiel"{/if}>
+<div class="clear" title="Houd deze url privé!&#013;Nieuwe aanvragen: zie je profiel">
+	<a name="ICAL"></a>
+	<img src="/plaetjes/knopjes/ical.gif" alt="ICAL" />
+{if LoginModel::getUid() == 'x999' OR LoginModel::getAccount()->hasPrivateToken()}
+	<input type="text" value="{LoginModel::getAccount()->getICalLink()}" size="35" onclick="this.setSelectionRange(0, this.value.length);" readonly />
 {else}
-	<a name="ICAL" href="/profiel/{LoginModel::getUid()}#tokenaanvragen" title="Persoonlijke ICalender feed aanvragen">
+	<a href="/profiel/{LoginModel::getUid()}#tokenaanvragen">Privé url aanvragen</a>
 {/if}
-		<img src="/plaetjes/knopjes/ical.gif" alt="ICAL" /></a>
-	<a href="https://www.google.com/calendar/render?cid={LoginModel::getAccount()->getICalLink()|escape:'url'}" target="_blank">
-		<img src="//www.google.com/calendar/images/ext/gc_button6.gif" border=0></a>
 </div>

@@ -82,6 +82,7 @@ td.corvee {
 }
 
 .neus2013{
+	-webkit-print-color-adjust: exact;
 	text-align: center;
 	color: transparent;
 	width: 16px;

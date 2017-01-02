@@ -24,7 +24,7 @@ abstract class Zijbalk {
 		// Sponsors
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			$sponsor_menu = MenuModel::instance()->getMenu("sponsors");
-			$sponsor_menu->tekst = 'Sponsors';
+			$sponsor_menu->tekst = 'Mogelijkheden';
 			$zijbalk[] = new BlockMenuView($sponsor_menu);
 		}
 
@@ -83,7 +83,9 @@ abstract class Zijbalk {
 		// Komende verjaardagen
 		if (LoginModel::mag('P_LOGGED_IN') AND LidInstellingen::get('zijbalk', 'verjaardagen') > 0) {
 			require_once 'view/VerjaardagenView.class.php';
-			$zijbalk[] = new VerjaardagenView('komende');
+			$zijbalk[] = new KomendeVerjaardagenView(
+			    VerjaardagenModel::getKomende((int)LidInstellingen::get('zijbalk', 'verjaardagen')),
+                LidInstellingen::get('zijbalk', 'verjaardagen_pasfotos') == 'ja');
 		}
 		return $zijbalk;
 	}

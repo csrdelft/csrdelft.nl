@@ -163,7 +163,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'moot'					 => array(T::Char, true),
 		'verticale'				 => array(T::Char, true),
 		'verticaleleider'		 => array(T::Boolean, true),
-		'kringcoach'			 => array(T::Char, true),
+		'kringcoach'			 => array(T::Boolean, true),
 		// civi-gegevens
 		'patroon'				 => array(T::UID, true),
 		'corvee_punten'			 => array(T::Integer, true),
@@ -206,10 +206,13 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function magBewerken() {
-		if ($this->uid === LoginModel::getUid()) {
+		if (LoginModel::mag('P_LEDEN_MOD')) {
 			return true;
 		}
-		if (LoginModel::mag('P_LEDEN_MOD')) {
+		if ($this->uid == 'x999') {
+			return false;
+		}
+		if ($this->uid === LoginModel::getUid()) {
 			return true;
 		}
 		if ($this->status === LidStatus::Noviet AND LoginModel::mag('commissie:NovCie')) {
@@ -321,7 +324,8 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getBeschrijving() {
-		return $this->getTitel() . ' wordt ' . (date('Y') - date('Y', strtotime($this->gebdatum))) . ' jaar';
+		$jaar = isset($GLOBALS['agenda_jaar']) ? $GLOBALS['agenda_jaar'] : date('Y');
+		return $this->getTitel() . ' wordt ' . ($jaar - date('Y', strtotime($this->gebdatum))) . ' jaar';
 	}
 
 	public function getLocatie() {
@@ -413,15 +417,15 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	/**
 	 * Naam met verschillende weergave-mogelijkheden.
 	 * 
-	 * @param string $vorm volledig, streeplijst, civitas, user, nick, bijnaam, aaidrom, Duckstad
-     * @param bool $force Forceer een type ongeacht of de gebruiker ingelogd is.
+	 * @param string $vorm Zie switch()
+	 * @param bool $force Forceer een type ongeacht of de gebruiker ingelogd is
 	 * @return string
 	 */
 	public function getNaam($vorm = 'volledig', $force = false) {
 		if ($vorm === 'user') {
 			$vorm = LidInstellingen::get('forum', 'naamWeergave');
 		}
-		if (!LoginModel::mag('P_LOGGED_IN') AND !$force) {
+		if (! $force AND ! LoginModel::mag('P_LOGGED_IN')) {
 			$vorm = 'civitas';
 		}
 		switch ($vorm) {

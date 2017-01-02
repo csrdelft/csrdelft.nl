@@ -58,7 +58,7 @@ class BeheerTakenController extends AclController {
 			$this->bewerk($tid);
 			$modal = $this->view;
 		} elseif (is_int($mid) && $mid > 0) {
-			$maaltijd = MaaltijdenModel::getMaaltijd($mid, true);
+			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid, true);
 			$taken = CorveeTakenModel::getTakenVoorMaaltijd($mid, true);
 		} else {
 			$taken = CorveeTakenModel::getAlleTaken();
@@ -106,8 +106,8 @@ class BeheerTakenController extends AclController {
 
 	public function nieuw($mid = null) {
 		if ($mid !== null) {
-			$maaltijd = MaaltijdenModel::getMaaltijd($mid);
-			$beginDatum = $maaltijd->getDatum();
+			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+			$beginDatum = $maaltijd->datum;
 		}
 		$crid = filter_input(INPUT_POST, 'crv_repetitie_id', FILTER_SANITIZE_NUMBER_INT);
 		if (!empty($crid)) {
@@ -145,7 +145,7 @@ class BeheerTakenController extends AclController {
 			$taak = CorveeTakenModel::saveTaak($tid, (int) $values['functie_id'], $values['uid'], $values['crv_repetitie_id'], $values['maaltijd_id'], $values['datum'], $values['punten'], $values['bonus_malus']);
 			$maaltijd = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], maalcieUrl . '/maaltijd/' . $values['maaltijd_id'])) { // state of gui
-				$maaltijd = MaaltijdenModel::getMaaltijd($values['maaltijd_id']);
+				$maaltijd = MaaltijdenModel::instance()->getMaaltijd($values['maaltijd_id']);
 			}
 			$this->view = new BeheerTaakView($taak, $maaltijd);
 		}

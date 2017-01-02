@@ -203,7 +203,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 */
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
 		require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
-		$aantal = MaaltijdAbonnementenModel::verwijderAbonnementenVoorLid($profiel->uid);
+		$aantal = MaaltijdAbonnementenModel::instance()->verwijderAbonnementenVoorLid($profiel->uid);
 		if ($aantal > 0) {
 			return 'Afmelden abo\'s: ' . $aantal . ' uitgezet.[br]';
 		}

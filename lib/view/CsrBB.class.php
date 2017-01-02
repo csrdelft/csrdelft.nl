@@ -873,18 +873,18 @@ HTML;
 		require_once 'view/maalcie/MaaltijdKetzerView.class.php';
 		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = MaaltijdenModel::getKomendeMaaltijdenVoorLid(\LoginModel::getUid()); // met filter
+				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(\LoginModel::getUid()); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
 					return 'Geen aankomende maaltijd.';
 				}
 				$maaltijd = reset($maaltijden);
 				if (endsWith($mid, '2') && $aantal >= 2) {
-					unset($maaltijden[$maaltijd->getMaaltijdId()]);
+					unset($maaltijden[$maaltijd->maaltijd_id]);
 					$maaltijd2 = reset($maaltijden);
 				}
 			} elseif (preg_match('/\d+/', $mid)) {
-				$maaltijd = MaaltijdenModel::getMaaltijdVoorKetzer((int) $mid); // met filter
+				$maaltijd = MaaltijdenModel::instance()->getMaaltijdVoorKetzer((int) $mid); // met filter
 				if (!$maaltijd) {
 					return '';
 				}
@@ -898,21 +898,21 @@ HTML;
 		if (!isset($maaltijd)) {
 			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 		}
-		$aanmeldingen = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd->getMaaltijdId() => $maaltijd), \LoginModel::getUid());
+		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), \LoginModel::getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		} else {
-			$aanmelding = $aanmeldingen[$maaltijd->getMaaltijdId()];
+			$aanmelding = $aanmeldingen[$maaltijd->maaltijd_id];
 		}
 		$ketzer = new MaaltijdKetzerView($maaltijd, $aanmelding);
 		$result = $ketzer->getHtml();
 
 		if ($maaltijd2 !== null) {
-			$aanmeldingen2 = MaaltijdAanmeldingenModel::getAanmeldingenVoorLid(array($maaltijd2->getMaaltijdId() => $maaltijd2), \LoginModel::getUid());
+			$aanmeldingen2 = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd2->maaltijd_id => $maaltijd2), \LoginModel::getUid());
 			if (empty($aanmeldingen2)) {
 				$aanmelding2 = null;
 			} else {
-				$aanmelding2 = $aanmeldingen2[$maaltijd2->getMaaltijdId()];
+				$aanmelding2 = $aanmeldingen2[$maaltijd2->maaltijd_id];
 			}
 			$ketzer2 = new MaaltijdKetzerView($maaltijd2, $aanmelding2);
 			$result .= $ketzer2->getHtml();
@@ -1047,7 +1047,7 @@ HTML;
 	function bb_locatie($arguments = array()) {
 		$address = $this->parseArray(array('[/locatie]'), array());
 		$map = $this->maps(htmlspecialchars($address), $arguments);
-		return '<span class="hoverIntent"><a href="https://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . ' <img src="/plaetjes/famfamfam/map.png" alt="map" title="Kaart" /></a><div class="hoverIntentContent">' . $map . '</div></span>';
+		return '<span class="hoverIntent"><a href="https://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . Icon::getTag('map', null, 'Kaart', 'text') . '</a><div class="hoverIntentContent">' . $map . '</div></span>';
 	}
 
 	/**
@@ -1062,7 +1062,7 @@ HTML;
 	 * 
 	 * @author Piet-Jan Spaans
 	 * 
-	 * [map dynamic=false w=100 h=100]Oude Delft 9[/map]
+	 * [map h=100]Oude Delft 9[/map]
 	 */
 	public function bb_map($arguments = array()) {
 		$address = $this->parseArray(array('[/map]', '[/kaart]'), array());
@@ -1073,30 +1073,15 @@ HTML;
 		if (trim($address) == '') {
 			return 'Geen adres opgegeven';
 		}
-		if (isset($arguments['w']) AND $arguments['w'] < 800) {
-			$width = (int) $arguments['w'];
-		} else {
-			$width = 400;
-		}
-		if (isset($arguments['h']) AND $arguments['h'] < 600) {
+		// Hoogte maakt niet veel uit
+		if (isset($arguments['h']) AND $arguments['h'] <= 900) {
 			$height = (int) $arguments['h'];
 		} else {
-			$height = 300;
+			$height = 450;
 		}
-		$html = '';
-		if (!array_key_exists('mapJsLoaded', $GLOBALS)) {
-			$html .= '<script src="https://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAATQu5ACWkfGjbh95oIqCLYxRY812Ew6qILNIUSbDumxwZYKk2hBShiPLD96Ep_T-MwdtX--5T5PYf1A" type="text/javascript"></script><script type="text/javascript" src="/layout/js/gmaps.js"></script>';
-			$GLOBALS['mapJsLoaded'] = 1;
-		} else {
-			$GLOBALS['mapJsLoaded'] += 1;
-		}
-		$mapid = 'map' . $GLOBALS['mapJsLoaded'];
-		$jscall = "writeStaticGmap('$mapid', '$address', $width, $height);";
-		if (!isset($arguments['static'])) {
-			$jscall = "$(document).ready(function() {loadGmaps('$mapid','$address');});";
-		}
-		$html .= '<div class="bb-gmap" id="' . $mapid . '" style="width:' . $width . 'px;height:' . $height . 'px;"></div><script type="text/javascript">' . $jscall . '</script>';
-		return $html;
+
+		return '<iframe height="' . $height . '" frameborder="0" style="border:0;width:100%"
+src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOGLE_EMBED_KEY . '"></iframe>';
 	}
 
 	/**

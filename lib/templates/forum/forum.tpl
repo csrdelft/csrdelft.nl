@@ -10,7 +10,7 @@
 
 {include file='forum/head_buttons.tpl'}
 
-<h1>Forum{include file='forum/rss_link.tpl'}</h1>
+<h1>Forum</h1>
 
 {foreach from=$categorien item=categorie}
 	<div class="forumcategorie">
@@ -39,3 +39,5 @@
 		</div>
 	</div>
 {/foreach}
+
+{include file='forum/rss_link.tpl'}

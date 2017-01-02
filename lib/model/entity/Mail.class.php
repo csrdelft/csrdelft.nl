@@ -49,7 +49,8 @@ class Mail {
 		if (!email_like($email)) {
 			throw new Exception('Emailadres in $from geen valide e-mailadres');
 		}
-		$this->from = array($email => $name);
+		// Geen speciale tekens in naam vanwege spamfilters
+		$this->from = array($email => filter_var($name, FILTER_SANITIZE_EMAIL));
 	}
 
 	public function getReplyTo($email_only = false) {
@@ -65,7 +66,8 @@ class Mail {
 		if (!email_like($email)) {
 			throw new Exception('Emailadres in $reply_to geen valide e-mailadres');
 		}
-		$this->replyTo = array($email => $name);
+		// Geen speciale tekens in naam vanwege spamfilters
+		$this->replyTo = array($email => filter_var($name, FILTER_SANITIZE_EMAIL));
 	}
 
 	public function getTo() {
@@ -85,7 +87,8 @@ class Mail {
 			if (!email_like($email)) {
 				throw new Exception('Invalid e-mailadres in TO "' . $email . '"');
 			}
-			$this->to[$this->production_safe($email)] = $name;
+			// Geen speciale tekens in naam vanwege spamfilters
+			$this->to[$this->production_safe($email)] = filter_var($name, FILTER_SANITIZE_EMAIL);
 		}
 	}
 
@@ -106,7 +109,8 @@ class Mail {
 			if (!email_like($email)) {
 				throw new Exception('Invalid e-mailadres in BCC "' . $email . '"');
 			}
-			$this->bcc[$this->production_safe($email)] = $name;
+			// Geen speciale tekens in naam vanwege spamfilters
+			$this->bcc[$this->production_safe($email)] = filter_var($name, FILTER_SANITIZE_EMAIL);
 		}
 	}
 
@@ -116,8 +120,8 @@ class Mail {
 			$onderwerp .= ' [Mail: Debug-modus actief]';
 		}
 		if ($this->charset === 'UTF-8') {
-			//zorg dat het onderwerp netjes utf8 in base64 is. Als je dit niet doet krijgt het
-			//spampunten van spamassasin (SUBJECT_NEEDS_ENCODING,SUBJ_ILLEGAL_CHARS)
+			// Zorg dat het onderwerp netjes utf8 in base64 is. Als je dit niet doet krijgt het
+			// spampunten van spamassasin (SUBJECT_NEEDS_ENCODING,SUBJ_ILLEGAL_CHARS)
 			$onderwerp = ' =?UTF-8?B?' . base64_encode($onderwerp) . "?=\n";
 		}
 		return $onderwerp;
@@ -199,6 +203,7 @@ class Mail {
 				throw new Exception('unknown mail type: "' . $this->type . '"');
 		}
 		if ($this->inDebugMode() AND ! $debug) {
+			setMelding($body, 0);
 			return false;
 		}
 		return mail($this->getTo(), $this->getSubject(), $body, $this->getHeaders(), $this->getExtraparameters());

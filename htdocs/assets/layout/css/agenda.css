@@ -23,10 +23,6 @@ table.agenda th.weeknr {
 }
 
 /*** MAAND ***************************/
-div#ical {
-	width: 100%;
-	text-align: center;
-}
 div.maandnavigatie {
 	padding: 15px 0;
 	text-align: center;

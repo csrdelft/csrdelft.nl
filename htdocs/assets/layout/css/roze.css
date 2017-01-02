@@ -4,6 +4,8 @@
 	color: #fff !important;
 	font-family: "Comic Sans MS", Arial, sans-serif !important;
 }
-.cd-beeldmerk{
-	background-image: url('/plaetjes/owee/2010/logo.png') !important;
+/*OWee logo met gradient*/
+#cd-zijbalk .cd-beeldmerk {
+	-webkit-filter: invert(100%);
+	filter: invert(100%);
 }
