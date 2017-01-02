@@ -108,7 +108,7 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 		$html = '<div id="groep-leden-' . $this->groep->id . '" class="groep-leden"><ul class="groep-tabs nobullets">';
 
 		if (!$this->groep instanceof Verticale) {
-			$html .= '<li class="geschiedenis float-left"><a class="btn" href="' . str_replace($this->groep->id, $this->groep->familie, $this->groep->getUrl()) . '" title="Bekijk geschiedenis"><span class="fa fa-clock-o"></span></a></li>';
+			$html .= '<li class="geschiedenis float-left"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><span class="fa fa-clock-o"></span></a></li>';
 		}
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Pasfotos . '" title="' . GroepTab::getDescription(GroepTab::Pasfotos) . ' tonen"><span class="fa fa-user"></span></a></li>';
@@ -238,7 +238,7 @@ class GroepLijstView extends GroepTabView {
 		foreach ($profielen as $profiel) {
 			$html .= '<tr><td>';
 			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Afmelden)) {
-				$html .= '<a href="' . $this->groep->getUrl() . 'afmelden/' . $profiel->uid . '" class="post confirm float-left" title="Afmelden">' . Icon::getTag('bullet_delete') . '</a>';
+				$html .= '<a href="' . $this->groep->getUrl() . 'afmelden/' . $profiel->uid . '" class="post confirm float-left" title="Afmelden">'.Icon::getTag('bullet_delete').'</a>';
 			}
 			$html .= $profiel->getLink('civitas');
 			$html .= '</td><td>';

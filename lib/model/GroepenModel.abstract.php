@@ -20,17 +20,11 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	protected $default_order = 'begin_moment DESC';
 
 	public static function get($id) {
-		return static::instance()->retrieveByPrimaryKey(array($id));
-	}
-
-	public static function getFamilie($familie, $status = null) {
-		$where = 'familie = ?';
-		$params = array($familie);
-		if (in_array($status, GroepStatus::getTypeOptions())) {
-			$where .= 'AND status = ?';
-			$params[] = $status;
+		if (is_numeric($id)) {
+			return static::instance()->retrieveByPrimaryKey(array($id));
 		}
-		return static::instance()->prefetch($where, $params);
+		$groepen = static::instance()->prefetch('familie = ? AND status = ?', array($id, GroepStatus::HT), null, null, 1);
+		return reset($groepen);
 	}
 
 	public static function getNaam() {

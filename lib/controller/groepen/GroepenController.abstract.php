@@ -18,7 +18,7 @@ abstract class AbstractGroepenController extends Controller {
 	public function performAction(array $args = array()) {
 		$this->action = 'overzicht'; // default
 
-		if ($this->hasParam(3)) { // ID, familie or action
+		if ($this->hasParam(3)) { // id or action
 			$this->action = $this->getParam(3);
 		}
 		switch ($this->action) {
@@ -49,7 +49,7 @@ abstract class AbstractGroepenController extends Controller {
 				}
 				break;
 
-			// Groep ID of selectie vereist
+			// Groep id of selectie vereist
 			case 'wijzigen':
 			case 'logboek':
 				/**
@@ -59,23 +59,11 @@ abstract class AbstractGroepenController extends Controller {
 				 */
 				break;
 
-			// Groep ID of familie vereist
+			// Groep id vereist
 			default:
-
-				// Familie in param 3?
-				if (!is_numeric($this->action)) {
-					$familie = $this->model->getFamilie($this->action);
-					if (!$familie) {
-						$this->geentoegang();
-					}
-					$args['groepen'] = $familie;
-					$this->action = 'familie'; // default
-
-					break;
-				}
-
-				// Groep ID in param 3?
-				$groep = $this->model->get($this->action);
+				// Groep id in param 3?
+				$id = $this->action;
+				$groep = $this->model->get($id);
 				if (!$groep) {
 					$this->exit_http(403);
 				}
@@ -116,7 +104,6 @@ abstract class AbstractGroepenController extends Controller {
 
 			case 'overzicht':
 			case 'bekijken':
-			case 'familie':
 			case 'zoeken':
 				return $this->getMethod() == 'GET';
 
@@ -126,6 +113,7 @@ abstract class AbstractGroepenController extends Controller {
 			case 'sluiten':
 			case 'logboek':
 			case 'omschrijving':
+			case 'deelnamegrafiek':
 			case GroepTab::Pasfotos:
 			case GroepTab::Lijst:
 			case GroepTab::Statistiek:
@@ -153,24 +141,19 @@ abstract class AbstractGroepenController extends Controller {
 	}
 
 	public function bekijken(AbstractGroep $groep) {
+		$groepen = $this->model->find('familie = ?', array($groep->familie));
 		if (property_exists($groep, 'soort')) {
 			$soort = $groep->soort;
 		} else {
 			$soort = null;
 		}
-		$body = new GroepenView($this->model, array($groep), $soort, false); // controleert rechten bekijken per groep
+		$body = new GroepenView($this->model, $groepen, $soort, $groep->id); // controleert rechten bekijken per groep
 		$this->view = new CsrLayoutPage($body);
 	}
 
-	public function familie(array $groepen) {
-		$groep = reset($groepen);
-		if (property_exists($groep, 'soort')) {
-			$soort = $groep->soort;
-		} else {
-			$soort = null;
-		}
-		$body = new GroepenView($this->model, $groepen, $soort, true); // controleert rechten bekijken per groep
-		$this->view = new CsrLayoutPage($body);
+	public function deelnamegrafiek(AbstractGroep $groep) {
+		$groepen = $this->model->find('familie = ?', array($groep->familie));
+		$this->view = new GroepenDeelnameGrafiek($groepen); // controleert GEEN rechten bekijken
 	}
 
 	public function omschrijving(AbstractGroep $groep) {
