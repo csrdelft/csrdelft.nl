@@ -29,7 +29,7 @@ abstract class SmartyTemplateView implements View {
 	 */
 	protected $smarty;
 
-	public function __construct($model, $titel = false) {
+	public function __construct($model, $titel = null) {
 		$this->model = $model;
 		$this->titel = $titel;
 		$this->smarty = CsrSmarty::instance();

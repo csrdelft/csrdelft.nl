@@ -1,23 +1,24 @@
 <?php
-require_once 'view/formulier/TabsForm.class.php';
+require_once 'view/formulier/DataTableKnop.class.php';
+require_once 'view/formulier/DataTableResponse.class.php';
 
 /**
- * DataTable.class.php
- * 
+ * DataTable.abstract.php
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Uses DataTables plug-in for jQuery.
  * @see http://www.datatables.net/
- * 
+ *
  */
-abstract class DataTable extends TabsForm {
+abstract class DataTable extends Formulier {
 
-	public $nestedForm = true;
-	public $filter = null;
+	public $filter;
 	protected $dataUrl;
 	private $groupByColumn;
-	private $groupByLocked = false;
+	private $groupByLocked;
 	protected $defaultLength = 10;
+	protected $knoppen = array();
 	private $columns = array();
 	protected $settings = array(
 		'deferRender'	 => true,
@@ -59,13 +60,15 @@ abstract class DataTable extends TabsForm {
 		)
 	);
 
-	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null) {
-		parent::__construct(new $orm(), null, $titel, true);
+	public function __construct($orm, $dataUrl, $titel = null, $groupByColumn = null, $groupByLocked = false) {
+		parent::__construct(new $orm(), null, $titel);
+		$this->setDataTableId('DTTT_' . $this->getFormId());
+
+		$this->filter = null;
 		$this->dataUrl = $dataUrl;
-		$this->dataTableId = $this->formId;
-		$this->formId .= '_toolbar';
 		$this->css_classes[] = 'DataTableToolbar';
 		$this->groupByColumn = $groupByColumn;
+		$this->groupByLocked = $groupByLocked;
 
 		// create group expand / collapse column
 		$this->columns['details'] = array(
@@ -89,8 +92,10 @@ abstract class DataTable extends TabsForm {
 		}
 	}
 
-	protected function addKnop(DataTableKnop $knop, $tab = 'head') {
-		$this->addFields(array($knop), $tab);
+	protected function addKnop(DataTableKnop $knop) {
+		$knop->dataTableId = $this->getDataTableId();
+		$this->knoppen[] = $knop;
+		$this->addFields(array($knop));
 	}
 
 	protected function addColumn($newName, $before = null, $defaultContent = null, $render = null) {
@@ -157,7 +162,7 @@ abstract class DataTable extends TabsForm {
 		if ($this->dataUrl) {
 			$this->settings['ajax'] = array(
 				'url'		 => $this->dataUrl,
-				'type'		 => 'POST',
+				'type'		 => ($this->post ? 'POST' : 'GET'),
 				'data'		 => array(
 					'lastUpdate' => 'fnGetLastUpdate'
 				),
@@ -229,6 +234,9 @@ JS;
 	}
 
 	public function view() {
+		// toolbar
+		parent::view();
+
 		// encode settings
 		$settingsJson = json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0);
 
@@ -239,10 +247,9 @@ JS;
         $settingsJson = str_replace('"fnUpdateToolbar"', 'fnUpdateToolbar', $settingsJson);
         $settingsJson = preg_replace('/"render":\s?"(.+)"/', '"render": $1', $settingsJson);
 
-		// toolbar
-		parent::view();
+		$tableId = $this->getDataTableId();
 		?>
-		<table id="<?= $this->dataTableId; ?>" class="display <?= ($this->groupByColumn !== false ? 'groupByColumn' : ''); ?>" groupbycolumn="<?= $this->groupByColumn; ?>"></table>
+		<table id="<?= $tableId; ?>" class="display <?= ($this->groupByColumn !== false ? 'groupByColumn' : ''); ?>" groupbycolumn="<?= $this->groupByColumn; ?>"></table>
 		<script type="text/javascript">
 			<?= $this->getJavascript(); ?>
 
@@ -250,10 +257,10 @@ JS;
 
 				var fnUpdateToolbar = <?= $this->getUpdateToolbarFunction(); ?>;
 				var fnGetLastUpdate = function () {
-					return Number($('#<?= $this->dataTableId; ?>').attr('data-lastupdate'));
+					return Number($('#<?= $tableId; ?>').attr('data-lastupdate'));
 				}
 				var fnSetLastUpdate = function (lastUpdate) {
-					$('#<?= $this->dataTableId; ?>').attr('data-lastupdate', lastUpdate);
+					$('#<?= $tableId; ?>').attr('data-lastupdate', lastUpdate);
 				}
 				/**
 				 * Called after row addition and row data update.
@@ -272,7 +279,7 @@ JS;
 					$(tr).children().each(function (columnIndex, td) {
 						// Init custom buttons in rows
 						$(td).children('a.post').each(function (i, a) {
-							$(a).attr('data-tableid', '<?= $this->dataTableId; ?>');
+							$(a).attr('data-tableid', '<?= $tableId; ?>');
 						});
 					});
 				};
@@ -284,7 +291,7 @@ JS;
 				 */
 				var fnAjaxUpdateCallback = function (json) {
 					fnSetLastUpdate(json.lastUpdate);
-					var tableId = '#<?= $this->dataTableId; ?>';
+					var tableId = '#<?= $tableId; ?>';
 					var $table = $(tableId);
 					var table = $table.DataTable();
 
@@ -295,7 +302,7 @@ JS;
 								$.post(table.ajax.url(), {
 									'lastUpdate': fnGetLastUpdate()
 								}, function (data, textStatus, jqXHR) {
-									fnUpdateDataTable('#<?= $this->dataTableId; ?>', data);
+									fnUpdateDataTable('#<?= $tableId; ?>', data);
 									fnAjaxUpdateCallback(data);
 								});
 							}, timeout);
@@ -315,7 +322,8 @@ JS;
 					return json.data;
 				};
 				// Init DataTable
-				var tableId = '#<?= $this->dataTableId; ?>';
+				var toolbarId = '#<?= $this->getFormId(); ?>'
+				var tableId = '#<?= $tableId; ?>';
 				var table = $(tableId).dataTable(<?= $settingsJson; ?>);
 				table.fnFilter('<?= str_replace("'", "\'", $this->filter); ?>');
 				/**
@@ -323,12 +331,12 @@ JS;
 				 */
 				$(tableId + ' tbody').on('click', 'tr', fnUpdateToolbar);
 				$('.DTTT_button_text').on('click', fnUpdateToolbar); // (De-)Select all
-				$(tableId + '_toolbar').prependTo(tableId + '_wrapper'); // Toolbar above table
-				$(tableId + '_toolbar h2.Titel').prependTo(tableId + '_wrapper'); // Title above toolbar
-				$('.DTTT_container').children().appendTo(tableId + '_toolbar'); // Buttons inside toolbar
+				$(toolbarId).prependTo(tableId + '_wrapper'); // Toolbar above table
+				$(toolbarId + ' h2.Titel').prependTo(tableId + '_wrapper'); // Title above toolbar
+				$('.DTTT_container').children().appendTo(toolbarId); // Buttons inside toolbar
 				$('.DTTT_container').remove(); // Remove buttons container
 				$(tableId + '_filter input').attr('placeholder', 'Zoeken').unwrap(); // Remove filter container
-				$(tableId + '_filter').prependTo(tableId + '_toolbar'); // Filter inside toolbar
+				$(tableId + '_filter').prependTo(toolbarId); // Filter inside toolbar
 				fnInitStickyToolbar(); // Init after modifying DOM
 				// Toggle details childrow
 				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
@@ -354,72 +362,6 @@ JS;
 			});
 		</script>
 		<?php
-	}
-
-}
-
-class DataTableKnop extends FormulierKnop {
-
-	private $multiplicity;
-	protected $tableId;
-
-	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $class, $icon = null) {
-		parent::__construct($url, $action . ' DataTableResponse', $label, $title, $icon);
-		$this->multiplicity = $multiplicity;
-		$this->tableId = $tableId;
-		$this->css_classes[] = 'DTTT_button';
-		$this->css_classes[] = 'DTTT_button_' . $class;
-	}
-
-	public function getUpdateToolbar() {
-		return "$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity})).blur().toggleClass('DTTT_disabled', !(aantal {$this->multiplicity}));";
-	}
-
-	public function getHtml() {
-		return str_replace('<a ', '<a data-tableid="' . $this->tableId . '" ', parent::getHtml());
-	}
-
-}
-
-abstract class DataTableResponse extends JsonResponse {
-
-	public $autoUpdate = false;
-	public $modal = null;
-
-	public function view() {
-		http_response_code($this->code);
-		header('Content-Type: application/json');
-		echo "{\n";
-		echo '"modal":' . json_encode($this->modal) . ",\n";
-		echo '"autoUpdate":' . json_encode($this->autoUpdate) . ",\n";
-		echo '"lastUpdate":' . json_encode(time() - 1) . ",\n";
-		echo '"data":[' . "\n";
-		$comma = false;
-		foreach ($this->model as $entity) {
-			if ($comma) {
-				echo ",\n";
-			} else {
-				$comma = true;
-			}
-			$json = $this->getJson($entity);
-			if ($json) {
-				echo $json;
-			} else {
-				$comma = false;
-			}
-		}
-		echo "\n]}";
-	}
-
-}
-
-class RemoveRowsResponse extends DataTableResponse {
-
-	public function getJson($entity) {
-		return parent::getJson(array(
-					'UUID'	 => $entity->getUUID(),
-					'remove' => true
-		));
 	}
 
 }

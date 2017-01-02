@@ -144,32 +144,31 @@ class AgendaController extends AclController {
 	}
 
 	public function verbergen($refuuid = null) {
-		$parts = explode('@', $refuuid, 2);
-		$module = explode('.', $parts[1], 2);
-		switch ($module[0]) {
+		$decoded = $this->model->decodeUUID($refuuid);
+		switch ($decoded['class']) {
 
 			case 'csrdelft':
-				$item = ProfielModel::instance()->retrieveByUUID($refuuid);
+				$item = ProfielModel::instance()->retrieveByPrimaryKey($decoded['pk']);
 				break;
 
 			case 'bijbelrooster':
-				$item = BijbelroosterModel::instance()->retrieveByUUID($refuuid);
+				$item = BijbelroosterModel::instance()->retrieveByPrimaryKey($decoded['pk']);
 				break;
 
 			case 'maaltijd':
-				$item = MaaltijdenModel::instance()->retrieveByUUID($refuuid);
+				$item = MaaltijdenModel::instance()->retrieveByPrimaryKey($decoded['pk']);
 				break;
 
 			case 'corveetaak':
-				$item = CorveeTakenModel::instance()->retrieveByUUID($refuuid);
+				$item = CorveeTakenModel::instance()->retrieveByPrimaryKey($decoded['pk']);
 				break;
 
 			case 'activiteit':
-				$item = ActiviteitenModel::instance()->retrieveByUUID($refuuid);
+				$item = ActiviteitenModel::instance()->retrieveByPrimaryKey($decoded['pk']);
 				break;
 
 			case 'agendaitem':
-				$item = AgendaModel::instance()->retrieveByUUID($refuuid);
+				$item = AgendaModel::instance()->retrieveByPrimaryKey($decoded['pk']);
 				break;
 
 			default:

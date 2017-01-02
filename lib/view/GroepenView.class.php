@@ -41,33 +41,33 @@ class GroepenBeheerTable extends DataTable {
 		$this->searchColumn('status');
 		$this->searchColumn('soort');
 
-		$preview = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'voorbeeld', 'post popup', 'Voorbeeld', 'Voorbeeldweergave van de ketzer', 'show');
+		$preview = new DataTableKnop('== 1', $this->url . 'voorbeeld', 'post popup', 'Voorbeeld', 'Voorbeeldweergave van de ketzer', 'show');
 		$this->addKnop($preview);
 
-		$create = new DataTableKnop('== 0', $this->dataTableId, $this->url . 'nieuw', 'post popup', 'Nieuw', 'Nieuwe toevoegen', 'add');
+		$create = new DataTableKnop('== 0', $this->url . 'nieuw', 'post popup', 'Nieuw', 'Nieuwe toevoegen', 'add');
 		$this->addKnop($create);
 
-		$next = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'aanmaken', 'post popup', 'Opvolger', 'Nieuwe toevoegen die de huidige opvolgt', 'add');
+		$next = new DataTableKnop('== 1', $this->url . 'aanmaken', 'post popup', 'Opvolger', 'Nieuwe toevoegen die de huidige opvolgt', 'add');
 		$this->addKnop($next);
 
-		$update = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'wijzigen', 'post popup', 'Wijzigen', 'Wijzig eigenschappen', 'edit');
+		$update = new DataTableKnop('== 1', $this->url . 'wijzigen', 'post popup', 'Wijzigen', 'Wijzig eigenschappen', 'edit');
 		$this->addKnop($update);
 
 		if (property_exists($model::ORM, 'aanmelden_vanaf')) {
-			$sluiten = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'sluiten', 'post confirm', 'Sluiten', 'Inschrijvingen nu sluiten', 'lock');
+			$sluiten = new DataTableKnop('>= 1', $this->url . 'sluiten', 'post confirm', 'Sluiten', 'Inschrijvingen nu sluiten', 'lock');
 			$this->addKnop($sluiten);
 		}
 
-		$opvolg = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'opvolging', 'post popup', 'Opvolging', 'Familienaam en groepstatus instellen', 'timeline');
+		$opvolg = new DataTableKnop('>= 1', $this->url . 'opvolging', 'post popup', 'Opvolging', 'Familienaam en groepstatus instellen', 'timeline');
 		$this->addKnop($opvolg);
 
-		$convert = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'converteren', 'post popup', 'Converteren', 'Converteer naar ander soort groep', 'lightning');
+		$convert = new DataTableKnop('>= 1', $this->url . 'converteren', 'post popup', 'Converteren', 'Converteer naar ander soort groep', 'lightning');
 		$this->addKnop($convert);
 
-		$delete = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'verwijderen', 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
+		$delete = new DataTableKnop('>= 1', $this->url . 'verwijderen', 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
 		$this->addKnop($delete);
 
-		$log = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'logboek', 'post popup', 'Logboek', 'Logboek bekijken', 'log');
+		$log = new DataTableKnop('== 1', $this->url . 'logboek', 'post popup', 'Logboek', 'Logboek bekijken', 'log');
 		$this->addKnop($log);
 	}
 
@@ -113,7 +113,7 @@ class GroepenBeheerData extends DataTableResponse {
 
 }
 
-class GroepLogboekTable extends DataTable implements FormElement {
+class GroepLogboekTable extends DataTable {
 
 	public function __construct(AbstractGroep $groep) {
 		require_once 'model/entity/ChangeLogEntry.class.php';
@@ -124,14 +124,6 @@ class GroepLogboekTable extends DataTable implements FormElement {
 		$this->searchColumn('new_value');
 		$this->searchColumn('uid');
 		$this->setColumnTitle('uid', 'Door');
-	}
-
-	public function getHtml() {
-		throw new Exception('not implemented');
-	}
-
-	public function getType() {
-		return get_class($this);
 	}
 
 }

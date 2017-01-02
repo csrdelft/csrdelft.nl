@@ -94,6 +94,10 @@ abstract class PersistenceModel implements Persistence {
 		return $this->orm->getPrimaryKey();
 	}
 
+	public function decodeUUID($UUID) {
+		return $this->orm->decodeUUID($UUID);
+	}
+
 	/**
 	 * Find existing entities with optional search criteria.
 	 * Retrieves all attributes.
@@ -236,9 +240,11 @@ abstract class PersistenceModel implements Persistence {
 	 * @return PersistentEntity|false
 	 */
 	public function retrieveByUUID($UUID) {
-		$parts = explode('@', $UUID, 2);
-		$primary_key_values = explode('.', $parts[0]);
-		return $this->retrieveByPrimaryKey($primary_key_values);
+		$decoded = $this->decodeUUID($UUID);
+		if (strcasecmp(static::ORM, $decoded['class']) != 0) {
+			throw new Exception('Wrong ORM: ' . static::ORM . ' != ' . $decoded['class']);
+		}
+		return $this->retrieveByPrimaryKey($decoded['pk']);
 	}
 
 	/**
@@ -337,6 +343,20 @@ abstract class PersistenceModel implements Persistence {
 			$where[] = $key . ' = ?';
 		}
 		return Database::sqlDelete($this->getTableName(), implode(' AND ', $where), $primary_key_values, 1);
+	}
+
+	/**
+	 * Do NOT use @ and . in your primary keys or you WILL run into trouble here!
+	 * 
+	 * @param string $UUID
+	 * @return boolean rows affected
+	 */
+	public function deleteByUUID($UUID) {
+		$decoded = $this->decodeUUID($UUID);
+		if (strcasecmp(static::ORM, $decoded['class']) != 0) {
+			throw new Exception('Wrong ORM: ' . static::ORM . ' != ' . $decoded['class']);
+		}
+		return $this->deleteByPrimaryKey($decoded['pk']);
 	}
 
 }
