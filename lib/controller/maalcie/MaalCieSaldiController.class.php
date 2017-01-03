@@ -1,6 +1,5 @@
 <?php
 
-require_once 'lid/saldi.class.php';
 require_once 'view/maalcie/MaalCieSaldiView.class.php';
 require_once 'view/maalcie/forms/BoekjaarSluitenForm.class.php';
 
