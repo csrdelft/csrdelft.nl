@@ -15,10 +15,8 @@ class EetwensForm extends InlineForm {
 		$field = new TextareaField('eetwens', CorveeVoorkeurenModel::getEetwens(LoginModel::getProfiel()), 'Allergie/diëet:');
 
 		parent::__construct(null, maalcieUrl . '/eetwens', $field, true, true);
-	}
 
-	public function getFormId() {
-		return 'eetwens-form';
+		$this->formId = 'eetwens-form';
 	}
 
 }

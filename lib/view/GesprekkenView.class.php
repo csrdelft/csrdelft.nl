@@ -70,18 +70,18 @@ class GesprekkenTable extends DataTable {
 		$this->addColumn('deelnemers');
 		$this->searchColumn('deelnemers');
 
-		$create = new DataTableKnop('== 0', '/gesprekken/start', 'post popup', 'Nieuw', 'Nieuw gesprek starten', 'email_add');
+		$create = new DataTableKnop('== 0', $this->dataTableId, '/gesprekken/start', 'post popup', 'Nieuw', 'Nieuw gesprek starten', 'email_add');
 		$this->addKnop($create);
 
-		$sluiten = new DataTableKnop('== 1', '/gesprekken/verlaten', 'post confirm', 'Verlaten', 'Gesprek verlaten', 'delete');
+		$sluiten = new DataTableKnop('== 1', $this->dataTableId, '/gesprekken/verlaten', 'post confirm', 'Verlaten', 'Gesprek verlaten', 'delete');
 		$this->addKnop($sluiten);
 
-		$add = new DataTableKnop('== 1', '/gesprekken/toevoegen', 'post popup', 'Toevoegen', 'Deelnemer toevoegen aan het gesprek', 'user_add');
+		$add = new DataTableKnop('== 1', $this->dataTableId, '/gesprekken/toevoegen', 'post popup', 'Toevoegen', 'Deelnemer toevoegen aan het gesprek', 'user_add');
 		$this->addKnop($add);
 
 		$this->javascript .= <<<JS
 
-$('#{$this->getDataTableId()}').on('click', 'td:nth-child(2)', function (event) {
+$('#{$this->dataTableId}').on('click', 'td:nth-child(2)', function (event) {
 	window.location.href = $(this).parent().children('td:first').children('a:first').attr('href');
 });
 JS;
@@ -154,10 +154,10 @@ class BerichtenResponse extends DataTableResponse {
 
 class GesprekBerichtForm extends InlineForm {
 
-	public function __construct(Gesprek $gesprek) {
+	public function __construct(Gesprek $gesprek, $dataTableId = true) {
 		$field = new RequiredTextareaField('inhoud', null, null);
 		$field->placeholder = 'Bericht';
-		parent::__construct(null, '/gesprekken/zeg/' . $gesprek->gesprek_id, $field, false);
+		parent::__construct(null, '/gesprekken/zeg/' . $gesprek->gesprek_id, $field, false, false, $dataTableId);
 		$this->css_classes[] = 'SubmitReset';
 		$this->css_classes[] = 'noanim';
 	}

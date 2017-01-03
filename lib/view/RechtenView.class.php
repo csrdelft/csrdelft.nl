@@ -22,13 +22,13 @@ class RechtenTable extends DataTable {
 			}
 		}
 
-		$create = new DataTableKnop('== 0', '/rechten/aanmaken/' . $environment . '/' . $resource, 'post popup', 'Instellen', 'Rechten instellen', 'key_add');
+		$create = new DataTableKnop('== 0', $this->dataTableId, '/rechten/aanmaken/' . $environment . '/' . $resource, 'post popup', 'Instellen', 'Rechten instellen', 'key_add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', '/rechten/wijzigen', 'post popup', 'Wijzigen', 'Rechten wijzigen', 'key_edit');
+		$update = new DataTableKnop('== 1', $this->dataTableId, '/rechten/wijzigen', 'post popup', 'Wijzigen', 'Rechten wijzigen', 'key_edit');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', '/rechten/verwijderen', 'post confirm', 'Intrekken', 'Rechten intrekken', 'key_delete');
+		$delete = new DataTableKnop('>= 1', $this->dataTableId, '/rechten/verwijderen', 'post confirm', 'Intrekken', 'Rechten intrekken', 'key_delete');
 		$this->addKnop($delete);
 	}
 

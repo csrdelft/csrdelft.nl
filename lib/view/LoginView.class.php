@@ -8,7 +8,7 @@ require_once 'model/entity/security/RememberLogin.class.php';
  * 
  * Tonen van login sessies en diverse formulieren.
  */
-class LoginSessionsTable extends DataTable {
+class LoginSessionsTable extends DataTable implements FormElement {
 
 	public function __construct() {
 		parent::__construct(LoginModel::ORM, '/loginsessionsdata', 'Sessiebeheer', 'ip');
@@ -16,6 +16,14 @@ class LoginSessionsTable extends DataTable {
 		$this->hideColumn('uid');
 		$this->searchColumn('login_moment');
 		$this->searchColumn('user_agent');
+	}
+
+	public function getHtml() {
+		throw new Exception('unsupported');
+	}
+
+	public function getType() {
+		return get_class($this);
 	}
 
 }
@@ -42,7 +50,7 @@ class LoginSessionsData extends DataTableResponse {
 
 }
 
-class RememberLoginTable extends DataTable {
+class RememberLoginTable extends DataTable implements FormElement {
 
 	public function __construct() {
 		parent::__construct(RememberLoginModel::ORM, '/loginrememberdata', 'Automatisch inloggen', 'ip');
@@ -52,17 +60,25 @@ class RememberLoginTable extends DataTable {
 		$this->searchColumn('remember_since');
 		$this->searchColumn('device_name');
 
-		$create = new DataTableKnop('== 0', '/loginremember', 'post popup', 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat', 'add');
+		$create = new DataTableKnop('== 0', $this->dataTableId, '/loginremember', 'post popup', 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat', 'add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', '/loginremember', 'post popup', 'Naam wijzigen', 'Wijzig naam van apparaat', 'edit');
+		$update = new DataTableKnop('== 1', $this->dataTableId, '/loginremember', 'post popup', 'Naam wijzigen', 'Wijzig naam van apparaat', 'edit');
 		$this->addKnop($update);
 
-		$lock = new DataTableKnop('>= 1', '/loginlockip', 'post', '(Ont)Koppel IP', 'Alleen inloggen vanaf bepaald IP-adres', 'lock');
+		$lock = new DataTableKnop('>= 1', $this->dataTableId, '/loginlockip', 'post', '(Ont)Koppel IP', 'Alleen inloggen vanaf bepaald IP-adres', 'lock');
 		$this->addKnop($lock);
 
-		$delte = new DataTableKnop('>= 1', '/loginforget', 'post', 'Verwijderen', 'Stop automatische login voor dit apparaat', 'delete');
+		$delte = new DataTableKnop('>= 1', $this->dataTableId, '/loginforget', 'post', 'Verwijderen', 'Stop automatische login voor dit apparaat', 'delete');
 		$this->addKnop($delte);
+	}
+
+	public function getHtml() {
+		throw new Exception('unsupported');
+	}
+
+	public function getType() {
+		return get_class($this);
 	}
 
 }
@@ -90,7 +106,7 @@ class RememberLoginData extends DataTableResponse {
 class RememberLoginForm extends ModalForm {
 
 	public function __construct(RememberLogin $remember) {
-		parent::__construct($remember, '/loginremember', 'Automatisch inloggen vanaf huidig apparaat');
+		parent::__construct($remember, '/loginremember', 'Automatisch inloggen vanaf huidig apparaat', true);
 
 		$fields[] = new HtmlComment('<div class="dikgedrukt">Gebruik deze functie alleen voor een veilig apparaat op een veilige locatie.</div>');
 		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');
@@ -101,10 +117,20 @@ class RememberLoginForm extends ModalForm {
 
 }
 
+class RememberAfterLoginForm extends RememberLoginForm {
+
+	public function __construct(RememberLogin $remember) {
+		parent::__construct($remember);
+		$this->dataTableId = false; // same as parent but without data table
+	}
+
+}
+
 class LoginForm extends Formulier {
 
 	public function __construct() {
 		parent::__construct(null, '/login');
+		$this->formId = 'loginform';
 
 		$fields['user'] = new TextField('user', null, null);
 		$fields['user']->placeholder = 'Bijnaam of lidnummer';
@@ -125,10 +151,6 @@ class LoginForm extends Formulier {
 		}
 
 		$this->addFields($fields);
-	}
-
-	public function getFormId() {
-		return 'loginform';
 	}
 
 	public function view() {

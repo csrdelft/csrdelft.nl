@@ -10,8 +10,9 @@ class LidInstellingenView extends TabsForm {
 
 	public function __construct(LidInstellingen $model) {
 		parent::__construct($model, '/instellingen/opslaan', 'Webstekinstellingen');
+		$this->formId = 'lidinstellingenform';
 		$this->vertical = true;
-		$this->onHoverClick = true;
+		$this->hoverintent = true;
 
 		$fields[] = new HtmlComment('<p>Op deze pagina kunt u diverse instellingen voor de stek wijzigen. De waarden tussen haakjes zijn de standaardwaarden.</p>');
 		$this->addFields($fields, 'head');
@@ -45,10 +46,6 @@ class LidInstellingenView extends TabsForm {
 		$fields[] = new FormDefaultKnoppen('/');
 
 		$this->addFields($fields, 'foot');
-	}
-
-	public function getFormId() {
-		return 'lidinstellingenform';
 	}
 
 }

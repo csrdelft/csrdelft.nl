@@ -4,9 +4,9 @@ require_once 'view/View.interface.php';
 
 /**
  * JsonResponse.class.php
- *
+ * 
  * @author P.W.G. Brussee <brussee@live.nl>
- *
+ * 
  */
 class JsonResponse implements View {
 
@@ -18,8 +18,8 @@ class JsonResponse implements View {
 		$this->code = $code;
 	}
 
-	public function getJson($model) {
-		return json_encode($model);
+	public function getJson($entity) {
+		return json_encode($entity);
 	}
 
 	public function view() {
@@ -49,13 +49,13 @@ class JsonLijstResponse extends JsonResponse {
 		header('Content-Type: application/json');
 		echo "[\n";
 		$comma = false;
-		foreach ($this->model as $model) {
+		foreach ($this->model as $item) {
 			if ($comma) {
 				echo ",\n";
 			} else {
 				$comma = true;
 			}
-			$json = $this->getJson($model);
+			$json = $this->getJson($item);
 			if ($json) {
 				echo $json;
 			} else {

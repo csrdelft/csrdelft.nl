@@ -73,10 +73,6 @@ class DynamicEntityModel extends PersistenceModel {
 		return array_values($this->definition->primary_key);
 	}
 
-	public function decodeUUID($UUID) {
-		return DynamicEntity::decodeUUID($UUID);
-	}
-
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
 		$entity = parent::retrieveByPrimaryKey($primary_key_values);
 		if ($entity) {
