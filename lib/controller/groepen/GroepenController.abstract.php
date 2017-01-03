@@ -66,7 +66,7 @@ abstract class AbstractGroepenController extends Controller {
 				if (!is_numeric($this->action)) {
 					$familie = $this->model->getFamilie($this->action);
 					if (!$familie) {
-						$this->exit_http(403);
+						$this->geentoegang();
 					}
 					$args['groepen'] = $familie;
 					$this->action = 'familie'; // default
