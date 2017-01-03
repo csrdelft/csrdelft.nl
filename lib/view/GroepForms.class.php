@@ -420,7 +420,7 @@ class GroepLogboekForm extends ModalForm {
 
 }
 
-class GroepPreviewForm extends ModalForm {
+class GroepPreviewForm extends ModalForm implements FormElement {
 
 	public function __construct(AbstractGroep $groep) {
 		parent::__construct($groep, null, 'Voorbeeldweergave');
@@ -445,6 +445,10 @@ class GroepPreviewForm extends ModalForm {
 		}
 		$html .= $this->getScriptTag();
 		return $html . '</form>';
+	}
+
+	public function getJavascript() {
+		parent::getJavascript();
 	}
 
 	public function getType() {

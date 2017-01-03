@@ -4,17 +4,18 @@ require_once 'view/formulier/Formulier.class.php';
 
 /**
  * TabsForm.class.php
- *
+ * 
  * @author P.W.G. Brussee <brussee@live.nl>
- *
+ * 
  * Formulier met tabbladen.
- *
+ * 
  */
 class TabsForm extends Formulier {
 
 	private $tabs = array();
 	public $vertical = false;
-	public $onHoverClick = false;
+	public $hoverintent = false;
+	public $nestedForm = false;
 
 	public function getTabs() {
 		return $this->tabs;
@@ -46,11 +47,14 @@ class TabsForm extends Formulier {
 	 * Toont het formulier en javascript van alle fields.
 	 */
 	public function view() {
-		echo $this->getFormTag();
 		echo getMelding();
-		$titel = $this->getTitel();
-		if (!empty($titel)) {
-			echo '<h2 class="Titel">' . $titel . '</h2>';
+		if ($this->nestedForm) {
+			echo '<div id="' . $this->formId . '" class="' . implode(' ', $this->css_classes) . '">';
+		} else {
+			echo $this->getFormTag();
+		}
+		if ($this->getTitel()) {
+			echo '<h2 class="Titel">' . $this->getTitel() . '</h2>';
 		}
 		// fields above tabs
 		if (isset($this->tabs['head'])) {
@@ -66,14 +70,13 @@ class TabsForm extends Formulier {
 		}
 		// tabs
 		if (sizeof($this->tabs) > 0) {
-			$formId = $this->getFormId();
-			echo '<br /><div id="' . $formId . '-tabs" class="tabs-list"><ul>';
+			echo '<br /><div id="' . $this->formId . '-tabs" class="tabs-list"><ul>';
 			foreach ($this->tabs as $tab => $fields) {
-				echo '<li><a href="#' . $formId . '-tab-' . $tab . '" class="tab-item">' . ucfirst($tab) . '</a></li>';
+				echo '<li><a href="#' . $this->formId . '-tab-' . $tab . '" class="tab-item">' . ucfirst($tab) . '</a></li>';
 			}
 			echo '</ul>';
 			foreach ($this->tabs as $tab => $fields) {
-				echo '<div id="' . $formId . '-tab-' . $tab . '" class="tabs-content">';
+				echo '<div id="' . $this->formId . '-tab-' . $tab . '" class="tabs-content">';
 				foreach ($fields as $field) {
 					$field->view();
 				}
@@ -88,27 +91,30 @@ class TabsForm extends Formulier {
 			}
 		}
 		echo $this->getScriptTag();
-		echo '</form>';
+		if ($this->nestedForm) {
+			echo '</div>';
+		} else {
+			echo '</form>';
+		}
 	}
 
 	public function getJavascript() {
-		$formId = $this->getFormId();
 		$js = <<<JS
 
-$('#{$formId}-tabs').tabs();
+$('#{$this->formId}-tabs').tabs();
 JS;
 		if ($this->vertical) {
 			$js .= <<<JS
 
-$('#{$formId}-tabs').tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
-$('#{$formId}-tabs li').removeClass('ui-corner-top').addClass('ui-corner-left');
+$('#{$this->formId}-tabs').tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
+$('#{$this->formId}-tabs li').removeClass('ui-corner-top').addClass('ui-corner-left');
 JS;
 		}
-		if ($this->onHoverClick) {
+		if ($this->hoverintent) {
 			$js .= <<<JS
 
 try {
-	$('#{$formId}-tabs .tab-item').hoverIntent(function() {
+	$('#{$this->formId}-tabs .tab-item').hoverIntent(function() {
 		$(this).trigger('click');
 	});
 } catch(err) {

@@ -21,14 +21,15 @@ require_once 'view/formulier/FormKnoppen.class.php';
  * 
  * @see FormElement
  */
-class Formulier implements View, Validator, FormElement {
+class Formulier implements View, Validator {
 
 	protected $model;
-	protected $action;
-	private $formId;
+	protected $formId;
+	protected $dataTableId;
+	protected $action = null;
 	public $post = true;
+    protected $error;
 	private $enctype = 'multipart/form-data';
-	private $linkedDataTableId;
 	/**
 	 * Fields must be added via addFields()
 	 * or insertElementBefore() methods,
@@ -37,19 +38,23 @@ class Formulier implements View, Validator, FormElement {
 	 * @var FormElement[]
 	 */
 	private $fields = array();
-	protected $javascript = '';
 	public $css_classes = array();
+	protected $javascript = '';
 	public $titel;
 	public $stappen_submit = false;
-	public $nestedForm = false;
 
-	public function __construct($model, $action, $titel = null) {
+	public function __construct($model, $action, $titel = false, $dataTableId = false) {
 		$this->model = $model;
+		$this->formId = uniqid(get_class($this->model));
 		$this->action = $action;
 		$this->titel = $titel;
-		$this->formId = uniqid(get_class($this->model));
 		$this->css_classes[] = 'Formulier';
-		$this->linkedDataTableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);
+		// Link with DataTable?
+		if ($dataTableId === true) {
+			$this->dataTableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);
+		} else {
+			$this->dataTableId = $dataTableId;
+		}
 	}
 
 	public function getFormId() {
@@ -57,7 +62,7 @@ class Formulier implements View, Validator, FormElement {
 	}
 
 	public function getDataTableId() {
-		return $this->linkedDataTableId;
+		return $this->dataTableId;
 	}
 
 	/**
@@ -67,7 +72,7 @@ class Formulier implements View, Validator, FormElement {
 	 * @param string $dataTableId
 	 */
 	public function setDataTableId($dataTableId) {
-		$this->linkedDataTableId = $dataTableId;
+		$this->dataTableId = $dataTableId;
 	}
 
 	public function getTitel() {
@@ -80,10 +85,6 @@ class Formulier implements View, Validator, FormElement {
 
 	public function getBreadcrumbs() {
 		return null;
-	}
-
-	public function getType() {
-		return get_class($this);
 	}
 
 	private function loadProperty(InputField $field) {
@@ -187,8 +188,6 @@ class Formulier implements View, Validator, FormElement {
 		foreach ($fields as $field) {
 			if ($field instanceof InputField) {
 				$this->loadProperty($field);
-			} elseif ($field instanceof Formulier) {
-				$field->nestedForm = true;
 			}
 		}
 		$this->fields = array_merge($this->fields, $fields);
@@ -271,43 +270,35 @@ class Formulier implements View, Validator, FormElement {
 		return $errors;
 	}
 
-	public function getJavascript() {
-		$js = $this->javascript;
+	protected function getJavascript() {
 		foreach ($this->fields as $field) {
-			$js .= $field->getJavascript();
+			$this->javascript .= $field->getJavascript();
 		}
 		if ($this->stappen_submit) {
-			$js .= <<<JS
+			$this->javascript .= <<<JS
 
 $(form).formSteps({submitButton: "{$this->stappen_submit}"});
 JS;
 		}
-		return $js;
+		return $this->javascript;
 	}
 
 	protected function getFormTag() {
-		$dataTableId = $this->getDataTableId();
-		if ($dataTableId) {
+		if ($this->dataTableId) {
 			$this->css_classes[] = 'DataTableResponse';
 		}
-		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->getFormId() . '" data-tableid="' . $dataTableId . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'POST' : 'GET') . '">';
+		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->formId . '" data-tableid="' . $this->dataTableId . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
 	}
 
 	protected function getScriptTag() {
-		$formId = $this->getFormId();
 		return <<<JS
 <script type="text/javascript">
-/* {$formId} */
 $(document).ready(function () {
-	var form = document.getElementById('{$formId}');
+	var form = document.getElementById('{$this->formId}');
 	{$this->getJavascript()}
 });
 </script>
 JS;
-	}
-
-	public function getHtml() {
-		throw new Exception('Not implemented');
 	}
 
 	/**
@@ -319,25 +310,20 @@ JS;
 		if ($showMelding) {
 			echo getMelding();
 		}
-		if ($this->nestedForm) {
-			echo '<div id="' . $this->getFormId() . '" class="' . implode(' ', $this->css_classes) . '">';
-		} else {
-			echo $this->getFormTag();
-		}
+		echo $this->getFormTag();
 		$titel = $this->getTitel();
 		if (!empty($titel)) {
-			echo '<h2 class="Titel">' . $titel . '</h2>';
+			echo '<h1 class="Titel">' . $titel . '</h1>';
 		}
+        if (isset($this->error)) {
+            echo '<span class="error">' . $this->error . '</span>';
+        }
 		//debugprint($this->getError()); //DEBUG
 		foreach ($this->fields as $field) {
 			$field->view();
 		}
 		echo $this->getScriptTag();
-		if ($this->nestedForm) {
-			echo '</div>';
-		} else {
-			echo '</form>';
-		}
+		echo '</form>';
 	}
 
 	/**
@@ -399,13 +385,16 @@ class ModalForm extends Formulier {
 /**
  * InlineForm with single InputField and FormDefaultKnoppen.
  */
-abstract class InlineForm extends Formulier {
+abstract class InlineForm extends Formulier implements FormElement {
 
 	private $field;
 	private $toggle;
 
-	public function __construct($model, $action, InputField $field, $toggle = true, $buttons = false) {
-		parent::__construct($model, $action);
+	public function __construct($model, $action, InputField $field, $toggle = true, $buttons = false, $dataTableId = false) {
+		parent::__construct($model, $action, null, $dataTableId);
+		if (isset($_POST['InlineFormId'])) {
+			$this->formId = filter_input(INPUT_POST, 'InlineFormId', FILTER_SANITIZE_STRING);
+		}
 		$this->css_classes[] = 'InlineForm';
 		$this->css_classes[] = $this->getType();
 		$this->field = $field;
@@ -417,7 +406,7 @@ abstract class InlineForm extends Formulier {
 		if ($buttons instanceof FormKnoppen) {
 			$fields[] = $buttons;
 		} elseif ($buttons) {
-			$fields[] = new FormDefaultKnoppen(null, false, true, false, true, false, false);
+			$fields[] = new FormDefaultKnoppen(null, false, true, false, true, false, $dataTableId);
 		} else {
 			$this->field->enter_submit = true;
 			$this->field->escape_cancel = true;
@@ -429,18 +418,10 @@ abstract class InlineForm extends Formulier {
 		$this->addFields($fields);
 	}
 
-	public function getFormId() {
-		if (isset($_POST['InlineFormId'])) {
-			return filter_input(INPUT_POST, 'InlineFormId', FILTER_SANITIZE_STRING);
-		}
-		return parent::getFormId();
-	}
-
 	public function getHtml() {
-		$formId = $this->getFormId();
-		$html = '<div id="wrapper_' . $formId . '" class="InlineForm">';
+		$html = '<div id="wrapper_' . $this->formId . '" class="InlineForm">';
 		if ($this->toggle) {
-			$html .= '<div id="toggle_' . $formId . '" class="InlineFormToggle">' . $this->field->getValue() . '</div>';
+			$html .= '<div id="toggle_' . $this->formId . '" class="InlineFormToggle">' . $this->field->getValue() . '</div>';
 			$this->css_classes[] = 'ToggleForm';
 		}
 		$html .= $this->getFormTag();
@@ -457,6 +438,18 @@ abstract class InlineForm extends Formulier {
 
 	public function getField() {
 		return $this->field;
+	}
+
+	public function getType() {
+		return get_class($this);
+	}
+
+	/**
+	 * Public for FormElement
+	 * @return string
+	 */
+	public function getJavascript() {
+		return parent::getJavascript();
 	}
 
 }

@@ -134,8 +134,7 @@ require_once 'model/LogModel.class.php';
 // View
 require_once 'view/JsonResponse.class.php';
 require_once 'view/SmartyTemplateView.abstract.php';
-require_once 'view/formulier/TabsForm.class.php';
-require_once 'view/formulier/DataTable.abstract.php';
+require_once 'view/formulier/DataTable.class.php';
 require_once 'view/CsrBB.class.php';
 require_once 'view/CsrLayoutPage.class.php';
 require_once 'view/CsrLayoutOweePage.class.php';

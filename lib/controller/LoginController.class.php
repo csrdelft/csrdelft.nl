@@ -74,7 +74,7 @@ class LoginController extends AclController {
 			// Remember login form
 			if ($values['remember']) {
 				$remember = RememberLoginModel::instance()->nieuw();
-				$form = new RememberLoginForm($remember);
+				$form = new RememberAfterLoginForm($remember);
 				$form->css_classes[] = 'redirect';
 
 				require_once 'model/CmsPaginaModel.class.php';
