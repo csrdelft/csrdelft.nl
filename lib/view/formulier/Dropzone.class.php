@@ -86,7 +86,7 @@ thisDropzone = new Dropzone('#{$this->formId}', {
 		});
 	},
 	maxFilesize: {$maxsize},
-	maxFiles: 30,
+	maxFiles: 500,
 	dictDefaultMessage: "Drop files here to upload",
 	dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
 	dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
