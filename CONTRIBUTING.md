@@ -45,3 +45,4 @@ GRANT ALL PRIVILEGES ON `csrdelft` . * TO 'csrdelft'@'localhost';
 Hernoem `etc/mysql.ini.sample` naar `etc/mysql.ini` en voer de goede waarden in.
 
 Fix een export van de database en plaats deze in je lokale database.
+Hiervoor kun je de fixtures gebruiken in de root folder. (user=x404, pass=civitasstekdebugaccount404)
