@@ -147,7 +147,7 @@ abstract class DataTable extends TabsForm {
 		// set view modus: paging or scrolling
 		if ($this->defaultLength > 0) {
 			$this->settings['paging'] = true;
-			$this->settings['iDisplayLength'] = $this->defaultLength;
+			$this->settings['pageLength'] = $this->defaultLength;
 		} else {
 			$this->settings['paging'] = false;
 			$this->settings['dom'] = str_replace('i', '', $this->settings['dom']);
