@@ -14,34 +14,54 @@ $(document).ready(function () {
 function fnInitDataTables() {
 	// Custom global filter
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
-}
 
-function fnInitStickyToolbar() {
-	// Sticky toolbar
-	var toolbar = $('.DataTableToolbar:first');
-	toolbar.next().css('padding-top', toolbar.height()); // Create whitespace
-	if (toolbar.css('position') !== 'absolute') {
-		toolbar.css({
-			'position': 'absolute',
-			'z-index': '100'
-		});
-		toolbar.attr('fixY', toolbar.offset().top - $('header').height());
-		toolbar.next('table').css('padding-top', toolbar.height());
-		$(window).scroll(fnStickyToolbar);
-	}
-}
+    // Verwerk een multipliciteit in de vorm van `== 1` of `!= 0` of `> 3` voor de selecties
+	// Returns bool
+    var evaluateMultiplicity = function (expression, num) {
+        var operator_num = expression.split(' ');
+        return {
+            '==': function (a, b) { return a == b; },
+            '!=': function (a, b) { return a != b; },
+            '>=': function (a, b) { return a >= b; },
+            '>' : function (a, b) { return a >  b; },
+            '<=': function (a, b) { return a <= b; },
+            '<' : function (a, b) { return a <  b; }
+        }[operator_num[0]](num, parseInt(operator_num[1]));
+    };
 
-function fnStickyToolbar() {
-	var y = $(window).scrollTop();
-	var toolbar = '.DataTableToolbar:first';
-	//$('.DataTableToolbar').each(function (i, toolbar) {
-	var m = $(toolbar).attr('fixY');
-	if (y >= m) {
-		$(toolbar).css('margin-top', y - m);
-	} else {
-		$(toolbar).css('margin-top', 0);
-	}
-	//});
+    // Zet de icons van de default buttons
+    $.fn.dataTable.ext.buttons.copyHtml5.className += ' dt-button-ico dt-ico-page_white_copy';
+	$.fn.dataTable.ext.buttons.copyFlash.className += ' dt-button-ico dt-ico-page_white_copy';
+	$.fn.dataTable.ext.buttons.csvHtml5.className += ' dt-button-ico dt-ico-page_white_text';
+	$.fn.dataTable.ext.buttons.csvFlash.className += ' dt-button-ico dt-ico-page_white_text';
+	$.fn.dataTable.ext.buttons.pdfHtml5.className += ' dt-button-ico dt-ico-page_white_acrobat';
+	$.fn.dataTable.ext.buttons.pdfFlash.className += ' dt-button-ico dt-ico-page_white_acrobat';
+	$.fn.dataTable.ext.buttons.excelHtml5.className += ' dt-button-ico dt-ico-page_white_excel';
+	$.fn.dataTable.ext.buttons.excelFlash.className += ' dt-button-ico dt-ico-page_white_excel';
+    $.fn.dataTable.ext.buttons.print.className += ' dt-button-ico dt-ico-printer';
+
+    $.fn.dataTable.ext.buttons.default = {
+        init: function (dt, node, config) {
+            var that = this;
+            var toggle = function () {
+				that.enable(
+					evaluateMultiplicity(
+						config.multiplicity,
+						dt.rows({selected: true}).count()))
+			};
+            dt.on('select.dt.DT deselect.dt.DT', toggle);
+            // Initiele staat
+            toggle();
+
+            // Settings voor knop_ajax
+            node.attr('href', config.href);
+            node.attr('data-tableid', dt.context[0].sTableId);
+        },
+        action: function( e, dt, button, config ) {
+            knop_post.call(button, e)
+        },
+        className: 'post DataTableResponse'
+    }
 }
 
 function fnAutoScroll(tableId) {
@@ -91,10 +111,6 @@ function fnGetSelection(tableId) {
 		selection.push($(this).attr('data-uuid'));
 	});
 	return selection;
-}
-
-function fnGetSelectedUUID(tableId) {
-	return $(tableId + ' tbody tr.selected:first').attr('data-uuid');
 }
 
 function fnGetGroupByColumn(tableId) {
