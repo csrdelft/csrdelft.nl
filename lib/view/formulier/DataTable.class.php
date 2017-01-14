@@ -126,13 +126,13 @@ abstract class DataTable extends TabsForm {
 
 	protected function hideColumn($name, $hide = true) {
 		if (isset($this->columns[$name])) {
-			$this->columns[$name]['visible'] = $hide ? false : true;
+			$this->columns[$name]['visible'] = !$hide;
 		}
 	}
 
 	protected function searchColumn($name, $searchable = true) {
 		if (isset($this->columns[$name])) {
-			$this->columns[$name]['searchable'] = (boolean) $searchable;
+			$this->columns[$name]['searchable'] = (boolean)$searchable;
 		}
 	}
 
@@ -156,16 +156,15 @@ abstract class DataTable extends TabsForm {
 		// set ajax url
 		if ($this->dataUrl) {
 			$this->settings['ajax'] = array(
-				'url'		 => $this->dataUrl,
-				'type'		 => 'POST',
-				'data'		 => array(
+				'url' => $this->dataUrl,
+				'type' => 'POST',
+				'data' => array(
 					'lastUpdate' => 'fnGetLastUpdate'
 				),
-				'dataSrc'	 => 'fnAjaxUpdateCallback'
+				'dataSrc' => 'fnAjaxUpdateCallback'
 			);
 		}
 		$this->settings['createdRow'] = 'fnCreatedRowCallback';
-		$this->settings['drawCallback'] = 'fnUpdateToolbar';
 
 		// get columns index
 		$columns = array_keys($this->columns);
@@ -192,7 +191,7 @@ abstract class DataTable extends TabsForm {
 			if (!isset($def['visible']) OR $def['visible'] === true) {
 
 				// default order by first visible orderable column
-				if (!isset($this->settings['order']) AND ! (isset($def['orderable']) AND $def['orderable'] === false)) {
+				if (!isset($this->settings['order']) AND !(isset($def['orderable']) AND $def['orderable'] === false)) {
 					$this->settings['order'] = array(
 						array($index, 'asc')
 					);
@@ -257,10 +256,10 @@ JS;
 				}
 				/**
 				 * Called after row addition and row data update.
-				 * 
-				 * @param object tr
-				 * @param objectdata
-				 * @param int rowIndex
+				 *
+				 * @param tr
+				 * @param data
+				 * @param rowIndex
 				 */
 				var fnCreatedRowCallback = function (tr, data, rowIndex) {
 					$(tr).attr('data-uuid', data.UUID);
@@ -278,7 +277,7 @@ JS;
 				};
 				/**
 				 * Called after ajax load complete.
-				 * 
+				 *
 				 * @param object json
 				 * @returns object
 				 */
@@ -417,8 +416,8 @@ class RemoveRowsResponse extends DataTableResponse {
 
 	public function getJson($entity) {
 		return parent::getJson(array(
-					'UUID'	 => $entity->getUUID(),
-					'remove' => true
+			'UUID' => $entity->getUUID(),
+			'remove' => true
 		));
 	}
 
