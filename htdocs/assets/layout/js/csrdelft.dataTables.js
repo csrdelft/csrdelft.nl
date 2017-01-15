@@ -18,6 +18,8 @@ function fnInitDataTables() {
     // Verwerk een multipliciteit in de vorm van `== 1` of `!= 0` of `> 3` voor de selecties
 	// Returns bool
     var evaluateMultiplicity = function (expression, num) {
+    	// Altijd laten zien bij geen expressie
+    	if (expression.length === 0) return true;
         var operator_num = expression.split(' ');
         return {
             '==': function (a, b) { return a == b; },
@@ -40,6 +42,7 @@ function fnInitDataTables() {
 	$.fn.dataTable.ext.buttons.excelFlash.className += ' dt-button-ico dt-ico-page_white_excel';
     $.fn.dataTable.ext.buttons.print.className += ' dt-button-ico dt-ico-printer';
 
+    // Laat een modal zien, of doe een ajax call gebasseerd op selectie.
     $.fn.dataTable.ext.buttons.default = {
         init: function (dt, node, config) {
             var that = this;
@@ -61,7 +64,14 @@ function fnInitDataTables() {
             knop_post.call(button, e)
         },
         className: 'post DataTableResponse'
-    }
+    };
+
+    // Verander de bron van een datatable
+    $.fn.dataTable.ext.buttons.sourceChange = {
+		action: function (e, dt, button, config) {
+    		dt.ajax.url(config.href).load();
+		}
+	}
 }
 
 function fnAutoScroll(tableId) {

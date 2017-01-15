@@ -50,8 +50,13 @@ class MaaltijdenModel extends PersistenceModel {
         $this->update($maaltijd);
 	}
 
-	public function getAlleMaaltijden() {
-		return $this->find('verwijderd = false');
+	public function getMaaltijden($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
+    	$filter = 'verwijderd = false';
+    	if ($criteria != null AND $criteria != '') {
+    		$filter .= ' AND ' . $criteria;
+		}
+
+    	return $this->find($filter, $criteria_params, $groupby, $orderby, $limit, $start);
 	}
 
 	/**

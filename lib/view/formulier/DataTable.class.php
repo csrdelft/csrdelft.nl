@@ -237,7 +237,7 @@ class DataTable implements View, FormElement {
 	}
 
 	public function getBreadcrumbs() {
-		return "Datatable";
+		return $this->titel;
 	}
 
 	/**

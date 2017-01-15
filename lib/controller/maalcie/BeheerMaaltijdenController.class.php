@@ -27,13 +27,13 @@ class BeheerMaaltijdenController extends AclController {
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'beheer'	 => 'P_MAAL_MOD',
-				'prullenbak' => 'P_MAAL_MOD',
 				//'leegmaken' => 'P_MAAL_MOD',
 				'archief'	 => 'P_MAAL_MOD',
 				'fiscaal'	 => 'P_MAAL_MOD'
 			);
 		} else {
 			$this->acl = array(
+				'beheer'         => 'P_MAAL_MOD',
 				'sluit'			 => 'P_MAAL_MOD',
 				'open'			 => 'P_MAAL_MOD',
 				'nieuw'			 => 'P_MAAL_MOD',
@@ -61,20 +61,32 @@ class BeheerMaaltijdenController extends AclController {
 	}
 
 	public function beheer($mid = null) {
-		$modal = null;
-		if (is_int($mid) && $mid > 0) {
-			$this->bewerk($mid);
-			$modal = $this->view;
-		}
-		$body = new BeheerMaaltijdenView($this->model->getAlleMaaltijden(), false, false, MaaltijdRepetitiesModel::instance()->getAlleRepetities());
-		$this->view = new CsrLayoutPage($body, array(), $modal);
-		$this->view->addCompressedResources('maalcie');
-	}
+		if ($this->getMethod() == 'POST') {
+			$filter = $this->hasParam('filter') ? $this->getParam('filter') : '';
+			switch ($filter) {
+				case 'prullenbak':
+					$data = $this->model->find('verwijderd = true');
+					break;
+				case 'alles':
+					$data = $this->model->getMaaltijden();
+					break;
+				case 'toekomst':
+				default:
+					$data = $this->model->getMaaltijden('datum > NOW() - INTERVAL 1 WEEK');
+					break;
+			}
 
-	public function prullenbak() {
-		$body = new BeheerMaaltijdenView($this->model->getVerwijderdeMaaltijden(), true);
-		$this->view = new CsrLayoutPage($body);
-		$this->view->addCompressedResources('maalcie');
+			$this->view = new BeheerMaaltijdenLijst($data);
+		} else {
+			$modal = null;
+			if (is_int($mid) && $mid > 0) {
+				$this->bewerk($mid);
+				$modal = $this->view;
+			}
+			$body = new BeheerMaaltijdenView();
+			$this->view = new CsrLayoutPage($body, array(), $modal);
+			$this->view->addCompressedResources('maalcie');
+		}
 	}
 
 	public function archief() {
