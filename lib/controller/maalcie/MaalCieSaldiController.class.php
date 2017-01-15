@@ -1,6 +1,7 @@
 <?php
 
 require_once 'view/maalcie/MaalCieSaldiView.class.php';
+require_once 'model/fiscaal/SaldoModel.class.php';
 require_once 'view/maalcie/forms/BoekjaarSluitenForm.class.php';
 
 /**
