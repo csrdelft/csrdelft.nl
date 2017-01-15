@@ -320,7 +320,7 @@ JS;
         }
 		//debugprint($this->getError()); //DEBUG
 		foreach ($this->fields as $field) {
-			$field->view();
+			echo $field->getHtml();
 		}
 		echo $this->getScriptTag();
 		echo '</form>';
