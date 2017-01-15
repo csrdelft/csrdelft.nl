@@ -98,14 +98,7 @@ class DataTable implements View, FormElement {
 	}
 
 	protected function addKnop(DataTableKnop $knop) {
-		$this->settings['userButtons'][] = array(
-			'text' => $knop->label,
-			'multiplicity' => $knop->multiplicity,
-			'extend' => 'default',
-			'href' => $knop->url,
-			'className' => $knop->icon ? 'dt-button-ico dt-ico-' . Icon::get($knop->icon) : '',
-			'dataTableId' => $this->dataTableId
-		);
+		$this->settings['userButtons'][] = $knop->getSettings();
 	}
 
 	protected function columnPosition($name) {
@@ -378,23 +371,32 @@ JS;
 	}
 }
 
-class DataTableKnop extends FormulierKnop {
+class DataTableKnop {
 
 	public $multiplicity;
 	protected $tableId;
+	protected $label;
+	protected $url;
+	protected $icon;
+	protected $id;
 
 	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $icon = '') {
-		parent::__construct($url, $action . ' DataTableResponse', $label, $title, $icon);
+		$this->icon = $icon;
+		$this->label = $label;
+		$this->url = $url;
 		$this->multiplicity = $multiplicity;
 		$this->tableId = $tableId;
 	}
 
-	public function getUpdateToolbar() {
-		return "$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity})).blur().toggleClass('DTTT_disabled', !(aantal {$this->multiplicity}));";
-	}
-
-	public function getHtml() {
-		return str_replace('<a ', '<a data-tableid="' . $this->tableId . '" ', parent::getHtml());
+	public function getSettings() {
+		return array(
+			'text' => $this->label,
+			'multiplicity' => $this->multiplicity,
+			'extend' => 'default',
+			'href' => $this->url,
+			'className' => $this->icon ? 'dt-button-ico dt-ico-' . Icon::get($this->icon) : '',
+			'dataTableId' => $this->tableId
+		);
 	}
 
 }
