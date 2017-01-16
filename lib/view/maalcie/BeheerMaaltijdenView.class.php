@@ -49,6 +49,8 @@ class BeheerMaaltijdenView extends DataTable {
 		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer?filter=alles', '', 'Alles', 'Alles weergeven', 'time', 'sourceChange'));
 		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer?filter=prullenbak', '', 'Prullenbak', 'Prullenbak weergeven', 'bin_closed', 'sourceChange'));
 		$this->addKnop($weergave);
+
+		$this->addKnop(new DataTableKnop('== 0', $this->dataTableId, '/maaltijden/beheer/nieuw', '', 'Nieuw', 'Nieuwe maaltijd aanmaken', 'add'));
 	}
 
 	public function getBreadcrumbs() {
