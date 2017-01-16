@@ -67,11 +67,26 @@ function fnInitDataTables() {
     };
 
     // Verander de bron van een datatable
-    $.fn.dataTable.ext.buttons.sourceChange = {
+	// De knop is ingedrukt als de bron van de datatable
+	// gelijk is aan de bron van de knop.
+	$.fn.dataTable.ext.buttons.sourceChange = {
+		init: function (dt, node, config) {
+			var enable = function () {
+				dt.buttons(node).active(dt.ajax.url() == config.href);
+			};
+			dt.on('xhr.sourceChange', enable);
+
+			enable();
+		},
 		action: function (e, dt, button, config) {
-    		dt.ajax.url(config.href).load();
+			dt.ajax.url(config.href).load();
 		}
-	}
+	};
+
+	$('body').on('click', function () {
+		// Verwijder tooltips als de datatable modal wordt gesloten
+		$(".ui-tooltip-content").parents('div').remove();
+	})
 }
 
 function fnAutoScroll(tableId) {
