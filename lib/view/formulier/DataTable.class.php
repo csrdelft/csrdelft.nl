@@ -56,6 +56,10 @@ class DataTable implements View, FormElement {
 					'0' => '',
 					'1' => '1 rij geselecteerd'
 				)
+			),
+			'buttons' => array(
+				'copy' => 'Kopiëren',
+				'print' => 'Printen'
 			)
 		)
 	);
