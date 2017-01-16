@@ -41,7 +41,11 @@
 //
 //}
 class BeheerMaaltijdenView extends DataTable {
-	public function __construct() {
+	/**
+	 * BeheerMaaltijdenView constructor.
+	 * @param $repetities MaaltijdRepetitie[]
+	 */
+	public function __construct($repetities) {
 		parent::__construct(MaaltijdenModel::ORM, '/maaltijden/beheer', "Maaltijdenbeheer");
 
 		$weergave = new DataTableKnop('', $this->dataTableId, '', '', "Weergave", 'Weergave van tabel', '', 'collection');
@@ -50,7 +54,15 @@ class BeheerMaaltijdenView extends DataTable {
 		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer?filter=prullenbak', '', 'Prullenbak', 'Prullenbak weergeven', 'bin_closed', 'sourceChange'));
 		$this->addKnop($weergave);
 
-		$this->addKnop(new DataTableKnop('== 0', $this->dataTableId, '/maaltijden/beheer/nieuw', '', 'Nieuw', 'Nieuwe maaltijd aanmaken', 'add'));
+		$nieuw = new DataTableKnop('', $this->dataTableId, '', '', 'Nieuw', 'Nieuwe maaltijd aanmaken', 'add', 'collection');
+
+		foreach ($repetities as $repetitie) {
+			$nieuw->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer/nieuw?mrid=' . $repetitie->mlt_repetitie_id, '', $repetitie->standaard_titel, "Nieuwe $repetitie->standaard_titel aanmaken"));
+		}
+
+		$nieuw->addKnop(new DataTableKnop('', $this->dataTableId, 'maaltijden/beheer/nieuw', '', 'Anders', 'Maaltijd zonder repetitie aanmaken', 'calendar_edit'));
+
+		$this->addKnop($nieuw);
 	}
 
 	public function getBreadcrumbs() {
