@@ -86,6 +86,7 @@ class BeheerMaaltijdenController extends AclController {
 			$body = new BeheerMaaltijdenView(MaaltijdRepetitiesModel::instance()->find());
 			$this->view = new CsrLayoutPage($body, array(), $modal);
 			$this->view->addCompressedResources('maalcie');
+			$this->view->addCompressedResources('datatable');
 		}
 	}
 
