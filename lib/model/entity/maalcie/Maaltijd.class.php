@@ -179,6 +179,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
      */
     public function jsonSerialize() {
         $json = parent::jsonSerialize();
+        $json['tijd'] = date('G:i', strtotime($json['tijd']));
         $json['aantal_aanmeldingen'] = $this->getAantalAanmeldingen();
         $json['gesloten'] = $json['gesloten'] ? '1' : '0';
         $json['prijs'] = strval($json['prijs']);

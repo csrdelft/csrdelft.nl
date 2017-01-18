@@ -38,7 +38,6 @@ class BeheerMaaltijdenController extends AclController {
 				'open'			 => 'P_MAAL_MOD',
 				'nieuw'			 => 'P_MAAL_MOD',
 				'bewerk'		 => 'P_MAAL_MOD',
-				'opslaan'		 => 'P_MAAL_MOD',
 				'verwijder'		 => 'P_MAAL_MOD',
 				'herstel'		 => 'P_MAAL_MOD',
 				'anderaanmelden' => 'P_MAAL_MOD',
@@ -116,48 +115,45 @@ class BeheerMaaltijdenController extends AclController {
 	}
 
 	public function nieuw() {
-		if ($this->hasParam('mrid')) {
+		$maaltijd = new Maaltijd();
+		$this->view = new MaaltijdForm($maaltijd, 'nieuw');
+
+		if ($this->view->validate()) {
+			$maaltijd_aanmeldingen = $this->model->saveMaaltijd($maaltijd);
+			$this->view = new BeheerMaaltijdenLijst(array($maaltijd_aanmeldingen[0]));
+			if ($maaltijd_aanmeldingen[1] > 0) {
+				setMelding($maaltijd_aanmeldingen[1] . ' aanmelding' . ($maaltijd_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd_aanmeldingen[0]->aanmeld_filter, 2);
+			}
+		} elseif ($this->hasParam('mrid')) {
 			$mrid = $this->getParam('mrid');
 			$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
 			$beginDatum = $repetitie->getFirstOccurrence();
 			if ($repetitie->periode_in_dagen > 0) {
 				$this->view = new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 			} else {
-                $maaltijd = new Maaltijd();
-                $maaltijd->maaltijd_id = 0;
-                $maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
-                $maaltijd->titel = $repetitie->standaard_titel;
-                $maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
-                $maaltijd->tijd = $repetitie->standaard_tijd;
-                $maaltijd->prijs = $repetitie->standaard_prijs;
-                $maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
-
-				$this->view = new MaaltijdForm($maaltijd); // fetches POST values itself
+				$maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+				$maaltijd->titel = $repetitie->standaard_titel;
+				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
+				$maaltijd->tijd = $repetitie->standaard_tijd;
+				$maaltijd->prijs = $repetitie->standaard_prijs;
+				$maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
 			}
-		} else {
-			$maaltijd = new Maaltijd();
-			$this->view = new MaaltijdForm($maaltijd); // fetches POST values itself
 		}
+
 	}
 
-	public function bewerk($mid) {
-		$maaltijd = $this->model->getMaaltijd($mid);
-		$this->view = new MaaltijdForm($maaltijd); // fetches POST values itself
-	}
-
-	public function opslaan($mid) {
-		if ($mid > 0) {
-			$this->bewerk($mid);
-		} else {
-			$this->nieuw();
+	public function bewerk() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		if (empty($selection)) {
+			$this->exit_http(403);
 		}
-		if ($this->view->validate()) {
-			$maaltijd = $this->view->getModel();
-			$maaltijd_aanmeldingen = $this->model->saveMaaltijd($maaltijd);
-			$this->view = new BeheerMaaltijdView($maaltijd_aanmeldingen[0]);
-			if ($maaltijd_aanmeldingen[1] > 0) {
-				setMelding($maaltijd_aanmeldingen[1] . ' aanmelding' . ($maaltijd_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd_aanmeldingen[0]->aanmeld_filter, 2);
-			}
+		$maaltijd = $this->model->retrieveByUUID($selection[0]);
+		$form = new MaaltijdForm($maaltijd, 'bewerk');
+		if ($form->validate()) {
+			$this->model->update($maaltijd);
+			$this->view = new BeheerMaaltijdenLijst(array($maaltijd));
+		} else {
+			$this->view = $form;
 		}
 	}
 

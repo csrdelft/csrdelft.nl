@@ -10,8 +10,8 @@
  */
 class MaaltijdForm extends ModalForm {
 
-	public function __construct(Maaltijd $maaltijd) {
-		parent::__construct($maaltijd, maalcieUrl . '/opslaan/' . $maaltijd->maaltijd_id);
+	public function __construct(Maaltijd $maaltijd, $action) {
+		parent::__construct($maaltijd, '/maaltijden/beheer/'. $action, false, true);
         
 		if ($maaltijd->maaltijd_id < 0) {
 			throw new Exception('invalid mid');
