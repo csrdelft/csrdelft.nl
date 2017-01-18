@@ -6379,7 +6379,7 @@
 	
 			_fnCallbackFire( settings, 'aoStateLoaded', 'stateLoaded', [settings, state] );
 			callback();
-		}
+		};
 	
 		if ( ! settings.oFeatures.bStateSave ) {
 			callback();
