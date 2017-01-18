@@ -229,7 +229,14 @@ class DataTable implements View, FormElement {
 
 	public function view() {
 		echo $this->getHtml();
-		echo '<script type="text/javascript">' . $this->getJavascript() . '</script>';
+		// Voorkom globals in javascript
+		echo <<<HTML
+<script type="text/javascript">
+	(function() {
+		{$this->getJavascript()}
+	})();
+</script>'
+HTML;
 	}
 
 	public function getTitel() {

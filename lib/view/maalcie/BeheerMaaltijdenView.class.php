@@ -48,6 +48,8 @@ class BeheerMaaltijdenView extends DataTable {
 	public function __construct($repetities) {
 		parent::__construct(MaaltijdenModel::ORM, '/maaltijden/beheer', "Maaltijdenbeheer");
 
+		$this->addColumn('aanmeld_filter', null, null, 'aanmeldFilter_render');
+
 		$weergave = new DataTableKnop('', $this->dataTableId, '', '', "Weergave", 'Weergave van tabel', '', 'collection');
 		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer', '', 'Toekomst', 'Toekomst weergeven', 'time_go', 'sourceChange'));
 		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer?filter=alles', '', 'Alles', 'Alles weergeven', 'time', 'sourceChange'));
@@ -61,8 +63,18 @@ class BeheerMaaltijdenView extends DataTable {
 		}
 
 		$nieuw->addKnop(new DataTableKnop('', $this->dataTableId, 'maaltijden/beheer/nieuw', '', 'Anders', 'Maaltijd zonder repetitie aanmaken', 'calendar_edit'));
-
 		$this->addKnop($nieuw);
+
+		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/bewerk', '', 'Bewerken', 'Maaltijd bewerken', 'pencil'));
+	}
+
+	public function getJavascript() {
+		return parent::getJavascript() . <<<JS
+function aanmeldFilter_render(data) {
+	return data ? '<span class="ico group_key" title="Aanmeld filter actief: \'' + data + '\'"></span>' : '';
+}
+JS;
+
 	}
 
 	public function getBreadcrumbs() {
