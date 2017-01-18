@@ -140,7 +140,7 @@
                                                               alt="TUDelft"></a></li>
                 </ul>
                 <ul class="copyright">
-                    <li>&copy; 2016 - C.S.R. Delft</li>
+                    <li>&copy; {date('Y')} - C.S.R. Delft</li>
                 </ul>
             </div>
         </section>
