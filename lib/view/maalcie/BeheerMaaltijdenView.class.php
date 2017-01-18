@@ -48,7 +48,13 @@ class BeheerMaaltijdenView extends DataTable {
 	public function __construct($repetities) {
 		parent::__construct(MaaltijdenModel::ORM, '/maaltijden/beheer', "Maaltijdenbeheer");
 
+		$this->hideColumn('verwijderd');
+		$this->hideColumn('aanmeld_limiet');
+
 		$this->addColumn('aanmeld_filter', null, null, 'aanmeldFilter_render');
+		$this->addColumn('gesloten', null, null, 'gesloten_render');
+		$this->addColumn('aanmeldingen', 'aanmeld_limiet', null, 'aanmeldingen_render');
+		$this->addColumn('prijs', null, null, 'prijs_render');
 
 		$weergave = new DataTableKnop('', $this->dataTableId, '', '', "Weergave", 'Weergave van tabel', '', 'collection');
 		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer', '', 'Toekomst', 'Toekomst weergeven', 'time_go', 'sourceChange'));
@@ -62,7 +68,7 @@ class BeheerMaaltijdenView extends DataTable {
 			$nieuw->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer/nieuw?mrid=' . $repetitie->mlt_repetitie_id, '', $repetitie->standaard_titel, "Nieuwe $repetitie->standaard_titel aanmaken"));
 		}
 
-		$nieuw->addKnop(new DataTableKnop('', $this->dataTableId, 'maaltijden/beheer/nieuw', '', 'Anders', 'Maaltijd zonder repetitie aanmaken', 'calendar_edit'));
+		$nieuw->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer/nieuw', '', 'Anders', 'Maaltijd zonder repetitie aanmaken', 'calendar_edit'));
 		$this->addKnop($nieuw);
 
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/bewerk', '', 'Bewerken', 'Maaltijd bewerken', 'pencil'));
@@ -70,9 +76,23 @@ class BeheerMaaltijdenView extends DataTable {
 	}
 
 	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
+		return /** @lang JavaScript */
+			parent::getJavascript() . <<<JS
 function aanmeldFilter_render(data) {
 	return data ? '<span class="ico group_key" title="Aanmeld filter actief: \'' + data + '\'"></span>' : '';
+}
+
+function gesloten_render(data) {
+    return '<span class="ico '+(data=='1'?'tick':'cross')+'"></span>';
+}
+
+function aanmeldingen_render(data, type, row) {
+	return row.aantal_aanmeldingen + " (" + row.aanmeld_limiet + ")"; 
+}
+
+function prijs_render(data) {
+	
+	return "&euro; " + (data/100).toFixed(2).replace('.', ',');
 }
 JS;
 
