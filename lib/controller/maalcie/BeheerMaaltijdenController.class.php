@@ -157,10 +157,12 @@ class BeheerMaaltijdenController extends AclController {
 		}
 	}
 
-	public function verwijder($mid) {
-        $this->model->verwijderMaaltijd($mid);
-		echo '<tr id="maaltijd-row-' . $mid . '" class="remove"></tr>';
-		exit;
+	public function verwijder() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$maaltijd = $this->model->retrieveByUUID($selection[0]);
+		$this->model->delete($maaltijd);
+
+		$this->view = new RemoveRowsResponse(array($maaltijd));
 	}
 
 	public function herstel($mid) {
