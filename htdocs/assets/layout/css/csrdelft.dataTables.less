@@ -19,6 +19,54 @@
 	}
 }
 
+button, a, div {
+	&.dt-button-warning {
+		background-color: #f2dede;
+		/* Fallback */
+		background-image: -webkit-linear-gradient(top, #f2dede 0%, #e7c3c3 100%);
+		/* Chrome 10+, Saf5.1+, iOS 5+ */
+		background-image: -moz-linear-gradient(top, #f2dede 0%, #e7c3c3 100%);
+		/* FF3.6 */
+		background-image: -ms-linear-gradient(top, #f2dede 0%, #e7c3c3 100%);
+		/* IE10 */
+		background-image: -o-linear-gradient(top, #f2dede 0%, #e7c3c3 100%);
+		/* Opera 11.10+ */
+		background-image: linear-gradient(to bottom, #f2dede 0%, #e7c3c3 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#f2dede', EndColorStr='#e7c3c3');
+
+		&:active:not(.disabled):hover:not(.disabled),
+		&.active:not(.disabled):hover:not(.disabled) {
+			box-shadow: inset 1px 1px 3px #999999;
+			background-color: #e0cece;
+			/* Fallback */
+			background-image: -webkit-linear-gradient(top, #e0cece 0%, #d1b2b2 100%);
+			/* Chrome 10+, Saf5.1+, iOS 5+ */
+			background-image: -moz-linear-gradient(top, #e0cece 0%, #d1b2b2 100%);
+			/* FF3.6 */
+			background-image: -ms-linear-gradient(top, #e0cece 0%, #d1b2b2 100%);
+			/* IE10 */
+			background-image: -o-linear-gradient(top, #e0cece 0%, #d1b2b2 100%);
+			/* Opera 11.10+ */
+			background-image: linear-gradient(to bottom, #e0cece 0%, #d1b2b2 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#e0cece', EndColorStr='#d1b2b2');
+		}
+		&:hover:not(.disabled) {
+			background-color: #e0cece;
+			/* Fallback */
+			background-image: -webkit-linear-gradient(top, #e0cece 0%, #d1b2b2 100%);
+			/* Chrome 10+, Saf5.1+, iOS 5+ */
+			background-image: -moz-linear-gradient(top, #e0cece 0%, #d1b2b2 100%);
+			/* FF3.6 */
+			background-image: -ms-linear-gradient(top, #e0cece 0%, #d1b2b2 100%);
+			/* IE10 */
+			background-image: -o-linear-gradient(top, #e0cece 0%, #d1b2b2 100%);
+			/* Opera 11.10+ */
+			background-image: linear-gradient(to bottom, #e0cece 0%, #d1b2b2 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#e0cece', EndColorStr='#d1b2b2');
+		}
+	}
+}
+
 .dataTable {
 	width: 100% !important;
 

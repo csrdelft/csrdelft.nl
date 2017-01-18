@@ -83,6 +83,47 @@ function fnInitDataTables() {
 		}
 	};
 
+	$.fn.dataTable.ext.buttons.confirm = {
+		extend: 'collection',
+		init: function (dt, node, config) {
+			var that = this;
+			var toggle = function () {
+				that.enable(
+					evaluateMultiplicity(
+						config.multiplicity,
+						dt.rows({selected: true}).count()))
+			};
+			dt.on('select.dt.DT deselect.dt.DT', toggle);
+			// Initiele staat
+			toggle();
+
+			var action = config.action;
+
+			var buttons = new $.fn.dataTable.Buttons( dt, {
+				buttons: [
+					{
+						extend: 'default',
+						text: function ( dt ) {
+							return dt.i18n( 'csr.zeker', 'Are you sure?' );
+						},
+						action: action,
+						multiplicity: '', // altijd mogelijk
+						className: 'dt-button-ico dt-ico-exclamation dt-button-warning',
+						href: config.href
+					}
+				]
+			} );
+
+			config._collection.append(buttons.dom.container.children());
+
+			// Reset action to extend one.
+			config.action = $.fn.dataTable.ext.buttons.collection.action;
+		},
+		action: function( e, dt, button, config ) {
+			knop_post.call(button, e)
+		},
+	};
+
 	$('body').on('click', function () {
 		// Verwijder tooltips als de datatable modal wordt gesloten
 		$(".ui-tooltip-content").parents('div').remove();

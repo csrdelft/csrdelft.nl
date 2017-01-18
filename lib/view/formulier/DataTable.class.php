@@ -60,6 +60,10 @@ class DataTable implements View, FormElement {
 			'buttons' => array(
 				'copy' => 'Kopiëren',
 				'print' => 'Printen'
+			),
+			// Eigen definities
+			'csr' => array(
+				'zeker' => 'Weet u het zeker?'
 			)
 		)
 	);
