@@ -43,12 +43,28 @@ class RememberLoginModel extends PersistenceModel {
 
 	public function rememberLogin(RememberLogin $remember) {
 		$rand = crypto_rand_token(255);
+
+		$oldtoken = $remember->token;
+
 		$remember->token = hash('sha512', $rand);
 		if ($this->exists($remember)) {
 			$this->update($remember);
 		} else {
 			$remember->id = $this->create($remember);
 		}
+
+		$newtoken = $remember->token;
+
+		// Doe een log naar de debuglog, om erachter te komen waarom logins verdwijnen.
+		DebugLogModel::instance()->log("RememberLoginModel", "rememberLogin", array('$remember'), <<<DUMP
+Updating rememberlogin for user \n
+(Tokens as in db) \n
+id: {$remember->id},\n
+oldtoken: {$oldtoken},\n
+newtoken: {$newtoken}
+DUMP
+		);
+
 		return setRememberCookie($rand);
 	}
 
