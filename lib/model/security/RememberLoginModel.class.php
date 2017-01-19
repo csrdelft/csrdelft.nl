@@ -57,10 +57,9 @@ class RememberLoginModel extends PersistenceModel {
 
 		// Doe een log naar de debuglog, om erachter te komen waarom logins verdwijnen.
 		DebugLogModel::instance()->log("RememberLoginModel", "rememberLogin", array('$remember'), <<<DUMP
-Updating rememberlogin for user \n
-(Tokens as in db) \n
-id: {$remember->id},\n
-oldtoken: {$oldtoken},\n
+user: {$remember->uid},
+id: {$remember->id},
+oldtoken: {$oldtoken},
 newtoken: {$newtoken}
 DUMP
 		);
