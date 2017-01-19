@@ -56,6 +56,24 @@ function fnInitDataTables() {
             // Initiele staat
             toggle();
 
+            // Vervang :col door de waarde te vinden in de geselecteerde row
+			// Dit wordt alleen geprobeerd als dit voorkomt
+            if (config.href.indexOf(':') != -1) {
+            	var replacements = /:(\w+)/g.exec(config.href);
+            	dt.on('select.dt.DT', function (e, dt, type, indexes) {
+            		if (indexes.length == 1) {
+						var newHref = config.href;
+            			var row = dt.row(indexes).data();
+            			// skipt match, start met groepen
+						for (var i = 1; i < replacements.length; i++) {
+							newHref = newHref.replace(':' + replacements[i], row[replacements[i]]);
+						}
+
+						node.attr('href', newHref)
+					}
+				})
+			}
+
             // Settings voor knop_ajax
             node.attr('href', config.href);
             node.attr('data-tableid', dt.context[0].sTableId);
@@ -65,6 +83,13 @@ function fnInitDataTables() {
         },
         className: 'post DataTableResponse'
     };
+
+    $.fn.dataTable.ext.buttons.popup = {
+    	extend: 'default',
+    	action: function(e, dt, button, config) {
+    		window.open(button.attr('href'));
+		}
+	};
 
     // Verander de bron van een datatable
 	// De knop is ingedrukt als de bron van de datatable

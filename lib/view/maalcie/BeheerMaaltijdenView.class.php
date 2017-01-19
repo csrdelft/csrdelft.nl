@@ -50,6 +50,7 @@ class BeheerMaaltijdenView extends DataTable {
 
 		$this->hideColumn('verwijderd');
 		$this->hideColumn('aanmeld_limiet');
+		$this->hideColumn('omschrijving');
 
 		$this->addColumn('aanmeld_filter', null, null, 'aanmeldFilter_render');
 		$this->addColumn('gesloten', null, null, 'gesloten_render');
@@ -73,6 +74,7 @@ class BeheerMaaltijdenView extends DataTable {
 
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/bewerk', '', 'Bewerken', 'Maaltijd bewerken', 'pencil'));
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/verwijder', '', 'Verwijderen', 'Maaltijd verwijderen', 'cross', 'confirm'));
+		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/lijst/:maaltijd_id', '', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal', 'popup'));
 	}
 
 	public function getJavascript() {
