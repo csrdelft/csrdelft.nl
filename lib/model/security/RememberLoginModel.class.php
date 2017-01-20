@@ -53,9 +53,12 @@ class RememberLoginModel extends PersistenceModel {
 			$remember->id = $this->create($remember);
 		}
 
+		setRememberCookie($rand);
+
 		$newtoken = $remember->token;
 
 		$cookietoken = isset($_COOKIE['remember']) ? hash('sha512', $_COOKIE['remember']) : '';
+		$headers = implode(", ", headers_list());
 
 		// Doe een log naar de debuglog, om erachter te komen waarom logins verdwijnen.
 		DebugLogModel::instance()->log("RememberLoginModel", "rememberLogin", array('$remember'), <<<DUMP
@@ -63,11 +66,12 @@ user: {$remember->uid},
 id: {$remember->id},
 cookietoken: {$cookietoken},
 oldtoken: {$oldtoken},
-newtoken: {$newtoken}
+newtoken: {$newtoken},
+headers: {$headers}
 DUMP
 		);
 
-		return setRememberCookie($rand);
+		return;
 	}
 
 }
