@@ -1,6 +1,7 @@
 # Contribueren aan de stek
 
-## Installatie
+## Development
+Hieronder is uitleg te vinden voor het installeren van alle componenten voor het lokaal gebruiken van de stek.
 
 ### Apache2
 
@@ -77,3 +78,28 @@ Op andere platforms moet je gebruik maken van boot2docker.
     docker run -ti --rm --link <reponame>_stekdb_1:db -v `pwd`:/mnt mariadb bash -c 'exec mysql  -h"$DB_PORT_3306_TCP_ADDR" -u root -p csrdelft < /mnt/dump.sql'
 
 Plaetjes zitten niet standaard in deze repo. Maar als je ze in `htdocs/plaetjes` zet zal docker ze gebruiken.
+
+## Issues
+### Type
+Spreekt redelijk voorzich. De kleur is een pastelkleur. De specifieke kleur per label is willekeurig.
+
+`type:enhancement` - Verbetering voor de huidige code base / architectuur. Dit kan bijvoorbeeld een performance verbetering zijn maar ook een refactor.
+`type:design` - Puur gericht op uiterlijk.
+`type:feature` - Nieuwe toevoeging ten opzichte van huidige code base.
+`type:bug`
+`type:security`
+`type:task`
+
+### Prioriteit
+Het inschatten van dit label kan lastig zijn. Hieronder enkele richtlijnen. De kleuren voor deze labels zijn rood, oranje en geel.
+
+`prio:high` - Moet veranderd worden om de stek draaiende te kunnen houden. Tevens problemen die het gebruik van de stek regelmatig verstoren.
+`prio:normal` - Zaken die van waarde zijn maar de huidige stek niet ontregelen als ze niet gefixt worden. Denk hierbij aan nieuwe refactors.
+`prio:low` - Veelal issues die vooralsnog genegeerd kunnen worden. Bevatten vaak mooie ideeen, maar daar is nu geen tijd voor / behoefte aan.
+
+### Extra
+Het extra label is altijd zwart en beschrijft het onderdeel van de stek waar dit over gaat. Deze wordt, in tegenstelling tot de vorige 2, niet consistent gebruikt. Dit zou in een later stadium nog gedaan kunnen worden. Mogelijk zou dit ook met milestones kunnen.
+
+`part:Forum`
+`part:SocCie`
+...
