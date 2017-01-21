@@ -1,6 +1,6 @@
 # Contribueren aan de stek
 
-## Development
+## Installatie
 Hieronder is uitleg te vinden voor het installeren van alle componenten voor het lokaal gebruiken van de stek.
 
 ### Apache2
@@ -79,8 +79,21 @@ Op andere platforms moet je gebruik maken van boot2docker.
 
 Plaetjes zitten niet standaard in deze repo. Maar als je ze in `htdocs/plaetjes` zet zal docker ze gebruiken.
 
-## Issues
-### Type
+## Development
+
+### Branches & PR
+We hebben enkele branches. Niet heel bijzonder.
+
+- `master` -  live stek, niet stukmaken! Taart als dat wel gebeurd.
+- `#issue - naam`: graag issue nummer (van github) vermelden indien mogelijk.
+- `naam`: overig
+
+We werken met PRs voor de meeste gevallen. Probeer je code door ten minste 1 persoon te laten reviewen.
+Diegene mag hem mergen en zal er vervolgens voor zorgen dat de live stek wordt geupdate.
+
+
+### Issues
+#### Type
 Spreekt redelijk voorzich. De kleur is een pastelkleur. De specifieke kleur per label is willekeurig.
 
 `type:enhancement` - Verbetering voor de huidige code base / architectuur. Dit kan bijvoorbeeld een performance verbetering zijn maar ook een refactor.
@@ -90,14 +103,14 @@ Spreekt redelijk voorzich. De kleur is een pastelkleur. De specifieke kleur per 
 `type:security`
 `type:task`
 
-### Prioriteit
+#### Prioriteit
 Het inschatten van dit label kan lastig zijn. Hieronder enkele richtlijnen. De kleuren voor deze labels zijn rood, oranje en geel.
 
 `prio:high` - Moet veranderd worden om de stek draaiende te kunnen houden. Tevens problemen die het gebruik van de stek regelmatig verstoren.
 `prio:normal` - Zaken die van waarde zijn maar de huidige stek niet ontregelen als ze niet gefixt worden. Denk hierbij aan nieuwe refactors.
 `prio:low` - Veelal issues die vooralsnog genegeerd kunnen worden. Bevatten vaak mooie ideeen, maar daar is nu geen tijd voor / behoefte aan.
 
-### Extra
+#### Extra
 Het extra label is altijd zwart en beschrijft het onderdeel van de stek waar dit over gaat. Deze wordt, in tegenstelling tot de vorige 2, niet consistent gebruikt. Dit zou in een later stadium nog gedaan kunnen worden. Mogelijk zou dit ook met milestones kunnen.
 
 `part:Forum`
