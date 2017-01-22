@@ -102,6 +102,7 @@ Spreekt redelijk voorzich. De kleur is een pastelkleur. De specifieke kleur per 
 `type:bug`
 `type:security`
 `type:task`
+`type:question`
 
 #### Prioriteit
 Het inschatten van dit label kan lastig zijn. Hieronder enkele richtlijnen. De kleuren voor deze labels zijn rood, oranje en geel.
@@ -110,9 +111,9 @@ Het inschatten van dit label kan lastig zijn. Hieronder enkele richtlijnen. De k
 `prio:normal` - Zaken die van waarde zijn maar de huidige stek niet ontregelen als ze niet gefixt worden. Denk hierbij aan nieuwe refactors.
 `prio:low` - Veelal issues die vooralsnog genegeerd kunnen worden. Bevatten vaak mooie ideeen, maar daar is nu geen tijd voor / behoefte aan.
 
-#### Extra
-Het extra label is altijd zwart en beschrijft het onderdeel van de stek waar dit over gaat. Deze wordt, in tegenstelling tot de vorige 2, niet consistent gebruikt. Dit zou in een later stadium nog gedaan kunnen worden. Mogelijk zou dit ook met milestones kunnen.
+#### Component
+Het component label is altijd zwart en beschrijft het onderdeel van de stek waar dit over gaat. Deze wordt, in tegenstelling tot de vorige 2, niet consistent gebruikt. Dit zou in een later stadium nog gedaan kunnen worden. Mogelijk zou dit ook met milestones kunnen.
 
-`part:Forum`
-`part:SocCie`
+`compnent:forum`
+`component:soccie`
 ...
