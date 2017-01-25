@@ -15,6 +15,8 @@
             $header = $('#header'),
             $banner = $('#banner');
 
+        var hasLoaded = false;
+
         if (typeof $banner[0] == "undefined") {
             $banner = $('#banner-small');
         }
@@ -31,6 +33,25 @@
                 $login._show();
             }
         });
+
+        // Lazy load after animations have finished and user has scrolled
+        $window.scroll(function() {
+            if (hasLoaded === false && $(window).scrollTop() > 0) {
+                lazyLoad();
+            }
+        });
+
+        function lazyLoad() {
+            if (hasLoaded === true) return;
+            hasLoaded = true;
+
+            setTimeout(function() {
+                $('.lazy-load').each(function() {
+                    var html = $(this).data('lazy');
+                    $(this).append(html);
+                });
+            }, 1000);
+        }
 
         // Fix: Placeholder polyfill.
         $('form').placeholder();
