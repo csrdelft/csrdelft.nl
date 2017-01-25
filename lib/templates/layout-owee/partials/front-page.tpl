@@ -108,7 +108,7 @@
                         2611 BA Delft
                     </li>
                     <li class="fa-phone">015-2135681</li>
-                    <li class="fa-envelope"><a href="mailto:owee@csrdelft.nl">owee@csrdelft.nl</a></li>
+                    <li class="fa-envelope"><a href="mailto:abactis@csrdelft.nl">owee@csrdelft.nl</a></li>
                     <li class="fa-facebook"><a href="https://www.facebook.com/OWee-CSR-Delft-1570871723180451/?fref=ts">Like
                             de Facebookpagina om de laatste updates te ontvangen</a></li>
                     <li class="fa-map-marker">
