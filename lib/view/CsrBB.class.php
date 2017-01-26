@@ -1189,7 +1189,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		if ($vertaling === null) {
 			$vertaling = LidInstellingen::get('algemeen', 'bijbel');
 		}
-		$link = 'https://www.debijbel.nl/bijbel/zoeken/' . $vertaling . '/' . $stukje;
+		$link = 'https://www.debijbel.nl/bijbel/' . $vertaling . '/' . $stukje;
 		if ($tag) {
 			return '<a href="' . $link . '" target="_blank">' . $stukje . '</a>';
 		} else {
