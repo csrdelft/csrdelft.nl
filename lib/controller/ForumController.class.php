@@ -655,8 +655,8 @@ class ForumController extends Controller {
 				$lidnaam = $profiel->getNaam('civitas');
 				require_once 'model/entity/Mail.class.php';
 				$bericht =
-					"[url=" . CSR_ROOT . "/forum/reactie/" . $post->post_id . "#" . $post->post_id . "]" . $draad->titel . "[/url]" .
 					"Geachte " . $lidnaam . ",\n\nEr is een nieuwe reactie geplaatst door " . $auteur . " in een draad dat u volgt: " .
+                    "[url=" . CSR_ROOT . "/forum/reactie/" . $post->post_id . "#" . $post->post_id . "]" . $draad->titel . "[/url]" .
 					"\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT";
 				$mail = new Mail(array($profiel->getPrimaryEmail() => $lidnaam), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
 				$mail->send();
