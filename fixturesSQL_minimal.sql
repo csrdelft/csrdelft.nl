@@ -774,6 +774,12 @@ CREATE TABLE IF NOT EXISTS `forum_categorien` (
   KEY `volgorde` (`volgorde`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+INSERT INTO csrdelft.forum_categorien (titel, rechten_lezen, volgorde) VALUES ('Vereniging', 'P_LOGGED_IN', 1);
+INSERT INTO csrdelft.forum_categorien (titel, rechten_lezen, volgorde) VALUES ('Openbaar', 'P_FORUM_READ', 4);
+INSERT INTO csrdelft.forum_categorien (titel, rechten_lezen, volgorde) VALUES ('Geloof & Vorming', 'P_LOGGED_IN', 2);
+INSERT INTO csrdelft.forum_categorien (titel, rechten_lezen, volgorde) VALUES ('Deelfora', 'P_LOGGED_IN', 3);
+INSERT INTO csrdelft.forum_categorien (titel, rechten_lezen, volgorde) VALUES ('Overig', 'P_LOGGED_IN', 5);
+
 -- --------------------------------------------------------
 
 --
@@ -794,6 +800,9 @@ CREATE TABLE IF NOT EXISTS `forum_delen` (
   KEY `categorie_id` (`categorie_id`),
   KEY `volgorde` (`volgorde`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+INSERT INTO csrdelft.forum_delen (categorie_id, titel, omschrijving, rechten_lezen, rechten_posten, rechten_modereren, volgorde) VALUES (1, 'C.S.R.-zaken', 'Afdeling voor interne zaken. Onzichtbaar voor externen die niet kunnen inloggen.', 'P_LOGGED_IN', 'P_LOGGED_IN', 'P_FORUM_MOD', 0);
 
 -- --------------------------------------------------------
 

@@ -17,7 +17,7 @@
         <section id="footer">
             <div class="inner">
                 <ul class="copyright">
-                    <li>&copy; 2016 - C.S.R. Delft</li>
+                    <li>&copy; {date('Y')} - C.S.R. Delft</li>
                 </ul>
             </div>
         </section>
