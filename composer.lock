@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cd10673b317189965ed2bfe876033b22",
-    "content-hash": "28535141b361e9413e935a2bf30b0a05",
+    "content-hash": "1acadab864398906306b5b110d5e07fc",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -48,7 +47,7 @@
             ],
             "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
             "homepage": "https://github.com/firebase/php-jwt",
-            "time": "2016-07-18 04:51:16"
+            "time": "2016-07-18T04:51:16+00:00"
         },
         {
             "name": "globalcitizen/php-iban",
@@ -76,7 +75,7 @@
                 "LGPL-3.0"
             ],
             "description": "php-iban is a library for parsing and validating IBAN (and IIBAN) bank account information.",
-            "time": "2016-10-02 16:00:06"
+            "time": "2016-10-02T16:00:06+00:00"
         },
         {
             "name": "google/apiclient",
@@ -135,7 +134,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2017-01-11 19:44:46"
+            "time": "2017-01-11T19:44:46+00:00"
         },
         {
             "name": "google/apiclient-services",
@@ -169,7 +168,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2017-01-11 18:53:21"
+            "time": "2017-01-11T18:53:21+00:00"
         },
         {
             "name": "google/auth",
@@ -217,7 +216,7 @@
                 "google",
                 "oauth2"
             ],
-            "time": "2016-11-02 14:59:14"
+            "time": "2016-11-02T14:59:14+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -279,7 +278,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2016-10-08 15:01:37"
+            "time": "2016-10-08T15:01:37+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -330,7 +329,7 @@
             "keywords": [
                 "promise"
             ],
-            "time": "2016-12-20 10:07:11"
+            "time": "2016-12-20T10:07:11+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -388,7 +387,55 @@
                 "stream",
                 "uri"
             ],
-            "time": "2016-06-24 23:00:38"
+            "time": "2016-06-24T23:00:38+00:00"
+        },
+        {
+            "name": "jacwright/restserver",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jacwright/RestServer.git",
+                "reference": "584aa063caeb88f2bbbdcd145786ae0df1df029c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jacwright/RestServer/zipball/584aa063caeb88f2bbbdcd145786ae0df1df029c",
+                "reference": "584aa063caeb88f2bbbdcd145786ae0df1df029c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Jacwright\\RestServer": "source/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Wright",
+                    "email": "jacwright@gmail.com",
+                    "homepage": "http://jacwright.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "php rest server for very light-weight REST APIs",
+            "homepage": "https://github.com/jacwright/RestServer",
+            "keywords": [
+                "http",
+                "json",
+                "light-weight",
+                "mit",
+                "php",
+                "rest",
+                "rest-server"
+            ],
+            "time": "2016-12-20 19:04:05"
         },
         {
             "name": "monolog/monolog",
@@ -466,7 +513,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-11-26 00:15:39"
+            "time": "2016-11-26T00:15:39+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -558,7 +605,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2016-10-04 00:57:04"
+            "time": "2016-10-04T00:57:04+00:00"
         },
         {
             "name": "psr/cache",
@@ -604,7 +651,7 @@
                 "psr",
                 "psr-6"
             ],
-            "time": "2016-08-06 20:24:11"
+            "time": "2016-08-06T20:24:11+00:00"
         },
         {
             "name": "psr/http-message",
@@ -654,7 +701,7 @@
                 "request",
                 "response"
             ],
-            "time": "2016-08-06 14:39:51"
+            "time": "2016-08-06T14:39:51+00:00"
         },
         {
             "name": "psr/log",
@@ -701,7 +748,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "smarty/smarty",
@@ -754,13 +801,15 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-12-14 21:57:25"
+            "time": "2016-12-14T21:57:25+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "jacwright/restserver": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

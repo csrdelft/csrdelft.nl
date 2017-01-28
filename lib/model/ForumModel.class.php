@@ -760,14 +760,15 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	 * @param int $aantal
 	 * @param boolean $belangrijk
 	 * @param boolean $rss
+	 * @param int $offset
+	 * @param boolean $getLatestPosts
 	 * @return ForumDraad[]
 	 */
-	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false) {
+	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false, $offset = 0, $getLatestPosts = false) {
 		if (!is_int($aantal)) {
 			$aantal = (int) LidInstellingen::get('forum', 'draden_per_pagina');
 			$pagina = $this->pagina;
-		} else {
-			$pagina = 1;
+			$offset = ($pagina - 1) * $aantal;
 		}
 		$delenById = ForumDelenModel::instance()->getForumDelenVoorLid($rss);
 		$count = count($delenById);
@@ -798,12 +799,16 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
 			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
 		}
-		$dradenById = group_by_distinct('draad_id', $this->find($where, $where_params, null, 'laatst_gewijzigd DESC', $aantal, ($pagina - 1) * $aantal));
+		$dradenById = group_by_distinct('draad_id', $this->find($where, $where_params, null, 'laatst_gewijzigd DESC', $aantal, $offset));
 		$count = count($dradenById);
 		if ($count > 0) {
 			$draden_ids = array_keys($dradenById);
 			array_unshift($draden_ids, LoginModel::getUid());
 			ForumDradenGelezenModel::instance()->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
+			if ($getLatestPosts) {
+				$latest_post_ids = array_map(function($draad) { return $draad->laatste_post_id; }, array_values($dradenById));
+				ForumPostsModel::instance()->prefetch('wacht_goedkeuring = FALSE AND verwijderd = FALSE AND post_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $latest_post_ids);
+			}
 		}
 		return $dradenById;
 	}

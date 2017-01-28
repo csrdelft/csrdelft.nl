@@ -1,8 +1,2 @@
 RewriteEngine On
-RewriteRule ^auth/authorize$ authorize.php [L]
-RewriteRule ^auth/token$ token.php [L]
-RewriteRule ^leden/([0-9a-z]*)$ api.php?cat=leden&id=$1 [L]
-RewriteRule ^leden$ api.php?cat=leden [L]
-RewriteRule ^agenda$ api.php?cat=agenda [QSA,L]
-RewriteRule ^([a-z]*)/([0-9]*)/aanmelden api.php?cat=$1&id=$2&action=aanmelden [L]
-RewriteRule ^([a-z]*)/([0-9]*)/afmelden api.php?cat=$1&id=$2&action=afmelden [L]
+RewriteRule ^.*$ index.php [QSA,L]
