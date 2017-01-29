@@ -21,6 +21,15 @@ class RememberLoginModel extends PersistenceModel {
 		}
 		$remember = $this->find('token = ? AND (lock_ip = FALSE OR ip = ?)', array(hash('sha512', $rand), $ip), null, null, 1)->fetch();
 		if (!$remember) {
+			$token = hash('sha512', $rand);
+			$headers = implode(", ", headers_list());
+			// Doe een log naar de debuglog, om erachter te komen waarom logins verdwijnen.
+			DebugLogModel::instance()->log("RememberLoginModel", "verifyToken", array('$rand'), <<<DUMP
+token rejected,
+cookietoken: {$token},
+headers: {$headers}
+DUMP
+			);
 			return false;
 		}
 		$this->rememberLogin($remember);
