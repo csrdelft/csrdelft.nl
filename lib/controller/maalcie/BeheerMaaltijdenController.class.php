@@ -40,8 +40,8 @@ class BeheerMaaltijdenController extends AclController {
 				'bewerk'		 => 'P_MAAL_MOD',
 				'verwijder'		 => 'P_MAAL_MOD',
 				'herstel'		 => 'P_MAAL_MOD',
-				'anderaanmelden' => 'P_MAAL_MOD',
-				'anderafmelden'	 => 'P_MAAL_MOD',
+				'aanmelden' => 'P_MAAL_MOD',
+				'afmelden'	 => 'P_MAAL_MOD',
 				'aanmaken'		 => 'P_MAAL_MOD'
 			);
 		}
@@ -171,23 +171,29 @@ class BeheerMaaltijdenController extends AclController {
 		exit;
 	}
 
-	public function anderaanmelden($mid) {
-		$form = new AanmeldingForm($mid, true); // fetches POST values itself
+	public function aanmelden() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		/** @var Maaltijd $maaltijd */
+		$maaltijd = $this->model->retrieveByUUID($selection[0]);
+		$form = new AanmeldingForm($maaltijd, true); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$aanmelding = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($mid, $values['voor_lid'], LoginModel::getUid(), $values['aantal_gasten'], true);
-			$this->view = new BeheerMaaltijdView($aanmelding->maaltijd);
+			MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($maaltijd, $values['voor_lid'], LoginModel::getUid(), $values['aantal_gasten'], true);
+			$this->view = new BeheerMaaltijdenLijst(array($maaltijd));
 		} else {
 			$this->view = $form;
 		}
 	}
 
-	public function anderafmelden($mid) {
-		$form = new AanmeldingForm($mid, false); // fetches POST values itself
+	public function afmelden() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		/** @var Maaltijd $maaltijd */
+		$maaltijd = $this->model->retrieveByUUID($selection[0]);
+		$form = new AanmeldingForm($maaltijd, false); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$maaltijd = MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($mid, $values['voor_lid'], true);
-			$this->view = new BeheerMaaltijdView($maaltijd);
+			MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($maaltijd, $values['voor_lid'], true);
+			$this->view = new BeheerMaaltijdenLijst(array($maaltijd));
 		} else {
 			$this->view = $form;
 		}

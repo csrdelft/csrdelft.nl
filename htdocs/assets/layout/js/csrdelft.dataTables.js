@@ -42,6 +42,8 @@ function fnInitDataTables() {
 	$.fn.dataTable.ext.buttons.excelFlash.className += ' dt-button-ico dt-ico-page_white_excel';
     $.fn.dataTable.ext.buttons.print.className += ' dt-button-ico dt-ico-printer';
 
+
+
     // Laat een modal zien, of doe een ajax call gebasseerd op selectie.
     $.fn.dataTable.ext.buttons.default = {
         init: function (dt, node, config) {
@@ -148,6 +150,13 @@ function fnInitDataTables() {
 			knop_post.call(button, e)
 		},
 	};
+
+	$.fn.dataTable.ext.buttons.defaultCollection = {
+		extend: 'collection',
+		init: function (dt, node, config) {
+			$.fn.dataTable.ext.buttons.default.init.call(this, dt, node, config);
+		}
+	}
 
 	$('body').on('click', function () {
 		// Verwijder tooltips als de datatable modal wordt gesloten

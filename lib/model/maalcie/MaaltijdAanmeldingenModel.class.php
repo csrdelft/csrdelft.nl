@@ -14,8 +14,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 
     protected static $instance;
 
-	public function aanmeldenVoorMaaltijd($mid, $uid, $doorUid, $aantalGasten = 0, $beheer = false, $gastenEetwens = '') {
-		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+	public function aanmeldenVoorMaaltijd(Maaltijd $maaltijd, $uid, $doorUid, $aantalGasten = 0, $beheer = false, $gastenEetwens = '') {
 		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
 			MaaltijdenModel::instance()->sluitMaaltijd($maaltijd);
 		}
@@ -31,23 +30,24 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 			}
 		}
 
-		if ($this->getIsAangemeld($mid, $uid)) {
+		if ($this->getIsAangemeld($maaltijd->maaltijd_id, $uid)) {
 			if (!$beheer) {
 				throw new Exception('Al aangemeld');
 			}
 			// aanmelding van lid updaten met aantal gasten door beheerder
-			$aanmelding = $this->loadAanmelding($mid, $uid);
+			$aanmelding = $this->loadAanmelding($maaltijd->maaltijd_id, $uid);
 			$verschil = $aantalGasten - $aanmelding->aantal_gasten;
-			if ($verschil === 0) {
-				throw new Exception('Al aangemeld met ' . $aantalGasten . ' gasten');
-			}
+			// Kan nu even niets schelen
+//			if ($verschil === 0) {
+//				throw new Exception('Al aangemeld met ' . $aantalGasten . ' gasten');
+//			}
 			$aanmelding->aantal_gasten = $aantalGasten;
 			$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
             $this->update($aanmelding);
 			$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
 		} else {
             $aanmelding = new MaaltijdAanmelding();
-            $aanmelding->maaltijd_id = $mid;
+            $aanmelding->maaltijd_id = $maaltijd->maaltijd_id;
             $aanmelding->uid = $uid;
             $aanmelding->door_uid = $doorUid;
             $aanmelding->aantal_gasten = $aantalGasten;
@@ -106,19 +106,18 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 		return $aantal;
 	}
 
-	public function afmeldenDoorLid($mid, $uid, $beheer = false) {
-		if (!$this->getIsAangemeld($mid, $uid)) {
+	public function afmeldenDoorLid(Maaltijd $maaltijd, $uid, $beheer = false) {
+		if (!$this->getIsAangemeld($maaltijd->maaltijd_id, $uid)) {
 			throw new Exception('Niet aangemeld');
 		}
-		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
 		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
 			MaaltijdenModel::instance()->sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer && $maaltijd->gesloten) {
 			throw new Exception('Maaltijd is gesloten');
 		}
-		$aanmelding = $this->loadAanmelding($mid, $uid);
-		$this->deleteByPrimaryKey(array($mid, $uid));
+		$aanmelding = $this->loadAanmelding($maaltijd->maaltijd_id, $uid);
+		$this->deleteByPrimaryKey(array($maaltijd->maaltijd_id, $uid));
 		$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() - 1 - $aanmelding->aantal_gasten;
 		return $maaltijd;
 	}

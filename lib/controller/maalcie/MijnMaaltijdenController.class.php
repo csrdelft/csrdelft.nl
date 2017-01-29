@@ -86,7 +86,8 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function aanmelden($mid) {
-		$aanmelding = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($mid, LoginModel::getUid(), LoginModel::getUid());
+		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+		$aanmelding = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($maaltijd, LoginModel::getUid(), LoginModel::getUid());
 		if ($this->getMethod() == 'POST') {
 			$this->view = new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
 		} else {
@@ -96,7 +97,8 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function afmelden($mid) {
-		$maaltijd = MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($mid, LoginModel::getUid());
+		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+		MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($maaltijd, LoginModel::getUid());
 		if ($this->getMethod() == 'POST') {
 			$this->view = new MijnMaaltijdView($maaltijd);
 		} else {
