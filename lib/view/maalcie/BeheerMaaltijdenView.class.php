@@ -8,39 +8,16 @@
  * Tonen van alle maaltijden om te beheren.
  * 
  */
-//class BeheerMaaltijdenView extends SmartyTemplateView {
-//
-//	private $prullenbak;
-//	private $archief;
-//	private $repetities;
-//
-//	public function __construct($maaltijden, $prullenbak = false, $archief = false, $repetities = null) {
-//		parent::__construct($maaltijden);
-//		$this->prullenbak = $prullenbak;
-//		$this->archief = $archief;
-//		$this->repetities = $repetities;
-//		if ($prullenbak) {
-//			$this->titel = 'Beheer maaltijden in prullenbak';
-//		} elseif ($archief) {
-//			$this->titel = 'Maaltijdenarchief';
-//		} else {
-//			$this->titel = 'Maaltijdenbeheer';
-//		}
-//
-//		$this->smarty->assign('prullenbak', $this->prullenbak);
-//		$this->smarty->assign('archief', $this->archief);
-//	}
-//
-//	public function view() {
-//		$this->smarty->assign('maaltijden', $this->model);
-//		$this->smarty->assign('repetities', $this->repetities);
-//
-//		$this->smarty->display('maalcie/menu_pagina.tpl');
-//		$this->smarty->display('maalcie/maaltijd/beheer_maaltijden.tpl');
-//	}
-//
-//}
-class BeheerMaaltijdenView extends DataTable {
+class BeheerMaaltijdenView extends SmartyTemplateView {
+	public function view() {
+		$this->smarty->display('maalcie/menu_pagina.tpl');
+		$beheerTable = new BeheerMaaltijdenTable($this->model);
+		$beheerTable->view();
+	}
+
+}
+
+class BeheerMaaltijdenTable extends DataTable {
 	/**
 	 * BeheerMaaltijdenView constructor.
 	 * @param $repetities MaaltijdRepetitie[]
