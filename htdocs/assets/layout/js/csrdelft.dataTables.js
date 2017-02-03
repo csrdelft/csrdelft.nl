@@ -93,6 +93,13 @@ function fnInitDataTables() {
 		}
 	};
 
+    $.fn.dataTable.ext.buttons.url = {
+    	extend: 'default',
+		action: function(e, dt, button, config) {
+    		window.location.href = button.attr('href');
+		}
+	};
+
     // Verander de bron van een datatable
 	// De knop is ingedrukt als de bron van de datatable
 	// gelijk is aan de bron van de knop.

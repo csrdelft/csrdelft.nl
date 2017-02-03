@@ -79,8 +79,13 @@ class BeheerMaaltijdenView extends DataTable {
 		$this->addKnop($aanmeldingen);
 
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/bewerk', '', 'Bewerken', 'Maaltijd bewerken', 'pencil'));
+		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/corvee/beheer/maaltijd/:maaltijd_id', '', 'Corvee bewerken', 'Gekoppelde corveetaken bewerken', 'chart_organisation', 'url'));
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/verwijder', '', 'Verwijderen', 'Maaltijd verwijderen', 'cross', 'confirm'));
-		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/lijst/:maaltijd_id', '', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal', 'popup'));
+
+		$lijst = new DataTableKnop('== 1', $this->dataTableId, '', '', 'Lijst', 'Maaltijdlijst bekijken', '', 'defaultCollection');
+		$lijst->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer/fiscaal/:maaltijd_id', '', 'Fiscale Maaltijdlijst', 'Fiscale maaltijdlijst bekijken', 'money_euro', 'popup'));
+		$lijst->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/lijst/:maaltijd_id', '', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal', 'popup'));
+		$this->addKnop($lijst);
 	}
 
 	public function getJavascript() {
