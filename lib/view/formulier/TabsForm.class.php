@@ -59,7 +59,7 @@ class TabsForm extends Formulier {
 		// fields above tabs
 		if (isset($this->tabs['head'])) {
 			foreach ($this->tabs['head'] as $field) {
-				$field->view();
+				echo $field->getHtml();
 			}
 			unset($this->tabs['head']);
 		}
@@ -78,7 +78,7 @@ class TabsForm extends Formulier {
 			foreach ($this->tabs as $tab => $fields) {
 				echo '<div id="' . $this->formId . '-tab-' . $tab . '" class="tabs-content">';
 				foreach ($fields as $field) {
-					$field->view();
+					echo $field->getHtml();
 				}
 				echo '</div>';
 			}
@@ -87,7 +87,7 @@ class TabsForm extends Formulier {
 		// fields below tabs
 		if (isset($foot)) {
 			foreach ($foot as $field) {
-				$field->view();
+				echo $field->getHtml();
 			}
 		}
 		echo $this->getScriptTag();

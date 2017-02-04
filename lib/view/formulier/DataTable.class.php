@@ -3,78 +3,83 @@ require_once 'view/formulier/TabsForm.class.php';
 
 /**
  * DataTable.class.php
- * 
- * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
+ * @author P.W.G. Brussee <brussee@live.nl
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ *
  * Uses DataTables plug-in for jQuery.
  * @see http://www.datatables.net/
- * 
+ *
  */
-abstract class DataTable extends TabsForm {
+class DataTable implements View, FormElement {
 
 	public $nestedForm = true;
 	public $filter = null;
 	protected $dataUrl;
 	private $groupByColumn;
-	private $groupByLocked = false;
+	protected $titel;
+	protected $dataTableId;
+	public $model;
 	protected $defaultLength = 10;
 	private $columns = array();
 	protected $settings = array(
-		'deferRender'	 => true,
-		'dom'			 => 'fTrtpli',
-		'tableTools'	 => array(
-			'sRowSelect' => 'os',
-			'aButtons'	 => array(
-				'select_all',
-				'select_none',
-				'copy',
-				'xls',
-				'pdf',
-				'print'
-			),
-			'sSwfPath'	 => '/layout/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf'
-		),
-		'lengthMenu'	 => array(
+		'deferRender' => true,
+		'dom' => 'Bfrtpli',
+		'buttons' => array('copy', 'csv', 'excel', 'pdf', 'print'),
+		'userButtons' => array(),
+		'select' => true,
+		'lengthMenu' => array(
 			array(10, 25, 50, 100, -1),
 			array(10, 25, 50, 100, 'Alles')
 		),
-		'language'		 => array(
-			'sProcessing'		 => 'Bezig...',
-			'sLengthMenu'		 => '_MENU_ resultaten weergeven',
-			'sZeroRecords'		 => 'Geen resultaten gevonden',
-			'sInfo'				 => '_START_ tot _END_ van _TOTAL_ resultaten',
-			'sInfoEmpty'		 => 'Geen resultaten om weer te geven',
-			'sInfoFiltered'		 => ' (gefilterd uit _MAX_ resultaten)',
-			'sInfoPostFix'		 => '',
-			'sSearch'			 => '',
-			'sEmptyTable'		 => 'Geen resultaten aanwezig in de tabel',
-			'sInfoThousands'	 => '.',
-			'sLoadingRecords'	 => 'Een moment geduld aub - bezig met laden...',
-			'oPaginate'			 => array(
-				'sFirst'	 => 'Eerste',
-				'sLast'		 => 'Laatste',
-				'sNext'		 => 'Volgende',
-				'sPrevious'	 => 'Vorige'
+		'language' => array(
+			'sProcessing' => 'Bezig...',
+			'sLengthMenu' => '_MENU_ resultaten weergeven',
+			'sZeroRecords' => 'Geen resultaten gevonden',
+			'sInfo' => '_START_ tot _END_ van _TOTAL_ resultaten',
+			'sInfoEmpty' => 'Geen resultaten om weer te geven',
+			'sInfoFiltered' => ' (gefilterd uit _MAX_ resultaten)',
+			'sInfoPostFix' => '',
+			'sSearch' => 'Zoeken',
+			'sEmptyTable' => 'Geen resultaten aanwezig in de tabel',
+			'sInfoThousands' => '.',
+			'sLoadingRecords' => 'Een moment geduld aub - bezig met laden...',
+			'oPaginate' => array(
+				'sFirst' => 'Eerste',
+				'sLast' => 'Laatste',
+				'sNext' => 'Volgende',
+				'sPrevious' => 'Vorige'
+			),
+			'select' => array(
+				'rows' => array(
+					'_' => '%d rijen geselecteerd',
+					'0' => '',
+					'1' => '1 rij geselecteerd'
+				)
+			),
+			'buttons' => array(
+				'copy' => 'Kopiëren',
+				'print' => 'Printen'
 			)
 		)
 	);
 
 	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null) {
-		parent::__construct(new $orm(), null, $titel, true);
+		$this->model = new $orm();
+		$this->titel = $titel;
+
 		$this->dataUrl = $dataUrl;
-		$this->dataTableId = $this->formId;
-		$this->formId .= '_toolbar';
-		$this->css_classes[] = 'DataTableToolbar';
+		$this->dataTableId = uniqid(get_class($this->model));
 		$this->groupByColumn = $groupByColumn;
 
 		// create group expand / collapse column
 		$this->columns['details'] = array(
-			'name'			 => 'details',
-			'data'			 => 'details',
-			'title'			 => '',
-			'type'			 => 'string',
-			'orderable'		 => false,
-			'searchable'	 => false,
+			'name' => 'details',
+			'data' => 'details',
+			'title' => '',
+			'type' => 'string',
+			'orderable' => false,
+			'searchable' => false,
 			'defaultContent' => ''
 		);
 
@@ -89,25 +94,36 @@ abstract class DataTable extends TabsForm {
 		}
 	}
 
-	protected function addKnop(DataTableKnop $knop, $tab = 'head') {
-		$this->addFields(array($knop), $tab);
+	/**
+	 * @return string
+	 */
+	public function getDataTableId() {
+		return $this->dataTableId;
+	}
+
+	protected function addKnop(DataTableKnop $knop) {
+		$this->settings['userButtons'][] = $knop;
+	}
+
+	protected function columnPosition($name) {
+		return array_search($name, array_keys($this->columns));
 	}
 
 	protected function addColumn($newName, $before = null, $defaultContent = null, $render = null) {
 		// column definition
 		$newColumn = array(
-			'name'		 => $newName,
-			'data'		 => $newName,
-			'title'		 => ucfirst(str_replace('_', ' ', $newName)),
+			'name' => $newName,
+			'data' => $newName,
+			'title' => ucfirst(str_replace('_', ' ', $newName)),
 			'defaultContent' => $defaultContent,
-			'type'		 => 'string',
+			'type' => 'string',
 			'searchable' => false,
 			'render' => $render
-				/*
-				  //TODO: sort by other column
-				  { "iDataSort": 1 },
-				  reldate(getDateTime());
-				 */
+			/*
+			  //TODO: sort by other column
+			  { "iDataSort": 1 },
+			  reldate(getDateTime());
+			 */
 		);
 		// append or insert at position
 		if ($before === null) {
@@ -126,13 +142,13 @@ abstract class DataTable extends TabsForm {
 
 	protected function hideColumn($name, $hide = true) {
 		if (isset($this->columns[$name])) {
-			$this->columns[$name]['visible'] = $hide ? false : true;
+			$this->columns[$name]['visible'] = !$hide;
 		}
 	}
 
 	protected function searchColumn($name, $searchable = true) {
 		if (isset($this->columns[$name])) {
-			$this->columns[$name]['searchable'] = (boolean) $searchable;
+			$this->columns[$name]['searchable'] = (boolean)$searchable;
 		}
 	}
 
@@ -147,7 +163,7 @@ abstract class DataTable extends TabsForm {
 		// set view modus: paging or scrolling
 		if ($this->defaultLength > 0) {
 			$this->settings['paging'] = true;
-			$this->settings['iDisplayLength'] = $this->defaultLength;
+			$this->settings['pageLength'] = $this->defaultLength;
 		} else {
 			$this->settings['paging'] = false;
 			$this->settings['dom'] = str_replace('i', '', $this->settings['dom']);
@@ -156,16 +172,15 @@ abstract class DataTable extends TabsForm {
 		// set ajax url
 		if ($this->dataUrl) {
 			$this->settings['ajax'] = array(
-				'url'		 => $this->dataUrl,
-				'type'		 => 'POST',
-				'data'		 => array(
+				'url' => $this->dataUrl,
+				'type' => 'POST',
+				'data' => array(
 					'lastUpdate' => 'fnGetLastUpdate'
 				),
-				'dataSrc'	 => 'fnAjaxUpdateCallback'
+				'dataSrc' => 'fnAjaxUpdateCallback'
 			);
 		}
 		$this->settings['createdRow'] = 'fnCreatedRowCallback';
-		$this->settings['drawCallback'] = 'fnUpdateToolbar';
 
 		// get columns index
 		$columns = array_keys($this->columns);
@@ -192,7 +207,7 @@ abstract class DataTable extends TabsForm {
 			if (!isset($def['visible']) OR $def['visible'] === true) {
 
 				// default order by first visible orderable column
-				if (!isset($this->settings['order']) AND ! (isset($def['orderable']) AND $def['orderable'] === false)) {
+				if (!isset($this->settings['order']) AND !(isset($def['orderable']) AND $def['orderable'] === false)) {
 					$this->settings['order'] = array(
 						array($index, 'asc')
 					);
@@ -206,29 +221,53 @@ abstract class DataTable extends TabsForm {
 		// translate columns index
 		$this->settings['columns'] = array_values($this->columns);
 
+		// Voeg nieuwe knoppen toe
+		$this->settings['buttons'] = array_merge($this->settings['userButtons'], $this->settings['buttons']);
+
 		return $this->settings;
 	}
 
-	/**
-	 * Update datatable knoppen based on selection (count).
-	 * 
-	 * @return javascript
-	 */
-	private function getUpdateToolbarFunction() {
-		$js = <<<JS
-function () {
-	var selectie = fnGetSelection(tableId);
-	var aantal = selectie.length;
-JS;
-		foreach ($this->getFields() as $field) {
-			if ($field instanceof DataTableKnop) {
-				$js .= "\n" . $field->getUpdateToolbar() . "\n";
-			}
-		}
-		return $js . '}';
+	public function view() {
+		echo $this->getHtml();
+		echo '<script type="text/javascript">' . $this->getJavascript() . '</script>';
 	}
 
-	public function view() {
+	public function getTitel() {
+		return $this->titel;
+	}
+
+	public function getBreadcrumbs() {
+		return "Datatable";
+	}
+
+	/**
+	 * Hiermee wordt gepoogt af te dwingen dat een view een model heeft om te tonen
+	 */
+	public function getModel() {
+		return $this->model;
+	}
+
+	public function getType() {
+		return get_class($this);
+	}
+
+	public function getGroupByColumn() {
+		// get columns index
+		$columns = array_keys($this->columns);
+		return isset($this->columns[$this->groupByColumn]) ? array_search($this->groupByColumn, $columns) : false;
+	}
+
+	public function getHtml() {
+		$groupByColumn = $this->groupByColumn !== false ? ' groupByColumn' : '';
+
+		return <<<HTML
+<h2 class="Titel">{$this->getTitel()}</h2>
+
+<table id="{$this->dataTableId}" class="display{$groupByColumn}" groupbycolumn="{$this->getGroupByColumn()}"></table>
+HTML;
+	}
+
+	public function getJavascript() {
 		// encode settings
 		$settingsJson = json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0);
 
@@ -236,33 +275,29 @@ JS;
 		$settingsJson = str_replace('"fnGetLastUpdate"', 'fnGetLastUpdate', $settingsJson);
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
-        $settingsJson = str_replace('"fnUpdateToolbar"', 'fnUpdateToolbar', $settingsJson);
-        $settingsJson = preg_replace('/"render":\s?"(.+)"/', '"render": $1', $settingsJson);
+		$settingsJson = preg_replace('/"render":\s?"(.+)"/', '"render": $1', $settingsJson);
 
-		// toolbar
-		parent::view();
-		?>
-		<table id="<?= $this->dataTableId; ?>" class="display <?= ($this->groupByColumn !== false ? 'groupByColumn' : ''); ?>" groupbycolumn="<?= $this->groupByColumn; ?>"></table>
-		<script type="text/javascript">
-			<?= $this->getJavascript(); ?>
+		$filter = str_replace("'", "\'", $this->filter);
 
+		return <<<JS
 			$(document).ready(function () {
-
-				var fnUpdateToolbar = <?= $this->getUpdateToolbarFunction(); ?>;
+				var tableId = '#{$this->dataTableId}';
+			
 				var fnGetLastUpdate = function () {
-					return Number($('#<?= $this->dataTableId; ?>').attr('data-lastupdate'));
-				}
+					return Number($(tableId).attr('data-lastupdate'));
+				};
 				var fnSetLastUpdate = function (lastUpdate) {
-					$('#<?= $this->dataTableId; ?>').attr('data-lastupdate', lastUpdate);
-				}
+					$(tableId).attr('data-lastupdate', lastUpdate);
+				};
 				/**
 				 * Called after row addition and row data update.
-				 * 
-				 * @param object tr
-				 * @param objectdata
-				 * @param int rowIndex
+				 *
+				 * @param tr
+				 * @param data
+				 * @param rowIndex
 				 */
 				var fnCreatedRowCallback = function (tr, data, rowIndex) {
+					var table = this;
 					$(tr).attr('data-uuid', data.UUID);
 					init_context(tr);
 					// Details from external source
@@ -272,21 +307,19 @@ JS;
 					$(tr).children().each(function (columnIndex, td) {
 						// Init custom buttons in rows
 						$(td).children('a.post').each(function (i, a) {
-							$(a).attr('data-tableid', '<?= $this->dataTableId; ?>');
+							$(a).attr('data-tableid', table.attr('id'));
 						});
 					});
 				};
 				/**
 				 * Called after ajax load complete.
-				 * 
-				 * @param object json
+				 *
+				 * @param json
 				 * @returns object
 				 */
 				var fnAjaxUpdateCallback = function (json) {
 					fnSetLastUpdate(json.lastUpdate);
-					var tableId = '#<?= $this->dataTableId; ?>';
-					var $table = $(tableId);
-					var table = $table.DataTable();
+					var table = $(tableId).DataTable();
 
 					if (json.autoUpdate) {
 						var timeout = parseInt(json.autoUpdate);
@@ -295,7 +328,7 @@ JS;
 								$.post(table.ajax.url(), {
 									'lastUpdate': fnGetLastUpdate()
 								}, function (data, textStatus, jqXHR) {
-									fnUpdateDataTable('#<?= $this->dataTableId; ?>', data);
+									fnUpdateDataTable(tableId, data);
 									fnAjaxUpdateCallback(data);
 								});
 							}, timeout);
@@ -315,70 +348,73 @@ JS;
 					return json.data;
 				};
 				// Init DataTable
-				var tableId = '#<?= $this->dataTableId; ?>';
-				var table = $(tableId).dataTable(<?= $settingsJson; ?>);
-				table.fnFilter('<?= str_replace("'", "\'", $this->filter); ?>');
-				/**
-				 * Toolbar button state update on row (de-)selection.
-				 */
-				$(tableId + ' tbody').on('click', 'tr', fnUpdateToolbar);
-				$('.DTTT_button_text').on('click', fnUpdateToolbar); // (De-)Select all
-				$(tableId + '_toolbar').prependTo(tableId + '_wrapper'); // Toolbar above table
-				$(tableId + '_toolbar h2.Titel').prependTo(tableId + '_wrapper'); // Title above toolbar
-				$('.DTTT_container').children().appendTo(tableId + '_toolbar'); // Buttons inside toolbar
-				$('.DTTT_container').remove(); // Remove buttons container
-				$(tableId + '_filter input').attr('placeholder', 'Zoeken').unwrap(); // Remove filter container
-				$(tableId + '_filter').prependTo(tableId + '_toolbar'); // Filter inside toolbar
-				fnInitStickyToolbar(); // Init after modifying DOM
+				var jtable = $(tableId);
+				var table = jtable.dataTable({$settingsJson});
+				table.fnFilter('{$filter}');
+				//fnInitStickyToolbar(); // Init after modifying DOM
 				// Toggle details childrow
-				$(tableId + ' tbody').on('click', 'tr td.toggle-childrow', function (event) {
+				jtable.find('tbody').on('click', 'tr td.toggle-childrow', function (event) {
 					fnChildRow(tableId, $(this));
 				});
-				// Group by column
-				$(tableId + '.groupByColumn tbody').on('click', 'tr.group', function (event) {
-					if (!bShiftPressed && !bCtrlPressed) {
-						fnGroupExpandCollapse(tableId, $(this));
-					}
-				});
-				$(tableId + '.groupByColumn thead').on('click', 'th.toggle-group:first', function (event) {
-					fnGroupExpandCollapseAll(tableId, $(this));
-				});
-		<?php if (!$this->groupByLocked) { ?>
-					$(tableId + '.groupByColumn').on('order.dt', fnGroupByColumn);
-		<?php } ?>
-				$(tableId + '.groupByColumn').on('draw.dt', fnGroupByColumnDraw);
-				$(tableId + '.groupByColumn').data('collapsedGroups', []);
-				if ($(tableId).hasClass('groupByColumn') && fnGetGroupByColumn(tableId)) {
-					$(tableId + ' thead tr th').first().addClass('toggle-group toggle-group-expanded');
+				if (jtable.hasClass('groupByColumn') && fnGetGroupByColumn(tableId)) {
+					// Group by column
+					jtable.find('tbody').on('click', 'tr.group', function (event) {
+						if (!bShiftPressed && !bCtrlPressed) {
+							fnGroupExpandCollapse(tableId, $(this));
+						}
+					});
+					jtable.find('thead').on('click', 'th.toggle-group:first', function (event) {
+						fnGroupExpandCollapseAll(tableId, $(this));
+					});
+					jtable.on('draw.dt', fnGroupByColumnDraw);
+					jtable.data('collapsedGroups', []);
+					jtable.find('thead tr th').first().addClass('toggle-group toggle-group-expanded');
 				}
 			});
-		</script>
-		<?php
+JS;
 	}
-
 }
 
-class DataTableKnop extends FormulierKnop {
+class DataTableKnop implements JsonSerializable {
 
-	private $multiplicity;
+	protected $multiplicity;
 	protected $tableId;
+	protected $label;
+	protected $url;
+	protected $icon;
+	protected $id;
+	protected $extend;
+	protected $buttons;
+	protected $title;
 
-	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $class, $icon = null) {
-		parent::__construct($url, $action . ' DataTableResponse', $label, $title, $icon);
+	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $icon = '', $extend = 'default') {
+		$this->icon = $icon;
+		$this->label = $label;
+		$this->title = $title;
+		$this->url = $url;
 		$this->multiplicity = $multiplicity;
 		$this->tableId = $tableId;
-		$this->css_classes[] = 'DTTT_button';
-		$this->css_classes[] = 'DTTT_button_' . $class;
+		$this->extend = $extend;
+		$this->buttons = array();
 	}
 
-	public function getUpdateToolbar() {
-		return "$('#{$this->getId()}').attr('disabled', !(aantal {$this->multiplicity})).blur().toggleClass('DTTT_disabled', !(aantal {$this->multiplicity}));";
+	public function addKnop(DataTableKnop $knop) {
+		$this->buttons[] = $knop;
 	}
 
-	public function getHtml() {
-		return str_replace('<a ', '<a data-tableid="' . $this->tableId . '" ', parent::getHtml());
+	public function jsonSerialize() {
+		return array(
+			'text' => $this->label,
+			'titleAttr' => $this->title,
+			'multiplicity' => $this->multiplicity,
+			'extend' => $this->extend,
+			'href' => $this->url,
+			'className' => $this->icon ? 'dt-button-ico dt-ico-' . Icon::get($this->icon) : '',
+			'dataTableId' => $this->tableId,
+			'autoClose' => true,
+			'buttons' => $this->buttons
+		);
 	}
-
 }
 
 abstract class DataTableResponse extends JsonResponse {
@@ -417,8 +453,8 @@ class RemoveRowsResponse extends DataTableResponse {
 
 	public function getJson($entity) {
 		return parent::getJson(array(
-					'UUID'	 => $entity->getUUID(),
-					'remove' => true
+			'UUID' => $entity->getUUID(),
+			'remove' => true
 		));
 	}
 

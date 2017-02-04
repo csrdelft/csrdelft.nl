@@ -27,7 +27,7 @@ class GesprekkenView implements View {
 
 	public function getBreadcrumbs() {
 		if ($this->gesprek) {
-			$gesprek = $this->berichtenTable->titel;
+			$gesprek = $this->berichtenTable->getTitel();
 		} else {
 			$gesprek = 'Gesprekken';
 		}
@@ -78,8 +78,10 @@ class GesprekkenTable extends DataTable {
 
 		$add = new DataTableKnop('== 1', $this->dataTableId, '/gesprekken/toevoegen', 'post popup', 'Toevoegen', 'Deelnemer toevoegen aan het gesprek', 'user_add');
 		$this->addKnop($add);
+	}
 
-		$this->javascript .= <<<JS
+	public function getJavascript() {
+		return parent::getJavascript() . <<<JS
 
 $('#{$this->dataTableId}').on('click', 'td:nth-child(2)', function (event) {
 	window.location.href = $(this).parent().children('td:first').children('a:first').attr('href');
@@ -128,8 +130,10 @@ class GesprekBerichtenTable extends DataTable {
 		$this->hideColumn('auteur_uid');
 		$this->hideColumn('moment');
 		$this->searchColumn('inhoud');
+	}
 
-		$this->javascript .= <<<JS
+	public function getJavascript() {
+		return parent::getJavascript() .<<<JS
 
 $(document).ready(function (event) {
 	$('textarea[name="inhoud"]').focus();

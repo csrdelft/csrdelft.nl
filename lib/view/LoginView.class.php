@@ -8,7 +8,7 @@ require_once 'model/entity/security/RememberLogin.class.php';
  * 
  * Tonen van login sessies en diverse formulieren.
  */
-class LoginSessionsTable extends DataTable implements FormElement {
+class LoginSessionsTable extends DataTable {
 
 	public function __construct() {
 		parent::__construct(LoginModel::ORM, '/loginsessionsdata', 'Sessiebeheer', 'ip');
@@ -16,10 +16,6 @@ class LoginSessionsTable extends DataTable implements FormElement {
 		$this->hideColumn('uid');
 		$this->searchColumn('login_moment');
 		$this->searchColumn('user_agent');
-	}
-
-	public function getHtml() {
-		throw new Exception('unsupported');
 	}
 
 	public function getType() {
@@ -50,7 +46,7 @@ class LoginSessionsData extends DataTableResponse {
 
 }
 
-class RememberLoginTable extends DataTable implements FormElement {
+class RememberLoginTable extends DataTable {
 
 	public function __construct() {
 		parent::__construct(RememberLoginModel::ORM, '/loginrememberdata', 'Automatisch inloggen', 'ip');
@@ -71,10 +67,6 @@ class RememberLoginTable extends DataTable implements FormElement {
 
 		$delte = new DataTableKnop('>= 1', $this->dataTableId, '/loginforget', 'post', 'Verwijderen', 'Stop automatische login voor dit apparaat', 'delete');
 		$this->addKnop($delte);
-	}
-
-	public function getHtml() {
-		throw new Exception('unsupported');
 	}
 
 	public function getType() {
