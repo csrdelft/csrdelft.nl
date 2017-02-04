@@ -37,10 +37,6 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 			// aanmelding van lid updaten met aantal gasten door beheerder
 			$aanmelding = $this->loadAanmelding($maaltijd->maaltijd_id, $uid);
 			$verschil = $aantalGasten - $aanmelding->aantal_gasten;
-			// Kan nu even niets schelen
-//			if ($verschil === 0) {
-//				throw new Exception('Al aangemeld met ' . $aantalGasten . ' gasten');
-//			}
 			$aanmelding->aantal_gasten = $aantalGasten;
 			$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
             $this->update($aanmelding);
