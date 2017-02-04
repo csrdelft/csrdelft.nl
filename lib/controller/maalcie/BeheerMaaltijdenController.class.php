@@ -11,9 +11,9 @@ require_once 'view/maalcie/forms/AanmeldingForm.class.php';
 
 /**
  * BeheerMaaltijdenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class BeheerMaaltijdenController extends AclController {
 
@@ -36,6 +36,7 @@ class BeheerMaaltijdenController extends AclController {
 				'beheer'         => 'P_MAAL_MOD',
 				'sluit'			 => 'P_MAAL_MOD',
 				'open'			 => 'P_MAAL_MOD',
+				'toggle'         => 'P_MAAL_MOD',
 				'nieuw'			 => 'P_MAAL_MOD',
 				'bewerk'		 => 'P_MAAL_MOD',
 				'verwijder'		 => 'P_MAAL_MOD',
@@ -100,6 +101,18 @@ class BeheerMaaltijdenController extends AclController {
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
 		require_once 'view/maalcie/MaaltijdLijstView.class.php';
 		$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, null, true);
+	}
+
+	public function toggle($mid) {
+		$maaltijd = $this->model->getMaaltijd($mid);
+
+		if ($maaltijd->gesloten) {
+			$this->model->openMaaltijd($maaltijd);
+		} else {
+			$this->model->sluitMaaltijd($maaltijd);
+		}
+
+		$this->view = new BeheerMaaltijdenLijst(array($maaltijd));
 	}
 
 	public function sluit($mid) {

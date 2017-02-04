@@ -46,7 +46,7 @@ class MaaltijdenModel extends PersistenceModel {
 			throw new Exception('Maaltijd is al gesloten');
 		}
 		$maaltijd->gesloten = true;
-		$maaltijd->laatst_gesloten = date('Y-m-d H:i');
+		$maaltijd->laatst_gesloten = date('Y-m-d H:i:s');
         $this->update($maaltijd);
 	}
 
