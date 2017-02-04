@@ -27,6 +27,7 @@ class BeheerMaaltijdenController extends AclController {
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'beheer'	 => 'P_MAAL_MOD',
+				'prullenbak' => 'P_MAAL_MOD',
 				//'leegmaken' => 'P_MAAL_MOD',
 				'archief'	 => 'P_MAAL_MOD',
 				'fiscaal'	 => 'P_MAAL_MOD'
@@ -34,6 +35,7 @@ class BeheerMaaltijdenController extends AclController {
 		} else {
 			$this->acl = array(
 				'beheer'         => 'P_MAAL_MOD',
+				'prullenbak'     => 'P_MAAL_MOD',
 				'sluit'			 => 'P_MAAL_MOD',
 				'open'			 => 'P_MAAL_MOD',
 				'toggle'         => 'P_MAAL_MOD',
@@ -60,6 +62,18 @@ class BeheerMaaltijdenController extends AclController {
 		parent::performAction(array($mid));
 	}
 
+	public function prullenbak() {
+		if ($this->getMethod() == 'POST') {
+			$data = $this->model->find('verwijderd = true');
+			$this->view = new BeheerMaaltijdenLijst($data);
+		} else {
+			$body = new BeheerMaaltijdenView(new PrullenbakMaaltijdenTable(), 'Prullenbak maaltijdenbeheer');
+			$this->view = new CsrLayoutPage($body);
+			$this->view->addCompressedResources('maalcie');
+			$this->view->addCompressedResources('datatable');
+		}
+	}
+
 	public function beheer($mid = null) {
 		if ($this->getMethod() == 'POST') {
 			$filter = $this->hasParam('filter') ? $this->getParam('filter') : '';
@@ -83,7 +97,8 @@ class BeheerMaaltijdenController extends AclController {
 				$this->bewerk($mid);
 				$modal = $this->view;
 			}
-			$body = new BeheerMaaltijdenView(MaaltijdRepetitiesModel::instance()->find());
+			$repetities = MaaltijdRepetitiesModel::instance()->find(); /** @var MaaltijdRepetitie[] $repetities */
+			$body = new BeheerMaaltijdenView(new BeheerMaaltijdenTable($repetities), 'Maaltijdenbeheer');
 			$this->view = new CsrLayoutPage($body, array(), $modal);
 			$this->view->addCompressedResources('maalcie');
 			$this->view->addCompressedResources('datatable');
@@ -113,18 +128,6 @@ class BeheerMaaltijdenController extends AclController {
 		}
 
 		$this->view = new BeheerMaaltijdenLijst(array($maaltijd));
-	}
-
-	public function sluit($mid) {
-		$maaltijd = $this->model->getMaaltijd($mid);
-        $this->model->sluitMaaltijd($maaltijd);
-		$this->view = new BeheerMaaltijdView($maaltijd);
-	}
-
-	public function open($mid) {
-		$maaltijd = $this->model->getMaaltijd($mid);
-        $this->model->openMaaltijd($maaltijd);
-		$this->view = new BeheerMaaltijdView($maaltijd);
 	}
 
 	public function nieuw() {
@@ -172,22 +175,30 @@ class BeheerMaaltijdenController extends AclController {
 
 	public function verwijder() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$maaltijd = $this->model->retrieveByUUID($selection[0]);
-		$this->model->delete($maaltijd);
+		$maaltijd = $this->model->retrieveByUUID($selection[0]); /** @var Maaltijd $maaltijd */
+
+		if ($maaltijd->verwijderd) {
+			$this->model->delete($maaltijd);
+		} else {
+			$maaltijd->verwijderd = true;
+			$this->model->update($maaltijd);
+		}
 
 		$this->view = new RemoveRowsResponse(array($maaltijd));
 	}
 
-	public function herstel($mid) {
-        $this->model->herstelMaaltijd($mid);
-		echo '<tr id="maaltijd-row-' . $mid . '" class="remove"></tr>';
-		exit;
+	public function herstel() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$maaltijd = $this->model->retrieveByUUID($selection[0]); /** @var Maaltijd $maaltijd */
+
+		$maaltijd->verwijderd = false;
+		$this->model->update($maaltijd);
+		$this->view = new RemoveRowsResponse(array($maaltijd)); // Verwijder uit prullenbak
 	}
 
 	public function aanmelden() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		/** @var Maaltijd $maaltijd */
-		$maaltijd = $this->model->retrieveByUUID($selection[0]);
+		$maaltijd = $this->model->retrieveByUUID($selection[0]); /** @var Maaltijd $maaltijd */
 		$form = new AanmeldingForm($maaltijd, true); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
@@ -229,7 +240,7 @@ class BeheerMaaltijdenController extends AclController {
 			if (empty($maaltijden)) {
 				throw new Exception('Geen nieuwe maaltijden aangemaakt');
 			}
-			$this->view = new BeheerMaaltijdenLijstView($maaltijden);
+			$this->view = new BeheerMaaltijdenLijst($maaltijden);
 		} else {
 			$this->view = $form;
 		}
