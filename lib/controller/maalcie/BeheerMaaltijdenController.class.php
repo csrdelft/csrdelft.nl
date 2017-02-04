@@ -36,6 +36,7 @@ class BeheerMaaltijdenController extends AclController {
 			$this->acl = array(
 				'beheer'         => 'P_MAAL_MOD',
 				'prullenbak'     => 'P_MAAL_MOD',
+				'archief'        => 'P_MAAL_MOD',
 				'sluit'			 => 'P_MAAL_MOD',
 				'open'			 => 'P_MAAL_MOD',
 				'toggle'         => 'P_MAAL_MOD',
@@ -106,9 +107,15 @@ class BeheerMaaltijdenController extends AclController {
 	}
 
 	public function archief() {
-		$body = new BeheerMaaltijdenView(ArchiefMaaltijdModel::instance()->getArchiefMaaltijdenTussen(), false, true);
-		$this->view = new CsrLayoutPage($body);
-		$this->view->addCompressedResources('maalcie');
+		if ($this->getMethod() == 'POST') {
+			$data = ArchiefMaaltijdModel::instance()->find();
+			$this->view = new BeheerMaaltijdenLijst($data);
+		} else {
+			$body = new BeheerMaaltijdenView(new ArchiefMaaltijdenTable(), 'Archief maaltijdenbeheer');
+			$this->view = new CsrLayoutPage($body);
+			$this->view->addCompressedResources('maalcie');
+			$this->view->addCompressedResources('datatable');
+		}
 	}
 
 	public function fiscaal($mid) {

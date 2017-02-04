@@ -1,14 +1,15 @@
 <?php
 
 require_once 'view/maalcie/MaalCieSaldiView.class.php';
-require_once 'model/fiscaal/SaldoModel.class.php';
 require_once 'view/maalcie/forms/BoekjaarSluitenForm.class.php';
+require_once 'model/fiscaal/SaldoModel.class.php';
+require_once 'model/maalcie/MaaltijdenModel.class.php';
 
 /**
  * MaalCieSaldiController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class MaalCieSaldiController extends AclController {
 

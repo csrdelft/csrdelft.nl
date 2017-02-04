@@ -149,3 +149,20 @@ JS;
 		return "Maaltijden / Beheer / Prullenbak";
 	}
 }
+
+class ArchiefMaaltijdenTable extends DataTable {
+	public function __construct() {
+		parent::__construct(ArchiefMaaltijdModel::ORM, '/maaltijden/beheer/archief');
+		$this->addColumn('prijs', null, null, 'prijs_render');
+	}
+
+	public function getJavascript() {
+		return /** @lang JavaScript */
+			parent::getJavascript() . <<<JS
+function prijs_render(data) {
+	return "&euro; " + (data/100).toFixed(2).replace('.', ',');
+}
+JS;
+
+	}
+}

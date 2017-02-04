@@ -2,6 +2,7 @@
 
 require_once 'model/entity/maalcie/Maaltijd.class.php';
 require_once 'model/entity/maalcie/ArchiefMaaltijd.class.php';
+require_once 'model/maalcie/ArchiefMaaltijdModel.class.php';
 require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
 require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
 
