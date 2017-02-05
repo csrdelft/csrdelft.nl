@@ -35,13 +35,13 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	 * @return CorveeVoorkeur[]
 	 */
 	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false) {
-		$repById = CorveeRepetitiesModel::getVoorkeurbareRepetities(true); // grouped by crid
+		$repById = CorveeRepetitiesModel::instance()->getVoorkeurbareRepetities(); // grouped by crid
 		$lijst = array();
 		$voorkeuren = $this->find('uid = ?', array($uid)); /** @var CorveeVoorkeur[] $voorkeuren */
 		foreach ($voorkeuren as $voorkeur) {
 			$crid = $voorkeur->crv_repetitie_id;
 			if (!array_key_exists($crid, $repById)) { // ingeschakelde voorkeuren altijd weergeven
-				$repById[$crid] = CorveeRepetitiesModel::getRepetitie($crid);
+				$repById[$crid] = CorveeRepetitiesModel::instance()->getRepetitie($crid);
 			}
 			$voorkeur->setCorveeRepetitie($repById[$crid]);
 			$voorkeur->setVanUid($uid);
@@ -50,7 +50,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		foreach ($repById as $crid => $repetitie) {
 			if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
 				require_once 'model/maalcie/KwalificatiesModel.class.php';
-				if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->getFunctieId())) {
+				if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->functie_id)) {
 					continue;
 				}
 			}
@@ -83,7 +83,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	 * @return CorveeVoorkeur[uid][crid]
 	 */
 	public function getVoorkeurenMatrix() {
-		$repById = CorveeRepetitiesModel::getVoorkeurbareRepetities(true); // grouped by crid
+		$repById = CorveeRepetitiesModel::instance()->getVoorkeurbareRepetities(); // grouped by crid
 		$leden_voorkeuren = $this->loadLedenVoorkeuren();
 		$matrix = array();
 		foreach ($leden_voorkeuren as $lv) { // build matrix
@@ -134,13 +134,13 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		if ($this->exists($voorkeur)) {
 			throw new Exception('Voorkeur al ingeschakeld');
 		}
-		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
-		if (!$repetitie->getIsVoorkeurbaar()) {
+		$repetitie = CorveeRepetitiesModel::instance()->getRepetitie($crid);
+		if (!$repetitie->voorkeurbaar) {
 			throw new Exception('Niet voorkeurbaar');
 		}
 		if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
 			require_once 'model/maalcie/KwalificatiesModel.class.php';
-			if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->getFunctieId())) {
+			if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->functie_id)) {
 				throw new Exception('Niet gekwalificeerd');
 			}
 		}

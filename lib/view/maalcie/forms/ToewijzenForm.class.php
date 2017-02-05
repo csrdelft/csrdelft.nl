@@ -41,7 +41,7 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 
 		$crid = $taak->crv_repetitie_id;
 		if ($crid !== null) {
-			$this->voorkeurbaar = CorveeRepetitiesModel::getRepetitie($crid)->getIsVoorkeurbaar();
+			$this->voorkeurbaar = CorveeRepetitiesModel::instance()->getRepetitie($crid)->getIsVoorkeurbaar();
 		}
 
 		if ($taak->getCorveeFunctie()->kwalificatie_benodigd) {

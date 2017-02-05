@@ -50,7 +50,7 @@
 		<select id="crid" name="crv_repetitie_id" value="kies" origvalue="kies" class="FormElement SubmitChange">
 			<option selected="selected">kies</option>
 			{foreach from=$repetities item=repetitie}
-				<option value="{$repetitie->getCorveeRepetitieId()}">{$repetitie->getCorveeFunctie()->naam} op {$repetitie->getDagVanDeWeekText()}</option>
+				<option value="{$repetitie->crv_repetitie_id}">{$repetitie->getCorveeFunctie()->naam} op {$repetitie->getDagVanDeWeekText()}</option>
 			{/foreach}
 		</select>
 		<a href="/corveerepetities" class="btn" title="Periodiek corvee beheren">{icon get="calendar_edit"}</a>

@@ -49,12 +49,12 @@ class CorveeRepetitiesController extends AclController {
 		if (is_int($crid) && $crid > 0) {
 			$this->bewerk($crid);
 			$modal = $this->view;
-			$repetities = CorveeRepetitiesModel::getAlleRepetities();
+			$repetities = CorveeRepetitiesModel::instance()->getAlleRepetities();
 		} elseif (is_int($mrid) && $mrid > 0) {
-			$repetities = CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($mrid);
+			$repetities = CorveeRepetitiesModel::instance()->getRepetitiesVoorMaaltijdRepetitie($mrid);
 			$maaltijdrepetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
 		} else {
-			$repetities = CorveeRepetitiesModel::getAlleRepetities();
+			$repetities = CorveeRepetitiesModel::instance()->getAlleRepetities();
 		}
 		$this->view = new CorveeRepetitiesView($repetities, $maaltijdrepetitie);
 		$this->view = new CsrLayoutPage($this->view);
@@ -67,13 +67,13 @@ class CorveeRepetitiesController extends AclController {
 	}
 
 	public function nieuw($mrid = null) {
-		$repetitie = new CorveeRepetitie(0, $mrid);
-		$this->view = new CorveeRepetitieForm($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), null, $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
+		$repetitie = CorveeRepetitiesModel::instance()->nieuw(0, $mrid);
+		$this->view = new CorveeRepetitieForm($repetitie->crv_repetitie_id, $repetitie->mlt_repetitie_id, $repetitie->dag_vd_week, $repetitie->periode_in_dagen, $repetitie->functie_id, null, $repetitie->standaard_aantal, $repetitie->voorkeurbaar); // fetches POST values itself
 	}
 
 	public function bewerk($crid) {
-		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
-		$this->view = new CorveeRepetitieForm($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardPunten(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
+		$repetitie = CorveeRepetitiesModel::instance()->getRepetitie($crid);
+		$this->view = new CorveeRepetitieForm($repetitie->crv_repetitie_id, $repetitie->mlt_repetitie_id, $repetitie->dag_vd_week, $repetitie->periode_in_dagen, $repetitie->functie_id, $repetitie->standaard_punten, $repetitie->standaard_aantal, $repetitie->voorkeurbaar); // fetches POST values itself
 	}
 
 	public function opslaan($crid) {
@@ -86,7 +86,7 @@ class CorveeRepetitiesController extends AclController {
 			$values = $this->view->getValues();
 			$mrid = empty($values['mlt_repetitie_id']) ? null : (int) $values['mlt_repetitie_id'];
 			$voorkeurbaar = empty($values['voorkeurbaar']) ? false : (bool) $values['voorkeurbaar'];
-			$repetitie_aantal = CorveeRepetitiesModel::saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_punten'], $values['standaard_aantal'], $voorkeurbaar);
+			$repetitie_aantal = CorveeRepetitiesModel::instance()->saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_punten'], $values['standaard_aantal'], $voorkeurbaar);
 			$maaltijdrepetitie = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], maalcieUrl . '/maaltijd/' . $mrid)) { // state of gui
 				$maaltijdrepetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
@@ -99,7 +99,7 @@ class CorveeRepetitiesController extends AclController {
 	}
 
 	public function verwijder($crid) {
-		$aantal = CorveeRepetitiesModel::verwijderRepetitie($crid);
+		$aantal = CorveeRepetitiesModel::instance()->verwijderRepetitie($crid);
 		if ($aantal > 0) {
 			setMelding($aantal . ' voorkeur' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 		}

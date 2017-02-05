@@ -352,7 +352,7 @@ class MaaltijdenModel extends PersistenceModel {
             $beginDatum = strtotime('+' . $shift . ' days', $beginDatum);
         }
         $datum = $beginDatum;
-        $corveerepetities = \CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id);
+        $corveerepetities = \CorveeRepetitiesModel::instance()->getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id);
         $maaltijden = array();
         while ($datum <= $eindDatum) { // break after one
 

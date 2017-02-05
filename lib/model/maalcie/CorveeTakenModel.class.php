@@ -249,9 +249,9 @@ class CorveeTakenModel extends PersistenceModel {
 	private function vanRepetitie(CorveeRepetitie $repetitie, $datum, $mid = null, $uid = null, $bonus_malus = null) {
 		$taak = new CorveeTaak();
 		$taak->taak_id = null;
-		$taak->functie_id = $repetitie->getFunctieId();
+		$taak->functie_id = $repetitie->functie_id;
 		$taak->uid = $uid;
-		$taak->crv_repetitie_id = $repetitie->getCorveeRepetitieId();
+		$taak->crv_repetitie_id = $repetitie->crv_repetitie_id;
 		$taak->maaltijd_id = $mid;
 		$taak->datum = $datum;
 		$taak->bonus_malus = $bonus_malus;
@@ -348,8 +348,8 @@ class CorveeTakenModel extends PersistenceModel {
 	// Repetitie-Taken ############################################################
 
 	public function maakRepetitieTaken(CorveeRepetitie $repetitie, $beginDatum, $eindDatum, $mid = null) {
-		if ($repetitie->getPeriodeInDagen() < 1) {
-			throw new Exception('New repetitie-taken faalt: $periode =' . $repetitie->getPeriodeInDagen());
+		if ($repetitie->periode_in_dagen < 1) {
+			throw new Exception('New repetitie-taken faalt: $periode =' . $repetitie->periode_in_dagen);
 		}
 		$db = \Database::instance();
 		try {
@@ -365,7 +365,7 @@ class CorveeTakenModel extends PersistenceModel {
 
 	public function newRepetitieTaken(CorveeRepetitie $repetitie, $beginDatum, $eindDatum, $mid = null) {
 		// start at first occurence
-		$shift = $repetitie->getDagVanDeWeek() - date('w', $beginDatum) + 7;
+		$shift = $repetitie->dag_vd_week - date('w', $beginDatum) + 7;
 		$shift %= 7;
 		if ($shift > 0) {
 			$beginDatum = strtotime('+' . $shift . ' days', $beginDatum);
@@ -373,15 +373,15 @@ class CorveeTakenModel extends PersistenceModel {
 		$datum = $beginDatum;
 		$taken = array();
 		while ($datum <= $eindDatum) { // break after one
-			for ($i = $repetitie->getStandaardAantal(); $i > 0; $i--) {
+			for ($i = $repetitie->standaard_aantal; $i > 0; $i--) {
 				$taak = $this->vanRepetitie($repetitie, date('Y-m-d', $datum), null, null, 0);
 				$this->create($taak);
 				$taken[] = $taak;
 			}
-			if ($repetitie->getPeriodeInDagen() < 1) {
+			if ($repetitie->periode_in_dagen < 1) {
 				break;
 			}
-			$datum = strtotime('+' . $repetitie->getPeriodeInDagen() . ' days', $datum);
+			$datum = strtotime('+' . $repetitie->periode_in_dagen . ' days', $datum);
 		}
 		return $taken;
 	}
@@ -411,21 +411,21 @@ class CorveeTakenModel extends PersistenceModel {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
-			$taken = $this->find('verwijderd = false AND crv_repetitie_id = ?', array($repetitie->getCorveeRepetitieId())); /** @var CorveeTaak $taak */
+			$taken = $this->find('verwijderd = false AND crv_repetitie_id = ?', array($repetitie->crv_repetitie_id)); /** @var CorveeTaak $taak */
 
 			foreach($taken as $taak) {
-				$taak->functie_id = $repetitie->getFunctieId();
-				$taak->punten = $repetitie->getStandaardPunten();
+				$taak->functie_id = $repetitie->functie_id;
+				$taak->punten = $repetitie->standaard_punten;
 
 				$this->update($taak);
 			}
 			$updatecount = $taken->rowCount();
 
-			$taken = $this->find('verwijderd = FALSE AND crv_repetitie_id = ?', array($repetitie->getCorveeRepetitieId()));
+			$taken = $this->find('verwijderd = FALSE AND crv_repetitie_id = ?', array($repetitie->crv_repetitie_id));
 			$takenPerDatum = array(); // taken per datum indien geen maaltijd
 			$takenPerMaaltijd = array(); // taken per maaltijd
 			require_once 'model/maalcie/MaaltijdenModel.class.php';
-			$maaltijden = MaaltijdenModel::instance()->getKomendeRepetitieMaaltijden($repetitie->getMaaltijdRepetitieId());
+			$maaltijden = MaaltijdenModel::instance()->getKomendeRepetitieMaaltijden($repetitie->mlt_repetitie_id);
 			$maaltijdenById = array();
 			foreach ($maaltijden as $maaltijd) {
 				$takenPerMaaltijd[$maaltijd->maaltijd_id] = array();
@@ -436,7 +436,7 @@ class CorveeTakenModel extends PersistenceModel {
 			foreach ($taken as $taak) {
 				$datum = strtotime($taak->datum);
 				if ($verplaats) {
-					$shift = $repetitie->getDagVanDeWeek() - date('w', $datum);
+					$shift = $repetitie->dag_vd_week - date('w', $datum);
 					if ($shift > 0) {
 						$datum = strtotime('+' . $shift . ' days', $datum);
 					} elseif ($shift < 0) {
@@ -460,7 +460,7 @@ class CorveeTakenModel extends PersistenceModel {
 			// standaard aantal aanvullen
 			$datumcount = 0;
 			foreach ($takenPerDatum as $datum => $taken) {
-				$verschil = $repetitie->getStandaardAantal() - sizeof($taken);
+				$verschil = $repetitie->standaard_aantal - sizeof($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					$taak = $this->vanRepetitie($repetitie, $taken[0]->datum, null, null, 0);
 					$this->create($taak);
@@ -469,7 +469,7 @@ class CorveeTakenModel extends PersistenceModel {
 			}
 			$maaltijdcount = 0;
 			foreach ($takenPerMaaltijd as $mid => $taken) {
-				$verschil = $repetitie->getStandaardAantal() - sizeof($taken);
+				$verschil = $repetitie->standaard_aantal - sizeof($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					$taak = $this->vanRepetitie($repetitie, $maaltijdenById[$mid]->datum, $mid, null, 0);
 					$this->create($taak);

@@ -64,7 +64,7 @@ class BeheerTakenController extends AclController {
 			$taken = CorveeTakenModel::instance()->getAlleTaken();
 			$maaltijd = null;
 		}
-		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities());
+		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::instance()->getAlleRepetities());
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 		$this->view->modal = $modal;
@@ -111,15 +111,15 @@ class BeheerTakenController extends AclController {
 		}
 		$crid = filter_input(INPUT_POST, 'crv_repetitie_id', FILTER_SANITIZE_NUMBER_INT);
 		if (!empty($crid)) {
-			$repetitie = CorveeRepetitiesModel::getRepetitie((int) $crid);
+			$repetitie = CorveeRepetitiesModel::instance()->getRepetitie((int) $crid);
 			if ($mid === null) {
-				$beginDatum = CorveeRepetitiesModel::getFirstOccurrence($repetitie);
-				if ($repetitie->getPeriodeInDagen() > 0) {
+				$beginDatum = CorveeRepetitiesModel::instance()->getFirstOccurrence($repetitie);
+				if ($repetitie->periode_in_dagen > 0) {
 					$this->view = new RepetitieCorveeForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 					return;
 				}
 			}
-			$this->view = new TaakForm(0, $repetitie->getFunctieId(), null, $repetitie->getCorveeRepetitieId(), $mid, $beginDatum, $repetitie->getStandaardPunten(), 0); // fetches POST values itself
+			$this->view = new TaakForm(0, $repetitie->functie_id, null, $repetitie->crv_repetitie_id, $mid, $beginDatum, $repetitie->standaard_punten, 0); // fetches POST values itself
 		} else {
 			$taak = new CorveeTaak();
 			if (isset($beginDatum)) {
@@ -206,7 +206,7 @@ class BeheerTakenController extends AclController {
 	// Repetitie-Taken ############################################################
 
 	public function aanmaken($crid) {
-		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
+		$repetitie = CorveeRepetitiesModel::instance()->getRepetitie($crid);
 		$form = new RepetitieCorveeForm($repetitie); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
