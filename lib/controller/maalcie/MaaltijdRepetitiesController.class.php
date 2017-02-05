@@ -8,12 +8,14 @@ require_once 'view/maalcie/forms/MaaltijdRepetitieForm.class.php';
  * MaaltijdRepetitiesController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * @property MaaltijdRepetitiesModel $model
  * 
  */
 class MaaltijdRepetitiesController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, null);
+		parent::__construct($query, MaaltijdRepetitiesModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'beheer' => 'P_MAAL_MOD'
@@ -47,7 +49,7 @@ class MaaltijdRepetitiesController extends AclController {
 			$this->bewerk($mrid);
 			$modal = $this->view;
 		}
-		$this->view = new MaaltijdRepetitiesView(MaaltijdRepetitiesModel::instance()->getAlleRepetities());
+		$this->view = new MaaltijdRepetitiesView($this->model->getAlleRepetities());
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 		$this->view->modal = $modal;
@@ -58,7 +60,7 @@ class MaaltijdRepetitiesController extends AclController {
 	}
 
 	public function bewerk($mrid) {
-		$this->view = new MaaltijdRepetitieForm(MaaltijdRepetitiesModel::instance()->getRepetitie($mrid)); // fetches POST values itself
+		$this->view = new MaaltijdRepetitieForm($this->model->getRepetitie($mrid)); // fetches POST values itself
 	}
 
 	public function opslaan($mrid) {
@@ -70,7 +72,7 @@ class MaaltijdRepetitiesController extends AclController {
 		if ($this->view->validate()) {
             $repetitie = $this->view->getModel();
 
-            $aantal = MaaltijdRepetitiesModel::instance()->saveRepetitie($repetitie);
+            $aantal = $this->model->saveRepetitie($repetitie);
             $this->view = new MaaltijdRepetitieView($repetitie);
 			if ($aantal > 0) {
 				setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);

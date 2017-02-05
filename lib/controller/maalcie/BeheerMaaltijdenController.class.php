@@ -14,13 +14,10 @@ require_once 'view/maalcie/forms/AanmeldingForm.class.php';
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
+ * @property MaaltijdenModel $model
+ *
  */
 class BeheerMaaltijdenController extends AclController {
-
-    /**
-     * @var MaaltijdenModel
-     */
-    protected $model;
 
 	public function __construct($query) {
 		parent::__construct($query, MaaltijdenModel::transaction());

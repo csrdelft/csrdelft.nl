@@ -8,15 +8,11 @@ require_once 'view/maalcie/BeheerAbonnementenView.class.php';
  * BeheerMaaltijdenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * @property MaaltijdAbonnementenModel $model
  * 
  */
 class BeheerAbonnementenController extends AclController {
-
-    /**
-     * @var MaaltijdAbonnementenModel
-     */
-    protected $model;
-
 	public function __construct($query) {
 		parent::__construct($query, MaaltijdAbonnementenModel::transaction());
 		if ($this->getMethod() == 'GET') {
