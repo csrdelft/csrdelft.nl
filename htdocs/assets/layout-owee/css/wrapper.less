@@ -11,6 +11,7 @@
   background-color: #001e62;
   margin: 6.5em 0;
   position: relative;
+  text-align: right;
 
   .inner {
     display: flex;
@@ -18,9 +19,25 @@
   }
 
   &.alt {
+    text-align: left;
     .inner {
       flex-direction: row;
     }
+
+    &:before {
+      -moz-transform: scaleX(-1);
+      -webkit-transform: scaleX(-1);
+      -ms-transform: scaleX(-1);
+      transform: scaleX(-1);
+    }
+
+    &:after {
+      -moz-transform: scaleY(-1) scaleX(-1);
+      -webkit-transform: scaleY(-1) scaleX(-1);
+      -ms-transform: scaleY(-1) scaleX(-1);
+      transform: scaleY(-1) scaleX(-1);
+    }
+
   }
 
   &:before, &:after {
@@ -44,20 +61,6 @@
     transform: scaleY(-1);
     bottom: -6.5em;
     left: 0;
-  }
-
-  &.alt:before {
-    -moz-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    -ms-transform: scaleX(-1);
-    transform: scaleX(-1);
-  }
-
-  &.alt:after {
-    -moz-transform: scaleY(-1) scaleX(-1);
-    -webkit-transform: scaleY(-1) scaleX(-1);
-    -ms-transform: scaleY(-1) scaleX(-1);
-    transform: scaleY(-1) scaleX(-1);
   }
 
   .inner {
@@ -97,10 +100,6 @@
   .content {
     width: 100%;
     -ms-flex: 2;
-  }
-
-  &.spotlight {
-    text-align: right;
   }
 }
 

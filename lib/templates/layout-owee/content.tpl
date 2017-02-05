@@ -8,7 +8,7 @@
 
 <!-- Wrapper -->
 <section id="wrapper">
-    <section class="wrapper spotlight detail style1 kleur1">
+    <section class="wrapper detail kleur1">
         <div class="inner">
             <div class="content">
                 {if isset($menutpl)}{include file="layout-owee/partials/_menu$menutpl.tpl"}{/if}

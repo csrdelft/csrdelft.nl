@@ -22,7 +22,7 @@ body {
   -ms-overflow-style: scrollbar;
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: @scherm-middelsmal) {
 
   html, body {
     min-width: 320px;
@@ -200,7 +200,7 @@ h6 {
   font-size: 0.7em;
 }
 
-@media screen and (max-width: 736px) {
+@media screen and (max-width: @scherm-middel) {
 
   h2 {
     font-size: 1em;
@@ -264,29 +264,19 @@ hr {
   }
 }
 
-.align-left {
-  text-align: left;
-}
-
-.align-center {
-  text-align: center;
-}
-
-.align-right {
-  text-align: right;
-}
-
-#page-wrapper {
-  -moz-transition: -moz-filter 0.25s ease;
-  -webkit-transition: -webkit-filter 0.25s ease;
-  -ms-transition: -ms-filter 0.25s ease;
-  transition: filter 0.25s ease;
-}
-
 .detail img {
   margin: 1em;
 }
 
 .clear {
   clear: both;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: auto;
+  position: relative;
+  overflow: hidden;
+  padding: 54.05% 0 0 0;
 }

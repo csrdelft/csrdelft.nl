@@ -1,11 +1,3 @@
-.transform(@value) {
-  -webkit-transform: @value;
-  -moz-transform: @value;
-  -ms-transform: @value;
-  -o-transform: @value;
-  transform: @value;
-}
-
 .fadeIn(@duration; @translate; @filter; ) {
   transition: opacity @duration ease, transform @duration ease, filter @duration/2 ease;
   -moz-transition: opacity @duration ease, -moz-transform @duration ease, -moz-filter @duration/2 ease;
@@ -19,8 +11,6 @@
   -webkit-transition-delay: 0.8s;
   -ms-transition-delay: 0.8s;
   transition-delay: 0.8s;
-  -moz-filter: none;
-  -ms-filter: none;
 
   body.is-loading & {
     opacity: 0;

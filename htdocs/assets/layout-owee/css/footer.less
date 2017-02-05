@@ -50,23 +50,21 @@
       width: ~"calc(50% - 1.5em)";
     }
 
-    .copyright {
+    .copyright,.sponsors {
       border-top: solid 2px rgba(0, 30, 98, 1);
       list-style: none;
-      margin: 4em 0 2em 0;
+      margin: 2em 0 1em 0;
       padding: 2em 0 0 0;
       width: 100%;
       text-align: center;
 
       li {
-        /* 				border-left: solid 2px rgba(0, 30, 98, 1); */
         color: rgba(0, 30, 98, 1);
-        display: inline-block;
+        display: block;
         font-size: 0.9em;
         line-height: 1;
         margin-left: 1em;
-        padding: 0;
-        padding-left: 1em;
+        padding: 0 0 0 1em;
         margin-bottom: 2em;
 
         &:first-child {
@@ -92,19 +90,16 @@
   }
 }
 
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: @scherm-extrabreed) {
 
   #footer {
-    /* 			background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/bg.jpg"); */
-    background-size: auto, cover;
-    background: #ffcc33 center, center;
     margin-top: -6.5em;
     padding-top: 6.5em;
   }
 
 }
 
-@media screen and (max-width: 980px) {
+@media screen and (max-width: @scherm-breed) {
 
   #footer {
     margin-top: -4.75em;
@@ -123,14 +118,14 @@
         margin: 0 0 4em 0;
       }
 
-      .copyright {
+      .copyright,.sponsors {
         margin: 4em 0 2em 0;
       }
     }
   }
 }
 
-@media screen and (max-width: 736px) {
+@media screen and (max-width: @scherm-middel) {
 
   #footer {
     margin-top: -2.5em;
@@ -150,21 +145,23 @@
 
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: @scherm-middelsmal) {
 
-  #footer .inner .copyright li {
-    border-left: 0;
-    display: block;
-    margin: 1em 0 0 0;
-    padding-left: 0;
-    &:first-child {
-      margin-top: 0;
+  #footer {
+    .copyright li, .sponsors li {
+      border-left: 0;
+      display: block;
+      margin: 1em 0 0 0;
+      padding-left: 0;
+      &:first-child {
+        margin-top: 0;
+      }
     }
   }
 
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: @scherm-smal) {
 
   #footer .inner {
     padding: 2em 1.5em 0.1em 1.5em;

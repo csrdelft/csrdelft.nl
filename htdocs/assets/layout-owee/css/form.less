@@ -251,26 +251,12 @@ button,
     }
   }
 
-  &.fit {
-    display: block;
-    margin: 0 0 1em 0;
-    width: 100%;
-  }
-
-  &.small {
-    font-size: 0.6em;
-  }
-
-  &.big {
-    font-size: 1em;
-  }
-
   &.disabled,
   &:disabled {
     opacity: 0.25;
   }
 
-  @media screen and (max-width: 640px) {
+  @media screen and (max-width: @scherm-middelsmal) {
     padding: 0;
   }
 }
