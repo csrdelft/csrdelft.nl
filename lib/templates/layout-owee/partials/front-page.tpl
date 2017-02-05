@@ -48,7 +48,7 @@
     </section>
 
     <!-- Three -->
-    <section id="three" class="wrapper kleur1">
+    <section id="three" class="wrapper kleur3">
         <div class="inner">
             <span class="image"><img src="/assets/layout-owee/plaetjes/OC.jpg" alt=""/></span>
             <div class="content">
@@ -68,7 +68,7 @@
     </section>
 
     <!-- Four -->
-    <section id="four" class="wrapper alt kleur2">
+    <section id="four" class="wrapper alt kleur1">
         <div class="inner">
             <div class="content">
                 <h2 class="major">Foto's</h2>
