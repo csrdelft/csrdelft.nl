@@ -7,7 +7,9 @@ require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
  * CorveeVoorkeurenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class CorveeVoorkeurenModel {
+class CorveeVoorkeurenModel extends PersistenceModel {
+	const ORM = "CorveeVoorkeur";
+	const DIR = "maalcie/";
 
 	public static function getEetwens(Profiel $profiel) {
 		return $profiel->eetwens;
@@ -33,9 +35,9 @@ class CorveeVoorkeurenModel {
 	public static function getVoorkeurenVoorLid($uid, $uitgeschakeld = false) {
 		$repById = CorveeRepetitiesModel::getVoorkeurbareRepetities(true); // grouped by crid
 		$lijst = array();
-		$voorkeuren = self::loadVoorkeuren(null, $uid);
+		$voorkeuren = self::loadVoorkeuren(null, $uid); /** @var CorveeVoorkeur $voorkeur */
 		foreach ($voorkeuren as $voorkeur) {
-			$crid = $voorkeur->getCorveeRepetitieId();
+			$crid = $voorkeur->crv_repetitie_id;
 			if (!array_key_exists($crid, $repById)) { // ingeschakelde voorkeuren altijd weergeven
 				$repById[$crid] = CorveeRepetitiesModel::getRepetitie($crid);
 			}
@@ -52,7 +54,9 @@ class CorveeVoorkeurenModel {
 			}
 			if (!array_key_exists($crid, $lijst)) { // uitgeschakelde voorkeuren weergeven
 				if ($uitgeschakeld) {
-					$voorkeur = new CorveeVoorkeur($crid, null);
+					$voorkeur = new CorveeVoorkeur();
+					$voorkeur->crv_repetitie_id = $crid;
+					$voorkeur->uid = null;
 					$voorkeur->setCorveeRepetitie($repetitie);
 					$voorkeur->setVanUid($uid);
 					$lijst[$crid] = $voorkeur;
@@ -87,10 +91,12 @@ class CorveeVoorkeurenModel {
 		foreach ($leden_voorkeuren as $lv) { // build matrix
 			$crid = $lv['crid'];
 			$uid = $lv['van'];
+			$voorkeur = new CorveeVoorkeur();
+			$voorkeur->crv_repetitie_id = $crid;
 			if ($lv['voorkeur']) { // ingeschakelde voorkeuren
-				$voorkeur = new CorveeVoorkeur($crid, $uid);
+				$voorkeur->uid = $uid;
 			} else { // uitgeschakelde voorkeuren
-				$voorkeur = new CorveeVoorkeur($crid, null);
+				$voorkeur->uid = '';
 			}
 			$voorkeur->setCorveeRepetitie($repById[$crid]);
 			$voorkeur->setVanUid($uid);
@@ -182,7 +188,11 @@ class CorveeVoorkeurenModel {
 				throw new Exception('New corvee-voorkeur faalt: $query->rowCount() = ' . $query->rowCount());
 			}
 			$db->commit();
-			return new CorveeVoorkeur($crid, $uid);
+
+			$voorkeur = new CorveeVoorkeur();
+			$voorkeur->crv_repetitie_id = $crid;
+			$voorkeur->uid = $uid;
+			return $voorkeur;
 		} catch (\Exception $e) {
 			$db->rollback();
 			throw $e; // rethrow to controller
@@ -194,7 +204,10 @@ class CorveeVoorkeurenModel {
 			throw new Exception('Voorkeur al uitgeschakeld');
 		}
 		self::deleteVoorkeuren($crid, $uid);
-		return new CorveeVoorkeur($crid, null);
+		$voorkeur = new CorveeVoorkeur();
+		$voorkeur->crv_repetitie_id = $crid;
+		$voorkeur->uid = null;
+		return $voorkeur;
 	}
 
 	/**
@@ -219,7 +232,7 @@ class CorveeVoorkeurenModel {
 		$voorkeuren = self::getVoorkeurenVoorLid($uid);
 		$aantal = 0;
 		foreach ($voorkeuren as $voorkeur) {
-			$aantal += self::deleteVoorkeuren($voorkeur->getCorveeRepetitieId(), $uid);
+			$aantal += self::deleteVoorkeuren($voorkeur->crv_repetitie_id, $uid);
 		}
 		if (sizeof($voorkeuren) !== $aantal) {
 			throw new Exception('Niet alle voorkeuren zijn uitgeschakeld!');

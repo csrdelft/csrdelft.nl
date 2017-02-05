@@ -54,7 +54,9 @@ class BeheerVoorkeurenController extends AclController {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		CorveeVoorkeurenModel::uitschakelenVoorkeur((int) $crid, $uid);
-		$voorkeur = new CorveeVoorkeur((int) $crid, null);
+		$voorkeur = new CorveeVoorkeur();
+		$voorkeur->crv_repetitie_id = (int) $crid;
+		$voorkeur->uid = '';
 		$voorkeur->setVanUid($uid);
 		$this->view = new BeheerVoorkeurView($voorkeur);
 	}

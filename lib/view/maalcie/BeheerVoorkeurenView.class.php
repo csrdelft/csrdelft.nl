@@ -34,8 +34,8 @@ class BeheerVoorkeurView extends SmartyTemplateView {
 
 	public function view() {
 		$this->smarty->assign('voorkeur', $this->model);
-		$this->smarty->assign('crid', $this->model->getCorveeRepetitieId());
-		$this->smarty->assign('uid', $this->model->getUid());
+		$this->smarty->assign('crid', $this->model->crv_repetitie_id);
+		$this->smarty->assign('uid', $this->model->uid);
 		$this->smarty->display('maalcie/voorkeur/beheer_voorkeur_veld.tpl');
 	}
 
