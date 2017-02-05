@@ -41,23 +41,23 @@ class BeheerVrijstellingenController extends AclController {
 	}
 
 	public function beheer() {
-		$vrijstellingen = CorveeVrijstellingenModel::getAlleVrijstellingen();
+		$vrijstellingen = CorveeVrijstellingenModel::instance()->find(); /** @var CorveeVrijstelling[] $vrijstellingen */
 		$this->view = new BeheerVrijstellingenView($vrijstellingen);
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function nieuw() {
-		$vrijstelling = new CorveeVrijstelling();
-		$this->view = new VrijstellingForm($vrijstelling->getUid(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
+		$vrijstelling = CorveeVrijstellingenModel::instance()->nieuw();
+		$this->view = new VrijstellingForm($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage); // fetches POST values itself
 	}
 
 	public function bewerk($uid) {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		$vrijstelling = CorveeVrijstellingenModel::getVrijstelling($uid);
-		$this->view = new VrijstellingForm($vrijstelling->getUid(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
+		$vrijstelling = CorveeVrijstellingenModel::instance()->getVrijstelling($uid);
+		$this->view = new VrijstellingForm($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage); // fetches POST values itself
 	}
 
 	public function opslaan($uid = null) {
@@ -68,7 +68,7 @@ class BeheerVrijstellingenController extends AclController {
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
-			$vrijstelling = CorveeVrijstellingenModel::saveVrijstelling($values['uid'], $values['begin_datum'], $values['eind_datum'], $values['percentage']);
+			$vrijstelling = CorveeVrijstellingenModel::instance()->saveVrijstelling($values['uid'], $values['begin_datum'], $values['eind_datum'], $values['percentage']);
 			$this->view = new BeheerVrijstellingView($vrijstelling);
 		}
 	}
@@ -77,7 +77,7 @@ class BeheerVrijstellingenController extends AclController {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		CorveeVrijstellingenModel::verwijderVrijstelling($uid);
+		CorveeVrijstellingenModel::instance()->verwijderVrijstelling($uid);
 		echo '<tr id="vrijstelling-row-' . $uid . '" class="remove"></tr>';
 		exit;
 	}

@@ -19,9 +19,9 @@ In de onderstaande tabel staat de vrijstelling die u heeft gekregen.
 	</thead>
 	<tbody>
 		<tr>
-			<td>{$vrijstelling->getBeginDatum()|date_format:"%e %b %Y"}</td>
-			<td>{$vrijstelling->getEindDatum()|date_format:"%e %b %Y"}</td>
-			<td>{$vrijstelling->getPercentage()}%</td>
+			<td>{$vrijstelling->begin_datum|date_format:"%e %b %Y"}</td>
+			<td>{$vrijstelling->eind_datum|date_format:"%e %b %Y"}</td>
+			<td>{$vrijstelling->percentage}%</td>
 			<td>{$vrijstelling->getPunten()}</td>
 		</tr>
 	</tbody>

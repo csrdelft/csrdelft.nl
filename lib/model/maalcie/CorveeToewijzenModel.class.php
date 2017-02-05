@@ -21,7 +21,7 @@ class CorveeToewijzenModel {
 	 * @throws Exception
 	 */
 	public static function getSuggesties(CorveeTaak $taak) {
-		$vrijstellingen = CorveeVrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
+		$vrijstellingen = CorveeVrijstellingenModel::instance()->getAlleVrijstellingen(true); // grouped by uid
 		$functie = $taak->getCorveeFunctie();
 		if ($functie->kwalificatie_benodigd) { // laad alleen gekwalificeerde leden
 			$lijst = array();
@@ -38,7 +38,7 @@ class CorveeToewijzenModel {
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
 					$datum = $taak->getBeginMoment();
-					if ($datum >= strtotime($vrijstelling->getBeginDatum()) && $datum <= strtotime($vrijstelling->getEindDatum())) {
+					if ($datum >= strtotime($vrijstelling->begin_datum) && $datum <= strtotime($vrijstelling->eind_datum)) {
 						continue; // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 				}
@@ -57,11 +57,11 @@ class CorveeToewijzenModel {
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
 					$datum = $taak->getBeginMoment();
-					if ($datum >= strtotime($vrijstelling->getBeginDatum()) && $datum <= strtotime($vrijstelling->getEindDatum())) {
+					if ($datum >= strtotime($vrijstelling->begin_datum) && $datum <= strtotime($vrijstelling->eind_datum)) {
 						unset($lijst[$uid]); // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 					// corrigeer prognose in suggestielijst vóór de aanvang van de vrijstellingsperiode
-					if ($vrijstelling !== null && $datum < strtotime($vrijstelling->getBeginDatum())) {
+					if ($vrijstelling !== null && $datum < strtotime($vrijstelling->begin_datum)) {
 						$lijst[$uid]['prognose'] -= $vrijstelling->getPunten();
 					}
 				}
