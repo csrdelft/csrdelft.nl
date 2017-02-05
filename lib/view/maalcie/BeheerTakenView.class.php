@@ -21,7 +21,7 @@ class BeheerTakenView extends SmartyTemplateView {
 	 * @param bool $prullenbak
 	 * @param null $repetities
 	 */
-	public function __construct(array $taken, $maaltijd = null, $prullenbak = false, $repetities = null) {
+	public function __construct($taken, $maaltijd = null, $prullenbak = false, $repetities = null) {
 		parent::__construct(array());
 		$this->maaltijd = $maaltijd;
 		$this->prullenbak = $prullenbak;
@@ -39,7 +39,7 @@ class BeheerTakenView extends SmartyTemplateView {
 			if (!array_key_exists($datum, $this->model)) {
 				$this->model[$datum] = array();
 			}
-			$this->model[$datum][$taak->functie_id][] = $taak;
+			$this->model[$datum][	$taak->functie_id][] = $taak;
 		}
 
 		$this->smarty->assign('prullenbak', $this->prullenbak);

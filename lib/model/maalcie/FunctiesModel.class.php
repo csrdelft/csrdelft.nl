@@ -42,7 +42,7 @@ class FunctiesModel extends CachedPersistenceModel {
 	}
 
 	public function removeFunctie(CorveeFunctie $functie) {
-		if (CorveeTakenModel::existFunctieTaken($functie->functie_id)) {
+		if (CorveeTakenModel::instance()->existFunctieTaken($functie->functie_id)) {
 			throw new Exception('Verwijder eerst de bijbehorende corveetaken!');
 		}
 		if (CorveeRepetitiesModel::existFunctieRepetities($functie->functie_id)) {

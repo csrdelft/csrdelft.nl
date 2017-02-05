@@ -37,7 +37,7 @@ class CorveeHerinneringenModel {
 		$mail->setPlaceholders(array('LIDNAAM' => $lidnaam, 'DATUM' => $datum, 'MEEETEN' => $eten));
 		if ($mail->send()) { // false if failed
 			if (!$mail->inDebugMode()) {
-				CorveeTakenModel::updateGemaild($taak);
+				CorveeTakenModel::instance()->updateGemaild($taak);
 			}
 			return $datum . ' ' . $taak->getCorveeFunctie()->naam . ' verstuurd! (' . $lidnaam . ')';
 		} else {
@@ -49,7 +49,7 @@ class CorveeHerinneringenModel {
 		$vooraf = str_replace('-', '+', Instellingen::get('corvee', 'herinnering_1e_mail'));
 		$van = strtotime(date('Y-m-d'));
 		$tot = strtotime($vooraf, $van);
-		$taken = CorveeTakenModel::getTakenVoorAgenda($van, $tot, true);
+		$taken = CorveeTakenModel::instance()->getTakenVoorAgenda($van, $tot, true);
 		$verzonden = array();
 		$errors = array();
 		foreach ($taken as $taak) {

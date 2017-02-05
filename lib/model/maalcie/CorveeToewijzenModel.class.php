@@ -69,8 +69,8 @@ class CorveeToewijzenModel {
 			$sorteer = 'sorteerPrognose';
 		}
 		foreach ($lijst as $uid => $punten) {
-			$lijst[$uid]['laatste'] = CorveeTakenModel::getLaatsteTaakVanLid($uid);
-			if ($lijst[$uid]['laatste'] !== null && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime(Instellingen::get('corvee', 'suggesties_recent_verbergen'), $taak->getBeginMoment())) {
+			$lijst[$uid]['laatste'] = CorveeTakenModel::instance()->getLaatsteTaakVanLid($uid);
+			if ($lijst[$uid]['laatste'] !== false && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime(Instellingen::get('corvee', 'suggesties_recent_verbergen'), $taak->getBeginMoment())) {
 				$lijst[$uid]['recent'] = true;
 			} else {
 				$lijst[$uid]['recent'] = false;
@@ -86,12 +86,12 @@ class CorveeToewijzenModel {
 	}
 
 	static function sorteerKwali($a, $b) {
-		if ($a['laatste'] !== null && $b['laatste'] !== null) {
+		if ($a['laatste'] !== false && $b['laatste'] !== false) {
 			$a = $a['laatste']->getBeginMoment();
 			$b = $b['laatste']->getBeginMoment();
-		} elseif ($a['laatste'] === null) {
+		} elseif ($a['laatste'] === false) {
 			return -1;
-		} elseif ($b['laatste'] === null) {
+		} elseif ($b['laatste'] === false) {
 			return 1;
 		} else {
 			$a = $a['aantal'];

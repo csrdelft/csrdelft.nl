@@ -40,7 +40,7 @@ class CorveePuntenModel {
 				$errors[] = $e;
 			}
 		}
-		$taken = CorveeTakenModel::verwijderOudeTaken();
+		$taken = CorveeTakenModel::instance()->verwijderOudeTaken();
 		return array($aantal, $taken, $errors);
 	}
 
@@ -108,7 +108,7 @@ class CorveePuntenModel {
 	}
 
 	public static function loadPuntenVoorAlleLeden($functies = null) {
-		$taken = CorveeTakenModel::getAlleTaken(true); // grouped by uid
+		$taken = CorveeTakenModel::instance()->getAlleTaken(true); // grouped by uid
 		$vrijstellingen = CorveeVrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
@@ -131,7 +131,7 @@ class CorveePuntenModel {
 
 	public static function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = null) {
 		if ($lidtaken === null) {
-			$lidtaken = CorveeTakenModel::getTakenVoorLid($profiel->uid);
+			$lidtaken = CorveeTakenModel::instance()->getTakenVoorLid($profiel->uid);
 			$vrijstelling = CorveeVrijstellingenModel::getVrijstelling($profiel->uid);
 		}
 		if ($functies === null) { // niet per functie sommeren

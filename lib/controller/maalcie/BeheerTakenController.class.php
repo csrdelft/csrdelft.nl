@@ -59,9 +59,9 @@ class BeheerTakenController extends AclController {
 			$modal = $this->view;
 		} elseif (is_int($mid) && $mid > 0) {
 			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid, true);
-			$taken = CorveeTakenModel::getTakenVoorMaaltijd($mid, true);
+			$taken = CorveeTakenModel::instance()->getTakenVoorMaaltijd($mid, true);
 		} else {
-			$taken = CorveeTakenModel::getAlleTaken();
+			$taken = CorveeTakenModel::instance()->getAlleTaken();
 			$maaltijd = null;
 		}
 		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::getAlleRepetities());
@@ -75,7 +75,7 @@ class BeheerTakenController extends AclController {
 	}
 
 	public function prullenbak() {
-		$this->view = new BeheerTakenView(CorveeTakenModel::getVerwijderdeTaken(), null, true);
+		$this->view = new BeheerTakenView(CorveeTakenModel::instance()->getVerwijderdeTaken(), null, true);
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 	}
@@ -130,7 +130,7 @@ class BeheerTakenController extends AclController {
 	}
 
 	public function bewerk($tid) {
-		$taak = CorveeTakenModel::getTaak($tid);
+		$taak = CorveeTakenModel::instance()->getTaak($tid);
 		$this->view = new TaakForm($taak->taak_id, $taak->functie_id, $taak->uid, $taak->crv_repetitie_id, $taak->maaltijd_id, $taak->datum, $taak->punten, $taak->bonus_malus); // fetches POST values itself
 	}
 
@@ -142,7 +142,7 @@ class BeheerTakenController extends AclController {
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
-			$taak = CorveeTakenModel::saveTaak($tid, (int) $values['functie_id'], $values['uid'], $values['crv_repetitie_id'], $values['maaltijd_id'], $values['datum'], $values['punten'], $values['bonus_malus']);
+			$taak = CorveeTakenModel::instance()->saveTaak($tid, (int) $values['functie_id'], $values['uid'], $values['crv_repetitie_id'], $values['maaltijd_id'], $values['datum'], $values['punten'], $values['bonus_malus']);
 			$maaltijd = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], maalcieUrl . '/maaltijd/' . $values['maaltijd_id'])) { // state of gui
 				$maaltijd = MaaltijdenModel::instance()->getMaaltijd($values['maaltijd_id']);
@@ -152,23 +152,23 @@ class BeheerTakenController extends AclController {
 	}
 
 	public function verwijder($tid) {
-		CorveeTakenModel::verwijderTaak($tid);
+		CorveeTakenModel::instance()->verwijderTaak($tid);
 		echo '<tr id="corveetaak-row-' . $tid . '" class="remove"></tr>';
 		exit;
 	}
 
 	public function herstel($tid) {
-		CorveeTakenModel::herstelTaak($tid);
+		CorveeTakenModel::instance()->herstelTaak($tid);
 		echo '<tr id="corveetaak-row-' . $tid . '" class="remove"></tr>';
 		exit;
 	}
 
 	public function toewijzen($tid) {
-		$taak = CorveeTakenModel::getTaak($tid);
+		$taak = CorveeTakenModel::instance()->getTaak($tid);
 		$uidField = new LidField('uid', null, null, 'leden'); // fetches POST values itself
 		if ($uidField->validate()) {
-			$taak = CorveeTakenModel::getTaak($tid);
-			CorveeTakenModel::taakToewijzenAanLid($taak, $uidField->getValue());
+			$taak = CorveeTakenModel::instance()->getTaak($tid);
+			CorveeTakenModel::instance()->taakToewijzenAanLid($taak, $uidField->getValue());
 			$this->view = new BeheerTaakView($taak);
 		} else {
 			require_once 'model/maalcie/CorveeToewijzenModel.class.php';
@@ -179,26 +179,26 @@ class BeheerTakenController extends AclController {
 	}
 
 	public function puntentoekennen($tid) {
-		$taak = CorveeTakenModel::getTaak($tid);
-		CorveeTakenModel::puntenToekennen($taak);
+		$taak = CorveeTakenModel::instance()->getTaak($tid);
+		CorveeTakenModel::instance()->puntenToekennen($taak);
 		$this->view = new BeheerTaakView($taak);
 	}
 
 	public function puntenintrekken($tid) {
-		$taak = CorveeTakenModel::getTaak($tid);
-		CorveeTakenModel::puntenIntrekken($taak);
+		$taak = CorveeTakenModel::instance()->getTaak($tid);
+		CorveeTakenModel::instance()->puntenIntrekken($taak);
 		$this->view = new BeheerTaakView($taak);
 	}
 
 	public function email($tid) {
-		$taak = CorveeTakenModel::getTaak($tid);
+		$taak = CorveeTakenModel::instance()->getTaak($tid);
 		require_once 'model/maalcie/CorveeHerinneringenModel.class.php';
 		CorveeHerinneringenModel::stuurHerinnering($taak);
 		$this->view = new BeheerTaakView($taak);
 	}
 
 	public function leegmaken() {
-		$aantal = CorveeTakenModel::prullenbakLeegmaken();
+		$aantal = CorveeTakenModel::instance()->prullenbakLeegmaken();
 		setMelding($aantal . ($aantal === 1 ? ' taak' : ' taken') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
 		redirect(maalcieUrl . '/prullenbak');
 	}
@@ -211,7 +211,7 @@ class BeheerTakenController extends AclController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$mid = (empty($values['maaltijd_id']) ? null : (int) $values['maaltijd_id']);
-			$taken = CorveeTakenModel::maakRepetitieTaken($repetitie, $values['begindatum'], $values['einddatum'], $mid);
+			$taken = CorveeTakenModel::instance()->maakRepetitieTaken($repetitie, $values['begindatum'], $values['einddatum'], $mid);
 			if (empty($taken)) {
 				throw new Exception('Geen nieuwe taken aangemaakt');
 			}

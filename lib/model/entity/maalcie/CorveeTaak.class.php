@@ -39,7 +39,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	public $bonus_toegekend; # int 11
 	public $wanneer_toegekend; # datetime
 	public $wanneer_gemaild; # text
-	public $verwijderd; # boolean
+	public $verwijderd = false; # boolean
 
 	public function getPuntenPrognose() {
 		return $this->punten + $this->bonus_malus - $this->punten_toegekend - $this->bonus_toegekend;
@@ -186,15 +186,15 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	protected static $persistent_attributes = array(
 		'taak_id' => array(T::Integer, false, 'auto_increment'),
 		'functie_id' => array(T::Integer),
-		'uid' => array(T::UID),
-		'crv_repetitie_id' => array(T::Integer),
-		'maaltijd_id' => array(T::Integer),
+		'uid' => array(T::UID, true),
+		'crv_repetitie_id' => array(T::Integer, true),
+		'maaltijd_id' => array(T::Integer, true),
 		'datum' => array(T::Date),
 		'punten' => array(T::Integer),
 		'bonus_malus' => array(T::Integer),
 		'punten_toegekend' => array(T::Integer),
 		'bonus_toegekend' => array(T::Integer),
-		'wanneer_toegekend' => array(T::DateTime),
+		'wanneer_toegekend' => array(T::DateTime, true),
 		'wanneer_gemaild' => array(T::Text),
 		'verwijderd' => array(T::Boolean)
 	);

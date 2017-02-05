@@ -153,8 +153,8 @@ class CorveeRepetitiesModel {
 		if (!is_int($crid) || $crid <= 0) {
 			throw new Exception('Verwijder corvee-repetitie faalt: Invalid $crid =' . $crid);
 		}
-		if (CorveeTakenModel::existRepetitieTaken($crid)) {
-			CorveeTakenModel::verwijderRepetitieTaken($crid); // delete corveetaken first (foreign key)
+		if (CorveeTakenModel::instance()->existRepetitieTaken($crid)) {
+			CorveeTakenModel::instance()->verwijderRepetitieTaken($crid); // delete corveetaken first (foreign key)
 			throw new Exception('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 		return self::deleteRepetitie($crid);
