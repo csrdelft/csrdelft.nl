@@ -102,7 +102,7 @@ class CorveeRepetitiesModel {
 				$repetitie->setVoorkeurbaar((boolean) $voorkeur);
 				self::updateRepetitie($repetitie);
 				if (!$voorkeur) { // niet (meer) voorkeurbaar
-					$voorkeuren = CorveeVoorkeurenModel::verwijderVoorkeuren($crid);
+					$voorkeuren = CorveeVoorkeurenModel::instance()->verwijderVoorkeuren($crid);
 				}
 			}
 			$db->commit();
@@ -164,7 +164,7 @@ class CorveeRepetitiesModel {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
-			$aantal = CorveeVoorkeurenModel::verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)
+			$aantal = CorveeVoorkeurenModel::instance()->verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)
 			$sql = 'DELETE FROM crv_repetities';
 			$sql.= ' WHERE crv_repetitie_id=?';
 			$values = array($crid);

@@ -40,26 +40,26 @@ class MijnVoorkeurenController extends AclController {
 	}
 
 	public function mijn() {
-		$voorkeuren = CorveeVoorkeurenModel::getVoorkeurenVoorLid(LoginModel::getUid(), true);
+		$voorkeuren = CorveeVoorkeurenModel::instance()->getVoorkeurenVoorLid(LoginModel::getUid(), true);
 		$this->view = new MijnVoorkeurenView($voorkeuren);
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function inschakelen($crid) {
-		$voorkeur = CorveeVoorkeurenModel::inschakelenVoorkeur($crid, LoginModel::getUid());
+		$voorkeur = CorveeVoorkeurenModel::instance()->inschakelenVoorkeur($crid, LoginModel::getUid());
 		$this->view = new MijnVoorkeurView($voorkeur);
 	}
 
 	public function uitschakelen($crid) {
-		$voorkeur = CorveeVoorkeurenModel::uitschakelenVoorkeur($crid, LoginModel::getUid());
+		$voorkeur = CorveeVoorkeurenModel::instance()->uitschakelenVoorkeur($crid, LoginModel::getUid());
 		$this->view = new MijnVoorkeurView($voorkeur);
 	}
 
 	public function eetwens() {
 		$form = new EetwensForm();
 		if ($form->validate()) {
-			CorveeVoorkeurenModel::setEetwens(LoginModel::getProfiel(), $form->getField()->getValue());
+			CorveeVoorkeurenModel::instance()->setEetwens(LoginModel::getProfiel(), $form->getField()->getValue());
 		}
 		$this->view = $form;
 	}

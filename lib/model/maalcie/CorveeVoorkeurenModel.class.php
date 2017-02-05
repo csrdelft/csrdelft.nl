@@ -11,11 +11,13 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	const ORM = "CorveeVoorkeur";
 	const DIR = "maalcie/";
 
-	public static function getEetwens(Profiel $profiel) {
+	protected static $instance;
+
+	public function getEetwens(Profiel $profiel) {
 		return $profiel->eetwens;
 	}
 
-	public static function setEetwens(Profiel $profiel, $eetwens) {
+	public function setEetwens(Profiel $profiel, $eetwens) {
 		$profiel->eetwens = $eetwens;
 		if (ProfielModel::instance()->update($profiel) !== 1) {
 			throw new Exception('Eetwens opslaan mislukt');
@@ -32,10 +34,10 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	 * @param boolean $uitgeschakeld 
 	 * @return CorveeVoorkeur[]
 	 */
-	public static function getVoorkeurenVoorLid($uid, $uitgeschakeld = false) {
+	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false) {
 		$repById = CorveeRepetitiesModel::getVoorkeurbareRepetities(true); // grouped by crid
 		$lijst = array();
-		$voorkeuren = self::loadVoorkeuren(null, $uid); /** @var CorveeVoorkeur $voorkeur */
+		$voorkeuren = $this->find('uid = ?', array($uid)); /** @var CorveeVoorkeur[] $voorkeuren */
 		foreach ($voorkeuren as $voorkeur) {
 			$crid = $voorkeur->crv_repetitie_id;
 			if (!array_key_exists($crid, $repById)) { // ingeschakelde voorkeuren altijd weergeven
@@ -67,16 +69,12 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		return $lijst;
 	}
 
-	public static function getHeeftVoorkeur($crid, $uid) {
-		if (!is_int($crid) || $crid <= 0) {
-			throw new Exception('Get heeft voorkeur faalt: Invalid $crid = ' . $crid);
-		}
-		$sql = 'SELECT EXISTS (SELECT * FROM crv_voorkeuren WHERE crv_repetitie_id = ? AND uid = ?)';
-		$values = array($crid, $uid);
-		$query = \Database::instance()->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchColumn();
-		return $result;
+	public function getHeeftVoorkeur($crid, $uid) {
+		$voorkeur = new CorveeVoorkeur();
+		$voorkeur->crv_repetitie_id = $crid;
+		$voorkeur->uid = $uid;
+
+		return $this->exists($voorkeur);
 	}
 
 	/**
@@ -84,9 +82,9 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	 * 
 	 * @return CorveeVoorkeur[uid][crid]
 	 */
-	public static function getVoorkeurenMatrix() {
+	public function getVoorkeurenMatrix() {
 		$repById = CorveeRepetitiesModel::getVoorkeurbareRepetities(true); // grouped by crid
-		$leden_voorkeuren = self::loadLedenVoorkeuren();
+		$leden_voorkeuren = $this->loadLedenVoorkeuren();
 		$matrix = array();
 		foreach ($leden_voorkeuren as $lv) { // build matrix
 			$crid = $lv['crid'];
@@ -96,7 +94,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 			if ($lv['voorkeur']) { // ingeschakelde voorkeuren
 				$voorkeur->uid = $uid;
 			} else { // uitgeschakelde voorkeuren
-				$voorkeur->uid = '';
+				$voorkeur->uid = null;
 			}
 			$voorkeur->setCorveeRepetitie($repById[$crid]);
 			$voorkeur->setVanUid($uid);
@@ -107,7 +105,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		return array($matrix, $repById);
 	}
 
-	private static function loadLedenVoorkeuren() {
+	private function loadLedenVoorkeuren() {
 		$sql = 'SELECT lid.uid AS van, r.crv_repetitie_id AS crid, ';
 		$sql.= ' (EXISTS (SELECT * FROM crv_voorkeuren AS v WHERE v.crv_repetitie_id = crid AND v.uid = van )) AS voorkeur';
 		$sql.= ' FROM profielen AS lid, crv_repetities AS r';
@@ -121,37 +119,19 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		return $result;
 	}
 
-	public static function getVoorkeurenVoorRepetitie($crid) {
+	public function getVoorkeurenVoorRepetitie($crid) {
 		if (!is_int($crid) || $crid <= 0) {
 			throw new Exception('Get voorkeuren voor repetitie faalt: Invalid $crid = ' . $crid);
 		}
-		return self::loadVoorkeuren($crid);
+		return $this->find('crv_repetitie_id = ?', array($crid));
 	}
 
-	private static function loadVoorkeuren($crid = null, $uid = null) {
-		if (is_int($crid) && $uid !== null) {
-			throw new Exception('Load voorkeuren faalt: both $crid AND $uid provided');
-		}
-		$sql = 'SELECT crv_repetitie_id, uid';
-		$sql.= ' FROM crv_voorkeuren';
-		$values = array();
-		if (is_int($crid)) {
-			$sql.= ' WHERE crv_repetitie_id = ?';
-			$values[] = $crid;
-		}
-		if ($uid !== null) {
-			$sql.= ' WHERE uid = ?';
-			$values[] = $uid;
-		}
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\CorveeVoorkeur');
-		return $result;
-	}
+	public function inschakelenVoorkeur($crid, $uid) {
+		$voorkeur = new CorveeVoorkeur();
+		$voorkeur->crv_repetitie_id = $crid;
+		$voorkeur->uid = $uid;
 
-	public static function inschakelenVoorkeur($crid, $uid) {
-		if (self::getHeeftVoorkeur($crid, $uid)) {
+		if ($this->exists($voorkeur)) {
 			throw new Exception('Voorkeur al ingeschakeld');
 		}
 		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
@@ -164,49 +144,23 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 				throw new Exception('Niet gekwalificeerd');
 			}
 		}
-		return self::newVoorkeur($crid, $uid);
+
+		$this->create($voorkeur);
+
+		return $voorkeur;
 	}
 
-	/**
-	 * Slaat voorkeur op voor de opgegeven corvee-repetitie voor een specifiek lid.
-	 * 
-	 * @param int $crid
-	 * @param String $uid
-	 * @return CorveeVoorkeur
-	 */
-	private static function newVoorkeur($crid, $uid) {
-		$db = \Database::instance();
-		try {
-			$db->beginTransaction();
-			$sql = 'INSERT IGNORE INTO crv_voorkeuren';
-			$sql.= ' (crv_repetitie_id, uid)';
-			$values = array($crid, $uid);
-			$sql.= ' VALUES (?, ?)';
-			$query = $db->prepare($sql);
-			$query->execute($values);
-			if ($query->rowCount() !== 1) {
-				throw new Exception('New corvee-voorkeur faalt: $query->rowCount() = ' . $query->rowCount());
-			}
-			$db->commit();
-
-			$voorkeur = new CorveeVoorkeur();
-			$voorkeur->crv_repetitie_id = $crid;
-			$voorkeur->uid = $uid;
-			return $voorkeur;
-		} catch (\Exception $e) {
-			$db->rollback();
-			throw $e; // rethrow to controller
-		}
-	}
-
-	public static function uitschakelenVoorkeur($crid, $uid) {
-		if (!self::getHeeftVoorkeur($crid, $uid)) {
-			throw new Exception('Voorkeur al uitgeschakeld');
-		}
-		self::deleteVoorkeuren($crid, $uid);
+	public function uitschakelenVoorkeur($crid, $uid) {
 		$voorkeur = new CorveeVoorkeur();
 		$voorkeur->crv_repetitie_id = $crid;
-		$voorkeur->uid = null;
+		$voorkeur->uid = $uid;
+
+		if (!$this->exists($voorkeur)) {
+			throw new Exception('Voorkeur al uitgeschakeld');
+		}
+
+		$this->delete($voorkeur);
+
 		return $voorkeur;
 	}
 
@@ -216,11 +170,14 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	 * 
 	 * @return int amount of deleted voorkeuren
 	 */
-	public static function verwijderVoorkeuren($crid) {
-		if (!is_int($crid) || $crid <= 0) {
-			throw new Exception('Verwijder voorkeuren faalt: Invalid $crid = ' . $crid);
+	public function verwijderVoorkeuren($crid) {
+		$voorkeuren = $this->find('crv_repetitie_id = ?', array($crid));
+		$num = $voorkeuren->rowCount();
+		foreach ($voorkeuren as $voorkeur) {
+			$this->delete($voorkeur);
 		}
-		return self::deleteVoorkeuren($crid);
+
+		return $num;
 	}
 
 	/**
@@ -228,33 +185,13 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	 * 
 	 * @return int amount of deleted voorkeuren
 	 */
-	public static function verwijderVoorkeurenVoorLid($uid) {
-		$voorkeuren = self::getVoorkeurenVoorLid($uid);
-		$aantal = 0;
+	public function verwijderVoorkeurenVoorLid($uid) {
+		$voorkeuren = $this->find('uid = ?', array($uid));
+		$aantal = $voorkeuren->rowCount();
 		foreach ($voorkeuren as $voorkeur) {
-			$aantal += self::deleteVoorkeuren($voorkeur->crv_repetitie_id, $uid);
-		}
-		if (sizeof($voorkeuren) !== $aantal) {
-			throw new Exception('Niet alle voorkeuren zijn uitgeschakeld!');
+			$this->delete($voorkeur);
 		}
 		return $aantal;
-	}
-
-	private static function deleteVoorkeuren($crid, $uid = null) {
-		$sql = 'DELETE FROM crv_voorkeuren';
-		$sql.= ' WHERE crv_repetitie_id = ?';
-		$values = array($crid);
-		if ($uid !== null) {
-			$sql.= ' AND uid = ?';
-			$values[] = $uid;
-		}
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($uid !== null && $query->rowCount() !== 1) {
-			throw new Exception('Delete voorkeuren faalt: $query->rowCount() = ' . $query->rowCount());
-		}
-		return $query->rowCount();
 	}
 
 }

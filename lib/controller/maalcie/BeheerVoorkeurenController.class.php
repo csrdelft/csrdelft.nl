@@ -34,7 +34,7 @@ class BeheerVoorkeurenController extends AclController {
 	}
 
 	public function beheer() {
-		$matrix_repetities = CorveeVoorkeurenModel::getVoorkeurenMatrix();
+		$matrix_repetities = CorveeVoorkeurenModel::instance()->getVoorkeurenMatrix();
 		$this->view = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
@@ -44,7 +44,7 @@ class BeheerVoorkeurenController extends AclController {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		$voorkeur = CorveeVoorkeurenModel::inschakelenVoorkeur((int) $crid, $uid);
+		$voorkeur = CorveeVoorkeurenModel::instance()->inschakelenVoorkeur((int) $crid, $uid);
 		$voorkeur->setVanUid($voorkeur->getUid());
 		$this->view = new BeheerVoorkeurView($voorkeur);
 	}
@@ -53,7 +53,7 @@ class BeheerVoorkeurenController extends AclController {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		CorveeVoorkeurenModel::uitschakelenVoorkeur((int) $crid, $uid);
+		CorveeVoorkeurenModel::instance()->uitschakelenVoorkeur((int) $crid, $uid);
 		$voorkeur = new CorveeVoorkeur();
 		$voorkeur->crv_repetitie_id = (int) $crid;
 		$voorkeur->uid = '';
