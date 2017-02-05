@@ -178,11 +178,11 @@ class CorveePuntenModel {
 			$sumBonus[$fid] = 0;
 		}
 		foreach ($taken as $taak) {
-			$fid = $taak->getFunctieId();
+			$fid = $taak->functie_id;
 			if (array_key_exists($fid, $functies)) {
 				$sumAantal[$fid] += 1;
-				$sumPunten[$fid] += $taak->getPuntenToegekend();
-				$sumBonus[$fid] += $taak->getBonusToegekend();
+				$sumPunten[$fid] += $taak->punten_toegekend;
+				$sumBonus[$fid] += $taak->bonus_toegekend;
 			}
 			$sumPrognose += $taak->getPuntenPrognose();
 		}

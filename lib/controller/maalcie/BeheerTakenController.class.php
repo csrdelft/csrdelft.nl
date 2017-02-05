@@ -123,15 +123,15 @@ class BeheerTakenController extends AclController {
 		} else {
 			$taak = new CorveeTaak();
 			if (isset($beginDatum)) {
-				$taak->setDatum($beginDatum);
+				$taak->datum = $beginDatum;
 			}
-			$this->view = new TaakForm($taak->getTaakId(), $taak->getFunctieId(), $taak->getUid(), $taak->getCorveeRepetitieId(), $mid, $taak->getDatum(), null, $taak->getBonusMalus()); // fetches POST values itself
+			$this->view = new TaakForm($taak->taak_id, $taak->functie_id, $taak->uid, $taak->crv_repetitie_id, $mid, $taak->datum, null, $taak->bonus_malus); // fetches POST values itself
 		}
 	}
 
 	public function bewerk($tid) {
 		$taak = CorveeTakenModel::getTaak($tid);
-		$this->view = new TaakForm($taak->getTaakId(), $taak->getFunctieId(), $taak->getUid(), $taak->getCorveeRepetitieId(), $taak->getMaaltijdId(), $taak->getDatum(), $taak->getPunten(), $taak->getBonusMalus()); // fetches POST values itself
+		$this->view = new TaakForm($taak->taak_id, $taak->functie_id, $taak->uid, $taak->crv_repetitie_id, $taak->maaltijd_id, $taak->datum, $taak->punten, $taak->bonus_malus); // fetches POST values itself
 	}
 
 	public function opslaan($tid) {

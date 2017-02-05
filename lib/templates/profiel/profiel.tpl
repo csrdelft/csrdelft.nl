@@ -275,7 +275,7 @@
 			<div class="label">Corveetaken:</div>
 			<ul class="nobullets data">
 				{foreach from=$corveetaken item=taak}
-					<li>{$taak->getCorveeFunctie()->naam} <span class="lichtgrijs">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
+					<li>{$taak->getCorveeFunctie()->naam} <span class="lichtgrijs">({$taak->datum|date_format:"%a %e %b"})</span></li>
 					{/foreach}
 			</ul>
 			<br />

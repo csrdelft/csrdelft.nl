@@ -35,11 +35,11 @@ class BeheerTakenView extends SmartyTemplateView {
 			$this->titel = 'Corveebeheer';
 		}
 		foreach ($taken as $taak) {
-			$datum = $taak->getDatum();
+			$datum = $taak->datum;
 			if (!array_key_exists($datum, $this->model)) {
 				$this->model[$datum] = array();
 			}
-			$this->model[$datum][$taak->getFunctieId()][] = $taak;
+			$this->model[$datum][$taak->functie_id][] = $taak;
 		}
 
 		$this->smarty->assign('prullenbak', $this->prullenbak);

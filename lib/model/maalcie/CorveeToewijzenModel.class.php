@@ -75,8 +75,8 @@ class CorveeToewijzenModel {
 			} else {
 				$lijst[$uid]['recent'] = false;
 			}
-			if ($taak->getCorveeRepetitieId() !== null) {
-				$lijst[$uid]['voorkeur'] = CorveeVoorkeurenModel::instance()->getHeeftVoorkeur($taak->getCorveeRepetitieId(), $uid);
+			if ($taak->crv_repetitie_id !== null) {
+				$lijst[$uid]['voorkeur'] = CorveeVoorkeurenModel::instance()->getHeeftVoorkeur($taak->crv_repetitie_id, $uid);
 			} else {
 				$lijst[$uid]['voorkeur'] = false;
 			}

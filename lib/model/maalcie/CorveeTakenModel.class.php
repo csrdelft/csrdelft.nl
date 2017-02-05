@@ -28,15 +28,15 @@ class CorveeTakenModel {
 	}
 
 	public static function taakToewijzenAanLid(CorveeTaak $taak, $uid) {
-		if ($taak->getUid() === $uid) {
+		if ($taak->uid === $uid) {
 			return false;
 		}
 		$puntenruilen = false;
-		if ($taak->getWanneerToegekend() !== null) {
+		if ($taak->wanneer_toegekend !== null) {
 			$puntenruilen = true;
 		}
 		$taak->setWanneerGemaild('');
-		if ($puntenruilen && $taak->getUid() !== null) {
+		if ($puntenruilen && $taak->uid !== null) {
 			self::puntenIntrekken($taak);
 		}
 		$taak->setUid($uid);
@@ -52,10 +52,10 @@ class CorveeTakenModel {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
-			CorveePuntenModel::puntenToekennen($taak->getUid(), $taak->getPunten(), $taak->getBonusMalus());
-			$taak->setPuntenToegekend($taak->getPuntenToegekend() + $taak->getPunten());
-			$taak->setBonusToegekend($taak->getBonusToegekend() + $taak->getBonusMalus());
-			$taak->setWanneerToegekend(date('Y-m-d H:i'));
+			CorveePuntenModel::puntenToekennen($taak->uid, $taak->punten, $taak->bonus_malus);
+			$taak->punten_toegekend = $taak->punten_toegekend + $taak->punten;
+			$taak->bonus_toegekend = $taak->bonus_toegekend + $taak->bonus_malus;
+			$taak->wanneer_toegekend = date('Y-m-d H:i');
 			self::updateTaak($taak);
 			$db->commit();
 		} catch (\Exception $e) {
@@ -68,10 +68,10 @@ class CorveeTakenModel {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
-			CorveePuntenModel::puntenIntrekken($taak->getUid(), $taak->getPunten(), $taak->getBonusMalus());
-			$taak->setPuntenToegekend($taak->getPuntenToegekend() - $taak->getPunten());
-			$taak->setBonusToegekend($taak->getBonusToegekend() - $taak->getBonusMalus());
-			$taak->setWanneerToegekend(null);
+			CorveePuntenModel::puntenIntrekken($taak->uid, $taak->punten, $taak->bonus_malus);
+			$taak->punten_toegekend = $taak->punten_toegekend - $taak->punten;
+			$taak->bonus_toegekend = $taak->bonus_toegekend - $taak->bonus_malus;
+			$taak->wanneer_toegekend = null;
 			self::updateTaak($taak);
 			$db->commit();
 		} catch (\Exception $e) {
@@ -83,9 +83,9 @@ class CorveeTakenModel {
 	public static function getRoosterMatrix(array $taken) {
 		$matrix = array();
 		foreach ($taken as $taak) {
-			$datum = strtotime($taak->getDatum());
+			$datum = strtotime($taak->datum);
 			$week = date('W', $datum);
-			$matrix[$week][$datum][$taak->getFunctieId()][] = $taak;
+			$matrix[$week][$datum][$taak->functie_id][] = $taak;
 		}
 		return $matrix;
 	}
@@ -103,7 +103,7 @@ class CorveeTakenModel {
 		if ($groupByUid) {
 			$takenByUid = array();
 			foreach ($taken as $taak) {
-				$uid = $taak->getUid();
+				$uid = $taak->uid;
 				if ($uid !== null) {
 					$takenByUid[$uid][] = $taak;
 				}
@@ -119,7 +119,7 @@ class CorveeTakenModel {
 
 	public static function getTaak($tid) {
 		$taak = self::loadTaak($tid);
-		if ($taak->getIsVerwijderd()) {
+		if ($taak->verwijderd) {
 			throw new Exception('Maaltijd is verwijderd');
 		}
 		return $taak;
@@ -203,14 +203,14 @@ class CorveeTakenModel {
 				$taak = self::newTaak($fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus);
 			} else {
 				$taak = self::getTaak($tid);
-				if ($taak->getFunctieId() !== $fid) {
-					$taak->setCorveeRepetitieId(null);
-					$taak->setFunctieId($fid);
+				if ($taak->functie_id !== $fid) {
+					$taak->crv_repetitie_id = null;
+					$taak->functie_id = $fid;
 				}
-				$taak->setMaaltijdId($mid);
-				$taak->setDatum($datum);
-				$taak->setPunten($punten);
-				$taak->setBonusMalus($bonus_malus);
+				$taak->maaltijd_id = $mid;
+				$taak->datum = $datum;
+				$taak->punten = $punten;
+				$taak->bonus_malus = $bonus_malus;
 				if (!self::taakToewijzenAanLid($taak, $uid)) {
 					self::updateTaak($taak);
 				}
@@ -225,10 +225,10 @@ class CorveeTakenModel {
 
 	public static function herstelTaak($tid) {
 		$taak = self::loadTaak($tid);
-		if (!$taak->getIsVerwijderd()) {
+		if (!$taak->verwijderd) {
 			throw new Exception('Corveetaak is niet verwijderd');
 		}
-		$taak->setVerwijderd(false);
+		$taak->verwijderd = false;
 		self::updateTaak($taak);
 		return $taak;
 	}
@@ -267,10 +267,10 @@ class CorveeTakenModel {
 
 	public static function verwijderTaak($tid) {
 		$taak = self::loadTaak($tid);
-		if ($taak->getIsVerwijderd()) {
+		if ($taak->verwijderd) {
 			self::deleteTaken($tid); // definitief verwijderen
 		} else {
-			$taak->setVerwijderd(true);
+			$taak->verwijderd = true;
 			self::updateTaak($taak);
 		}
 	}
@@ -316,19 +316,19 @@ class CorveeTakenModel {
 		$sql.= ' SET functie_id=?, uid=?, crv_repetitie_id=?, maaltijd_id=?, datum=?, punten=?, bonus_malus=?, punten_toegekend=?, bonus_toegekend=?, wanneer_toegekend=?, wanneer_gemaild=?, verwijderd=?';
 		$sql.= ' WHERE taak_id=?';
 		$values = array(
-			$taak->getFunctieId(),
-			$taak->getUid(),
-			$taak->getCorveeRepetitieId(),
-			$taak->getMaaltijdId(),
-			$taak->getDatum(),
-			$taak->getPunten(),
-			$taak->getBonusMalus(),
-			$taak->getPuntenToegekend(),
-			$taak->getBonusToegekend(),
-			$taak->getWanneerToegekend(),
-			$taak->getWanneerGemaild(),
-			werkomheen_pdo_bool($taak->getIsVerwijderd()),
-			$taak->getTaakId()
+			$taak->functie_id,
+			$taak->uid,
+			$taak->crv_repetitie_id,
+			$taak->maaltijd_id,
+			$taak->datum,
+			$taak->punten,
+			$taak->bonus_malus,
+			$taak->punten_toegekend,
+			$taak->bonus_toegekend,
+			$taak->wanneer_toegekend,
+			$taak->wanneer_gemaild,
+			werkomheen_pdo_bool($taak->verwijderd),
+			$taak->taak_id
 		);
 		$db = \Database::instance();
 		$query = $db->prepare($sql);
@@ -352,7 +352,20 @@ class CorveeTakenModel {
 		if ($query->rowCount() !== 1) {
 			throw new Exception('New taak faalt: $query->rowCount() =' . $query->rowCount());
 		}
-		$taak = new CorveeTaak(intval($db->lastInsertId()), $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus, 0, 0, null, '', false);
+		$taak = new CorveeTaak();
+		$taak->taak_id = (int) intval($db->lastInsertId());
+		$taak->functie_id = $fid;
+		$taak->setUid($uid);
+		$taak->crv_repetitie_id = $crid;
+		$taak->maaltijd_id = $mid;
+		$taak->datum = $datum;
+		$taak->punten = $punten;
+		$taak->bonus_malus = $bonus_malus;
+		$taak->punten_toegekend = 0;
+		$taak->bonus_toegekend = 0;
+		$taak->wanneer_toegekend = null;
+		$taak->setWanneerGemaild('');
+		$taak->verwijderd = false;
 		return $taak;
 	}
 
@@ -550,7 +563,7 @@ class CorveeTakenModel {
 			// update day of the week
 			$daycount = 0;
 			foreach ($taken as $taak) {
-				$datum = strtotime($taak->getDatum());
+				$datum = strtotime($taak->datum);
 				if ($verplaats) {
 					$shift = $repetitie->getDagVanDeWeek() - date('w', $datum);
 					if ($shift > 0) {
@@ -559,12 +572,12 @@ class CorveeTakenModel {
 						$datum = strtotime($shift . ' days', $datum);
 					}
 					if ($shift !== 0) {
-						$taak->setDatum(date('Y-m-d', $datum));
+						$taak->datum = date('Y-m-d', $datum);
 						self::updateTaak($taak);
 						$daycount++;
 					}
 				}
-				$mid = $taak->getMaaltijdId();
+				$mid = $taak->maaltijd_id;
 				if ($mid !== null) {
 					if (array_key_exists($mid, $maaltijdenById)) { // do not change if not komende repetitie maaltijd
 						$takenPerMaaltijd[$mid][] = $taak;
@@ -579,7 +592,7 @@ class CorveeTakenModel {
 				$verschil = $repetitie->getStandaardAantal() - sizeof($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					self::newTaak(
-							$repetitie->getFunctieId(), null, $repetitie->getCorveeRepetitieId(), null, $taken[0]->getDatum(), $repetitie->getStandaardPunten(), 0
+							$repetitie->getFunctieId(), null, $repetitie->getCorveeRepetitieId(), null, $taken[0]->datum, $repetitie->getStandaardPunten(), 0
 					);
 				}
 				$datumcount += $verschil;
@@ -589,7 +602,7 @@ class CorveeTakenModel {
 				$verschil = $repetitie->getStandaardAantal() - sizeof($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					self::newTaak(
-							$repetitie->getFunctieId(), null, $repetitie->getCorveeRepetitieId(), $mid, $maaltijdenById[$mid]->getDatum(), $repetitie->getStandaardPunten(), 0
+							$repetitie->getFunctieId(), null, $repetitie->getCorveeRepetitieId(), $mid, $maaltijdenById[$mid]->datum, $repetitie->getStandaardPunten(), 0
 					);
 				}
 				$maaltijdcount += $verschil;
