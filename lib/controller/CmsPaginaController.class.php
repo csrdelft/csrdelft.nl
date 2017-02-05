@@ -105,11 +105,10 @@ class CmsPaginaController extends Controller {
 		}
 		if ($this->model->delete($pagina)) {
 			setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
-			redirect(CSR_ROOT);
 		} else {
 			setMelding('Verwijderen mislukt', -1);
-			redirect(CSR_ROOT);
 		}
+		$this->view = new JsonResponse(CSR_ROOT); // redirect
 	}
 
 }
