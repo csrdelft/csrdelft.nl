@@ -9,7 +9,7 @@
     <section id="wrapper">
 
         <!-- One -->
-        <section id="one" class="wrapper spotlight style1">
+        <section id="one" class="wrapper spotlight style1 kleur1">
             <div class="inner">
                 <span class="image"><img src="/assets/layout-owee/plaetjes/vereniging.jpg" alt=""/></span>
                 <div class="content">
@@ -27,7 +27,7 @@
         </section>
 
         <!-- Two -->
-        <section id="two" class="wrapper alt spotlight style2">
+        <section id="two" class="wrapper alt spotlight style2 kleur2">
             <div class="inner">
                 <span class="image"><img src="/assets/layout-owee/plaetjes/podium.jpg" alt=""/></span>
                 <div class="content">
@@ -46,7 +46,7 @@
         </section>
 
         <!-- Three -->
-        <section id="three" class="wrapper spotlight style3">
+        <section id="three" class="wrapper spotlight style3 kleur1">
             <div class="inner">
                 <span class="image"><img src="/assets/layout-owee/plaetjes/OC.jpg" alt=""/></span>
                 <div class="content">
@@ -66,29 +66,56 @@
         </section>
 
         <!-- Four -->
-        <section id="four" class="wrapper alt style1">
+        <section id="four" class="wrapper spotlight alt kleur2">
             <div class="inner">
-                <h2 class="major">Foto's</h2>
-                <div class="box alt">
-                    <div class="row uniform">
-                        <div class="4u"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic01.jpg"
-                                                                     alt=""/></span></div>
-                        <div class="4u"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic02.jpg"
-                                                                     alt=""/></span></div>
-                        <div class="4u$"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic03.jpg"
-                                                                      alt=""/></span></div>
-                        <div class="4u"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic04.jpg"
-                                                                     alt=""/></span></div>
-                        <div class="4u"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic05.jpg"
-                                                                     alt=""/></span></div>
-                        <div class="4u$"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic06.jpg"
-                                                                      alt=""/></span></div>
-                        <div class="4u"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic07.jpg"
-                                                                     alt=""/></span></div>
-                        <div class="4u"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic08.jpg"
-                                                                     alt=""/></span></div>
-                        <div class="4u$"><span class="image fit"><img src="/plaetjes/fotoalbum/Voorpagina/Extern/pic09.jpg"
-                                                                      alt=""/></span></div>
+                <div class="content">
+                    <h2 class="major">Foto's</h2>
+                    <div class="grid">
+                        <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic01.jpg"
+                           data-lightbox="page-lightbox">
+                            <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic01.jpg"
+                                 src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic01.jpg">
+                        </a>
+                        <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic02.jpg"
+                           data-lightbox="page-lightbox">
+                            <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic02.jpg"
+                                 src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic02.jpg">
+                        </a>
+                        <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic03.jpg"
+                           data-lightbox="page-lightbox">
+                            <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic03.jpg"
+                                 src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic03.jpg">
+                        </a>
+                        <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic04.jpg"
+                           data-lightbox="page-lightbox">
+                            <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic04.jpg"
+                                 src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic04.jpg">
+                        </a>
+                        <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic05.jpg"
+                           data-lightbox="page-lightbox">
+                            <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic05.jpg"
+                                 src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic05.jpg">
+                        </a>
+                        <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic06.jpg"
+                           data-lightbox="page-lightbox">
+                            <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic06.jpg"
+                                 src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic06.jpg">
+                        </a>
+                        <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic07.jpg"
+                           data-lightbox="page-lightbox">
+                            <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic07.jpg"
+                                 src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic07.jpg">
+                        </a>
+                        <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic08.jpg"
+                           data-lightbox="page-lightbox">
+                            <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic08.jpg"
+                                 src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic08.jpg">
+                        </a>
+                        <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic09.jpg"
+                           data-lightbox="page-lightbox">
+                            <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic09.jpg"
+                                 src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic09.jpg">
+                        </a>
                     </div>
                 </div>
             </div>

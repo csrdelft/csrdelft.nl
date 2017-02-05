@@ -55,7 +55,7 @@ class LoginController extends AclController {
 		require_once 'view/CmsPaginaView.class.php';
 		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
         if (!LoginModel::mag('P_LOGGED_IN')) {
-            $this->view = new CsrLayoutExternPage($body);
+            $this->view = new CsrLayoutOweePage($body);
         } else {
             $this->view = new CsrLayoutPage($body);
         }
@@ -246,7 +246,7 @@ class LoginController extends AclController {
 				}
 			}
 		}
-		$this->view = new CsrLayoutExternPage($form);
+		$this->view = new CsrLayoutOweePage($form);
 	}
 
 	public function verify($tokenString = null) {
@@ -266,7 +266,7 @@ class LoginController extends AclController {
 				setMelding('Deze link is niet meer geldig', -1);
 			}
 		}
-		$this->view = new CsrLayoutExternPage($form);
+		$this->view = new CsrLayoutOweePage($form);
 	}
 
 	public function loginsessionsdata() {
