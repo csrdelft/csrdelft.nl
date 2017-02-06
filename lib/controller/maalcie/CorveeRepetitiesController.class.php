@@ -70,12 +70,12 @@ class CorveeRepetitiesController extends AclController {
 
 	public function nieuw($mrid = null) {
 		$repetitie = $this->model->nieuw(0, $mrid);
-		$this->view = new CorveeRepetitieForm($repetitie->crv_repetitie_id, $repetitie->mlt_repetitie_id, $repetitie->dag_vd_week, $repetitie->periode_in_dagen, $repetitie->functie_id, null, $repetitie->standaard_aantal, $repetitie->voorkeurbaar); // fetches POST values itself
+		$this->view = new CorveeRepetitieForm($repetitie); // fetches POST values itself
 	}
 
 	public function bewerk($crid) {
 		$repetitie = $this->model->getRepetitie($crid);
-		$this->view = new CorveeRepetitieForm($repetitie->crv_repetitie_id, $repetitie->mlt_repetitie_id, $repetitie->dag_vd_week, $repetitie->periode_in_dagen, $repetitie->functie_id, $repetitie->standaard_punten, $repetitie->standaard_aantal, $repetitie->voorkeurbaar); // fetches POST values itself
+		$this->view = new CorveeRepetitieForm($repetitie); // fetches POST values itself
 	}
 
 	public function opslaan($crid) {
