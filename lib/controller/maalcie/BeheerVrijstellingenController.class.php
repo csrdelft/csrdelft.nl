@@ -51,7 +51,7 @@ class BeheerVrijstellingenController extends AclController {
 
 	public function nieuw() {
 		$vrijstelling = $this->model->nieuw();
-		$this->view = new VrijstellingForm($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage); // fetches POST values itself
+		$this->view = new VrijstellingForm($vrijstelling); // fetches POST values itself
 	}
 
 	public function bewerk($uid) {
@@ -59,7 +59,7 @@ class BeheerVrijstellingenController extends AclController {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
 		$vrijstelling = $this->model->getVrijstelling($uid);
-		$this->view = new VrijstellingForm($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage); // fetches POST values itself
+		$this->view = new VrijstellingForm($vrijstelling); // fetches POST values itself
 	}
 
 	public function opslaan($uid = null) {
