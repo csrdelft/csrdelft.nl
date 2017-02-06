@@ -1,5 +1,8 @@
 <?php
 
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\PersistenceModel;
+
 require_once 'model/entity/maalcie/CorveeRepetitie.class.php';
 require_once 'model/maalcie/CorveeTakenModel.class.php';
 require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
@@ -83,7 +86,7 @@ class CorveeRepetitiesModel extends PersistenceModel {
 	}
 
 	public function saveRepetitie($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
-		$db = \Database::instance();
+		$db = Database::instance();
 		try {
 			$db->beginTransaction();
 			$voorkeuren = 0;
@@ -121,7 +124,7 @@ class CorveeRepetitiesModel extends PersistenceModel {
 			throw new Exception('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 
-		$db = \Database::instance();
+		$db = Database::instance();
 		try {
 			$db->beginTransaction();
 			$aantal = CorveeVoorkeurenModel::instance()->verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)

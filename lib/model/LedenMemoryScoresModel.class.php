@@ -1,4 +1,6 @@
 <?php
+use CsrDelft\Orm\DataBase\Database;
+use CsrDelft\Orm\PersistenceModel;
 
 /**
  * LedenMemoryScoresModel.class.php

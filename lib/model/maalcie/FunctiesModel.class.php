@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\Orm\CachedPersistenceModel;
+
 require_once 'model/maalcie/KwalificatiesModel.class.php';
 
 /**

@@ -1,5 +1,8 @@
 <?php
 
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\PersistenceModel;
+
 require_once 'model/entity/peilingen/Peiling.class.php';
 require_once 'model/entity/peilingen/PeilingOptie.class.php';
 require_once 'model/entity/peilingen/PeilingStem.class.php';

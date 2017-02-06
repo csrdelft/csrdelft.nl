@@ -1,5 +1,8 @@
 <?php
 
+use CsrDelft\Orm\PersistenceModel;
+use MongoDB\BSON\Type;
+
 require_once 'model/entity/maalcie/MaaltijdAanmelding.class.php';
 require_once 'model/maalcie/MaaltijdenModel.class.php';
 

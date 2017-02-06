@@ -1,5 +1,10 @@
 <?php
 
+use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\Orm\DataBase\Database;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\PersistenceModel;
+
 require_once 'model/Paging.interface.php';
 
 /**

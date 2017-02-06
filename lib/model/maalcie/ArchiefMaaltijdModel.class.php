@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\Orm\PersistenceModel;
+
 class ArchiefMaaltijdModel extends PersistenceModel {
     const ORM = 'ArchiefMaaltijd';
     const DIR = 'maalcie/';

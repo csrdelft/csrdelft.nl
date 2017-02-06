@@ -1,4 +1,6 @@
 <?php
+use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\Orm\DataBase\Database;
 
 /**
  * AccountModel.class.php

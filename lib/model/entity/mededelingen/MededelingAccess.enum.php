@@ -1,4 +1,6 @@
 <?php
+use CsrDelft\Orm\Entity\PersistentEnum;
+
 /**
  * MededelingAccess.enum.php
  *

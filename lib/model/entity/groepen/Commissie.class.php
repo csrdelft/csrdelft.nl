@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\Orm\Entity\T;
+
 require_once 'model/entity/groepen/CommissieSoort.enum.php';
 
 /**

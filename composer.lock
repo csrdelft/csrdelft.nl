@@ -4,9 +4,40 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cd10673b317189965ed2bfe876033b22",
-    "content-hash": "28535141b361e9413e935a2bf30b0a05",
+    "hash": "54ac4d10ce8d158b8dba8fd5bc0f526d",
+    "content-hash": "10da5f9e48695b7194709b1ba8c34106",
     "packages": [
+        {
+            "name": "csrdelft/orm",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/csrdelft/orm.git",
+                "reference": "bcf8dd54f4174b78aeb64a39a88edf051f7ec401"
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CsrDelft\\Orm\\": "src"
+                }
+            },
+            "license": [
+                "Unknown"
+            ],
+            "authors": [
+                {
+                    "name": "Gerben Oolbekkink",
+                    "email": "g.j.w.oolbekkink@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+            "homepage": "https://github.com/csrdelft/orm",
+            "time": "2017-02-06 14:21:35"
+        },
         {
             "name": "firebase/php-jwt",
             "version": "v4.0.0",
@@ -760,7 +791,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "csrdelft/orm": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

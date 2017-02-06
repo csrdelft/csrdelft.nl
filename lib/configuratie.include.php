@@ -15,6 +15,9 @@
 //header('location: https://csrdelft.nl/onderhoud.html');
 //exit;
 
+// Composer autoload
+require __DIR__ . '/../vendor/autoload.php';
+
 register_shutdown_function('fatal_handler');
 
 function fatal_handler(Exception $ex = null) {
@@ -78,9 +81,6 @@ if (php_sapi_name() === 'cli') {
 	define('MODE', 'WEB');
 }
 
-// Composer autoload
-require __DIR__ . '/../vendor/autoload.php';
-
 // Defines
 require_once 'defines.include.php';
 require_once 'common.functions.php';
@@ -121,8 +121,6 @@ if (FORCE_HTTPS) {
 
 // Model
 require_once 'MijnSqli.class.php'; // DEPRECATED
-require_once 'model/framework/DynamicEntityModel.class.php';
-require_once 'model/framework/CachedPersistenceModel.abstract.php';
 require_once 'model/DebugLogModel.class.php';
 require_once 'model/TimerModel.class.php';
 require_once 'model/entity/agenda/Agendeerbaar.interface.php';
@@ -142,6 +140,24 @@ require_once 'icon.class.php';
 
 // Controller
 require_once 'controller/framework/AclController.abstract.php';
+
+use CsrDelft\Orm\DataBase\Database;
+use CsrDelft\Orm\DataBase\DatabaseAdmin;
+use CsrDelft\Orm\DataBase\OrmMemcache;
+
+$cred = parse_ini_file(ETC_PATH . 'mysql.ini'); // Separate login credentials in the future perhaps.
+if ($cred === false) {
+	$cred = array(
+		'host'	 => 'localhost',
+		'user'	 => 'admin',
+		'pass'	 => 'password',
+		'db'	 => 'csrdelft'
+	);
+}
+
+OrmMemcache::init(DATA_PATH);
+Database::init($cred['host'], $cred['db'], $cred['user'], $cred['pass']);
+DatabaseAdmin::init($cred['host'], $cred['db'], $cred['user'], $cred['pass']);
 
 // Router
 switch (constant('MODE')) {

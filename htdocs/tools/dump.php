@@ -1,12 +1,12 @@
 <?php
 
+use CsrDelft\Orm\DataBase\DatabaseAdmin;
+
 require_once 'configuratie.include.php';
 
 if (!LoginModel::mag('P_ADMIN')) {
 	redirect(CSR_ROOT);
 }
-
-require_once 'model/framework/DatabaseAdmin.singleton.php';
 
 $tables = array();
 $results = DatabaseAdmin::instance()->sqlShowTables();

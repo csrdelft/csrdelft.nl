@@ -1,5 +1,8 @@
 <?php
 
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\PersistenceModel;
+
 require_once 'model/entity/maalcie/CorveeVoorkeur.class.php';
 require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
 
@@ -111,7 +114,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		$sql.= ' FROM profielen AS lid, crv_repetities AS r';
 		$sql.= ' WHERE r.voorkeurbaar = true AND lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")'; // alleen leden
 		$sql.= ' ORDER BY lid.achternaam, lid.voornaam ASC';
-		$db = \Database::instance();
+		$db = Database::instance();
 		$values = array();
 		$query = $db->prepare($sql);
 		$query->execute($values);

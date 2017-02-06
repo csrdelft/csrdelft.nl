@@ -1,4 +1,7 @@
 <?php
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
+
 class Eetplan extends PersistentEntity {
     public $uid;
     public $woonoord_id;

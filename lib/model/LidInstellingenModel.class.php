@@ -1,5 +1,8 @@
 <?php
 
+use CsrDelft\Orm\DataBase\Database;
+use CsrDelft\Orm\Entity\T;
+
 require_once 'model/InstellingenModel.class.php';
 
 /**

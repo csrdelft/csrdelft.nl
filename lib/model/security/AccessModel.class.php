@@ -1,5 +1,8 @@
 <?php
 
+use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\Orm\DataBase\Database;
+
 require_once 'model/entity/security/AccessRole.enum.php';
 require_once 'model/entity/security/AccessAction.enum.php';
 require_once 'model/security/LoginModel.class.php';

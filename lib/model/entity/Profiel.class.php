@@ -1,5 +1,9 @@
 <?php
 
+use CsrDelft\Orm\DataBase\Database;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
+
 require_once 'model/entity/Geslacht.enum.php';
 require_once 'model/entity/OntvangtContactueel.enum.php';
 require_once 'model/entity/LidStatus.enum.php';

@@ -1,5 +1,9 @@
 <?php
 
+use CsrDelft\Orm\DataBase\Database;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
+
 require_once 'model/entity/groepen/GroepStatus.enum.php';
 require_once 'model/entity/groepen/GroepLid.abstract.php';
 
