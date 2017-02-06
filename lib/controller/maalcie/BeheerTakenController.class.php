@@ -121,19 +121,21 @@ class BeheerTakenController extends AclController {
 					return;
 				}
 			}
-			$this->view = new TaakForm(0, $repetitie->functie_id, null, $repetitie->crv_repetitie_id, $mid, $beginDatum, $repetitie->standaard_punten, 0); // fetches POST values itself
+			$taak = CorveeTakenModel::instance()->vanRepetitie($repetitie, $beginDatum, $mid);
+			$this->view = new TaakForm($taak, 'nieuw'); // fetches POST values itself
 		} else {
 			$taak = new CorveeTaak();
 			if (isset($beginDatum)) {
 				$taak->datum = $beginDatum;
 			}
-			$this->view = new TaakForm($taak->taak_id, $taak->functie_id, $taak->uid, $taak->crv_repetitie_id, $mid, $taak->datum, null, $taak->bonus_malus); // fetches POST values itself
+			$taak->maaltijd_id = $mid;
+			$this->view = new TaakForm($taak, 'nieuw'); // fetches POST values itself
 		}
 	}
 
 	public function bewerk($tid) {
 		$taak = $this->model->getTaak($tid);
-		$this->view = new TaakForm($taak->taak_id, $taak->functie_id, $taak->uid, $taak->crv_repetitie_id, $taak->maaltijd_id, $taak->datum, $taak->punten, $taak->bonus_malus); // fetches POST values itself
+		$this->view = new TaakForm($taak, 'bewerk/' . $tid); // fetches POST values itself
 	}
 
 	public function opslaan($tid) {
@@ -143,7 +145,15 @@ class BeheerTakenController extends AclController {
 			$this->nieuw();
 		}
 		if ($this->view->validate()) {
-			$values = $this->view->getValues();
+			$values = $this->view->getModel();
+			if ($values->taak_id == null) {
+				$this->model->create($values);
+			} else {
+				$origineel = $this->model->getTaak($values->taak_id);
+				if (!$this->model->taakToewijzenAanLid($origineel, $values->uid)) {
+					$this->model->update($values);
+				}
+			}
 			$taak = $this->model->saveTaak($tid, (int) $values['functie_id'], $values['uid'], $values['crv_repetitie_id'], $values['maaltijd_id'], $values['datum'], $values['punten'], $values['bonus_malus']);
 			$maaltijd = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], maalcieUrl . '/maaltijd/' . $values['maaltijd_id'])) { // state of gui

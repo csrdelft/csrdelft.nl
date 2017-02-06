@@ -246,7 +246,7 @@ class CorveeTakenModel extends PersistenceModel {
 		}
 	}
 
-	private function vanRepetitie(CorveeRepetitie $repetitie, $datum, $mid = null, $uid = null, $bonus_malus = null) {
+	public function vanRepetitie(CorveeRepetitie $repetitie, $datum, $mid = null, $uid = null, $bonus_malus = 0) {
 		$taak = new CorveeTaak();
 		$taak->taak_id = null;
 		$taak->functie_id = $repetitie->functie_id;
