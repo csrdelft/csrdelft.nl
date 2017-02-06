@@ -74,6 +74,10 @@ class CorveeRepetitiesModel extends PersistenceModel {
 		return $this->find('mlt_repetitie_id = ?', array($mrid));
 	}
 
+	/**
+	 * @param $crid
+	 * @return CorveeRepetitie|false
+	 */
 	public function getRepetitie($crid) {
 		return $this->retrieveByPrimaryKey(array($crid));
 	}

@@ -49,12 +49,18 @@ class MijnVoorkeurenController extends AclController {
 	}
 
 	public function inschakelen($crid) {
-		$voorkeur = $this->model->inschakelenVoorkeur($crid, LoginModel::getUid());
+		$voorkeur = new CorveeVoorkeur();
+		$voorkeur->crv_repetitie_id = $crid;
+		$voorkeur->uid = LoginModel::getUid();
+		$voorkeur = $this->model->inschakelenVoorkeur($voorkeur);
 		$this->view = new MijnVoorkeurView($voorkeur);
 	}
 
 	public function uitschakelen($crid) {
-		$voorkeur = $this->model->uitschakelenVoorkeur($crid, LoginModel::getUid());
+		$voorkeur = new CorveeVoorkeur();
+		$voorkeur->crv_repetitie_id = $crid;
+		$voorkeur->uid = LoginModel::getUid();
+		$voorkeur = $this->model->uitschakelenVoorkeur($voorkeur);
 		$this->view = new MijnVoorkeurView($voorkeur);
 	}
 

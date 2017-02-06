@@ -126,21 +126,17 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		return $this->find('crv_repetitie_id = ?', array($crid));
 	}
 
-	public function inschakelenVoorkeur($crid, $uid) {
-		$voorkeur = new CorveeVoorkeur();
-		$voorkeur->crv_repetitie_id = $crid;
-		$voorkeur->uid = $uid;
-
+	public function inschakelenVoorkeur(CorveeVoorkeur $voorkeur) {
 		if ($this->exists($voorkeur)) {
 			throw new Exception('Voorkeur al ingeschakeld');
 		}
-		$repetitie = CorveeRepetitiesModel::instance()->getRepetitie($crid);
+		$repetitie = CorveeRepetitiesModel::instance()->getRepetitie($voorkeur->crv_repetitie_id);
 		if (!$repetitie->voorkeurbaar) {
 			throw new Exception('Niet voorkeurbaar');
 		}
 		if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
 			require_once 'model/maalcie/KwalificatiesModel.class.php';
-			if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->functie_id)) {
+			if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->functie_id)) {
 				throw new Exception('Niet gekwalificeerd');
 			}
 		}
@@ -150,11 +146,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		return $voorkeur;
 	}
 
-	public function uitschakelenVoorkeur($crid, $uid) {
-		$voorkeur = new CorveeVoorkeur();
-		$voorkeur->crv_repetitie_id = $crid;
-		$voorkeur->uid = $uid;
-
+	public function uitschakelenVoorkeur($voorkeur) {
 		if (!$this->exists($voorkeur)) {
 			throw new Exception('Voorkeur al uitgeschakeld');
 		}

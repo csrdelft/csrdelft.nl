@@ -46,7 +46,11 @@ class BeheerVoorkeurenController extends AclController {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		$voorkeur = $this->model->inschakelenVoorkeur((int) $crid, $uid);
+		$voorkeur = new CorveeVoorkeur();
+		$voorkeur->crv_repetitie_id = $crid;
+		$voorkeur->uid = $uid;
+
+		$voorkeur = $this->model->inschakelenVoorkeur($voorkeur);
 		$voorkeur->setVanUid($voorkeur->getUid());
 		$this->view = new BeheerVoorkeurView($voorkeur);
 	}
@@ -55,11 +59,14 @@ class BeheerVoorkeurenController extends AclController {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		$this->model->uitschakelenVoorkeur((int) $crid, $uid);
 		$voorkeur = new CorveeVoorkeur();
 		$voorkeur->crv_repetitie_id = (int) $crid;
-		$voorkeur->uid = '';
+		$voorkeur->uid = $uid;
 		$voorkeur->setVanUid($uid);
+
+		$this->model->uitschakelenVoorkeur($voorkeur);
+
+		$voorkeur->uid = null;
 		$this->view = new BeheerVoorkeurView($voorkeur);
 	}
 
