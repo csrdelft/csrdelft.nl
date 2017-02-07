@@ -122,7 +122,7 @@ abstract class AbstractGroep extends PersistentEntity {
 	}
 
 	public function getFamilieSuggesties() {
-		return Database::sqlSelect(array('DISTINCT familie'), $this->getTableName())->fetchAll(PDO::FETCH_COLUMN);
+		return Database::instance()->sqlSelect(array('DISTINCT familie'), $this->getTableName())->fetchAll(PDO::FETCH_COLUMN);
 	}
 
 	public function getOpmerkingSuggesties() {
@@ -132,7 +132,7 @@ abstract class AbstractGroep extends PersistentEntity {
 			$suggesties = CommissieFunctie::getTypeOptions();
 		} else {
 			$leden = static::leden;
-			$suggesties = Database::sqlSelect(array('DISTINCT opmerking'), $leden::instance()->getTableName(), 'groep_id = ?', array($this->id))->fetchAll(PDO::FETCH_COLUMN);
+			$suggesties = Database::instance()->sqlSelect(array('DISTINCT opmerking'), $leden::instance()->getTableName(), 'groep_id = ?', array($this->id))->fetchAll(PDO::FETCH_COLUMN);
 		}
 		return $suggesties;
 	}
@@ -148,7 +148,7 @@ abstract class AbstractGroep extends PersistentEntity {
 			return false;
 		}
 		$leden = static::leden;
-		$aangemeld = Database::sqlExists($leden::instance()->getTableName(), 'groep_id = ? AND uid = ?', array($this->id, LoginModel::getUid()));
+		$aangemeld = Database::instance()->sqlExists($leden::instance()->getTableName(), 'groep_id = ? AND uid = ?', array($this->id, LoginModel::getUid()));
 		switch ($action) {
 
 			case A::Aanmelden:

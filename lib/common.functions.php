@@ -586,10 +586,10 @@ function getDebug($get = true, $post = true, $files = true, $cookie = true, $ses
 		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SERVER, true));
 	}
 	if ($sql) {
-		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::getQueries(), "PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
+		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::instance()->getQueries(), "PDO" => Database::instance()->getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
 	}
 	if ($sqltrace) {
-		$debug .= '<hr />SQL-backtrace<hr />' . htmlspecialchars(print_r(Database::getTrace(), true));
+		$debug .= '<hr />SQL-backtrace<hr />' . htmlspecialchars(print_r(Database::instance()->getTrace(), true));
 	}
 	return $debug;
 }

@@ -16,6 +16,7 @@ class FotoTagAlbum extends FotoAlbum {
 	public $uid;
 
 	public function __construct($uid) {
+		parent::__construct();
 		// no parent constructor
 		$this->uid = $uid;
 		$this->subalbums = array();

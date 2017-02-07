@@ -24,6 +24,7 @@ class Document extends Bestand {
 	private $leesrechten = 'P_LEDEN_READ'; //rechten nodig om bestand te mogen bekijken en downloaden
 
 	public function __construct($init) {
+		parent::__construct();
 		$this->filesize = 0;  //bestandsafmeting in bytes
 		$this->mimetype = 'application/octet-stream'; //mime-type van het bestand
 		$this->load($init);

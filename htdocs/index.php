@@ -1,4 +1,6 @@
 <?php
+//require 'php_error.php';
+//\php_error\reportErrors();
 
 /**
  * index.php
@@ -44,7 +46,7 @@ try {
 
 	if (DB_CHECK AND LoginModel::mag('P_ADMIN')) {
 
-		$queries = DatabaseAdmin::getQueries();
+		$queries = DatabaseAdmin::instance()->getQueries();
 		if (!empty($queries)) {
 			if (DB_MODIFY) {
 				header('Content-Type: text/x-sql');

@@ -526,6 +526,7 @@ class BiebBoek {
 class NieuwBoek extends BiebBoek {
 
 	public function __construct() {
+		parent::__construct(array());
 		$this->id = 0;
 		//zetten we de defaultwaarden voor het nieuwe boek.
 		$this->rubriek = new BiebRubriek(108);

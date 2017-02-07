@@ -141,11 +141,7 @@ require_once 'icon.class.php';
 // Controller
 require_once 'controller/framework/AclController.abstract.php';
 
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\Persistence\DatabaseAdmin;
-use CsrDelft\Orm\Persistence\OrmMemcache;
-
-$cred = parse_ini_file(ETC_PATH . 'mysql.ini'); // Separate login credentials in the future perhaps.
+$cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 if ($cred === false) {
 	$cred = array(
 		'host'	 => 'localhost',
@@ -155,9 +151,10 @@ if ($cred === false) {
 	);
 }
 
-OrmMemcache::init(DATA_PATH);
-Database::init($cred['host'], $cred['db'], $cred['user'], $cred['pass']);
-DatabaseAdmin::init($cred['host'], $cred['db'], $cred['user'], $cred['pass']);
+CsrDelft\Orm\Configuration::load(array(
+	'cache_path' => DATA_PATH,
+	'db' => $cred
+));
 
 // Router
 switch (constant('MODE')) {
