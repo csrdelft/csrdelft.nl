@@ -1,6 +1,6 @@
 <?php
 
-use CsrDelft\Orm\DataBase\DatabaseAdmin;
+use CsrDelft\Orm\Persistence\DatabaseAdmin;
 
 require_once 'configuratie.include.php';
 

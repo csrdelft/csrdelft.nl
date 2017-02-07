@@ -1,6 +1,6 @@
 <?php
 
-use CsrDelft\Orm\DataBase\OrmMemcache;
+use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\Orm\DynamicEntityModel;
 use CsrDelft\Orm\PersistenceModel;
 

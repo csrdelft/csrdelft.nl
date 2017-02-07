@@ -141,9 +141,9 @@ require_once 'icon.class.php';
 // Controller
 require_once 'controller/framework/AclController.abstract.php';
 
-use CsrDelft\Orm\DataBase\Database;
-use CsrDelft\Orm\DataBase\DatabaseAdmin;
-use CsrDelft\Orm\DataBase\OrmMemcache;
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\Orm\Persistence\OrmMemcache;
 
 $cred = parse_ini_file(ETC_PATH . 'mysql.ini'); // Separate login credentials in the future perhaps.
 if ($cred === false) {

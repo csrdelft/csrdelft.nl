@@ -1,7 +1,7 @@
 <?php
 
-use CsrDelft\Orm\DataBase\Database;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\Orm\Persistence\Database;
 
 require_once 'model/InstellingenModel.class.php';
 

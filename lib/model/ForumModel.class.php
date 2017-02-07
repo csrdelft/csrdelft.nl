@@ -1,7 +1,7 @@
 <?php
 
 use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\Orm\DataBase\Database;
+use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 

@@ -7,7 +7,7 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-use CsrDelft\Orm\DataBase\OrmMemcache;
+use CsrDelft\Orm\Persistence\OrmMemcache;
 
 require_once 'configuratie.include.php';
 

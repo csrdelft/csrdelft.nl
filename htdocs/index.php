@@ -7,7 +7,7 @@
  * 
  * Entry point voor stek modules.
  */
-use CsrDelft\Orm\DataBase\DatabaseAdmin;
+use CsrDelft\Orm\Persistence\DatabaseAdmin;
 
 try {
 	require_once 'configuratie.include.php';

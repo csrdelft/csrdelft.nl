@@ -4,8 +4,8 @@
 # -------------------------------------------------------------------
 # common.functions.php
 # -------------------------------------------------------------------
-use CsrDelft\Orm\DataBase\Database;
-use CsrDelft\Orm\DataBase\DatabaseAdmin;
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\Persistence\DatabaseAdmin;
 
 /**
  * PDO does a stringcast (false = '') and MySql uses tinyint for booleans so expects 0/1

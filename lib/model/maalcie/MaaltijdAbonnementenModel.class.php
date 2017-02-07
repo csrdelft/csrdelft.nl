@@ -1,6 +1,6 @@
 <?php
 
-use CsrDelft\Orm\DataBase\Database;
+use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
 require_once 'model/entity/maalcie/MaaltijdAbonnement.class.php';
