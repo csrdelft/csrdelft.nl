@@ -4,25 +4,29 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8a5843baeb37e8e30237cef4b950c46b",
-    "content-hash": "5e168ea83d0022c7e70cf5a485cae242",
+    "hash": "b25cc25175ebb7076520e43bdb222a55",
+    "content-hash": "6e15d5972683cd2a4cf0ade76884990c",
     "packages": [
         {
             "name": "csrdelft/orm",
-            "version": "v1.0.0",
+            "version": "v1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
-                "reference": "9753870b311eb3212fbd83db60610f7b1ab157b8"
+                "reference": "ef7378ab0deaee6b17ec2511519a1a3bab110387"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/orm/zipball/9753870b311eb3212fbd83db60610f7b1ab157b8",
-                "reference": "9753870b311eb3212fbd83db60610f7b1ab157b8",
+                "url": "https://api.github.com/repos/csrdelft/orm/zipball/ef7378ab0deaee6b17ec2511519a1a3bab110387",
+                "reference": "ef7378ab0deaee6b17ec2511519a1a3bab110387",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/php-code-coverage": "^4.0",
+                "phpunit/phpunit": "^5.7"
             },
             "type": "library",
             "autoload": {
@@ -43,7 +47,7 @@
             ],
             "description": "The creatively named object-relational mapping library for csrdelft.nl",
             "homepage": "https://github.com/csrdelft/orm",
-            "time": "2017-02-07 22:55:54"
+            "time": "2017-02-08 01:48:21"
         },
         {
             "name": "firebase/php-jwt",
