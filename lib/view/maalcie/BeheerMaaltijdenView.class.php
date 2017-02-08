@@ -38,6 +38,10 @@ class BeheerMaaltijdenTable extends DataTable {
 		$this->addColumn('aanmeldingen', 'aanmeld_limiet', null, 'aanmeldingen_render');
 		$this->addColumn('prijs', null, null, 'prijs_render');
 
+		$this->searchColumn('titel');
+		$this->searchColumn('prijs');
+		$this->searchColumn('aanmeld_filter');
+
 		$weergave = new DataTableKnop('', $this->dataTableId, '', '', "Weergave", 'Weergave van tabel', '', 'collection');
 		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer', '', 'Toekomst', 'Toekomst weergeven', 'time_go', 'sourceChange'));
 		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer?filter=alles', '', 'Alles', 'Alles weergeven', 'time', 'sourceChange'));
