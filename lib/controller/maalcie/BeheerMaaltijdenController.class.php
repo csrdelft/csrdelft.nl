@@ -93,14 +93,9 @@ class BeheerMaaltijdenController extends AclController {
 
 			$this->view = new BeheerMaaltijdenLijst($data);
 		} else {
-			$modal = null;
-			if (is_int($mid) && $mid > 0) {
-				$this->bewerk($mid);
-				$modal = $this->view;
-			}
 			$repetities = MaaltijdRepetitiesModel::instance()->find(); /** @var MaaltijdRepetitie[] $repetities */
 			$body = new BeheerMaaltijdenView(new BeheerMaaltijdenTable($repetities), 'Maaltijdenbeheer');
-			$this->view = new CsrLayoutPage($body, array(), $modal);
+			$this->view = new CsrLayoutPage($body, array());
 			$this->view->addCompressedResources('maalcie');
 			$this->view->addCompressedResources('datatable');
 		}
