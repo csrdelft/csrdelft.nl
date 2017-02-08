@@ -1,7 +1,4 @@
 <?php
-//require 'php_error.php';
-//\php_error\reportErrors();
-
 /**
  * index.php
  * 
