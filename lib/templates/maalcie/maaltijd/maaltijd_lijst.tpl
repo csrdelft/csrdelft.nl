@@ -86,8 +86,8 @@
 				{if $corveetaken}
 					{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
 						&bullet;&nbsp;
-						{if $taak->getUid()}
-							{ProfielModel::getLink($taak->getUid(), Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}
+						{if $taak->uid}
+							{ProfielModel::getLink($taak->uid, Instellingen::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}
 						{else}
 							<span class="cursief">vacature</span>
 						{/if}

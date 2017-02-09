@@ -12,8 +12,8 @@ require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 class CorveeHerinneringenModel {
 
 	public static function stuurHerinnering(CorveeTaak $taak) {
-		$datum = date('d-m-Y', strtotime($taak->getDatum()));
-		$uid = $taak->getUid();
+		$datum = date('d-m-Y', strtotime($taak->datum));
+		$uid = $taak->uid;
 		$profiel = ProfielModel::get($uid);
 		if (!$profiel) {
 			throw new Exception($datum . ' ' . $taak->getCorveeFunctie()->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
@@ -24,8 +24,8 @@ class CorveeHerinneringenModel {
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
 		$bericht = $taak->getCorveeFunctie()->email_bericht;
 		$eten = '';
-		if ($taak->getMaaltijdId() !== null) {
-			$aangemeld = MaaltijdAanmeldingenModel::instance()->getIsAangemeld($taak->getMaaltijdId(), $uid);
+		if ($taak->maaltijd_id !== null) {
+			$aangemeld = MaaltijdAanmeldingenModel::instance()->getIsAangemeld($taak->maaltijd_id, $uid);
 			if ($aangemeld) {
 				$eten = Instellingen::get('corvee', 'mail_wel_meeeten');
 			} else {
@@ -37,7 +37,7 @@ class CorveeHerinneringenModel {
 		$mail->setPlaceholders(array('LIDNAAM' => $lidnaam, 'DATUM' => $datum, 'MEEETEN' => $eten));
 		if ($mail->send()) { // false if failed
 			if (!$mail->inDebugMode()) {
-				CorveeTakenModel::updateGemaild($taak);
+				CorveeTakenModel::instance()->updateGemaild($taak);
 			}
 			return $datum . ' ' . $taak->getCorveeFunctie()->naam . ' verstuurd! (' . $lidnaam . ')';
 		} else {
@@ -49,7 +49,7 @@ class CorveeHerinneringenModel {
 		$vooraf = str_replace('-', '+', Instellingen::get('corvee', 'herinnering_1e_mail'));
 		$van = strtotime(date('Y-m-d'));
 		$tot = strtotime($vooraf, $van);
-		$taken = CorveeTakenModel::getTakenVoorAgenda($van, $tot, true);
+		$taken = CorveeTakenModel::instance()->getTakenVoorAgenda($van, $tot, true);
 		$verzonden = array();
 		$errors = array();
 		foreach ($taken as $taak) {

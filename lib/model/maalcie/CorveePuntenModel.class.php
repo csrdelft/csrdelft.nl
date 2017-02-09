@@ -12,7 +12,7 @@ class CorveePuntenModel {
 	public static function resetCorveejaar() {
 		$aantal = 0;
 		$errors = array();
-		$vrijstellingen = CorveeVrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
+		$vrijstellingen = CorveeVrijstellingenModel::instance()->getAlleVrijstellingen(true); // grouped by uid
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
 			try {
@@ -23,15 +23,15 @@ class CorveePuntenModel {
 				$punten = $totalen['puntenTotaal'];
 				$punten += $totalen['bonusTotaal'];
 				$vrijstelling = null;
-				if (array_key_exists($uid, $vrijstellingen) && time() > strtotime($vrijstellingen[$uid]->getBeginDatum())) {
+				if (array_key_exists($uid, $vrijstellingen) && time() > strtotime($vrijstellingen[$uid]->begin_datum)) {
 					$vrijstelling = $vrijstellingen[$uid];
 					$punten += $vrijstelling->getPunten();
-					if (time() > strtotime($vrijstelling->getEindDatum())) {
-						CorveeVrijstellingenModel::verwijderVrijstelling($vrijstelling->getUid());
+					if (time() > strtotime($vrijstelling->eind_datum)) {
+						CorveeVrijstellingenModel::instance()->verwijderVrijstelling($vrijstelling->uid);
 						$aantal++;
 					} else { // niet dubbel toekennen
-						$vrijstelling->setPercentage(0);
-						CorveeVrijstellingenModel::saveVrijstelling($vrijstelling->getUid(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage());
+						$vrijstelling->percentage = 0;
+						CorveeVrijstellingenModel::instance()->saveVrijstelling($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage);
 					}
 				}
 				$punten -= intval(Instellingen::get('corvee', 'punten_per_jaar'));
@@ -40,7 +40,7 @@ class CorveePuntenModel {
 				$errors[] = $e;
 			}
 		}
-		$taken = CorveeTakenModel::verwijderOudeTaken();
+		$taken = CorveeTakenModel::instance()->verwijderOudeTaken();
 		return array($aantal, $taken, $errors);
 	}
 
@@ -108,8 +108,8 @@ class CorveePuntenModel {
 	}
 
 	public static function loadPuntenVoorAlleLeden($functies = null) {
-		$taken = CorveeTakenModel::getAlleTaken(true); // grouped by uid
-		$vrijstellingen = CorveeVrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
+		$taken = CorveeTakenModel::instance()->getAlleTaken(true); // grouped by uid
+		$vrijstellingen = CorveeVrijstellingenModel::instance()->getAlleVrijstellingen(true); // grouped by uid
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
 			$profiel = ProfielModel::get($uid); // false if lid does not exist
@@ -131,8 +131,8 @@ class CorveePuntenModel {
 
 	public static function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = null) {
 		if ($lidtaken === null) {
-			$lidtaken = CorveeTakenModel::getTakenVoorLid($profiel->uid);
-			$vrijstelling = CorveeVrijstellingenModel::getVrijstelling($profiel->uid);
+			$lidtaken = CorveeTakenModel::instance()->getTakenVoorLid($profiel->uid);
+			$vrijstelling = CorveeVrijstellingenModel::instance()->getVrijstelling($profiel->uid);
 		}
 		if ($functies === null) { // niet per functie sommeren
 			$lijst = array();
@@ -178,11 +178,11 @@ class CorveePuntenModel {
 			$sumBonus[$fid] = 0;
 		}
 		foreach ($taken as $taak) {
-			$fid = $taak->getFunctieId();
+			$fid = $taak->functie_id;
 			if (array_key_exists($fid, $functies)) {
 				$sumAantal[$fid] += 1;
-				$sumPunten[$fid] += $taak->getPuntenToegekend();
-				$sumBonus[$fid] += $taak->getBonusToegekend();
+				$sumPunten[$fid] += $taak->punten_toegekend;
+				$sumBonus[$fid] += $taak->bonus_toegekend;
 			}
 			$sumPrognose += $taak->getPuntenPrognose();
 		}

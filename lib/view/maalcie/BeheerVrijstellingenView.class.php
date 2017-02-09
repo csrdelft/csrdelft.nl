@@ -10,7 +10,7 @@
  */
 class BeheerVrijstellingenView extends SmartyTemplateView {
 
-	public function __construct(array $vrijstellingen) {
+	public function __construct($vrijstellingen) {
 		parent::__construct($vrijstellingen, 'Beheer vrijstellingen');
 	}
 

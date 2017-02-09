@@ -10,15 +10,11 @@ require_once 'view/maalcie/MijnMaaltijdenView.class.php';
  * MijnMaaltijdenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * @property MaaltijdenModel $model
  * 
  */
 class MijnMaaltijdenController extends AclController {
-
-    /**
-     * @var MaaltijdenModel
-     */
-    protected $model;
-
 	public function __construct($query) {
 		parent::__construct($query, MaaltijdenModel::instance());
 		if ($this->getMethod() == 'GET') {
@@ -69,7 +65,7 @@ class MijnMaaltijdenController extends AclController {
 			return;
 		}
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
-		$taken = CorveeTakenModel::getTakenVoorMaaltijd($mid);
+		$taken = CorveeTakenModel::instance()->getTakenVoorMaaltijd($mid);
 		require_once 'view/maalcie/MaaltijdLijstView.class.php';
 		$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}
