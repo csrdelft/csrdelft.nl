@@ -294,7 +294,7 @@ HTML;
 		$settingsJson = str_replace('"fnGetLastUpdate"', 'fnGetLastUpdate', $settingsJson);
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
-		$settingsJson = preg_replace('/"render":\s?"(.+)"/', '"render": $1', $settingsJson);
+		$settingsJson = preg_replace('/"render":\s?"(.+?)"/', '"render": $1', $settingsJson);
 
 		$filter = str_replace("'", "\'", $this->filter);
 
