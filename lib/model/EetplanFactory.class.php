@@ -220,7 +220,7 @@ class EetplanFactory {
             if ($random == 0)
                 $huis_index = $huis_index % $aantal_huizen + 1;
             else
-                $huis_index = rand(1, $aantal_huizen);
+                $huis_index = rand(0, $aantal_huizen);
 
             $huis_id = $this->huizen[$huis_index]->id;
         }
