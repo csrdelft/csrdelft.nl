@@ -164,7 +164,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
         'tijd' => array(T::Time),
         'prijs' => array(T::Integer),
         'gesloten' => array(T::Boolean),
-        'laatst_gesloten' => array(T::Integer, true),
+        'laatst_gesloten' => array(T::Timestamp, true),
         'verwijderd' => array(T::Boolean),
         'aanmeld_filter' => array(T::String, true),
         'omschrijving' => array(T::Text, true),
@@ -179,6 +179,8 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
      */
     public function jsonSerialize() {
         $json = parent::jsonSerialize();
+        $json['repetitie_naam'] = is_int($this->mlt_repetitie_id) ? MaaltijdRepetitiesModel::instance()->getRepetitie($this->mlt_repetitie_id)->standaard_titel : '';
+        $json['tijd'] = date('G:i', strtotime($json['tijd']));
         $json['aantal_aanmeldingen'] = $this->getAantalAanmeldingen();
         $json['gesloten'] = $json['gesloten'] ? '1' : '0';
         $json['prijs'] = strval($json['prijs']);

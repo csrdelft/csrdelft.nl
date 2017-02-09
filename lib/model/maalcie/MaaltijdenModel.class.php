@@ -2,6 +2,7 @@
 
 require_once 'model/entity/maalcie/Maaltijd.class.php';
 require_once 'model/entity/maalcie/ArchiefMaaltijd.class.php';
+require_once 'model/maalcie/ArchiefMaaltijdModel.class.php';
 require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
 require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
 
@@ -46,12 +47,17 @@ class MaaltijdenModel extends PersistenceModel {
 			throw new Exception('Maaltijd is al gesloten');
 		}
 		$maaltijd->gesloten = true;
-		$maaltijd->laatst_gesloten = date('Y-m-d H:i');
+		$maaltijd->laatst_gesloten = date('Y-m-d H:i:s');
         $this->update($maaltijd);
 	}
 
-	public function getAlleMaaltijden() {
-		return $this->find('verwijderd = false');
+	public function getMaaltijden($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
+    	$filter = 'verwijderd = false';
+    	if ($criteria != null AND $criteria != '') {
+    		$filter .= ' AND ' . $criteria;
+		}
+
+    	return $this->find($filter, $criteria_params, $groupby, $orderby, $limit, $start);
 	}
 
 	/**
