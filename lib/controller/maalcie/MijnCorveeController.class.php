@@ -10,12 +10,14 @@ require_once 'view/maalcie/CorveeRoosterView.class.php';
  * MijnCorveeController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * @property CorveeTakenModel $model
  * 
  */
 class MijnCorveeController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, null);
+		parent::__construct($query, CorveeTakenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'mijn'		 => 'P_CORVEE_IK',
@@ -35,8 +37,8 @@ class MijnCorveeController extends AclController {
 	}
 
 	public function mijn() {
-		$taken = CorveeTakenModel::instance()->getKomendeTakenVoorLid(LoginModel::getUid());
-		$rooster = CorveeTakenModel::instance()->getRoosterMatrix($taken);
+		$taken = $this->model->getKomendeTakenVoorLid(LoginModel::getUid());
+		$rooster = $this->model->getRoosterMatrix($taken);
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$punten = CorveePuntenModel::loadPuntenVoorLid(LoginModel::getProfiel(), $functies);
 		$vrijstelling = CorveeVrijstellingenModel::instance()->getVrijstelling(LoginModel::getUid());
@@ -47,13 +49,13 @@ class MijnCorveeController extends AclController {
 
 	public function rooster($toonverleden = false) {
 		if ($toonverleden === 'verleden' AND LoginModel::mag('P_CORVEE_MOD')) {
-			$taken = CorveeTakenModel::instance()->getVerledenTaken();
+			$taken = $this->model->getVerledenTaken();
 			$toonverleden = false; // hide button
 		} else {
-			$taken = CorveeTakenModel::instance()->getKomendeTaken();
+			$taken = $this->model->getKomendeTaken();
 			$toonverleden = LoginModel::mag('P_CORVEE_MOD');
 		}
-		$rooster = CorveeTakenModel::instance()->getRoosterMatrix($taken);
+		$rooster = $this->model->getRoosterMatrix($taken);
 		$this->view = new CorveeRoosterView($rooster, $toonverleden);
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
