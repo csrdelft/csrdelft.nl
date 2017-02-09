@@ -1,4 +1,6 @@
 <?php
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * CorveeTaak.class.php	| 	P.W.G. Brussee (brussee@live.nl)

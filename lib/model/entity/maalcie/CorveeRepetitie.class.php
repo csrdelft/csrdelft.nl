@@ -1,4 +1,5 @@
 <?php
+use CsrDelft\Orm\Entity\PersistentEntity;
 
 /**
  * CorveeRepetitie.class.php	| 	P.W.G. Brussee (brussee@live.nl)
