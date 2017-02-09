@@ -163,7 +163,7 @@ function fnInitDataTables() {
 		init: function (dt, node, config) {
 			$.fn.dataTable.ext.buttons.default.init.call(this, dt, node, config);
 		}
-	}
+	};
 
 	$('body').on('click', function () {
 		// Verwijder tooltips als de datatable modal wordt gesloten
