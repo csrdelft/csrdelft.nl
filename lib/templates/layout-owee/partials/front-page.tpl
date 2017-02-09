@@ -38,11 +38,6 @@
                     studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
                     deze groepen en dus ook C.S.R. zullen zichzelf tijdens deze week op verschillende momenten en
                     manieren presenteren.</p>
-                <a href="/plaetjes/fotoalbum/2015-2016/Posters/Programmaposter%20OWee.jpg.jpg" class="special">Bekijk
-                    het programma</a>
-                <div class="video lazy-load"
-                     data-lazy="<iframe src='https://www.youtube.com/embed/3YOMos8tPu0' frameborder='0' allowfullscreen></iframe>">
-                </div>
             </div>
         </div>
     </section>
@@ -60,7 +55,7 @@
                     Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hieronder voor de
                     mogelijkheden of voor het opvragen van een informatiepakket.</p>
                 <a href="#footer" class="special">Vul interesseformulier in</a>
-                <p class="lidworden">Wil je lid worden? Zorg ervoor dat je de week van 29 augustus t/m 4 september vrij
+                <p class="lidworden">Wil je lid worden? Zorg ervoor dat je de week van 29 augustus t/m 3 september vrij
                     houdt voor de novitiaatsweek.</p>
                 <a href="/lidworden" class="special">Meer informatie over lid worden</a>
             </div>
