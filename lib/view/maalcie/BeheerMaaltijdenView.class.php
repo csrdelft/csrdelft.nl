@@ -2,11 +2,11 @@
 
 /**
  * BeheerMaaltijdenView.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Toon het maaltijdensysteem menu en een body
- * 
+ *
  */
 class BeheerMaaltijdenView extends SmartyTemplateView {
 	public function __construct(View $model, $titel = false) {
@@ -37,6 +37,8 @@ class BeheerMaaltijdenTable extends DataTable {
 		$this->addColumn('gesloten', null, null, 'gesloten_render');
 		$this->addColumn('aanmeldingen', 'aanmeld_limiet', null, 'aanmeldingen_render');
 		$this->addColumn('prijs', null, null, 'prijs_render');
+
+		$this->setOrder(array('datum' => 'desc'));
 
 		$this->searchColumn('titel');
 		$this->searchColumn('prijs');

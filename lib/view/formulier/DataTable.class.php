@@ -113,6 +113,14 @@ class DataTable implements View, FormElement {
 		return array_search($name, array_keys($this->columns));
 	}
 
+	protected function setOrder($names) {
+		$orders = [];
+		foreach ($names as $name => $order) {
+			$orders[] = array($this->columnPosition($name), $order);
+		}
+		$this->settings['order'] = $orders;
+	}
+
 	protected function addColumn($newName, $before = null, $defaultContent = null, $render = null) {
 		// column definition
 		$newColumn = array(
