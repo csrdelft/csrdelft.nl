@@ -247,7 +247,7 @@ class DataTable implements View, FormElement {
 	(function() {
 		{$this->getJavascript()}
 	})();
-</script>'
+</script>
 HTML;
 	}
 
