@@ -140,10 +140,10 @@ class EetplanFactory {
         $aantal_huizen = count($this->huizen) - 1;
 
         // $huis_index is het nummer van he thuis in $this->huizen
-        if ($random == 0) {
-            $huis_index = 1;
+        if ($random == false) {
+            $huis_index = 0;
         } else {
-            $huis_index = rand(1, $aantal_huizen);
+            $huis_index = rand(0, $aantal_huizen);
         }
 
         // Interne id, niet oplopend van huis
