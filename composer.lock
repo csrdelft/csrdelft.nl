@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b25cc25175ebb7076520e43bdb222a55",
-    "content-hash": "6e15d5972683cd2a4cf0ade76884990c",
+    "hash": "326465c1d39a117f9f092fc8b9810789",
+    "content-hash": "fa478728872eaba0f14e817a13771565",
     "packages": [
         {
             "name": "csrdelft/orm",
-            "version": "v1.1",
+            "version": "v1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
-                "reference": "ef7378ab0deaee6b17ec2511519a1a3bab110387"
+                "reference": "c4fd19013db595bc5f097fe55c4a2baf1830647b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/orm/zipball/ef7378ab0deaee6b17ec2511519a1a3bab110387",
-                "reference": "ef7378ab0deaee6b17ec2511519a1a3bab110387",
+                "url": "https://api.github.com/repos/csrdelft/orm/zipball/c4fd19013db595bc5f097fe55c4a2baf1830647b",
+                "reference": "c4fd19013db595bc5f097fe55c4a2baf1830647b",
                 "shasum": ""
             },
             "require": {
@@ -47,7 +47,7 @@
             ],
             "description": "The creatively named object-relational mapping library for csrdelft.nl",
             "homepage": "https://github.com/csrdelft/orm",
-            "time": "2017-02-08 01:48:21"
+            "time": "2017-02-09 18:39:11"
         },
         {
             "name": "firebase/php-jwt",
