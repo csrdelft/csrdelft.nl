@@ -54,9 +54,13 @@ class LoginController extends AclController {
 		require_once 'model/CmsPaginaModel.class.php';
 		require_once 'view/CmsPaginaView.class.php';
 		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
-		$this->view = new CsrLayoutPage($body);
+        if (!LoginModel::mag('P_LOGGED_IN')) {
+            $this->view = new CsrLayoutOweePage($body);
+        } else {
+            $this->view = new CsrLayoutPage($body);
+        }
         $this->view->view();
-		exit;
+        exit;
 	}
 
 	public function login() {
@@ -89,8 +93,10 @@ class LoginController extends AclController {
 				setGoBackCookie(null);
 				redirect($url);
 			}
-		}
-		redirect(CSR_ROOT);
+			redirect(CSR_ROOT);
+		} else {
+            redirect(CSR_ROOT . "#login");
+        }
 	}
 
 	public function logout() {
@@ -240,7 +246,7 @@ class LoginController extends AclController {
 				}
 			}
 		}
-		$this->view = new CsrLayoutPage($form);
+		$this->view = new CsrLayoutOweePage($form);
 	}
 
 	public function verify($tokenString = null) {
@@ -260,7 +266,7 @@ class LoginController extends AclController {
 				setMelding('Deze link is niet meer geldig', -1);
 			}
 		}
-		$this->view = new CsrLayoutPage($form);
+		$this->view = new CsrLayoutOweePage($form);
 	}
 
 	public function loginsessionsdata() {

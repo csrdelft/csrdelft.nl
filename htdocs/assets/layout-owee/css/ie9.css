@@ -30,7 +30,7 @@
 
 /* Menu */
 
-	#menu .inner {
+	#menu .inner, #login .inner {
 		margin: 4em auto;
 	}
 
@@ -78,3 +78,10 @@
 			display: inline-block;
 			width: 45%;
 		}
+
+/* Grid */
+
+	.grid a {
+		display: block;
+		float: left;
+	}
