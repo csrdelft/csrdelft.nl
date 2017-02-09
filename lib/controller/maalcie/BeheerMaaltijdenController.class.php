@@ -134,9 +134,9 @@ class BeheerMaaltijdenController extends AclController {
 
 	public function nieuw() {
 		$maaltijd = new Maaltijd();
-		$this->view = new MaaltijdForm($maaltijd, 'nieuw');
+		$form = new MaaltijdForm($maaltijd, 'nieuw');
 
-		if ($this->view->validate()) {
+		if ($form->validate()) {
 			$maaltijd_aanmeldingen = $this->model->saveMaaltijd($maaltijd);
 			$this->view = new BeheerMaaltijdenLijst(array($maaltijd_aanmeldingen[0]));
 			if ($maaltijd_aanmeldingen[1] > 0) {
@@ -155,6 +155,7 @@ class BeheerMaaltijdenController extends AclController {
 				$maaltijd->tijd = $repetitie->standaard_tijd;
 				$maaltijd->prijs = $repetitie->standaard_prijs;
 				$maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
+				$this->view = new MaaltijdForm($maaltijd, 'nieuw');
 			}
 		}
 
