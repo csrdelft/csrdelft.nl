@@ -137,7 +137,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 			throw new Exception('Geen string: wanneer gemaild');
 		}
 		if ($datumtijd !== '') {
-			$datumtijd .= '&#013;' . $this->getWanneerGemaild();
+			$datumtijd .= '&#013;' . $this->wanneer_gemaild;
 		}
 		$this->wanneer_gemaild = $datumtijd;
 	}
