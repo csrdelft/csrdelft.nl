@@ -2,7 +2,7 @@
 	mijn_vrijstelling.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <h3>Corveevrijstelling</h3>
-{if $vrijstelling === null}
+{if $vrijstelling === false}
 <p>U heeft geen vrijstelling.</p>
 {else}
 <p>
