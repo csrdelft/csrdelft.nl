@@ -1231,8 +1231,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		/**
 		 * END COPY FROM @see LedenMemoryView.class.php
 		 */
-		$table = new LedenMemoryScoreTable($groep);
-		$table->titel .= $titel;
+		$table = new LedenMemoryScoreTable($groep, $titel);
 		return $table->view();
 	}
 
