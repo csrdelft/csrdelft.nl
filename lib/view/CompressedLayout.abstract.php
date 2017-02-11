@@ -150,7 +150,9 @@ abstract class CompressedLayout extends HtmlPage {
 	private static function getUserModules($module, $extension) {
 		$modules = array();
 
-		if ($module == 'general') {
+		if ($module == 'front-page') {
+			return array('general');
+		} elseif ($module == 'general') {
 			// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
 			$modules[] = 'general';
 			$modules[] = 'formulier';
