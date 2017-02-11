@@ -26,6 +26,33 @@
 
         $window.on('load', function () {
             $body.removeClass('is-loading');
+
+			// Lazy load cms pages, these should be loaded always, not on scroll
+			setTimeout(function() {
+				$('div.bb-img-loading').each(function () {
+					var content = $(document.createElement('IMG'));
+					content.error(function () {
+						$(this).attr('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
+						$(this).attr('src', '/plaetjes/famfamfam/picture_error.png');
+						$(this).css('width', '16px');
+						$(this).css('height', '16px');
+						$(this).removeClass('bb-img-loading').addClass('bb-img');
+					});
+					content.addClass('bb-img');
+					content.attr('alt', $(this).attr('title'));
+					content.attr('style', $(this).attr('style'));
+					content.attr('src', $(this).attr('src'));
+					$(this).html(content);
+					content.on('load', function () {
+						var foto = content.attr('src').indexOf('/plaetjes/fotoalbum/') >= 0;
+						var video = $(this).parent().parent().hasClass('bb-video-preview');
+						$(this).parent().replaceWith($(this));
+						if (!foto && !video) {
+							$(this).wrap('<a class="lightbox-link" href="' + $(this).attr('src') + '" data-lightbox="page-lightbox"></a>');
+						}
+					});
+				});
+			});
         });
 
         // Lazy load after animations have finished and user has scrolled
