@@ -143,7 +143,7 @@ class CorveePuntenModel {
 		} else {
 			$lijst = self::sumPuntenPerFunctie($functies, $lidtaken);
 		}
-		if ($vrijstelling === null) {
+		if ($vrijstelling === false) {
 			$lijst['vrijstelling'] = false;
 		} else { // bij suggestielijst wordt de prognose gecorrigeerd voor beginDatum van vrijstelling
 			$lijst['vrijstelling'] = $vrijstelling;
