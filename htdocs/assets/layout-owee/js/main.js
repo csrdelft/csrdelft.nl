@@ -39,12 +39,13 @@
             if (hasLoaded === true) return;
             hasLoaded = true;
 
+            // Lazy load frontpage
             setTimeout(function() {
                 $('.lazy-load').each(function() {
                     var html = $(this).data('lazy');
                     $(this).append(html);
                 });
-            }, 1000);
+            });
         }
 
         // Fix: Placeholder polyfill.
