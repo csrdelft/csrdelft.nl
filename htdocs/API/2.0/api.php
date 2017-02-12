@@ -74,6 +74,13 @@ if ($authHeader) {
 				}
 			}
 
+			// Forum
+			elseif (isset($_GET['cat']) && $_GET['cat'] === 'forum') {
+				require_once 'controller/ForumApiController.class.php';
+				$controller = new ForumApiController(str_replace('API/2.0/', REQUEST_URI));
+				$controller->performAction();
+			}
+
 			if (!isset($get)) {
 
 				// Invalid request

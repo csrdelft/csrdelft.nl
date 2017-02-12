@@ -125,7 +125,8 @@ class ForumController extends Controller {
 	 * Overzicht met categorien en forumdelen laten zien.
 	 */
 	public function forum() {
-		$this->view = new ForumOverzichtView();
+		$forum = ForumModel::instance()->getForumIndelingVoorLid();
+		$this->view = new ForumOverzichtView($forum);
 	}
 
 	public function grafiekdata() {
@@ -282,10 +283,10 @@ class ForumController extends Controller {
 		if ($pagina === 'laatste') {
 			ForumDradenModel::instance()->setLaatstePagina($deel->forum_id);
 		} elseif ($pagina === 'prullenbak' AND $deel->magModereren()) {
-			$deel->setForumDraden(ForumDradenModel::instance()->getPrullenbakVoorDeel($deel));
+			$deel->forum_draden = ForumDradenModel::instance()->getPrullenbakVoorDeel($deel);
 			$paging = false;
 		} elseif ($pagina === 'belangrijk' AND $deel->magLezen()) {
-			$deel->setForumDraden(ForumDradenModel::instance()->getBelangrijkeForumDradenVoorDeel($deel));
+			$deel->forum_draden = ForumDradenModel::instance()->getBelangrijkeForumDradenVoorDeel($deel);
 			$paging = false;
 		} else {
 			ForumDradenModel::instance()->setHuidigePagina((int) $pagina, $deel->forum_id);
@@ -318,7 +319,7 @@ class ForumController extends Controller {
 		} elseif ($pagina === 'laatste') {
 			ForumPostsModel::instance()->setLaatstePagina($draad->draad_id);
 		} elseif ($pagina === 'prullenbak' AND $draad->magModereren()) {
-			$draad->setForumPosts(ForumPostsModel::instance()->getPrullenbakVoorDraad($draad));
+			$draad->forum_posts = ForumPostsModel::instance()->getPrullenbakVoorDraad($draad);
 			$paging = false;
 		} else {
 			ForumPostsModel::instance()->setHuidigePagina((int) $pagina, $draad->draad_id);

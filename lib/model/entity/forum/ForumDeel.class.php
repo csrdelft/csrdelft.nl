@@ -108,7 +108,7 @@ class ForumDeel extends PersistentEntity {
 	 */
 	public function getForumDraden() {
 		if (!isset($this->forum_draden)) {
-			$this->setForumDraden(ForumDradenModel::instance()->getForumDradenVoorDeel($this));
+			$this->forum_draden = ForumDradenModel::instance()->getForumDradenVoorDeel($this);
 		}
 		return $this->forum_draden;
 	}
@@ -116,15 +116,6 @@ class ForumDeel extends PersistentEntity {
 	public function hasForumDraden() {
 		$this->getForumDraden();
 		return !empty($this->forum_draden);
-	}
-
-	/**
-	 * Public for search results and all sorts of prefetching.
-	 * 
-	 * @param array $forum_draden
-	 */
-	public function setForumDraden(array $forum_draden) {
-		$this->forum_draden = $forum_draden;
 	}
 
 }

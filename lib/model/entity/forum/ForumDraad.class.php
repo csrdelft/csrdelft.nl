@@ -94,7 +94,7 @@ class ForumDraad extends PersistentEntity {
 	 * Forumposts
 	 * @var ForumPost[]
 	 */
-	private $forum_posts;
+	public $forum_posts;
 	/**
 	 * Aantal ongelezen posts
 	 * @var int
@@ -265,7 +265,7 @@ class ForumDraad extends PersistentEntity {
 	 */
 	public function getForumPosts() {
 		if (!isset($this->forum_posts)) {
-			$this->setForumPosts(ForumPostsModel::instance()->getForumPostsVoorDraad($this));
+			$this->forum_posts = ForumPostsModel::instance()->getForumPostsVoorDraad($this);
 		}
 		return $this->forum_posts;
 	}
@@ -273,15 +273,6 @@ class ForumDraad extends PersistentEntity {
 	public function hasForumPosts() {
 		$this->getForumPosts();
 		return !empty($this->forum_posts);
-	}
-
-	/**
-	 * Public for search results and all sorts of prefetching.
-	 * 
-	 * @param array $forum_posts
-	 */
-	public function setForumPosts(array $forum_posts) {
-		$this->forum_posts = $forum_posts;
 	}
 
 	public function getAantalOngelezenPosts() {
