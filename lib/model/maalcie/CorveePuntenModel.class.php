@@ -121,7 +121,7 @@ class CorveePuntenModel {
 			if (array_key_exists($uid, $taken)) {
 				$lidtaken = $taken[$uid];
 			}
-			$vrijstelling = null;
+			$vrijstelling = false;
 			if (array_key_exists($uid, $vrijstellingen)) {
 				$vrijstelling = $vrijstellingen[$uid];
 			}
