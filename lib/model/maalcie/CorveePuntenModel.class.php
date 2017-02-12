@@ -12,6 +12,7 @@ class CorveePuntenModel {
 	public static function resetCorveejaar() {
 		$aantal = 0;
 		$errors = array();
+		/** @var CorveeVrijstelling[] $vrijstellingen */
 		$vrijstellingen = CorveeVrijstellingenModel::instance()->getAlleVrijstellingen(true); // grouped by uid
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
@@ -129,7 +130,7 @@ class CorveePuntenModel {
 		return $matrix;
 	}
 
-	public static function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = null) {
+	public static function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = false) {
 		if ($lidtaken === null) {
 			$lidtaken = CorveeTakenModel::instance()->getTakenVoorLid($profiel->uid);
 			$vrijstelling = CorveeVrijstellingenModel::instance()->getVrijstelling($profiel->uid);
