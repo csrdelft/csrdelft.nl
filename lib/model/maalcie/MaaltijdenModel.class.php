@@ -32,6 +32,7 @@ class MaaltijdenModel extends PersistenceModel {
         $maaltijd->prijs = $repetitie->standaard_prijs;
         $maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
         $maaltijd->omschrijving = null;
+        $maaltijd->verwerkt = false;
 
         return $maaltijd;
     }

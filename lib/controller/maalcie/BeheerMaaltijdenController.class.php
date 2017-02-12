@@ -27,6 +27,7 @@ class BeheerMaaltijdenController extends AclController {
 				'prullenbak' => 'P_MAAL_MOD',
 				//'leegmaken' => 'P_MAAL_MOD',
 				'archief'	 => 'P_MAAL_MOD',
+				'onverwerkt' => 'P_MAAL_MOD',
 				'fiscaal'	 => 'P_MAAL_MOD'
 			);
 		} else {
@@ -78,6 +79,9 @@ class BeheerMaaltijdenController extends AclController {
 			switch ($filter) {
 				case 'prullenbak':
 					$data = $this->model->find('verwijderd = true');
+					break;
+				case 'onverwerkt':
+					$data = $this->model->find('verwijderd = false AND gesloten = true AND verwerkt = false');
 					break;
 				case 'alles':
 					$data = $this->model->getMaaltijden();
@@ -250,6 +254,19 @@ class BeheerMaaltijdenController extends AclController {
 			$this->view = new BeheerMaaltijdenLijst($maaltijden);
 		} else {
 			$this->view = $form;
+		}
+	}
+
+	// Maalcie-fiscaat
+
+	public function onverwerkt() {
+		if ($this->getAction() == "POST") {
+
+		} else {
+			$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
+			$this->view = new CsrLayoutPage($body);
+			$this->view->addCompressedResources('maalcie');
+			$this->view->addCompressedResources('datatable');
 		}
 	}
 

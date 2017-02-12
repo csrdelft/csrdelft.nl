@@ -17,6 +17,9 @@
 					<option value="/maaltijden/repetities">Repetities</option>
 					<option value="/instellingenbeheer/module/maaltijden">Instellingen</option>
 					<option value="/maaltijden/abonnementenbeheer">Abonnementen</option>
+				</optgroup>
+				<optgroup label="Fiscaat">
+					<option value="/maaltijden/beheer/onverwerkt">Onverwerkt</option>
 					<option value="/maaltijden/maalciesaldi">Saldi</option>
 				</optgroup>
 				<optgroup label="Corvee">
