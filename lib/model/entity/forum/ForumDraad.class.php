@@ -8,7 +8,7 @@
  * Een ForumDraad zit in een deelforum en bevat forumposts.
  * 
  */
-class ForumDraad extends PersistentEntity {
+class ForumDraad extends PersistentEntity implements TreeNode {
 
 	/**
 	 * Primary key
@@ -306,6 +306,22 @@ class ForumDraad extends PersistentEntity {
 		require_once 'view/FlotTimeSeries.class.php';
 		$formatter = new FlotTimeSeries(array($this->getStats()));
 		return $formatter->getJson($formatter->getModel());
+	}
+
+	public function hasParent() {
+		return $this->forum_id != null;
+	}
+
+	public function getParent() {
+		return $this->getForumDeel();
+	}
+
+	public function hasChildren() {
+		return $this->hasForumPosts();
+	}
+
+	public function getChildren() {
+		return $this->getForumPosts();
 	}
 
 }

@@ -3,6 +3,7 @@
 require_once 'model/framework/Database.singleton.php';
 require_once 'model/framework/TransactionWrapper.class.php';
 require_once 'model/framework/Persistence.interface.php';
+require_once 'model/entity/framework/TreeNode.interface.php';
 require_once 'model/entity/framework/PersistentEntity.abstract.php';
 
 /**
@@ -251,7 +252,7 @@ abstract class PersistenceModel implements Persistence {
 	 * foreach ($users as $user) {
 	 *   echo $user->getAddress(); // address is sparse: retrieve address
 	 * }
-	 * 
+	 *
 	 * class User extends PersitentEntity {
 	 *   public function getAddress() {
 	 *     $attributes = array('city' 'street', 'number', 'postalcode');
@@ -323,6 +324,23 @@ abstract class PersistenceModel implements Persistence {
 	 */
 	public function delete(PersistentEntity $entity) {
 		return $this->deleteByPrimaryKey($entity->getValues(true));
+	}
+
+	/**
+	 * Delete existing entity and all of its children, if any.
+	 *
+	 * @param PersistentEntity $entity
+	 * @return int number of rows affected
+	 */
+	public function deleteRecursive(PersistentEntity $entity) {
+		$rowCount = 0;
+		// Delete children, if any
+		if ($entity instanceof TreeNode AND $entity->hasChildren()) {
+			foreach ($entity->getChildren() as $child) {
+				$rowCount += $this->deleteRecursive($child);
+			}
+		}
+		return $rowCount + $this->delete($entity);
 	}
 
 	/**

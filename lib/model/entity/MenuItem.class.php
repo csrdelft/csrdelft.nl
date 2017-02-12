@@ -5,11 +5,10 @@
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
- * Een menu-item instantie beschrijft een menu onderdeel van een menu-boom
- * en heeft daarom een parent.
+ * Een menu-item instantie beschrijft een menu-onderdeel van een menu-boom.
  * 
  */
-class MenuItem extends PersistentEntity {
+class MenuItem extends PersistentEntity implements TreeNode {
 
 	/**
 	 * Primary key
@@ -80,16 +79,8 @@ class MenuItem extends PersistentEntity {
 	 */
 	protected static $table_name = 'menus';
 
-	public function getChildren() {
-		if (!isset($this->children)) {
-			$this->children = MenuModel::instance()->getChildren($this);
-		}
-		return $this->children;
-	}
-
-	public function hasChildren() {
-		$this->getChildren();
-		return !empty($this->children);
+	public function hasParent() {
+		return !empty($this->parent_id);
 	}
 
 	/**
@@ -100,6 +91,18 @@ class MenuItem extends PersistentEntity {
 	 */
 	public function getParent() {
 		return MenuModel::instance()->getParent($this);
+	}
+
+	public function hasChildren() {
+		$this->getChildren();
+		return !empty($this->children);
+	}
+
+	public function getChildren() {
+		if (!isset($this->children)) {
+			$this->children = MenuModel::instance()->prefetch('parent_id = ?', array($this->item_id)); // cache for getParent()
+		}
+		return $this->children;
 	}
 
 	/**

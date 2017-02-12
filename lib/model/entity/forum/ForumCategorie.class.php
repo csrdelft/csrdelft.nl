@@ -8,7 +8,7 @@
  * Een forum categorie bevat deelfora.
  * 
  */
-class ForumCategorie extends PersistentEntity {
+class ForumCategorie extends PersistentEntity implements TreeNode {
 
 	/**
 	 * Primary key
@@ -84,6 +84,22 @@ class ForumCategorie extends PersistentEntity {
 	 */
 	public function setForumDelen(array $forum_delen) {
 		$this->forum_delen = $forum_delen;
+	}
+
+	public function hasParent() {
+		return false;
+	}
+
+	public function getParent() {
+		return null;
+	}
+
+	public function hasChildren() {
+		return $this->hasForumDelen();
+	}
+
+	public function getChildren() {
+		return $this->getForumDelen();
 	}
 
 }
