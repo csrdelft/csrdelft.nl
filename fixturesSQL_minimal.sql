@@ -632,24 +632,6 @@ CREATE TABLE IF NOT EXISTS `debug_log` (
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `dies_gala_2014`
---
-
-DROP TABLE IF EXISTS `dies_gala_2014`;
-CREATE TABLE IF NOT EXISTS `dies_gala_2014` (
-  `uid` varchar(4) NOT NULL,
-  `naamDate` varchar(60) NOT NULL,
-  `eetZelf` int(11) NOT NULL,
-  `eetDate` int(11) NOT NULL,
-  `allerZelf` varchar(100) NOT NULL,
-  `allerDate` varchar(100) NOT NULL,
-  `date18` int(11) NOT NULL,
-  PRIMARY KEY (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Tabelstructuur voor tabel `document`
 --
 
@@ -702,21 +684,6 @@ CREATE TABLE IF NOT EXISTS `eetplan` (
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `eetplanhuis`
---
-
-DROP TABLE IF EXISTS `eetplanhuis`;
-CREATE TABLE IF NOT EXISTS `eetplanhuis` (
-  `id` int(11) NOT NULL,
-  `naam` varchar(255) NOT NULL,
-  `groepid` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `groepid` (`groepid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Tabelstructuur voor tabel `eetplan_bekenden`
 --
 
@@ -725,22 +692,6 @@ CREATE TABLE IF NOT EXISTS `eetplan_bekenden` (
   `uid1` varchar(4) NOT NULL,
   `uid2` varchar(4) NOT NULL,
   PRIMARY KEY (`uid1`,`uid2`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Tabelstructuur voor tabel `eetplan_oud`
---
-
-DROP TABLE IF EXISTS `eetplan_oud`;
-CREATE TABLE IF NOT EXISTS `eetplan_oud` (
-  `avond` int(11) NOT NULL DEFAULT '0',
-  `uid` varchar(4) NOT NULL DEFAULT '0',
-  `huis` int(11) NOT NULL DEFAULT '0',
-  KEY `avond` (`avond`),
-  KEY `uid` (`uid`),
-  KEY `huis` (`huis`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

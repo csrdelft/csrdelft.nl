@@ -8,12 +8,14 @@ require_once 'view/maalcie/forms/VrijstellingForm.class.php';
  * BeheerVrijstellingenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * @property CorveeVrijstellingenModel $model
  * 
  */
 class BeheerVrijstellingenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, null);
+		parent::__construct($query, CorveeVrijstellingenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'beheer' => 'P_CORVEE_MOD'
@@ -41,23 +43,23 @@ class BeheerVrijstellingenController extends AclController {
 	}
 
 	public function beheer() {
-		$vrijstellingen = CorveeVrijstellingenModel::getAlleVrijstellingen();
+		$vrijstellingen = $this->model->find(); /** @var CorveeVrijstelling[] $vrijstellingen */
 		$this->view = new BeheerVrijstellingenView($vrijstellingen);
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function nieuw() {
-		$vrijstelling = new CorveeVrijstelling();
-		$this->view = new VrijstellingForm($vrijstelling->getUid(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
+		$vrijstelling = $this->model->nieuw();
+		$this->view = new VrijstellingForm($vrijstelling); // fetches POST values itself
 	}
 
 	public function bewerk($uid) {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		$vrijstelling = CorveeVrijstellingenModel::getVrijstelling($uid);
-		$this->view = new VrijstellingForm($vrijstelling->getUid(), $vrijstelling->getBeginDatum(), $vrijstelling->getEindDatum(), $vrijstelling->getPercentage()); // fetches POST values itself
+		$vrijstelling = $this->model->getVrijstelling($uid);
+		$this->view = new VrijstellingForm($vrijstelling); // fetches POST values itself
 	}
 
 	public function opslaan($uid = null) {
@@ -68,7 +70,7 @@ class BeheerVrijstellingenController extends AclController {
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
-			$vrijstelling = CorveeVrijstellingenModel::saveVrijstelling($values['uid'], $values['begin_datum'], $values['eind_datum'], $values['percentage']);
+			$vrijstelling = $this->model->saveVrijstelling($values['uid'], $values['begin_datum'], $values['eind_datum'], $values['percentage']);
 			$this->view = new BeheerVrijstellingView($vrijstelling);
 		}
 	}
@@ -77,7 +79,7 @@ class BeheerVrijstellingenController extends AclController {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new Exception('Lid bestaat niet: $uid =' . $uid);
 		}
-		CorveeVrijstellingenModel::verwijderVrijstelling($uid);
+		$this->model->verwijderVrijstelling($uid);
 		echo '<tr id="vrijstelling-row-' . $uid . '" class="remove"></tr>';
 		exit;
 	}

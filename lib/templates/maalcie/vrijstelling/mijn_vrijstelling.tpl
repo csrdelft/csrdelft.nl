@@ -2,7 +2,7 @@
 	mijn_vrijstelling.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <h3>Corveevrijstelling</h3>
-{if $vrijstelling === null}
+{if $vrijstelling === false}
 <p>U heeft geen vrijstelling.</p>
 {else}
 <p>
@@ -19,9 +19,9 @@ In de onderstaande tabel staat de vrijstelling die u heeft gekregen.
 	</thead>
 	<tbody>
 		<tr>
-			<td>{$vrijstelling->getBeginDatum()|date_format:"%e %b %Y"}</td>
-			<td>{$vrijstelling->getEindDatum()|date_format:"%e %b %Y"}</td>
-			<td>{$vrijstelling->getPercentage()}%</td>
+			<td>{$vrijstelling->begin_datum|date_format:"%e %b %Y"}</td>
+			<td>{$vrijstelling->eind_datum|date_format:"%e %b %Y"}</td>
+			<td>{$vrijstelling->percentage}%</td>
 			<td>{$vrijstelling->getPunten()}</td>
 		</tr>
 	</tbody>

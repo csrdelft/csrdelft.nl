@@ -7,6 +7,10 @@ ol {
   }
 }
 
+.spotlight ul {
+  list-style-type: none;
+}
+
 ul {
   list-style: disc;
   margin: 0 0 2em 0;
@@ -114,7 +118,7 @@ ul {
   }
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: @scherm-middelsmal) {
 
   ul.actions {
     margin: 0 0 2em 0;
@@ -176,7 +180,7 @@ ul.contact {
   }
 }
 
-@media screen and (max-width: 736px) {
+@media screen and (max-width: @scherm-middel) {
 
   ul.contact li {
     margin: 1.5em 0 0 0;

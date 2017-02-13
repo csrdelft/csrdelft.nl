@@ -44,13 +44,13 @@ class GroepenBeheerTable extends DataTable {
 		$preview = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'voorbeeld', 'post popup', 'Voorbeeld', 'Voorbeeldweergave van de ketzer', 'show');
 		$this->addKnop($preview);
 
-		$create = new DataTableKnop('== 0', $this->dataTableId, $this->url . 'nieuw', 'post popup', 'Nieuw', 'Nieuwe toevoegen', 'add');
+		$create = new DataTableKnop('== 0', $this->dataTableId, $this->url . 'nieuw', 'post popup', 'Nieuw', 'Nieuwe toevoegen', 'toevoegen');
 		$this->addKnop($create);
 
-		$next = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'aanmaken', 'post popup', 'Opvolger', 'Nieuwe toevoegen die de huidige opvolgt', 'add');
+		$next = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'aanmaken', 'post popup', 'Opvolger', 'Nieuwe toevoegen die de huidige opvolgt', 'toevoegen');
 		$this->addKnop($next);
 
-		$update = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'wijzigen', 'post popup', 'Wijzigen', 'Wijzig eigenschappen', 'edit');
+		$update = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'wijzigen', 'post popup', 'Wijzigen', 'Wijzig eigenschappen', 'bewerken');
 		$this->addKnop($update);
 
 		if (property_exists($model::ORM, 'aanmelden_vanaf')) {
@@ -58,7 +58,7 @@ class GroepenBeheerTable extends DataTable {
 			$this->addKnop($sluiten);
 		}
 
-		$opvolg = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'opvolging', 'post popup', 'Opvolging', 'Familienaam en groepstatus instellen', 'timeline');
+		$opvolg = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'opvolging', 'post popup', 'Opvolging', 'Familienaam en groepstatus instellen', 'timeline_marker');
 		$this->addKnop($opvolg);
 
 		$convert = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'converteren', 'post popup', 'Converteren', 'Converteer naar ander soort groep', 'lightning');
@@ -113,7 +113,7 @@ class GroepenBeheerData extends DataTableResponse {
 
 }
 
-class GroepLogboekTable extends DataTable implements FormElement {
+class GroepLogboekTable extends DataTable {
 
 	public function __construct(AbstractGroep $groep) {
 		require_once 'model/entity/ChangeLogEntry.class.php';

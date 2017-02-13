@@ -13,71 +13,26 @@
  * in het buitenland zitten niet in te delen gedurende die periode.
  * 
  */
-class CorveeVrijstelling {
-	# primary key
-
-	private $uid; # foreign key lid.uid
-	private $begin_datum; # date
-	private $eind_datum; # date
-	private $percentage; # int 3
-
-	public function __construct($uid = null, $begin = null, $eind = null, $percentage = null) {
-		$this->uid = $uid;
-		if ($begin === null) {
-			$begin = date('Y-m-d');
-		}
-		$this->setBeginDatum($begin);
-		if ($eind === null) {
-			$eind = date('Y-m-d');
-		}
-		$this->setEindDatum($eind);
-		if ($percentage === null) {
-			$percentage = intval(Instellingen::get('corvee', 'standaard_vrijstelling_percentage'));
-		}
-		$this->setPercentage($percentage);
-	}
-
-	public function getUid() {
-		return $this->uid;
-	}
-
-	public function getBeginDatum() {
-		return $this->begin_datum;
-	}
-
-	public function getEindDatum() {
-		return $this->eind_datum;
-	}
-
-	public function getPercentage() {
-		return (int) $this->percentage;
-	}
+class CorveeVrijstelling extends PersistentEntity {
+	public $uid;
+	public $begin_datum;
+	public $eind_datum;
+	// TODO: Check percentage tussen 0 en 100 in controller
+	public $percentage;
 
 	public function getPunten() {
-		return (int) ceil($this->getPercentage() * intval(Instellingen::get('corvee', 'punten_per_jaar')) / 100);
+		return (int) ceil($this->percentage * intval(Instellingen::get('corvee', 'punten_per_jaar')) / 100);
 	}
 
-	public function setBeginDatum($datum) {
-		if (!is_string($datum)) {
-			throw new Exception('Geen string: begin datum');
-		}
-		$this->begin_datum = $datum;
-	}
+	protected static $table_name = 'crv_vrijstellingen';
+	protected static $persistent_attributes = array(
+		'uid' => array(T::UID),
+		'begin_datum' => array(T::Date),
+		'eind_datum' => array(T::Date),
+		'percentage' => array(T::Integer)
+	);
 
-	public function setEindDatum($datum) {
-		if (!is_string($datum)) {
-			throw new Exception('Geen string: eind datum');
-		}
-		$this->eind_datum = $datum;
-	}
-
-	public function setPercentage($int) {
-		if (!is_int($int) || $int < 0 || $int > 100) {
-			throw new Exception('Geen integer: percentage');
-		}
-		$this->percentage = $int;
-	}
-
+	protected static $primary_key = array('uid');
 }
 
 ?>

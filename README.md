@@ -1,5 +1,5 @@
-[![VersionEye](https://img.shields.io/versioneye/d/user/projects/5774370f99ed29003b2812ba.svg?style=flat-square)](https://www.versioneye.com/user/projects/5774370f99ed29003b2812ba)
-[![Codacy grade](https://img.shields.io/codacy/grade/70ed86243f82444790e463c24c2a3a0c.svg?style=flat-square)](https://www.codacy.com/app/qurben/csrdelft-nl?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=csrdelft/csrdelft.nl&amp;utm_campaign=Badge_Grade)
+[![Dependency Status](https://www.versioneye.com/user/projects/589dd05e0f3d4f003ce97d87/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/589dd05e0f3d4f003ce97d87)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5d5cf50e6d6d4b7fb4357e73d987fdfe)](https://www.codacy.com/app/C-S-R-Delft/csrdelft-nl?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=csrdelft/csrdelft.nl&amp;utm_campaign=Badge_Grade)
 # csrdelft.nl stek
 
 Welkom bij de repo van onze webstek. Kijk gerust rond. 

@@ -14,8 +14,6 @@
     <link rel="shortcut icon" href="{$smarty.const.CSR_ROOT}/assets/layout/plaetjes/favicon.ico"/>
     <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"
           href="{$smarty.const.CSR_ROOT}/forum/rss.xml"/>
-    <!--[if lte IE 8]>
-    <script src="/assets/layout-owee/js/html5shiv.js"></script><![endif]-->
     {foreach from=$stylesheets item=sheet}
         <link rel="stylesheet" href="{$sheet}" type="text/css"/>
     {/foreach}
@@ -43,15 +41,17 @@
 
     <!-- Loginform -->
     <nav id="login">
+        <a href="#_" class="overlay"></a>
         <div class="inner">
             <h2>Inloggen</h2>
             {$loginform->view()}
-            <a href="#" class="close">Close</a>
+            <a href="#_" class="close">Close</a>
         </div>
     </nav>
 
     <!-- Menu -->
     <nav id="menu">
+        <a href="#_" class="overlay"></a>
         <div class="inner">
             <h2>Menu</h2>
             <ul class="links">
@@ -63,6 +63,6 @@
                 <li><a href="/contact">Contactinformatie</a></li>
                 <li><a href="/contact/sponsoring">Bedrijven</a></li>
             </ul>
-            <a href="#" class="close">Close</a>
+            <a href="#_" class="close">Close</a>
         </div>
     </nav>

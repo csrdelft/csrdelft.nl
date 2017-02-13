@@ -20,6 +20,7 @@ class Icon {
 		'verjaardag'				 => 'cake',
 		'vraagteken'				 => 'help',
 		'fout'						 => 'error',
+		'show'                       => 'eye',
 		//documumenten
 		'mime-onbekend'				 => 'page_white',
 		'mime-audio'				 => 'sound',
@@ -56,10 +57,11 @@ class Icon {
         'alert-success'              => 'accept',
         'alert-warning'              => 'bell',
         // Overig
-        'table'                      => 'table_normal'
+        'table'                      => 'table_normal',
+		'log'                        => 'report'
 	);
 
-	private static function get($key) {
+	public static function get($key) {
 		if (array_key_exists($key, self::$alias)) {
 		    return self::$alias[$key];
 		} else {

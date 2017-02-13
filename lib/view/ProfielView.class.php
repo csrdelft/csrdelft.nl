@@ -128,13 +128,13 @@ class ProfielView extends SmartyTemplateView {
 		$this->smarty->assign('corveebonus', $this->model->corvee_punten_bonus);
 
 		require_once 'model/maalcie/CorveeTakenModel.class.php';
-		$this->smarty->assign('corveetaken', CorveeTakenModel::getTakenVoorLid($this->model->uid));
+		$this->smarty->assign('corveetaken', CorveeTakenModel::instance()->getTakenVoorLid($this->model->uid));
 
 		require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
-		$this->smarty->assign('corveevoorkeuren', CorveeVoorkeurenModel::getVoorkeurenVoorLid($this->model->uid));
+		$this->smarty->assign('corveevoorkeuren', CorveeVoorkeurenModel::instance()->getVoorkeurenVoorLid($this->model->uid));
 
 		require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
-		$this->smarty->assign('corveevrijstelling', CorveeVrijstellingenModel::getVrijstelling($this->model->uid));
+		$this->smarty->assign('corveevrijstelling', CorveeVrijstellingenModel::instance()->getVrijstelling($this->model->uid));
 
 		require_once 'model/maalcie/KwalificatiesModel.class.php';
 		$this->smarty->assign('corveekwalificaties', KwalificatiesModel::instance()->getKwalificatiesVanLid($this->model->uid));

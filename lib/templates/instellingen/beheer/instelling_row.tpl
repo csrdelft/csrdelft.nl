@@ -22,7 +22,7 @@
 				<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"} Opslaan</a>
 				<a class="btn reset cancel" title="Annuleren" onclick="
 					$(this).parent().find('.InstellingToggle').toggle();
-					$(this).parent().parent().parent().find('.wijzigknop').toggle();
+					$('#instelling-row-{$id}').find('.wijzigknop').toggle();
 				">{icon get="delete"} Annuleren</a>
 			</form>
 		</div>

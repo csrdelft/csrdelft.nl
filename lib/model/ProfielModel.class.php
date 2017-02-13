@@ -216,8 +216,8 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return string changelogregel
 	 */
 	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus) {
-		$taken = CorveeTakenModel::getKomendeTakenVoorLid($profiel->uid);
-		$aantal = CorveeTakenModel::verwijderTakenVoorLid($profiel->uid);
+		$taken = CorveeTakenModel::instance()->getKomendeTakenVoorLid($profiel->uid);
+		$aantal = CorveeTakenModel::instance()->verwijderTakenVoorLid($profiel->uid);
 		if (sizeof($taken) !== $aantal) {
 			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
 		}

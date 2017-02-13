@@ -11,15 +11,15 @@
 class ToewijzenForm extends ModalForm {
 
 	public function __construct(CorveeTaak $taak, array $suggesties) {
-		parent::__construct(null, maalcieUrl . '/toewijzen/' . $taak->getTaakId());
+		parent::__construct(null, maalcieUrl . '/toewijzen/' . $taak->taak_id);
 
-		if (!is_int($taak->getTaakId()) || $taak->getTaakId() <= 0) {
+		if (!is_int($taak->taak_id) || $taak->taak_id <= 0) {
 			throw new Exception('invalid tid');
 		}
 		$this->titel = 'Taak toewijzen aan lid';
 		$this->css_classes[] = 'PreventUnchanged';
 
-		$fields[] = new LidField('uid', $taak->getUid(), 'Naam of lidnummer', 'leden');
+		$fields[] = new LidField('uid', $taak->uid, 'Naam of lidnummer', 'leden');
 		$fields[] = new SuggestieLIjst($suggesties, $taak);
 		$fields[] = new FormDefaultKnoppen();
 
@@ -39,9 +39,9 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 		parent::__construct($suggesties);
 		$this->taak = $taak;
 
-		$crid = $taak->getCorveeRepetitieId();
+		$crid = $taak->crv_repetitie_id;
 		if ($crid !== null) {
-			$this->voorkeurbaar = CorveeRepetitiesModel::getRepetitie($crid)->getIsVoorkeurbaar();
+			$this->voorkeurbaar = CorveeRepetitiesModel::instance()->getRepetitie($crid)->voorkeurbaar;
 		}
 
 		if ($taak->getCorveeFunctie()->kwalificatie_benodigd) {

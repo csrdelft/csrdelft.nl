@@ -12,7 +12,7 @@ class EetwensForm extends InlineForm {
 
 	public function __construct() {
 
-		$field = new TextareaField('eetwens', CorveeVoorkeurenModel::getEetwens(LoginModel::getProfiel()), 'Allergie/diëet:');
+		$field = new TextareaField('eetwens', CorveeVoorkeurenModel::instance()->getEetwens(LoginModel::getProfiel()), 'Allergie/diëet:');
 
 		parent::__construct(null, maalcieUrl . '/eetwens', $field, true, true);
 

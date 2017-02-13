@@ -13,7 +13,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
     const ORM = 'MaaltijdRepetitie';
     const DIR = 'maalcie/';
 
-    protected $default_order = 'periode_in_dagen ASC, dag_vd_week ASC';
+    protected $default_order = '(periode_in_dagen = 0) ASC, periode_in_dagen ASC, dag_vd_week ASC, standaard_titel ASC';
 
     protected static $instance;
     
@@ -115,7 +115,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 		if (!is_int($mrid) || $mrid <= 0) {
 			throw new Exception('Verwijder maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);
 		}
-		if (CorveeRepetitiesModel::existMaaltijdRepetitieCorvee($mrid)) {
+		if (CorveeRepetitiesModel::instance()->existMaaltijdRepetitieCorvee($mrid)) {
 			throw new Exception('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
 		}
 		if (MaaltijdenModel::instance()->existRepetitieMaaltijden($mrid)) {

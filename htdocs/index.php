@@ -31,7 +31,7 @@ try {
 		default:
 			if (!LoginModel::mag('P_LOGGED_IN')) {
 				setGoBackCookie(REQUEST_URI);
-				redirect(CSR_ROOT);
+				redirect(CSR_ROOT . "#login");
 			}
 	}
 	$class .= 'Controller';
