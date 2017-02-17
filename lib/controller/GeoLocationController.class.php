@@ -14,12 +14,12 @@ class GeoLocationController extends AclController {
 		parent::__construct($query, GeoLocationModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'map' => 'P_LEDEN_READ'
+				'map' => 'OUDEREJAARS'
 			);
 		} else {
 			$this->acl = array(
 				'save'	 => 'P_LOGGED_IN',
-				'get'	 => 'P_LEDEN_READ'
+				'get'	 => 'OUDEREJAARS'
 			);
 		}
 	}
@@ -182,41 +182,43 @@ class GeoLocationController extends AclController {
 								}
 							});
 
-							google.maps.event.addListener(marker, 'dblclick', function () {
-								map.setZoom(17);
-								map.panTo(marker.position);
-							});
+							if (marker) {
+								google.maps.event.addListener(marker, 'dblclick', function () {
+									map.setZoom(17);
+									map.panTo(marker.position);
+								});
 
-							google.maps.event.addListener(marker, 'click', function () {
+								google.maps.event.addListener(marker, 'click', function () {
 
-								var options = {
-									strokeColor: marker.styleIcon.color,
-									strokeOpacity: 0.5,
-									strokeWeight: 2,
-									fillColor: marker.styleIcon.color,
-									fillOpacity: 0.15,
-									map: map,
-									center: latlon,
-									radius: parseInt(data.position.accuracy)
-								};
-								if (radius) {
-									radius.setOptions(options);
+									var options = {
+										strokeColor: marker.styleIcon.color,
+										strokeOpacity: 0.5,
+										strokeWeight: 2,
+										fillColor: marker.styleIcon.color,
+										fillOpacity: 0.15,
+										map: map,
+										center: latlon,
+										radius: parseInt(data.position.accuracy)
+									};
+									if (radius) {
+										radius.setOptions(options);
+									}
+									else {
+										radius = new google.maps.Circle(options);
+									}
+
+									if (openwindow) {
+										infowindows[openwindow].close();
+									}
+
+									infowindow.open(map, marker);
+									openwindow = data.uid;
+
+								});
+
+								if (openwindow === data.uid) {
+									google.maps.event.trigger(marker, 'click');
 								}
-								else {
-									radius = new google.maps.Circle(options);
-								}
-
-								if (openwindow) {
-									infowindows[openwindow].close();
-								}
-
-								infowindow.open(map, marker);
-								openwindow = data.uid;
-
-							});
-
-							if (openwindow === data.uid) {
-								google.maps.event.trigger(marker, 'click');
 							}
 
 						};
