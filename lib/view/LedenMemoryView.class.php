@@ -178,8 +178,8 @@ class LedenMemoryScoreForm extends Formulier {
 
 class LedenMemoryScoreTable extends DataTable {
 
-	public function __construct(AbstractGroep $groep = null) {
-		parent::__construct(LedenMemoryScoresModel::ORM, '/leden/memoryscores/' . ($groep ? $groep->getUUID() : null), 'Topscores Ledenmemory', 'groep');
+	public function __construct(AbstractGroep $groep = null, $titel) {
+		parent::__construct(LedenMemoryScoresModel::ORM, '/leden/memoryscores/' . ($groep ? $groep->getUUID() : null), 'Topscores Ledenmemory' . $titel, 'groep');
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->settings['dom'] = 'rtpli';
 

@@ -18,6 +18,8 @@ function fnInitDataTables() {
     // Verwerk een multipliciteit in de vorm van `== 1` of `!= 0` of `> 3` voor de selecties
 	// Returns bool
     var evaluateMultiplicity = function (expression, num) {
+    	// Altijd laten zien bij geen expressie
+    	if (expression.length === 0) return true;
         var operator_num = expression.split(' ');
         return {
             '==': function (a, b) { return a == b; },
@@ -40,6 +42,9 @@ function fnInitDataTables() {
 	$.fn.dataTable.ext.buttons.excelFlash.className += ' dt-button-ico dt-ico-page_white_excel';
     $.fn.dataTable.ext.buttons.print.className += ' dt-button-ico dt-ico-printer';
 
+
+
+    // Laat een modal zien, of doe een ajax call gebasseerd op selectie.
     $.fn.dataTable.ext.buttons.default = {
         init: function (dt, node, config) {
             var that = this;
@@ -53,6 +58,24 @@ function fnInitDataTables() {
             // Initiele staat
             toggle();
 
+            // Vervang :col door de waarde te vinden in de geselecteerde row
+			// Dit wordt alleen geprobeerd als dit voorkomt
+            if (config.href.indexOf(':') != -1) {
+            	var replacements = /:(\w+)/g.exec(config.href);
+            	dt.on('select.dt.DT', function (e, dt, type, indexes) {
+            		if (indexes.length == 1) {
+						var newHref = config.href;
+            			var row = dt.row(indexes).data();
+            			// skipt match, start met groepen
+						for (var i = 1; i < replacements.length; i++) {
+							newHref = newHref.replace(':' + replacements[i], row[replacements[i]]);
+						}
+
+						node.attr('href', newHref)
+					}
+				})
+			}
+
             // Settings voor knop_ajax
             node.attr('href', config.href);
             node.attr('data-tableid', dt.context[0].sTableId);
@@ -61,7 +84,91 @@ function fnInitDataTables() {
             knop_post.call(button, e)
         },
         className: 'post DataTableResponse'
-    }
+    };
+
+    $.fn.dataTable.ext.buttons.popup = {
+    	extend: 'default',
+    	action: function(e, dt, button, config) {
+    		window.open(button.attr('href'));
+		}
+	};
+
+    $.fn.dataTable.ext.buttons.url = {
+    	extend: 'default',
+		action: function(e, dt, button, config) {
+    		window.location.href = button.attr('href');
+		}
+	};
+
+    // Verander de bron van een datatable
+	// De knop is ingedrukt als de bron van de datatable
+	// gelijk is aan de bron van de knop.
+	$.fn.dataTable.ext.buttons.sourceChange = {
+		init: function (dt, node, config) {
+			var enable = function () {
+				dt.buttons(node).active(dt.ajax.url() == config.href);
+			};
+			dt.on('xhr.sourceChange', enable);
+
+			enable();
+		},
+		action: function (e, dt, button, config) {
+			dt.ajax.url(config.href).load();
+		}
+	};
+
+	$.fn.dataTable.ext.buttons.confirm = {
+		extend: 'collection',
+		init: function (dt, node, config) {
+			var that = this;
+			var toggle = function () {
+				that.enable(
+					evaluateMultiplicity(
+						config.multiplicity,
+						dt.rows({selected: true}).count()))
+			};
+			dt.on('select.dt.DT deselect.dt.DT', toggle);
+			// Initiele staat
+			toggle();
+
+			var action = config.action;
+
+			var buttons = new $.fn.dataTable.Buttons( dt, {
+				buttons: [
+					{
+						extend: 'default',
+						text: function ( dt ) {
+							return dt.i18n( 'csr.zeker', 'Are you sure?' );
+						},
+						action: action,
+						multiplicity: '', // altijd mogelijk
+						className: 'dt-button-ico dt-ico-exclamation dt-button-warning',
+						href: config.href
+					}
+				]
+			} );
+
+			config._collection.append(buttons.dom.container.children());
+
+			// Reset action to extend one.
+			config.action = $.fn.dataTable.ext.buttons.collection.action;
+		},
+		action: function( e, dt, button, config ) {
+			knop_post.call(button, e)
+		},
+	};
+
+	$.fn.dataTable.ext.buttons.defaultCollection = {
+		extend: 'collection',
+		init: function (dt, node, config) {
+			$.fn.dataTable.ext.buttons.default.init.call(this, dt, node, config);
+		}
+	};
+
+	$('body').on('click', function () {
+		// Verwijder tooltips als de datatable modal wordt gesloten
+		$(".ui-tooltip-content").parents('div').remove();
+	})
 }
 
 function fnAutoScroll(tableId) {

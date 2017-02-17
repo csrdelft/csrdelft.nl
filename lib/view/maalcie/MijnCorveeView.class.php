@@ -14,7 +14,14 @@ class MijnCorveeView extends SmartyTemplateView {
 	private $functies;
 	private $vrijstelling;
 
-	public function __construct(array $taken, array $punten, array $functies, CorveeVrijstelling $vrijstelling = null) {
+	/**
+	 * MijnCorveeView constructor.
+	 * @param array $taken
+	 * @param array $punten
+	 * @param array $functies
+	 * @param CorveeVrijstelling|bool $vrijstelling
+	 */
+	public function __construct(array $taken, array $punten, array $functies, $vrijstelling = false) {
 		parent::__construct($taken, 'Mijn corveeoverzicht');
 		$this->punten = $punten;
 		$this->functies = $functies;

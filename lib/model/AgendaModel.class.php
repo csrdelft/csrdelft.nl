@@ -77,9 +77,9 @@ class AgendaModel extends PersistenceModel {
 
 		// CorveeTaken
 		if (LidInstellingen::get('agenda', 'toonCorvee') === 'iedereen') {
-			$result = array_merge($result, CorveeTakenModel::getTakenVoorAgenda($van, $tot, true));
+			$result = array_merge($result, CorveeTakenModel::instance()->getTakenVoorAgenda($van, $tot, true));
 		} elseif (LidInstellingen::get('agenda', 'toonCorvee') === 'eigen') {
-			$result = array_merge($result, CorveeTakenModel::getTakenVoorAgenda($van, $tot, false));
+			$result = array_merge($result, CorveeTakenModel::instance()->getTakenVoorAgenda($van, $tot, false));
 		}
 
 		// Verjaardagen

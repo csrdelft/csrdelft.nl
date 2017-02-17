@@ -10,15 +10,11 @@ require_once 'view/maalcie/MijnMaaltijdenView.class.php';
  * MijnMaaltijdenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * @property MaaltijdenModel $model
  * 
  */
 class MijnMaaltijdenController extends AclController {
-
-    /**
-     * @var MaaltijdenModel
-     */
-    protected $model;
-
 	public function __construct($query) {
 		parent::__construct($query, MaaltijdenModel::instance());
 		if ($this->getMethod() == 'GET') {
@@ -69,7 +65,7 @@ class MijnMaaltijdenController extends AclController {
 			return;
 		}
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
-		$taken = CorveeTakenModel::getTakenVoorMaaltijd($mid);
+		$taken = CorveeTakenModel::instance()->getTakenVoorMaaltijd($mid)->fetchAll();
 		require_once 'view/maalcie/MaaltijdLijstView.class.php';
 		$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}
@@ -86,7 +82,8 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function aanmelden($mid) {
-		$aanmelding = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($mid, LoginModel::getUid(), LoginModel::getUid());
+		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+		$aanmelding = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($maaltijd, LoginModel::getUid(), LoginModel::getUid());
 		if ($this->getMethod() == 'POST') {
 			$this->view = new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
 		} else {
@@ -96,7 +93,8 @@ class MijnMaaltijdenController extends AclController {
 	}
 
 	public function afmelden($mid) {
-		$maaltijd = MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($mid, LoginModel::getUid());
+		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+		MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($maaltijd, LoginModel::getUid());
 		if ($this->getMethod() == 'POST') {
 			$this->view = new MijnMaaltijdView($maaltijd);
 		} else {

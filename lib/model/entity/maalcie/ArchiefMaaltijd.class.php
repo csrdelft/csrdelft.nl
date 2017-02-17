@@ -89,6 +89,12 @@ class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
 
     protected static $primary_key = array('maaltijd_id');
 
+    public function jsonSerialize() {
+		$json = parent::jsonSerialize();
+		$json['aanmeldingen'] = count($this->getAanmeldingenArray());
+		return $json;
+	}
+
 }
 
 ?>

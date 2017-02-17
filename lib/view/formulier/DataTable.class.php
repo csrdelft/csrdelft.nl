@@ -60,6 +60,10 @@ class DataTable implements View, FormElement {
 			'buttons' => array(
 				'copy' => 'Kopiëren',
 				'print' => 'Printen'
+			),
+			// Eigen definities
+			'csr' => array(
+				'zeker' => 'Weet u het zeker?'
 			)
 		)
 	);
@@ -107,6 +111,14 @@ class DataTable implements View, FormElement {
 
 	protected function columnPosition($name) {
 		return array_search($name, array_keys($this->columns));
+	}
+
+	protected function setOrder($names) {
+		$orders = [];
+		foreach ($names as $name => $order) {
+			$orders[] = array($this->columnPosition($name), $order);
+		}
+		$this->settings['order'] = $orders;
 	}
 
 	protected function addColumn($newName, $before = null, $defaultContent = null, $render = null) {
@@ -229,7 +241,14 @@ class DataTable implements View, FormElement {
 
 	public function view() {
 		echo $this->getHtml();
-		echo '<script type="text/javascript">' . $this->getJavascript() . '</script>';
+		// Voorkom globals in javascript
+		echo <<<HTML
+<script type="text/javascript">
+	(function() {
+		{$this->getJavascript()}
+	})();
+</script>
+HTML;
 	}
 
 	public function getTitel() {
@@ -237,7 +256,7 @@ class DataTable implements View, FormElement {
 	}
 
 	public function getBreadcrumbs() {
-		return "Datatable";
+		return $this->titel;
 	}
 
 	/**
@@ -275,7 +294,7 @@ HTML;
 		$settingsJson = str_replace('"fnGetLastUpdate"', 'fnGetLastUpdate', $settingsJson);
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
 		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
-		$settingsJson = preg_replace('/"render":\s?"(.+)"/', '"render": $1', $settingsJson);
+		$settingsJson = preg_replace('/"render":\s?"(.+?)"/', '"render": $1', $settingsJson);
 
 		$filter = str_replace("'", "\'", $this->filter);
 

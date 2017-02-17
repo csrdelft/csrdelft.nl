@@ -2,6 +2,7 @@
 
 require_once 'model/entity/maalcie/Maaltijd.class.php';
 require_once 'model/entity/maalcie/ArchiefMaaltijd.class.php';
+require_once 'model/maalcie/ArchiefMaaltijdModel.class.php';
 require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
 require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
 
@@ -46,12 +47,17 @@ class MaaltijdenModel extends PersistenceModel {
 			throw new Exception('Maaltijd is al gesloten');
 		}
 		$maaltijd->gesloten = true;
-		$maaltijd->laatst_gesloten = date('Y-m-d H:i');
+		$maaltijd->laatst_gesloten = date('Y-m-d H:i:s');
         $this->update($maaltijd);
 	}
 
-	public function getAlleMaaltijden() {
-		return $this->find('verwijderd = false');
+	public function getMaaltijden($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
+    	$filter = 'verwijderd = false';
+    	if ($criteria != null AND $criteria != '') {
+    		$filter .= ' AND ' . $criteria;
+		}
+
+    	return $this->find($filter, $criteria_params, $groupby, $orderby, $limit, $start);
 	}
 
 	/**
@@ -176,9 +182,9 @@ class MaaltijdenModel extends PersistenceModel {
 
 	public function verwijderMaaltijd($mid) {
 		$maaltijd = $this->loadMaaltijd($mid);
-		\CorveeTakenModel::verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
+		\CorveeTakenModel::instance()->verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
 		if ($maaltijd->verwijderd) {
-			if (\CorveeTakenModel::existMaaltijdCorvee($mid)) {
+			if (\CorveeTakenModel::instance()->existMaaltijdCorvee($mid)) {
 				throw new Exception('Er zitten nog bijbehorende corveetaken in de prullenbak. Verwijder die eerst definitief!');
 			}
 			MaaltijdAanmeldingenModel::instance()->deleteAanmeldingenVoorMaaltijd($mid);
@@ -247,7 +253,7 @@ class MaaltijdenModel extends PersistenceModel {
 			try {
                 $archief = ArchiefMaaltijdModel::instance()->vanMaaltijd($maaltijd);
                 ArchiefMaaltijdModel::instance()->create($archief);
-				if (\CorveeTakenModel::existMaaltijdCorvee($maaltijd->maaltijd_id)) {
+				if (\CorveeTakenModel::instance()->existMaaltijdCorvee($maaltijd->maaltijd_id)) {
 					setMelding($maaltijd->datum . ' ' . $maaltijd->titel . ' heeft nog gekoppelde corveetaken!', 2);
 				}
 			} catch (\Exception $e) {
@@ -346,7 +352,7 @@ class MaaltijdenModel extends PersistenceModel {
             $beginDatum = strtotime('+' . $shift . ' days', $beginDatum);
         }
         $datum = $beginDatum;
-        $corveerepetities = \CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id);
+        $corveerepetities = \CorveeRepetitiesModel::instance()->getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id);
         $maaltijden = array();
         while ($datum <= $eindDatum) { // break after one
 
@@ -355,7 +361,7 @@ class MaaltijdenModel extends PersistenceModel {
             $this->meldAboAan($maaltijd);
 
             foreach ($corveerepetities as $corveerepetitie) {
-                \CorveeTakenModel::newRepetitieTaken($corveerepetitie, $datum, $datum, intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
+                \CorveeTakenModel::instance()->newRepetitieTaken($corveerepetitie, $datum, $datum, intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
             }
             $maaltijden[] = $maaltijd;
             if ($repetitie->periode_in_dagen < 1) {

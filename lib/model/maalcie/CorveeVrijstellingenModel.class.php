@@ -7,64 +7,61 @@ require_once 'model/entity/maalcie/CorveeVrijstelling.class.php';
  * CorveeVrijstellingenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class CorveeVrijstellingenModel {
+class CorveeVrijstellingenModel extends PersistenceModel {
+	const ORM = CorveeVrijstelling::class;
+	const DIR = 'maalcie/';
 
-	public static function getAlleVrijstellingen($groupByUid=false) {
-		$vrijstellingen = self::loadVrijstellingen();
+	protected static $instance;
+
+	public function nieuw($uid = null, $begin = null, $eind = null, $percentage = 0) {
+		$vrijstelling = new CorveeVrijstelling();
+		$vrijstelling->uid = $uid;
+		if ($begin === null) {
+			$begin = date('Y-m-d');
+		}
+		$vrijstelling->begin_datum = $begin;
+		if ($eind === null) {
+			$eind = date('Y-m-d');
+		}
+		$vrijstelling->eind_datum = $eind;
+		if ($percentage === null) {
+			$percentage = intval(Instellingen::get('corvee', 'standaard_vrijstelling_percentage'));
+		}
+		$vrijstelling->percentage = $percentage;
+
+		return $vrijstelling;
+	}
+
+	public function getAlleVrijstellingen($groupByUid=false) {
+		$vrijstellingen = $this->find();
 		if ($groupByUid) {
 			$vrijstellingenByUid = array();
 			foreach ($vrijstellingen as $vrijstelling) {
-				$vrijstellingenByUid[$vrijstelling->getUid()] = $vrijstelling;
+				$vrijstellingenByUid[$vrijstelling->uid] = $vrijstelling;
 			}
 			return $vrijstellingenByUid;
 		}
 		return $vrijstellingen;
 	}
 	
-	public static function getVrijstelling($uid) {
-		$vrijstellingen = self::loadVrijstellingen('uid = ?', array($uid), 1);
-		if (!array_key_exists(0, $vrijstellingen)) {
-			return null; //throw new Exception('Get vrijstelling faalt: Not found $uid ='. $uid);
-		}
-		return $vrijstellingen[0];
-	}
-
-	/**
-	 * @param null $where
-	 * @param array $values
-	 * @param null $limit
-	 * @return CorveeVrijstelling[]
-	 */
-	private static function loadVrijstellingen($where=null, $values=array(), $limit=null) {
-		$sql = 'SELECT uid, begin_datum, eind_datum, percentage';
-		$sql.= ' FROM crv_vrijstellingen';
-		if ($where !== null) {
-			$sql.= ' WHERE '. $where;
-		}
-		$sql.= ' ORDER BY begin_datum ASC';
-		if (is_int($limit) && $limit > 0) {
-			$sql.= ' LIMIT '. $limit;
-		}
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\CorveeVrijstelling');
-		return $result;
+	public function getVrijstelling($uid) {
+		return $this->retrieveByPrimaryKey(array($uid));
 	}
 	
-	public static function saveVrijstelling($uid, $begin, $eind, $percentage) {
+	public function saveVrijstelling($uid, $begin, $eind, $percentage) {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
-			$vrijstelling = self::getVrijstelling($uid);
-			if ($vrijstelling === null) {
-				$vrijstelling = self::newVrijstelling($uid, $begin, $eind, $percentage);
+			$vrijstelling = $this->getVrijstelling($uid);
+			if ($vrijstelling === false) {
+				$vrijstelling = $this->nieuw($uid, $begin, $eind, $percentage);
+				$this->create($vrijstelling);
 			}
 			else {
-				$vrijstelling->setBeginDatum($begin);
-				$vrijstelling->setEindDatum($eind);
-				$vrijstelling->setPercentage($percentage);
-				self::updateVrijstelling($vrijstelling);
+				$vrijstelling->begin_datum = $begin;
+				$vrijstelling->eind_datum = $eind;
+				$vrijstelling->percentage = $percentage;
+				$this->update($vrijstelling);
 			}
 			$db->commit();
 			return $vrijstelling;
@@ -75,52 +72,8 @@ class CorveeVrijstellingenModel {
 		}
 	}
 	
-	private static function newVrijstelling($uid, $begin, $eind, $percentage) {
-		$sql = 'INSERT INTO crv_vrijstellingen';
-		$sql.= ' (uid, begin_datum, eind_datum, percentage)';
-		$sql.= ' VALUES (?, ?, ?, ?)';
-		$values = array($uid, $begin, $eind, $percentage);
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($query->rowCount() !== 1) {
-			throw new Exception('New vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
-		}
-		return new CorveeVrijstelling($uid, $begin, $eind, $percentage);
-	}
-	
-	private static function updateVrijstelling(CorveeVrijstelling $vrijstelling) {
-		$sql = 'UPDATE crv_vrijstellingen';
-		$sql.= ' SET begin_datum=?, eind_datum=?, percentage=?';
-		$sql.= ' WHERE uid=?';
-		$values = array(
-			$vrijstelling->getBeginDatum(),
-			$vrijstelling->getEindDatum(),
-			$vrijstelling->getPercentage(),
-			$vrijstelling->getUid()
-		);
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($query->rowCount() !== 1) {
-			throw new Exception('Update vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
-		}
-	}
-	
-	public static function verwijderVrijstelling($uid) {
-		self::deleteVrijstelling($uid);
-	}
-	
-	private static function deleteVrijstelling($uid) {
-		$sql = 'DELETE FROM crv_vrijstellingen';
-		$sql.= ' WHERE uid = ?';
-		$values = array($uid);
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($query->rowCount() !== 1) {
-			throw new Exception('Delete vrijstelling faalt: $query->rowCount() ='. $query->rowCount());
-		}
+	public function verwijderVrijstelling($uid) {
+		$this->deleteByPrimaryKey(array($uid));
 	}
 }
 

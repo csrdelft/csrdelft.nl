@@ -8,11 +8,41 @@ require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
  * CorveeRepetitiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
  * 
  */
-class CorveeRepetitiesModel {
+class CorveeRepetitiesModel extends PersistenceModel {
+	const ORM = 'CorveeRepetitie';
+	const DIR = 'maalcie/';
 
-	public static function getFirstOccurrence(CorveeRepetitie $repetitie) {
+	protected static $instance;
+
+	public function nieuw($crid = 0, $mrid = null, $dag = null, $periode = null, $fid = 0, $punten = 0, $aantal = null, $voorkeur = null) {
+		$repetitie = new CorveeRepetitie();
+		$repetitie->crv_repetitie_id = (int) $crid;
+		$repetitie->mlt_repetitie_id = $mrid;
+		if ($dag === null) {
+			$dag = intval(Instellingen::get('corvee', 'standaard_repetitie_weekdag'));
+		}
+		$repetitie->dag_vd_week = $dag;
+		if ($periode === null) {
+			$periode = intval(Instellingen::get('corvee', 'standaard_repetitie_periode'));
+		}
+		$repetitie->periode_in_dagen = $periode;
+		$repetitie->functie_id = $fid;
+		$repetitie->standaard_punten = $punten;
+		if ($aantal === null) {
+			$aantal = intval(Instellingen::get('corvee', 'standaard_aantal_corveers'));
+		}
+		$repetitie->standaard_aantal = $aantal;
+		if ($voorkeur === null) {
+			$voorkeur = (boolean) Instellingen::get('corvee', 'standaard_voorkeurbaar');
+		}
+		$repetitie->voorkeurbaar = $voorkeur;
+
+		return $repetitie;
+	}
+
+	public function getFirstOccurrence(CorveeRepetitie $repetitie) {
 		$datum = time();
-		$shift = $repetitie->getDagVanDeWeek() - date('w', $datum) + 7;
+		$shift = $repetitie->dag_vd_week - date('w', $datum) + 7;
 		$shift %= 7;
 		if ($shift > 0) {
 			$datum = strtotime('+' . $shift . ' days', $datum);
@@ -20,89 +50,58 @@ class CorveeRepetitiesModel {
 		return date('Y-m-d', $datum);
 	}
 
-	public static function getVoorkeurbareRepetities($groupById = false) {
-		$repetities = self::loadRepetities('voorkeurbaar = true');
-		if ($groupById) {
-			$result = array();
-			foreach ($repetities as $repetitie) {
-				$result[$repetitie->getCorveeRepetitieId()] = $repetitie;
-			}
-			return $result;
+	public function getVoorkeurbareRepetities() {
+		$repetities = $this->find('voorkeurbaar = true');
+		$result = array();
+		foreach ($repetities as $repetitie) {
+			$result[$repetitie->crv_repetitie_id] = $repetitie;
 		}
-		return $repetities;
+		return $result;
 	}
 
-	public static function getAlleRepetities() {
-		return self::loadRepetities();
+	public function getAlleRepetities() {
+		return $this->find();
 	}
 
 	/**
 	 * Haalt de periodieke taken op die gekoppeld zijn aan een periodieke maaltijd.
 	 *
 	 * @param int $mrid
-	 * @return CorveeRepetitie[]
+	 * @return PDOStatement|CorveeRepetitie[]
 	 * @throws Exception
 	 */
-	public static function getRepetitiesVoorMaaltijdRepetitie($mrid) {
-		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Load taken voor maaltijd faalt: Invalid $mrid =' . $mrid);
-		}
-		return self::loadRepetities('mlt_repetitie_id = ?', array($mrid));
-	}
-
-	public static function getRepetitie($crid) {
-		if (!is_int($crid) || $crid <= 0) {
-			throw new Exception('Get corvee-repetitie faalt: Invalid $crid =' . $crid);
-		}
-		$repetities = self::loadRepetities('crv_repetitie_id = ?', array($crid), 1);
-		if (!array_key_exists(0, $repetities)) {
-			throw new Exception('Get corvee-repetitie faalt: Not found $crid =' . $crid);
-		}
-		return $repetities[0];
+	public function getRepetitiesVoorMaaltijdRepetitie($mrid) {
+		return $this->find('mlt_repetitie_id = ?', array($mrid));
 	}
 
 	/**
-	 * @param string $where
-	 * @param array $values
-	 * @param int $limit
-	 * @return CorveeRepetitie[]
+	 * @param $crid
+	 * @return CorveeRepetitie|false
 	 */
-	private static function loadRepetities($where = null, $values = array(), $limit = null) {
-		$sql = 'SELECT crv_repetitie_id, mlt_repetitie_id, dag_vd_week, periode_in_dagen, functie_id, standaard_punten, standaard_aantal, voorkeurbaar';
-		$sql.= ' FROM crv_repetities';
-		if ($where !== null) {
-			$sql.= ' WHERE ' . $where;
-		}
-		$sql.= ' ORDER BY periode_in_dagen ASC, dag_vd_week ASC';
-		if (is_int($limit)) {
-			$sql.= ' LIMIT ' . $limit;
-		}
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\CorveeRepetitie');
-		return $result;
+	public function getRepetitie($crid) {
+		return $this->retrieveByPrimaryKey(array($crid));
 	}
 
-	public static function saveRepetitie($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
+	public function saveRepetitie($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
 			$voorkeuren = 0;
 			if ($crid === 0) {
-				$repetitie = self::newRepetitie($mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
+				$repetitie = $this->nieuw(0, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
+				$repetitie->crv_repetitie_id = $this->create($repetitie);
 			} else {
-				$repetitie = self::getRepetitie($crid);
-				$repetitie->setMaaltijdRepetitieId($mrid);
-				$repetitie->setDagVanDeWeek($dag);
-				$repetitie->setPeriodeInDagen($periode);
-				$repetitie->setFunctieId($fid);
-				$repetitie->setStandaardPunten($punten);
-				$repetitie->setStandaardAantal($aantal);
-				$repetitie->setVoorkeurbaar((boolean) $voorkeur);
-				self::updateRepetitie($repetitie);
+				$repetitie = $this->getRepetitie($crid);
+				$repetitie->mlt_repetitie_id = $mrid;
+				$repetitie->dag_vd_week =  $dag;
+				$repetitie->periode_in_dagen = $periode;
+				$repetitie->functie_id = $fid;
+				$repetitie->standaard_punten = $punten;
+				$repetitie->standaard_aantal = $aantal;
+				$repetitie->voorkeurbaar = (boolean) $voorkeur;
+				$this->update($repetitie);
 				if (!$voorkeur) { // niet (meer) voorkeurbaar
-					$voorkeuren = CorveeVoorkeurenModel::verwijderVoorkeuren($crid);
+					$voorkeuren = CorveeVoorkeurenModel::instance()->verwijderVoorkeuren($crid);
 				}
 			}
 			$db->commit();
@@ -113,58 +112,19 @@ class CorveeRepetitiesModel {
 		}
 	}
 
-	private static function updateRepetitie(CorveeRepetitie $repetitie) {
-		$sql = 'UPDATE crv_repetities';
-		$sql.= ' SET mlt_repetitie_id=?, dag_vd_week=?, periode_in_dagen=?, functie_id=?, standaard_punten=?, standaard_aantal=?, voorkeurbaar=?';
-		$sql.= ' WHERE crv_repetitie_id=?';
-		$values = array(
-			$repetitie->getMaaltijdRepetitieId(),
-			$repetitie->getDagVanDeWeek(),
-			$repetitie->getPeriodeInDagen(),
-			$repetitie->getFunctieId(),
-			$repetitie->getStandaardPunten(),
-			$repetitie->getStandaardAantal(),
-			werkomheen_pdo_bool($repetitie->getIsVoorkeurbaar()),
-			$repetitie->getCorveeRepetitieId()
-		);
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($query->rowCount() !== 1) {
-			//throw new Exception('Update corvee-repetitie faalt: $query->rowCount() ='. $query->rowCount());
-		}
-	}
-
-	private static function newRepetitie($mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
-		$sql = 'INSERT INTO crv_repetities';
-		$sql.= ' (crv_repetitie_id, mlt_repetitie_id, dag_vd_week, periode_in_dagen, functie_id, standaard_punten, standaard_aantal, voorkeurbaar)';
-		$sql.= ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-		$values = array(null, $mrid, $dag, $periode, $fid, $punten, $aantal, werkomheen_pdo_bool($voorkeur));
-		$db = \Database::instance();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		if ($query->rowCount() !== 1) {
-			throw new Exception('New corvee-repetitie faalt: $query->rowCount() =' . $query->rowCount());
-		}
-		return new CorveeRepetitie(intval($db->lastInsertId()), $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
-	}
-
-	public static function verwijderRepetitie($crid) {
+	public function verwijderRepetitie($crid) {
 		if (!is_int($crid) || $crid <= 0) {
 			throw new Exception('Verwijder corvee-repetitie faalt: Invalid $crid =' . $crid);
 		}
-		if (CorveeTakenModel::existRepetitieTaken($crid)) {
-			CorveeTakenModel::verwijderRepetitieTaken($crid); // delete corveetaken first (foreign key)
+		if (CorveeTakenModel::instance()->existRepetitieTaken($crid)) {
+			CorveeTakenModel::instance()->verwijderRepetitieTaken($crid); // delete corveetaken first (foreign key)
 			throw new Exception('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
-		return self::deleteRepetitie($crid);
-	}
 
-	private static function deleteRepetitie($crid) {
 		$db = \Database::instance();
 		try {
 			$db->beginTransaction();
-			$aantal = CorveeVoorkeurenModel::verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)
+			$aantal = CorveeVoorkeurenModel::instance()->verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)
 			$sql = 'DELETE FROM crv_repetities';
 			$sql.= ' WHERE crv_repetitie_id=?';
 			$values = array($crid);
@@ -188,18 +148,9 @@ class CorveeRepetitiesModel {
 	 *
 	 * @param int $mrid
 	 * @return bool
-	 * @throws Exception
 	 */
-	public static function existMaaltijdRepetitieCorvee($mrid) {
-		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Exist maaltijd-repetitie-corvee faalt: Invalid $mid =' . $mrid);
-		}
-		$sql = 'SELECT EXISTS (SELECT * FROM crv_repetities WHERE mlt_repetitie_id = ?)';
-		$values = array($mrid);
-		$query = \Database::instance()->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchColumn();
-		return $result;
+	public function existMaaltijdRepetitieCorvee($mrid) {
+		return $this->count('mlt_repetitie_id = ?', array($mrid)) > 0;
 	}
 
 	// Functie-Repetities ############################################################
@@ -209,18 +160,9 @@ class CorveeRepetitiesModel {
 	 *
 	 * @param int $fid
 	 * @return bool
-	 * @throws Exception
 	 */
-	public static function existFunctieRepetities($fid) {
-		if (!is_int($fid) || $fid <= 0) {
-			throw new Exception('Exist functie-repetities faalt: Invalid $fid =' . $fid);
-		}
-		$sql = 'SELECT EXISTS (SELECT * FROM crv_repetities WHERE functie_id = ?)';
-		$values = array($fid);
-		$query = \Database::instance()->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchColumn();
-		return $result;
+	public function existFunctieRepetities($fid) {
+		return $this->count('functie_id = ?', array($fid)) > 0;
 	}
 
 }

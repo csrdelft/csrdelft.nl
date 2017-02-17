@@ -10,16 +10,20 @@
  */
 class AanmeldingForm extends ModalForm {
 
-	public function __construct($mid, $nieuw, $uid = null, $gasten = 0) {
-		parent::__construct(null, maalcieUrl . '/ander' . ($nieuw ? 'aanmelden' : 'afmelden') . '/' . $mid);
+	/**
+	 * AanmeldingForm constructor.
+	 * @param Maaltijd $maaltijd
+	 * @param boolean $nieuw
+	 * @param string $uid
+	 * @param int $gasten
+	 */
+	public function __construct(Maaltijd $maaltijd, $nieuw, $uid = null, $gasten = 0) {
+		parent::__construct(null, '/maaltijden/beheer/' . ($nieuw ? 'aanmelden' : 'afmelden'), true, true);
 
-		if (!is_int($mid) || $mid <= 0) {
-			throw new Exception('invalid mid');
-		}
 		if ($nieuw) {
-			$this->title = 'Aanmelding toevoegen/aanpassen';
+			$this->titel = 'Aanmelding toevoegen/aanpassen';
 		} else {
-			$this->title = 'Aanmelding verwijderen (inclusief gasten)';
+			$this->titel = 'Aanmelding verwijderen (inclusief gasten)';
 		}
 		$this->css_classes[] = 'PreventUnchanged';
 

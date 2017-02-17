@@ -7,6 +7,8 @@ require_once 'view/maalcie/BeheerFunctiesView.class.php';
  * BeheerFunctiesController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * @property FunctiesModel $model
  * 
  */
 class BeheerFunctiesController extends AclController {
