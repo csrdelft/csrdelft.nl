@@ -1,26 +1,11 @@
 .fadeIn(@duration; @translate; @filter; ) {
   transition: opacity @duration ease, transform @duration ease, filter @duration/2 ease;
-  -moz-transition: opacity @duration ease, -moz-transform @duration ease, -moz-filter @duration/2 ease;
-  -webkit-transition: opacity @duration ease, -webkit-transform @duration ease, -webkit-filter @duration/2 ease;
-  -ms-transition: opacity @duration ease, -ms-transform @duration ease, -ms-filter @duration/2 ease;
-  -webkit-transform: none;
-  -moz-transform: none;
-  -ms-transform: none;
   transform: none;
-  -moz-transition-delay: 0.8s;
-  -webkit-transition-delay: 0.8s;
-  -ms-transition-delay: 0.8s;
-  transition-delay: 0.8s;
+  transition-delay: 0s;
 
   body.is-loading & {
     opacity: 0;
-    -moz-transform: @translate;
-    -webkit-transform: @translate;
-    -ms-transform: @translate;
     transform: @translate;
-    -moz-filter: @filter;
-    -webkit-filter: @filter;
-    -ms-filter: @filter;
     filter: @filter;
   }
 }
