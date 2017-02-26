@@ -39,7 +39,7 @@
 			</form>
 		</div>
 	</td>
-	<td style="text-align: right; background-color: #{$puntenlijst.prognoseColor};"{if $puntenlijst.vrijstelling} title="{$puntenlijst.vrijstelling->getPercentage()}% vrijstelling"{/if}>
+	<td style="text-align: right; background-color: #{$puntenlijst.prognoseColor};"{if $puntenlijst.vrijstelling} title="{$puntenlijst.vrijstelling->percentage}% vrijstelling"{/if}>
 		{$puntenlijst.prognose}
 		<div class="inline" style="width: 25px;">{if $puntenlijst.vrijstelling}*{else}&nbsp;{/if}</div>
 	</td>
