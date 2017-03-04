@@ -171,8 +171,15 @@
                     </a>
                 </li>
                 <li>
-                    <a href="http://www.tudelft.nl/" class="lazy-load"
-                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/TU_Delft_logo_White.png' alt='TUDelft'>">
+                    <a href="http://www.pricewise.nl/">
+                        <img width=300px src="https://csrdelft.nl/plaetjes/banners/pricewise.svg"
+                             alt="Pricewise">
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.tudelft.nl/">
+                        <img src="https://csrdelft.nl/plaetjes/banners/TU_Delft_logo_White.png"
+                             alt="TUDelft">
                     </a>
                 </li>
             </ul>
