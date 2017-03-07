@@ -154,6 +154,8 @@ class BeheerMaaltijdenController extends AclController {
 				$maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
 				$this->view = new MaaltijdForm($maaltijd, 'nieuw');
 			}
+		} else {
+			$this->view = $form;
 		}
 
 	}

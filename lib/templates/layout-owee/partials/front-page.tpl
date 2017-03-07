@@ -29,7 +29,8 @@
     <!-- Two -->
     <section id="two" class="wrapper alt kleur2">
         <div class="inner">
-            <span class="image"><img src="/assets/layout-owee/plaetjes/podium.jpg" alt=""/></span>
+            <span class="image lazy-load"
+                  data-lazy="<img src='/assets/layout-owee/plaetjes/podium.jpg' alt=''/>"></span>
             <div class="content">
                 <h2 class="major">C.S.R. in de OWee</h2>
                 <p>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee. Dit jaar
@@ -45,7 +46,7 @@
     <!-- Three -->
     <section id="three" class="wrapper kleur3">
         <div class="inner">
-            <span class="image"><img src="/assets/layout-owee/plaetjes/OC.jpg" alt=""/></span>
+            <span class="image lazy-load" data-lazy="<img src='/assets/layout-owee/plaetjes/OC.jpg' alt=''/>"></span>
             <div class="content">
                 <h2 class="major">Interesse/vragen</h2>
                 <p>Uiteraard ben je welkom om tijdens de OWee langs te komen op onze sociëteit Confide aan de Oude Delft
@@ -68,50 +69,50 @@
             <div class="content">
                 <h2 class="major">Foto's</h2>
                 <div class="grid">
-                    <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic01.jpg"
-                       data-lightbox="page-lightbox">
-                        <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic01.jpg"
-                             src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic01.jpg">
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic01.jpg"
+                       data-lightbox="page-lightbox"
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic01.jpg'
+                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic01.jpg'>">
                     </a>
-                    <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic02.jpg"
-                       data-lightbox="page-lightbox">
-                        <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic02.jpg"
-                             src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic02.jpg">
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic02.jpg"
+                       data-lightbox="page-lightbox"
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic02.jpg'
+                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic02.jpg'>">
                     </a>
-                    <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic03.jpg"
-                       data-lightbox="page-lightbox">
-                        <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic03.jpg"
-                             src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic03.jpg">
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic03.jpg"
+                       data-lightbox="page-lightbox"
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic03.jpg'
+                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic03.jpg'>">
                     </a>
-                    <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic04.jpg"
-                       data-lightbox="page-lightbox">
-                        <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic04.jpg"
-                             src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic04.jpg">
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic04.jpg"
+                       data-lightbox="page-lightbox"
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic04.jpg'
+                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic04.jpg'>">
                     </a>
-                    <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic05.jpg"
-                       data-lightbox="page-lightbox">
-                        <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic05.jpg"
-                             src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic05.jpg">
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic05.jpg"
+                       data-lightbox="page-lightbox"
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic05.jpg'
+                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic05.jpg'>">
                     </a>
-                    <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic06.jpg"
-                       data-lightbox="page-lightbox">
-                        <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic06.jpg"
-                             src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic06.jpg">
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic06.jpg"
+                       data-lightbox="page-lightbox"
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic06.jpg'
+                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic06.jpg'>">
                     </a>
-                    <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic07.jpg"
-                       data-lightbox="page-lightbox">
-                        <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic07.jpg"
-                             src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic07.jpg">
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic07.jpg"
+                       data-lightbox="page-lightbox"
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic07.jpg'
+                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic07.jpg'>">
                     </a>
-                    <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic08.jpg"
-                       data-lightbox="page-lightbox">
-                        <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic08.jpg"
-                             src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic08.jpg">
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic08.jpg"
+                       data-lightbox="page-lightbox"
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic08.jpg'
+                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic08.jpg'>">
                     </a>
-                    <a class="lightbox-link" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic09.jpg"
-                       data-lightbox="page-lightbox">
-                        <img class="bb-img" alt="/plaetjes/fotoalbum/Voorpagina/Extern/pic09.jpg"
-                             src="/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic09.jpg">
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic09.jpg"
+                       data-lightbox="page-lightbox"
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic09.jpg'
+                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic09.jpg'>">
                     </a>
                 </div>
             </div>
@@ -140,40 +141,39 @@
             </ul>
             <ul class="sponsors">
                 <li>
-                    <a href="https://dosign.nl/">
-                        <img src="https://csrdelft.nl/plaetjes/banners/dosign.gif"
-                             alt="Dosignadvertentie">
+                    <a href="https://dosign.nl/" class="lazy-load"
+                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/dosign.gif' alt='Dosignadvertentie'>">
                     </a>
                 </li>
                 <li>
-                    <a href="http://mechdes.nl/">
-                        <img src="https://csrdelft.nl/plaetjes/banners/mechdes.gif"
-                             alt="Mechdesadvertentie">
+                    <a href="http://mechdes.nl/" class="lazy-load"
+                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/mechdes.gif' alt='Mechdesadvertentie'>">
                     </a>
                 </li>
                 <li>
-                    <a href="http://galjemadetachering.nl/">
-                        <img src="https://csrdelft.nl/plaetjes/banners/galjema_banner.jpg"
-                             alt="Galjemaadvertentie">
+                    <a href="http://galjemadetachering.nl/" class="lazy-load"
+                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/galjema_banner.jpg' alt='Galjemaadvertentie'>">
                     </a>
                 </li>
                 <li>
-                    <a href="http://stcgroep.nl/">
-                        <img src="https://csrdelft.nl/plaetjes/banners/STC-groep-banner.gif"
-                             alt="STC-advertentie">
+                    <a href="http://stcgroep.nl/" class="lazy-load"
+                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/STC-groep-banner.gif' alt='STC-advertentie'>">
                     </a>
                 </li>
                 <li>
-                    <a href="http://zoover.nl/">
-                        <img src="https://csrdelft.nl/plaetjes/banners/Zoover.jpg"
-                             alt="Zooveradvertentie">
-
+                    <a href="http://zoover.nl/" class="lazy-load"
+                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/Zoover.jpg' alt='Zooveradvertentie'>">
                     </a>
                 </li>
                 <li>
-                    <a href="https://www.maxilia.nl/banners-drukken/">
-                        <img src="https://csrdelft.nl/plaetjes/banners/maxilia.png"
-                             alt="Maxiliaadvertentie"/>
+                    <a href="https://www.maxilia.nl/banners-drukken/" class="lazy-load"
+                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/maxilia.png' alt='Maxiliaadvertentie'/>">
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.pricewise.nl/">
+                        <img width=300px src="https://csrdelft.nl/plaetjes/banners/pricewise.svg"
+                             alt="Pricewise">
                     </a>
                 </li>
                 <li>

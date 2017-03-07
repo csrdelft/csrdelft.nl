@@ -65,7 +65,7 @@ class MijnMaaltijdenController extends AclController {
 			return;
 		}
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
-		$taken = CorveeTakenModel::instance()->getTakenVoorMaaltijd($mid);
+		$taken = CorveeTakenModel::instance()->getTakenVoorMaaltijd($mid)->fetchAll();
 		require_once 'view/maalcie/MaaltijdLijstView.class.php';
 		$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}
