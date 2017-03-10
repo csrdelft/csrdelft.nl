@@ -3,16 +3,30 @@
 /** donker-turquoise : #05877d*/
 /**/
 
+@font-face {
+	font-family: geek;
+	src: url('/assets/layout/fonts/geek.eot');
+	src: url('/assets/layout/fonts/geek.eot?#iefix') format('embedded-opentype'),
+	url('/assets/layout/fonts/geek.woff') format('woff'),
+	url('/assets/layout/fonts/geek.ttf') format('truetype'),
+	url('/assets/layout/fonts/geek.svg#abril_fatfaceregular') format('svg');
+	src: url(/assets/layout/fonts/geek.ttf) format("truetype");
+}
+
+* {
+	font-family: geek, FontAwesome, sans-serif !important;
+}
+
 /*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
 #cd-zijbalk, #forumtabel th, .cd-primary-nav ul {
-	background-color: #0b8849 !important;
+	background-color: #348fc1 !important;
 }
 
 /*Koppen in het rood*/
 h1, a, a:hover,
 .cd-primary-nav > li > a:hover,
 .cd-primary-nav > li > a.selected {
-	color: #fd892c;
+	color: #b6b6b6;
 }
 
 
@@ -35,7 +49,7 @@ h1, a, a:hover,
 /*Streepje onder naam*/
 .cd-primary-nav > li > a:hover,
 .cd-primary-nav > li > a.selected {
-	box-shadow: inset 0 -2px 0 #fd892c;
+	box-shadow: inset 0 -2px 0 #348fc1;
 }
 
 
@@ -50,7 +64,7 @@ h1, a, a:hover,
 
 /*Zijbalk grens van het scherm in rood*/
 #cd-zijbalk {
-	border-color: #fd892c;
+	border-color: white;
 }
 
 /*OWee logo met gradient*/
