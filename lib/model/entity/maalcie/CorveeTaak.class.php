@@ -34,9 +34,9 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	public $maaltijd_id; # foreign key maaltijd.id
 	public $datum; # date
 	public $punten; # int 11
-	public $bonus_malus; # int 11
-	public $punten_toegekend; # int 11
-	public $bonus_toegekend; # int 11
+	public $bonus_malus = 0; # int 11
+	public $punten_toegekend = 0; # int 11
+	public $bonus_toegekend = 0; # int 11
 	public $wanneer_toegekend; # datetime
 	public $wanneer_gemaild; # text
 	public $verwijderd = false; # boolean
@@ -195,7 +195,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 		'punten_toegekend' => array(T::Integer),
 		'bonus_toegekend' => array(T::Integer),
 		'wanneer_toegekend' => array(T::DateTime, true),
-		'wanneer_gemaild' => array(T::Text),
+		'wanneer_gemaild' => array(T::Text, true),
 		'verwijderd' => array(T::Boolean)
 	);
 

@@ -122,14 +122,14 @@ class BeheerTakenController extends AclController {
 				}
 			}
 			$taak = CorveeTakenModel::instance()->vanRepetitie($repetitie, $beginDatum, $mid);
-			$this->view = new TaakForm($taak, 'nieuw'); // fetches POST values itself
+			$this->view = new TaakForm($taak, 'opslaan/0'); // fetches POST values itself
 		} else {
 			$taak = new CorveeTaak();
 			if (isset($beginDatum)) {
 				$taak->datum = $beginDatum;
 			}
 			$taak->maaltijd_id = $mid;
-			$this->view = new TaakForm($taak, 'nieuw'); // fetches POST values itself
+			$this->view = new TaakForm($taak, 'opslaan/0'); // fetches POST values itself
 		}
 	}
 
@@ -145,6 +145,7 @@ class BeheerTakenController extends AclController {
 			$this->nieuw();
 		}
 		if ($this->view->validate()) {
+			/** @var CorveeTaak $values */
 			$values = $this->view->getModel();
 			if ($values->taak_id == null) {
 				$this->model->create($values);
@@ -154,10 +155,10 @@ class BeheerTakenController extends AclController {
 					$this->model->update($values);
 				}
 			}
-			$taak = $this->model->saveTaak($tid, (int) $values['functie_id'], $values['uid'], $values['crv_repetitie_id'], $values['maaltijd_id'], $values['datum'], $values['punten'], $values['bonus_malus']);
+			$taak = $this->model->saveTaak((int) $tid, (int) $values->functie_id, $values->uid, $values->crv_repetitie_id, $values->maaltijd_id, $values->datum, $values->punten, $values->bonus_malus);
 			$maaltijd = null;
-			if (endsWith($_SERVER['HTTP_REFERER'], maalcieUrl . '/maaltijd/' . $values['maaltijd_id'])) { // state of gui
-				$maaltijd = MaaltijdenModel::instance()->getMaaltijd($values['maaltijd_id']);
+			if (endsWith($_SERVER['HTTP_REFERER'], maalcieUrl . '/maaltijd/' . $values->maaltijd_id)) { // state of gui
+				$maaltijd = MaaltijdenModel::instance()->getMaaltijd($values->maaltijd_id);
 			}
 			$this->view = new BeheerTaakView($taak, $maaltijd);
 		}
