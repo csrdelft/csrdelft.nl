@@ -135,7 +135,7 @@ class BeheerTakenController extends AclController {
 
 	public function bewerk($tid) {
 		$taak = $this->model->getTaak($tid);
-		$this->view = new TaakForm($taak, 'bewerk/' . $tid); // fetches POST values itself
+		$this->view = new TaakForm($taak, 'opslaan/' . $tid); // fetches POST values itself
 	}
 
 	public function opslaan($tid) {
