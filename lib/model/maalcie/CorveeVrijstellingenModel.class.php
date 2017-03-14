@@ -1,6 +1,9 @@
 <?php
 
 
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\PersistenceModel;
+
 require_once 'model/entity/maalcie/CorveeVrijstelling.class.php';
 
 /**
@@ -49,7 +52,7 @@ class CorveeVrijstellingenModel extends PersistenceModel {
 	}
 	
 	public function saveVrijstelling($uid, $begin, $eind, $percentage) {
-		$db = \Database::instance();
+		$db = Database::instance();
 		try {
 			$db->beginTransaction();
 			$vrijstelling = $this->getVrijstelling($uid);

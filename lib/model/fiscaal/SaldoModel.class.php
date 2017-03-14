@@ -1,5 +1,9 @@
 <?php
 
+use CsrDelft\Orm\Persistence\OrmMemcache;
+use CsrDelft\Orm\DynamicEntityModel;
+use CsrDelft\Orm\PersistenceModel;
+
 class SaldoModel extends PersistenceModel {
     const ORM = 'Saldo';
     const DIR = 'fiscaal/';
@@ -147,7 +151,7 @@ class SaldoModel extends PersistenceModel {
                     $row++;
                 }
             }
-            CsrMemcache::instance()->flush();
+            OrmMemcache::instance()->flush();
             if ($bCorrect === true) {
                 setMelding('Er zijn ' . $row . ' regels ingevoerd. Als dit er minder zijn dan u verwacht zitten er ongeldige regels in uw bestand.', 0);
             } else {

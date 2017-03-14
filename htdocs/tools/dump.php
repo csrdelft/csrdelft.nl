@@ -1,12 +1,12 @@
 <?php
 
+use CsrDelft\Orm\Persistence\DatabaseAdmin;
+
 require_once 'configuratie.include.php';
 
 if (!LoginModel::mag('P_ADMIN')) {
 	redirect(CSR_ROOT);
 }
-
-require_once 'model/framework/DatabaseAdmin.singleton.php';
 
 $tables = array();
 $results = DatabaseAdmin::instance()->sqlShowTables();
@@ -20,7 +20,13 @@ $form->addFields($fields);
 $form->titel = 'Dump database table';
 
 if ($form->validate()) {
-	DatabaseAdmin::instance()->sqlBackupTable($fields['tabel']->getValue());
+	$name = $fields['tabel']->getValue();
+	$filename = 'backup-' . $name . '_' . date('d-m-Y_H-i-s') . '.sql.gz';
+	header('Content-Type: application/x-gzip');
+	header('Content-Disposition: attachment; filename="' . $filename . '"');
+	$cred = parse_ini_file(ETC_PATH . 'mysql.ini');
+	$cmd = 'mysqldump --user=' . $cred['user'] . ' --password=' . $cred['pass'] . ' --host=' . $cred['host'] . ' ' . $cred['db'] . ' ' . $name . ' | gzip --best';
+	passthru($cmd);
 } else {
 	$pagina = new CsrLayoutPage($form);
 	$pagina->view();

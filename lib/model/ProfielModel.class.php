@@ -1,5 +1,9 @@
 <?php
 
+use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\Entity\PersistentEntity;
+
 require_once 'model/entity/Mail.class.php';
 
 /**
@@ -50,11 +54,11 @@ class ProfielModel extends CachedPersistenceModel {
 	}
 
 	public static function existsNick($nick) {
-		return Database::sqlExists(static::instance()->getTableName(), 'nickname = ?', array($nick));
+		return Database::instance()->sqlExists(static::instance()->getTableName(), 'nickname = ?', array($nick));
 	}
 
 	public static function existsDuck($duck) {
-		return Database::sqlExists(static::instance()->getTableName(), 'duckname = ?', array($duck));
+		return Database::instance()->sqlExists(static::instance()->getTableName(), 'duckname = ?', array($duck));
 	}
 
 	public function nieuw($lidjaar, $lidstatus) {
@@ -69,7 +73,7 @@ class ProfielModel extends CachedPersistenceModel {
 	public function create(PersistentEntity $profiel) {
 		// Lichting zijn de laatste 2 cijfers van lidjaar
 		$jj = substr($profiel->lidjaar, 2, 2);
-		$laatste_uid = Database::sqlSelect(array('MAX(uid)'), $this->getTableName(), 'LEFT(uid, 2) = ?', array($jj), null, null, 1)->fetchColumn();
+		$laatste_uid = Database::instance()->sqlSelect(array('MAX(uid)'), $this->getTableName(), 'LEFT(uid, 2) = ?', array($jj), null, null, 1)->fetchColumn();
 		if ($laatste_uid) {
 			// Volgnummer zijn de laatste 2 cijfers van uid
 			$volgnummer = intval(substr($laatste_uid, 2, 2)) + 1;

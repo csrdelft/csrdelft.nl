@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\Orm\Entity\PersistentEntity;
+
 require_once 'model/entity/Map.class.php';
 
 /**

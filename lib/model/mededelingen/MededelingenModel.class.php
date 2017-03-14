@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\Orm\PersistenceModel;
+
 require_once 'model/mededelingen/MededelingCategorieenModel.class.php';
 
 /**

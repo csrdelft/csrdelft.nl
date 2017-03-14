@@ -1,11 +1,14 @@
 <?php
 
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\PersistenceModel;
+
 require_once 'model/entity/maalcie/CorveeVoorkeur.class.php';
 require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
 
 /**
  * CorveeVoorkeurenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
+ *
  */
 class CorveeVoorkeurenModel extends PersistenceModel {
 	const ORM = "CorveeVoorkeur";
@@ -29,9 +32,9 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	 * de voorkeuren die het lid nog kan inschakelen.
 	 * Dat laatste kan alleen voor het ingelogde lid.
 	 * Voor elk ander lid worden de permissies niet gefilterd.
-	 * 
+	 *
 	 * @param string $uid
-	 * @param boolean $uitgeschakeld 
+	 * @param boolean $uitgeschakeld
 	 * @return CorveeVoorkeur[]
 	 */
 	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false) {
@@ -79,7 +82,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 
 	/**
 	 * Bouwt matrix voor alle repetities en voorkeuren van alle leden
-	 * 
+	 *
 	 * @return CorveeVoorkeur[uid][crid]
 	 */
 	public function getVoorkeurenMatrix() {
@@ -111,7 +114,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		$sql.= ' FROM profielen AS lid, crv_repetities AS r';
 		$sql.= ' WHERE r.voorkeurbaar = true AND lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")'; // alleen leden
 		$sql.= ' ORDER BY lid.achternaam, lid.voornaam ASC';
-		$db = \Database::instance();
+		$db = Database::instance();
 		$values = array();
 		$query = $db->prepare($sql);
 		$query->execute($values);
@@ -159,7 +162,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	/**
 	 * Called when a CorveeRepetitie is being deleted.
 	 * This is only possible after all CorveeVoorkeuren are deleted of this CorveeRepetitie (db foreign key)
-	 * 
+	 *
 	 * @return int amount of deleted voorkeuren
 	 */
 	public function verwijderVoorkeuren($crid) {
@@ -174,7 +177,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 
 	/**
 	 * Called when a Lid is being made Lid-af.
-	 * 
+	 *
 	 * @return int amount of deleted voorkeuren
 	 */
 	public function verwijderVoorkeurenVoorLid($uid) {

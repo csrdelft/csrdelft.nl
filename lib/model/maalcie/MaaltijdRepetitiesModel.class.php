@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\Orm\PersistenceModel;
+
 require_once 'model/entity/maalcie/MaaltijdRepetitie.class.php';
 require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
 require_once 'model/maalcie/CorveeRepetitiesModel.class.php';

@@ -1,4 +1,5 @@
 <?php
+use CsrDelft\Orm\PersistenceModel;
 
 /**
  * GesprekkenModel.class.php

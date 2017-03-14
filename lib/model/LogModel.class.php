@@ -1,4 +1,6 @@
 <?php
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\PersistenceModel;
 
 /**
  * LogModel.class.php
@@ -14,7 +16,7 @@ class LogModel extends PersistenceModel {
 
     public function opschonen() {
         // Gebruik directe delete, dit is veel sneller
-        Database::sqlDelete($this->getTableName(), 'moment < ?', array(date('Y-m-d H:i:s', strtotime('-2 months'))));
+        Database::instance()->sqlDelete($this->getTableName(), 'moment < ?', array(date('Y-m-d H:i:s', strtotime('-2 months'))));
     }
 
     public function log() {

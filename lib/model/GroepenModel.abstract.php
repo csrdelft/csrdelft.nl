@@ -1,5 +1,10 @@
 <?php
 
+use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\DynamicEntityModel;
+use CsrDelft\Orm\Entity\PersistentEntity;
+
 require_once 'model/entity/groepen/Groep.abstract.php';
 require_once 'model/GroepLedenModel.abstract.php';
 
@@ -213,7 +218,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	public function getGroepenVoorLid($uid, $status = null) {
 		$orm = static::ORM;
 		$leden = $orm::leden;
-		$ids = Database::sqlSelect(array('DISTINCT groep_id'), $leden::instance()->getTableName(), 'uid = ?', array($uid))->fetchAll(PDO::FETCH_COLUMN);
+		$ids = Database::instance()->sqlSelect(array('DISTINCT groep_id'), $leden::instance()->getTableName(), 'uid = ?', array($uid))->fetchAll(PDO::FETCH_COLUMN);
 		if (empty($ids)) {
 			return array();
 		}
@@ -321,11 +326,11 @@ class LichtingenModel extends AbstractGroepenModel {
 	}
 
 	public static function getJongsteLidjaar() {
-		return (int) Database::sqlSelect(array('MAX(lidjaar)'), ProfielModel::instance()->getTableName())->fetchColumn();
+		return (int) Database::instance()->sqlSelect(array('MAX(lidjaar)'), ProfielModel::instance()->getTableName())->fetchColumn();
 	}
 
 	public static function getOudsteLidjaar() {
-		return (int) Database::sqlSelect(array('MIN(lidjaar)'), ProfielModel::instance()->getTableName(), 'lidjaar > 0')->fetchColumn();
+		return (int) Database::instance()->sqlSelect(array('MIN(lidjaar)'), ProfielModel::instance()->getTableName(), 'lidjaar > 0')->fetchColumn();
 	}
 
 }

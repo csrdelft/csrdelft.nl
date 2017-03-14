@@ -1,5 +1,8 @@
 <?php
 
+use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\Orm\Persistence\Database;
+
 require_once 'model/entity/security/AccessRole.enum.php';
 require_once 'model/entity/security/AccessAction.enum.php';
 require_once 'model/security/LoginModel.class.php';
@@ -118,6 +121,7 @@ class AccessModel extends CachedPersistenceModel {
 	private $permissions = array();
 
 	protected function __construct() {
+		parent::__construct();
 		$this->loadPermissions();
 	}
 
@@ -640,7 +644,7 @@ class AccessModel extends CachedPersistenceModel {
 							$g = CommissiesModel::instance()->getTableName();
 							break;
 					}
-					return Database::sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie = ? AND l.uid = ?', array($role, $gevraagd, $profiel->uid));
+					return Database::instance()->sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie = ? AND l.uid = ?', array($role, $gevraagd, $profiel->uid));
 				}
 			// fall through
 

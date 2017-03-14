@@ -1,4 +1,5 @@
 <?php
+use CsrDelft\Orm\CachedPersistenceModel;
 
 /**
  * InstellingenModel.class.php

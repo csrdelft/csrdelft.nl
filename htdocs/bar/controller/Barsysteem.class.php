@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/framework/Database.singleton.php';
+use CsrDelft\Orm\Persistence\Database;
 
 class Barsysteem
 {

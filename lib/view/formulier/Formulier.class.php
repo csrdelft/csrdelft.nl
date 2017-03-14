@@ -1,5 +1,8 @@
 <?php
 
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
+
 require_once 'view/View.interface.php';
 require_once 'view/Validator.interface.php';
 require_once 'view/formulier/FormElement.abstract.php';

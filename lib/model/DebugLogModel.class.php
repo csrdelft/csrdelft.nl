@@ -1,4 +1,6 @@
 <?php
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\PersistenceModel;
 
 /**
  * DebugLogModel.class.php
