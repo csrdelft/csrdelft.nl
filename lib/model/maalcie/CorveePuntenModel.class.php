@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\Orm\Persistence\Database;
+
 require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
 require_once 'model/maalcie/CorveeTakenModel.class.php';
 
@@ -94,7 +96,7 @@ class CorveePuntenModel {
 		if (is_int($limit) && $limit > 0) {
 			$sql.= ' LIMIT ' . $limit;
 		}
-		$db = \Database::instance();
+		$db = Database::instance();
 		$query = $db->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll();

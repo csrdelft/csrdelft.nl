@@ -1,4 +1,6 @@
 <?php
+use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\Orm\Persistence\Database;
 
 /**
  * AccountModel.class.php
@@ -31,7 +33,7 @@ class AccountModel extends CachedPersistenceModel {
 	}
 
 	public static function existsUsername($name) {
-		return Database::sqlExists(static::instance()->getTableName(), 'username = ?', array($name));
+		return Database::instance()->sqlExists(static::instance()->getTableName(), 'username = ?', array($name));
 	}
 
 	public function maakAccount($uid) {

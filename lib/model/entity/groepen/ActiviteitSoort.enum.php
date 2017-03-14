@@ -1,4 +1,5 @@
 <?php
+use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
  * ActiviteitSoort.enum.php

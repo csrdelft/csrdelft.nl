@@ -4,6 +4,8 @@
 # -------------------------------------------------------------------
 # common.functions.php
 # -------------------------------------------------------------------
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\Persistence\DatabaseAdmin;
 
 /**
  * PDO does a stringcast (false = '') and MySql uses tinyint for booleans so expects 0/1
@@ -82,7 +84,7 @@ function group_by($prop, $in, $del = true) {
 
 /**
  * Group by distinct object property
- * 
+ *
  * @param string $prop
  * @param array $in
  * @param boolean $del delete from $in array
@@ -584,11 +586,10 @@ function getDebug($get = true, $post = true, $files = true, $cookie = true, $ses
 		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SERVER, true));
 	}
 	if ($sql) {
-		require_once 'model/framework/DatabaseAdmin.singleton.php';
-		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::getQueries(), "PDO" => Database::getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
+		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::instance()->getQueries(), "PDO" => Database::instance()->getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
 	}
 	if ($sqltrace) {
-		$debug .= '<hr />SQL-backtrace<hr />' . htmlspecialchars(print_r(Database::getTrace(), true));
+		$debug .= '<hr />SQL-backtrace<hr />' . htmlspecialchars(print_r(Database::instance()->getTrace(), true));
 	}
 	return $debug;
 }

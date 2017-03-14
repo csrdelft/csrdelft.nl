@@ -1,4 +1,5 @@
 <?php
+use CsrDelft\Orm\PersistenceModel;
 
 /**
  * OneTimeTokensModel.class.php

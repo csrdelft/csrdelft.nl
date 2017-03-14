@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\Orm\PersistenceModel;
+
 require_once 'model/entity/maalcie/Maaltijd.class.php';
 require_once 'model/entity/maalcie/ArchiefMaaltijd.class.php';
 require_once 'model/maalcie/ArchiefMaaltijdModel.class.php';

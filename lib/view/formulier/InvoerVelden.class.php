@@ -30,6 +30,8 @@
  * @see KeuzeVelden.class.php
  * 
  */
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\PersistenceModel;
 
 /**
  * InputField is de base class van alle FormElements die data leveren,

@@ -1,4 +1,6 @@
 <?php
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\PersistenceModel;
 
 /**
  * ChangeLogModel.class.php

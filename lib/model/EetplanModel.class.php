@@ -1,5 +1,8 @@
 <?php
 
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\PersistenceModel;
+
 require_once 'model/entity/Eetplan.class.php';
 require_once 'model/entity/EetplanBekenden.class.php';
 require_once 'model/EetplanFactory.class.php';

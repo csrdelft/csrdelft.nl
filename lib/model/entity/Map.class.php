@@ -1,4 +1,5 @@
 <?php
+use CsrDelft\Orm\Entity\PersistentEntity;
 
 /**
  * Map.class.php

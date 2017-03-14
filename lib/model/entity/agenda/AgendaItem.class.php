@@ -1,4 +1,6 @@
 <?php
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * AgendaItem.class.php
@@ -124,5 +126,4 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 		}
 		return false;
 	}
-
 }

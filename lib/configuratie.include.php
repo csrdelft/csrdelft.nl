@@ -15,6 +15,9 @@
 //header('location: https://csrdelft.nl/onderhoud.html');
 //exit;
 
+// Composer autoload
+require __DIR__ . '/../vendor/autoload.php';
+
 register_shutdown_function('fatal_handler');
 
 function fatal_handler(Exception $ex = null) {
@@ -78,9 +81,6 @@ if (php_sapi_name() === 'cli') {
 	define('MODE', 'WEB');
 }
 
-// Composer autoload
-require __DIR__ . '/../vendor/autoload.php';
-
 // Defines
 require_once 'defines.include.php';
 require_once 'common.functions.php';
@@ -121,8 +121,6 @@ if (FORCE_HTTPS) {
 
 // Model
 require_once 'MijnSqli.class.php'; // DEPRECATED
-require_once 'model/framework/DynamicEntityModel.class.php';
-require_once 'model/framework/CachedPersistenceModel.abstract.php';
 require_once 'model/DebugLogModel.class.php';
 require_once 'model/TimerModel.class.php';
 require_once 'model/entity/agenda/Agendeerbaar.interface.php';
@@ -142,6 +140,21 @@ require_once 'icon.class.php';
 
 // Controller
 require_once 'controller/framework/AclController.abstract.php';
+
+$cred = parse_ini_file(ETC_PATH . 'mysql.ini');
+if ($cred === false) {
+	$cred = array(
+		'host'	 => 'localhost',
+		'user'	 => 'admin',
+		'pass'	 => 'password',
+		'db'	 => 'csrdelft'
+	);
+}
+
+CsrDelft\Orm\Configuration::load(array(
+	'cache_path' => DATA_PATH,
+	'db' => $cred
+));
 
 // Router
 switch (constant('MODE')) {

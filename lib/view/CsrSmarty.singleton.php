@@ -1,4 +1,5 @@
 <?php
+use CsrDelft\Orm\Persistence\Database;
 
 /**
  * CsrSmarty.singleton.php

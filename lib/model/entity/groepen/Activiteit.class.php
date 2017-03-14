@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\Orm\Entity\T;
+
 require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
 require_once 'model/entity/groepen/Ketzer.class.php';
 

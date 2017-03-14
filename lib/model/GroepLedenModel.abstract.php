@@ -1,4 +1,6 @@
 <?php
+use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\Orm\Persistence\Database;
 
 /**
  * GroepLedenModel.abstract.php

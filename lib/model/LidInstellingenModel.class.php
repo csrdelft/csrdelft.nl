@@ -1,5 +1,8 @@
 <?php
 
+use CsrDelft\Orm\Entity\T;
+use CsrDelft\Orm\Persistence\Database;
+
 require_once 'model/InstellingenModel.class.php';
 
 /**
@@ -204,12 +207,12 @@ class LidInstellingen extends Instellingen {
 				$properties[] = array($module, $id, $waarde, LoginModel::getUid());
 			}
 		}
-		Database::sqlInsertMultiple($this->getTableName(), $properties, true);
+		Database::instance()->sqlInsertMultiple($this->getTableName(), $properties, true);
 		$this->flushCache(true);
 	}
 
 	public function resetForAll($module, $id) {
-		Database::sqlDelete($this->getTableName(), 'module = ? AND instelling_id = ?', array($module, $id));
+		Database::instance()->sqlDelete($this->getTableName(), 'module = ? AND instelling_id = ?', array($module, $id));
 		$this->flushCache(true);
 	}
 

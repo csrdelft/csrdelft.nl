@@ -1,4 +1,5 @@
 <?php
+use CsrDelft\Orm\Entity\T;
 
 /**
  * Lichting.class.php

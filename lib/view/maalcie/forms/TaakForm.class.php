@@ -33,12 +33,13 @@ class TaakForm extends ModalForm {
 		}
 
 		$fields['fid'] = new SelectField('functie_id', $taak->functie_id, 'Functie', $functieNamen);
-		$fields['fid']->onchange = $functiePunten . "$('#field_punten').val(punten[this.value]);";
+		$fields['fid']->onchange = $functiePunten . "$('.punten_field').val(punten[this.value]);";
 		$fields['lid'] = new LidField('uid', $taak->uid, 'Naam of lidnummer');
 		$fields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
 		$fields[] = new DateField('datum', $taak->datum, 'Datum', date('Y') + 2, date('Y') - 2);
-		$fields[] = new IntField('punten', $taak->punten, 'Punten', 0, 10);
-		$fields[] = new IntField('bonus_malus', $taak->bonus_malus, 'Bonus/malus', -10, 10);
+		$fields['ptn'] = new RequiredIntField('punten', $taak->punten, 'Punten', 0, 10);
+		$fields['ptn']->css_classes[] = 'punten_field';
+		$fields[] = new RequiredIntField('bonus_malus', $taak->bonus_malus, 'Bonus/malus', -10, 10);
 		$fields['crid'] = new IntField('crv_repetitie_id', $taak->crv_repetitie_id, null);
 		$fields['crid']->readonly = true;
 		$fields['crid']->hidden = true;

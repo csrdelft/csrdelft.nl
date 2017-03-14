@@ -1,5 +1,4 @@
 <?php
-
 /**
  * index.php
  * 
@@ -7,6 +6,8 @@
  * 
  * Entry point voor stek modules.
  */
+use CsrDelft\Orm\Persistence\DatabaseAdmin;
+
 try {
 	require_once 'configuratie.include.php';
 
@@ -42,7 +43,7 @@ try {
 
 	if (DB_CHECK AND LoginModel::mag('P_ADMIN')) {
 
-		$queries = DatabaseAdmin::getQueries();
+		$queries = DatabaseAdmin::instance()->getQueries();
 		if (!empty($queries)) {
 			if (DB_MODIFY) {
 				header('Content-Type: text/x-sql');

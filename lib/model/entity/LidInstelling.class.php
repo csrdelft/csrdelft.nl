@@ -1,4 +1,5 @@
 <?php
+use CsrDelft\Orm\Entity\T;
 
 /**
  * LidInstelling.class.php
