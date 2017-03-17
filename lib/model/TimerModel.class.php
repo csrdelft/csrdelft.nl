@@ -9,7 +9,7 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class TimerModel extends PersistenceModel {
 
-	const ORM = 'ExecutionTime';
+	const ORM = ExecutionTime::class;
 
 	protected static $instance;
 	/**

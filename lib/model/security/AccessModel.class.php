@@ -21,7 +21,7 @@ require_once 'model/GroepenModel.abstract.php';
  */
 class AccessModel extends CachedPersistenceModel {
 
-	const ORM = 'AccessControl';
+	const ORM = AccessControl::class;
 	const DIR = 'security/';
 
 	protected static $instance;

@@ -9,7 +9,7 @@ use CsrDelft\Orm\CachedPersistenceModel;
  */
 class Instellingen extends CachedPersistenceModel {
 
-	const ORM = 'Instelling';
+	const ORM = Instelling::class;
 
 	protected static $instance;
 	/**

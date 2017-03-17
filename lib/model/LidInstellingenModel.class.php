@@ -15,7 +15,7 @@ require_once 'model/InstellingenModel.class.php';
  */
 class LidInstellingen extends Instellingen {
 
-	const ORM = 'LidInstelling';
+	const ORM = LidInstelling::class;
 
 	protected static $instance;
 	/**

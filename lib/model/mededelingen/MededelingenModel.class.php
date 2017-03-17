@@ -13,7 +13,7 @@ require_once 'model/mededelingen/MededelingCategorieenModel.class.php';
  */
 class MededelingenModel extends PersistenceModel {
 
-	const ORM = 'Mededeling';
+	const ORM = Mededeling::class;
 	const DIR = 'mededelingen/';
 	const defaultPrioriteit = 255;
 

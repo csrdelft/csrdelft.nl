@@ -10,7 +10,7 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class LogModel extends PersistenceModel {
 
-    const ORM = 'LogEntry';
+    const ORM = LogEntry::class;
 
     protected static $instance;
 

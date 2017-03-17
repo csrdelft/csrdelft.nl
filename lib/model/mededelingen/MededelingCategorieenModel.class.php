@@ -10,7 +10,7 @@ use CsrDelft\Orm\CachedPersistenceModel;
  */
 class MededelingCategorieenModel extends CachedPersistenceModel {
 
-	const ORM = 'MededelingCategorie';
+	const ORM = MededelingCategorie::class;
 	const DIR = 'mededelingen/';
 
 	protected static $instance;

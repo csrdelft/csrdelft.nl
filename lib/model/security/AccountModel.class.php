@@ -12,7 +12,7 @@ use CsrDelft\Orm\Persistence\Database;
  */
 class AccountModel extends CachedPersistenceModel {
 
-	const ORM = 'Account';
+	const ORM = Account::class;
 	const DIR = 'security/';
 
 	protected static $instance;

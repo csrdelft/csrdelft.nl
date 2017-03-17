@@ -10,7 +10,7 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class FotoAlbumModel extends PersistenceModel {
 
-	const ORM = 'FotoAlbum';
+	const ORM = FotoAlbum::class;
 	const DIR = 'fotoalbum/';
 
 	protected static $instance;
@@ -244,7 +244,7 @@ HTML;
 
 class FotoModel extends PersistenceModel {
 
-	const ORM = 'Foto';
+	const ORM = Foto::class;
 	const DIR = 'fotoalbum/';
 
 	protected static $instance;
@@ -313,7 +313,7 @@ class FotoModel extends PersistenceModel {
 
 class FotoTagsModel extends PersistenceModel {
 
-	const ORM = 'FotoTag';
+	const ORM = FotoTag::class;
 	const DIR = 'fotoalbum/';
 
 	protected static $instance;

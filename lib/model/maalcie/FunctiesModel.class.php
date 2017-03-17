@@ -12,7 +12,7 @@ require_once 'model/maalcie/KwalificatiesModel.class.php';
  */
 class FunctiesModel extends CachedPersistenceModel {
 
-	const ORM = 'CorveeFunctie';
+	const ORM = CorveeFunctie::class;
 	const DIR = 'maalcie/';
 
 	protected static $instance;

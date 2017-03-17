@@ -9,7 +9,7 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class RememberLoginModel extends PersistenceModel {
 
-	const ORM = 'RememberLogin';
+	const ORM = RememberLogin::class;
 	const DIR = 'security/';
 
 	protected static $instance;

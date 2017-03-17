@@ -11,7 +11,7 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class CmsPaginaModel extends PersistenceModel {
 
-	const ORM = 'CmsPagina';
+	const ORM = CmsPagina::class;
 
 	protected static $instance;
 

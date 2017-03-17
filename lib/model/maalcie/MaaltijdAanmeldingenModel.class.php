@@ -12,7 +12,7 @@ require_once 'model/maalcie/MaaltijdenModel.class.php';
  */
 class MaaltijdAanmeldingenModel extends PersistenceModel  {
 
-    const ORM = 'MaaltijdAanmelding';
+    const ORM = MaaltijdAanmelding::class;
     const DIR = 'maalcie/';
 
     protected static $instance;

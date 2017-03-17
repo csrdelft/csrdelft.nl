@@ -13,7 +13,7 @@ require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
  */
 class MaaltijdAbonnementenModel extends PersistenceModel {
 
-    const ORM = 'MaaltijdAbonnement';
+    const ORM = MaaltijdAbonnement::class;
     const DIR = 'maalcie/';
 
     protected static $instance;

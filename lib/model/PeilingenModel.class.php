@@ -18,7 +18,7 @@ require_once 'model/entity/peilingen/PeilingStem.class.php';
  */
 class PeilingenModel extends PersistenceModel {
 
-	const ORM = 'Peiling';
+	const ORM = Peiling::class;
 	const DIR = 'peilingen/';
 
 	protected static $instance;
@@ -109,7 +109,7 @@ class PeilingenModel extends PersistenceModel {
 
 class PeilingOptiesModel extends PersistenceModel {
 
-	const ORM = 'PeilingOptie';
+	const ORM = PeilingOptie::class;
 	const DIR = 'peilingen/';
 
 	protected static $instance;
@@ -118,7 +118,7 @@ class PeilingOptiesModel extends PersistenceModel {
 
 class PeilingStemmenModel extends PersistenceModel {
 
-	const ORM = 'PeilingStem';
+	const ORM = PeilingStem::class;
 	const DIR = 'peilingen/';
 
 	protected static $instance;

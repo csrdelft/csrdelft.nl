@@ -5,7 +5,7 @@ use CsrDelft\Orm\DynamicEntityModel;
 use CsrDelft\Orm\PersistenceModel;
 
 class SaldoModel extends PersistenceModel {
-    const ORM = 'Saldo';
+    const ORM = Saldo::class;
     const DIR = 'fiscaal/';
 
     protected static $instance;

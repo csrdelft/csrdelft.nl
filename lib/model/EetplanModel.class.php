@@ -18,7 +18,7 @@ require_once 'model/EetplanFactory.class.php';
 class EetplanModel extends PersistenceModel {
     protected static $instance;
 
-    const ORM = 'Eetplan';
+    const ORM = Eetplan::class;
 
     public function getEetplanVoorAvond($avond) {
         return $this->find('avond = ?', array($avond));
