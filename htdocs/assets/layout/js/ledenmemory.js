@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
 
-	$.backstretch('/assets/layout2/plaetjes/bg-image-16.jpg');
+	$.backstretch('/assets/layout/plaetjes/memory/bg-image-16.jpg');
 
 	var first = true;
 	var delayed = false;
