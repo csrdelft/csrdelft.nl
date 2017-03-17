@@ -10,7 +10,7 @@ class Barsysteem
 
     function Barsysteem()
     {
-        $this->db = Database::instance();
+        $this->db = Database::instance()->getDatabase();
     }
 
     function isLoggedIn()
