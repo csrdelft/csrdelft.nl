@@ -600,17 +600,20 @@ class ForumController extends Controller {
 			redirect($url);
 		}
 
-		// concept opslaan
-		if ($nieuw) {
-			ForumDradenReagerenModel::instance()->setConcept($deel, null, $tekst, $titel);
-		} else {
-			ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id, $tekst);
-		}
+		if (LoginModel::mag('P_LOGGED_IN')) {
+			// concept opslaan
+			if ($nieuw) {
+				ForumDradenReagerenModel::instance()->setConcept($deel, null, $tekst, $titel);
+			}
+			else {
+				ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id, $tekst);
+			}
 
+			$mailadres = null;
+			$wacht_goedkeuring = false;
+		}
 		// externen checks
-		$mailadres = null;
-		$wacht_goedkeuring = false;
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+		else {
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
