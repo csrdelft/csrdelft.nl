@@ -63,7 +63,6 @@ Probeer om ten minste deze te verkrijgen.
 * /htdocs/plaetjes/famfamfam/
 * /htdocs/plaetjes/pasfoto/geen-foto.jpg
 * /htdocs/pleatjes/layout/
-* /htdocs/pleatjes/layout2/
 
 ### Docker
 

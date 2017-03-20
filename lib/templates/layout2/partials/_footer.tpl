@@ -1,4 +1,0 @@
-{printDebug()}
-</body>
-
-</html>
