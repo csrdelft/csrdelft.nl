@@ -44,7 +44,7 @@ class CorveeTakenModel extends PersistenceModel {
 	}
 
 	public function puntenToekennen(CorveeTaak $taak) {
-		$db = Database::instance();
+		$db = Database::instance()->getDatabase();
 		try {
 			$db->beginTransaction();
 			CorveePuntenModel::puntenToekennen($taak->uid, $taak->punten, $taak->bonus_malus);
@@ -60,7 +60,7 @@ class CorveeTakenModel extends PersistenceModel {
 	}
 
 	public function puntenIntrekken(CorveeTaak $taak) {
-		$db = Database::instance();
+		$db = Database::instance()->getDatabase();
 		try {
 			$db->beginTransaction();
 			CorveePuntenModel::puntenIntrekken($taak->uid, $taak->punten, $taak->bonus_malus);
@@ -177,7 +177,7 @@ class CorveeTakenModel extends PersistenceModel {
 	}
 
 	public function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
-		$db = Database::instance();
+		$db = Database::instance()->getDatabase();
 		try {
 			$db->beginTransaction();
 			if ($tid === 0) {
@@ -354,7 +354,7 @@ class CorveeTakenModel extends PersistenceModel {
 		if ($repetitie->periode_in_dagen < 1) {
 			throw new Exception('New repetitie-taken faalt: $periode =' . $repetitie->periode_in_dagen);
 		}
-		$db = Database::instance();
+		$db = Database::instance()->getDatabase();
 		try {
 			$db->beginTransaction();
 			$taken = $this->newRepetitieTaken($repetitie, strtotime($beginDatum), strtotime($eindDatum), $mid);
@@ -411,7 +411,7 @@ class CorveeTakenModel extends PersistenceModel {
 	}
 
 	public function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats) {
-		$db = Database::instance();
+		$db = Database::instance()->getDatabase();
 		try {
 			$db->beginTransaction();
 			$taken = $this->find('verwijderd = false AND crv_repetitie_id = ?', array($repetitie->crv_repetitie_id)); /** @var CorveeTaak $taak */
