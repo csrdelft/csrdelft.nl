@@ -258,6 +258,7 @@ class CorveeTakenModel extends PersistenceModel {
 		$taak->maaltijd_id = $mid;
 		$taak->datum = $datum;
 		$taak->bonus_malus = $bonus_malus;
+		$taak->punten = $repetitie->standaard_punten;
 		$taak->punten_toegekend = 0;
 		$taak->bonus_toegekend = 0;
 		$taak->wanneer_toegekend = null;
@@ -377,7 +378,7 @@ class CorveeTakenModel extends PersistenceModel {
 		$taken = array();
 		while ($datum <= $eindDatum) { // break after one
 			for ($i = $repetitie->standaard_aantal; $i > 0; $i--) {
-				$taak = $this->vanRepetitie($repetitie, date('Y-m-d', $datum), null, null, 0);
+				$taak = $this->vanRepetitie($repetitie, date('Y-m-d', $datum), $mid, null, 0);
 				$this->create($taak);
 				$taken[] = $taak;
 			}
