@@ -1,5 +1,8 @@
 <?php
 
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
+
 class MaalciePrijs extends PersistentEntity {
 	public $van;
 	public $tot;

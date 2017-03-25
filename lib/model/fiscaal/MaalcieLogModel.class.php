@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\Orm\PersistenceModel;
+
 require_once 'model/entity/fiscaal/MaalcieLog.class.php';
 
 class MaalcieLogModel extends PersistenceModel {

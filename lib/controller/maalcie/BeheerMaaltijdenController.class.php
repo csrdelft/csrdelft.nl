@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\Orm\Persistence\Database;
+
 require_once 'model/maalcie/MaaltijdenModel.class.php';
 require_once 'model/maalcie/ArchiefMaaltijdModel.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';

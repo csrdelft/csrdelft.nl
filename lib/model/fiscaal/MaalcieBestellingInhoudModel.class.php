@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\Orm\PersistenceModel;
+
 require_once 'model/entity/fiscaal/MaalcieBestellingInhoud.class.php';
 
 class MaalcieBestellingInhoudModel extends PersistenceModel {

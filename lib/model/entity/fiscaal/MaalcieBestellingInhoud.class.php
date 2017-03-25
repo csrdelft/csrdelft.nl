@@ -1,5 +1,8 @@
 <?php
 
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
+
 class MaalcieBestellingInhoud extends PersistentEntity {
 	public $bestellingid;
 	public $productid;
