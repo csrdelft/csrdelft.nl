@@ -102,7 +102,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
         $values = array();
         $sql.= ' WHERE lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")';
         $sql.= ' ORDER BY lid.achternaam, lid.voornaam ASC';
-        $db = Database::instance();
+        $db = Database::instance()->getDatabase();
         $query = $db->prepare($sql);
         $query->execute($values);
 
@@ -143,7 +143,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
         $sql.= ' FROM profielen AS lid, mlt_repetities AS r';
         $sql.= ' HAVING abo = true';
         $sql.= ' ORDER BY lid.achternaam, lid.voornaam ASC';
-        $db = Database::instance();
+        $db = Database::instance()->getDatabase();
         $query = $db->prepare($sql);
         $query->execute();
         $abos = $query->fetchAll();
