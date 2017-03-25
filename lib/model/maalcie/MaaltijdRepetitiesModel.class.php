@@ -1,5 +1,6 @@
 <?php
 
+use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
 require_once 'model/entity/maalcie/MaaltijdRepetitie.class.php';
@@ -101,16 +102,18 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
      * @return array
      */
 	public function saveRepetitie($repetitie) {
-        $abos = 0;
-        if ($repetitie->mlt_repetitie_id === 0) {
-            $repetitie->mlt_repetitie_id = $this->create($repetitie);
-        } else {
-            $this->update($repetitie);
-            if (!$repetitie->abonneerbaar) { // niet (meer) abonneerbaar
-                $abos = MaaltijdAbonnementenModel::instance()->verwijderAbonnementen($repetitie->mlt_repetitie_id);
-            }
-        }
-        return $abos;
+		return Database::transaction(function () use ($repetitie) {
+			$abos = 0;
+			if ($repetitie->mlt_repetitie_id === 0) {
+				$repetitie->mlt_repetitie_id = $this->create($repetitie);
+			} else {
+				$this->update($repetitie);
+				if (!$repetitie->abonneerbaar) { // niet (meer) abonneerbaar
+					$abos = MaaltijdAbonnementenModel::instance()->verwijderAbonnementen($repetitie->mlt_repetitie_id);
+				}
+			}
+			return $abos;
+		});
 	}
 
 	public function verwijderRepetitie($mrid) {

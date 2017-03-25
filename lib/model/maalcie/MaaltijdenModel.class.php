@@ -1,5 +1,6 @@
 <?php
 
+use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
 require_once 'model/entity/maalcie/Maaltijd.class.php';
@@ -296,46 +297,46 @@ class MaaltijdenModel extends PersistenceModel {
 	}
 
 	public function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $verplaats) {
-        // update day of the week & check filter
-        $updated = 0;
-        $aanmeldingen = 0;
-        $maaltijden = $this->find('verwijderd = FALSE AND mlt_repetitie_id = ?', array($repetitie->mlt_repetitie_id));
-        $filter = $repetitie->abonnement_filter;
-        if (!empty($filter)) {
-            $aanmeldingen = MaaltijdAanmeldingenModel::instance()->checkAanmeldingenFilter($filter, $maaltijden);
-        }
-        foreach ($maaltijden as $maaltijd) {
-            if ($verplaats) {
-                $datum = strtotime($maaltijd->datum);
-                $shift = $repetitie->dag_vd_week - date('w', $datum);
-                if ($shift > 0) {
-                    $datum = strtotime('+' . $shift . ' days', $datum);
-                } elseif ($shift < 0) {
-                    $datum = strtotime($shift . ' days', $datum);
-                }
-                $maaltijd->datum = date('Y-m-d', $datum);
-            }
-            $maaltijd->titel = $repetitie->standaard_titel;
-            $maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
-            $repetitie->standaard_tijd = $maaltijd->tijd;
-            $maaltijd->prijs = $repetitie->standaard_prijs;
-            $maaltijd->aanmeld_filter = $filter;
-            try {
-                $this->update($maaltijd);
-                $updated++;
-            } catch (\Exception $e) {
+		return Database::transaction(function () use ($repetitie, $verplaats) {
+			// update day of the week & check filter
+			$updated = 0;
+			$aanmeldingen = 0;
+			$maaltijden = $this->find('verwijderd = FALSE AND mlt_repetitie_id = ?', array($repetitie->mlt_repetitie_id));
+			$filter = $repetitie->abonnement_filter;
+			if (!empty($filter)) {
+				$aanmeldingen = MaaltijdAanmeldingenModel::instance()->checkAanmeldingenFilter($filter, $maaltijden);
+			}
+			foreach ($maaltijden as $maaltijd) {
+				if ($verplaats) {
+					$datum = strtotime($maaltijd->datum);
+					$shift = $repetitie->dag_vd_week - date('w', $datum);
+					if ($shift > 0) {
+						$datum = strtotime('+' . $shift . ' days', $datum);
+					} elseif ($shift < 0) {
+						$datum = strtotime($shift . ' days', $datum);
+					}
+					$maaltijd->datum = date('Y-m-d', $datum);
+				}
+				$maaltijd->titel = $repetitie->standaard_titel;
+				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
+				$repetitie->standaard_tijd = $maaltijd->tijd;
+				$maaltijd->prijs = $repetitie->standaard_prijs;
+				$maaltijd->aanmeld_filter = $filter;
+				try {
+					$this->update($maaltijd);
+					$updated++;
+				} catch (\Exception $e) {
 
-            }
-        }
-        return array($updated, $aanmeldingen);
+				}
+			}
+			return array($updated, $aanmeldingen);
+		});
 	}
 
 	/**
 	 * Maakt nieuwe maaltijden aan volgens de definitie van de maaltijd-repetitie.
 	 * Alle leden met een abonnement hierop worden automatisch aangemeld.
      *
-     * Moet in een transactie gedraaid worden.
-	 *
 	 * @param MaaltijdRepetitie $repetitie
 	 * @param $beginDatum
 	 * @param $eindDatum
@@ -343,35 +344,37 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @throws Exception
 	 */
 	public function maakRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $beginDatum, $eindDatum) {
-		if ($repetitie->periode_in_dagen < 1) {
-			throw new Exception('New repetitie-maaltijden faalt: $periode =' . $repetitie->periode_in_dagen);
-		}
+		return Database::transaction(function () use ($repetitie, $beginDatum, $eindDatum) {
+			if ($repetitie->periode_in_dagen < 1) {
+				throw new Exception('New repetitie-maaltijden faalt: $periode =' . $repetitie->periode_in_dagen);
+			}
 
-        // start at first occurence
-        $shift = $repetitie->dag_vd_week - date('w', $beginDatum) + 7;
-        $shift %= 7;
-        if ($shift > 0) {
-            $beginDatum = strtotime('+' . $shift . ' days', $beginDatum);
-        }
-        $datum = $beginDatum;
-        $corveerepetities = \CorveeRepetitiesModel::instance()->getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id);
-        $maaltijden = array();
-        while ($datum <= $eindDatum) { // break after one
+			// start at first occurence
+			$shift = $repetitie->dag_vd_week - date('w', $beginDatum) + 7;
+			$shift %= 7;
+			if ($shift > 0) {
+				$beginDatum = strtotime('+' . $shift . ' days', $beginDatum);
+			}
+			$datum = $beginDatum;
+			$corveerepetities = \CorveeRepetitiesModel::instance()->getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id);
+			$maaltijden = array();
+			while ($datum <= $eindDatum) { // break after one
 
-            $maaltijd = $this->vanRepetitie($repetitie, $datum);
-            $maaltijd->maaltijd_id = $this->create($maaltijd);
-            $this->meldAboAan($maaltijd);
+				$maaltijd = $this->vanRepetitie($repetitie, $datum);
+				$maaltijd->maaltijd_id = $this->create($maaltijd);
+				$this->meldAboAan($maaltijd);
 
-            foreach ($corveerepetities as $corveerepetitie) {
-                \CorveeTakenModel::instance()->newRepetitieTaken($corveerepetitie, $datum, $datum, intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
-            }
-            $maaltijden[] = $maaltijd;
-            if ($repetitie->periode_in_dagen < 1) {
-                break;
-            }
-            $datum = strtotime('+' . $repetitie->periode_in_dagen . ' days', $datum);
-        }
-        return $maaltijden;
+				foreach ($corveerepetities as $corveerepetitie) {
+					\CorveeTakenModel::instance()->newRepetitieTaken($corveerepetitie, $datum, $datum, intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
+				}
+				$maaltijden[] = $maaltijd;
+				if ($repetitie->periode_in_dagen < 1) {
+					break;
+				}
+				$datum = strtotime('+' . $repetitie->periode_in_dagen . ' days', $datum);
+			}
+			return $maaltijden;
+		});
     }
 
 }
