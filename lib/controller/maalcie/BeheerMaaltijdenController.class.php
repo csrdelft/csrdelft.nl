@@ -6,6 +6,7 @@ require_once 'model/maalcie/MaaltijdenModel.class.php';
 require_once 'model/maalcie/ArchiefMaaltijdModel.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
+require_once 'model/fiscaal/MaalcieBestellingModel.class.php';
 require_once 'view/maalcie/BeheerMaaltijdenView.class.php';
 require_once 'view/maalcie/forms/MaaltijdForm.class.php';
 require_once 'view/maalcie/forms/RepetitieMaaltijdenForm.class.php';
@@ -46,7 +47,8 @@ class BeheerMaaltijdenController extends AclController {
 				'herstel'		 => 'P_MAAL_MOD',
 				'aanmelden' => 'P_MAAL_MOD',
 				'afmelden'	 => 'P_MAAL_MOD',
-				'aanmaken'		 => 'P_MAAL_MOD'
+				'aanmaken'		 => 'P_MAAL_MOD',
+				'verwerk'        => 'P_MAAL_MOD'
 			);
 		}
 	}
@@ -270,6 +272,44 @@ class BeheerMaaltijdenController extends AclController {
 			$this->view->addCompressedResources('maalcie');
 			$this->view->addCompressedResources('datatable');
 		}
+	}
+
+	public function verwerk() {
+		# Haal maaltijd op
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		/** @var Maaltijd $maaltijd */
+		$maaltijd = $this->model->retrieveByUUID($selection[0]);
+
+		$maaltijden = Database::transaction(function () use ($maaltijd) {
+			# Controleer of de maaltijd gesloten is en geweest is
+			if ($maaltijd->gesloten != true or date_create($maaltijd->datum) >= date_create("today") or $maaltijd->tijd >= date_create("now")) {
+				throw new Exception("Maaltijd nog niet geweest");
+			}
+
+			# Ga alle personen in de maaltijd af
+			$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
+
+			$bestellingen = array();
+			# Maak een bestelling voor deze persoon
+			foreach ($aanmeldingen as $aanmelding) {
+				$bestellingen[] = MaalcieBestellingModel::instance()->vanMaaltijdAanmelding($aanmelding);
+			}
+
+			# Reken de bestelling af
+			foreach ($bestellingen as $bestelling) {
+				MaalcieBestellingModel::instance()->create($bestelling);
+			}
+
+			# Zet de maaltijd op verwerkt
+
+			$maaltijd->verwerkt = true;
+
+			$this->model->update($maaltijd);
+
+			return array($maaltijd);
+		});
+
+		$this->view = new BeheerMaaltijdenLijst($maaltijden);
 	}
 
 }
