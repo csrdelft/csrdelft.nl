@@ -1,14 +1,101 @@
 <?php
+
+require_once 'model/fiscaal/MaalcieProductModel.class.php';
+require_once 'view/fiscaal/BeheerProductenView.class.php';
+
 /**
- * Created by PhpStorm.
- * User: gerbe
- * Date: 27/03/2017
- * Time: 16:19
+ * Class BeheerProductenController
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ *
+ * @property MaalcieProductModel $model
  */
+class BeheerProductenController extends AclController {
+	public function __construct($query) {
+		parent::__construct($query, MaalcieProductModel::instance());
 
-namespace controller\fiscaat;
+		if ($this->getMethod() == "POST") {
+			$this->acl = [
+				'overzicht' => 'P_MAAL_MOD',
+				'toevoegen' => 'P_MAAL_MOD',
+				'bewerken'  => 'P_MAAL_MOD',
+				'opslaan'   => 'P_MAAL_MOD',
+				'verwijderen' => 'P_MAAL_MOD'
+			];
+		} else {
+			$this->acl = [
+				'overzicht' => 'P_MAAL_MOD',
+			];
+		}
+	}
 
+	public function performAction(array $args = array()) {
+		$this->action = 'overzicht';
 
-class BeheerProductenController {
+		if ($this->hasParam(3)) {
+			$this->action = $this->getParam(3);
+		}
+		return parent::performAction($args);
+	}
 
+	public function POST_overzicht() {
+		$this->view = new BeheerProductenResponse($this->model->find());
+	}
+
+	public function GET_overzicht() {
+		$this->view = new CsrLayoutPage(new BeheerProductenView());
+	}
+
+	public function POST_toevoegen() {
+		$form = new CiviProductForm(new MaalcieProduct(), 'opslaan/nieuw');
+
+		if ($this->getMethod() == "POST" AND $form->validate()) {
+			$product = $form->getModel();
+
+			if ($this->model->exists($product)) {
+				$this->model->update($product);
+			} else {
+				$this->model->create($product);
+			}
+
+			$this->view = new BeheerProductenResponse(array($product));
+			return;
+		}
+
+		$this->view = $form;
+	}
+
+	public function POST_bewerken() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+
+		/** @var MaalcieProduct $product */
+		$product = $this->model->retrieveByUUID($selection[0]);
+		$product->prijs = $this->model->getPrijs($product)->prijs;
+		$this->view = new CiviProductForm($product, 'opslaan');
+	}
+
+	public function POST_opslaan() {
+		if ($this->hasParam(4) AND $this->getParam(4) == "nieuw") {
+			$form = new CiviProductForm(new MaalcieProduct(), 'opslaan/nieuw');
+			if ($form->validate()) {
+				$product = $form->getModel();
+				$this->model->create($product);
+
+				$this->view = new BeheerProductenResponse(array($product));
+				return;
+			}
+		} else {
+			$form = new CiviProductForm(new MaalcieProduct(), 'opslaan');
+			var_dump($form->getFields());
+			if ($form->validate()) {
+				$product = $form->getModel();
+				$this->model->update($product);
+
+				$this->view = new BeheerProductenResponse(array($product));
+				return;
+			}
+		}
+
+		$this->view = $form;
+	}
 }

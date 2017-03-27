@@ -13,12 +13,19 @@ class MaalcieProductModel extends PersistenceModel {
 
 	protected static $instance;
 
+	/**
+	 * @param MaalcieProduct $product
+	 * @return MaalciePrijs
+	 */
+	public function getPrijs($product) {
+		return MaalciePrijsModel::instance()->find('productid = ?', $product->getValues(true), null, 'van DESC', 1)->fetch();
+	}
+
 	public function getProduct($id) {
 		/** @var MaalcieProduct $product */
 		$product = $this->retrieveByPrimaryKey(array($id));
 
-		$product->prijs = MaalciePrijsModel::instance()
-			->find('productid = ?', array($id), null, 'van DESC', 1)->fetch()->prijs;
+		$product->prijs = $this->getPrijs($product)->prijs;
 
 		return $product;
 	}
@@ -28,10 +35,9 @@ class MaalcieProductModel extends PersistenceModel {
 		$entries = parent::find($criteria, $criteria_params, $group_by, $order_by, $limit, $start)->fetchAll();
 
 		foreach ($entries as $entry) {
-			$entry->prijs = MaalciePrijsModel::instance()
-				->find('productid = ?', $entry->getValues(true), null, 'van DESC', 1)->fetch()->prijs;
+			$entry->prijs = $this->getPrijs($entry)->prijs;
 		}
-		
+
 		return $entries;
 	}
 
@@ -64,7 +70,7 @@ class MaalcieProductModel extends PersistenceModel {
 			$nu = date_create('now')->format(DateTime::ISO8601);
 
 			/** @var MaalciePrijs $prijs */
-			$prijs = MaalciePrijsModel::instance()->find('productid = ?', $product->getValues(true), null, 'van DESC', 1)->fetch();
+			$prijs = $this->getPrijs($product);
 			$prijs->tot = $nu;
 			MaalciePrijsModel::instance()->update($prijs);
 
