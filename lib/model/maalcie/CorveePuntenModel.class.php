@@ -97,7 +97,7 @@ class CorveePuntenModel {
 			$sql.= ' LIMIT ' . $limit;
 		}
 		$db = Database::instance();
-		$query = $db->prepare($sql);
+		$query = $db->getDatabase()->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll();
 		$totalen = array();
