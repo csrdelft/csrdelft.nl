@@ -9,9 +9,9 @@ require_once 'model/entity/groepen/GroepLid.abstract.php';
 
 /**
  * AbstractGroep.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een groep met leden.
  */
 abstract class AbstractGroep extends PersistentEntity {
@@ -34,7 +34,7 @@ abstract class AbstractGroep extends PersistentEntity {
 	 */
 	public $familie;
 	/**
-	 * Datum en tijd begin 
+	 * Datum en tijd begin
 	 * @var string
 	 */
 	public $begin_moment;
@@ -91,8 +91,14 @@ abstract class AbstractGroep extends PersistentEntity {
 	protected static $primary_key = array('id');
 
 	/**
+	 * De URL van de groep
+	 * @return string
+	 */
+	abstract public function getUrl();
+
+	/**
 	 * Is lid van deze groep?
-	 * 
+	 *
 	 * @param string $uid
 	 * @return AbstractGroepLid
 	 */
@@ -103,7 +109,7 @@ abstract class AbstractGroep extends PersistentEntity {
 
 	/**
 	 * Lazy loading by foreign key.
-	 * 
+	 *
 	 * @return AbstractGroepLid[]
 	 */
 	public function getLeden() {
@@ -139,7 +145,7 @@ abstract class AbstractGroep extends PersistentEntity {
 
 	/**
 	 * Has permission for action?
-	 * 
+	 *
 	 * @param string $action
 	 * @return boolean
 	 */
@@ -181,7 +187,7 @@ abstract class AbstractGroep extends PersistentEntity {
 
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
-	 * 
+	 *
 	 * @param string $action
 	 * @return boolean
 	 */

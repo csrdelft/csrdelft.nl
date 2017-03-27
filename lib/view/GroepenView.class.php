@@ -8,9 +8,9 @@ require_once 'view/GroepLedenView.class.php';
 
 /**
  * GroepenView.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class GroepenBeheerTable extends DataTable {
 
@@ -222,6 +222,7 @@ class GroepView implements FormElement {
 		if (property_exists($this->groep, 'locatie') AND ! empty($this->groep->locatie)) {
 			$html .= ' &nbsp; <a target="_blank" href="https://maps.google.nl/maps?q=' . urlencode($this->groep->locatie) . '" title="' . $this->groep->locatie . '" class="lichtgrijs fa fa-map-marker fa-lg"></a>';
 		}
+		$html .= ' <span class="groep-id-hint">(<a href="' . $this->groep->getUrl() . '">#' . $this->groep->id . '</a>)</span>';
 		$html .= '</h3>';
 		$html .= CsrBB::parse($this->groep->samenvatting);
 		if (!empty($this->groep->omschrijving)) {
