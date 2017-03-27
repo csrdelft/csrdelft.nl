@@ -395,8 +395,14 @@ class JaNeeField extends RadioField {
 		parent::__construct($name, (int) $value, $description, array(1 => 'Ja', 0 => 'Nee'));
 	}
 
+	public function validate() {
+		return array_key_exists($this->value, $this->options);
+	}
+
 	public function getValue() {
-		return (int) parent::getValue();
+		// Override $this->value, want parent doet dat ook.
+		$this->value = (int) parent::getValue();
+		return $this->value;
 	}
 
 }
