@@ -1,18 +1,33 @@
 <?php
 
 use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\DynamicEntityModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Persistence\Database;
 
 require_once 'model/entity/groepen/Groep.abstract.php';
 require_once 'model/GroepLedenModel.abstract.php';
 
+require_once 'model/groepen/ActiviteitenModel.class.php';
+require_once 'model/groepen/BesturenModel.class.php';
+require_once 'model/groepen/CommissiesModel.class.php';
+require_once 'model/groepen/LichtingenModel.class.php';
+require_once 'model/groepen/KetzerKeuzesModel.class.php';
+require_once 'model/groepen/KetzerOptiesModel.class.php';
+require_once 'model/groepen/KetzerSelectorsModel.class.php';
+require_once 'model/groepen/KetzersModel.class.php';
+require_once 'model/groepen/KringenModel.class.php';
+require_once 'model/groepen/VerticalenModel.class.php';
+require_once 'model/groepen/OnderverenigingenModel.class.php';
+require_once 'model/groepen/RechtenGroepenModel.class.php';
+require_once 'model/groepen/WerkgroepenModel.class.php';
+require_once 'model/groepen/WoonoordenModel.class.php';
+
 /**
  * GroepenModel.abstract.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
@@ -44,7 +59,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
 	/**
 	 * Oude groep-id's omnummeren. 'snaam' mag ook.
-	 * 
+	 *
 	 * @param int|string $id
 	 * @return boolean
 	 */
@@ -232,275 +247,6 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 		$where .= ' AND status = ?';
 		$ids[] = $status;
 		return $this->prefetch($where, $ids);
-	}
-
-}
-
-class RechtenGroepenModel extends AbstractGroepenModel {
-
-	const ORM = RechtenGroep::class;
-
-	protected static $instance;
-
-	public function nieuw() {
-		$groep = parent::nieuw();
-		$groep->rechten_aanmelden = 'P_LOGGED_IN';
-		return $groep;
-	}
-
-}
-
-class OnderverenigingenModel extends AbstractGroepenModel {
-
-	const ORM = Ondervereniging::class;
-
-	protected static $instance;
-
-	public function nieuw() {
-		$ondervereniging = parent::nieuw();
-		$ondervereniging->status = OnderverenigingStatus::AdspirantOndervereniging;
-		$ondervereniging->status_historie = '[div]Aangemaakt als ' . OnderverenigingStatus::getDescription($ondervereniging->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
-		return $ondervereniging;
-	}
-
-}
-
-class WoonoordenModel extends AbstractGroepenModel {
-
-	const ORM = Woonoord::class;
-
-	protected static $instance;
-
-	public function nieuw() {
-		$woonoord = parent::nieuw();
-		$woonoord->status = HuisStatus::Woonoord;
-		$woonoord->status_historie = '[div]Aangemaakt als ' . HuisStatus::getDescription($woonoord->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
-		return $woonoord;
-	}
-
-}
-
-class LichtingenModel extends AbstractGroepenModel {
-
-	const ORM = Lichting::class;
-
-	protected static $instance;
-
-	public static function get($lidjaar) {
-		return static::instance()->nieuw($lidjaar);
-	}
-
-	public function nieuw($lidjaar = null) {
-		if ($lidjaar === null) {
-			$lidjaar = date('Y');
-		}
-		$lichting = parent::nieuw();
-		$lichting->lidjaar = (int) $lidjaar;
-		$lichting->id = $lichting->lidjaar;
-		$lichting->naam = 'Lichting ' . $lichting->lidjaar;
-		$lichting->familie = 'Lichting';
-		$lichting->begin_moment = $lichting->lidjaar . '-09-01 00:00:00';
-		return $lichting;
-	}
-
-	/**
-	 * Override normal behaviour.
-	 */
-	public function find($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
-		$jongste = static::getJongsteLidjaar();
-		$oudste = static::getOudsteLidjaar();
-		$lichtingen = array();
-		for ($lidjaar = $jongste; $lidjaar >= $oudste; $lidjaar--) {
-			$lichtingen[] = $this->nieuw($lidjaar);
-		}
-		return $lichtingen;
-	}
-
-	public static function getHuidigeJaargang() {
-		$jaar = (int) date('Y');
-		$maand = (int) date('m');
-		if ($maand < 8) {
-			$jaar--;
-		}
-		return $jaar . '-' . ($jaar + 1);
-	}
-
-	public static function getJongsteLidjaar() {
-		return (int) Database::instance()->sqlSelect(array('MAX(lidjaar)'), ProfielModel::instance()->getTableName())->fetchColumn();
-	}
-
-	public static function getOudsteLidjaar() {
-		return (int) Database::instance()->sqlSelect(array('MIN(lidjaar)'), ProfielModel::instance()->getTableName(), 'lidjaar > 0')->fetchColumn();
-	}
-
-}
-
-class VerticalenModel extends AbstractGroepenModel {
-
-	const ORM = Verticale::class;
-
-	protected static $instance;
-	/**
-	 * Store verticalen array as a whole in memcache
-	 * @var boolean
-	 */
-	protected $memcache_prefetch = true;
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'letter ASC';
-
-	public static function get($letter) {
-		$verticalen = static::instance()->prefetch('letter = ?', array($letter), null, null, 1);
-		return reset($verticalen);
-	}
-
-	public function nieuw() {
-		$verticale = parent::nieuw();
-		$verticale->letter = null;
-		return $verticale;
-	}
-
-}
-
-class KringenModel extends AbstractGroepenModel {
-
-	const ORM = Kring::class;
-
-	protected static $instance;
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'verticale ASC, kring_nummer ASC';
-
-	public static function get($id) {
-		$kringen = static::instance()->prefetch('verticale = ? AND kring_nummer = ?', explode('.', $id), null, null, 1);
-		return reset($kringen);
-	}
-
-	public function nieuw($letter = '') {
-		$kring = parent::nieuw();
-		$kring->verticale = $letter;
-		return $kring;
-	}
-
-	public function getKringenVoorVerticale(Verticale $verticale) {
-		return $this->prefetch('verticale = ?', array($verticale->letter));
-	}
-
-}
-
-class CommissiesModel extends AbstractGroepenModel {
-
-	const ORM = Commissie::class;
-
-	protected static $instance;
-
-	public function nieuw($soort = null) {
-		if (!in_array($soort, CommissieSoort::getTypeOptions())) {
-			$soort = CommissieSoort::Commissie;
-		}
-		$commissie = parent::nieuw();
-		$commissie->soort = $soort;
-		return $commissie;
-	}
-
-}
-
-class BesturenModel extends AbstractGroepenModel {
-
-	const ORM = Bestuur::class;
-
-	protected static $instance;
-
-	public function nieuw() {
-		$bestuur = parent::nieuw();
-		$bestuur->bijbeltekst = '';
-		return $bestuur;
-	}
-
-}
-
-class KetzersModel extends AbstractGroepenModel {
-
-	const ORM = Ketzer::class;
-
-	protected static $instance;
-
-	public function nieuw() {
-		$ketzer = parent::nieuw();
-		$ketzer->aanmeld_limiet = null;
-		$ketzer->aanmelden_vanaf = getDateTime();
-		$ketzer->aanmelden_tot = null;
-		$ketzer->bewerken_tot = null;
-		$ketzer->afmelden_tot = null;
-		return $ketzer;
-	}
-
-}
-
-class WerkgroepenModel extends KetzersModel {
-
-	const ORM = Werkgroep::class;
-
-	protected static $instance;
-
-}
-
-class ActiviteitenModel extends KetzersModel {
-
-	const ORM = Activiteit::class;
-
-	protected static $instance;
-
-	public function nieuw($soort = null) {
-		if (!in_array($soort, ActiviteitSoort::getTypeOptions())) {
-			$soort = ActiviteitSoort::SjaarsActie;
-		}
-		$activiteit = parent::nieuw();
-		$activiteit->soort = $soort;
-		$activiteit->rechten_aanmelden = null;
-		$activiteit->locatie = null;
-		$activiteit->in_agenda = true;
-		return $activiteit;
-	}
-
-}
-
-class KetzerSelectorsModel extends AbstractGroepenModel {
-
-	const ORM = KetzerSelector::class;
-
-	protected static $instance;
-
-	public function getSelectorsVoorKetzer(Ketzer $ketzer) {
-		return $this->prefetch('ketzer_id = ?', array($ketzer->id));
-	}
-
-}
-
-class KetzerOptiesModel extends AbstractGroepenModel {
-
-	const ORM = KetzerOptie::class;
-
-	protected static $instance;
-
-	public function getOptiesVoorSelect(KetzerSelector $select) {
-		return $this->prefetch('select_id = ?', array($select->select_id));
-	}
-
-}
-
-class KetzerKeuzesModel extends AbstractGroepenModel {
-
-	const ORM = KetzerKeuze::class;
-
-	protected static $instance;
-
-	public function getKeuzesVoorOptie(KetzerOptie $optie) {
-		return $this->prefetch('optie_id = ?', array($optie->optie_id));
 	}
 
 }
