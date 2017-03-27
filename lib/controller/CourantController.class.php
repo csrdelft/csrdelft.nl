@@ -6,9 +6,9 @@ require_once 'view/courant/CourantBeheerView.class.php';
 
 /**
  * CourantController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van de courant.
  */
 class CourantController extends AclController {
@@ -74,6 +74,7 @@ class CourantController extends AclController {
 					if (isset($_SESSION['compose_snapshot'])) {
 						$_SESSION['compose_snapshot'] = null;
 					}
+					redirect("/courant");
 				} else {
 					setMelding('Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.', -1);
 				}
@@ -116,7 +117,7 @@ class CourantController extends AclController {
 		} else {
 			setMelding('Uw bericht is niet verwijderd.', -1);
 		}
-		$this->toevoegen();
+		redirect("/courant");
 	}
 
 	public function verzenden($iedereen = null) {
