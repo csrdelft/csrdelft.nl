@@ -16,8 +16,6 @@
 				{/if}
 				{if LoginModel::mag('P_LOGGED_IN')}
 					<a href="/logout">Uitloggen</a>
-				{else}
-					<div class="login-form">{include file='layout2/partials/_loginForm.tpl'}</div>
 				{/if}
 			</div>
 		</div>
