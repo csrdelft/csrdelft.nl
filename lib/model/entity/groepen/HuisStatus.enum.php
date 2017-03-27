@@ -11,25 +11,25 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 abstract class HuisStatus implements PersistentEnum {
 
-	const Woonoord = 'w';
-	const Huis = 'h';
+	const WOONOORD = 'w';
+	const HUIS = 'h';
 
 	public static function getTypeOptions() {
-		return array(self::Woonoord, self::Huis);
+		return array(self::WOONOORD, self::HUIS);
 	}
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::Woonoord: return 'Woonoord';
-			case self::Huis: return 'Huis';
+			case self::WOONOORD: return 'Woonoord';
+			case self::HUIS: return 'Huis';
 			default: throw new Exception('HuisStatus onbekend');
 		}
 	}
 
 	public static function getChar($option) {
 		switch ($option) {
-			case self::Woonoord: return 'W';
-			case self::Huis: return 'H';
+			case self::WOONOORD: return 'W';
+			case self::HUIS: return 'H';
 			default: throw new Exception('HuisStatus onbekend');
 		}
 	}

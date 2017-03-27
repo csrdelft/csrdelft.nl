@@ -258,7 +258,7 @@ class OnderverenigingenModel extends AbstractGroepenModel {
 
 	public function nieuw() {
 		$ondervereniging = parent::nieuw();
-		$ondervereniging->status = OnderverenigingStatus::AdspirantOndervereniging;
+		$ondervereniging->status = OnderverenigingStatus::ADSPIRANTONDERVERENIGING;
 		$ondervereniging->status_historie = '[div]Aangemaakt als ' . OnderverenigingStatus::getDescription($ondervereniging->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $ondervereniging;
 	}
@@ -273,7 +273,7 @@ class WoonoordenModel extends AbstractGroepenModel {
 
 	public function nieuw() {
 		$woonoord = parent::nieuw();
-		$woonoord->status = HuisStatus::Woonoord;
+		$woonoord->status = HuisStatus::WOONOORD;
 		$woonoord->status_historie = '[div]Aangemaakt als ' . HuisStatus::getDescription($woonoord->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $woonoord;
 	}
