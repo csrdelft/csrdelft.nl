@@ -282,26 +282,28 @@ class BeheerMaaltijdenController extends AclController {
 
 		$maaltijden = Database::transaction(function () use ($maaltijd) {
 			# Controleer of de maaltijd gesloten is en geweest is
-			if ($maaltijd->gesloten != true or date_create($maaltijd->datum) >= date_create("today") or $maaltijd->tijd >= date_create("now")) {
+			if ($maaltijd->gesloten == false OR date_create($maaltijd->datum) >= date_create("today") OR $maaltijd->tijd >= date_create("now")) {
 				throw new Exception("Maaltijd nog niet geweest");
 			}
 
+			$aanmeldingen_model = MaaltijdAanmeldingenModel::instance();
+			$bestelling_model = MaalcieBestellingModel::instance();
+
 			# Ga alle personen in de maaltijd af
-			$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
+			$aanmeldingen = $aanmeldingen_model->getAanmeldingenVoorMaaltijd($maaltijd);
 
 			$bestellingen = array();
 			# Maak een bestelling voor deze persoon
 			foreach ($aanmeldingen as $aanmelding) {
-				$bestellingen[] = MaalcieBestellingModel::instance()->vanMaaltijdAanmelding($aanmelding);
+				$bestellingen[] = $bestelling_model->vanMaaltijdAanmelding($aanmelding);
 			}
 
 			# Reken de bestelling af
 			foreach ($bestellingen as $bestelling) {
-				MaalcieBestellingModel::instance()->create($bestelling);
+				$bestelling_model->create($bestelling);
 			}
 
 			# Zet de maaltijd op verwerkt
-
 			$maaltijd->verwerkt = true;
 
 			$this->model->update($maaltijd);
@@ -309,7 +311,7 @@ class BeheerMaaltijdenController extends AclController {
 			return array($maaltijd);
 		});
 
-		$this->view = new BeheerMaaltijdenLijst($maaltijden);
+		$this->view = new RemoveRowsResponse($maaltijden);
 	}
 
 }

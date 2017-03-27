@@ -191,7 +191,7 @@ class OnverwerkteMaaltijdenTable extends DataTable {
 		$this->addColumn('aanmeldingen', 'aanmeld_limiet', null, 'aanmeldingen_render');
 		$this->addColumn('prijs', null, null, 'prijs_render');
 
-		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/verwerk', '', 'Verwerken', 'Maaltijd verwerken', 'cog_go'));
+		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/fiscaat/verwerk', '', 'Verwerken', 'Maaltijd verwerken', 'cog_go'));
 
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/verwijder', '', 'Verwijderen', 'Maaltijd verwijderen', 'cross', 'confirm'));
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/lijst/:maaltijd_id', '', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal', 'popup'));

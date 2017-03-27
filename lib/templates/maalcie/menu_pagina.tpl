@@ -19,7 +19,8 @@
 					<option value="/maaltijden/abonnementenbeheer">Abonnementen</option>
 				</optgroup>
 				<optgroup label="Fiscaat">
-					<option value="/maaltijden/beheer/onverwerkt">Onverwerkt</option>
+					<option value="/maaltijden/fiscaat/producten">Productbeheer</option>
+					<option value="/maaltijden/fiscaat/onverwerkt">Onverwerkt</option>
 					<option value="/maaltijden/maalciesaldi">Saldi</option>
 				</optgroup>
 				<optgroup label="Corvee">

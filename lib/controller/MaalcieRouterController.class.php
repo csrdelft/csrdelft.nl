@@ -17,6 +17,7 @@ class MaalcieRouterController extends AclController {
 			'maaltijdenketzer'				 => 'P_MAAL_IK',
 			'maaltijdenlijst'				 => 'P_MAAL_IK', // shortcut
 			'maaltijdenbeheer'				 => 'P_MAAL_MOD',
+			'maaltijdenfiscaat'              => 'P_MAAL_MOD',
 			'maaltijdenrepetities'			 => 'P_MAAL_MOD',
 			'maaltijdenabonnementen'		 => 'P_MAAL_IK',
 			'maaltijdenabonnementenbeheer'	 => 'P_MAAL_MOD',
@@ -80,6 +81,11 @@ class MaalcieRouterController extends AclController {
 	public function maaltijdenbeheer() {
 		require_once 'controller/maalcie/BeheerMaaltijdenController.class.php';
 		return new BeheerMaaltijdenController($this->model);
+	}
+
+	public function maaltijdenfiscaat() {
+		require_once 'controller/maalcie/MaaltijdenFiscaatController.class.php';
+		return new MaaltijdenFiscaatController($this->model);
 	}
 
 	public function maaltijdenrepetities() {

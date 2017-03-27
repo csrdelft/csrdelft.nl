@@ -10,6 +10,8 @@ class MaalcieProduct extends PersistentEntity {
 	public $prioriteit;
 	public $beheer;
 
+	public $prijs;
+
 	protected static $table_name = 'maalcieproduct';
 	protected static $persistent_attributes = array(
 		'id' => array(T::Integer, false, 'auto_increment'),
