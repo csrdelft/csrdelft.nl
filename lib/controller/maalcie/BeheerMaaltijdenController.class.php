@@ -20,7 +20,7 @@ require_once 'view/maalcie/forms/AanmeldingForm.class.php';
 class BeheerMaaltijdenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, MaaltijdenModel::transaction());
+		parent::__construct($query, MaaltijdenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'beheer'	 => 'P_MAAL_MOD',
@@ -55,7 +55,7 @@ class BeheerMaaltijdenController extends AclController {
 		}
 		$mid = null;
 		if ($this->hasParam(3)) {
-			$mid = (int) $this->getParam(3);
+			$mid = (int)$this->getParam(3);
 		}
 		parent::performAction(array($mid));
 	}
@@ -90,7 +90,8 @@ class BeheerMaaltijdenController extends AclController {
 
 			$this->view = new BeheerMaaltijdenLijst($data);
 		} else {
-			$repetities = MaaltijdRepetitiesModel::instance()->find(); /** @var MaaltijdRepetitie[] $repetities */
+			/** @var MaaltijdRepetitie[] $repetities */
+			$repetities = MaaltijdRepetitiesModel::instance()->find();
 			$body = new BeheerMaaltijdenView(new BeheerMaaltijdenTable($repetities), 'Maaltijdenbeheer');
 			$this->view = new CsrLayoutPage($body, array());
 			$this->view->addCompressedResources('maalcie');
@@ -165,6 +166,7 @@ class BeheerMaaltijdenController extends AclController {
 		if (empty($selection)) {
 			$this->exit_http(403);
 		}
+		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->model->retrieveByUUID($selection[0]);
 		$form = new MaaltijdForm($maaltijd, 'bewerk');
 		if ($form->validate()) {
@@ -177,7 +179,8 @@ class BeheerMaaltijdenController extends AclController {
 
 	public function verwijder() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$maaltijd = $this->model->retrieveByUUID($selection[0]); /** @var Maaltijd $maaltijd */
+		/** @var Maaltijd $maaltijd */
+		$maaltijd = $this->model->retrieveByUUID($selection[0]);
 
 		if ($maaltijd->verwijderd) {
 			$this->model->delete($maaltijd);
@@ -191,7 +194,8 @@ class BeheerMaaltijdenController extends AclController {
 
 	public function herstel() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$maaltijd = $this->model->retrieveByUUID($selection[0]); /** @var Maaltijd $maaltijd */
+		/** @var Maaltijd $maaltijd */
+		$maaltijd = $this->model->retrieveByUUID($selection[0]);
 
 		$maaltijd->verwijderd = false;
 		$this->model->update($maaltijd);
@@ -200,7 +204,8 @@ class BeheerMaaltijdenController extends AclController {
 
 	public function aanmelden() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$maaltijd = $this->model->retrieveByUUID($selection[0]); /** @var Maaltijd $maaltijd */
+		/** @var Maaltijd $maaltijd */
+		$maaltijd = $this->model->retrieveByUUID($selection[0]);
 		$form = new AanmeldingForm($maaltijd, true); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();

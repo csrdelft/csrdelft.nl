@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "899dec30cd0e1c17d91212ae46c2cec7",
-    "content-hash": "6111cf64b7e8bdea179b720d9db028ad",
+    "hash": "1ff2eff3c7d6d13a8278a6324ec2a2bd",
+    "content-hash": "7d5fcfad550bd9da6ab1482ce3af8194",
     "packages": [
         {
             "name": "csrdelft/orm",
-            "version": "v1.3",
+            "version": "v1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
-                "reference": "339563398e5e3187af83c9792083f20940afd635"
+                "reference": "f3b3181f71c1ae3996f02502167eddb33e64450b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/orm/zipball/339563398e5e3187af83c9792083f20940afd635",
-                "reference": "339563398e5e3187af83c9792083f20940afd635",
+                "url": "https://api.github.com/repos/csrdelft/orm/zipball/f3b3181f71c1ae3996f02502167eddb33e64450b",
+                "reference": "f3b3181f71c1ae3996f02502167eddb33e64450b",
                 "shasum": ""
             },
             "require": {
@@ -48,7 +48,7 @@
             ],
             "description": "The creatively named object-relational mapping library for csrdelft.nl",
             "homepage": "https://github.com/csrdelft/orm",
-            "time": "2017-02-12 15:18:44"
+            "time": "2017-03-25 17:08:50"
         },
         {
             "name": "doctrine/instantiator",
@@ -431,16 +431,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.4.1",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "0d6c7ca039329247e4f0f8f8f6506810e8248855"
+                "reference": "f5b8a8512e2b58b0071a7280e39f14f72e05d87c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/0d6c7ca039329247e4f0f8f8f6506810e8248855",
-                "reference": "0d6c7ca039329247e4f0f8f8f6506810e8248855",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/f5b8a8512e2b58b0071a7280e39f14f72e05d87c",
+                "reference": "f5b8a8512e2b58b0071a7280e39f14f72e05d87c",
                 "shasum": ""
             },
             "require": {
@@ -492,7 +492,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2017-02-27 10:51:17"
+            "time": "2017-03-20 17:10:46"
         },
         {
             "name": "jacwright/restserver",
@@ -1269,16 +1269,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.15",
+            "version": "5.7.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "b99112aecc01f62acf3d81a3f59646700a1849e5"
+                "reference": "68752b665d3875f9a38a357e3ecb35c79f8673bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b99112aecc01f62acf3d81a3f59646700a1849e5",
-                "reference": "b99112aecc01f62acf3d81a3f59646700a1849e5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/68752b665d3875f9a38a357e3ecb35c79f8673bf",
+                "reference": "68752b665d3875f9a38a357e3ecb35c79f8673bf",
                 "shasum": ""
             },
             "require": {
@@ -1347,7 +1347,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-03-02 15:22:43"
+            "time": "2017-03-19 16:52:12"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

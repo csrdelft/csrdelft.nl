@@ -173,6 +173,10 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
         return $aanmelding;
 	}
 
+	/**
+	 * @param Maaltijd $maaltijd
+	 * @return MaaltijdAanmelding[]
+	 */
 	public function getAanmeldingenVoorMaaltijd(Maaltijd $maaltijd) {
         $aanmeldingen = $this->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
 		$lijst = array();

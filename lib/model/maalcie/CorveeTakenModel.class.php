@@ -8,8 +8,8 @@ require_once 'model/maalcie/FunctiesModel.class.php';
 require_once 'model/maalcie/CorveePuntenModel.class.php';
 
 /**
- * CorveeTakenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
+ * CorveeTakenModel.class.php    |    P.W.G. Brussee (brussee@live.nl)
+ *
  */
 class CorveeTakenModel extends PersistenceModel {
 	const ORM = CorveeTaak::class;
@@ -44,35 +44,23 @@ class CorveeTakenModel extends PersistenceModel {
 	}
 
 	public function puntenToekennen(CorveeTaak $taak) {
-		$db = Database::instance()->getDatabase();
-		try {
-			$db->beginTransaction();
+		Database::transaction(function () use ($taak) {
 			CorveePuntenModel::puntenToekennen($taak->uid, $taak->punten, $taak->bonus_malus);
 			$taak->punten_toegekend = $taak->punten_toegekend + $taak->punten;
 			$taak->bonus_toegekend = $taak->bonus_toegekend + $taak->bonus_malus;
 			$taak->wanneer_toegekend = date('Y-m-d H:i');
 			$this->update($taak);
-			$db->commit();
-		} catch (\Exception $e) {
-			$db->rollBack();
-			throw $e; // rethrow to controller
-		}
+		});
 	}
 
 	public function puntenIntrekken(CorveeTaak $taak) {
-		$db = Database::instance()->getDatabase();
-		try {
-			$db->beginTransaction();
+		Database::transaction(function () use ($taak) {
 			CorveePuntenModel::puntenIntrekken($taak->uid, $taak->punten, $taak->bonus_malus);
 			$taak->punten_toegekend = $taak->punten_toegekend - $taak->punten;
 			$taak->bonus_toegekend = $taak->bonus_toegekend - $taak->bonus_malus;
 			$taak->wanneer_toegekend = null;
 			$this->update($taak);
-			$db->commit();
-		} catch (\Exception $e) {
-			$db->rollBack();
-			throw $e; // rethrow to controller
-		}
+		});
 	}
 
 	public function getRoosterMatrix(array $taken) {
@@ -114,7 +102,8 @@ class CorveeTakenModel extends PersistenceModel {
 	}
 
 	public function getTaak($tid) {
-		$taak = $this->retrieveByPrimaryKey(array($tid)); /** @var CorveeTaak $taak */
+		$taak = $this->retrieveByPrimaryKey(array($tid));
+		/** @var CorveeTaak $taak */
 		if ($taak->verwijderd) {
 			throw new Exception('Maaltijd is verwijderd');
 		}
@@ -148,7 +137,7 @@ class CorveeTakenModel extends PersistenceModel {
 
 	/**
 	 * Haalt de taken op voor een lid.
-	 * 
+	 *
 	 * @param string $uid
 	 * @return PDOStatement
 	 */
@@ -158,7 +147,7 @@ class CorveeTakenModel extends PersistenceModel {
 
 	/**
 	 * Zoekt de laatste taak op van een lid.
-	 * 
+	 *
 	 * @param string $uid
 	 * @return CorveeTaak
 	 */
@@ -168,7 +157,7 @@ class CorveeTakenModel extends PersistenceModel {
 
 	/**
 	 * Haalt de komende taken op waarvoor een lid is ingedeeld.
-	 * 
+	 *
 	 * @param string $uid
 	 * @return PDOStatement|CorveeTaak[]
 	 */
@@ -177,9 +166,7 @@ class CorveeTakenModel extends PersistenceModel {
 	}
 
 	public function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
-		$db = Database::instance()->getDatabase();
-		try {
-			$db->beginTransaction();
+		return Database::transaction(function () use ($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
 			if ($tid === 0) {
 				$taak = $this->newTaak($fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus);
 			} else {
@@ -196,16 +183,14 @@ class CorveeTakenModel extends PersistenceModel {
 					$this->update($taak);
 				}
 			}
-			$db->commit();
+
 			return $taak;
-		} catch (\Exception $e) {
-			$db->rollBack();
-			throw $e; // rethrow to controller
-		}
+		});
 	}
 
 	public function herstelTaak($tid) {
-		$taak = $this->retrieveByPrimaryKey(array($tid)); /** @var CorveeTaak $taak */
+		/** @var CorveeTaak $taak */
+		$taak = $this->retrieveByPrimaryKey(array($tid));
 		if (!$taak->verwijderd) {
 			throw new Exception('Corveetaak is niet verwijderd');
 		}
@@ -240,7 +225,8 @@ class CorveeTakenModel extends PersistenceModel {
 	}
 
 	public function verwijderTaak($tid) {
-		$taak = $this->retrieveByPrimaryKey(array($tid)); /** @var CorveeTaak $taak */
+		/** @var CorveeTaak $taak */
+		$taak = $this->retrieveByPrimaryKey(array($tid));
 		if ($taak->verwijderd) {
 			$this->delete($taak); // definitief verwijderen
 		} else {
@@ -355,16 +341,10 @@ class CorveeTakenModel extends PersistenceModel {
 		if ($repetitie->periode_in_dagen < 1) {
 			throw new Exception('New repetitie-taken faalt: $periode =' . $repetitie->periode_in_dagen);
 		}
-		$db = Database::instance()->getDatabase();
-		try {
-			$db->beginTransaction();
-			$taken = $this->newRepetitieTaken($repetitie, strtotime($beginDatum), strtotime($eindDatum), $mid);
-			$db->commit();
-			return $taken;
-		} catch (\Exception $e) {
-			$db->rollBack();
-			throw $e; // rethrow to controller
-		}
+
+		return Database::transaction(function () use ($repetitie, $beginDatum, $eindDatum, $mid) {
+			return $this->newRepetitieTaken($repetitie, strtotime($beginDatum), strtotime($eindDatum), $mid);
+		});
 	}
 
 	public function newRepetitieTaken(CorveeRepetitie $repetitie, $beginDatum, $eindDatum, $mid = null) {
@@ -412,12 +392,11 @@ class CorveeTakenModel extends PersistenceModel {
 	}
 
 	public function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats) {
-		$db = Database::instance()->getDatabase();
-		try {
-			$db->beginTransaction();
-			$taken = $this->find('verwijderd = false AND crv_repetitie_id = ?', array($repetitie->crv_repetitie_id)); /** @var CorveeTaak $taak */
+		return Database::transaction(function () use ($repetitie, $verplaats) {
+			$taken = $this->find('verwijderd = false AND crv_repetitie_id = ?', array($repetitie->crv_repetitie_id));
+			/** @var CorveeTaak $taak */
 
-			foreach($taken as $taak) {
+			foreach ($taken as $taak) {
 				$taak->functie_id = $repetitie->functie_id;
 				$taak->punten = $repetitie->standaard_punten;
 
@@ -480,12 +459,8 @@ class CorveeTakenModel extends PersistenceModel {
 				}
 				$maaltijdcount += $verschil;
 			}
-			$db->commit();
 			return array('update' => $updatecount, 'day' => $daycount, 'datum' => $datumcount, 'maaltijd' => $maaltijdcount);
-		} catch (\Exception $e) {
-			$db->rollBack();
-			throw $e; // rethrow to controller
-		}
+		});
 	}
 
 }

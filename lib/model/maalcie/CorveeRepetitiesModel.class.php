@@ -86,9 +86,7 @@ class CorveeRepetitiesModel extends PersistenceModel {
 	}
 
 	public function saveRepetitie($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
-		$db = Database::instance()->getDatabase();
-		try {
-			$db->beginTransaction();
+		return Database::transaction(function () use ($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
 			$voorkeuren = 0;
 			if ($crid === 0) {
 				$repetitie = $this->nieuw(0, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
@@ -96,23 +94,19 @@ class CorveeRepetitiesModel extends PersistenceModel {
 			} else {
 				$repetitie = $this->getRepetitie($crid);
 				$repetitie->mlt_repetitie_id = $mrid;
-				$repetitie->dag_vd_week =  $dag;
+				$repetitie->dag_vd_week = $dag;
 				$repetitie->periode_in_dagen = $periode;
 				$repetitie->functie_id = $fid;
 				$repetitie->standaard_punten = $punten;
 				$repetitie->standaard_aantal = $aantal;
-				$repetitie->voorkeurbaar = (boolean) $voorkeur;
+				$repetitie->voorkeurbaar = (boolean)$voorkeur;
 				$this->update($repetitie);
 				if (!$voorkeur) { // niet (meer) voorkeurbaar
 					$voorkeuren = CorveeVoorkeurenModel::instance()->verwijderVoorkeuren($crid);
 				}
 			}
-			$db->commit();
 			return array($repetitie, $voorkeuren);
-		} catch (\Exception $e) {
-			$db->rollBack();
-			throw $e; // rethrow to controller
-		}
+		});
 	}
 
 	public function verwijderRepetitie($crid) {
@@ -124,24 +118,14 @@ class CorveeRepetitiesModel extends PersistenceModel {
 			throw new Exception('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 
-		$db = Database::instance()->getDatabase();
-		try {
-			$db->beginTransaction();
+		return Database::transaction(function () use ($crid) {
 			$aantal = CorveeVoorkeurenModel::instance()->verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)
-			$sql = 'DELETE FROM crv_repetities';
-			$sql.= ' WHERE crv_repetitie_id=?';
-			$values = array($crid);
-			$query = $db->prepare($sql);
-			$query->execute($values);
-			if ($query->rowCount() !== 1) {
-				throw new Exception('Delete corvee-repetitie faalt: $query->rowCount() =' . $query->rowCount());
+			$deleted = $this->deleteByPrimaryKey(array($crid));
+			if ($deleted !== 1) {
+				throw new Exception('Delete corvee-repetitie faalt: $deleted =' . $deleted);
 			}
-			$db->commit();
 			return $aantal;
-		} catch (\Exception $e) {
-			$db->rollBack();
-			throw $e; // rethrow to controller
-		}
+		});
 	}
 
 	// Maaltijd-Repetitie-Corvee ############################################################

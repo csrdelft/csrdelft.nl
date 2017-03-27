@@ -52,9 +52,7 @@ class CorveeVrijstellingenModel extends PersistenceModel {
 	}
 	
 	public function saveVrijstelling($uid, $begin, $eind, $percentage) {
-		$db = Database::instance()->getDatabase();
-		try {
-			$db->beginTransaction();
+		return Database::transaction(function () use ($uid, $begin, $eind, $percentage) {
 			$vrijstelling = $this->getVrijstelling($uid);
 			if ($vrijstelling === false) {
 				$vrijstelling = $this->nieuw($uid, $begin, $eind, $percentage);
@@ -66,13 +64,8 @@ class CorveeVrijstellingenModel extends PersistenceModel {
 				$vrijstelling->percentage = $percentage;
 				$this->update($vrijstelling);
 			}
-			$db->commit();
 			return $vrijstelling;
-		}
-		catch (\Exception $e) {
-			$db->rollBack();
-			throw $e; // rethrow to controller
-		}
+		});
 	}
 	
 	public function verwijderVrijstelling($uid) {
