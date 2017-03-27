@@ -11,6 +11,7 @@
 		</td>
 		<td>
 			<div class="titel">{$maaltijd->titel}
+				<span title="BB-code: [maaltijd={$maaltijd->maaltijd_id}]" class="maaltijd-id"> (#{$maaltijd->maaltijd_id})</span>
 				<div class="float-right">
 					{assign var=prijs value=$maaltijd->getPrijsFloat()|string_format:"%.2f"}
 					{if $aanmelding and $aanmelding->getSaldoStatus() < 0}
