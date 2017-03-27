@@ -9,7 +9,7 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class GeoLocationModel extends PersistenceModel {
 
-	const ORM = 'GeoLocation';
+	const ORM = GeoLocation::class;
 
 	protected static $instance;
 	/**

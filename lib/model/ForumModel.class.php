@@ -15,7 +15,7 @@ require_once 'model/Paging.interface.php';
  */
 class ForumModel extends CachedPersistenceModel {
 
-	const ORM = 'ForumCategorie';
+	const ORM = ForumCategorie::class;
 	const DIR = 'forum/';
 
 	protected static $instance;
@@ -116,7 +116,7 @@ class ForumModel extends CachedPersistenceModel {
 
 class ForumDelenModel extends CachedPersistenceModel {
 
-	const ORM = 'ForumDeel';
+	const ORM = ForumDeel::class;
 	const DIR = 'forum/';
 
 	protected static $instance;
@@ -310,7 +310,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 
 class ForumDradenReagerenModel extends PersistenceModel {
 
-	const ORM = 'ForumDraadReageren';
+	const ORM = ForumDraadReageren::class;
 	const DIR = 'forum/';
 
 	protected static $instance;
@@ -409,7 +409,7 @@ class ForumDradenReagerenModel extends PersistenceModel {
 
 class ForumDradenGelezenModel extends CachedPersistenceModel {
 
-	const ORM = 'ForumDraadGelezen';
+	const ORM = ForumDraadGelezen::class;
 	const DIR = 'forum/';
 
 	protected static $instance;
@@ -471,7 +471,7 @@ class ForumDradenGelezenModel extends CachedPersistenceModel {
 
 class ForumDradenVerbergenModel extends CachedPersistenceModel {
 
-	const ORM = 'ForumDraadVerbergen';
+	const ORM = ForumDraadVerbergen::class;
 	const DIR = 'forum/';
 
 	protected static $instance;
@@ -521,7 +521,7 @@ class ForumDradenVerbergenModel extends CachedPersistenceModel {
 
 class ForumDradenVolgenModel extends CachedPersistenceModel {
 
-	const ORM = 'ForumDraadVolgen';
+	const ORM = ForumDraadVolgen::class;
 	const DIR = 'forum/';
 
 	protected static $instance;
@@ -575,7 +575,7 @@ class ForumDradenVolgenModel extends CachedPersistenceModel {
 
 class ForumDradenModel extends CachedPersistenceModel implements Paging {
 
-	const ORM = 'ForumDraad';
+	const ORM = ForumDraad::class;
 	const DIR = 'forum/';
 
 	protected static $instance;
@@ -891,7 +891,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 
 class ForumPostsModel extends CachedPersistenceModel implements Paging {
 
-	const ORM = 'ForumPost';
+	const ORM = ForumPost::class;
 	const DIR = 'forum/';
 
 	protected static $instance;

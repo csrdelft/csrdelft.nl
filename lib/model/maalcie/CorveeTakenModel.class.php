@@ -12,7 +12,7 @@ require_once 'model/maalcie/CorveePuntenModel.class.php';
  * 
  */
 class CorveeTakenModel extends PersistenceModel {
-	const ORM = 'CorveeTaak';
+	const ORM = CorveeTaak::class;
 	const DIR = 'maalcie/';
 
 	protected static $instance;

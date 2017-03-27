@@ -10,7 +10,7 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class ChangeLogModel extends PersistenceModel {
 
-	const ORM = 'ChangeLogEntry';
+	const ORM = ChangeLogEntry::class;
 
 	protected static $instance;
 

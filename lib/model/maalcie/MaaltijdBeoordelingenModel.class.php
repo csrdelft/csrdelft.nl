@@ -10,7 +10,7 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class MaaltijdBeoordelingenModel extends PersistenceModel {
 
-	const ORM = 'MaaltijdBeoordeling';
+	const ORM = MaaltijdBeoordeling::class;
 	const DIR = 'maalcie/';
 
 	protected static $instance;

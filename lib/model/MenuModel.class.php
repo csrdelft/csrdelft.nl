@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEntity;
  */
 class MenuModel extends CachedPersistenceModel {
 
-	const ORM = 'MenuItem';
+	const ORM = MenuItem::class;
 
 	protected static $instance;
 	/**

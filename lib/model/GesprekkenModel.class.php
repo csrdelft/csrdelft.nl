@@ -9,7 +9,7 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class GesprekkenModel extends PersistenceModel {
 
-	const ORM = 'Gesprek';
+	const ORM = Gesprek::class;
 	const DIR = 'gesprekken/';
 
 	protected static $instance;
@@ -51,7 +51,7 @@ class GesprekkenModel extends PersistenceModel {
  */
 class GesprekDeelnemersModel extends PersistenceModel {
 
-	const ORM = 'GesprekDeelnemer';
+	const ORM = GesprekDeelnemer::class;
 	const DIR = 'gesprekken/';
 
 	protected static $instance;
@@ -127,7 +127,7 @@ class GesprekDeelnemersModel extends PersistenceModel {
  */
 class GesprekBerichtenModel extends PersistenceModel {
 
-	const ORM = 'GesprekBericht';
+	const ORM = GesprekBericht::class;
 	const DIR = 'gesprekken/';
 
 	protected static $instance;

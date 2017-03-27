@@ -9,7 +9,7 @@ use CsrDelft\Orm\CachedPersistenceModel;
  */
 class KwalificatiesModel extends CachedPersistenceModel {
 
-	const ORM = 'CorveeKwalificatie';
+	const ORM = CorveeKwalificatie::class;
 	const DIR = 'maalcie/';
 
 	protected static $instance;

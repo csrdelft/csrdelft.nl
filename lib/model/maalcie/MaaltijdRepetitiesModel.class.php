@@ -12,7 +12,7 @@ require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
  */
 class MaaltijdRepetitiesModel extends PersistenceModel {
 
-    const ORM = 'MaaltijdRepetitie';
+    const ORM = MaaltijdRepetitie::class;
     const DIR = 'maalcie/';
 
     protected $default_order = '(periode_in_dagen = 0) ASC, periode_in_dagen ASC, dag_vd_week ASC, standaard_titel ASC';

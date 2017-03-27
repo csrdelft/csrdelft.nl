@@ -14,7 +14,7 @@ require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
  */
 class MaaltijdenModel extends PersistenceModel {
 
-    const ORM = 'Maaltijd';
+    const ORM = Maaltijd::class;
     const DIR = 'maalcie/';
 
     protected $default_order = 'datum ASC, tijd ASC';

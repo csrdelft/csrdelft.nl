@@ -10,7 +10,7 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class LedenMemoryScoresModel extends PersistenceModel {
 
-	const ORM = 'LedenMemoryScore';
+	const ORM = LedenMemoryScore::class;
 
 	protected static $instance;
 	/**

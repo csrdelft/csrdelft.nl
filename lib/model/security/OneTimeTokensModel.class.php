@@ -11,7 +11,7 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class OneTimeTokensModel extends PersistenceModel {
 
-	const ORM = 'OneTimeToken';
+	const ORM = OneTimeToken::class;
 	const DIR = 'security/';
 
 	protected static $instance;

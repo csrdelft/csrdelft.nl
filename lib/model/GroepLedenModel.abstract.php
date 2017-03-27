@@ -89,7 +89,7 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 
 class RechtenGroepLedenModel extends AbstractGroepLedenModel {
 
-	const ORM = 'RechtenGroepLid';
+	const ORM = RechtenGroepLid::class;
 
 	protected static $instance;
 
@@ -97,7 +97,7 @@ class RechtenGroepLedenModel extends AbstractGroepLedenModel {
 
 class OnderverenigingsLedenModel extends AbstractGroepLedenModel {
 
-	const ORM = 'OnderverenigingsLid';
+	const ORM = OnderverenigingsLid::class;
 
 	protected static $instance;
 
@@ -105,7 +105,7 @@ class OnderverenigingsLedenModel extends AbstractGroepLedenModel {
 
 class BewonersModel extends AbstractGroepLedenModel {
 
-	const ORM = 'Bewoner';
+	const ORM = Bewoner::class;
 
 	protected static $instance;
 
@@ -113,7 +113,7 @@ class BewonersModel extends AbstractGroepLedenModel {
 
 class LichtingLedenModel extends AbstractGroepLedenModel {
 
-	const ORM = 'LichtingsLid';
+	const ORM = LichtingsLid::class;
 
 	protected static $instance;
 
@@ -156,7 +156,7 @@ class LichtingLedenModel extends AbstractGroepLedenModel {
 
 class VerticaleLedenModel extends AbstractGroepLedenModel {
 
-	const ORM = 'VerticaleLid';
+	const ORM = VerticaleLid::class;
 
 	protected static $instance;
 
@@ -208,7 +208,7 @@ class VerticaleLedenModel extends AbstractGroepLedenModel {
 
 class KringLedenModel extends AbstractGroepLedenModel {
 
-	const ORM = 'KringLid';
+	const ORM = KringLid::class;
 
 	protected static $instance;
 
@@ -216,7 +216,7 @@ class KringLedenModel extends AbstractGroepLedenModel {
 
 class CommissieLedenModel extends AbstractGroepLedenModel {
 
-	const ORM = 'CommissieLid';
+	const ORM = CommissieLid::class;
 
 	protected static $instance;
 
@@ -224,7 +224,7 @@ class CommissieLedenModel extends AbstractGroepLedenModel {
 
 class BestuursLedenModel extends AbstractGroepLedenModel {
 
-	const ORM = 'BestuursLid';
+	const ORM = BestuursLid::class;
 
 	protected static $instance;
 
@@ -232,7 +232,7 @@ class BestuursLedenModel extends AbstractGroepLedenModel {
 
 class KetzerDeelnemersModel extends AbstractGroepLedenModel {
 
-	const ORM = 'KetzerDeelnemer';
+	const ORM = KetzerDeelnemer::class;
 
 	protected static $instance;
 
@@ -240,7 +240,7 @@ class KetzerDeelnemersModel extends AbstractGroepLedenModel {
 
 class WerkgroepDeelnemersModel extends KetzerDeelnemersModel {
 
-	const ORM = 'WerkgroepDeelnemer';
+	const ORM = WerkgroepDeelnemer::class;
 
 	protected static $instance;
 
@@ -248,7 +248,7 @@ class WerkgroepDeelnemersModel extends KetzerDeelnemersModel {
 
 class ActiviteitDeelnemersModel extends KetzerDeelnemersModel {
 
-	const ORM = 'ActiviteitDeelnemer';
+	const ORM = ActiviteitDeelnemer::class;
 
 	protected static $instance;
 

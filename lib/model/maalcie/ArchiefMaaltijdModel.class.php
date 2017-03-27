@@ -3,7 +3,7 @@
 use CsrDelft\Orm\PersistenceModel;
 
 class ArchiefMaaltijdModel extends PersistenceModel {
-    const ORM = 'ArchiefMaaltijd';
+    const ORM = ArchiefMaaltijd::class;
     const DIR = 'maalcie/';
 
     protected static $instance;

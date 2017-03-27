@@ -9,7 +9,7 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class BijbelroosterModel extends PersistenceModel {
 
-	const ORM = 'Bijbelrooster';
+	const ORM = Bijbelrooster::class;
 
 	protected static $instance;
 

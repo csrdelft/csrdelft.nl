@@ -15,7 +15,7 @@ require_once 'model/entity/Mail.class.php';
  */
 class ProfielModel extends CachedPersistenceModel {
 
-	const ORM = 'Profiel';
+	const ORM = Profiel::class;
 
 	protected static $instance;
 
