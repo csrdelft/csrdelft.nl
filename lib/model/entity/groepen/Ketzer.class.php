@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Ketzer extends AbstractGroep {
 
-	const leden = 'KetzerDeelnemersModel';
+	const LEDEN = 'KetzerDeelnemersModel';
 
 	/**
 	 * Maximaal aantal groepsleden
@@ -77,7 +77,7 @@ class Ketzer extends AbstractGroep {
 	public function mag($action) {
 		switch ($action) {
 
-			case A::Aanmelden:
+			case AccessAction::AANMELDEN:
 				// Controleer maximum leden
 				if (isset($this->aanmeld_limiet) AND $this->aantalLeden() >= $this->aanmeld_limiet) {
 					return false;
@@ -88,14 +88,14 @@ class Ketzer extends AbstractGroep {
 				}
 				break;
 
-			case A::Bewerken:
+			case AccessAction::BEWERKEN:
 				// Controleer bewerkperiode
 				if (time() > strtotime($this->bewerken_tot)) {
 					return false;
 				}
 				break;
 
-			case A::Afmelden:
+			case AccessAction::AFMELDEN:
 				// Controleer afmeldperiode
 				if (time() > strtotime($this->afmelden_tot)) {
 					return false;
@@ -114,10 +114,10 @@ class Ketzer extends AbstractGroep {
 	public static function magAlgemeen($action) {
 		switch ($action) {
 
-			case A::Aanmaken:
-			case A::Aanmelden:
-			case A::Bewerken:
-			case A::Afmelden:
+			case AccessAction::AANMAKEN:
+			case AccessAction::AANMELDEN:
+			case AccessAction::BEWERKEN:
+			case AccessAction::AFMELDEN:
 				return true;
 		}
 		return parent::magAlgemeen($action);

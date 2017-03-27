@@ -67,8 +67,8 @@ class MededelingenView extends SmartyTemplateView {
 	private $paginaNummerOpgevraagd;
 	private $prullenbak;
 
-	const aantalTopMostBlock = 3;
-	const mededelingenRoot = '/mededelingen/';
+	const AANTALTOPMOSTBLOCK = 3;
+	const MEDEDELINGENROOT = '/mededelingen/';
 
 	/**
 	 * @var MededelingenModel
@@ -118,7 +118,7 @@ class MededelingenView extends SmartyTemplateView {
 		if ($this->geselecteerdeMededeling === null) {
 			// Als er minstens één 'topmost' mededeling is, maak dat de geselecteerde.
 			// Anders, hou $this->geselecteerdeMededeling gelijk aan null.
-			$topMost = $this->model->getTopmost(self::aantalTopMostBlock); // Haal de n belangrijkste mededelingen op.
+			$topMost = $this->model->getTopmost(self::AANTALTOPMOSTBLOCK); // Haal de n belangrijkste mededelingen op.
 			if (isset($topMost[0])) {
 				$this->geselecteerdeMededeling = $topMost[0];
 			}
@@ -141,12 +141,12 @@ class MededelingenView extends SmartyTemplateView {
 		}
 
 		// De link om terug te gaan naar de mededelingenketser.
-		$this->smarty->assign('mededelingenketser_root', self::mededelingenRoot);
+		$this->smarty->assign('mededelingenketser_root', self::MEDEDELINGENROOT);
 		// Het pad naar de paginaroot (mededelingenketser of prullenbak).
 		if (!$this->prullenbak) {
-			$this->smarty->assign('pagina_root', self::mededelingenRoot);
+			$this->smarty->assign('pagina_root', self::MEDEDELINGENROOT);
 		} else {
-			$this->smarty->assign('pagina_root', self::mededelingenRoot . 'prullenbak/');
+			$this->smarty->assign('pagina_root', self::MEDEDELINGENROOT . 'prullenbak/');
 		}
 		$this->smarty->assign('model', $this->model);
 		$this->smarty->assign('lijst', $this->model->getLijstVanPagina($this->paginaNummer, LidInstellingen::get('mededelingen', 'aantalPerPagina'), $this->prullenbak));
@@ -159,7 +159,7 @@ class MededelingenView extends SmartyTemplateView {
 	}
 
 	public function getTopBlock($doelgroep) {
-		$topMost = $this->model->getTopmost(self::aantalTopMostBlock, $doelgroep);
+		$topMost = $this->model->getTopmost(self::AANTALTOPMOSTBLOCK, $doelgroep);
 		$this->smarty->assign('topmost', $topMost);
 
 		return $this->smarty->fetch('mededelingen/mededelingentopblock.tpl');

@@ -9,25 +9,25 @@ use CsrDelft\Orm\Entity\PersistentEnum;
 
 abstract class MededelingAccess implements PersistentEnum {
 
-    const Post = 'P_NEWS_POST';
-    const Mod = 'P_NEWS_MOD';
+    const POST = 'P_NEWS_POST';
+    const MOD = 'P_NEWS_MOD';
 
     public static function getTypeOptions() {
-        return array(self::Post, self::Mod);
+        return array(self::POST, self::MOD);
     }
 
     public static function getDescription($option) {
         switch ($option) {
-            case self::Post: return 'Ouderejaarskring';
-            case self::Mod: return 'Eerstejaarskring';
+            case self::POST: return 'Ouderejaarskring';
+            case self::MOD: return 'Eerstejaarskring';
             default: throw new Exception('Toegang onbekend');
         }
     }
 
     public static function getChar($option) {
         switch ($option) {
-            case self::Post: return 'P';
-            case self::Mod: return 'M';
+            case self::POST: return 'P';
+            case self::MOD: return 'M';
             default: throw new Exception('Toegang onbekend');
         }
     }

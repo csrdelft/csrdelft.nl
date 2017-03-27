@@ -14,7 +14,7 @@ require_once 'model/entity/groepen/CommissieSoort.enum.php';
  */
 class Commissie extends AbstractGroep {
 
-	const leden = 'CommissieLedenModel';
+	const LEDEN = 'CommissieLedenModel';
 
 	/**
 	 * (Bestuurs-)Commissie / SjaarCie
@@ -48,7 +48,7 @@ class Commissie extends AbstractGroep {
 	public static function magAlgemeen($action, $soort = null) {
 		switch ($soort) {
 
-			case CommissieSoort::SjaarCie:
+			case CommissieSoort::SJAARCIE:
 				if (LoginModel::mag('commissie:NovCie')) {
 					return true;
 				}

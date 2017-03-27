@@ -45,7 +45,7 @@ class ApiAgendaController {
 		$activiteiten = ActiviteitenModel::instance()->find('in_agenda = TRUE AND (' . $query . ')', $find);
 		$activiteitenFiltered = array();
 		foreach ($activiteiten as $activiteit) {
-			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(A::Bekijken)) {
+			if (in_array($activiteit->soort, array(ActiviteitSoort::EXTERN, ActiviteitSoort::OWEE, ActiviteitSoort::IFES)) OR $activiteit->mag(AccessAction::BEKIJKEN)) {
 				$activiteitenFiltered[] = $activiteit;
 			}
 		}

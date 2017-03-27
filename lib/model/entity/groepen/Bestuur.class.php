@@ -9,7 +9,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Bestuur extends AbstractGroep {
 
-	const leden = 'BestuursLedenModel';
+	const LEDEN = 'BestuursLedenModel';
 
 	/**
 	 * Bestuurstekst

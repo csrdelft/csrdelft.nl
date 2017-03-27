@@ -10,7 +10,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class RechtenGroep extends AbstractGroep {
 
-	const leden = 'RechtenGroepLedenModel';
+	const LEDEN = 'RechtenGroepLedenModel';
 
 	/**
 	 * Rechten benodigd voor aanmelden
@@ -43,10 +43,10 @@ class RechtenGroep extends AbstractGroep {
 	public function mag($action) {
 		switch ($action) {
 
-			case A::Bekijken:
-			case A::Aanmelden:
-			case A::Bewerken:
-			case A::Afmelden:
+			case AccessAction::BEKIJKEN:
+			case AccessAction::AANMELDEN:
+			case AccessAction::BEWERKEN:
+			case AccessAction::AFMELDEN:
 				if (!LoginModel::mag($this->rechten_aanmelden)) {
 					return false;
 				}

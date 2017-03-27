@@ -50,7 +50,7 @@ class Barsysteem
         foreach ($terug as $row) {
             $persoon = array();
             $persoon["naam"] = $row["naam"];
-            $persoon["status"] = LidStatus::Nobody;
+            $persoon["status"] = LidStatus::NOBODY;
             if ($row["stekUID"]) {
                 $profiel = ProfielModel::get($row["stekUID"]);
                 if ($profiel) {

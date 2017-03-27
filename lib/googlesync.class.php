@@ -509,7 +509,7 @@ class GoogleSync {
 			}
 			//geslacht?
 			$gender = $doc->createElement('gContact:gender');
-			$gender->setAttribute('value', $profiel->geslacht == Geslacht::Man ? 'male' : 'female');
+			$gender->setAttribute('value', $profiel->geslacht == Geslacht::MAN ? 'male' : 'female');
 			//$entry->appendChild($gender);
 		}
 

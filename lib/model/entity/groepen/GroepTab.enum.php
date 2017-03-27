@@ -11,34 +11,34 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 abstract class GroepTab implements PersistentEnum {
 
-	const Lijst = 'lijst';
-	const Pasfotos = 'pasfotos';
-	const Statistiek = 'stats';
-	const Emails = 'emails';
-	const Eetwens = 'eetwens';
+	const LIJST = 'lijst';
+	const PASFOTOS = 'pasfotos';
+	const STATS = 'stats';
+    const EMAILS = 'emails';
+	const EETWENS = 'eetwens';
 
 	public static function getTypeOptions() {
-		return array(self::Lijst, self::Pasfotos, self::Statistiek, self::Emails, self::Eetwens);
+		return array(self::LIJST, self::PASFOTOS, self::STATS, self::EMAILS, self::EETWENS);
 	}
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::Lijst: return 'Lijst';
-			case self::Pasfotos: return 'Pasfoto\'s';
-			case self::Statistiek: return 'Statistiek';
-			case self::Emails: return 'E-mails';
-			case self::Eetwens: return 'Allergie/dieet';
+			case self::LIJST: return 'Lijst';
+			case self::PASFOTOS: return 'Pasfoto\'s';
+			case self::STATS: return 'Statistiek';
+			case self::EMAILS: return 'E-mails';
+			case self::EETWENS: return 'Allergie/dieet';
 			default: throw new Exception('GroepTab onbekend');
 		}
 	}
 
 	public static function getChar($option) {
 		switch ($option) {
-			case self::Lijst: return 'l';
-			case self::Pasfotos: return 'p';
-			case self::Statistiek: return 's';
-			case self::Emails: return 'e';
-			case self::Eetwens: return 'a';
+			case self::LIJST: return 'l';
+			case self::PASFOTOS: return 'p';
+			case self::STATS: return 's';
+			case self::EMAILS: return 'e';
+			case self::EETWENS: return 'a';
 			default: throw new Exception('GroepTab onbekend');
 		}
 	}

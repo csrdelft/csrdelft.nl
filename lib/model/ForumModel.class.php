@@ -77,7 +77,7 @@ class ForumModel extends CachedPersistenceModel {
 		}
 
 		// Voor alle ex-leden settings opschonen
-		$uids = Database::instance()->sqlSelect(array('uid'), ProfielModel::instance()->getTableName(), 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
+		$uids = Database::instance()->sqlSelect(array('uid'), ProfielModel::instance()->getTableName(), 'status IN (?,?,?,?)', array(LidStatus::COMMISSIE, LidStatus::NOBODY, LidStatus::EXLID, LidStatus::OVERLEDEN));
 		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($uids as $uid) {
 			if (AccountModel::isValidUid($uid)) {

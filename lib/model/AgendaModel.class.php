@@ -67,7 +67,7 @@ class AgendaModel extends PersistenceModel {
 		  )', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
 		foreach ($activiteiten as $activiteit) {
 			// Alleen bekijken in agenda (leden bekijken mag dus niet)
-			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(A::Bekijken)) {
+			if (in_array($activiteit->soort, array(ActiviteitSoort::EXTERN, ActiviteitSoort::OWEE, ActiviteitSoort::IFES)) OR $activiteit->mag(AccessAction::BEKIJKEN)) {
 				$result[] = $activiteit;
 			}
 		}

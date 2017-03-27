@@ -9,7 +9,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Lichting extends AbstractGroep {
 
-	const leden = 'LichtingLedenModel';
+	const LEDEN = 'LichtingLedenModel';
 
 	/**
 	 * Lidjaar
@@ -37,14 +37,14 @@ class Lichting extends AbstractGroep {
 	 * Read-only: generated group
 	 */
 	public function mag($action) {
-		return $action === A::Bekijken;
+		return $action === AccessAction::BEKIJKEN;
 	}
 
 	/**
 	 * Read-only: generated group
 	 */
 	public static function magAlgemeen($action) {
-		return $action === A::Bekijken;
+		return $action === AccessAction::BEKIJKEN;
 	}
 
 }

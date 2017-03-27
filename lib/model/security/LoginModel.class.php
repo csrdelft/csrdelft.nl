@@ -246,11 +246,11 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// Autologin
 		if ($remember) {
-			$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
+			$_SESSION['_authenticationMethod'] = AuthenticationMethod::COOKIE_TOKEN;
 		}
 		// Previously(!) verified private token or OneTimeToken
 		elseif ($alreadyAuthenticatedByUrlToken) {
-			$_SESSION['_authenticationMethod'] = AuthenticationMethod::url_token;
+			$_SESSION['_authenticationMethod'] = AuthenticationMethod::URL_TOKEN;
 		} else {
 			// Moet eventueel wachten?
 			if ($evtWachten) {
@@ -265,7 +265,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			// Check password
 			if (AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
 				AccountModel::instance()->successfulLoginAttempt($account);
-				$_SESSION['_authenticationMethod'] = AuthenticationMethod::password_login;
+				$_SESSION['_authenticationMethod'] = AuthenticationMethod::PASSWORD_LOGIN;
 			}
 			// Wrong password
 			else {
@@ -414,9 +414,9 @@ class LoginModel extends PersistenceModel implements Validator {
 			return null;
 		}
 		$method = $_SESSION['_authenticationMethod'];
-		if ($method === AuthenticationMethod::password_login) {
+		if ($method === AuthenticationMethod::PASSWORD_LOGIN) {
 			if ($this->current_session AND $this->current_session->isRecent()) {
-				return AuthenticationMethod::recent_password_login;
+				return AuthenticationMethod::RECENT_PASSWORD_LOGIN;
 			}
 		}
 		return $method;

@@ -65,7 +65,7 @@ class ProfielModel extends CachedPersistenceModel {
 		$profiel = new Profiel();
 		$profiel->lidjaar = $lidjaar;
 		$profiel->status = $lidstatus;
-        $profiel->ontvangtcontactueel = OntvangtContactueel::Nee;
+        $profiel->ontvangtcontactueel = OntvangtContactueel::NEE;
 		$profiel->changelog = '[div]Aangemaakt als ' . LidStatus::getDescription($profiel->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $profiel;
 	}
@@ -174,11 +174,11 @@ class ProfielModel extends CachedPersistenceModel {
 	public function wijzig_lidstatus(Profiel $profiel, $oudestatus) {
 		$changelog = '';
 		// Maaltijd en corvee bijwerken
-		$geenAboEnCorveeVoor = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Commissie, LidStatus::Overleden);
+		$geenAboEnCorveeVoor = array(LidStatus::OUDLID, LidStatus::ERELID, LidStatus::NOBODY, LidStatus::EXLID, LidStatus::COMMISSIE, LidStatus::OVERLEDEN);
 		if (in_array($profiel->status, $geenAboEnCorveeVoor)) {
 			//maaltijdabo's uitzetten (R_ETER is een S_NOBODY die toch een abo mag hebben)
 			$account = AccountModel::get($profiel->uid);
-			if (!$account OR $account->perm_role !== AccessRole::Eter) {
+			if (!$account OR $account->perm_role !== AccessAction::Eter) {
 				$removedabos = $this->disableMaaltijdabos($profiel, $oudestatus);
 				if ($removedabos != '') {
 					$changelog .= $removedabos;
@@ -191,8 +191,8 @@ class ProfielModel extends CachedPersistenceModel {
 			}
 		}
 		// Mailen naar fisci,bibliothecaris...
-		$wordtinactief = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden);
-		$wasactief = array(LidStatus::Noviet, LidStatus::Gastlid, LidStatus::Lid, LidStatus::Kringel);
+		$wordtinactief = array(LidStatus::OUDLID, LidStatus::ERELID, LidStatus::NOBODY, LidStatus::EXLID, LidStatus::OVERLEDEN);
+		$wasactief = array(LidStatus::NOVIET, LidStatus::GASTLID, LidStatus::LID, LidStatus::KRINGEL);
 		if (in_array($profiel->status, $wordtinactief) AND in_array($oudestatus, $wasactief)) {
 			$this->notifyFisci($profiel, $oudestatus);
 			$this->notifyBibliothecaris($profiel, $oudestatus);
@@ -314,7 +314,7 @@ class ProfielModel extends CachedPersistenceModel {
 			}
 		}
 		// Kopjes
-		$mv = ($profiel->geslacht == Geslacht::Man ? 'hem' : 'haar');
+		$mv = ($profiel->geslacht == Geslacht::MAN ? 'hem' : 'haar');
 		$enkelvoud = "Het volgende boek is nog door {$mv} geleend";
 		$meervoud = "De volgende boeken zijn nog door {$mv} geleend";
 		if ($bkncsr['aantal'])
@@ -336,7 +336,7 @@ class ProfielModel extends CachedPersistenceModel {
 			'NAAM'		 => ProfielModel::getNaam($profiel->uid, 'volledig'),
 			'UID'		 => $profiel->uid,
 			'OUD'		 => substr($oudestatus, 2),
-			'NIEUW'		 => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),
+			'NIEUW'		 => ($profiel->status === LidStatus::NOBODY ? 'GEEN LID' : substr($profiel->status, 2)),
 			'CSRLIJST'	 => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
 			'LEDENLIJST' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
 			'ADMIN'		 => LoginModel::getProfiel()->getNaam()

@@ -11,34 +11,34 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 abstract class AuthenticationMethod implements PersistentEnum {
 
-	const url_token = 'ut';
-	const cookie_token = 'ct';
-	const password_login = 'pl';
-	const recent_password_login = 'rpl';
-	const password_login_and_one_time_token = 'plaott';
+	const URL_TOKEN = 'ut';
+	const COOKIE_TOKEN = 'ct';
+	const PASSWORD_LOGIN = 'pl';
+	const RECENT_PASSWORD_LOGIN = 'rpl';
+	const PASSWORD_LOGIN_AND_ONE_TIME_TOKEN = 'plaott';
 
 	public static function getTypeOptions() {
-		return array(self::url_token, self::cookie_token, self::password_login, self::recent_password_login, self::password_login_and_one_time_token);
+		return array(self::URL_TOKEN, self::COOKIE_TOKEN, self::PASSWORD_LOGIN, self::RECENT_PASSWORD_LOGIN, self::PASSWORD_LOGIN_AND_ONE_TIME_TOKEN);
 	}
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::url_token: return 'Private url';
-			case self::cookie_token: return 'Auto-login';
-			case self::password_login: return 'Normal login';
-			case self::recent_password_login: return 'Confirm password';
-			case self::password_login_and_one_time_token: return 'Two-step verification (2SV)';
+			case self::URL_TOKEN: return 'Private url';
+			case self::COOKIE_TOKEN: return 'Auto-login';
+			case self::PASSWORD_LOGIN: return 'Normal login';
+			case self::RECENT_PASSWORD_LOGIN: return 'Confirm password';
+			case self::PASSWORD_LOGIN_AND_ONE_TIME_TOKEN: return 'Two-step verification (2SV)';
 			default: throw new Exception('AuthenticationMethod onbekend');
 		}
 	}
 
 	public static function getChar($option) {
 		switch ($option) {
-			case self::url_token:
-			case self::cookie_token:
-			case self::password_login:
-			case self::recent_password_login:
-			case self::password_login_and_one_time_token:
+			case self::URL_TOKEN:
+			case self::COOKIE_TOKEN:
+			case self::PASSWORD_LOGIN:
+			case self::RECENT_PASSWORD_LOGIN:
+			case self::PASSWORD_LOGIN_AND_ONE_TIME_TOKEN:
 				return strtoupper($option);
 			default: throw new Exception('AuthenticationMethod onbekend');
 		}

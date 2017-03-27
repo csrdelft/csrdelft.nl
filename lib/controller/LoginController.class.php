@@ -151,7 +151,7 @@ class LoginController extends AclController {
 			return $this->accountaanvragen();
 		}
 		// bewerken
-		if (LoginModel::instance()->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
+		if (LoginModel::instance()->getAuthenticationMethod() !== AuthenticationMethod::RECENT_PASSWORD_LOGIN) {
 			setMelding('U mag geen account wijzigen want u bent niet recent met wachtwoord ingelogd', 2);
 			$this->exit_http(403);
 		}
@@ -220,7 +220,7 @@ class LoginController extends AclController {
 			$form = new WachtwoordVergetenForm();
 			if ($form->validate()) {
 				// voorkom dat AccessModel ingelogde gebruiker blokkeerd als AuthenticationMethod::token_url niet toegestaan is
-				if (LoginModel::instance()->getAuthenticationMethod() === AuthenticationMethod::url_token) {
+				if (LoginModel::instance()->getAuthenticationMethod() === AuthenticationMethod::URL_TOKEN) {
 					LoginModel::instance()->login('x999', 'x999', false);
 				}
 				$values = $form->getValues();
@@ -254,7 +254,7 @@ class LoginController extends AclController {
 		$form = new VerifyForm($tokenString);
 		if ($form->validate()) {
 			// voorkom dat AccessModel ingelogde gebruiker blokkeerd als AuthenticationMethod::token_url niet toegestaan is
-			if (LoginModel::instance()->getAuthenticationMethod() === AuthenticationMethod::url_token) {
+			if (LoginModel::instance()->getAuthenticationMethod() === AuthenticationMethod::URL_TOKEN) {
 				LoginModel::instance()->login('x999', 'x999', false);
 			}
 			$uid = $form->findByName('user')->getValue();

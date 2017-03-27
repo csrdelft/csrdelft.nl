@@ -79,9 +79,9 @@ class MededelingenController extends AclController {
 
         setMelding("Mededeling is verwijderd.", 1);
         if ($this->prullenbak) {
-            redirect(MededelingenView::mededelingenRoot . 'prullenbak');
+            redirect(MededelingenView::MEDEDELINGENROOT . 'prullenbak');
         } else {
-            redirect(MededelingenView::mededelingenRoot);
+            redirect(MededelingenView::MEDEDELINGENROOT);
         }
     }
 
@@ -139,7 +139,7 @@ class MededelingenController extends AclController {
 						"\r\nDe inhoud van de mededeling is als volgt: \r\n\r\n" . str_replace('\r\n', "\n", $mededeling->tekst) . "\r\n\r\nEINDE BERICHT", "From: pubcie@csrdelft.nl\nReply-To: " . $mededeling->uid . "@csrdelft.nl");
                 }
 
-                $nieuweLocatie = MededelingenView::mededelingenRoot;
+                $nieuweLocatie = MededelingenView::MEDEDELINGENROOT;
                 if ($mededeling->verborgen) {
                     $nieuweLocatie .= 'prullenbak/';
                 }
@@ -156,7 +156,7 @@ class MededelingenController extends AclController {
         $mededeling->zichtbaarheid = 'zichtbaar';
         $this->model->update($mededeling);
         setMelding("Mededeling is goedgekeurd.", 1);
-        redirect(MededelingenView::mededelingenRoot . $mededeling->id);
+        redirect(MededelingenView::MEDEDELINGENROOT . $mededeling->id);
     }
 
 }

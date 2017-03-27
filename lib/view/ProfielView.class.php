@@ -23,7 +23,7 @@ class ProfielView extends SmartyTemplateView {
 		$kring = $this->model->getKring();
 		if ($kring) {
 			$html = '<a href="' . $kring->getUrl() . '">' . $kring->naam;
-			if ($this->model->status === LidStatus::Kringel) {
+			if ($this->model->status === LidStatus::KRINGEL) {
 				$html .= ' (kringel)';
 			} elseif ($kring->getLid($this->model->uid)->opmerking === 'Leider') {
 				$html .= ' (kringleider)';
@@ -210,16 +210,16 @@ class ProfielForm extends Formulier {
 			if ($profiel->voornaam == '') {
 				$gelijknamigenovieten = array();
 			} else {
-				$gelijknamigenovieten = LidZoeker::zoekLeden($profiel->voornaam, 'voornaam', 'alle', 'achternaam', array(LidStatus::Noviet), array('uid'));
+				$gelijknamigenovieten = LidZoeker::zoekLeden($profiel->voornaam, 'voornaam', 'alle', 'achternaam', array(LidStatus::NOVIET), array('uid'));
 			}
 			if ($profiel->achternaam == '') {
 				$gelijknamigeleden = array();
 			} else {
-				$gelijknamigeleden = LidZoeker::zoekLeden($profiel->achternaam, 'achternaam', 'alle', 'lidjaar', array(LidStatus::Lid, LidStatus::Gastlid), array('uid'));
+				$gelijknamigeleden = LidZoeker::zoekLeden($profiel->achternaam, 'achternaam', 'alle', 'lidjaar', array(LidStatus::LID, LidStatus::GASTLID), array('uid'));
 			}
 
 			$html = '<div class="novieten">';
-			if (count($gelijknamigenovieten) > 1 OR ( $profiel->status !== LidStatus::Noviet AND ! empty($gelijknamigenovieten))) {
+			if (count($gelijknamigenovieten) > 1 OR ( $profiel->status !== LidStatus::NOVIET AND ! empty($gelijknamigenovieten))) {
 				$html .= 'Gelijknamige novieten:<ul class="nobullets">';
 				foreach ($gelijknamigenovieten as $noviet) {
 					$html .= '<li>' . ProfielModel::getLink($noviet['uid'], 'volledig') . '</li>';
@@ -229,7 +229,7 @@ class ProfielForm extends Formulier {
 				$html .= 'Geen novieten met overeenkomstige namen.';
 			}
 			$html .= '</div><div class="leden">';
-			if (count($gelijknamigeleden) > 1 OR ( !($profiel->status == LidStatus::Lid OR $profiel->status == LidStatus::Gastlid) AND ! empty($gelijknamigeleden))) {
+			if (count($gelijknamigeleden) > 1 OR ( !($profiel->status == LidStatus::LID OR $profiel->status == LidStatus::GASTLID) AND ! empty($gelijknamigeleden))) {
 				$html .= 'Gelijknamige (gast)leden:<ul class="nobullets">';
 				foreach ($gelijknamigeleden as $lid) {
 					$html .= '<li>' . ProfielModel::getLink($lid['uid'], 'volledig') . '</li>';
@@ -258,10 +258,10 @@ class ProfielForm extends Formulier {
 				}
 			}
 			$fields[] = new RequiredDateField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15);
-			if ($admin AND $profiel->status === LidStatus::Overleden) {
+			if ($admin AND $profiel->status === LidStatus::OVERLEDEN) {
 				$fields[] = new DateField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
 			}
-			if (($admin OR $profiel->isOudlid() OR $profiel->status === LidStatus::Overleden) AND ! $inschrijven) {
+			if (($admin OR $profiel->isOudlid() OR $profiel->status === LidStatus::OVERLEDEN) AND ! $inschrijven) {
 				$fields[] = new LidField('echtgenoot', $profiel->echtgenoot, 'Echtgenoot', 'allepersonen');
 				$fields[] = new Subkopje('Oudledenpost');
 				$fields[] = new TextField('adresseringechtpaar', $profiel->adresseringechtpaar, 'Tenaamstelling post echtpaar', 250);

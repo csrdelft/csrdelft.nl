@@ -189,7 +189,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 		}
 		// leden verwijderen
 		try {
-			$oldleden = $oldgroep::leden;
+			$oldleden = $oldgroep::LEDEN;
 			$oldledenmodel = $oldleden::instance();
 			foreach ($oldgroep->getLeden() as $oldlid) {
 				$oldledenmodel->delete($oldlid);
@@ -400,7 +400,7 @@ class CommissiesModel extends AbstractGroepenModel {
 
 	public function nieuw($soort = null) {
 		if (!in_array($soort, CommissieSoort::getTypeOptions())) {
-			$soort = CommissieSoort::Commissie;
+			$soort = CommissieSoort::COMMISSIE;
 		}
 		$commissie = parent::nieuw();
 		$commissie->soort = $soort;
@@ -457,7 +457,7 @@ class ActiviteitenModel extends KetzersModel {
 
 	public function nieuw($soort = null) {
 		if (!in_array($soort, ActiviteitSoort::getTypeOptions())) {
-			$soort = ActiviteitSoort::SjaarsActie;
+			$soort = ActiviteitSoort::SJAARSACTIE;
 		}
 		$activiteit = parent::nieuw();
 		$activiteit->soort = $soort;

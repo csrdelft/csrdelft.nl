@@ -219,7 +219,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		if ($this->uid === LoginModel::getUid()) {
 			return true;
 		}
-		if ($this->status === LidStatus::Noviet AND LoginModel::mag('commissie:NovCie')) {
+		if ($this->status === LidStatus::NOVIET AND LoginModel::mag('commissie:NovCie')) {
 			return true;
 		}
 		return false;
@@ -482,17 +482,17 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 			case 'civitas':
 				// noviet
-				if ($this->status === LidStatus::Noviet) {
+				if ($this->status === LidStatus::NOVIET) {
 					$naam = 'Noviet ' . $this->voornaam;
 					if (!empty($this->postfix)) {
 						$naam .= ' ' . $this->postfix;
 					}
 				} elseif ($this->isLid() OR $this->isOudlid()) {
 					// voor novieten is het Dhr./ Mevr.
-					if (LoginModel::getProfiel()->status === LidStatus::Noviet) {
-						$naam = ($this->geslacht === Geslacht::Vrouw) ? 'Mevr. ' : 'Dhr. ';
+					if (LoginModel::getProfiel()->status === LidStatus::NOVIET) {
+						$naam = ($this->geslacht === Geslacht::VROUW) ? 'Mevr. ' : 'Dhr. ';
 					} else {
-						$naam = ($this->geslacht === Geslacht::Vrouw) ? 'Ama. ' : 'Am. ';
+						$naam = ($this->geslacht === Geslacht::VROUW) ? 'Ama. ' : 'Am. ';
 					}
 					if (!empty($this->tussenvoegsel)) {
 						$naam .= ucfirst($this->tussenvoegsel) . ' ';
@@ -518,7 +518,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 					}
 					$naam .= $this->achternaam;
 					// status char weergeven bij kringels
-					if ($this->status === LidStatus::Kringel) {
+					if ($this->status === LidStatus::KRINGEL) {
 						$naam .= ' ' . LidStatus::getChar($this->status);
 					}
 				}

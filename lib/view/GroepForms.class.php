@@ -89,7 +89,7 @@ class GroepForm extends ModalForm {
 			 * 
 			 * N.B.: Deze check staat binnen de !magAlgemeen zodat P_LEDEN_MOD deze check overslaat
 			 */
-			elseif ($this->mode === A::Wijzigen AND $groep instanceof Woonoord) {
+			elseif ($this->mode === AccessAction::WIJZIGEN AND $groep instanceof Woonoord) {
 
 				$origvalue = $this->findByName('soort')->getOrigValue();
 				if ($origvalue !== $soort) {
@@ -155,7 +155,7 @@ class GroepSoortField extends RadioField {
 		if (property_exists($groep, 'soort') AND in_array($groep->soort, $activiteiten)) {
 			$default = $groep->soort;
 		} else {
-			$default = ActiviteitSoort::Vereniging;
+			$default = ActiviteitSoort::VERENIGING;
 		}
 		$this->activiteit = new SelectField('activiteit', $default, null, $activiteiten);
 		$this->activiteit->onclick = <<<JS
@@ -171,7 +171,7 @@ JS;
 		if (property_exists($groep, 'soort') AND in_array($groep->soort, $commissies)) {
 			$default = $groep->soort;
 		} else {
-			$default = CommissieSoort::Commissie;
+			$default = CommissieSoort::COMMISSIE;
 		}
 		$this->commissie = new SelectField('commissie', $default, null, $commissies);
 		$this->commissie->onclick = <<<JS
@@ -262,7 +262,7 @@ class KetzerSoortField extends GroepSoortField {
 			case 'KetzersModel':
 				$model = $class[0]::instance(); // require once
 				$orm = $model::ORM;
-				if (!$orm::magAlgemeen(A::Aanmaken, $soort)) {
+				if (!$orm::magAlgemeen(AccessAction::AANMAKEN, $soort)) {
 					if ($model instanceof ActiviteitenModel) {
 						$naam = ActiviteitSoort::getDescription($soort);
 					} else {
