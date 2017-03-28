@@ -21,7 +21,7 @@ class FiscaatRouterController extends AclController {
 	}
 
 	public function producten() {
-		require_once 'controller/fiscaat/BeheerProductenController.class.php';
-		return new BeheerProductenController($this->model);
+		require_once 'controller/fiscaat/BeheerCiviProductenController.class.php';
+		return new BeheerCiviProductenController($this->model);
 	}
 }

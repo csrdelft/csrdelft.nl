@@ -4,25 +4,25 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'model/entity/fiscaal/MaalcieProduct.class.php';
-require_once 'model/fiscaal/MaalciePrijsModel.class.php';
+require_once 'model/entity/fiscaal/CiviProduct.class.php';
+require_once 'model/fiscaal/CiviPrijsModel.class.php';
 
-class MaalcieProductModel extends PersistenceModel {
-	const ORM = 'MaalcieProduct';
+class CiviProductModel extends PersistenceModel {
+	const ORM = CiviProduct::class;
 	const DIR = 'fiscaal/';
 
 	protected static $instance;
 
 	/**
-	 * @param MaalcieProduct $product
-	 * @return MaalciePrijs
+	 * @param CiviProduct $product
+	 * @return CiviPrijs
 	 */
 	public function getPrijs($product) {
-		return MaalciePrijsModel::instance()->find('productid = ?', $product->getValues(true), null, 'van DESC', 1)->fetch();
+		return CiviPrijsModel::instance()->find('productid = ?', $product->getValues(true), null, 'van DESC', 1)->fetch();
 	}
 
 	public function getProduct($id) {
-		/** @var MaalcieProduct $product */
+		/** @var CiviProduct $product */
 		$product = $this->retrieveByPrimaryKey(array($id));
 
 		$product->prijs = $this->getPrijs($product)->prijs;
@@ -31,7 +31,7 @@ class MaalcieProductModel extends PersistenceModel {
 	}
 
 	public function find($criteria = null, array $criteria_params = array(), $group_by = null, $order_by = null, $limit = null, $start = 0) {
-		/** @var MaalcieProduct[] $entries */
+		/** @var CiviProduct[] $entries */
 		$entries = parent::find($criteria, $criteria_params, $group_by, $order_by, $limit, $start)->fetchAll();
 
 		foreach ($entries as $entry) {
@@ -42,44 +42,44 @@ class MaalcieProductModel extends PersistenceModel {
 	}
 
 	/**
-	 * @param PersistentEntity|MaalcieProduct $product
+	 * @param PersistentEntity|CiviProduct $product
 	 * @return string last insert id
 	 */
 	public function create(PersistentEntity $product) {
 		return Database::transaction(function () use ($product) {
 			$product->id = parent::create($product);
 
-			$prijs = new MaalciePrijs();
+			$prijs = new CiviPrijs();
 			$prijs->productid = $product->id;
 			$prijs->van = date_create('now')->format(DateTime::ISO8601);
 			$prijs->tot = date_create('0000-00-00')->format(DateTime::ISO8601);
 			$prijs->prijs = $product->prijs;
 
-			MaalciePrijsModel::instance()->create($prijs);
+			CiviPrijsModel::instance()->create($prijs);
 
 			return $product->id;
 		});
 	}
 
 	/**
-	 * @param PersistentEntity|MaalcieProduct $product
+	 * @param PersistentEntity|CiviProduct $product
 	 * @return int number of rows affected
 	 */
 	public function update(PersistentEntity $product) {
 		return Database::transaction(function () use ($product) {
 			$nu = date_create('now')->format(DateTime::ISO8601);
 
-			/** @var MaalciePrijs $prijs */
+			/** @var CiviPrijs $prijs */
 			$prijs = $this->getPrijs($product);
 			$prijs->tot = $nu;
-			MaalciePrijsModel::instance()->update($prijs);
+			CiviPrijsModel::instance()->update($prijs);
 
-			$nieuw_prijs = new MaalciePrijs();
+			$nieuw_prijs = new CiviPrijs();
 			$nieuw_prijs->productid = $product->id;
 			$nieuw_prijs->van = $nu;
 			$nieuw_prijs->tot = date_create('0000-00-00')->format(DateTime::ISO8601);
 			$nieuw_prijs->prijs = $product->prijs;
-			MaalciePrijsModel::instance()->create($nieuw_prijs);
+			CiviPrijsModel::instance()->create($nieuw_prijs);
 
 			return parent::update($product);
 		});

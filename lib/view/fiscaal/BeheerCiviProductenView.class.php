@@ -1,8 +1,8 @@
 <?php
 
-class BeheerProductenView extends DataTable {
+class BeheerCiviProductenView extends DataTable {
 	public function __construct() {
-		parent::__construct(MaalcieProduct::class, '/fiscaat/producten', 'Productenbeheer');
+		parent::__construct(CiviProduct::class, '/fiscaat/producten', 'Productenbeheer');
 
 		$this->addColumn('prijs');
 		$this->addColumn('beheer', 'prijs', null, 'truefalse');
@@ -18,12 +18,11 @@ function truefalse (data) {
     return '<span class="ico '+(data?'tick':'cross')+'"></span>';
 }
 JS;
-
 	}
 }
 
 class CiviProductForm extends ModalForm {
-	function __construct(MaalcieProduct $model, $target) {
+	function __construct(CiviProduct $model, $target) {
 		parent::__construct($model, '/fiscaat/producten/' . $target, false, true);
 		$fields['id'] = new IntField('id', $model->id, 'id');
 		$fields['id']->hidden = true;

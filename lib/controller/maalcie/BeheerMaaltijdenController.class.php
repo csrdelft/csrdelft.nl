@@ -287,7 +287,7 @@ class BeheerMaaltijdenController extends AclController {
 			}
 
 			$aanmeldingen_model = MaaltijdAanmeldingenModel::instance();
-			$bestelling_model = MaalcieBestellingModel::instance();
+			$bestelling_model = CiviBestellingModel::instance();
 
 			# Ga alle personen in de maaltijd af
 			$aanmeldingen = $aanmeldingen_model->getAanmeldingenVoorMaaltijd($maaltijd);

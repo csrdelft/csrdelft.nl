@@ -8,11 +8,11 @@ require_once 'view/fiscaal/BeheerProductenView.class.php';
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
- * @property MaalcieProductModel $model
+ * @property CiviProductModel $model
  */
 class BeheerProductenController extends AclController {
 	public function __construct($query) {
-		parent::__construct($query, MaalcieProductModel::instance());
+		parent::__construct($query, CiviProductModel::instance());
 
 		if ($this->getMethod() == "POST") {
 			$this->acl = [
@@ -43,11 +43,11 @@ class BeheerProductenController extends AclController {
 	}
 
 	public function GET_overzicht() {
-		$this->view = new CsrLayoutPage(new BeheerProductenView());
+		$this->view = new CsrLayoutPage(new BeheerCiviProductenView());
 	}
 
 	public function POST_toevoegen() {
-		$form = new CiviProductForm(new MaalcieProduct(), 'opslaan/nieuw');
+		$form = new CiviProductForm(new CiviProduct(), 'opslaan/nieuw');
 
 		if ($this->getMethod() == "POST" AND $form->validate()) {
 			$product = $form->getModel();
@@ -68,7 +68,7 @@ class BeheerProductenController extends AclController {
 	public function POST_bewerken() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 
-		/** @var MaalcieProduct $product */
+		/** @var CiviProduct $product */
 		$product = $this->model->retrieveByUUID($selection[0]);
 		$product->prijs = $this->model->getPrijs($product)->prijs;
 		$this->view = new CiviProductForm($product, 'opslaan');
@@ -76,7 +76,7 @@ class BeheerProductenController extends AclController {
 
 	public function POST_opslaan() {
 		if ($this->hasParam(4) AND $this->getParam(4) == "nieuw") {
-			$form = new CiviProductForm(new MaalcieProduct(), 'opslaan/nieuw');
+			$form = new CiviProductForm(new CiviProduct(), 'opslaan/nieuw');
 			if ($form->validate()) {
 				$product = $form->getModel();
 				$this->model->create($product);
@@ -85,7 +85,7 @@ class BeheerProductenController extends AclController {
 				return;
 			}
 		} else {
-			$form = new CiviProductForm(new MaalcieProduct(), 'opslaan');
+			$form = new CiviProductForm(new CiviProduct(), 'opslaan');
 			var_dump($form->getFields());
 			if ($form->validate()) {
 				$product = $form->getModel();

@@ -6,25 +6,25 @@ use CsrDelft\Orm\Entity\T;
 require_once 'model/fiscaal/MaalcieBestellingInhoudModel.class.php';
 require_once 'model/entity/fiscaal/MaalcieBestelling.class.php';
 
-class MaalcieBestelling extends PersistentEntity {
+class CiviBestelling extends PersistentEntity {
 	public $id;
 	public $uid;
 	public $totaal = 0;
 	public $deleted;
 
 	/**
-	 * @var MaalcieBestellingInhoud[]
+	 * @var CiviBestellingInhoud[]
 	 */
 	public $inhoud = array();
 
-	public function add(MaalcieBestellingInhoud $maaltijd) {
+	public function add(CiviBestellingInhoud $maaltijd) {
 		$this->inhoud[] = $maaltijd;
 		$maaltijd->bestellingid = $this->id;
 
-		$this->totaal += MaalcieBestellingInhoudModel::instance()->getPrijs($maaltijd);
+		$this->totaal += CiviBestellingInhoudModel::instance()->getPrijs($maaltijd);
 	}
 
-	protected static $table_name = 'maalciebestelling';
+	protected static $table_name = 'CiviBestelling';
 	protected static $persistent_attributes = array(
 		'id' => array(T::Integer, false, 'auto_increment'),
 		'uid' => array(T::UID),

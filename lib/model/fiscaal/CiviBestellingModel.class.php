@@ -3,21 +3,21 @@
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'model/entity/fiscaal/MaalcieBestelling.class.php';
-require_once 'model/fiscaal/MaalcieBestellingInhoudModel.class.php';
+require_once 'model/entity/fiscaal/CiviBestelling.class.php';
+require_once 'model/fiscaal/CiviBestellingInhoudModel.class.php';
 
-class MaalcieBestellingModel extends PersistenceModel {
-	const ORM = 'MaalcieBestelling';
+class CiviBestellingModel extends PersistenceModel {
+	const ORM = CiviBestelling::class;
 	const DIR = 'fiscaal/';
 
 	protected static $instance;
 
 	public function vanMaaltijdAanmelding(MaaltijdAanmelding $aanmelding) {
-		$bestelling = new MaalcieBestelling();
+		$bestelling = new CiviBestelling();
 		$bestelling->uid = $aanmelding->uid;
 		$bestelling->deleted = false;
 
-		$inhoud = new MaalcieBestellingInhoud();
+		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = 1 + $aanmelding->aantal_gasten;
 		$inhoud->productid = $aanmelding->getMaaltijd()->mlt_repetitie_id;
 
@@ -27,7 +27,7 @@ class MaalcieBestellingModel extends PersistenceModel {
 	}
 
 	/**
-	 * @param PersistentEntity|MaalcieBestelling $entity
+	 * @param PersistentEntity|CiviBestelling $entity
 	 * @return string
 	 */
 	public function create(PersistentEntity $entity) {
@@ -35,7 +35,7 @@ class MaalcieBestellingModel extends PersistenceModel {
 
 		foreach ($entity->inhoud as $bestelling) {
 			$bestelling->bestellingid = $entity->id;
-			MaalcieBestellingInhoudModel::instance()->create($bestelling);
+			CiviBestellingInhoudModel::instance()->create($bestelling);
 		}
 
 		return $entity->id;

@@ -3,13 +3,13 @@
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
-class MaalcieLog extends PersistentEntity {
+class CiviSaldoLog extends PersistentEntity {
 	public $id;
 	public $ip;
 	public $type;
 	public $timestamp;
 
-	protected static $table_name = 'maalcielog';
+	protected static $table_name = 'CiviSaldoLog';
 	protected static $persistent_attributes = array(
 		'id' => array(T::Integer, false, 'auto_increment'),
 		'ip' => array(T::String),

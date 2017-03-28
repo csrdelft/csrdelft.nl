@@ -3,12 +3,12 @@
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
-class MaalcieBestellingInhoud extends PersistentEntity {
+class CiviBestellingInhoud extends PersistentEntity {
 	public $bestellingid;
 	public $productid;
 	public $aantal;
 
-	protected static $table_name = 'maalciebestellinginhoud';
+	protected static $table_name = 'CiviBestellingInhoud';
 	protected static $persistent_attributes = array(
 		'bestellingid' => array(T::Integer),
 		'productid' => array(T::Integer),

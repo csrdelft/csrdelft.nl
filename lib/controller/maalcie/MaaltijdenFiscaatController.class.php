@@ -19,7 +19,7 @@ require_once 'view/fiscaal/BeheerProductenView.class.php';
 class MaaltijdenFiscaatController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, MaalcieProductModel::instance());
+		parent::__construct($query, CiviProductModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'producten' => 'P_MAAL_MOD',
@@ -49,7 +49,7 @@ class MaaltijdenFiscaatController extends AclController {
 		if ($this->getMethod() == "POST") {
 			$this->view = new JsonResponse($this->model->find()->fetchAll());
 		} else {
-			$body = new BeheerProductenView();
+			$body = new BeheerCiviProductenView();
 			$this->view = new CsrLayoutPage($body);
 		}
 	}
@@ -78,7 +78,7 @@ class MaaltijdenFiscaatController extends AclController {
 
 		$maaltijden = Database::transaction(function () use ($maaltijd) {
 			$aanmeldingen_model = MaaltijdAanmeldingenModel::instance();
-			$bestelling_model = MaalcieBestellingModel::instance();
+			$bestelling_model = CiviBestellingModel::instance();
 
 			# Ga alle personen in de maaltijd af
 			$aanmeldingen = $aanmeldingen_model->getAanmeldingenVoorMaaltijd($maaltijd);

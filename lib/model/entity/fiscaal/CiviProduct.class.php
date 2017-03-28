@@ -3,7 +3,7 @@
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
-class MaalcieProduct extends PersistentEntity {
+class CiviProduct extends PersistentEntity {
 	public $id;
 	public $status;
 	public $beschrijving;
@@ -12,7 +12,7 @@ class MaalcieProduct extends PersistentEntity {
 
 	public $prijs;
 
-	protected static $table_name = 'maalcieproduct';
+	protected static $table_name = 'CiviProduct';
 	protected static $persistent_attributes = array(
 		'id' => array(T::Integer, false, 'auto_increment'),
 		'status' => array(T::Integer),
