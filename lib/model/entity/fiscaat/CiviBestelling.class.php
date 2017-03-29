@@ -3,8 +3,8 @@
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
-require_once 'model/fiscaal/MaalcieBestellingInhoudModel.class.php';
-require_once 'model/entity/fiscaal/MaalcieBestelling.class.php';
+require_once 'model/fiscaat/MaalcieBestellingInhoudModel.class.php';
+require_once 'model/entity/fiscaat/MaalcieBestelling.class.php';
 
 class CiviBestelling extends PersistentEntity {
 	public $id;

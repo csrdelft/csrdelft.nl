@@ -2,12 +2,12 @@
 
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'model/entity/fiscaal/CiviBestellingInhoud.class.php';
-require_once 'model/fiscaal/MaalcieProductModel.class.php';
+require_once 'model/entity/fiscaat/CiviBestellingInhoud.class.php';
+require_once 'model/fiscaat/MaalcieProductModel.class.php';
 
 class CiviBestellingInhoudModel extends PersistenceModel {
 	const ORM = 'CiviBestellingInhoud';
-	const DIR = 'fiscaal/';
+	const DIR = 'fiscaat/';
 
 	protected static $instance;
 

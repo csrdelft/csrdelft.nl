@@ -210,7 +210,7 @@ class ProfielController extends AclController {
 	}
 
 	public function saldo($uid, $timespan) {
-        require_once 'model/fiscaal/SaldoModel.class.php';
+        require_once 'model/fiscaat/SaldoModel.class.php';
         if(SaldoModel::instance()->magGrafiekZien($uid)){
             $data = SaldoModel::instance()->getDataPoints($uid, $timespan);
             $this->view = new JsonResponse($data);

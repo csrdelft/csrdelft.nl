@@ -2,11 +2,11 @@
 
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'model/entity/fiscaal/CiviPrijs.class.php';
+require_once 'model/entity/fiscaat/CiviPrijs.class.php';
 
 class CiviPrijsModel extends PersistenceModel {
 	const ORM = CiviPrijs::class;
-	const DIR = 'fiscaal/';
+	const DIR = 'fiscaat/';
 
 	protected static $instance;
 }

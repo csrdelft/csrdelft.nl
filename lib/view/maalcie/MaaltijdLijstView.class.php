@@ -10,16 +10,16 @@
  */
 class MaaltijdLijstView extends CompressedLayout {
 
-	private $fiscaal;
+	private $fiscaat;
 
-	public function __construct(Maaltijd $maaltijd, $aanmeldingen, $corvee, $fiscaal = false) {
+	public function __construct(Maaltijd $maaltijd, $aanmeldingen, $corvee, $fiscaat = false) {
 		parent::__construct('layout', $this, $maaltijd->getTitel());
-		$this->fiscaal = $fiscaal;
+		$this->fiscaat = $fiscaat;
 
 		$this->addCompressedResources('maalcielijst');
 		$smarty = CsrSmarty::instance();
 
-		if (!$this->fiscaal) {
+		if (!$this->fiscaat) {
 			for ($i = $maaltijd->getMarge(); $i > 0; $i--) { // ruimte voor marge eters
 				$aanmeldingen[] = new MaaltijdAanmelding();
 			}
@@ -47,8 +47,8 @@ class MaaltijdLijstView extends CompressedLayout {
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
 
-		if ($this->fiscaal) {
-			$smarty->display('maalcie/maaltijd/maaltijd_lijst_fiscaal.tpl');
+		if ($this->fiscaat) {
+			$smarty->display('maalcie/maaltijd/maaltijd_lijst_fiscaat.tpl');
 		} else {
 			$smarty->display('maalcie/maaltijd/maaltijd_lijst.tpl');
 		}

@@ -3,12 +3,12 @@
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'model/entity/fiscaal/CiviBestelling.class.php';
-require_once 'model/fiscaal/CiviBestellingInhoudModel.class.php';
+require_once 'model/entity/fiscaat/CiviBestelling.class.php';
+require_once 'model/fiscaat/CiviBestellingInhoudModel.class.php';
 
 class CiviBestellingModel extends PersistenceModel {
 	const ORM = CiviBestelling::class;
-	const DIR = 'fiscaal/';
+	const DIR = 'fiscaat/';
 
 	protected static $instance;
 

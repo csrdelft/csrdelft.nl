@@ -6,7 +6,7 @@ require_once 'model/maalcie/MaaltijdenModel.class.php';
 require_once 'model/maalcie/ArchiefMaaltijdModel.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
-require_once 'model/fiscaal/MaalcieBestellingModel.class.php';
+require_once 'model/fiscaat/MaalcieBestellingModel.class.php';
 require_once 'view/maalcie/BeheerMaaltijdenView.class.php';
 require_once 'view/maalcie/forms/MaaltijdForm.class.php';
 require_once 'view/maalcie/forms/RepetitieMaaltijdenForm.class.php';
@@ -31,7 +31,7 @@ class BeheerMaaltijdenController extends AclController {
 				//'leegmaken' => 'P_MAAL_MOD',
 				'archief'	 => 'P_MAAL_MOD',
 				'onverwerkt' => 'P_MAAL_MOD',
-				'fiscaal'	 => 'P_MAAL_MOD'
+				'fiscaat'	 => 'P_MAAL_MOD'
 			);
 		} else {
 			$this->acl = array(
@@ -119,7 +119,7 @@ class BeheerMaaltijdenController extends AclController {
 		}
 	}
 
-	public function fiscaal($mid) {
+	public function fiscaat($mid) {
 		$maaltijd = $this->model->getMaaltijd($mid, true);
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
 		require_once 'view/maalcie/MaaltijdLijstView.class.php';

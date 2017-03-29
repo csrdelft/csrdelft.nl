@@ -4,12 +4,12 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'model/entity/fiscaal/CiviProduct.class.php';
-require_once 'model/fiscaal/CiviPrijsModel.class.php';
+require_once 'model/entity/fiscaat/CiviProduct.class.php';
+require_once 'model/fiscaat/CiviPrijsModel.class.php';
 
 class CiviProductModel extends PersistenceModel {
 	const ORM = CiviProduct::class;
-	const DIR = 'fiscaal/';
+	const DIR = 'fiscaat/';
 
 	protected static $instance;
 

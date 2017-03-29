@@ -1,4 +1,4 @@
-CREATE TABLE maalcielog
+CREATE TABLE CiviLog
 (
   id        INT(11) NOT NULL AUTO_INCREMENT,
   ip        VARCHAR(15),
@@ -8,7 +8,7 @@ CREATE TABLE maalcielog
   PRIMARY KEY (id)
 );
 
-CREATE TABLE maalciebestelling
+CREATE TABLE CiviBestelling
 (
   id      INT(11)    NOT NULL AUTO_INCREMENT,
   uid     VARCHAR(4) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE maalciebestelling
   PRIMARY KEY (id)
 );
 
-CREATE TABLE maalciebestellinginhoud
+CREATE TABLE CiviBestellinginhoud
 (
   bestellingid INT(11) NOT NULL,
   productid    INT(11) NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE maalciebestellinginhoud
   PRIMARY KEY (bestellingid, productid)
 );
 
-CREATE TABLE maalcieproduct
+CREATE TABLE CiviProduct
 (
   id           INT(11) NOT NULL AUTO_INCREMENT,
   status       INT(11),
@@ -35,7 +35,7 @@ CREATE TABLE maalcieproduct
   PRIMARY KEY (id)
 );
 
-CREATE TABLE maalcieprijs
+CREATE TABLE CiviPrijs
 (
   van       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   tot       TIMESTAMP NOT NULL,

@@ -120,7 +120,7 @@ class ProfielView extends SmartyTemplateView {
 			$this->smarty->assign('abos', MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($this->model->uid));
 		}
 
-		require_once 'model/fiscaal/SaldoModel.class.php';
+		require_once 'model/fiscaat/SaldoModel.class.php';
 		if (SaldoModel::instance()->magGrafiekZien($this->model->uid)) {
 			$this->smarty->assign('saldografiek', 'ja');
 		}

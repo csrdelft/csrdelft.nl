@@ -4,9 +4,9 @@ use CsrDelft\Orm\Persistence\Database;
 
 require_once 'model/maalcie/MaaltijdenModel.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
-require_once 'model/fiscaal/MaalcieBestellingModel.class.php';
+require_once 'model/fiscaat/MaalcieBestellingModel.class.php';
 require_once 'view/maalcie/BeheerMaaltijdenView.class.php';
-require_once 'view/fiscaal/BeheerProductenView.class.php';
+require_once 'view/fiscaat/BeheerProductenView.class.php';
 
 /**
  * MaaltijdenFiscaatController.class.php

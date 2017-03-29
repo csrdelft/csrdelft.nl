@@ -1,7 +1,7 @@
 <?php
 
-require_once 'model/fiscaal/MaalcieProductModel.class.php';
-require_once 'view/fiscaal/BeheerProductenView.class.php';
+require_once 'model/fiscaat/CiviProductModel.class.php';
+require_once 'view/fiscaat/BeheerCiviProductenView.class.php';
 
 /**
  * Class BeheerProductenController
@@ -10,7 +10,7 @@ require_once 'view/fiscaal/BeheerProductenView.class.php';
  *
  * @property CiviProductModel $model
  */
-class BeheerProductenController extends AclController {
+class BeheerCiviProductenController extends AclController {
 	public function __construct($query) {
 		parent::__construct($query, CiviProductModel::instance());
 
