@@ -220,21 +220,15 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function removeMenuItem(MenuItem $item) {
-		$db = Database::instance()->getDatabase();
-		try {
-			$db->beginTransaction();
+		return Database::transaction(function () use ($item) {
 			// give new parent to otherwise future orphans
 			$update = array('parent_id' => $item->parent_id);
 			$where = 'parent_id = :oldid';
 			$rowCount = Database::instance()->sqlUpdate($this->getTableName(), $update, $where, array(':oldid' => $item->item_id));
 			$this->delete($item);
-			$db->commit();
 			$this->flushCache(true);
 			return $rowCount;
-		} catch (Exception $e) {
-			$db->rollBack();
-			throw $e; // rethrow to controller
-		}
+		});
 	}
 
 }
