@@ -220,7 +220,7 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	public function removeMenuItem(MenuItem $item) {
-		$db = Database::instance();
+		$db = Database::instance()->getDatabase();
 		try {
 			$db->beginTransaction();
 			// give new parent to otherwise future orphans
