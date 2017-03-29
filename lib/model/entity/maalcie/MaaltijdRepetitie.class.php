@@ -28,6 +28,7 @@ class MaaltijdRepetitie extends PersistentEntity {
 	# primary key
 
 	public $mlt_repetitie_id; # int 11
+	public $product_id;
     /**
      * 0: Sunday
      * 6: Saturday
@@ -44,6 +45,7 @@ class MaaltijdRepetitie extends PersistentEntity {
     protected static $table_name = 'mlt_repetities';
     protected static $persistent_attributes = array(
         'mlt_repetitie_id' => array(T::Integer, false, 'auto_increment'),
+        'product_id' => array(T::Integer),
         'dag_vd_week' => array(T::Integer),
         'periode_in_dagen' => array(T::Integer),
         'standaard_titel' => array(T::String),

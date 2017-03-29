@@ -32,6 +32,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 
 	public $maaltijd_id; # int 11
 	public $mlt_repetitie_id; # foreign key mlt_repetitie.id
+	public $product_id;
 	public $titel; # string 255
 	public $aanmeld_limiet; # int 11
 	public $datum; # date
@@ -161,6 +162,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
     protected static $persistent_attributes = array(
         'maaltijd_id' => array(T::Integer, false, 'auto_increment'),
         'mlt_repetitie_id' => array(T::Integer, true),
+        'product_id' => array(T::Integer),
         'titel' => array(T::String),
         'aanmeld_limiet' => array(T::Integer),
         'datum' => array(T::Date),

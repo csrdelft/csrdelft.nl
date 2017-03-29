@@ -19,7 +19,7 @@ class CiviBestellingModel extends PersistenceModel {
 
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = 1 + $aanmelding->aantal_gasten;
-		$inhoud->productid = $aanmelding->getMaaltijd()->mlt_repetitie_id;
+		$inhoud->product_id = $aanmelding->getMaaltijd()->mlt_repetitie_id;
 
 		$bestelling->add($inhoud);
 

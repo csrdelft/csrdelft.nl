@@ -18,7 +18,7 @@ class CiviProductModel extends PersistenceModel {
 	 * @return CiviPrijs
 	 */
 	public function getPrijs($product) {
-		return CiviPrijsModel::instance()->find('productid = ?', $product->getValues(true), null, 'van DESC', 1)->fetch();
+		return CiviPrijsModel::instance()->find('product_id = ?', $product->getValues(true), null, 'van DESC', 1)->fetch();
 	}
 
 	public function getProduct($id) {
@@ -50,7 +50,7 @@ class CiviProductModel extends PersistenceModel {
 			$product->id = parent::create($product);
 
 			$prijs = new CiviPrijs();
-			$prijs->productid = $product->id;
+			$prijs->product_id = $product->id;
 			$prijs->van = date_create('now')->format(DateTime::ISO8601);
 			$prijs->tot = date_create('0000-00-00')->format(DateTime::ISO8601);
 			$prijs->prijs = $product->prijs;

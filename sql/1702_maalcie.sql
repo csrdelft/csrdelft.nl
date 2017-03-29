@@ -1,3 +1,11 @@
+-- Opschonen vorige keer
+ALTER TABLE mlt_maaltijden DROP FOREIGN KEY FK_mlt_product;
+ALTER TABLE mlt_maaltijden DROP COLUMN product_id;
+ALTER TABLE mlt_repetities DROP FOREIGN KEY FK_mltrep_product;
+ALTER TABLE mlt_repetities DROP COLUMN product_id;
+
+DROP TABLE `CiviBestellingInhoud`, `CiviBestelling`, `CiviPrijs`, `CiviProduct`, `CiviLog`;
+
 CREATE TABLE CiviLog
 (
   id        INT(11) NOT NULL AUTO_INCREMENT,
@@ -6,6 +14,27 @@ CREATE TABLE CiviLog
   value     TEXT,
   timestamp TIMESTAMP        DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
+);
+
+CREATE TABLE CiviProduct
+(
+  id           INT(11) NOT NULL AUTO_INCREMENT,
+  status       INT(11) NOT NULL,
+  beschrijving TEXT NOT NULL,
+  prioriteit   INT(11) NOT NULL,
+  beheer       TINYINT(1) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE CiviPrijs
+(
+  van       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  tot       TIMESTAMP NOT NULL,
+  product_id INT(11) NOT NULL,
+  prijs     INT(11) NOT NULL,
+  PRIMARY KEY (van, product_id),
+  CONSTRAINT FK_CP_product FOREIGN KEY (product_id)
+  REFERENCES CiviProduct(id)
 );
 
 CREATE TABLE CiviBestelling
@@ -17,29 +46,64 @@ CREATE TABLE CiviBestelling
   PRIMARY KEY (id)
 );
 
-CREATE TABLE CiviBestellinginhoud
+CREATE TABLE CiviBestellingInhoud
 (
-  bestellingid INT(11) NOT NULL,
-  productid    INT(11) NOT NULL,
+  bestelling_id INT(11) NOT NULL,
+  product_id    INT(11) NOT NULL,
   aantal       INT(11),
-  PRIMARY KEY (bestellingid, productid)
+  PRIMARY KEY (bestelling_id, product_id),
+  CONSTRAINT FK_CBI_product FOREIGN KEY (product_id)
+  REFERENCES CiviBestelling(id),
+  CONSTRAINT FK_CBI_bestelling FOREIGN KEY (bestelling_id)
+  REFERENCES CiviProduct(id)
 );
 
-CREATE TABLE CiviProduct
-(
-  id           INT(11) NOT NULL AUTO_INCREMENT,
-  status       INT(11),
-  beschrijving TEXT,
-  prioriteit   INT(11),
-  beheer       TINYINT(1),
-  PRIMARY KEY (id)
-);
+ALTER TABLE mlt_maaltijden ADD COLUMN product_id INT(11) NOT NULL;
+ALTER TABLE mlt_repetities ADD COLUMN product_id INT(11) NOT NULL;
 
-CREATE TABLE CiviPrijs
-(
-  van       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  tot       TIMESTAMP NOT NULL,
-  productid INT(11),
-  prijs     INT(11),
-  PRIMARY KEY (van, productid)
-);
+INSERT INTO CiviProduct (status, beschrijving, prioriteit, beheer)
+VALUES (1, 'Anders', 1, 1);
+SET @mlt = LAST_INSERT_ID();
+INSERT INTO CiviPrijs (van, tot, product_id, prijs)
+VALUES (NOW(), NOW(), @mlt, 0);
+UPDATE mlt_maaltijden SET product_id = @mlt WHERE mlt_repetitie_id IS NULL;
+
+-- Donderdagmaaltijd
+INSERT INTO CiviProduct (status, beschrijving, prioriteit, beheer)
+VALUES (1, 'Donderdagmaaltijd', 1, 0);
+SET @mlt = LAST_INSERT_ID();
+INSERT INTO CiviPrijs (van, tot, product_id, prijs)
+VALUES (NOW(), 0, @mlt, 350);
+UPDATE mlt_maaltijden SET product_id = @mlt WHERE mlt_repetitie_id = 1;
+UPDATE mlt_repetities SET product_id = @mlt WHERE mlt_repetitie_id = 1;
+
+-- Verticalekring
+INSERT INTO CiviProduct (status, beschrijving, prioriteit, beheer)
+VALUES (1, 'Verticalekring', 1, 0);
+SET @mlt = LAST_INSERT_ID();
+INSERT INTO CiviPrijs (van, tot, product_id, prijs)
+VALUES (NOW(), 0, @mlt, 350);
+UPDATE mlt_maaltijden SET product_id = @mlt WHERE mlt_repetitie_id IN (2,3,4,5,6,7,8,9,13);
+UPDATE mlt_repetities SET product_id = @mlt WHERE mlt_repetitie_id IN (2,3,4,5,6,7,8,9,13);
+
+-- DéDé Diner
+INSERT INTO CiviProduct (status, beschrijving, prioriteit, beheer)
+VALUES (1, 'DéDé-Diner', 1, 0);
+SET @mlt = LAST_INSERT_ID();
+INSERT INTO CiviPrijs (van, tot, product_id, prijs)
+VALUES (NOW(), 0, @mlt, 350);
+UPDATE mlt_maaltijden SET product_id = @mlt WHERE mlt_repetitie_id = 10;
+UPDATE mlt_repetities SET product_id = @mlt WHERE mlt_repetitie_id = 10;
+
+-- Alpha cursus
+INSERT INTO CiviProduct (status, beschrijving, prioriteit, beheer)
+VALUES (1, 'Alpha Cursus', 1, 0);
+SET @mlt = LAST_INSERT_ID();
+INSERT INTO CiviPrijs (van, tot, product_id, prijs)
+VALUES (NOW(), 0, @mlt, 0);
+UPDATE mlt_maaltijden SET product_id = @mlt WHERE mlt_repetitie_id = 11;
+UPDATE mlt_repetities SET product_id = @mlt WHERE mlt_repetitie_id = 11;
+
+-- Leg foreign keys aan
+ALTER TABLE mlt_maaltijden ADD CONSTRAINT FK_mlt_product FOREIGN KEY (product_id) REFERENCES CiviProduct(id);
+ALTER TABLE mlt_repetities ADD CONSTRAINT FK_mltrep_product FOREIGN KEY (product_id) REFERENCES CiviProduct(id);
