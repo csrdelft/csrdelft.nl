@@ -15,7 +15,7 @@ class MededelingenModel extends PersistenceModel {
 
 	const ORM = Mededeling::class;
 	const DIR = 'mededelingen/';
-	const defaultPrioriteit = 255;
+	const DEFAULTPRIORITEIT = 255;
 
 	protected static $instance;
 
@@ -48,7 +48,7 @@ class MededelingenModel extends PersistenceModel {
 
 		if (!$this->isModerator()) {
 			if (isset($mededeling->prioriteit) && !array_search($mededeling->prioriteit, array_keys($this->getPrioriteiten()))) {
-				$mededeling->prioriteit = MededelingenModel::defaultPrioriteit;
+				$mededeling->prioriteit = MededelingenModel::DEFAULTPRIORITEIT;
 			}
 		}
 

@@ -650,7 +650,7 @@ HTML;
 	protected function groep(AbstractGroep $groep) {
 		require_once 'view/GroepenView.class.php';
 		// Controleer rechten
-		if (!$groep->mag(A::Bekijken)) {
+		if (!$groep->mag(AccessAction::BEKIJKEN)) {
 			return '';
 		}
 		$view = new GroepView($groep, null, false, true);

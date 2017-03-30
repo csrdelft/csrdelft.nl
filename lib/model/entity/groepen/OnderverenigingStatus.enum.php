@@ -11,28 +11,28 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 abstract class OnderverenigingStatus implements PersistentEnum {
 
-	const AdspirantOndervereniging = 'a';
-	const Ondervereniging = 'o';
-	const VoormaligOndervereniging = 'v';
+	const ADSPIRANTONDERVERENIGING = 'a';
+	const ONDERVERENIGING = 'o';
+	const VOORMALIGONDERVERENIGING = 'v';
 
 	public static function getTypeOptions() {
-		return array(self::AdspirantOndervereniging, self::Ondervereniging, self::VoormaligOndervereniging);
+		return array(self::ADSPIRANTONDERVERENIGING, self::ONDERVERENIGING, self::VOORMALIGONDERVERENIGING);
 	}
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::AdspirantOndervereniging: return 'adspirant-ondervereniging';
-			case self::Ondervereniging: return 'ondervereniging';
-			case self::VoormaligOndervereniging: return 'voormalig ondervereniging';
+			case self::ADSPIRANTONDERVERENIGING: return 'adspirant-ondervereniging';
+			case self::ONDERVERENIGING: return 'ondervereniging';
+			case self::VOORMALIGONDERVERENIGING: return 'voormalig ondervereniging';
 			default: throw new Exception('OnderverenigingStatus onbekend');
 		}
 	}
 
 	public static function getChar($option) {
 		switch ($option) {
-			case self::AdspirantOndervereniging:
-			case self::Ondervereniging:
-			case self::VoormaligOndervereniging:
+			case self::ADSPIRANTONDERVERENIGING:
+			case self::ONDERVERENIGING:
+			case self::VOORMALIGONDERVERENIGING:
 				return ucfirst($option);
 			default: throw new Exception('OnderverenigingStatus onbekend');
 		}

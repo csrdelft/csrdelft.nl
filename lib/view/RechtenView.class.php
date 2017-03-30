@@ -16,7 +16,7 @@ class RechtenTable extends DataTable {
 
 		// Has permission to change permissions?
 		if (!LoginModel::mag('P_ADMIN')) {
-			$rechten = $model::getSubject($environment, A::Rechten, $resource);
+			$rechten = $model::getSubject($environment, AccessAction::RECHTEN, $resource);
 			if (!$rechten OR ! LoginModel::mag($rechten)) {
 				return;
 			}
@@ -52,7 +52,7 @@ class RechtenData extends DataTableResponse {
 	public function getJson($ac) {
 		$array = $ac->jsonSerialize();
 
-		$array['action'] = A::getDescription($ac->action);
+		$array['action'] = AccessAction::getDescription($ac->action);
 
 		if ($ac->resource === '*') {
 			$array['resource'] = 'Elke ' . lcfirst($ac->environment);
@@ -83,12 +83,12 @@ class RechtenForm extends ModalForm {
 			}
 
 			$acties = array();
-			foreach (A::getTypeOptions() as $option) {
-				$acties[$option] = A::getDescription($option);
+			foreach (AccessAction::getTypeOptions() as $option) {
+				$acties[$option] = AccessAction::getDescription($option);
 			}
 			$fields[] = new SelectField('action', $ac->action, 'Actie', $acties);
 		} else {
-			$fields[] = new HtmlComment('<label>Actie</label><div class="dikgedrukt">' . A::getDescription($ac->action) . '</div>');
+			$fields[] = new HtmlComment('<label>Actie</label><div class="dikgedrukt">' . AccessAction::getDescription($ac->action) . '</div>');
 		}
 		$fields[] = new RequiredRechtenField('subject', $ac->subject, 'Toegestaan voor');
 		$fields[] = new FormDefaultKnoppen();

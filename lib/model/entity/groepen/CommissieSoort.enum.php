@@ -11,31 +11,31 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 abstract class CommissieSoort implements PersistentEnum {
 
-	const Commissie = 'c';
-	const SjaarCie = 's';
-	const BestuursCommissie = 'b';
-	const Extern = 'e';
+	const COMMISSIE = 'c';
+	const SJAARCIE = 's';
+	const BESTUURSCOMMISSIE = 'b';
+	const EXTERN = 'e';
 
 	public static function getTypeOptions() {
-		return array(self::Commissie, self::SjaarCie, self::BestuursCommissie, self::Extern);
+		return array(self::COMMISSIE, self::SJAARCIE, self::BESTUURSCOMMISSIE, self::EXTERN);
 	}
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::Commissie: return 'Commissie';
-			case self::SjaarCie: return 'SjaarCie';
-			case self::BestuursCommissie: return 'Bestuurscommissie';
-			case self::Extern: return 'Externe commissie';
+			case self::COMMISSIE: return 'Commissie';
+			case self::SJAARCIE: return 'SjaarCie';
+			case self::BESTUURSCOMMISSIE: return 'Bestuurscommissie';
+			case self::EXTERN: return 'Externe commissie';
 			default: throw new Exception('CommissieSoort onbekend');
 		}
 	}
 
 	public static function getChar($option) {
 		switch ($option) {
-			case self::Commissie:
-			case self::SjaarCie:
-			case self::BestuursCommissie:
-			case self::Extern:
+			case self::COMMISSIE:
+			case self::SJAARCIE:
+			case self::BESTUURSCOMMISSIE:
+			case self::EXTERN:
 				return ucfirst($option);
 			default: throw new Exception('CommissieSoort onbekend');
 		}

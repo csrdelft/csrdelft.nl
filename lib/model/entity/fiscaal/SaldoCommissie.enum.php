@@ -9,25 +9,25 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 abstract class SaldoCommissie implements PersistentEnum {
 
-    const SocCie = 'soccie';
-    const MaalCie = 'maalcie';
+    const SOCCIE = 'soccie';
+    const MAALCIE = 'maalcie';
 
     public static function getTypeOptions() {
-        return array(self::SocCie, self::MaalCie);
+        return array(self::SOCCIE, self::MAALCIE);
     }
 
     public static function getDescription($option) {
         switch ($option) {
-            case self::SocCie: return 'soccie';
-            case self::MaalCie: return 'maalcie';
+            case self::SOCCIE: return 'soccie';
+            case self::MAALCIE: return 'maalcie';
             default: throw new Exception('Commissie onbekend');
         }
     }
 
     public static function getChar($option) {
         switch ($option) {
-            case self::SocCie: return 'S';
-            case self::MaalCie: return 'M';
+            case self::SOCCIE: return 'S';
+            case self::MAALCIE: return 'M';
             default: throw new Exception('Commissie onbekend');
         }
     }

@@ -44,7 +44,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * Standaard toegestane authenticatie methoden
 	 * @var array
 	 */
-	private static $defaultAllowedAuthenticationMethods = array(AuthenticationMethod::cookie_token, AuthenticationMethod::password_login, AuthenticationMethod::recent_password_login, AuthenticationMethod::password_login_and_one_time_token);
+	private static $defaultAllowedAuthenticationMethods = array(AuthenticationMethod::COOKIE_TOKEN, AuthenticationMethod::PASSWORD_LOGIN, AuthenticationMethod::RECENT_PASSWORD_LOGIN, AuthenticationMethod::PASSWORD_LOGIN_AND_ONE_TIME_TOKEN);
 
 	public static function getSubject($environment, $action, $resource) {
 		$ac = self::instance()->retrieveByPrimaryKey(array($environment, $action, $resource));
@@ -162,7 +162,7 @@ class AccessModel extends CachedPersistenceModel {
 	public function setAcl($environment, $resource, array $acl) {
 		// Has permission to change permissions?
 		if (!LoginModel::mag('P_ADMIN')) {
-			$rechten = self::getSubject($environment, A::Rechten, $resource);
+			$rechten = self::getSubject($environment, AccessAction::RECHTEN, $resource);
 			if (!$rechten OR ! LoginModel::mag($rechten)) {
 				return false;
 			}
@@ -209,16 +209,16 @@ class AccessModel extends CachedPersistenceModel {
 
 	public function getDefaultPermissionRole($lidstatus) {
 		switch ($lidstatus) {
-			case LidStatus::Kringel:
-			case LidStatus::Noviet:
-			case LidStatus::Lid:
-			case LidStatus::Gastlid: return AccessRole::Lid;
-			case LidStatus::Oudlid:
-			case LidStatus::Erelid: return AccessRole::Oudlid;
-			case LidStatus::Commissie:
-			case LidStatus::Overleden:
-			case LidStatus::Exlid:
-			case LidStatus::Nobody: return AccessRole::Nobody;
+			case LidStatus::KRINGEL:
+			case LidStatus::NOVIET:
+			case LidStatus::LID:
+			case LidStatus::GASTLID: return AccessAction::Lid;
+			case LidStatus::OUDLID:
+			case LidStatus::ERELID: return AccessAction::Oudlid;
+			case LidStatus::COMMISSIE:
+			case LidStatus::OVERLEDEN:
+			case LidStatus::EXLID:
+			case LidStatus::NOBODY: return AccessAction::Nobody;
 			default: throw new Exception('LidStatus onbekend');
 		}
 	}
@@ -375,15 +375,15 @@ class AccessModel extends CachedPersistenceModel {
 		// use | $p[] for hierarchical RBAC (inheritance between roles)
 		// use & ~$p[] for constrained RBAC (separation of duties)
 
-		$this->roles[AccessRole::Nobody] = $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'] | $p['P_ALBUM_READ'];
-		$this->roles[AccessRole::Eter] = $this->roles[AccessRole::Nobody] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
-		$this->roles[AccessRole::Lid] = $this->roles[AccessRole::Eter] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_ADD'] | $p['P_PEILING_VOTE'];
-		$this->roles[AccessRole::Oudlid] = $this->roles[AccessRole::Lid];
-		$this->roles[AccessRole::MaalCie] = $this->roles[AccessRole::Lid] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
-		$this->roles[AccessRole::BASFCie] = $this->roles[AccessRole::Lid] | $p['P_DOCS_MOD'] | $p['P_ALBUM_DEL'] | $p['P_BIEB_MOD'] | $p['P_PEILING_MOD'];
-		$this->roles[AccessRole::Bestuur] = $this->roles[AccessRole::BASFCie] | $this->roles[AccessRole::MaalCie] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_ALBUM_DEL'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
-		$this->roles[AccessRole::PubCie] = $this->roles[AccessRole::Bestuur] | $p['P_ADMIN'] | $p['P_MAIL_SEND'] | $p['P_CORVEE_SCHED'] | $p['P_FORUM_ADMIN'];
-		$this->roles[AccessRole::Vlieger] = $this->roles[AccessRole::BASFCie]  | $this->roles[AccessRole::MaalCie];
+		$this->roles[AccessAction::Nobody] = $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'] | $p['P_ALBUM_READ'];
+		$this->roles[AccessAction::Eter] = $this->roles[AccessAction::Nobody] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
+		$this->roles[AccessAction::Lid] = $this->roles[AccessAction::Eter] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_ADD'] | $p['P_PEILING_VOTE'];
+		$this->roles[AccessAction::Oudlid] = $this->roles[AccessAction::Lid];
+		$this->roles[AccessAction::MaalCie] = $this->roles[AccessAction::Lid] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
+		$this->roles[AccessAction::BASFCie] = $this->roles[AccessAction::Lid] | $p['P_DOCS_MOD'] | $p['P_ALBUM_DEL'] | $p['P_BIEB_MOD'] | $p['P_PEILING_MOD'];
+		$this->roles[AccessAction::Bestuur] = $this->roles[AccessAction::BASFCie] | $this->roles[AccessAction::MaalCie] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_ALBUM_DEL'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
+		$this->roles[AccessAction::PubCie] = $this->roles[AccessAction::Bestuur] | $p['P_ADMIN'] | $p['P_MAIL_SEND'] | $p['P_CORVEE_SCHED'] | $p['P_FORUM_ADMIN'];
+		$this->roles[AccessAction::Vlieger] = $this->roles[AccessAction::BASFCie]  | $this->roles[AccessAction::MaalCie];
 
 		// save in cache
 		$this->setCache($key, $this->permissions, true);
@@ -584,9 +584,9 @@ class AccessModel extends CachedPersistenceModel {
 				$gevraagd = 'S_' . $gevraagd;
 				if ($gevraagd == $profiel->status) {
 					return true;
-				} elseif ($gevraagd == LidStatus::Lid AND LidStatus::isLidLike($profiel->status)) {
+				} elseif ($gevraagd == LidStatus::LID AND LidStatus::isLidLike($profiel->status)) {
 					return true;
-				} elseif ($gevraagd == LidStatus::Oudlid AND LidStatus::isOudlidLike($profiel->status)) {
+				} elseif ($gevraagd == LidStatus::OUDLID AND LidStatus::isOudlidLike($profiel->status)) {
 					return true;
 				}
 

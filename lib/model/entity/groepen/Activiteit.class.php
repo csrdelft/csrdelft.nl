@@ -13,7 +13,7 @@ require_once 'model/entity/groepen/Ketzer.class.php';
  */
 class Activiteit extends Ketzer implements Agendeerbaar {
 
-	const leden = 'ActiviteitDeelnemersModel';
+	const LEDEN = 'ActiviteitDeelnemersModel';
 
 	/**
 	 * Intern / Extern / SjaarsActie / etc.
@@ -64,8 +64,8 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	public function mag($action) {
 		switch ($action) {
 
-			case A::Bekijken:
-			case A::Aanmelden:
+			case AccessAction::BEKIJKEN:
+			case AccessAction::AANMELDEN:
 				if (!empty($this->rechten_aanmelden) AND ! LoginModel::mag($this->rechten_aanmelden)) {
 					return false;
 				}
@@ -84,19 +84,19 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	public static function magAlgemeen($action, $soort = null) {
 		switch ($soort) {
 
-			case ActiviteitSoort::OWee:
+			case ActiviteitSoort::OWEE:
 				if (LoginModel::mag('commissie:OWeeCie')) {
 					return true;
 				}
 				break;
 
-			case ActiviteitSoort::Dies:
+			case ActiviteitSoort::DIES:
 				if (LoginModel::mag('commissie:DiesCie')) {
 					return true;
 				}
 				break;
 
-			case ActiviteitSoort::Lustrum:
+			case ActiviteitSoort::LUSTRUM:
 				if (LoginModel::mag('commissie:LustrumCie')) {
 					return true;
 				}

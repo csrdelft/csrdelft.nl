@@ -11,24 +11,24 @@ use CsrDelft\Orm\Entity\PersistentEnum;
 abstract class LidStatus implements PersistentEnum {
 
 	// h.t. leden
-	const Noviet = 'S_NOVIET';
-	const Lid = 'S_LID';
-	const Gastlid = 'S_GASTLID';
+	const NOVIET = 'S_NOVIET';
+	const LID = 'S_LID';
+	const GASTLID = 'S_GASTLID';
 	// o.t. leden
-	const Oudlid = 'S_OUDLID';
-	const Erelid = 'S_ERELID';
+	const OUDLID = 'S_OUDLID';
+	const ERELID = 'S_ERELID';
 	// niet-leden
-	const Overleden = 'S_OVERLEDEN';
-	const Exlid = 'S_EXLID';
-	const Nobody = 'S_NOBODY';
-	const Commissie = 'S_CIE';
-	const Kringel = 'S_KRINGEL';
+	const OVERLEDEN = 'S_OVERLEDEN';
+	const EXLID = 'S_EXLID';
+	const NOBODY = 'S_NOBODY';
+	const COMMISSIE = 'S_CIE';
+	const KRINGEL = 'S_KRINGEL';
 
-	public static $lidlike = array(self::Noviet, self::Lid, self::Gastlid);
-	public static $oudlidlike = array(self::Oudlid, self::Erelid);
+	public static $lidlike = array(self::NOVIET, self::LID, self::GASTLID);
+	public static $oudlidlike = array(self::OUDLID, self::ERELID);
 
 	public static function getTypeOptions() {
-		return array(self::Noviet, self::Lid, self::Gastlid, self::Oudlid, self::Erelid, self::Overleden, self::Exlid, self::Nobody, self::Commissie, self::Kringel);
+		return array(self::NOVIET, self::LID, self::GASTLID, self::OUDLID, self::ERELID, self::OVERLEDEN, self::EXLID, self::NOBODY, self::COMMISSIE, self::KRINGEL);
 	}
 
 	public static function isLidLike($option) {
@@ -41,16 +41,16 @@ abstract class LidStatus implements PersistentEnum {
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::Noviet: return 'Noviet';
-			case self::Lid: return 'Lid';
-			case self::Gastlid: return 'Gastlid';
-			case self::Oudlid: return 'Oudlid';
-			case self::Erelid: return 'Erelid';
-			case self::Overleden: return 'Overleden';
-			case self::Exlid: return 'Ex-lid';
-			case self::Nobody: return 'Nobody';
-			case self::Commissie: return 'Commissie (LDAP)';
-			case self::Kringel: return 'Kringel';
+			case self::NOVIET: return 'Noviet';
+			case self::LID: return 'Lid';
+			case self::GASTLID: return 'Gastlid';
+			case self::OUDLID: return 'Oudlid';
+			case self::ERELID: return 'Erelid';
+			case self::OVERLEDEN: return 'Overleden';
+			case self::EXLID: return 'Ex-lid';
+			case self::NOBODY: return 'Nobody';
+			case self::COMMISSIE: return 'Commissie (LDAP)';
+			case self::KRINGEL: return 'Kringel';
 			default: throw new Exception('LidStatus onbekend');
 		}
 	}
@@ -63,16 +63,16 @@ abstract class LidStatus implements PersistentEnum {
 	 */
 	public static function getChar($option) {
 		switch ($option) {
-			case self::Noviet:
-			case self::Lid:
-			case self::Gastlid: return '';
-			case self::Commissie: return '∈';
-			case self::Exlid:
-			case self::Nobody: return '∉';
-			case self::Kringel: return '~';
-			case self::Oudlid: return '•';
-			case self::Erelid: return '☀';
-			case self::Overleden: return '✝';
+			case self::NOVIET:
+			case self::LID:
+			case self::GASTLID: return '';
+			case self::COMMISSIE: return '∈';
+			case self::EXLID:
+			case self::NOBODY: return '∉';
+			case self::KRINGEL: return '~';
+			case self::OUDLID: return '•';
+			case self::ERELID: return '☀';
+			case self::OVERLEDEN: return '✝';
 			default: throw new Exception('LidStatus onbekend');
 		}
 	}

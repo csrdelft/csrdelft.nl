@@ -15,7 +15,7 @@ class GroepLedenTable extends DataTable {
 		$this->setColumnTitle('uid', 'Lidnaam');
 		$this->setColumnTitle('door_uid', 'Aangemeld door');
 
-		if ($groep->mag(A::Beheren)) {
+		if ($groep->mag(AccessAction::BEHEREN)) {
 
 			$create = new DataTableKnop('== 0', $this->dataTableId, $groep->getUrl() . 'aanmelden', 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
 			$this->addKnop($create);
@@ -111,15 +111,15 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 			$html .= '<li class="geschiedenis float-left"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><span class="fa fa-clock-o"></span></a></li>';
 		}
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Pasfotos . '" title="' . GroepTab::getDescription(GroepTab::Pasfotos) . ' tonen"><span class="fa fa-user"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::PASFOTOS . '" title="' . GroepTab::getDescription(GroepTab::PASFOTOS) . ' tonen"><span class="fa fa-user"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Lijst . '" title="' . GroepTab::getDescription(GroepTab::Lijst) . ' tonen"><span class="fa fa-align-justify"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::LIJST . '" title="' . GroepTab::getDescription(GroepTab::LIJST) . ' tonen"><span class="fa fa-align-justify"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Statistiek . '" title="' . GroepTab::getDescription(GroepTab::Statistiek) . ' tonen"><span class="fa fa-pie-chart"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::STATS . '" title="' . GroepTab::getDescription(GroepTab::STATS) . ' tonen"><span class="fa fa-pie-chart"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Emails . '" title="' . GroepTab::getDescription(GroepTab::Emails) . ' tonen"><span class="fa fa-envelope"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::EMAILS . '" title="' . GroepTab::getDescription(GroepTab::EMAILS) . ' tonen"><span class="fa fa-envelope"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEetwensView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::Eetwens . '" title="' . GroepTab::getDescription(GroepTab::Eetwens) . ' tonen"><span class="fa fa-heartbeat"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEetwensView ? 'active' : '' ) . '" href="' . $this->groep->getUrl() . GroepTab::EETWENS . '" title="' . GroepTab::getDescription(GroepTab::EETWENS) . ' tonen"><span class="fa fa-heartbeat"></span></a></li>';
 
 		$onclick = "$('#groep-" . $this->groep->id . "').toggleClass('leden-uitgeklapt');";
 		$html .= '<li class="float-right"><a class="btn vergroot" id="groep-vergroot-' . $this->groep->id . '" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Uitklappen" onclick="' . $onclick . '"><span class="fa fa-expand"></span></a>';
@@ -145,7 +145,7 @@ else {
 	tabContent.height(availableHeight);
 }
 JS;
-		if ($this->groep->mag(A::Beheren)) {
+		if ($this->groep->mag(AccessAction::BEHEREN)) {
 
 			$this->javascript .= <<<JS
 
@@ -199,7 +199,7 @@ class GroepPasfotosView extends GroepTabView {
 
 	protected function getTabContent() {
 		$html = '';
-		if ($this->groep->mag(A::Aanmelden)) {
+		if ($this->groep->mag(AccessAction::AANMELDEN)) {
 			$orm = get_class($this->groep);
 			$leden = $orm::leden;
 			$lid = $leden::instance()->nieuw($this->groep, LoginModel::getUid());
@@ -219,7 +219,7 @@ class GroepLijstView extends GroepTabView {
 
 	public function getTabContent() {
 		$html = '<table class="groep-lijst"><tbody>';
-		if ($this->groep->mag(A::Aanmelden)) {
+		if ($this->groep->mag(AccessAction::AANMELDEN)) {
 			$html .= '<tr><td colspan="2">';
 			$orm = get_class($this->groep);
 			$leden = $orm::leden;
@@ -237,12 +237,12 @@ class GroepLijstView extends GroepTabView {
 		$profielen = ProfielModel::instance()->prefetch('uid IN (' . implode(', ', array_fill(0, count($uids), '?')) . ')', $uids, null, 'achternaam ASC');
 		foreach ($profielen as $profiel) {
 			$html .= '<tr><td>';
-			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Afmelden)) {
+			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(AccessAction::AFMELDEN)) {
 				$html .= '<a href="' . $this->groep->getUrl() . 'afmelden/' . $profiel->uid . '" class="post confirm float-left" title="Afmelden">'.Icon::getTag('bullet_delete').'</a>';
 			}
 			$html .= $profiel->getLink('civitas');
 			$html .= '</td><td>';
-			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(A::Bewerken)) {
+			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(AccessAction::BEWERKEN)) {
 				$form = new GroepBewerkenForm($leden[$profiel->uid], $this->groep);
 				$html .= $form->getHtml();
 			} else {

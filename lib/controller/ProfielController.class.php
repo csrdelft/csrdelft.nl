@@ -100,7 +100,7 @@ class ProfielController extends AclController {
 			$this->exit_http(403);
 		}
 		// NovCie mag novieten aanmaken
-		if ($lidstatus !== LidStatus::Noviet AND ! LoginModel::mag('P_LEDEN_MOD')) {
+		if ($lidstatus !== LidStatus::NOVIET AND ! LoginModel::mag('P_LEDEN_MOD')) {
 			$this->exit_http(403);
 		}
 		// Maak nieuw profiel zonder op te slaan

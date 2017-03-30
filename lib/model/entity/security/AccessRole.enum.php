@@ -12,14 +12,14 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 abstract class AccessRole implements PersistentEnum {
 
-	const Nobody = 'R_NOBODY';
-	const Eter = 'R_ETER';
-	const Oudlid = 'R_OUDLID';
-	const Lid = 'R_LID';
-	const BASFCie = 'R_BASF';
-	const MaalCie = 'R_MAALCIE';
-	const Bestuur = 'R_BESTUUR';
-	const PubCie = 'R_PUBCIE';
+	const NOBODY = 'R_NOBODY';
+	const ETER = 'R_ETER';
+	const OUDLID = 'R_OUDLID';
+	const LID = 'R_LID';
+	const BASFCIE = 'R_BASF';
+	const MAALCIE = 'R_MAALCIE';
+	const BESTUUR = 'R_BESTUUR';
+	const PUBCIE = 'R_PUBCIE';
 
 	/**
 	 * Extra rechtenset voor Am. de Vlieger.
@@ -28,28 +28,28 @@ abstract class AccessRole implements PersistentEnum {
 	const Vlieger = "R_VLIEGER";
 
 	public static function getTypeOptions() {
-		return array(self::Nobody, self::Eter, self::Oudlid, self::Lid,
-			self::BASFCie, self::MaalCie, self::Bestuur, self::PubCie, self::Vlieger);
+		return array(self::NOBODY, self::ETER, self::OUDLID, self::LID,
+			self::BASFCIE, self::MAALCIE, self::BESTUUR, self::PUBCIE, self::Vlieger);
 	}
 
 	public static function canChangeAccessRoleTo($from) {
 		switch ($from) {
-			case self::PubCie: return self::getTypeOptions();
-			case self::Bestuur: return array(self::Nobody, self::Eter, self::Oudlid, self::Lid);
+			case self::PUBCIE: return self::getTypeOptions();
+			case self::BESTUUR: return array(self::NOBODY, self::ETER, self::OUDLID, self::LID);
 			default: return array();
 		}
 	}
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::Nobody: return 'Ex-lid/Nobody';
-			case self::Eter: return 'Eter (inlog voor abo\'s)';
-			case self::Oudlid: return 'Oudlid';
-			case self::Lid: return 'Lid';
-			case self::BASFCie: return 'BASFCie-rechten';
-			case self::MaalCie: return 'MaalCie-rechten';
-			case self::Bestuur: return 'Bestuur-rechten';
-			case self::PubCie: return 'PubCie-rechten';
+			case self::NOBODY: return 'Ex-lid/Nobody';
+			case self::ETER: return 'Eter (inlog voor abo\'s)';
+			case self::OUDLID: return 'Oudlid';
+			case self::LID: return 'Lid';
+			case self::BASFCIE: return 'BASFCie-rechten';
+			case self::MAALCIE: return 'MaalCie-rechten';
+			case self::BESTUUR: return 'Bestuur-rechten';
+			case self::PUBCIE: return 'PubCie-rechten';
 			case self::Vlieger: return 'Vlieger-rechten';
 			default: throw new Exception('AccessRole onbekend');
 		}
@@ -57,14 +57,14 @@ abstract class AccessRole implements PersistentEnum {
 
 	public static function getChar($option) {
 		switch ($option) {
-			case self::Nobody: return 'N';
-			case self::Eter: return 'E';
-			case self::Oudlid: return 'O';
-			case self::Lid: return 'L';
-			case self::BASFCie: return 'BASF';
-			case self::MaalCie: return 'M';
-			case self::Bestuur: return 'B';
-			case self::PubCie: return 'P';
+			case self::NOBODY: return 'N';
+			case self::ETER: return 'E';
+			case self::OUDLID: return 'O';
+			case self::LID: return 'L';
+			case self::BASFCIE: return 'BASF';
+			case self::MAALCIE: return 'M';
+			case self::BESTUUR: return 'B';
+			case self::PUBCIE: return 'P';
 			case self::Vlieger: return 'V';
 			default: throw new Exception('AccessRole onbekend');
 		}

@@ -29,7 +29,7 @@ class ApiAuthController {
 		}
 
 		$_SESSION['_uid'] = $token->data->userId;
-		$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
+		$_SESSION['_authenticationMethod'] = AuthenticationMethod::COOKIE_TOKEN;
 
 		return true;
 	}
@@ -67,7 +67,7 @@ class ApiAuthController {
 
 					if ($validPassword) {
 						AccountModel::instance()->successfulLoginAttempt($account);
-						$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
+						$_SESSION['_authenticationMethod'] = AuthenticationMethod::COOKIE_TOKEN;
 						$credentialsAreValid = true;
 					} else {
 						AccountModel::instance()->failedLoginAttempt($account);

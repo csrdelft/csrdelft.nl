@@ -161,27 +161,27 @@ class GroepView implements FormElement {
 		$this->bb = $bb;
 		switch ($tab) {
 
-			case GroepTab::Pasfotos:
+			case GroepTab::PASFOTOS:
 				$this->leden = new GroepPasfotosView($groep);
 				break;
 
-			case GroepTab::Lijst:
+			case GroepTab::LIJST:
 				$this->leden = new GroepLijstView($groep);
 				break;
 
-			case GroepTab::Statistiek:
+			case GroepTab::STATS:
 				$this->leden = new GroepStatistiekView($groep);
 				break;
 
-			case GroepTab::Emails:
+			case GroepTab::EMAILS:
 				$this->leden = new GroepEmailsView($groep);
 				break;
 
-			case GroepTab::Emails:
+			case GroepTab::EMAILS:
 				$this->leden = new GroepEmailsView($groep);
 				break;
 
-			case GroepTab::Eetwens:
+			case GroepTab::EETWENS:
 				$this->leden = new GroepEetwensView($groep);
 				break;
 
@@ -215,7 +215,7 @@ class GroepView implements FormElement {
 			$html .= ' bb-block';
 		}
 		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting">';
-		if ($this->groep->mag(A::Wijzigen)) {
+		if ($this->groep->mag(AccessAction::WIJZIGEN)) {
 			$html .= '<div class="float-right"><a class="btn" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-pencil"></span></a></div>';
 		}
 		$html .= '<h3>' . $this->getTitel();
@@ -266,9 +266,9 @@ class GroepenView implements View {
 		$this->soort = $soort;
 		$this->geschiedenis = $geschiedenis;
 		if ($model instanceof BesturenModel) {
-			$this->tab = GroepTab::Lijst;
+			$this->tab = GroepTab::LIJST;
 		} else {
-			$this->tab = GroepTab::Pasfotos;
+			$this->tab = GroepTab::PASFOTOS;
 		}
 		$this->pagina = CmsPaginaModel::get($model->getNaam());
 		if (!$this->pagina) {
@@ -291,7 +291,7 @@ class GroepenView implements View {
 	public function view() {
 		$model = $this->model;
 		$orm = $model::ORM;
-		if ($orm::magAlgemeen(A::Aanmaken, $this->soort)) {
+		if ($orm::magAlgemeen(AccessAction::AANMAKEN, $this->soort)) {
 			echo '<a class="btn" href="' . $this->model->getUrl() . 'nieuw/' . $this->soort . '">'.Icon::getTag('add').' Toevoegen</a>';
 		}
 		echo '<a class="btn" href="' . $this->model->getUrl() . 'beheren">'.Icon::getTag('table').' Beheren</a>';
@@ -302,7 +302,7 @@ class GroepenView implements View {
 		$view->view();
 		foreach ($this->groepen as $groep) {
 			// Controleer rechten
-			if (!$groep->mag(A::Bekijken)) {
+			if (!$groep->mag(AccessAction::BEKIJKEN)) {
 				continue;
 			}
 			echo '<hr>';
@@ -333,7 +333,7 @@ class GroepenDeelnameGrafiek implements View {
 			}
 			foreach ($groep->getLeden() as $lid) {
 				$profiel = ProfielModel::get($lid->uid);
-				if ($profiel->geslacht === Geslacht::Man) {
+				if ($profiel->geslacht === Geslacht::MAN) {
 					$mannen[$time] += 1;
 				} else {
 					$vrouwen[$time] += 1;

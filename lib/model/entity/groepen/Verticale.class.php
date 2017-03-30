@@ -9,7 +9,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Verticale extends AbstractGroep {
 
-	const leden = 'VerticaleLedenModel';
+	const LEDEN = 'VerticaleLedenModel';
 
 	/**
 	 * Primary key
@@ -43,9 +43,9 @@ class Verticale extends AbstractGroep {
 	public function mag($action) {
 		switch ($action) {
 
-			case A::Bekijken:
-			case A::Aanmaken:
-			case A::Wijzigen:
+			case AccessAction::BEKIJKEN:
+			case AccessAction::AANMAKEN:
+			case AccessAction::WIJZIGEN:
 				return parent::mag($action);
 		}
 		return false;
@@ -57,9 +57,9 @@ class Verticale extends AbstractGroep {
 	public static function magAlgemeen($action) {
 		switch ($action) {
 
-			case A::Bekijken:
-			case A::Aanmaken:
-			case A::Wijzigen:
+			case AccessAction::BEKIJKEN:
+			case AccessAction::AANMAKEN:
+			case AccessAction::WIJZIGEN:
 				return parent::magAlgemeen($action);
 		}
 		return false;

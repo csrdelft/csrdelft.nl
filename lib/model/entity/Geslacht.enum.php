@@ -9,25 +9,25 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 abstract class Geslacht implements PersistentEnum {
 
-	const Man = 'm';
-	const Vrouw = 'v';
+	const MAN = 'm';
+	const VROUW = 'v';
 
 	public static function getTypeOptions() {
-		return array(self::Man, self::Vrouw);
+		return array(self::MAN, self::VROUW);
 	}
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::Man: return 'man';
-			case self::Vrouw: return 'vrouw';
+			case self::MAN: return 'man';
+			case self::VROUW: return 'vrouw';
 			default: throw new Exception('Geslacht onbekend');
 		}
 	}
 
 	public static function getChar($option) {
 		switch ($option) {
-			case self::Man: return 'M';
-			case self::Vrouw: return 'V';
+			case self::MAN: return 'M';
+			case self::VROUW: return 'V';
 			default: throw new Exception('Geslacht onbekend');
 		}
 	}

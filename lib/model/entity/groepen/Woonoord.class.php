@@ -14,7 +14,7 @@ require_once 'model/entity/groepen/HuisStatus.enum.php';
  */
 class Woonoord extends AbstractGroep {
 
-	const leden = 'BewonersModel';
+	const LEDEN = 'BewonersModel';
 
 	/**
 	 * Woonoord / Huis
@@ -54,8 +54,8 @@ class Woonoord extends AbstractGroep {
 	public function mag($action, $soort = null) {
 		switch ($action) {
 
-			case A::Beheren:
-			case A::Wijzigen:
+			case AccessAction::BEHEREN:
+			case AccessAction::WIJZIGEN:
 				// Huidige bewoners mogen beheren
 				if (LoginModel::mag('woonoord:' . $this->familie)) {
 					// HuisStatus wijzigen wordt geblokkeerd in GroepForm->validate()

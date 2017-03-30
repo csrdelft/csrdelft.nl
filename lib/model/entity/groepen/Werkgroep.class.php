@@ -10,7 +10,7 @@ require_once 'model/entity/groepen/Ketzer.class.php';
  */
 class Werkgroep extends Ketzer {
 
-	const leden = 'WerkgroepDeelnemersModel';
+	const LEDEN = 'WerkgroepDeelnemersModel';
 
 	/**
 	 * Database table name
@@ -29,7 +29,7 @@ class Werkgroep extends Ketzer {
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action) {
-		if ($action === A::Aanmaken AND ! LoginModel::mag('P_LEDEN_MOD')) {
+		if ($action === AccessAction::AANMAKEN AND ! LoginModel::mag('P_LEDEN_MOD')) {
 			return false;
 		}
 		return parent::magAlgemeen($action);

@@ -12,7 +12,7 @@ require_once 'view/DocumentenView.class.php';
  */
 class DocumentenController extends AclController {
 
-	const baseurl = '/documenten/';
+	const BASEURL = '/documenten/';
 
 	public $document = null;
 	protected $valid = true;

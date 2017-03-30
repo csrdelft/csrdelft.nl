@@ -189,7 +189,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 		}
 		// leden verwijderen
 		try {
-			$oldleden = $oldgroep::leden;
+			$oldleden = $oldgroep::LEDEN;
 			$oldledenmodel = $oldleden::instance();
 			foreach ($oldgroep->getLeden() as $oldlid) {
 				$oldledenmodel->delete($oldlid);
@@ -258,7 +258,7 @@ class OnderverenigingenModel extends AbstractGroepenModel {
 
 	public function nieuw() {
 		$ondervereniging = parent::nieuw();
-		$ondervereniging->status = OnderverenigingStatus::AdspirantOndervereniging;
+		$ondervereniging->status = OnderverenigingStatus::ADSPIRANTONDERVERENIGING;
 		$ondervereniging->status_historie = '[div]Aangemaakt als ' . OnderverenigingStatus::getDescription($ondervereniging->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $ondervereniging;
 	}
@@ -273,7 +273,7 @@ class WoonoordenModel extends AbstractGroepenModel {
 
 	public function nieuw() {
 		$woonoord = parent::nieuw();
-		$woonoord->status = HuisStatus::Woonoord;
+		$woonoord->status = HuisStatus::WOONOORD;
 		$woonoord->status_historie = '[div]Aangemaakt als ' . HuisStatus::getDescription($woonoord->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $woonoord;
 	}
@@ -400,7 +400,7 @@ class CommissiesModel extends AbstractGroepenModel {
 
 	public function nieuw($soort = null) {
 		if (!in_array($soort, CommissieSoort::getTypeOptions())) {
-			$soort = CommissieSoort::Commissie;
+			$soort = CommissieSoort::COMMISSIE;
 		}
 		$commissie = parent::nieuw();
 		$commissie->soort = $soort;
@@ -457,7 +457,7 @@ class ActiviteitenModel extends KetzersModel {
 
 	public function nieuw($soort = null) {
 		if (!in_array($soort, ActiviteitSoort::getTypeOptions())) {
-			$soort = ActiviteitSoort::SjaarsActie;
+			$soort = ActiviteitSoort::SJAARSACTIE;
 		}
 		$activiteit = parent::nieuw();
 		$activiteit->soort = $soort;

@@ -12,7 +12,7 @@ require_once 'model/entity/groepen/OnderverenigingStatus.enum.php';
  */
 class Ondervereniging extends AbstractGroep {
 
-	const leden = 'OnderverenigingsLedenModel';
+	const LEDEN = 'OnderverenigingsLedenModel';
 
 	/**
 	 * (Adspirant-)Ondervereniging

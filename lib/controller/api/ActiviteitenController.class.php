@@ -20,11 +20,11 @@ class ApiActiviteitenController {
 
 		$activiteit = ActiviteitenModel::get($id);
 
-		if (!$activiteit || !$activiteit->mag(A::Bekijken)) {
+		if (!$activiteit || !$activiteit->mag(AccessAction::BEKIJKEN)) {
 			throw new RestException(404, 'Activiteit bestaat niet');
 		}
 
-		if (!$activiteit->mag(A::Aanmelden)) {
+		if (!$activiteit->mag(AccessAction::AANMELDEN)) {
 			throw new RestException(403, 'Aanmelden niet mogelijk');
 		}
 
@@ -47,11 +47,11 @@ class ApiActiviteitenController {
 
 		$activiteit = ActiviteitenModel::get($id);
 
-		if (!$activiteit || !$activiteit->mag(A::Bekijken)) {
+		if (!$activiteit || !$activiteit->mag(AccessAction::BEKIJKEN)) {
 			throw new RestException(404, 'Activiteit bestaat niet');
 		}
 
-		if (!$activiteit->mag(A::Afmelden)) {
+		if (!$activiteit->mag(AccessAction::AFMELDEN)) {
 			throw new RestException(403, 'Afmelden niet mogelijk');
 		}
 

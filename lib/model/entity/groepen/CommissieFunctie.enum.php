@@ -12,35 +12,35 @@ use CsrDelft\Orm\Entity\PersistentEnum;
 abstract class CommissieFunctie implements PersistentEnum {
 
 	// Bestuur
-	const Praeses = 'Praeses';
-	const Abactis = 'Abactis';
-	const Fiscus = 'Fiscus';
-	const VicePraeses = 'Vice-Praeses';
-	const ViceAbactis = 'Vice-Abactis';
+	const PRAESES = 'Praeses';
+	const ABACTIS = 'Abactis';
+	const FISCUS = 'Fiscus';
+	const VICE_PRAESES = 'Vice-Praeses';
+	const VICE_ABACTIS = 'Vice-Abactis';
 	// Commissie
 	const QQ = 'Q.Q.';
 	// BASFCie
-	const Bibliothecarus = 'Bibliothecarus';
-	const Archivarus = 'Archivarus';
-	const Statisticus = 'Statisticus';
-	const Fotocommissaris = 'Fotocommissaris';
+	const BIBLIOTHECARUS = 'Bibliothecarus';
+	const ARCHIVARUS = 'Archivarus';
+	const STATISTICUS = 'Statisticus';
+	const FOTOCOMMISSARIS = 'Fotocommissaris';
 
 	public static function getTypeOptions() {
-		return array(self::Praeses, self::Abactis, self::Fiscus, self::VicePraeses, self::ViceAbactis, self::QQ, self::Bibliothecarus, self::Archivarus, self::Statisticus, self::Fotocommissaris);
+		return array(self::PRAESES, self::ABACTIS, self::FISCUS, self::VICE_PRAESES, self::VICE_ABACTIS, self::QQ, self::BIBLIOTHECARUS, self::ARCHIVARUS, self::STATISTICUS, self::FOTOCOMMISSARIS);
 	}
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::Praeses:
-			case self::Abactis:
-			case self::Fiscus:
-			case self::VicePraeses:
-			case self::ViceAbactis:
+			case self::PRAESES:
+			case self::ABACTIS:
+			case self::FISCUS:
+			case self::VICE_PRAESES:
+			case self::VICE_ABACTIS:
 			case self::QQ:
-			case self::Bibliothecarus:
-			case self::Archivarus:
-			case self::Statisticus:
-			case self::Fotocommissaris:
+			case self::BIBLIOTHECARUS:
+			case self::ARCHIVARUS:
+			case self::STATISTICUS:
+			case self::FOTOCOMMISSARIS:
 				return $option;
 			default: throw new Exception('CommissieFunctie onbekend');
 		}
@@ -48,16 +48,16 @@ abstract class CommissieFunctie implements PersistentEnum {
 
 	public static function getChar($option) {
 		switch ($option) {
-			case self::Praeses:
-			case self::Abactis:
-			case self::Fiscus:
-			case self::VicePraeses:
-			case self::ViceAbactis:
+			case self::PRAESES:
+			case self::ABACTIS:
+			case self::FISCUS:
+			case self::VICE_PRAESES:
+			case self::VICE_ABACTIS:
 			case self::QQ:
-			case self::Bibliothecarus:
-			case self::Archivarus:
-			case self::Statisticus:
-			case self::Fotocommissaris:
+			case self::BIBLIOTHECARUS:
+			case self::ARCHIVARUS:
+			case self::STATISTICUS:
+			case self::FOTOCOMMISSARIS:
 				return '';
 			default: throw new Exception('CommissieFunctie onbekend');
 		}

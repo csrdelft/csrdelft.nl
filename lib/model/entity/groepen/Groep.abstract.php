@@ -16,7 +16,7 @@ require_once 'model/entity/groepen/GroepLid.abstract.php';
  */
 abstract class AbstractGroep extends PersistentEntity {
 
-	const leden = 'GroepLedenModel';
+	const LEDEN = 'GroepLedenModel';
 
 	/**
 	 * Primary key
@@ -103,7 +103,7 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * @return AbstractGroepLid
 	 */
 	public function getLid($uid) {
-		$leden = static::leden;
+		$leden = static::LEDEN;
 		return $leden::get($this, $uid);
 	}
 
@@ -113,17 +113,17 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * @return AbstractGroepLid[]
 	 */
 	public function getLeden() {
-		$leden = static::leden;
+		$leden = static::LEDEN;
 		return $leden::instance()->getLedenVoorGroep($this);
 	}
 
 	public function aantalLeden() {
-		$leden = static::leden;
+		$leden = static::LEDEN;
 		return $leden::instance()->count('groep_id = ?', array($this->id));
 	}
 
 	public function getStatistieken() {
-		$leden = static::leden;
+		$leden = static::LEDEN;
 		return $leden::instance()->getStatistieken($this);
 	}
 
@@ -137,7 +137,7 @@ abstract class AbstractGroep extends PersistentEntity {
 		} elseif ($this instanceof Commissie OR $this instanceof Bestuur) {
 			$suggesties = CommissieFunctie::getTypeOptions();
 		} else {
-			$leden = static::leden;
+			$leden = static::LEDEN;
 			$suggesties = Database::instance()->sqlSelect(array('DISTINCT opmerking'), $leden::instance()->getTableName(), 'groep_id = ?', array($this->id))->fetchAll(PDO::FETCH_COLUMN);
 		}
 		return $suggesties;
@@ -153,23 +153,23 @@ abstract class AbstractGroep extends PersistentEntity {
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			return false;
 		}
-		$leden = static::leden;
+		$leden = static::LEDEN;
 		$aangemeld = Database::instance()->sqlExists($leden::instance()->getTableName(), 'groep_id = ? AND uid = ?', array($this->id, LoginModel::getUid()));
 		switch ($action) {
 
-			case A::Aanmelden:
+			case AccessAction::AANMELDEN:
 				if ($aangemeld) {
 					return false;
 				}
 				break;
 
-			case A::Bewerken:
+			case AccessAction::BEWERKEN:
 				if (!$aangemeld) {
 					return false;
 				}
 				break;
 
-			case A::Afmelden:
+			case AccessAction::AFMELDEN:
 				if (!$aangemeld) {
 					return false;
 				}
@@ -194,13 +194,13 @@ abstract class AbstractGroep extends PersistentEntity {
 	public static function magAlgemeen($action) {
 		switch ($action) {
 
-			case A::Bekijken:
+			case AccessAction::BEKIJKEN:
 				return LoginModel::mag('P_LEDEN_READ');
 
 			// Voorkom dat moderators overal een normale aanmeldknop krijgen
-			case A::Aanmelden:
-			case A::Bewerken:
-			case A::Afmelden:
+			case AccessAction::AANMELDEN:
+			case AccessAction::BEWERKEN:
+			case AccessAction::AFMELDEN:
 				return false;
 		}
 		// Moderators mogen alles

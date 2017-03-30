@@ -9,7 +9,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Kring extends AbstractGroep {
 
-	const leden = 'KringLedenModel';
+	const LEDEN = 'KringLedenModel';
 
 	/**
 	 * Verticaleletter

@@ -11,25 +11,25 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 abstract class KetzerSelectorSoort implements PersistentEnum {
 
-	const Single = 'XOR';
-	const Multiple = 'AND';
+	const SINGLE = 'XOR';
+	const MULTIPLE = 'AND';
 
 	public static function values() {
-		return array(self::Single, self::Multiple);
+		return array(self::SINGLE, self::MULTIPLE);
 	}
 
 	public static function getDescription($option) {
 		switch ($option) {
-			case self::Single: return 'Keuzerondje';
-			case self::Multiple: return 'Vinkje';
+			case self::SINGLE: return 'Keuzerondje';
+			case self::MULTIPLE: return 'Vinkje';
 			default: throw new Exception('KetzerSelectorSoort onbekend');
 		}
 	}
 
 	public static function getChar($option) {
 		switch ($option) {
-			case self::Single:
-			case self::Multiple:
+			case self::SINGLE:
+			case self::MULTIPLE:
 				return $option;
 			default: throw new Exception('KetzerSelectorSoort onbekend');
 		}
