@@ -22,8 +22,11 @@
  *  - ColorField                    Kleurkiezer
  *  - SterrenField                        Sterren
  *
+ * Pas op, de volgorde van requires is belangrijk
  */
 
+require_once 'view/formulier/keuzevelden/SelectField.class.php';
+require_once 'view/formulier/keuzevelden/RadioField.class.php';
 require_once 'view/formulier/keuzevelden/CheckboxField.class.php';
 require_once 'view/formulier/keuzevelden/ColorField.class.php';
 require_once 'view/formulier/keuzevelden/DateField.class.php';
@@ -33,7 +36,10 @@ require_once 'view/formulier/keuzevelden/GeslachtField.class.php';
 require_once 'view/formulier/keuzevelden/JaNeeField.class.php';
 require_once 'view/formulier/keuzevelden/KerkField.class.php';
 require_once 'view/formulier/keuzevelden/MultiSelectField.class.php';
-require_once 'view/formulier/keuzevelden/RadioField.class.php';
+require_once 'view/formulier/keuzevelden/SterrenField.class.php';
+require_once 'view/formulier/keuzevelden/TimeField.class.php';
+require_once 'view/formulier/keuzevelden/VerticaleField.class.php';
+require_once 'view/formulier/keuzevelden/WeekdagField.class.php';
 require_once 'view/formulier/keuzevelden/RequiredCheckboxField.class.php';
 require_once 'view/formulier/keuzevelden/RequiredColorField.class.php';
 require_once 'view/formulier/keuzevelden/RequiredDateField.class.php';
@@ -48,8 +54,3 @@ require_once 'view/formulier/keuzevelden/RequiredSterrenField.class.php';
 require_once 'view/formulier/keuzevelden/RequiredTimeField.class.php';
 require_once 'view/formulier/keuzevelden/RequiredVerticaleField.class.php';
 require_once 'view/formulier/keuzevelden/RequiredWeekdagField.class.php';
-require_once 'view/formulier/keuzevelden/SelectField.class.php';
-require_once 'view/formulier/keuzevelden/SterrenField.class.php';
-require_once 'view/formulier/keuzevelden/TimeField.class.php';
-require_once 'view/formulier/keuzevelden/VerticaleField.class.php';
-require_once 'view/formulier/keuzevelden/WeekdagField.class.php';
