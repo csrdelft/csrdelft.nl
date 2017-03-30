@@ -9,7 +9,6 @@ require_once 'view/formulier/FormElement.abstract.php';
 require_once 'view/formulier/InvoerVelden.class.php';
 require_once 'view/formulier/GetalVelden.class.php';
 require_once 'view/formulier/KeuzeVelden.class.php';
-require_once 'view/formulier/BBCodeVelden.class.php';
 require_once 'view/formulier/UploadVelden.class.php';
 require_once 'view/formulier/knoppen/FormKnoppen.class.php';
 require_once 'view/formulier/knoppen/FormDefaultKnoppen.class.php';
