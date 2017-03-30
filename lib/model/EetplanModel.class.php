@@ -1,11 +1,11 @@
 <?php
 
-use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 
 require_once 'model/entity/Eetplan.class.php';
 require_once 'model/entity/EetplanBekenden.class.php';
 require_once 'model/EetplanFactory.class.php';
+require_once 'model/EetplanBekendenModel.class.php';
 
 /**
  * EetplanModel.class.php
@@ -120,38 +120,5 @@ class EetplanModel extends PersistenceModel {
 
     public function getBekendeHuizen($lichting) {
         return $this->find('uid LIKE ? AND avond = DATE(0)', array($lichting . "%"))->fetchAll();
-    }
-}
-
-class EetplanBekendenModel extends PersistenceModel {
-    protected static $instance;
-
-    const ORM = "EetplanBekenden";
-
-    /**
-     * EetplanBekenden constructor.
-     */
-    public function __construct() {
-        parent::__construct();
-    }
-
-    public function getBekenden($lichting) {
-        return $this->find('uid1 LIKE ?', array($lichting . "%"))->fetchAll();
-    }
-
-	/**
-	 * @param PersistentEntity|EetplanBekenden $entity
-	 * @return bool
-	 */
-    public function exists(PersistentEntity $entity) {
-        if (parent::exists($entity)) {
-            return true;
-        }
-
-        $omgekeerd = new EetplanBekenden();
-        $omgekeerd->uid1 = $entity->uid2;
-        $omgekeerd->uid2 = $entity->uid1;
-
-        return parent::exists($omgekeerd);
     }
 }
