@@ -126,7 +126,7 @@ require_once 'model/TimerModel.class.php';
 require_once 'model/entity/agenda/Agendeerbaar.interface.php';
 require_once 'model/security/AccessModel.class.php';
 require_once 'model/LidInstellingenModel.class.php';
-require_once 'model/ForumModel.class.php';
+require_once 'model/forum/ForumModel.class.php';
 require_once 'model/LogModel.class.php';
 
 // View

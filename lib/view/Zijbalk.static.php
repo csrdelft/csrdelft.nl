@@ -41,7 +41,7 @@ abstract class Zijbalk {
 		}
 		// Nieuwste belangrijke forumberichten
 		if (LidInstellingen::get('zijbalk', 'forum_belangrijk') > 0) {
-			require_once 'model/ForumModel.class.php';
+			require_once 'model/forum/ForumModel.class.php';
 			require_once 'view/ForumView.class.php';
 			$zijbalk[] = new ForumDraadZijbalkView(
 					ForumDradenModel::instance()->getRecenteForumDraden(
@@ -49,7 +49,7 @@ abstract class Zijbalk {
 		}
 		// Nieuwste forumberichten
 		if (LidInstellingen::get('zijbalk', 'forum') > 0) {
-			require_once 'model/ForumModel.class.php';
+			require_once 'model/forum/ForumModel.class.php';
 			require_once 'view/ForumView.class.php';
 			$belangrijk = (LidInstellingen::get('zijbalk', 'forum_belangrijk') > 0 ? false : null);
 			$zijbalk[] = new ForumDraadZijbalkView(
@@ -58,7 +58,7 @@ abstract class Zijbalk {
 		}
 		// Zelfgeposte forumberichten
 		if (LidInstellingen::get('zijbalk', 'forum_zelf') > 0) {
-			require_once 'model/ForumModel.class.php';
+			require_once 'model/forum/ForumModel.class.php';
 			require_once 'view/ForumView.class.php';
 			$posts = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginModel::getUid(), (int) LidInstellingen::get('zijbalk', 'forum_zelf'), true);
 			$zijbalk[] = new ForumPostZijbalkView($posts);

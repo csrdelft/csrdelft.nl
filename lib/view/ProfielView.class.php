@@ -140,7 +140,7 @@ class ProfielView extends SmartyTemplateView {
 		require_once 'model/maalcie/KwalificatiesModel.class.php';
 		$this->smarty->assign('corveekwalificaties', KwalificatiesModel::instance()->getKwalificatiesVanLid($this->model->uid));
 
-		require_once 'model/ForumModel.class.php';
+		require_once 'model/forum/ForumModel.class.php';
 		$this->smarty->assign('forumpostcount', ForumPostsModel::instance()->getAantalForumPostsVoorLid($this->model->uid));
 
 		require_once 'model/bibliotheek/BiebCatalogus.class.php';
