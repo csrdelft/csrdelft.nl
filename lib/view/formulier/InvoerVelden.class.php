@@ -19,7 +19,7 @@ require_once 'view/formulier/invoervelden/LidField.class.php';
 require_once 'view/formulier/invoervelden/RechtenField.class.php';
 require_once 'view/formulier/invoervelden/StudieField.class.php';
 require_once 'view/formulier/invoervelden/TextareaField.class.php';
-require_once 'view/formulier/invoervelden/BBCodeField.php';
+require_once 'view/formulier/invoervelden/BBCodeField.class.php';
 require_once 'view/formulier/invoervelden/UrlField.class.php';
 require_once 'view/formulier/invoervelden/UsernameField.class.php';
 require_once 'view/formulier/invoervelden/WachtwoordField.class.php';
