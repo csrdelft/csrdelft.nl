@@ -378,5 +378,3 @@ class MaaltijdenModel extends PersistenceModel {
     }
 
 }
-
-?>

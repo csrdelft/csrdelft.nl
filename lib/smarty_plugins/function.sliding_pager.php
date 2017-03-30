@@ -166,4 +166,3 @@ function smarty_function_sliding_pager($params, &$smarty) {
 
 /* vim: set expandtab: */
 /* vim: set ts=4: */
-?>

@@ -7,7 +7,8 @@ require_once 'view/MenuBeheerView.class.php';
  * MenuBeheerController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
+ * @property MenuModel $model
  */
 class MenuBeheerController extends AclController {
 

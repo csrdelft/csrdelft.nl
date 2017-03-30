@@ -115,6 +115,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 * Set primary key.
 	 * 
 	 * @param PersistentEntity $groep
+	 * @return void
 	 */
 	public function create(PersistentEntity $groep) {
 		$groep->id = (int) parent::create($groep);

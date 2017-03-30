@@ -138,7 +138,7 @@ function aanmeldFilter_render(data) {
 }
 
 function gesloten_render(data) {
-    return '<span class="ico '+(data=='1'?'tick':'cross')+'"></span>';
+    return '<span class="ico '+(data==='1'?'tick':'cross')+'"></span>';
 }
 
 function aanmeldingen_render(data, type, row) {

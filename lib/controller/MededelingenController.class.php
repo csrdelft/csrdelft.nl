@@ -9,6 +9,8 @@ require_once 'view/MededelingenView.class.php';
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  * Controller van het bijbelrooster.
+ *
+ * @property MededelingenModel $model
  */
 class MededelingenController extends AclController {
 

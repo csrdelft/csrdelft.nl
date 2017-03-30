@@ -6,6 +6,8 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller voor kringen.
+ *
+ * @property KringenModel $model
  */
 class KringenController extends AbstractGroepenController {
 

@@ -6,6 +6,8 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Controller van de agenda.
+ *
+ * @property LoginModel $model
  */
 class LoginController extends AclController {
 
@@ -292,6 +294,7 @@ class LoginController extends AclController {
 		}
 		$response = array();
 		foreach ($selection as $UUID) {
+			/** @var RememberLogin $remember */
 			$remember = RememberLoginModel::instance()->retrieveByUUID($UUID);
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
 				$this->exit_http(403);
@@ -346,6 +349,7 @@ class LoginController extends AclController {
 		}
 		$response = array();
 		foreach ($selection as $UUID) {
+			/** @var RememberLogin $remember */
 			$remember = RememberLoginModel::instance()->retrieveByUUID($UUID);
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
 				$this->exit_http(403);

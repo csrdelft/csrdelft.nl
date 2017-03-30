@@ -407,7 +407,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * worden Permissies hierdoor beperkt voor de veiligheid.
 	 * @see AccessModel::mag()
 	 * 
-	 * @return AuthenticationMethod|null
+	 * @return string|null uit AuthenticationMethod
 	 */
 	public function getAuthenticationMethod() {
 		if (!isset($_SESSION['_authenticationMethod'])) {

@@ -153,5 +153,3 @@ class CorveeRepetitiesModel extends PersistenceModel {
 	}
 
 }
-
-?>

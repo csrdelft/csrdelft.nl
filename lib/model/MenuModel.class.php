@@ -163,7 +163,7 @@ class MenuModel extends CachedPersistenceModel {
 	/**
 	 * Lijst van alle menu roots om te beheren.
 	 * 
-	 * @return MenuItem[]
+	 * @return MenuItem[]|false
 	 */
 	public function getMenuBeheerLijst() {
 		if (LoginModel::mag('P_ADMIN')) {
@@ -184,7 +184,7 @@ class MenuModel extends CachedPersistenceModel {
 	 * Get menu item by id (cached).
 	 * 
 	 * @param int $id
-	 * @return MenuItem
+	 * @return MenuItem|false
 	 */
 	public function getMenuItem($id) {
 		return $this->retrieveByPrimaryKey(array($id));
@@ -209,6 +209,10 @@ class MenuModel extends CachedPersistenceModel {
 		return $item;
 	}
 
+	/**
+	 * @param PersistentEntity|MenuItem $entity
+	 * @return void
+	 */
 	public function create(PersistentEntity $entity) {
 		$entity->item_id = (int) parent::create($entity);
 		$this->flushCache(true);

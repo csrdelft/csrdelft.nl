@@ -176,7 +176,7 @@ class Formulier implements View, Validator {
 	 * Zoekt een InputField met exact de gegeven naam.
 	 *
 	 * @param string $fieldName
-	 * @return InputField OR false if not found
+	 * @return InputField|false if not found
 	 */
 	public function findByName($fieldName) {
 		foreach ($this->fields as $field) {
@@ -294,20 +294,21 @@ JS;
 	}
 
 	protected function getScriptTag() {
-		return <<<JS
+		return <<<HTML
 <script type="text/javascript">
 $(document).ready(function () {
 	var form = document.getElementById('{$this->formId}');
 	{$this->getJavascript()}
 });
 </script>
-JS;
+HTML;
 	}
 
 	/**
 	 * Toont het formulier en javascript van alle fields.
 	 * 
 	 * @param boolean $showMelding Toon meldingen bovenaan formulier
+	 * @return void
 	 */
 	public function view($showMelding = true) {
 		if ($showMelding) {
@@ -332,7 +333,7 @@ JS;
 	/**
 	 * Geef een array terug van de gewijzigde velden.
 	 *
-	 * @returns ChangeLogEntry
+	 * @returns ChangeLogEntry[]
 	 */
 	public function diff() {
 		require_once 'model/ChangeLogModel.class.php';

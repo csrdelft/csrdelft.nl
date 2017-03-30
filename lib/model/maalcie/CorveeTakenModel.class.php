@@ -139,7 +139,7 @@ class CorveeTakenModel extends PersistenceModel {
 	 * Haalt de taken op voor een lid.
 	 *
 	 * @param string $uid
-	 * @return PDOStatement
+	 * @return PDOStatement|CorveeTaak[]
 	 */
 	public function getTakenVoorLid($uid) {
 		return $this->find('verwijderd = false AND uid = ?', array($uid));
@@ -464,5 +464,3 @@ class CorveeTakenModel extends PersistenceModel {
 	}
 
 }
-
-?>

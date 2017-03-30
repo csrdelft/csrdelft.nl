@@ -135,6 +135,10 @@ class EetplanHuizenData {
  * Class EetplanHuizenView
  */
 class EetplanHuizenView extends DataTableResponse {
+	/**
+	 * @param Woonoord $entity
+	 * @return string
+	 */
     public function getJson($entity) {
         return parent::getJson(array(
             'UUID' => $entity->getUUID(),
@@ -165,6 +169,10 @@ class EetplanBekendenTable extends DataTable {
  * Class EetplanRelatieView
  */
 class EetplanRelatieView extends DataTableResponse {
+	/**
+	 * @param EetplanBekenden $entity
+	 * @return string
+	 */
     public function getJson($entity) {
         $array = $entity->jsonSerialize();
         $array['noviet1'] = $entity->getNoviet1()->getNaam();
@@ -210,6 +218,10 @@ class EetplanBekendeHuizenTable extends DataTable {
  * Class EetplanBekendeHuizenResponse
  */
 class EetplanBekendeHuizenResponse extends DataTableResponse {
+	/**
+	 * @param Eetplan $entity
+	 * @return string
+	 */
     public function getJson($entity) {
         $array = $entity->jsonSerialize();
         $array['woonoord'] = $entity->getWoonoord()->naam;
@@ -243,6 +255,10 @@ class EetplanBekendeHuizenForm extends ModalForm {
  */
 class EetplanHuizenResponse extends JsonLijstResponse  {
 
+	/**
+	 * @param Woonoord $entity
+	 * @return string
+	 */
     public function getJson($entity) {
         return parent::getJson(array(
             'url' => $entity->getUrl(),

@@ -17,12 +17,18 @@ class AccountModel extends CachedPersistenceModel {
 
 	protected static $instance;
 
+	/**
+	 * @param $uid
+	 * @return Account|false
+	 */
 	public static function get($uid) {
 		return static::instance()->retrieveByPrimaryKey(array($uid));
 	}
 
 	/**
 	 * Dit zegt niet in dat een account of profiel ook werkelijk bestaat!
+	 * @param $uid
+	 * @return bool
 	 */
 	public static function isValidUid($uid) {
 		return is_string($uid) AND preg_match('/^[a-z0-9]{4}$/', $uid);
@@ -86,6 +92,9 @@ class AccountModel extends CachedPersistenceModel {
 	 * Reset het wachtwoord van de gebruiker.
 	 *  - Controleert GEEN eisen aan wachtwoord
 	 *  - Wordt NIET gelogged in de changelog van het profiel
+	 * @param Account $account
+	 * @param $pass_plain
+	 * @return bool
 	 */
 	public function wijzigWachtwoord(Account $account, $pass_plain) {
 		// Niet veranderd?

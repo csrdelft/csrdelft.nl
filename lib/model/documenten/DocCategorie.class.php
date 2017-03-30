@@ -187,7 +187,7 @@ class DocCategorie {
 	 * @param $zoekterm
 	 * @param int $categorie
 	 * @param int $limiet
-	 * @return array|bool
+	 * @return Document[]|bool
 	 */
 	public static function zoekDocumenten($zoekterm, $categorie = 0, $limiet = 0) {
 		$documenten = array();

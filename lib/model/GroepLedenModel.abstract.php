@@ -122,7 +122,7 @@ class LichtingLedenModel extends AbstractGroepLedenModel {
 	 * 
 	 * @param Lichting $lichting
 	 * @param string $uid
-	 * @return LichtingLid|false
+	 * @return LichtingsLid|false
 	 */
 	public static function get(AbstractGroep $lichting, $uid) {
 		$profiel = ProfielModel::get($uid);
@@ -139,7 +139,7 @@ class LichtingLedenModel extends AbstractGroepLedenModel {
 	 * Return leden van lichting.
 	 * 
 	 * @param Lichting $lichting
-	 * @return LichtingLid[]
+	 * @return LichtingsLid[]
 	 */
 	public function getLedenVoorGroep(AbstractGroep $lichting) {
 		$leden = array();

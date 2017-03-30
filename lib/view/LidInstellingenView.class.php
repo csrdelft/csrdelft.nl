@@ -4,7 +4,8 @@
  * LidInstellingenView.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
+ * @property LidInstellingen $model
  */
 class LidInstellingenView extends TabsForm {
 

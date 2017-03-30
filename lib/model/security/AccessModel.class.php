@@ -37,7 +37,7 @@ class AccessModel extends CachedPersistenceModel {
 	private static $ledenRead = array('P_LEDEN_READ', 'P_OUDLEDEN_READ');
 	/**
 	 * Gebruikt om ledengegevens te wijzigen
-	 * @var type array
+	 * @var array
 	 */
 	private static $ledenWrite = array('P_PROFIEL_EDIT', 'P_LEDEN_MOD');
 	/**
@@ -47,6 +47,7 @@ class AccessModel extends CachedPersistenceModel {
 	private static $defaultAllowedAuthenticationMethods = array(AuthenticationMethod::cookie_token, AuthenticationMethod::password_login, AuthenticationMethod::recent_password_login, AuthenticationMethod::password_login_and_one_time_token);
 
 	public static function getSubject($environment, $action, $resource) {
+		/** @var AccessControl $ac */
 		$ac = self::instance()->retrieveByPrimaryKey(array($environment, $action, $resource));
 		if ($ac) {
 			return $ac->subject;
@@ -184,6 +185,7 @@ class AccessModel extends CachedPersistenceModel {
 		// CRUD ACL
 		foreach ($acl as $action => $subject) {
 			// Retrieve AC
+			/** @var AccessControl $ac */
 			$ac = $this->retrieveByPrimaryKey(array($environment, $action, $resource));
 			// Delete AC
 			if (empty($subject)) {
@@ -236,7 +238,7 @@ class AccessModel extends CachedPersistenceModel {
 	/**
 	 * Get error(s) in permission string, if any.
 	 *
-	 * @param type $permissions
+	 * @param string $permissions
 	 * @return array empty if no errors; substring(s) of $permissions containing error(s) otherwise
 	 */
 	public function getPermissionStringErrors($permissions) {
@@ -600,7 +602,7 @@ class AccessModel extends CachedPersistenceModel {
 				return (string) $profiel->lidjaar === $gevraagd;
 
 			case 'EERSTEJAARS':
-				if ($profiel->lidaar === LichtingenModel::getJongsteLidjaar()) {
+				if ($profiel->lidjaar === LichtingenModel::getJongsteLidjaar()) {
 					return true;
 				}
 				return false;

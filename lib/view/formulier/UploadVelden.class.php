@@ -259,6 +259,8 @@ class RequiredImageField extends ImageField {
  * 
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * @property Bestand $model
  */
 class BestandBehouden extends InputField {
 

@@ -143,4 +143,3 @@ function smarty_block_table_foreach($params,  $content, &$smarty, &$repeat)
     }
 }
 /* vim: set expandtab: */
-?>

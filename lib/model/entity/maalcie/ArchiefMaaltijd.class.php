@@ -98,5 +98,3 @@ class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
 	}
 
 }
-
-?>

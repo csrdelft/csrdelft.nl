@@ -34,11 +34,13 @@ class Verticale extends AbstractGroep {
 	}
 
 	public function getKringen() {
-		return KringenModel::getKringenVoorVerticale($this);
+		return KringenModel::instance()->getKringenVoorVerticale($this);
 	}
 
 	/**
 	 * Limit functionality: leden generated
+	 * @param string $action
+	 * @return bool
 	 */
 	public function mag($action) {
 		switch ($action) {
@@ -53,6 +55,8 @@ class Verticale extends AbstractGroep {
 
 	/**
 	 * Limit functionality: leden generated
+	 * @param string $action
+	 * @return bool
 	 */
 	public static function magAlgemeen($action) {
 		switch ($action) {

@@ -6,6 +6,8 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller voor ketzers.
+ *
+ * @property KetzersModel $model
  */
 class KetzersController extends AbstractGroepenController {
 

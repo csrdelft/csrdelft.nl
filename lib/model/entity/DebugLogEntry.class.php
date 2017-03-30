@@ -22,7 +22,7 @@ class DebugLogEntry extends PersistentEntity {
 	public $class_function;
 	/**
 	 * Dump data
-	 * @var LongText
+	 * @var string LongText
 	 */
 	public $dump;
 	/**

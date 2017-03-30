@@ -3,6 +3,13 @@
 require_once 'model/PeilingenModel.class.php';
 require_once 'view/PeilingenView.class.php';
 
+/**
+ * Class PeilingenController
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ *
+ * @property PeilingenModel $model
+ */
 class PeilingenController extends AclController {
 
 	public function __construct($query) {

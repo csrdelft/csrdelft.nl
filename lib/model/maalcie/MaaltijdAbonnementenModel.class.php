@@ -129,9 +129,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	/**
 	 * Bouwt matrix voor alle repetities en abonnementen van alle leden
 	 *
-	 * @param null $ingeschakeld
-	 * @param null $voorLid
-	 * @return MaaltijdAbonnement [uid][mrid]
+	 * @return MaaltijdAbonnement[][] 2d matrix met eerst uid, en dan repetitie id
 	 * @throws Exception
 	 */
 	public function getAbonnementenMatrix() {
@@ -285,6 +283,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 * @throws Exception
 	 */
 	public function verwijderAbonnementen($mrid) {
+		/** @var MaaltijdAbonnement[] $abos */
 		$abos = $this->find('mlt_repetitie_id = ?', array($mrid));
         $aantal = count($abos);
         foreach ($abos as $abo) {
@@ -297,7 +296,8 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	/**
 	 * Called when a Lid is being made Lid-af.
 	 * All linked MaaltijdAanmeldingen are deleted of this MaaltijdAbonnement.
-	 * 
+	 *
+	 * @param $uid
 	 * @return int amount of deleted abos
 	 */
 	public function verwijderAbonnementenVoorLid($uid) {
@@ -312,5 +312,3 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 		return $aantal;
 	}
 }
-
-?>

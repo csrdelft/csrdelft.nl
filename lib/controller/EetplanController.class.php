@@ -87,6 +87,7 @@ class EetplanController extends AclController {
             $selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
             $woonoorden = array();
             foreach ($selection as $woonoord) {
+            	/** @var Woonoord $woonoord */
                 $woonoord = WoonoordenModel::instance()->retrieveByUUID($woonoord);
                 $woonoord->eetplan = $actie == 'aan';
                 WoonoordenModel::instance()->update($woonoord);

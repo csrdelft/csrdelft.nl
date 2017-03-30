@@ -64,5 +64,3 @@ function smarty_function_knop($params, &$smarty){
 
 
 /* vim: set expandtab: */
-
-?>

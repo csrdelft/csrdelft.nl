@@ -10,6 +10,8 @@ require_once 'view/CmsPaginaView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller van de agenda.
+ *
+ * @property CmsPaginaModel $model
  */
 class CmsPaginaController extends Controller {
 
@@ -50,6 +52,7 @@ class CmsPaginaController extends Controller {
 	}
 
 	public function bekijken($naam) {
+		/** @var CmsPagina $pagina */
 		$pagina = $this->model->get($naam);
 		if (!$pagina) { // 404
 			$pagina = $this->model->get('thuis');
@@ -99,6 +102,7 @@ class CmsPaginaController extends Controller {
 	}
 
 	public function verwijderen($naam) {
+		/** @var CmsPagina $pagina */
 		$pagina = $this->model->get($naam);
 		if (!$pagina OR ! $pagina->magVerwijderen()) {
 			$this->exit_http(403);

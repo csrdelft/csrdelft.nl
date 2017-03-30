@@ -248,8 +248,9 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	/**
 	 * Controleer of alle aanmeldingen voor de maaltijden nog in overeenstemming zijn met het aanmeldfilter.
 	 *
+	 * @param $filter
 	 * @param Maaltijd[] $maaltijden
-	 * @return int|void
+	 * @return int
 	 */
 	public function checkAanmeldingenFilter($filter, $maaltijden) {
 		$mids = array();

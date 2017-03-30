@@ -10,6 +10,8 @@ require_once 'view/courant/CourantBeheerView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Controller van de courant.
+ *
+ * @property CourantModel $model
  */
 class CourantController extends AclController {
 

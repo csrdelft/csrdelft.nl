@@ -93,6 +93,10 @@ JS;
 
 class GesprekkenResponse extends DataTableResponse {
 
+	/**
+	 * @param Gesprek $gesprek
+	 * @return string
+	 */
 	public function getJson($gesprek) {
 		$array = $gesprek->jsonSerialize();
 
@@ -145,6 +149,10 @@ JS;
 
 class BerichtenResponse extends DataTableResponse {
 
+	/**
+	 * @param GesprekBericht $bericht
+	 * @return string
+	 */
 	public function getJson($bericht) {
 		$array = $bericht->jsonSerialize();
 
