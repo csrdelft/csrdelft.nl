@@ -15,11 +15,11 @@
  * 	- TelefoonField				Telefoonnummers
  */
 
-require_once 'view/formulier/getalvelden/BedragField.class.php';
 require_once 'view/formulier/getalvelden/FloatField.class.php';
 require_once 'view/formulier/getalvelden/IntField.class.class.php';
+require_once 'view/formulier/getalvelden/BedragField.class.php';
+require_once 'view/formulier/getalvelden/TelefoonField.class.php';
 require_once 'view/formulier/getalvelden/RequiredBedragField.class.php';
 require_once 'view/formulier/getalvelden/RequiredFloatField.class.php';
 require_once 'view/formulier/getalvelden/RequiredIntField.class.php';
 require_once 'view/formulier/getalvelden/RequiredTelefoonField.class.php';
-require_once 'view/formulier/getalvelden/TelefoonField.class.php';
