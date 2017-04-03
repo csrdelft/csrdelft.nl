@@ -53,6 +53,7 @@ class ForumModel extends CachedPersistenceModel {
 			$delenByCategorieId = group_by('categorie_id', ForumDelenModel::instance()->getForumDelenVoorLid());
 			$this->indeling = array();
 			foreach ($this->prefetch() as $categorie) {
+				/** @var ForumCategorie $categorie */
 				if ($categorie->magLezen()) {
 					$this->indeling[] = $categorie;
 					if (isset($delenByCategorieId[$categorie->categorie_id])) {
@@ -137,6 +138,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 	 * @throws Exception
 	 */
 	public static function get($id) {
+		/** @var ForumDeel $deel */
 		$deel = static::instance()->retrieveByPrimaryKey(array($id));
 		if (!$deel) {
 			throw new Exception('Forum bestaat niet!');
@@ -144,6 +146,10 @@ class ForumDelenModel extends CachedPersistenceModel {
 		return $deel;
 	}
 
+	/**
+	 * @param PersistentEntity|ForumDeel $entity
+	 * @return int
+	 */
 	public function create(PersistentEntity $entity) {
 		$entity->forum_id = (int) parent::create($entity);
 		return $entity->forum_id;
@@ -177,6 +183,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 	}
 
 	public function getForumDelenVoorLid($rss = false) {
+		/** @var ForumDeel[] $delen */
 		$delen = group_by_distinct('forum_id', $this->prefetch());
 		foreach ($delen as $forum_id => $deel) {
 			if (!$deel->magLezen($rss)) {

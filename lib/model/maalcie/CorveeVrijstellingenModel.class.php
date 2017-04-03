@@ -46,7 +46,11 @@ class CorveeVrijstellingenModel extends PersistenceModel {
 		}
 		return $vrijstellingen;
 	}
-	
+
+	/**
+	 * @param $uid
+	 * @return CorveeVrijstelling|false
+	 */
 	public function getVrijstelling($uid) {
 		return $this->retrieveByPrimaryKey(array($uid));
 	}
@@ -72,5 +76,3 @@ class CorveeVrijstellingenModel extends PersistenceModel {
 		$this->deleteByPrimaryKey(array($uid));
 	}
 }
-
-?>

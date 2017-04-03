@@ -49,6 +49,7 @@ class AgendaModel extends PersistenceModel {
 		// AgendaItems
 		$begin_moment = date('Y-m-d', $van);
 		$eind_moment = date('Y-m-d', $tot);
+		/** @var AgendaItem[] $items */
 		$items = $this->find('(begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
 		foreach ($items as $item) {
 			if ($item->magBekijken($ical)) {
@@ -139,6 +140,10 @@ class AgendaModel extends PersistenceModel {
 		return $itemsByUUID;
 	}
 
+	/**
+	 * @param $itemId
+	 * @return AgendaItem|false
+	 */
 	public function getAgendaItem($itemId) {
 		return $this->retrieveByPrimaryKey(array($itemId));
 	}

@@ -8,6 +8,8 @@ require_once 'view/ProfielView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller voor de ledenlijst.
+ *
+ * @property ProfielModel $model
  */
 class ProfielController extends AclController {
 

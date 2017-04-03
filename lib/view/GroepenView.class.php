@@ -252,7 +252,7 @@ class GroepenView implements View {
 
 	private $model;
 	/**
-	 * @var Groep
+	 * @var AbstractGroep[]
 	 */
 	private $groepen;
 	private $soort;

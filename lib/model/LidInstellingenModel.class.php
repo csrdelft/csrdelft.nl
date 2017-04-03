@@ -129,7 +129,7 @@ class LidInstellingen extends Instellingen {
 	 * Functie getInstelling aanvullen met uid.
 	 * 
 	 * @param array $primary_key_values
-	 * @return LidInstelling
+	 * @return LidInstelling|false
 	 */
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
 		$primary_key_values[] = LoginModel::getUid();

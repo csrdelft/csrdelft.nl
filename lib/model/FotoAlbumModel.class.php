@@ -15,6 +15,11 @@ class FotoAlbumModel extends PersistenceModel {
 
 	protected static $instance;
 
+	/**
+	 * @param PersistentEntity|FotoAlbum $album
+	 * @return string
+	 * @throws Exception
+	 */
 	public function create(PersistentEntity $album) {
 		if (!file_exists($album->path)) {
 			mkdir($album->path);
@@ -26,6 +31,10 @@ class FotoAlbumModel extends PersistenceModel {
 		return parent::create($album);
 	}
 
+	/**
+	 * @param PersistentEntity|FotoAlbum $album
+	 * @return int
+	 */
 	public function delete(PersistentEntity $album) {
 		$path = $album->path . '_resized';
 		if (file_exists($path)) {
@@ -263,7 +272,7 @@ class FotoModel extends PersistenceModel {
 	/**
 	 * Create database entry if foto does not exist.
 	 * 
-	 * @param PersistentEntity $foto
+	 * @param Foto|PersistentEntity $foto
 	 * @param array $attributes
 	 * @return mixed false on failure
 	 */

@@ -190,5 +190,3 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	}
 
 }
-
-?>

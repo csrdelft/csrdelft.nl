@@ -9,6 +9,8 @@ require_once 'view/FotoAlbumView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller van het fotoalbum.
+ *
+ * @property FotoAlbumModel $model
  */
 class FotoAlbumController extends AclController {
 
@@ -294,6 +296,7 @@ class FotoAlbumController extends AclController {
 		}
 		$result = array();
 		foreach ($this->model->find('replace(subdir, "é", "e") REGEXP ?', array($query . '[^/]*[/]{1}$'), null, 'subdir DESC', $limit) as $album) {
+			/** @var FotoAlbum $album */
 			$result[] = array(
 				'url'	 => $album->getUrl(),
 				'label'	 => $album->getParentName(),
@@ -342,6 +345,7 @@ class FotoAlbumController extends AclController {
 			$this->exit_http(403);
 		}
 		FotoTagsModel::instance()->removeTag($refuuid, $keyword);
+		/** @var Foto $foto */
 		$foto = FotoModel::instance()->retrieveByUUID($refuuid);
 		if ($foto) {
 			// return all tags

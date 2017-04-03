@@ -204,5 +204,3 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	protected static $primary_key = array('taak_id');
 
 }
-
-?>

@@ -87,5 +87,3 @@ class CorveeRepetitie extends PersistentEntity {
 
 	protected static $primary_key = array('crv_repetitie_id');
 }
-
-?>

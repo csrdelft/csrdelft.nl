@@ -36,5 +36,3 @@ class CorveeVrijstelling extends PersistentEntity {
 
 	protected static $primary_key = array('uid');
 }
-
-?>

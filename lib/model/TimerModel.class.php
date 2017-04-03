@@ -25,6 +25,7 @@ class TimerModel extends PersistenceModel {
 	public function log() {
 		$time = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
 		$req = substr(REQUEST_URI, 0, 255);
+		/** @var ExecutionTime $measurement */
 		$measurement = $this->retrieveByPrimaryKey(array($req));
 		if ($measurement) {
 			$measurement->counter++;

@@ -5,7 +5,7 @@ require_once 'model/PeilingenModel.class.php';
 class PeilingView extends SmartyTemplateView {
 	private $beheer;
 
-	function PeilingView(Peiling $peiling, $beheer = false) {
+	public function __construct(Peiling $peiling, $beheer = false) {
 		parent::__construct($peiling);
 		$this->beheer = $beheer;
 	}

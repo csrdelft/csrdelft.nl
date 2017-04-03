@@ -14,6 +14,7 @@ class DocumentenController extends AclController {
 
 	const baseurl = '/documenten/';
 
+	/** @var Document */
 	public $document = null;
 	protected $valid = true;
 	protected $errors = '';

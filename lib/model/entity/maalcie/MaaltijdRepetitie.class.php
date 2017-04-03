@@ -87,5 +87,3 @@ class MaaltijdRepetitie extends PersistentEntity {
         return date('Y-m-d', $datum);
     }
 }
-
-?>

@@ -6,7 +6,8 @@ require_once 'view/LidInstellingenView.class.php';
  * LidInstellingenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
+ * @property LidInstellingen $model
  */
 class LidInstellingenController extends AclController {
 

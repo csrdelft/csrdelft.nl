@@ -39,7 +39,7 @@
 		{/if}
 		<label>Vervalt op:</label>
 		<div id="vervalt">
-			<input type="checkbox" name="vervaltijdAan"{if $mededeling->vervaltijd!==null} checked="checked"{/if} onchange="this.form.vervaltijd.disabled = this.form.vervaltijd.disabled == '' ? 'disabled' : ''" />&nbsp;
+			<input type="checkbox" name="vervaltijdAan"{if $mededeling->vervaltijd!==null} checked="checked"{/if} onchange="this.form.vervaltijd.disabled = this.form.vervaltijd.disabled === '' ? 'disabled' : ''" />&nbsp;
 			<input id="vervaltijd" type="text" name="vervaltijd" value="{if $mededeling->vervaltijd!==null}{$mededeling->vervaltijd|date_format:$datumtijdFormaat}{else}{$standaardVervaltijd}" disabled="disabled{/if}" />
 		</div><br />
 		{if MededelingenModel::isModerator() AND $mededeling->zichtbaarheid!='wacht_goedkeuring'}

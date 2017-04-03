@@ -14,9 +14,13 @@
 class LDAP {
 	### private ###
 
+	/** @var resource|bool  */
 	var $_conn = false;
 	var $_base_leden;
 	var $_base_groepen;
+	private $_base_people;
+	private $_base_antiplesk;
+	private $_base_mailbox;
 
 	public function __construct($dobind = true) {
 		# bepaal of we alleen verbinding maken, of ook meteen inloggen.
@@ -222,7 +226,7 @@ class LDAP {
 	/**
 	 * verwijder de hele groep uit ldap
 	 * 
-	 * @param string kortegroepnaam
+	 * @param $cn string kortegroepnaam
 	 * @return bool gelukt/mislukt
 	 */
 	function removeGroep($cn) {
@@ -276,5 +280,3 @@ class LDAP {
 	}
 
 }
-
-?>

@@ -23,6 +23,10 @@ class PeilingenModel extends PersistenceModel {
 
 	protected static $instance;
 
+	/**
+	 * @param PersistentEntity|Peiling $entity
+	 * @return int
+	 */
 	public function update(PersistentEntity $entity) {
 		foreach ($entity->getOpties() as $optie) {
 			PeilingOptiesModel::instance()->update($optie);
@@ -31,6 +35,10 @@ class PeilingenModel extends PersistenceModel {
 		return parent::update($entity);
 	}
 
+	/**
+	 * @param PersistentEntity|Peiling $entity
+	 * @return int
+	 */
 	public function delete(PersistentEntity $entity) {
 		foreach ($entity->getOpties() as $optie) {
 			PeilingOptiesModel::instance()->delete($optie);
@@ -44,6 +52,10 @@ class PeilingenModel extends PersistenceModel {
 		return parent::delete($entity);
 	}
 
+	/**
+	 * @param PersistentEntity|Peiling $entity
+	 * @return string
+	 */
 	public function create(PersistentEntity $entity) {
 		$peiling_id = parent::create($entity);
 
@@ -95,7 +107,7 @@ class PeilingenModel extends PersistenceModel {
 
 	/**
 	 * @param $peiling_id
-	 * @return Peiling
+	 * @return Peiling|false
 	 */
 	public function getPeilingById($peiling_id) {
 		return $this->retrieveByPrimaryKey(array($peiling_id));

@@ -6,7 +6,8 @@ require_once 'view/InstellingenBeheerView.class.php';
  * InstellingenBeheerController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
+ * @property Instellingen $model
  */
 class InstellingenBeheerController extends AclController {
 

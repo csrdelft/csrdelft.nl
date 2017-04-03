@@ -10,6 +10,8 @@ require_once 'view/AgendaView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller van de agenda.
+ *
+ * @property AgendaModel $model
  */
 class AgendaController extends AclController {
 
@@ -46,6 +48,8 @@ class AgendaController extends AclController {
 
 	/**
 	 * Maandoverzicht laten zien.
+	 * @param int $jaar
+	 * @param int $maand
 	 */
 	public function maand($jaar = 0, $maand = 0) {
 		$jaar = intval($jaar);
@@ -77,6 +81,7 @@ class AgendaController extends AclController {
 		}
 		$van = date('Y-m-d');
 		$tot = date('Y-m-d', strtotime('+6 months'));
+		/** @var AgendaItem[] $items */
 		$items = $this->model->find('eind_moment >= ? AND begin_moment <= ? AND (titel LIKE ? OR beschrijving LIKE ? OR locatie LIKE ?)', array($van, $tot, $query, $query, $query), null, 'begin_moment ASC, titel ASC', $limit);
 		$result = array();
 		foreach ($items as $item) {
@@ -175,6 +180,7 @@ class AgendaController extends AclController {
 			default:
 				throw new Exception('invalid UUID');
 		}
+		/** @var Agendeerbaar $item */
 		AgendaVerbergenModel::instance()->toggleVerbergen($item);
 		$this->view = new AgendeerbaarMaandView($item);
 	}

@@ -21,7 +21,7 @@ class FunctiesModel extends CachedPersistenceModel {
 	 * Lazy loading of kwalificaties.
 	 * 
 	 * @param int $fid
-	 * @return CorveeFunctie[]
+	 * @return CorveeFunctie
 	 */
 	public static function get($fid) {
 		return static::instance()->retrieveByPrimaryKey(array($fid));

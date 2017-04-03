@@ -70,6 +70,10 @@ class ProfielModel extends CachedPersistenceModel {
 		return $profiel;
 	}
 
+	/**
+	 * @param PersistentEntity|Profiel $profiel
+	 * @return string
+	 */
 	public function create(PersistentEntity $profiel) {
 		// Lichting zijn de laatste 2 cijfers van lidjaar
 		$jj = substr($profiel->lidjaar, 2, 2);
@@ -84,6 +88,10 @@ class ProfielModel extends CachedPersistenceModel {
 		return parent::create($profiel);
 	}
 
+	/**
+	 * @param PersistentEntity|Profiel $profiel
+	 * @return int
+	 */
 	public function update(PersistentEntity $profiel) {
 		try {
 			$this->save_ldap($profiel);
@@ -202,7 +210,9 @@ class ProfielModel extends CachedPersistenceModel {
 
 	/**
 	 * Zet alle abo's uit en geeft een changelog-regel terug.
-	 * 
+	 *
+	 * @param Profiel $profiel
+	 * @param $oudestatus
 	 * @return string changelogregel
 	 */
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
@@ -216,7 +226,9 @@ class ProfielModel extends CachedPersistenceModel {
 
 	/**
 	 * Verwijder toekomstige corveetaken en geef changelog-regel terug.
-	 * 
+	 *
+	 * @param Profiel $profiel
+	 * @param $oudestatus
 	 * @return string changelogregel
 	 */
 	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus) {
@@ -252,7 +264,9 @@ class ProfielModel extends CachedPersistenceModel {
 
 	/**
 	 * Mail naar fisci over statuswijzigingen. Kunnen zij hun systemen weer mee updaten.
-	 * 
+	 *
+	 * @param Profiel $profiel
+	 * @param $oudestatus
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyFisci(Profiel $profiel, $oudestatus) {
@@ -285,7 +299,9 @@ class ProfielModel extends CachedPersistenceModel {
 
 	/**
 	 * Mail naar bibliothecaris en leden over geleende boeken
-	 * 
+	 *
+	 * @param Profiel $profiel
+	 * @param $oudestatus
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyBibliothecaris(Profiel $profiel, $oudestatus) {

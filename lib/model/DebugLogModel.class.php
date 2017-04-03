@@ -34,7 +34,7 @@ class DebugLogModel extends PersistenceModel {
 		}
 		$entry->ip = $_SERVER['REMOTE_ADDR'];
 		$entry->request = REQUEST_URI;
-		$entry->referer = HTTP_REFERER;
+		$entry->ip_referer = HTTP_REFERER;
 		$entry->user_agent = $_SERVER['HTTP_USER_AGENT'];
 		$entry->id = $this->create($entry);
 		if (DEBUG AND Database::instance()->inTransaction()) {

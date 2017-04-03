@@ -74,7 +74,7 @@ class Streeplijstcontent implements View {
 			<html>
 				<head>
 					<style>
-						body{ font-family: arial; font-size: 13px; }
+						body{ font-family:Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 13px; }
 						table{ border: 2px solid black; }
 						td{ border: 1px solid black; }
 						table{ border-collapse: collapse; width: 100%; }

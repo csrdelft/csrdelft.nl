@@ -8,6 +8,7 @@ require_once 'view/GroepenView.class.php';
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
+ * @property AbstractGroepenModel $model
  */
 abstract class AbstractGroepenController extends Controller {
 
@@ -276,6 +277,7 @@ abstract class AbstractGroepenController extends Controller {
 		}
 		// opvolger
 		else {
+			/** @var AbstractGroep $old */
 			$old = $this->model->retrieveByUUID($selection[0]);
 			if (!$old) {
 				$this->exit_http(403);
@@ -341,6 +343,7 @@ abstract class AbstractGroepenController extends Controller {
 			if (empty($selection)) {
 				$this->exit_http(403);
 			}
+			/** @var AbstractGroep $groep */
 			$groep = $this->model->retrieveByUUID($selection[0]);
 			if (!$groep OR ! $groep->mag(A::Wijzigen)) {
 				$this->exit_http(403);
@@ -359,6 +362,7 @@ abstract class AbstractGroepenController extends Controller {
 	public function verwijderen(array $selection) {
 		$response = array();
 		foreach ($selection as $UUID) {
+			/** @var AbstractGroep $groep */
 			$groep = $this->model->retrieveByUUID($UUID);
 			if (!$groep OR ! $groep->mag(A::Verwijderen)) {
 				continue;
@@ -371,6 +375,7 @@ abstract class AbstractGroepenController extends Controller {
 	}
 
 	public function opvolging(array $selection) {
+		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($selection[0]);
 		$form = new GroepOpvolgingForm($groep, $this->model->getUrl() . $this->action);
 		if ($form->validate()) {
@@ -395,10 +400,12 @@ abstract class AbstractGroepenController extends Controller {
 	}
 
 	public function converteren(array $selection) {
+		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($selection[0]);
 		$form = new GroepConverteerForm($groep, $this->model);
 		if ($form->validate()) {
 			$values = $form->getValues();
+			/** @var AbstractGroepenModel $model */
 			$model = $values['model']::instance();
 			$converteer = get_class($model) !== get_class($this->model);
 			$response = array();
@@ -433,9 +440,9 @@ abstract class AbstractGroepenController extends Controller {
 	}
 
 	public function sluiten(array $selection) {
-		$groep = $this->model->retrieveByUUID($selection[0]);
 		$response = array();
 		foreach ($selection as $UUID) {
+			/** @var AbstractGroep $groep */
 			$groep = $this->model->retrieveByUUID($UUID);
 			if (!$groep OR ! property_exists($groep, 'aanmelden_tot') OR time() > strtotime($groep->aanmelden_tot) OR ! $groep->mag(A::Wijzigen)) {
 				continue;
@@ -452,6 +459,7 @@ abstract class AbstractGroepenController extends Controller {
 		if (empty($selection)) {
 			$this->exit_http(403);
 		}
+		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($selection[0]);
 		if (!$groep OR ! $groep->mag(A::Bekijken)) {
 			$this->exit_http(403);
@@ -471,6 +479,7 @@ abstract class AbstractGroepenController extends Controller {
 		// popup request
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			/** @var AbstractGroep $groep */
 			$groep = $this->model->retrieveByUUID($selection[0]);
 			if (!$groep->mag(A::Bekijken)) {
 				$this->exit_http(403);
@@ -493,6 +502,7 @@ abstract class AbstractGroepenController extends Controller {
 
 	public function aanmelden(AbstractGroep $groep, $uid = null) {
 		$leden = $groep::leden;
+		/** @var AbstractGroepLedenModel $model */
 		$model = $leden::instance();
 		if ($uid) {
 			if (!$groep->mag(A::Aanmelden)) {
@@ -527,6 +537,7 @@ abstract class AbstractGroepenController extends Controller {
 	}
 
 	public function bewerken(AbstractGroep $groep, $uid = null) {
+		/** @var AbstractGroepLedenModel $model */
 		$leden = $groep::leden;
 		$model = $leden::instance();
 		if ($uid) {
@@ -563,6 +574,7 @@ abstract class AbstractGroepenController extends Controller {
 	}
 
 	public function afmelden(AbstractGroep $groep, $uid = null) {
+		/** @var AbstractGroepLedenModel $model */
 		$leden = $groep::leden;
 		$model = $leden::instance();
 		if ($uid) {

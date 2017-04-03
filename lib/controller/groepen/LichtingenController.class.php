@@ -6,6 +6,8 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller voor lichtingen.
+ *
+ * @property LichtingenModel $model
  */
 class LichtingenController extends AbstractGroepenController {
 

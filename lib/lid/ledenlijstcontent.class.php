@@ -123,7 +123,7 @@ class LedenlijstContent implements View {
 		?>
 		<script type="text/javascript">
 			function updateVeldselectie() {
-				if (jQuery('#fweergave').val() == 'kaartje') {
+				if (jQuery('#fweergave').val() === 'kaartje') {
 					jQuery('#veldselectiecontainer').hide('fast');
 				} else {
 					jQuery('#veldselectiecontainer').show('fast');
@@ -146,7 +146,7 @@ class LedenlijstContent implements View {
 					}
 				});
 
-				if (document.location.hash == '#geavanceerd') {
+				if (document.location.hash === '#geavanceerd') {
 					$('#advanced').removeClass('verborgen');
 				} else {
 					$('#advanced input').attr('disabled', 'disabled');

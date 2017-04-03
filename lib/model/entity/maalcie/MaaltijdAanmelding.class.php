@@ -108,5 +108,3 @@ class MaaltijdAanmelding extends PersistentEntity  {
     protected static $primary_key = array('maaltijd_id', 'uid');
 
 }
-
-?>

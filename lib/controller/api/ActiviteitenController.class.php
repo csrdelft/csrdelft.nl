@@ -29,6 +29,7 @@ class ApiActiviteitenController {
 		}
 
 		$leden = $activiteit::leden;
+		/** @var AbstractGroepLedenModel $model */
 		$model = $leden::instance();
 		$lid = $model->nieuw($activiteit, $_SESSION['_uid']);
 

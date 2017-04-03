@@ -46,12 +46,12 @@ class IntField extends InputField {
 		}
 		$this->onkeydown .= <<<JS
 
-	if (event.keyCode == 107 || event.keyCode == 109) {
+	if (event.keyCode === 107 || event.keyCode === 109) {
 		event.preventDefault();
-		if (event.keyCode == 107) {
+		if (event.keyCode === 107) {
 			$('#add_{$this->getId()}').click();
 		}
-		else if (event.keyCode == 109) {
+		else if (event.keyCode === 109) {
 			$('#substract_{$this->getId()}').click();
 		}
 		return false;

@@ -33,6 +33,10 @@ class ChangeLogModel extends PersistenceModel {
 		return $change;
 	}
 
+	/**
+	 * @param ChangeLogEntry|PersistentEntity $change
+	 * @return void
+	 */
 	public function create(PersistentEntity $change) {
 		$change->id = (int) parent::create($change);
 	}

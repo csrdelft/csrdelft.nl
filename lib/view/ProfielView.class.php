@@ -5,7 +5,8 @@
  * 
  * @author C.S.R. Delft	<pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
+ * @property Profiel $model
  */
 class ProfielView extends SmartyTemplateView {
 
@@ -149,6 +150,7 @@ class ProfielView extends SmartyTemplateView {
 		require_once 'view/FotoAlbumView.class.php';
 		$fotos = array();
 		foreach (FotoTagsModel::instance()->find('keyword = ?', array($this->model->uid), null, null, 3) as $tag) {
+			/** @var Foto $foto */
 			$foto = FotoModel::instance()->retrieveByUUID($tag->refuuid);
 			if ($foto) {
 				$fotos[] = new FotoBBView($foto);
