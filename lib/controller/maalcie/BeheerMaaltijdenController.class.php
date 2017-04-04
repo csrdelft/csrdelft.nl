@@ -6,7 +6,7 @@ require_once 'model/maalcie/MaaltijdenModel.class.php';
 require_once 'model/maalcie/ArchiefMaaltijdModel.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
-require_once 'model/fiscaat/MaalcieBestellingModel.class.php';
+require_once 'model/fiscaat/CiviBestellingModel.class.php';
 require_once 'view/maalcie/BeheerMaaltijdenView.class.php';
 require_once 'view/maalcie/forms/MaaltijdForm.class.php';
 require_once 'view/maalcie/forms/RepetitieMaaltijdenForm.class.php';
