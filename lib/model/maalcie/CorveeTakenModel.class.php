@@ -152,7 +152,7 @@ class CorveeTakenModel extends PersistenceModel {
 	 * @return CorveeTaak
 	 */
 	public function getLaatsteTaakVanLid($uid) {
-		return $this->find('verwijderd = false AND uid = ?', array($uid), null, null, 1)->fetch();
+		return $this->find('verwijderd = false AND uid = ?', array($uid), null, 'datum DESC', 1)->fetch();
 	}
 
 	/**
