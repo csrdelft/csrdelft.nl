@@ -2,6 +2,7 @@
 
 require_once 'model/fiscaat/CiviProductModel.class.php';
 require_once 'view/fiscaat/BeheerCiviProductenView.class.php';
+require_once 'view/fiscaat/CiviProductenSuggestiesView.class.php';
 
 /**
  * Class BeheerProductenController
@@ -18,13 +19,14 @@ class BeheerCiviProductenController extends AclController {
 			$this->acl = [
 				'overzicht' => 'P_MAAL_MOD',
 				'toevoegen' => 'P_MAAL_MOD',
-				'bewerken'  => 'P_MAAL_MOD',
-				'opslaan'   => 'P_MAAL_MOD',
+				'bewerken' => 'P_MAAL_MOD',
+				'opslaan' => 'P_MAAL_MOD',
 				'verwijderen' => 'P_MAAL_MOD'
 			];
 		} else {
 			$this->acl = [
 				'overzicht' => 'P_MAAL_MOD',
+				'suggesties' => 'P_MAAL_MOD'
 			];
 		}
 	}
@@ -36,6 +38,11 @@ class BeheerCiviProductenController extends AclController {
 			$this->action = $this->getParam(3);
 		}
 		return parent::performAction($args);
+	}
+
+	public function GET_suggesties() {
+		$query = '%' . $this->getParam('q') . '%';
+		$this->view = new CiviProductenSuggestiesView($this->model->find('beschrijving LIKE ?', array($query)));
 	}
 
 	public function POST_overzicht() {
