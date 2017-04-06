@@ -128,6 +128,7 @@ class LoginController extends AclController {
 	}
 
 	public function pauper($terug = null) {
+		DebugLogModel::instance()->log(get_class(), 'Pauper gebruikt');
 		if ($terug === 'terug') {
 			$this->model->setPauper(false);
 			redirect(CSR_ROOT);
