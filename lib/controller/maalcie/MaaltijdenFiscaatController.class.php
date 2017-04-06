@@ -4,9 +4,9 @@ use CsrDelft\Orm\Persistence\Database;
 
 require_once 'model/maalcie/MaaltijdenModel.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
-require_once 'model/fiscaat/MaalcieBestellingModel.class.php';
+require_once 'model/fiscaat/CiviBestellingModel.class.php';
 require_once 'view/maalcie/BeheerMaaltijdenView.class.php';
-require_once 'view/fiscaat/BeheerProductenView.class.php';
+require_once 'view/fiscaat/BeheerCiviProductenView.class.php';
 
 /**
  * MaaltijdenFiscaatController.class.php
@@ -69,7 +69,7 @@ class MaaltijdenFiscaatController extends AclController {
 		# Haal maaltijd op
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		/** @var Maaltijd $maaltijd */
-		$maaltijd = $this->model->retrieveByUUID($selection[0]);
+		$maaltijd = MaaltijdenModel::instance()->retrieveByUUID($selection[0]);
 
 		# Controleer of de maaltijd gesloten is en geweest is
 		if ($maaltijd->gesloten == false OR date_create(sprintf("%s %s", $maaltijd->datum, $maaltijd->tijd)) >= date_create("now")) {
@@ -81,7 +81,7 @@ class MaaltijdenFiscaatController extends AclController {
 			$bestelling_model = CiviBestellingModel::instance();
 
 			# Ga alle personen in de maaltijd af
-			$aanmeldingen = $aanmeldingen_model->getAanmeldingenVoorMaaltijd($maaltijd);
+			$aanmeldingen = $aanmeldingen_model->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
 
 			$bestellingen = array();
 			# Maak een bestelling voor deze persoon

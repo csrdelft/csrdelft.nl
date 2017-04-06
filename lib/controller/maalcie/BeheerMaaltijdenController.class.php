@@ -273,45 +273,4 @@ class BeheerMaaltijdenController extends AclController {
 			$this->view->addCompressedResources('datatable');
 		}
 	}
-
-	public function verwerk() {
-		# Haal maaltijd op
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		/** @var Maaltijd $maaltijd */
-		$maaltijd = $this->model->retrieveByUUID($selection[0]);
-
-		$maaltijden = Database::transaction(function () use ($maaltijd) {
-			# Controleer of de maaltijd gesloten is en geweest is
-			if ($maaltijd->gesloten == false OR date_create($maaltijd->datum) >= date_create("today") OR $maaltijd->tijd >= date_create("now")) {
-				throw new Exception("Maaltijd nog niet geweest");
-			}
-
-			$aanmeldingen_model = MaaltijdAanmeldingenModel::instance();
-			$bestelling_model = CiviBestellingModel::instance();
-
-			# Ga alle personen in de maaltijd af
-			$aanmeldingen = $aanmeldingen_model->getAanmeldingenVoorMaaltijd($maaltijd);
-
-			$bestellingen = array();
-			# Maak een bestelling voor deze persoon
-			foreach ($aanmeldingen as $aanmelding) {
-				$bestellingen[] = $bestelling_model->vanMaaltijdAanmelding($aanmelding);
-			}
-
-			# Reken de bestelling af
-			foreach ($bestellingen as $bestelling) {
-				$bestelling_model->create($bestelling);
-			}
-
-			# Zet de maaltijd op verwerkt
-			$maaltijd->verwerkt = true;
-
-			$this->model->update($maaltijd);
-
-			return array($maaltijd);
-		});
-
-		$this->view = new RemoveRowsResponse($maaltijden);
-	}
-
 }

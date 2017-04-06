@@ -53,9 +53,9 @@ CREATE TABLE CiviBestellingInhoud
   aantal       INT(11),
   PRIMARY KEY (bestelling_id, product_id),
   CONSTRAINT FK_CBI_product FOREIGN KEY (product_id)
-  REFERENCES CiviBestelling(id),
+  REFERENCES CiviProduct(id),
   CONSTRAINT FK_CBI_bestelling FOREIGN KEY (bestelling_id)
-  REFERENCES CiviProduct(id)
+  REFERENCES CiviBestelling(id)
 );
 
 ALTER TABLE mlt_maaltijden ADD COLUMN product_id INT(11) NOT NULL;

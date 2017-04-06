@@ -19,9 +19,10 @@ class CiviBestellingModel extends PersistenceModel {
 
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = 1 + $aanmelding->aantal_gasten;
-		$inhoud->product_id = $aanmelding->getMaaltijd()->mlt_repetitie_id;
+		$inhoud->product_id = $aanmelding->getMaaltijd()->product_id;
 
-		$bestelling->add($inhoud);
+		$bestelling->inhoud[] = $inhoud;
+		$bestelling->totaal = CiviProductModel::instance()->getProduct($inhoud->product_id)->prijs * (1 + $aanmelding->aantal_gasten);
 
 		return $bestelling;
 	}
@@ -34,7 +35,7 @@ class CiviBestellingModel extends PersistenceModel {
 		$entity->id = parent::create($entity);
 
 		foreach ($entity->inhoud as $bestelling) {
-			$bestelling->bestellingid = $entity->id;
+			$bestelling->bestelling_id = $entity->id;
 			CiviBestellingInhoudModel::instance()->create($bestelling);
 		}
 
