@@ -22,15 +22,6 @@ class RememberLoginModel extends PersistenceModel {
 		}
 		$remember = $this->find('token = ? AND (lock_ip = FALSE OR ip = ?)', array(hash('sha512', $rand), $ip), null, null, 1)->fetch();
 		if (!$remember) {
-			$token = hash('sha512', $rand);
-			$headers = implode(", ", headers_list());
-			// Doe een log naar de debuglog, om erachter te komen waarom logins verdwijnen.
-			DebugLogModel::instance()->log("RememberLoginModel", "verifyToken", array('$rand'), <<<DUMP
-token rejected,
-cookietoken: {$token},
-headers: {$headers}
-DUMP
-			);
 			return false;
 		}
 		$this->rememberLogin($remember);
@@ -54,8 +45,6 @@ DUMP
 	public function rememberLogin(RememberLogin $remember) {
 		$rand = crypto_rand_token(255);
 
-		$oldtoken = $remember->token;
-
 		$remember->token = hash('sha512', $rand);
 		if ($this->exists($remember)) {
 			$this->update($remember);
@@ -64,22 +53,6 @@ DUMP
 		}
 
 		setRememberCookie($rand);
-
-		$newtoken = $remember->token;
-
-		$cookietoken = isset($_COOKIE['remember']) ? hash('sha512', $_COOKIE['remember']) : '';
-		$headers = implode(", ", headers_list());
-
-		// Doe een log naar de debuglog, om erachter te komen waarom logins verdwijnen.
-		DebugLogModel::instance()->log("RememberLoginModel", "rememberLogin", array('$remember'), <<<DUMP
-user: {$remember->uid},
-id: {$remember->id},
-cookietoken: {$cookietoken},
-oldtoken: {$oldtoken},
-newtoken: {$newtoken},
-headers: {$headers}
-DUMP
-		);
 
 		return;
 	}
