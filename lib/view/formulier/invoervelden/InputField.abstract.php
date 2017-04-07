@@ -202,7 +202,7 @@ abstract class InputField implements FormElement, Validator {
 	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
 	 */
 	public function getDiv() {
-		$cssclass = 'invoervelden\InputField';
+		$cssclass = 'InputField';
 		if ($this->hidden) {
 			$cssclass .= ' verborgen';
 		}
