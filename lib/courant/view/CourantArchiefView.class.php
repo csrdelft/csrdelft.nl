@@ -1,5 +1,5 @@
 <?php
-require_once 'view/courant/CourantView.class.php';
+require_once 'courant/view/CourantView.class.php';
 
 /**
  * CourantArchiefView.class.php
@@ -31,7 +31,7 @@ class CourantArchiefView implements View {
 		?>
 		<ul class="horizontal nobullets">
 			<li>
-				<a href="/courant/" title="Courantinzendingen">Courantinzendingen</a>
+				<a href="/courant" title="Courantinzendingen">Courantinzendingen</a>
 			</li>
 			<li class="active">
 				<a href="/courant/archief/" title="Archief">Archief</a>

@@ -1,8 +1,8 @@
 <?php
 
-require_once 'model/CourantModel.class.php';
-require_once 'view/courant/CourantView.class.php';
-require_once 'view/courant/CourantBeheerView.class.php';
+require_once 'courant/model/CourantModel.class.php';
+require_once 'courant/view/CourantView.class.php';
+require_once 'courant/view/CourantBeheerView.class.php';
 
 /**
  * CourantController.class.php
@@ -58,7 +58,7 @@ class CourantController extends AclController {
 	}
 
 	public function archief() {
-		require_once 'view/courant/CourantArchiefView.class.php';
+		require_once 'courant/view/CourantArchiefView.class.php';
 		$body = new CourantArchiefView($this->model);
 		$this->view = new CsrLayoutPage($body);
 	}
