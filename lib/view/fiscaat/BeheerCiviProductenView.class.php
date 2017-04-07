@@ -12,6 +12,10 @@ class BeheerCiviProductenView extends DataTable {
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/producten/verwijderen', 'post', 'Verwijderen', 'Product verwijderen', 'cross'));
 	}
 
+	public function getBreadcrumbs() {
+		return '<a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » Producten';
+	}
+
 	public function getJavascript() {
 		return parent::getJavascript() . <<<JS
 function truefalse (data) {
