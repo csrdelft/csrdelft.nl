@@ -79,10 +79,12 @@ class MaaltijdenFiscaatController extends AclController {
 		$maaltijden = Database::transaction(function () use ($maaltijd) {
 			$aanmeldingen_model = MaaltijdAanmeldingenModel::instance();
 			$bestelling_model = CiviBestellingModel::instance();
+			$civisaldo_model = CiviSaldoModel::instance();
 
 			# Ga alle personen in de maaltijd af
 			$aanmeldingen = $aanmeldingen_model->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
 
+			/** @var Civibestelling[] $bestellingen */
 			$bestellingen = array();
 			# Maak een bestelling voor deze persoon
 			foreach ($aanmeldingen as $aanmelding) {
@@ -92,6 +94,7 @@ class MaaltijdenFiscaatController extends AclController {
 			# Reken de bestelling af
 			foreach ($bestellingen as $bestelling) {
 				$bestelling_model->create($bestelling);
+				$civisaldo_model->verlagen($bestelling->uid, $bestelling->totaal);
 			}
 
 			# Zet de maaltijd op verwerkt

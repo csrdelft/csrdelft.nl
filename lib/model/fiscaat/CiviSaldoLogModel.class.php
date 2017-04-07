@@ -9,4 +9,12 @@ class CiviSaldoLogModel extends PersistenceModel {
 	const DIR = 'fiscaat/';
 
 	protected static $instance;
+
+	public function log($type, $data) {
+		$logEntry = new CiviSaldoLog();
+		$logEntry->timestamp = new DateTime();
+		$logEntry->ip = $_SERVER['REMOTE_ADDR'];
+		$logEntry->type = $type;
+		$logEntry->data = $data;
+	}
 }

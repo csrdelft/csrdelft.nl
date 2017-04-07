@@ -25,6 +25,7 @@ class MaaltijdenModel extends PersistenceModel {
     public function vanRepetitie(MaaltijdRepetitie $repetitie, $datum) {
         $maaltijd = new Maaltijd();
         $maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+        $maaltijd->product_id = $repetitie->product_id;
         $maaltijd->titel = $repetitie->standaard_titel;
         $maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
         $maaltijd->datum = date('Y-m-d', $datum);
