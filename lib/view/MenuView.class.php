@@ -50,7 +50,7 @@ class MainMenuView extends MenuView {
 		require_once 'savedquery.class.php';
 		$mcount = new SavedQuery(62);
 		$this->smarty->assign('mcount', $mcount->count());
-		require_once 'model/GesprekkenModel.class.php';
+		require_once 'gesprekken/model/GesprekkenModel.class.php';
 		$this->smarty->assign('gesprekOngelezen', GesprekDeelnemersModel::instance()->getAantalNieuweBerichtenVoorLid(LoginModel::getUid()));
 		$this->smarty->assign('favorieten', MenuModel::instance()->getMenu(LoginModel::getUid()));
 		$this->smarty->assign('zoekbalk', new InstantSearchForm());

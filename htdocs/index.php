@@ -42,7 +42,7 @@ try {
 		/** @noinspection PhpIncludeInspection */
 		require_once 'controller/' . $class . '.class.php';
 	} else {
-		$modules = array('eetplan', 'documenten', 'bibliotheek', 'mededelingen', 'peilingen');
+		$modules = array('eetplan', 'documenten', 'bibliotheek', 'mededelingen', 'peilingen', 'gesprekken');
 
 		if (in_array($module, $modules)) {
 			/** @noinspection PhpIncludeInspection */
