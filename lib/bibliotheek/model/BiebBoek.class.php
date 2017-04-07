@@ -1,7 +1,7 @@
 <?php
 
-require_once 'model/bibliotheek/BiebRubriek.class.php';
-require_once 'model/bibliotheek/BiebBeschrijving.class.php';
+require_once 'bibliotheek/model/BiebRubriek.class.php';
+require_once 'bibliotheek/model/BiebBeschrijving.class.php';
 
 /**
  * BiebBoek.class.php	| 	Gerrit Uitslag

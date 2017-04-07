@@ -816,8 +816,8 @@ HTML;
 			$boekid = $this->parseArray(array('[/boek]'), array());
 		}
 
-		require_once 'model/bibliotheek/BiebBoek.class.php';
-		require_once 'view/BibliotheekView.class.php';
+		require_once 'bibliotheek/model/BiebBoek.class.php';
+		require_once 'bibliotheek/view/BibliotheekView.class.php';
 		try {
 			$boek = new BiebBoek((int) $boekid);
 			$content = new BoekBBView($boek);

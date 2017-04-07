@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/bibliotheek/BiebCatalogus.class.php';
+require_once 'bibliotheek/model/BiebCatalogus.class.php';
 
 /**
  * BibliotheekView.class.php

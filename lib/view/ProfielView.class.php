@@ -143,7 +143,7 @@ class ProfielView extends SmartyTemplateView {
 		require_once 'model/forum/ForumModel.class.php';
 		$this->smarty->assign('forumpostcount', ForumPostsModel::instance()->getAantalForumPostsVoorLid($this->model->uid));
 
-		require_once 'model/bibliotheek/BiebCatalogus.class.php';
+		require_once 'bibliotheek/model/BiebCatalogus.class.php';
 		$this->smarty->assign('boeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'eigendom'));
 		$this->smarty->assign('gerecenseerdeboeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'gerecenseerd'));
 
