@@ -1099,7 +1099,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		} else {
 			$peiling_id = $this->parseArray(array('[/peiling]'), array());
 		}
-		require_once 'view/PeilingenView.class.php';
+		require_once 'peilingen/view/PeilingenView.class.php';
 		try {
 			$peiling = PeilingenModel::instance()->getPeilingById((int) $peiling_id);
 			$peilingcontent = new PeilingView($peiling);

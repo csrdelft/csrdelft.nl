@@ -27,7 +27,7 @@ RewriteRule ^eetplan			index.php?m=eetplan&c=Eetplan	[QSA,L]
 RewriteRule ^documenten			index.php?m=documenten&c=Documenten	[QSA,L]
 RewriteRule ^bibliotheek		index.php?m=bibliotheek&c=Bibliotheek [QSA,L]
 RewriteRule ^mededelingen       index.php?m=mededelingen&c=Mededelingen [QSA,L]
-RewriteRule ^peilingen          index.php?c=Peilingen [QSA,L]
+RewriteRule ^peilingen          index.php?m=peilingen&c=Peilingen [QSA,L]
 
 RewriteRule ^leden				index.php?c=Profiel [QSA,L]
 RewriteRule ^profiel			index.php?c=Profiel [QSA,L]

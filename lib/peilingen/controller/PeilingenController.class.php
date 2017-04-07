@@ -1,7 +1,7 @@
 <?php
 
-require_once 'model/PeilingenModel.class.php';
-require_once 'view/PeilingenView.class.php';
+require_once 'peilingen/model/PeilingenModel.class.php';
+require_once 'peilingen/view/PeilingenView.class.php';
 
 /**
  * Class PeilingenController
