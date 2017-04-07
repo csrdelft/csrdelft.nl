@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/EetplanModel.class.php';
+require_once 'eetplan/model/EetplanModel.class.php';
 
 /**
  * EetplanView.class.php

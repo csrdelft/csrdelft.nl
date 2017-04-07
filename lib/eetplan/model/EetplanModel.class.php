@@ -2,10 +2,10 @@
 
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'model/entity/Eetplan.class.php';
-require_once 'model/entity/EetplanBekenden.class.php';
-require_once 'model/EetplanFactory.class.php';
-require_once 'model/EetplanBekendenModel.class.php';
+require_once 'eetplan/model/entity/Eetplan.class.php';
+require_once 'eetplan/model/entity/EetplanBekenden.class.php';
+require_once 'eetplan/model/EetplanFactory.class.php';
+require_once 'eetplan/model/EetplanBekendenModel.class.php';
 
 /**
  * EetplanModel.class.php

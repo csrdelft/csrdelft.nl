@@ -37,7 +37,17 @@ try {
 	}
 	$class .= 'Controller';
 
-	require_once 'controller/' . $class . '.class.php';
+	$module = filter_input(INPUT_GET, 'm', FILTER_SANITIZE_STRING);
+	if (empty($module)) {
+		require_once 'controller/' . $class . '.class.php';
+	} else {
+		$modules = array('eetplan');
+
+		if (in_array($module, $modules)) {
+			require_once $module . '/controller/' . $class . '.class.php';
+		}
+	}
+
 	$controller = new $class(REQUEST_URI);
 	$controller->performAction();
 
