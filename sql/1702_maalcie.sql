@@ -9,9 +9,9 @@ DROP TABLE `CiviBestellingInhoud`, `CiviBestelling`, `CiviPrijs`, `CiviProduct`,
 CREATE TABLE CiviLog
 (
   id        INT(11) NOT NULL AUTO_INCREMENT,
-  ip        VARCHAR(15),
-  type      ENUM ('insert', 'update', 'remove'),
-  value     TEXT,
+  ip        VARCHAR(255) NOT NULL,
+  type      ENUM ('insert', 'update', 'remove') NOT NULL,
+  data      VARCHAR(255) NOT NULL,
   timestamp TIMESTAMP        DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
@@ -56,6 +56,14 @@ CREATE TABLE CiviBestellingInhoud
   REFERENCES CiviProduct(id),
   CONSTRAINT FK_CBI_bestelling FOREIGN KEY (bestelling_id)
   REFERENCES CiviBestelling(id)
+);
+
+CREATE TABLE CiviSaldo
+(
+  uid VARCHAR(4) NOT NULL,
+  saldo INT(11) NOT NULL,
+  laatst_veranderd TIMESTAMP NOT NULL,
+  PRIMARY KEY (uid)
 );
 
 ALTER TABLE mlt_maaltijden ADD COLUMN product_id INT(11) NOT NULL;

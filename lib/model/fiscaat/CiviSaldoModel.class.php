@@ -4,11 +4,12 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 
 require_once 'model/entity/fiscaat/CiviSaldo.class.php';
 require_once 'model/entity/fiscaat/CiviSaldoLogEnum.class.php';
+require_once 'model/fiscaat/CiviSaldoLogModel.class.php';
 
 class CiviSaldoModel extends \CsrDelft\Orm\PersistenceModel {
 	const ORM = CiviSaldo::class;
 
-	protected $instance;
+	protected static $instance;
 
 	/**
 	 * @param $uid

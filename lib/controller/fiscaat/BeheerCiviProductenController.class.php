@@ -56,7 +56,7 @@ class BeheerCiviProductenController extends AclController {
 	public function POST_toevoegen() {
 		$form = new CiviProductForm(new CiviProduct(), 'opslaan/nieuw');
 
-		if ($this->getMethod() == "POST" AND $form->validate()) {
+		if ($form->validate()) {
 			$product = $form->getModel();
 
 			if ($this->model->exists($product)) {

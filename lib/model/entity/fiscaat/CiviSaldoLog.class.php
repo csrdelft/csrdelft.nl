@@ -12,7 +12,7 @@ class CiviSaldoLog extends PersistentEntity {
 	public $data;
 	public $timestamp;
 
-	protected static $table_name = 'CiviSaldoLog';
+	protected static $table_name = 'CiviLog';
 	protected static $persistent_attributes = array(
 		'id' => array(T::Integer, false, 'auto_increment'),
 		'ip' => array(T::String),
