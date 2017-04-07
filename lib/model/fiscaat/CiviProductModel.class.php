@@ -70,15 +70,18 @@ class CiviProductModel extends PersistenceModel {
 
 			/** @var CiviPrijs $prijs */
 			$prijs = $this->getPrijs($product);
-			$prijs->tot = $nu;
-			CiviPrijsModel::instance()->update($prijs);
+			// Alleen prijs updaten als deze veranderd is, niet als alleen andere velden veranderen.
+			if ($prijs->prijs !== $product->prijs) {
+				$prijs->tot = $nu;
+				CiviPrijsModel::instance()->update($prijs);
 
-			$nieuw_prijs = new CiviPrijs();
-			$nieuw_prijs->productid = $product->id;
-			$nieuw_prijs->van = $nu;
-			$nieuw_prijs->tot = date_create('0000-00-00')->format(DateTime::ISO8601);
-			$nieuw_prijs->prijs = $product->prijs;
-			CiviPrijsModel::instance()->create($nieuw_prijs);
+				$nieuw_prijs = new CiviPrijs();
+				$nieuw_prijs->product_id = $product->id;
+				$nieuw_prijs->van = $nu;
+				$nieuw_prijs->tot = date_create('0000-00-00')->format(DateTime::ISO8601);
+				$nieuw_prijs->prijs = $product->prijs;
+				CiviPrijsModel::instance()->create($nieuw_prijs);
+			}
 
 			return parent::update($product);
 		});

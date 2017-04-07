@@ -93,7 +93,6 @@ class BeheerCiviProductenController extends AclController {
 			}
 		} else {
 			$form = new CiviProductForm(new CiviProduct(), 'opslaan');
-			var_dump($form->getFields());
 			if ($form->validate()) {
 				$product = $form->getModel();
 				$this->model->update($product);
