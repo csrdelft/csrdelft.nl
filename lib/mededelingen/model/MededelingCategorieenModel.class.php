@@ -1,6 +1,8 @@
 <?php
 use CsrDelft\Orm\CachedPersistenceModel;
 
+require_once 'mededelingen/model/entity/MededelingCategorie.class.php';
+
 /**
  * MededelingCategorieenModel.class.php
  *

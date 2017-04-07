@@ -3,7 +3,7 @@
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
-require_once 'model/entity/mededelingen/MededelingAccess.enum.php';
+require_once 'mededelingen/model/entity/MededelingAccess.enum.php';
 
 /**
  * MededelingCategorie.class.php

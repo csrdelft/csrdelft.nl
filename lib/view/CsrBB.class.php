@@ -1016,8 +1016,8 @@ HTML;
 			return '[mededelingen] Geen geldig mededelingenblok.';
 		}
 
-		require_once 'model/mededelingen/MededelingenModel.class.php';
-		require_once 'view/MededelingenView.class.php';
+		require_once 'mededelingen/model/MededelingenModel.class.php';
+		require_once 'mededelingen/view/MededelingenView.class.php';
 
 		$MededelingenView = new MededelingenView(0);
 		switch ($type) {

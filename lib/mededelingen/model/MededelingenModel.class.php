@@ -2,7 +2,8 @@
 
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'model/mededelingen/MededelingCategorieenModel.class.php';
+require_once 'mededelingen/model/MededelingCategorieenModel.class.php';
+require_once 'mededelingen/model/entity/Mededeling.class.php';
 
 /**
  * MededelingenModel.class.php

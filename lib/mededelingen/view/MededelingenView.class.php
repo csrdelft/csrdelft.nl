@@ -130,7 +130,7 @@ class MededelingenView extends SmartyTemplateView {
 	public function getBreadcrumbs()
 	{
 		if ($this->prullenbak) {
-			return parent::getBreadcrumbs() . '<a href="/" tile="Startpagina"><span class="fa fa-home module-icon"></span></a> » <a href="/mededelingen/">Mededelingen</a> » <span class="active">Prullenbak</span>';
+			return parent::getBreadcrumbs() . '<a href="/" tile="Startpagina"><span class="fa fa-home module-icon"></span></a> » <a href="/mededelingen">Mededelingen</a> » <span class="active">Prullenbak</span>';
 		}
 		return parent::getBreadcrumbs();
 	}

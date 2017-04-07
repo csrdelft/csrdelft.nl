@@ -35,8 +35,8 @@ abstract class Zijbalk {
 		}
 		// Laatste mededelingen
 		if (LidInstellingen::get('zijbalk', 'mededelingen') > 0) {
-			require_once 'model/mededelingen/MededelingenModel.class.php';
-			require_once 'view/MededelingenView.class.php';
+			require_once 'mededelingen/model/MededelingenModel.class.php';
+			require_once 'mededelingen/view/MededelingenView.class.php';
 			$zijbalk[] = new MededelingenZijbalkView((int) LidInstellingen::get('zijbalk', 'mededelingen'));
 		}
 		// Nieuwste belangrijke forumberichten
