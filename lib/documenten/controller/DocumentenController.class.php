@@ -1,8 +1,8 @@
 <?php
 
-require_once 'model/documenten/Document.class.php';
-require_once 'model/documenten/DocCategorie.class.php';
-require_once 'view/DocumentenView.class.php';
+require_once 'documenten/model/Document.class.php';
+require_once 'documenten/model/DocCategorie.class.php';
+require_once 'documenten/view/DocumentenView.class.php';
 
 /**
  * DocumentenController.class.php

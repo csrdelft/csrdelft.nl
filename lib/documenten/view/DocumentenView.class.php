@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/documenten/Document.class.php';
+require_once 'documenten/model/Document.class.php';
 
 /**
  * DocumentenView.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)

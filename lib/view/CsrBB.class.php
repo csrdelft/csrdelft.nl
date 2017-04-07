@@ -840,7 +840,7 @@ HTML;
 		} else {
 			$id = $this->parseArray(array('[/document]'), array());
 		}
-		require_once 'view/DocumentenView.class.php';
+		require_once 'documenten/view/DocumentenView.class.php';
 		try {
 			$document = new Document((int) $id);
 			$content = new DocumentBBContent($document);

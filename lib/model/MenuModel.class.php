@@ -100,7 +100,7 @@ class MenuModel extends CachedPersistenceModel {
 				break;
 
 			case 'Documenten':
-				require_once 'model/documenten/DocCategorie.class.php';
+				require_once 'documenten/model/DocCategorie.class.php';
 				$overig = false;
 				foreach (DocCategorie::getAll() as $categorie) {
 					$item = $this->nieuw($parent->item_id);

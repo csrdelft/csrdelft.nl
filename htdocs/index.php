@@ -39,11 +39,13 @@ try {
 
 	$module = filter_input(INPUT_GET, 'm', FILTER_SANITIZE_STRING);
 	if (empty($module)) {
+		/** @noinspection PhpIncludeInspection */
 		require_once 'controller/' . $class . '.class.php';
 	} else {
-		$modules = array('eetplan');
+		$modules = array('eetplan', 'documenten');
 
 		if (in_array($module, $modules)) {
+			/** @noinspection PhpIncludeInspection */
 			require_once $module . '/controller/' . $class . '.class.php';
 		}
 	}

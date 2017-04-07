@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/entity/Bestand.class.php';
+require_once 'documenten/model/entity/Bestand.class.php';
 
 /**
  * document.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
