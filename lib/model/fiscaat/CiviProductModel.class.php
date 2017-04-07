@@ -32,13 +32,12 @@ class CiviProductModel extends PersistenceModel {
 
 	public function find($criteria = null, array $criteria_params = array(), $group_by = null, $order_by = null, $limit = null, $start = 0) {
 		/** @var CiviProduct[] $entries */
-		$entries = parent::find($criteria, $criteria_params, $group_by, $order_by, $limit, $start)->fetchAll();
+		$entries = parent::find($criteria, $criteria_params, $group_by, $order_by, $limit, $start);
 
 		foreach ($entries as $entry) {
 			$entry->prijs = $this->getPrijs($entry)->prijs;
+			yield $entry;
 		}
-
-		return $entries;
 	}
 
 	/**
