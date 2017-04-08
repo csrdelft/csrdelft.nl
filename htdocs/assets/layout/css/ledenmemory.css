@@ -1,5 +1,10 @@
 
-body { color: #fff; overflow-x: hidden; }
+body {
+	color: #fff;
+	overflow-x: hidden;
+	background: url("/assets/layout/plaetjes/memory/bg-image-16.jpg") fixed;
+	background-size: contain;
+}
 
 .blue {
     background: #1255a3;

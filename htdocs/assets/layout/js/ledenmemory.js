@@ -1,8 +1,5 @@
 
 $(document).ready(function () {
-
-	$.backstretch('/assets/layout/plaetjes/memory/bg-image-16.jpg');
-
 	var first = true;
 	var delayed = false;
 	var learnmode = document.title.indexOf('oefenen') >= 0;
