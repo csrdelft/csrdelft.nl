@@ -6,6 +6,8 @@ require_once 'common.functions.php';
  * LidZoeker
  *
  * de array's die in deze class staan bepalen wat er in het formulier te zien is.
+ *
+ * @deprecated
  */
 class LidZoeker {
 

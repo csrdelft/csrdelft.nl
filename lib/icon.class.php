@@ -6,6 +6,9 @@
  * Gaat samen met 'layout/css/icons.less' en 'layout/css/icons.png'
  *
  * Icon::getTag('bewerken'); geeft <span class="ico pencil"></span>
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ *
  */
 class Icon {
 	//handige dingen die we graag gebruiken in csrdelft.nl. Moeten geen namen zijn die al voorkomen

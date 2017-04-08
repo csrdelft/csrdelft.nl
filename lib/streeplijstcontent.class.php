@@ -1,12 +1,11 @@
 <?php
 
-# C.S.R. Delft | pubcie@csrdelft.nl
-# -------------------------------------------------------------------
-# class.streeplijst.php
-# -------------------------------------------------------------------
-# Kan streep/bestellijsten maken.
-# -------------------------------------------------------------------
-
+/**
+ * C.S.R. Delft | pubcie@csrdelft.nl
+ * streeplijstcontent.class.php
+ *
+ * @deprecated
+ */
 class Streeplijstcontent implements View {
 
 	private $sVerticale = 'alle';

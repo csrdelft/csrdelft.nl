@@ -1,12 +1,14 @@
 <?php
 
-/*
+/**
  * Roodschopperklasse.
  *
  * Stuur mensen die rood staan een schopmailtje.
  *
  * Er wordt bbcode geparsed, maar de mail wordt plaintext verzonden, dus erg veel zal daar niet
  * van overblijven. Wellicht kan er later nog een html-optie ingeklust worden.
+ *
+ * @deprecated
  */
 require_once 'configuratie.include.php';
 require_once 'model/entity/Mail.class.php';

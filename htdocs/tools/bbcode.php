@@ -5,6 +5,8 @@ require_once 'configuratie.include.php';
  * bbcode.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  * Dit scriptje doet niets meer dan server side bbcode parsen op de gegeven string.
+ *
+ * Wordt gebruikt in de preview van bbcode op het forum
  */
 if (isset($_POST['data'])) {
 	$string = urldecode($_POST['data']);
