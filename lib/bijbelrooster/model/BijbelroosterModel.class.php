@@ -1,6 +1,8 @@
 <?php
 use CsrDelft\Orm\PersistenceModel;
 
+require_once 'bijbelrooster/model/entity/Bijbelrooster.class.php';
+
 /**
  * BijbelroosterModel.class.php
  * 

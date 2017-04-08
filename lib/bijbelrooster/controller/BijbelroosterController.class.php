@@ -1,7 +1,7 @@
 <?php
 
-require_once 'model/BijbelroosterModel.class.php';
-require_once 'view/BijbelroosterView.class.php';
+require_once 'bijbelrooster/model/BijbelroosterModel.class.php';
+require_once 'bijbelrooster/view/BijbelroosterView.class.php';
 
 /**
  * BijbelroosterController.class.php

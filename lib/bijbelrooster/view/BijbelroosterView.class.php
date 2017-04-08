@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/BijbelroosterModel.class.php';
+require_once 'bijbelrooster/model/BijbelroosterModel.class.php';
 
 /**
  * BijbelroosterView.class.php

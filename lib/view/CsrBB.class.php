@@ -1162,7 +1162,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		} else {
 			$dagen = $this->parseArray(array('[/bijbelrooster]'), array());
 		}
-		require_once 'view/BijbelroosterView.class.php';
+		require_once 'bijbelrooster/view/BijbelroosterView.class.php';
 		$view = new BijbelroosterBBView($dagen);
 		return $view->getHtml();
 	}
