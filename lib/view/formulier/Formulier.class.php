@@ -5,13 +5,19 @@ use CsrDelft\Orm\Entity\T;
 
 require_once 'view/View.interface.php';
 require_once 'view/Validator.interface.php';
-require_once 'view/formulier/FormElement.abstract.php';
+require_once 'view/formulier/elementen/FormElement.interface.php';
+require_once 'view/formulier/elementen/HtmlComment.class.php';
+require_once 'view/formulier/elementen/HtmlBbComment.class.php';
+require_once 'view/formulier/elementen/Subkopje.class.php';
+require_once 'view/formulier/elementen/CollapsableSubkopje.class.php';
+require_once 'view/formulier/elementen/FieldSet.class.php';
 require_once 'view/formulier/InvoerVelden.class.php';
 require_once 'view/formulier/GetalVelden.class.php';
 require_once 'view/formulier/KeuzeVelden.class.php';
-require_once 'view/formulier/BBCodeVelden.class.php';
 require_once 'view/formulier/UploadVelden.class.php';
-require_once 'view/formulier/FormKnoppen.class.php';
+require_once 'view/formulier/knoppen/FormKnoppen.class.php';
+require_once 'view/formulier/knoppen/FormDefaultKnoppen.class.php';
+require_once 'view/formulier/knoppen/ModalCloseButtons.class.php';
 
 /**
  * Formulier.class.php

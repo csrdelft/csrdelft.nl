@@ -76,7 +76,7 @@ class MenuModel extends CachedPersistenceModel {
 		switch ($parent->tekst) {
 
 			case 'Forum':
-				require_once 'model/ForumModel.class.php';
+				require_once 'model/forum/ForumModel.class.php';
 				foreach (ForumModel::instance()->prefetch() as $categorie) {
 					$item = $this->nieuw($parent->item_id);
 					$item->item_id = - $categorie->categorie_id; // nodig voor getParent()

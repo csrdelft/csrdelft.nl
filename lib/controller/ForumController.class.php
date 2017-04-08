@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/ForumModel.class.php';
+require_once 'model/forum/ForumModel.class.php';
 require_once 'view/ForumView.class.php';
 
 /**
