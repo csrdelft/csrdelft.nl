@@ -2,11 +2,14 @@
 
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'controller/AgendaController.class.php';
+require_once 'agenda/controller/AgendaController.class.php';
 require_once 'model/BijbelroosterModel.class.php';
 require_once 'model/VerjaardagenModel.class.php';
 require_once 'model/maalcie/MaaltijdenModel.class.php';
 require_once 'model/maalcie/CorveeTakenModel.class.php';
+
+require_once 'agenda/model/entity/AgendaItem.class.php';
+require_once 'agenda/model/entity/AgendaVerbergen.class.php';
 
 /**
  * AgendaModel.class.php

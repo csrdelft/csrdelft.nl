@@ -1,7 +1,7 @@
 <?php
 
-require_once 'model/AgendaModel.class.php';
-require_once 'view/AgendaView.class.php';
+require_once 'agenda/model/AgendaModel.class.php';
+require_once 'agenda/view/AgendaView.class.php';
 
 /**
  * AgendaController.class.php

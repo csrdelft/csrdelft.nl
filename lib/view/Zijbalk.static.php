@@ -30,7 +30,7 @@ abstract class Zijbalk {
 
 		// Agenda
 		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingen::get('zijbalk', 'agendaweken') > 0 && LidInstellingen::get('zijbalk', 'agenda_max') > 0) {
-			require_once 'model/AgendaModel.class.php';
+			require_once 'agenda/model/AgendaModel.class.php';
 			$zijbalk[] = new AgendaZijbalkView(AgendaModel::instance(), LidInstellingen::get('zijbalk', 'agendaweken'));
 		}
 		// Laatste mededelingen

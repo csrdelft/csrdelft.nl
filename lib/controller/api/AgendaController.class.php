@@ -24,7 +24,7 @@ class ApiAgendaController {
 		$from = strtotime($_GET['from']);
 		$to = strtotime($_GET['to']);
 
-		require_once 'model/AgendaModel.class.php';
+		require_once 'agenda/model/AgendaModel.class.php';
 
 		$result = array();
 
