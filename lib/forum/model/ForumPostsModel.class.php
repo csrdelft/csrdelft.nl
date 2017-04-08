@@ -2,6 +2,8 @@
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 
+require_once 'forum/model/entity/ForumPost.class.php';
+
 /**
  * ForumPostsModel.class.php
  *

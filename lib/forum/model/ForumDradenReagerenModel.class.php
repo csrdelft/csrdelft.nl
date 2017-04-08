@@ -1,6 +1,8 @@
 <?php
 use CsrDelft\Orm\PersistenceModel;
 
+require_once 'forum/model/entity/ForumDraadReageren.class.php';
+
 /**
  * ForumDradenReagerenModel.class.php
  *

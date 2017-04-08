@@ -1,7 +1,7 @@
 <?php
 
-require_once 'model/forum/ForumModel.class.php';
-require_once 'view/ForumView.class.php';
+require_once 'forum/model/ForumModel.class.php';
+require_once 'forum/view/ForumView.class.php';
 
 /**
  * ForumController.class.php

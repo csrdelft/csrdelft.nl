@@ -2,6 +2,8 @@
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 
+require_once 'forum/model/entity/ForumDeel.class.php';
+
 /**
  * ForumDelenModel.class.php
  *

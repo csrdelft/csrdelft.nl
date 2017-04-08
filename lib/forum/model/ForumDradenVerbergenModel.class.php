@@ -1,6 +1,8 @@
 <?php
 use CsrDelft\Orm\CachedPersistenceModel;
 
+require_once 'forum/model/entity/ForumDraadVerbergen.class.php';
+
 /**
  * ForumDradenVerbergenModel.class.php
  *
