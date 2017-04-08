@@ -1,7 +1,7 @@
 <?php
 
-require_once 'model/MenuModel.class.php';
-require_once 'view/MenuBeheerView.class.php';
+require_once 'menu/model/MenuModel.class.php';
+require_once 'menu/view/MenuBeheerView.class.php';
 
 /**
  * MenuBeheerController.class.php

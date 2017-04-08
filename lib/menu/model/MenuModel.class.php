@@ -3,6 +3,8 @@ use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;
 
+require_once 'menu/model/entity/MenuItem.class.php';
+
 /**
  * MenuModel.class.php
  * 

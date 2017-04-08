@@ -44,7 +44,7 @@ RewriteRule ^bijbelrooster		index.php?c=Bijbelrooster [L]
 RewriteRule ^rechten			index.php?c=Rechten [L]
 RewriteRule ^instellingenbeheer	index.php?c=InstellingenBeheer [L]
 RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
-RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
+RewriteRule ^menubeheer			index.php?m=menu&c=MenuBeheer [L]
 RewriteRule ^commissievoorkeuren index.php?c=CommissieVoorkeuren [L]
 
 # business club

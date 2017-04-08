@@ -4,8 +4,8 @@ require_once 'view/Zijbalk.static.php';
 require_once 'view/SitemapView.class.php';
 require_once 'view/InstantSearchForm.class.php';
 require_once 'view/CompressedLayout.abstract.php';
-require_once 'view/MenuView.class.php';
-require_once 'model/MenuModel.class.php';
+require_once 'menu/view/MenuView.class.php';
+require_once 'menu/model/MenuModel.class.php';
 require_once 'model/DragObjectModel.class.php';
 
 /**
