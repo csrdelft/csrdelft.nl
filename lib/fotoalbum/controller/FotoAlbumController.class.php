@@ -1,6 +1,6 @@
 <?php
 
-require_once 'view/FotoAlbumView.class.php';
+require_once 'fotoalbum/view/FotoAlbumView.class.php';
 
 /**
  * FotoAlbumController.class.php

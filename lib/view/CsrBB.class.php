@@ -145,7 +145,7 @@ class CsrBB extends eamBBParser {
 	 * Toont de thumbnail met link naar fotoalbum.
 	 */
 	function bb_foto($arguments = array()) {
-		require_once 'controller/FotoAlbumController.class.php';
+		require_once 'fotoalbum/controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/foto]'), array()));
 		$parts = explode('/', $url);
 		if (in_array('Posters', $parts)) {
@@ -189,7 +189,7 @@ class CsrBB extends eamBBParser {
 	 *
 	 */
 	protected function bb_fotoalbum($arguments = array()) {
-		require_once 'controller/FotoAlbumController.class.php';
+		require_once 'fotoalbum/controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
 		if ($url === 'laatste') {
 			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();

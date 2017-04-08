@@ -2,7 +2,7 @@
 
 use CsrDelft\Orm\Entity\T;
 
-require_once 'model/entity/fotoalbum/Foto.class.php';
+require_once 'fotoalbum/model/entity/Foto.class.php';
 
 /**
  * FotoAlbum.class.php

@@ -2,6 +2,10 @@
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 
+require_once 'fotoalbum/model/entity/FotoAlbum.class.php';
+require_once 'fotoalbum/model/entity/Foto.class.php';
+require_once 'fotoalbum/model/entity/FotoTag.class.php';
+
 /**
  * FotoAlbumModel.class.php
  * 
@@ -55,7 +59,7 @@ class FotoAlbumModel extends PersistenceModel {
 			return null;
 		}
 		if (AccountModel::isValidUid($path) AND ProfielModel::existsUid($path)) {
-			require_once 'model/entity/fotoalbum/FotoTagAlbum.class.php';
+			require_once 'fotoalbum/model/entity/FotoTagAlbum.class.php';
 			$album = new FotoTagAlbum($path);
 		} else {
 			$album = new FotoAlbum($path);
