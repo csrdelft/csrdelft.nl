@@ -10,7 +10,7 @@ CREATE TABLE CiviLog
 (
   id        INT(11) NOT NULL AUTO_INCREMENT,
   ip        VARCHAR(255) NOT NULL,
-  type      ENUM ('insert', 'update', 'remove') NOT NULL,
+  type      ENUM ('insert','remove','create','update','delete') NOT NULL,
   data      VARCHAR(255) NOT NULL,
   timestamp TIMESTAMP        DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)

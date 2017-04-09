@@ -9,7 +9,7 @@ require_once 'model/entity/fiscaat/CiviSaldo.class.php';
  */
 class BeheerCiviSaldoView extends DataTable {
 	public function __construct() {
-		parent::__construct(CiviSaldo::class, '/fiscaat/saldo', 'Saldobeheer');
+		parent::__construct('CiviSaldo', '/fiscaat/saldo', 'Saldobeheer');
 
 		$this->addColumn('naam', 'saldo');
 		$this->addColumn('lichting', 'saldo');
@@ -21,6 +21,7 @@ class BeheerCiviSaldoView extends DataTable {
 		$this->searchColumn('naam');
 
 		$this->addKnop(new DataTableKnop('== 0', $this->dataTableId, '/fiscaat/saldo/registreren', 'post', 'Registreren', 'Lid registreren', 'toevoegen'));
+		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/saldo/verwijderen', 'post', 'Verwijderen', 'Saldo van lid verwijderen', 'verwijderen'));
 	}
 
 	public function getBreadcrumbs() {
@@ -61,6 +62,7 @@ class BeheerSaldoResponse extends DataTableResponse {
 	 */
 	public function getJson($entity) {
 		return parent::getJson(array(
+			'UUID' => $entity->getUUID(),
 			'uid' => $entity->uid,
 			'naam' => ProfielModel::getNaam($entity->uid, 'volledig'),
 			'lichting' => substr($entity->uid, 0, 2),

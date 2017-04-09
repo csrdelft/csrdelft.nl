@@ -16,7 +16,8 @@ class BeheerCiviSaldoController extends AclController {
 		if ($this->getMethod() == "POST") {
 			$this->acl = [
 				'overzicht' => 'P_MAAL_MOD',
-				'registreren' => 'P_MAAL_MOD'
+				'registreren' => 'P_MAAL_MOD',
+				'verwijderen' => 'P_MAAL_MOD'
 			];
 		} else {
 			$this->acl = [
@@ -40,6 +41,20 @@ class BeheerCiviSaldoController extends AclController {
 
 	public function POST_overzicht() {
 		$this->view = new BeheerSaldoResponse($this->model->find());
+	}
+
+	public function POST_verwijderen() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+
+		$civisaldo = $this->model->retrieveByUUID($selection[0]);
+
+		if ($civisaldo) {
+			$this->model->delete($civisaldo);
+			$this->view = new RemoveRowsResponse(array($civisaldo));
+			return;
+		}
+
+		$this->exit_http(404);
 	}
 
 	public function POST_registreren() {

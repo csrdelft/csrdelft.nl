@@ -1,12 +1,13 @@
 <?php
 
 use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\PersistenceModel;
 
 require_once 'model/entity/fiscaat/CiviSaldo.class.php';
 require_once 'model/entity/fiscaat/CiviSaldoLogEnum.class.php';
 require_once 'model/fiscaat/CiviSaldoLogModel.class.php';
 
-class CiviSaldoModel extends \CsrDelft\Orm\PersistenceModel {
+class CiviSaldoModel extends PersistenceModel {
 	const ORM = CiviSaldo::class;
 
 	protected static $instance;
@@ -70,13 +71,21 @@ class CiviSaldoModel extends \CsrDelft\Orm\PersistenceModel {
 		return $saldo->saldo;
 	}
 
+	public function delete(PersistentEntity $entity) {
+		if ($entity->saldo !== 0) {
+			throw new Exception("Kan CiviSaldo niet verwijderen: Saldo ongelijk aan nul.");
+		}
+		CiviSaldoLogModel::instance()->log(CiviSaldoLogEnum::DELETE_SALDO, $entity);
+		return parent::delete($entity);
+	}
+
 	public function create(PersistentEntity $entity) {
-		CiviSaldoLogModel::instance()->log(CiviSaldoLogEnum::INSERT, $entity);
+		CiviSaldoLogModel::instance()->log(CiviSaldoLogEnum::CREATE_SALDO, $entity);
 		return parent::create($entity);
 	}
 
 	public function update(PersistentEntity $entity) {
-		CiviSaldoLogModel::instance()->log(CiviSaldoLogEnum::UPDATE, $entity);
+		CiviSaldoLogModel::instance()->log(CiviSaldoLogEnum::UPDATE_SALDO, $entity);
 		return parent::update($entity);
 	}
 }
