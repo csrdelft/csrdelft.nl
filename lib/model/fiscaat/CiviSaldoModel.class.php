@@ -11,6 +11,15 @@ class CiviSaldoModel extends \CsrDelft\Orm\PersistenceModel {
 
 	protected static $instance;
 
+	public function maakSaldo($uid) {
+		$saldo = new Civisaldo();
+		$saldo->uid = $uid;
+		$saldo->saldo = 0;
+		$saldo->laatst_veranderd = getDateTime();
+		$this->create($saldo);
+		return $saldo;
+	}
+
 	/**
 	 * @param $uid
 	 * @param int $bedrag
