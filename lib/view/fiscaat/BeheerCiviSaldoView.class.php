@@ -15,11 +15,7 @@ class BeheerCiviSaldoView extends DataTable {
 		$this->addColumn('lichting', 'saldo');
 		$this->setOrder(array('saldo' => 'asc'));
 
-		$nieuw = new DataTableKnop('== 0', $this->dataTableId, '', null, 'Registreren', null, 'add', 'defaultCollection');
-		$nieuw->addKnop(new DataTableKnop('', $this->dataTableId, '/fiscaat/saldo/registreren/lid', 'post', 'Lid', 'Lid registreren'));
-		$nieuw->addKnop(new DataTableKnop('', $this->dataTableId, '/fiscaat/saldo/registreren/lichting', 'post', 'Lichting', 'Lichting registreren'));
-
-		$this->addKnop($nieuw);
+		$this->addKnop(new DataTableKnop('== 0', $this->dataTableId, '/fiscaat/saldo/registreren', 'post', 'Registreren', 'Lid registreren', 'toevoegen'));
 	}
 
 	public function getBreadcrumbs() {
@@ -35,6 +31,11 @@ JS;
 	}
 }
 
+/**
+ * Class LidRegistratieForm
+ *
+ * Maak het mogelijk om een lid te registreren, wordt uiteindelijk samengetrokken met het aanmaken van een lid.
+ */
 class LidRegistratieForm extends ModalForm {
 	public function __construct(CiviSaldo $model) {
 		parent::__construct($model, '/fiscaat/saldo/registreren/lid', false, true);
@@ -53,13 +54,12 @@ class BeheerSaldoResponse extends DataTableResponse {
 	 * @return string
 	 */
 	public function getJson($entity) {
-		$data = array(
+		return parent::getJson(array(
 			'uid' => $entity->uid,
 			'naam' => ProfielModel::getNaam($entity->uid, 'volledig'),
 			'lichting' => substr($entity->uid, 0, 2),
 			'saldo' => $entity->saldo,
 			'laatst_veranderd' => $entity->laatst_veranderd
-		);
-		return json_encode($data);
+		));
 	}
 }

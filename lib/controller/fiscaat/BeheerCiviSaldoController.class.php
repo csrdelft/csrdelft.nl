@@ -42,21 +42,17 @@ class BeheerCiviSaldoController extends AclController {
 		$this->view = new BeheerSaldoResponse($this->model->find());
 	}
 
-	public function POST_registreren($groep) {
-		if ($groep == 'lid') {
-			$form = new LidRegistratieForm(new CiviSaldo());
+	public function POST_registreren() {
+		$form = new LidRegistratieForm(new CiviSaldo());
 
-			if ($form->validate()) {
-				$saldo = $form->getModel();
-				$saldo->laatst_veranderd = date_create()->format(DATE_ISO8601);
-				$this->model->create($saldo);
-				$this->view = new BeheerSaldoResponse(array($saldo));
-				return;
-			}
-
-			$this->view = $form;
-		} elseif ($groep == 'lichting') {
-			$form = '';
+		if ($form->validate()) {
+			$saldo = $form->getModel();
+			$saldo->laatst_veranderd = date_create()->format(DATE_ISO8601);
+			$this->model->create($saldo);
+			$this->view = new BeheerSaldoResponse(array($saldo));
+			return;
 		}
+
+		$this->view = $form;
 	}
 }
