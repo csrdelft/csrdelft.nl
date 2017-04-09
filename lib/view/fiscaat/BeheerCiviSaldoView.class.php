@@ -11,7 +11,8 @@ class BeheerCiviSaldoView extends DataTable {
 	public function __construct() {
 		parent::__construct(CiviSaldo::class, '/fiscaat/saldo', 'Saldobeheer');
 
-		$this->addColumn('uid');
+		$this->addColumn('naam', 'saldo');
+		$this->addColumn('lichting', 'saldo');
 		$this->setOrder(array('saldo' => 'asc'));
 
 		$nieuw = new DataTableKnop('== 0', $this->dataTableId, '', null, 'Registreren', null, 'add', 'defaultCollection');
@@ -46,4 +47,19 @@ class LidRegistratieForm extends ModalForm {
 	}
 }
 
-class BeheerSaldoResponse extends DataTableResponse {}
+class BeheerSaldoResponse extends DataTableResponse {
+	/**
+	 * @param CiviSaldo $entity
+	 * @return string
+	 */
+	public function getJson($entity) {
+		$data = array(
+			'uid' => $entity->uid,
+			'naam' => ProfielModel::getNaam($entity->uid, 'volledig'),
+			'lichting' => substr($entity->uid, 0, 2),
+			'saldo' => $entity->saldo,
+			'laatst_veranderd' => $entity->laatst_veranderd
+		);
+		return json_encode($data);
+	}
+}
