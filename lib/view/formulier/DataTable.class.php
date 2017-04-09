@@ -121,14 +121,14 @@ class DataTable implements View, FormElement {
 		$this->settings['order'] = $orders;
 	}
 
-	protected function addColumn($newName, $before = null, $defaultContent = null, $render = null) {
+	protected function addColumn($newName, $before = null, $defaultContent = null, $render = null, $order_by = null, $type = 'string') {
 		// column definition
 		$newColumn = array(
 			'name' => $newName,
 			'data' => $newName,
 			'title' => ucfirst(str_replace('_', ' ', $newName)),
 			'defaultContent' => $defaultContent,
-			'type' => 'string',
+			'type' => $type,
 			'searchable' => false,
 			'render' => $render
 			/*
@@ -137,6 +137,9 @@ class DataTable implements View, FormElement {
 			  reldate(getDateTime());
 			 */
 		);
+		if ($order_by !== null) {
+			$newColumn['orderData'] = $this->columnPosition($order_by);
+		}
 		// append or insert at position
 		if ($before === null) {
 			$this->columns[$newName] = $newColumn;

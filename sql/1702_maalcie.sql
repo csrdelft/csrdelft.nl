@@ -115,3 +115,9 @@ UPDATE mlt_repetities SET product_id = @mlt WHERE mlt_repetitie_id = 11;
 -- Leg foreign keys aan
 ALTER TABLE mlt_maaltijden ADD CONSTRAINT FK_mlt_product FOREIGN KEY (product_id) REFERENCES CiviProduct(id);
 ALTER TABLE mlt_repetities ADD CONSTRAINT FK_mltrep_product FOREIGN KEY (product_id) REFERENCES CiviProduct(id);
+
+-- Vul de CiviSaldo tabel uit de saldolog
+INSERT INTO CiviSaldo SELECT uid, saldo*100, moment AS laatst_veranderd
+FROM saldolog WHERE (uid, moment) IN (
+  SELECT uid, max(moment) FROM saldolog WHERE cie = 'maalcie' GROUP BY uid
+) ORDER BY moment DESC

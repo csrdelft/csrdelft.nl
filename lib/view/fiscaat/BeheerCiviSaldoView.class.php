@@ -13,7 +13,12 @@ class BeheerCiviSaldoView extends DataTable {
 
 		$this->addColumn('naam', 'saldo');
 		$this->addColumn('lichting', 'saldo');
-		$this->setOrder(array('saldo' => 'asc'));
+		$this->addColumn('saldo', null, null, null, null, 'num');
+		$this->hideColumn('saldo');
+		$this->addColumn('saldo_', 'laatst_veranderd', null, 'prijs_render', 'saldo');
+		$this->setOrder(array('saldo_' => 'asc'));
+
+		$this->searchColumn('naam');
 
 		$this->addKnop(new DataTableKnop('== 0', $this->dataTableId, '/fiscaat/saldo/registreren', 'post', 'Registreren', 'Lid registreren', 'toevoegen'));
 	}
@@ -23,9 +28,10 @@ class BeheerCiviSaldoView extends DataTable {
 	}
 
 	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-function truefalse (data) {
-    return '<span class="ico '+(data?'tick':'cross')+'"></span>';
+		return /** @lang JavaScript */
+			parent::getJavascript() . <<<JS
+function prijs_render(data, type, row) {
+	return "&euro; " + (row.saldo/100).toFixed(2).replace('.', ',');
 }
 JS;
 	}
