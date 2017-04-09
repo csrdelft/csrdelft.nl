@@ -22,12 +22,10 @@ class MaaltijdenFiscaatController extends AclController {
 		parent::__construct($query, CiviProductModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'producten' => 'P_MAAL_MOD',
 				'onverwerkt' => 'P_MAAL_MOD'
 			);
 		} else {
 			$this->acl = array(
-				'producten' => 'P_MAAL_MOD',
 				'verwerk' => 'P_MAAL_MOD'
 			);
 		}
@@ -45,27 +43,14 @@ class MaaltijdenFiscaatController extends AclController {
 		parent::performAction(array($mid));
 	}
 
-	public function producten() {
-		if ($this->getMethod() == "POST") {
-			$this->view = new JsonResponse($this->model->find()->fetchAll());
-		} else {
-			$body = new BeheerCiviProductenView();
-			$this->view = new CsrLayoutPage($body);
-		}
+	public function GET_onverwerkt() {
+		$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
+		$this->view = new CsrLayoutPage($body);
+		$this->view->addCompressedResources('maalcie');
+		$this->view->addCompressedResources('datatable');
 	}
 
-	public function onverwerkt() {
-		if ($this->getAction() == "POST") {
-
-		} else {
-			$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
-			$this->view = new CsrLayoutPage($body);
-			$this->view->addCompressedResources('maalcie');
-			$this->view->addCompressedResources('datatable');
-		}
-	}
-
-	public function verwerk() {
+	public function POST_verwerk() {
 		# Haal maaltijd op
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		/** @var Maaltijd $maaltijd */
