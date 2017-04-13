@@ -69,7 +69,9 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	}
 
 	public function getAbonnementenWaarschuwingenMatrix() {
-        $abos = $this->find();
+		require_once 'model/entity/LidStatus.enum.php';
+
+		$abos = $this->find();
 
         $waarschuwingen = array();
 
