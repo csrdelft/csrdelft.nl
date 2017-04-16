@@ -34,7 +34,6 @@ class MaaltijdForm extends ModalForm {
 		$fields[] = new RequiredTextField('titel', $maaltijd->titel, 'Titel', 255, 5);
 		$fields[] = new RequiredDateField('datum', $maaltijd->datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields[] = new RequiredTimeField('tijd', $maaltijd->tijd, 'Tijd', 15);
-		$fields[] = new RequiredBedragField('prijs', $maaltijd->prijs, 'Prijs', '€', 0, 50, 0.50);
 		$fields[] = new RequiredEntityField('product', 'beschrijving', 'Product', CiviProductModel::instance(), '/fiscaat/producten/suggesties?q=', $product);
 		$fields[] = new RequiredIntField('aanmeld_limiet', $maaltijd->aanmeld_limiet, 'Aanmeldlimiet', 0, 200);
 		$fields[] = new RechtenField('aanmeld_filter', $maaltijd->aanmeld_filter, 'Aanmeldrestrictie');

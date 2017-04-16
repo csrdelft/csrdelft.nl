@@ -12,6 +12,10 @@ class CiviProduct extends PersistentEntity {
 
 	public $prijs;
 
+	public function getBeschrijving() {
+		return sprintf("%s (€%.2f)", $this->beschrijving, $this->prijs/100);
+	}
+
 	protected static $table_name = 'CiviProduct';
 	protected static $persistent_attributes = array(
 		'id' => array(T::Integer, false, 'auto_increment'),
