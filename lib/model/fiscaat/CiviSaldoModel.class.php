@@ -12,6 +12,10 @@ class CiviSaldoModel extends PersistenceModel {
 
 	protected static $instance;
 
+	public function getSaldo($uid) {
+		return $this->find('uid = ?', array($uid))->fetch();
+	}
+
 	public function maakSaldo($uid) {
 		$saldo = new Civisaldo();
 		$saldo->uid = $uid;
