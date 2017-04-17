@@ -45,7 +45,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	public $omschrijving; # text
 	public $aantal_aanmeldingen;
 	public $archief;
-	public $verwerkt;
+	public $verwerkt = false;
 	/**
 	 * De taak die rechten geeft voor het bekijken en sluiten van de maaltijd(-lijst)
 	 * @var CorveeTaak 
@@ -167,7 +167,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
         'aanmeld_limiet' => array(T::Integer),
         'datum' => array(T::Date),
         'tijd' => array(T::Time),
-        'prijs' => array(T::Integer),
+        'prijs' => array(T::Integer, true),
         'gesloten' => array(T::Boolean),
         'laatst_gesloten' => array(T::Timestamp, true),
         'verwijderd' => array(T::Boolean),

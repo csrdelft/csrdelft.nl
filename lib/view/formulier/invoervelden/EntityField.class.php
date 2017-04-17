@@ -51,7 +51,7 @@ class EntityField extends InputField {
 		parent::__construct($name, $this->entity->$show, $description, $model);
 		$this->suggestions[] = $url;
 		$this->show_value = $show;
-		$this->value = $this->entity->$show;
+		$this->value = $this->getValue();
 	}
 
 	public function getName() {
@@ -94,7 +94,7 @@ class EntityField extends InputField {
 
 		foreach ($this->entity->getPrimaryKey() as $key) {
 			$input_key = filter_input(INPUT_POST, $this->name . '_' . $key, FILTER_DEFAULT);
-			if (false == $input_key OR null == $input_key) {
+			if (false === $input_key OR null === $input_key) {
 				return false;
 			}
 		}
