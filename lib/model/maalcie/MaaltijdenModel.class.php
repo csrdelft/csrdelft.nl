@@ -30,7 +30,6 @@ class MaaltijdenModel extends PersistenceModel {
         $maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
         $maaltijd->datum = date('Y-m-d', $datum);
         $maaltijd->tijd = $repetitie->standaard_tijd;
-        $maaltijd->prijs = $repetitie->standaard_prijs;
         $maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
         $maaltijd->omschrijving = null;
         $maaltijd->verwerkt = false;

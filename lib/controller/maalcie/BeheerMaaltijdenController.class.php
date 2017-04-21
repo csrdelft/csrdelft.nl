@@ -166,7 +166,6 @@ class BeheerMaaltijdenController extends AclController {
 				$maaltijd->titel = $repetitie->standaard_titel;
 				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
 				$maaltijd->tijd = $repetitie->standaard_tijd;
-				$maaltijd->prijs = $repetitie->standaard_prijs;
 				$maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
 				$this->view = new MaaltijdForm($maaltijd, 'nieuw');
 			}

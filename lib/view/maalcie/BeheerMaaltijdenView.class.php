@@ -31,6 +31,7 @@ class BeheerMaaltijdenTable extends DataTable {
 		$this->hideColumn('aanmeld_limiet');
 		$this->hideColumn('omschrijving');
 		$this->hideColumn('mlt_repetitie_id');
+		$this->hideColumn('verwerkt');
 
 		$this->addColumn('repetitie_naam', 'titel');
 		$this->addColumn('aanmeld_filter', null, null, 'aanmeldFilter_render');

@@ -37,7 +37,6 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	public $aanmeld_limiet; # int 11
 	public $datum; # date
 	public $tijd; # time
-	public $prijs; # int 11
 	public $gesloten = false; # boolean
 	public $laatst_gesloten; # int 11
 	public $verwijderd = false; # boolean
@@ -53,8 +52,12 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	public $maaltijdcorvee;
 
 	public function getPrijsFloat() {
-        return (float) $this->prijs / 100.0;
+        return (float) $this->getPrijs() / 100.0;
     }
+
+    public function getPrijs() {
+		return CiviProductModel::instance()->getPrijs(CiviProductModel::instance()->getProduct($this->product_id))->prijs;
+	}
 
     /**
      * @return int
@@ -90,7 +93,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getBudget() {
 		$budget = $this->getAantalAanmeldingen() + $this->getMarge();
-		$budget *= $this->prijs - intval(Instellingen::get('maaltijden', 'budget_maalcie'));
+		$budget *= $this->getPrijs() - intval(Instellingen::get('maaltijden', 'budget_maalcie'));
 		return floatval($budget) / 100.0;
 	}
 
@@ -167,7 +170,6 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
         'aanmeld_limiet' => array(T::Integer),
         'datum' => array(T::Date),
         'tijd' => array(T::Time),
-        'prijs' => array(T::Integer, true),
         'gesloten' => array(T::Boolean),
         'laatst_gesloten' => array(T::Timestamp, true),
         'verwijderd' => array(T::Boolean),
@@ -189,7 +191,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
         $json['tijd'] = date('G:i', strtotime($json['tijd']));
         $json['aantal_aanmeldingen'] = $this->getAantalAanmeldingen();
         $json['gesloten'] = $json['gesloten'] ? '1' : '0';
-        $json['prijs'] = strval($json['prijs']);
+        $json['prijs'] = strval($this->getPrijs());
         return $json;
     }
 
