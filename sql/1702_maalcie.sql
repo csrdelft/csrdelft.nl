@@ -112,6 +112,13 @@ VALUES (NOW(), 0, @mlt, 0);
 UPDATE mlt_maaltijden SET product_id = @mlt WHERE mlt_repetitie_id = 11;
 UPDATE mlt_repetities SET product_id = @mlt WHERE mlt_repetitie_id = 11;
 
+-- Cent (voor mutaties)
+INSERT INTO CiviProduct (status, beschrijving, prioriteit, beheer)
+VALUES(1, 'Cent', 1, 1);
+SET @cent = LAST_INSERT_ID();
+INSERT INTO CiviPrijs (van, tot, product_id, prijs)
+VALUES (NOW(), 0, @cent, 1);
+
 -- Leg foreign keys aan
 ALTER TABLE mlt_maaltijden ADD CONSTRAINT FK_mlt_product FOREIGN KEY (product_id) REFERENCES CiviProduct(id);
 ALTER TABLE mlt_repetities ADD CONSTRAINT FK_mltrep_product FOREIGN KEY (product_id) REFERENCES CiviProduct(id);
