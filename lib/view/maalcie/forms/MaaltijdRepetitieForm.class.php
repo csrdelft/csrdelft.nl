@@ -39,7 +39,6 @@ class MaaltijdRepetitieForm extends ModalForm {
 			$fields['abo']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) if (!confirm('Alle abonnementen zullen worden verwijderd!')) this.checked = true;";
 		}
 		$fields[] = new RequiredEntityField('product', 'beschrijving', 'Product', CiviProductModel::instance(), '/fiscaat/producten/suggesties?q=', $product);
-		$fields[] = new BedragField('standaard_prijs', $model->standaard_prijs, 'Standaard prijs', '€', 0, 50, 0.50);
 		$fields[] = new IntField('standaard_limiet', $model->standaard_limiet, 'Standaard limiet', 0, 200);
 		$fields[] = new RechtenField('abonnement_filter', $model->abonnement_filter, 'Aanmeldrestrictie');
 

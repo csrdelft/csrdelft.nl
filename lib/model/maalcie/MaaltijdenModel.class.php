@@ -320,8 +320,8 @@ class MaaltijdenModel extends PersistenceModel {
 				}
 				$maaltijd->titel = $repetitie->standaard_titel;
 				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
-				$repetitie->standaard_tijd = $maaltijd->tijd;
-				$maaltijd->prijs = $repetitie->standaard_prijs;
+				$maaltijd->tijd = $repetitie->standaard_tijd;
+				$maaltijd->product_id = $repetitie->product_id;
 				$maaltijd->aanmeld_filter = $filter;
 				try {
 					$this->update($maaltijd);

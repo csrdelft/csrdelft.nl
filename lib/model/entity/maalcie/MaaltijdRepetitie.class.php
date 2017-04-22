@@ -57,6 +57,11 @@ class MaaltijdRepetitie extends PersistentEntity {
     );
     protected static $primary_key = array('mlt_repetitie_id');
 
+    public function getStandaardPrijs() {
+    	require_once 'model/fiscaat/CiviProductModel.class.php';
+		return CiviProductModel::instance()->getPrijs(CiviProductModel::instance()->getProduct($this->product_id))->prijs;
+	}
+
 	public function getDagVanDeWeekText() {
 		return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
 	}
@@ -76,7 +81,7 @@ class MaaltijdRepetitie extends PersistentEntity {
 	}
 
 	public function getStandaardPrijsFloat() {
-		return (float) $this->standaard_prijs / 100.0;
+		return (float) $this->getStandaardPrijs() / 100.0;
 	}
 
 	public function getFirstOccurrence() {
