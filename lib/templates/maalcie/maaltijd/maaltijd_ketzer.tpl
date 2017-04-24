@@ -46,7 +46,7 @@
 		<div class="maaltijdgegevens">
 			<div class="titel">
 				<a href="/maaltijdenketzer">{$maaltijd->titel}</a>
-				{if $maaltijd->prijs !== $standaardprijs}
+				{if $maaltijd->getPrijs() !== $standaardprijs}
 					&nbsp; (&euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"})
 				{/if}
 			</div>
