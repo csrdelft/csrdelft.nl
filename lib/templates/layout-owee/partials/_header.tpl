@@ -61,7 +61,7 @@
                 <li><a href="/forum">Forum</a></li>
                 <li><a href="/forum/deel/12">Kamers zoeken/aanbieden</a></li>
                 <li><a href="/contact">Contactinformatie</a></li>
-                <li><a href="/contact/sponsoring">Bedrijven</a></li>
+                <li><a href="/contact/bedrijven">Bedrijven</a></li>
             </ul>
             <a href="#_" class="close">Close</a>
         </div>
