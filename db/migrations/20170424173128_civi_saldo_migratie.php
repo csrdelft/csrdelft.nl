@@ -71,6 +71,7 @@ CREATE TABLE CiviSaldo
 );
 
 ALTER TABLE mlt_maaltijden ADD COLUMN product_id INT(11) NOT NULL;
+ALTER TABLE mlt_maaltijden ADD COLUMN verwerkt TINYINT(1) NOT NULL;
 ALTER TABLE mlt_repetities ADD COLUMN product_id INT(11) NOT NULL;
 
 INSERT INTO CiviProduct (id, status, beschrijving, prioriteit, beheer)
@@ -128,6 +129,9 @@ FROM saldolog WHERE (uid, moment) IN (
   SELECT uid, max(moment) FROM saldolog WHERE cie = 'maalcie' GROUP BY uid
 ) ORDER BY moment DESC");
 
+		// Verplaats geen data als de data verkeerd is.
+		$this->adapter->beginTransaction();
+
 		// Migreer de saldolog tabel naar CiviSaldo
 		foreach ($gebruikers as $index => $gebruiker) {
 			$saldo = $gebruiker['saldo'] * 100;
@@ -148,6 +152,11 @@ FROM saldolog WHERE (uid, moment) IN (
 						VALUES ('0.0.0.0', 'create', '{user: %s, saldo: %d}')",
 				$gebruiker['uid'], $saldo));
 		}
+
+		// Zet alle maaltijden op verwerkt
+		$this->execute("UPDATE mlt_maaltijden SET verwerkt = true");
+
+		$this->adapter->commitTransaction();
 	}
 
 	public function down() {
@@ -155,10 +164,11 @@ FROM saldolog WHERE (uid, moment) IN (
 -- Opschonen vorige keer
 ALTER TABLE mlt_maaltijden DROP FOREIGN KEY FK_mlt_product;
 ALTER TABLE mlt_maaltijden DROP COLUMN product_id;
+ALTER TABLE mlt_maaltijden DROP COLUMN verwerkt;
 ALTER TABLE mlt_repetities DROP FOREIGN KEY FK_mltrep_product;
 ALTER TABLE mlt_repetities DROP COLUMN product_id;
 
-DROP TABLE `CiviBestellingInhoud`, `CiviBestelling`, `CiviPrijs`, `CiviProduct`, `CiviLog`, `CiviSaldo`;
+DROP TABLE CiviBestellingInhoud, CiviBestelling, CiviPrijs, CiviProduct, CiviLog, CiviSaldo;
 SQL
 		);
 	}
