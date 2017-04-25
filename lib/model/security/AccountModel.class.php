@@ -52,7 +52,7 @@ class AccountModel extends CachedPersistenceModel {
 		$account->username = $uid;
 		$account->email = $profiel->email;
 		$account->pass_hash = '';
-		$account->pass_since = '';
+		$account->pass_since = '1970-01-01 00:00:00';
 		$account->failed_login_attempts = 0;
 		$account->perm_role = AccessModel::instance()->getDefaultPermissionRole($profiel->status);
 		$this->create($account);

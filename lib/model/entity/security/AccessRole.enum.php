@@ -29,7 +29,7 @@ abstract class AccessRole implements PersistentEnum {
 	const Vlieger = "R_VLIEGER";
 
 	public static function getTypeOptions() {
-		return array(self::Nobody, self::Eter, self::Oudlid, self::Lid,
+		return array(self::Nobody, self::Eter, self::Oudlid, self::Lid, self::Kringel,
 			self::BASFCie, self::MaalCie, self::Bestuur, self::PubCie, self::Vlieger);
 	}
 
@@ -47,6 +47,7 @@ abstract class AccessRole implements PersistentEnum {
 			case self::Eter: return 'Eter (inlog voor abo\'s)';
 			case self::Oudlid: return 'Oudlid';
 			case self::Lid: return 'Lid';
+            case self::Kringel: return 'Kringel';
 			case self::BASFCie: return 'BASFCie-rechten';
 			case self::MaalCie: return 'MaalCie-rechten';
 			case self::Bestuur: return 'Bestuur-rechten';
@@ -62,6 +63,7 @@ abstract class AccessRole implements PersistentEnum {
 			case self::Eter: return 'E';
 			case self::Oudlid: return 'O';
 			case self::Lid: return 'L';
+            case self::Kringel: return 'K';
 			case self::BASFCie: return 'BASF';
 			case self::MaalCie: return 'M';
 			case self::Bestuur: return 'B';
