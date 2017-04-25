@@ -75,6 +75,11 @@ class CiviSaldoModel extends PersistenceModel {
 		return $saldo->saldo;
 	}
 
+	/**
+	 * @param PersistentEntity|CiviSaldo $entity
+	 * @return int
+	 * @throws Exception
+	 */
 	public function delete(PersistentEntity $entity) {
 		if ($entity->saldo !== 0) {
 			throw new Exception("Kan CiviSaldo niet verwijderen: Saldo ongelijk aan nul.");
