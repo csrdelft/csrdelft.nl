@@ -12,10 +12,10 @@ class CiviSaldoLogModel extends PersistenceModel {
 
 	public function log($type, $data) {
 		$logEntry = new CiviSaldoLog();
-		$logEntry->timestamp = new DateTime();
+		$logEntry->timestamp = date_create()->getTimestamp();
 		$logEntry->ip = filter_input(INPUT_SERVER, 'REMOTE_ADDR');
 		$logEntry->type = $type;
-		$logEntry->data = $data;
+		$logEntry->data = json_encode($data);
 		$this->create($logEntry);
 	}
 }

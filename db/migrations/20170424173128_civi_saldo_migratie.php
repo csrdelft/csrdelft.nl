@@ -16,7 +16,7 @@ CREATE TABLE CiviLog
   ip        VARCHAR(255) NOT NULL,
   type      ENUM ('insert','remove','create','update','delete') NOT NULL,
   data      VARCHAR(255) NOT NULL,
-  timestamp TIMESTAMP        DEFAULT CURRENT_TIMESTAMP,
+  timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
 
@@ -54,7 +54,7 @@ CREATE TABLE CiviBestellingInhoud
 (
   bestelling_id INT(11) NOT NULL,
   product_id    INT(11) NOT NULL,
-  aantal       INT(11),
+  aantal       INT(11) NOT NULL,
   PRIMARY KEY (bestelling_id, product_id),
   CONSTRAINT FK_CBI_product FOREIGN KEY (product_id)
   REFERENCES CiviProduct(id),
@@ -147,7 +147,7 @@ FROM saldolog WHERE (uid, moment) IN (
 				$index + 1, 6, $saldo));
 			$this->execute(sprintf(
 				"INSERT INTO CiviLog (ip, type, data)
-						VALUES ('0.0.0.0', 'create', '{user: %s, saldo: %d}')",
+						VALUES ('0.0.0.0', 'create', '{\"user\": \"%s\", \"saldo\": %d}')",
 				$gebruiker['uid'], $saldo));
 		}
 
