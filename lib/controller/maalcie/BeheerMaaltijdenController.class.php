@@ -179,7 +179,7 @@ class BeheerMaaltijdenController extends AclController {
 		if ($mid === null) {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			if (empty($selection)) {
-				$this->exit_http(403);
+				$this->exit_http(404);
 			}
 			$mid = $selection[0];
 		}
