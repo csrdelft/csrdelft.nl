@@ -39,7 +39,7 @@ class BeheerMaaltijdenTable extends DataTable {
 		$this->addColumn('aanmeldingen', 'aanmeld_limiet', null, 'aanmeldingen_render');
 		$this->addColumn('prijs', null, null, 'prijs_render');
 
-		$this->setOrder(array('datum' => 'desc'));
+		$this->setOrder(array('datum' => 'asc'));
 
 		$this->searchColumn('titel');
 		$this->searchColumn('prijs');
