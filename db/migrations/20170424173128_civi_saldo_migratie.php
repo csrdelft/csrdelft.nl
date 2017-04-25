@@ -129,8 +129,6 @@ FROM saldolog WHERE (uid, moment) IN (
   SELECT uid, max(moment) FROM saldolog WHERE cie = 'maalcie' GROUP BY uid
 ) ORDER BY moment DESC");
 
-		// Verplaats geen data als de data verkeerd is.
-		$this->adapter->beginTransaction();
 
 		// Migreer de saldolog tabel naar CiviSaldo
 		foreach ($gebruikers as $index => $gebruiker) {
@@ -154,9 +152,7 @@ FROM saldolog WHERE (uid, moment) IN (
 		}
 
 		// Zet alle maaltijden op verwerkt
-		$this->execute("UPDATE mlt_maaltijden SET verwerkt = true");
-
-		$this->adapter->commitTransaction();
+		$this->execute("UPDATE mlt_maaltijden SET verwerkt = TRUE");
 	}
 
 	public function down() {
