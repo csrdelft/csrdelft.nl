@@ -44,7 +44,7 @@ class CiviSaldoModel extends PersistenceModel {
 		}
 
 		$saldo->saldo += $bedrag;
-		$saldo->laatst_veranderd = date_create();
+		$saldo->laatst_veranderd = date_create()->getTimestamp();
 		$this->update($saldo);
 
 		return $saldo->saldo;
@@ -69,7 +69,7 @@ class CiviSaldoModel extends PersistenceModel {
 		}
 
 		$saldo->saldo -= $bedrag;
-		$saldo->laatst_veranderd = date_create();
+		$saldo->laatst_veranderd = date_create()->getTimestamp();
 		$this->update($saldo);
 
 		return $saldo->saldo;
