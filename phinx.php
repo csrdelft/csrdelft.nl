@@ -2,7 +2,8 @@
 /**
  * Configuratie voor Phinx, verbind met de stek database om daar migraties op te kunnen runnen.
  */
-
+// PHP from Phinx might not have a proper path
+set_include_path(get_include_path() . PATH_SEPARATOR . 'lib');
 require_once 'defines.include.php';
 
 $db_cred = parse_ini_file(ETC_PATH . 'mysql.ini');

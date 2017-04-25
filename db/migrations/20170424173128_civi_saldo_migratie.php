@@ -123,25 +123,30 @@ ALTER TABLE mlt_repetities ADD CONSTRAINT FK_mltrep_product FOREIGN KEY (product
 SQL
 		);
 
-		$gebruikers = $this->fetchAll("SELECT uid, saldo*100, moment AS laatst_veranderd
+		$gebruikers = $this->fetchAll("SELECT uid, saldo, moment AS laatst_veranderd
 FROM saldolog WHERE (uid, moment) IN (
   SELECT uid, max(moment) FROM saldolog WHERE cie = 'maalcie' GROUP BY uid
 ) ORDER BY moment DESC");
 
 		// Migreer de saldolog tabel naar CiviSaldo
 		foreach ($gebruikers as $index => $gebruiker) {
+			$saldo = $gebruiker['saldo'] * 100;
 			$this->execute(sprintf(
 				"INSERT INTO CiviSaldo (uid, saldo, laatst_veranderd) 
-						VALUES ('%s', %d, %s)",
-				$gebruiker['uid'], $gebruiker['saldo'], $gebruiker['laatst_veranderd']));
+						VALUES ('%s', %d, '%s')",
+				$gebruiker['uid'], $saldo, $gebruiker['laatst_veranderd']));
 			$this->execute(sprintf(
 				"INSERT INTO CiviBestelling (id, uid, totaal, deleted) 
 						VALUES (%d, '%s', %d, %d)",
-				$index, $gebruiker['uid'], $gebruiker['saldo'], 0));
+				$index + 1, $gebruiker['uid'], $saldo, 0));
 			$this->execute(sprintf(
 				"INSERT INTO CiviBestellingInhoud (bestelling_id, product_id, aantal)
 						VALUES (%d, %d, %d)",
-				$index, 6, $gebruiker['saldo']));
+				$index + 1, 6, $saldo));
+			$this->execute(sprintf(
+				"INSERT INTO CiviLog (ip, type, data)
+						VALUES ('0.0.0.0', 'create', '{user: %s, saldo: %d}')",
+				$gebruiker['uid'], $saldo));
 		}
 	}
 
@@ -153,7 +158,7 @@ ALTER TABLE mlt_maaltijden DROP COLUMN product_id;
 ALTER TABLE mlt_repetities DROP FOREIGN KEY FK_mltrep_product;
 ALTER TABLE mlt_repetities DROP COLUMN product_id;
 
-DROP TABLE `CiviBestellingInhoud`, `CiviBestelling`, `CiviPrijs`, `CiviProduct`, `CiviLog`;
+DROP TABLE `CiviBestellingInhoud`, `CiviBestelling`, `CiviPrijs`, `CiviProduct`, `CiviLog`, `CiviSaldo`;
 SQL
 		);
 	}
