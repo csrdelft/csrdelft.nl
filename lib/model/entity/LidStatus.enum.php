@@ -3,10 +3,10 @@ use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
  * LidStatus.enum.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 abstract class LidStatus implements PersistentEnum {
 
@@ -23,12 +23,15 @@ abstract class LidStatus implements PersistentEnum {
 	const Nobody = 'S_NOBODY';
 	const Commissie = 'S_CIE';
 	const Kringel = 'S_KRINGEL';
+	const Studentenwerker = 'S_WERKER';
 
-	public static $lidlike = array(self::Noviet, self::Lid, self::Gastlid);
+	public static $lidlike = array(self::Noviet, self::Lid, self::Gastlid, self::Studentenwerker);
 	public static $oudlidlike = array(self::Oudlid, self::Erelid);
 
 	public static function getTypeOptions() {
-		return array(self::Noviet, self::Lid, self::Gastlid, self::Oudlid, self::Erelid, self::Overleden, self::Exlid, self::Nobody, self::Commissie, self::Kringel);
+		return array(self::Noviet, self::Lid, self::Gastlid, self::Oudlid,
+            self::Erelid, self::Overleden, self::Exlid, self::Nobody, self::Commissie,
+            self::Kringel, self::Studentenwerker);
 	}
 
 	public static function isLidLike($option) {
@@ -51,6 +54,7 @@ abstract class LidStatus implements PersistentEnum {
 			case self::Nobody: return 'Nobody';
 			case self::Commissie: return 'Commissie (LDAP)';
 			case self::Kringel: return 'Kringel';
+            case self::Studentenwerker: return 'Studentenwerker';
 			default: throw new Exception('LidStatus onbekend');
 		}
 	}
@@ -65,6 +69,7 @@ abstract class LidStatus implements PersistentEnum {
 		switch ($option) {
 			case self::Noviet:
 			case self::Lid:
+            case self::Studentenwerker:
 			case self::Gastlid: return '';
 			case self::Commissie: return '∈';
 			case self::Exlid:

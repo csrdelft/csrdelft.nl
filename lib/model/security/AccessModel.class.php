@@ -211,12 +211,13 @@ class AccessModel extends CachedPersistenceModel {
 
 	public function getDefaultPermissionRole($lidstatus) {
 		switch ($lidstatus) {
-			case LidStatus::Kringel:
 			case LidStatus::Noviet:
 			case LidStatus::Lid:
+            case LidStatus::Studentenwerker:
 			case LidStatus::Gastlid: return AccessRole::Lid;
 			case LidStatus::Oudlid:
 			case LidStatus::Erelid: return AccessRole::Oudlid;
+            case LidStatus::Kringel: return AccessRole::Kringel;
 			case LidStatus::Commissie:
 			case LidStatus::Overleden:
 			case LidStatus::Exlid:
@@ -378,7 +379,8 @@ class AccessModel extends CachedPersistenceModel {
 		// use & ~$p[] for constrained RBAC (separation of duties)
 
 		$this->roles[AccessRole::Nobody] = $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_AGENDA_READ'] | $p['P_ALBUM_READ'];
-		$this->roles[AccessRole::Eter] = $this->roles[AccessRole::Nobody] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
+        $this->roles[AccessRole::Kringel] = $p['P_PUBLIC'] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_LEDEN_READ'] | $p['P_MAAL_IK'] | $p['P_PEILING_VOTE'];
+        $this->roles[AccessRole::Eter] = $this->roles[AccessRole::Nobody] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'];
 		$this->roles[AccessRole::Lid] = $this->roles[AccessRole::Eter] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_ADD'] | $p['P_PEILING_VOTE'];
 		$this->roles[AccessRole::Oudlid] = $this->roles[AccessRole::Lid];
 		$this->roles[AccessRole::MaalCie] = $this->roles[AccessRole::Lid] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];

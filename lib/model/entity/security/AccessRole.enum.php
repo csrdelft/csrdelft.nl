@@ -5,7 +5,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * AccessRole.enum.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * RBAC MAC roles.
  * 
  * @see AccessModel
@@ -16,6 +16,7 @@ abstract class AccessRole implements PersistentEnum {
 	const Eter = 'R_ETER';
 	const Oudlid = 'R_OUDLID';
 	const Lid = 'R_LID';
+	const Kringel = 'R_KRINGEL';
 	const BASFCie = 'R_BASF';
 	const MaalCie = 'R_MAALCIE';
 	const Bestuur = 'R_BESTUUR';
