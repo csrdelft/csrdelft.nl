@@ -27,6 +27,21 @@ class CiviBestellingModel extends PersistenceModel {
 		return $bestelling;
 	}
 
+	public function vanInleg($bedrag, $uid) {
+		$bestelling = new CiviBestelling();
+		$bestelling->uid = $uid;
+		$bestelling->deleted = false;
+
+		$inhoud = new CiviBestellingInhoud();
+		$inhoud->aantal = -$bedrag;
+		$inhoud->product_id = 6; // TODO dynamic
+
+		$bestelling->inhoud[] = $inhoud;
+		$bestelling->totaal = CiviProductModel::instance()->getProduct($inhoud->product_id)->prijs * -$bedrag;
+
+		return $bestelling;
+	}
+
 	/**
 	 * @param PersistentEntity|CiviBestelling $entity
 	 * @return string

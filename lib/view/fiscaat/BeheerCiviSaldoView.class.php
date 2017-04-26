@@ -21,7 +21,8 @@ class BeheerCiviSaldoView extends DataTable {
 		$this->searchColumn('naam');
 
 		$this->addKnop(new DataTableKnop('== 0', $this->dataTableId, '/fiscaat/saldo/registreren', 'post', 'Registreren', 'Lid registreren', 'toevoegen'));
-		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/saldo/verwijderen', 'post', 'Verwijderen', 'Saldo van lid verwijderen', 'verwijderen'));
+		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/saldo/verwijderen', 'post', 'Verwijderen', 'Saldo van lid verwijderen', 'verwijderen', 'confirm'));
+		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/saldo/inleggen', 'post', 'Inleggen', 'Saldo van lid ophogen', 'coins_add'));
 	}
 
 	public function getBreadcrumbs() {
@@ -49,6 +50,19 @@ class LidRegistratieForm extends ModalForm {
 
 		$fields[] = new LidField('uid', $model->uid, 'Lid');
 		$fields[] = new IntField('saldo', $model->saldo, 'Initieel saldo');
+		$fields['btn'] = new FormDefaultKnoppen();
+
+		$this->addFields($fields);
+	}
+}
+
+class InleggenForm extends ModalForm {
+	public function __construct(Civisaldo $model) {
+		parent::__construct($model, '/fiscaat/saldo/inleggen', "Inleggen: "  . ProfielModel::getNaam($model->uid, 'volledig'), true);
+
+		$fields['saldo'] = new BedragField('saldo', $model->saldo, 'Huidig saldo');
+		$fields['saldo']->readonly = true;
+		$fields[] = new BedragField('inleg', 0, 'Inleg', '€', 0.01);
 		$fields['btn'] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
