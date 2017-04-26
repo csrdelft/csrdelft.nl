@@ -14,8 +14,10 @@ class BedragField extends IntField {
 
 	public $valuta;
 
+	public $pattern = '-?[0-9]+';
+
 	public function __construct($name, $value, $description, $valuta = '€', $min = null, $max = null, $step = 0.01) {
-		parent::__construct($name, $value, $description, $min * 100, $max * 100);
+		parent::__construct($name, $value, $description, is_numeric($min) ? intval($min * 100) : null, is_numeric($max) ? intval($max * 100) : null);
 		$this->step = $step * 100;
 		$this->valuta = $valuta;
 	}
