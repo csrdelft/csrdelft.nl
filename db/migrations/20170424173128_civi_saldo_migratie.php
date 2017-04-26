@@ -140,11 +140,11 @@ FROM saldolog WHERE (uid, moment) IN (
 			$this->execute(sprintf(
 				"INSERT INTO CiviBestelling (id, uid, totaal, deleted) 
 						VALUES (%d, '%s', %d, %d)",
-				$index + 1, $gebruiker['uid'], $saldo, 0));
+				$index + 1, $gebruiker['uid'], -$saldo, 0));
 			$this->execute(sprintf(
 				"INSERT INTO CiviBestellingInhoud (bestelling_id, product_id, aantal)
 						VALUES (%d, %d, %d)",
-				$index + 1, 6, $saldo));
+				$index + 1, 6, -$saldo));
 			$this->execute(sprintf(
 				"INSERT INTO CiviLog (ip, type, data)
 						VALUES ('0.0.0.0', 'create', '{\"user\": \"%s\", \"saldo\": %d}')",
