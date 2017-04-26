@@ -16,7 +16,7 @@ class FiscaatRouterController extends AclController {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		$controller = parent::performAction();
+		$controller = parent::performAction($args);
 		if ($controller !== null) {
 			$controller->performAction();
 			$this->view = $controller->getView();
