@@ -22,11 +22,15 @@ class CiviBestelling extends PersistentEntity {
 		return CiviBestellingInhoudModel::instance()->find('bestelling_id = ?', array($this->id));
 	}
 
-	public function jsonSerialize() {
-		$data = parent::jsonSerialize();
-		$data['inhoud'] = implode(", ", array_map(function ($inhoud) {
+	public function getInhoudBeschrijving() {
+		return implode(", ", array_map(function ($inhoud) {
 			return $inhoud->aantal . " van " . CiviProductModel::instance()->getProduct($inhoud->product_id)->beschrijving;
 		}, $this->getInhoud()->fetchAll()));
+	}
+
+	public function jsonSerialize() {
+		$data = parent::jsonSerialize();
+		$data['inhoud'] = $this->getInhoudBeschrijving();
 		return $data;
 	}
 
