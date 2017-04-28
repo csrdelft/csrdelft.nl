@@ -1,6 +1,10 @@
 <h1>Civisaldo overzicht</h1>
 
-<ul>
-    <li><a href="/fiscaat/producten">Productenbeheer</a></li>
-    <li><a href="/fiscaat/saldo">Saldobeheer</a></li>
-</ul>
+<div class="container-fluid">
+    <div class="col-lg-6">
+        {$productenbeheer->view()}
+    </div>
+    <div class="col-lg-6">
+        {$saldobeheer->view()}
+    </div>
+</div>
