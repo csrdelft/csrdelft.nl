@@ -18,6 +18,18 @@ class CiviBestelling extends PersistentEntity {
 	 */
 	public $inhoud = array();
 
+	public function getInhoud() {
+		return CiviBestellingInhoudModel::instance()->find('bestelling_id = ?', array($this->id));
+	}
+
+	public function jsonSerialize() {
+		$data = parent::jsonSerialize();
+		$data['inhoud'] = implode(", ", array_map(function ($inhoud) {
+			return $inhoud->aantal . " van " . CiviProductModel::instance()->getProduct($inhoud->product_id)->beschrijving;
+		}, $this->getInhoud()->fetchAll()));
+		return $data;
+	}
+
 	protected static $table_name = 'CiviBestelling';
 	protected static $persistent_attributes = array(
 		'id' => array(T::Integer, false, 'auto_increment'),

@@ -11,5 +11,17 @@ require_once 'model/entity/fiscaat/CiviBestelling.class.php';
 class CiviBestellingOverzichtView extends DataTable {
 	public function __construct($uid) {
 		parent::__construct(CiviBestelling::class, '/fiscaat/bestellingen/' . $uid, "Overzicht voor " . ProfielModel::getNaam($uid, 'volledig'));
+
+		$this->addColumn('inhoud');
+		$this->addColumn('totaal', null, null, 'prijs_render');
+	}
+
+	public function getJavascript() {
+		return /** @lang JavaScript */
+			parent::getJavascript() . <<<JS
+function prijs_render(data) {
+	return "&euro; " + (data/100).toFixed(2).replace('.', ',');
+}
+JS;
 	}
 }
