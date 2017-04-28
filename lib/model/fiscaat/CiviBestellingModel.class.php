@@ -16,6 +16,7 @@ class CiviBestellingModel extends PersistenceModel {
 		$bestelling = new CiviBestelling();
 		$bestelling->uid = $aanmelding->uid;
 		$bestelling->deleted = false;
+		$bestelling->moment = getDateTime();
 
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = 1 + $aanmelding->aantal_gasten;
@@ -31,6 +32,7 @@ class CiviBestellingModel extends PersistenceModel {
 		$bestelling = new CiviBestelling();
 		$bestelling->uid = $uid;
 		$bestelling->deleted = false;
+		$bestelling->moment = getDateTime();
 
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = -$bedrag;

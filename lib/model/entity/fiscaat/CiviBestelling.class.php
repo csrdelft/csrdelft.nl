@@ -11,6 +11,7 @@ class CiviBestelling extends PersistentEntity {
 	public $uid;
 	public $totaal = 0;
 	public $deleted;
+	public $moment;
 
 	/**
 	 * @var CiviBestellingInhoud[]
@@ -22,7 +23,8 @@ class CiviBestelling extends PersistentEntity {
 		'id' => array(T::Integer, false, 'auto_increment'),
 		'uid' => array(T::UID),
 		'totaal' => array(T::Integer),
-		'deleted' => array(T::Boolean)
+		'deleted' => array(T::Boolean),
+		'moment' => array(T::Timestamp)
 	);
 	protected static $primary_key = array('id');
 }

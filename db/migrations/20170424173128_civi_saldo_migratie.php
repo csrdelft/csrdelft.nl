@@ -10,6 +10,8 @@ use Phinx\Migration\AbstractMigration;
 class CiviSaldoMigratie extends AbstractMigration {
 	public function up() {
 		$this->execute(<<<SQL
+SET NAMES utf8;
+
 CREATE TABLE CiviLog
 (
   id        INT(11) NOT NULL AUTO_INCREMENT,
@@ -47,6 +49,7 @@ CREATE TABLE CiviBestelling
   uid     VARCHAR(4) NOT NULL,
   totaal  INT(11)    NOT NULL,
   deleted TINYINT(1) NOT NULL,
+  moment   TIMESTAMP NOT NULL,
   PRIMARY KEY (id)
 );
 
