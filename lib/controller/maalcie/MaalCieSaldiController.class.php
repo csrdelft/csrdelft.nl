@@ -21,7 +21,6 @@ class MaalCieSaldiController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'upload'		 => 'P_MAAL_SALDI',
 				'sluitboekjaar'	 => 'P_MAAL_SALDI'
 			);
 		}
@@ -39,11 +38,6 @@ class MaalCieSaldiController extends AclController {
 		$this->view = new MaalCieSaldiView();
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
-	}
-
-	public function upload() {
-		$this->beheer();
-		SaldoModel::putMaalcieCsv();
 	}
 
 	public function sluitboekjaar() {
