@@ -4,48 +4,58 @@ use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\Orm\DynamicEntityModel;
 use CsrDelft\Orm\PersistenceModel;
 
+require_once 'model/fiscaat/CiviSaldoModel.class.php';
+require_once 'model/fiscaat/CiviBestellingModel.class.php';
+
 class SaldoModel extends PersistenceModel {
     const ORM = Saldo::class;
     const DIR = 'fiscaat/';
 
     protected static $instance;
 
+	/**
+	 * Flot wil graag een timestamp in milliseconden, php kent timestamps in seconden
+	 *
+	 * @param $moment
+	 * @return false|int
+	 */
+    private function flotTime($moment) {
+		return strtotime($moment) * 1000;
+	}
+
     public function getDataPointsForMaalCie($uid, $timespan) {
-        if (!$this->magGrafiekZien($uid, "maalcie")) {
-            return null;
-        }
+		if (!$this->magGrafiekZien($uid, "maalcie")) {
+			return null;
+		}
+		$model = CiviSaldoModel::instance();
+		$klant = $model->find('uid = ?', array($uid), null, null, 1)->fetch();
+		if (!$klant) {
+			return null;
+		}
 
-        $points = $this->find('uid = ? AND cie = "maalcie" AND moment > (NOW() - INTERVAL ? DAY)', array($uid, $timespan))->fetchAll();
+		$saldo = $klant->saldo;
+		// Teken het huidige saldo
+		$data = array(array($this->flotTime(getDateTime()), round($saldo / 100, 2)));
+		$model = CiviBestellingModel::instance();
+		$bestellingen = $model->find('uid = ? AND deleted = FALSE AND moment>(NOW() - INTERVAL ? DAY)', array($klant->uid, $timespan), null, 'moment DESC');
+		foreach ($bestellingen as $bestelling) {
+			$data[] = array($this->flotTime($bestelling->moment), round($saldo / 100, 2));
+			$saldo += $bestelling->totaal;
+		}
 
-        if (!empty($points)) {
-            //herhaal laatste datapunt om grafiek te tekenen tot aan vandaag
-            $row = clone end($points);
-            $row->moment = getDateTime();
-            array_push($points, $row);
-        } else {
-            // haal de het meest recente saldo op
-            $points[] = $this->find('uid = ? AND cie = "maalcie"', array($uid), null, 'moment', 1)->fetch();
-            if (isset($points[0]->moment)) {
-                $points[0]->moment = getDateTime();
-            }
-        }
+		if (!empty($data)) {
+			// herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan
+			$row = end($data);
+			$time = strtotime('-' . $timespan . ' days') + 3600;
+			array_push($data, array($time * 1000, $row[1]));
+		}
 
-        if (!empty($points)) {
-            // herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan
-            $row = reset($points);
-            $time = strtotime('-' . $timespan . ' days');
-            $saldo = new Saldo();
-            $saldo->saldo = $row->saldo;
-            $saldo->moment = getDateTime($time + 3600);
-            array_unshift($points, $saldo);
-        }
-
-        return array(
-            "label" => "MaalCie",
-            "data" => $points,
-            "threshold" => array("below" => 0, "color" => "red"),
-            "lines" => array("steps" => true)
-        );
+		return array(
+			"label" => "MaalCie",
+			"data" => array_reverse($data), // Keer de lijst om, flot laat anders veranderingen in de data 1-off zien
+			"threshold" => array("below" => 0, "color" => "red"),
+			"lines" => array("steps" => true)
+		);
     }
 
     public function getDataPointsForSocCie($uid, $timespan) {
