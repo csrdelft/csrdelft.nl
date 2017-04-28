@@ -36,7 +36,7 @@ class CiviBestellingModel extends PersistenceModel {
 
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = -$bedrag;
-		$inhoud->product_id = 6; // TODO dynamic
+		$inhoud->product_id = 6; // TODO dynamic, is cent
 
 		$bestelling->inhoud[] = $inhoud;
 		$bestelling->totaal = CiviProductModel::instance()->getProduct($inhoud->product_id)->prijs * -$bedrag;

@@ -14,6 +14,8 @@ class CiviBestellingOverzichtView extends DataTable {
 
 		$this->addColumn('inhoud');
 		$this->addColumn('totaal', null, null, 'prijs_render');
+
+		$this->setOrder(array('moment' => 'desc'));
 	}
 
 	public function getJavascript() {
