@@ -19,7 +19,8 @@
 					<option value="/maaltijden/abonnementenbeheer">Abonnementen</option>
 				</optgroup>
 				<optgroup label="Fiscaat">
-					<option value="/maaltijden/fiscaat/producten">Productbeheer</option>
+					<option value="/fiscaat/producten">Productbeheer</option>
+					<option value="/fiscaat/saldo">Saldobeheer</option>
 					<option value="/maaltijden/fiscaat/onverwerkt">Onverwerkt</option>
 					<option value="/maaltijden/maalciesaldi">Saldi</option>
 				</optgroup>
