@@ -21,7 +21,7 @@ class BeheerCiviSaldoView extends DataTable {
 		$this->searchColumn('naam');
 
 		$this->addKnop(new DataTableKnop('== 0', $this->dataTableId, '/fiscaat/saldo/registreren', 'post', 'Registreren', 'Lid registreren', 'toevoegen'));
-		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/saldo/verwijderen', 'post', 'Verwijderen', 'Saldo van lid verwijderen', 'verwijderen', 'confirm'));
+		$this->addKnop(new DataTableKnop('>= 1', $this->dataTableId, '/fiscaat/saldo/verwijderen', 'post', 'Verwijderen', 'Saldo van lid verwijderen', 'verwijderen', 'confirm'));
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/saldo/inleggen', 'post', 'Inleggen', 'Saldo van lid ophogen', 'coins_add'));
 	}
 

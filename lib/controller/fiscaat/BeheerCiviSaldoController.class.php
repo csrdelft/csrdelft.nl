@@ -85,11 +85,18 @@ class BeheerCiviSaldoController extends AclController {
 	public function POST_verwijderen() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 
-		$civisaldo = $this->model->retrieveByUUID($selection[0]);
+		$removed = array();
+		foreach($selection as $uuid) {
+			$civisaldo = $this->model->retrieveByUUID($uuid);
 
-		if ($civisaldo) {
-			$this->model->delete($civisaldo);
-			$this->view = new RemoveRowsResponse(array($civisaldo));
+			if ($civisaldo) {
+				$this->model->delete($civisaldo);
+				$removed[] = $civisaldo;
+			}
+		}
+
+		if (!empty($removed)) {
+			$this->view = new RemoveRowsResponse($removed);
 			return;
 		}
 
