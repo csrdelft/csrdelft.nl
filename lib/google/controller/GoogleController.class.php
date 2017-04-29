@@ -1,6 +1,6 @@
 <?php
 
-require_once 'view/GoogleCallbackView.class.php';
+require_once 'google/view/GoogleCallbackView.class.php';
 
 class GoogleController extends AclController
 {

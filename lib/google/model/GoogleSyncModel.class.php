@@ -13,7 +13,7 @@ require_once 'configuratie.include.php';
  * algemeen, interactie: https://developers.google.com/google-apps/contacts/v3/
  * alle referentie https://developers.google.com/google-apps/contacts/v3/reference
  */
-class GoogleSync {
+class GoogleSyncModel {
 
 	private $groupname = 'C.S.R.-import';
     /**
@@ -36,7 +36,7 @@ class GoogleSync {
 
     public static function instance() {
 		if (!isset(self::$instance)) {
-			self::$instance = new GoogleSync();
+			self::$instance = new GoogleSyncModel();
 		}
 		return self::$instance;
 	}

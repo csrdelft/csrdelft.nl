@@ -180,9 +180,9 @@ class ProfielController extends AclController {
 
 	public function addToGoogleContacts(Profiel $profiel) {
 		try {
-			require_once 'googlesync.class.php';
-			GoogleSync::doRequestToken(CSR_ROOT . "/profiel/" . $profiel->uid . "/addToGoogleContacts");
-			$gSync = GoogleSync::instance();
+			require_once 'google/model/GoogleSyncModel.class.php';
+			GoogleSyncModel::doRequestToken(CSR_ROOT . "/profiel/" . $profiel->uid . "/addToGoogleContacts");
+			$gSync = GoogleSyncModel::instance();
 			$msg = $gSync->syncLid($profiel);
 			setMelding('Opgeslagen in Google Contacts: ' . $msg, 1);
 		} catch (Exception $e) {
