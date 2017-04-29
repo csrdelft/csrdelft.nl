@@ -154,8 +154,8 @@ FROM saldolog WHERE (uid, moment) IN (
 				$gebruiker['uid'], $saldo));
 		}
 
-		// Zet alle maaltijden op verwerkt
-		$this->execute("UPDATE mlt_maaltijden SET verwerkt = TRUE");
+		// Zet alle (verleden) maaltijden op verwerkt
+		$this->execute("UPDATE mlt_maaltijden SET verwerkt = TRUE WHERE verwijderd = FALSE AND gesloten = FALSE");
 	}
 
 	public function down() {
