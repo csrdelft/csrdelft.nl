@@ -22,7 +22,7 @@
 					<option value="/fiscaat/producten">Productbeheer</option>
 					<option value="/fiscaat/saldo">Saldobeheer</option>
 					<option value="/maaltijden/fiscaat/onverwerkt">Onverwerkt</option>
-					<option value="/maaltijden/maalciesaldi">Saldi</option>
+					<option value="/maaltijden/boekjaar">Boekjaar sluiten</option>
 				</optgroup>
 				<optgroup label="Corvee">
 					<option value="/corvee/beheer">Beheer</option>
