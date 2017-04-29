@@ -155,6 +155,21 @@ class DataTable implements View, FormElement {
 		}
 	}
 
+	/**
+	 * Gebruik deze functie om kolommen te verwijderen, doe dit als eerst.
+	 *
+	 * @see columnPosition geeft een andere uitvoer na deze functie.
+	 *
+	 * Gebruik de veiligere @see hideColumn als je de inhoud van een kolom nog wil kunnen opvragen.
+	 *
+	 * @param $name
+	 */
+	protected function deleteColumn($name) {
+		if (isset($this->columns[$name])) {
+			array_splice($this->columns, $this->columnPosition($name), 1);
+		}
+	}
+
 	protected function hideColumn($name, $hide = true) {
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['visible'] = !$hide;

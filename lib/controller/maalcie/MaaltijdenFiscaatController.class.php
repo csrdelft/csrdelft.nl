@@ -24,11 +24,12 @@ class MaaltijdenFiscaatController extends AclController {
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'onverwerkt' => 'P_MAAL_MOD',
-				'inleggen' => 'P_MAAL_MOD'
+				'overzicht' => 'P_MAAL_MOD'
 			);
 		} else {
 			$this->acl = array(
-				'verwerk' => 'P_MAAL_MOD'
+				'verwerk' => 'P_MAAL_MOD',
+				'overzicht' => 'P_MAAL_MOD'
 			);
 		}
 	}
@@ -43,6 +44,16 @@ class MaaltijdenFiscaatController extends AclController {
 			$mid = (int)$this->getParam(3);
 		}
 		parent::performAction(array($mid));
+	}
+
+	public function GET_overzicht() {
+		$body = new BeheerMaaltijdenView(new FiscaatMaaltijdenOverzichtTable(), 'Overzicht verwerkte maaltijden');
+		$this->view = new CsrLayoutPage($body);
+	}
+
+	public function POST_overzicht() {
+		$data = MaaltijdenModel::instance()->find('verwerkt = true');
+		$this->view = new FiscaatMaaltijdenOverzichtResponse($data);
 	}
 
 	public function GET_onverwerkt() {
