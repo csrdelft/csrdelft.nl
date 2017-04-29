@@ -4,7 +4,7 @@ class BeheerCiviProductenView extends DataTable {
 	public function __construct() {
 		parent::__construct(CiviProduct::class, '/fiscaat/producten', 'Productenbeheer');
 
-		$this->addColumn('prijs');
+		$this->addColumn('prijs', null, null, 'prijs_render', null, 'num-fmt');
 		$this->addColumn('beheer', 'prijs', null, 'truefalse');
 		$this->hideColumn('prioriteit');
 
@@ -21,6 +21,10 @@ class BeheerCiviProductenView extends DataTable {
 		return parent::getJavascript() . <<<JS
 function truefalse (data) {
     return '<span class="ico '+(data?'tick':'cross')+'"></span>';
+}
+
+function prijs_render(data) {
+	return "€" + (data/100).toFixed(2);
 }
 JS;
 	}

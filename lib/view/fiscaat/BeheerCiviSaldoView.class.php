@@ -13,10 +13,8 @@ class BeheerCiviSaldoView extends DataTable {
 
 		$this->addColumn('naam', 'saldo');
 		$this->addColumn('lichting', 'saldo');
-		$this->addColumn('saldo', null, null, null, null, 'num');
-		$this->hideColumn('saldo');
-		$this->addColumn('saldo_', 'laatst_veranderd', null, 'prijs_render', 'saldo');
-		$this->setOrder(array('saldo_' => 'asc'));
+		$this->addColumn('saldo', null, null, 'prijs_render', 'saldo', null, 'num-fmt');
+		$this->setOrder(array('saldo' => 'asc'));
 
 		$this->searchColumn('naam');
 
@@ -32,8 +30,8 @@ class BeheerCiviSaldoView extends DataTable {
 	public function getJavascript() {
 		return /** @lang JavaScript */
 			parent::getJavascript() . <<<JS
-function prijs_render(data, type, row) {
-	return "&euro; " + (row.saldo/100).toFixed(2).replace('.', ',');
+function prijs_render(data) {
+	return "€" + (data/100).toFixed(2);
 }
 JS;
 	}

@@ -13,7 +13,7 @@ class CiviBestellingOverzichtView extends DataTable {
 		parent::__construct(CiviBestelling::class, '/fiscaat/bestellingen/' . $uid, "Overzicht voor " . ProfielModel::getNaam($uid, 'volledig'));
 
 		$this->addColumn('inhoud');
-		$this->addColumn('totaal', null, null, 'prijs_render');
+		$this->addColumn('totaal', null, null, 'prijs_render', null, 'num-fmt');
 
 		$this->setOrder(array('moment' => 'desc'));
 	}
@@ -22,7 +22,7 @@ class CiviBestellingOverzichtView extends DataTable {
 		return /** @lang JavaScript */
 			parent::getJavascript() . <<<JS
 function prijs_render(data) {
-	return "&euro; " + (data/100).toFixed(2).replace('.', ',');
+	return "€" + (data/100).toFixed(2);
 }
 JS;
 	}

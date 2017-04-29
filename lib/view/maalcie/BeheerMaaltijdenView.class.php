@@ -37,7 +37,7 @@ class BeheerMaaltijdenTable extends DataTable {
 		$this->addColumn('aanmeld_filter', null, null, 'aanmeldFilter_render');
 		$this->addColumn('gesloten', null, null, 'gesloten_render');
 		$this->addColumn('aanmeldingen', 'aanmeld_limiet', null, 'aanmeldingen_render');
-		$this->addColumn('prijs', null, null, 'prijs_render');
+		$this->addColumn('prijs', null, null, 'prijs_render', null, 'num-fmt');
 
 		$this->setOrder(array('datum' => 'asc'));
 
@@ -90,8 +90,7 @@ function aanmeldingen_render(data, type, row) {
 }
 
 function prijs_render(data) {
-	
-	return "&euro; " + (data/100).toFixed(2).replace('.', ',');
+	return "€" + (data/100).toFixed(2);
 }
 JS;
 
@@ -115,7 +114,7 @@ class PrullenbakMaaltijdenTable extends DataTable {
 		$this->addColumn('aanmeld_filter', null, null, 'aanmeldFilter_render');
 		$this->addColumn('gesloten', null, null, 'gesloten_render');
 		$this->addColumn('aanmeldingen', 'aanmeld_limiet', null, 'aanmeldingen_render');
-		$this->addColumn('prijs', null, null, 'prijs_render');
+		$this->addColumn('prijs', null, null, 'prijs_render', null, 'num-fmt');
 
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/herstel', '', 'Herstellen', 'Deze maaltijd herstellen', 'arrow_undo'));
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/corvee/beheer/maaltijd/:maaltijd_id', '', 'Corvee bewerken', 'Gekoppelde corveetaken bewerken', 'chart_organisation', 'url'));
@@ -141,8 +140,7 @@ function aanmeldingen_render(data, type, row) {
 }
 
 function prijs_render(data) {
-	
-	return "&euro; " + (data/100).toFixed(2).replace('.', ',');
+	return "€" + (data/100).toFixed(2);
 }
 JS;
 
@@ -156,14 +154,14 @@ JS;
 class ArchiefMaaltijdenTable extends DataTable {
 	public function __construct() {
 		parent::__construct(ArchiefMaaltijdModel::ORM, '/maaltijden/beheer/archief');
-		$this->addColumn('prijs', null, null, 'prijs_render');
+		$this->addColumn('prijs', null, null, 'prijs_render', null, 'num-fmt');
 	}
 
 	public function getJavascript() {
 		return /** @lang JavaScript */
 			parent::getJavascript() . <<<JS
 function prijs_render(data) {
-	return "&euro; " + (data/100).toFixed(2).replace('.', ',');
+	return "€" + (data/100).toFixed(2);
 }
 JS;
 
@@ -184,7 +182,7 @@ class OnverwerkteMaaltijdenTable extends DataTable {
 
 		$this->addColumn('repetitie_naam', 'titel');
 		$this->addColumn('aanmeldingen', 'aanmeld_limiet', null, 'aanmeldingen_render');
-		$this->addColumn('prijs', null, null, 'prijs_render');
+		$this->addColumn('prijs', null, null, 'prijs_render', null, 'num-fmt');
 
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/fiscaat/verwerk', '', 'Verwerken', 'Maaltijd verwerken', 'cog_go'));
 
@@ -207,8 +205,7 @@ function aanmeldingen_render(data, type, row) {
 }
 
 function prijs_render(data) {
-	
-	return "&euro; " + (data/100).toFixed(2).replace('.', ',');
+	return "€" + (data/100).toFixed(2);
 }
 JS;
 
@@ -242,7 +239,7 @@ class FiscaatMaaltijdenOverzichtTable extends DataTable {
 		return /** @lang JavaScript */
 			parent::getJavascript() . <<<JS
 function prijs_render(data) {
-	return "€" + (data/100).toFixed(2).replace(',', ',');
+	return "€" + (data/100).toFixed(2);
 }
 JS;
 
