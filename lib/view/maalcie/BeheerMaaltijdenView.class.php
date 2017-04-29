@@ -71,10 +71,7 @@ class BeheerMaaltijdenTable extends DataTable {
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/corvee/beheer/maaltijd/:maaltijd_id', '', 'Corvee bewerken', 'Gekoppelde corveetaken bewerken', 'chart_organisation', 'url'));
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/verwijder', '', 'Verwijderen', 'Maaltijd verwijderen', 'cross', 'confirm'));
 
-		$lijst = new DataTableKnop('== 1', $this->dataTableId, '', '', 'Lijst', 'Maaltijdlijst bekijken', '', 'defaultCollection');
-		$lijst->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer/fiscaat/:maaltijd_id', '', 'Fiscale Maaltijdlijst', 'Fiscale maaltijdlijst bekijken', 'money_euro', 'popup'));
-		$lijst->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/lijst/:maaltijd_id', '', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal', 'popup'));
-		$this->addKnop($lijst);
+		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/lijst/:maaltijd_id', '', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal', 'popup'));
 	}
 
 	public function getJavascript() {
@@ -123,10 +120,7 @@ class PrullenbakMaaltijdenTable extends DataTable {
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/herstel', '', 'Herstellen', 'Deze maaltijd herstellen', 'arrow_undo'));
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/corvee/beheer/maaltijd/:maaltijd_id', '', 'Corvee bewerken', 'Gekoppelde corveetaken bewerken', 'chart_organisation', 'url'));
 
-		$lijst = new DataTableKnop('== 1', $this->dataTableId, '', '', 'Lijst', 'Maaltijdlijst bekijken', '', 'defaultCollection');
-		$lijst->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer/fiscaat/:maaltijd_id', '', 'Fiscale Maaltijdlijst', 'Fiscale maaltijdlijst bekijken', 'money_euro', 'popup'));
-		$lijst->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/lijst/:maaltijd_id', '', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal', 'popup'));
-		$this->addKnop($lijst);
+		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/lijst/:maaltijd_id', '', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal', 'popup'));
 
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/verwijder', '', 'Verwijderen', 'Maaltijd definitief verwijderen', 'cross', 'confirm'));
 	}

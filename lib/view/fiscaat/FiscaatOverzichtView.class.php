@@ -10,6 +10,10 @@ class FiscaatOverzichtView extends SmartyTemplateView {
 		$this->smarty->display('fiscaat/overzicht.tpl');
 	}
 
+	public function getTitel() {
+		return "Civisaldo overzicht";
+	}
+
 	public function getBreadcrumbs() {
 		return '<a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » Overzicht';
 	}

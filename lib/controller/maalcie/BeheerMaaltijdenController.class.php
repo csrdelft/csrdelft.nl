@@ -29,7 +29,6 @@ class BeheerMaaltijdenController extends AclController {
 				//'leegmaken' => 'P_MAAL_MOD',
 				'archief'	 => 'P_MAAL_MOD',
 				'onverwerkt' => 'P_MAAL_MOD',
-				'fiscaat'	 => 'P_MAAL_MOD'
 			);
 		} else {
 			$this->acl = array(
@@ -123,13 +122,6 @@ class BeheerMaaltijdenController extends AclController {
 			$this->view->addCompressedResources('maalcie');
 			$this->view->addCompressedResources('datatable');
 		}
-	}
-
-	public function fiscaat($mid) {
-		$maaltijd = $this->model->getMaaltijd($mid, true);
-		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
-		require_once 'view/maalcie/MaaltijdLijstView.class.php';
-		$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, null, true);
 	}
 
 	public function toggle($mid) {

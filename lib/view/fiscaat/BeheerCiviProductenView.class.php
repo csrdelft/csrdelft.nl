@@ -6,6 +6,7 @@ class BeheerCiviProductenView extends DataTable {
 
 		$this->addColumn('prijs');
 		$this->addColumn('beheer', 'prijs', null, 'truefalse');
+		$this->hideColumn('prioriteit');
 
 		$this->addKnop(new DataTableKnop('== 0', $this->dataTableId, '/fiscaat/producten/toevoegen', 'post', 'Nieuw', 'Nieuw product toevoegen', 'add'));
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/producten/bewerken', 'post', 'Bewerken', 'Product bewerken', 'pencil'));
