@@ -18,7 +18,8 @@ class BeheerCiviProductenView extends DataTable {
 	}
 
 	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
+		return /** @lang JavaScript */
+			parent::getJavascript() . <<<JS
 function truefalse (data) {
     return '<span class="ico '+(data?'tick':'cross')+'"></span>';
 }
