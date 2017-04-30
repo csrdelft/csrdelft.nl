@@ -653,7 +653,7 @@ class ForumController extends Controller {
 					continue;
 				}
 				$lidnaam = $profiel->getNaam('civitas');
-				require_once 'model/entity/Mail.class.php';
+				require_once 'algemeen/model/entity/Mail.class.php';
 				$bericht =
 					"Geachte " . $lidnaam . ",\n\nEr is een nieuwe reactie geplaatst door " . $auteur . " in een draad dat u volgt: " .
                     "[url=" . CSR_ROOT . "/forum/reactie/" . $post->post_id . "#" . $post->post_id . "]" . $draad->titel . "[/url]" .

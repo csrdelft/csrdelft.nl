@@ -4,7 +4,7 @@ use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;
 
-require_once 'model/entity/Mail.class.php';
+require_once 'algemeen/model/entity/Mail.class.php';
 
 /**
  * ProfielModel.class.php

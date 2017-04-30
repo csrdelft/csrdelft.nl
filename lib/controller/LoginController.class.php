@@ -210,7 +210,7 @@ class LoginController extends AclController {
 				$this->model->login($account->uid, $pass_plain, false);
 				// stuur bevestigingsmail
 				$lidnaam = $account->getProfiel()->getNaam('volledig');
-				require_once 'model/entity/Mail.class.php';
+				require_once 'algemeen/model/entity/Mail.class.php';
 				$bericht = "Geachte " . $lidnaam .
 						",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
 				$mail = new Mail(array($account->email => $lidnaam), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
@@ -236,7 +236,7 @@ class LoginController extends AclController {
 					// Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
 					// Dit zorgt voor een • in het 'aan' veld van de mail, sommige spamfilters gaan hiervan over hun nek
 					$lidnaam = $account->getProfiel()->getNaam('volledig', true);
-					require_once 'model/entity/Mail.class.php';
+					require_once 'algemeen/model/entity/Mail.class.php';
 					$bericht = "Geachte " . $civitasnaam .
 							",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1] .
 							".\n\n[url=" . CSR_ROOT . "/verify/" . $token[0] .
