@@ -2,6 +2,8 @@
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
+require_once 'log/model/entity/LogEntry.class.php';
+
 /**
  * LogModel.class.php
  *
