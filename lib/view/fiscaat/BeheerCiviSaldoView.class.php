@@ -75,6 +75,7 @@ class BeheerSaldoResponse extends DataTableResponse {
 	public function getJson($entity) {
 		return parent::getJson(array(
 			'UUID' => $entity->getUUID(),
+			'id' => $entity->id,
 			'uid' => $entity->uid,
 			'naam' => ProfielModel::getNaam($entity->uid, 'volledig'),
 			'lichting' => substr($entity->uid, 0, 2),

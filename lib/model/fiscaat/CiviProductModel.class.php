@@ -6,7 +6,13 @@ use CsrDelft\Orm\PersistenceModel;
 
 require_once 'model/entity/fiscaat/CiviProduct.class.php';
 require_once 'model/fiscaat/CiviPrijsModel.class.php';
+require_once 'model/fiscaat/CiviCategorieModel.class.php';
 
+/**
+ * Class CiviProductModel
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ */
 class CiviProductModel extends PersistenceModel {
 	const ORM = CiviProduct::class;
 	const DIR = 'fiscaat/';

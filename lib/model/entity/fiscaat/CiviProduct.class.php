@@ -9,6 +9,7 @@ class CiviProduct extends PersistentEntity {
 	public $beschrijving;
 	public $prioriteit;
 	public $beheer;
+	public $categorie_id;
 
 	public $prijs;
 
@@ -22,7 +23,8 @@ class CiviProduct extends PersistentEntity {
 		'status' => array(T::Integer),
 		'beschrijving' => array(T::Text),
 		'prioriteit' => array(T::Integer),
-		'beheer' => array(T::Boolean)
+		'beheer' => array(T::Boolean),
+		'categorie_id' => array(T::Integer)
 	);
 	protected static $primary_key = array('id');
 }

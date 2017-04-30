@@ -34,6 +34,12 @@ JS;
 class CiviProductForm extends ModalForm {
 	function __construct(CiviProduct $model, $target) {
 		parent::__construct($model, '/fiscaat/producten/' . $target, false, true);
+
+		$categorie = CiviCategorieModel::instance()->findSparse(array('type'), 'id = ?', array($model->categorie_id))->fetch();
+		if ($categorie == false) {
+			$categorie = new CiviCategorie();
+		}
+
 		$fields['id'] = new IntField('id', $model->id, 'id');
 		$fields['id']->hidden = true;
 		$fields[] = new RequiredIntField('status', $model->status, 'Status');
@@ -41,6 +47,7 @@ class CiviProductForm extends ModalForm {
 		$fields[] = new RequiredIntField('prioriteit', $model->prioriteit, 'Prioriteit');
 		$fields[] = new RequiredJaNeeField('beheer', $model->beheer, 'Beheer');
 		$fields[] = new RequiredBedragField('prijs', $model->prijs, 'Prijs', '€', 0, 50, 0.50);
+		$fields[] = new RequiredEntityField('categorie', 'type', 'Categorie', CiviCategorieModel::instance(), '/fiscaat/categorien/suggesties?q=', $categorie);
 		$fields['btn'] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);

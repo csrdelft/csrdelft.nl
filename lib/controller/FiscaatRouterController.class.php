@@ -8,7 +8,8 @@ class FiscaatRouterController extends AclController {
 			'overzicht' => 'P_MAAL_MOD',
 			'producten' => 'P_MAAL_MOD',
 			'saldo' => 'P_MAAL_MOD',
-			'bestellingen' => 'P_MAAL_MOD'
+			'bestellingen' => 'P_MAAL_MOD',
+			'categorien' => 'P_MAAL_MOD'
 		);
 	}
 
@@ -42,5 +43,10 @@ class FiscaatRouterController extends AclController {
 	public function bestellingen() {
 		require_once 'controller/fiscaat/BeheerCiviBestellingController.class.php';
 		return new BeheerCiviBestellingController($this->model);
+	}
+
+	public function categorien() {
+		require_once 'controller/fiscaat/BeheerCiviCategorienController.class.php';
+		return new BeheerCiviCategorienController($this->model);
 	}
 }
