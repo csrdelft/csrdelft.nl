@@ -79,8 +79,8 @@ class ProfielController extends AclController {
 				$this->action = $this->getParam(2);
 			}
 			if (startsWith($this->action, 'memory')) {
-				require_once 'model/LedenMemoryScoresModel.class.php';
-				require_once 'view/LedenMemoryView.class.php';
+				require_once 'ledenmemory/model/LedenMemoryScoresModel.class.php';
+				require_once 'ledenmemory/view/LedenMemoryView.class.php';
 			}
 			return parent::performAction($this->getParams(3));
 		}

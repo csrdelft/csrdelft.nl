@@ -1,6 +1,6 @@
 <?php
 
-require_once 'controller/framework/Controller.abstract.php';
+require_once 'algemeen/controller/Controller.abstract.php';
 require_once 'bibliotheek/model/BiebBoek.class.php';
 require_once 'bibliotheek/view/BibliotheekView.class.php';
 

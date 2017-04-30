@@ -1,5 +1,10 @@
 <?php
 
+require_once 'ledenmemory/view/LedenMemoryScoreForm.php';
+require_once 'ledenmemory/view/LedenMemoryScoreResponse.php';
+require_once 'ledenmemory/view/LedenMemoryScoreTable.php';
+require_once 'ledenmemory/view/LedenMemoryZijbalkView.php';
+
 /**
  * LedenMemoryView.class.php
  *
@@ -156,128 +161,6 @@ HTML;
 			</body>
 		</html>
 		<?php
-	}
-
-}
-
-class LedenMemoryScoreForm extends Formulier {
-
-	public function __construct(LedenMemoryScore $score) {
-		parent::__construct($score, '/leden/memoryscore');
-
-		$fields[] = new RequiredIntField('tijd', $score->tijd, null, 1);
-		$fields[] = new RequiredIntField('beurten', $score->beurten, null, 1);
-		$fields[] = new RequiredIntField('goed', $score->goed, null, 1);
-		$fields[] = new TextField('groep', $score->groep, null);
-		$fields[] = new RequiredIntField('eerlijk', $score->eerlijk, null, 0, 1);
-
-		$this->addFields($fields);
-	}
-
-}
-
-class LedenMemoryScoreTable extends DataTable {
-
-	public function __construct(AbstractGroep $groep = null, $titel) {
-		parent::__construct(LedenMemoryScoresModel::ORM, '/leden/memoryscores/' . ($groep ? $groep->getUUID() : null), 'Topscores Ledenmemory' . $titel, 'groep');
-		$this->settings['tableTools']['aButtons'] = array();
-		$this->settings['dom'] = 'rtpli';
-
-		$this->hideColumn('goed');
-		$this->hideColumn('eerlijk');
-		$this->hideColumn('wanneer');
-
-		$this->setColumnTitle('door_uid', 'Naam');
-	}
-
-}
-
-class LedenMemoryScoreResponse extends DataTableResponse {
-
-	private $titles = array();
-
-	public function getJson($score) {
-		$array = $score->jsonSerialize();
-
-		$minutes = floor($score->tijd / 60);
-		$seconds = $score->tijd % 60;
-		$array['tijd'] = ($minutes < 10 ? '0' : '') . $minutes . ':' . ($seconds < 10 ? '0' : '') . $seconds;
-
-		$array['door_uid'] = ProfielModel::getLink($score->door_uid, 'civitas');
-
-		if (!isset($this->titles[$score->groep])) {
-			$this->titles[$score->groep] = '';
-
-			// Cache the title of the group
-			$parts = explode('@', $score->groep);
-			if (isset($parts[0], $parts[1])) {
-				switch ($parts[1]) {
-
-					case 'verticale.csrdelft.nl':
-						$groep = VerticalenModel::instance()->retrieveByUUID($score->groep);
-						$this->titles[$score->groep] = 'Verticale ' . $groep->naam;
-						break;
-
-					case 'lichting.csrdelft.nl':
-						$this->titles[$score->groep] = 'Lichting ' . $parts[0];
-						break;
-				}
-			}
-		}
-		$array['groep'] = $this->titles[$score->groep];
-
-		return parent::getJson($array);
-	}
-
-}
-
-class LedenMemoryZijbalkView implements View {
-
-	private $scores;
-	private $titel;
-
-	public function __construct($scores, $titel) {
-		$this->scores = $scores;
-		$this->titel = $titel;
-	}
-
-	function getTitel() {
-		return 'Topscores ' . $this->titel;
-	}
-
-	public function getBreadcrumbs() {
-		return null;
-	}
-
-	function getModel() {
-		return $this->scores;
-	}
-
-	function view() {
-		echo '<div id="zijbalk_ledenmemory_topscores"><div class="zijbalk-kopje"><a href="/forum/onderwerp/8017">';
-		echo $this->getTitel();
-		echo '</a></div>';
-		$first = true;
-		foreach ($this->getModel() as $score) {
-			echo '<div class="item">';
-			echo sprintf('%02d', floor($score->tijd / 60 % 60)); //minuten
-			echo ':';
-			echo sprintf('%02d', floor($score->tijd % 60)); //seconden
-			echo ' ';
-			if ($first) {
-				echo '<span class="cursief">';
-			}
-			echo ProfielModel::getLink($score->door_uid, 'civitas');
-			echo ' (';
-			echo $score->beurten;
-			echo ')';
-			if ($first) {
-				echo '</span>';
-			}
-			echo '</div>';
-			$first = false;
-		}
-		echo '</div>'; //einde wrapperdiv
 	}
 
 }

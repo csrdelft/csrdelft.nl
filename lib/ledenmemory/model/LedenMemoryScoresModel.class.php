@@ -2,6 +2,8 @@
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
+require_once 'ledenmemory/model/entity/LedenMemoryScore.class.php';
+
 /**
  * LedenMemoryScoresModel.class.php
  * 

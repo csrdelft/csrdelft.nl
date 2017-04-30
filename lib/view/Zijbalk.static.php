@@ -65,8 +65,8 @@ abstract class Zijbalk {
 		}
 		// Ledenmemory topscores
 		if (LoginModel::mag('P_LEDEN_READ') AND LidInstellingen::get('zijbalk', 'ledenmemory_topscores') > 0) {
-			require_once 'model/LedenMemoryScoresModel.class.php';
-			require_once 'view/LedenMemoryView.class.php';
+			require_once 'ledenmemory/model/LedenMemoryScoresModel.class.php';
+			require_once 'ledenmemory/view/LedenMemoryView.class.php';
 			$lidjaar = LichtingenModel::getJongsteLidjaar();
 			$lichting = LichtingenModel::get($lidjaar);
 			$scores = LedenMemoryScoresModel::instance()->getGroepTopScores($lichting, (int) LidInstellingen::get('zijbalk', 'ledenmemory_topscores'));

@@ -1198,8 +1198,8 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	}
 
 	function bb_ledenmemoryscores($arguments = array()) {
-		require_once 'model/LedenMemoryScoresModel.class.php';
-		require_once 'view/LedenMemoryView.class.php';
+		require_once 'ledenmemory/model/LedenMemoryScoresModel.class.php';
+		require_once 'ledenmemory/view/LedenMemoryView.class.php';
 		LedenMemoryScoresModel::instance();
 		$groep = null;
 		$titel = null;

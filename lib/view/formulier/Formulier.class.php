@@ -3,8 +3,8 @@
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
-require_once 'view/View.interface.php';
-require_once 'view/Validator.interface.php';
+require_once 'algemeen/view/View.interface.php';
+require_once 'algemeen/view/Validator.interface.php';
 require_once 'view/formulier/elementen/FormElement.interface.php';
 require_once 'view/formulier/elementen/HtmlComment.class.php';
 require_once 'view/formulier/elementen/HtmlBbComment.class.php';

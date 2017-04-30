@@ -3,8 +3,7 @@
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 
-require_once 'model/Paging.interface.php';
-
+require_once 'forum/model/Paging.interface.php';
 require_once 'forum/model/ForumDelenModel.class.php';
 require_once 'forum/model/ForumDradenReagerenModel.class.php';
 require_once 'forum/model/ForumDradenGelezenModel.class.php';

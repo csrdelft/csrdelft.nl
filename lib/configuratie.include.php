@@ -130,7 +130,7 @@ require_once 'forum/model/ForumModel.class.php';
 require_once 'model/LogModel.class.php';
 
 // View
-require_once 'view/JsonResponse.class.php';
+require_once 'algemeen/view/JsonResponse.class.php';
 require_once 'view/SmartyTemplateView.abstract.php';
 require_once 'view/formulier/DataTable.class.php';
 require_once 'view/CsrBB.class.php';
@@ -139,7 +139,7 @@ require_once 'view/CsrLayoutOweePage.class.php';
 require_once 'icon.class.php';
 
 // Controller
-require_once 'controller/framework/AclController.abstract.php';
+require_once 'algemeen/controller/AclController.abstract.php';
 
 $cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 if ($cred === false) {
