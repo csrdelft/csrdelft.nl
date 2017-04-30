@@ -1,6 +1,6 @@
 <?php
 
-require_once 'view/InstellingenBeheerView.class.php';
+require_once 'instellingenbeheer/view/InstellingenBeheerView.class.php';
 
 /**
  * InstellingenBeheerController.class.php

@@ -3,7 +3,7 @@
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\Orm\Persistence\Database;
 
-require_once 'model/InstellingenModel.class.php';
+require_once 'instellingenbeheer/model/InstellingenModel.class.php';
 
 /**
  * LidInstellingenModel.class.php

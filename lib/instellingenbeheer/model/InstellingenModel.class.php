@@ -1,6 +1,8 @@
 <?php
 use CsrDelft\Orm\CachedPersistenceModel;
 
+require_once 'instellingenbeheer/model/entity/Instelling.class.php';
+
 /**
  * InstellingenModel.class.php
  * 
