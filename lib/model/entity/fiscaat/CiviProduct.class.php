@@ -3,6 +3,13 @@
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
+/**
+ * Class CiviProduct
+ *
+ * Bevat een @see CiviPrijs
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ */
 class CiviProduct extends PersistentEntity {
 	public $id;
 	public $status;
@@ -13,7 +20,7 @@ class CiviProduct extends PersistentEntity {
 
 	public $prijs;
 
-	public function getBeschrijving() {
+	public function getBeschrijvingFormatted() {
 		return sprintf("%s (€%.2f)", $this->beschrijving, $this->prijs/100);
 	}
 

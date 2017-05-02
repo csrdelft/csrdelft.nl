@@ -3,6 +3,13 @@
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
+/**
+ * Class CiviBestellingInhoud
+ *
+ * Onderdeel van een @see CiviBestelling
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ */
 class CiviBestellingInhoud extends PersistentEntity {
 	public $bestelling_id;
 	public $product_id;

@@ -1,13 +1,19 @@
 <?php
+use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * CiviSaldo.class.php
  *
+ * Bewaart het saldo van een lid, uid is een verwijzing naar account.
+ *
+ * Uid kan ook een niet bestaande uid bevatten voor profielen die niet kunnen inloggen en alleen via SocCie kunnen
+ * afrekenen.
+ *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 07/04/2017
  */
-class CiviSaldo extends \CsrDelft\Orm\Entity\PersistentEntity {
+class CiviSaldo extends PersistentEntity {
 	public $id;
 	public $uid;
 	public $naam;

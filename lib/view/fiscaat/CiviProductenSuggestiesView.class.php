@@ -14,7 +14,7 @@ class CiviProductenSuggestiesView extends JsonLijstResponse {
 	public function getJson($entity) {
 		return json_encode(array(
 			'url' => '/fiscaat/producten',
-			'value' => $entity->getBeschrijving(),
+			'value' => $entity->getBeschrijvingFormatted(),
 			'label' => $entity->id,
 			'id' => $entity->id
 		));

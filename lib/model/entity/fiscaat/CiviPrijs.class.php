@@ -3,6 +3,14 @@
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
+/**
+ * Class CiviPrijs
+ *
+ * Prijs van een @see CiviProduct van en tot zorgen ervoor dat altijd terug te vinden is wat de prijs van een product
+ * was op een bepaald moment.
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ */
 class CiviPrijs extends PersistentEntity {
 	public $van;
 	public $tot;

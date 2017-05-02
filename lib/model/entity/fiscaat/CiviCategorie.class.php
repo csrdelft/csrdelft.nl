@@ -8,6 +8,10 @@ require_once 'model/entity/fiscaat/CiviSaldoCommissieEnum.class.php';
 /**
  * Class CiviCategorie
  *
+ * Een Product kan onderdeel van een categorie zijn. Deze categorie hoort ook bij een commissie.
+ *
+ * Als er veel gebruik gemaakt gaat worden van categorien en commissies moet hier uitgebreid worden.
+ *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class CiviCategorie extends PersistentEntity {

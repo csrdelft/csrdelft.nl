@@ -4,6 +4,8 @@ use CsrDelft\Orm\Entity\PersistentEnum;
 /**
  * CiviSaldoCommissieEnum.class.php
  *
+ * Maak onderscheid tussen verschillende commissies die uit hetzelfde potje geld halen.
+ *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 07/04/2017
  */

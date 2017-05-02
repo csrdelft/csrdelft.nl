@@ -6,6 +6,13 @@ use CsrDelft\Orm\Entity\T;
 require_once 'model/fiscaat/CiviBestellingInhoudModel.class.php';
 require_once 'model/entity/fiscaat/CiviBestelling.class.php';
 
+/**
+ * Class CiviBestelling
+ *
+ * Heeft een of meer @see CiviBestellingInhoud
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ */
 class CiviBestelling extends PersistentEntity {
 	public $id;
 	public $uid;
