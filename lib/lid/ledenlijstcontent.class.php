@@ -4,12 +4,6 @@ require_once 'lid/lidzoeker.class.php';
 /**
  *  C.S.R. Delft | pubcie@csrdelft.nl
  * 
- * LLWeergave, LLLijst, LLKaartje, LLCSV:
- * 		verschillende methode's om dingen in de ledenlijst weer te geven. 
- * 		Als je een nieuwe weergave erbij wilt klussen maak dan een class
- * 		LL<Naam> extends LLWeergave{} aan en voeg die naam toe aan de 
- * 		array private $weergave in LidZoeker.
- * 
  * LedenlijstContent
  * 		Algemene View voor de ledenlijst.
  */
