@@ -187,7 +187,7 @@ ALTER TABLE mlt_maaltijden DROP COLUMN verwerkt;
 ALTER TABLE mlt_repetities DROP FOREIGN KEY FK_mltrep_product;
 ALTER TABLE mlt_repetities DROP COLUMN product_id;
 
-DROP TABLE CiviBestellingInhoud, CiviBestelling, CiviPrijs, CiviProduct, CiviLog, CiviSaldo;
+DROP TABLE CiviBestellingInhoud, CiviBestelling, CiviPrijs, CiviProduct, CiviLog, CiviSaldo, CiviCategorie;
 SQL
 		);
 	}
