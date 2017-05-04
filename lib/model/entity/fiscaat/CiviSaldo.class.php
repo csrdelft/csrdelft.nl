@@ -19,6 +19,7 @@ class CiviSaldo extends PersistentEntity {
 	public $naam;
 	public $saldo;
 	public $laatst_veranderd;
+	public $deleted = false;
 
 	protected static $persistent_attributes = [
 		'id' => array(T::Integer, false, 'auto_increment'),
@@ -26,6 +27,7 @@ class CiviSaldo extends PersistentEntity {
 		'naam' => array(T::Text, true),
 		'saldo' => array(T::Integer),
 		'laatst_veranderd' => array(T::Timestamp),
+		'deleted' => array(T::Boolean),
 	];
 	protected static $table_name = 'CiviSaldo';
 	protected static $primary_key = array('id');

@@ -84,6 +84,7 @@ CREATE TABLE CiviSaldo
   naam TEXT,
   saldo INT(11) NOT NULL,
   laatst_veranderd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  deleted TINYINT(1) NOT NULL,
   PRIMARY KEY (id)
 );
 
