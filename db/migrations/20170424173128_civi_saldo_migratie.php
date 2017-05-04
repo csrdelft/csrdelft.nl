@@ -179,16 +179,23 @@ FROM saldolog WHERE (uid, moment) IN (
 	}
 
 	public function down() {
-		$this->execute(<<<SQL
--- Opschonen vorige keer
-ALTER TABLE mlt_maaltijden DROP FOREIGN KEY FK_mlt_product;
-ALTER TABLE mlt_maaltijden DROP COLUMN product_id;
-ALTER TABLE mlt_maaltijden DROP COLUMN verwerkt;
-ALTER TABLE mlt_repetities DROP FOREIGN KEY FK_mltrep_product;
-ALTER TABLE mlt_repetities DROP COLUMN product_id;
-
-DROP TABLE CiviBestellingInhoud, CiviBestelling, CiviPrijs, CiviProduct, CiviLog, CiviSaldo, CiviCategorie;
-SQL
-		);
+		try {
+			$this->execute("ALTER TABLE mlt_maaltijden DROP FOREIGN KEY FK_mlt_product;");
+		} catch (Exception $ignore) { echo "FK_mlt_product al verwijderd"; }
+		try {
+			$this->execute("ALTER TABLE mlt_maaltijden DROP COLUMN product_id;");
+		} catch (Exception $ignore) { echo "mlt_maaltijden(product_id) al verwijderd"; }
+		try {
+			$this->execute("ALTER TABLE mlt_maaltijden DROP COLUMN verwerkt;");
+		} catch (Exception $ignore) { echo "mlt_maaltijden(verwerkt) al verwijderd"; }
+		try {
+			$this->execute("ALTER TABLE mlt_repetities DROP FOREIGN KEY FK_mltrep_product;");
+		} catch (Exception $ignore) { echo "FK_mltrep_product al verwijderd"; }
+		try {
+			$this->execute("ALTER TABLE mlt_repetities DROP COLUMN product_id;");
+		} catch (Exception $ignore) { echo "mlt_repetities(product_id) al verwijderd"; }
+		try {
+			$this->execute("DROP TABLE IF EXISTS CiviBestellingInhoud, CiviBestelling, CiviPrijs, CiviProduct, CiviLog, CiviSaldo, CiviCategorie;");
+		} catch (Exception $ignore) { echo "sommige tabellen al verwijderd"; }
 	}
 }
