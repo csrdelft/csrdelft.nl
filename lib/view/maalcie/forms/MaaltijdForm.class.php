@@ -2,17 +2,17 @@
 
 /**
  * MaaltijdForm.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Formulier voor een nieuwe of te bewerken maaltijd.
- * 
+ *
  */
 class MaaltijdForm extends ModalForm {
 
 	public function __construct(Maaltijd $maaltijd, $action) {
 		parent::__construct($maaltijd, '/maaltijden/beheer/'. $action, false, true);
-        
+
 		if ($maaltijd->maaltijd_id < 0) {
 			throw new Exception('invalid mid');
 		}
@@ -24,7 +24,6 @@ class MaaltijdForm extends ModalForm {
 		}
 
 		$fields['mrid'] = new IntField('mlt_repetitie_id', $maaltijd->mlt_repetitie_id, null);
-		$fields['mrid']->readonly = true;
 		$fields['mrid']->hidden = true;
 		$fields[] = new RequiredTextField('titel', $maaltijd->titel, 'Titel', 255, 5);
 		$fields[] = new RequiredDateField('datum', $maaltijd->datum, 'Datum', date('Y') + 2, date('Y') - 2);
