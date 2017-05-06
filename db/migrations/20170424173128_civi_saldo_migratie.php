@@ -148,21 +148,63 @@ ALTER TABLE mlt_repetities ADD CONSTRAINT FK_mltrep_product FOREIGN KEY (product
 SQL
 		);
 
+		// Voeg de menu items toe in de database
+		$actueelMenu = $this->fetchRow("SELECT item_id FROM menus WHERE link='/actueel'")[0];
+		$this->insert('menus', [
+			'parent_id' => $actueelMenu,
+			'volgorde' => 0,
+			'tekst' => 'CiviSaldo',
+			'link' => '/fiscaat',
+			'rechten_bekijken' => 'P_MAAL_MOD',
+			'zichtbaar' => 1
+		]);
+		$civiMenu = $this->fetchRow("SELECT LAST_INSERT_ID()")[0];
+		$this->insert('menus', [
+			[
+				'parent_id' => $civiMenu,
+				'volgorde' => 1,
+				'tekst' => 'Overzicht',
+				'link' => '/fiscaat/overzicht',
+				'rechten_bekijken' => 'P_MAAL_MOD',
+				'zichtbaar' => 1
+			], [
+				'parent_id' => $civiMenu,
+				'volgorde' => 2,
+				'tekst' => 'Saldobeheer',
+				'link' => '/fiscaat/saldo',
+				'rechten_bekijken' => 'P_MAAL_MOD',
+				'zichtbaar' => 1
+			], [
+				'parent_id' => $civiMenu,
+				'volgorde' => 3,
+				'tekst' => 'Productbeheer',
+				'link' => '/fiscaat/producten',
+				'rechten_bekijken' => 'P_MAAL_MOD',
+				'zichtbaar' => 1
+			], [
+				'parent_id' => $civiMenu,
+				'volgorde' => 4,
+				'tekst' => 'Bestellingen',
+				'link' => '/fiscaat/bestellingen',
+				'rechten_bekijken' => 'P_MAAL_MOD',
+				'zichtbaar' => 1
+			]
+		]);
+
+		// Migreer de saldolog tabel naar CiviSaldo
 		$gebruikers = $this->fetchAll("SELECT uid, saldo, moment AS laatst_veranderd
 FROM saldolog WHERE (uid, moment) IN (
   SELECT uid, max(moment) FROM saldolog WHERE cie = 'maalcie' GROUP BY uid
 ) ORDER BY moment DESC");
 
-
-		// Migreer de saldolog tabel naar CiviSaldo
 		foreach ($gebruikers as $index => $gebruiker) {
 			$saldo = $gebruiker['saldo'] * 100;
 			$this->execute(sprintf(
-				"INSERT INTO CiviSaldo (uid, saldo, laatst_veranderd, deleted) 
+				"INSERT INTO CiviSaldo (uid, saldo, laatst_veranderd, deleted)
 						VALUES ('%s', %d, '%s', FALSE)",
 				$gebruiker['uid'], $saldo, $gebruiker['laatst_veranderd']));
 			$this->execute(sprintf(
-				"INSERT INTO CiviBestelling (id, uid, totaal, deleted, moment) 
+				"INSERT INTO CiviBestelling (id, uid, totaal, deleted, moment)
 						VALUES (%d, '%s', %d, %d, '%s')",
 				$index + 1, $gebruiker['uid'], -$saldo, 0, $gebruiker['laatst_veranderd']));
 			$this->execute(sprintf(
@@ -195,6 +237,12 @@ FROM saldolog WHERE (uid, moment) IN (
 		try {
 			$this->execute("ALTER TABLE mlt_repetities DROP COLUMN product_id;");
 		} catch (Exception $ignore) { echo "mlt_repetities(product_id) al verwijderd"; }
+		try {
+			$actueelMenu = $this->fetchRow("SELECT item_id FROM menus WHERE link='/actueel'")[0];
+			$civiMenu = $this->fetchRow("SELECT item_id FROM menus WHERE link='/fiscaat' AND parent_id=$actueelMenu")[0];
+			$this->execute("DELETE FROM menus WHERE parent_id=$civiMenu");
+			$this->execute("DELETE FROM menus WHERE item_id=$civiMenu");
+		} catch (Exception $ignore) { echo "CiviSaldo menus al verwijderd"; }
 		try {
 			$this->execute("DROP TABLE IF EXISTS CiviBestellingInhoud, CiviBestelling, CiviPrijs, CiviProduct, CiviLog, CiviSaldo, CiviCategorie;");
 		} catch (Exception $ignore) { echo "sommige tabellen al verwijderd"; }
