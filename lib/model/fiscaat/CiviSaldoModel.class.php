@@ -37,7 +37,7 @@ class CiviSaldoModel extends PersistenceModel {
 		}
 
 		/** @var CiviSaldo $saldo */
-		$saldo = $this->retrieveByPrimaryKey(array($uid));
+		$saldo = $this->find('uid = ?', array($uid))->fetch();
 
 		if (!$saldo) {
 			throw new Exception('Lid heeft geen CiviSaldo');
