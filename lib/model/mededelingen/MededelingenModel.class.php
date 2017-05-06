@@ -8,7 +8,6 @@ use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'model/mededelingen/MededelingCategorieenModel.class.php';
 
 /**
  * MededelingenModel.class.php

@@ -7,7 +7,6 @@ use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use Exception;
 
-require_once 'model/maalcie/KwalificatiesModel.class.php';
 
 /**
  * FunctiesModel.class.php

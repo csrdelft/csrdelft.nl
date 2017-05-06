@@ -175,18 +175,6 @@ class MededelingenView extends SmartyTemplateView {
 
 }
 
-class MededelingenZijbalkView extends SmartyTemplateView {
-
-	public function view() {
-		// De laatste n mededelingen ophalen en meegeven aan $this.
-		$mededelingen = MededelingenModel::getLaatsteMededelingen($this->model);
-		$this->smarty->assign('mededelingen', $mededelingen);
-
-		$this->smarty->display('mededelingen/mededelingenzijbalk.tpl');
-	}
-
-}
-
 class MededelingenOverzichtView extends SmartyTemplateView {
 
 	public function __construct() {

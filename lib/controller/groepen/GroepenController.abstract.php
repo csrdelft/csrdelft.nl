@@ -15,7 +15,7 @@ use CsrDelft\model\entity\security\A;
 use CsrDelft\model\security\LoginModel;
 use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\formulier\RemoveRowsResponse;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use CsrDelft\view\GroepAanmeldenForm;
 use CsrDelft\view\GroepBewerkenForm;
 use CsrDelft\view\GroepConverteerForm;
@@ -40,8 +40,6 @@ use CsrDelft\view\GroepStatistiekView;
 use CsrDelft\view\GroepView;
 use CsrDelft\view\JsonResponse;
 
-require_once 'model/ChangeLogModel.class.php';
-require_once 'view/GroepenView.class.php';
 
 /**
  * GroepenController.abstract.php

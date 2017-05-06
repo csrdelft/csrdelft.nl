@@ -19,21 +19,6 @@ use CsrDelft\view\formulier\uploadvelden\FileField;
 use CsrDelft\view\Validator;
 use CsrDelft\view\View;
 
-require_once 'view/View.interface.php';
-require_once 'view/Validator.interface.php';
-require_once 'view/formulier/elementen/FormElement.interface.php';
-require_once 'view/formulier/elementen/HtmlComment.class.php';
-require_once 'view/formulier/elementen/HtmlBbComment.class.php';
-require_once 'view/formulier/elementen/Subkopje.class.php';
-require_once 'view/formulier/elementen/CollapsableSubkopje.class.php';
-require_once 'view/formulier/elementen/FieldSet.class.php';
-require_once 'view/formulier/InvoerVelden.class.php';
-require_once 'view/formulier/GetalVelden.class.php';
-require_once 'view/formulier/KeuzeVelden.class.php';
-require_once 'view/formulier/UploadVelden.class.php';
-require_once 'view/formulier/knoppen/FormKnoppen.class.php';
-require_once 'view/formulier/knoppen/FormDefaultKnoppen.class.php';
-require_once 'view/formulier/knoppen/ModalCloseButtons.class.php';
 
 /**
  * Formulier.class.php
@@ -381,8 +366,7 @@ HTML;
 	 * @returns ChangeLogEntry[]
 	 */
 	public function diff() {
-		require_once 'model/ChangeLogModel.class.php';
-		$diff = array();
+				$diff = array();
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof InputField) {
 				$old = $field->getOrigValue();
@@ -412,93 +396,6 @@ HTML;
 			$changelog .= '[/div][hr]';
 		}
 		return $changelog;
-	}
-
-}
-
-/**
- * Form as modal content.
- */
-class ModalForm extends Formulier {
-
-	public function view() {
-		$this->css_classes[] = 'ModalForm';
-		echo '<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1" style="display: block;">';
-		parent::view();
-		printDebug();
-		echo '</div>';
-	}
-
-}
-
-/**
- * InlineForm with single InputField and FormDefaultKnoppen.
- */
-abstract class InlineForm extends Formulier implements FormElement {
-
-	private $field;
-	private $toggle;
-
-	public function __construct($model, $action, InputField $field, $toggle = true, $buttons = false, $dataTableId = false) {
-		parent::__construct($model, $action, null, $dataTableId);
-		if (isset($_POST['InlineFormId'])) {
-			$this->formId = filter_input(INPUT_POST, 'InlineFormId', FILTER_SANITIZE_STRING);
-		}
-		$this->css_classes[] = 'InlineForm';
-		$this->css_classes[] = $this->getType();
-		$this->field = $field;
-		$this->toggle = $toggle;
-
-		$fields = array();
-		$fields[] = $this->field;
-
-		if ($buttons instanceof FormKnoppen) {
-			$fields[] = $buttons;
-		} elseif ($buttons) {
-			$fields[] = new FormDefaultKnoppen(null, false, true, false, true, false, $dataTableId);
-		} else {
-			$this->field->enter_submit = true;
-			$this->field->escape_cancel = true;
-		}
-		if (!isset($this->field->title) AND property_exists($this->field, 'description')) {
-			$this->field->title = $this->field->description;
-		}
-
-		$this->addFields($fields);
-	}
-
-	public function getHtml() {
-		$html = '<div id="wrapper_' . $this->formId . '" class="InlineForm">';
-		if ($this->toggle) {
-			$html .= '<div id="toggle_' . $this->formId . '" class="InlineFormToggle">' . $this->field->getValue() . '</div>';
-			$this->css_classes[] = 'ToggleForm';
-		}
-		$html .= $this->getFormTag();
-		foreach ($this->getFields() as $field) {
-			$html .= $field->getHtml();
-		}
-		$html .= $this->getScriptTag();
-		return $html . '</form></div>';
-	}
-
-	public function view() {
-		echo $this->getHtml();
-	}
-
-	public function getField() {
-		return $this->field;
-	}
-
-	public function getType() {
-		return get_class($this);
-	}
-
-	/**
-	 * Public for FormElement
-	 * @return string
-	 */
-	public function getJavascript() {
-		return parent::getJavascript();
 	}
 
 }

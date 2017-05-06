@@ -4,7 +4,6 @@ namespace CsrDelft\view;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\view\View;
 
-require_once 'view/HtmlPage.abstract.php';
 
 /**
  * CompressedLayout.abstract.php

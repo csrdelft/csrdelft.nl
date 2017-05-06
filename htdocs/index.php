@@ -42,7 +42,7 @@ try {
 			}
 	}
 
-	$namespacedClassName = 'Csrdelft\\controller\\' . $class . 'Controller';
+	$namespacedClassName = 'CsrDelft\\controller\\' . $class . 'Controller';
 	/** @var Controller $controller */
 	$controller = new $namespacedClassName(REQUEST_URI);
 	$controller->performAction();

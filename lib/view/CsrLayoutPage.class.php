@@ -5,14 +5,8 @@ use CsrDelft\model\DragObjectModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\ModalForm;
+use CsrDelft\view\menu\MainMenuView;
 
-require_once 'view/Zijbalk.static.php';
-require_once 'view/SitemapView.class.php';
-require_once 'view/InstantSearchForm.class.php';
-require_once 'view/CompressedLayout.abstract.php';
-require_once 'view/MenuView.class.php';
-require_once 'model/MenuModel.class.php';
-require_once 'model/DragObjectModel.class.php';
 
 /**
  * CsrLayoutPage.class.php

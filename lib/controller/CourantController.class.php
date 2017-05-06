@@ -10,9 +10,6 @@ use CsrDelft\view\courant\CourantBeheerView;
 use CsrDelft\view\courant\CourantView;
 use CsrDelft\view\CsrLayoutPage;
 
-require_once 'model/CourantModel.class.php';
-require_once 'view/courant/CourantView.class.php';
-require_once 'view/courant/CourantBeheerView.class.php';
 
 /**
  * CourantController.class.php
@@ -68,8 +65,7 @@ class CourantController extends AclController {
 	}
 
 	public function archief() {
-		require_once 'view/courant/CourantArchiefView.class.php';
-		$body = new CourantArchiefView($this->model);
+				$body = new CourantArchiefView($this->model);
 		$this->view = new CsrLayoutPage($body);
 	}
 

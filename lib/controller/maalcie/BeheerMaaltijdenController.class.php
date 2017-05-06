@@ -9,10 +9,8 @@ use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\formulier\RemoveRowsResponse;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\ArchiefMaaltijdenTable;
 use CsrDelft\view\maalcie\BeheerMaaltijdenLijst;
 use CsrDelft\view\maalcie\BeheerMaaltijdenTable;
@@ -23,16 +21,9 @@ use CsrDelft\view\maalcie\forms\RepetitieMaaltijdenForm;
 use CsrDelft\view\maalcie\MaaltijdLijstView;
 use CsrDelft\view\maalcie\PrullenbakMaaltijdenTable;
 use Exception;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
 
-require_once 'model/maalcie/MaaltijdenModel.class.php';
-require_once 'model/maalcie/ArchiefMaaltijdModel.class.php';
-require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
-require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
-require_once 'model/fiscaat/CiviBestellingModel.class.php';
-require_once 'view/maalcie/BeheerMaaltijdenView.class.php';
-require_once 'view/maalcie/forms/MaaltijdForm.class.php';
-require_once 'view/maalcie/forms/RepetitieMaaltijdenForm.class.php';
-require_once 'view/maalcie/forms/AanmeldingForm.class.php';
 
 /**
  * BeheerMaaltijdenController.class.php

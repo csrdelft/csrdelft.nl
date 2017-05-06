@@ -16,11 +16,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
 use Exception;
 
-require_once 'controller/AgendaController.class.php';
-require_once 'model/BijbelroosterModel.class.php';
-require_once 'model/VerjaardagenModel.class.php';
-require_once 'model/maalcie/MaaltijdenModel.class.php';
-require_once 'model/maalcie/CorveeTakenModel.class.php';
 
 /**
  * AgendaModel.class.php

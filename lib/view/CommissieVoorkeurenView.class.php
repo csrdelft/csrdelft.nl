@@ -111,8 +111,7 @@ class CommissieVoorkeurenForm extends Formulier {
 		//permissies
 		$opties = array(1 => 'nee', 2 => 'misschien', 3 => 'ja');
 
-		require_once 'model/CommissieVoorkeurenModel.class.php';
-		$model = new CommissieVoorkeurenModel($profiel->uid);
+				$model = new CommissieVoorkeurenModel($profiel->uid);
 		$commissies = $model->getCommissies();
 		$voorkeuren = $model->getVoorkeur();
 

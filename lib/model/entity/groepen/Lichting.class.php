@@ -1,7 +1,7 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
 use CsrDelft\model\entity\security\A;
-use CsrDelft\model\LichtingLedenModel;
+use CsrDelft\model\groepen\leden\LichtingLedenModel;
 use CsrDelft\Orm\Entity\T;
 
 /**

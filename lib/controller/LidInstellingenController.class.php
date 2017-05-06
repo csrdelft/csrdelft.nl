@@ -10,7 +10,6 @@ use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\LidInstellingenView;
 
-require_once 'view/LidInstellingenView.class.php';
 
 /**
  * LidInstellingenController.class.php

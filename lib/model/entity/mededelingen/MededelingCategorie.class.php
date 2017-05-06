@@ -5,7 +5,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
-require_once 'model/entity/mededelingen/MededelingAccess.enum.php';
 
 /**
  * MededelingCategorie.class.php

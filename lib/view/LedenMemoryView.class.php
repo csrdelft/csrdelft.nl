@@ -1,6 +1,6 @@
 <?php
 namespace CsrDelft\view;
-use CsrDelft\model\entity\groepen\AbstractGroep;use CsrDelft\model\entity\LedenMemoryScore;use CsrDelft\model\entity\LidStatus;use CsrDelft\model\entity\Profiel;use CsrDelft\model\groepen\LichtingenModel;use CsrDelft\model\groepen\VerticalenModel;use CsrDelft\model\LedenMemoryScoresModel;use CsrDelft\model\ProfielModel;use function CsrDelft\square_crop;use CsrDelft\view\formulier\DataTable;use CsrDelft\view\formulier\DataTableResponse;use CsrDelft\view\formulier\Formulier;use CsrDelft\view\formulier\getalvelden\RequiredIntField;use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\model\entity\groepen\AbstractGroep;use CsrDelft\model\entity\LedenMemoryScore;use CsrDelft\model\entity\LidStatus;use CsrDelft\model\entity\Profiel;use CsrDelft\model\groepen\LichtingenModel;use CsrDelft\model\groepen\VerticalenModel;use CsrDelft\model\LedenMemoryScoresModel;use CsrDelft\model\ProfielModel;use CsrDelft\view\formulier\datatable\DataTable;use CsrDelft\view\formulier\datatable\DataTableResponse;use CsrDelft\view\formulier\Formulier;use CsrDelft\view\formulier\getalvelden\RequiredIntField;use CsrDelft\view\formulier\invoervelden\TextField;use function CsrDelft\square_crop;
 
 /**
  * LedenMemoryView.class.php

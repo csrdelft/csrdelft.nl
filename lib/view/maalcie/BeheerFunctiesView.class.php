@@ -1,6 +1,5 @@
 <?php
 namespace CsrDelft\view\maalcie;
-use function CsrDelft\getMelding;
 use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\model\entity\maalcie\CorveeKwalificatie;
 use CsrDelft\view\formulier\getalvelden\IntField;
@@ -11,6 +10,7 @@ use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 use CsrDelft\view\SmartyTemplateView;
+use function CsrDelft\getMelding;
 
 /**
  * BeheerFunctiesView.class.php

@@ -1,12 +1,11 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
 
-use CsrDelft\model\BewonersModel;
 use CsrDelft\model\entity\security\A;
+use CsrDelft\model\groepen\leden\BewonersModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 
-require_once 'model/entity/groepen/HuisStatus.enum.php';
 
 /**
  * Woonoord.class.php

@@ -1,14 +1,14 @@
 <?php
 namespace CsrDelft\model\entity\gesprekken;
-use function CsrDelft\getDateTime;
-use CsrDelft\model\GesprekBerichtenModel;
-use CsrDelft\model\GesprekDeelnemersModel;
+use CsrDelft\model\gesprekken\GesprekBerichtenModel;
+use CsrDelft\model\gesprekken\GesprekDeelnemersModel;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use Exception;
+use function CsrDelft\getDateTime;
 
 /**
  * Gesprek.class.php

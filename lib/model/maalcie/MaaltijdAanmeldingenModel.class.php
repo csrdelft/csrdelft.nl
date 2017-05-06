@@ -10,8 +10,6 @@ use CsrDelft\Orm\PersistenceModel;
 use Exception;
 use MongoDB\BSON\Type;
 
-require_once 'model/entity/maalcie/MaaltijdAanmelding.class.php';
-require_once 'model/maalcie/MaaltijdenModel.class.php';
 
 /**
  * MaaltijdAanmeldingenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)

@@ -7,7 +7,6 @@ use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\formulier\UrlDownloader;
 use Exception;
 
-require_once 'view/formulier/UrlDownloader.class.php';
 
 /**
  * DownloadUrlField.class.php

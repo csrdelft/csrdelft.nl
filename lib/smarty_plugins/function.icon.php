@@ -28,7 +28,6 @@
  */
 use CsrDelft\Icon;
 
-require_once 'icon.class.php';
 
 function smarty_function_icon($params, &$smarty) {
 

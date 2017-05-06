@@ -9,7 +9,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 use function CsrDelft\startsWith;
 
-require_once 'model/entity/fotoalbum/Foto.class.php';
 
 /**
  * FotoAlbum.class.php

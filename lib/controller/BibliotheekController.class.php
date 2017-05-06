@@ -16,9 +16,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
 use Exception;
 
-require_once 'controller/framework/Controller.abstract.php';
-require_once 'model/bibliotheek/BiebBoek.class.php';
-require_once 'view/BibliotheekView.class.php';
 
 /**
  * BibliotheekController.class.php	|	Gerrit Uitslag (klapinklapin@gmail.com)
@@ -68,16 +65,14 @@ class BibliotheekController extends Controller {
 	}
 
 	public function rubrieken() {
-		require_once 'controller/CmsPaginaController.class.php';
-		$c = new CmsPaginaController($this->action);
+				$c = new CmsPaginaController($this->action);
 		$c->bekijken($this->action);
 		$c->getView()->view();
 		exit;
 	}
 
 	public function wenslijst() {
-		require_once 'controller/CmsPaginaController.class.php';
-		$c = new CmsPaginaController($this->action);
+				$c = new CmsPaginaController($this->action);
 		$c->bekijken($this->action);
 		$c->getView()->view();
 		exit;

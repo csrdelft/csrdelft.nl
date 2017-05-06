@@ -10,9 +10,6 @@ use CsrDelft\Orm\PersistenceModel;
 use function CsrDelft\setMelding;
 use Exception;
 
-require_once 'model/entity/peilingen/Peiling.class.php';
-require_once 'model/entity/peilingen/PeilingOptie.class.php';
-require_once 'model/entity/peilingen/PeilingStem.class.php';
 
 /**
  * PeilingenModel.class.php

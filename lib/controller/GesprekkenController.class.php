@@ -2,24 +2,22 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
-use function CsrDelft\getDateTime;
-use CsrDelft\model\GesprekBerichtenModel;
-use CsrDelft\model\GesprekDeelnemersModel;
-use CsrDelft\model\GesprekkenModel;
+use CsrDelft\model\gesprekken\GesprekBerichtenModel;
+use CsrDelft\model\gesprekken\GesprekDeelnemersModel;
+use CsrDelft\model\gesprekken\GesprekkenModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\BerichtenResponse;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\formulier\RemoveRowsResponse;
-use CsrDelft\view\GesprekBerichtForm;
-use CsrDelft\view\GesprekDeelnemerToevoegenForm;
-use CsrDelft\view\GesprekForm;
-use CsrDelft\view\GesprekkenResponse;
-use CsrDelft\view\GesprekkenView;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\gesprekken\BerichtenResponse;
+use CsrDelft\view\gesprekken\GesprekBerichtForm;
+use CsrDelft\view\gesprekken\GesprekDeelnemerToevoegenForm;
+use CsrDelft\view\gesprekken\GesprekForm;
+use CsrDelft\view\gesprekken\GesprekkenResponse;
+use CsrDelft\view\gesprekken\GesprekkenView;
 use CsrDelft\view\JsonResponse;
+use function CsrDelft\getDateTime;
 
-require_once 'model/GesprekkenModel.class.php';
-require_once 'view/GesprekkenView.class.php';
 
 /**
  * GesprekkenController.class.php

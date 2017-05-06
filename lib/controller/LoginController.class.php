@@ -13,14 +13,11 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\security\OneTimeTokensModel;
 use CsrDelft\model\security\RememberLoginModel;
-use function CsrDelft\redirect;
-use function CsrDelft\setGoBackCookie;
-use function CsrDelft\setMelding;
 use CsrDelft\view\AccountForm;
 use CsrDelft\view\CmsPaginaView;
 use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\formulier\RemoveRowsResponse;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\LoginForm;
 use CsrDelft\view\LoginSessionsData;
@@ -30,6 +27,9 @@ use CsrDelft\view\RememberLoginForm;
 use CsrDelft\view\VerifyForm;
 use CsrDelft\view\WachtwoordVergetenForm;
 use CsrDelft\view\WachtwoordWijzigenForm;
+use function CsrDelft\redirect;
+use function CsrDelft\setGoBackCookie;
+use function CsrDelft\setMelding;
 
 /**
  * LoginController.class.php
@@ -84,9 +84,7 @@ class LoginController extends AclController {
 		if ($this->getMethod() == 'POST') {
 			parent::exit_http($response_code);
 		}
-		require_once 'model/CmsPaginaModel.class.php';
-		require_once 'view/CmsPaginaView.class.php';
-		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
+						$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
         if (!LoginModel::mag('P_LOGGED_IN')) {
             $this->view = new CsrLayoutOweePage($body);
         } else {
@@ -97,8 +95,7 @@ class LoginController extends AclController {
 	}
 
 	public function login() {
-		require_once 'view/LoginView.class.php';
-		$form = new LoginForm(); // fetches POST values itself
+				$form = new LoginForm(); // fetches POST values itself
 		$values = $form->getValues();
 
 		if ($form->validate() AND $this->model->login($values['user'], $values['pass'])) {
@@ -114,8 +111,6 @@ class LoginController extends AclController {
 				$form = new RememberAfterLoginForm($remember);
 				$form->css_classes[] = 'redirect';
 
-				require_once 'model/CmsPaginaModel.class.php';
-				require_once 'view/CmsPaginaView.class.php';
 
 				$body = new CmsPaginaView(CmsPaginaModel::get(InstellingenModel::get('stek', 'homepage')));
 				$this->view = new CsrLayoutPage($body, array(), $form);
@@ -166,9 +161,7 @@ class LoginController extends AclController {
 		} else {
 			$this->model->setPauper(true);
 		}
-		require_once 'model/CmsPaginaModel.class.php';
-		require_once 'view/CmsPaginaView.class.php';
-		$body = new CmsPaginaView(CmsPaginaModel::get('mobiel'));
+						$body = new CmsPaginaView(CmsPaginaModel::get('mobiel'));
 		$this->view = new CsrLayoutPage($body);
 	}
 
@@ -241,8 +234,7 @@ class LoginController extends AclController {
 				$this->model->login($account->uid, $pass_plain, false);
 				// stuur bevestigingsmail
 				$lidnaam = $account->getProfiel()->getNaam('volledig');
-				require_once 'model/entity/Mail.class.php';
-				$bericht = "Geachte " . $lidnaam .
+								$bericht = "Geachte " . $lidnaam .
 						",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
 				$mail = new Mail(array($account->email => $lidnaam), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
 				$mail->send();
@@ -267,8 +259,7 @@ class LoginController extends AclController {
 					// Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
 					// Dit zorgt voor een • in het 'aan' veld van de mail, sommige spamfilters gaan hiervan over hun nek
 					$lidnaam = $account->getProfiel()->getNaam('volledig', true);
-					require_once 'model/entity/Mail.class.php';
-					$bericht = "Geachte " . $civitasnaam .
+										$bericht = "Geachte " . $civitasnaam .
 							",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1] .
 							".\n\n[url=" . CSR_ROOT . "/verify/" . $token[0] .
 							"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";

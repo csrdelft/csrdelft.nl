@@ -6,10 +6,6 @@ use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;
 use Exception;
 
-require_once 'model/maalcie/KwalificatiesModel.class.php';
-require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
-require_once 'model/maalcie/CorveePuntenModel.class.php';
-require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
 
 /**
  * CorveeToewijzenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)

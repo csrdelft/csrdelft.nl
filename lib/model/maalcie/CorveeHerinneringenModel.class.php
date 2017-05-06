@@ -7,8 +7,6 @@ use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;
 use Exception;
 
-require_once 'model/entity/Mail.class.php';
-require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 
 /**
  * CorveeHerinneringenModel.class.php

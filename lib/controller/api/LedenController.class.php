@@ -19,7 +19,6 @@ class ApiLedenController {
 	 * @url GET /
 	 */
 	public function getLeden() {
-		require_once 'lid/lidzoeker.class.php';
 
 		$zoeker = new LidZoeker();
 		$leden = [];

@@ -13,8 +13,6 @@ use CsrDelft\view\MededelingenOverzichtView;
 use CsrDelft\view\MededelingenView;
 use CsrDelft\view\MededelingView;
 
-require_once 'model/mededelingen/MededelingenModel.class.php';
-require_once 'view/MededelingenView.class.php';
 
 /**
  * Class MededelingenController

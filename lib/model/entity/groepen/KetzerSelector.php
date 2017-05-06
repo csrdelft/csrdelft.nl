@@ -5,7 +5,6 @@ use CsrDelft\model\groepen\KetzerOptiesModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
-require_once 'model/entity/groepen/KetzerSelectorSoort.enum.php';
 
 /**
  * KetzerSelector.class.php

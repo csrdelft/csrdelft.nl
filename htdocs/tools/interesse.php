@@ -11,7 +11,6 @@
 use CsrDelft\model\entity\Mail;
 
 require_once "configuratie.include.php";
-require_once 'model/entity/Mail.class.php';
 
 function checkCaptcha($captcha)
 {

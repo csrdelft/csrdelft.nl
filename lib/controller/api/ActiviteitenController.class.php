@@ -21,8 +21,6 @@ class ApiActiviteitenController {
 	 * @url POST /$id/aanmelden
 	 */
 	public function activiteitAanmelden($id) {
-		require_once 'model/GroepenModel.abstract.php';
-		require_once 'model/ChangeLogModel.class.php';
 
 		$activiteit = ActiviteitenModel::get($id);
 
@@ -49,8 +47,6 @@ class ApiActiviteitenController {
 	 * @url POST /$id/afmelden
 	 */
 	public function activiteitAfmelden($id) {
-		require_once 'model/GroepenModel.abstract.php';
-		require_once 'model/ChangeLogModel.class.php';
 
 		$activiteit = ActiviteitenModel::get($id);
 

@@ -7,7 +7,6 @@ use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'model/entity/maalcie/CorveeVrijstelling.class.php';
 
 /**
  * CorveeVrijstellingenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)

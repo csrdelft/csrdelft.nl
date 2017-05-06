@@ -11,9 +11,6 @@ use CsrDelft\view\maalcie\BeheerVrijstellingView;
 use CsrDelft\view\maalcie\forms\VrijstellingForm;
 use Exception;
 
-require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
-require_once 'view/maalcie/BeheerVrijstellingenView.class.php';
-require_once 'view/maalcie/forms/VrijstellingForm.class.php';
 
 /**
  * BeheerVrijstellingenController.class.php

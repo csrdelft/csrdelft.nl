@@ -5,7 +5,6 @@ use CsrDelft\model\entity\security\A;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\WerkgroepDeelnemersModel;
 
-require_once 'model/entity/groepen/Ketzer.class.php';
 
 /**
  * Werkgroep.class.php

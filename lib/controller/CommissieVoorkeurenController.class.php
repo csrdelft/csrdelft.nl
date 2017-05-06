@@ -8,8 +8,6 @@ use CsrDelft\view\CommissieVoorkeurenProfiel;
 use CsrDelft\view\CommissieVoorkeurenView;
 use CsrDelft\view\CsrLayoutPage;
 
-require_once 'model/CommissieVoorkeurenModel.class.php';
-require_once 'view/CommissieVoorkeurenView.class.php';
 
 /**
  * CommissieVoorkeurenController.class.php

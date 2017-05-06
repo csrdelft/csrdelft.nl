@@ -1,7 +1,6 @@
 <?php
 namespace CsrDelft\view;
 
-use function CsrDelft\className;
 use CsrDelft\Icon;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\ChangeLogModel;
@@ -13,17 +12,13 @@ use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\A;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\formulier\DataTable;
-use CsrDelft\view\formulier\DataTableKnop;
-use CsrDelft\view\formulier\DataTableResponse;
+use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\DataTableResponse;
 use CsrDelft\view\formulier\elementen\FormElement;
 use Exception;
+use function CsrDelft\className;
 
-require_once 'model/entity/groepen/GroepTab.enum.php';
-require_once 'model/CmsPaginaModel.class.php';
-require_once 'view/CmsPaginaView.class.php';
-require_once 'view/GroepForms.class.php';
-require_once 'view/GroepLedenView.class.php';
 
 /**
  * GroepenView.class.php
@@ -135,8 +130,7 @@ class GroepenBeheerData extends DataTableResponse {
 class GroepLogboekTable extends DataTable {
 
 	public function __construct(AbstractGroep $groep) {
-		require_once 'model/entity/ChangeLogEntry.class.php';
-		parent::__construct(ChangeLogModel::ORM, $groep->getUrl() . 'logboek', false, 'moment');
+				parent::__construct(ChangeLogModel::ORM, $groep->getUrl() . 'logboek', false, 'moment');
 		$this->hideColumn('subject');
 		$this->searchColumn('property');
 		$this->searchColumn('old_value');

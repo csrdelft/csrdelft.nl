@@ -3,7 +3,6 @@ namespace CsrDelft\model\groepen;
 use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 
-require_once 'model/groepen/KetzersModel.class.php';
 
 class ActiviteitenModel extends KetzersModel {
 

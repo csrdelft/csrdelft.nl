@@ -13,7 +13,6 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 use Exception;
 
-require_once 'model/maalcie/MaaltijdenModel.class.php';
 
 /**
  * TaakForm.class.php

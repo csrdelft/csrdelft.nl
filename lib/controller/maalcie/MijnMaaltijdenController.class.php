@@ -17,11 +17,6 @@ use CsrDelft\view\maalcie\MaaltijdLijstView;
 use CsrDelft\view\maalcie\MijnMaaltijdenView;
 use CsrDelft\view\maalcie\MijnMaaltijdView;
 
-require_once 'model/maalcie/MaaltijdenModel.class.php';
-require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
-require_once 'model/maalcie/MaaltijdBeoordelingenModel.class.php';
-require_once 'model/maalcie/CorveeTakenModel.class.php';
-require_once 'view/maalcie/MijnMaaltijdenView.class.php';
 
 /**
  * MijnMaaltijdenController.class.php
@@ -83,8 +78,7 @@ class MijnMaaltijdenController extends AclController {
 		}
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
 		$taken = CorveeTakenModel::instance()->getTakenVoorMaaltijd($mid)->fetchAll();
-		require_once 'view/maalcie/MaaltijdLijstView.class.php';
-		$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
+				$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}
 
 	public function sluit($mid) {
@@ -104,8 +98,7 @@ class MijnMaaltijdenController extends AclController {
 		if ($this->getMethod() == 'POST') {
 			$this->view = new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
 		} else {
-			require_once 'view/maalcie/MaaltijdKetzerView.class.php';
-			$this->view = new MaaltijdKetzerView($aanmelding->maaltijd, $aanmelding);
+						$this->view = new MaaltijdKetzerView($aanmelding->maaltijd, $aanmelding);
 		}
 	}
 
@@ -115,8 +108,7 @@ class MijnMaaltijdenController extends AclController {
 		if ($this->getMethod() == 'POST') {
 			$this->view = new MijnMaaltijdView($maaltijd);
 		} else {
-			require_once 'view/maalcie/MaaltijdKetzerView.class.php';
-			$this->view = new MaaltijdKetzerView($maaltijd);
+						$this->view = new MaaltijdKetzerView($maaltijd);
 		}
 	}
 

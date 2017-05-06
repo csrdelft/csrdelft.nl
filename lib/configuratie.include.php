@@ -171,30 +171,6 @@ if (FORCE_HTTPS) {
 	}
 }
 
-
-// Model
-require_once 'MijnSqli.class.php'; // DEPRECATED
-require_once 'model/DebugLogModel.class.php';
-require_once 'model/TimerModel.class.php';
-require_once 'model/entity/agenda/Agendeerbaar.interface.php';
-require_once 'model/security/AccessModel.class.php';
-require_once 'model/LidInstellingenModel.class.php';
-require_once 'model/forum/ForumModel.class.php';
-require_once 'model/LogModel.class.php';
-require_once 'model/fiscaat/CiviProductModel.class.php';
-
-// View
-require_once 'view/JsonResponse.class.php';
-require_once 'view/SmartyTemplateView.abstract.php';
-require_once 'view/formulier/DataTable.class.php';
-require_once 'view/CsrBB.class.php';
-require_once 'view/CsrLayoutPage.class.php';
-require_once 'view/CsrLayoutOweePage.class.php';
-require_once 'icon.class.php';
-
-// Controller
-require_once 'controller/framework/AclController.abstract.php';
-
 $cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 if ($cred === false) {
 	$cred = array(
@@ -213,7 +189,7 @@ CsrDelft\Orm\Configuration::load(array(
 // Router
 switch (constant('MODE')) {
 	case 'CLI':
-		require_once 'model/security/CliLoginModel.class.php';
+		//require_once 'model/security/CliLoginModel.class.php';
 		// Late static binding requires explicitly
 		// calling instance() before any static method!
 		LoginModel::instance();

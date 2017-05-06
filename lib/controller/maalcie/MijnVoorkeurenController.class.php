@@ -10,9 +10,6 @@ use CsrDelft\view\maalcie\forms\EetwensForm;
 use CsrDelft\view\maalcie\MijnVoorkeurenView;
 use CsrDelft\view\maalcie\MijnVoorkeurView;
 
-require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
-require_once 'view/maalcie/MijnVoorkeurenView.class.php';
-require_once 'view/maalcie/forms/EetwensForm.class.php';
 
 /**
  * MijnVoorkeurenController.class.php

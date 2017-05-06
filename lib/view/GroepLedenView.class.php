@@ -1,6 +1,5 @@
 <?php
 namespace CsrDelft\view;
-use function CsrDelft\group_by_distinct;
 use CsrDelft\Icon;
 use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
@@ -9,10 +8,11 @@ use CsrDelft\model\entity\groepen\Verticale;
 use CsrDelft\model\entity\security\A;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\DataTable;
-use CsrDelft\view\formulier\DataTableKnop;
-use CsrDelft\view\formulier\DataTableResponse;
+use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\DataTableResponse;
 use CsrDelft\view\formulier\elementen\FormElement;
+use function CsrDelft\group_by_distinct;
 
 /**
  * GroepLedenView.class.php

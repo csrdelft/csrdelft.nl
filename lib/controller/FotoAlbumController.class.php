@@ -22,7 +22,6 @@ use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PosterUploadForm;
 use Exception;
 
-require_once 'view/FotoAlbumView.class.php';
 
 /**
  * FotoAlbumController.class.php

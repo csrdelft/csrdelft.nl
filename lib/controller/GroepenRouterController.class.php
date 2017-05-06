@@ -4,8 +4,6 @@ namespace CsrDelft\controller;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\security\LoginModel;
 
-require_once 'model/GroepenModel.abstract.php';
-require_once 'controller/groepen/GroepenController.abstract.php';
 
 /**
  * GroepenRouterController.class.php

@@ -171,15 +171,12 @@ class ProfielView extends SmartyTemplateView {
 
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {
 
-			require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
-			$timestamp = strtotime(InstellingenModel::get('maaltijden', 'recent_lidprofiel'));
+						$timestamp = strtotime(InstellingenModel::get('maaltijden', 'recent_lidprofiel'));
 			$this->smarty->assign('recenteAanmeldingen', MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid($this->model->uid, $timestamp));
 
-			require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
-			$this->smarty->assign('abos', MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($this->model->uid));
+						$this->smarty->assign('abos', MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($this->model->uid));
 		}
 
-		require_once 'model/fiscaat/SaldoModel.class.php';
 		if (SaldoModel::instance()->magGrafiekZien($this->model->uid)) {
 			$this->smarty->assign('saldografiek', 'ja');
 		}
@@ -193,27 +190,20 @@ class ProfielView extends SmartyTemplateView {
 		$this->smarty->assign('corveepunten', $this->model->corvee_punten);
 		$this->smarty->assign('corveebonus', $this->model->corvee_punten_bonus);
 
-		require_once 'model/maalcie/CorveeTakenModel.class.php';
-		$this->smarty->assign('corveetaken', CorveeTakenModel::instance()->getTakenVoorLid($this->model->uid));
+				$this->smarty->assign('corveetaken', CorveeTakenModel::instance()->getTakenVoorLid($this->model->uid));
 
-		require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
-		$this->smarty->assign('corveevoorkeuren', CorveeVoorkeurenModel::instance()->getVoorkeurenVoorLid($this->model->uid));
+				$this->smarty->assign('corveevoorkeuren', CorveeVoorkeurenModel::instance()->getVoorkeurenVoorLid($this->model->uid));
 
-		require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
-		$this->smarty->assign('corveevrijstelling', CorveeVrijstellingenModel::instance()->getVrijstelling($this->model->uid));
+				$this->smarty->assign('corveevrijstelling', CorveeVrijstellingenModel::instance()->getVrijstelling($this->model->uid));
 
-		require_once 'model/maalcie/KwalificatiesModel.class.php';
-		$this->smarty->assign('corveekwalificaties', KwalificatiesModel::instance()->getKwalificatiesVanLid($this->model->uid));
+				$this->smarty->assign('corveekwalificaties', KwalificatiesModel::instance()->getKwalificatiesVanLid($this->model->uid));
 
-		require_once 'model/forum/ForumModel.class.php';
-		$this->smarty->assign('forumpostcount', ForumPostsModel::instance()->getAantalForumPostsVoorLid($this->model->uid));
+				$this->smarty->assign('forumpostcount', ForumPostsModel::instance()->getAantalForumPostsVoorLid($this->model->uid));
 
-		require_once 'model/bibliotheek/BiebCatalogus.class.php';
-		$this->smarty->assign('boeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'eigendom'));
+				$this->smarty->assign('boeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'eigendom'));
 		$this->smarty->assign('gerecenseerdeboeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'gerecenseerd'));
 
-		require_once 'view/FotoAlbumView.class.php';
-		$fotos = array();
+				$fotos = array();
 		foreach (FotoTagsModel::instance()->find('keyword = ?', array($this->model->uid), null, null, 3) as $tag) {
 			/** @var Foto $foto */
 			$foto = FotoModel::instance()->retrieveByUUID($tag->refuuid);
@@ -273,8 +263,7 @@ class ProfielForm extends Formulier {
 			$fields[] = new SelectField('status', $profiel->status, 'Lidstatus', $statussen);
 			$fields[] = new HtmlComment('<p>Bij het wijzigen van de lidstatus worden overbodige <span class="waarschuwing">gegevens verwijderd</span>, onomkeerbaar, opletten dus!</p>');
 
-			require_once 'lid/lidzoeker.class.php';
-			if ($profiel->voornaam == '') {
+						if ($profiel->voornaam == '') {
 				$gelijknamigenovieten = array();
 			} else {
 				$gelijknamigenovieten = LidZoeker::zoekLeden($profiel->voornaam, 'voornaam', 'alle', 'achternaam', array(LidStatus::Noviet), array('uid'));

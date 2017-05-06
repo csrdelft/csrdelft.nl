@@ -7,9 +7,6 @@ use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use Exception;
 
-require_once 'model/entity/maalcie/MaaltijdRepetitie.class.php';
-require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
-require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
 
 /**
  * MaaltijdRepetitiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)

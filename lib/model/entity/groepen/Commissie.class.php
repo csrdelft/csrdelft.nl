@@ -1,11 +1,10 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
 
-use CsrDelft\model\CommissieLedenModel;
+use CsrDelft\model\groepen\leden\CommissieLedenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 
-require_once 'model/entity/groepen/CommissieSoort.enum.php';
 
 /**
  * Commissie.class.php

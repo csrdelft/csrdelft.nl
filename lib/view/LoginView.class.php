@@ -7,11 +7,9 @@ use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\RememberLogin;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\security\RememberLoginModel;
-use function CsrDelft\reldate;
-use function CsrDelft\setMelding;
-use CsrDelft\view\formulier\DataTable;
-use CsrDelft\view\formulier\DataTableKnop;
-use CsrDelft\view\formulier\DataTableResponse;
+use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\DataTableResponse;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
@@ -27,8 +25,9 @@ use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\DeleteKnop;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
+use function CsrDelft\reldate;
+use function CsrDelft\setMelding;
 
-require_once 'model/entity/security/RememberLogin.class.php';
 
 /**
  * LoginView.class.php

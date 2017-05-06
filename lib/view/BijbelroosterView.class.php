@@ -5,7 +5,6 @@ use CsrDelft\model\BijbelroosterModel;
 use CsrDelft\view\View;
 use PDOStatement;
 
-require_once 'model/BijbelroosterModel.class.php';
 
 /**
  * BijbelroosterView.class.php

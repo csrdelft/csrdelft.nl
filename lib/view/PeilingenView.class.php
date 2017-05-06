@@ -3,7 +3,6 @@ namespace CsrDelft\view;
 
 use CsrDelft\model\entity\peilingen\Peiling;
 
-require_once 'model/PeilingenModel.class.php';
 
 class PeilingView extends SmartyTemplateView {
 	private $beheer;

@@ -1,10 +1,9 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
 
-use CsrDelft\model\OnderverenigingsLedenModel;
+use CsrDelft\model\groepen\leden\OnderverenigingsLedenModel;
 use CsrDelft\Orm\Entity\T;
 
-require_once 'model/entity/groepen/OnderverenigingStatus.enum.php';
 
 /**
  * Ondervereniging.class.php

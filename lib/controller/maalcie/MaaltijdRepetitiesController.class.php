@@ -12,9 +12,6 @@ use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
 use CsrDelft\view\maalcie\MaaltijdRepetitiesView;
 use CsrDelft\view\maalcie\MaaltijdRepetitieView;
 
-require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
-require_once 'view/maalcie/MaaltijdRepetitiesView.class.php';
-require_once 'view/maalcie/forms/MaaltijdRepetitieForm.class.php';
 
 /**
  * MaaltijdRepetitiesController.class.php

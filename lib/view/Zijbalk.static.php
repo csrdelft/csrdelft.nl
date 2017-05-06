@@ -10,8 +10,10 @@ use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
-use CsrDelft\view\ForumDraadZijbalkView;
-use CsrDelft\view\ForumPostZijbalkView;
+use CsrDelft\view\agenda\AgendaZijbalkView;
+use CsrDelft\view\forum\ForumDraadZijbalkView;
+use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
+use CsrDelft\view\mededelingen\MededelingenZijbalkView;
 
 /**
  * Zijbalk.static.php
@@ -30,8 +32,7 @@ abstract class Zijbalk {
 		}
 		// Is het al...
 		if (LidInstellingenModel::get('zijbalk', 'ishetal') != 'niet weergeven') {
-			require_once 'view/IsHetAlView.class.php';
-			array_unshift($zijbalk, new IsHetAlView(LidInstellingenModel::get('zijbalk', 'ishetal')));
+						array_unshift($zijbalk, new IsHetAlView(LidInstellingenModel::get('zijbalk', 'ishetal')));
 		}
 
 		// Sponsors
@@ -43,60 +44,47 @@ abstract class Zijbalk {
 
 		// Agenda
 		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingenModel::get('zijbalk', 'agendaweken') > 0 && LidInstellingenModel::get('zijbalk', 'agenda_max') > 0) {
-			require_once 'model/AgendaModel.class.php';
-			$zijbalk[] = new AgendaZijbalkView(AgendaModel::instance(), LidInstellingenModel::get('zijbalk', 'agendaweken'));
+						$zijbalk[] = new AgendaZijbalkView(AgendaModel::instance(), LidInstellingenModel::get('zijbalk', 'agendaweken'));
 		}
 		// Laatste mededelingen
 		if (LidInstellingenModel::get('zijbalk', 'mededelingen') > 0) {
-			require_once 'model/mededelingen/MededelingenModel.class.php';
-			require_once 'view/MededelingenView.class.php';
-			$zijbalk[] = new MededelingenZijbalkView((int) LidInstellingenModel::get('zijbalk', 'mededelingen'));
+									$zijbalk[] = new MededelingenZijbalkView((int) LidInstellingenModel::get('zijbalk', 'mededelingen'));
 		}
 		// Nieuwste belangrijke forumberichten
 		if (LidInstellingenModel::get('zijbalk', 'forum_belangrijk') > 0) {
-			require_once 'model/forum/ForumModel.class.php';
-			require_once 'view/ForumView.class.php';
-			$zijbalk[] = new ForumDraadZijbalkView(
+									$zijbalk[] = new ForumDraadZijbalkView(
 					ForumDradenModel::instance()->getRecenteForumDraden(
 							(int) LidInstellingenModel::get('zijbalk', 'forum_belangrijk'), true), true);
 		}
 		// Nieuwste forumberichten
 		if (LidInstellingenModel::get('zijbalk', 'forum') > 0) {
-			require_once 'model/forum/ForumModel.class.php';
-			require_once 'view/ForumView.class.php';
-			$belangrijk = (LidInstellingenModel::get('zijbalk', 'forum_belangrijk') > 0 ? false : null);
+									$belangrijk = (LidInstellingenModel::get('zijbalk', 'forum_belangrijk') > 0 ? false : null);
 			$zijbalk[] = new ForumDraadZijbalkView(
 					ForumDradenModel::instance()->getRecenteForumDraden(
 							(int) LidInstellingenModel::get('zijbalk', 'forum'), $belangrijk), $belangrijk);
 		}
 		// Zelfgeposte forumberichten
 		if (LidInstellingenModel::get('zijbalk', 'forum_zelf') > 0) {
-			require_once 'model/forum/ForumModel.class.php';
-			require_once 'view/ForumView.class.php';
-			$posts = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginModel::getUid(), (int) LidInstellingenModel::get('zijbalk', 'forum_zelf'), true);
+									$posts = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginModel::getUid(), (int) LidInstellingenModel::get('zijbalk', 'forum_zelf'), true);
 			$zijbalk[] = new ForumPostZijbalkView($posts);
 		}
 		// Ledenmemory topscores
 		if (LoginModel::mag('P_LEDEN_READ') AND LidInstellingenModel::get('zijbalk', 'ledenmemory_topscores') > 0) {
-			require_once 'model/LedenMemoryScoresModel.class.php';
-			require_once 'view/LedenMemoryView.class.php';
-			$lidjaar = LichtingenModel::getJongsteLidjaar();
+									$lidjaar = LichtingenModel::getJongsteLidjaar();
 			$lichting = LichtingenModel::get($lidjaar);
 			$scores = LedenMemoryScoresModel::instance()->getGroepTopScores($lichting, (int) LidInstellingenModel::get('zijbalk', 'ledenmemory_topscores'));
 			$zijbalk[] = new LedenMemoryZijbalkView($scores, $lidjaar);
 		}
 		// Nieuwste fotoalbum
 		if (LidInstellingenModel::get('zijbalk', 'fotoalbum') == 'ja') {
-			require_once 'controller/FotoAlbumController.class.php';
-			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
+						$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 			if ($album !== null) {
 				$zijbalk[] = new FotoAlbumZijbalkView($album);
 			}
 		}
 		// Komende verjaardagen
 		if (LoginModel::mag('P_LOGGED_IN') AND LidInstellingenModel::get('zijbalk', 'verjaardagen') > 0) {
-			require_once 'view/VerjaardagenView.class.php';
-			$zijbalk[] = new KomendeVerjaardagenView(
+						$zijbalk[] = new KomendeVerjaardagenView(
 			    VerjaardagenModel::getKomende((int)LidInstellingenModel::get('zijbalk', 'verjaardagen')),
                 LidInstellingenModel::get('zijbalk', 'verjaardagen_pasfotos') == 'ja');
 		}

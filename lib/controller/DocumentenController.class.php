@@ -22,9 +22,6 @@ use CsrDelft\view\formulier\uploadvelden\RequiredFileField;
 use CsrDelft\view\JsonResponse;
 use Exception;
 
-require_once 'model/documenten/Document.class.php';
-require_once 'model/documenten/DocCategorie.class.php';
-require_once 'view/DocumentenView.class.php';
 
 /**
  * DocumentenController.class.php

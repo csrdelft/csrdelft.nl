@@ -2,7 +2,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\Controller;
-use function CsrDelft\email_like;
 use CsrDelft\Icon;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\forum\ForumDelenModel;
@@ -15,16 +14,14 @@ use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
 use CsrDelft\SimpleSpamFilter;
 use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\FlotTimeSeries;
+use CsrDelft\view\forum\ForumDraadView;
 use CsrDelft\view\ForumDeelForm;
 use CsrDelft\view\ForumDeelView;
 use CsrDelft\view\ForumDraadReagerenView;
-use CsrDelft\view\ForumDraadView;
 use CsrDelft\view\ForumOverzichtView;
 use CsrDelft\view\ForumPostDeleteView;
 use CsrDelft\view\ForumPostView;
@@ -33,9 +30,10 @@ use CsrDelft\view\ForumRssView;
 use CsrDelft\view\ForumZoekenForm;
 use CsrDelft\view\JsonResponse;
 use Exception;
+use function CsrDelft\email_like;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
 
-require_once 'model/forum/ForumModel.class.php';
-require_once 'view/ForumView.class.php';
 
 /**
  * ForumController.class.php
@@ -168,8 +166,7 @@ class ForumController extends Controller {
 		foreach (ForumDelenModel::instance()->getForumDelenVoorLid() as $deel) {
 			$series[$deel->titel] = $model->getStatsVoorForumDeel($deel);
 		}
-		require_once 'view/FlotTimeSeries.class.php';
-		$this->view = new FlotTimeSeries($series);
+				$this->view = new FlotTimeSeries($series);
 	}
 
 	/**
@@ -612,8 +609,7 @@ class ForumController extends Controller {
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 
 		// spam controle
-		require_once 'simplespamfilter.class.php';
-		$filter = new SimpleSpamfilter();
+				$filter = new SimpleSpamfilter();
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
 		if (!empty($spamtrap) OR $filter->isSpam($tekst) OR ( isset($titel) AND $filter->isSpam($titel) )) { //TODO: logging
 			setMelding('SPAM', -1);
@@ -687,8 +683,7 @@ class ForumController extends Controller {
 					continue;
 				}
 				$lidnaam = $profiel->getNaam('civitas');
-				require_once 'model/entity/Mail.class.php';
-				$bericht =
+								$bericht =
 					"Geachte " . $lidnaam . ",\n\nEr is een nieuwe reactie geplaatst door " . $auteur . " in een draad dat u volgt: " .
                     "[url=" . CSR_ROOT . "/forum/reactie/" . $post->post_id . "#" . $post->post_id . "]" . $draad->titel . "[/url]" .
 					"\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT";

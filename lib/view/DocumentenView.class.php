@@ -4,7 +4,6 @@ namespace CsrDelft\view;
 use CsrDelft\model\documenten\DocCategorie;
 use CsrDelft\model\documenten\Document;
 
-require_once 'model/documenten/Document.class.php';
 
 /**
  * DocumentenView.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)

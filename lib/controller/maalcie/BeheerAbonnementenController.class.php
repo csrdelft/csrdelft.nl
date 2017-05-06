@@ -12,9 +12,6 @@ use CsrDelft\view\maalcie\BeheerAbonnementView;
 use CsrDelft\view\CsrLayoutPage;
 use Exception;
 
-require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
-require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
-require_once 'view/maalcie/BeheerAbonnementenView.class.php';
 
 /**
  * BeheerMaaltijdenController.class.php

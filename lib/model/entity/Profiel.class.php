@@ -1,35 +1,29 @@
 <?php
 namespace CsrDelft\model\entity;
 
-use function CsrDelft\array_filter_empty;
 use CsrDelft\GoogleSync;
-use CsrDelft\model\BestuursLedenModel;
-use CsrDelft\model\CommissieLedenModel;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\model\groepen\CommissiesModel;
 use CsrDelft\model\groepen\KringenModel;
+use CsrDelft\model\groepen\leden\BestuursLedenModel;
+use CsrDelft\model\groepen\leden\CommissieLedenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use function CsrDelft\setMelding;
-use function CsrDelft\square_crop;
+use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\CsrBB;
 use Exception;
+use function CsrDelft\array_filter_empty;
+use function CsrDelft\setMelding;
+use function CsrDelft\square_crop;
 
-require_once 'model/entity/Geslacht.enum.php';
-require_once 'model/entity/OntvangtContactueel.enum.php';
-require_once 'model/entity/LidStatus.enum.php';
-require_once 'model/entity/Kringleider.enum.php';
-require_once 'ldap.class.php';
-require_once 'model/GroepenModel.abstract.php';
 
 /**
  * Profiel.class.php
@@ -676,8 +670,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function isInGoogleContacts() {
 		try {
-			require_once 'googlesync.class.php';
-			if (!GoogleSync::isAuthenticated()) {
+						if (!GoogleSync::isAuthenticated()) {
 				return null;
 			}
 			return GoogleSync::instance()->existsInGoogleContacts($this);

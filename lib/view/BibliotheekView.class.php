@@ -7,7 +7,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use function CsrDelft\reldate;
 
-require_once 'model/bibliotheek/BiebCatalogus.class.php';
 
 /**
  * BibliotheekView.class.php

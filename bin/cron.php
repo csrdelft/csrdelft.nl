@@ -70,16 +70,14 @@ try {
 
 // Corvee herinneringen
 try {
-	require_once 'model/maalcie/CorveeHerinneringenModel.class.php';
-	CorveeHerinneringenModel::stuurHerinneringen();
+		CorveeHerinneringenModel::stuurHerinneringen();
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'CorveeHerinneringenModel::stuurHerinneringen()', array(), $e);
 }
 
 // Forum opschonen
 try {
-	require_once 'model/forum/ForumModel.class.php';
-	ForumModel::instance()->opschonen();
+		ForumModel::instance()->opschonen();
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'ForumModel::instance()->opschonen()', array(), $e);
 }

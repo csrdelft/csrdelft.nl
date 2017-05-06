@@ -8,9 +8,6 @@ use CsrDelft\Orm\PersistenceModel;
 use Exception;
 use PDOStatement;
 
-require_once 'model/entity/maalcie/CorveeRepetitie.class.php';
-require_once 'model/maalcie/CorveeTakenModel.class.php';
-require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
 
 /**
  * CorveeRepetitiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)

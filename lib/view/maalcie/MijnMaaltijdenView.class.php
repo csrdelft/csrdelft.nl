@@ -10,7 +10,6 @@ use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
 use CsrDelft\view\SmartyTemplateView;
 
-require_once 'view/maalcie/forms/MaaltijdBeoordelingForm.class.php';
 
 /**
  * MijnMaaltijdenView.class.php

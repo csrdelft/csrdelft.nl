@@ -8,8 +8,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
 use Exception;
 
-require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
-require_once 'model/maalcie/CorveeTakenModel.class.php';
 
 /**
  * CorveePuntenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)

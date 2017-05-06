@@ -10,8 +10,6 @@ use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\PeilingenBeheerView;
 
-require_once 'model/PeilingenModel.class.php';
-require_once 'view/PeilingenView.class.php';
 
 /**
  * Class PeilingenController

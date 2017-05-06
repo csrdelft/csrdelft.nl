@@ -5,7 +5,6 @@ use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\view\SmartyTemplateView;
 
-require_once 'controller/maalcie/MijnMaaltijdenController.class.php';
 
 /**
  * MaaltijdKetzerView.class.php

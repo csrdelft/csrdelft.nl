@@ -1,6 +1,6 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
-use CsrDelft\model\BestuursLedenModel;
+use CsrDelft\model\groepen\leden\BestuursLedenModel;
 use CsrDelft\Orm\Entity\T;
 
 /**

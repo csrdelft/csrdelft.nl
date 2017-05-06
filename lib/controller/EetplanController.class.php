@@ -10,7 +10,6 @@ use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\EetplanBeheerView;
 use CsrDelft\view\EetplanBekendeHuizenForm;
@@ -23,11 +22,10 @@ use CsrDelft\view\EetplanNovietView;
 use CsrDelft\view\EetplanRelatieView;
 use CsrDelft\view\EetplanTableView;
 use CsrDelft\view\EetplanView;
-use CsrDelft\view\formulier\RemoveRowsResponse;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use CsrDelft\view\NieuwEetplanForm;
+use function CsrDelft\setMelding;
 
-require_once 'model/EetplanModel.class.php';
-require_once 'view/EetplanView.class.php';
 
 /**
  * EetplanController.class.php

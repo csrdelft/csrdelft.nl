@@ -11,9 +11,6 @@ use CsrDelft\view\maalcie\BeheerPuntenLidView;
 use CsrDelft\view\maalcie\BeheerPuntenView;
 use Exception;
 
-require_once 'model/maalcie/CorveePuntenModel.class.php';
-require_once 'model/maalcie/FunctiesModel.class.php';
-require_once 'view/maalcie/BeheerPuntenView.class.php';
 
 /**
  * BeheerPuntenController.class.php

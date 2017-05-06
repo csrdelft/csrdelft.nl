@@ -69,8 +69,7 @@ class FotoAlbumModel extends PersistenceModel {
 			return null;
 		}
 		if (AccountModel::isValidUid($path) AND ProfielModel::existsUid($path)) {
-			require_once 'model/entity/fotoalbum/FotoTagAlbum.class.php';
-			$album = new FotoTagAlbum($path);
+						$album = new FotoTagAlbum($path);
 		} else {
 			$album = new FotoAlbum($path);
 		}

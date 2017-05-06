@@ -4,7 +4,6 @@ namespace CsrDelft\model\documenten;
 use CsrDelft\MijnSqli;
 use CsrDelft\model\security\LoginModel;
 
-require_once 'model/documenten/Document.class.php';
 
 /**
  * DocCategorie.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)

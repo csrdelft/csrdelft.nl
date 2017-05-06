@@ -20,8 +20,6 @@ use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use Exception;
 
-require_once 'model/bibliotheek/BiebRubriek.class.php';
-require_once 'model/bibliotheek/BiebBeschrijving.class.php';
 
 /**
  * BiebBoek.class.php	| 	Gerrit Uitslag

@@ -3,7 +3,6 @@ namespace CsrDelft\view;
 use CsrDelft\model\AgendaModel;
 use CsrDelft\model\entity\agenda\AgendaItem;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\invoervelden\RequiredRechtenField;
 use CsrDelft\view\formulier\invoervelden\RequiredTextField;
@@ -177,41 +176,6 @@ class AgendaItemForm extends ModalForm {
 			$fields['eind_moment']->error = 'Eindmoment moet na beginmoment liggen';
 		}
 		return parent::validate();
-	}
-
-}
-
-abstract class AgendaItemsView extends AgendaView {
-
-	protected $items;
-
-	public function __construct(AgendaModel $agenda, $aantalWeken) {
-		parent::__construct($agenda);
-		$beginMoment = strtotime(date('Y-m-d'));
-		$eindMoment = strtotime('+' . $aantalWeken . ' weeks', $beginMoment);
-		$eindMoment = strtotime('next saturday', $eindMoment);
-		$this->items = $this->model->getAllAgendeerbaar($beginMoment, $eindMoment, false, $this instanceof AgendaZijbalkView);
-	}
-
-}
-
-class AgendaZijbalkView extends AgendaItemsView {
-
-	public function view() {
-		if (count($this->items) > LidInstellingenModel::get('zijbalk', 'agenda_max')) {
-			$this->items = array_slice($this->items, 0, LidInstellingenModel::get('zijbalk', 'agenda_max'));
-		}
-		$this->smarty->assign('items', $this->items);
-		$this->smarty->display('agenda/zijbalk.tpl');
-	}
-
-}
-
-class AgendaCourantView extends AgendaItemsView {
-
-	public function view() {
-		$this->smarty->assign('items', $this->items);
-		$this->smarty->display('agenda/courant.tpl');
 	}
 
 }

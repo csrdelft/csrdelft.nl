@@ -8,7 +8,6 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use Exception;
 
-require_once 'model/entity/Bestand.class.php';
 
 /**
  * document.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)

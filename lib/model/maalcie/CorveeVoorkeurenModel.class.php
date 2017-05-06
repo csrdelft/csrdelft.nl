@@ -8,8 +8,6 @@ use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use Exception;
 
-require_once 'model/entity/maalcie/CorveeVoorkeur.class.php';
-require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
 
 /**
  * CorveeVoorkeurenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -58,8 +56,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		}
 		foreach ($repById as $crid => $repetitie) {
 			if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
-				require_once 'model/maalcie/KwalificatiesModel.class.php';
-				if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->functie_id)) {
+								if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->functie_id)) {
 					continue;
 				}
 			}
@@ -144,8 +141,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 			throw new Exception('Niet voorkeurbaar');
 		}
 		if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
-			require_once 'model/maalcie/KwalificatiesModel.class.php';
-			if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->functie_id)) {
+						if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->functie_id)) {
 				throw new Exception('Niet gekwalificeerd');
 			}
 		}

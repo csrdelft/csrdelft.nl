@@ -314,8 +314,7 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function getStatsJson() {
-		require_once 'view/FlotTimeSeries.class.php';
-		$formatter = new FlotTimeSeries(array($this->getStats()));
+				$formatter = new FlotTimeSeries(array($this->getStats()));
 		return $formatter->getJson($formatter->getModel());
 	}
 

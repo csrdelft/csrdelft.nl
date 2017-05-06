@@ -3,7 +3,6 @@ namespace CsrDelft\model\entity;
 
 use Exception;
 
-require_once 'model/entity/Bestand.class.php';
 
 /**
  * Afbeelding.class.php

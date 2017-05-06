@@ -3,7 +3,6 @@ namespace CsrDelft\view\formulier;
 
 use function CsrDelft\getMelding;
 
-require_once 'view/formulier/Formulier.class.php';
 
 /**
  * TabsForm.class.php

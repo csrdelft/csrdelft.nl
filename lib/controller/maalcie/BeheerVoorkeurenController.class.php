@@ -10,8 +10,6 @@ use CsrDelft\view\maalcie\BeheerVoorkeurenView;
 use CsrDelft\view\maalcie\BeheerVoorkeurView;
 use Exception;
 
-require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
-require_once 'view/maalcie/BeheerVoorkeurenView.class.php';
 
 /**
  * BeheerVoorkeurenController.class.php

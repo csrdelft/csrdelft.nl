@@ -15,8 +15,6 @@ use CsrDelft\view\CmsPaginaZijbalkView;
 use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
 
-require_once 'model/CmsPaginaModel.class.php';
-require_once 'view/CmsPaginaView.class.php';
 
 /**
  * CmsPaginaController.class.php

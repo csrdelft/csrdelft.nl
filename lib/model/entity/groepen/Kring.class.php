@@ -1,6 +1,6 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
-use CsrDelft\model\KringLedenModel;
+use CsrDelft\model\groepen\leden\KringLedenModel;
 use CsrDelft\Orm\Entity\T;
 
 /**

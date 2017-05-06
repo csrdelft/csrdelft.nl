@@ -18,12 +18,6 @@ use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use CsrDelft\view\Validator;
 use Exception;
 
-require_once 'view/Validator.interface.php';
-require_once 'model/entity/security/AuthenticationMethod.enum.php';
-require_once 'model/security/RememberLoginModel.class.php';
-require_once 'model/security/AccountModel.class.php';
-require_once 'model/security/OneTimeTokensModel.class.php';
-require_once 'model/ProfielModel.class.php';
 
 /**
  * LoginModel.class.php

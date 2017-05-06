@@ -7,7 +7,6 @@ use CsrDelft\model\security\LoginModel;
 use function CsrDelft\reldate;
 use CsrDelft\view\JsonResponse;
 
-require_once 'model/GeoLocationModel.class.php';
 
 /**
  * GeoLocationController.class.php

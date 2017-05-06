@@ -7,7 +7,6 @@ use CsrDelft\model\entity\security\LoginSession;
 use CsrDelft\model\entity\security\RememberLogin;
 use CsrDelft\model\InstellingenModel;
 
-require_once 'model/security/LoginModel.class.php';
 
 /**
  * CliLoginModel.class.php

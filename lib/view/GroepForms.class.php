@@ -1,7 +1,5 @@
 <?php
 namespace CsrDelft\view;
-use function CsrDelft\classNameZonderNamespace;
-use function CsrDelft\getMelding;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\AbstractGroepLid;
@@ -24,7 +22,6 @@ use CsrDelft\model\groepen\RechtenGroepenModel;
 use CsrDelft\model\groepen\WerkgroepenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\setMelding;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
 use CsrDelft\view\formulier\elementen\HtmlComment;
@@ -39,6 +36,9 @@ use CsrDelft\view\formulier\knoppen\ModalCloseButtons;
 use CsrDelft\view\formulier\knoppen\PasfotoAanmeldenKnop;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 use CsrDelft\view\formulier\ModalForm;
+use function CsrDelft\classNameZonderNamespace;
+use function CsrDelft\getMelding;
+use function CsrDelft\setMelding;
 
 /**
  * GroepForms.class.php
@@ -187,8 +187,7 @@ class GroepSoortField extends RadioField {
 	public function __construct($name, $value, $description, AbstractGroep $groep) {
 		parent::__construct($name, $value, $description, array());
 
-		require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
-		$activiteiten = array();
+				$activiteiten = array();
 		foreach (ActiviteitSoort::getTypeOptions() as $soort) {
 			$activiteiten[$soort] = ActiviteitSoort::getDescription($soort);
 		}
@@ -203,8 +202,7 @@ class GroepSoortField extends RadioField {
 $('#{$this->getId()}Option_ActiviteitenModel').click();
 JS;
 
-		require_once 'model/entity/groepen/CommissieSoort.enum.php';
-		$commissies = array();
+				$commissies = array();
 		foreach (CommissieSoort::getTypeOptions() as $soort) {
 			$commissies[$soort] = CommissieSoort::getDescription($soort);
 		}

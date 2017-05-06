@@ -3,7 +3,6 @@ namespace CsrDelft\controller\framework;
 
 use CsrDelft\model\security\LoginModel;
 
-require_once 'controller/framework/Controller.abstract.php';
 
 /**
  * AclController.abstract.php

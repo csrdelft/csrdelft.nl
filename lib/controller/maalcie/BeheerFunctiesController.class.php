@@ -12,8 +12,6 @@ use CsrDelft\view\maalcie\FunctieForm;
 use CsrDelft\view\maalcie\FunctieView;
 use CsrDelft\view\maalcie\KwalificatieForm;
 
-require_once 'model/maalcie/FunctiesModel.class.php';
-require_once 'view/maalcie/BeheerFunctiesView.class.php';
 
 /**
  * BeheerFunctiesController.class.php

@@ -8,7 +8,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\InstellingBeheerView;
 use CsrDelft\view\InstellingenBeheerView;
 
-require_once 'view/InstellingenBeheerView.class.php';
 
 /**
  * InstellingenBeheerController.class.php

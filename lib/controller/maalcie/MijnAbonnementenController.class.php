@@ -10,9 +10,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\MijnAbonnementenView;
 use CsrDelft\view\maalcie\MijnAbonnementView;
 
-require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
-require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
-require_once 'view/maalcie/MijnAbonnementenView.class.php';
 
 /**
  * MijnAbonnementenController.class.php

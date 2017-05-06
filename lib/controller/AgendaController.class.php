@@ -1,13 +1,6 @@
 <?php
 namespace CsrDelft\controller;
 
-use function CsrDelft\setMelding;
-use CsrDelft\view\AgendaCourantView;
-use CsrDelft\view\AgendaICalendarView;
-use CsrDelft\view\AgendaItemDeleteView;
-use CsrDelft\view\AgendaItemForm;
-use CsrDelft\view\AgendaMaandView;
-use CsrDelft\view\AgendeerbaarMaandView;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\AgendaModel;
 use CsrDelft\model\AgendaVerbergenModel;
@@ -18,12 +11,17 @@ use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\JsonResponse;
+use CsrDelft\view\agenda\AgendaCourantView;
+use CsrDelft\view\AgendaICalendarView;
+use CsrDelft\view\AgendaItemDeleteView;
+use CsrDelft\view\AgendaItemForm;
+use CsrDelft\view\AgendaMaandView;
+use CsrDelft\view\AgendeerbaarMaandView;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\JsonResponse;
 use Exception;
+use function CsrDelft\setMelding;
 
-require_once 'model/AgendaModel.class.php';
-require_once 'view/AgendaView.class.php';
 
 /**
  * AgendaController.class.php

@@ -197,8 +197,7 @@ class Mail {
 	public function send($debug = false) {
 		switch ($this->type) {
 			case 'html':
-				require_once 'view/MailTemplateView.class.php';
-				$template = new MailTemplateView($this);
+								$template = new MailTemplateView($this);
 				$body = $template->getHtml();
 				break;
 

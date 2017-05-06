@@ -5,7 +5,6 @@ use CsrDelft\model\entity\KeywordTag;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\T;
 
-require_once 'model/entity/KeywordTag.class.php';
 
 /**
  * FotoTag.class.php

@@ -2,8 +2,6 @@
 namespace CsrDelft\view;
 
 use CsrDelft\bbparser\eamBBParser;
-use function CsrDelft\endsWith;
-use function CsrDelft\external_url;
 use CsrDelft\Icon;
 use CsrDelft\model\bibliotheek\BiebBoek;
 use CsrDelft\model\documenten\Document;
@@ -28,17 +26,19 @@ use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\PeilingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\reldate;
 use CsrDelft\SavedQuery;
 use CsrDelft\SavedQueryContent;
-use function CsrDelft\startsWith;
-use function CsrDelft\url_like;
 use CsrDelft\view\formulier\UrlDownloader;
+use CsrDelft\view\fotoalbum\FotoAlbumBBView;
+use CsrDelft\view\fotoalbum\FotoAlbumSliderView;
 use CsrDelft\view\maalcie\MaaltijdKetzerView;
 use Exception;
-use CsrDelft\view\GroepView;
+use function CsrDelft\endsWith;
+use function CsrDelft\external_url;
+use function CsrDelft\reldate;
+use function CsrDelft\startsWith;
+use function CsrDelft\url_like;
 
-require_once 'bbparser/eamBBParser.class.php';
 
 /**
  * CsrBB.class.php
@@ -183,8 +183,7 @@ class CsrBB extends eamBBParser {
 	 * Toont de thumbnail met link naar fotoalbum.
 	 */
 	function bb_foto($arguments = array()) {
-		require_once 'controller/FotoAlbumController.class.php';
-		$url = urldecode($this->parseArray(array('[/foto]'), array()));
+				$url = urldecode($this->parseArray(array('[/foto]'), array()));
 		$parts = explode('/', $url);
 		if (in_array('Posters', $parts)) {
 			$groot = true;
@@ -227,8 +226,7 @@ class CsrBB extends eamBBParser {
 	 *
 	 */
 	protected function bb_fotoalbum($arguments = array()) {
-		require_once 'controller/FotoAlbumController.class.php';
-		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
+				$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
 		if ($url === 'laatste') {
 			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 		} else {
@@ -473,8 +471,7 @@ class CsrBB extends eamBBParser {
 		$queryID = (int) $queryID;
 
 		if ($queryID != 0) {
-			require_once 'savedquery.class.php';
-			$sqc = new SavedQueryContent(new SavedQuery($queryID));
+						$sqc = new SavedQueryContent(new SavedQuery($queryID));
 
 			return $sqc->render_queryResult();
 		} else {
@@ -686,8 +683,7 @@ HTML;
 	}
 
 	protected function groep(AbstractGroep $groep) {
-		require_once 'view/GroepenView.class.php';
-		// Controleer rechten
+				// Controleer rechten
 		if (!$groep->mag(A::Bekijken)) {
 			return '';
 		}
@@ -854,9 +850,7 @@ HTML;
 			$boekid = $this->parseArray(array('[/boek]'), array());
 		}
 
-		require_once 'model/bibliotheek/BiebBoek.class.php';
-		require_once 'view/BibliotheekView.class.php';
-		try {
+						try {
 			$boek = new BiebBoek((int) $boekid);
 			$content = new BoekBBView($boek);
 			return $content->view();
@@ -878,8 +872,7 @@ HTML;
 		} else {
 			$id = $this->parseArray(array('[/document]'), array());
 		}
-		require_once 'view/DocumentenView.class.php';
-		try {
+				try {
 			$document = new Document((int) $id);
 			$content = new DocumentBBContent($document);
 			return $content->getHtml();
@@ -906,10 +899,7 @@ HTML;
 		$mid = trim($mid);
 		$maaltijd2 = null;
 
-		require_once 'model/maalcie/MaaltijdenModel.class.php';
-		require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
-		require_once 'view/maalcie/MaaltijdKetzerView.class.php';
-		try {
+								try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
 				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(LoginModel::getUid()); // met filter
 				$aantal = sizeof($maaltijden);
@@ -1054,8 +1044,6 @@ HTML;
 			return '[mededelingen] Geen geldig mededelingenblok.';
 		}
 
-		require_once 'model/mededelingen/MededelingenModel.class.php';
-		require_once 'view/MededelingenView.class.php';
 
 		$MededelingenView = new MededelingenView(0);
 		switch ($type) {
@@ -1137,8 +1125,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		} else {
 			$peiling_id = $this->parseArray(array('[/peiling]'), array());
 		}
-		require_once 'view/PeilingenView.class.php';
-		try {
+				try {
 			$peiling = PeilingenModel::instance()->getPeilingById((int) $peiling_id);
 			$peilingcontent = new PeilingView($peiling);
 			return $peilingcontent->getHtml();
@@ -1200,8 +1187,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		} else {
 			$dagen = $this->parseArray(array('[/bijbelrooster]'), array());
 		}
-		require_once 'view/BijbelroosterView.class.php';
-		$view = new BijbelroosterBBView($dagen);
+				$view = new BijbelroosterBBView($dagen);
 		return $view->getHtml();
 	}
 
@@ -1236,9 +1222,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	}
 
 	function bb_ledenmemoryscores($arguments = array()) {
-		require_once 'model/LedenMemoryScoresModel.class.php';
-		require_once 'view/LedenMemoryView.class.php';
-		LedenMemoryScoresModel::instance();
+						LedenMemoryScoresModel::instance();
 		$groep = null;
 		$titel = null;
 		/**

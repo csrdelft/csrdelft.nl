@@ -12,15 +12,7 @@ use CsrDelft\Orm\Persistence\Database;
 use Exception;
 use PDO;
 
-require_once 'model/Paging.interface.php';
 
-require_once 'model/forum/ForumDelenModel.class.php';
-require_once 'model/forum/ForumDradenReagerenModel.class.php';
-require_once 'model/forum/ForumDradenGelezenModel.class.php';
-require_once 'model/forum/ForumDradenVerbergenModel.class.php';
-require_once 'model/forum/ForumDradenVolgenModel.class.php';
-require_once 'model/forum/ForumDradenModel.class.php';
-require_once 'model/forum/ForumPostsModel.class.php';
 
 /**
  * ForumModel.class.php

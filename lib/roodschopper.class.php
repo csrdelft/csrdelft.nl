@@ -19,7 +19,6 @@ use CsrDelft\view\CsrBB;
 use Exception;
 
 require_once 'configuratie.include.php';
-require_once 'model/entity/Mail.class.php';
 
 class Roodschopper {
 

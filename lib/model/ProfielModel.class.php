@@ -18,7 +18,6 @@ use function CsrDelft\getDateTime;
 use function CsrDelft\setMelding;
 
 
-require_once 'model/entity/Mail.class.php';
 
 /**
  * ProfielModel.class.php
@@ -230,8 +229,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return string changelogregel
 	 */
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
-		require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
-		$aantal = MaaltijdAbonnementenModel::instance()->verwijderAbonnementenVoorLid($profiel->uid);
+				$aantal = MaaltijdAbonnementenModel::instance()->verwijderAbonnementenVoorLid($profiel->uid);
 		if ($aantal > 0) {
 			return 'Afmelden abo\'s: ' . $aantal . ' uitgezet.[br]';
 		}
@@ -318,8 +316,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyBibliothecaris(Profiel $profiel, $oudestatus) {
-		require_once 'model/bibliotheek/BiebCatalogus.class.php';
-		$boeken = BiebCatalogus::getBoekenByUid($profiel->uid, 'geleend');
+				$boeken = BiebCatalogus::getBoekenByUid($profiel->uid, 'geleend');
 		if (!is_array($boeken)) {
 			$boeken = array();
 		}

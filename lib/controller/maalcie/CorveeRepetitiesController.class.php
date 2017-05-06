@@ -13,10 +13,6 @@ use CsrDelft\view\maalcie\CorveeRepetitiesView;
 use CsrDelft\view\maalcie\CorveeRepetitieView;
 use CsrDelft\view\maalcie\forms\CorveeRepetitieForm;
 
-require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
-require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
-require_once 'view/maalcie/CorveeRepetitiesView.class.php';
-require_once 'view/maalcie/forms/CorveeRepetitieForm.class.php';
 
 /**
  * CorveeRepetitiesController.class.php

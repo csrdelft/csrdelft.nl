@@ -10,8 +10,6 @@ use CsrDelft\view\JsonResponse;
 use CsrDelft\view\MenuBeheerView;
 use CsrDelft\view\MenuItemForm;
 
-require_once 'model/MenuModel.class.php';
-require_once 'view/MenuBeheerView.class.php';
 
 /**
  * MenuBeheerController.class.php

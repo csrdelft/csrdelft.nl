@@ -1,16 +1,14 @@
 <?php
-namespace CsrDelft\view\formulier;
-use function CsrDelft\className;
-use CsrDelft\Icon;
-use CsrDelft\view\formulier\elementen\FormElement;
-use CsrDelft\view\JsonResponse;
-use CsrDelft\view\View;
-use JsonSerializable;
 
-require_once 'view/formulier/TabsForm.class.php';
+namespace CsrDelft\view\formulier\datatable;
+
+use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\View;
+use function CsrDelft\className;
+
 
 /**
- * DataTable.class.php
+ * DataTable.php
  *
  * @author P.W.G. Brussee <brussee@live.nl
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -425,89 +423,4 @@ HTML;
 			};
 JS;
 	}
-}
-
-class DataTableKnop implements JsonSerializable {
-
-	protected $multiplicity;
-	protected $tableId;
-	protected $label;
-	protected $url;
-	protected $icon;
-	protected $id;
-	protected $extend;
-	protected $buttons;
-	protected $title;
-
-	public function __construct($multiplicity, $tableId, $url, $action, $label, $title, $icon = '', $extend = 'default') {
-		$this->icon = $icon;
-		$this->label = $label;
-		$this->title = $title;
-		$this->url = $url;
-		$this->multiplicity = $multiplicity;
-		$this->tableId = $tableId;
-		$this->extend = $extend;
-		$this->buttons = array();
-	}
-
-	public function addKnop(DataTableKnop $knop) {
-		$this->buttons[] = $knop;
-	}
-
-	public function jsonSerialize() {
-		return array(
-			'text' => $this->label,
-			'titleAttr' => $this->title,
-			'multiplicity' => $this->multiplicity,
-			'extend' => $this->extend,
-			'href' => $this->url,
-			'className' => $this->icon ? 'dt-button-ico dt-ico-' . Icon::get($this->icon) : '',
-			'dataTableId' => $this->tableId,
-			'autoClose' => true,
-			'buttons' => $this->buttons
-		);
-	}
-}
-
-abstract class DataTableResponse extends JsonResponse {
-
-	public $autoUpdate = false;
-	public $modal = null;
-
-	public function view() {
-		http_response_code($this->code);
-		header('Content-Type: application/json');
-		echo "{\n";
-		echo '"modal":' . json_encode($this->modal) . ",\n";
-		echo '"autoUpdate":' . json_encode($this->autoUpdate) . ",\n";
-		echo '"lastUpdate":' . json_encode(time() - 1) . ",\n";
-		echo '"data":[' . "\n";
-		$comma = false;
-		foreach ($this->model as $entity) {
-			if ($comma) {
-				echo ",\n";
-			} else {
-				$comma = true;
-			}
-			$json = $this->getJson($entity);
-			if ($json) {
-				echo $json;
-			} else {
-				$comma = false;
-			}
-		}
-		echo "\n]}";
-	}
-
-}
-
-class RemoveRowsResponse extends DataTableResponse {
-
-	public function getJson($entity) {
-		return parent::getJson(array(
-			'UUID' => $entity->getUUID(),
-			'remove' => true
-		));
-	}
-
 }

@@ -3,7 +3,6 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\model\groepen\WerkgroepenModel;
 
-require_once 'controller/groepen/KetzersController.class.php';
 
 /**
  * WerkgroepenController.class.php

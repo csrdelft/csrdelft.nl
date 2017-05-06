@@ -5,9 +5,9 @@ use CsrDelft\model\entity\security\A;
 use CsrDelft\model\entity\security\AccessControl;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\DataTable;
-use CsrDelft\view\formulier\DataTableKnop;
-use CsrDelft\view\formulier\DataTableResponse;
+use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\DataTableResponse;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\invoervelden\RequiredRechtenField;
 use CsrDelft\view\formulier\invoervelden\RequiredTextField;
@@ -49,9 +49,7 @@ class RechtenTable extends DataTable {
 	}
 
 	public function view() {
-		require_once 'model/CmsPaginaModel.class.php';
-		require_once 'view/CmsPaginaView.class.php';
-		$view = new CmsPaginaView(CmsPaginaModel::get('UitlegACL'));
+						$view = new CmsPaginaView(CmsPaginaModel::get('UitlegACL'));
 		$view->view();
 		parent::view();
 	}
