@@ -1,4 +1,44 @@
 <?php
+namespace CsrDelft\view;
+use function CsrDelft\classNameZonderNamespace;
+use function CsrDelft\getMelding;
+use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\groepen\AbstractGroepLid;
+use CsrDelft\model\entity\groepen\Activiteit;
+use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\model\entity\groepen\Commissie;
+use CsrDelft\model\entity\groepen\CommissieSoort;
+use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\entity\groepen\HuisStatus;
+use CsrDelft\model\entity\groepen\Ketzer;
+use CsrDelft\model\entity\groepen\Kring;
+use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\model\groepen\OnderverenigingenModel;
+use CsrDelft\model\groepen\RechtenGroepenModel;
+use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\setMelding;
+use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\elementen\HtmlBbComment;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\InlineForm;
+use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\keuzevelden\MultiSelectField;
+use CsrDelft\view\formulier\keuzevelden\RadioField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\knoppen\FormKnoppen;
+use CsrDelft\view\formulier\knoppen\ModalCloseButtons;
+use CsrDelft\view\formulier\knoppen\PasfotoAanmeldenKnop;
+use CsrDelft\view\formulier\knoppen\SubmitKnop;
+use CsrDelft\view\formulier\ModalForm;
 
 /**
  * GroepForms.class.php
@@ -15,7 +55,7 @@ class GroepForm extends ModalForm {
 	private $mode;
 
 	public function __construct(AbstractGroep $groep, $action, $mode, $nocancel = false) {
-		parent::__construct($groep, $action, get_class($groep), true);
+		parent::__construct($groep, $action, classNameZonderNamespace(get_class($groep)), true);
 		$this->mode = $mode;
 		if ($groep->id) {
 			$this->titel .= ' wijzigen';
@@ -129,7 +169,7 @@ class GroepOpvolgingForm extends ModalForm {
 		foreach (GroepStatus::getTypeOptions() as $status) {
 			$options[$status] = GroepStatus::getChar($status);
 		}
-		$fields[] = new RadioField('status', $groep->status, 'Groepstatus', $options);
+		$fields[] = new RadioField('status', $groep->status, Groepstatus::class, $options);
 
 		$fields[] = new FormDefaultKnoppen();
 
@@ -180,14 +220,14 @@ $('#{$this->getId()}Option_CommissiesModel').click();
 JS;
 
 		$this->options = array(
-			'ActiviteitenModel'		 => $this->activiteit,
-			'KetzersModel'			 => 'Aanschafketzer',
-			'WerkgroepenModel'		 => WerkgroepenModel::ORM,
-			'RechtenGroepenModel'	 => 'Groep (overig)',
-			'OnderverenigingenModel' => OnderverenigingenModel::ORM,
-			'WoonoordenModel'		 => WoonoordenModel::ORM,
-			'BesturenModel'			 => BesturenModel::ORM,
-			'CommissiesModel'		 => $this->commissie
+			ActiviteitenModel::class		 => $this->activiteit,
+			KetzersModel::class			 => 'Aanschafketzer',
+			WerkgroepenModel::class		 => WerkgroepenModel::ORM,
+			RechtenGroepenModel::class	 => 'Groep (overig)',
+			OnderverenigingenModel::class => OnderverenigingenModel::ORM,
+			WoonoordenModel::class		 => WoonoordenModel::ORM,
+			BesturenModel::class			 => BesturenModel::ORM,
+			CommissiesModel::class => $this->commissie
 		);
 	}
 

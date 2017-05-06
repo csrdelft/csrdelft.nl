@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\view\maalcie;
+use function CsrDelft\getMelding;
+use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
+use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use CsrDelft\view\SmartyTemplateView;
 
 /**
  * BeheerAbonnementenView.class.php

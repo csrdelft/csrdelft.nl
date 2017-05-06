@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\controller\groepen;
+use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\GroepAanmakenForm;
 
 /**
  * KetzersController.class.php

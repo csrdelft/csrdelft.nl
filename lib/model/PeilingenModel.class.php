@@ -1,7 +1,14 @@
 <?php
+namespace CsrDelft\model;
 
+use CsrDelft\model\entity\peilingen\Peiling;
+use CsrDelft\model\entity\peilingen\PeilingOptie;
+use CsrDelft\model\entity\peilingen\PeilingStem;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
+use function CsrDelft\setMelding;
+use Exception;
 
 require_once 'model/entity/peilingen/Peiling.class.php';
 require_once 'model/entity/peilingen/PeilingOptie.class.php';

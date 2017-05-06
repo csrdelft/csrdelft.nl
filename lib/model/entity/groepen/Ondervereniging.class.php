@@ -1,5 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\model\OnderverenigingsLedenModel;
 use CsrDelft\Orm\Entity\T;
 
 require_once 'model/entity/groepen/OnderverenigingStatus.enum.php';
@@ -12,7 +14,7 @@ require_once 'model/entity/groepen/OnderverenigingStatus.enum.php';
  */
 class Ondervereniging extends AbstractGroep {
 
-	const leden = 'OnderverenigingsLedenModel';
+	const leden = OnderverenigingsLedenModel::class;
 
 	/**
 	 * (Adspirant-)Ondervereniging
@@ -24,7 +26,7 @@ class Ondervereniging extends AbstractGroep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'soort' => array(T::Enumeration, false, 'OnderverenigingStatus'),
+		'soort' => array(T::Enumeration, false, OnderverenigingStatus::class),
 	);
 	/**
 	 * Database table name

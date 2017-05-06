@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft;
 
 /**
  * Roodschopperklasse.
@@ -10,6 +11,13 @@
  *
  * @deprecated
  */
+use CsrDelft\model\entity\Mail;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\CsrBB;
+use Exception;
+
 require_once 'configuratie.include.php';
 require_once 'model/entity/Mail.class.php';
 

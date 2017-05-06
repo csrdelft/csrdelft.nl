@@ -1,4 +1,21 @@
 <?php
+namespace CsrDelft\view;
+
+use CsrDelft\model\EetplanBekendenModel;
+use CsrDelft\model\EetplanModel;
+use CsrDelft\model\entity\Eetplan;
+use CsrDelft\model\entity\EetplanBekenden;
+use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\view\formulier\DataTable;
+use CsrDelft\view\formulier\DataTableKnop;
+use CsrDelft\view\formulier\DataTableResponse;
+use CsrDelft\view\formulier\invoervelden\RequiredEntityField;
+use CsrDelft\view\formulier\invoervelden\RequiredLidField;
+use CsrDelft\view\formulier\keuzevelden\RequiredDateField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
 
 require_once 'model/EetplanModel.class.php';
 

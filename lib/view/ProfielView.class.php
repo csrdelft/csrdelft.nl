@@ -1,4 +1,62 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\lid\LidZoeker;
+use CsrDelft\model\bibliotheek\BiebCatalogus;
+use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\OntvangtContactueel;
+use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\fiscaal\SaldoModel;
+use CsrDelft\model\forum\ForumPostsModel;
+use CsrDelft\model\FotoModel;
+use CsrDelft\model\FotoTagsModel;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\model\groepen\OnderverenigingenModel;
+use CsrDelft\model\groepen\RechtenGroepenModel;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
+use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
+use CsrDelft\model\maalcie\KwalificatiesModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\elementen\CollapsableSubkopje;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\elementen\Subkopje;
+use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\getalvelden\RequiredIntField;
+use CsrDelft\view\formulier\getalvelden\RequiredTelefoonField;
+use CsrDelft\view\formulier\getalvelden\TelefoonField;
+use CsrDelft\view\formulier\invoervelden\DuckField;
+use CsrDelft\view\formulier\invoervelden\EmailField;
+use CsrDelft\view\formulier\invoervelden\LandField;
+use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\invoervelden\RequiredEmailField;
+use CsrDelft\view\formulier\invoervelden\RequiredIBANField;
+use CsrDelft\view\formulier\invoervelden\RequiredLandField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextareaField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\invoervelden\StudieField;
+use CsrDelft\view\formulier\invoervelden\TextareaField;
+use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\invoervelden\UrlField;
+use CsrDelft\view\formulier\keuzevelden\DateField;
+use CsrDelft\view\formulier\keuzevelden\JaNeeField;
+use CsrDelft\view\formulier\keuzevelden\RequiredDateField;
+use CsrDelft\view\formulier\keuzevelden\RequiredGeslachtField;
+use CsrDelft\view\formulier\keuzevelden\RequiredSelectField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\keuzevelden\VerticaleField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\uploadvelden\ImageField;
 
 /**
  * ProfielView.class.php
@@ -113,7 +171,7 @@ class ProfielView extends SmartyTemplateView {
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {
 
 			require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
-			$timestamp = strtotime(Instellingen::get('maaltijden', 'recent_lidprofiel'));
+			$timestamp = strtotime(InstellingenModel::get('maaltijden', 'recent_lidprofiel'));
 			$this->smarty->assign('recenteAanmeldingen', MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid($this->model->uid, $timestamp));
 
 			require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';

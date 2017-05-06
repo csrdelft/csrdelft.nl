@@ -1,5 +1,8 @@
 <?php
+namespace CsrDelft\model;
+use CsrDelft\model\entity\Instelling;
 use CsrDelft\Orm\CachedPersistenceModel;
+use Exception;
 
 /**
  * InstellingenModel.class.php
@@ -7,7 +10,7 @@ use CsrDelft\Orm\CachedPersistenceModel;
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
-class Instellingen extends CachedPersistenceModel {
+class InstellingenModel extends CachedPersistenceModel {
 
 	const ORM = Instelling::class;
 

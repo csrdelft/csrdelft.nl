@@ -1,4 +1,26 @@
 <?php
+namespace CsrDelft\view;
+
+use function CsrDelft\getMelding;
+use CsrDelft\Icon;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\entity\fotoalbum\Foto;
+use CsrDelft\model\entity\fotoalbum\FotoAlbum;
+use CsrDelft\model\FotoAlbumModel;
+use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\view\formulier\Dropzone;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\getalvelden\RequiredIntField;
+use CsrDelft\view\formulier\InlineForm;
+use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\invoervelden\RequiredFileNameField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
+use CsrDelft\view\formulier\uploadvelden\ImageField;
+use CsrDelft\view\formulier\uploadvelden\RequiredImageField;
 
 require_once 'model/FotoAlbumModel.class.php';
 
@@ -98,7 +120,7 @@ class FotoAlbumToevoegenForm extends ModalForm {
 class FotoTagToevoegenForm extends InlineForm {
 
 	public function __construct(Foto $foto) {
-		$field = new LidField('uid', null, null, LidInstellingen::get('fotoalbum', 'tag_suggestions'));
+		$field = new LidField('uid', null, null, LidInstellingenModel::get('fotoalbum', 'tag_suggestions'));
 		$field->placeholder = 'Naam of lidnummer';
 		parent::__construct(null, '/fotoalbum/addtag/' . $foto->subdir, $field, false, false);
 		$fields[] = new RequiredTextField('foto', $foto->filename, null);
@@ -187,13 +209,13 @@ class FotoBBView extends SmartyTemplateView {
 		if ($this->responsive) {
 			$html .= 'responsive';
 		}
-		if (!$this->groot AND LidInstellingen::get('forum', 'fotoWeergave') == 'boven bericht') {
+		if (!$this->groot AND LidInstellingenModel::get('forum', 'fotoWeergave') == 'boven bericht') {
 			$html .= ' hoverIntent"><div class="hoverIntentContent"><div class="bb-img-loading" src="' . $this->model->getResizedUrl() . '"></div></div>';
 		} else {
 			$html .= '">';
 		}
 		$html .= '<div class="bb-img-loading" src="';
-		if (($this->groot AND LidInstellingen::get('forum', 'fotoWeergave') != 'nee') OR LidInstellingen::get('forum', 'fotoWeergave') == 'in bericht') {
+		if (($this->groot AND LidInstellingenModel::get('forum', 'fotoWeergave') != 'nee') OR LidInstellingenModel::get('forum', 'fotoWeergave') == 'in bericht') {
 			$html .= $this->model->getResizedUrl();
 		} else {
 			$html .= $this->model->getThumbUrl();
@@ -231,8 +253,8 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 		echo '<div class="fotos">';
 		$fotos = $this->model->getFotos();
 		$limit = count($fotos);
-		if ($limit > LidInstellingen::get('zijbalk', 'fotos')) {
-			$limit = LidInstellingen::get('zijbalk', 'fotos');
+		if ($limit > LidInstellingenModel::get('zijbalk', 'fotos')) {
+			$limit = LidInstellingenModel::get('zijbalk', 'fotos');
 		}
 		shuffle($fotos);
 		for ($i = 0; $i < $limit; $i++) {

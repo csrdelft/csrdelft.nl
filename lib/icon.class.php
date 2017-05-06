@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft;
 
 /**
  * Icon dingetje voor csrdelft.nl.

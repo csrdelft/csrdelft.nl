@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\view;
+
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\view\View;
 
 require_once 'view/HtmlPage.abstract.php';
 
@@ -76,7 +80,7 @@ abstract class CompressedLayout extends HtmlPage {
 
 			// input handle class
 			global $INPUT;
-			$INPUT = new Input();
+			$INPUT = new \Input();
 		} elseif (substr($conf['cachedir'], -15) != 'compressorcache') {
 			//schakel naar csr cache, terwijl wij in wiki context runnen
 			$conf['cachedirbackup'] = $conf['cachedir'];
@@ -94,7 +98,7 @@ abstract class CompressedLayout extends HtmlPage {
 
 		// initieer een cache
 		$key = ($extension == 'js' ? 'scripts' : 'styles') . $_SERVER['HTTP_HOST'] . $_SERVER['SERVER_PORT'] . $layout . implode('', $modules);
-		$cache = new cache($key, '.' . $extension);
+		$cache = new \cache($key, '.' . $extension);
 
 		// load style.ini/script.ini
 		$inicontent = self::parseConfig($layout, $extension);
@@ -161,25 +165,25 @@ abstract class CompressedLayout extends HtmlPage {
 
 			if ($extension == 'css') {
 				//voeg modules toe afhankelijk van instelling
-				$modules[] = LidInstellingen::get('layout', 'opmaak');
-				if (LidInstellingen::get('layout', 'toegankelijk') == 'bredere letters') {
+				$modules[] = LidInstellingenModel::get('layout', 'opmaak');
+				if (LidInstellingenModel::get('layout', 'toegankelijk') == 'bredere letters') {
 					$modules[] = 'bredeletters';
 				}
-				if (LidInstellingen::get('layout', 'fx') == 'sneeuw') {
+				if (LidInstellingenModel::get('layout', 'fx') == 'sneeuw') {
 					$modules[] = 'fxsnow';
-				} elseif (LidInstellingen::get('layout', 'fx') == 'space') {
+				} elseif (LidInstellingenModel::get('layout', 'fx') == 'space') {
 					$modules[] = 'fxspace';
 				}
 			} elseif ($extension == 'js') {
-				if (LidInstellingen::get('layout', 'fx') == 'wolken') {
+				if (LidInstellingenModel::get('layout', 'fx') == 'wolken') {
 					$modules[] = 'fxclouds';
 				}
 			}
 
-			if (LidInstellingen::get('layout', 'minion') == 'ja') {
+			if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
 				$modules[] = 'minion';
 			}
-			if (LidInstellingen::get('layout', 'fx') == 'onontdekt') {
+			if (LidInstellingenModel::get('layout', 'fx') == 'onontdekt') {
                 $modules[] = 'fxonontdekt';
             } elseif (LidInstellingen::get('layout', 'fx') == 'civisaldo') {
 				$modules[] = 'fxcivisaldo';

@@ -1,5 +1,11 @@
 <?php
+namespace CsrDelft\controller\api;
 
+use CsrDelft\model\AbstractGroepLedenModel;
+use CsrDelft\model\ChangeLogModel;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\security\LoginModel;
 use \Jacwright\RestServer\RestException;
 
 class ApiActiviteitenController {

@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\controller\groepen;
+use CsrDelft\model\groepen\WoonoordenModel;
 
 /**
  * WoonoordenController.class.php

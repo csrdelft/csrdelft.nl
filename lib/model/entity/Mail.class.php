@@ -1,4 +1,11 @@
 <?php
+namespace CsrDelft\model\entity;
+use function CsrDelft\email_like;
+use function CsrDelft\isSyrinx;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrBB;
+use CsrDelft\view\MailTemplateView;
+use Exception;
 
 /**
  * Mail.class.php

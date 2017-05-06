@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model\groepen;
+
+use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\entity\groepen\RechtenGroep;
 
 class RechtenGroepenModel extends AbstractGroepenModel {
 

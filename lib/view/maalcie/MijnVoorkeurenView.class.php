@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\view\maalcie;
+
+use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
+use CsrDelft\view\maalcie\forms\EetwensForm;
+use CsrDelft\view\SmartyTemplateView;
 
 require_once 'view/maalcie/forms/EetwensForm.class.php';
 

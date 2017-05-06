@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\view\maalcie;
+use CsrDelft\view\SmartyTemplateView;
 
 /**
  * BeheerPuntenView.class.php

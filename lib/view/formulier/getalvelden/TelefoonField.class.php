@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\view\formulier\getalvelden;
+use CsrDelft\view\formulier\invoervelden\TextField;
+
 /**
  * TelefoonField.class.php
  *

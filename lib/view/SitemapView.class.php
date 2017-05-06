@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\model\entity\MenuItem;
+use CsrDelft\model\MenuModel;
+use CsrDelft\view\formulier\elementen\CollapsableSubkopje;
 
 /**
  * SitemapView.class.php

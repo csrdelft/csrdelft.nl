@@ -1,8 +1,8 @@
-{getMelding()}
+{CsrDelft\getMelding()}
 
 {$zoekform->view()}
 
-{if isset($deel->forum_id) AND LoginModel::mag('P_ADMIN')}
+{if isset($deel->forum_id) AND CsrDelft\model\security\LoginModel::mag('P_ADMIN')}
 	<div class="forumheadbtn">
 		<a href="/forum/beheren/{$deel->forum_id}" class="btn post popup" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
 	</div>

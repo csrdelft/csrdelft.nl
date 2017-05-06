@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\view;
 
 require_once 'view/View.interface.php';
 

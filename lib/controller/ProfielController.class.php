@@ -1,4 +1,34 @@
 <?php
+namespace CsrDelft\controller;
+
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\GoogleSync;
+use CsrDelft\model\CommissieVoorkeurenModel;
+use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\fiscaal\SaldoModel;
+use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\LedenMemoryScoresModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\model\VerjaardagenModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use function CsrDelft\startsWith;
+use CsrDelft\view\AlleVerjaardagenView;
+use CsrDelft\view\CommissieVoorkeurenForm;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\LedenMemoryScoreForm;
+use CsrDelft\view\LedenMemoryScoreResponse;
+use CsrDelft\view\LedenMemoryView;
+use CsrDelft\view\ProfielForm;
+use CsrDelft\view\ProfielView;
+use CsrDelft\view\StamboomView;
+use Exception;
 
 require_once 'view/ProfielView.class.php';
 

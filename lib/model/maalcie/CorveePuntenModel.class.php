@@ -1,6 +1,11 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
+use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
+use Exception;
 
 require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
 require_once 'model/maalcie/CorveeTakenModel.class.php';
@@ -37,9 +42,9 @@ class CorveePuntenModel {
 						CorveeVrijstellingenModel::instance()->saveVrijstelling($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage);
 					}
 				}
-				$punten -= intval(Instellingen::get('corvee', 'punten_per_jaar'));
+				$punten -= intval(InstellingenModel::get('corvee', 'punten_per_jaar'));
 				self::savePuntenVoorLid($profiel, $punten, 0);
-			} catch (\Exception $e) {
+			} catch (Exception $e) {
 				$errors[] = $e;
 			}
 		}
@@ -159,7 +164,7 @@ class CorveePuntenModel {
 		$lijst['prognose'] += $lijst['puntenTotaal'] + $lijst['bonusTotaal'];
 		$lijst['prognoseColor'] = self::rgbCalculate($lijst['prognose']);
 		if ($profiel->isLid()) {
-			$lijst['tekort'] = Instellingen::get('corvee', 'punten_per_jaar') - $lijst['prognose'];
+			$lijst['tekort'] = InstellingenModel::get('corvee', 'punten_per_jaar') - $lijst['prognose'];
 		} else {
 			$lijst['tekort'] = 0 - $lijst['prognose'];
 		}
@@ -196,7 +201,7 @@ class CorveePuntenModel {
 	 * RGB kleurovergang berekenen
 	 */
 	private static function rgbCalculate($punten, $tekort = false) {
-		$perjaar = intval(Instellingen::get('corvee', 'punten_per_jaar'));
+		$perjaar = intval(InstellingenModel::get('corvee', 'punten_per_jaar'));
 		if (!$tekort) {
 			$punten = $perjaar - $punten;
 		}

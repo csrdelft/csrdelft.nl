@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\view\formulier\elementen;
 /**
  * Subkopje.class.php
  *

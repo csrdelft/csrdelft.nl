@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\view\formulier\getalvelden;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\invoervelden\InputField;
+use Exception;
+
 /**
  * IntField.class.php
  *

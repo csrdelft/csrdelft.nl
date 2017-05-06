@@ -1,4 +1,33 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\Icon;
+use CsrDelft\model\entity\security\AccessRole;
+use CsrDelft\model\entity\security\Account;
+use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\model\entity\security\RememberLogin;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\model\security\RememberLoginModel;
+use function CsrDelft\reldate;
+use function CsrDelft\setMelding;
+use CsrDelft\view\formulier\DataTable;
+use CsrDelft\view\formulier\DataTableKnop;
+use CsrDelft\view\formulier\DataTableResponse;
+use CsrDelft\view\formulier\elementen\HtmlBbComment;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\invoervelden\RequiredEmailField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\invoervelden\RequiredWachtwoordWijzigenField;
+use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\invoervelden\UsernameField;
+use CsrDelft\view\formulier\invoervelden\WachtwoordField;
+use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
+use CsrDelft\view\formulier\keuzevelden\CheckboxField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\DeleteKnop;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
+
 require_once 'model/entity/security/RememberLogin.class.php';
 
 /**

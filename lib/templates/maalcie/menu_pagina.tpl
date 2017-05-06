@@ -6,7 +6,7 @@
 		<li><a href="/corvee/rooster">Corveerooster</a></li>
 		<li><a href="/corvee">Mijn corveeoverzicht</a></li>
 		<li><a href="/corvee/voorkeuren">Mijn voorkeuren</a></li>
-{if LoginModel::mag('P_MAAL_MOD,P_CORVEE_MOD')}
+{if CsrDelft\model\security\LoginModel::mag('P_MAAL_MOD,P_CORVEE_MOD')}
 		<li>
 			<select onchange="window.location.href = this.value;">
 				<option value="">Beheermenu</option>
@@ -40,7 +40,7 @@
 <hr/>
 <table>
 	<tr id="maalcie-melding">
-		<td id="maalcie-melding-veld">{getMelding()}</td>
+		<td id="maalcie-melding-veld">{CsrDelft\getMelding()}</td>
 	</tr>
 </table>
 <h1>{$titel}</h1>

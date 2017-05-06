@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\model\entity\Instelling;
+use CsrDelft\model\InstellingenModel;
 
 /**
  * InstellingenBeheerView.class.php
@@ -12,7 +15,7 @@ class InstellingenBeheerView extends SmartyTemplateView {
 
 	private $module;
 
-	public function __construct(Instellingen $instellingen, $module) {
+	public function __construct(InstellingenModel $instellingen, $module) {
 		parent::__construct($instellingen, 'Instellingenbeheer');
 		$this->module = $module;
 	}

@@ -1,4 +1,19 @@
 <?php
+namespace CsrDelft\view;
+use function CsrDelft\getMelding;
+use function CsrDelft\group_by_distinct;
+use CsrDelft\model\entity\gesprekken\Gesprek;
+use CsrDelft\model\GesprekBerichtenModel;
+use CsrDelft\model\GesprekkenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\DataTable;
+use CsrDelft\view\formulier\DataTableKnop;
+use CsrDelft\view\formulier\DataTableResponse;
+use CsrDelft\view\formulier\InlineForm;
+use CsrDelft\view\formulier\invoervelden\RequiredLidField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextareaField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
 
 /**
  * GesprekkenView.class.php

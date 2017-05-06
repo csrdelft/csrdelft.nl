@@ -1,4 +1,14 @@
 <?php
+namespace CsrDelft\controller;
+
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\peilingen\Peiling;
+use CsrDelft\model\entity\peilingen\PeilingOptie;
+use CsrDelft\model\PeilingenModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\PeilingenBeheerView;
 
 require_once 'model/PeilingenModel.class.php';
 require_once 'view/PeilingenView.class.php';

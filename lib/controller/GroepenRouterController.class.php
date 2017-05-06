@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\controller;
+
+use CsrDelft\controller\framework\Controller;
+use CsrDelft\model\security\LoginModel;
 
 require_once 'model/GroepenModel.abstract.php';
 require_once 'controller/groepen/GroepenController.abstract.php';
@@ -30,9 +34,8 @@ class GroepenRouterController extends Controller {
 			$this->exit_http(403);
 		}
 		$class = ucfirst($class) . 'Controller';
-
-		require_once 'controller/groepen/' . $class . '.class.php';
-		$controller = new $class(REQUEST_URI);
+		$namespacedClass = 'CsrDelft\\controller\\groepen\\' . $class;
+		$controller = new $namespacedClass(REQUEST_URI);
 		$controller->performAction();
 
 		$this->view = $controller->getView();

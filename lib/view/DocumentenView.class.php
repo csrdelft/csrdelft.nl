@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\view;
+
+use CsrDelft\model\documenten\DocCategorie;
+use CsrDelft\model\documenten\Document;
 
 require_once 'model/documenten/Document.class.php';
 

@@ -1,4 +1,16 @@
 <?php
+namespace CsrDelft\view\maalcie\forms;
+use CsrDelft\view\formulier\getalvelden\BedragField;
+use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\invoervelden\RechtenField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\keuzevelden\CheckboxField;
+use CsrDelft\view\formulier\keuzevelden\JaNeeField;
+use CsrDelft\view\formulier\keuzevelden\TimeField;
+use CsrDelft\view\formulier\keuzevelden\WeekdagField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\knoppen\FormulierKnop;
+use CsrDelft\view\formulier\ModalForm;
 
 /**
  * MaaltijdRepetitieForm.class.php

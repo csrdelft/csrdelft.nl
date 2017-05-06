@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 
 /**
  * KetzerDeelnemer.class.php

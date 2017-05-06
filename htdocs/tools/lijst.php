@@ -1,5 +1,15 @@
 <?php
 
+use CsrDelft\GoogleSync;
+use CsrDelft\lid\LedenlijstContent;
+use CsrDelft\lid\LidZoeker;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CmsPaginaView;
+use CsrDelft\view\CsrLayoutPage;
+
 require_once 'configuratie.include.php';
 require_once 'lid/ledenlijstcontent.class.php';
 

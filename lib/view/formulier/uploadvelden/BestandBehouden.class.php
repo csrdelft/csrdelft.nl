@@ -1,4 +1,10 @@
 <?php
+namespace CsrDelft\view\formulier\uploadvelden;
+use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\entity\Bestand;
+use CsrDelft\view\formulier\invoervelden\InputField;
+use Exception;
+
 /**
  * BestandBehouden.class.php
  *

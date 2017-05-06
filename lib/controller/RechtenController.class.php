@@ -1,4 +1,13 @@
 <?php
+namespace CsrDelft\controller;
+
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\security\AccessModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\formulier\RemoveRowsResponse;
+use CsrDelft\view\RechtenData;
+use CsrDelft\view\RechtenForm;
+use CsrDelft\view\RechtenTable;
 
 require_once 'view/RechtenView.class.php';
 

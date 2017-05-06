@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\view\maalcie;
+
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\view\SmartyTemplateView;
 
 require_once 'controller/maalcie/MijnMaaltijdenController.class.php';
 
@@ -20,7 +25,7 @@ class MaaltijdKetzerView extends SmartyTemplateView {
 	}
 
 	public function getHtml() {
-		$this->smarty->assign('standaardprijs', intval(Instellingen::get('maaltijden', 'standaard_prijs')));
+		$this->smarty->assign('standaardprijs', intval(InstellingenModel::get('maaltijden', 'standaard_prijs')));
 		$this->smarty->assign('maaltijd', $this->model);
 		$this->smarty->assign('aanmelding', $this->aanmelding);
 		return $this->smarty->fetch('maalcie/maaltijd/maaltijd_ketzer.tpl');

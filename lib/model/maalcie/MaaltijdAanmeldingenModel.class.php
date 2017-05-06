@@ -1,6 +1,13 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccessModel;
+use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\PersistenceModel;
+use Exception;
 use MongoDB\BSON\Type;
 
 require_once 'model/entity/maalcie/MaaltijdAanmelding.class.php';

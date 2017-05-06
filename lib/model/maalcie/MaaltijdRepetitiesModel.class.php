@@ -1,7 +1,11 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
+use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use Exception;
 
 require_once 'model/entity/maalcie/MaaltijdRepetitie.class.php';
 require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';

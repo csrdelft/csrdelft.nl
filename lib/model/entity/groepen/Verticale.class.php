@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\groepen\KringenModel;
+use CsrDelft\model\VerticaleLedenModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
@@ -9,7 +13,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Verticale extends AbstractGroep {
 
-	const leden = 'VerticaleLedenModel';
+	const leden = VerticaleLedenModel::class;
 
 	/**
 	 * Primary key

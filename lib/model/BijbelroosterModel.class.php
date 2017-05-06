@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\model;
+use CsrDelft\model\entity\Bijbelrooster;
 use CsrDelft\Orm\PersistenceModel;
 
 /**

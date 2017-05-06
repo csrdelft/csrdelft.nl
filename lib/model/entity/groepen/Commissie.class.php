@@ -1,5 +1,8 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\model\CommissieLedenModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 
 require_once 'model/entity/groepen/CommissieSoort.enum.php';
@@ -14,7 +17,7 @@ require_once 'model/entity/groepen/CommissieSoort.enum.php';
  */
 class Commissie extends AbstractGroep {
 
-	const leden = 'CommissieLedenModel';
+	const leden = CommissieLedenModel::class;
 
 	/**
 	 * (Bestuurs-)Commissie / SjaarCie
@@ -26,7 +29,7 @@ class Commissie extends AbstractGroep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'soort' => array(T::Enumeration, false, 'CommissieSoort'),
+		'soort' => array(T::Enumeration, false, CommissieSoort::class),
 	);
 	/**
 	 * Database table name

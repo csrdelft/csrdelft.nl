@@ -13,7 +13,7 @@
 					{/if}
 					<div class="itemtitel">
 						{* {$mededeling->getDatum()} *}
-						<a href="{$pagina_root}{$mededeling->id}"{if LoginModel::mag('P_NEWS_MOD')} class="{if !$mededeling->prive}cursief{/if} {if $mededeling->zichtbaarheid=='wacht_goedkeuring'}dikgedrukt{/if}"{/if}>{$mededeling->titel|bbcode|html_substr:"40":"…"}</a>
+						<a href="{$pagina_root}{$mededeling->id}"{if CsrDelft\model\security\LoginModel::mag('P_NEWS_MOD')} class="{if !$mededeling->prive}cursief{/if} {if $mededeling->zichtbaarheid=='wacht_goedkeuring'}dikgedrukt{/if}"{/if}>{$mededeling->titel|bbcode|html_substr:"40":"…"}</a>
 					</div>
 				</div>
 			{/foreach}

@@ -1,4 +1,4 @@
-{if LoginModel::mag('P_ADMIN,commissie:NovCie')}
+{if CsrDelft\model\security\LoginModel::mag('P_ADMIN,commissie:NovCie')}
     <a href="/eetplan/beheer" class="btn float-right"><span class="ico wrench"></span> Eetplanbeheer</a>
 {/if}
 <h1>Eetplan</h1>

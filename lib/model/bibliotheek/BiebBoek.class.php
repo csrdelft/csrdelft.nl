@@ -1,4 +1,23 @@
 <?php
+namespace CsrDelft\model\bibliotheek;
+
+use function CsrDelft\getDateTime;
+use CsrDelft\MijnSqli;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\elementen\Subkopje;
+use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\RequiredBBCodeField;
+use CsrDelft\view\formulier\invoervelden\RequiredLidField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\invoervelden\TextareaField;
+use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use Exception;
 
 require_once 'model/bibliotheek/BiebRubriek.class.php';
 require_once 'model/bibliotheek/BiebBeschrijving.class.php';

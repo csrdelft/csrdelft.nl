@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\model;
+use CsrDelft\model\entity\Eetplan;
 
 /**
  * EetplanFactory.class.php

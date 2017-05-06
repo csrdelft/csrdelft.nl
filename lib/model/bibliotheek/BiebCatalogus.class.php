@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\model\bibliotheek;
+use CsrDelft\MijnSqli;
+use CsrDelft\model\security\LoginModel;
 
 /**
  * BiebCatalogus.class.php	| 	Gerrit Uitslag

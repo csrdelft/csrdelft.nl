@@ -1,4 +1,19 @@
 <?php
+namespace CsrDelft\view;
+use function CsrDelft\getMelding;
+use CsrDelft\Icon;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\entity\CmsPagina;
+use function CsrDelft\reldate;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\invoervelden\BBCodeField;
+use CsrDelft\view\formulier\invoervelden\RechtenField;
+use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\keuzevelden\RadioField;
+use CsrDelft\view\formulier\knoppen\DeleteKnop;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\View;
 
 /**
  * CmsPaginaView.class.php

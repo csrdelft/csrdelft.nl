@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\view\formulier\getalvelden;
+use CsrDelft\view\formulier\invoervelden\InputField;
+use Exception;
+
 /**
  * FloatField.class.php
  *

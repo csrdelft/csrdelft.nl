@@ -1,6 +1,6 @@
 <h1>Peilingbeheertool</h1>
 <div>
-    {getMelding()}
+    {CsrDelft\getMelding()}
     <span class="dikgedrukt">Nieuwe peiling:</span><br/>
     <form id="nieuwePeiling" action="/peilingen/beheer" method="post">
         <label for="titel">Titel:</label><input name="titel" type="text" value="{$peiling->titel}"/><br />

@@ -1,6 +1,14 @@
 <?php
+namespace CsrDelft\model\entity\gesprekken;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\GesprekBerichtenModel;
+use CsrDelft\model\GesprekDeelnemersModel;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use Exception;
 
 /**
  * Gesprek.class.php
@@ -76,7 +84,7 @@ class Gesprek extends PersistentEntity {
 			$lastUpdate = $toegevoegd;
 		}
 		// Auto update
-		$threshold = (int) Instellingen::get('gesprekken', 'active_threshold_seconds');
+		$threshold = (int) InstellingenModel::get('gesprekken', 'active_threshold_seconds');
 		$anderen = 0;
 		$active = 0;
 		foreach ($this->getDeelnemers() as $d) {
@@ -88,9 +96,9 @@ class Gesprek extends PersistentEntity {
 			}
 		}
 		if ($active > 0) {
-			$this->auto_update = 1000 * (int) Instellingen::get('gesprekken', 'active_interval_seconds');
+			$this->auto_update = 1000 * (int) InstellingenModel::get('gesprekken', 'active_interval_seconds');
 		} elseif ($anderen > 0) {
-			$this->auto_update = 1000 * (int) Instellingen::get('gesprekken', 'slow_interval_seconds');
+			$this->auto_update = 1000 * (int) InstellingenModel::get('gesprekken', 'slow_interval_seconds');
 		} else {
 			$this->auto_update = false;
 		}

@@ -1,4 +1,12 @@
 <?php
+namespace CsrDelft\controller;
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\GeoLocationModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\reldate;
+use CsrDelft\view\JsonResponse;
+
 require_once 'model/GeoLocationModel.class.php';
 
 /**

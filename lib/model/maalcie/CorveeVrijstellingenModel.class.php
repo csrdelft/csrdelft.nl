@@ -1,6 +1,9 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
 
+use CsrDelft\model\entity\maalcie\CorveeVrijstelling;
+use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
@@ -28,7 +31,7 @@ class CorveeVrijstellingenModel extends PersistenceModel {
 		}
 		$vrijstelling->eind_datum = $eind;
 		if ($percentage === null) {
-			$percentage = intval(Instellingen::get('corvee', 'standaard_vrijstelling_percentage'));
+			$percentage = intval(InstellingenModel::get('corvee', 'standaard_vrijstelling_percentage'));
 		}
 		$vrijstelling->percentage = $percentage;
 

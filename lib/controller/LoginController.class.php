@@ -1,4 +1,34 @@
 <?php
+namespace CsrDelft\controller;
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\DebugLogModel;
+use CsrDelft\model\entity\Mail;
+use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccessModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\model\security\OneTimeTokensModel;
+use CsrDelft\model\security\RememberLoginModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setGoBackCookie;
+use function CsrDelft\setMelding;
+use CsrDelft\view\AccountForm;
+use CsrDelft\view\CmsPaginaView;
+use CsrDelft\view\CsrLayoutOweePage;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\formulier\RemoveRowsResponse;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\LoginForm;
+use CsrDelft\view\LoginSessionsData;
+use CsrDelft\view\RememberAfterLoginForm;
+use CsrDelft\view\RememberLoginData;
+use CsrDelft\view\RememberLoginForm;
+use CsrDelft\view\VerifyForm;
+use CsrDelft\view\WachtwoordVergetenForm;
+use CsrDelft\view\WachtwoordWijzigenForm;
 
 /**
  * LoginController.class.php
@@ -86,7 +116,7 @@ class LoginController extends AclController {
 				require_once 'model/CmsPaginaModel.class.php';
 				require_once 'view/CmsPaginaView.class.php';
 
-				$body = new CmsPaginaView(CmsPaginaModel::get(Instellingen::get('stek', 'homepage')));
+				$body = new CmsPaginaView(CmsPaginaModel::get(InstellingenModel::get('stek', 'homepage')));
 				$this->view = new CsrLayoutPage($body, array(), $form);
 				return;
 			}

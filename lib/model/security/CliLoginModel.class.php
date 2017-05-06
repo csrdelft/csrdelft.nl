@@ -1,4 +1,11 @@
 <?php
+namespace CsrDelft\model\security;
+
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\model\entity\security\LoginSession;
+use CsrDelft\model\entity\security\RememberLogin;
+use CsrDelft\model\InstellingenModel;
 
 require_once 'model/security/LoginModel.class.php';
 
@@ -93,7 +100,7 @@ class CliLoginModel extends LoginModel {
 		$session->session_hash = hash('sha512', session_id());
 		$session->uid = $account->uid;
 		$session->login_moment = getDateTime();
-		$session->expire = getDateTime(time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
+		$session->expire = getDateTime(time() + (int) InstellingenModel::get('beveiliging', 'session_lifetime_seconds'));
 		$session->user_agent = MODE;
 		$session->ip = '';
 		$session->lock_ip = true; // sessie koppelen aan ip?

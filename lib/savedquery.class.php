@@ -1,7 +1,12 @@
 <?php
+namespace CsrDelft;
 
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
+
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\View;
 
 class SavedQuery {
 

@@ -1,4 +1,15 @@
 <?php
+namespace CsrDelft\view\maalcie\forms;
+use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\maalcie\CorveeRepetitiesModel;
+use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
+use CsrDelft\view\SmartyTemplateView;
+use Exception;
 
 /**
  * ToewijzenForm.class.php
@@ -45,11 +56,11 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 		}
 
 		if ($taak->getCorveeFunctie()->kwalificatie_benodigd) {
-			$this->voorkeur = Instellingen::get('corvee', 'suggesties_voorkeur_kwali_filter');
-			$this->recent = Instellingen::get('corvee', 'suggesties_recent_kwali_filter');
+			$this->voorkeur = InstellingenModel::get('corvee', 'suggesties_voorkeur_kwali_filter');
+			$this->recent = InstellingenModel::get('corvee', 'suggesties_recent_kwali_filter');
 		} else {
-			$this->voorkeur = Instellingen::get('corvee', 'suggesties_voorkeur_filter');
-			$this->recent = Instellingen::get('corvee', 'suggesties_recent_filter');
+			$this->voorkeur = InstellingenModel::get('corvee', 'suggesties_voorkeur_filter');
+			$this->recent = InstellingenModel::get('corvee', 'suggesties_recent_filter');
 		}
 	}
 

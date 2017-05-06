@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\view;
 require_once 'model/VerjaardagenModel.class.php';
 
 /**

@@ -1,12 +1,12 @@
 {* Toon een overzicht van documenten in de verschillende categorieën *}
 
 <div id="controls">
-	{if LoginModel::mag('P_DOCS_MOD')}
+	{if CsrDelft\model\security\LoginModel::mag('P_DOCS_MOD')}
 		<a class="btn" href="/documenten/toevoegen">{icon get="toevoegen"} Toevoegen</a>
 	{/if}
 </div>
 
-{getMelding()}
+{CsrDelft\getMelding()}
 
 <h1>Documenten</h1>
 
@@ -25,7 +25,7 @@
 					<a href="/documenten/categorie/{$categorie->getID()}/" title="Alle documenten in {$categorie->getNaam()|escape:'html'}">
 						{$categorie->getNaam()|escape:'html'}
 					</a>
-					{if LoginModel::mag('P_DOCS_MOD')}
+					{if CsrDelft\model\security\LoginModel::mag('P_DOCS_MOD')}
 						<a class="toevoegen" href="/documenten/toevoegen/?catID={$categorie->getID()}"
 						   title="Document toevoegen in categorie: {$categorie->getNaam()|escape:'html'}">
 							{icon get="toevoegen"}
@@ -54,7 +54,7 @@
 					<td class="size">{$document->getFileSize()|filesize}</td>
 					<td title="{$document->getMimetype()}">{$document->getMimetype()|mimeicon}</td>
 					<td>{$document->getToegevoegd()|reldate}</td>
-					<td>{ProfielModel::getLink($document->getEigenaar(), 'civitas')}</td>
+					<td>{CsrDelft\model\ProfielModel::getLink($document->getEigenaar(), 'civitas')}</td>
 				</tr>
 			{foreachelse}
 				<tr><td class="document" colspan="5">Geen documenten in deze categorie</td></tr>

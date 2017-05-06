@@ -1,5 +1,10 @@
 <?php
+namespace CsrDelft\model\security;
+use function CsrDelft\crypto_rand_token;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\security\RememberLogin;
 use CsrDelft\Orm\PersistenceModel;
+use function CsrDelft\setRememberCookie;
 
 /**
  * RememberLoginModel.class.php

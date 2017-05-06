@@ -1,5 +1,8 @@
 <?php
+namespace CsrDelft\model\entity\fotoalbum;
 
+use CsrDelft\model\entity\KeywordTag;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\T;
 
 require_once 'model/entity/KeywordTag.class.php';

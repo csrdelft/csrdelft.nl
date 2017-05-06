@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\controller\groepen;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\view\JsonResponse;
 
 /**
  * VerticalenController.class.php

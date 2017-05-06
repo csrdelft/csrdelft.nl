@@ -1,4 +1,43 @@
 <?php
+namespace CsrDelft\controller\groepen;
+
+use CsrDelft\controller\framework\Controller;
+use function CsrDelft\getDateTime;
+use function CsrDelft\group_by_distinct;
+use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\ChangeLogModel;
+use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\entity\groepen\GroepTab;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\formulier\RemoveRowsResponse;
+use CsrDelft\view\GroepAanmeldenForm;
+use CsrDelft\view\GroepBewerkenForm;
+use CsrDelft\view\GroepConverteerForm;
+use CsrDelft\view\GroepEetwensView;
+use CsrDelft\view\GroepEmailsView;
+use CsrDelft\view\GroepenBeheerData;
+use CsrDelft\view\GroepenBeheerTable;
+use CsrDelft\view\GroepenDeelnameGrafiek;
+use CsrDelft\view\GroepenView;
+use CsrDelft\view\GroepForm;
+use CsrDelft\view\GroepLedenData;
+use CsrDelft\view\GroepLedenTable;
+use CsrDelft\view\GroepLidBeheerForm;
+use CsrDelft\view\GroepLijstView;
+use CsrDelft\view\GroepLogboekData;
+use CsrDelft\view\GroepLogboekForm;
+use CsrDelft\view\GroepOmschrijvingView;
+use CsrDelft\view\GroepOpvolgingForm;
+use CsrDelft\view\GroepPasfotosView;
+use CsrDelft\view\GroepPreviewForm;
+use CsrDelft\view\GroepStatistiekView;
+use CsrDelft\view\GroepView;
+use CsrDelft\view\JsonResponse;
 
 require_once 'model/ChangeLogModel.class.php';
 require_once 'view/GroepenView.class.php';

@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\view\formulier\invoervelden;
+use function CsrDelft\email_like;
+
 /**
  * EmailField.class.php
  *

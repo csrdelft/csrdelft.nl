@@ -1,5 +1,9 @@
 #!/usr/bin/php5
 <?php
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\Mail;
+use CsrDelft\model\ProfielModel;
+
 chdir(dirname(__FILE__) . '/../lib/');
 
 require_once 'configuratie.include.php';

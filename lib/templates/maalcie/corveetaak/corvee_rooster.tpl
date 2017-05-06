@@ -60,7 +60,7 @@
 					{if $taak->uid === LoginModel::getUid()}
 						{* icon get="arrow_switch" title="Ruilen" *}
 					{/if}
-					{ProfielModel::getLink($taak->uid, Instellingen::get('corvee', 'weergave_ledennamen_corveerooster'))}
+					{CsrDelft\model\ProfielModel::getLink($taak->uid,CsrDelft\model\InstellingenModel::get('corvee', 'weergave_ledennamen_corveerooster'))}
 				{else}
 					<span class="cursief">vacature</span>
 				{/if}

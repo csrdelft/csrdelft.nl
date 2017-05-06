@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\view\formulier;
 
 /**
  * GetalVelden.class.php

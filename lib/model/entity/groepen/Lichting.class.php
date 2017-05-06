@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\LichtingLedenModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
@@ -9,7 +12,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Lichting extends AbstractGroep {
 
-	const leden = 'LichtingLedenModel';
+	const leden = LichtingLedenModel::class;
 
 	/**
 	 * Lidjaar

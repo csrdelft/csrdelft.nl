@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\controller\groepen;
+use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\view\JsonResponse;
 
 /**
  * LichtingenController.class.php

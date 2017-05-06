@@ -1,7 +1,36 @@
 <?php
+namespace CsrDelft\model\security;
 
+use function CsrDelft\in_array_i;
+use CsrDelft\model\BestuursLedenModel;
+use CsrDelft\model\CommissieLedenModel;
+use CsrDelft\model\entity\groepen\CommissieFunctie;
+use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\entity\security\AccessControl;
+use CsrDelft\model\entity\security\AccessRole;
+use CsrDelft\model\entity\security\Account;
+use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\model\groepen\KringenModel;
+use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\model\groepen\OnderverenigingenModel;
+use CsrDelft\model\groepen\RechtenGroepenModel;
+use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\maalcie\KwalificatiesModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use function CsrDelft\setMelding;
+use Exception;
 
 require_once 'model/entity/security/AccessRole.enum.php';
 require_once 'model/entity/security/AccessAction.enum.php';

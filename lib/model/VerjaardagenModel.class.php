@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\model;
 
 /**
  * VerjaardagenModel.class.php

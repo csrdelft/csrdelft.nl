@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\model\entity\Mail;
 
 /**
  * MailTemplateView.class.php

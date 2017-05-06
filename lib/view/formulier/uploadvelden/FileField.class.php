@@ -1,4 +1,10 @@
 <?php
+namespace CsrDelft\view\formulier\uploadvelden;
+
+use CsrDelft\model\entity\Bestand;
+use CsrDelft\model\entity\Map;
+use CsrDelft\view\formulier\keuzevelden\RadioField;
+use Exception;
 
 /**
  * FileField.class.php

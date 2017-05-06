@@ -7,6 +7,8 @@
  * @author     Gerrit Uitslag <klapinklapin@gmail.com>
  */
 
+use CsrDelft\view\CompressedLayout;
+
 if (!defined('DOKU_INC')) define('DOKU_INC', dirname(__FILE__) . '/../wiki/');
 
 //reuse the Javascript functions of DokuWiki without triggering the main function js_out()

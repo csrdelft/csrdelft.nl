@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\groepen\KetzerSelectorsModel;
+use CsrDelft\model\KetzerDeelnemersModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
@@ -11,7 +15,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Ketzer extends AbstractGroep {
 
-	const leden = 'KetzerDeelnemersModel';
+	const leden = KetzerDeelnemersModel::class;
 
 	/**
 	 * Maximaal aantal groepsleden

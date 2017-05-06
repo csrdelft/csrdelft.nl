@@ -1,4 +1,17 @@
 <?php
+namespace CsrDelft\controller;
+
+use CsrDelft\controller\framework\AclController;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\mededelingen\Mededeling;
+use CsrDelft\model\mededelingen\MededelingenModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\MededelingenOverzichtView;
+use CsrDelft\view\MededelingenView;
+use CsrDelft\view\MededelingView;
 
 require_once 'model/mededelingen/MededelingenModel.class.php';
 require_once 'view/MededelingenView.class.php';

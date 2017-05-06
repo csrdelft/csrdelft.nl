@@ -1,4 +1,4 @@
-{getMelding()}
+{CsrDelft\getMelding()}
 
 {$zoekform->view()}
 
@@ -26,7 +26,7 @@
 	</div>
 {/foreach}
 
-{foreach from=MenuModel::instance()->getMenu('remotefora')->getChildren() item=remoteCategorie}
+{foreach from=CsrDelft\model\MenuModel::instance()->getMenu('remotefora')->getChildren() item=remoteCategorie}
 	<div class="forumcategorie">
 		<h3><a name="{$remoteCategorie->tekst}">{$remoteCategorie->tekst}</a></h3>
 		<div class="forumdelen">

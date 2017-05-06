@@ -1,7 +1,12 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
+use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
+use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use Exception;
 
 require_once 'model/entity/maalcie/CorveeVoorkeur.class.php';
 require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
@@ -11,7 +16,7 @@ require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
  *
  */
 class CorveeVoorkeurenModel extends PersistenceModel {
-	const ORM = "CorveeVoorkeur";
+	const ORM = CorveeVoorkeur::class;
 	const DIR = "maalcie/";
 
 	protected static $instance;

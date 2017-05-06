@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\model\groepen;
+
+use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\entity\groepen\KetzerKeuze;
+use CsrDelft\model\entity\groepen\KetzerOptie;
 
 class KetzerKeuzesModel extends AbstractGroepenModel {
 

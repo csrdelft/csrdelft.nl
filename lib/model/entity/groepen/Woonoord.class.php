@@ -1,5 +1,9 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\model\BewonersModel;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 
 require_once 'model/entity/groepen/HuisStatus.enum.php';
@@ -14,7 +18,7 @@ require_once 'model/entity/groepen/HuisStatus.enum.php';
  */
 class Woonoord extends AbstractGroep {
 
-	const leden = 'BewonersModel';
+	const leden = BewonersModel::class;
 
 	/**
 	 * Woonoord / Huis
@@ -31,7 +35,7 @@ class Woonoord extends AbstractGroep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'soort' => array(T::Enumeration, false, 'HuisStatus'),
+		'soort' => array(T::Enumeration, false, HuisStatus::class),
         'eetplan' => array(T::Boolean)
 	);
 	/**

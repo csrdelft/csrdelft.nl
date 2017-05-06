@@ -1,4 +1,12 @@
 <?php
+namespace CsrDelft\view\formulier;
+use function CsrDelft\className;
+use CsrDelft\Icon;
+use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\View;
+use JsonSerializable;
+
 require_once 'view/formulier/TabsForm.class.php';
 
 /**
@@ -73,7 +81,7 @@ class DataTable implements View, FormElement {
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
-		$this->dataTableId = uniqid(get_class($this->model));
+		$this->dataTableId = uniqid(className(get_class($this->model)));
 		$this->groupByColumn = $groupByColumn;
 
 		// create group expand / collapse column

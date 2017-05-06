@@ -1,4 +1,19 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\entity\security\AccessControl;
+use CsrDelft\model\security\AccessModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\DataTable;
+use CsrDelft\view\formulier\DataTableKnop;
+use CsrDelft\view\formulier\DataTableResponse;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\invoervelden\RequiredRechtenField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
 
 /**
  * RechtenView.class.php

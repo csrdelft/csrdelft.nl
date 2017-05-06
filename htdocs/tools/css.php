@@ -4,6 +4,8 @@
  *
  * @author     Gerrit Uitslag <klapinklapin@gmail.com>
  */
+use CsrDelft\view\CompressedLayout;
+
 if (!defined('DOKU_INC')) define('DOKU_INC', realpath(dirname(__FILE__) . '/../wiki/').'/');
 
 //reuse the CSS functions of DokuWiki without triggering the main function css_out()
@@ -19,7 +21,7 @@ require_once(DOKU_INC . 'lib/exe/css.php');
  *
  *  @author Chris Smith <chris@jalakai.co.uk>
  */
-class DokuCssFileCSR extends DokuCssFile {
+class DokuCssFileCSR extends \DokuCssFile {
 
 	/**
 	 * TODO LET OP Dit is een kopie van getRelative(), zodat relatieve pad op onze manier kunnen bepalen (2 mods)

@@ -1,4 +1,11 @@
 <?php
+namespace CsrDelft\model\maalcie;
+
+use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\model\entity\Mail;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\ProfielModel;
+use Exception;
 
 require_once 'model/entity/Mail.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
@@ -27,9 +34,9 @@ class CorveeHerinneringenModel {
 		if ($taak->maaltijd_id !== null) {
 			$aangemeld = MaaltijdAanmeldingenModel::instance()->getIsAangemeld($taak->maaltijd_id, $uid);
 			if ($aangemeld) {
-				$eten = Instellingen::get('corvee', 'mail_wel_meeeten');
+				$eten = InstellingenModel::get('corvee', 'mail_wel_meeeten');
 			} else {
-				$eten = Instellingen::get('corvee', 'mail_niet_meeeten');
+				$eten = InstellingenModel::get('corvee', 'mail_niet_meeeten');
 			}
 		}
 		$mail = new Mail($to, $onderwerp, $bericht);
@@ -46,7 +53,7 @@ class CorveeHerinneringenModel {
 	}
 
 	public static function stuurHerinneringen() {
-		$vooraf = str_replace('-', '+', Instellingen::get('corvee', 'herinnering_1e_mail'));
+		$vooraf = str_replace('-', '+', InstellingenModel::get('corvee', 'herinnering_1e_mail'));
 		$van = strtotime(date('Y-m-d'));
 		$tot = strtotime($vooraf, $van);
 		$taken = CorveeTakenModel::instance()->getTakenVoorAgenda($van, $tot, true);
@@ -56,7 +63,7 @@ class CorveeHerinneringenModel {
 			if ($taak->getMoetHerinneren()) {
 				try {
 					$verzonden[] = self::stuurHerinnering($taak);
-				} catch (\Exception $e) {
+				} catch (Exception $e) {
 					$errors[] = $e;
 				}
 			}

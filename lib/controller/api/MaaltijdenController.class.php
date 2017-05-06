@@ -1,5 +1,10 @@
 <?php
+namespace CsrDelft\controller\api;
 
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\security\LoginModel;
+use Exception;
 use \Jacwright\RestServer\RestException;
 
 class ApiMaaltijdenController {

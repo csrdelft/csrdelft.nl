@@ -1,4 +1,14 @@
 <?php
+namespace CsrDelft\controller\maalcie;
+
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\BeheerVrijstellingenView;
+use CsrDelft\view\maalcie\BeheerVrijstellingView;
+use CsrDelft\view\maalcie\forms\VrijstellingForm;
+use Exception;
 
 require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
 require_once 'view/maalcie/BeheerVrijstellingenView.class.php';

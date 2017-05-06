@@ -1,4 +1,38 @@
 <?php
+namespace CsrDelft\controller;
+
+use CsrDelft\controller\framework\Controller;
+use function CsrDelft\email_like;
+use CsrDelft\Icon;
+use CsrDelft\model\entity\Mail;
+use CsrDelft\model\forum\ForumDelenModel;
+use CsrDelft\model\forum\ForumDradenGelezenModel;
+use CsrDelft\model\forum\ForumDradenModel;
+use CsrDelft\model\forum\ForumDradenReagerenModel;
+use CsrDelft\model\forum\ForumDradenVerbergenModel;
+use CsrDelft\model\forum\ForumDradenVolgenModel;
+use CsrDelft\model\forum\ForumPostsModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\SimpleSpamFilter;
+use CsrDelft\view\CsrLayoutOweePage;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\FlotTimeSeries;
+use CsrDelft\view\ForumDeelForm;
+use CsrDelft\view\ForumDeelView;
+use CsrDelft\view\ForumDraadReagerenView;
+use CsrDelft\view\ForumDraadView;
+use CsrDelft\view\ForumOverzichtView;
+use CsrDelft\view\ForumPostDeleteView;
+use CsrDelft\view\ForumPostView;
+use CsrDelft\view\ForumResultatenView;
+use CsrDelft\view\ForumRssView;
+use CsrDelft\view\ForumZoekenForm;
+use CsrDelft\view\JsonResponse;
+use Exception;
 
 require_once 'model/forum/ForumModel.class.php';
 require_once 'view/ForumView.class.php';
@@ -178,7 +212,7 @@ class ForumController extends Controller {
 			$ouder = 'jonger';
 			$jaar = 1;
 		}
-		$limit = (int) LidInstellingen::get('forum', 'zoekresultaten');
+		$limit = (int) LidInstellingenModel::get('forum', 'zoekresultaten');
 		$draden = ForumDelenModel::instance()->zoeken($query, false, $datum, $ouder, $jaar, $limit);
 		$this->view = new ForumResultatenView($draden, $query);
 	}
@@ -202,9 +236,9 @@ class ForumController extends Controller {
 			$draden = ForumDelenModel::instance()->zoeken($query, true, $datum, $ouder, $jaar, $limit);
 			foreach ($draden as $draad) {
 				$url = '/forum/onderwerp/' . $draad->draad_id;
-				if (LidInstellingen::get('forum', 'open_draad_op_pagina') == 'ongelezen') {
+				if (LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'ongelezen') {
 					$url .= '#ongelezen';
-				} elseif (LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste') {
+				} elseif (LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'laatste') {
 					$url .= '#reageren';
 				}
 				if ($draad->belangrijk) {
@@ -310,7 +344,7 @@ class ForumController extends Controller {
 			$gelezen = false;
 		}
 		if ($pagina === null) {
-			$pagina = LidInstellingen::get('forum', 'open_draad_op_pagina');
+			$pagina = LidInstellingenModel::get('forum', 'open_draad_op_pagina');
 		}
 		$paging = true;
 		if ($pagina === 'ongelezen' AND $gelezen) {

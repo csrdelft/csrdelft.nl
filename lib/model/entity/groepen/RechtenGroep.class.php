@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\RechtenGroepLedenModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
@@ -10,7 +14,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class RechtenGroep extends AbstractGroep {
 
-	const leden = 'RechtenGroepLedenModel';
+	const leden = RechtenGroepLedenModel::class;
 
 	/**
 	 * Rechten benodigd voor aanmelden

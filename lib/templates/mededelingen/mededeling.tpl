@@ -1,7 +1,7 @@
 <h1>Mededeling {if $mededeling->id==0}toevoegen{else}bewerken{/if}</h1>
 <form action="{MededelingenView::mededelingenRoot}bewerken/{$mededeling->id}" method="post" enctype="multipart/form-data">
-	{getMelding()}
-	{if !LoginModel::mag('P_NEWS_MOD')}
+	{CsrDelft\getMelding()}
+	{if !CsrDelft\model\security\LoginModel::mag('P_NEWS_MOD')}
 		Hier kunt u een mededeling toevoegen. Het zal echter niet direct zichtbaar worden, maar &eacute;&eacute;rst door de PubCie worden goedgekeurd.<br /><br />
 	{/if} 
 	<label>Titel:</label>
@@ -17,7 +17,7 @@
 	<div id="instellingen">
 		<label for="categorie">Categorie: <a title="De categorie bepaalt welk kleurtje erv&oacute;&oacute;r komt in de overzichtspagina.">{icon get="vraagteken"}</a></label>
 		<select name="categorie">
-			{foreach from=MededelingCategorieenModel::getAll() item=categorie}
+			{foreach from=CsrDelft\model\mededelingen\MededelingCategorieenModel::getAll() item=categorie}
 				{if $categorie->magUitbreiden() OR $categorie->id==$mededeling->categorie}
 					<option value="{$categorie->id}"{if $mededeling->categorie==$categorie->id} selected="selected"{/if}>{$categorie->naam|escape:'html'}</option>
 				{/if}
@@ -25,11 +25,11 @@
 		</select><br />
 		<label for="doelgroep">Doelgroep: <a title="De doelgroep bepaalt welke groep(en) mensen het recht krijg(t)(en) om deze mededeling te zien.">{icon get="vraagteken"}</a></label>
 		<select name="doelgroep">
-			{foreach from=MededelingenModel::getDoelgroepen() item=doelgroep}
+			{foreach from=CsrDelft\model\mededelingen\MededelingenModel::getDoelgroepen() item=doelgroep}
 				<option value="{$doelgroep}"{if $mededeling->doelgroep==$doelgroep} selected="selected"{/if}>{$doelgroep}{if $doelgroep === 'iedereen'} (ook externen){/if}</option>
 			{/foreach}
 		</select><br />
-		{if MededelingenModel::isModerator()}
+		{if CsrDelft\model\mededelingen\MededelingenModel::isModerator()}
 			<label for="prioriteit">Prioriteit: <a title="Hoe belangrijk is deze mededeling? De mededelingen met de hoogste prioriteit komt bovenaan in de top {MededelingenView::aantalTopMostBlock} op de voorpagina van de stek.">{icon get="vraagteken"}</a></label>
 			<select name="prioriteit">
 				{foreach from=$prioriteiten key=prioriteitId item=prioriteit}
@@ -42,7 +42,7 @@
 			<input type="checkbox" name="vervaltijdAan"{if $mededeling->vervaltijd!==null} checked="checked"{/if} onchange="this.form.vervaltijd.disabled = this.form.vervaltijd.disabled === '' ? 'disabled' : ''" />&nbsp;
 			<input id="vervaltijd" type="text" name="vervaltijd" value="{if $mededeling->vervaltijd!==null}{$mededeling->vervaltijd|date_format:$datumtijdFormaat}{else}{$standaardVervaltijd}" disabled="disabled{/if}" />
 		</div><br />
-		{if MededelingenModel::isModerator() AND $mededeling->zichtbaarheid!='wacht_goedkeuring'}
+		{if CsrDelft\model\mededelingen\MededelingenModel::isModerator() AND $mededeling->zichtbaarheid!='wacht_goedkeuring'}
 			<label for="verborgen">Verbergen <a title="Verborgen mededelingen zijn alleen voor moderators zichtbaar.">{icon get="vraagteken"}</a></label> 
 			<input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->verborgen} checked="checked"{/if} />
 		{/if}
@@ -63,6 +63,6 @@
 	<div class="clear">
 		{if $prullenbak}<input type="hidden" name="prullenbak" value="1" />{/if}
 		<label >&nbsp;</label><input type="submit" name="submit" value="Opslaan" />
-		<a href="{MededelingenView::mededelingenRoot}{$mededeling->id}" class="btn">Annuleren</a>
+		<a href="{CsrDelft\view\MededelingenView::mededelingenRoot}{$mededeling->id}" class="btn">Annuleren</a>
 	</div>
 </form>

@@ -1,5 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\model\groepen\KetzerOptiesModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -37,7 +39,7 @@ class KetzerSelector extends PersistentEntity {
 	protected static $persistent_attributes = array(
 		'select_id'		 => array(T::Integer, false, 'auto_increment'),
 		'ketzer_id'		 => array(T::Integer),
-		'keuze_soort'	 => array(T::Enumeration, false, 'KetzerSelectorSoort')
+		'keuze_soort'	 => array(T::Enumeration, false, KetzerSelectorSoort::class)
 	);
 	/**
 	 * Database table name

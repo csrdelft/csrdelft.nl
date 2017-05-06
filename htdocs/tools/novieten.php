@@ -6,6 +6,11 @@
  * Time: 13:09
  */
 
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\View;
+
 require_once 'configuratie.include.php';
 
 if (!LoginModel::mag('commissie:NovCie,P_ADMIN')) exit;

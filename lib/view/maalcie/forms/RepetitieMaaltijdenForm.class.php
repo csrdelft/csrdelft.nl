@@ -1,4 +1,10 @@
 <?php
+namespace CsrDelft\view\maalcie\forms;
+use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\keuzevelden\DateField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
 
 /**
  * RepetitieMaaltijdenForm.class.php

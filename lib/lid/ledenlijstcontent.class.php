@@ -1,4 +1,13 @@
 <?php
+namespace CsrDelft\lid;
+use function CsrDelft\getMelding;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\View;
+use Exception;
+
 require_once 'lid/lidzoeker.class.php';
 
 /**

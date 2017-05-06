@@ -1,4 +1,14 @@
 <?php
+namespace CsrDelft\controller\maalcie;
+
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
+use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\MijnAbonnementenView;
+use CsrDelft\view\maalcie\MijnAbonnementView;
 
 require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
 require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';

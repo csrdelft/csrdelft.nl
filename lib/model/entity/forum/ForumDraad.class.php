@@ -1,6 +1,15 @@
 <?php
+namespace CsrDelft\model\entity\forum;
+use CsrDelft\model\forum\ForumDelenModel;
+use CsrDelft\model\forum\ForumDradenGelezenModel;
+use CsrDelft\model\forum\ForumDradenVerbergenModel;
+use CsrDelft\model\forum\ForumDradenVolgenModel;
+use CsrDelft\model\forum\ForumPostsModel;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\view\FlotTimeSeries;
 
 /**
  * ForumDraad.class.php
@@ -176,7 +185,7 @@ class ForumDraad extends PersistentEntity {
 		if ($this->verwijderd AND ! $this->magModereren()) {
 			return false;
 		}
-		if (!LoginModel::mag('P_LOGGED_IN') AND $this->gesloten AND strtotime($this->laatst_gewijzigd) < strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten'))) {
+		if (!LoginModel::mag('P_LOGGED_IN') AND $this->gesloten AND strtotime($this->laatst_gewijzigd) < strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten'))) {
 			return false;
 		}
 		return $this->getForumDeel()->magLezen() OR ( $this->isGedeeld() AND $this->getGedeeldMet()->magLezen() );

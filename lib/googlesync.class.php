@@ -1,4 +1,16 @@
 <?php
+namespace CsrDelft;
+
+use CsrDelft\model\entity\Geslacht;
+use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use DOMDocument;
+use DOMText;
+use Exception;
+use Google_Client;
+use SimpleXMLElement;
 
 define('GOOGLE_CONTACTS_URL', 'https://www.google.com/m8/feeds/contacts/default/full?v=3.0');
 define('GOOGLE_GROUPS_URL', 'https://www.google.com/m8/feeds/groups/default/full?v=3.0');
@@ -46,8 +58,8 @@ class GoogleSync {
 			throw new Exception('Authsub token not available');
 		}
 
-		if (LidInstellingen::get('googleContacts', 'groepnaam') != '') {
-			$this->groupname = trim(LidInstellingen::get('googleContacts', 'groepnaam'));
+		if (LidInstellingenModel::get('googleContacts', 'groepnaam') != '') {
+			$this->groupname = trim(LidInstellingenModel::get('googleContacts', 'groepnaam'));
 			if ($this->groupname == '') {
 				$this->groupname = 'C.S.R.-import';
 			}
@@ -79,7 +91,7 @@ class GoogleSync {
 			$this->loadContactsForGroup($this->groupid);
 
 			//copy setting from settings manager.
-			$this->extendedExport = LidInstellingen::get('googleContacts', 'extended') == 'ja';
+			$this->extendedExport = LidInstellingenModel::get('googleContacts', 'extended') == 'ja';
 		} catch (Exception $ex) {
 			setMelding("Verbinding met Google verbroken.", 2);
 			unset($_SESSION['google_token'], $_SESSION['google_access_token']);

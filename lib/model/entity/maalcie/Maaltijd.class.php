@@ -1,4 +1,10 @@
 <?php
+namespace CsrDelft\model\entity\maalcie;
+use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -74,12 +80,12 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getMarge() {
 		$aantal = $this->getAantalAanmeldingen();
-		$marge = floor($aantal / floatval(Instellingen::get('maaltijden', 'marge_gasten_verhouding')));
-		$min = intval(Instellingen::get('maaltijden', 'marge_gasten_min'));
+		$marge = floor($aantal / floatval(InstellingenModel::get('maaltijden', 'marge_gasten_verhouding')));
+		$min = intval(InstellingenModel::get('maaltijden', 'marge_gasten_min'));
 		if ($marge < $min) {
 			$marge = $min;
 		}
-		$max = intval(Instellingen::get('maaltijden', 'marge_gasten_max'));
+		$max = intval(InstellingenModel::get('maaltijden', 'marge_gasten_max'));
 		if ($marge > $max) {
 			$marge = $max;
 		}
@@ -93,7 +99,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getBudget() {
 		$budget = $this->getAantalAanmeldingen() + $this->getMarge();
-		$budget *= $this->getPrijs() - intval(Instellingen::get('maaltijden', 'budget_maalcie'));
+		$budget *= $this->getPrijs() - intval(InstellingenModel::get('maaltijden', 'budget_maalcie'));
 		return floatval($budget) / 100.0;
 	}
 

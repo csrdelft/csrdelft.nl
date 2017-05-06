@@ -1,4 +1,12 @@
 <?php
+namespace CsrDelft\model\documenten;
+
+use function CsrDelft\getDateTime;
+use CsrDelft\MijnSqli;
+use CsrDelft\model\entity\Bestand;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use Exception;
 
 require_once 'model/entity/Bestand.class.php';
 

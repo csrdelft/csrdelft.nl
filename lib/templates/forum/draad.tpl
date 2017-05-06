@@ -1,4 +1,4 @@
-{getMelding()}
+{CsrDelft\getMelding()}
 {strip}
 
 	{$zoekform->view()}
@@ -6,7 +6,7 @@
 	{capture name='kop'}
 		<div class="forumheadbtn">
 			{if !isset($statistiek) AND $draad->magStatistiekBekijken()}
-				<a href="/forum/onderwerp/{$draad->draad_id}/{ForumPostsModel::instance()->getHuidigePagina()}/statistiek" class="btn" title="Toon statistieken">{icon get="chart_line"}</a>
+				<a href="/forum/onderwerp/{$draad->draad_id}/{CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina()}/statistiek" class="btn" title="Toon statistieken">{icon get="chart_line"}</a>
 				&nbsp;&nbsp;&nbsp;
 			{/if}
 			<a title="Onderwerp toevoegen aan favorieten" class="btn post popup addfav" href="/menubeheer/toevoegen/favoriet">{icon get="star"}</a>
@@ -64,7 +64,7 @@
 		{elseif $draad->gesloten}
 			<div class="draad-gesloten">
 				U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
-				{if $draad->getForumDeel()->isOpenbaar() AND strtotime($draad->laatst_gewijzigd) < strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten'))}
+				{if $draad->getForumDeel()->isOpenbaar() AND strtotime($draad->laatst_gewijzigd) < strtotime(CsrDelft\model\InstellingenModel::get('forum', 'externen_geentoegang_gesloten'))}
 					<div class="dikgedrukt">Dit externe onderwerp is niet meer toegankelijk voor externen en zoekmachines.</div>
 				{/if}
 			</div>
@@ -97,14 +97,14 @@
 							{assign var="append" value=""}
 						{/if}
 						{sliding_pager baseurl="/forum/onderwerp/"|cat:$draad->draad_id|cat:"/" url_append=$append
-pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=ForumPostsModel::instance()->getHuidigePagina()}
+pagecount=CsrDelft\model\forum\ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpage=CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina()}
 					</div>
 				</td>
 			</tr>
 		{/capture}
 
 		{* Paginering boven eerste post op de pagina als de eerste post van het draadje niet plakkerig is of dit de eerste pagina is *}
-		{if $paging AND (!$draad->eerste_post_plakkerig OR ForumPostsModel::instance()->getHuidigePagina() === 1)}
+		{if $paging AND (!$draad->eerste_post_plakkerig OR CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina() === 1)}
 			{$smarty.capture.paginering}
 		{/if}
 
@@ -128,7 +128,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 			{include file='forum/post_lijst.tpl'}
 
 			{* Paginering onder eerste plakkerige post op alle pagina's behalve de eerste *}
-			{if $paging AND $draad->eerste_post_plakkerig AND ForumPostsModel::instance()->getHuidigePagina() != 1 AND $smarty.foreach.posts.first}
+			{if $paging AND $draad->eerste_post_plakkerig AND CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina() != 1 AND $smarty.foreach.posts.first}
 				{$smarty.capture.paginering}
 			{/if}
 
@@ -140,7 +140,7 @@ pagecount=ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) curpag
 		{/if}
 
 		{* Geen ongelezen berichten op de laatste pagina betekend in het geheel geen ongelezen berichten *}
-		{if !$vanaf AND ForumPostsModel::instance()->getHuidigePagina() === ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
+		{if !$vanaf AND CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina() === CsrDelft\model\forum\ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
 			<tr class="tussenschot ongelezenvanaf">
 				<td colspan="2">
 					<a id="ongelezen">&nbsp;</a>

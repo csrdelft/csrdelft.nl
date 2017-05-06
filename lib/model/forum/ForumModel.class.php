@@ -1,7 +1,16 @@
 <?php
+namespace CsrDelft\model\forum;
 
+use function CsrDelft\getDateTime;
+use function CsrDelft\group_by;
+use CsrDelft\model\entity\forum\ForumCategorie;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use Exception;
+use PDO;
 
 require_once 'model/Paging.interface.php';
 

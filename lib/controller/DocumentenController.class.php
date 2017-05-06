@@ -1,4 +1,26 @@
 <?php
+namespace CsrDelft\controller;
+
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\documenten\DocCategorie;
+use CsrDelft\model\documenten\Document;
+use CsrDelft\model\entity\Map;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\DocumentCategorieContent;
+use CsrDelft\view\DocumentContent;
+use CsrDelft\view\DocumentDownloadContent;
+use CsrDelft\view\DocumentenContent;
+use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\invoervelden\RechtenField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\uploadvelden\BestandBehouden;
+use CsrDelft\view\formulier\uploadvelden\RequiredFileField;
+use CsrDelft\view\JsonResponse;
+use Exception;
 
 require_once 'model/documenten/Document.class.php';
 require_once 'model/documenten/DocCategorie.class.php';
@@ -180,7 +202,7 @@ class DocumentenController extends AclController {
 			$this->document->setNaam($fields['naam']->getValue());
 			$this->document->setCatID($fields['catID']->getValue());
 			// Als we al een bestand hebben voor dit document, moet die natuurlijk eerst hdb.
-			if (get_class($fields['uploader']->getUploader()) !== 'BestandBehouden') {
+			if (!$fields['uploader']->getUploader() instanceof BestandBehouden) {
 				if ($this->document->hasFile()) {
 					try {
 						$this->document->deleteFile();

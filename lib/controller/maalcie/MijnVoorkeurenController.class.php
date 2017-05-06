@@ -1,4 +1,14 @@
 <?php
+namespace CsrDelft\controller\maalcie;
+
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
+use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\forms\EetwensForm;
+use CsrDelft\view\maalcie\MijnVoorkeurenView;
+use CsrDelft\view\maalcie\MijnVoorkeurView;
 
 require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
 require_once 'view/maalcie/MijnVoorkeurenView.class.php';

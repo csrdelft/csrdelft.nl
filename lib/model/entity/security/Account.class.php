@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\model\entity\security;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -87,7 +89,7 @@ class Account extends PersistentEntity {
 		'last_login_attempt'	 => array(T::DateTime, true),
 		'failed_login_attempts'	 => array(T::Integer),
 		'blocked_reason'		 => array(T::Text, true),
-		'perm_role'				 => array(T::Enumeration, false, 'AccessRole'),
+		'perm_role'				 => array(T::Enumeration, false, AccessRole::class),
 		'private_token'			 => array(T::String, true),
 		'private_token_since'	 => array(T::DateTime, true)
 	);

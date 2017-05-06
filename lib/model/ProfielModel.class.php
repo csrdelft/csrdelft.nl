@@ -1,8 +1,22 @@
 <?php
-
+use CsrDelft\LDAP;
+use CsrDelft\model\bibliotheek\BiebCatalogus;
+use CsrDelft\model\entity\Geslacht;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\Mail;
+use CsrDelft\model\entity\OntvangtContactueel;
+use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\security\AccessRole;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Persistence\Database;
+use function CsrDelft\getDateTime;
+use function CsrDelft\setMelding;
+
 
 require_once 'model/entity/Mail.class.php';
 

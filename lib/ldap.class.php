@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft;
 
 # C.S.R. Delft | pubcie@csrdelft.nl
 # met dank aan Jeugdkerken NL
@@ -10,6 +11,8 @@
 # de data die LDAP in gaat. Maak dus op de juiste manier gebruik
 # van de ldap_escape_(dn|attribute) functies!
 # -------------------------------------------------------------------
+
+use Exception;
 
 class LDAP {
 	### private ###

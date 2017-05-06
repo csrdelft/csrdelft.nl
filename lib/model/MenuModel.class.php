@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\model;
+use CsrDelft\model\documenten\DocCategorie;
+use CsrDelft\model\entity\MenuItem;
+use CsrDelft\model\forum\ForumModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;

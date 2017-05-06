@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model\groepen;
+use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\entity\groepen\Lichting;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
 
 class LichtingenModel extends AbstractGroepenModel {

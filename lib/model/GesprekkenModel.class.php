@@ -1,4 +1,10 @@
 <?php
+namespace CsrDelft\model;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\gesprekken\Gesprek;
+use CsrDelft\model\entity\gesprekken\GesprekBericht;
+use CsrDelft\model\entity\gesprekken\GesprekDeelnemer;
+use CsrDelft\model\entity\security\Account;
 use CsrDelft\Orm\PersistenceModel;
 
 /**
@@ -90,7 +96,7 @@ class GesprekDeelnemersModel extends PersistenceModel {
 	}
 
 	public function voegToeAanGesprek(Gesprek $gesprek, Account $account, GesprekDeelnemer $door = null) {
-		if (count($gesprek->getDeelnemers()) >= (int) Instellingen::get('gesprekken', 'max_aantal_deelnemers')) {
+		if (count($gesprek->getDeelnemers()) >= (int) InstellingenModel::get('gesprekken', 'max_aantal_deelnemers')) {
 			return false;
 		}
 		$deelnemer = new GesprekDeelnemer();

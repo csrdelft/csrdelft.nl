@@ -1,11 +1,17 @@
 <?php
+namespace CsrDelft;
 
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # common.functions.php
 # -------------------------------------------------------------------
+use CsrDelft\lid\LidZoeker;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use DateTime;
 
 /**
  * PDO does a stringcast (false = '') and MySql uses tinyint for booleans so expects 0/1
@@ -43,7 +49,7 @@ function endsWith($haystack, $needle) {
  * @return array
  */
 function array_filter_empty($array) {
-	return array_filter($array, 'not_empty');
+	return array_filter($array, 'CsrDelft\not_empty');
 }
 
 function not_empty($value) {
@@ -112,7 +118,7 @@ function setGoBackCookie($url) {
 		unset($_COOKIE['goback']);
 		setcookie('goback', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	} else {
-		setcookie('goback', $url, time() + (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+		setcookie('goback', $url, time() + (int) InstellingenModel::get('beveiliging', 'session_lifetime_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	}
 }
 
@@ -126,12 +132,12 @@ function setRememberCookie($token) {
 		unset($_COOKIE['remember']);
 		setcookie('remember', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	} else {
-		setcookie('remember', $token, time() + (int) Instellingen::get('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+		setcookie('remember', $token, time() + (int) InstellingenModel::get('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	}
 }
 
 function getSessionMaxLifeTime() {
-	$lifetime = (int) Instellingen::get('beveiliging', 'session_lifetime_seconds');
+	$lifetime = (int) InstellingenModel::get('beveiliging', 'session_lifetime_seconds');
 	// Sync lifetime of FS based PHP session with DB based C.S.R. session
 	$gc = (int) ini_get('session.gc_maxlifetime');
 	if ($gc > 0 AND $gc < $lifetime) {
@@ -651,4 +657,13 @@ function getMelding() {
 	} else {
 		return '';
 	}
+}
+
+function className($className) {
+	return preg_replace('/\\\\/', '-', $className);
+}
+
+function classNameZonderNamespace($className) {
+	$namespaceExploded = explode('\\', $className);
+	return array_pop($namespaceExploded);
 }

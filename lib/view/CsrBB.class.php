@@ -1,4 +1,42 @@
 <?php
+namespace CsrDelft\view;
+
+use CsrDelft\bbparser\eamBBParser;
+use function CsrDelft\endsWith;
+use function CsrDelft\external_url;
+use CsrDelft\Icon;
+use CsrDelft\model\bibliotheek\BiebBoek;
+use CsrDelft\model\documenten\Document;
+use CsrDelft\model\entity\fotoalbum\Foto;
+use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\FotoAlbumModel;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\model\groepen\OnderverenigingenModel;
+use CsrDelft\model\groepen\RechtenGroepenModel;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\model\LedenMemoryScoresModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\PeilingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\reldate;
+use CsrDelft\SavedQuery;
+use CsrDelft\SavedQueryContent;
+use function CsrDelft\startsWith;
+use function CsrDelft\url_like;
+use CsrDelft\view\formulier\UrlDownloader;
+use CsrDelft\view\maalcie\MaaltijdKetzerView;
+use Exception;
+use CsrDelft\view\GroepView;
 
 require_once 'bbparser/eamBBParser.class.php';
 
@@ -299,7 +337,7 @@ class CsrBB extends eamBBParser {
 		} else {
 			$content = $arguments;
 		}
-		if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
+		if (LidInstellingenModel::get('layout', 'neuzen') != 'nee') {
 			$neus = Icon::getTag('bullet_red', null, null, 'neus2013', 'o');
 			$content = str_replace('o', $neus, $content);
 		}
@@ -412,7 +450,7 @@ class CsrBB extends eamBBParser {
 			$testwaarde = $arguments['waarde'];
 		}
 		try {
-			if (LidInstellingen::get($arguments['module'], $arguments['instelling']) == $testwaarde) {
+			if (LidInstellingenModel::get($arguments['module'], $arguments['instelling']) == $testwaarde) {
 				return $content;
 			}
 		} catch (Exception $e) {
@@ -873,7 +911,7 @@ HTML;
 		require_once 'view/maalcie/MaaltijdKetzerView.class.php';
 		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(\LoginModel::getUid()); // met filter
+				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(LoginModel::getUid()); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
 					return 'Geen aankomende maaltijd.';
@@ -898,7 +936,7 @@ HTML;
 		if (!isset($maaltijd)) {
 			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 		}
-		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), \LoginModel::getUid());
+		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), LoginModel::getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		} else {
@@ -908,7 +946,7 @@ HTML;
 		$result = $ketzer->getHtml();
 
 		if ($maaltijd2 !== null) {
-			$aanmeldingen2 = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd2->maaltijd_id => $maaltijd2), \LoginModel::getUid());
+			$aanmeldingen2 = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd2->maaltijd_id => $maaltijd2), LoginModel::getUid());
 			if (empty($aanmeldingen2)) {
 				$aanmelding2 = null;
 			} else {
@@ -1183,11 +1221,11 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	}
 
 	public static function getBijbelLink($stukje, $vertaling = null, $tag = false) {
-		if (!LidInstellingen::instance()->isValidValue('algemeen', 'bijbel', $vertaling)) {
+		if (!LidInstellingenModel::instance()->isValidValue('algemeen', 'bijbel', $vertaling)) {
 			$vertaling = null;
 		}
 		if ($vertaling === null) {
-			$vertaling = LidInstellingen::get('algemeen', 'bijbel');
+			$vertaling = LidInstellingenModel::get('algemeen', 'bijbel');
 		}
 		$link = 'https://www.debijbel.nl/bijbel/' . $vertaling . '/' . $stukje;
 		if ($tag) {

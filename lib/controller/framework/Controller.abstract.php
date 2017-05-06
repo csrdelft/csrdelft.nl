@@ -1,5 +1,15 @@
 <?php
+namespace CsrDelft\controller\framework;
+use CsrDelft\view\CmsPaginaView;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setGoBackCookie;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrBB;
+use CsrDelft\view\CsrLayoutPage;
+use Exception;
 
 /**
  * Controller.abstract.php

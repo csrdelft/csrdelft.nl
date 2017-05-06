@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
+
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\model\WerkgroepDeelnemersModel;
 
 require_once 'model/entity/groepen/Ketzer.class.php';
 
@@ -10,7 +15,7 @@ require_once 'model/entity/groepen/Ketzer.class.php';
  */
 class Werkgroep extends Ketzer {
 
-	const leden = 'WerkgroepDeelnemersModel';
+	const leden = WerkgroepDeelnemersModel::class;
 
 	/**
 	 * Database table name

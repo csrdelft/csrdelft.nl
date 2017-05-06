@@ -365,7 +365,7 @@
 							item.parent().addClass('disabled');
 						}
 					};
-		{if LoginModel::mag('P_LOGGED_IN')}
+		{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
 
 					// knopje downloaden
 					var btnDown = $('<a id="btnDown" tabindex="-1"><span class="fa fa-download"></span> &nbsp; Downloaden</a>');
@@ -375,7 +375,7 @@
 					});
 					addCMI(btnDown);
 		{/if}
-		{if LoginModel::mag('P_LEDEN_READ')}
+		{if CsrDelft\model\security\LoginModel::mag('P_LEDEN_READ')}
 
 					// knopje taggen
 					var btnTag = $('<a id="btnTag" tabindex="-1"><span class="fa fa-smile-o"></span> &nbsp; Leden etiketteren</a>');
@@ -429,7 +429,7 @@
 						btnZoom.find('span.fa').addClass('fa-search-minus');
 					}
 
-		{if LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
+		{if CsrDelft\model\security\LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
 
 					// knopje rechtsom draaien
 					var btnRight = $('<a id="btnRight" tabindex="-1"><span class="fa fa-repeat"></span> &nbsp; Draai met de klok mee</a>');
@@ -542,7 +542,7 @@
 					"tooltipSeeAllPhotos": "Grid",
 					"tooltipSeeOtherAlbums": "Toon sub-albums",
 					"tooltipSlideshow": "Slideshow",
-					"slideshowInterval": "{Instellingen::get('fotoalbum', 'slideshow_interval')}",
+					"slideshowInterval": "{CsrDelft\model\InstellingenModel::get('fotoalbum', 'slideshow_interval')}",
 					"slideshow": true,
 					"slideshowAutostart": false,
 					"slideshowRandom": false,
@@ -570,7 +570,7 @@
 						if (zoom.attr('data-size') !== 'fit') {
 							showFullRes();
 						}
-		{if LoginModel::mag('P_LEDEN_READ')}
+		{if CsrDelft\model\security\LoginModel::mag('P_LEDEN_READ')}
 						if (tagMode) {
 							duringTagMode();
 						}
@@ -657,7 +657,7 @@
 				});
 
 				// toggle tag mode
-		{if LoginModel::mag('P_LEDEN_READ')}
+		{if CsrDelft\model\security\LoginModel::mag('P_LEDEN_READ')}
 
 				// knopje taggen
 				var btnTag = $('<span class="fa fa-smile-o jgallery-btn jgallery-btn-small" tooltip="Leden etiketteren"></span>');
@@ -723,20 +723,20 @@
 	</script>
 {/if}
 <div class="float-right" style="margin-top: 30px;">
-	{if LoginModel::mag('P_ALBUM_ADD')}
+	{if CsrDelft\model\security\LoginModel::mag('P_ALBUM_ADD')}
 		<a class="btn" href="/fotoalbum/uploaden/{$album->subdir}">{icon get="picture_add"} Toevoegen</a>
 		<a class="btn post popup" href="/fotoalbum/toevoegen/{$album->subdir}">{icon get="folder_add"} Nieuw album</a>
 	{/if}
-	{if LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
+	{if CsrDelft\model\security\LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
 		<a href="/fotoalbum/hernoemen/{$album->subdir}" class="btn post prompt redirect" title="Fotoalbum hernoemen" data="Nieuwe naam={$album->dirname|ucfirst}">{icon get=pencil} Naam wijzigen</a>
 		{if $album->isEmpty()}
 			<a href="/fotoalbum/verwijderen/{$album->subdir}" class="btn post confirm redirect" title="Fotoalbum verwijderen">{icon get=cross} Verwijderen</a>
 		{/if}
-		{if LoginModel::mag('P_ALBUM_MOD')}
+		{if CsrDelft\model\security\LoginModel::mag('P_ALBUM_MOD')}
 			<a class="btn popup confirm" href="/fotoalbum/verwerken/{$album->subdir}" title="Fotoalbum verwerken (dit kan even duren). Verwijder magick-* files in /tmp handmatig bij timeout!">{icon get="application_view_gallery"} Verwerken</a>
 		{/if}
 	{/if}
-	{if LoginModel::mag('P_LOGGED_IN') AND $album->hasFotos()}
+	{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN') AND $album->hasFotos()}
 		<a class="btn" href="/fotoalbum/downloaden/{$album->subdir}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
 	{/if}
 </div>
@@ -746,7 +746,7 @@
 		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
 			<h2>{$album->dirname|ucfirst}</h2>
 			{foreach from=$album->getFotos() item=foto}
-				<a class="foto" href="{$foto->getResizedUrl()}" data-href="{$foto->getFullUrl()}" data-mod="{$foto->isOwner() || LoginModel::mag('P_ALBUM_MOD')}">
+				<a class="foto" href="{$foto->getResizedUrl()}" data-href="{$foto->getFullUrl()}" data-mod="{$foto->isOwner() || CsrDelft\model\security\LoginModel::mag('P_ALBUM_MOD')}">
 					<img src="{$foto->getThumbUrl()}" alt="{$smarty.const.CSR_ROOT}{$foto->getFullUrl()|replace:"%20":" "}" />
 				</a>
 			{/foreach}

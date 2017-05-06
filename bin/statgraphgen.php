@@ -1,6 +1,8 @@
 #!/usr/bin/php5
 <?php
 
+use function CsrDelft\getDateTime;
+
 require_once('/srv/www/www.csrdelft.nl/lib/configuratie.include.php');
 
 uurstats($db, STATS_DIR . 'uurstats.png');

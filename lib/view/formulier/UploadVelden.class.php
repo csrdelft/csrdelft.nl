@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\view\formulier;
 
 require_once 'model/entity/Afbeelding.class.php';
 

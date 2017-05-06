@@ -26,7 +26,7 @@
  * @param    Smarty
  * @return   string
  */
-require_once 'knop.class.php';
+use CsrDelft\Knop;
 
 function smarty_function_knop($params, &$smarty){
     if(!isset($params['url'])){

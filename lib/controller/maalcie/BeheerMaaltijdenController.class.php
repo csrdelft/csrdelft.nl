@@ -1,4 +1,29 @@
 <?php
+namespace CsrDelft\controller\maalcie;
+
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\model\maalcie\ArchiefMaaltijdModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\formulier\RemoveRowsResponse;
+use CsrDelft\view\maalcie\ArchiefMaaltijdenTable;
+use CsrDelft\view\maalcie\BeheerMaaltijdenLijst;
+use CsrDelft\view\maalcie\BeheerMaaltijdenTable;
+use CsrDelft\view\maalcie\BeheerMaaltijdenView;
+use CsrDelft\view\maalcie\forms\AanmeldingForm;
+use CsrDelft\view\maalcie\forms\MaaltijdForm;
+use CsrDelft\view\maalcie\forms\RepetitieMaaltijdenForm;
+use CsrDelft\view\maalcie\MaaltijdLijstView;
+use CsrDelft\view\maalcie\PrullenbakMaaltijdenTable;
+use Exception;
+use CsrDelft\view\maalcie\forms\MaaltijdForm;
+use CsrDelft\view\maalcie\forms\RepetitieMaaltijdenForm;
 
 require_once 'model/maalcie/MaaltijdenModel.class.php';
 require_once 'model/maalcie/ArchiefMaaltijdModel.class.php';

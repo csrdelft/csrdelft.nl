@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\model;
+use CsrDelft\model\entity\ExecutionTime;
 use CsrDelft\Orm\PersistenceModel;
 
 /**

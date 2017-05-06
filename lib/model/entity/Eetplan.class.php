@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\model\entity;
+use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

@@ -1,5 +1,10 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\model\ActiviteitDeelnemersModel;
+use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 
 require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
@@ -13,7 +18,7 @@ require_once 'model/entity/groepen/Ketzer.class.php';
  */
 class Activiteit extends Ketzer implements Agendeerbaar {
 
-	const leden = 'ActiviteitDeelnemersModel';
+	const leden = ActiviteitDeelnemersModel::class;
 
 	/**
 	 * Intern / Extern / SjaarsActie / etc.
@@ -40,7 +45,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'soort'				 => array(T::Enumeration, false, 'ActiviteitSoort'),
+		'soort'				 => array(T::Enumeration, false, ActiviteitSoort::class),
 		'rechten_aanmelden'	 => array(T::String, true),
 		'locatie'			 => array(T::String, true),
 		'in_agenda'			 => array(T::Boolean)

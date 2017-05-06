@@ -1,6 +1,13 @@
 <?php
+namespace CsrDelft\model\forum;
+use function CsrDelft\group_by;
+use function CsrDelft\group_by_distinct;
+use CsrDelft\model\entity\forum\ForumCategorie;
+use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use function CsrDelft\setMelding;
+use Exception;
 
 /**
  * ForumDelenModel.class.php

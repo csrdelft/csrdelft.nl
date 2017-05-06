@@ -1,6 +1,9 @@
 <?php
+namespace CsrDelft\model\entity;
+use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\view\CsrBB;
 
 /**
  * Bijbelrooster.class.php

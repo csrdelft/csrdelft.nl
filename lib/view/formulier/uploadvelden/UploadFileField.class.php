@@ -1,4 +1,11 @@
 <?php
+namespace CsrDelft\view\formulier\uploadvelden;
+use function CsrDelft\getMaximumFileUploadSize;
+use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\entity\Bestand;
+use CsrDelft\view\formulier\invoervelden\InputField;
+use Exception;
+
 /**
  * UploadFileField.class.php
  *

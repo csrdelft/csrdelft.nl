@@ -16,6 +16,16 @@
  * 
  * @see http://www.cronjob.nl/
  */
+use function CsrDelft\getDateTime;
+use CsrDelft\model\DebugLogModel;
+use CsrDelft\model\forum\ForumModel;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\LogModel;
+use CsrDelft\model\maalcie\CorveeHerinneringenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\model\security\OneTimeTokensModel;
+
 chdir(dirname(__FILE__) . '/../lib/');
 
 require_once 'configuratie.include.php';
@@ -52,10 +62,10 @@ try {
 
 // Instellingen
 try {
-	Instellingen::instance()->opschonen();
-	LidInstellingen::instance()->opschonen();
+	InstellingenModel::instance()->opschonen();
+	LidInstellingenModel::instance()->opschonen();
 } catch (Exception $e) {
-	DebugLogModel::instance()->log('cron.php', '(Lid)Instellingen::instance()->opschonen()', array(), $e);
+	DebugLogModel::instance()->log('cron.php', '(Lid)InstellingenModel::instance()->opschonen()', array(), $e);
 }
 
 // Corvee herinneringen

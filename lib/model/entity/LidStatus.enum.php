@@ -1,5 +1,7 @@
 <?php
+namespace CsrDelft\model\entity;
 use CsrDelft\Orm\Entity\PersistentEnum;
+use Exception;
 
 /**
  * LidStatus.enum.php
@@ -39,6 +41,10 @@ abstract class LidStatus implements PersistentEnum {
 		return in_array($option, self::$oudlidlike);
 	}
 
+	/**
+	 * @param $option
+	 * @return string
+	 */
 	public static function getDescription($option) {
 		switch ($option) {
 			case self::Noviet: return 'Noviet';

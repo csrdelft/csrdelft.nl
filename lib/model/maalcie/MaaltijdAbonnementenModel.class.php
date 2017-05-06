@@ -1,7 +1,13 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use function CsrDelft\setMelding;
+use Exception;
 
 require_once 'model/entity/maalcie/MaaltijdAbonnement.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';

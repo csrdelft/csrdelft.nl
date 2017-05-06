@@ -1,4 +1,18 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\model\AgendaModel;
+use CsrDelft\model\entity\agenda\AgendaItem;
+use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\invoervelden\RequiredRechtenField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\invoervelden\TextareaField;
+use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\keuzevelden\RequiredDateTimeField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\knoppen\FormulierKnop;
+use CsrDelft\view\formulier\ModalForm;
 
 /**
  * AgendaView.class.php
@@ -184,8 +198,8 @@ abstract class AgendaItemsView extends AgendaView {
 class AgendaZijbalkView extends AgendaItemsView {
 
 	public function view() {
-		if (count($this->items) > LidInstellingen::get('zijbalk', 'agenda_max')) {
-			$this->items = array_slice($this->items, 0, LidInstellingen::get('zijbalk', 'agenda_max'));
+		if (count($this->items) > LidInstellingenModel::get('zijbalk', 'agenda_max')) {
+			$this->items = array_slice($this->items, 0, LidInstellingenModel::get('zijbalk', 'agenda_max'));
 		}
 		$this->smarty->assign('items', $this->items);
 		$this->smarty->display('agenda/zijbalk.tpl');

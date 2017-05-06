@@ -1,5 +1,7 @@
 <?php
+namespace CsrDelft\view;
 use CsrDelft\Orm\Persistence\Database;
+use Smarty;
 
 /**
  * CsrSmarty.singleton.php

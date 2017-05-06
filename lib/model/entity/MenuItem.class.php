@@ -1,6 +1,13 @@
 <?php
+namespace CsrDelft\model\entity;
+use CsrDelft\model\forum\ForumDradenModel;
+use CsrDelft\model\MenuModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use function CsrDelft\setMelding;
+use function CsrDelft\startsWith;
+use Exception;
 
 /**
  * MenuItem.class.php

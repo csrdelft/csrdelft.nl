@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\view\formulier\keuzevelden;
+use CsrDelft\view\formulier\invoervelden\InputField;
+
 /**
  * SelectField.class.php
  *

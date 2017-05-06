@@ -1,6 +1,13 @@
 <?php
+namespace CsrDelft\model\entity\fotoalbum;
 
+use function CsrDelft\debugprint;
+use function CsrDelft\direncode;
+use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\FotoModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
+use Exception;
 
 require_once 'model/entity/fotoalbum/FotoAlbum.class.php';
 

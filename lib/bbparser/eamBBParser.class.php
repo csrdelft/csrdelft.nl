@@ -1,10 +1,13 @@
 <?php
+namespace CsrDelft\bbparser;
 
 /**
  * Main BB-code Parser file
  *
  * This file holds the eamBBParser class, the main class of the eamBBParser project.
  */
+use function CsrDelft\email_like;
+use function CsrDelft\url_like;
 
 /**
  * Main BB-code Parser Class, the core of the eamBBParser package.

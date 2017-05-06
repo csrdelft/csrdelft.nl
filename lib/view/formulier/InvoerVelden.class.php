@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\view\formulier;
 /**
  * Include alle invoervelden. Met autoload wordt deze klasse overbodig.
  *

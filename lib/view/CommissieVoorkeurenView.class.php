@@ -1,4 +1,16 @@
 <?php
+namespace CsrDelft\view;
+
+use CsrDelft\model\CommissieVoorkeurenModel;
+use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\VoorkeurCommissie;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\invoervelden\TextareaField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\View;
 
 class CommissieVoorkeurenView implements View {
 

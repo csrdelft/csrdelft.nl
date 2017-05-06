@@ -1,7 +1,12 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
+use CsrDelft\model\entity\maalcie\CorveeRepetitie;
+use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use Exception;
 
 require_once 'model/entity/maalcie/CorveeTaak.class.php';
 require_once 'model/maalcie/FunctiesModel.class.php';

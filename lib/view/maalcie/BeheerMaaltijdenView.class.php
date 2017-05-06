@@ -1,4 +1,12 @@
 <?php
+namespace CsrDelft\view\maalcie;
+use CsrDelft\model\maalcie\ArchiefMaaltijdModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\view\formulier\DataTable;
+use CsrDelft\view\formulier\DataTableKnop;
+use CsrDelft\view\formulier\DataTableResponse;
+use CsrDelft\view\SmartyTemplateView;
+use CsrDelft\view\View;
 
 /**
  * BeheerMaaltijdenView.class.php

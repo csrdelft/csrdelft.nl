@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\view\formulier\keuzevelden;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\invoervelden\InputField;
+
 /**
  * CheckboxField.class.php
  *

@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\view\maalcie;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\SmartyTemplateView;
 
 /**
  * MaalCieBeheerMenuView.class.php

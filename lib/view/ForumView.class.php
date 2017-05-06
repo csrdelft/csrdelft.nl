@@ -1,4 +1,26 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\model\entity\forum\ForumDeel;
+use CsrDelft\model\entity\forum\ForumDraad;
+use CsrDelft\model\entity\forum\ForumPost;
+use CsrDelft\model\forum\ForumDelenModel;
+use CsrDelft\model\forum\ForumDradenModel;
+use CsrDelft\model\forum\ForumDradenReagerenModel;
+use CsrDelft\model\forum\ForumModel;
+use CsrDelft\model\forum\ForumPostsModel;
+use CsrDelft\model\MenuModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\invoervelden\RechtenField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\invoervelden\TextareaField;
+use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\DeleteKnop;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
 
 /**
  * ForumView.class.php

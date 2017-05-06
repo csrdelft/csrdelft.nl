@@ -45,13 +45,13 @@
 						<input type="text" name="titel" value="{$draad->titel}" />
 						<input type="submit" value="Opslaan" class="btn" />
 					</form>
-					{if LoginModel::mag('P_FORUM_BELANGRIJK')}
+					{if CsrDelft\model\security\LoginModel::mag('P_FORUM_BELANGRIJK')}
 						<br />
 						<form action="/forum/wijzigen/{$draad->draad_id}/belangrijk" method="post">
 							<label>Belangrijk markeren &nbsp;</label>
 							<select name="belangrijk">
 								<option value=""{if !$draad->belangrijk} selected="selected"{/if}>Niet belangrijk</option>
-								{foreach from=ForumDradenModel::$belangrijk_opties key=group item=list}
+								{foreach from=CsrDelft\model\forum\ForumDradenModel::$belangrijk_opties key=group item=list}
 									<optgroup label="{$group}">
 										{foreach from=$list key=value item=label}
 											<option value="{$value}"{if $value === $draad->belangrijk} selected="selected"{/if}>{$label}</option>

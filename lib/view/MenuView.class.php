@@ -1,4 +1,10 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\model\entity\MenuItem;
+use CsrDelft\model\GesprekDeelnemersModel;
+use CsrDelft\model\MenuModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\SavedQuery;
 
 /**
  * MenuView.class.php

@@ -1,4 +1,10 @@
 <?php
+namespace CsrDelft\view;
+
+use CsrDelft\model\DragObjectModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\ModalForm;
 
 require_once 'view/Zijbalk.static.php';
 require_once 'view/SitemapView.class.php';
@@ -62,13 +68,13 @@ class CsrLayoutPage extends CompressedLayout {
 				$this->zijbalk = array();
 			}
 			$this->zijbalk = Zijbalk::addStandaardZijbalk($this->zijbalk);
-			if (LidInstellingen::get('zijbalk', 'scrollen') != 'met pagina mee') {
+			if (LidInstellingenModel::get('zijbalk', 'scrollen') != 'met pagina mee') {
 				$smarty->assign('scrollfix', DragObjectModel::getCoords('zijbalk', 0, 0)['top']);
 			}
 		}
 		$smarty->assign('zijbalk', $this->zijbalk);
 
-		if (LidInstellingen::get('layout', 'minion') == 'ja') {
+		if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
 			$smarty->assign('minioncoords', DragObjectModel::getCoords('minion', 40, 40));
 			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
 		}

@@ -1,4 +1,19 @@
 <?php
+namespace CsrDelft\controller;
+
+use CsrDelft\controller\framework\Controller;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\entity\CmsPagina;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CmsPaginaForm;
+use CsrDelft\view\CmsPaginaView;
+use CsrDelft\view\CmsPaginaZijbalkView;
+use CsrDelft\view\CsrLayoutOweePage;
+use CsrDelft\view\CsrLayoutPage;
 
 require_once 'model/CmsPaginaModel.class.php';
 require_once 'view/CmsPaginaView.class.php';
@@ -42,7 +57,7 @@ class CmsPaginaController extends Controller {
 		} elseif ($this->hasParam(1)) {
 			$naam = $this->getParam(1);
 		} else {
-			$naam = Instellingen::get('stek', 'homepage');
+			$naam = InstellingenModel::get('stek', 'homepage');
 		}
 		parent::performAction(array($naam));
 	}

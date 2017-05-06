@@ -1,8 +1,12 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use PDO;
 
 require_once 'model/entity/groepen/GroepStatus.enum.php';
 require_once 'model/entity/groepen/GroepLid.abstract.php';
@@ -16,7 +20,7 @@ require_once 'model/entity/groepen/GroepLid.abstract.php';
  */
 abstract class AbstractGroep extends PersistentEntity {
 
-	const leden = 'GroepLedenModel';
+	const leden = 'Error';
 
 	/**
 	 * Primary key
@@ -78,7 +82,7 @@ abstract class AbstractGroep extends PersistentEntity {
 		'familie'		 => array(T::String),
 		'begin_moment'	 => array(T::DateTime),
 		'eind_moment'	 => array(T::DateTime, true),
-		'status'		 => array(T::Enumeration, false, 'GroepStatus'),
+		'status'		 => array(T::Enumeration, false, GroepStatus::class),
 		'samenvatting'	 => array(T::Text),
 		'omschrijving'	 => array(T::Text, true),
 		'keuzelijst'	 => array(T::String, true),

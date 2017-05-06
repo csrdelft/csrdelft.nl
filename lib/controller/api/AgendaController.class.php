@@ -1,5 +1,14 @@
 <?php
+namespace CsrDelft\controller\api;
 
+use CsrDelft\model\ActiviteitDeelnemersModel;
+use CsrDelft\model\AgendaModel;
+use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\security\LoginModel;
 use \Jacwright\RestServer\RestException;
 
 class ApiAgendaController {

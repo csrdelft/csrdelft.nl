@@ -1,4 +1,23 @@
 <?php
+namespace CsrDelft\controller;
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\maalcie\BeheerAbonnementenController;
+use CsrDelft\controller\maalcie\BeheerFunctiesController;
+use CsrDelft\controller\maalcie\BeheerMaaltijdenController;
+use CsrDelft\controller\maalcie\BeheerPuntenController;
+use CsrDelft\controller\maalcie\BeheerTakenController;
+use CsrDelft\controller\maalcie\BeheerVoorkeurenController;
+use CsrDelft\controller\maalcie\BeheerVrijstellingenController;
+use CsrDelft\controller\maalcie\CorveeRepetitiesController;
+use CsrDelft\controller\maalcie\MaalCieSaldiController;
+use CsrDelft\controller\maalcie\MaaltijdRepetitiesController;
+use CsrDelft\controller\maalcie\MijnAbonnementenController;
+use CsrDelft\controller\maalcie\MijnCorveeController;
+use CsrDelft\controller\maalcie\MijnMaaltijdenController;
+use CsrDelft\controller\maalcie\MijnVoorkeurenController;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\view\CmsPaginaView;
+use CsrDelft\view\CsrLayoutPage;
 
 /**
  * MaalcieRouterController.class.php

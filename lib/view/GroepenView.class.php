@@ -1,4 +1,23 @@
 <?php
+namespace CsrDelft\view;
+
+use function CsrDelft\className;
+use CsrDelft\Icon;
+use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\ChangeLogModel;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\entity\Geslacht;
+use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\entity\groepen\GroepTab;
+use CsrDelft\model\entity\security\A;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\view\formulier\DataTable;
+use CsrDelft\view\formulier\DataTableKnop;
+use CsrDelft\view\formulier\DataTableResponse;
+use CsrDelft\view\formulier\elementen\FormElement;
+use Exception;
 
 require_once 'model/entity/groepen/GroepTab.enum.php';
 require_once 'model/CmsPaginaModel.class.php';
@@ -131,7 +150,7 @@ class GroepLogboekTable extends DataTable {
 	}
 
 	public function getType() {
-		return get_class($this);
+		return className($this);
 	}
 
 }

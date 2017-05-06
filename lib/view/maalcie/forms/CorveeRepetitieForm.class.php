@@ -1,4 +1,16 @@
 <?php
+namespace CsrDelft\view\maalcie\forms;
+use CsrDelft\model\entity\maalcie\CorveeRepetitie;
+use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\keuzevelden\CheckboxField;
+use CsrDelft\view\formulier\keuzevelden\JaNeeField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\keuzevelden\WeekdagField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\knoppen\FormulierKnop;
+use CsrDelft\view\formulier\ModalForm;
 
 /**
  * CorveeRepetitieForm.class.php

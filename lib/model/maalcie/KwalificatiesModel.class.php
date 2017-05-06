@@ -1,5 +1,10 @@
 <?php
+namespace CsrDelft\model\maalcie;
+use function CsrDelft\group_by;
+use CsrDelft\model\entity\maalcie\CorveeFunctie;
+use CsrDelft\model\entity\maalcie\CorveeKwalificatie;
 use CsrDelft\Orm\CachedPersistenceModel;
+use Exception;
 
 /**
  * KwalificatiesModel.class.php

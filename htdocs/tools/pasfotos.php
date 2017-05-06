@@ -7,6 +7,10 @@
  *
  * Zet een stel uid's om in pasfoto's
  */
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+
 require_once 'configuratie.include.php';
 
 if (isset($_GET['string'])) {

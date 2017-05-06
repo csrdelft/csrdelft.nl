@@ -1,6 +1,12 @@
 <?php
+namespace CsrDelft\model\security;
+use function CsrDelft\crypto_rand_token;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\security\Account;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use Exception;
 
 /**
  * AccountModel.class.php

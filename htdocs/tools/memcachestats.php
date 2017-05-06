@@ -7,6 +7,9 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  */
+use function CsrDelft\debugprint;
+use function CsrDelft\getMelding;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\OrmMemcache;
 
 require_once 'configuratie.include.php';

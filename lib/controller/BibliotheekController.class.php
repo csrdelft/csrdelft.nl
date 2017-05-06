@@ -1,4 +1,20 @@
 <?php
+namespace CsrDelft\controller;
+
+use CsrDelft\controller\framework\Controller;
+use CsrDelft\model\bibliotheek\BewerkBoek;
+use CsrDelft\model\bibliotheek\BiebCatalogus;
+use CsrDelft\model\bibliotheek\NieuwBoek;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\BibliotheekBoekContent;
+use CsrDelft\view\BibliotheekCatalogusContent;
+use CsrDelft\view\BibliotheekCatalogusDatatableContent;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\JsonResponse;
+use Exception;
 
 require_once 'controller/framework/Controller.abstract.php';
 require_once 'model/bibliotheek/BiebBoek.class.php';

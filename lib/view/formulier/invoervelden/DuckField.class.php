@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\view\formulier\invoervelden;
+use CsrDelft\model\ProfielModel;
+
 /**
  * DuckField.class.php
  *

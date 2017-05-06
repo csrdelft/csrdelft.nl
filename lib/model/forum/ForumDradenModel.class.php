@@ -1,6 +1,19 @@
 <?php
+namespace CsrDelft\model\forum;
+use function CsrDelft\endsWith;
+use function CsrDelft\getDateTime;
+use function CsrDelft\group_by_distinct;
+use CsrDelft\model\entity\forum\ForumDeel;
+use CsrDelft\model\entity\forum\ForumDraad;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\Paging;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use function CsrDelft\setMelding;
+use Exception;
+use PDO;
 
 /**
  * ForumDradenModel.class.php
@@ -77,7 +90,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	protected function __construct() {
 		CachedPersistenceModel::__construct();
 		$this->pagina = 1;
-		$this->per_pagina = (int)LidInstellingen::get('forum', 'draden_per_pagina');
+		$this->per_pagina = (int)LidInstellingenModel::get('forum', 'draden_per_pagina');
 		$this->aantal_paginas = array();
 		$this->aantal_plakkerig = null;
 	}
@@ -116,7 +129,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 			$where_params = array($forum_id);
 			if (!LoginModel::mag('P_LOGGED_IN')) {
 				$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
-				$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
+				$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
 			}
 			$this->aantal_paginas[$forum_id] = (int)ceil($this->count($where, $where_params) / $this->per_pagina);
 		}
@@ -147,7 +160,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
-			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
+			$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
 		}
 		$order = 'score DESC, plakkerig DESC';
 		if (in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
@@ -177,7 +190,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		$where_params = array($deel->forum_id);
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
-			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
+			$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
 		}
 		return $this->prefetch($where, $where_params);
 	}
@@ -187,7 +200,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		$where_params = array($deel->forum_id, $deel->forum_id);
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
-			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
+			$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
 		}
 		return $this->prefetch($where, $where_params, null, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 	}
@@ -207,7 +220,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	 */
 	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false, $offset = 0, $getLatestPosts = false) {
 		if (!is_int($aantal)) {
-			$aantal = (int)LidInstellingen::get('forum', 'draden_per_pagina');
+			$aantal = (int)LidInstellingenModel::get('forum', 'draden_per_pagina');
 			$pagina = $this->pagina;
 			$offset = ($pagina - 1) * $aantal;
 		}
@@ -238,7 +251,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		}
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
-			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
+			$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
 		}
 		$dradenById = group_by_distinct('draad_id', $this->find($where, $where_params, null, 'laatst_gewijzigd DESC', $aantal, $offset));
 		$count = count($dradenById);

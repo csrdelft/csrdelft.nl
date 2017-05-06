@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\view;
+
+use CsrDelft\model\BijbelroosterModel;
+use CsrDelft\view\View;
 
 require_once 'model/BijbelroosterModel.class.php';
 

@@ -1,5 +1,12 @@
 <?php
+namespace CsrDelft\controller\api;
 
+use CsrDelft\model\forum\ForumDradenGelezenModel;
+use CsrDelft\model\forum\ForumDradenModel;
+use CsrDelft\model\forum\ForumPostsModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use Exception;
 use Jacwright\RestServer\RestException;
 
 class ApiForumController {

@@ -1,4 +1,21 @@
 <?php
+namespace CsrDelft\model;
+use function CsrDelft\getDateTime;
+use function CsrDelft\group_by_distinct;
+use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\groepen\ActiviteitDeelnemer;
+use CsrDelft\model\entity\groepen\BestuursLid;
+use CsrDelft\model\entity\groepen\Bewoner;
+use CsrDelft\model\entity\groepen\CommissieLid;
+use CsrDelft\model\entity\groepen\KetzerDeelnemer;
+use CsrDelft\model\entity\groepen\KringLid;
+use CsrDelft\model\entity\groepen\LichtingsLid;
+use CsrDelft\model\entity\groepen\OnderverenigingsLid;
+use CsrDelft\model\entity\groepen\RechtenGroepLid;
+use CsrDelft\model\entity\groepen\VerticaleLid;
+use CsrDelft\model\entity\groepen\WerkgroepDeelnemer;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 

@@ -1,6 +1,10 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
+use CsrDelft\model\entity\maalcie\ArchiefMaaltijd;
+use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\Orm\PersistenceModel;
+use Exception;
 
 class ArchiefMaaltijdModel extends PersistenceModel {
     const ORM = ArchiefMaaltijd::class;

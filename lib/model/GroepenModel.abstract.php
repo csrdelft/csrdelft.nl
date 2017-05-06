@@ -1,9 +1,21 @@
 <?php
+namespace CsrDelft\model;
 
+use function CsrDelft\className;
+use function CsrDelft\classNameZonderNamespace;
+use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\model\security\AccessModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\DynamicEntityModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
+use function CsrDelft\setMelding;
+use Exception;
+use PDO;
 
 require_once 'model/entity/groepen/Groep.abstract.php';
 require_once 'model/GroepLedenModel.abstract.php';
@@ -48,7 +60,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	}
 
 	public static function getNaam() {
-		return strtolower(str_replace('Model', '', get_called_class()));
+		return strtolower(str_replace('Model', '', classNameZonderNamespace(get_called_class())));
 	}
 
 	public static function getUrl() {
@@ -73,11 +85,12 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 			return false;
 		}
 		$model = $groep->model;
-		if (!class_exists($model)) {
+		$namespacedModel = 'CsrDelft\\model\\groepen\\' . $model;
+		if (!class_exists($namespacedModel)) {
 			setMelding('Model niet gevonden: ' . $model, -1);
 			return false;
 		}
-		return $model::get($groep->omnummering);
+		return $namespacedModel::get($groep->omnummering);
 	}
 
 	/**

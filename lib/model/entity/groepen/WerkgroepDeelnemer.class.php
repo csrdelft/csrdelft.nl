@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 
 require_once 'model/entity/groepen/KetzerDeelnemer.class.php';
 

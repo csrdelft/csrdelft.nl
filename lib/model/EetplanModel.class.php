@@ -1,5 +1,8 @@
 <?php
+namespace CsrDelft\model;
 
+use CsrDelft\model\entity\Eetplan;
+use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\Orm\PersistenceModel;
 
 require_once 'model/entity/Eetplan.class.php';

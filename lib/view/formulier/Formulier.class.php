@@ -1,7 +1,22 @@
 <?php
+namespace CsrDelft\view\formulier;
 
+use function CsrDelft\className;
+use function CsrDelft\getDateTime;
+use function CsrDelft\getMelding;
+use CsrDelft\model\ChangeLogModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use function CsrDelft\printDebug;
+use function CsrDelft\startsWith;
+use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\knoppen\FormKnoppen;
+use CsrDelft\view\formulier\uploadvelden\FileField;
+use CsrDelft\view\Validator;
+use CsrDelft\view\View;
 
 require_once 'view/View.interface.php';
 require_once 'view/Validator.interface.php';
@@ -54,7 +69,7 @@ class Formulier implements View, Validator {
 
 	public function __construct($model, $action, $titel = false, $dataTableId = false) {
 		$this->model = $model;
-		$this->formId = uniqid(get_class($this->model));
+		$this->formId = uniqid(className(get_class($this->model)));
 		$this->action = $action;
 		$this->titel = $titel;
 		$this->css_classes[] = 'Formulier';
@@ -110,6 +125,7 @@ class Formulier implements View, Validator {
 		$fields = array();
 		foreach ($this->model->getAttributes() as $fieldName) {
 			$definition = $this->model->getAttributeDefinition($fieldName);
+			$namespace = "CsrDelft\\view\\formulier\\";
 			if (!isset($definition[1]) OR $definition[1] === false) {
 				$class = 'Required';
 			} else {
@@ -119,47 +135,69 @@ class Formulier implements View, Validator {
 			switch ($definition[0]) {
 				case T::String:
 					if (startsWith($fieldName, 'rechten_')) {
+						$namespace .= 'invoervelden';
 						$class .= 'RechtenField';
 						break;
 					}
 				// fall through
 				case T::Char:
 					if ($fieldName === 'verticale') {
+						$namespace .= 'keuzevelden';
 						$class .= 'VerticaleField';
 						break;
 					}
+					$namespace .= 'invoervelden';
 					$class .= 'TextField';
 					break;
-				case T::Boolean: $class .= 'JaNeeField';
+				case T::Boolean:
+					$namespace .= 'keuzevelden';
+					$class .= 'JaNeeField';
 					break;
-				case T::Integer: $class .= 'IntField';
+				case T::Integer:
+					$namespace .= 'getalvelden';
+					$class .= 'IntField';
 					break;
-				case T::Float: $class .= 'FloatField';
+				case T::Float:
+					$namespace .= 'getalvelden';
+					$class .= 'FloatField';
 					break;
-				case T::Date: $class .= 'DateField';
+				case T::Date:
+					$namespace .= 'keuzevelden';
+					$class .= 'DateField';
 					break;
-				case T::Time: $class .= 'TimeField';
+				case T::Time:
+					$namespace .= 'keuzevelden';
+					$class .= 'TimeField';
 					break;
-				case T::DateTime: $class .= 'DateTimeField';
+				case T::DateTime:
+					$namespace .= 'keuzevelden';
+					$class .= 'DateTimeField';
 					break;
 				case T::Text:
-				case T::LongText: $class .= 'TextareaField';
+				case T::LongText:
+				$namespace .= 'invoervelden';
+				$class .= 'TextareaField';
 					break;
-				case T::Enumeration: $class .= 'SelectField';
+				case T::Enumeration:
+					$namespace .= 'keuzevelden';
+					$class .= 'SelectField';
 					break;
-				case T::UID: $class .='LidField';
+				case T::UID:
+					$namespace .= 'invoervelden';
+					$class .='LidField';
 					break;
 			}
+			$namespacedClass = $namespace . '\\' . $class;
 			if ($definition[0] == T::Enumeration) {
 				$options = array();
 				foreach ($definition[2]::getTypeOptions() as $option) {
 					$options[$option] = $definition[2]::getDescription($option);
 				}
-				$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc, $options);
+				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc, $options);
 			} elseif ($definition[0] == T::Char) {
-				$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc, 1);
+				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc, 1);
 			} else {
-				$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc);
+				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc);
 			}
 		}
 		foreach ($this->model->getPrimaryKey() as $fieldName) {

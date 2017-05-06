@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\view\formulier\invoervelden;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 

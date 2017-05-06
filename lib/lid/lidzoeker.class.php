@@ -1,4 +1,11 @@
 <?php
+namespace CsrDelft\lid;
+
+use CsrDelft\MijnSqli;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use Exception;
 
 require_once 'common.functions.php';
 

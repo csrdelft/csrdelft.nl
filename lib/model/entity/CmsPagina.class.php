@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\model\entity;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

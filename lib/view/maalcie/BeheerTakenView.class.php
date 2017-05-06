@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\view\maalcie;
+use function CsrDelft\getMelding;
+use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\view\SmartyTemplateView;
 
 /**
  * BeheerTakenView.class.php

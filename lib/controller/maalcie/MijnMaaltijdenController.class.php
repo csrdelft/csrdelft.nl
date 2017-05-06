@@ -1,4 +1,21 @@
 <?php
+namespace CsrDelft\controller\maalcie;
+
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
+use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
+use CsrDelft\view\maalcie\MaaltijdKetzerView;
+use CsrDelft\view\maalcie\MaaltijdLijstView;
+use CsrDelft\view\maalcie\MijnMaaltijdenView;
+use CsrDelft\view\maalcie\MijnMaaltijdView;
 
 require_once 'model/maalcie/MaaltijdenModel.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
@@ -51,7 +68,7 @@ class MijnMaaltijdenController extends AclController {
 	public function ketzer() {
 		$maaltijden = $this->model->getKomendeMaaltijdenVoorLid(LoginModel::getUid());
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid($maaltijden, LoginModel::getUid());
-		$timestamp = strtotime(Instellingen::get('maaltijden', 'beoordeling_periode'));
+		$timestamp = strtotime(InstellingenModel::get('maaltijden', 'beoordeling_periode'));
 		$recent = MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid(LoginModel::getUid(), $timestamp);
 		$this->view = new MijnMaaltijdenView($maaltijden, $aanmeldingen, $recent);
 		$this->view = new CsrLayoutPage($this->view);

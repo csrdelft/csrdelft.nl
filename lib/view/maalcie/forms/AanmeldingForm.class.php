@@ -1,4 +1,10 @@
 <?php
+namespace CsrDelft\view\maalcie\forms;
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
 
 /**
  * AanmeldingForm.class.php

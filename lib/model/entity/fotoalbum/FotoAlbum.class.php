@@ -1,6 +1,13 @@
 <?php
+namespace CsrDelft\model\entity\fotoalbum;
 
+use function CsrDelft\direncode;
+use function CsrDelft\endsWith;
+use CsrDelft\model\entity\Map;
+use CsrDelft\model\FotoAlbumModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
+use function CsrDelft\startsWith;
 
 require_once 'model/entity/fotoalbum/Foto.class.php';
 

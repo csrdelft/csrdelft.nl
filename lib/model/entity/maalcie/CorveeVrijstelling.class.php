@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\model\entity\maalcie;
+use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -23,7 +25,7 @@ class CorveeVrijstelling extends PersistentEntity {
 	public $percentage;
 
 	public function getPunten() {
-		return (int) ceil($this->percentage * intval(Instellingen::get('corvee', 'punten_per_jaar')) / 100);
+		return (int) ceil($this->percentage * intval(InstellingenModel::get('corvee', 'punten_per_jaar')) / 100);
 	}
 
 	protected static $table_name = 'crv_vrijstellingen';

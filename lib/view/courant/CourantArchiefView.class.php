@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\view\courant;
+use CsrDelft\model\CourantModel;
+use CsrDelft\view\View;
+
 require_once 'view/courant/CourantView.class.php';
 
 /**
