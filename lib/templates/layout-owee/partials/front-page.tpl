@@ -156,11 +156,6 @@
                     </a>
                 </li>
                 <li>
-                    <a href="http://stcgroep.nl/" class="lazy-load"
-                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/STC-groep-banner.gif' alt='STC-advertentie'>">
-                    </a>
-                </li>
-                <li>
                     <a href="http://zoover.nl/" class="lazy-load"
                        data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/Zoover.jpg' alt='Zooveradvertentie'>">
                     </a>
