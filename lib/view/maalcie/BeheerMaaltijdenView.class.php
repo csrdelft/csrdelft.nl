@@ -31,11 +31,11 @@ class BeheerMaaltijdenTable extends DataTable {
 		$this->hideColumn('aanmeld_limiet');
 		$this->hideColumn('omschrijving');
 		$this->hideColumn('mlt_repetitie_id');
-		$this->hideColumn('verwerkt');
 
 		$this->addColumn('repetitie_naam', 'titel');
 		$this->addColumn('aanmeld_filter', null, null, 'aanmeldFilter_render');
-		$this->addColumn('gesloten', null, null, 'gesloten_render');
+		$this->addColumn('gesloten', null, null, 'check_render');
+		$this->addColumn('verwerkt', null, null, 'check_render');
 		$this->addColumn('aanmeldingen', 'aanmeld_limiet', null, 'aanmeldingen_render');
 		$this->addColumn('prijs', null, null, 'prijs_render', null, 'num-fmt');
 
@@ -81,7 +81,7 @@ function aanmeldFilter_render(data) {
 	return data ? '<span class="ico group_key" title="Aanmeld filter actief: \'' + data + '\'"></span>' : '';
 }
 
-function gesloten_render(data) {
+function check_render(data) {
     return '<span class="ico '+(data=='1'?'tick':'cross')+'"></span>';
 }
 

@@ -127,6 +127,10 @@ class BeheerMaaltijdenController extends AclController {
 	public function toggle($mid) {
 		$maaltijd = $this->model->getMaaltijd($mid);
 
+		if ($maaltijd->verwerkt) {
+			throw new Exception('Maaltijd al verwerkt');
+		}
+
 		if ($maaltijd->gesloten) {
 			$this->model->openMaaltijd($maaltijd);
 		} else {
