@@ -16,17 +16,25 @@ class BeheerCiviBestellingController extends AclController {
 
 		if ($this->getMethod() == "POST") {
 			$this->acl = [
-				'overzicht' => 'P_MAAL_MOD',
+				'mijn' => 'P_MAAL_IK',
+				'overzicht' => 'P_MAAL_MOD'
 			];
 		} else {
 			$this->acl = [
-				'overzicht' => 'P_MAAL_MOD',
+				'mijn' => 'P_MAAL_IK',
+				'overzicht' => 'P_MAAL_MOD'
 			];
 		}
 	}
 
 	public function performAction(array $args = array()) {
-		$this->action = 'overzicht';
+		$this->action = 'mijn';
+
+		if ($this->hasParam(3)) {
+			if ($this->getParam(3) != LoginModel::getUid()) {
+				$this->action = 'overzicht';
+			}
+		}
 
 		return parent::performAction($this->getParams(3));
 	}
@@ -37,5 +45,13 @@ class BeheerCiviBestellingController extends AclController {
 
 	public function POST_overzicht($uid) {
 		$this->view = new CiviBestellingOverzichtResponse($this->model->find('uid = ?', array($uid)));
+	}
+
+	public function GET_mijn() {
+		$this->GET_overzicht(LoginModel::getUid());
+	}
+
+	public function POST_mijn() {
+		$this->POST_overzicht(LoginModel::getUid());
 	}
 }

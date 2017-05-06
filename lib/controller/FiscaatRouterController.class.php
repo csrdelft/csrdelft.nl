@@ -8,7 +8,7 @@ class FiscaatRouterController extends AclController {
 			'overzicht' => 'P_MAAL_MOD',
 			'producten' => 'P_MAAL_MOD',
 			'saldo' => 'P_MAAL_MOD',
-			'bestellingen' => 'P_MAAL_MOD',
+			'bestellingen' => 'P_MAAL_IK',
 			'categorien' => 'P_MAAL_MOD'
 		);
 	}

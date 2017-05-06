@@ -155,7 +155,7 @@ SQL
 			'volgorde' => 0,
 			'tekst' => 'CiviSaldo',
 			'link' => '/fiscaat',
-			'rechten_bekijken' => 'P_MAAL_MOD',
+			'rechten_bekijken' => 'P_MAAL_IK',
 			'zichtbaar' => 1
 		]);
 		$civiMenu = $this->fetchRow("SELECT LAST_INSERT_ID()")[0];
@@ -186,7 +186,7 @@ SQL
 				'volgorde' => 4,
 				'tekst' => 'Bestellingen',
 				'link' => '/fiscaat/bestellingen',
-				'rechten_bekijken' => 'P_MAAL_MOD',
+				'rechten_bekijken' => 'P_MAAL_IK',
 				'zichtbaar' => 1
 			]
 		]);
