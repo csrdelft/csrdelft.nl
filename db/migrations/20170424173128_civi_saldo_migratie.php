@@ -158,8 +158,8 @@ FROM saldolog WHERE (uid, moment) IN (
 		foreach ($gebruikers as $index => $gebruiker) {
 			$saldo = $gebruiker['saldo'] * 100;
 			$this->execute(sprintf(
-				"INSERT INTO CiviSaldo (uid, saldo, laatst_veranderd) 
-						VALUES ('%s', %d, '%s')",
+				"INSERT INTO CiviSaldo (uid, saldo, laatst_veranderd, deleted) 
+						VALUES ('%s', %d, '%s', FALSE)",
 				$gebruiker['uid'], $saldo, $gebruiker['laatst_veranderd']));
 			$this->execute(sprintf(
 				"INSERT INTO CiviBestelling (id, uid, totaal, deleted) 
