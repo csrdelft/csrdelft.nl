@@ -162,9 +162,9 @@ FROM saldolog WHERE (uid, moment) IN (
 						VALUES ('%s', %d, '%s', FALSE)",
 				$gebruiker['uid'], $saldo, $gebruiker['laatst_veranderd']));
 			$this->execute(sprintf(
-				"INSERT INTO CiviBestelling (id, uid, totaal, deleted) 
-						VALUES (%d, '%s', %d, %d)",
-				$index + 1, $gebruiker['uid'], -$saldo, 0));
+				"INSERT INTO CiviBestelling (id, uid, totaal, deleted, moment) 
+						VALUES (%d, '%s', %d, %d, '%s')",
+				$index + 1, $gebruiker['uid'], -$saldo, 0, $gebruiker['laatst_veranderd']));
 			$this->execute(sprintf(
 				"INSERT INTO CiviBestellingInhoud (bestelling_id, product_id, aantal)
 						VALUES (%d, %d, %d)",
