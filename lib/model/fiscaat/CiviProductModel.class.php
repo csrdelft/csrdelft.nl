@@ -57,7 +57,7 @@ class CiviProductModel extends PersistenceModel {
 			$prijs = new CiviPrijs();
 			$prijs->product_id = $product->id;
 			$prijs->van = date_create('now')->format(DateTime::ISO8601);
-			$prijs->tot = date_create('0000-00-00')->format(DateTime::ISO8601);
+			$prijs->tot = NULL;
 			$prijs->prijs = $product->prijs;
 
 			CiviPrijsModel::instance()->create($prijs);
@@ -84,7 +84,7 @@ class CiviProductModel extends PersistenceModel {
 				$nieuw_prijs = new CiviPrijs();
 				$nieuw_prijs->product_id = $product->id;
 				$nieuw_prijs->van = $nu;
-				$nieuw_prijs->tot = date_create('0000-00-00')->format(DateTime::ISO8601);
+				$nieuw_prijs->tot = NULL;
 				$nieuw_prijs->prijs = $product->prijs;
 				CiviPrijsModel::instance()->create($nieuw_prijs);
 			}

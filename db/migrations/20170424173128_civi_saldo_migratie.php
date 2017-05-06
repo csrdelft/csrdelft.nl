@@ -47,7 +47,7 @@ CREATE TABLE CiviProduct
 CREATE TABLE CiviPrijs
 (
   van       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  tot       TIMESTAMP NOT NULL,
+  tot       TIMESTAMP NULL,
   product_id INT(11) NOT NULL,
   prijs     INT(11) NOT NULL,
   PRIMARY KEY (van, product_id),

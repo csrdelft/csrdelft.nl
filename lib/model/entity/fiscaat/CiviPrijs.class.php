@@ -20,7 +20,7 @@ class CiviPrijs extends PersistentEntity {
 	protected static $table_name = 'CiviPrijs';
 	protected static $persistent_attributes = array(
 		'van' => array(T::Timestamp),
-		'tot' => array(T::Timestamp),
+		'tot' => array(T::Timestamp, true),
 		'product_id' => array(T::Integer),
 		'prijs' => array(T::Integer)
 	);
