@@ -53,6 +53,7 @@ CREATE TABLE CiviPrijs
   PRIMARY KEY (van, product_id),
   CONSTRAINT FK_CP_product FOREIGN KEY (product_id)
   REFERENCES CiviProduct(id)
+  ON DELETE CASCADE
 );
 
 CREATE TABLE CiviBestelling
