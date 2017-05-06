@@ -13,7 +13,7 @@ class BeheerCiviSaldoView extends DataTable {
 
 		$this->addColumn('naam', 'saldo');
 		$this->addColumn('lichting', 'saldo');
-		$this->addColumn('saldo', null, null, 'prijs_render', 'saldo', null, 'num-fmt');
+		$this->addColumn('saldo', null, null, 'prijs_render', 'saldo', 'num-fmt');
 		$this->setOrder(array('saldo' => 'asc'));
 
 		$this->searchColumn('naam');
@@ -80,7 +80,8 @@ class BeheerSaldoResponse extends DataTableResponse {
 			'naam' => ProfielModel::getNaam($entity->uid, 'volledig'),
 			'lichting' => substr($entity->uid, 0, 2),
 			'saldo' => $entity->saldo,
-			'laatst_veranderd' => $entity->laatst_veranderd
+			'laatst_veranderd' => $entity->laatst_veranderd,
+			'deleted' => $entity->deleted
 		));
 	}
 }
