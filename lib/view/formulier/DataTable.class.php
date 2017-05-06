@@ -364,6 +364,7 @@ HTML;
 					} else {
 						fnAutoScroll(tableId);
 					}
+					fnDeselectItemsOnPageChange(table);
 					return json.data;
 				};
 				// Init DataTable
@@ -390,6 +391,12 @@ HTML;
 					jtable.find('thead tr th').first().addClass('toggle-group toggle-group-expanded');
 				}
 			});
+
+			var fnDeselectItemsOnPageChange = function (dt) {
+				dt.on('page', function() {
+					dt.rows({ selected: true }).deselect();
+				});
+			};
 JS;
 	}
 }
