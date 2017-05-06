@@ -68,7 +68,7 @@ try {
 
 // Forum opschonen
 try {
-	require_once 'model/forum/ForumModel.class.php';
+	require_once 'forum/model/ForumModel.class.php';
 	ForumModel::instance()->opschonen();
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'ForumModel::instance()->opschonen()', array(), $e);

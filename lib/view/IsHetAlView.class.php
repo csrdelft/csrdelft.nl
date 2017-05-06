@@ -75,7 +75,7 @@ class IsHetAlView implements View {
 				break;
 
 			default:
-				require_once 'model/AgendaModel.class.php';
+				require_once 'agenda/model/AgendaModel.class.php';
 				$vandaag = AgendaModel::instance()->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
 					$this->ja = true;

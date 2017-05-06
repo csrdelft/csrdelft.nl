@@ -37,7 +37,19 @@ try {
 	}
 	$class .= 'Controller';
 
-	require_once 'controller/' . $class . '.class.php';
+	$module = filter_input(INPUT_GET, 'm', FILTER_SANITIZE_STRING);
+	if (empty($module)) {
+		/** @noinspection PhpIncludeInspection */
+		require_once 'controller/' . $class . '.class.php';
+	} else {
+		$modules = array('eetplan', 'documenten', 'bibliotheek', 'mededelingen', 'peilingen', 'gesprekken', 'courant', 'forum', 'agenda', 'fotoalbum', 'menu', 'bijbelrooster');
+
+		if (in_array($module, $modules)) {
+			/** @noinspection PhpIncludeInspection */
+			require_once $module . '/controller/' . $class . '.class.php';
+		}
+	}
+
 	$controller = new $class(REQUEST_URI);
 	$controller->performAction();
 

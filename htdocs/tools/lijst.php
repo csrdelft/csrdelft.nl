@@ -44,10 +44,10 @@ $ledenlijstcontent = new LedenlijstContent($zoeker);
 
 if (isset($_GET['addToGoogleContacts'])) {
 	try {
-		require_once 'googlesync.class.php';
-		GoogleSync::doRequestToken(CSR_ROOT . REQUEST_URI);
+		require_once 'google/model/GoogleSyncModel.class.php';
+		GoogleSyncModel::doRequestToken(CSR_ROOT . REQUEST_URI);
 
-		$gSync = GoogleSync::instance();
+		$gSync = GoogleSyncModel::instance();
 
 		$start = microtime(true);
 		$message = $gSync->syncLidBatch($zoeker->getLeden());

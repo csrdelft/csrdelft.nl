@@ -4,7 +4,7 @@ use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;
 
-require_once 'model/entity/Mail.class.php';
+require_once 'algemeen/model/entity/Mail.class.php';
 
 /**
  * ProfielModel.class.php
@@ -305,7 +305,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyBibliothecaris(Profiel $profiel, $oudestatus) {
-		require_once 'model/bibliotheek/BiebCatalogus.class.php';
+		require_once 'bibliotheek/model/BiebCatalogus.class.php';
 		$boeken = BiebCatalogus::getBoekenByUid($profiel->uid, 'geleend');
 		if (!is_array($boeken)) {
 			$boeken = array();

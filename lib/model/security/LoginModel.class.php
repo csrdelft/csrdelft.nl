@@ -2,7 +2,7 @@
 
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'view/Validator.interface.php';
+require_once 'algemeen/view/Validator.interface.php';
 require_once 'model/entity/security/AuthenticationMethod.enum.php';
 require_once 'model/security/RememberLoginModel.class.php';
 require_once 'model/security/AccountModel.class.php';

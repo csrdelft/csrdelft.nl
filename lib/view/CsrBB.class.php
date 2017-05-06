@@ -145,7 +145,7 @@ class CsrBB extends eamBBParser {
 	 * Toont de thumbnail met link naar fotoalbum.
 	 */
 	function bb_foto($arguments = array()) {
-		require_once 'controller/FotoAlbumController.class.php';
+		require_once 'fotoalbum/controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/foto]'), array()));
 		$parts = explode('/', $url);
 		if (in_array('Posters', $parts)) {
@@ -189,7 +189,7 @@ class CsrBB extends eamBBParser {
 	 *
 	 */
 	protected function bb_fotoalbum($arguments = array()) {
-		require_once 'controller/FotoAlbumController.class.php';
+		require_once 'fotoalbum/controller/FotoAlbumController.class.php';
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
 		if ($url === 'laatste') {
 			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
@@ -816,8 +816,8 @@ HTML;
 			$boekid = $this->parseArray(array('[/boek]'), array());
 		}
 
-		require_once 'model/bibliotheek/BiebBoek.class.php';
-		require_once 'view/BibliotheekView.class.php';
+		require_once 'bibliotheek/model/BiebBoek.class.php';
+		require_once 'bibliotheek/view/BibliotheekView.class.php';
 		try {
 			$boek = new BiebBoek((int) $boekid);
 			$content = new BoekBBView($boek);
@@ -840,7 +840,7 @@ HTML;
 		} else {
 			$id = $this->parseArray(array('[/document]'), array());
 		}
-		require_once 'view/DocumentenView.class.php';
+		require_once 'documenten/view/DocumentenView.class.php';
 		try {
 			$document = new Document((int) $id);
 			$content = new DocumentBBContent($document);
@@ -1016,8 +1016,8 @@ HTML;
 			return '[mededelingen] Geen geldig mededelingenblok.';
 		}
 
-		require_once 'model/mededelingen/MededelingenModel.class.php';
-		require_once 'view/MededelingenView.class.php';
+		require_once 'mededelingen/model/MededelingenModel.class.php';
+		require_once 'mededelingen/view/MededelingenView.class.php';
 
 		$MededelingenView = new MededelingenView(0);
 		switch ($type) {
@@ -1099,7 +1099,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		} else {
 			$peiling_id = $this->parseArray(array('[/peiling]'), array());
 		}
-		require_once 'view/PeilingenView.class.php';
+		require_once 'peilingen/view/PeilingenView.class.php';
 		try {
 			$peiling = PeilingenModel::instance()->getPeilingById((int) $peiling_id);
 			$peilingcontent = new PeilingView($peiling);
@@ -1162,7 +1162,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		} else {
 			$dagen = $this->parseArray(array('[/bijbelrooster]'), array());
 		}
-		require_once 'view/BijbelroosterView.class.php';
+		require_once 'bijbelrooster/view/BijbelroosterView.class.php';
 		$view = new BijbelroosterBBView($dagen);
 		return $view->getHtml();
 	}
@@ -1198,8 +1198,8 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	}
 
 	function bb_ledenmemoryscores($arguments = array()) {
-		require_once 'model/LedenMemoryScoresModel.class.php';
-		require_once 'view/LedenMemoryView.class.php';
+		require_once 'ledenmemory/model/LedenMemoryScoresModel.class.php';
+		require_once 'ledenmemory/view/LedenMemoryView.class.php';
 		LedenMemoryScoresModel::instance();
 		$groep = null;
 		$titel = null;

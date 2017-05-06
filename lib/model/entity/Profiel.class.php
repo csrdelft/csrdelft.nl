@@ -664,11 +664,11 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function isInGoogleContacts() {
 		try {
-			require_once 'googlesync.class.php';
-			if (!GoogleSync::isAuthenticated()) {
+			require_once 'google/model/GoogleSyncModel.class.php';
+			if (!GoogleSyncModel::isAuthenticated()) {
 				return null;
 			}
-			return GoogleSync::instance()->existsInGoogleContacts($this);
+			return GoogleSyncModel::instance()->existsInGoogleContacts($this);
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), 0);
 			return null;

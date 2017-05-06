@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/entity/Mail.class.php';
+require_once 'algemeen/model/entity/Mail.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 
 /**

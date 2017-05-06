@@ -4,12 +4,12 @@ use \Jacwright\RestServer\RestServer;
 
 require_once 'configuratie.include.php';
 
-require 'controller/api/ActiviteitenController.class.php';
-require 'controller/api/AgendaController.class.php';
-require 'controller/api/AuthController.class.php';
-require 'controller/api/ForumController.class.php';
-require 'controller/api/LedenController.class.php';
-require 'controller/api/MaaltijdenController.class.php';
+require 'api/controller/ActiviteitenController.class.php';
+require 'api/controller/AgendaController.class.php';
+require 'api/controller/AuthController.class.php';
+require 'api/controller/ForumController.class.php';
+require 'api/controller/LedenController.class.php';
+require 'api/controller/MaaltijdenController.class.php';
 
 $mode = DEBUG ? 'debug' : 'production';
 $server = new RestServer($mode);

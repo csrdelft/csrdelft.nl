@@ -140,14 +140,14 @@ class ProfielView extends SmartyTemplateView {
 		require_once 'model/maalcie/KwalificatiesModel.class.php';
 		$this->smarty->assign('corveekwalificaties', KwalificatiesModel::instance()->getKwalificatiesVanLid($this->model->uid));
 
-		require_once 'model/forum/ForumModel.class.php';
+		require_once 'forum/model/ForumModel.class.php';
 		$this->smarty->assign('forumpostcount', ForumPostsModel::instance()->getAantalForumPostsVoorLid($this->model->uid));
 
-		require_once 'model/bibliotheek/BiebCatalogus.class.php';
+		require_once 'bibliotheek/model/BiebCatalogus.class.php';
 		$this->smarty->assign('boeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'eigendom'));
 		$this->smarty->assign('gerecenseerdeboeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'gerecenseerd'));
 
-		require_once 'view/FotoAlbumView.class.php';
+		require_once 'fotoalbum/view/FotoAlbumView.class.php';
 		$fotos = array();
 		foreach (FotoTagsModel::instance()->find('keyword = ?', array($this->model->uid), null, null, 3) as $tag) {
 			/** @var Foto $foto */
