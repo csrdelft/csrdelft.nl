@@ -8,13 +8,15 @@ class BeheerCiviProductenView extends DataTable {
 		$this->addColumn('beheer', 'prijs', null, 'truefalse');
 		$this->hideColumn('prioriteit');
 
+		$this->searchColumn('beschrijving');
+
 		$this->addKnop(new DataTableKnop('== 0', $this->dataTableId, '/fiscaat/producten/toevoegen', 'post', 'Nieuw', 'Nieuw product toevoegen', 'add'));
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/producten/bewerken', 'post', 'Bewerken', 'Product bewerken', 'pencil'));
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/producten/verwijderen', 'post', 'Verwijderen', 'Product verwijderen', 'cross'));
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » Producten';
+		return '<a href="/" title="Startpagina"><span class="fa fa-home module-icon"></span></a> » <a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » <span class="active">Producten</span>';
 	}
 
 	public function getJavascript() {

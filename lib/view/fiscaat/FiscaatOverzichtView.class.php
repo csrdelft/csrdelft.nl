@@ -15,6 +15,6 @@ class FiscaatOverzichtView extends SmartyTemplateView {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » Overzicht';
+		return '<a href="/" title="Startpagina"><span class="fa fa-home module-icon"></span></a> » <a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » <span class="active">Overzicht</span>';
 	}
 }

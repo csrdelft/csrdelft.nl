@@ -24,7 +24,7 @@ class BeheerCiviSaldoView extends DataTable {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » Saldo';
+		return '<a href="/" title="Startpagina"><span class="fa fa-home module-icon"></span></a> » <a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » <span class="active">Saldo</span>';
 	}
 
 	public function getJavascript() {
