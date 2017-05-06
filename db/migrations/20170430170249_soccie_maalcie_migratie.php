@@ -11,6 +11,11 @@ class SocCieMaalCieMigratie extends AbstractMigration {
 	 * Stop het civisaldo en maalciesaldo bij elkaar in dezelfde tabellen
 	 */
 	public function up() {
+		$this->table('CiviBestelling')
+			->addColumn('cie', 'enum', ['values' => ['anders', 'soccie', 'maalcie']])
+			->save();
+		$this->execute('ALTER TABLE `CiviBestelling` CHANGE `moment` `moment` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;');
+
 		$prijzen = $this->fetchAll("SELECT van, tot, productId, prijs FROM socCiePrijs;");
 		$producten = $this->fetchAll("SELECT id, status, beschrijving, prioriteit, grootboekId, beheer FROM socCieProduct;");
 		$grootboeken = $this->fetchAll("SELECT id, type, status FROM socCieGrootboekType;");
@@ -99,10 +104,14 @@ class SocCieMaalCieMigratie extends AbstractMigration {
 				}
 			));
 
+			$tot = new DateTime($prijzen[$i]['tot']);
+			if ($tot->format("Y") >= 2035)
+				$tot = null;
+
 			$this->execute(sprintf(
 				"INSERT INTO CiviPrijs(van, tot, product_id, prijs) VALUES (%s, %s, %d, %d)",
 				q($prijzen[$i]['van']),
-				q($prijzen[$i]['tot']),
+				isset($tot) ? q($prijzen[$i]['tot']) : 'NULL',
 				$product['new_id'],
 				$prijzen[$i]['prijs']
 			));
@@ -119,7 +128,7 @@ class SocCieMaalCieMigratie extends AbstractMigration {
 			));
 
 			$this->execute(sprintf(
-				"INSERT INTO CiviBestelling (uid, totaal, deleted, moment) VALUES (%s, %d, %d, %s)",
+				"INSERT INTO CiviBestelling (uid, totaal, deleted, moment, cie) VALUES (%s, %d, %d, %s, 'soccie')",
 				q($soccieklant['new_uid']),
 				$socciebestellingen[$i]['totaal'],
 				$socciebestellingen[$i]['deleted'],
@@ -155,6 +164,14 @@ class SocCieMaalCieMigratie extends AbstractMigration {
 		}
 
 		//$this->adapter->commitTransaction();
+	}
+
+	public function down() {
+		try{
+			$this->table('CiviBestelling')
+				->removeColumn('cie')
+				->save();
+		} catch (Exception $ignored) { echo "CiviBestelling.cie kolom is al verwijderd\n"; }
 	}
 
 	private function lastId() {
