@@ -206,12 +206,17 @@
 					{/if}
 				{/if}
 				<div class="clear-left"></div>
-				<div class="label">Saldohistorie:</div>
-				{foreach from=$bestellinglog item=bestelling}
+				{if LoginModel::getUid() === $profiel->uid || LoginModel::mag('P_MAAL_MOD')}
+					<div class="label">Saldohistorie:</div>
+					{foreach from=$bestellinglog item=bestelling}
+						<div class="data">
+							{$bestelling->getInhoudBeschrijving()} <span class="lichtgrijs">({$bestelling->moment|date_format:"%a %e %b"})</span>
+						</div>
+					{/foreach}
 					<div class="data">
-						{$bestelling->getInhoudBeschrijving()} <span class="lichtgrijs">({$bestelling->moment|date_format:"%a %e %b"})</span></li>
+						<a href="{$bestellingenlink}">Meer &#187;</a>
 					</div>
-				{/foreach}
+				{/if}
 
 				{if isset($saldografiek)}
 					<div class="clear-left"></div>
