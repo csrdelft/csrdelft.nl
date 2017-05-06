@@ -101,14 +101,14 @@ VALUES (2, 1, 'Mutatie', 'anders');
 INSERT INTO CiviProduct (id, status, beschrijving, prioriteit, beheer, categorie_id)
 VALUES (1,  1, 'Anders', 1, 1, 1);
 INSERT INTO CiviPrijs (van, tot, product_id, prijs)
-VALUES (NOW(), NOW(), 1, 0);
+VALUES (NOW(), NULL, 1, 0);
 UPDATE mlt_maaltijden SET product_id = 1 WHERE mlt_repetitie_id IS NULL;
 
 -- Donderdagmaaltijd
 INSERT INTO CiviProduct (id, status, beschrijving, prioriteit, beheer, categorie_id)
 VALUES (2, 1, 'Donderdagmaaltijd', 1, 0, 1);
 INSERT INTO CiviPrijs (van, tot, product_id, prijs)
-VALUES (NOW(), 0, 2, 350);
+VALUES (NOW(), NULL, 2, 350);
 UPDATE mlt_maaltijden SET product_id = 2 WHERE mlt_repetitie_id = 1;
 UPDATE mlt_repetities SET product_id = 2 WHERE mlt_repetitie_id = 1;
 
@@ -116,7 +116,7 @@ UPDATE mlt_repetities SET product_id = 2 WHERE mlt_repetitie_id = 1;
 INSERT INTO CiviProduct (id, status, beschrijving, prioriteit, beheer, categorie_id)
 VALUES (3, 1, 'Verticalekring', 1, 0, 1);
 INSERT INTO CiviPrijs (van, tot, product_id, prijs)
-VALUES (NOW(), 0, 3, 350);
+VALUES (NOW(), NULL, 3, 350);
 UPDATE mlt_maaltijden SET product_id = 3 WHERE mlt_repetitie_id IN (2,3,4,5,6,7,8,9,13);
 UPDATE mlt_repetities SET product_id = 3 WHERE mlt_repetitie_id IN (2,3,4,5,6,7,8,9,13);
 
@@ -124,7 +124,7 @@ UPDATE mlt_repetities SET product_id = 3 WHERE mlt_repetitie_id IN (2,3,4,5,6,7,
 INSERT INTO CiviProduct (id, status, beschrijving, prioriteit, beheer, categorie_id)
 VALUES (4, 1, 'DéDé-Diner', 1, 0, 1);
 INSERT INTO CiviPrijs (van, tot, product_id, prijs)
-VALUES (NOW(), 0, 4, 350);
+VALUES (NOW(), NULL, 4, 350);
 UPDATE mlt_maaltijden SET product_id = 4 WHERE mlt_repetitie_id = 10;
 UPDATE mlt_repetities SET product_id = 4 WHERE mlt_repetitie_id = 10;
 
@@ -132,7 +132,7 @@ UPDATE mlt_repetities SET product_id = 4 WHERE mlt_repetitie_id = 10;
 INSERT INTO CiviProduct (id, status, beschrijving, prioriteit, beheer, categorie_id)
 VALUES (5, 1, 'Alpha Cursus', 1, 0, 1);
 INSERT INTO CiviPrijs (van, tot, product_id, prijs)
-VALUES (NOW(), 0, 5, 0);
+VALUES (NOW(), NULL, 5, 0);
 UPDATE mlt_maaltijden SET product_id = 5 WHERE mlt_repetitie_id = 11;
 UPDATE mlt_repetities SET product_id = 5 WHERE mlt_repetitie_id = 11;
 
@@ -140,7 +140,7 @@ UPDATE mlt_repetities SET product_id = 5 WHERE mlt_repetitie_id = 11;
 INSERT INTO CiviProduct (id, status, beschrijving, prioriteit, beheer, categorie_id)
 VALUES(6, 1, 'Cent', 1, 1, 2);
 INSERT INTO CiviPrijs (van, tot, product_id, prijs)
-VALUES (NOW(), 0, 6, 1);
+VALUES (NOW(), NULL, 6, 1);
 
 -- Leg foreign keys aan
 ALTER TABLE mlt_maaltijden ADD CONSTRAINT FK_mlt_product FOREIGN KEY (product_id) REFERENCES CiviProduct(id);

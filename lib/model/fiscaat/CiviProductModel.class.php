@@ -24,7 +24,13 @@ class CiviProductModel extends PersistenceModel {
 	 * @return CiviPrijs
 	 */
 	public function getPrijs($product) {
-		return CiviPrijsModel::instance()->find('product_id = ?', $product->getValues(true), null, 'van DESC', 1)->fetch();
+		return CiviPrijsModel::instance()->find(
+			'product_id = ?',
+			$product->getValues(true),
+			null,
+			'van DESC',
+			1
+		)->fetch();
 	}
 
 	public function getProduct($id) {
