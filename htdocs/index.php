@@ -6,6 +6,7 @@
  * 
  * Entry point voor stek modules.
  */
+use CsrDelft\controller\framework\Controller;
 use function CsrDelft\debugprint;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
@@ -40,11 +41,9 @@ try {
 				redirect(CSR_ROOT . "#login");
 			}
 	}
-	$class .= 'Controller';
 
-	require_once 'controller/' . $class . '.class.php';
-
-	$namespacedClassName = 'Csrdelft\\controller\\' . $class;
+	$namespacedClassName = 'Csrdelft\\controller\\' . $class . 'Controller';
+	/** @var Controller $controller */
 	$controller = new $namespacedClassName(REQUEST_URI);
 	$controller->performAction();
 

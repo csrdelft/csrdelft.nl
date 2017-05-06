@@ -3,6 +3,7 @@ namespace CsrDelft\view;
 use CsrDelft\lid\LidZoeker;
 use CsrDelft\model\bibliotheek\BiebCatalogus;
 use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\OntvangtContactueel;
 use CsrDelft\model\entity\Profiel;

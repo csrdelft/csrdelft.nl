@@ -2,6 +2,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\maalcie\CorveeVrijstelling;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\CsrLayoutPage;

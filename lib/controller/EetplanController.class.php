@@ -7,6 +7,7 @@ use CsrDelft\model\EetplanModel;
 use CsrDelft\model\entity\Eetplan;
 use CsrDelft\model\entity\EetplanBekenden;
 use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use function CsrDelft\setMelding;

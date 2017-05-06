@@ -6,6 +6,7 @@ use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use Exception;
+use PDOStatement;
 
 require_once 'model/entity/maalcie/CorveeRepetitie.class.php';
 require_once 'model/maalcie/CorveeTakenModel.class.php';

@@ -3,6 +3,7 @@ namespace CsrDelft\view;
 use function CsrDelft\getMelding;
 use function CsrDelft\group_by_distinct;
 use CsrDelft\model\entity\gesprekken\Gesprek;
+use CsrDelft\model\entity\gesprekken\GesprekBericht;
 use CsrDelft\model\GesprekBerichtenModel;
 use CsrDelft\model\GesprekkenModel;
 use CsrDelft\model\security\LoginModel;

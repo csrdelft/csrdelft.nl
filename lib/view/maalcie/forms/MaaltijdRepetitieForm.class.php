@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\view\maalcie\forms;
+use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\view\formulier\getalvelden\BedragField;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;

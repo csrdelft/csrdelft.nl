@@ -5,6 +5,7 @@ use CsrDelft\controller\framework\Controller;
 use function CsrDelft\getDateTime;
 use function CsrDelft\group_by_distinct;
 use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\ChangeLogModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;

@@ -1,6 +1,9 @@
 <?php
 namespace CsrDelft\model;
 use CsrDelft\model\entity\Eetplan;
+use CsrDelft\model\entity\EetplanBekenden;
+use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\model\entity\Profiel;
 
 /**
  * EetplanFactory.class.php

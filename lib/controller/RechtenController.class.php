@@ -2,6 +2,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\security\AccessControl;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\RemoveRowsResponse;

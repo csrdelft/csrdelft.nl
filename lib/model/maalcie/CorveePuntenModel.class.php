@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\model\entity\maalcie\CorveeVrijstelling;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;

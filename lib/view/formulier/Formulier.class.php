@@ -5,6 +5,7 @@ use function CsrDelft\className;
 use function CsrDelft\getDateTime;
 use function CsrDelft\getMelding;
 use CsrDelft\model\ChangeLogModel;
+use CsrDelft\model\entity\ChangeLogEntry;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;

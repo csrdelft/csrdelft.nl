@@ -7,6 +7,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use Exception;
+use PDOStatement;
 
 require_once 'model/entity/maalcie/CorveeTaak.class.php';
 require_once 'model/maalcie/FunctiesModel.class.php';

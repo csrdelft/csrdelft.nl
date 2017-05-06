@@ -5,6 +5,7 @@ use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\model\entity\security\RememberLogin;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccessModel;

@@ -9,6 +9,7 @@ use function CsrDelft\setGoBackCookie;
 use function CsrDelft\setMelding;
 use CsrDelft\view\CsrBB;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\View;
 use Exception;
 
 /**

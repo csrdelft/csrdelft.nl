@@ -14,6 +14,7 @@ use CsrDelft\view\formulier\invoervelden\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
+use Exception;
 
 /**
  * RechtenView.class.php
