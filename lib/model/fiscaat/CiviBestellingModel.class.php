@@ -18,6 +18,7 @@ class CiviBestellingModel extends PersistenceModel {
 
 	public function vanMaaltijdAanmelding(MaaltijdAanmelding $aanmelding) {
 		$bestelling = new CiviBestelling();
+		$bestelling->cie = 'maalcie';
 		$bestelling->uid = $aanmelding->uid;
 		$bestelling->deleted = false;
 		$bestelling->moment = getDateTime();
@@ -34,6 +35,7 @@ class CiviBestellingModel extends PersistenceModel {
 
 	public function vanInleg($bedrag, $uid) {
 		$bestelling = new CiviBestelling();
+		$bestelling->cie = 'anders';
 		$bestelling->uid = $uid;
 		$bestelling->deleted = false;
 		$bestelling->moment = getDateTime();
