@@ -7,7 +7,7 @@ use CsrDelft\model\bibliotheek\BiebBoek;
 use CsrDelft\model\documenten\Document;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\security\A;
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\FotoAlbumModel;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\groepen\BesturenModel;
@@ -31,6 +31,7 @@ use CsrDelft\SavedQueryContent;
 use CsrDelft\view\formulier\UrlDownloader;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 use CsrDelft\view\fotoalbum\FotoAlbumSliderView;
+use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\maalcie\MaaltijdKetzerView;
 use Exception;
 use function CsrDelft\endsWith;
@@ -684,7 +685,7 @@ HTML;
 
 	protected function groep(AbstractGroep $groep) {
 				// Controleer rechten
-		if (!$groep->mag(A::Bekijken)) {
+		if (!$groep->mag(AccessAction::Bekijken)) {
 			return '';
 		}
 		$view = new GroepView($groep, null, false, true);

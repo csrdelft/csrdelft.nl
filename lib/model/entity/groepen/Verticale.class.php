@@ -1,6 +1,6 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
-use CsrDelft\model\entity\security\A;
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\KringenModel;
 use CsrDelft\model\groepen\leden\VerticaleLedenModel;
 use CsrDelft\Orm\Entity\T;
@@ -49,9 +49,9 @@ class Verticale extends AbstractGroep {
 	public function mag($action) {
 		switch ($action) {
 
-			case A::Bekijken:
-			case A::Aanmaken:
-			case A::Wijzigen:
+			case AccessAction::Bekijken:
+			case AccessAction::Aanmaken:
+			case AccessAction::Wijzigen:
 				return parent::mag($action);
 		}
 		return false;
@@ -65,9 +65,9 @@ class Verticale extends AbstractGroep {
 	public static function magAlgemeen($action) {
 		switch ($action) {
 
-			case A::Bekijken:
-			case A::Aanmaken:
-			case A::Wijzigen:
+			case AccessAction::Bekijken:
+			case AccessAction::Aanmaken:
+			case AccessAction::Wijzigen:
 				return parent::magAlgemeen($action);
 		}
 		return false;

@@ -7,7 +7,7 @@ use CsrDelft\model\entity\agenda\AgendaItem;
 use CsrDelft\model\entity\agenda\AgendaVerbergen;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
-use CsrDelft\model\entity\security\A;
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
@@ -77,7 +77,7 @@ class AgendaModel extends PersistenceModel {
 		  )', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
 		foreach ($activiteiten as $activiteit) {
 			// Alleen bekijken in agenda (leden bekijken mag dus niet)
-			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(A::Bekijken)) {
+			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(AccessAction::Bekijken)) {
 				$result[] = $activiteit;
 			}
 		}

@@ -4,7 +4,7 @@ namespace CsrDelft\controller\api;
 use CsrDelft\model\ActiviteitDeelnemersModel;
 use CsrDelft\model\AgendaModel;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
-use CsrDelft\model\entity\security\A;
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
@@ -53,7 +53,7 @@ class ApiAgendaController {
 		$activiteiten = ActiviteitenModel::instance()->find('in_agenda = TRUE AND (' . $query . ')', $find);
 		$activiteitenFiltered = array();
 		foreach ($activiteiten as $activiteit) {
-			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(A::Bekijken)) {
+			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(AccessAction::Bekijken)) {
 				$activiteitenFiltered[] = $activiteit;
 			}
 		}

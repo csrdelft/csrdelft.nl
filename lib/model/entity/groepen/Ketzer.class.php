@@ -1,6 +1,6 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
-use CsrDelft\model\entity\security\A;
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\KetzerSelectorsModel;
 use CsrDelft\model\KetzerDeelnemersModel;
 use CsrDelft\Orm\Entity\T;
@@ -81,7 +81,7 @@ class Ketzer extends AbstractGroep {
 	public function mag($action) {
 		switch ($action) {
 
-			case A::Aanmelden:
+			case AccessAction::Aanmelden:
 				// Controleer maximum leden
 				if (isset($this->aanmeld_limiet) AND $this->aantalLeden() >= $this->aanmeld_limiet) {
 					return false;
@@ -92,14 +92,14 @@ class Ketzer extends AbstractGroep {
 				}
 				break;
 
-			case A::Bewerken:
+			case AccessAction::Bewerken:
 				// Controleer bewerkperiode
 				if (time() > strtotime($this->bewerken_tot)) {
 					return false;
 				}
 				break;
 
-			case A::Afmelden:
+			case AccessAction::Afmelden:
 				// Controleer afmeldperiode
 				if (time() > strtotime($this->afmelden_tot)) {
 					return false;
@@ -118,10 +118,10 @@ class Ketzer extends AbstractGroep {
 	public static function magAlgemeen($action) {
 		switch ($action) {
 
-			case A::Aanmaken:
-			case A::Aanmelden:
-			case A::Bewerken:
-			case A::Afmelden:
+			case AccessAction::Aanmaken:
+			case AccessAction::Aanmelden:
+			case AccessAction::Bewerken:
+			case AccessAction::Afmelden:
 				return true;
 		}
 		return parent::magAlgemeen($action);

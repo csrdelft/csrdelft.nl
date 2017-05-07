@@ -4,7 +4,7 @@ namespace CsrDelft\model\security;
 use CsrDelft\model\entity\groepen\CommissieFunctie;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\security\A;
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AccessControl;
 use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\entity\security\Account;
@@ -188,7 +188,7 @@ class AccessModel extends CachedPersistenceModel {
 	public function setAcl($environment, $resource, array $acl) {
 		// Has permission to change permissions?
 		if (!LoginModel::mag('P_ADMIN')) {
-			$rechten = self::getSubject($environment, A::Rechten, $resource);
+			$rechten = self::getSubject($environment, AccessAction::Rechten, $resource);
 			if (!$rechten OR ! LoginModel::mag($rechten)) {
 				return false;
 			}

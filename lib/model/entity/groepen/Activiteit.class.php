@@ -3,7 +3,7 @@ namespace CsrDelft\model\entity\groepen;
 
 use CsrDelft\model\ActiviteitDeelnemersModel;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
-use CsrDelft\model\entity\security\A;
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 
@@ -67,8 +67,8 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	public function mag($action) {
 		switch ($action) {
 
-			case A::Bekijken:
-			case A::Aanmelden:
+			case AccessAction::Bekijken:
+			case AccessAction::Aanmelden:
 				if (!empty($this->rechten_aanmelden) AND ! LoginModel::mag($this->rechten_aanmelden)) {
 					return false;
 				}

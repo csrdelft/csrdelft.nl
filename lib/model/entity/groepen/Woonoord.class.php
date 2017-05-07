@@ -1,7 +1,7 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
 
-use CsrDelft\model\entity\security\A;
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\leden\BewonersModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
@@ -57,8 +57,8 @@ class Woonoord extends AbstractGroep {
 	public function mag($action, $soort = null) {
 		switch ($action) {
 
-			case A::Beheren:
-			case A::Wijzigen:
+			case AccessAction::Beheren:
+			case AccessAction::Wijzigen:
 				// Huidige bewoners mogen beheren
 				if (LoginModel::mag('woonoord:' . $this->familie)) {
 					// HuisStatus wijzigen wordt geblokkeerd in GroepForm->validate()

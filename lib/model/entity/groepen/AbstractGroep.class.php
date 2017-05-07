@@ -1,7 +1,7 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
 
-use CsrDelft\model\entity\security\A;
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -159,19 +159,19 @@ abstract class AbstractGroep extends PersistentEntity {
 		$aangemeld = Database::instance()->sqlExists($leden::instance()->getTableName(), 'groep_id = ? AND uid = ?', array($this->id, LoginModel::getUid()));
 		switch ($action) {
 
-			case A::Aanmelden:
+			case AccessAction::Aanmelden:
 				if ($aangemeld) {
 					return false;
 				}
 				break;
 
-			case A::Bewerken:
+			case AccessAction::Bewerken:
 				if (!$aangemeld) {
 					return false;
 				}
 				break;
 
-			case A::Afmelden:
+			case AccessAction::Afmelden:
 				if (!$aangemeld) {
 					return false;
 				}
@@ -196,13 +196,13 @@ abstract class AbstractGroep extends PersistentEntity {
 	public static function magAlgemeen($action) {
 		switch ($action) {
 
-			case A::Bekijken:
+			case AccessAction::Bekijken:
 				return LoginModel::mag('P_LEDEN_READ');
 
 			// Voorkom dat moderators overal een normale aanmeldknop krijgen
-			case A::Aanmelden:
-			case A::Bewerken:
-			case A::Afmelden:
+			case AccessAction::Aanmelden:
+			case AccessAction::Bewerken:
+			case AccessAction::Afmelden:
 				return false;
 		}
 		// Moderators mogen alles

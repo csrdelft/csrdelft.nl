@@ -12,7 +12,7 @@ use CsrDelft\model\entity\groepen\HuisStatus;
 use CsrDelft\model\entity\groepen\Ketzer;
 use CsrDelft\model\entity\groepen\Kring;
 use CsrDelft\model\entity\groepen\Woonoord;
-use CsrDelft\model\entity\security\A;
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\model\groepen\CommissiesModel;
@@ -36,6 +36,7 @@ use CsrDelft\view\formulier\knoppen\ModalCloseButtons;
 use CsrDelft\view\formulier\knoppen\PasfotoAanmeldenKnop;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 use CsrDelft\view\formulier\ModalForm;
+use CsrDelft\view\groepen\GroepView;
 use function CsrDelft\classNameZonderNamespace;
 use function CsrDelft\getMelding;
 use function CsrDelft\setMelding;
@@ -129,7 +130,7 @@ class GroepForm extends ModalForm {
 			 * 
 			 * N.B.: Deze check staat binnen de !magAlgemeen zodat P_LEDEN_MOD deze check overslaat
 			 */
-			elseif ($this->mode === A::Wijzigen AND $groep instanceof Woonoord) {
+			elseif ($this->mode === AccessAction::Wijzigen AND $groep instanceof Woonoord) {
 
 				$origvalue = $this->findByName('soort')->getOrigValue();
 				if ($origvalue !== $soort) {
@@ -300,7 +301,7 @@ class KetzerSoortField extends GroepSoortField {
 			case 'KetzersModel':
 				$model = $class[0]::instance(); // require once
 				$orm = $model::ORM;
-				if (!$orm::magAlgemeen(A::Aanmaken, $soort)) {
+				if (!$orm::magAlgemeen(AccessAction::Aanmaken, $soort)) {
 					if ($model instanceof ActiviteitenModel) {
 						$naam = ActiviteitSoort::getDescription($soort);
 					} else {
