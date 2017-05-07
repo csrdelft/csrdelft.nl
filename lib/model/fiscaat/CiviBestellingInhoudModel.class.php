@@ -16,4 +16,9 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 
 		return $product->prijs * $inhoud->aantal;
 	}
+
+	public function getBeschrijving(CiviBestellingInhoud $inhoud) {
+		$product = CiviProductModel::instance()->getProduct($inhoud->product_id);
+		return sprintf("%d %s", $inhoud->aantal, $product->beschrijving);
+	}
 }

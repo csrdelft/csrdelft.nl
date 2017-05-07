@@ -12,8 +12,33 @@ class CiviBestellingModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function getBestellingenVoorLid($uid, $limit = null, $includeDeleted = false) {
-		return $this->find('uid = ?' . ($includeDeleted ? '' : ' AND deleted=0'), array($uid), null, 'moment DESC', $limit);
+	public function getAlleBestellingenVoorLid($uid, $limit = null) {
+		return $this->find('uid = ?', [$uid], null, 'moment DESC', $limit);
+	}
+
+	public function getBestellingenVoorLid($uid, $limit = null) {
+		return $this->find('uid = ? AND deleted = FALSE', array($uid), null, 'moment DESC', $limit);
+	}
+
+	/**
+	 * @param CiviBestelling[] $bestellingen
+	 * @return Generator
+	 */
+	public function getBeschrijving($bestellingen) {
+		foreach ($bestellingen as $bestelling) {
+			/** @var CiviBestellingInhoud[] $inhoud */
+			$inhoud = $bestelling->getInhoud();
+			$bestellingInhoud = [];
+			foreach ($inhoud as $item) {
+				$bestellingInhoud[] = CiviBestellingInhoudModel::instance()->getBeschrijving($item);
+			}
+
+			yield (object) [
+				'inhoud' => $bestellingInhoud,
+				'moment' => $bestelling->moment,
+				'totaal' => $bestelling->totaal
+			];
+		}
 	}
 
 	public function vanMaaltijdAanmelding(MaaltijdAanmelding $aanmelding) {
