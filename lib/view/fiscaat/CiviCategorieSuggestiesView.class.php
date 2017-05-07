@@ -1,5 +1,9 @@
 <?php
 
+namespace CsrDelft\view\fiscaat;
+use CsrDelft\model\entity\fiscaat\CiviCategorie;
+use CsrDelft\view\JsonLijstResponse;
+
 /**
  * CiviProductenSuggestiesView.class.php
  *

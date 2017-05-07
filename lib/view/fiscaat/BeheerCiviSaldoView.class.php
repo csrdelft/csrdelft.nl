@@ -1,5 +1,10 @@
 <?php
-require_once 'model/entity/fiscaat/CiviSaldo.class.php';
+
+namespace CsrDelft\view\fiscaat;
+
+use CsrDelft\model\entity\fiscaat\CiviSaldo;
+use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\formulier\datatable\DataTableKnop;
 
 /**
  * BeheerCiviSaldoView.class.php
@@ -9,7 +14,7 @@ require_once 'model/entity/fiscaat/CiviSaldo.class.php';
  */
 class BeheerCiviSaldoView extends DataTable {
 	public function __construct() {
-		parent::__construct('CiviSaldo', '/fiscaat/saldo', 'Saldobeheer');
+		parent::__construct(CiviSaldo::class, '/fiscaat/saldo', 'Saldobeheer');
 
 		$this->addColumn('naam', 'saldo');
 		$this->addColumn('lichting', 'saldo');
@@ -37,51 +42,4 @@ JS;
 	}
 }
 
-/**
- * Class LidRegistratieForm
- *
- * Maak het mogelijk om een lid te registreren, wordt uiteindelijk samengetrokken met het aanmaken van een lid.
- */
-class LidRegistratieForm extends ModalForm {
-	public function __construct(CiviSaldo $model) {
-		parent::__construct($model, '/fiscaat/saldo/registreren/lid', false, true);
 
-		$fields[] = new LidField('uid', $model->uid, 'Lid');
-		$fields[] = new IntField('saldo', $model->saldo, 'Initieel saldo');
-		$fields['btn'] = new FormDefaultKnoppen();
-
-		$this->addFields($fields);
-	}
-}
-
-class InleggenForm extends ModalForm {
-	public function __construct(Civisaldo $model) {
-		parent::__construct($model, '/fiscaat/saldo/inleggen', "Inleggen: "  . ProfielModel::getNaam($model->uid, 'volledig'), true);
-
-		$fields['saldo'] = new BedragField('saldo', $model->saldo, 'Huidig saldo');
-		$fields['saldo']->readonly = true;
-		$fields[] = new BedragField('inleg', 0, 'Inleg', '€', 0.01);
-		$fields['btn'] = new FormDefaultKnoppen();
-
-		$this->addFields($fields);
-	}
-}
-
-class BeheerSaldoResponse extends DataTableResponse {
-	/**
-	 * @param CiviSaldo $entity
-	 * @return string
-	 */
-	public function getJson($entity) {
-		return parent::getJson(array(
-			'UUID' => $entity->getUUID(),
-			'id' => $entity->id,
-			'uid' => $entity->uid,
-			'naam' => ProfielModel::existsUid($entity->uid) ? ProfielModel::getNaam($entity->uid, 'volledig') : $entity->naam,
-			'lichting' => substr($entity->uid, 0, 2),
-			'saldo' => $entity->saldo,
-			'laatst_veranderd' => $entity->laatst_veranderd,
-			'deleted' => $entity->deleted
-		));
-	}
-}

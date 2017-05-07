@@ -1,13 +1,23 @@
 <?php
 
-use CsrDelft\Orm\Persistence\Database;
+namespace CsrDelft\controller\maalcie;
 
-require_once 'model/maalcie/MaaltijdenModel.class.php';
-require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
-require_once 'model/fiscaat/CiviBestellingModel.class.php';
-require_once 'model/fiscaat/CiviSaldoModel.class.php';
-require_once 'view/maalcie/BeheerMaaltijdenView.class.php';
-require_once 'view/fiscaat/BeheerCiviProductenView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\fiscaat\CiviBestelling;
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\model\fiscaat\CiviBestellingModel;
+use CsrDelft\model\fiscaat\CiviProductModel;
+use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\maalcie\BeheerMaaltijdenView;
+use CsrDelft\view\maalcie\FiscaatMaaltijdenOverzichtResponse;
+use CsrDelft\view\maalcie\FiscaatMaaltijdenOverzichtTable;
+use CsrDelft\view\maalcie\OnverwerkteMaaltijdenTable;
+use Exception;
 
 /**
  * MaaltijdenFiscaatController.class.php

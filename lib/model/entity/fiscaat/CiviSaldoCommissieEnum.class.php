@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\fiscaal;
+
 use CsrDelft\Orm\Entity\PersistentEnum;
 use Exception;
 

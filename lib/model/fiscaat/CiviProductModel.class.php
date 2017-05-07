@@ -1,8 +1,13 @@
 <?php
 
+namespace CsrDelft\model\fiscaat;
+
+use CsrDelft\model\entity\fiscaat\CiviPrijs;
+use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use DateTime;
 
 require_once 'model/entity/fiscaat/CiviProduct.class.php';
 require_once 'model/fiscaat/CiviPrijsModel.class.php';

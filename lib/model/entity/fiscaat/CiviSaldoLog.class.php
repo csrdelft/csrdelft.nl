@@ -1,9 +1,9 @@
 <?php
 
+namespace CsrDelft\model\entity\fiscaat;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-
-require_once 'model/entity/fiscaat/CiviSaldoLogEnum.class.php';
 
 class CiviSaldoLog extends PersistentEntity {
 	public $id;

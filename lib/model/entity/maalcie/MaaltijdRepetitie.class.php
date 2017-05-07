@@ -1,4 +1,5 @@
 <?php
+use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

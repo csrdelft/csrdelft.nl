@@ -1,9 +1,12 @@
 <?php
 namespace CsrDelft\view\maalcie\forms;
+use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\view\formulier\getalvelden\BedragField;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
+use CsrDelft\view\formulier\invoervelden\RequiredEntityField;
 use CsrDelft\view\formulier\invoervelden\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;

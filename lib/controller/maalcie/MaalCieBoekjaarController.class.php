@@ -2,17 +2,11 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
-use CsrDelft\model\fiscaal\SaldoModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\forms\BoekjaarSluitenForm;
-use CsrDelft\view\maalcie\MaalCieSaldiView;
-
-require_once 'view/maalcie/MaalCieBoekjaarSluitenView.class.php';
-require_once 'view/maalcie/forms/BoekjaarSluitenForm.class.php';
-require_once 'model/fiscaat/SaldoModel.class.php';
-require_once 'model/maalcie/MaaltijdenModel.class.php';
+use CsrDelft\view\maalcie\MaalCieBoekjaarSluitenView;
 
 /**
  * MaalCieSaldiController.class.php

@@ -1,5 +1,8 @@
 <?php
 
+namespace CsrDelft\model\entity\fiscaat;
+
+use CsrDelft\model\entity\fiscaal\CiviSaldoCommissieEnum;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

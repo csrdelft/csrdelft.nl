@@ -8,6 +8,7 @@
 
 namespace CsrDelft\view\gesprekken;
 
+use function CsrDelft\group_by_distinct;
 use CsrDelft\model\entity\gesprekken\Gesprek;
 use CsrDelft\view\formulier\invoervelden\RequiredLidField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;

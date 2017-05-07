@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view;
+
 use CsrDelft\lid\LidZoeker;
 use CsrDelft\model\bibliotheek\BiebCatalogus;
 use CsrDelft\model\entity\Afbeelding;
@@ -7,7 +9,8 @@ use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\OntvangtContactueel;
 use CsrDelft\model\entity\Profiel;
-use CsrDelft\model\fiscaal\SaldoModel;
+use CsrDelft\model\fiscaat\CiviBestellingModel;
+use CsrDelft\model\fiscaat\SaldoModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\FotoModel;
 use CsrDelft\model\FotoTagsModel;
@@ -170,18 +173,16 @@ class ProfielView extends SmartyTemplateView {
 		$this->smarty->assign('activiteiten', $activiteiten);
 
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {
-
-						$timestamp = strtotime(InstellingenModel::get('maaltijden', 'recent_lidprofiel'));
+			$timestamp = strtotime(InstellingenModel::get('maaltijden', 'recent_lidprofiel'));
 			$this->smarty->assign('recenteAanmeldingen', MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid($this->model->uid, $timestamp));
 
-						$this->smarty->assign('abos', MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($this->model->uid));
+			$this->smarty->assign('abos', MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($this->model->uid));
 		}
 
 		if (SaldoModel::instance()->magGrafiekZien($this->model->uid)) {
 			$this->smarty->assign('saldografiek', 'ja');
 		}
 
-		require_once 'model/fiscaat/CiviBestellingModel.class.php';
 		$bestellingen = CiviBestellingModel::instance()->getBestellingenVoorLid($this->model->uid, 10);
 		$bestellinglog = CiviBestellingModel::instance()->getBeschrijving($bestellingen);
 		$this->smarty->assign('bestellinglog', $bestellinglog);
@@ -190,20 +191,20 @@ class ProfielView extends SmartyTemplateView {
 		$this->smarty->assign('corveepunten', $this->model->corvee_punten);
 		$this->smarty->assign('corveebonus', $this->model->corvee_punten_bonus);
 
-				$this->smarty->assign('corveetaken', CorveeTakenModel::instance()->getTakenVoorLid($this->model->uid));
+		$this->smarty->assign('corveetaken', CorveeTakenModel::instance()->getTakenVoorLid($this->model->uid));
 
-				$this->smarty->assign('corveevoorkeuren', CorveeVoorkeurenModel::instance()->getVoorkeurenVoorLid($this->model->uid));
+		$this->smarty->assign('corveevoorkeuren', CorveeVoorkeurenModel::instance()->getVoorkeurenVoorLid($this->model->uid));
 
-				$this->smarty->assign('corveevrijstelling', CorveeVrijstellingenModel::instance()->getVrijstelling($this->model->uid));
+		$this->smarty->assign('corveevrijstelling', CorveeVrijstellingenModel::instance()->getVrijstelling($this->model->uid));
 
-				$this->smarty->assign('corveekwalificaties', KwalificatiesModel::instance()->getKwalificatiesVanLid($this->model->uid));
+		$this->smarty->assign('corveekwalificaties', KwalificatiesModel::instance()->getKwalificatiesVanLid($this->model->uid));
 
-				$this->smarty->assign('forumpostcount', ForumPostsModel::instance()->getAantalForumPostsVoorLid($this->model->uid));
+		$this->smarty->assign('forumpostcount', ForumPostsModel::instance()->getAantalForumPostsVoorLid($this->model->uid));
 
-				$this->smarty->assign('boeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'eigendom'));
+		$this->smarty->assign('boeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'eigendom'));
 		$this->smarty->assign('gerecenseerdeboeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'gerecenseerd'));
 
-				$fotos = array();
+		$fotos = array();
 		foreach (FotoTagsModel::instance()->find('keyword = ?', array($this->model->uid), null, null, 3) as $tag) {
 			/** @var Foto $foto */
 			$foto = FotoModel::instance()->retrieveByUUID($tag->refuuid);

@@ -1,8 +1,9 @@
 <?php
 
-use CsrDelft\Orm\PersistenceModel;
+namespace CsrDelft\model\fiscaat;
 
-require_once 'model/entity/fiscaat/CiviCategorie.class.php';
+use CsrDelft\model\entity\fiscaat\CiviCategorie;
+use CsrDelft\Orm\PersistenceModel;
 
 /**
  * Class CiviCategorieModel

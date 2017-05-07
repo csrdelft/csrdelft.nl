@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\model\entity\maalcie;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;

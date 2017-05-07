@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\controller;
+
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\controller\maalcie\BeheerAbonnementenController;
 use CsrDelft\controller\maalcie\BeheerFunctiesController;
@@ -9,7 +11,7 @@ use CsrDelft\controller\maalcie\BeheerTakenController;
 use CsrDelft\controller\maalcie\BeheerVoorkeurenController;
 use CsrDelft\controller\maalcie\BeheerVrijstellingenController;
 use CsrDelft\controller\maalcie\CorveeRepetitiesController;
-use CsrDelft\controller\maalcie\MaalCieSaldiController;
+use CsrDelft\controller\maalcie\MaalCieBoekjaarController;
 use CsrDelft\controller\maalcie\MaaltijdRepetitiesController;
 use CsrDelft\controller\maalcie\MijnAbonnementenController;
 use CsrDelft\controller\maalcie\MijnCorveeController;
@@ -18,6 +20,7 @@ use CsrDelft\controller\maalcie\MijnVoorkeurenController;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\view\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\controller\maalcie\MaaltijdenFiscaatController;
 
 /**
  * MaalcieRouterController.class.php
@@ -78,14 +81,14 @@ class MaalcieRouterController extends AclController {
 		if ($this->getMethod() == 'POST') {
 			parent::exit_http($response_code);
 		}
-						$body = new CmsPaginaView(CmsPaginaModel::get('maaltijden'));
+		$body = new CmsPaginaView(CmsPaginaModel::get('maaltijden'));
 		$this->view = new CsrLayoutPage($body);
 		$this->view->view();
 		exit;
 	}
 
 	public function maaltijdenketzer() {
-				return new MijnMaaltijdenController($this->model);
+		return new MijnMaaltijdenController($this->model);
 	}
 
 	public function maaltijdenlijst() {
@@ -95,24 +98,23 @@ class MaalcieRouterController extends AclController {
 	}
 
 	public function maaltijdenbeheer() {
-				return new BeheerMaaltijdenController($this->model);
+		return new BeheerMaaltijdenController($this->model);
 	}
 
 	public function maaltijdenfiscaat() {
-		require_once 'controller/maalcie/MaaltijdenFiscaatController.class.php';
 		return new MaaltijdenFiscaatController($this->model);
 	}
 
 	public function maaltijdenrepetities() {
-				return new MaaltijdRepetitiesController($this->model);
+		return new MaaltijdRepetitiesController($this->model);
 	}
 
 	public function maaltijdenabonnementen() {
-				return new MijnAbonnementenController($this->model);
+		return new MijnAbonnementenController($this->model);
 	}
 
 	public function maaltijdenabonnementenbeheer() {
-				return new BeheerAbonnementenController($this->model);
+		return new BeheerAbonnementenController($this->model);
 	}
 
 	public function maaltijdenboekjaar() {
@@ -120,7 +122,7 @@ class MaalcieRouterController extends AclController {
 	}
 
 	public function corveemijn() {
-				return new MijnCorveeController($this->model);
+		return new MijnCorveeController($this->model);
 	}
 
 	public function corveerooster() {
@@ -129,31 +131,31 @@ class MaalcieRouterController extends AclController {
 	}
 
 	public function corveebeheer() {
-				return new BeheerTakenController($this->model);
+		return new BeheerTakenController($this->model);
 	}
 
 	public function corveerepetities() {
-				return new CorveeRepetitiesController($this->model);
+		return new CorveeRepetitiesController($this->model);
 	}
 
 	public function corveevoorkeuren() {
-				return new MijnVoorkeurenController($this->model);
+		return new MijnVoorkeurenController($this->model);
 	}
 
 	public function corveevoorkeurenbeheer() {
-				return new BeheerVoorkeurenController($this->model);
+		return new BeheerVoorkeurenController($this->model);
 	}
 
 	public function corveepuntenbeheer() {
-				return new BeheerPuntenController($this->model);
+		return new BeheerPuntenController($this->model);
 	}
 
 	public function corveevrijstellingen() {
-				return new BeheerVrijstellingenController($this->model);
+		return new BeheerVrijstellingenController($this->model);
 	}
 
 	public function corveefuncties() {
-				return new BeheerFunctiesController($this->model);
+		return new BeheerFunctiesController($this->model);
 	}
 
 }

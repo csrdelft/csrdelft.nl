@@ -1,5 +1,8 @@
 <?php
 
+namespace CsrDelft\model\fiscaat;
+
+use CsrDelft\model\entity\fiscaat\CiviSaldoLog;
 use CsrDelft\Orm\PersistenceModel;
 
 require_once 'model/entity/fiscaat/CiviSaldoLog.class.php';

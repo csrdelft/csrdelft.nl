@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\leden\CommissieLedenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;

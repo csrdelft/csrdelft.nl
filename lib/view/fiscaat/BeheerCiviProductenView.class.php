@@ -1,5 +1,11 @@
 <?php
 
+namespace CsrDelft\view\fiscaat;
+
+use CsrDelft\model\entity\fiscaat\CiviProduct;
+use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\formulier\datatable\DataTableKnop;
+
 class BeheerCiviProductenView extends DataTable {
 	public function __construct() {
 		parent::__construct(CiviProduct::class, '/fiscaat/producten', 'Productenbeheer');
@@ -32,28 +38,3 @@ function prijs_render(data) {
 JS;
 	}
 }
-
-class CiviProductForm extends ModalForm {
-	function __construct(CiviProduct $model, $target) {
-		parent::__construct($model, '/fiscaat/producten/' . $target, false, true);
-
-		$categorie = CiviCategorieModel::instance()->findSparse(array('type'), 'id = ?', array($model->categorie_id))->fetch();
-		if ($categorie == false) {
-			$categorie = new CiviCategorie();
-		}
-
-		$fields['id'] = new IntField('id', $model->id, 'id');
-		$fields['id']->hidden = true;
-		$fields[] = new RequiredIntField('status', $model->status, 'Status');
-		$fields[] = new RequiredTextField('beschrijving', $model->beschrijving, 'Beschrijving');
-		$fields[] = new RequiredIntField('prioriteit', $model->prioriteit, 'Prioriteit');
-		$fields[] = new RequiredJaNeeField('beheer', $model->beheer, 'Beheer');
-		$fields[] = new RequiredBedragField('prijs', $model->prijs, 'Prijs', '€', 0, 50, 0.50);
-		$fields[] = new RequiredEntityField('categorie', 'type', 'Categorie', CiviCategorieModel::instance(), '/fiscaat/categorien/suggesties?q=', $categorie);
-		$fields['btn'] = new FormDefaultKnoppen();
-
-		$this->addFields($fields);
-	}
-}
-
-class BeheerProductenResponse extends DataTableResponse {}

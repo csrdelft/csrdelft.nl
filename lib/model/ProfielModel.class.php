@@ -1,4 +1,7 @@
 <?php
+
+namespace CsrDelft\model;
+
 use CsrDelft\LDAP;
 use CsrDelft\model\bibliotheek\BiebCatalogus;
 use CsrDelft\model\entity\Geslacht;
@@ -16,7 +19,7 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use function CsrDelft\getDateTime;
 use function CsrDelft\setMelding;
-
+use Exception;
 
 
 /**

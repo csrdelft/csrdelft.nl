@@ -19,7 +19,6 @@ use CsrDelft\view\maalcie\BeheerTakenView;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\TaakForm;
 use Exception;
-use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\ToewijzenForm;
 
 

@@ -1,15 +1,14 @@
 <?php
 /**
- * CiviBestellingOverzichtResponse.class.php
+ * BeheerProductenResponse.php
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 26/04/2017
+ * @date 07/05/2017
  */
 
 namespace CsrDelft\view\fiscaat;
 
-
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 
-class CiviBestellingOverzichtResponse extends DataTableResponse {
+class BeheerProductenResponse extends DataTableResponse {
 }

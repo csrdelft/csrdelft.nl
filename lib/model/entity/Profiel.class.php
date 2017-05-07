@@ -4,6 +4,7 @@ namespace CsrDelft\model\entity;
 use CsrDelft\GoogleSync;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\model\groepen\CommissiesModel;
 use CsrDelft\model\groepen\KringenModel;

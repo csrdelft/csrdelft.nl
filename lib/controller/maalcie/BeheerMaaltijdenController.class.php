@@ -19,6 +19,7 @@ use CsrDelft\view\maalcie\forms\AanmeldingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdForm;
 use CsrDelft\view\maalcie\forms\RepetitieMaaltijdenForm;
 use CsrDelft\view\maalcie\MaaltijdLijstView;
+use CsrDelft\view\maalcie\OnverwerkteMaaltijdenTable;
 use CsrDelft\view\maalcie\PrullenbakMaaltijdenTable;
 use Exception;
 use function CsrDelft\redirect;

@@ -1,10 +1,13 @@
 <?php
 
+namespace CsrDelft\model\fiscaat;
+
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\fiscaat\CiviBestelling;
+use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
+use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
-
-require_once 'model/entity/fiscaat/CiviBestelling.class.php';
-require_once 'model/fiscaat/CiviBestellingInhoudModel.class.php';
 
 class CiviBestellingModel extends PersistenceModel {
 	const ORM = CiviBestelling::class;

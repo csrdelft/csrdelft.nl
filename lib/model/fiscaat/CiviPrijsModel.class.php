@@ -1,8 +1,9 @@
 <?php
 
-use CsrDelft\Orm\PersistenceModel;
+namespace CsrDelft\model\fiscaat;
 
-require_once 'model/entity/fiscaat/CiviPrijs.class.php';
+use CsrDelft\model\entity\fiscaat\CiviPrijs;
+use CsrDelft\Orm\PersistenceModel;
 
 class CiviPrijsModel extends PersistenceModel {
 	const ORM = CiviPrijs::class;

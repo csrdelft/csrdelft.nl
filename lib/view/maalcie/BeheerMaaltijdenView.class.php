@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\view\maalcie;
+use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\ArchiefMaaltijdModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
