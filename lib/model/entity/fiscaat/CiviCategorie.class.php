@@ -2,11 +2,8 @@
 
 namespace CsrDelft\model\entity\fiscaat;
 
-use CsrDelft\model\entity\fiscaal\CiviSaldoCommissieEnum;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-
-require_once 'model/entity/fiscaat/CiviSaldoCommissieEnum.class.php';
 
 /**
  * Class CiviCategorie

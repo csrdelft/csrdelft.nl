@@ -2,7 +2,6 @@
 
 namespace CsrDelft\model\entity\fiscaat;
 
-use CsrDelft\model\entity\fiscaal\CiviSaldoCommissieEnum;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
