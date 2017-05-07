@@ -32,7 +32,7 @@ class CiviBestelling extends PersistentEntity {
 
 	public function jsonSerialize() {
 		$data = parent::jsonSerialize();
-		$data['inhoud'] = CiviBestellingModel::instance()->getBeschrijving($this->getInhoud());
+		$data['inhoud'] = CiviBestellingModel::instance()->getBeschrijvingText($this->getInhoud());
 		return $data;
 	}
 

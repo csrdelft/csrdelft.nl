@@ -41,6 +41,14 @@ class CiviBestellingModel extends PersistenceModel {
 		}
 	}
 
+	public function getBeschrijvingText($bestellingen) {
+		$bestellingenInhoud = [];
+		foreach ($bestellingen as $item) {
+			$bestellingenInhoud[] = CiviBestellingInhoudModel::instance()->getBeschrijving($item);
+		}
+		return implode(", ", $bestellingenInhoud);
+	}
+
 	public function vanMaaltijdAanmelding(MaaltijdAanmelding $aanmelding) {
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'maalcie';

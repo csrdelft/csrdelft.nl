@@ -207,13 +207,13 @@
 				{/if}
 				<div class="clear-left"></div>
 				{if LoginModel::getUid() === $profiel->uid || LoginModel::mag('P_MAAL_MOD')}
-				<a id="CiviSaldo"></a>
-				<div class="label">Saldohistorie:</div>
-				{foreach from=$bestellinglog item=bestelling}
-					<div class="data {cycle values="donker,licht"}">
-						<span>{implode(", ", $bestelling->inhoud)}</span>
-						<span class="float-right">{$bestelling->totaal|bedrag}</span>
-						<span class="float-right lichtgrijs bestelling-moment">({$bestelling->moment|date_format:"%D"}) </span>
+					<a id="CiviSaldo"></a>
+					<div class="label">Saldohistorie:</div>
+					{foreach from=$bestellinglog item=bestelling}
+						<div class="data {cycle values="donker,licht"}">
+							<span>{implode(", ", $bestelling->inhoud)}</span>
+							<span class="float-right">{$bestelling->totaal|bedrag}</span>
+							<span class="float-right lichtgrijs bestelling-moment">({$bestelling->moment|date_format:"%D"}) </span>
 						</div>
 					{/foreach}
 					<div class="data">

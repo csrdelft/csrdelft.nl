@@ -126,7 +126,7 @@ class ProfielView extends SmartyTemplateView {
 		}
 
 		require_once 'model/fiscaat/CiviBestellingModel.class.php';
-		$bestellingen = CiviBestellingModel::instance()->getBestellingenVoorLid($this->model->uid);
+		$bestellingen = CiviBestellingModel::instance()->getBestellingenVoorLid($this->model->uid, 10);
 		$bestellinglog = CiviBestellingModel::instance()->getBeschrijving($bestellingen);
 		$this->smarty->assign('bestellinglog', $bestellinglog);
 		$this->smarty->assign('bestellingenlink', '/fiscaat/bestellingen' . (LoginModel::getUid() === $this->model->uid ? '' : '/'.$this->model->uid));
