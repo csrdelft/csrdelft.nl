@@ -12,8 +12,8 @@ class CiviBestellingModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function getBestellingenVoorLid($uid) {
-		return $this->find('uid = ?', array($uid), null, 'moment DESC');
+	public function getBestellingenVoorLid($uid, $limit = null) {
+		return $this->find('uid = ?', array($uid), null, 'moment DESC', $limit);
 	}
 
 	public function vanMaaltijdAanmelding(MaaltijdAanmelding $aanmelding) {
