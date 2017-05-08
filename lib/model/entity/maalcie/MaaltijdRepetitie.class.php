@@ -4,8 +4,8 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * MaaltijdRepetitie.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
- * 
+ *
+ *
  * Een mlt_repetitie instantie beschrijft een maaltijd die periodiek wordt gehouden als volgt:
  *  - uniek identificatienummer
  *  - op welke dag van de week de maaltijd wordt gehouden
@@ -15,14 +15,14 @@ use CsrDelft\Orm\Entity\T;
  *  - of er een abonnement kan worden genomen op deze periodieke maaltijden
  *  - de standaard limiet van het aantal aanmeldingen
  *  - of er restricties gelden voor wie zich mag abonneren op deze maaltijd
- * 
- * 
+ *
+ *
  * De standaard titel, limiet en filter worden standaard overgenomen, maar kunnen worden overschreven per maaltijd.
  * Bij het aanmaken van een nieuwe maaltijd (op basis van deze repetitie) worden alle leden met een abonnement op deze repetitie aangemeldt voor deze nieuwe maaltijd.
- * 
- * 
+ *
+ *
  * Zie ook MaaltijdAbonnement.class.php
- * 
+ *
  */
 class MaaltijdRepetitie extends PersistentEntity {
 	# primary key
@@ -50,7 +50,7 @@ class MaaltijdRepetitie extends PersistentEntity {
         'periode_in_dagen' => array(T::Integer),
         'standaard_titel' => array(T::String),
         'standaard_tijd' => array(T::Time),
-        'standaard_prijs' => array(T::Integer),
+        'standaard_prijs' => array(T::Integer, true),
         'abonneerbaar' => array(T::Boolean),
         'standaard_limiet' => array(T::Integer),
         'abonnement_filter' => array(T::String, true)

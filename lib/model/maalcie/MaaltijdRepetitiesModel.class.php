@@ -9,7 +9,7 @@ require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
 
 /**
  * MaaltijdRepetitiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
+ *
  */
 class MaaltijdRepetitiesModel extends PersistenceModel {
 
@@ -71,7 +71,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 	public function saveRepetitie($repetitie) {
 		return Database::transaction(function () use ($repetitie) {
 			$abos = 0;
-			if ($repetitie->mlt_repetitie_id === 0) {
+			if ($repetitie->mlt_repetitie_id == null) {
 				$repetitie->mlt_repetitie_id = $this->create($repetitie);
 			} else {
 				$this->update($repetitie);

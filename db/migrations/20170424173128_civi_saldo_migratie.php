@@ -91,6 +91,7 @@ CREATE TABLE CiviSaldo
 ALTER TABLE mlt_maaltijden ADD COLUMN product_id INT(11) NOT NULL;
 ALTER TABLE mlt_maaltijden ADD COLUMN verwerkt TINYINT(1) NOT NULL;
 ALTER TABLE mlt_repetities ADD COLUMN product_id INT(11) NOT NULL;
+ALTER TABLE mlt_repetities CHANGE standaard_prijs standaard_prijs INT(11) NULL;
 
 INSERT INTO CiviCategorie (id, status, type, cie)
 VALUES (1, 1, 'Maaltijd', 'maalcie');
@@ -246,5 +247,6 @@ FROM saldolog WHERE (uid, moment) IN (
 		try {
 			$this->execute("DROP TABLE IF EXISTS CiviBestellingInhoud, CiviBestelling, CiviPrijs, CiviProduct, CiviLog, CiviSaldo, CiviCategorie;");
 		} catch (Exception $ignore) { echo "sommige tabellen al verwijderd"; }
+		$this->execute("ALTER TABLE `mlt_repetities` CHANGE `standaard_prijs` `standaard_prijs` INT(11) NOT NULL;");
 	}
 }
