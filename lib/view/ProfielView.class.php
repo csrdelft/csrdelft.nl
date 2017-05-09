@@ -127,7 +127,7 @@ class ProfielView extends SmartyTemplateView {
 
 		require_once 'model/fiscaat/CiviBestellingModel.class.php';
 		$this->smarty->assign('bestellinglog', CiviBestellingModel::instance()->getBestellingenVoorLid($this->model->uid));
-		$this->smarty->assign('bestellingenlink', '/fiscaat/bestellingen' . (LoginModel::getUid() === $this->model->uid ? '' : $this->model->uid));
+		$this->smarty->assign('bestellingenlink', '/fiscaat/bestellingen' . (LoginModel::getUid() === $this->model->uid ? '' : '/'.$this->model->uid));
 
 		$this->smarty->assign('corveepunten', $this->model->corvee_punten);
 		$this->smarty->assign('corveebonus', $this->model->corvee_punten_bonus);
