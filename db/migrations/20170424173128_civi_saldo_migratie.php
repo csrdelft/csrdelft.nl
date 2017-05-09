@@ -193,12 +193,11 @@ SQL
 		]);
 
 		// Migreer de saldolog tabel naar CiviSaldo
-		$gebruikers = $this->fetchAll("SELECT uid, saldo, moment AS laatst_veranderd
-FROM saldolog WHERE (uid, moment) IN (
-  SELECT uid, max(moment) FROM saldolog WHERE cie = 'maalcie' GROUP BY uid
-) ORDER BY moment DESC");
+		$gebruikers = $this->fetchAll("SELECT distinct(uid) FROM saldolog WHERE cie = 'maalcie'");
 
 		foreach ($gebruikers as $index => $gebruiker) {
+			$gebruiker = $this->fetchRow("SELECT uid, saldo, moment as laatst_veranderd FROM saldolog WHERE uid='${gebruiker['uid']}' ORDER BY moment DESC LIMIT 1");
+
 			$saldo = $gebruiker['saldo'] * 100;
 			$this->execute(sprintf(
 				"INSERT INTO CiviSaldo (uid, saldo, laatst_veranderd, deleted)
