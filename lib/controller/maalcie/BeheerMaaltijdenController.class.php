@@ -4,6 +4,7 @@ require_once 'model/maalcie/MaaltijdenModel.class.php';
 require_once 'model/maalcie/ArchiefMaaltijdModel.class.php';
 require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
+require_once 'model/fiscaat/CiviBestellingModel.class.php';
 require_once 'view/maalcie/BeheerMaaltijdenView.class.php';
 require_once 'view/maalcie/forms/MaaltijdForm.class.php';
 require_once 'view/maalcie/forms/RepetitieMaaltijdenForm.class.php';
@@ -27,7 +28,7 @@ class BeheerMaaltijdenController extends AclController {
 				'prullenbak' => 'P_MAAL_MOD',
 				//'leegmaken' => 'P_MAAL_MOD',
 				'archief'	 => 'P_MAAL_MOD',
-				'fiscaal'	 => 'P_MAAL_MOD'
+				'onverwerkt' => 'P_MAAL_MOD',
 			);
 		} else {
 			$this->acl = array(
@@ -43,7 +44,8 @@ class BeheerMaaltijdenController extends AclController {
 				'herstel'		 => 'P_MAAL_MOD',
 				'aanmelden' => 'P_MAAL_MOD',
 				'afmelden'	 => 'P_MAAL_MOD',
-				'aanmaken'		 => 'P_MAAL_MOD'
+				'aanmaken'		 => 'P_MAAL_MOD',
+				'verwerk'        => 'P_MAAL_MOD'
 			);
 		}
 	}
@@ -72,31 +74,42 @@ class BeheerMaaltijdenController extends AclController {
 		}
 	}
 
-	public function beheer($mid = null) {
-		if ($this->getMethod() == 'POST') {
-			$filter = $this->hasParam('filter') ? $this->getParam('filter') : '';
-			switch ($filter) {
-				case 'prullenbak':
-					$data = $this->model->find('verwijderd = true');
-					break;
-				case 'alles':
-					$data = $this->model->getMaaltijden();
-					break;
-				case 'toekomst':
-				default:
-					$data = $this->model->getMaaltijden('datum > NOW() - INTERVAL 1 WEEK');
-					break;
-			}
-
-			$this->view = new BeheerMaaltijdenLijst($data);
-		} else {
-			/** @var MaaltijdRepetitie[] $repetities */
-			$repetities = MaaltijdRepetitiesModel::instance()->find();
-			$body = new BeheerMaaltijdenView(new BeheerMaaltijdenTable($repetities), 'Maaltijdenbeheer');
-			$this->view = new CsrLayoutPage($body, array());
-			$this->view->addCompressedResources('maalcie');
-			$this->view->addCompressedResources('datatable');
+	public function POST_beheer() {
+		$filter = $this->hasParam('filter') ? $this->getParam('filter') : '';
+		switch ($filter) {
+			case 'prullenbak':
+				$data = $this->model->find('verwijderd = true');
+				break;
+			case 'onverwerkt':
+				$data = $this->model->find('verwijderd = false AND gesloten = true AND verwerkt = false');
+				break;
+			case 'alles':
+				$data = $this->model->getMaaltijden();
+				break;
+			case 'toekomst':
+			default:
+				$data = $this->model->getMaaltijden('datum > NOW() - INTERVAL 1 WEEK');
+				break;
 		}
+
+		$this->view = new BeheerMaaltijdenLijst($data);
+	}
+
+	public function GET_beheer($mid = null) {
+		$modal = null;
+		if ($mid !== null) {
+			$this->bewerk($mid);
+			$modal = $this->view;
+		} elseif ($mid === 0) {
+			$this->nieuw();
+			$modal = $this->view;
+		}
+		/** @var MaaltijdRepetitie[] $repetities */
+		$repetities = MaaltijdRepetitiesModel::instance()->find();
+		$body = new BeheerMaaltijdenView(new BeheerMaaltijdenTable($repetities), 'Maaltijdenbeheer');
+		$this->view = new CsrLayoutPage($body, array(), $modal);
+		$this->view->addCompressedResources('maalcie');
+		$this->view->addCompressedResources('datatable');
 	}
 
 	public function archief() {
@@ -111,15 +124,12 @@ class BeheerMaaltijdenController extends AclController {
 		}
 	}
 
-	public function fiscaal($mid) {
-		$maaltijd = $this->model->getMaaltijd($mid, true);
-		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
-		require_once 'view/maalcie/MaaltijdLijstView.class.php';
-		$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, null, true);
-	}
-
 	public function toggle($mid) {
 		$maaltijd = $this->model->getMaaltijd($mid);
+
+		if ($maaltijd->verwerkt) {
+			throw new Exception('Maaltijd al verwerkt');
+		}
 
 		if ($maaltijd->gesloten) {
 			$this->model->openMaaltijd($maaltijd);
@@ -148,10 +158,10 @@ class BeheerMaaltijdenController extends AclController {
 				$this->view = new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 			} else {
 				$maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+				$maaltijd->product_id = $repetitie->product_id;
 				$maaltijd->titel = $repetitie->standaard_titel;
 				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
 				$maaltijd->tijd = $repetitie->standaard_tijd;
-				$maaltijd->prijs = $repetitie->standaard_prijs;
 				$maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
 				$this->view = new MaaltijdForm($maaltijd, 'nieuw');
 			}
@@ -161,13 +171,17 @@ class BeheerMaaltijdenController extends AclController {
 
 	}
 
-	public function bewerk() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		if (empty($selection)) {
-			$this->exit_http(403);
+	public function bewerk($mid = null) {
+		if ($mid === null) {
+			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			if (empty($selection)) {
+				$this->exit_http(404);
+			}
+			$mid = $selection[0];
 		}
+
 		/** @var Maaltijd $maaltijd */
-		$maaltijd = $this->model->retrieveByUUID($selection[0]);
+		$maaltijd = $this->model->retrieveByUUID($mid);
 		$form = new MaaltijdForm($maaltijd, 'bewerk');
 		if ($form->validate()) {
 			$this->model->update($maaltijd);
@@ -253,4 +267,16 @@ class BeheerMaaltijdenController extends AclController {
 		}
 	}
 
+	// Maalcie-fiscaat
+
+	public function onverwerkt() {
+		if ($this->getAction() == "POST") {
+
+		} else {
+			$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
+			$this->view = new CsrLayoutPage($body);
+			$this->view->addCompressedResources('maalcie');
+			$this->view->addCompressedResources('datatable');
+		}
+	}
 }

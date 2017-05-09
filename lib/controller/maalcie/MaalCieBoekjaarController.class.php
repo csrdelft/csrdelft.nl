@@ -1,8 +1,8 @@
 <?php
 
-require_once 'view/maalcie/MaalCieSaldiView.class.php';
+require_once 'view/maalcie/MaalCieBoekjaarSluitenView.class.php';
 require_once 'view/maalcie/forms/BoekjaarSluitenForm.class.php';
-require_once 'model/fiscaal/SaldoModel.class.php';
+require_once 'model/fiscaat/SaldoModel.class.php';
 require_once 'model/maalcie/MaaltijdenModel.class.php';
 
 /**
@@ -11,7 +11,7 @@ require_once 'model/maalcie/MaaltijdenModel.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class MaalCieSaldiController extends AclController {
+class MaalCieBoekjaarController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, null);
@@ -21,7 +21,6 @@ class MaalCieSaldiController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'upload'		 => 'P_MAAL_SALDI',
 				'sluitboekjaar'	 => 'P_MAAL_SALDI'
 			);
 		}
@@ -36,14 +35,9 @@ class MaalCieSaldiController extends AclController {
 	}
 
 	public function beheer() {
-		$this->view = new MaalCieSaldiView();
+		$this->view = new MaalCieBoekjaarSluitenView();
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
-	}
-
-	public function upload() {
-		$this->beheer();
-		SaldoModel::putMaalcieCsv();
 	}
 
 	public function sluitboekjaar() {
@@ -51,7 +45,7 @@ class MaalCieSaldiController extends AclController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$errors_aantal = MaaltijdenModel::instance()->archiveerOudeMaaltijden(strtotime($values['begindatum']), strtotime($values['einddatum']));
-			$this->view = new MaalCieSaldiView();
+			$this->view = new MaalCieBoekjaarSluitenView();
 			if (sizeof($errors_aantal[0]) === 0) {
 				setMelding('Boekjaar succesvol gesloten: ' . $errors_aantal[1] . ' maaltijden naar het archief verplaatst.', 1);
 			}

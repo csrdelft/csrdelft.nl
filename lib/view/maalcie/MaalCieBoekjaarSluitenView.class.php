@@ -8,15 +8,15 @@
  * Tonen van een upload tool voor het bijwerken de MaalCie saldi op de stek.
  * 
  */
-class MaalCieSaldiView extends SmartyTemplateView {
+class MaalCieBoekjaarSluitenView extends SmartyTemplateView {
 
 	public function __construct() {
-		parent::__construct(null, 'MaalCie-saldi uploaden met een CSV-bestand');
+		parent::__construct(null, 'Boekjaar sluiten');
 	}
 
 	public function view() {
 		$this->smarty->display('maalcie/menu_pagina.tpl');
-		$this->smarty->display('maalcie/maalcie_saldi.tpl');
+		$this->smarty->display('maalcie/boekjaar_sluiten.tpl');
 	}
 
 }

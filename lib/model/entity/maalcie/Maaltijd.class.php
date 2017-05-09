@@ -32,11 +32,11 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 
 	public $maaltijd_id; # int 11
 	public $mlt_repetitie_id; # foreign key mlt_repetitie.id
+	public $product_id;
 	public $titel; # string 255
 	public $aanmeld_limiet; # int 11
 	public $datum; # date
 	public $tijd; # time
-	public $prijs; # int 11
 	public $gesloten = false; # boolean
 	public $laatst_gesloten; # int 11
 	public $verwijderd = false; # boolean
@@ -44,6 +44,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	public $omschrijving; # text
 	public $aantal_aanmeldingen;
 	public $archief;
+	public $verwerkt = false;
 	/**
 	 * De taak die rechten geeft voor het bekijken en sluiten van de maaltijd(-lijst)
 	 * @var CorveeTaak 
@@ -51,8 +52,12 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	public $maaltijdcorvee;
 
 	public function getPrijsFloat() {
-        return (float) $this->prijs / 100.0;
+        return (float) $this->getPrijs() / 100.0;
     }
+
+    public function getPrijs() {
+		return CiviProductModel::instance()->getPrijs(CiviProductModel::instance()->getProduct($this->product_id))->prijs;
+	}
 
     /**
      * @return int
@@ -88,7 +93,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getBudget() {
 		$budget = $this->getAantalAanmeldingen() + $this->getMarge();
-		$budget *= $this->prijs - intval(Instellingen::get('maaltijden', 'budget_maalcie'));
+		$budget *= $this->getPrijs() - intval(Instellingen::get('maaltijden', 'budget_maalcie'));
 		return floatval($budget) / 100.0;
 	}
 
@@ -160,16 +165,17 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
     protected static $persistent_attributes = array(
         'maaltijd_id' => array(T::Integer, false, 'auto_increment'),
         'mlt_repetitie_id' => array(T::Integer, true),
+        'product_id' => array(T::Integer),
         'titel' => array(T::String),
         'aanmeld_limiet' => array(T::Integer),
         'datum' => array(T::Date),
         'tijd' => array(T::Time),
-        'prijs' => array(T::Integer),
         'gesloten' => array(T::Boolean),
         'laatst_gesloten' => array(T::Timestamp, true),
         'verwijderd' => array(T::Boolean),
         'aanmeld_filter' => array(T::String, true),
         'omschrijving' => array(T::Text, true),
+		'verwerkt' => array(T::Boolean)
     );
 
     protected static $primary_key = array('maaltijd_id');
@@ -185,7 +191,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
         $json['tijd'] = date('G:i', strtotime($json['tijd']));
         $json['aantal_aanmeldingen'] = $this->getAantalAanmeldingen();
         $json['gesloten'] = $json['gesloten'] ? '1' : '0';
-        $json['prijs'] = strval($json['prijs']);
+        $json['prijs'] = strval($this->getPrijs());
         return $json;
     }
 

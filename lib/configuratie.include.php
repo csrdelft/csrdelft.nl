@@ -128,6 +128,7 @@ require_once 'model/security/AccessModel.class.php';
 require_once 'model/LidInstellingenModel.class.php';
 require_once 'model/forum/ForumModel.class.php';
 require_once 'model/LogModel.class.php';
+require_once 'model/fiscaat/CiviProductModel.class.php';
 
 // View
 require_once 'view/JsonResponse.class.php';

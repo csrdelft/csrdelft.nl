@@ -204,12 +204,25 @@
 					{if LoginModel::mag('P_MAAL_MOD')}
 						<span class="lichtgrijs">({if !$profiel->machtiging}geen {/if}machtiging getekend)</span>
 					{/if}
-					<br />
 				{/if}
-				<a name="SocCieSaldo"></a><a name="MaalCieSaldo"></a>
-					{if isset($saldografiek)}
-					<br />
-					{include file='profiel/_saldografiek.tpl'}
+				<div class="clear-left"></div>
+				{if LoginModel::getUid() === $profiel->uid || LoginModel::mag('P_MAAL_MOD')}
+					<div class="label">Saldohistorie:</div>
+					{foreach from=$bestellinglog item=bestelling}
+						<div class="data">
+							{$bestelling->getInhoudBeschrijving()} <span class="lichtgrijs">({$bestelling->moment|date_format:"%a %e %b"})</span>
+						</div>
+					{/foreach}
+					<div class="data">
+						<a href="{$bestellingenlink}">Meer &#187;</a>
+					</div>
+				{/if}
+
+				{if isset($saldografiek)}
+					<div class="clear-left"></div>
+					<div class="label">Saldografiek:</div>
+					<div class="clear-left"></div>
+                    {include file='profiel/_saldografiek.tpl'}
 				{/if}
 			</div>
 		</div>

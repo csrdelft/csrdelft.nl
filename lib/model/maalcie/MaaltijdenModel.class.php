@@ -25,13 +25,14 @@ class MaaltijdenModel extends PersistenceModel {
     public function vanRepetitie(MaaltijdRepetitie $repetitie, $datum) {
         $maaltijd = new Maaltijd();
         $maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+        $maaltijd->product_id = $repetitie->product_id;
         $maaltijd->titel = $repetitie->standaard_titel;
         $maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
         $maaltijd->datum = date('Y-m-d', $datum);
         $maaltijd->tijd = $repetitie->standaard_tijd;
-        $maaltijd->prijs = $repetitie->standaard_prijs;
         $maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
         $maaltijd->omschrijving = null;
+        $maaltijd->verwerkt = false;
 
         return $maaltijd;
     }
@@ -319,8 +320,8 @@ class MaaltijdenModel extends PersistenceModel {
 				}
 				$maaltijd->titel = $repetitie->standaard_titel;
 				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
-				$repetitie->standaard_tijd = $maaltijd->tijd;
-				$maaltijd->prijs = $repetitie->standaard_prijs;
+				$maaltijd->tijd = $repetitie->standaard_tijd;
+				$maaltijd->product_id = $repetitie->product_id;
 				$maaltijd->aanmeld_filter = $filter;
 				try {
 					$this->update($maaltijd);

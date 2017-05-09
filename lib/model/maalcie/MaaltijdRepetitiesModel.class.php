@@ -9,7 +9,7 @@ require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
 
 /**
  * MaaltijdRepetitiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
+ *
  */
 class MaaltijdRepetitiesModel extends PersistenceModel {
 
@@ -19,39 +19,6 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
     protected $default_order = '(periode_in_dagen = 0) ASC, periode_in_dagen ASC, dag_vd_week ASC, standaard_titel ASC';
 
     protected static $instance;
-    
-    public function nieuwMaaltijdRepetitie($mrid = 0, $dag = null, $periode = null, $titel = '', $tijd = null, $prijs = null, $abo = null, $limiet = null, $filter = null) {
-        $repetitie = new MaaltijdRepetitie();
-        $this->mlt_repetitie_id = (int) $mrid;
-        if ($dag === null) {
-            $dag = intval(Instellingen::get('maaltijden', 'standaard_repetitie_weekdag'));
-        }
-        $repetitie->dag_vd_week = $dag;
-        if ($periode === null) {
-            $periode = intval(Instellingen::get('maaltijden', 'standaard_repetitie_periode'));
-        }
-        $repetitie->periode_in_dagen = $periode;
-        $repetitie->standaard_titel = $titel;
-        if ($tijd === null) {
-            $tijd = Instellingen::get('maaltijden', 'standaard_aanvang');
-        }
-        $repetitie->standaard_tijd = $tijd;
-        if ($prijs === null) {
-            $prijs = intval(Instellingen::get('maaltijden', 'standaard_prijs'));
-        }
-        $repetitie->standaard_prijs = $prijs;
-        if ($abo === null) {
-            $abo = (boolean) Instellingen::get('maaltijden', 'standaard_abonneerbaar');
-        }
-        $repetitie->abonneerbaar = $abo;
-        if ($limiet === null) {
-            $limiet = intval(Instellingen::get('maaltijden', 'standaard_limiet'));
-        }
-        $repetitie->standaard_limiet = $limiet;
-        $repetitie->abonnement_filter = $filter;
-
-        return $repetitie;
-    }
 
 	/**
 	 * Filtert de repetities met het abonnement-filter van de maaltijd-repetitie op de permissies van het ingelogde lid.
@@ -104,7 +71,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 	public function saveRepetitie($repetitie) {
 		return Database::transaction(function () use ($repetitie) {
 			$abos = 0;
-			if ($repetitie->mlt_repetitie_id === 0) {
+			if ($repetitie->mlt_repetitie_id == null) {
 				$repetitie->mlt_repetitie_id = $this->create($repetitie);
 			} else {
 				$this->update($repetitie);

@@ -17,10 +17,11 @@ class MaalcieRouterController extends AclController {
 			'maaltijdenketzer'				 => 'P_MAAL_IK',
 			'maaltijdenlijst'				 => 'P_MAAL_IK', // shortcut
 			'maaltijdenbeheer'				 => 'P_MAAL_MOD',
+			'maaltijdenfiscaat'              => 'P_MAAL_MOD',
 			'maaltijdenrepetities'			 => 'P_MAAL_MOD',
 			'maaltijdenabonnementen'		 => 'P_MAAL_IK',
 			'maaltijdenabonnementenbeheer'	 => 'P_MAAL_MOD',
-			'maaltijdenmaalciesaldi'		 => 'P_MAAL_SALDI',
+			'maaltijdenboekjaar'			 => 'P_MAAL_SALDI',
 			'corveemijn'					 => 'P_CORVEE_IK',
 			'corveerooster'					 => 'P_CORVEE_IK', // shortcut
 			'corveebeheer'					 => 'P_CORVEE_MOD',
@@ -82,6 +83,11 @@ class MaalcieRouterController extends AclController {
 		return new BeheerMaaltijdenController($this->model);
 	}
 
+	public function maaltijdenfiscaat() {
+		require_once 'controller/maalcie/MaaltijdenFiscaatController.class.php';
+		return new MaaltijdenFiscaatController($this->model);
+	}
+
 	public function maaltijdenrepetities() {
 		require_once 'controller/maalcie/MaaltijdRepetitiesController.class.php';
 		return new MaaltijdRepetitiesController($this->model);
@@ -97,9 +103,9 @@ class MaalcieRouterController extends AclController {
 		return new BeheerAbonnementenController($this->model);
 	}
 
-	public function maaltijdenmaalciesaldi() {
-		require_once 'controller/maalcie/MaalCieSaldiController.class.php';
-		return new MaalCieSaldiController($this->model);
+	public function maaltijdenboekjaar() {
+		require_once 'controller/maalcie/MaalCieBoekjaarController.class.php';
+		return new MaalCieBoekjaarController($this->model);
 	}
 
 	public function corveemijn() {

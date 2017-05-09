@@ -24,6 +24,11 @@ class MaaltijdRepetitieForm extends ModalForm {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
+		$product = CiviProductModel::instance()->findSparse(array('beschrijving'), 'id = ?', array($model->product_id))->fetch();
+		if ($product == false) {
+			$product = new CiviProduct();
+		}
+
 		$fields[] = new RequiredTextField('standaard_titel', $model->standaard_titel, 'Standaard titel', 255);
 		$fields[] = new TimeField('standaard_tijd', $model->standaard_tijd, 'Standaard tijd', 15);
 		$fields['dag'] = new WeekdagField('dag_vd_week', $model->dag_vd_week, 'Dag v/d week');
@@ -33,7 +38,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 		if ($model->mlt_repetitie_id !== 0) {
 			$fields['abo']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) if (!confirm('Alle abonnementen zullen worden verwijderd!')) this.checked = true;";
 		}
-		$fields[] = new BedragField('standaard_prijs', $model->standaard_prijs, 'Standaard prijs', '€', 0, 50, 0.50);
+		$fields[] = new RequiredEntityField('product', 'beschrijving', 'Product', CiviProductModel::instance(), '/fiscaat/producten/suggesties?q=', $product);
 		$fields[] = new IntField('standaard_limiet', $model->standaard_limiet, 'Standaard limiet', 0, 200);
 		$fields[] = new RechtenField('abonnement_filter', $model->abonnement_filter, 'Aanmeldrestrictie');
 

@@ -21,6 +21,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	}
 
 	public function setEetwens(Profiel $profiel, $eetwens) {
+		if ($profiel->eetwens === $eetwens) return;
 		$profiel->eetwens = $eetwens;
 		if (ProfielModel::instance()->update($profiel) !== 1) {
 			throw new Exception('Eetwens opslaan mislukt');

@@ -4,8 +4,8 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * MaaltijdRepetitie.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
- * 
+ *
+ *
  * Een mlt_repetitie instantie beschrijft een maaltijd die periodiek wordt gehouden als volgt:
  *  - uniek identificatienummer
  *  - op welke dag van de week de maaltijd wordt gehouden
@@ -15,19 +15,20 @@ use CsrDelft\Orm\Entity\T;
  *  - of er een abonnement kan worden genomen op deze periodieke maaltijden
  *  - de standaard limiet van het aantal aanmeldingen
  *  - of er restricties gelden voor wie zich mag abonneren op deze maaltijd
- * 
- * 
+ *
+ *
  * De standaard titel, limiet en filter worden standaard overgenomen, maar kunnen worden overschreven per maaltijd.
  * Bij het aanmaken van een nieuwe maaltijd (op basis van deze repetitie) worden alle leden met een abonnement op deze repetitie aangemeldt voor deze nieuwe maaltijd.
- * 
- * 
+ *
+ *
  * Zie ook MaaltijdAbonnement.class.php
- * 
+ *
  */
 class MaaltijdRepetitie extends PersistentEntity {
 	# primary key
 
 	public $mlt_repetitie_id; # int 11
+	public $product_id;
     /**
      * 0: Sunday
      * 6: Saturday
@@ -44,16 +45,22 @@ class MaaltijdRepetitie extends PersistentEntity {
     protected static $table_name = 'mlt_repetities';
     protected static $persistent_attributes = array(
         'mlt_repetitie_id' => array(T::Integer, false, 'auto_increment'),
+        'product_id' => array(T::Integer),
         'dag_vd_week' => array(T::Integer),
         'periode_in_dagen' => array(T::Integer),
         'standaard_titel' => array(T::String),
         'standaard_tijd' => array(T::Time),
-        'standaard_prijs' => array(T::Integer),
+        'standaard_prijs' => array(T::Integer, true),
         'abonneerbaar' => array(T::Boolean),
         'standaard_limiet' => array(T::Integer),
         'abonnement_filter' => array(T::String, true)
     );
     protected static $primary_key = array('mlt_repetitie_id');
+
+    public function getStandaardPrijs() {
+    	require_once 'model/fiscaat/CiviProductModel.class.php';
+		return CiviProductModel::instance()->getPrijs(CiviProductModel::instance()->getProduct($this->product_id))->prijs;
+	}
 
 	public function getDagVanDeWeekText() {
 		return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
@@ -74,7 +81,7 @@ class MaaltijdRepetitie extends PersistentEntity {
 	}
 
 	public function getStandaardPrijsFloat() {
-		return (float) $this->standaard_prijs / 100.0;
+		return (float) $this->getStandaardPrijs() / 100.0;
 	}
 
 	public function getFirstOccurrence() {

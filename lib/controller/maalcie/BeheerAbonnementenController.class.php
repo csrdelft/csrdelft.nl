@@ -14,7 +14,7 @@ require_once 'view/maalcie/BeheerAbonnementenView.class.php';
  */
 class BeheerAbonnementenController extends AclController {
 	public function __construct($query) {
-		parent::__construct($query, MaaltijdAbonnementenModel::transaction());
+		parent::__construct($query, MaaltijdAbonnementenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'waarschuwingen' => 'P_MAAL_MOD',

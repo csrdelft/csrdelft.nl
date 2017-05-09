@@ -1,4 +1,7 @@
 <?php
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\PersistenceModel;
+
 /**
  * EntityField.class.php
  *
@@ -12,10 +15,14 @@
  */
 class EntityField extends InputField {
 
-	private $show_value, $entity, $orm;
+	private $show_value;
+	/** @var  PersistentEntity */
+	private $entity;
+	/** @var  PersistentEntity */
+	private $orm;
 
 	/**
-	 * @var \CsrDelft\Orm\PersistenceModel
+	 * @var PersistenceModel
 	 */
 	protected $model;
 
@@ -24,20 +31,27 @@ class EntityField extends InputField {
 	 * @param $name string Prefix van de input
 	 * @param $show string Attribuut van $model om in de input weer te geven
 	 * @param $description string Beschrijvijng van de input
-	 * @param \CsrDelft\Orm\Entity\PersistentEntity $entity
-	 * @param \CsrDelft\Orm\PersistenceModel $model Model
+	 * @param PersistentEntity $entity
+	 * @param PersistenceModel $model Model
 	 * @param $url string Url waar aanvullingen te vinden zijn
 	 */
-	public function __construct($name, $show, $description, \CsrDelft\Orm\PersistenceModel $model, $url) {
+	public function __construct($name, $show, $description, PersistenceModel $model, $url, $entity = null) {
 		$this->orm = $model::ORM;
-		$this->entity = new $this->orm();
+		$this->entity = $entity;
+		if ($entity === null) {
+			$this->entity = new $this->orm();
+		}
 		foreach ($this->entity->getPrimaryKey() as $key) {
-			$this->entity->$key = filter_input(INPUT_POST, $name . '_' . $key, FILTER_DEFAULT);
+			$input_key = filter_input(INPUT_POST, $name . '_' . $key, FILTER_DEFAULT);
+			if (null != $input_key AND false != $input_key) {
+				$this->entity->$key = $input_key;
+			}
 		}
 
 		parent::__construct($name, $this->entity->$show, $description, $model);
 		$this->suggestions[] = $url;
 		$this->show_value = $show;
+		$this->value = $this->getValue();
 	}
 
 	public function getName() {
@@ -73,12 +87,14 @@ class EntityField extends InputField {
 	 * @return bool Of alles gepost is
 	 */
 	public function isPosted() {
-		if (false === filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)) {
+		$input_show = filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT);
+		if (false == $input_show OR null == $input_show) {
 			return false;
 		}
 
 		foreach ($this->entity->getPrimaryKey() as $key) {
-			if (false === filter_input(INPUT_POST, $this->name . '_' . $key, FILTER_DEFAULT)) {
+			$input_key = filter_input(INPUT_POST, $this->name . '_' . $key, FILTER_DEFAULT);
+			if (false === $input_key OR null === $input_key) {
 				return false;
 			}
 		}

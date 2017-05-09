@@ -2,7 +2,7 @@
 
 /**
  * ProfielView.class.php
- * 
+ *
  * @author C.S.R. Delft	<pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
@@ -120,10 +120,14 @@ class ProfielView extends SmartyTemplateView {
 			$this->smarty->assign('abos', MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($this->model->uid));
 		}
 
-		require_once 'model/fiscaal/SaldoModel.class.php';
+		require_once 'model/fiscaat/SaldoModel.class.php';
 		if (SaldoModel::instance()->magGrafiekZien($this->model->uid)) {
 			$this->smarty->assign('saldografiek', 'ja');
 		}
+
+		require_once 'model/fiscaat/CiviBestellingModel.class.php';
+		$this->smarty->assign('bestellinglog', CiviBestellingModel::instance()->getBestellingenVoorLid($this->model->uid));
+		$this->smarty->assign('bestellingenlink', '/fiscaat/bestellingen' . (LoginModel::getUid() === $this->model->uid ? '' : $this->model->uid));
 
 		$this->smarty->assign('corveepunten', $this->model->corvee_punten);
 		$this->smarty->assign('corveebonus', $this->model->corvee_punten_bonus);

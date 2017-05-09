@@ -45,6 +45,10 @@ class MaaltijdAanmelding extends PersistentEntity  {
 		return ProfielModel::get($this->uid)->maalcieSaldo;
 	}
 
+	public function getMaaltijd() {
+		return MaaltijdenModel::instance()->getMaaltijd($this->maaltijd_id);
+	}
+
 	/**
 	 * Bereken of het saldo toereikend is voor de prijs van de maaltijd.
 	 * 
@@ -62,7 +66,7 @@ class MaaltijdAanmelding extends PersistentEntity  {
 	 */
 	public function getSaldoStatus() {
 		$saldo = $this->getSaldo();
-		$prijs = $this->maaltijd->getPrijsFloat();
+		$prijs = $this->getMaaltijd()->getPrijsFloat();
 
 		if ($saldo > $prijs) { // saldo meer dan genoeg
 			return 3;
@@ -84,7 +88,7 @@ class MaaltijdAanmelding extends PersistentEntity  {
 	 */
 	public function getSaldoMelding() {
 		$status = $this->getSaldoStatus();
-		$prijs = sprintf('%.2f', $this->maaltijd->getPrijsFloat());
+		$prijs = sprintf('%.2f', $this->getMaaltijd()->getPrijsFloat());
 		switch ($status) {
 			case 3: return 'ok';
 			case 2: return $prijs;

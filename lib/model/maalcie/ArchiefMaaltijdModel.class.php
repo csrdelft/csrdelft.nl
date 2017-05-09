@@ -30,7 +30,7 @@ class ArchiefMaaltijdModel extends PersistenceModel {
         $archief->titel = $maaltijd->titel;
         $archief->datum = $maaltijd->datum;
         $archief->tijd = $maaltijd->tijd;
-        $archief->prijs = $maaltijd->prijs;
+        $archief->prijs = $maaltijd->getPrijs();
         $archief->aanmeldingen = '';
         foreach (MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd) as $aanmelding) {
             if ($aanmelding->uid === '') {
