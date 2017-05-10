@@ -27,6 +27,9 @@ class SaldoModel extends PersistenceModel {
 		if (!$this->magGrafiekZien($uid, "maalcie")) {
 			return null;
 		}
+
+		$oldData = $this->getDataPointsForOldMaalCie($uid, $timespan);
+
 		$model = CiviSaldoModel::instance();
 		$klant = $model->find('uid = ?', array($uid), null, null, 1)->fetch();
 		if (!$klant) {
@@ -43,7 +46,7 @@ class SaldoModel extends PersistenceModel {
 			$saldo += $bestelling->totaal;
 		}
 
-		if (!empty($data)) {
+		if (!empty($data) && empty($oldData)) {
 			// herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan
 			$row = end($data);
 			$time = strtotime('-' . $timespan . ' days') + 3600;
@@ -52,11 +55,25 @@ class SaldoModel extends PersistenceModel {
 
 		return array(
 			"label" => "MaalCie",
-			"data" => array_reverse($data), // Keer de lijst om, flot laat anders veranderingen in de data 1-off zien
+			"data" => array_merge($oldData, array_reverse($data)), // Keer de lijst om, flot laat anders veranderingen in de data 1-off zien
 			"threshold" => array("below" => 0, "color" => "red"),
 			"lines" => array("steps" => true)
 		);
     }
+
+    private function getDataPointsForOldMaalCie($uid, $timespan) {
+			$points = $this->find('uid = ? AND cie = "maalcie" AND moment > (NOW() - INTERVAL ? DAY)', array($uid, $timespan))->fetchAll();
+			if (!empty($points)) {
+				// herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan
+				$row = reset($points);
+				$time = strtotime('-' . $timespan . ' days');
+				$saldo = new Saldo();
+				$saldo->saldo = $row->saldo;
+				$saldo->moment = getDateTime($time + 3600);
+				array_unshift($points, $saldo);
+			}
+			return $points;
+		}
 
     public function getDataPointsForSocCie($uid, $timespan) {
         if (!$this->magGrafiekZien($uid, "soccie")) {
