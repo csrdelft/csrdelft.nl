@@ -12,8 +12,9 @@ class CiviSaldoLogModel extends PersistenceModel {
 
 	public function log($type, $data) {
 		$logEntry = new CiviSaldoLog();
-		$logEntry->timestamp = date_create()->getTimestamp();
-		$logEntry->ip = filter_input(INPUT_SERVER, 'REMOTE_ADDR');
+		// Don't use filter_input for $_SERVER when PHP runs through FastCGI:
+		// https://bugs.php.net/bug.php?id=49184
+		$logEntry->ip = filter_var($_SERVER['REMOTE_ADDR']);
 		$logEntry->type = $type;
 		$logEntry->data = json_encode($data);
 		$this->create($logEntry);
