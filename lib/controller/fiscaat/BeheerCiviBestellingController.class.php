@@ -44,7 +44,12 @@ class BeheerCiviBestellingController extends AclController {
 	}
 
 	public function POST_overzicht($uid) {
-		$this->view = new CiviBestellingOverzichtResponse($this->model->find('uid = ?', array($uid)));
+		if ($this->hasParam("deleted") && $this->getParam("deleted") == "true") {
+			$data = $this->model->find('uid = ?', array($uid));
+		} else {
+			$data = $this->model->find('uid = ? and deleted = false', array($uid));
+		}
+		$this->view = new CiviBestellingOverzichtResponse($data);
 	}
 
 	public function GET_mijn() {

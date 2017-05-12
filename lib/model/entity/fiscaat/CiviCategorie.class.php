@@ -25,7 +25,7 @@ class CiviCategorie extends PersistentEntity {
 		'id' => array(T::Integer, false, 'auto_increment'),
 		'type' => array(T::String),
 		'status' => array(T::Integer),
-		'cie' => array(T::Enumeration, true, CiviSaldoCommissieEnum::class)
+		'cie' => array(T::Enumeration, false, CiviSaldoCommissieEnum::class)
 	);
 	protected static $primary_key = array('id');
 }

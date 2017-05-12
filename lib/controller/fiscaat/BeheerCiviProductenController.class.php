@@ -1,6 +1,7 @@
 <?php
 
 require_once 'model/fiscaat/CiviProductModel.class.php';
+require_once 'model/fiscaat/CiviBestellingInhoudModel.class.php';
 require_once 'view/fiscaat/BeheerCiviProductenView.class.php';
 require_once 'view/fiscaat/CiviProductenSuggestiesView.class.php';
 
@@ -79,6 +80,34 @@ class BeheerCiviProductenController extends AclController {
 		$product = $this->model->retrieveByUUID($selection[0]);
 		$product->prijs = $this->model->getPrijs($product)->prijs;
 		$this->view = new CiviProductForm($product, 'opslaan');
+	}
+
+	public function POST_verwijderen() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+
+		$removed = array();
+		$existingOrders = array();
+		foreach($selection as $uuid) {
+			$product = $this->model->retrieveByUUID($uuid);
+
+			if ($product) {
+				if (CiviBestellingInhoudModel::instance()->count('product_id = ?', array($product->id)) == 0) {
+					$this->model->delete($product);
+					$removed[] = $product;
+				} else {
+					$existingOrders[] = $product;
+				}
+			}
+		}
+
+		if (!empty($removed)) {
+			$this->view = new RemoveRowsResponse($removed);
+			return;
+		} elseif (!empty($existingOrders)) {
+			$this->exit_http(403);
+		}
+
+		$this->exit_http(404);
 	}
 
 	public function POST_opslaan() {

@@ -8,10 +8,10 @@ require_once 'model/entity/Mail.class.php';
 
 /**
  * ProfielModel.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class ProfielModel extends CachedPersistenceModel {
 
@@ -21,7 +21,7 @@ class ProfielModel extends CachedPersistenceModel {
 
 	/**
 	 * TODO: sparse retieval: array('voornaam', 'tussenvoegsel', 'achternaam');
-	 * 
+	 *
 	 * @param string $uid
 	 * @return Profiel|false
 	 */
@@ -272,8 +272,7 @@ class ProfielModel extends CachedPersistenceModel {
 	private function notifyFisci(Profiel $profiel, $oudestatus) {
 		// Saldi ophalen
 		$saldi = '';
-		$saldi .= 'SocCie: ' . $profiel->getSoccieSaldo() . "\n";
-		$saldi .= 'MaalCie: ' . $profiel->getMaalCieSaldo() . "\n";
+		$saldi .= 'CiviSaldo: ' . $profiel->getCiviSaldo() . "\n";
 
 		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/lidafmeldingfisci.mail');
 		$values = array(

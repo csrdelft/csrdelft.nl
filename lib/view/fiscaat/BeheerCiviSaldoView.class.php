@@ -24,7 +24,7 @@ class BeheerCiviSaldoView extends DataTable {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » Saldo';
+		return '<a href="/" title="Startpagina"><span class="fa fa-home module-icon"></span></a> » <a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » <span class="active">Saldo</span>';
 	}
 
 	public function getJavascript() {
@@ -77,7 +77,7 @@ class BeheerSaldoResponse extends DataTableResponse {
 			'UUID' => $entity->getUUID(),
 			'id' => $entity->id,
 			'uid' => $entity->uid,
-			'naam' => ProfielModel::getNaam($entity->uid, 'volledig'),
+			'naam' => ProfielModel::existsUid($entity->uid) ? ProfielModel::getNaam($entity->uid, 'volledig') : $entity->naam,
 			'lichting' => substr($entity->uid, 0, 2),
 			'saldo' => $entity->saldo,
 			'laatst_veranderd' => $entity->laatst_veranderd,

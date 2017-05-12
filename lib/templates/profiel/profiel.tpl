@@ -196,7 +196,7 @@
 		</div>
 	</div>
 
-	{if ($profiel->isLid() OR (LoginModel::mag('P_LEDEN_MOD') AND ($profiel->soccieSaldo < 0 OR $profiel->maalcieSaldo < 0))) AND (isset($saldografiek) OR $profiel->bankrekening!='')}
+	{if ($profiel->isLid() OR (LoginModel::mag('P_LEDEN_MOD') AND ($profiel->getCiviSaldo() < 0))) AND (isset($saldografiek) OR $profiel->bankrekening!='')}
 		<div class="profielregel">
 			<div class="gegevens">
 				{if $profiel->bankrekening!=''}
@@ -207,10 +207,13 @@
 				{/if}
 				<div class="clear-left"></div>
 				{if LoginModel::getUid() === $profiel->uid || LoginModel::mag('P_MAAL_MOD')}
+					<a id="CiviSaldo"></a>
 					<div class="label">Saldohistorie:</div>
 					{foreach from=$bestellinglog item=bestelling}
-						<div class="data">
-							{$bestelling->getInhoudBeschrijving()} <span class="lichtgrijs">({$bestelling->moment|date_format:"%a %e %b"})</span>
+						<div class="data {cycle values="donker,licht"}">
+							<span>{implode(", ", $bestelling->inhoud)}</span>
+							<span class="float-right">{$bestelling->totaal|bedrag}</span>
+							<span class="float-right lichtgrijs bestelling-moment">({$bestelling->moment|date_format:"%D"}) </span>
 						</div>
 					{/foreach}
 					<div class="data">

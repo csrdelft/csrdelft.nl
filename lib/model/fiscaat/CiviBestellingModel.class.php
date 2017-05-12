@@ -12,12 +12,46 @@ class CiviBestellingModel extends PersistenceModel {
 
 	protected static $instance;
 
-	public function getBestellingenVoorLid($uid) {
-		return $this->find('uid = ?', array($uid), null, 'moment DESC');
+	public function getAlleBestellingenVoorLid($uid, $limit = null) {
+		return $this->find('uid = ?', [$uid], null, 'moment DESC', $limit);
+	}
+
+	public function getBestellingenVoorLid($uid, $limit = null) {
+		return $this->find('uid = ? AND deleted = FALSE', array($uid), null, 'moment DESC', $limit);
+	}
+
+	/**
+	 * @param CiviBestelling[] $bestellingen
+	 * @return Generator
+	 */
+	public function getBeschrijving($bestellingen) {
+		foreach ($bestellingen as $bestelling) {
+			/** @var CiviBestellingInhoud[] $inhoud */
+			$inhoud = $bestelling->getInhoud();
+			$bestellingInhoud = [];
+			foreach ($inhoud as $item) {
+				$bestellingInhoud[] = CiviBestellingInhoudModel::instance()->getBeschrijving($item);
+			}
+
+			yield (object) [
+				'inhoud' => $bestellingInhoud,
+				'moment' => $bestelling->moment,
+				'totaal' => $bestelling->totaal
+			];
+		}
+	}
+
+	public function getBeschrijvingText($bestellingen) {
+		$bestellingenInhoud = [];
+		foreach ($bestellingen as $item) {
+			$bestellingenInhoud[] = CiviBestellingInhoudModel::instance()->getBeschrijving($item);
+		}
+		return implode(", ", $bestellingenInhoud);
 	}
 
 	public function vanMaaltijdAanmelding(MaaltijdAanmelding $aanmelding) {
 		$bestelling = new CiviBestelling();
+		$bestelling->cie = 'maalcie';
 		$bestelling->uid = $aanmelding->uid;
 		$bestelling->deleted = false;
 		$bestelling->moment = getDateTime();
@@ -34,6 +68,7 @@ class CiviBestellingModel extends PersistenceModel {
 
 	public function vanInleg($bedrag, $uid) {
 		$bestelling = new CiviBestelling();
+		$bestelling->cie = 'anders';
 		$bestelling->uid = $uid;
 		$bestelling->deleted = false;
 		$bestelling->moment = getDateTime();

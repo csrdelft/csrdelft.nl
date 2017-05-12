@@ -13,12 +13,12 @@ require_once 'model/GroepenModel.abstract.php';
 
 /**
  * Profiel.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Profiel van een lid. Agendeerbaar vanwege verjaardag in agenda.
- * 
+ *
  */
 class Profiel extends PersistentEntity implements Agendeerbaar {
 
@@ -238,7 +238,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Geef een array met contactgegevens terug, als de velden niet leeg zijn.
-	 * 
+	 *
 	 * TODO: aparte tabellen voor multiple email, telefoon, etc...
 	 */
 	public function getContactgegevens() {
@@ -294,7 +294,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * een beetje vieze hack omdat Agendeerbaar een enkele activiteit
 	 * verwacht, terwijl een verjaardag een periodieke activiteit (elk
 	 * jaar) is.
-	 * 
+	 *
 	 * @return int timestamp
 	 */
 	public function getBeginMoment() {
@@ -420,7 +420,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Naam met verschillende weergave-mogelijkheden.
-	 * 
+	 *
 	 * @param string $vorm Zie switch()
 	 * @param bool $force Forceer een type ongeacht of de gebruiker ingelogd is
 	 * @return string
@@ -549,7 +549,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	/**
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
 	 * Geef anders een standaard-plaatje terug.
-	 * 	
+	 *
 	 * @param boolean $square Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 * @return string
 	 */
@@ -640,27 +640,18 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	/**
-	 * Vraag SocCie saldo aan SocCie systeem (staat gewoon in klant-tabel).
-	 * 
+	 * Vraag CiviSaldo aan CiviSaldosysteem (staat gewoon in CiviSaldo-tabel).
+	 *
 	 * @return float
 	 */
-	public function getSoccieSaldo() {
-		return Database::instance()->sqlSelect(array('saldo'), 'socCieKlanten', 'stekUID = ?', array($this->uid), null, null, 1)->fetchColumn() / (float) 100;
-	}
-
-	/**
-	 * Vraag MaalCie saldo aan MaalCie systeem (staat gewoon in lid-tabel).
-	 * 
-	 * @return float
-	 */
-	public function getMaalCieSaldo() {
+	public function getCiviSaldo() {
 		require_once 'model/fiscaat/CiviSaldoModel.class.php';
 		return CiviSaldoModel::instance()->getSaldo($this->uid)->saldo / (float) 100;
 	}
 
 	/**
 	 * Controleer of een lid al in de google-contacts-lijst staat.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function isInGoogleContacts() {

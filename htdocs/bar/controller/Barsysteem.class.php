@@ -45,32 +45,38 @@ class Barsysteem
     function getPersonen()
     {
         require_once 'model/entity/LidStatus.enum.php';
-        $terug = $this->db->query("SELECT socCieKlanten.stekUID, socCieKlanten.socCieId, socCieKlanten.naam, socCieKlanten.saldo, socCieKlanten.deleted, COUNT(socCieBestelling.totaal) AS recent FROM socCieKlanten LEFT JOIN socCieBestelling ON (socCieKlanten.socCieId = socCieBestelling.socCieId AND DATEDIFF(NOW(), tijd) < 100 AND socCieBestelling.deleted = 0) GROUP BY socCieKlanten.socCieId;");
+        $terug = $this->db->query(<<<SQL
+SELECT CiviSaldo.uid, CiviSaldo.naam, CiviSaldo.saldo, CiviSaldo.deleted, COUNT(CiviBestelling.totaal) AS recent 
+FROM CiviSaldo LEFT JOIN CiviBestelling 
+ON (CiviSaldo.id = CiviBestelling.uid AND DATEDIFF(NOW(), CiviBestelling.moment) < 100 AND CiviBestelling.deleted = 0)
+GROUP BY CiviSaldo.id;
+SQL
+);
         $result = array();
         foreach ($terug as $row) {
             $persoon = array();
             $persoon["naam"] = $row["naam"];
             $persoon["status"] = LidStatus::Nobody;
-            if ($row["stekUID"]) {
-                $profiel = ProfielModel::get($row["stekUID"]);
+            if ($row["uid"]) {
+                $profiel = ProfielModel::get($row["uid"]);
                 if ($profiel) {
                     $persoon["naam"] = $this->getNaam($profiel);
                     $persoon["status"] = $profiel->status;
                 }
             }
-            $persoon["socCieId"] = $row["socCieId"];
+            $persoon["socCieId"] = $row["uid"];
             $persoon["bijnaam"] = $row["naam"];
             $persoon["saldo"] = $row["saldo"];
             $persoon["recent"] = $row["recent"];
             $persoon["deleted"] = $row["deleted"];
-            $result[$row["socCieId"]] = $persoon;
+            $result[$row["uid"]] = $persoon;
         }
         return $result;
     }
 
     function getProducten()
     {
-        $q = $this->db->prepare("SELECT id, beheer, prijs, beschrijving, prioriteit, status FROM socCieProduct AS P JOIN socCiePrijs AS R ON (P.id=R.productId AND (CURRENT_TIMESTAMP BETWEEN van AND tot)) ORDER BY prioriteit DESC");
+        $q = $this->db->prepare("SELECT id, beheer, prijs, beschrijving, prioriteit, status FROM CiviProduct AS P JOIN CiviPrijs AS R ON (P.id=R.product_id AND CURRENT_TIMESTAMP > van AND tot IS NULL) ORDER BY prioriteit DESC");
         $q->execute();
 
         $result = array();
@@ -90,7 +96,7 @@ class Barsysteem
     function getGrootboeken()
     {
 
-        $q = $this->db->prepare("SELECT id, type FROM socCieGrootboekType");
+        $q = $this->db->prepare("SELECT id, type FROM CiviCategorie WHERE cie='soccie'");
         $q->execute();
         return $q->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -99,23 +105,23 @@ class Barsysteem
     {
         $this->db->beginTransaction();
 
-        $q = $this->db->prepare("INSERT INTO socCieBestelling (socCieId) VALUES (:socCieId);");
+        $q = $this->db->prepare("INSERT INTO CiviBestelling (uid, cie) VALUES (:socCieId, 'soccie');");
         $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
         $q->execute();
         $bestelId = $this->db->lastInsertId();
         foreach ($data->bestelLijst as $productId => $aantal) {
-            $q = $this->db->prepare("INSERT INTO socCieBestellingInhoud VALUES (:bestelId,  :productId, :aantal);");
+            $q = $this->db->prepare("INSERT INTO CiviBestellingInhoud VALUES (:bestelId,  :productId, :aantal);");
             $q->bindValue(":productId", $productId, PDO::PARAM_INT);
             $q->bindValue(":aantal", $aantal, PDO::PARAM_INT);
             $q->bindValue(":bestelId", $bestelId, PDO::PARAM_INT);
             $q->execute();
         }
         $totaal = $this->getBestellingTotaal($bestelId);
-        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo - :totaal WHERE socCieId=:socCieId ;");
+        $q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo - :totaal WHERE uid=:socCieId ;");
         $q->bindValue(":totaal", $totaal, PDO::PARAM_INT);
         $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
         $q->execute();
-        $q = $this->db->prepare("UPDATE socCieBestelling  SET totaal = :totaal WHERE id = :bestelId;");
+        $q = $this->db->prepare("UPDATE CiviBestelling  SET totaal = :totaal WHERE id = :bestelId;");
         $q->bindValue(":totaal", $totaal, PDO::PARAM_INT);
         $q->bindValue(":bestelId", $bestelId, PDO::PARAM_INT);
         $q->execute();
@@ -129,7 +135,7 @@ class Barsysteem
 
     function getBestellingPersoon($socCieId)
     {
-        $q = $this->db->prepare("SELECT *, B.deleted AS d, 0 AS oud FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId WHERE socCieId=:socCieId");
+        $q = $this->db->prepare("SELECT *, B.deleted AS d, 0 AS oud FROM CiviBestelling AS B JOIN CiviBestellingInhoud AS I ON B.id=I.bestelling_id WHERE uid=:socCieId AND B.cie = 'soccie'");
         $q->bindValue(":socCieId", $socCieId, PDO::PARAM_INT);
         $q->execute();
         return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC));
@@ -154,8 +160,8 @@ class Barsysteem
         }
         $qa = "";
         if ($persoon != "alles")
-            $qa = "B.socCieId=:socCieId AND";
-        $q = $this->db->prepare("SELECT *, B.deleted AS d, K.deleted AS oud FROM socCieBestelling AS B JOIN socCieBestellingInhoud AS I ON B.id=I.bestellingId JOIN socCieKlanten AS K ON B.socCieId = K.socCieId WHERE " . $qa . " (tijd BETWEEN :begin AND :eind)");
+            $qa = "B.uid=:socCieId AND";
+        $q = $this->db->prepare("SELECT *, B.deleted AS d, K.deleted AS oud FROM CiviBestelling AS B JOIN CiviBestellingInhoud AS I ON B.id=I.bestelling_id JOIN CiviSaldo AS K USING (uid) WHERE B.cie = 'soccie' AND $qa (moment BETWEEN :begin AND :eind)");
         if ($persoon != "alles")
             $q->bindValue(":socCieId", $persoon, PDO::PARAM_INT);
         $q->bindValue(":begin", $begin);
@@ -170,19 +176,19 @@ class Barsysteem
         $this->db->beginTransaction();
 
         // Add old order to saldo
-        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo + :bestelTotaal WHERE socCieId=:socCieId;");
+        $q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo + :bestelTotaal WHERE uid=:socCieId;");
         $q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
         $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
         $q->execute();
 
         // Remove old contents of the order
-        $q = $this->db->prepare("DELETE FROM socCieBestellingInhoud WHERE bestellingId = :bestelId");
+        $q = $this->db->prepare("DELETE FROM CiviBestellingInhoud WHERE bestelling_id = :bestelId");
         $q->bindValue(":bestelId", $data->oudeBestelling->bestelId, PDO::PARAM_INT);
         $q->execute();
 
         // Add contents of the order
         foreach ($data->bestelLijst as $productId => $aantal) {
-            $q = $this->db->prepare("INSERT INTO socCieBestellingInhoud VALUES (:bestelId, :productId, :aantal);");
+            $q = $this->db->prepare("INSERT INTO CiviBestellingInhoud VALUES (:bestelId, :productId, :aantal);");
             $q->bindValue(":productId", $productId, PDO::PARAM_INT);
             $q->bindValue(":bestelId", $data->oudeBestelling->bestelId, PDO::PARAM_INT);
             $q->bindValue(":aantal", $aantal, PDO::PARAM_INT);
@@ -190,13 +196,13 @@ class Barsysteem
         }
 
         // Substract new order from saldo
-        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo - :bestelTotaal WHERE socCieId=:socCieId;");
+        $q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo - :bestelTotaal WHERE uid=:socCieId;");
         $q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
         $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
         $q->execute();
 
         // Update old order
-        $q = $this->db->prepare("UPDATE socCieBestelling SET totaal = :totaal  WHERE id = :bestelId");
+        $q = $this->db->prepare("UPDATE CiviBestelling SET totaal = :totaal  WHERE cie='soccie' AND id = :bestelId");
         $q->bindValue(":totaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
         $q->bindValue(":bestelId", $data->oudeBestelling->bestelId, PDO::PARAM_INT);
         $q->execute();
@@ -211,7 +217,7 @@ class Barsysteem
 
     function getSaldo($socCieId)
     {
-        $q = $this->db->prepare("SELECT saldo FROM socCieKlanten WHERE socCieId = :socCieId");
+        $q = $this->db->prepare("SELECT saldo FROM CiviSaldo WHERE uid = :socCieId");
         $q->bindValue(":socCieId", $socCieId);
         $q->execute();
         return $q->fetchColumn();
@@ -220,11 +226,11 @@ class Barsysteem
     function verwijderBestelling($data)
     {
         $this->db->beginTransaction();
-        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo + :bestelTotaal WHERE socCieId=:socCieId;");
+        $q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo + :bestelTotaal WHERE uid=:socCieId;");
         $q->bindValue(":bestelTotaal", $data->bestelTotaal, PDO::PARAM_INT);
         $q->bindValue(":socCieId", $data->persoon, PDO::PARAM_INT);
         $q->execute();
-        $q = $this->db->prepare("UPDATE socCieBestelling SET deleted = 1 WHERE id = :bestelId AND deleted = 0");
+        $q = $this->db->prepare("UPDATE CiviBestelling SET deleted = 1 WHERE cie='soccie' AND id = :bestelId AND deleted = 0");
         $q->bindValue(":bestelId", $data->bestelId, PDO::PARAM_INT);
         $q->execute();
         if (!$this->db->commit() || $q->rowCount() == 0) {
@@ -237,11 +243,11 @@ class Barsysteem
     function undoVerwijderBestelling($data)
     {
         $this->db->beginTransaction();
-        $q = $this->db->prepare("UPDATE socCieKlanten SET saldo = saldo - :bestelTotaal WHERE socCieId=:socCieId;");
+        $q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo - :bestelTotaal WHERE uid=:socCieId;");
         $q->bindValue(":bestelTotaal", $data->bestelTotaal, PDO::PARAM_INT);
         $q->bindValue(":socCieId", $data->persoon, PDO::PARAM_INT);
         $q->execute();
-        $q = $this->db->prepare("UPDATE socCieBestelling SET deleted = 0 WHERE id = :bestelId AND deleted = 1");
+        $q = $this->db->prepare("UPDATE CiviBestelling SET deleted = 0 WHERE cie='soccie' AND id = :bestelId AND deleted = 1");
         $q->bindValue(":bestelId", $data->bestelId, PDO::PARAM_INT);
         $q->execute();
         if (!$this->db->commit() || $q->rowCount() == 0) {
@@ -255,17 +261,17 @@ class Barsysteem
     {
         $result = array();
         foreach ($queryResult as $row) {
-            if (!array_key_exists($row["bestellingId"], $result)) {
-                $result[$row["bestellingId"]] = array();
-                $result[$row["bestellingId"]]["bestelLijst"] = array();
-                $result[$row["bestellingId"]]["bestelTotaal"] = $row["totaal"];
-                $result[$row["bestellingId"]]["persoon"] = $row["socCieId"];
-                $result[$row["bestellingId"]]["tijd"] = $row["tijd"];
-                $result[$row["bestellingId"]]["bestelId"] = $row["id"];
-                $result[$row["bestellingId"]]["deleted"] = $row["d"];
-                $result[$row["bestellingId"]]["oud"] = $row["oud"];
+            if (!array_key_exists($row["bestelling_id"], $result)) {
+                $result[$row["bestelling_id"]] = array();
+                $result[$row["bestelling_id"]]["bestelLijst"] = array();
+                $result[$row["bestelling_id"]]["bestelTotaal"] = $row["totaal"];
+                $result[$row["bestelling_id"]]["persoon"] = $row["uid"];
+                $result[$row["bestelling_id"]]["tijd"] = $row["moment"];
+                $result[$row["bestelling_id"]]["bestelId"] = $row["bestelling_id"];
+                $result[$row["bestelling_id"]]["deleted"] = $row["d"];
+                $result[$row["bestelling_id"]]["oud"] = $row["oud"];
             }
-            $result[$row["bestellingId"]]["bestelLijst"][$row["productId"]] = 1 * $row["aantal"];
+            $result[$row["bestelling_id"]]["bestelLijst"][$row["product_id"]] = 1 * $row["aantal"];
         }
 
         if (!empty($productIDs)) {
@@ -288,7 +294,7 @@ class Barsysteem
 
     private function getBestellingTotaal($bestelId)
     {
-        $q = $this->db->prepare("SELECT SUM(prijs * aantal) FROM socCieBestellingInhoud AS I JOIN socCiePrijs AS P ON I . productId = P . productId WHERE bestellingId = :bestelId AND CURRENT_TIMESTAMP < tot AND CURRENT_TIMESTAMP > van");
+        $q = $this->db->prepare("SELECT SUM(prijs * aantal) FROM CiviBestellingInhoud AS I JOIN CiviPrijs AS P USING (product_id) WHERE bestelling_id = :bestelId AND tot IS NULL");
         $q->bindValue(":bestelId", $bestelId, PDO::PARAM_INT);
         $q->execute();
         return $q->fetchColumn();
@@ -296,7 +302,7 @@ class Barsysteem
 
     private function getBestellingTotaalTijd($bestelId, $timestamp)
     {
-        $q = $this->db->prepare("SELECT SUM(prijs * aantal) FROM socCieBestellingInhoud AS I JOIN socCiePrijs AS P ON I . productId = P . productId WHERE bestellingId = :bestelId AND :timeStamp < tot AND :timeStamp > van");
+        $q = $this->db->prepare("SELECT SUM(prijs * aantal) FROM CiviBestellingInhoud AS I JOIN CiviPrijs AS P USING (product_id) WHERE bestelling_id = :bestelId AND :timeStamp > van AND (:timeStamp < tot OR tot IS NULL)");
         $q->bindValue(":bestelId", $bestelId, PDO::PARAM_INT);
         $q->bindValue(":timeStamp", $timestamp, PDO::PARAM_STMT);
         $q->execute();
@@ -319,21 +325,22 @@ class Barsysteem
         $q = $this->db->prepare("
 SELECT G.type,
 	SUM(I.aantal * PR.prijs) AS total,
-	WEEK(B.tijd, 3) AS week,
-	YEARWEEK(B.tijd, 3) AS yearweek
-FROM socCieBestelling AS B
-JOIN socCieBestellingInhoud AS I ON
-	B.id = I.bestellingId
-JOIN socCieProduct AS P ON
-	I.productId = P.id
-JOIN socCiePrijs AS PR ON
-	P.id = PR.productId
-	AND (B.tijd BETWEEN PR.van AND PR.tot)
-JOIN socCieGrootboekType AS G ON
-	P.grootboekId = G.id
+	WEEK(B.moment, 3) AS week,
+	YEARWEEK(B.moment, 3) AS yearweek
+FROM CiviBestelling AS B
+JOIN CiviBestellingInhoud AS I ON
+	B.id = I.bestelling_id
+JOIN CiviProduct AS P ON
+	I.product_id = P.id
+JOIN CiviPrijs AS PR ON
+	P.id = PR.product_id
+	AND (B.moment > PR.van AND (B.moment < PR.tot OR PR.tot IS NULL))
+JOIN CiviCategorie AS G ON
+	P.categorie_id = G.id
 WHERE
 	B.deleted = 0 AND
-	G.status = 1
+	G.status = 1 AND 
+	B.cie = 'soccie'
 GROUP BY
 	yearweek,
 	G.id
@@ -377,9 +384,9 @@ ORDER BY yearweek DESC
     private function sumSaldi($profielOnly = false)
     {
 
-        $after = $profielOnly ? "AND stekUID IS NOT NULL" : "";
+        $after = $profielOnly ? "AND uid NOT LIKE 'c%'" : "";
 
-        return $this->db->query("SELECT SUM(saldo) AS sum FROM socCieKlanten WHERE deleted = 0 " . $after)->fetch(PDO::FETCH_ASSOC);
+        return $this->db->query("SELECT SUM(saldo) AS sum FROM CiviSaldo WHERE deleted = 0 " . $after)->fetch(PDO::FETCH_ASSOC);
     }
 
     private function getRed()
@@ -387,14 +394,14 @@ ORDER BY yearweek DESC
 
         $result = array();
 
-        $q = $this->db->query("SELECT stekUID, saldo FROM socCieKlanten WHERE deleted = 0 AND saldo < 0 AND stekUID IS NOT NULL ORDER BY saldo");
+        $q = $this->db->query("SELECT uid, saldo FROM CiviSaldo WHERE deleted = 0 AND saldo < 0 AND uid NOT LIKE 'c%' ORDER BY saldo");
         while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
 
             $result[] = array(
-                'naam' => $this->getNaam(ProfielModel::get($r['stekUID'])),
-                'email' => ProfielModel::get($r['stekUID'])->getPrimaryEmail(),
+                'naam' => $this->getNaam(ProfielModel::get($r['uid'])),
+                'email' => ProfielModel::get($r['uid'])->getPrimaryEmail(),
                 'saldo' => $r['saldo'],
-                'status' => ProfielModel::get($r['stekUID'])->status
+                'status' => ProfielModel::get($r['uid'])->status
             );
         }
 
@@ -409,12 +416,12 @@ ORDER BY yearweek DESC
 
         $this->db->beginTransaction();
 
-        $q = $this->db->prepare("INSERT INTO socCieProduct(status, beschrijving, prioriteit, grootboekId, beheer) VALUES(1, :name, -5000, :type, 0)");
+        $q = $this->db->prepare("INSERT INTO CiviProduct(status, beschrijving, prioriteit, categorie_id, beheer) VALUES(1, :name, -5000, :type, 0)");
         $q->bindValue(':name', $name);
         $q->bindValue(':type', $type);
         $q->execute();
 
-        $q = $this->db->prepare("INSERT INTO socCiePrijs(productId, prijs) VALUES(:productId, :price)");
+        $q = $this->db->prepare("INSERT INTO CiviPrijs(product_id, prijs) VALUES(:productId, :price)");
         $q->bindValue(':productId', $this->db->lastInsertId());
         $q->bindValue(':price', $price);
         $q->execute();
@@ -430,7 +437,7 @@ ORDER BY yearweek DESC
     public function updatePerson($id, $name)
     {
 
-        $q = $this->db->prepare("UPDATE socCieKlanten SET naam = :naam WHERE socCieId = :id");
+        $q = $this->db->prepare("UPDATE CiviSaldo SET naam = :naam WHERE uid = :id");
         $q->bindValue(':id', $id, PDO::PARAM_INT);
         $q->bindValue(':naam', $name, PDO::PARAM_STR);
         return $q->execute();
@@ -439,7 +446,7 @@ ORDER BY yearweek DESC
     public function removePerson($id)
     {
 
-        $q = $this->db->prepare("UPDATE socCieKlanten SET deleted = 1 WHERE socCieId = :id AND saldo = 0");
+        $q = $this->db->prepare("UPDATE CiviSaldo SET deleted = 1 WHERE uid = :id AND saldo = 0");
         $q->bindValue(':id', $id, PDO::PARAM_INT);
         $q->execute();
         return $q->rowCount();
@@ -448,13 +455,15 @@ ORDER BY yearweek DESC
     public function addPerson($name, $saldo, $uid)
     {
 
-        $q = $this->db->prepare("INSERT INTO socCieKlanten (naam, saldo, stekUID) VALUES (:naam, :saldo, :stekUID)");
+        $q = $this->db->prepare("INSERT INTO CiviSaldo (naam, saldo, uid) VALUES (:naam, :saldo, :uid)");
         $q->bindValue(':naam', $name, PDO::PARAM_STR);
         $q->bindValue(':saldo', $saldo, PDO::PARAM_STR);
-        if (!empty($uid))
-            $q->bindValue(':stekUID', $uid, PDO::PARAM_STR);
-        else
-            $q->bindValue(':stekUID', null, PDO::PARAM_INT);
+        if (!empty($uid)) {
+					$q->bindValue(':uid', $uid, PDO::PARAM_STR);
+				} else {
+        	$latest = $this->db->query("SELECT uid FROM CiviSaldo WHERE uid LIKE 'c%' ORDER BY uid DESC LIMIT 1")->fetchColumn();
+        	$q->bindValue(':uid', ++$latest, PDO::PARAM_INT);
+				}
 
         return $q->execute();
     }
@@ -464,11 +473,11 @@ ORDER BY yearweek DESC
 
         $this->db->beginTransaction();
 
-        $q = $this->db->prepare("UPDATE socCiePrijs SET tot = CURRENT_TIMESTAMP WHERE productId = :productId ORDER BY tot DESC LIMIT 1");
+        $q = $this->db->prepare("UPDATE CiviPrijs SET tot = CURRENT_TIMESTAMP WHERE product_id = :productId AND tot IS NULL ORDER BY van DESC LIMIT 1");
         $q->bindValue(':productId', $productId);
         $q->execute();
 
-        $q = $this->db->prepare("INSERT INTO socCiePrijs (productId, prijs) VALUES (:productId, :prijs)");
+        $q = $this->db->prepare("INSERT INTO CiviPrijs (product_id, prijs) VALUES (:productId, :prijs)");
         $q->bindValue(':productId', $productId);
         $q->bindValue(':prijs', $price);
         $q->execute();
@@ -486,7 +495,7 @@ ORDER BY yearweek DESC
 
         $this->db->beginTransaction();
 
-        $q = $this->db->prepare("UPDATE socCieProduct SET status = :visibility WHERE id = :productId");
+        $q = $this->db->prepare("UPDATE CiviProduct SET status = :visibility WHERE id = :productId");
         $q->bindValue(':productId', $productId);
         $q->bindValue(':visibility', $visibility);
         $q->execute();
@@ -509,10 +518,10 @@ ORDER BY yearweek DESC
         }
         $value = implode("\r\n", $value);
 
-        $q = $this->db->prepare("INSERT INTO socCieLog (ip, type, value) VALUES(:ip, :type, :value)");
+        $q = $this->db->prepare("INSERT INTO CiviLog (ip, type, data) VALUES(:ip, :type, :data)");
         $q->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
         $q->bindValue(':type', $type, PDO::PARAM_STR);
-        $q->bindValue(':value', $value, PDO::PARAM_STR);
+        $q->bindValue(':data', $value, PDO::PARAM_STR);
         $q->execute();
     }
 
