@@ -181,7 +181,9 @@ abstract class CompressedLayout extends HtmlPage {
 			}
 			if (LidInstellingen::get('layout', 'fx') == 'onontdekt') {
                 $modules[] = 'fxonontdekt';
-            }
+            } elseif (LidInstellingen::get('layout', 'fx') == 'civisaldo') {
+				$modules[] = 'fxcivisaldo';
+			}
 
 			return $modules;
 		} else {

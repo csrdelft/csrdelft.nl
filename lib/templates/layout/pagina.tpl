@@ -33,6 +33,8 @@
 		<div id="cd-main-overlay">
 			{if LidInstellingen::get('layout', 'fx') == 'onontdekt'}
 				{include file='layout/fx-onontdekt.tpl'}
+			{elseif LidInstellingen::get('layout', 'fx') == 'civisaldo'}
+				{include file='layout/fx-civisaldo.tpl'}
 			{/if}
 		</div>
 		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
