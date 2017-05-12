@@ -16,7 +16,7 @@ class CiviSaldoCommissieEnum implements PersistentEnum {
 	const ANDERS = 'anders';
 
 	public static function getTypeOptions() {
-		return array(self::SOCCIE, self::MAALCIE, self::ANDERS);
+		return array(self::ANDERS, self::SOCCIE, self::MAALCIE);
 	}
 
 	public static function getDescription($option) {

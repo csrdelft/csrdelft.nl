@@ -14,6 +14,9 @@ class SocCieMaalCieMigratie extends AbstractMigration {
 		$this->table('CiviBestelling')
 			->addColumn('cie', 'enum', ['values' => ['anders', 'soccie', 'maalcie']])
 			->save();
+		$this->table('CiviCategorie')
+			->changeColumn('cie', 'enum', ['values' => ['anders', 'soccie', 'maalcie']])
+			->save();
 		$this->execute('ALTER TABLE `CiviBestelling` CHANGE `moment` `moment` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;');
 
 		$prijzen = $this->fetchAll("SELECT van, tot, productId, prijs FROM socCiePrijs;");
