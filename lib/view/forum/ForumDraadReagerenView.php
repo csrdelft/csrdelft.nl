@@ -1,11 +1,6 @@
 <?php
-/**
- * The ${NAME} file.
- */
 
 namespace CsrDelft\view\forum;
-
-use CsrDelft\view\ForumView;
 
 class ForumDraadReagerenView extends ForumView
 {

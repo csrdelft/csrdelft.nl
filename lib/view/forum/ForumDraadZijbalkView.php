@@ -9,7 +9,6 @@
 namespace CsrDelft\view\forum;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\ForumView;
 
 /**
  * Requires ForumDraad[]

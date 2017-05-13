@@ -14,8 +14,6 @@ use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumDradenReagerenModel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\forum\ForumPostsModel;
-use CsrDelft\view\ForumView;
-use CsrDelft\view\ForumZoekenForm;
 
 class ForumDraadView extends ForumView {
 
