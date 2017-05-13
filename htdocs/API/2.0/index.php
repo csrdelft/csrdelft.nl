@@ -6,7 +6,7 @@ use CsrDelft\controller\api\ApiAuthController;
 use CsrDelft\controller\api\ApiForumController;
 use CsrDelft\controller\api\ApiLedenController;
 use CsrDelft\controller\api\ApiMaaltijdenController;
-use \Jacwright\RestServer\RestServer;
+use Jacwright\RestServer\RestServer;
 
 require_once 'configuratie.include.php';
 

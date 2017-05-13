@@ -36,7 +36,7 @@ use function CsrDelft\setMelding;
 
 
 /**
- * ForumController.class.php
+ * ApiForumController.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
