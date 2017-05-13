@@ -2,10 +2,12 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\groepen\KetzersModel;
 
 class KetzerSoortField extends GroepSoortField
 {
@@ -24,7 +26,7 @@ class KetzerSoortField extends GroepSoortField
         foreach ($this->activiteit->getOptions() as $soort => $label) {
             $this->options['ActiviteitenModel_' . $soort] = $label;
         }
-        $this->options['KetzersModel'] = 'Aanschafketzer';
+        $this->options[KetzersModel::class] = 'Aanschafketzer';
         //$this->options['WerkgroepenModel'] = WerkgroepenModel::ORM;
         //$this->options['RechtenGroepenModel'] = 'Groep (overig)';
     }
@@ -37,7 +39,7 @@ class KetzerSoortField extends GroepSoortField
     {
         $class = explode('_', $this->value, 2);
         $soort = null;
-        switch ($class[0]) {
+        switch (classNameZonderNamespace($class[0])) {
 
             case 'ActiviteitenModel':
                 $soort = $class[1];
