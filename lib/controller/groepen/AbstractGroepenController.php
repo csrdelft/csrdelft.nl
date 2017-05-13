@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\controller\groepen;
 
+use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\AbstractGroepLedenModel;
@@ -252,7 +253,7 @@ abstract class AbstractGroepenController extends Controller {
 				$result[$groep->familie] = array(
 					'url'	 => $groep->getUrl() . '#' . $groep->id,
 					'label'	 => 'Groepen',
-					'value'	 => get_class($groep) . ':' . $groep->familie
+					'value'	 => classNameZonderNamespace(get_class($groep)) . ':' . $groep->familie
 				);
 			}
 		}

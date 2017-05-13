@@ -189,7 +189,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 			if (!isset(self::$old)) {
 				self::$old = DynamicEntityModel::makeModel('groep');
 			}
-			$omnummering = self::$old->find('omnummering = ? AND model = ?', array($oldgroep->id, get_class($oldmodel)), null, null, 1)->fetch();
+			$omnummering = self::$old->find('omnummering = ? AND model = ?', array($oldgroep->id, classNameZonderNamespace(get_class($oldmodel))), null, null, 1)->fetch();
 			if ($omnummering) {
 				$omnummering->omnummering = $newgroep->id;
 				$omnummering->model = get_class($this);
