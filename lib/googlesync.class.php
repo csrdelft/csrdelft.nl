@@ -72,9 +72,9 @@ class GoogleSync {
         $client->setClientSecret(GOOGLE_CLIENT_SECRET);
         $client->setRedirectUri($redirect_uri);
         $client->setAccessType('offline');
-        $client->setScopes('https://www.google.com/m8/feeds');
+        $client->setScopes(['https://www.google.com/m8/feeds']);
         if (!isset($_SESSION['google_access_token'])) {
-			$_SESSION['google_access_token'] = $client->authenticate($_SESSION['google_token']);
+			$_SESSION['google_access_token'] = $client->fetchAccessTokenWithAuthCode($_SESSION['google_token']);
         }
 
         $client->setAccessToken($_SESSION['google_access_token']);
@@ -103,7 +103,7 @@ class GoogleSync {
 	 */
 	private function loadGroupFeed() {
 	    $httpClient = $this->client->authorize();
-		$response = $httpClient->get(GOOGLE_GROUPS_URL);
+		$response = $httpClient->request('GET', GOOGLE_GROUPS_URL);
 		if ($response->getStatusCode() === 401) {
 			throw new Exception();
 		}
@@ -116,7 +116,7 @@ class GoogleSync {
 	private function loadContactsForGroup($groupId) {
 		// Default max-results is 25, laad alles in 1 keer
         $httpClient = $this->client->authorize();
-        $response = $httpClient->get(GOOGLE_CONTACTS_URL . '&max-results=1000&group=' . urlencode($groupId));
+        $response = $httpClient->request('GET', GOOGLE_CONTACTS_URL . '&max-results=1000&group=' . urlencode($groupId));
 		if ($response->getStatusCode() === 401) {
 			throw new Exception();
 		}
@@ -296,7 +296,7 @@ class GoogleSync {
 		$entry->appendChild($title);
 
         $httpClient = $this->client->authorize();
-        $response = $httpClient->post(GOOGLE_GROUPS_URL, [
+        $response = $httpClient->request('POST', GOOGLE_GROUPS_URL, [
             'headers' => ['Content-Type' => 'application/atom+xml'],
             'body' => $doc->saveXML()
         ]);
@@ -318,7 +318,8 @@ class GoogleSync {
 		//kan veel tijd kosten, dus time_limit naar 0 zodat het oneindig door kan gaan.
 		set_time_limit(0);
 
-		$profielBatch = array();
+		/** @var Profiel[] $profielBatch */
+		$profielBatch = [];
 		foreach ($leden as $profiel) {
 			if ($profiel instanceof Profiel) {
 				$profielBatch[] = $profiel;
@@ -375,7 +376,7 @@ class GoogleSync {
 			}
 
 			$httpClient = $this->client->authorize();
-            $response = $httpClient->post(GOOGLE_CONTACTS_BATCH_URL, [
+            $response = $httpClient->request('POST', GOOGLE_CONTACTS_BATCH_URL, [
                 'headers' => [
                     'Content-Type' => 'application/atom+xml',
                     'GData-Version' => '3.0'],
@@ -421,7 +422,7 @@ class GoogleSync {
 		if ($googleid != null) {
 			try {
 				//post to original entry's link[rel=self], set ETag in HTTP-headers for versioning
-                $response = $httpClient->put($googleid['self'], [
+                $response = $httpClient->request('PUT', $googleid['self'], [
                     'headers' => [
                         'GData-Version' => '3.0',
                         'Content-Type' => 'application/atom+xml',
@@ -439,7 +440,7 @@ class GoogleSync {
 			}
 		} else {
 			try {
-			    $response = $httpClient->post(GOOGLE_CONTACTS_URL, [
+			    $response = $httpClient->request('POST', GOOGLE_CONTACTS_URL, [
 			        'headers' => [
 			            'Content-Type' => 'application/atom+xml'
                     ],
@@ -458,7 +459,7 @@ class GoogleSync {
 
 	/**
 	 * Haal de link naar de contact foto uit een contact xml-string en post de foto van $profiel er naar toe.
-	 * @param $contact string
+	 * @param $contact array
 	 * @param $profiel Profiel
 	 */
 	private function updatePhoto($contact, $profiel) {
@@ -475,11 +476,10 @@ class GoogleSync {
 
 		$httpClient = $this->client->authorize();
 
-        $httpClient->put($url, [
+        $httpClient->request('PUT', $url, [
             'headers' => $headers,
             'body' => file_get_contents($path)
         ]);
-
 	}
 
 	/**
@@ -698,9 +698,9 @@ class GoogleSync {
             $client->setClientSecret(GOOGLE_CLIENT_SECRET);
             $client->setRedirectUri($redirect_uri);
             $client->setAccessType('offline');
-            $client->setScopes('https://www.google.com/m8/feeds');
+            $client->setScopes(['https://www.google.com/m8/feeds']);
             $client->setState(urlencode($state));
-            
+
             $googleImportUrl = $client->createAuthUrl();
             header("HTTP/1.0 307 Temporary Redirect");
 			header("Location: $googleImportUrl");
