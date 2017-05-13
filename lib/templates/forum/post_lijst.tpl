@@ -28,9 +28,11 @@
 				{$post->datum_tijd}
 			{/if}
 		</span>
-		{if $post->uid !== 'x999' AND CsrDelft\model\security\LoginModel::mag('P_LEDEN_READ')}
+		{toegang P_LEDEN_READ}
+		{if $post->uid !== 'x999'}
 			<div id="p{$post->post_id}" class="forumpasfoto{if CsrDelft\model\LidInstellingenModel::get('forum', 'toonpasfotos') == 'nee'} verborgen{/if}">{CsrDelft\model\ProfielModel::getLink($post->uid, 'pasfoto')}</div>
 		{/if}
+		{/toegang}
 		<br />
 		{if isset($statistiek)}
 			<span class="lichtgrijs small" title="Gelezen door {$post->getAantalGelezen()} van de {$draad->getAantalLezers()} lezers">{$post->getGelezenPercentage()|string_format:"%.0f"}% gelezen</span>
@@ -56,10 +58,10 @@
 				{if $post->magBewerken()}
 					<a href="#{$post->post_id}" class="{if $post->uid !== CsrDelft\model\security\LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop{/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
 				{/if}
-				{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
+				{toegang P_LOGGED_IN}
 					{assign var=timestamp value=strtotime($post->datum_tijd)}
 					<a id="timestamp{$timestamp}" href="/forum/bladwijzer/{$post->draad_id}" class="btn post forummodknop bladwijzer" data="timestamp={$timestamp}" title="Bladwijzer bij dit bericht leggen">{icon get="tab"}</a>
-				{/if}
+				{/toegang}
 				{if $post->getForumDraad()->magModereren()}
 					<a href="/forum/offtopic/{$post->post_id}" class="btn post confirm{if !$post->wacht_goedkeuring} forummodknop{/if}" title="Offtopic markeren">{icon get="thumb_down"}</a>
 					{if !$post->verwijderd}

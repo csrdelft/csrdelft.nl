@@ -9,14 +9,14 @@
 	{/if}
 	<span class="lichtgrijs">{$item->volgorde}</span>
 	<a href="/menubeheer/bewerken/{$item->item_id}" class="btn post popup" title="Dit menu-item bewerken">{icon get="bewerken"}</a>
-	{if CsrDelft\model\security\LoginModel::mag('P_ADMIN')}
+	{toegang P_ADMIN}
 		<a href="/menubeheer/toevoegen/{$item->item_id}" class="btn post popup" title="Sub-menu-item toevoegen">{icon get="add"}</a>
-	{/if}
+	{/toegang}
 	<a href="/menubeheer/zichtbaar/{$item->item_id}" class="btn post ReloadPage" title="Menu-item is nu {if !$item->zichtbaar}on{/if}zichtbaar">{if $item->zichtbaar}{icon get="eye"}{else}{icon get="shading"}{/if}</a>
 	<span>{$item->tekst}</span>
-	{if CsrDelft\model\security\LoginModel::mag('P_ADMIN')}
+	{toegang P_ADMIN}
 		<span class="lichtgrijs">{$item->item_id}</span>
-	{/if}
+	{/toegang}
 	<div class="float-right">
 		{if $item->rechten_bekijken !== 'P_PUBLIC' and $item->rechten_bekijken != CsrDelft\model\security\LoginModel::getUid()}
 			&nbsp;{icon get="group_key" title="Rechten bekijken:&#013;"|cat:$item->rechten_bekijken}&nbsp;

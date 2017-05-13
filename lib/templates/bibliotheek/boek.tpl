@@ -1,4 +1,4 @@
-{* 
+{*
  *	Boek weergeven
  *}
 
@@ -10,11 +10,11 @@
 	<li>
 		<a href="/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
 	</li>
-	{if CsrDelft\model\security\LoginModel::mag('P_BIEB_READ')}
+	{toegang P_BIEB_READ}
 		<li>
 			<a href="/bibliotheek/rubrieken" title="Rubriekenoverzicht">Rubrieken</a>
 		</li>
-	{/if}
+	{/toegang}
 </ul>
 
 {if $boek->magBekijken()}
@@ -52,7 +52,7 @@
 	<div class="boek" id="{$boek->getId()}">
 
 		{if $boek->isEigenaar()}
-			
+
 			<div class="blok header boekgegevens">
 				{$boek->ajaxformuliervelden->findByName('titel')->view()}
 			</div>
@@ -217,7 +217,7 @@
 							<span class="recensist">{ProfielModel::getLink($beschrijving.schrijver_uid, 'civitas')}</span><br />
 							<span class="moment">{$beschrijving.toegevoegd|reldate}</span><br />
 
-						{* knopjes bij elke post *}	
+						{* knopjes bij elke post *}
 							{if $boek->magBeschrijvingVerwijderen($beschrijving.id)}
 								{knop url="/bibliotheek/bewerkbeschrijving/`$boek->getId()`/`$beschrijving.id`#Beschrijvingsformulier" type=bewerken}
 								{knop url="/bibliotheek/verwijderbeschrijving/`$boek->getId()`/`$beschrijving.id`" type=verwijderen confirm='Weet u zeker dat u deze beschrijving wilt verwijderen?'}

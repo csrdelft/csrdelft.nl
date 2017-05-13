@@ -1,7 +1,7 @@
 {* maaltijd_ketzer.tpl	|	P.W.G. Brussee (brussee@live.nl) *}
 {strip}
 	<div class="bb-block bb-maaltijd maaltijdketzer-{$maaltijd->maaltijd_id}">
-		{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
+		{toegang P_LOGGED_IN}
 			<div class="aanmelddata maaltijd-{if $aanmelding}aan{else}af{/if}gemeld">Aangemeld:<br />
 
 				{if !$maaltijd->gesloten && CsrDelft\model\security\LoginModel::mag('P_MAAL_IK')}
@@ -42,7 +42,7 @@
 				{/if}
 
 			</div>
-		{/if}
+		{/toegang}
 		<div class="maaltijdgegevens">
 			<div class="titel">
 				<a href="/maaltijdenketzer">{$maaltijd->titel}</a>

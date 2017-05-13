@@ -1,9 +1,10 @@
 <h1>Mededeling {if $mededeling->id==0}toevoegen{else}bewerken{/if}</h1>
 <form action="{MededelingenView::mededelingenRoot}bewerken/{$mededeling->id}" method="post" enctype="multipart/form-data">
 	{CsrDelft\getMelding()}
-	{if !CsrDelft\model\security\LoginModel::mag('P_NEWS_MOD')}
+	{toegang P_NEWS_MOD}
+	{geentoegang}
 		Hier kunt u een mededeling toevoegen. Het zal echter niet direct zichtbaar worden, maar &eacute;&eacute;rst door de PubCie worden goedgekeurd.<br /><br />
-	{/if} 
+	{/toegang}
 	<label>Titel:</label>
 	<input type="text" name="titel" value="{$mededeling->titel|escape:'html'}" class="titel" /><br />
 	<label>Tekst:</label>
@@ -43,7 +44,7 @@
 			<input id="vervaltijd" type="text" name="vervaltijd" value="{if $mededeling->vervaltijd!==null}{$mededeling->vervaltijd|date_format:$datumtijdFormaat}{else}{$standaardVervaltijd}" disabled="disabled{/if}" />
 		</div><br />
 		{if CsrDelft\model\mededelingen\MededelingenModel::isModerator() AND $mededeling->zichtbaarheid!='wacht_goedkeuring'}
-			<label for="verborgen">Verbergen <a title="Verborgen mededelingen zijn alleen voor moderators zichtbaar.">{icon get="vraagteken"}</a></label> 
+			<label for="verborgen">Verbergen <a title="Verborgen mededelingen zijn alleen voor moderators zichtbaar.">{icon get="vraagteken"}</a></label>
 			<input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->verborgen} checked="checked"{/if} />
 		{/if}
 	</div>

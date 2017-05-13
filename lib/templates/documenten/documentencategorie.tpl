@@ -1,9 +1,9 @@
 {* Toon een overzicht van documenten in een bepaalde categorie *}
 
 <div id="controls">
-	{if CsrDelft\model\security\LoginModel::mag('P_DOCS_MOD')}
+	{toegang P_DOCS_MOD}
 		<a class="btn" href="/documenten/toevoegen/?catID={$categorie->getID()}">{icon get="toevoegen"} Toevoegen</a>
-	{/if}
+	{/toegang}
 </div>
 
 {CsrDelft\getMelding()}

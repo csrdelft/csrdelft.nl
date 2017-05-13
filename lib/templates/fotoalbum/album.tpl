@@ -365,7 +365,7 @@
 							item.parent().addClass('disabled');
 						}
 					};
-		{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
+		{toegang P_LOGGED_IN}
 
 					// knopje downloaden
 					var btnDown = $('<a id="btnDown" tabindex="-1"><span class="fa fa-download"></span> &nbsp; Downloaden</a>');
@@ -374,8 +374,8 @@
 						window.location.href = '/fotoalbum/download' + url;
 					});
 					addCMI(btnDown);
-		{/if}
-		{if CsrDelft\model\security\LoginModel::mag('P_LEDEN_READ')}
+		{/toegang}
+		{toegang P_LEDEN_READ}
 
 					// knopje taggen
 					var btnTag = $('<a id="btnTag" tabindex="-1"><span class="fa fa-smile-o"></span> &nbsp; Leden etiketteren</a>');
@@ -383,7 +383,7 @@
 						container.find('span.fa-smile-o.jgallery-btn').click();
 					});
 					addCMI(btnTag);
-		{/if}
+		{/toegang}
 
 					// knopje full screen
 					var btnFS = $('<a id="btnFS" tabindex="-1"><span class="fa"></span> &nbsp; Volledig scherm</a>');
@@ -570,12 +570,12 @@
 						if (zoom.attr('data-size') !== 'fit') {
 							showFullRes();
 						}
-		{if CsrDelft\model\security\LoginModel::mag('P_LEDEN_READ')}
+		{toegang P_LEDEN_READ}
 						if (tagMode) {
 							duringTagMode();
 						}
 						loadTags();
-		{/if}
+		{/toegang}
 					}
 				});
 				container = $('div.jgallery');
@@ -657,7 +657,7 @@
 				});
 
 				// toggle tag mode
-		{if CsrDelft\model\security\LoginModel::mag('P_LEDEN_READ')}
+		{toegang P_LEDEN_READ}
 
 				// knopje taggen
 				var btnTag = $('<span class="fa fa-smile-o jgallery-btn jgallery-btn-small" tooltip="Leden etiketteren"></span>');
@@ -694,7 +694,7 @@
 					$(this).removeClass('fa-toggle-on').removeClass('fa-toggle-off').addClass('fa-smile-o');
 				});
 				btnTag.appendTo(container.find('div.icons'));
-		{/if}
+		{/toegang}
 				// mode change album selector to last position
 				container.find('div.icons .jgallery-btn.change-album').appendTo(container.find('div.icons'));
 			});
@@ -723,22 +723,24 @@
 	</script>
 {/if}
 <div class="float-right" style="margin-top: 30px;">
-	{if CsrDelft\model\security\LoginModel::mag('P_ALBUM_ADD')}
+	{toegang P_ALBUM_ADD}
 		<a class="btn" href="/fotoalbum/uploaden/{$album->subdir}">{icon get="picture_add"} Toevoegen</a>
 		<a class="btn post popup" href="/fotoalbum/toevoegen/{$album->subdir}">{icon get="folder_add"} Nieuw album</a>
-	{/if}
+	{/toegang}
 	{if CsrDelft\model\security\LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
 		<a href="/fotoalbum/hernoemen/{$album->subdir}" class="btn post prompt redirect" title="Fotoalbum hernoemen" data="Nieuwe naam={$album->dirname|ucfirst}">{icon get=pencil} Naam wijzigen</a>
 		{if $album->isEmpty()}
 			<a href="/fotoalbum/verwijderen/{$album->subdir}" class="btn post confirm redirect" title="Fotoalbum verwijderen">{icon get=cross} Verwijderen</a>
 		{/if}
-		{if CsrDelft\model\security\LoginModel::mag('P_ALBUM_MOD')}
+		{toegang P_ALBUM_MOD}
 			<a class="btn popup confirm" href="/fotoalbum/verwerken/{$album->subdir}" title="Fotoalbum verwerken (dit kan even duren). Verwijder magick-* files in /tmp handmatig bij timeout!">{icon get="application_view_gallery"} Verwerken</a>
-		{/if}
+		{/toegang}
 	{/if}
-	{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN') AND $album->hasFotos()}
+	{toegang P_LOGGED_IN}
+	{if $album->hasFotos()}
 		<a class="btn" href="/fotoalbum/downloaden/{$album->subdir}" title="Download als TAR-bestand">{icon get="picture_save"} Download album</a>
 	{/if}
+	{/toegang}
 </div>
 <h1 class="inline">{$album->dirname|ucfirst}</h1>
 {if $album->hasFotos()}

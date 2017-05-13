@@ -6,7 +6,7 @@
 		<li><a href="/corvee/rooster">Corveerooster</a></li>
 		<li><a href="/corvee">Mijn corveeoverzicht</a></li>
 		<li><a href="/corvee/voorkeuren">Mijn voorkeuren</a></li>
-{if CsrDelft\model\security\LoginModel::mag('P_MAAL_MOD,P_CORVEE_MOD')}
+{toegang 'P_MAAL_MOD,P_CORVEE_MOD'}
 		<li>
 			<select onchange="window.location.href = this.value;">
 				<option value="">Beheermenu</option>
@@ -34,7 +34,7 @@
 				</optgroup>
 			</select>
 		</li>
-{/if}
+{/toegang}
 	</ul>
 </div>
 <hr/>

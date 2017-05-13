@@ -26,9 +26,9 @@
 					{/if}
 				<td id="dag-{$dag.datum|date_format:"%Y-%m-%d"}" class="dag {if strftime('%m', $dag.datum) != strftime('%m', $datum)}anderemaand{/if}{if date('d-m', $dag.datum)==date('d-m')} vandaag{/if}">
 					<div class="meta">
-						{if CsrDelft\model\security\LoginModel::mag('P_AGENDA_ADD')}
+						{toegang P_AGENDA_ADD}
 							<a href="/agenda/toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}" class="beheren post popup" title="Agenda-item toevoegen">{icon get="add"}</a>
-						{/if}
+						{/toegang}
 						{$dagnr}
 					</div>
 					<ul id="items-{$dag.datum|date_format:"%Y-%m-%d"}" class="items">
