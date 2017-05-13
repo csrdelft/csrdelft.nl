@@ -46,7 +46,7 @@ class BeheerCiviSaldoController extends AclController {
 	}
 
 	public function POST_overzicht() {
-		$this->view = new BeheerSaldoResponse($this->model->find());
+		$this->view = new BeheerSaldoResponse($this->model->find('deleted = false'));
 	}
 
 	public function POST_inleggen() {
@@ -109,7 +109,11 @@ class BeheerCiviSaldoController extends AclController {
 		if ($form->validate()) {
 			$saldo = $form->getModel();
 			$saldo->laatst_veranderd = date_create()->format(DATE_ISO8601);
-			$this->model->create($saldo);
+			if ($this->model->find('uid = ?', [$saldo->uid])->rowCount() === 1) {
+			    $this->model->update($saldo);
+            } else {
+                $this->model->create($saldo);
+            }
 			$this->view = new BeheerSaldoResponse(array($saldo));
 			return;
 		}
