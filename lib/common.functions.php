@@ -58,7 +58,7 @@ function not_empty($value) {
 
 /**
  * Case insensitive in_array
- * 
+ *
  * @source http://stackoverflow.com/a/2166524
  * @param string $needle
  * @param array $haystack
@@ -70,7 +70,7 @@ function in_array_i($needle, array $haystack) {
 
 /**
  * Group by object property
- * 
+ *
  * @param string $prop
  * @param array $in
  * @param boolean $del delete from $in array
@@ -110,7 +110,7 @@ function group_by_distinct($prop, $in, $del = true) {
 
 /**
  * Set cookie with url to go back to after login.
- * 
+ *
  * @param string $url
  */
 function setGoBackCookie($url) {
@@ -124,7 +124,7 @@ function setGoBackCookie($url) {
 
 /**
  * Set cookie with token to automatically login.
- * 
+ *
  * @param string $token
  */
 function setRememberCookie($token) {
@@ -136,6 +136,9 @@ function setRememberCookie($token) {
 	}
 }
 
+/**
+ * @return int
+ */
 function getSessionMaxLifeTime() {
 	$lifetime = (int) InstellingenModel::get('beveiliging', 'session_lifetime_seconds');
 	// Sync lifetime of FS based PHP session with DB based C.S.R. session
@@ -148,7 +151,7 @@ function getSessionMaxLifeTime() {
 
 /**
  * Invokes a client page (re)load the url.
- * 
+ *
  * @param string $url
  * @param boolean $refresh allow a refresh; redirect to CSR_ROOT otherwise
  */
@@ -168,7 +171,7 @@ function redirect($url = null, $refresh = true) {
 
 /**
  * rawurlencode() met uitzondering van slashes.
- * 
+ *
  * @param string $url
  * @return string
  */
@@ -176,6 +179,11 @@ function direncode($url) {
 	return str_replace('%2F', '/', rawurlencode($url));
 }
 
+/**
+ * @param $string string
+ *
+ * @return bool
+ */
 function is_utf8($string) {
 	return checkEncoding($string, 'UTF-8');
 }
@@ -200,6 +208,12 @@ function crypto_rand_token($length) {
 	return $token;
 }
 
+/**
+ * @param $min int
+ * @param $max int
+ *
+ * @return mixed
+ */
 function crypto_rand_secure($min, $max) {
 	$range = $max - $min;
 	if ($range < 0) {
@@ -216,17 +230,31 @@ function crypto_rand_secure($min, $max) {
 	return $min + $rnd;
 }
 
+/**
+ * @param $date
+ * @param string $format
+ *
+ * @return bool
+ */
 function valid_date($date, $format = 'Y-m-d H:i:s') {
 	$d = DateTime::createFromFormat($format, $date);
 	return $d && $d->format($format) == $date;
 }
 
+/**
+ * @param $name string
+ *
+ * @return bool
+ */
 function valid_filename($name) {
 	return preg_match('/^(?:[a-z0-9 \-_\(\)é]|\.(?!\.))+$/iD', $name);
 }
 
 /**
  * @source http://www.regular-expressions.info/email.html
+ * @param $email
+ *
+ * @return bool
  */
 function email_like($email) {
 	if (empty($email)) {
@@ -237,6 +265,9 @@ function email_like($email) {
 
 /**
  * @source https://mathiasbynens.be/demo/url-regex
+ * @param $url
+ *
+ * @return bool
  */
 function url_like($url) {
 	if (empty($url)) {
@@ -320,7 +351,7 @@ function isGeldigeDatum($datum) {
 
 /**
  * print_r een variabele met <pre>-tags eromheen.
- * 
+ *
  * @param string $sString
  * @param string $cssID
  */
@@ -377,7 +408,7 @@ function namen2uid($sNamen, $filter = 'leden') {
 			$naam.=$aZoekNamen[0]['achternaam'];
 			$return[] = array('uid' => $aZoekNamen[0]['uid'], 'naam' => $naam);
 		} elseif (count($aZoekNamen) == 0) {
-			
+
 		} else {
 			//geen enkelvoudige match, dan een array teruggeven
 			foreach ($aZoekNamen as $aZoekNaam) {
@@ -428,7 +459,7 @@ function reldate($datum) {
 
 /**
  * Voeg landcode toe als nummer met 0 begint of vervang 00 met +
- * 
+ *
  * @param string $phonenumber
  * @param string $prefix
  * @return string
@@ -539,7 +570,7 @@ function format_filesize($size) {
 
 /**
  * This function transforms the php.ini notation for numbers (like '2M') to an integer (2*1024*1024 in this case)
- * 
+ *
  * @source http://stackoverflow.com/a/22500394
  */
 function convertPHPSizeToBytes($sSize) {
@@ -549,10 +580,15 @@ function convertPHPSizeToBytes($sSize) {
 	$sSuffix = substr($sSize, -1);
 	$iValue = substr($sSize, 0, -1);
 	switch (strtoupper($sSuffix)) {
-		case 'P': $iValue *= 1024;
+        /** @noinspection PhpMissingBreakStatementInspection */
+        case 'P': $iValue *= 1024;
+        /** @noinspection PhpMissingBreakStatementInspection */
 		case 'T': $iValue *= 1024;
+        /** @noinspection PhpMissingBreakStatementInspection */
 		case 'G': $iValue *= 1024;
+        /** @noinspection PhpMissingBreakStatementInspection */
 		case 'M': $iValue *= 1024;
+        /** @noinspection PhpMissingBreakStatementInspection */
 		case 'K': $iValue *= 1024;
 		default:
 			break;
@@ -633,7 +669,7 @@ function setMelding($msg, $lvl) {
 
 /**
  * Geeft berichten weer die opgeslagen zijn in de sessie met met setMelding($msg, $lvl)
- * 
+ *
  * @return string html van melding(en) of lege string
  */
 function getMelding() {
@@ -659,10 +695,24 @@ function getMelding() {
 	}
 }
 
+/**
+ * Haal de volledige classname met namespace op uit een beschrijving.
+ *
+ * @param $className
+ *
+ * @return string
+ */
 function className($className) {
 	return preg_replace('/\\\\/', '-', $className);
 }
 
+/**
+ * Haal de classname op uit een class beschrijving met namespace
+ *
+ * @param $className
+ *
+ * @return string
+ */
 function classNameZonderNamespace($className) {
 	$namespaceExploded = explode('\\', $className);
 	return array_pop($namespaceExploded);
