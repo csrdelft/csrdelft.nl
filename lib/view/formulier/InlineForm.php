@@ -7,6 +7,7 @@
  */
 
 namespace CsrDelft\view\formulier;
+use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -26,7 +27,7 @@ abstract class InlineForm extends Formulier implements FormElement {
 			$this->formId = filter_input(INPUT_POST, 'InlineFormId', FILTER_SANITIZE_STRING);
 		}
 		$this->css_classes[] = 'InlineForm';
-		$this->css_classes[] = $this->getType();
+		$this->css_classes[] = classNameZonderNamespace($this->getType());
 		$this->field = $field;
 		$this->toggle = $toggle;
 
