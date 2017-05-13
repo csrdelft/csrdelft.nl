@@ -19,7 +19,7 @@ use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\LoginForm;
+use CsrDelft\view\login\LoginForm;
 use CsrDelft\view\LoginSessionsData;
 use CsrDelft\view\RememberAfterLoginForm;
 use CsrDelft\view\RememberLoginData;

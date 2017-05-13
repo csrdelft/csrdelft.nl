@@ -2,15 +2,15 @@
 namespace CsrDelft\model\entity\groepen;
 
 use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\groepen\leden\WerkgroepDeelnemersModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\WerkgroepDeelnemersModel;
 
 
 /**
  * Werkgroep.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Werkgroep extends Ketzer {
 
@@ -28,7 +28,7 @@ class Werkgroep extends Ketzer {
 
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
-	 * 
+	 *
 	 * @param string $action
 	 * @return boolean
 	 */

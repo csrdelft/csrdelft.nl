@@ -31,9 +31,9 @@ use function CsrDelft\setMelding;
 
 /**
  * LoginView.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Tonen van login sessies en diverse formulieren.
  */
 class LoginSessionsTable extends DataTable {
@@ -60,7 +60,7 @@ class LoginSessionsData extends DataTableResponse {
 		$array['details'] = '<a href="/loginendsession/' . $session->session_hash . '" class="post DataTableResponse SingleRow" title="Log uit">' . Icon::getTag('door_in') . '</a>';
 
 		$array['login_moment'] = reldate($array['login_moment']);
-        
+
         $array['authentication_method'] = AuthenticationMethod::getDescription($array['authentication_method']);
 
 		if ($session->lock_ip) {
@@ -142,48 +142,6 @@ class RememberAfterLoginForm extends RememberLoginForm {
 	public function __construct(RememberLogin $remember) {
 		parent::__construct($remember);
 		$this->dataTableId = false; // same as parent but without data table
-	}
-
-}
-
-class LoginForm extends Formulier {
-
-	public function __construct() {
-		parent::__construct(null, '/login');
-		$this->formId = 'loginform';
-
-		$fields['user'] = new TextField('user', null, null);
-		$fields['user']->placeholder = 'Bijnaam of lidnummer';
-
-		$fields['pass'] = new WachtwoordField('pass', null, null);
-		$fields['pass']->placeholder = 'Wachtwoord';
-
-		if (LoginModel::instance()->hasError()) {
-			$fields[] = new HtmlComment('<p class="error">' . LoginModel::instance()->getError() . '</p>');
-		} else {
-			$fields[] = new HtmlComment('<div class="float-left">');
-
-			$fields['pauper'] = new CheckboxField('pauper', false, null, 'Mobiel');
-
-			$fields[] = new HtmlComment('</div>');
-
-			$fields['remember'] = new CheckboxField('remember', false, null, 'Blijf ingelogd');
-		}
-
-		$this->addFields($fields);
-	}
-
-	public function view() {
-		parent::view($showMelding = false);
-		?>
-		<ul>
-			<li>
-				<a href="#" class="login-submit" onclick="document.getElementById('loginform').submit();">Inloggen</a> &raquo;
-				&nbsp; <a href="/accountaanvragen">Account aanvragen</a> &raquo;
-			</li>
-			<li><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a></li>
-		</ul>
-		<?php
 	}
 
 }

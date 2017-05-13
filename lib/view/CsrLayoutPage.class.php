@@ -5,15 +5,16 @@ use CsrDelft\model\DragObjectModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\ModalForm;
+use CsrDelft\view\login\LoginForm;
 use CsrDelft\view\menu\MainMenuView;
 
 
 /**
  * CsrLayoutPage.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * De stek layout van 2006
  */
 class CsrLayoutPage extends CompressedLayout {

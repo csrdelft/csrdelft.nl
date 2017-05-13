@@ -1,15 +1,15 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\RechtenGroepLedenModel;
+use CsrDelft\model\groepen\leden\RechtenGroepLedenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * RechtenGroep.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een groep beperkt voor rechten.
  */
 class RechtenGroep extends AbstractGroep {
@@ -40,7 +40,7 @@ class RechtenGroep extends AbstractGroep {
 
 	/**
 	 * Has permission for action?
-	 * 
+	 *
 	 * @param AccessAction $action
 	 * @return boolean
 	 */

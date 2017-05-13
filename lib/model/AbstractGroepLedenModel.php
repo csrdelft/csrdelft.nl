@@ -1,32 +1,20 @@
 <?php
 namespace CsrDelft\model;
-use function CsrDelft\getDateTime;
-use function CsrDelft\group_by_distinct;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\AbstractGroepLid;
-use CsrDelft\model\entity\groepen\ActiviteitDeelnemer;
-use CsrDelft\model\entity\groepen\BestuursLid;
-use CsrDelft\model\entity\groepen\Bewoner;
-use CsrDelft\model\entity\groepen\CommissieLid;
-use CsrDelft\model\entity\groepen\KetzerDeelnemer;
-use CsrDelft\model\entity\groepen\KringLid;
-use CsrDelft\model\entity\groepen\Lichting;
-use CsrDelft\model\entity\groepen\LichtingsLid;
-use CsrDelft\model\entity\groepen\OnderverenigingsLid;
 use CsrDelft\model\entity\groepen\RechtenGroepLid;
-use CsrDelft\model\entity\groepen\Verticale;
-use CsrDelft\model\entity\groepen\VerticaleLid;
 use CsrDelft\model\entity\groepen\WerkgroepDeelnemer;
-use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use function CsrDelft\getDateTime;
+use function CsrDelft\group_by_distinct;
 
 /**
  * AbstractGroepLedenModel.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 
@@ -60,7 +48,7 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 
 	/**
 	 * Return leden van groep.
-	 * 
+	 *
 	 * @param AbstractGroep $groep
 	 * @return AbstractGroepLid[]
 	 */
@@ -70,7 +58,7 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 
 	/**
 	 * Bereken statistieken van de groepleden.
-	 * 
+	 *
 	 * @param AbstractGroep $groep
 	 * @return array
 	 */
@@ -104,37 +92,5 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 		}
 		return $stats;
 	}
-
-}
-
-class RechtenGroepLedenModel extends AbstractGroepLedenModel {
-
-	const ORM = RechtenGroepLid::class;
-
-	protected static $instance;
-
-}
-
-class KetzerDeelnemersModel extends AbstractGroepLedenModel {
-
-	const ORM = KetzerDeelnemer::class;
-
-	protected static $instance;
-
-}
-
-class WerkgroepDeelnemersModel extends KetzerDeelnemersModel {
-
-	const ORM = WerkgroepDeelnemer::class;
-
-	protected static $instance;
-
-}
-
-class ActiviteitDeelnemersModel extends KetzerDeelnemersModel {
-
-	const ORM = ActiviteitDeelnemer::class;
-
-	protected static $instance;
 
 }

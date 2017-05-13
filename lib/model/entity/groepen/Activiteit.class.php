@@ -1,18 +1,18 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
 
-use CsrDelft\model\ActiviteitDeelnemersModel;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\groepen\leden\ActiviteitDeelnemersModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 
 
 /**
  * Activiteit.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Activiteit extends Ketzer implements Agendeerbaar {
 
@@ -60,7 +60,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 
 	/**
 	 * Has permission for action?
-	 * 
+	 *
 	 * @param AccessAction $action
 	 * @return boolean
 	 */
@@ -79,7 +79,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
-	 * 
+	 *
 	 * @param AccessAction $action
 	 * @param string $soort
 	 * @return boolean

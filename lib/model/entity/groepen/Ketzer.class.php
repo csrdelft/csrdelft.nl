@@ -2,16 +2,16 @@
 namespace CsrDelft\model\entity\groepen;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\KetzerSelectorsModel;
-use CsrDelft\model\KetzerDeelnemersModel;
+use CsrDelft\model\groepen\leden\KetzerDeelnemersModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * Ketzer.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een ketzer is een aanmeldbare groep.
- * 
+ *
  */
 class Ketzer extends AbstractGroep {
 
@@ -65,7 +65,7 @@ class Ketzer extends AbstractGroep {
 
 	/**
 	 * Lazy loading by foreign key.
-	 * 
+	 *
 	 * @return KetzerSelector[]
 	 */
 	public function getSelectors() {
@@ -74,7 +74,7 @@ class Ketzer extends AbstractGroep {
 
 	/**
 	 * Has permission for action?
-	 * 
+	 *
 	 * @param AccessAction $action
 	 * @return boolean
 	 */
@@ -111,7 +111,7 @@ class Ketzer extends AbstractGroep {
 
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
-	 * 
+	 *
 	 * @param string $action
 	 * @return boolean
 	 */
