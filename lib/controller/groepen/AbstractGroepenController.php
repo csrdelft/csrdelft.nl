@@ -42,7 +42,7 @@ use function CsrDelft\setMelding;
 
 
 /**
- * GroepenController.abstract.php
+ * AbstractGroepenController.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
@@ -126,7 +126,7 @@ abstract class AbstractGroepenController extends Controller {
 
 	/**
 	 * Check permissions & valid params in actions.
-	 * 
+	 *
 	 * @param string $action
 	 * @param array $args
 	 * @return boolean

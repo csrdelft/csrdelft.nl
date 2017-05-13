@@ -5,13 +5,11 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\documenten\DocCategorie;
 use CsrDelft\model\documenten\Document;
 use CsrDelft\model\entity\Map;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\DocumentCategorieContent;
-use CsrDelft\view\DocumentContent;
-use CsrDelft\view\DocumentDownloadContent;
-use CsrDelft\view\DocumentenContent;
+use CsrDelft\view\documenten\DocumentCategorieContent;
+use CsrDelft\view\documenten\DocumentContent;
+use CsrDelft\view\documenten\DocumentDownloadContent;
+use CsrDelft\view\documenten\DocumentenContent;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\RequiredTextField;
@@ -21,11 +19,13 @@ use CsrDelft\view\formulier\uploadvelden\BestandBehouden;
 use CsrDelft\view\formulier\uploadvelden\RequiredFileField;
 use CsrDelft\view\JsonResponse;
 use Exception;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
 
 
 /**
  * DocumentenController.class.php
- * 
+ *
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  *
  */
