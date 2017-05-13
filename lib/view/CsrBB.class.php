@@ -36,6 +36,7 @@ use CsrDelft\view\fotoalbum\FotoAlbumSliderView;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\maalcie\MaaltijdKetzerView;
+use CsrDelft\view\peilingen\PeilingView;
 use Exception;
 use function CsrDelft\endsWith;
 use function CsrDelft\external_url;
