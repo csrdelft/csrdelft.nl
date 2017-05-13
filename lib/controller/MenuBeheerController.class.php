@@ -4,16 +4,16 @@ namespace CsrDelft\controller;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\MenuBeheerView;
-use CsrDelft\view\MenuItemForm;
+use CsrDelft\view\menubeheer\MenuBeheerView;
+use CsrDelft\view\menubeheer\MenuItemForm;
+use function CsrDelft\setMelding;
 
 
 /**
  * MenuBeheerController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property MenuModel $model

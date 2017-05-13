@@ -9,7 +9,7 @@
 	{/if}
 	<span class="lichtgrijs">{$item->volgorde}</span>
 	<a href="/menubeheer/bewerken/{$item->item_id}" class="btn post popup" title="Dit menu-item bewerken">{icon get="bewerken"}</a>
-	{if LoginModel::mag('P_ADMIN')}
+	{if CsrDelft\model\security\LoginModel::mag('P_ADMIN')}
 		<a href="/menubeheer/toevoegen/{$item->item_id}" class="btn post popup" title="Sub-menu-item toevoegen">{icon get="add"}</a>
 	{/if}
 	<a href="/menubeheer/zichtbaar/{$item->item_id}" class="btn post ReloadPage" title="Menu-item is nu {if !$item->zichtbaar}on{/if}zichtbaar">{if $item->zichtbaar}{icon get="eye"}{else}{icon get="shading"}{/if}</a>
