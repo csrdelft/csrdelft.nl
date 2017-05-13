@@ -28,6 +28,7 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\SavedQuery;
 use CsrDelft\SavedQueryContent;
+use CsrDelft\view\bibliotheek\BoekBBView;
 use CsrDelft\view\documenten\DocumentBBContent;
 use CsrDelft\view\formulier\UrlDownloader;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
