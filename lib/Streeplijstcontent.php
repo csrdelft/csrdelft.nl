@@ -7,7 +7,7 @@ use CsrDelft\view\View;
 
 /**
  * C.S.R. Delft | pubcie@csrdelft.nl
- * streeplijstcontent.class.php
+ * Streeplijstcontent.php
  *
  * @deprecated
  */
