@@ -49,7 +49,7 @@ class Streeplijstcontent implements View {
 			$this->sLidjaar = $_GET['lichting'];
 		}
 		//leden welke in de lijst moeten laden.
-		require_once 'lid/lidzoeker.class.php';
+		require_once 'lid/LidZoeker.php';
 		$this->aLeden = LidZoeker::zoekLeden($this->sLidjaar, 'uid', $this->sVerticale, 'achternaam', 'leden');
 	}
 
