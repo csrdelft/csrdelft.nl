@@ -25,7 +25,7 @@ class CiviBestellingModel extends PersistenceModel {
 
 	/**
 	 * @param CiviBestelling[] $bestellingen
-	 * @return Generator
+	 * @return \Generator
 	 */
 	public function getBeschrijving($bestellingen) {
 		foreach ($bestellingen as $bestelling) {

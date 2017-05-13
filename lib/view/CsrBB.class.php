@@ -31,6 +31,7 @@ use CsrDelft\SavedQueryContent;
 use CsrDelft\view\formulier\UrlDownloader;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 use CsrDelft\view\fotoalbum\FotoAlbumSliderView;
+use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\maalcie\MaaltijdKetzerView;
 use Exception;
@@ -43,15 +44,15 @@ use function CsrDelft\url_like;
 
 /**
  * CsrBB.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  */
 class CsrBB extends eamBBParser {
 
 	/**
 	 * BBcode within email is limited.
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	protected $email_mode = false;
 
@@ -81,7 +82,7 @@ class CsrBB extends eamBBParser {
 	/**
 	 * Bij citeren mogen er geen ongesloten tags zijn om problemen te voorkomen.
 	 * Werkt niet bij [ubboff] / [tekst].
-	 * 
+	 *
 	 * @param string $bbcode
 	 * @return string
 	 */
@@ -95,7 +96,7 @@ class CsrBB extends eamBBParser {
 
 	/**
 	 * Aantal ongesloten tags.
-	 * 
+	 *
 	 * @param string $bbcode
 	 * @return int
 	 */
@@ -111,7 +112,7 @@ class CsrBB extends eamBBParser {
 	}
 
 	/**
-	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien kunnen worden 
+	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien kunnen worden
 	 * bij het citeren, slopen we hier alles wat in privé-tags staat weg.
 	 */
 	public static function filterPrive($bbcode) {
@@ -124,7 +125,7 @@ class CsrBB extends eamBBParser {
 	}
 
 	/**
-	 * Omdat we niet willen dat dingen die in commentaar staan alsnog gezien kunnen worden 
+	 * Omdat we niet willen dat dingen die in commentaar staan alsnog gezien kunnen worden
 	 * bij het citeren, slopen we hier alles wat in commentaar-tags staat weg.
 	 */
 	public static function filterCommentaar($bbcode) {
@@ -180,7 +181,7 @@ class CsrBB extends eamBBParser {
 
 	/**
 	 * [foto]/pad/naar/foto[/foto]
-	 * 
+	 *
 	 * Toont de thumbnail met link naar fotoalbum.
 	 */
 	function bb_foto($arguments = array()) {
@@ -383,7 +384,7 @@ class CsrBB extends eamBBParser {
 
 	/**
 	 * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.
-	 * 
+	 *
 	 * Example:
 	 * [lid=0436] => Am. Waagmeester
 	 * of
@@ -793,7 +794,7 @@ HTML;
 	/**
 	 * Geeft een groep met kortebeschrijving en een lijstje met leden weer.
 	 * Als de groep aanmeldbaar is komt er ook een aanmeldknopje bij.
-	 * 
+	 *
 	 * [groep]123[/groep]
 	 * of
 	 * [groep=123]
@@ -817,7 +818,7 @@ HTML;
 
 	/**
 	 * Geeft een link naar de verticale.
-	 * 
+	 *
 	 * [verticale]A[/verticale]
 	 * of
 	 * [verticale=A]
@@ -839,7 +840,7 @@ HTML;
 	/**
 	 * Geeft titel en auteur van een boek.
 	 * Een kleine indicator geeft met kleuren beschikbaarheid aan
-	 * 
+	 *
 	 * [boek]123[/boek]
 	 * of
 	 * [boek=123]
@@ -862,7 +863,7 @@ HTML;
 
 	/**
 	 * Geeft een blokje met een documentnaam, link, bestandsgrootte en formaat.
-	 * 
+	 *
 	 * [document]1234[/document]
 	 * of
 	 * [document=1234]
@@ -884,7 +885,7 @@ HTML;
 
 	/**
 	 * Geeft een maaltijdketzer weer met maaltijdgegevens, aantal aanmeldingen en een aanmeldknopje.
-	 * 
+	 *
 	 * [maaltijd=next], [maaltijd=1234]
 	 * of
 	 * [maaltijd]next[/maaldijd]
@@ -1086,9 +1087,9 @@ HTML;
 
 	/**
 	 * Google-maps
-	 * 
+	 *
 	 * @author Piet-Jan Spaans
-	 * 
+	 *
 	 * [map h=100]Oude Delft 9[/map]
 	 */
 	public function bb_map($arguments = array()) {
@@ -1113,9 +1114,9 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 
 	/**
 	 * Peiling
-	 * 
+	 *
 	 * @author Piet-Jan Spaans
-	 * 
+	 *
 	 * [peiling=2]
 	 * of
 	 * [peiling]2[/peiling]

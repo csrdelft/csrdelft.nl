@@ -24,10 +24,10 @@ use function CsrDelft\getMelding;
 
 /**
  * FotoAlbumView.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * De views van het fotoalbum.
  */
 class FotoAlbumView extends SmartyTemplateView {
@@ -177,47 +177,6 @@ class FotosDropzone extends Dropzone {
 		// Uitleg foto's toevoegen
 						$body = new CmsPaginaView(CmsPaginaModel::get('fotostoevoegen'));
 		$body->view();
-	}
-
-}
-
-class FotoBBView extends SmartyTemplateView {
-
-	private $groot;
-	private $responsive;
-
-	public function __construct(Foto $foto, $groot = false, $responsive = false) {
-		parent::__construct($foto);
-		$this->groot = $groot;
-		$this->responsive = $responsive;
-	}
-
-	public function getHtml() {
-		$html = '<a href="' . $this->model->getAlbumUrl();
-		if ($this->groot) {
-			$html .= '?fullscreen';
-		}
-		$html .= '#' . $this->model->getResizedUrl() . '" class="';
-		if ($this->responsive) {
-			$html .= 'responsive';
-		}
-		if (!$this->groot AND LidInstellingenModel::get('forum', 'fotoWeergave') == 'boven bericht') {
-			$html .= ' hoverIntent"><div class="hoverIntentContent"><div class="bb-img-loading" src="' . $this->model->getResizedUrl() . '"></div></div>';
-		} else {
-			$html .= '">';
-		}
-		$html .= '<div class="bb-img-loading" src="';
-		if (($this->groot AND LidInstellingenModel::get('forum', 'fotoWeergave') != 'nee') OR LidInstellingenModel::get('forum', 'fotoWeergave') == 'in bericht') {
-			$html .= $this->model->getResizedUrl();
-		} else {
-			$html .= $this->model->getThumbUrl();
-		}
-		$html .= '"></div></a>';
-		return $html;
-	}
-
-	public function view() {
-		echo $this->getHtml();
 	}
 
 }

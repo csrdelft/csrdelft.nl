@@ -4,6 +4,7 @@ namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fiscaat\CiviBestellingOverzichtResponse;
 use CsrDelft\view\fiscaat\CiviBestellingOverzichtView;

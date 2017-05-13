@@ -61,6 +61,7 @@ use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\keuzevelden\VerticaleField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\uploadvelden\ImageField;
+use CsrDelft\view\fotoalbum\FotoBBView;
 
 /**
  * ProfielView.class.php

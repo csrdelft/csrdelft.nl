@@ -2,11 +2,9 @@
 namespace CsrDelft\model\maalcie;
 
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use Exception;
-
 
 /**
  * MaaltijdRepetitiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)

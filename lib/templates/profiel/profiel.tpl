@@ -48,7 +48,7 @@
 			{if $profiel->gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div><div class="data">{$profiel->gebdatum|date_format:"%d-%m-%Y"}</div>{/if}
 			{if $profiel->status === CsrDelft\model\entity\LidStatus::Overleden AND $profiel->sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div><div class="data">{$profiel->sterfdatum|date_format:"%d-%m-%Y"}</div>{/if}
 			{if CsrDelft\model\ProfielModel::get($profiel->echtgenoot)}
-				<div class="label">{if CsrDelft\model\ProfielModel::get($profiel->echtgenoot)->geslacht === Geslacht::Vrouw}Echtgenote{else}Echtgenoot{/if}:</div>
+				<div class="label">{if CsrDelft\model\ProfielModel::get($profiel->echtgenoot)->geslacht === CsrDelft\model\entity\Geslacht::Vrouw}Echtgenote{else}Echtgenoot{/if}:</div>
 				<div class="data">{CsrDelft\model\ProfielModel::get($profiel->echtgenoot)->getLink('civitas')}</div>
 			{/if}
 		</div>
@@ -206,7 +206,7 @@
 					{/if}
 				{/if}
 				<div class="clear-left"></div>
-				{if LoginModel::getUid() === $profiel->uid || LoginModel::mag('P_MAAL_MOD')}
+				{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid || CsrDelft\model\security\LoginModel::mag('P_MAAL_MOD')}
 					<a id="CiviSaldo"></a>
 					<div class="label">Saldohistorie:</div>
 					{foreach from=$bestellinglog item=bestelling}
