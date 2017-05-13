@@ -1,26 +1,25 @@
 <?php
 
+use CsrDelft\controller\api\ApiActiviteitenController;
+use CsrDelft\controller\api\ApiAgendaController;
+use CsrDelft\controller\api\ApiAuthController;
+use CsrDelft\controller\api\ApiForumController;
+use CsrDelft\controller\api\ApiLedenController;
+use CsrDelft\controller\api\ApiMaaltijdenController;
 use \Jacwright\RestServer\RestServer;
 
 require_once 'configuratie.include.php';
-
-require 'controller/api/ActiviteitenController.class.php';
-require 'controller/api/AgendaController.class.php';
-require 'controller/api/AuthController.class.php';
-require 'controller/api/ForumController.class.php';
-require 'controller/api/LedenController.class.php';
-require 'controller/api/MaaltijdenController.class.php';
 
 $mode = DEBUG ? 'debug' : 'production';
 $server = new RestServer($mode);
 
 $server->cacheDir = DATA_PATH . 'restserver/';
 
-$server->addClass('ApiActiviteitenController', '/activiteiten');
-$server->addClass('ApiAgendaController', '/agenda');
-$server->addClass('ApiAuthController', '/auth');
-$server->addClass('ApiForumController', '/forum');
-$server->addClass('ApiLedenController', '/leden');
-$server->addClass('ApiMaaltijdenController', '/maaltijden');
+$server->addClass(ApiActiviteitenController::class, '/activiteiten');
+$server->addClass(ApiAgendaController::class, '/agenda');
+$server->addClass(ApiAuthController::class, '/auth');
+$server->addClass(ApiForumController::class, '/forum');
+$server->addClass(ApiLedenController::class, '/leden');
+$server->addClass(ApiMaaltijdenController::class, '/maaltijden');
 
 $server->handle();
