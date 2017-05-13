@@ -24,12 +24,12 @@ class GroepView implements FormElement {
 	private $groep;
 	private $leden;
 	private $geschiedenis;
-	private $bb;
+	private $bbAan;
 
-	public function __construct(AbstractGroep $groep, $tab = null, $geschiedenis = false, $bb = false) {
+	public function __construct(AbstractGroep $groep, $tab = null, $geschiedenis = false, $bbAan = false) {
 		$this->groep = $groep;
 		$this->geschiedenis = $geschiedenis;
-		$this->bb = $bb;
+		$this->bbAan = $bbAan;
 		switch ($tab) {
 
 			case GroepTab::Pasfotos:
@@ -42,10 +42,6 @@ class GroepView implements FormElement {
 
 			case GroepTab::Statistiek:
 				$this->leden = new GroepStatistiekView($groep);
-				break;
-
-			case GroepTab::Emails:
-				$this->leden = new GroepEmailsView($groep);
 				break;
 
 			case GroepTab::Emails:
@@ -82,7 +78,7 @@ class GroepView implements FormElement {
 		if ($this->geschiedenis) {
 			$html .= ' state-geschiedenis';
 		}
-		if ($this->bb) {
+		if ($this->bbAan) {
 			$html .= ' bb-block';
 		}
 		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting">';

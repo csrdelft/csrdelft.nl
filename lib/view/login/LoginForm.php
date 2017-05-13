@@ -43,7 +43,7 @@ class LoginForm extends Formulier
 
     public function view()
     {
-        parent::view($showMelding = false);
+        parent::view(false);
         ?>
         <ul>
             <li>
