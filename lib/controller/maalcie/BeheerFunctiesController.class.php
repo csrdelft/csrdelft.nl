@@ -1,7 +1,17 @@
 <?php
+namespace CsrDelft\controller\maalcie;
 
-require_once 'model/maalcie/FunctiesModel.class.php';
-require_once 'view/maalcie/BeheerFunctiesView.class.php';
+use function CsrDelft\setMelding;
+use CsrDelft\view\maalcie\BeheerFunctiesView;
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\maalcie\KwalificatiesModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\FunctieDeleteView;
+use CsrDelft\view\maalcie\FunctieForm;
+use CsrDelft\view\maalcie\FunctieView;
+use CsrDelft\view\maalcie\KwalificatieForm;
+
 
 /**
  * BeheerFunctiesController.class.php

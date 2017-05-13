@@ -1,8 +1,11 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\groepen\leden\BewonersModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 
-require_once 'model/entity/groepen/HuisStatus.enum.php';
 
 /**
  * Woonoord.class.php
@@ -14,7 +17,7 @@ require_once 'model/entity/groepen/HuisStatus.enum.php';
  */
 class Woonoord extends AbstractGroep {
 
-	const leden = 'BewonersModel';
+	const leden = BewonersModel::class;
 
 	/**
 	 * Woonoord / Huis
@@ -31,7 +34,7 @@ class Woonoord extends AbstractGroep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'soort' => array(T::Enumeration, false, 'HuisStatus'),
+		'soort' => array(T::Enumeration, false, HuisStatus::class),
         'eetplan' => array(T::Boolean)
 	);
 	/**
@@ -54,8 +57,8 @@ class Woonoord extends AbstractGroep {
 	public function mag($action, $soort = null) {
 		switch ($action) {
 
-			case A::Beheren:
-			case A::Wijzigen:
+			case AccessAction::Beheren:
+			case AccessAction::Wijzigen:
 				// Huidige bewoners mogen beheren
 				if (LoginModel::mag('woonoord:' . $this->familie)) {
 					// HuisStatus wijzigen wordt geblokkeerd in GroepForm->validate()

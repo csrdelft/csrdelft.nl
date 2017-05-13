@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\view\formulier\knoppen;
+use CsrDelft\Icon;
+use CsrDelft\view\formulier\elementen\FormElement;
+
 /**
  * FormulierKnop.class.php
  *

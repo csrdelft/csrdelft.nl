@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\view\formulier\uploadvelden;
 /**
  * RequiredImageField.class.php
  *

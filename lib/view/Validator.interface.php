@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\view;
 
 /**
  * Validator.class.php

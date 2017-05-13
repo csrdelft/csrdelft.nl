@@ -1,6 +1,27 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'view/FotoAlbumView.class.php';
+use CsrDelft\controller\framework\AclController;
+use function CsrDelft\endsWith;
+use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\entity\fotoalbum\Foto;
+use CsrDelft\model\entity\fotoalbum\FotoAlbum;
+use CsrDelft\model\FotoAlbumModel;
+use CsrDelft\model\FotoModel;
+use CsrDelft\model\FotoTagsModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutOweePage;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\FotoAlbumToevoegenForm;
+use CsrDelft\view\FotoAlbumView;
+use CsrDelft\view\FotosDropzone;
+use CsrDelft\view\FotoTagToevoegenForm;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\PosterUploadForm;
+use Exception;
+
 
 /**
  * FotoAlbumController.class.php

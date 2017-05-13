@@ -1,5 +1,10 @@
 <?php
+namespace CsrDelft\controller\api;
 
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\security\LoginModel;
+use Exception;
 use \Jacwright\RestServer\RestException;
 
 class ApiMaaltijdenController {
@@ -15,7 +20,6 @@ class ApiMaaltijdenController {
 	 * @url POST /$id/aanmelden
 	 */
 	public function maaltijdAanmelden($id) {
-		require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 
 		try {
 			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($id);
@@ -30,7 +34,6 @@ class ApiMaaltijdenController {
 	 * @url POST /$id/afmelden
 	 */
 	public function maaltijdAfmelden($id) {
-		require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
 
 		try {
 			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($id);

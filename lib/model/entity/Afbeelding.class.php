@@ -1,6 +1,8 @@
 <?php
+namespace CsrDelft\model\entity;
 
-require_once 'model/entity/Bestand.class.php';
+use Exception;
+
 
 /**
  * Afbeelding.class.php

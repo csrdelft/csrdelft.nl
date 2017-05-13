@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\ChangeLogEntry;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 

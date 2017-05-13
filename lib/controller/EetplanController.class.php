@@ -1,7 +1,31 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/EetplanModel.class.php';
-require_once 'view/EetplanView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\EetplanBekendenModel;
+use CsrDelft\model\EetplanModel;
+use CsrDelft\model\entity\Eetplan;
+use CsrDelft\model\entity\EetplanBekenden;
+use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\EetplanBeheerView;
+use CsrDelft\view\EetplanBekendeHuizenForm;
+use CsrDelft\view\EetplanBekendeHuizenResponse;
+use CsrDelft\view\EetplanBekendenForm;
+use CsrDelft\view\EetplanHuisView;
+use CsrDelft\view\EetplanHuizenResponse;
+use CsrDelft\view\EetplanHuizenView;
+use CsrDelft\view\EetplanNovietView;
+use CsrDelft\view\EetplanRelatieView;
+use CsrDelft\view\EetplanTableView;
+use CsrDelft\view\EetplanView;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\NieuwEetplanForm;
+use function CsrDelft\setMelding;
+
 
 /**
  * EetplanController.class.php

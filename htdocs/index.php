@@ -6,7 +6,13 @@
  * 
  * Entry point voor stek modules.
  */
+use CsrDelft\controller\framework\Controller;
+use function CsrDelft\debugprint;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\model\TimerModel;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use function CsrDelft\redirect;
+use function CsrDelft\setGoBackCookie;
 
 try {
 	require_once 'configuratie.include.php';
@@ -35,10 +41,10 @@ try {
 				redirect(CSR_ROOT . "#login");
 			}
 	}
-	$class .= 'Controller';
 
-	require_once 'controller/' . $class . '.class.php';
-	$controller = new $class(REQUEST_URI);
+	$namespacedClassName = 'CsrDelft\\controller\\' . $class . 'Controller';
+	/** @var Controller $controller */
+	$controller = new $namespacedClassName(REQUEST_URI);
 	$controller->performAction();
 
 	if (DB_CHECK AND LoginModel::mag('P_ADMIN')) {

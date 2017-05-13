@@ -1,13 +1,21 @@
 <?php
 
+use CsrDelft\GoogleSync;
+use CsrDelft\lid\LedenlijstContent;
+use CsrDelft\lid\LidZoeker;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CmsPaginaView;
+use CsrDelft\view\CsrLayoutPage;
+
 require_once 'configuratie.include.php';
 require_once 'lid/ledenlijstcontent.class.php';
 
 if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 	# geen rechten
-	require_once 'model/CmsPaginaModel.class.php';
-	require_once 'view/CmsPaginaView.class.php';
-	$body = new CmsPaginaView(CmsPaginaModel::get('403'));
+			$body = new CmsPaginaView(CmsPaginaModel::get('403'));
 	$pagina = new CsrLayoutPage($body);
 	$pagina->view();
 	exit;
@@ -44,8 +52,7 @@ $ledenlijstcontent = new LedenlijstContent($zoeker);
 
 if (isset($_GET['addToGoogleContacts'])) {
 	try {
-		require_once 'googlesync.class.php';
-		GoogleSync::doRequestToken(CSR_ROOT . REQUEST_URI);
+				GoogleSync::doRequestToken(CSR_ROOT . REQUEST_URI);
 
 		$gSync = GoogleSync::instance();
 

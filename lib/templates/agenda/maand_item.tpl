@@ -1,19 +1,19 @@
-{assign var=verborgen value=AgendaVerbergenModel::instance()->isVerborgen($item)}
+{assign var=verborgen value=CsrDelft\model\AgendaVerbergenModel::instance()->isVerborgen($item)}
 <li id="item-{str_replace('@', '-', str_replace('.', '-', $item->getUUID()))}" {if $verborgen}class="offtopic"{/if} title="{$item->getBeschrijving()}" parentid="items-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}">
 	<a href="/agenda/verbergen/{$item->getUUID()}" class="beheren post" title="{if $verborgen}Toon{else}Verberg{/if} dit agenda item">{if $verborgen}{icon get=shading}{else}{icon get=eye}{/if}</a>
-	{if $item instanceof Groep AND $item->mag(A::Wijzigen)}
+	{if $item instanceof CsrDelft\model\entity\groepen\AbstractGroep AND $item->mag(CsrDelft\model\entity\security\A::Wijzigen)}
 		<a href="{$item->getUrl()}wijzigen" class="beheren" title="Wijzig {htmlspecialchars($item->naam)}">{icon get="bewerken"}</a>
-	{elseif $item instanceof AgendaItem AND $item->magBeheren()}
+	{elseif $item instanceof CsrDelft\model\entity\agenda\AgendaItem AND $item->magBeheren()}
 		<a href="/agenda/bewerken/{$item->item_id}" class="beheren post popup" title="Dit agenda-item bewerken">{icon get="bewerken"}</a>
 		<a href="/agenda/verwijderen/{$item->item_id}" class="beheren post confirm" title="Dit agenda-item definitief verwijderen">{icon get="verwijderen"}</a>
 	{/if}
-	{if $item instanceof Profiel}
+	{if $item instanceof CsrDelft\model\entity\Profiel}
 		{icon get="verjaardag"}
 		{$item->getLink()}
-	{elseif $item instanceof Bijbelrooster}
+	{elseif $item instanceof CsrDelft\model\entity\Bijbelrooster}
 		{icon get="book_open"}
 		{$item->getLink(true)}
-	{elseif $item instanceof Maaltijd}
+	{elseif $item instanceof CsrDelft\model\entity\maalcie\Maaltijd}
 		<img src="/plaetjes/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon" />
 		<div class="tijd">
 			{$item->getBeginMoment()|date_format:"%R"} - {$item->getEindMoment()|date_format:"%R"}
@@ -21,7 +21,7 @@
 		<a href="{$item->getLink()}">
 			{$item->getTitel()}
 		</a>
-	{elseif $item instanceof CorveeTaak}
+	{elseif $item instanceof CsrDelft\model\entity\CorveeTaak}
 		{if $item->getCorveeFunctie()->naam|stristr:"klus"}
 			<img src="/plaetjes/maalcie/drill.png" width="16" height="16" alt="drill" class="icon" />
 		{else}
@@ -30,7 +30,7 @@
 		<a href="{$item->getLink()}">
 			{$item->getTitel()}
 		</a>
-	{elseif $item instanceof Agendeerbaar}
+	{elseif $item instanceof CsrDelft\model\entity\agenda\Agendeerbaar}
 		{if !$item->isHeledag()}
 			<div class="tijd">
 				{$item->getBeginMoment()|date_format:"%R"}

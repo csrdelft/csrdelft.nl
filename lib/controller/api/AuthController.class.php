@@ -1,5 +1,11 @@
 <?php
+namespace CsrDelft\controller\api;
 
+use function CsrDelft\crypto_rand_token;
+use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\RememberLoginModel;
+use Exception;
 use Firebase\JWT\JWT;
 use \Jacwright\RestServer\RestException;
 

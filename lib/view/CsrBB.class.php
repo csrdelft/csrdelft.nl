@@ -1,18 +1,58 @@
 <?php
+namespace CsrDelft\view;
 
-require_once 'bbparser/eamBBParser.class.php';
+use CsrDelft\bbparser\eamBBParser;
+use CsrDelft\Icon;
+use CsrDelft\model\bibliotheek\BiebBoek;
+use CsrDelft\model\documenten\Document;
+use CsrDelft\model\entity\fotoalbum\Foto;
+use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\FotoAlbumModel;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\model\groepen\OnderverenigingenModel;
+use CsrDelft\model\groepen\RechtenGroepenModel;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\model\LedenMemoryScoresModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\PeilingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\SavedQuery;
+use CsrDelft\SavedQueryContent;
+use CsrDelft\view\formulier\UrlDownloader;
+use CsrDelft\view\fotoalbum\FotoAlbumBBView;
+use CsrDelft\view\fotoalbum\FotoAlbumSliderView;
+use CsrDelft\view\fotoalbum\FotoBBView;
+use CsrDelft\view\groepen\GroepView;
+use CsrDelft\view\maalcie\MaaltijdKetzerView;
+use Exception;
+use function CsrDelft\endsWith;
+use function CsrDelft\external_url;
+use function CsrDelft\reldate;
+use function CsrDelft\startsWith;
+use function CsrDelft\url_like;
+
 
 /**
  * CsrBB.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  */
 class CsrBB extends eamBBParser {
 
 	/**
 	 * BBcode within email is limited.
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	protected $email_mode = false;
 
@@ -42,7 +82,7 @@ class CsrBB extends eamBBParser {
 	/**
 	 * Bij citeren mogen er geen ongesloten tags zijn om problemen te voorkomen.
 	 * Werkt niet bij [ubboff] / [tekst].
-	 * 
+	 *
 	 * @param string $bbcode
 	 * @return string
 	 */
@@ -56,7 +96,7 @@ class CsrBB extends eamBBParser {
 
 	/**
 	 * Aantal ongesloten tags.
-	 * 
+	 *
 	 * @param string $bbcode
 	 * @return int
 	 */
@@ -72,7 +112,7 @@ class CsrBB extends eamBBParser {
 	}
 
 	/**
-	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien kunnen worden 
+	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien kunnen worden
 	 * bij het citeren, slopen we hier alles wat in privé-tags staat weg.
 	 */
 	public static function filterPrive($bbcode) {
@@ -85,7 +125,7 @@ class CsrBB extends eamBBParser {
 	}
 
 	/**
-	 * Omdat we niet willen dat dingen die in commentaar staan alsnog gezien kunnen worden 
+	 * Omdat we niet willen dat dingen die in commentaar staan alsnog gezien kunnen worden
 	 * bij het citeren, slopen we hier alles wat in commentaar-tags staat weg.
 	 */
 	public static function filterCommentaar($bbcode) {
@@ -141,12 +181,11 @@ class CsrBB extends eamBBParser {
 
 	/**
 	 * [foto]/pad/naar/foto[/foto]
-	 * 
+	 *
 	 * Toont de thumbnail met link naar fotoalbum.
 	 */
 	function bb_foto($arguments = array()) {
-		require_once 'controller/FotoAlbumController.class.php';
-		$url = urldecode($this->parseArray(array('[/foto]'), array()));
+				$url = urldecode($this->parseArray(array('[/foto]'), array()));
 		$parts = explode('/', $url);
 		if (in_array('Posters', $parts)) {
 			$groot = true;
@@ -189,8 +228,7 @@ class CsrBB extends eamBBParser {
 	 *
 	 */
 	protected function bb_fotoalbum($arguments = array()) {
-		require_once 'controller/FotoAlbumController.class.php';
-		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
+				$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
 		if ($url === 'laatste') {
 			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 		} else {
@@ -299,7 +337,7 @@ class CsrBB extends eamBBParser {
 		} else {
 			$content = $arguments;
 		}
-		if (LidInstellingen::get('layout', 'neuzen') != 'nee') {
+		if (LidInstellingenModel::get('layout', 'neuzen') != 'nee') {
 			$neus = Icon::getTag('bullet_red', null, null, 'neus2013', 'o');
 			$content = str_replace('o', $neus, $content);
 		}
@@ -346,7 +384,7 @@ class CsrBB extends eamBBParser {
 
 	/**
 	 * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.
-	 * 
+	 *
 	 * Example:
 	 * [lid=0436] => Am. Waagmeester
 	 * of
@@ -412,7 +450,7 @@ class CsrBB extends eamBBParser {
 			$testwaarde = $arguments['waarde'];
 		}
 		try {
-			if (LidInstellingen::get($arguments['module'], $arguments['instelling']) == $testwaarde) {
+			if (LidInstellingenModel::get($arguments['module'], $arguments['instelling']) == $testwaarde) {
 				return $content;
 			}
 		} catch (Exception $e) {
@@ -435,8 +473,7 @@ class CsrBB extends eamBBParser {
 		$queryID = (int) $queryID;
 
 		if ($queryID != 0) {
-			require_once 'savedquery.class.php';
-			$sqc = new SavedQueryContent(new SavedQuery($queryID));
+						$sqc = new SavedQueryContent(new SavedQuery($queryID));
 
 			return $sqc->render_queryResult();
 		} else {
@@ -648,9 +685,8 @@ HTML;
 	}
 
 	protected function groep(AbstractGroep $groep) {
-		require_once 'view/GroepenView.class.php';
-		// Controleer rechten
-		if (!$groep->mag(A::Bekijken)) {
+				// Controleer rechten
+		if (!$groep->mag(AccessAction::Bekijken)) {
 			return '';
 		}
 		$view = new GroepView($groep, null, false, true);
@@ -758,7 +794,7 @@ HTML;
 	/**
 	 * Geeft een groep met kortebeschrijving en een lijstje met leden weer.
 	 * Als de groep aanmeldbaar is komt er ook een aanmeldknopje bij.
-	 * 
+	 *
 	 * [groep]123[/groep]
 	 * of
 	 * [groep=123]
@@ -782,7 +818,7 @@ HTML;
 
 	/**
 	 * Geeft een link naar de verticale.
-	 * 
+	 *
 	 * [verticale]A[/verticale]
 	 * of
 	 * [verticale=A]
@@ -804,7 +840,7 @@ HTML;
 	/**
 	 * Geeft titel en auteur van een boek.
 	 * Een kleine indicator geeft met kleuren beschikbaarheid aan
-	 * 
+	 *
 	 * [boek]123[/boek]
 	 * of
 	 * [boek=123]
@@ -816,9 +852,7 @@ HTML;
 			$boekid = $this->parseArray(array('[/boek]'), array());
 		}
 
-		require_once 'model/bibliotheek/BiebBoek.class.php';
-		require_once 'view/BibliotheekView.class.php';
-		try {
+						try {
 			$boek = new BiebBoek((int) $boekid);
 			$content = new BoekBBView($boek);
 			return $content->view();
@@ -829,7 +863,7 @@ HTML;
 
 	/**
 	 * Geeft een blokje met een documentnaam, link, bestandsgrootte en formaat.
-	 * 
+	 *
 	 * [document]1234[/document]
 	 * of
 	 * [document=1234]
@@ -840,8 +874,7 @@ HTML;
 		} else {
 			$id = $this->parseArray(array('[/document]'), array());
 		}
-		require_once 'view/DocumentenView.class.php';
-		try {
+				try {
 			$document = new Document((int) $id);
 			$content = new DocumentBBContent($document);
 			return $content->getHtml();
@@ -852,7 +885,7 @@ HTML;
 
 	/**
 	 * Geeft een maaltijdketzer weer met maaltijdgegevens, aantal aanmeldingen en een aanmeldknopje.
-	 * 
+	 *
 	 * [maaltijd=next], [maaltijd=1234]
 	 * of
 	 * [maaltijd]next[/maaldijd]
@@ -868,12 +901,9 @@ HTML;
 		$mid = trim($mid);
 		$maaltijd2 = null;
 
-		require_once 'model/maalcie/MaaltijdenModel.class.php';
-		require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
-		require_once 'view/maalcie/MaaltijdKetzerView.class.php';
-		try {
+								try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(\LoginModel::getUid()); // met filter
+				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(LoginModel::getUid()); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
 					return 'Geen aankomende maaltijd.';
@@ -898,7 +928,7 @@ HTML;
 		if (!isset($maaltijd)) {
 			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 		}
-		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), \LoginModel::getUid());
+		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), LoginModel::getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
 		} else {
@@ -908,7 +938,7 @@ HTML;
 		$result = $ketzer->getHtml();
 
 		if ($maaltijd2 !== null) {
-			$aanmeldingen2 = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd2->maaltijd_id => $maaltijd2), \LoginModel::getUid());
+			$aanmeldingen2 = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd2->maaltijd_id => $maaltijd2), LoginModel::getUid());
 			if (empty($aanmeldingen2)) {
 				$aanmelding2 = null;
 			} else {
@@ -1016,8 +1046,6 @@ HTML;
 			return '[mededelingen] Geen geldig mededelingenblok.';
 		}
 
-		require_once 'model/mededelingen/MededelingenModel.class.php';
-		require_once 'view/MededelingenView.class.php';
 
 		$MededelingenView = new MededelingenView(0);
 		switch ($type) {
@@ -1059,9 +1087,9 @@ HTML;
 
 	/**
 	 * Google-maps
-	 * 
+	 *
 	 * @author Piet-Jan Spaans
-	 * 
+	 *
 	 * [map h=100]Oude Delft 9[/map]
 	 */
 	public function bb_map($arguments = array()) {
@@ -1086,9 +1114,9 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 
 	/**
 	 * Peiling
-	 * 
+	 *
 	 * @author Piet-Jan Spaans
-	 * 
+	 *
 	 * [peiling=2]
 	 * of
 	 * [peiling]2[/peiling]
@@ -1099,8 +1127,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		} else {
 			$peiling_id = $this->parseArray(array('[/peiling]'), array());
 		}
-		require_once 'view/PeilingenView.class.php';
-		try {
+				try {
 			$peiling = PeilingenModel::instance()->getPeilingById((int) $peiling_id);
 			$peilingcontent = new PeilingView($peiling);
 			return $peilingcontent->getHtml();
@@ -1162,8 +1189,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		} else {
 			$dagen = $this->parseArray(array('[/bijbelrooster]'), array());
 		}
-		require_once 'view/BijbelroosterView.class.php';
-		$view = new BijbelroosterBBView($dagen);
+				$view = new BijbelroosterBBView($dagen);
 		return $view->getHtml();
 	}
 
@@ -1183,11 +1209,11 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	}
 
 	public static function getBijbelLink($stukje, $vertaling = null, $tag = false) {
-		if (!LidInstellingen::instance()->isValidValue('algemeen', 'bijbel', $vertaling)) {
+		if (!LidInstellingenModel::instance()->isValidValue('algemeen', 'bijbel', $vertaling)) {
 			$vertaling = null;
 		}
 		if ($vertaling === null) {
-			$vertaling = LidInstellingen::get('algemeen', 'bijbel');
+			$vertaling = LidInstellingenModel::get('algemeen', 'bijbel');
 		}
 		$link = 'https://www.debijbel.nl/bijbel/' . $vertaling . '/' . $stukje;
 		if ($tag) {
@@ -1198,9 +1224,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	}
 
 	function bb_ledenmemoryscores($arguments = array()) {
-		require_once 'model/LedenMemoryScoresModel.class.php';
-		require_once 'view/LedenMemoryView.class.php';
-		LedenMemoryScoresModel::instance();
+						LedenMemoryScoresModel::instance();
 		$groep = null;
 		$titel = null;
 		/**

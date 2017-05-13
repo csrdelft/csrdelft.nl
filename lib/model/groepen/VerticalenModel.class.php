@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model\groepen;
+
+use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\entity\groepen\Verticale;
 
 class VerticalenModel extends AbstractGroepenModel {
 

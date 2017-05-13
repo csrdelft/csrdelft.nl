@@ -1,5 +1,16 @@
 <?php
+namespace CsrDelft\controller\framework;
+use CsrDelft\view\CmsPaginaView;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setGoBackCookie;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrBB;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\View;
+use Exception;
 
 /**
  * Controller.abstract.php
@@ -189,9 +200,7 @@ abstract class Controller {
 			redirect(CSR_ROOT . "#login");
 		}
 		// GUI 403
-		require_once 'model/CmsPaginaModel.class.php';
-		require_once 'view/CmsPaginaView.class.php';
-		$body = new CmsPaginaView(CmsPaginaModel::get($response_code));
+						$body = new CmsPaginaView(CmsPaginaModel::get($response_code));
 		$this->view = new CsrLayoutPage($body);
 		$this->view->view();
 		exit;

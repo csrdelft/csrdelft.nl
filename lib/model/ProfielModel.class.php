@@ -1,10 +1,26 @@
 <?php
 
-use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\Entity\PersistentEntity;
+namespace CsrDelft\model;
 
-require_once 'model/entity/Mail.class.php';
+use CsrDelft\LDAP;
+use CsrDelft\model\bibliotheek\BiebCatalogus;
+use CsrDelft\model\entity\Geslacht;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\Mail;
+use CsrDelft\model\entity\OntvangtContactueel;
+use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\security\AccessRole;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Persistence\Database;
+use function CsrDelft\getDateTime;
+use function CsrDelft\setMelding;
+use Exception;
+
 
 /**
  * ProfielModel.class.php
@@ -216,8 +232,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return string changelogregel
 	 */
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
-		require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
-		$aantal = MaaltijdAbonnementenModel::instance()->verwijderAbonnementenVoorLid($profiel->uid);
+				$aantal = MaaltijdAbonnementenModel::instance()->verwijderAbonnementenVoorLid($profiel->uid);
 		if ($aantal > 0) {
 			return 'Afmelden abo\'s: ' . $aantal . ' uitgezet.[br]';
 		}
@@ -304,8 +319,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyBibliothecaris(Profiel $profiel, $oudestatus) {
-		require_once 'model/bibliotheek/BiebCatalogus.class.php';
-		$boeken = BiebCatalogus::getBoekenByUid($profiel->uid, 'geleend');
+				$boeken = BiebCatalogus::getBoekenByUid($profiel->uid, 'geleend');
 		if (!is_array($boeken)) {
 			$boeken = array();
 		}

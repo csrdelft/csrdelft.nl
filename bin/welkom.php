@@ -1,9 +1,12 @@
 #!/usr/bin/php5
 <?php
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\Mail;
+use CsrDelft\model\ProfielModel;
+
 chdir(dirname(__FILE__) . '/../lib/');
 
 require_once 'configuratie.include.php';
-require_once 'model/entity/Mail.class.php';
 
 # Scriptje om voor sjaars een wachtwoord te genereren en dat toe te mailen.
 # Vergeet niet voor gebruik hieronder het jaar aan te passen.

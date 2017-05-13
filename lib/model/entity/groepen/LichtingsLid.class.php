@@ -1,6 +1,6 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 
-require_once 'model/entity/LidStatus.enum.php';
 
 /**
  * LichtingsLid.class.php

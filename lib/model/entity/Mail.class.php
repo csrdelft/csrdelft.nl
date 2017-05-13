@@ -1,4 +1,11 @@
 <?php
+namespace CsrDelft\model\entity;
+use function CsrDelft\email_like;
+use function CsrDelft\isSyrinx;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrBB;
+use CsrDelft\view\MailTemplateView;
+use Exception;
 
 /**
  * Mail.class.php
@@ -190,8 +197,7 @@ class Mail {
 	public function send($debug = false) {
 		switch ($this->type) {
 			case 'html':
-				require_once 'view/MailTemplateView.class.php';
-				$template = new MailTemplateView($this);
+								$template = new MailTemplateView($this);
 				$body = $template->getHtml();
 				break;
 

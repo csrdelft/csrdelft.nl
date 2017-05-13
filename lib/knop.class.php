@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft;
 
 /**
  * class.btn.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
@@ -105,9 +106,4 @@ class Knop {
 		$knop->setText($text);
 		return $knop->getHtml();
 	}
-
-	public static function viewKnop($url, $type, $text = null) {
-		echo getKnop($url, $type, $text);
-	}
-
 }

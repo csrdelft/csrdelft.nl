@@ -1,7 +1,8 @@
 <?php
 
-require_once 'view/fiscaat/BeheerCiviSaldoView.class.php';
-require_once 'view/fiscaat/BeheerCiviProductenView.class.php';
+namespace CsrDelft\view\fiscaat;
+
+use CsrDelft\view\SmartyTemplateView;
 
 class FiscaatOverzichtView extends SmartyTemplateView {
 	public function view() {

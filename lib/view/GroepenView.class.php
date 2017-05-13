@@ -1,10 +1,23 @@
 <?php
+namespace CsrDelft\view;
 
-require_once 'model/entity/groepen/GroepTab.enum.php';
-require_once 'model/CmsPaginaModel.class.php';
-require_once 'view/CmsPaginaView.class.php';
-require_once 'view/GroepForms.class.php';
-require_once 'view/GroepLedenView.class.php';
+use CsrDelft\Icon;
+use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\ChangeLogModel;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\entity\Geslacht;
+use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\entity\groepen\GroepTab;
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\DataTableResponse;
+use Exception;
+use function CsrDelft\className;
+
 
 /**
  * GroepenView.class.php
@@ -116,8 +129,7 @@ class GroepenBeheerData extends DataTableResponse {
 class GroepLogboekTable extends DataTable {
 
 	public function __construct(AbstractGroep $groep) {
-		require_once 'model/entity/ChangeLogEntry.class.php';
-		parent::__construct(ChangeLogModel::ORM, $groep->getUrl() . 'logboek', false, 'moment');
+				parent::__construct(ChangeLogModel::ORM, $groep->getUrl() . 'logboek', false, 'moment');
 		$this->hideColumn('subject');
 		$this->searchColumn('property');
 		$this->searchColumn('old_value');
@@ -131,7 +143,7 @@ class GroepLogboekTable extends DataTable {
 	}
 
 	public function getType() {
-		return get_class($this);
+		return className($this);
 	}
 
 }
@@ -144,106 +156,6 @@ class GroepLogboekData extends DataTableResponse {
 		$array['uid'] = ProfielModel::getLink($log->uid, 'civitas');
 
 		return parent::getJson($array);
-	}
-
-}
-
-class GroepView implements FormElement {
-
-	private $groep;
-	private $leden;
-	private $geschiedenis;
-	private $bb;
-
-	public function __construct(AbstractGroep $groep, $tab = null, $geschiedenis = false, $bb = false) {
-		$this->groep = $groep;
-		$this->geschiedenis = $geschiedenis;
-		$this->bb = $bb;
-		switch ($tab) {
-
-			case GroepTab::Pasfotos:
-				$this->leden = new GroepPasfotosView($groep);
-				break;
-
-			case GroepTab::Lijst:
-				$this->leden = new GroepLijstView($groep);
-				break;
-
-			case GroepTab::Statistiek:
-				$this->leden = new GroepStatistiekView($groep);
-				break;
-
-			case GroepTab::Emails:
-				$this->leden = new GroepEmailsView($groep);
-				break;
-
-			case GroepTab::Emails:
-				$this->leden = new GroepEmailsView($groep);
-				break;
-
-			case GroepTab::Eetwens:
-				$this->leden = new GroepEetwensView($groep);
-				break;
-
-			default:
-				if ($groep->keuzelijst) {
-					$this->leden = new GroepLijstView($groep);
-				} else {
-					$this->leden = new GroepPasfotosView($groep);
-				}
-		}
-	}
-
-	public function getModel() {
-		return $this->groep;
-	}
-
-	public function getTitel() {
-		return $this->groep->naam;
-	}
-
-	public function getBreadcrumbs() {
-		return null;
-	}
-
-	public function getHtml() {
-		$html = '<a name="' . $this->groep->id . '"></a><div id="groep-' . $this->groep->id . '" class="bb-groep';
-		if ($this->geschiedenis) {
-			$html .= ' state-geschiedenis';
-		}
-		if ($this->bb) {
-			$html .= ' bb-block';
-		}
-		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting">';
-		if ($this->groep->mag(A::Wijzigen)) {
-			$html .= '<div class="float-right"><a class="btn" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-pencil"></span></a></div>';
-		}
-		$html .= '<h3>' . $this->getTitel();
-		if (property_exists($this->groep, 'locatie') AND ! empty($this->groep->locatie)) {
-			$html .= ' &nbsp; <a target="_blank" href="https://maps.google.nl/maps?q=' . urlencode($this->groep->locatie) . '" title="' . $this->groep->locatie . '" class="lichtgrijs fa fa-map-marker fa-lg"></a>';
-		}
-		$html .= ' <span class="groep-id-hint">(<a href="' . $this->groep->getUrl() . '">#' . $this->groep->id . '</a>)</span>';
-		$html .= '</h3>';
-		$html .= CsrBB::parse($this->groep->samenvatting);
-		if (!empty($this->groep->omschrijving)) {
-			$html .= '<div class="clear">&nbsp;</div><a id="groep-omschrijving-' . $this->groep->id . '" class="post noanim" href="' . $this->groep->getUrl() . 'omschrijving">Meer lezen »</a>';
-		}
-		$html .= '</div>';
-		$html .= $this->leden->getHtml();
-		$html .= '<div class="clear">&nbsp</div></div>';
-		return $html;
-	}
-
-	public function view() {
-		echo $this->getHtml();
-	}
-
-	public function getJavascript() {
-		return null;
-	}
-
-	public function getType() {
-		return get_class($this->groep);
 	}
 
 }
@@ -291,7 +203,7 @@ class GroepenView implements View {
 	public function view() {
 		$model = $this->model;
 		$orm = $model::ORM;
-		if ($orm::magAlgemeen(A::Aanmaken, $this->soort)) {
+		if ($orm::magAlgemeen(AccessAction::Aanmaken, $this->soort)) {
 			echo '<a class="btn" href="' . $this->model->getUrl() . 'nieuw/' . $this->soort . '">'.Icon::getTag('add').' Toevoegen</a>';
 		}
 		echo '<a class="btn" href="' . $this->model->getUrl() . 'beheren">'.Icon::getTag('table').' Beheren</a>';
@@ -302,11 +214,11 @@ class GroepenView implements View {
 		$view->view();
 		foreach ($this->groepen as $groep) {
 			// Controleer rechten
-			if (!$groep->mag(A::Bekijken)) {
+			if (!$groep->mag(AccessAction::Bekijken)) {
 				continue;
 			}
 			echo '<hr>';
-			$view = new GroepView($groep, $this->tab, $this->geschiedenis);
+			$view = new groepen\GroepView($groep, $this->tab, $this->geschiedenis);
 			$view->view();
 		}
 	}

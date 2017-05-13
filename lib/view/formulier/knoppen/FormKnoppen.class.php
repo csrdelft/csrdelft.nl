@@ -1,11 +1,8 @@
 <?php
+namespace CsrDelft\view\formulier\knoppen;
 
-require_once 'view/formulier/knoppen/FormulierKnop.class.php';
-require_once 'view/formulier/knoppen/SubmitKnop.class.php';
-require_once 'view/formulier/knoppen/CancelKnop.class.php';
-require_once 'view/formulier/knoppen/DeleteKnop.class.php';
-require_once 'view/formulier/knoppen/ResetKnop.class.php';
-require_once 'view/formulier/knoppen/PasfotoAanmeldenKnop.class.php';
+use CsrDelft\view\formulier\elementen\FormElement;
+
 
 /**
  * FormKnoppen.class.php

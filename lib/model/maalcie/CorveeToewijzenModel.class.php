@@ -1,9 +1,11 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
-require_once 'model/maalcie/KwalificatiesModel.class.php';
-require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
-require_once 'model/maalcie/CorveePuntenModel.class.php';
-require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
+use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\ProfielModel;
+use Exception;
+
 
 /**
  * CorveeToewijzenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -70,7 +72,7 @@ class CorveeToewijzenModel {
 		}
 		foreach ($lijst as $uid => $punten) {
 			$lijst[$uid]['laatste'] = CorveeTakenModel::instance()->getLaatsteTaakVanLid($uid);
-			if ($lijst[$uid]['laatste'] !== false && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime(Instellingen::get('corvee', 'suggesties_recent_verbergen'), $taak->getBeginMoment())) {
+			if ($lijst[$uid]['laatste'] !== false && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime(InstellingenModel::get('corvee', 'suggesties_recent_verbergen'), $taak->getBeginMoment())) {
 				$lijst[$uid]['recent'] = true;
 			} else {
 				$lijst[$uid]['recent'] = false;

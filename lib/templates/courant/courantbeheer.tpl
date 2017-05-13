@@ -9,7 +9,7 @@
 <hr />
 
 {* feutmeldingen weergeven... *}
-{getMelding()}
+{CsrDelft\getMelding()}
 
 <h1>C.S.R.-courant</h1>
 <p>
@@ -30,7 +30,7 @@
 		{foreach from=$courant->getBerichtenVoorGebruiker() item=bericht}
 			<dt>
 			<span class="onderstreept">{$bericht.categorie|replace:'csr':'C.S.R.'}</span>
-			{if $courant->magBeheren()}({ProfielModel::getLink($bericht.uid, 'civitas')}){/if}
+			{if $courant->magBeheren()}({CsrDelft\model\ProfielModel::getLink($bericht.uid, 'civitas')}){/if}
 			<span class="dikgedrukt">{$bericht.titel}</span>
 			{if $courant->magBeheren($bericht.uid)}
 				<a class="btn" href="/courant/bewerken/{$bericht.ID}">bewerken</a>

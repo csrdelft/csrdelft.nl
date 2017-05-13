@@ -1,11 +1,13 @@
 <?php
 
+namespace CsrDelft\model\fiscaat;
+
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\fiscaat\CiviSaldo;
+use CsrDelft\model\entity\fiscaat\CiviSaldoLogEnum;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
-
-require_once 'model/entity/fiscaat/CiviSaldo.class.php';
-require_once 'model/entity/fiscaat/CiviSaldoLogEnum.class.php';
-require_once 'model/fiscaat/CiviSaldoLogModel.class.php';
+use Exception;
 
 class CiviSaldoModel extends PersistenceModel {
 	const ORM = CiviSaldo::class;

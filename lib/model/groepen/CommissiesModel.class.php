@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\model\groepen;
+
+use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\entity\groepen\Commissie;
+use CsrDelft\model\entity\groepen\CommissieSoort;
 
 class CommissiesModel extends AbstractGroepenModel {
 

@@ -1,6 +1,7 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\view\login\LoginForm;
 
-require_once 'view/LoginView.class.php';
 
 /**
  * CsrLayoutOweePage.class.php

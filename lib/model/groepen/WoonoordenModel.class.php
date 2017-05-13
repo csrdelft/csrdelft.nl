@@ -1,4 +1,11 @@
 <?php
+namespace CsrDelft\model\groepen;
+
+use function CsrDelft\getDateTime;
+use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\entity\groepen\HuisStatus;
+use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\model\security\LoginModel;
 
 class WoonoordenModel extends AbstractGroepenModel {
 

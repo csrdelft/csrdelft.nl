@@ -1,8 +1,12 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
+use function CsrDelft\group_by_distinct;
+use CsrDelft\model\entity\maalcie\CorveeFunctie;
+use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\CachedPersistenceModel;
+use Exception;
 
-require_once 'model/maalcie/KwalificatiesModel.class.php';
 
 /**
  * FunctiesModel.class.php
@@ -39,7 +43,7 @@ class FunctiesModel extends CachedPersistenceModel {
 
 	public function nieuw() {
 		$functie = new CorveeFunctie();
-		$functie->kwalificatie_benodigd = (boolean) Instellingen::get('corvee', 'standaard_kwalificatie');
+		$functie->kwalificatie_benodigd = (boolean) InstellingenModel::get('corvee', 'standaard_kwalificatie');
 		return $functie;
 	}
 

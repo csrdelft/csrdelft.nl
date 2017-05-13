@@ -1,4 +1,7 @@
 <?php
+
+namespace CsrDelft\model\entity\fiscaat;
+
 use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**

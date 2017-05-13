@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model;
+use CsrDelft\MijnSqli;
+use CsrDelft\model\security\AccessModel;
+use CsrDelft\model\security\AccountModel;
 
 /**
  * CommissieVoorkeurenModel.class.php

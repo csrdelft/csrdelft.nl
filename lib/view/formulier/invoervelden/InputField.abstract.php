@@ -1,4 +1,14 @@
 <?php
+namespace CsrDelft\view\formulier\invoervelden;
+use CsrDelft\Icon;
+use function CsrDelft\in_array_i;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\valid_filename;
+use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\uploadvelden\BestandBehouden;
+use CsrDelft\view\Validator;
+use Exception;
+
 /**
  * InputField.abstract.php
  *

@@ -1,13 +1,23 @@
 <?php
+namespace CsrDelft\model\security;
 
+use function CsrDelft\getDateTime;
+use function CsrDelft\getSessionMaxLifeTime;
+use CsrDelft\model\entity\security\Account;
+use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\model\entity\security\LoginSession;
+use CsrDelft\model\entity\security\RememberLogin;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\PersistenceModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use function CsrDelft\setRememberCookie;
+use function CsrDelft\startsWith;
+use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
+use CsrDelft\view\Validator;
+use Exception;
 
-require_once 'view/Validator.interface.php';
-require_once 'model/entity/security/AuthenticationMethod.enum.php';
-require_once 'model/security/RememberLoginModel.class.php';
-require_once 'model/security/AccountModel.class.php';
-require_once 'model/security/OneTimeTokensModel.class.php';
-require_once 'model/ProfielModel.class.php';
 
 /**
  * LoginModel.class.php
@@ -159,8 +169,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 		// Controleer of wachtwoord is verlopen
 		$pass_since = strtotime($account->pass_since);
-		$verloop_na = strtotime(Instellingen::get('beveiliging', 'wachtwoorden_verlopen_ouder_dan'));
-		$waarschuwing_vooraf = strtotime(Instellingen::get('beveiliging', 'wachtwoorden_verlopen_waarschuwing_vooraf'), $verloop_na);
+		$verloop_na = strtotime(InstellingenModel::get('beveiliging', 'wachtwoorden_verlopen_ouder_dan'));
+		$waarschuwing_vooraf = strtotime(InstellingenModel::get('beveiliging', 'wachtwoorden_verlopen_waarschuwing_vooraf'), $verloop_na);
 		if ($pass_since < $verloop_na) {
 			if (!startsWith(REQUEST_URI, '/wachtwoord') AND ! startsWith(REQUEST_URI, '/tools/css.php') AND ! startsWith(REQUEST_URI, '/tools/js.php') AND REQUEST_URI !== '/endsu') {
 				setMelding('Uw wachtwoord is verlopen', 2);

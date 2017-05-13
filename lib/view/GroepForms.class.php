@@ -1,4 +1,45 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\groepen\AbstractGroepLid;
+use CsrDelft\model\entity\groepen\Activiteit;
+use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\model\entity\groepen\Commissie;
+use CsrDelft\model\entity\groepen\CommissieSoort;
+use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\entity\groepen\HuisStatus;
+use CsrDelft\model\entity\groepen\Ketzer;
+use CsrDelft\model\entity\groepen\Kring;
+use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\model\groepen\OnderverenigingenModel;
+use CsrDelft\model\groepen\RechtenGroepenModel;
+use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\elementen\HtmlBbComment;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\InlineForm;
+use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\keuzevelden\MultiSelectField;
+use CsrDelft\view\formulier\keuzevelden\RadioField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\knoppen\FormKnoppen;
+use CsrDelft\view\formulier\knoppen\ModalCloseButtons;
+use CsrDelft\view\formulier\knoppen\PasfotoAanmeldenKnop;
+use CsrDelft\view\formulier\knoppen\SubmitKnop;
+use CsrDelft\view\formulier\ModalForm;
+use CsrDelft\view\groepen\GroepView;
+use function CsrDelft\classNameZonderNamespace;
+use function CsrDelft\getMelding;
+use function CsrDelft\setMelding;
 
 /**
  * GroepForms.class.php
@@ -15,7 +56,7 @@ class GroepForm extends ModalForm {
 	private $mode;
 
 	public function __construct(AbstractGroep $groep, $action, $mode, $nocancel = false) {
-		parent::__construct($groep, $action, get_class($groep), true);
+		parent::__construct($groep, $action, classNameZonderNamespace(get_class($groep)), true);
 		$this->mode = $mode;
 		if ($groep->id) {
 			$this->titel .= ' wijzigen';
@@ -89,7 +130,7 @@ class GroepForm extends ModalForm {
 			 * 
 			 * N.B.: Deze check staat binnen de !magAlgemeen zodat P_LEDEN_MOD deze check overslaat
 			 */
-			elseif ($this->mode === A::Wijzigen AND $groep instanceof Woonoord) {
+			elseif ($this->mode === AccessAction::Wijzigen AND $groep instanceof Woonoord) {
 
 				$origvalue = $this->findByName('soort')->getOrigValue();
 				if ($origvalue !== $soort) {
@@ -129,7 +170,7 @@ class GroepOpvolgingForm extends ModalForm {
 		foreach (GroepStatus::getTypeOptions() as $status) {
 			$options[$status] = GroepStatus::getChar($status);
 		}
-		$fields[] = new RadioField('status', $groep->status, 'Groepstatus', $options);
+		$fields[] = new RadioField('status', $groep->status, Groepstatus::class, $options);
 
 		$fields[] = new FormDefaultKnoppen();
 
@@ -147,8 +188,7 @@ class GroepSoortField extends RadioField {
 	public function __construct($name, $value, $description, AbstractGroep $groep) {
 		parent::__construct($name, $value, $description, array());
 
-		require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
-		$activiteiten = array();
+				$activiteiten = array();
 		foreach (ActiviteitSoort::getTypeOptions() as $soort) {
 			$activiteiten[$soort] = ActiviteitSoort::getDescription($soort);
 		}
@@ -163,8 +203,7 @@ class GroepSoortField extends RadioField {
 $('#{$this->getId()}Option_ActiviteitenModel').click();
 JS;
 
-		require_once 'model/entity/groepen/CommissieSoort.enum.php';
-		$commissies = array();
+				$commissies = array();
 		foreach (CommissieSoort::getTypeOptions() as $soort) {
 			$commissies[$soort] = CommissieSoort::getDescription($soort);
 		}
@@ -180,14 +219,14 @@ $('#{$this->getId()}Option_CommissiesModel').click();
 JS;
 
 		$this->options = array(
-			'ActiviteitenModel'		 => $this->activiteit,
-			'KetzersModel'			 => 'Aanschafketzer',
-			'WerkgroepenModel'		 => WerkgroepenModel::ORM,
-			'RechtenGroepenModel'	 => 'Groep (overig)',
-			'OnderverenigingenModel' => OnderverenigingenModel::ORM,
-			'WoonoordenModel'		 => WoonoordenModel::ORM,
-			'BesturenModel'			 => BesturenModel::ORM,
-			'CommissiesModel'		 => $this->commissie
+			ActiviteitenModel::class		 => $this->activiteit,
+			KetzersModel::class			 => 'Aanschafketzer',
+			WerkgroepenModel::class		 => WerkgroepenModel::ORM,
+			RechtenGroepenModel::class	 => 'Groep (overig)',
+			OnderverenigingenModel::class => OnderverenigingenModel::ORM,
+			WoonoordenModel::class		 => WoonoordenModel::ORM,
+			BesturenModel::class			 => BesturenModel::ORM,
+			CommissiesModel::class => $this->commissie
 		);
 	}
 
@@ -262,7 +301,7 @@ class KetzerSoortField extends GroepSoortField {
 			case 'KetzersModel':
 				$model = $class[0]::instance(); // require once
 				$orm = $model::ORM;
-				if (!$orm::magAlgemeen(A::Aanmaken, $soort)) {
+				if (!$orm::magAlgemeen(AccessAction::Aanmaken, $soort)) {
 					if ($model instanceof ActiviteitenModel) {
 						$naam = ActiviteitSoort::getDescription($soort);
 					} else {

@@ -1,8 +1,17 @@
 <?php
+namespace CsrDelft\controller\maalcie;
 
-require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
-require_once 'view/maalcie/MaaltijdRepetitiesView.class.php';
-require_once 'view/maalcie/forms/MaaltijdRepetitieForm.class.php';
+use CsrDelft\controller\framework\AclController;
+use function CsrDelft\getMelding;
+use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
+use CsrDelft\view\maalcie\MaaltijdRepetitiesView;
+use CsrDelft\view\maalcie\MaaltijdRepetitieView;
+
 
 /**
  * MaaltijdRepetitiesController.class.php

@@ -1,4 +1,4 @@
-{getMelding()}
+{CsrDelft\getMelding()}
 
 <h1>{$titel}</h1>
 
@@ -8,7 +8,7 @@
 			<thead>
 				<tr>
 					<th class="niet-dik">
-						{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
+						{if CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief'}
 							{$draad->datum_tijd|reldate}
 						{else}
 							{$draad->datum_tijd}
@@ -23,7 +23,7 @@
 							</span>
 						{else}
 							<small class="niet-dik">[<a href="/forum/deel/{$draad->forum_id}">{$draad->getForumDeel()->titel}</a>]</small>
-							<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}"{if $draad->isOngelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>
+							<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}"{if $draad->isOngelezen()} class="{CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave')}"{/if}>
 								{$draad->titel}
 							</a>
 							{if $draad->belangrijk}

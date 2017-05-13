@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\view\formulier\invoervelden;
+use function CsrDelft\valid_filename;
+
 /**
  * FileNameField.class.php
  *

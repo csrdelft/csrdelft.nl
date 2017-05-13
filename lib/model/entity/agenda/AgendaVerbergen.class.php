@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\model\entity\agenda;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

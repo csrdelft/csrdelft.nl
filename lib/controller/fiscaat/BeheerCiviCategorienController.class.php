@@ -1,7 +1,12 @@
 <?php
 
-require_once 'model/fiscaat/CiviCategorieModel.class.php';
-require_once 'view/fiscaat/CiviCategorieSuggestiesView.class.php';
+namespace CsrDelft\controller\fiscaat;
+
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\fiscaat\CiviBestellingModel;
+use CsrDelft\model\fiscaat\CiviCategorieModel;
+use CsrDelft\view\fiscaat\CiviCategorieSuggestiesView;
+
 
 /**
  * Class BeheerCiviBestellingController

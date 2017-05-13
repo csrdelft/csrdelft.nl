@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\model\bibliotheek;
+use function CsrDelft\getDateTime;
+use CsrDelft\MijnSqli;
+use CsrDelft\model\security\LoginModel;
+use Exception;
 
 /**
  * BiebBeschrijving.class.php	| 	Gerrit Uitslag

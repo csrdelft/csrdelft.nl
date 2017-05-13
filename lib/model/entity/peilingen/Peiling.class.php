@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model\entity\peilingen;
+use CsrDelft\model\PeilingOptiesModel;
+use CsrDelft\model\PeilingStemmenModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

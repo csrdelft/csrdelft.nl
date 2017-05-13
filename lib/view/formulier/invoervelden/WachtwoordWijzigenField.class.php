@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\view\formulier\invoervelden;
+use function CsrDelft\array_filter_empty;
+use CsrDelft\model\entity\security\Account;
+use CsrDelft\model\security\AccountModel;
+
 /**
  * WachtwoordWijzigenField.class.php
  *

@@ -12,7 +12,7 @@
 		{else}
 			<div class="inline" style="width: 16px;"></div>
 		{/if}
-		<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}{if LidInstellingen::get('forum', 'open_draad_op_pagina') == 'ongelezen'}#ongelezen{elseif LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste'}#reageren{/if}"{if LoginModel::mag('P_LOGGED_IN') AND $draad->isOngelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>{$draad->titel}</a>
+		<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}{if CsrDelft\model\LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'ongelezen'}#ongelezen{elseif CsrDelft\model\LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'laatste'}#reageren{/if}"{if LoginModel::mag('P_LOGGED_IN') AND $draad->isOngelezen()} class="{CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave')}"{/if}>{$draad->titel}</a>
 		{if LoginModel::mag('P_LOGGED_IN') AND $draad->getAantalOngelezenPosts() > 0}
 			<span class="badge">{$draad->getAantalOngelezenPosts()}</span>
 		{/if}
@@ -21,7 +21,7 @@
 		{/if}
 	</td>
 	<td class="datumwijziging">
-		{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
+		{if CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief'}
 			{$draad->laatst_gewijzigd|reldate}
 		{else}
 			{$draad->laatst_gewijzigd}

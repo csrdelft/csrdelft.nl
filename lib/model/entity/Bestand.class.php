@@ -1,8 +1,8 @@
 <?php
+namespace CsrDelft\model\entity;
 
 use CsrDelft\Orm\Entity\PersistentEntity;
 
-require_once 'model/entity/Map.class.php';
 
 /**
  * Bestand.class.php

@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\model;
+use CsrDelft\model\entity\EetplanBekenden;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 

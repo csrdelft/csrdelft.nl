@@ -1,5 +1,7 @@
 <?php
 
+namespace CsrDelft\model\entity\fiscaat;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

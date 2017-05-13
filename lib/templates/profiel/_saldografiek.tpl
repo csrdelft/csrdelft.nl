@@ -52,7 +52,7 @@
 	}
 </script>
 <div id="saldografiek" class="verborgen" style="width: 670px; height: 220px;"></div>
-{if LoginModel::getUid() !== $profiel->uid}
+{if CsrDelft\model\security\LoginModel::getUid() !== $profiel->uid}
 	<br /><a class="btn" onclick="jQuery('#saldografiek').show();
 			makePlot();
 			jQuery(this).remove()">Toon saldografiek</a>

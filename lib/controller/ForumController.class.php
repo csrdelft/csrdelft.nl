@@ -1,7 +1,39 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/forum/ForumModel.class.php';
-require_once 'view/ForumView.class.php';
+use CsrDelft\controller\framework\Controller;
+use CsrDelft\Icon;
+use CsrDelft\model\entity\Mail;
+use CsrDelft\model\forum\ForumDelenModel;
+use CsrDelft\model\forum\ForumDradenGelezenModel;
+use CsrDelft\model\forum\ForumDradenModel;
+use CsrDelft\model\forum\ForumDradenReagerenModel;
+use CsrDelft\model\forum\ForumDradenVerbergenModel;
+use CsrDelft\model\forum\ForumDradenVolgenModel;
+use CsrDelft\model\forum\ForumPostsModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\SimpleSpamFilter;
+use CsrDelft\view\CsrLayoutOweePage;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\FlotTimeSeries;
+use CsrDelft\view\forum\ForumDraadView;
+use CsrDelft\view\ForumDeelForm;
+use CsrDelft\view\ForumDeelView;
+use CsrDelft\view\ForumDraadReagerenView;
+use CsrDelft\view\ForumOverzichtView;
+use CsrDelft\view\ForumPostDeleteView;
+use CsrDelft\view\ForumPostView;
+use CsrDelft\view\ForumResultatenView;
+use CsrDelft\view\ForumRssView;
+use CsrDelft\view\ForumZoekenForm;
+use CsrDelft\view\JsonResponse;
+use Exception;
+use function CsrDelft\email_like;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+
 
 /**
  * ForumController.class.php
@@ -134,8 +166,7 @@ class ForumController extends Controller {
 		foreach (ForumDelenModel::instance()->getForumDelenVoorLid() as $deel) {
 			$series[$deel->titel] = $model->getStatsVoorForumDeel($deel);
 		}
-		require_once 'view/FlotTimeSeries.class.php';
-		$this->view = new FlotTimeSeries($series);
+				$this->view = new FlotTimeSeries($series);
 	}
 
 	/**
@@ -178,7 +209,7 @@ class ForumController extends Controller {
 			$ouder = 'jonger';
 			$jaar = 1;
 		}
-		$limit = (int) LidInstellingen::get('forum', 'zoekresultaten');
+		$limit = (int) LidInstellingenModel::get('forum', 'zoekresultaten');
 		$draden = ForumDelenModel::instance()->zoeken($query, false, $datum, $ouder, $jaar, $limit);
 		$this->view = new ForumResultatenView($draden, $query);
 	}
@@ -202,9 +233,9 @@ class ForumController extends Controller {
 			$draden = ForumDelenModel::instance()->zoeken($query, true, $datum, $ouder, $jaar, $limit);
 			foreach ($draden as $draad) {
 				$url = '/forum/onderwerp/' . $draad->draad_id;
-				if (LidInstellingen::get('forum', 'open_draad_op_pagina') == 'ongelezen') {
+				if (LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'ongelezen') {
 					$url .= '#ongelezen';
-				} elseif (LidInstellingen::get('forum', 'open_draad_op_pagina') == 'laatste') {
+				} elseif (LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'laatste') {
 					$url .= '#reageren';
 				}
 				if ($draad->belangrijk) {
@@ -310,7 +341,7 @@ class ForumController extends Controller {
 			$gelezen = false;
 		}
 		if ($pagina === null) {
-			$pagina = LidInstellingen::get('forum', 'open_draad_op_pagina');
+			$pagina = LidInstellingenModel::get('forum', 'open_draad_op_pagina');
 		}
 		$paging = true;
 		if ($pagina === 'ongelezen' AND $gelezen) {
@@ -578,8 +609,7 @@ class ForumController extends Controller {
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 
 		// spam controle
-		require_once 'simplespamfilter.class.php';
-		$filter = new SimpleSpamfilter();
+				$filter = new SimpleSpamfilter();
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
 		if (!empty($spamtrap) OR $filter->isSpam($tekst) OR ( isset($titel) AND $filter->isSpam($titel) )) { //TODO: logging
 			setMelding('SPAM', -1);
@@ -653,8 +683,7 @@ class ForumController extends Controller {
 					continue;
 				}
 				$lidnaam = $profiel->getNaam('civitas');
-				require_once 'model/entity/Mail.class.php';
-				$bericht =
+								$bericht =
 					"Geachte " . $lidnaam . ",\n\nEr is een nieuwe reactie geplaatst door " . $auteur . " in een draad dat u volgt: " .
                     "[url=" . CSR_ROOT . "/forum/reactie/" . $post->post_id . "#" . $post->post_id . "]" . $draad->titel . "[/url]" .
 					"\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT";

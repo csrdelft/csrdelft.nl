@@ -1,6 +1,12 @@
 <?php
+namespace CsrDelft\view;
 
-require_once 'model/bibliotheek/BiebCatalogus.class.php';
+use CsrDelft\model\bibliotheek\BiebBoek;
+use CsrDelft\model\bibliotheek\BiebCatalogus;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\reldate;
+
 
 /**
  * BibliotheekView.class.php

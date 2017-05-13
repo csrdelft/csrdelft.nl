@@ -1,9 +1,11 @@
 <?php
+namespace CsrDelft\model;
 
+use CsrDelft\model\entity\LidInstelling;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\Orm\Persistence\Database;
 
-require_once 'model/InstellingenModel.class.php';
 
 /**
  * LidInstellingenModel.class.php
@@ -13,7 +15,7 @@ require_once 'model/InstellingenModel.class.php';
  * Deze class houdt de instellingen bij voor een gebruiker.
  * In de sessie en in het profiel van leden.
  */
-class LidInstellingen extends Instellingen {
+class LidInstellingenModel extends InstellingenModel {
 
 	const ORM = LidInstelling::class;
 

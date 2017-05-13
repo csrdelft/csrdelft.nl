@@ -1,15 +1,30 @@
 <?php
+namespace CsrDelft\model\entity;
 
-use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\GoogleSync;
+use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\model\groepen\KringenModel;
+use CsrDelft\model\groepen\leden\BestuursLedenModel;
+use CsrDelft\model\groepen\leden\CommissieLedenModel;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\view\CsrBB;
+use Exception;
+use function CsrDelft\array_filter_empty;
+use function CsrDelft\setMelding;
+use function CsrDelft\square_crop;
 
-require_once 'model/entity/Geslacht.enum.php';
-require_once 'model/entity/OntvangtContactueel.enum.php';
-require_once 'model/entity/LidStatus.enum.php';
-require_once 'model/entity/Kringleider.enum.php';
-require_once 'ldap.class.php';
-require_once 'model/GroepenModel.abstract.php';
 
 /**
  * Profiel.class.php
@@ -124,13 +139,13 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'nickname'				 => array(T::String, true),
 		'duckname'				 => array(T::String, true),
 		// fysiek
-		'geslacht'				 => array(T::Enumeration, false, 'Geslacht'),
+		'geslacht'				 => array(T::Enumeration, false, Geslacht::class),
 		'gebdatum'				 => array(T::Date),
 		'sterfdatum'			 => array(T::Date, true),
 		// getrouwd
 		'echtgenoot'			 => array(T::UID, true),
 		'adresseringechtpaar'	 => array(T::String, true),
-		'ontvangtcontactueel'	 => array(T::Enumeration, false, 'OntvangtContactueel'),
+		'ontvangtcontactueel'	 => array(T::Enumeration, false, OntvangtContactueel::class),
 		// adres
 		'adres'					 => array(T::String),
 		'postcode'				 => array(T::String),
@@ -159,7 +174,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		// lidmaatschap
 		'lidjaar'				 => array(T::Integer),
 		'lidafdatum'			 => array(T::Date, true),
-		'status'				 => array(T::Enumeration, false, 'LidStatus'),
+		'status'				 => array(T::Enumeration, false, LidStatus::class),
 		// geld
 		'bankrekening'			 => array(T::String, true),
 		'machtiging'			 => array(T::Boolean, true),
@@ -350,13 +365,13 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
 		$k = '';
-		if ($vorm !== 'pasfoto' AND LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
+		if ($vorm !== 'pasfoto' AND LidInstellingenModel::get('layout', 'visitekaartjes') == 'ja') {
 			$title = '';
 		} else {
 			$title = ' title="' . htmlspecialchars($this->getNaam('volledig')) . '"';
 		}
 		$l = '<a href="/profiel/' . $this->uid . '"' . $title . ' class="lidLink ' . htmlspecialchars($this->status) . '">';
-		if ($vorm !== 'pasfoto' AND ( $vorm === 'leeg' OR LidInstellingen::get('layout', 'visitekaartjes') == 'ja' )) {
+		if ($vorm !== 'pasfoto' AND ( $vorm === 'leeg' OR LidInstellingenModel::get('layout', 'visitekaartjes') == 'ja' )) {
 			$k = '<span';
 			if ($vorm !== 'leeg') {
 				$k .=' class="hoverIntent"';
@@ -427,7 +442,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getNaam($vorm = 'volledig', $force = false) {
 		if ($vorm === 'user') {
-			$vorm = LidInstellingen::get('forum', 'naamWeergave');
+			$vorm = LidInstellingenModel::get('forum', 'naamWeergave');
 		}
 		if (! $force AND ! LoginModel::mag('P_LOGGED_IN')) {
 			$vorm = 'civitas';
@@ -561,7 +576,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				$folders = array('');
 			} else {
 				if ($vorm === 'user') {
-					$vorm = LidInstellingen::get('forum', 'naamWeergave');
+					$vorm = LidInstellingenModel::get('forum', 'naamWeergave');
 				}
 				$folders = array($vorm . '/', '');
 			}
@@ -656,8 +671,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function isInGoogleContacts() {
 		try {
-			require_once 'googlesync.class.php';
-			if (!GoogleSync::isAuthenticated()) {
+						if (!GoogleSync::isAuthenticated()) {
 				return null;
 			}
 			return GoogleSync::instance()->existsInGoogleContacts($this);

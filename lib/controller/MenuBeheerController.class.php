@@ -1,7 +1,15 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/MenuModel.class.php';
-require_once 'view/MenuBeheerView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\MenuModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\MenuBeheerView;
+use CsrDelft\view\MenuItemForm;
+
 
 /**
  * MenuBeheerController.class.php

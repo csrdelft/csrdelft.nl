@@ -1,4 +1,16 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\model\entity\MenuItem;
+use CsrDelft\model\MenuModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\getalvelden\RequiredIntField;
+use CsrDelft\view\formulier\invoervelden\RechtenField;
+use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\invoervelden\UrlField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
 
 /**
  * MenuBeheerView.class.php

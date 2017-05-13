@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
+use CsrDelft\model\groepen\leden\BestuursLedenModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
@@ -9,7 +11,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Bestuur extends AbstractGroep {
 
-	const leden = 'BestuursLedenModel';
+	const leden = BestuursLedenModel::class;
 
 	/**
 	 * Bestuurstekst

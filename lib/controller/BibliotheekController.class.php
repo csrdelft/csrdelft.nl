@@ -1,8 +1,21 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'controller/framework/Controller.abstract.php';
-require_once 'model/bibliotheek/BiebBoek.class.php';
-require_once 'view/BibliotheekView.class.php';
+use CsrDelft\controller\framework\Controller;
+use CsrDelft\model\bibliotheek\BewerkBoek;
+use CsrDelft\model\bibliotheek\BiebCatalogus;
+use CsrDelft\model\bibliotheek\NieuwBoek;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\BibliotheekBoekContent;
+use CsrDelft\view\BibliotheekCatalogusContent;
+use CsrDelft\view\BibliotheekCatalogusDatatableContent;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\JsonResponse;
+use Exception;
+
 
 /**
  * BibliotheekController.class.php	|	Gerrit Uitslag (klapinklapin@gmail.com)
@@ -52,16 +65,14 @@ class BibliotheekController extends Controller {
 	}
 
 	public function rubrieken() {
-		require_once 'controller/CmsPaginaController.class.php';
-		$c = new CmsPaginaController($this->action);
+				$c = new CmsPaginaController($this->action);
 		$c->bekijken($this->action);
 		$c->getView()->view();
 		exit;
 	}
 
 	public function wenslijst() {
-		require_once 'controller/CmsPaginaController.class.php';
-		$c = new CmsPaginaController($this->action);
+				$c = new CmsPaginaController($this->action);
 		$c->bekijken($this->action);
 		$c->getView()->view();
 		exit;

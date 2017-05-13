@@ -11,7 +11,7 @@
 			</ul>
 		</header>
 		<main class="cd-main-content">
-			<div id="cd-zijbalk"{if LidInstellingen::get('zijbalk', 'scrollen')!='met pagina mee'} class="{if LidInstellingen::get('zijbalk', 'scrollen')=='pauper/desktop'}desktop-only {/if}{if LidInstellingen::get('zijbalk', 'scrollbalk')=='ja'}scroll-hover {/if}scroll-fixed dragobject dragvertical" data-scrollfix="{$scrollfix}"{/if}>
+			<div id="cd-zijbalk"{if CsrDelft\model\LidInstellingenModel::get('zijbalk', 'scrollen')!='met pagina mee'} class="{if CsrDelft\model\LidInstellingenModel::get('zijbalk', 'scrollen')=='pauper/desktop'}desktop-only {/if}{if CsrDelft\model\LidInstellingenModel::get('zijbalk', 'scrollbalk')=='ja'}scroll-hover {/if}scroll-fixed dragobject dragvertical" data-scrollfix="{$scrollfix}"{/if}>
 				<a href="/">
 					<div class="cd-beeldmerk"></div>
 				</a>
@@ -26,14 +26,14 @@
 				{$body->view()}
 			</div>
 			<footer class="cd-footer">
-				{printDebug()}
+				{CsrDelft\printDebug()}
 			</footer>
 		</main>
 		{$mainmenu->view()}
 		<div id="cd-main-overlay">
-			{if LidInstellingen::get('layout', 'fx') == 'onontdekt'}
+			{if CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'onontdekt'}
 				{include file='layout/fx-onontdekt.tpl'}
-			{elseif LidInstellingen::get('layout', 'fx') == 'civisaldo'}
+			{elseif CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'civisaldo'}
 				{include file='layout/fx-civisaldo.tpl'}
 			{/if}
 		</div>
@@ -46,7 +46,7 @@
 		{if isset($minion)}
 			{$minion}
 		{/if}
-		{if LidInstellingen::get('layout', 'fx') == 'wolken'}
+		{if CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'wolken'}
 			{include file='layout/fx-clouds.tpl'}
 		{/if}
 	</body>

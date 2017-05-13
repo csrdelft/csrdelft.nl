@@ -1,5 +1,8 @@
 <?php
 
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
 
 class Barsysteem
@@ -44,7 +47,6 @@ class Barsysteem
 
     function getPersonen()
     {
-        require_once 'model/entity/LidStatus.enum.php';
         $terug = $this->db->query(<<<SQL
 SELECT CiviSaldo.uid, CiviSaldo.naam, CiviSaldo.saldo, CiviSaldo.deleted, COUNT(CiviBestelling.totaal) AS recent 
 FROM CiviSaldo LEFT JOIN CiviBestelling 

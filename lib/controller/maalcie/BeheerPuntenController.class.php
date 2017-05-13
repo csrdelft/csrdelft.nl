@@ -1,8 +1,16 @@
 <?php
+namespace CsrDelft\controller\maalcie;
 
-require_once 'model/maalcie/CorveePuntenModel.class.php';
-require_once 'model/maalcie/FunctiesModel.class.php';
-require_once 'view/maalcie/BeheerPuntenView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\maalcie\CorveePuntenModel;
+use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\ProfielModel;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\BeheerPuntenLidView;
+use CsrDelft\view\maalcie\BeheerPuntenView;
+use Exception;
+
 
 /**
  * BeheerPuntenController.class.php

@@ -1,5 +1,10 @@
 <?php
 
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use CsrDelft\Streeplijstcontent;
+use CsrDelft\view\CsrLayoutPage;
+
 require_once 'configuratie.include.php';
 
 # C.S.R. Delft

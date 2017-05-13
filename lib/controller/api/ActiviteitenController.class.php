@@ -1,5 +1,11 @@
 <?php
+namespace CsrDelft\controller\api;
 
+use CsrDelft\model\AbstractGroepLedenModel;
+use CsrDelft\model\ChangeLogModel;
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\security\LoginModel;
 use \Jacwright\RestServer\RestException;
 
 class ApiActiviteitenController {
@@ -15,16 +21,14 @@ class ApiActiviteitenController {
 	 * @url POST /$id/aanmelden
 	 */
 	public function activiteitAanmelden($id) {
-		require_once 'model/GroepenModel.abstract.php';
-		require_once 'model/ChangeLogModel.class.php';
 
 		$activiteit = ActiviteitenModel::get($id);
 
-		if (!$activiteit || !$activiteit->mag(A::Bekijken)) {
+		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
 			throw new RestException(404, 'Activiteit bestaat niet');
 		}
 
-		if (!$activiteit->mag(A::Aanmelden)) {
+		if (!$activiteit->mag(AccessAction::Aanmelden)) {
 			throw new RestException(403, 'Aanmelden niet mogelijk');
 		}
 
@@ -43,16 +47,14 @@ class ApiActiviteitenController {
 	 * @url POST /$id/afmelden
 	 */
 	public function activiteitAfmelden($id) {
-		require_once 'model/GroepenModel.abstract.php';
-		require_once 'model/ChangeLogModel.class.php';
 
 		$activiteit = ActiviteitenModel::get($id);
 
-		if (!$activiteit || !$activiteit->mag(A::Bekijken)) {
+		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
 			throw new RestException(404, 'Activiteit bestaat niet');
 		}
 
-		if (!$activiteit->mag(A::Afmelden)) {
+		if (!$activiteit->mag(AccessAction::Afmelden)) {
 			throw new RestException(403, 'Afmelden niet mogelijk');
 		}
 

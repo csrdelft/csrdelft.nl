@@ -1,4 +1,13 @@
 <?php
+namespace CsrDelft\view\formulier\uploadvelden;
+use function CsrDelft\endsWith;
+use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\entity\Bestand;
+use CsrDelft\model\entity\Map;
+use CsrDelft\view\formulier\keuzevelden\CheckboxField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use Exception;
+
 /**
  * ExistingFileField.class.php
  *

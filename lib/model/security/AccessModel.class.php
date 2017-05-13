@@ -1,12 +1,37 @@
 <?php
+namespace CsrDelft\model\security;
 
+use CsrDelft\model\entity\groepen\CommissieFunctie;
+use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\entity\security\AccessControl;
+use CsrDelft\model\entity\security\AccessRole;
+use CsrDelft\model\entity\security\Account;
+use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\model\groepen\KringenModel;
+use CsrDelft\model\groepen\leden\BestuursLedenModel;
+use CsrDelft\model\groepen\leden\CommissieLedenModel;
+use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\model\groepen\OnderverenigingenModel;
+use CsrDelft\model\groepen\RechtenGroepenModel;
+use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\maalcie\KwalificatiesModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use Exception;
+use function CsrDelft\in_array_i;
+use function CsrDelft\setMelding;
 
-require_once 'model/entity/security/AccessRole.enum.php';
-require_once 'model/entity/security/AccessAction.enum.php';
-require_once 'model/security/LoginModel.class.php';
-require_once 'model/GroepenModel.abstract.php';
 
 /**
  * AccessModel.class.php
@@ -163,7 +188,7 @@ class AccessModel extends CachedPersistenceModel {
 	public function setAcl($environment, $resource, array $acl) {
 		// Has permission to change permissions?
 		if (!LoginModel::mag('P_ADMIN')) {
-			$rechten = self::getSubject($environment, A::Rechten, $resource);
+			$rechten = self::getSubject($environment, AccessAction::Rechten, $resource);
 			if (!$rechten OR ! LoginModel::mag($rechten)) {
 				return false;
 			}
@@ -765,7 +790,6 @@ class AccessModel extends CachedPersistenceModel {
 			 * Heeft een lid een kwalficatie voor een functie in het covee-systeem?
 			 */
 			case 'KWALIFICATIE':
-				require_once 'model/maalcie/FunctiesModel.class.php';
 
 				if (is_numeric($gevraagd)) {
 					$functie_id = (int) $gevraagd;

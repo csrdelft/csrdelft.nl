@@ -1,18 +1,27 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'view/LidInstellingenView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\LidInstellingenModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\formulier\invoervelden\UrlField;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\LidInstellingenView;
+
 
 /**
  * LidInstellingenController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @property LidInstellingen $model
+ * @property LidInstellingenModel $model
  */
 class LidInstellingenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, LidInstellingen::instance());
+		parent::__construct($query, LidInstellingenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'beheer' => 'P_LOGGED_IN'

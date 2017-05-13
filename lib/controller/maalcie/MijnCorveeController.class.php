@@ -1,10 +1,16 @@
 <?php
+namespace CsrDelft\controller\maalcie;
 
-require_once 'model/maalcie/CorveeTakenModel.class.php';
-require_once 'model/maalcie/CorveePuntenModel.class.php';
-require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
-require_once 'view/maalcie/MijnCorveeView.class.php';
-require_once 'view/maalcie/CorveeRoosterView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\maalcie\CorveePuntenModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
+use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\CorveeRoosterView;
+use CsrDelft\view\maalcie\MijnCorveeView;
+
 
 /**
  * MijnCorveeController.class.php

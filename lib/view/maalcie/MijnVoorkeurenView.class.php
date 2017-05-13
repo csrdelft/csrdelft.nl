@@ -1,6 +1,10 @@
 <?php
+namespace CsrDelft\view\maalcie;
 
-require_once 'view/maalcie/forms/EetwensForm.class.php';
+use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
+use CsrDelft\view\maalcie\forms\EetwensForm;
+use CsrDelft\view\SmartyTemplateView;
+
 
 /**
  * MijnVoorkeurenView.class.php

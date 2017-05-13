@@ -1,4 +1,20 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\entity\security\AccessControl;
+use CsrDelft\model\security\AccessModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\invoervelden\RequiredRechtenField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
+use Exception;
 
 /**
  * RechtenView.class.php
@@ -16,7 +32,7 @@ class RechtenTable extends DataTable {
 
 		// Has permission to change permissions?
 		if (!LoginModel::mag('P_ADMIN')) {
-			$rechten = $model::getSubject($environment, A::Rechten, $resource);
+			$rechten = $model::getSubject($environment, AccessAction::Rechten, $resource);
 			if (!$rechten OR ! LoginModel::mag($rechten)) {
 				return;
 			}
@@ -33,9 +49,7 @@ class RechtenTable extends DataTable {
 	}
 
 	public function view() {
-		require_once 'model/CmsPaginaModel.class.php';
-		require_once 'view/CmsPaginaView.class.php';
-		$view = new CmsPaginaView(CmsPaginaModel::get('UitlegACL'));
+						$view = new CmsPaginaView(CmsPaginaModel::get('UitlegACL'));
 		$view->view();
 		parent::view();
 	}
@@ -52,7 +66,7 @@ class RechtenData extends DataTableResponse {
 	public function getJson($ac) {
 		$array = $ac->jsonSerialize();
 
-		$array['action'] = A::getDescription($ac->action);
+		$array['action'] = AccessAction::getDescription($ac->action);
 
 		if ($ac->resource === '*') {
 			$array['resource'] = 'Elke ' . lcfirst($ac->environment);
@@ -83,12 +97,12 @@ class RechtenForm extends ModalForm {
 			}
 
 			$acties = array();
-			foreach (A::getTypeOptions() as $option) {
-				$acties[$option] = A::getDescription($option);
+			foreach (AccessAction::getTypeOptions() as $option) {
+				$acties[$option] = AccessAction::getDescription($option);
 			}
 			$fields[] = new SelectField('action', $ac->action, 'Actie', $acties);
 		} else {
-			$fields[] = new HtmlComment('<label>Actie</label><div class="dikgedrukt">' . A::getDescription($ac->action) . '</div>');
+			$fields[] = new HtmlComment('<label>Actie</label><div class="dikgedrukt">' . AccessAction::getDescription($ac->action) . '</div>');
 		}
 		$fields[] = new RequiredRechtenField('subject', $ac->subject, 'Toegestaan voor');
 		$fields[] = new FormDefaultKnoppen();

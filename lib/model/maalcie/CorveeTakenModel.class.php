@@ -1,11 +1,14 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
+use CsrDelft\model\entity\maalcie\CorveeRepetitie;
+use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use Exception;
+use PDOStatement;
 
-require_once 'model/entity/maalcie/CorveeTaak.class.php';
-require_once 'model/maalcie/FunctiesModel.class.php';
-require_once 'model/maalcie/CorveePuntenModel.class.php';
 
 /**
  * CorveeTakenModel.class.php    |    P.W.G. Brussee (brussee@live.nl)
@@ -407,8 +410,7 @@ class CorveeTakenModel extends PersistenceModel {
 			$taken = $this->find('verwijderd = FALSE AND crv_repetitie_id = ?', array($repetitie->crv_repetitie_id));
 			$takenPerDatum = array(); // taken per datum indien geen maaltijd
 			$takenPerMaaltijd = array(); // taken per maaltijd
-			require_once 'model/maalcie/MaaltijdenModel.class.php';
-			$maaltijden = MaaltijdenModel::instance()->getKomendeRepetitieMaaltijden($repetitie->mlt_repetitie_id);
+						$maaltijden = MaaltijdenModel::instance()->getKomendeRepetitieMaaltijden($repetitie->mlt_repetitie_id);
 			$maaltijdenById = array();
 			foreach ($maaltijden as $maaltijd) {
 				$takenPerMaaltijd[$maaltijd->maaltijd_id] = array();

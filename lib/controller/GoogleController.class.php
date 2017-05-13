@@ -1,6 +1,9 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'view/GoogleCallbackView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\view\GoogleCallbackView;
+
 
 class GoogleController extends AclController
 {

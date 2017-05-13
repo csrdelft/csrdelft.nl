@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft;
 
 /**
  * MijnSqli.class.php

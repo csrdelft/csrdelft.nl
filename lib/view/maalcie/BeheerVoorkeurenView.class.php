@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\view\maalcie;
+use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
+use CsrDelft\view\SmartyTemplateView;
 
 /**
  * BeheerVoorkeurenView.class.php

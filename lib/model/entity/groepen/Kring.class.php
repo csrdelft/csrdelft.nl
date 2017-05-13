@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
+use CsrDelft\model\groepen\leden\KringLedenModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
@@ -9,7 +11,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Kring extends AbstractGroep {
 
-	const leden = 'KringLedenModel';
+	const leden = KringLedenModel::class;
 
 	/**
 	 * Verticaleletter

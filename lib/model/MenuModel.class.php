@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\model;
+use CsrDelft\model\documenten\DocCategorie;
+use CsrDelft\model\entity\MenuItem;
+use CsrDelft\model\forum\ForumModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -76,8 +81,7 @@ class MenuModel extends CachedPersistenceModel {
 		switch ($parent->tekst) {
 
 			case 'Forum':
-				require_once 'model/forum/ForumModel.class.php';
-				foreach (ForumModel::instance()->prefetch() as $categorie) {
+								foreach (ForumModel::instance()->prefetch() as $categorie) {
 					$item = $this->nieuw($parent->item_id);
 					$item->item_id = - $categorie->categorie_id; // nodig voor getParent()
 					$item->rechten_bekijken = $categorie->rechten_lezen;
@@ -100,8 +104,7 @@ class MenuModel extends CachedPersistenceModel {
 				break;
 
 			case 'Documenten':
-				require_once 'model/documenten/DocCategorie.class.php';
-				$overig = false;
+								$overig = false;
 				foreach (DocCategorie::getAll() as $categorie) {
 					$item = $this->nieuw($parent->item_id);
 					$item->rechten_bekijken = $categorie->getLeesrechten();

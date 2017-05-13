@@ -6,7 +6,11 @@
  * @date 26/04/2017
  */
 
-require_once 'model/entity/fiscaat/CiviBestelling.class.php';
+namespace CsrDelft\view\fiscaat;
+
+use CsrDelft\model\entity\fiscaat\CiviBestelling;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\view\formulier\datatable\DataTable;
 
 class CiviBestellingOverzichtView extends DataTable {
 	public function __construct($uid) {

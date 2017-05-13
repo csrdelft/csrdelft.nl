@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\view;
+
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use Google_Client;
 
 class GoogleCallbackView
 {

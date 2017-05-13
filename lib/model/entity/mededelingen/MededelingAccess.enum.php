@@ -1,5 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\mededelingen;
 use CsrDelft\Orm\Entity\PersistentEnum;
+use Exception;
 
 /**
  * MededelingAccess.enum.php

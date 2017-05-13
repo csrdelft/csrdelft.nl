@@ -1,7 +1,11 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/BijbelroosterModel.class.php';
-require_once 'view/BijbelroosterView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\BijbelroosterModel;
+use CsrDelft\view\BijbelroosterView;
+use CsrDelft\view\CsrLayoutPage;
+
 
 /**
  * BijbelroosterController.class.php

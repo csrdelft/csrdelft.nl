@@ -4,7 +4,7 @@
 			<a href="/agenda/" title="Agenda">Agenda</a>
 		</div>
 		{foreach from=$items item=item}
-			{if $item instanceof Profiel}
+			{if $item instanceof CsrDelft\model\entity\Profiel}
 				{* geen verjaardagen hier *}
 			{else}
 				<div class="item">

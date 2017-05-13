@@ -1,5 +1,11 @@
 <?php
 
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use CsrDelft\SavedQuery;
+use CsrDelft\SavedQueryContent;
+use CsrDelft\view\CsrLayoutPage;
+
 require_once 'configuratie.include.php';
 require_once 'savedquery.class.php';
 

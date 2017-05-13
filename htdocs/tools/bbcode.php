@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\view\CsrBB;
+
 require_once 'configuratie.include.php';
 /**
  * bbcode.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)

@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\maalcie;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

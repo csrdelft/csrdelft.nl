@@ -3,7 +3,7 @@
 	<tr id="maaltijd-row-{$maaltijd->maaltijd_id}"{if $maaltijd->aanmeld_limiet === 0 or ($maaltijd->gesloten and ! $aanmelding)} class="taak-grijs"{/if}>
 		<td>
 			{$maaltijd->datum|date_format:"%a %e %b"} {$maaltijd->tijd|date_format:"%H:%M"}
-			{if $maaltijd->magBekijken(LoginModel::getUid())}
+			{if $maaltijd->magBekijken(CsrDelft\model\security\LoginModel::getUid())}
 				<div class="float-right">
 					{icon get="paintcan" title=$maaltijd->maaltijdcorvee->getCorveeFunctie()->naam}
 				</div>
@@ -25,11 +25,11 @@
 					{/if}
 				</div>
 			</div>
-			{CsrBB::parse($maaltijd->omschrijving)}
+			{CsrDelft\view\CsrBB::parse($maaltijd->omschrijving)}
 		</td>
 		<td class="text-center">
 			{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->aanmeld_limiet})
-			{if $maaltijd->magSluiten(LoginModel::getUid())}
+			{if $maaltijd->magSluiten(CsrDelft\model\security\LoginModel::getUid())}
 				<div class="float-right">
 					<a href="/maaltijdenlijst/{$maaltijd->maaltijd_id}" title="Toon maaltijdlijst" class="btn">{icon get="table"}</a>
 				</div>

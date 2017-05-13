@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\view\formulier\knoppen;
 /**
  * ModalCloseButtons.class.php
  *

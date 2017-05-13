@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\forum;
+use CsrDelft\model\forum\ForumDradenModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

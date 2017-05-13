@@ -1,4 +1,11 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\MenuModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\setMelding;
+use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\invoervelden\TextField;
 
 /**
  * InstantSearchForm.class.php
@@ -46,46 +53,46 @@ else {
 JS;
 		if (LoginModel::mag('P_LEDEN_READ')) {
 
-			if (LidInstellingen::get('zoeken', 'favorieten') === 'ja') {
+			if (LidInstellingenModel::get('zoeken', 'favorieten') === 'ja') {
 				$this->addSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
 			}
-			if (LidInstellingen::get('zoeken', 'menu') === 'ja') {
+			if (LidInstellingenModel::get('zoeken', 'menu') === 'ja') {
 				$this->addSuggestions(MenuModel::instance()->flattenMenu(MenuModel::instance()->getMenu('main')));
 			}
 
-			$instelling = LidInstellingen::get('zoeken', 'leden');
+			$instelling = LidInstellingenModel::get('zoeken', 'leden');
 			if ($instelling !== 'nee') {
 				$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=' . $instelling . '&q=';
 			}
 
 			// TODO: bundelen om simultane verbindingen te sparen
 			foreach (array('commissies', 'kringen', 'onderverenigingen', 'werkgroepen', 'woonoorden', 'groepen') as $option) {
-				if (LidInstellingen::get('zoeken', $option) === 'ja') {
+				if (LidInstellingenModel::get('zoeken', $option) === 'ja') {
 					$this->suggestions[ucfirst($option)] = '/groepen/' . $option . '/zoeken/?q=';
 				}
 			}
 
-			if (LidInstellingen::get('zoeken', 'agenda') === 'ja') {
+			if (LidInstellingenModel::get('zoeken', 'agenda') === 'ja') {
 				$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';
 			}
 
-			if (LidInstellingen::get('zoeken', 'forum') === 'ja') {
+			if (LidInstellingenModel::get('zoeken', 'forum') === 'ja') {
 				$this->suggestions['Forum'] = '/forum/titelzoeken/?q=';
 			}
 
-			if (LidInstellingen::get('zoeken', 'fotoalbum') === 'ja') {
+			if (LidInstellingenModel::get('zoeken', 'fotoalbum') === 'ja') {
 				$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/?q=';
 			}
 
-			if (LidInstellingen::get('zoeken', 'wiki') === 'ja') {
+			if (LidInstellingenModel::get('zoeken', 'wiki') === 'ja') {
 				$this->suggestions['Wiki'] = '/tools/wikisuggesties/?q=';
 			}
 
-			if (LidInstellingen::get('zoeken', 'documenten') === 'ja') {
+			if (LidInstellingenModel::get('zoeken', 'documenten') === 'ja') {
 				$this->suggestions['Documenten'] = '/documenten/zoeken/?q=';
 			}
 
-			if (LidInstellingen::get('zoeken', 'boeken') === 'ja') {
+			if (LidInstellingenModel::get('zoeken', 'boeken') === 'ja') {
 				$this->suggestions['Boeken'] = '/bibliotheek/zoeken/?q=';
 			}
 
@@ -125,7 +132,7 @@ JS;
 		$html = '';
 		foreach (array('favorieten', 'menu', 'leden', 'commissies', 'kringen', 'onderverenigingen', 'werkgroepen', 'woonoorden', 'groepen', 'agenda', 'forum', 'fotoalbum', 'wiki', 'documenten', 'boeken') as $option) {
 			$html .= '<li><a href="#">';
-			$instelling = LidInstellingen::get('zoeken', $option);
+			$instelling = LidInstellingenModel::get('zoeken', $option);
 			if ($instelling !== 'nee') {
 				$html .= '<span class="fa fa-check"></span> ';
 				if ($option === 'leden') {

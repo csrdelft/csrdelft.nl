@@ -1,12 +1,21 @@
 <?php
+namespace CsrDelft\model;
 
+use function CsrDelft\getDateTime;
+use function CsrDelft\getWeekNumber;
+use CsrDelft\model\entity\agenda\AgendaItem;
+use CsrDelft\model\entity\agenda\AgendaVerbergen;
+use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
+use Exception;
 
-require_once 'controller/AgendaController.class.php';
-require_once 'model/BijbelroosterModel.class.php';
-require_once 'model/VerjaardagenModel.class.php';
-require_once 'model/maalcie/MaaltijdenModel.class.php';
-require_once 'model/maalcie/CorveeTakenModel.class.php';
 
 /**
  * AgendaModel.class.php
@@ -58,7 +67,7 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Bijbelrooster
-		if (LidInstellingen::get('agenda', 'toonBijbelrooster') === 'ja' && !$zijbalk) {
+		if (LidInstellingenModel::get('agenda', 'toonBijbelrooster') === 'ja' && !$zijbalk) {
 			$result = array_merge($result, BijbelroosterModel::instance()->getBijbelroosterTussen($van, $tot)->fetchAll());
 		}
 
@@ -68,26 +77,26 @@ class AgendaModel extends PersistenceModel {
 		  )', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
 		foreach ($activiteiten as $activiteit) {
 			// Alleen bekijken in agenda (leden bekijken mag dus niet)
-			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(A::Bekijken)) {
+			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(AccessAction::Bekijken)) {
 				$result[] = $activiteit;
 			}
 		}
 
 		// Maaltijden
-		if (LidInstellingen::get('agenda', 'toonMaaltijden') === 'ja') {
+		if (LidInstellingenModel::get('agenda', 'toonMaaltijden') === 'ja') {
 			$result = array_merge($result, MaaltijdenModel::instance()->getMaaltijdenVoorAgenda($van, $tot));
 		}
 
 		// CorveeTaken
-		if (LidInstellingen::get('agenda', 'toonCorvee') === 'iedereen') {
+		if (LidInstellingenModel::get('agenda', 'toonCorvee') === 'iedereen') {
 			$result = array_merge($result, CorveeTakenModel::instance()->getTakenVoorAgenda($van, $tot, true));
-		} elseif (LidInstellingen::get('agenda', 'toonCorvee') === 'eigen') {
+		} elseif (LidInstellingenModel::get('agenda', 'toonCorvee') === 'eigen') {
 			$result = array_merge($result, CorveeTakenModel::instance()->getTakenVoorAgenda($van, $tot, false));
 		}
 
 		// Verjaardagen
 		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
-		if (LoginModel::mag('P_VERJAARDAGEN', $auth) AND LidInstellingen::get('agenda', 'toonVerjaardagen') === 'ja') {
+		if (LoginModel::mag('P_VERJAARDAGEN', $auth) AND LidInstellingenModel::get('agenda', 'toonVerjaardagen') === 'ja') {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.
@@ -98,7 +107,7 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Sorteren
-		usort($result, array('AgendaModel', 'vergelijkAgendeerbaars'));
+		usort($result, array(AgendaModel::class, 'vergelijkAgendeerbaars'));
 
 		return $result;
 	}
@@ -149,7 +158,7 @@ class AgendaModel extends PersistenceModel {
 	}
 
 	public function getICalendarItems() {
-		return $this->filterVerborgen($this->getAllAgendeerbaar(strtotime(Instellingen::get('agenda', 'ical_from')), strtotime(Instellingen::get('agenda', 'ical_to')), true));
+		return $this->filterVerborgen($this->getAllAgendeerbaar(strtotime(InstellingenModel::get('agenda', 'ical_from')), strtotime(InstellingenModel::get('agenda', 'ical_to')), true));
 	}
 
 	public function getItemsByDay($jaar, $maand, $dag) {
@@ -225,7 +234,7 @@ class AgendaModel extends PersistenceModel {
 		$item->begin_moment = getDateTime(strtotime($datum) + 72000);
 		$item->eind_moment = getDateTime(strtotime($datum) + 79200);
 		if (LoginModel::mag('P_AGENDA_MOD')) {
-			$item->rechten_bekijken = Instellingen::get('agenda', 'standaard_rechten');
+			$item->rechten_bekijken = InstellingenModel::get('agenda', 'standaard_rechten');
 		} else {
 			$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
 		}

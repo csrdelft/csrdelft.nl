@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\view\maalcie;
+use function CsrDelft\getMelding;
+use CsrDelft\model\entity\maalcie\CorveeRepetitie;
+use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\view\SmartyTemplateView;
 
 /**
  * CorveeRepetitiesView.class.php

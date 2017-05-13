@@ -4,6 +4,7 @@
  * @package Smarty
  * @subpackage plugins
  */
+use CsrDelft\Icon;
 
 
 /**

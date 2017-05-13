@@ -1,4 +1,14 @@
 <?php
+namespace CsrDelft\view\maalcie;
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\model\maalcie\ArchiefMaaltijdModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\SmartyTemplateView;
+use CsrDelft\view\View;
 
 /**
  * BeheerMaaltijdenView.class.php

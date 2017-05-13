@@ -1,5 +1,18 @@
 <?php
 
+namespace CsrDelft\controller\fiscaat;
+
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\fiscaat\CiviProduct;
+use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
+use CsrDelft\model\fiscaat\CiviProductModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\fiscaat\BeheerCiviProductenView;
+use CsrDelft\view\fiscaat\BeheerProductenResponse;
+use CsrDelft\view\fiscaat\CiviProductenSuggestiesView;
+use CsrDelft\view\fiscaat\CiviProductForm;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+
 require_once 'model/fiscaat/CiviProductModel.class.php';
 require_once 'model/fiscaat/CiviBestellingInhoudModel.class.php';
 require_once 'view/fiscaat/BeheerCiviProductenView.class.php';

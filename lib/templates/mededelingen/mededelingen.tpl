@@ -18,7 +18,7 @@
 		<div>Deze pagina bevat alleen verborgen, verwijderde en vervallen mededelingen.</div>
 		<br />
 	{/if}
-	{getMelding()}
+	{CsrDelft\getMelding()}
 	{if !empty($geselecteerdeMededeling)}		{*	Check of er een mededeling geselecteerd is.	Zo niet, dan
 		is de database leeg en geven we een nette foutmelding.	*}
 		<div id="kolomlinks">
@@ -91,7 +91,7 @@
 				</div>
 				<div class="informatie">
 					<hr />
-					Geplaatst op {$geselecteerdeMededeling->datum|date_format:'%d-%m-%Y'}{if $model->isModerator()} door {ProfielModel::getLink($geselecteerdeMededeling->uid, 'civitas')}{/if}<br />
+					Geplaatst op {$geselecteerdeMededeling->datum|date_format:'%d-%m-%Y'}{if $model->isModerator()} door {CsrDelft\model\ProfielModel::getLink($geselecteerdeMededeling->uid, 'civitas')}{/if}<br />
 					Categorie: {$geselecteerdeMededeling->getCategorie()->naam}<br />
 					{if $model->isModerator()}
 						Doelgroep: {$geselecteerdeMededeling->doelgroep}<br />

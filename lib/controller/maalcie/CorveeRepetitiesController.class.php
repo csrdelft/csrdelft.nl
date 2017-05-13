@@ -1,9 +1,18 @@
 <?php
+namespace CsrDelft\controller\maalcie;
 
-require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
-require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
-require_once 'view/maalcie/CorveeRepetitiesView.class.php';
-require_once 'view/maalcie/forms/CorveeRepetitieForm.class.php';
+use CsrDelft\controller\framework\AclController;
+use function CsrDelft\endsWith;
+use function CsrDelft\getMelding;
+use CsrDelft\model\maalcie\CorveeRepetitiesModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\CorveeRepetitiesView;
+use CsrDelft\view\maalcie\CorveeRepetitieView;
+use CsrDelft\view\maalcie\forms\CorveeRepetitieForm;
+
 
 /**
  * CorveeRepetitiesController.class.php

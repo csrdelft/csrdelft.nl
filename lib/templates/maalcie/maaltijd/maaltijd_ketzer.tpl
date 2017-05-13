@@ -1,10 +1,10 @@
 {* maaltijd_ketzer.tpl	|	P.W.G. Brussee (brussee@live.nl) *}
 {strip}
 	<div class="bb-block bb-maaltijd maaltijdketzer-{$maaltijd->maaltijd_id}">
-		{if LoginModel::mag('P_LOGGED_IN')}
+		{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
 			<div class="aanmelddata maaltijd-{if $aanmelding}aan{else}af{/if}gemeld">Aangemeld:<br />
 
-				{if !$maaltijd->gesloten && LoginModel::mag('P_MAAL_IK')}
+				{if !$maaltijd->gesloten && CsrDelft\model\security\LoginModel::mag('P_MAAL_IK')}
 
 					{if $aanmelding}
 						<a onclick="ketzer_ajax('/maaltijdenketzer/afmelden/{$maaltijd->maaltijd_id}', '.maaltijdketzer-{$maaltijd->maaltijd_id}');" class="btn maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
@@ -51,21 +51,21 @@
 				{/if}
 			</div>
 			op {$maaltijd->datum|date_format:"%A %e %B"} om {$maaltijd->tijd|date_format:"%H:%M"}
-			{if $maaltijd->magBekijken(LoginModel::getUid())}
+			{if $maaltijd->magBekijken(CsrDelft\model\security\LoginModel::getUid())}
 				<div class="float-right">
 					{icon get="paintcan" title=$maaltijd->maaltijdcorvee->getCorveeFunctie()->naam}
 				</div>
 			{/if}
 			<div class="small">
-				{if $maaltijd->magSluiten(LoginModel::getUid())}
+				{if $maaltijd->magSluiten(CsrDelft\model\security\LoginModel::getUid())}
 					<a href="/maaltijdenlijst/{$maaltijd->maaltijd_id}" title="Toon maaltijdlijst">
 				{/if}
 				Inschrijvingen: <em>{$maaltijd->getAantalAanmeldingen()}</em> van <em>{$maaltijd->aanmeld_limiet}</em>
-				{if $maaltijd->magSluiten(LoginModel::getUid())}
+				{if $maaltijd->magSluiten(CsrDelft\model\security\LoginModel::getUid())}
 					</a>
 				{/if}
 			</div>
-			{CsrBB::parse($maaltijd->omschrijving)}
+			{CsrDelft\view\CsrBB::parse($maaltijd->omschrijving)}
 		</div>
 	</div>
 {/strip}

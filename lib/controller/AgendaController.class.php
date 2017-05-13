@@ -1,14 +1,34 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/AgendaModel.class.php';
-require_once 'view/AgendaView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\AgendaModel;
+use CsrDelft\model\AgendaVerbergenModel;
+use CsrDelft\model\BijbelroosterModel;
+use CsrDelft\model\entity\agenda\AgendaItem;
+use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\view\agenda\AgendaCourantView;
+use CsrDelft\view\AgendaICalendarView;
+use CsrDelft\view\AgendaItemDeleteView;
+use CsrDelft\view\AgendaItemForm;
+use CsrDelft\view\AgendaMaandView;
+use CsrDelft\view\AgendeerbaarMaandView;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\JsonResponse;
+use Exception;
+use function CsrDelft\setMelding;
+
 
 /**
  * AgendaController.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van de agenda.
  *
  * @property AgendaModel $model

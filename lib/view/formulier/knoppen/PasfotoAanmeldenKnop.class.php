@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\view\formulier\knoppen;
+use CsrDelft\model\security\LoginModel;
+
 /**
  * PasfotoAanmeldenKnop.class.php
  *

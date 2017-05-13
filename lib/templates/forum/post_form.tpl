@@ -10,17 +10,17 @@
 			<tr>
 				{* todo: invoerveld voor naam niet-ingelogd*}
 				<td>
-					{ProfielModel::getNaam(LoginModel::getUid(), 'user')}
-					{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'}
-						<span id="t{LoginModel::getUid()}-reageren" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
+					{CsrDelft\model\ProfielModel::getNaam(CsrDelft\model\security\LoginModel::getUid(), 'user')}
+					{if CsrDelft\model\LidInstellingenModel::get('forum', 'toonpasfotos') == 'nee'}
+						<span id="t{CsrDelft\model\security\LoginModel::getUid()}-reageren" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
 					{/if}
 				</td>
 				<td class="postlinktd"><a id="reageren" name="reageren" class="postlink">&rarr;</a></td>
 			</tr>
 		</table>
 
-		{if LoginModel::mag('P_LEDEN_READ')}
-			<div id="preageren" class="forumpasfoto{if LidInstellingen::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif LoginModel::mag('P_LEDEN_READ')}">{ProfielModel::getLink(LoginModel::getUid(), 'pasfoto')}{/if}</div>
+		{if CsrDelft\model\security\LoginModel::mag('P_LEDEN_READ')}
+			<div id="preageren" class="forumpasfoto{if CsrDelft\model\LidInstellingenModel::get('forum', 'toonpasfotos') == 'nee'} verborgen">{elseif CsrDelft\model\security\LoginModel::mag('P_LEDEN_READ')}">{CsrDelft\model\ProfielModel::getLink(CsrDelft\model\security\LoginModel::getUid(), 'pasfoto')}{/if}</div>
 		{/if}
 
 		<div id="forummeldingen">
@@ -31,7 +31,7 @@
 					Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.
 				</div>
 			{/if}
-			{if LoginModel::mag('P_LOGGED_IN')}
+			{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
 				<div id="draad-melding">
 					Hier kunt u een onderwerp toevoegen in deze categorie van het forum.
 					Kijkt u vooraf goed of het onderwerp waarover u post hier wel thuishoort.
@@ -44,7 +44,7 @@
 
 		<form id="forumForm" class="Formulier" action="/forum/posten/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" method="post">
 
-			{if !LoginModel::mag('P_LOGGED_IN')}
+			{if !CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
 				<div class="bericht">
 					Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
 					&eacute;&eacute;rst door de PubCie worden goedgekeurd. Zoekmachines nemen berichten van dit openbare
@@ -64,12 +64,12 @@
 			<div class="butn">
 				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" class="btn" />
 				<input type="button" value="Voorbeeld" id="forumVoorbeeld" class="btn" onclick="CsrBBPreview('forumBericht', 'berichtPreview');" />
-				{if LoginModel::mag('P_LOGGED_IN')}
+				{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
 					<input type="button" value="Concept opslaan" id="forumConcept" class="btn" onclick="saveConceptForumBericht();" data-url="/forum/concept/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" />
 				{/if}
 				<div class="float-right">
-					{if LoginModel::mag('P_LOGGED_IN')}
-						<a href="/fotoalbum/uploaden/fotoalbum/{LichtingenModel::getHuidigeJaargang()}/Posters" target="_blank">Poster opladen</a> &nbsp;
+					{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
+						<a href="/fotoalbum/uploaden/fotoalbum/{CsrDelft\model\groepen\LichtingenModel::getHuidigeJaargang()}/Posters" target="_blank">Poster opladen</a> &nbsp;
 						<a href="/groepen/activiteiten/nieuw" class="post popup">Ketzer maken</a> &nbsp;
 						<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a> &nbsp;
 					{/if}

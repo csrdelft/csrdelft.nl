@@ -1,6 +1,13 @@
 <?php
+namespace CsrDelft\model\documenten;
 
-require_once 'model/entity/Bestand.class.php';
+use function CsrDelft\getDateTime;
+use CsrDelft\MijnSqli;
+use CsrDelft\model\entity\Bestand;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use Exception;
+
 
 /**
  * document.class.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)

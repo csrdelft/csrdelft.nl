@@ -1,15 +1,22 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\invoervelden\UrlField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\TabsForm;
 
 /**
  * LidInstellingenView.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @property LidInstellingen $model
+ * @property LidInstellingenModel $model
  */
 class LidInstellingenView extends TabsForm {
 
-	public function __construct(LidInstellingen $model) {
+	public function __construct(LidInstellingenModel $model) {
 		parent::__construct($model, '/instellingen/opslaan', 'Webstekinstellingen');
 		$this->formId = 'lidinstellingenform';
 		$this->vertical = true;

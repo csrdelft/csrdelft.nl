@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\maalcie;
+
+use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

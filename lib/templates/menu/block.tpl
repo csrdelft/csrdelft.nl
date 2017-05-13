@@ -3,6 +3,6 @@
 </div>
 {foreach from=$root->children item=item}
 {if $item->magBekijken()}<div class="item{if $item->active} active{/if}{if $root->tekst == 'Sponsors'} ads{/if}">&raquo;
-<a href="{$item->link}" title="{$item->tekst}"{if $item->isOngelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>{$item->tekst}</a></div>
+<a href="{$item->link}" title="{$item->tekst}"{if $item->isOngelezen()} class="{CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave')}"{/if}>{$item->tekst}</a></div>
 {/if}
 {/foreach}

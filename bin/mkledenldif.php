@@ -3,6 +3,8 @@
 # draaien met:
 #!/usr/bin/php5 -c /etc/php5/vhosts/csrdelft/
 # instellingen & rommeltjes
+use CsrDelft\MijnSqli;
+
 require_once('/srv/www/www.csrdelft.nl/lib/configuratie.include.php');
 require_once('configuratie.include.php');
 

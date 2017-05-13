@@ -1,6 +1,15 @@
 <?php
+namespace CsrDelft\controller\api;
 
-use \Jacwright\RestServer\RestException;
+use CsrDelft\model\AgendaModel;
+use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\groepen\leden\ActiviteitDeelnemersModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\security\LoginModel;
+use Jacwright\RestServer\RestException;
 
 class ApiAgendaController {
 
@@ -24,7 +33,6 @@ class ApiAgendaController {
 		$from = strtotime($_GET['from']);
 		$to = strtotime($_GET['to']);
 
-		require_once 'model/AgendaModel.class.php';
 
 		$result = array();
 
@@ -45,7 +53,7 @@ class ApiAgendaController {
 		$activiteiten = ActiviteitenModel::instance()->find('in_agenda = TRUE AND (' . $query . ')', $find);
 		$activiteitenFiltered = array();
 		foreach ($activiteiten as $activiteit) {
-			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(A::Bekijken)) {
+			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(AccessAction::Bekijken)) {
 				$activiteitenFiltered[] = $activiteit;
 			}
 		}

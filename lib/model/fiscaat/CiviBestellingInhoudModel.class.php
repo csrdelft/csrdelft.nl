@@ -1,9 +1,9 @@
 <?php
 
-use CsrDelft\Orm\PersistenceModel;
+namespace CsrDelft\model\fiscaat;
 
-require_once 'model/entity/fiscaat/CiviBestellingInhoud.class.php';
-require_once 'model/fiscaat/CiviProductModel.class.php';
+use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
+use CsrDelft\Orm\PersistenceModel;
 
 class CiviBestellingInhoudModel extends PersistenceModel {
 	const ORM = CiviBestellingInhoud::class;

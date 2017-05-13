@@ -1,19 +1,20 @@
 <?php
+namespace CsrDelft\view;
 
-require_once 'view/Zijbalk.static.php';
-require_once 'view/SitemapView.class.php';
-require_once 'view/InstantSearchForm.class.php';
-require_once 'view/CompressedLayout.abstract.php';
-require_once 'view/MenuView.class.php';
-require_once 'model/MenuModel.class.php';
-require_once 'model/DragObjectModel.class.php';
+use CsrDelft\model\DragObjectModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\ModalForm;
+use CsrDelft\view\login\LoginForm;
+use CsrDelft\view\menu\MainMenuView;
+
 
 /**
  * CsrLayoutPage.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * De stek layout van 2006
  */
 class CsrLayoutPage extends CompressedLayout {
@@ -62,13 +63,13 @@ class CsrLayoutPage extends CompressedLayout {
 				$this->zijbalk = array();
 			}
 			$this->zijbalk = Zijbalk::addStandaardZijbalk($this->zijbalk);
-			if (LidInstellingen::get('zijbalk', 'scrollen') != 'met pagina mee') {
+			if (LidInstellingenModel::get('zijbalk', 'scrollen') != 'met pagina mee') {
 				$smarty->assign('scrollfix', DragObjectModel::getCoords('zijbalk', 0, 0)['top']);
 			}
 		}
 		$smarty->assign('zijbalk', $this->zijbalk);
 
-		if (LidInstellingen::get('layout', 'minion') == 'ja') {
+		if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
 			$smarty->assign('minioncoords', DragObjectModel::getCoords('minion', 40, 40));
 			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
 		}

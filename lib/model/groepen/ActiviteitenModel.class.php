@@ -1,5 +1,8 @@
 <?php
-require_once 'model/groepen/KetzersModel.class.php';
+namespace CsrDelft\model\groepen;
+use CsrDelft\model\entity\groepen\Activiteit;
+use CsrDelft\model\entity\groepen\ActiviteitSoort;
+
 
 class ActiviteitenModel extends KetzersModel {
 

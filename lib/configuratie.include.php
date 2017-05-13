@@ -1,5 +1,4 @@
 <?php
-
 /**
  * configuratie.include.php
  * 
@@ -16,7 +15,61 @@
 //exit;
 
 // Composer autoload
+use CsrDelft\model\DebugLogModel;
+use CsrDelft\model\forum\ForumModel;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\LogModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\model\TimerModel;
+use function CsrDelft\printDebug;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+
 require __DIR__ . '/../vendor/autoload.php';
+
+spl_autoload_register(function ($class) {
+
+	// project-specific namespace prefix
+	$prefix = 'CsrDelft\\';
+
+	// base directory for the namespace prefix
+	$base_dir = __DIR__ . DIRECTORY_SEPARATOR;
+
+	// does the class use the namespace prefix?
+	$len = strlen($prefix);
+	if (strncmp($prefix, $class, $len) !== 0) {
+		// no, move to the next registered autoloader
+		return;
+	}
+
+	// get the relative class name
+	$relative_class = substr($class, $len);
+
+	// replace the namespace prefix with the base directory, replace namespace
+	// separators with directory separators in the relative class name, append
+	// with .php
+	$file = $base_dir . str_replace('\\', '/', $relative_class);
+
+	$extensions = [
+		'.class.php',
+		'.interface.php',
+		'.php',
+		'.abstract.php',
+		'.static.php',
+		'.enum.php'
+	];
+
+	foreach ($extensions as $extension) {
+		$fileFull = $file . $extension;
+		if (file_exists($fileFull)) {
+			require $fileFull;
+			return; // Done
+		}
+	}
+});
 
 register_shutdown_function('fatal_handler');
 
@@ -118,30 +171,6 @@ if (FORCE_HTTPS) {
 	}
 }
 
-
-// Model
-require_once 'MijnSqli.class.php'; // DEPRECATED
-require_once 'model/DebugLogModel.class.php';
-require_once 'model/TimerModel.class.php';
-require_once 'model/entity/agenda/Agendeerbaar.interface.php';
-require_once 'model/security/AccessModel.class.php';
-require_once 'model/LidInstellingenModel.class.php';
-require_once 'model/forum/ForumModel.class.php';
-require_once 'model/LogModel.class.php';
-require_once 'model/fiscaat/CiviProductModel.class.php';
-
-// View
-require_once 'view/JsonResponse.class.php';
-require_once 'view/SmartyTemplateView.abstract.php';
-require_once 'view/formulier/DataTable.class.php';
-require_once 'view/CsrBB.class.php';
-require_once 'view/CsrLayoutPage.class.php';
-require_once 'view/CsrLayoutOweePage.class.php';
-require_once 'icon.class.php';
-
-// Controller
-require_once 'controller/framework/AclController.abstract.php';
-
 $cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 if ($cred === false) {
 	$cred = array(
@@ -160,7 +189,7 @@ CsrDelft\Orm\Configuration::load(array(
 // Router
 switch (constant('MODE')) {
 	case 'CLI':
-		require_once 'model/security/CliLoginModel.class.php';
+		//require_once 'model/security/CliLoginModel.class.php';
 		// Late static binding requires explicitly
 		// calling instance() before any static method!
 		LoginModel::instance();
@@ -170,7 +199,7 @@ switch (constant('MODE')) {
 		break;
 
 	case 'WEB':
-		Instellingen::instance()->prefetch();
+		InstellingenModel::instance()->prefetch();
 
 		// Terugvinden van temp upload files
 		ini_set('upload_tmp_dir', TMP_PATH);
@@ -182,7 +211,7 @@ switch (constant('MODE')) {
 		ini_set('session.cache_limiter', 'nocache');
 		ini_set('session.use_trans_sid', 0);
 		// Sync lifetime of FS based PHP session with DB based C.S.R. session
-		ini_set('session.gc_maxlifetime', (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
+		ini_set('session.gc_maxlifetime', (int) InstellingenModel::get('beveiliging', 'session_lifetime_seconds'));
 		ini_set('session.use_strict_mode', true);
 		ini_set('session.use_cookies', true);
 		ini_set('session.use_only_cookies', true);
@@ -204,7 +233,7 @@ switch (constant('MODE')) {
         LogModel::instance()->log();
 
 		// Prefetch
-		LidInstellingen::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
+		LidInstellingenModel::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
 		VerticalenModel::instance()->prefetch();
 		ForumModel::instance()->prefetch();
 

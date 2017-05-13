@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft;
+use CsrDelft\lid\LidZoeker;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\view\View;
 
 /**
  * C.S.R. Delft | pubcie@csrdelft.nl

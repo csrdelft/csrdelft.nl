@@ -1,4 +1,5 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 
 /**
  * CommissieLid.class.php

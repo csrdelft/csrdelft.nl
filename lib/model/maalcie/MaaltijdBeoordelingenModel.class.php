@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model\maalcie;
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\model\entity\maalcie\MaaltijdBeoordeling;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 

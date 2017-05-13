@@ -1,5 +1,9 @@
 <?php
+namespace CsrDelft\controller\api;
 
+use CsrDelft\lid\LidZoeker;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
 use \Jacwright\RestServer\RestException;
 
 class ApiLedenController {
@@ -15,7 +19,6 @@ class ApiLedenController {
 	 * @url GET /
 	 */
 	public function getLeden() {
-		require_once 'lid/lidzoeker.class.php';
 
 		$zoeker = new LidZoeker();
 		$leden = [];

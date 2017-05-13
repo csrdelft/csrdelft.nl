@@ -1,18 +1,25 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'view/InstellingenBeheerView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\InstellingBeheerView;
+use CsrDelft\view\InstellingenBeheerView;
+
 
 /**
  * InstellingenBeheerController.class.php
  * 
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @property Instellingen $model
+ * @property InstellingenModel $model
  */
 class InstellingenBeheerController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, Instellingen::instance());
+		parent::__construct($query, InstellingenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'module' => 'P_LOGGED_IN'

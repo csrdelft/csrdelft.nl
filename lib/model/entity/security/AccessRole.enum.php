@@ -1,5 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\security;
 use CsrDelft\Orm\Entity\PersistentEnum;
+use Exception;
 
 /**
  * AccessRole.enum.php

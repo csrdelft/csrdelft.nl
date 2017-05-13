@@ -1,10 +1,19 @@
 <?php
 
-use CsrDelft\Orm\Persistence\Database;
+namespace CsrDelft\controller\fiscaat;
 
-require_once 'model/fiscaat/CiviSaldoModel.class.php';
-require_once 'model/fiscaat/CiviBestellingModel.class.php';
-require_once 'view/fiscaat/BeheerCiviSaldoView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\fiscaat\CiviSaldo;
+use CsrDelft\model\fiscaat\CiviBestellingModel;
+use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\fiscaat\BeheerCiviSaldoView;
+use CsrDelft\view\fiscaat\BeheerSaldoResponse;
+use CsrDelft\view\fiscaat\InleggenForm;
+use CsrDelft\view\fiscaat\LidRegistratieForm;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use function CsrDelft\getDateTime;
 
 /**
  * BeheerCiviSaldoController.class.php

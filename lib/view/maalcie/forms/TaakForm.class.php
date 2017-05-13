@@ -1,6 +1,18 @@
 <?php
+namespace CsrDelft\view\maalcie\forms;
 
-require_once 'model/maalcie/MaaltijdenModel.class.php';
+use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\getalvelden\RequiredIntField;
+use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\keuzevelden\DateField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
+use Exception;
+
 
 /**
  * TaakForm.class.php

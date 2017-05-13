@@ -6,4 +6,10 @@
  * @date 26/04/2017
  */
 
-class CiviBestellingOverzichtResponse extends DataTableResponse {}
+namespace CsrDelft\view\fiscaat;
+
+
+use CsrDelft\view\formulier\datatable\DataTableResponse;
+
+class CiviBestellingOverzichtResponse extends DataTableResponse {
+}

@@ -1,6 +1,15 @@
 <?php
+namespace CsrDelft\view\maalcie;
 
-require_once 'view/maalcie/forms/MaaltijdBeoordelingForm.class.php';
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
+use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
+use CsrDelft\view\SmartyTemplateView;
+
 
 /**
  * MijnMaaltijdenView.class.php
@@ -47,7 +56,7 @@ class MijnMaaltijdenView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('standaardprijs', intval(Instellingen::get('maaltijden', 'standaard_prijs')));
+		$this->smarty->assign('standaardprijs', intval(InstellingenModel::get('maaltijden', 'standaard_prijs')));
 		$this->smarty->assign('maaltijden', $this->model);
 		$this->smarty->assign('aanmeldingen', $this->aanmeldingen);
 		$this->smarty->assign('beoordelen', $this->beoordelen);
@@ -72,7 +81,7 @@ class MijnMaaltijdView extends SmartyTemplateView {
 	public function view() {
 		$this->smarty->assign('maaltijd', $this->model);
 		$this->smarty->assign('aanmelding', $this->aanmelding);
-		$this->smarty->assign('standaardprijs', intval(Instellingen::get('maaltijden', 'standaard_prijs')));
+		$this->smarty->assign('standaardprijs', intval(InstellingenModel::get('maaltijden', 'standaard_prijs')));
 		$this->smarty->display('maalcie/maaltijd/mijn_maaltijd_lijst.tpl');
 	}
 

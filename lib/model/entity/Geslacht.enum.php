@@ -1,5 +1,7 @@
 <?php
+namespace CsrDelft\model\entity;
 use CsrDelft\Orm\Entity\PersistentEnum;
+use Exception;
 
 /**
  * Geslacht.enum.php

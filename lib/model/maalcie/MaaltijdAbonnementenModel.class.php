@@ -1,11 +1,14 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use function CsrDelft\setMelding;
+use Exception;
 
-require_once 'model/entity/maalcie/MaaltijdAbonnement.class.php';
-require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
-require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
 
 /**
  * MaaltijdAbonnementenModel.class.php    |    P.W.G. Brussee (brussee@live.nl)
@@ -72,8 +75,6 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 
 	public function getAbonnementenWaarschuwingenMatrix() {
 		return Database::transaction(function () {
-			require_once 'model/entity/LidStatus.enum.php';
-
 			$abos = $this->find();
 
 			$waarschuwingen = array();
@@ -112,8 +113,6 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 			$db = Database::instance()->getDatabase();
 			$query = $db->prepare($sql);
 			$query->execute($values);
-
-			require_once 'model/entity/LidStatus.enum.php';
 
 			$leden = ProfielModel::instance()->find("status = ? OR status = ? OR status = ?", LidStatus::$lidlike);
 

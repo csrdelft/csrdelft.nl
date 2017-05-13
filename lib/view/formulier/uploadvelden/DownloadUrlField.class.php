@@ -1,5 +1,12 @@
 <?php
-require_once 'view/formulier/UrlDownloader.class.php';
+namespace CsrDelft\view\formulier\uploadvelden;
+use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\entity\Bestand;
+use function CsrDelft\url_like;
+use CsrDelft\view\formulier\invoervelden\UrlField;
+use CsrDelft\view\formulier\UrlDownloader;
+use Exception;
+
 
 /**
  * DownloadUrlField.class.php

@@ -1,7 +1,15 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/PeilingenModel.class.php';
-require_once 'view/PeilingenView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\peilingen\Peiling;
+use CsrDelft\model\entity\peilingen\PeilingOptie;
+use CsrDelft\model\PeilingenModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\PeilingenBeheerView;
+
 
 /**
  * Class PeilingenController

@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft;
+
+use CsrDelft\view\SmartyTemplateView;
 
 class RoodschopperContent extends SmartyTemplateView {
 

@@ -1,10 +1,26 @@
 <?php
+namespace CsrDelft\controller\maalcie;
 
-require_once 'model/maalcie/CorveeTakenModel.class.php';
-require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
-require_once 'view/maalcie/BeheerTakenView.class.php';
-require_once 'view/maalcie/forms/TaakForm.class.php';
-require_once 'view/maalcie/forms/RepetitieCorveeForm.class.php';
+use CsrDelft\controller\framework\AclController;
+use function CsrDelft\endsWith;
+use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\model\maalcie\CorveeHerinneringenModel;
+use CsrDelft\model\maalcie\CorveeRepetitiesModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\CorveeToewijzenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\maalcie\BeheerTaakView;
+use CsrDelft\view\maalcie\BeheerTakenLijstView;
+use CsrDelft\view\maalcie\BeheerTakenView;
+use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
+use CsrDelft\view\maalcie\forms\TaakForm;
+use Exception;
+use CsrDelft\view\maalcie\forms\ToewijzenForm;
+
 
 /**
  * BeheerTakenController.class.php
@@ -83,8 +99,7 @@ class BeheerTakenController extends AclController {
 	}
 
 	public function herinneren() {
-		require_once 'model/maalcie/CorveeHerinneringenModel.class.php';
-		$verstuurd_errors = CorveeHerinneringenModel::stuurHerinneringen();
+				$verstuurd_errors = CorveeHerinneringenModel::stuurHerinneringen();
 		$verstuurd = $verstuurd_errors[0];
 		$errors = $verstuurd_errors[1];
 		$aantal = sizeof($verstuurd);
@@ -184,9 +199,7 @@ class BeheerTakenController extends AclController {
 			$this->model->taakToewijzenAanLid($taak, $uidField->getValue());
 			$this->view = new BeheerTaakView($taak);
 		} else {
-			require_once 'model/maalcie/CorveeToewijzenModel.class.php';
-			require_once 'view/maalcie/forms/ToewijzenForm.class.php';
-			$suggesties = CorveeToewijzenModel::getSuggesties($taak);
+									$suggesties = CorveeToewijzenModel::getSuggesties($taak);
 			$this->view = new ToewijzenForm($taak, $suggesties); // fetches POST values itself
 		}
 	}
@@ -205,8 +218,7 @@ class BeheerTakenController extends AclController {
 
 	public function email($tid) {
 		$taak = $this->model->getTaak($tid);
-		require_once 'model/maalcie/CorveeHerinneringenModel.class.php';
-		CorveeHerinneringenModel::stuurHerinnering($taak);
+				CorveeHerinneringenModel::stuurHerinnering($taak);
 		$this->view = new BeheerTaakView($taak);
 	}
 

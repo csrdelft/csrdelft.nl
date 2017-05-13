@@ -1,5 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 use CsrDelft\Orm\Entity\PersistentEnum;
+use Exception;
 
 /**
  * CommissieSoort.enum.php

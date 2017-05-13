@@ -1,4 +1,4 @@
-{if LoginModel::mag('P_LOGGED_IN')}
+{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
 	<div class="forumheadbtn">
 		<a href="/forum/toonalles" class="btn post confirm ReloadPage" title="Verborgen onderwerpen weer laten zien">{icon get="eye"} {ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid()}</a>
 	</div>

@@ -1,8 +1,17 @@
 <?php
+namespace CsrDelft\controller\maalcie;
 
-require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
-require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
-require_once 'view/maalcie/BeheerAbonnementenView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
+use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
+use CsrDelft\model\ProfielModel;
+use function CsrDelft\setMelding;
+use CsrDelft\view\maalcie\BeheerAbonnementenLijstView;
+use CsrDelft\view\maalcie\BeheerAbonnementenView;
+use CsrDelft\view\maalcie\BeheerAbonnementView;
+use CsrDelft\view\CsrLayoutPage;
+use Exception;
+
 
 /**
  * BeheerMaaltijdenController.class.php

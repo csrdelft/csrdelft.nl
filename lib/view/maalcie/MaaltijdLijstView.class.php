@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\view\maalcie;
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
+use CsrDelft\view\CompressedLayout;
+use CsrDelft\view\CsrSmarty;
 
 /**
  * MaaltijdLijstView.class.php

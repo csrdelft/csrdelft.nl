@@ -1,6 +1,20 @@
 <?php
+namespace CsrDelft\model\forum;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\forum\ForumDeel;
+use CsrDelft\model\entity\forum\ForumDraad;
+use CsrDelft\model\entity\forum\ForumDraadGelezen;
+use CsrDelft\model\entity\forum\ForumPost;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\Paging;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use function CsrDelft\startsWith;
+use CsrDelft\view\CsrBB;
+use Exception;
+use PDO;
 
 /**
  * ForumPostsModel.class.php
@@ -57,7 +71,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	protected function __construct() {
 		CachedPersistenceModel::__construct();
 		$this->pagina = 1;
-		$this->per_pagina = (int)LidInstellingen::get('forum', 'posts_per_pagina');
+		$this->per_pagina = (int)LidInstellingenModel::get('forum', 'posts_per_pagina');
 		$this->aantal_paginas = array();
 	}
 
@@ -92,7 +106,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 			if ($draad->pagina_per_post) {
 				$this->per_pagina = 1;
 			} else {
-				$this->per_pagina = (int)LidInstellingen::get('forum', 'posts_per_pagina');
+				$this->per_pagina = (int)LidInstellingenModel::get('forum', 'posts_per_pagina');
 			}
 			$this->aantal_paginas[$draad_id] = (int)ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
 		}
@@ -117,7 +131,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$where_params = array($query);
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
-			$where_params[] = getDateTime(strtotime(Instellingen::get('forum', 'externen_geentoegang_gesloten')));
+			$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
 		}
 		$order = 'score DESC';
 		if (in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
@@ -165,7 +179,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 			array_unshift($posts, $first_post);
 		}
 		// 2008-filter
-		if (LidInstellingen::get('forum', 'filter2008') == 'ja') {
+		if (LidInstellingenModel::get('forum', 'filter2008') == 'ja') {
 			foreach ($posts as $post) {
 				if (startsWith($post->uid, '08')) {
 					$post->gefilterd = 'Bericht van 2008';
@@ -308,19 +322,19 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	}
 
 	public function getStatsTotal() {
-		$terug = getDateTime(strtotime(Instellingen::get('forum', 'grafiek_stats_periode')));
+		$terug = getDateTime(strtotime(InstellingenModel::get('forum', 'grafiek_stats_periode')));
 		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
 		return Database::instance()->sqlSelect($fields, $this->getTableName(), 'datum_tijd > ?', array($terug), 'timestamp');
 	}
 
 	public function getStatsVoorForumDeel(ForumDeel $deel) {
-		$terug = getDateTime(strtotime(Instellingen::get('forum', 'grafiek_stats_periode')));
+		$terug = getDateTime(strtotime(InstellingenModel::get('forum', 'grafiek_stats_periode')));
 		$fields = array('UNIX_TIMESTAMP(DATE(p.datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
 		return Database::instance()->sqlSelect($fields, $this->getTableName() . ' AS p RIGHT JOIN ' . ForumDradenModel::instance()->getTableName() . ' AS d ON p.draad_id = d.draad_id', 'd.forum_id = ? AND p.datum_tijd > ?', array($deel->forum_id, $terug), 'timestamp');
 	}
 
 	public function getStatsVoorDraad(ForumDraad $draad) {
-		$terug = getDateTime(strtotime(Instellingen::get('forum', 'grafiek_draad_recent'), strtotime($draad->laatst_gewijzigd)));
+		$terug = getDateTime(strtotime(InstellingenModel::get('forum', 'grafiek_draad_recent'), strtotime($draad->laatst_gewijzigd)));
 		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
 		return Database::instance()->sqlSelect($fields, $this->getTableName(), 'draad_id = ? AND datum_tijd > ?', array($draad->draad_id, $terug), 'timestamp');
 	}

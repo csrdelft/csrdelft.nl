@@ -1,6 +1,8 @@
 <?php
+namespace CsrDelft\controller\groepen;
 
-require_once 'controller/groepen/KetzersController.class.php';
+use CsrDelft\model\groepen\ActiviteitenModel;
+
 
 /**
  * ActiviteitenController.class.php

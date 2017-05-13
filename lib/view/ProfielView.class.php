@@ -1,5 +1,68 @@
 <?php
 
+namespace CsrDelft\view;
+
+use CsrDelft\lid\LidZoeker;
+use CsrDelft\model\bibliotheek\BiebCatalogus;
+use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\entity\fotoalbum\Foto;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\OntvangtContactueel;
+use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\fiscaat\CiviBestellingModel;
+use CsrDelft\model\fiscaat\SaldoModel;
+use CsrDelft\model\forum\ForumPostsModel;
+use CsrDelft\model\FotoModel;
+use CsrDelft\model\FotoTagsModel;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\model\groepen\OnderverenigingenModel;
+use CsrDelft\model\groepen\RechtenGroepenModel;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
+use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
+use CsrDelft\model\maalcie\KwalificatiesModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\elementen\CollapsableSubkopje;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\elementen\Subkopje;
+use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\getalvelden\RequiredIntField;
+use CsrDelft\view\formulier\getalvelden\RequiredTelefoonField;
+use CsrDelft\view\formulier\getalvelden\TelefoonField;
+use CsrDelft\view\formulier\invoervelden\DuckField;
+use CsrDelft\view\formulier\invoervelden\EmailField;
+use CsrDelft\view\formulier\invoervelden\LandField;
+use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\invoervelden\RequiredEmailField;
+use CsrDelft\view\formulier\invoervelden\RequiredIBANField;
+use CsrDelft\view\formulier\invoervelden\RequiredLandField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextareaField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\invoervelden\StudieField;
+use CsrDelft\view\formulier\invoervelden\TextareaField;
+use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\invoervelden\UrlField;
+use CsrDelft\view\formulier\keuzevelden\DateField;
+use CsrDelft\view\formulier\keuzevelden\JaNeeField;
+use CsrDelft\view\formulier\keuzevelden\RequiredDateField;
+use CsrDelft\view\formulier\keuzevelden\RequiredGeslachtField;
+use CsrDelft\view\formulier\keuzevelden\RequiredSelectField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\keuzevelden\VerticaleField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\uploadvelden\ImageField;
+use CsrDelft\view\fotoalbum\FotoBBView;
+
 /**
  * ProfielView.class.php
  *
@@ -111,21 +174,16 @@ class ProfielView extends SmartyTemplateView {
 		$this->smarty->assign('activiteiten', $activiteiten);
 
 		if (LoginModel::getUid() == $this->model->uid || LoginModel::mag('P_MAAL_MOD')) {
-
-			require_once 'model/maalcie/MaaltijdAanmeldingenModel.class.php';
-			$timestamp = strtotime(Instellingen::get('maaltijden', 'recent_lidprofiel'));
+			$timestamp = strtotime(InstellingenModel::get('maaltijden', 'recent_lidprofiel'));
 			$this->smarty->assign('recenteAanmeldingen', MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid($this->model->uid, $timestamp));
 
-			require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
 			$this->smarty->assign('abos', MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($this->model->uid));
 		}
 
-		require_once 'model/fiscaat/SaldoModel.class.php';
 		if (SaldoModel::instance()->magGrafiekZien($this->model->uid)) {
 			$this->smarty->assign('saldografiek', 'ja');
 		}
 
-		require_once 'model/fiscaat/CiviBestellingModel.class.php';
 		$bestellingen = CiviBestellingModel::instance()->getBestellingenVoorLid($this->model->uid, 10);
 		$bestellinglog = CiviBestellingModel::instance()->getBeschrijving($bestellingen);
 		$this->smarty->assign('bestellinglog', $bestellinglog);
@@ -134,26 +192,19 @@ class ProfielView extends SmartyTemplateView {
 		$this->smarty->assign('corveepunten', $this->model->corvee_punten);
 		$this->smarty->assign('corveebonus', $this->model->corvee_punten_bonus);
 
-		require_once 'model/maalcie/CorveeTakenModel.class.php';
 		$this->smarty->assign('corveetaken', CorveeTakenModel::instance()->getTakenVoorLid($this->model->uid));
 
-		require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
 		$this->smarty->assign('corveevoorkeuren', CorveeVoorkeurenModel::instance()->getVoorkeurenVoorLid($this->model->uid));
 
-		require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
 		$this->smarty->assign('corveevrijstelling', CorveeVrijstellingenModel::instance()->getVrijstelling($this->model->uid));
 
-		require_once 'model/maalcie/KwalificatiesModel.class.php';
 		$this->smarty->assign('corveekwalificaties', KwalificatiesModel::instance()->getKwalificatiesVanLid($this->model->uid));
 
-		require_once 'model/forum/ForumModel.class.php';
 		$this->smarty->assign('forumpostcount', ForumPostsModel::instance()->getAantalForumPostsVoorLid($this->model->uid));
 
-		require_once 'model/bibliotheek/BiebCatalogus.class.php';
 		$this->smarty->assign('boeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'eigendom'));
 		$this->smarty->assign('gerecenseerdeboeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'gerecenseerd'));
 
-		require_once 'view/FotoAlbumView.class.php';
 		$fotos = array();
 		foreach (FotoTagsModel::instance()->find('keyword = ?', array($this->model->uid), null, null, 3) as $tag) {
 			/** @var Foto $foto */
@@ -214,8 +265,7 @@ class ProfielForm extends Formulier {
 			$fields[] = new SelectField('status', $profiel->status, 'Lidstatus', $statussen);
 			$fields[] = new HtmlComment('<p>Bij het wijzigen van de lidstatus worden overbodige <span class="waarschuwing">gegevens verwijderd</span>, onomkeerbaar, opletten dus!</p>');
 
-			require_once 'lid/lidzoeker.class.php';
-			if ($profiel->voornaam == '') {
+						if ($profiel->voornaam == '') {
 				$gelijknamigenovieten = array();
 			} else {
 				$gelijknamigenovieten = LidZoeker::zoekLeden($profiel->voornaam, 'voornaam', 'alle', 'achternaam', array(LidStatus::Noviet), array('uid'));

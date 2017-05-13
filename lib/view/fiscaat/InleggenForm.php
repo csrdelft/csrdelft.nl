@@ -1,0 +1,28 @@
+<?php
+/**
+ * InleggenForm.php
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @date 07/05/2017
+ */
+
+namespace CsrDelft\view\fiscaat;
+
+use CsrDelft\model\entity\fiscaat\CiviSaldo;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\view\formulier\getalvelden\BedragField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
+
+class InleggenForm extends ModalForm {
+	public function __construct(Civisaldo $model) {
+		parent::__construct($model, '/fiscaat/saldo/inleggen', "Inleggen: " . ProfielModel::getNaam($model->uid, 'volledig'), true);
+
+		$fields['saldo'] = new BedragField('saldo', $model->saldo, 'Huidig saldo');
+		$fields['saldo']->readonly = true;
+		$fields[] = new BedragField('inleg', 0, 'Inleg', '€', 0.01);
+		$fields['btn'] = new FormDefaultKnoppen();
+
+		$this->addFields($fields);
+	}
+}

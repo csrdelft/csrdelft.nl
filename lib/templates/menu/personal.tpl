@@ -1,14 +1,14 @@
-<li class="has-children{if LoginModel::instance()->isSued()} sued{/if}">
-	<a href="#0">{LoginModel::getProfiel()->getNaam('volledig')}</a>
+<li class="has-children{if CsrDelft\model\security\LoginModel::instance()->isSued()} sued{/if}">
+	<a href="#0">{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('volledig')}</a>
 	<ul class="is-hidden">
-		<li class="go-back"><a href="#0">{LoginModel::getProfiel()->getNaam('volledig')}</a></li>
-	{if LoginModel::instance()->isSued()}
-		<li><a href="/endsu" class="error" title="Switch user actie beeindingen">SU {ProfielModel::getNaam(LoginModel::getSuedFrom()->uid, 'civitas')}</a></li>
+		<li class="go-back"><a href="#0">{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('volledig')}</a></li>
+	{if CsrDelft\model\security\LoginModel::instance()->isSued()}
+		<li><a href="/endsu" class="error" title="Switch user actie beeindingen">SU {CsrDelft\model\ProfielModel::getNaam(CsrDelft\model\security\LoginModel::getSuedFrom()->uid, 'civitas')}</a></li>
 	{/if}
 		<li><a href="/gesprekken" title="{$gesprekOngelezen} ongelezen bericht{if $gesprekOngelezen !== 1}en{/if}">Gesprekken{if $gesprekOngelezen > 0}&nbsp;<span class="badge">{$gesprekOngelezen}</span>{/if}</a></li>
 		<li>
-			<a href="/profiel/{LoginModel::getUid()}#CiviSaldo" title="Bekijk CiviSaldo historie">
-				{assign var=saldo value=LoginModel::getProfiel()->getCiviSaldo()}
+			<a href="/profiel/{CsrDelft\model\security\LoginModel::getUid()}#CiviSaldo" title="Bekijk CiviSaldo historie">
+				{assign var=saldo value=CsrDelft\model\security\LoginModel::getProfiel()->getCiviSaldo()}
 				CiviSaldo: <span{if $saldo < 0} class="staatrood"{/if}>&euro; {$saldo|number_format:2:",":"."}</span>
 			</a>
 		</li>

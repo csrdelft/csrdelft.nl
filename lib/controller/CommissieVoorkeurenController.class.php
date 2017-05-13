@@ -1,7 +1,13 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/CommissieVoorkeurenModel.class.php';
-require_once 'view/CommissieVoorkeurenView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\CommissieVoorkeurenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\view\CommissieVoorkeurenProfiel;
+use CsrDelft\view\CommissieVoorkeurenView;
+use CsrDelft\view\CsrLayoutPage;
+
 
 /**
  * CommissieVoorkeurenController.class.php

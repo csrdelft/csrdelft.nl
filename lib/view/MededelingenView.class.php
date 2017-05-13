@@ -1,4 +1,12 @@
 <?php
+namespace CsrDelft\view;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\mededelingen\Mededeling;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\mededelingen\MededelingenModel;
+use CsrDelft\model\security\LoginModel;
+use DateTime;
+use Exception;
 
 /**
  * Class MededelingView
@@ -149,11 +157,11 @@ class MededelingenView extends SmartyTemplateView {
 			$this->smarty->assign('pagina_root', self::mededelingenRoot . 'prullenbak/');
 		}
 		$this->smarty->assign('model', $this->model);
-		$this->smarty->assign('lijst', $this->model->getLijstVanPagina($this->paginaNummer, LidInstellingen::get('mededelingen', 'aantalPerPagina'), $this->prullenbak));
+		$this->smarty->assign('lijst', $this->model->getLijstVanPagina($this->paginaNummer, LidInstellingenModel::get('mededelingen', 'aantalPerPagina'), $this->prullenbak));
 		$this->smarty->assign('geselecteerdeMededeling', $this->geselecteerdeMededeling);
 		$this->smarty->assign('wachtGoedkeuring', $this->model->getLijstWachtGoedkeuring());
 		$this->smarty->assign('huidigePagina', $this->paginaNummer);
-		$this->smarty->assign('totaalAantalPaginas', (ceil($this->model->getAantal($this->prullenbak) / LidInstellingen::get('mededelingen', 'aantalPerPagina'))));
+		$this->smarty->assign('totaalAantalPaginas', (ceil($this->model->getAantal($this->prullenbak) / LidInstellingenModel::get('mededelingen', 'aantalPerPagina'))));
 		$this->smarty->assign('datumtijdFormaat', '%d-%m-%Y %H:%M');
 		$this->smarty->display('mededelingen/mededelingen.tpl');
 	}
@@ -163,18 +171,6 @@ class MededelingenView extends SmartyTemplateView {
 		$this->smarty->assign('topmost', $topMost);
 
 		return $this->smarty->fetch('mededelingen/mededelingentopblock.tpl');
-	}
-
-}
-
-class MededelingenZijbalkView extends SmartyTemplateView {
-
-	public function view() {
-		// De laatste n mededelingen ophalen en meegeven aan $this.
-		$mededelingen = MededelingenModel::getLaatsteMededelingen($this->model);
-		$this->smarty->assign('mededelingen', $mededelingen);
-
-		$this->smarty->display('mededelingen/mededelingenzijbalk.tpl');
 	}
 
 }

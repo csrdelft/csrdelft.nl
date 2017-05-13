@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\model\groepen;
+
+use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\model\entity\groepen\Kring;
+use CsrDelft\model\entity\groepen\Verticale;
 
 class KringenModel extends AbstractGroepenModel {
 

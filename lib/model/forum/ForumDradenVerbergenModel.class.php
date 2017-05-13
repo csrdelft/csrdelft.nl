@@ -1,5 +1,10 @@
 <?php
+namespace CsrDelft\model\forum;
+use CsrDelft\model\entity\forum\ForumDraad;
+use CsrDelft\model\entity\forum\ForumDraadVerbergen;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
+use Exception;
 
 /**
  * ForumDradenVerbergenModel.class.php

@@ -1,6 +1,8 @@
 <?php
+namespace CsrDelft\view\formulier;
 
-require_once 'view/formulier/Formulier.class.php';
+use function CsrDelft\getMelding;
+
 
 /**
  * TabsForm.class.php

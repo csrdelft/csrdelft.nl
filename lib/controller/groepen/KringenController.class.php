@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\controller\groepen;
+use CsrDelft\model\groepen\KringenModel;
+use CsrDelft\view\JsonResponse;
 
 /**
  * KringenController.class.php

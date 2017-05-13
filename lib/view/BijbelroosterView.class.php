@@ -1,6 +1,10 @@
 <?php
+namespace CsrDelft\view;
 
-require_once 'model/BijbelroosterModel.class.php';
+use CsrDelft\model\BijbelroosterModel;
+use CsrDelft\view\View;
+use PDOStatement;
+
 
 /**
  * BijbelroosterView.class.php

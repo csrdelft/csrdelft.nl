@@ -4,14 +4,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="index, follow" />
 <meta name="author" content="PubCie C.S.R. Delft" />
-<meta name="description" content="{Instellingen::get('stek', 'beschrijving')}">
+<meta name="description" content="{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}">
 <meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE" />
 <meta name="apple-itunes-app" content="app-id=1112148892, app-argument={$smarty.const.CSR_ROOT}{$REQUEST_URI}">
 <meta property="og:url" content="{$smarty.const.CSR_ROOT}{$REQUEST_URI}" />
 <meta property="og:title" content="C.S.R. Delft | {$titel}" />
 <meta property="og:locale" content="nl_nl" />
 <meta property="og:image" content="{$smarty.const.CSR_ROOT}/assets/layout/plaetjes/beeldmerk.png" />
-<meta property="og:description" content="{Instellingen::get('stek', 'beschrijving')}" />
+<meta property="og:description" content="{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}" />
 <title>C.S.R. Delft - {$titel}</title>
 <link rel="shortcut icon" href="{$smarty.const.CSR_ROOT}/assets/layout/plaetjes/favicon.ico" />
 <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{$smarty.const.CSR_ROOT}/forum/rss.xml" />

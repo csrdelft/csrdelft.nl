@@ -1,6 +1,20 @@
 <?php
+namespace CsrDelft\model;
+use function CsrDelft\debugprint;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\fotoalbum\Foto;
+use CsrDelft\model\entity\fotoalbum\FotoAlbum;
+use CsrDelft\model\entity\fotoalbum\FotoTag;
+use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
+use function CsrDelft\setMelding;
+use function CsrDelft\valid_filename;
+use Exception;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
  * FotoAlbumModel.class.php
@@ -55,8 +69,7 @@ class FotoAlbumModel extends PersistenceModel {
 			return null;
 		}
 		if (AccountModel::isValidUid($path) AND ProfielModel::existsUid($path)) {
-			require_once 'model/entity/fotoalbum/FotoTagAlbum.class.php';
-			$album = new FotoTagAlbum($path);
+						$album = new FotoTagAlbum($path);
 		} else {
 			$album = new FotoAlbum($path);
 		}
