@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\cms;
 use CsrDelft\model\entity\CmsPagina;
+use function CsrDelft\reldate;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\BBCodeField;
