@@ -1,5 +1,7 @@
 <?php
 namespace CsrDelft\view\formulier\elementen;
+use function CsrDelft\classNameZonderNamespace;
+
 /**
  * Subkopje.class.php
  *
@@ -12,7 +14,7 @@ class Subkopje extends HtmlComment {
 	public $h = 3;
 
 	public function getHtml() {
-		return '<h' . $this->h . ' class="' . get_class($this) . '">' . $this->comment . '</h' . $this->h . '>';
+		return '<h' . $this->h . ' class="' . classNameZonderNamespace(get_class($this)) . '">' . $this->comment . '</h' . $this->h . '>';
 	}
 
 }

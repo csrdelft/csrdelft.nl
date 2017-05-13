@@ -1,5 +1,7 @@
 <?php
 namespace CsrDelft\view\formulier\elementen;
+use function CsrDelft\classNameZonderNamespace;
+
 /**
  * HtmlComment.class.php
  *
@@ -46,7 +48,7 @@ JS;
 	}
 
 	public function getType() {
-		return get_class($this);
+		return classNameZonderNamespace(get_class($this));
 	}
 
 }

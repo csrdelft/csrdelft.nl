@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\view;
+use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\Icon;
 use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\entity\security\Account;
@@ -47,7 +48,7 @@ class LoginSessionsTable extends DataTable {
 	}
 
 	public function getType() {
-		return get_class($this);
+		return classNameZonderNamespace(get_class($this));
 	}
 
 }

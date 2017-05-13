@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\view\formulier\invoervelden;
+use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\Icon;
 use function CsrDelft\in_array_i;
 use CsrDelft\model\security\LoginModel;
@@ -89,7 +90,7 @@ abstract class InputField implements FormElement, Validator {
 		}
 		$this->description = $description;
 		// add *Field classname to css_classes
-		$this->css_classes[] = get_class($this);
+		$this->css_classes[] = classNameZonderNamespace(get_class($this));
 	}
 
 	public function getType() {

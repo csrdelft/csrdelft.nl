@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\view\formulier\knoppen;
+use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\Icon;
 use CsrDelft\view\formulier\elementen\FormElement;
 
@@ -49,7 +50,7 @@ class FormulierKnop implements FormElement {
 	}
 
 	public function getType() {
-		return get_class($this);
+		return classNameZonderNamespace(get_class($this));
 	}
 
 	public function getHtml() {

@@ -1,21 +1,22 @@
 <?php
 namespace CsrDelft\view\formulier\knoppen;
 
+use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\view\formulier\elementen\FormElement;
 
 
 /**
  * FormKnoppen.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
- * 
+ *
+ *
  * Uitbreidingen van FormulierKnop:
  * 		- SubmitKnop		invoer wordt verzonden
  * 		- ResetKnop			invoer wordt teruggezet naar opgeslagen waarden
  * 		- CancelKnop		invoer wordt genegeerd
  * 		- DeleteKnop		invoer wordt verwijderd
- * 
+ *
  */
 abstract class FormKnoppen implements FormElement {
 
@@ -41,7 +42,7 @@ abstract class FormKnoppen implements FormElement {
 	}
 
 	public function getType() {
-		return get_class($this);
+		return classNameZonderNamespace(get_class($this));
 	}
 
 	public function addKnop(FormulierKnop $knop, $left = false, $prepend = false) {

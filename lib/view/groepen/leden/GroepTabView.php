@@ -8,6 +8,7 @@
 
 namespace CsrDelft\view\groepen\leden;
 
+use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\groepen\Verticale;
 use CsrDelft\model\entity\security\AccessAction;
@@ -15,6 +16,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\GroepEetwensView;
 use CsrDelft\view\GroepEmailsView;
 use CsrDelft\view\groepen;
+use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\GroepStatistiekView;
 
 abstract class GroepTabView extends GroepOmschrijvingView {
@@ -28,7 +30,7 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 			$html .= '<li class="geschiedenis float-left"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><span class="fa fa-clock-o"></span></a></li>';
 		}
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof groepen\leden\GroepPasfotosView ? 'active' : '') . '" href="' . $this->groep->getUrl() . GroepTab::Pasfotos . '" title="' . GroepTab::getDescription(GroepTab::Pasfotos) . ' tonen"><span class="fa fa-user"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'active' : '') . '" href="' . $this->groep->getUrl() . GroepTab::Pasfotos . '" title="' . GroepTab::getDescription(GroepTab::Pasfotos) . ' tonen"><span class="fa fa-user"></span></a></li>';
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'active' : '') . '" href="' . $this->groep->getUrl() . GroepTab::Lijst . '" title="' . GroepTab::getDescription(GroepTab::Lijst) . ' tonen"><span class="fa fa-align-justify"></span></a></li>';
 

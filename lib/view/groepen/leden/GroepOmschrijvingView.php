@@ -8,6 +8,7 @@
 
 namespace CsrDelft\view\groepen\leden;
 
+use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\view\CsrBB;
 use CsrDelft\view\formulier\elementen\FormElement;
@@ -27,7 +28,7 @@ class GroepOmschrijvingView implements FormElement {
 	}
 
 	public function getType() {
-		return get_class($this);
+		return classNameZonderNamespace(get_class($this));
 	}
 
 	public function getModel() {

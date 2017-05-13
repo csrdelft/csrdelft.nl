@@ -8,6 +8,7 @@
 
 namespace CsrDelft\view\groepen;
 
+use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
@@ -110,7 +111,7 @@ class GroepView implements FormElement {
 	}
 
 	public function getType() {
-		return get_class($this->groep);
+		return classNameZonderNamespace(get_class($this->groep));
 	}
 
 }

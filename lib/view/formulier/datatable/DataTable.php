@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\datatable;
 
+use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\View;
 use function CsrDelft\className;
@@ -291,7 +292,7 @@ HTML;
 	}
 
 	public function getType() {
-		return get_class($this);
+		return classNameZonderNamespace(get_class($this));
 	}
 
 	public function getGroupByColumn() {
