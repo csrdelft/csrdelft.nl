@@ -9,14 +9,14 @@ use CsrDelft\view\formulier\keuzevelden\SterrenField;
 
 class MaaltijdKwaliteitBeoordelingForm extends InlineForm {
 
-	public function __construct(Maaltijd $m, MaaltijdBeoordeling $b) {
+	public function __construct(Maaltijd $maaltijd, MaaltijdBeoordeling $beoordeling) {
 
-		$field = new SterrenField('kwaliteit', $b->kwaliteit, null, 4);
+		$field = new SterrenField('kwaliteit', $beoordeling->kwaliteit, null, 4);
 		$field->hints = array('ruim onvoldoende', 'onvoldoende', 'voldoende', 'ruim voldoende');
 		$field->click_submit = true;
-		$field->readonly = $m->getBeginMoment() < strtotime(InstellingenModel::get('maaltijden', 'beoordeling_periode'));
+		$field->readonly = $maaltijd->getBeginMoment() < strtotime(InstellingenModel::get('maaltijden', 'beoordeling_periode'));
 
-		parent::__construct($b, maalcieUrl . '/beoordeling/' . $b->maaltijd_id, $field, false);
+		parent::__construct($beoordeling, maalcieUrl . '/beoordeling/' . $beoordeling->maaltijd_id, $field, false);
 		$this->css_classes[] = 'noanim';
 	}
 

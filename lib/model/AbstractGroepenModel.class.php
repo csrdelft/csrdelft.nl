@@ -78,9 +78,9 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
 	/**
 	 * Groepen waarvan de gevraagde gebruiker de wikipagina's mag lezen en bewerken.
-	 * 
+	 *
 	 * @param string $uid
-	 * @return string
+	 * @return array
 	 */
 	public static function getWikiToegang($uid) {
 		$result = array();
@@ -124,7 +124,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
 	/**
 	 * Set primary key.
-	 * 
+	 *
 	 * @param PersistentEntity $groep
 	 * @return void
 	 */
@@ -134,7 +134,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
 	/**
 	 * Delete ACL.
-	 * 
+	 *
 	 * @param array $primary_key_values
 	 * @return int number of rows affected
 	 */
@@ -145,7 +145,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
 	/**
 	 * Converteer groep inclusief leden van klasse.
-	 * 
+	 *
 	 * @param AbstractGroep $oldgroep
 	 * @param AbstractGroepenModel $oldmodel
 	 * @param string $soort
@@ -222,7 +222,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
 	/**
 	 * Return groepen by GroepStatus voor lid.
-	 * 
+	 *
 	 * @param string $uid
 	 * @param GroepStatus|array $status
 	 * @return AbstractGroep[]
