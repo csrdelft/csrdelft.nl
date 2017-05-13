@@ -33,7 +33,7 @@
 		<div id="cd-main-overlay">
 			{if CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'onontdekt'}
 				{include file='layout/fx-onontdekt.tpl'}
-			{elseif LidInstellingen::get('layout', 'fx') == 'civisaldo'}
+			{elseif CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'civisaldo'}
 				{include file='layout/fx-civisaldo.tpl'}
 			{/if}
 		</div>
