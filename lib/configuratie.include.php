@@ -1,10 +1,10 @@
 <?php
 /**
  * configuratie.include.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * First include for entire application.
  * Handle exceptions gracefully and notify admin.
  * Configure sessions.
@@ -29,6 +29,9 @@ use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
 
 require __DIR__ . '/../vendor/autoload.php';
+// Defines
+require_once 'defines.include.php';
+require_once 'common.functions.php';
 
 spl_autoload_register(function ($class) {
 
@@ -74,6 +77,7 @@ spl_autoload_register(function ($class) {
 register_shutdown_function('fatal_handler');
 
 function fatal_handler(Exception $ex = null) {
+    echo "fatal error";
 
 	try {
 		if (defined('TIME_MEASURE') AND TIME_MEASURE) {
@@ -82,8 +86,8 @@ function fatal_handler(Exception $ex = null) {
 
 		if ($ex instanceof Exception) {
 			if ((defined('DEBUG') AND DEBUG) OR LoginModel::mag('P_LOGGED_IN')) {
-				echo str_replace('#', '<br />#', $ex); // stacktrace 
-				printDebug();
+				echo str_replace('#', '<br />#', $ex); // stacktrace
+				CsrDelft\printDebug();
 			}
 		}
 	} catch (Exception $e) {
@@ -133,10 +137,6 @@ if (php_sapi_name() === 'cli') {
 } else {
 	define('MODE', 'WEB');
 }
-
-// Defines
-require_once 'defines.include.php';
-require_once 'common.functions.php';
 
 if (isset($_SERVER['REQUEST_URI'])) {
 	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
