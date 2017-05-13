@@ -90,7 +90,8 @@ class BeheerCiviSaldoController extends AclController {
 			$civisaldo = $this->model->retrieveByUUID($uuid);
 
 			if ($civisaldo) {
-				$this->model->delete($civisaldo);
+			    $civisaldo->deleted = true;
+				$this->model->update($civisaldo);
 				$removed[] = $civisaldo;
 			}
 		}
