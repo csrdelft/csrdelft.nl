@@ -8,17 +8,17 @@
 
 namespace CsrDelft\view\groepen;
 
-use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\view\CsrBB;
 use CsrDelft\view\formulier\elementen\FormElement;
-use CsrDelft\view\GroepEetwensView;
-use CsrDelft\view\GroepEmailsView;
+use CsrDelft\view\groepen\leden\GroepEetwensView;
+use CsrDelft\view\groepen\leden\GroepEmailsView;
 use CsrDelft\view\groepen\leden\GroepLijstView;
 use CsrDelft\view\groepen\leden\GroepPasfotosView;
-use CsrDelft\view\GroepStatistiekView;
+use CsrDelft\view\groepen\leden\GroepStatistiekView;
+use function CsrDelft\classNameZonderNamespace;
 
 class GroepView implements FormElement {
 

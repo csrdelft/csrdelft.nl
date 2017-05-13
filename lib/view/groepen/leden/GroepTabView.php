@@ -8,16 +8,10 @@
 
 namespace CsrDelft\view\groepen\leden;
 
-use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\groepen\Verticale;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\GroepEetwensView;
-use CsrDelft\view\GroepEmailsView;
-use CsrDelft\view\groepen;
-use CsrDelft\view\groepen\leden\GroepPasfotosView;
-use CsrDelft\view\GroepStatistiekView;
 
 abstract class GroepTabView extends GroepOmschrijvingView {
 
