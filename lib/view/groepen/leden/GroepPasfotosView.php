@@ -11,7 +11,7 @@ namespace CsrDelft\view\groepen\leden;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\GroepAanmeldenForm;
+use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 
 class GroepPasfotosView extends GroepTabView {
 

@@ -8,13 +8,13 @@
 
 namespace CsrDelft\view\groepen\leden;
 
-use function CsrDelft\group_by_distinct;
 use CsrDelft\Icon;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\GroepAanmeldenForm;
-use CsrDelft\view\GroepBewerkenForm;
+use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
+use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
+use function CsrDelft\group_by_distinct;
 
 class GroepLijstView extends GroepTabView {
 
