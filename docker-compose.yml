@@ -5,7 +5,7 @@ stek:
   ports:
     - "8080:80"
   volumes:
-    - ./htdocs/plaetjes:/var/www/csrdelft.nl/htdocs/plaetjes
+    - .:/var/www/csrdelft.nl
 
 stekdb:
   image: mariadb
@@ -16,3 +16,5 @@ stekdb:
     MYSQL_DATABASE: csrdelft
   volumes:
     - db/:/var/lib/mysql/
+  ports:
+    - "3306:3306"
