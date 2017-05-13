@@ -6,7 +6,7 @@ use CsrDelft\model\entity\groepen\AbstractGroep;use CsrDelft\model\entity\LedenM
  * LedenMemoryView.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Het spelletje memory met pasfotos en namen van leden
  */
 class LedenMemoryView extends CompressedLayout {
@@ -229,57 +229,6 @@ class LedenMemoryScoreResponse extends DataTableResponse {
 		$array['groep'] = $this->titles[$score->groep];
 
 		return parent::getJson($array);
-	}
-
-}
-
-class LedenMemoryZijbalkView implements View {
-
-	private $scores;
-	private $titel;
-
-	public function __construct($scores, $titel) {
-		$this->scores = $scores;
-		$this->titel = $titel;
-	}
-
-	function getTitel() {
-		return 'Topscores ' . $this->titel;
-	}
-
-	public function getBreadcrumbs() {
-		return null;
-	}
-
-	function getModel() {
-		return $this->scores;
-	}
-
-	function view() {
-		echo '<div id="zijbalk_ledenmemory_topscores"><div class="zijbalk-kopje"><a href="/forum/onderwerp/8017">';
-		echo $this->getTitel();
-		echo '</a></div>';
-		$first = true;
-		foreach ($this->getModel() as $score) {
-			echo '<div class="item">';
-			echo sprintf('%02d', floor($score->tijd / 60 % 60)); //minuten
-			echo ':';
-			echo sprintf('%02d', floor($score->tijd % 60)); //seconden
-			echo ' ';
-			if ($first) {
-				echo '<span class="cursief">';
-			}
-			echo ProfielModel::getLink($score->door_uid, 'civitas');
-			echo ' (';
-			echo $score->beurten;
-			echo ')';
-			if ($first) {
-				echo '</span>';
-			}
-			echo '</div>';
-			$first = false;
-		}
-		echo '</div>'; //einde wrapperdiv
 	}
 
 }

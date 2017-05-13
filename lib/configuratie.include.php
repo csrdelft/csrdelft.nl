@@ -77,8 +77,6 @@ spl_autoload_register(function ($class) {
 register_shutdown_function('fatal_handler');
 
 function fatal_handler(Exception $ex = null) {
-    echo "fatal error";
-
 	try {
 		if (defined('TIME_MEASURE') AND TIME_MEASURE) {
 			TimerModel::instance()->log();

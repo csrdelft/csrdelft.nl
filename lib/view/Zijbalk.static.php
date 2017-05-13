@@ -14,6 +14,7 @@ use CsrDelft\view\agenda\AgendaZijbalkView;
 use CsrDelft\view\forum\ForumDraadZijbalkView;
 use CsrDelft\view\forum\ForumPostZijbalkView;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
+use CsrDelft\view\ledenmemory\LedenMemoryZijbalkView;
 use CsrDelft\view\mededelingen\MededelingenZijbalkView;
 
 /**
