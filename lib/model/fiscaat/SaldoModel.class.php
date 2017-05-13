@@ -124,7 +124,7 @@ class SaldoModel extends PersistenceModel {
 		return array(
 			"label" => "CiviSaldo",
 			"data" => array_reverse($data), // Keer de lijst om, flot laat anders veranderingen in de data 1-off zien
-			"threshold" => array("below" => 0, "color" => "red"),
+			"threshold" => array("below" => 0, "color" => "green"),
 			"lines" => array("steps" => true)
 		);
 	}
