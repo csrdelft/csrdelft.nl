@@ -24,9 +24,9 @@ use CsrDelft\view\formulier\ModalForm;
 
 /**
  * ForumView.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Tonen van het forum.
  */
 abstract class ForumView extends SmartyTemplateView {
@@ -188,19 +188,6 @@ class ForumDeelForm extends ModalForm {
 		$fields['btn']->addKnop($delete, true);
 
 		$this->addFields($fields);
-	}
-
-}
-
-class ForumDraadReagerenView extends ForumView {
-
-	public function __construct($lijst) {
-		parent::__construct($lijst);
-	}
-
-	public function view() {
-		$this->smarty->assign('reageren', $this->model);
-		$this->smarty->display('forum/draad_reageren.tpl');
 	}
 
 }

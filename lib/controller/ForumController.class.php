@@ -18,10 +18,10 @@ use CsrDelft\SimpleSpamFilter;
 use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\FlotTimeSeries;
+use CsrDelft\view\forum\ForumDraadReagerenView;
 use CsrDelft\view\forum\ForumDraadView;
 use CsrDelft\view\ForumDeelForm;
 use CsrDelft\view\ForumDeelView;
-use CsrDelft\view\ForumDraadReagerenView;
 use CsrDelft\view\ForumOverzichtView;
 use CsrDelft\view\ForumPostDeleteView;
 use CsrDelft\view\ForumPostView;
@@ -37,9 +37,9 @@ use function CsrDelft\setMelding;
 
 /**
  * ForumController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van het forum.
  */
 class ForumController extends Controller {
@@ -188,7 +188,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
-	 * 
+	 *
 	 * @param string $query
 	 * @param int $pagina
 	 */
@@ -216,7 +216,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Draden zoeken op titel voor auto-aanvullen.
-	 * 
+	 *
 	 * @param string $query
 	 */
 	public function titelzoeken() {
@@ -274,7 +274,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Recente draadjes laten zien in tabel.
-	 * 
+	 *
 	 * @param int $pagina
 	 * @param string $belangrijk
 	 */
@@ -291,7 +291,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Shortcut to /recent/1/belangrijk.
-	 * 
+	 *
 	 * @param int $pagina
 	 */
 	public function belangrijk($pagina = 1) {
@@ -300,7 +300,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Deelforum laten zien met draadjes in tabel.
-	 * 
+	 *
 	 * @param int $forum_id
 	 * @param int $pagina or 'laatste' or 'prullenbak'
 	 */
@@ -326,7 +326,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Forumdraadje laten zien met alle zichtbare/verwijderde posts.
-	 * 
+	 *
 	 * @param int $draad_id
 	 * @param int $pagina or 'laatste' or 'ongelezen'
 	 */
@@ -367,7 +367,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Opzoeken forumdraad van forumpost.
-	 * 
+	 *
 	 * @param int $post_id
 	 */
 	public function reactie($post_id) {
@@ -397,7 +397,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Forum deel bewerken.
-	 * 
+	 *
 	 * @param int $forum_id
 	 */
 	public function beheren($forum_id) {
@@ -416,7 +416,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Forum deel verwijderen.
-	 * 
+	 *
 	 * @param int $forum_id
 	 */
 	public function opheffen($forum_id) {
@@ -433,7 +433,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Forum draad verbergen in zijbalk.
-	 * 
+	 *
 	 * @param int $draad_id
 	 */
 	public function verbergen($draad_id) {
@@ -450,7 +450,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Forum draad tonen in zijbalk.
-	 * 
+	 *
 	 * @param int $draad_id
 	 */
 	public function tonen($draad_id) {
@@ -474,7 +474,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Forum draad volgen per email.
-	 * 
+	 *
 	 * @param int $draad_id
 	 */
 	public function volgenaan($draad_id) {
@@ -491,7 +491,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Forum draad niet meer volgen.
-	 * 
+	 *
 	 * @param int $draad_id
 	 */
 	public function volgenuit($draad_id) {
@@ -515,7 +515,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Leg bladwijzer
-	 * 
+	 *
 	 * @param int $draad_id
 	 */
 	public function bladwijzer($draad_id) {
@@ -529,7 +529,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Wijzig een eigenschap van een draadje.
-	 * 
+	 *
 	 * @param int $draad_id
 	 * @param string $property
 	 * @param mixed $value
@@ -580,7 +580,7 @@ class ForumController extends Controller {
 
 	/**
 	 * Forum post toevoegen en evt. nieuw draadje aanmaken.
-	 * 
+	 *
 	 * @param int $forum_id
 	 * @param int $draad_id
 	 */
