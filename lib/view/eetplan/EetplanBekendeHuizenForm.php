@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\eetplan;
+
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\view\formulier\invoervelden\RequiredEntityField;
 use CsrDelft\view\formulier\invoervelden\RequiredLidField;

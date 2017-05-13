@@ -13,7 +13,7 @@ use CsrDelft\Orm\PersistenceModel;
 class EetplanBekendenModel extends PersistenceModel {
 	protected static $instance;
 
-	const ORM = "EetplanBekenden";
+	const ORM = EetplanBekenden::class;
 
 	/**
 	 * EetplanBekenden constructor.
