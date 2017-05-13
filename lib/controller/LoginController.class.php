@@ -13,7 +13,7 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\security\OneTimeTokensModel;
 use CsrDelft\model\security\RememberLoginModel;
-use CsrDelft\view\CmsPaginaView;
+use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;

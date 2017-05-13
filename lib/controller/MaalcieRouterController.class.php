@@ -12,21 +12,21 @@ use CsrDelft\controller\maalcie\BeheerVoorkeurenController;
 use CsrDelft\controller\maalcie\BeheerVrijstellingenController;
 use CsrDelft\controller\maalcie\CorveeRepetitiesController;
 use CsrDelft\controller\maalcie\MaalCieBoekjaarController;
+use CsrDelft\controller\maalcie\MaaltijdenFiscaatController;
 use CsrDelft\controller\maalcie\MaaltijdRepetitiesController;
 use CsrDelft\controller\maalcie\MijnAbonnementenController;
 use CsrDelft\controller\maalcie\MijnCorveeController;
 use CsrDelft\controller\maalcie\MijnMaaltijdenController;
 use CsrDelft\controller\maalcie\MijnVoorkeurenController;
 use CsrDelft\model\CmsPaginaModel;
-use CsrDelft\view\CmsPaginaView;
+use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\controller\maalcie\MaaltijdenFiscaatController;
 
 /**
  * MaalcieRouterController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Router voor de maalcie module.
  */
 class MaalcieRouterController extends AclController {

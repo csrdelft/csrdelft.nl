@@ -9,7 +9,7 @@ use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\BesturenModel;
-use CsrDelft\view\CmsPaginaView;
+use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\groepen;
 use CsrDelft\view\View;
 

@@ -7,6 +7,7 @@ use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\FotoAlbumModel;
 use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\formulier\Dropzone;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;

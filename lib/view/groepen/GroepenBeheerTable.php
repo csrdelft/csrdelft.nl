@@ -3,7 +3,7 @@ namespace CsrDelft\view\groepen;
 
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\CmsPaginaModel;
-use CsrDelft\view\CmsPaginaView;
+use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\formulier\datatable\DataTable;
 use CsrDelft\view\formulier\datatable\DataTableKnop;
 
