@@ -1,24 +1,28 @@
 <?php
-namespace CsrDelft\model;
+namespace CsrDelft\model\agenda;
 
-use function CsrDelft\getDateTime;
-use function CsrDelft\getWeekNumber;
+use CsrDelft\model\agenda;
+use CsrDelft\model\BijbelroosterModel;
 use CsrDelft\model\entity\agenda\AgendaItem;
-use CsrDelft\model\entity\agenda\AgendaVerbergen;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\model\VerjaardagenModel;
 use CsrDelft\Orm\PersistenceModel;
 use Exception;
+use function CsrDelft\getDateTime;
+use function CsrDelft\getWeekNumber;
 
 
 /**
- * AgendaModel.class.php
+ * AgendaModel.php
  *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -141,7 +145,7 @@ class AgendaModel extends PersistenceModel {
 		if ($count > 0) {
 			$params = array_keys($itemsByUUID);
 			array_unshift($params, LoginModel::getUid());
-			$verborgen = AgendaVerbergenModel::instance()->find('uid = ? AND refuuid IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $params);
+			$verborgen = agenda\AgendaVerbergenModel::instance()->find('uid = ? AND refuuid IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $params);
 			foreach ($verborgen as $verbergen) {
 				unset($itemsByUUID[$verbergen->refuuid]);
 			}
@@ -239,31 +243,6 @@ class AgendaModel extends PersistenceModel {
 			$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
 		}
 		return $item;
-	}
-
-}
-
-class AgendaVerbergenModel extends PersistenceModel {
-
-	const ORM = AgendaVerbergen::class;
-	const DIR = 'agenda/';
-
-	protected static $instance;
-
-	public function toggleVerbergen(Agendeerbaar $item) {
-		$verborgen = $this->retrieveByPrimaryKey(array(LoginModel::getUid(), $item->getUUID()));
-		if (!$verborgen) {
-			$verborgen = new AgendaVerbergen();
-			$verborgen->uid = LoginModel::getUid();
-			$verborgen->refuuid = $item->getUUID();
-			$this->create($verborgen);
-		} else {
-			$this->delete($verborgen);
-		}
-	}
-
-	public function isVerborgen(Agendeerbaar $item) {
-		return $this->existsByPrimaryKey(array(LoginModel::getUid(), $item->getUUID()));
 	}
 
 }

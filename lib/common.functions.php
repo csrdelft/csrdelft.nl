@@ -714,6 +714,5 @@ function className($className) {
  * @return string
  */
 function classNameZonderNamespace($className) {
-	$namespaceExploded = explode('\\', $className);
-	return array_pop($namespaceExploded);
+	return (new \ReflectionClass($className))->getShortName();
 }

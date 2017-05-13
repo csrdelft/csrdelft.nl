@@ -1,6 +1,6 @@
 <?php
 namespace CsrDelft\view;
-use CsrDelft\model\AgendaModel;
+use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\FotoAlbumModel;
