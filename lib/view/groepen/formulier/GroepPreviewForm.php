@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use function CsrDelft\getMelding;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
