@@ -7,12 +7,12 @@ use CsrDelft\view\View;
 
 /**
  * CompressedLayout.abstract.php
- * 
+ *
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Gebruikt .ini files voor stylesheets en scripts per module en layout.
- * 
+ *
  * @see htdocs/tools/css.php
  * @see htdocs/tools/js.php
  */
@@ -31,7 +31,7 @@ abstract class CompressedLayout extends HtmlPage {
 
 	/**
 	 * Add compressed css en js to page for module.
-	 * 
+	 *
 	 * @param string $module
 	 */
 	public function addCompressedResources($module) {
@@ -184,7 +184,7 @@ abstract class CompressedLayout extends HtmlPage {
 			}
 			if (LidInstellingenModel::get('layout', 'fx') == 'onontdekt') {
                 $modules[] = 'fxonontdekt';
-            } elseif (LidInstellingen::get('layout', 'fx') == 'civisaldo') {
+            } elseif (LidInstellingenModel::get('layout', 'fx') == 'civisaldo') {
 				$modules[] = 'fxcivisaldo';
 			}
 
