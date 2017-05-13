@@ -411,7 +411,7 @@ class LedenlijstContent implements View {
         echo '<hr class="clear" />';
 
         if ($this->lidzoeker->count() > 0) {
-            $class = $this->lidzoeker->getWeergave();
+            $class = 'CsrDelft\\lid\\' . $this->lidzoeker->getWeergave();
             $weergave = new $class($this->lidzoeker);
             $weergave->view();
         } elseif ($this->lidzoeker->searched()) {
