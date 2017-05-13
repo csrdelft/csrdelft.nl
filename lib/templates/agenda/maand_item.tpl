@@ -1,7 +1,7 @@
 {assign var=verborgen value=CsrDelft\model\AgendaVerbergenModel::instance()->isVerborgen($item)}
 <li id="item-{str_replace('@', '-', str_replace('.', '-', $item->getUUID()))}" {if $verborgen}class="offtopic"{/if} title="{$item->getBeschrijving()}" parentid="items-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}">
 	<a href="/agenda/verbergen/{$item->getUUID()}" class="beheren post" title="{if $verborgen}Toon{else}Verberg{/if} dit agenda item">{if $verborgen}{icon get=shading}{else}{icon get=eye}{/if}</a>
-	{if $item instanceof CsrDelft\model\entity\groepen\AbstractGroep AND $item->mag(CsrDelft\model\entity\security\A::Wijzigen)}
+	{if $item instanceof CsrDelft\model\entity\groepen\AbstractGroep AND $item->mag(CsrDelft\model\entity\security\AccessAction::Wijzigen)}
 		<a href="{$item->getUrl()}wijzigen" class="beheren" title="Wijzig {htmlspecialchars($item->naam)}">{icon get="bewerken"}</a>
 	{elseif $item instanceof CsrDelft\model\entity\agenda\AgendaItem AND $item->magBeheren()}
 		<a href="/agenda/bewerken/{$item->item_id}" class="beheren post popup" title="Dit agenda-item bewerken">{icon get="bewerken"}</a>
