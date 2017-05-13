@@ -10,7 +10,6 @@ namespace CsrDelft\view\agenda;
 
 use CsrDelft\model\AgendaModel;
 use CsrDelft\view\agenda;
-use CsrDelft\view\AgendaView;
 
 abstract class AgendaItemsView extends AgendaView {
 
