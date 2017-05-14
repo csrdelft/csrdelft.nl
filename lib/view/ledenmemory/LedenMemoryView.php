@@ -1,9 +1,9 @@
 <?php
-namespace CsrDelft\view;
-use CsrDelft\model\entity\groepen\AbstractGroep;use CsrDelft\model\entity\LedenMemoryScore;use CsrDelft\model\entity\LidStatus;use CsrDelft\model\entity\Profiel;use CsrDelft\model\groepen\LichtingenModel;use CsrDelft\model\groepen\VerticalenModel;use CsrDelft\model\LedenMemoryScoresModel;use CsrDelft\model\ProfielModel;use CsrDelft\view\formulier\datatable\DataTable;use CsrDelft\view\formulier\datatable\DataTableResponse;use CsrDelft\view\formulier\Formulier;use CsrDelft\view\formulier\getalvelden\RequiredIntField;use CsrDelft\view\formulier\invoervelden\TextField;use function CsrDelft\square_crop;
+namespace CsrDelft\view\ledenmemory;
+use CsrDelft\model\entity\groepen\AbstractGroep;use CsrDelft\model\entity\LidStatus;use CsrDelft\model\entity\Profiel;use CsrDelft\model\groepen\LichtingenModel;use CsrDelft\model\groepen\VerticalenModel;use CsrDelft\model\ProfielModel;use CsrDelft\view\CompressedLayout;use CsrDelft\view\CsrSmarty;use function CsrDelft\square_crop;
 
 /**
- * LedenMemoryView.class.php
+ * LedenMemoryView.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
@@ -158,77 +158,6 @@ HTML;
 			</body>
 		</html>
 		<?php
-	}
-
-}
-
-class LedenMemoryScoreForm extends Formulier {
-
-	public function __construct(LedenMemoryScore $score) {
-		parent::__construct($score, '/leden/memoryscore');
-
-		$fields[] = new RequiredIntField('tijd', $score->tijd, null, 1);
-		$fields[] = new RequiredIntField('beurten', $score->beurten, null, 1);
-		$fields[] = new RequiredIntField('goed', $score->goed, null, 1);
-		$fields[] = new TextField('groep', $score->groep, null);
-		$fields[] = new RequiredIntField('eerlijk', $score->eerlijk, null, 0, 1);
-
-		$this->addFields($fields);
-	}
-
-}
-
-class LedenMemoryScoreTable extends DataTable {
-
-	public function __construct(AbstractGroep $groep = null, $titel) {
-		parent::__construct(LedenMemoryScoresModel::ORM, '/leden/memoryscores/' . ($groep ? $groep->getUUID() : null), 'Topscores Ledenmemory' . $titel, 'groep');
-		$this->settings['tableTools']['aButtons'] = array();
-		$this->settings['dom'] = 'rtpli';
-
-		$this->hideColumn('goed');
-		$this->hideColumn('eerlijk');
-		$this->hideColumn('wanneer');
-
-		$this->setColumnTitle('door_uid', 'Naam');
-	}
-
-}
-
-class LedenMemoryScoreResponse extends DataTableResponse {
-
-	private $titles = array();
-
-	public function getJson($score) {
-		$array = $score->jsonSerialize();
-
-		$minutes = floor($score->tijd / 60);
-		$seconds = $score->tijd % 60;
-		$array['tijd'] = ($minutes < 10 ? '0' : '') . $minutes . ':' . ($seconds < 10 ? '0' : '') . $seconds;
-
-		$array['door_uid'] = ProfielModel::getLink($score->door_uid, 'civitas');
-
-		if (!isset($this->titles[$score->groep])) {
-			$this->titles[$score->groep] = '';
-
-			// Cache the title of the group
-			$parts = explode('@', $score->groep);
-			if (isset($parts[0], $parts[1])) {
-				switch ($parts[1]) {
-
-					case 'verticale.csrdelft.nl':
-						$groep = VerticalenModel::instance()->retrieveByUUID($score->groep);
-						$this->titles[$score->groep] = 'Verticale ' . $groep->naam;
-						break;
-
-					case 'lichting.csrdelft.nl':
-						$this->titles[$score->groep] = 'Lichting ' . $parts[0];
-						break;
-				}
-			}
-		}
-		$array['groep'] = $this->titles[$score->groep];
-
-		return parent::getJson($array);
 	}
 
 }

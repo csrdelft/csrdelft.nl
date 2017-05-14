@@ -11,7 +11,6 @@ namespace CsrDelft\view\fotoalbum;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\LidInstellingenModel;
-use CsrDelft\view\FotoAlbumView;
 
 class FotoAlbumZijbalkView extends FotoAlbumView {
 

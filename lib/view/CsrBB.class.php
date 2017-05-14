@@ -35,6 +35,8 @@ use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 use CsrDelft\view\fotoalbum\FotoAlbumSliderView;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\groepen\GroepView;
+use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
+use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\maalcie\MaaltijdKetzerView;
 use CsrDelft\view\peilingen\PeilingView;
 use Exception;

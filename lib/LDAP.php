@@ -4,7 +4,7 @@ namespace CsrDelft;
 # C.S.R. Delft | pubcie@csrdelft.nl
 # met dank aan Jeugdkerken NL
 # -------------------------------------------------------------------
-# ldap.class.php
+# LDAP.php
 # -------------------------------------------------------------------
 # Beheert LDAP-toegang
 # N.B. Let op dat functies in deze klasse verantwoordelijk zijn voor
@@ -180,13 +180,13 @@ class LDAP {
 	 * Voeg een nieuw record toe
 	 * N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
 	 * http://nl2.php.net/manual/en/function.ldap-add.php
-	 * 
+	 *
 	 * @param string $cn kortegroepnaam
 	 * @param array $entry onderstaande array zonder [objectClass]
 	 * @return bool gelukt/mislukt
-	 * 
+	 *
 	 * $entry zoals die door ldap_add() wordt toegevoegd:
-	 * $entry = Array ( 
+	 * $entry = Array (
 	  [cn] => kortenaamcommissie
 	  [member] => Array (
 	  [0] => uid=0431,ou=leden,dc=csrdelft,dc=nl
@@ -213,11 +213,11 @@ class LDAP {
 	 * Wijzig de informatie van een groep
 	 * N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
 	 * http://nl2.php.net/manual/en/function.ldap-add.php
-	 * 
+	 *
 	 * @param string $cn kortegroepnaam
 	 * @param array $entry array zoals in addGroep maar zonder [objectClass]
 	 * @return bool gelukt/mislukt
-	 * 
+	 *
 	 * ldap_modify overschrijft de members-array in ldap met nieuwe array.
 	 */
 	function modifyGroep($cn, $entry) {
@@ -228,7 +228,7 @@ class LDAP {
 
 	/**
 	 * verwijder de hele groep uit ldap
-	 * 
+	 *
 	 * @param $cn string kortegroepnaam
 	 * @return bool gelukt/mislukt
 	 */
