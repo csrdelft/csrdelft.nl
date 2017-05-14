@@ -1,5 +1,8 @@
 <?php
+namespace CsrDelft\model\entity\fiscaat;
+
 use CsrDelft\Orm\Entity\PersistentEnum;
+use Exception;
 
 /**
  * SaldoCommissie.enum.php

@@ -3,8 +3,7 @@ namespace CsrDelft\model\entity\fiscaat;
 
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-
-require_once 'model/entity/fiscaat/SaldoCommissie.enum.php';
+use JsonSerializable;
 
 /**
  * Saldo.class.php
@@ -23,7 +22,7 @@ class Saldo extends PersistentEntity implements JsonSerializable {
      * @var array
      */
     protected static $persistent_attributes = array(
-        'cie'        => array(T::Enumeration, false, 'SaldoCommissie'),
+        'cie'        => array(T::Enumeration, false, SaldoCommissie::class),
         'uid'        => array(T::UID),
         'moment'     => array(T::DateTime),
         'saldo'      => array(T::Float)
