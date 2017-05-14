@@ -1,9 +1,9 @@
 <?php
 /**
  * index.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Entry point voor stek modules.
  */
 use CsrDelft\controller\framework\Controller;
@@ -32,6 +32,7 @@ try {
 		case 'FotoAlbum':
 		case 'Agenda':
 		case 'Mededelingen':
+        case 'Assets':
 			break;
 
 		// de rest alleen voor ingelogde gebruikers:
