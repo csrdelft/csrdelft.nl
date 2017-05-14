@@ -29,9 +29,6 @@ use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
 
 require __DIR__ . '/../vendor/autoload.php';
-// Defines
-require_once 'defines.include.php';
-require_once 'common.functions.php';
 
 spl_autoload_register(function ($class) {
 
@@ -135,6 +132,10 @@ if (php_sapi_name() === 'cli') {
 } else {
 	define('MODE', 'WEB');
 }
+
+// Defines
+require_once 'defines.include.php';
+require_once 'common.functions.php';
 
 if (isset($_SERVER['REQUEST_URI'])) {
 	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
