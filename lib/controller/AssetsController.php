@@ -25,7 +25,7 @@ class AssetsController extends AclController
     private $cachePool;
 
     public function __construct($query) {
-        parent::__construct($query, new AssetsModel(true, true), ['GET']);
+        parent::__construct($query, new AssetsModel(false, true), ['GET']);
         $this->acl = [
             'js' => 'P_PUBLIC',
             'css' => 'P_PUBLIC'
@@ -53,7 +53,7 @@ class AssetsController extends AclController
             $js = $item->get();
         } else {
             $js = $this->model->createJavascript($item);
-            $this->cachePool->save($item->set($js));
+            //$this->cachePool->save($item->set($js));
         }
 
         $this->view = new JavascriptResponse($js);
@@ -69,7 +69,7 @@ class AssetsController extends AclController
             $css = $item->get();
         } else {
             $css = $this->model->createCss($item);
-            $this->cachePool->save($item->set($css));
+            //$this->cachePool->save($item->set($css));
         }
 
         $this->view = new CssResponse($css);

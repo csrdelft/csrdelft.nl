@@ -6,11 +6,10 @@
 namespace CsrDelft\model;
 
 use CsrDelft\view\CompressedLayout;
+use JShrink\Minifier as JsMin;
 use Psr\Cache\CacheItemInterface;
 use Stash\Driver\FileSystem;
 use Stash\Pool;
-use tubalmartin\CssMin\Minifier as CssMin;
-use JShrink\Minifier as JsMin;
 
 /**
  * Class AssetsModel.
@@ -30,13 +29,16 @@ class AssetsModel
     private $minify;
     private $gzip;
 
-    public function __construct($minify, $gzip)
-    {
+    public function __construct(
+        $minify,
+        $gzip
+    ) {
         $this->minify = $minify;
         $this->gzip = $gzip;
     }
 
-    public function createJavascript(CacheItemInterface $item) {
+    public function createJavascript(CacheItemInterface $item)
+    {
         $key = explode('/', $item->getKey());
 
         $extension = $key[0];
@@ -53,7 +55,7 @@ class AssetsModel
         foreach ($modules as $mod) {
             if (!key_exists($mod, $files)) continue;
             foreach ($files[$mod] as $file) {
-                if (!file_exists(ASSETS_PATH. $file)) continue;
+                if (!file_exists(ASSETS_PATH . $file)) continue;
                 $filename = str_replace(ASSETS_PATH, '', $file);
 
                 echo "/* Begin van " . $filename . " */\n";
@@ -75,7 +77,8 @@ class AssetsModel
         return $js;
     }
 
-    public function createCss(CacheItemInterface $item) {
+    public function createCss(CacheItemInterface $item)
+    {
         $driver = new FileSystem(['path' => DATA_PATH . 'less']);
         $pool = new Pool($driver);
 
@@ -103,24 +106,52 @@ class AssetsModel
                 $item = $pool->getItem($file);
 
                 if ($item->isHit()) {
-                    echo $item->get();
-                } else {
-                    if (strstr($file, '.css') === '.css') {
-                        $cssContents = file_get_contents(ASSETS_PATH . $file);
-                        $dir = dirname('/assets/' . $file);
-                        $cssContents = preg_replace(self::CSS_REGEX_URL, "url($dir/$1)", $cssContents);
-                    } else {
-                        $less = new \Less_Parser();
-                        $less->parse(
-                            file_get_contents(ASSETS_PATH . $file),
-                            ASSETS_PATH . $file
-                        );
-                        $cssContents = $less->getCss();
+                    $css = $item->get();
+                    $prefix = trim(strtok($css, PHP_EOL), "/* /");
+
+                    $includes = explode("|", $prefix);
+                    $timestamp = array_pop($includes);
+
+                    array_unshift($includes, ASSETS_PATH . $file);
+
+                    foreach ($includes as $includedLessFile) {
+                        if (strtotime($timestamp) < filemtime($includedLessFile)) {
+                            $pool->deleteItem($file);
+                            $item = $pool->getItem($file);
+                        }
                     }
 
-                    $pool->save($item->set($cssContents));
-                    echo $cssContents;
+                    if ($item->isHit()) {
+                        echo $css;
+                        continue;
+                    }
                 }
+
+                // Prefix timestamp
+                $cssContents = sprintf("/* |%s */\n", date('c'));
+                if (strstr($file, '.css') === '.css') {
+                    $cssContents .= file_get_contents(ASSETS_PATH . $file);
+                    $dir = dirname('/assets/' . $file);
+                    $cssContents = preg_replace(self::CSS_REGEX_URL, "url($dir/$1)", $cssContents);
+                } else {
+                    $less = new \Less_Parser();
+                    $less->parse(
+                        file_get_contents(ASSETS_PATH . $file),
+                        ASSETS_PATH . $file
+                    );
+                    $parsedLess = $less->getCss();
+                    $references = $less->allParsedFiles();
+                    $cssContents = "/* ";
+                    foreach ($references as $reference) {
+                        $cssContents .= sprintf("%s|", $reference);
+                    }
+                    $cssContents .= sprintf("%s */\n", date('c'));
+                    $cssContents .= $parsedLess;
+                }
+
+                $pool->save($item->set($cssContents));
+                echo $cssContents;
+
             }
         }
 
@@ -133,7 +164,10 @@ class AssetsModel
         return $css;
     }
 
-    public static function parseConfig($layout, $extension) {
+    public static function parseConfig(
+        $layout,
+        $extension
+    ) {
         if ($extension == 'js') {
             $ininame = 'script';
             $sectionname = 'scripts';
