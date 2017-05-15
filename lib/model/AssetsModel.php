@@ -113,7 +113,7 @@ class AssetsModel
                         $less = new \Less_Parser();
                         $less->parse(
                             file_get_contents(ASSETS_PATH . $file),
-                            '/assets/' . $file
+                            ASSETS_PATH . $file
                         );
                         $cssContents = $less->getCss();
                     }
