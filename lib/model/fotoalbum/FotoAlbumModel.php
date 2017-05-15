@@ -1,26 +1,25 @@
 <?php
-namespace CsrDelft\model;
-use function CsrDelft\debugprint;
-use function CsrDelft\getDateTime;
+namespace CsrDelft\model\fotoalbum;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\entity\fotoalbum\FotoTag;
 use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
-use function CsrDelft\setMelding;
-use function CsrDelft\valid_filename;
 use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use function CsrDelft\debugprint;
+use function CsrDelft\setMelding;
+use function CsrDelft\valid_filename;
 
 /**
- * FotoAlbumModel.class.php
- * 
+ * FotoAlbumModel.php
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class FotoAlbumModel extends PersistenceModel {
 
@@ -121,7 +120,7 @@ class FotoAlbumModel extends PersistenceModel {
 					if (!$foto->exists()) {
 						throw new Exception('Foto bestaat niet: ' . $foto->directory . $foto->filename);
 					}
-					FotoModel::instance()->verwerkFoto($foto);
+					\CsrDelft\model\fotoalbum\FotoModel::instance()->verwerkFoto($foto);
 					if (false === @chmod($path, 0644)) {
 						throw new Exception('Geen eigenaar van foto: ' . $path);
 					}
@@ -186,17 +185,17 @@ HTML;
 			$subdir->subdir = str_replace($oldDir, $newDir, $album->subdir);
 			$this->create($subdir);
 		}
-		foreach (FotoModel::instance()->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
+		foreach (\CsrDelft\model\fotoalbum\FotoModel::instance()->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
 			$oldUUID = $foto->getUUID();
 			// updaten gaat niet vanwege primary key
-			FotoModel::instance()->delete($foto);
+			\CsrDelft\model\fotoalbum\FotoModel::instance()->delete($foto);
 			$foto->subdir = str_replace($oldDir, $newDir, $foto->subdir);
-			FotoModel::instance()->create($foto);
-			foreach (FotoTagsModel::instance()->find('refuuid = ?', array($oldUUID)) as $tag) {
+			\CsrDelft\model\fotoalbum\FotoModel::instance()->create($foto);
+			foreach (\CsrDelft\model\fotoalbum\FotoTagsModel::instance()->find('refuuid = ?', array($oldUUID)) as $tag) {
 				// updaten gaat niet vanwege primary key
-				FotoTagsModel::instance()->delete($tag);
+				\CsrDelft\model\fotoalbum\FotoTagsModel::instance()->delete($tag);
 				$tag->refuuid = $foto->getUUID();
-				FotoTagsModel::instance()->create($tag);
+				\CsrDelft\model\fotoalbum\FotoTagsModel::instance()->create($tag);
 			}
 		}
 		if (false === @rmdir(PHOTOS_PATH . $oldDir)) {
@@ -224,9 +223,9 @@ HTML;
 				if ($success) {
 					// database in sync houden
 					// updaten gaat niet vanwege primary key
-					FotoModel::instance()->delete($foto);
+					\CsrDelft\model\fotoalbum\FotoModel::instance()->delete($foto);
 					$foto->filename = str_replace('folder', '', $foto->filename);
-					FotoModel::instance()->create($foto);
+					\CsrDelft\model\fotoalbum\FotoModel::instance()->create($foto);
 				}
 				if ($foto === $cover) {
 					return $success;
@@ -243,9 +242,9 @@ HTML;
 		if ($success) {
 			// database in sync houden
 			// updaten gaat niet vanwege primary key
-			FotoModel::instance()->delete($cover);
+			\CsrDelft\model\fotoalbum\FotoModel::instance()->delete($cover);
 			$cover->filename = substr_replace($cover->filename, 'folder', strrpos($cover->filename, '.'), 0);
-			FotoModel::instance()->create($cover);
+			\CsrDelft\model\fotoalbum\FotoModel::instance()->create($cover);
 		}
 		return $success;
 	}
@@ -253,129 +252,12 @@ HTML;
 	public function opschonen(FotoAlbum $fotoalbum) {
 		foreach ($this->find('subdir LIKE ?', array($fotoalbum->subdir . '%')) as $album) {
 			if (!$album->exists()) {
-				foreach (FotoModel::instance()->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {
-					FotoModel::instance()->delete($foto);
-					FotoTagsModel::instance()->verwijderFotoTags($foto);
+				foreach (\CsrDelft\model\fotoalbum\FotoModel::instance()->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {
+					\CsrDelft\model\fotoalbum\FotoModel::instance()->delete($foto);
+					\CsrDelft\model\fotoalbum\FotoTagsModel::instance()->verwijderFotoTags($foto);
 				}
 				$this->delete($album);
 			}
-		}
-	}
-
-}
-
-class FotoModel extends PersistenceModel {
-
-	const ORM = Foto::class;
-	const DIR = 'fotoalbum/';
-
-	protected static $instance;
-
-	/**
-	 * @override parent::retrieveByUUID($UUID)
-	 */
-	public function retrieveByUUID($UUID) {
-		$parts = explode('@', $UUID, 2);
-		$path = explode('/', $parts[0]);
-		$filename = array_pop($path);
-		$subdir = implode('/', $path) . '/';
-		return $this->retrieveByPrimaryKey(array($subdir, $filename));
-	}
-
-	/**
-	 * Create database entry if foto does not exist.
-	 * 
-	 * @param Foto|PersistentEntity $foto
-	 * @param array $attributes
-	 * @return mixed false on failure
-	 */
-	public function retrieveAttributes(PersistentEntity $foto, array $attributes) {
-		$this->verwerkFoto($foto);
-		return parent::retrieveAttributes($foto, $attributes);
-	}
-
-	public function create(PersistentEntity $foto) {
-		$foto->owner = LoginModel::getUid();
-		$foto->rotation = 0;
-		parent::create($foto);
-	}
-
-	public function verwerkFoto(Foto $foto) {
-		if (!$this->exists($foto)) {
-			$this->create($foto);
-			if (false === @chmod($foto->getFullPath(), 0644)) {
-				throw new Exception('Geen eigenaar van foto: ' . htmlspecialchars($foto->getFullPath()));
-			}
-		}
-		if (!$foto->hasThumb()) {
-			$foto->createThumb();
-		}
-		if (!$foto->hasResized()) {
-			$foto->createResized();
-		}
-	}
-
-	public function verwijderFoto(Foto $foto) {
-		$ret = true;
-		$ret &= unlink($foto->directory . $foto->filename);
-		if ($foto->hasResized()) {
-			$ret &= unlink($foto->getResizedPath());
-		}
-		if ($foto->hasThumb()) {
-			$ret &= unlink($foto->getThumbPath());
-		}
-		if ($ret) {
-			$this->delete($foto);
-			FotoTagsModel::instance()->verwijderFotoTags($foto);
-		}
-		return $ret;
-	}
-
-}
-
-class FotoTagsModel extends PersistenceModel {
-
-	const ORM = FotoTag::class;
-	const DIR = 'fotoalbum/';
-
-	protected static $instance;
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'wanneer DESC';
-
-	public function getTags(Foto $foto) {
-		return $this->find('refuuid = ?', array($foto->getUUID()));
-	}
-
-	public function addTag(Foto $foto, $uid, $x, $y, $size) {
-		if (!ProfielModel::existsUid($uid)) {
-			throw new Exception('Profiel bestaat niet');
-		}
-		$tag = new FotoTag();
-		$tag->refuuid = $foto->getUUID();
-		$tag->keyword = $uid;
-		$tag->door = LoginModel::getUid();
-		$tag->wanneer = getDateTime();
-		$tag->x = (int) $x;
-		$tag->y = (int) $y;
-		$tag->size = (int) $size;
-		if ($this->exists($tag)) {
-			return $this->retrieve($tag);
-		} else {
-			parent::create($tag);
-			return $tag;
-		}
-	}
-
-	public function removeTag($refuuid, $keyword) {
-		return $this->deleteByPrimaryKey(array($refuuid, $keyword));
-	}
-
-	public function verwijderFotoTags(Foto $foto) {
-		foreach ($this->getTags($foto) as $tag) {
-			$this->delete($tag);
 		}
 	}
 

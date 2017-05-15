@@ -4,6 +4,7 @@ namespace CsrDelft\view\login;
 
 use CsrDelft\Icon;
 use CsrDelft\model\entity\security\AuthenticationMethod;
+use function CsrDelft\reldate;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 
 class LoginSessionsData extends DataTableResponse

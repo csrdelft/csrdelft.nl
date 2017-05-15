@@ -8,7 +8,7 @@ use CsrDelft\model\documenten\Document;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\FotoAlbumModel;
+use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\model\groepen\CommissiesModel;

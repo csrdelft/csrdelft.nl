@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\view\formulier\uploadvelden;
+
 use function CsrDelft\getMaximumFileUploadSize;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
@@ -56,7 +57,7 @@ class UploadFileField extends InputField {
 				$this->error = 'Selecteer een bestand';
 			}
 		} elseif ($this->value['error'] == UPLOAD_ERR_INI_SIZE) {
-			$this->error = 'Bestand is te groot: Maximaal ' . format_filesize(getMaximumFileUploadSize());
+			$this->error = 'Bestand is te groot: Maximaal ' . \format_filesize(getMaximumFileUploadSize());
 		} elseif ($this->value['error'] != UPLOAD_ERR_OK) {
 			$this->error = 'Upload-error: code ' . $this->value['error'];
 		} elseif (!is_uploaded_file($this->value['tmp_name']) OR empty($this->model->filesize)) {

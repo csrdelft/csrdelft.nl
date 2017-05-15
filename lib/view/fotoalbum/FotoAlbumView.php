@@ -2,7 +2,7 @@
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\FotoAlbumModel;
+use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\view\SmartyTemplateView;
 use function CsrDelft\getMelding;
 

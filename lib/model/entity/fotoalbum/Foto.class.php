@@ -1,27 +1,27 @@
 <?php
 namespace CsrDelft\model\entity\fotoalbum;
 
-use function CsrDelft\debugprint;
-use function CsrDelft\direncode;
 use CsrDelft\model\entity\Afbeelding;
-use CsrDelft\model\FotoModel;
+use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 use Exception;
+use function CsrDelft\debugprint;
+use function CsrDelft\direncode;
 
 
 /**
  * Foto.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Foto extends Afbeelding {
 
 	/**
 	 * Relatief pad in fotoalbum
-	 * @var string 
+	 * @var string
 	 */
 	public $subdir;
 	/**
@@ -170,7 +170,7 @@ class Foto extends Afbeelding {
 
 	/**
 	 * Rotate resized & thumb for prettyPhoto to show the right way up.
-	 * 
+	 *
 	 * @param int $degrees
 	 */
 	public function rotate($degrees) {

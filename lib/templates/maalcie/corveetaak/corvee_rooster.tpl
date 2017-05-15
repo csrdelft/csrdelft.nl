@@ -57,7 +57,7 @@
 			{/if}
 			<td class="taak {$class}">
 				{if $taak->uid}
-					{if $taak->uid === LoginModel::getUid()}
+					{if $taak->uid === CsrDelft\model\security\LoginModel::getUid()}
 						{* icon get="arrow_switch" title="Ruilen" *}
 					{/if}
 					{CsrDelft\model\ProfielModel::getLink($taak->uid,CsrDelft\model\InstellingenModel::get('corvee', 'weergave_ledennamen_corveerooster'))}

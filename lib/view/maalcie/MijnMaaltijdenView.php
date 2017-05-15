@@ -12,12 +12,12 @@ use CsrDelft\view\SmartyTemplateView;
 
 
 /**
- * MijnMaaltijdenView.class.php
- * 
+ * MijnMaaltijdenView.php
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Tonen van komende maaltijden en of een lid zich heeft aangemeld.
- * 
+ *
  */
 class MijnMaaltijdenView extends SmartyTemplateView {
 
@@ -65,24 +65,6 @@ class MijnMaaltijdenView extends SmartyTemplateView {
 
 		$this->smarty->display('maalcie/menu_pagina.tpl');
 		$this->smarty->display('maalcie/maaltijd/mijn_maaltijden.tpl');
-	}
-
-}
-
-class MijnMaaltijdView extends SmartyTemplateView {
-
-	private $aanmelding;
-
-	public function __construct(Maaltijd $maaltijd, MaaltijdAanmelding $aanmelding = null) {
-		parent::__construct($maaltijd);
-		$this->aanmelding = $aanmelding;
-	}
-
-	public function view() {
-		$this->smarty->assign('maaltijd', $this->model);
-		$this->smarty->assign('aanmelding', $this->aanmelding);
-		$this->smarty->assign('standaardprijs', intval(InstellingenModel::get('maaltijden', 'standaard_prijs')));
-		$this->smarty->display('maalcie/maaltijd/mijn_maaltijd_lijst.tpl');
 	}
 
 }
