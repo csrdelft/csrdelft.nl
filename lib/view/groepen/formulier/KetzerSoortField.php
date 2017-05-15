@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
@@ -24,7 +23,7 @@ class KetzerSoortField extends GroepSoortField
 
         $this->options = array();
         foreach ($this->activiteit->getOptions() as $soort => $label) {
-            $this->options['ActiviteitenModel_' . $soort] = $label;
+            $this->options[ActiviteitenModel::class . '_' . $soort] = $label;
         }
         $this->options[KetzersModel::class] = 'Aanschafketzer';
         //$this->options['WerkgroepenModel'] = WerkgroepenModel::ORM;
@@ -32,36 +31,34 @@ class KetzerSoortField extends GroepSoortField
     }
 
     /**
-     * Super ugly
+     * Pretty ugly
      * @return boolean
      */
     public function validate()
     {
         $class = explode('_', $this->value, 2);
-        $soort = null;
-        switch ($class[0]) {
 
-            case 'ActiviteitenModel':
-                $soort = $class[1];
-            // fall through
-
-            case 'KetzersModel':
-                $model = $class[0]::instance(); // require once
-                $orm = $model::ORM;
-                if (!$orm::magAlgemeen(AccessAction::Aanmaken, $soort)) {
-                    if ($model instanceof ActiviteitenModel) {
-                        $naam = ActiviteitSoort::getDescription($soort);
-                    } else {
-                        $naam = $model->getNaam();
-                    }
-                    $this->error = 'U mag geen ' . $naam . ' aanmaken';
-                }
-                break;
-
-            default:
-                $this->error = 'Onbekende optie gekozen';
+        if ($class[0] === ActiviteitenModel::class) {
+            $soort = $class[1];
+        } elseif ($class[0] === KetzersModel::class) {
+            $soort = null;
+        } else {
+            $this->error = 'Onbekende optie gekozen';
+            return false;
         }
-        return $this->error === '';
+
+        $model = $class[0]::instance(); // require once
+        $orm = $model::ORM;
+        if (!$orm::magAlgemeen(AccessAction::Aanmaken, $soort)) {
+            if ($model instanceof ActiviteitenModel) {
+                $naam = ActiviteitSoort::getDescription($soort);
+            } else {
+                $naam = $model->getNaam();
+            }
+            $this->error = 'U mag geen ' . $naam . ' aanmaken';
+        }
+
+        return true;
     }
 
 }
