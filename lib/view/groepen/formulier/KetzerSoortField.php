@@ -39,7 +39,7 @@ class KetzerSoortField extends GroepSoortField
     {
         $class = explode('_', $this->value, 2);
         $soort = null;
-        switch (classNameZonderNamespace($class[0])) {
+        switch ($class[0]) {
 
             case 'ActiviteitenModel':
                 $soort = $class[1];
