@@ -7,17 +7,17 @@ use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\forms\EetwensForm;
-use CsrDelft\view\maalcie\MijnVoorkeurenView;
-use CsrDelft\view\maalcie\MijnVoorkeurView;
+use CsrDelft\view\maalcie\persoonlijk\voorkeuren\MijnVoorkeurenView;
+use CsrDelft\view\maalcie\persoonlijk\voorkeuren\MijnVoorkeurView;
 
 
 /**
  * MijnVoorkeurenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property CorveeVoorkeurenModel $model
- * 
+ *
  */
 class MijnVoorkeurenController extends AclController {
 

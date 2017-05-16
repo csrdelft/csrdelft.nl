@@ -5,18 +5,18 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\maalcie\CorveePuntenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\ProfielModel;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\maalcie\BeheerPuntenLidView;
-use CsrDelft\view\maalcie\BeheerPuntenView;
+use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenLidView;
+use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenView;
 use Exception;
+use function CsrDelft\setMelding;
 
 
 /**
  * BeheerPuntenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class BeheerPuntenController extends AclController {
 

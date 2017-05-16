@@ -2,25 +2,25 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
-use function CsrDelft\endsWith;
-use function CsrDelft\getMelding;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\maalcie\CorveeRepetitiesView;
-use CsrDelft\view\maalcie\CorveeRepetitieView;
+use CsrDelft\view\maalcie\corvee\repetities\CorveeRepetitiesView;
+use CsrDelft\view\maalcie\corvee\repetities\CorveeRepetitieView;
 use CsrDelft\view\maalcie\forms\CorveeRepetitieForm;
+use function CsrDelft\endsWith;
+use function CsrDelft\getMelding;
+use function CsrDelft\setMelding;
 
 
 /**
  * CorveeRepetitiesController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property CorveeRepetitiesModel $model
- * 
+ *
  */
 class CorveeRepetitiesController extends AclController {
 

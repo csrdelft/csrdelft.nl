@@ -5,21 +5,21 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\ProfielModel;
-use function CsrDelft\setMelding;
-use CsrDelft\view\maalcie\BeheerAbonnementenLijstView;
-use CsrDelft\view\maalcie\BeheerAbonnementenView;
-use CsrDelft\view\maalcie\BeheerAbonnementView;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementenLijstView;
+use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementenView;
+use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementView;
 use Exception;
+use function CsrDelft\setMelding;
 
 
 /**
  * BeheerMaaltijdenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property MaaltijdAbonnementenModel $model
- * 
+ *
  */
 class BeheerAbonnementenController extends AclController {
 	public function __construct($query) {

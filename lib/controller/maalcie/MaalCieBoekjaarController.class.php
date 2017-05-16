@@ -3,10 +3,10 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\beheer\MaalCieBoekjaarSluitenView;
 use CsrDelft\view\maalcie\forms\BoekjaarSluitenForm;
-use CsrDelft\view\maalcie\MaalCieBoekjaarSluitenView;
+use function CsrDelft\setMelding;
 
 /**
  * MaalCieSaldiController.class.php

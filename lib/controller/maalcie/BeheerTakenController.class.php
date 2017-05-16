@@ -2,33 +2,33 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
-use function CsrDelft\endsWith;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeToewijzenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\invoervelden\LidField;
-use CsrDelft\view\maalcie\BeheerTaakView;
-use CsrDelft\view\maalcie\BeheerTakenLijstView;
-use CsrDelft\view\maalcie\BeheerTakenView;
+use CsrDelft\view\maalcie\corvee\taken\BeheerTaakView;
+use CsrDelft\view\maalcie\corvee\taken\BeheerTakenLijstView;
+use CsrDelft\view\maalcie\corvee\taken\BeheerTakenView;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\TaakForm;
-use Exception;
 use CsrDelft\view\maalcie\forms\ToewijzenForm;
+use Exception;
+use function CsrDelft\endsWith;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
 
 
 /**
  * BeheerTakenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property CorveeTakenModel $model
- * 
+ *
  */
 class BeheerTakenController extends AclController {
 

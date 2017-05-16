@@ -5,19 +5,19 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\maalcie\MijnAbonnementenView;
-use CsrDelft\view\maalcie\MijnAbonnementView;
+use CsrDelft\view\maalcie\persoonlijk\abonnementen\MijnAbonnementenView;
+use CsrDelft\view\maalcie\persoonlijk\abonnementen\MijnAbonnementView;
+use function CsrDelft\setMelding;
 
 
 /**
  * MijnAbonnementenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property MaaltijdAbonnementenModel $model
- * 
+ *
  */
 class MijnAbonnementenController extends AclController {
 
