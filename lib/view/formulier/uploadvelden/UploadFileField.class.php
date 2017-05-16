@@ -93,7 +93,7 @@ class UploadFileField extends InputField {
 
 	public function getJavascript() {
 		$max = getMaximumFileUploadSize();
-		$format = format_filesize($max);
+		$format = \format_filesize($max);
 		return parent::getJavascript() . <<<JS
 
 $('#{$this->getId()}').change(function() {
