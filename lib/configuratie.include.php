@@ -106,8 +106,8 @@ function fatal_handler(Exception $ex = null) {
 				$headers[] = 'Content-Type: text/plain; charset=UTF-8';
 				$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
 				$subject = 'Fatal error on request ';
-				if (isset($_SERVER['SCRIPT_URL'])) {
-					$subject .= filter_var($_SERVER['SCRIPT_URL'], FILTER_SANITIZE_URL);
+				if (isset($debug['error']['file'])) {
+					$subject .= preg_replace(BASE_PATH, '', $debug['error']['file']b);
 				}
 				mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
 			}
