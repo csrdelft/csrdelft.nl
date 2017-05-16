@@ -29,7 +29,7 @@
 								{foreach from=$tabel item="aanmelding"}
 									<tr>
 										{if $aanmelding->uid}
-											<td>{ProfielModel::getLink($aanmelding->uid,CsrDelft\model\InstellingenModel::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}<br />
+											<td>{CsrDelft\model\ProfielModel::getLink($aanmelding->uid,CsrDelft\model\InstellingenModel::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}<br />
 												{assign var=eetwens value=ProfielModel::get($aanmelding->uid)->eetwens}
 												{if $eetwens !== ''}
 													<span class="eetwens">
@@ -48,7 +48,7 @@
 											</td>
 											<td class="saldo">{$aanmelding->getSaldoMelding()}</td>
 										{elseif $aanmelding->door_uid}
-											<td>Gast van {ProfielModel::getLink($aanmelding->door_uid,CsrDelft\model\InstellingenModel::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
+											<td>Gast van {CsrDelft\Model\ProfielModel::getLink($aanmelding->door_uid,CsrDelft\model\InstellingenModel::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
 											<td class="saldo">-</td>
 										{else}
 											<td style="line-height: 2.2em;">&nbsp;</td>
