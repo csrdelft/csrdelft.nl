@@ -30,7 +30,7 @@
 									<tr>
 										{if $aanmelding->uid}
 											<td>{CsrDelft\model\ProfielModel::getLink($aanmelding->uid,CsrDelft\model\InstellingenModel::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}<br />
-												{assign var=eetwens value=ProfielModel::get($aanmelding->uid)->eetwens}
+												{assign var=eetwens value=CsrDelft\model\ProfielModel::get($aanmelding->uid)->eetwens}
 												{if $eetwens !== ''}
 													<span class="eetwens">
 														{$eetwens}
@@ -87,7 +87,7 @@
 					{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
 						&bullet;&nbsp;
 						{if $taak->uid}
-							{ProfielModel::getLink($taak->uid,CsrDelft\model\InstellingenModel::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}
+							{CsrDelft\model\ProfielModel::getLink($taak->uid,CsrDelft\model\InstellingenModel::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}
 						{else}
 							<span class="cursief">vacature</span>
 						{/if}
