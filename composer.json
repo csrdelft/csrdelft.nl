@@ -13,7 +13,7 @@
         "jacwright/restserver": "dev-master",
         "globalcitizen/php-iban": "2.5.9",
         "robmorgan/phinx": "^0.8.0",
-        "csrdelft/orm": "1.5"
+        "csrdelft/orm": "1.6"
     },
     "config": {
         "platform": {

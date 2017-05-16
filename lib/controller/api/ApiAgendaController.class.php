@@ -1,7 +1,7 @@
 <?php
 namespace CsrDelft\controller\api;
 
-use CsrDelft\model\AgendaModel;
+use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;

@@ -1,8 +1,8 @@
 /*!
  * csrdelft.dataTables.js
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Group by & multi-select capabilities.
  */
 
@@ -396,7 +396,6 @@ function fnChildRow(tableId, $td, column) {
 			if (row.child.isShown()) {
 				tr.removeClass('loading');
 				innerDiv.html(data).slideDown();
-				init_context(innerDiv);
 			}
 		});
 		jqXHR.fail(function (jqXHR, textStatus, errorThrown) {

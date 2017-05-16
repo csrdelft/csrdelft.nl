@@ -2,33 +2,33 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
-use function CsrDelft\endsWith;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\FotoAlbumModel;
-use CsrDelft\model\FotoModel;
-use CsrDelft\model\FotoTagsModel;
+use CsrDelft\model\fotoalbum\FotoAlbumModel;
+use CsrDelft\model\fotoalbum\FotoModel;
+use CsrDelft\model\fotoalbum\FotoTagsModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\FotoAlbumToevoegenForm;
-use CsrDelft\view\FotoAlbumView;
-use CsrDelft\view\FotosDropzone;
-use CsrDelft\view\FotoTagToevoegenForm;
+use CsrDelft\view\fotoalbum\FotoAlbumToevoegenForm;
+use CsrDelft\view\fotoalbum\FotoAlbumView;
+use CsrDelft\view\fotoalbum\FotosDropzone;
+use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
+use CsrDelft\view\fotoalbum\PosterUploadForm;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\PosterUploadForm;
 use Exception;
+use function CsrDelft\endsWith;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
 
 
 /**
  * FotoAlbumController.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van het fotoalbum.
  *
  * @property FotoAlbumModel $model
@@ -310,7 +310,7 @@ class FotoAlbumController extends AclController {
 		if (!$this->hasParam('q')) {
 			$this->exit_http(403);
 		}
-		$query = iconv('utf-8', 'ascii//TRANSLIT', $this->getParam('q')); // convert accented characters to regular 
+		$query = iconv('utf-8', 'ascii//TRANSLIT', $this->getParam('q')); // convert accented characters to regular
 		$limit = 5;
 		if ($this->hasParam('limit')) {
 			$limit = (int) $this->getParam('limit');

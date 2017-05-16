@@ -2,24 +2,24 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
-use function CsrDelft\getMelding;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
-use CsrDelft\view\maalcie\MaaltijdRepetitiesView;
-use CsrDelft\view\maalcie\MaaltijdRepetitieView;
+use CsrDelft\view\maalcie\repetities\MaaltijdRepetitiesView;
+use CsrDelft\view\maalcie\repetities\MaaltijdRepetitieView;
+use function CsrDelft\getMelding;
+use function CsrDelft\setMelding;
 
 
 /**
  * MaaltijdRepetitiesController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property MaaltijdRepetitiesModel $model
- * 
+ *
  */
 class MaaltijdRepetitiesController extends AclController {
 

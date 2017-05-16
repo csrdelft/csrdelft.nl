@@ -92,7 +92,7 @@ class GroepForm extends ModalForm {
 				} elseif ($groep instanceof Commissie) {
 					$naam = CommissieSoort::getDescription($soort);
 				} else {
-					$naam = get_class($groep);
+					$naam = classNameZonderNamespace(get_class($groep));
 				}
 				setMelding('U mag geen ' . $naam . ' aanmaken', -1);
 				return false;

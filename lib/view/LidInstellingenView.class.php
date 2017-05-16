@@ -6,10 +6,12 @@ use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\TabsForm;
+use CsrDelft\view\login\LoginSessionsTable;
+use CsrDelft\view\login\RememberLoginTable;
 
 /**
  * LidInstellingenView.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property LidInstellingenModel $model

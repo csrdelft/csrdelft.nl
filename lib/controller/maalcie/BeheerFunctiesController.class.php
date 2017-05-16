@@ -1,25 +1,25 @@
 <?php
 namespace CsrDelft\controller\maalcie;
 
-use function CsrDelft\setMelding;
-use CsrDelft\view\maalcie\BeheerFunctiesView;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\maalcie\FunctieDeleteView;
-use CsrDelft\view\maalcie\FunctieForm;
-use CsrDelft\view\maalcie\FunctieView;
-use CsrDelft\view\maalcie\KwalificatieForm;
+use CsrDelft\view\maalcie\corvee\functies\BeheerFunctiesView;
+use CsrDelft\view\maalcie\corvee\functies\FunctieDeleteView;
+use CsrDelft\view\maalcie\corvee\functies\FunctieForm;
+use CsrDelft\view\maalcie\corvee\functies\FunctieView;
+use CsrDelft\view\maalcie\corvee\functies\KwalificatieForm;
+use function CsrDelft\setMelding;
 
 
 /**
  * BeheerFunctiesController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property FunctiesModel $model
- * 
+ *
  */
 class BeheerFunctiesController extends AclController {
 

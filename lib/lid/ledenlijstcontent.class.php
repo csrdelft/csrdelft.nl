@@ -8,7 +8,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\View;
 use Exception;
 
-require_once 'lid/lidzoeker.class.php';
+require_once 'lid/LidZoeker.php';
 
 abstract class LLWeergave {
 

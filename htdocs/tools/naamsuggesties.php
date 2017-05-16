@@ -9,7 +9,7 @@ require_once 'configuratie.include.php';
  * naamsuggesties.php	| 	Gerrit Uitslag (klapinklapin@gmail.com)
  *
  * voorziet in naamsuggesties voor de typeahead plugin
- * 
+ *
  * request url: /tools/naamsuggesties/{$zoekin}?q=zoeknaam&limit=20&timestamp=1336432238620
  */
 if (!LoginModel::mag('P_OUDLEDEN_READ')) {
@@ -33,7 +33,7 @@ if (isset($_GET['limit'])) {
 	$limiet = (int) $_GET['limit'];
 }
 
-require_once 'lid/lidzoeker.class.php';
+require_once 'lid/LidZoeker.php';
 $namen = LidZoeker::zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $velden, $limiet);
 
 $result = array();

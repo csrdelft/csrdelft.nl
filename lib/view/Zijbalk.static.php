@@ -1,9 +1,9 @@
 <?php
 namespace CsrDelft\view;
-use CsrDelft\model\AgendaModel;
+use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumPostsModel;
-use CsrDelft\model\FotoAlbumModel;
+use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\LidInstellingenModel;

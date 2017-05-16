@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\agenda;
 
-use CsrDelft\model\AgendaModel;
+use CsrDelft\model\agenda\AgendaModel;
 
 class AgendaICalendarView extends AgendaView
 {

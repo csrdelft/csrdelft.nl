@@ -29,9 +29,6 @@ use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
 
 require __DIR__ . '/../vendor/autoload.php';
-// Defines
-require_once 'defines.include.php';
-require_once 'common.functions.php';
 
 spl_autoload_register(function ($class) {
 
@@ -108,10 +105,7 @@ function fatal_handler(Exception $ex = null) {
 				$headers[] = 'From: Fatal error handler <pubcie@csrdelft.nl>';
 				$headers[] = 'Content-Type: text/plain; charset=UTF-8';
 				$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
-				$subject = 'Fatal error on request ';
-				if (isset($_SERVER['SCRIPT_URL'])) {
-					$subject .= filter_var($_SERVER['SCRIPT_URL'], FILTER_SANITIZE_URL);
-				}
+				$subject = 'Fatal error: ' . $debug['error']['message'];
 				mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
 			}
 		}
@@ -135,6 +129,10 @@ if (php_sapi_name() === 'cli') {
 } else {
 	define('MODE', 'WEB');
 }
+
+// Defines
+require_once 'defines.include.php';
+require_once 'common.functions.php';
 
 if (isset($_SERVER['REQUEST_URI'])) {
 	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);

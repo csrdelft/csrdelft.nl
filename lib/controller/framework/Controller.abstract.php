@@ -1,16 +1,16 @@
 <?php
 namespace CsrDelft\controller\framework;
-use CsrDelft\view\CmsPaginaView;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
-use function CsrDelft\redirect;
-use function CsrDelft\setGoBackCookie;
-use function CsrDelft\setMelding;
+use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrBB;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\View;
 use Exception;
+use function CsrDelft\redirect;
+use function CsrDelft\setGoBackCookie;
+use function CsrDelft\setMelding;
 
 /**
  * Controller.abstract.php
@@ -89,7 +89,7 @@ abstract class Controller {
 	/**
 	 * REST: positional parameters
 	 * KVP: named parameters
-	 * 
+	 *
 	 * @param string $key
 	 * @return boolean
 	 */
@@ -106,7 +106,7 @@ abstract class Controller {
 	/**
 	 * REST: positional parameters
 	 * KVP: named parameters
-	 * 
+	 *
 	 * @param string $key
 	 * @return string
 	 */
@@ -119,7 +119,7 @@ abstract class Controller {
 
 	/**
 	 * Return REST query paramter values from $num onwards.
-	 * 
+	 *
 	 * @param int $num skip params before this
 	 * @return array
 	 */
@@ -151,7 +151,7 @@ abstract class Controller {
 
 	/**
 	 * If named action is defined.
-	 * 
+	 *
 	 * @param string $action
 	 * @return boolean
 	 */

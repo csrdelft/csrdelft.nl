@@ -7,10 +7,10 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * AgendaItem.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * AgendaItems worden door de agenda getoont samen met andere Agendeerbare dingen.
  */
 class AgendaItem extends PersistentEntity implements Agendeerbaar {

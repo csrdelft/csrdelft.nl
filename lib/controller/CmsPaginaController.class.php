@@ -2,26 +2,26 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\Controller;
-use function CsrDelft\getDateTime;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\CmsPagina;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-use CsrDelft\view\CmsPaginaForm;
-use CsrDelft\view\CmsPaginaView;
-use CsrDelft\view\CmsPaginaZijbalkView;
+use CsrDelft\view\cms\CmsPaginaForm;
+use CsrDelft\view\cms\CmsPaginaView;
+use CsrDelft\view\cms\CmsPaginaZijbalkView;
 use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
+use function CsrDelft\getDateTime;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
 
 
 /**
  * CmsPaginaController.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van de agenda.
  *
  * @property CmsPaginaModel $model

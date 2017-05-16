@@ -2,8 +2,8 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
-use CsrDelft\model\AgendaModel;
-use CsrDelft\model\AgendaVerbergenModel;
+use CsrDelft\model\agenda\AgendaModel;
+use CsrDelft\model\agenda\AgendaVerbergenModel;
 use CsrDelft\model\BijbelroosterModel;
 use CsrDelft\model\entity\agenda\AgendaItem;
 use CsrDelft\model\entity\agenda\Agendeerbaar;

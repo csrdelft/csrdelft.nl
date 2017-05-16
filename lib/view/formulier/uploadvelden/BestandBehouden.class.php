@@ -53,7 +53,7 @@ class BestandBehouden extends InputField {
 	}
 
 	public function getHtml() {
-		return '<div ' . $this->getInputAttribute(array('id', 'name', 'class')) . '>' . $this->model->filename . ' (' . format_filesize($this->model->filesize) . ')</div>';
+		return '<div ' . $this->getInputAttribute(array('id', 'name', 'class')) . '>' . $this->model->filename . ' (' . \format_filesize($this->model->filesize) . ')</div>';
 	}
 
 	public function getPreviewDiv() {

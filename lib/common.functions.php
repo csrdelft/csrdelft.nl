@@ -398,7 +398,7 @@ function namen2uid($sNamen, $filter = 'leden') {
 	$aNamen = explode(',', $sNamen);
 	foreach ($aNamen as $sNaam) {
 		$aNaamOpties = array();
-		require_once 'lid/lidzoeker.class.php';
+		require_once 'lid/LidZoeker.php';
 		$aZoekNamen = LidZoeker::zoekLeden($sNaam, 'naam', 'alle', 'achternaam', $filter, array('uid', 'voornaam', 'tussenvoegsel', 'achternaam'));
 		if (count($aZoekNamen) == 1) {
 			$naam = $aZoekNamen[0]['voornaam'] . ' ';
@@ -714,6 +714,5 @@ function className($className) {
  * @return string
  */
 function classNameZonderNamespace($className) {
-	$namespaceExploded = explode('\\', $className);
-	return array_pop($namespaceExploded);
+	return (new \ReflectionClass($className))->getShortName();
 }

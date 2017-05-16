@@ -5,10 +5,10 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\model\entity\peilingen\PeilingOptie;
 use CsrDelft\model\PeilingenModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\peilingen\PeilingenBeheerView;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
-use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\PeilingenBeheerView;
 
 
 /**

@@ -5,6 +5,7 @@ use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AccessControl;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\formulier\datatable\DataTable;
 use CsrDelft\view\formulier\datatable\DataTableKnop;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
@@ -18,9 +19,9 @@ use Exception;
 
 /**
  * RechtenView.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class RechtenTable extends DataTable {
 

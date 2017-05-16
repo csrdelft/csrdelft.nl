@@ -111,7 +111,7 @@
 							{if $exemplaar.eigenaar_uid=='x222'}{assign var=total_exemplaren_bibliotheek value=$total_exemplaren_bibliotheek+1}
 								C.S.R.-bibliotheek
 							{else}
-								{ProfielModel::getLink($exemplaar.eigenaar_uid, 'civitas')}
+								{CsrDelft\model\ProfielModel::getLink($exemplaar.eigenaar_uid, 'civitas')}
 							{/if}
 						</div>
 					{* opmerking *}
@@ -214,7 +214,7 @@
 						</td>
 					{else}
 						<td class="linkerkolom recensist">
-							<span class="recensist">{ProfielModel::getLink($beschrijving.schrijver_uid, 'civitas')}</span><br />
+							<span class="recensist">{CsrDelft\model\ProfielModel::getLink($beschrijving.schrijver_uid, 'civitas')}</span><br />
 							<span class="moment">{$beschrijving.toegevoegd|reldate}</span><br />
 
 						{* knopjes bij elke post *}

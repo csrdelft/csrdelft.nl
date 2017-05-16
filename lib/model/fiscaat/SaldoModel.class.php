@@ -2,11 +2,11 @@
 
 namespace CsrDelft\model\fiscaat;
 
+use CsrDelft\model\entity\fiscaat\Saldo;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DynamicEntityModel;
 use CsrDelft\Orm\PersistenceModel;
 use function CsrDelft\getDateTime;
-use Saldo;
 
 require_once 'model/fiscaat/CiviSaldoModel.class.php';
 require_once 'model/fiscaat/CiviBestellingModel.class.php';
