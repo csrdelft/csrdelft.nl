@@ -48,7 +48,7 @@
 											</td>
 											<td class="saldo">{$aanmelding->getSaldoMelding()}</td>
 										{elseif $aanmelding->door_uid}
-											<td>Gast van {CsrDelft\Model\ProfielModel::getLink($aanmelding->door_uid,CsrDelft\model\InstellingenModel::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
+											<td>Gast van {CsrDelft\model\ProfielModel::getLink($aanmelding->door_uid,CsrDelft\model\InstellingenModel::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
 											<td class="saldo">-</td>
 										{else}
 											<td style="line-height: 2.2em;">&nbsp;</td>
