@@ -26,7 +26,7 @@ class ToewijzenForm extends ModalForm {
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields[] = new LidField('uid', $taak->uid, 'Naam of lidnummer', 'leden');
-		$fields[] = new SuggestieLIjst($suggesties, $taak);
+		$fields[] = new SuggestieLijst($suggesties, $taak);
 		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
