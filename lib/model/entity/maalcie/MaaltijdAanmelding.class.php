@@ -45,7 +45,7 @@ class MaaltijdAanmelding extends PersistentEntity  {
 	 * @return float if lid exists, false otherwise
 	 */
 	public function getSaldo() {
-		return ProfielModel::get($this->uid)->civiSaldo;
+		return ProfielModel::get($this->uid)->getCiviSaldo();
 	}
 
 	public function getMaaltijd() {
