@@ -109,6 +109,7 @@ function fatal_handler(Exception $ex = null) {
 				mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
 			}
 		}
+        touch(DATA_PATH . 'foutmelding.last');
 	}
 }
 

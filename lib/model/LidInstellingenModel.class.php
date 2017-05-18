@@ -82,7 +82,7 @@ class LidInstellingenModel extends InstellingenModel {
 		'zijbalk'		 => array(
 			'scrollen'				 => array('Scrollen', T::Enumeration, array('met pagina mee', 'apart scrollen', 'pauper/desktop'), 'met pagina mee'),
 			'scrollbalk'			 => array('Scrollbalk tonen', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren'), 'willekeurig'),
+			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren', 'foutmelding'), 'willekeurig'),
 			'favorieten'			 => array('Favorieten menu weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'agendaweken'			 => array('Aantal weken in agenda weergeven', T::Integer, array(0, 10), 2),
 			'agenda_max'			 => array('Maximaal aantal agenda-items', T::Integer, array(0, 50), 15),
@@ -129,7 +129,7 @@ class LidInstellingenModel extends InstellingenModel {
 
 	/**
 	 * Functie getInstelling aanvullen met uid.
-	 * 
+	 *
 	 * @param array $primary_key_values
 	 * @return LidInstelling|false
 	 */
