@@ -38,6 +38,7 @@ use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
 use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
+use CsrDelft\view\mededelingen\MededelingenView;
 use CsrDelft\view\peilingen\PeilingView;
 use Exception;
 use function CsrDelft\endsWith;
