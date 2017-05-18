@@ -5,6 +5,7 @@
 
 namespace CsrDelft\view\maalcie\persoonlijk\abonnementen;
 
+use function CsrDelft\getMelding;
 use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\view\SmartyTemplateView;
 

@@ -5,13 +5,13 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\InstellingBeheerView;
-use CsrDelft\view\InstellingenBeheerView;
+use CsrDelft\view\instellingen\InstellingBeheerView;
+use CsrDelft\view\instellingen\InstellingenBeheerView;
 
 
 /**
  * InstellingenBeheerController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property InstellingenModel $model
