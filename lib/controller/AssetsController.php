@@ -27,8 +27,8 @@ class AssetsController extends AclController
     public function __construct($query) {
         parent::__construct($query, new AssetsModel(false, true), ['GET']);
         $this->acl = [
-            'js' => 'P_PUBLIC',
-            'css' => 'P_PUBLIC'
+            'scripts' => 'P_PUBLIC',
+            'styles' => 'P_PUBLIC'
         ];
 
         $driver = new FileSystem(['path' => DATA_PATH . 'assets/']);
@@ -37,11 +37,11 @@ class AssetsController extends AclController
 
     public function performAction(array $args = array())
     {
-        $this->action = $this->getParam(2);
-        return parent::performAction($this->getParams(3));
+        $this->action = $this->getParam(1);
+        return parent::performAction($this->getParams(2));
     }
 
-    public function js($layout, $module) {
+    public function scripts($layout, $module) {
 
         $module = str_replace('.js', '', $module);
 
@@ -59,7 +59,7 @@ class AssetsController extends AclController
         $this->view = new JavascriptResponse($js);
     }
 
-    public function css($layout, $module)
+    public function styles($layout, $module)
     {
         $module = str_replace('.css', '', $module);
 

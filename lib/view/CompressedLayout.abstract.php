@@ -35,10 +35,10 @@ abstract class CompressedLayout extends HtmlPage {
 	 * @param string $module
 	 */
 	public function addCompressedResources($module) {
-		$sheet = '/res/css/' . $this->layout . '/' . $module . '.css';
+		$sheet = '/styles/' . $this->layout . '/' . $module . '.css';
 		parent::addStylesheet($sheet, true);
 
-		$script = '/res/js/' . $this->layout . '/' . $module . '.js';
+		$script = '/scripts/' . $this->layout . '/' . $module . '.js';
 		parent::addScript($script, true);
 	}
 

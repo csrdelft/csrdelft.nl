@@ -7,6 +7,7 @@ namespace CsrDelft\model;
 
 use CsrDelft\view\CompressedLayout;
 use JShrink\Minifier as JsMin;
+use tubalmartin\CssMin\Minifier as CssMin;
 use Psr\Cache\CacheItemInterface;
 use Stash\Driver\FileSystem;
 use Stash\Pool;
@@ -102,34 +103,36 @@ class AssetsModel
             if (!key_exists($mod, $files)) continue;
             // load files
             foreach ($files[$mod] as $file) {
-                echo "\n/* XXXXXXXXX $file XXXXXXXXX */\n";
+                echo "/* file:$file */\n";
                 $item = $pool->getItem($file);
 
                 if ($item->isHit()) {
                     $css = $item->get();
-                    $prefix = trim(strtok($css, PHP_EOL), "/* /");
+                    $prefix = strtok($css, PHP_EOL);
+
+                    $prefix = substr($prefix, 2, strlen($prefix) - 1);
 
                     $includes = explode("|", $prefix);
                     $timestamp = array_pop($includes);
 
                     array_unshift($includes, ASSETS_PATH . $file);
 
-                    foreach ($includes as $includedLessFile) {
-                        if (strtotime($timestamp) < filemtime($includedLessFile)) {
-                            $pool->deleteItem($file);
-                            $item = $pool->getItem($file);
-                        }
+                    if ($this->invalidateCache($includes, $timestamp)) {
+                        echo "/* invalidate cache */" .PHP_EOL;
+                        $pool->deleteItem($file);
+                        $item = $pool->getItem($file);
                     }
 
                     if ($item->isHit()) {
+                        //echo substr($css, strpos($css, PHP_EOL) + 1);
                         echo $css;
                         continue;
                     }
                 }
 
                 // Prefix timestamp
-                $cssContents = sprintf("/* |%s */\n", date('c'));
                 if (strstr($file, '.css') === '.css') {
+                    $cssContents = sprintf("/*%s*/" . PHP_EOL, filemtime(ASSETS_PATH . $file));
                     $cssContents .= file_get_contents(ASSETS_PATH . $file);
                     $dir = dirname('/assets/' . $file);
                     $cssContents = preg_replace(self::CSS_REGEX_URL, "url($dir/$1)", $cssContents);
@@ -141,11 +144,16 @@ class AssetsModel
                     );
                     $parsedLess = $less->getCss();
                     $references = $less->allParsedFiles();
-                    $cssContents = "/* ";
+                    $cssContents = "/*";
+                    $lastModified = filemtime(ASSETS_PATH . $file);
                     foreach ($references as $reference) {
                         $cssContents .= sprintf("%s|", $reference);
+                        $modified = filemtime($reference);
+                        if ($modified > $lastModified) {
+                            $lastModified = $modified;
+                        }
                     }
-                    $cssContents .= sprintf("%s */\n", date('c'));
+                    $cssContents .= sprintf("%s*/" . PHP_EOL, $lastModified);
                     $cssContents .= $parsedLess;
                 }
 
@@ -193,5 +201,24 @@ class AssetsModel
         }
 
         return $includes;
+    }
+
+    /**
+     * @param $includes
+     * @param $timestamp
+     *
+     * @return mixed
+     */
+    private function invalidateCache(
+        $includes,
+        $timestamp
+    ) {
+        foreach ($includes as $includedLessFile) {
+            echo "/* $includedLessFile */";
+            if ($timestamp < filemtime($includedLessFile)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

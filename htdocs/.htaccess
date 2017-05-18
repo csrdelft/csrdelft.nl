@@ -48,7 +48,8 @@ RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
 RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
 RewriteRule ^commissievoorkeuren index.php?c=CommissieVoorkeuren [L]
 
-RewriteRule ^res                inex.php?c=Assets [L]
+RewriteRule ^styles             index.php?c=Assets [L]
+RewriteRule ^scripts            index.php?c=Assets [L]
 
 # business club
 RewriteRule ^bc$ bc/index.html [L]
