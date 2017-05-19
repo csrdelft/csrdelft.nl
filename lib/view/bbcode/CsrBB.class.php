@@ -1,7 +1,7 @@
 <?php
-namespace CsrDelft\view;
+namespace CsrDelft\view\bbcode;
 
-use CsrDelft\bbparser\eamBBParser;
+use CsrDelft\view\bbcode\Parser;
 use CsrDelft\Icon;
 use CsrDelft\model\bibliotheek\BiebBoek;
 use CsrDelft\model\documenten\Document;
@@ -53,7 +53,7 @@ use function CsrDelft\url_like;
  *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  */
-class CsrBB extends eamBBParser {
+class CsrBB extends Parser {
 
 	/**
 	 * BBcode within email is limited.

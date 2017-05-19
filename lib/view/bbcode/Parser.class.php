@@ -1,26 +1,21 @@
 <?php
-namespace CsrDelft\bbparser;
+namespace CsrDelft\view\bbcode;
+
+use function CsrDelft\email_like;
+use function CsrDelft\url_like;
+
 
 /**
  * Main BB-code Parser file
  *
- * This file holds the eamBBParser class, the main class of the eamBBParser project.
- */
-use function CsrDelft\email_like;
-use function CsrDelft\url_like;
-
-/**
- * Main BB-code Parser Class, the core of the eamBBParser package.
+ * This file is based on the eamBBParser class of the eamBBParser project.
  *
- * This class does all of the work, and also holds some basic tag definitions.
  * @package eamBBParser
  * @author Erik Bakker <erik@eamelink.nl>
  * @copyright 2005, Erik Bakker <erik@eamelink.nl>
  * @license http://www.gnu.org/copyleft/lesser.html
- * @example examples.php Example of implementation
- * @example testexample.php Test-setup
  */
-class eamBBParser {
+class Parser {
 
 	/**
 	 * Storage for BB code
@@ -120,7 +115,7 @@ class eamBBParser {
 	var $paragraph_required;
 	/**
 	 * It's possible with the ubboff tag to switch processing off.
-	 * 
+	 *
 	 * Keep track of ubb status
 	 *
 	 * When we're in a [ubboff] block, this will be false. Otherwise true.
@@ -467,7 +462,7 @@ class eamBBParser {
 
 							$entry = null;
 						} else {
-							
+
 						}
 						array_unshift($this->parseArray, $shift);
 					}

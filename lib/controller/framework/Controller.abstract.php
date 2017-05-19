@@ -4,7 +4,7 @@ use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\CsrBB;
+use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\View;
 use Exception;

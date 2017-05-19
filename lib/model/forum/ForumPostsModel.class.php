@@ -12,7 +12,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use function CsrDelft\startsWith;
-use CsrDelft\view\CsrBB;
+use CsrDelft\view\bbcode\CsrBB;
 use Exception;
 use PDO;
 

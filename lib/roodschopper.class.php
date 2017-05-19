@@ -15,7 +15,7 @@ use CsrDelft\model\entity\Mail;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrBB;
+use CsrDelft\view\bbcode\CsrBB;
 use Exception;
 
 require_once 'configuratie.include.php';
