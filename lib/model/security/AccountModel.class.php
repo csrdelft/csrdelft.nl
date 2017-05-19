@@ -11,11 +11,11 @@ use Exception;
 
 /**
  * AccountModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Wachtwoord en login timeout management.
- * 
+ *
  */
 class AccountModel extends CachedPersistenceModel {
 
@@ -72,7 +72,7 @@ class AccountModel extends CachedPersistenceModel {
 
 	/**
 	 * Verify SSHA hash.
-	 * 
+	 *
 	 * @param Account $account
 	 * @param string $pass_plain
 	 * @return boolean
@@ -90,12 +90,12 @@ class AccountModel extends CachedPersistenceModel {
 
 	/**
 	 * Create SSH hash.
-	 * 
+	 *
 	 * @param string $pass_plain
 	 * @return string
 	 */
 	public function maakWachtwoord($pass_plain) {
-		$salt = mhash_keygen_s2k(MHASH_SHA1, $pass_plain, substr(pack('h*', md5(mt_rand())), 0, 8), 4);
+		$salt = \mhash_keygen_s2k(MHASH_SHA1, $pass_plain, substr(pack('h*', md5(mt_rand())), 0, 8), 4);
 		return "{SSHA}" . base64_encode(mhash(MHASH_SHA1, $pass_plain . $salt) . $salt);
 	}
 
