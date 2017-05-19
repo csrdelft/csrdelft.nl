@@ -63,7 +63,6 @@ class CsrBB extends Parser {
 	protected $email_mode = false;
 
 	public function __construct() {
-		parent::__construct();
 		$this->paragraph_mode = false;
 	}
 

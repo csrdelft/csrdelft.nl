@@ -4,7 +4,6 @@ namespace CsrDelft\view\bbcode;
 use function CsrDelft\email_like;
 use function CsrDelft\url_like;
 
-
 /**
  * Main BB-code Parser file
  *
@@ -15,18 +14,19 @@ use function CsrDelft\url_like;
  * @copyright 2005, Erik Bakker <erik@eamelink.nl>
  * @license http://www.gnu.org/copyleft/lesser.html
  */
+
 class Parser {
 
 	/**
 	 * Storage for BB code
-	 * @access private
 	 */
-	var $bbcode;
+	private $bbcode;
+
 	/**
 	 * Storage for outgoing HTML
-	 * @access private
 	 */
-	var $HTML;
+	private $HTML;
+
 	/**
 	 * Array holding tags & text
 	 *
@@ -38,81 +38,82 @@ class Parser {
 	 * 		[3] => [/b]
 	 * 		[4] => , cool huh?!
 	 * 		  )
-	 * @access private
 	 */
-	var $parseArray;
+	private $parseArray = array();
+
 	/**
 	 * Aliasses, like * for lishort
-	 *
-	 * @todo Check if this works as it should
-	 * @access private
 	 */
-	var $aliassen;
+	private $aliassen = array(
+		'*'		 => 'lishort',
+		'ulist'	 => 'list'
+	);
+
 	/**
 	 * The current quote level, to make sure nested quotes are replaced by ...
-	 *
-	 * @access private
 	 */
-	var $quote_level;
+	private $quote_level = 0;
+
 	/**
 	 * How deep are we; e.g. How many open tags?
-	 *
-	 * @access private
 	 */
-	var $level;
+	private $level = 0;
+
 	/**
 	 * Amount of tags already parsed
-	 *
-	 * @access private
 	 */
-	var $tags_counted;
+	private $tags_counted = 0;
+
 	/**
 	 * Maximum allowed number of tags
 	 *
-	 * When having trouble with users trying to get down the server by using tons of tags, lower this limit. Open �nd closing tags will count towards max.
+	 * When having trouble with users trying to get down the server by using tons of tags, lower this limit. Open and closing tags will count towards max.
 	 * @var int Maximum number of tags to be parsed.
 	 *
 	 */
-	var $max_tags;
+	public $max_tags = 700;
+
 	/**
 	 * Allow HTML in code
 	 *
 	 * Whether or not to allow HTMl code. Default is false. When set to false, [html] tag won't do anything.
 	 * @var boolean
 	 */
-	var $allow_html;
+	public $allow_html = false;
+
 	/**
 	 * Accept html by default
 	 *
 	 * When set to true, html will be accepted. When set to false, only html within [html] tags will be accepted. This setting only has effect when $allow_html is set to true.
 	 * @var boolean
 	 */
-	var $standard_html;
-	// We want to enclose all nice in paragraphs
+	public $standard_html = false;
+
 	/**
 	 * Enable paragraph mode
 	 *
 	 * When set to true, the parser will try to use &lt;p&gt; tags around text, and remove unnecessary br's. <b>This is an experimental feature! Please let me know if you find strange behaviour!</b>
 	 * @var boolean
 	 */
-	var $paragraph_mode;
+	protected $paragraph_mode = true;
+
 	/**
 	 * Keep track of open paragraphs
-	 * @access private
 	 */
-	var $paragraph_open;
+	private $paragraph_open = false;
+
 	/**
 	 * Tags that do not need to be encapsulated in paragraphs
-	 * @access private
 	 */
-	var $paragraphless_tags;
+	private $paragraphless_tags = array('h', 'quote', 'hr', 'table', 'br');
+
 	/**
 	 * Keep track of current paragraph-required-status
 	 *
 	 * When we're in a tag that does not need to be encapsulate in a paragraph, this var will be false, otherwise true. Works only when in paragraph mode.
-	 * @access private
 	 */
-	var $paragraph_required;
+	private $paragraph_required = true;
+
 	/**
 	 * It's possible with the ubboff tag to switch processing off.
 	 *
@@ -120,61 +121,8 @@ class Parser {
 	 *
 	 * When we're in a [ubboff] block, this will be false. Otherwise true.
 	 * Also used by [commentaar] and [prive]
-	 * @access private
 	 */
-	var $bb_mode;
-
-	/**
-	 * returns Version of eamBB
-	 * @return string
-	 */
-	function getVersion() {
-		return "0.9.5";
-	}
-
-	/**
-	 * eamBBParser constructor
-	 */
-	function __construct() {
-		// Initialize the parseArray0
-		$this->parseArray = array();
-		// Define aliasses
-		$this->aliassen = array(
-			'*'		 => 'lishort',
-			'ulist'	 => 'list'
-		);
-		// Define preParsePatterns
-		$this->preParsePattern = array(
-			'!(^|[ \n\r\t])(((ftp://)|(http://)|(https://))(([a-z0-9_-]+)(:([a-z0-9_\-]+([a-z0-9_\-]+\@)?))?\@)?(www\.)?([a-z0-9_-]|\.)+(\.[a-z]{2,4})(\:[0-9]+)?(/[^/: \n\r]*)*)!i',
-			'!(^|[ \n\r\t])([a-z_-][a-z0-9\._-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)!i'
-		);
-		// Define preParseReplacements
-		$this->preParseReplacement = array(
-			'\1[url=\2]\2[/url]',
-			'\1[email=\2]'
-		);
-		// set level (level = # of opened tags)
-		$this->level = 0;
-		// set quote_level
-		$this->quote_level = 0;
-
-		// Set max tags
-		$this->tags_counted = 0;
-		$this->max_tags = 700;
-
-		// We don't want standard html
-		$this->allow_html = false;
-		$this->standard_html = false;
-
-		// We do want nice paragraphs
-		$this->paragraph_mode = true;
-		$this->paragraph_open = false;
-		$this->paragraphless_tags = array('h', 'quote', 'hr', 'table', 'br');
-		$this->paragraph_required = true;
-
-		// Whether or not to parse bbcode
-		$this->bb_mode = true;
-	}
+	private $bb_mode = true;
 
 	/**
 	 * Transform BB code to HTML code.
@@ -182,17 +130,13 @@ class Parser {
 	 * This method takes a text with BB code and transforms it to HTML.
 	 * @param string $bbcode BB code to be transformed
 	 * @return string HTML
-	 * @example examples.php
 	 */
-	function getHtml($bbcode) {
+	public function getHtml($bbcode) {
 		if (strlen($bbcode) == 0) {
 			return null;
 		}
 
 		$this->bbcode = str_replace(array("\r\n", "\n"), '[br]', $bbcode);
-
-		// preparsing, auto linkification, html on/off and stuff
-		$this->preParse();
 
 		// Create the parsearray with the buildarray function, pretty nice ;)
 		$this->tags_counted = 0;
@@ -204,27 +148,13 @@ class Parser {
 		// Get output
 		$this->HTML = str_replace('[br]', "<br />\n", $this->parseArray());
 
-
 		return $this->HTML;
 	}
 
 	/**
-	 * Preparses content, for auto-linkification
-	 *
-	 * @access private
-	 */
-	function preParse() {
-
-		// Do autolinkification
-		//$this->UBB = preg_replace($this->preParsePattern, $this->preParseReplacement, $this->UBB);
-	}
-
-	/**
 	 * Set [html] and [nohtml] tags according to settings
-	 *
-	 * @access private
 	 */
-	function htmlFix() {
+	private function htmlFix() {
 		// First, check if html is allowed
 		if (!$this->allow_html) {
 			$html = false;
@@ -270,10 +200,8 @@ class Parser {
 
 	/**
 	 * Breaks the inputted BB code into an array of text and tags
-	 *
-	 * @access private
 	 */
-	function buildArray($string) {
+	private function buildArray($string) {
 
 		if (strlen($string) == 0) // Empty or no string
 			return false;
@@ -322,8 +250,6 @@ class Parser {
 			$this->tags_counted++;
 		}
 
-
-
 		if (!empty($pretext))
 			array_unshift($current, $pretext);
 
@@ -338,15 +264,13 @@ class Parser {
 	 * Process array
 	 *
 	 * Walks through the array until one of the stoppers is found. When encountering an 'open' tag, which is not in $forbidden, open corresponding bb_ function.
-	 * @access private
 	 */
-	function parseArray($stoppers = array(), $forbidden = array()) {
+	private function parseArray($stoppers = array(), $forbidden = array()) {
 
 		if (!is_array($this->parseArray)) { // Well, nothing to parse
 			return null;
 		}
 		$text = '';
-
 
 		$forbidden_aantal_open = 0;
 		while ($entry = array_shift($this->parseArray)) {
@@ -381,7 +305,6 @@ class Parser {
 					}
 				}
 
-
 				if ($this->bb_mode && substr($entry, 0, 1) == '[' && substr($entry, strlen($entry) - 1, 1) == ']' && substr($entry, 1, 1) != '/' && (method_exists($this, 'bb_' . $tag) || (isset($this->aliassen[$tag]) && method_exists($this, 'bb_' . $this->aliassen[$tag]))) && !in_array($tag, $forbidden) && !isset($forbidden['all'])) {
 					$functionname = 'bb_' . $tag;
 					if (!method_exists($this, $functionname))
@@ -410,14 +333,12 @@ class Parser {
 						}
 					}
 
-
 					$this->level++;
 					$newtext = $this->$functionname($arguments);
 
 					// Reset paragraph_required.
 					if ($this->paragraph_mode && $paragraph_setting_modified)
 						$this->paragraph_required = true;
-
 
 					$text .= $newtext;
 				} else {
@@ -467,7 +388,6 @@ class Parser {
 						array_unshift($this->parseArray, $shift);
 					}
 
-
 					// Add paragraphs if necessary
 					if ($this->paragraph_mode && !$this->paragraph_open && $this->paragraph_required && $this->level == 0) {
 						$text .= '<p>';
@@ -478,7 +398,6 @@ class Parser {
 				}
 			}
 		} // End of BIG while!
-
 
 		if ($this->paragraph_open) { // No need for a level check, should be zero anyway.
 			$this->paragraph_open = false;
@@ -494,9 +413,8 @@ class Parser {
 	 * When supplied with a full tag ([b] or [img w=5 h=10]), return tag name
 	 * @return string
 	 * @param string $fullTag The full tag to get the tagname from
-	 * @access private
 	 */
-	function getTag($fullTag) {
+	private function getTag($fullTag) {
 		if (substr($fullTag, 0, 1) == '[' && substr($fullTag, strlen($fullTag) - 1, 1) == ']') {
 			return strtok($fullTag, '[ =]');
 		} else {
@@ -510,9 +428,8 @@ class Parser {
 	 * When supplied with a full tag ([h=5] or [img=blah.gif w=5 h=10]), return array with argument/value as key/value pairs
 	 * @return array
 	 * @param string $fullTag The full tag to get the arguments from
-	 * @access private
 	 */
-	function getArguments($fullTag) {
+	private function getArguments($fullTag) {
 
 		$argument_array = Array();
 		$tag = substr($fullTag, 1, strlen($fullTag) - 2);
@@ -544,14 +461,14 @@ class Parser {
 		return $argument_array;
 	}
 
-	function bb_h($args) { //Heading ;)
+	function bb_h($arguments) {
 		$id = '';
-		if (isset($args['id'])) {
-			$id = ' id="' . htmlspecialchars($args['id']) . '"';
+		if (isset($arguments['id'])) {
+			$id = ' id="' . htmlspecialchars($arguments['id']) . '"';
 		}
 		$h = 1;
-		if (isset($args['h'])) {
-			$h = (int) $args['h'];
+		if (isset($arguments['h'])) {
+			$h = (int) $arguments['h'];
 		}
 		$text = '<h' . $h . $id . '>';
 		$text .= $this->parseArray(array('[/h]'), array('h'));
@@ -631,12 +548,12 @@ class Parser {
 		return $text;
 	}
 
-	function bb_code($args = array()) {
+	function bb_code($arguments = array()) {
 
 		$content = $this->parseArray(array('[/code]'), array('code', 'br', 'all' => 'all'));
 
-		if (isset($args['code'])) {
-			$text = '<br /><sub>' . $args['code'] . ' code:</sub><pre class="bbcode">' . $content . '</pre>';
+		if (isset($arguments['code'])) {
+			$text = '<br /><sub>' . $arguments['code'] . ' code:</sub><pre class="bbcode">' . $content . '</pre>';
 		} else {
 			$text = '<br /><sub>code:</sub><pre class="bbcode">' . $content . '</pre>';
 		}
