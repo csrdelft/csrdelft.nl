@@ -39,7 +39,7 @@ class Parser {
 	 * 		[4] => , cool huh?!
 	 * 		  )
 	 */
-	private $parseArray = array();
+	protected $parseArray = array();
 
 	/**
 	 * Aliasses, like * for lishort
@@ -52,7 +52,7 @@ class Parser {
 	/**
 	 * The current quote level, to make sure nested quotes are replaced by ...
 	 */
-	private $quote_level = 0;
+	protected $quote_level = 0;
 
 	/**
 	 * How deep are we; e.g. How many open tags?
@@ -122,7 +122,7 @@ class Parser {
 	 * When we're in a [ubboff] block, this will be false. Otherwise true.
 	 * Also used by [commentaar] and [prive]
 	 */
-	private $bb_mode = true;
+	protected $bb_mode = true;
 
 	/**
 	 * Transform BB code to HTML code.
@@ -265,7 +265,7 @@ class Parser {
 	 *
 	 * Walks through the array until one of the stoppers is found. When encountering an 'open' tag, which is not in $forbidden, open corresponding bb_ function.
 	 */
-	private function parseArray($stoppers = array(), $forbidden = array()) {
+	protected function parseArray($stoppers = array(), $forbidden = array()) {
 
 		if (!is_array($this->parseArray)) { // Well, nothing to parse
 			return null;
