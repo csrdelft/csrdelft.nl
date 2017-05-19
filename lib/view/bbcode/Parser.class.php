@@ -461,6 +461,14 @@ class Parser {
 		return $argument_array;
 	}
 
+	/**
+	 * Heading
+	 *
+	 * @param Integer $arguments['h'] Heading level (1-6)
+	 * @param optional String $arguments['id'] ID attribute
+	 *
+	 * @example [h=1 id=special]Heading[/h]
+	 */
 	function bb_h($arguments) {
 		$id = '';
 		if (isset($arguments['id'])) {
@@ -498,6 +506,11 @@ class Parser {
 		return $return;
 	}
 
+	/**
+	 * Bold
+	 *
+	 * @example [b]Bold[/b]
+	 */
 	function bb_b() {
 		if ($this->nobold === true AND $this->quote_level == 0) {
 			return $this->parseArray(array('[/b]'), array('b'));
@@ -506,26 +519,61 @@ class Parser {
 		}
 	}
 
+	/**
+	 * Subscript
+	 *
+	 * @example [sub]Subscript[/sub]
+	 */
 	function bb_sub() {
 		return '<sub>' . $this->parseArray(array('[/sub]'), array('sub', 'sup')) . '</sub>';
 	}
 
+	/**
+	 * Superscript
+	 *
+	 * @example [sup]Superscript[/sup]
+	 */
 	function bb_sup() {
 		return '<sup>' . $this->parseArray(array('[/sup]'), array('sub', 'sup')) . '</sup>';
 	}
 
+	/**
+	 * Italic
+	 *
+	 * @example [i]Italic[/i]
+	 */
 	function bb_i() {
 		return '<em>' . $this->parseArray(array('[/i]'), array('i')) . '</em>';
 	}
 
+	/**
+	 * Strikethrough
+	 *
+	 * @example [s]Strikethrough[/s]
+	 */
 	function bb_s() {
 		return '<span style="text-decoration: line-through;">' . $this->parseArray(array('[/s]'), array('s')) . '</span>';
 	}
 
+	/**
+	 * Underline
+	 *
+	 * @example [u]Underline[/u]
+	 */
 	function bb_u() {
 		return '<span style="text-decoration: underline;">' . $this->parseArray(array('[/u]'), array('u')) . '</span>';
 	}
 
+	/**
+	 * URL anchor
+	 *
+	 * @param String $arguments['url'] URL it links to
+	 *
+	 * @example [url=https://csrdelft.nl]Anchor[/url]
+	 * @example [url]https://csrdelft.nl[/url]
+	 * @example [rul=https://csrdelft.nl]Anchor[/rul]
+	 * @example [rul]https://csrdelft.nl[/rul]
+	 */
 	function bb_url($arguments = array()) {
 
 		$content = $this->parseArray(array('[/url]', '[/rul]'), array());
@@ -548,6 +596,13 @@ class Parser {
 		return $text;
 	}
 
+	/**
+	 * Code
+	 *
+	 * @param optional String $arguments['code'] Description of code type
+	 *
+	 * @example [code=PHP]phpinfo();[/code]
+	 */
 	function bb_code($arguments = array()) {
 
 		$content = $this->parseArray(array('[/code]'), array('code', 'br', 'all' => 'all'));
@@ -561,6 +616,11 @@ class Parser {
 		return $text;
 	}
 
+	/**
+	 * Quote
+	 *
+	 * @example [quote]Citaat[/quote]
+	 */
 	function bb_quote() {
 		if ($this->quote_level == 0) {
 			$this->quote_level = 1;
@@ -578,6 +638,15 @@ class Parser {
 		return $text;
 	}
 
+	/**
+	 * List
+	 *
+	 * @param optional String $arguments['list'] Type of ordered list
+	 *
+	 * @example [list]Unordered list[/list]
+	 * @example [ulist]Unordered list[/ulist]
+	 * @example [list=a]Ordered list numbered with lowercase letters[/list]
+	 */
 	function bb_list($arguments) {
 		$content = $this->parseArray(array('[/list]', '[/ulist]'), array('br'));
 		if (!isset($arguments['list'])) {
@@ -588,18 +657,42 @@ class Parser {
 		return $text;
 	}
 
+	/**
+	 * Horizontal line
+	 *
+	 * @example [hr]
+	 */
 	function bb_hr($arguments) {
 		return '<hr />';
 	}
 
+	/**
+	 * List item (short)
+	 *
+	 * @example [lishort]First item
+	 * @example [*]Next item
+	 */
 	function bb_lishort($arguments) {
 		return '<li>' . $this->parseArray(array('[br]')) . '</li>';
 	}
 
+	/**
+	 * List item
+	 *
+	 * @example [li]Item[/li]
+	 */
 	function bb_li($arguments) {
 		return '<li>' . $this->parseArray(array('[/li]')) . '</li>';
 	}
 
+	/**
+	 * Slash me
+	 *
+	 * @param optional String $arguments['me'] Name of who is me
+	 *
+	 * @example [me] waves
+	 * @example [me=Name] waves
+	 */
 	function bb_me($arguments) {
 		$content = $this->parseArray(array('[br]'), array());
 		array_unshift($this->parseArray, '[br]');
@@ -611,6 +704,12 @@ class Parser {
 		return $html;
 	}
 
+	/**
+	 * UBB off
+	 *
+	 * @example [ubboff]Not parsed[/ubboff]
+	 * @example [tekst]Not parsed[/tekst]
+	 */
 	function bb_ubboff() {
 		$this->bb_mode = false;
 		$content = $this->parseArray(array('[/ubboff]', '[/tekst]'), array());
@@ -618,6 +717,15 @@ class Parser {
 		return $content;
 	}
 
+	/**
+	 * Email anchor
+	 *
+	 * @param String $arguments['email'] Email address to link to
+	 * @param optional Boolean $arguments['spamsafe'] Uses spam safe javascript obfuscator
+	 *
+	 * @example [email]noreply@csrdelft.nl[/email]
+	 * @example [email=noreply@csrdelft.nl spamsafe]text[/email]
+	 */
 	function bb_email($arguments) {
 		$html = '';
 
@@ -661,6 +769,11 @@ class Parser {
 		return $html;
 	}
 
+	/**
+	 * Image
+	 *
+	 * @example [img]URL[/img]
+	 */
 	function bb_img($arguments) {
 		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
 
@@ -677,6 +790,16 @@ class Parser {
 		return $html;
 	}
 
+	/**
+	 * Table
+	 *
+	 * @param optional String $arguments['border'] CSS border style
+	 * @param optional String $arguments['color'] CSS color style
+	 * @param optional String $arguments['background-color'] CSS background-color style
+	 * @param optional String $arguments['border-collapse'] CSS border-collapse style
+	 *
+	 * @example [table border=1px_solid_blue]...[/table]
+	 */
 	function bb_table($arguments) {
 		$tableProperties = array('border', 'color', 'background-color', 'border-collapse');
 		$style = '';
@@ -691,12 +814,25 @@ class Parser {
 		return $html;
 	}
 
+	/**
+	 * Table row
+	 *
+	 * @example [tr]...
+	 * @example [tr]...[/tr]
+	 */
 	function bb_tr() {
 		$content = $this->parseArray(array('[/tr]'), array('br'));
 		$html = '<tr>' . $content . '</tr>';
 		return $html;
 	}
 
+	/**
+	 * Table cell
+	 *
+	 * @param optional Integer $arguments['w'] CSS width in pixels
+	 *
+	 * @example [td w=50]...[/td]
+	 */
 	function bb_td($arguments = array()) {
 		$content = $this->parseArray(array('[/td]'), array());
 
@@ -709,12 +845,28 @@ class Parser {
 		return $html;
 	}
 
+	/**
+	 * Table header cell
+	 *
+	 * @example [th]...[/th]
+	 */
 	function bb_th() {
 		$content = $this->parseArray(array('[/th]'), array());
 		$html = '<th>' . $content . '</th>';
 		return $html;
 	}
 
+	/**
+	 * Div
+	 *
+	 * @param optional String $arguments['class'] Class attribute
+	 * @param optional Boolean $arguments['clear'] CSS clear: both
+	 * @param optional String $arguments['float'] CSS float left or right
+	 * @param optional Integer $arguments['w'] CSS width in pixels
+	 * @param optional Integer $arguments['h'] CSS height in pixels
+	 *
+	 * @example [div class=special clear float=left w=20 h=50]...[/div]
+	 */
 	function bb_div($arguments = array()) {
 		$content = $this->parseArray(array('[/div]'), array());
 		$class = '';
