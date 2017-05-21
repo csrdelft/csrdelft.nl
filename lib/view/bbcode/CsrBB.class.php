@@ -151,6 +151,16 @@ class CsrBB extends Parser {
 		return $html;
 	}
 
+	/**
+	 * Image
+	 *
+	 * @param optional String $arguments['class'] Class attribute
+	 * @param optional String $arguments['float'] CSS float left or right
+	 * @param optional Integer $arguments['w'] CSS width in pixels
+	 * @param optional Integer $arguments['h'] CSS height in pixels
+	 *
+	 * @example [img class=special float=left w=20 h=50]URL[/img]
+	 */
 	function bb_img($arguments = array()) {
 		$style = '';
 		$class = '';
@@ -185,9 +195,11 @@ class CsrBB extends Parser {
 	}
 
 	/**
-	 * [foto]/pad/naar/foto[/foto]
+	 * Toont de thumbnail van een foto met link naar fotoalbum.
 	 *
-	 * Toont de thumbnail met link naar fotoalbum.
+	 * @param optional Boolean $arguments['responsive'] Responsive sizing
+	 *
+	 * @example [foto responsive]/pad/naar/foto[/foto]
 	 */
 	function bb_foto($arguments = array()) {
 				$url = urldecode($this->parseArray(array('[/foto]'), array()));
@@ -218,22 +230,30 @@ class CsrBB extends Parser {
 	}
 
 	/**
-	 * [fotoalbum]/pad/naar/album[/fotoalbum]
+	 * Fotoalbum
 	 *
-	 * Parameters:
-	 * 	rows	Aantal regels weergeven
-	 * 			rows=4
+	 * Albumweergave (default):
+	 * @param optional Boolean $arguments['compact'] Compacte weergave
+	 * @param optional Integer $arguments['rows'] Aantal rijen
+	 * @param optional Integer $arguments['perrow'] Aantal kolommen
+	 * @param optional Boolean $arguments['bigfirst'] Eerste foto groot
+	 * @param optional String $arguments['big'] Indexen van foto's die groot moeten, of patroon 'a', 'b' of 'c'
 	 *
-	 * 	big		Lijstje met indexen van afbeeldingen die groot moeten
-	 * 			worden.
-	 * 			big=0,5,14 | big=a | big=b |
+	 * @example [fotoalbum compact bigfirst]/pad/naar/album[/fotoalbum]
+	 * @example [fotoalbum rows=2 perrow=5 big=a]/pad/naar/album[/fotoalbum]
+	 * @example [fotoalbum big=0,5,14]/pad/naar/album[/fotoalbum]
 	 *
-	 * 	compact	Compacte versie van de tag weergeven
-	 * 			compact=true
+	 * Sliderweergave:
+	 * @param optional Boolean $arguments['slider'] Slider weergave
+	 * @param optional Integer $arguments['interval'] Slider interval in seconden
+	 * @param optional Boolean $arguments['random'] Slider met random volgorde
+	 * @param optional Boolean $arguments['height'] Slider hoogte in pixels
 	 *
+	 * @example [fotoalbum slider interval=10 random height=200]/pad/naar/album[/fotoalbum]
+	 * @example [fotoalbum]laatste[/fotoalbum]
 	 */
 	protected function bb_fotoalbum($arguments = array()) {
-				$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
+		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
 		if ($url === 'laatste') {
 			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 		} else {
@@ -297,6 +317,14 @@ class CsrBB extends Parser {
 		return $this->bb_url($arguments);
 	}
 
+	/**
+	 * URL
+	 *
+	 * @param String $arguments['url'] URL waarnaar gelinkt wordt
+	 *
+	 * @example [url]https://csrdelft.nl[/url]
+	 * @example [url=https://csrdelft.nl]Stek[/url]
+	 */
 	function bb_url($arguments = array()) {
 		$content = $this->parseArray(array('[/url]', '[/rul]'), array());
 		if (isset($arguments['url'])) { // [url=
@@ -336,6 +364,11 @@ class CsrBB extends Parser {
 	  }
 	 */
 
+	/**
+	 * 2013 Neuzen
+	 *
+	 * @example [neuzen]2o13[/neuzen]
+	 */
 	function bb_neuzen($arguments = array()) {
 		if (is_array($arguments)) {
 			$content = $this->parseArray(array('[/neuzen]'), array());
@@ -349,6 +382,16 @@ class CsrBB extends Parser {
 		return $content;
 	}
 
+	/**
+	 * Citaat
+	 *
+	 * @param optional String $arguments['citaat'] Naam of lidnummer van wie geciteerd wordt
+	 * @param optional String $arguments['url'] Link naar bron van het citaat
+	 *
+	 * @example [citaat=1234]Citaat[/citaat]
+	 * @example [citaat=Jan_Lid url="https://csrdelft.nl"]Citaat[/citaat]
+	 * @example [citaat]Citaat[/citaat]
+	 */
 	function bb_citaat($arguments = array()) {
 		if ($this->quote_level == 0) {
 			$this->quote_level = 1;
@@ -380,7 +423,11 @@ class CsrBB extends Parser {
 	}
 
 	/**
-	 * Geef de relatieve datum terug.
+	 * Relatieve datum zoals geparsed door php's strtotime
+	 *
+	 * @example [reldate]1 day ago[/reldate]
+	 * @example [reldate]20-01-2012[/reldate]
+	 * @example [reldate]20-01-2012 18:00[/reldate]
 	 */
 	function bb_reldate($arguments = array()) {
 		$content = $this->parseArray(array('[/reldate]'), array());
@@ -390,10 +437,8 @@ class CsrBB extends Parser {
 	/**
 	 * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.
 	 *
-	 * Example:
-	 * [lid=0436] => Am. Waagmeester
-	 * of
-	 * [lid]0436[/lid]
+	 * @example [lid=0436]
+	 * @example [lid]0436[/lid]
 	 */
 	function bb_lid($arguments = array()) {
 		if (isset($arguments['lid'])) {
@@ -412,6 +457,11 @@ class CsrBB extends Parser {
 	/**
 	 * Tekst binnen de privé-tag wordt enkel weergegeven voor leden met
 	 * (standaard) P_LOGGED_IN. Een andere permissie kan worden meegegeven.
+	 *
+	 * @param optional String $arguments['prive'] Permissie nodig om de tekst te lezen
+	 *
+	 * @example [prive]Persoonsgegevens[/prive]
+	 * @example [prive=commissie:PubCie]Tekst[/prive]
 	 */
 	function bb_prive($arguments = array()) {
 		if (isset($arguments['prive'])) {
@@ -435,10 +485,13 @@ class CsrBB extends Parser {
 	}
 
 	/**
-	 * Toont content als instelling een bepaalde waarde heeft,
-	 * standaard 'ja';
+	 * Toont content als instelling een bepaalde waarde heeft, standaard 'ja';
 	 *
-	 * [instelling=maaltijdblokje module=voorpagina][maaltijd=next][/instelling]
+	 * @param String $arguments['instelling'] Naam instelling
+	 * @param String $arguments['module'] Naam module
+	 * @param optional String $arguments['waarde'] Waarde waarbij content wordt weergegeven
+	 *
+	 * @example [instelling=maaltijdblokje module=voorpagina][maaltijd=next][/instelling]
 	 */
 	function bb_instelling($arguments = array()) {
 		$content = $this->parseArray(array('[/instelling]'), array());
@@ -467,7 +520,8 @@ class CsrBB extends Parser {
 	 * Deze methode kan resultaten van query's die in de database staan printen in een
 	 * tabelletje.
 	 *
-	 * [query=1] of [query]1[/query]
+	 * @example [query=1]
+	 * @example [query]1[/query]
 	 */
 	function bb_query($arguments = array()) {
 		if (isset($arguments['query'])) {
@@ -478,8 +532,7 @@ class CsrBB extends Parser {
 		$queryID = (int) $queryID;
 
 		if ($queryID != 0) {
-						$sqc = new SavedQueryContent(new SavedQuery($queryID));
-
+			$sqc = new SavedQueryContent(new SavedQuery($queryID));
 			return $sqc->render_queryResult();
 		} else {
 			return '[query] Geen geldig query-id opgegeven.<br />';
@@ -488,6 +541,10 @@ class CsrBB extends Parser {
 
 	/**
 	 * Laat de embedded spotify player zien
+	 *
+	 * @param optional String $arguments['formaat'] Ander formaar: 'hoog' of 'blok'
+	 *
+	 * @example [spotify]https://open.spotify.com/user/.../playlist/...[/spotify]
 	 */
 	function bb_spotify($arguments = array()) {
 		$id = $this->parseArray(array('[/spotify]'), array());
@@ -528,6 +585,14 @@ class CsrBB extends Parser {
 					frameborder=\"0\" allowtransparency=\"true\"></iframe>";
 	}
 
+	/**
+	 * YouTube speler
+	 *
+	 * @param String $arguments['youtube'] YouTube id van 11 tekens
+	 *
+	 * @example [youtube]dQw4w9WgXcQ[/youtube]
+	 * @example [youtube=dQw4w9WgXcQ]
+	 */
 	function bb_youtube($arguments = array()) {
 		$id = $this->parseArray(array('[/youtube]'), array());
 		if (isset($arguments['youtube'])) { // [youtube=
@@ -554,14 +619,9 @@ class CsrBB extends Parser {
 	 *
 	 * Tot nu toe youtube, vimeo, dailymotion, 123video, godtube
 	 *
-	 * [video]http://www.youtube.com/watch?v=Zo0LJrw5nCs[/video]
-	 * [video]Zo0LJrw5nCs[/video]
-	 * [video]http://vimeo.com/1582112[/video]
-	 *
-	 * tag parameters:
-	 * 		force	Forceer weergave filmpje ook als het al een keer op de pagina voorkomt.
-	 * 		width	Breedte van het filmpje
-	 * 		height	Hoogte van het filmpje
+	 * @example [video]http://www.youtube.com/watch?v=Zo0LJrw5nCs[/video]
+	 * @example [video]Zo0LJrw5nCs[/video]
+	 * @example [video]http://vimeo.com/1582112[/video]
 	 */
 	function bb_video($arguments = array()) {
 		$content = $this->parseArray(array('[/video]'), array());
@@ -640,6 +700,15 @@ HTML;
 		return $html;
 	}
 
+	/**
+	 * Twitter widget
+	 *
+	 * @param optional Integer $arguments['lines']
+	 * @param optional Integer $arguments['width'] Breedte
+	 * @param optional Integer $arguments['height'] Hoogte
+	 *
+	 * @example [twitter][/twitter]
+	 */
 	function bb_twitter($arguments = array()) {
 		$content = $this->parseArray(array('[/twitter]'), array());
 		// widget size
@@ -690,7 +759,7 @@ HTML;
 	}
 
 	protected function groep(AbstractGroep $groep) {
-				// Controleer rechten
+		// Controleer rechten
 		if (!$groep->mag(AccessAction::Bekijken)) {
 			return '';
 		}
@@ -800,9 +869,8 @@ HTML;
 	 * Geeft een groep met kortebeschrijving en een lijstje met leden weer.
 	 * Als de groep aanmeldbaar is komt er ook een aanmeldknopje bij.
 	 *
-	 * [groep]123[/groep]
-	 * of
-	 * [groep=123]
+	 * @example [groep]123[/groep]
+	 * @example [groep=123]
 	 */
 	protected function bb_groep($arguments = array()) {
 		if (isset($arguments['groep'])) {
@@ -824,9 +892,8 @@ HTML;
 	/**
 	 * Geeft een link naar de verticale.
 	 *
-	 * [verticale]A[/verticale]
-	 * of
-	 * [verticale=A]
+	 * @example [verticale]A[/verticale]
+	 * @example [verticale=A]
 	 */
 	protected function bb_verticale($arguments = array()) {
 		if (isset($arguments['verticale'])) {
@@ -846,9 +913,8 @@ HTML;
 	 * Geeft titel en auteur van een boek.
 	 * Een kleine indicator geeft met kleuren beschikbaarheid aan
 	 *
-	 * [boek]123[/boek]
-	 * of
-	 * [boek=123]
+	 * @example [boek]123[/boek]
+	 * @example [boek=123]
 	 */
 	protected function bb_boek($arguments = array()) {
 		if (isset($arguments['boek'])) {
@@ -857,7 +923,7 @@ HTML;
 			$boekid = $this->parseArray(array('[/boek]'), array());
 		}
 
-						try {
+		try {
 			$boek = new BiebBoek((int) $boekid);
 			$content = new BoekBBView($boek);
 			return $content->view();
@@ -869,9 +935,8 @@ HTML;
 	/**
 	 * Geeft een blokje met een documentnaam, link, bestandsgrootte en formaat.
 	 *
-	 * [document]1234[/document]
-	 * of
-	 * [document=1234]
+	 * @example [document]1234[/document]
+	 * @example [document=1234]
 	 */
 	protected function bb_document($arguments = array()) {
 		if (isset($arguments['document'])) {
@@ -891,11 +956,10 @@ HTML;
 	/**
 	 * Geeft een maaltijdketzer weer met maaltijdgegevens, aantal aanmeldingen en een aanmeldknopje.
 	 *
-	 * [maaltijd=next], [maaltijd=1234]
-	 * of
-	 * [maaltijd]next[/maaldijd]
-	 * of
-	 * [maaltijd]123[/maaltijd]
+	 * @example [maaltijd=next]
+	 * @example [maaltijd=1234]
+	 * @example [maaltijd]next[/maaldijd]
+	 * @example [maaltijd]123[/maaltijd]
 	 */
 	public function bb_maaltijd($arguments = array()) {
 		if (isset($arguments['maaltijd'])) {
@@ -1037,9 +1101,8 @@ HTML;
 	/**
 	 * Deze methode kan de belangrijkste mededelingen (doorgaans een top3) weergeven.
 	 *
-	 * [mededelingen=top3]
-	 * of
-	 * [mededeling]top3[/mededeling]
+	 * @example [mededelingen=top3]
+	 * @example [mededeling]top3[/mededeling]
 	 */
 	public function bb_mededelingen($arguments = array()) {
 		if (isset($arguments['mededelingen'])) {
@@ -1050,7 +1113,6 @@ HTML;
 		if ($type == '') {
 			return '[mededelingen] Geen geldig mededelingenblok.';
 		}
-
 
 		$MededelingenView = new MededelingenView(0);
 		switch ($type) {
@@ -1095,7 +1157,7 @@ HTML;
 	 *
 	 * @author Piet-Jan Spaans
 	 *
-	 * [map h=100]Oude Delft 9[/map]
+	 * @example [map h=100]Oude Delft 9[/map]
 	 */
 	public function bb_map($arguments = array()) {
 		$address = $this->parseArray(array('[/map]', '[/kaart]'), array());
@@ -1122,9 +1184,8 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	 *
 	 * @author Piet-Jan Spaans
 	 *
-	 * [peiling=2]
-	 * of
-	 * [peiling]2[/peiling]
+	 * @example [peiling=2]
+	 * @example [peiling]2[/peiling]
 	 */
 	public function bb_peiling($arguments = array()) {
 		if (isset($arguments['peiling'])) {
@@ -1144,10 +1205,9 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	private $slideshowJsIncluded = false;
 
 	/**
-	 * Slideshow-tag.
+	 * Slideshow
 	 *
-	 * example:
-	 * [slideshow]http://example.com/image_1.jpg[/slideshow]
+	 * @example [slideshow]http://example.com/image_1.jpg[/slideshow]
 	 */
 	public function bb_slideshow($arguments = array()) {
 		$content = $this->parseArray(array('[/slideshow]'), array());
@@ -1184,9 +1244,8 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	/**
 	 * Blokje met bijbelrooster voor opgegeven aantal dagen.
 	 *
-	 * [bijbelrooster=10]
-	 * of
-	 * [bijbelrooster]10[/bijbelrooster]
+	 * @example [bijbelrooster=10]
+	 * @example [bijbelrooster]10[/bijbelrooster]
 	 */
 	public function bb_bijbelrooster($arguments = array()) {
 		if (isset($arguments['bijbelrooster'])) {
@@ -1229,7 +1288,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	}
 
 	function bb_ledenmemoryscores($arguments = array()) {
-						LedenMemoryScoresModel::instance();
+		LedenMemoryScoresModel::instance();
 		$groep = null;
 		$titel = null;
 		/**
