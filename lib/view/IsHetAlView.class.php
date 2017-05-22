@@ -80,6 +80,10 @@ class IsHetAlView implements View {
 				$this->ja = null;
 				break;
 
+            case 'foutmelding':
+                $this->ja = null;
+                break;
+
 			default:
 								$vandaag = AgendaModel::instance()->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
@@ -131,6 +135,10 @@ class IsHetAlView implements View {
 			case 'borrel':
 				echo 'Is er een ' . $this->model . ' vanavond?';
 				break;
+
+            case 'foutmelding':
+                echo sprintf('<div class="ja"><abbr class="timeago" title="%s"></abbr></div><div>sinds de laatste foutmelding!</div>', date('c', filemtime(DATA_PATH . 'foutmelding.last')));
+                break;
 
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);

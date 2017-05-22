@@ -1,21 +1,21 @@
 <?php
 namespace CsrDelft\model\entity\fotoalbum;
 
-use function CsrDelft\direncode;
-use function CsrDelft\endsWith;
 use CsrDelft\model\entity\Map;
-use CsrDelft\model\FotoAlbumModel;
+use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
+use function CsrDelft\direncode;
+use function CsrDelft\endsWith;
 use function CsrDelft\startsWith;
 
 
 /**
  * FotoAlbum.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class FotoAlbum extends Map {
 
@@ -26,7 +26,7 @@ class FotoAlbum extends Map {
 	private static $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé|Posters)/i';
 	/**
 	 * Relatief pad in fotoalbum
-	 * @var string 
+	 * @var string
 	 */
 	public $subdir;
 	/**

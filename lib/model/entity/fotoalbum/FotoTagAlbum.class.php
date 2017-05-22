@@ -1,15 +1,15 @@
 <?php
 namespace CsrDelft\model\entity\fotoalbum;
-use CsrDelft\model\FotoModel;
-use CsrDelft\model\FotoTagsModel;
+use CsrDelft\model\fotoalbum\FotoModel;
+use CsrDelft\model\fotoalbum\FotoTagsModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 
 /**
  * FotoTagAlbum.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class FotoTagAlbum extends FotoAlbum {
 

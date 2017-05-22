@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\view\formulier\uploadvelden;
+use function CsrDelft\format_filesize;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\view\formulier\invoervelden\InputField;

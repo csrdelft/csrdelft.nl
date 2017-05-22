@@ -1,9 +1,9 @@
 <h1>Mededeling {if $mededeling->id==0}toevoegen{else}bewerken{/if}</h1>
-<form action="{MededelingenView::mededelingenRoot}bewerken/{$mededeling->id}" method="post" enctype="multipart/form-data">
+<form action="{mededelingen\MededelingenView::mededelingenRoot}bewerken/{$mededeling->id}" method="post" enctype="multipart/form-data">
 	{CsrDelft\getMelding()}
 	{if !CsrDelft\model\security\LoginModel::mag('P_NEWS_MOD')}
 		Hier kunt u een mededeling toevoegen. Het zal echter niet direct zichtbaar worden, maar &eacute;&eacute;rst door de PubCie worden goedgekeurd.<br /><br />
-	{/if} 
+	{/if}
 	<label>Titel:</label>
 	<input type="text" name="titel" value="{$mededeling->titel|escape:'html'}" class="titel" /><br />
 	<label>Tekst:</label>
@@ -30,7 +30,7 @@
 			{/foreach}
 		</select><br />
 		{if CsrDelft\model\mededelingen\MededelingenModel::isModerator()}
-			<label for="prioriteit">Prioriteit: <a title="Hoe belangrijk is deze mededeling? De mededelingen met de hoogste prioriteit komt bovenaan in de top {MededelingenView::aantalTopMostBlock} op de voorpagina van de stek.">{icon get="vraagteken"}</a></label>
+			<label for="prioriteit">Prioriteit: <a title="Hoe belangrijk is deze mededeling? De mededelingen met de hoogste prioriteit komt bovenaan in de top {mededelingen\MededelingenView::aantalTopMostBlock} op de voorpagina van de stek.">{icon get="vraagteken"}</a></label>
 			<select name="prioriteit">
 				{foreach from=$prioriteiten key=prioriteitId item=prioriteit}
 					<option value="{$prioriteitId}"{if $mededeling->prioriteit==$prioriteitId} selected="selected"{/if}>{$prioriteit|escape:'html'}</option>
@@ -43,7 +43,7 @@
 			<input id="vervaltijd" type="text" name="vervaltijd" value="{if $mededeling->vervaltijd!==null}{$mededeling->vervaltijd|date_format:$datumtijdFormaat}{else}{$standaardVervaltijd}" disabled="disabled{/if}" />
 		</div><br />
 		{if CsrDelft\model\mededelingen\MededelingenModel::isModerator() AND $mededeling->zichtbaarheid!='wacht_goedkeuring'}
-			<label for="verborgen">Verbergen <a title="Verborgen mededelingen zijn alleen voor moderators zichtbaar.">{icon get="vraagteken"}</a></label> 
+			<label for="verborgen">Verbergen <a title="Verborgen mededelingen zijn alleen voor moderators zichtbaar.">{icon get="vraagteken"}</a></label>
 			<input id="verborgen" type="checkbox" name="verborgen"{if $mededeling->verborgen} checked="checked"{/if} />
 		{/if}
 	</div>
@@ -63,6 +63,6 @@
 	<div class="clear">
 		{if $prullenbak}<input type="hidden" name="prullenbak" value="1" />{/if}
 		<label >&nbsp;</label><input type="submit" name="submit" value="Opslaan" />
-		<a href="{CsrDelft\view\MededelingenView::mededelingenRoot}{$mededeling->id}" class="btn">Annuleren</a>
+		<a href="{CsrDelft\view\mededelingen\MededelingenView::mededelingenRoot}{$mededeling->id}" class="btn">Annuleren</a>
 	</div>
 </form>

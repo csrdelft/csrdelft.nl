@@ -3,6 +3,7 @@
 namespace CsrDelft\view\login;
 
 use CsrDelft\Icon;
+use function CsrDelft\reldate;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 
 class RememberLoginData extends DataTableResponse

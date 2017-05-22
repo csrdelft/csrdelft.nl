@@ -30,7 +30,7 @@ suggesties_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 						<tr class="
 							{if !$suggestie.voorkeur} geenvoorkeur{/if}
 							{if $suggestie.recent} recent{/if}
-							{if $jongsteLichting === ProfielModel::get($uid)->lidjaar} jongste{else} oudere{/if}
+							{if $jongsteLichting === CsrDelft\model\ProfielModel::get($uid)->lidjaar} jongste{else} oudere{/if}
 							">
 							<td style="width: 15px;">
 								<a class="btn submit" style="padding: 0 2px;" onclick="$(this).closest('form').find('.LidField').val('{$uid}');">
@@ -52,7 +52,7 @@ suggesties_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 								{/if}
 							</td>
 							<td style="width: 140px;">
-								{ProfielModel::get($uid)->getNaam(CsrDelft\model\InstellingenModel::get('corvee', 'weergave_ledennamen_beheer'))}
+								{CsrDelft\model\ProfielModel::get($uid)->getNaam(CsrDelft\model\InstellingenModel::get('corvee', 'weergave_ledennamen_beheer'))}
 							</td>
 							{if $suggestie.laatste}
 								<td>{$suggestie.laatste->getBeginMoment()|date_format:"%d %b %Y"}</td>
@@ -69,26 +69,26 @@ suggesties_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 	<table id="suggesties-controls">
 		<tr>
 			<td {if isset($voorkeurbaar) AND !$voorkeurbaar}
-				title="Deze corveerepetitie is niet voorkeurbaar." 
+				title="Deze corveerepetitie is niet voorkeurbaar."
 				{elseif !isset($voorkeurbaar)}
-					title="Dit is geen periodieke taak dus zijn er geen voorkeuren." 
+					title="Dit is geen periodieke taak dus zijn er geen voorkeuren."
 					{/if}
 						>
-						<input type="checkbox" id="voorkeur" 
+						<input type="checkbox" id="voorkeur"
 							   {if !isset($voorkeurbaar) OR !$voorkeurbaar}
-								   disabled 
+								   disabled
 							   {else}
 								   {if $voorkeur}
-									   checked="checked" 
+									   checked="checked"
 								   {/if}
-								   onchange="taken_toggle_suggestie('geenvoorkeur');" 
+								   onchange="taken_toggle_suggestie('geenvoorkeur');"
 							   {/if}
 							   />
 						<label for="voorkeur" class="CheckboxFieldLabel">Met voorkeur</label>
 						<br />
-						<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');" 
+						<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');"
 							   {if $recent}
-								   checked="checked" 
+								   checked="checked"
 							   {/if}
 							   />
 						<label for="recent" class="CheckboxFieldLabel">Niet recent gecorveed</label>

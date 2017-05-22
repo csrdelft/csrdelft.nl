@@ -1,7 +1,7 @@
 <?php
 namespace CsrDelft\view\formulier;
 
-use function CsrDelft\className;
+use function CsrDelft\classNameZonderNamespace;
 use function CsrDelft\getDateTime;
 use function CsrDelft\getMelding;
 use CsrDelft\model\ChangeLogModel;
@@ -9,26 +9,22 @@ use CsrDelft\model\entity\ChangeLogEntry;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use function CsrDelft\printDebug;
 use function CsrDelft\startsWith;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
-use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
-use CsrDelft\view\formulier\knoppen\FormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
 use CsrDelft\view\Validator;
 use CsrDelft\view\View;
 
-
 /**
  * Formulier.class.php
- * 
+ *
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Alle dingen die we in de field-array van een Formulier stoppen
  * moeten een uitbreiding zijn van FormElement.
- * 
+ *
  * @see FormElement
  */
 class Formulier implements View, Validator {
@@ -44,7 +40,7 @@ class Formulier implements View, Validator {
 	 * Fields must be added via addFields()
 	 * or insertElementBefore() methods,
 	 * and retrieved with getFields() method.
-	 * 
+	 *
 	 * @var FormElement[]
 	 */
 	private $fields = array();
@@ -55,7 +51,7 @@ class Formulier implements View, Validator {
 
 	public function __construct($model, $action, $titel = false, $dataTableId = false) {
 		$this->model = $model;
-		$this->formId = uniqid(className(get_class($this->model)));
+		$this->formId = uniqid(classNameZonderNamespace(get_class($this->model)));
 		$this->action = $action;
 		$this->titel = $titel;
 		$this->css_classes[] = 'Formulier';
@@ -78,7 +74,7 @@ class Formulier implements View, Validator {
 	/**
 	 * Set the id late (after constructor).
 	 * Use in case it is not POSTed.
-	 * 
+	 *
 	 * @param string $dataTableId
 	 */
 	public function setDataTableId($dataTableId) {
@@ -336,7 +332,7 @@ HTML;
 
 	/**
 	 * Toont het formulier en javascript van alle fields.
-	 * 
+	 *
 	 * @param boolean $showMelding Toon meldingen bovenaan formulier
 	 * @return void
 	 */
@@ -382,7 +378,7 @@ HTML;
 
 	/**
 	 * Maak een stukje bbcode aan met daarin de huidige wijziging, door wie en wanneer.
-	 * 
+	 *
 	 * @param ChangeLogEntry[] $diff
 	 * @return string
 	 */

@@ -10,21 +10,21 @@ use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
+use CsrDelft\view\maalcie\beheer\MaaltijdLijstView;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
-use CsrDelft\view\maalcie\MaaltijdKetzerView;
-use CsrDelft\view\maalcie\MaaltijdLijstView;
-use CsrDelft\view\maalcie\MijnMaaltijdenView;
-use CsrDelft\view\maalcie\MijnMaaltijdView;
+use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
+use CsrDelft\view\maalcie\persoonlijk\MijnMaaltijdenView;
+use CsrDelft\view\maalcie\persoonlijk\MijnMaaltijdView;
 
 
 /**
  * MijnMaaltijdenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property MaaltijdenModel $model
- * 
+ *
  */
 class MijnMaaltijdenController extends AclController {
 	public function __construct($query) {

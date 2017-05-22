@@ -8,17 +8,17 @@ use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\maalcie\CorveeRoosterView;
-use CsrDelft\view\maalcie\MijnCorveeView;
+use CsrDelft\view\maalcie\corvee\CorveeRoosterView;
+use CsrDelft\view\maalcie\persoonlijk\MijnCorveeView;
 
 
 /**
  * MijnCorveeController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property CorveeTakenModel $model
- * 
+ *
  */
 class MijnCorveeController extends AclController {
 

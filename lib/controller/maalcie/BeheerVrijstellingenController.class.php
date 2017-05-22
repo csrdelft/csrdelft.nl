@@ -6,19 +6,19 @@ use CsrDelft\model\entity\maalcie\CorveeVrijstelling;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\maalcie\BeheerVrijstellingenView;
-use CsrDelft\view\maalcie\BeheerVrijstellingView;
+use CsrDelft\view\maalcie\corvee\vrijstellingen\BeheerVrijstellingenView;
+use CsrDelft\view\maalcie\corvee\vrijstellingen\BeheerVrijstellingView;
 use CsrDelft\view\maalcie\forms\VrijstellingForm;
 use Exception;
 
 
 /**
  * BeheerVrijstellingenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property CorveeVrijstellingenModel $model
- * 
+ *
  */
 class BeheerVrijstellingenController extends AclController {
 

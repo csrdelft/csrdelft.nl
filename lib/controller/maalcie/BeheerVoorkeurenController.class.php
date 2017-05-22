@@ -6,18 +6,18 @@ use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\maalcie\BeheerVoorkeurenView;
-use CsrDelft\view\maalcie\BeheerVoorkeurView;
+use CsrDelft\view\maalcie\corvee\voorkeuren\BeheerVoorkeurenView;
+use CsrDelft\view\maalcie\corvee\voorkeuren\BeheerVoorkeurView;
 use Exception;
 
 
 /**
  * BeheerVoorkeurenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property CorveeVoorkeurenModel $model
- * 
+ *
  */
 class BeheerVoorkeurenController extends AclController {
 
