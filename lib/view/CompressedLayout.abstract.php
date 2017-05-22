@@ -1,9 +1,9 @@
 <?php
+
 namespace CsrDelft\view;
 
-use CsrDelft\model\LidInstellingenModel;
-use CsrDelft\view\View;
-
+use Stash\Driver\FileSystem;
+use Stash\Pool;
 
 /**
  * CompressedLayout.abstract.php
@@ -17,85 +17,59 @@ use CsrDelft\view\View;
  * @see htdocs/tools/js.php
  */
 abstract class CompressedLayout extends HtmlPage {
+    private $layout;
 
-	private $layout;
+    public function __construct($layout, View $body, $titel) {
+        parent::__construct($body, $titel);
+        $this->layout = $layout;
+    }
 
-	public function __construct($layout, View $body, $titel) {
-		parent::__construct($body, $titel);
-		$this->layout = $layout;
-	}
+    protected function getLayout() {
+        return $this->layout;
+    }
 
-	protected function getLayout() {
-		return $this->layout;
-	}
+    /**
+     * Controleer de cache.
+     *
+     * @param $layout
+     * @param $module
+     * @param $extension
+     *
+     * @return string   Hash voor de timestamp van de laatste cache.
+     */
+    public function checkCache($layout, $module, $extension) {
+        $driver = new FileSystem(['path' => DATA_PATH . 'assets/']);
+        $cachePool = new Pool($driver);
+        $item = $cachePool->getItem(sprintf('/%s/%s/%s', $extension, $layout, $module));
 
-	/**
-	 * Add compressed css en js to page for module.
-	 *
-	 * @param string $module
-	 */
-	public function addCompressedResources($module) {
-		$sheet = '/styles/' . $this->layout . '/' . $module . '.css';
-		parent::addStylesheet($sheet, true);
+        if ($item->isHit()) {
+            return hash('crc32', $item->getCreation()->format('U'));
+        } else {
+            // Er bestaat geen cache, uitzondering.
+            return hash('crc32', date('U'));
+        }
+    }
 
-		$script = '/scripts/' . $this->layout . '/' . $module . '.js';
-		parent::addScript($script, true);
-	}
+    /**
+     * Add compressed css en js to page for module.
+     *
+     * @param string $module
+     */
+    public function addCompressedResources($module) {
+        $sheet = sprintf('/styles/%s/%s/%s.css',
+            $this->checkCache($this->layout, $module, 'css'),
+            $this->layout,
+            $module
+        );
+        parent::addStylesheet($sheet, true);
 
-	/**
-	 * Geeft een array met gevraagde modules, afhankelijk van lidinstellingen
-	 * [elke module bestaat uit een set css- of js-bestanden]
-	 *
-	 * @param $module
-	 * @param $extension
-	 * @return array
-	 */
-	public static function getUserModules($module, $extension) {
-		$modules = array();
+        $script = sprintf('/scripts/%s/%s/%s.js',
+            $this->checkCache($this->layout, $module, 'js'),
+            $this->layout,
+            $module
+        );
+        parent::addScript($script, true);
+    }
 
-		if ($module == 'front-page') {
-			return array('general');
-		} elseif ($module == 'general') {
-			// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
-			$modules[] = 'general';
-			$modules[] = 'formulier';
-			$modules[] = 'datatable';
-			$modules[] = 'grafiek';
 
-			if ($extension == 'css') {
-				//voeg modules toe afhankelijk van instelling
-				$modules[] = LidInstellingenModel::get('layout', 'opmaak');
-				if (LidInstellingenModel::get('layout', 'toegankelijk') == 'bredere letters') {
-					$modules[] = 'bredeletters';
-				}
-				if (LidInstellingenModel::get('layout', 'fx') == 'sneeuw') {
-					$modules[] = 'fxsnow';
-				} elseif (LidInstellingenModel::get('layout', 'fx') == 'space') {
-					$modules[] = 'fxspace';
-				}
-			} elseif ($extension == 'js') {
-				if (LidInstellingenModel::get('layout', 'fx') == 'wolken') {
-					$modules[] = 'fxclouds';
-				}
-			}
-
-			if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
-				$modules[] = 'minion';
-			}
-			if (LidInstellingenModel::get('layout', 'fx') == 'onontdekt') {
-                $modules[] = 'fxonontdekt';
-            } elseif (LidInstellingenModel::get('layout', 'fx') == 'civisaldo') {
-				$modules[] = 'fxcivisaldo';
-			}
-
-			return $modules;
-		} else {
-			// een niet-algemene module gevraagd
-			if ($module) {
-				$modules[] = $module;
-				return $modules;
-			}
-			return $modules;
-		}
-	}
 }

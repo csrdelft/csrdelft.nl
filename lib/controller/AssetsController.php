@@ -8,8 +8,6 @@ namespace CsrDelft\controller;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\AssetsModel;
 use CsrDelft\view\CssResponse;
-use Stash\Driver\FileSystem;
-use Stash\Pool;
 use CsrDelft\view\JavascriptResponse;
 
 /**
@@ -22,54 +20,52 @@ use CsrDelft\view\JavascriptResponse;
  */
 class AssetsController extends AclController
 {
-    private $cachePool;
-
     public function __construct($query) {
-        parent::__construct($query, new AssetsModel(false, true), ['GET']);
+        parent::__construct($query, new AssetsModel(MINIFY), ['GET']);
         $this->acl = [
             'scripts' => 'P_PUBLIC',
             'styles' => 'P_PUBLIC'
         ];
-
-        $driver = new FileSystem(['path' => DATA_PATH . 'assets/']);
-        $this->cachePool = new Pool($driver);
     }
 
-    public function performAction(array $args = array())
-    {
+    public function performAction(array $args = array()) {
         $this->action = $this->getParam(1);
-        return parent::performAction($this->getParams(2));
+        // GetParam(2) is hash voor cache.
+        return parent::performAction($this->getParams(3));
     }
 
     public function scripts($layout, $module) {
-
         $module = str_replace('.js', '', $module);
+        $item = $this->model->getItem($layout, $module, 'js');
 
-        $item = $this->cachePool->getItem('js/' . $layout . '/' . $module);
-
-        //$this->model->checkCache($item);
+        if (DEBUG) {
+            $item->clear();
+        }
 
         if ($item->isHit()) {
             $js = $item->get();
         } else {
             $js = $this->model->createJavascript($item);
-            //$this->cachePool->save($item->set($js));
+            $this->model->save($item->set($js));
         }
+
 
         $this->view = new JavascriptResponse($js);
     }
 
-    public function styles($layout, $module)
-    {
+    public function styles($layout, $module) {
         $module = str_replace('.css', '', $module);
+        $item = $this->model->getItem($layout, $module, 'css');
 
-        $item = $this->cachePool->getItem(sprintf('css/%s/%s', $layout, $module));
+        if (DEBUG) {
+            $item->clear();
+        }
 
         if ($item->isHit()) {
             $css = $item->get();
         } else {
             $css = $this->model->createCss($item);
-            //$this->cachePool->save($item->set($css));
+            $this->model->save($item->set($css));
         }
 
         $this->view = new CssResponse($css);

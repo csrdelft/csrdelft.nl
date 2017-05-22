@@ -23,5 +23,8 @@
         "platform": {
             "php": "5.6"
         }
+    },
+    "scripts": {
+        "clear-assets-cache": "@php bin/clear-assets-cache.php"
     }
 }
