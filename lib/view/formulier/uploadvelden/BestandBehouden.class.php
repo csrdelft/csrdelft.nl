@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\view\formulier\uploadvelden;
+use function CsrDelft\format_filesize;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\view\formulier\invoervelden\InputField;
@@ -53,7 +54,7 @@ class BestandBehouden extends InputField {
 	}
 
 	public function getHtml() {
-		return '<div ' . $this->getInputAttribute(array('id', 'name', 'class')) . '>' . $this->model->filename . ' (' . \format_filesize($this->model->filesize) . ')</div>';
+		return '<div ' . $this->getInputAttribute(array('id', 'name', 'class')) . '>' . $this->model->filename . ' (' . format_filesize($this->model->filesize) . ')</div>';
 	}
 
 	public function getPreviewDiv() {

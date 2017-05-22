@@ -9,6 +9,7 @@
 
 use CsrDelft\view\CompressedLayout;
 
+@$GLOBALS['DOKU_UNITTEST_ASSUME_WINDOWS'] = false;
 if (!defined('DOKU_INC')) define('DOKU_INC', dirname(__FILE__) . '/../wiki/');
 
 //reuse the Javascript functions of DokuWiki without triggering the main function js_out()
@@ -27,7 +28,6 @@ $conf['cachetime'] = 100*60*60*24; // -1, 0, ..
 //generate javascript file
 header('Content-Type: text/javascript; charset=utf-8');
 csr_js_out();
-
 
 // ---------------------- C.S.R. functions ------------------------------
 

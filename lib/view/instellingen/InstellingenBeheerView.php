@@ -1,15 +1,15 @@
 <?php
-namespace CsrDelft\view;
-use CsrDelft\model\entity\Instelling;
+namespace CsrDelft\view\instellingen;
 use CsrDelft\model\InstellingenModel;
+use CsrDelft\view\SmartyTemplateView;
 
 /**
- * InstellingenBeheerView.class.php
- * 
+ * InstellingenBeheerView.php
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Tonen van alle instellingen om te beheren.
- * 
+ *
  */
 class InstellingenBeheerView extends SmartyTemplateView {
 
@@ -30,21 +30,6 @@ class InstellingenBeheerView extends SmartyTemplateView {
 		$this->smarty->assign('module', $this->module);
 		$this->smarty->assign('modules', $this->model->getModules());
 		$this->smarty->display('instellingen/beheer/instellingen_page.tpl');
-	}
-
-}
-
-class InstellingBeheerView extends SmartyTemplateView {
-
-	public function __construct(Instelling $instelling) {
-		parent::__construct($instelling);
-	}
-
-	public function view() {
-		$this->smarty->assign('module', $this->model->module);
-		$this->smarty->assign('id', $this->model->instelling_id);
-		$this->smarty->assign('waarde', $this->model->waarde);
-		$this->smarty->display('instellingen/beheer/instelling_row.tpl');
 	}
 
 }

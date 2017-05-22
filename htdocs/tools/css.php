@@ -6,6 +6,7 @@
  */
 use CsrDelft\view\CompressedLayout;
 
+@$GLOBALS['DOKU_UNITTEST_ASSUME_WINDOWS'] = false;
 if (!defined('DOKU_INC')) define('DOKU_INC', realpath(dirname(__FILE__) . '/../wiki/').'/');
 
 //reuse the CSS functions of DokuWiki without triggering the main function css_out()

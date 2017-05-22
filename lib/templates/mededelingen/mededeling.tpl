@@ -1,5 +1,5 @@
 <h1>Mededeling {if $mededeling->id==0}toevoegen{else}bewerken{/if}</h1>
-<form action="{MededelingenView::mededelingenRoot}bewerken/{$mededeling->id}" method="post" enctype="multipart/form-data">
+<form action="{mededelingen\MededelingenView::mededelingenRoot}bewerken/{$mededeling->id}" method="post" enctype="multipart/form-data">
 	{CsrDelft\getMelding()}
 	{toegang P_NEWS_MOD}
 	{geentoegang}
@@ -31,7 +31,7 @@
 			{/foreach}
 		</select><br />
 		{if CsrDelft\model\mededelingen\MededelingenModel::isModerator()}
-			<label for="prioriteit">Prioriteit: <a title="Hoe belangrijk is deze mededeling? De mededelingen met de hoogste prioriteit komt bovenaan in de top {MededelingenView::aantalTopMostBlock} op de voorpagina van de stek.">{icon get="vraagteken"}</a></label>
+			<label for="prioriteit">Prioriteit: <a title="Hoe belangrijk is deze mededeling? De mededelingen met de hoogste prioriteit komt bovenaan in de top {mededelingen\MededelingenView::aantalTopMostBlock} op de voorpagina van de stek.">{icon get="vraagteken"}</a></label>
 			<select name="prioriteit">
 				{foreach from=$prioriteiten key=prioriteitId item=prioriteit}
 					<option value="{$prioriteitId}"{if $mededeling->prioriteit==$prioriteitId} selected="selected"{/if}>{$prioriteit|escape:'html'}</option>
@@ -64,6 +64,6 @@
 	<div class="clear">
 		{if $prullenbak}<input type="hidden" name="prullenbak" value="1" />{/if}
 		<label >&nbsp;</label><input type="submit" name="submit" value="Opslaan" />
-		<a href="{CsrDelft\view\MededelingenView::mededelingenRoot}{$mededeling->id}" class="btn">Annuleren</a>
+		<a href="{CsrDelft\view\mededelingen\MededelingenView::mededelingenRoot}{$mededeling->id}" class="btn">Annuleren</a>
 	</div>
 </form>

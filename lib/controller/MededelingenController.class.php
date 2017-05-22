@@ -2,21 +2,21 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\mededelingen\Mededeling;
 use CsrDelft\model\mededelingen\MededelingenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\mededelingen\MededelingenOverzichtView;
+use CsrDelft\view\mededelingen\MededelingenView;
+use CsrDelft\view\mededelingen\MededelingView;
+use function CsrDelft\getDateTime;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
-use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\MededelingenOverzichtView;
-use CsrDelft\view\MededelingenView;
-use CsrDelft\view\MededelingView;
 
 
 /**
  * Class MededelingenController
- * 
+ *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  * Controller van het bijbelrooster.
@@ -72,7 +72,7 @@ class MededelingenController extends AclController {
         $this->view = new CsrLayoutPage($body);
         $this->view->addCompressedResources('mededelingen');
     }
-    
+
     public function top3overzicht() {
         return new MededelingenOverzichtView();
     }
@@ -135,7 +135,7 @@ class MededelingenController extends AclController {
                 $mededeling->verborgen = false;
             }
 
-            
+
 
             if (isset($_FILES['plaatje']) && ($img_errors = $this->model->savePlaatje($_FILES['plaatje'], $mededeling)) != '') {
                 setMelding('<h3>Niet opgeslagen</h3>'. $img_errors, -1);
