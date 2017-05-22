@@ -230,7 +230,7 @@ class AssetsModel {
         $modules = array();
 
         if ($module == 'front-page') {
-            return array('general');
+            $modules[] = 'general';
         } elseif ($module == 'general') {
             // de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
             $modules[] = 'general';
@@ -263,16 +263,12 @@ class AssetsModel {
             } elseif (LidInstellingenModel::get('layout', 'fx') == 'civisaldo') {
                 $modules[] = 'fxcivisaldo';
             }
-
-            return $modules;
         } else {
             // een niet-algemene module gevraagd
-            if ($module) {
-                $modules[] = $module;
-                return $modules;
-            }
-            return $modules;
+            $modules[] = $module;
         }
+
+        return $modules;
     }
 
     /**
