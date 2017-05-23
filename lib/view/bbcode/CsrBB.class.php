@@ -194,20 +194,6 @@ HTML;
 	}
 
 	/**
-	 * Dit laad de twitter account van het hidden cash spel.
-	 */
-	function bb_hidden($arguments = array()) {
-		$url = 'https://twitter.com/HiddenCashCSR';
-		$tekst = 'Tweets door @HiddenCashCSR';
-		if ($this->light_mode) {
-			return $this->lightLinkInline('hidden', $url, $tekst);
-		}
-		$html = '<a class="twitter-timeline" href="' . $url . '" data-widget-id="477465734352621568">' . $tekst . '</a>
-							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http://.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
-		return $html;
-	}
-
-	/**
 	 * Image
 	 *
 	 * @param optional String $arguments['class'] Class attribute

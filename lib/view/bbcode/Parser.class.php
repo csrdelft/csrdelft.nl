@@ -507,19 +507,6 @@ class Parser {
 	}
 
 	/**
-	 * Bold
-	 *
-	 * @example [b]Bold[/b]
-	 */
-	function bb_b() {
-		if ($this->nobold === true AND $this->quote_level == 0) {
-			return $this->parseArray(array('[/b]'), array('b'));
-		} else {
-			return '<strong class="bb-tag-b">' . $this->parseArray(array('[/b]'), array('b')) . '</strong>';
-		}
-	}
-
-	/**
 	 * Subscript
 	 *
 	 * @example [sub]Subscript[/sub]
@@ -535,65 +522,6 @@ class Parser {
 	 */
 	function bb_sup() {
 		return '<sup class="bb-tag-sup">' . $this->parseArray(array('[/sup]'), array('sub', 'sup')) . '</sup>';
-	}
-
-	/**
-	 * Italic
-	 *
-	 * @example [i]Italic[/i]
-	 */
-	function bb_i() {
-		return '<em class="bb-tag-i">' . $this->parseArray(array('[/i]'), array('i')) . '</em>';
-	}
-
-	/**
-	 * Strikethrough
-	 *
-	 * @example [s]Strikethrough[/s]
-	 */
-	function bb_s() {
-		return '<span style="text-decoration: line-through;" class="bb-tag-s">' . $this->parseArray(array('[/s]'), array('s')) . '</span>';
-	}
-
-	/**
-	 * Underline
-	 *
-	 * @example [u]Underline[/u]
-	 */
-	function bb_u() {
-		return '<span style="text-decoration: underline;" class="bb-tag-u">' . $this->parseArray(array('[/u]'), array('u')) . '</span>';
-	}
-
-	/**
-	 * URL anchor
-	 *
-	 * @param String $arguments['url'] URL it links to
-	 *
-	 * @example [url=https://csrdelft.nl]Anchor[/url]
-	 * @example [url]https://csrdelft.nl[/url]
-	 * @example [rul=https://csrdelft.nl]Anchor[/rul]
-	 * @example [rul]https://csrdelft.nl[/rul]
-	 */
-	function bb_url($arguments = array()) {
-
-		$content = $this->parseArray(array('[/url]', '[/rul]'), array());
-		//[url=
-		if (isset($arguments['url'])) {
-			$href = $arguments['url'];
-		} elseif (isset($arguments['rul'])) {
-			$href = $arguments['rul'];
-		} else {
-			//of [url][/url]
-			$href = $content;
-		}
-
-		// only valid patterns
-		if (!url_like(urldecode($href))) {
-			$text = $href;
-		} else {
-			$text = '<a class="bb-tag-url" href="' . $href . '">' . $content . '</a>';
-		}
-		return $text;
 	}
 
 	/**
@@ -763,27 +691,6 @@ class Parser {
 			}
 		} else {
 			$html = '[email] Ongeldig e-mailadres (' . htmlspecialchars($mailto) . ')';
-		}
-		return $html;
-	}
-
-	/**
-	 * Image
-	 *
-	 * @example [img]URL[/img]
-	 */
-	function bb_img($arguments) {
-		$content = $this->parseArray(array('[/img]', '[/IMG]'), array());
-
-		// only valid patterns
-		if (!url_like(urldecode($content))) {
-			$html = $content;
-		} else {
-			//als de html toegestaan is hebben we genoeg vertrouwen om sommige karakters niet te encoderen
-			if (!$this->allow_html) {
-				$content = htmlspecialchars($content);
-			}
-			$html = '<img class="bb-img bb-tag-img" src="' . $content . '" alt="' . $content . '" />';
 		}
 		return $html;
 	}
