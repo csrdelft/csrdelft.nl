@@ -279,11 +279,11 @@ class Document extends Bestand {
 	}
 
 	public function getUrl() {
-		return '/documenten/bekijken/' . $this->getID() . '/' . $this->getFullFileName();
+		return '/documenten/bekijken/' . $this->getID() . '/' . rawurlencode($this->getFullFileName());
 	}
 
 	public function getDownloadUrl() {
-		return '/documenten/download/' . $this->getID() . '/' . $this->getFullFileName();
+		return '/documenten/download/' . $this->getID() . '/' . rawurlencode($this->getFullFileName());
 	}
 
 	/**
