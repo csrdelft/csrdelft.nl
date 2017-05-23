@@ -111,6 +111,29 @@ function fatal_handler(Exception $ex = null) {
 
             touch(DATA_PATH . 'foutmelding.last');
 		}
+
+        if (file_exists(ETC_PATH . 'slack.ini')) {
+            $slackConfig = parse_ini_file(ETC_PATH . 'slack.ini');
+            $slackClient = new Maknz\Slack\Client($slackConfig['url'], $slackConfig);
+            $foutmelding = $slackClient->createMessage();
+
+            $errorName = \CsrDelft\errorName($debug['error']['type']);
+            $moment = date('r');
+
+            $foutmelding->setText(<<<MD
+*Foutmelding `{$debug['error']['message']}`*
+• Moment `$moment`
+• Type `$errorName`
+• Bestand `{$debug['error']['file']}`
+• Regel `{$debug['error']['line']}`
+• Url `{$debug['SERVER']['REQUEST_URI']}`
+• Veroorzaakt door `{$debug['SESSION']['_uid']}`
+• Browser `{$debug['SERVER']['HTTP_USER_AGENT']}`
+MD
+            );
+
+            $foutmelding->send();
+        }
 	}
 }
 
