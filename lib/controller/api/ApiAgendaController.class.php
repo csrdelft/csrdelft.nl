@@ -81,7 +81,7 @@ class ApiAgendaController {
 		$maaltijdAanmeldingen = array_keys(MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid($mids, $_SESSION['_uid']));
 
 		// Sorteren
-		usort($result, array('CsrDelft\model\agenda\AgendaModel', 'vergelijkAgendeerbaars'));
+		usort($result, array(AgendaModel::class, 'vergelijkAgendeerbaars'));
 
 		$agenda = array(
 			'events' => $result,
