@@ -40,6 +40,7 @@ use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
 use CsrDelft\view\mededelingen\MededelingenView;
 use CsrDelft\view\peilingen\PeilingView;
+use CsrDelft\view\bijbelrooster\BijbelroosterBBView;
 use Exception;
 use function CsrDelft\endsWith;
 use function CsrDelft\external_url;
