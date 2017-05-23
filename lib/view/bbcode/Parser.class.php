@@ -478,7 +478,7 @@ class Parser {
 		if (isset($arguments['h'])) {
 			$h = (int) $arguments['h'];
 		}
-		$text = '<h' . $h . $id . '>';
+		$text = '<h' . $h . $id . ' class="bb-tag-h">';
 		$text .= $this->parseArray(array('[/h]'), array('h'));
 		$text .= '</h' . $h . '>' . "\n\n";
 
@@ -515,7 +515,7 @@ class Parser {
 		if ($this->nobold === true AND $this->quote_level == 0) {
 			return $this->parseArray(array('[/b]'), array('b'));
 		} else {
-			return '<strong>' . $this->parseArray(array('[/b]'), array('b')) . '</strong>';
+			return '<strong class="bb-tag-b">' . $this->parseArray(array('[/b]'), array('b')) . '</strong>';
 		}
 	}
 
@@ -525,7 +525,7 @@ class Parser {
 	 * @example [sub]Subscript[/sub]
 	 */
 	function bb_sub() {
-		return '<sub>' . $this->parseArray(array('[/sub]'), array('sub', 'sup')) . '</sub>';
+		return '<sub class="bb-tag-sub">' . $this->parseArray(array('[/sub]'), array('sub', 'sup')) . '</sub>';
 	}
 
 	/**
@@ -534,7 +534,7 @@ class Parser {
 	 * @example [sup]Superscript[/sup]
 	 */
 	function bb_sup() {
-		return '<sup>' . $this->parseArray(array('[/sup]'), array('sub', 'sup')) . '</sup>';
+		return '<sup class="bb-tag-sup">' . $this->parseArray(array('[/sup]'), array('sub', 'sup')) . '</sup>';
 	}
 
 	/**
@@ -543,7 +543,7 @@ class Parser {
 	 * @example [i]Italic[/i]
 	 */
 	function bb_i() {
-		return '<em>' . $this->parseArray(array('[/i]'), array('i')) . '</em>';
+		return '<em class="bb-tag-i">' . $this->parseArray(array('[/i]'), array('i')) . '</em>';
 	}
 
 	/**
@@ -552,7 +552,7 @@ class Parser {
 	 * @example [s]Strikethrough[/s]
 	 */
 	function bb_s() {
-		return '<span style="text-decoration: line-through;">' . $this->parseArray(array('[/s]'), array('s')) . '</span>';
+		return '<span style="text-decoration: line-through;" class="bb-tag-s">' . $this->parseArray(array('[/s]'), array('s')) . '</span>';
 	}
 
 	/**
@@ -561,7 +561,7 @@ class Parser {
 	 * @example [u]Underline[/u]
 	 */
 	function bb_u() {
-		return '<span style="text-decoration: underline;">' . $this->parseArray(array('[/u]'), array('u')) . '</span>';
+		return '<span style="text-decoration: underline;" class="bb-tag-u">' . $this->parseArray(array('[/u]'), array('u')) . '</span>';
 	}
 
 	/**
@@ -591,7 +591,7 @@ class Parser {
 		if (!url_like(urldecode($href))) {
 			$text = $href;
 		} else {
-			$text = '<a href="' . $href . '">' . $content . '</a>';
+			$text = '<a class="bb-tag-url" href="' . $href . '">' . $content . '</a>';
 		}
 		return $text;
 	}
@@ -604,16 +604,14 @@ class Parser {
 	 * @example [code=PHP]phpinfo();[/code]
 	 */
 	function bb_code($arguments = array()) {
-
 		$content = $this->parseArray(array('[/code]'), array('code', 'br', 'all' => 'all'));
 
+		$code = '';
 		if (isset($arguments['code'])) {
-			$text = '<br /><sub>' . $arguments['code'] . ' code:</sub><pre class="bbcode">' . $content . '</pre>';
-		} else {
-			$text = '<br /><sub>code:</sub><pre class="bbcode">' . $content . '</pre>';
+			$code = $arguments['code'] + ' ';
 		}
 
-		return $text;
+		return '<div class="bb-tag-code"><sub>' . $code . 'code:</sub><pre class="bbcode">' . $content . '</pre></div>';;
 	}
 
 	/**
@@ -633,7 +631,7 @@ class Parser {
 			unset($delcontent);
 			$content = '...';
 		}
-		$text = '<div class="citaatContainer"><strong>Citaat</strong>' .
+		$text = '<div class="citaatContainer bb-tag-quote"><strong>Citaat</strong>' .
 				'<div class="citaat">' . $content . '</div></div>';
 		return $text;
 	}
@@ -650,9 +648,9 @@ class Parser {
 	function bb_list($arguments) {
 		$content = $this->parseArray(array('[/list]', '[/ulist]'), array('br'));
 		if (!isset($arguments['list'])) {
-			$text = '<ul>' . $content . '</ul>';
+			$text = '<ul class="bb-tag-list">' . $content . '</ul>';
 		} else {
-			$text = '<ol type="' . $arguments['list'] . '">' . $content . '</ol>';
+			$text = '<ol class="bb-tag-list" type="' . $arguments['list'] . '">' . $content . '</ol>';
 		}
 		return $text;
 	}
@@ -663,7 +661,7 @@ class Parser {
 	 * @example [hr]
 	 */
 	function bb_hr($arguments) {
-		return '<hr />';
+		return '<hr class="bb-tag-hr" />';
 	}
 
 	/**
@@ -673,7 +671,7 @@ class Parser {
 	 * @example [*]Next item
 	 */
 	function bb_lishort($arguments) {
-		return '<li>' . $this->parseArray(array('[br]')) . '</li>';
+		return '<li class="bb-tag-li">' . $this->parseArray(array('[br]')) . '</li>';
 	}
 
 	/**
@@ -682,7 +680,7 @@ class Parser {
 	 * @example [li]Item[/li]
 	 */
 	function bb_li($arguments) {
-		return '<li>' . $this->parseArray(array('[/li]')) . '</li>';
+		return '<li class="bb-tag-li">' . $this->parseArray(array('[/li]')) . '</li>';
 	}
 
 	/**
@@ -697,9 +695,9 @@ class Parser {
 		$content = $this->parseArray(array('[br]'), array());
 		array_unshift($this->parseArray, '[br]');
 		if (isset($arguments['me'])) {
-			$html = '<font color="red">* ' . $arguments['me'] . $content . '</font>';
+			$html = '<span style="color:red;">* ' . $arguments['me'] . $content . '</span>';
 		} else {
-			$html = '<font color="red">/me' . $content . '</font>';
+			$html = '<span style="color:red;">/me' . $content . '</span>';
 		}
 		return $html;
 	}
@@ -757,7 +755,7 @@ class Parser {
 			array_unshift($this->parseArray, $mailto);
 		}
 		if (!empty($email)) {
-			$html = '<a href="mailto:' . $email . '">' . $text . '</a>';
+			$html = '<a class="bb-tag-email" href="mailto:' . $email . '">' . $text . '</a>';
 
 			//spamprotectie: rot13 de email-tags, en voeg javascript toe om dat weer terug te rot13-en.
 			if (isset($arguments['spamsafe'])) {
@@ -785,7 +783,7 @@ class Parser {
 			if (!$this->allow_html) {
 				$content = htmlspecialchars($content);
 			}
-			$html = '<img class="bb-img" src="' . $content . '" alt="' . $content . '" />';
+			$html = '<img class="bb-img bb-tag-img" src="' . $content . '" alt="' . $content . '" />';
 		}
 		return $html;
 	}
@@ -810,7 +808,7 @@ class Parser {
 		}
 
 		$content = $this->parseArray(array('[/table]'), array('br'));
-		$html = '<table class="bb-table" style="' . $style . '">' . $content . '</table>';
+		$html = '<table class="bb-table bb-tag-table" style="' . $style . '">' . $content . '</table>';
 		return $html;
 	}
 
@@ -822,7 +820,7 @@ class Parser {
 	 */
 	function bb_tr() {
 		$content = $this->parseArray(array('[/tr]'), array('br'));
-		$html = '<tr>' . $content . '</tr>';
+		$html = '<tr class="bb-tag-tr">' . $content . '</tr>';
 		return $html;
 	}
 
@@ -841,7 +839,7 @@ class Parser {
 			$style.='width: ' . (int) $arguments['w'] . 'px; ';
 		}
 
-		$html = '<td style="' . $style . '">' . $content . '</td>';
+		$html = '<td class="bb-tag-td" style="' . $style . '">' . $content . '</td>';
 		return $html;
 	}
 
@@ -852,7 +850,7 @@ class Parser {
 	 */
 	function bb_th() {
 		$content = $this->parseArray(array('[/th]'), array());
-		$html = '<th>' . $content . '</th>';
+		$html = '<th class="bb-tag-th">' . $content . '</th>';
 		return $html;
 	}
 
@@ -881,7 +879,7 @@ class Parser {
 			$class.=' float-right';
 		}
 		if ($class != '') {
-			$class = ' class="' . $class . '"';
+			$class = ' class="bb-tag-div ' . $class . '"';
 		}
 		$style = '';
 		if (isset($arguments['w'])) {
