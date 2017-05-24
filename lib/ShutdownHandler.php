@@ -1,7 +1,4 @@
 <?php
-/**
- * The FatalHandler file.
- */
 
 namespace CsrDelft;
 
@@ -12,7 +9,7 @@ use Maknz\Slack\Client as SlackClient;
 use Exception;
 
 /**
- * Class FatalHandler.
+ * Class ShutdownHandler.
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
