@@ -7,6 +7,13 @@ stek:
   volumes:
     - .:/var/www/csrdelft.nl
 
+composer:
+  restart: 'no'
+  image: composer/composer:php5
+  command: install
+  volumes:
+    - .:/app
+
 stekdb:
   image: mariadb
   environment:
