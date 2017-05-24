@@ -1,15 +1,12 @@
 <?php
-/**
- * The AssetsModel file.
- */
 
 namespace CsrDelft\model;
 
 use JShrink\Minifier as JsMin;
 use Psr\Cache\CacheItemInterface;
-use Stash\Driver\FileSystem;
+use Stash\Driver\FileSystem as FileSystemDriver;
 use Stash\Interfaces\ItemInterface;
-use Stash\Pool;
+use Stash\Pool as CachePool;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use tubalmartin\CssMin\Minifier as CssMin;
 use function CsrDelft\endsWith;
@@ -18,7 +15,6 @@ use function CsrDelft\endsWith;
  * Class AssetsModel.
  *
  * @author Gerben Oolbekkink <gerben@bunq.com>
- * @since 20170514 Initial creation.
  */
 class AssetsModel {
     /**
@@ -34,8 +30,8 @@ class AssetsModel {
     public function __construct($minify) {
         $this->minify = $minify;
 
-        $driver = new FileSystem(['path' => DATA_PATH . 'assets/']);
-        $this->cachePool = new Pool($driver);
+        $driver = new FileSystemDriver(['path' => DATA_PATH . 'assets/']);
+        $this->cachePool = new CachePool($driver);
     }
 
     /**
@@ -127,8 +123,8 @@ class AssetsModel {
     }
 
     public function createCss(CacheItemInterface $item) {
-        $driver = new FileSystem(['path' => DATA_PATH . 'less/']);
-        $pool = new Pool($driver);
+        $driver = new FileSystemDriver(['path' => DATA_PATH . 'less/']);
+        $pool = new CachePool($driver);
 
         list($extension, $layout, $module) = explode('/', $item->getKey());
 
@@ -313,11 +309,11 @@ class AssetsModel {
 
     /**
      * @param CacheItemInterface $item
-     * @param Pool $pool
+     * @param CachePool $pool
      *
      * @return CacheItemInterface
      */
-    protected function invalidateLessCache(CacheItemInterface $item, Pool $pool) {
+    protected function invalidateLessCache(CacheItemInterface $item, CachePool $pool) {
         $css = $item->get();
         $prefix = strtok($css, PHP_EOL);
 

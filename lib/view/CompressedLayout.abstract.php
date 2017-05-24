@@ -2,14 +2,15 @@
 
 namespace CsrDelft\view;
 
-use Stash\Driver\FileSystem;
-use Stash\Pool;
+use Stash\Driver\FileSystem as FileSystemDriver;
+use Stash\Pool as CachePool;
 
 /**
  * CompressedLayout.abstract.php
  *
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
  * @author P.W.G. Brussee <brussee@live.nl>
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  * Gebruikt .ini files voor stylesheets en scripts per module en layout.
  *
@@ -37,15 +38,15 @@ abstract class CompressedLayout extends HtmlPage {
      *
      * @return string   Hash voor de timestamp van de laatste cache.
      */
-    public function checkCache($layout, $module, $extension) {
-        $driver = new FileSystem(['path' => DATA_PATH . 'assets/']);
-        $cachePool = new Pool($driver);
+    public function cacheHash($layout, $module, $extension) {
+        $driver = new FileSystemDriver(['path' => DATA_PATH . 'assets/']);
+        $cachePool = new CachePool($driver);
         $item = $cachePool->getItem(sprintf('/%s/%s/%s', $extension, $layout, $module));
 
         if ($item->isHit()) {
             return hash('crc32', $item->getCreation()->format('U'));
         } else {
-            // Er bestaat geen cache, uitzondering.
+            // Er bestaat geen cache, alleen nadat cache geleegd is.
             return hash('crc32', date('U'));
         }
     }
@@ -57,14 +58,14 @@ abstract class CompressedLayout extends HtmlPage {
      */
     public function addCompressedResources($module) {
         $sheet = sprintf('/styles/%s/%s/%s.css',
-            $this->checkCache($this->layout, $module, 'css'),
+            $this->cacheHash($this->layout, $module, 'css'),
             $this->layout,
             $module
         );
         parent::addStylesheet($sheet, true);
 
         $script = sprintf('/scripts/%s/%s/%s.js',
-            $this->checkCache($this->layout, $module, 'js'),
+            $this->cacheHash($this->layout, $module, 'js'),
             $this->layout,
             $module
         );
