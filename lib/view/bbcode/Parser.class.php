@@ -1,9 +1,6 @@
 <?php
 namespace CsrDelft\view\bbcode;
 
-use function CsrDelft\email_like;
-use function CsrDelft\url_like;
-
 /**
  * Main BB-code Parser file
  *

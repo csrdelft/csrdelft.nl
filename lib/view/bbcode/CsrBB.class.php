@@ -48,6 +48,7 @@ use function CsrDelft\format_filesize;
 use function CsrDelft\reldate;
 use function CsrDelft\startsWith;
 use function CsrDelft\url_like;
+use function CsrDelft\email_like;
 
 
 /**
@@ -156,7 +157,7 @@ class CsrBB extends Parser {
 	/**
 	 * Templates for light mode
 	 */
-	public static function lightLinkInline($tag, $url, $content) {
+	private function lightLinkInline($tag, $url, $content) {
 		$content = htmlspecialchars($content);
 		return <<<HTML
 			<a class="bb-link-inline bb-tag-{$tag}" href="{$url}">{$content}</a>
@@ -1400,21 +1401,23 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		} else {
 			$vertaling = null;
 		}
-		return self::getBijbelLink($stukje, $vertaling, true, $this->light_mode);
+		$link = self::getBijbelLink($stukje, $vertaling, !$this->light_mode);
+		if ($this->light_mode) {
+			return $this->lightLinkInline('bijbel', $link, $stukje);
+		} else {
+			return $link;
+		}
 	}
 
-	public static function getBijbelLink($stukje, $vertaling = null, $tag = false, $light_mode = false) {
+	public static function getBijbelLink($stukje, $vertaling = null, $tag = false) {
 		if (!LidInstellingenModel::instance()->isValidValue('algemeen', 'bijbel', $vertaling)) {
 			$vertaling = null;
 		}
 		if ($vertaling === null) {
 			$vertaling = LidInstellingenModel::get('algemeen', 'bijbel');
 		}
-		$link = 'https://www.debijbel.nl/bijbel/' . $vertaling . '/' . $stukje;
+		$link = 'https://www.debijbel.nl/bijbel/' . urlencode($vertaling) . '/' . urlencode($stukje);
 		if ($tag) {
-			if ($light_mode) {
-				return CsrBB::lightLinkInline('bijbel', $link, $stukje);
-			}
 			return '<a href="' . $link . '" target="_blank">' . $stukje . '</a>';
 		} else {
 			return $link;
