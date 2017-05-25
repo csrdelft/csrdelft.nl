@@ -2,7 +2,9 @@
 namespace CsrDelft;
 
 use CsrDelft\model\entity\Geslacht;
+use CsrDelft\model\entity\GoogleToken;
 use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\GoogleTokenModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
@@ -26,26 +28,55 @@ require_once 'configuratie.include.php';
  * alle referentie https://developers.google.com/google-apps/contacts/v3/reference
  */
 class GoogleSync {
-
-	private $groupname = 'C.S.R.-import';
     /**
-	 * Alle groepen van de gebruiker
+     * Groep naam in Google Contacts.
+     *
+     * @var string
+     */
+    private $groupname = 'C.S.R.-import';
+
+    /**
+	 * Alle groepen van de gebruiker.
 	 *
      * @var SimpleXMLElement[]
      */
 	private $groupFeed = null;
-	private $groupid = null;  // google-id van de groep waar alles in terecht moet komen...
+
+    /**
+     * Google-id van de groep waar alles in terecht moet komen.
+     *
+     * @var null|string
+     */
+    private $groupid = null;
+
     /**
 	 * Alle contacten in de 'Stek-groep' van de gebruiker
 	 *
      * @var SimpleXMLElement[]
      */
 	private $contactFeed = null;
-	private $contactData = null; // an array containing array's with some data for each contact.
-	//sigleton pattern
-	private static $instance;
-    private $client; // GoogleClient
 
+    /**
+     * An array containing array's with some data for each contact.
+     * @var null
+     */
+    private $contactData = null;
+
+	/**
+     * sigleton pattern
+     */
+	private static $instance;
+
+    /**
+     * @var Google_Client
+     */
+    private $client;
+
+    /**
+     * Get singleton instance of class.
+     *
+     * @return GoogleSync
+     */
     public static function instance() {
 		if (!isset(self::$instance)) {
 			self::$instance = new GoogleSync();
@@ -53,8 +84,14 @@ class GoogleSync {
 		return self::$instance;
 	}
 
-	private function __construct() {
-		if (!isset($_SESSION['google_token'])) {
+    /**
+     * GoogleSync constructor.
+     * @throws Exception
+     */
+    private function __construct() {
+        /** @var GoogleToken $google_token */
+        $google_token = GoogleTokenModel::instance()->find('uid = ?', [LoginModel::getUid()])->fetch();
+		if ($google_token === false) {
 			throw new Exception('Authsub token not available');
 		}
 
@@ -73,16 +110,12 @@ class GoogleSync {
         $client->setRedirectUri($redirect_uri);
         $client->setAccessType('offline');
         $client->setScopes(['https://www.google.com/m8/feeds']);
-        if (!isset($_SESSION['google_access_token'])) {
-			$_SESSION['google_access_token'] = $client->fetchAccessTokenWithAuthCode($_SESSION['google_token']);
-        }
-
-        $client->setAccessToken($_SESSION['google_access_token']);
+        // $client ververst de access token wanneer dat nodig is.
+        $client->setAccessToken($google_token->token);
 
         $this->client = $client;
 
 		try {
-
 			//first load group feed, find or create the groupname from the user settings.
 			$this->loadGroupFeed();
 			$this->groupid = $this->getGroupId();
@@ -93,8 +126,8 @@ class GoogleSync {
 			//copy setting from settings manager.
 			$this->extendedExport = LidInstellingenModel::get('googleContacts', 'extended') == 'ja';
 		} catch (Exception $ex) {
-			setMelding("Verbinding met Google verbroken.", 2);
-			unset($_SESSION['google_token'], $_SESSION['google_access_token']);
+			setMelding("Verbinding met Google verbroken." . $ex->getMessage(), 2);
+//			GoogleTokenModel::instance()->delete($google_token);
 		}
 	}
 
@@ -436,7 +469,7 @@ class GoogleSync {
 
 				return 'Update: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
-				return sprintf($error_message, 'update', $profiel->getNaam(), $e->getMessage());
+				throw new Exception(sprintf($error_message, 'update', $profiel->getNaam(), $e->getMessage()));
 			}
 		} else {
 			try {
@@ -452,7 +485,7 @@ class GoogleSync {
 
 				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
 			} catch (Exception $e) {
-				return sprintf($error_message, 'insert', $profiel->getNaam(), $e->getMessage());
+				throw new Exception(sprintf($error_message, 'insert', $profiel->getNaam(), $e->getMessage()));
 			}
 		}
 	}
@@ -678,12 +711,17 @@ class GoogleSync {
 		return $doc;
 	}
 
-	public static function isAuthenticated() {
-		return isset($_SESSION['google_token']);
+    /**
+     * Bestaat er een verbinding met Google?
+     *
+     * @return bool
+     */
+    public static function isAuthenticated() {
+		return GoogleTokenModel::instance()->count('uid = ?', [LoginModel::getUid()]) === 1;
 	}
 
     /**
-     * Vraag een Authsub-token aan bij google, plaats bij ontvangen in _SESSION['google_token'].
+     * Vraag een Authsub-token aan bij google, plaats bij ontvangen in GoogleToken tabel.
      *
      * @param $state string, moet de url bevatten waar naar geredirect moet worden als
      * de authenticatie gelukt is, de url zonder `addToGoogleContacts` wordt gebruikt als
@@ -691,14 +729,7 @@ class GoogleSync {
      */
 	public static function doRequestToken($state) {
 		if (!static::isAuthenticated()) {
-            $redirect_uri = CSR_ROOT . '/google/callback';
-            $client = new Google_Client();
-            $client->setApplicationName('Stek');
-            $client->setClientId(GOOGLE_CLIENT_ID);
-            $client->setClientSecret(GOOGLE_CLIENT_SECRET);
-            $client->setRedirectUri($redirect_uri);
-            $client->setAccessType('offline');
-            $client->setScopes(['https://www.google.com/m8/feeds']);
+            $client = self::createGoogleCLient();
             $client->setState(urlencode($state));
 
             $googleImportUrl = $client->createAuthUrl();
@@ -707,4 +738,22 @@ class GoogleSync {
 			exit;
 		}
 	}
+
+    /**
+     * Maak een nieuwe Google_Client met de settings van de stek.
+     *
+     * @return Google_Client
+     */
+    public static function createGoogleCLient() {
+        $redirect_uri = CSR_ROOT . '/google/callback';
+        $client = new Google_Client();
+        $client->setApplicationName('Stek');
+        $client->setClientId(GOOGLE_CLIENT_ID);
+        $client->setClientSecret(GOOGLE_CLIENT_SECRET);
+        $client->setRedirectUri($redirect_uri);
+        $client->setAccessType('offline');
+        $client->setScopes(['https://www.google.com/m8/feeds']);
+
+        return $client;
+    }
 }
