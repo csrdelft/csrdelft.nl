@@ -102,12 +102,12 @@ MD
      *
      * Runt in Debug en Productie mode.
      *
-     * @param null $ex
+     * @param null $exception
      */
-    public static function stacktraceHandler($ex = null) {
-        if ($ex instanceof Exception) {
+    public static function stacktraceHandler($exception = null) {
+        if ($exception instanceof Exception) {
             if ((defined('DEBUG') && DEBUG) || LoginModel::mag('P_LOGGED_IN')) {
-                echo str_replace('#', '<br />#', $ex); // stacktrace
+                echo str_replace('#', '<br />#', $exception); // stacktrace
                 printDebug();
             }
         }
