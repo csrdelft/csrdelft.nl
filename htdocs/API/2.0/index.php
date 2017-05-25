@@ -8,6 +8,25 @@ use CsrDelft\controller\api\ApiLedenController;
 use CsrDelft\controller\api\ApiMaaltijdenController;
 use Jacwright\RestServer\RestServer;
 
+/**
+ * Maak de API toegankelijk vanaf bepaalde externe Origins.
+ */
+$enabledOrigins = array(
+	'http://localhost:8100', // Nodig voor de iOS app
+	'https://csrdelft.github.io' // Gebruikt voor app staging
+);
+if (in_array($_SERVER['HTTP_ORIGIN'], $enabledOrigins, true)) {
+	header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+	header('Access-Control-Max-Age: 1440');
+	header('Access-Control-Allow-Headers: Accept, Origin, Content-Type, X-Csr-Authorization');
+	header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
+
+	if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+		http_response_code(204);
+		exit;
+	}
+}
+
 require_once 'configuratie.include.php';
 
 $mode = DEBUG ? 'debug' : 'production';
