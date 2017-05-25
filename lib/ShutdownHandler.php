@@ -13,7 +13,7 @@ use Exception;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class ShutdownHandler
+final class ShutdownHandler
 {
     /**
      * Stuur een mail naar de PubCie.
