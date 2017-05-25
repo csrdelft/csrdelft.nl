@@ -45,6 +45,7 @@ class ApiLedenController {
 			throw new RestException(404);
 		}
 
+		$woonoord = $profiel->getWoonoord();
 		$lid = array(
 			'id'               => $profiel->uid,
 			'naam' => array(
@@ -58,7 +59,7 @@ class ApiLedenController {
 			'email'            => $profiel->email,
 			'mobiel'           => $profiel->mobiel,
 			'huis' => array(
-				'naam'           => $profiel->getWoonoord()->naam,
+				'naam'           => $woonoord ? $woonoord->naam : null,
 				'adres'          => $profiel->adres,
 				'postcode'       => $profiel->postcode,
 				'woonplaats'     => $profiel->woonplaats,

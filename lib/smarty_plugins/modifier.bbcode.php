@@ -5,7 +5,7 @@
  * @package Smarty
  * @subpackage plugins
  */
-use CsrDelft\view\CsrBB;
+use CsrDelft\view\bbcode\CsrBB;
 
 /**
  * Smarty cat modifier plugin

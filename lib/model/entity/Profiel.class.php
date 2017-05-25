@@ -19,7 +19,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\CsrBB;
+use CsrDelft\view\bbcode\CsrBB;
 use Exception;
 use function CsrDelft\array_filter_empty;
 use function CsrDelft\setMelding;
