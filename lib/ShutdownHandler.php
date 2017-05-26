@@ -82,7 +82,8 @@ final class ShutdownHandler
             $moment = date('r');
 
             $foutmelding->setText(<<<MD
-*Foutmelding `{$debug['error']['message']}`*
+*Foutmelding*
+```{$debug['error']['message']}```
 • Moment `$moment`
 • Type `$errorName`
 • Bestand `{$debug['error']['file']}`
