@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model;
 
+use DateInterval;
 use JShrink\Minifier as JsMin;
 use Psr\Cache\CacheItemInterface;
 use Stash\Driver\FileSystem as FileSystemDriver;
@@ -63,6 +64,7 @@ class AssetsModel {
      * @return bool
      */
     public function save(CacheItemInterface $item) {
+        $item->expiresAfter(DateInterval::createFromDateString('1 year'));
         return $this->cachePool->save($item);
     }
 
@@ -89,6 +91,10 @@ class AssetsModel {
 
         // load files
         foreach ($modules as $mod) {
+            if (!key_exists($mod, $files)) {
+                // Geen js voor deze mod
+                continue;
+            }
             foreach ($files[$mod] as $file) {
                 if (!file_exists(ASSETS_PATH . $file)) {
                     throw new Exception('Bestand niet gevonden: ' . $file);
@@ -137,6 +143,10 @@ class AssetsModel {
 
         // build the stylesheet
         foreach ($modules as $mod) {
+            if (!key_exists($mod, $files)) {
+                // Geen css voor deze mod
+                continue;
+            }
             // load files
             foreach ($files[$mod] as $file) {
                 $item = $pool->getItem($file);
