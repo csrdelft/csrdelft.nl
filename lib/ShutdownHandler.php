@@ -126,7 +126,7 @@ MD
             $debug['GET'] = $_GET;
             $debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
             $debug['SERVER'] = $_SERVER;
-            return $error;
+            return $debug;
         }
         return null;
     }
