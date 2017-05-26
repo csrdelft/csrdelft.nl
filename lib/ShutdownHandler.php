@@ -88,6 +88,7 @@ final class ShutdownHandler
 • Bestand `{$debug['error']['file']}`
 • Regel `{$debug['error']['line']}`
 • Url `{$debug['SERVER']['REQUEST_URI']}`
+• Method `{$debug['SERVER']['REQUEST_METHOD']}`
 • Veroorzaakt door `{$debug['SESSION']['_uid']}`
 • Browser `{$debug['SERVER']['HTTP_USER_AGENT']}`
 MD

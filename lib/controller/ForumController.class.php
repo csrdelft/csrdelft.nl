@@ -166,7 +166,7 @@ class ForumController extends Controller {
 		foreach (ForumDelenModel::instance()->getForumDelenVoorLid() as $deel) {
 			$series[$deel->titel] = $model->getStatsVoorForumDeel($deel);
 		}
-				$this->view = new FlotTimeSeries($series);
+		$this->view = new FlotTimeSeries($series);
 	}
 
 	/**
