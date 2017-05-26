@@ -352,7 +352,7 @@ function isGeldigeDatum($datum) {
 /**
  * print_r een variabele met <pre>-tags eromheen.
  *
- * @param string $sString
+ * @param mixed $sString
  * @param string $cssID
  */
 function debugprint($sString, $cssID = 'pubcie_debug') {
