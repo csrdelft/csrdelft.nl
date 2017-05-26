@@ -27,6 +27,7 @@ use function CsrDelft\setMelding;
 
 require __DIR__ . '/../vendor/autoload.php';
 require_once 'defines.include.php';
+require_once 'common.functions.php';
 
 spl_autoload_register(function ($class) {
 	// project-specific namespace prefix
@@ -98,8 +99,6 @@ if (php_sapi_name() === 'cli') {
 } else {
 	define('MODE', 'WEB');
 }
-
-require_once 'common.functions.php';
 
 if (isset($_SERVER['REQUEST_URI'])) {
 	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
