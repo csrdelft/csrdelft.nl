@@ -14,8 +14,7 @@
 //header('location: https://csrdelft.nl/onderhoud.html');
 //exit;
 
-// Composer autoload
-use CsrDelft\model\DebugLogModel;
+use CsrDelft\ShutdownHandler;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\InstellingenModel;
@@ -23,15 +22,12 @@ use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\TimerModel;
-use function CsrDelft\printDebug;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
 
 require __DIR__ . '/../vendor/autoload.php';
 
 spl_autoload_register(function ($class) {
-
 	// project-specific namespace prefix
 	$prefix = 'CsrDelft\\';
 
@@ -71,48 +67,16 @@ spl_autoload_register(function ($class) {
 	}
 });
 
-register_shutdown_function('fatal_handler');
-
-function fatal_handler(Exception $ex = null) {
-	try {
-		if (defined('TIME_MEASURE') AND TIME_MEASURE) {
-			TimerModel::instance()->log();
-		}
-
-		if ($ex instanceof Exception) {
-			if ((defined('DEBUG') AND DEBUG) OR LoginModel::mag('P_LOGGED_IN')) {
-				echo str_replace('#', '<br />#', $ex); // stacktrace
-				CsrDelft\printDebug();
-			}
-		}
-	} catch (Exception $e) {
-		echo $e->getMessage();
-	}
-
-	$error = error_get_last();
-	if ($error !== null) {
-		$debug['error'] = $error;
-		$debug['trace'] = debug_backtrace(false);
-		$debug['POST'] = $_POST;
-		$debug['GET'] = $_GET;
-		$debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
-		$debug['SERVER'] = $_SERVER;
-		if ($error['type'] === E_CORE_ERROR OR $error['type'] === E_ERROR) {
-
-			if (defined('DEBUG') AND DEBUG) {
-				DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
-			} else {
-				$headers[] = 'From: Fatal error handler <pubcie@csrdelft.nl>';
-				$headers[] = 'Content-Type: text/plain; charset=UTF-8';
-				$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
-				$subject = 'Fatal error: ' . $debug['error']['message'];
-				mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
-			}
-
-            touch(DATA_PATH . 'foutmelding.last');
-		}
-	}
+// Registreer foutmelding handlers
+if (DEBUG) {
+    register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
+} else {
+    register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
+    register_shutdown_function([ShutdownHandler::class, 'slackHandler']);
 }
+
+register_shutdown_function([ShutdownHandler::class, 'timerHandler']);
+register_shutdown_function([ShutdownHandler::class, 'touchHandler']);
 
 // alle meldingen tonen
 error_reporting(E_ALL);
