@@ -166,8 +166,6 @@ switch (constant('MODE')) {
 		// Terugvinden van temp upload files
 		ini_set('upload_tmp_dir', TMP_PATH);
 
-		ini_set('always_populate_raw_post_data', -1);
-
 		// Sessie configureren
 		ini_set('session.name', 'CSRSESSID');
 		ini_set('session.save_path', SESSION_PATH);
