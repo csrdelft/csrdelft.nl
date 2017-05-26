@@ -8,8 +8,7 @@ use CsrDelft\model\GoogleTokenModel;
 use CsrDelft\model\security\LoginModel;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
-use Google_Client;
-use Symfony\Component\Config\Definition\Exception\Exception;
+use Exception;
 
 
 /**
@@ -44,16 +43,16 @@ class GoogleController extends AclController
     {
         if ($code) {
             $client = GoogleSync::createGoogleCLient();
-            $access_token = $client->fetchAccessTokenWithAuthCode($code);
+            $client->fetchAccessTokenWithAuthCode($code);
 
-            $token = new GoogleToken();
-            $token->uid = LoginModel::getUid();
-            $token->token = json_encode($access_token);
+            $googleToken = new GoogleToken();
+            $googleToken->uid = LoginModel::getUid();
+            $googleToken->token = $client->getRefreshToken();
 
-            if ($this->model->exists($token)) {
-                $this->model->update($token);
+            if ($this->model->exists($googleToken)) {
+                $this->model->update($googleToken);
             } else {
-                $this->model->create($token);
+                $this->model->create($googleToken);
             }
 
             redirect(urldecode($state));

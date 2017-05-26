@@ -92,7 +92,7 @@ class GoogleSync {
         /** @var GoogleToken $google_token */
         $google_token = GoogleTokenModel::instance()->find('uid = ?', [LoginModel::getUid()])->fetch();
 		if ($google_token === false) {
-			throw new Exception('Authsub token not available');
+			throw new Exception('Authsub token not available, use doRequestToken.');
 		}
 
 		if (LidInstellingenModel::get('googleContacts', 'groepnaam') != '') {
@@ -102,16 +102,8 @@ class GoogleSync {
 			}
 		}
 
-        $redirect_uri = CSR_ROOT . '/google/callback';
-        $client= new Google_Client();
-        $client->setApplicationName('Stek');
-        $client->setClientId(GOOGLE_CLIENT_ID);
-        $client->setClientSecret(GOOGLE_CLIENT_SECRET);
-        $client->setRedirectUri($redirect_uri);
-        $client->setAccessType('offline');
-        $client->setScopes(['https://www.google.com/m8/feeds']);
-        // $client ververst de access token wanneer dat nodig is.
-        $client->setAccessToken($google_token->token);
+        $client= self::createGoogleCLient();
+        $client->fetchAccessTokenWithRefreshToken($google_token->token);
 
         $this->client = $client;
 
@@ -127,7 +119,7 @@ class GoogleSync {
 			$this->extendedExport = LidInstellingenModel::get('googleContacts', 'extended') == 'ja';
 		} catch (Exception $ex) {
 			setMelding("Verbinding met Google verbroken." . $ex->getMessage(), 2);
-//			GoogleTokenModel::instance()->delete($google_token);
+			GoogleTokenModel::instance()->delete($google_token);
 		}
 	}
 
@@ -211,7 +203,8 @@ class GoogleSync {
 			'self'	 => (string) $link->attributes()->href,
 			'photo'  => array(
 				'href' => (string) $photoLink->attributes()->href,
-				'etag' => (string) $photoLink->attributes('gd', true)->etag),
+				'etag' => (string) $photoLink->attributes('gd', true)->etag
+            ),
 			'csruid' => (string) $uid->attributes()->value
 		);
 	}
@@ -430,13 +423,14 @@ class GoogleSync {
 		return $message;
 	}
 
-	/**
-	 * Een enkel lid syncen naar Google contacts.
-	 *
-	 * @param $profiel Profiel
-	 *
-	 * @return string met foutmelding of naam van lid bij succes.
-	 */
+    /**
+     * Een enkel lid syncen naar Google contacts.
+     *
+     * @param $profiel Profiel
+     *
+     * @return string met foutmelding of naam van lid bij succes.
+     * @throws Exception
+     */
 	public function syncLid(Profiel $profiel) {
 		if (!$profiel instanceof Profiel) {
 			$profiel = ProfielModel::get($profiel);
@@ -543,19 +537,28 @@ class GoogleSync {
 				$nick = $doc->createElement('gContact:nickname', $profiel->nickname);
 				$entry->appendChild($nick);
 			}
-			//duckname
-			if ($profiel->duckname != '') {
-				$duck = $doc->createElement('gContact:duckname', $profiel->duckname);
-				$entry->appendChild($duck);
-			}
 			//initialen
 			if ($profiel->voorletters != '') {
 				$entry->appendChild($doc->createElement('gContact:initials', $profiel->voorletters));
 			}
-			//geslacht?
-			$gender = $doc->createElement('gContact:gender');
-			$gender->setAttribute('value', $profiel->geslacht == Geslacht::Man ? 'male' : 'female');
-			//$entry->appendChild($gender);
+
+            //adres ouders toevoegen, alleen bij leden...
+            if ($profiel->isLid() AND $profiel->o_adres != '' AND $profiel->adres != $profiel->o_adres) {
+                $address = $doc->createElement('gd:structuredPostalAddress');
+                //$address->setAttribute('rel', 'http://schemas.google.com/g/2005#other');
+                $address->setAttribute('label', 'Ouders');
+
+                $address->appendChild($doc->createElement('gd:street', $profiel->o_adres));
+                if ($profiel->o_postcode != '') {
+                    $address->appendChild($doc->createElement('gd:postcode', $profiel->o_postcode));
+                }
+                $address->appendChild($doc->createElement('gd:city', $profiel->o_woonplaats));
+                if ($profiel->o_land != '') {
+                    $address->appendChild($doc->createElement('gd:country', $profiel->o_land));
+                }
+                $address->appendChild($doc->createElement('gd:formattedAddress', $profiel->getFormattedAddressOuders()));
+                $entry->appendChild($address);
+            }
 		}
 
 		//add home address
@@ -584,26 +587,6 @@ class GoogleSync {
 			}
 			$address->appendChild($doc->createElement('gd:formattedAddress', $profiel->getFormattedAddress()));
 			$entry->appendChild($address);
-		}
-
-		if ($this->extendedExport) {
-			//adres ouders toevoegen, alleen bij leden...
-			if ($profiel->isLid() AND $profiel->o_adres != '' AND $profiel->adres != $profiel->o_adres) {
-				$address = $doc->createElement('gd:structuredPostalAddress');
-				//$address->setAttribute('rel', 'http://schemas.google.com/g/2005#other');
-				$address->setAttribute('label', 'Ouders');
-
-				$address->appendChild($doc->createElement('gd:street', $profiel->o_adres));
-				if ($profiel->o_postcode != '') {
-					$address->appendChild($doc->createElement('gd:postcode', $profiel->o_postcode));
-				}
-				$address->appendChild($doc->createElement('gd:city', $profiel->o_woonplaats));
-				if ($profiel->o_land != '') {
-					$address->appendChild($doc->createElement('gd:country', $profiel->o_land));
-				}
-				$address->appendChild($doc->createElement('gd:formattedAddress', $profiel->getFormattedAddressOuders()));
-				$entry->appendChild($address);
-			}
 		}
 
 		// add email element
@@ -702,7 +685,12 @@ class GoogleSync {
 			$entry->appendChild($update);
 		}
 
-		//csr uid
+		$profielPagina = $doc->createElement('gContact:website');
+		$profielPagina->setAttribute('href', CSR_ROOT . '/profiel/' . $profiel->uid);
+		$profielPagina->setAttribute('label', 'C.S.R. webstek profiel');
+		$entry->appendChild($profielPagina);
+
+		// csr uid, wordt gebruikt bij update.
 		$uid = $doc->createElement('gContact:userDefinedField');
 		$uid->setAttribute('key', 'csruid');
 		$uid->setAttribute('value', $profiel->uid);
@@ -752,6 +740,8 @@ class GoogleSync {
         $client->setClientSecret(GOOGLE_CLIENT_SECRET);
         $client->setRedirectUri($redirect_uri);
         $client->setAccessType('offline');
+        // Zonder force kunnen we nog een oude sessie krijgen (zonder refresh token)
+        $client->setApprovalPrompt('force');
         $client->setScopes(['https://www.google.com/m8/feeds']);
 
         return $client;
