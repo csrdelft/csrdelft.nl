@@ -1,119 +1,92 @@
-#cd-zijbalk {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 179px;
-	padding: 0 5px 40px 5px;
-	background-color: #f5f5f5;
+@import "kleuren.less";
+@import "maten.less";
 
-	.cd-beeldmerk {
-		height: 200px;
-		margin: auto;
-		background-image: url("/assets/layout/plaetjes/beeldmerk.png");
-		background-repeat: no-repeat;
-		background-size: contain;
-		background-position: center;
-	}
+body > aside {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: @zijbalk-breedte;
+  background-color: @zijbalk;
 
-	.blok {
+  .cd-beeldmerk {
+    margin: 1em;
+    width: 11em;
+    height: 11em;
+    filter: invert();
+    background: url("/assets/layout/plaetjes/beeldmerk.png") no-repeat center;
+    background-size: contain;
+  }
 
-		.zijbalk-kopje {
-			border: none;
-			font-size: 1.2em;
-			font-weight: normal;
-			margin: 10px 0 5px 0;
-			padding: 2px 0 5px 0;
-			background-image: url("/assets/layout/plaetjes/portal-break.png");
-			background-repeat: no-repeat;
-			background-position: bottom left;
-			background-color: transparent;
-		}
+  .link {
+    display: block;
+    width: inherit;
 
-		.item {
-			padding: 1px 0;
-			font-size: .9em;
-			border: none;
-			background-color: transparent;
-			text-align: left;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			-o-text-overflow: ellipsis;
-			white-space: nowrap;
+    height: 1.5em;
+    line-height: 1.5em;
 
-			a {
-				color: #000;
-			}
-		}
-	}
+    text-decoration: none;
 
-	.zijbalk-dag {
-		display: inline-block;
-		width: 15px;
-		text-align: right;
-	}
+    &.zoeken {
+      background-color: @nadruk;
+      text-align: center;
+      vertical-align: middle;
 
-	.ishetal {
-		text-align: center;
-		width: 180px;
-		margin: 15px 20px 20px 0;
+      margin-bottom: 3em;
+    }
 
-		.ja, .nee {
-			font-size: 1.4em;
-			font-weight: bold;
-			color: red;
-			text-align: center;
-		}
-		.ja {
-			color: green;
-		}
-	}
+    &.categorie {
+      padding-left: 2em;
+      color: white;
+      margin-bottom: 1em;
+      i {
+        width: 1em;
+        line-height: inherit;
+        text-align: center;
+        margin-right: 0.5em;
+      }
 
-	/* Verjaardag in de zijbalk */
-	#komende_pasfotos .verjaardag {
-		position: relative;
-		float: left;
-		text-align: center;
-		margin: 0 1px 1px 0;
-		width: 55px;
-		height: 73px;
+      &:hover {
+        background-color: #6a9bcb;
+      }
+    }
+  }
 
-		.datum {
-			position: absolute;
-			display: block;
-			width: 100%;
-			bottom: 0;
-			background-color: white;
-			color: black;
-			font-size: .9em;
-			opacity: 0.7;
-			filter: alpha(opacity=70);
-		}
-	}
+  .persoonlijk {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 10em;
+    width: inherit;
+    background-color: @zijbalk-donker;
+    text-align: center;
+    color: white;
+    .foto {
+      width: 4em;
+      height: 4em;
+      margin: -2em 3em 1em;
+      border-radius: 50%;
+      border: 1px solid black;
+    }
 
-	#zijbalk_fotoalbum {
+    .naam {
+      margin-bottom: 1em;
+    }
 
-		div.fotos a {
-			text-decoration: none;
-		}
-		img {
-			float: left;
-			width: 55px;
-			height: 55px;
-			margin: 0 1px 1px 0;
-		}
-	}
+    .saldo-titel {
+      width: inherit;
+    }
+
+    .saldo-bedrag {
+      &.staatrood {
+        color: #cb351e;
+      }
+    }
+  }
 }
 
-
-/* -------------------------------- 
-
-Overrides voor bredere schermen
-
--------------------------------- */
-@media only screen and (min-width: 960px) {
-	#cd-zijbalk {
-		width: 200px;
-		padding-left: 10px;
-		border-left: 7px solid #0A3292;
-	}
+@media screen and (max-height: 700px) {
+  .persoonlijk {
+    display: none;
+  }
 }

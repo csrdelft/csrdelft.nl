@@ -1,0 +1,42 @@
+// Beschrijft de voorpagina
+@import "kleuren.less";
+@import "maten.less";
+
+body {
+  background-color: @achtergrondkleur;
+}
+
+body > header {
+  display: none;
+}
+
+body > main {
+  position: absolute;
+  background-color: @achtergrondkleur-main;
+  top: 0;
+  left: @zijbalk-breedte + @witruimte-breedte;
+  right: @witruimte-breedte;
+
+  margin: 0 5em;
+
+  .foto {
+    overflow: hidden;
+    background: url(https://csrdelft.nl/plaetjes/fotoalbum/Voorpagina/_resized/tsjernobyl.jpg) no-repeat center center;
+    background-size: cover;
+    height: 20em;
+  }
+
+  section {
+    margin: 1em;
+  }
+
+  section.forum {
+    ul {
+      list-style: none;
+    }
+
+    li {
+      vertical-align: text-bottom;
+    }
+  }
+}

@@ -10,26 +10,64 @@
 				<li><a class="cd-nav-trigger" href="#cd-primary-nav">Menu<span></span></a></li>
 			</ul>
 		</header>
-		<main class="cd-main-content">
-			<div id="cd-zijbalk"{if CsrDelft\model\LidInstellingenModel::get('zijbalk', 'scrollen')!='met pagina mee'} class="{if CsrDelft\model\LidInstellingenModel::get('zijbalk', 'scrollen')=='pauper/desktop'}desktop-only {/if}{if CsrDelft\model\LidInstellingenModel::get('zijbalk', 'scrollbalk')=='ja'}scroll-hover {/if}scroll-fixed dragobject dragvertical" data-scrollfix="{$scrollfix}"{/if}>
-				<a href="/">
-					<div class="cd-beeldmerk"></div>
-				</a>
-				{foreach from=$zijbalk item=blok}
-					<div class="blok">{$blok->view()}</div>
-				{/foreach}
+		<aside id="cd-zijbalk">
+			<a href="/">
+				<div class="cd-beeldmerk"></div>
+			</a>
+			<a class="link zoeken"><i class="fa fa-search"></i></a>
+			<a class="link categorie" href="#"><i class="fa fa-home"></i>thuis</a>
+			<a class="link categorie" href="#"><i class="fa fa-group"></i>groepen</a>
+			<a class="link categorie" href="#"><i class="fa fa-bolt"></i>actueel</a>
+			<a class="link categorie" href="#"><i class="fa fa-comments"></i>forum</a>
+			<a class="link categorie" href="#"><i class="fa fa-paper-plane"></i>communicatie</a>
+
+			<div class="persoonlijk">
+				<img class="foto" src="/plaetjes/pasfoto/1345.vierkant.png"/>
+				<div class="naam">{LoginModel::getProfiel()->getNaam('civitas')}</div>
+				<div class="saldo-titel">saldo</div>
+                {assign var=saldo value=LoginModel::getProfiel()->getMaalcieSaldo()}
+				<div class="saldo-bedrag{if $saldo < 0} staatrood{/if}">
+					&euro; {$saldo|number_format:2:",":"."}
+				</div>
 			</div>
-			<nav class="cd-page-top">
-				<div class="breadcrumbs">{$breadcrumbs}</div>
-			</nav>
-			<div class="cd-page-content">
-				{$body->view()}
-			</div>
-			<footer class="cd-footer">
-				{CsrDelft\printDebug()}
-			</footer>
+		</aside>
+		<nav class="cd-page-top">
+			<div class="breadcrumbs">{$breadcrumbs}</div>
+		</nav>
+		<main>
+			<div class="foto"></div>
+			<section class="forum">
+				<h1>forum</h1>
+				<ul>
+					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+				</ul>
+			</section>
+			<section>
+				<h1>mededelingen</h1>
+			</section>
+			<section>
+				<h1>agenda</h1>
+			</section>
+			<section>
+				<h1>jarig</h1>
+			</section>
+
+
+
+
+			{*{$body->view()}*}
+			{*<footer class="cd-footer">*}
+				{*{printDebug()}*}
+			{*</footer>*}
 		</main>
-		{$mainmenu->view()}
+		{*{$mainmenu->view()}*}
 		<div id="cd-main-overlay">
 			{if CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'onontdekt'}
 				{include file='layout/fx-onontdekt.tpl'}
