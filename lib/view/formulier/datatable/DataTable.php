@@ -5,8 +5,6 @@ namespace CsrDelft\view\formulier\datatable;
 use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\View;
-use function CsrDelft\className;
-
 
 /**
  * DataTable.php
@@ -80,7 +78,7 @@ class DataTable implements View, FormElement {
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
-		$this->dataTableId = uniqid(className(get_class($this->model)));
+		$this->dataTableId = uniqid(classNameZonderNamespace(get_class($this->model)));
 		$this->groupByColumn = $groupByColumn;
 
 		// create group expand / collapse column

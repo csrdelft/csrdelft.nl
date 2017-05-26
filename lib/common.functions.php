@@ -716,3 +716,35 @@ function className($className) {
 function classNameZonderNamespace($className) {
 	return (new \ReflectionClass($className))->getShortName();
 }
+
+/**
+ * Haal string naam op voor error uit php
+ *
+ * @param int $type
+ *
+ * @return string
+ */
+function errorName($type) {
+    $errors = [
+        E_ERROR => 'E_ERROR',
+        E_WARNING => 'E_WARNING',
+        E_PARSE => 'E_PARSE',
+        E_NOTICE => 'E_NOTICE',
+        E_CORE_ERROR => 'E_CORE_ERROR',
+        E_CORE_WARNING => 'E_CORE_WARNING',
+        E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+        E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+        E_USER_ERROR => 'E_USER_ERROR',
+        E_USER_WARNING => 'E_USER_WARNING',
+        E_USER_NOTICE => 'E_USER_NOTICE',
+        E_STRICT => 'E_STRICT',
+        E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
+        E_DEPRECATED => 'E_DEPRECATED',
+        E_USER_DEPRECATED => 'E_USER_DEPRECATED',
+    ];
+    if (key_exists($type, $errors)) {
+        return $errors[$type];
+    } else {
+        return 'Onbekende fout ' . strval($type);
+    }
+}

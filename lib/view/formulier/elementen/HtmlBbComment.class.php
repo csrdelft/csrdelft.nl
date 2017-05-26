@@ -1,6 +1,6 @@
 <?php
 namespace CsrDelft\view\formulier\elementen;
-use CsrDelft\view\CsrBB;
+use CsrDelft\view\bbcode\CsrBB;
 
 /**
  * HtmlBbComment.class.php

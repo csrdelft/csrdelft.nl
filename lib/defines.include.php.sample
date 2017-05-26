@@ -43,6 +43,9 @@ define('JWT_SECRET', '$3Wb@IRhmTnf6msM$RV6fJ6fao%nm%2Td2ixabLf_8rv%-#H5a1Qtr$gxj
 # JWT lifetime for API, in seconds
 define('JWT_LIFETIME', 3600);
 
+# Toegestane API origins
+define('API_ORIGINS', 'http://localhost:8080,https://csrdelft.github.io');
+
 define('CAPTCHA_SECRET', '<Zet mij>');
 define('GOOGLE_CLIENT_ID', '<Zet mij>');
 define('GOOGLE_CLIENT_SECRET', '<Zet mij>');

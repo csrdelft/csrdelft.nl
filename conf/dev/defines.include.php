@@ -40,6 +40,9 @@ define('JWT_SECRET', 'BjG\0_;,OY5k)w-frmSpgleH"*^6Q_t{M=uh.<:nH8n<Xrs!FZY=TGhi}{
 # JWT lifetime for API, in seconds
 define('JWT_LIFETIME', 3600);
 
+# Toegestane API origins
+define('API_ORIGINS', 'http://localhost:8080,https://csrdelft.github.io');
+
 # paden MET trailing slash
 define('BASE_PATH', realpath(dirname(__FILE__)) . "/../");
 define('ETC_PATH', BASE_PATH . 'etc/');

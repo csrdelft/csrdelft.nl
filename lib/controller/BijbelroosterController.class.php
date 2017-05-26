@@ -3,15 +3,15 @@ namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\BijbelroosterModel;
-use CsrDelft\view\BijbelroosterView;
+use CsrDelft\view\bijbelrooster\BijbelroosterView;
 use CsrDelft\view\CsrLayoutPage;
 
 
 /**
  * BijbelroosterController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van het bijbelrooster.
  */
 class BijbelroosterController extends AclController {

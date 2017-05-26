@@ -2,7 +2,7 @@
 namespace CsrDelft\view\cms;
 use CsrDelft\Icon;
 use CsrDelft\model\entity\CmsPagina;
-use CsrDelft\view\CsrBB;
+use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\View;
 use function CsrDelft\getMelding;
 

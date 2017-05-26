@@ -14,8 +14,6 @@ class EetplanHuizenTable extends DataTable
         $this->addColumn('eetplan', null, null, 'switchButton_' . $this->dataTableId);
         $this->addKnop(new DataTableKnop(">= 1", $this->dataTableId, $this->dataUrl . 'aan', 'post', 'Aanmelden', 'Woonoorden aanmelden voor eetplan', 'add'));
         $this->addKnop(new DataTableKnop(">= 1", $this->dataTableId, $this->dataUrl . 'uit', 'post', 'Afmelden', 'Woonoorden afmelden voor eetplan', 'delete'));
-
-        echo "huizentable";
     }
 
     public function getJavascript()

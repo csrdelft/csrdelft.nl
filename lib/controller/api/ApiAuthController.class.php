@@ -14,7 +14,7 @@ class ApiAuthController {
 	/**
 	 * @return boolean
 	 */
-	public function isAuthorized() {
+	public static function isAuthorized() {
 		$headers = apache_request_headers();
 		$authHeader = isset($headers['X-Csr-Authorization']) ? $headers['X-Csr-Authorization'] : $headers['x-csr-authorization'];
 
