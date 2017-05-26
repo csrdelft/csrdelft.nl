@@ -73,7 +73,8 @@ if (DEBUG) {
     register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
 } else {
     register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
-    register_shutdown_function([ShutdownHandler::class, 'slackHandler']);
+    set_error_handler([ShutdownHandler::class, 'slackHandler']);
+    register_shutdown_function([SessionHandler::class, 'slackShutdownHandler']);
     register_shutdown_function([ShutdownHandler::class, 'httpStatusHandler']);
 }
 
