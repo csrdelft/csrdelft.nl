@@ -68,13 +68,13 @@
 			{*</footer>*}
 		</main>
 		{*{$mainmenu->view()}*}
-		<div id="cd-main-overlay">
-			{if CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'onontdekt'}
-				{include file='layout/fx-onontdekt.tpl'}
-			{elseif CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'civisaldo'}
-				{include file='layout/fx-civisaldo.tpl'}
-			{/if}
-		</div>
+		{*<div id="cd-main-overlay">*}
+			{*{if CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'onontdekt'}*}
+				{*{include file='layout/fx-onontdekt.tpl'}*}
+			{*{elseif CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'civisaldo'}*}
+				{*{include file='layout/fx-civisaldo.tpl'}*}
+			{*{/if}*}
+		{*</div>*}
 		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
 		{if isset($modal)}
 			{$modal->view()}
