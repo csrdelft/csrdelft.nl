@@ -75,7 +75,7 @@ if (DEBUG) {
 } else {
     register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
     set_error_handler([ShutdownHandler::class, 'slackHandler']);
-    register_shutdown_function([SessionHandler::class, 'slackShutdownHandler']);
+    register_shutdown_function([ShutdownHandler::class, 'slackShutdownHandler']);
     register_shutdown_function([ShutdownHandler::class, 'httpStatusHandler']);
 }
 
