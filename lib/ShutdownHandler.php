@@ -5,8 +5,8 @@ namespace CsrDelft;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
-use Maknz\Slack\Client as SlackClient;
 use Exception;
+use Maknz\Slack\Client as SlackClient;
 
 /**
  * Class ShutdownHandler.
@@ -73,7 +73,10 @@ final class ShutdownHandler
      */
     public static function slackHandler() {
         $debug = self::getDebug();
-        if ($debug !== null && file_exists(ETC_PATH . 'slack.ini')) {
+        if ($debug !== null
+            && file_exists(ETC_PATH . 'slack.ini')
+            && error_reporting() !== 0
+        ) {
             $slackConfig = parse_ini_file(ETC_PATH . 'slack.ini');
             $slackClient = new SlackClient($slackConfig['url'], $slackConfig);
             $foutmelding = $slackClient->createMessage();
