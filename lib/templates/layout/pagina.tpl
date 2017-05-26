@@ -23,9 +23,9 @@
 
 			<div class="persoonlijk">
 				<img class="foto" src="/plaetjes/pasfoto/1345.vierkant.png"/>
-				<div class="naam">{LoginModel::getProfiel()->getNaam('civitas')}</div>
+				<div class="naam">{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('civitas')}</div>
 				<div class="saldo-titel">saldo</div>
-                {assign var=saldo value=LoginModel::getProfiel()->getMaalcieSaldo()}
+                {assign var=saldo value=CsrDelft\model\security\LoginModel::getProfiel()->getCiviSaldo()}
 				<div class="saldo-bedrag{if $saldo < 0} staatrood{/if}">
 					&euro; {$saldo|number_format:2:",":"."}
 				</div>
