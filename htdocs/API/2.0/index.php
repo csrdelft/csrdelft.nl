@@ -10,6 +10,21 @@ use Jacwright\RestServer\RestServer;
 
 require_once 'configuratie.include.php';
 
+/**
+ * Maak de API toegankelijk vanaf bepaalde externe domeinen.
+ */
+if (in_array($_SERVER['HTTP_ORIGIN'], explode(',', API_ORIGINS), true)) {
+	header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+	header('Access-Control-Max-Age: 1440');
+	header('Access-Control-Allow-Headers: Accept, Origin, Content-Type, X-Csr-Authorization');
+	header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
+
+	if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+		http_response_code(204);
+		exit;
+	}
+}
+
 $mode = DEBUG ? 'debug' : 'production';
 $server = new RestServer($mode);
 
