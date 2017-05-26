@@ -297,9 +297,9 @@ class AssetsModel {
      */
     protected function parseLess($file) {
         $less = new \Less_Parser();
-        $less->parse(
-            file_get_contents(ASSETS_PATH . $file),
-            ASSETS_PATH . $file
+        $less->parseFile(
+            ASSETS_PATH . $file,
+            dirname(ASSETS_DIR . DIRECTORY_SEPARATOR . $file)
         );
         $parsedLess = $less->getCss();
         $references = $less->allParsedFiles();

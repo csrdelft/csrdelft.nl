@@ -26,6 +26,6 @@
         }
     },
     "scripts": {
-        "clear-assets-cache": "@php bin/clear-assets-cache.php"
+        "clear-assets-cache": "php bin/clear-assets-cache.php"
     }
 }
