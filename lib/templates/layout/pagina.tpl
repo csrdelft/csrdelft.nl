@@ -36,27 +36,29 @@
 		</nav>
 		<main>
 			<div class="foto"></div>
-			<section class="forum">
+			<section class="breed-50">
 				<h1>forum</h1>
 				<ul>
-					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#"class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
+					<li><a href="#">Meer lezen</a></li>
 				</ul>
 			</section>
-			<section>
-				<h1>mededelingen</h1>
-			</section>
-			<section>
+			<section class="breed-25">
 				<h1>agenda</h1>
 			</section>
-			<section>
-				<h1>jarig</h1>
+			<section class="breed-25">
+				<h1>Binnenkort jarig</h1>
+				{$verjaardagen->view()}
+			</section>
+			<section class="breed-50">
+				<h1>mededelingen</h1>
 			</section>
 
 

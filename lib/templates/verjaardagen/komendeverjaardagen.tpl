@@ -1,12 +1,4 @@
-<div id="zijbalk_verjaardagen">
-    <div class="zijbalk-kopje">
-        {if CsrDelft\model\security\LoginModel::mag('P_LEDEN_READ')}
-            <a href="/leden/verjaardagen">Verjaardagen</a>
-        {else}
-            Verjaardagen
-        {/if}
-    </div>
-
+<div id="komende_verjaardagen">
     {if $toonpasfotos}
         <div class="item" id="komende_pasfotos">
             {foreach from=$verjaardagen item=profiel}

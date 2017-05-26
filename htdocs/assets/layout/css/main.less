@@ -26,13 +26,53 @@ body > main {
     height: 20em;
   }
 
-  section {
-    margin: 1em;
+  #komende_verjaardagen {
+    .verjaardag {
+      position: relative;
+      float: left;
+      text-align: center;
+      width: 4em;
+      height: 5em;
+
+      margin: 0 0.5em 1.5em 0;
+
+      border-collapse: collapse;
+
+      .datum {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        color: #000;
+        font-size: .9em;
+        opacity: .7;
+        filter: alpha(opacity=70);
+      }
+
+      .pasfoto {
+        width: 4em;
+        height: 5em;
+        margin: 1px 0 0 1px;
+      }
+    }
   }
 
-  section.forum {
+  section {
+    padding: 1em;
+    float: left;
+
+    &.breed-50 {
+      width: 50%;
+    }
+
+    &.breed-25 {
+      width: 25%;
+    }
+
     ul {
       list-style: none;
+      padding-left: 0;
     }
 
     li {

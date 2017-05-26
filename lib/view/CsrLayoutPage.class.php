@@ -4,6 +4,7 @@ namespace CsrDelft\view;
 use CsrDelft\model\DragObjectModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\model\VerjaardagenModel;
 use CsrDelft\view\formulier\ModalForm;
 use CsrDelft\view\login\LoginForm;
 use CsrDelft\view\menu\MainMenuView;
@@ -51,6 +52,9 @@ class CsrLayoutPage extends CompressedLayout {
 		$smarty->assign('mainmenu', new MainMenuView());
 		$smarty->assign('body', $this->getBody());
 		$smarty->assign('modal', $this->modal);
+        $smarty->assign('verjaardagen', new KomendeVerjaardagenView(
+            VerjaardagenModel::getKomende((int)LidInstellingenModel::get('zijbalk', 'verjaardagen')),
+            LidInstellingenModel::get('zijbalk', 'verjaardagen_pasfotos') == 'ja'));
 
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
 		if (!$breadcrumbs) {
