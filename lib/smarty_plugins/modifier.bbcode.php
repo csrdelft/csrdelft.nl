@@ -6,6 +6,7 @@
  * @subpackage plugins
  */
 use CsrDelft\view\bbcode\CsrBB;
+use CsrDelft\view\bbcode\EmailCsrBB;
 
 /**
  * Smarty cat modifier plugin
@@ -26,7 +27,7 @@ use CsrDelft\view\bbcode\CsrBB;
  */
 function smarty_modifier_bbcode($bbcode, $mode = null) {
 	if ($mode === 'mail') {
-		return CsrBB::parseMail($bbcode);
+		return EmailCsrBB::parse($bbcode);
 	} elseif ($mode === 'html') {
 		return CsrBB::parseHtml($bbcode);
 	}
