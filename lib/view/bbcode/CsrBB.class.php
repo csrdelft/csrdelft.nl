@@ -158,7 +158,6 @@ class CsrBB extends Parser {
 	 * Templates for light mode
 	 */
 	private function lightLinkInline($tag, $url, $content) {
-		$content = htmlspecialchars($content);
 		return <<<HTML
 			<a class="bb-link-inline bb-tag-{$tag}" href="{$url}">{$content}</a>
 HTML;
