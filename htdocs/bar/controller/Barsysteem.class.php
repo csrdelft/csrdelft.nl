@@ -50,7 +50,7 @@ class Barsysteem
         $terug = $this->db->query(<<<SQL
 SELECT CiviSaldo.uid, CiviSaldo.naam, CiviSaldo.saldo, CiviSaldo.deleted, COUNT(CiviBestelling.totaal) AS recent 
 FROM CiviSaldo LEFT JOIN CiviBestelling 
-ON (CiviSaldo.id = CiviBestelling.uid AND DATEDIFF(NOW(), CiviBestelling.moment) < 100 AND CiviBestelling.deleted = 0)
+ON (CiviSaldo.uid = CiviBestelling.uid AND DATEDIFF(NOW(), CiviBestelling.moment) < 100 AND CiviBestelling.deleted = 0)
 GROUP BY CiviSaldo.id;
 SQL
 );
@@ -78,7 +78,17 @@ SQL
 
     function getProducten()
     {
-        $q = $this->db->prepare("SELECT id, beheer, prijs, beschrijving, prioriteit, status FROM CiviProduct AS P JOIN CiviPrijs AS R ON (P.id=R.product_id AND CURRENT_TIMESTAMP > van AND tot IS NULL) ORDER BY prioriteit DESC");
+        $q = $this->db->prepare(<<<SQL
+SELECT P.id, beheer, prijs, beschrijving, prioriteit, P.status 
+FROM CiviProduct AS P 
+JOIN CiviPrijs AS R 
+ON (P.id=R.product_id AND CURRENT_TIMESTAMP > van AND tot IS NULL)
+JOIN CiviCategorie AS C
+ON (C.id=P.categorie_id)
+WHERE C.cie = 'soccie'
+ORDER BY prioriteit DESC
+SQL
+);
         $q->execute();
 
         $result = array();
