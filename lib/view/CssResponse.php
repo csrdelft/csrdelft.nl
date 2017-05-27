@@ -1,15 +1,11 @@
 <?php
-/**
- * The CssResponse file.
- */
 
 namespace CsrDelft\view;
 
 /**
  * Class CssResponse.
  *
- * @author Gerben Oolbekkink <gerben@bunq.com>
- * @since 20170514 Initial creation.
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class CssResponse implements View {
     private $model;

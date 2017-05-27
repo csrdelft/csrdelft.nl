@@ -1,7 +1,4 @@
 <?php
-/**
- * The AssetsController file.
- */
 
 namespace CsrDelft\controller;
 

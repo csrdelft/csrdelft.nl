@@ -1,7 +1,4 @@
 <?php
-/**
- * The JavascriptAssetsView file.
- */
 
 namespace CsrDelft\view;
 

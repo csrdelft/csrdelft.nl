@@ -15,7 +15,7 @@ use function CsrDelft\endsWith;
 /**
  * Class AssetsModel.
  *
- * @author Gerben Oolbekkink <gerben@bunq.com>
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class AssetsModel {
     /**
