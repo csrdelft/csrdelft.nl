@@ -34,20 +34,25 @@
 		<nav class="cd-page-top">
 			{*<div class="breadcrumbs">{$breadcrumbs}</div>*}
 		</nav>
-		<main class="foto">
-		</main>
+		{*<main class="foto">*}
+		{*</main>*}
+		{*<main>*}
+			{*<section class="breed-50">*}
+				{*<h1>Forum</h1>*}
+				{*{$forum->view()}*}
+				{*<h1>Mededelingen</h1>*}
+			{*</section>*}
+			{*<section class="breed-25">*}
+				{*<h1>Agenda</h1>*}
+			{*</section>*}
+			{*<section class="breed-25">*}
+				{*<h1>Binnenkort jarig</h1>*}
+				{*{$verjaardagen->view()}*}
+			{*</section>*}
+		{*</main>*}
 		<main>
-			<section class="breed-50">
-				<h1>Forum</h1>
-				{$forum->view()}
-				<h1>Mededelingen</h1>
-			</section>
-			<section class="breed-25">
-				<h1>Agenda</h1>
-			</section>
-			<section class="breed-25">
-				<h1>Binnenkort jarig</h1>
-				{$verjaardagen->view()}
+			<section>
+                {$body->view()}
 			</section>
 		</main>
 
@@ -58,7 +63,6 @@
 			{*<footer class="cd-footer">*}
 				{*{printDebug()}*}
 			{*</footer>*}
-		</main>
 		{*{$mainmenu->view()}*}
 		{*<div id="cd-main-overlay">*}
 			{*{if CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'onontdekt'}*}
