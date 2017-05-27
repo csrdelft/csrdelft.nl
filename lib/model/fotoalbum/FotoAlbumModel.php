@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\model\fotoalbum;
+
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
@@ -37,7 +38,7 @@ class FotoAlbumModel extends PersistenceModel {
 		if (!file_exists($album->path)) {
 			mkdir($album->path);
 			if (false === @chmod($album->path, 0755)) {
-				throw new Exception('Geen eigenaar van album: ' . htmlspecialchars($foto->getFullPath()));
+				throw new Exception('Geen eigenaar van album: ' . htmlspecialchars($album->path));
 			}
 		}
 		$album->owner = LoginModel::getUid();
@@ -120,7 +121,7 @@ class FotoAlbumModel extends PersistenceModel {
 					if (!$foto->exists()) {
 						throw new Exception('Foto bestaat niet: ' . $foto->directory . $foto->filename);
 					}
-					\CsrDelft\model\fotoalbum\FotoModel::instance()->verwerkFoto($foto);
+					FotoModel::instance()->verwerkFoto($foto);
 					if (false === @chmod($path, 0644)) {
 						throw new Exception('Geen eigenaar van foto: ' . $path);
 					}
@@ -185,17 +186,18 @@ HTML;
 			$subdir->subdir = str_replace($oldDir, $newDir, $album->subdir);
 			$this->create($subdir);
 		}
-		foreach (\CsrDelft\model\fotoalbum\FotoModel::instance()->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
+		foreach (FotoModel::instance()->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
+		    /** @var Foto $foto */
 			$oldUUID = $foto->getUUID();
 			// updaten gaat niet vanwege primary key
-			\CsrDelft\model\fotoalbum\FotoModel::instance()->delete($foto);
+			FotoModel::instance()->delete($foto);
 			$foto->subdir = str_replace($oldDir, $newDir, $foto->subdir);
-			\CsrDelft\model\fotoalbum\FotoModel::instance()->create($foto);
-			foreach (\CsrDelft\model\fotoalbum\FotoTagsModel::instance()->find('refuuid = ?', array($oldUUID)) as $tag) {
+			FotoModel::instance()->create($foto);
+			foreach (FotoTagsModel::instance()->find('refuuid = ?', array($oldUUID)) as $tag) {
 				// updaten gaat niet vanwege primary key
-				\CsrDelft\model\fotoalbum\FotoTagsModel::instance()->delete($tag);
+				FotoTagsModel::instance()->delete($tag);
 				$tag->refuuid = $foto->getUUID();
-				\CsrDelft\model\fotoalbum\FotoTagsModel::instance()->create($tag);
+				FotoTagsModel::instance()->create($tag);
 			}
 		}
 		if (false === @rmdir(PHOTOS_PATH . $oldDir)) {
@@ -207,7 +209,6 @@ HTML;
 
 	public function setAlbumCover(FotoAlbum $album, Foto $cover) {
 		$success = true;
-		$toggle = false;
 		// find old cover
 		foreach ($album->getFotos() as $foto) {
 			if (strpos($foto->filename, 'folder') !== false) {
@@ -223,9 +224,9 @@ HTML;
 				if ($success) {
 					// database in sync houden
 					// updaten gaat niet vanwege primary key
-					\CsrDelft\model\fotoalbum\FotoModel::instance()->delete($foto);
+					FotoModel::instance()->delete($foto);
 					$foto->filename = str_replace('folder', '', $foto->filename);
-					\CsrDelft\model\fotoalbum\FotoModel::instance()->create($foto);
+					FotoModel::instance()->create($foto);
 				}
 				if ($foto === $cover) {
 					return $success;
@@ -242,19 +243,20 @@ HTML;
 		if ($success) {
 			// database in sync houden
 			// updaten gaat niet vanwege primary key
-			\CsrDelft\model\fotoalbum\FotoModel::instance()->delete($cover);
+			FotoModel::instance()->delete($cover);
 			$cover->filename = substr_replace($cover->filename, 'folder', strrpos($cover->filename, '.'), 0);
-			\CsrDelft\model\fotoalbum\FotoModel::instance()->create($cover);
+			FotoModel::instance()->create($cover);
 		}
 		return $success;
 	}
 
 	public function opschonen(FotoAlbum $fotoalbum) {
 		foreach ($this->find('subdir LIKE ?', array($fotoalbum->subdir . '%')) as $album) {
+		    /** @var FotoAlbum $album */
 			if (!$album->exists()) {
-				foreach (\CsrDelft\model\fotoalbum\FotoModel::instance()->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {
-					\CsrDelft\model\fotoalbum\FotoModel::instance()->delete($foto);
-					\CsrDelft\model\fotoalbum\FotoTagsModel::instance()->verwijderFotoTags($foto);
+				foreach (FotoModel::instance()->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {
+					FotoModel::instance()->delete($foto);
+					FotoTagsModel::instance()->verwijderFotoTags($foto);
 				}
 				$this->delete($album);
 			}

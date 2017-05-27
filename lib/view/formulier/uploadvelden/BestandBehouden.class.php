@@ -39,7 +39,7 @@ class BestandBehouden extends InputField {
 	public function validate() {
 		parent::validate();
 		if (!$this->isAvailable() OR empty($this->model->filesize)) {
-			$this->error = 'Bestand bestaat niet (meer): ' . htmlspecialchars($this->model->directory . $this->model->filename);
+			$this->error = 'Bestand bestaat niet (meer): ' . htmlspecialchars($this->model->directory->path . $this->model->filename);
 		} elseif (!empty($this->filterMime) AND !in_array($this->model->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . htmlspecialchars($this->model->mimetype);
 		}
@@ -47,9 +47,9 @@ class BestandBehouden extends InputField {
 	}
 
 	public function opslaan($directory, $filename, $overwrite = false) {
-		parent::opslaan($directory, $filename, false);
-		if (false === @chmod($this->model->directory . $this->model->filename, 0644)) {
-			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($this->model->directory . $this->model->filename));
+		parent::opslaan($directory, $filename, $overwrite);
+		if (false === @chmod($this->model->directory->path . $this->model->filename, 0644)) {
+			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($this->model->directory->path . $this->model->filename));
 		}
 	}
 

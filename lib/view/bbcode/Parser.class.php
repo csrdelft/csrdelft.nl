@@ -161,8 +161,6 @@ class Parser {
 			$html = false;
 		}
 
-		$nohtmltagopen = $htmltagopen = false;
-
 		$newParseArray = array();
 		while ($tag = array_shift($this->parseArray)) {
 			switch ($tag) {
@@ -443,7 +441,7 @@ class Parser {
 					$value = $entry;
 				}
 			}
-			if (isset($value)) {
+			if (isset($value) && isset($key)) {
 				// FIXME: stupid javascript filtering detected
 				if (strstr(strtolower($value), 'javascript:')) {
 					$value = 'disabled';
