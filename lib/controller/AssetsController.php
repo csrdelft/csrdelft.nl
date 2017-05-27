@@ -6,6 +6,7 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\AssetsModel;
 use CsrDelft\view\CssResponse;
 use CsrDelft\view\JavascriptResponse;
+use Exception;
 
 /**
  * Class AssetsController.
@@ -51,20 +52,38 @@ class AssetsController extends AclController
     }
 
     public function styles($layout, $module) {
-        $module = str_replace('.css', '', $module);
-        $item = $this->model->getItem($layout, $module, 'css');
+        try {
+            $module = str_replace('.css', '', $module);
+            $item = $this->model->getItem($layout, $module, 'css');
 
-        if (DEBUG) {
-            $item->clear();
+            if (DEBUG) {
+                $item->clear();
+            }
+
+            if ($item->isHit()) {
+                $css = $item->get();
+            } else {
+                $css = $this->model->createCss($item);
+                $this->model->save($item->set($css));
+            }
+
+            $this->view = new CssResponse($css);
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            $message = preg_replace("/\n/", "\\A ", $message);
+            $this->view = new CssResponse(<<<CSS
+body::before {
+    content: '$message';
+    white-space: pre;
+    display: block;
+    position: absolute;
+    background: #ffa9a7;
+    border: 1px solid black;
+    margin: 30px;
+    z-index: 9999;
+}
+CSS
+            );
         }
-
-        if ($item->isHit()) {
-            $css = $item->get();
-        } else {
-            $css = $this->model->createCss($item);
-            $this->model->save($item->set($css));
-        }
-
-        $this->view = new CssResponse($css);
     }
 }
