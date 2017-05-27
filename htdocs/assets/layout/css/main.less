@@ -67,6 +67,60 @@ body > main {
     }
   }
 
+  .zijbalk_forum {
+    .ongelezen {
+      a {
+        margin-left: -2em;
+      }
+      .bullet {
+        flex: 0 0 2em;
+        text-align: center;
+        svg {
+          width: 0.5em;
+          height: 0.5em;
+        }
+      }
+
+      .draad-titel {
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+    }
+    .item a {
+      text-decoration: none;
+      color: black;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+    }
+
+    span {
+      padding: 0.5em;
+    }
+    .draad-titel {
+      flex-grow: 2;
+      padding-left: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .draad-deel {
+      white-space: nowrap;
+    }
+    .draad-moment {
+      white-space: nowrap;
+    }
+    .draad-auteur {
+      img {
+        border-radius: 50%;
+        width: 2em;
+        height: 2em;
+      }
+    }
+  }
+
   section {
     float: left;
 
