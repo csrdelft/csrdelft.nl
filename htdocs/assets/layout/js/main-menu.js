@@ -1,6 +1,30 @@
 jQuery(document).ready(function ($) {
 	//if you change this breakpoint in the style.css file (or _layout.scss if you use SASS), don't forget to update this value as well
 	var MqL = 960;
+
+	function checkWindowWidth() {
+		//check window width (scrollbar included)
+		var e = window;
+		var a = 'inner';
+		if (!('innerWidth' in window)) {
+			a = 'client';
+			e = document.documentElement || document.body;
+		}
+		return e[a + 'Width'] >= MqL;
+	}
+
+	function moveNavigation() {
+		var navigation = $('.cd-nav');
+		var desktop = checkWindowWidth();
+		if (desktop) {
+			navigation.detach();
+			navigation.insertBefore('.cd-header-buttons');
+		} else {
+			navigation.detach();
+			navigation.insertAfter('.cd-main-content');
+		}
+	}
+
 	//move nav element position according to window width
 	moveNavigation();
 	$(window).on('resize', function () {
@@ -48,7 +72,7 @@ jQuery(document).ready(function ($) {
 		toggleSearch();
 	});
 
-	//close lateral menu on mobile 
+	//close lateral menu on mobile
 	$overlay.on('swiperight', function () {
 		if ($('.cd-primary-nav').hasClass('nav-is-visible')) {
 			closeNav();
@@ -68,14 +92,15 @@ jQuery(document).ready(function ($) {
 	});
 
 
-	//prevent default clicking on direct children of .cd-primary-nav 
+	//prevent default clicking on direct children of .cd-primary-nav
 	$('.cd-primary-nav').children('.has-children').children('a').on('click', function (event) {
 		event.preventDefault();
 	});
 	//open submenu
 	$('.has-children').children('a').on('click', function (event) {
-		if (!checkWindowWidth())
+		if (!checkWindowWidth()) {
 			event.preventDefault();
+		}
 		var selected = $(this);
 		if (selected.next('ul').hasClass('is-hidden')) {
 			//desktop version only
@@ -106,44 +131,18 @@ jQuery(document).ready(function ($) {
 		});
 	}
 
-	function checkWindowWidth() {
-		//check window width (scrollbar included)
-		var e = window;
-		var a = 'inner';
-		if (!('innerWidth' in window)) {
-			a = 'client';
-			e = document.documentElement || document.body;
-		}
-		if (e[ a + 'Width' ] >= MqL) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	function moveNavigation() {
-		var navigation = $('.cd-nav');
-		var desktop = checkWindowWidth();
-		if (desktop) {
-			navigation.detach();
-			navigation.insertBefore('.cd-header-buttons');
-		} else {
-			navigation.detach();
-			navigation.insertAfter('.cd-main-content');
-		}
-	}
-
 	var $searchfield = $('.cd-search').find('input[type="search"]');
 
 	function toggleSearch(type) {
+		$cdSearch = $('.cd-search');
 		if (type === 'close') {
-			$('.cd-search').removeClass('is-visible');
+			$cdSearch.removeClass('is-visible');
 			$('.cd-search-trigger').removeClass('search-is-visible');
 		} else {
-			$('.cd-search').toggleClass('is-visible');
+			$cdSearch.toggleClass('is-visible');
 			$('.cd-search-trigger').toggleClass('search-is-visible');
 		}
-		if ($('.cd-search').hasClass('is-visible')) {
+		if ($cdSearch.hasClass('is-visible')) {
 			$searchfield.focus();
 			$maintrigger.fadeOut();
 			$('#cd-user-avatar').fadeOut();
@@ -157,6 +156,7 @@ jQuery(document).ready(function ($) {
 		}
 	}
 
+	var fadeToggle = false;
 	// Fade header when leaving top of page
 	function toggleFade() {
 		if ($(window).scrollTop() > 100) {
@@ -169,8 +169,8 @@ jQuery(document).ready(function ($) {
 		}
 		fadeToggle = false;
 	}
-	var fadeToggle = false;
-	$(window).on('scroll', function (event) {
+
+	$(window).on('scroll', function () {
 		if (!fadeToggle) {
 			fadeToggle = true;
 			$maintrigger.data('timer', setTimeout(toggleFade, 3000));
