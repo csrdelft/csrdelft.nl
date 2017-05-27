@@ -51,9 +51,7 @@
 			{*</section>*}
 		{*</main>*}
 		<main>
-			<section>
-                {$body->view()}
-			</section>
+			{$body->view()}
 		</main>
 
 

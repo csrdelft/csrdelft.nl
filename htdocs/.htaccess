@@ -14,6 +14,8 @@ RewriteRule ^(leden)?lijst/?(.*)$	tools/lijst.php [QSA,L]
 RewriteRule ^forum/rss/([0-9a-zA-Z]*)/csrdelft.xml		index.php?c=Forum&private_token=$1 [L]
 RewriteRule ^agenda/ical/([0-9a-zA-Z]*)/csrdelft.ics	index.php?c=Agenda&private_token=$1 [L]
 
+RewriteRule ^$                  index.php?c=Voorpagina [L]
+
 RewriteRule ^login				index.php?c=Login [L]
 RewriteRule ^logout				index.php?c=Login [L]
 RewriteRule ^su					index.php?c=Login [L]

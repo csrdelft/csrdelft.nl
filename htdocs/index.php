@@ -25,6 +25,7 @@ if (empty($class)) {
 // toegang tot leden website dicht-timmeren:
 switch ($class) {
     // toegestaan voor iedereen:
+    case 'Voorpagina':
     case 'Login':
     case 'CmsPagina':
     case 'Forum':
