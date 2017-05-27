@@ -1,10 +1,10 @@
 {strip}
     {assign var=timestamp value=strtotime($draad->laatst_gewijzigd)}
-    <div class="item{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN') AND $draad->isOngelezen()} ongelezen{/if}" id="forumdraad-row-{$draad->draad_id}">
+    <div class="item{if $draad->isOngelezen()} ongelezen{/if}" id="forumdraad-row-{$draad->draad_id}">
 
         <a href="/forum/onderwerp/{$draad->draad_id}{if CsrDelft\model\LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'ongelezen'}#ongelezen{elseif CsrDelft\model\LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'laatste'}#reageren{/if}"
            title="{$draad->titel}">
-            {if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN') AND $draad->isOngelezen()}
+            {if $draad->isOngelezen()}
                 <span class="bullet">
                     <svg viewBox="0 0 32 32">
                         <ellipse cx="16" cy="16" rx="16" ry="16" style="fill:#ff9000;" ></ellipse>
