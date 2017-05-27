@@ -4,6 +4,7 @@
 
 body {
   background-color: @achtergrondkleur;
+  margin-left: @zijbalk-breedte;
 }
 
 body > header {
@@ -11,25 +12,30 @@ body > header {
 }
 
 body > main {
-  position: absolute;
+  position: relative;
   background-color: @achtergrondkleur-main;
-  top: 0;
-  left: @zijbalk-breedte + @witruimte-breedte;
-  right: @witruimte-breedte;
 
-  margin: 0 5em;
+  display: flex;
+  justify-content: space-between;
 
-  .foto {
+  margin: 0 auto;
+
+  width: 1024px;
+
+  padding: 2em;
+
+  &.foto {
     overflow: hidden;
-    background: url(https://csrdelft.nl/plaetjes/fotoalbum/Voorpagina/_resized/tsjernobyl.jpg) no-repeat center center;
+    background: url(https://csrdelft.nl/plaetjes/fotoalbum/Voorpagina/_resized/Borrel-42.jpg) no-repeat center center;
     background-size: cover;
     height: 20em;
   }
 
   #komende_verjaardagen {
+    display: flex;
+    flex-wrap: wrap;
     .verjaardag {
       position: relative;
-      float: left;
       text-align: center;
       width: 4em;
       height: 5em;
@@ -59,24 +65,46 @@ body > main {
   }
 
   section {
-    padding: 1em;
     float: left;
 
     &.breed-50 {
       width: 50%;
+      flex-grow: 4;
     }
 
     &.breed-25 {
       width: 25%;
+      flex-grow: 2;
     }
 
     ul {
-      list-style: none;
-      padding-left: 0;
+      padding-left:0;
     }
 
     li {
       vertical-align: text-bottom;
+      list-style: none;
+      line-height: 3em;
+    }
+
+    li.ongelezen {
+      font-weight: bold;
+      &::before {
+        content:"•";
+        color: @nadruk;
+        font-size: 3em;
+        line-height:inherit;
+        width:2rem;
+        float:left;
+        margin-left:-2rem;
+        text-align: center;
+      }
+    }
+  }
+
+  section {
+    .forum-draad-link {
+
     }
   }
 }

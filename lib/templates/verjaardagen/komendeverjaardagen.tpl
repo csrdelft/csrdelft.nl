@@ -1,20 +1,8 @@
 <div id="komende_verjaardagen">
-    {if $toonpasfotos}
-        <div class="item" id="komende_pasfotos">
-            {foreach from=$verjaardagen item=profiel}
-                <div class="verjaardag{if $profiel->isJarig()} cursief{/if}">
-                    {$profiel->getLink('pasfoto')}
-                    <span class="datum">{date('d-m', strtotime($profiel->gebdatum))}</span>
-                </div>
-            {/foreach}
-            <div class="clear"></div>
+    {foreach from=$verjaardagen item=profiel}
+        <div class="verjaardag{if $profiel->isJarig()} cursief{/if}">
+            {$profiel->getLink('pasfoto')}
+            <span class="datum">{date('d-m', strtotime($profiel->gebdatum))}</span>
         </div>
-    {else}
-        {foreach from=$verjaardagen item=profiel}
-            <div class="item">{date('d-m', strtotime($profiel->gebdatum))}
-                <span{if $profiel->isJarig()} class="cursief"{/if}>{$profiel->getLink('civitas')}</span>
-            </div>
-        {/foreach}
-    {/if}
-
+    {/foreach}
 </div>

@@ -32,34 +32,24 @@
 			</div>
 		</aside>
 		<nav class="cd-page-top">
-			<div class="breadcrumbs">{$breadcrumbs}</div>
+			{*<div class="breadcrumbs">{$breadcrumbs}</div>*}
 		</nav>
+		<main class="foto">
+		</main>
 		<main>
-			<div class="foto"></div>
 			<section class="breed-50">
-				<h1>forum</h1>
-				<ul>
-					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#" class="forum-draad-link">Broedersportdag en BBBQ</a> <a href="#" class="forum-categorie-link">C.S.R.-zaken</a> 9 minuten geleden <img class="pasfoto-klein" src="/plaetjes/pasfoto/1529.vierkant.png"></li>
-					<li><a href="#">Meer lezen</a></li>
-				</ul>
+				<h1>Forum</h1>
+				{$forum->view()}
+				<h1>Mededelingen</h1>
 			</section>
 			<section class="breed-25">
-				<h1>agenda</h1>
+				<h1>Agenda</h1>
 			</section>
 			<section class="breed-25">
 				<h1>Binnenkort jarig</h1>
 				{$verjaardagen->view()}
 			</section>
-			<section class="breed-50">
-				<h1>mededelingen</h1>
-			</section>
+		</main>
 
 
 
