@@ -17,6 +17,7 @@ body > main {
 
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 
   margin: 0 auto;
 
@@ -24,7 +25,9 @@ body > main {
 
   padding: 2em;
 
-  &.foto {
+  .foto {
+    width: calc(~"100% + 4em");
+    margin: -2em -2em 1em -2em;
     overflow: hidden;
     background: url(https://csrdelft.nl/plaetjes/fotoalbum/Voorpagina/_resized/Borrel-42.jpg) no-repeat center center;
     background-size: cover;
