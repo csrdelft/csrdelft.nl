@@ -11,6 +11,32 @@ $(document).ready(function () {
 	var goed = 0;
 	var starttijd;
 
+	function showReel() {
+		var content = '<div class="box"><table><tbody><tr><td>';
+		if (flip1.hasClass('pasfoto')) {
+			content += flip1.find('img').parent().html();
+			content += '</td><td><h3>' + flip2.find('h3').attr('title') + '</h3>';
+		} else if (flip2.hasClass('pasfoto')) {
+			content += flip2.find('img').parent().html();
+			content += '</td><td><h3>' + flip1.find('h3').attr('title') + '</h3>';
+		} else {
+			alert('error');
+		}
+		content += '</td></tr></tbody></table></div>';
+		var box = $(content).appendTo('body');
+		box.animate({
+			left: '60%'
+		}, 'slow', function () {
+			$(this).css('left', '60%');
+		});
+
+		$(box).delay(1200).animate({
+			left: '-50%'
+		}, 'slow', function () {
+			$(box).remove();
+		});
+	}
+
 	function checkCorrectness() {
 		beurten += 1;
 
@@ -107,32 +133,6 @@ $(document).ready(function () {
 		$('<div id="dialog-finish" class="blue">' + content + '</div>').appendTo('body');
 
 		$('#dialog-finish').dialog(dialog);
-	}
-
-	function showReel() {
-		var content = '<div class="box"><table><tbody><tr><td>';
-		if (flip1.hasClass('pasfoto')) {
-			content += flip1.find('img').parent().html();
-			content += '</td><td><h3>' + flip2.find('h3').attr('title') + '</h3>';
-		} else if (flip2.hasClass('pasfoto')) {
-			content += flip2.find('img').parent().html();
-			content += '</td><td><h3>' + flip1.find('h3').attr('title') + '</h3>';
-		} else {
-			alert('error');
-		}
-		content += '</td></tr></tbody></table></div>';
-		var box = $(content).appendTo('body');
-		box.animate({
-			left: '60%'
-		}, 'slow', function () {
-			$(this).css('left', '60%');
-		});
-
-		$(box).delay(1200).animate({
-			left: '-50%'
-		}, 'slow', function () {
-			$(box).remove();
-		});
 	}
 
 	$('.memorycard').click(function () {

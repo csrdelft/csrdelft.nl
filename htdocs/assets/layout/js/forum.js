@@ -23,6 +23,8 @@ function saveConceptForumBericht() {
 	setTimeout(toggleForumConceptBtn, 3000);
 }
 
+var bewerkContainer = null;
+var bewerkContainerInnerHTML = null;
 function restorePost() {
 	bewerkContainer.innerHTML = bewerkContainerInnerHTML;
 	$('#bewerk-melding').slideUp(200, remove);
@@ -33,8 +35,6 @@ function restorePost() {
  * Een post bewerken in het forum.
  * Haal een post op, bouw een formuliertje met javascript.
  */
-var bewerkContainer = null;
-var bewerkContainerInnerHTML = null;
 function forumBewerken(postId) {
 	$.ajax({
 		url: '/forum/tekst/' + postId,

@@ -134,7 +134,7 @@ jQuery(document).ready(function ($) {
 	var $searchfield = $('.cd-search').find('input[type="search"]');
 
 	function toggleSearch(type) {
-		$cdSearch = $('.cd-search');
+		var $cdSearch = $('.cd-search');
 		if (type === 'close') {
 			$cdSearch.removeClass('is-visible');
 			$('.cd-search-trigger').removeClass('search-is-visible');
