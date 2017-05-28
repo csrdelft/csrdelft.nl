@@ -6,28 +6,28 @@
 
 (function ($) {
 
-    "use strict";
+	"use strict";
 
-    $(function () {
+	$(function () {
 
-        var $window = $(window),
-            $body = $('body'),
-            $header = $('#header'),
-            $banner = $('#banner');
+		var $window = $(window),
+			$body = $('body'),
+			$header = $('#header'),
+			$banner = $('#banner');
 
-        var hasLoaded = false;
+		var hasLoaded = false;
 
-        if (typeof $banner[0] == "undefined") {
-            $banner = $('#banner-small');
-        }
+		if (typeof $banner[0] === "undefined") {
+			$banner = $('#banner-small');
+		}
 
-        $window.on('load', function () {
-            $body.removeClass('is-loading');
+		$window.on('load', function () {
+			$body.removeClass('is-loading');
 
 			// Lazy load cms pages, these should be loaded always, not on scroll
-			setTimeout(function() {
+			setTimeout(function () {
 				$('div.bb-img-loading').each(function () {
-					var content = $(document.createElement('IMG'));
+					var content = $(document.createElement('img'));
 					content.error(function () {
 						$(this).attr('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
 						$(this).attr('src', '/plaetjes/famfamfam/picture_error.png');
@@ -51,49 +51,49 @@
 					});
 				});
 			});
-        });
+		});
 
-        // Lazy load after animations have finished and user has scrolled
-        $window.scroll(function() {
-            if (hasLoaded === false && $(window).scrollTop() > 0) {
-                lazyLoad();
-            }
-        });
+		function lazyLoad() {
+			if (hasLoaded === true) return;
+			hasLoaded = true;
 
-        function lazyLoad() {
-            if (hasLoaded === true) return;
-            hasLoaded = true;
+			// Lazy load frontpage
+			setTimeout(function () {
+				$('.lazy-load').each(function () {
+					var html = $(this).data('lazy');
+					$(this).append(html);
+				});
+			});
+		}
 
-            // Lazy load frontpage
-            setTimeout(function() {
-                $('.lazy-load').each(function() {
-                    var html = $(this).data('lazy');
-                    $(this).append(html);
-                });
-            });
-        }
+		// Lazy load after animations have finished and user has scrolled
+		$window.scroll(function () {
+			if (hasLoaded === false && $(window).scrollTop() > 0) {
+				lazyLoad();
+			}
+		});
 
-        if ($banner.length > 0
-            && $header.hasClass('alt')) {
+		if ($banner.length > 0
+			&& $header.hasClass('alt')) {
 
-            $window.on('resize', function () {
-                $window.trigger('scroll');
-            });
+			$window.on('resize', function () {
+				$window.trigger('scroll');
+			});
 
-            $banner.scrollex({
-                bottom: $header.outerHeight(),
-                terminate: function () {
-                    $header.removeClass('alt');
-                },
-                enter: function () {
-                    $header.addClass('alt');
-                },
-                leave: function () {
-                    $header.removeClass('alt');
-                }
-            });
+			$banner.scrollex({
+				bottom: $header.outerHeight(),
+				terminate: function () {
+					$header.removeClass('alt');
+				},
+				enter: function () {
+					$header.addClass('alt');
+				},
+				leave: function () {
+					$header.removeClass('alt');
+				}
+			});
 
-        }
-    });
+		}
+	});
 
 })(jQuery);

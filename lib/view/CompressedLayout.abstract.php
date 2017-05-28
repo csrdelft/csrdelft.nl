@@ -73,7 +73,7 @@ abstract class CompressedLayout extends HtmlPage {
 		$cssModules = static::getUserModules($module, 'css');
 		$sheet = sprintf('/styles/%s/%s/%s/%s.css',
 			$this->cacheHash($this->getLayout(), $module, 'css', $cssModules),
-			hash('crc32', implode('', $cssModules)),
+			hash('crc32', 'a' . implode('', $cssModules)),
 			$this->getLayout(),
 			$module
 		);
@@ -82,7 +82,7 @@ abstract class CompressedLayout extends HtmlPage {
 		$jsModules = static::getUserModules($module, 'js');
 		$script = sprintf('/scripts/%s/%s/%s/%s.js',
 			$this->cacheHash($this->getLayout(), $module, 'js', $jsModules),
-			hash('crc32', implode('', $jsModules)),
+			hash('crc32', 'a' . implode('', $jsModules)),
 			$this->getLayout(),
 			$module
 		);
