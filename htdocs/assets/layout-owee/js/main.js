@@ -73,9 +73,6 @@
             });
         }
 
-        // Fix: Placeholder polyfill.
-        $('form').placeholder();
-
         if ($banner.length > 0
             && $header.hasClass('alt')) {
 
