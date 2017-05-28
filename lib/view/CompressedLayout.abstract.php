@@ -18,9 +18,19 @@ use Stash\Pool as CachePool;
  * @see htdocs/tools/js.php
  */
 abstract class CompressedLayout extends HtmlPage {
-    private $layout;
+	/**
+	 * @var string
+	 */
+	private $layout;
 
-    public function __construct($layout, View $body, $titel) {
+	/**
+	 * CompressedLayout constructor.
+	 *
+	 * @param string $layout
+	 * @param View $body
+	 * @param string $titel
+	 */
+	public function __construct($layout, View $body, $titel) {
         parent::__construct($body, $titel);
         $this->layout = $layout;
     }
@@ -58,15 +68,15 @@ abstract class CompressedLayout extends HtmlPage {
      */
     public function addCompressedResources($module) {
         $sheet = sprintf('/styles/%s/%s/%s.css',
-            $this->cacheHash($this->layout, $module, 'css'),
-            $this->layout,
+            $this->cacheHash($this->getLayout(), $module, 'css'),
+            $this->getLayout(),
             $module
         );
         parent::addStylesheet($sheet, true);
 
         $script = sprintf('/scripts/%s/%s/%s.js',
-            $this->cacheHash($this->layout, $module, 'js'),
-            $this->layout,
+            $this->cacheHash($this->getLayout(), $module, 'js'),
+            $this->getLayout(),
             $module
         );
         parent::addScript($script, true);
