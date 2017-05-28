@@ -1,89 +1,14 @@
 /**
  * dragobject.js	|	P.W.G. Brussee (brussee@live.nl)
- * 
+ *
  * requires jQuery
  */
 
 $(document).ready(function () {
-	window.addEventListener('mousedown', startDrag, false);
-	window.addEventListener('mouseup', stopDrag, false);
-
-	var dragobjectID = false;
+	var dragObjectId = false;
+	var dragged;
 	var oldX;
 	var oldY;
-
-	function startDrag(e) {
-		e = e || window.event;
-		var tag = e.target.tagName.toUpperCase();
-		var overflow = $(e.target).css('overflow');
-		if ((tag !== 'DIV' && tag !== 'H1') || overflow === 'auto' || overflow === 'scroll') { // sliding scrollbar of dropdown menu or input field
-			return;
-		}
-		dragobjectID = $(e.target).attr('id');
-		if (typeof dragobjectID === 'undefined' || dragobjectID === false || !$('#' + dragobjectID).hasClass('dragobject')) {
-			dragobjectID = $(e.target).closest('.dragobject').attr('id');
-		}
-		if (typeof dragobjectID !== 'undefined' && dragobjectID !== false) {
-			oldX = mouseX(e);
-			oldY = mouseY(e);
-			window.addEventListener('mousemove', mouseMoveHandler, true);
-		}
-		else {
-			dragobjectID = false;
-		}
-		dragged = false;
-	}
-	function stopDrag(e) {
-		if (!dragobjectID) {
-			return;
-		}
-		window.removeEventListener('mousemove', mouseMoveHandler, true);
-		if (dragged) {
-			var dragobject = $('#' + dragobjectID);
-			var top, left;
-			if (dragobject.hasClass('dragvertical') || dragobject.hasClass('draghorizontal')) {
-				top = dragobject.scrollTop();
-				left = dragobject.scrollLeft();
-			}
-			else {
-				top = dragobjTop();
-				left = dragobjLeft();
-			}
-			$.post('/tools/dragobject.php', {
-				id: dragobjectID,
-				coords: {
-					top: top,
-					left: left
-				}
-			});
-			dragged = false;
-		}
-		dragobjectID = false;
-	}
-	function mouseMoveHandler(e) {
-		if (!dragobjectID) {
-			return;
-		}
-		var dragobject = $('#' + dragobjectID);
-		e = e || window.event;
-		var newX = mouseX(e);
-		var newY = mouseY(e);
-		dragged = dragobject.hasClass('savepos');
-		if (dragobject.hasClass('dragvertical')) {
-			dragobject.scrollTop(dragobject.scrollTop() + oldY - newY);
-		}
-		else if (dragobject.hasClass('draghorizontal')) {
-			dragobject.scrollLeft(dragobject.scrollLeft() + oldX - newX);
-		}
-		else {
-			dragobject.css({
-				'top': (dragobjTop() + newY - oldY) + 'px',
-				'left': (dragobjLeft() + newX - oldX) + 'px'
-			});
-		}
-		oldX = newX;
-		oldY = newY;
-	}
 
 	function docScrollLeft() {
 		return (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
@@ -111,11 +36,86 @@ $(document).ready(function () {
 		return null;
 	}
 
-	function dragobjLeft() {
-		return $('#' + dragobjectID).offset().left - docScrollLeft();
+	function dragObjLeft() {
+		return $('#' + dragObjectId).offset().left - docScrollLeft();
 	}
-	function dragobjTop() {
-		return $('#' + dragobjectID).offset().top - docScrollTop();
+	function dragObjTop() {
+		return $('#' + dragObjectId).offset().top - docScrollTop();
 	}
 
+	function startDrag(e) {
+		e = e || window.event;
+		var tag = e.target.tagName.toUpperCase();
+		var overflow = $(e.target).css('overflow');
+		if ((tag !== 'DIV' && tag !== 'H1') || overflow === 'auto' || overflow === 'scroll') { // sliding scrollbar of dropdown menu or input field
+			return;
+		}
+		dragObjectId = $(e.target).attr('id');
+		if (typeof dragObjectId === 'undefined' || dragObjectId === false || !$('#' + dragObjectId).hasClass('dragobject')) {
+			dragObjectId = $(e.target).closest('.dragobject').attr('id');
+		}
+		if (typeof dragObjectId !== 'undefined' && dragObjectId !== false) {
+			oldX = mouseX(e);
+			oldY = mouseY(e);
+			window.addEventListener('mousemove', mouseMoveHandler, true);
+		}
+		else {
+			dragObjectId = false;
+		}
+		dragged = false;
+	}
+	function stopDrag() {
+		if (!dragObjectId) {
+			return;
+		}
+		window.removeEventListener('mousemove', mouseMoveHandler, true);
+		if (dragged) {
+			var dragObject = $('#' + dragObjectId);
+			var top, left;
+			if (dragObject.hasClass('dragvertical') || dragObject.hasClass('draghorizontal')) {
+				top = dragObject.scrollTop();
+				left = dragObject.scrollLeft();
+			}
+			else {
+				top = dragObjTop();
+				left = dragObjLeft();
+			}
+			$.post('/tools/dragobject.php', {
+				id: dragObjectId,
+				coords: {
+					top: top,
+					left: left
+				}
+			});
+			dragged = false;
+		}
+		dragObjectId = false;
+	}
+	function mouseMoveHandler(e) {
+		if (!dragObjectId) {
+			return;
+		}
+		var dragobject = $('#' + dragObjectId);
+		e = e || window.event;
+		var newX = mouseX(e);
+		var newY = mouseY(e);
+		dragged = dragobject.hasClass('savepos');
+		if (dragobject.hasClass('dragvertical')) {
+			dragobject.scrollTop(dragobject.scrollTop() + oldY - newY);
+		}
+		else if (dragobject.hasClass('draghorizontal')) {
+			dragobject.scrollLeft(dragobject.scrollLeft() + oldX - newX);
+		}
+		else {
+			dragobject.css({
+				'top': (dragObjTop() + newY - oldY) + 'px',
+				'left': (dragObjLeft() + newX - oldX) + 'px'
+			});
+		}
+		oldX = newX;
+		oldY = newY;
+	}
+
+	window.addEventListener('mousedown', startDrag, false);
+	window.addEventListener('mouseup', stopDrag, false);
 });
