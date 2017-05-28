@@ -3,45 +3,44 @@
 namespace CsrDelft\view;
 
 /**
- * Class JavascriptAssetsView.
+ * Class JavascriptResponse.
  *
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @since 20170514 Initial creation.
  */
 class JavascriptResponse implements View {
-    private $model;
-    private $cacheTime;
+	private $model;
+	private $cacheTime;
 
-    /**
-     * JavascriptResponse constructor.
-     *
-     * @param string $model
-     * @param int $cacheTime   Tijd om te cachen in de browser in seconden.
-     */
-    public function __construct($model, $cacheTime = 31536000) {
-        $this->model = $model;
-        $this->cacheTime = $cacheTime;
-    }
+	/**
+	 * JavascriptResponse constructor.
+	 *
+	 * @param string $model
+	 * @param int $cacheTime Tijd om te cachen in de browser in seconden.
+	 */
+	public function __construct($model, $cacheTime = 31536000) {
+		$this->model = $model;
+		$this->cacheTime = $cacheTime;
+	}
 
-    public function view() {
-        header('Content-Type: application/javascript');
-        header('Cache-Control: public, max-age=' . $this->cacheTime);
+	public function view() {
+		header('Content-Type: application/javascript');
+		header('Cache-Control: public, max-age=' . $this->cacheTime);
 
-        echo $this->getModel();
-    }
+		echo $this->getModel();
+	}
 
-    public function getTitel() {
-        // nil.
-    }
+	public function getTitel() {
+		// nil.
+	}
 
-    public function getBreadcrumbs() {
-        // nil.
-    }
+	public function getBreadcrumbs() {
+		// nil.
+	}
 
-    /**
-     * @return string
-     */
-    public function getModel() {
-        return $this->model;
-    }
+	/**
+	 * @return string
+	 */
+	public function getModel() {
+		return $this->model;
+	}
 }
