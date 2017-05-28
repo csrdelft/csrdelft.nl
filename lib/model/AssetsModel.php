@@ -246,7 +246,7 @@ class AssetsModel {
 
             if ($extension == 'css') {
                 //voeg modules toe afhankelijk van instelling
-                $modules[] = LidInstellingenModel::get('layout', 'opmaak');
+
                 if (LidInstellingenModel::get('layout', 'toegankelijk') == 'bredere letters') {
                     $modules[] = 'bredeletters';
                 }

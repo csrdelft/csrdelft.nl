@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view;
 
+use CsrDelft\model\LidInstellingenModel;
 use Stash\Driver\FileSystem as FileSystemDriver;
 use Stash\Pool as CachePool;
 
@@ -33,6 +34,8 @@ abstract class CompressedLayout extends HtmlPage {
 	public function __construct($layout, View $body, $titel) {
 		parent::__construct($body, $titel);
 		$this->layout = $layout;
+
+		$this->addCompressedResources(LidInstellingenModel::get('layout', 'opmaak'));
 	}
 
 	protected function getLayout() {
