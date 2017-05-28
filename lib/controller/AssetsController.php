@@ -27,13 +27,13 @@ class AssetsController extends AclController {
 
 	public function performAction(array $args = array()) {
 		$this->action = $this->getParam(1);
-		// GetParam(2) is hash voor cache.
+		// GetParam(2) is timehash voor cache.
 		return parent::performAction($this->getParams(3));
 	}
 
-	public function scripts($layout, $module) {
+	public function scripts($hash, $layout, $module) {
 		$module = str_replace('.js', '', $module);
-		$item = $this->model->getItem($layout, $module, 'js');
+		$item = $this->model->getItem($hash, $layout, $module, 'js');
 
 		if (DEBUG) {
 			$item->clear();
@@ -50,10 +50,10 @@ class AssetsController extends AclController {
 		$this->view = new JavascriptResponse($js);
 	}
 
-	public function styles($layout, $module) {
+	public function styles($hash, $layout, $module) {
 		try {
 			$module = str_replace('.css', '', $module);
-			$item = $this->model->getItem($layout, $module, 'css');
+			$item = $this->model->getItem($hash, $layout, $module, 'css');
 
 			if (DEBUG) {
 				$item->clear();

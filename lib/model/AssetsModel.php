@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model;
 
+use CsrDelft\view\CompressedLayout;
 use DateInterval;
 use JShrink\Minifier as JsMin;
 use Psr\Cache\CacheItemInterface;
@@ -35,27 +36,28 @@ class AssetsModel {
         $this->cachePool = new CachePool($driver);
     }
 
-    /**
-     * Haal item op uit cache.
-     *
-     * Cache ziet er als volgt uit:
-     *
-     * /$extension/$layout/$module, bijv. /js/layout-owee/general
-     *
-     * De cache is op verschillende niveaus te clearen, alle js van een layout clearen doe je als volgt:
-     *
-     *   $this->cachePool->deleteItem('/js/layout-owee');
-     *
-     * De cache verwijdert dan ook items die specifieker zijn.
-     *
-     * @param $layout
-     * @param $module
-     * @param $extension
-     *
-     * @return ItemInterface
-     */
-    public function getItem($layout, $module, $extension) {
-        return $this->cachePool->getItem(sprintf('/%s/%s/%s', $extension, $layout, $module));
+	/**
+	 * Haal item op uit cache.
+	 *
+	 * Cache ziet er als volgt uit:
+	 *
+	 * /$extension/$layout/$module, bijv. /js/layout-owee/general
+	 *
+	 * De cache is op verschillende niveaus te clearen, alle js van een layout clearen doe je als volgt:
+	 *
+	 *   $this->cachePool->deleteItem('/js/layout-owee');
+	 *
+	 * De cache verwijdert dan ook items die specifieker zijn.
+	 *
+	 * @param $moduleHash
+	 * @param $layout
+	 * @param $module
+	 * @param $extension
+	 *
+	 * @return ItemInterface
+	 */
+    public function getItem($moduleHash, $layout, $module, $extension) {
+        return $this->cachePool->getItem(sprintf('/%s/%s/%s/%s', $extension, $layout, $module, $moduleHash));
     }
 
     /**
@@ -75,15 +77,15 @@ class AssetsModel {
      *
      * @return string
      */
-    public function checkCache($layout, $module, $extension) {
-        $item = $this->getItem($layout, $module, $extension);
+    public function checkCache($hash, $layout, $module, $extension) {
+        $item = $this->getItem($hash, $layout, $module, $extension);
         return dechex($item->getCreation()->format('u'));
     }
 
     public function createJavascript(CacheItemInterface $item) {
-        list($extension, $layout, $module) = explode('/', $item->getKey());
+        list($extension, $layout, $module, $hash) = explode('/', $item->getKey());
 
-        $modules = $this->getUserModules($module, $extension);
+        $modules = CompressedLayout::getUserModules($module, $extension);
 
         $files = $this->parseConfig($layout, $extension);
 
@@ -132,9 +134,9 @@ class AssetsModel {
         $driver = new FileSystemDriver(['path' => DATA_PATH . 'less/']);
         $pool = new CachePool($driver);
 
-        list($extension, $layout, $module) = explode('/', $item->getKey());
+        list($extension, $layout, $module, $hash) = explode('/', $item->getKey());
 
-        $modules = $this->getUserModules($module, $extension);
+        $modules = CompressedLayout::getUserModules($module, $extension);
 
         $files = $this->parseConfig($layout, $extension);
 
@@ -221,60 +223,6 @@ class AssetsModel {
             }
         }
         return false;
-    }
-
-    /**
-     * Geeft een array met gevraagde modules, afhankelijk van lidinstellingen
-     * [elke module bestaat uit een set css- of js-bestanden]
-     *
-     * @param $module
-     * @param $extension
-     *
-     * @return array
-     */
-    public function getUserModules($module, $extension) {
-        $modules = array();
-
-        if ($module == 'front-page') {
-            $modules[] = 'general';
-        } elseif ($module == 'general') {
-            // de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
-            $modules[] = 'general';
-            $modules[] = 'formulier';
-            $modules[] = 'datatable';
-            $modules[] = 'grafiek';
-
-            if ($extension == 'css') {
-                //voeg modules toe afhankelijk van instelling
-
-                if (LidInstellingenModel::get('layout', 'toegankelijk') == 'bredere letters') {
-                    $modules[] = 'bredeletters';
-                }
-                if (LidInstellingenModel::get('layout', 'fx') == 'sneeuw') {
-                    $modules[] = 'fxsnow';
-                } elseif (LidInstellingenModel::get('layout', 'fx') == 'space') {
-                    $modules[] = 'fxspace';
-                }
-            } elseif ($extension == 'js') {
-                if (LidInstellingenModel::get('layout', 'fx') == 'wolken') {
-                    $modules[] = 'fxclouds';
-                }
-            }
-
-            if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
-                $modules[] = 'minion';
-            }
-            if (LidInstellingenModel::get('layout', 'fx') == 'onontdekt') {
-                $modules[] = 'fxonontdekt';
-            } elseif (LidInstellingenModel::get('layout', 'fx') == 'civisaldo') {
-                $modules[] = 'fxcivisaldo';
-            }
-        } else {
-            // een niet-algemene module gevraagd
-            $modules[] = $module;
-        }
-
-        return $modules;
     }
 
     /**
