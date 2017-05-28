@@ -29,7 +29,7 @@ class Bestand extends PersistentEntity {
 	public $mimetype;
 	/**
 	 * Locatie van bestand
-	 * @var Map
+	 * @var string
 	 */
 	public $directory;
 	/**
@@ -52,7 +52,7 @@ class Bestand extends PersistentEntity {
 	 * Bestaat er een bestand met de naam in de map.
 	 */
 	public function exists() {
-		return @is_readable($this->directory->path . $this->filename) AND is_file($this->directory->path . $this->filename);
+		return @is_readable($this->directory . $this->filename) AND is_file($this->directory . $this->filename);
 	}
 
 }
