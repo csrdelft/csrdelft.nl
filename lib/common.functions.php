@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft;
 
 # C.S.R. Delft | pubcie@csrdelft.nl
@@ -18,7 +19,7 @@ use DateTime;
  */
 function werkomheen_pdo_bool($value) {
 	if (is_bool($value)) {
-		$value = (int) $value;
+		$value = (int)$value;
 	}
 	return $value;
 }
@@ -27,6 +28,7 @@ function werkomheen_pdo_bool($value) {
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
  * @param string $haystack
  * @param string $needle
+ *
  * @return boolean
  */
 function startsWith($haystack, $needle) {
@@ -37,6 +39,7 @@ function startsWith($haystack, $needle) {
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
  * @param string $haystack
  * @param string $needle
+ *
  * @return boolean
  */
 function endsWith($haystack, $needle) {
@@ -46,6 +49,7 @@ function endsWith($haystack, $needle) {
 /**
  * @source http://stackoverflow.com/a/3654335
  * @param array $array
+ *
  * @return array
  */
 function array_filter_empty($array) {
@@ -62,6 +66,7 @@ function not_empty($value) {
  * @source http://stackoverflow.com/a/2166524
  * @param string $needle
  * @param array $haystack
+ *
  * @return boolean
  */
 function in_array_i($needle, array $haystack) {
@@ -74,6 +79,7 @@ function in_array_i($needle, array $haystack) {
  * @param string $prop
  * @param array $in
  * @param boolean $del delete from $in array
+ *
  * @return array $out
  */
 function group_by($prop, $in, $del = true) {
@@ -94,6 +100,7 @@ function group_by($prop, $in, $del = true) {
  * @param string $prop
  * @param array $in
  * @param boolean $del delete from $in array
+ *
  * @return array $out
  */
 function group_by_distinct($prop, $in, $del = true) {
@@ -118,7 +125,7 @@ function setGoBackCookie($url) {
 		unset($_COOKIE['goback']);
 		setcookie('goback', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	} else {
-		setcookie('goback', $url, time() + (int) InstellingenModel::get('beveiliging', 'session_lifetime_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+		setcookie('goback', $url, time() + (int)InstellingenModel::get('beveiliging', 'session_lifetime_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	}
 }
 
@@ -132,7 +139,7 @@ function setRememberCookie($token) {
 		unset($_COOKIE['remember']);
 		setcookie('remember', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	} else {
-		setcookie('remember', $token, time() + (int) InstellingenModel::get('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+		setcookie('remember', $token, time() + (int)InstellingenModel::get('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	}
 }
 
@@ -140,9 +147,9 @@ function setRememberCookie($token) {
  * @return int
  */
 function getSessionMaxLifeTime() {
-	$lifetime = (int) InstellingenModel::get('beveiliging', 'session_lifetime_seconds');
+	$lifetime = (int)InstellingenModel::get('beveiliging', 'session_lifetime_seconds');
 	// Sync lifetime of FS based PHP session with DB based C.S.R. session
-	$gc = (int) ini_get('session.gc_maxlifetime');
+	$gc = (int)ini_get('session.gc_maxlifetime');
 	if ($gc > 0 AND $gc < $lifetime) {
 		$lifetime = $gc;
 	}
@@ -173,6 +180,7 @@ function redirect($url = null, $refresh = true) {
  * rawurlencode() met uitzondering van slashes.
  *
  * @param string $url
+ *
  * @return string
  */
 function direncode($url) {
@@ -200,8 +208,8 @@ function checkEncoding($string, $string_encoding) {
 function crypto_rand_token($length) {
 	$token = '';
 	$codeAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	$codeAlphabet.= 'abcdefghijklmnopqrstuvwxyz';
-	$codeAlphabet.= '0123456789';
+	$codeAlphabet .= 'abcdefghijklmnopqrstuvwxyz';
+	$codeAlphabet .= '0123456789';
 	for ($i = 0; $i < $length; $i++) {
 		$token .= $codeAlphabet[crypto_rand_secure(0, strlen($codeAlphabet))];
 	}
@@ -220,9 +228,9 @@ function crypto_rand_secure($min, $max) {
 		return $min; // not so random...
 	}
 	$log = log($range, 2);
-	$bytes = (int) ($log / 8) + 1; // length in bytes
-	$bits = (int) $log + 1; // length in bits
-	$filter = (int) (1 << $bits) - 1; // set all lower bits to 1
+	$bytes = (int)($log / 8) + 1; // length in bytes
+	$bits = (int)$log + 1; // length in bits
+	$filter = (int)(1 << $bits) - 1; // set all lower bits to 1
 	do {
 		$rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
 		$rnd = $rnd & $filter; // discard irrelevant bits
@@ -278,7 +286,7 @@ function url_like($url) {
 
 function external_url($url, $label) {
 	$url = filter_var($url, FILTER_SANITIZE_URL);
-	if ($url AND ( url_like($url) OR url_like(CSR_ROOT . $url) )) {
+	if ($url AND (url_like($url) OR url_like(CSR_ROOT . $url))) {
 		if (startsWith($url, 'http://') OR startsWith($url, 'https://')) {
 			$extern = ' target="_blank"';
 		} else {
@@ -301,6 +309,7 @@ function isSyrinx() {
 
 /**
  * @param int $timestamp optional
+ *
  * @return string current DateTime formatted Y-m-d H:i:s
  */
 function getDateTime($timestamp = null) {
@@ -312,6 +321,7 @@ function getDateTime($timestamp = null) {
 
 /**
  * @param int $timestamp
+ *
  * @return string aangepast ISO-8601 weeknummer met zondag als eerste dag van de week
  */
 function getWeekNumber($timestamp) {
@@ -324,6 +334,7 @@ function getWeekNumber($timestamp) {
 
 /**
  * @param string $datum moet beginnen met 'yyyy-mm-dd' (wat daarna komt maakt niet uit)
+ *
  * @return boolean true als $datum geldig is volgens checkdate(); false otherwise
  */
 function isGeldigeDatum($datum) {
@@ -346,7 +357,7 @@ function isGeldigeDatum($datum) {
 		return false;
 	}
 	// De strings casten naar ints en de datum laten checken.
-	return checkdate((int) $maand, (int) $dag, (int) $jaar);
+	return checkdate((int)$maand, (int)$dag, (int)$jaar);
 }
 
 /**
@@ -364,32 +375,33 @@ function debugprint($sString, $cssID = 'pubcie_debug') {
 /**
  * Probeert uit invoer van uids of namen per zoekterm een unieke uid te bepalen, zoniet een lijstje suggesties en anders false.
  *
- * @param 	string $sNamen string met namen en/of uids op nieuwe regels en/of gescheiden door komma's
+ * @param  string $sNamen string met namen en/of uids op nieuwe regels en/of gescheiden door komma's
  * @param   array|string $filter zoekfilter voor LidZoeker::zoekLeden, toegestane input: '', 'leden', 'oudleden' of array met stati
- * @return 	bool false bij geen matches
- * 			of een array met per zoekterm een entry met een unieke uid en naam òf een array met naamopties.
+ *
+ * @return  bool false bij geen matches
+ *      of een array met per zoekterm een entry met een unieke uid en naam òf een array met naamopties.
  * Voorbeeld:
  * Input: $sNamen = 'Lid, Klaassen'
  * Output: Array(
-  [0] => Array (
-  [naamOpties] => Array (
-  [0] => Array (
-  [uid] => 4444
-  [naam] => Oud Lid
-  )
-  [1] => Array (
-  [uid] => x101
-  [naam] => Jan Lid
-  )
-  [2] => Array (
-  ...
-  )
-  )
-  [1] => Array (
-  [uid] => 0431
-  [naam] => Jan Klaassen
-  )
-  )
+ * [0] => Array (
+ * [naamOpties] => Array (
+ * [0] => Array (
+ * [uid] => 4444
+ * [naam] => Oud Lid
+ * )
+ * [1] => Array (
+ * [uid] => x101
+ * [naam] => Jan Lid
+ * )
+ * [2] => Array (
+ * ...
+ * )
+ * )
+ * [1] => Array (
+ * [uid] => 0431
+ * [naam] => Jan Klaassen
+ * )
+ * )
  */
 function namen2uid($sNamen, $filter = 'leden') {
 	$return = array();
@@ -403,9 +415,9 @@ function namen2uid($sNamen, $filter = 'leden') {
 		if (count($aZoekNamen) == 1) {
 			$naam = $aZoekNamen[0]['voornaam'] . ' ';
 			if (trim($aZoekNamen[0]['tussenvoegsel']) != '') {
-				$naam.=$aZoekNamen[0]['tussenvoegsel'] . ' ';
+				$naam .= $aZoekNamen[0]['tussenvoegsel'] . ' ';
 			}
-			$naam.=$aZoekNamen[0]['achternaam'];
+			$naam .= $aZoekNamen[0]['achternaam'];
 			$return[] = array('uid' => $aZoekNamen[0]['uid'], 'naam' => $naam);
 		} elseif (count($aZoekNamen) == 0) {
 
@@ -414,8 +426,8 @@ function namen2uid($sNamen, $filter = 'leden') {
 			foreach ($aZoekNamen as $aZoekNaam) {
 				$profiel = ProfielModel::get($aZoekNaam['uid']);
 				$aNaamOpties[] = array(
-					'uid'	 => $aZoekNaam['uid'],
-					'naam'	 => $profiel->getNaam());
+					'uid' => $aZoekNaam['uid'],
+					'naam' => $profiel->getNaam());
 			}
 			$return[]['naamOpties'] = $aNaamOpties;
 		}
@@ -447,7 +459,8 @@ function reldate($datum) {
 	  $return .= ' geleden';
 	  } elseif ($verschil <= (60 * 60 * 4)) {
 	  $return = floor($verschil / (60 * 60)) . ' uur geleden';
-	  } else */if (date('Y-m-d') == date('Y-m-d', $moment)) {
+	  } else */
+	if (date('Y-m-d') == date('Y-m-d', $moment)) {
 		$return = 'vandaag om ' . strftime('%H:%M', $moment);
 	} elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
 		$return = 'gisteren om ' . strftime('%H:%M', $moment);
@@ -462,6 +475,7 @@ function reldate($datum) {
  *
  * @param string $phonenumber
  * @param string $prefix
+ *
  * @return string
  */
 function internationalizePhonenumber($phonenumber, $prefix = '+31') {
@@ -580,16 +594,21 @@ function convertPHPSizeToBytes($sSize) {
 	$sSuffix = substr($sSize, -1);
 	$iValue = substr($sSize, 0, -1);
 	switch (strtoupper($sSuffix)) {
-        /** @noinspection PhpMissingBreakStatementInspection */
-        case 'P': $iValue *= 1024;
-        /** @noinspection PhpMissingBreakStatementInspection */
-		case 'T': $iValue *= 1024;
-        /** @noinspection PhpMissingBreakStatementInspection */
-		case 'G': $iValue *= 1024;
-        /** @noinspection PhpMissingBreakStatementInspection */
-		case 'M': $iValue *= 1024;
-        /** @noinspection PhpMissingBreakStatementInspection */
-		case 'K': $iValue *= 1024;
+		/** @noinspection PhpMissingBreakStatementInspection */
+		case 'P':
+			$iValue *= 1024;
+		/** @noinspection PhpMissingBreakStatementInspection */
+		case 'T':
+			$iValue *= 1024;
+		/** @noinspection PhpMissingBreakStatementInspection */
+		case 'G':
+			$iValue *= 1024;
+		/** @noinspection PhpMissingBreakStatementInspection */
+		case 'M':
+			$iValue *= 1024;
+		/** @noinspection PhpMissingBreakStatementInspection */
+		case 'K':
+			$iValue *= 1024;
 		default:
 			break;
 	}
@@ -601,13 +620,16 @@ function getMaximumFileUploadSize() {
 }
 
 function printDebug() {
-	if (DEBUG OR ( LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued() )) {
+	if (DEBUG OR (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())) {
 		echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
 		echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
 	}
 }
 
-function getDebug($get = true, $post = true, $files = true, $cookie = true, $session = true, $server = true, $sql = true, $sqltrace = true) {
+function getDebug(
+	$get = true, $post = true, $files = true, $cookie = true, $session = true, $server = true, $sql = true,
+	$sqltrace = true
+) {
 	$debug = '';
 	if ($get) {
 		$debug .= '<hr />GET<hr />' . htmlspecialchars(print_r($_GET, true));
@@ -655,7 +677,7 @@ function setMelding($msg, $lvl) {
 	$errors[1] = 'success';
 	$errors[2] = 'warning';
 	$msg = trim($msg);
-	if (!empty($msg) AND ( $lvl === -1 OR $lvl === 0 OR $lvl === 1 OR $lvl === 2 )) {
+	if (!empty($msg) AND ($lvl === -1 OR $lvl === 0 OR $lvl === 1 OR $lvl === 2)) {
 		if (!isset($_SESSION['melding'])) {
 			$_SESSION['melding'] = array();
 		}
@@ -725,26 +747,26 @@ function classNameZonderNamespace($className) {
  * @return string
  */
 function errorName($type) {
-    $errors = [
-        E_ERROR => 'E_ERROR',
-        E_WARNING => 'E_WARNING',
-        E_PARSE => 'E_PARSE',
-        E_NOTICE => 'E_NOTICE',
-        E_CORE_ERROR => 'E_CORE_ERROR',
-        E_CORE_WARNING => 'E_CORE_WARNING',
-        E_COMPILE_ERROR => 'E_COMPILE_ERROR',
-        E_COMPILE_WARNING => 'E_COMPILE_WARNING',
-        E_USER_ERROR => 'E_USER_ERROR',
-        E_USER_WARNING => 'E_USER_WARNING',
-        E_USER_NOTICE => 'E_USER_NOTICE',
-        E_STRICT => 'E_STRICT',
-        E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
-        E_DEPRECATED => 'E_DEPRECATED',
-        E_USER_DEPRECATED => 'E_USER_DEPRECATED',
-    ];
-    if (key_exists($type, $errors)) {
-        return $errors[$type];
-    } else {
-        return 'Onbekende fout ' . strval($type);
-    }
+	$errors = [
+		E_ERROR => 'E_ERROR',
+		E_WARNING => 'E_WARNING',
+		E_PARSE => 'E_PARSE',
+		E_NOTICE => 'E_NOTICE',
+		E_CORE_ERROR => 'E_CORE_ERROR',
+		E_CORE_WARNING => 'E_CORE_WARNING',
+		E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+		E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+		E_USER_ERROR => 'E_USER_ERROR',
+		E_USER_WARNING => 'E_USER_WARNING',
+		E_USER_NOTICE => 'E_USER_NOTICE',
+		E_STRICT => 'E_STRICT',
+		E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
+		E_DEPRECATED => 'E_DEPRECATED',
+		E_USER_DEPRECATED => 'E_USER_DEPRECATED',
+	];
+	if (key_exists($type, $errors)) {
+		return $errors[$type];
+	} else {
+		return 'Onbekende fout ' . strval($type);
+	}
 }

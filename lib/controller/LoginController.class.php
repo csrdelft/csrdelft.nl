@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\controller;
+
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\DebugLogModel;
@@ -46,29 +48,29 @@ class LoginController extends AclController {
 		parent::__construct($query, LoginModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'logout'			 => 'P_LOGGED_IN',
-				'su'				 => 'P_ADMIN',
-				'endsu'				 => 'P_LOGGED_IN',
-				'pauper'			 => 'P_PUBLIC',
-				'account'			 => 'P_LOGGED_IN',
-				'accountaanvragen'	 => 'P_PUBLIC',
-				'wachtwoord'		 => 'P_PUBLIC',
-				'verify'			 => 'P_PUBLIC'
+				'logout' => 'P_LOGGED_IN',
+				'su' => 'P_ADMIN',
+				'endsu' => 'P_LOGGED_IN',
+				'pauper' => 'P_PUBLIC',
+				'account' => 'P_LOGGED_IN',
+				'accountaanvragen' => 'P_PUBLIC',
+				'wachtwoord' => 'P_PUBLIC',
+				'verify' => 'P_PUBLIC'
 			);
 		} else {
 			$this->acl = array(
-				'login'				 => 'P_PUBLIC',
-				'logout'			 => 'P_LOGGED_IN',
-				'pauper'			 => 'P_PUBLIC',
-				'account'			 => 'P_LOGGED_IN',
-				'wachtwoord'		 => 'P_PUBLIC',
-				'verify'			 => 'P_PUBLIC',
-				'loginsessionsdata'	 => 'P_LOGGED_IN',
-				'loginendsession'	 => 'P_LOGGED_IN',
-				'loginlockip'		 => 'P_LOGGED_IN',
-				'loginrememberdata'	 => 'P_LOGGED_IN',
-				'loginremember'		 => 'P_LOGGED_IN',
-				'loginforget'		 => 'P_LOGGED_IN'
+				'login' => 'P_PUBLIC',
+				'logout' => 'P_LOGGED_IN',
+				'pauper' => 'P_PUBLIC',
+				'account' => 'P_LOGGED_IN',
+				'wachtwoord' => 'P_PUBLIC',
+				'verify' => 'P_PUBLIC',
+				'loginsessionsdata' => 'P_LOGGED_IN',
+				'loginendsession' => 'P_LOGGED_IN',
+				'loginlockip' => 'P_LOGGED_IN',
+				'loginrememberdata' => 'P_LOGGED_IN',
+				'loginremember' => 'P_LOGGED_IN',
+				'loginforget' => 'P_LOGGED_IN'
 			);
 		}
 	}
@@ -84,18 +86,18 @@ class LoginController extends AclController {
 		if ($this->getMethod() == 'POST') {
 			parent::exit_http($response_code);
 		}
-						$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
-        if (!LoginModel::mag('P_LOGGED_IN')) {
-            $this->view = new CsrLayoutOweePage($body);
-        } else {
-            $this->view = new CsrLayoutPage($body);
-        }
-        $this->view->view();
-        exit;
+		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			$this->view = new CsrLayoutOweePage($body);
+		} else {
+			$this->view = new CsrLayoutPage($body);
+		}
+		$this->view->view();
+		exit;
 	}
 
 	public function login() {
-				$form = new LoginForm(); // fetches POST values itself
+		$form = new LoginForm(); // fetches POST values itself
 		$values = $form->getValues();
 
 		if ($form->validate() AND $this->model->login($values['user'], $values['pass'])) {
@@ -123,8 +125,8 @@ class LoginController extends AclController {
 			}
 			redirect(CSR_ROOT);
 		} else {
-            redirect(CSR_ROOT . "#login");
-        }
+			redirect(CSR_ROOT . "#login");
+		}
 	}
 
 	public function logout() {
@@ -161,7 +163,7 @@ class LoginController extends AclController {
 		} else {
 			$this->model->setPauper(true);
 		}
-						$body = new CmsPaginaView(CmsPaginaModel::get('mobiel'));
+		$body = new CmsPaginaView(CmsPaginaModel::get('mobiel'));
 		$this->view = new CsrLayoutPage($body);
 	}
 
@@ -170,7 +172,7 @@ class LoginController extends AclController {
 	}
 
 	public function account($uid = null, $delete = null) {
-		if ($uid === null OR ! LoginModel::mag('P_ADMIN')) {
+		if ($uid === null OR !LoginModel::mag('P_ADMIN')) {
 			$uid = LoginModel::getUid();
 		}
 		// aanvragen
@@ -218,8 +220,7 @@ class LoginController extends AclController {
 				AccountModel::instance()->wijzigWachtwoord($account, $pass_plain);
 				setMelding('Wachtwoord instellen geslaagd', 1);
 			}
-		}
-		// resetten
+		} // resetten
 		elseif ($action === 'reset' AND LoginModel::mag('P_PROFIEL_EDIT', AuthenticationMethod::getTypeOptions()) AND OneTimeTokensModel::instance()->isVerified($account->uid, '/wachtwoord/reset')) {
 			$form = new WachtwoordWijzigenForm($account, $action, false);
 			if ($form->validate()) {
@@ -234,14 +235,13 @@ class LoginController extends AclController {
 				$this->model->login($account->uid, $pass_plain, false);
 				// stuur bevestigingsmail
 				$lidnaam = $account->getProfiel()->getNaam('volledig');
-								$bericht = "Geachte " . $lidnaam .
-						",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
+				$bericht = "Geachte " . $lidnaam .
+					",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
 				$mail = new Mail(array($account->email => $lidnaam), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
 				$mail->send();
 				redirect(CSR_ROOT);
 			}
-		}
-		// vergeten
+		} // vergeten
 		else {
 			$form = new WachtwoordVergetenForm();
 			if ($form->validate()) {
@@ -259,10 +259,10 @@ class LoginController extends AclController {
 					// Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
 					// Dit zorgt voor een • in het 'aan' veld van de mail, sommige spamfilters gaan hiervan over hun nek
 					$lidnaam = $account->getProfiel()->getNaam('volledig', true);
-										$bericht = "Geachte " . $civitasnaam .
-							",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1] .
-							".\n\n[url=" . CSR_ROOT . "/verify/" . $token[0] .
-							"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
+					$bericht = "Geachte " . $civitasnaam .
+						",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1] .
+						".\n\n[url=" . CSR_ROOT . "/verify/" . $token[0] .
+						"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
 					$mail = new Mail(array($account->email => $lidnaam), '[C.S.R. webstek] Wachtwoord vergeten', $bericht);
 					$mail->send();
 					setMelding('Wachtwoord reset email verzonden', 1);
@@ -352,8 +352,7 @@ class LoginController extends AclController {
 			}
 			if (isset($_POST['DataTableId'])) {
 				$this->view = new RememberLoginData(array($remember));
-			}
-			// after login
+			} // after login
 			elseif (isset($_COOKIE['goback'])) {
 				$this->view = new JsonResponse($_COOKIE['goback']);
 				setGoBackCookie(null);

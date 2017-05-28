@@ -16,74 +16,73 @@ use Exception;
  *
  * @property AssetsModel $model
  */
-class AssetsController extends AclController
-{
-    public function __construct($query) {
-        parent::__construct($query, new AssetsModel(MINIFY), ['GET']);
-        $this->acl = [
-            'scripts' => 'P_PUBLIC',
-            'styles' => 'P_PUBLIC'
-        ];
-    }
+class AssetsController extends AclController {
+	public function __construct($query) {
+		parent::__construct($query, new AssetsModel(MINIFY), ['GET']);
+		$this->acl = [
+			'scripts' => 'P_PUBLIC',
+			'styles' => 'P_PUBLIC'
+		];
+	}
 
-    public function performAction(array $args = array()) {
-        $this->action = $this->getParam(1);
-        // GetParam(2) is hash voor cache.
-        return parent::performAction($this->getParams(3));
-    }
+	public function performAction(array $args = array()) {
+		$this->action = $this->getParam(1);
+		// GetParam(2) is hash voor cache.
+		return parent::performAction($this->getParams(3));
+	}
 
-    public function scripts($layout, $module) {
-        $module = str_replace('.js', '', $module);
-        $item = $this->model->getItem($layout, $module, 'js');
+	public function scripts($layout, $module) {
+		$module = str_replace('.js', '', $module);
+		$item = $this->model->getItem($layout, $module, 'js');
 
-        if (DEBUG) {
-            $item->clear();
-        }
+		if (DEBUG) {
+			$item->clear();
+		}
 
-        if ($item->isHit()) {
-            $js = $item->get();
-        } else {
-            $js = $this->model->createJavascript($item);
-            $this->model->save($item->set($js));
-        }
+		if ($item->isHit()) {
+			$js = $item->get();
+		} else {
+			$js = $this->model->createJavascript($item);
+			$this->model->save($item->set($js));
+		}
 
 
-        $this->view = new JavascriptResponse($js);
-    }
+		$this->view = new JavascriptResponse($js);
+	}
 
-    public function styles($layout, $module) {
-        try {
-            $module = str_replace('.css', '', $module);
-            $item = $this->model->getItem($layout, $module, 'css');
+	public function styles($layout, $module) {
+		try {
+			$module = str_replace('.css', '', $module);
+			$item = $this->model->getItem($layout, $module, 'css');
 
-            if (DEBUG) {
-                $item->clear();
-            }
+			if (DEBUG) {
+				$item->clear();
+			}
 
-            if ($item->isHit()) {
-                $css = $item->get();
-            } else {
-                $css = $this->model->createCss($item);
-                $this->model->save($item->set($css));
-            }
+			if ($item->isHit()) {
+				$css = $item->get();
+			} else {
+				$css = $this->model->createCss($item);
+				$this->model->save($item->set($css));
+			}
 
-            $this->view = new CssResponse($css);
-        } catch (Exception $exception) {
-            $message = $exception->getMessage();
-            $message = preg_replace("/\n/", "\\A ", $message);
-            $this->view = new CssResponse(<<<CSS
+			$this->view = new CssResponse($css);
+		} catch (Exception $exception) {
+			$message = $exception->getMessage();
+			$message = preg_replace("/\n/", "\\A ", $message);
+			$this->view = new CssResponse(<<<CSS
 body::before {
-    content: '$message';
-    white-space: pre;
-    display: block;
-    position: absolute;
-    background: #ffa9a7;
-    border: 1px solid black;
-    margin: 30px;
-    z-index: 9999;
+	content: '$message';
+	white-space: pre;
+	display: block;
+	position: absolute;
+	background: #ffa9a7;
+	border: 1px solid black;
+	margin: 30px;
+	z-index: 9999;
 }
 CSS
-            );
-        }
-    }
+			);
+		}
+	}
 }
