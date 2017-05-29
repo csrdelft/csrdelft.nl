@@ -1,30 +1,30 @@
 <?php
-namespace CsrDelft\model;
+namespace CsrDelft\model\peilingen;
 
 use CsrDelft\model\entity\peilingen\Peiling;
-use CsrDelft\model\entity\peilingen\PeilingOptie;
 use CsrDelft\model\entity\peilingen\PeilingStem;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
-use function CsrDelft\setMelding;
 use Exception;
+use function CsrDelft\setMelding;
 
 
 /**
- * PeilingenModel.class.php
- * 
+ * PeilingenModel.php
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
- * 
- * 
+ *
  * Verzorgt het opvragen en opslaan van peilingen en stemmen in de database.
- * 
+ *
  */
 class PeilingenModel extends PersistenceModel {
 
 	const ORM = Peiling::class;
-	const DIR = 'peilingen/';
 
+	/**
+	 * @var static
+	 */
 	protected static $instance;
 
 	/**
@@ -119,28 +119,6 @@ class PeilingenModel extends PersistenceModel {
 
 	public function getLijst() {
 		return $this->find(null, array(), null, 'id DESC');
-	}
-
-}
-
-class PeilingOptiesModel extends PersistenceModel {
-
-	const ORM = PeilingOptie::class;
-	const DIR = 'peilingen/';
-
-	protected static $instance;
-
-}
-
-class PeilingStemmenModel extends PersistenceModel {
-
-	const ORM = PeilingStem::class;
-	const DIR = 'peilingen/';
-
-	protected static $instance;
-
-	public function heeftGestemd($peiling_id, $uid) {
-		return $this->existsByPrimaryKey(array($peiling_id, $uid));
 	}
 
 }

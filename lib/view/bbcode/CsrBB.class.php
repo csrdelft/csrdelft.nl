@@ -1,7 +1,6 @@
 <?php
 namespace CsrDelft\view\bbcode;
 
-use CsrDelft\view\bbcode\Parser;
 use CsrDelft\Icon;
 use CsrDelft\model\bibliotheek\BiebBoek;
 use CsrDelft\model\documenten\Document;
@@ -23,12 +22,13 @@ use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\model\PeilingenModel;
+use CsrDelft\model\peilingen\PeilingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\SavedQuery;
 use CsrDelft\SavedQueryContent;
 use CsrDelft\view\bibliotheek\BoekBBView;
+use CsrDelft\view\bijbelrooster\BijbelroosterBBView;
 use CsrDelft\view\documenten\DocumentBBContent;
 use CsrDelft\view\formulier\UrlDownloader;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
@@ -40,15 +40,14 @@ use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
 use CsrDelft\view\mededelingen\MededelingenView;
 use CsrDelft\view\peilingen\PeilingView;
-use CsrDelft\view\bijbelrooster\BijbelroosterBBView;
 use Exception;
+use function CsrDelft\email_like;
 use function CsrDelft\endsWith;
 use function CsrDelft\external_url;
 use function CsrDelft\format_filesize;
 use function CsrDelft\reldate;
 use function CsrDelft\startsWith;
 use function CsrDelft\url_like;
-use function CsrDelft\email_like;
 
 
 /**
