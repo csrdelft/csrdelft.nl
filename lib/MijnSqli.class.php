@@ -3,11 +3,11 @@ namespace CsrDelft;
 
 /**
  * MijnSqli.class.php
- * 
+ *
  * @deprecated
- * 
+ *
  * OogOpslag Internet / C.S.R. Delft | pubcie@csrdelft.nl
- * 
+ *
  * MySQLi wrapper
  */
 class MijnSqli {
@@ -105,6 +105,9 @@ class MijnSqli {
 
 	public function next($result) {
 		if (!$result) {
+			echo '<pre>';
+			print_r(debug_backtrace());
+			echo '</pre>';
 			die('Unable to run query: ' . $this->error());
 		}
 		return mysqli_fetch_assoc($result);
@@ -112,6 +115,9 @@ class MijnSqli {
 
 	public function next_array($result) {
 		if (!$result) {
+			echo '<pre>';
+			print_r(debug_backtrace());
+			echo '</pre>';
 			die('Unable to run query: ' . $this->error());
 		}
 		return mysqli_fetch_array($result);
@@ -119,6 +125,9 @@ class MijnSqli {
 
 	public function numRows($result) {
 		if (!$result) {
+			echo '<pre>';
+			print_r(debug_backtrace());
+			echo '</pre>';
 			die('Unable to run query: ' . $this->error());
 		}
 		return mysqli_num_rows($result);

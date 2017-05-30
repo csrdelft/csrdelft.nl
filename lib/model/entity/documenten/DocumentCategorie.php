@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\documenten;
 
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -15,6 +16,10 @@ class DocumentCategorie extends PersistentEntity {
 	public $naam;
 	public $zichtbaar;
 	public $leesrechten;
+
+	public function magBekijken() {
+		return LoginModel::mag($this->leesrechten);
+	}
 
 	protected static $persistent_attributes = [
 		'id' => [T::Integer, false, 'auto_increment'],

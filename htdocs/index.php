@@ -47,7 +47,7 @@ $namespacedClassName = 'CsrDelft\\controller\\' . $class . 'Controller';
 $controller = new $namespacedClassName(REQUEST_URI);
 $controller->performAction();
 
-if (DB_CHECK AND LoginModel::mag('P_ADMIN')) {
+if (false AND DB_CHECK AND LoginModel::mag('P_ADMIN')) {
 
     $queries = DatabaseAdmin::instance()->getQueries();
     if (!empty($queries)) {

@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\model;
-use CsrDelft\model\documenten\DocCategorie;
+use CsrDelft\model\documenten\DocumentCategorieModel;
+use CsrDelft\model\entity\documenten\DocumentCategorie;
 use CsrDelft\model\entity\MenuItem;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\security\LoginModel;
@@ -10,9 +11,9 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 
 /**
  * MenuModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class MenuModel extends CachedPersistenceModel {
 
@@ -28,7 +29,7 @@ class MenuModel extends CachedPersistenceModel {
 	/**
 	 * Get menu for viewing.
 	 * Use 2 levels of caching.
-	 * 
+	 *
 	 * @param string $naam
 	 * @return MenuItem root
 	 */
@@ -54,7 +55,7 @@ class MenuModel extends CachedPersistenceModel {
 			$root = $this->nieuw(0);
 			$root->tekst = $naam;
 			if ($naam == LoginModel::getUid()) {
-				// maak favorieten menu 
+				// maak favorieten menu
 				$root->link = '/menubeheer/beheer/' . $naam;
 			} else {
 				$root->link = '';
@@ -69,7 +70,7 @@ class MenuModel extends CachedPersistenceModel {
 	/**
 	 * Voeg forum-categorien, forum-delen, documenten-categorien en verticalen toe aan menu.
 	 * Deze komen in memcache terecht.
-	 * 
+	 *
 	 * @param MenuItem $parent
 	 * @return MenuItem $parent
 	 */
@@ -105,11 +106,12 @@ class MenuModel extends CachedPersistenceModel {
 
 			case 'Documenten':
 								$overig = false;
-				foreach (DocCategorie::getAll() as $categorie) {
+				foreach (DocumentCategorieModel::instance()->find() as $categorie) {
+					/** @var DocumentCategorie $categorie */
 					$item = $this->nieuw($parent->item_id);
-					$item->rechten_bekijken = $categorie->getLeesrechten();
-					$item->link = '/documenten/categorie/' . $categorie->getID();
-					$item->tekst = $categorie->getNaam();
+					$item->rechten_bekijken = $categorie->leesrechten;
+					$item->link = '/documenten/categorie/' . $categorie->id;
+					$item->tekst = $categorie->naam;
 					if (!$overig AND $item->tekst == 'Overig') {
 						$overig = $item;
 					} else {
@@ -126,7 +128,7 @@ class MenuModel extends CachedPersistenceModel {
 
 	/**
 	 * Build tree structure.
-	 * 
+	 *
 	 * @param MenuItem $parent
 	 * @return MenuItem $parent
 	 */
@@ -139,7 +141,7 @@ class MenuModel extends CachedPersistenceModel {
 
 	/**
 	 * Flatten tree structure.
-	 * 
+	 *
 	 * @param MenuItem $root
 	 * @return MenuItem[]
 	 */
@@ -165,7 +167,7 @@ class MenuModel extends CachedPersistenceModel {
 
 	/**
 	 * Lijst van alle menu roots om te beheren.
-	 * 
+	 *
 	 * @return MenuItem[]|false
 	 */
 	public function getMenuBeheerLijst() {
@@ -185,7 +187,7 @@ class MenuModel extends CachedPersistenceModel {
 
 	/**
 	 * Get menu item by id (cached).
-	 * 
+	 *
 	 * @param int $id
 	 * @return MenuItem|false
 	 */
@@ -195,7 +197,7 @@ class MenuModel extends CachedPersistenceModel {
 
 	/**
 	 * Get the parent of a menu item (cached).
-	 * 
+	 *
 	 * @param MenuItem $item
 	 * @return MenuItem
 	 */
