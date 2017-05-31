@@ -203,7 +203,7 @@ class ProfielController extends AclController {
 			$msg = $gSync->syncLid($profiel);
 			setMelding('Opgeslagen in Google Contacts: ' . $msg, 1);
 		} catch (Exception $e) {
-			setMelding($e->getMessage(), -1);
+			setMelding("Opslaan in Google Contacts mislukt: " . $e->getMessage(), -1);
 		}
 		redirect(CSR_ROOT . '/profiel/' . $profiel->uid);
 	}

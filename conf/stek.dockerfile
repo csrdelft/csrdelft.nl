@@ -1,32 +1,27 @@
 FROM php:5.6-apache
 
-ENV BASE /var/www/csrdelft.nl
-
 # update
-RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install sendmail
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php5-mysql
-RUN DEBIAN_FRONTEND=noninteractive apt-get \
-  -o Dpkg::Options::="--force-confnew" \
-  -y install libapache2-mod-php5
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends sendmail=8.14.4-8+deb8u2 \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
-# cleanup
-RUN rm -r /var/lib/apt/lists/*
-
-# copy config
-COPY conf/dev/php.ini /usr/local/etc/php/
-COPY conf/dev/apache2.conf /etc/apache2/apache2.conf
-COPY conf/dev/defines.include.php /var/www/csrdelft.nl/lib/
-COPY conf/dev/mysql.ini /var/www/csrdelft.nl/etc/
+# install php extensions
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 # enable apache mods
 RUN a2enmod rewrite
+
+ENV BASE /var/www/csrdelft.nl
+
+# copy config
+COPY conf/dev/apache2.conf /etc/apache2/apache2.conf
 
 # copy the source
 COPY . /var/www/csrdelft.nl
 
 # set permissions on DATA directories
-RUN mkdir ${BASE}/data/ && \
-  chown -R www-data ${BASE}/data && \
-  chmod -R u+rw ${BASE}/data/ && \
-  chmod -R u+rw ${BASE}/htdocs/wiki/data/
+RUN chown -R www-data "${BASE}/data" && \
+  chmod -R u+rw "${BASE}/data/" && \
+  chmod -R u+rw "${BASE}/htdocs/wiki/data/"
