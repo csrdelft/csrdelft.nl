@@ -4,7 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\GoogleSync;
-use CsrDelft\model\CommissieVoorkeurenModel;
+use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Profiel;

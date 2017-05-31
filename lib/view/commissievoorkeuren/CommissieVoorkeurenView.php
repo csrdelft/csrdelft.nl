@@ -1,8 +1,8 @@
 <?php
 namespace CsrDelft\view\commissievoorkeuren;
 
+use CsrDelft\model\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\model\VoorkeurCommissie;
 use CsrDelft\view\View;
 
 class CommissieVoorkeurenView implements View {

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\commissievoorkeuren;
 
-use CsrDelft\model\CommissieVoorkeurenModel;
+use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
