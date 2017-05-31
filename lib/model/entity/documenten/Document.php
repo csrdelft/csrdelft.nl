@@ -2,9 +2,9 @@
 
 namespace CsrDelft\model\entity\documenten;
 
+use CsrDelft\Icon;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use Exception;
 
@@ -70,31 +70,56 @@ class Document extends Bestand {
 		return '/documenten/download/' . $this->id . '/' . rawurlencode($this->filename);
 	}
 
+	public function getMimetypeIcon() {
+		return Icon::getTag('mime-' . $this->getFriendlyMimetype());
+	}
+
 	public function getFriendlyMimetype() {
-		if (strpos($this->mimetype, 'pdf')) {
-			return 'pdf';
-		} elseif (strpos($this->mimetype, 'msword') OR strpos($this->mimetype, 'officedocument.word')) {
-			return 'doc';
-		} elseif (strpos($this->mimetype, 'officedocument.pres')) {
-			return 'ppt';
-		} elseif (strpos($this->mimetype, 'html')) {
-			return 'html';
-		} elseif (strpos($this->mimetype, 'jpeg')) {
-			return 'jpg';
-		} elseif (strpos($this->mimetype, 'plain')) {
-			return 'txt';
-		} elseif (strpos($this->mimetype, 'png')) {
-			return 'png';
-		} elseif ($this->mimetype == 'application/octet-stream') {
-			return 'onbekend';
+		$mimetypeMap = [
+			'application/pdf' => 'pdf',
+			'application/zip' => 'zip',
+			'application/msword' => 'word',
+			'application/vnd.ms-excel' => 'excel',
+			'audio/mp3' => 'audio',
+			'audio/x-wav' => 'audio',
+			'text/rtf' => 'word',
+			'application/vnd.ms-powerpoint' => 'powerpoint',
+			'text/plain' => 'plain',
+			'image/jpeg' => 'image',
+			'image/png' => 'image',
+			'application/x-rar' => 'zip',
+			'application/rar' => 'zip',
+			'image/x-wmf' => 'image',
+			'application/force-download' => 'onbekend',
+			'application/x-pdf' => 'pdf',
+			'image/bmp' => 'image',
+			'application/rtf' => 'word',
+			'audio/mpeg' => 'audio',
+			'application/rar-x' => 'zip',
+			'application/vnd.openxmlformats-officedocument.spre' => 'excel',
+			'application/vnd.openxmlformats-officedocument.word' => 'word',
+			'application/vnd.openxmlformats-officedocument.pres' => 'powerpoint',
+			'application/x-zip-compressed' => 'zip',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'excel',
+			'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'powerpoint',
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'word',
+			'application/octet-stream' => 'onbekend',
+			'text/pdf' => 'pdf',
+			'application/vnd.ms-excel.sheet.macroenabled.12' => 'excel',
+		];
+
+		if (key_exists($this->mimetype, $mimetypeMap)) {
+			return $mimetypeMap[$this->mimetype];
 		} else {
-			return $this->mimetype;
+			return 'onbekend';
 		}
 	}
 
 	/**
 	 * Aangehangen bestand verwijderen van file system.
+	 *
 	 * @param bool $throwWhenNotFound
+	 *
 	 * @return bool
 	 * @throws Exception
 	 */
