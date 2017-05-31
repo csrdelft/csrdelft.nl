@@ -2,8 +2,9 @@ FROM php:5.6-apache
 
 # update
 RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get -y install sendmail \
- && rm -r /var/lib/apt/lists/*
+ && apt-get install -y --no-install-recommends sendmail=8.14.4-8+deb8u2 \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 # install php extensions
 RUN docker-php-ext-install mysqli pdo pdo_mysql
@@ -21,6 +22,6 @@ COPY conf/dev/apache2.conf /etc/apache2/apache2.conf
 COPY . /var/www/csrdelft.nl
 
 # set permissions on DATA directories
-RUN chown -R www-data ${BASE}/data && \
-  chmod -R u+rw ${BASE}/data/ && \
-  chmod -R u+rw ${BASE}/htdocs/wiki/data/
+RUN chown -R www-data "${BASE}/data" && \
+  chmod -R u+rw "${BASE}/data/" && \
+  chmod -R u+rw "${BASE}/htdocs/wiki/data/"
