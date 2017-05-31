@@ -3,11 +3,11 @@ namespace CsrDelft;
 
 /**
  * MijnSqli.class.php
- *
+ * 
  * @deprecated
- *
+ * 
  * OogOpslag Internet / C.S.R. Delft | pubcie@csrdelft.nl
- *
+ * 
  * MySQLi wrapper
  */
 class MijnSqli {
