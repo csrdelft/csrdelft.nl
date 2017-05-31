@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
 
 use CsrDelft\model\entity\security\AccessAction;
@@ -9,11 +10,11 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * Woonoord.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een woonoord is waar C.S.R.-ers bij elkaar wonen.
- * 
+ *
  */
 class Woonoord extends AbstractGroep {
 
@@ -25,17 +26,17 @@ class Woonoord extends AbstractGroep {
 	 */
 	public $soort;
 
-    /**
-     * Doet mee met Eetplan
-     */
-    public $eetplan;
+	/**
+	 * Doet mee met Eetplan
+	 */
+	public $eetplan;
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'soort' => array(T::Enumeration, false, HuisStatus::class),
-        'eetplan' => array(T::Boolean)
+		'eetplan' => array(T::Boolean)
 	);
 	/**
 	 * Database table name
@@ -49,9 +50,10 @@ class Woonoord extends AbstractGroep {
 
 	/**
 	 * Has permission for action?
-	 * 
+	 *
 	 * @param AccessAction $action
 	 * @param string $soort
+	 *
 	 * @return boolean
 	 */
 	public function mag($action, $soort = null) {

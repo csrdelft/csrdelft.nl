@@ -1,7 +1,4 @@
 <?php
-/**
- * The ${NAME} file.
- */
 
 namespace CsrDelft\view\maalcie\corvee\functies;
 use CsrDelft\model\entity\maalcie\CorveeKwalificatie;

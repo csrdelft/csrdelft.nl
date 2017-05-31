@@ -6,7 +6,7 @@ jQuery(document).ready(function ($) {
 	 * Catalogus
 	 *********************************************/
 	//catalogus: tabellen naar zebra converteren.
-	jQuery("#boeken").find("tr:odd").addClass('odd');
+	jQuery('#boeken').find('tr:odd').addClass('odd');
 
 
 	//catalogus: hippe sorteerbare tabel fixen.
@@ -106,8 +106,8 @@ jQuery(document).ready(function ($) {
 	// boekpagina: vult code-veld
 	biebCodeVakvuller();
 
-	// boekpagina: 
-	//   Suggesties uit Google books. 
+	// boekpagina:
+	//   Suggesties uit Google books.
 	//   Kiezen van een suggestie plaatst in alle velden de juiste info.
 	function getAuteur(datarow) {
 		return datarow.authors ? datarow.authors.join(', ') : '';
@@ -117,7 +117,7 @@ jQuery(document).ready(function ($) {
 	}
 	function getIsbn(datarow) {
 		var isbn = '';
-		if (datarow.industryIdentifiers && datarow.industryIdentifiers[1] && datarow.industryIdentifiers[1].type == "ISBN_13") {
+		if (datarow.industryIdentifiers && datarow.industryIdentifiers[1] && datarow.industryIdentifiers[1].type === 'ISBN_13') {
 			isbn = datarow.industryIdentifiers[1].identifier;
 		}
 		return isbn;
@@ -195,7 +195,7 @@ jQuery(document).ready(function ($) {
 		// Missing js file
 	}
 
-	//boekpagina: autocomplete voor bewerkvelden uit C.S.R.-database. 
+	//boekpagina: autocomplete voor bewerkvelden uit C.S.R.-database.
 	/* result = array(
 	 *		array(data:array(..,..,..), value: "string", result:"string"),
 	 * 		array(... )

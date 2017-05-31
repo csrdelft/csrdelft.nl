@@ -50,7 +50,7 @@ class Barsysteem
         $terug = $this->db->query(<<<SQL
 SELECT CiviSaldo.uid, CiviSaldo.naam, CiviSaldo.saldo, CiviSaldo.deleted, COUNT(CiviBestelling.totaal) AS recent 
 FROM CiviSaldo LEFT JOIN CiviBestelling 
-ON (CiviSaldo.id = CiviBestelling.uid AND DATEDIFF(NOW(), CiviBestelling.moment) < 100 AND CiviBestelling.deleted = 0)
+ON (CiviSaldo.uid = CiviBestelling.uid AND DATEDIFF(NOW(), CiviBestelling.moment) < 100 AND CiviBestelling.deleted = 0)
 GROUP BY CiviSaldo.id;
 SQL
 );
@@ -78,7 +78,17 @@ SQL
 
     function getProducten()
     {
-        $q = $this->db->prepare("SELECT id, beheer, prijs, beschrijving, prioriteit, status FROM CiviProduct AS P JOIN CiviPrijs AS R ON (P.id=R.product_id AND CURRENT_TIMESTAMP > van AND tot IS NULL) ORDER BY prioriteit DESC");
+        $q = $this->db->prepare(<<<SQL
+SELECT P.id, beheer, prijs, beschrijving, prioriteit, P.status 
+FROM CiviProduct AS P 
+JOIN CiviPrijs AS R 
+ON (P.id=R.product_id AND CURRENT_TIMESTAMP > van AND tot IS NULL)
+JOIN CiviCategorie AS C
+ON (C.id=P.categorie_id)
+WHERE C.cie = 'soccie'
+ORDER BY prioriteit DESC
+SQL
+);
         $q->execute();
 
         $result = array();
@@ -119,8 +129,10 @@ SQL
             $q->execute();
         }
         $totaal = $this->getBestellingTotaal($bestelId);
-        $q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo - :totaal WHERE uid=:socCieId ;");
+        $q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo - :totaal, laatst_veranderd = :laatstVeranderd WHERE uid=:socCieId ;");
         $q->bindValue(":totaal", $totaal, PDO::PARAM_INT);
+        $q->bindValue(":laatstVeranderd", getDateTime());
+
         $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
         $q->execute();
         $q = $this->db->prepare("UPDATE CiviBestelling  SET totaal = :totaal WHERE id = :bestelId;");
@@ -163,7 +175,16 @@ SQL
         $qa = "";
         if ($persoon != "alles")
             $qa = "B.uid=:socCieId AND";
-        $q = $this->db->prepare("SELECT *, B.deleted AS d, K.deleted AS oud FROM CiviBestelling AS B JOIN CiviBestellingInhoud AS I ON B.id=I.bestelling_id JOIN CiviSaldo AS K USING (uid) WHERE B.cie = 'soccie' AND $qa (moment BETWEEN :begin AND :eind)");
+        $q = $this->db->prepare(<<<SQL
+SELECT *, B.deleted AS d, K.deleted AS oud 
+FROM CiviBestelling AS B 
+JOIN CiviBestellingInhoud AS I 
+ON B.id=I.bestelling_id 
+JOIN CiviSaldo AS K 
+USING (uid) 
+WHERE B.cie = 'soccie' AND $qa (moment BETWEEN :begin AND :eind)
+SQL
+);
         if ($persoon != "alles")
             $q->bindValue(":socCieId", $persoon, PDO::PARAM_INT);
         $q->bindValue(":begin", $begin);
@@ -198,8 +219,9 @@ SQL
         }
 
         // Substract new order from saldo
-        $q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo - :bestelTotaal WHERE uid=:socCieId;");
+        $q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo - :bestelTotaal, laatst_veranderd = :laatstVeranderd WHERE uid=:socCieId;");
         $q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
+        $q->bindValue(":laatstVeranderd", getDateTime());
         $q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
         $q->execute();
 

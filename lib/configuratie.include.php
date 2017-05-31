@@ -14,7 +14,6 @@
 //header('location: https://csrdelft.nl/onderhoud.html');
 //exit;
 
-use CsrDelft\ShutdownHandler;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\InstellingenModel;
@@ -22,10 +21,13 @@ use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\ShutdownHandler;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
 
 require __DIR__ . '/../vendor/autoload.php';
+require_once 'defines.include.php';
+require_once 'common.functions.php';
 
 spl_autoload_register(function ($class) {
 	// project-specific namespace prefix
@@ -69,10 +71,12 @@ spl_autoload_register(function ($class) {
 
 // Registreer foutmelding handlers
 if (DEBUG) {
-    register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
+	register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
 } else {
-    register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
-    register_shutdown_function([ShutdownHandler::class, 'slackHandler']);
+	register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
+	set_error_handler([ShutdownHandler::class, 'slackHandler']);
+	register_shutdown_function([ShutdownHandler::class, 'slackShutdownHandler']);
+	register_shutdown_function([ShutdownHandler::class, 'httpStatusHandler']);
 }
 
 register_shutdown_function([ShutdownHandler::class, 'timerHandler']);
@@ -96,10 +100,6 @@ if (php_sapi_name() === 'cli') {
 	define('MODE', 'WEB');
 }
 
-// Defines
-require_once 'defines.include.php';
-require_once 'common.functions.php';
-
 if (isset($_SERVER['REQUEST_URI'])) {
 	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
 } else {
@@ -121,10 +121,10 @@ if (FORCE_HTTPS) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-            $account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
-            // Reset private token, user has to get a new one
-            AccountModel::instance()->resetPrivateToken($account);
-            // TODO: Log dit
+			$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
+			// Reset private token, user has to get a new one
+			AccountModel::instance()->resetPrivateToken($account);
+			// TODO: Log dit
 		}
 		// redirect to https
 		header('Location: ' . CSR_ROOT . REQUEST_URI, true, 301);
@@ -136,10 +136,10 @@ if (FORCE_HTTPS) {
 $cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 if ($cred === false) {
 	$cred = array(
-		'host'	 => 'localhost',
-		'user'	 => 'admin',
-		'pass'	 => 'password',
-		'db'	 => 'csrdelft'
+		'host' => 'localhost',
+		'user' => 'admin',
+		'pass' => 'password',
+		'db' => 'csrdelft'
 	);
 }
 
@@ -173,7 +173,7 @@ switch (constant('MODE')) {
 		ini_set('session.cache_limiter', 'nocache');
 		ini_set('session.use_trans_sid', 0);
 		// Sync lifetime of FS based PHP session with DB based C.S.R. session
-		ini_set('session.gc_maxlifetime', (int) InstellingenModel::get('beveiliging', 'session_lifetime_seconds'));
+		ini_set('session.gc_maxlifetime', (int)InstellingenModel::get('beveiliging', 'session_lifetime_seconds'));
 		ini_set('session.use_strict_mode', true);
 		ini_set('session.use_cookies', true);
 		ini_set('session.use_only_cookies', true);
@@ -190,9 +190,9 @@ switch (constant('MODE')) {
 			session_regenerate_id(true);
 		}
 		// Validate login
-        LoginModel::instance();
+		LoginModel::instance();
 
-        LogModel::instance()->log();
+		LogModel::instance()->log();
 
 		// Prefetch
 		LidInstellingenModel::instance()->prefetch('uid = ?', array(LoginModel::getUid()));

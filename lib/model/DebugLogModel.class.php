@@ -10,9 +10,9 @@ use Exception;
 
 /**
  * DebugLogModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class DebugLogModel extends PersistenceModel {
 
@@ -39,6 +39,7 @@ class DebugLogModel extends PersistenceModel {
 			$entry->su_uid = LoginModel::getSuedFrom()->uid;
 		}
 		$entry->ip = $_SERVER['REMOTE_ADDR'];
+		$entry->referer = $_SERVER['HTTP_REFERER'];
 		$entry->request = REQUEST_URI;
 		$entry->ip_referer = HTTP_REFERER;
 		$entry->user_agent = $_SERVER['HTTP_USER_AGENT'];

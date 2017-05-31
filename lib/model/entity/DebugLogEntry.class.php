@@ -5,9 +5,9 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * DebugLogEntry.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class DebugLogEntry extends PersistentEntity {
 
@@ -61,6 +61,11 @@ class DebugLogEntry extends PersistentEntity {
 	 * @var string
 	 */
 	public $request;
+    /**
+     * Referer
+     * @var string
+     */
+	public $referer;
 	/**
 	 * User agent
 	 * @var string

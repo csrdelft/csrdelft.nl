@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\cms;
+
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\view\View;
 
@@ -12,39 +13,33 @@ use CsrDelft\view\View;
  *
  * Tonen van de lijst met CmsPaginas voor de zijbalk.
  */
-class CmsPaginaZijbalkView implements View
-{
+class CmsPaginaZijbalkView implements View {
 
-    private $paginas;
+	private $paginas;
 
-    public function __construct(CmsPaginaModel $model)
-    {
-        $this->paginas = $model->getAllePaginas();
-    }
+	public function __construct(CmsPaginaModel $model) {
+		$this->paginas = $model->getAllePaginas();
+	}
 
-    public function getModel()
-    {
-        return $this->paginas;
-    }
+	public function getModel() {
+		return $this->paginas;
+	}
 
-    public function getBreadcrumbs()
-    {
-        return null;
-    }
+	public function getBreadcrumbs() {
+		return null;
+	}
 
-    public function getTitel()
-    {
-        return 'Pagina\'s';
-    }
+	public function getTitel() {
+		return 'Pagina\'s';
+	}
 
-    public function view()
-    {
-        echo '<div class="zijbalk-kopje"><a href="/pagina/bewerken">' . $this->getTitel() . '</a></div>';
-        foreach ($this->paginas as $pagina) {
-            echo '<div class="item">';
-            echo '<a href="/pagina/' . $pagina->naam . '" title="' . htmlspecialchars($pagina->naam) . '" >' . $pagina->titel . '</a><br />';
-            echo '</div>';
-        }
-    }
+	public function view() {
+		echo '<div class="zijbalk-kopje"><a href="/pagina/bewerken">' . $this->getTitel() . '</a></div>';
+		foreach ($this->paginas as $pagina) {
+			echo '<div class="item">';
+			echo '<a href="/pagina/' . $pagina->naam . '" title="' . htmlspecialchars($pagina->naam) . '" >' . $pagina->titel . '</a><br />';
+			echo '</div>';
+		}
+	}
 
 }

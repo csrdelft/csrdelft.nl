@@ -5,8 +5,8 @@ namespace CsrDelft;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
-use Maknz\Slack\Client as SlackClient;
 use Exception;
+use Maknz\Slack\Client as SlackClient;
 
 /**
  * Class ShutdownHandler.
@@ -15,6 +15,17 @@ use Exception;
  */
 final class ShutdownHandler
 {
+    /**
+     * Zet de http status code. Voorkomt dat stacktraces weergegeven worden.
+     *
+     * Runt in Productie mode.
+     */
+    public static function httpStatusHandler() {
+        $debug = self::getDebug();
+        if ($debug !== null && self::isError($debug)) {
+            http_response_code(500);
+        }
+    }
     /**
      * Stuur een mail naar de PubCie.
      *
@@ -58,27 +69,57 @@ final class ShutdownHandler
     /**
      * Stuur een schop naar de PubCie Slack.
      *
+     * Wordt uitgevoerd bij E_ERROR en E_CORE_ERROR.
+     *
      * Runt in Productie mode.
      */
-    public static function slackHandler() {
+    public static function slackShutdownHandler() {
         $debug = self::getDebug();
-        if ($debug !== null && file_exists(ETC_PATH . 'slack.ini')) {
+        if ($debug !== null && self::isError($debug)) {
+            $errno = $debug['error']['type'];
+            $errstr = $debug['error']['message'];
+            $errfile = $debug['error']['file'];
+            $errline = $debug['error']['line'];
+            static::slackHandler($errno, $errstr, $errfile, $errline);
+        }
+    }
+
+    /**
+     * Stuur een schop naar de PubCie Slack.
+     *
+     * Is een `error_handler` en wordt niet uitgevoerd bij E_ERROR.
+     *
+     * Runt in Productie mode.
+     */
+    public static function slackHandler($errno, $errstr, $errfile, $errline) {
+        if (!(error_reporting() & $errno)) {
+            // Deze error is gesuppressed.
+            return;
+        }
+
+
+        $debug = self::getDebug();
+        if ($debug !== null
+            && file_exists(ETC_PATH . 'slack.ini')
+        ) {
             $slackConfig = parse_ini_file(ETC_PATH . 'slack.ini');
             $slackClient = new SlackClient($slackConfig['url'], $slackConfig);
             $foutmelding = $slackClient->createMessage();
 
-            $errorName = \CsrDelft\errorName($debug['error']['type']);
+            $errorName = \CsrDelft\errorName($errno);
             $moment = date('r');
 
             $foutmelding->setText(<<<MD
-*Foutmelding `{$debug['error']['message']}`*
+*Foutmelding*
+```{$errstr}```
 • Moment `$moment`
 • Type `$errorName`
-• Bestand `{$debug['error']['file']}`
-• Regel `{$debug['error']['line']}`
-• Url `{$debug['SERVER']['REQUEST_URI']}`
-• Veroorzaakt door `{$debug['SESSION']['_uid']}`
-• Browser `{$debug['SERVER']['HTTP_USER_AGENT']}`
+• Bestand `{$errfile}`
+• Regel `{$errline}`
+• Url `{$_SERVER['REQUEST_URI']}`
+• Method `{$_SERVER['REQUEST_METHOD']}`
+• Veroorzaakt door `{$_SESSION['_uid']}`
+• Browser `{$_SERVER['HTTP_USER_AGENT']}`
 MD
             );
 
@@ -126,7 +167,7 @@ MD
             $debug['GET'] = $_GET;
             $debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
             $debug['SERVER'] = $_SERVER;
-            return $error;
+            return $debug;
         }
         return null;
     }

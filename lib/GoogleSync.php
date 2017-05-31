@@ -1,7 +1,7 @@
 <?php
+
 namespace CsrDelft;
 
-use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\GoogleToken;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\GoogleTokenModel;
@@ -28,69 +28,69 @@ require_once 'configuratie.include.php';
  * alle referentie https://developers.google.com/google-apps/contacts/v3/reference
  */
 class GoogleSync {
-    /**
-     * Groep naam in Google Contacts.
-     *
-     * @var string
-     */
-    private $groupname = 'C.S.R.-import';
-
-    /**
-	 * Alle groepen van de gebruiker.
+	/**
+	 * Groep naam in Google Contacts.
 	 *
-     * @var SimpleXMLElement[]
-     */
-	private $groupFeed = null;
-
-    /**
-     * Google-id van de groep waar alles in terecht moet komen.
-     *
-     * @var null|string
-     */
-    private $groupid = null;
-
-    /**
-	 * Alle contacten in de 'Stek-groep' van de gebruiker
-	 *
-     * @var SimpleXMLElement[]
-     */
-	private $contactFeed = null;
-
-    /**
-     * An array containing array's with some data for each contact.
-     * @var null
-     */
-    private $contactData = null;
+	 * @var string
+	 */
+	private $groupname = 'C.S.R.-import';
 
 	/**
-     * sigleton pattern
-     */
+	 * Alle groepen van de gebruiker.
+	 *
+	 * @var SimpleXMLElement[]
+	 */
+	private $groupFeed = null;
+
+	/**
+	 * Google-id van de groep waar alles in terecht moet komen.
+	 *
+	 * @var null|string
+	 */
+	private $groupid = null;
+
+	/**
+	 * Alle contacten in de 'Stek-groep' van de gebruiker
+	 *
+	 * @var SimpleXMLElement[]
+	 */
+	private $contactFeed = null;
+
+	/**
+	 * An array containing array's with some data for each contact.
+	 * @var null
+	 */
+	private $contactData = null;
+
+	/**
+	 * sigleton pattern
+	 */
 	private static $instance;
 
-    /**
-     * @var Google_Client
-     */
-    private $client;
+	/**
+	 * @var Google_Client
+	 */
+	private $client;
 
-    /**
-     * Get singleton instance of class.
-     *
-     * @return GoogleSync
-     */
-    public static function instance() {
+	/**
+	 * Get singleton instance of class.
+	 *
+	 * @return GoogleSync
+	 */
+	public static function instance() {
 		if (!isset(self::$instance)) {
 			self::$instance = new GoogleSync();
 		}
 		return self::$instance;
 	}
 
-    /**
-     * GoogleSync constructor.
-     * @throws Exception
-     */
-    private function __construct() {
-        /** @var GoogleToken $google_token */
-        $google_token = GoogleTokenModel::instance()->find('uid = ?', [LoginModel::getUid()])->fetch();
+	/**
+	 * GoogleSync constructor.
+	 * @throws Exception
+	 */
+	private function __construct() {
+		/** @var GoogleToken $google_token */
+		$google_token = GoogleTokenModel::instance()->find('uid = ?', [LoginModel::getUid()])->fetch();
 		if ($google_token === false) {
 			throw new Exception('Authsub token not available, use doRequestToken.');
 		}
@@ -102,10 +102,10 @@ class GoogleSync {
 			}
 		}
 
-        $client= self::createGoogleCLient();
-        $client->fetchAccessTokenWithRefreshToken($google_token->token);
+		$client = self::createGoogleCLient();
+		$client->fetchAccessTokenWithRefreshToken($google_token->token);
 
-        $this->client = $client;
+		$this->client = $client;
 
 		try {
 			//first load group feed, find or create the groupname from the user settings.
@@ -127,7 +127,7 @@ class GoogleSync {
 	 * Load all contactgroups.
 	 */
 	private function loadGroupFeed() {
-	    $httpClient = $this->client->authorize();
+		$httpClient = $this->client->authorize();
 		$response = $httpClient->request('GET', GOOGLE_GROUPS_URL);
 		if ($response->getStatusCode() === 401) {
 			throw new Exception();
@@ -140,30 +140,30 @@ class GoogleSync {
 	 */
 	private function loadContactsForGroup($groupId) {
 		// Default max-results is 25, laad alles in 1 keer
-        $httpClient = $this->client->authorize();
-        $response = $httpClient->request('GET', GOOGLE_CONTACTS_URL . '&max-results=1000&group=' . urlencode($groupId));
+		$httpClient = $this->client->authorize();
+		$response = $httpClient->request('GET', GOOGLE_CONTACTS_URL . '&max-results=1000&group=' . urlencode($groupId));
 		if ($response->getStatusCode() === 401) {
 			throw new Exception();
 		}
 		$this->contactFeed = simplexml_load_string($response->getBody())->entry;
 	}
 
-    /**
-     * Zorg ervoor dat $xml met xpath doorzocht kan worden. Dit werkt alleen voor het huidige element,
-     * diepere elementen moeten opnieuw gefixt worden.
-     *
-     * De standaard namespace wordt _, omdat deze niet leeg kan zijn.
-     *
-     * @param $xml SimpleXMLElement
-     */
-    private function fixSimpleXMLNameSpace($xml) {
-        foreach ($xml->getDocNamespaces() as $strPrefix => $strNamespace) {
-            if (strlen($strPrefix)==0) {
-                $strPrefix = "_";
-            }
-            $xml->registerXPathNamespace($strPrefix, $strNamespace);
-        }
-    }
+	/**
+	 * Zorg ervoor dat $xml met xpath doorzocht kan worden. Dit werkt alleen voor het huidige element,
+	 * diepere elementen moeten opnieuw gefixt worden.
+	 *
+	 * De standaard namespace wordt _, omdat deze niet leeg kan zijn.
+	 *
+	 * @param $xml SimpleXMLElement
+	 */
+	private function fixSimpleXMLNameSpace($xml) {
+		foreach ($xml->getDocNamespaces() as $strPrefix => $strNamespace) {
+			if (strlen($strPrefix) == 0) {
+				$strPrefix = "_";
+			}
+			$xml->registerXPathNamespace($strPrefix, $strNamespace);
+		}
+	}
 
 	/**
 	 * Trek naam googleId en wat andere relevante meuk uit de feed-objecten
@@ -185,6 +185,7 @@ class GoogleSync {
 	 * Maak een behapbaar object van een contact.
 	 *
 	 * @param $contact SimpleXMLElement
+	 *
 	 * @return array|null Een array als de contact een csruid heeft, anders null
 	 */
 	private function unpackGoogleContact($contact) {
@@ -197,15 +198,15 @@ class GoogleSync {
 		$photoLink = $contact->xpath('_:link[@rel="http://schemas.google.com/contacts/2008/rel#photo"]')[0];
 
 		return array(
-			'name'	 => (string) $contact->title,
-			'etag'	 => (string) $contact->attributes('gd', true)->etag,
-			'id'	 => (string) $contact->id,
-			'self'	 => (string) $link->attributes()->href,
-			'photo'  => array(
-				'href' => (string) $photoLink->attributes()->href,
-				'etag' => (string) $photoLink->attributes('gd', true)->etag
-            ),
-			'csruid' => (string) $uid->attributes()->value
+			'name' => (string)$contact->title,
+			'etag' => (string)$contact->attributes('gd', true)->etag,
+			'id' => (string)$contact->id,
+			'self' => (string)$link->attributes()->href,
+			'photo' => array(
+				'href' => (string)$photoLink->attributes()->href,
+				'etag' => (string)$photoLink->attributes('gd', true)->etag
+			),
+			'csruid' => (string)$uid->attributes()->value
 		);
 	}
 
@@ -223,9 +224,9 @@ class GoogleSync {
 		foreach ($this->getGoogleContacts() as $contact) {
 
 			if (
-					$contact['csruid'] == $profiel->uid OR
-					strtolower($contact['name']) == $name OR
-					str_replace(' ', '', strtolower($contact['name'])) == str_replace(' ', '', $name)
+				$contact['csruid'] == $profiel->uid OR
+				strtolower($contact['name']) == $name OR
+				str_replace(' ', '', strtolower($contact['name'])) == str_replace(' ', '', $name)
 			) {
 				return $contact;
 			}
@@ -251,9 +252,9 @@ class GoogleSync {
 	function getGroups() {
 		$return = array();
 		foreach ($this->groupFeed as $group) {
-            $this->fixSimpleXMLNameSpace($group);
+			$this->fixSimpleXMLNameSpace($group);
 
-			$title = (string) $group->title;
+			$title = (string)$group->title;
 
 			if (substr($title, 0, 13) == 'System Group:') {
 				$title = substr($title, 14);
@@ -262,17 +263,17 @@ class GoogleSync {
 			//opslaan in de array.
 			//Dit ID hebben we nodig om onafhankelijk van de ingestelde taal @google de system
 			//group 'My Contacts' te kunnen gebruiken
-            $systemgroup = $group->xpath('gContact:systemGroup');
-            if (count($systemgroup) == 1) {
-                $systemgroup = (string) $systemgroup[0]->id;
-            } else {
-                $systemgroup = null;
-            }
+			$systemgroup = $group->xpath('gContact:systemGroup');
+			if (count($systemgroup) == 1) {
+				$systemgroup = (string)$systemgroup[0]->id;
+			} else {
+				$systemgroup = null;
+			}
 
 			$return[] = array(
-				'id'			 => (string) $group->id,
-				'name'			 => $title,
-				'systemgroup'	 => $systemgroup
+				'id' => (string)$group->id,
+				'name' => $title,
+				'systemgroup' => $systemgroup
 			);
 		}
 		return $return;
@@ -321,16 +322,16 @@ class GoogleSync {
 		$title->setAttribute('type', 'text');
 		$entry->appendChild($title);
 
-        $httpClient = $this->client->authorize();
-        $response = $httpClient->request('POST', GOOGLE_GROUPS_URL, [
-            'headers' => ['Content-Type' => 'application/atom+xml'],
-            'body' => $doc->saveXML()
-        ]);
+		$httpClient = $this->client->authorize();
+		$response = $httpClient->request('POST', GOOGLE_GROUPS_URL, [
+			'headers' => ['Content-Type' => 'application/atom+xml'],
+			'body' => $doc->saveXML()
+		]);
 
 		//herlaad groupFeed om de nieuw gemaakte daar ook in te hebben.
 		$this->loadGroupFeed();
 
-		return (string) simplexml_load_string($response->getBody())->id;
+		return (string)simplexml_load_string($response->getBody())->id;
 	}
 
 	/**
@@ -374,7 +375,7 @@ class GoogleSync {
 			$doc->appendChild($feed);
 
 			foreach ($profielBatch as $profiel) {
-				$profielXml = $doc->importNode($this->createXML($profiel)->documentElement,true);
+				$profielXml = $doc->importNode($this->createXML($profiel)->documentElement, true);
 				$feed->appendChild($profielXml);
 
 				$batchOperation = $doc->createElement('batch:operation');
@@ -392,22 +393,22 @@ class GoogleSync {
 					$profielXml->appendChild($id);
 
 					$batchOperation->setAttribute('type', 'update');
-					$message.='Update: ' . $profiel->getNaam() . ' ';
+					$message .= 'Update: ' . $profiel->getNaam() . ' ';
 				} else {
 					$batchOperation->setAttribute('type', 'insert');
-					$message.='Ingevoegd: ' . $profiel->getNaam() . ' ';
+					$message .= 'Ingevoegd: ' . $profiel->getNaam() . ' ';
 				}
 
 				$profielXml->appendChild($batchOperation);
 			}
 
 			$httpClient = $this->client->authorize();
-            $response = $httpClient->request('POST', GOOGLE_CONTACTS_BATCH_URL, [
-                'headers' => [
-                    'Content-Type' => 'application/atom+xml',
-                    'GData-Version' => '3.0'],
-                'body' => $doc->saveXML()
-            ]);
+			$response = $httpClient->request('POST', GOOGLE_CONTACTS_BATCH_URL, [
+				'headers' => [
+					'Content-Type' => 'application/atom+xml',
+					'GData-Version' => '3.0'],
+				'body' => $doc->saveXML()
+			]);
 
 			$newContacts = simplexml_load_string($response->getBody());
 
@@ -423,14 +424,14 @@ class GoogleSync {
 		return $message;
 	}
 
-    /**
-     * Een enkel lid syncen naar Google contacts.
-     *
-     * @param $profiel Profiel
-     *
-     * @return string met foutmelding of naam van lid bij succes.
-     * @throws Exception
-     */
+	/**
+	 * Een enkel lid syncen naar Google contacts.
+	 *
+	 * @param $profiel Profiel
+	 *
+	 * @return string met foutmelding of naam van lid bij succes.
+	 * @throws Exception
+	 */
 	public function syncLid(Profiel $profiel) {
 		if (!$profiel instanceof Profiel) {
 			$profiel = ProfielModel::get($profiel);
@@ -440,23 +441,23 @@ class GoogleSync {
 		$googleid = $this->existsInGoogleContacts($profiel);
 
 		$error_message = '<div>Fout in Google-sync#%s: <br />' .
-				'Lid: %s<br />Foutmelding: %s</div>';
+			'Lid: %s<br />Foutmelding: %s</div>';
 
 		$doc = $this->createXML($profiel);
 
-        $httpClient = $this->client->authorize();
+		$httpClient = $this->client->authorize();
 
 		if ($googleid != null) {
 			try {
 				//post to original entry's link[rel=self], set ETag in HTTP-headers for versioning
-                $response = $httpClient->request('PUT', $googleid['self'], [
-                    'headers' => [
-                        'GData-Version' => '3.0',
-                        'Content-Type' => 'application/atom+xml',
-                        'If-Match' => $googleid['etag']
-                    ],
-                    'body' => $doc->saveXML()
-                ]);
+				$response = $httpClient->request('PUT', $googleid['self'], [
+					'headers' => [
+						'GData-Version' => '3.0',
+						'Content-Type' => 'application/atom+xml',
+						'If-Match' => $googleid['etag']
+					],
+					'body' => $doc->saveXML()
+				]);
 
 				$contact = $this->unpackGoogleContact(simplexml_load_string($response->getBody()));
 				$this->updatePhoto($contact, $profiel);
@@ -467,12 +468,12 @@ class GoogleSync {
 			}
 		} else {
 			try {
-			    $response = $httpClient->request('POST', GOOGLE_CONTACTS_URL, [
-			        'headers' => [
-			            'Content-Type' => 'application/atom+xml'
-                    ],
-                    'body' => $doc->saveXML()
-                ]);
+				$response = $httpClient->request('POST', GOOGLE_CONTACTS_URL, [
+					'headers' => [
+						'Content-Type' => 'application/atom+xml'
+					],
+					'body' => $doc->saveXML()
+				]);
 
 				$contact = $this->unpackGoogleContact(simplexml_load_string($response->getBody()));
 				$this->updatePhoto($contact, $profiel);
@@ -486,6 +487,7 @@ class GoogleSync {
 
 	/**
 	 * Haal de link naar de contact foto uit een contact xml-string en post de foto van $profiel er naar toe.
+	 *
 	 * @param $contact array
 	 * @param $profiel Profiel
 	 */
@@ -493,7 +495,7 @@ class GoogleSync {
 
 		$url = $contact['photo']['href'];
 
-		$path  = PHOTOS_PATH . $profiel->getPasfotoPath(true);
+		$path = PHOTOS_PATH . $profiel->getPasfotoPath(true);
 
 		$headers = array('GData-Version' => '3.0', 'Content-Type' => "image/*");
 
@@ -503,15 +505,17 @@ class GoogleSync {
 
 		$httpClient = $this->client->authorize();
 
-        $httpClient->request('PUT', $url, [
-            'headers' => $headers,
-            'body' => file_get_contents($path)
-        ]);
+		$httpClient->request('PUT', $url, [
+			'headers' => $headers,
+			'body' => file_get_contents($path)
+		]);
 	}
 
 	/**
 	 * Create a XML document for this Lid.
+	 *
 	 * @param $profiel Profiel create XML feed for this object
+	 *
 	 * @return DOMDocument XML document voor dit Profiel
 	 */
 	private function createXML(Profiel $profiel) {
@@ -542,23 +546,23 @@ class GoogleSync {
 				$entry->appendChild($doc->createElement('gContact:initials', $profiel->voorletters));
 			}
 
-            //adres ouders toevoegen, alleen bij leden...
-            if ($profiel->isLid() AND $profiel->o_adres != '' AND $profiel->adres != $profiel->o_adres) {
-                $address = $doc->createElement('gd:structuredPostalAddress');
-                //$address->setAttribute('rel', 'http://schemas.google.com/g/2005#other');
-                $address->setAttribute('label', 'Ouders');
+			//adres ouders toevoegen, alleen bij leden...
+			if ($profiel->isLid() AND $profiel->o_adres != '' AND $profiel->adres != $profiel->o_adres) {
+				$address = $doc->createElement('gd:structuredPostalAddress');
+				//$address->setAttribute('rel', 'http://schemas.google.com/g/2005#other');
+				$address->setAttribute('label', 'Ouders');
 
-                $address->appendChild($doc->createElement('gd:street', $profiel->o_adres));
-                if ($profiel->o_postcode != '') {
-                    $address->appendChild($doc->createElement('gd:postcode', $profiel->o_postcode));
-                }
-                $address->appendChild($doc->createElement('gd:city', $profiel->o_woonplaats));
-                if ($profiel->o_land != '') {
-                    $address->appendChild($doc->createElement('gd:country', $profiel->o_land));
-                }
-                $address->appendChild($doc->createElement('gd:formattedAddress', $profiel->getFormattedAddressOuders()));
-                $entry->appendChild($address);
-            }
+				$address->appendChild($doc->createElement('gd:street', $profiel->o_adres));
+				if ($profiel->o_postcode != '') {
+					$address->appendChild($doc->createElement('gd:postcode', $profiel->o_postcode));
+				}
+				$address->appendChild($doc->createElement('gd:city', $profiel->o_woonplaats));
+				if ($profiel->o_land != '') {
+					$address->appendChild($doc->createElement('gd:country', $profiel->o_land));
+				}
+				$address->appendChild($doc->createElement('gd:formattedAddress', $profiel->getFormattedAddressOuders()));
+				$entry->appendChild($address);
+			}
 		}
 
 		//add home address
@@ -699,51 +703,51 @@ class GoogleSync {
 		return $doc;
 	}
 
-    /**
-     * Bestaat er een verbinding met Google?
-     *
-     * @return bool
-     */
-    public static function isAuthenticated() {
+	/**
+	 * Bestaat er een verbinding met Google?
+	 *
+	 * @return bool
+	 */
+	public static function isAuthenticated() {
 		return GoogleTokenModel::instance()->count('uid = ?', [LoginModel::getUid()]) === 1;
 	}
 
-    /**
-     * Vraag een Authsub-token aan bij google, plaats bij ontvangen in GoogleToken tabel.
-     *
-     * @param $state string, moet de url bevatten waar naar geredirect moet worden als
-     * de authenticatie gelukt is, de url zonder `addToGoogleContacts` wordt gebruikt als
-     * de authenticatie mislukt.
-     */
+	/**
+	 * Vraag een Authsub-token aan bij google, plaats bij ontvangen in GoogleToken tabel.
+	 *
+	 * @param $state string, moet de url bevatten waar naar geredirect moet worden als
+	 * de authenticatie gelukt is, de url zonder `addToGoogleContacts` wordt gebruikt als
+	 * de authenticatie mislukt.
+	 */
 	public static function doRequestToken($state) {
 		if (!static::isAuthenticated()) {
-            $client = self::createGoogleCLient();
-            $client->setState(urlencode($state));
+			$client = self::createGoogleCLient();
+			$client->setState(urlencode($state));
 
-            $googleImportUrl = $client->createAuthUrl();
-            header("HTTP/1.0 307 Temporary Redirect");
+			$googleImportUrl = $client->createAuthUrl();
+			header("HTTP/1.0 307 Temporary Redirect");
 			header("Location: $googleImportUrl");
 			exit;
 		}
 	}
 
-    /**
-     * Maak een nieuwe Google_Client met de settings van de stek.
-     *
-     * @return Google_Client
-     */
-    public static function createGoogleCLient() {
-        $redirect_uri = CSR_ROOT . '/google/callback';
-        $client = new Google_Client();
-        $client->setApplicationName('Stek');
-        $client->setClientId(GOOGLE_CLIENT_ID);
-        $client->setClientSecret(GOOGLE_CLIENT_SECRET);
-        $client->setRedirectUri($redirect_uri);
-        $client->setAccessType('offline');
-        // Zonder force kunnen we nog een oude sessie krijgen (zonder refresh token)
-        $client->setApprovalPrompt('force');
-        $client->setScopes(['https://www.google.com/m8/feeds']);
+	/**
+	 * Maak een nieuwe Google_Client met de settings van de stek.
+	 *
+	 * @return Google_Client
+	 */
+	public static function createGoogleCLient() {
+		$redirect_uri = CSR_ROOT . '/google/callback';
+		$client = new Google_Client();
+		$client->setApplicationName('Stek');
+		$client->setClientId(GOOGLE_CLIENT_ID);
+		$client->setClientSecret(GOOGLE_CLIENT_SECRET);
+		$client->setRedirectUri($redirect_uri);
+		$client->setAccessType('offline');
+		// Zonder force kunnen we nog een oude sessie krijgen (zonder refresh token)
+		$client->setApprovalPrompt('force');
+		$client->setScopes(['https://www.google.com/m8/feeds']);
 
-        return $client;
-    }
+		return $client;
+	}
 }

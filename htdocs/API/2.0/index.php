@@ -13,7 +13,7 @@ require_once 'configuratie.include.php';
 /**
  * Maak de API toegankelijk vanaf bepaalde externe domeinen.
  */
-if (in_array($_SERVER['HTTP_ORIGIN'], explode(',', API_ORIGINS), true)) {
+if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], explode(',', API_ORIGINS), true)) {
 	header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
 	header('Access-Control-Max-Age: 1440');
 	header('Access-Control-Allow-Headers: Accept, Origin, Content-Type, X-Csr-Authorization');
