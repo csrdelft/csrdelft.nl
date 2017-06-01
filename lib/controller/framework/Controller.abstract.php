@@ -200,7 +200,7 @@ abstract class Controller {
 			redirect(CSR_ROOT . "#login");
 		}
 		// GUI 403
-						$body = new CmsPaginaView(CmsPaginaModel::get($response_code));
+		$body = new CmsPaginaView(CmsPaginaModel::get($response_code));
 		$this->view = new CsrLayoutPage($body);
 		$this->view->view();
 		exit;
