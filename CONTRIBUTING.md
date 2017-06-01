@@ -64,6 +64,17 @@ Probeer om ten minste deze te verkrijgen.
 * /htdocs/plaetjes/pasfoto/geen-foto.jpg
 * /htdocs/pleatjes/layout/
 
+## CmsPaginas
+
+De volgende CMS pagina's zijn gehardcoded in de stek, zorg dat deze in de `cms_paginas` tabel aanwezig zijn.
+
+* `thuis`
+* `accountaanvragen`
+* `mobiel`
+* `UitlegACL`
+* `fotostoevoegen`
+* `403`
+
 ### Docker
 
 Op Linux en mac moet dit makkelijk draaien.
