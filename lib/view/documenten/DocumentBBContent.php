@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\documenten;
 
-use CsrDelft\model\documenten\Document;
+use CsrDelft\model\entity\documenten\Document;
 
 class DocumentBBContent extends DocumentenView
 {

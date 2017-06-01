@@ -3,7 +3,7 @@ namespace CsrDelft\view\bbcode;
 
 use CsrDelft\Icon;
 use CsrDelft\model\bibliotheek\BiebBoek;
-use CsrDelft\model\documenten\Document;
+use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;
@@ -1042,10 +1042,10 @@ HTML;
 			$id = $this->parseArray(array('[/document]'), array());
 		}
 		try {
-			$document = new Document((int) $id);
+			$document = DocumentModel::instance()->get($id);
 			if ($this->light_mode) {
-				$beschrijving = $document->getFriendlyMimetype() . ' (' . format_filesize((int) $document->getFileSize()) . ')';
-				return $this->lightLinkBlock('document', $document->getDownloadUrl(), $document->getNaam(), $beschrijving);
+				$beschrijving = $document->getFriendlyMimetype() . ' (' . format_filesize((int) $document->filesize) . ')';
+				return $this->lightLinkBlock('document', $document->getDownloadUrl(), $document->naam, $beschrijving);
 			}
 			$content = new DocumentBBContent($document);
 			return $content->getHtml();
