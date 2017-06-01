@@ -162,7 +162,7 @@
                 </li>
                 <li>
                     <a href="https://www.maxilia.nl/banners-drukken/" class="lazy-load"
-                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/maxilia.png' alt='Maxiliaadvertentie'/>">
+                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/maxilia.png' class='white-background' alt='Maxiliaadvertentie'/>">
                     </a>
                 </li>
                 <li>
