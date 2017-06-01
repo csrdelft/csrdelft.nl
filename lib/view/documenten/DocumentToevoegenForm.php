@@ -28,10 +28,10 @@ class DocumentToevoegenForm extends Formulier {
 		$map->path = PUBLIC_FTP . 'documenten/';
 		$map->dirname = basename($map->path);
 
-		$fields[] = new SelectField('categorie_id', $document->categorie_id, 'Categorie', DocumentCategorieModel::instance()->getCategorieNamen());
-		$fields[] = new RequiredTextField('naam', $document->naam, 'Documentnaam');
-		$fields[] = $this->uploader = new RequiredFileField('document', 'Document', $document, $map);
-		$fields['rechten'] = new RechtenField('leesrechten', $document->leesrechten, 'Leesrechten');
+		$fields[] = new SelectField('categorie_id', $this->model->categorie_id, 'Categorie', DocumentCategorieModel::instance()->getCategorieNamen());
+		$fields[] = new RequiredTextField('naam', $this->model->naam, 'Documentnaam');
+		$fields[] = $this->uploader = new RequiredFileField('document', 'Document', $this->model, $map);
+		$fields['rechten'] = new RechtenField('leesrechten', $this->model->leesrechten, 'Leesrechten');
 		$fields['rechten']->readonly = true;
 		$fields[] = new FormDefaultKnoppen('/documenten/');
 
