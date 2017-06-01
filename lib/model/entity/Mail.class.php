@@ -4,6 +4,7 @@ use function CsrDelft\email_like;
 use function CsrDelft\isSyrinx;
 use function CsrDelft\setMelding;
 use CsrDelft\view\bbcode\CsrBB;
+use CsrDelft\view\bbcode\EmailCsrBB;
 use CsrDelft\view\MailTemplateView;
 use Exception;
 
@@ -12,7 +13,7 @@ use Exception;
  *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Alle mailadressen in to of bcc zullen als de host niet syrinx is
  * worden aangepast naar pubcie@csrdelft.nl
  */
@@ -187,7 +188,7 @@ class Mail {
 			$body = str_replace($key, $value, $body);
 		}
 		if ($this->type === 'html') {
-			$body = CsrBB::parseMail($body);
+			$body = EmailCsrBB::parse($body);
 		}
 		return $body;
 	}

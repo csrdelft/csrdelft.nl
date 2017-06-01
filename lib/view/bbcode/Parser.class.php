@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\bbcode;
 
 /**
@@ -125,7 +126,9 @@ class Parser {
 	 * Transform BB code to HTML code.
 	 *
 	 * This method takes a text with BB code and transforms it to HTML.
+	 *
 	 * @param string $bbcode BB code to be transformed
+	 *
 	 * @return string HTML
 	 */
 	public function getHtml($bbcode) {
@@ -196,7 +199,8 @@ class Parser {
 	/**
 	 * Breaks the inputted BB code into an array of text and tags
 	 */
-	private function buildArray($string) {
+	private function buildArray($string)
+	{
 
 		if (strlen($string) == 0) // Empty or no string
 			return false;
@@ -259,8 +263,16 @@ class Parser {
 	 * Process array
 	 *
 	 * Walks through the array until one of the stoppers is found. When encountering an 'open' tag, which is not in $forbidden, open corresponding bb_ function.
+	 *
+	 * @param array $stoppers
+	 * @param array $forbidden
+	 *
+	 * @return string
 	 */
-	protected function parseArray($stoppers = array(), $forbidden = array()) {
+	protected function parseArray(
+		$stoppers = array(),
+		$forbidden = array()
+	) {
 
 		if (!is_array($this->parseArray)) { // Well, nothing to parse
 			return null;
@@ -407,9 +419,11 @@ class Parser {
 	 *
 	 * When supplied with a full tag ([b] or [img w=5 h=10]), return tag name
 	 * @return string
+	 *
 	 * @param string $fullTag The full tag to get the tagname from
 	 */
-	private function getTag($fullTag) {
+	private function getTag($fullTag)
+	{
 		if (substr($fullTag, 0, 1) == '[' && substr($fullTag, strlen($fullTag) - 1, 1) == ']') {
 			return strtok($fullTag, '[ =]');
 		} else {
@@ -422,6 +436,7 @@ class Parser {
 	 *
 	 * When supplied with a full tag ([h=5] or [img=blah.gif w=5 h=10]), return array with argument/value as key/value pairs
 	 * @return array
+	 *
 	 * @param string $fullTag The full tag to get the arguments from
 	 */
 	private function getArguments($fullTag) {
