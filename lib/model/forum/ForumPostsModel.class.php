@@ -129,10 +129,6 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$attributes = array('*', 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score');
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		$where_params = array($query);
-		if (!LoginModel::mag('P_LOGGED_IN')) {
-			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
-			$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
-		}
 		$order = 'score DESC';
 		if (in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
 			$order .= ', ' . $datumsoort . ' DESC';
