@@ -1,7 +1,7 @@
 <!-- Banner -->
 <section id="banner">
     <div class="inner">
-        <img src="/assets/layout-owee/plaetjes/Logo.svg">
+        <img src="/assets/layout-owee/plaetjes/logo-next-level.svg">
     </div>
 </section>
 
