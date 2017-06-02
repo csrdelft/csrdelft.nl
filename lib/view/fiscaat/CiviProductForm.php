@@ -24,7 +24,7 @@ class CiviProductForm extends ModalForm {
 	function __construct(CiviProduct $model, $target) {
 		parent::__construct($model, '/fiscaat/producten/' . $target, false, true);
 
-		$categorie = CiviCategorieModel::instance()->findSparse(array('type'), 'id = ?', array($model->categorie_id))->fetch();
+		$categorie = CiviCategorieModel::instance()->find('id = ?', array($model->categorie_id))->fetch();
 		if ($categorie == false) {
 			$categorie = new CiviCategorie();
 		}

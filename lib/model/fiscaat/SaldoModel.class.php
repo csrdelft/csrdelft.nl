@@ -63,14 +63,14 @@ class SaldoModel extends PersistenceModel {
 			return null;
 		}
 		$model = DynamicEntityModel::makeModel('socCieKlanten');
-		$klant = $model->findSparse(array('socCieId', 'saldo'), 'stekUID = ?', array($uid), null, null, 1)->fetch();
+		$klant = $model->find('stekUID = ?', array($uid), null, null, 1)->fetch();
 		if (!$klant) {
 			return null;
 		}
 		$saldo = $klant->saldo;
 		$data = $data = [];
 		$model = DynamicEntityModel::makeModel('socCieBestelling');
-		$bestellingen = $model->findSparse(array('tijd', 'totaal'), 'socCieId = ? AND deleted = FALSE AND tijd>(NOW() - INTERVAL ? DAY)', array($klant->socCieId, $timespan), null, 'tijd DESC');
+		$bestellingen = $model->find('socCieId = ? AND deleted = FALSE AND tijd>(NOW() - INTERVAL ? DAY)', array($klant->socCieId, $timespan), null, 'tijd DESC');
 		foreach ($bestellingen as $bestelling) {
 			$data[] = array('moment' => $bestelling->tijd, 'saldo' => round($saldo / 100, 2));
 			$saldo += $bestelling->totaal;
