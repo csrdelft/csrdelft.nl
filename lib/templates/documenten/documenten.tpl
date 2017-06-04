@@ -52,7 +52,7 @@
 							{/if}
 					</td>
 					<td class="size">{$document->filesize|filesize}</td>
-					<td title="{$document->mimetype}">$document->getMimetypeIcon()</td>
+					<td title="{$document->mimetype}">{$document->getMimetypeIcon()}</td>
 					<td>{$document->toegevoegd|reldate}</td>
 					<td>{CsrDelft\model\ProfielModel::getLink($document->eigenaar, 'civitas')}</td>
 				</tr>
