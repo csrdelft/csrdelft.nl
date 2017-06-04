@@ -31,7 +31,7 @@ class EetplanModel extends PersistenceModel {
 	 * Haal alle avonden op die voor deze lichting gelden.
 	 *
 	 * @param $lichting
-	 * @return Eetplan[] Lijst met sparse(!) eetplan objecten met alleen een avond.
+	 * @return Eetplan[] Lijst met eetplan objecten met alleen een avond.
 	 */
     public function getAvonden($lichting) {
         return $this->find('uid LIKE ?', array($lichting . "%"), 'avond')->fetchAll();

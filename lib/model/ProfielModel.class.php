@@ -36,8 +36,6 @@ class ProfielModel extends CachedPersistenceModel {
 	protected static $instance;
 
 	/**
-	 * TODO: sparse retieval: array('voornaam', 'tussenvoegsel', 'achternaam');
-	 *
 	 * @param string $uid
 	 * @return Profiel|false
 	 */

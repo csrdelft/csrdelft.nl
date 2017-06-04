@@ -1041,15 +1041,17 @@ HTML;
 		} else {
 			$id = $this->parseArray(array('[/document]'), array());
 		}
-		try {
-			$document = DocumentModel::instance()->get($id);
+
+		$document = DocumentModel::instance()->get($id);
+
+		if ($document) {
 			if ($this->light_mode) {
 				$beschrijving = $document->getFriendlyMimetype() . ' (' . format_filesize((int) $document->filesize) . ')';
 				return $this->lightLinkBlock('document', $document->getDownloadUrl(), $document->naam, $beschrijving);
 			}
 			$content = new DocumentBBContent($document);
 			return $content->getHtml();
-		} catch (Exception $e) {
+		} else {
 			return '<div class="bb-document">[document] Ongeldig document (id:' . $id . ')</div>';
 		}
 	}
