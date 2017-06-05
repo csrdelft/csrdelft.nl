@@ -102,7 +102,7 @@ class SaldoModel extends PersistenceModel {
 		);
 	}
 
-	public function getDataPointsForCiviSaldo($uid, $timespan) {
+	public function getDataPointsForCiviSaldo($uid, $timespan, $repeatFirst = false) {
 		if (!$this->magGrafiekZien($uid)) {
 			return null;
 		}
@@ -121,9 +121,14 @@ class SaldoModel extends PersistenceModel {
 			$saldo += $bestelling->totaal;
 		}
 		if (!empty($data)) {
-			// Dupliceer het eerste datapunt om grafiek te tekenen vanaf 0
+			// Dupliceer het eerste datapunt om grafiek te tekenen vanaf 0 of het laatste als $repeatFirst waar is
 			$row = end($data);
-			array_push($data, array($row[0], 0));
+			if ($repeatFirst) {
+                $time = $this->flotTime($timespan - 1 . ' days 23 hours ago');
+                array_push($data, [$time, $row[1]]);
+            } else {
+                array_push($data, [$row[0], 0]);
+            }
 		}
 		return array(
 			"label" => "CiviSaldo",
@@ -136,11 +141,13 @@ class SaldoModel extends PersistenceModel {
 
 	public function getDataPoints($uid, $timespan) {
 		// array_filter haalt grafieken die niet gezien mogen worden of geen data hebben voor dit $timespan eruit.
-		return array_filter(array(
-			$this->getDataPointsForMaalCie($uid, $timespan),
-			$this->getDataPointsForSocCie($uid, $timespan),
-			$this->getDataPointsForCiviSaldo($uid, $timespan)
-		));
+		$array = array_filter(array(
+		    $this->getDataPointsForMaalCie($uid, $timespan),
+            $this->getDataPointsForSocCie($uid, $timespan)
+        ));
+		// Begin met het herhalen van het CiviSaldo naar het verleden als de oude SocCie en MaalCie saldi niet meer zichtbaar zijn.
+		$array[] = $this->getDataPointsForCiviSaldo($uid, $timespan, empty($array) || (empty($array[0]['data']) && empty([1]['data'])));
+        return array_filter($array);
 	}
 
 	public function magGrafiekZien($uid) {
