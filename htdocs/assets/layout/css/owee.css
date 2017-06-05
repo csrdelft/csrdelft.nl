@@ -27,7 +27,7 @@ a:hover,
 .cd-primary-nav .cd-secondary-nav a,
 .cd-primary-nav .cd-secondary-nav > li > a:hover,
 .cd-primary-nav .cd-secondary-nav > li > a {
-    color: #fa7921;
+    color: #fff;
 }
 
 /*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
@@ -53,7 +53,7 @@ a:hover,
 #cd-zijbalk .blok .item a,
 #cd-zijbalk .ishetal,
 #cd-zijbalk .blok .item {
-    color: #fa7921;
+    color: white;
 }
 
 /*Zijbalk grens van het scherm in blauw*/
