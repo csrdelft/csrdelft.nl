@@ -1,8 +1,8 @@
 <?php
 namespace CsrDelft\view\maalcie\forms;
 use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\view\formulier\getalvelden\IntField;
-use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\getalvelden\RequiredIntField;
+use CsrDelft\view\formulier\invoervelden\RequiredLidField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -33,9 +33,9 @@ class AanmeldingForm extends ModalForm {
 		}
 		$this->css_classes[] = 'PreventUnchanged';
 
-		$fields[] = new LidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
+		$fields[] = new RequiredLidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
 		if ($nieuw) {
-			$fields[] = new IntField('aantal_gasten', $gasten, 'Aantal gasten', 0, 200);
+			$fields[] = new RequiredIntField('aantal_gasten', $gasten, 'Aantal gasten', 0, 200);
 		}
 		$fields[] = new FormDefaultKnoppen();
 
