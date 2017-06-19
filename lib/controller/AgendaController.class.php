@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\agenda\AgendaVerbergenModel;
-use CsrDelft\model\BijbelroosterModel;
 use CsrDelft\model\entity\agenda\AgendaItem;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\groepen\ActiviteitenModel;
@@ -175,10 +174,6 @@ class AgendaController extends AclController {
 
 			case 'csrdelft':
 				$item = ProfielModel::instance()->retrieveByUUID($refuuid);
-				break;
-
-			case 'bijbelrooster':
-				$item = BijbelroosterModel::instance()->retrieveByUUID($refuuid);
 				break;
 
 			case 'maaltijd':

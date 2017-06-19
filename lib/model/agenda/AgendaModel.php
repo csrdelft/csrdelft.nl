@@ -2,7 +2,6 @@
 namespace CsrDelft\model\agenda;
 
 use CsrDelft\model\agenda;
-use CsrDelft\model\BijbelroosterModel;
 use CsrDelft\model\entity\agenda\AgendaItem;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
@@ -68,11 +67,6 @@ class AgendaModel extends PersistenceModel {
 			if ($item->magBekijken($ical)) {
 				$result[] = $item;
 			}
-		}
-
-		// Bijbelrooster
-		if (LidInstellingenModel::get('agenda', 'toonBijbelrooster') === 'ja' && !$zijbalk) {
-			$result = array_merge($result, BijbelroosterModel::instance()->getBijbelroosterTussen($van, $tot)->fetchAll());
 		}
 
 		// Activiteiten

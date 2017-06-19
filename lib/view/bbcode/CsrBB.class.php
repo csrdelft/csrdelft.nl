@@ -28,7 +28,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\SavedQuery;
 use CsrDelft\SavedQueryContent;
 use CsrDelft\view\bibliotheek\BoekBBView;
-use CsrDelft\view\bijbelrooster\BijbelroosterBBView;
 use CsrDelft\view\documenten\DocumentBBContent;
 use CsrDelft\view\formulier\UrlDownloader;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
@@ -1368,25 +1367,6 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 			}
 		}
 		return '<div class="bb-slideshow">' . $content . '</div>';
-	}
-
-	/**
-	 * Blokje met bijbelrooster voor opgegeven aantal dagen.
-	 *
-	 * @example [bijbelrooster=10]
-	 * @example [bijbelrooster]10[/bijbelrooster]
-	 */
-	public function bb_bijbelrooster($arguments = array()) {
-		if (isset($arguments['bijbelrooster'])) {
-			$dagen = $arguments['bijbelrooster'];
-		} else {
-			$dagen = $this->parseArray(array('[/bijbelrooster]'), array());
-		}
-		if ($this->light_mode) {
-			return $this->lightLinkBlock('bijbelrooster', '/bijbelrooster', 'Bijbelleesrooster', '');
-		}
-		$view = new BijbelroosterBBView($dagen);
-		return $view->getHtml();
 	}
 
 	function bb_bijbel($arguments = array()) {
