@@ -95,11 +95,11 @@ class BeheerCiviSaldoController extends AclController {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 
 		$removed = array();
-		foreach($selection as $uuid) {
+		foreach ($selection as $uuid) {
 			$civisaldo = $this->model->retrieveByUUID($uuid);
 
 			if ($civisaldo) {
-			    $civisaldo->deleted = true;
+				$civisaldo->deleted = true;
 				$this->model->update($civisaldo);
 				$removed[] = $civisaldo;
 			}
@@ -120,10 +120,10 @@ class BeheerCiviSaldoController extends AclController {
 			$saldo = $form->getModel();
 			$saldo->laatst_veranderd = date_create()->format(DATE_ISO8601);
 			if ($this->model->find('uid = ?', [$saldo->uid])->rowCount() === 1) {
-			    $this->model->update($saldo);
-            } else {
-                $this->model->create($saldo);
-            }
+				$this->model->update($saldo);
+			} else {
+				$this->model->create($saldo);
+			}
 			$this->view = new BeheerSaldoResponse(array($saldo));
 			return;
 		}

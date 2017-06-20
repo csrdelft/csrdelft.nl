@@ -1,12 +1,12 @@
 <ul class="horizontal nobullets">
 	<li>
-		<a href="{CsrDelft\view\mededelingen\MededelingenView::mededelingenRoot}" title="Mededelingenketzer">Mededelingenketzer</a>
+		<a href="{CsrDelft\view\mededelingen\MededelingenView::MEDEDELINGEN_ROOT}" title="Mededelingenketzer">Mededelingenketzer</a>
 	</li>
 	<li class="active">
-		<a href="{CsrDelft\view\mededelingen\MededelingenView::mededelingenRoot}top3overzicht/" title="Top 3 Overzicht">Top 3 Overzicht</a>
+		<a href="{CsrDelft\view\mededelingen\MededelingenView::MEDEDELINGEN_ROOT}top3overzicht/" title="Top 3 Overzicht">Top 3 Overzicht</a>
 	</li>
 	<li>
-		<a href="{CsrDelft\view\mededelingen\MededelingenView::mededelingenRoot}prullenbak/" title="Prullenbak">Prullenbak</a>
+		<a href="{CsrDelft\view\mededelingen\MededelingenView::MEDEDELINGEN_ROOT}prullenbak/" title="Prullenbak">Prullenbak</a>
 	</li>
 </ul>
 <hr />

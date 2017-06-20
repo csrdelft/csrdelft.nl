@@ -350,7 +350,7 @@ class FotoAlbumController extends AclController {
 			$x = $formulier->findByName('x')->getValue();
 			$y = $formulier->findByName('y')->getValue();
 			$size = $formulier->findByName('size')->getValue();
-			$tag = FotoTagsModel::instance()->addTag($foto, $uid, $x, $y, $size);
+			FotoTagsModel::instance()->addTag($foto, $uid, $x, $y, $size);
 			// return all tags
 			$tags = FotoTagsModel::instance()->getTags($foto);
 			$this->view = new JsonResponse($tags->fetchAll());

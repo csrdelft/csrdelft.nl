@@ -1,8 +1,8 @@
 /**
  * @source http://jsfiddle.net/kylemit/x9tgy/
- * 
+ *
  * Example usage:
- * 
+ *
 
 $("#something").contextMenu({
 	menuSelector: "#contextMenu",
@@ -26,21 +26,36 @@ $("#something").contextMenu({
 
 	$.fn.contextMenu = function (settings) {
 
+		function getMenuPosition(mouse, direction, scrollDir) {
+			var win = $(window)[direction](),
+				scroll = $(window)[scrollDir](),
+				menu = $(settings.menuSelector)[direction](),
+				position = mouse + scroll;
+
+			// opening menu would pass the side of the page
+			if (mouse + menu > win && menu < mouse) {
+				position -= menu;
+			}
+
+			return position;
+		}
+
 		return this.each(function () {
 
 			// Open context menu
-			$(this).on("contextmenu", function (e) {
+			$(this).on('contextmenu', function (e) {
 
 				// return native menu if pressing control
-				if (e.ctrlKey)
+				if (e.ctrlKey) {
 					return;
+				}
 
 				//open menu
 				$(settings.menuSelector)
-						.data("invokedOn", $(e.target))
+						.data('invokedOn', $(e.target))
 						.show()
 						.css({
-							position: "absolute",
+							position: 'absolute',
 							left: getMenuPosition(e.clientX, 'width', 'scrollLeft'),
 							top: getMenuPosition(e.clientY, 'height', 'scrollTop')
 						})
@@ -48,7 +63,7 @@ $("#something").contextMenu({
 						.on('click', function (e) {
 							$(this).hide();
 
-							var $invokedOn = $(this).data("invokedOn");
+							var $invokedOn = $(this).data('invokedOn');
 							var $selectedMenu = $(e.target);
 
 							settings.menuSelected.call(this, $invokedOn, $selectedMenu);
@@ -62,19 +77,5 @@ $("#something").contextMenu({
 				$(settings.menuSelector).hide();
 			});
 		});
-
-		function getMenuPosition(mouse, direction, scrollDir) {
-			var win = $(window)[direction](),
-					scroll = $(window)[scrollDir](),
-					menu = $(settings.menuSelector)[direction](),
-					position = mouse + scroll;
-
-			// opening menu would pass the side of the page
-			if (mouse + menu > win && menu < mouse)
-				position -= menu;
-
-			return position;
-		}
-
 	};
-})(jQuery, window);
+}(jQuery, window));

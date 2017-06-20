@@ -14,8 +14,6 @@
 //header('location: https://csrdelft.nl/onderhoud.html');
 //exit;
 
-// Composer autoload
-use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\InstellingenModel;
@@ -23,15 +21,15 @@ use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\TimerModel;
-use function CsrDelft\printDebug;
+use CsrDelft\ShutdownHandler;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
 
 require __DIR__ . '/../vendor/autoload.php';
+require_once 'defines.include.php';
+require_once 'common.functions.php';
 
 spl_autoload_register(function ($class) {
-
 	// project-specific namespace prefix
 	$prefix = 'CsrDelft\\';
 
@@ -71,48 +69,18 @@ spl_autoload_register(function ($class) {
 	}
 });
 
-register_shutdown_function('fatal_handler');
-
-function fatal_handler(Exception $ex = null) {
-	try {
-		if (defined('TIME_MEASURE') AND TIME_MEASURE) {
-			TimerModel::instance()->log();
-		}
-
-		if ($ex instanceof Exception) {
-			if ((defined('DEBUG') AND DEBUG) OR LoginModel::mag('P_LOGGED_IN')) {
-				echo str_replace('#', '<br />#', $ex); // stacktrace
-				CsrDelft\printDebug();
-			}
-		}
-	} catch (Exception $e) {
-		echo $e->getMessage();
-	}
-
-	$error = error_get_last();
-	if ($error !== null) {
-		$debug['error'] = $error;
-		$debug['trace'] = debug_backtrace(false);
-		$debug['POST'] = $_POST;
-		$debug['GET'] = $_GET;
-		$debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
-		$debug['SERVER'] = $_SERVER;
-		if ($error['type'] === E_CORE_ERROR OR $error['type'] === E_ERROR) {
-
-			if (defined('DEBUG') AND DEBUG) {
-				DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
-			} else {
-				$headers[] = 'From: Fatal error handler <pubcie@csrdelft.nl>';
-				$headers[] = 'Content-Type: text/plain; charset=UTF-8';
-				$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
-				$subject = 'Fatal error: ' . $debug['error']['message'];
-				mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
-			}
-
-            touch(DATA_PATH . 'foutmelding.last');
-		}
-	}
+// Registreer foutmelding handlers
+if (DEBUG) {
+	register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
+} else {
+	register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
+	set_error_handler([ShutdownHandler::class, 'slackHandler']);
+	register_shutdown_function([ShutdownHandler::class, 'slackShutdownHandler']);
+	register_shutdown_function([ShutdownHandler::class, 'httpStatusHandler']);
 }
+
+register_shutdown_function([ShutdownHandler::class, 'timerHandler']);
+register_shutdown_function([ShutdownHandler::class, 'touchHandler']);
 
 // alle meldingen tonen
 error_reporting(E_ALL);
@@ -131,10 +99,6 @@ if (php_sapi_name() === 'cli') {
 } else {
 	define('MODE', 'WEB');
 }
-
-// Defines
-require_once 'defines.include.php';
-require_once 'common.functions.php';
 
 if (isset($_SERVER['REQUEST_URI'])) {
 	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
@@ -157,10 +121,10 @@ if (FORCE_HTTPS) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-            $account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
-            // Reset private token, user has to get a new one
-            AccountModel::instance()->resetPrivateToken($account);
-            // TODO: Log dit
+			$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
+			// Reset private token, user has to get a new one
+			AccountModel::instance()->resetPrivateToken($account);
+			// TODO: Log dit
 		}
 		// redirect to https
 		header('Location: ' . CSR_ROOT . REQUEST_URI, true, 301);
@@ -172,10 +136,10 @@ if (FORCE_HTTPS) {
 $cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 if ($cred === false) {
 	$cred = array(
-		'host'	 => 'localhost',
-		'user'	 => 'admin',
-		'pass'	 => 'password',
-		'db'	 => 'csrdelft'
+		'host' => 'localhost',
+		'user' => 'admin',
+		'pass' => 'password',
+		'db' => 'csrdelft'
 	);
 }
 
@@ -209,7 +173,7 @@ switch (constant('MODE')) {
 		ini_set('session.cache_limiter', 'nocache');
 		ini_set('session.use_trans_sid', 0);
 		// Sync lifetime of FS based PHP session with DB based C.S.R. session
-		ini_set('session.gc_maxlifetime', (int) InstellingenModel::get('beveiliging', 'session_lifetime_seconds'));
+		ini_set('session.gc_maxlifetime', (int)InstellingenModel::get('beveiliging', 'session_lifetime_seconds'));
 		ini_set('session.use_strict_mode', true);
 		ini_set('session.use_cookies', true);
 		ini_set('session.use_only_cookies', true);
@@ -226,9 +190,9 @@ switch (constant('MODE')) {
 			session_regenerate_id(true);
 		}
 		// Validate login
-        LoginModel::instance();
+		LoginModel::instance();
 
-        LogModel::instance()->log();
+		LogModel::instance()->log();
 
 		// Prefetch
 		LidInstellingenModel::instance()->prefetch('uid = ?', array(LoginModel::getUid()));

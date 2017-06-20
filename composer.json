@@ -13,11 +13,19 @@
         "jacwright/restserver": "dev-master",
         "globalcitizen/php-iban": "2.5.9",
         "robmorgan/phinx": "^0.8.0",
-        "csrdelft/orm": "1.6"
+        "csrdelft/orm": "1.6",
+        "tedivm/stash": "^0.14.1",
+        "tedivm/jshrink": "^1.1",
+        "tubalmartin/cssmin": "^4.0",
+        "oyejorge/less.php": "v1.7.0.14",
+        "maknz/slack": "^1.7"
     },
     "config": {
         "platform": {
             "php": "5.6"
         }
+    },
+    "scripts": {
+        "clear-assets-cache": "php bin/clear-assets-cache.php"
     }
 }

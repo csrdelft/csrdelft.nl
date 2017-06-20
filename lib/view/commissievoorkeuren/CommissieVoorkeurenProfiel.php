@@ -1,11 +1,8 @@
 <?php
-/**
- * The ${NAME} file.
- */
 
 namespace CsrDelft\view\commissievoorkeuren;
 
-use CsrDelft\model\CommissieVoorkeurenModel;
+use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\View;
 

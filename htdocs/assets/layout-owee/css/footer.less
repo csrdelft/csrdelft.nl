@@ -1,10 +1,12 @@
+@import "variables";
+
 #footer {
   .inner, h2, a, label {
-    color: @tekstdonker;
+    color: @tekstlicht;
   }
 
   a {
-    border-bottom: dotted 1px rgba(0, 30, 98, 1);
+    border-bottom: dotted 1px @tekstdonker;
     text-decoration: none;
     &:hover {
       border-bottom-color: transparent;
@@ -17,7 +19,7 @@
   }
 
   input {
-    color: #001e62 !important;
+    color: @tekstlicht !important;
   }
 
   .inner {
@@ -51,7 +53,7 @@
     }
 
     .copyright,.sponsors {
-      border-top: solid 2px rgba(0, 30, 98, 1);
+      border-top: solid 2px @tekstdonker;
       list-style: none;
       margin: 2em 0 1em 0;
       padding: 2em 0 0 0;
@@ -59,7 +61,7 @@
       text-align: center;
 
       li {
-        color: rgba(0, 30, 98, 1);
+        color: @tekstlicht;
         display: block;
         font-size: 0.9em;
         line-height: 1;

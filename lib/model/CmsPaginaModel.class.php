@@ -6,10 +6,10 @@ use CsrDelft\Orm\PersistenceModel;
 
 /**
  * CmsPaginaModel.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Bekijken of bewerken van CmsPaginas.
  */
 class CmsPaginaModel extends PersistenceModel {
@@ -18,6 +18,11 @@ class CmsPaginaModel extends PersistenceModel {
 
 	protected static $instance;
 
+	/**
+	 * @param $naam
+	 *
+	 * @return CmsPagina|false
+	 */
 	public static function get($naam) {
 		return static::instance()->retrieveByPrimaryKey(array($naam));
 	}

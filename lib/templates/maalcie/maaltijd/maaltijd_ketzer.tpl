@@ -65,7 +65,7 @@
 					</a>
 				{/if}
 			</div>
-			{CsrDelft\view\CsrBB::parse($maaltijd->omschrijving)}
+			{CsrDelft\view\bbcode\CsrBB::parse($maaltijd->omschrijving)}
 		</div>
 	</div>
 {/strip}

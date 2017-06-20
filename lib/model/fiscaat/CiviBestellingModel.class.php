@@ -30,7 +30,7 @@ class CiviBestellingModel extends PersistenceModel {
 	public function getBeschrijving($bestellingen) {
 		foreach ($bestellingen as $bestelling) {
 			/** @var CiviBestellingInhoud[] $inhoud */
-			$inhoud = $bestelling->getInhoud();
+			$inhoud = CiviBestellingInhoudModel::instance()->find('bestelling_id = ?', array($bestelling->id));
 			$bestellingInhoud = [];
 			foreach ($inhoud as $item) {
 				$bestellingInhoud[] = CiviBestellingInhoudModel::instance()->getBeschrijving($item);

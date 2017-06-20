@@ -24,17 +24,17 @@ class EetplanModel extends PersistenceModel {
     }
 
     public function getNovieten($lichting) {
-        return $this->findSparse(array('uid'), 'uid LIKE ?', array($lichting . "%"), 'uid');
+        return $this->find('uid LIKE ?', array($lichting . "%"), 'uid');
     }
 
 	/**
 	 * Haal alle avonden op die voor deze lichting gelden.
 	 *
 	 * @param $lichting
-	 * @return Eetplan[] Lijst met sparse(!) eetplan objecten met alleen een avond.
+	 * @return Eetplan[] Lijst met eetplan objecten met alleen een avond.
 	 */
     public function getAvonden($lichting) {
-        return $this->findSparse(array('avond'), 'uid LIKE ?', array($lichting . "%"), 'avond')->fetchAll();
+        return $this->find('uid LIKE ?', array($lichting . "%"), 'avond')->fetchAll();
     }
 
 	/**

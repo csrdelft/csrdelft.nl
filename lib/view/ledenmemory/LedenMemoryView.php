@@ -63,7 +63,11 @@ class LedenMemoryView extends CompressedLayout {
 		}
 	}
 
-	public function getModel() {
+	public function getLayout() {
+		return 'layout';
+	}
+
+public function getModel() {
 		return $this->leden;
 	}
 

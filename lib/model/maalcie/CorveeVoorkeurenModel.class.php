@@ -158,6 +158,8 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 
 		$this->delete($voorkeur);
 
+		$voorkeur->uid = null;
+
 		return $voorkeur;
 	}
 

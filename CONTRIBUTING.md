@@ -64,10 +64,21 @@ Probeer om ten minste deze te verkrijgen.
 * /htdocs/plaetjes/pasfoto/geen-foto.jpg
 * /htdocs/pleatjes/layout/
 
+## CmsPaginas
+
+De volgende CMS pagina's zijn gehardcoded in de stek, zorg dat deze in de `cms_paginas` tabel aanwezig zijn.
+
+* `thuis`
+* `accountaanvragen`
+* `mobiel`
+* `UitlegACL`
+* `fotostoevoegen`
+* `403`
+
 ### Docker
 
-Op Linux moet dit makkelijk draaien.
-Op andere platforms moet je gebruik maken van boot2docker.
+Op Linux en mac moet dit makkelijk draaien.
+Op andere platforms kun je docker beter niet overwegen.
 
     # Run the stek and database
     docker-compose up stek
@@ -75,8 +86,12 @@ Op andere platforms moet je gebruik maken van boot2docker.
     # initialize the database (only need to do this once)
     # make sure you have the dump.sql in the root of your repo
     docker run -ti --rm --link <reponame>_stekdb_1:db -v `pwd`:/mnt mariadb bash -c 'exec mysql  -h"$DB_PORT_3306_TCP_ADDR" -u root -p csrdelft < /mnt/dump.sql'
-
-Plaetjes zitten niet standaard in deze repo. Maar als je ze in `htdocs/plaetjes` zet zal docker ze gebruiken.
+    
+    # install composer dependencies
+    docker-compose run --rm composer install
+    
+    # add a dependency
+    docker-compose run --rm composer require myVendor/package
 
 ## Development
 

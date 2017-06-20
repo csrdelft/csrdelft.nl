@@ -6,9 +6,9 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 
 /**
  * Bestand.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Bestand extends PersistentEntity {
 
@@ -24,12 +24,12 @@ class Bestand extends PersistentEntity {
 	public $filesize;
 	/**
 	 * Mime-type van het bestand
-	 * @var string 
+	 * @var string
 	 */
 	public $mimetype;
 	/**
 	 * Locatie van bestand
-	 * @var Map
+	 * @var string
 	 */
 	public $directory;
 	/**

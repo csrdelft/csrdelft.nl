@@ -1,10 +1,9 @@
 <?php
-namespace CsrDelft\view;
+namespace CsrDelft\view\bbcode;
 
-use CsrDelft\bbparser\eamBBParser;
 use CsrDelft\Icon;
 use CsrDelft\model\bibliotheek\BiebBoek;
-use CsrDelft\model\documenten\Document;
+use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;
@@ -23,12 +22,13 @@ use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\model\PeilingenModel;
+use CsrDelft\model\peilingen\PeilingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\SavedQuery;
 use CsrDelft\SavedQueryContent;
 use CsrDelft\view\bibliotheek\BoekBBView;
+use CsrDelft\view\bijbelrooster\BijbelroosterBBView;
 use CsrDelft\view\documenten\DocumentBBContent;
 use CsrDelft\view\formulier\UrlDownloader;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
@@ -41,8 +41,10 @@ use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
 use CsrDelft\view\mededelingen\MededelingenView;
 use CsrDelft\view\peilingen\PeilingView;
 use Exception;
+use function CsrDelft\email_like;
 use function CsrDelft\endsWith;
 use function CsrDelft\external_url;
+use function CsrDelft\format_filesize;
 use function CsrDelft\reldate;
 use function CsrDelft\startsWith;
 use function CsrDelft\url_like;
@@ -53,7 +55,7 @@ use function CsrDelft\url_like;
  *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  */
-class CsrBB extends eamBBParser {
+class CsrBB extends Parser {
 
 	/**
 	 * BBcode within email is limited.
@@ -62,10 +64,12 @@ class CsrBB extends eamBBParser {
 	 */
 	protected $email_mode = false;
 
-	public function __construct() {
-		parent::__construct();
-		$this->paragraph_mode = false;
-	}
+	/**
+	 * Light-weight front-end agnostic mode.
+	 *
+	 * @var boolean
+	 */
+	protected $light_mode = false;
 
 	public static function parse($bbcode) {
 		$parser = new CsrBB();
@@ -82,6 +86,12 @@ class CsrBB extends eamBBParser {
 	public static function parseMail($bbcode) {
 		$parser = new CsrBB();
 		$parser->email_mode = true;
+		return $parser->getHtml($bbcode);
+	}
+
+	public static function parseLight($bbcode) {
+		$parser = new CsrBB();
+		$parser->light_mode = true;
 		return $parser->getHtml($bbcode);
 	}
 
@@ -144,15 +154,62 @@ class CsrBB extends eamBBParser {
 	}
 
 	/**
-	 * Dit laad de twitter account van het hidden cash spel.
+	 * Templates for light mode
 	 */
-	function bb_hidden($arguments = array()) {
-		$html = '<a class="twitter-timeline" href="https://twitter.com/HiddenCashCSR" data-widget-id="477465734352621568">Tweets by @HiddenCashCSR</a>
-							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http://.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
-		return $html;
+	private function lightLinkInline($tag, $url, $content) {
+		return <<<HTML
+			<a class="bb-link-inline bb-tag-{$tag}" href="{$url}">{$content}</a>
+HTML;
 	}
 
+	private function lightLinkBlock($tag, $url, $titel, $beschrijving, $thumbnail = '') {
+		$titel = htmlspecialchars($titel);
+		$beschrijving = htmlspecialchars($beschrijving);
+		if ($thumbnail !== '') {
+			$thumbnail = '<img src="' . $thumbnail . '" />';
+		}
+		return <<<HTML
+			<a class="bb-link-block bb-tag-{$tag}" href="{$url}">
+				{$thumbnail}
+				<h2>{$titel}</h2>
+				<p>{$beschrijving}</p>
+			</a>
+HTML;
+	}
+
+	private function lightLinkImage($tag, $url) {
+		return <<<HTML
+			<a class="bb-link-image bb-tag-{$tag}" href="{$url}"></a>
+HTML;
+	}
+
+	private function lightLinkThumbnail($tag, $url, $thumbnail) {
+		return <<<HTML
+			<a class="bb-link-thumbnail bb-tag-{$tag}" href="{$url}">
+				<img src="{$thumbnail}" />
+			</a>
+HTML;
+	}
+
+	/**
+	 * Image
+	 *
+	 * @param optional String $arguments['class'] Class attribute
+	 * @param optional String $arguments['float'] CSS float left or right
+	 * @param optional Integer $arguments['w'] CSS width in pixels
+	 * @param optional Integer $arguments['h'] CSS height in pixels
+	 *
+	 * @example [img class=special float=left w=20 h=50]URL[/img]
+	 */
 	function bb_img($arguments = array()) {
+		$url = $this->parseArray(array('[/img]', '[/IMG]'), array());
+		$url = filter_var($url, FILTER_SANITIZE_URL);
+		if (!$url OR ( !url_like($url) AND ! startsWith($url, '/plaetjes/') )) {
+			return $url;
+		}
+		if ($this->light_mode) {
+			return $this->lightLinkImage('img', $url);
+		}
 		$style = '';
 		$class = '';
 		if (isset($arguments['class'])) {
@@ -174,11 +231,6 @@ class CsrBB extends eamBBParser {
 		if (isset($arguments['h']) AND $arguments['h'] > 10) {
 			$style .= 'height: ' . ((int) $arguments['h']) . 'px;';
 		}
-		$url = $this->parseArray(array('[/img]', '[/IMG]'), array());
-		$url = filter_var($url, FILTER_SANITIZE_URL);
-		if (!$url OR ( !url_like($url) AND ! startsWith($url, '/plaetjes/') )) {
-			return $url;
-		}
 		if ($this->email_mode) {
 			return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
 		}
@@ -186,55 +238,61 @@ class CsrBB extends eamBBParser {
 	}
 
 	/**
-	 * [foto]/pad/naar/foto[/foto]
+	 * Toont de thumbnail van een foto met link naar fotoalbum.
 	 *
-	 * Toont de thumbnail met link naar fotoalbum.
+	 * @param optional Boolean $arguments['responsive'] Responsive sizing
+	 *
+	 * @example [foto responsive]/pad/naar/foto[/foto]
 	 */
 	function bb_foto($arguments = array()) {
-				$url = urldecode($this->parseArray(array('[/foto]'), array()));
+		$url = urldecode($this->parseArray(array('[/foto]'), array()));
 		$parts = explode('/', $url);
-		if (in_array('Posters', $parts)) {
-			$groot = true;
-		} else {
-			$groot = false;
-		}
 		$filename = str_replace('#', '', array_pop($parts)); // replace # (foolproof)
 		$path = PHOTOS_PATH . 'fotoalbum' . implode('/', $parts);
 		$album = FotoAlbumModel::instance()->getFotoAlbum($path);
 		if (!$album) {
 			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
 		}
-		if (isset($arguments['responsive'])) {
-			$responsive = true;
-		} else {
-			$responsive = false;
-		}
 		$foto = new Foto($filename, $album);
-		if ($foto) {
-			$fototag = new FotoBBView($foto, $groot, $responsive);
-		} else {
+		if (!$foto) {
 			return '';
 		}
+		if ($this->light_mode) {
+			$link = $foto->getAlbumUrl() . '#' . $foto->getResizedUrl();
+			$thumb = CSR_ROOT . $foto->getThumbUrl();
+			return $this->lightLinkThumbnail('foto', $link, $thumb);
+		}
+		$groot = in_array('Posters', $parts);
+		$responsive = isset($arguments['responsive']);
+		$fototag = new FotoBBView($foto, $groot, $responsive);
 		return $fototag->getHtml();
 	}
 
 	/**
-	 * [fotoalbum]/pad/naar/album[/fotoalbum]
+	 * Fotoalbum
 	 *
-	 * Parameters:
-	 * 	rows	Aantal regels weergeven
-	 * 			rows=4
+	 * Albumweergave (default):
+	 * @param optional Boolean $arguments['compact'] Compacte weergave
+	 * @param optional Integer $arguments['rows'] Aantal rijen
+	 * @param optional Integer $arguments['perrow'] Aantal kolommen
+	 * @param optional Boolean $arguments['bigfirst'] Eerste foto groot
+	 * @param optional String $arguments['big'] Indexen van foto's die groot moeten, of patroon 'a', 'b' of 'c'
 	 *
-	 * 	big		Lijstje met indexen van afbeeldingen die groot moeten
-	 * 			worden.
-	 * 			big=0,5,14 | big=a | big=b |
+	 * @example [fotoalbum compact bigfirst]/pad/naar/album[/fotoalbum]
+	 * @example [fotoalbum rows=2 perrow=5 big=a]/pad/naar/album[/fotoalbum]
+	 * @example [fotoalbum big=0,5,14]/pad/naar/album[/fotoalbum]
 	 *
-	 * 	compact	Compacte versie van de tag weergeven
-	 * 			compact=true
+	 * Sliderweergave:
+	 * @param optional Boolean $arguments['slider'] Slider weergave
+	 * @param optional Integer $arguments['interval'] Slider interval in seconden
+	 * @param optional Boolean $arguments['random'] Slider met random volgorde
+	 * @param optional Boolean $arguments['height'] Slider hoogte in pixels
 	 *
+	 * @example [fotoalbum slider interval=10 random height=200]/pad/naar/album[/fotoalbum]
+	 * @example [fotoalbum]laatste[/fotoalbum]
 	 */
 	protected function bb_fotoalbum($arguments = array()) {
-				$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
+		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
 		if ($url === 'laatste') {
 			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 		} else {
@@ -253,6 +311,11 @@ class CsrBB extends eamBBParser {
 		}
 		if (!$album) {
 			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
+		}
+		if ($this->light_mode) {
+			$beschrijving = count($album->getFotos()) . ' foto\'s';
+			$cover = CSR_ROOT . $album->getCoverUrl();
+			return $this->lightLinkBlock('fotoalbum', $album->getUrl(), $album->dirname, $beschrijving, $cover);
 		}
 		if (isset($arguments['slider'])) {
 			$view = new FotoAlbumSliderView($album);
@@ -298,6 +361,14 @@ class CsrBB extends eamBBParser {
 		return $this->bb_url($arguments);
 	}
 
+	/**
+	 * URL
+	 *
+	 * @param String $arguments['url'] URL waarnaar gelinkt wordt
+	 *
+	 * @example [url]https://csrdelft.nl[/url]
+	 * @example [url=https://csrdelft.nl]Stek[/url]
+	 */
 	function bb_url($arguments = array()) {
 		$content = $this->parseArray(array('[/url]', '[/rul]'), array());
 		if (isset($arguments['url'])) { // [url=
@@ -306,6 +377,9 @@ class CsrBB extends eamBBParser {
 			$url = $arguments['rul'];
 		} else { // [url][/url]
 			$url = $content;
+		}
+		if ($this->light_mode) {
+			return $this->lightLinkInline('url', $url, $content);
 		}
 		return external_url($url, $content);
 	}
@@ -337,11 +411,15 @@ class CsrBB extends eamBBParser {
 	  }
 	 */
 
+	/**
+	 * 2013 Neuzen
+	 *
+	 * @example [neuzen]2o13[/neuzen]
+	 */
 	function bb_neuzen($arguments = array()) {
-		if (is_array($arguments)) {
-			$content = $this->parseArray(array('[/neuzen]'), array());
-		} else {
-			$content = $arguments;
+		$content = $this->parseArray(array('[/neuzen]'), array());
+		if ($this->light_mode) {
+			return $content;
 		}
 		if (LidInstellingenModel::get('layout', 'neuzen') != 'nee') {
 			$neus = Icon::getTag('bullet_red', null, null, 'neus2013', 'o');
@@ -350,6 +428,16 @@ class CsrBB extends eamBBParser {
 		return $content;
 	}
 
+	/**
+	 * Citaat
+	 *
+	 * @param optional String $arguments['citaat'] Naam of lidnummer van wie geciteerd wordt
+	 * @param optional String $arguments['url'] Link naar bron van het citaat
+	 *
+	 * @example [citaat=1234]Citaat[/citaat]
+	 * @example [citaat=Jan_Lid url=https://csrdelft.nl]Citaat[/citaat]
+	 * @example [citaat]Citaat[/citaat]
+	 */
 	function bb_citaat($arguments = array()) {
 		if ($this->quote_level == 0) {
 			$this->quote_level = 1;
@@ -360,18 +448,29 @@ class CsrBB extends eamBBParser {
 			$content = $this->parseArray(array('[/citaat]'), array());
 			$this->quote_level--;
 			$content = '<div onclick="$(this).children(\'.citaatpuntjes\').slideUp();$(this).children(\'.meercitaat\').slideDown();"><div class="meercitaat verborgen">' . $content . '</div><div class="citaatpuntjes" title="Toon citaat">...</div></div>';
+			if ($this->light_mode) {
+				$content = '...';
+			}
 		}
-		$text = '<div class="citaatContainer">Citaat';
+		$text = '<div class="citaatContainer bb-tag-citaat">Citaat';
 		$van = '';
 		if (isset($arguments['citaat'])) {
 			$van = trim(str_replace('_', ' ', $arguments['citaat']));
 		}
-		$profiel = ProfielModel::getLink($van, 'user');
+		$profiel = ProfielModel::get($van);
 		if ($profiel) {
-			$text .= ' van ' . $profiel;
+			if ($this->light_mode) {
+				$text .= ' van ' . $this->lightLinkInline('lid', '/profiel/' . $profiel->uid, $profiel->getNaam('user'));
+			} else {
+				$text .= ' van ' . $profiel->getLink('user');
+			}
 		} elseif ($van != '') {
 			if (isset($arguments['url']) AND url_like($arguments['url'])) {
-				$text .= ' van ' . external_url($arguments['url'], $van);
+				if ($this->light_mode) {
+					$text .= ' van ' . $this->lightLinkInline('url', $arguments['url'], $van);
+				} else {
+					$text .= ' van ' . external_url($arguments['url'], $van);
+				}
 			} else {
 				$text .= ' van ' . $van;
 			}
@@ -381,20 +480,22 @@ class CsrBB extends eamBBParser {
 	}
 
 	/**
-	 * Geef de relatieve datum terug.
+	 * Relatieve datum zoals geparsed door php's strtotime
+	 *
+	 * @example [reldate]1 day ago[/reldate]
+	 * @example [reldate]20-01-2012[/reldate]
+	 * @example [reldate]20-01-2012 18:00[/reldate]
 	 */
 	function bb_reldate($arguments = array()) {
 		$content = $this->parseArray(array('[/reldate]'), array());
-		return '<span title="' . htmlspecialchars($content) . '">' . reldate($content) . '</span>';
+		return '<span class="bb-tag-reldate" title="' . htmlspecialchars($content) . '">' . reldate($content) . '</span>';
 	}
 
 	/**
 	 * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.
 	 *
-	 * Example:
-	 * [lid=0436] => Am. Waagmeester
-	 * of
-	 * [lid]0436[/lid]
+	 * @example [lid=0436]
+	 * @example [lid]0436[/lid]
 	 */
 	function bb_lid($arguments = array()) {
 		if (isset($arguments['lid'])) {
@@ -403,16 +504,24 @@ class CsrBB extends eamBBParser {
 			$uid = $this->parseArray(array('[/lid]'), array());
 		}
 		$uid = trim($uid);
-		$link = ProfielModel::getLink($uid, 'user');
-		if (!$link) {
+		$profiel = ProfielModel::get($uid);
+		if (!$profiel) {
 			return '[lid] ' . htmlspecialchars($uid) . '] &notin; db.';
 		}
-		return $link;
+		if ($this->light_mode) {
+			return $this->lightLinkInline('lid', '/profiel/' . $uid, $profiel->getNaam('user'));
+		}
+		return $profiel->getLink('user');
 	}
 
 	/**
 	 * Tekst binnen de privé-tag wordt enkel weergegeven voor leden met
 	 * (standaard) P_LOGGED_IN. Een andere permissie kan worden meegegeven.
+	 *
+	 * @param optional String $arguments['prive'] Permissie nodig om de tekst te lezen
+	 *
+	 * @example [prive]Persoonsgegevens[/prive]
+	 * @example [prive=commissie:PubCie]Tekst[/prive]
 	 */
 	function bb_prive($arguments = array()) {
 		if (isset($arguments['prive'])) {
@@ -427,7 +536,7 @@ class CsrBB extends eamBBParser {
 			$forbidden = array();
 		}
 		// content moet altijd geparsed worden, anders blijft de inhoud van de tag gewoon staan
-		$content = '<span class="bb-prive">' . $this->parseArray(array('[/prive]'), $forbidden) . '</span>';
+		$content = '<span class="bb-prive bb-tag-prive">' . $this->parseArray(array('[/prive]'), $forbidden) . '</span>';
 		if (!LoginModel::mag($permissie)) {
 			$content = '';
 			$this->bb_mode = true;
@@ -436,10 +545,13 @@ class CsrBB extends eamBBParser {
 	}
 
 	/**
-	 * Toont content als instelling een bepaalde waarde heeft,
-	 * standaard 'ja';
+	 * Toont content als instelling een bepaalde waarde heeft, standaard 'ja';
 	 *
-	 * [instelling=maaltijdblokje module=voorpagina][maaltijd=next][/instelling]
+	 * @param String $arguments['instelling'] Naam instelling
+	 * @param String $arguments['module'] Naam module
+	 * @param optional String $arguments['waarde'] Waarde waarbij content wordt weergegeven
+	 *
+	 * @example [instelling=maaltijdblokje module=voorpagina][maaltijd=next][/instelling]
 	 */
 	function bb_instelling($arguments = array()) {
 		$content = $this->parseArray(array('[/instelling]'), array());
@@ -468,7 +580,8 @@ class CsrBB extends eamBBParser {
 	 * Deze methode kan resultaten van query's die in de database staan printen in een
 	 * tabelletje.
 	 *
-	 * [query=1] of [query]1[/query]
+	 * @example [query=1]
+	 * @example [query]1[/query]
 	 */
 	function bb_query($arguments = array()) {
 		if (isset($arguments['query'])) {
@@ -479,8 +592,11 @@ class CsrBB extends eamBBParser {
 		$queryID = (int) $queryID;
 
 		if ($queryID != 0) {
-						$sqc = new SavedQueryContent(new SavedQuery($queryID));
-
+			$sqc = new SavedQueryContent(new SavedQuery($queryID));
+			if ($this->light_mode) {
+				$url = '/tools/query.php?id=' . urlencode($queryID);
+				return $this->lightLinkBlock('query', $url, $sqc->getModel()->getBeschrijving(), $sqc->getModel()->count() . ' regels');
+			}
 			return $sqc->render_queryResult();
 		} else {
 			return '[query] Geen geldig query-id opgegeven.<br />';
@@ -489,6 +605,11 @@ class CsrBB extends eamBBParser {
 
 	/**
 	 * Laat de embedded spotify player zien
+	 *
+	 * @param optional String $arguments['formaat'] Ander formaar: 'hoog' of 'blok'
+	 *
+	 * @example [spotify]https://open.spotify.com/user/.../playlist/...[/spotify]
+	 * @example [spotify]spotify:user:...:playlist:...[/spotify]
 	 */
 	function bb_spotify($arguments = array()) {
 		$id = $this->parseArray(array('[/spotify]'), array());
@@ -505,6 +626,20 @@ class CsrBB extends eamBBParser {
 		}
 
 		$uri = html_entity_decode($uri);
+
+		if ($this->light_mode) {
+			$url = 'https://open.spotify.com/' . str_replace(':', '/', str_replace('spotify:', '', $uri));
+			if (strstr($uri, 'playlist')) {
+				$beschrijving = 'Afspeellijst';
+			} elseif (strstr($uri, 'album')) {
+				$beschrijving = 'Album';
+			} elseif (strstr($uri, 'track')) {
+				$beschrijving = 'Nummer';
+			} else {
+				$beschrijving = '';
+			}
+			return $this->lightLinkBlock('spotify', $url, 'Spotify', $beschrijving);
+		}
 
 		# stiekem is het formaat altijd breed ?
 		$width = 580;
@@ -529,6 +664,14 @@ class CsrBB extends eamBBParser {
 					frameborder=\"0\" allowtransparency=\"true\"></iframe>";
 	}
 
+	/**
+	 * YouTube speler
+	 *
+	 * @param String $arguments['youtube'] YouTube id van 11 tekens
+	 *
+	 * @example [youtube]dQw4w9WgXcQ[/youtube]
+	 * @example [youtube=dQw4w9WgXcQ]
+	 */
 	function bb_youtube($arguments = array()) {
 		$id = $this->parseArray(array('[/youtube]'), array());
 		if (isset($arguments['youtube'])) { // [youtube=
@@ -543,6 +686,10 @@ class CsrBB extends eamBBParser {
 			$attributes['src'] = '//www.youtube.com/embed/' . $id . '?autoplay=1';
 			$previewthumb = 'https://img.youtube.com/vi/' . $id . '/0.jpg';
 
+			if ($this->light_mode) {
+				return $this->lightLinkBlock('youtube', 'https://youtu.be/' . $id, 'YouTube video', '', $previewthumb);
+			}
+
 			return $this->video_preview($attributes, $previewthumb);
 		} else {
 			return '[youtube] Geen geldig youtube-id (' . htmlspecialchars($id) . ')';
@@ -555,14 +702,9 @@ class CsrBB extends eamBBParser {
 	 *
 	 * Tot nu toe youtube, vimeo, dailymotion, 123video, godtube
 	 *
-	 * [video]http://www.youtube.com/watch?v=Zo0LJrw5nCs[/video]
-	 * [video]Zo0LJrw5nCs[/video]
-	 * [video]http://vimeo.com/1582112[/video]
-	 *
-	 * tag parameters:
-	 * 		force	Forceer weergave filmpje ook als het al een keer op de pagina voorkomt.
-	 * 		width	Breedte van het filmpje
-	 * 		height	Hoogte van het filmpje
+	 * @example [video]http://www.youtube.com/watch?v=Zo0LJrw5nCs[/video]
+	 * @example [video]Zo0LJrw5nCs[/video]
+	 * @example [video]http://vimeo.com/1582112[/video]
 	 */
 	function bb_video($arguments = array()) {
 		$content = $this->parseArray(array('[/video]'), array());
@@ -578,14 +720,14 @@ class CsrBB extends eamBBParser {
 
 		//match type and id
 		if (strstr($content, 'youtube.com') OR strstr($content, 'youtu.be')) {
-			$type = 'youtube';
+			$type = 'YouTube';
 			if (preg_match('#(?:youtube\.com/watch\?v=|youtu.be/)([0-9a-zA-Z\-_]{11})#', $content, $matches) > 0) {
 				$id = $matches[1];
 			}
 			$params['src'] = '//www.youtube.com/embed/' . $id . '?autoplay=1';
 			$previewthumb = 'https://img.youtube.com/vi/' . $id . '/0.jpg';
 		} elseif (strstr($content, 'vimeo')) {
-			$type = 'vimeo';
+			$type = 'Vimeo';
 			if (preg_match('#vimeo\.com/(?:clip\:)?(\d+)#', $content, $matches) > 0) {
 				$id = $matches[1];
 			}
@@ -602,14 +744,14 @@ class CsrBB extends eamBBParser {
 				$previewthumb = $data[0]['thumbnail_medium'];
 			}
 		} elseif (strstr($content, 'dailymotion')) {
-			$type = 'dailymotion';
+			$type = 'DailyMotion';
 			if (preg_match('#dailymotion\.com/video/([a-z0-9]+)#', $content, $matches) > 0) {
 				$id = $matches[1];
 			}
 			$params['src'] = '//www.dailymotion.com/embed/video/' . $id . '?autoPlay=1';
 			$previewthumb = 'http://www.dailymotion.com/thumbnail/video/' . $id;
 		} elseif (strstr($content, 'godtube')) {
-			$type = 'godtube';
+			$type = 'GodTube';
 			if (preg_match('#godtube\.com/watch/\?v=([a-zA-Z0-9]+)#', $content, $matches) > 0) {
 				$id = $matches[1];
 			}
@@ -622,11 +764,13 @@ class CsrBB extends eamBBParser {
 		if (empty($type) OR empty($id)) {
 			return '[video] Niet-ondersteunde video-website (' . htmlspecialchars($content) . ')';
 		}
+		if ($this->light_mode) {
+			return $this->lightLinkBlock('video', $content, $type . ' video', '', $previewthumb);
+		}
 		return $this->video_preview($params, $previewthumb);
 	}
 
 	function video_preview(array $params, $previewthumb) {
-
 		$params = json_encode($params);
 
 		$html = <<<HTML
@@ -641,8 +785,23 @@ HTML;
 		return $html;
 	}
 
+	/**
+	 * Twitter widget
+	 *
+	 * @param optional Integer $arguments['lines']
+	 * @param optional Integer $arguments['width'] Breedte
+	 * @param optional Integer $arguments['height'] Hoogte
+	 *
+	 * @example [twitter][/twitter]
+	 */
 	function bb_twitter($arguments = array()) {
 		$content = $this->parseArray(array('[/twitter]'), array());
+
+		if ($this->light_mode) {
+			$url = 'https://twitter.com/' . $content;
+			return $this->lightLinkBlock('twitter', $url, 'Twitter', 'Tweets van @' . $content);
+		}
+
 		// widget size
 		$lines = 4;
 		$width = 355;
@@ -690,10 +849,13 @@ HTML;
 		return $html;
 	}
 
-	protected function groep(AbstractGroep $groep) {
-				// Controleer rechten
+	protected function groep(AbstractGroep $groep, $tag, $leden) {
+		// Controleer rechten
 		if (!$groep->mag(AccessAction::Bekijken)) {
 			return '';
+		}
+		if ($this->light_mode) {
+			return $this->lightLinkBlock($tag, $groep->getUrl(), $groep->naam, $groep->aantalLeden() . ' ' . $leden);
 		}
 		$view = new GroepView($groep, null, false, true);
 		return $view->getHtml();
@@ -707,7 +869,7 @@ HTML;
 		}
 		$groep = KetzersModel::get($id);
 		if ($groep) {
-			return $this->groep($groep);
+			return $this->groep($groep, 'ketzer', 'aanmeldingen');
 		} else {
 			return 'Ketzer met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/ketzers/beheren">Zoeken</a>';
 		}
@@ -721,7 +883,7 @@ HTML;
 		}
 		$groep = ActiviteitenModel::get($id);
 		if ($groep) {
-			return $this->groep($groep);
+			return $this->groep($groep, 'activiteit', 'aanmeldingen');
 		} else {
 			return 'Activiteit met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/activiteiten/beheren">Zoeken</a>';
 		}
@@ -735,7 +897,7 @@ HTML;
 		}
 		$groep = BesturenModel::get($id);
 		if ($groep) {
-			return $this->groep($groep);
+			return $this->groep($groep, 'bestuur', 'personen');
 		} else {
 			return 'Bestuur met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/besturen/beheren">Zoeken</a>';
 		}
@@ -749,7 +911,7 @@ HTML;
 		}
 		$groep = CommissiesModel::get($id);
 		if ($groep) {
-			return $this->groep($groep);
+			return $this->groep($groep, 'commissie', 'leden');
 		} else {
 			return 'Commissie met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/commissies/beheren">Zoeken</a>';
 		}
@@ -763,7 +925,7 @@ HTML;
 		}
 		$groep = WerkgroepenModel::get($id);
 		if ($groep) {
-			return $this->groep($groep);
+			return $this->groep($groep, 'werkgroep', 'aanmeldingen');
 		} else {
 			return 'Werkgroep met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/werkgroepen/beheren">Zoeken</a>';
 		}
@@ -777,7 +939,7 @@ HTML;
 		}
 		$groep = WoonoordenModel::get($id);
 		if ($groep) {
-			return $this->groep($groep);
+			return $this->groep($groep, 'woonoord', 'bewoners');
 		} else {
 			return 'Woonoord met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/woonoorden/beheren">Zoeken</a>';
 		}
@@ -791,7 +953,7 @@ HTML;
 		}
 		$groep = OnderverenigingenModel::get($id);
 		if ($groep) {
-			return $this->groep($groep);
+			return $this->groep($groep, 'ondervereniging', 'leden');
 		} else {
 			return 'Ondervereniging met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/onderverenigingen/beheren">Zoeken</a>';
 		}
@@ -801,9 +963,8 @@ HTML;
 	 * Geeft een groep met kortebeschrijving en een lijstje met leden weer.
 	 * Als de groep aanmeldbaar is komt er ook een aanmeldknopje bij.
 	 *
-	 * [groep]123[/groep]
-	 * of
-	 * [groep=123]
+	 * @example [groep]123[/groep]
+	 * @example [groep=123]
 	 */
 	protected function bb_groep($arguments = array()) {
 		if (isset($arguments['groep'])) {
@@ -816,7 +977,7 @@ HTML;
 			$groep = RechtenGroepenModel::omnummeren($id);
 		}
 		if ($groep) {
-			return $this->groep($groep);
+			return $this->groep($groep, 'groep', 'personen');
 		} else {
 			return 'Groep met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/overig/beheren">Zoeken</a>';
 		}
@@ -825,15 +986,14 @@ HTML;
 	/**
 	 * Geeft een link naar de verticale.
 	 *
-	 * [verticale]A[/verticale]
-	 * of
-	 * [verticale=A]
+	 * @example [verticale]A[/verticale]
+	 * @example [verticale=A]
 	 */
 	protected function bb_verticale($arguments = array()) {
 		if (isset($arguments['verticale'])) {
 			$letter = $arguments['verticale'];
 		} else {
-			$letter = $this->parseArray(array('[/groep]'), array());
+			$letter = $this->parseArray(array('[/verticale]'), array());
 		}
 		try {
 			$verticale = VerticalenModel::get($letter);
@@ -847,9 +1007,8 @@ HTML;
 	 * Geeft titel en auteur van een boek.
 	 * Een kleine indicator geeft met kleuren beschikbaarheid aan
 	 *
-	 * [boek]123[/boek]
-	 * of
-	 * [boek=123]
+	 * @example [boek]123[/boek]
+	 * @example [boek=123]
 	 */
 	protected function bb_boek($arguments = array()) {
 		if (isset($arguments['boek'])) {
@@ -858,8 +1017,11 @@ HTML;
 			$boekid = $this->parseArray(array('[/boek]'), array());
 		}
 
-						try {
+		try {
 			$boek = new BiebBoek((int) $boekid);
+			if ($this->light_mode) {
+				return $this->lightLinkBlock('boek', $boek->getUrl(), $boek->getTitel(), 'Auteur: ' . $boek->getAuteur());
+			}
 			$content = new BoekBBView($boek);
 			return $content->view();
 		} catch (Exception $e) {
@@ -870,9 +1032,8 @@ HTML;
 	/**
 	 * Geeft een blokje met een documentnaam, link, bestandsgrootte en formaat.
 	 *
-	 * [document]1234[/document]
-	 * of
-	 * [document=1234]
+	 * @example [document]1234[/document]
+	 * @example [document=1234]
 	 */
 	protected function bb_document($arguments = array()) {
 		if (isset($arguments['document'])) {
@@ -880,11 +1041,17 @@ HTML;
 		} else {
 			$id = $this->parseArray(array('[/document]'), array());
 		}
-				try {
-			$document = new Document((int) $id);
+
+		$document = DocumentModel::instance()->get($id);
+
+		if ($document) {
+			if ($this->light_mode) {
+				$beschrijving = $document->getFriendlyMimetype() . ' (' . format_filesize((int) $document->filesize) . ')';
+				return $this->lightLinkBlock('document', $document->getDownloadUrl(), $document->naam, $beschrijving);
+			}
 			$content = new DocumentBBContent($document);
 			return $content->getHtml();
-		} catch (Exception $e) {
+		} else {
 			return '<div class="bb-document">[document] Ongeldig document (id:' . $id . ')</div>';
 		}
 	}
@@ -892,11 +1059,10 @@ HTML;
 	/**
 	 * Geeft een maaltijdketzer weer met maaltijdgegevens, aantal aanmeldingen en een aanmeldknopje.
 	 *
-	 * [maaltijd=next], [maaltijd=1234]
-	 * of
-	 * [maaltijd]next[/maaldijd]
-	 * of
-	 * [maaltijd]123[/maaltijd]
+	 * @example [maaltijd=next]
+	 * @example [maaltijd=1234]
+	 * @example [maaltijd]next[/maaldijd]
+	 * @example [maaltijd]123[/maaltijd]
 	 */
 	public function bb_maaltijd($arguments = array()) {
 		if (isset($arguments['maaltijd'])) {
@@ -907,7 +1073,7 @@ HTML;
 		$mid = trim($mid);
 		$maaltijd2 = null;
 
-								try {
+		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
 				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(LoginModel::getUid()); // met filter
 				$aantal = sizeof($maaltijden);
@@ -933,6 +1099,10 @@ HTML;
 		}
 		if (!isset($maaltijd)) {
 			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
+		}
+		if ($this->light_mode) {
+			$url = $maaltijd->getLink() . '#' . $maaltijd->maaltijd_id;
+			return $this->lightLinkBlock('maaltijd', $url, $maaltijd->titel, $maaltijd->datum . ' ' . $maaltijd->tijd);
 		}
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), LoginModel::getUid());
 		if (empty($aanmeldingen)) {
@@ -979,7 +1149,7 @@ HTML;
 
 	public function bb_offtopic($arguments = array()) {
 		$content = $this->parseArray(array('[/ot]', '[/offtopic]', '[/vanonderwerp]'), array());
-		return '<span class="offtopic">' . $content . '</span>';
+		return '<span class="offtopic bb-tag-offtopic">' . $content . '</span>';
 	}
 
 	/**
@@ -991,6 +1161,10 @@ HTML;
 
 	public function bb_spoiler($arguments = array()) {
 		$content = $this->parseArray(array('[/spoiler]', '[/verklapper]'), array());
+		if ($this->light_mode) {
+			$content = str_replace('[br]', '<br />', $content);
+			return '<a class="bb-tag-spoiler" href="#/verklapper/' . urlencode($content) . '">Toon verklapper</a>';
+		}
 		return '<button class="spoiler">Toon verklapper</button><div class="spoiler-content">' . $content . '</div>';
 	}
 
@@ -1007,20 +1181,20 @@ HTML;
 		if ($this->nobold === true AND $this->quote_level == 0) {
 			return $this->parseArray(array('[/b]'), array('b'));
 		} else {
-			return '<span class="dikgedrukt"><strong>' . $this->parseArray(array('[/b]'), array('b')) . '</strong></span>';
+			return '<strong class="dikgedrukt bb-tag-b">' . $this->parseArray(array('[/b]'), array('b')) . '</strong>';
 		}
 	}
 
 	function bb_i() {
-		return '<span class="cursief"><em>' . $this->parseArray(array('[/i]'), array('i')) . '</em></span>';
+		return '<em class="cursief bb-tag-i">' . $this->parseArray(array('[/i]'), array('i')) . '</em>';
 	}
 
 	function bb_s() {
-		return '<span class="doorgestreept"><del>' . $this->parseArray(array('[/s]'), array('s')) . '</del></span>';
+		return '<del class="doorgestreept bb-tag-s">' . $this->parseArray(array('[/s]'), array('s')) . '</del>';
 	}
 
 	function bb_u() {
-		return '<span class="onderstreept"><ins>' . $this->parseArray(array('[/u]'), array('u')) . '</ins></span>';
+		return '<ins class="onderstreept bb-tag-u">' . $this->parseArray(array('[/u]'), array('u')) . '</ins>';
 	}
 
 	function bb_rn() {
@@ -1038,9 +1212,8 @@ HTML;
 	/**
 	 * Deze methode kan de belangrijkste mededelingen (doorgaans een top3) weergeven.
 	 *
-	 * [mededelingen=top3]
-	 * of
-	 * [mededeling]top3[/mededeling]
+	 * @example [mededelingen=top3]
+	 * @example [mededelingen]top3[/mededelingen]
 	 */
 	public function bb_mededelingen($arguments = array()) {
 		if (isset($arguments['mededelingen'])) {
@@ -1051,8 +1224,9 @@ HTML;
 		if ($type == '') {
 			return '[mededelingen] Geen geldig mededelingenblok.';
 		}
-
-
+		if ($this->light_mode) {
+			return $this->lightLinkBlock('mededelingen', '/mededelingen', 'Mededelingen', 'Bekijk de laatste mededelingen');
+		}
 		$MededelingenView = new MededelingenView(0);
 		switch ($type) {
 			case 'top3nietleden': //lekker handig om dit intern dan weer anders te noemen...
@@ -1080,8 +1254,12 @@ HTML;
 	 */
 	function bb_locatie($arguments = array()) {
 		$address = $this->parseArray(array('[/locatie]'), array());
+		$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
+		if ($this->light_mode) {
+			return $this->lightLinkInline('locatie', $url, $address);
+		}
 		$map = $this->maps(htmlspecialchars($address), $arguments);
-		return '<span class="hoverIntent"><a href="https://maps.google.nl/maps?q=' . htmlspecialchars($address) . '">' . $address . Icon::getTag('map', null, 'Kaart', 'text') . '</a><div class="hoverIntentContent">' . $map . '</div></span>';
+		return '<span class="hoverIntent"><a href="' . $url . '">' . $address . Icon::getTag('map', null, 'Kaart', 'text') . '</a><div class="hoverIntentContent">' . $map . '</div></span>';
 	}
 
 	/**
@@ -1096,10 +1274,14 @@ HTML;
 	 *
 	 * @author Piet-Jan Spaans
 	 *
-	 * [map h=100]Oude Delft 9[/map]
+	 * @example [map h=100]Oude Delft 9[/map]
 	 */
 	public function bb_map($arguments = array()) {
 		$address = $this->parseArray(array('[/map]', '[/kaart]'), array());
+		if ($this->light_mode) {
+			$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
+			return $this->lightLinkBlock('map', $url, $address, 'Google Maps');
+		}
 		return $this->maps(htmlspecialchars($address), $arguments);
 	}
 
@@ -1123,9 +1305,8 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	 *
 	 * @author Piet-Jan Spaans
 	 *
-	 * [peiling=2]
-	 * of
-	 * [peiling]2[/peiling]
+	 * @example [peiling=2]
+	 * @example [peiling]2[/peiling]
 	 */
 	public function bb_peiling($arguments = array()) {
 		if (isset($arguments['peiling'])) {
@@ -1133,8 +1314,12 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		} else {
 			$peiling_id = $this->parseArray(array('[/peiling]'), array());
 		}
-				try {
+		try {
 			$peiling = PeilingenModel::instance()->getPeilingById((int) $peiling_id);
+			if ($this->light_mode) {
+				$url = '#/peiling/' . urlencode($peiling_id);
+				return $this->lightLinkBlock('peiling', $url, $peiling->titel, $peiling->tekst);
+			}
 			$peilingcontent = new PeilingView($peiling);
 			return $peilingcontent->getHtml();
 		} catch (Exception $e) {
@@ -1145,10 +1330,9 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	private $slideshowJsIncluded = false;
 
 	/**
-	 * Slideshow-tag.
+	 * Slideshow
 	 *
-	 * example:
-	 * [slideshow]http://example.com/image_1.jpg[/slideshow]
+	 * @example [slideshow]http://example.com/image_1.jpg[/slideshow]
 	 */
 	public function bb_slideshow($arguments = array()) {
 		$content = $this->parseArray(array('[/slideshow]'), array());
@@ -1163,6 +1347,10 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		if (count($slides) == 0) {
 			$content = '[slideshow]: geen geldige afbeeldingen gegeven';
 		} else {
+			if ($this->light_mode) {
+				$url = '#/slideshow/' . urlencode(json_encode($slides));
+				return $this->lightLinkBlock('slideshow', $url, 'Slideshow', count($slides) . ' foto\'s');
+			}
 			$content = '
 				<div class="image_reel">';
 			foreach ($slides as $slide) {
@@ -1185,9 +1373,8 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	/**
 	 * Blokje met bijbelrooster voor opgegeven aantal dagen.
 	 *
-	 * [bijbelrooster=10]
-	 * of
-	 * [bijbelrooster]10[/bijbelrooster]
+	 * @example [bijbelrooster=10]
+	 * @example [bijbelrooster]10[/bijbelrooster]
 	 */
 	public function bb_bijbelrooster($arguments = array()) {
 		if (isset($arguments['bijbelrooster'])) {
@@ -1195,7 +1382,10 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		} else {
 			$dagen = $this->parseArray(array('[/bijbelrooster]'), array());
 		}
-				$view = new BijbelroosterBBView($dagen);
+		if ($this->light_mode) {
+			return $this->lightLinkBlock('bijbelrooster', '/bijbelrooster', 'Bijbelleesrooster', '');
+		}
+		$view = new BijbelroosterBBView($dagen);
 		return $view->getHtml();
 	}
 
@@ -1211,7 +1401,12 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		} else {
 			$vertaling = null;
 		}
-		return self::getBijbelLink($stukje, $vertaling, true);
+		$link = self::getBijbelLink($stukje, $vertaling, !$this->light_mode);
+		if ($this->light_mode) {
+			return $this->lightLinkInline('bijbel', $link, $stukje);
+		} else {
+			return $link;
+		}
 	}
 
 	public static function getBijbelLink($stukje, $vertaling = null, $tag = false) {
@@ -1221,7 +1416,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		if ($vertaling === null) {
 			$vertaling = LidInstellingenModel::get('algemeen', 'bijbel');
 		}
-		$link = 'https://www.debijbel.nl/bijbel/' . $vertaling . '/' . $stukje;
+		$link = 'https://www.debijbel.nl/bijbel/' . urlencode($vertaling) . '/' . urlencode($stukje);
 		if ($tag) {
 			return '<a href="' . $link . '" target="_blank">' . $stukje . '</a>';
 		} else {
@@ -1230,7 +1425,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	}
 
 	function bb_ledenmemoryscores($arguments = array()) {
-						LedenMemoryScoresModel::instance();
+		LedenMemoryScoresModel::instance();
 		$groep = null;
 		$titel = null;
 		/**
@@ -1261,8 +1456,351 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		/**
 		 * END COPY FROM @see LedenMemoryView.class.php
 		 */
+		if ($this->light_mode) {
+			return $this->lightLinkBlock('ledenmemoryscores', '/forum/onderwerp/8017', 'Ledenmemory Scores', $titel);
+		}
 		$table = new LedenMemoryScoreTable($groep, $titel);
 		return $table->view();
+	}
+
+	/**
+	 * Heading
+	 *
+	 * @param Integer $arguments['h'] Heading level (1-6)
+	 * @param optional String $arguments['id'] ID attribute
+	 *
+	 * @example [h=1 id=special]Heading[/h]
+	 */
+	function bb_h($arguments) {
+		$id = '';
+		if (isset($arguments['id'])) {
+			$id = ' id="' . htmlspecialchars($arguments['id']) . '"';
+		}
+		$h = 1;
+		if (isset($arguments['h'])) {
+			$h = (int) $arguments['h'];
+		}
+		$text = '<h' . $h . $id . ' class="bb-tag-h">';
+		$text .= $this->parseArray(array('[/h]'), array('h'));
+		$text .= '</h' . $h . '>' . "\n\n";
+
+		// remove trailing br (or even two)
+		$next_tag = array_shift($this->parseArray);
+
+		if ($next_tag != '[br]') {
+			array_unshift($this->parseArray, $next_tag);
+		} else {
+			$next_tag = array_shift($this->parseArray);
+			if ($next_tag != '[br]') {
+				array_unshift($this->parseArray, $next_tag);
+			}
+		}
+		return $text;
+	}
+
+	protected $nobold = false;
+
+	function bb_nobold($arguments = array()) {
+		$this->nobold = true;
+		$return = $this->parseArray(array('[/nobold]'), array());
+		$this->nobold = false;
+
+		return $return;
+	}
+
+	/**
+	 * Subscript
+	 *
+	 * @example [sub]Subscript[/sub]
+	 */
+	function bb_sub() {
+		return '<sub class="bb-tag-sub">' . $this->parseArray(array('[/sub]'), array('sub', 'sup')) . '</sub>';
+	}
+
+	/**
+	 * Superscript
+	 *
+	 * @example [sup]Superscript[/sup]
+	 */
+	function bb_sup() {
+		return '<sup class="bb-tag-sup">' . $this->parseArray(array('[/sup]'), array('sub', 'sup')) . '</sup>';
+	}
+
+	/**
+	 * Code
+	 *
+	 * @param optional String $arguments['code'] Description of code type
+	 *
+	 * @example [code=PHP]phpinfo();[/code]
+	 */
+	function bb_code($arguments = array()) {
+		$content = $this->parseArray(array('[/code]'), array('code', 'br', 'all' => 'all'));
+
+		$code = '';
+		if (isset($arguments['code'])) {
+			$code = $arguments['code'] + ' ';
+		}
+
+		return '<div class="bb-tag-code"><sub>' . $code . 'code:</sub><pre class="bbcode">' . $content . '</pre></div>';;
+	}
+
+	/**
+	 * Quote
+	 *
+	 * @example [quote]Citaat[/quote]
+	 */
+	function bb_quote() {
+		if ($this->quote_level == 0) {
+			$this->quote_level = 1;
+			$content = $this->parseArray(array('[/quote]'), array());
+			$this->quote_level = 0;
+		} else {
+			$this->quote_level++;
+			$delcontent = $this->parseArray(array('[/quote]'), array());
+			$this->quote_level--;
+			unset($delcontent);
+			$content = '...';
+		}
+		$text = '<div class="citaatContainer bb-tag-quote"><strong>Citaat</strong>' .
+				'<div class="citaat">' . $content . '</div></div>';
+		return $text;
+	}
+
+	/**
+	 * List
+	 *
+	 * @param optional String $arguments['list'] Type of ordered list
+	 *
+	 * @example [list]Unordered list[/list]
+	 * @example [ulist]Unordered list[/ulist]
+	 * @example [list=a]Ordered list numbered with lowercase letters[/list]
+	 */
+	function bb_list($arguments) {
+		$content = $this->parseArray(array('[/list]', '[/ulist]'), array('br'));
+		if (!isset($arguments['list'])) {
+			$text = '<ul class="bb-tag-list">' . $content . '</ul>';
+		} else {
+			$text = '<ol class="bb-tag-list" type="' . $arguments['list'] . '">' . $content . '</ol>';
+		}
+		return $text;
+	}
+
+	/**
+	 * Horizontal line
+	 *
+	 * @example [hr]
+	 */
+	function bb_hr($arguments) {
+		return '<hr class="bb-tag-hr" />';
+	}
+
+	/**
+	 * List item (short)
+	 *
+	 * @example [lishort]First item
+	 * @example [*]Next item
+	 */
+	function bb_lishort($arguments) {
+		return '<li class="bb-tag-li">' . $this->parseArray(array('[br]')) . '</li>';
+	}
+
+	/**
+	 * List item
+	 *
+	 * @example [li]Item[/li]
+	 */
+	function bb_li($arguments) {
+		return '<li class="bb-tag-li">' . $this->parseArray(array('[/li]')) . '</li>';
+	}
+
+	/**
+	 * Slash me
+	 *
+	 * @param optional String $arguments['me'] Name of who is me
+	 *
+	 * @example [me] waves
+	 * @example [me=Name] waves
+	 */
+	function bb_me($arguments) {
+		$content = $this->parseArray(array('[br]'), array());
+		array_unshift($this->parseArray, '[br]');
+		if (isset($arguments['me'])) {
+			$html = '<span style="color:red;">* ' . $arguments['me'] . $content . '</span>';
+		} else {
+			$html = '<span style="color:red;">/me' . $content . '</span>';
+		}
+		return $html;
+	}
+
+	/**
+	 * UBB off
+	 *
+	 * @example [ubboff]Not parsed[/ubboff]
+	 * @example [tekst]Not parsed[/tekst]
+	 */
+	function bb_ubboff() {
+		$this->bb_mode = false;
+		$content = $this->parseArray(array('[/ubboff]', '[/tekst]'), array());
+		$this->bb_mode = true;
+		return $content;
+	}
+
+	/**
+	 * Email anchor
+	 *
+	 * @param String $arguments['email'] Email address to link to
+	 * @param optional Boolean $arguments['spamsafe'] Uses spam safe javascript obfuscator
+	 *
+	 * @example [email]noreply@csrdelft.nl[/email]
+	 * @example [email=noreply@csrdelft.nl spamsafe]text[/email]
+	 */
+	function bb_email($arguments) {
+		$html = '';
+
+		$mailto = array_shift($this->parseArray);
+		$endtag = array_shift($this->parseArray);
+
+		$email = '';
+		$text = '';
+
+		// only valid patterns
+		if ($endtag == '[/email]') {
+			if (isset($arguments['email'])) {
+				if (email_like($arguments['email'])) {
+					$email = $arguments['email'];
+					$text = $mailto;
+				}
+			} else {
+				if (email_like($mailto)) {
+					$email = $text = $mailto;
+				}
+			}
+		} else {
+			if (isset($arguments['email'])) {
+				if (email_like($arguments['email'])) {
+					$email = $text = $arguments['email'];
+				}
+			}
+			array_unshift($this->parseArray, $endtag);
+			array_unshift($this->parseArray, $mailto);
+		}
+		if (!empty($email)) {
+			$html = '<a class="bb-tag-email" href="mailto:' . $email . '">' . $text . '</a>';
+
+			//spamprotectie: rot13 de email-tags, en voeg javascript toe om dat weer terug te rot13-en.
+			if (isset($arguments['spamsafe'])) {
+				$html = '<script>document.write("' . str_rot13(addslashes($html)) . '".replace(/[a-zA-Z]/g, function(c){ return String.fromCharCode((c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);}));</script>';
+			}
+		} else {
+			$html = '[email] Ongeldig e-mailadres (' . htmlspecialchars($mailto) . ')';
+		}
+		return $html;
+	}
+
+	/**
+	 * Table
+	 *
+	 * @param optional String $arguments['border'] CSS border style
+	 * @param optional String $arguments['color'] CSS color style
+	 * @param optional String $arguments['background-color'] CSS background-color style
+	 * @param optional String $arguments['border-collapse'] CSS border-collapse style
+	 *
+	 * @example [table border=1px_solid_blue]...[/table]
+	 */
+	function bb_table($arguments) {
+		$tableProperties = array('border', 'color', 'background-color', 'border-collapse');
+		$style = '';
+		foreach ($arguments as $name => $value) {
+			if (in_array($name, $tableProperties)) {
+				$style.=$name . ': ' . str_replace('_', ' ', htmlspecialchars($value)) . '; ';
+			}
+		}
+
+		$content = $this->parseArray(array('[/table]'), array('br'));
+		$html = '<table class="bb-table bb-tag-table" style="' . $style . '">' . $content . '</table>';
+		return $html;
+	}
+
+	/**
+	 * Table row
+	 *
+	 * @example [tr]...
+	 * @example [tr]...[/tr]
+	 */
+	function bb_tr() {
+		$content = $this->parseArray(array('[/tr]'), array('br'));
+		$html = '<tr class="bb-tag-tr">' . $content . '</tr>';
+		return $html;
+	}
+
+	/**
+	 * Table cell
+	 *
+	 * @param optional Integer $arguments['w'] CSS width in pixels
+	 *
+	 * @example [td w=50]...[/td]
+	 */
+	function bb_td($arguments = array()) {
+		$content = $this->parseArray(array('[/td]'), array());
+
+		$style = '';
+		if (isset($arguments['w'])) {
+			$style.='width: ' . (int) $arguments['w'] . 'px; ';
+		}
+
+		$html = '<td class="bb-tag-td" style="' . $style . '">' . $content . '</td>';
+		return $html;
+	}
+
+	/**
+	 * Table header cell
+	 *
+	 * @example [th]...[/th]
+	 */
+	function bb_th() {
+		$content = $this->parseArray(array('[/th]'), array());
+		$html = '<th class="bb-tag-th">' . $content . '</th>';
+		return $html;
+	}
+
+	/**
+	 * Div
+	 *
+	 * @param optional String $arguments['class'] Class attribute
+	 * @param optional Boolean $arguments['clear'] CSS clear: both
+	 * @param optional String $arguments['float'] CSS float left or right
+	 * @param optional Integer $arguments['w'] CSS width in pixels
+	 * @param optional Integer $arguments['h'] CSS height in pixels
+	 *
+	 * @example [div class=special clear float=left w=20 h=50]...[/div]
+	 */
+	function bb_div($arguments = array()) {
+		$content = $this->parseArray(array('[/div]'), array());
+		$class = '';
+		if (isset($arguments['class'])) {
+			$class .= htmlspecialchars($arguments['class']);
+		}
+		if (isset($arguments['clear'])) {
+			$class.=' clear';
+		} elseif (isset($arguments['float']) AND $arguments['float'] == 'left') {
+			$class.=' float-left';
+		} elseif (isset($arguments['float']) AND $arguments['float'] == 'right') {
+			$class.=' float-right';
+		}
+		if ($class != '') {
+			$class = ' class="bb-tag-div ' . $class . '"';
+		}
+		$style = '';
+		if (isset($arguments['w'])) {
+			$style.='width: ' . ((int) $arguments['w']) . 'px; ';
+		}
+		if (isset($arguments['h'])) {
+			$style.='height: ' . ((int) $arguments['h']) . 'px; ';
+		}
+		if ($style != '') {
+			$style = ' style="' . $style . '" ';
+		}
+		return '<div' . $class . $style . '>' . $content . '</div>';
 	}
 
 }

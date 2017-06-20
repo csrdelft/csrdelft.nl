@@ -19,7 +19,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\CsrBB;
+use CsrDelft\view\bbcode\CsrBB;
 use Exception;
 use function CsrDelft\array_filter_empty;
 use function CsrDelft\setMelding;
@@ -660,7 +660,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * @return float
 	 */
 	public function getCiviSaldo() {
-		require_once 'model/fiscaat/CiviSaldoModel.class.php';
 		return CiviSaldoModel::instance()->getSaldo($this->uid)->saldo / (float) 100;
 	}
 
@@ -671,10 +670,10 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function isInGoogleContacts() {
 		try {
-						if (!GoogleSync::isAuthenticated()) {
+            if (!GoogleSync::isAuthenticated()) {
 				return null;
 			}
-			return GoogleSync::instance()->existsInGoogleContacts($this);
+			return !is_null(GoogleSync::instance()->existsInGoogleContacts($this));
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), 0);
 			return null;

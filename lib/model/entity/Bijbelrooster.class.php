@@ -3,7 +3,7 @@ namespace CsrDelft\model\entity;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use CsrDelft\view\CsrBB;
+use CsrDelft\view\bbcode\CsrBB;
 
 /**
  * Bijbelrooster.class.php

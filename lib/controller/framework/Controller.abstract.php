@@ -4,7 +4,7 @@ use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\CsrBB;
+use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\View;
 use Exception;
@@ -200,7 +200,7 @@ abstract class Controller {
 			redirect(CSR_ROOT . "#login");
 		}
 		// GUI 403
-						$body = new CmsPaginaView(CmsPaginaModel::get($response_code));
+		$body = new CmsPaginaView(CmsPaginaModel::get($response_code));
 		$this->view = new CsrLayoutPage($body);
 		$this->view->view();
 		exit;

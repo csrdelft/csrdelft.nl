@@ -1,6 +1,6 @@
 <?php
 
-use CsrDelft\view\CsrBB;
+use CsrDelft\view\bbcode\CsrBB;
 
 require_once 'configuratie.include.php';
 /**
