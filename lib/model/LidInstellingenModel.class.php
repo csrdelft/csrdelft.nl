@@ -44,7 +44,7 @@ class LidInstellingenModel extends InstellingenModel {
 		),
 		'layout'		 => array(
 			'toegankelijk'	 => array('Leesbaarheid', T::Enumeration, array('standaard', 'bredere letters'), 'standaard'),
-			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'lustrum', 'owee', 'dies', 'sineregno', 'roze'), 'normaal'),
+			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'lustrum', 'owee', 'dies', 'sineregno', 'civitasia', 'roze'), 'normaal'),
 			'fx'			 => array('Effect', T::Enumeration, array('nee', 'civisaldo', 'onontdekt', 'sneeuw', 'space', 'wolken'), 'nee'),
 			'visitekaartjes' => array('Civikaartjes', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'neuzen'		 => array('Neuzen', T::Enumeration, array('2013', 'nee'), '2013'),
