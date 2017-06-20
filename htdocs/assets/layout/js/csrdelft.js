@@ -28,7 +28,7 @@ function init_page() {
 	zijbalk_scroll_fixed();
 	init_dropzone();
 	init_timeago_once();
-	init_tooltip_once();
+	//init_tooltip_once();
 	init_sluit_meldingen();
 	init_context($('body'));
 	//init_geolocation();
@@ -804,7 +804,7 @@ function getSelectedText() {
 /**
  * Selecteer de tekst van een DOM-element.
  * @source http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
- * 
+ *
  * @param elmnt DOM-object
  */
 function selectText(elmnt) {
@@ -883,7 +883,7 @@ function basename(path, suffix) {
 /**
  * Bereken de breedte van een native scrollbalk.
  * @source http://www.alexandre-gomes.com/?p=115
- * 
+ *
  * @returns int
  */
 function getScrollBarWidth() {

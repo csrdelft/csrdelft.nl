@@ -23,20 +23,7 @@ class ForumDraadZijbalkView extends ForumView {
 	}
 
 	public function view() {
-		echo '<div class="zijbalk_forum"><div class="zijbalk-kopje"><a href="/forum/recent';
-		if ($this->belangrijk === true) {
-			echo '/1/belangrijk';
-		}
-		echo '">Forum';
-		if ($this->belangrijk === true) {
-			echo ' belangrijk';
-		}
-		echo '</a>';
-		$aantal = ForumPostsModel::instance()->getAantalWachtOpGoedkeuring();
-		if ($aantal > 0 AND LoginModel::mag('P_FORUM_MOD')) {
-			echo ' &nbsp;<a href="/forum/wacht" class="badge" title="' . $aantal . ' forumbericht' . ($aantal === 1 ? '' : 'en') . ' wacht' . ($aantal === 1 ? '' : 'en') . ' op goedkeuring">' . $aantal . '</a>';
-		}
-		echo '</div>';
+		echo '<div class="zijbalk_forum">';
 		foreach ($this->model as $draad) {
 			$this->smarty->assign('draad', $draad);
 			$this->smarty->display('forum/draad_zijbalk.tpl');

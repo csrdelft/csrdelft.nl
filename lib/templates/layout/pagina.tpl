@@ -10,33 +10,49 @@
 				<li><a class="cd-nav-trigger" href="#cd-primary-nav">Menu<span></span></a></li>
 			</ul>
 		</header>
-		<main class="cd-main-content">
-			<div id="cd-zijbalk"{if CsrDelft\model\LidInstellingenModel::get('zijbalk', 'scrollen')!='met pagina mee'} class="{if CsrDelft\model\LidInstellingenModel::get('zijbalk', 'scrollen')=='pauper/desktop'}desktop-only {/if}{if CsrDelft\model\LidInstellingenModel::get('zijbalk', 'scrollbalk')=='ja'}scroll-hover {/if}scroll-fixed dragobject dragvertical" data-scrollfix="{$scrollfix}"{/if}>
-				<a href="/">
-					<div class="cd-beeldmerk"></div>
-				</a>
-				{foreach from=$zijbalk item=blok}
-					<div class="blok">{$blok->view()}</div>
-				{/foreach}
+		<aside id="cd-zijbalk">
+			<a href="/">
+				<div class="cd-beeldmerk"></div>
+			</a>
+			<a class="link zoeken"><i class="fa fa-search"></i></a>
+			<a class="link categorie" href="#"><i class="fa fa-home"></i>thuis</a>
+			<a class="link categorie" href="#"><i class="fa fa-group"></i>groepen</a>
+			<a class="link categorie" href="#"><i class="fa fa-bolt"></i>actueel</a>
+			<a class="link categorie" href="#"><i class="fa fa-comments"></i>forum</a>
+			<a class="link categorie" href="#"><i class="fa fa-paper-plane"></i>communicatie</a>
+
+			<div class="persoonlijk">
+				<img class="foto" src="/plaetjes/pasfoto/1345.vierkant.png"/>
+				<div class="naam">{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('civitas')}</div>
+				<div class="saldo-titel">saldo</div>
+                {assign var=saldo value=CsrDelft\model\security\LoginModel::getProfiel()->getCiviSaldo()}
+				<div class="saldo-bedrag{if $saldo < 0} staatrood{/if}">
+					&euro; {$saldo|number_format:2:",":"."}
+				</div>
 			</div>
-			<nav class="cd-page-top">
-				<div class="breadcrumbs">{$breadcrumbs}</div>
-			</nav>
-			<div class="cd-page-content">
-				{$body->view()}
-			</div>
-			<footer class="cd-footer">
-				{CsrDelft\printDebug()}
-			</footer>
+		</aside>
+		<nav class="cd-page-top">
+			{*<div class="breadcrumbs">{$breadcrumbs}</div>*}
+		</nav>
+		<main>
+			{$body->view()}
 		</main>
-		{$mainmenu->view()}
-		<div id="cd-main-overlay">
-			{if CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'onontdekt'}
-				{include file='layout/fx-onontdekt.tpl'}
-			{elseif CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'civisaldo'}
-				{include file='layout/fx-civisaldo.tpl'}
-			{/if}
-		</div>
+
+		<footer>
+			&copy; {date('Y')} - PubCie der C.S.R. Delft
+		</footer>
+
+			{*<footer class="cd-footer">*}
+				{*{printDebug()}*}
+			{*</footer>*}
+		{*{$mainmenu->view()}*}
+		{*<div id="cd-main-overlay">*}
+			{*{if CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'onontdekt'}*}
+				{*{include file='layout/fx-onontdekt.tpl'}*}
+			{*{elseif CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'civisaldo'}*}
+				{*{include file='layout/fx-civisaldo.tpl'}*}
+			{*{/if}*}
+		{*</div>*}
 		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
 		{if isset($modal)}
 			{$modal->view()}

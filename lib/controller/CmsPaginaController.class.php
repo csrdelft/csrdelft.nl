@@ -68,21 +68,18 @@ class CmsPaginaController extends Controller {
 		/** @var CmsPagina $pagina */
 		$pagina = $this->model->get($naam);
 		if (!$pagina) { // 404
-			$pagina = $this->model->get('thuis');
+			$pagina = $this->model->get('403');
 		}
 		if (!$pagina->magBekijken()) { // 403
 			$this->exit_http(403);
 		}
 		$body = new CmsPaginaView($pagina);
 		if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde bezoekers
-			$tmpl = 'content';
 			$menu = '';
-			if ($pagina->naam === 'thuis') {
-				$tmpl = 'index';
-			} elseif ($this->hasParam(1) AND $this->getParam(1) === 'vereniging') {
+			if ($this->hasParam(1) AND $this->getParam(1) === 'vereniging') {
 				$menu = 'Vereniging';
 			}
-			$this->view = new CsrLayoutOweePage($body, $tmpl, $menu);
+			$this->view = new CsrLayoutOweePage($body, 'content', $menu);
 		} else {
 			$this->view = new CsrLayoutPage($body, $this->zijbalk);
 			if ($pagina->naam === 'thuis') {

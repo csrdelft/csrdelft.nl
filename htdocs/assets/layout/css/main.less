@@ -1,0 +1,175 @@
+// Beschrijft de voorpagina
+@import "kleuren.less";
+@import "maten.less";
+
+body {
+  background-color: @achtergrondkleur;
+  margin-left: @zijbalk-breedte;
+}
+
+body > header {
+  display: none;
+}
+
+body > main {
+  position: relative;
+  background-color: @achtergrondkleur-main;
+
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  margin: 0 auto;
+
+  width: 1024px;
+
+  padding: 2em;
+
+  .foto {
+    width: calc(~"100% + 4em");
+    margin: -2em -2em 1em -2em;
+    overflow: hidden;
+    background: url(https://csrdelft.nl/plaetjes/fotoalbum/Voorpagina/_resized/Borrel-42.jpg) no-repeat center center;
+    background-size: cover;
+    height: 20em;
+  }
+
+  #komende_verjaardagen {
+    display: flex;
+    flex-wrap: wrap;
+    .verjaardag {
+      position: relative;
+      text-align: center;
+      width: 4em;
+      height: 5em;
+
+      margin: 0 0.5em 1.5em 0;
+
+      border-collapse: collapse;
+
+      .datum {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        color: #000;
+        font-size: .9em;
+        opacity: .7;
+        filter: alpha(opacity=70);
+      }
+
+      .pasfoto {
+        width: 4em;
+        height: 5em;
+        margin: 1px 0 0 1px;
+      }
+    }
+  }
+
+  .zijbalk_forum {
+    .ongelezen {
+      a {
+        margin-left: -2em;
+      }
+      .bullet {
+        flex: 0 0 2em;
+        text-align: center;
+        svg {
+          width: 0.5em;
+          height: 0.5em;
+        }
+      }
+
+      .draad-titel {
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+    }
+    .item a {
+      text-decoration: none;
+      color: black;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+    }
+
+    span {
+      padding: 0.5em;
+    }
+    .draad-titel {
+      flex-grow: 2;
+      padding-left: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .draad-deel {
+      white-space: nowrap;
+    }
+    .draad-moment {
+      white-space: nowrap;
+    }
+    .draad-auteur {
+      img {
+        border-radius: 50%;
+        width: 2em;
+        height: 2em;
+      }
+    }
+  }
+
+  section {
+    float: left;
+
+    &.breed-50 {
+      width: 50%;
+      flex-grow: 4;
+    }
+
+    &.breed-25 {
+      width: 25%;
+      flex-grow: 2;
+    }
+
+    ul {
+      padding-left:0;
+    }
+
+    li {
+      vertical-align: text-bottom;
+      list-style: none;
+      line-height: 3em;
+    }
+
+    li.ongelezen {
+      font-weight: bold;
+      &::before {
+        content:"•";
+        color: @nadruk;
+        font-size: 3em;
+        line-height:inherit;
+        width:2rem;
+        float:left;
+        margin-left:-2rem;
+        text-align: center;
+      }
+    }
+  }
+
+  section {
+    .forum-draad-link {
+
+    }
+  }
+}
+
+body > footer {
+  width: 1024px;
+  background-color: @achtergrondkleur-main;
+  text-align: center;
+  margin: 0.5em auto 0;
+  padding: 0.5em;
+}

@@ -2,9 +2,12 @@
 namespace CsrDelft\view;
 
 use CsrDelft\model\DragObjectModel;
+use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\model\VerjaardagenModel;
 use CsrDelft\view\formulier\ModalForm;
+use CsrDelft\view\forum\ForumDraadZijbalkView;
 use CsrDelft\view\login\LoginForm;
 use CsrDelft\view\menu\MainMenuView;
 
@@ -51,6 +54,13 @@ class CsrLayoutPage extends CompressedLayout {
 		$smarty->assign('mainmenu', new MainMenuView());
 		$smarty->assign('body', $this->getBody());
 		$smarty->assign('modal', $this->modal);
+        $smarty->assign('verjaardagen', new KomendeVerjaardagenView(
+            VerjaardagenModel::getKomende((int)LidInstellingenModel::get('zijbalk', 'verjaardagen')),
+            LidInstellingenModel::get('zijbalk', 'verjaardagen_pasfotos') == 'ja'));
+        $belangrijk = (LidInstellingenModel::get('zijbalk', 'forum_belangrijk') > 0 ? false : null);
+        $smarty->assign('forum', new ForumDraadZijbalkView(
+            ForumDradenModel::instance()->getRecenteForumDraden(
+                (int) LidInstellingenModel::get('zijbalk', 'forum'), $belangrijk), $belangrijk));
 
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
 		if (!$breadcrumbs) {
