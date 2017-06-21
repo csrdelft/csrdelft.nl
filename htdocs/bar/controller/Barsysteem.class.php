@@ -11,7 +11,7 @@ class Barsysteem
     var $db;
     private $beheer;
 
-    function Barsysteem()
+    function __construct()
     {
         $this->db = Database::instance()->getDatabase();
     }

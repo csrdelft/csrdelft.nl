@@ -27,6 +27,11 @@ class CiviSaldoModel extends PersistenceModel {
 		return $saldo;
 	}
 
+	public function getSomSaldi($profielOnly = false) {
+	    $after = $profielOnly ? "AND uid NOT LIKE 'c%'" : "";
+	    return array_reduce($this->select(['saldo'], "deleted = 0 $after")->fetchAll(), function($a, $b) {return $a+$b['saldo'];}, 0);
+    }
+
 	/**
 	 * @param $uid
 	 * @param int $bedrag

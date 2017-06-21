@@ -2,10 +2,13 @@
 
 namespace CsrDelft\view\fiscaat;
 
+use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\view\SmartyTemplateView;
 
 class FiscaatOverzichtView extends SmartyTemplateView {
 	public function view() {
+	    $this->smarty->assign('saldisom', CiviSaldoModel::instance()->getSomSaldi());
+        $this->smarty->assign('saldisomleden', CiviSaldoModel::instance()->getSomSaldi(true));
 		$this->smarty->assign('productenbeheer', new BeheerCiviProductenView());
 		$this->smarty->assign('saldobeheer', new BeheerCiviSaldoView());
 		$this->smarty->display('fiscaat/overzicht.tpl');
