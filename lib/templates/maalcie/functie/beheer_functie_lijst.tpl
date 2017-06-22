@@ -18,7 +18,7 @@
 			<div class="kwali verborgen"><a title="Toon leden" class="btn" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon leden</a></div>
 		{/if}
 		{foreach from=$functie->getKwalificaties() item=kwali}
-			<div class="kwali{if CsrDerlft\model\ProfielModel::get($kwali->uid)->isOudlid()} verborgen{/if}">
+			<div class="kwali{if CsrDelft\model\ProfielModel::get($kwali->uid)->isOudlid()} verborgen{/if}">
 				<a href="{$smarty.const.maalcieUrl}/dekwalificeer/{$functie->functie_id}/{$kwali->uid}" title="Kwalificatie intrekken" class="btn post">{icon get="vcard_delete"}</a>
 				&nbsp;{ProfielModel::get($kwali->uid)->getNaam(CsrDelft\model\InstellingenModel::get('corvee', 'weergave_ledennamen_beheer'))}
 				<span class="lichtgrijs"> (sinds {$kwali->wanneer_toegewezen})</span>
