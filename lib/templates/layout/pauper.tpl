@@ -14,9 +14,9 @@
 				{if CsrDelft\model\security\LoginModel::instance()->hasError()}
 					<span class="error">{CsrDelft\model\security\LoginModel::instance()->getError()}</span>
 				{/if}
-				{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
+				{toegang P_LOGGED_IN}
 					<a href="/logout">Uitloggen</a>
-				{/if}
+				{/toegang}
 			</div>
 		</div>
 		<br />

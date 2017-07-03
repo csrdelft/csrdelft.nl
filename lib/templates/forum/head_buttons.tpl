@@ -1,4 +1,4 @@
-{if CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
+{toegang P_LOGGED_IN}
 	<div class="forumheadbtn">
 		<a href="/forum/toonalles" class="btn post confirm ReloadPage" title="Verborgen onderwerpen weer laten zien">{icon get="eye"} {CsrDelft\model\forum\ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid()}</a>
 	</div>
@@ -10,4 +10,4 @@
 			<a href="/forum/wacht" class="btn" title="Reacties die wachten op goedkeuring">{icon get="hourglass"} {CsrDelft\model\forum\ForumPostsModel::instance()->getAantalWachtOpGoedkeuring()}</a>
 		</div>
 	{/if}
-{/if}
+{/toegang}

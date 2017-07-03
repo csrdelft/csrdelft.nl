@@ -2,11 +2,13 @@
 
 {$zoekform->view()}
 
-{if isset($deel->forum_id) AND CsrDelft\model\security\LoginModel::mag('P_ADMIN')}
+{toegang P_ADMIN}
+{if isset($deel->forum_id)}
 	<div class="forumheadbtn">
 		<a href="/forum/beheren/{$deel->forum_id}" class="btn post popup" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
 	</div>
 {/if}
+{/toegang}
 
 {include file='forum/head_buttons.tpl'}
 
@@ -55,12 +57,14 @@
 					<h2>{$deel->titel}</h2>
 					{$deel->omschrijving}
 
-					{if !isset($deel->forum_id) AND CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN')}
+					{toegang P_LOGGED_IN}
+					{if !isset($deel->forum_id)}
 						Berichten per dag: (sleep om te zoomen)
 						<div class="grafiek">
 							{include file='forum/stats_grafiek.tpl'}
 						</div>
 					{/if}
+					{/toegang}
 				</div>
 			</td>
 		</tr>

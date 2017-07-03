@@ -10,11 +10,11 @@
 	<li>
 		<a href="/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
 	</li>
-	{if CsrDelft\model\security\LoginModel::mag('P_BIEB_READ')}
+	{toegang P_BIEB_READ}
 		<li>
 			<a href="/bibliotheek/rubrieken" title="Rubriekenoverzicht">Rubrieken</a>
 		</li>
-	{/if}
+	{/toegang}
 </ul>
 
 {if $boek->magBekijken()}

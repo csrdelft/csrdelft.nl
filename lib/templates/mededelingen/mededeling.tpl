@@ -1,9 +1,10 @@
 <h1>Mededeling {if $mededeling->id==0}toevoegen{else}bewerken{/if}</h1>
 <form action="{mededelingen\MededelingenView::MEDEDELINGEN_ROOT}bewerken/{$mededeling->id}" method="post" enctype="multipart/form-data">
 	{CsrDelft\getMelding()}
-	{if !CsrDelft\model\security\LoginModel::mag('P_NEWS_MOD')}
+	{toegang P_NEWS_MOD}
+	{geentoegang}
 		Hier kunt u een mededeling toevoegen. Het zal echter niet direct zichtbaar worden, maar &eacute;&eacute;rst door de PubCie worden goedgekeurd.<br /><br />
-	{/if}
+	{/toegang}
 	<label>Titel:</label>
 	<input type="text" name="titel" value="{$mededeling->titel|escape:'html'}" class="titel" /><br />
 	<label>Tekst:</label>

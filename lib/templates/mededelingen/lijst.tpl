@@ -13,14 +13,16 @@
 					{/if}
 					<div class="itemtitel">
 						{* {$mededeling->getDatum()} *}
-						<a href="{$pagina_root}{$mededeling->id}"{if CsrDelft\model\security\LoginModel::mag('P_NEWS_MOD')} class="{if !$mededeling->prive}cursief{/if} {if $mededeling->zichtbaarheid=='wacht_goedkeuring'}dikgedrukt{/if}"{/if}>{$mededeling->titel|bbcode|html_substr:"40":"…"}</a>
+						<a href="{$pagina_root}{$mededeling->id}"{toegang P_NEWS_MOD} class="{if !$mededeling->prive}cursief{/if} {if $mededeling->zichtbaarheid=='wacht_goedkeuring'}dikgedrukt{/if}"{/toegang}>
+							{$mededeling->titel|bbcode|html_substr:"40":"…"}
+						</a>
 					</div>
 				</div>
 			{/foreach}
 		</div> {* Einde mededelingenlijst-block*}
 	{/foreach}
 	<div class="mededelingen_paginering">
-		Pagina: {sliding_pager baseurl="`$pagina_root`pagina/" 
+		Pagina: {sliding_pager baseurl="`$pagina_root`pagina/"
 					pagecount=$totaalAantalPaginas curpage=$huidigePagina
 					txt_prev="&lt;" separator="" txt_next="&gt;" show_always=true show_first_last=false show_prev_next=false}
 	</div>

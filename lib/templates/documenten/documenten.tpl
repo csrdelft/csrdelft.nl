@@ -1,9 +1,9 @@
 {* Toon een overzicht van documenten in de verschillende categorieën *}
 
 <div id="controls">
-	{if CsrDelft\model\security\LoginModel::mag('P_DOCS_MOD')}
+	{toegang P_DOCS_MOD}
 		<a class="btn" href="/documenten/toevoegen">{icon get="toevoegen"} Toevoegen</a>
-	{/if}
+	{/toegang}
 </div>
 
 {CsrDelft\getMelding()}
@@ -25,12 +25,12 @@
 					<a href="/documenten/categorie/{$categorie->id}/" title="Alle documenten in {$categorie->naam|escape:'html'}">
 						{$categorie->naam|escape:'html'}
 					</a>
-					{if CsrDelft\model\security\LoginModel::mag('P_DOCS_MOD')}
+					{toegang P_DOCS_MOD}
 						<a class="toevoegen" href="/documenten/toevoegen/?catID={$categorie->id}"
 						   title="Document toevoegen in categorie: {$categorie->naam|escape:'html'}">
 							{icon get="toevoegen"}
 						</a>
-					{/if}
+					{/toegang}
 				</th>
 			</tr>
 			{foreach from=$model->getRecent($categorie, 5) item=document}
