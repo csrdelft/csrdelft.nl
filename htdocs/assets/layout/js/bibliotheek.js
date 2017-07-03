@@ -190,20 +190,19 @@ jQuery(document).ready(function ($) {
             }
         }).on("typeahead:selected", function(event, row, dataset) {
             //gegevens in invulvelden plaatsen
-			var inputs = $("form.Formulier input:not(.tt-hint)");
 			var values = [
-                row.title,
-                getAuteur(row),
-                row.pageCount,
-                getLanguage(row),
-                getIsbn(row),
-                row.publisher,
-                getPublishedDate(row)
-			];
-			values.forEach(function(el, i) {
-				$(inputs[i]).val(el);
+                {key: 'titel', value: row.title},
+                {key: 'auteur', value: getAuteur(row)},
+                {key: 'paginas', value: row.pageCount},
+                {key: 'taal', value: getLanguage(row)},
+                {key: 'isbn', value: getIsbn(row)},
+                {key: 'uitgeverij', value: row.publisher},
+                {key: 'uitgavejaar', value: getPublishedDate(row)}
+            ];
+			values.forEach(function(el) {
+				$("input[name=" + el.key + "]").val(el.value);
 			});
-        });
+		});
 
 		//boekpagina: autocomplete voor bewerkvelden uit C.S.R.-database.
 		/* result = array(
@@ -297,12 +296,13 @@ jQuery(document).ready(function ($) {
 
 //voeg 'genereer'-knop toe aan codefield, die een biebcode geneert met waardes uit andere velden
 function biebCodeVakvuller() {
+    var codeveld = $("input[name=code]");
 	var codeknop = $('<a class="btn genereer" title="Biebcode invullen">Genereer</a>').mousedown(function (event) {
 		event.preventDefault();
-		$("#field_code").val(
-				$("#field_rubriek").val() + '.' + $("#field_auteur").val().substring(0, 3).toLowerCase()
+		codeveld.val(
+				$("select[name=rubriek]").val() + '.' + $("input[name=auteur]").val().substring(0, 3).toLowerCase()
 				).focus();
 	});
-	$("#field_code").after(codeknop);
+	codeveld.after(codeknop);
 }
 
