@@ -43,8 +43,10 @@ class BibliotheekController extends Controller {
 
 	public function performAction(array $args = array()) {
 		parent::performAction($args);
-		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('bibliotheek');
+		if ($this->action != "autocomplete") {
+			$this->view = new CsrLayoutPage($this->view);
+			$this->view->addCompressedResources('bibliotheek');
+		}
 	}
 
 	protected function mag($action, array $args) {
