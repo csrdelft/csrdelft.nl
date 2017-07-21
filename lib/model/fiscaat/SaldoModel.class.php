@@ -4,12 +4,8 @@ namespace CsrDelft\model\fiscaat;
 
 use CsrDelft\model\entity\fiscaat\Saldo;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\DynamicEntityModel;
 use CsrDelft\Orm\PersistenceModel;
 use function CsrDelft\getDateTime;
-
-require_once 'model/fiscaat/CiviSaldoModel.class.php';
-require_once 'model/fiscaat/CiviBestellingModel.class.php';
 
 class SaldoModel extends PersistenceModel {
 	const ORM = Saldo::class;
@@ -17,92 +13,11 @@ class SaldoModel extends PersistenceModel {
 
 	protected static $instance;
 
-	/**
-	 * Flot wil graag een timestamp in milliseconden, php kent timestamps in seconden
-	 *
-	 * @param $moment
-	 * @return false|int
-	 */
-	private function flotTime($moment) {
-		return strtotime($moment) * 1000;
+	public function getDataPoints($uid, $timespan) {
+		return [$this->getDataPointsForCiviSaldo($uid, $timespan)];
 	}
 
-	public function getDataPointsForMaalCie($uid, $timespan) {
-		if (!$this->magGrafiekZien($uid, "maalcie")) {
-			return null;
-		}
-		$points = $this->find('uid = ? AND cie = "maalcie" AND moment > (NOW() - INTERVAL ? DAY)', array($uid, $timespan))->fetchAll();
-		if (!empty($points)) {
-			// herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan
-			$row = reset($points);
-			$time = strtotime('-' . $timespan . ' days');
-			$saldo = new Saldo();
-			$saldo->saldo = $row->saldo;
-			$saldo->moment = getDateTime($time + 3600);
-			array_unshift($points, $saldo);
-		}
-		if (!empty($points)) {
-			// Dupliceer het laatste punt met saldo 0 voor de overgang naar CiviSaldo
-			$row = end($points);
-			$saldo = new Saldo();
-			$saldo->saldo = 0;
-			$saldo->moment = $row->moment;
-			array_push($points, $saldo);
-		}
-
-		return array(
-			"label" => "MaalCie",
-			"data" => $points,
-			"threshold" => array("below" => 0, "color" => "red"),
-			"lines" => array("steps" => true)
-		);
-	}
-
-	public function getDataPointsForSocCie($uid, $timespan) {
-		if (!$this->magGrafiekZien($uid)) {
-			return null;
-		}
-		$model = DynamicEntityModel::makeModel('socCieKlanten');
-		$klant = $model->find('stekUID = ?', array($uid), null, null, 1)->fetch();
-		if (!$klant) {
-			return null;
-		}
-		$saldo = $klant->saldo;
-		$data = $data = [];
-		$model = DynamicEntityModel::makeModel('socCieBestelling');
-		$bestellingen = $model->find('socCieId = ? AND deleted = FALSE AND tijd>(NOW() - INTERVAL ? DAY)', array($klant->socCieId, $timespan), null, 'tijd DESC');
-		foreach ($bestellingen as $bestelling) {
-			$data[] = array('moment' => $bestelling->tijd, 'saldo' => round($saldo / 100, 2));
-			$saldo += $bestelling->totaal;
-		}
-		if (!empty($data)) {
-			// herhaal eerste datapunt om grafiek te tekenen vanaf begin timespan
-			// Pas op, soccie is omgedraaid van maalcie omdat saldo's op runtime berekend worden
-			$row = end($data);
-			$time = strtotime('-' . $timespan . ' days');
-			array_push($data, array('moment' => getDateTime($time + 3600), 'saldo' => $row['saldo']));
-		}
-		if (!empty($data)) {
-			// Dupliceer het laatste punt met saldo 0 voor de overgang naar CiviSaldo
-			$row = reset($data);
-			array_unshift($data, ['moment' => $row['moment'], 'saldo' => 0]);
-		}
-		$points = [];
-		foreach ($data as $entry) {
-			$saldo = new Saldo();
-			$saldo->moment = $entry['moment'];
-			$saldo->saldo = $entry['saldo'];
-			$points[] = $saldo;
-		}
-		return array(
-			"label" => "SocCie",
-			"data" => $points,
-			"threshold" => array("below" => 0, "color" => "red"),
-			"lines" => array("steps" => true)
-		);
-	}
-
-	public function getDataPointsForCiviSaldo($uid, $timespan, $repeatFirst = false) {
+	public function getDataPointsForCiviSaldo($uid, $timespan) {
 		if (!$this->magGrafiekZien($uid)) {
 			return null;
 		}
@@ -113,45 +28,47 @@ class SaldoModel extends PersistenceModel {
 		}
 		$saldo = $klant->saldo;
 		// Teken het huidige saldo
-		$data = array(array($this->flotTime(getDateTime()), round($saldo / 100, 2)));
+		$data = [[$this->flotTime(getDateTime()), round($saldo / 100, 2)]];
 		$model = CiviBestellingModel::instance();
-		$bestellingen = $model->find('uid = ? AND deleted = FALSE AND moment>(NOW() - INTERVAL ? DAY)', array($klant->uid, $timespan), null, 'moment DESC');
+		$bestellingen = $model->find(
+			'uid = ? AND deleted = FALSE AND moment>(NOW() - INTERVAL ? DAY)',
+			[$klant->uid, $timespan],
+			null,
+			'moment DESC'
+		);
+
 		foreach ($bestellingen as $bestelling) {
 			$data[] = array($this->flotTime($bestelling->moment), round($saldo / 100, 2));
 			$saldo += $bestelling->totaal;
 		}
+
 		if (!empty($data)) {
-			// Dupliceer het eerste datapunt om grafiek te tekenen vanaf 0 of het laatste als $repeatFirst waar is
 			$row = end($data);
-			if ($repeatFirst) {
-                $time = $this->flotTime($timespan - 1 . ' days 23 hours ago');
-                array_push($data, [$time, $row[1]]);
-            } else {
-                array_push($data, [$row[0], 0]);
-            }
+			$time = $this->flotTime($timespan - 1 . ' days 23 hours ago');
+			array_push($data, [$time, $row[1]]);
 		}
-		return array(
+		return [
 			"label" => "CiviSaldo",
 			"data" => array_reverse($data), // Keer de lijst om, flot laat anders veranderingen in de data 1-off zien
 			"color" => "green",
-			"threshold" => array("below" => 0, "color" => "red"),
-			"lines" => array("steps" => true)
-		);
-	}
-
-	public function getDataPoints($uid, $timespan) {
-		// array_filter haalt grafieken die niet gezien mogen worden of geen data hebben voor dit $timespan eruit.
-		$array = array_filter(array(
-		    $this->getDataPointsForMaalCie($uid, $timespan),
-            $this->getDataPointsForSocCie($uid, $timespan)
-        ));
-		// Begin met het herhalen van het CiviSaldo naar het verleden als de oude SocCie en MaalCie saldi niet meer zichtbaar zijn.
-		$array[] = $this->getDataPointsForCiviSaldo($uid, $timespan, empty($array) || (empty($array[0]['data']) && empty([1]['data'])));
-        return array_filter($array);
+			"threshold" => ["below" => 0, "color" => "red"],
+			"lines" => ["steps" => true]
+		];
 	}
 
 	public function magGrafiekZien($uid) {
 		//mogen we uberhaupt een grafiek zien?
 		return LoginModel::getUid() === $uid OR LoginModel::mag('P_LEDEN_MOD,commissie:SocCie,commissie:MaalCie');
+	}
+
+	/**
+	 * Flot wil graag een timestamp in milliseconden, php kent timestamps in seconden
+	 *
+	 * @param $moment
+	 *
+	 * @return false|int
+	 */
+	private function flotTime($moment) {
+		return strtotime($moment) * 1000;
 	}
 }

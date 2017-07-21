@@ -101,8 +101,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $corvee_punten;
 	public $corvee_punten_bonus;
 	public $soccieID;
-	public $soccieSaldo;
-	public $maalcieSaldo;
 	// novitiaat
 	public $createTerm;
 	public $novitiaat;
@@ -189,8 +187,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'corvee_punten_bonus'	 => array(T::Integer, true),
 		'soccieID'				 => array(T::Integer, true),
 		'createTerm'			 => array(T::String, true),
-		'soccieSaldo'			 => array(T::Float, true),
-		'maalcieSaldo'			 => array(T::Float, true),
 		// Persoonlijk
 		'eetwens'				 => array(T::String, true),
 		'lengte'				 => array(T::Integer),
