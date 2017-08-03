@@ -46,7 +46,7 @@
     <!-- Three -->
     <section id="three" class="wrapper kleur3">
         <div class="inner">
-            <span class="image lazy-load" data-lazy="<img src='/assets/layout-owee/plaetjes/OC.jpg' alt=''/>"></span>
+            <span class="image lazy-load" data-lazy="<img src='/assets/layout-owee/plaetjes/OC-2017.jpg' alt=''/>"></span>
             <div class="content">
                 <h2 class="major">Interesse/vragen</h2>
                 <p>Uiteraard ben je welkom om tijdens de OWee langs te komen op onze sociëteit Confide aan de Oude Delft
