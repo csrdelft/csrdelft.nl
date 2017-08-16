@@ -1,18 +1,25 @@
 <?php
-
 namespace CsrDelft\model\fiscaat;
 
 use CsrDelft\model\entity\fiscaat\CiviSaldoLog;
 use CsrDelft\Orm\PersistenceModel;
 
-require_once 'model/entity/fiscaat/CiviSaldoLog.class.php';
-
+/**
+ * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ */
 class CiviSaldoLogModel extends PersistenceModel {
 	const ORM = CiviSaldoLog::class;
 	const DIR = 'fiscaat/';
 
+	/**
+	 * @var CiviSaldoLogModel
+	 */
 	protected static $instance;
 
+	/**
+	 * @param string $type
+	 * @param string $data
+	 */
 	public function log($type, $data) {
 		$logEntry = new CiviSaldoLog();
 		// Don't use filter_input for $_SERVER when PHP runs through FastCGI:

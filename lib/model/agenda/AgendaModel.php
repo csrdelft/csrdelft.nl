@@ -31,7 +31,6 @@ use function CsrDelft\getWeekNumber;
 class AgendaModel extends PersistenceModel {
 
 	const ORM = AgendaItem::class;
-	const DIR = 'agenda/';
 
 	protected static $instance;
 	/**
@@ -41,8 +40,8 @@ class AgendaModel extends PersistenceModel {
 	protected $default_order = 'begin_moment ASC, titel ASC';
 
 	/**
-	 * @param $van
-	 * @param $tot
+	 * @param integer $van
+	 * @param integer $tot
 	 * @param bool $ical
 	 * @param bool $zijbalk
 	 * @return Agendeerbaar[]

@@ -1,5 +1,4 @@
 <?php
-
 namespace CsrDelft\model\fiscaat;
 
 use CsrDelft\model\entity\fiscaat\CiviPrijs;
@@ -8,20 +7,17 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use DateTime;
-
-require_once 'model/entity/fiscaat/CiviProduct.class.php';
-require_once 'model/fiscaat/CiviPrijsModel.class.php';
-require_once 'model/fiscaat/CiviCategorieModel.class.php';
+use PDOStatement;
 
 /**
- * Class CiviProductModel
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class CiviProductModel extends PersistenceModel {
 	const ORM = CiviProduct::class;
-	const DIR = 'fiscaat/';
 
+	/**
+	 * @var CiviProductModel
+	 */
 	protected static $instance;
 
 	/**
@@ -38,6 +34,11 @@ class CiviProductModel extends PersistenceModel {
 		)->fetch();
 	}
 
+	/**
+	 * @param int $id
+	 *
+	 * @return CiviProduct
+	 */
 	public function getProduct($id) {
 		/** @var CiviProduct $product */
 		$product = $this->retrieveByPrimaryKey(array($id));
@@ -47,6 +48,18 @@ class CiviProductModel extends PersistenceModel {
 		return $product;
 	}
 
+	/**
+	 * Find existing entities with optional search criteria.
+	 * Retrieves all attributes.
+	 *
+	 * @param string $criteria WHERE
+	 * @param array $criteria_params optional named parameters
+	 * @param string $group_by GROUP BY
+	 * @param string $order_by ORDER BY
+	 * @param int $limit max amount of results
+	 * @param int $start results from index
+	 * @return PDOStatement|CiviProduct[] implements Traversable using foreach does NOT require ->fetchAll()
+	 */
 	public function find($criteria = null, array $criteria_params = array(), $group_by = null, $order_by = null, $limit = null, $start = 0) {
 		/** @var CiviProduct[] $entries */
 		$entries = parent::find($criteria, $criteria_params, $group_by, $order_by, $limit, $start);

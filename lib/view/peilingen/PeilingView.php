@@ -6,6 +6,8 @@ use CsrDelft\view\SmartyTemplateView;
 
 
 class PeilingView extends SmartyTemplateView {
+
+	/** @var bool */
 	private $beheer;
 
 	public function __construct(Peiling $peiling, $beheer = false) {

@@ -15,6 +15,9 @@ class MededelingCategorieenModel extends CachedPersistenceModel {
 	const ORM = MededelingCategorie::class;
 	const DIR = 'mededelingen/';
 
+	/**
+	 * @var MededelingCategorieenModel
+	 */
 	protected static $instance;
 	/**
 	 * Store MededelingCategorie array as a whole in memcache

@@ -22,6 +22,11 @@ class EetplanBekendenModel extends PersistenceModel {
 		PersistenceModel::__construct();
 	}
 
+	/**
+	 * @param string $lichting
+	 *
+	 * @return array
+	 */
 	public function getBekenden($lichting) {
 		return $this->find('uid1 LIKE ?', array($lichting . "%"))->fetchAll();
 	}

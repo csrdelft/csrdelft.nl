@@ -71,10 +71,14 @@ class PeilingenModel extends PersistenceModel {
 		return $peiling_id;
 	}
 
-	public function stem($peiling_id, $optieid) {
+	/**
+	 * @param int $peiling_id
+	 * @param int $optie_id
+	 */
+	public function stem($peiling_id, $optie_id) {
 		$peiling = $this->getPeilingById((int) $peiling_id);
 		if ($peiling->magStemmen()) {
-			$optie = PeilingOptiesModel::instance()->find('peiling_id = ? AND id = ?', array($peiling_id, $optieid))->fetch();
+			$optie = PeilingOptiesModel::instance()->find('peiling_id = ? AND id = ?', array($peiling_id, $optie_id))->fetch();
 			$optie->stemmen += 1;
 
 			$stem = new PeilingStem();
@@ -92,6 +96,12 @@ class PeilingenModel extends PersistenceModel {
 		}
 	}
 
+	/**
+	 * @param Peiling $entity
+	 *
+	 * @return string
+	 * @throws Exception
+	 */
 	public function validate(Peiling $entity) {
 		$errors = '';
 		if ($entity == null) {
@@ -117,6 +127,9 @@ class PeilingenModel extends PersistenceModel {
 		return $this->retrieveByPrimaryKey(array($peiling_id));
 	}
 
+	/**
+	 * @return \PDOStatement|Peiling[]
+	 */
 	public function getLijst() {
 		return $this->find(null, array(), null, 'id DESC');
 	}

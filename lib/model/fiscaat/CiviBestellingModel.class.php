@@ -9,23 +9,40 @@ use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 
+/**
+ * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ */
 class CiviBestellingModel extends PersistenceModel {
 	const ORM = CiviBestelling::class;
-	const DIR = 'fiscaat/';
 
+	/**
+	 * @var CiviBestellingModel
+	 */
 	protected static $instance;
 
+	/**
+	 * @param string $uid
+	 * @param int $limit
+	 *
+	 * @return \PDOStatement
+	 */
 	public function getAlleBestellingenVoorLid($uid, $limit = null) {
 		return $this->find('uid = ?', [$uid], null, 'moment DESC', $limit);
 	}
 
+	/**
+	 * @param string $uid
+	 * @param int $limit
+	 *
+	 * @return \PDOStatement
+	 */
 	public function getBestellingenVoorLid($uid, $limit = null) {
 		return $this->find('uid = ? AND deleted = FALSE', array($uid), null, 'moment DESC', $limit);
 	}
 
 	/**
 	 * @param CiviBestelling[] $bestellingen
-	 * @return \Generator
+	 * @return \Generator|object[]
 	 */
 	public function getBeschrijving($bestellingen) {
 		foreach ($bestellingen as $bestelling) {
@@ -44,6 +61,11 @@ class CiviBestellingModel extends PersistenceModel {
 		}
 	}
 
+	/**
+	 * @param CiviBestellingInhoud[] $bestellingen
+	 *
+	 * @return string
+	 */
 	public function getBeschrijvingText($bestellingen) {
 		$bestellingenInhoud = [];
 		foreach ($bestellingen as $item) {

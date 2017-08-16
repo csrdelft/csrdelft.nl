@@ -16,6 +16,7 @@ class CmsPaginaModel extends PersistenceModel {
 
 	const ORM = CmsPagina::class;
 
+	/** @var CmsPaginaModel */
 	protected static $instance;
 
 	/**
@@ -27,6 +28,9 @@ class CmsPaginaModel extends PersistenceModel {
 		return static::instance()->retrieveByPrimaryKey(array($naam));
 	}
 
+	/**
+	 * @return CmsPagina[]
+	 */
 	public function getAllePaginas() {
 		$paginas = $this->find(null, array(), null, 'titel ASC');
 		$result = array();
@@ -38,6 +42,11 @@ class CmsPaginaModel extends PersistenceModel {
 		return $result;
 	}
 
+	/**
+	 * @param string $naam
+	 *
+	 * @return CmsPagina
+	 */
 	public function nieuw($naam) {
 		$pagina = new CmsPagina();
 		$pagina->naam = $naam;

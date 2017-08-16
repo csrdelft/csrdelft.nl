@@ -1,5 +1,4 @@
 <?php
-
 namespace CsrDelft\view\peilingen;
 
 use CsrDelft\model\entity\peilingen\Peiling;
@@ -7,12 +6,14 @@ use CsrDelft\view\SmartyTemplateView;
 
 class PeilingenBeheerView extends SmartyTemplateView {
 
+	/** @var Peiling */
 	private $peiling;
 
 	/**
 	 * PeilingenBeheerView constructor.
 	 *
-	 * @param $model Peiling[]
+	 * @param Peiling[] $model
+	 * @param Peiling $peiling
 	 */
 	public function __construct($model, $peiling) {
 		parent::__construct($model);
@@ -32,12 +33,14 @@ class PeilingenBeheerView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		$peilingen = array();
+		$peilingen = [];
+
 		foreach ($this->model as $peiling) {
 			$peilingen[] = new PeilingView($peiling, true);
 		}
-		$this->smarty->assign("peiling", $this->peiling);
-		$this->smarty->assign("peilingen", $peilingen);
+
+		$this->smarty->assign('peiling', $this->peiling);
+		$this->smarty->assign('peilingen', $peilingen);
 		$this->smarty->display('peiling/beheer.tpl');
 	}
 
