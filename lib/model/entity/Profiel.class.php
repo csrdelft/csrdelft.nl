@@ -18,7 +18,6 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\bbcode\CsrBB;
 use Exception;
 use function CsrDelft\array_filter_empty;
@@ -48,7 +47,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $achternaam;
 	public $postfix;
 	public $nickname;
-	public $duckname;
 	// fysiek
 	public $geslacht;
 	public $gebdatum;
@@ -135,7 +133,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'achternaam'			 => array(T::String),
 		'postfix'				 => array(T::String, true),
 		'nickname'				 => array(T::String, true),
-		'duckname'				 => array(T::String, true),
 		// fysiek
 		'geslacht'				 => array(T::Enumeration, false, Geslacht::class),
 		'gebdatum'				 => array(T::Date),
@@ -480,13 +477,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			case 'bijnaam':
 				if (!empty($this->nickname)) {
 					$naam = $this->nickname;
-					break;
-				}
-			// fall through
-
-			case 'Duckstad':
-				if (!empty($this->duckname)) {
-					$naam = $this->duckname;
 					break;
 				}
 			// fall through
