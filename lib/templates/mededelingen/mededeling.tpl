@@ -31,7 +31,7 @@
 			{/foreach}
 		</select><br />
 		{if CsrDelft\model\mededelingen\MededelingenModel::isModerator()}
-			<label for="prioriteit">Prioriteit: <a title="Hoe belangrijk is deze mededeling? De mededelingen met de hoogste prioriteit komt bovenaan in de top {CsrDelft\view\mededelingen\MededelingenView::aantalTopMostBlock} op de voorpagina van de stek.">{icon get="vraagteken"}</a></label>
+			<label for="prioriteit">Prioriteit: <a title="Hoe belangrijk is deze mededeling? De mededelingen met de hoogste prioriteit komt bovenaan in de top {CsrDelft\view\mededelingen\MededelingenView::AANTAL_TOP_MOST_BLOK} op de voorpagina van de stek.">{icon get="vraagteken"}</a></label>
 			<select name="prioriteit">
 				{foreach from=$prioriteiten key=prioriteitId item=prioriteit}
 					<option value="{$prioriteitId}"{if $mededeling->prioriteit==$prioriteitId} selected="selected"{/if}>{$prioriteit|escape:'html'}</option>
