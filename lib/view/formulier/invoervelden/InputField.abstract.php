@@ -29,7 +29,6 @@ use Exception;
  *        * TextareaField                Textarea die automagisch uitbreidt bij typen
  *            - BBCodeField        Textarea met bbcode voorbeeld
  *    * NickField                    Nicknames
- *    * DuckField                    Ducknames
  *        * LidField                    Leden selecteren
  *    - WachtwoordWijzigenField        Wachtwoorden (oude, nieuwe, nieuwe ter bevestiging)
  *  - EntityField                    PersistentEntity primary key values array

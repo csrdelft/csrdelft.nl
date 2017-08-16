@@ -576,9 +576,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				}
 				if ($path) {
 					break;
-				} elseif ($vorm === 'Duckstad') {
-					$path = 'pasfoto/' . $vorm . '/eend.jpg';
-					break;
 				}
 			}
 		}
