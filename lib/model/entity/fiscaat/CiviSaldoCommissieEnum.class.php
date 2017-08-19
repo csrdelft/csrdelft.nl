@@ -17,6 +17,7 @@ class CiviSaldoCommissieEnum implements PersistentEnum {
 
 	const MAALCIE = 'maalcie';
 	const SOCCIE = 'soccie';
+	const OWEECIE = 'oweecie';
 	const ANDERS = 'anders';
 
 	public static function getTypeOptions() {
