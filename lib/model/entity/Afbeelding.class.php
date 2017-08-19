@@ -3,12 +3,10 @@ namespace CsrDelft\model\entity;
 
 use Exception;
 
-
 /**
  * Afbeelding.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
  */
 class Afbeelding extends Bestand {
 
@@ -28,6 +26,15 @@ class Afbeelding extends Bestand {
 	 */
 	public $height;
 
+	/**
+	 * Constructor is called late (after attributes are set)
+	 * by PDO::FETCH_CLASS with $cast = true
+	 *
+	 * @param string $path
+	 * @param bool $parse
+	 *
+	 * @throws Exception
+	 */
 	public function __construct($path, $parse = true) {
 		parent::__construct();
 		if ($path !== null) {

@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\model\entity;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -7,7 +8,6 @@ use CsrDelft\Orm\Entity\T;
  * DebugLogEntry.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
  */
 class DebugLogEntry extends PersistentEntity {
 

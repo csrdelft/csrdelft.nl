@@ -2,30 +2,58 @@
 
 namespace CsrDelft\model\entity;
 
+use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 class Eetplan extends PersistentEntity {
+	/**
+	 * @var string
+	 */
 	public $uid;
+
+	/**
+	 * @var int
+	 */
 	public $woonoord_id;
+
+	/**
+	 * @var string
+	 */
 	public $avond;
 
+	/**
+	 * @return Woonoord|false|mixed
+	 */
 	public function getWoonoord() {
 		return WoonoordenModel::get($this->woonoord_id);
 	}
 
+	/**
+	 * @return Profiel|false
+	 */
 	public function getNoviet() {
 		return ProfielModel::get($this->uid);
 	}
 
+	/**
+	 * @var string
+	 */
 	protected static $table_name = 'eetplan';
-	protected static $persistent_attributes = array(
-		'uid' => array(T::UID, false),
-		'woonoord_id' => array(T::Integer, false),
-		'avond' => array(T::Date, false)
-	);
 
-	protected static $primary_key = array('uid', 'woonoord_id');
+	/**
+	 * @var array
+	 */
+	protected static $persistent_attributes = [
+		'uid' => [T::UID, false],
+		'woonoord_id' => [T::Integer, false],
+		'avond' => [T::Date, false]
+	];
+
+	/**
+	 * @var string[]
+	 */
+	protected static $primary_key = ['uid', 'woonoord_id'];
 }
