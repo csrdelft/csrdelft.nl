@@ -240,7 +240,7 @@ class ProfielForm extends Formulier
 
         if ($admin OR $inschrijven) {
             $fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
-            $fields[] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
+            $fields[] = new RequiredTextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
         }
 
         $fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
