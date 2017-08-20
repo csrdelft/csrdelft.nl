@@ -24,7 +24,7 @@ class BiebCatalogus {
 	/**
 	 * Zet json in elkaar voor dataTables om catalogustabel mee te vullen
 	 * Filters en sortering worden aan de hand van parameters uit _GET ingesteld
-	 * 
+	 *
 	 * @return json
 	 */
 	protected function loadCatalogusdata() {
@@ -225,7 +225,7 @@ class BiebCatalogus {
 
 	/**
 	 * geeft alle waardes in db voor $key
-	 * 
+	 *
 	 * @param $key string waarvoor waardes gezocht moeten worden
 	 * @return array van alle waardes, alfabetisch gesorteerd
 	 */
@@ -237,7 +237,7 @@ class BiebCatalogus {
 				$query = "
 					SELECT uid, concat(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) as naam  
 					FROM profielen 
-					WHERE status IN ('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID') 
+					WHERE status IN ('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID')  AND uid NOT LIKE '17%'
 					ORDER BY achternaam;";
 			} else {
 				$query = "
