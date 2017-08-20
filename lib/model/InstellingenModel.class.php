@@ -6,9 +6,9 @@ use Exception;
 
 /**
  * InstellingenModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class InstellingenModel extends CachedPersistenceModel {
 
@@ -21,14 +21,29 @@ class InstellingenModel extends CachedPersistenceModel {
 	 */
 	protected $memcache_prefetch = true;
 
+	/**
+	 * @param string $module
+	 * @param string $id
+	 *
+	 * @return bool
+	 */
 	public static function has($module, $id) {
 		return isset(static::$defaults[$module][$id]);
 	}
 
+	/**
+	 * @param string $module
+	 * @param string $id
+	 *
+	 * @return string
+	 */
 	public static function get($module, $id) {
 		return static::instance()->getValue($module, $id);
 	}
 
+	/**
+	 * @var string[][]
+	 */
 	protected static $defaults = array(
 		'agenda'		 => array(
 			'standaard_rechten'	 => 'P_LOGGED_IN',
@@ -115,14 +130,25 @@ class InstellingenModel extends CachedPersistenceModel {
 		)
 	);
 
+	/**
+	 * @return string[]
+	 */
 	public function getModules() {
 		return array_keys(static::$defaults);
 	}
 
+	/**
+	 * @param string $module
+	 *
+	 * @return string[]
+	 */
 	public function getModuleInstellingen($module) {
 		return array_keys(static::$defaults[$module]);
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function getInstellingen() {
 		$instellingen = array();
 		foreach ($this->getModules() as $module) {
@@ -131,10 +157,22 @@ class InstellingenModel extends CachedPersistenceModel {
 		return $instellingen;
 	}
 
+	/**
+	 * @param string $module
+	 * @param string $id
+	 *
+	 * @return string
+	 */
 	public function getValue($module, $id) {
 		return $this->getInstelling($module, $id)->waarde;
 	}
 
+	/**
+	 * @param string $module
+	 * @param string $id
+	 *
+	 * @return string
+	 */
 	public function getDefault($module, $id) {
 		return static::$defaults[$module][$id];
 	}
@@ -142,7 +180,7 @@ class InstellingenModel extends CachedPersistenceModel {
 	/**
 	 * Haal een instelling op uit het cache of de database.
 	 * Als een instelling niet is gezet wordt deze aangemaakt met de default waarde en opgeslagen.
-	 * 
+	 *
 	 * @param string $module
 	 * @param string $id
 	 * @return Instelling
@@ -164,6 +202,12 @@ class InstellingenModel extends CachedPersistenceModel {
 		}
 	}
 
+	/**
+	 * @param string $module
+	 * @param string $id
+	 *
+	 * @return Instelling
+	 */
 	protected function newInstelling($module, $id) {
 		$instelling = new Instelling();
 		$instelling->module = $module;
@@ -173,6 +217,13 @@ class InstellingenModel extends CachedPersistenceModel {
 		return $instelling;
 	}
 
+	/**
+	 * @param string $module
+	 * @param string $id
+	 * @param string $waarde
+	 *
+	 * @return Instelling
+	 */
 	public function wijzigInstelling($module, $id, $waarde) {
 		$instelling = $this->getInstelling($module, $id);
 		$instelling->waarde = $waarde;
@@ -180,6 +231,8 @@ class InstellingenModel extends CachedPersistenceModel {
 		return $instelling;
 	}
 
+	/**
+	 */
 	public function opschonen() {
 		foreach ($this->find() as $instelling) {
 			if (!static::has($instelling->module, $instelling->instelling_id)) {

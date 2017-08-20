@@ -9,17 +9,16 @@ use function CsrDelft\redirect;
 
 /**
  * OneTimeTokensModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Model voor two-step verification (2SV).
- * 
  */
 class OneTimeTokensModel extends PersistenceModel {
 
 	const ORM = OneTimeToken::class;
-	const DIR = 'security/';
 
+	/** @var static */
 	protected static $instance;
 
 	/**
@@ -57,10 +56,20 @@ class OneTimeTokensModel extends PersistenceModel {
 		return false;
 	}
 
+	/**
+	 * @param string $uid
+	 * @param string $url
+	 */
 	public function discardToken($uid, $url) {
 		$this->deleteByPrimaryKey(array($uid, $url));
 	}
 
+	/**
+	 * @param string $uid
+	 * @param string $url
+	 *
+	 * @return array
+	 */
 	public function createToken($uid, $url) {
 		$rand = crypto_rand_token(255);
 		$token = new OneTimeToken();
@@ -77,6 +86,8 @@ class OneTimeTokensModel extends PersistenceModel {
 		return array($rand, $token->expire);
 	}
 
+	/**
+	 */
 	public function opschonen() {
 		foreach ($this->find('expire <= NOW()') as $token) {
 			$this->delete($token);

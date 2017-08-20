@@ -19,6 +19,7 @@ class MenuModel extends CachedPersistenceModel {
 
 	const ORM = MenuItem::class;
 
+	/** @var static */
 	protected static $instance;
 	/**
 	 * Default ORDER BY
@@ -82,7 +83,7 @@ class MenuModel extends CachedPersistenceModel {
 		switch ($parent->tekst) {
 
 			case 'Forum':
-								foreach (ForumModel::instance()->prefetch() as $categorie) {
+				foreach (ForumModel::instance()->prefetch() as $categorie) {
 					$item = $this->nieuw($parent->item_id);
 					$item->item_id = - $categorie->categorie_id; // nodig voor getParent()
 					$item->rechten_bekijken = $categorie->rechten_lezen;
@@ -153,6 +154,11 @@ class MenuModel extends CachedPersistenceModel {
 		return $list;
 	}
 
+	/**
+	 * @param string $naam
+	 *
+	 * @return bool|MenuItem
+	 */
 	public function getMenuRoot($naam) {
 		$root = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
 		if ($root) {
@@ -161,6 +167,11 @@ class MenuModel extends CachedPersistenceModel {
 		return false;
 	}
 
+	/**
+	 * @param MenuItem $parent
+	 *
+	 * @return MenuItem[]
+	 */
 	public function getChildren(MenuItem $parent) {
 		return $this->prefetch('parent_id = ?', array($parent->item_id)); // cache for getParent()
 	}
@@ -178,6 +189,11 @@ class MenuModel extends CachedPersistenceModel {
 		}
 	}
 
+	/**
+	 * @param MenuItem $item
+	 *
+	 * @return MenuItem
+	 */
 	public function getRoot(MenuItem $item) {
 		if ($item->parent_id === 0) {
 			return $item;
@@ -205,6 +221,11 @@ class MenuModel extends CachedPersistenceModel {
 		return $this->getMenuItem($item->parent_id);
 	}
 
+	/**
+	 * @param int $parent_id
+	 *
+	 * @return MenuItem
+	 */
 	public function nieuw($parent_id) {
 		$item = new MenuItem();
 		$item->parent_id = $parent_id;
@@ -216,6 +237,7 @@ class MenuModel extends CachedPersistenceModel {
 
 	/**
 	 * @param PersistentEntity|MenuItem $entity
+	 *
 	 * @return void
 	 */
 	public function create(PersistentEntity $entity) {
@@ -223,11 +245,20 @@ class MenuModel extends CachedPersistenceModel {
 		$this->flushCache(true);
 	}
 
+	/**
+	 * @param PersistentEntity|MenuItem $entity
+	 * @return int
+	 */
 	public function update(PersistentEntity $entity) {
 		$this->flushCache(true);
 		return parent::update($entity);
 	}
 
+	/**
+	 * @param MenuItem $item
+	 *
+	 * @return int
+	 */
 	public function removeMenuItem(MenuItem $item) {
 		return Database::transaction(function () use ($item) {
 			// give new parent to otherwise future orphans
@@ -239,5 +270,4 @@ class MenuModel extends CachedPersistenceModel {
 			return $rowCount;
 		});
 	}
-
 }

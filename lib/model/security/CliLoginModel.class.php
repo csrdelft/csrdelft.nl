@@ -10,24 +10,36 @@ use CsrDelft\model\InstellingenModel;
 
 /**
  * CliLoginModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Model van het huidige ingeloggede account in CLI modus.
- * 
+ *
  */
 class CliLoginModel extends LoginModel {
 
+	/**
+	 * @var string
+	 */
 	protected static $uid = 'x999';
 
+	/**
+	 * @return string
+	 */
 	public static function getUid() {
 		return self::$uid;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function getSuedFrom() {
 		return false;
 	}
 
+	/**
+	 * CliLoginModel constructor.
+	 */
 	protected function __construct() {
 	    parent::__static();
 		parent::__construct();
@@ -36,6 +48,9 @@ class CliLoginModel extends LoginModel {
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate() {
 		if (defined('ETC_PATH')) {
 			$cred = parse_ini_file(ETC_PATH . 'cron.ini');
@@ -48,10 +63,24 @@ class CliLoginModel extends LoginModel {
 		return $this->login($cred['user'], $cred['pass']);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasError() {
 		return false;
 	}
 
+	/**
+	 * @param string $user
+	 * @param string $pass_plain
+	 * @param bool $evtWachten
+	 * @param RememberLogin|null $remember
+	 * @param bool $lockIP
+	 * @param bool $alreadyAuthenticatedByUrlToken
+	 * @param string $expire
+	 *
+	 * @return bool
+	 */
 	public function login($user, $pass_plain, $evtWachten = true, RememberLogin $remember = null, $lockIP = false, $alreadyAuthenticatedByUrlToken = false, $expire = null) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
@@ -113,18 +142,29 @@ class CliLoginModel extends LoginModel {
 		return true;
 	}
 
+	/**
+	 */
 	public function logout() {
 		self::$uid = 'x999';
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isSued() {
 		return false;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getAuthenticationMethod() {
 		return AuthenticationMethod::password_login;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isPauper() {
 		return false;
 	}

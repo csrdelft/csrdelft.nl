@@ -3,6 +3,7 @@ namespace CsrDelft\model\security;
 
 use function CsrDelft\getDateTime;
 use function CsrDelft\getSessionMaxLifeTime;
+use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
@@ -21,21 +22,24 @@ use Exception;
 
 /**
  * LoginModel.class.php
- * 
+ *
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Model van het huidige ingeloggede account voor inloggen, uitloggen, su'en etc.
- * 
+ *
  * @see AccountModel.class.php
  */
 class LoginModel extends PersistenceModel implements Validator {
 
 	const ORM = LoginSession::class;
-	const DIR = 'security/';
 
+	/** @var static */
 	protected static $instance;
 
+	/**
+	 * @return LoginModel
+	 */
 	public static function instance() {
 		if (!isset(static::$instance)) {
 			/**
@@ -50,6 +54,9 @@ class LoginModel extends PersistenceModel implements Validator {
 		return static::$instance;
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function getUid() {
 		if (MODE === 'CLI') {
 			return CliLoginModel::getUid();
@@ -57,24 +64,45 @@ class LoginModel extends PersistenceModel implements Validator {
 		return $_SESSION['_uid'];
 	}
 
+	/**
+	 * @return Account|false
+	 */
 	public static function getSuedFrom() {
 		return AccountModel::get($_SESSION['_suedFrom']);
 	}
 
+	/**
+	 * @return Account|false
+	 */
 	public static function getAccount() {
 		return AccountModel::get(static::getUid());
 	}
 
+	/**
+	 * @return Profiel|false
+	 */
 	public static function getProfiel() {
 		return ProfielModel::get(static::getUid());
 	}
 
+	/**
+	 * @param string $permission
+	 * @param array|null $allowedAuthenticationMethods
+	 *
+	 * @return bool
+	 */
 	public static function mag($permission, array $allowedAuthenticationMethods = null) {
 		return AccessModel::mag(static::getAccount(), $permission, $allowedAuthenticationMethods);
 	}
 
+	/**
+	 * @var LoginSession|false
+	 */
 	private $current_session;
 
+	/**
+	 * LoginModel constructor.
+	 */
 	protected function __construct() {
 		parent::__construct();
 		/**
@@ -128,6 +156,8 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	/**
 	 * Is de huidige gebruiker al actief in een sessie?
+	 *
+	 * @return bool
 	 */
 	public function validate() {
 		// Er is geen _uid gezet in $_SESSION dus er is nog niemand ingelogd
@@ -191,13 +221,16 @@ class LoginModel extends PersistenceModel implements Validator {
 		return true;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasError() {
 		return isset($_SESSION['auth_error']);
 	}
 
 	/**
 	 * Na opvragen resetten.
-	 * 
+	 *
 	 * @return mixed null or string
 	 */
 	public function getError() {
@@ -211,21 +244,21 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	/**
 	 * Inloggen met verschillende mogelijkheden:
-	 * 
+	 *
 	 * Als een gebruiker wordt ingelogd met $wacht == true, dan wordt gekeken of
 	 * er een timeout nodig is vanwege eerdere mislukte inlogpogingen.
-	 * 
+	 *
 	 * Als een gebruiker wordt ingelogd met $lockIP == true, dan wordt het IP-adres
 	 * van de gebruiker opgeslagen in de sessie, en het sessie-cookie zal ALLEEN
 	 * vanaf dat adres toegang geven tot de website.
-	 * 
+	 *
 	 * Als een gebruiker wordt ingelogd met $tokenAuthenticated == true, dan wordt het wachtwoord
 	 * van de gebruiker NIET gecontroleerd en wordt er ook GEEN timeout geforceerd, er wordt
 	 * vanuit gegaan dat VOORAF een token is gecontroleerd en dat voldoende is voor authenticatie.
-	 * 
+	 *
 	 * Als een gebruiker wordt ingelogd met $expire == DateTime, dan verloopt de sessie
 	 * van de gebruiker op het gegeven moment en wordt de gebruiker uigelogd.
-	 * 
+	 *
 	 * @param string $user
 	 * @param string $pass_plain
 	 * @param boolean $evtWachten
@@ -347,6 +380,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		return true;
 	}
 
+	/**
+	 */
 	public function logout() {
 		// Forget autologin
 		if (isset($_COOKIE['remember'])) {
@@ -361,6 +396,11 @@ class LoginModel extends PersistenceModel implements Validator {
 		session_destroy();
 	}
 
+	/**
+	 * @param string $uid
+	 *
+	 * @throws Exception
+	 */
 	public function switchUser($uid) {
 		if ($this->isSued()) {
 			throw new Exception('Geneste su niet mogelijk!');
@@ -382,6 +422,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		$_SESSION['_authenticationMethod'] = $authMethod;
 	}
 
+	/**
+	 */
 	public function endSwitchUser() {
 		$suedFrom = static::getSuedFrom();
 		// Keep authentication method
@@ -396,6 +438,9 @@ class LoginModel extends PersistenceModel implements Validator {
 		$_SESSION['_authenticationMethod'] = $authMethod;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isSued() {
 		if (!isset($_SESSION['_suedFrom'])) {
 			return false;
@@ -404,10 +449,18 @@ class LoginModel extends PersistenceModel implements Validator {
 		return $suedFrom AND AccessModel::mag($suedFrom, 'P_ADMIN');
 	}
 
+	/**
+	 * @param Account $suNaar
+	 *
+	 * @return bool
+	 */
 	public function maySuTo(Account $suNaar) {
 		return LoginModel::mag('P_ADMIN') AND ! $this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, 'P_LOGGED_IN');
 	}
 
+	/**
+	 * @return LoginSession|false
+	 */
 	protected function getCurrentSession() {
 		return $this->retrieveByPrimaryKey(array(hash('sha512', session_id())));
 	}
@@ -416,7 +469,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * Indien de huidige gebruiker is geauthenticeerd door middel van een token in de url
 	 * worden Permissies hierdoor beperkt voor de veiligheid.
 	 * @see AccessModel::mag()
-	 * 
+	 *
 	 * @return string|null uit AuthenticationMethod
 	 */
 	public function getAuthenticationMethod() {
@@ -432,10 +485,16 @@ class LoginModel extends PersistenceModel implements Validator {
 		return $method;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isPauper() {
 		return isset($_SESSION['pauper']);
 	}
 
+	/**
+	 * @param bool $value
+	 */
 	public function setPauper($value) {
 		if ($value) {
 			$_SESSION['pauper'] = true;
@@ -444,6 +503,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 	}
 
+	/**
+	 */
 	public function opschonen() {
 		foreach ($this->find('expire <= ?', array(getDateTime())) as $this->current_session) {
 			$this->delete($this->current_session);

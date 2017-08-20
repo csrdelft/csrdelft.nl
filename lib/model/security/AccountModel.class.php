@@ -15,13 +15,12 @@ use Exception;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Wachtwoord en login timeout management.
- *
  */
 class AccountModel extends CachedPersistenceModel {
 
 	const ORM = Account::class;
-	const DIR = 'security/';
 
+	/** @var static */
 	protected static $instance;
 
 	/**
@@ -41,14 +40,30 @@ class AccountModel extends CachedPersistenceModel {
 		return is_string($uid) AND preg_match('/^[a-z0-9]{4}$/', $uid);
 	}
 
+	/**
+	 * @param string $uid
+	 *
+	 * @return bool
+	 */
 	public static function existsUid($uid) {
 		return static::instance()->existsByPrimaryKey(array($uid));
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
 	public static function existsUsername($name) {
 		return Database::instance()->sqlExists(static::instance()->getTableName(), 'username = ?', array($name));
 	}
 
+	/**
+	 * @param string $uid
+	 *
+	 * @return Account
+	 * @throws Exception
+	 */
 	public function maakAccount($uid) {
 		$profiel = ProfielModel::get($uid);
 		if (!$profiel) {
@@ -126,12 +141,20 @@ class AccountModel extends CachedPersistenceModel {
 		return true;
 	}
 
+	/**
+	 * @param Account $account
+	 */
 	public function resetPrivateToken(Account $account) {
 		$account->private_token = crypto_rand_token(150);
 		$account->private_token_since = getDateTime();
 		$this->update($account);
 	}
 
+	/**
+	 * @param Account $account
+	 *
+	 * @return int
+	 */
 	public function moetWachten(Account $account) {
 		/**
 		 * @source OWASP best-practice
@@ -149,12 +172,18 @@ class AccountModel extends CachedPersistenceModel {
 		return 0;
 	}
 
+	/**
+	 * @param Account $account
+	 */
 	public function failedLoginAttempt(Account $account) {
 		$account->failed_login_attempts++;
 		$account->last_login_attempt = getDateTime();
 		$this->update($account);
 	}
 
+	/**
+	 * @param Account $account
+	 */
 	public function successfulLoginAttempt(Account $account) {
 		$account->failed_login_attempts = 0;
 		$account->last_login_attempt = getDateTime();

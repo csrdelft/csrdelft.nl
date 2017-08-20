@@ -1,12 +1,6 @@
 <?php
-/**
- * GesprekBerichtenModel.php
- *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/05/2017
- */
-
 namespace CsrDelft\model\gesprekken;
+
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\gesprekken\Gesprek;
 use CsrDelft\model\entity\gesprekken\GesprekBericht;
@@ -17,13 +11,12 @@ use CsrDelft\Orm\PersistenceModel;
  * GesprekBerichtenModel.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
  */
 class GesprekBerichtenModel extends PersistenceModel {
 
 	const ORM = GesprekBericht::class;
-	const DIR = 'gesprekken/';
 
+	/** @var static */
 	protected static $instance;
 	/**
 	 * Default ORDER BY
@@ -31,18 +24,42 @@ class GesprekBerichtenModel extends PersistenceModel {
 	 */
 	protected $default_order = 'bericht_id ASC';
 
+	/**
+	 * @param int $bericht_id
+	 *
+	 * @return GesprekBericht|false
+	 */
 	public static function get($bericht_id) {
 		return static::instance()->retrieveByPrimaryKey(array($bericht_id));
 	}
 
+	/**
+	 * @param Gesprek $gesprek
+	 * @param int $lastUpdate
+	 *
+	 * @return GesprekBericht[]|\PDOStatement
+	 */
 	public function getBerichtenSinds(Gesprek $gesprek, $lastUpdate) {
 		return $this->find('gesprek_id = ? AND moment > ?', array($gesprek->gesprek_id, getDateTime($lastUpdate)));
 	}
 
+	/**
+	 * @param Gesprek $gesprek
+	 * @param int $lastUpdate
+	 *
+	 * @return int
+	 */
 	public function getAantalBerichtenSinds(Gesprek $gesprek, $lastUpdate) {
 		return $this->count('gesprek_id = ? AND moment > ?', array($gesprek->gesprek_id, getDateTime($lastUpdate)));
 	}
 
+	/**
+	 * @param Gesprek $gesprek
+	 * @param GesprekDeelnemer $deelnemer
+	 * @param string $inhoud
+	 *
+	 * @return GesprekBericht
+	 */
 	public function maakBericht(Gesprek $gesprek, GesprekDeelnemer $deelnemer, $inhoud) {
 		// Maak bericht
 		$bericht = new GesprekBericht();
@@ -57,6 +74,9 @@ class GesprekBerichtenModel extends PersistenceModel {
 		return $bericht;
 	}
 
+	/**
+	 * @param Gesprek $gesprek
+	 */
 	public function verwijderBerichtenVoorGesprek(Gesprek $gesprek) {
 		foreach ($this->find('gesprek_id = ?', array($gesprek->gesprek_id)) as $bericht) {
 			$this->delete($bericht);

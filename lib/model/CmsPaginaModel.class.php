@@ -32,6 +32,7 @@ class CmsPaginaModel extends PersistenceModel {
 	 * @return CmsPagina[]
 	 */
 	public function getAllePaginas() {
+		/** @var CmsPagina[] $paginas */
 		$paginas = $this->find(null, array(), null, 'titel ASC');
 		$result = array();
 		foreach ($paginas as $pagina) {
