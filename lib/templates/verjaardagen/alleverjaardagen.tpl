@@ -24,9 +24,8 @@
                     <td>
                         {/if}
                         &nbsp;
-                        {CsrDelft\model\ProfielModel::get($verjaardag->uid)->getLink('civitas')}
+                        {$verjaardag->getLink('civitas')}
                     </td>
-
                 </tr>
             {/foreach}
         </table>
