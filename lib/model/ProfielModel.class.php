@@ -19,7 +19,6 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use function CsrDelft\getDateTime;
 use function CsrDelft\setMelding;
-use function CsrDelft\startsWith;
 use Exception;
 
 
@@ -64,26 +63,16 @@ class ProfielModel extends CachedPersistenceModel {
 		return $profiel->getLink($vorm);
 	}
 
-	public function find($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0)
-	{
-			if (!LoginModel::mag('commissie:NovCie')) $criteria .= " AND uid NOT LIKE '17%'";
-			return parent::find($criteria, $criteria_params, $groupby, $orderby, $limit, $start);
-	}
-
 	public static function existsUid($uid) {
-		if (!LoginModel::mag('commissie:NovCie') && startsWith($primary_key_values[0], '17')) {
-			return false;
-		}
-
 		return static::instance()->existsByPrimaryKey(array($uid));
 	}
 
 	public static function existsNick($nick) {
-		return Database::instance()->sqlExists(static::instance()->getTableName(), 'nickname = ? AND uid NOT LIKE \'17%\'', array($nick));
+		return Database::instance()->sqlExists(static::instance()->getTableName(), 'nickname = ?', array($nick));
 	}
 
 	public static function existsDuck($duck) {
-		return Database::instance()->sqlExists(static::instance()->getTableName(), 'duckname = ? AND uid NOT LIKE \'17%\'', array($duck));
+		return Database::instance()->sqlExists(static::instance()->getTableName(), 'duckname = ?', array($duck));
 	}
 
 	public function nieuw($lidjaar, $lidstatus) {
@@ -241,7 +230,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return string changelogregel
 	 */
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
-		$aantal = MaaltijdAbonnementenModel::instance()->verwijderAbonnementenVoorLid($profiel->uid);
+				$aantal = MaaltijdAbonnementenModel::instance()->verwijderAbonnementenVoorLid($profiel->uid);
 		if ($aantal > 0) {
 			return 'Afmelden abo\'s: ' . $aantal . ' uitgezet.[br]';
 		}
@@ -328,7 +317,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyBibliothecaris(Profiel $profiel, $oudestatus) {
-		$boeken = BiebCatalogus::getBoekenByUid($profiel->uid, 'geleend');
+				$boeken = BiebCatalogus::getBoekenByUid($profiel->uid, 'geleend');
 		if (!is_array($boeken)) {
 			$boeken = array();
 		}
