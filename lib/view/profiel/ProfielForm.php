@@ -176,10 +176,6 @@ class ProfielForm extends Formulier
         if (!$inschrijven) {
             $fields['email']->readonly = true;
             $fields['email']->title = 'Wijzig je e-mailadres met het inloggegevens-formulier.';
-            $fields[] = new EmailField('msn', $profiel->msn, 'MSN');
-            $fields[] = new TextField('icq', $profiel->icq, 'ICQ', 10);
-            $fields[] = new EmailField('jid', $profiel->jid, 'Jabber/Google-talk');
-            $fields[] = new TextField('skype', $profiel->skype, 'Skype', 20);
             $fields[] = new UrlField('linkedin', $profiel->linkedin, 'Publiek LinkedIn-profiel');
             $fields[] = new UrlField('website', $profiel->website, 'Website');
         }
@@ -190,10 +186,6 @@ class ProfielForm extends Formulier
         $fields[] = new RequiredIBANField('bankrekening', $profiel->bankrekening, 'Bankrekening', 18);
         if ($admin) {
             $fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
-        }
-        if (LoginModel::mag('P_ADMIN')) {
-            $fields[] = new IntField('soccieID', (int)$profiel->soccieID, 'SoccieID (uniek icm. bar)', 0, 10000);
-            $fields[] = new SelectField('createTerm', $profiel->createTerm, 'Aangemaakt bij', array('barvoor' => 'barvoor', 'barmidden' => 'barmidden', 'barachter' => 'barachter', 'soccie' => 'soccie'));
         }
 
         $fields[] = new Subkopje('Studie');

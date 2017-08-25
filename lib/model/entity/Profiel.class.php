@@ -243,10 +243,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public function getContactgegevens() {
 		return array_filter_empty(array(
 			'Email'			 => $this->getPrimaryEmail(),
-			'ICQ'			 => $this->icq,
-			'MSN'			 => $this->msn,
-			'Jabber/GTalk'	 => $this->jid,
-			'Skype'			 => $this->skype,
 			'LinkedIn'		 => $this->linkedin,
 			'Website'		 => $this->website
 		));
