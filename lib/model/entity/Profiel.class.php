@@ -72,10 +72,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	// contact
 	public $email;
 	public $mobiel;
-	public $icq;
-	public $msn;
-	public $skype;
-	public $jid;
 	public $linkedin;
 	public $website;
 	// studie
@@ -100,9 +96,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $eetwens;
 	public $corvee_punten;
 	public $corvee_punten_bonus;
-	public $soccieID;
 	// novitiaat
-	public $createTerm;
 	public $novitiaat;
 	public $novitiaatBijz;
 	public $medisch;
@@ -158,10 +152,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'o_telefoon'			 => array(T::String, true),
 		// contact
 		'email'					 => array(T::String),
-		'icq'					 => array(T::String, true),
-		'msn'					 => array(T::String, true),
-		'skype'					 => array(T::String, true),
-		'jid'					 => array(T::String, true),
 		'linkedin'				 => array(T::String, true),
 		'website'				 => array(T::String, true),
 		// studie
@@ -185,8 +175,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'patroon'				 => array(T::UID, true),
 		'corvee_punten'			 => array(T::Integer, true),
 		'corvee_punten_bonus'	 => array(T::Integer, true),
-		'soccieID'				 => array(T::Integer, true),
-		'createTerm'			 => array(T::String, true),
 		// Persoonlijk
 		'eetwens'				 => array(T::String, true),
 		'lengte'				 => array(T::Integer),
