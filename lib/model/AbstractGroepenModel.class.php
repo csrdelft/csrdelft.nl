@@ -12,7 +12,6 @@ use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\DynamicEntityModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
-use Exception;
 use PDO;
 use function CsrDelft\classNameZonderNamespace;
 use function CsrDelft\setMelding;
@@ -162,7 +161,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 			}
 			$newgroep->id = null;
 			$this->create($newgroep);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			setMelding('Converteren mislukt: ' . $e->getMessage(), -1);
 			return false;
 		}
@@ -180,7 +179,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 				$newlid->groep_id = $newgroep->id;
 				$ledenmodel->create($newlid);
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			setMelding('Leden converteren mislukt: ' . $e->getMessage(), -1);
 			return false;
 		}
@@ -195,7 +194,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 				$omnummering->model = get_class($this);
 				self::$old->update($omnummering);
 			}
-		} catch (Exception $ex) {
+		} catch (\Exception $ex) {
 			setMelding('Omnummeren mislukt: ' . $ex->getMessage(), -1);
 			return false;
 		}
@@ -206,14 +205,14 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 			foreach ($oldgroep->getLeden() as $oldlid) {
 				$oldledenmodel->delete($oldlid);
 			}
-		} catch (Exception $ex) {
+		} catch (\Exception $ex) {
 			setMelding('Leden verwijderen mislukt: ' . $ex->getMessage(), -1);
 			return false;
 		}
 		// groep verwijderen
 		try {
 			$oldmodel->delete($oldgroep);
-		} catch (Exception $ex) {
+		} catch (\Exception $ex) {
 			setMelding('Groep verwijderen mislukt: ' . $ex->getMessage(), -1);
 			return false;
 		}

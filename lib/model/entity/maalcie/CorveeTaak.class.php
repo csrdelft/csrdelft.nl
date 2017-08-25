@@ -1,17 +1,17 @@
 <?php
 namespace CsrDelft\model\entity\maalcie;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use Exception;
 
 /**
  * CorveeTaak.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
- * 
+ *
+ *
  * Een crv_taak instantie beschrijft een taak die een lid moet uitvoeren of (niet) uitgevoerd heeft als volgt:
  *  - uniek identificatienummer
  *  - welke functie deze taak inhoud (bijv. tafelpraeses)
@@ -24,13 +24,13 @@ use Exception;
  *  - aantal bonuspunten dat is toegekend
  *  - moment wanneer de punten zijn toegekend (datum en tijd)
  *  - of er een controle van de taak heeft plaatsgevonden (door de hyco) en zo ja of het ok was (anders null)
- * 
+ *
  * Het aanmaken van een corveetaak kan vanuit CorveeRepetitie gebeuren, maar ook vanuit MaaltijdCorvee bij het indelen van leden voor corvee-functies bij maaltijden; beide in verband met corvee-voorkeuren van leden, gewone danwel maaltijd-gerelateerde corvee-functies. (join Maaltijd.repetitie_id === MaaltijdCorvee.maaltijd_repetitie_id && join MaaltijdCorvee.corvee_repetitie_id === CorveeRepetitie.id)
  * De totale hoeveelheid punten van een lid zijn het puntenaantal van voorgaande jaren opgeslagen in lid.corvee_punten + de som van de toegekende punten van alle taken van een lid.
- * 
- * 
+ *
+ *
  * Zie ook MaaltijdCorvee.class.php
- * 
+ *
  */
 class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	# primary key
@@ -63,7 +63,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Berekent hoevaak er gemaild is op basis van wanneer er gemaild is.
-	 * 
+	 *
 	 * @return int
 	 */
 	public function getAantalKeerGemaild() {
@@ -72,7 +72,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Bepaalt of er een herinnering gemaild moet worden op basis van het aantal verstuurde herinneringen en de ingestelde periode vooraf.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function getMoetHerinneren() {
@@ -99,7 +99,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Bepaalt of er op tijd is gemaild op basis van de laatst verstuurde email.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function getIsTelaatGemaild() {
@@ -126,7 +126,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Lazy loading by foreign key.
-	 * 
+	 *
 	 * @return CorveeFunctie
 	 */
 	public function getCorveeFunctie() {
@@ -135,14 +135,14 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 
 	public function setUid($uid) {
 		if ($uid !== null && !ProfielModel::existsUid($uid)) {
-			throw new Exception('Geen lid: set lid id');
+			throw new CsrGebruikerException('Geen lid: set lid id');
 		}
 		$this->uid = $uid;
 	}
 
 	public function setWanneerGemaild($datumtijd) {
 		if (!is_string($datumtijd)) {
-			throw new Exception('Geen string: wanneer gemaild');
+			throw new CsrGebruikerException('Geen string: wanneer gemaild');
 		}
 		if ($datumtijd !== '') {
 			$datumtijd .= '&#013;' . $this->wanneer_gemaild;

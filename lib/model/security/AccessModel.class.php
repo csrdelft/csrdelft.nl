@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\model\security;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\groepen\CommissieFunctie;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\LidStatus;
@@ -28,7 +29,6 @@ use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
-use Exception;
 use function CsrDelft\in_array_i;
 use function CsrDelft\setMelding;
 
@@ -204,7 +204,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * @param string $resource
 	 * @param array $acl
 	 * @return bool
-	 * @throws Exception
+	 * @throws CsrException
 	 */
 	public function setAcl($environment, $resource, array $acl) {
 		// Has permission to change permissions?
@@ -259,7 +259,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * @param string $lidstatus
 	 *
 	 * @return string
-	 * @throws Exception
+	 * @throws CsrException
 	 */
 	public function getDefaultPermissionRole($lidstatus) {
 		switch ($lidstatus) {
@@ -273,7 +273,7 @@ class AccessModel extends CachedPersistenceModel {
 			case LidStatus::Overleden:
 			case LidStatus::Exlid:
 			case LidStatus::Nobody: return AccessRole::Nobody;
-			default: throw new Exception('LidStatus onbekend');
+			default: throw new CsrException('LidStatus onbekend');
 		}
 	}
 
@@ -837,7 +837,7 @@ class AccessModel extends CachedPersistenceModel {
 						if ($maaltijd AND $maaltijd->magSluiten($profiel->uid)) {
 							return true;
 						}
-					} catch (Exception $e) {
+					} catch (CsrException $e) {
 						// Maaltijd bestaat niet
 					}
 				}

@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\fotoalbum\Foto;
@@ -17,7 +18,6 @@ use CsrDelft\view\fotoalbum\FotosDropzone;
 use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
 use CsrDelft\view\fotoalbum\PosterUploadForm;
 use CsrDelft\view\JsonResponse;
-use Exception;
 use function CsrDelft\endsWith;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
@@ -151,7 +151,7 @@ class FotoAlbumController extends AclController {
 					if ($poster) {
 						$filename = $formulier->findByName('posternaam')->getValue() . '.jpg';
 						if (strpos($filename, 'folder') !== false) {
-							throw new Exception('Albumcover niet toegestaan');
+							throw new CsrGebruikerException('Albumcover niet toegestaan');
 						}
 					} else {
 						$filename = $uploader->getModel()->filename;
@@ -170,12 +170,12 @@ class FotoAlbumController extends AclController {
 								return;
 							}
 						} else {
-							throw new Exception('Verwerken mislukt');
+							throw new CsrGebruikerException('Verwerken mislukt');
 						}
 					} else {
-						throw new Exception('Opslaan mislukt');
+						throw new CsrGebruikerException('Opslaan mislukt');
 					}
-				} catch (Exception $e) {
+				} catch (CsrGebruikerException $e) {
 					$this->view = new JsonResponse(array('error' => $e->getMessage()), 500);
 					return;
 				}

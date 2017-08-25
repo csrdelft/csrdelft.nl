@@ -1,10 +1,10 @@
 <?php
 namespace CsrDelft\view\maalcie\forms;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
-use Exception;
 
 /**
  * ToewijzenForm.php
@@ -20,7 +20,7 @@ class ToewijzenForm extends ModalForm {
 		parent::__construct(null, maalcieUrl . '/toewijzen/' . $taak->taak_id);
 
 		if (!is_int($taak->taak_id) || $taak->taak_id <= 0) {
-			throw new Exception('invalid tid');
+			throw new CsrGebruikerException(sprintf('Ongeldig taak id "%s".', $taak->taak_id));
 		}
 		$this->titel = 'Taak toewijzen aan lid';
 		$this->css_classes[] = 'PreventUnchanged';

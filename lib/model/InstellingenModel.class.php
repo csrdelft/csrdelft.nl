@@ -1,8 +1,8 @@
 <?php
 namespace CsrDelft\model;
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\Instelling;
 use CsrDelft\Orm\CachedPersistenceModel;
-use Exception;
 
 /**
  * InstellingenModel.class.php
@@ -184,7 +184,7 @@ class InstellingenModel extends CachedPersistenceModel {
 	 * @param string $module
 	 * @param string $id
 	 * @return Instelling
-	 * @throws Exception indien de default waarde ontbreekt (de instelling bestaat niet)
+	 * @throws CsrException indien de default waarde ontbreekt (de instelling bestaat niet)
 	 */
 	protected function getInstelling($module, $id) {
 		$instelling = $this->retrieveByPrimaryKey(array($module, $id));
@@ -198,7 +198,7 @@ class InstellingenModel extends CachedPersistenceModel {
 				// Haal niet-bestaande instelling uit de database
 				$this->delete($instelling);
 			}
-			throw new Exception('Instelling bestaat niet: ' . $id . ' module: ' . $module);
+			throw new CsrException(sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module));
 		}
 	}
 

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\bibliotheek;
 
+use CsrDelft\common\CsrException;
 use function CsrDelft\getDateTime;
 use CsrDelft\MijnSqli;
 use CsrDelft\model\ProfielModel;
@@ -13,7 +14,6 @@ use CsrDelft\view\formulier\invoervelden\RequiredBBCodeField;
 use CsrDelft\view\formulier\invoervelden\RequiredLidField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
-use Exception;
 
 class BewerkBoek extends BiebBoek
 {
@@ -76,7 +76,6 @@ class BewerkBoek extends BiebBoek
      * @param        $value
      * @param bool $initboek
      *
-     * @throws Exception
      * @return void
      */
     public function setValue(
@@ -98,13 +97,13 @@ class BewerkBoek extends BiebBoek
      *
      * @param string $entry
      *
-     * @throws Exception
+     * @throws CsrException
      * @return InputField
      */
     public function getField($entry)
     {
         if (!$field = $this->ajaxformuliervelden->findByName($entry)) {
-            throw new Exception('Dit formulier bevat geen veld "' . $entry . '"');
+            throw new CsrException('Dit formulier bevat geen veld "' . $entry . '"');
         }
         return $field;
     }
@@ -508,14 +507,14 @@ class BewerkBoek extends BiebBoek
      * Geeft Beschrijving-object dat bewerkt/toegevoegd/verwijdert wordt
      *
      * @return BiebBeschrijving
-     * @throws Exception
+     * @throws CsrException
      */
     public function getEditBeschrijving()
     {
         if (array_key_exists($this->editbeschrijving, $this->beschrijvingen)) {
             return $this->beschrijvingen[$this->editbeschrijving];
         } else {
-            throw new Exception('Beschrijving niet bij dit boek gevonden! Boek::getEditBeschrijving() mislukt. ');
+            throw new CsrException('Beschrijving niet bij dit boek gevonden! Boek::getEditBeschrijving() mislukt. ');
         }
     }
 

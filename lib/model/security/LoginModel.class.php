@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\model\security;
 
+use CsrDelft\common\CsrGebruikerException;
 use function CsrDelft\getDateTime;
 use function CsrDelft\getSessionMaxLifeTime;
 use CsrDelft\model\entity\Profiel;
@@ -17,8 +18,6 @@ use function CsrDelft\setRememberCookie;
 use function CsrDelft\startsWith;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use CsrDelft\view\Validator;
-use Exception;
-
 
 /**
  * LoginModel.class.php
@@ -399,15 +398,15 @@ class LoginModel extends PersistenceModel implements Validator {
 	/**
 	 * @param string $uid
 	 *
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public function switchUser($uid) {
 		if ($this->isSued()) {
-			throw new Exception('Geneste su niet mogelijk!');
+			throw new CsrGebruikerException('Geneste su niet mogelijk!');
 		}
 		$suNaar = AccountModel::get($uid);
 		if (!$this->maySuTo($suNaar)) {
-			throw new Exception('Deze gebruiker mag niet inloggen!');
+			throw new CsrGebruikerException('Deze gebruiker mag niet inloggen!');
 		}
 		$suedFrom = static::getAccount();
 		// Keep authentication method

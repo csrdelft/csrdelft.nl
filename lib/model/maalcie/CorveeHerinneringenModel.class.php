@@ -1,18 +1,17 @@
 <?php
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;
-use Exception;
-
 
 /**
  * CorveeHerinneringenModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class CorveeHerinneringenModel {
 
@@ -21,7 +20,7 @@ class CorveeHerinneringenModel {
 		$uid = $taak->uid;
 		$profiel = ProfielModel::get($uid);
 		if (!$profiel) {
-			throw new Exception($datum . ' ' . $taak->getCorveeFunctie()->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
+			throw new CsrGebruikerException($datum . ' ' . $taak->getCorveeFunctie()->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
 		}
 		$lidnaam = ProfielModel::getNaam($uid, 'civitas');
 		$to = array($profiel->getPrimaryEmail() => $lidnaam);
@@ -46,7 +45,7 @@ class CorveeHerinneringenModel {
 			}
 			return $datum . ' ' . $taak->getCorveeFunctie()->naam . ' verstuurd! (' . $lidnaam . ')';
 		} else {
-			throw new Exception($datum . ' ' . $taak->getCorveeFunctie()->naam . ' faalt! (' . $lidnaam . ')');
+			throw new CsrGebruikerException($datum . ' ' . $taak->getCorveeFunctie()->naam . ' faalt! (' . $lidnaam . ')');
 		}
 	}
 
@@ -61,7 +60,7 @@ class CorveeHerinneringenModel {
 			if ($taak->getMoetHerinneren()) {
 				try {
 					$verzonden[] = self::stuurHerinnering($taak);
-				} catch (Exception $e) {
+				} catch (CsrGebruikerException $e) {
 					$errors[] = $e;
 				}
 			}

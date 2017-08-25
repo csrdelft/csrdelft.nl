@@ -1,7 +1,7 @@
 <?php
 namespace CsrDelft\model\entity;
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * LidStatus.enum.php
@@ -64,7 +64,7 @@ abstract class LidStatus implements PersistentEnum {
 	 * @param string $option
 	 *
 	 * @return string
-	 * @throws Exception
+	 * @throws CsrException
 	 */
 	public static function getDescription($option) {
 		switch ($option) {
@@ -78,7 +78,7 @@ abstract class LidStatus implements PersistentEnum {
 			case self::Nobody: return 'Nobody';
 			case self::Commissie: return 'Commissie (LDAP)';
 			case self::Kringel: return 'Kringel';
-			default: throw new Exception('LidStatus onbekend');
+			default: throw new CsrException('LidStatus onbekend');
 		}
 	}
 
@@ -91,7 +91,7 @@ abstract class LidStatus implements PersistentEnum {
 	 * @param string $option
 	 *
 	 * @return string
-	 * @throws Exception
+	 * @throws CsrException
 	 */
 	public static function getChar($option) {
 		switch ($option) {
@@ -105,7 +105,7 @@ abstract class LidStatus implements PersistentEnum {
 			case self::Oudlid: return '•';
 			case self::Erelid: return '☀';
 			case self::Overleden: return '✝';
-			default: throw new Exception('LidStatus onbekend');
+			default: throw new CsrException('LidStatus onbekend');
 		}
 	}
 

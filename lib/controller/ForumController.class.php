@@ -2,6 +2,8 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\Icon;
 use CsrDelft\model\entity\Mail;
@@ -30,7 +32,6 @@ use CsrDelft\view\forum\ForumResultatenView;
 use CsrDelft\view\forum\ForumRssView;
 use CsrDelft\view\forum\ForumZoekenForm;
 use CsrDelft\view\JsonResponse;
-use Exception;
 use function CsrDelft\email_like;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
@@ -124,7 +125,7 @@ class ForumController extends Controller {
 		}
 		try {
 			parent::performAction($this->getParams(3));
-		} catch (Exception $e) {
+		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), -1);
 			$this->action = 'forum';
 			parent::performAction(array());
@@ -389,7 +390,7 @@ class ForumController extends Controller {
 		if ($form->validate()) {
 			$rowCount = ForumDelenModel::instance()->create($deel);
 			if ($rowCount !== 1) {
-				throw new Exception('Forum aanmaken mislukt!');
+				throw new CsrGebruikerException('Forum aanmaken mislukt!');
 			}
 			$this->view = new JsonResponse(true);
 		} else {
@@ -401,6 +402,8 @@ class ForumController extends Controller {
 	 * Forum deel bewerken.
 	 *
 	 * @param int $forum_id
+	 *
+	 * @throws CsrGebruikerException
 	 */
 	public function beheren($forum_id) {
 		$deel = ForumDelenModel::get((int)$forum_id);
@@ -408,7 +411,7 @@ class ForumController extends Controller {
 		if ($form->validate()) {
 			$rowCount = ForumDelenModel::instance()->update($deel);
 			if ($rowCount !== 1) {
-				throw new Exception('Forum beheren mislukt!');
+				throw new CsrGebruikerException('Forum beheren mislukt!');
 			}
 			$this->view = new JsonResponse(true);
 		} else {
@@ -437,14 +440,16 @@ class ForumController extends Controller {
 	 * Forum draad verbergen in zijbalk.
 	 *
 	 * @param int $draad_id
+	 *
+	 * @throws CsrGebruikerException
 	 */
 	public function verbergen($draad_id) {
 		$draad = ForumDradenModel::get((int)$draad_id);
 		if (!$draad->magVerbergen()) {
-			throw new Exception('Onderwerp mag niet verborgen worden');
+			throw new CsrGebruikerException('Onderwerp mag niet verborgen worden');
 		}
 		if ($draad->isVerborgen()) {
-			throw new Exception('Onderwerp is al verborgen');
+			throw new CsrGebruikerException('Onderwerp is al verborgen');
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad);
 		$this->view = new JsonResponse(true);
@@ -454,11 +459,13 @@ class ForumController extends Controller {
 	 * Forum draad tonen in zijbalk.
 	 *
 	 * @param int $draad_id
+	 *
+	 * @throws CsrGebruikerException
 	 */
 	public function tonen($draad_id) {
 		$draad = ForumDradenModel::get((int)$draad_id);
 		if (!$draad->isVerborgen()) {
-			throw new Exception('Onderwerp is niet verborgen');
+			throw new CsrGebruikerException('Onderwerp is niet verborgen');
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad, false);
 		$this->view = new JsonResponse(true);
@@ -478,14 +485,16 @@ class ForumController extends Controller {
 	 * Forum draad volgen per email.
 	 *
 	 * @param int $draad_id
+	 *
+	 * @throws CsrGebruikerException
 	 */
 	public function volgenaan($draad_id) {
 		$draad = ForumDradenModel::get((int)$draad_id);
 		if (!$draad->magVolgen()) {
-			throw new Exception('Onderwerp mag niet gevolgd worden');
+			throw new CsrGebruikerException('Onderwerp mag niet gevolgd worden');
 		}
 		if ($draad->isGevolgd()) {
-			throw new Exception('Onderwerp wordt al gevolgd');
+			throw new CsrGebruikerException('Onderwerp wordt al gevolgd');
 		}
 		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad);
 		$this->view = new JsonResponse(true);
@@ -495,11 +504,13 @@ class ForumController extends Controller {
 	 * Forum draad niet meer volgen.
 	 *
 	 * @param int $draad_id
+	 *
+	 * @throws CsrGebruikerException
 	 */
 	public function volgenuit($draad_id) {
 		$draad = ForumDradenModel::get((int)$draad_id);
 		if (!$draad->isGevolgd()) {
-			throw new Exception('Onderwerp wordt niet gevolgd');
+			throw new CsrGebruikerException('Onderwerp wordt niet gevolgd');
 		}
 		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad, false);
 		$this->view = new JsonResponse(true);
@@ -535,8 +546,6 @@ class ForumController extends Controller {
 	 * @param int $draad_id
 	 * @param string $property
 	 * @param mixed $value
-	 *
-	 * @throws Exception indien forum niet bestaat bij verplaatsen of wijzigen mislukt
 	 */
 	public function wijzigen($draad_id, $property, $value = null) {
 		$draad = ForumDradenModel::get((int)$draad_id);

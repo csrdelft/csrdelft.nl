@@ -1,6 +1,8 @@
 <?php
 namespace CsrDelft\model\entity;
 
+use function CsrDelft\aaidrom;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\GoogleSync;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\GroepStatus;
@@ -18,9 +20,7 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\bbcode\CsrBB;
-use Exception;
 use function CsrDelft\array_filter_empty;
 use function CsrDelft\setMelding;
 use function CsrDelft\square_crop;
@@ -537,18 +537,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				break;
 
 			case 'aaidrom': // voor een 1 aprilgrap ooit
-				$voornaam = strtolower($this->voornaam);
-				$achternaam = strtolower($this->achternaam);
-
-				$voor = array();
-				preg_match('/^([^aeiuoy]*)(.*)$/', $voornaam, $voor);
-				$achter = array();
-				preg_match('/^([^aeiuoy]*)(.*)$/', $achternaam, $achter);
-
-				$nwvoor = ucwords($achter[1] . $voor[2]);
-				$nwachter = ucwords($voor[1] . $achter[2]);
-
-				$naam = sprintf("%s %s%s", $nwvoor, !empty($this->tussenvoegsel) ? $this->tussenvoegsel . ' ' : '', $nwachter);
+				$naam = aaidrom($this->voornaam, $this->achternaam);
 				break;
 
 			default:
@@ -670,7 +659,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				return null;
 			}
 			return !is_null(GoogleSync::instance()->existsInGoogleContacts($this));
-		} catch (Exception $e) {
+		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), 0);
 			return null;
 		}

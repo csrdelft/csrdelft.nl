@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\controller\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
@@ -8,8 +9,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\corvee\voorkeuren\BeheerVoorkeurenView;
 use CsrDelft\view\maalcie\corvee\voorkeuren\BeheerVoorkeurView;
-use Exception;
-
 
 /**
  * BeheerVoorkeurenController.class.php
@@ -52,7 +51,7 @@ class BeheerVoorkeurenController extends AclController {
 
 	public function inschakelen($crid, $uid) {
 		if (!ProfielModel::existsUid($uid)) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
+			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		$voorkeur = new CorveeVoorkeur();
 		$voorkeur->crv_repetitie_id = $crid;
@@ -65,7 +64,7 @@ class BeheerVoorkeurenController extends AclController {
 
 	public function uitschakelen($crid, $uid) {
 		if (!ProfielModel::existsUid($uid)) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
+			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		$voorkeur = new CorveeVoorkeur();
 		$voorkeur->crv_repetitie_id = (int) $crid;

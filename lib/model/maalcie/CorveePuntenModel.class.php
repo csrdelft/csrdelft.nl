@@ -1,17 +1,17 @@
 <?php
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeVrijstelling;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
-use Exception;
-
 
 /**
  * CorveePuntenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
+ *
  */
 class CorveePuntenModel {
 
@@ -25,7 +25,7 @@ class CorveePuntenModel {
 			try {
 				$profiel = ProfielModel::get($uid); // false if lid does not exist
 				if (!$profiel) {
-					throw new Exception('Lid bestaat niet: $uid =' . $uid);
+					throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 				}
 				$punten = $totalen['puntenTotaal'];
 				$punten += $totalen['bonusTotaal'];
@@ -43,7 +43,7 @@ class CorveePuntenModel {
 				}
 				$punten -= intval(InstellingenModel::get('corvee', 'punten_per_jaar'));
 				self::savePuntenVoorLid($profiel, $punten, 0);
-			} catch (Exception $e) {
+			} catch (CsrGebruikerException $e) {
 				$errors[] = $e;
 			}
 		}
@@ -53,11 +53,11 @@ class CorveePuntenModel {
 
 	public static function puntenToekennen($uid, $punten, $bonus_malus) {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
-			throw new Exception('Punten toekennen faalt: geen integer');
+			throw new CsrGebruikerException('Punten toekennen faalt: geen integer');
 		}
 		$profiel = ProfielModel::get($uid); // false if lid does not exist
 		if (!$profiel) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
+			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		if ($punten !== 0 OR $bonus_malus !== 0) {
 			self::savePuntenVoorLid($profiel, (int) $profiel->corvee_punten + $punten, (int) $profiel->corvee_punten_bonus + $bonus_malus);
@@ -66,14 +66,14 @@ class CorveePuntenModel {
 
     public static function puntenIntrekken($uid, $punten, $bonus_malus) {
         if (!is_int($punten) || !is_int($bonus_malus)) {
-            throw new Exception('Punten intrekken faalt: geen integer');
+            throw new CsrGebruikerException('Punten intrekken faalt: geen integer');
         }
         self::puntenToekennen($uid, -$punten, -$bonus_malus);
     }
 
 	public static function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null) {
 		if (!is_int($punten) && !is_int($bonus_malus)) {
-			throw new Exception('Save punten voor lid faalt: geen integer');
+			throw new CsrGebruikerException('Save punten voor lid faalt: geen integer');
 		}
 		if (is_int($punten)) {
 			$profiel->corvee_punten = $punten;
@@ -82,7 +82,7 @@ class CorveePuntenModel {
 			$profiel->corvee_punten_bonus = $bonus_malus;
 		}
 		if (ProfielModel::instance()->update($profiel) !== 1) {
-			throw new Exception('Save punten voor lid faalt: opslaan mislukt');
+			throw new CsrException('Save punten voor lid faalt: opslaan mislukt');
 		}
 	}
 
@@ -121,7 +121,7 @@ class CorveePuntenModel {
 		foreach ($matrix as $uid => $totalen) {
 			$profiel = ProfielModel::get($uid); // false if lid does not exist
 			if (!$profiel) {
-				throw new Exception('Lid bestaat niet: $uid =' . $uid);
+				throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 			}
 			$lidtaken = array();
 			if (array_key_exists($uid, $taken)) {

@@ -1,15 +1,15 @@
 <?php
 namespace CsrDelft\model\entity\security;
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * AccessAction.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * CRUD + groepen-acties.
- * 
+ *
  */
 abstract class AccessAction implements PersistentEnum {
 
@@ -44,7 +44,7 @@ abstract class AccessAction implements PersistentEnum {
 			case self::Verwijderen: return 'Verwijderen';
 			case self::Beheren: return 'Beheren';
 			case self::Rechten: return 'Rechten instellen';
-			default: throw new Exception('AccessAction onbekend');
+			default: throw new CsrException('AccessAction onbekend');
 		}
 	}
 
@@ -61,7 +61,7 @@ abstract class AccessAction implements PersistentEnum {
 			case self::Beheren:
 			case self::Rechten:
 				return ucfirst($option);
-			default: throw new Exception('AccessAction onbekend');
+			default: throw new CsrException('AccessAction onbekend');
 		}
 	}
 

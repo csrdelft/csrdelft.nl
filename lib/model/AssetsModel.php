@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\model;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\view\CompressedLayout;
 use DateInterval;
 use JShrink\Minifier as JsMin;
@@ -116,7 +117,7 @@ class AssetsModel {
 			}
 			foreach ($files[$mod] as $file) {
 				if (!file_exists(ASSETS_PATH . $file)) {
-					throw new Exception('Bestand niet gevonden: ' . $file);
+					throw new CsrException('Bestand niet gevonden: ' . $file);
 				}
 
 				$filename = str_replace(ASSETS_PATH, '', $file);

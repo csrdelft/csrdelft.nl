@@ -20,8 +20,6 @@ use CsrDelft\Orm\Persistence\Database;
 use function CsrDelft\getDateTime;
 use function CsrDelft\setMelding;
 use function CsrDelft\startsWith;
-use Exception;
-
 
 /**
  * ProfielModel.class.php
@@ -120,7 +118,7 @@ class ProfielModel extends CachedPersistenceModel {
 	public function update(PersistentEntity $profiel) {
 		try {
 			$this->save_ldap($profiel);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			setMelding($e->getMessage(), -1); //TODO: logging
 		}
 		$this->cache($profiel, true, true);

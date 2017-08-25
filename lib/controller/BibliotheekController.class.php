@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\bibliotheek\BewerkBoek;
 use CsrDelft\model\bibliotheek\BiebCatalogus;
@@ -12,7 +13,6 @@ use CsrDelft\view\bibliotheek\BibliotheekCatalogusContent;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableContent;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
-use Exception;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
 
@@ -119,7 +119,7 @@ class BibliotheekController extends Controller {
 			}
 			try {
 				$this->boek = new BewerkBoek($boekid, $beschrijvingsid);
-			} catch (Exception $e) {
+			} catch (CsrException $e) {
 				setMelding($e->getMessage(), -1);
 				redirect('/bibliotheek/');
 			}
@@ -155,7 +155,7 @@ class BibliotheekController extends Controller {
 				} else {
 					$return['melding'] = 'Fout: ' . $this->boek->getField($_POST['id'])->getError() . ' ' . $this->boek->getError();
 				}
-			} catch (Exception $e) {
+			} catch (CsrException $e) {
 				$return['melding'] = 'Fout: ' . $e->getMessage();
 			}
 		} else {

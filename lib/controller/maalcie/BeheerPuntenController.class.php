@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\controller\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\maalcie\CorveePuntenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
@@ -8,7 +9,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenLidView;
 use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenView;
-use Exception;
 use function CsrDelft\setMelding;
 
 
@@ -58,7 +58,7 @@ class BeheerPuntenController extends AclController {
 	public function wijzigpunten($uid) {
 		$profiel = ProfielModel::get($uid); // false if lid does not exist
 		if (!$profiel) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
+			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		$punten = (int) filter_input(INPUT_POST, 'totaal_punten', FILTER_SANITIZE_NUMBER_INT);
 		CorveePuntenModel::savePuntenVoorLid($profiel, $punten, null);
@@ -70,7 +70,7 @@ class BeheerPuntenController extends AclController {
 	public function wijzigbonus($uid) {
 		$profiel = ProfielModel::get($uid); // false if lid does not exist
 		if (!$profiel) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
+			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		$bonus = (int) filter_input(INPUT_POST, 'totaal_bonus', FILTER_SANITIZE_NUMBER_INT);
 		CorveePuntenModel::savePuntenVoorLid($profiel, null, $bonus);

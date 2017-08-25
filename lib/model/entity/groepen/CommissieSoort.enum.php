@@ -1,15 +1,15 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * CommissieSoort.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * (Bestuurs-)Commissie / SjaarCie.
- * 
+ *
  */
 abstract class CommissieSoort implements PersistentEnum {
 
@@ -28,7 +28,7 @@ abstract class CommissieSoort implements PersistentEnum {
 			case self::SjaarCie: return 'SjaarCie';
 			case self::BestuursCommissie: return 'Bestuurscommissie';
 			case self::Extern: return 'Externe commissie';
-			default: throw new Exception('CommissieSoort onbekend');
+			default: throw new CsrException('CommissieSoort onbekend');
 		}
 	}
 
@@ -39,7 +39,7 @@ abstract class CommissieSoort implements PersistentEnum {
 			case self::BestuursCommissie:
 			case self::Extern:
 				return ucfirst($option);
-			default: throw new Exception('CommissieSoort onbekend');
+			default: throw new CsrException('CommissieSoort onbekend');
 		}
 	}
 

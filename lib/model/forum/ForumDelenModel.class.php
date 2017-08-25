@@ -1,5 +1,7 @@
 <?php
 namespace CsrDelft\model\forum;
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use function CsrDelft\group_by;
 use function CsrDelft\group_by_distinct;
 use CsrDelft\model\entity\forum\ForumCategorie;
@@ -8,7 +10,6 @@ use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use function CsrDelft\setMelding;
-use Exception;
 
 /**
  * ForumDelenModel.class.php
@@ -37,13 +38,13 @@ class ForumDelenModel extends CachedPersistenceModel {
 	/**
 	 * @param $id
 	 * @return ForumDeel
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public static function get($id) {
 		/** @var ForumDeel $deel */
 		$deel = static::instance()->retrieveByPrimaryKey(array($id));
 		if (!$deel) {
-			throw new Exception('Forum bestaat niet!');
+			throw new CsrGebruikerException('Forum bestaat niet!');
 		}
 		return $deel;
 	}
@@ -76,7 +77,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 	public function verwijderForumDeel($id) {
 		$rowCount = $this->deleteByPrimaryKey(array($id));
 		if ($rowCount !== 1) {
-			throw new Exception('Deelforum verwijderen mislukt');
+			throw new CsrException('Deelforum verwijderen mislukt');
 		}
 	}
 

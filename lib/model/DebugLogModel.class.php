@@ -6,7 +6,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use function CsrDelft\setMelding;
-use Exception;
 
 /**
  * DebugLogModel.class.php
@@ -43,8 +42,8 @@ class DebugLogModel extends PersistenceModel {
 		$entry = new DebugLogEntry();
 		$entry->class_function = $class . '->' . $function . '(' . implode(', ', $args) . ')';
 		$entry->dump = $dump;
-		$e = new Exception();
-		$entry->call_trace = $e->getTraceAsString();
+		$exception = new \Exception();
+		$entry->call_trace = $exception->getTraceAsString();
 		$entry->moment = getDateTime();
 		$entry->uid = LoginModel::getUid();
 		if (LoginModel::instance()->isSued()) {

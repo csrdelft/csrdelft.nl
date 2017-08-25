@@ -1,11 +1,11 @@
 <?php
 namespace CsrDelft\model\entity\fotoalbum;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
-use Exception;
 use function CsrDelft\debugprint;
 use function CsrDelft\direncode;
 
@@ -134,7 +134,7 @@ class Foto extends Afbeelding {
 		if ($this->hasThumb()) {
 			chmod($this->getThumbPath(), 0644);
 		} else {
-			throw new Exception('Thumb maken mislukt: ' . $this->getFullPath());
+			throw new CsrException('Thumb maken mislukt: ' . $this->getFullPath());
 		}
 	}
 
@@ -160,7 +160,7 @@ class Foto extends Afbeelding {
 		if ($this->hasResized()) {
 			chmod($this->getResizedPath(), 0644);
 		} else {
-			throw new Exception('Resized maken mislukt: ' . $this->getFullPath());
+			throw new CsrException('Resized maken mislukt: ' . $this->getFullPath());
 		}
 	}
 

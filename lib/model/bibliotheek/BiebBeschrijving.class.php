@@ -1,9 +1,9 @@
 <?php
 namespace CsrDelft\model\bibliotheek;
+use CsrDelft\common\CsrException;
 use function CsrDelft\getDateTime;
 use CsrDelft\MijnSqli;
 use CsrDelft\model\security\LoginModel;
-use Exception;
 
 /**
  * BiebBeschrijving.class.php	| 	Gerrit Uitslag
@@ -13,7 +13,7 @@ use Exception;
  */
 class BiebBeschrijving {
 
-	private $id = 0;  // id van recensie 
+	private $id = 0;  // id van recensie
 	private $beschrijving = array();
 
 	public function __construct($init, $boekid = null) {
@@ -41,7 +41,7 @@ class BiebBeschrijving {
 					$beschrijving = $db->next($result);
 					$this->beschrijving = $beschrijving;
 				} else {
-					throw new Exception('Mislukt. Boek::getBeschrijving()' . $db->error());
+					throw new CsrException('Mislukt. Boek::getBeschrijving()' . $db->error());
 				}
 			}
 		}
@@ -121,7 +121,7 @@ class BiebBeschrijving {
 
 	/*
 	 * verwijder beschrijving
-	 * 
+	 *
 	 * @return	true geslaagd
 	 * 			false mislukt, iig id=0 is false
 	 */

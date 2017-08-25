@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\model\security;
+use CsrDelft\common\CsrGebruikerException;
 use function CsrDelft\crypto_rand_token;
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\security\Account;
@@ -7,7 +8,6 @@ use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
-use Exception;
 
 /**
  * AccountModel.class.php
@@ -62,12 +62,12 @@ class AccountModel extends CachedPersistenceModel {
 	 * @param string $uid
 	 *
 	 * @return Account
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public function maakAccount($uid) {
 		$profiel = ProfielModel::get($uid);
 		if (!$profiel) {
-			throw new Exception('Profiel bestaat niet');
+			throw new CsrGebruikerException('Profiel bestaat niet');
 		}
 
 		// Maak een CiviSaldo voor dit account

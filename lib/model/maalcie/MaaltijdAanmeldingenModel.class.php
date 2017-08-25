@@ -1,46 +1,48 @@
 <?php
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\PersistenceModel;
-use Exception;
 use MongoDB\BSON\Type;
 
 
 /**
  * MaaltijdAanmeldingenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
+ *
  */
-class MaaltijdAanmeldingenModel extends PersistenceModel  {
+class MaaltijdAanmeldingenModel extends PersistenceModel {
 
-    const ORM = MaaltijdAanmelding::class;
-    const DIR = 'maalcie/';
+	const ORM = MaaltijdAanmelding::class;
+	const DIR = 'maalcie/';
 
-    protected static $instance;
+	protected static $instance;
 
-	public function aanmeldenVoorMaaltijd(Maaltijd $maaltijd, $uid, $doorUid, $aantalGasten = 0, $beheer = false, $gastenEetwens = '') {
+	public function aanmeldenVoorMaaltijd(
+		Maaltijd $maaltijd, $uid, $doorUid, $aantalGasten = 0, $beheer = false, $gastenEetwens = ''
+	) {
 		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
 			MaaltijdenModel::instance()->sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer) {
 			if (!$this->checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) {
-				throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $maaltijd->aanmeld_filter);
+				throw new CsrGebruikerException('Niet toegestaan vanwege aanmeldrestrictie: ' . $maaltijd->aanmeld_filter);
 			}
 			if ($maaltijd->gesloten) {
-				throw new Exception('Maaltijd is gesloten');
+				throw new CsrGebruikerException('Maaltijd is gesloten');
 			}
 			if ($maaltijd->getAantalAanmeldingen() >= $maaltijd->aanmeld_limiet) {
-				throw new Exception('Maaltijd zit al vol');
+				throw new CsrGebruikerException('Maaltijd zit al vol');
 			}
 		}
 
 		if ($this->getIsAangemeld($maaltijd->maaltijd_id, $uid)) {
 			if (!$beheer) {
-				throw new Exception('Al aangemeld');
+				throw new CsrGebruikerException('Al aangemeld');
 			}
 			// aanmelding van lid updaten met aantal gasten door beheerder
 			$aanmelding = $this->loadAanmelding($maaltijd->maaltijd_id, $uid);
@@ -50,15 +52,15 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
             $this->update($aanmelding);
 			$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
 		} else {
-            $aanmelding = new MaaltijdAanmelding();
-            $aanmelding->maaltijd_id = $maaltijd->maaltijd_id;
-            $aanmelding->uid = $uid;
-            $aanmelding->door_uid = $doorUid;
-            $aanmelding->aantal_gasten = $aantalGasten;
-            $aanmelding->gasten_eetwens = $gastenEetwens;
-            $aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+			$aanmelding = new MaaltijdAanmelding();
+			$aanmelding->maaltijd_id = $maaltijd->maaltijd_id;
+			$aanmelding->uid = $uid;
+			$aanmelding->door_uid = $doorUid;
+			$aanmelding->aantal_gasten = $aantalGasten;
+			$aanmelding->gasten_eetwens = $gastenEetwens;
+			$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
 
-            $this->create($aanmelding);
+			$this->create($aanmelding);
 
 			$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + 1 + $aantalGasten;
 		}
@@ -67,26 +69,27 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	}
 
 	public function aanmeldenDoorAbonnement($mid, $mrid, $uid) {
-        $aanmelding = new MaaltijdAanmelding();
-        $aanmelding->maaltijd_id = $mid;
-        $aanmelding->uid = $uid;
-        $aanmelding->door_uid = $uid;
-        $aanmelding->door_abonnement = $mrid;
-        $aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
-        $aanmelding->gasten_eetwens = '';
+		$aanmelding = new MaaltijdAanmelding();
+		$aanmelding->maaltijd_id = $mid;
+		$aanmelding->uid = $uid;
+		$aanmelding->door_uid = $uid;
+		$aanmelding->door_abonnement = $mrid;
+		$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+		$aanmelding->gasten_eetwens = '';
 
-        if (!$this->exists($aanmelding)) {
-            $this->create($aanmelding);
-        }
-    }
+		if (!$this->exists($aanmelding)) {
+			$this->create($aanmelding);
+		}
+	}
 
-    /**
-     * Called when a MaaltijdAbonnement is being deleted (turned off) or a MaaltijdRepetitie is being deleted.
-     *
-     * @param int $mrid id van de betreffede MaaltijdRepetitie
-     * @param type $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
-     * @return int|void
-     */
+	/**
+	 * Called when a MaaltijdAbonnement is being deleted (turned off) or a MaaltijdRepetitie is being deleted.
+	 *
+	 * @param int $mrid id van de betreffede MaaltijdRepetitie
+	 * @param type $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
+	 *
+	 * @return int|void
+	 */
 	public function afmeldenDoorAbonnement($mrid, $uid) {
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
 		$maaltijden = MaaltijdenModel::instance()->getKomendeOpenRepetitieMaaltijden($mrid);
@@ -112,13 +115,13 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 
 	public function afmeldenDoorLid(Maaltijd $maaltijd, $uid, $beheer = false) {
 		if (!$this->getIsAangemeld($maaltijd->maaltijd_id, $uid)) {
-			throw new Exception('Niet aangemeld');
+			throw new CsrGebruikerException('Niet aangemeld');
 		}
 		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
 			MaaltijdenModel::instance()->sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer && $maaltijd->gesloten) {
-			throw new Exception('Maaltijd is gesloten');
+			throw new CsrGebruikerException('Maaltijd is gesloten');
 		}
 		$aanmelding = $this->loadAanmelding($maaltijd->maaltijd_id, $uid);
 		$this->deleteByPrimaryKey(array($maaltijd->maaltijd_id, $uid));
@@ -128,54 +131,54 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 
 	public function saveGasten($mid, $uid, $gasten) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new Exception('Save gasten faalt: Invalid $mid =' . $mid);
+			throw new CsrGebruikerException('Save gasten faalt: Invalid $mid =' . $mid);
 		}
 		if (!is_int($gasten) || $gasten < 0) {
-			throw new Exception('Save gasten faalt: Invalid $gasten =' . $gasten);
+			throw new CsrGebruikerException('Save gasten faalt: Invalid $gasten =' . $gasten);
 		}
 		if (!$this->getIsAangemeld($mid, $uid)) {
-			throw new Exception('Niet aangemeld');
+			throw new CsrGebruikerException('Niet aangemeld');
 		}
 
-        $maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
-        if ($maaltijd->gesloten) {
-            throw new Exception('Maaltijd is gesloten');
-        }
-        $aanmelding = $this->loadAanmelding($mid, $uid);
-        $verschil = $gasten - $aanmelding->aantal_gasten;
-        if ($maaltijd->getAantalAanmeldingen() + $verschil > $maaltijd->aanmeld_limiet) {
-            throw new Exception('Maaltijd zit te vol');
-        }
-        if ($aanmelding->aantal_gasten !== $gasten) {
-            $aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
-        }
-        $aanmelding->aantal_gasten = $gasten;
-        $this->update($aanmelding);
-        $maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
-        $aanmelding->maaltijd = $maaltijd;
-        return $aanmelding;
+		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+		if ($maaltijd->gesloten) {
+			throw new CsrGebruikerException('Maaltijd is gesloten');
+		}
+		$aanmelding = $this->loadAanmelding($mid, $uid);
+		$verschil = $gasten - $aanmelding->aantal_gasten;
+		if ($maaltijd->getAantalAanmeldingen() + $verschil > $maaltijd->aanmeld_limiet) {
+			throw new CsrGebruikerException('Maaltijd zit te vol');
+		}
+		if ($aanmelding->aantal_gasten !== $gasten) {
+			$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+		}
+		$aanmelding->aantal_gasten = $gasten;
+		$this->update($aanmelding);
+		$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
+		$aanmelding->maaltijd = $maaltijd;
+		return $aanmelding;
 	}
 
 	public function saveGastenEetwens($mid, $uid, $opmerking) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new Exception('Save gasten eetwens faalt: Invalid $mid =' . $mid);
+			throw new CsrGebruikerException('Save gasten eetwens faalt: Invalid $mid =' . $mid);
 		}
 		if (!$this->getIsAangemeld($mid, $uid)) {
-			throw new Exception('Niet aangemeld');
+			throw new CsrGebruikerException('Niet aangemeld');
 		}
 
-        $maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
-        if ($maaltijd->gesloten) {
-            throw new Exception('Maaltijd is gesloten');
-        }
-        $aanmelding = $this->loadAanmelding($mid, $uid);
-        if ($aanmelding->aantal_gasten <= 0) {
-            throw new Exception('Geen gasten aangemeld');
-        }
-        $aanmelding->maaltijd = $maaltijd;
-        $aanmelding->gasten_eetwens = $opmerking;
-        $this->update($aanmelding);
-        return $aanmelding;
+		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+		if ($maaltijd->gesloten) {
+			throw new CsrGebruikerException('Maaltijd is gesloten');
+		}
+		$aanmelding = $this->loadAanmelding($mid, $uid);
+		if ($aanmelding->aantal_gasten <= 0) {
+			throw new CsrGebruikerException('Geen gasten aangemeld');
+		}
+		$aanmelding->maaltijd = $maaltijd;
+		$aanmelding->gasten_eetwens = $opmerking;
+		$this->update($aanmelding);
+		return $aanmelding;
 	}
 
 	/**
@@ -223,31 +226,31 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	}
 
 	public function getIsAangemeld($mid, $uid) {
-        $aanmelding = new MaaltijdAanmelding();
-        $aanmelding->maaltijd_id = $mid;
-        $aanmelding->uid = $uid;
+		$aanmelding = new MaaltijdAanmelding();
+		$aanmelding->maaltijd_id = $mid;
+		$aanmelding->uid = $uid;
 
-        return $this->exists($aanmelding);
+		return $this->exists($aanmelding);
 	}
 
 	public function loadAanmelding($mid, $uid) {
         $aanmelding = $this->retrieveByPrimaryKey(array($mid, $uid));
 		if ($aanmelding === false) {
-			throw new Exception('Load aanmelding faalt: Not found $mid =' . $mid);
+			throw new CsrGebruikerException('Load aanmelding faalt: Not found $mid =' . $mid);
 		}
 		return $aanmelding;
 	}
 
 	/**
 	 * Called when a Maaltijd is being deleted.
-	 * 
+	 *
 	 * @param int $mid maaltijd-id
 	 */
 	public function deleteAanmeldingenVoorMaaltijd($mid) {
-        $aanmeldingen = $this->find('maaltijd_id = ?', array($mid));
-        foreach ($aanmeldingen as $aanmelding) {
-            $this->delete($aanmelding);
-        }
+		$aanmeldingen = $this->find('maaltijd_id = ?', array($mid));
+		foreach ($aanmeldingen as $aanmelding) {
+			$this->delete($aanmelding);
+		}
 	}
 
 	/**
@@ -268,15 +271,15 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 			return 0;
 		}
 		$aantal = 0;
-        $aanmeldingen = array();
-        foreach ($mids as $mid) {
-            array_merge($aanmeldingen, $this->find('maaltijd_id = ?', array($mid))->fetchAll());
-        }
+		$aanmeldingen = array();
+		foreach ($mids as $mid) {
+			array_merge($aanmeldingen, $this->find('maaltijd_id = ?', array($mid))->fetchAll());
+		}
 		foreach ($aanmeldingen as $aanmelding) { // check filter voor elk aangemeld lid
 			$uid = $aanmelding->uid;
 			if (!$this->checkAanmeldFilter($uid, $filter)) { // verwijder aanmelding indien niet toegestaan
-                $aantal += 1 + $aanmelding->aantal_gasten;
-                $this->delete($aanmelding);
+				$aantal += 1 + $aanmelding->aantal_gasten;
+				$this->delete($aanmelding);
 			}
 		}
 		return $aantal;
@@ -285,7 +288,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 	public function checkAanmeldFilter($uid, $filter) {
 		$account = AccountModel::get($uid); // false if account does not exist
 		if (!$account) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
+			throw new CsrGebruikerException('Lid bestaat niet: $uid =' . $uid);
 		}
 		if (empty($filter)) {
 			return true;
@@ -297,28 +300,28 @@ class MaaltijdAanmeldingenModel extends PersistenceModel  {
 
 	/**
 	 * Alleen aanroepen voor inschakelen abonnement!
-	 * 
+	 *
 	 * @param int $mrid
 	 * @param string $uid
 	 * @return int|false aantal aanmeldingen or false
-	 * @throws Exception indien niet toegestaan vanwege aanmeldrestrictie
+	 * @throws CsrGebruikerException indien niet toegestaan vanwege aanmeldrestrictie
 	 */
 	public function aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid) {
 		$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
 		if (!$this->checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
-			throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
+			throw new CsrGebruikerException('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
 		}
 
 		$aantal = 0;
 
-        $maaltijden = MaaltijdenModel::instance()->find("mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?", array($mrid, date('Y-m-d')));
-        foreach ($maaltijden as $maaltijd) {
-            if (!$this->existsByPrimaryKey(array($maaltijd->maaltijd_id, $uid))) {
-                $this->aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $mrid, $uid);
-                $aantal++;
-            }
-        }
-        return $aantal;
+		$maaltijden = MaaltijdenModel::instance()->find("mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?", array($mrid, date('Y-m-d')));
+		foreach ($maaltijden as $maaltijd) {
+			if (!$this->existsByPrimaryKey(array($maaltijd->maaltijd_id, $uid))) {
+				$this->aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $mrid, $uid);
+				$aantal++;
+			}
+		}
+		return $aantal;
 	}
 
 }

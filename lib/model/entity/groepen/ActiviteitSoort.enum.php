@@ -1,15 +1,15 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * ActiviteitSoort.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Algemene en specifieke activiteitsoorten.
- * 
+ *
  */
 abstract class ActiviteitSoort implements PersistentEnum {
 
@@ -44,7 +44,7 @@ abstract class ActiviteitSoort implements PersistentEnum {
 			case self::Ondervereniging: return 'Onderverenigings-activiteit';
 			case self::IFES: return 'Activiteit van IFES';
 			case self::Extern: return 'Externe activiteit';
-			default: throw new Exception('ActiviteitSoort onbekend');
+			default: throw new CsrException('ActiviteitSoort onbekend');
 		}
 	}
 
@@ -63,7 +63,7 @@ abstract class ActiviteitSoort implements PersistentEnum {
 			case self::IFES:
 			case self::Extern:
 				return strtoupper(substr($option, 0, 2));
-			default: throw new Exception('ActiviteitSoort onbekend');
+			default: throw new CsrException('ActiviteitSoort onbekend');
 		}
 	}
 

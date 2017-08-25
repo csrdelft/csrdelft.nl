@@ -2,6 +2,7 @@
 
 namespace CsrDelft;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\GoogleToken;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\GoogleTokenModel;
@@ -10,7 +11,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use DOMDocument;
 use DOMText;
-use Exception;
 use Google_Client;
 use SimpleXMLElement;
 
@@ -86,13 +86,13 @@ class GoogleSync {
 
 	/**
 	 * GoogleSync constructor.
-	 * @throws Exception
+	 * @throws CsrException
 	 */
 	private function __construct() {
 		/** @var GoogleToken $google_token */
 		$google_token = GoogleTokenModel::instance()->find('uid = ?', [LoginModel::getUid()])->fetch();
 		if ($google_token === false) {
-			throw new Exception('Authsub token not available, use doRequestToken.');
+			throw new CsrException('Authsub token not available, use doRequestToken.');
 		}
 
 		if (LidInstellingenModel::get('googleContacts', 'groepnaam') != '') {
@@ -117,7 +117,7 @@ class GoogleSync {
 
 			//copy setting from settings manager.
 			$this->extendedExport = LidInstellingenModel::get('googleContacts', 'extended') == 'ja';
-		} catch (Exception $ex) {
+		} catch (CsrException $ex) {
 			setMelding("Verbinding met Google verbroken." . $ex->getMessage(), 2);
 			GoogleTokenModel::instance()->delete($google_token);
 		}
@@ -130,7 +130,7 @@ class GoogleSync {
 		$httpClient = $this->client->authorize();
 		$response = $httpClient->request('GET', GOOGLE_GROUPS_URL);
 		if ($response->getStatusCode() === 401) {
-			throw new Exception();
+			throw new CsrException();
 		}
 		$this->groupFeed = simplexml_load_string($response->getBody())->entry;
 	}
@@ -143,7 +143,7 @@ class GoogleSync {
 		$httpClient = $this->client->authorize();
 		$response = $httpClient->request('GET', GOOGLE_CONTACTS_URL . '&max-results=1000&group=' . urlencode($groupId));
 		if ($response->getStatusCode() === 401) {
-			throw new Exception();
+			throw new CsrException();
 		}
 		$this->contactFeed = simplexml_load_string($response->getBody())->entry;
 	}
@@ -353,7 +353,7 @@ class GoogleSync {
 			} else {
 				try {
 					$profielBatch[] = ProfielModel::get($profiel);
-				} catch (Exception $e) {
+				} catch (\Exception $e) {
 					// omit faulty/non-existant uid's
 				}
 			}
@@ -430,7 +430,7 @@ class GoogleSync {
 	 * @param $profiel Profiel
 	 *
 	 * @return string met foutmelding of naam van lid bij succes.
-	 * @throws Exception
+	 * @throws CsrException
 	 */
 	public function syncLid(Profiel $profiel) {
 		if (!$profiel instanceof Profiel) {
@@ -463,8 +463,8 @@ class GoogleSync {
 				$this->updatePhoto($contact, $profiel);
 
 				return 'Update: ' . $profiel->getNaam() . ' ';
-			} catch (Exception $e) {
-				throw new Exception(sprintf($error_message, 'update', $profiel->getNaam(), $e->getMessage()));
+			} catch (\Exception $e) {
+				throw new CsrException(sprintf($error_message, 'update', $profiel->getNaam(), $e->getMessage()));
 			}
 		} else {
 			try {
@@ -479,8 +479,8 @@ class GoogleSync {
 				$this->updatePhoto($contact, $profiel);
 
 				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
-			} catch (Exception $e) {
-				throw new Exception(sprintf($error_message, 'insert', $profiel->getNaam(), $e->getMessage()));
+			} catch (\Exception $e) {
+				throw new CsrException(sprintf($error_message, 'insert', $profiel->getNaam(), $e->getMessage()));
 			}
 		}
 	}

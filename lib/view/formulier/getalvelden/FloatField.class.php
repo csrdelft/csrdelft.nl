@@ -1,7 +1,7 @@
 <?php
 namespace CsrDelft\view\formulier\getalvelden;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\view\formulier\invoervelden\InputField;
-use Exception;
 
 /**
  * FloatField.class.php
@@ -22,10 +22,10 @@ class FloatField extends InputField {
 	public function __construct($name, $value, $description, $precision, $min = null, $max = null, $step = null) {
 		parent::__construct($name, $value, $description, $min, $max);
 		if (!is_float($this->value) AND $this->value !== null) {
-			throw new Exception('value geen float');
+			throw new CsrGebruikerException('value geen float');
 		}
 		if (!is_float($this->origvalue) AND $this->origvalue !== null) {
-			throw new Exception('origvalue geen float');
+			throw new CsrGebruikerException('origvalue geen float');
 		}
 		if (is_int($precision)) {
 			$this->precision = $precision;

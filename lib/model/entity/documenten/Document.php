@@ -2,11 +2,12 @@
 
 namespace CsrDelft\model\entity\documenten;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\Icon;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
-use Exception;
 
 /**
  * Class Document.
@@ -121,12 +122,12 @@ class Document extends Bestand {
 	 * @param bool $throwWhenNotFound
 	 *
 	 * @return bool
-	 * @throws Exception
+	 * @throws CsrException
 	 */
 	public function deleteFile($throwWhenNotFound = true) {
 		if (!$this->hasFile()) {
 			if ($throwWhenNotFound) {
-				throw new Exception('Geen bestand gevonden voor dit document');
+				throw new CsrGebruikerException('Geen bestand gevonden voor dit document');
 			} else {
 				return true;
 			}
@@ -136,9 +137,9 @@ class Document extends Bestand {
 			return true;
 		} else {
 			if (is_writable($this->getFullPath())) {
-				throw new Exception('Kan bestand niet verwijderen, lijkt wel beschrijfbaar' . $this->getFullPath());
+				throw new CsrException('Kan bestand niet verwijderen, lijkt wel beschrijfbaar' . $this->getFullPath());
 			} else {
-				throw new Exception('Kan bestand niet verwijderen, niet beschrijfbaar');
+				throw new CsrException('Kan bestand niet verwijderen, niet beschrijfbaar');
 			}
 		}
 	}

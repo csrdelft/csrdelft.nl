@@ -6,7 +6,6 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\AssetsModel;
 use CsrDelft\view\CssResponse;
 use CsrDelft\view\JavascriptResponse;
-use Exception;
 
 /**
  * Class AssetsController.
@@ -72,7 +71,7 @@ class AssetsController extends AclController {
 			}
 
 			$this->view = new CssResponse($css);
-		} catch (Exception $exception) {
+		} catch (\Exception $exception) {
 			$message = $exception->getMessage();
 			$message = preg_replace("/\n/", "\\A ", $message);
 			$this->view = new CssResponse(<<<CSS

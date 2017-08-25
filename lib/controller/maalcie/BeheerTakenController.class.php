@@ -1,6 +1,8 @@
 <?php
 namespace CsrDelft\controller\maalcie;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
@@ -16,7 +18,6 @@ use CsrDelft\view\maalcie\corvee\taken\BeheerTakenView;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\TaakForm;
 use CsrDelft\view\maalcie\forms\ToewijzenForm;
-use Exception;
 use function CsrDelft\endsWith;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
@@ -238,7 +239,7 @@ class BeheerTakenController extends AclController {
 			$mid = (empty($values['maaltijd_id']) ? null : (int) $values['maaltijd_id']);
 			$taken = $this->model->maakRepetitieTaken($repetitie, $values['begindatum'], $values['einddatum'], $mid);
 			if (empty($taken)) {
-				throw new Exception('Geen nieuwe taken aangemaakt');
+				throw new CsrGebruikerException('Geen nieuwe taken aangemaakt.');
 			}
 			$this->view = new BeheerTakenLijstView($taken);
 		} else {
