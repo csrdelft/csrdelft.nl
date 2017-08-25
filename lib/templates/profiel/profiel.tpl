@@ -44,6 +44,7 @@
 					{$profiel->uid}
 				{/if}</div>
 			{if $profiel->nickname!=''}<div class="label">Bijnaam:</div><div class="data">{$profiel->nickname}</div>{/if}
+			{if $profiel->duckname!=''}<div class="label">Duckstad-naam:</div><div class="data">{$profiel->duckname}</div>{/if}
 			<br />
 			{if $profiel->voorletters!=''}<div class="label">Voorletters:</div><div class="data">{$profiel->voorletters}</div>{/if}
 			{if $profiel->gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div><div class="data">{$profiel->gebdatum|date_format:"%d-%m-%Y"}</div>{/if}
