@@ -71,7 +71,7 @@ class ProfielModel extends CachedPersistenceModel {
 	}
 
 	public static function existsUid($uid) {
-		if (!LoginModel::mag('commissie:NovCie') && startsWith($uid, '17')) {
+		if (!LoginModel::mag('commissie:NovCie') && startsWith($primary_key_values[0], '17')) {
 			return false;
 		}
 
