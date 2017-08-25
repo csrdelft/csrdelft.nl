@@ -71,6 +71,10 @@ class ProfielModel extends CachedPersistenceModel {
 		return Database::instance()->sqlExists(static::instance()->getTableName(), 'nickname = ?', array($nick));
 	}
 
+	public static function existsDuck($duck) {
+		return Database::instance()->sqlExists(static::instance()->getTableName(), 'duckname = ?', array($duck));
+	}
+
 	public function nieuw($lidjaar, $lidstatus) {
 		$profiel = new Profiel();
 		$profiel->lidjaar = $lidjaar;

@@ -3,6 +3,7 @@
 namespace CsrDelft\view\profiel;
 
 use CsrDelft\lid\LidZoeker;
+use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\OntvangtContactueel;
 use CsrDelft\model\entity\Profiel;
@@ -16,6 +17,7 @@ use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\RequiredIntField;
 use CsrDelft\view\formulier\getalvelden\RequiredTelefoonField;
 use CsrDelft\view\formulier\getalvelden\TelefoonField;
+use CsrDelft\view\formulier\invoervelden\DuckField;
 use CsrDelft\view\formulier\invoervelden\EmailField;
 use CsrDelft\view\formulier\invoervelden\LandField;
 use CsrDelft\view\formulier\invoervelden\LidField;
@@ -36,6 +38,7 @@ use CsrDelft\view\formulier\keuzevelden\RequiredSelectField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\keuzevelden\VerticaleField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\uploadvelden\ImageField;
 
 class ProfielForm extends Formulier
 {
@@ -215,6 +218,16 @@ class ProfielForm extends Formulier
                 $fields[] = new JaNeeField('kringcoach', $profiel->kringcoach, 'Kringcoach');
             }
             $fields[] = new LidField('patroon', $profiel->patroon, 'Patroon', 'allepersonen');
+        }
+
+        if (!$inschrijven) {
+            $fields[] = new Subkopje('Duckstad');
+            $fields[] = new DuckField('duckname', $profiel->duckname);
+            $duckfoto = new Afbeelding(PHOTOS_PATH . $profiel->getPasfotoPath(false, 'Duckstad'));
+            if (!$duckfoto->exists() OR strpos($duckfoto->directory, '/Duckstad/') === false) {
+                $duckfoto = null;
+            }
+            $fields[] = new ImageField('duckfoto', 'Duck-pasfoto', $duckfoto, null, null, false, 100, 100, 250, 250);
         }
 
         $fields[] = new Subkopje('Persoonlijk');
