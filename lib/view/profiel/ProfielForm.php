@@ -233,7 +233,7 @@ class ProfielForm extends Formulier
         $fields[] = new Subkopje('Persoonlijk');
         $fields[] = new TextField('eetwens', $profiel->eetwens, 'Dieet/voedselallergie');
         $fields[] = new RequiredIntField('lengte', (int)$profiel->lengte, 'Lengte (cm)', 50, 250);
-        $fields[] = new SelectField('ovkaart', $profiel->ovkaart, 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
+        $fields[] = new RequiredSelectField('ovkaart', $profiel->ovkaart, 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
         $fields[] = new TextField('kerk', $profiel->kerk, 'Kerk', 50);
         $fields[] = new TextField('muziek', $profiel->muziek, 'Muziekinstrument', 50);
         $fields[] = new SelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
