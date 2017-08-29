@@ -1,6 +1,6 @@
 <?php
-namespace CsrDelft\model;
-use CsrDelft\model\entity\EetplanBekenden;
+namespace CsrDelft\model\eetplan;
+use CsrDelft\model\entity\eetplan\EetplanBekenden;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 
@@ -16,16 +16,9 @@ class EetplanBekendenModel extends PersistenceModel {
 	const ORM = EetplanBekenden::class;
 
 	/**
-	 * EetplanBekenden constructor.
-	 */
-	public function __construct() {
-		PersistenceModel::__construct();
-	}
-
-	/**
 	 * @param string $lichting
 	 *
-	 * @return array
+	 * @return EetplanBekenden[]
 	 */
 	public function getBekenden($lichting) {
 		return $this->find('uid1 LIKE ?', array($lichting . "%"))->fetchAll();
@@ -33,10 +26,11 @@ class EetplanBekendenModel extends PersistenceModel {
 
 	/**
 	 * @param PersistentEntity|EetplanBekenden $entity
+	 *
 	 * @return bool
 	 */
 	public function exists(PersistentEntity $entity) {
-		if (PersistenceModel::exists($entity)) {
+		if (parent::exists($entity)) {
 			return true;
 		}
 
@@ -44,6 +38,6 @@ class EetplanBekendenModel extends PersistenceModel {
 		$omgekeerd->uid1 = $entity->uid2;
 		$omgekeerd->uid2 = $entity->uid1;
 
-		return PersistenceModel::exists($omgekeerd);
+		return parent::exists($omgekeerd);
 	}
 }

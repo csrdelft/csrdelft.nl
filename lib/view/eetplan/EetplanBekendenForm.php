@@ -1,7 +1,7 @@
 <?php
 
 namespace CsrDelft\view\eetplan;
-use CsrDelft\model\entity\EetplanBekenden;
+use CsrDelft\model\entity\eetplan\EetplanBekenden;
 use CsrDelft\view\formulier\invoervelden\RequiredLidField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;

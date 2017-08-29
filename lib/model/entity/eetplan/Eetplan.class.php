@@ -1,8 +1,9 @@
 <?php
 
-namespace CsrDelft\model\entity;
+namespace CsrDelft\model\entity\eetplan;
 
 use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
