@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\view\mededelingen;
 use CsrDelft\model\entity\mededelingen\Mededeling;
+use CsrDelft\model\mededelingen\MededelingCategorieenModel;
 use CsrDelft\model\mededelingen\MededelingenModel;
 use CsrDelft\view\SmartyTemplateView;
 use DateTime;
@@ -10,10 +11,16 @@ use function CsrDelft\getDateTime;
  * Class MededelingView
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ *
+ * @property MededelingenModel $model
  */
 class MededelingView extends SmartyTemplateView {
 
+	/**
+	 * @var bool
+	 */
 	private $prullenbak;
+
 	/**
 	 * @var MededelingenModel
 	 */
@@ -25,6 +32,12 @@ class MededelingView extends SmartyTemplateView {
 	private $mededeling;
 
 
+	/**
+	 * MededelingView constructor.
+	 *
+	 * @param Mededeling $mededeling
+	 * @param bool $prullenbak
+	 */
 	public function __construct(Mededeling $mededeling, $prullenbak = false) {
 		parent::__construct(MededelingenModel::instance(), 'Mededelingen');
 		$this->prullenbak = $prullenbak;
@@ -33,6 +46,9 @@ class MededelingView extends SmartyTemplateView {
 		$this->smarty->assign('prullenbak', $this->prullenbak);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getBreadcrumbs() {
 		$breadcrumb = parent::getBreadcrumbs() . '<a href="/mededelingen">Mededelingen</a> » ';
 		if ($this->mededeling->id) {
@@ -43,10 +59,15 @@ class MededelingView extends SmartyTemplateView {
 		return $breadcrumb;
 	}
 
+	/**
+	 */
 	public function view() {
 		$this->smarty->assign('mededeling', $this->mededeling);
-		$this->smarty->assign('prioriteiten', MededelingenModel::getPrioriteiten());
+		$this->smarty->assign('prioriteiten', $this->model->getPrioriteiten());
+		$this->smarty->assign('categorien', MededelingCategorieenModel::getAll());
+		$this->smarty->assign('doelgroepen', $this->model->getDoelgroepen());
 		$this->smarty->assign('datumtijdFormaat', '%Y-%m-%d %H:%M');
+
 		// Een standaard vervaltijd verzinnen indien nodig.
 		if ($this->mededeling->vervaltijd === null) {
 			$standaardVervaltijd = new DateTime(getDateTime());
