@@ -33,6 +33,13 @@ class MededelingenView extends SmartyTemplateView {
 	 */
 	protected $model;
 
+	/**
+	 * MededelingenView constructor.
+	 *
+	 * @param int $mededelingId
+	 * @param int $paginanummer
+	 * @param bool $prullenbak
+	 */
 	public function __construct(
 		$mededelingId,
 		$paginanummer = null,

@@ -66,16 +66,16 @@ class LidZoeker {
 		$sort = $db->escape($sort);
 
 		# In welke status wordt gezocht, is afhankelijk van wat voor rechten de
-		# ingelogd persoon heeft.
+		# ingelogd persoon heeft. 
 		#
-		# R_LID en R_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen
+		# R_LID en R_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen 
 		# de volgende afkortingen gebruiken:
 		#  - '' (lege string) of alleleden: novieten, (gast)leden, kringels, ere- en oudleden
 		#  - leden :  						novieten, (gast)leden en kringels
 		#  - oudleden : 					oud- en ereleden
 		#  - allepersonen:					novieten, (gast)leden, kringels, oud- en ereleden, overleden leden en nobodies (alleen geen commissies)
 		# én alleen voor OUDLEDENMOD:
-		#  - nobodies : 					alleen nobodies
+		#  - nobodies : 					alleen nobodies 
 
 		$statusfilter = '';
 		if ($zoekstatus == 'alleleden') {
@@ -148,7 +148,7 @@ class LidZoeker {
 				WHERE
 					(" . $zoekfilter . ")
 				AND
-					($statusfilter)  AND uid NOT LIKE '17%'
+					($statusfilter)
 				{$mootfilter}
 				ORDER BY
 					{$sort}
@@ -403,7 +403,7 @@ class LidZoeker {
 
 	/**
 	 * Doe de zoektocht.
-	 *
+	 * 
 	 * @return Profiel[]
 	 */
 	public function search() {
@@ -415,7 +415,6 @@ class LidZoeker {
 			$query .= $this->defaultSearch($this->query);
 		}
 		$query .= $this->getFilterSQL();
-        $query .= "AND uid NOT LIKE '17%'";
 		$query .= ' ORDER BY ' . implode($this->sort) . ';';
 
 		$this->sqlquery = $query;

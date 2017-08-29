@@ -254,7 +254,7 @@ class MededelingenModel extends PersistenceModel {
 	/**
 	 * @return string[]
 	 */
-	public static function getPrioriteiten() {
+	public function getPrioriteiten() {
 		$prioriteiten = array();
 		$prioriteiten[255] = 'geen';
 		for ($i = 1; $i <= 6; $i++) {
@@ -266,7 +266,7 @@ class MededelingenModel extends PersistenceModel {
 	/**
 	 * @return string[]
 	 */
-	public static function getDoelgroepen() {
+	public function getDoelgroepen() {
 		return ['iedereen', '(oud)leden', 'leden'];
 	}
 

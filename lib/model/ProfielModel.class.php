@@ -19,7 +19,6 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use function CsrDelft\getDateTime;
 use function CsrDelft\setMelding;
-use function CsrDelft\startsWith;
 
 /**
  * ProfielModel.class.php
@@ -62,26 +61,16 @@ class ProfielModel extends CachedPersistenceModel {
 		return $profiel->getLink($vorm);
 	}
 
-	public function find($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0)
-	{
-			if (!LoginModel::mag('commissie:NovCie')) $criteria .= " AND uid NOT LIKE '17%'";
-			return parent::find($criteria, $criteria_params, $groupby, $orderby, $limit, $start);
-	}
-
 	public static function existsUid($uid) {
-		if (!LoginModel::mag('commissie:NovCie') && startsWith($uid, '17')) {
-			return false;
-		}
-
 		return static::instance()->existsByPrimaryKey(array($uid));
 	}
 
 	public static function existsNick($nick) {
-		return Database::instance()->sqlExists(static::instance()->getTableName(), 'nickname = ? AND uid NOT LIKE \'17%\'', array($nick));
+		return Database::instance()->sqlExists(static::instance()->getTableName(), 'nickname = ?', array($nick));
 	}
 
 	public static function existsDuck($duck) {
-		return Database::instance()->sqlExists(static::instance()->getTableName(), 'duckname = ? AND uid NOT LIKE \'17%\'', array($duck));
+		return Database::instance()->sqlExists(static::instance()->getTableName(), 'duckname = ?', array($duck));
 	}
 
 	public function nieuw($lidjaar, $lidstatus) {

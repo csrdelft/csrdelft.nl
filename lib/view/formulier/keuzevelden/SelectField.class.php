@@ -48,6 +48,7 @@ class SelectField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
+
 		if ($this->groups) {
 			// flatten array
 			$options = array();
