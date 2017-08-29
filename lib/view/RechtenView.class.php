@@ -15,7 +15,6 @@ use CsrDelft\view\formulier\invoervelden\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
-use Exception;
 
 /**
  * RechtenView.class.php
@@ -62,7 +61,6 @@ class RechtenData extends DataTableResponse {
 	/**
 	 * @param AccessControl $ac
 	 * @return string
-	 * @throws Exception
 	 */
 	public function getJson($ac) {
 		$array = $ac->jsonSerialize();

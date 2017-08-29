@@ -2,11 +2,11 @@
 
 namespace CsrDelft\model\fotoalbum;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
-use Exception;
 
 class FotoModel extends PersistenceModel
 {
@@ -56,7 +56,7 @@ class FotoModel extends PersistenceModel
         if (!$this->exists($foto)) {
             $this->create($foto);
             if (false === @chmod($foto->getFullPath(), 0644)) {
-                throw new Exception('Geen eigenaar van foto: ' . htmlspecialchars($foto->getFullPath()));
+                throw new CsrException('Geen eigenaar van foto: ' . htmlspecialchars($foto->getFullPath()));
             }
         }
         if (!$foto->hasThumb()) {

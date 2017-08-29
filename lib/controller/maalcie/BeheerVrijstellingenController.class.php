@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\controller\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\maalcie\CorveeVrijstelling;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
@@ -9,7 +10,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\corvee\vrijstellingen\BeheerVrijstellingenView;
 use CsrDelft\view\maalcie\corvee\vrijstellingen\BeheerVrijstellingView;
 use CsrDelft\view\maalcie\forms\VrijstellingForm;
-use Exception;
 
 
 /**
@@ -64,7 +64,7 @@ class BeheerVrijstellingenController extends AclController {
 
 	public function bewerk($uid) {
 		if (!ProfielModel::existsUid($uid)) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
+			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		$vrijstelling = $this->model->getVrijstelling($uid);
 		$this->view = new VrijstellingForm($vrijstelling); // fetches POST values itself
@@ -85,7 +85,7 @@ class BeheerVrijstellingenController extends AclController {
 
 	public function verwijder($uid) {
 		if (!ProfielModel::existsUid($uid)) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
+			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		$this->model->verwijderVrijstelling($uid);
 		echo '<tr id="vrijstelling-row-' . $uid . '" class="remove"></tr>';

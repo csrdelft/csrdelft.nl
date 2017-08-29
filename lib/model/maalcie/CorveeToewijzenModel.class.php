@@ -1,15 +1,14 @@
 <?php
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;
-use Exception;
-
 
 /**
  * CorveeToewijzenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
+ *
  */
 class CorveeToewijzenModel {
 
@@ -20,7 +19,7 @@ class CorveeToewijzenModel {
 	 *
 	 * @param CorveeTaak $taak
 	 * @return array
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public static function getSuggesties(CorveeTaak $taak) {
 		$vrijstellingen = CorveeVrijstellingenModel::instance()->getAlleVrijstellingen(true); // grouped by uid
@@ -32,7 +31,7 @@ class CorveeToewijzenModel {
 				$uid = $kwali->uid;
 				$profiel = ProfielModel::get($uid); // false if lid does not exist
 				if (!$profiel) {
-					throw new Exception('Lid bestaat niet: $uid =' . $uid);
+					throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 				}
 				if (!$profiel->isLid()) {
 					continue; // geen oud-lid of overleden lid

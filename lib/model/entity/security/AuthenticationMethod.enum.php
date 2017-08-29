@@ -1,15 +1,15 @@
 <?php
 namespace CsrDelft\model\entity\security;
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * AuthenticationMethod.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Authentication methods for LoginSession.
- * 
+ *
  */
 abstract class AuthenticationMethod implements PersistentEnum {
 
@@ -30,7 +30,7 @@ abstract class AuthenticationMethod implements PersistentEnum {
 			case self::password_login: return 'Normal login';
 			case self::recent_password_login: return 'Confirm password';
 			case self::password_login_and_one_time_token: return 'Two-step verification (2SV)';
-			default: throw new Exception('AuthenticationMethod onbekend');
+			default: throw new CsrException('AuthenticationMethod onbekend');
 		}
 	}
 
@@ -42,7 +42,7 @@ abstract class AuthenticationMethod implements PersistentEnum {
 			case self::recent_password_login:
 			case self::password_login_and_one_time_token:
 				return strtoupper($option);
-			default: throw new Exception('AuthenticationMethod onbekend');
+			default: throw new CsrException('AuthenticationMethod onbekend');
 		}
 	}
 

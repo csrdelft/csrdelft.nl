@@ -1,15 +1,15 @@
 <?php
 namespace CsrDelft\model\entity\security;
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * AccessRole.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * RBAC MAC roles.
- * 
+ *
  * @see AccessModel
  */
 abstract class AccessRole implements PersistentEnum {
@@ -53,7 +53,7 @@ abstract class AccessRole implements PersistentEnum {
 			case self::Bestuur: return 'Bestuur-rechten';
 			case self::PubCie: return 'PubCie-rechten';
 			case self::Vlieger: return 'Vlieger-rechten';
-			default: throw new Exception('AccessRole onbekend');
+			default: throw new CsrException('AccessRole onbekend');
 		}
 	}
 
@@ -68,7 +68,7 @@ abstract class AccessRole implements PersistentEnum {
 			case self::Bestuur: return 'B';
 			case self::PubCie: return 'P';
 			case self::Vlieger: return 'V';
-			default: throw new Exception('AccessRole onbekend');
+			default: throw new CsrException('AccessRole onbekend');
 		}
 	}
 

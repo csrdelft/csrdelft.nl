@@ -1,12 +1,12 @@
 <?php
 namespace CsrDelft\view\formulier\uploadvelden;
+use CsrDelft\common\CsrException;
 use function CsrDelft\endsWith;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\model\entity\Map;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
-use Exception;
 
 /**
  * ExistingFileField.class.php
@@ -98,15 +98,15 @@ class ExistingFileField extends SelectField {
 		parent::opslaan($directory, $filename, $overwrite);
 		$copied = copy($this->model->directory . $this->model->filename, $directory . $filename);
 		if (!$copied) {
-			throw new Exception('Bestand kopieren mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
+			throw new CsrException('Bestand kopieren mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
 		if (false === @chmod($directory . $filename, 0644)) {
-			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($directory . $filename));
+			throw new CsrException('Geen eigenaar van bestand: ' . htmlspecialchars($directory . $filename));
 		}
 		if ($this->verplaats->getValue()) {
 			$moved = unlink($this->model->directory . $this->model->filename);
 			if (!$moved) {
-				throw new Exception('Verplaatsen mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
+				throw new CsrException('Verplaatsen mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 			}
 		}
 		$this->model->directory = $directory;

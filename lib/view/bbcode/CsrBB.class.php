@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\view\bbcode;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\Icon;
 use CsrDelft\model\bibliotheek\BiebBoek;
 use CsrDelft\model\documenten\DocumentModel;
@@ -39,7 +40,6 @@ use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
 use CsrDelft\view\mededelingen\MededelingenView;
 use CsrDelft\view\peilingen\PeilingView;
-use Exception;
 use function CsrDelft\email_like;
 use function CsrDelft\endsWith;
 use function CsrDelft\external_url;
@@ -570,7 +570,7 @@ HTML;
 			if (LidInstellingenModel::get($arguments['module'], $arguments['instelling']) == $testwaarde) {
 				return $content;
 			}
-		} catch (Exception $e) {
+		} catch (CsrException $e) {
 			return '[instelling]: ' . $e->getMessage();
 		}
 	}
@@ -997,7 +997,7 @@ HTML;
 		try {
 			$verticale = VerticalenModel::get($letter);
 			return '<a href="/verticalen#' . $verticale->letter . '">' . $verticale->naam . '</a>';
-		} catch (Exception $e) {
+		} catch (CsrException $e) {
 			return 'Verticale met letter=' . htmlspecialchars($letter) . ' bestaat niet. <a href="/verticalen">Zoeken</a>';
 		}
 	}
@@ -1023,7 +1023,7 @@ HTML;
 			}
 			$content = new BoekBBView($boek);
 			return $content->view();
-		} catch (Exception $e) {
+		} catch (CsrException $e) {
 			return '[boek] Boek [boekid:' . (int) $boekid . '] bestaat niet.';
 		}
 	}
@@ -1090,7 +1090,7 @@ HTML;
 					return '';
 				}
 			}
-		} catch (Exception $e) {
+		} catch (CsrException $e) {
 			if (strpos($e->getMessage(), 'Not found') !== false) {
 				return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 			}
@@ -1321,7 +1321,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 			}
 			$peilingcontent = new PeilingView($peiling);
 			return $peilingcontent->getHtml();
-		} catch (Exception $e) {
+		} catch (CsrException $e) {
 			return '[peiling] Er bestaat geen peiling met (id:' . (int) $peiling_id . ')';
 		}
 	}

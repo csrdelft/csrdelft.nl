@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\GoogleSync;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
@@ -26,7 +27,6 @@ use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\profiel\ProfielView;
 use CsrDelft\view\StamboomView;
-use Exception;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
 use function CsrDelft\startsWith;
@@ -202,7 +202,7 @@ class ProfielController extends AclController {
 			$gSync = GoogleSync::instance();
 			$msg = $gSync->syncLid($profiel);
 			setMelding('Opgeslagen in Google Contacts: ' . $msg, 1);
-		} catch (Exception $e) {
+		} catch (CsrException $e) {
 			setMelding("Opslaan in Google Contacts mislukt: " . $e->getMessage(), -1);
 		}
 		redirect(CSR_ROOT . '/profiel/' . $profiel->uid);

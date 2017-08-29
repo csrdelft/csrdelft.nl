@@ -1,12 +1,13 @@
 <?php
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeRepetitie;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
-use Exception;
 use PDOStatement;
 
 
@@ -108,7 +109,7 @@ class CorveeTakenModel extends PersistenceModel {
 		$taak = $this->retrieveByPrimaryKey(array($tid));
 		/** @var CorveeTaak $taak */
 		if ($taak->verwijderd) {
-			throw new Exception('Maaltijd is verwijderd');
+			throw new CsrGebruikerException('Maaltijd is verwijderd');
 		}
 		return $taak;
 	}
@@ -120,14 +121,14 @@ class CorveeTakenModel extends PersistenceModel {
 	 * @param int $tot Timestamp
 	 * @param bool $iedereen
 	 * @return CorveeTaak[]
-	 * @throws Exception
+	 * @throws CsrException
 	 */
 	public function getTakenVoorAgenda($van, $tot, $iedereen = false) {
 		if (!is_int($van)) {
-			throw new Exception('Invalid timestamp: $van getTakenVoorAgenda()');
+			throw new CsrException('Invalid timestamp: $van getTakenVoorAgenda()');
 		}
 		if (!is_int($tot)) {
-			throw new Exception('Invalid timestamp: $tot getTakenVoorAgenda()');
+			throw new CsrException('Invalid timestamp: $tot getTakenVoorAgenda()');
 		}
 		$where = 'verwijderd = FALSE AND datum >= ? AND datum <= ?';
 		$values = array(date('Y-m-d', $van), date('Y-m-d', $tot));
@@ -195,7 +196,7 @@ class CorveeTakenModel extends PersistenceModel {
 		/** @var CorveeTaak $taak */
 		$taak = $this->retrieveByPrimaryKey(array($tid));
 		if (!$taak->verwijderd) {
-			throw new Exception('Corveetaak is niet verwijderd');
+			throw new CsrGebruikerException('Corveetaak is niet verwijderd');
 		}
 		$taak->verwijderd = false;
 		$this->update($taak);
@@ -287,11 +288,11 @@ class CorveeTakenModel extends PersistenceModel {
 	 * @param int $mid
 	 * @param bool $verwijderd
 	 * @return PDOStatement|CorveeTaak[]
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public function getTakenVoorMaaltijd($mid, $verwijderd = false) {
 		if (!is_int($mid) || $mid <= 0) {
-			throw new Exception('Load taken voor maaltijd faalt: Invalid $mid =' . $mid);
+			throw new CsrGebruikerException('Load taken voor maaltijd faalt: Invalid $mid =' . $mid);
 		}
 		if ($verwijderd) {
 			return $this->find('maaltijd_id = ?', array($mid));
@@ -304,7 +305,6 @@ class CorveeTakenModel extends PersistenceModel {
 	 *
 	 * @param int $mid
 	 * @return bool
-	 * @throws Exception
 	 */
 	public function existMaaltijdCorvee($mid) {
 		return $this->count('maaltijd_id = ?', array($mid)) > 0;
@@ -332,7 +332,6 @@ class CorveeTakenModel extends PersistenceModel {
 	 *
 	 * @param int $fid
 	 * @return bool
-	 * @throws Exception
 	 */
 	public function existFunctieTaken($fid) {
 		return $this->count('functie_id = ?', array($fid)) > 0;
@@ -342,7 +341,7 @@ class CorveeTakenModel extends PersistenceModel {
 
 	public function maakRepetitieTaken(CorveeRepetitie $repetitie, $beginDatum, $eindDatum, $mid = null) {
 		if ($repetitie->periode_in_dagen < 1) {
-			throw new Exception('New repetitie-taken faalt: $periode =' . $repetitie->periode_in_dagen);
+			throw new CsrGebruikerException('New repetitie-taken faalt: $periode =' . $repetitie->periode_in_dagen);
 		}
 
 		return Database::transaction(function () use ($repetitie, $beginDatum, $eindDatum, $mid) {
@@ -388,7 +387,6 @@ class CorveeTakenModel extends PersistenceModel {
 	 *
 	 * @param int $crid
 	 * @return bool
-	 * @throws Exception
 	 */
 	public function existRepetitieTaken($crid) {
 		return $this->count('crv_repetitie_id = ?', array($crid)) > 0;

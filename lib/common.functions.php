@@ -770,3 +770,24 @@ function errorName($type) {
 		return 'Onbekende fout ' . strval($type);
 	}
 }
+
+/**
+ * @param string $voornaam
+ * @param string $achternaam
+ *
+ * @return string
+ */
+function aaidrom($voornaam, $achternaam) {
+	$voornaam = strtolower($voornaam);
+	$achternaam = strtolower($achternaam);
+
+	$voor = array();
+	preg_match('/^([^aeiuoy]*)(.*)$/', $voornaam, $voor);
+	$achter = array();
+	preg_match('/^([^aeiuoy]*)(.*)$/', $achternaam, $achter);
+
+	$nwvoor = ucwords($achter[1] . $voor[2]);
+	$nwachter = ucwords($voor[1] . $achter[2]);
+
+	return sprintf("%s %s%s", $nwvoor, !empty($this->tussenvoegsel) ? $this->tussenvoegsel . ' ' : '', $nwachter);
+}

@@ -6,7 +6,6 @@ use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
-use Exception;
 
 require_once 'common.functions.php';
 
@@ -327,7 +326,7 @@ class LidZoeker {
 			try {
 				//FIXME: $groep = new OldGroep(substr($zoekterm, 6));
 				$uids = array_keys($groep->getLeden());
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				//care.
 			}
 			$query = "uid IN('" . implode("','", $uids) . "') ";

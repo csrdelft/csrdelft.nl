@@ -1,7 +1,7 @@
 <?php
 namespace CsrDelft\model\bibliotheek;
+use CsrDelft\common\CsrException;
 use CsrDelft\MijnSqli;
-use Exception;
 
 /**
  * BiebRubriek.class.php	| 	Gerrit Uitslag
@@ -37,7 +37,7 @@ class BiebRubriek {
 				$this->id = $categorie['id'];
 				$this->rubriek = array($categorie['cat1'], $categorie['cat2']);
 			} else {
-				throw new Exception('__contruct() mislukt. Bestaat de rubriek wel? ' . $db->error());
+				throw new CsrException('__contruct() mislukt. Bestaat de rubriek wel? ' . $db->error());
 			}
 		}
 	}
@@ -64,8 +64,8 @@ class BiebRubriek {
 
 	/*
 	 * geeft alle rubrieken
-	 * 
-	 * @param 	$samenvoegen 	true:geeft een string, 
+	 *
+	 * @param 	$samenvoegen 	true:geeft een string,
 	 * 							false: raw array
 	 * 			$short		true:array with rubriekids as key
 	 * 						false: array with subarray('id'=> int, 'cat' => 'string')
@@ -109,7 +109,7 @@ class BiebRubriek {
 
 	/*
 	 * geeft alle rubriekids
-	 * 
+	 *
 	 * @return	array met id's
 	 * 			of een lege array
 	 */

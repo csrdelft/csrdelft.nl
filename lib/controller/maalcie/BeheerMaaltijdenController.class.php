@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\controller\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
@@ -20,7 +21,6 @@ use CsrDelft\view\maalcie\beheer\PrullenbakMaaltijdenTable;
 use CsrDelft\view\maalcie\forms\AanmeldingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdForm;
 use CsrDelft\view\maalcie\forms\RepetitieMaaltijdenForm;
-use Exception;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
 
@@ -143,7 +143,7 @@ class BeheerMaaltijdenController extends AclController {
 		$maaltijd = $this->model->getMaaltijd($mid);
 
 		if ($maaltijd->verwerkt) {
-			throw new Exception('Maaltijd al verwerkt');
+			throw new CsrGebruikerException('Maaltijd al verwerkt');
 		}
 
 		if ($maaltijd->gesloten) {
@@ -274,7 +274,7 @@ class BeheerMaaltijdenController extends AclController {
 			$values = $form->getValues();
 			$maaltijden = $this->model->maakRepetitieMaaltijden($repetitie, strtotime($values['begindatum']), strtotime($values['einddatum']));
 			if (empty($maaltijden)) {
-				throw new Exception('Geen nieuwe maaltijden aangemaakt');
+				throw new CsrGebruikerException('Geen nieuwe maaltijden aangemaakt.');
 			}
 			$this->view = new BeheerMaaltijdenLijst($maaltijden);
 		} else {

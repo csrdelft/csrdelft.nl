@@ -2,8 +2,8 @@
 
 namespace CsrDelft\model\entity\fiscaat;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * SaldoCommissie.enum.php
@@ -27,7 +27,7 @@ abstract class SaldoCommissie implements PersistentEnum {
 			case self::MaalCie:
 				return 'maalcie';
 			default:
-				throw new Exception('Commissie onbekend');
+				throw new CsrException('Commissie onbekend');
 		}
 	}
 
@@ -38,7 +38,7 @@ abstract class SaldoCommissie implements PersistentEnum {
 			case self::MaalCie:
 				return 'M';
 			default:
-				throw new Exception('Commissie onbekend');
+				throw new CsrException('Commissie onbekend');
 		}
 	}
 

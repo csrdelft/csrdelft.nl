@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
@@ -10,7 +11,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementenLijstView;
 use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementenView;
 use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementView;
-use Exception;
 use function CsrDelft\setMelding;
 
 
@@ -82,7 +82,7 @@ class BeheerAbonnementenController extends AclController {
 
 	public function inschakelen($mrid, $uid) {
 		if (!ProfielModel::existsUid($uid)) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
+			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat nie.', $uid));
 		}
 		$abo = new MaaltijdAbonnement();
 		$abo->mlt_repetitie_id = $mrid;
@@ -97,7 +97,7 @@ class BeheerAbonnementenController extends AclController {
 
 	public function uitschakelen($mrid, $uid) {
 		if (!ProfielModel::existsUid($uid)) {
-			throw new Exception('Lid bestaat niet: $uid =' . $uid);
+			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		$abo_aantal = $this->model->uitschakelenAbonnement((int)$mrid, $uid);
 		$this->view = new BeheerAbonnementView($abo_aantal[0]);

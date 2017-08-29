@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\view\maalcie\forms;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
@@ -11,16 +12,14 @@ use CsrDelft\view\formulier\keuzevelden\DateField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
-use Exception;
-
 
 /**
  * TaakForm.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Formulier voor een nieuwe of te bewerken corveetaak.
- * 
+ *
  */
 class TaakForm extends ModalForm {
 
@@ -68,7 +67,7 @@ class TaakForm extends ModalForm {
 		if (is_int($fields['mid']->getValue())) {
 			try {
 				MaaltijdenModel::instance()->getMaaltijd($fields['mid']->getValue(), true);
-			} catch (Exception $e) {
+			} catch (CsrGebruikerException $e) {
 				$fields['mid']->error = 'Maaltijd bestaat niet.';
 				$valid = false;
 			}

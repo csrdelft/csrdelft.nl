@@ -1,12 +1,11 @@
 <?php
 namespace CsrDelft\view\formulier\uploadvelden;
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
 use function CsrDelft\url_like;
 use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\formulier\UrlDownloader;
-use Exception;
-
 
 /**
  * DownloadUrlField.class.php
@@ -43,7 +42,7 @@ class DownloadUrlField extends UrlField {
 			$clean_name = preg_replace('/[^a-zA-Z0-9\s\.\-\_]/', '', $url_name);
 			$this->tmp_file = TMP_PATH . $clean_name;
 			if (!is_writable(TMP_PATH)) {
-				throw new Exception('TMP_PATH is niet beschrijfbaar');
+				throw new CsrException('TMP_PATH is niet beschrijfbaar');
 			}
 			$filesize = file_put_contents($this->tmp_file, $data);
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -88,14 +87,14 @@ class DownloadUrlField extends UrlField {
 		parent::opslaan($directory, $filename, $overwrite);
 		$copied = copy($this->model->directory . $this->model->filename, $directory . $filename);
 		if (!$copied) {
-			throw new Exception('Bestand kopieren mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
+			throw new CsrException('Bestand kopieren mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
 		$moved = unlink($this->model->directory . $this->model->filename);
 		if (!$moved) {
-			throw new Exception('Verplaatsen mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
+			throw new CsrException('Verplaatsen mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
 		if (false === @chmod($directory . $filename, 0644)) {
-			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($directory . $filename));
+			throw new CsrException('Geen eigenaar van bestand: ' . htmlspecialchars($directory . $filename));
 		}
 		$this->model->directory = $directory;
 		$this->model->filename = $filename;

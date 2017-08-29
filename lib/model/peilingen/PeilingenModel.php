@@ -1,12 +1,12 @@
 <?php
 namespace CsrDelft\model\peilingen;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\model\entity\peilingen\PeilingStem;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
-use Exception;
 use function CsrDelft\setMelding;
 
 
@@ -88,7 +88,7 @@ class PeilingenModel extends PersistenceModel {
 			try {
 				PeilingStemmenModel::instance()->create($stem);
 				PeilingOptiesModel::instance()->update($optie);
-			} catch (Exception $e) {
+			} catch (CsrGebruikerException $e) {
 				setMelding($e->getMessage(), -1);
 			}
 		} else {
@@ -100,12 +100,12 @@ class PeilingenModel extends PersistenceModel {
 	 * @param Peiling $entity
 	 *
 	 * @return string
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public function validate(Peiling $entity) {
 		$errors = '';
 		if ($entity == null) {
-			throw new Exception('Peiling is leeg');
+			throw new CsrGebruikerException('Peiling is leeg');
 		}
 		if (trim($entity->tekst) == '') {
 			$errors .= 'Tekst mag niet leeg zijn.<br />';

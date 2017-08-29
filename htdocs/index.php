@@ -6,6 +6,8 @@
  *
  * Entry point voor stek modules.
  */
+
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
@@ -45,7 +47,15 @@ switch ($class) {
 $namespacedClassName = 'CsrDelft\\controller\\' . $class . 'Controller';
 /** @var Controller $controller */
 $controller = new $namespacedClassName(REQUEST_URI);
-$controller->performAction();
+
+try {
+	$controller->performAction();
+} catch (CsrGebruikerException $exception) {
+	http_response_code(400);
+	echo $exception->getMessage();
+	exit;
+}
+
 
 if (DB_CHECK AND LoginModel::mag('P_ADMIN')) {
 

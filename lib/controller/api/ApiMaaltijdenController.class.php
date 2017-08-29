@@ -4,7 +4,6 @@ namespace CsrDelft\controller\api;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
-use Exception;
 use \Jacwright\RestServer\RestException;
 
 class ApiMaaltijdenController {
@@ -25,7 +24,7 @@ class ApiMaaltijdenController {
 			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($id);
 			$aanmelding = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($maaltijd, $_SESSION['_uid'], $_SESSION['_uid']);
 			return array('data' => $aanmelding->maaltijd);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			throw new RestException(403, $e->getMessage());
 		}
 	}
@@ -39,7 +38,7 @@ class ApiMaaltijdenController {
 			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($id);
 			MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($maaltijd, $_SESSION['_uid']);
 			return array('data' => $maaltijd);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			throw new RestException(403, $e->getMessage());
 		}
 	}

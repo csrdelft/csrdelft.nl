@@ -1,13 +1,13 @@
 <?php
 namespace CsrDelft\model\entity;
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * Kringleider.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 abstract class Kringleider implements PersistentEnum {
 
@@ -24,7 +24,7 @@ abstract class Kringleider implements PersistentEnum {
 			case self::Ouderejaars: return 'Ouderejaarskring';
 			case self::Eerstejaars: return 'Eerstejaarskring';
 			case self::Nee: return 'Nee';
-			default: throw new Exception('Kringleider onbekend');
+			default: throw new CsrException('Kringleider onbekend');
 		}
 	}
 
@@ -33,7 +33,7 @@ abstract class Kringleider implements PersistentEnum {
 			case self::Ouderejaars: return 'O';
 			case self::Eerstejaars: return 'E';
 			case self::Nee: return '-';
-			default: throw new Exception('Kringleider onbekend');
+			default: throw new CsrException('Kringleider onbekend');
 		}
 	}
 

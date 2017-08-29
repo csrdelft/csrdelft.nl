@@ -1,10 +1,10 @@
 <?php
 namespace CsrDelft\model\forum;
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadVolgen;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
-use Exception;
 
 /**
  * ForumDradenVolgenModel.class.php
@@ -48,7 +48,7 @@ class ForumDradenVolgenModel extends CachedPersistenceModel {
 		} elseif ($this->getVolgenVoorLid($draad)) {
 			$rowCount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
 			if ($rowCount !== 1) {
-				throw new Exception('Volgen stoppen mislukt');
+				throw new CsrException('Volgen stoppen mislukt');
 			}
 		}
 	}

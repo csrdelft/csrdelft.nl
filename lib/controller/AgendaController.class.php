@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\agenda\AgendaVerbergenModel;
@@ -18,7 +19,6 @@ use CsrDelft\view\agenda\AgendaMaandView;
 use CsrDelft\view\agenda\AgendeerbaarMaandView;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
-use Exception;
 use function CsrDelft\setMelding;
 
 
@@ -193,7 +193,7 @@ class AgendaController extends AclController {
 				break;
 
 			default:
-				throw new Exception('invalid UUID');
+				throw new CsrException('invalid UUID');
 		}
 		/** @var Agendeerbaar $item */
 		AgendaVerbergenModel::instance()->toggleVerbergen($item);

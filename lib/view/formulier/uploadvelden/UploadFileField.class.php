@@ -1,12 +1,12 @@
 <?php
 namespace CsrDelft\view\formulier\uploadvelden;
 
+use CsrDelft\common\CsrException;
 use function CsrDelft\format_filesize;
 use function CsrDelft\getMaximumFileUploadSize;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\view\formulier\invoervelden\InputField;
-use Exception;
 
 /**
  * UploadFileField.class.php
@@ -73,10 +73,10 @@ class UploadFileField extends InputField {
 		parent::opslaan($directory, $filename, $overwrite);
 		$moved = @move_uploaded_file($this->value['tmp_name'], $directory . $filename);
 		if (!$moved) {
-			throw new Exception('Verplaatsen mislukt: ' . htmlspecialchars($this->value['tmp_name']));
+			throw new CsrException('Verplaatsen mislukt: ' . htmlspecialchars($this->value['tmp_name']));
 		}
 		if (false === @chmod($directory . $filename, 0644)) {
-			throw new Exception('Geen eigenaar van bestand: ' . htmlspecialchars($directory . $filename));
+			throw new CsrException('Geen eigenaar van bestand: ' . htmlspecialchars($directory . $filename));
 		}
 		$this->model->directory = $directory;
 		$this->model->filename = $filename;

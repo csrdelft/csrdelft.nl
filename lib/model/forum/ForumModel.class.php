@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\model\forum;
 
+use CsrDelft\common\CsrGebruikerException;
 use function CsrDelft\getDateTime;
 use function CsrDelft\group_by;
 use CsrDelft\model\entity\forum\ForumCategorie;
@@ -9,16 +10,12 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
-use Exception;
 use PDO;
-
-
 
 /**
  * ForumModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
  */
 class ForumModel extends CachedPersistenceModel {
 
@@ -45,14 +42,14 @@ class ForumModel extends CachedPersistenceModel {
 	public static function get($id) {
 		$categorie = static::instance()->retrieveByPrimaryKey(array($id));
 		if (!$categorie) {
-			throw new Exception('Forum-categorie bestaat niet!');
+			throw new CsrGebruikerException('Forum-categorie bestaat niet!');
 		}
 		return $categorie;
 	}
 
 	/**
 	 * Eager loading of ForumDeel[].
-	 * 
+	 *
 	 * @return ForumCategorie[]
 	 */
 	public function getForumIndelingVoorLid() {

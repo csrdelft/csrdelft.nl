@@ -1,10 +1,10 @@
 <?php
 namespace CsrDelft\view\formulier\uploadvelden;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\model\entity\Map;
 use CsrDelft\view\formulier\keuzevelden\RadioField;
-use Exception;
 
 /**
  * FileField.class.php
@@ -63,7 +63,7 @@ class FileField extends RadioField {
 
 	public function getUploader() {
 		if (!isset($this->uploaders[$this->value])) {
-			throw new Exception('Upload method not available: ' . htmlspecialchars($this->value));
+			throw new CsrException('Upload method not available: ' . htmlspecialchars($this->value));
 		}
 		return $this->uploaders[$this->value];
 	}

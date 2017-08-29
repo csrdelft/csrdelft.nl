@@ -5,7 +5,6 @@ namespace CsrDelft;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
-use Exception;
 use Maknz\Slack\Client as SlackClient;
 
 /**
@@ -146,7 +145,7 @@ MD
      * @param null $exception
      */
     public static function stacktraceHandler($exception = null) {
-        if ($exception instanceof Exception) {
+        if ($exception instanceof \Exception) {
             if ((defined('DEBUG') && DEBUG) || LoginModel::mag('P_LOGGED_IN')) {
                 echo str_replace('#', '<br />#', $exception); // stacktrace
                 printDebug();

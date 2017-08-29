@@ -14,12 +14,12 @@ $barsysteem = new Barsysteem();
 if ($barsysteem->isLoggedIn()){
 
 	/* Start beheer */
-		
+
 	if(isset($_POST["update_person"])) {
 		echo $barsysteem->updatePerson($_POST['id'], $_POST['name']);
 	}
 
-	if($barsysteem->isBeheer()) {		
+	if($barsysteem->isBeheer()) {
 		// Get grootboekinvoer
 		if(isset($_GET['q']) && $_GET['q'] == 'grootboek') {
 			echo json_encode($barsysteem->getGrootboekInvoer());
@@ -27,10 +27,10 @@ if ($barsysteem->isLoggedIn()){
 		if(isset($_GET['q']) && $_GET['q'] == 'tools') {
 			echo json_encode($barsysteem->getToolData());
 		}
-        if(isset($_POST["add_product"])) {
-            echo $barsysteem->addProduct($_POST['name'], $_POST['price'], $_POST['grootboekId']);
-        }
-		if(isset($_POST['q']) && $_POST['q'] == 'updatePrice') {
+		if (isset($_POST["add_product"])) {
+			echo $barsysteem->addProduct($_POST['name'], $_POST['price'], $_POST['grootboekId']);
+		}
+		if (isset($_POST['q']) && $_POST['q'] == 'updatePrice') {
 			echo $barsysteem->updatePrice($_POST['productId'], $_POST['price']);
 		}
 		if(isset($_POST['q']) && $_POST['q'] == 'updateVisibility') {
@@ -43,7 +43,7 @@ if ($barsysteem->isLoggedIn()){
 			echo $barsysteem->removePerson($_POST['id']);
 		}
 	}
-	
+
 	/* Einde beheer */
 
 	// Get persons
@@ -67,24 +67,24 @@ if ($barsysteem->isLoggedIn()){
             echo $barsysteem->verwerkBestelling(json_decode($_POST["bestelling"]));
         }
     }
-	
+
 	// Get saldo
     if (isset($_POST["saldoSocCieId"])) {
         echo $barsysteem->getSaldo($_POST["saldoSocCieId"]);
     }
-	
+
 	// Remove order
     if (isset($_POST["verwijderBestelling"])) {
 		$barsysteem->log('remove', $_POST);
         echo $barsysteem->verwijderBestelling(json_decode($_POST["verwijderBestelling"]));
     }
-	
+
 	// Undo remove order
     if (isset($_POST["undoVerwijderBestelling"])) {
 		$barsysteem->log('remove', $_POST);
         echo $barsysteem->undoVerwijderBestelling(json_decode($_POST["undoVerwijderBestelling"]));
     }
-	
+
 	// Load orders
     if (isset($_POST["laadLaatste"])) {
         echo json_encode($barsysteem->getBestellingLaatste($_POST["aantal"], $_POST["begin"], $_POST["eind"], isset($_POST['productType']) ? $_POST['productType'] : array()));

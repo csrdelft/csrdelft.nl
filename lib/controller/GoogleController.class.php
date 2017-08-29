@@ -2,12 +2,12 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\GoogleSync;
 use CsrDelft\model\entity\GoogleToken;
 use CsrDelft\model\GoogleTokenModel;
 use CsrDelft\model\security\LoginModel;
-use Exception;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
 
@@ -62,6 +62,6 @@ class GoogleController extends AclController {
 			redirect($state);
 		}
 
-		throw new Exception('Geen error en geen code van Google gekregen.');
+		throw new CsrException('Geen error en geen code van Google gekregen.');
 	}
 }

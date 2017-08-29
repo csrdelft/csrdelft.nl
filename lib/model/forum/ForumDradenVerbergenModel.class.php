@@ -1,10 +1,10 @@
 <?php
 namespace CsrDelft\model\forum;
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadVerbergen;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
-use Exception;
 
 /**
  * ForumDradenVerbergenModel.class.php
@@ -44,7 +44,7 @@ class ForumDradenVerbergenModel extends CachedPersistenceModel {
 		} elseif ($this->getVerbergenVoorLid($draad)) {
 			$rowCount = $this->deleteByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
 			if ($rowCount !== 1) {
-				throw new Exception('Weer tonen mislukt');
+				throw new CsrException('Weer tonen mislukt');
 			}
 		}
 	}

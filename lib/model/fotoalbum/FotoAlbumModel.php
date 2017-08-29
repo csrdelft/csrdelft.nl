@@ -1,6 +1,8 @@
 <?php
 namespace CsrDelft\model\fotoalbum;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
@@ -9,7 +11,6 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
-use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use function CsrDelft\debugprint;
@@ -32,13 +33,13 @@ class FotoAlbumModel extends PersistenceModel {
 	/**
 	 * @param PersistentEntity|FotoAlbum $album
 	 * @return string
-	 * @throws Exception
+	 * @throws CsrException
 	 */
 	public function create(PersistentEntity $album) {
 		if (!file_exists($album->path)) {
 			mkdir($album->path);
 			if (false === @chmod($album->path, 0755)) {
-				throw new Exception('Geen eigenaar van album: ' . htmlspecialchars($album->path));
+				throw new CsrException('Geen eigenaar van album: ' . htmlspecialchars($album->path));
 			}
 		}
 		$album->owner = LoginModel::getUid();
@@ -105,7 +106,7 @@ class FotoAlbumModel extends PersistenceModel {
 						$this->create($album);
 					}
 					if (false === @chmod($path, 0755)) {
-						throw new Exception('Geen eigenaar van album: ' . $path);
+						throw new CsrException('Geen eigenaar van album: ' . $path);
 					}
 				}
 				// Foto
@@ -119,14 +120,14 @@ class FotoAlbumModel extends PersistenceModel {
 					$album = new FotoAlbum(dirname($path));
 					$foto = new Foto($filename, $album, true);
 					if (!$foto->exists()) {
-						throw new Exception('Foto bestaat niet: ' . $foto->directory . $foto->filename);
+						throw new CsrException('Foto bestaat niet: ' . $foto->directory . $foto->filename);
 					}
 					FotoModel::instance()->verwerkFoto($foto);
 					if (false === @chmod($path, 0644)) {
-						throw new Exception('Geen eigenaar van foto: ' . $path);
+						throw new CsrException('Geen eigenaar van foto: ' . $path);
 					}
 				}
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				$errors++;
 				if (defined('RESIZE_OUTPUT')) {
 					debugprint($e->getMessage());
@@ -156,23 +157,23 @@ HTML;
 
 	public function hernoemAlbum(FotoAlbum $album, $newName) {
 		if (!valid_filename($newName)) {
-			throw new Exception('Ongeldige naam');
+			throw new CsrGebruikerException('Ongeldige naam');
 		}
 		// controleer rechten
 		$oldDir = $album->subdir;
 		if (false === @chmod(PHOTOS_PATH . $oldDir, 0755)) {
-			throw new Exception('Geen eigenaar van album: ' . htmlspecialchars(PHOTOS_PATH . $oldDir));
+			throw new CsrException('Geen eigenaar van album: ' . htmlspecialchars(PHOTOS_PATH . $oldDir));
 		}
 
 		// nieuwe subdir op basis van path
 		$newDir = dirname($oldDir) . '/' . $newName . '/';
 		if (false === @rename($album->path, PHOTOS_PATH . $newDir)) {
 			$error = error_get_last();
-			throw new Exception($error['message']);
+			throw new CsrException($error['message']);
 		}
 		// controleer rechten
 		if (false === @chmod(PHOTOS_PATH . $newDir, 0755)) {
-			throw new Exception('Geen eigenaar van album: ' . htmlspecialchars(PHOTOS_PATH . $newDir));
+			throw new CsrException('Geen eigenaar van album: ' . htmlspecialchars(PHOTOS_PATH . $newDir));
 		}
 
 		// database in sync houden

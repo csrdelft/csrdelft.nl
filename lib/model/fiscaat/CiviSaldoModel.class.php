@@ -1,12 +1,12 @@
 <?php
 namespace CsrDelft\model\fiscaat;
 
+use CsrDelft\common\CsrGebruikerException;
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\model\entity\fiscaat\CiviSaldoLogEnum;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
-use Exception;
 
 /**
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -56,18 +56,18 @@ class CiviSaldoModel extends PersistenceModel {
 	 * @param string $uid
 	 * @param int $bedrag
 	 * @return int Nieuwe saldo
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public function ophogen($uid, $bedrag) {
 		if ($bedrag < 0) {
-			throw new Exception( 'Kan niet ophogen met een negatief bedrag');
+			throw new CsrGebruikerException( 'Kan niet ophogen met een negatief bedrag');
 		}
 
 		/** @var CiviSaldo $saldo */
 		$saldo = $this->find('uid = ?', array($uid))->fetch();
 
 		if (!$saldo) {
-			throw new Exception('Lid heeft geen CiviSaldo');
+			throw new CsrGebruikerException('Lid heeft geen CiviSaldo');
 		}
 
 		$saldo->saldo += $bedrag;
@@ -81,18 +81,18 @@ class CiviSaldoModel extends PersistenceModel {
 	 * @param string $uid
 	 * @param int $bedrag
 	 * @return int Nieuwe saldo
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public function verlagen($uid, $bedrag) {
 		if ($bedrag < 0) {
-			throw new Exception('Kan niet verlagen met een negatief bedrag');
+			throw new CsrGebruikerException('Kan niet verlagen met een negatief bedrag');
 		}
 
 		/** @var CiviSaldo $saldo */
 		$saldo = $this->find('uid = ?', array($uid))->fetch();
 
 		if (!$saldo) {
-			throw new Exception('Lid heeft geen Civisaldo');
+			throw new CsrGebruikerException('Lid heeft geen Civisaldo');
 		}
 
 		$saldo->saldo -= $bedrag;
@@ -105,11 +105,11 @@ class CiviSaldoModel extends PersistenceModel {
 	/**
 	 * @param PersistentEntity|CiviSaldo $entity
 	 * @return int
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public function delete(PersistentEntity $entity) {
 		if ($entity->saldo !== 0) {
-			throw new Exception("Kan CiviSaldo niet verwijderen: Saldo ongelijk aan nul.");
+			throw new CsrGebruikerException("Kan CiviSaldo niet verwijderen: Saldo ongelijk aan nul.");
 		}
 		CiviSaldoLogModel::instance()->log(CiviSaldoLogEnum::DELETE_SALDO, $entity);
 		return parent::delete($entity);
