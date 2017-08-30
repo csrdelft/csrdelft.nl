@@ -773,11 +773,12 @@ function errorName($type) {
 
 /**
  * @param string $voornaam
+ * @param string $tussenvoegsel
  * @param string $achternaam
  *
  * @return string
  */
-function aaidrom($voornaam, $achternaam) {
+function aaidrom($voornaam, $tussenvoegsel, $achternaam) {
 	$voornaam = strtolower($voornaam);
 	$achternaam = strtolower($achternaam);
 
@@ -789,5 +790,5 @@ function aaidrom($voornaam, $achternaam) {
 	$nwvoor = ucwords($achter[1] . $voor[2]);
 	$nwachter = ucwords($voor[1] . $achter[2]);
 
-	return sprintf("%s %s%s", $nwvoor, !empty($this->tussenvoegsel) ? $this->tussenvoegsel . ' ' : '', $nwachter);
+	return sprintf("%s %s%s", $nwvoor, !empty($tussenvoegsel) ? $tussenvoegsel . ' ' : '', $nwachter);
 }

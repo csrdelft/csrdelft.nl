@@ -537,7 +537,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				break;
 
 			case 'aaidrom': // voor een 1 aprilgrap ooit
-				$naam = aaidrom($this->voornaam, $this->achternaam);
+				$naam = aaidrom($this->voornaam, $this->tussenvoegsel, $this->achternaam);
 				break;
 
 			default:
