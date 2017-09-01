@@ -600,25 +600,6 @@ class GoogleSync {
 		$email->setAttribute('primary', 'true');
 		$entry->appendChild($email);
 
-		if ($this->extendedExport) {
-			// add IM adresses.
-			$ims = array(
-				array('msn', 'http://schemas.google.com/g/2005#MSN'),
-				array('skype', 'http://schemas.google.com/g/2005#SKYPE'),
-				array('icq', 'http://schemas.google.com/g/2005#ICQ'),
-				array('jid', 'http://schemas.google.com/g/2005#JABBER')
-			);
-			foreach ($ims as $im) {
-				if ($profiel->$im[0] != '') {
-					$imEntry = $doc->createElement('gd:im');
-					$imEntry->setAttribute('address', $profiel->$im[0]);
-					$imEntry->setAttribute('protocol', $im[1]);
-					$imEntry->setAttribute('rel', 'http://schemas.google.com/g/2005#home');
-					$entry->appendChild($imEntry);
-				}
-			}
-		}
-
 		//phone numbers
 		$telefoons = array();
 
