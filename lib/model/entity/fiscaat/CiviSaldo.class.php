@@ -26,7 +26,7 @@ class CiviSaldo extends PersistentEntity {
 	protected static $persistent_attributes = [
 		'id' => array(T::Integer, false, 'auto_increment'),
 		'uid' => array(T::UID),
-		'naam' => array(T::Text, true),
+		'naam' => array(T::Text),
 		'saldo' => array(T::Integer),
 		'laatst_veranderd' => array(T::Timestamp),
 		'deleted' => array(T::Boolean),

@@ -36,6 +36,7 @@ class CiviSaldoModel extends PersistenceModel {
 	public function maakSaldo($uid) {
 		$saldo = new Civisaldo();
 		$saldo->uid = $uid;
+		$saldo->naam = '';
 		$saldo->saldo = 0;
 		$saldo->laatst_veranderd = getDateTime();
 		$this->create($saldo);
