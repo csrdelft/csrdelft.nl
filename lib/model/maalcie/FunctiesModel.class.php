@@ -1,18 +1,17 @@
 <?php
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use function CsrDelft\group_by_distinct;
 use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\CachedPersistenceModel;
-use Exception;
-
 
 /**
  * FunctiesModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class FunctiesModel extends CachedPersistenceModel {
 
@@ -23,7 +22,7 @@ class FunctiesModel extends CachedPersistenceModel {
 
 	/**
 	 * Lazy loading of kwalificaties.
-	 * 
+	 *
 	 * @param int $fid
 	 * @return CorveeFunctie
 	 */
@@ -33,7 +32,7 @@ class FunctiesModel extends CachedPersistenceModel {
 
 	/**
 	 * Optional eager loading of kwalificaties.
-	 * 
+	 *
 	 * @param boolean $load_kwalificaties
 	 * @return CorveeFunctie[]
 	 */
@@ -49,13 +48,13 @@ class FunctiesModel extends CachedPersistenceModel {
 
 	public function removeFunctie(CorveeFunctie $functie) {
 		if (CorveeTakenModel::instance()->existFunctieTaken($functie->functie_id)) {
-			throw new Exception('Verwijder eerst de bijbehorende corveetaken!');
+			throw new CsrGebruikerException('Verwijder eerst de bijbehorende corveetaken!');
 		}
 		if (CorveeRepetitiesModel::instance()->existFunctieRepetities($functie->functie_id)) {
-			throw new Exception('Verwijder eerst de bijbehorende corveerepetities!');
+			throw new CsrGebruikerException('Verwijder eerst de bijbehorende corveerepetities!');
 		}
 		if ($functie->hasKwalificaties()) {
-			throw new Exception('Verwijder eerst de bijbehorende kwalificaties!');
+			throw new CsrGebruikerException('Verwijder eerst de bijbehorende kwalificaties!');
 		}
 		return $this->delete($functie);
 	}

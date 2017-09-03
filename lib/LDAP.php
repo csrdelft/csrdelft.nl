@@ -12,7 +12,7 @@ namespace CsrDelft;
 # van de ldap_escape_(dn|attribute) functies!
 # -------------------------------------------------------------------
 
-use Exception;
+use CsrDelft\common\CsrException;
 
 class LDAP {
 	### private ###
@@ -40,7 +40,7 @@ class LDAP {
 			$this->disconnect();
 
 		if (!file_exists(ETC_PATH . "ldap.ini")) {
-			throw new Exception('LDAP not available');
+			throw new CsrException('LDAP not available');
 		}
 		$ldapini = parse_ini_file(ETC_PATH . "ldap.ini");
 		$conn = ldap_connect($ldapini['ldap_host'], $ldapini['ldap_port']);

@@ -1,7 +1,7 @@
 <!-- Banner -->
 <section id="banner">
     <div class="inner">
-        <img src="/assets/layout-owee/plaetjes/Logo.svg">
+        <img src="/assets/layout-owee/plaetjes/logo-next-level.svg">
     </div>
 </section>
 
@@ -46,7 +46,7 @@
     <!-- Three -->
     <section id="three" class="wrapper kleur3">
         <div class="inner">
-            <span class="image lazy-load" data-lazy="<img src='/assets/layout-owee/plaetjes/OC.jpg' alt=''/>"></span>
+            <span class="image lazy-load" data-lazy="<img src='/assets/layout-owee/plaetjes/OC-2017.jpg' alt=''/>"></span>
             <div class="content">
                 <h2 class="major">Interesse/vragen</h2>
                 <p>Uiteraard ben je welkom om tijdens de OWee langs te komen op onze sociëteit Confide aan de Oude Delft
@@ -162,7 +162,7 @@
                 </li>
                 <li>
                     <a href="https://www.maxilia.nl/banners-drukken/" class="lazy-load"
-                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/maxilia.png' alt='Maxiliaadvertentie'/>">
+                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/maxilia.png' class='white-background' alt='Maxiliaadvertentie'/>">
                     </a>
                 </li>
                 <li>

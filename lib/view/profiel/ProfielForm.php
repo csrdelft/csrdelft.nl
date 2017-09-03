@@ -176,10 +176,6 @@ class ProfielForm extends Formulier
         if (!$inschrijven) {
             $fields['email']->readonly = true;
             $fields['email']->title = 'Wijzig je e-mailadres met het inloggegevens-formulier.';
-            $fields[] = new EmailField('msn', $profiel->msn, 'MSN');
-            $fields[] = new TextField('icq', $profiel->icq, 'ICQ', 10);
-            $fields[] = new EmailField('jid', $profiel->jid, 'Jabber/Google-talk');
-            $fields[] = new TextField('skype', $profiel->skype, 'Skype', 20);
             $fields[] = new UrlField('linkedin', $profiel->linkedin, 'Publiek LinkedIn-profiel');
             $fields[] = new UrlField('website', $profiel->website, 'Website');
         }
@@ -190,10 +186,6 @@ class ProfielForm extends Formulier
         $fields[] = new RequiredIBANField('bankrekening', $profiel->bankrekening, 'Bankrekening', 18);
         if ($admin) {
             $fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
-        }
-        if (LoginModel::mag('P_ADMIN')) {
-            $fields[] = new IntField('soccieID', (int)$profiel->soccieID, 'SoccieID (uniek icm. bar)', 0, 10000);
-            $fields[] = new SelectField('createTerm', $profiel->createTerm, 'Aangemaakt bij', array('barvoor' => 'barvoor', 'barmidden' => 'barmidden', 'barachter' => 'barachter', 'soccie' => 'soccie'));
         }
 
         $fields[] = new Subkopje('Studie');
@@ -233,14 +225,14 @@ class ProfielForm extends Formulier
         $fields[] = new Subkopje('Persoonlijk');
         $fields[] = new TextField('eetwens', $profiel->eetwens, 'Dieet/voedselallergie');
         $fields[] = new RequiredIntField('lengte', (int)$profiel->lengte, 'Lengte (cm)', 50, 250);
-        $fields[] = new SelectField('ovkaart', $profiel->ovkaart, 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
+        $fields[] = new RequiredSelectField('ovkaart', $profiel->ovkaart, 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
         $fields[] = new TextField('kerk', $profiel->kerk, 'Kerk', 50);
         $fields[] = new TextField('muziek', $profiel->muziek, 'Muziekinstrument', 50);
         $fields[] = new SelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 
         if ($admin OR $inschrijven) {
             $fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
-            $fields[] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
+            $fields[] = new RequiredTextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
         }
 
         $fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');

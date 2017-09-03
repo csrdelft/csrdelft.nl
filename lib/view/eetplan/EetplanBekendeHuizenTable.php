@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\eetplan;
 
-use CsrDelft\model\EetplanModel;
+use CsrDelft\model\eetplan\EetplanModel;
 use CsrDelft\view\formulier\datatable\DataTable;
 use CsrDelft\view\formulier\datatable\DataTableKnop;
 

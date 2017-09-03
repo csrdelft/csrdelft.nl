@@ -1,9 +1,10 @@
 <?php
 namespace CsrDelft\view\bbcode;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\Icon;
 use CsrDelft\model\bibliotheek\BiebBoek;
-use CsrDelft\model\documenten\Document;
+use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;
@@ -28,7 +29,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\SavedQuery;
 use CsrDelft\SavedQueryContent;
 use CsrDelft\view\bibliotheek\BoekBBView;
-use CsrDelft\view\bijbelrooster\BijbelroosterBBView;
 use CsrDelft\view\documenten\DocumentBBContent;
 use CsrDelft\view\formulier\UrlDownloader;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
@@ -40,7 +40,6 @@ use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
 use CsrDelft\view\mededelingen\MededelingenView;
 use CsrDelft\view\peilingen\PeilingView;
-use Exception;
 use function CsrDelft\email_like;
 use function CsrDelft\endsWith;
 use function CsrDelft\external_url;
@@ -571,7 +570,7 @@ HTML;
 			if (LidInstellingenModel::get($arguments['module'], $arguments['instelling']) == $testwaarde) {
 				return $content;
 			}
-		} catch (Exception $e) {
+		} catch (CsrException $e) {
 			return '[instelling]: ' . $e->getMessage();
 		}
 	}
@@ -998,7 +997,7 @@ HTML;
 		try {
 			$verticale = VerticalenModel::get($letter);
 			return '<a href="/verticalen#' . $verticale->letter . '">' . $verticale->naam . '</a>';
-		} catch (Exception $e) {
+		} catch (CsrException $e) {
 			return 'Verticale met letter=' . htmlspecialchars($letter) . ' bestaat niet. <a href="/verticalen">Zoeken</a>';
 		}
 	}
@@ -1024,7 +1023,7 @@ HTML;
 			}
 			$content = new BoekBBView($boek);
 			return $content->view();
-		} catch (Exception $e) {
+		} catch (CsrException $e) {
 			return '[boek] Boek [boekid:' . (int) $boekid . '] bestaat niet.';
 		}
 	}
@@ -1041,15 +1040,17 @@ HTML;
 		} else {
 			$id = $this->parseArray(array('[/document]'), array());
 		}
-		try {
-			$document = new Document((int) $id);
+
+		$document = DocumentModel::instance()->get($id);
+
+		if ($document) {
 			if ($this->light_mode) {
-				$beschrijving = $document->getFriendlyMimetype() . ' (' . format_filesize((int) $document->getFileSize()) . ')';
-				return $this->lightLinkBlock('document', $document->getDownloadUrl(), $document->getNaam(), $beschrijving);
+				$beschrijving = $document->getFriendlyMimetype() . ' (' . format_filesize((int) $document->filesize) . ')';
+				return $this->lightLinkBlock('document', $document->getDownloadUrl(), $document->naam, $beschrijving);
 			}
 			$content = new DocumentBBContent($document);
 			return $content->getHtml();
-		} catch (Exception $e) {
+		} else {
 			return '<div class="bb-document">[document] Ongeldig document (id:' . $id . ')</div>';
 		}
 	}
@@ -1089,7 +1090,7 @@ HTML;
 					return '';
 				}
 			}
-		} catch (Exception $e) {
+		} catch (CsrException $e) {
 			if (strpos($e->getMessage(), 'Not found') !== false) {
 				return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 			}
@@ -1320,7 +1321,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 			}
 			$peilingcontent = new PeilingView($peiling);
 			return $peilingcontent->getHtml();
-		} catch (Exception $e) {
+		} catch (CsrException $e) {
 			return '[peiling] Er bestaat geen peiling met (id:' . (int) $peiling_id . ')';
 		}
 	}
@@ -1366,25 +1367,6 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 			}
 		}
 		return '<div class="bb-slideshow">' . $content . '</div>';
-	}
-
-	/**
-	 * Blokje met bijbelrooster voor opgegeven aantal dagen.
-	 *
-	 * @example [bijbelrooster=10]
-	 * @example [bijbelrooster]10[/bijbelrooster]
-	 */
-	public function bb_bijbelrooster($arguments = array()) {
-		if (isset($arguments['bijbelrooster'])) {
-			$dagen = $arguments['bijbelrooster'];
-		} else {
-			$dagen = $this->parseArray(array('[/bijbelrooster]'), array());
-		}
-		if ($this->light_mode) {
-			return $this->lightLinkBlock('bijbelrooster', '/bijbelrooster', 'Bijbelleesrooster', '');
-		}
-		$view = new BijbelroosterBBView($dagen);
-		return $view->getHtml();
 	}
 
 	function bb_bijbel($arguments = array()) {

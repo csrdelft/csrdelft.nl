@@ -6,10 +6,10 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * CmsPagina.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Content Management System Paginas zijn statische pagina's die via de front-end kunnen worden gewijzigd.
  */
 class CmsPagina extends PersistentEntity {
@@ -73,18 +73,30 @@ class CmsPagina extends PersistentEntity {
 	 */
 	protected static $table_name = 'cms_paginas';
 
+	/**
+	 * @return bool
+	 */
 	public function magBekijken() {
 		return LoginModel::mag($this->rechten_bekijken);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function magBewerken() {
 		return LoginModel::mag($this->rechten_bewerken);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function magRechtenWijzigen() {
 		return LoginModel::mag('P_ADMIN');
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function magVerwijderen() {
 		return LoginModel::mag('P_ADMIN');
 	}

@@ -1,15 +1,15 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * CommissieFunctie.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Standaard functies binnen het bestuur en commissies.
- * 
+ *
  */
 abstract class CommissieFunctie implements PersistentEnum {
 
@@ -44,7 +44,7 @@ abstract class CommissieFunctie implements PersistentEnum {
 			case self::Statisticus:
 			case self::Fotocommissaris:
 				return $option;
-			default: throw new Exception('CommissieFunctie onbekend');
+			default: throw new CsrException('CommissieFunctie onbekend');
 		}
 	}
 
@@ -61,7 +61,7 @@ abstract class CommissieFunctie implements PersistentEnum {
 			case self::Statisticus:
 			case self::Fotocommissaris:
 				return '';
-			default: throw new Exception('CommissieFunctie onbekend');
+			default: throw new CsrException('CommissieFunctie onbekend');
 		}
 	}
 

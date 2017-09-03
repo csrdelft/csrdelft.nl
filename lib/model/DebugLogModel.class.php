@@ -6,20 +6,23 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use function CsrDelft\setMelding;
-use Exception;
 
 /**
  * DebugLogModel.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
  */
 class DebugLogModel extends PersistenceModel {
 
 	const ORM = DebugLogEntry::class;
 
+	/**
+	 * @var static
+	 */
 	protected static $instance;
 
+	/**
+	 */
 	public function opschonen() {
 		$entries = $this->find('moment < ?', array(strtotime('-2 months')));
 		foreach ($entries as $entry) {
@@ -27,12 +30,20 @@ class DebugLogModel extends PersistenceModel {
 		}
 	}
 
+	/**
+	 * @param string $class
+	 * @param string $function
+	 * @param string[] array $args
+	 * @param string $dump
+	 *
+	 * @return DebugLogEntry
+	 */
 	public function log($class, $function, array $args = array(), $dump = null) {
 		$entry = new DebugLogEntry();
 		$entry->class_function = $class . '->' . $function . '(' . implode(', ', $args) . ')';
 		$entry->dump = $dump;
-		$e = new Exception();
-		$entry->call_trace = $e->getTraceAsString();
+		$exception = new \Exception();
+		$entry->call_trace = $exception->getTraceAsString();
 		$entry->moment = getDateTime();
 		$entry->uid = LoginModel::getUid();
 		if (LoginModel::instance()->isSued()) {

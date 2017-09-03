@@ -3,10 +3,10 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
-use CsrDelft\model\EetplanBekendenModel;
-use CsrDelft\model\EetplanModel;
-use CsrDelft\model\entity\Eetplan;
-use CsrDelft\model\entity\EetplanBekenden;
+use CsrDelft\model\eetplan\EetplanBekendenModel;
+use CsrDelft\model\eetplan\EetplanModel;
+use CsrDelft\model\entity\eetplan\Eetplan;
+use CsrDelft\model\entity\eetplan\EetplanBekenden;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\groepen\LichtingenModel;

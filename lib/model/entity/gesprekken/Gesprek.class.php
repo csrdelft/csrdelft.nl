@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\model\entity\gesprekken;
+use CsrDelft\common\CsrException;
 use CsrDelft\model\gesprekken\GesprekBerichtenModel;
 use CsrDelft\model\gesprekken\GesprekDeelnemersModel;
 use CsrDelft\model\InstellingenModel;
@@ -7,14 +8,13 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use Exception;
 use function CsrDelft\getDateTime;
 
 /**
  * Gesprek.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Gesprek extends PersistentEntity {
 
@@ -77,7 +77,7 @@ class Gesprek extends PersistentEntity {
 
 	public function getBerichten(GesprekDeelnemer $deelnemer, $lastUpdate) {
 		if (!is_int($lastUpdate)) {
-			throw new Exception('lastUpdate invalid');
+			throw new CsrException('lastUpdate invalid');
 		}
 		$toegevoegd = strtotime($deelnemer->toegevoegd_moment);
 		if ($lastUpdate < $toegevoegd) {

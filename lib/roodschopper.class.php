@@ -11,12 +11,12 @@ namespace CsrDelft;
  *
  * @deprecated
  */
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\CsrBB;
-use Exception;
 
 require_once 'configuratie.include.php';
 
@@ -33,13 +33,13 @@ class Roodschopper {
 
 	public function __construct($cie, $saldogrens, $onderwerp, $bericht) {
 		if (!in_array($cie, array('maalcie', 'soccie'))) {
-			throw new Exception('Ongeldige commissie');
+			throw new CsrGebruikerException('Ongeldige commissie');
 		}
 		$this->cie = $cie;
 		//er wordt in roodschopper.php -abs($saldogrens) gedaan, dus dat dit voorkomt
 		//is onwaarschijnlijk.
 		if ($saldogrens > 0) {
-			throw new Exception('Saldogrens moet beneden nul zijn');
+			throw new CsrGebruikerException('Saldogrens moet beneden nul zijn');
 		}
 
 		$this->saldogrens = $saldogrens;
@@ -172,7 +172,7 @@ h.t. Fiscus.';
 
 	/**
 	 * Geef een array van Lid-objecten terug van de te schoppen leden.
-	 * 
+	 *
 	 */
 	public function getLeden() {
 		if ($this->teschoppen === null) {

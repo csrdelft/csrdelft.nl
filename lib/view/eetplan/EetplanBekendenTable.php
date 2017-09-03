@@ -2,8 +2,7 @@
 
 namespace CsrDelft\view\eetplan;
 
-use CsrDelft\model\EetplanBekendenModel;
-use CsrDelft\model\entity\EetplanBekenden;
+use CsrDelft\model\entity\eetplan\EetplanBekenden;
 use CsrDelft\view\formulier\datatable\DataTable;
 use CsrDelft\view\formulier\datatable\DataTableKnop;
 

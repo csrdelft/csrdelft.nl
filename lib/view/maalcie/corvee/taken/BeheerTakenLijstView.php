@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\maalcie\corvee\taken;
 
+use function CsrDelft\getMelding;
 use CsrDelft\view\SmartyTemplateView;
 
 class BeheerTakenLijstView extends SmartyTemplateView

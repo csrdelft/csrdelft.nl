@@ -23,6 +23,7 @@ class OnverwerkteMaaltijdenTable extends DataTable
         $this->addColumn('repetitie_naam', 'titel');
         $this->addColumn('aanmeldingen', 'aanmeld_limiet', null, 'aanmeldingen_render');
         $this->addColumn('prijs', null, null, 'prijs_render', null, 'num-fmt');
+        $this->addColumn('totaalprijs', null, null, 'totaal_prijs', null, 'num-fmt');
 
         $this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/fiscaat/verwerk', '', 'Verwerken', 'Maaltijd verwerken', 'cog_go'));
 
@@ -47,6 +48,10 @@ function aanmeldingen_render(data, type, row) {
 
 function prijs_render(data) {
 	return "€" + (data/100).toFixed(2);
+}
+
+function totaal_prijs(data, type, row) {
+    return prijs_render(row.aantal_aanmeldingen * parseInt(row.prijs));
 }
 JS;
 

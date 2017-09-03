@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\entity;
+namespace CsrDelft\model\entity\eetplan;
 
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;

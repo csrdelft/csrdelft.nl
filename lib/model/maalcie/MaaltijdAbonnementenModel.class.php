@@ -1,14 +1,13 @@
 <?php
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use function CsrDelft\setMelding;
-use Exception;
-
 
 /**
  * MaaltijdAbonnementenModel.class.php    |    P.W.G. Brussee (brussee@live.nl)
@@ -137,7 +136,6 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 * Bouwt matrix voor alle repetities en abonnementen van alle leden
 	 *
 	 * @return MaaltijdAbonnement[][] 2d matrix met eerst uid, en dan repetitie id
-	 * @throws Exception
 	 */
 	public function getAbonnementenMatrix() {
 		return Database::transaction(function () {
@@ -223,19 +221,19 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	/**
 	 * @param $abo MaaltijdAbonnement
 	 * @return false|int
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public function inschakelenAbonnement($abo) {
 		return Database::transaction(function () use ($abo) {
 			$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($abo->mlt_repetitie_id);
 			if (!$repetitie->abonneerbaar) {
-				throw new Exception('Niet abonneerbaar');
+				throw new CsrGebruikerException('Niet abonneerbaar');
 			}
 			if ($this->exists($abo)) {
-				throw new Exception('Abonnement al ingeschakeld');
+				throw new CsrGebruikerException('Abonnement al ingeschakeld');
 			}
 			if (!MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($abo->uid, $repetitie->abonnement_filter)) {
-				throw new Exception('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
+				throw new CsrGebruikerException('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
 			}
 
 			$abo->van_uid = $abo->uid;
@@ -278,7 +276,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	public function uitschakelenAbonnement($mrid, $uid) {
 		return Database::transaction(function () use ($mrid, $uid) {
 			if (!$this->getHeeftAbonnement($mrid, $uid)) {
-				throw new Exception('Abonnement al uitgeschakeld');
+				throw new CsrGebruikerException('Abonnement al uitgeschakeld');
 			}
 			$this->deleteByPrimaryKey(array($mrid, $uid));
 			$abo = new MaaltijdAbonnement();
@@ -297,7 +295,6 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 *
 	 * @param $mrid
 	 * @return int amount of deleted abos
-	 * @throws Exception
 	 */
 	public function verwijderAbonnementen($mrid) {
 		return Database::transaction(function () use ($mrid) {

@@ -1,6 +1,8 @@
 <?php
 namespace CsrDelft\view\formulier\invoervelden;
 use function CsrDelft\classNameZonderNamespace;
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\Icon;
 use function CsrDelft\in_array_i;
 use CsrDelft\model\security\LoginModel;
@@ -8,7 +10,6 @@ use function CsrDelft\valid_filename;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\uploadvelden\BestandBehouden;
 use CsrDelft\view\Validator;
-use Exception;
 
 /**
  * InputField.abstract.php
@@ -177,34 +178,34 @@ abstract class InputField implements FormElement, Validator {
 	 * @param string $directory fully qualified path with trailing slash
 	 * @param string $filename filename with extension
 	 * @param boolean $overwrite allowed to overwrite existing file
-	 * @throws Exception Ongeldige bestandsnaam, doelmap niet schrijfbaar of naam ingebruik
+	 * @throws CsrException Ongeldige bestandsnaam, doelmap niet schrijfbaar of naam ingebruik
 	 */
 	public function opslaan($directory, $filename, $overwrite = false) {
 		if (!$this->isAvailable()) {
-			throw new Exception('Uploadmethode niet beschikbaar: ' . get_class($this));
+			throw new CsrException('Uploadmethode niet beschikbaar: ' . get_class($this));
 		}
 		if (!$this->validate()) {
-			throw new Exception($this->getError());
+			throw new CsrGebruikerException($this->getError());
 		}
 		if (!valid_filename($filename)) {
-			throw new Exception('Ongeldige bestandsnaam: ' . htmlspecialchars($filename));
+			throw new CsrGebruikerException('Ongeldige bestandsnaam: ' . htmlspecialchars($filename));
 		}
 		if (!file_exists($directory)) {
 			mkdir($directory);
 		}
 		if (false === @chmod($directory, 0755)) {
-			throw new Exception('Geen eigenaar van map: ' . htmlspecialchars($directory));
+			throw new CsrException('Geen eigenaar van map: ' . htmlspecialchars($directory));
 		}
 		if (!is_writable($directory)) {
-			throw new Exception('Doelmap is niet beschrijfbaar: ' . htmlspecialchars($directory));
+			throw new CsrException('Doelmap is niet beschrijfbaar: ' . htmlspecialchars($directory));
 		}
 		if (file_exists($directory . $filename)) {
 			if ($overwrite) {
 				if (!unlink($directory . $filename)) {
-					throw new Exception('Overschrijven mislukt: ' . htmlspecialchars($directory . $filename));
+					throw new CsrException('Overschrijven mislukt: ' . htmlspecialchars($directory . $filename));
 				}
 			} elseif (!$this instanceof BestandBehouden) {
-				throw new Exception('Bestandsnaam al in gebruik: ' . htmlspecialchars($directory . $filename));
+				throw new CsrGebruikerException('Bestandsnaam al in gebruik: ' . htmlspecialchars($directory . $filename));
 			}
 		}
 	}

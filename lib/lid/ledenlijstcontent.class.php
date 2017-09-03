@@ -7,7 +7,6 @@ use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\View;
-use Exception;
 use function CsrDelft\getMelding;
 
 require_once 'lid/LidZoeker.php';
@@ -174,7 +173,7 @@ class LLLijst extends LLweergave {
 				default:
 					try {
 						echo htmlspecialchars($profiel->$veld);
-					} catch (Exception $e) {
+					} catch (\Exception $e) {
 						echo ' - ';
 					}
 			}
@@ -284,7 +283,7 @@ class LLCSV extends LLweergave {
 				default:
 					try {
 						$return .= $profiel->$veld;
-					} catch (Exception $e) {
+					} catch (\Exception $e) {
 						//omit non-existant fields
 					}
 			}

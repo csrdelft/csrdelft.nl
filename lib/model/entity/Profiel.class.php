@@ -1,6 +1,8 @@
 <?php
 namespace CsrDelft\model\entity;
 
+use function CsrDelft\aaidrom;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\GoogleSync;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\GroepStatus;
@@ -18,9 +20,7 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\bbcode\CsrBB;
-use Exception;
 use function CsrDelft\array_filter_empty;
 use function CsrDelft\setMelding;
 use function CsrDelft\square_crop;
@@ -72,10 +72,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	// contact
 	public $email;
 	public $mobiel;
-	public $icq;
-	public $msn;
-	public $skype;
-	public $jid;
 	public $linkedin;
 	public $website;
 	// studie
@@ -100,11 +96,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $eetwens;
 	public $corvee_punten;
 	public $corvee_punten_bonus;
-	public $soccieID;
-	public $soccieSaldo;
-	public $maalcieSaldo;
 	// novitiaat
-	public $createTerm;
 	public $novitiaat;
 	public $novitiaatBijz;
 	public $medisch;
@@ -160,10 +152,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'o_telefoon'			 => array(T::String, true),
 		// contact
 		'email'					 => array(T::String),
-		'icq'					 => array(T::String, true),
-		'msn'					 => array(T::String, true),
-		'skype'					 => array(T::String, true),
-		'jid'					 => array(T::String, true),
 		'linkedin'				 => array(T::String, true),
 		'website'				 => array(T::String, true),
 		// studie
@@ -187,10 +175,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'patroon'				 => array(T::UID, true),
 		'corvee_punten'			 => array(T::Integer, true),
 		'corvee_punten_bonus'	 => array(T::Integer, true),
-		'soccieID'				 => array(T::Integer, true),
-		'createTerm'			 => array(T::String, true),
-		'soccieSaldo'			 => array(T::Float, true),
-		'maalcieSaldo'			 => array(T::Float, true),
 		// Persoonlijk
 		'eetwens'				 => array(T::String, true),
 		'lengte'				 => array(T::Integer),
@@ -259,10 +243,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public function getContactgegevens() {
 		return array_filter_empty(array(
 			'Email'			 => $this->getPrimaryEmail(),
-			'ICQ'			 => $this->icq,
-			'MSN'			 => $this->msn,
-			'Jabber/GTalk'	 => $this->jid,
-			'Skype'			 => $this->skype,
 			'LinkedIn'		 => $this->linkedin,
 			'Website'		 => $this->website
 		));
@@ -541,18 +521,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				break;
 
 			case 'aaidrom': // voor een 1 aprilgrap ooit
-				$voornaam = strtolower($this->voornaam);
-				$achternaam = strtolower($this->achternaam);
-
-				$voor = array();
-				preg_match('/^([^aeiuoy]*)(.*)$/', $voornaam, $voor);
-				$achter = array();
-				preg_match('/^([^aeiuoy]*)(.*)$/', $achternaam, $achter);
-
-				$nwvoor = ucwords($achter[1] . $voor[2]);
-				$nwachter = ucwords($voor[1] . $achter[2]);
-
-				$naam = sprintf("%s %s%s", $nwvoor, !empty($this->tussenvoegsel) ? $this->tussenvoegsel . ' ' : '', $nwachter);
+				$naam = aaidrom($this->voornaam, $this->tussenvoegsel, $this->achternaam);
 				break;
 
 			default:
@@ -660,7 +629,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * @return float
 	 */
 	public function getCiviSaldo() {
-		require_once 'model/fiscaat/CiviSaldoModel.class.php';
 		return CiviSaldoModel::instance()->getSaldo($this->uid)->saldo / (float) 100;
 	}
 
@@ -671,11 +639,11 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function isInGoogleContacts() {
 		try {
-						if (!GoogleSync::isAuthenticated()) {
+            if (!GoogleSync::isAuthenticated()) {
 				return null;
 			}
-			return GoogleSync::instance()->existsInGoogleContacts($this);
-		} catch (Exception $e) {
+			return !is_null(GoogleSync::instance()->existsInGoogleContacts($this));
+		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), 0);
 			return null;
 		}

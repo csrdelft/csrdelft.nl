@@ -1,17 +1,18 @@
 <?php
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeRepetitie;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
-use Exception;
 use PDOStatement;
 
 
 /**
  * CorveeRepetitiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
+ *
  */
 class CorveeRepetitiesModel extends PersistenceModel {
 	const ORM = CorveeRepetitie::class;
@@ -73,7 +74,6 @@ class CorveeRepetitiesModel extends PersistenceModel {
 	 *
 	 * @param int $mrid
 	 * @return PDOStatement|CorveeRepetitie[]
-	 * @throws Exception
 	 */
 	public function getRepetitiesVoorMaaltijdRepetitie($mrid) {
 		return $this->find('mlt_repetitie_id = ?', array($mrid));
@@ -113,18 +113,18 @@ class CorveeRepetitiesModel extends PersistenceModel {
 
 	public function verwijderRepetitie($crid) {
 		if (!is_int($crid) || $crid <= 0) {
-			throw new Exception('Verwijder corvee-repetitie faalt: Invalid $crid =' . $crid);
+			throw new CsrGebruikerException('Verwijder corvee-repetitie faalt: Invalid $crid =' . $crid);
 		}
 		if (CorveeTakenModel::instance()->existRepetitieTaken($crid)) {
 			CorveeTakenModel::instance()->verwijderRepetitieTaken($crid); // delete corveetaken first (foreign key)
-			throw new Exception('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
+			throw new CsrGebruikerException('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 
 		return Database::transaction(function () use ($crid) {
 			$aantal = CorveeVoorkeurenModel::instance()->verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)
 			$deleted = $this->deleteByPrimaryKey(array($crid));
 			if ($deleted !== 1) {
-				throw new Exception('Delete corvee-repetitie faalt: $deleted =' . $deleted);
+				throw new CsrException('Delete corvee-repetitie faalt: $deleted =' . $deleted);
 			}
 			return $aantal;
 		});

@@ -2,13 +2,13 @@
 
 namespace CsrDelft\model\fotoalbum;
 
+use CsrDelft\common\CsrGebruikerException;
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoTag;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
-use Exception;
 
 class FotoTagsModel extends PersistenceModel
 {
@@ -28,15 +28,9 @@ class FotoTagsModel extends PersistenceModel
         return $this->find('refuuid = ?', array($foto->getUUID()));
     }
 
-    public function addTag(
-        Foto $foto,
-        $uid,
-        $x,
-        $y,
-        $size
-    ) {
+    public function addTag(Foto $foto, $uid, $x, $y, $size) {
         if (!ProfielModel::existsUid($uid)) {
-            throw new Exception('Profiel bestaat niet');
+            throw new CsrGebruikerException('Profiel bestaat niet');
         }
         $tag = new FotoTag();
         $tag->refuuid = $foto->getUUID();

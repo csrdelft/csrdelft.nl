@@ -2,7 +2,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
-use CsrDelft\model\CommissieVoorkeurenModel;
+use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenProfiel;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenView;

@@ -1,10 +1,10 @@
 <?php
 namespace CsrDelft\view\maalcie\forms;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\view\formulier\getalvelden\IntField;
-use CsrDelft\view\formulier\getalvelden\RequiredBedragField;
 use CsrDelft\view\formulier\getalvelden\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\BBCodeField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
@@ -15,7 +15,6 @@ use CsrDelft\view\formulier\keuzevelden\RequiredTimeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormulierKnop;
 use CsrDelft\view\formulier\ModalForm;
-use Exception;
 
 /**
  * MaaltijdForm.php
@@ -27,16 +26,24 @@ use Exception;
  */
 class MaaltijdForm extends ModalForm {
 
+	/**
+	 * MaaltijdForm constructor.
+	 *
+	 * @param Maaltijd $maaltijd
+	 * @param string $action
+	 *
+	 * @throws CsrGebruikerException
+	 */
 	public function __construct(Maaltijd $maaltijd, $action) {
 		parent::__construct($maaltijd, '/maaltijden/beheer/'. $action, false, true);
 
-		$product = CiviProductModel::instance()->findSparse(array('beschrijving'), 'id = ?', array($maaltijd->product_id))->fetch();
+		$product = CiviProductModel::instance()->find('id = ?', array($maaltijd->product_id))->current();
 		if ($product == false) {
 			$product = new CiviProduct();
 		}
 
 		if ($maaltijd->maaltijd_id < 0) {
-			throw new Exception('invalid mid');
+			throw new CsrGebruikerException(sprintf('Ongeldig maaltijd id "%s".', $maaltijd->maaltijd_id));
 		}
 		if ($maaltijd->maaltijd_id == 0) {
 			$this->titel = 'Maaltijd aanmaken';

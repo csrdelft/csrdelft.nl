@@ -125,7 +125,7 @@ $(function () {
     }
 
     function zetProductInLijst(product) {
-	
+
 		if(product.beheer == 0 || beheer) {
 			$("#bestelKnoppenLijst").append("<button type='button' class='btn btn-bestel btn-default' id='bestelKnop" + product.productId + "'>" + product.beschrijving + "<br />" +
 				saldoStr(product.prijs) + "</button>");
@@ -215,7 +215,7 @@ $(function () {
     var producten = {};
 
 	function laadPersonen() {
-	
+
 		$.ajax({
 			url: "ajax.php",
 			method: "POST",
@@ -225,7 +225,7 @@ $(function () {
 			.done(function (data) {
 				personen = data;
 				updateOnKeyPress();
-				
+
 				var pl = $(".personList");
 				if(pl.size() > 0) {
 					var html = '';
@@ -233,12 +233,12 @@ $(function () {
 
                         if(this.deleted == 0)
 						    html += '<option value="' + this.socCieId + '">' + this.naam + '</option>';
-					
+
 					});
 					pl.html(html);
 				}
 			});
-		
+
 	} laadPersonen();
 
 	function laadProducten() {
@@ -333,63 +333,63 @@ $(function () {
     }
 
     $("#knopConfirm").each(function() {
-	
+
 		var $this = $(this);
-	
+
 		// Set current submiting state on false
 		var submitting = false;
 		var warningGiven = false;
-	
+
 		$(this).click(function () {
 
 			var oudlid = isOudLid(selectedPerson);
-			
+
 			var toRed;
 			if(oudeBestelling)
 				toRed = parseInt(selectedPerson.saldo) + parseInt(oudeBestelling.bestelTotaal) - bestelTotaal() < 0;
 			else
 				toRed = selectedPerson.saldo - bestelTotaal() < 0;
-				
+
 			if(bestelTotaal() <= 0 || selectedPerson.status == 'S_NOBODY' || beheer)
 				toRed = false;
-			
+
 			// Hack
 			var emptyOrder = true;
 			for(key in bestelLijst) {
 				emptyOrder = false
 			}
-			
+
 			if(oudlid && toRed) {
-			
+
 				zetBericht("Oudleden kunnen niet rood staan, inleg vereist!", "danger");
-			
+
 			} else if (selectedPerson && !emptyOrder) {
-			
+
 				if(!warningGiven && toRed) {
-				
+
 					$this.addClass("loading");
-				
+
 					zetBericht("Laat lid inleggen. Saldo wordt negatief.", "danger");
 					setTimeout(function() {
 						warningGiven = true;
 						$this.removeClass("loading");
 					}, 3000);
-				
+
 				} else {
-			
+
 					// Set submitting state on true
 					submitting = true;
 					$this.addClass("loading");
 					$this.prop("disabled", true);
-				
+
 					var result = {};
 					result["bestelLijst"] = bestelLijst;
 					result["bestelTotaal"] = bestelTotaal();
 					result["persoon"] = selectedPerson;
-					
+
 					// If update of old order us that data
 					if (oudeBestelling) result["oudeBestelling"] = oudeBestelling;
-					
+
 					$.ajax({
 						url: "ajax.php",
 						method: "POST",
@@ -399,16 +399,16 @@ $(function () {
 							//succes! de bestelling is goed verwerkt
 							cancel();
 						} else {
-							zetBericht("Er gaat iets verkeert met de bestelling, hij is niet verwerkt!", "danger");
+							zetBericht("Er gaat iets verkeerd met de bestelling, hij is niet verwerkt!", "danger");
 						}
 					}).always(function() {
-					
+
 						// After AJAX always set submitting on false
 						submitting = false;
 						warningGiven = false;
 						$this.removeClass("loading");
 						$this.prop("disabled", false);
-					
+
 					});
 
 				}
@@ -418,9 +418,9 @@ $(function () {
 			} else if (emptyOrder) {
 				zetBericht("Geen bestelling ingevoerd!", "danger");
 			}
-		
+
 		});
-		
+
     });
 
     /*************************************************************************************************/
@@ -450,16 +450,16 @@ $(function () {
 	});
 
     $("#knopCancel").click(function() {
-	
+
 		// Hack
 		var emptyOrder = true;
 		for(key in bestelLijst) {
 			emptyOrder = false
 		}
-	
+
 		if(emptyOrder || confirm("Weet je zeker dat je de bestelling wilt afbreken?"))
 			cancel();
-		
+
 	});
 
     function cancel() {
@@ -509,9 +509,9 @@ $(function () {
             }
             var bestelUL = '<ul><li>' + bestel.join('</li><li>') + '</li></ul>';
             var bestelComma = bestel.join(", ");
-			
+
 			var deleted = parseInt(bestelling.deleted) == 1;
-            
+
 			$("#besteLijstBeheerContent tbody").append("<tr class=\"" + (deleted ? "removed" : "") + "\" id='tabelRijBeheerLijst" + item + "'><td>" + personen[bestelling.persoon].naam + "</td><td>"
                 + bestelling.tijd + "</td><td>" + saldoStr(bestelling.bestelTotaal) + "</td><td>" + bestelUL + "</td>" +
                 "<td>" + (bestelling.oud == 1 ? "" : "<div class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>Opties <span class='caret'></span></button>" +
@@ -758,36 +758,36 @@ $(function () {
     }
 
     $("#laadProducten").click(function () {
-	
+
 		$(this).parent().find("> button").addClass("btn-default").removeClass("btn-primary");
 		$(this).removeClass("btn-default").addClass("btn-primary");
-		
+
 		$("#productBeheer").removeClass("hidden");
 		$("#grootboekInvoer, #persoonBeheer, #tools").addClass("hidden");
-		
+
     });
-	
+
 	$("#laadPersonen").click(function() {
-	
+
 		$(this).parent().find("> button").addClass("btn-default").removeClass("btn-primary");
 		$(this).removeClass("btn-default").addClass("btn-primary");
-		
+
 		$("#persoonBeheer").removeClass("hidden");
 		$("#grootboekInvoer, #productBeheer, #tools").addClass("hidden");
-	
+
 	});
-	
+
 	$("#addPerson").submit(function(e) {
-	
+
 		e.preventDefault();
 		var $this = $(this);
-		
+
 		$.ajax({
 			url: $(this).attr("action"),
 			method: $(this).attr("method"),
 			data: $(this).serializeArray(),
 			success: function(data) {
-			
+
 				if(data == "1") {
 					zetBericht("Persoon toegevoegd.", "success");
 					laadPersonen();
@@ -795,26 +795,26 @@ $(function () {
 				} else {
 					zetBericht("Er is iets misgegeaan met het toevoegen van een persoon!", "danger");
 				}
-			
+
 			},
 			error: function() {
 				zetBericht("Er is iets misgegeaan met het toevoegen van een persoon!", "danger");
 			}
 		});
-	
+
 	});
-	
+
 	$("#updatePerson").submit(function(e) {
-	
+
 		e.preventDefault();
 		var $this = $(this);
-		
+
 		$.ajax({
 			url: $(this).attr("action"),
 			method: $(this).attr("method"),
 			data: $(this).serializeArray(),
 			success: function(data) {
-			
+
 				if(data == "1") {
 					zetBericht("Persoon aangepast.", "success");
 					laadPersonen();
@@ -822,28 +822,28 @@ $(function () {
 				} else {
 					zetBericht("Er is iets misgegeaan met het aanpassen van een persoon!", "danger");
 				}
-			
+
 			},
 			error: function() {
 				zetBericht("Er is iets misgegeaan met het aanpassen van een persoon!", "danger");
 			}
 		});
-	
+
 	});
-	
+
 	$("#removePerson").submit(function(e) {
-	
+
 		e.preventDefault();
 		var $this = $(this);
-		
+
 		if(confirm("Weet je zeker dat je " + $(".personList :selected", this).html() + " wilt verwijderen?")) {
-		
+
 			$.ajax({
 				url: $(this).attr("action"),
 				method: $(this).attr("method"),
 				data: $this.serializeArray(),
 				success: function(data) {
-				
+
 					if(data == "1") {
 						zetBericht("Persoon verwijderd.", "success");
 						laadPersonen();
@@ -851,76 +851,76 @@ $(function () {
 					} else {
 						zetBericht("Er is iets misgegeaan met het verwijderen van een persoon!", "danger");
 					}
-				
+
 				},
 				error: function() {
 					zetBericht("Er is iets misgegeaan met het verwijderen van een persoon!", "danger");
 				}
 			});
-		
+
 		}
-	
+
 	});
-	
+
 	$("#laadGrootboekInvoer").click(function() {
-	
+
 		var button = $(this);
-	
+
 		$.ajax({
 			url: "ajax.php?q=grootboek",
 			method: "GET",
 			dataType: "json",
 			success: function(data) {
-		
+
 				button.parent().find("> button").addClass("btn-default").removeClass("btn-primary");
 				button.removeClass("btn-default").addClass("btn-primary");
-				
+
 				var html = [];
-				
+
 				$.each(data, function() {
-					
+
 					addhtml = '';
-					
+
 					addhtml += '<h2>' + this.title + '</h2>';
 					addhtml += '<table class="table table-striped"><thead><tr><th>Soort</th><th>Prijs</th></tr></thead><tbody>';
-					
+
 					var total = 0;
 					$.each(this.content, function() {
 
                         var add = parseFloat(this.total);
 						total += add < 0 ? 0 : add;
 						addhtml += '<tr><td>' + this.type + (add < 0 ? ' <strong>(niet in totaal)</strong>' : '') + '</td><td>' + saldoStr(this.total) + '</td></tr>';
-					
+
 					});
-					
-					addhtml += '<tr><td>Week totaal</td><td>' + saldoStr(total) + '</td></tr>';				
+
+					addhtml += '<tr><td>Week totaal</td><td>' + saldoStr(total) + '</td></tr>';
 					addhtml += '</tbody></table>';
-					
+
 					html.push(addhtml);
-				
+
 				});
-				
+
 				$("#productBeheer, #persoonBeheer, #tools").addClass("hidden");
 				$("#grootboekInvoer").html(html).removeClass("hidden");
-			
+
 			}
 		});
-	
+
 	});
-	
+
 	$("#laadTools").click(function() {
-	
+
 		var button = $(this);
-	
+
 		$.ajax({
 			url: "ajax.php?q=tools",
 			method: "GET",
 			dataType: "json",
 			success: function(data) {
-		
+
 				button.parent().find("> button").addClass("btn-default").removeClass("btn-primary");
 				button.removeClass("btn-default").addClass("btn-primary");
-			
+
 				$("#sumSaldi").html(saldoStr(data.sum_saldi.sum));
 				$("#sumSaldiLid").html(saldoStr(data.sum_saldi_lid.sum));
 
@@ -940,13 +940,13 @@ $(function () {
 
                 });
                 $("#red-old").html(html);
-				
+
 				$("#productBeheer, #persoonBeheer, #grootboekInvoer").addClass("hidden");
 				$("#tools").removeClass("hidden");
-			
+
 			}
 		});
-	
+
 	});
 
     /**

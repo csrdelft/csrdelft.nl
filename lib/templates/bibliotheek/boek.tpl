@@ -10,11 +10,11 @@
 	<li>
 		<a href="/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
 	</li>
-	{if CsrDelft\model\security\LoginModel::mag('P_BIEB_READ')}
+	{toegang P_BIEB_READ}
 		<li>
 			<a href="/bibliotheek/rubrieken" title="Rubriekenoverzicht">Rubrieken</a>
 		</li>
-	{/if}
+	{/toegang}
 </ul>
 
 {if $boek->magBekijken()}
@@ -41,7 +41,7 @@
 	<h1>Nieuw boek toevoegen</h1>
 	<p>Zoek via het Google Books-zoekveld je boek en kies een van de suggesties om de boekgegevens hieronder in te vullen.</p>
 	<div class="boekzoeker" title="Geef titel, auteur, isbn of een ander kenmerk van het boek. Minstens 7 tekens, na 1 seconde verschijnen suggesties.">
-		<label for="boekzoeker"><img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts" />Google Books:</label><input type="text" placeholder="Zoek en kies een suggestie om de velden te vullen" id="boekzoeker">
+		<label for="boekzoeker"><img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="Zoeken op Google Books" />Google Books:</label><input type="text" placeholder="Zoek en kies een suggestie om de velden te vullen" id="boekzoeker">
 	</div>
 
 	{$boek->getFormulier()->view()}

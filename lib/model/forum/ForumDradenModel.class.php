@@ -1,5 +1,7 @@
 <?php
 namespace CsrDelft\model\forum;
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use function CsrDelft\endsWith;
 use function CsrDelft\getDateTime;
 use function CsrDelft\group_by_distinct;
@@ -12,7 +14,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use function CsrDelft\setMelding;
-use Exception;
 use PDO;
 
 /**
@@ -77,12 +78,12 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	/**
 	 * @param $id
 	 * @return ForumDraad
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public static function get($id) {
 		$draad = static::instance()->retrieveByPrimaryKey(array($id));
 		if (!$draad) {
-			throw new Exception('Forum-onderwerp bestaat niet!');
+			throw new CsrGebruikerException('Forum-onderwerp bestaat niet!');
 		}
 		return $draad;
 	}
@@ -301,12 +302,12 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 
 	public function wijzigForumDraad(ForumDraad $draad, $property, $value) {
 		if (!property_exists($draad, $property)) {
-			throw new Exception('Property undefined: ' . $property);
+			throw new CsrException('Property undefined: ' . $property);
 		}
 		$draad->$property = $value;
 		$rowCount = $this->update($draad);
 		if ($rowCount !== 1) {
-			throw new Exception('Wijzigen van ' . $property . ' mislukt');
+			throw new CsrException('Wijzigen van ' . $property . ' mislukt');
 		}
 		if ($property === 'belangrijk') {
 			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);

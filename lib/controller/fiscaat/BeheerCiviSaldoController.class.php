@@ -7,6 +7,7 @@ use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\Orm\Persistence\Database;
+use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fiscaat\BeheerCiviSaldoView;
 use CsrDelft\view\fiscaat\BeheerSaldoResponse;
@@ -119,11 +120,18 @@ class BeheerCiviSaldoController extends AclController {
 		if ($form->validate()) {
 			$saldo = $form->getModel();
 			$saldo->laatst_veranderd = date_create()->format(DATE_ISO8601);
-			if ($this->model->find('uid = ?', [$saldo->uid])->rowCount() === 1) {
-				$this->model->update($saldo);
-			} else {
-				$this->model->create($saldo);
+
+			if (is_null($saldo->uid)) {
+				$laatsteSaldo = $this->model->find("uid LIKE 'c%'", [], null, 'uid DESC', 1)->fetch();
+				$saldo->uid = ++$laatsteSaldo->uid;
 			}
+
+			if ($this->model->find('uid = ?', [$saldo->uid])->rowCount() === 1) {
+				$this->exit_http(403);
+			} else {
+				$saldo->id = $this->model->create($saldo);
+			}
+
 			$this->view = new BeheerSaldoResponse(array($saldo));
 			return;
 		}

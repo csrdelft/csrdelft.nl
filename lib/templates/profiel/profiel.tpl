@@ -15,12 +15,14 @@
 					{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid OR CsrDelft\model\security\LoginModel::mag('P_ADMIN')}
 						{if CsrDelft\model\security\AccountModel::existsUid($profiel->uid)}
 							<a href="/account/{$profiel->uid}" class="btn" title="Inloggegevens bewerken">{icon get="key"}</a>
-						{elseif CsrDelft\model\security\LoginModel::mag('P_ADMIN')}
+						{else}
+							{toegang P_ADMIN}
 							<a href="/account/{$profiel->uid}" class="btn" title="Account aanmaken">{icon get="key_delete" hover="key_add"}</a>
+							{/toegang}
 						{/if}
-						{if CsrDelft\model\security\LoginModel::mag('P_ADMIN')}
+						{toegang P_ADMIN}
 							<a href="/tools/stats.php?uid={$profiel->uid}" class="btn" title="Toon bezoeklog">{icon get="server_chart"}</a>
-						{/if}
+						{/toegang}
 					{/if}
 				</div>
 			</div>
@@ -201,9 +203,9 @@
 			<div class="gegevens">
 				{if $profiel->bankrekening!=''}
 					<div class="label">Bankrekening:</div> {$profiel->bankrekening}
-					{if CsrDelft\model\security\LoginModel::mag('P_MAAL_MOD')}
+					{toegang P_MAAL_MOD}
 						<span class="lichtgrijs">({if !$profiel->machtiging}geen {/if}machtiging getekend)</span>
-					{/if}
+					{/toegang}
 				{/if}
 				<div class="clear-left"></div>
 				{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid || CsrDelft\model\security\LoginModel::mag('P_MAAL_MOD')}
@@ -411,14 +413,16 @@
 		</div>
 	</div>
 
-	{if CsrDelft\model\security\LoginModel::mag('P_ADMIN,bestuur,commissie:NovCie') AND $profiel->status === CsrDelft\model\entity\LidStatus::Noviet AND $profiel->kgb!=''}
+	{toegang 'P_ADMIN,bestuur,commissie:NovCie'}
+	{if $profiel->status === CsrDelft\model\entity\LidStatus::Noviet AND $profiel->kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
 			<div style="cursor: pointer;" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
 			<div class="gegevens verborgen" id="novcie_gegevens">{$profiel->kgb|bbcode}</div>
 		</div>
 	{/if}
+	{/toegang}
 
-	{if CsrDelft\model\security\LoginModel::mag('P_LEDEN_MOD')}
+	{toegang P_LEDEN_MOD}
 		<div class="profielregel" id="changelog">
 			<div class="gegevens">
 				<div style="cursor: pointer;" onclick="$('#changelog_gegevens').toggle();
@@ -428,6 +432,6 @@
 				</div>
 			</div>
 		</div>
-	{/if}
+	{/toegang}
 
 </div>

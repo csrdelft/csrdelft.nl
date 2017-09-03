@@ -1,15 +1,15 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * GroepStatus.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * De status van een groep of lid in een groep.
- * 
+ *
  */
 abstract class GroepStatus implements PersistentEnum {
 
@@ -24,9 +24,9 @@ abstract class GroepStatus implements PersistentEnum {
 	public static function getDescription($option) {
 		switch ($option) {
 			case self::FT: return 'future tempore'; // 'in de toekomstige tijd'
-			case self::HT: return 'hoc tempore'; // 'in de huidige tijd' (lett. 'in deze tijd') 
+			case self::HT: return 'hoc tempore'; // 'in de huidige tijd' (lett. 'in deze tijd')
 			case self::OT: return 'olim tempore'; // 'in de verleden tijd' (lett. 'uit de tijd')
-			default: throw new Exception('GroepStatus onbekend');
+			default: throw new CsrException('GroepStatus onbekend');
 		}
 	}
 
@@ -35,7 +35,7 @@ abstract class GroepStatus implements PersistentEnum {
 			case self::FT: return 'f.t.';
 			case self::HT: return 'h.t.';
 			case self::OT: return 'o.t.';
-			default: throw new Exception('GroepStatus onbekend');
+			default: throw new CsrException('GroepStatus onbekend');
 		}
 	}
 

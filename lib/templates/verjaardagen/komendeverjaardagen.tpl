@@ -1,10 +1,10 @@
 <div id="zijbalk_verjaardagen">
     <div class="zijbalk-kopje">
-        {if CsrDelft\model\security\LoginModel::mag('P_LEDEN_READ')}
+        {toegang P_LEDEN_READ}
             <a href="/leden/verjaardagen">Verjaardagen</a>
-        {else}
+        {geentoegang}
             Verjaardagen
-        {/if}
+        {/toegang}
     </div>
 
     {if $toonpasfotos}

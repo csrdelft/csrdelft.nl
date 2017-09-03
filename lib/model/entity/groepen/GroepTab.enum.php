@@ -1,15 +1,15 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * GroepTab.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * De verschillende tabbladen om een groep weer te geven.
- * 
+ *
  */
 abstract class GroepTab implements PersistentEnum {
 
@@ -30,7 +30,7 @@ abstract class GroepTab implements PersistentEnum {
 			case self::Statistiek: return 'Statistiek';
 			case self::Emails: return 'E-mails';
 			case self::Eetwens: return 'Allergie/dieet';
-			default: throw new Exception('GroepTab onbekend');
+			default: throw new CsrException('GroepTab onbekend');
 		}
 	}
 
@@ -41,7 +41,7 @@ abstract class GroepTab implements PersistentEnum {
 			case self::Statistiek: return 's';
 			case self::Emails: return 'e';
 			case self::Eetwens: return 'a';
-			default: throw new Exception('GroepTab onbekend');
+			default: throw new CsrException('GroepTab onbekend');
 		}
 	}
 

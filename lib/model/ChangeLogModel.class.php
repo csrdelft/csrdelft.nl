@@ -8,16 +8,25 @@ use CsrDelft\Orm\PersistenceModel;
 
 /**
  * ChangeLogModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class ChangeLogModel extends PersistenceModel {
 
 	const ORM = ChangeLogEntry::class;
 
+	/** @var static */
 	protected static $instance;
 
+	/**
+	 * @param string $subject
+	 * @param string $property
+	 * @param string $old
+	 * @param string $new
+	 *
+	 * @return ChangeLogEntry
+	 */
 	public function nieuw($subject, $property, $old, $new) {
 		$change = new ChangeLogEntry();
 		$change->moment = getDateTime();
@@ -45,12 +54,23 @@ class ChangeLogModel extends PersistenceModel {
 		$change->id = (int) parent::create($change);
 	}
 
+	/**
+	 * @param string $subject
+	 * @param string $property
+	 * @param string $old
+	 * @param string $new
+	 *
+	 * @return ChangeLogEntry
+	 */
 	public function log($subject, $property, $old, $new) {
 		$change = $this->nieuw($subject, $property, $old, $new);
 		$this->create($change);
 		return $change;
 	}
 
+	/**
+	 * @param ChangeLogEntry[] $diff
+	 */
 	public function logChanges(array $diff) {
 		foreach ($diff as $change) {
 			$this->create($change);

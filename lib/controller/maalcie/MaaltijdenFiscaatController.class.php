@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\maalcie\Maaltijd;
@@ -17,7 +18,6 @@ use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenView;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
-use Exception;
 
 /**
  * MaaltijdenFiscaatController.class.php
@@ -81,7 +81,7 @@ class MaaltijdenFiscaatController extends AclController {
 
 		# Controleer of de maaltijd gesloten is en geweest is
 		if ($maaltijd->gesloten == false OR date_create(sprintf("%s %s", $maaltijd->datum, $maaltijd->tijd)) >= date_create("now")) {
-			throw new Exception("Maaltijd nog niet geweest");
+			throw new CsrGebruikerException("Maaltijd nog niet geweest");
 		}
 
 		$maaltijden = Database::transaction(function () use ($maaltijd) {

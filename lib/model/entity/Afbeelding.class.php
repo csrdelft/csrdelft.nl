@@ -1,14 +1,12 @@
 <?php
 namespace CsrDelft\model\entity;
 
-use Exception;
-
+use CsrDelft\common\CsrException;
 
 /**
  * Afbeelding.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
  */
 class Afbeelding extends Bestand {
 
@@ -28,6 +26,15 @@ class Afbeelding extends Bestand {
 	 */
 	public $height;
 
+	/**
+	 * Constructor is called late (after attributes are set)
+	 * by PDO::FETCH_CLASS with $cast = true
+	 *
+	 * @param string $path
+	 * @param bool $parse
+	 *
+	 * @throws CsrException
+	 */
 	public function __construct($path, $parse = true) {
 		parent::__construct();
 		if ($path !== null) {
@@ -37,17 +44,17 @@ class Afbeelding extends Bestand {
 		if ($parse) {
 			$this->filesize = @filesize($this->directory . $this->filename);
 			if (!$this->filesize) {
-				throw new Exception('Afbeelding is leeg: ' . $this->directory . $this->filename);
+				throw new CsrException('Afbeelding is leeg: ' . $this->directory . $this->filename);
 			}
 			$image = @getimagesize($this->directory . $this->filename);
 			if (!$image) {
-				throw new Exception('Afbeelding parsen mislukt: ' . $this->directory . $this->filename);
+				throw new CsrException('Afbeelding parsen mislukt: ' . $this->directory . $this->filename);
 			}
 			$this->width = $image[0];
 			$this->height = $image[1];
 			$this->mimetype = $image['mime'];
 			if (!in_array($this->mimetype, static::$mimeTypes)) {
-				throw new Exception('Geen afbeelding: [' . $this->mimetype . '] ' . $this->directory . $this->filename);
+				throw new CsrException('Geen afbeelding: [' . $this->mimetype . '] ' . $this->directory . $this->filename);
 			}
 		}
 	}

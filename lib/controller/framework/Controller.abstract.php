@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\controller\framework;
+use CsrDelft\common\CsrException;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
@@ -7,7 +8,6 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\View;
-use Exception;
 use function CsrDelft\redirect;
 use function CsrDelft\setGoBackCookie;
 use function CsrDelft\setMelding;
@@ -184,7 +184,7 @@ abstract class Controller {
 		}
 		// Controleer of de actie bestaat
 		elseif (!$this->hasAction($this->action)) {
-			throw new Exception('Action undefined: ' . $this->action);
+			throw new CsrException('Action undefined: ' . $this->action);
 		}
 		return call_user_func_array(array($this, $this->action), $args);
 	}
@@ -200,7 +200,7 @@ abstract class Controller {
 			redirect(CSR_ROOT . "#login");
 		}
 		// GUI 403
-						$body = new CmsPaginaView(CmsPaginaModel::get($response_code));
+		$body = new CmsPaginaView(CmsPaginaModel::get($response_code));
 		$this->view = new CsrLayoutPage($body);
 		$this->view->view();
 		exit;

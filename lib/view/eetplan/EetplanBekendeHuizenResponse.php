@@ -1,7 +1,7 @@
 <?php
 
 namespace CsrDelft\view\eetplan;
-use CsrDelft\model\entity\Eetplan;
+use CsrDelft\model\entity\eetplan\Eetplan;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 
 /**

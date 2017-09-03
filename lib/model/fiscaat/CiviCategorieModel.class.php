@@ -12,7 +12,9 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class CiviCategorieModel extends PersistenceModel {
 	const ORM = CiviCategorie::class;
-	const DIR = 'fiscaat/';
 
+	/**
+	 * @var CiviCategorieModel
+	 */
 	protected static $instance;
 }

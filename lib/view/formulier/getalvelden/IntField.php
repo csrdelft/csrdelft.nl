@@ -1,8 +1,8 @@
 <?php
 namespace CsrDelft\view\formulier\getalvelden;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\invoervelden\InputField;
-use Exception;
 
 /**
  * IntField.class.php
@@ -27,10 +27,10 @@ class IntField extends InputField {
 	public function __construct($name, $value, $description, $min = null, $max = null) {
 		parent::__construct($name, $value, $description, 11);
 		if (!is_int($this->value) AND $this->value !== null) {
-			throw new Exception('value geen int');
+			throw new CsrGebruikerException('value geen int');
 		}
 		if (!is_int($this->origvalue) AND $this->origvalue !== null) {
-			throw new Exception('origvalue geen int');
+			throw new CsrGebruikerException('origvalue geen int');
 		}
 		if (is_int($min)) {
 			$this->min = $min;

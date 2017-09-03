@@ -138,49 +138,49 @@ jQuery(document).ready(function ($) {
 
 	try {
 		//suggestiemenu configureren
-		$("#boekzoeker").autocomplete("https://www.googleapis.com/books/v1/volumes", {
-			dataType: 'jsonp',
-			parse: function (data) {
-				var rows = [];
-				data = data.items;
-				for (var i = 0; i < data.length; i++) {
-					var datarow = data[i].volumeInfo;
-					rows[i] = {data: datarow, value: datarow.title, result: datarow.title + ' ' + getAuteur(datarow)};
+		var boekenSource = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.whitespace,
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			limit: 25,
+			remote: {
+				url: "https://www.googleapis.com/books/v1/volumes?q=%QUERY",
+				filter: function (data) {
+					var rows = [];
+					data = data.items;
+					for (var i = 0; i < data.length; i++) {
+						var datarow = data[i].volumeInfo;
+						datarow.index = i;
+						rows[i] = datarow;
+					}
+					return rows;
+				},
+				ajax: {
+					data: {
+						fields: 'items(volumeInfo(authors,industryIdentifiers,language,pageCount,publishedDate,publisher,title))',
+						key: 'AIzaSyC7zu4-25xbizddFWuIbn107WTTPr37jos'
+					}
 				}
-				return rows;
-			},
-			formatItem: function (row, i, n) {
-				var item = '<div title="titel: ' + row.title + "\nAuteur: " + getAuteur(row) + "\nPagina's: " + row.pageCount + "\nTaal: " + getLanguage(row) + "\nISBN: " + getIsbn(row) + "\nUitgeverij: " + row.publisher + "\nUitgavejaar: " + getPublishedDate(row) + '">';
-				item += row.title + '<br /><span class="cursief">' + getAuteur(row) + '</span>';
-				item += '</div>';
-				return item;
-			},
-			formatResult: function (row) {
-				return row.title + ' ' + getAuteur(row);
-			},
-			extraParams: {
-				limit: '',
-				fields: 'items(volumeInfo(authors,industryIdentifiers,language,pageCount,publishedDate,publisher,title))',
-				key: 'AIzaSyC7zu4-25xbizddFWuIbn107WTTPr37jos',
-				maxResults: 25,
-				qq: 1
-			},
-			minChars: 7,
-			delay: 1000,
-			max: 25
-
-					//invullen van info van gekozen suggestie in de boekvelden
-		}).result(function (event, row, formatted) {
-			//gegevens in invulvelden plaatsen
-			$("#field_titel").val(row.title);
-			$("#field_auteur").val(getAuteur(row));
-			$("#field_paginas").val(row.pageCount);
-			$("#field_taal").val(getLanguage(row));
-			$("#field_isbn").val(getIsbn(row));
-			$("#field_uitgeverij").val(row.publisher);
-			$("#field_uitgavejaar").val(getPublishedDate(row));
-
-			//kleurt invoerveld rood bij te korte zoekterm
+			}
+		});
+		boekenSource.initialize();
+		$("#boekzoeker").typeahead({
+			autoselect: true,
+			hint: true,
+			highlight: true,
+			minLength: 7
+		}, {
+			name: "boekenSource",
+			displayKey: "title",
+			source: boekenSource.ttAdapter(),
+			templates: {
+				header: "<h3>Boeken</h3>",
+				suggestion: function (row) {
+					var item = '<div style="margin: 5px 10px" title="Titel: ' + row.title + " | Auteur: " + getAuteur(row) + " | Pagina's: " + row.pageCount + " | Taal: " + getLanguage(row) + " | ISBN: " + getIsbn(row) + " | Uitgeverij: " + row.publisher + " | Uitgavejaar: " + getPublishedDate(row) + '">';
+					item += '<span class="dikgedrukt">' + row.title + '</span><br /><span class="cursief">' + getAuteur(row) + '</span>';
+					item += '</div>';
+					return item;
+				}
+			}
 		}).keyup(function (event) {
 			var inputlen = $(this).val().length;
 			if (inputlen > 0 && inputlen < 7) {
@@ -188,37 +188,52 @@ jQuery(document).ready(function ($) {
 			} else {
 				$(this).css("background-color", "white");
 			}
+		}).on("typeahead:selected", function(event, row, dataset) {
+			//gegevens in invulvelden plaatsen
+			var values = [
+				{key: 'titel', value: row.title},
+				{key: 'auteur', value: getAuteur(row)},
+				{key: 'paginas', value: row.pageCount},
+				{key: 'taal', value: getLanguage(row)},
+				{key: 'isbn', value: getIsbn(row)},
+				{key: 'uitgeverij', value: row.publisher},
+				{key: 'uitgavejaar', value: getPublishedDate(row)}
+			];
+			values.forEach(function(el) {
+				$("input[name=" + el.key + "]").val(el.value);
+			});
 		});
-	}
-	catch (err) {
-		console.log(err);
-		// Missing js file
-	}
 
-	//boekpagina: autocomplete voor bewerkvelden uit C.S.R.-database.
-	/* result = array(
-	 *		array(data:array(..,..,..), value: "string", result:"string"),
-	 * 		array(... )
-	 * )
-	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
-	 */
-	var options = {
-		dataType: 'json',
-		parse: function (result) {
-			return result;
-		},
-		formatItem: function (row, i, n) {
-			return 'Ga naar: <a href="/bibliotheek/boek/' + row.id + '" target="_blank">' + row.titel + '</a>';
-		},
-		clickFire: true,
-		cacheLength: 0,
-		delay: 600,
-		max: 20
-	};
-
-	try {
-		$("#field_titel").autocomplete("/bibliotheek/autocomplete/titel", options).result(function (event, row) {
-			window.open('/bibliotheek/boek/' + row.id)
+		//boekpagina: autocomplete voor bewerkvelden uit C.S.R.-database.
+		/* result = array(
+		 *		array(data:array(..,..,..), value: "string", result:"string"),
+		 * 		array(... )
+		 * )
+		 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
+		 */
+		var bestaandeBoekenSource = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.whitespace,
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			limit: 20,
+			remote: "autocomplete/titel?q=%QUERY"
+		});
+		bestaandeBoekenSource.initialize();
+		$("form.Formulier input:not(.tt-hint):first").typeahead({
+			autoselect: true,
+			hint: true,
+			highlight: true
+		}, {
+			name: "bestaandeBoekenSource",
+			displayKey: "value",
+			source: bestaandeBoekenSource.ttAdapter(),
+			templates: {
+				header: "<h3>Bestaande Boeken</h3>",
+				suggestion: function (row) {
+					return '<div style="margin: 5px 10px">Ga naar: <a href="/bibliotheek/boek/' + row.data.id + '" target="_blank">' + row.data.titel + '</a></div>';
+				}
+			}
+		}).on("typeahead:select", function (event, row) {
+			window.open('/bibliotheek/boek/' + row.data.id)
 		});
 	} catch (err) {
 		console.log(err);
@@ -281,12 +296,13 @@ jQuery(document).ready(function ($) {
 
 //voeg 'genereer'-knop toe aan codefield, die een biebcode geneert met waardes uit andere velden
 function biebCodeVakvuller() {
+	var codeveld = $("input[name=code]");
 	var codeknop = $('<a class="btn genereer" title="Biebcode invullen">Genereer</a>').mousedown(function (event) {
 		event.preventDefault();
-		$("#field_code").val(
-				$("#field_rubriek").val() + '.' + $("#field_auteur").val().substring(0, 3).toLowerCase()
+		codeveld.val(
+				$("select[name=rubriek]").val() + '.' + $("input[name=auteur]").val().substring(0, 3).toLowerCase()
 				).focus();
 	});
-	$("#field_code").after(codeknop);
+	codeveld.after(codeknop);
 }
 

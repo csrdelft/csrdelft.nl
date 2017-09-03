@@ -1,13 +1,13 @@
 <?php
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
-use Exception;
-
 
 /**
  * CorveeVoorkeurenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -27,7 +27,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		if ($profiel->eetwens === $eetwens) return;
 		$profiel->eetwens = $eetwens;
 		if (ProfielModel::instance()->update($profiel) !== 1) {
-			throw new Exception('Eetwens opslaan mislukt');
+			throw new CsrException('Eetwens opslaan mislukt');
 		}
 	}
 
@@ -127,22 +127,22 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 
 	public function getVoorkeurenVoorRepetitie($crid) {
 		if (!is_int($crid) || $crid <= 0) {
-			throw new Exception('Get voorkeuren voor repetitie faalt: Invalid $crid = ' . $crid);
+			throw new CsrGebruikerException('Get voorkeuren voor repetitie faalt: Invalid $crid = ' . $crid);
 		}
 		return $this->find('crv_repetitie_id = ?', array($crid));
 	}
 
 	public function inschakelenVoorkeur(CorveeVoorkeur $voorkeur) {
 		if ($this->exists($voorkeur)) {
-			throw new Exception('Voorkeur al ingeschakeld');
+			throw new CsrGebruikerException('Voorkeur al ingeschakeld');
 		}
 		$repetitie = CorveeRepetitiesModel::instance()->getRepetitie($voorkeur->crv_repetitie_id);
 		if (!$repetitie->voorkeurbaar) {
-			throw new Exception('Niet voorkeurbaar');
+			throw new CsrGebruikerException('Niet voorkeurbaar');
 		}
 		if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
 						if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->functie_id)) {
-				throw new Exception('Niet gekwalificeerd');
+				throw new CsrGebruikerException('Niet gekwalificeerd');
 			}
 		}
 
@@ -153,7 +153,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 
 	public function uitschakelenVoorkeur($voorkeur) {
 		if (!$this->exists($voorkeur)) {
-			throw new Exception('Voorkeur al uitgeschakeld');
+			throw new CsrGebruikerException('Voorkeur al uitgeschakeld');
 		}
 
 		$this->delete($voorkeur);

@@ -1,10 +1,10 @@
 <?php
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
-use Exception;
 
 /**
  * MaaltijdRepetitiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -24,7 +24,6 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 	 *
 	 * @param string $uid
 	 * @return MaaltijdRepetitie[]
-	 * @throws Exception
 	 * @internal param MaaltijdRepetitie[] $repetities
 	 */
 	public function getAbonneerbareRepetitiesVoorLid($uid) {
@@ -53,12 +52,12 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
     /**
      * @param $mrid
      * @return MaaltijdRepetitie
-     * @throws Exception
+     * @throws CsrGebruikerException
      */
 	public function getRepetitie($mrid) {
 		$repetitie = $this->retrieveByPrimaryKey(array($mrid));
 		if ($repetitie === false) {
-			throw new Exception('Get maaltijd-repetitie faalt: Not found $mrid =' . $mrid);
+			throw new CsrGebruikerException('Get maaltijd-repetitie faalt: Not found $mrid =' . $mrid);
 		}
 		return $repetitie;
 	}
@@ -84,14 +83,14 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 
 	public function verwijderRepetitie($mrid) {
 		if (!is_int($mrid) || $mrid <= 0) {
-			throw new Exception('Verwijder maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);
+			throw new CsrGebruikerException('Verwijder maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);
 		}
 		if (CorveeRepetitiesModel::instance()->existMaaltijdRepetitieCorvee($mrid)) {
-			throw new Exception('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
+			throw new CsrGebruikerException('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
 		}
 		if (MaaltijdenModel::instance()->existRepetitieMaaltijden($mrid)) {
 			MaaltijdenModel::instance()->verwijderRepetitieMaaltijden($mrid); // delete maaltijden first (foreign key)
-			throw new Exception('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
+			throw new CsrGebruikerException('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 		$aantalAbos = MaaltijdAbonnementenModel::instance()->verwijderAbonnementen($mrid);
         $this->deleteByPrimaryKey(array($mrid));

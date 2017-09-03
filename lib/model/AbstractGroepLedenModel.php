@@ -1,9 +1,8 @@
 <?php
 namespace CsrDelft\model;
+
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\AbstractGroepLid;
-use CsrDelft\model\entity\groepen\RechtenGroepLid;
-use CsrDelft\model\entity\groepen\WerkgroepDeelnemer;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
@@ -14,12 +13,8 @@ use function CsrDelft\group_by_distinct;
  * AbstractGroepLedenModel.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
  */
 abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
-
-	const DIR = 'groepen/';
-
 	/**
 	 * Default ORDER BY
 	 * @var string
@@ -31,10 +26,22 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 	 */
 	protected $memcache_prefetch = true;
 
+	/**
+	 * @param AbstractGroep $groep
+	 * @param $uid
+	 *
+	 * @return AbstractGroepLid|false
+	 */
 	public static function get(AbstractGroep $groep, $uid) {
 		return static::instance()->retrieveByPrimaryKey(array($groep->id, $uid));
 	}
 
+	/**
+	 * @param AbstractGroep $groep
+	 * @param $uid
+	 *
+	 * @return AbstractGroepLid
+	 */
 	public function nieuw(AbstractGroep $groep, $uid) {
 		$orm = static::ORM;
 		$lid = new $orm();

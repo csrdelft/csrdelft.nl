@@ -1,7 +1,7 @@
 <?php
 namespace CsrDelft\model\entity\mededelingen;
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * MededelingAccess.enum.php
@@ -22,7 +22,7 @@ abstract class MededelingAccess implements PersistentEnum {
         switch ($option) {
             case self::Post: return 'Ouderejaarskring';
             case self::Mod: return 'Eerstejaarskring';
-            default: throw new Exception('Toegang onbekend');
+            default: throw new CsrException('Toegang onbekend');
         }
     }
 
@@ -30,7 +30,7 @@ abstract class MededelingAccess implements PersistentEnum {
         switch ($option) {
             case self::Post: return 'P';
             case self::Mod: return 'M';
-            default: throw new Exception('Toegang onbekend');
+            default: throw new CsrException('Toegang onbekend');
         }
     }
 

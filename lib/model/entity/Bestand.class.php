@@ -8,7 +8,6 @@ use CsrDelft\Orm\Entity\PersistentEntity;
  * Bestand.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
  */
 class Bestand extends PersistentEntity {
 
@@ -50,6 +49,8 @@ class Bestand extends PersistentEntity {
 
 	/**
 	 * Bestaat er een bestand met de naam in de map.
+	 *
+	 * @return bool
 	 */
 	public function exists() {
 		return @is_readable($this->directory . $this->filename) AND is_file($this->directory . $this->filename);

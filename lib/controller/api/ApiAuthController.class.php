@@ -5,7 +5,6 @@ use function CsrDelft\crypto_rand_token;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\RememberLoginModel;
-use Exception;
 use Firebase\JWT\JWT;
 use \Jacwright\RestServer\RestException;
 
@@ -30,7 +29,7 @@ class ApiAuthController {
 
 		try {
 			$token = JWT::decode($jwt, JWT_SECRET, array('HS512'));
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			throw new RestException(401);
 		}
 

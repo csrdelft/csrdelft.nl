@@ -45,7 +45,7 @@
 						<input type="text" name="titel" value="{$draad->titel}" />
 						<input type="submit" value="Opslaan" class="btn" />
 					</form>
-					{if CsrDelft\model\security\LoginModel::mag('P_FORUM_BELANGRIJK')}
+					{toegang P_FORUM_BELANGRIJK}
 						<br />
 						<form action="/forum/wijzigen/{$draad->draad_id}/belangrijk" method="post">
 							<label>Belangrijk markeren &nbsp;</label>
@@ -61,7 +61,7 @@
 							</select>
 							<input type="submit" value="Opslaan" class="btn" />
 						</form>
-					{/if}
+					{/toegang}
 					{if $gedeeld_met_opties}
 						<br />
 						<form action="/forum/wijzigen/{$draad->draad_id}/gedeeld_met" method="post">

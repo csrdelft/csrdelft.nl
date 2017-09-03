@@ -1,7 +1,7 @@
 <?php
-namespace CsrDelft\model;
-use CsrDelft\model\entity\Eetplan;
-use CsrDelft\model\entity\EetplanBekenden;
+namespace CsrDelft\model\eetplan;
+use CsrDelft\model\entity\eetplan\Eetplan;
+use CsrDelft\model\entity\eetplan\EetplanBekenden;
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\entity\Profiel;
 
@@ -133,7 +133,7 @@ class EetplanFactory {
      *
      * @param string $avond
      * @param bool $random
-     * @return array
+     * @return Eetplan[]
      */
     public function genereer($avond, $random = false) {
         assert(isset($this->novieten));

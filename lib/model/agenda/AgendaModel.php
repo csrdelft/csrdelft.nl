@@ -1,8 +1,7 @@
 <?php
 namespace CsrDelft\model\agenda;
 
-use CsrDelft\model\agenda;
-use CsrDelft\model\BijbelroosterModel;
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\agenda\AgendaItem;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
@@ -16,7 +15,6 @@ use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
 use CsrDelft\Orm\PersistenceModel;
-use Exception;
 use function CsrDelft\getDateTime;
 use function CsrDelft\getWeekNumber;
 
@@ -32,7 +30,6 @@ use function CsrDelft\getWeekNumber;
 class AgendaModel extends PersistenceModel {
 
 	const ORM = AgendaItem::class;
-	const DIR = 'agenda/';
 
 	protected static $instance;
 	/**
@@ -42,21 +39,21 @@ class AgendaModel extends PersistenceModel {
 	protected $default_order = 'begin_moment ASC, titel ASC';
 
 	/**
-	 * @param $van
-	 * @param $tot
+	 * @param integer $van
+	 * @param integer $tot
 	 * @param bool $ical
 	 * @param bool $zijbalk
 	 * @return Agendeerbaar[]
-	 * @throws Exception
+	 * @throws CsrException
 	 */
 	public function getAllAgendeerbaar($van, $tot, $ical = false, $zijbalk = false) {
 		$result = array();
 
 		if (!is_int($van)) {
-			throw new Exception('Invalid timestamp: $van getAllAgendeerbaar()');
+			throw new CsrException('Invalid timestamp: $van getAllAgendeerbaar()');
 		}
 		if (!is_int($tot)) {
-			throw new Exception('Invalid timestamp: $tot getAllAgendeerbaar()');
+			throw new CsrException('Invalid timestamp: $tot getAllAgendeerbaar()');
 		}
 
 		// AgendaItems
@@ -68,11 +65,6 @@ class AgendaModel extends PersistenceModel {
 			if ($item->magBekijken($ical)) {
 				$result[] = $item;
 			}
-		}
-
-		// Bijbelrooster
-		if (LidInstellingenModel::get('agenda', 'toonBijbelrooster') === 'ja' && !$zijbalk) {
-			$result = array_merge($result, BijbelroosterModel::instance()->getBijbelroosterTussen($van, $tot)->fetchAll());
 		}
 
 		// Activiteiten
@@ -145,7 +137,7 @@ class AgendaModel extends PersistenceModel {
 		if ($count > 0) {
 			$params = array_keys($itemsByUUID);
 			array_unshift($params, LoginModel::getUid());
-			$verborgen = agenda\AgendaVerbergenModel::instance()->find('uid = ? AND refuuid IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $params);
+			$verborgen = AgendaVerbergenModel::instance()->find('uid = ? AND refuuid IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $params);
 			foreach ($verborgen as $verbergen) {
 				unset($itemsByUUID[$verbergen->refuuid]);
 			}

@@ -19,8 +19,6 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use function CsrDelft\getDateTime;
 use function CsrDelft\setMelding;
-use Exception;
-
 
 /**
  * ProfielModel.class.php
@@ -36,8 +34,6 @@ class ProfielModel extends CachedPersistenceModel {
 	protected static $instance;
 
 	/**
-	 * TODO: sparse retieval: array('voornaam', 'tussenvoegsel', 'achternaam');
-	 *
 	 * @param string $uid
 	 * @return Profiel|false
 	 */
@@ -111,7 +107,7 @@ class ProfielModel extends CachedPersistenceModel {
 	public function update(PersistentEntity $profiel) {
 		try {
 			$this->save_ldap($profiel);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			setMelding($e->getMessage(), -1); //TODO: logging
 		}
 		$this->cache($profiel, true, true);
@@ -232,7 +228,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return string changelogregel
 	 */
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
-				$aantal = MaaltijdAbonnementenModel::instance()->verwijderAbonnementenVoorLid($profiel->uid);
+		$aantal = MaaltijdAbonnementenModel::instance()->verwijderAbonnementenVoorLid($profiel->uid);
 		if ($aantal > 0) {
 			return 'Afmelden abo\'s: ' . $aantal . ' uitgezet.[br]';
 		}
@@ -319,7 +315,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyBibliothecaris(Profiel $profiel, $oudestatus) {
-				$boeken = BiebCatalogus::getBoekenByUid($profiel->uid, 'geleend');
+		$boeken = BiebCatalogus::getBoekenByUid($profiel->uid, 'geleend');
 		if (!is_array($boeken)) {
 			$boeken = array();
 		}

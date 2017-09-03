@@ -1,5 +1,7 @@
 <?php
 namespace CsrDelft\model\forum;
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumDraad;
@@ -13,7 +15,6 @@ use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use function CsrDelft\startsWith;
 use CsrDelft\view\bbcode\CsrBB;
-use Exception;
 use PDO;
 
 /**
@@ -58,12 +59,12 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	/**
 	 * @param $id
 	 * @return ForumPost
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public static function get($id) {
 		$post = static::instance()->retrieveByPrimaryKey(array($id));
 		if (!$post) {
-			throw new Exception('Forum-reactie bestaat niet!');
+			throw new CsrGebruikerException('Forum-reactie bestaat niet!');
 		}
 		return $post;
 	}
@@ -129,10 +130,6 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$attributes = array('*', 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score');
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		$where_params = array($query);
-		if (!LoginModel::mag('P_LOGGED_IN')) {
-			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
-			$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
-		}
 		$order = 'score DESC';
 		if (in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
 			$order .= ', ' . $datumsoort . ' DESC';
@@ -238,7 +235,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$post->verwijderd = !$post->verwijderd;
 		$rowCount = $this->update($post);
 		if ($rowCount !== 1) {
-			throw new Exception('Verwijderen mislukt');
+			throw new CsrException('Verwijderen mislukt');
 		}
 		ForumDradenModel::instance()->resetLastPost($post->getForumDraad());
 	}
@@ -259,7 +256,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$post->bewerkt_tekst .= $bewerkt;
 		$rowCount = $this->update($post);
 		if ($rowCount !== 1) {
-			throw new Exception('Bewerken mislukt');
+			throw new CsrException('Bewerken mislukt');
 		}
 		if ($verschil > 3) {
 			$draad = $post->getForumDraad();
@@ -268,7 +265,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 			$draad->laatste_wijziging_uid = $post->uid;
 			$rowCount = ForumDradenModel::instance()->update($draad);
 			if ($rowCount !== 1) {
-				throw new Exception('Bewerken mislukt');
+				throw new CsrException('Bewerken mislukt');
 			}
 		}
 	}
@@ -280,7 +277,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
 		$rowCount = $this->update($post);
 		if ($rowCount !== 1) {
-			throw new Exception('Verplaatsen mislukt');
+			throw new CsrException('Verplaatsen mislukt');
 		}
 		ForumDradenModel::instance()->resetLastPost($post->getForumDraad());
 		ForumDradenModel::instance()->resetLastPost($oudeDraad);
@@ -292,7 +289,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
 		$rowCount = $this->update($post);
 		if ($rowCount !== 1) {
-			throw new Exception('Offtopic mislukt');
+			throw new CsrException('Offtopic mislukt');
 		}
 	}
 
@@ -303,7 +300,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate][/prive]' . "\n";
 			$rowCount = $this->update($post);
 			if ($rowCount !== 1) {
-				throw new Exception('Goedkeuren mislukt');
+				throw new CsrException('Goedkeuren mislukt');
 			}
 		}
 		$draad = $post->getForumDraad();

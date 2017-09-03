@@ -289,6 +289,7 @@ class LoginController extends AclController {
 				// redirect by verifyToken
 			} else {
 				setMelding('Deze link is niet meer geldig', -1);
+				redirect(CSR_ROOT . '/wachtwoord/vergeten');
 			}
 		}
 		$this->view = new CsrLayoutOweePage($form);

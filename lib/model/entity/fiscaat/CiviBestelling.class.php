@@ -28,10 +28,16 @@ class CiviBestelling extends PersistentEntity {
 	 */
 	public $inhoud = array();
 
+	/**
+	 * @return \PDOStatement|CiviBestellingInhoud[]
+	 */
 	public function getInhoud() {
 		return CiviBestellingInhoudModel::instance()->find('bestelling_id = ?', array($this->id));
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function jsonSerialize() {
 		$data = parent::jsonSerialize();
 		$data['inhoud'] = CiviBestellingModel::instance()->getBeschrijvingText($this->getInhoud());

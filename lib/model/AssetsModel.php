@@ -1,7 +1,7 @@
 <?php
-
 namespace CsrDelft\model;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\view\CompressedLayout;
 use DateInterval;
 use JShrink\Minifier as JsMin;
@@ -19,22 +19,34 @@ use function CsrDelft\endsWith;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class AssetsModel {
-    /**
-     * url(<relatieve url>)
-     *
-     * <relatieve url> begint niet met 'data', 'http', of '/'
-     */
-    const CSS_REGEX_URL = '/url\([\'"]{1}(?!\/)(?!data)(?!http)(.*?)[\'"]{1}\)/';
+	/**
+	 * url(<relatieve url>)
+	 *
+	 * <relatieve url> begint niet met 'data', 'http', of '/'
+	 */
+	const CSS_REGEX_URL = '/url\([\'"]{1}(?!\/)(?!data)(?!http)(.*?)[\'"]{1}\)/';
 
-    private $minify;
-    private $cachePool;
+	/**
+	 * @var bool
+	 */
+	private $minify;
 
-    public function __construct($minify) {
-        $this->minify = $minify;
+	/**
+	 * @var CachePool
+	 */
+	private $cachePool;
 
-        $driver = new FileSystemDriver(['path' => DATA_PATH . 'assets/']);
-        $this->cachePool = new CachePool($driver);
-    }
+	/**
+	 * AssetsModel constructor.
+	 *
+	 * @param bool $minify
+	 */
+	public function __construct($minify) {
+		$this->minify = $minify;
+
+		$driver = new FileSystemDriver(['path' => DATA_PATH . 'assets/']);
+		$this->cachePool = new CachePool($driver);
+	}
 
 	/**
 	 * Haal item op uit cache.
@@ -56,236 +68,253 @@ class AssetsModel {
 	 *
 	 * @return ItemInterface
 	 */
-    public function getItem($moduleHash, $layout, $module, $extension) {
-        return $this->cachePool->getItem(sprintf('/%s/%s/%s/%s', $extension, $layout, $module, $moduleHash));
-    }
+	public function getItem($moduleHash, $layout, $module, $extension) {
+		return $this->cachePool->getItem(sprintf('/%s/%s/%s/%s', $extension, $layout, $module, $moduleHash));
+	}
 
-    /**
-     * @param CacheItemInterface $item
-     *
-     * @return bool
-     */
-    public function save(CacheItemInterface $item) {
-        $item->expiresAfter(DateInterval::createFromDateString('1 year'));
-        return $this->cachePool->save($item);
-    }
+	/**
+	 * @param CacheItemInterface $item
+	 *
+	 * @return bool
+	 */
+	public function save(CacheItemInterface $item) {
+		$item->expiresAfter(DateInterval::createFromDateString('1 year'));
+		return $this->cachePool->save($item);
+	}
 
-    /**
-     * @param $layout
-     * @param $module
-     * @param $extension
-     *
-     * @return string
-     */
-    public function checkCache($hash, $layout, $module, $extension) {
-        $item = $this->getItem($hash, $layout, $module, $extension);
-        return dechex($item->getCreation()->format('u'));
-    }
+	/**
+	 * @param string $hash
+	 * @param string $layout
+	 * @param string $module
+	 * @param string $extension
+	 *
+	 * @return string
+	 */
+	public function checkCache($hash, $layout, $module, $extension) {
+		$item = $this->getItem($hash, $layout, $module, $extension);
+		return dechex($item->getCreation()->format('u'));
+	}
 
-    public function createJavascript(CacheItemInterface $item) {
-        list($extension, $layout, $module, $hash) = explode('/', $item->getKey());
+	/**
+	 * @param CacheItemInterface $item
+	 *
+	 * @return string
+	 */
+	public function createJavascript(CacheItemInterface $item) {
+		list($extension, $layout, $module, $hash) = explode('/', $item->getKey());
 
-        $modules = CompressedLayout::getUserModules($module, $extension);
+		$modules = CompressedLayout::getUserModules($module, $extension);
 
-        $files = $this->parseConfig($layout, $extension);
+		$files = $this->parseConfig($layout, $extension);
 
-        ob_start();
+		ob_start();
 
-        // load files
-        foreach ($modules as $mod) {
-            if (!key_exists($mod, $files)) {
-                // Geen js voor deze mod
-                continue;
-            }
-            foreach ($files[$mod] as $file) {
-                if (!file_exists(ASSETS_PATH . $file)) {
-                    throw new Exception('Bestand niet gevonden: ' . $file);
-                }
+		// load files
+		foreach ($modules as $mod) {
+			if (!key_exists($mod, $files)) {
+				// Geen js voor deze mod
+				continue;
+			}
+			foreach ($files[$mod] as $file) {
+				if (!file_exists(ASSETS_PATH . $file)) {
+					throw new CsrException('Bestand niet gevonden: ' . $file);
+				}
 
-                $filename = str_replace(ASSETS_PATH, '', $file);
+				$filename = str_replace(ASSETS_PATH, '', $file);
 
-                echo "/* Begin van " . $filename . " */\n";
-                if (DEBUG) {
-                    echo 'try {' . PHP_EOL;
-                }
+				echo "/* Begin van " . $filename . " */\n";
+				if (DEBUG) {
+					echo 'try {' . PHP_EOL;
+				}
 
-                echo file_get_contents(ASSETS_PATH . $file) . PHP_EOL;
+				echo file_get_contents(ASSETS_PATH . $file) . PHP_EOL;
 
-                if (DEBUG) {
-                    echo '} catch (e) {' . PHP_EOL . 'logError(e, "' . $file . '");' . PHP_EOL . '}' . PHP_EOL;
-                }
+				if (DEBUG) {
+					echo '} catch (e) {' . PHP_EOL . 'logError(e, "' . $file . '");' . PHP_EOL . '}' . PHP_EOL;
+				}
 
-                echo "/* Eind van " . $filename . " */\n\n";
-            }
-        }
+				echo "/* Eind van " . $filename . " */\n\n";
+			}
+		}
 
-        $js = ob_get_clean();
+		$js = ob_get_clean();
 
-        if ($this->minify) {
-            // Tijdelijke fix voor #57 in JShrink
-            $js = preg_replace('/\*\/\/\*/', "*/\n/*", $js);
-            $js = JsMin::minify($js);
-        }
+		if ($this->minify) {
+			// Tijdelijke fix voor #57 in JShrink
+			$js = preg_replace('/\*\/\/\*/', "*/\n/*", $js);
+			$js = JsMin::minify($js);
+		}
 
-        return $js;
-    }
+		return $js;
+	}
 
-    public function createCss(CacheItemInterface $item) {
-        $driver = new FileSystemDriver(['path' => DATA_PATH . 'less/']);
-        $pool = new CachePool($driver);
+	/**
+	 * @param CacheItemInterface $item
+	 *
+	 * @return string
+	 */
+	public function createCss(CacheItemInterface $item) {
+		$driver = new FileSystemDriver(['path' => DATA_PATH . 'less/']);
+		$pool = new CachePool($driver);
 
-        list($extension, $layout, $module, $hash) = explode('/', $item->getKey());
+		list($extension, $layout, $module, $hash) = explode('/', $item->getKey());
 
-        $modules = CompressedLayout::getUserModules($module, $extension);
+		$modules = CompressedLayout::getUserModules($module, $extension);
 
-        $files = $this->parseConfig($layout, $extension);
+		$files = $this->parseConfig($layout, $extension);
 
-        // start output buffering
-        ob_start();
+		// start output buffering
+		ob_start();
 
-        // build the stylesheet
-        foreach ($modules as $mod) {
-            if (!key_exists($mod, $files)) {
-                // Geen css voor deze mod
-                continue;
-            }
-            // load files
-            foreach ($files[$mod] as $file) {
-                $item = $pool->getItem($file);
+		// build the stylesheet
+		foreach ($modules as $mod) {
+			if (!key_exists($mod, $files)) {
+				// Geen css voor deze mod
+				continue;
+			}
+			// load files
+			foreach ($files[$mod] as $file) {
+				$item = $pool->getItem($file);
 
-                if ($item->isHit()) {
-                    $item = $this->invalidateLessCache($item, $pool);
-                }
+				if ($item->isHit()) {
+					$item = $this->invalidateLessCache($item, $pool);
+				}
 
-                if ($item->isHit()) {
-                    echo $item->get();
-                    continue;
-                } else {
-                    if (endsWith($file, '.css')) {
-                        $cssContents = $this->parseCss($file);
-                    } else {
-                        $cssContents = $this->parseLess($file);
-                    }
+				if ($item->isHit()) {
+					echo $item->get();
+					continue;
+				} else {
+					if (endsWith($file, '.css')) {
+						$cssContents = $this->parseCss($file);
+					} else {
+						$cssContents = $this->parseLess($file);
+					}
 
-                    $pool->save($item->set($cssContents));
-                    echo $cssContents;
-                }
-            }
-        }
+					$pool->save($item->set($cssContents));
+					echo $cssContents;
+				}
+			}
+		}
 
-        $css = ob_get_clean();
+		$css = ob_get_clean();
 
-        if ($this->minify) {
-            $css = (new CssMin())->run($css);
-        }
+		if ($this->minify) {
+			$css = (new CssMin())->run($css);
+		}
 
-        return $css;
-    }
+		return $css;
+	}
 
-    public static function parseConfig($layout, $extension) {
-        if ($extension == 'js') {
-            $ininame = 'script';
-            $sectionname = 'scripts';
-        } else {
-            $ininame = 'style';
-            $sectionname = 'stylesheets';
-        }
+	/**
+	 * @param string $layout
+	 * @param string $extension
+	 *
+	 * @return string[]
+	 */
+	public static function parseConfig($layout, $extension) {
+		if ($extension == 'js') {
+			$ininame = 'script';
+			$sectionname = 'scripts';
+		} else {
+			$ininame = 'style';
+			$sectionname = 'stylesheets';
+		}
 
-        $includes = array(); // mode, file => base
-        // load style.ini/script.ini
-        $ini = ASSETS_PATH . $layout . DIRECTORY_SEPARATOR . $ininame . '.ini';
-        if (file_exists($ini)) {
-            $data = parse_ini_file($ini, true);
-            if (is_array($data[$sectionname])) {
-                foreach ($data[$sectionname] as $module => $files) {
-                    foreach ($files as $file) {
-                        $includes[$module][] = $file;
-                    }
-                }
-            }
-        }
+		$includes = array(); // mode, file => base
+		// load style.ini/script.ini
+		$ini = ASSETS_PATH . $layout . DIRECTORY_SEPARATOR . $ininame . '.ini';
+		if (file_exists($ini)) {
+			$data = parse_ini_file($ini, true);
+			if (is_array($data[$sectionname])) {
+				foreach ($data[$sectionname] as $module => $files) {
+					foreach ($files as $file) {
+						$includes[$module][] = $file;
+					}
+				}
+			}
+		}
 
-        return $includes;
-    }
+		return $includes;
+	}
 
-    /**
-     * Is het tijd de cache te refreshen?
-     *
-     * @param $includes
-     * @param $timestamp
-     *
-     * @return mixed
-     */
-    private function invalidateCache($includes, $timestamp) {
-        foreach ($includes as $includedLessFile) {
-            if ($timestamp < filemtime($includedLessFile)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	/**
+	 * Is het tijd de cache te refreshen?
+	 *
+	 * @param string[] $includes
+	 * @param int $timestamp
+	 *
+	 * @return bool
+	 */
+	private function invalidateCache($includes, $timestamp) {
+		foreach ($includes as $includedLessFile) {
+			if ($timestamp < filemtime($includedLessFile)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    /**
-     * @param $file
-     *
-     * @return mixed|string
-     */
-    protected function parseCss($file) {
-        $cssContents = sprintf("/*%s*/" . PHP_EOL, filemtime(ASSETS_PATH . $file));
-        $cssContents .= file_get_contents(ASSETS_PATH . $file);
-        $dir = dirname('/assets/' . $file);
-        $cssContents = preg_replace(self::CSS_REGEX_URL, "url($dir/$1)", $cssContents);
-        return $cssContents;
-    }
+	/**
+	 * @param string $file
+	 *
+	 * @return string
+	 */
+	protected function parseCss($file) {
+		$cssContents = sprintf("/*%s*/" . PHP_EOL, filemtime(ASSETS_PATH . $file));
+		$cssContents .= file_get_contents(ASSETS_PATH . $file);
+		$dir = dirname('/assets/' . $file);
+		$cssContents = preg_replace(self::CSS_REGEX_URL, "url($dir/$1)", $cssContents);
+		return $cssContents;
+	}
 
-    /**
-     * @param $file
-     *
-     * @return string
-     */
-    protected function parseLess($file) {
-        $less = new \Less_Parser();
-        $less->parseFile(
-            ASSETS_PATH . $file,
-            dirname(ASSETS_DIR . DIRECTORY_SEPARATOR . $file)
-        );
-        $parsedLess = $less->getCss();
-        $references = $less->allParsedFiles();
-        $cssContents = "/*";
-        $lastModified = filemtime(ASSETS_PATH . $file);
-        foreach ($references as $reference) {
-            $cssContents .= sprintf("%s|", $reference);
-            $modified = filemtime($reference);
-            if ($modified > $lastModified) {
-                $lastModified = $modified;
-            }
-        }
-        $cssContents .= sprintf("%s*/" . PHP_EOL, $lastModified);
-        $cssContents .= $parsedLess;
-        return $cssContents;
-    }
+	/**
+	 * @param string $file
+	 *
+	 * @return string
+	 */
+	protected function parseLess($file) {
+		$less = new \Less_Parser();
+		$less->parseFile(
+			ASSETS_PATH . $file,
+			dirname(ASSETS_DIR . DIRECTORY_SEPARATOR . $file)
+		);
+		$parsedLess = $less->getCss();
+		$references = $less->allParsedFiles();
+		$cssContents = "/*";
+		$lastModified = filemtime(ASSETS_PATH . $file);
+		foreach ($references as $reference) {
+			$cssContents .= sprintf("%s|", $reference);
+			$modified = filemtime($reference);
+			if ($modified > $lastModified) {
+				$lastModified = $modified;
+			}
+		}
+		$cssContents .= sprintf("%s*/" . PHP_EOL, $lastModified);
+		$cssContents .= $parsedLess;
+		return $cssContents;
+	}
 
-    /**
-     * @param CacheItemInterface $item
-     * @param CachePool $pool
-     *
-     * @return CacheItemInterface
-     */
-    protected function invalidateLessCache(CacheItemInterface $item, CachePool $pool) {
-        $css = $item->get();
-        $prefix = strtok($css, PHP_EOL);
+	/**
+	 * @param CacheItemInterface $item
+	 * @param CachePool $pool
+	 *
+	 * @return CacheItemInterface
+	 */
+	protected function invalidateLessCache(CacheItemInterface $item, CachePool $pool) {
+		$css = $item->get();
+		$prefix = strtok($css, PHP_EOL);
 
-        $prefix = substr($prefix, 2, strlen($prefix) - 1);
+		$prefix = substr($prefix, 2, strlen($prefix) - 1);
 
-        $includes = explode("|", $prefix);
-        $timestamp = array_pop($includes);
+		$includes = explode("|", $prefix);
+		$timestamp = array_pop($includes);
 
-        array_unshift($includes, ASSETS_PATH . $item->getKey());
+		array_unshift($includes, ASSETS_PATH . $item->getKey());
 
-        if ($this->invalidateCache($includes, $timestamp)) {
-            $pool->deleteItem($item->getKey());
-            $item = $pool->getItem($item->getKey());
-        }
-        return $item;
-    }
+		if ($this->invalidateCache($includes, $timestamp)) {
+			$pool->deleteItem($item->getKey());
+			$item = $pool->getItem($item->getKey());
+		}
+		return $item;
+	}
 }

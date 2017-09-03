@@ -2,10 +2,10 @@
 
 namespace CsrDelft\view\groepen;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\model\ChangeLogModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\view\formulier\datatable\DataTable;
-use Exception;
 
 class GroepLogboekTable extends DataTable
 {
@@ -23,7 +23,7 @@ class GroepLogboekTable extends DataTable
 
     public function getHtml()
     {
-        throw new Exception('not implemented');
+        throw new CsrException('not implemented');
     }
 
     public function getType()

@@ -1,13 +1,13 @@
 <?php
 namespace CsrDelft\model\entity;
+use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * Geslacht.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 abstract class Geslacht implements PersistentEnum {
 
@@ -22,7 +22,7 @@ abstract class Geslacht implements PersistentEnum {
 		switch ($option) {
 			case self::Man: return 'man';
 			case self::Vrouw: return 'vrouw';
-			default: throw new Exception('Geslacht onbekend');
+			default: throw new CsrException('Geslacht onbekend');
 		}
 	}
 
@@ -30,7 +30,7 @@ abstract class Geslacht implements PersistentEnum {
 		switch ($option) {
 			case self::Man: return 'M';
 			case self::Vrouw: return 'V';
-			default: throw new Exception('Geslacht onbekend');
+			default: throw new CsrException('Geslacht onbekend');
 		}
 	}
 

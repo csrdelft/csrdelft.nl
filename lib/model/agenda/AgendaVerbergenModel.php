@@ -11,8 +11,8 @@ class AgendaVerbergenModel extends PersistenceModel
 {
 
     const ORM = AgendaVerbergen::class;
-    const DIR = 'agenda/';
 
+    /** @var AgendaVerbergenModel */
     protected static $instance;
 
     public function toggleVerbergen(Agendeerbaar $item)

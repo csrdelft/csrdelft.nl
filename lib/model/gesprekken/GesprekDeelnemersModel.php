@@ -1,12 +1,6 @@
 <?php
-/**
- * GesprekDeelnemersModel.php
- *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/05/2017
- */
-
 namespace CsrDelft\model\gesprekken;
+
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\gesprekken\Gesprek;
 use CsrDelft\model\entity\gesprekken\GesprekDeelnemer;
@@ -18,13 +12,12 @@ use CsrDelft\Orm\PersistenceModel;
  * GesprekDeelnemersModel.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
  */
 class GesprekDeelnemersModel extends PersistenceModel {
 
 	const ORM = GesprekDeelnemer::class;
-	const DIR = 'gesprekken/';
 
+	/** @var static */
 	protected static $instance;
 	/**
 	 * Default ORDER BY
@@ -32,14 +25,31 @@ class GesprekDeelnemersModel extends PersistenceModel {
 	 */
 	protected $default_order = 'toegevoegd_moment ASC';
 
+	/**
+	 * @param int $gesprek_id
+	 * @param string $uid
+	 *
+	 * @return GesprekDeelnemer|false
+	 */
 	public static function get($gesprek_id, $uid) {
 		return static::instance()->retrieveByPrimaryKey(array($gesprek_id, $uid));
 	}
 
+	/**
+	 * @param Gesprek $gesprek
+	 *
+	 * @return GesprekDeelnemer[]|\PDOStatement
+	 */
 	public function getDeelnemersVanGesprek(Gesprek $gesprek) {
 		return $this->find('gesprek_id = ? ', array($gesprek->gesprek_id));
 	}
 
+	/**
+	 * @param string $uid
+	 * @param int $lastUpdate
+	 *
+	 * @return Gesprek[]
+	 */
 	public function getGesprekkenVoorLid($uid, $lastUpdate) {
 		$gesprekken = array();
 		foreach ($this->find('uid = ?', array($uid)) as $deelnemer) {
@@ -52,6 +62,11 @@ class GesprekDeelnemersModel extends PersistenceModel {
 		return $gesprekken;
 	}
 
+	/**
+	 * @param string $uid
+	 *
+	 * @return int
+	 */
 	public function getAantalNieuweBerichtenVoorLid($uid) {
 		$totaal = 0;
 		foreach ($this->getGesprekkenVoorLid($uid, 0) as $gesprek) {
@@ -60,6 +75,13 @@ class GesprekDeelnemersModel extends PersistenceModel {
 		return $totaal;
 	}
 
+	/**
+	 * @param Gesprek $gesprek
+	 * @param Account $account
+	 * @param GesprekDeelnemer|null $door
+	 *
+	 * @return bool|GesprekDeelnemer
+	 */
 	public function voegToeAanGesprek(Gesprek $gesprek, Account $account, GesprekDeelnemer $door = null) {
 		if (count($gesprek->getDeelnemers()) >= (int)InstellingenModel::get('gesprekken', 'max_aantal_deelnemers')) {
 			return false;
@@ -77,6 +99,12 @@ class GesprekDeelnemersModel extends PersistenceModel {
 		return $deelnemer;
 	}
 
+	/**
+	 * @param Gesprek $gesprek
+	 * @param GesprekDeelnemer $deelnemer
+	 *
+	 * @return bool
+	 */
 	public function verlaatGesprek(Gesprek $gesprek, GesprekDeelnemer $deelnemer) {
 		$rowCount = $this->delete($deelnemer);
 		if ($this->count('gesprek_id = ?', array($gesprek->gesprek_id)) === 0) {

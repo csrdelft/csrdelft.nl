@@ -40,7 +40,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
-		$product = CiviProductModel::instance()->findSparse(array('beschrijving'), 'id = ?', array($model->product_id))->fetch();
+		$product = CiviProductModel::instance()->find('id = ?', array($model->product_id))->fetch();
 		if ($product == false) {
 			$product = new CiviProduct();
 		}

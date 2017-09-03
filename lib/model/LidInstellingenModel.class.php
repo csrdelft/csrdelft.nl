@@ -38,14 +38,13 @@ class LidInstellingenModel extends InstellingenModel {
 			'bijbel' => array('Bijbelvertaling', T::Enumeration, array('NBV' => 'De Nieuwe Bijbelvertaling', 'BGT' => 'Bijbel in Gewone Taal', 'GNB96' => 'Groot Nieuws Bijbel', 'NFB' => 'Nije Fryske Bibeloersetting', 'NBG51' => 'NBG-vertaling 1951', 'SVJ' => 'Statenvertaling (Jongbloed-editie)', 'HSVI' => 'Herziene Statenvertaling', 'CEVD' => 'Contemporary English Version', 'GNTD' => 'Good News Translation'), 'NBV')
 		),
 		'agenda'		 => array(
-			'toonBijbelrooster'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'toonVerjaardagen'	 => array('Verjaardagen weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'toonMaaltijden'	 => array('Maaltijden weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'toonCorvee'		 => array('Corvee weergeven', T::Enumeration, array('iedereen', 'eigen', 'nee'), 'eigen')
 		),
 		'layout'		 => array(
 			'toegankelijk'	 => array('Leesbaarheid', T::Enumeration, array('standaard', 'bredere letters'), 'standaard'),
-			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'lustrum', 'owee', 'dies', 'sineregno', 'roze'), 'normaal'),
+			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'lustrum', 'owee', 'dies', 'sineregno', 'civitasia', 'roze'), 'normaal'),
 			'fx'			 => array('Effect', T::Enumeration, array('nee', 'civisaldo', 'onontdekt', 'sneeuw', 'space', 'wolken'), 'nee'),
 			'visitekaartjes' => array('Civikaartjes', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'neuzen'		 => array('Neuzen', T::Enumeration, array('2013', 'nee'), '2013'),
@@ -74,7 +73,6 @@ class LidInstellingenModel extends InstellingenModel {
 			'aantalPerPagina' => array('Aantal mededeling per pagina', T::Integer, array(5, 50), 10)
 		), /*
 		  'voorpagina'	 => array(
-		  'bijbelroosterblokje'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 		  'maaltijdblokje'		 => array('Eerstvolgende maaltijd weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 		  'laatstefotoalbum'		 => array('Laatste fotoalbum weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 		  'twitterblokje'			 => array('Twitter-feed weergeven', T::Enumeration, array('ja', 'nee'), 'nee')

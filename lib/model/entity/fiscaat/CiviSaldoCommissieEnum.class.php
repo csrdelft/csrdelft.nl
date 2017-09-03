@@ -3,7 +3,6 @@
 namespace CsrDelft\model\entity\fiscaat;
 
 use CsrDelft\Orm\Entity\PersistentEnum;
-use Exception;
 
 /**
  * CiviSaldoCommissieEnum.class.php
@@ -17,10 +16,11 @@ class CiviSaldoCommissieEnum implements PersistentEnum {
 
 	const MAALCIE = 'maalcie';
 	const SOCCIE = 'soccie';
+	const OWEECIE = 'oweecie';
 	const ANDERS = 'anders';
 
 	public static function getTypeOptions() {
-		return array(self::ANDERS, self::SOCCIE, self::MAALCIE);
+		return array(self::ANDERS, self::SOCCIE, self::MAALCIE, self::OWEECIE);
 	}
 
 	public static function getDescription($option) {

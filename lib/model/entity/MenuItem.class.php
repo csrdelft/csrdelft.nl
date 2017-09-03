@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\model\entity;
+use CsrDelft\common\CsrException;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
@@ -7,16 +8,14 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use function CsrDelft\setMelding;
 use function CsrDelft\startsWith;
-use Exception;
 
 /**
  * MenuItem.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een menu-item instantie beschrijft een menu onderdeel van een menu-boom
  * en heeft daarom een parent.
- * 
  */
 class MenuItem extends PersistentEntity {
 
@@ -104,7 +103,7 @@ class MenuItem extends PersistentEntity {
 	/**
 	 * Do not store parent as well as children:
 	 * bi-directional not possible for serialization.
-	 * 
+	 *
 	 * @return MenuItem
 	 */
 	public function getParent() {
@@ -114,7 +113,7 @@ class MenuItem extends PersistentEntity {
 	/**
 	 * Bepaald of het gevraagde menu-item een
 	 * sub-item is van dit menu-item.
-	 * 
+	 *
 	 * @param MenuItem $item
 	 * @return boolean
 	 */
@@ -151,7 +150,7 @@ class MenuItem extends PersistentEntity {
 			try {
 				$draad = ForumDradenModel::get((int) $draad_id);
 				return $draad->isOngelezen();
-			} catch (Exception $e) {
+			} catch (CsrException $e) {
 				setMelding('Uw favoriete forumdraadje bestaat helaas niet meer: ' . htmlspecialchars($this->tekst), 2);
 			}
 		}

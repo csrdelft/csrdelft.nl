@@ -6,7 +6,6 @@ use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
-use Exception;
 
 require_once 'common.functions.php';
 
@@ -67,16 +66,16 @@ class LidZoeker {
 		$sort = $db->escape($sort);
 
 		# In welke status wordt gezocht, is afhankelijk van wat voor rechten de
-		# ingelogd persoon heeft. 
+		# ingelogd persoon heeft.
 		#
-		# R_LID en R_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen 
+		# R_LID en R_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen
 		# de volgende afkortingen gebruiken:
 		#  - '' (lege string) of alleleden: novieten, (gast)leden, kringels, ere- en oudleden
 		#  - leden :  						novieten, (gast)leden en kringels
 		#  - oudleden : 					oud- en ereleden
 		#  - allepersonen:					novieten, (gast)leden, kringels, oud- en ereleden, overleden leden en nobodies (alleen geen commissies)
 		# én alleen voor OUDLEDENMOD:
-		#  - nobodies : 					alleen nobodies 
+		#  - nobodies : 					alleen nobodies
 
 		$statusfilter = '';
 		if ($zoekstatus == 'alleleden') {
@@ -135,7 +134,7 @@ class LidZoeker {
 			# standaardvelden
 			if (empty($velden)) {
 				$velden = array('uid', 'nickname', 'duckname', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix', 'adres', 'postcode', 'woonplaats', 'land', 'telefoon',
-					'mobiel', 'email', 'geslacht', 'gebdatum', 'voornamen', 'icq', 'msn', 'skype', 'jid', 'website', 'beroep', 'studie', 'studiejaar',
+					'mobiel', 'email', 'geslacht', 'gebdatum', 'voornamen', 'website', 'beroep', 'studie', 'studiejaar',
 					'o_adres', 'o_postcode', 'o_woonplaats', 'o_land', 'o_telefoon', 'kerk', 'muziek', 'eetwens', 'status');
 			}
 
@@ -170,7 +169,7 @@ class LidZoeker {
 	//velden die door gewone leden geselecteerd mogen worden.
 	private $allowVelden = array(
 		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'duckname', 'geslacht',
-		'email', 'adres', 'telefoon', 'mobiel', 'msn', 'jid', 'skype', 'linkedin', 'website', 'studie', 'status',
+		'email', 'adres', 'telefoon', 'mobiel', 'linkedin', 'website', 'studie', 'status',
 		'gebdatum', 'beroep', 'verticale', 'moot', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening', 'eetwens');
 	//velden die ook door mensen met P_LEDEN_MOD bekeken mogen worden
 	//(merge in de constructor)
@@ -190,7 +189,6 @@ class LidZoeker {
 		'studie'				 => 'Studie',
 		'gebdatum'				 => 'Geb.datum',
 		'studienr'				 => 'StudieNr.',
-		'jid'					 => 'Jabber',
 		'ontvangtcontactueel'	 => 'Contactueel?',
 		'machtiging'			 => 'Machtiging getekend?',
 		'adresseringechtpaar'	 => 'Post echtpaar t.n.v.',
@@ -327,7 +325,7 @@ class LidZoeker {
 			try {
 				//FIXME: $groep = new OldGroep(substr($zoekterm, 6));
 				$uids = array_keys($groep->getLeden());
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				//care.
 			}
 			$query = "uid IN('" . implode("','", $uids) . "') ";
@@ -404,7 +402,7 @@ class LidZoeker {
 
 	/**
 	 * Doe de zoektocht.
-	 * 
+	 *
 	 * @return Profiel[]
 	 */
 	public function search() {

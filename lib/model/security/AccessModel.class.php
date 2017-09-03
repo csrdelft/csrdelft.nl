@@ -1,6 +1,7 @@
 <?php
 namespace CsrDelft\model\security;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\groepen\CommissieFunctie;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\LidStatus;
@@ -28,27 +29,25 @@ use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
-use Exception;
 use function CsrDelft\in_array_i;
 use function CsrDelft\setMelding;
 
-
 /**
  * AccessModel.class.php
- * 
+ *
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * RBAC met MAC en DAC implementatie.
- * 
+ *
  * @see http://csrc.nist.gov/groups/SNS/rbac/faq.html
- * 
+ *
  */
 class AccessModel extends CachedPersistenceModel {
 
 	const ORM = AccessControl::class;
-	const DIR = 'security/';
 
+	/** @var static */
 	protected static $instance;
 	/**
 	 * Geldige prefixes voor rechten
@@ -71,6 +70,13 @@ class AccessModel extends CachedPersistenceModel {
 	 */
 	private static $defaultAllowedAuthenticationMethods = array(AuthenticationMethod::cookie_token, AuthenticationMethod::password_login, AuthenticationMethod::recent_password_login, AuthenticationMethod::password_login_and_one_time_token);
 
+	/**
+	 * @param string $environment
+	 * @param string $action
+	 * @param string $resource
+	 *
+	 * @return null|string
+	 */
 	public static function getSubject($environment, $action, $resource) {
 		/** @var AccessControl $ac */
 		$ac = self::instance()->retrieveByPrimaryKey(array($environment, $action, $resource));
@@ -84,12 +90,12 @@ class AccessModel extends CachedPersistenceModel {
 	 * @param Account $subject Het lid dat de gevraagde permissies zou moeten bezitten.
 	 * @param string $permission Gevraagde permissie(s).
 	 * @param array $allowedAuthenticationMethods Bij niet toegestane methode doen alsof gebruiker x999 is.
-	 * 
+	 *
 	 * Met deze functies kan op één of meerdere permissies worden getest,
 	 * onderling gescheiden door komma's. Als een lid één van de
 	 * permissies 'heeft', geeft de functie true terug. Het is dus een
 	 * logische OF tussen de verschillende te testen permissies.
-	 * 
+	 *
 	 * Voorbeeldjes:
 	 *  commissie:NovCie			geeft true leden van de h.t. NovCie.
 	 *  commissie:SocCie:ot			geeft true voor alle leden die ooit SocCie hebben gedaan
@@ -97,13 +103,13 @@ class AccessModel extends CachedPersistenceModel {
 	 *  commissie:SocCie>Fiscus		geeft true voor h.t. Soccielid met functie fiscus
 	 *  geslacht:m					geeft true voor alle mannelijke leden
 	 *  verticale:d					geeft true voor alle leden van verticale d.
-	 * 
+	 *
 	 * Gecompliceerde voorbeeld:
 	 * 		commissie:NovCie+commissie:MaalCie|1337,bestuur
-	 * 
+	 *
 	 * Equivalent met haakjes:
 	 * 		(commissie:NovCie AND (commissie:MaalCie OR 1337)) OR bestuur
-	 * 
+	 *
 	 * Geeft toegang aan:
 	 * 		de mensen die én in de NovCie zitten én in de MaalCie zitten
 	 * 		of mensen die in de NovCie zitten en lidnummer 1337 hebben
@@ -132,7 +138,7 @@ class AccessModel extends CachedPersistenceModel {
 
 	/**
 	 * Partially ordered Role Hierarchy:
-	 * 
+	 *
 	 * A subject can have multiple roles.	<- NIET ondersteund met MAC, wel met DAC
 	 * A role can have multiple subjects.
 	 * A role can have many permissions.
@@ -146,11 +152,20 @@ class AccessModel extends CachedPersistenceModel {
 	 */
 	private $permissions = array();
 
+	/**
+	 * AccessModel constructor.
+	 */
 	protected function __construct() {
 		parent::__construct();
 		$this->loadPermissions();
 	}
 
+	/**
+	 * @param string $environment
+	 * @param string $resource
+	 *
+	 * @return AccessControl
+	 */
 	public function nieuw($environment, $resource) {
 		$ac = new AccessControl();
 		$ac->environment = $environment;
@@ -160,6 +175,12 @@ class AccessModel extends CachedPersistenceModel {
 		return $ac;
 	}
 
+	/**
+	 * @param string $environment
+	 * @param string $resource
+	 *
+	 * @return array
+	 */
 	public function getTree($environment, $resource) {
 		if ($environment === ActiviteitenModel::ORM) {
 			$activiteit = ActiviteitenModel::get($resource);
@@ -183,7 +204,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * @param string $resource
 	 * @param array $acl
 	 * @return bool
-	 * @throws Exception
+	 * @throws CsrException
 	 */
 	public function setAcl($environment, $resource, array $acl) {
 		// Has permission to change permissions?
@@ -234,6 +255,12 @@ class AccessModel extends CachedPersistenceModel {
 		return true;
 	}
 
+	/**
+	 * @param string $lidstatus
+	 *
+	 * @return string
+	 * @throws CsrException
+	 */
 	public function getDefaultPermissionRole($lidstatus) {
 		switch ($lidstatus) {
 			case LidStatus::Kringel:
@@ -246,10 +273,13 @@ class AccessModel extends CachedPersistenceModel {
 			case LidStatus::Overleden:
 			case LidStatus::Exlid:
 			case LidStatus::Nobody: return AccessRole::Nobody;
-			default: throw new Exception('LidStatus onbekend');
+			default: throw new CsrException('LidStatus onbekend');
 		}
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getPermissionSuggestions() {
 		$suggestions = array_keys($this->permissions);
 		$suggestions[] = 'bestuur';
@@ -286,6 +316,11 @@ class AccessModel extends CachedPersistenceModel {
 		return $errors;
 	}
 
+	/**
+	 * @param string $permission
+	 *
+	 * @return bool
+	 */
 	public function isValidPermission($permission) {
 		// case insensitive
 		$permission = strtoupper($permission);
@@ -315,6 +350,11 @@ class AccessModel extends CachedPersistenceModel {
 		return false;
 	}
 
+	/**
+	 * @param string $role
+	 *
+	 * @return bool
+	 */
 	public function isValidRole($role) {
 		if (isset($this->roles[$role])) {
 			return true;
@@ -325,11 +365,11 @@ class AccessModel extends CachedPersistenceModel {
 	/**
 	 * Hier staan de 'vaste' permissies, die gegeven worden door de PubCie.
 	 * In tegenstelling tot de variabele permissies zoals lidmaatschap van een groep.
-	 * 
+	 *
 	 * READ = Rechten om het onderdeel in te zien
 	 * POST = Rechten om iets toe te voegen
 	 * MOD  = Moderate rechten, dus verwijderen enzo
-	 * 
+	 *
 	 * Let op: de rechten zijn cumulatief (bijv: 7=4+2+1, 3=2+1)
 	 * als je hiervan afwijkt, kun je (bewust) niveau's uitsluiten (bijv 5=4+1, sluit 2 uit)
 	 * de levels worden omgezet in een karakter met die ASCII waarde (dit zijn vaak niet-leesbare symbolen, bijv #8=backspace)
@@ -419,7 +459,7 @@ class AccessModel extends CachedPersistenceModel {
 
 	/**
 	 * Create permission string with character which has ascii value of request level.
-	 * 
+	 *
 	 * @param int $onderdeelnummer starts at zero
 	 * @param int $level           permissiewaarde
 	 * @return string permission string
@@ -429,6 +469,12 @@ class AccessModel extends CachedPersistenceModel {
 		return substr_replace($nulperm, chr($level), $onderdeelnummer, 1);
 	}
 
+	/**
+	 * @param Account $subject
+	 * @param string $permission
+	 *
+	 * @return bool|mixed
+	 */
 	private function hasPermission(Account $subject, $permission) {
 		// Rechten vergeten?
 		if (empty($permission)) {
@@ -497,6 +543,12 @@ class AccessModel extends CachedPersistenceModel {
 		return $result;
 	}
 
+	/**
+	 * @param Account $subject
+	 * @param string $permission
+	 *
+	 * @return bool
+	 */
 	private function mandatoryAccessControl(Account $subject, $permission) {
 
 		if (isset($_SESSION['password_unsafe'])) {
@@ -521,18 +573,18 @@ class AccessModel extends CachedPersistenceModel {
 		/**
 		 * permissies zijn een string, waarin elk kararakter de
 		 * waarde heeft van een permissielevel voor een bepaald onderdeel.
-		 * 
+		 *
 		 * de mogelijke verschillende permissies voor een onderdeel zijn machten van twee:
 		 * 1, 2, 4, 8, etc
 		 * elk van deze waardes kan onderscheiden worden in een permissie, ook als je ze met elkaar combineert
 		 * bijv.  3=1+2, 7=1+2+4, 5=1+4, 6=2+4, 12=4+8, etc
-		 * 
+		 *
 		 * $gevraagd is de gevraagde permissie als string,
 		 * de permissies van de gebruiker $lidheeft kunnen we bij $this->lid opvragen
 		 * als we die 2 met elkaar AND-en, dan moet het resultaat hetzelfde
 		 * zijn aan de gevraagde permissie. In dat geval bestaat de permissie
 		 * van het account dus minimaal uit de gevraagde permissie
-		 * 
+		 *
 		 * Bij het AND-en, wordt elke karakter bitwise vergeleken, dat betekent:
 		 * - elke karakter van de string omzetten in de ASCII-waarde
 		 *   (bijv. ?=63, A=65, a=97, etc zie ook www.ascii.cl)
@@ -541,16 +593,16 @@ class AccessModel extends CachedPersistenceModel {
 		 * - de bits van het binaire getal een-voor-een vergelijken met de bits van het binaire getal uit de
 		 *   andere string. Als ze overeenkomen worden ze bewaard.
 		 *   (bijv. 3&5=1 => 00011&00101=00001)
-		 * 
+		 *
 		 * voorbeeld (met de getallen 0 tot 7 als ASCII-waardes ipv de symbolen, voor de leesbaarheid)
 		 * gevraagd:  P_FORUM_MOD : 0000000700
 		 * account heeft: R_LID   : 0005544500
 		 * AND resultaat          : 0000000500 -> is niet wat gevraagd is -> weiger
-		 * 
+		 *
 		 * gevraagd:  P_DOCS_READ : 0000004000
 		 * account heeft: R_LID   : 0005544500
 		 * AND resultaat          : 0000004000 -> ja!
-		 * 
+		 *
 		 */
 		$resultaat = $gevraagd & $lidheeft;
 
@@ -561,6 +613,12 @@ class AccessModel extends CachedPersistenceModel {
 		return false;
 	}
 
+	/**
+	 * @param Account $subject
+	 * @param string $permission
+	 *
+	 * @return bool
+	 */
 	private function discretionaryAccessControl(Account $subject, $permission) {
 
 		// haal het profiel van de gebruiker op
@@ -779,7 +837,7 @@ class AccessModel extends CachedPersistenceModel {
 						if ($maaltijd AND $maaltijd->magSluiten($profiel->uid)) {
 							return true;
 						}
-					} catch (Exception $e) {
+					} catch (CsrException $e) {
 						// Maaltijd bestaat niet
 					}
 				}

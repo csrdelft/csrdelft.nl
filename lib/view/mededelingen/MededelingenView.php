@@ -2,12 +2,13 @@
 
 namespace CsrDelft\view\mededelingen;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\mededelingen\Mededeling;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\mededelingen\MededelingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\SmartyTemplateView;
-use Exception;
 
 /**
  * Class MededelingenView
@@ -32,6 +33,13 @@ class MededelingenView extends SmartyTemplateView {
 	 */
 	protected $model;
 
+	/**
+	 * MededelingenView constructor.
+	 *
+	 * @param int $mededelingId
+	 * @param int $paginanummer
+	 * @param bool $prullenbak
+	 */
 	public function __construct(
 		$mededelingId,
 		$paginanummer = null,
@@ -52,7 +60,7 @@ class MededelingenView extends SmartyTemplateView {
 			try {
 				$this->geselecteerdeMededeling = $this->model->retrieveByUUID($mededelingId);;
 				if (!$this->geselecteerdeMededeling) {
-					throw new Exception('Mededeling bestaat niet!');
+					throw new CsrGebruikerException('Mededeling bestaat niet!');
 				} elseif (!$this->prullenbak OR !LoginModel::mag('P_NEWS_MOD')) {
 					// In de volgende gevallen heeft de gebruiker geen rechten om deze mededeling te bekijken:
 					// 1. Indien deze mededeling reeds verwijderd is.
@@ -71,7 +79,7 @@ class MededelingenView extends SmartyTemplateView {
 						$this->geselecteerdeMededeling = null;
 					}
 				}
-			} catch (Exception $e) {
+			} catch (CsrException $e) {
 				// Doe niets, zodat $geselecteerdeMededeling gelijk blijft aan null.
 			}
 		}
