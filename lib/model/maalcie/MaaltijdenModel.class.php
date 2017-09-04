@@ -253,8 +253,9 @@ class MaaltijdenModel extends PersistenceModel {
 			$abonnementen = MaaltijdAbonnementenModel::instance()->getAbonnementenVoorRepetitie($maaltijd->mlt_repetitie_id);
 			foreach ($abonnementen as $abo) {
 				if (MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($abo->uid, $maaltijd->aanmeld_filter)) {
-					MaaltijdAanmeldingenModel::instance()->aanmeldenDoorAbonnement($maaltijd, $abo->mlt_repetitie_id, $abo->uid);
-					$aantal++;
+					if (MaaltijdAanmeldingenModel::instance()->aanmeldenDoorAbonnement($maaltijd, $abo->mlt_repetitie_id, $abo->uid)) {
+						$aantal++;
+					}
 				}
 			}
 		}

@@ -74,10 +74,14 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 			try {
 				$this->assertMagAanmelden($maaltijd, $uid);
 				$this->create($aanmelding);
-			} catch (Exception $e) {
-				// Negeer.
+
+				return true;
+			} catch (CsrGebruikerException $e) {
+				return false;
 			}
 		}
+
+		return false;
 	}
 
 	/**
@@ -315,8 +319,9 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 		$maaltijden = MaaltijdenModel::instance()->find("mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?", array($mrid, date('Y-m-d')));
 		foreach ($maaltijden as $maaltijd) {
 			if (!$this->existsByPrimaryKey(array($maaltijd->maaltijd_id, $uid))) {
-				$this->aanmeldenDoorAbonnement($maaltijd, $mrid, $uid);
-				$aantal++;
+				if ($this->aanmeldenDoorAbonnement($maaltijd, $mrid, $uid)) {
+					$aantal++;
+				}
 			}
 		}
 		return $aantal;
