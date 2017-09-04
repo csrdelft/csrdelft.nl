@@ -9,7 +9,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-abstract class OntvangtContactueel implements PersistentEnum {
+abstract class OntvangtContactueel extends PersistentEnum {
 
 	const Ja = 'ja';
 	const Digitaal = 'digitaal';

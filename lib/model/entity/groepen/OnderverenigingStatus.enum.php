@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * De status van een ondervereniging.
  *
  */
-abstract class OnderverenigingStatus implements PersistentEnum {
+abstract class OnderverenigingStatus extends PersistentEnum {
 
 	const AdspirantOndervereniging = 'a';
 	const Ondervereniging = 'o';

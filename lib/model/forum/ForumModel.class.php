@@ -38,6 +38,54 @@ class ForumModel extends CachedPersistenceModel {
 	 * @var array
 	 */
 	private $indeling;
+	/**
+	 * @var ForumDelenModel
+	 */
+	private $forumDelenModel;
+	/**
+	 * @var ForumDradenModel
+	 */
+	private $forumDradenModel;
+	/**
+	 * @var ForumDradenGelezenModel
+	 */
+	private $forumDradenGelezenModel;
+	/**
+	 * @var ForumDradenReagerenModel
+	 */
+	private $forumDradenReagerenModel;
+	/**
+	 * @var ForumDradenVerbergenModel
+	 */
+	private $forumDradenVerbergenModel;
+	/**
+	 * @var ForumDradenVolgenModel
+	 */
+	private $forumDradenVolgenModel;
+	/**
+	 * @var ForumPostsModel
+	 */
+	private $forumPostsModel;
+
+	protected function __construct(
+		ForumDelenModel $forumDelenModel,
+		ForumDradenModel $forumDradenModel,
+		ForumDradenGelezenModel $forumDradenGelezenModel,
+		ForumDradenReagerenModel $forumDradenReagerenModel,
+		ForumDradenVerbergenModel $forumDradenVerbergenModel,
+		ForumDradenVolgenModel $forumDradenVolgenModel,
+		ForumPostsModel $forumPostsModel
+	) {
+		parent::__construct();
+
+		$this->forumDelenModel = $forumDelenModel;
+		$this->forumDradenModel = $forumDradenModel;
+		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
+		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
+		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
+		$this->forumDradenVolgenModel = $forumDradenVolgenModel;
+		$this->forumPostsModel = $forumPostsModel;
+	}
 
 	public static function get($id) {
 		$categorie = static::instance()->retrieveByPrimaryKey(array($id));
@@ -54,7 +102,7 @@ class ForumModel extends CachedPersistenceModel {
 	 */
 	public function getForumIndelingVoorLid() {
 		if (!isset($this->indeling)) {
-			$delenByCategorieId = group_by('categorie_id', ForumDelenModel::instance()->getForumDelenVoorLid());
+			$delenByCategorieId = group_by('categorie_id', $this->forumDelenModel->getForumDelenVoorLid());
 			$this->indeling = array();
 			foreach ($this->prefetch() as $categorie) {
 				/** @var ForumCategorie $categorie */
@@ -73,12 +121,12 @@ class ForumModel extends CachedPersistenceModel {
 
 	public function opschonen() {
 		// Oude lege concepten verwijderen
-		ForumDradenReagerenModel::instance()->verwijderLegeConcepten();
+		$this->forumDradenReagerenModel->verwijderLegeConcepten();
 
 		// Niet-goedgekeurde posts verwijderen
-		$posts = ForumPostsModel::instance()->find('verwijderd = TRUE AND wacht_goedkeuring = TRUE');
+		$posts = $this->forumPostsModel->find('verwijderd = TRUE AND wacht_goedkeuring = TRUE');
 		foreach ($posts as $post) {
-			ForumPostsModel::instance()->delete($post);
+			$this->forumPostsModel->delete($post);
 		}
 
 		// Voor alle ex-leden settings opschonen
@@ -86,33 +134,33 @@ class ForumModel extends CachedPersistenceModel {
 		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($uids as $uid) {
 			if (AccountModel::isValidUid($uid)) {
-				ForumDradenGelezenModel::instance()->verwijderDraadGelezenVoorLid($uid);
-				ForumDradenVerbergenModel::instance()->toonAllesVoorLid($uid);
-				ForumDradenVolgenModel::instance()->volgNietsVoorLid($uid);
-				ForumDradenReagerenModel::instance()->verwijderReagerenVoorLid($uid);
+				$this->forumDradenGelezenModel->verwijderDraadGelezenVoorLid($uid);
+				$this->forumDradenVerbergenModel->toonAllesVoorLid($uid);
+				$this->forumDradenVolgenModel->volgNietsVoorLid($uid);
+				$this->forumDradenReagerenModel->verwijderReagerenVoorLid($uid);
 			}
 		}
 
 		// Settings voor oude topics opschonen en oude/verwijderde topics en posts definitief verwijderen
 		$datetime = getDateTime(strtotime('-1 year'));
-		$draden = ForumDradenModel::instance()->find('verwijderd = TRUE OR (gesloten = TRUE AND (laatst_gewijzigd IS NULL OR laatst_gewijzigd < ?))', array($datetime));
+		$draden = $this->forumDradenModel->find('verwijderd = TRUE OR (gesloten = TRUE AND (laatst_gewijzigd IS NULL OR laatst_gewijzigd < ?))', array($datetime));
 		foreach ($draden as $draad) {
 
 			// Settings verwijderen
-			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
-			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
-			ForumDradenGelezenModel::instance()->verwijderDraadGelezen($draad);
-			ForumDradenReagerenModel::instance()->verwijderReagerenVoorDraad($draad);
+			$this->forumDradenVolgenModel->stopVolgenVoorIedereen($draad);
+			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
+			$this->forumDradenGelezenModel->verwijderDraadGelezen($draad);
+			$this->forumDradenReagerenModel->verwijderReagerenVoorDraad($draad);
 
 			// Oude verwijderde posts definitief verwijderen
-			$posts = ForumPostsModel::instance()->find('verwijderd = TRUE AND draad_id = ?', array($draad->draad_id));
+			$posts = $this->forumPostsModel->find('verwijderd = TRUE AND draad_id = ?', array($draad->draad_id));
 			foreach ($posts as $post) {
-				ForumPostsModel::instance()->delete($post);
+				$this->forumPostsModel->delete($post);
 			}
 			if ($draad->verwijderd) {
 
 				// Als het goed is zijn er nooit niet-verwijderde posts in een verwijderd draadje
-				ForumDradenModel::instance()->delete($draad);
+				$this->forumDradenModel->delete($draad);
 			}
 		}
 	}

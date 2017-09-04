@@ -9,7 +9,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-abstract class LidStatus implements PersistentEnum {
+abstract class LidStatus extends PersistentEnum {
 
 	// h.t. leden
 	const Noviet = 'S_NOVIET';

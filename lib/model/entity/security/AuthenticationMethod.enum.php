@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * Authentication methods for LoginSession.
  *
  */
-abstract class AuthenticationMethod implements PersistentEnum {
+abstract class AuthenticationMethod extends PersistentEnum {
 
 	const url_token = 'ut';
 	const cookie_token = 'ct';

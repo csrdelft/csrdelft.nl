@@ -9,7 +9,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 
-abstract class MededelingAccess implements PersistentEnum {
+abstract class MededelingAccess extends PersistentEnum {
 
     const Post = 'P_NEWS_POST';
     const Mod = 'P_NEWS_MOD';

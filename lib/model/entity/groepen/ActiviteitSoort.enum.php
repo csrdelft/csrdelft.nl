@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * Algemene en specifieke activiteitsoorten.
  *
  */
-abstract class ActiviteitSoort implements PersistentEnum {
+abstract class ActiviteitSoort extends PersistentEnum {
 
 	const Vereniging = 'vereniging';
 	const Lustrum = 'lustrum';

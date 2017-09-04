@@ -9,7 +9,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-abstract class Geslacht implements PersistentEnum {
+abstract class Geslacht extends PersistentEnum {
 
 	const Man = 'm';
 	const Vrouw = 'v';

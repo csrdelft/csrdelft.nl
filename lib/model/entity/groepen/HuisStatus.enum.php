@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * De status van een huis / woonoord.
  *
  */
-abstract class HuisStatus implements PersistentEnum {
+abstract class HuisStatus extends PersistentEnum {
 
 	const Woonoord = 'w';
 	const Huis = 'h';

@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * Standaard functies binnen het bestuur en commissies.
  *
  */
-abstract class CommissieFunctie implements PersistentEnum {
+abstract class CommissieFunctie extends PersistentEnum {
 
 	// Bestuur
 	const Praeses = 'Praeses';

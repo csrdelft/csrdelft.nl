@@ -14,9 +14,7 @@ class FotoTagsModel extends PersistenceModel
 {
 
     const ORM = FotoTag::class;
-    const DIR = 'fotoalbum/';
 
-    protected static $instance;
     /**
      * Default ORDER BY
      * @var string

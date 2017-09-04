@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * CRUD + groepen-acties.
  *
  */
-abstract class AccessAction implements PersistentEnum {
+abstract class AccessAction extends PersistentEnum {
 
 	// lezen
 	const Bekijken = 'r'; // retrieve

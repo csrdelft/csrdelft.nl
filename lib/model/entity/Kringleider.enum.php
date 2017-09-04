@@ -9,7 +9,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-abstract class Kringleider implements PersistentEnum {
+abstract class Kringleider extends PersistentEnum {
 
 	const Ouderejaars = 'o';
 	const Eerstejaars = 'e';

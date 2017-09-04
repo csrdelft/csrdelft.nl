@@ -12,7 +12,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  *
  * @see AccessModel
  */
-abstract class AccessRole implements PersistentEnum {
+abstract class AccessRole extends PersistentEnum {
 
 	const Nobody = 'R_NOBODY';
 	const Eter = 'R_ETER';

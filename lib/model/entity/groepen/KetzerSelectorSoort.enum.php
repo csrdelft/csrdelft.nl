@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * De keuzesoort van een selector: AND (Multiple) / XOR (Single)
  *
  */
-abstract class KetzerSelectorSoort implements PersistentEnum {
+abstract class KetzerSelectorSoort extends PersistentEnum {
 
 	const Single = 'XOR';
 	const Multiple = 'AND';

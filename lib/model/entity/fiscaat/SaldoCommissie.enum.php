@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  */
-abstract class SaldoCommissie implements PersistentEnum {
+abstract class SaldoCommissie extends PersistentEnum {
 
 	const SocCie = 'soccie';
 	const MaalCie = 'maalcie';

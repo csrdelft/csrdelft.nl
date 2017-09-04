@@ -12,7 +12,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 07/04/2017
  */
-class CiviSaldoCommissieEnum implements PersistentEnum {
+class CiviSaldoCommissieEnum extends PersistentEnum {
 
 	const MAALCIE = 'maalcie';
 	const SOCCIE = 'soccie';

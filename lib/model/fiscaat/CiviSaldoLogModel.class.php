@@ -8,13 +8,10 @@ use CsrDelft\Orm\PersistenceModel;
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class CiviSaldoLogModel extends PersistenceModel {
-	const ORM = CiviSaldoLog::class;
-	const DIR = 'fiscaat/';
-
 	/**
-	 * @var CiviSaldoLogModel
+	 * ORM class.
 	 */
-	protected static $instance;
+	const ORM = CiviSaldoLog::class;
 
 	/**
 	 * @param string $type

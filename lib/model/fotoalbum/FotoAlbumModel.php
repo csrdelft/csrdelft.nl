@@ -29,6 +29,24 @@ class FotoAlbumModel extends PersistenceModel {
 	const DIR = 'fotoalbum/';
 
 	protected static $instance;
+	/**
+	 * @var FotoModel
+	 */
+	private $fotoModel;
+	/**
+	 * @var FotoTagsModel
+	 */
+	private $fotoTagsModel;
+
+	public function __construct(
+		FotoModel $fotoModel,
+		FotoTagsModel $fotoTagsModel
+	) {
+		parent::__construct();
+
+		$this->fotoModel = $fotoModel;
+		$this->fotoTagsModel = $fotoTagsModel;
+	}
 
 	/**
 	 * @param PersistentEntity|FotoAlbum $album
@@ -122,7 +140,7 @@ class FotoAlbumModel extends PersistenceModel {
 					if (!$foto->exists()) {
 						throw new CsrException('Foto bestaat niet: ' . $foto->directory . $foto->filename);
 					}
-					FotoModel::instance()->verwerkFoto($foto);
+					$this->fotoModel->verwerkFoto($foto);
 					if (false === @chmod($path, 0644)) {
 						throw new CsrException('Geen eigenaar van foto: ' . $path);
 					}
@@ -187,18 +205,18 @@ HTML;
 			$subdir->subdir = str_replace($oldDir, $newDir, $album->subdir);
 			$this->create($subdir);
 		}
-		foreach (FotoModel::instance()->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
+		foreach ($this->fotoModel->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
 		    /** @var Foto $foto */
 			$oldUUID = $foto->getUUID();
 			// updaten gaat niet vanwege primary key
-			FotoModel::instance()->delete($foto);
+			$this->fotoModel->delete($foto);
 			$foto->subdir = str_replace($oldDir, $newDir, $foto->subdir);
-			FotoModel::instance()->create($foto);
-			foreach (FotoTagsModel::instance()->find('refuuid = ?', array($oldUUID)) as $tag) {
+			$this->fotoModel->create($foto);
+			foreach ($this->fotoTagsModel->find('refuuid = ?', array($oldUUID)) as $tag) {
 				// updaten gaat niet vanwege primary key
-				FotoTagsModel::instance()->delete($tag);
+				$this->fotoTagsModel->delete($tag);
 				$tag->refuuid = $foto->getUUID();
-				FotoTagsModel::instance()->create($tag);
+				$this->fotoTagsModel->create($tag);
 			}
 		}
 		if (false === @rmdir(PHOTOS_PATH . $oldDir)) {
@@ -225,9 +243,9 @@ HTML;
 				if ($success) {
 					// database in sync houden
 					// updaten gaat niet vanwege primary key
-					FotoModel::instance()->delete($foto);
+					$this->fotoModel->delete($foto);
 					$foto->filename = str_replace('folder', '', $foto->filename);
-					FotoModel::instance()->create($foto);
+					$this->fotoModel->create($foto);
 				}
 				if ($foto === $cover) {
 					return $success;
@@ -244,9 +262,9 @@ HTML;
 		if ($success) {
 			// database in sync houden
 			// updaten gaat niet vanwege primary key
-			FotoModel::instance()->delete($cover);
+			$this->fotoModel->delete($cover);
 			$cover->filename = substr_replace($cover->filename, 'folder', strrpos($cover->filename, '.'), 0);
-			FotoModel::instance()->create($cover);
+			$this->fotoModel->create($cover);
 		}
 		return $success;
 	}
@@ -255,9 +273,9 @@ HTML;
 		foreach ($this->find('subdir LIKE ?', array($fotoalbum->subdir . '%')) as $album) {
 		    /** @var FotoAlbum $album */
 			if (!$album->exists()) {
-				foreach (FotoModel::instance()->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {
-					FotoModel::instance()->delete($foto);
-					FotoTagsModel::instance()->verwijderFotoTags($foto);
+				foreach ($this->fotoModel->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {
+					$this->fotoModel->delete($foto);
+					$this->fotoTagsModel->verwijderFotoTags($foto);
 				}
 				$this->delete($album);
 			}

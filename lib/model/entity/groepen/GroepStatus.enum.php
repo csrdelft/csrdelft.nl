@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * De status van een groep of lid in een groep.
  *
  */
-abstract class GroepStatus implements PersistentEnum {
+abstract class GroepStatus extends PersistentEnum {
 
 	const FT = 'ft';
 	const HT = 'ht';

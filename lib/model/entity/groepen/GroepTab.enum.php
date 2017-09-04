@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * De verschillende tabbladen om een groep weer te geven.
  *
  */
-abstract class GroepTab implements PersistentEnum {
+abstract class GroepTab extends PersistentEnum {
 
 	const Lijst = 'lijst';
 	const Pasfotos = 'pasfotos';

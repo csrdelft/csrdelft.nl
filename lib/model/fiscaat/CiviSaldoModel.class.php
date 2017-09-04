@@ -18,6 +18,22 @@ class CiviSaldoModel extends PersistenceModel {
 	 * @var CiviSaldoModel
 	 */
 	protected static $instance;
+	/**
+	 * @var CiviSaldoLogModel
+	 */
+	private $civiSaldoLogModel;
+
+	/**
+	 * CiviSaldoModel constructor.
+	 * @param CiviSaldoLogModel $civiSaldoLogModel
+	 */
+	public function __construct(
+		CiviSaldoLogModel $civiSaldoLogModel
+	) {
+		parent::__construct();
+
+		$this->civiSaldoLogModel = $civiSaldoLogModel;
+	}
 
 	/**
 	 * @param string $uid
@@ -112,7 +128,7 @@ class CiviSaldoModel extends PersistenceModel {
 		if ($entity->saldo !== 0) {
 			throw new CsrGebruikerException("Kan CiviSaldo niet verwijderen: Saldo ongelijk aan nul.");
 		}
-		CiviSaldoLogModel::instance()->log(CiviSaldoLogEnum::DELETE_SALDO, $entity);
+		$this->civiSaldoLogModel->log(CiviSaldoLogEnum::DELETE_SALDO, $entity);
 		return parent::delete($entity);
 	}
 
@@ -122,7 +138,7 @@ class CiviSaldoModel extends PersistenceModel {
 	 * @return string
 	 */
 	public function create(PersistentEntity $entity) {
-		CiviSaldoLogModel::instance()->log(CiviSaldoLogEnum::CREATE_SALDO, $entity);
+		$this->civiSaldoLogModel->log(CiviSaldoLogEnum::CREATE_SALDO, $entity);
 		return parent::create($entity);
 	}
 
@@ -132,7 +148,7 @@ class CiviSaldoModel extends PersistenceModel {
 	 * @return int
 	 */
 	public function update(PersistentEntity $entity) {
-		CiviSaldoLogModel::instance()->log(CiviSaldoLogEnum::UPDATE_SALDO, $entity);
+		$this->civiSaldoLogModel->log(CiviSaldoLogEnum::UPDATE_SALDO, $entity);
 		return parent::update($entity);
 	}
 }

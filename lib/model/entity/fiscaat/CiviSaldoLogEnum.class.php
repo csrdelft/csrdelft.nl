@@ -10,7 +10,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 07/04/2017
  */
-class CiviSaldoLogEnum implements PersistentEnum {
+class CiviSaldoLogEnum extends PersistentEnum {
 
 	/** Maken van een bestelling */
 	const INSERT_BESTELLING = 'insert';

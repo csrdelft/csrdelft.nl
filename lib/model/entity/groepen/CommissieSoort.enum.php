@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * (Bestuurs-)Commissie / SjaarCie.
  *
  */
-abstract class CommissieSoort implements PersistentEnum {
+abstract class CommissieSoort extends PersistentEnum {
 
 	const Commissie = 'c';
 	const SjaarCie = 's';
