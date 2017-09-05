@@ -113,7 +113,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 			$query = $db->prepare($sql);
 			$query->execute($values);
 
-			$leden = ProfielModel::instance()->find("status = ? OR status = ? OR status = ?", LidStatus::$lidlike);
+			$leden = ProfielModel::instance()->find("status = ? OR status = ? OR status = ?", LidStatus::getLidLike());
 
 			$matrix = array();
 			foreach ($leden as $lid) {

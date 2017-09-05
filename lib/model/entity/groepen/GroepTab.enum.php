@@ -1,6 +1,6 @@
 <?php
 namespace CsrDelft\model\entity\groepen;
-use CsrDelft\common\CsrException;
+
 use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
@@ -13,36 +13,45 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 abstract class GroepTab extends PersistentEnum {
 
+	/**
+	 * GroepTab opties.
+	 */
 	const Lijst = 'lijst';
 	const Pasfotos = 'pasfotos';
 	const Statistiek = 'stats';
 	const Emails = 'emails';
 	const Eetwens = 'eetwens';
 
-	public static function getTypeOptions() {
-		return array(self::Lijst, self::Pasfotos, self::Statistiek, self::Emails, self::Eetwens);
-	}
+	/**
+	 * @var string[]
+	 */
+	protected static $supportedChoices = [
+		self::Lijst => self::Lijst,
+		self::Pasfotos => self::Pasfotos,
+		self::Statistiek => self::Statistiek,
+		self::Emails => self::Emails,
+		self::Eetwens => self::Eetwens,
+	];
 
-	public static function getDescription($option) {
-		switch ($option) {
-			case self::Lijst: return 'Lijst';
-			case self::Pasfotos: return 'Pasfoto\'s';
-			case self::Statistiek: return 'Statistiek';
-			case self::Emails: return 'E-mails';
-			case self::Eetwens: return 'Allergie/dieet';
-			default: throw new CsrException('GroepTab onbekend');
-		}
-	}
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToDescription = [
+		self::Lijst => 'Lijst',
+		self::Pasfotos => 'Pasfoto\'s',
+		self::Statistiek => 'Statistiek',
+		self::Emails => 'E-mails',
+		self::Eetwens => 'Allergie/dieet',
+	];
 
-	public static function getChar($option) {
-		switch ($option) {
-			case self::Lijst: return 'l';
-			case self::Pasfotos: return 'p';
-			case self::Statistiek: return 's';
-			case self::Emails: return 'e';
-			case self::Eetwens: return 'a';
-			default: throw new CsrException('GroepTab onbekend');
-		}
-	}
-
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToChar = [
+		self::Lijst => 'l',
+		self::Pasfotos => 'p',
+		self::Statistiek => 's',
+		self::Emails => 'e',
+		self::Eetwens => 'a',
+	];
 }

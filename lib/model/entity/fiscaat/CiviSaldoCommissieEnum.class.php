@@ -1,5 +1,4 @@
 <?php
-
 namespace CsrDelft\model\entity\fiscaat;
 
 use CsrDelft\Orm\Entity\PersistentEnum;
@@ -14,20 +13,28 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 class CiviSaldoCommissieEnum extends PersistentEnum {
 
+	/**
+	 * CiviSaldoCommissie opties.
+	 */
 	const MAALCIE = 'maalcie';
 	const SOCCIE = 'soccie';
 	const OWEECIE = 'oweecie';
 	const ANDERS = 'anders';
 
-	public static function getTypeOptions() {
-		return array(self::ANDERS, self::SOCCIE, self::MAALCIE, self::OWEECIE);
-	}
+	/**
+	 * @var string[]
+	 */
+	protected static $supportedChoices = [
+		self::ANDERS => self::ANDERS,
+		self::SOCCIE => self::SOCCIE,
+		self::OWEECIE => self::OWEECIE,
+		self::ANDERS => self::ANDERS,
+	];
 
-	public static function getDescription($option) {
-		return sprintf('Commissie: %s', $option);
-	}
-
-	public static function getChar($option) {
-		return ucfirst($option);
-	}
+	protected static $mapChoiceToDescription = [
+		self::ANDERS => 'Anders',
+		self::SOCCIE => 'SocCie',
+		self::OWEECIE => 'OweeCie',
+		self::MAALCIE => 'MaalCie',
+	];
 }

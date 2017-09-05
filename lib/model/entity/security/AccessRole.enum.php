@@ -1,6 +1,6 @@
 <?php
 namespace CsrDelft\model\entity\security;
-use CsrDelft\common\CsrException;
+
 use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
@@ -14,6 +14,9 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 abstract class AccessRole extends PersistentEnum {
 
+	/**
+	 * AccessRole opties.
+	 */
 	const Nobody = 'R_NOBODY';
 	const Eter = 'R_ETER';
 	const Oudlid = 'R_OUDLID';
@@ -29,47 +32,62 @@ abstract class AccessRole extends PersistentEnum {
 	 */
 	const Vlieger = "R_VLIEGER";
 
-	public static function getTypeOptions() {
-		return array(self::Nobody, self::Eter, self::Oudlid, self::Lid,
-			self::BASFCie, self::MaalCie, self::Bestuur, self::PubCie, self::Vlieger);
-	}
+	/**
+	 * @var string[]
+	 */
+	protected static $supportedChoices = [
+		self::Nobody => self::Nobody,
+		self::Eter => self::Eter,
+		self::Oudlid => self::Oudlid,
+		self::Lid => self::Lid,
+		self::BASFCie => self::BASFCie,
+		self::MaalCie => self::MaalCie,
+		self::Bestuur => self::Bestuur,
+		self::PubCie => self::PubCie,
+		self::Vlieger => self::Vlieger,
+	];
 
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToDescription = [
+		self::Nobody => 'Ex-lid/Nobody',
+		self::Eter => 'Eter (inlog voor abo\'s)',
+		self::Oudlid => 'Oudlid',
+		self::Lid => 'Lid',
+		self::BASFCie => 'BASFCie-rechten',
+		self::MaalCie => 'MaalCie-rechten',
+		self::Bestuur => 'Bestuur-rechten',
+		self::PubCie => 'PubCie-rechten',
+		self::Vlieger => 'Vlieger-rechten',
+	];
+
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToChar = [
+		self::Nobody => 'N',
+		self::Eter => 'E',
+		self::Oudlid => 'O',
+		self::Lid => 'L',
+		self::BASFCie => 'BASF',
+		self::MaalCie => 'M',
+		self::Bestuur => 'B',
+		self::PubCie => 'P',
+		self::Vlieger => 'V',
+	];
+
+	/**
+	 * @param string $from
+	 * @return string[]
+	 */
 	public static function canChangeAccessRoleTo($from) {
-		switch ($from) {
-			case self::PubCie: return self::getTypeOptions();
-			case self::Bestuur: return array(self::Nobody, self::Eter, self::Oudlid, self::Lid);
-			default: return array();
+		if ($from === self::PubCie) {
+			return static::getTypeOptions();
+		} elseif ($from === self::Bestuur) {
+			return [self::Nobody, self::Eter, self::Oudlid, self::Lid];
+		} else {
+			return [];
 		}
 	}
-
-	public static function getDescription($option) {
-		switch ($option) {
-			case self::Nobody: return 'Ex-lid/Nobody';
-			case self::Eter: return 'Eter (inlog voor abo\'s)';
-			case self::Oudlid: return 'Oudlid';
-			case self::Lid: return 'Lid';
-			case self::BASFCie: return 'BASFCie-rechten';
-			case self::MaalCie: return 'MaalCie-rechten';
-			case self::Bestuur: return 'Bestuur-rechten';
-			case self::PubCie: return 'PubCie-rechten';
-			case self::Vlieger: return 'Vlieger-rechten';
-			default: throw new CsrException('AccessRole onbekend');
-		}
-	}
-
-	public static function getChar($option) {
-		switch ($option) {
-			case self::Nobody: return 'N';
-			case self::Eter: return 'E';
-			case self::Oudlid: return 'O';
-			case self::Lid: return 'L';
-			case self::BASFCie: return 'BASF';
-			case self::MaalCie: return 'M';
-			case self::Bestuur: return 'B';
-			case self::PubCie: return 'P';
-			case self::Vlieger: return 'V';
-			default: throw new CsrException('AccessRole onbekend');
-		}
-	}
-
 }

@@ -17,7 +17,7 @@ class LedenMemoryView extends CompressedLayout {
 	private $groep;
 
 	public function __construct() {
-		$lidstatus = array_merge(LidStatus::$lidlike, LidStatus::$oudlidlike);
+		$lidstatus = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		$lidstatus[] = LidStatus::Overleden;
 		$this->groep = array();
 		$this->cheat = isset($_GET['rosebud']);

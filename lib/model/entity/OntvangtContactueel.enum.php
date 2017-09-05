@@ -1,6 +1,6 @@
 <?php
 namespace CsrDelft\model\entity;
-use CsrDelft\common\CsrException;
+
 use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
@@ -11,30 +11,37 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 abstract class OntvangtContactueel extends PersistentEnum {
 
+	/**
+	 * OntvangtContactueel opties.
+	 */
 	const Ja = 'ja';
 	const Digitaal = 'digitaal';
 	const Nee = 'nee';
 
-	public static function getTypeOptions() {
-		return array(self::Ja, self::Digitaal, self::Nee);
-	}
+	/**
+	 * @var string[]
+	 */
+	protected static $supportedChoices = [
+		self::Ja => self::Ja,
+		self::Digitaal => self::Digitaal,
+		self::Nee => self::Nee,
+	];
 
-	public static function getDescription($option) {
-		switch ($option) {
-			case self::Ja: return 'ja';
-			case self::Digitaal: return 'ja, digitaal';
-			case self::Nee: return 'nee';
-			default: throw new CsrException('OntvangtContactueel onbekend');
-		}
-	}
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToDescription = [
+		self::Ja => 'ja',
+		self::Digitaal => 'ja, digitaal',
+		self::Nee => 'nee',
+	];
 
-	public static function getChar($option) {
-		switch ($option) {
-			case self::Ja: return 'J';
-			case self::Digitaal: return 'D';
-			case self::Nee: return '-';
-			default: throw new CsrException('OntvangtContactueel onbekend');
-		}
-	}
-
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToChar = [
+		self::Ja => 'J',
+		self::Digitaal => 'D',
+		self::Nee => '-',
+	];
 }

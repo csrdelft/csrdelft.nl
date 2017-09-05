@@ -1,6 +1,6 @@
 <?php
 namespace CsrDelft\model\entity\security;
-use CsrDelft\common\CsrException;
+
 use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
@@ -9,60 +9,65 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * CRUD + groepen-acties.
- *
  */
 abstract class AccessAction extends PersistentEnum {
 
 	// lezen
+	/**
+	 * Leesrechten
+	 */
 	const Bekijken = 'r'; // retrieve
-	// schrijven (groepen)
+
+	/**
+	 * Schrijfrechten (groepen)
+	 */
 	const Aanmelden = 'j'; // join
 	const Bewerken = 'e'; // edit
 	const Afmelden = 'l'; // leave
 	const Opvolging = 's'; // sequence
-	// schrijven (algemeen)
+
+	/**
+	 * Schrijfrechten (algemeen)
+	 */
 	const Aanmaken = 'c'; // create
 	const Wijzigen = 'u'; // update
 	const Verwijderen = 'd'; // delete
-	// beheren
+
+	/**
+	 * Beheerrechten
+	 */
 	const Beheren = 'm'; // manage
-	const Rechten = 'p'; // permissions
+	const Rechten = 'p'; // permissions\
 
-	public static function getTypeOptions() {
-		return array(self::Bekijken, self::Aanmelden, self::Bewerken, self::Afmelden, self::Opvolging, self::Aanmaken, self::Wijzigen, self::Verwijderen, self::Beheren, self::Rechten);
-	}
+	/**
+	 * @var string[]
+	 */
+	protected static $supportedChoices = [
+		self::Bekijken => self::Bekijken,
+		self::Aanmelden => self::Aanmelden,
+		self::Bewerken => self::Bewerken,
+		self::Afmelden => self::Afmelden,
+		self::Opvolging => self::Opvolging,
+		self::Aanmaken => self::Aanmaken,
+		self::Wijzigen => self::Wijzigen,
+		self::Verwijderen => self::Verwijderen,
+		self::Beheren => self::Beheren,
+		self::Rechten => self::Rechten,
+	];
 
-	public static function getDescription($option) {
-		switch ($option) {
-			case self::Bekijken: return 'Bekijken';
-			case self::Aanmelden: return 'Aanmelden';
-			case self::Bewerken: return 'Aanmelding bewerken';
-			case self::Afmelden: return 'Afmelden';
-			case self::Opvolging: return 'Opvolging aanpassen';
-			case self::Aanmaken: return 'Nieuwe aanmaken';
-			case self::Wijzigen: return 'Wijzigen';
-			case self::Verwijderen: return 'Verwijderen';
-			case self::Beheren: return 'Beheren';
-			case self::Rechten: return 'Rechten instellen';
-			default: throw new CsrException('AccessAction onbekend');
-		}
-	}
-
-	public static function getChar($option) {
-		switch ($option) {
-			case self::Bekijken:
-			case self::Aanmelden:
-			case self::Bewerken:
-			case self::Afmelden:
-			case self::Opvolging:
-			case self::Aanmaken:
-			case self::Wijzigen:
-			case self::Verwijderen:
-			case self::Beheren:
-			case self::Rechten:
-				return ucfirst($option);
-			default: throw new CsrException('AccessAction onbekend');
-		}
-	}
-
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToDescription = [
+		self::Bekijken => 'Bekijken',
+		self::Aanmelden => 'Aanmelden',
+		self::Bewerken => 'Aanmelding bewerken',
+		self::Afmelden => 'Afmelden',
+		self::Opvolging => 'Opvolging aanpassen',
+		self::Aanmaken => 'Nieuwe aanmaken',
+		self::Wijzigen => 'Wijzigen',
+		self::Verwijderen => 'Verwijderen',
+		self::Beheren => 'Beheren',
+		self::Rechten => 'Rechten instellen',
+	];
 }

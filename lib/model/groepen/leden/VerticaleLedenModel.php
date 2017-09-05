@@ -52,7 +52,7 @@ class VerticaleLedenModel extends AbstractGroepLedenModel {
 	 */
 	public function getLedenVoorGroep(AbstractGroep $verticale) {
 		$leden = array();
-		$status = LidStatus::$lidlike;
+		$status = LidStatus::getLidLike();
 		$where = 'verticale = ? AND status IN (' . implode(', ', array_fill(0, count($status), '?')) . ')';
 		array_unshift($status, $verticale->letter);
 		foreach (ProfielModel::instance()->prefetch($where, $status) as $profiel) {
