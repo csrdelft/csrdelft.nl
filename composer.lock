@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
-                "reference": "e8e9187a9be1f1bb699c1b74649eb6973e95bbd6"
+                "reference": "83b790aaa45b3e0874ba485d1330f4fba67f25c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/orm/zipball/e8e9187a9be1f1bb699c1b74649eb6973e95bbd6",
-                "reference": "e8e9187a9be1f1bb699c1b74649eb6973e95bbd6",
+                "url": "https://api.github.com/repos/csrdelft/orm/zipball/83b790aaa45b3e0874ba485d1330f4fba67f25c9",
+                "reference": "83b790aaa45b3e0874ba485d1330f4fba67f25c9",
                 "shasum": ""
             },
             "require": {
@@ -52,7 +52,7 @@
             ],
             "description": "The creatively named object-relational mapping library for csrdelft.nl",
             "homepage": "https://github.com/csrdelft/orm",
-            "time": "2017-09-04 19:07:21"
+            "time": "2017-09-05 14:21:10"
         },
         {
             "name": "doctrine/instantiator",

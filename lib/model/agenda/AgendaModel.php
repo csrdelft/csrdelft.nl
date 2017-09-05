@@ -38,6 +38,48 @@ class AgendaModel extends PersistenceModel {
 	protected $default_order = 'begin_moment ASC, titel ASC';
 
 	/**
+	 * @var AgendaVerbergenModel
+	 */
+	private $agendaVerbergenModel;
+
+	/**
+	 * @var ActiviteitenModel
+	 */
+	private $activiteitenModel;
+
+	/**
+	 * @var CorveeTakenModel
+	 */
+	private $corveeTakenModel;
+
+	/**
+	 * @var MaaltijdenModel
+	 */
+	private $maaltijdenModel;
+
+	/**
+	 * AgendaModel constructor.
+	 * @param AgendaVerbergenModel $agendaVerbergenModel
+	 * @param ActiviteitenModel $activiteitenModel
+	 * @param CorveeTakenModel $corveeTakenModel
+	 * @param MaaltijdenModel $maaltijdenModel
+	 */
+	protected function __construct(
+		AgendaVerbergenModel $agendaVerbergenModel,
+		ActiviteitenModel $activiteitenModel,
+		CorveeTakenModel $corveeTakenModel,
+		MaaltijdenModel $maaltijdenModel
+	) {
+		parent::__construct();
+
+
+		$this->agendaVerbergenModel = $agendaVerbergenModel;
+		$this->activiteitenModel = $activiteitenModel;
+		$this->corveeTakenModel = $corveeTakenModel;
+		$this->maaltijdenModel = $maaltijdenModel;
+	}
+
+	/**
 	 * @param integer $van
 	 * @param integer $tot
 	 * @param bool $ical
@@ -67,26 +109,26 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Activiteiten
-		$activiteiten = ActiviteitenModel::instance()->find('in_agenda = TRUE AND (
+		$activiteiten = $this->activiteitenModel->find('in_agenda = TRUE AND (
 		    (begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)
 		  )', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
 		foreach ($activiteiten as $activiteit) {
 			// Alleen bekijken in agenda (leden bekijken mag dus niet)
-			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(AccessAction::Bekijken)) {
+			if (in_array($activiteit->soort, [ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES]) OR $activiteit->mag(AccessAction::Bekijken)) {
 				$result[] = $activiteit;
 			}
 		}
 
 		// Maaltijden
 		if (LidInstellingenModel::get('agenda', 'toonMaaltijden') === 'ja') {
-			$result = array_merge($result, MaaltijdenModel::instance()->getMaaltijdenVoorAgenda($van, $tot));
+			$result = array_merge($result, $this->maaltijdenModel->getMaaltijdenVoorAgenda($van, $tot));
 		}
 
 		// CorveeTaken
 		if (LidInstellingenModel::get('agenda', 'toonCorvee') === 'iedereen') {
-			$result = array_merge($result, CorveeTakenModel::instance()->getTakenVoorAgenda($van, $tot, true));
+			$result = array_merge($result, $this->corveeTakenModel->getTakenVoorAgenda($van, $tot, true));
 		} elseif (LidInstellingenModel::get('agenda', 'toonCorvee') === 'eigen') {
-			$result = array_merge($result, CorveeTakenModel::instance()->getTakenVoorAgenda($van, $tot, false));
+			$result = array_merge($result, $this->corveeTakenModel->getTakenVoorAgenda($van, $tot, false));
 		}
 
 		// Verjaardagen
@@ -136,7 +178,7 @@ class AgendaModel extends PersistenceModel {
 		if ($count > 0) {
 			$params = array_keys($itemsByUUID);
 			array_unshift($params, LoginModel::getUid());
-			$verborgen = AgendaVerbergenModel::instance()->find('uid = ? AND refuuid IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $params);
+			$verborgen = $this->agendaVerbergenModel->find('uid = ? AND refuuid IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $params);
 			foreach ($verborgen as $verbergen) {
 				unset($itemsByUUID[$verbergen->refuuid]);
 			}
