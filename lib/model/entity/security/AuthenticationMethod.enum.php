@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\model\entity\security;
+
 use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
 
@@ -9,40 +10,50 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Authentication methods for LoginSession.
- *
  */
 abstract class AuthenticationMethod extends PersistentEnum {
 
+	/**
+	 * AuthenticationMethod opties.
+	 */
 	const url_token = 'ut';
 	const cookie_token = 'ct';
 	const password_login = 'pl';
 	const recent_password_login = 'rpl';
 	const password_login_and_one_time_token = 'plaott';
 
-	public static function getTypeOptions() {
-		return array(self::url_token, self::cookie_token, self::password_login, self::recent_password_login, self::password_login_and_one_time_token);
-	}
+	/**
+	 * @var string[]
+	 */
+	protected static $supportedChoices = [
+		self::url_token => self::url_token,
+		self::cookie_token => self::cookie_token,
+		self::password_login => self::password_login,
+		self::recent_password_login => self::recent_password_login,
+		self::password_login_and_one_time_token => self::password_login_and_one_time_token,
+	];
 
-	public static function getDescription($option) {
-		switch ($option) {
-			case self::url_token: return 'Private url';
-			case self::cookie_token: return 'Auto-login';
-			case self::password_login: return 'Normal login';
-			case self::recent_password_login: return 'Confirm password';
-			case self::password_login_and_one_time_token: return 'Two-step verification (2SV)';
-			default: throw new CsrException('AuthenticationMethod onbekend');
-		}
-	}
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToDescription = [
+		self::url_token => 'Private url',
+		self::cookie_token => 'Auto-login',
+		self::password_login => 'Normal login',
+		self::recent_password_login => 'Confirm password',
+		self::password_login_and_one_time_token => 'Two-step verification (2SV)',
+	];
 
+	/**
+	 * @param string $option
+	 * @return string
+	 * @throws CsrException
+	 */
 	public static function getChar($option) {
-		switch ($option) {
-			case self::url_token:
-			case self::cookie_token:
-			case self::password_login:
-			case self::recent_password_login:
-			case self::password_login_and_one_time_token:
-				return strtoupper($option);
-			default: throw new CsrException('AuthenticationMethod onbekend');
+		if (isset(static::$supportedChoices[$option])) {
+			return strtoupper($option);
+		} else {
+			throw new CsrException('AuthenticationMethod onbekend');
 		}
 	}
 
