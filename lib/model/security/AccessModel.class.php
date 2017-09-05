@@ -47,8 +47,6 @@ class AccessModel extends CachedPersistenceModel {
 
 	const ORM = AccessControl::class;
 
-	/** @var static */
-	protected static $instance;
 	/**
 	 * Geldige prefixes voor rechten
 	 * @var array

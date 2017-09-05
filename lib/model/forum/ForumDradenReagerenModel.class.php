@@ -18,9 +18,6 @@ use CsrDelft\Orm\PersistenceModel;
 class ForumDradenReagerenModel extends PersistenceModel {
 
 	const ORM = ForumDraadReageren::class;
-	const DIR = 'forum/';
-
-	protected static $instance;
 
 	protected function maakForumDraadReageren(ForumDeel $deel, $draad_id = null, $concept = null, $titel = null) {
 		$reageren = new ForumDraadReageren();

@@ -1,11 +1,4 @@
 <?php
-/**
- * VerticaleLedenModel.php
- *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/05/2017
- */
-
 namespace CsrDelft\model\groepen\leden;
 
 use CsrDelft\model\AbstractGroepLedenModel;
@@ -14,12 +7,13 @@ use CsrDelft\model\entity\groepen\Verticale;
 use CsrDelft\model\entity\groepen\VerticaleLid;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\ProfielModel;
-
+/**
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @date 06/05/2017
+ */
 class VerticaleLedenModel extends AbstractGroepLedenModel {
 
 	const ORM = VerticaleLid::class;
-
-	protected static $instance;
 
 	/**
 	 * Create VerticaleLid on the fly.

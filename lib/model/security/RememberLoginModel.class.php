@@ -16,9 +16,6 @@ class RememberLoginModel extends PersistenceModel {
 
 	const ORM = RememberLogin::class;
 
-	/** @var static */
-	protected static $instance;
-
 	/**
 	 * @param string $rand
 	 *

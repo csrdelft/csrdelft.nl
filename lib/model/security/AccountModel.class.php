@@ -20,9 +20,6 @@ class AccountModel extends CachedPersistenceModel {
 
 	const ORM = Account::class;
 
-	/** @var static */
-	protected static $instance;
-
 	/**
 	 * @param $uid
 	 * @return Account|false

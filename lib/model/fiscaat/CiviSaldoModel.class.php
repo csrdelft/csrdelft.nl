@@ -15,10 +15,6 @@ class CiviSaldoModel extends PersistenceModel {
 	const ORM = CiviSaldo::class;
 
 	/**
-	 * @var CiviSaldoModel
-	 */
-	protected static $instance;
-	/**
 	 * @var CiviSaldoLogModel
 	 */
 	private $civiSaldoLogModel;

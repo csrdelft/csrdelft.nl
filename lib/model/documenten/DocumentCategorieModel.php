@@ -14,8 +14,6 @@ use CsrDelft\Orm\PersistenceModel;
 class DocumentCategorieModel extends PersistenceModel {
 	const ORM = DocumentCategorie::class;
 
-	protected static $instance;
-
 	/**
 	 * @param $id
 	 *

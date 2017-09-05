@@ -31,7 +31,6 @@ class AgendaModel extends PersistenceModel {
 
 	const ORM = AgendaItem::class;
 
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string

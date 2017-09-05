@@ -18,9 +18,6 @@ class OneTimeTokensModel extends PersistenceModel {
 
 	const ORM = OneTimeToken::class;
 
-	/** @var static */
-	protected static $instance;
-
 	/**
 	 * Verify a one time token for a user and redirect to the url.
 	 *

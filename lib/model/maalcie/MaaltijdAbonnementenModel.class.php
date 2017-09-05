@@ -16,9 +16,6 @@ use function CsrDelft\setMelding;
 class MaaltijdAbonnementenModel extends PersistenceModel {
 
 	const ORM = MaaltijdAbonnement::class;
-	const DIR = 'maalcie/';
-
-	protected static $instance;
 
 	/**
 	 * Geeft de ingeschakelde abonnementen voor een lid terug plus

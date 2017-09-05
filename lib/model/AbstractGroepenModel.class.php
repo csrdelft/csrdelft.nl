@@ -25,8 +25,6 @@ use function CsrDelft\setMelding;
  */
 abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
-	const DIR = 'groepen/';
-
 	/**
 	 * Default ORDER BY
 	 * @var string

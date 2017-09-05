@@ -15,8 +15,6 @@ class LogModel extends PersistenceModel {
 
     const ORM = LogEntry::class;
 
-    protected static $instance;
-
     public function opschonen() {
         // Gebruik directe delete, dit is veel sneller
         Database::instance()->sqlDelete($this->getTableName(), 'moment < ?', array(date('Y-m-d H:i:s', strtotime('-2 months'))));

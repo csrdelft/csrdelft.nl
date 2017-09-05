@@ -12,9 +12,6 @@ class AgendaVerbergenModel extends PersistenceModel
 
     const ORM = AgendaVerbergen::class;
 
-    /** @var AgendaVerbergenModel */
-    protected static $instance;
-
     public function toggleVerbergen(Agendeerbaar $item)
     {
         $verborgen = $this->retrieveByPrimaryKey(array(LoginModel::getUid(), $item->getUUID()));

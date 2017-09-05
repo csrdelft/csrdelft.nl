@@ -18,9 +18,6 @@ use MongoDB\BSON\Type;
 class MaaltijdAanmeldingenModel extends PersistenceModel {
 
 	const ORM = MaaltijdAanmelding::class;
-	const DIR = 'maalcie/';
-
-	protected static $instance;
 
 	public function aanmeldenVoorMaaltijd(
 		Maaltijd $maaltijd, $uid, $doorUid, $aantalGasten = 0, $beheer = false, $gastenEetwens = ''

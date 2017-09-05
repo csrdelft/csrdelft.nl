@@ -20,9 +20,7 @@ use PDO;
 class ForumModel extends CachedPersistenceModel {
 
 	const ORM = ForumCategorie::class;
-	const DIR = 'forum/';
 
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string

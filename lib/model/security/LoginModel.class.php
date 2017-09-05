@@ -33,9 +33,6 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	const ORM = LoginSession::class;
 
-	/** @var static */
-	protected static $instance;
-
 	/**
 	 * @param mixed[] $arguments
 	 * @return LoginModel|PersistenceModel

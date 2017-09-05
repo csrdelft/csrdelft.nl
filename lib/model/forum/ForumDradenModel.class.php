@@ -26,9 +26,7 @@ use PDO;
 class ForumDradenModel extends CachedPersistenceModel implements Paging {
 
 	const ORM = ForumDraad::class;
-	const DIR = 'forum/';
 
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string

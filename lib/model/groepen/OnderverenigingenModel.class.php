@@ -11,8 +11,6 @@ class OnderverenigingenModel extends AbstractGroepenModel {
 
 	const ORM = Ondervereniging::class;
 
-	protected static $instance;
-
 	public function nieuw() {
 		$ondervereniging = parent::nieuw();
 		$ondervereniging->status = OnderverenigingStatus::AdspirantOndervereniging;

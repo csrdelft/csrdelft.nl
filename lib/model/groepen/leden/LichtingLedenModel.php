@@ -1,11 +1,4 @@
 <?php
-/**
- * LichtingLedenModel.php
- *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/05/2017
- */
-
 namespace CsrDelft\model\groepen\leden;
 
 use CsrDelft\model\AbstractGroepLedenModel;
@@ -14,11 +7,13 @@ use CsrDelft\model\entity\groepen\Lichting;
 use CsrDelft\model\entity\groepen\LichtingsLid;
 use CsrDelft\model\ProfielModel;
 
+/**
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @date 06/05/2017
+ */
 class LichtingLedenModel extends AbstractGroepLedenModel {
 
 	const ORM = LichtingsLid::class;
-
-	protected static $instance;
 
 	/**
 	 * Create LichtingLid on the fly.
@@ -54,5 +49,4 @@ class LichtingLedenModel extends AbstractGroepLedenModel {
 		}
 		return $leden;
 	}
-
 }

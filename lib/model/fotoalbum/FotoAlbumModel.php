@@ -26,9 +26,7 @@ use function CsrDelft\valid_filename;
 class FotoAlbumModel extends PersistenceModel {
 
 	const ORM = FotoAlbum::class;
-	const DIR = 'fotoalbum/';
 
-	protected static $instance;
 	/**
 	 * @var FotoModel
 	 */

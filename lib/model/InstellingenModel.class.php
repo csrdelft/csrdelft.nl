@@ -14,7 +14,6 @@ class InstellingenModel extends CachedPersistenceModel {
 
 	const ORM = Instelling::class;
 
-	protected static $instance;
 	/**
 	 * Store instellingen array as a whole in memcache
 	 * @var boolean

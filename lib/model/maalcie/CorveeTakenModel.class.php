@@ -15,9 +15,6 @@ use PDOStatement;
  */
 class CorveeTakenModel extends PersistenceModel {
 	const ORM = CorveeTaak::class;
-	const DIR = 'maalcie/';
-
-	protected static $instance;
 
 	public function updateGemaild(CorveeTaak $taak) {
 		$taak->setWanneerGemaild(date('Y-m-d H:i'));

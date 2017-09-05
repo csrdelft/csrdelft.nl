@@ -13,7 +13,6 @@ class TimerModel extends PersistenceModel {
 
 	const ORM = ExecutionTime::class;
 
-	protected static $instance;
 	/**
 	 * Time before and after view
 	 * @var float

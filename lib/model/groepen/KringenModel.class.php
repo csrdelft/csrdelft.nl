@@ -9,7 +9,6 @@ class KringenModel extends AbstractGroepenModel {
 
 	const ORM = Kring::class;
 
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string

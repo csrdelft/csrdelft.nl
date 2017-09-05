@@ -16,8 +16,6 @@ class GesprekBerichtenModel extends PersistenceModel {
 
 	const ORM = GesprekBericht::class;
 
-	/** @var static */
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string

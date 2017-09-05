@@ -31,8 +31,6 @@ class ProfielModel extends CachedPersistenceModel {
 
 	const ORM = Profiel::class;
 
-	protected static $instance;
-
 	/**
 	 * @param string $uid
 	 * @return Profiel|false

@@ -11,7 +11,6 @@ use CsrDelft\Orm\PersistenceModel;
  * @date 30/03/2017
  */
 class EetplanBekendenModel extends PersistenceModel {
-	protected static $instance;
 
 	const ORM = EetplanBekenden::class;
 
