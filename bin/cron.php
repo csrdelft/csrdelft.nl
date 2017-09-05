@@ -2,21 +2,20 @@
 <?php
 /**
  * cron.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Entry point voor uitvoeren van CRON-jobs.
- * 
+ *
  * 'geinstalleerd' met:
  * svn:executable property
  * export EDITOR=nano
  * crontab -e
  * 0 1 * * * /usr/www/csrdelft.nl/bin/cron.php >> /srv/www/csrdelft.nl/data/log/cron.log 2>&1
  * test door ./cron.php te typen
- * 
+ *
  * @see http://www.cronjob.nl/
  */
-use function CsrDelft\getDateTime;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\InstellingenModel;
@@ -25,6 +24,7 @@ use CsrDelft\model\LogModel;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\security\OneTimeTokensModel;
+use function CsrDelft\getDateTime;
 
 chdir(dirname(__FILE__) . '/../lib/');
 
@@ -41,9 +41,9 @@ try {
 
 // Log
 try {
-    LogModel::instance()->opschonen();
+	LogModel::instance()->opschonen();
 } catch (Exception $e) {
-    DebugLogModel::instance()->log('cron.php', 'LogModel::opschonen()', array(), $e);
+	DebugLogModel::instance()->log('cron.php', 'LogModel::opschonen()', array(), $e);
 }
 
 // LoginModel
@@ -70,19 +70,19 @@ try {
 
 // Corvee herinneringen
 try {
-		CorveeHerinneringenModel::stuurHerinneringen();
+	CorveeHerinneringenModel::stuurHerinneringen();
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'CorveeHerinneringenModel::stuurHerinneringen()', array(), $e);
 }
 
 // Forum opschonen
 try {
-		ForumModel::instance()->opschonen();
+	ForumModel::instance()->opschonen();
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'ForumModel::instance()->opschonen()', array(), $e);
 }
 
 $finish = microtime(true) - $start;
 if (DEBUG) {
-	echo getDateTime() . ' Finished in ' . (int) $finish . " seconds.\r\n";
+	echo getDateTime() . ' Finished in ' . (int)$finish . " seconds.\r\n";
 }

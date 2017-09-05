@@ -66,7 +66,7 @@ class CiviProductModel extends PersistenceModel {
 	 * @param string $order_by ORDER BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
-	 * @return PDOStatement|CiviProduct[] implements Traversable using foreach does NOT require ->fetchAll()
+	 * @return \Generator|CiviProduct[] implements Traversable using foreach does NOT require ->fetchAll()
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $group_by = null, $order_by = null, $limit = null, $start = 0) {
 		/** @var CiviProduct[] $entries */

@@ -15,9 +15,9 @@
 				<div class="float-right">
 					{assign var=prijs value=$maaltijd->getPrijsFloat()|string_format:"%.2f"}
 					{if $aanmelding and $aanmelding->getSaldoStatus() < 0}
-						{icon get="money_delete" title="U staat rood bij de MaalCie!&#013;Maaltijdprijs: &euro; "|cat:$prijs}
+						{icon get="money_delete" title="U hebt een negatief CiviSaldo!&#013;Maaltijdprijs: &euro; "|cat:$prijs}
 					{elseif $aanmelding and $aanmelding->getSaldoStatus() < 2}
-						{icon get="money_delete" title="Uw MaalCie saldo is te laag!&#013;Maaltijdprijs: &euro; "|cat:$prijs}
+						{icon get="money_delete" title="Uw CiviSaldo is te laag!&#013;Maaltijdprijs: &euro; "|cat:$prijs}
 					{elseif $maaltijd->getPrijs() != $standaardprijs}
 						{icon get="money" title="Afwijkende maaltijdprijs: &euro; "|cat:$prijs}
 					{else}

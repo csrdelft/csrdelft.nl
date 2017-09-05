@@ -16,6 +16,9 @@ class KringenModel extends AbstractGroepenModel {
 	protected $default_order = 'verticale ASC, kring_nummer ASC';
 
 	public static function get($id) {
+		if (is_numeric($id)) {
+			return parent::get($id);
+		}
 		$kringen = static::instance()->prefetch('verticale = ? AND kring_nummer = ?', explode('.', $id), null, null, 1);
 		return reset($kringen);
 	}

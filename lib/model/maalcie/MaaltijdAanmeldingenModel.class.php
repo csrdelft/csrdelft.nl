@@ -9,6 +9,7 @@ use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\PersistenceModel;
 use MongoDB\BSON\Type;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 
 /**
@@ -26,15 +27,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 			MaaltijdenModel::instance()->sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer) {
-			if (!$this->checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) {
-				throw new CsrGebruikerException('Niet toegestaan vanwege aanmeldrestrictie: ' . $maaltijd->aanmeld_filter);
-			}
-			if ($maaltijd->gesloten) {
-				throw new CsrGebruikerException('Maaltijd is gesloten');
-			}
-			if ($maaltijd->getAantalAanmeldingen() >= $maaltijd->aanmeld_limiet) {
-				throw new CsrGebruikerException('Maaltijd zit al vol');
-			}
+			$this->assertMagAanmelden($maaltijd, $uid);
 		}
 
 		if ($this->getIsAangemeld($maaltijd->maaltijd_id, $uid)) {
@@ -65,9 +58,9 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 		return $aanmelding;
 	}
 
-	public function aanmeldenDoorAbonnement($mid, $mrid, $uid) {
+	public function aanmeldenDoorAbonnement(Maaltijd $maaltijd, $mrid, $uid) {
 		$aanmelding = new MaaltijdAanmelding();
-		$aanmelding->maaltijd_id = $mid;
+		$aanmelding->maaltijd_id = $maaltijd->maaltijd_id;
 		$aanmelding->uid = $uid;
 		$aanmelding->door_uid = $uid;
 		$aanmelding->door_abonnement = $mrid;
@@ -75,8 +68,17 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 		$aanmelding->gasten_eetwens = '';
 
 		if (!$this->exists($aanmelding)) {
-			$this->create($aanmelding);
+			try {
+				$this->assertMagAanmelden($maaltijd, $uid);
+				$this->create($aanmelding);
+
+				return true;
+			} catch (CsrGebruikerException $e) {
+				return false;
+			}
 		}
+
+		return false;
 	}
 
 	/**
@@ -314,11 +316,29 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 		$maaltijden = MaaltijdenModel::instance()->find("mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?", array($mrid, date('Y-m-d')));
 		foreach ($maaltijden as $maaltijd) {
 			if (!$this->existsByPrimaryKey(array($maaltijd->maaltijd_id, $uid))) {
-				$this->aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $mrid, $uid);
-				$aantal++;
+				if ($this->aanmeldenDoorAbonnement($maaltijd, $mrid, $uid)) {
+					$aantal++;
+				}
 			}
 		}
 		return $aantal;
+	}
+
+	/**
+	 * @param Maaltijd $maaltijd
+	 * @param string $uid
+	 * @throws CsrGebruikerException
+	 */
+	protected function assertMagAanmelden(Maaltijd $maaltijd, $uid) {
+		if (!$this->checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) {
+			throw new CsrGebruikerException('Niet toegestaan vanwege aanmeldrestrictie: ' . $maaltijd->aanmeld_filter);
+		}
+		if ($maaltijd->gesloten) {
+			throw new CsrGebruikerException('Maaltijd is gesloten');
+		}
+		if ($maaltijd->getAantalAanmeldingen() >= $maaltijd->aanmeld_limiet) {
+			throw new CsrGebruikerException('Maaltijd zit al vol');
+		}
 	}
 
 }
