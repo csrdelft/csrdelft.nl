@@ -21,6 +21,8 @@ class CorveeTakenModel extends PersistenceModel {
 
 	protected static $instance;
 
+	protected $default_order = 'datum ASC';
+
 	public function updateGemaild(CorveeTaak $taak) {
 		$taak->setWanneerGemaild(date('Y-m-d H:i'));
 		$this->update($taak);
