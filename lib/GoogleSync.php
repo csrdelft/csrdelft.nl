@@ -351,10 +351,9 @@ class GoogleSync {
 			if ($profiel instanceof Profiel) {
 				$profielBatch[] = $profiel;
 			} else {
-				try {
-					$profielBatch[] = ProfielModel::get($profiel);
-				} catch (\Exception $e) {
-					// omit faulty/non-existant uid's
+				$profiel = ProfielModel::get($profiel);
+				if ($profiel !== false) {
+					$profielBatch[] = $profiel;
 				}
 			}
 		}
