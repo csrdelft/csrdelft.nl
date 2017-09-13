@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\maalcie\corvee\functies;
 
+use function CsrDelft\getMelding;
 use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\view\SmartyTemplateView;
 
