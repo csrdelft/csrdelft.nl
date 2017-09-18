@@ -31,8 +31,10 @@ class VoorkeurCommissie {
 		$res = array();
 		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 			$account = AccountModel::get($row['uid']);
-			$gedaan = AccessModel::mag($account, 'commissie:' . $this->naam . ',commissie:' . $this->naam . ':ot');
-			$res[$row['uid']] = array('voorkeur' => $row['voorkeur'], 'gedaan' => $gedaan);
+			if ($account->getProfiel() && $account->getProfiel()->isLid()) {
+				$gedaan = AccessModel::mag($account, 'commissie:' . $this->naam . ',commissie:' . $this->naam . ':ot');
+				$res[$row['uid']] = array('voorkeur' => $row['voorkeur'], 'gedaan' => $gedaan);
+			}
 		}
 		return $res;
 	}
