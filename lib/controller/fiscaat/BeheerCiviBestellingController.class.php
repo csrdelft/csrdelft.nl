@@ -6,8 +6,8 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\fiscaat\CiviBestellingOverzichtResponse;
-use CsrDelft\view\fiscaat\CiviBestellingOverzichtView;
+use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTable;
+use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTableResponse;
 
 /**
  * Class BeheerCiviBestellingController
@@ -36,16 +36,14 @@ class BeheerCiviBestellingController extends AclController {
 		$this->action = 'mijn';
 
 		if ($this->hasParam(3)) {
-			if ($this->getParam(3) != LoginModel::getUid()) {
-				$this->action = 'overzicht';
-			}
+			$this->action = 'overzicht';
 		}
 
 		return parent::performAction($this->getParams(3));
 	}
 
 	public function GET_overzicht($uid) {
-		$this->view = new CsrLayoutPage(new CiviBestellingOverzichtView($uid));
+		$this->view = new CsrLayoutPage(new CiviBestellingTable($uid));
 	}
 
 	public function POST_overzicht($uid) {
@@ -54,7 +52,7 @@ class BeheerCiviBestellingController extends AclController {
 		} else {
 			$data = $this->model->find('uid = ? and deleted = false', array($uid));
 		}
-		$this->view = new CiviBestellingOverzichtResponse($data);
+		$this->view = new CiviBestellingTableResponse($data);
 	}
 
 	public function GET_mijn() {

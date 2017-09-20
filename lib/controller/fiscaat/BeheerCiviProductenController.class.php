@@ -7,20 +7,13 @@ use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\fiscaat\BeheerCiviProductenView;
-use CsrDelft\view\fiscaat\BeheerProductenResponse;
-use CsrDelft\view\fiscaat\CiviProductenSuggestiesView;
-use CsrDelft\view\fiscaat\CiviProductForm;
+use CsrDelft\view\fiscaat\producten\CiviProductForm;
+use CsrDelft\view\fiscaat\producten\CiviProductSuggestiesView;
+use CsrDelft\view\fiscaat\producten\CiviProductTable;
+use CsrDelft\view\fiscaat\producten\CiviProductTableResponse;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 
-require_once 'model/fiscaat/CiviProductModel.class.php';
-require_once 'model/fiscaat/CiviBestellingInhoudModel.class.php';
-require_once 'view/fiscaat/BeheerCiviProductenView.class.php';
-require_once 'view/fiscaat/CiviProductenSuggestiesView.class.php';
-
 /**
- * Class BeheerProductenController
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  * @property CiviProductModel $model
@@ -56,15 +49,15 @@ class BeheerCiviProductenController extends AclController {
 
 	public function GET_suggesties() {
 		$query = '%' . $this->getParam('q') . '%';
-		$this->view = new CiviProductenSuggestiesView($this->model->find('beschrijving LIKE ?', array($query)));
+		$this->view = new CiviProductSuggestiesView($this->model->find('beschrijving LIKE ?', array($query)));
 	}
 
 	public function POST_overzicht() {
-		$this->view = new BeheerProductenResponse($this->model->find());
+		$this->view = new CiviProductTableResponse($this->model->find());
 	}
 
 	public function GET_overzicht() {
-		$this->view = new CsrLayoutPage(new BeheerCiviProductenView());
+		$this->view = new CsrLayoutPage(new CiviProductTable());
 	}
 
 	public function POST_toevoegen() {
@@ -79,7 +72,7 @@ class BeheerCiviProductenController extends AclController {
 				$this->model->create($product);
 			}
 
-			$this->view = new BeheerProductenResponse(array($product));
+			$this->view = new CiviProductTableResponse(array($product));
 			return;
 		}
 
@@ -130,7 +123,7 @@ class BeheerCiviProductenController extends AclController {
 				$product = $form->getModel();
 				$this->model->create($product);
 
-				$this->view = new BeheerProductenResponse(array($product));
+				$this->view = new CiviProductTableResponse(array($product));
 				return;
 			}
 		} else {
@@ -139,7 +132,7 @@ class BeheerCiviProductenController extends AclController {
 				$product = $form->getModel();
 				$this->model->update($product);
 
-				$this->view = new BeheerProductenResponse(array($product));
+				$this->view = new CiviProductTableResponse(array($product));
 				return;
 			}
 		}

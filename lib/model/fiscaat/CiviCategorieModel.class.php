@@ -17,4 +17,12 @@ class CiviCategorieModel extends PersistenceModel {
 	 * @var CiviCategorieModel
 	 */
 	protected static $instance;
+
+	/**
+	 * @param $id
+	 * @return CiviCategorie|false
+	 */
+	public static function get($id) {
+		return static::instance()->retrieveByPrimaryKey([$id]);
+	}
 }

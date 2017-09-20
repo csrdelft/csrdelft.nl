@@ -792,3 +792,75 @@ function aaidrom($voornaam, $tussenvoegsel, $achternaam) {
 
 	return sprintf("%s %s%s", $nwvoor, !empty($tussenvoegsel) ? $tussenvoegsel . ' ' : '', $nwachter);
 }
+
+function url2absolute($baseurl, $relativeurl) {
+
+	// if the relative URL is scheme relative then treat it differently
+	if(substr($relativeurl, 0, 2) === "//") {
+		if(parse_url($baseurl, PHP_URL_SCHEME) != null) {
+			return parse_url($baseurl, PHP_URL_SCHEME) . ":" . $relativeurl;
+		} else { // assume HTTP
+			return "http:" . $relativeurl;
+		}
+	}
+
+	// if the relative URL points to the root then treat it more simply
+	if(substr($relativeurl, 0, 1) === "/") {
+		$parts = parse_url($baseurl);
+		$return = $parts['scheme'] . ":";
+		$return .= ($parts['scheme'] === "file") ? "///" : "//";
+		// username:password@host:port ... could go here too!
+		$return .= $parts['host'] . $relativeurl;
+		return $return;
+	}
+
+	// If the relative URL is actually an absolute URL then just use that
+	if(parse_url($relativeurl, PHP_URL_SCHEME) !== null) {
+		return $relativeurl;
+	}
+
+	$parts = parse_url($baseurl);
+
+	// Chop off the query string in a base URL if it is there
+	if(isset($parts['query'])) {
+		$baseurl = strstr($baseurl,'?',true);
+	}
+
+	// The rest is adapted from Puggan Se
+
+	$minpartsinfinal = 3; // for everything except file:///
+	if($parts['scheme'] === "file") {
+		$minpartsinfinal = 4;
+	}
+
+	// logic for username:password@host:port ... query string etc. could go here too ... somewhere?
+
+	$basepath = explode('/', $baseurl); // will this handle correctly when query strings have '/'
+	$relpath = explode('/', $relativeurl);
+
+	array_pop($basepath);
+
+	$returnpath = array_merge($basepath, $relpath);
+	$returnpath = array_reverse($returnpath);
+
+	$parents = 0;
+	foreach($returnpath as $part_nr => $part_value) {
+		/* if we find '..', remove this and the next element */
+		if($part_value == '..') {
+			$parents++;
+			unset($returnpath[$part_nr]);
+		} /* if we find '.' remove this element */
+		else if($part_value == '.') {
+			unset($returnpath[$part_nr]);
+		} /* if this is a normal element, and we have unhandled '..', then remove this */
+		else if($parents > 0) {
+			unset($returnpath[$part_nr]);
+			$parents--;
+		}
+	}
+	$returnpath = array_reverse($returnpath);
+	if(count($returnpath) < $minpartsinfinal) {
+		return FALSE;
+	}
+	return implode('/', $returnpath);
+}

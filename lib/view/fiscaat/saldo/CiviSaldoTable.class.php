@@ -1,18 +1,15 @@
 <?php
-
-namespace CsrDelft\view\fiscaat;
+namespace CsrDelft\view\fiscaat\saldo;
 
 use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\view\formulier\datatable\DataTable;
 use CsrDelft\view\formulier\datatable\DataTableKnop;
 
 /**
- * BeheerCiviSaldoView.class.php
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 07/04/2017
  */
-class BeheerCiviSaldoView extends DataTable {
+class CiviSaldoTable extends DataTable {
 	public function __construct() {
 		parent::__construct(CiviSaldo::class, '/fiscaat/saldo', 'Saldobeheer');
 

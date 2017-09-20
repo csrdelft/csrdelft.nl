@@ -1,20 +1,17 @@
 <?php
-/**
- * CiviBestellingOverzichtView.class.php
- *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 26/04/2017
- */
-
-namespace CsrDelft\view\fiscaat;
+namespace CsrDelft\view\fiscaat\bestellingen;
 
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\formulier\datatable\DataTable;
 
-class CiviBestellingOverzichtView extends DataTable {
+/**
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @date 26/04/2017
+ */
+class CiviBestellingTable extends DataTable {
 	public function __construct($uid) {
-		parent::__construct(CiviBestelling::class, '/fiscaat/bestellingen/' . $uid, "Overzicht voor " . ProfielModel::getNaam($uid, 'volledig'));
+		parent::__construct(CiviBestelling::class, '/fiscaat/bestellingen', "Overzicht voor " . ProfielModel::getNaam($uid, 'volledig'));
 
 		$this->addColumn('inhoud');
 		$this->addColumn('totaal', null, null, 'prijs_render', null, 'num-fmt');

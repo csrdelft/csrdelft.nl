@@ -7,12 +7,11 @@ use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\Orm\Persistence\Database;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\fiscaat\BeheerCiviSaldoView;
-use CsrDelft\view\fiscaat\BeheerSaldoResponse;
-use CsrDelft\view\fiscaat\InleggenForm;
-use CsrDelft\view\fiscaat\LidRegistratieForm;
+use CsrDelft\view\fiscaat\saldo\CiviSaldoTable;
+use CsrDelft\view\fiscaat\saldo\CiviSaldoTableResponse;
+use CsrDelft\view\fiscaat\saldo\InleggenForm;
+use CsrDelft\view\fiscaat\saldo\LidRegistratieForm;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use function CsrDelft\getDateTime;
 
@@ -52,11 +51,11 @@ class BeheerCiviSaldoController extends AclController {
 	}
 
 	public function GET_overzicht() {
-		$this->view = new CsrLayoutPage(new BeheerCiviSaldoView());
+		$this->view = new CsrLayoutPage(new CiviSaldoTable());
 	}
 
 	public function POST_overzicht() {
-		$this->view = new BeheerSaldoResponse($this->model->find('deleted = false'));
+		$this->view = new CiviSaldoTableResponse($this->model->find('deleted = false'));
 	}
 
 	public function POST_inleggen() {
@@ -81,7 +80,7 @@ class BeheerCiviSaldoController extends AclController {
 					$civisaldo->laatst_veranderd = getDateTime();
 				});
 
-				$this->view = new BeheerSaldoResponse(array($civisaldo));
+				$this->view = new CiviSaldoTableResponse(array($civisaldo));
 			} else {
 				$this->view = $form;
 			}
@@ -132,7 +131,7 @@ class BeheerCiviSaldoController extends AclController {
 				$saldo->id = $this->model->create($saldo);
 			}
 
-			$this->view = new BeheerSaldoResponse(array($saldo));
+			$this->view = new CiviSaldoTableResponse(array($saldo));
 			return;
 		}
 
