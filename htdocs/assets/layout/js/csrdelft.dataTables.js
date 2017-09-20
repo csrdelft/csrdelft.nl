@@ -21,14 +21,18 @@ function fnInitDataTables() {
     	// Altijd laten zien bij geen expressie
     	if (expression.length === 0) return true;
         var operator_num = expression.split(' ');
-        return {
-            '==': function (a, b) { return a == b; },
-            '!=': function (a, b) { return a != b; },
-            '>=': function (a, b) { return a >= b; },
-            '>' : function (a, b) { return a >  b; },
-            '<=': function (a, b) { return a <= b; },
-            '<' : function (a, b) { return a <  b; }
-        }[operator_num[0]](num, parseInt(operator_num[1]));
+        var expression_operator = operator_num[0];
+        var expression_num = parseInt(operator_num[1]);
+		var operatorToFunction = {
+			'==': function (a, b) { return a === b; },
+			'!=': function (a, b) { return a !== b; },
+			'>=': function (a, b) { return a >= b; },
+			'>' : function (a, b) { return a >  b; },
+			'<=': function (a, b) { return a <= b; },
+			'<' : function (a, b) { return a <  b; }
+		};
+
+		return operatorToFunction[expression_operator](num, expression_num);
     };
 
     // Zet de icons van de default buttons
@@ -42,8 +46,6 @@ function fnInitDataTables() {
 	$.fn.dataTable.ext.buttons.excelFlash.className += ' dt-button-ico dt-ico-page_white_excel';
     $.fn.dataTable.ext.buttons.print.className += ' dt-button-ico dt-ico-printer';
 
-
-
     // Laat een modal zien, of doe een ajax call gebasseerd op selectie.
     $.fn.dataTable.ext.buttons.default = {
         init: function (dt, node, config) {
@@ -52,7 +54,9 @@ function fnInitDataTables() {
 				that.enable(
 					evaluateMultiplicity(
 						config.multiplicity,
-						dt.rows({selected: true}).count()))
+						dt.rows({selected: true}).count()
+					)
+				);
 			};
             dt.on('select.dt.DT deselect.dt.DT', toggle);
             // Initiele staat
@@ -60,10 +64,10 @@ function fnInitDataTables() {
 
             // Vervang :col door de waarde te vinden in de geselecteerde row
 			// Dit wordt alleen geprobeerd als dit voorkomt
-            if (config.href.indexOf(':') != -1) {
+            if (config.href.indexOf(':') !== -1) {
             	var replacements = /:(\w+)/g.exec(config.href);
             	dt.on('select.dt.DT', function (e, dt, type, indexes) {
-            		if (indexes.length == 1) {
+            		if (indexes.length === 1) {
 						var newHref = config.href;
             			var row = dt.row(indexes).data();
             			// skipt match, start met groepen
@@ -80,7 +84,7 @@ function fnInitDataTables() {
             node.attr('href', config.href);
             node.attr('data-tableid', dt.context[0].sTableId);
         },
-        action: function( e, dt, button, config ) {
+        action: function( e, dt, button, config) {
             knop_post.call(button, e)
         },
         className: 'post DataTableResponse'
@@ -106,7 +110,7 @@ function fnInitDataTables() {
 	$.fn.dataTable.ext.buttons.sourceChange = {
 		init: function (dt, node, config) {
 			var enable = function () {
-				dt.buttons(node).active(dt.ajax.url() == config.href);
+				dt.buttons(node).active(dt.ajax.url() === config.href);
 			};
 			dt.on('xhr.sourceChange', enable);
 
@@ -125,7 +129,9 @@ function fnInitDataTables() {
 				that.enable(
 					evaluateMultiplicity(
 						config.multiplicity,
-						dt.rows({selected: true}).count()))
+						dt.rows({selected: true}).count()
+					)
+				);
 			};
 			dt.on('select.dt.DT deselect.dt.DT', toggle);
 			// Initiele staat
@@ -155,7 +161,7 @@ function fnInitDataTables() {
 		},
 		action: function( e, dt, button, config ) {
 			knop_post.call(button, e)
-		},
+		}
 	};
 
 	$.fn.dataTable.ext.buttons.defaultCollection = {
@@ -305,7 +311,7 @@ function fnGroupByColumnDraw(event, settings) {
 
 function fnHideEmptyCollapsedAll(tableId, $th) {
 	var $table = $(tableId);
-	if ($('tr.group', $table).length == $table.data('collapsedGroups').length) {
+	if ($('tr.group', $table).length === $table.data('collapsedGroups').length) {
 		$('td.dataTables_empty', $table).parent().remove();
 		$th.removeClass('toggle-group-expanded');
 	}
