@@ -19,7 +19,7 @@
             {else}
                 <td>{$datum}</td>
             {/if}
-            <td>{ProfielModel::getLink($noviet->uid, 'civitas')}</td>
+            <td>{CsrDelft\model\ProfielModel::getLink($noviet->uid, 'civitas')}</td>
             <td>{$noviet->mobiel}</td>
             <td>{$noviet->email}</td>
             <td>{$noviet->eetwens}</td>

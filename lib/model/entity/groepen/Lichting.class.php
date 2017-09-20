@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\groepen\leden\LichtingLedenModel;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * Lichting.class.php
@@ -8,7 +12,7 @@
  */
 class Lichting extends AbstractGroep {
 
-	const leden = 'LichtingLedenModel';
+	const leden = LichtingLedenModel::class;
 
 	/**
 	 * Lidjaar
@@ -36,14 +40,14 @@ class Lichting extends AbstractGroep {
 	 * Read-only: generated group
 	 */
 	public function mag($action) {
-		return $action === A::Bekijken;
+		return $action === AccessAction::Bekijken;
 	}
 
 	/**
 	 * Read-only: generated group
 	 */
 	public static function magAlgemeen($action) {
-		return $action === A::Bekijken;
+		return $action === AccessAction::Bekijken;
 	}
 
 }

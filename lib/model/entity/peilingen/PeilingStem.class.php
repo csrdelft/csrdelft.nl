@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model\entity\peilingen;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
+
 /**
  * Class PeilingStem
  *

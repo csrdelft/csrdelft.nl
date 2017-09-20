@@ -1,6 +1,12 @@
 <?php
+namespace CsrDelft\model\mededelingen;
 
-require_once 'model/mededelingen/MededelingCategorieenModel.class.php';
+use function CsrDelft\getDateTime;
+use function CsrDelft\isGeldigeDatum;
+use CsrDelft\model\entity\mededelingen\Mededeling;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\PersistenceModel;
 
 /**
  * MededelingenModel.class.php
@@ -11,16 +17,18 @@ require_once 'model/mededelingen/MededelingCategorieenModel.class.php';
  */
 class MededelingenModel extends PersistenceModel {
 
-	const ORM = 'Mededeling';
-	const DIR = 'mededelingen/';
-	const defaultPrioriteit = 255;
+	const ORM = Mededeling::class;
+	const DEFAULT_PRIORITEIT = 255;
 
+	/**
+	 * @var MededelingenModel
+	 */
 	protected static $instance;
 
 	/**
 	 * Valideer een gegeven mededeling.
 	 *
-	 * @param $mededeling Mededeling
+	 * @param Mededeling $mededeling
 	 * @return string Foutmelding
 	 */
 	public function validate($mededeling) {
@@ -46,7 +54,7 @@ class MededelingenModel extends PersistenceModel {
 
 		if (!$this->isModerator()) {
 			if (isset($mededeling->prioriteit) && !array_search($mededeling->prioriteit, array_keys($this->getPrioriteiten()))) {
-				$mededeling->prioriteit = MededelingenModel::defaultPrioriteit;
+				$mededeling->prioriteit = MededelingenModel::DEFAULT_PRIORITEIT;
 			}
 		}
 
@@ -58,8 +66,9 @@ class MededelingenModel extends PersistenceModel {
 	}
 
 	/**
-	 * @param $image
-	 * @param $mededeling Mededeling
+	 * @param string[] $image
+	 * @param Mededeling $mededeling
+	 *
 	 * @return string
 	 */
 	public function savePlaatje($image, $mededeling) {
@@ -88,6 +97,12 @@ class MededelingenModel extends PersistenceModel {
 		return $img_errors;
 	}
 
+	/**
+	 * @param int $aantal
+	 * @param string $doelgroep
+	 *
+	 * @return Mededeling[]
+	 */
 	public function getTopmost($aantal, $doelgroep = null) {
 		$topmost = array();
 		if (!is_numeric($aantal) OR $aantal <= 0) {
@@ -132,6 +147,13 @@ class MededelingenModel extends PersistenceModel {
 			$aantal)->fetchAll();
 	}
 
+	/**
+	 * @param int $pagina
+	 * @param int $aantal
+	 * @param bool $prullenbak
+	 *
+	 * @return Mededeling[]
+	 */
 	public function getLijstVanPagina($pagina = 1, $aantal, $prullenbak = false) {
 		// Prullenbak checken.
 		if ($prullenbak AND ! LoginModel::mag('P_NEWS_MOD')) {
@@ -158,12 +180,15 @@ class MededelingenModel extends PersistenceModel {
 		return $mededelingen;
 	}
 
+	/**
+	 * @return Mededeling[]
+	 */
 	public function getLijstWachtGoedkeuring() {
 		$mededelingen = array();
 		// Moderators of niet-ingelogden hebben geen berichten die wachten op goedkeuring.
 		if (LoginModel::mag('P_NEWS_MOD') OR ! LoginModel::mag('P_LEDEN_READ'))
 			return $mededelingen;
-		
+
 		$resultaat = $this->find('uid=? AND zichtbaarheid="wacht_goedkeuring"',
 			array(LoginModel::getUid()),
 			'datum DESC');
@@ -178,22 +203,38 @@ class MededelingenModel extends PersistenceModel {
 		return $mededelingen;
 	}
 
+	/**
+	 * @param bool $prullenbak
+	 *
+	 * @return int
+	 */
 	public function getAantal($prullenbak) {
 		return $this->count(MededelingenModel::getClauses($prullenbak));
 	}
 
+	/**
+	 * @param Mededeling $mededeling
+	 * @param bool $prullenbak
+	 *
+	 * @return int
+	 */
 	public function getPaginaNummer($mededeling, $prullenbak) {
 		$clauses = MededelingenModel::getClauses($prullenbak);
 
 		$positie = $this->count(
 			$clauses.' AND datum >= ?',
 			array($mededeling->datum));
-		
-		$paginaNummer = (int) ceil($positie / LidInstellingen::get('mededelingen', 'aantalPerPagina'));
+
+		$paginaNummer = (int) ceil($positie / LidInstellingenModel::get('mededelingen', 'aantalPerPagina'));
 		$paginaNummer = $paginaNummer >= 1 ? $paginaNummer : 1; // Het moet natuurlijk wel groter dan 0 zijn.
 		return $paginaNummer;
 	}
 
+	/**
+	 * @param int $aantal
+	 *
+	 * @return \PDOStatement|Mededeling[]
+	 */
 	public static function getLaatsteMededelingen($aantal) {
 
 		$zichtbaarheidClause = "zichtbaarheid='zichtbaar'";
@@ -210,7 +251,10 @@ class MededelingenModel extends PersistenceModel {
 		);
 	}
 
-	public static function getPrioriteiten() {
+	/**
+	 * @return string[]
+	 */
+	public function getPrioriteiten() {
 		$prioriteiten = array();
 		$prioriteiten[255] = 'geen';
 		for ($i = 1; $i <= 6; $i++) {
@@ -219,26 +263,46 @@ class MededelingenModel extends PersistenceModel {
 		return $prioriteiten;
 	}
 
-	public static function getDoelgroepen() {
-		return array('iedereen', '(oud)leden', 'leden');
+	/**
+	 * @return string[]
+	 */
+	public function getDoelgroepen() {
+		return ['iedereen', '(oud)leden', 'leden'];
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function isModerator() {
 		return LoginModel::mag('P_NEWS_MOD');
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function isOudlid() {
 		return LoginModel::mag('status:oudlid');
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function magPriveLezen() {
 		return LoginModel::mag('P_LEDEN_READ');
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function magToevoegen() {
 		return LoginModel::mag('P_NEWS_POST');
 	}
 
+	/**
+	 * @param bool $prullenbak
+	 *
+	 * @return string
+	 */
 	public static function getClauses($prullenbak) {
 		// Verval clause.
 		$vervalClause = "(vervaltijd IS NULL OR vervaltijd > '" . getDateTime() . "')";

@@ -1,20 +1,31 @@
 <?php
+namespace CsrDelft\controller\maalcie;
 
-require_once 'model/maalcie/CorveeRepetitiesModel.class.php';
-require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
-require_once 'view/maalcie/CorveeRepetitiesView.class.php';
-require_once 'view/maalcie/forms/CorveeRepetitieForm.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\maalcie\CorveeRepetitiesModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\corvee\repetities\CorveeRepetitiesView;
+use CsrDelft\view\maalcie\corvee\repetities\CorveeRepetitieView;
+use CsrDelft\view\maalcie\forms\CorveeRepetitieForm;
+use function CsrDelft\endsWith;
+use function CsrDelft\getMelding;
+use function CsrDelft\setMelding;
+
 
 /**
  * CorveeRepetitiesController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
+ * @property CorveeRepetitiesModel $model
+ *
  */
 class CorveeRepetitiesController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, null);
+		parent::__construct($query, CorveeRepetitiesModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'beheer'	 => 'P_CORVEE_MOD',
@@ -49,12 +60,12 @@ class CorveeRepetitiesController extends AclController {
 		if (is_int($crid) && $crid > 0) {
 			$this->bewerk($crid);
 			$modal = $this->view;
-			$repetities = CorveeRepetitiesModel::getAlleRepetities();
+			$repetities = $this->model->getAlleRepetities();
 		} elseif (is_int($mrid) && $mrid > 0) {
-			$repetities = CorveeRepetitiesModel::getRepetitiesVoorMaaltijdRepetitie($mrid);
-			$maaltijdrepetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
+			$repetities = $this->model->getRepetitiesVoorMaaltijdRepetitie($mrid);
+			$maaltijdrepetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
 		} else {
-			$repetities = CorveeRepetitiesModel::getAlleRepetities();
+			$repetities = $this->model->getAlleRepetities();
 		}
 		$this->view = new CorveeRepetitiesView($repetities, $maaltijdrepetitie);
 		$this->view = new CsrLayoutPage($this->view);
@@ -67,13 +78,13 @@ class CorveeRepetitiesController extends AclController {
 	}
 
 	public function nieuw($mrid = null) {
-		$repetitie = new CorveeRepetitie(0, $mrid);
-		$this->view = new CorveeRepetitieForm($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), null, $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
+		$repetitie = $this->model->nieuw(0, $mrid);
+		$this->view = new CorveeRepetitieForm($repetitie); // fetches POST values itself
 	}
 
 	public function bewerk($crid) {
-		$repetitie = CorveeRepetitiesModel::getRepetitie($crid);
-		$this->view = new CorveeRepetitieForm($repetitie->getCorveeRepetitieId(), $repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getFunctieId(), $repetitie->getStandaardPunten(), $repetitie->getStandaardAantal(), $repetitie->getIsVoorkeurbaar()); // fetches POST values itself
+		$repetitie = $this->model->getRepetitie($crid);
+		$this->view = new CorveeRepetitieForm($repetitie); // fetches POST values itself
 	}
 
 	public function opslaan($crid) {
@@ -86,10 +97,10 @@ class CorveeRepetitiesController extends AclController {
 			$values = $this->view->getValues();
 			$mrid = empty($values['mlt_repetitie_id']) ? null : (int) $values['mlt_repetitie_id'];
 			$voorkeurbaar = empty($values['voorkeurbaar']) ? false : (bool) $values['voorkeurbaar'];
-			$repetitie_aantal = CorveeRepetitiesModel::saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_punten'], $values['standaard_aantal'], $voorkeurbaar);
+			$repetitie_aantal = $this->model->saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_punten'], $values['standaard_aantal'], $voorkeurbaar);
 			$maaltijdrepetitie = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], maalcieUrl . '/maaltijd/' . $mrid)) { // state of gui
-				$maaltijdrepetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
+				$maaltijdrepetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
 			}
 			$this->view = new CorveeRepetitieView($repetitie_aantal[0], $maaltijdrepetitie);
 			if ($repetitie_aantal[1] > 0) {
@@ -99,7 +110,7 @@ class CorveeRepetitiesController extends AclController {
 	}
 
 	public function verwijder($crid) {
-		$aantal = CorveeRepetitiesModel::verwijderRepetitie($crid);
+		$aantal = $this->model->verwijderRepetitie($crid);
 		if ($aantal > 0) {
 			setMelding($aantal . ' voorkeur' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 		}
@@ -112,7 +123,7 @@ class CorveeRepetitiesController extends AclController {
 		$this->opslaan($crid);
 		if ($this->view instanceof CorveeRepetitieView) { // opslaan succesvol
 			$verplaats = isset($_POST['verplaats_dag']);
-			$aantal = CorveeTakenModel::updateRepetitieTaken($this->view->getModel(), $verplaats);
+			$aantal = CorveeTakenModel::instance()->updateRepetitieTaken($this->view->getModel(), $verplaats);
 			if ($aantal['update'] < $aantal['day']) {
 				$aantal['update'] = $aantal['day'];
 			}

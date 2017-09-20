@@ -1,13 +1,22 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/MenuModel.class.php';
-require_once 'view/MenuBeheerView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\MenuModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\menubeheer\MenuBeheerView;
+use CsrDelft\view\menubeheer\MenuItemForm;
+use function CsrDelft\setMelding;
+
 
 /**
  * MenuBeheerController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
+ * @property MenuModel $model
  */
 class MenuBeheerController extends AclController {
 

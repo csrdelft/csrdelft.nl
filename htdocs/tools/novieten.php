@@ -6,6 +6,11 @@
  * Time: 13:09
  */
 
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\View;
+
 require_once 'configuratie.include.php';
 
 if (!LoginModel::mag('commissie:NovCie,P_ADMIN')) exit;
@@ -14,7 +19,7 @@ $query = "SELECT * FROM profielen WHERE status = 'S_NOVIET'";
 
 $content = '';
 $content .= '<table class="table"><tr><th>UID</th><th>Voornaam</th><th>Tussenvoegsel</th><th>Achternaam</th><th>Mobiel</th><th>Studie</th></tr>';
-foreach (Database::sqlSelect(array('*'), 'profielen', 'status = ?', array('S_NOVIET')) as $item) {
+foreach (Database::instance()->sqlSelect(array('*'), 'profielen', 'status = ?', array('S_NOVIET')) as $item) {
     $string = <<<NOV
 <tr>
 <td><a href="/profiel/%s">%s</a></td>

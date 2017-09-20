@@ -1,8 +1,21 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'controller/framework/Controller.abstract.php';
-require_once 'model/bibliotheek/BiebBoek.class.php';
-require_once 'view/BibliotheekView.class.php';
+use CsrDelft\common\CsrException;
+use CsrDelft\controller\framework\Controller;
+use CsrDelft\model\bibliotheek\BewerkBoek;
+use CsrDelft\model\bibliotheek\BiebCatalogus;
+use CsrDelft\model\bibliotheek\NieuwBoek;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\bibliotheek\BibliotheekBoekContent;
+use CsrDelft\view\bibliotheek\BibliotheekCatalogusContent;
+use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableContent;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\JsonResponse;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+
 
 /**
  * BibliotheekController.class.php	|	Gerrit Uitslag (klapinklapin@gmail.com)
@@ -30,8 +43,10 @@ class BibliotheekController extends Controller {
 
 	public function performAction(array $args = array()) {
 		parent::performAction($args);
-		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('bibliotheek');
+		if ($this->action != "autocomplete") {
+			$this->view = new CsrLayoutPage($this->view);
+			$this->view->addCompressedResources('bibliotheek');
+		}
 	}
 
 	protected function mag($action, array $args) {
@@ -52,16 +67,14 @@ class BibliotheekController extends Controller {
 	}
 
 	public function rubrieken() {
-		require_once 'controller/CmsPaginaController.class.php';
-		$c = new CmsPaginaController($this->action);
+				$c = new CmsPaginaController($this->action);
 		$c->bekijken($this->action);
 		$c->getView()->view();
 		exit;
 	}
 
 	public function wenslijst() {
-		require_once 'controller/CmsPaginaController.class.php';
-		$c = new CmsPaginaController($this->action);
+				$c = new CmsPaginaController($this->action);
 		$c->bekijken($this->action);
 		$c->getView()->view();
 		exit;
@@ -69,9 +82,9 @@ class BibliotheekController extends Controller {
 
 	/**
 	 * Catalogus tonen
-	 * 
+	 *
 	 * /[filters]
-	 * 
+	 *
 	 */
 	protected function catalogustonen() {
 		$this->view = new BibliotheekCatalogusContent();
@@ -89,7 +102,7 @@ class BibliotheekController extends Controller {
 
 	/**
 	 * Laad een boek object
-	 * 
+	 *
 	 * ga er van uit dat in getParam(3) een boekid staat en laad dat in.
 	 * @param $boekid	$boekid
 	 * 					of leeg: gebruikt getParam()
@@ -106,7 +119,7 @@ class BibliotheekController extends Controller {
 			}
 			try {
 				$this->boek = new BewerkBoek($boekid, $beschrijvingsid);
-			} catch (Exception $e) {
+			} catch (CsrException $e) {
 				setMelding($e->getMessage(), -1);
 				redirect('/bibliotheek/');
 			}
@@ -115,7 +128,7 @@ class BibliotheekController extends Controller {
 
 	/**
 	 * Boekpagina weergeven
-	 * 
+	 *
 	 * /boek/id
 	 */
 	protected function boek() {
@@ -125,7 +138,7 @@ class BibliotheekController extends Controller {
 
 	/**
 	 * Verwerken van bewerking van een veld op de boekpagina
-	 * 
+	 *
 	 * /bewerkboek/id
 	 */
 	protected function bewerkboek() {
@@ -142,7 +155,7 @@ class BibliotheekController extends Controller {
 				} else {
 					$return['melding'] = 'Fout: ' . $this->boek->getField($_POST['id'])->getError() . ' ' . $this->boek->getError();
 				}
-			} catch (Exception $e) {
+			} catch (CsrException $e) {
 				$return['melding'] = 'Fout: ' . $e->getMessage();
 			}
 		} else {
@@ -154,10 +167,10 @@ class BibliotheekController extends Controller {
 
 	/**
 	 * Nieuw boek aanmaken, met formulier
-	 * 
+	 *
 	 * /nieuwboek
 	 * /boek[/0]
-	 * 
+	 *
 	 */
 	protected function nieuwboek() {
 		//leeg object Boek laden
@@ -177,7 +190,7 @@ class BibliotheekController extends Controller {
 
 	/**
 	 * Verwijder boek
-	 * 
+	 *
 	 * /verwijderboek/id
 	 */
 	protected function verwijderboek() {
@@ -196,7 +209,7 @@ class BibliotheekController extends Controller {
 
 	/**
 	 * Boekbeschrijving aanpassen
-	 * 
+	 *
 	 * /bewerkbeschrijving/id/beschrijvingsid
 	 */
 	protected function bewerkbeschrijving() {
@@ -215,7 +228,7 @@ class BibliotheekController extends Controller {
 
 	/**
 	 * Boekbeschrijving verwijderen
-	 * 
+	 *
 	 * /verwijderbeschrijving/id/beschrijvingsid
 	 */
 	protected function verwijderbeschrijving() {
@@ -280,7 +293,7 @@ class BibliotheekController extends Controller {
 	/**
 	 * Exemplaar is geleend of wordt uitgeleend door eigenaar
 	 * kan door iedereen, inclusief eigenaar
-	 * 
+	 *
 	 * /exemplaarlenen/id/exemplaarid[/ander]
 	 */
 	protected function exemplaarlenen() {
@@ -318,7 +331,7 @@ class BibliotheekController extends Controller {
 	/**
 	 * Lener zegt dat hij/zij exemplaar heeft teruggegeven
 	 * Alleen door lener
-	 * 
+	 *
 	 * /exemplaarteruggegeven/id/exemplaarid
 	 */
 	protected function exemplaarteruggegeven() {
@@ -338,7 +351,7 @@ class BibliotheekController extends Controller {
 	/**
 	 * Exemplaar is terugontvangen van lener
 	 * Alleen door eigenaar
-	 * 
+	 *
 	 * /exemplaarterugontvangen/id/exemplaarid
 	 */
 	protected function exemplaarterugontvangen() {
@@ -358,7 +371,7 @@ class BibliotheekController extends Controller {
 	/**
 	 * Exemplaar is vermist
 	 * Alleen door eigenaar
-	 * 
+	 *
 	 * /exemplaarvermist/id/exemplaarid
 	 */
 	protected function exemplaarvermist() {
@@ -378,7 +391,7 @@ class BibliotheekController extends Controller {
 	/**
 	 * Exemplaar is gevonden
 	 * Alleen door eigenaar
-	 * 
+	 *
 	 * /exemplaargevonden/id/exemplaarid
 	 */
 	protected function exemplaargevonden() {
@@ -397,9 +410,9 @@ class BibliotheekController extends Controller {
 
 	/**
 	 * Genereert suggesties voor jquery-autocomplete
-	 * 
+	 *
 	 * /autocomplete/auteur
-	 * 
+	 *
 	 * @return json
 	 */
 	protected function autocomplete() {

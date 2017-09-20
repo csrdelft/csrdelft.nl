@@ -1,20 +1,39 @@
 <?php
+namespace CsrDelft\model\entity;
 
-require_once 'model/entity/Geslacht.enum.php';
-require_once 'model/entity/OntvangtContactueel.enum.php';
-require_once 'model/entity/LidStatus.enum.php';
-require_once 'model/entity/Kringleider.enum.php';
-require_once 'ldap.class.php';
-require_once 'model/GroepenModel.abstract.php';
+use function CsrDelft\aaidrom;
+use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\GoogleSync;
+use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\model\groepen\KringenModel;
+use CsrDelft\model\groepen\leden\BestuursLedenModel;
+use CsrDelft\model\groepen\leden\CommissieLedenModel;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
+use CsrDelft\view\bbcode\CsrBB;
+use function CsrDelft\array_filter_empty;
+use function CsrDelft\setMelding;
+use function CsrDelft\square_crop;
+
 
 /**
  * Profiel.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Profiel van een lid. Agendeerbaar vanwege verjaardag in agenda.
- * 
+ *
  */
 class Profiel extends PersistentEntity implements Agendeerbaar {
 
@@ -53,10 +72,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	// contact
 	public $email;
 	public $mobiel;
-	public $icq;
-	public $msn;
-	public $skype;
-	public $jid;
 	public $linkedin;
 	public $website;
 	// studie
@@ -81,11 +96,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $eetwens;
 	public $corvee_punten;
 	public $corvee_punten_bonus;
-	public $soccieID;
-	public $soccieSaldo;
-	public $maalcieSaldo;
 	// novitiaat
-	public $createTerm;
 	public $novitiaat;
 	public $novitiaatBijz;
 	public $medisch;
@@ -120,13 +131,13 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'nickname'				 => array(T::String, true),
 		'duckname'				 => array(T::String, true),
 		// fysiek
-		'geslacht'				 => array(T::Enumeration, false, 'Geslacht'),
+		'geslacht'				 => array(T::Enumeration, false, Geslacht::class),
 		'gebdatum'				 => array(T::Date),
 		'sterfdatum'			 => array(T::Date, true),
 		// getrouwd
 		'echtgenoot'			 => array(T::UID, true),
 		'adresseringechtpaar'	 => array(T::String, true),
-		'ontvangtcontactueel'	 => array(T::Enumeration, false, 'OntvangtContactueel'),
+		'ontvangtcontactueel'	 => array(T::Enumeration, false, OntvangtContactueel::class),
 		// adres
 		'adres'					 => array(T::String),
 		'postcode'				 => array(T::String),
@@ -141,10 +152,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'o_telefoon'			 => array(T::String, true),
 		// contact
 		'email'					 => array(T::String),
-		'icq'					 => array(T::String, true),
-		'msn'					 => array(T::String, true),
-		'skype'					 => array(T::String, true),
-		'jid'					 => array(T::String, true),
 		'linkedin'				 => array(T::String, true),
 		'website'				 => array(T::String, true),
 		// studie
@@ -155,7 +162,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		// lidmaatschap
 		'lidjaar'				 => array(T::Integer),
 		'lidafdatum'			 => array(T::Date, true),
-		'status'				 => array(T::Enumeration, false, 'LidStatus'),
+		'status'				 => array(T::Enumeration, false, LidStatus::class),
 		// geld
 		'bankrekening'			 => array(T::String, true),
 		'machtiging'			 => array(T::Boolean, true),
@@ -163,15 +170,11 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'moot'					 => array(T::Char, true),
 		'verticale'				 => array(T::Char, true),
 		'verticaleleider'		 => array(T::Boolean, true),
-		'kringcoach'			 => array(T::Char, true),
+		'kringcoach'			 => array(T::Boolean, true),
 		// civi-gegevens
 		'patroon'				 => array(T::UID, true),
 		'corvee_punten'			 => array(T::Integer, true),
 		'corvee_punten_bonus'	 => array(T::Integer, true),
-		'soccieID'				 => array(T::Integer, true),
-		'createTerm'			 => array(T::String, true),
-		'soccieSaldo'			 => array(T::Float, true),
-		'maalcieSaldo'			 => array(T::Float, true),
 		// Persoonlijk
 		'eetwens'				 => array(T::String, true),
 		'lengte'				 => array(T::Integer),
@@ -234,16 +237,12 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Geef een array met contactgegevens terug, als de velden niet leeg zijn.
-	 * 
+	 *
 	 * TODO: aparte tabellen voor multiple email, telefoon, etc...
 	 */
 	public function getContactgegevens() {
 		return array_filter_empty(array(
 			'Email'			 => $this->getPrimaryEmail(),
-			'ICQ'			 => $this->icq,
-			'MSN'			 => $this->msn,
-			'Jabber/GTalk'	 => $this->jid,
-			'Skype'			 => $this->skype,
 			'LinkedIn'		 => $this->linkedin,
 			'Website'		 => $this->website
 		));
@@ -290,7 +289,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * een beetje vieze hack omdat Agendeerbaar een enkele activiteit
 	 * verwacht, terwijl een verjaardag een periodieke activiteit (elk
 	 * jaar) is.
-	 * 
+	 *
 	 * @return int timestamp
 	 */
 	public function getBeginMoment() {
@@ -324,7 +323,8 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getBeschrijving() {
-		return $this->getTitel() . ' wordt ' . (date('Y') - date('Y', strtotime($this->gebdatum))) . ' jaar';
+		$jaar = isset($GLOBALS['agenda_jaar']) ? $GLOBALS['agenda_jaar'] : date('Y');
+		return $this->getTitel() . ' wordt ' . ($jaar - date('Y', strtotime($this->gebdatum))) . ' jaar';
 	}
 
 	public function getLocatie() {
@@ -345,13 +345,13 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
 		$k = '';
-		if ($vorm !== 'pasfoto' AND LidInstellingen::get('layout', 'visitekaartjes') == 'ja') {
+		if ($vorm !== 'pasfoto' AND LidInstellingenModel::get('layout', 'visitekaartjes') == 'ja') {
 			$title = '';
 		} else {
 			$title = ' title="' . htmlspecialchars($this->getNaam('volledig')) . '"';
 		}
 		$l = '<a href="/profiel/' . $this->uid . '"' . $title . ' class="lidLink ' . htmlspecialchars($this->status) . '">';
-		if ($vorm !== 'pasfoto' AND ( $vorm === 'leeg' OR LidInstellingen::get('layout', 'visitekaartjes') == 'ja' )) {
+		if ($vorm !== 'pasfoto' AND ( $vorm === 'leeg' OR LidInstellingenModel::get('layout', 'visitekaartjes') == 'ja' )) {
 			$k = '<span';
 			if ($vorm !== 'leeg') {
 				$k .=' class="hoverIntent"';
@@ -415,14 +415,14 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Naam met verschillende weergave-mogelijkheden.
-	 * 
+	 *
 	 * @param string $vorm Zie switch()
 	 * @param bool $force Forceer een type ongeacht of de gebruiker ingelogd is
 	 * @return string
 	 */
 	public function getNaam($vorm = 'volledig', $force = false) {
 		if ($vorm === 'user') {
-			$vorm = LidInstellingen::get('forum', 'naamWeergave');
+			$vorm = LidInstellingenModel::get('forum', 'naamWeergave');
 		}
 		if (! $force AND ! LoginModel::mag('P_LOGGED_IN')) {
 			$vorm = 'civitas';
@@ -521,18 +521,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				break;
 
 			case 'aaidrom': // voor een 1 aprilgrap ooit
-				$voornaam = strtolower($this->voornaam);
-				$achternaam = strtolower($this->achternaam);
-
-				$voor = array();
-				preg_match('/^([^aeiuoy]*)(.*)$/', $voornaam, $voor);
-				$achter = array();
-				preg_match('/^([^aeiuoy]*)(.*)$/', $achternaam, $achter);
-
-				$nwvoor = ucwords($achter[1] . $voor[2]);
-				$nwachter = ucwords($voor[1] . $achter[2]);
-
-				$naam = sprintf("%s %s%s", $nwvoor, !empty($this->tussenvoegsel) ? $this->tussenvoegsel . ' ' : '', $nwachter);
+				$naam = aaidrom($this->voornaam, $this->tussenvoegsel, $this->achternaam);
 				break;
 
 			default:
@@ -544,7 +533,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	/**
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
 	 * Geef anders een standaard-plaatje terug.
-	 * 	
+	 *
 	 * @param boolean $square Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
 	 * @return string
 	 */
@@ -556,7 +545,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				$folders = array('');
 			} else {
 				if ($vorm === 'user') {
-					$vorm = LidInstellingen::get('forum', 'naamWeergave');
+					$vorm = LidInstellingenModel::get('forum', 'naamWeergave');
 				}
 				$folders = array($vorm . '/', '');
 			}
@@ -635,36 +624,26 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	/**
-	 * Vraag SocCie saldo aan SocCie systeem (staat gewoon in klant-tabel).
-	 * 
+	 * Vraag CiviSaldo aan CiviSaldosysteem (staat gewoon in CiviSaldo-tabel).
+	 *
 	 * @return float
 	 */
-	public function getSoccieSaldo() {
-		return Database::instance()->sqlSelect(array('saldo'), 'socCieKlanten', 'stekUID = ?', array($this->uid), null, null, 1)->fetchColumn() / (float) 100;
-	}
-
-	/**
-	 * Vraag MaalCie saldo aan MaalCie systeem (staat gewoon in lid-tabel).
-	 * 
-	 * @return float
-	 */
-	public function getMaalCieSaldo() {
-		return $this->maalcieSaldo;
+	public function getCiviSaldo() {
+		return CiviSaldoModel::instance()->getSaldo($this->uid)->saldo / (float) 100;
 	}
 
 	/**
 	 * Controleer of een lid al in de google-contacts-lijst staat.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function isInGoogleContacts() {
 		try {
-			require_once 'googlesync.class.php';
-			if (!GoogleSync::isAuthenticated()) {
+            if (!GoogleSync::isAuthenticated()) {
 				return null;
 			}
-			return GoogleSync::instance()->existsInGoogleContacts($this);
-		} catch (Exception $e) {
+			return !is_null(GoogleSync::instance()->existsInGoogleContacts($this));
+		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), 0);
 			return null;
 		}

@@ -1,18 +1,24 @@
 <?php
+namespace CsrDelft\model\security;
+use function CsrDelft\crypto_rand_token;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\security\OneTimeToken;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\Orm\PersistenceModel;
+use function CsrDelft\redirect;
 
 /**
  * OneTimeTokensModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Model voor two-step verification (2SV).
- * 
  */
 class OneTimeTokensModel extends PersistenceModel {
 
-	const ORM = 'OneTimeToken';
-	const DIR = 'security/';
+	const ORM = OneTimeToken::class;
 
+	/** @var static */
 	protected static $instance;
 
 	/**
@@ -50,17 +56,27 @@ class OneTimeTokensModel extends PersistenceModel {
 		return false;
 	}
 
+	/**
+	 * @param string $uid
+	 * @param string $url
+	 */
 	public function discardToken($uid, $url) {
 		$this->deleteByPrimaryKey(array($uid, $url));
 	}
 
+	/**
+	 * @param string $uid
+	 * @param string $url
+	 *
+	 * @return array
+	 */
 	public function createToken($uid, $url) {
 		$rand = crypto_rand_token(255);
 		$token = new OneTimeToken();
 		$token->uid = $uid;
 		$token->url = $url;
 		$token->token = hash('sha512', $rand);
-		$token->expire = getDateTime(strtotime(Instellingen::get('beveiliging', 'one_time_token_expire_after')));
+		$token->expire = getDateTime(strtotime(InstellingenModel::get('beveiliging', 'one_time_token_expire_after')));
 		$token->verified = false;
 		if ($this->exists($token)) {
 			$this->update($token);
@@ -70,6 +86,8 @@ class OneTimeTokensModel extends PersistenceModel {
 		return array($rand, $token->expire);
 	}
 
+	/**
+	 */
 	public function opschonen() {
 		foreach ($this->find('expire <= NOW()') as $token) {
 			$this->delete($token);

@@ -179,8 +179,9 @@ function init_lazy_images(parent) {
 		content.on('load', function () {
 			var foto = content.attr('src').indexOf('/plaetjes/fotoalbum/') >= 0;
 			var video = $(this).parent().parent().hasClass('bb-video-preview');
+			var hasAnchor = $(this).closest('a').length !== 0;
 			$(this).parent().replaceWith($(this));
-			if (!foto && !video) {
+			if (!foto && !video && !hasAnchor) {
 				$(this).wrap('<a class="lightbox-link" href="' + $(this).attr('src') + '" data-lightbox="page-lightbox"></a>');
 			}
 		});
@@ -670,7 +671,7 @@ function dom_update(htmlString) {
 		var elmnt = $('#' + id);
 		if (elmnt.length === 1) {
 			if ($(this).hasClass('remove')) {
-				elmnt.effect('puff', {}, 400, remove);
+				elmnt.effect('fade', {}, 400, remove);
 			}
 			else {
 				elmnt.replaceWith($(this).show()).effect('highlight');
@@ -754,7 +755,7 @@ function ajax_request(type, url, data, source, onsuccess, onerror, onfinish) {
 			modal_close();
 		}
 		if (onerror) {
-			onerror(errorThrown);
+			onerror(jqXHR.responseText);
 		}
 	});
 	jqXHR.always(function () {
@@ -803,7 +804,7 @@ function getSelectedText() {
 /**
  * Selecteer de tekst van een DOM-element.
  * @source http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
- * 
+ *
  * @param elmnt DOM-object
  */
 function selectText(elmnt) {
@@ -882,7 +883,7 @@ function basename(path, suffix) {
 /**
  * Bereken de breedte van een native scrollbalk.
  * @source http://www.alexandre-gomes.com/?p=115
- * 
+ *
  * @returns int
  */
 function getScrollBarWidth() {

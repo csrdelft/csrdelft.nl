@@ -1,14 +1,37 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'view/FotoAlbumView.class.php';
+use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\entity\fotoalbum\Foto;
+use CsrDelft\model\entity\fotoalbum\FotoAlbum;
+use CsrDelft\model\fotoalbum\FotoAlbumModel;
+use CsrDelft\model\fotoalbum\FotoModel;
+use CsrDelft\model\fotoalbum\FotoTagsModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\CsrLayoutOweePage;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\fotoalbum\FotoAlbumToevoegenForm;
+use CsrDelft\view\fotoalbum\FotoAlbumView;
+use CsrDelft\view\fotoalbum\FotosDropzone;
+use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
+use CsrDelft\view\fotoalbum\PosterUploadForm;
+use CsrDelft\view\JsonResponse;
+use function CsrDelft\endsWith;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+
 
 /**
  * FotoAlbumController.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van het fotoalbum.
+ *
+ * @property FotoAlbumModel $model
  */
 class FotoAlbumController extends AclController {
 
@@ -128,7 +151,7 @@ class FotoAlbumController extends AclController {
 					if ($poster) {
 						$filename = $formulier->findByName('posternaam')->getValue() . '.jpg';
 						if (strpos($filename, 'folder') !== false) {
-							throw new Exception('Albumcover niet toegestaan');
+							throw new CsrGebruikerException('Albumcover niet toegestaan');
 						}
 					} else {
 						$filename = $uploader->getModel()->filename;
@@ -147,12 +170,12 @@ class FotoAlbumController extends AclController {
 								return;
 							}
 						} else {
-							throw new Exception('Verwerken mislukt');
+							throw new CsrGebruikerException('Verwerken mislukt');
 						}
 					} else {
-						throw new Exception('Opslaan mislukt');
+						throw new CsrGebruikerException('Opslaan mislukt');
 					}
-				} catch (Exception $e) {
+				} catch (CsrGebruikerException $e) {
 					$this->view = new JsonResponse(array('error' => $e->getMessage()), 500);
 					return;
 				}
@@ -287,13 +310,14 @@ class FotoAlbumController extends AclController {
 		if (!$this->hasParam('q')) {
 			$this->exit_http(403);
 		}
-		$query = iconv('utf-8', 'ascii//TRANSLIT', $this->getParam('q')); // convert accented characters to regular 
+		$query = iconv('utf-8', 'ascii//TRANSLIT', $this->getParam('q')); // convert accented characters to regular
 		$limit = 5;
 		if ($this->hasParam('limit')) {
 			$limit = (int) $this->getParam('limit');
 		}
 		$result = array();
 		foreach ($this->model->find('replace(subdir, "é", "e") REGEXP ?', array($query . '[^/]*[/]{1}$'), null, 'subdir DESC', $limit) as $album) {
+			/** @var FotoAlbum $album */
 			$result[] = array(
 				'url'	 => $album->getUrl(),
 				'label'	 => $album->getParentName(),
@@ -326,7 +350,7 @@ class FotoAlbumController extends AclController {
 			$x = $formulier->findByName('x')->getValue();
 			$y = $formulier->findByName('y')->getValue();
 			$size = $formulier->findByName('size')->getValue();
-			$tag = FotoTagsModel::instance()->addTag($foto, $uid, $x, $y, $size);
+			FotoTagsModel::instance()->addTag($foto, $uid, $x, $y, $size);
 			// return all tags
 			$tags = FotoTagsModel::instance()->getTags($foto);
 			$this->view = new JsonResponse($tags->fetchAll());
@@ -342,6 +366,7 @@ class FotoAlbumController extends AclController {
 			$this->exit_http(403);
 		}
 		FotoTagsModel::instance()->removeTag($refuuid, $keyword);
+		/** @var Foto $foto */
 		$foto = FotoModel::instance()->retrieveByUUID($refuuid);
 		if ($foto) {
 			// return all tags

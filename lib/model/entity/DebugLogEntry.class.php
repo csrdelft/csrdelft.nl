@@ -1,10 +1,13 @@
 <?php
+namespace CsrDelft\model\entity;
+
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * DebugLogEntry.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
  */
 class DebugLogEntry extends PersistentEntity {
 
@@ -20,7 +23,7 @@ class DebugLogEntry extends PersistentEntity {
 	public $class_function;
 	/**
 	 * Dump data
-	 * @var LongText
+	 * @var string LongText
 	 */
 	public $dump;
 	/**
@@ -58,6 +61,11 @@ class DebugLogEntry extends PersistentEntity {
 	 * @var string
 	 */
 	public $request;
+    /**
+     * Referer
+     * @var string
+     */
+	public $referer;
 	/**
 	 * User agent
 	 * @var string

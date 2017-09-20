@@ -1,6 +1,6 @@
 /**
  * maalcie.js	|	P.W.G. Brussee (brussee@live.nl)
- * 
+ *
  * requires jQuery & dragobject.js
  */
 
@@ -70,15 +70,16 @@ function taken_toggle_suggestie(soort, show) {
 	taken_color_suggesties();
 }
 function taken_color_suggesties() {
-	$('#suggesties-tabel tr:visible:odd').css('background-color', '#FAFAFA');
-	$('#suggesties-tabel tr:visible:even').css('background-color', '#EBEBEB');
+	var $suggestiesTabel = $('#suggesties-tabel');
+	$suggestiesTabel.find('tr:visible:odd').css('background-color', '#FAFAFA');
+	$suggestiesTabel.find('tr:visible:even').css('background-color', '#EBEBEB');
 }
 
 var lastSelectedId;
 function taken_select_range(e) {
 	var shift = bShiftPressed;
 	var withinRange = false;
-	$("#maalcie-tabel tbody tr td a input[name='" + $(e.target).attr('name') + "']:visible").each(function () {
+	$('#maalcie-tabel').find('tbody tr td a input[name="' + $(e.target).attr('name') + '"]:visible').each(function () {
 		var thisId = $(this).attr('id');
 		if (thisId === lastSelectedId) {
 			withinRange = !withinRange;
@@ -104,7 +105,7 @@ function taken_submit_range(e) {
 	if ($(e.target).hasClass('confirm') && !confirm($(e.target).attr('title') + '.\n\nWeet u het zeker?')) {
 		return false;
 	}
-	$("input[name='" + $(e.target).find('input:first').attr('name') + "']:visible").each(function () {
+	$('input[name="' + $(e.target).find('input:first').attr('name') + '"]:visible').each(function () {
 		if ($(this).prop('checked')) {
 			ajax_request('POST', $(this).parent().attr('href'), $(this).parent().attr('post'), $(this).parent(), dom_update, alert);
 		}

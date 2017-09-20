@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\controller\groepen;
+use CsrDelft\model\groepen\KringenModel;
+use CsrDelft\view\JsonResponse;
 
 /**
  * KringenController.class.php
@@ -6,6 +9,8 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller voor kringen.
+ *
+ * @property KringenModel $model
  */
 class KringenController extends AbstractGroepenController {
 

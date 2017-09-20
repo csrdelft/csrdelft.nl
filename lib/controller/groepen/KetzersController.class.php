@@ -1,11 +1,17 @@
 <?php
+namespace CsrDelft\controller\groepen;
+use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\view\groepen\formulier\GroepAanmakenForm;
+use CsrDelft\view\JsonResponse;
 
 /**
  * KetzersController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller voor ketzers.
+ *
+ * @property KetzersModel $model
  */
 class KetzersController extends AbstractGroepenController {
 

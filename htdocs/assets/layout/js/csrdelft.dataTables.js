@@ -1,8 +1,8 @@
 /*!
  * csrdelft.dataTables.js
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Group by & multi-select capabilities.
  */
 
@@ -14,34 +14,167 @@ $(document).ready(function () {
 function fnInitDataTables() {
 	// Custom global filter
 	$.fn.dataTable.ext.search.push(fnGroupExpandCollapseDraw);
-}
 
-function fnInitStickyToolbar() {
-	// Sticky toolbar
-	var toolbar = $('.DataTableToolbar:first');
-	toolbar.next().css('padding-top', toolbar.height()); // Create whitespace
-	if (toolbar.css('position') !== 'absolute') {
-		toolbar.css({
-			'position': 'absolute',
-			'z-index': '100'
-		});
-		toolbar.attr('fixY', toolbar.offset().top - $('header').height());
-		toolbar.next('table').css('padding-top', toolbar.height());
-		$(window).scroll(fnStickyToolbar);
-	}
-}
+    // Verwerk een multipliciteit in de vorm van `== 1` of `!= 0` of `> 3` voor de selecties
+	// Returns bool
+    var evaluateMultiplicity = function (expression, num) {
+    	// Altijd laten zien bij geen expressie
+    	if (expression.length === 0) return true;
+        var operator_num = expression.split(' ');
+        var expression_operator = operator_num[0];
+        var expression_num = parseInt(operator_num[1]);
+		var operatorToFunction = {
+			'==': function (a, b) { return a === b; },
+			'!=': function (a, b) { return a !== b; },
+			'>=': function (a, b) { return a >= b; },
+			'>' : function (a, b) { return a >  b; },
+			'<=': function (a, b) { return a <= b; },
+			'<' : function (a, b) { return a <  b; }
+		};
 
-function fnStickyToolbar() {
-	var y = $(window).scrollTop();
-	var toolbar = '.DataTableToolbar:first';
-	//$('.DataTableToolbar').each(function (i, toolbar) {
-	var m = $(toolbar).attr('fixY');
-	if (y >= m) {
-		$(toolbar).css('margin-top', y - m);
-	} else {
-		$(toolbar).css('margin-top', 0);
-	}
-	//});
+		return operatorToFunction[expression_operator](num, expression_num);
+    };
+
+    // Zet de icons van de default buttons
+    $.fn.dataTable.ext.buttons.copyHtml5.className += ' dt-button-ico dt-ico-page_white_copy';
+	$.fn.dataTable.ext.buttons.copyFlash.className += ' dt-button-ico dt-ico-page_white_copy';
+	$.fn.dataTable.ext.buttons.csvHtml5.className += ' dt-button-ico dt-ico-page_white_text';
+	$.fn.dataTable.ext.buttons.csvFlash.className += ' dt-button-ico dt-ico-page_white_text';
+	$.fn.dataTable.ext.buttons.pdfHtml5.className += ' dt-button-ico dt-ico-page_white_acrobat';
+	$.fn.dataTable.ext.buttons.pdfFlash.className += ' dt-button-ico dt-ico-page_white_acrobat';
+	$.fn.dataTable.ext.buttons.excelHtml5.className += ' dt-button-ico dt-ico-page_white_excel';
+	$.fn.dataTable.ext.buttons.excelFlash.className += ' dt-button-ico dt-ico-page_white_excel';
+    $.fn.dataTable.ext.buttons.print.className += ' dt-button-ico dt-ico-printer';
+
+    // Laat een modal zien, of doe een ajax call gebasseerd op selectie.
+    $.fn.dataTable.ext.buttons.default = {
+        init: function (dt, node, config) {
+            var that = this;
+            var toggle = function () {
+				that.enable(
+					evaluateMultiplicity(
+						config.multiplicity,
+						dt.rows({selected: true}).count()
+					)
+				);
+			};
+            dt.on('select.dt.DT deselect.dt.DT', toggle);
+            // Initiele staat
+            toggle();
+
+            // Vervang :col door de waarde te vinden in de geselecteerde row
+			// Dit wordt alleen geprobeerd als dit voorkomt
+            if (config.href.indexOf(':') !== -1) {
+            	var replacements = /:(\w+)/g.exec(config.href);
+            	dt.on('select.dt.DT', function (e, dt, type, indexes) {
+            		if (indexes.length === 1) {
+						var newHref = config.href;
+            			var row = dt.row(indexes).data();
+            			// skipt match, start met groepen
+						for (var i = 1; i < replacements.length; i++) {
+							newHref = newHref.replace(':' + replacements[i], row[replacements[i]]);
+						}
+
+						node.attr('href', newHref)
+					}
+				})
+			}
+
+            // Settings voor knop_ajax
+            node.attr('href', config.href);
+            node.attr('data-tableid', dt.context[0].sTableId);
+        },
+        action: function( e, dt, button, config) {
+            knop_post.call(button, e)
+        },
+        className: 'post DataTableResponse'
+    };
+
+    $.fn.dataTable.ext.buttons.popup = {
+    	extend: 'default',
+    	action: function(e, dt, button, config) {
+    		window.open(button.attr('href'));
+		}
+	};
+
+    $.fn.dataTable.ext.buttons.url = {
+    	extend: 'default',
+		action: function(e, dt, button, config) {
+    		window.location.href = button.attr('href');
+		}
+	};
+
+    // Verander de bron van een datatable
+	// De knop is ingedrukt als de bron van de datatable
+	// gelijk is aan de bron van de knop.
+	$.fn.dataTable.ext.buttons.sourceChange = {
+		init: function (dt, node, config) {
+			var enable = function () {
+				dt.buttons(node).active(dt.ajax.url() === config.href);
+			};
+			dt.on('xhr.sourceChange', enable);
+
+			enable();
+		},
+		action: function (e, dt, button, config) {
+			dt.ajax.url(config.href).load();
+		}
+	};
+
+	$.fn.dataTable.ext.buttons.confirm = {
+		extend: 'collection',
+		init: function (dt, node, config) {
+			var that = this;
+			var toggle = function () {
+				that.enable(
+					evaluateMultiplicity(
+						config.multiplicity,
+						dt.rows({selected: true}).count()
+					)
+				);
+			};
+			dt.on('select.dt.DT deselect.dt.DT', toggle);
+			// Initiele staat
+			toggle();
+
+			var action = config.action;
+
+			var buttons = new $.fn.dataTable.Buttons( dt, {
+				buttons: [
+					{
+						extend: 'default',
+						text: function ( dt ) {
+							return dt.i18n( 'csr.zeker', 'Are you sure?' );
+						},
+						action: action,
+						multiplicity: '', // altijd mogelijk
+						className: 'dt-button-ico dt-ico-exclamation dt-button-warning',
+						href: config.href
+					}
+				]
+			} );
+
+			config._collection.append(buttons.dom.container.children());
+
+			// Reset action to extend one.
+			config.action = $.fn.dataTable.ext.buttons.collection.action;
+		},
+		action: function( e, dt, button, config ) {
+			knop_post.call(button, e)
+		}
+	};
+
+	$.fn.dataTable.ext.buttons.defaultCollection = {
+		extend: 'collection',
+		init: function (dt, node, config) {
+			$.fn.dataTable.ext.buttons.default.init.call(this, dt, node, config);
+		}
+	};
+
+	$('body').on('click', function () {
+		// Verwijder tooltips als de datatable modal wordt gesloten
+		$(".ui-tooltip-content").parents('div').remove();
+	})
 }
 
 function fnAutoScroll(tableId) {
@@ -91,10 +224,6 @@ function fnGetSelection(tableId) {
 		selection.push($(this).attr('data-uuid'));
 	});
 	return selection;
-}
-
-function fnGetSelectedUUID(tableId) {
-	return $(tableId + ' tbody tr.selected:first').attr('data-uuid');
 }
 
 function fnGetGroupByColumn(tableId) {
@@ -182,7 +311,7 @@ function fnGroupByColumnDraw(event, settings) {
 
 function fnHideEmptyCollapsedAll(tableId, $th) {
 	var $table = $(tableId);
-	if ($('tr.group', $table).length == $table.data('collapsedGroups').length) {
+	if ($('tr.group', $table).length === $table.data('collapsedGroups').length) {
 		$('td.dataTables_empty', $table).parent().remove();
 		$th.removeClass('toggle-group-expanded');
 	}
@@ -273,7 +402,6 @@ function fnChildRow(tableId, $td, column) {
 			if (row.child.isShown()) {
 				tr.removeClass('loading');
 				innerDiv.html(data).slideDown();
-				init_context(innerDiv);
 			}
 		});
 		jqXHR.fail(function (jqXHR, textStatus, errorThrown) {

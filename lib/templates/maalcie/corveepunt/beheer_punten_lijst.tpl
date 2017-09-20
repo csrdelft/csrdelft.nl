@@ -2,7 +2,7 @@
 	beheer_punten_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <tr id="punten-row-{$puntenlijst.lid->uid}">
-	<td>{$puntenlijst.lid->getNaam(Instellingen::get('corvee', 'weergave_ledennamen_beheer'))}</td>
+	<td>{$puntenlijst.lid->getNaam(CsrDelft\model\InstellingenModel::get('corvee', 'weergave_ledennamen_beheer'))}</td>
 {foreach from=$puntenlijst.aantal key=fid item=aantal}
 	<td>{strip}
 	{if $aantal !== 0}
@@ -39,7 +39,7 @@
 			</form>
 		</div>
 	</td>
-	<td style="text-align: right; background-color: #{$puntenlijst.prognoseColor};"{if $puntenlijst.vrijstelling} title="{$puntenlijst.vrijstelling->getPercentage()}% vrijstelling"{/if}>
+	<td style="text-align: right; background-color: #{$puntenlijst.prognoseColor};"{if $puntenlijst.vrijstelling} title="{$puntenlijst.vrijstelling->percentage}% vrijstelling"{/if}>
 		{$puntenlijst.prognose}
 		<div class="inline" style="width: 25px;">{if $puntenlijst.vrijstelling}*{else}&nbsp;{/if}</div>
 	</td>

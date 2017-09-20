@@ -1,11 +1,23 @@
 .image {
-  border-radius: 5px;
-  border: 0;
-  display: inline-block;
-  position: relative;
+  margin: 2em 3em;
+  width: 22em;
+  overflow: hidden;
+  -ms-flex: 1;
+
   img {
+    border-radius: 100%;
+    width: 100%;
+  }
+
+  &.block {
     border-radius: 5px;
-    display: block;
+    border: 0;
+    display: inline-block;
+    position: relative;
+    img {
+      border-radius: 5px;
+      display: block;
+    }
   }
 
   &.left, &.right {

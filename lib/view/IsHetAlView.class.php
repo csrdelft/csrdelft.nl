@@ -1,4 +1,10 @@
 <?php
+namespace CsrDelft\view;
+
+use CsrDelft\model\agenda\AgendaModel;
+use CsrDelft\model\entity\agenda\AgendaItem;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\security\LoginModel;
 
 class IsHetAlView implements View {
 
@@ -30,7 +36,7 @@ class IsHetAlView implements View {
 	public function __construct($ishetal) {
 		$this->model = $ishetal;
 		if ($this->model == 'willekeurig') {
-			$opties = array_slice(LidInstellingen::instance()->getTypeOptions('zijbalk', 'ishetal'), 2);
+			$opties = array_slice(LidInstellingenModel::instance()->getTypeOptions('zijbalk', 'ishetal'), 2);
 			$this->model = $opties[array_rand($opties)];
 		}
 		switch ($this->model) {
@@ -74,9 +80,12 @@ class IsHetAlView implements View {
 				$this->ja = null;
 				break;
 
+            case 'foutmelding':
+                $this->ja = null;
+                break;
+
 			default:
-				require_once 'model/AgendaModel.class.php';
-				$vandaag = AgendaModel::instance()->zoekWoordAgenda($this->model);
+								$vandaag = AgendaModel::instance()->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
 					$this->ja = true;
 					/*
@@ -126,6 +135,10 @@ class IsHetAlView implements View {
 			case 'borrel':
 				echo 'Is er een ' . $this->model . ' vanavond?';
 				break;
+
+            case 'foutmelding':
+                echo sprintf('<div class="ja"><abbr class="timeago" title="%s"></abbr></div><div>sinds de laatste foutmelding!</div>', date('c', filemtime(DATA_PATH . 'foutmelding.last')));
+                break;
 
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);

@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\model\mededelingen;
+use CsrDelft\model\entity\mededelingen\MededelingCategorie;
+use CsrDelft\Orm\CachedPersistenceModel;
 
 /**
  * MededelingCategorieenModel.class.php
@@ -9,9 +12,12 @@
  */
 class MededelingCategorieenModel extends CachedPersistenceModel {
 
-	const ORM = 'MededelingCategorie';
+	const ORM = MededelingCategorie::class;
 	const DIR = 'mededelingen/';
 
+	/**
+	 * @var MededelingCategorieenModel
+	 */
 	protected static $instance;
 	/**
 	 * Store MededelingCategorie array as a whole in memcache

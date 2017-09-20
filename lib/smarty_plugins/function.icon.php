@@ -26,7 +26,8 @@
  * @param    Smarty
  * @return   string
  */
-require_once 'icon.class.php';
+use CsrDelft\Icon;
+
 
 function smarty_function_icon($params, &$smarty) {
 

@@ -46,8 +46,8 @@
 			<td>
 				{table_foreach from=$taken inner=rows item=taak table_attr='class="maalcie-rooster"' cols=2}
 			</td>
-			{if $taak->getUid()}
-				{if $taak->getUid() === LoginModel::getUid()} 
+			{if $taak->uid}
+				{if $taak->uid === CsrDelft\model\security\LoginModel::getUid()}
 					{assign var="class" value="taak-self"}
 				{else}
 					{assign var="class" value=""}
@@ -56,11 +56,11 @@
 				{assign var="class" value="taak-grijs"}
 			{/if}
 			<td class="taak {$class}">
-				{if $taak->getUid()}
-					{if $taak->getUid() === LoginModel::getUid()} 
+				{if $taak->uid}
+					{if $taak->uid === CsrDelft\model\security\LoginModel::getUid()}
 						{* icon get="arrow_switch" title="Ruilen" *}
 					{/if}
-					{ProfielModel::getLink($taak->getUid(), Instellingen::get('corvee', 'weergave_ledennamen_corveerooster'))}
+					{CsrDelft\model\ProfielModel::getLink($taak->uid,CsrDelft\model\InstellingenModel::get('corvee', 'weergave_ledennamen_corveerooster'))}
 				{else}
 					<span class="cursief">vacature</span>
 				{/if}

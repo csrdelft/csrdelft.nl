@@ -1,23 +1,39 @@
 <?php
 
-require_once 'model/entity/Mail.class.php';
+namespace CsrDelft\model;
+
+use CsrDelft\LDAP;
+use CsrDelft\model\bibliotheek\BiebCatalogus;
+use CsrDelft\model\entity\Geslacht;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\Mail;
+use CsrDelft\model\entity\OntvangtContactueel;
+use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\security\AccessRole;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Persistence\Database;
+use function CsrDelft\getDateTime;
+use function CsrDelft\setMelding;
 
 /**
  * ProfielModel.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class ProfielModel extends CachedPersistenceModel {
 
-	const ORM = 'Profiel';
+	const ORM = Profiel::class;
 
 	protected static $instance;
 
 	/**
-	 * TODO: sparse retieval: array('voornaam', 'tussenvoegsel', 'achternaam');
-	 * 
 	 * @param string $uid
 	 * @return Profiel|false
 	 */
@@ -50,11 +66,11 @@ class ProfielModel extends CachedPersistenceModel {
 	}
 
 	public static function existsNick($nick) {
-		return Database::sqlExists(static::instance()->getTableName(), 'nickname = ?', array($nick));
+		return Database::instance()->sqlExists(static::instance()->getTableName(), 'nickname = ?', array($nick));
 	}
 
 	public static function existsDuck($duck) {
-		return Database::sqlExists(static::instance()->getTableName(), 'duckname = ?', array($duck));
+		return Database::instance()->sqlExists(static::instance()->getTableName(), 'duckname = ?', array($duck));
 	}
 
 	public function nieuw($lidjaar, $lidstatus) {
@@ -66,10 +82,14 @@ class ProfielModel extends CachedPersistenceModel {
 		return $profiel;
 	}
 
+	/**
+	 * @param PersistentEntity|Profiel $profiel
+	 * @return string
+	 */
 	public function create(PersistentEntity $profiel) {
 		// Lichting zijn de laatste 2 cijfers van lidjaar
 		$jj = substr($profiel->lidjaar, 2, 2);
-		$laatste_uid = Database::sqlSelect(array('MAX(uid)'), $this->getTableName(), 'LEFT(uid, 2) = ?', array($jj), null, null, 1)->fetchColumn();
+		$laatste_uid = Database::instance()->sqlSelect(array('MAX(uid)'), $this->getTableName(), 'LEFT(uid, 2) = ?', array($jj), null, null, 1)->fetchColumn();
 		if ($laatste_uid) {
 			// Volgnummer zijn de laatste 2 cijfers van uid
 			$volgnummer = intval(substr($laatste_uid, 2, 2)) + 1;
@@ -80,10 +100,14 @@ class ProfielModel extends CachedPersistenceModel {
 		return parent::create($profiel);
 	}
 
+	/**
+	 * @param PersistentEntity|Profiel $profiel
+	 * @return int
+	 */
 	public function update(PersistentEntity $profiel) {
 		try {
 			$this->save_ldap($profiel);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			setMelding($e->getMessage(), -1); //TODO: logging
 		}
 		$this->cache($profiel, true, true);
@@ -198,12 +222,13 @@ class ProfielModel extends CachedPersistenceModel {
 
 	/**
 	 * Zet alle abo's uit en geeft een changelog-regel terug.
-	 * 
+	 *
+	 * @param Profiel $profiel
+	 * @param $oudestatus
 	 * @return string changelogregel
 	 */
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
-		require_once 'model/maalcie/MaaltijdAbonnementenModel.class.php';
-		$aantal = MaaltijdAbonnementenModel::verwijderAbonnementenVoorLid($profiel->uid);
+		$aantal = MaaltijdAbonnementenModel::instance()->verwijderAbonnementenVoorLid($profiel->uid);
 		if ($aantal > 0) {
 			return 'Afmelden abo\'s: ' . $aantal . ' uitgezet.[br]';
 		}
@@ -212,12 +237,14 @@ class ProfielModel extends CachedPersistenceModel {
 
 	/**
 	 * Verwijder toekomstige corveetaken en geef changelog-regel terug.
-	 * 
+	 *
+	 * @param Profiel $profiel
+	 * @param $oudestatus
 	 * @return string changelogregel
 	 */
 	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus) {
-		$taken = CorveeTakenModel::getKomendeTakenVoorLid($profiel->uid);
-		$aantal = CorveeTakenModel::verwijderTakenVoorLid($profiel->uid);
+		$taken = CorveeTakenModel::instance()->getKomendeTakenVoorLid($profiel->uid);
+		$aantal = CorveeTakenModel::instance()->verwijderTakenVoorLid($profiel->uid);
 		if (sizeof($taken) !== $aantal) {
 			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
 		}
@@ -248,14 +275,15 @@ class ProfielModel extends CachedPersistenceModel {
 
 	/**
 	 * Mail naar fisci over statuswijzigingen. Kunnen zij hun systemen weer mee updaten.
-	 * 
+	 *
+	 * @param Profiel $profiel
+	 * @param $oudestatus
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyFisci(Profiel $profiel, $oudestatus) {
 		// Saldi ophalen
 		$saldi = '';
-		$saldi .= 'SocCie: ' . $profiel->getSoccieSaldo() . "\n";
-		$saldi .= 'MaalCie: ' . $profiel->getMaalCieSaldo() . "\n";
+		$saldi .= 'CiviSaldo: ' . $profiel->getCiviSaldo() . "\n";
 
 		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/lidafmeldingfisci.mail');
 		$values = array(
@@ -281,11 +309,12 @@ class ProfielModel extends CachedPersistenceModel {
 
 	/**
 	 * Mail naar bibliothecaris en leden over geleende boeken
-	 * 
+	 *
+	 * @param Profiel $profiel
+	 * @param $oudestatus
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyBibliothecaris(Profiel $profiel, $oudestatus) {
-		require_once 'model/bibliotheek/BiebCatalogus.class.php';
 		$boeken = BiebCatalogus::getBoekenByUid($profiel->uid, 'geleend');
 		if (!is_array($boeken)) {
 			$boeken = array();

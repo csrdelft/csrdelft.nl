@@ -1,12 +1,14 @@
-{getMelding()}
+{CsrDelft\getMelding()}
 
 {$zoekform->view()}
 
-{if isset($deel->forum_id) AND LoginModel::mag('P_ADMIN')}
+{toegang P_ADMIN}
+{if isset($deel->forum_id)}
 	<div class="forumheadbtn">
 		<a href="/forum/beheren/{$deel->forum_id}" class="btn post popup" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
 	</div>
 {/if}
+{/toegang}
 
 {include file='forum/head_buttons.tpl'}
 
@@ -36,13 +38,13 @@
 				<th colspan="3">
 					{if isset($deel->forum_id)}
 						{sliding_pager baseurl="/forum/deel/"|cat:$deel->forum_id|cat:"/"
-							pagecount=ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=ForumDradenModel::instance()->getHuidigePagina()
+							pagecount=CsrDelft\model\forum\ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina()
 							separator=" &nbsp;" show_prev_next=true}
 					{else}
 						{sliding_pager baseurl="/forum/recent/" url_append=$belangrijk
-							pagecount=ForumDradenModel::instance()->getHuidigePagina() curpage=ForumDradenModel::instance()->getHuidigePagina()
+							pagecount=CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina() curpage=CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina()
 							separator=" &nbsp;"}
-						&nbsp;<a href="/forum/recent/{ForumDradenModel::instance()->getAantalPaginas(null)}{$belangrijk}">verder terug</a>
+						&nbsp;<a href="/forum/recent/{CsrDelft\model\forum\ForumDradenModel::instance()->getAantalPaginas(null)}{$belangrijk}">verder terug</a>
 					{/if}
 				</th>
 			</tr>
@@ -55,12 +57,14 @@
 					<h2>{$deel->titel}</h2>
 					{$deel->omschrijving}
 
-					{if !isset($deel->forum_id) AND LoginModel::mag('P_LOGGED_IN')}
+					{toegang P_LOGGED_IN}
+					{if !isset($deel->forum_id)}
 						Berichten per dag: (sleep om te zoomen)
 						<div class="grafiek">
 							{include file='forum/stats_grafiek.tpl'}
 						</div>
 					{/if}
+					{/toegang}
 				</div>
 			</td>
 		</tr>

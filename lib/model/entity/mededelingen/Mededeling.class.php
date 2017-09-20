@@ -1,10 +1,17 @@
 <?php
+namespace CsrDelft\model\entity\mededelingen;
+use CsrDelft\model\mededelingen\MededelingCategorieenModel;
+use CsrDelft\model\mededelingen\MededelingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * Mededeling.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Mededeling extends PersistentEntity {
 
@@ -96,6 +103,14 @@ class Mededeling extends PersistentEntity {
 
 	public function getCategorie() {
 		return MededelingCategorieenModel::get($this->categorie);
+	}
+
+	public function isModerator() {
+		return MededelingenModel::isModerator();
+	}
+
+	public function getProfiel() {
+		return ProfielModel::get($this->uid);
 	}
 
 	//	// function magBewerken()

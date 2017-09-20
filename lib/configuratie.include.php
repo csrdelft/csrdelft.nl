@@ -1,11 +1,10 @@
 <?php
-
 /**
  * configuratie.include.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * First include for entire application.
  * Handle exceptions gracefully and notify admin.
  * Configure sessions.
@@ -15,50 +14,73 @@
 //header('location: https://csrdelft.nl/onderhoud.html');
 //exit;
 
-register_shutdown_function('fatal_handler');
+use CsrDelft\model\forum\ForumModel;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\LogModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\ShutdownHandler;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
 
-function fatal_handler(Exception $ex = null) {
+require __DIR__ . '/../vendor/autoload.php';
+require_once 'defines.include.php';
+require_once 'common.functions.php';
 
-	try {
-		if (defined('TIME_MEASURE') AND TIME_MEASURE) {
-			TimerModel::instance()->log();
-		}
+spl_autoload_register(function ($class) {
+	// project-specific namespace prefix
+	$prefix = 'CsrDelft\\';
 
-		if ($ex instanceof Exception) {
-			if ((defined('DEBUG') AND DEBUG) OR LoginModel::mag('P_LOGGED_IN')) {
-				echo str_replace('#', '<br />#', $ex); // stacktrace 
-				printDebug();
-			}
-		}
-	} catch (Exception $e) {
-		echo $e->getMessage();
+	// base directory for the namespace prefix
+	$base_dir = __DIR__ . DIRECTORY_SEPARATOR;
+
+	// does the class use the namespace prefix?
+	$len = strlen($prefix);
+	if (strncmp($prefix, $class, $len) !== 0) {
+		// no, move to the next registered autoloader
+		return;
 	}
 
-	$error = error_get_last();
-	if ($error !== null) {
-		$debug['error'] = $error;
-		$debug['trace'] = debug_backtrace(false);
-		$debug['POST'] = $_POST;
-		$debug['GET'] = $_GET;
-		$debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
-		$debug['SERVER'] = $_SERVER;
-		if ($error['type'] === E_CORE_ERROR OR $error['type'] === E_ERROR) {
+	// get the relative class name
+	$relative_class = substr($class, $len);
 
-			if (defined('DEBUG') AND DEBUG) {
-				DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
-			} else {
-				$headers[] = 'From: Fatal error handler <pubcie@csrdelft.nl>';
-				$headers[] = 'Content-Type: text/plain; charset=UTF-8';
-				$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
-				$subject = 'Fatal error on request ';
-				if (isset($_SERVER['SCRIPT_URL'])) {
-					$subject .= filter_var($_SERVER['SCRIPT_URL'], FILTER_SANITIZE_URL);
-				}
-				mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
-			}
+	// replace the namespace prefix with the base directory, replace namespace
+	// separators with directory separators in the relative class name, append
+	// with .php
+	$file = $base_dir . str_replace('\\', '/', $relative_class);
+
+	$extensions = [
+		'.class.php',
+		'.interface.php',
+		'.php',
+		'.abstract.php',
+		'.static.php',
+		'.enum.php'
+	];
+
+	foreach ($extensions as $extension) {
+		$fileFull = $file . $extension;
+		if (file_exists($fileFull)) {
+			require $fileFull;
+			return; // Done
 		}
 	}
+});
+
+// Registreer foutmelding handlers
+if (DEBUG) {
+	register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
+} else {
+	register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
+	set_error_handler([ShutdownHandler::class, 'slackHandler']);
+	register_shutdown_function([ShutdownHandler::class, 'slackShutdownHandler']);
+	register_shutdown_function([ShutdownHandler::class, 'httpStatusHandler']);
 }
+
+register_shutdown_function([ShutdownHandler::class, 'timerHandler']);
+register_shutdown_function([ShutdownHandler::class, 'touchHandler']);
 
 // alle meldingen tonen
 error_reporting(E_ALL);
@@ -77,13 +99,6 @@ if (php_sapi_name() === 'cli') {
 } else {
 	define('MODE', 'WEB');
 }
-
-// Composer autoload
-require __DIR__ . '/../vendor/autoload.php';
-
-// Defines
-require_once 'defines.include.php';
-require_once 'common.functions.php';
 
 if (isset($_SERVER['REQUEST_URI'])) {
 	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
@@ -106,7 +121,10 @@ if (FORCE_HTTPS) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-			//TODO: invalidate compromised token
+			$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
+			// Reset private token, user has to get a new one
+			AccountModel::instance()->resetPrivateToken($account);
+			// TODO: Log dit
 		}
 		// redirect to https
 		header('Location: ' . CSR_ROOT . REQUEST_URI, true, 301);
@@ -115,34 +133,25 @@ if (FORCE_HTTPS) {
 	}
 }
 
+$cred = parse_ini_file(ETC_PATH . 'mysql.ini');
+if ($cred === false) {
+	$cred = array(
+		'host' => 'localhost',
+		'user' => 'admin',
+		'pass' => 'password',
+		'db' => 'csrdelft'
+	);
+}
 
-// Model
-require_once 'MijnSqli.class.php'; // DEPRECATED
-require_once 'model/framework/DynamicEntityModel.class.php';
-require_once 'model/framework/CachedPersistenceModel.abstract.php';
-require_once 'model/DebugLogModel.class.php';
-require_once 'model/TimerModel.class.php';
-require_once 'model/entity/agenda/Agendeerbaar.interface.php';
-require_once 'model/security/AccessModel.class.php';
-require_once 'model/LidInstellingenModel.class.php';
-require_once 'model/ForumModel.class.php';
-
-// View
-require_once 'view/JsonResponse.class.php';
-require_once 'view/SmartyTemplateView.abstract.php';
-require_once 'view/formulier/DataTable.class.php';
-require_once 'view/CsrBB.class.php';
-require_once 'view/CsrLayoutPage.class.php';
-require_once 'view/CsrLayoutOweePage.class.php';
-require_once 'icon.class.php';
-
-// Controller
-require_once 'controller/framework/AclController.abstract.php';
+CsrDelft\Orm\Configuration::load(array(
+	'cache_path' => DATA_PATH,
+	'db' => $cred
+));
 
 // Router
 switch (constant('MODE')) {
 	case 'CLI':
-		require_once 'model/security/CliLoginModel.class.php';
+		//require_once 'model/security/CliLoginModel.class.php';
 		// Late static binding requires explicitly
 		// calling instance() before any static method!
 		LoginModel::instance();
@@ -152,7 +161,7 @@ switch (constant('MODE')) {
 		break;
 
 	case 'WEB':
-		Instellingen::instance()->prefetch();
+		InstellingenModel::instance()->prefetch();
 
 		// Terugvinden van temp upload files
 		ini_set('upload_tmp_dir', TMP_PATH);
@@ -164,7 +173,7 @@ switch (constant('MODE')) {
 		ini_set('session.cache_limiter', 'nocache');
 		ini_set('session.use_trans_sid', 0);
 		// Sync lifetime of FS based PHP session with DB based C.S.R. session
-		ini_set('session.gc_maxlifetime', (int) Instellingen::get('beveiliging', 'session_lifetime_seconds'));
+		ini_set('session.gc_maxlifetime', (int)InstellingenModel::get('beveiliging', 'session_lifetime_seconds'));
 		ini_set('session.use_strict_mode', true);
 		ini_set('session.use_cookies', true);
 		ini_set('session.use_only_cookies', true);
@@ -181,10 +190,12 @@ switch (constant('MODE')) {
 			session_regenerate_id(true);
 		}
 		// Validate login
-		LoginModel::instance()->logBezoek();
+		LoginModel::instance();
+
+		LogModel::instance()->log();
 
 		// Prefetch
-		LidInstellingen::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
+		LidInstellingenModel::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
 		VerticalenModel::instance()->prefetch();
 		ForumModel::instance()->prefetch();
 

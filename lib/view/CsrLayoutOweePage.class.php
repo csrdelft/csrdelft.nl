@@ -1,6 +1,7 @@
 <?php
+namespace CsrDelft\view;
+use CsrDelft\view\login\LoginForm;
 
-require_once 'view/LoginView.class.php';
 
 /**
  * CsrLayoutOweePage.class.php
@@ -27,7 +28,12 @@ class CsrLayoutOweePage extends CompressedLayout {
 		parent::__construct('layout-owee', $body, $body->getTitel());
 		$this->tmpl = $template;
 		$this->menutmpl = $menu;
-		$this->addCompressedResources('general');
+		if ($template === 'index') {
+			// Zie CompressedLayout::getUserModules, front-page is héél compact
+			$this->addCompressedResources('front-page');
+		} else {
+			$this->addCompressedResources('general');
+		}
 	}
 
 	public function getBreadcrumbs() {

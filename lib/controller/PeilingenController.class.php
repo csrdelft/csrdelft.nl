@@ -1,8 +1,23 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/PeilingenModel.class.php';
-require_once 'view/PeilingenView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\peilingen\Peiling;
+use CsrDelft\model\entity\peilingen\PeilingOptie;
+use CsrDelft\model\peilingen\PeilingenModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\peilingen\PeilingenBeheerView;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
 
+
+/**
+ * Class PeilingenController
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ *
+ * @property PeilingenModel $model
+ */
 class PeilingenController extends AclController {
 
 	public function __construct($query) {

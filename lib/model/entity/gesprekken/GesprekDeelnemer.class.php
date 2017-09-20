@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\gesprekken;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * GesprekDeelnemer.class.php

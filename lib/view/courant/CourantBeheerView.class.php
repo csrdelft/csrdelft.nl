@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\view\courant;
+use CsrDelft\model\CourantModel;
+use CsrDelft\view\SmartyTemplateView;
 
 /**
  * CourantBeheerView.class.php

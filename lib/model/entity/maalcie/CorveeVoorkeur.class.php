@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\maalcie;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * CorveeVoorkeur.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -10,18 +13,13 @@
  * Zie ook CorveeRepetitie.class.php
  * 
  */
-class CorveeVoorkeur {
+class CorveeVoorkeur extends PersistentEntity {
 	# shared primary key
 
-	private $crv_repetitie_id; # foreign key crv_repetitie.id
-	private $uid; # foreign key lid.uid
-	private $corvee_repetitie;
-	private $van_uid;
-
-	public function __construct($crid = 0, $uid = '') {
-		$this->crv_repetitie_id = (int) $crid;
-		$this->uid = $uid;
-	}
+	public $crv_repetitie_id;
+	public $uid;
+	public $corvee_repetitie;
+	public $van_uid;
 
 	public function getCorveeRepetitieId() {
 		return (int) $this->crv_repetitie_id;
@@ -46,5 +44,13 @@ class CorveeVoorkeur {
 	public function setVanUid($uid) {
 		$this->van_uid = $uid;
 	}
+
+	protected static $table_name = 'crv_voorkeuren';
+	protected static $persistent_attributes = array(
+		'uid' => array(T::UID),
+		'crv_repetitie_id' => array(T::Integer)
+	);
+
+	protected static $primary_key = array('uid', 'crv_repetitie_id');
 
 }

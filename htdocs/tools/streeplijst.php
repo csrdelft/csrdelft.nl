@@ -1,5 +1,10 @@
 <?php
 
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use CsrDelft\Streeplijstcontent;
+use CsrDelft\view\CsrLayoutPage;
+
 require_once 'configuratie.include.php';
 
 # C.S.R. Delft
@@ -12,7 +17,7 @@ if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 	redirect(CSR_ROOT);
 }
 
-require_once 'streeplijstcontent.class.php';
+require_once 'Streeplijstcontent.php';
 $body = new Streeplijstcontent();
 
 

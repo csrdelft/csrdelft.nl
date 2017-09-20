@@ -1,11 +1,19 @@
 <?php
+namespace CsrDelft\model\entity;
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
+use function CsrDelft\email_like;
+use function CsrDelft\isSyrinx;
+use function CsrDelft\setMelding;
+use CsrDelft\view\bbcode\CsrBB;
+use CsrDelft\view\MailTemplateView;
 
 /**
  * Mail.class.php
  *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Alle mailadressen in to of bcc zullen als de host niet syrinx is
  * worden aangepast naar pubcie@csrdelft.nl
  */
@@ -47,7 +55,7 @@ class Mail {
 
 	public function setFrom($email, $name = null) {
 		if (!email_like($email)) {
-			throw new Exception('Emailadres in $from geen valide e-mailadres');
+			throw new CsrGebruikerException('Emailadres in $from geen valide e-mailadres');
 		}
 		// Geen speciale tekens in naam vanwege spamfilters
 		$this->from = array($email => filter_var($name, FILTER_SANITIZE_EMAIL));
@@ -64,7 +72,7 @@ class Mail {
 
 	public function setReplyTo($email, $name = null) {
 		if (!email_like($email)) {
-			throw new Exception('Emailadres in $reply_to geen valide e-mailadres');
+			throw new CsrGebruikerException('Emailadres in $reply_to geen valide e-mailadres');
 		}
 		// Geen speciale tekens in naam vanwege spamfilters
 		$this->replyTo = array($email => filter_var($name, FILTER_SANITIZE_EMAIL));
@@ -85,7 +93,7 @@ class Mail {
 	public function addTo(array $to) {
 		foreach ($to as $email => $name) {
 			if (!email_like($email)) {
-				throw new Exception('Invalid e-mailadres in TO "' . $email . '"');
+				throw new CsrGebruikerException('Invalid e-mailadres in TO "' . $email . '"');
 			}
 			// Geen speciale tekens in naam vanwege spamfilters
 			$this->to[$this->production_safe($email)] = filter_var($name, FILTER_SANITIZE_EMAIL);
@@ -107,7 +115,7 @@ class Mail {
 	public function addBcc(array $bcc) {
 		foreach ($bcc as $email => $name) {
 			if (!email_like($email)) {
-				throw new Exception('Invalid e-mailadres in BCC "' . $email . '"');
+				throw new CsrGebruikerException('Invalid e-mailadres in BCC "' . $email . '"');
 			}
 			// Geen speciale tekens in naam vanwege spamfilters
 			$this->bcc[$this->production_safe($email)] = filter_var($name, FILTER_SANITIZE_EMAIL);
@@ -190,8 +198,7 @@ class Mail {
 	public function send($debug = false) {
 		switch ($this->type) {
 			case 'html':
-				require_once 'view/MailTemplateView.class.php';
-				$template = new MailTemplateView($this);
+								$template = new MailTemplateView($this);
 				$body = $template->getHtml();
 				break;
 
@@ -200,7 +207,7 @@ class Mail {
 				break;
 
 			default:
-				throw new Exception('unknown mail type: "' . $this->type . '"');
+				throw new CsrException('unknown mail type: "' . $this->type . '"');
 		}
 		if ($this->inDebugMode() AND ! $debug) {
 			setMelding($body, 0);

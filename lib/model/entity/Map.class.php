@@ -1,4 +1,6 @@
 <?php
+namespace CsrDelft\model\entity;
+use CsrDelft\Orm\Entity\PersistentEntity;
 
 /**
  * Map.class.php

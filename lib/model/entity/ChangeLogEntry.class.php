@@ -1,10 +1,13 @@
 <?php
+namespace CsrDelft\model\entity;
+
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * ChangeLogEntry.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
  */
 class ChangeLogEntry extends PersistentEntity {
 
@@ -66,5 +69,4 @@ class ChangeLogEntry extends PersistentEntity {
 	 * @var string
 	 */
 	protected static $table_name = 'changelog';
-
 }

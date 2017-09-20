@@ -1,15 +1,36 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/AgendaModel.class.php';
-require_once 'view/AgendaView.class.php';
+use CsrDelft\common\CsrException;
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\agenda\AgendaModel;
+use CsrDelft\model\agenda\AgendaVerbergenModel;
+use CsrDelft\model\entity\agenda\AgendaItem;
+use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\view\agenda\AgendaCourantView;
+use CsrDelft\view\agenda\AgendaICalendarView;
+use CsrDelft\view\agenda\AgendaItemDeleteView;
+use CsrDelft\view\agenda\AgendaItemForm;
+use CsrDelft\view\agenda\AgendaMaandView;
+use CsrDelft\view\agenda\AgendeerbaarMaandView;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\JsonResponse;
+use function CsrDelft\setMelding;
+
 
 /**
- * AgendaController.class.php
- * 
+ * ApiAgendaController.class.php
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van de agenda.
+ *
+ * @property AgendaModel $model
  */
 class AgendaController extends AclController {
 
@@ -46,6 +67,8 @@ class AgendaController extends AclController {
 
 	/**
 	 * Maandoverzicht laten zien.
+	 * @param int $jaar
+	 * @param int $maand
 	 */
 	public function maand($jaar = 0, $maand = 0) {
 		$jaar = intval($jaar);
@@ -77,6 +100,7 @@ class AgendaController extends AclController {
 		}
 		$van = date('Y-m-d');
 		$tot = date('Y-m-d', strtotime('+6 months'));
+		/** @var AgendaItem[] $items */
 		$items = $this->model->find('eind_moment >= ? AND begin_moment <= ? AND (titel LIKE ? OR beschrijving LIKE ? OR locatie LIKE ?)', array($van, $tot, $query, $query, $query), null, 'begin_moment ASC, titel ASC', $limit);
 		$result = array();
 		foreach ($items as $item) {
@@ -152,10 +176,6 @@ class AgendaController extends AclController {
 				$item = ProfielModel::instance()->retrieveByUUID($refuuid);
 				break;
 
-			case 'bijbelrooster':
-				$item = BijbelroosterModel::instance()->retrieveByUUID($refuuid);
-				break;
-
 			case 'maaltijd':
 				$item = MaaltijdenModel::instance()->retrieveByUUID($refuuid);
 				break;
@@ -173,8 +193,9 @@ class AgendaController extends AclController {
 				break;
 
 			default:
-				throw new Exception('invalid UUID');
+				throw new CsrException('invalid UUID');
 		}
+		/** @var Agendeerbaar $item */
 		AgendaVerbergenModel::instance()->toggleVerbergen($item);
 		$this->view = new AgendeerbaarMaandView($item);
 	}

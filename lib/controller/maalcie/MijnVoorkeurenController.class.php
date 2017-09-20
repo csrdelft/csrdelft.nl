@@ -1,19 +1,28 @@
 <?php
+namespace CsrDelft\controller\maalcie;
 
-require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
-require_once 'view/maalcie/MijnVoorkeurenView.class.php';
-require_once 'view/maalcie/forms/EetwensForm.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
+use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\forms\EetwensForm;
+use CsrDelft\view\maalcie\persoonlijk\voorkeuren\MijnVoorkeurenView;
+use CsrDelft\view\maalcie\persoonlijk\voorkeuren\MijnVoorkeurView;
+
 
 /**
  * MijnVoorkeurenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
+ * @property CorveeVoorkeurenModel $model
+ *
  */
 class MijnVoorkeurenController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, null);
+		parent::__construct($query, CorveeVoorkeurenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'mijn' => 'P_CORVEE_IK'
@@ -40,26 +49,32 @@ class MijnVoorkeurenController extends AclController {
 	}
 
 	public function mijn() {
-		$voorkeuren = CorveeVoorkeurenModel::getVoorkeurenVoorLid(LoginModel::getUid(), true);
+		$voorkeuren = $this->model->getVoorkeurenVoorLid(LoginModel::getUid(), true);
 		$this->view = new MijnVoorkeurenView($voorkeuren);
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function inschakelen($crid) {
-		$voorkeur = CorveeVoorkeurenModel::inschakelenVoorkeur($crid, LoginModel::getUid());
+		$voorkeur = new CorveeVoorkeur();
+		$voorkeur->crv_repetitie_id = $crid;
+		$voorkeur->uid = LoginModel::getUid();
+		$voorkeur = $this->model->inschakelenVoorkeur($voorkeur);
 		$this->view = new MijnVoorkeurView($voorkeur);
 	}
 
 	public function uitschakelen($crid) {
-		$voorkeur = CorveeVoorkeurenModel::uitschakelenVoorkeur($crid, LoginModel::getUid());
+		$voorkeur = new CorveeVoorkeur();
+		$voorkeur->crv_repetitie_id = $crid;
+		$voorkeur->uid = LoginModel::getUid();
+		$voorkeur = $this->model->uitschakelenVoorkeur($voorkeur);
 		$this->view = new MijnVoorkeurView($voorkeur);
 	}
 
 	public function eetwens() {
 		$form = new EetwensForm();
 		if ($form->validate()) {
-			CorveeVoorkeurenModel::setEetwens(LoginModel::getProfiel(), $form->getField()->getValue());
+			$this->model->setEetwens(LoginModel::getProfiel(), $form->getField()->getValue());
 		}
 		$this->view = $form;
 	}

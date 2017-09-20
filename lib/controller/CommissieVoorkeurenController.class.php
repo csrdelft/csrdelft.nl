@@ -1,14 +1,20 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/CommissieVoorkeurenModel.class.php';
-require_once 'view/CommissieVoorkeurenView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenProfiel;
+use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenView;
+use CsrDelft\view\CsrLayoutPage;
+
 
 /**
  * CommissieVoorkeurenController.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller voor commissie voorkeuren.
  */
 class CommissieVoorkeurenController extends AclController {

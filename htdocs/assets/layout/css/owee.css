@@ -1,23 +1,24 @@
-/* owee 2016*/
-/** blauw: #101d61*/
-/** geel: #fec524*/
+/* owee 2017*/
+/** oranje: #f15025*/
+/** paars: #853d7d*/
+/** oranje-tekst: #fa7921 */
 
 /*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
 
 #cd-zijbalk,
 #forumtabel th,
 .cd-primary-nav ul {
-    background-color: #fec524 !important;
+    background-color: #853d7d !important;
 }
 
-/*Koppen in blauw*/
+/*Koppen in oranje*/
 
 h1,
 a,
 a:hover,
 .cd-primary-nav > li > a:hover,
 .cd-primary-nav > li > a.selected {
-    color: #101d61;
+    color: #fa7921;
 }
 
 /*NAVIGATIE MENU*/
@@ -26,21 +27,21 @@ a:hover,
 .cd-primary-nav .cd-secondary-nav a,
 .cd-primary-nav .cd-secondary-nav > li > a:hover,
 .cd-primary-nav .cd-secondary-nav > li > a {
-    color: #101d61;
+    color: #fff;
 }
 
 /*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
 
 .cd-primary-nav .cd-secondary-nav a:hover {
     text-decoration: underline !important;
-    color: #101d61;
+    color: #fa7921;
 }
 
 /*Streepje onder naam*/
 
 .cd-primary-nav > li > a:hover,
 .cd-primary-nav > li > a.selected {
-    box-shadow: inset 0 -2px 0 #101d61;
+    box-shadow: inset 0 -2px 0 #f15025;
 }
 
 /*ZIJBALK*/
@@ -52,19 +53,19 @@ a:hover,
 #cd-zijbalk .blok .item a,
 #cd-zijbalk .ishetal,
 #cd-zijbalk .blok .item {
-    color: #101d61;
+    color: white;
 }
 
 /*Zijbalk grens van het scherm in blauw*/
 
 #cd-zijbalk {
-    border-color: #101d61;
+    border-color: #f15025;
 }
 
 /*OWee logo*/
 
 #cd-zijbalk .cd-beeldmerk {
-    background-image: url("/plaetjes/owee/2016/logo.png");
+    background-image: url("/assets/layout-owee/plaetjes/logo-next-level.svg");
 }
 
 /*KNOPPEN*/
@@ -77,7 +78,8 @@ input[type=button],
 .btn:focus,
 input[type=submit]:focus,
 input[type=button]:focus {
-    background-image: linear-gradient(to bottom, #101d61, #1045be);
+    border-color: #e53d00;
+    background-image: linear-gradient(to bottom, #f15025, #fa7921);
 }
 
 /*Voor een mouse hover wordt de gradient omgedraaid*/
@@ -85,11 +87,13 @@ input[type=button]:focus {
 .btn:hover,
 input[type=submit]:hover,
 input[type=button]:hover {
-    background-image: linear-gradient(to bottom, #1045be, #101d61);
+    border-color: #e53d00;
+    background-image: linear-gradient(to bottom, #fa7921, #f15025);
 }
 
 /*Actieve knoppen in geel gradient -> zo ontstaat verschil tussen hover en active*/
 
 .btn.active {
-    background-image: linear-gradient(to bottom, #fec524, #ffd45c);
+    border-color: #e53d00;
+    background-image: linear-gradient(to bottom, #853d7d, #864CB5);
 }

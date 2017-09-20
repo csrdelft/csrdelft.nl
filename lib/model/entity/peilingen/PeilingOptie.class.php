@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model\entity\peilingen;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
+
 /**
  * Class PeilingOptie
  *
@@ -26,7 +30,7 @@ class PeilingOptie extends PersistentEntity {
 	 * Aantal stemmen
 	 * @var int
 	 */
-    public $stemmen;
+    public $stemmen = 0;
 
     public static function init($optie) {
         $peilingoptie = new PeilingOptie();

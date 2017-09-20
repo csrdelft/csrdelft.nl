@@ -48,99 +48,90 @@
  * @return string
  */
 
-function smarty_block_table_foreach($params,  $content, &$smarty, &$repeat)
-{
-    static $depth   = 0;          //depth in a nested situation :
-    // 1 in general, 2 in the first nested call, 3 in the second etc...
+function smarty_block_table_foreach($params, $content, &$smarty, &$repeat) {
+	static $depth = 0;          //depth in a nested situation :
+	// 1 in general, 2 in the first nested call, 3 in the second etc...
 
-    static $from_array = array(); //keep track of the from param, and the current value. Index is $depth.
-    static $loop_array = array(); //feed the html_table function. Index is $depth.
+	static $from_array = array(); //keep track of the from param, and the current value. Index is $depth.
+	static $loop_array = array(); //feed the html_table function. Index is $depth.
 
 
-    ///////////////////////////////////////////////////////
-    //check params
-    ///////////////////////////////////////////////////////
-    if (!isset($params['from'])) {
-        $smarty->trigger_error("table_foreach: missing 'from' parameter");
-        return;
-    }
-    if (!isset($params['item'])) {
-        $smarty->trigger_error("table_foreach: missing 'item' parameter");
-        return;
-    }
+	///////////////////////////////////////////////////////
+	//check params
+	///////////////////////////////////////////////////////
+	if (!isset($params['from'])) {
+		$smarty->trigger_error("table_foreach: missing 'from' parameter");
+		return;
+	}
+	if (!isset($params['item'])) {
+		$smarty->trigger_error("table_foreach: missing 'item' parameter");
+		return;
+	}
 
-    if(0 == count($params['from']))
-    {
-        return;
-    }
+	if (0 == count($params['from'])) {
+		return;
+	}
 
-    ///////////////////////////////////////////////////////
-    //first call (for each {table_foreach } in the tpl)
-    //increment $depth
-    ///////////////////////////////////////////////////////
-    if(is_null($content))
-    {
-        $depth ++;
-        $from_array[$depth] = (array) $params['from'];
-    }
-    ///////////////////////////////////////////////////////
-    //assignments of $content for next call
-    ///////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////
+	//first call (for each {table_foreach } in the tpl)
+	//increment $depth
+	///////////////////////////////////////////////////////
+	if (is_null($content)) {
+		$depth++;
+		$from_array[$depth] = (array)$params['from'];
+	}
+	///////////////////////////////////////////////////////
+	//assignments of $content for next call
+	///////////////////////////////////////////////////////
 
-    //get the from param corresponding to the current depth
-    $from = & $from_array[$depth];
+	//get the from param corresponding to the current depth
+	$from = &$from_array[$depth];
 
-    //get the current key and item
-    //$from being static the array descriptor is kept
-    //between two calls
-    if(list($key, $item) = each($from))
-    {
-        $repeat = true;
-        //smarty assignments : item
-        $item_varname = (string) $params['item'];
-        $smarty->assign($item_varname, $item);
+	//get the current key and item
+	//$from being static the array descriptor is kept
+	//between two calls
+	if (list($key, $item) = each($from)) {
+		$repeat = true;
+		//smarty assignments : item
+		$item_varname = (string)$params['item'];
+		$smarty->assign($item_varname, $item);
 
-        //key
-        if(isset($params['key']))
-        {
-            $key_varname = (string) $params['key'];
-            $smarty->assign($key_varname,  $key);
-        }
-    }else
-    {
-        //no values left
-        $repeat = false;
-    }
+		//key
+		if (isset($params['key'])) {
+			$key_varname = (string)$params['key'];
+			$smarty->assign($key_varname, $key);
+		}
+	} else {
+		//no values left
+		$repeat = false;
+	}
 
-    ///////////////////////////////////////////////////////
-    //add content to loop[]
-    ///////////////////////////////////////////////////////
-    if(!is_null($content))
-    {
-        $loop = & $loop_array[$depth];
-        $loop[] = $content;
-    }
+	///////////////////////////////////////////////////////
+	//add content to loop[]
+	///////////////////////////////////////////////////////
+	if (!is_null($content)) {
+		$loop = &$loop_array[$depth];
+		$loop[] = $content;
+	}
 
-    ///////////////////////////////////////////////////////
-    //last call : call html_table
-    //decrement $depth
-    ///////////////////////////////////////////////////////
-    if(!$repeat)
-    {
+	///////////////////////////////////////////////////////
+	//last call : call html_table
+	//decrement $depth
+	///////////////////////////////////////////////////////
+	if (!$repeat) {
 
-        //call html_table
-        require_once( dirname(__FILE__)."/function.html_table.php");
-        $params = array_merge($params, array("loop" => $loop));
+		//call html_table
+		require_once(dirname(__FILE__) . "/function.html_table.php");
+		$params = array_merge($params, array("loop" => $loop));
 
-        //reset the static vars
-        $loop = array();
-        $from = array();
-        //decrement $depth
-        $depth --;
+		//reset the static vars
+		$loop = array();
+		$from = array();
+		//decrement $depth
+		$depth--;
 
-        return smarty_function_html_table($params, $smarty);
+		return smarty_function_html_table($params, $smarty);
 
-    }
+	}
 }
 /* vim: set expandtab: */
-?>

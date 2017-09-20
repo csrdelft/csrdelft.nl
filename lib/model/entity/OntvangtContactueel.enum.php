@@ -1,10 +1,13 @@
 <?php
+namespace CsrDelft\model\entity;
+use CsrDelft\common\CsrException;
+use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
  * OntvangtContactueel.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 abstract class OntvangtContactueel implements PersistentEnum {
 
@@ -21,7 +24,7 @@ abstract class OntvangtContactueel implements PersistentEnum {
 			case self::Ja: return 'ja';
 			case self::Digitaal: return 'ja, digitaal';
 			case self::Nee: return 'nee';
-			default: throw new Exception('OntvangtContactueel onbekend');
+			default: throw new CsrException('OntvangtContactueel onbekend');
 		}
 	}
 
@@ -30,7 +33,7 @@ abstract class OntvangtContactueel implements PersistentEnum {
 			case self::Ja: return 'J';
 			case self::Digitaal: return 'D';
 			case self::Nee: return '-';
-			default: throw new Exception('OntvangtContactueel onbekend');
+			default: throw new CsrException('OntvangtContactueel onbekend');
 		}
 	}
 

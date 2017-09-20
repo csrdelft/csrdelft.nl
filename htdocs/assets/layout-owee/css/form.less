@@ -1,9 +1,15 @@
+@import "variables";
+
 .float-left {
   float: left;
 }
 
 .FormElement.CheckBoxField {
   display: none;
+}
+
+.FormulierKnop {
+  cursor: pointer;
 }
 
 form {
@@ -64,40 +70,7 @@ textarea {
   }
 
   &:focus {
-    border-color: #001e62;
-  }
-}
-
-.select-wrapper {
-  text-decoration: none;
-  display: block;
-  position: relative;
-
-  &:before {
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    font-family: FontAwesome;
-    font-style: normal;
-    font-weight: normal;
-    text-transform: none !important;
-  }
-
-  &:before {
-    color: rgba(255, 255, 255, 0.125);
-    content: '\f078';
-    display: block;
-    height: 2.75em;
-    line-height: 2.75em;
-    pointer-events: none;
-    position: absolute;
-    right: 0;
-    text-align: center;
-    top: 0;
-    width: 2.75em;
-  }
-
-  select::-ms-expand {
-    display: none;
+    border-color: ~"#@{kleur1}";
   }
 }
 
@@ -184,7 +157,7 @@ input[type="radio"] {
     color: #2e3141;
   }
   &:focus + label:before {
-    border-color: #4c5c96;
+    border-color: ~"#@{kleur1}";
   }
 }
 
@@ -284,26 +257,12 @@ button,
     }
   }
 
-  &.fit {
-    display: block;
-    margin: 0 0 1em 0;
-    width: 100%;
-  }
-
-  &.small {
-    font-size: 0.6em;
-  }
-
-  &.big {
-    font-size: 1em;
-  }
-
   &.disabled,
   &:disabled {
     opacity: 0.25;
   }
 
-  @media screen and (max-width: 640px) {
+  @media screen and (max-width: @scherm-middelsmal) {
     padding: 0;
   }
 }

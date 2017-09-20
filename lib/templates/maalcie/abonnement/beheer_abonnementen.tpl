@@ -9,7 +9,7 @@ Op deze pagina kunt u alle abonnementen beheren en zoeken.
 	<select name="mrid" origvalue="kies" class="FormElement SubmitChange">
 		<option selected="selected">kies</option>
 {foreach from=$aborepetities item=repetitie}
-		<option value="{$repetitie->getMaaltijdRepetitieId()}" class="save">{$repetitie->getStandaardTitel()}</option>
+		<option value="{$repetitie->mlt_repetitie_id}" class="save">{$repetitie->standaard_titel}</option>
 {/foreach}
 	</select>
 </form>

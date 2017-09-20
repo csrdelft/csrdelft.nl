@@ -1,15 +1,30 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/CmsPaginaModel.class.php';
-require_once 'view/CmsPaginaView.class.php';
+use CsrDelft\controller\framework\Controller;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\entity\CmsPagina;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\cms\CmsPaginaForm;
+use CsrDelft\view\cms\CmsPaginaView;
+use CsrDelft\view\cms\CmsPaginaZijbalkView;
+use CsrDelft\view\CsrLayoutOweePage;
+use CsrDelft\view\CsrLayoutPage;
+use function CsrDelft\getDateTime;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+
 
 /**
  * CmsPaginaController.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van de agenda.
+ *
+ * @property CmsPaginaModel $model
  */
 class CmsPaginaController extends Controller {
 
@@ -40,7 +55,7 @@ class CmsPaginaController extends Controller {
 		} elseif ($this->hasParam(1)) {
 			$naam = $this->getParam(1);
 		} else {
-			$naam = Instellingen::get('stek', 'homepage');
+			$naam = InstellingenModel::get('stek', 'homepage');
 		}
 		parent::performAction(array($naam));
 	}
@@ -50,6 +65,7 @@ class CmsPaginaController extends Controller {
 	}
 
 	public function bekijken($naam) {
+		/** @var CmsPagina $pagina */
 		$pagina = $this->model->get($naam);
 		if (!$pagina) { // 404
 			$pagina = $this->model->get('thuis');
@@ -99,6 +115,7 @@ class CmsPaginaController extends Controller {
 	}
 
 	public function verwijderen($naam) {
+		/** @var CmsPagina $pagina */
 		$pagina = $this->model->get($naam);
 		if (!$pagina OR ! $pagina->magVerwijderen()) {
 			$this->exit_http(403);

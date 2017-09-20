@@ -1,19 +1,30 @@
 <?php
+namespace CsrDelft\controller\maalcie;
 
-require_once 'model/maalcie/MaaltijdRepetitiesModel.class.php';
-require_once 'view/maalcie/MaaltijdRepetitiesView.class.php';
-require_once 'view/maalcie/forms/MaaltijdRepetitieForm.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
+use CsrDelft\view\maalcie\repetities\MaaltijdRepetitiesView;
+use CsrDelft\view\maalcie\repetities\MaaltijdRepetitieView;
+use function CsrDelft\getMelding;
+use function CsrDelft\setMelding;
+
 
 /**
  * MaaltijdRepetitiesController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
+ * @property MaaltijdRepetitiesModel $model
+ *
  */
 class MaaltijdRepetitiesController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, null);
+		parent::__construct($query, MaaltijdRepetitiesModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'beheer' => 'P_MAAL_MOD'
@@ -47,20 +58,18 @@ class MaaltijdRepetitiesController extends AclController {
 			$this->bewerk($mrid);
 			$modal = $this->view;
 		}
-		$this->view = new MaaltijdRepetitiesView(MaaltijdRepetitiesModel::getAlleRepetities());
+		$this->view = new MaaltijdRepetitiesView($this->model->getAlleRepetities());
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');
 		$this->view->modal = $modal;
 	}
 
 	public function nieuw() {
-		$repetitie = new MaaltijdRepetitie();
-		$this->view = new MaaltijdRepetitieForm($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter()); // fetches POST values itself
+		$this->view = new MaaltijdRepetitieForm(new MaaltijdRepetitie()); // fetches POST values itself
 	}
 
 	public function bewerk($mrid) {
-		$repetitie = MaaltijdRepetitiesModel::getRepetitie($mrid);
-		$this->view = new MaaltijdRepetitieForm($repetitie->getMaaltijdRepetitieId(), $repetitie->getDagVanDeWeek(), $repetitie->getPeriodeInDagen(), $repetitie->getStandaardTitel(), $repetitie->getStandaardTijd(), $repetitie->getStandaardPrijs(), $repetitie->getIsAbonneerbaar(), $repetitie->getStandaardLimiet(), $repetitie->getAbonnementFilter()); // fetches POST values itself
+		$this->view = new MaaltijdRepetitieForm($this->model->getRepetitie($mrid)); // fetches POST values itself
 	}
 
 	public function opslaan($mrid) {
@@ -70,17 +79,18 @@ class MaaltijdRepetitiesController extends AclController {
 			$this->nieuw();
 		}
 		if ($this->view->validate()) {
-			$values = $this->view->getValues();
-			$repetitie_aantal = MaaltijdRepetitiesModel::saveRepetitie($mrid, $values['dag_vd_week'], $values['periode_in_dagen'], $values['standaard_titel'], $values['standaard_tijd'], $values['standaard_prijs'], $values['abonneerbaar'], $values['standaard_limiet'], $values['abonnement_filter']);
-			$this->view = new MaaltijdRepetitieView($repetitie_aantal[0]);
-			if ($repetitie_aantal[1] > 0) {
-				setMelding($repetitie_aantal[1] . ' abonnement' . ($repetitie_aantal[1] !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
+            $repetitie = $this->view->getModel();
+
+            $aantal = $this->model->saveRepetitie($repetitie);
+            $this->view = new MaaltijdRepetitieView($repetitie);
+			if ($aantal > 0) {
+				setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 			}
 		}
 	}
 
 	public function verwijder($mrid) {
-		$aantal = MaaltijdRepetitiesModel::verwijderRepetitie($mrid);
+		$aantal = MaaltijdRepetitiesModel::instance()->verwijderRepetitie($mrid);
 		if ($aantal > 0) {
 			setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 		}
@@ -93,10 +103,10 @@ class MaaltijdRepetitiesController extends AclController {
 		$this->opslaan($mrid);
 		if ($this->view instanceof MaaltijdRepetitieView) { // opslaan succesvol
 			$verplaats = isset($_POST['verplaats_dag']);
-			$updated_aanmeldingen = MaaltijdenModel::updateRepetitieMaaltijden($this->view->getModel(), $verplaats);
+			$updated_aanmeldingen = MaaltijdenModel::instance()->updateRepetitieMaaltijden($this->view->getModel(), $verplaats);
 			setMelding($updated_aanmeldingen[0] . ' maaltijd' . ($updated_aanmeldingen[0] !== 1 ? 'en' : '') . ' bijgewerkt' . ($verplaats ? ' en eventueel verplaatst.' : '.'), 1);
 			if ($updated_aanmeldingen[1] > 0) {
-				setMelding($updated_aanmeldingen[1] . ' aanmelding' . ($updated_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $this->view->getModel()->getAbonnementFilter(), 2);
+				setMelding($updated_aanmeldingen[1] . ' aanmelding' . ($updated_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $this->view->getModel()->abonnement_filter, 2);
 			}
 		}
 	}

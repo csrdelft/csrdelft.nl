@@ -1,4 +1,9 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\groepen\KringenModel;
+use CsrDelft\model\groepen\leden\VerticaleLedenModel;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * Verticale.class.php
@@ -8,7 +13,7 @@
  */
 class Verticale extends AbstractGroep {
 
-	const leden = 'VerticaleLedenModel';
+	const leden = VerticaleLedenModel::class;
 
 	/**
 	 * Primary key
@@ -33,18 +38,20 @@ class Verticale extends AbstractGroep {
 	}
 
 	public function getKringen() {
-		return KringenModel::getKringenVoorVerticale($this);
+		return KringenModel::instance()->getKringenVoorVerticale($this);
 	}
 
 	/**
 	 * Limit functionality: leden generated
+	 * @param string $action
+	 * @return bool
 	 */
 	public function mag($action) {
 		switch ($action) {
 
-			case A::Bekijken:
-			case A::Aanmaken:
-			case A::Wijzigen:
+			case AccessAction::Bekijken:
+			case AccessAction::Aanmaken:
+			case AccessAction::Wijzigen:
 				return parent::mag($action);
 		}
 		return false;
@@ -52,13 +59,15 @@ class Verticale extends AbstractGroep {
 
 	/**
 	 * Limit functionality: leden generated
+	 * @param string $action
+	 * @return bool
 	 */
 	public static function magAlgemeen($action) {
 		switch ($action) {
 
-			case A::Bekijken:
-			case A::Aanmaken:
-			case A::Wijzigen:
+			case AccessAction::Bekijken:
+			case AccessAction::Aanmaken:
+			case AccessAction::Wijzigen:
 				return parent::magAlgemeen($action);
 		}
 		return false;

@@ -1,6 +1,8 @@
 <?php
+namespace CsrDelft\controller\framework;
 
-require_once 'controller/framework/Controller.abstract.php';
+use CsrDelft\model\security\LoginModel;
+
 
 /**
  * AclController.abstract.php

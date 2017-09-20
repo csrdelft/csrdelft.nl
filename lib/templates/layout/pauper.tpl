@@ -11,14 +11,12 @@
 			</div>
 			<a href="/pauper/terug">Naar normale webstek</a>
 			<div class="float-right">
-				{if LoginModel::instance()->hasError()}
-					<span class="error">{LoginModel::instance()->getError()}</span>
+				{if CsrDelft\model\security\LoginModel::instance()->hasError()}
+					<span class="error">{CsrDelft\model\security\LoginModel::instance()->getError()}</span>
 				{/if}
-				{if LoginModel::mag('P_LOGGED_IN')}
+				{toegang P_LOGGED_IN}
 					<a href="/logout">Uitloggen</a>
-				{else}
-					<div class="login-form">{include file='layout2/partials/_loginForm.tpl'}</div>
-				{/if}
+				{/toegang}
 			</div>
 		</div>
 		<br />

@@ -24,9 +24,8 @@
                     <td>
                         {/if}
                         &nbsp;
-                        {ProfielModel::get($verjaardag->uid)->getLink('civitas')}
+                        {$verjaardag->getLink('civitas')}
                     </td>
-
                 </tr>
             {/foreach}
         </table>

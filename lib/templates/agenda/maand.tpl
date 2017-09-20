@@ -1,4 +1,4 @@
-{getMelding()}
+{CsrDelft\getMelding()}
 {capture name='navlinks'}
 	<div class="maandnavigatie">
 		<a class="btn float-left" href="{$urlVorige}">&laquo; {$prevMaand}</a>
@@ -26,9 +26,9 @@
 					{/if}
 				<td id="dag-{$dag.datum|date_format:"%Y-%m-%d"}" class="dag {if strftime('%m', $dag.datum) != strftime('%m', $datum)}anderemaand{/if}{if date('d-m', $dag.datum)==date('d-m')} vandaag{/if}">
 					<div class="meta">
-						{if LoginModel::mag('P_AGENDA_ADD')}
+						{toegang P_AGENDA_ADD}
 							<a href="/agenda/toevoegen/{$dag.datum|date_format:"%Y-%m-%d"}" class="beheren post popup" title="Agenda-item toevoegen">{icon get="add"}</a>
-						{/if}
+						{/toegang}
 						{$dagnr}
 					</div>
 					<ul id="items-{$dag.datum|date_format:"%Y-%m-%d"}" class="items">
@@ -45,9 +45,9 @@
 <div class="clear" title="Houd deze url privé!&#013;Nieuwe aanvragen: zie je profiel">
 	<a name="ICAL"></a>
 	<img src="/plaetjes/knopjes/ical.gif" alt="ICAL" />
-{if LoginModel::getUid() == 'x999' OR LoginModel::getAccount()->hasPrivateToken()}
-	<input type="text" value="{LoginModel::getAccount()->getICalLink()}" size="35" onclick="this.setSelectionRange(0, this.value.length);" readonly />
+{if CsrDelft\model\security\LoginModel::getUid() == 'x999' OR CsrDelft\model\security\LoginModel::getAccount()->hasPrivateToken()}
+	<input type="text" value="{CsrDelft\model\security\LoginModel::getAccount()->getICalLink()}" size="35" onclick="this.setSelectionRange(0, this.value.length);" readonly />
 {else}
-	<a href="/profiel/{LoginModel::getUid()}#tokenaanvragen">Privé url aanvragen</a>
+	<a href="/profiel/{CsrDelft\model\security\LoginModel::getUid()}#tokenaanvragen">Privé url aanvragen</a>
 {/if}
 </div>

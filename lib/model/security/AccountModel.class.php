@@ -1,44 +1,78 @@
 <?php
+namespace CsrDelft\model\security;
+use CsrDelft\common\CsrGebruikerException;
+use function CsrDelft\crypto_rand_token;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\security\Account;
+use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\Orm\Persistence\Database;
 
 /**
  * AccountModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Wachtwoord en login timeout management.
- * 
  */
 class AccountModel extends CachedPersistenceModel {
 
-	const ORM = 'Account';
-	const DIR = 'security/';
+	const ORM = Account::class;
 
+	/** @var static */
 	protected static $instance;
 
+	/**
+	 * @param $uid
+	 * @return Account|false
+	 */
 	public static function get($uid) {
 		return static::instance()->retrieveByPrimaryKey(array($uid));
 	}
 
 	/**
 	 * Dit zegt niet in dat een account of profiel ook werkelijk bestaat!
+	 * @param $uid
+	 * @return bool
 	 */
 	public static function isValidUid($uid) {
 		return is_string($uid) AND preg_match('/^[a-z0-9]{4}$/', $uid);
 	}
 
+	/**
+	 * @param string $uid
+	 *
+	 * @return bool
+	 */
 	public static function existsUid($uid) {
 		return static::instance()->existsByPrimaryKey(array($uid));
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
 	public static function existsUsername($name) {
-		return Database::sqlExists(static::instance()->getTableName(), 'username = ?', array($name));
+		return Database::instance()->sqlExists(static::instance()->getTableName(), 'username = ?', array($name));
 	}
 
+	/**
+	 * @param string $uid
+	 *
+	 * @return Account
+	 * @throws CsrGebruikerException
+	 */
 	public function maakAccount($uid) {
 		$profiel = ProfielModel::get($uid);
 		if (!$profiel) {
-			throw new Exception('Profiel bestaat niet');
+			throw new CsrGebruikerException('Profiel bestaat niet');
 		}
+
+		// Maak een CiviSaldo voor dit account
+		CiviSaldoModel::instance()->maakSaldo($uid);
+
 		$account = new Account();
 		$account->uid = $uid;
 		$account->username = $uid;
@@ -53,7 +87,7 @@ class AccountModel extends CachedPersistenceModel {
 
 	/**
 	 * Verify SSHA hash.
-	 * 
+	 *
 	 * @param Account $account
 	 * @param string $pass_plain
 	 * @return boolean
@@ -71,12 +105,12 @@ class AccountModel extends CachedPersistenceModel {
 
 	/**
 	 * Create SSH hash.
-	 * 
+	 *
 	 * @param string $pass_plain
 	 * @return string
 	 */
 	public function maakWachtwoord($pass_plain) {
-		$salt = mhash_keygen_s2k(MHASH_SHA1, $pass_plain, substr(pack('h*', md5(mt_rand())), 0, 8), 4);
+		$salt = \mhash_keygen_s2k(MHASH_SHA1, $pass_plain, substr(pack('h*', md5(mt_rand())), 0, 8), 4);
 		return "{SSHA}" . base64_encode(mhash(MHASH_SHA1, $pass_plain . $salt) . $salt);
 	}
 
@@ -84,6 +118,9 @@ class AccountModel extends CachedPersistenceModel {
 	 * Reset het wachtwoord van de gebruiker.
 	 *  - Controleert GEEN eisen aan wachtwoord
 	 *  - Wordt NIET gelogged in de changelog van het profiel
+	 * @param Account $account
+	 * @param $pass_plain
+	 * @return bool
 	 */
 	public function wijzigWachtwoord(Account $account, $pass_plain) {
 		// Niet veranderd?
@@ -104,12 +141,20 @@ class AccountModel extends CachedPersistenceModel {
 		return true;
 	}
 
+	/**
+	 * @param Account $account
+	 */
 	public function resetPrivateToken(Account $account) {
 		$account->private_token = crypto_rand_token(150);
 		$account->private_token_since = getDateTime();
 		$this->update($account);
 	}
 
+	/**
+	 * @param Account $account
+	 *
+	 * @return int
+	 */
 	public function moetWachten(Account $account) {
 		/**
 		 * @source OWASP best-practice
@@ -127,12 +172,18 @@ class AccountModel extends CachedPersistenceModel {
 		return 0;
 	}
 
+	/**
+	 * @param Account $account
+	 */
 	public function failedLoginAttempt(Account $account) {
 		$account->failed_login_attempts++;
 		$account->last_login_attempt = getDateTime();
 		$this->update($account);
 	}
 
+	/**
+	 * @param Account $account
+	 */
 	public function successfulLoginAttempt(Account $account) {
 		$account->failed_login_attempts = 0;
 		$account->last_login_attempt = getDateTime();

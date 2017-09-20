@@ -1,19 +1,27 @@
 <?php
+namespace CsrDelft\model\entity\fotoalbum;
 
-require_once 'model/entity/fotoalbum/FotoAlbum.class.php';
+use CsrDelft\common\CsrException;
+use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\fotoalbum\FotoModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Entity\T;
+use function CsrDelft\debugprint;
+use function CsrDelft\direncode;
+
 
 /**
  * Foto.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Foto extends Afbeelding {
 
 	/**
 	 * Relatief pad in fotoalbum
-	 * @var string 
+	 * @var string
 	 */
 	public $subdir;
 	/**
@@ -126,7 +134,7 @@ class Foto extends Afbeelding {
 		if ($this->hasThumb()) {
 			chmod($this->getThumbPath(), 0644);
 		} else {
-			throw new Exception('Thumb maken mislukt: ' . $this->getFullPath());
+			throw new CsrException('Thumb maken mislukt: ' . $this->getFullPath());
 		}
 	}
 
@@ -141,7 +149,7 @@ class Foto extends Afbeelding {
 		} else {
 			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
-		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getFullPath()) . ' -resize 1024x1024 -format jpg -quality 85 ' . $rotate . escapeshellarg($this->getResizedPath());
+		$command = IMAGEMAGICK_PATH . 'convert ' . escapeshellarg($this->getFullPath()) . ' -resize 1024x1024 -format jpg -quality 85 -interlace Line ' . $rotate . escapeshellarg($this->getResizedPath());
 		if (defined('RESIZE_OUTPUT')) {
 			debugprint($command);
 		}
@@ -152,7 +160,7 @@ class Foto extends Afbeelding {
 		if ($this->hasResized()) {
 			chmod($this->getResizedPath(), 0644);
 		} else {
-			throw new Exception('Resized maken mislukt: ' . $this->getFullPath());
+			throw new CsrException('Resized maken mislukt: ' . $this->getFullPath());
 		}
 	}
 
@@ -162,7 +170,7 @@ class Foto extends Afbeelding {
 
 	/**
 	 * Rotate resized & thumb for prettyPhoto to show the right way up.
-	 * 
+	 *
 	 * @param int $degrees
 	 */
 	public function rotate($degrees) {

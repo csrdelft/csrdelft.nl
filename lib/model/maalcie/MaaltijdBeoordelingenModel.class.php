@@ -1,4 +1,10 @@
 <?php
+namespace CsrDelft\model\maalcie;
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\model\entity\maalcie\MaaltijdBeoordeling;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\PersistenceModel;
 
 /**
  * MaaltijdBeoordelingenModel.class.php
@@ -8,14 +14,14 @@
  */
 class MaaltijdBeoordelingenModel extends PersistenceModel {
 
-	const ORM = 'MaaltijdBeoordeling';
+	const ORM = MaaltijdBeoordeling::class;
 	const DIR = 'maalcie/';
 
 	protected static $instance;
 
 	public function nieuw(Maaltijd $maaltijd) {
 		$b = new MaaltijdBeoordeling();
-		$b->maaltijd_id = $maaltijd->getMaaltijdId();
+		$b->maaltijd_id = $maaltijd->maaltijd_id;
 		$b->uid = LoginModel::getUid();
 		$b->kwantiteit = null;
 		$b->kwaliteit = null;
@@ -24,9 +30,9 @@ class MaaltijdBeoordelingenModel extends PersistenceModel {
 	}
 
 	public function getNormalizedBeoordelingen(Maaltijd $maaltijd) {
-		$beoordelingen = $this->find('maaltijd_id = ?', array($maaltijd->getMaaltijdId()));
+		$beoordelingen = $this->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
 		foreach ($beoordelingen as $b) {
-			$normalize = Database::sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), $this->getTableName(), 'uid = ?', array($b->uid));
+			$normalize = Database::instance()->sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), $this->getTableName(), 'uid = ?', array($b->uid));
 			foreach ($normalize as $avg) {
 				$b->kwantiteit /= $avg[0];
 				$b->kwaliteit /= $avg[1];

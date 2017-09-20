@@ -1,4 +1,16 @@
 <?php
+namespace CsrDelft\controller\framework;
+use CsrDelft\common\CsrException;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\view\cms\CmsPaginaView;
+use CsrDelft\view\bbcode\CsrBB;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\View;
+use function CsrDelft\redirect;
+use function CsrDelft\setGoBackCookie;
+use function CsrDelft\setMelding;
 
 /**
  * Controller.abstract.php
@@ -77,7 +89,7 @@ abstract class Controller {
 	/**
 	 * REST: positional parameters
 	 * KVP: named parameters
-	 * 
+	 *
 	 * @param string $key
 	 * @return boolean
 	 */
@@ -94,7 +106,7 @@ abstract class Controller {
 	/**
 	 * REST: positional parameters
 	 * KVP: named parameters
-	 * 
+	 *
 	 * @param string $key
 	 * @return string
 	 */
@@ -107,7 +119,7 @@ abstract class Controller {
 
 	/**
 	 * Return REST query paramter values from $num onwards.
-	 * 
+	 *
 	 * @param int $num skip params before this
 	 * @return array
 	 */
@@ -139,7 +151,7 @@ abstract class Controller {
 
 	/**
 	 * If named action is defined.
-	 * 
+	 *
 	 * @param string $action
 	 * @return boolean
 	 */
@@ -172,7 +184,7 @@ abstract class Controller {
 		}
 		// Controleer of de actie bestaat
 		elseif (!$this->hasAction($this->action)) {
-			throw new Exception('Action undefined: ' . $this->action);
+			throw new CsrException('Action undefined: ' . $this->action);
 		}
 		return call_user_func_array(array($this, $this->action), $args);
 	}
@@ -185,11 +197,9 @@ abstract class Controller {
 		// Redirect to login form
 		elseif (LoginModel::getUid() === 'x999') {
 			setGoBackCookie(REQUEST_URI);
-			redirect(CSR_ROOT);
+			redirect(CSR_ROOT . "#login");
 		}
 		// GUI 403
-		require_once 'model/CmsPaginaModel.class.php';
-		require_once 'view/CmsPaginaView.class.php';
 		$body = new CmsPaginaView(CmsPaginaModel::get($response_code));
 		$this->view = new CsrLayoutPage($body);
 		$this->view->view();

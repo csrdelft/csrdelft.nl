@@ -1,4 +1,13 @@
 <?php
+namespace CsrDelft\model\entity\maalcie;
+use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\fiscaat\CiviProductModel;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * Maaltijd.class.php	| 	P.W.G. Brussee (brussee@live.nl)
@@ -25,120 +34,45 @@
  * Zie ook MaaltijdAanmelding.class.php
  * 
  */
-class Maaltijd implements Agendeerbaar, JsonSerializable {
+class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	# primary key
 
-	private $maaltijd_id; # int 11
-	private $mlt_repetitie_id; # foreign key mlt_repetitie.id
-	private $titel; # string 255
-	private $aanmeld_limiet; # int 11
-	private $datum; # date
-	private $tijd; # time
-	private $prijs; # int 11
-	private $gesloten; # boolean
-	private $laatst_gesloten; # int 11
-	private $verwijderd; # boolean
-	private $aanmeld_filter; # string 255
-	private $omschrijving; # text
-	private $aantal_aanmeldingen;
-	private $archief;
+	public $maaltijd_id; # int 11
+	public $mlt_repetitie_id; # foreign key mlt_repetitie.id
+	public $product_id;
+	public $titel; # string 255
+	public $aanmeld_limiet; # int 11
+	public $datum; # date
+	public $tijd; # time
+	public $gesloten = false; # boolean
+	public $laatst_gesloten; # int 11
+	public $verwijderd = false; # boolean
+	public $aanmeld_filter; # string 255
+	public $omschrijving; # text
+	public $aantal_aanmeldingen;
+	public $archief;
+	public $verwerkt = false;
 	/**
 	 * De taak die rechten geeft voor het bekijken en sluiten van de maaltijd(-lijst)
 	 * @var CorveeTaak 
 	 */
 	public $maaltijdcorvee;
 
-	public function __construct($mid = 0, $mrid = null, $titel = '', $limiet = null, $datum = null, $tijd = null, $prijs = null, $gesloten = false, $wanneer_gesloten = null, $verwijderd = false, $filter = null, $omschrijving = null) {
-		$this->maaltijd_id = (int) $mid;
-		if ($mrid !== null) {
-			$this->mlt_repetitie_id = (int) $mrid;
-		}
-		$this->setTitel($titel);
-		if ($limiet === null) {
-			$limiet = intval(Instellingen::get('maaltijden', 'standaard_limiet'));
-		}
-		$this->setAanmeldLimiet($limiet);
-		if ($datum === null) {
-			$datum = date('Y-m-d');
-		}
-		$this->setDatum($datum);
-		if ($tijd === null) {
-			$tijd = Instellingen::get('maaltijden', 'standaard_aanvang');
-		}
-		$this->setTijd($tijd);
-		if ($prijs === null) {
-			$prijs = intval(Instellingen::get('maaltijden', 'standaard_prijs'));
-		}
-		$this->setPrijs($prijs);
-		$this->setGesloten($gesloten);
-		$this->setLaatstGesloten($wanneer_gesloten);
-		$this->setVerwijderd($verwijderd);
-		$this->setAanmeldFilter($filter);
-		$this->setOmschrijving($omschrijving);
-	}
-
-	public function jsonSerialize() {
-		return get_object_vars($this);
-	}
-
-	public function getMaaltijdId() {
-		return (int) $this->maaltijd_id;
-	}
-
-	public function getMaaltijdRepetitieId() {
-		if (empty($this->mlt_repetitie_id)) {
-			return null;
-		}
-		return (int) $this->mlt_repetitie_id;
-	}
-
-	public function getTitel() {
-		return $this->titel;
-	}
-
-	public function getAanmeldLimiet() {
-		return (int) $this->aanmeld_limiet;
-	}
-
-	public function getDatum() {
-		return $this->datum;
-	}
-
-	public function getTijd() {
-		return $this->tijd;
-	}
-
-	public function getPrijs() {
-		return (int) $this->prijs;
-	}
-
 	public function getPrijsFloat() {
-		return (float) $this->getPrijs() / 100.0;
+        return (float) $this->getPrijs() / 100.0;
+    }
+
+    public function getPrijs() {
+		return CiviProductModel::instance()->getPrijs(CiviProductModel::instance()->getProduct($this->product_id))->prijs;
 	}
 
-	public function getIsGesloten() {
-		return (boolean) $this->gesloten;
-	}
-
-	public function getLaatstGesloten() {
-		return $this->laatst_gesloten;
-	}
-
-	public function getIsVerwijderd() {
-		return (boolean) $this->verwijderd;
-	}
-
-	public function getAanmeldFilter() {
-		return $this->aanmeld_filter;
-	}
-
-	public function getOmschrijving() {
-		return $this->omschrijving;
-	}
-
-	public function getAantalAanmeldingen() {
-		return (int) $this->aantal_aanmeldingen;
-	}
+    /**
+     * @return int
+     */
+    public function getAantalAanmeldingen() {
+        $aantal = MaaltijdAanmeldingenModel::instance()->select(array('SUM(aantal_gasten) + COUNT(*)'), 'maaltijd_id = ?', array($this->maaltijd_id));
+        return (int) $aantal->fetchColumn();
+    }
 
 	/**
 	 * Bereken de marge in verband met niet aangemelde gasten.
@@ -147,12 +81,12 @@ class Maaltijd implements Agendeerbaar, JsonSerializable {
 	 */
 	public function getMarge() {
 		$aantal = $this->getAantalAanmeldingen();
-		$marge = floor($aantal / floatval(Instellingen::get('maaltijden', 'marge_gasten_verhouding')));
-		$min = intval(Instellingen::get('maaltijden', 'marge_gasten_min'));
+		$marge = floor($aantal / floatval(InstellingenModel::get('maaltijden', 'marge_gasten_verhouding')));
+		$min = intval(InstellingenModel::get('maaltijden', 'marge_gasten_min'));
 		if ($marge < $min) {
 			$marge = $min;
 		}
-		$max = intval(Instellingen::get('maaltijden', 'marge_gasten_max'));
+		$max = intval(InstellingenModel::get('maaltijden', 'marge_gasten_max'));
 		if ($marge > $max) {
 			$marge = $max;
 		}
@@ -166,103 +100,18 @@ class Maaltijd implements Agendeerbaar, JsonSerializable {
 	 */
 	public function getBudget() {
 		$budget = $this->getAantalAanmeldingen() + $this->getMarge();
-		$budget *= $this->getPrijs() - intval(Instellingen::get('maaltijden', 'budget_maalcie'));
+		$budget *= $this->getPrijs() - intval(InstellingenModel::get('maaltijden', 'budget_maalcie'));
 		return floatval($budget) / 100.0;
-	}
-
-	public function getArchief() {
-		return $this->archief;
-	}
-
-	public function setTitel($titel) {
-		if (!is_string($titel)) {
-			throw new Exception('Geen string: titel');
-		}
-		$this->titel = $titel;
-	}
-
-	public function setAanmeldLimiet($int) {
-		if (!is_int($int) || $int < 0) {
-			throw new Exception('Geen integer: aanmeld limiet');
-		}
-		$this->aanmeld_limiet = $int;
-	}
-
-	public function setDatum($datum) {
-		if (!is_string($datum)) {
-			throw new Exception('Geen string: datum');
-		}
-		$this->datum = $datum;
-	}
-
-	public function setTijd($time) {
-		if (!is_string($time)) {
-			throw new Exception('Geen string: tijd');
-		}
-		$this->tijd = $time;
-	}
-
-	public function setPrijs($prijs) {
-		if (!is_int($prijs)) {
-			throw new Exception('Geen integer: prijs');
-		}
-		$this->prijs = $prijs;
-	}
-
-	public function setGesloten($bool) {
-		if (!is_bool($bool)) {
-			throw new Exception('Geen boolean: gesloten');
-		}
-		$this->gesloten = $bool;
-	}
-
-	public function setLaatstGesloten($datetime) {
-		if ($datetime !== null && !is_string($datetime)) {
-			throw new Exception('Geen string: laatst gesloten');
-		}
-		$this->laatst_gesloten = $datetime;
-	}
-
-	public function setVerwijderd($bool) {
-		if (!is_bool($bool)) {
-			throw new Exception('Geen boolean: verwijderd');
-		}
-		$this->verwijderd = $bool;
-	}
-
-	public function setAanmeldFilter($string) {
-		if (!is_string($string) AND $string !== null) {
-			throw new Exception('Geen string: aanmeld filter');
-		}
-		$this->aanmeld_filter = $string;
-	}
-
-	public function setOmschrijving($string) {
-		if (!is_string($string) AND $string !== null) {
-			throw new Exception('Geen string: omschrijving');
-		}
-		$this->omschrijving = $string;
-	}
-
-	public function setAantalAanmeldingen($int) {
-		if (!is_int($int) || $int < 0) {
-			throw new Exception('Geen integer: aantal aanmeldingen');
-		}
-		$this->aantal_aanmeldingen = $int;
-	}
-
-	public function setArchief(ArchiefMaaltijd $archief) {
-		$this->archief = $archief;
 	}
 
 	// Agendeerbaar ############################################################
 
-	public function getUUID() {
-		return $this->maaltijd_id . '@maaltijd.csrdelft.nl';
-	}
+    public function getTitel() {
+        return $this->titel;
+    }
 
-	public function getBeginMoment() {
-		return strtotime($this->getDatum() . ' ' . $this->getTijd());
+    public function getBeginMoment() {
+		return strtotime($this->datum . ' ' . $this->tijd);
 	}
 
 	public function getEindMoment() {
@@ -297,9 +146,9 @@ class Maaltijd implements Agendeerbaar, JsonSerializable {
 		if (!isset($this->maaltijdcorvee)) {
 			// Zoek op datum, want er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is.
 			// Ook hoeft een taak niet per se gekoppeld te zijn aan een maaltijd (maximaal aan 1 maaltijd).
-			$taken = CorveeTakenModel::getTakenVoorAgenda($this->getBeginMoment(), $this->getBeginMoment());
+			$taken = CorveeTakenModel::instance()->getTakenVoorAgenda($this->getBeginMoment(), $this->getBeginMoment());
 			foreach ($taken as $taak) {
-				if ($taak->getUid() === $uid AND $taak->getMaaltijdId() !== null) { // checken op gekoppelde maaltijd (zie hierboven)
+				if ($taak->uid === $uid AND $taak->maaltijd_id !== null) { // checken op gekoppelde maaltijd (zie hierboven)
 					$this->maaltijdcorvee = $taak; // de taak die toegang geeft tot de maaltijdlijst
 					return true;
 				}
@@ -318,5 +167,39 @@ class Maaltijd implements Agendeerbaar, JsonSerializable {
 	public function magSluiten($uid) {
 		return $this->magBekijken($uid) AND $this->maaltijdcorvee->getCorveeFunctie()->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
 	}
+
+    protected static $table_name = 'mlt_maaltijden';
+    protected static $persistent_attributes = array(
+        'maaltijd_id' => array(T::Integer, false, 'auto_increment'),
+        'mlt_repetitie_id' => array(T::Integer, true),
+        'product_id' => array(T::Integer),
+        'titel' => array(T::String),
+        'aanmeld_limiet' => array(T::Integer),
+        'datum' => array(T::Date),
+        'tijd' => array(T::Time),
+        'gesloten' => array(T::Boolean),
+        'laatst_gesloten' => array(T::Timestamp, true),
+        'verwijderd' => array(T::Boolean),
+        'aanmeld_filter' => array(T::String, true),
+        'omschrijving' => array(T::Text, true),
+		'verwerkt' => array(T::Boolean)
+    );
+
+    protected static $primary_key = array('maaltijd_id');
+
+    /**
+     * De API voor de app gebruikt json_encode
+     *
+     * @return array|mixed
+     */
+    public function jsonSerialize() {
+        $json = parent::jsonSerialize();
+        $json['repetitie_naam'] = is_int($this->mlt_repetitie_id) ? MaaltijdRepetitiesModel::instance()->getRepetitie($this->mlt_repetitie_id)->standaard_titel : '';
+        $json['tijd'] = date('G:i', strtotime($json['tijd']));
+        $json['aantal_aanmeldingen'] = $this->getAantalAanmeldingen();
+        $json['gesloten'] = $json['gesloten'] ? '1' : '0';
+        $json['prijs'] = strval($this->getPrijs());
+        return $json;
+    }
 
 }

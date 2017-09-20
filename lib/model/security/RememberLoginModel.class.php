@@ -1,18 +1,29 @@
 <?php
+namespace CsrDelft\model\security;
+use function CsrDelft\crypto_rand_token;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\security\RememberLogin;
+use CsrDelft\Orm\PersistenceModel;
+use function CsrDelft\setRememberCookie;
 
 /**
  * RememberLoginModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class RememberLoginModel extends PersistenceModel {
 
-	const ORM = 'RememberLogin';
-	const DIR = 'security/';
+	const ORM = RememberLogin::class;
 
+	/** @var static */
 	protected static $instance;
 
+	/**
+	 * @param string $rand
+	 *
+	 * @return bool|RememberLogin
+	 */
 	public function verifyToken($rand) {
 		if (isset($_SERVER['REMOTE_ADDR'])) {
 			$ip = $_SERVER['REMOTE_ADDR'];
@@ -27,6 +38,9 @@ class RememberLoginModel extends PersistenceModel {
 		return $remember;
 	}
 
+	/**
+	 * @return RememberLogin
+	 */
 	public function nieuw() {
 		$remember = new RememberLogin();
 		$remember->uid = LoginModel::getUid();
@@ -41,15 +55,19 @@ class RememberLoginModel extends PersistenceModel {
 		return $remember;
 	}
 
+	/**
+	 * @param RememberLogin $remember
+	 */
 	public function rememberLogin(RememberLogin $remember) {
 		$rand = crypto_rand_token(255);
+
 		$remember->token = hash('sha512', $rand);
 		if ($this->exists($remember)) {
 			$this->update($remember);
 		} else {
 			$remember->id = $this->create($remember);
 		}
-		return setRememberCookie($rand);
-	}
 
+		setRememberCookie($rand);
+	}
 }

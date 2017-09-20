@@ -1,14 +1,17 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
+use CsrDelft\common\CsrException;
+use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
  * KetzerSelectorSoort.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * De keuzesoort van een selector: AND (Multiple) / XOR (Single)
- * 
+ *
  */
-abstract class KetzerSelectorSoort extends PersistentEnum {
+abstract class KetzerSelectorSoort implements PersistentEnum {
 
 	const Single = 'XOR';
 	const Multiple = 'AND';
@@ -21,7 +24,7 @@ abstract class KetzerSelectorSoort extends PersistentEnum {
 		switch ($option) {
 			case self::Single: return 'Keuzerondje';
 			case self::Multiple: return 'Vinkje';
-			default: throw new Exception('KetzerSelectorSoort onbekend');
+			default: throw new CsrException('KetzerSelectorSoort onbekend');
 		}
 	}
 
@@ -30,7 +33,7 @@ abstract class KetzerSelectorSoort extends PersistentEnum {
 			case self::Single:
 			case self::Multiple:
 				return $option;
-			default: throw new Exception('KetzerSelectorSoort onbekend');
+			default: throw new CsrException('KetzerSelectorSoort onbekend');
 		}
 	}
 

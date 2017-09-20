@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model\entity\maalcie;
+use CsrDelft\model\maalcie\KwalificatiesModel;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * CorveeFunctie.class.php

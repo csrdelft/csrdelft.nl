@@ -15,7 +15,6 @@ body{
 table{
 	border: 0;
 	margin: 0; padding: 0;
-	margin-top: 0;
 	width: 100%
 }
 td{

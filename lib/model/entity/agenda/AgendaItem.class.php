@@ -1,11 +1,16 @@
 <?php
+namespace CsrDelft\model\entity\agenda;
+use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * AgendaItem.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * AgendaItems worden door de agenda getoont samen met andere Agendeerbare dingen.
  */
 class AgendaItem extends PersistentEntity implements Agendeerbaar {
@@ -124,5 +129,4 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 		}
 		return false;
 	}
-
 }

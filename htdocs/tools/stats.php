@@ -2,6 +2,14 @@
 
 //holymoly, wat een kekcode is dit zeg.
 
+use CsrDelft\MijnSqli;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\View;
+
 require_once 'configuratie.include.php';
 
 if (!LoginModel::mag('P_ADMIN')) {

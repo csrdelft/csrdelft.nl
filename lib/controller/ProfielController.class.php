@@ -1,42 +1,73 @@
 <?php
 
-require_once 'view/ProfielView.class.php';
+namespace CsrDelft\controller;
+
+use CsrDelft\common\CsrException;
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\GoogleSync;
+use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
+use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\fiscaat\SaldoModel;
+use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\LedenMemoryScoresModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\model\VerjaardagenModel;
+use CsrDelft\view\AlleVerjaardagenView;
+use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
+use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
+use CsrDelft\view\ledenmemory\LedenMemoryView;
+use CsrDelft\view\profiel\ProfielForm;
+use CsrDelft\view\profiel\ProfielView;
+use CsrDelft\view\StamboomView;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use function CsrDelft\startsWith;
 
 /**
  * ProfielController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller voor de ledenlijst.
+ *
+ * @property ProfielModel $model
  */
 class ProfielController extends AclController {
-
 	public function __construct($query) {
 		parent::__construct($query, ProfielModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				// Profiel
-				'profiel'				 => 'P_OUDLEDEN_READ',
-				'bewerken'				 => 'P_PROFIEL_EDIT',
-				'voorkeuren'			 => 'P_PROFIEL_EDIT',
-				'resetPrivateToken'		 => 'P_PROFIEL_EDIT',
-				'addToGoogleContacts'	 => 'P_LEDEN_READ',
+				'profiel' => 'P_OUDLEDEN_READ',
+				'bewerken' => 'P_PROFIEL_EDIT',
+				'voorkeuren' => 'P_PROFIEL_EDIT',
+				'resetPrivateToken' => 'P_PROFIEL_EDIT',
+				'addToGoogleContacts' => 'P_LEDEN_READ',
 				// Leden
-				'nieuw'					 => 'P_LEDEN_MOD,commissie:NovCie',
-				'lijst'					 => 'P_OUDLEDEN_READ',
-				'stamboom'				 => 'P_OUDLEDEN_READ',
-				'verjaardagen'			 => 'P_LEDEN_READ',
-				'memory'				 => 'P_OUDLEDEN_READ'
+				'nieuw' => 'P_LEDEN_MOD,commissie:NovCie',
+				'lijst' => 'P_OUDLEDEN_READ',
+				'stamboom' => 'P_OUDLEDEN_READ',
+				'verjaardagen' => 'P_LEDEN_READ',
+				'memory' => 'P_OUDLEDEN_READ',
+				'saldo' => 'P_LEDEN_READ'
 			);
 		} else {
 			$this->acl = array(
 				// Profiel
-				'bewerken'		 => 'P_PROFIEL_EDIT',
-				'voorkeuren'	 => 'P_PROFIEL_EDIT',
+				'bewerken' => 'P_PROFIEL_EDIT',
+				'voorkeuren' => 'P_PROFIEL_EDIT',
 				// Leden
-				'nieuw'			 => 'P_LEDEN_MOD,commissie:NovCie',
-				'memoryscore'	 => 'P_LEDEN_READ',
-				'memoryscores'	 => 'P_LEDEN_READ'
+				'nieuw' => 'P_LEDEN_MOD,commissie:NovCie',
+				'memoryscore' => 'P_LEDEN_READ',
+				'memoryscores' => 'P_LEDEN_READ'
 			);
 		}
 	}
@@ -68,16 +99,13 @@ class ProfielController extends AclController {
 			$this->view = new CsrLayoutPage($body);
 			$this->view->addCompressedResources('profiel');
 			$this->view->addCompressedResources('grafiek');
-		}
-		// Leden
+		} // Leden
 		else {
 			$this->action = 'lijst';
 			if ($this->hasParam(2)) {
 				$this->action = $this->getParam(2);
 			}
 			if (startsWith($this->action, 'memory')) {
-				require_once 'model/LedenMemoryScoresModel.class.php';
-				require_once 'view/LedenMemoryView.class.php';
 			}
 			return parent::performAction($this->getParams(3));
 		}
@@ -95,15 +123,15 @@ class ProfielController extends AclController {
 	public function nieuw($lidjaar, $status) {
 		// Controleer invoer
 		$lidstatus = 'S_' . strtoupper($status);
-		if (!preg_match('/^[0-9]{4}$/', $lidjaar) OR ! in_array($lidstatus, LidStatus::getTypeOptions())) {
+		if (!preg_match('/^[0-9]{4}$/', $lidjaar) OR !in_array($lidstatus, LidStatus::getTypeOptions())) {
 			$this->exit_http(403);
 		}
 		// NovCie mag novieten aanmaken
-		if ($lidstatus !== LidStatus::Noviet AND ! LoginModel::mag('P_LEDEN_MOD')) {
+		if ($lidstatus !== LidStatus::Noviet AND !LoginModel::mag('P_LEDEN_MOD')) {
 			$this->exit_http(403);
 		}
 		// Maak nieuw profiel zonder op te slaan
-		$profiel = ProfielModel::instance()->nieuw((int) $lidjaar, $lidstatus);
+		$profiel = ProfielModel::instance()->nieuw((int)$lidjaar, $lidstatus);
 		return $this->bewerken($profiel);
 	}
 
@@ -113,7 +141,6 @@ class ProfielController extends AclController {
 		}
 		$form = new ProfielForm($profiel);
 		if ($form->validate()) {
-
 			// Duck-pasfoto opslaan
 			$duckfoto = $form->findByName('duckfoto');
 			if ($duckfoto AND $duckfoto->getModel() instanceof Afbeelding) {
@@ -123,23 +150,19 @@ class ProfielController extends AclController {
 					$duckfoto->opslaan(PHOTOS_PATH . 'pasfoto/Duckstad/', $profiel->uid . $ext, true);
 				}
 			}
-
 			$diff = $form->diff();
 			if (empty($diff)) {
 				setMelding('Geen wijzigingen', 0);
 			} else {
 				$nieuw = !$this->model->exists($profiel);
 				$changelog = $form->changelog($diff, $nieuw);
-
 				// LidStatus wijzigen
 				foreach ($diff as $change) {
 					if ($change->property === 'status') {
 						$changelog .= '[div]' . $this->model->wijzig_lidstatus($profiel, $change->old_value) . '[/div][hr]';
 					}
 				}
-
 				$profiel->changelog = $changelog . $profiel->changelog;
-
 				if ($nieuw) {
 					$this->model->create($profiel);
 					setMelding('Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid, 1);
@@ -158,8 +181,6 @@ class ProfielController extends AclController {
 		if (!$profiel->magBewerken()) {
 			$this->exit_http(403);
 		}
-		require_once 'model/CommissieVoorkeurenModel.class.php';
-		require_once 'view/CommissieVoorkeurenView.class.php';
 		$form = new CommissieVoorkeurenForm($profiel);
 		if ($form->validate()) {
 			$model = new CommissieVoorkeurenModel($profiel->uid);
@@ -177,15 +198,13 @@ class ProfielController extends AclController {
 
 	public function addToGoogleContacts(Profiel $profiel) {
 		try {
-			require_once 'googlesync.class.php';
 			GoogleSync::doRequestToken(CSR_ROOT . "/profiel/" . $profiel->uid . "/addToGoogleContacts");
 			$gSync = GoogleSync::instance();
 			$msg = $gSync->syncLid($profiel);
 			setMelding('Opgeslagen in Google Contacts: ' . $msg, 1);
-		} catch (Exception $e) {
-			setMelding($e->getMessage(), -1);
+		} catch (CsrException $e) {
+			setMelding("Opslaan in Google Contacts mislukt: " . $e->getMessage(), -1);
 		}
-
 		redirect(CSR_ROOT . '/profiel/' . $profiel->uid);
 	}
 
@@ -194,16 +213,23 @@ class ProfielController extends AclController {
 	}
 
 	public function stamboom($uid = null) {
-		require_once 'view/StamboomView.class.php';
 		$body = new StamboomView($uid);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addCompressedResources('stamboom');
 	}
 
 	public function verjaardagen() {
-		require_once 'view/VerjaardagenView.class.php';
 		$body = new AlleVerjaardagenView(VerjaardagenModel::getJaar());
 		$this->view = new CsrLayoutPage($body);
+	}
+
+	public function saldo($uid, $timespan) {
+		if (SaldoModel::instance()->magGrafiekZien($uid)) {
+			$data = SaldoModel::instance()->getDataPoints($uid, $timespan);
+			$this->view = new JsonResponse($data);
+		} else {
+			$this->exit_http(403);
+		}
 	}
 
 	public function memory() {
@@ -224,11 +250,9 @@ class ProfielController extends AclController {
 		$parts = explode('@', $groep);
 		if (isset($parts[0], $parts[1])) {
 			switch ($parts[1]) {
-
 				case 'verticale.csrdelft.nl':
 					$groep = VerticalenModel::instance()->retrieveByUUID($groep);
 					break;
-
 				case 'lichting.csrdelft.nl':
 					$groep = LichtingenModel::get($parts[0]);
 					break;
@@ -241,5 +265,4 @@ class ProfielController extends AclController {
 		}
 		$this->view = new LedenMemoryScoreResponse($data);
 	}
-
 }

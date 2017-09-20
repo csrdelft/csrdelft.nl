@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\model;
+use CsrDelft\model\entity\ExecutionTime;
+use CsrDelft\Orm\PersistenceModel;
 
 /**
  * TimerModel.class.php
@@ -8,7 +11,7 @@
  */
 class TimerModel extends PersistenceModel {
 
-	const ORM = 'ExecutionTime';
+	const ORM = ExecutionTime::class;
 
 	protected static $instance;
 	/**
@@ -24,6 +27,7 @@ class TimerModel extends PersistenceModel {
 	public function log() {
 		$time = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
 		$req = substr(REQUEST_URI, 0, 255);
+		/** @var ExecutionTime $measurement */
 		$measurement = $this->retrieveByPrimaryKey(array($req));
 		if ($measurement) {
 			$measurement->counter++;

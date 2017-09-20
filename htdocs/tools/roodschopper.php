@@ -1,5 +1,13 @@
 <?php
 
+use function CsrDelft\email_like;
+use CsrDelft\model\security\LoginModel;
+use function CsrDelft\redirect;
+use CsrDelft\Roodschopper;
+use CsrDelft\RoodschopperContent;
+use function CsrDelft\setMelding;
+use CsrDelft\view\CsrLayoutPage;
+
 require_once 'configuratie.include.php';
 require_once 'roodschopper.class.php';
 require_once 'roodschoppercontent.class.php';
@@ -9,6 +17,7 @@ require_once 'roodschoppercontent.class.php';
  * 
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  *
+ * @deprecated
  */
 //Alleen voor admins, maalcie en Soccie. LET OP: SocCie kan nu ook een maalciemail versturen.
 if (!LoginModel::mag('P_LEDEN_MOD,commissie:MaalCie,commissie:SocCie')) {

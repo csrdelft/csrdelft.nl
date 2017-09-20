@@ -53,8 +53,8 @@ Om inzicht te krijgen in de kwantiteit en kwaliteit van de maaltijden kunt u hie
 	<tbody>
 		{foreach from=$beoordelen key=mid item=maaltijd}
 			<tr>
-				<td>{$maaltijd->getDatum()|date_format:"%a %e %b"}</td>
-				<td>{$maaltijd->getTitel()}</td>
+				<td>{$maaltijd->datum|date_format:"%a %e %b"}</td>
+				<td>{$maaltijd->titel}</td>
 				<td>{$kwantiteit.$mid->view()}</td>
 				<td>{$kwaliteit.$mid->view()}</td>
 			</tr>

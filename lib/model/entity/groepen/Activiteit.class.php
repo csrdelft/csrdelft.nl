@@ -1,17 +1,22 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
 
-require_once 'model/entity/groepen/ActiviteitSoort.enum.php';
-require_once 'model/entity/groepen/Ketzer.class.php';
+use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\groepen\leden\ActiviteitDeelnemersModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Entity\T;
+
 
 /**
  * Activiteit.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Activiteit extends Ketzer implements Agendeerbaar {
 
-	const leden = 'ActiviteitDeelnemersModel';
+	const leden = ActiviteitDeelnemersModel::class;
 
 	/**
 	 * Intern / Extern / SjaarsActie / etc.
@@ -38,7 +43,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'soort'				 => array(T::Enumeration, false, 'ActiviteitSoort'),
+		'soort'				 => array(T::Enumeration, false, ActiviteitSoort::class),
 		'rechten_aanmelden'	 => array(T::String, true),
 		'locatie'			 => array(T::String, true),
 		'in_agenda'			 => array(T::Boolean)
@@ -55,15 +60,15 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 
 	/**
 	 * Has permission for action?
-	 * 
+	 *
 	 * @param AccessAction $action
 	 * @return boolean
 	 */
 	public function mag($action) {
 		switch ($action) {
 
-			case A::Bekijken:
-			case A::Aanmelden:
+			case AccessAction::Bekijken:
+			case AccessAction::Aanmelden:
 				if (!empty($this->rechten_aanmelden) AND ! LoginModel::mag($this->rechten_aanmelden)) {
 					return false;
 				}
@@ -74,7 +79,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
-	 * 
+	 *
 	 * @param AccessAction $action
 	 * @param string $soort
 	 * @return boolean

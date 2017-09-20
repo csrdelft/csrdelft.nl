@@ -1,12 +1,14 @@
 <?php
+namespace CsrDelft\controller\groepen;
 
-require_once 'controller/groepen/KetzersController.class.php';
+use CsrDelft\model\groepen\ActiviteitenModel;
+
 
 /**
- * ActiviteitenController.class.php
- * 
+ * ApiActiviteitenController.class.php
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller voor activiteiten.
  */
 class ActiviteitenController extends KetzersController {

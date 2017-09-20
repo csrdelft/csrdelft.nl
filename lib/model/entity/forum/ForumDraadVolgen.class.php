@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\forum;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * ForumDraadVolgen.class.php

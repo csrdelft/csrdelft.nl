@@ -1,18 +1,33 @@
-/* sine regno 2016*/
-/** rood: #EE343F*/
-/** donker-turquoise : #05877d*/
-/**/
+/* sine regno 2017*/
+@font-face {
+	font-family: geek;
+	src: url('/assets/layout/fonts/geek.eot');
+	src: url('/assets/layout/fonts/geek.eot?#iefix') format('embedded-opentype'),
+	url('/assets/layout/fonts/geek.woff') format('woff'),
+	url('/assets/layout/fonts/geek.ttf') format('truetype'),
+	url('/assets/layout/fonts/geek.svg#abril_fatfaceregular') format('svg');
+	src: url(/assets/layout/fonts/geek.ttf) format("truetype");
+}
+
+* {
+	font-family: geek, FontAwesome, sans-serif !important;
+}
 
 /*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
 #cd-zijbalk, #forumtabel th, .cd-primary-nav ul {
-	background-color: #0b8849 !important;
+	background-color: #2986c1 !important;
 }
 
-/*Koppen in het rood*/
+/*Koppen in het wit*/
 h1, a, a:hover,
 .cd-primary-nav > li > a:hover,
 .cd-primary-nav > li > a.selected {
-	color: #fd892c;
+	color: #b6b6b6;
+}
+
+/* Lijntje tussen ongelezen en gelezen berichten */
+#forumtabel tr.ongelezenvanaf td {
+	background-color: #e87023 !important;
 }
 
 
@@ -35,7 +50,7 @@ h1, a, a:hover,
 /*Streepje onder naam*/
 .cd-primary-nav > li > a:hover,
 .cd-primary-nav > li > a.selected {
-	box-shadow: inset 0 -2px 0 #fd892c;
+	box-shadow: inset 0 -2px 0 #2986c1;
 }
 
 
@@ -50,7 +65,7 @@ h1, a, a:hover,
 
 /*Zijbalk grens van het scherm in rood*/
 #cd-zijbalk {
-	border-color: #fd892c;
+	border-color: white;
 }
 
 /*OWee logo met gradient*/
@@ -66,18 +81,18 @@ h1, a, a:hover,
 /*Knoppen in blauw gradient*/
 .btn, input[type=submit], input[type=button], .progress-bar-info, .btn:focus,
 input[type=submit]:focus, input[type=button]:focus {
-	background-image: linear-gradient(to bottom, #0b8849, #15b062);
+	background-image: linear-gradient(to bottom, #e88039, #fda355);
 	border: none !important;
 }
 
 /*Voor een mouse hover wordt de gradient omgedraaid*/
 .btn:hover, input[type=submit]:hover, input[type=button]:hover {
-	background-image: linear-gradient(to bottom, #15b062, #0b8849);
+	background-image: linear-gradient(to bottom, #fda355, #e88039);
 	border: none !important;
 }
 
 /*Actieve knoppen iets ruimere kleuren -> zo ontstaat verschil tussen hover en active*/
 .btn.active {
-	background-image: linear-gradient(to bottom, #18bb69, #10663a);
+	background-image: linear-gradient(to bottom, #fda049, #e85c0e);
 	border: none !important;
 }

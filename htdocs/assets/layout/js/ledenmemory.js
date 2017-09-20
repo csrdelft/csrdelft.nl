@@ -1,8 +1,5 @@
 
 $(document).ready(function () {
-
-	$.backstretch('/assets/layout2/plaetjes/bg-image-16.jpg');
-
 	var first = true;
 	var delayed = false;
 	var learnmode = document.title.indexOf('oefenen') >= 0;
@@ -10,122 +7,50 @@ $(document).ready(function () {
 	var flip1 = false;
 	var flip2 = false;
 
-	$('.memorycard').click(function () {
-
-		flipback(); // gebruiker hoeft niet te wachten op delayed flipback
-
-		if (first) { // start de tijd
-			first = false;
-			starttijd = new Date();
-			update_title();
-		}
-
-		if ($(this).hasClass('goed')) { // goed?
-			// ignore
-		}
-		else if (learnmode) { // faden?
-
-			if (flip1 && flip2) {
-				alert('reset failed');
-			}
-			else if (flip1) { // dit is de tweede
-
-				if (($(this).hasClass('naam') && flip1.hasClass('pasfoto')) || ($(this).hasClass('pasfoto') && flip1.hasClass('naam'))) {
-					flip2 = $(this);
-					if (flip2.hasClass('pasfoto')) {
-						$('.memorycard.pasfoto').not(flip2).fadeTo('fast', 0.5);
-					}
-					else if (flip2.hasClass('naam')) {
-						$('.memorycard.naam').not(flip2).fadeTo('fast', 0.5);
-					}
-					else {
-						alert('error');
-					}
-
-					check_correctness();
-				}
-				else {
-					// ignore
-				}
-
-			}
-			else { // dit is de eerste
-
-				flip1 = $(this);
-				if (flip1.hasClass('pasfoto')) {
-					$('.memorycard.pasfoto').not(flip1).fadeTo('slow', 0.3);
-				}
-				else if (flip1.hasClass('naam')) {
-					$('.memorycard.naam').not(flip1).fadeTo('slow', 0.3);
-				}
-				else {
-					alert('error');
-				}
-
-			}
-
-		}
-		else { // omdraaien?
-
-			if ($(this).hasClass('flipped')) {
-
-				if (flip1.get(0) === $(this).get(0)) {
-					// ignore
-				}
-				else if (flip2.get(0) === $(this).get(0)) {
-					// ignore
-				}
-				else {
-					alert('flipback failed');
-				}
-			}
-			else {
-
-				if (flip1 && flip2) {
-					alert('reset failed');
-				}
-				else if (flip1) { // dit is de tweede
-
-					if (($(this).hasClass('naam') && flip1.hasClass('pasfoto')) || ($(this).hasClass('pasfoto') && flip1.hasClass('naam'))) {
-						flip2 = $(this);
-						flip2.addClass('flipped');
-
-						check_correctness();
-					}
-					else {
-						// ignore
-					}
-
-				}
-				else { // dit is de eerste
-					flip1 = $(this);
-					flip1.addClass('flipped');
-				}
-
-			}
-		}
-
-	});
-
 	var beurten = 0;
 	var goed = 0;
 	var starttijd;
 
-	function check_correctness() {
+	function showReel() {
+		var content = '<div class="box"><table><tbody><tr><td>';
+		if (flip1.hasClass('pasfoto')) {
+			content += flip1.find('img').parent().html();
+			content += '</td><td><h3>' + flip2.find('h3').attr('title') + '</h3>';
+		} else if (flip2.hasClass('pasfoto')) {
+			content += flip2.find('img').parent().html();
+			content += '</td><td><h3>' + flip1.find('h3').attr('title') + '</h3>';
+		} else {
+			alert('error');
+		}
+		content += '</td></tr></tbody></table></div>';
+		var box = $(content).appendTo('body');
+		box.animate({
+			left: '60%'
+		}, 'slow', function () {
+			$(this).css('left', '60%');
+		});
+
+		$(box).delay(1200).animate({
+			left: '-50%'
+		}, 'slow', function () {
+			$(box).remove();
+		});
+	}
+
+	function checkCorrectness() {
 		beurten += 1;
 
 		if (flip1.attr('uid') === flip2.attr('uid')) { // goed
 			flip1.addClass('goed');
 			flip2.addClass('goed');
 			goed += 1;
-			show_reel();
+			showReel();
 		}
 
 		if ($('.memorycard').length === $('.memorycard.goed').length) { // einde: toon alles
 			finished = true;
 			$('.memorycard').addClass('flipped').fadeTo('fast', 0.5);
-		}
-		else {
+		} else {
 			delayed = true;
 			window.setTimeout(flipback, 1000);
 		}
@@ -140,17 +65,14 @@ $(document).ready(function () {
 				if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
 					flip1.removeClass('flipped');
 					flip2.removeClass('flipped');
-				}
-				else {
+				} else {
 					$('.memorycard[uid=' + flip1.attr('uid') + ']').not(flip1).effect('shake');
 				}
-			}
-			else {
+			} else {
 				if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
 					flip1.fadeTo('slow', 0.5);
 					flip2.fadeTo('slow', 0.5);
-				}
-				else {
+				} else {
 					flip1.removeClass('flipped');
 					flip2.removeClass('flipped');
 				}
@@ -160,7 +82,7 @@ $(document).ready(function () {
 		}
 	}
 
-	function update_title() {
+	function updateTitle() {
 
 		var nu = new Date();
 		var seconds = (nu - starttijd) / 1000;
@@ -170,7 +92,7 @@ $(document).ready(function () {
 		document.title = goed + '/' + beurten + ' (' + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + ')';
 
 		if (!finished) {
-			return window.setTimeout(update_title, 1000);
+			return window.setTimeout(updateTitle, 1000);
 		}
 		// einde: stop de tijd
 
@@ -210,35 +132,89 @@ $(document).ready(function () {
 		}
 		$('<div id="dialog-finish" class="blue">' + content + '</div>').appendTo('body');
 
-		$("#dialog-finish").dialog(dialog);
+		$('#dialog-finish').dialog(dialog);
 	}
 
-	function show_reel() {
-		var content = '<div class="box"><table><tbody><tr><td>';
-		if (flip1.hasClass('pasfoto')) {
-			content += flip1.find('img').parent().html();
-			content += '</td><td><h3>' + flip2.find('h3').attr('title') + '</h3>';
-		}
-		else if (flip2.hasClass('pasfoto')) {
-			content += flip2.find('img').parent().html();
-			content += '</td><td><h3>' + flip1.find('h3').attr('title') + '</h3>';
-		}
-		else {
-			alert('error');
-		}
-		content += '</td></tr></tbody></table></div>';
-		var box = $(content).appendTo('body');
-		box.animate({
-			left: '60%'
-		}, 'slow', function () {
-			$(this).css('left', '60%');
-		});
+	$('.memorycard').click(function () {
 
-		$(box).delay(1200).animate({
-			left: '-50%'
-		}, 'slow', function () {
-			$(box).remove();
-		});
-	}
+		flipback(); // gebruiker hoeft niet te wachten op delayed flipback
+
+		if (first) { // start de tijd
+			first = false;
+			starttijd = new Date();
+			updateTitle();
+		}
+
+		if ($(this).hasClass('goed')) { // goed?
+			// ignore
+		} else if (learnmode) { // faden?
+
+			if (flip1 && flip2) {
+				alert('reset failed');
+			} else if (flip1) { // dit is de tweede
+
+				if (($(this).hasClass('naam') && flip1.hasClass('pasfoto')) || ($(this).hasClass('pasfoto') && flip1.hasClass('naam'))) {
+					flip2 = $(this);
+					if (flip2.hasClass('pasfoto')) {
+						$('.memorycard.pasfoto').not(flip2).fadeTo('fast', 0.5);
+					} else if (flip2.hasClass('naam')) {
+						$('.memorycard.naam').not(flip2).fadeTo('fast', 0.5);
+					} else {
+						alert('error');
+					}
+
+					checkCorrectness();
+				} else {
+					// ignore
+				}
+
+			} else { // dit is de eerste
+
+				flip1 = $(this);
+				if (flip1.hasClass('pasfoto')) {
+					$('.memorycard.pasfoto').not(flip1).fadeTo('slow', 0.3);
+				} else if (flip1.hasClass('naam')) {
+					$('.memorycard.naam').not(flip1).fadeTo('slow', 0.3);
+				} else {
+					alert('error');
+				}
+
+			}
+
+		} else { // omdraaien?
+
+			if ($(this).hasClass('flipped')) {
+
+				if (flip1.get(0) === $(this).get(0)) {
+					// ignore
+				} else if (flip2.get(0) === $(this).get(0)) {
+					// ignore
+				} else {
+					alert('flipback failed');
+				}
+			} else {
+
+				if (flip1 && flip2) {
+					alert('reset failed');
+				} else if (flip1) { // dit is de tweede
+
+					if (($(this).hasClass('naam') && flip1.hasClass('pasfoto')) || ($(this).hasClass('pasfoto') && flip1.hasClass('naam'))) {
+						flip2 = $(this);
+						flip2.addClass('flipped');
+
+						checkCorrectness();
+					} else {
+						// ignore
+					}
+
+				} else { // dit is de eerste
+					flip1 = $(this);
+					flip1.addClass('flipped');
+				}
+
+			}
+		}
+
+	});
 
 });

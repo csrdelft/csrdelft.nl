@@ -16,14 +16,14 @@
 			{if $smarty.foreach.taken.first}{* eerste taak van functie: reset ingedeeld-teller *}
 				{counter assign=count start=0}
 				{if $smarty.foreach.functie.first}
-		<div class="inline niet-dik" style="width: 80px;">{$taak->getDatum()|date_format:"%a %e %b"}</div>
+		<div class="inline niet-dik" style="width: 80px;">{$taak->datum|date_format:"%a %e %b"}</div>
 				{/if}
 		<div class="inline" style="width: 70px;">
 			<span title="{$taak->getCorveeFunctie()->naam}">
 				&nbsp;{$taak->getCorveeFunctie()->afkorting}:&nbsp;
 			</span>
 			{/if}
-			{if $taak->getUid()}{* ingedeelde taak van functie: teller++ *}
+			{if $taak->uid}{* ingedeelde taak van functie: teller++ *}
 				{counter}
 			{/if}
 			{if $smarty.foreach.taken.last}{* laatste taak van functie: toon ingedeeld-teller en totaal aantal taken van deze functie *}

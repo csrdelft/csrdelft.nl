@@ -1,6 +1,15 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'view/RechtenView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\security\AccessControl;
+use CsrDelft\model\security\AccessModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\RechtenData;
+use CsrDelft\view\RechtenForm;
+use CsrDelft\view\RechtenTable;
+
 
 /**
  * RechtenController.class.php
@@ -8,6 +17,8 @@ require_once 'view/RechtenView.class.php';
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller van de ACL.
+ *
+ * @property AccessModel $model
  */
 class RechtenController extends AclController {
 
@@ -62,6 +73,7 @@ class RechtenController extends AclController {
 		if (!isset($selection[0])) {
 			$this->exit_http(403);
 		}
+		/** @var AccessControl $ac */
 		$ac = $this->model->retrieveByUUID($selection[0]);
 		$form = new RechtenForm($ac, $this->action);
 		if ($form->validate()) {
@@ -78,6 +90,7 @@ class RechtenController extends AclController {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$response = array();
 		foreach ($selection as $UUID) {
+			/** @var AccessControl $ac */
 			$ac = $this->model->retrieveByUUID($UUID);
 			$this->model->setAcl($ac->environment, $ac->resource, array(
 				$ac->action => null

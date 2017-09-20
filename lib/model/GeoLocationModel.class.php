@@ -1,4 +1,8 @@
 <?php
+namespace CsrDelft\model;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\GeoLocation;
+use CsrDelft\Orm\PersistenceModel;
 
 /**
  * GeoLocationModel.class.php
@@ -8,7 +12,7 @@
  */
 class GeoLocationModel extends PersistenceModel {
 
-	const ORM = 'GeoLocation';
+	const ORM = GeoLocation::class;
 
 	protected static $instance;
 	/**

@@ -1,15 +1,24 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/CourantModel.class.php';
-require_once 'view/courant/CourantView.class.php';
-require_once 'view/courant/CourantBeheerView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\CourantModel;
+use function CsrDelft\redirect;
+use function CsrDelft\setMelding;
+use CsrDelft\view\courant\CourantArchiefView;
+use CsrDelft\view\courant\CourantBeheerView;
+use CsrDelft\view\courant\CourantView;
+use CsrDelft\view\CsrLayoutPage;
+
 
 /**
  * CourantController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van de courant.
+ *
+ * @property CourantModel $model
  */
 class CourantController extends AclController {
 
@@ -56,8 +65,7 @@ class CourantController extends AclController {
 	}
 
 	public function archief() {
-		require_once 'view/courant/CourantArchiefView.class.php';
-		$body = new CourantArchiefView($this->model);
+				$body = new CourantArchiefView($this->model);
 		$this->view = new CsrLayoutPage($body);
 	}
 
@@ -74,6 +82,7 @@ class CourantController extends AclController {
 					if (isset($_SESSION['compose_snapshot'])) {
 						$_SESSION['compose_snapshot'] = null;
 					}
+					redirect("/courant");
 				} else {
 					setMelding('Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.', -1);
 				}
@@ -116,7 +125,7 @@ class CourantController extends AclController {
 		} else {
 			setMelding('Uw bericht is niet verwijderd.', -1);
 		}
-		$this->toevoegen();
+		redirect("/courant");
 	}
 
 	public function verzenden($iedereen = null) {

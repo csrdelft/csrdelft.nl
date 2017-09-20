@@ -1,7 +1,23 @@
 <?php
+namespace CsrDelft\controller;
 
-require_once 'model/GesprekkenModel.class.php';
-require_once 'view/GesprekkenView.class.php';
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\gesprekken\GesprekBerichtenModel;
+use CsrDelft\model\gesprekken\GesprekDeelnemersModel;
+use CsrDelft\model\gesprekken\GesprekkenModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\gesprekken\BerichtenResponse;
+use CsrDelft\view\gesprekken\GesprekBerichtForm;
+use CsrDelft\view\gesprekken\GesprekDeelnemerToevoegenForm;
+use CsrDelft\view\gesprekken\GesprekForm;
+use CsrDelft\view\gesprekken\GesprekkenResponse;
+use CsrDelft\view\gesprekken\GesprekkenView;
+use CsrDelft\view\JsonResponse;
+use function CsrDelft\getDateTime;
+
 
 /**
  * GesprekkenController.class.php

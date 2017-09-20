@@ -1,21 +1,27 @@
 <?php
+namespace CsrDelft\model\maalcie;
+use CsrDelft\common\CsrGebruikerException;
+use function CsrDelft\group_by;
+use CsrDelft\model\entity\maalcie\CorveeFunctie;
+use CsrDelft\model\entity\maalcie\CorveeKwalificatie;
+use CsrDelft\Orm\CachedPersistenceModel;
 
 /**
  * KwalificatiesModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class KwalificatiesModel extends CachedPersistenceModel {
 
-	const ORM = 'CorveeKwalificatie';
+	const ORM = CorveeKwalificatie::class;
 	const DIR = 'maalcie/';
 
 	protected static $instance;
 
 	/**
 	 * Lazy loading of corveefunctie.
-	 * 
+	 *
 	 * @return CorveeKwalificatie[]
 	 */
 	public function getAlleKwalificaties() {
@@ -28,7 +34,7 @@ class KwalificatiesModel extends CachedPersistenceModel {
 
 	/**
 	 * Eager loading of corveefuncties.
-	 * 
+	 *
 	 * @param string $uid
 	 * @return CorveeFunctie[]
 	 */
@@ -49,7 +55,7 @@ class KwalificatiesModel extends CachedPersistenceModel {
 
 	public function kwalificatieToewijzen(CorveeKwalificatie $kwali) {
 		if ($this->existsByPrimaryKey($kwali->getValues(true))) {
-			throw new Exception('Is al gekwalificeerd!');
+			throw new CsrGebruikerException('Is al gekwalificeerd!');
 		}
 		$this->create($kwali);
 	}
@@ -57,7 +63,7 @@ class KwalificatiesModel extends CachedPersistenceModel {
 	public function kwalificatieIntrekken($uid, $fid) {
 		$rowCount = $this->deleteByPrimaryKey(array($uid, $fid));
 		if ($rowCount !== 1) {
-			throw new Exception('Is niet gekwalificeerd!');
+			throw new CsrGebruikerException('Is niet gekwalificeerd!');
 		}
 	}
 

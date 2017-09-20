@@ -1,13 +1,14 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
-require_once 'model/maalcie/KwalificatiesModel.class.php';
-require_once 'model/maalcie/CorveeVrijstellingenModel.class.php';
-require_once 'model/maalcie/CorveePuntenModel.class.php';
-require_once 'model/maalcie/CorveeVoorkeurenModel.class.php';
+use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\ProfielModel;
 
 /**
  * CorveeToewijzenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
+ *
  */
 class CorveeToewijzenModel {
 
@@ -18,10 +19,10 @@ class CorveeToewijzenModel {
 	 *
 	 * @param CorveeTaak $taak
 	 * @return array
-	 * @throws Exception
+	 * @throws CsrGebruikerException
 	 */
 	public static function getSuggesties(CorveeTaak $taak) {
-		$vrijstellingen = CorveeVrijstellingenModel::getAlleVrijstellingen(true); // grouped by uid
+		$vrijstellingen = CorveeVrijstellingenModel::instance()->getAlleVrijstellingen(true); // grouped by uid
 		$functie = $taak->getCorveeFunctie();
 		if ($functie->kwalificatie_benodigd) { // laad alleen gekwalificeerde leden
 			$lijst = array();
@@ -30,7 +31,7 @@ class CorveeToewijzenModel {
 				$uid = $kwali->uid;
 				$profiel = ProfielModel::get($uid); // false if lid does not exist
 				if (!$profiel) {
-					throw new Exception('Lid bestaat niet: $uid =' . $uid);
+					throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 				}
 				if (!$profiel->isLid()) {
 					continue; // geen oud-lid of overleden lid
@@ -38,7 +39,7 @@ class CorveeToewijzenModel {
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
 					$datum = $taak->getBeginMoment();
-					if ($datum >= strtotime($vrijstelling->getBeginDatum()) && $datum <= strtotime($vrijstelling->getEindDatum())) {
+					if ($datum >= strtotime($vrijstelling->begin_datum) && $datum <= strtotime($vrijstelling->eind_datum)) {
 						continue; // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 				}
@@ -57,11 +58,11 @@ class CorveeToewijzenModel {
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
 					$datum = $taak->getBeginMoment();
-					if ($datum >= strtotime($vrijstelling->getBeginDatum()) && $datum <= strtotime($vrijstelling->getEindDatum())) {
+					if ($datum >= strtotime($vrijstelling->begin_datum) && $datum <= strtotime($vrijstelling->eind_datum)) {
 						unset($lijst[$uid]); // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 					// corrigeer prognose in suggestielijst vóór de aanvang van de vrijstellingsperiode
-					if ($vrijstelling !== null && $datum < strtotime($vrijstelling->getBeginDatum())) {
+					if ($vrijstelling !== null && $datum < strtotime($vrijstelling->begin_datum)) {
 						$lijst[$uid]['prognose'] -= $vrijstelling->getPunten();
 					}
 				}
@@ -69,14 +70,14 @@ class CorveeToewijzenModel {
 			$sorteer = 'sorteerPrognose';
 		}
 		foreach ($lijst as $uid => $punten) {
-			$lijst[$uid]['laatste'] = CorveeTakenModel::getLaatsteTaakVanLid($uid);
-			if ($lijst[$uid]['laatste'] !== null && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime(Instellingen::get('corvee', 'suggesties_recent_verbergen'), $taak->getBeginMoment())) {
+			$lijst[$uid]['laatste'] = CorveeTakenModel::instance()->getLaatsteTaakVanLid($uid);
+			if ($lijst[$uid]['laatste'] !== false && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime(InstellingenModel::get('corvee', 'suggesties_recent_verbergen'), $taak->getBeginMoment())) {
 				$lijst[$uid]['recent'] = true;
 			} else {
 				$lijst[$uid]['recent'] = false;
 			}
-			if ($taak->getCorveeRepetitieId() !== null) {
-				$lijst[$uid]['voorkeur'] = CorveeVoorkeurenModel::getHeeftVoorkeur($taak->getCorveeRepetitieId(), $uid);
+			if ($taak->crv_repetitie_id !== null) {
+				$lijst[$uid]['voorkeur'] = CorveeVoorkeurenModel::instance()->getHeeftVoorkeur($taak->crv_repetitie_id, $uid);
 			} else {
 				$lijst[$uid]['voorkeur'] = false;
 			}
@@ -86,12 +87,12 @@ class CorveeToewijzenModel {
 	}
 
 	static function sorteerKwali($a, $b) {
-		if ($a['laatste'] !== null && $b['laatste'] !== null) {
+		if ($a['laatste'] !== false && $b['laatste'] !== false) {
 			$a = $a['laatste']->getBeginMoment();
 			$b = $b['laatste']->getBeginMoment();
-		} elseif ($a['laatste'] === null) {
+		} elseif ($a['laatste'] === false) {
 			return -1;
-		} elseif ($b['laatste'] === null) {
+		} elseif ($b['laatste'] === false) {
 			return 1;
 		} else {
 			$a = $a['aantal'];
@@ -119,5 +120,3 @@ class CorveeToewijzenModel {
 	}
 
 }
-
-?>

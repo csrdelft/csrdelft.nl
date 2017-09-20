@@ -1,24 +1,32 @@
 <?php
+namespace CsrDelft\view\maalcie\forms;
 
-require_once 'model/maalcie/MaaltijdenModel.class.php';
+use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\getalvelden\RequiredIntField;
+use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\keuzevelden\DateField;
+use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use CsrDelft\view\formulier\ModalForm;
 
 /**
  * TaakForm.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Formulier voor een nieuwe of te bewerken corveetaak.
- * 
+ *
  */
 class TaakForm extends ModalForm {
 
-	public function __construct($tid, $fid = null, $uid = null, $crid = null, $mid = null, $datum = null, $punten = null, $bonus_malus = null) {
-		parent::__construct(null, maalcieUrl . '/opslaan/' . $tid);
+	public function __construct(CorveeTaak $taak, $action) {
+		parent::__construct($taak, maalcieUrl . '/' . $action);
 
-		if (!is_int($tid) || $tid < 0) {
-			throw new Exception('invalid tid');
-		}
-		if ($tid === 0) {
+		if ($taak->taak_id === null) {
 			$this->titel = 'Corveetaak aanmaken';
 		} else {
 			$this->titel = 'Corveetaak wijzigen';
@@ -30,22 +38,23 @@ class TaakForm extends ModalForm {
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->functie_id] = $functie->naam;
 			$functiePunten .= 'punten[' . $functie->functie_id . ']=' . $functie->standaard_punten . ';';
-			if ($punten === null) {
-				$punten = $functie->standaard_punten;
+			if ($taak->punten === null) {
+				$taak->punten = $functie->standaard_punten;
 			}
 		}
 
-		$fields['fid'] = new SelectField('functie_id', $fid, 'Functie', $functieNamen);
-		$fields['fid']->onchange = $functiePunten . "$('#field_punten').val(punten[this.value]);";
-		$fields['lid'] = new LidField('uid', $uid, 'Naam of lidnummer');
+		$fields['fid'] = new SelectField('functie_id', $taak->functie_id, 'Functie', $functieNamen);
+		$fields['fid']->onchange = $functiePunten . "$('.punten_field').val(punten[this.value]);";
+		$fields['lid'] = new LidField('uid', $taak->uid, 'Naam of lidnummer');
 		$fields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
-		$fields[] = new DateField('datum', $datum, 'Datum', date('Y') + 2, date('Y') - 2);
-		$fields[] = new IntField('punten', $punten, 'Punten', 0, 10);
-		$fields[] = new IntField('bonus_malus', $bonus_malus, 'Bonus/malus', -10, 10);
-		$fields['crid'] = new IntField('crv_repetitie_id', $crid, null);
+		$fields[] = new DateField('datum', $taak->datum, 'Datum', date('Y') + 2, date('Y') - 2);
+		$fields['ptn'] = new RequiredIntField('punten', $taak->punten, 'Punten', 0, 10);
+		$fields['ptn']->css_classes[] = 'punten_field';
+		$fields[] = new RequiredIntField('bonus_malus', $taak->bonus_malus, 'Bonus/malus', -10, 10);
+		$fields['crid'] = new IntField('crv_repetitie_id', $taak->crv_repetitie_id, null);
 		$fields['crid']->readonly = true;
 		$fields['crid']->hidden = true;
-		$fields['mid'] = new IntField('maaltijd_id', $mid, 'Gekoppelde maaltijd', 0);
+		$fields['mid'] = new IntField('maaltijd_id', $taak->maaltijd_id, 'Gekoppelde maaltijd', 0);
 		$fields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
 		$fields[] = new FormDefaultKnoppen();
 
@@ -57,8 +66,8 @@ class TaakForm extends ModalForm {
 		$fields = $this->getFields();
 		if (is_int($fields['mid']->getValue())) {
 			try {
-				MaaltijdenModel::getMaaltijd($fields['mid']->getValue(), true);
-			} catch (Exception $e) {
+				MaaltijdenModel::instance()->getMaaltijd($fields['mid']->getValue(), true);
+			} catch (CsrGebruikerException $e) {
 				$fields['mid']->error = 'Maaltijd bestaat niet.';
 				$valid = false;
 			}

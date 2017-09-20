@@ -1,25 +1,30 @@
 <?php
+namespace CsrDelft\model\maalcie;
 
-require_once 'model/maalcie/KwalificatiesModel.class.php';
+use CsrDelft\common\CsrGebruikerException;
+use function CsrDelft\group_by_distinct;
+use CsrDelft\model\entity\maalcie\CorveeFunctie;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\Orm\CachedPersistenceModel;
 
 /**
  * FunctiesModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class FunctiesModel extends CachedPersistenceModel {
 
-	const ORM = 'CorveeFunctie';
+	const ORM = CorveeFunctie::class;
 	const DIR = 'maalcie/';
 
 	protected static $instance;
 
 	/**
 	 * Lazy loading of kwalificaties.
-	 * 
+	 *
 	 * @param int $fid
-	 * @return CorveeFunctie[]
+	 * @return CorveeFunctie
 	 */
 	public static function get($fid) {
 		return static::instance()->retrieveByPrimaryKey(array($fid));
@@ -27,7 +32,7 @@ class FunctiesModel extends CachedPersistenceModel {
 
 	/**
 	 * Optional eager loading of kwalificaties.
-	 * 
+	 *
 	 * @param boolean $load_kwalificaties
 	 * @return CorveeFunctie[]
 	 */
@@ -37,19 +42,19 @@ class FunctiesModel extends CachedPersistenceModel {
 
 	public function nieuw() {
 		$functie = new CorveeFunctie();
-		$functie->kwalificatie_benodigd = (boolean) Instellingen::get('corvee', 'standaard_kwalificatie');
+		$functie->kwalificatie_benodigd = (boolean) InstellingenModel::get('corvee', 'standaard_kwalificatie');
 		return $functie;
 	}
 
 	public function removeFunctie(CorveeFunctie $functie) {
-		if (CorveeTakenModel::existFunctieTaken($functie->functie_id)) {
-			throw new Exception('Verwijder eerst de bijbehorende corveetaken!');
+		if (CorveeTakenModel::instance()->existFunctieTaken($functie->functie_id)) {
+			throw new CsrGebruikerException('Verwijder eerst de bijbehorende corveetaken!');
 		}
-		if (CorveeRepetitiesModel::existFunctieRepetities($functie->functie_id)) {
-			throw new Exception('Verwijder eerst de bijbehorende corveerepetities!');
+		if (CorveeRepetitiesModel::instance()->existFunctieRepetities($functie->functie_id)) {
+			throw new CsrGebruikerException('Verwijder eerst de bijbehorende corveerepetities!');
 		}
 		if ($functie->hasKwalificaties()) {
-			throw new Exception('Verwijder eerst de bijbehorende kwalificaties!');
+			throw new CsrGebruikerException('Verwijder eerst de bijbehorende kwalificaties!');
 		}
 		return $this->delete($functie);
 	}

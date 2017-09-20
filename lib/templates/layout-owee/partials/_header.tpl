@@ -2,20 +2,18 @@
 <html>
 
 <head>
-    <meta name="description" content="{Instellingen::get('stek', 'beschrijving')}">
+    <meta name="description" content="{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}">
     <meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE"/>
     <meta property="og:url" content="{$smarty.const.CSR_ROOT}{$REQUEST_URI}"/>
     <meta property="og:title" content="C.S.R. Delft | {$titel}"/>
     <meta property="og:locale" content="nl_nl"/>
     <meta property="og:image" content="{$smarty.const.CSR_ROOT}/assets/layout/plaetjes/beeldmerk.png"/>
-    <meta property="og:description" content="{Instellingen::get('stek', 'beschrijving')}"/>
+    <meta property="og:description" content="{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C.S.R. Delft - {$titel}</title>
     <link rel="shortcut icon" href="{$smarty.const.CSR_ROOT}/assets/layout/plaetjes/favicon.ico"/>
     <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"
           href="{$smarty.const.CSR_ROOT}/forum/rss.xml"/>
-    <!--[if lte IE 8]>
-    <script src="/assets/layout-owee/js/html5shiv.js"></script><![endif]-->
     {foreach from=$stylesheets item=sheet}
         <link rel="stylesheet" href="{$sheet}" type="text/css"/>
     {/foreach}
@@ -23,7 +21,6 @@
           href="https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic"/>
     <!--[if lte IE 9]>
     <link rel="stylesheet" href="/assets/layout-owee/css/ie9.css"/><![endif]-->
-    <script src='https://www.google.com/recaptcha/api.js?hl=nl'></script>
     {foreach from=$scripts item=script}
         <script type="text/javascript" src="{$script}"></script>
     {/foreach}
@@ -44,15 +41,17 @@
 
     <!-- Loginform -->
     <nav id="login">
+        <a href="#_" class="overlay"></a>
         <div class="inner">
             <h2>Inloggen</h2>
             {$loginform->view()}
-            <a href="#" class="close">Close</a>
+            <a href="#_" class="close">Close</a>
         </div>
     </nav>
 
     <!-- Menu -->
     <nav id="menu">
+        <a href="#_" class="overlay"></a>
         <div class="inner">
             <h2>Menu</h2>
             <ul class="links">
@@ -62,8 +61,8 @@
                 <li><a href="/forum">Forum</a></li>
                 <li><a href="/forum/deel/12">Kamers zoeken/aanbieden</a></li>
                 <li><a href="/contact">Contactinformatie</a></li>
-                <li><a href="/contact/sponsoring">Bedrijven</a></li>
+                <li><a href="/contact/bedrijven">Bedrijven</a></li>
             </ul>
-            <a href="#" class="close">Close</a>
+            <a href="#_" class="close">Close</a>
         </div>
     </nav>

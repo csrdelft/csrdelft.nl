@@ -5,7 +5,7 @@
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		</head>
 		<body>
-			<table style="width:98%; border: 1px solid #CCC; font-family:verdana,arial; font-size:12px;">
+			<table style="width:98%; border: 1px solid #CCC; font-family:Verdana, Geneva, Arial, Helvetica, sans-serif; font-size:12px;">
 				<tbody>
 					<tr>
 						<td>

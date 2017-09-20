@@ -6,230 +6,94 @@
 
 (function ($) {
 
-    "use strict";
-
-    $(function () {
-
-        var $window = $(window),
-            $body = $('body'),
-            $header = $('#header'),
-            $banner = $('#banner');
-
-        if (typeof $banner[0] == "undefined") {
-            $banner = $('#banner-small');
-        }
-
-        // Disable animations/transitions until the page has loaded.
-        $body.addClass('is-loading');
-
-        $window.on('load', function () {
-            $body.removeClass('is-loading');
-
-            // Als er een error in de loginform is, dan heeft de gebruiker net geprobeerd in te loggen
-            // Laat dan het loginscherm zien.
-            if ($('#loginform').find('.error').length) {
-                $login._show();
-            }
-        });
-
-        // Fix: Placeholder polyfill.
-        $('form').placeholder();
-
-        if ($banner.length > 0
-            && $header.hasClass('alt')) {
-
-            $window.on('resize', function () {
-                $window.trigger('scroll');
-            });
-
-            $banner.scrollex({
-                bottom: $header.outerHeight(),
-                terminate: function () {
-                    $header.removeClass('alt');
-                },
-                enter: function () {
-                    $header.addClass('alt');
-                },
-                leave: function () {
-                    $header.removeClass('alt');
-                }
-            });
-
-        }
-
-        // Menu.
-        var $menu = $('#menu');
-
-        $menu._locked = false;
-
-        $menu._lock = function () {
-
-            if ($menu._locked)
-                return false;
-
-            $menu._locked = true;
-
-            window.setTimeout(function () {
-                $menu._locked = false;
-            }, 350);
-
-            return true;
-
-        };
-
-        $menu._show = function () {
-
-            if ($menu._lock())
-                $body.addClass('is-menu-visible');
-
-        };
-
-        $menu._hide = function () {
-
-            if ($menu._lock())
-                $body.removeClass('is-menu-visible');
-
-        };
-
-        $menu._toggle = function () {
-
-            if ($menu._lock())
-                $body.toggleClass('is-menu-visible');
-
-        };
-
-        $menu
-            .appendTo($body)
-            .on('click', function (event) {
-
-                event.stopPropagation();
-
-                // Hide.
-                $menu._hide();
-
-            })
-            .find('.inner')
-            .on('click', '.close', function (event) {
-
-                event.preventDefault();
-                event.stopPropagation();
-                event.stopImmediatePropagation();
-
-                // Hide.
-                $menu._hide();
-
-            })
-            .on('click', function (event) {
-                event.stopPropagation();
-            })
-            .on('click', 'a', function (event) {
-
-                var href = $(this).attr('href');
-
-                event.preventDefault();
-                event.stopPropagation();
-
-                // Hide.
-                $menu._hide();
-
-                // Redirect.
-                window.setTimeout(function () {
-                    window.location.href = href;
-                }, 350);
-
-            });
-
-        var $login = $('#login');
-
-        $login._locked = false;
-
-        $login._lock = function () {
-
-            if ($login._locked)
-                return false;
-
-            $login._locked = true;
-
-            window.setTimeout(function () {
-                $login._locked = false;
-            }, 350);
-
-            return true;
-
-        };
-
-        $login._show = function () {
-
-            if ($login._lock())
-                $body.addClass('is-login-visible');
-
-        };
-
-        $login._hide = function () {
-
-            if ($login._lock())
-                $body.removeClass('is-login-visible');
-
-        };
-
-        $login._toggle = function () {
-
-            if ($login._lock())
-                $body.toggleClass('is-login-visible');
-
-        };
-
-        $login
-            .appendTo($body)
-            .on('click', function (event) {
-
-                event.stopPropagation();
-
-                // Hide.
-                $login._hide();
-
-            })
-            .find('.inner')
-            .on('click', '.close', function (event) {
-
-                event.preventDefault();
-                event.stopPropagation();
-                event.stopImmediatePropagation();
-
-                // Hide.
-                $login._hide();
-
-            })
-            .on('click', function (event) {
-                event.stopPropagation();
-            })
-
-        $body
-            .on('click', 'a[href="#menu"]', function (event) {
-
-                event.stopPropagation();
-                event.preventDefault();
-
-                // Toggle.
-                $menu._toggle();
-
-            })
-            .on('click', 'a[href="#login"]', function (event) {
-                event.stopPropagation();
-                event.preventDefault();
-
-                $login._toggle();
-            })
-            .on('keydown', function (event) {
-
-                // Hide on escape.
-                if (event.keyCode == 27) {
-                    $menu._hide();
-                    $login._hide();
-                }
-
-            });
-
-    });
+	"use strict";
+
+	$(function () {
+
+		var $window = $(window),
+			$body = $('body'),
+			$header = $('#header'),
+			$banner = $('#banner');
+
+		var hasLoaded = false;
+
+		if (typeof $banner[0] === "undefined") {
+			$banner = $('#banner-small');
+		}
+
+		$window.on('load', function () {
+			$body.removeClass('is-loading');
+
+			// Lazy load cms pages, these should be loaded always, not on scroll
+			setTimeout(function () {
+				$('div.bb-img-loading').each(function () {
+					var content = $(document.createElement('img'));
+					content.error(function () {
+						$(this).attr('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
+						$(this).attr('src', '/plaetjes/famfamfam/picture_error.png');
+						$(this).css('width', '16px');
+						$(this).css('height', '16px');
+						$(this).removeClass('bb-img-loading').addClass('bb-img');
+					});
+					content.addClass('bb-img');
+					content.attr('alt', $(this).attr('title'));
+					content.attr('style', $(this).attr('style'));
+					content.attr('src', $(this).attr('src'));
+					$(this).html(content);
+					content.on('load', function () {
+						var foto = content.attr('src').indexOf('/plaetjes/fotoalbum/') >= 0;
+						var video = $(this).parent().parent().hasClass('bb-video-preview');
+						var hasAnchor = $(this).closest('a').length !== 0;
+						$(this).parent().replaceWith($(this));
+						if (!foto && !video && !hasAnchor) {
+							$(this).wrap('<a class="lightbox-link" href="' + $(this).attr('src') + '" data-lightbox="page-lightbox"></a>');
+						}
+					});
+				});
+			});
+		});
+
+		function lazyLoad() {
+			if (hasLoaded === true) return;
+			hasLoaded = true;
+
+			// Lazy load frontpage
+			setTimeout(function () {
+				$('.lazy-load').each(function () {
+					var html = $(this).data('lazy');
+					$(this).append(html);
+				});
+			});
+		}
+
+		// Lazy load after animations have finished and user has scrolled
+		$window.scroll(function () {
+			if (hasLoaded === false && $(window).scrollTop() > 0) {
+				lazyLoad();
+			}
+		});
+
+		if ($banner.length > 0
+			&& $header.hasClass('alt')) {
+
+			$window.on('resize', function () {
+				$window.trigger('scroll');
+			});
+
+			$banner.scrollex({
+				bottom: $header.outerHeight(),
+				terminate: function () {
+					$header.removeClass('alt');
+				},
+				enter: function () {
+					$header.addClass('alt');
+				},
+				leave: function () {
+					$header.removeClass('alt');
+				}
+			});
+
+		}
+	});
 
 })(jQuery);

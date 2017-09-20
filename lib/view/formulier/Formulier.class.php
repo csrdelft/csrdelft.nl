@@ -1,24 +1,30 @@
 <?php
+namespace CsrDelft\view\formulier;
 
-require_once 'view/View.interface.php';
-require_once 'view/Validator.interface.php';
-require_once 'view/formulier/FormElement.abstract.php';
-require_once 'view/formulier/InvoerVelden.class.php';
-require_once 'view/formulier/GetalVelden.class.php';
-require_once 'view/formulier/KeuzeVelden.class.php';
-require_once 'view/formulier/BBCodeVelden.class.php';
-require_once 'view/formulier/UploadVelden.class.php';
-require_once 'view/formulier/FormKnoppen.class.php';
+use function CsrDelft\classNameZonderNamespace;
+use function CsrDelft\getDateTime;
+use function CsrDelft\getMelding;
+use CsrDelft\model\ChangeLogModel;
+use CsrDelft\model\entity\ChangeLogEntry;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
+use function CsrDelft\startsWith;
+use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\uploadvelden\FileField;
+use CsrDelft\view\Validator;
+use CsrDelft\view\View;
 
 /**
  * Formulier.class.php
- * 
+ *
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Alle dingen die we in de field-array van een Formulier stoppen
  * moeten een uitbreiding zijn van FormElement.
- * 
+ *
  * @see FormElement
  */
 class Formulier implements View, Validator {
@@ -34,7 +40,7 @@ class Formulier implements View, Validator {
 	 * Fields must be added via addFields()
 	 * or insertElementBefore() methods,
 	 * and retrieved with getFields() method.
-	 * 
+	 *
 	 * @var FormElement[]
 	 */
 	private $fields = array();
@@ -45,7 +51,7 @@ class Formulier implements View, Validator {
 
 	public function __construct($model, $action, $titel = false, $dataTableId = false) {
 		$this->model = $model;
-		$this->formId = uniqid(get_class($this->model));
+		$this->formId = uniqid(classNameZonderNamespace(get_class($this->model)));
 		$this->action = $action;
 		$this->titel = $titel;
 		$this->css_classes[] = 'Formulier';
@@ -68,7 +74,7 @@ class Formulier implements View, Validator {
 	/**
 	 * Set the id late (after constructor).
 	 * Use in case it is not POSTed.
-	 * 
+	 *
 	 * @param string $dataTableId
 	 */
 	public function setDataTableId($dataTableId) {
@@ -101,6 +107,7 @@ class Formulier implements View, Validator {
 		$fields = array();
 		foreach ($this->model->getAttributes() as $fieldName) {
 			$definition = $this->model->getAttributeDefinition($fieldName);
+			$namespace = "CsrDelft\\view\\formulier\\";
 			if (!isset($definition[1]) OR $definition[1] === false) {
 				$class = 'Required';
 			} else {
@@ -110,47 +117,69 @@ class Formulier implements View, Validator {
 			switch ($definition[0]) {
 				case T::String:
 					if (startsWith($fieldName, 'rechten_')) {
+						$namespace .= 'invoervelden';
 						$class .= 'RechtenField';
 						break;
 					}
 				// fall through
 				case T::Char:
 					if ($fieldName === 'verticale') {
+						$namespace .= 'keuzevelden';
 						$class .= 'VerticaleField';
 						break;
 					}
+					$namespace .= 'invoervelden';
 					$class .= 'TextField';
 					break;
-				case T::Boolean: $class .= 'JaNeeField';
+				case T::Boolean:
+					$namespace .= 'keuzevelden';
+					$class .= 'JaNeeField';
 					break;
-				case T::Integer: $class .= 'IntField';
+				case T::Integer:
+					$namespace .= 'getalvelden';
+					$class .= 'IntField';
 					break;
-				case T::Float: $class .= 'FloatField';
+				case T::Float:
+					$namespace .= 'getalvelden';
+					$class .= 'FloatField';
 					break;
-				case T::Date: $class .= 'DateField';
+				case T::Date:
+					$namespace .= 'keuzevelden';
+					$class .= 'DateField';
 					break;
-				case T::Time: $class .= 'TimeField';
+				case T::Time:
+					$namespace .= 'keuzevelden';
+					$class .= 'TimeField';
 					break;
-				case T::DateTime: $class .= 'DateTimeField';
+				case T::DateTime:
+					$namespace .= 'keuzevelden';
+					$class .= 'DateTimeField';
 					break;
 				case T::Text:
-				case T::LongText: $class .= 'TextareaField';
+				case T::LongText:
+				$namespace .= 'invoervelden';
+				$class .= 'TextareaField';
 					break;
-				case T::Enumeration: $class .= 'SelectField';
+				case T::Enumeration:
+					$namespace .= 'keuzevelden';
+					$class .= 'SelectField';
 					break;
-				case T::UID: $class .='LidField';
+				case T::UID:
+					$namespace .= 'invoervelden';
+					$class .='LidField';
 					break;
 			}
+			$namespacedClass = $namespace . '\\' . $class;
 			if ($definition[0] == T::Enumeration) {
 				$options = array();
 				foreach ($definition[2]::getTypeOptions() as $option) {
 					$options[$option] = $definition[2]::getDescription($option);
 				}
-				$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc, $options);
+				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc, $options);
 			} elseif ($definition[0] == T::Char) {
-				$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc, 1);
+				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc, 1);
 			} else {
-				$fields[$fieldName] = new $class($fieldName, $this->model->$fieldName, $desc);
+				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc);
 			}
 		}
 		foreach ($this->model->getPrimaryKey() as $fieldName) {
@@ -173,7 +202,7 @@ class Formulier implements View, Validator {
 	 * Zoekt een InputField met exact de gegeven naam.
 	 *
 	 * @param string $fieldName
-	 * @return InputField OR false if not found
+	 * @return InputField|false if not found
 	 */
 	public function findByName($fieldName) {
 		foreach ($this->fields as $field) {
@@ -291,20 +320,21 @@ JS;
 	}
 
 	protected function getScriptTag() {
-		return <<<JS
+		return <<<HTML
 <script type="text/javascript">
 $(document).ready(function () {
 	var form = document.getElementById('{$this->formId}');
 	{$this->getJavascript()}
 });
 </script>
-JS;
+HTML;
 	}
 
 	/**
 	 * Toont het formulier en javascript van alle fields.
-	 * 
+	 *
 	 * @param boolean $showMelding Toon meldingen bovenaan formulier
+	 * @return void
 	 */
 	public function view($showMelding = true) {
 		if ($showMelding) {
@@ -329,11 +359,10 @@ JS;
 	/**
 	 * Geef een array terug van de gewijzigde velden.
 	 *
-	 * @returns ChangeLogEntry
+	 * @returns ChangeLogEntry[]
 	 */
 	public function diff() {
-		require_once 'model/ChangeLogModel.class.php';
-		$diff = array();
+				$diff = array();
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof InputField) {
 				$old = $field->getOrigValue();
@@ -349,7 +378,7 @@ JS;
 
 	/**
 	 * Maak een stukje bbcode aan met daarin de huidige wijziging, door wie en wanneer.
-	 * 
+	 *
 	 * @param ChangeLogEntry[] $diff
 	 * @return string
 	 */
@@ -363,93 +392,6 @@ JS;
 			$changelog .= '[/div][hr]';
 		}
 		return $changelog;
-	}
-
-}
-
-/**
- * Form as modal content.
- */
-class ModalForm extends Formulier {
-
-	public function view() {
-		$this->css_classes[] = 'ModalForm';
-		echo '<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1" style="display: block;">';
-		parent::view();
-		printDebug();
-		echo '</div>';
-	}
-
-}
-
-/**
- * InlineForm with single InputField and FormDefaultKnoppen.
- */
-abstract class InlineForm extends Formulier implements FormElement {
-
-	private $field;
-	private $toggle;
-
-	public function __construct($model, $action, InputField $field, $toggle = true, $buttons = false, $dataTableId = false) {
-		parent::__construct($model, $action, null, $dataTableId);
-		if (isset($_POST['InlineFormId'])) {
-			$this->formId = filter_input(INPUT_POST, 'InlineFormId', FILTER_SANITIZE_STRING);
-		}
-		$this->css_classes[] = 'InlineForm';
-		$this->css_classes[] = $this->getType();
-		$this->field = $field;
-		$this->toggle = $toggle;
-
-		$fields = array();
-		$fields[] = $this->field;
-
-		if ($buttons instanceof FormKnoppen) {
-			$fields[] = $buttons;
-		} elseif ($buttons) {
-			$fields[] = new FormDefaultKnoppen(null, false, true, false, true, false, $dataTableId);
-		} else {
-			$this->field->enter_submit = true;
-			$this->field->escape_cancel = true;
-		}
-		if (!isset($this->field->title) AND property_exists($this->field, 'description')) {
-			$this->field->title = $this->field->description;
-		}
-
-		$this->addFields($fields);
-	}
-
-	public function getHtml() {
-		$html = '<div id="wrapper_' . $this->formId . '" class="InlineForm">';
-		if ($this->toggle) {
-			$html .= '<div id="toggle_' . $this->formId . '" class="InlineFormToggle">' . $this->field->getValue() . '</div>';
-			$this->css_classes[] = 'ToggleForm';
-		}
-		$html .= $this->getFormTag();
-		foreach ($this->getFields() as $field) {
-			$html .= $field->getHtml();
-		}
-		$html .= $this->getScriptTag();
-		return $html . '</form></div>';
-	}
-
-	public function view() {
-		echo $this->getHtml();
-	}
-
-	public function getField() {
-		return $this->field;
-	}
-
-	public function getType() {
-		return get_class($this);
-	}
-
-	/**
-	 * Public for FormElement
-	 * @return string
-	 */
-	public function getJavascript() {
-		return parent::getJavascript();
 	}
 
 }

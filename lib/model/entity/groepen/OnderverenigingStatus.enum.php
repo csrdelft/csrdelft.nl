@@ -1,12 +1,15 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
+use CsrDelft\common\CsrException;
+use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
  * OnderverenigingStatus.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * De status van een ondervereniging.
- * 
+ *
  */
 abstract class OnderverenigingStatus implements PersistentEnum {
 
@@ -23,7 +26,7 @@ abstract class OnderverenigingStatus implements PersistentEnum {
 			case self::AdspirantOndervereniging: return 'adspirant-ondervereniging';
 			case self::Ondervereniging: return 'ondervereniging';
 			case self::VoormaligOndervereniging: return 'voormalig ondervereniging';
-			default: throw new Exception('OnderverenigingStatus onbekend');
+			default: throw new CsrException('OnderverenigingStatus onbekend');
 		}
 	}
 
@@ -33,7 +36,7 @@ abstract class OnderverenigingStatus implements PersistentEnum {
 			case self::Ondervereniging:
 			case self::VoormaligOndervereniging:
 				return ucfirst($option);
-			default: throw new Exception('OnderverenigingStatus onbekend');
+			default: throw new CsrException('OnderverenigingStatus onbekend');
 		}
 	}
 

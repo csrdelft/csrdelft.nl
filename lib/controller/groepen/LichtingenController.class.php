@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\controller\groepen;
+use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\view\JsonResponse;
 
 /**
  * LichtingenController.class.php
@@ -6,6 +9,8 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  * 
  * Controller voor lichtingen.
+ *
+ * @property LichtingenModel $model
  */
 class LichtingenController extends AbstractGroepenController {
 

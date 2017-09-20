@@ -1,12 +1,15 @@
 <?php
+namespace CsrDelft\model\entity\security;
+use CsrDelft\common\CsrException;
+use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
  * AccessRole.enum.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * RBAC MAC roles.
- * 
+ *
  * @see AccessModel
  */
 abstract class AccessRole implements PersistentEnum {
@@ -20,8 +23,15 @@ abstract class AccessRole implements PersistentEnum {
 	const Bestuur = 'R_BESTUUR';
 	const PubCie = 'R_PUBCIE';
 
+	/**
+	 * Extra rechtenset voor Am. de Vlieger.
+	 * Een combinatie van BASFCie (archief) en MaalCie.
+	 */
+	const Vlieger = "R_VLIEGER";
+
 	public static function getTypeOptions() {
-		return array(self::Nobody, self::Eter, self::Oudlid, self::Lid, self::BASFCie, self::MaalCie, self::Bestuur, self::PubCie);
+		return array(self::Nobody, self::Eter, self::Oudlid, self::Lid,
+			self::BASFCie, self::MaalCie, self::Bestuur, self::PubCie, self::Vlieger);
 	}
 
 	public static function canChangeAccessRoleTo($from) {
@@ -42,7 +52,8 @@ abstract class AccessRole implements PersistentEnum {
 			case self::MaalCie: return 'MaalCie-rechten';
 			case self::Bestuur: return 'Bestuur-rechten';
 			case self::PubCie: return 'PubCie-rechten';
-			default: throw new Exception('AccessRole onbekend');
+			case self::Vlieger: return 'Vlieger-rechten';
+			default: throw new CsrException('AccessRole onbekend');
 		}
 	}
 
@@ -56,7 +67,8 @@ abstract class AccessRole implements PersistentEnum {
 			case self::MaalCie: return 'M';
 			case self::Bestuur: return 'B';
 			case self::PubCie: return 'P';
-			default: throw new Exception('AccessRole onbekend');
+			case self::Vlieger: return 'V';
+			default: throw new CsrException('AccessRole onbekend');
 		}
 	}
 

@@ -1,7 +1,7 @@
 {*
 	instellingen_page.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-<table><tr id="maalcie-melding"><td id="maalcie-melding-veld">{getMelding()}</td></tr></table>
+<table><tr id="maalcie-melding"><td id="maalcie-melding-veld">{CsrDelft\getMelding()}</td></tr></table>
 <h1>{$titel}</h1>
 <p>
 	Op deze pagina kunt u instellingen wijzigen en resetten voor elke module op de stek.
@@ -32,7 +32,7 @@
 		</thead>
 		<tbody>
 			{foreach from=$instellingen item=id}
-				{include file='instellingen/beheer/instelling_row.tpl' waarde=Instellingen::get($module, $id)}
+				{include file='instellingen/beheer/instelling_row.tpl' waarde=CsrDelft\model\InstellingenModel::get($module, $id)}
 			{/foreach}
 		</tbody>
 	</table>

@@ -25,6 +25,7 @@ etc/gozerbot.ini
 etc/ldap.ini
 etc/mysql.ini
 etc/soccie.ini
+etc/slack.ini
 htdocs/download
 htdocs/enquete
 htdocs/google*.html
@@ -46,3 +47,4 @@ tmp/*
 # Compiled python file LDAP
 bin/ldap/settings.pyc
 /vendor/
+.DS_Store

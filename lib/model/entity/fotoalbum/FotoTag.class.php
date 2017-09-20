@@ -1,6 +1,10 @@
 <?php
+namespace CsrDelft\model\entity\fotoalbum;
 
-require_once 'model/entity/KeywordTag.class.php';
+use CsrDelft\model\entity\KeywordTag;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\Orm\Entity\T;
+
 
 /**
  * FotoTag.class.php

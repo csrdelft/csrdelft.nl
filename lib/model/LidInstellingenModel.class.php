@@ -1,6 +1,11 @@
 <?php
+namespace CsrDelft\model;
 
-require_once 'model/InstellingenModel.class.php';
+use CsrDelft\model\entity\LidInstelling;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Entity\T;
+use CsrDelft\Orm\Persistence\Database;
+
 
 /**
  * LidInstellingenModel.class.php
@@ -10,9 +15,9 @@ require_once 'model/InstellingenModel.class.php';
  * Deze class houdt de instellingen bij voor een gebruiker.
  * In de sessie en in het profiel van leden.
  */
-class LidInstellingen extends Instellingen {
+class LidInstellingenModel extends InstellingenModel {
 
-	const ORM = 'LidInstelling';
+	const ORM = LidInstelling::class;
 
 	protected static $instance;
 	/**
@@ -33,15 +38,14 @@ class LidInstellingen extends Instellingen {
 			'bijbel' => array('Bijbelvertaling', T::Enumeration, array('NBV' => 'De Nieuwe Bijbelvertaling', 'BGT' => 'Bijbel in Gewone Taal', 'GNB96' => 'Groot Nieuws Bijbel', 'NFB' => 'Nije Fryske Bibeloersetting', 'NBG51' => 'NBG-vertaling 1951', 'SVJ' => 'Statenvertaling (Jongbloed-editie)', 'HSVI' => 'Herziene Statenvertaling', 'CEVD' => 'Contemporary English Version', 'GNTD' => 'Good News Translation'), 'NBV')
 		),
 		'agenda'		 => array(
-			'toonBijbelrooster'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'toonVerjaardagen'	 => array('Verjaardagen weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'toonMaaltijden'	 => array('Maaltijden weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'toonCorvee'		 => array('Corvee weergeven', T::Enumeration, array('iedereen', 'eigen', 'nee'), 'eigen')
 		),
 		'layout'		 => array(
 			'toegankelijk'	 => array('Leesbaarheid', T::Enumeration, array('standaard', 'bredere letters'), 'standaard'),
-			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'lustrum', 'owee', 'dies', 'sineregno', 'roze'), 'normaal'),
-			'fx'			 => array('Effect', T::Enumeration, array('nee', 'onontdekt', 'sneeuw', 'space', 'wolken'), 'nee'),
+			'opmaak'		 => array('Opmaak', T::Enumeration, array('normaal', 'lustrum', 'owee', 'dies', 'sineregno', 'civitasia', 'roze'), 'normaal'),
+			'fx'			 => array('Effect', T::Enumeration, array('nee', 'civisaldo', 'onontdekt', 'sneeuw', 'space', 'wolken'), 'nee'),
 			'visitekaartjes' => array('Civikaartjes', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'neuzen'		 => array('Neuzen', T::Enumeration, array('2013', 'nee'), '2013'),
 			'minion'		 => array('Minion', T::Enumeration, array('ja', 'nee'), 'nee'),
@@ -69,7 +73,6 @@ class LidInstellingen extends Instellingen {
 			'aantalPerPagina' => array('Aantal mededeling per pagina', T::Integer, array(5, 50), 10)
 		), /*
 		  'voorpagina'	 => array(
-		  'bijbelroosterblokje'	 => array('Bijbelrooster weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 		  'maaltijdblokje'		 => array('Eerstvolgende maaltijd weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 		  'laatstefotoalbum'		 => array('Laatste fotoalbum weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 		  'twitterblokje'			 => array('Twitter-feed weergeven', T::Enumeration, array('ja', 'nee'), 'nee')
@@ -77,7 +80,7 @@ class LidInstellingen extends Instellingen {
 		'zijbalk'		 => array(
 			'scrollen'				 => array('Scrollen', T::Enumeration, array('met pagina mee', 'apart scrollen', 'pauper/desktop'), 'met pagina mee'),
 			'scrollbalk'			 => array('Scrollbalk tonen', T::Enumeration, array('ja', 'nee'), 'ja'),
-			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren'), 'willekeurig'),
+			'ishetal'				 => array('Is het al… weergeven', T::Enumeration, array('niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren', 'foutmelding'), 'willekeurig'),
 			'favorieten'			 => array('Favorieten menu weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'agendaweken'			 => array('Aantal weken in agenda weergeven', T::Integer, array(0, 10), 2),
 			'agenda_max'			 => array('Maximaal aantal agenda-items', T::Integer, array(0, 50), 15),
@@ -124,9 +127,9 @@ class LidInstellingen extends Instellingen {
 
 	/**
 	 * Functie getInstelling aanvullen met uid.
-	 * 
+	 *
 	 * @param array $primary_key_values
-	 * @return LidInstelling
+	 * @return LidInstelling|false
 	 */
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
 		$primary_key_values[] = LoginModel::getUid();
@@ -204,12 +207,12 @@ class LidInstellingen extends Instellingen {
 				$properties[] = array($module, $id, $waarde, LoginModel::getUid());
 			}
 		}
-		Database::sqlInsertMultiple($this->getTableName(), $properties, true);
+		Database::instance()->sqlInsertMultiple($this->getTableName(), $properties, true);
 		$this->flushCache(true);
 	}
 
 	public function resetForAll($module, $id) {
-		Database::sqlDelete($this->getTableName(), 'module = ? AND instelling_id = ?', array($module, $id));
+		Database::instance()->sqlDelete($this->getTableName(), 'module = ? AND instelling_id = ?', array($module, $id));
 		$this->flushCache(true);
 	}
 

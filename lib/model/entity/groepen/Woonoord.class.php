@@ -1,18 +1,24 @@
 <?php
 
-require_once 'model/entity/groepen/HuisStatus.enum.php';
+namespace CsrDelft\model\entity\groepen;
+
+use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\groepen\leden\BewonersModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Entity\T;
+
 
 /**
  * Woonoord.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een woonoord is waar C.S.R.-ers bij elkaar wonen.
- * 
+ *
  */
 class Woonoord extends AbstractGroep {
 
-	const leden = 'BewonersModel';
+	const leden = BewonersModel::class;
 
 	/**
 	 * Woonoord / Huis
@@ -20,17 +26,17 @@ class Woonoord extends AbstractGroep {
 	 */
 	public $soort;
 
-    /**
-     * Doet mee met Eetplan
-     */
-    public $eetplan;
+	/**
+	 * Doet mee met Eetplan
+	 */
+	public $eetplan;
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'soort' => array(T::Enumeration, false, 'HuisStatus'),
-        'eetplan' => array(T::Boolean)
+		'soort' => array(T::Enumeration, false, HuisStatus::class),
+		'eetplan' => array(T::Boolean)
 	);
 	/**
 	 * Database table name
@@ -44,16 +50,17 @@ class Woonoord extends AbstractGroep {
 
 	/**
 	 * Has permission for action?
-	 * 
+	 *
 	 * @param AccessAction $action
 	 * @param string $soort
+	 *
 	 * @return boolean
 	 */
 	public function mag($action, $soort = null) {
 		switch ($action) {
 
-			case A::Beheren:
-			case A::Wijzigen:
+			case AccessAction::Beheren:
+			case AccessAction::Wijzigen:
 				// Huidige bewoners mogen beheren
 				if (LoginModel::mag('woonoord:' . $this->familie)) {
 					// HuisStatus wijzigen wordt geblokkeerd in GroepForm->validate()

@@ -1,6 +1,10 @@
 <?php
+namespace CsrDelft\model\entity\mededelingen;
 
-require_once 'model/entity/mededelingen/MededelingAccess.enum.php';
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
+
 
 /**
  * MededelingCategorie.class.php
@@ -22,7 +26,7 @@ class MededelingCategorie extends PersistentEntity {
         'id'		    => array(T::Integer, false, 'auto_increment'),
         'naam'	        => array(T::String),
         'prioriteit'    => array(T::Integer),
-        'permissie'     => array(T::Enumeration, false, 'MededelingAccess'),
+        'permissie'     => array(T::Enumeration, false, MededelingAccess::class),
         'plaatje'       => array(T::String),
         'beschrijving'  => array(T::Text, true)
     );

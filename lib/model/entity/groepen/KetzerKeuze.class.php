@@ -1,4 +1,7 @@
 <?php
+namespace CsrDelft\model\entity\groepen;
+use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Entity\T;
 
 /**
  * KetzerKeuze.class.php

@@ -1,11 +1,47 @@
 <?php
 
+namespace CsrDelft\controller;
+
+use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\DebugLogModel;
+use CsrDelft\model\entity\Mail;
+use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\model\entity\security\RememberLogin;
+use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccessModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\model\security\OneTimeTokensModel;
+use CsrDelft\model\security\RememberLoginModel;
+use CsrDelft\view\cms\CmsPaginaView;
+use CsrDelft\view\CsrLayoutOweePage;
+use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\login\AccountForm;
+use CsrDelft\view\login\LoginForm;
+use CsrDelft\view\login\LoginSessionsData;
+use CsrDelft\view\login\RememberAfterLoginForm;
+use CsrDelft\view\login\RememberLoginData;
+use CsrDelft\view\login\RememberLoginForm;
+use CsrDelft\view\login\VerifyForm;
+use CsrDelft\view\login\WachtwoordVergetenForm;
+use CsrDelft\view\login\WachtwoordWijzigenForm;
+use function CsrDelft\redirect;
+use function CsrDelft\setGoBackCookie;
+use function CsrDelft\setMelding;
+
 /**
  * LoginController.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Controller van de agenda.
+ *
+ * @property LoginModel $model
  */
 class LoginController extends AclController {
 
@@ -69,7 +105,6 @@ class LoginController extends AclController {
 	}
 
 	public function login() {
-		require_once 'view/LoginView.class.php';
 		$form = new LoginForm(); // fetches POST values itself
 		$values = $form->getValues();
 
@@ -86,10 +121,8 @@ class LoginController extends AclController {
 				$form = new RememberAfterLoginForm($remember);
 				$form->css_classes[] = 'redirect';
 
-				require_once 'model/CmsPaginaModel.class.php';
-				require_once 'view/CmsPaginaView.class.php';
 
-				$body = new CmsPaginaView(CmsPaginaModel::get(Instellingen::get('stek', 'homepage')));
+				$body = new CmsPaginaView(CmsPaginaModel::get(InstellingenModel::get('stek', 'homepage')));
 				$this->view = new CsrLayoutPage($body, array(), $form);
 				return;
 			}
@@ -98,8 +131,10 @@ class LoginController extends AclController {
 				setGoBackCookie(null);
 				redirect($url);
 			}
+			redirect(CSR_ROOT);
+		} else {
+			redirect(CSR_ROOT . "#login");
 		}
-		redirect(CSR_ROOT);
 	}
 
 	public function logout() {
@@ -129,14 +164,13 @@ class LoginController extends AclController {
 	}
 
 	public function pauper($terug = null) {
+		DebugLogModel::instance()->log(get_class(), 'Pauper gebruikt');
 		if ($terug === 'terug') {
 			$this->model->setPauper(false);
 			redirect(CSR_ROOT);
 		} else {
 			$this->model->setPauper(true);
 		}
-		require_once 'model/CmsPaginaModel.class.php';
-		require_once 'view/CmsPaginaView.class.php';
 		$body = new CmsPaginaView(CmsPaginaModel::get('mobiel'));
 		$this->view = new CsrLayoutPage($body);
 	}
@@ -156,10 +190,12 @@ class LoginController extends AclController {
 	}
 
 	public function GET_accountaanvragen() {
-		require_once 'model/CmsPaginaModel.class.php';
-		require_once 'view/CmsPaginaView.class.php';
 		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
-		$this->view = new CsrLayoutPage($body);
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			$this->view = new CsrLayoutOweePage($body);
+		} else {
+			$this->view = new CsrLayoutPage($body);
+		}
 	}
 
 	public function accountaanmaken($uid = null) {
@@ -176,7 +212,7 @@ class LoginController extends AclController {
 			if ($account) {
 				setMelding('Account succesvol aangemaakt', 1);
 			} else {
-				throw new Exception('Account aanmaken gefaald');
+				throw new CsrGebruikerException('Account aanmaken gefaald');
 			}
 		}
 		redirect('/account/' . $uid . '/bewerken');
@@ -286,7 +322,7 @@ class LoginController extends AclController {
 			// inloggen alsof gebruiker wachtwoord heeft ingevoerd
 			$loggedin = $this->model->login($account->uid, $pass_plain, false);
 			if (!$loggedin) {
-				throw new Exception('Inloggen met nieuw wachtwoord mislukt');
+				throw new CsrGebruikerException('Inloggen met nieuw wachtwoord mislukt');
 			}
 			// stuur bevestigingsmail
 			$profiel = $account->getProfiel();
@@ -325,7 +361,7 @@ class LoginController extends AclController {
 				setMelding('Wachtwoord reset email verzonden', 1);
 			}
 		}
-		$this->view = new CsrLayoutPage($form);
+		$this->view = new CsrLayoutOweePage($form);
 	}
 
 	public function verify($tokenString = null) {
@@ -336,10 +372,11 @@ class LoginController extends AclController {
 			// mag inloggen met url_token?
 			if (!$account OR ! AccessModel::mag($account, 'P_LOGGED_IN', AuthenticationMethod::getTypeOptions()) OR ! OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenString)) {
 				setMelding('Deze link is niet (meer) geldig', -1);
+				redirect(CSR_ROOT . '/wachtwoord/vergeten');
 			}
 			// verifyToken() redirects on success
 		}
-		$this->view = new CsrLayoutPage($form);
+		$this->view = new CsrLayoutOweePage($form);
 	}
 
 	public function loginsessionsdata() {
@@ -365,6 +402,7 @@ class LoginController extends AclController {
 		}
 		$response = array();
 		foreach ($selection as $UUID) {
+			/** @var RememberLogin $remember */
 			$remember = RememberLoginModel::instance()->retrieveByUUID($UUID);
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
 				$this->exit_http(403);
@@ -399,8 +437,7 @@ class LoginController extends AclController {
 			}
 			if (isset($_POST['DataTableId'])) {
 				$this->view = new RememberLoginData(array($remember));
-			}
-			// after login
+			} // after login
 			elseif (isset($_COOKIE['goback'])) {
 				$this->view = new JsonResponse($_COOKIE['goback']);
 				setGoBackCookie(null);
@@ -419,6 +456,7 @@ class LoginController extends AclController {
 		}
 		$response = array();
 		foreach ($selection as $UUID) {
+			/** @var RememberLogin $remember */
 			$remember = RememberLoginModel::instance()->retrieveByUUID($UUID);
 			if (!$remember OR $remember->uid !== LoginModel::getUid()) {
 				$this->exit_http(403);

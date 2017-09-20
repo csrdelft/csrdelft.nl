@@ -12,21 +12,23 @@
 						<a href="/profiel/{$profiel->uid}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="pencil"}</a>
 						<a href="/profiel/{$profiel->uid}/voorkeuren" class="btn" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
 					{/if}
-					{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_ADMIN')}
+					{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid OR CsrDelft\model\security\LoginModel::mag('P_ADMIN')}
 						{if AccountModel::existsUid($profiel->uid)}
 							<a href="/account/{$profiel->uid}/bewerken" class="btn" title="Inloggegevens bewerken">{icon get="key"}</a>
-						{elseif LoginModel::mag('P_ADMIN')}
+						{else}
+                            {toegang P_ADMIN}
 							<a href="/account/{$profiel->uid}/aanmaken" class="btn" title="Account aanmaken">{icon get="key_delete" hover="key_add"}</a>
+                            {/toegang}
 						{/if}
-						{if LoginModel::mag('P_ADMIN')}
+						{toegang P_ADMIN}
 							<a href="/tools/stats.php?uid={$profiel->uid}" class="btn" title="Toon bezoeklog">{icon get="server_chart"}</a>
-						{/if}
+						{/toegang}
 					{/if}
 				</div>
 			</div>
-			{getMelding()}
-			<h1 title="Lid-status: {LidStatus::getDescription($profiel->status)}">
-				{if LidStatus::getChar($profiel->status)!=''}<span class="status">{LidStatus::getChar($profiel->status)}&nbsp;</span>{/if}
+			{CsrDelft\getMelding()}
+			<h1 title="Lid-status: {CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}">
+				{if CsrDelft\model\entity\LidStatus::getChar($profiel->status)!=''}<span class="status">{CsrDelft\model\entity\LidStatus::getChar($profiel->status)}&nbsp;</span>{/if}
 				{$profiel->getNaam('volledig')}
 			</h1>
 		</div>
@@ -36,7 +38,7 @@
 		<div class="gegevens">
 			<div class="label">Naam:</div><div class="data">{$profiel->getNaam('civitas')}</div>
 			<div class="label">Lidnummer:</div><div class="data">
-				{if AccountModel::existsUid($profiel->uid) AND LoginModel::instance()->maySuTo($profiel->getAccount())}
+				{if CsrDelft\model\security\AccountModel::existsUid($profiel->uid) AND CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->getAccount())}
 					<a href="/su/{$profiel->uid}/" title="Su naar dit lid">{$profiel->uid}</a>
 				{else}
 					{$profiel->uid}
@@ -46,15 +48,15 @@
 			<br />
 			{if $profiel->voorletters!=''}<div class="label">Voorletters:</div><div class="data">{$profiel->voorletters}</div>{/if}
 			{if $profiel->gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div><div class="data">{$profiel->gebdatum|date_format:"%d-%m-%Y"}</div>{/if}
-			{if $profiel->status === LidStatus::Overleden AND $profiel->sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div><div class="data">{$profiel->sterfdatum|date_format:"%d-%m-%Y"}</div>{/if}
-			{if ProfielModel::get($profiel->echtgenoot)}
-				<div class="label">{if ProfielModel::get($profiel->echtgenoot)->geslacht === Geslacht::Vrouw}Echtgenote{else}Echtgenoot{/if}:</div>
-				<div class="data">{ProfielModel::get($profiel->echtgenoot)->getLink('civitas')}</div>
+			{if $profiel->status === CsrDelft\model\entity\LidStatus::Overleden AND $profiel->sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div><div class="data">{$profiel->sterfdatum|date_format:"%d-%m-%Y"}</div>{/if}
+			{if CsrDelft\model\ProfielModel::get($profiel->echtgenoot)}
+				<div class="label">{if CsrDelft\model\ProfielModel::get($profiel->echtgenoot)->geslacht === CsrDelft\model\entity\Geslacht::Vrouw}Echtgenote{else}Echtgenoot{/if}:</div>
+				<div class="data">{CsrDelft\model\ProfielModel::get($profiel->echtgenoot)->getLink('civitas')}</div>
 			{/if}
 		</div>
 	</div>
 
-	{if $profiel->status != LidStatus::Overleden AND ($profiel->adres!='' OR $profiel->o_adres!='')}
+	{if $profiel->status != CsrDelft\model\entity\LidStatus::Overleden AND ($profiel->adres!='' OR $profiel->o_adres!='')}
 		<div class="profielregel">
 			<div class="gegevens">
 				<div class="half">
@@ -119,20 +121,20 @@
 					<a href="/ledenlijst?q=lichting:{$profiel->lidjaar}&amp;status=ALL" title="Bekijk de leden van lichting {$profiel->lidjaar}">{$profiel->lidjaar}</a>
 				{/if}
 				{if !$profiel->isLid() AND $profiel->lidafdatum!='0000-00-00'} tot {$profiel->lidafdatum|substr:0:4}{/if}<br />
-				<div class="label">Status:</div> {LidStatus::getDescription($profiel->status)}<br />
+				<div class="label">Status:</div> {CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}<br />
 				<br />
 				{if $profiel->isOudlid()}
 					{if $profiel->beroep!=''}<div class="label">Beroep/werk:</div><div class="data">{$profiel->beroep}</div><br />{/if}
 				{/if}
 			</div>
 			<div class="half">
-				{if ProfielModel::get($profiel->patroon) OR $profiel->hasKinderen()}
+				{if CsrDelft\model\ProfielModel::get($profiel->patroon) OR $profiel->hasKinderen()}
 					<a class="float-right lichtgrijs fa fa-tree fa-3x" href="/leden/stamboom/{$profiel->uid}" title="Stamboom van {$profiel->getNaam()}"></a>
 				{/if}
-				{if ProfielModel::get($profiel->patroon)}
-					<div class="label">{if ProfielModel::get($profiel->patroon)->geslacht === Geslacht::Vrouw}M{else}P{/if}atroon:</div>
+				{if CsrDelft\model\ProfielModel::get($profiel->patroon)}
+					<div class="label">{if CsrDelft\model\ProfielModel::get($profiel->patroon)->geslacht === CsrDelft\model\entity\Geslacht::Vrouw}M{else}P{/if}atroon:</div>
 					<div class="data">
-						{ProfielModel::get($profiel->patroon)->getLink('civitas')}<br />
+						{CsrDelft\model\ProfielModel::get($profiel->patroon)->getLink('civitas')}<br />
 					</div>
 				{/if}
 				{if $profiel->hasKinderen()}
@@ -196,20 +198,36 @@
 		</div>
 	</div>
 
-	{if ($profiel->isLid() OR (LoginModel::mag('P_LEDEN_MOD') AND ($profiel->soccieSaldo < 0 OR $profiel->maalcieSaldo < 0))) AND (isset($saldografiek) OR $profiel->bankrekening!='')}
+	{if ($profiel->isLid() OR (CsrDelft\model\security\LoginModel::mag('P_LEDEN_MOD') AND ($profiel->getCiviSaldo() < 0))) AND (isset($saldografiek) OR $profiel->bankrekening!='')}
 		<div class="profielregel">
 			<div class="gegevens">
 				{if $profiel->bankrekening!=''}
 					<div class="label">Bankrekening:</div> {$profiel->bankrekening}
-					{if LoginModel::mag('P_MAAL_MOD')}
+					{toegang P_MAAL_MOD}
 						<span class="lichtgrijs">({if !$profiel->machtiging}geen {/if}machtiging getekend)</span>
-					{/if}
-					<br />
+					{/toegang}
 				{/if}
-				<a name="SocCieSaldo"></a><a name="MaalCieSaldo"></a>
-					{if isset($saldografiek)}
-					<br />
-					{include file='profiel/_saldografiek.tpl'}
+				<div class="clear-left"></div>
+				{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid || CsrDelft\model\security\LoginModel::mag('P_MAAL_MOD')}
+					<a id="CiviSaldo"></a>
+					<div class="label">Saldohistorie:</div>
+					{foreach from=$bestellinglog item=bestelling}
+						<div class="data {cycle values="donker,licht"}">
+							<span>{implode(", ", $bestelling->inhoud)}</span>
+							<span class="float-right">{$bestelling->totaal|bedrag}</span>
+							<span class="float-right lichtgrijs bestelling-moment">({$bestelling->moment|date_format:"%D"}) </span>
+						</div>
+					{/foreach}
+					<div class="data">
+						<a href="{$bestellingenlink}">Meer &#187;</a>
+					</div>
+				{/if}
+
+				{if isset($saldografiek)}
+					<div class="clear-left"></div>
+					<div class="label">Saldografiek:</div>
+					<div class="clear-left"></div>
+                    {include file='profiel/_saldografiek.tpl'}
 				{/if}
 			</div>
 		</div>
@@ -225,7 +243,7 @@
 					{else}
 						-
 					{/if}
-					{if LoginModel::getUid() === $profiel->uid}
+					{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid}
 						&nbsp;<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="btn">{icon get="pencil"}</a></div>
 						{/if}
 				</div>
@@ -235,7 +253,7 @@
 				<div class="label">Abo's:</div>
 				<ul class="nobullets data">
 					{foreach from=$abos item=abonnement}
-						<li>{$abonnement->getMaaltijdRepetitie()->getStandaardTitel()}</li>
+						<li>{$abonnement->maaltijd_repetitie->standaard_titel}</li>
 						{/foreach}
 				</ul>
 			{/if}
@@ -249,11 +267,11 @@
 				</ul>
 			</div>
 			<div class="half">
-				{if LoginModel::getUid() === $profiel->uid OR LoginModel::mag('P_MAAL_MOD')}
+				{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid OR CsrDelft\model\security\LoginModel::mag('P_MAAL_MOD')}
 					<div class="label">Recent:</div>
 					<ul class="nobullets data">
 						{foreach from=$recenteAanmeldingen item=aanmelding}
-							<li>{$aanmelding->getMaaltijd()->getTitel()} <span class="lichtgrijs">({$aanmelding->getMaaltijd()->getDatum()|date_format:"%a %e %b"})</span></li>
+							<li>{$aanmelding->maaltijd->getTitel()} <span class="lichtgrijs">({$aanmelding->maaltijd->datum|date_format:"%a %e %b"})</span></li>
 							{/foreach}
 					</ul>
 				{/if}
@@ -275,14 +293,14 @@
 			<div class="label">Corveetaken:</div>
 			<ul class="nobullets data">
 				{foreach from=$corveetaken item=taak}
-					<li>{$taak->getCorveeFunctie()->naam} <span class="lichtgrijs">({$taak->getDatum()|date_format:"%a %e %b"})</span></li>
+					<li>{$taak->getCorveeFunctie()->naam} <span class="lichtgrijs">({$taak->datum|date_format:"%a %e %b"})</span></li>
 					{/foreach}
 			</ul>
 			<br />
 		</div>
 	</div>
 
-	{if LoginModel::getUid() === $profiel->uid}
+	{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid}
 		<div class="profielregel" id="agenda">
 			<div class="gegevens" id="agenda_gegevens">
 				<div class="label">Persoonlijke<br />ICal-feed:</div>
@@ -297,10 +315,10 @@
 		</div>
 	{/if}
 
-	{if $forumpostcount > 0 OR LoginModel::getUid() === $profiel->uid}
+	{if $forumpostcount > 0 OR CsrDelft\model\security\LoginModel::getUid() === $profiel->uid}
 		<div class="profielregel" id="forum">
 			<div class="gegevens" id="forum_gegevens">
-				{if LoginModel::getUid() === $profiel->uid}
+				{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid}
 					<div class="label">Persoonlijk<br />RSS-feed:</div>
 					<div class="data">
 						{if $profiel->getAccount()->hasPrivateToken()}
@@ -318,11 +336,11 @@
 					<div class="label">Recent:</div>
 					<div class="data">
 						<table id="recenteForumberichten">
-							{foreach from=ForumPostsModel::instance()->getRecenteForumPostsVanLid($profiel->uid, (int) LidInstellingen::get('forum', 'draden_per_pagina')) item=post}
+							{foreach from=CsrDelft\model\forum\ForumPostsModel::instance()->getRecenteForumPostsVanLid($profiel->uid, (int) CsrDelft\model\LidInstellingenModel::get('forum', 'draden_per_pagina')) item=post}
 								<tr>
-									<td><a href="/forum/reactie/{$post->post_id}#{$post->post_id}" title="{htmlspecialchars($post->tekst)}"{if $post->getForumDraad()->isOngelezen()} class="{LidInstellingen::get('forum', 'ongelezenWeergave')}"{/if}>{$post->getForumDraad()->titel|truncate:75}</a></td>
+									<td><a href="/forum/reactie/{$post->post_id}#{$post->post_id}" title="{htmlspecialchars($post->tekst)}"{if $post->getForumDraad()->isOngelezen()} class="{CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave')}"{/if}>{$post->getForumDraad()->titel|truncate:75}</a></td>
 									<td>
-										{if LidInstellingen::get('forum', 'datumWeergave') === 'relatief'}
+										{if CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief'}
 											{$post->datum_tijd|reldate}
 										{else}
 											{$post->datum_tijd}
@@ -339,7 +357,7 @@
 		</div>
 	{/if}
 
-	{if $boeken OR LoginModel::getUid() === $profiel->uid OR $gerecenseerdeboeken}
+	{if $boeken OR CsrDelft\model\security\LoginModel::getUid() === $profiel->uid OR $gerecenseerdeboeken}
 		<div class="profielregel boeken" id="boeken">
 			<div class="gegevens">
 				{if $boeken}
@@ -356,7 +374,7 @@
 							{/foreach}
 					</ul>
 				{/if}
-				{if LoginModel::getUid() === $profiel->uid}
+				{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid}
 					<a class="btn" href="/bibliotheek/nieuwboek">{icon get="book_add"} Nieuw boek</a>
 					<br />
 				{/if}
@@ -395,14 +413,16 @@
 		</div>
 	</div>
 
-	{if LoginModel::mag('P_ADMIN,bestuur,commissie:NovCie') AND $profiel->status === LidStatus::Noviet AND $profiel->kgb!=''}
+	{toegang 'P_ADMIN,bestuur,commissie:NovCie'}
+	{if $profiel->status === CsrDelft\model\entity\LidStatus::Noviet AND $profiel->kgb!=''}
 		<div class="profielregel" id="novcieopmerking">
 			<div style="cursor: pointer;" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
 			<div class="gegevens verborgen" id="novcie_gegevens">{$profiel->kgb|bbcode}</div>
 		</div>
 	{/if}
+	{/toegang}
 
-	{if LoginModel::mag('P_LEDEN_MOD')}
+	{toegang P_LEDEN_MOD}
 		<div class="profielregel" id="changelog">
 			<div class="gegevens">
 				<div style="cursor: pointer;" onclick="$('#changelog_gegevens').toggle();
@@ -412,6 +432,6 @@
 				</div>
 			</div>
 		</div>
-	{/if}
+	{/toegang}
 
 </div>
