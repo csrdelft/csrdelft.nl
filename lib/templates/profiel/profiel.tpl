@@ -13,7 +13,7 @@
 						<a href="/profiel/{$profiel->uid}/voorkeuren" class="btn" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
 					{/if}
 					{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid OR CsrDelft\model\security\LoginModel::mag('P_ADMIN')}
-						{if AccountModel::existsUid($profiel->uid)}
+						{if CsrDelft\model\security\AccountModel::existsUid($profiel->uid)}
 							<a href="/account/{$profiel->uid}/bewerken" class="btn" title="Inloggegevens bewerken">{icon get="key"}</a>
 						{else}
                             {toegang P_ADMIN}

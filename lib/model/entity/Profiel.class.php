@@ -24,6 +24,7 @@ use CsrDelft\view\bbcode\CsrBB;
 use function CsrDelft\array_filter_empty;
 use function CsrDelft\setMelding;
 use function CsrDelft\square_crop;
+use GuzzleHttp\Exception\RequestException;
 
 
 /**
@@ -640,12 +641,15 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public function isInGoogleContacts() {
 		try {
             if (!GoogleSync::isAuthenticated()) {
-				return null;
+				return false;
 			}
 			return !is_null(GoogleSync::instance()->existsInGoogleContacts($this));
 		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), 0);
-			return null;
+			return false;
+		} catch (RequestException $e) {
+			setMelding($e->getMessage(), -1);
+			return false;
 		}
 	}
 
