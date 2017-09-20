@@ -14,11 +14,11 @@
 					{/if}
 					{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid OR CsrDelft\model\security\LoginModel::mag('P_ADMIN')}
 						{if CsrDelft\model\security\AccountModel::existsUid($profiel->uid)}
-							<a href="/account/{$profiel->uid}" class="btn" title="Inloggegevens bewerken">{icon get="key"}</a>
+							<a href="/account/{$profiel->uid}/bewerken" class="btn" title="Inloggegevens bewerken">{icon get="key"}</a>
 						{else}
-							{toegang P_ADMIN}
-							<a href="/account/{$profiel->uid}" class="btn" title="Account aanmaken">{icon get="key_delete" hover="key_add"}</a>
-							{/toegang}
+                            {toegang P_ADMIN}
+							<a href="/account/{$profiel->uid}/aanmaken" class="btn" title="Account aanmaken">{icon get="key_delete" hover="key_add"}</a>
+                            {/toegang}
 						{/if}
 						{toegang P_ADMIN}
 							<a href="/tools/stats.php?uid={$profiel->uid}" class="btn" title="Toon bezoeklog">{icon get="server_chart"}</a>
