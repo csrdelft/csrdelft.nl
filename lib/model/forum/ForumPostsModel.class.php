@@ -284,8 +284,8 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		if ($rowCount !== 1) {
 			throw new CsrException('Verplaatsen mislukt');
 		}
-		$this->forumDradenModel->resetLastPost($post->getForumDraad());
-		$this->forumDradenModel->resetLastPost($oudeDraad);
+		ForumDradenModel::instance()->resetLastPost($post->getForumDraad());
+		ForumDradenModel::instance()->resetLastPost($oudeDraad);
 	}
 
 	public function offtopicForumPost(ForumPost $post) {
