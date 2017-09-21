@@ -28,7 +28,7 @@ class CiviSaldoCommissieEnum extends PersistentEnum {
 		self::ANDERS => self::ANDERS,
 		self::SOCCIE => self::SOCCIE,
 		self::OWEECIE => self::OWEECIE,
-		self::ANDERS => self::ANDERS,
+		self::MAALCIE => self::MAALCIE,
 	];
 
 	protected static $mapChoiceToDescription = [
