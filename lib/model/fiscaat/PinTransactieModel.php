@@ -32,7 +32,7 @@ INNER JOIN CiviBestelling
 ON CiviBestellingInhoud.bestelling_id = CiviBestelling.id
 WHERE CiviBestellingInhoud.product_id = 24
 AND CiviBestellingInhoud.bestelling_id NOT IN (
-	SELECT bestelling_id FROM pin_transactie WHERE bestelling_id IS NOT NULL
+	SELECT bestelling_id FROM pin_transacties WHERE bestelling_id IS NOT NULL
 )
 AND moment > ? AND moment < ?
 SQL

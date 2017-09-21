@@ -59,6 +59,6 @@ class PinTransactie extends PersistentEntity {
 		'AUTRSP' => [T::String],
 		'STAN' => [T::String],
 	];
-	protected static $table_name = 'pin_transactie';
+	protected static $table_name = 'pin_transacties';
 	protected static $primary_key = ['id'];
 }
