@@ -16,9 +16,6 @@ use CsrDelft\Orm\CachedPersistenceModel;
 class ForumDradenGelezenModel extends CachedPersistenceModel {
 
 	const ORM = ForumDraadGelezen::class;
-	const DIR = 'forum/';
-
-	protected static $instance;
 
 	protected function maakForumDraadGelezen($draad_id) {
 		$gelezen = new ForumDraadGelezen();

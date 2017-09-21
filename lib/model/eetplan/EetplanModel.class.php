@@ -16,11 +16,6 @@ class EetplanModel extends PersistenceModel {
 	const ORM = Eetplan::class;
 
 	/**
-	 * @var EetplanModel
-	 */
-	protected static $instance;
-
-	/**
 	 * @param string $avond
 	 *
 	 * @return \PDOStatement|Eetplan[]

@@ -13,11 +13,6 @@ class PeilingStemmenModel extends PersistenceModel {
 	const ORM = PeilingStem::class;
 
 	/**
-	 * @var PeilingStemmenModel
-	 */
-	protected static $instance;
-
-	/**
 	 * @param int $peiling_id
 	 * @param string $uid
 	 *

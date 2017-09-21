@@ -13,8 +13,6 @@ use CsrDelft\Orm\PersistenceModel;
 class DocumentModel extends PersistenceModel {
 	const ORM = Document::class;
 
-	protected static $instance;
-
 	protected function __construct() {
 		parent::__construct();
 	}

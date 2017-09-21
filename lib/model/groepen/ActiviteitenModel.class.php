@@ -8,8 +8,6 @@ class ActiviteitenModel extends KetzersModel {
 
 	const ORM = Activiteit::class;
 
-	protected static $instance;
-
 	public function nieuw($soort = null) {
 		if (!in_array($soort, ActiviteitSoort::getTypeOptions())) {
 			$soort = ActiviteitSoort::SjaarsActie;

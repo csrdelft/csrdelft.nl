@@ -33,24 +33,19 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	const ORM = LoginSession::class;
 
-	/** @var static */
-	protected static $instance;
-
 	/**
-	 * @return LoginModel
+	 * @param mixed[] $arguments
+	 * @return LoginModel|PersistenceModel
 	 */
-	public static function instance() {
-		if (!isset(static::$instance)) {
-			/**
-			 * Dispatch the login proces to a separate class based on MODE.
-			 */
-			if (MODE === 'CLI') {
-				static::$instance = new CliLoginModel();
-			} else {
-				static::$instance = parent::instance();
-			}
+	public static function init(...$arguments) {
+		/**
+		 * Dispatch the login proces to a separate class based on MODE.
+		 */
+		if (MODE === 'CLI') {
+			return new CliLoginModel();
+		} else {
+			return parent::init(...$arguments);
 		}
-		return static::$instance;
 	}
 
 	/**

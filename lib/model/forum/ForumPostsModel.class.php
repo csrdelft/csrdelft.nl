@@ -27,9 +27,7 @@ use PDO;
 class ForumPostsModel extends CachedPersistenceModel implements Paging {
 
 	const ORM = ForumPost::class;
-	const DIR = 'forum/';
 
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string
@@ -55,6 +53,10 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	 * @var int
 	 */
 	private $aantal_wacht;
+	/**
+	 * @var ForumDradenGelezenModel
+	 */
+	private $forumDradenGelezenModel;
 
 	/**
 	 * @param $id
@@ -69,11 +71,14 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		return $post;
 	}
 
-	protected function __construct() {
-		CachedPersistenceModel::__construct();
+	protected function __construct(
+		ForumDradenGelezenModel $forumDradenGelezenModel
+	) {
+		parent::__construct();
 		$this->pagina = 1;
 		$this->per_pagina = (int)LidInstellingenModel::get('forum', 'posts_per_pagina');
 		$this->aantal_paginas = array();
+		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
 	}
 
 	public function getAantalPerPagina() {
@@ -208,7 +213,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$count = count($draden_ids);
 		if ($count > 0) {
 			array_unshift($draden_ids, LoginModel::getUid());
-			ForumDradenGelezenModel::instance()->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
+			$this->forumDradenGelezenModel->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
 		}
 		return $posts;
 	}
@@ -279,8 +284,8 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		if ($rowCount !== 1) {
 			throw new CsrException('Verplaatsen mislukt');
 		}
-		ForumDradenModel::instance()->resetLastPost($post->getForumDraad());
-		ForumDradenModel::instance()->resetLastPost($oudeDraad);
+		$this->forumDradenModel->resetLastPost($post->getForumDraad());
+		$this->forumDradenModel->resetLastPost($oudeDraad);
 	}
 
 	public function offtopicForumPost(ForumPost $post) {
@@ -310,7 +315,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		if ($draad->wacht_goedkeuring) {
 			$draad->wacht_goedkeuring = false;
 		}
-		ForumDradenModel::instance()->update($draad);
+		$this->forumDradenModel->update($draad);
 	}
 
 	public function citeerForumPost(ForumPost $post) {
@@ -327,7 +332,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	public function getStatsVoorForumDeel(ForumDeel $deel) {
 		$terug = getDateTime(strtotime(InstellingenModel::get('forum', 'grafiek_stats_periode')));
 		$fields = array('UNIX_TIMESTAMP(DATE(p.datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
-		return Database::instance()->sqlSelect($fields, $this->getTableName() . ' AS p RIGHT JOIN ' . ForumDradenModel::instance()->getTableName() . ' AS d ON p.draad_id = d.draad_id', 'd.forum_id = ? AND p.datum_tijd > ?', array($deel->forum_id, $terug), 'timestamp');
+		return Database::instance()->sqlSelect($fields, $this->getTableName() . ' AS p RIGHT JOIN ' . $this->forumDradenModel->getTableName() . ' AS d ON p.draad_id = d.draad_id', 'd.forum_id = ? AND p.datum_tijd > ?', array($deel->forum_id, $terug), 'timestamp');
 	}
 
 	public function getStatsVoorDraad(ForumDraad $draad) {

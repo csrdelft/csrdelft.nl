@@ -18,7 +18,6 @@ class LedenMemoryScoresModel extends PersistenceModel {
 
 	const ORM = LedenMemoryScore::class;
 
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string

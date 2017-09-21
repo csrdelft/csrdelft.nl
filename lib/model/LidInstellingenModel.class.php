@@ -19,7 +19,6 @@ class LidInstellingenModel extends InstellingenModel {
 
 	const ORM = LidInstelling::class;
 
-	protected static $instance;
 	/**
 	 * 'module' => array( 'key' => array('beschrijving', 'type', type-opties, 'default value', technical-values) )
 	 *

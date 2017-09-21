@@ -10,13 +10,23 @@ use CsrDelft\Orm\PersistenceModel;
 
 class FotoModel extends PersistenceModel
 {
-
+	/**
+	 * ORM class.
+	 */
     const ORM = Foto::class;
-    const DIR = 'fotoalbum/';
 
-    protected static $instance;
+	/**
+	 * @var FotoTagsModel
+	 */
+	private $fotoTagsModel;
 
-    /**
+	public function __construct(FotoTagsModel $fotoTagsModel) {
+		parent::__construct();
+
+		$this->fotoTagsModel = $fotoTagsModel;
+	}
+
+	/**
      * @override parent::retrieveByUUID($UUID)
      */
     public function retrieveByUUID($UUID)
@@ -44,14 +54,22 @@ class FotoModel extends PersistenceModel
         return parent::retrieveAttributes($foto, $attributes);
     }
 
+	/**
+	 * @param PersistentEntity|Foto $foto
+	 * @return string
+	 */
     public function create(PersistentEntity $foto)
     {
         $foto->owner = LoginModel::getUid();
         $foto->rotation = 0;
-        parent::create($foto);
+        return parent::create($foto);
     }
 
-    public function verwerkFoto(Foto $foto)
+	/**
+	 * @param Foto $foto
+	 * @throws CsrException
+	 */
+	public function verwerkFoto(Foto $foto)
     {
         if (!$this->exists($foto)) {
             $this->create($foto);
@@ -67,7 +85,11 @@ class FotoModel extends PersistenceModel
         }
     }
 
-    public function verwijderFoto(Foto $foto)
+	/**
+	 * @param Foto $foto
+	 * @return bool
+	 */
+	public function verwijderFoto(Foto $foto)
     {
         $ret = true;
         $ret &= unlink($foto->directory . $foto->filename);
@@ -79,7 +101,7 @@ class FotoModel extends PersistenceModel
         }
         if ($ret) {
             $this->delete($foto);
-            \CsrDelft\model\fotoalbum\FotoTagsModel::instance()->verwijderFotoTags($foto);
+            $this->fotoTagsModel->verwijderFotoTags($foto);
         }
         return $ret;
     }

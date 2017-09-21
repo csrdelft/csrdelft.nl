@@ -13,7 +13,7 @@
         "jacwright/restserver": "dev-master",
         "globalcitizen/php-iban": "2.5.9",
         "robmorgan/phinx": "^0.8.0",
-        "csrdelft/orm": "1.6",
+        "csrdelft/orm": "1.7",
         "tedivm/stash": "^0.14.1",
         "tedivm/jshrink": "^1.1",
         "tubalmartin/cssmin": "^4.0",

@@ -15,9 +15,6 @@ use CsrDelft\Orm\CachedPersistenceModel;
 class KwalificatiesModel extends CachedPersistenceModel {
 
 	const ORM = CorveeKwalificatie::class;
-	const DIR = 'maalcie/';
-
-	protected static $instance;
 
 	/**
 	 * Lazy loading of corveefunctie.

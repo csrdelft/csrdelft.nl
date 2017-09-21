@@ -15,9 +15,6 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class CorveeVoorkeurenModel extends PersistenceModel {
 	const ORM = CorveeVoorkeur::class;
-	const DIR = "maalcie/";
-
-	protected static $instance;
 
 	public function getEetwens(Profiel $profiel) {
 		return $profiel->eetwens;

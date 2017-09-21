@@ -15,9 +15,6 @@ use CsrDelft\Orm\PersistenceModel;
 class MaaltijdBeoordelingenModel extends PersistenceModel {
 
 	const ORM = MaaltijdBeoordeling::class;
-	const DIR = 'maalcie/';
-
-	protected static $instance;
 
 	public function nieuw(Maaltijd $maaltijd) {
 		$b = new MaaltijdBeoordeling();

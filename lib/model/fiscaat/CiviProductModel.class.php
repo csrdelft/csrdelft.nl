@@ -13,19 +13,27 @@ use PDOStatement;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class CiviProductModel extends PersistenceModel {
-	const ORM = CiviProduct::class;
-
 	/**
-	 * @var CiviProductModel
+	 * ORM class.
 	 */
-	protected static $instance;
+	const ORM = CiviProduct::class;
+	/**
+	 * @var CiviPrijsModel
+	 */
+	private $civiPrijsModel;
+
+	public function __construct(CiviPrijsModel $civiPrijsModel) {
+		parent::__construct();
+
+		$this->civiPrijsModel = $civiPrijsModel;
+	}
 
 	/**
 	 * @param CiviProduct $product
 	 * @return CiviPrijs
 	 */
 	public function getPrijs($product) {
-		return CiviPrijsModel::instance()->find(
+		return $this->civiPrijsModel->find(
 			'product_id = ?',
 			$product->getValues(true),
 			null,
@@ -84,7 +92,7 @@ class CiviProductModel extends PersistenceModel {
 			$prijs->tot = NULL;
 			$prijs->prijs = $product->prijs;
 
-			CiviPrijsModel::instance()->create($prijs);
+			$this->civiPrijsModel->create($prijs);
 
 			return $product->id;
 		});
@@ -103,14 +111,14 @@ class CiviProductModel extends PersistenceModel {
 			// Alleen prijs updaten als deze veranderd is, niet als alleen andere velden veranderen.
 			if ($prijs->prijs !== $product->prijs) {
 				$prijs->tot = $nu;
-				CiviPrijsModel::instance()->update($prijs);
+				$this->civiPrijsModel->update($prijs);
 
 				$nieuw_prijs = new CiviPrijs();
 				$nieuw_prijs->product_id = $product->id;
 				$nieuw_prijs->van = $nu;
 				$nieuw_prijs->tot = NULL;
 				$nieuw_prijs->prijs = $product->prijs;
-				CiviPrijsModel::instance()->create($nieuw_prijs);
+				$this->civiPrijsModel->create($nieuw_prijs);
 			}
 
 			return parent::update($product);

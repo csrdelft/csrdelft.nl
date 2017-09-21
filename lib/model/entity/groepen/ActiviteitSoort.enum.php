@@ -11,8 +11,11 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * Algemene en specifieke activiteitsoorten.
  *
  */
-abstract class ActiviteitSoort implements PersistentEnum {
+abstract class ActiviteitSoort extends PersistentEnum {
 
+	/**
+	 * ActiviteitSoort opties.
+	 */
 	const Vereniging = 'vereniging';
 	const Lustrum = 'lustrum';
 	const Dies = 'dies';
@@ -26,44 +29,52 @@ abstract class ActiviteitSoort implements PersistentEnum {
 	const IFES = 'ifes';
 	const Extern = 'extern';
 
-	public static function getTypeOptions() {
-		return array(self::Vereniging, self::Lustrum, self::Dies, self::OWee, self::SjaarsActie, self::Lichting, self::Verticale, self::Kring, self::Huis, self::Ondervereniging, self::IFES, self::Extern);
-	}
+	/**
+	 * @var string[]
+	 */
+	protected static $supportedChoices = [
+		self::Vereniging => self::Vereniging,
+		self::Lustrum => self::Lustrum,
+		self::Dies => self::Dies,
+		self::OWee => self::OWee,
+		self::SjaarsActie => self::SjaarsActie,
+		self::Lichting => self::Lichting,
+		self::Verticale => self::Verticale,
+		self::Kring => self::Kring,
+		self::Huis => self::Huis,
+		self::Ondervereniging => self::Ondervereniging,
+		self::IFES => self::IFES,
+		self::Extern => self::Extern,
+	];
 
-	public static function getDescription($option) {
-		switch ($option) {
-			case self::Vereniging: return 'Verenigings-activiteit';
-			case self::Lustrum: return 'Lustrum-activiteit';
-			case self::Dies: return 'Dies-activiteit';
-			case self::OWee: return 'OWee-activiteit';
-			case self::SjaarsActie: return 'Sjaarsactie';
-			case self::Lichting: return 'Lichtings-activiteit';
-			case self::Verticale: return 'Verticale-activiteit';
-			case self::Kring: return 'Kring-activiteit';
-			case self::Huis: return 'Huis-activiteit';
-			case self::Ondervereniging: return 'Onderverenigings-activiteit';
-			case self::IFES: return 'Activiteit van IFES';
-			case self::Extern: return 'Externe activiteit';
-			default: throw new CsrException('ActiviteitSoort onbekend');
-		}
-	}
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToDescription = [
+		self::Vereniging => 'Verenigings-activiteit',
+		self::Lustrum => 'Lustrum-activiteit',
+		self::Dies => 'Dies-activiteit',
+		self::OWee => 'OWee-activiteit',
+		self::SjaarsActie => 'Sjaarsactie',
+		self::Lichting => 'Lichtings-activiteit',
+		self::Verticale => 'Verticale-activiteit',
+		self::Kring => 'Kring-activiteit',
+		self::Huis => 'Huis-activiteit',
+		self::Ondervereniging => 'Onderverenigings-activiteit',
+		self::IFES => 'Activiteit van IFES',
+		self::Extern => 'Externe activiteit',
+	];
 
+	/**
+	 * @param string $option
+	 * @return string
+	 * @throws CsrException
+	 */
 	public static function getChar($option) {
-		switch ($option) {
-			case self::Vereniging:
-			case self::Lustrum:
-			case self::Dies:
-			case self::OWee:
-			case self::SjaarsActie:
-			case self::Lichting:
-			case self::Verticale:
-			case self::Kring:
-			case self::Huis:
-			case self::Ondervereniging:
-			case self::IFES:
-			case self::Extern:
-				return strtoupper(substr($option, 0, 2));
-			default: throw new CsrException('ActiviteitSoort onbekend');
+		if (isset(static::$supportedChoices[$option])) {
+			return strtoupper(substr($option, 0, 2));
+		} else {
+			throw new CsrException('ActiviteitSoort onbekend');
 		}
 	}
 
