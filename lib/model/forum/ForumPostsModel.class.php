@@ -315,7 +315,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		if ($draad->wacht_goedkeuring) {
 			$draad->wacht_goedkeuring = false;
 		}
-		$this->forumDradenModel->update($draad);
+		ForumDradenModel::instance()->update($draad);
 	}
 
 	public function citeerForumPost(ForumPost $post) {
