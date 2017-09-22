@@ -68,6 +68,7 @@ Probeer om ten minste deze te verkrijgen.
 
 De volgende CMS pagina's zijn gehardcoded in de stek, zorg dat deze in de `cms_paginas` tabel aanwezig zijn.
 
+* De lege CMS pagina, alle velden leeg
 * `thuis`
 * `accountaanvragen`
 * `mobiel`
