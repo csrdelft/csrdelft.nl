@@ -14,6 +14,8 @@ use function CsrDelft\getMelding;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * De views van het fotoalbum.
+ *
+ * @property FotoAlbum $model
  */
 class FotoAlbumView extends SmartyTemplateView {
 
@@ -28,6 +30,7 @@ class FotoAlbumView extends SmartyTemplateView {
 	function view() {
 		echo getMelding();
 		$this->smarty->assign('album', $this->model);
+		$this->smarty->assign('itemsJson', json_encode($this->model->getAlbumArray()));
 		$this->smarty->display('fotoalbum/album.tpl');
 	}
 

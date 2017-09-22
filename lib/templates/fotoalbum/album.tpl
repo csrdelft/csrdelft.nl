@@ -502,7 +502,7 @@
 					"height": "897px",
 					"mode": "standard",
 					"canChangeMode": true,
-					"swipeEvents": true,
+					"swipeEvents": false,
 					"browserHistory": true,
 					"disabledOnIE8AndOlder": true,
 					"preloadAll": false,
@@ -574,7 +574,8 @@
 						}
 						loadTags();
 		{/toegang}
-					}
+					},
+					"items": {$itemsJson}
 				});
 				container = $('div.jgallery');
 				container.addClass('noselect');
@@ -608,8 +609,7 @@
 					if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
 						// Fullscreen gegaan, door ons knopje.
 					} else if (container.hasClass('jgallery-full-screen')) {
-							$('span.change-mode').click();
-						}
+						$('span.change-mode').click();
 					}
 				});
 
@@ -745,26 +745,6 @@
 <h1 class="inline">{$album->dirname|ucfirst}</h1>
 {if $album->hasFotos()}
 	<div id="gallery">
-		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
-			<h2>{$album->dirname|ucfirst}</h2>
-			{foreach from=$album->getFotos() item=foto}
-				<a class="foto" href="{$foto->getResizedUrl()}" data-href="{$foto->getFullUrl()}" data-mod="{$foto->isOwner() || CsrDelft\model\security\LoginModel::mag('P_ALBUM_MOD')}">
-					<img src="{$foto->getThumbUrl()}" alt="{$smarty.const.CSR_ROOT}{$foto->getFullUrl()|replace:"%20":" "}" />
-				</a>
-			{/foreach}
-		</div>
-		{foreach from=$album->getSubAlbums(true) item=subalbum}
-			{if $subalbum->hasFotos()}
-				<div class="album" data-jgallery-album-title="{$subalbum->dirname|ucfirst}">
-					<h2>{$album->dirname|ucfirst}</h2>
-					{foreach from=$subalbum->getFotos() item=foto}
-						<a class="foto" href="{$foto->getResizedUrl()}">
-							<img src="{$foto->getThumbUrl()}" alt="{$smarty.const.CSR_ROOT}{$foto->getFullUrl()|replace:"%20":" "}" />
-						</a>
-					{/foreach}
-				</div>
-			{/if}
-		{/foreach}
 	</div>
 {else}
 	<div class="subalbums">

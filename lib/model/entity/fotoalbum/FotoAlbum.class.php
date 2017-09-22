@@ -228,4 +228,35 @@ class FotoAlbum extends Map {
 		return LoginModel::mag($this->owner);
 	}
 
+	/**
+	 * Maak een object voor jGallery.
+	 *
+	 * @return string[][]
+	 */
+	public function getAlbumArray() {
+		$fotos = [];
+		foreach ($this->getFotos() as $foto) {
+			$fotos[] = [
+				'url' => $foto->getResizedUrl(),
+				'thumbUrl' => $foto->getThumbUrl(),
+				'title' => CSR_ROOT . str_replace('%20', ' ', $foto->getFullUrl()),
+			];
+		}
+
+		$albums = [
+			[
+				'title' => ucfirst($this->dirname),
+				'images' => $fotos,
+			]
+		];
+
+		foreach ($this->getSubAlbums() as $subAlbum) {
+			if ($subAlbum->hasFotos()) {
+				$albums = array_merge($albums, $subAlbum->getAlbumArray());
+			}
+		}
+
+		return $albums;
+	}
+
 }
