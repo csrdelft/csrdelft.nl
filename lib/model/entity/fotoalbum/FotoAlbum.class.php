@@ -233,7 +233,7 @@ class FotoAlbum extends Map {
 	 *
 	 * @return string[][]
 	 */
-	public function getAlbumArray() {
+	public function getAlbumArrayRecursive() {
 		$fotos = [];
 		foreach ($this->getFotos() as $foto) {
 			$fotos[] = [
@@ -243,20 +243,37 @@ class FotoAlbum extends Map {
 			];
 		}
 
-		$albums = [
-			[
-				'title' => ucfirst($this->dirname),
-				'images' => $fotos,
-			]
+		$hoofdAlbum = [
+			'title' => ucfirst($this->dirname),
+			'images' => $fotos,
 		];
+
+		$albums = [$hoofdAlbum];
 
 		foreach ($this->getSubAlbums() as $subAlbum) {
 			if ($subAlbum->hasFotos()) {
-				$albums = array_merge($albums, $subAlbum->getAlbumArray());
+				$albums = array_merge($albums, $subAlbum->getAlbumArrayRecursive());
 			}
 		}
 
 		return $albums;
+	}
+
+	/**
+	 * Album array zonder poespas. Wordt voor sliders gebruikt.
+	 *
+	 * @return string[][]
+	 */
+	public function getAlbumArray() {
+		$fotos = [];
+
+		foreach ($this->getFotos() as $foto) {
+			$fotos[] = [
+				'url' => $foto->getResizedUrl(),
+			];
+		}
+
+		return $fotos;
 	}
 
 }
