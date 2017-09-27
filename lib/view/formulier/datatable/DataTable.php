@@ -329,10 +329,7 @@ HTML;
 					var table = this;
 					$(tr).attr('data-uuid', data.UUID);
 					init_context(tr);
-					// Details from external source
-					if ('detailSource' in data) {
-						$(tr).children('td:first').addClass('toggle-childrow').data('detailSource', data.detailSource);
-					}
+					
 					$(tr).children().each(function (columnIndex, td) {
 						// Init custom buttons in rows
 						$(td).children('a.post').each(function (i, a) {
@@ -381,10 +378,6 @@ HTML;
 				var jtable = $(tableId);
 				var table = jtable.dataTable({$settingsJson});
 				table.fnFilter('{$filter}');
-				// Toggle details childrow
-				jtable.find('tbody').on('click', 'tr td.toggle-childrow', function (event) {
-					fnChildRow(tableId, $(this));
-				});
 			});
 
 			var fnDeselectItemsOnPageChange = function (dt) {
