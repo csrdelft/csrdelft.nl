@@ -300,7 +300,7 @@ class MaaltijdenModel extends PersistenceModel {
 			$abonnementen = $this->maaltijdAbonnementenModel->getAbonnementenVoorRepetitie($maaltijd->mlt_repetitie_id);
 			foreach ($abonnementen as $abo) {
 				if ($this->maaltijdAanmeldingenModel->checkAanmeldFilter($abo->uid, $maaltijd->aanmeld_filter)) {
-					if ($this->maaltijdAanmeldingenModel->aanmeldenDoorAbonnement($maaltijd->maaltijd_id, $abo->mlt_repetitie_id, $abo->uid)) {
+					if ($this->maaltijdAanmeldingenModel->aanmeldenDoorAbonnement($maaltijd, $abo->mlt_repetitie_id, $abo->uid)) {
 						$aantal++;
 					}
 				}
