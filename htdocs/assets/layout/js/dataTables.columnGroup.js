@@ -127,16 +127,20 @@
 			// Create group rows for visible rows
 			var rows = $(table.rows({page: 'current'}).nodes());
 			tableNode.find('tr.group').remove();
+			var last;
 			// Iterate over data in the group by column
-			table.column(column, {page: 'current'}).data().unique().each(function (group, i) {
-				// Create group rows for collapsed groups
-				while (collapse.length > 0 && collapse[0].localeCompare(group) < 0) {
-					groupRow = $('<tr class="group"><td class="toggle-group"></td><td class="group-label">' + collapse[0] + '</td>' + colspan + '</tr>').data('groupData', collapse[0]);
+			table.column(column, {page: 'current'}).data().each(function (group, i) {
+				if (last !== group) {
+					// Create group rows for collapsed groups
+					while (collapse.length > 0 && collapse[0].localeCompare(group) < 0) {
+						groupRow = $('<tr class="group"><td class="toggle-group"></td><td class="group-label">' + collapse[0] + '</td>' + colspan + '</tr>').data('groupData', collapse[0]);
+						rows.eq(i).before(groupRow);
+						collapse.shift();
+					}
+					groupRow = $('<tr class="group"><td class="toggle-group toggle-group-expanded"></td><td class="group-label">' + group + '</td>' + colspan + '</tr>').data('groupData', group);
 					rows.eq(i).before(groupRow);
-					collapse.shift();
+					last = group;
 				}
-				groupRow = $('<tr class="group"><td class="toggle-group toggle-group-expanded"></td><td class="group-label">' + group + '</td>' + colspan + '</tr>').data('groupData', group);
-				rows.eq(i).before(groupRow);
 			});
 			// Create group rows for collapsed groups
 			var tbody = tableNode.children('tbody:first');
