@@ -30,7 +30,7 @@ class DataTable implements View, FormElement {
 	protected $settings = array(
 		'deferRender' => true,
 		'dom' => 'Bfrtpli',
-		'buttons' => array('copy', 'csv', 'excel', 'pdf', 'print'),
+		'buttons' => array('copy', 'csv', 'excel', 'print'),
 		'userButtons' => array(),
 		'select' => true,
 		'lengthMenu' => array(
