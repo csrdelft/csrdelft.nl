@@ -16,9 +16,6 @@ class ChangeLogModel extends PersistenceModel {
 
 	const ORM = ChangeLogEntry::class;
 
-	/** @var static */
-	protected static $instance;
-
 	/**
 	 * @param string $subject
 	 * @param string $property

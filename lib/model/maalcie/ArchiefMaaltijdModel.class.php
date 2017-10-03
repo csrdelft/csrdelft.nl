@@ -8,9 +8,6 @@ use CsrDelft\Orm\PersistenceModel;
 
 class ArchiefMaaltijdModel extends PersistenceModel {
     const ORM = ArchiefMaaltijd::class;
-    const DIR = 'maalcie/';
-
-    protected static $instance;
 
     protected $default_order = 'datum DESC, tijd DESC';
 

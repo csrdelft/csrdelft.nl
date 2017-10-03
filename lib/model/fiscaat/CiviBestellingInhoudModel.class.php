@@ -9,12 +9,21 @@ use CsrDelft\Orm\PersistenceModel;
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class CiviBestellingInhoudModel extends PersistenceModel {
+	/**
+	 * ORM class.
+	 */
 	const ORM = CiviBestellingInhoud::class;
 
 	/**
-	 * @var CiviBestellingInhoudModel
+	 * @var CiviProductModel
 	 */
-	protected static $instance;
+	private $civiProductModel;
+
+	protected function __construct(CiviProductModel $civiProductModel) {
+		parent::__construct();
+
+		$this->civiProductModel = $civiProductModel;
+	}
 
 	/**
 	 * @param CiviBestellingInhoud $inhoud
@@ -22,7 +31,7 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	 * @return int
 	 */
 	public function getPrijs(CiviBestellingInhoud $inhoud) {
-		$product = CiviProductModel::instance()->getProduct($inhoud->product_id);
+		$product = $this->civiProductModel->getProduct($inhoud->product_id);
 
 		return $product->prijs * $inhoud->aantal;
 	}
@@ -33,7 +42,7 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	 * @return string
 	 */
 	public function getBeschrijving(CiviBestellingInhoud $inhoud) {
-		$product = CiviProductModel::instance()->getProduct($inhoud->product_id);
+		$product = $this->civiProductModel->getProduct($inhoud->product_id);
 		return sprintf("%d %s", $inhoud->aantal, $product->beschrijving);
 	}
 }

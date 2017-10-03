@@ -14,7 +14,6 @@ class GeoLocationModel extends PersistenceModel {
 
 	const ORM = GeoLocation::class;
 
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string

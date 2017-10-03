@@ -262,15 +262,16 @@
 
 				// BEGIN toggle full screen
 				var toggleFullScreen = function () {
-					moveTagDivs();
-					if (container.hasClass('jgallery-full-screen')) {
-						window.scrollTo(0, 0);
-						window.clearTimeout($('#cd-main-trigger').data('timer'));
-						setTimeout(function () {
-							$('#cd-main-trigger').addClass('fade');
-							$('#cd-user-avatar').addClass('fade');
-						}, 1000);
-						var docelem = $('body').get(0);
+						//moveTagDivs();
+						if (container.hasClass('jgallery-full-screen')) {
+							requestFullscreen();
+						}
+						else {
+							exitFullScreen();
+						}
+					},
+					requestFullscreen = function() {
+						var docelem = $('.jgallery').get(0);
 						if (docelem.requestFullscreen) {
 							docelem.requestFullscreen();
 						} else if (docelem.webkitRequestFullscreen) {
@@ -280,10 +281,8 @@
 						} else if (docelem.msRequestFullscreen) {
 							docelem.msRequestFullscreen();
 						}
-					}
-					else {
-						$('#cd-main-trigger').removeClass('fade');
-						$('#cd-user-avatar').removeClass('fade');
+					},
+					exitFullScreen = function() {
 						if (document.exitFullscreen) {
 							document.exitFullscreen();
 						}
@@ -296,8 +295,7 @@
 						else if (document.msExitFullscreen) {
 							document.msExitFullscreen();
 						}
-					}
-				};
+					};
 				// END toggle full screen
 
 				// BEGIN zoom full resolution
@@ -504,7 +502,7 @@
 					"height": "897px",
 					"mode": "standard",
 					"canChangeMode": true,
-					"swipeEvents": true,
+					"swipeEvents": false,
 					"browserHistory": true,
 					"disabledOnIE8AndOlder": true,
 					"preloadAll": false,
@@ -576,7 +574,8 @@
 						}
 						loadTags();
 		{/toegang}
-					}
+					},
+					"items": {$itemsJson}
 				});
 				container = $('div.jgallery');
 				container.addClass('noselect');
@@ -603,13 +602,14 @@
 								moveTagDivs();
 							}
 						}
-						else {
-							$('span.change-mode').click();
-						}
 					}
-					else if (event.keyCode === 122) { // f11
-						event.preventDefault();
-						container.find('span.change-mode').click();
+				});
+
+				$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(e) {
+					if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+						// Fullscreen gegaan, door ons knopje.
+					} else if (container.hasClass('jgallery-full-screen')) {
+						$('span.change-mode').click();
 					}
 				});
 
@@ -745,26 +745,6 @@
 <h1 class="inline">{$album->dirname|ucfirst}</h1>
 {if $album->hasFotos()}
 	<div id="gallery">
-		<div class="album" data-jgallery-album-title="{$album->dirname|ucfirst}">
-			<h2>{$album->dirname|ucfirst}</h2>
-			{foreach from=$album->getFotos() item=foto}
-				<a class="foto" href="{$foto->getResizedUrl()}" data-href="{$foto->getFullUrl()}" data-mod="{$foto->isOwner() || CsrDelft\model\security\LoginModel::mag('P_ALBUM_MOD')}">
-					<img src="{$foto->getThumbUrl()}" alt="{$smarty.const.CSR_ROOT}{$foto->getFullUrl()|replace:"%20":" "}" />
-				</a>
-			{/foreach}
-		</div>
-		{foreach from=$album->getSubAlbums(true) item=subalbum}
-			{if $subalbum->hasFotos()}
-				<div class="album" data-jgallery-album-title="{$subalbum->dirname|ucfirst}">
-					<h2>{$album->dirname|ucfirst}</h2>
-					{foreach from=$subalbum->getFotos() item=foto}
-						<a class="foto" href="{$foto->getResizedUrl()}">
-							<img src="{$foto->getThumbUrl()}" alt="{$smarty.const.CSR_ROOT}{$foto->getFullUrl()|replace:"%20":" "}" />
-						</a>
-					{/foreach}
-				</div>
-			{/if}
-		{/foreach}
 	</div>
 {else}
 	<div class="subalbums">

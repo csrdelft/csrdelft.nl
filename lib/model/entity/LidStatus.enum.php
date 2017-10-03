@@ -1,6 +1,6 @@
 <?php
 namespace CsrDelft\model\entity;
-use CsrDelft\common\CsrException;
+
 use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
@@ -9,16 +9,24 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-abstract class LidStatus implements PersistentEnum {
+abstract class LidStatus extends PersistentEnum {
 
-	// h.t. leden
+	/**
+	 * Status voor h.t. leden.
+	 */
 	const Noviet = 'S_NOVIET';
 	const Lid = 'S_LID';
 	const Gastlid = 'S_GASTLID';
-	// o.t. leden
+
+	/**
+	 * Status voor o.t. leden.
+	 */
 	const Oudlid = 'S_OUDLID';
 	const Erelid = 'S_ERELID';
-	// niet-leden
+
+	/**
+	 * Status voor niet-leden.
+	 */
 	const Overleden = 'S_OVERLEDEN';
 	const Exlid = 'S_EXLID';
 	const Nobody = 'S_NOBODY';
@@ -28,18 +36,80 @@ abstract class LidStatus implements PersistentEnum {
 	/**
 	 * @var string[]
 	 */
-	public static $lidlike = [self::Noviet, self::Lid, self::Gastlid];
+	protected static $lidlike = [
+		self::Noviet => self::Noviet,
+		self::Lid => self::Lid,
+		self::Gastlid => self::Gastlid,
+	];
 
 	/**
 	 * @var string[]
 	 */
-	public static $oudlidlike = [self::Oudlid, self::Erelid];
+	protected static $oudlidlike = [
+		self::Oudlid => self::Oudlid,
+		self::Erelid => self::Erelid,
+	];
+
+	/**
+	 * @var string[]
+	 */
+	protected static $supportedChoices = [
+		self::Noviet => self::Noviet,
+		self::Lid => self::Lid,
+		self::Gastlid => self::Gastlid,
+		self::Oudlid => self::Oudlid,
+		self::Erelid => self::Erelid,
+		self::Overleden => self::Overleden,
+		self::Exlid => self::Exlid,
+		self::Nobody => self::Nobody,
+		self::Commissie => self::Commissie,
+		self::Kringel => self::Kringel,
+	];
+
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToDescription = [
+		self::Noviet => 'Noviet',
+		self::Lid => 'Lid',
+		self::Gastlid => 'Gastlid',
+		self::Oudlid => 'Oudlid',
+		self::Erelid => 'Erelid',
+		self::Overleden => 'Overleden',
+		self::Exlid => 'Ex-lid',
+		self::Nobody => 'Nobody',
+		self::Commissie => 'Commissie (LDAP)',
+		self::Kringel => 'Kringel',
+	];
+
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToChar = [
+		self::Noviet => '',
+		self::Lid => '',
+		self::Gastlid => '',
+		self::Commissie => '∈',
+		self::Exlid => '∉',
+		self::Nobody => '∉',
+		self::Kringel => '~',
+		self::Oudlid => '•',
+		self::Erelid => '☀',
+		self::Overleden => '✝',
+	];
 
 	/**
 	 * @return string[]
 	 */
-	public static function getTypeOptions() {
-		return [self::Noviet, self::Lid, self::Gastlid, self::Oudlid, self::Erelid, self::Overleden, self::Exlid, self::Nobody, self::Commissie, self::Kringel];
+	public static function getLidLike() {
+		return array_values(static::$lidlike);
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public static function getOudlidLike() {
+		return array_values(static::$oudlidlike);
 	}
 
 	/**
@@ -48,7 +118,7 @@ abstract class LidStatus implements PersistentEnum {
 	 * @return bool
 	 */
 	public static function isLidLike($option) {
-		return in_array($option, self::$lidlike);
+		return isset(static::$lidlike[$option]);
 	}
 
 	/**
@@ -57,56 +127,6 @@ abstract class LidStatus implements PersistentEnum {
 	 * @return bool
 	 */
 	public static function isOudlidLike($option) {
-		return in_array($option, self::$oudlidlike);
+		return isset(static::$oudlidlike[$option]);
 	}
-
-	/**
-	 * @param string $option
-	 *
-	 * @return string
-	 * @throws CsrException
-	 */
-	public static function getDescription($option) {
-		switch ($option) {
-			case self::Noviet: return 'Noviet';
-			case self::Lid: return 'Lid';
-			case self::Gastlid: return 'Gastlid';
-			case self::Oudlid: return 'Oudlid';
-			case self::Erelid: return 'Erelid';
-			case self::Overleden: return 'Overleden';
-			case self::Exlid: return 'Ex-lid';
-			case self::Nobody: return 'Nobody';
-			case self::Commissie: return 'Commissie (LDAP)';
-			case self::Kringel: return 'Kringel';
-			default: throw new CsrException('LidStatus onbekend');
-		}
-	}
-
-	/**
-	 * Geef een karakter terug om de status van het huidige lid aan te
-	 * duiden. In de loop der tijd zijn ~ voor kringel en • voor oudlid
-	 * ingeburgerd. Handig om in leden snel te zien om wat voor soort
-	 * lid het gaat.
-	 *
-	 * @param string $option
-	 *
-	 * @return string
-	 * @throws CsrException
-	 */
-	public static function getChar($option) {
-		switch ($option) {
-			case self::Noviet:
-			case self::Lid:
-			case self::Gastlid: return '';
-			case self::Commissie: return '∈';
-			case self::Exlid:
-			case self::Nobody: return '∉';
-			case self::Kringel: return '~';
-			case self::Oudlid: return '•';
-			case self::Erelid: return '☀';
-			case self::Overleden: return '✝';
-			default: throw new CsrException('LidStatus onbekend');
-		}
-	}
-
 }

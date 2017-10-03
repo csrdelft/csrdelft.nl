@@ -16,9 +16,6 @@ use CsrDelft\Orm\CachedPersistenceModel;
 class FunctiesModel extends CachedPersistenceModel {
 
 	const ORM = CorveeFunctie::class;
-	const DIR = 'maalcie/';
-
-	protected static $instance;
 
 	/**
 	 * Lazy loading of kwalificaties.
@@ -33,7 +30,6 @@ class FunctiesModel extends CachedPersistenceModel {
 	/**
 	 * Optional eager loading of kwalificaties.
 	 *
-	 * @param boolean $load_kwalificaties
 	 * @return CorveeFunctie[]
 	 */
 	public function getAlleFuncties() {

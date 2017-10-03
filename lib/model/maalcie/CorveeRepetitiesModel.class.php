@@ -16,9 +16,6 @@ use PDOStatement;
  */
 class CorveeRepetitiesModel extends PersistenceModel {
 	const ORM = CorveeRepetitie::class;
-	const DIR = 'maalcie/';
-
-	protected static $instance;
 
 	public function nieuw($crid = 0, $mrid = null, $dag = null, $periode = null, $fid = 0, $punten = 0, $aantal = null, $voorkeur = null) {
 		$repetitie = new CorveeRepetitie();

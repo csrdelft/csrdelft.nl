@@ -21,9 +21,22 @@ use function CsrDelft\setMelding;
 class ForumDelenModel extends CachedPersistenceModel {
 
 	const ORM = ForumDeel::class;
-	const DIR = 'forum/';
+	/**
+	 * @var ForumDradenModel
+	 */
+	private $forumDradenModel;
+	/**
+	 * @var ForumPostsModel
+	 */
+	private $forumPostsModel;
 
-	protected static $instance;
+	protected function __construct(ForumDradenModel $forumDradenModel, ForumPostsModel $forumPostsModel) {
+		parent::__construct();
+
+		$this->forumDradenModel = $forumDradenModel;
+		$this->forumPostsModel = $forumPostsModel;
+	}
+
 	/**
 	 * Default ORDER BY
 	 * @var string
@@ -54,7 +67,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 	 * @return int
 	 */
 	public function create(PersistentEntity $entity) {
-		$entity->forum_id = (int)CachedPersistenceModel::create($entity);
+		$entity->forum_id = (int)parent::create($entity);
 		return $entity->forum_id;
 	}
 
@@ -122,7 +135,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 		} else {
 			$deel->titel = 'Recent gewijzigd';
 		}
-		$deel->setForumDraden(ForumDradenModel::instance()->getRecenteForumDraden(null, $belangrijk));
+		$deel->setForumDraden($this->forumDradenModel->getRecenteForumDraden(null, $belangrijk));
 		return $deel;
 	}
 
@@ -133,9 +146,9 @@ class ForumDelenModel extends CachedPersistenceModel {
 	 * @return ForumDraad[]
 	 */
 	public function getWachtOpGoedkeuring() {
-		$postsByDraadId = group_by('draad_id', ForumPostsModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
-		$dradenById = group_by_distinct('draad_id', ForumDradenModel::instance()->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
-		$dradenById += ForumDradenModel::instance()->getForumDradenById(array_keys($postsByDraadId)); // laad draden bij posts
+		$postsByDraadId = group_by('draad_id', $this->forumPostsModel->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+		$dradenById = group_by_distinct('draad_id', $this->forumDradenModel->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+		$dradenById += $this->forumDradenModel->getForumDradenById(array_keys($postsByDraadId)); // laad draden bij posts
 		foreach ($dradenById as $draad) { // laad posts bij draden
 			if (array_key_exists($draad->draad_id, $postsByDraadId)) { // post is al gevonden
 				$draad->setForumPosts($postsByDraadId[$draad->draad_id]);
@@ -150,7 +163,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 					$melding .= 'goedgekeurd';
 					setMelding($melding, 2);
 				}
-				ForumDradenModel::instance()->update($draad);
+				$this->forumDradenModel->update($draad);
 			}
 		}
 		// check permissies
@@ -159,7 +172,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 				unset($dradenById[$draad_id]);
 			}
 		}
-		if (empty($dradenById) AND ForumPostsModel::instance()->getAantalWachtOpGoedkeuring() > 0) {
+		if (empty($dradenById) AND $this->forumPostsModel->getAantalWachtOpGoedkeuring() > 0) {
 			setMelding('U heeft onvoldoende rechten om de berichten goed te keuren', 0);
 		}
 		return $dradenById;
@@ -172,12 +185,12 @@ class ForumDelenModel extends CachedPersistenceModel {
 	 * @return ForumDraad[]
 	 */
 	public function zoeken($query, $titel, $datum, $ouder, $jaar, $limit) {
-		$gevonden_draden = group_by_distinct('draad_id', ForumDradenModel::instance()->zoeken($query, $datum, $ouder, $jaar, $limit)); // zoek op titel in draden
+		$gevonden_draden = group_by_distinct('draad_id', $this->forumDradenModel->zoeken($query, $datum, $ouder, $jaar, $limit)); // zoek op titel in draden
 		if ($titel === true) {
 			$gevonden_posts = array();
 		} else {
-			$gevonden_posts = group_by('draad_id', ForumPostsModel::instance()->zoeken($query, $datum, $ouder, $jaar, $limit)); // zoek op tekst in posts
-			$gevonden_draden += ForumDradenModel::instance()->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
+			$gevonden_posts = group_by('draad_id', $this->forumPostsModel->zoeken($query, $datum, $ouder, $jaar, $limit)); // zoek op tekst in posts
+			$gevonden_draden += $this->forumDradenModel->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
 			// laad posts bij draden
 			foreach ($gevonden_draden as $draad) {
 				if (property_exists($draad, 'score')) { // gevonden op draad titel
@@ -191,7 +204,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 						$draad->score += (float)$post->score;
 					}
 				} else { // laad eerste post
-					$array_first_post = ForumPostsModel::instance()->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, null, 1);
+					$array_first_post = $this->forumPostsModel->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, null, 1);
 					$draad->setForumPosts($array_first_post);
 				}
 			}

@@ -16,9 +16,6 @@ class CmsPaginaModel extends PersistenceModel {
 
 	const ORM = CmsPagina::class;
 
-	/** @var CmsPaginaModel */
-	protected static $instance;
-
 	/**
 	 * @param $naam
 	 *

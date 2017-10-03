@@ -17,8 +17,6 @@ class GesprekDeelnemersModel extends PersistenceModel {
 
 	const ORM = GesprekDeelnemer::class;
 
-	/** @var static */
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string

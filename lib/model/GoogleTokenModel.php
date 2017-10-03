@@ -12,8 +12,4 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class GoogleTokenModel extends PersistenceModel {
     const ORM = GoogleToken::class;
-    /**
-     * @var static
-     */
-    protected static $instance;
 }

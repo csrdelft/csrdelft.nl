@@ -21,11 +21,6 @@ class MededelingenModel extends PersistenceModel {
 	const DEFAULT_PRIORITEIT = 255;
 
 	/**
-	 * @var MededelingenModel
-	 */
-	protected static $instance;
-
-	/**
 	 * Valideer een gegeven mededeling.
 	 *
 	 * @param Mededeling $mededeling

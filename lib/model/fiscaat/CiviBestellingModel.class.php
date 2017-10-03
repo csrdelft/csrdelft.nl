@@ -13,12 +13,35 @@ use CsrDelft\Orm\PersistenceModel;
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class CiviBestellingModel extends PersistenceModel {
+	/**
+	 * ORM class.
+	 */
 	const ORM = CiviBestelling::class;
 
 	/**
-	 * @var CiviBestellingModel
+	 * @var CiviBestellingInhoudModel
 	 */
-	protected static $instance;
+	private $civiBestellingInhoudModel;
+
+	/**
+	 * @var CiviProductModel
+	 */
+	private $civiProductModel;
+
+	/**
+	 * CiviBestellingModel constructor.
+	 * @param CiviBestellingInhoudModel $civiBestellingInhoudModel
+	 * @param CiviProductModel $civiProductModel
+	 */
+	public function __construct(
+		CiviBestellingInhoudModel $civiBestellingInhoudModel,
+		CiviProductModel $civiProductModel
+	) {
+		parent::__construct();
+
+		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
+		$this->civiProductModel = $civiProductModel;
+	}
 
 	/**
 	 * @param string $uid
@@ -47,10 +70,10 @@ class CiviBestellingModel extends PersistenceModel {
 	public function getBeschrijving($bestellingen) {
 		foreach ($bestellingen as $bestelling) {
 			/** @var CiviBestellingInhoud[] $inhoud */
-			$inhoud = CiviBestellingInhoudModel::instance()->find('bestelling_id = ?', array($bestelling->id));
+			$inhoud = $this->civiBestellingInhoudModel->find('bestelling_id = ?', array($bestelling->id));
 			$bestellingInhoud = [];
 			foreach ($inhoud as $item) {
-				$bestellingInhoud[] = CiviBestellingInhoudModel::instance()->getBeschrijving($item);
+				$bestellingInhoud[] = $this->civiBestellingInhoudModel->getBeschrijving($item);
 			}
 
 			yield (object) [
@@ -69,7 +92,7 @@ class CiviBestellingModel extends PersistenceModel {
 	public function getBeschrijvingText($bestellingen) {
 		$bestellingenInhoud = [];
 		foreach ($bestellingen as $item) {
-			$bestellingenInhoud[] = CiviBestellingInhoudModel::instance()->getBeschrijving($item);
+			$bestellingenInhoud[] = $this->civiBestellingInhoudModel->getBeschrijving($item);
 		}
 		return implode(", ", $bestellingenInhoud);
 	}
@@ -86,7 +109,7 @@ class CiviBestellingModel extends PersistenceModel {
 		$inhoud->product_id = $aanmelding->getMaaltijd()->product_id;
 
 		$bestelling->inhoud[] = $inhoud;
-		$bestelling->totaal = CiviProductModel::instance()->getProduct($inhoud->product_id)->prijs * (1 + $aanmelding->aantal_gasten);
+		$bestelling->totaal = $this->civiProductModel->getProduct($inhoud->product_id)->prijs * (1 + $aanmelding->aantal_gasten);
 
 		return $bestelling;
 	}
@@ -103,7 +126,7 @@ class CiviBestellingModel extends PersistenceModel {
 		$inhoud->product_id = 6; // TODO dynamic, is cent
 
 		$bestelling->inhoud[] = $inhoud;
-		$bestelling->totaal = CiviProductModel::instance()->getProduct($inhoud->product_id)->prijs * -$bedrag;
+		$bestelling->totaal = $this->civiProductModel->getProduct($inhoud->product_id)->prijs * -$bedrag;
 
 		return $bestelling;
 	}
@@ -117,7 +140,7 @@ class CiviBestellingModel extends PersistenceModel {
 
 		foreach ($entity->inhoud as $bestelling) {
 			$bestelling->bestelling_id = $entity->id;
-			CiviBestellingInhoudModel::instance()->create($bestelling);
+			$this->civiBestellingInhoudModel->create($bestelling);
 		}
 
 		return $entity->id;

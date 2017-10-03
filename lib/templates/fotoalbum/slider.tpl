@@ -15,7 +15,8 @@
 					"transitionCols": 1,
 					"transitionRows": 1,
 					"backgroundColor": "FFFFFF",
-					"textColor": "000000"
+					"textColor": "000000",
+					"items": {$itemsJson}
 				});
 			});
 		}
@@ -24,9 +25,6 @@
 			// Missing js file
 		}
 	</script>
-	<div id="{$sliderId}" class="hidden">
-		{foreach from=$album->getFotos() item=foto}
-			<img src="{$foto->getResizedUrl()}" />
-		{/foreach}
+	<div id="{$sliderId}">
 	</div>
 {/if}

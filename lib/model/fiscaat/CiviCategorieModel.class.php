@@ -11,12 +11,10 @@ use CsrDelft\Orm\PersistenceModel;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class CiviCategorieModel extends PersistenceModel {
-	const ORM = CiviCategorie::class;
-
 	/**
-	 * @var CiviCategorieModel
+	 * ORM class.
 	 */
-	protected static $instance;
+	const ORM = CiviCategorie::class;
 
 	/**
 	 * @param $id

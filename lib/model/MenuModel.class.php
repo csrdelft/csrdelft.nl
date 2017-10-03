@@ -19,8 +19,6 @@ class MenuModel extends CachedPersistenceModel {
 
 	const ORM = MenuItem::class;
 
-	/** @var static */
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string

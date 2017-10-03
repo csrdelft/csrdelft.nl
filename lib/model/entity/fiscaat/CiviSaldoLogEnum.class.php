@@ -1,5 +1,4 @@
 <?php
-
 namespace CsrDelft\model\entity\fiscaat;
 
 use CsrDelft\Orm\Entity\PersistentEnum;
@@ -10,7 +9,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 07/04/2017
  */
-class CiviSaldoLogEnum implements PersistentEnum {
+class CiviSaldoLogEnum extends PersistentEnum {
 
 	/** Maken van een bestelling */
 	const INSERT_BESTELLING = 'insert';
@@ -24,15 +23,22 @@ class CiviSaldoLogEnum implements PersistentEnum {
 	/** Verwijderen van een saldo */
 	const DELETE_SALDO = 'delete';
 
-	public static function getTypeOptions() {
-		return array(self::INSERT_BESTELLING, self::REMOVE_BESTELLING, self::CREATE_SALDO, self::UPDATE_SALDO, self::DELETE_SALDO);
-	}
+	/**
+	 * @var string[]
+	 */
+	protected static $supportedChoices = [
+		self::INSERT_BESTELLING => self::INSERT_BESTELLING,
+		self::REMOVE_BESTELLING => self::REMOVE_BESTELLING,
+		self::CREATE_SALDO => self::CREATE_SALDO,
+		self::UPDATE_SALDO => self::UPDATE_SALDO,
+		self::DELETE_SALDO => self::DELETE_SALDO,
+	];
 
+	/**
+	 * @param string $option
+	 * @return string
+	 */
 	public static function getDescription($option) {
 		return sprintf('Log van type : %s', $option);
-	}
-
-	public static function getChar($option) {
-		return ucfirst($option);
 	}
 }

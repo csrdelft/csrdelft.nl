@@ -26,9 +26,7 @@ use PDO;
 class ForumDradenModel extends CachedPersistenceModel implements Paging {
 
 	const ORM = ForumDraad::class;
-	const DIR = 'forum/';
 
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string
@@ -76,6 +74,31 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	);
 
 	/**
+	 * @var ForumDradenGelezenModel
+	 */
+	private $forumDradenGelezenModel;
+
+	/**
+	 * @var ForumDradenReagerenModel
+	 */
+	private $forumDradenReagerenModel;
+
+	/**
+	 * @var ForumDradenVerbergenModel
+	 */
+	private $forumDradenVerbergenModel;
+
+	/**
+	 * @var ForumDradenVolgenModel
+	 */
+	private $forumDradenVolgenModel;
+
+	/**
+	 * @var ForumPostsModel
+	 */
+	private $forumPostsModel;
+
+	/**
 	 * @param $id
 	 * @return ForumDraad
 	 * @throws CsrGebruikerException
@@ -88,12 +111,24 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		return $draad;
 	}
 
-	protected function __construct() {
-		CachedPersistenceModel::__construct();
+	protected function __construct(
+		ForumDradenGelezenModel $forumDradenGelezenModel,
+		ForumDradenReagerenModel $forumDradenReagerenModel,
+		ForumDradenVerbergenModel $forumDradenVerbergenModel,
+		ForumDradenVolgenModel $forumDradenVolgenModel,
+		ForumPostsModel $forumPostsModel
+	) {
+		parent::__construct();
 		$this->pagina = 1;
 		$this->per_pagina = (int)LidInstellingenModel::get('forum', 'draden_per_pagina');
 		$this->aantal_paginas = array();
 		$this->aantal_plakkerig = null;
+
+		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
+		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
+		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
+		$this->forumDradenVolgenModel = $forumDradenVolgenModel;
+		$this->forumPostsModel = $forumPostsModel;
 	}
 
 	public function getAantalPerPagina() {
@@ -233,7 +268,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		$forum_ids_stub = implode(', ', array_fill(0, $count, '?'));
 		$forum_ids = array_keys($delenById);
 		$where_params = array_merge($forum_ids, $forum_ids);
-		$verbergen = ForumDradenVerbergenModel::instance()->prefetch('uid = ?', array(LoginModel::getUid()));
+		$verbergen = $this->forumDradenVerbergenModel->prefetch('uid = ?', array(LoginModel::getUid()));
 		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
 		$count = count($draden_ids);
 		if ($count > 0) {
@@ -259,12 +294,12 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		if ($count > 0) {
 			$draden_ids = array_keys($dradenById);
 			array_unshift($draden_ids, LoginModel::getUid());
-			ForumDradenGelezenModel::instance()->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
+			$this->forumDradenGelezenModel->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
 			if ($getLatestPosts) {
 				$latest_post_ids = array_map(function ($draad) {
 					return $draad->laatste_post_id;
 				}, array_values($dradenById));
-				ForumPostsModel::instance()->prefetch('wacht_goedkeuring = FALSE AND verwijderd = FALSE AND post_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $latest_post_ids);
+				$this->forumPostsModel->prefetch('wacht_goedkeuring = FALSE AND verwijderd = FALSE AND post_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $latest_post_ids);
 			}
 		}
 		return $dradenById;
@@ -310,21 +345,21 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 			throw new CsrException('Wijzigen van ' . $property . ' mislukt');
 		}
 		if ($property === 'belangrijk') {
-			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
+			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
 		} elseif ($property === 'gesloten') {
-			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
+			$this->forumDradenVolgenModel->stopVolgenVoorIedereen($draad);
 		} elseif ($property === 'verwijderd') {
-			ForumDradenVolgenModel::instance()->stopVolgenVoorIedereen($draad);
-			ForumDradenVerbergenModel::instance()->toonDraadVoorIedereen($draad);
-			ForumDradenGelezenModel::instance()->verwijderDraadGelezen($draad);
-			ForumDradenReagerenModel::instance()->verwijderReagerenVoorDraad($draad);
-			ForumPostsModel::instance()->verwijderForumPostsVoorDraad($draad);
+			$this->forumDradenVolgenModel->stopVolgenVoorIedereen($draad);
+			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
+			$this->forumDradenGelezenModel->verwijderDraadGelezen($draad);
+			$this->forumDradenReagerenModel->verwijderReagerenVoorDraad($draad);
+			$this->forumPostsModel->verwijderForumPostsVoorDraad($draad);
 		}
 	}
 
 	public function resetLastPost(ForumDraad $draad) {
 		// reset last post
-		$last_post = ForumPostsModel::instance()->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, 'laatst_gewijzigd DESC', 1)->fetch();
+		$last_post = $this->forumPostsModel->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, 'laatst_gewijzigd DESC', 1)->fetch();
 		if ($last_post) {
 			$draad->laatste_post_id = $last_post->post_id;
 			$draad->laatste_wijziging_uid = $last_post->uid;

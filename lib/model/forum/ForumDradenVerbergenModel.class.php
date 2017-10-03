@@ -16,9 +16,6 @@ use CsrDelft\Orm\CachedPersistenceModel;
 class ForumDradenVerbergenModel extends CachedPersistenceModel {
 
 	const ORM = ForumDraadVerbergen::class;
-	const DIR = 'forum/';
-
-	protected static $instance;
 
 	protected function maakForumDraadVerbergen($draad_id) {
 		$verbergen = new ForumDraadVerbergen();

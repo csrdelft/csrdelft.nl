@@ -9,9 +9,6 @@ use function CsrDelft\getDateTime;
 
 class SaldoModel extends PersistenceModel {
 	const ORM = Saldo::class;
-	const DIR = 'fiscaat/';
-
-	protected static $instance;
 
 	public function getDataPoints($uid, $timespan) {
 		return [$this->getDataPointsForCiviSaldo($uid, $timespan)];

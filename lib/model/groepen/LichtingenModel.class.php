@@ -9,8 +9,6 @@ class LichtingenModel extends AbstractGroepenModel {
 
 	const ORM = Lichting::class;
 
-	protected static $instance;
-
 	public static function get($lidjaar) {
 		return static::instance()->nieuw($lidjaar);
 	}

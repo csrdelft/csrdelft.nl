@@ -30,7 +30,7 @@ class DataTable implements View, FormElement {
 	protected $settings = array(
 		'deferRender' => true,
 		'dom' => 'Bfrtpli',
-		'buttons' => array('copy', 'csv', 'excel', 'pdf', 'print'),
+		'buttons' => array('copy', 'csv', 'excel', 'print'),
 		'userButtons' => array(),
 		'select' => true,
 		'lengthMenu' => array(
@@ -217,22 +217,17 @@ class DataTable implements View, FormElement {
 		}
 		$this->settings['createdRow'] = 'fnCreatedRowCallback';
 
-		// get columns index
-		$columns = array_keys($this->columns);
-
 		// group by column
 		if (isset($this->columns[$this->groupByColumn])) {
-
 			// make group by column invisible and searchable
 			$this->hideColumn($this->groupByColumn);
 			$this->searchColumn($this->groupByColumn);
 
-			$this->groupByColumn = array_search($this->groupByColumn, $columns);
-			$this->settings['orderFixed'] = array(
-				array($this->groupByColumn, 'asc')
-			);
-		} else {
-			$this->groupByColumn = false;
+			$groupByColumnPosition = $this->columnPosition($this->groupByColumn);
+			$this->settings['columnGroup'] = [ 'column' => $groupByColumnPosition ];
+			$this->settings['orderFixed'] = [
+				[$groupByColumnPosition, 'asc']
+			];
 		}
 
 		// create visible columns index array and default order
@@ -293,19 +288,11 @@ HTML;
 		return classNameZonderNamespace(get_class($this));
 	}
 
-	public function getGroupByColumn() {
-		// get columns index
-		$columns = array_keys($this->columns);
-		return isset($this->columns[$this->groupByColumn]) ? array_search($this->groupByColumn, $columns) : false;
-	}
-
 	public function getHtml() {
-		$groupByColumn = $this->groupByColumn !== false ? ' groupByColumn' : '';
-
 		return <<<HTML
 <h2 class="Titel">{$this->getTitel()}</h2>
 
-<table id="{$this->dataTableId}" class="display{$groupByColumn}" groupbycolumn="{$this->getGroupByColumn()}"></table>
+<table id="{$this->dataTableId}" class="display"></table>
 HTML;
 	}
 
@@ -342,10 +329,7 @@ HTML;
 					var table = this;
 					$(tr).attr('data-uuid', data.UUID);
 					init_context(tr);
-					// Details from external source
-					if ('detailSource' in data) {
-						$(tr).children('td:first').addClass('toggle-childrow').data('detailSource', data.detailSource);
-					}
+					
 					$(tr).children().each(function (columnIndex, td) {
 						// Init custom buttons in rows
 						$(td).children('a.post').each(function (i, a) {
@@ -394,25 +378,6 @@ HTML;
 				var jtable = $(tableId);
 				var table = jtable.dataTable({$settingsJson});
 				table.fnFilter('{$filter}');
-				//fnInitStickyToolbar(); // Init after modifying DOM
-				// Toggle details childrow
-				jtable.find('tbody').on('click', 'tr td.toggle-childrow', function (event) {
-					fnChildRow(tableId, $(this));
-				});
-				if (jtable.hasClass('groupByColumn') && fnGetGroupByColumn(tableId)) {
-					// Group by column
-					jtable.find('tbody').on('click', 'tr.group', function (event) {
-						if (!bShiftPressed && !bCtrlPressed) {
-							fnGroupExpandCollapse(tableId, $(this));
-						}
-					});
-					jtable.find('thead').on('click', 'th.toggle-group:first', function (event) {
-						fnGroupExpandCollapseAll(tableId, $(this));
-					});
-					jtable.on('draw.dt', fnGroupByColumnDraw);
-					jtable.data('collapsedGroups', []);
-					jtable.find('thead tr th').first().addClass('toggle-group toggle-group-expanded');
-				}
 			});
 
 			var fnDeselectItemsOnPageChange = function (dt) {

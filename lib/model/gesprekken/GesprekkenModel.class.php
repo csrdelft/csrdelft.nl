@@ -15,13 +15,36 @@ class GesprekkenModel extends PersistenceModel {
 
 	const ORM = Gesprek::class;
 
-	/** @var static */
-	protected static $instance;
 	/**
 	 * Default ORDER BY
 	 * @var string
 	 */
 	protected $default_order = 'laatste_update DESC';
+
+	/**
+	 * @var GesprekBerichtenModel
+	 */
+	private $gesprekBerichtenModel;
+
+	/**
+	 * @var GesprekDeelnemersModel
+	 */
+	private $gesprekDeelnemersModel;
+
+	/**
+	 * GesprekkenModel constructor.
+	 * @param GesprekBerichtenModel $gesprekBerichtenModel
+	 * @param GesprekDeelnemersModel $gesprekDeelnemersModel
+	 */
+	protected function __construct(
+		GesprekBerichtenModel $gesprekBerichtenModel,
+		GesprekDeelnemersModel $gesprekDeelnemersModel
+	) {
+		parent::__construct();
+
+		$this->gesprekBerichtenModel = $gesprekBerichtenModel;
+		$this->gesprekDeelnemersModel = $gesprekDeelnemersModel;
+	}
 
 	/**
 	 * @param $gesprek_id
@@ -45,10 +68,10 @@ class GesprekkenModel extends PersistenceModel {
 		$gesprek->laatste_update = getDateTime();
 		$gesprek->gesprek_id = (int) $this->create($gesprek);
 		// Deelnemers toevoegen
-		$deelnemer = GesprekDeelnemersModel::instance()->voegToeAanGesprek($gesprek, $from);
-		GesprekDeelnemersModel::instance()->voegToeAanGesprek($gesprek, $to);
+		$deelnemer = $this->gesprekDeelnemersModel->voegToeAanGesprek($gesprek, $from);
+		$this->gesprekDeelnemersModel->voegToeAanGesprek($gesprek, $to);
 		// Maak bericht
-		GesprekBerichtenModel::instance()->maakBericht($gesprek, $deelnemer, $inhoud);
+		$this->gesprekBerichtenModel->maakBericht($gesprek, $deelnemer, $inhoud);
 		return $gesprek;
 	}
 
@@ -58,7 +81,7 @@ class GesprekkenModel extends PersistenceModel {
 	 * @return int
 	 */
 	public function verwijderGesprek(Gesprek $gesprek) {
-		GesprekBerichtenModel::instance()->verwijderBerichtenVoorGesprek($gesprek);
+		$this->gesprekBerichtenModel->verwijderBerichtenVoorGesprek($gesprek);
 		return $this->delete($gesprek);
 	}
 

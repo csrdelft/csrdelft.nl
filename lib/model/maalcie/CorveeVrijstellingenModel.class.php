@@ -14,9 +14,6 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class CorveeVrijstellingenModel extends PersistenceModel {
 	const ORM = CorveeVrijstelling::class;
-	const DIR = 'maalcie/';
-
-	protected static $instance;
 
 	public function nieuw($uid = null, $begin = null, $eind = null, $percentage = 0) {
 		$vrijstelling = new CorveeVrijstelling();

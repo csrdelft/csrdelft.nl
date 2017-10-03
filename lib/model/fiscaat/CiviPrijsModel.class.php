@@ -9,10 +9,8 @@ use CsrDelft\Orm\PersistenceModel;
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class CiviPrijsModel extends PersistenceModel {
-	const ORM = CiviPrijs::class;
-
 	/**
-	 * @var CiviPrijsModel
+	 * ORM class.
 	 */
-	protected static $instance;
+	const ORM = CiviPrijs::class;
 }

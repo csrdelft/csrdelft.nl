@@ -8,7 +8,6 @@ class VerticalenModel extends AbstractGroepenModel {
 
 	const ORM = Verticale::class;
 
-	protected static $instance;
 	/**
 	 * Store verticalen array as a whole in memcache
 	 * @var boolean

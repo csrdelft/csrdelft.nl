@@ -13,11 +13,8 @@ use CsrDelft\Orm\PersistenceModel;
 class MaaltijdRepetitiesModel extends PersistenceModel {
 
     const ORM = MaaltijdRepetitie::class;
-    const DIR = 'maalcie/';
 
     protected $default_order = '(periode_in_dagen = 0) ASC, periode_in_dagen ASC, dag_vd_week ASC, standaard_titel ASC';
-
-    protected static $instance;
 
 	/**
 	 * Filtert de repetities met het abonnement-filter van de maaltijd-repetitie op de permissies van het ingelogde lid.

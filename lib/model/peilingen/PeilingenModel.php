@@ -23,11 +23,6 @@ class PeilingenModel extends PersistenceModel {
 	const ORM = Peiling::class;
 
 	/**
-	 * @var static
-	 */
-	protected static $instance;
-
-	/**
 	 * @param PersistentEntity|Peiling $entity
 	 * @return int
 	 */

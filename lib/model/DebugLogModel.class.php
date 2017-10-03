@@ -17,11 +17,6 @@ class DebugLogModel extends PersistenceModel {
 	const ORM = DebugLogEntry::class;
 
 	/**
-	 * @var static
-	 */
-	protected static $instance;
-
-	/**
 	 */
 	public function opschonen() {
 		$entries = $this->find('moment < ?', array(strtotime('-2 months')));
