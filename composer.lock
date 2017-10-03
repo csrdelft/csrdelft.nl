@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a9cce671bbe62a1f7348961216bc9111",
-    "content-hash": "064f7d3e2f8da08cc0efea36f1bb3c58",
+    "hash": "9d5c72d9a12d20395bec7379ee5f41f3",
+    "content-hash": "049c4d539911da04b23439101c263c77",
     "packages": [
         {
             "name": "csrdelft/orm",
-            "version": "v1.7",
+            "version": "v1.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
-                "reference": "1ca14c9a9de1cd29a1873d9b6102526c79809b17"
+                "reference": "974470843936bf12fbaccdcc67cf00859e9c2412"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/orm/zipball/1ca14c9a9de1cd29a1873d9b6102526c79809b17",
-                "reference": "1ca14c9a9de1cd29a1873d9b6102526c79809b17",
+                "url": "https://api.github.com/repos/csrdelft/orm/zipball/974470843936bf12fbaccdcc67cf00859e9c2412",
+                "reference": "974470843936bf12fbaccdcc67cf00859e9c2412",
                 "shasum": ""
             },
             "require": {
@@ -52,7 +52,7 @@
             ],
             "description": "The creatively named object-relational mapping library for csrdelft.nl",
             "homepage": "https://github.com/csrdelft/orm",
-            "time": "2017-09-20 14:45:21"
+            "time": "2017-10-03 14:42:26"
         },
         {
             "name": "doctrine/instantiator",
@@ -240,16 +240,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.25",
+            "version": "v0.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "a94763c82a4325a6529feaa0a1f5fd1c289c8f68"
+                "reference": "209421578d76762806087944cf514f1ede6cf7ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/a94763c82a4325a6529feaa0a1f5fd1c289c8f68",
-                "reference": "a94763c82a4325a6529feaa0a1f5fd1c289c8f68",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/209421578d76762806087944cf514f1ede6cf7ad",
+                "reference": "209421578d76762806087944cf514f1ede6cf7ad",
                 "shasum": ""
             },
             "require": {
@@ -273,7 +273,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2017-09-16 00:23:43"
+            "time": "2017-09-30 00:22:48"
         },
         {
             "name": "google/auth",
@@ -1390,16 +1390,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.21",
+            "version": "5.7.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3b91adfb64264ddec5a2dee9851f354aa66327db"
+                "reference": "10df877596c9906d4110b5b905313829043f2ada"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3b91adfb64264ddec5a2dee9851f354aa66327db",
-                "reference": "3b91adfb64264ddec5a2dee9851f354aa66327db",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/10df877596c9906d4110b5b905313829043f2ada",
+                "reference": "10df877596c9906d4110b5b905313829043f2ada",
                 "shasum": ""
             },
             "require": {
@@ -1468,7 +1468,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-06-21 08:11:54"
+            "time": "2017-09-24 07:23:38"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

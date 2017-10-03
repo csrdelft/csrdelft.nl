@@ -73,7 +73,7 @@ class BeheerCiviSaldoController extends AclController {
 				Database::transaction(function () use ($inleg, $civisaldo) {
 					$bestelling_model = CiviBestellingModel::instance();
 
-					$bestelling = $bestelling_model->vanInleg($inleg, $civisaldo->uid);
+					$bestelling = $bestelling_model->vanBedragInCenten($inleg, $civisaldo->uid);
 					$bestelling_model->create($bestelling);
 
 					$this->model->ophogen($civisaldo->uid, $inleg);

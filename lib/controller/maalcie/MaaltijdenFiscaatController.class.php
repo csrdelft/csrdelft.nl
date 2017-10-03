@@ -96,7 +96,7 @@ class MaaltijdenFiscaatController extends AclController {
 			$bestellingen = array();
 			# Maak een bestelling voor deze persoon
 			foreach ($aanmeldingen as $aanmelding) {
-				$bestellingen[] = $bestelling_model->vanMaaltijdAanmelding($aanmelding);
+				$bestellingen[] = $aanmeldingen_model->maakCiviBestelling($aanmelding);
 			}
 
 			# Reken de bestelling af
