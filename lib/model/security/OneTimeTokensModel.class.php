@@ -5,7 +5,6 @@ use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\security\OneTimeToken;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\PersistenceModel;
-use function CsrDelft\redirect;
 
 /**
  * OneTimeTokensModel.class.php
@@ -23,7 +22,7 @@ class OneTimeTokensModel extends PersistenceModel {
 	 *
 	 * @param string $uid
 	 * @param string $rand
-	 * @return boolean
+	 * @return boolean|OneTimeToken
 	 */
 	public function verifyToken($uid, $rand) {
 		$token = $this->find('uid = ? AND verified = FALSE AND expire > NOW() AND token = ?', array($uid, hash('sha512', $rand)), null, null, 1)->fetch();
@@ -33,7 +32,7 @@ class OneTimeTokensModel extends PersistenceModel {
 		if (LoginModel::instance()->login($token->uid, null, false, null, true, true, $token->expire)) {
 			$token->verified = true;
 			$this->update($token);
-			redirect($token->url);
+			return $token->url;
 		}
 		return false;
 	}
@@ -46,6 +45,7 @@ class OneTimeTokensModel extends PersistenceModel {
 	 * @return boolean
 	 */
 	public function isVerified($uid, $url) {
+		/** @var OneTimeToken $token */
 		$token = $this->retrieveByPrimaryKey(array($uid, $url));
 		if ($token) {
 			return $token->verified AND LoginModel::getUid() === $token->uid AND strtotime($token->expire) > time();

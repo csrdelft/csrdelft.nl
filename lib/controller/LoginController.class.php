@@ -370,11 +370,19 @@ class LoginController extends AclController {
 			$uid = $form->findByName('user')->getValue();
 			$account = AccountModel::get($uid);
 			// mag inloggen met url_token?
-			if (!$account OR ! AccessModel::mag($account, 'P_LOGGED_IN', AuthenticationMethod::getTypeOptions()) OR ! OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenString)) {
-				setMelding('Deze link is niet (meer) geldig', -1);
+			if ($account !== false AND AccessModel::mag($account, 'P_LOGGED_IN', AuthenticationMethod::getTypeOptions())) {
+				$token =  OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenString);
+
+				if ($token === false) {
+					setMelding('Deze link is niet (meer) geldig', -1);
+					redirect(CSR_ROOT . '/wachtwoord/vergeten');
+				} else {
+					redirect($token->url);
+				}
+			} else {
+				setMelding('Mag niet inloggen', -1);
 				redirect(CSR_ROOT . '/wachtwoord/vergeten');
 			}
-			// verifyToken() redirects on success
 		}
 		$this->view = new CsrLayoutOweePage($form);
 	}
