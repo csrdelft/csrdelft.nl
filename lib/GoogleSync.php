@@ -416,7 +416,9 @@ class GoogleSync {
 
 				$contact = $this->unpackGoogleContact($contact);
 				$profiel = ProfielModel::get($contact['csruid']);
-				$this->updatePhoto($contact, $profiel);
+				if ($profiel !== false) {
+					$this->updatePhoto($contact, $profiel);
+				}
 			}
 		}
 
