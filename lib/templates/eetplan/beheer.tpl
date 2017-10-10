@@ -5,6 +5,7 @@
 {$bekendehuizentable->view()}
 
 <a href="/eetplan/nieuw" class="btn post popup">Nieuw Eetplan</a>
+<a href="/eetplan/verwijderen" class="btn post popup">Eetplan verwijderen</a>
 
 {$table->view()}
 

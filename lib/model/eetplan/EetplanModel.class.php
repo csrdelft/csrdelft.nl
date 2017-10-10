@@ -20,8 +20,8 @@ class EetplanModel extends PersistenceModel {
 	 *
 	 * @return \PDOStatement|Eetplan[]
 	 */
-	public function getEetplanVoorAvond($avond) {
-		return $this->find('avond = ?', array($avond));
+	public function getEetplanVoorAvond($avond, $lichting) {
+		return $this->find('avond = ? AND uid LIKE ?', array($avond, $lichting . "%"));
 	}
 
 	/**
@@ -41,7 +41,7 @@ class EetplanModel extends PersistenceModel {
 	 * @return Eetplan[] Lijst met eetplan objecten met alleen een avond.
 	 */
 	public function getAvonden($lichting) {
-		return $this->find('uid LIKE ?', array($lichting . "%"), 'avond')->fetchAll();
+		return $this->find('uid LIKE ? AND avond <> "0000-00-00"', array($lichting . "%"), 'avond')->fetchAll();
 	}
 
 	/**
@@ -137,5 +137,17 @@ class EetplanModel extends PersistenceModel {
 	 */
 	public function getBekendeHuizen($lichting) {
 		return $this->find('uid LIKE ? AND avond = DATE(0)', array($lichting . "%"))->fetchAll();
+	}
+
+	/**
+	 * @param string $avond
+	 * @param string $lichting
+	 */
+	public function verwijderEetplan($avond, $lichting) {
+		$alleEetplan = $this->getEetplanVoorAvond($avond, $lichting);
+
+		foreach ($alleEetplan as $eetplan) {
+			$this->delete($eetplan);
+		}
 	}
 }

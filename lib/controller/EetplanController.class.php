@@ -24,6 +24,7 @@ use CsrDelft\view\eetplan\EetplanRelatieView;
 use CsrDelft\view\eetplan\EetplanTableView;
 use CsrDelft\view\eetplan\EetplanView;
 use CsrDelft\view\eetplan\NieuwEetplanForm;
+use CsrDelft\view\eetplan\VerwijderEetplanForm;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use function CsrDelft\setMelding;
 
@@ -59,7 +60,8 @@ class EetplanController extends AclController {
 				'woonoorden' => 'P_ADMIN,commissie:NovCie',
 				'novietrelatie' => 'P_ADMIN,commissie:NovCie',
 				'bekendehuizen' => 'P_ADMIN,commissie:NovCie',
-				'nieuw' => 'P_ADMIN,commissie:NovCie'
+				'nieuw' => 'P_ADMIN,commissie:NovCie',
+				'verwijderen' => 'P_ADMIN,commissie:NovCie',
 			);
 		}
 	}
@@ -173,7 +175,7 @@ class EetplanController extends AclController {
 		$model = EetplanBekendenModel::instance();
 		if ($actie == 'toevoegen') {
 			$eetplanbekenden = new EetplanBekenden();
-			$form = new EetplanBekendenForm($eetplanbekenden, $this->lichting);
+			$form = new EetplanBekendenForm($eetplanbekenden);
 			if (!$form->validate()) {
 				$this->view = $form;
 			} elseif (EetplanBekendenModel::instance()->exists($eetplanbekenden)) {
@@ -223,6 +225,20 @@ class EetplanController extends AclController {
 			foreach ($eetplan as $sessie) {
 				$this->model->create($sessie);
 			}
+
+			$this->view = new EetplanTableView($this->model->getEetplan($this->lichting));
+		}
+	}
+
+	public function verwijderen() {
+		$avonden = $this->model->getAvonden($this->lichting);
+		$form = new VerwijderEetplanForm($avonden);
+
+		if (!$form->validate()) {
+			$this->view = $form;
+		} else {
+			$avond = $form->getValues()['avond'];
+			$this->model->verwijderEetplan($avond, $this->lichting);
 
 			$this->view = new EetplanTableView($this->model->getEetplan($this->lichting));
 		}
