@@ -2,8 +2,12 @@
 namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
+use function CsrDelft\getDateTime;
+use CsrDelft\model\entity\fiscaat\CiviBestelling;
+use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
+use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
@@ -293,6 +297,24 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 			return true;
 		}
 		return AccessModel::mag($account, $filter);
+	}
+
+	public function maakCiviBestelling(MaaltijdAanmelding $aanmelding) {
+		$bestelling = new CiviBestelling();
+		$bestelling->cie = 'maalcie';
+		$bestelling->uid = $aanmelding->uid;
+		$bestelling->deleted = false;
+		$bestelling->moment = getDateTime();
+		$bestelling->comment = sprintf('Datum maaltijd: %s', date('Y-M-d', $aanmelding->getMaaltijd()->getBeginMoment()));
+
+		$inhoud = new CiviBestellingInhoud();
+		$inhoud->aantal = 1 + $aanmelding->aantal_gasten;
+		$inhoud->product_id = $aanmelding->getMaaltijd()->product_id;
+
+		$bestelling->inhoud[] = $inhoud;
+		$bestelling->totaal = CiviProductModel::instance()->getProduct($inhoud->product_id)->prijs * (1 + $aanmelding->aantal_gasten);
+
+		return $bestelling;
 	}
 
 	// Repetitie-Maaltijden ############################################################

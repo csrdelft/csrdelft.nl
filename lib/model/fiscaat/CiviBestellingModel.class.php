@@ -5,7 +5,6 @@ namespace CsrDelft\model\fiscaat;
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
-use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 
@@ -97,24 +96,7 @@ class CiviBestellingModel extends PersistenceModel {
 		return implode(", ", $bestellingenInhoud);
 	}
 
-	public function vanMaaltijdAanmelding(MaaltijdAanmelding $aanmelding) {
-		$bestelling = new CiviBestelling();
-		$bestelling->cie = 'maalcie';
-		$bestelling->uid = $aanmelding->uid;
-		$bestelling->deleted = false;
-		$bestelling->moment = getDateTime();
-
-		$inhoud = new CiviBestellingInhoud();
-		$inhoud->aantal = 1 + $aanmelding->aantal_gasten;
-		$inhoud->product_id = $aanmelding->getMaaltijd()->product_id;
-
-		$bestelling->inhoud[] = $inhoud;
-		$bestelling->totaal = $this->civiProductModel->getProduct($inhoud->product_id)->prijs * (1 + $aanmelding->aantal_gasten);
-
-		return $bestelling;
-	}
-
-	public function vanInleg($bedrag, $uid) {
+	public function vanBedragInCenten($bedrag, $uid) {
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'anders';
 		$bestelling->uid = $uid;
