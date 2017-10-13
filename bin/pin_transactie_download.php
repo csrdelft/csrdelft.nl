@@ -48,6 +48,12 @@ const RELATIVE_URL_REPORT = '../nl/report';
 
 require_once __DIR__ . '/../lib/configuratie.include.php';
 
+if (isset($argv[1])) {
+	$moment = strtotime($argv[1]);
+} else {
+	$moment = time() - DURATION_DAY_IN_SECONDS;
+}
+
 //Steps
 //1. Login
 $settings = parse_ini_file(__DIR__ . '/../etc/pin_transactie_download.ini');
@@ -107,7 +113,7 @@ $searchUrl = $searchMatches[1];
 
 //7. Do call to search with correct date
 $postFields = [
-	POST_FIELD_PERIOD_FROM_DATE_DATE => date(DATE_FORMAT_ONLINE, time() - DURATION_DAY_IN_SECONDS),
+	POST_FIELD_PERIOD_FROM_DATE_DATE => date(DATE_FORMAT_ONLINE, $moment),
 	POST_FIELD_PERIOD_FROM_DATE_HOURS => DATE_START_HOURS,
 	POST_FIELD_PERIOD_FROM_DATE_MINUTES => DATE_START_MINUTES,
 	POST_FIELD_PERIOD_DURATION => DURATION_DAY,
@@ -156,8 +162,8 @@ foreach ($tableRow as $row) {
 	}
 }
 
-$period_start = date(DATE_FORMAT_ONLINE, time() - DURATION_DAY_IN_SECONDS);
-$period_end = date(DATE_FORMAT_ONLINE, time());
+$period_start = date(DATE_FORMAT_ONLINE, $moment);
+$period_end = date(DATE_FORMAT_ONLINE, $moment + DURATION_DAY_IN_SECONDS);
 
 if ($unmatched !== 0) {
 	$body = <<<MAIL
