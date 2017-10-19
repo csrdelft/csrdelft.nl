@@ -20,6 +20,10 @@ class CiviCategorie extends PersistentEntity {
 	public $status;
 	public $cie;
 
+	public function getBeschrijving() {
+		return sprintf('%s (%s)', $this->type, $this->cie);
+	}
+
 	protected static $table_name = 'CiviCategorie';
 	protected static $persistent_attributes = array(
 		'id' => array(T::Integer, false, 'auto_increment'),

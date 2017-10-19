@@ -82,6 +82,12 @@ try {
 	DebugLogModel::instance()->log('cron.php', 'ForumModel::instance()->opschonen()', array(), $e);
 }
 
+try {
+    passthru('php ../bin/pin_transactie_download.php');
+} catch (Exception $e) {
+	DebugLogModel::instance()->log('cron.php', 'php pin_transactie_download.php', array(), $e);
+}
+
 $finish = microtime(true) - $start;
 if (DEBUG) {
 	echo getDateTime() . ' Finished in ' . (int)$finish . " seconds.\r\n";

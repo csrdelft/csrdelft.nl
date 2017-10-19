@@ -1,0 +1,10 @@
+;
+; Dit zijn de inloggegevens van de payplaza web interface
+;
+
+[payplaza]
+monitoring_email = ;
+url = ;
+store = ;
+username = ;
+password = ;

@@ -6,6 +6,7 @@ use CsrDelft\controller\fiscaat\BeheerCiviBestellingController;
 use CsrDelft\controller\fiscaat\BeheerCiviCategorienController;
 use CsrDelft\controller\fiscaat\BeheerCiviProductenController;
 use CsrDelft\controller\fiscaat\BeheerCiviSaldoController;
+use CsrDelft\controller\fiscaat\PinTransactieController;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fiscaat\FiscaatOverzichtView;
@@ -19,7 +20,8 @@ class FiscaatRouterController extends AclController {
 			'producten' => 'P_MAAL_MOD',
 			'saldo' => 'P_MAAL_MOD',
 			'bestellingen' => 'P_MAAL_IK',
-			'categorien' => 'P_MAAL_MOD'
+			'categorien' => 'P_MAAL_MOD',
+			'pin' => 'P_MAAL_MOD',
 		);
 	}
 
@@ -53,5 +55,9 @@ class FiscaatRouterController extends AclController {
 
 	public function categorien() {
 		return new BeheerCiviCategorienController($this->model);
+	}
+
+	public function pin() {
+		return new PinTransactieController($this->model);
 	}
 }

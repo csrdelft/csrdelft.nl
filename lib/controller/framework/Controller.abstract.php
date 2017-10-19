@@ -118,6 +118,15 @@ abstract class Controller {
 	}
 
 	/**
+	 * Return GET query params.
+	 *
+	 * @return string[]
+	 */
+	protected function getQueryParams() {
+		return $this->kvp;
+	}
+
+	/**
 	 * Return REST query paramter values from $num onwards.
 	 *
 	 * @param int $num skip params before this

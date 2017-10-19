@@ -198,7 +198,7 @@ class Mail {
 	public function send($debug = false) {
 		switch ($this->type) {
 			case 'html':
-								$template = new MailTemplateView($this);
+				$template = new MailTemplateView($this);
 				$body = $template->getHtml();
 				break;
 

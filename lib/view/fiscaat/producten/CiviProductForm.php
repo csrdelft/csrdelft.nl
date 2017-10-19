@@ -1,12 +1,5 @@
 <?php
-/**
- * CiviProductForm.php
- *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
- */
-
-namespace CsrDelft\view\fiscaat;
+namespace CsrDelft\view\fiscaat\producten;
 
 use CsrDelft\model\entity\fiscaat\CiviCategorie;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
@@ -20,6 +13,10 @@ use CsrDelft\view\formulier\keuzevelden\RequiredJaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
+/**
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @date 07/05/2017
+ */
 class CiviProductForm extends ModalForm {
 	function __construct(CiviProduct $model, $target) {
 		parent::__construct($model, '/fiscaat/producten/' . $target, false, true);

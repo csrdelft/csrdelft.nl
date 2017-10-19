@@ -15,4 +15,12 @@ class CiviCategorieModel extends PersistenceModel {
 	 * ORM class.
 	 */
 	const ORM = CiviCategorie::class;
+
+	/**
+	 * @param $id
+	 * @return CiviCategorie|false
+	 */
+	public static function get($id) {
+		return static::instance()->retrieveByPrimaryKey([$id]);
+	}
 }
