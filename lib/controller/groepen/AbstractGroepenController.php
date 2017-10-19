@@ -406,6 +406,12 @@ abstract class AbstractGroepenController extends Controller {
 			if (!$groep OR ! $groep->mag(AccessAction::Verwijderen)) {
 				continue;
 			}
+
+			if (count($groep->getLeden()) !== 0) {
+				// TODO: Laat gebruiker weten dat de groep niet is verwijderd omdat er nog leden in zitten.
+				continue;
+			}
+
 			ChangeLogModel::instance()->log($groep, 'delete', print_r($groep, true), null);
 			$this->model->delete($groep);
 			$response[] = $groep;

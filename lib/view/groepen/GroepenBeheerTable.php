@@ -66,7 +66,7 @@ class GroepenBeheerTable extends DataTable {
 		$convert = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'converteren', 'post popup', 'Converteren', 'Converteer naar ander soort groep', 'lightning');
 		$this->addKnop($convert);
 
-		$delete = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'verwijderen', 'post confirm', 'Verwijderen', 'Definitief verwijderen', 'delete');
+		$delete = new DataTableKnop('>= 1', $this->dataTableId, $this->url . 'verwijderen', 'post confirm', 'Verwijderen', 'Definitief verwijderen (groep moet hier voor leeg zijn)', 'delete', 'confirm');
 		$this->addKnop($delete);
 
 		$log = new DataTableKnop('== 1', $this->dataTableId, $this->url . 'logboek', 'post popup', 'Logboek', 'Logboek bekijken', 'log');
