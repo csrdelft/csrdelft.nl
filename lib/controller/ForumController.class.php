@@ -2,10 +2,10 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\Icon;
+use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenGelezenModel;
@@ -623,7 +623,8 @@ class ForumController extends Controller {
 		// spam controle
 		$filter = new SimpleSpamfilter();
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
-		if (!empty($spamtrap) OR $filter->isSpam($tekst) OR (isset($titel) AND $filter->isSpam($titel))) { //TODO: logging
+		if (!empty($spamtrap) OR $filter->isSpam($tekst) OR (isset($titel) AND $filter->isSpam($titel))) {
+			DebugLogModel::instance()->log(static::class, 'posten', [$forum_id, $draad_id], 'SPAM ' . $tekst);
 			setMelding('SPAM', -1);
 			$this->exit_http(403);
 		}
