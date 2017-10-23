@@ -141,15 +141,6 @@ class ProfielController extends AclController {
 		}
 		$form = new ProfielForm($profiel);
 		if ($form->validate()) {
-			// Duck-pasfoto opslaan
-			$duckfoto = $form->findByName('duckfoto');
-			if ($duckfoto AND $duckfoto->getModel() instanceof Afbeelding) {
-				$filename = $duckfoto->getModel()->filename;
-				if ($filename !== 'eend.jpg') {
-					$ext = '.' . pathinfo($filename, PATHINFO_EXTENSION);
-					$duckfoto->opslaan(PHOTOS_PATH . 'pasfoto/Duckstad/', $profiel->uid . $ext, true);
-				}
-			}
 			$diff = $form->diff();
 			if (empty($diff)) {
 				setMelding('Geen wijzigingen', 0);

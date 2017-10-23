@@ -212,16 +212,6 @@ class ProfielForm extends Formulier
             $fields[] = new LidField('patroon', $profiel->patroon, 'Patroon', 'allepersonen');
         }
 
-        if (!$inschrijven) {
-            $fields[] = new Subkopje('Duckstad');
-            $fields[] = new DuckField('duckname', $profiel->duckname);
-            $duckfoto = new Afbeelding(PHOTOS_PATH . $profiel->getPasfotoPath(false, 'Duckstad'));
-            if (!$duckfoto->exists() OR strpos($duckfoto->directory, '/Duckstad/') === false) {
-                $duckfoto = null;
-            }
-            $fields[] = new ImageField('duckfoto', 'Duck-pasfoto', $duckfoto, null, null, false, 100, 100, 250, 250);
-        }
-
         $fields[] = new Subkopje('Persoonlijk');
         $fields[] = new TextField('eetwens', $profiel->eetwens, 'Dieet/voedselallergie');
         $fields[] = new RequiredIntField('lengte', (int)$profiel->lengte, 'Lengte (cm)', 50, 250);
