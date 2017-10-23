@@ -62,6 +62,7 @@
 		<input type="button" value="Voorbeeld" onclick="CsrBBPreview('courantBericht', 'bewerkPreview');" />
 		{if $courant->magBeheren()}
 			<input type="button" value="Importeer agenda" onclick="importAgenda('courantBericht');" />
+			<input type="button" value="Importeer sponsor" onclick="document.getElementById('courantBericht').value += '[img]http://i.imgur.com/PYmPtiK.png[/img]'" />
 		{/if}
 	</div>
 </form>
