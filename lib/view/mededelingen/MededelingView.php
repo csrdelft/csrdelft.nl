@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\mededelingen;
+
 use CsrDelft\model\entity\mededelingen\Mededeling;
 use CsrDelft\model\mededelingen\MededelingCategorieenModel;
 use CsrDelft\model\mededelingen\MededelingenModel;
@@ -52,7 +54,7 @@ class MededelingView extends SmartyTemplateView {
 	public function getBreadcrumbs() {
 		$breadcrumb = parent::getBreadcrumbs() . '<a href="/mededelingen">Mededelingen</a> » ';
 		if ($this->mededeling->id) {
-			$breadcrumb .= '<a href="/mededelingen/'.$this->mededeling->id.'">' . $this->mededeling->titel . '</a> » <span class="active">Bewerken</span>';
+			$breadcrumb .= '<a href="/mededelingen/' . $this->mededeling->id . '">' . $this->mededeling->titel . '</a> » <span class="active">Bewerken</span>';
 		} else {
 			$breadcrumb .= '<span class="active">Toevoegen</span>';
 		}

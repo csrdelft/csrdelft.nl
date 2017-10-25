@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\getalvelden;
+
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\view\formulier\invoervelden\InputField;
 

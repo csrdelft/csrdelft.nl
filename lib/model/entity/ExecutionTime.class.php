@@ -1,13 +1,15 @@
 <?php
+
 namespace CsrDelft\model\entity;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * ExecutionTime.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class ExecutionTime extends PersistentEntity {
 
@@ -36,10 +38,10 @@ class ExecutionTime extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'request'			 => array(T::String),
-		'counter'			 => array(T::Integer),
-		'total_time'		 => array(T::Float),
-		'total_time_view'	 => array(T::Float)
+		'request' => array(T::String),
+		'counter' => array(T::Integer),
+		'total_time' => array(T::Float),
+		'total_time_view' => array(T::Float)
 	);
 	/**
 	 * Database primary key

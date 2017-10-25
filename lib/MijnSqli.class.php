@@ -1,13 +1,14 @@
 <?php
+
 namespace CsrDelft;
 
 /**
  * MijnSqli.class.php
- * 
+ *
  * @deprecated
- * 
+ *
  * OogOpslag Internet / C.S.R. Delft | pubcie@csrdelft.nl
- * 
+ *
  * MySQLi wrapper
  */
 class MijnSqli {
@@ -35,14 +36,14 @@ class MijnSqli {
 			$cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 		} else {
 			$cred = array(
-				'host'	 => 'localhost',
-				'user'	 => 'foo',
-				'pass'	 => 'bar',
-				'db'	 => 'csrdelft'
+				'host' => 'localhost',
+				'user' => 'foo',
+				'pass' => 'bar',
+				'db' => 'csrdelft'
 			);
 		}
 		$this->_db = mysqli_connect($cred['host'], $cred['user'], $cred['pass'], $cred['db'])
-				or die("Kan geen verbinding maken met de database server {$cred['host']}\n");
+		or die("Kan geen verbinding maken met de database server {$cred['host']}\n");
 		//database verbinding vertellen dat hij utf-8 moet gebruiken.
 		$this->query("SET NAMES 'utf8'");
 	}
@@ -209,7 +210,7 @@ class MijnSqli {
 	# int $id : regel-id
 
 	public function delete($table, $id) {
-		$id = (int) $id;
+		$id = (int)$id;
 		$this->query("DELETE FROM `" . $table . "` WHERE `id`=" . $id . ";");
 	}
 

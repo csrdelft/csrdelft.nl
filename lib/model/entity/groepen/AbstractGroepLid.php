@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
 
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -7,11 +8,11 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * AbstractGroepLid.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een lid van een groep.
- * 
+ *
  */
 abstract class AbstractGroepLid extends PersistentEntity {
 
@@ -48,11 +49,11 @@ abstract class AbstractGroepLid extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'groep_id'	 => array(T::Integer),
-		'uid'		 => array(T::UID),
-		'opmerking'	 => array(T::String, true),
-		'lid_sinds'	 => array(T::DateTime),
-		'door_uid'	 => array(T::UID)
+		'groep_id' => array(T::Integer),
+		'uid' => array(T::UID),
+		'opmerking' => array(T::String, true),
+		'lid_sinds' => array(T::DateTime),
+		'door_uid' => array(T::UID)
 	);
 	/**
 	 * Database primary key

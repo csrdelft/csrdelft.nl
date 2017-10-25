@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
@@ -29,8 +30,8 @@ class MijnAbonnementenController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'inschakelen'	 => 'P_MAAL_IK',
-				'uitschakelen'	 => 'P_MAAL_IK'
+				'inschakelen' => 'P_MAAL_IK',
+				'uitschakelen' => 'P_MAAL_IK'
 			);
 		}
 	}
@@ -42,7 +43,7 @@ class MijnAbonnementenController extends AclController {
 		}
 		$mrid = null;
 		if ($this->hasParam(3)) {
-			$mrid = (int) $this->getParam(3);
+			$mrid = (int)$this->getParam(3);
 		}
 		parent::performAction(array($mrid));
 	}
@@ -55,9 +56,9 @@ class MijnAbonnementenController extends AclController {
 	}
 
 	public function inschakelen($mrid) {
-        $abo = new MaaltijdAbonnement();
-        $abo->mlt_repetitie_id = $mrid;
-        $abo->uid = LoginModel::getUid();
+		$abo = new MaaltijdAbonnement();
+		$abo->mlt_repetitie_id = $mrid;
+		$abo->uid = LoginModel::getUid();
 		$aantal = $this->model->inschakelenAbonnement($abo);
 		$this->view = new MijnAbonnementView($abo);
 		if ($aantal > 0) {

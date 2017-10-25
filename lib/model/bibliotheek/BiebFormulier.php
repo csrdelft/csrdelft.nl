@@ -7,17 +7,14 @@ use CsrDelft\view\formulier\Formulier;
 /**
  * Werkomheen
  */
-class BiebFormulier extends Formulier
-{
+class BiebFormulier extends Formulier {
 
-    public function __construct()
-    {
-        parent::__construct(null, null);
-    }
+	public function __construct() {
+		parent::__construct(null, null);
+	}
 
-    public function getScriptTag()
-    {
-        parent::getScriptTag();
-    }
+	public function getScriptTag() {
+		parent::getScriptTag();
+	}
 
 }

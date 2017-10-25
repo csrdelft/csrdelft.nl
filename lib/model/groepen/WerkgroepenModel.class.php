@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\groepen;
+
 use CsrDelft\model\entity\groepen\Werkgroep;
 
 

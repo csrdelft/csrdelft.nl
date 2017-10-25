@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
@@ -18,7 +19,7 @@ use function CsrDelft\setMelding;
 
 
 /**
- * BibliotheekController.class.php	|	Gerrit Uitslag (klapinklapin@gmail.com)
+ * BibliotheekController.class.php  |  Gerrit Uitslag (klapinklapin@gmail.com)
  *
  */
 class BibliotheekController extends Controller {
@@ -67,14 +68,14 @@ class BibliotheekController extends Controller {
 	}
 
 	public function rubrieken() {
-				$c = new CmsPaginaController($this->action);
+		$c = new CmsPaginaController($this->action);
 		$c->bekijken($this->action);
 		$c->getView()->view();
 		exit;
 	}
 
 	public function wenslijst() {
-				$c = new CmsPaginaController($this->action);
+		$c = new CmsPaginaController($this->action);
 		$c->bekijken($this->action);
 		$c->getView()->view();
 		exit;
@@ -104,8 +105,8 @@ class BibliotheekController extends Controller {
 	 * Laad een boek object
 	 *
 	 * ga er van uit dat in getParam(3) een boekid staat en laad dat in.
-	 * @param $boekid	$boekid
-	 * 					of leeg: gebruikt getParam()
+	 * @param $boekid $boekid
+	 *          of leeg: gebruikt getParam()
 	 */
 	private function loadBoek($boekid = null) {
 		if ($this->hasParam(3) OR $boekid !== null) {
@@ -113,7 +114,7 @@ class BibliotheekController extends Controller {
 				$boekid = $this->getParam(3);
 			}
 			if ($this->hasParam(4) AND in_array($this->action, array('bewerkbeschrijving', 'verwijderbeschrijving'))) {
-				$beschrijvingsid = (int) $this->getParam(4);
+				$beschrijvingsid = (int)$this->getParam(4);
 			} else {
 				$beschrijvingsid = 0; //nieuwe beschrijving
 			}
@@ -214,7 +215,7 @@ class BibliotheekController extends Controller {
 	 */
 	protected function bewerkbeschrijving() {
 		$this->loadBoek();
-		if ($this->boek->getEditBeschrijving()->getId() != 0 AND ! $this->boek->magBeschrijvingVerwijderen()) {
+		if ($this->boek->getEditBeschrijving()->getId() != 0 AND !$this->boek->magBeschrijvingVerwijderen()) {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::bewerkbeschrijving()', -1);
 			redirect('/bibliotheek/boek/' . $this->boek->getId());
 		}
@@ -422,7 +423,7 @@ class BibliotheekController extends Controller {
 
 			$categorie = 0;
 			if ($this->hasParam(4)) {
-				$categorie = (int) $this->getParam(4);
+				$categorie = (int)$this->getParam(4);
 			}
 
 			$this->view = new JsonResponse(BiebCatalogus::getAutocompleteSuggesties($this->getParam(3), $zoekterm, $categorie));
@@ -438,18 +439,18 @@ class BibliotheekController extends Controller {
 		$zoekterm = $this->getParam('q');
 		$categorie = 0;
 		if ($this->hasParam('cat')) {
-			$categorie = (int) $this->getParam('cat');
+			$categorie = (int)$this->getParam('cat');
 		}
 		$limit = 5;
 		if ($this->hasParam('limit')) {
-			$limit = (int) $this->getParam('limit');
+			$limit = (int)$this->getParam('limit');
 		}
 		$result = array();
 		foreach (BiebCatalogus::getAutocompleteSuggesties('biebboek', $zoekterm, $categorie) as $prop) {
 			$result[] = array(
-				'url'	 => '/bibliotheek/boek/' . $prop['id'],
-				'label'	 => $prop['auteur'],
-				'value'	 => $prop['titel']
+				'url' => '/bibliotheek/boek/' . $prop['id'],
+				'label' => $prop['auteur'],
+				'value' => $prop['titel']
 			);
 		}
 		$this->view = new JsonResponse($result);

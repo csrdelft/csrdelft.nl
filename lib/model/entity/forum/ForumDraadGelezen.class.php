@@ -1,15 +1,17 @@
 <?php
+
 namespace CsrDelft\model\entity\forum;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * ForumDraadGelezen.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een ForumDraad kan worden gelezen door een lid op een bepaald moment.
- * 
+ *
  */
 class ForumDraadGelezen extends PersistentEntity {
 
@@ -36,8 +38,8 @@ class ForumDraadGelezen extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'draad_id'	 => array(T::Integer),
-		'uid'		 => array(T::UID),
+		'draad_id' => array(T::Integer),
+		'uid' => array(T::UID),
 		'datum_tijd' => array(T::DateTime)
 	);
 	/**

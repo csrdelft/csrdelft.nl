@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\agenda;
 
 use CsrDelft\common\CsrException;

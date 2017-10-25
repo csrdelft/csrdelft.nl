@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\fiscaat;
 
 use CsrDelft\common\CsrGebruikerException;
@@ -61,9 +62,11 @@ class CiviSaldoModel extends PersistenceModel {
 	 * @return mixed
 	 */
 	public function getSomSaldi($profielOnly = false) {
-	    $after = $profielOnly ? "AND uid NOT LIKE 'c%'" : "";
-	    return array_reduce($this->select(['saldo'], "deleted = 0 $after")->fetchAll(), function($a, $b) {return $a+$b['saldo'];}, 0);
-    }
+		$after = $profielOnly ? "AND uid NOT LIKE 'c%'" : "";
+		return array_reduce($this->select(['saldo'], "deleted = 0 $after")->fetchAll(), function ($a, $b) {
+			return $a + $b['saldo'];
+		}, 0);
+	}
 
 	/**
 	 * @param string $uid
@@ -73,7 +76,7 @@ class CiviSaldoModel extends PersistenceModel {
 	 */
 	public function ophogen($uid, $bedrag) {
 		if ($bedrag < 0) {
-			throw new CsrGebruikerException( 'Kan niet ophogen met een negatief bedrag');
+			throw new CsrGebruikerException('Kan niet ophogen met een negatief bedrag');
 		}
 
 		/** @var CiviSaldo $saldo */

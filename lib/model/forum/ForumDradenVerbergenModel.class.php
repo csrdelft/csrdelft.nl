@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\forum;
+
 use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadVerbergen;

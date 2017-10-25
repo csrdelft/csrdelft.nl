@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\forms;
+
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\view\formulier\getalvelden\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\RequiredLidField;

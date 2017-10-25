@@ -75,7 +75,7 @@ class CiviBestellingModel extends PersistenceModel {
 				$bestellingInhoud[] = $this->civiBestellingInhoudModel->getBeschrijving($item);
 			}
 
-			yield (object) [
+			yield (object)[
 				'inhoud' => $bestellingInhoud,
 				'moment' => $bestelling->moment,
 				'totaal' => $bestelling->totaal

@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view;
+
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
@@ -7,9 +9,9 @@ use CsrDelft\model\security\LoginModel;
 
 /**
  * StamboomView.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
- * 
+ *
  * Geeft een stamboom weer vanaf een startuid. Met de patroonlinkjes kan
  * je doorklikken naar boven. Verder niet zo'n spannend ding, zou een
  * stuk mooier gelayout kunnen worden...

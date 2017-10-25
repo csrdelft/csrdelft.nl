@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity;
 
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -51,13 +52,13 @@ class ChangeLogEntry extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'		 => array(T::Integer, false, 'auto_increment'),
-		'moment'	 => array(T::DateTime),
-		'subject'	 => array(T::String),
-		'property'	 => array(T::String),
-		'old_value'	 => array(T::Text, true),
-		'new_value'	 => array(T::Text, true),
-		'uid'		 => array(T::UID)
+		'id' => array(T::Integer, false, 'auto_increment'),
+		'moment' => array(T::DateTime),
+		'subject' => array(T::String),
+		'property' => array(T::String),
+		'old_value' => array(T::Text, true),
+		'new_value' => array(T::Text, true),
+		'uid' => array(T::UID)
 	);
 	/**
 	 * Database primary key

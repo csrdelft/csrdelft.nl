@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\invoervelden;
+
 use function CsrDelft\array_filter_empty;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\security\AccountModel;
@@ -101,7 +103,7 @@ class WachtwoordWijzigenField extends InputField {
 		if ($this->require_current) {
 			$current = $_POST[$this->name . '_current'];
 		}
-		// filter_input does not use current value in $_POST 
+		// filter_input does not use current value in $_POST
 		$new = $_POST[$this->name . '_new'];
 		$confirm = $_POST[$this->name . '_confirm'];
 		$length = strlen(utf8_decode($new));

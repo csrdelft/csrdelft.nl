@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\forum;
+
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -7,11 +9,11 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * ForumCategorie.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een forum categorie bevat deelfora.
- * 
+ *
  */
 class ForumCategorie extends PersistentEntity {
 
@@ -45,10 +47,10 @@ class ForumCategorie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'categorie_id'	 => array(T::Integer, false, 'auto_increment'),
-		'titel'			 => array(T::String),
-		'rechten_lezen'	 => array(T::String),
-		'volgorde'		 => array(T::Integer)
+		'categorie_id' => array(T::Integer, false, 'auto_increment'),
+		'titel' => array(T::String),
+		'rechten_lezen' => array(T::String),
+		'volgorde' => array(T::Integer)
 	);
 	/**
 	 * Database primary key
@@ -67,7 +69,7 @@ class ForumCategorie extends PersistentEntity {
 
 	/**
 	 * Lazy loading by foreign key.
-	 * 
+	 *
 	 * @return ForumDeel[]
 	 */
 	public function getForumDelen() {
@@ -84,7 +86,7 @@ class ForumCategorie extends PersistentEntity {
 
 	/**
 	 * Public for search results and all sorts of prefetching.
-	 * 
+	 *
 	 * @param array $forum_delen
 	 */
 	public function setForumDelen(array $forum_delen) {

@@ -1,12 +1,14 @@
 <?php
+
 namespace CsrDelft\view;
+
 use CsrDelft\model\entity\Mail;
 
 /**
  * MailTemplateView.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class MailTemplateView extends SmartyTemplateView {
 

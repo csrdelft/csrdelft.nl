@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
@@ -24,7 +25,7 @@ class MaalCieBoekjaarController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'sluitboekjaar'	 => 'P_MAAL_SALDI'
+				'sluitboekjaar' => 'P_MAAL_SALDI'
 			);
 		}
 	}

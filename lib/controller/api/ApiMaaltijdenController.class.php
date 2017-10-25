@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\api;
 
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;

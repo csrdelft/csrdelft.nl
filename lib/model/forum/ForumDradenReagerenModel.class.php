@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\forum;
+
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumDraad;

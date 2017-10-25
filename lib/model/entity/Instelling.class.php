@@ -1,25 +1,27 @@
 <?php
+
 namespace CsrDelft\model\entity;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * Instelling.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
- * 
+ *
+ *
  * Een instelling instantie beschrijft een key-value pair voor een module.
- * 
+ *
  * Bijvoorbeeld:
- * 
+ *
  * Voor maaltijden-module:
  *  - Standaard maaltijdprijs
  *  - Marge in verband met gasten
- * 
+ *
  * Voor corvee-module:
  *  - Corveepunten per jaar
- * 
+ *
  */
 class Instelling extends PersistentEntity {
 
@@ -43,9 +45,9 @@ class Instelling extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'module'		 => array(T::String),
-		'instelling_id'	 => array(T::String),
-		'waarde'		 => array(T::Text)
+		'module' => array(T::String),
+		'instelling_id' => array(T::String),
+		'waarde' => array(T::Text)
 	);
 	/**
 	 * Database primary key

@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\formulier;
 
 use function CsrDelft\getMelding;
@@ -6,11 +7,11 @@ use function CsrDelft\getMelding;
 
 /**
  * TabsForm.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Formulier met tabbladen.
- * 
+ *
  */
 class TabsForm extends Formulier {
 

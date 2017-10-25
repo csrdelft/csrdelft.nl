@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\peilingen;
 
 use CsrDelft\common\CsrGebruikerException;
@@ -71,7 +72,7 @@ class PeilingenModel extends PersistenceModel {
 	 * @param int $optie_id
 	 */
 	public function stem($peiling_id, $optie_id) {
-		$peiling = $this->getPeilingById((int) $peiling_id);
+		$peiling = $this->getPeilingById((int)$peiling_id);
 		if ($peiling->magStemmen()) {
 			$optie = PeilingOptiesModel::instance()->find('peiling_id = ? AND id = ?', array($peiling_id, $optie_id))->fetch();
 			$optie->stemmen += 1;

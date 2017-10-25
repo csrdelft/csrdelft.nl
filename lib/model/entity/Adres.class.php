@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -60,15 +62,15 @@ class Adres extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = [
-		'adres_id'	 => [T::Integer, false, 'auto_increment'],
-		'naam'		 => [T::String],
-		'straat'	 => [T::String],
-		'plaats'	 => [T::String],
+		'adres_id' => [T::Integer, false, 'auto_increment'],
+		'naam' => [T::String],
+		'straat' => [T::String],
+		'plaats' => [T::String],
 		'huisnummer' => [T::Integer],
 		'toevoeging' => [T::String],
-		'postcode'	 => [T::String],
-		'land'		 => [T::String],
-		'telefoon'	 => [T::String]
+		'postcode' => [T::String],
+		'land' => [T::String],
+		'telefoon' => [T::String]
 	];
 	/**
 	 * Database primary key

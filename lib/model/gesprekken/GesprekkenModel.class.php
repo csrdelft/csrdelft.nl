@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\gesprekken;
 
 use CsrDelft\model\entity\gesprekken\Gesprek;
@@ -66,7 +67,7 @@ class GesprekkenModel extends PersistenceModel {
 		// Maak gesprek
 		$gesprek = new Gesprek();
 		$gesprek->laatste_update = getDateTime();
-		$gesprek->gesprek_id = (int) $this->create($gesprek);
+		$gesprek->gesprek_id = (int)$this->create($gesprek);
 		// Deelnemers toevoegen
 		$deelnemer = $this->gesprekDeelnemersModel->voegToeAanGesprek($gesprek, $from);
 		$this->gesprekDeelnemersModel->voegToeAanGesprek($gesprek, $to);

@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\fiscaat\producten;
 
 use CsrDelft\model\entity\fiscaat\CiviCategorie;

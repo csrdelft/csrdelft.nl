@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\forms;
+
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\view\formulier\invoervelden\LidField;

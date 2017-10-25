@@ -7,6 +7,7 @@
  */
 
 namespace CsrDelft\view\forum;
+
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 

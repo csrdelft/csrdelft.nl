@@ -1,13 +1,15 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
+
 use CsrDelft\model\groepen\leden\KringLedenModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * Kring.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Kring extends AbstractGroep {
 
@@ -28,8 +30,8 @@ class Kring extends AbstractGroep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'verticale'		 => array(T::Char),
-		'kring_nummer'	 => array(T::Integer)
+		'verticale' => array(T::Char),
+		'kring_nummer' => array(T::Integer)
 	);
 	/**
 	 * Database table name

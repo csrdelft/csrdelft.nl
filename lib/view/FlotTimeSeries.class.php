@@ -1,11 +1,12 @@
 <?php
+
 namespace CsrDelft\view;
 
 /**
  * FlotTimeSeries.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class FlotTimeSeries extends JsonResponse {
 
@@ -15,14 +16,14 @@ class FlotTimeSeries extends JsonResponse {
 			$entry = array();
 			foreach ($data as $row) {
 				if (isset($row['timestamp'], $row['count'])) {
-					$entry[] = array((int) $row['timestamp'] * 1000, (int) $row['count']);
+					$entry[] = array((int)$row['timestamp'] * 1000, (int)$row['count']);
 				} else {
 					//var_dump($row);
 				}
 			}
 			$array[] = array(
-				'label'	 => $label,
-				'data'	 => $entry
+				'label' => $label,
+				'data' => $entry
 			);
 		}
 		return parent::getJson($array);

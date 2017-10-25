@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\forum;
+
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenGelezenModel;
 use CsrDelft\model\forum\ForumDradenVerbergenModel;
@@ -13,11 +15,11 @@ use CsrDelft\view\FlotTimeSeries;
 
 /**
  * ForumDraad.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een ForumDraad zit in een deelforum en bevat forumposts.
- * 
+ *
  */
 class ForumDraad extends PersistentEntity {
 
@@ -141,22 +143,22 @@ class ForumDraad extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'draad_id'				 => array(T::Integer, false, 'auto_increment'),
-		'forum_id'				 => array(T::Integer),
-		'gedeeld_met'			 => array(T::Integer, true),
-		'uid'					 => array(T::UID),
-		'titel'					 => array(T::String),
-		'datum_tijd'			 => array(T::DateTime),
-		'laatst_gewijzigd'		 => array(T::DateTime, true),
-		'laatste_post_id'		 => array(T::Integer, true),
-		'laatste_wijziging_uid'	 => array(T::UID, true),
-		'gesloten'				 => array(T::Boolean),
-		'verwijderd'			 => array(T::Boolean),
-		'wacht_goedkeuring'		 => array(T::Boolean),
-		'plakkerig'				 => array(T::Boolean),
-		'belangrijk'			 => array(T::String, true),
-		'eerste_post_plakkerig'	 => array(T::Boolean),
-		'pagina_per_post'		 => array(T::Boolean)
+		'draad_id' => array(T::Integer, false, 'auto_increment'),
+		'forum_id' => array(T::Integer),
+		'gedeeld_met' => array(T::Integer, true),
+		'uid' => array(T::UID),
+		'titel' => array(T::String),
+		'datum_tijd' => array(T::DateTime),
+		'laatst_gewijzigd' => array(T::DateTime, true),
+		'laatste_post_id' => array(T::Integer, true),
+		'laatste_wijziging_uid' => array(T::UID, true),
+		'gesloten' => array(T::Boolean),
+		'verwijderd' => array(T::Boolean),
+		'wacht_goedkeuring' => array(T::Boolean),
+		'plakkerig' => array(T::Boolean),
+		'belangrijk' => array(T::String, true),
+		'eerste_post_plakkerig' => array(T::Boolean),
+		'pagina_per_post' => array(T::Boolean)
 	);
 	/**
 	 * Database primary key
@@ -182,28 +184,28 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function magLezen() {
-		if ($this->verwijderd AND ! $this->magModereren()) {
+		if ($this->verwijderd AND !$this->magModereren()) {
 			return false;
 		}
 		if (!LoginModel::mag('P_LOGGED_IN') AND $this->gesloten AND strtotime($this->laatst_gewijzigd) < strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten'))) {
 			return false;
 		}
-		return $this->getForumDeel()->magLezen() OR ( $this->isGedeeld() AND $this->getGedeeldMet()->magLezen() );
+		return $this->getForumDeel()->magLezen() OR ($this->isGedeeld() AND $this->getGedeeldMet()->magLezen());
 	}
 
 	public function magPosten() {
 		if ($this->verwijderd OR $this->gesloten) {
 			return false;
 		}
-		return $this->getForumDeel()->magPosten() OR ( $this->isGedeeld() AND $this->getGedeeldMet()->magPosten() );
+		return $this->getForumDeel()->magPosten() OR ($this->isGedeeld() AND $this->getGedeeldMet()->magPosten());
 	}
 
 	public function magModereren() {
-		return $this->getForumDeel()->magModereren() OR ( $this->isGedeeld() AND $this->getGedeeldMet()->magModereren() );
+		return $this->getForumDeel()->magModereren() OR ($this->isGedeeld() AND $this->getGedeeldMet()->magModereren());
 	}
 
 	public function magStatistiekBekijken() {
-		return $this->magModereren() OR ( $this->uid != 'x999' AND $this->uid === LoginModel::getUid() );
+		return $this->magModereren() OR ($this->uid != 'x999' AND $this->uid === LoginModel::getUid());
 	}
 
 	public function magVerbergen() {
@@ -251,7 +253,7 @@ class ForumDraad extends PersistentEntity {
 
 	/**
 	 * FALSE if ongelezen!
-	 * 
+	 *
 	 * @return ForumDraadGelezen|boolean $gelezen
 	 */
 	public function getWanneerGelezen() {
@@ -271,7 +273,7 @@ class ForumDraad extends PersistentEntity {
 
 	/**
 	 * Lazy loading by foreign key.
-	 * 
+	 *
 	 * @return ForumPost[]
 	 */
 	public function getForumPosts() {
@@ -288,7 +290,7 @@ class ForumDraad extends PersistentEntity {
 
 	/**
 	 * Public for search results and all sorts of prefetching.
-	 * 
+	 *
 	 * @param array $forum_posts
 	 */
 	public function setForumPosts(array $forum_posts) {
@@ -314,7 +316,7 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function getStatsJson() {
-				$formatter = new FlotTimeSeries(array($this->getStats()));
+		$formatter = new FlotTimeSeries(array($this->getStats()));
 		return $formatter->getJson($formatter->getModel());
 	}
 

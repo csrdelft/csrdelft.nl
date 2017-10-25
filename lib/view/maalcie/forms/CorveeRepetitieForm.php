@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\forms;
+
 use CsrDelft\model\entity\maalcie\CorveeRepetitie;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;

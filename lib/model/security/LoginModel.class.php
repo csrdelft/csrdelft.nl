@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\security;
 
 use CsrDelft\common\CsrGebruikerException;
@@ -196,7 +197,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		$verloop_na = strtotime(InstellingenModel::get('beveiliging', 'wachtwoorden_verlopen_ouder_dan'));
 		$waarschuwing_vooraf = strtotime(InstellingenModel::get('beveiliging', 'wachtwoorden_verlopen_waarschuwing_vooraf'), $verloop_na);
 		if ($pass_since < $verloop_na) {
-			if (! startsWith(REQUEST_URI, '/wachtwoord') AND ! startsWith(REQUEST_URI, '/verify/') AND ! startsWith(REQUEST_URI, '/styles/') AND ! startsWith(REQUEST_URI, '/scripts/') AND REQUEST_URI !== '/endsu') {
+			if (!startsWith(REQUEST_URI, '/wachtwoord') AND !startsWith(REQUEST_URI, '/verify/') AND !startsWith(REQUEST_URI, '/styles/') AND !startsWith(REQUEST_URI, '/scripts/') AND REQUEST_URI !== '/endsu') {
 				setMelding('Uw wachtwoord is verlopen', 2);
 				redirect('/wachtwoord/verlopen');
 			}
@@ -205,7 +206,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			if ($uren < 24) {
 				setMelding('Uw wachtwoord verloopt binnen ' . $uren . ' uur', 2);
 			} else {
-				$dagen = floor((double) $uren / (double) 24) . ' dag';
+				$dagen = floor((double)$uren / (double)24) . ' dag';
 				if ($dagen > 1) {
 					$dagen .= 'en';
 				}
@@ -284,8 +285,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		// Autologin
 		if ($remember) {
 			$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
-		}
-		// Previously(!) verified private token or OneTimeToken
+		} // Previously(!) verified private token or OneTimeToken
 		elseif ($alreadyAuthenticatedByUrlToken) {
 			$_SESSION['_authenticationMethod'] = AuthenticationMethod::url_token;
 		} else {
@@ -303,14 +303,12 @@ class LoginModel extends PersistenceModel implements Validator {
 			if (AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
 				AccountModel::instance()->successfulLoginAttempt($account);
 				$_SESSION['_authenticationMethod'] = AuthenticationMethod::password_login;
-			}
-			// Wrong password
+			} // Wrong password
 			else {
 				// Password deleted (by admin)
 				if ($account->pass_hash == '') {
 					$_SESSION['auth_error'] = 'Gebruik wachtwoord vergeten of mail de PubCie';
-				}
-				// Regular failed username+password
+				} // Regular failed username+password
 				else {
 					$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
 					AccountModel::instance()->failedLoginAttempt($account);
@@ -449,7 +447,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return bool
 	 */
 	public function maySuTo(Account $suNaar) {
-		return LoginModel::mag('P_ADMIN') AND ! $this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, 'P_LOGGED_IN');
+		return LoginModel::mag('P_ADMIN') AND !$this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, 'P_LOGGED_IN');
 	}
 
 	/**

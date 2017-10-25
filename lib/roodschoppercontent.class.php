@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft;
 
 use CsrDelft\view\SmartyTemplateView;

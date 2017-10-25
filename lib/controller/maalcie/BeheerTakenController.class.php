@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrException;
@@ -37,24 +38,24 @@ class BeheerTakenController extends AclController {
 		parent::__construct($query, CorveeTakenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer'	 => 'P_CORVEE_MOD',
+				'beheer' => 'P_CORVEE_MOD',
 				'prullenbak' => 'P_CORVEE_MOD',
 				//'leegmaken' => 'P_MAAL_MOD',
-				'maaltijd'	 => 'P_CORVEE_MOD',
+				'maaltijd' => 'P_CORVEE_MOD',
 				'herinneren' => 'P_CORVEE_MOD'
 			);
 		} else {
 			$this->acl = array(
-				'nieuw'				 => 'P_CORVEE_MOD',
-				'bewerk'			 => 'P_CORVEE_MOD',
-				'opslaan'			 => 'P_CORVEE_MOD',
-				'verwijder'			 => 'P_CORVEE_MOD',
-				'herstel'			 => 'P_CORVEE_MOD',
-				'toewijzen'			 => 'P_CORVEE_MOD',
-				'puntentoekennen'	 => 'P_CORVEE_MOD',
-				'puntenintrekken'	 => 'P_CORVEE_MOD',
-				'email'				 => 'P_CORVEE_MOD',
-				'aanmaken'			 => 'P_CORVEE_MOD'
+				'nieuw' => 'P_CORVEE_MOD',
+				'bewerk' => 'P_CORVEE_MOD',
+				'opslaan' => 'P_CORVEE_MOD',
+				'verwijder' => 'P_CORVEE_MOD',
+				'herstel' => 'P_CORVEE_MOD',
+				'toewijzen' => 'P_CORVEE_MOD',
+				'puntentoekennen' => 'P_CORVEE_MOD',
+				'puntenintrekken' => 'P_CORVEE_MOD',
+				'email' => 'P_CORVEE_MOD',
+				'aanmaken' => 'P_CORVEE_MOD'
 			);
 		}
 	}
@@ -66,7 +67,7 @@ class BeheerTakenController extends AclController {
 		}
 		$tid = null;
 		if ($this->hasParam(3)) {
-			$tid = (int) $this->getParam(3);
+			$tid = (int)$this->getParam(3);
 		}
 		parent::performAction(array($tid));
 	}
@@ -100,7 +101,7 @@ class BeheerTakenController extends AclController {
 	}
 
 	public function herinneren() {
-				$verstuurd_errors = CorveeHerinneringenModel::stuurHerinneringen();
+		$verstuurd_errors = CorveeHerinneringenModel::stuurHerinneringen();
 		$verstuurd = $verstuurd_errors[0];
 		$errors = $verstuurd_errors[1];
 		$aantal = sizeof($verstuurd);
@@ -129,7 +130,7 @@ class BeheerTakenController extends AclController {
 		}
 		$crid = filter_input(INPUT_POST, 'crv_repetitie_id', FILTER_SANITIZE_NUMBER_INT);
 		if (!empty($crid)) {
-			$repetitie = CorveeRepetitiesModel::instance()->getRepetitie((int) $crid);
+			$repetitie = CorveeRepetitiesModel::instance()->getRepetitie((int)$crid);
 			if ($mid === null) {
 				$beginDatum = CorveeRepetitiesModel::instance()->getFirstOccurrence($repetitie);
 				if ($repetitie->periode_in_dagen > 0) {
@@ -163,7 +164,7 @@ class BeheerTakenController extends AclController {
 		if ($this->view->validate()) {
 			/** @var CorveeTaak $values */
 			$values = $this->view->getModel();
-			$taak = $this->model->saveTaak((int) $tid, (int) $values->functie_id, $values->uid, $values->crv_repetitie_id, $values->maaltijd_id, $values->datum, $values->punten, $values->bonus_malus);
+			$taak = $this->model->saveTaak((int)$tid, (int)$values->functie_id, $values->uid, $values->crv_repetitie_id, $values->maaltijd_id, $values->datum, $values->punten, $values->bonus_malus);
 			$maaltijd = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], maalcieUrl . '/maaltijd/' . $values->maaltijd_id)) { // state of gui
 				$maaltijd = MaaltijdenModel::instance()->getMaaltijd($values->maaltijd_id);
@@ -192,7 +193,7 @@ class BeheerTakenController extends AclController {
 			$this->model->taakToewijzenAanLid($taak, $uidField->getValue());
 			$this->view = new BeheerTaakView($taak);
 		} else {
-									$suggesties = CorveeToewijzenModel::getSuggesties($taak);
+			$suggesties = CorveeToewijzenModel::getSuggesties($taak);
 			$this->view = new ToewijzenForm($taak, $suggesties); // fetches POST values itself
 		}
 	}
@@ -211,7 +212,7 @@ class BeheerTakenController extends AclController {
 
 	public function email($tid) {
 		$taak = $this->model->getTaak($tid);
-				CorveeHerinneringenModel::stuurHerinnering($taak);
+		CorveeHerinneringenModel::stuurHerinnering($taak);
 		$this->view = new BeheerTaakView($taak);
 	}
 
@@ -228,7 +229,7 @@ class BeheerTakenController extends AclController {
 		$form = new RepetitieCorveeForm($repetitie); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$mid = (empty($values['maaltijd_id']) ? null : (int) $values['maaltijd_id']);
+			$mid = (empty($values['maaltijd_id']) ? null : (int)$values['maaltijd_id']);
 			$taken = $this->model->maakRepetitieTaken($repetitie, $values['begindatum'], $values['einddatum'], $mid);
 			if (empty($taken)) {
 				throw new CsrGebruikerException('Geen nieuwe taken aangemaakt.');

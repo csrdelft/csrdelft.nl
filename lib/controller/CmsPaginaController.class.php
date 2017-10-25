@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\Controller;
@@ -117,7 +118,7 @@ class CmsPaginaController extends Controller {
 	public function verwijderen($naam) {
 		/** @var CmsPagina $pagina */
 		$pagina = $this->model->get($naam);
-		if (!$pagina OR ! $pagina->magVerwijderen()) {
+		if (!$pagina OR !$pagina->magVerwijderen()) {
 			$this->exit_http(403);
 		}
 		if ($this->model->delete($pagina)) {

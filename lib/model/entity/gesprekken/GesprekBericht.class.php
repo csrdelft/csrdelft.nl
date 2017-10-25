@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\gesprekken;
+
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
@@ -7,9 +9,9 @@ use function CsrDelft\reldate;
 
 /**
  * GesprekBericht.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class GesprekBericht extends PersistentEntity {
 
@@ -45,9 +47,9 @@ class GesprekBericht extends PersistentEntity {
 	protected static $persistent_attributes = array(
 		'bericht_id' => array(T::Integer, false, 'auto_increment'),
 		'gesprek_id' => array(T::Integer),
-		'moment'	 => array(T::DateTime),
+		'moment' => array(T::DateTime),
 		'auteur_uid' => array(T::UID),
-		'inhoud'	 => array(T::Text)
+		'inhoud' => array(T::Text)
 	);
 	/**
 	 * Database primary key

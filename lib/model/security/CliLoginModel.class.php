@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\security;
 
 use function CsrDelft\getDateTime;
@@ -41,7 +42,7 @@ class CliLoginModel extends LoginModel {
 	 * CliLoginModel constructor.
 	 */
 	protected function __construct() {
-	    parent::__static();
+		parent::__static();
 		parent::__construct();
 		if (!$this->validate()) {
 			die('access denied');
@@ -56,8 +57,8 @@ class CliLoginModel extends LoginModel {
 			$cred = parse_ini_file(ETC_PATH . 'cron.ini');
 		} else {
 			$cred = array(
-				'user'	 => 'cron',
-				'pass'	 => 'pw'
+				'user' => 'cron',
+				'pass' => 'pw'
 			);
 		}
 		return $this->login($cred['user'], $cred['pass']);
@@ -103,14 +104,12 @@ class CliLoginModel extends LoginModel {
 		// Check password
 		if (AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
 			AccountModel::instance()->successfulLoginAttempt($account);
-		}
-		// Wrong password
+		} // Wrong password
 		else {
 			// Password deleted (by admin)
 			if ($account->pass_hash == '') {
 				die('Gebruik wachtwoord vergeten of mail de PubCie');
-			}
-			// Regular failed username+password
+			} // Regular failed username+password
 			else {
 				AccountModel::instance()->failedLoginAttempt($account);
 				die('Inloggen niet geslaagd');
@@ -128,7 +127,7 @@ class CliLoginModel extends LoginModel {
 		$session->session_hash = hash('sha512', session_id());
 		$session->uid = $account->uid;
 		$session->login_moment = getDateTime();
-		$session->expire = getDateTime(time() + (int) InstellingenModel::get('beveiliging', 'session_lifetime_seconds'));
+		$session->expire = getDateTime(time() + (int)InstellingenModel::get('beveiliging', 'session_lifetime_seconds'));
 		$session->user_agent = MODE;
 		$session->ip = '';
 		$session->lock_ip = true; // sessie koppelen aan ip?

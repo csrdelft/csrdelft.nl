@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\forms;
+
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\entity\maalcie\Maaltijd;
@@ -35,7 +37,7 @@ class MaaltijdForm extends ModalForm {
 	 * @throws CsrGebruikerException
 	 */
 	public function __construct(Maaltijd $maaltijd, $action) {
-		parent::__construct($maaltijd, '/maaltijden/beheer/'. $action, false, true);
+		parent::__construct($maaltijd, '/maaltijden/beheer/' . $action, false, true);
 
 		$product = CiviProductModel::instance()->find('id = ?', array($maaltijd->product_id))->current();
 		if ($product == false) {

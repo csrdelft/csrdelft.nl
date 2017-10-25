@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
@@ -23,8 +24,8 @@ class CommissieVoorkeurenController extends AclController {
 		parent::__construct($query, null);
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'overzicht'	 => 'bestuur',
-				'lidpagina'	 => 'bestuur'
+				'overzicht' => 'bestuur',
+				'lidpagina' => 'bestuur'
 			);
 		} else {
 			$this->acl = array(

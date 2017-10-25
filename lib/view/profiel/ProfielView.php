@@ -33,7 +33,7 @@ use CsrDelft\view\SmartyTemplateView;
 /**
  * ProfielView.php
  *
- * @author C.S.R. Delft	<pubcie@csrdelft.nl>
+ * @author C.S.R. Delft  <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property Profiel $model
@@ -154,7 +154,7 @@ class ProfielView extends SmartyTemplateView {
 		$bestellingen = CiviBestellingModel::instance()->getBestellingenVoorLid($this->model->uid, 10);
 		$bestellinglog = CiviBestellingModel::instance()->getBeschrijving($bestellingen);
 		$this->smarty->assign('bestellinglog', $bestellinglog);
-		$this->smarty->assign('bestellingenlink', '/fiscaat/bestellingen' . (LoginModel::getUid() === $this->model->uid ? '' : '/'.$this->model->uid));
+		$this->smarty->assign('bestellingenlink', '/fiscaat/bestellingen' . (LoginModel::getUid() === $this->model->uid ? '' : '/' . $this->model->uid));
 
 		$this->smarty->assign('corveepunten', $this->model->corvee_punten);
 		$this->smarty->assign('corveebonus', $this->model->corvee_punten_bonus);

@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity\fotoalbum;
 
 use CsrDelft\model\entity\Map;
@@ -55,7 +56,7 @@ class FotoAlbum extends Map {
 	 */
 	protected static $persistent_attributes = array(
 		'subdir' => array(T::String),
-		'owner'	 => array(T::UID)
+		'owner' => array(T::UID)
 	);
 	/**
 	 * Database primary key
@@ -99,7 +100,7 @@ class FotoAlbum extends Map {
 
 	public function isEmpty() {
 		$subalbums = $this->getSubAlbums();
-		return empty($subalbums) AND ! $this->hasFotos(true);
+		return empty($subalbums) AND !$this->hasFotos(true);
 	}
 
 	public function hasFotos($incompleet = false) {

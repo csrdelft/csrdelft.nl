@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\api;
 
 use CsrDelft\model\entity\forum\ForumDraad;
@@ -52,8 +53,8 @@ class ApiForumController {
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
 
 		try {
-			$draad = ForumDradenModel::get((int) $id);
-		} catch(\Exception $e) {
+			$draad = ForumDradenModel::get((int)$id);
+		} catch (\Exception $e) {
 			throw new RestException(404);
 		}
 

@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\maalcie;
+
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\InstellingenModel;
@@ -10,9 +12,9 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
- * Maaltijd.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
- * 
+ * Maaltijd.class.php  |  P.W.G. Brussee (brussee@live.nl)
+ *
+ *
  * Een mlt_maaltijd instantie beschrijft een individuele maaltijd als volgt:
  *  - uniek identificatienummer
  *  - door welke repetitie deze maaltijd is aangemaakt (optioneel)
@@ -23,16 +25,16 @@ use CsrDelft\Orm\Entity\T;
  *  - moment wanneer de maaltijd voor het laatst is gesloten (gebeurt in principe maar 1 keer)
  *  - of de maaltijd verwijderd is (in de prullenbak zit)
  *  - of er restricties gelden voor wie zich mag aanmelden
- * 
+ *
  * Een gesloten maaltijd kan weer heropend worden.
  * Een verwijderde maaltijd kan weer uit de prullenbak worden gehaald.
  * Zolang een maaltijd verwijderd is doet en telt deze niet meer mee in het maalcie-systeem.
  * Als de restricties gewijzigt worden nadat er al aangemeldingen zijn (direct na het aanmaken van een maaltijd vanwege abonnementen) worden illegale aanmeldingen automatisch verwijderd.
  * In principe worden maaltijden aangemaakt vanuit maaltijd-repetitie in verband met maaltijd-corvee-taken en corvee-voorkeuren van leden.
- * 
- * 
+ *
+ *
  * Zie ook MaaltijdAanmelding.class.php
- * 
+ *
  */
 class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	# primary key
@@ -54,29 +56,29 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	public $verwerkt = false;
 	/**
 	 * De taak die rechten geeft voor het bekijken en sluiten van de maaltijd(-lijst)
-	 * @var CorveeTaak 
+	 * @var CorveeTaak
 	 */
 	public $maaltijdcorvee;
 
 	public function getPrijsFloat() {
-        return (float) $this->getPrijs() / 100.0;
-    }
+		return (float)$this->getPrijs() / 100.0;
+	}
 
-    public function getPrijs() {
+	public function getPrijs() {
 		return CiviProductModel::instance()->getPrijs(CiviProductModel::instance()->getProduct($this->product_id))->prijs;
 	}
 
-    /**
-     * @return int
-     */
-    public function getAantalAanmeldingen() {
-        $aantal = MaaltijdAanmeldingenModel::instance()->select(array('SUM(aantal_gasten) + COUNT(*)'), 'maaltijd_id = ?', array($this->maaltijd_id));
-        return (int) $aantal->fetchColumn();
-    }
+	/**
+	 * @return int
+	 */
+	public function getAantalAanmeldingen() {
+		$aantal = MaaltijdAanmeldingenModel::instance()->select(array('SUM(aantal_gasten) + COUNT(*)'), 'maaltijd_id = ?', array($this->maaltijd_id));
+		return (int)$aantal->fetchColumn();
+	}
 
 	/**
 	 * Bereken de marge in verband met niet aangemelde gasten.
-	 * 
+	 *
 	 * @return int
 	 */
 	public function getMarge() {
@@ -95,7 +97,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Bereken het budget voor deze maaltijd.
-	 * 
+	 *
 	 * @return double
 	 */
 	public function getBudget() {
@@ -106,11 +108,11 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 
 	// Agendeerbaar ############################################################
 
-    public function getTitel() {
-        return $this->titel;
-    }
+	public function getTitel() {
+		return $this->titel;
+	}
 
-    public function getBeginMoment() {
+	public function getBeginMoment() {
 		return strtotime($this->datum . ' ' . $this->tijd);
 	}
 
@@ -138,7 +140,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Deze functie bepaalt of iemand de maaltijd(-lijst) mag zien.
-	 * 
+	 *
 	 * @param string $uid
 	 * @return boolean
 	 */
@@ -160,7 +162,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 
 	/**
 	 * Deze functie bepaalt of iemand deze maaltijd mag sluiten of niet.
-	 * 
+	 *
 	 * @param string $uid
 	 * @return boolean
 	 */
@@ -168,38 +170,38 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 		return $this->magBekijken($uid) AND $this->maaltijdcorvee->getCorveeFunctie()->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
 	}
 
-    protected static $table_name = 'mlt_maaltijden';
-    protected static $persistent_attributes = array(
-        'maaltijd_id' => array(T::Integer, false, 'auto_increment'),
-        'mlt_repetitie_id' => array(T::Integer, true),
-        'product_id' => array(T::Integer),
-        'titel' => array(T::String),
-        'aanmeld_limiet' => array(T::Integer),
-        'datum' => array(T::Date),
-        'tijd' => array(T::Time),
-        'gesloten' => array(T::Boolean),
-        'laatst_gesloten' => array(T::Timestamp, true),
-        'verwijderd' => array(T::Boolean),
-        'aanmeld_filter' => array(T::String, true),
-        'omschrijving' => array(T::Text, true),
+	protected static $table_name = 'mlt_maaltijden';
+	protected static $persistent_attributes = array(
+		'maaltijd_id' => array(T::Integer, false, 'auto_increment'),
+		'mlt_repetitie_id' => array(T::Integer, true),
+		'product_id' => array(T::Integer),
+		'titel' => array(T::String),
+		'aanmeld_limiet' => array(T::Integer),
+		'datum' => array(T::Date),
+		'tijd' => array(T::Time),
+		'gesloten' => array(T::Boolean),
+		'laatst_gesloten' => array(T::Timestamp, true),
+		'verwijderd' => array(T::Boolean),
+		'aanmeld_filter' => array(T::String, true),
+		'omschrijving' => array(T::Text, true),
 		'verwerkt' => array(T::Boolean)
-    );
+	);
 
-    protected static $primary_key = array('maaltijd_id');
+	protected static $primary_key = array('maaltijd_id');
 
-    /**
-     * De API voor de app gebruikt json_encode
-     *
-     * @return array|mixed
-     */
-    public function jsonSerialize() {
-        $json = parent::jsonSerialize();
-        $json['repetitie_naam'] = is_int($this->mlt_repetitie_id) ? MaaltijdRepetitiesModel::instance()->getRepetitie($this->mlt_repetitie_id)->standaard_titel : '';
-        $json['tijd'] = date('G:i', strtotime($json['tijd']));
-        $json['aantal_aanmeldingen'] = $this->getAantalAanmeldingen();
-        $json['gesloten'] = $json['gesloten'] ? '1' : '0';
-        $json['prijs'] = strval($this->getPrijs());
-        return $json;
-    }
+	/**
+	 * De API voor de app gebruikt json_encode
+	 *
+	 * @return array|mixed
+	 */
+	public function jsonSerialize() {
+		$json = parent::jsonSerialize();
+		$json['repetitie_naam'] = is_int($this->mlt_repetitie_id) ? MaaltijdRepetitiesModel::instance()->getRepetitie($this->mlt_repetitie_id)->standaard_titel : '';
+		$json['tijd'] = date('G:i', strtotime($json['tijd']));
+		$json['aantal_aanmeldingen'] = $this->getAantalAanmeldingen();
+		$json['gesloten'] = $json['gesloten'] ? '1' : '0';
+		$json['prijs'] = strval($this->getPrijs());
+		return $json;
+	}
 
 }

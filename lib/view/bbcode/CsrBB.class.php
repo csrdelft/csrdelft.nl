@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\bbcode;
 
 use CsrDelft\common\CsrException;
@@ -203,7 +204,7 @@ HTML;
 	function bb_img($arguments = array()) {
 		$url = $this->parseArray(array('[/img]', '[/IMG]'), array());
 		$url = filter_var($url, FILTER_SANITIZE_URL);
-		if (!$url OR ( !url_like($url) AND ! startsWith($url, '/plaetjes/') )) {
+		if (!$url OR (!url_like($url) AND !startsWith($url, '/plaetjes/'))) {
 			return $url;
 		}
 		if ($this->light_mode) {
@@ -225,10 +226,10 @@ HTML;
 			}
 		}
 		if (isset($arguments['w']) AND $arguments['w'] > 10) {
-			$style .= 'width: ' . ((int) $arguments['w']) . 'px; ';
+			$style .= 'width: ' . ((int)$arguments['w']) . 'px; ';
 		}
 		if (isset($arguments['h']) AND $arguments['h'] > 10) {
-			$style .= 'height: ' . ((int) $arguments['h']) . 'px;';
+			$style .= 'height: ' . ((int)$arguments['h']) . 'px;';
 		}
 		if ($this->email_mode) {
 			return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
@@ -319,10 +320,10 @@ HTML;
 		if (isset($arguments['slider'])) {
 			$view = new FotoAlbumSliderView($album);
 			if (isset($arguments['height'])) {
-				$view->height = (int) $arguments['height'];
+				$view->height = (int)$arguments['height'];
 			}
 			if (isset($arguments['interval'])) {
-				$view->interval = (int) $arguments['interval'];
+				$view->interval = (int)$arguments['interval'];
 			}
 			if (isset($arguments['random'])) {
 				$view->random = $arguments['random'] !== 'false';
@@ -334,10 +335,10 @@ HTML;
 				$view->makeCompact();
 			}
 			if (isset($arguments['rows'])) {
-				$view->setRows((int) $arguments['rows']);
+				$view->setRows((int)$arguments['rows']);
 			}
 			if (isset($arguments['perrow'])) {
-				$view->setPerRow((int) $arguments['perrow']);
+				$view->setPerRow((int)$arguments['perrow']);
 			}
 			if (isset($arguments['bigfirst'])) {
 				$view->setBig(0);
@@ -363,7 +364,7 @@ HTML;
 	/**
 	 * URL
 	 *
-	 * @param String $arguments['url'] URL waarnaar gelinkt wordt
+	 * @param String $arguments ['url'] URL waarnaar gelinkt wordt
 	 *
 	 * @example [url]https://csrdelft.nl[/url]
 	 * @example [url=https://csrdelft.nl]Stek[/url]
@@ -546,18 +547,18 @@ HTML;
 	/**
 	 * Toont content als instelling een bepaalde waarde heeft, standaard 'ja';
 	 *
-	 * @param String $arguments['instelling'] Naam instelling
-	 * @param String $arguments['module'] Naam module
+	 * @param String $arguments ['instelling'] Naam instelling
+	 * @param String $arguments ['module'] Naam module
 	 * @param optional String $arguments['waarde'] Waarde waarbij content wordt weergegeven
 	 *
 	 * @example [instelling=maaltijdblokje module=voorpagina][maaltijd=next][/instelling]
 	 */
 	function bb_instelling($arguments = array()) {
 		$content = $this->parseArray(array('[/instelling]'), array());
-		if (!array_key_exists('instelling', $arguments) OR ! isset($arguments['instelling'])) {
+		if (!array_key_exists('instelling', $arguments) OR !isset($arguments['instelling'])) {
 			return 'Geen of een niet bestaande instelling opgegeven: ' . htmlspecialchars($arguments['instelling']);
 		}
-		if (!array_key_exists('module', $arguments) OR ! isset($arguments['module'])) { // backwards compatibility
+		if (!array_key_exists('module', $arguments) OR !isset($arguments['module'])) { // backwards compatibility
 			$key = explode('_', $arguments['instelling'], 2);
 			$arguments['module'] = $key[0];
 			$arguments['instelling'] = $key[1];
@@ -588,7 +589,7 @@ HTML;
 		} else {
 			$queryID = $this->parseArray(array('[/query]'), array());
 		}
-		$queryID = (int) $queryID;
+		$queryID = (int)$queryID;
 
 		if ($queryID != 0) {
 			$sqc = new SavedQueryContent(new SavedQuery($queryID));
@@ -666,7 +667,7 @@ HTML;
 	/**
 	 * YouTube speler
 	 *
-	 * @param String $arguments['youtube'] YouTube id van 11 tekens
+	 * @param String $arguments ['youtube'] YouTube id van 11 tekens
 	 *
 	 * @example [youtube]dQw4w9WgXcQ[/youtube]
 	 * @example [youtube=dQw4w9WgXcQ]
@@ -805,14 +806,14 @@ HTML;
 		$lines = 4;
 		$width = 355;
 		$height = 300;
-		if (isset($arguments['lines']) AND (int) $arguments['lines'] > 0) {
-			$lines = (int) $arguments['lines'];
+		if (isset($arguments['lines']) AND (int)$arguments['lines'] > 0) {
+			$lines = (int)$arguments['lines'];
 		}
-		if (isset($arguments['width']) AND (int) $arguments['width'] > 100) {
-			$width = (int) $arguments['width'];
+		if (isset($arguments['width']) AND (int)$arguments['width'] > 100) {
+			$width = (int)$arguments['width'];
 		}
-		if (isset($arguments['height']) AND (int) $arguments['height'] > 100) {
-			$height = (int) $arguments['height'];
+		if (isset($arguments['height']) AND (int)$arguments['height'] > 100) {
+			$height = (int)$arguments['height'];
 		}
 
 		$html = <<<HTML
@@ -822,7 +823,7 @@ HTML;
 			  version: 2,
 			  type: 'profile',
 HTML;
-		$html.=" rpp: " . $lines . ",
+		$html .= " rpp: " . $lines . ",
 			  interval: 30000,
 			  width: " . $width . ",
 			  height: " . $height . ",
@@ -1017,14 +1018,14 @@ HTML;
 		}
 
 		try {
-			$boek = new BiebBoek((int) $boekid);
+			$boek = new BiebBoek((int)$boekid);
 			if ($this->light_mode) {
 				return $this->lightLinkBlock('boek', $boek->getUrl(), $boek->getTitel(), 'Auteur: ' . $boek->getAuteur());
 			}
 			$content = new BoekBBView($boek);
 			return $content->view();
 		} catch (CsrException $e) {
-			return '[boek] Boek [boekid:' . (int) $boekid . '] bestaat niet.';
+			return '[boek] Boek [boekid:' . (int)$boekid . '] bestaat niet.';
 		}
 	}
 
@@ -1045,7 +1046,7 @@ HTML;
 
 		if ($document) {
 			if ($this->light_mode) {
-				$beschrijving = $document->getFriendlyMimetype() . ' (' . format_filesize((int) $document->filesize) . ')';
+				$beschrijving = $document->getFriendlyMimetype() . ' (' . format_filesize((int)$document->filesize) . ')';
 				return $this->lightLinkBlock('document', $document->getDownloadUrl(), $document->naam, $beschrijving);
 			}
 			$content = new DocumentBBContent($document);
@@ -1085,7 +1086,7 @@ HTML;
 					$maaltijd2 = reset($maaltijden);
 				}
 			} elseif (preg_match('/\d+/', $mid)) {
-				$maaltijd = MaaltijdenModel::instance()->getMaaltijdVoorKetzer((int) $mid); // met filter
+				$maaltijd = MaaltijdenModel::instance()->getMaaltijdVoorKetzer((int)$mid); // met filter
 				if (!$maaltijd) {
 					return '';
 				}
@@ -1202,7 +1203,7 @@ HTML;
 
 	function bb_clear($arguments = array()) {
 		$sClear = 'clear';
-		if (isset($arguments['clear']) AND ( $arguments['clear'] === 'left' OR $arguments['clear'] === 'right' )) {
+		if (isset($arguments['clear']) AND ($arguments['clear'] === 'left' OR $arguments['clear'] === 'right')) {
 			$sClear .= '-' . $arguments['clear'];
 		}
 		return '<div class="' . $sClear . '"></div>';
@@ -1290,7 +1291,7 @@ HTML;
 		}
 		// Hoogte maakt niet veel uit
 		if (isset($arguments['h']) AND $arguments['h'] <= 900) {
-			$height = (int) $arguments['h'];
+			$height = (int)$arguments['h'];
 		} else {
 			$height = 450;
 		}
@@ -1314,7 +1315,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 			$peiling_id = $this->parseArray(array('[/peiling]'), array());
 		}
 		try {
-			$peiling = PeilingenModel::instance()->getPeilingById((int) $peiling_id);
+			$peiling = PeilingenModel::instance()->getPeilingById((int)$peiling_id);
 			if ($this->light_mode) {
 				$url = '#/peiling/' . urlencode($peiling_id);
 				return $this->lightLinkBlock('peiling', $url, $peiling->titel, $peiling->tekst);
@@ -1322,7 +1323,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 			$peilingcontent = new PeilingView($peiling);
 			return $peilingcontent->getHtml();
 		} catch (CsrException $e) {
-			return '[peiling] Er bestaat geen peiling met (id:' . (int) $peiling_id . ')';
+			return '[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')';
 		}
 	}
 
@@ -1423,7 +1424,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 				$groep = $verticale;
 			}
 		} elseif (isset($arguments['lichting'])) {
-			$l = (int) filter_var($arguments['lichting'], FILTER_SANITIZE_NUMBER_INT);
+			$l = (int)filter_var($arguments['lichting'], FILTER_SANITIZE_NUMBER_INT);
 			if ($l < 1950) {
 				$l = LichtingenModel::getJongsteLidjaar();
 			}
@@ -1446,7 +1447,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	/**
 	 * Heading
 	 *
-	 * @param Integer $arguments['h'] Heading level (1-6)
+	 * @param Integer $arguments ['h'] Heading level (1-6)
 	 * @param optional String $arguments['id'] ID attribute
 	 *
 	 * @example [h=1 id=special]Heading[/h]
@@ -1458,7 +1459,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		}
 		$h = 1;
 		if (isset($arguments['h'])) {
-			$h = (int) $arguments['h'];
+			$h = (int)$arguments['h'];
 		}
 		$text = '<h' . $h . $id . ' class="bb-tag-h">';
 		$text .= $this->parseArray(array('[/h]'), array('h'));
@@ -1542,7 +1543,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 			$content = '...';
 		}
 		$text = '<div class="citaatContainer bb-tag-quote"><strong>Citaat</strong>' .
-				'<div class="citaat">' . $content . '</div></div>';
+			'<div class="citaat">' . $content . '</div></div>';
 		return $text;
 	}
 
@@ -1628,7 +1629,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 	/**
 	 * Email anchor
 	 *
-	 * @param String $arguments['email'] Email address to link to
+	 * @param String $arguments ['email'] Email address to link to
 	 * @param optional Boolean $arguments['spamsafe'] Uses spam safe javascript obfuscator
 	 *
 	 * @example [email]noreply@csrdelft.nl[/email]
@@ -1692,7 +1693,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		$style = '';
 		foreach ($arguments as $name => $value) {
 			if (in_array($name, $tableProperties)) {
-				$style.=$name . ': ' . str_replace('_', ' ', htmlspecialchars($value)) . '; ';
+				$style .= $name . ': ' . str_replace('_', ' ', htmlspecialchars($value)) . '; ';
 			}
 		}
 
@@ -1725,7 +1726,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 
 		$style = '';
 		if (isset($arguments['w'])) {
-			$style.='width: ' . (int) $arguments['w'] . 'px; ';
+			$style .= 'width: ' . (int)$arguments['w'] . 'px; ';
 		}
 
 		$html = '<td class="bb-tag-td" style="' . $style . '">' . $content . '</td>';
@@ -1761,21 +1762,21 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 			$class .= htmlspecialchars($arguments['class']);
 		}
 		if (isset($arguments['clear'])) {
-			$class.=' clear';
+			$class .= ' clear';
 		} elseif (isset($arguments['float']) AND $arguments['float'] == 'left') {
-			$class.=' float-left';
+			$class .= ' float-left';
 		} elseif (isset($arguments['float']) AND $arguments['float'] == 'right') {
-			$class.=' float-right';
+			$class .= ' float-right';
 		}
 		if ($class != '') {
 			$class = ' class="bb-tag-div ' . $class . '"';
 		}
 		$style = '';
 		if (isset($arguments['w'])) {
-			$style.='width: ' . ((int) $arguments['w']) . 'px; ';
+			$style .= 'width: ' . ((int)$arguments['w']) . 'px; ';
 		}
 		if (isset($arguments['h'])) {
-			$style.='height: ' . ((int) $arguments['h']) . 'px; ';
+			$style .= 'height: ' . ((int)$arguments['h']) . 'px; ';
 		}
 		if ($style != '') {
 			$style = ' style="' . $style . '" ';

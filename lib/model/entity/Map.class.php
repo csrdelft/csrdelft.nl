@@ -1,12 +1,14 @@
 <?php
+
 namespace CsrDelft\model\entity;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 
 /**
  * Map.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Map extends PersistentEntity {
 

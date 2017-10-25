@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
@@ -28,16 +29,16 @@ class CorveeRepetitiesController extends AclController {
 		parent::__construct($query, CorveeRepetitiesModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer'	 => 'P_CORVEE_MOD',
-				'maaltijd'	 => 'P_CORVEE_MOD'
+				'beheer' => 'P_CORVEE_MOD',
+				'maaltijd' => 'P_CORVEE_MOD'
 			);
 		} else {
 			$this->acl = array(
-				'nieuw'		 => 'P_CORVEE_MOD',
-				'bewerk'	 => 'P_CORVEE_MOD',
-				'opslaan'	 => 'P_CORVEE_MOD',
-				'verwijder'	 => 'P_CORVEE_MOD',
-				'bijwerken'	 => 'P_MAAL_MOD'
+				'nieuw' => 'P_CORVEE_MOD',
+				'bewerk' => 'P_CORVEE_MOD',
+				'opslaan' => 'P_CORVEE_MOD',
+				'verwijder' => 'P_CORVEE_MOD',
+				'bijwerken' => 'P_MAAL_MOD'
 			);
 		}
 	}
@@ -49,7 +50,7 @@ class CorveeRepetitiesController extends AclController {
 		}
 		$crid = null;
 		if ($this->hasParam(3)) {
-			$crid = (int) $this->getParam(3);
+			$crid = (int)$this->getParam(3);
 		}
 		parent::performAction(array($crid));
 	}
@@ -95,8 +96,8 @@ class CorveeRepetitiesController extends AclController {
 		}
 		if ($this->view->validate()) {
 			$values = $this->view->getValues();
-			$mrid = empty($values['mlt_repetitie_id']) ? null : (int) $values['mlt_repetitie_id'];
-			$voorkeurbaar = empty($values['voorkeurbaar']) ? false : (bool) $values['voorkeurbaar'];
+			$mrid = empty($values['mlt_repetitie_id']) ? null : (int)$values['mlt_repetitie_id'];
+			$voorkeurbaar = empty($values['voorkeurbaar']) ? false : (bool)$values['voorkeurbaar'];
 			$repetitie_aantal = $this->model->saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_punten'], $values['standaard_aantal'], $voorkeurbaar);
 			$maaltijdrepetitie = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], maalcieUrl . '/maaltijd/' . $mrid)) { // state of gui
@@ -128,12 +129,12 @@ class CorveeRepetitiesController extends AclController {
 				$aantal['update'] = $aantal['day'];
 			}
 			setMelding(
-					$aantal['update'] . ' corveeta' . ($aantal['update'] !== 1 ? 'ken' : 'ak') . ' bijgewerkt waarvan ' .
-					$aantal['day'] . ' van dag verschoven.', 1);
+				$aantal['update'] . ' corveeta' . ($aantal['update'] !== 1 ? 'ken' : 'ak') . ' bijgewerkt waarvan ' .
+				$aantal['day'] . ' van dag verschoven.', 1);
 			$aantal['datum'] += $aantal['maaltijd'];
 			setMelding(
-					$aantal['datum'] . ' corveeta' . ($aantal['datum'] !== 1 ? 'ken' : 'ak') . ' aangemaakt waarvan ' .
-					$aantal['maaltijd'] . ' maaltijdcorvee.', 1);
+				$aantal['datum'] . ' corveeta' . ($aantal['datum'] !== 1 ? 'ken' : 'ak') . ' aangemaakt waarvan ' .
+				$aantal['maaltijd'] . ' maaltijdcorvee.', 1);
 		}
 	}
 

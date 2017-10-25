@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity;
 
 use function CsrDelft\aaidrom;
@@ -120,79 +121,79 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	protected static $persistent_attributes = array(
 		// account
-		'uid'					 => array(T::UID),
-		'changelog'				 => array(T::Text),
+		'uid' => array(T::UID),
+		'changelog' => array(T::Text),
 		// naam
-		'voornamen'				 => array(T::String, true),
-		'voorletters'			 => array(T::String),
-		'voornaam'				 => array(T::String),
-		'tussenvoegsel'			 => array(T::String, true),
-		'achternaam'			 => array(T::String),
-		'postfix'				 => array(T::String, true),
-		'nickname'				 => array(T::String, true),
-		'duckname'				 => array(T::String, true),
+		'voornamen' => array(T::String, true),
+		'voorletters' => array(T::String),
+		'voornaam' => array(T::String),
+		'tussenvoegsel' => array(T::String, true),
+		'achternaam' => array(T::String),
+		'postfix' => array(T::String, true),
+		'nickname' => array(T::String, true),
+		'duckname' => array(T::String, true),
 		// fysiek
-		'geslacht'				 => array(T::Enumeration, false, Geslacht::class),
-		'gebdatum'				 => array(T::Date),
-		'sterfdatum'			 => array(T::Date, true),
+		'geslacht' => array(T::Enumeration, false, Geslacht::class),
+		'gebdatum' => array(T::Date),
+		'sterfdatum' => array(T::Date, true),
 		// getrouwd
-		'echtgenoot'			 => array(T::UID, true),
-		'adresseringechtpaar'	 => array(T::String, true),
-		'ontvangtcontactueel'	 => array(T::Enumeration, false, OntvangtContactueel::class),
+		'echtgenoot' => array(T::UID, true),
+		'adresseringechtpaar' => array(T::String, true),
+		'ontvangtcontactueel' => array(T::Enumeration, false, OntvangtContactueel::class),
 		// adres
-		'adres'					 => array(T::String),
-		'postcode'				 => array(T::String),
-		'woonplaats'			 => array(T::String),
-		'land'					 => array(T::String),
-		'mobiel'				 => array(T::String),
-		'telefoon'				 => array(T::String, true),
-		'o_adres'				 => array(T::String, true),
-		'o_postcode'			 => array(T::String, true),
-		'o_woonplaats'			 => array(T::String, true),
-		'o_land'				 => array(T::String, true),
-		'o_telefoon'			 => array(T::String, true),
+		'adres' => array(T::String),
+		'postcode' => array(T::String),
+		'woonplaats' => array(T::String),
+		'land' => array(T::String),
+		'mobiel' => array(T::String),
+		'telefoon' => array(T::String, true),
+		'o_adres' => array(T::String, true),
+		'o_postcode' => array(T::String, true),
+		'o_woonplaats' => array(T::String, true),
+		'o_land' => array(T::String, true),
+		'o_telefoon' => array(T::String, true),
 		// contact
-		'email'					 => array(T::String),
-		'linkedin'				 => array(T::String, true),
-		'website'				 => array(T::String, true),
+		'email' => array(T::String),
+		'linkedin' => array(T::String, true),
+		'website' => array(T::String, true),
 		// studie
-		'studie'				 => array(T::String, true),
-		'studienr'				 => array(T::Integer, true),
-		'studiejaar'			 => array(T::Integer, true),
-		'beroep'				 => array(T::String, true),
+		'studie' => array(T::String, true),
+		'studienr' => array(T::Integer, true),
+		'studiejaar' => array(T::Integer, true),
+		'beroep' => array(T::String, true),
 		// lidmaatschap
-		'lidjaar'				 => array(T::Integer),
-		'lidafdatum'			 => array(T::Date, true),
-		'status'				 => array(T::Enumeration, false, LidStatus::class),
+		'lidjaar' => array(T::Integer),
+		'lidafdatum' => array(T::Date, true),
+		'status' => array(T::Enumeration, false, LidStatus::class),
 		// geld
-		'bankrekening'			 => array(T::String, true),
-		'machtiging'			 => array(T::Boolean, true),
+		'bankrekening' => array(T::String, true),
+		'machtiging' => array(T::Boolean, true),
 		// verticale
-		'moot'					 => array(T::Char, true),
-		'verticale'				 => array(T::Char, true),
-		'verticaleleider'		 => array(T::Boolean, true),
-		'kringcoach'			 => array(T::Boolean, true),
+		'moot' => array(T::Char, true),
+		'verticale' => array(T::Char, true),
+		'verticaleleider' => array(T::Boolean, true),
+		'kringcoach' => array(T::Boolean, true),
 		// civi-gegevens
-		'patroon'				 => array(T::UID, true),
-		'corvee_punten'			 => array(T::Integer, true),
-		'corvee_punten_bonus'	 => array(T::Integer, true),
+		'patroon' => array(T::UID, true),
+		'corvee_punten' => array(T::Integer, true),
+		'corvee_punten_bonus' => array(T::Integer, true),
 		// Persoonlijk
-		'eetwens'				 => array(T::String, true),
-		'lengte'				 => array(T::Integer),
-		'ovkaart'				 => array(T::String),
-		'kerk'					 => array(T::String, true),
-		'muziek'				 => array(T::String, true),
-		'zingen'				 => array(T::String, true),
-		'vrienden'				 => array(T::Text, true),
-		'middelbareSchool'		 => array(T::String),
+		'eetwens' => array(T::String, true),
+		'lengte' => array(T::Integer),
+		'ovkaart' => array(T::String),
+		'kerk' => array(T::String, true),
+		'muziek' => array(T::String, true),
+		'zingen' => array(T::String, true),
+		'vrienden' => array(T::Text, true),
+		'middelbareSchool' => array(T::String),
 		// novitiaat
-		'novitiaat'				 => array(T::Text),
-		'novitiaatBijz'			 => array(T::Text, true),
-		'medisch'				 => array(T::Text, true),
-		'startkamp'				 => array(T::String),
-		'matrixPlek'			 => array(T::String),
-		'novietSoort'			 => array(T::String),
-		'kgb'					 => array(T::Text, true)
+		'novitiaat' => array(T::Text),
+		'novitiaatBijz' => array(T::Text, true),
+		'medisch' => array(T::Text, true),
+		'startkamp' => array(T::String),
+		'matrixPlek' => array(T::String),
+		'novietSoort' => array(T::String),
+		'kgb' => array(T::Text, true)
 	);
 	/**
 	 * Database primary key
@@ -243,9 +244,9 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getContactgegevens() {
 		return array_filter_empty(array(
-			'Email'			 => $this->getPrimaryEmail(),
-			'LinkedIn'		 => $this->linkedin,
-			'Website'		 => $this->website
+			'Email' => $this->getPrimaryEmail(),
+			'LinkedIn' => $this->linkedin,
+			'Website' => $this->website
 		));
 	}
 
@@ -255,14 +256,14 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	public function getFormattedAddress() {
 		return $this->adres . "\n" .
-				$this->postcode . " " . $this->woonplaats . "\n" .
-				$this->land;
+			$this->postcode . " " . $this->woonplaats . "\n" .
+			$this->land;
 	}
 
 	public function getFormattedAddressOuders() {
 		return $this->o_adres . "\n" .
-				$this->o_postcode . " " . $this->o_woonplaats . "\n" .
-				$this->o_land;
+			$this->o_postcode . " " . $this->o_woonplaats . "\n" .
+			$this->o_land;
 	}
 
 	public function isJarig() {
@@ -304,7 +305,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			 */
 			$jaar = $GLOBALS['agenda_jaar'];
 			if ($GLOBALS['agenda_maand'] == 1 AND substr($this->gebdatum, 5, 2) == $GLOBALS['agenda_maand']) {
-				$jaar+=1;
+				$jaar += 1;
 			}
 		}
 		$datum = $jaar . '-' . substr($this->gebdatum, 5, 5) . ' 00:00:00'; // 1 b'vo
@@ -352,10 +353,10 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			$title = ' title="' . htmlspecialchars($this->getNaam('volledig')) . '"';
 		}
 		$l = '<a href="/profiel/' . $this->uid . '"' . $title . ' class="lidLink ' . htmlspecialchars($this->status) . '">';
-		if ($vorm !== 'pasfoto' AND ( $vorm === 'leeg' OR LidInstellingenModel::get('layout', 'visitekaartjes') == 'ja' )) {
+		if ($vorm !== 'pasfoto' AND ($vorm === 'leeg' OR LidInstellingenModel::get('layout', 'visitekaartjes') == 'ja')) {
 			$k = '<span';
 			if ($vorm !== 'leeg') {
-				$k .=' class="hoverIntent"';
+				$k .= ' class="hoverIntent"';
 			}
 			$k .= '><div style="margin-top: -15px; margin-left: -15px;" class="';
 			if ($vorm !== 'leeg') {
@@ -425,7 +426,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		if ($vorm === 'user') {
 			$vorm = LidInstellingenModel::get('forum', 'naamWeergave');
 		}
-		if (! $force AND ! LoginModel::mag('P_LOGGED_IN')) {
+		if (!$force AND !LoginModel::mag('P_LOGGED_IN')) {
 			$vorm = 'civitas';
 		}
 		switch ($vorm) {
@@ -457,7 +458,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			case 'voorletters':
 				$naam = $this->voorletters . ' ';
 				if (!empty($this->tussenvoegsel)) {
-					$naam .=$this->tussenvoegsel . ' ';
+					$naam .= $this->tussenvoegsel . ' ';
 				}
 				$naam .= $this->achternaam;
 				break;
@@ -501,8 +502,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 					if ($this->isOudlid()) {
 						$naam .= ' ' . LidStatus::getChar($this->status);
 					}
-				}
-				// geen lid
+				} // geen lid
 				else {
 					if (LoginModel::mag('P_LEDEN_READ')) {
 						$naam = $this->voornaam . ' ';
@@ -630,7 +630,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * @return float
 	 */
 	public function getCiviSaldo() {
-		return CiviSaldoModel::instance()->getSaldo($this->uid)->saldo / (float) 100;
+		return CiviSaldoModel::instance()->getSaldo($this->uid)->saldo / (float)100;
 	}
 
 	/**
@@ -640,7 +640,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function isInGoogleContacts() {
 		try {
-            if (!GoogleSync::isAuthenticated()) {
+			if (!GoogleSync::isAuthenticated()) {
 				return false;
 			}
 			return !is_null(GoogleSync::instance()->existsInGoogleContacts($this));

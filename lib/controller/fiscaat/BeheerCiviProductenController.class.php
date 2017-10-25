@@ -93,7 +93,7 @@ class BeheerCiviProductenController extends AclController {
 
 		$removed = array();
 		$existingOrders = array();
-		foreach($selection as $uuid) {
+		foreach ($selection as $uuid) {
 			$product = $this->model->retrieveByUUID($uuid);
 
 			if ($product) {

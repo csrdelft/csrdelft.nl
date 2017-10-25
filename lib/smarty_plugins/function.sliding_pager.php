@@ -67,7 +67,7 @@ function smarty_function_sliding_pager($params, &$smarty) {
 	$delta_l = 0;
 	$delta_r = 0;
 	if ($linknum % 2 == 0) {
-		$delta_l = ($linknum / 2 ) - 1;
+		$delta_l = ($linknum / 2) - 1;
 		$delta_r = $linknum / 2;
 	} else {
 		$delta_l = $delta_r = ($linknum - 1) / 2;

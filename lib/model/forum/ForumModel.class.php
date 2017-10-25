@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\forum;
 
 use CsrDelft\common\CsrGebruikerException;

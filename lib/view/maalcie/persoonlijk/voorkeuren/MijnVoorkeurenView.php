@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\maalcie\persoonlijk\voorkeuren;
 
 use CsrDelft\view\maalcie\forms\EetwensForm;

@@ -1,13 +1,14 @@
 <?php
+
 namespace CsrDelft\model;
 
 /**
  * Paging.interface.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Paginering van items.
- * 
+ *
  */
 interface Paging {
 

@@ -1,16 +1,18 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
+
 use CsrDelft\model\groepen\KetzerKeuzesModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * KetzerOptie.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een keuzemogelijkheid van een ketzer kan gekozen worden door een groeplid.
- * 
+ *
  */
 class KetzerOptie extends PersistentEntity {
 
@@ -34,9 +36,9 @@ class KetzerOptie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'optie_id'	 => array(T::Integer, false, 'auto_increment'),
-		'select_id'	 => array(T::Integer),
-		'waarde'	 => array(T::String)
+		'optie_id' => array(T::Integer, false, 'auto_increment'),
+		'select_id' => array(T::Integer),
+		'waarde' => array(T::String)
 	);
 	/**
 	 * Database table name
@@ -51,7 +53,7 @@ class KetzerOptie extends PersistentEntity {
 
 	/**
 	 * Lazy loading by foreign key.
-	 * 
+	 *
 	 * @return KetzerKeuze[]
 	 */
 	public function getKeuzes() {

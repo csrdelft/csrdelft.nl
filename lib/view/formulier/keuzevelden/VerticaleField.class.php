@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\keuzevelden;
+
 use CsrDelft\model\groepen\VerticalenModel;
 
 /**

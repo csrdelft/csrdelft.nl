@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft;
 
 /**
@@ -155,8 +156,8 @@ h.t. Fiscus.';
 					continue;
 				}
 				$this->teschoppen[$profielsaldo['uid']] = array(
-					'onderwerp'	 => $this->replace($this->onderwerp, $profielsaldo['uid'], $profielsaldo['saldo']),
-					'bericht'	 => $this->replace($this->bericht, $profielsaldo['uid'], $profielsaldo['saldo']));
+					'onderwerp' => $this->replace($this->onderwerp, $profielsaldo['uid'], $profielsaldo['saldo']),
+					'bericht' => $this->replace($this->bericht, $profielsaldo['uid'], $profielsaldo['saldo']));
 			}
 		}
 

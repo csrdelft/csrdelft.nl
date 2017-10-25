@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
 
 use CsrDelft\model\entity\security\AccessAction;
@@ -75,16 +76,16 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'			 => array(T::Integer, false, 'auto_increment'),
-		'naam'			 => array(T::String),
-		'familie'		 => array(T::String),
-		'begin_moment'	 => array(T::DateTime),
-		'eind_moment'	 => array(T::DateTime, true),
-		'status'		 => array(T::Enumeration, false, GroepStatus::class),
-		'samenvatting'	 => array(T::Text),
-		'omschrijving'	 => array(T::Text, true),
-		'keuzelijst'	 => array(T::String, true),
-		'maker_uid'		 => array(T::UID)
+		'id' => array(T::Integer, false, 'auto_increment'),
+		'naam' => array(T::String),
+		'familie' => array(T::String),
+		'begin_moment' => array(T::DateTime),
+		'eind_moment' => array(T::DateTime, true),
+		'status' => array(T::Enumeration, false, GroepStatus::class),
+		'samenvatting' => array(T::Text),
+		'omschrijving' => array(T::Text, true),
+		'keuzelijst' => array(T::String, true),
+		'maker_uid' => array(T::UID)
 	);
 	/**
 	 * Database primary key

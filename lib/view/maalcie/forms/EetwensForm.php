@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\forms;
+
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\InlineForm;

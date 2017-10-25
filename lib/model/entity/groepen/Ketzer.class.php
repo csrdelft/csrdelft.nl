@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
+
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\KetzerSelectorsModel;
 use CsrDelft\model\groepen\leden\KetzerDeelnemersModel;
@@ -47,11 +49,11 @@ class Ketzer extends AbstractGroep {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'aanmeld_limiet'	 => array(T::Integer, true),
-		'aanmelden_vanaf'	 => array(T::DateTime),
-		'aanmelden_tot'		 => array(T::DateTime),
-		'bewerken_tot'		 => array(T::DateTime, true),
-		'afmelden_tot'		 => array(T::DateTime, true)
+		'aanmeld_limiet' => array(T::Integer, true),
+		'aanmelden_vanaf' => array(T::DateTime),
+		'aanmelden_tot' => array(T::DateTime),
+		'bewerken_tot' => array(T::DateTime, true),
+		'afmelden_tot' => array(T::DateTime, true)
 	);
 	/**
 	 * Database table name

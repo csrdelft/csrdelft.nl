@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view;
+
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AccessControl;
@@ -33,7 +35,7 @@ class RechtenTable extends DataTable {
 		// Has permission to change permissions?
 		if (!LoginModel::mag('P_ADMIN')) {
 			$rechten = $model::getSubject($environment, AccessAction::Rechten, $resource);
-			if (!$rechten OR ! LoginModel::mag($rechten)) {
+			if (!$rechten OR !LoginModel::mag($rechten)) {
 				return;
 			}
 		}
@@ -49,7 +51,7 @@ class RechtenTable extends DataTable {
 	}
 
 	public function view() {
-						$view = new CmsPaginaView(CmsPaginaModel::get('UitlegACL'));
+		$view = new CmsPaginaView(CmsPaginaModel::get('UitlegACL'));
 		$view->view();
 		parent::view();
 	}

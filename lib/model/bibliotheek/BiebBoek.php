@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\bibliotheek;
 
 use CsrDelft\common\CsrException;
@@ -16,7 +17,7 @@ use function CsrDelft\getDateTime;
 
 
 /**
- * BiebBoek.php	| 	Gerrit Uitslag
+ * BiebBoek.php  |  Gerrit Uitslag
  *
  * boeken
  *
@@ -53,7 +54,7 @@ class BiebBoek {
 		if (is_array($init)) {
 			$this->array2properties($init);
 		} else {
-			$this->id = (int) $init;
+			$this->id = (int)$init;
 			if ($this->getId() != 0) {
 				$db = MijnSqli::instance();
 				$query = "
@@ -163,9 +164,9 @@ class BiebBoek {
 	public function getEigenaars($exemplaarid = null) {
 		$db = MijnSqli::instance();
 		if ($exemplaarid == null) {
-			$where = "WHERE boek_id =" . (int) $this->getId();
+			$where = "WHERE boek_id =" . (int)$this->getId();
 		} else {
-			$where = "WHERE id =" . (int) $exemplaarid;
+			$where = "WHERE id =" . (int)$exemplaarid;
 		}
 		$qEigenaar = "
 			SELECT eigenaar_uid
@@ -185,8 +186,8 @@ class BiebBoek {
 	/**
 	 * Controleert rechten voor wijderactie
 	 *
-	 * @return	bool
-	 * 		boek mag alleen door admins verwijdert worden
+	 * @return  bool
+	 *    boek mag alleen door admins verwijdert worden
 	 */
 	public function magVerwijderen() {
 		return LoginModel::mag('commissie:BASFCie,P_BIEB_MOD,P_ADMIN');
@@ -195,8 +196,8 @@ class BiebBoek {
 	/**
 	 * Controleert rechten voor bewerkactie
 	 *
-	 * @return	bool
-	 * 		boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
+	 * @return  bool
+	 *    boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
 	 */
 	public function magBewerken() {
 		return LoginModel::mag('P_BIEB_EDIT') OR $this->isEigenaar() OR $this->magVerwijderen();
@@ -215,10 +216,10 @@ class BiebBoek {
 	 *
 	 * @param null|int geen of $exemplaarid integer
 	 * @return bool true
-	 * 				of ingelogd eigenaar is v.e. exemplaar van het boek
-	 * 				of van het specifieke exemplaar als exemplaarid is gegeven.
-	 * 			false
-	 * 				geen geen resultaat of niet de eigenaar
+	 *        of ingelogd eigenaar is v.e. exemplaar van het boek
+	 *        of van het specifieke exemplaar als exemplaarid is gegeven.
+	 *      false
+	 *        geen geen resultaat of niet de eigenaar
 	 */
 	public function isEigenaar($exemplaarid = null) {
 		$eigenaars = $this->getEigenaars($exemplaarid);
@@ -257,13 +258,13 @@ class BiebBoek {
 		$qLener = "
 			SELECT uitgeleend_uid 
 			FROM `biebexemplaar`
-			WHERE id=" . (int) $exemplaarid . ";";
+			WHERE id=" . (int)$exemplaarid . ";";
 		$result = $db->query($qLener);
 		if ($db->numRows($result) > 0) {
 			$lener = $db->next($result);
 			return $lener['uitgeleend_uid'] == LoginModel::getUid();
 		} else {
-			$this->error.= $db->error();
+			$this->error .= $db->error();
 			return false;
 		}
 	}
@@ -304,7 +305,7 @@ class BiebBoek {
 		$query = "
 			SELECT id, eigenaar_uid, opmerking, uitgeleend_uid, toegevoegd, status, uitleendatum
 			FROM biebexemplaar
-			WHERE boek_id=" . (int) $this->getId() . "
+			WHERE boek_id=" . (int)$this->getId() . "
 			ORDER BY toegevoegd;";
 		$result = $db->query($query);
 
@@ -348,20 +349,20 @@ class BiebBoek {
 	 *
 	 * @param int $exemplaarid
 	 * @return string statuswaarde uit db van $exemplaarid
-	 * 			of anders lege string
+	 *      of anders lege string
 	 */
 	public function getStatusExemplaar($exemplaarid) {
 		$db = MijnSqli::instance();
 		$query = "
 			SELECT id, status
 			FROM biebexemplaar
-			WHERE id=" . (int) $exemplaarid . ";";
+			WHERE id=" . (int)$exemplaarid . ";";
 		$result = $db->query($query);
 		if ($db->numRows($result) > 0) {
 			$exemplaar = $db->next($result);
 			return $exemplaar['status'];
 		} else {
-			$this->error.= $db->error();
+			$this->error .= $db->error();
 			return '';
 		}
 	}
@@ -371,8 +372,8 @@ class BiebBoek {
 	 *
 	 * @param string $eigenaar uid
 	 * @return bool true geslaagd
-	 * 			false 	mislukt
-	 * 					$eigenaar is ongeldig uid
+	 *      false  mislukt
+	 *          $eigenaar is ongeldig uid
 	 */
 	public function addExemplaar($eigenaar) {
 		if (!AccountModel::isValidUid($eigenaar)) {
@@ -383,7 +384,7 @@ class BiebBoek {
 			INSERT INTO biebexemplaar (
 				boek_id, eigenaar_uid, toegevoegd, status
 			) VALUES (
-				" . (int) $this->getId() . ",
+				" . (int)$this->getId() . ",
 				'" . $db->escape($eigenaar) . "',
 				'" . getDateTime() . "',
 				'beschikbaar'
@@ -399,12 +400,12 @@ class BiebBoek {
 	 * Verwijder exemplaar
 	 *
 	 * @param int $id exemplaarid
-	 * @return bool	true geslaagd
-	 * 			false mislukt
+	 * @return bool  true geslaagd
+	 *      false mislukt
 	 */
 	public function verwijderExemplaar($id) {
 		$db = MijnSqli::instance();
-		$qDeleteExemplaar = "DELETE FROM biebexemplaar WHERE id=" . (int) $id . " LIMIT 1;";
+		$qDeleteExemplaar = "DELETE FROM biebexemplaar WHERE id=" . (int)$id . " LIMIT 1;";
 		return $db->query($qDeleteExemplaar);
 	}
 
@@ -473,7 +474,7 @@ class BiebBoek {
 	 *
 	 * @param string $key moet bekend zijn, anders exception
 	 * @param        $value
-	 * @param bool   $initboek
+	 * @param bool $initboek
 	 * @throws CsrException
 	 * @return void
 	 */
@@ -492,7 +493,7 @@ class BiebBoek {
 			case 'id':
 			case 'uitgavejaar':
 			case 'paginas':
-				$this->$key = (int) trim($value);
+				$this->$key = (int)trim($value);
 				break;
 			//strings
 			case 'categorie':

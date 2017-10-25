@@ -23,7 +23,7 @@ class CiviProduct extends PersistentEntity {
 	public $prijs;
 
 	public function getBeschrijvingFormatted() {
-		return sprintf("%s (€%.2f)", $this->beschrijving, $this->prijs/100);
+		return sprintf("%s (€%.2f)", $this->beschrijving, $this->prijs / 100);
 	}
 
 	protected static $table_name = 'CiviProduct';

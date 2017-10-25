@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\eetplan;
 
 use CsrDelft\view\SmartyTemplateView;
@@ -15,14 +16,14 @@ use CsrDelft\view\SmartyTemplateView;
  */
 abstract class AbstractEetplanView extends SmartyTemplateView {
 
-    protected $lichting;
+	protected $lichting;
 
-    public function __construct($model, $lichting) {
-        parent::__construct($model);
-        $this->lichting = $lichting;
-    }
+	public function __construct($model, $lichting) {
+		parent::__construct($model);
+		$this->lichting = $lichting;
+	}
 
-    public function getTitel() {
+	public function getTitel() {
 		return 'Eetplan';
 	}
 

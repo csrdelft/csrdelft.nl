@@ -1,14 +1,16 @@
 <?php
+
 namespace CsrDelft\view\courant;
+
 use CsrDelft\model\CourantModel;
 use CsrDelft\view\View;
 
 
 /**
  * CourantArchiefView.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
- * 
+ *
  */
 class CourantArchiefView implements View {
 
@@ -40,7 +42,7 @@ class CourantArchiefView implements View {
 				<a href="/courant/archief/" title="Archief">Archief</a>
 			</li>
 		</ul>
-		<hr />
+		<hr/>
 		<?php
 		echo '<h1>' . $this->getTitel() . '</h1>';
 		$jaar = 0;

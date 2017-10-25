@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\forms;
+
 use CsrDelft\model\entity\maalcie\CorveeRepetitie;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\getalvelden\IntField;

@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
 
 use CsrDelft\model\entity\agenda\Agendeerbaar;
@@ -43,10 +44,10 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'soort'				 => array(T::Enumeration, false, ActiviteitSoort::class),
-		'rechten_aanmelden'	 => array(T::String, true),
-		'locatie'			 => array(T::String, true),
-		'in_agenda'			 => array(T::Boolean)
+		'soort' => array(T::Enumeration, false, ActiviteitSoort::class),
+		'rechten_aanmelden' => array(T::String, true),
+		'locatie' => array(T::String, true),
+		'in_agenda' => array(T::Boolean)
 	);
 	/**
 	 * Database table name
@@ -69,7 +70,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 
 			case AccessAction::Bekijken:
 			case AccessAction::Aanmelden:
-				if (!empty($this->rechten_aanmelden) AND ! LoginModel::mag($this->rechten_aanmelden)) {
+				if (!empty($this->rechten_aanmelden) AND !LoginModel::mag($this->rechten_aanmelden)) {
 					return false;
 				}
 				break;
@@ -140,7 +141,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	public function isHeledag() {
 		$begin = date('H:i', $this->getBeginMoment());
 		$eind = date('H:i', $this->getEindMoment());
-		return $begin == '00:00' AND ( $eind == '23:59' OR $eind == '00:00' );
+		return $begin == '00:00' AND ($eind == '23:59' OR $eind == '00:00');
 	}
 
 }

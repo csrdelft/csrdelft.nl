@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\peilingen;
 
 use CsrDelft\model\entity\peilingen\Peiling;

@@ -1,36 +1,38 @@
 <?php
+
 namespace CsrDelft\model\entity\maalcie;
+
 use CsrDelft\model\maalcie\KwalificatiesModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * CorveeFunctie.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
- * 
+ *
+ *
  * Een CorveeFunctie instantie beschrijft een functie die een lid kan uitvoeren als taak en of hiervoor een kwalificatie nodig is.
  * Zo ja, dan moet een lid op moment van toewijzen van de taak over deze kwalificatie beschikken (lid.id moet voorkomen in tabel crv_kwalificaties).
- * 
+ *
  * Bijvoorbeeld:
  *  - Tafelpraeses
  *  - Kwalikok (kwalificatie benodigd!)
  *  - Afwasser
  *  - Keuken/Afzuigkap/Frituur schoonmaker
  *  - Klusser
- * 
+ *
  * Standaard punten wordt standaard overgenomen, maar kan worden overschreven per corveetaak.
- * 
- * 
+ *
+ *
  * Zie ook CorveeKwalificatie.class.php en CorveeTaak.class.php
- * 
+ *
  */
 class CorveeFunctie extends PersistentEntity {
 
 	/**
 	 * Primary key
-	 * @var int 
+	 * @var int
 	 */
 	public $functie_id;
 	/**
@@ -40,7 +42,7 @@ class CorveeFunctie extends PersistentEntity {
 	public $naam;
 	/**
 	 * Afkorting
-	 * @var string 
+	 * @var string
 	 */
 	public $afkorting;
 	/**
@@ -50,12 +52,12 @@ class CorveeFunctie extends PersistentEntity {
 	public $email_bericht;
 	/**
 	 * Standaard aantal corveepunten
-	 * @var int 
+	 * @var int
 	 */
 	public $standaard_punten;
 	/**
 	 * Is een kwalificatie benodigd
-	 * @var boolean 
+	 * @var boolean
 	 */
 	public $kwalificatie_benodigd;
 	/**
@@ -74,13 +76,13 @@ class CorveeFunctie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'functie_id'			 => array(T::Integer, false, 'auto_increment'),
-		'naam'					 => array(T::String),
-		'afkorting'				 => array(T::String),
-		'email_bericht'			 => array(T::Text),
-		'standaard_punten'		 => array(T::Integer),
-		'kwalificatie_benodigd'	 => array(T::Boolean),
-		'maaltijden_sluiten'	 => array(T::Boolean)
+		'functie_id' => array(T::Integer, false, 'auto_increment'),
+		'naam' => array(T::String),
+		'afkorting' => array(T::String),
+		'email_bericht' => array(T::Text),
+		'standaard_punten' => array(T::Integer),
+		'kwalificatie_benodigd' => array(T::Boolean),
+		'maaltijden_sluiten' => array(T::Boolean)
 	);
 	/**
 	 * Database primary key
@@ -95,7 +97,7 @@ class CorveeFunctie extends PersistentEntity {
 
 	/**
 	 * Lazy loading by foreign key.
-	 * 
+	 *
 	 * @return CorveeKwalificatie[]
 	 */
 	public function getKwalificaties() {

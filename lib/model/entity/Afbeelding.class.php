@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity;
 
 use CsrDelft\common\CsrException;

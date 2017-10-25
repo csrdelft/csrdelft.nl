@@ -25,15 +25,15 @@
  * @return string
  */
 
-if(!function_exists('format_filesize')){
+if (!function_exists('format_filesize')) {
 	function format_filesize($size) {
 		$units = array(' B', ' KB', ' MB', ' GB', ' TB');
 		for ($i = 0; $size >= 1024 && $i < 4; $i++) $size /= 1024;
-		return round($size, 2).$units[$i];
+		return round($size, 2) . $units[$i];
 	}
 }
-function smarty_modifier_filesize($size){
-	$size=(int)$size;
+function smarty_modifier_filesize($size) {
+	$size = (int)$size;
 	return format_filesize((int)$size);
 
 }

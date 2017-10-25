@@ -1,13 +1,15 @@
 <?php
+
 namespace CsrDelft\model\entity;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * LedenMemoryScore.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class LedenMemoryScore extends PersistentEntity {
 
@@ -57,14 +59,14 @@ class LedenMemoryScore extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'		 => array(T::Integer, false, 'auto_increment'),
-		'tijd'		 => array(T::Integer),
-		'beurten'	 => array(T::Integer),
-		'goed'		 => array(T::Integer),
-		'groep'		 => array(T::Text),
-		'eerlijk'	 => array(T::Boolean),
-		'door_uid'	 => array(T::UID),
-		'wanneer'	 => array(T::DateTime)
+		'id' => array(T::Integer, false, 'auto_increment'),
+		'tijd' => array(T::Integer),
+		'beurten' => array(T::Integer),
+		'goed' => array(T::Integer),
+		'groep' => array(T::Text),
+		'eerlijk' => array(T::Boolean),
+		'door_uid' => array(T::UID),
+		'wanneer' => array(T::DateTime)
 	);
 	/**
 	 * Database primary key

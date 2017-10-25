@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\menubeheer;
+
 use CsrDelft\model\entity\MenuItem;
 use CsrDelft\model\MenuModel;
 use CsrDelft\view\SmartyTemplateView;

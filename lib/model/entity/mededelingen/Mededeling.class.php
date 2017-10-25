@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\mededelingen;
+
 use CsrDelft\model\mededelingen\MededelingCategorieenModel;
 use CsrDelft\model\mededelingen\MededelingenModel;
 use CsrDelft\model\ProfielModel;
@@ -62,19 +64,19 @@ class Mededeling extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'		    => array(T::Integer, false, 'auto_increment'),
-		'datum'	        => array(T::DateTime),
-		'vervaltijd'    => array(T::DateTime, true),
-		'titel'         => array(T::String),
-		'tekst'         => array(T::Text),
-		'categorie'     => array(T::Integer),
+		'id' => array(T::Integer, false, 'auto_increment'),
+		'datum' => array(T::DateTime),
+		'vervaltijd' => array(T::DateTime, true),
+		'titel' => array(T::String),
+		'tekst' => array(T::Text),
+		'categorie' => array(T::Integer),
 		'zichtbaarheid' => array(T::String),
-		'prioriteit'    => array(T::Integer),
-		'uid'           => array(T::UID),
-		'doelgroep'     => array(T::String),
-		'verborgen'     => array(T::Boolean),
-		'verwijderd'    => array(T::Boolean),
-		'plaatje'       => array(T::String, true)
+		'prioriteit' => array(T::Integer),
+		'uid' => array(T::UID),
+		'doelgroep' => array(T::String),
+		'verborgen' => array(T::Boolean),
+		'verwijderd' => array(T::Boolean),
+		'plaatje' => array(T::String, true)
 	);
 	/**
 	 * Database primary key
@@ -118,7 +120,7 @@ class Mededeling extends PersistentEntity {
 	public function magBewerken() {
 		// het huidige lid mag dit bericht alleen bewerken als hij moderator is of als dit zijn eigen bericht
 		// is (en hij dus het toevoeg-recht heeft).
-		return MededelingenModel::isModerator() OR ( MededelingenModel::magToevoegen() AND $this->uid == LoginModel::getUid());
+		return MededelingenModel::isModerator() OR (MededelingenModel::magToevoegen() AND $this->uid == LoginModel::getUid());
 	}
 
 }

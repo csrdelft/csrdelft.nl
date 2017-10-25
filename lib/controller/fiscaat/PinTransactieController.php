@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\controller\framework\AclController;

@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
@@ -31,19 +32,19 @@ class MijnMaaltijdenController extends AclController {
 		parent::__construct($query, MaaltijdenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'ketzer'	 => 'P_MAAL_IK',
-				'lijst'		 => 'P_MAAL_IK',
-				'aanmelden'	 => 'P_MAAL_IK',
-				'afmelden'	 => 'P_MAAL_IK'
+				'ketzer' => 'P_MAAL_IK',
+				'lijst' => 'P_MAAL_IK',
+				'aanmelden' => 'P_MAAL_IK',
+				'afmelden' => 'P_MAAL_IK'
 			);
 		} else {
 			$this->acl = array(
-				'sluit'			 => 'P_MAAL_IK',
-				'aanmelden'		 => 'P_MAAL_IK',
-				'afmelden'		 => 'P_MAAL_IK',
-				'gasten'		 => 'P_MAAL_IK',
-				'opmerking'		 => 'P_MAAL_IK',
-				'beoordeling'	 => 'P_MAAL_IK'
+				'sluit' => 'P_MAAL_IK',
+				'aanmelden' => 'P_MAAL_IK',
+				'afmelden' => 'P_MAAL_IK',
+				'gasten' => 'P_MAAL_IK',
+				'opmerking' => 'P_MAAL_IK',
+				'beoordeling' => 'P_MAAL_IK'
 			);
 		}
 	}
@@ -55,7 +56,7 @@ class MijnMaaltijdenController extends AclController {
 		}
 		$mid = null;
 		if ($this->hasParam(3)) {
-			$mid = (int) $this->getParam(3);
+			$mid = (int)$this->getParam(3);
 		}
 		parent::performAction(array($mid));
 	}
@@ -72,22 +73,22 @@ class MijnMaaltijdenController extends AclController {
 
 	public function lijst($mid) {
 		$maaltijd = $this->model->getMaaltijd($mid, true);
-		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND ! LoginModel::mag('P_MAAL_MOD')) {
+		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND !LoginModel::mag('P_MAAL_MOD')) {
 			$this->exit_http(403);
 			return;
 		}
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
 		$taken = CorveeTakenModel::instance()->getTakenVoorMaaltijd($mid)->fetchAll();
-				$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
+		$this->view = new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
 	}
 
 	public function sluit($mid) {
 		$maaltijd = $this->model->getMaaltijd($mid);
-		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND ! LoginModel::mag('P_MAAL_MOD')) {
+		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND !LoginModel::mag('P_MAAL_MOD')) {
 			$this->exit_http(403);
 			return;
 		}
-        $this->model->sluitMaaltijd($maaltijd);
+		$this->model->sluitMaaltijd($maaltijd);
 		echo '<h3 id="gesloten-melding" class="remove"></div>';
 		exit;
 	}
@@ -98,7 +99,7 @@ class MijnMaaltijdenController extends AclController {
 		if ($this->getMethod() == 'POST') {
 			$this->view = new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
 		} else {
-						$this->view = new MaaltijdKetzerView($aanmelding->maaltijd, $aanmelding);
+			$this->view = new MaaltijdKetzerView($aanmelding->maaltijd, $aanmelding);
 		}
 	}
 
@@ -108,12 +109,12 @@ class MijnMaaltijdenController extends AclController {
 		if ($this->getMethod() == 'POST') {
 			$this->view = new MijnMaaltijdView($maaltijd);
 		} else {
-						$this->view = new MaaltijdKetzerView($maaltijd);
+			$this->view = new MaaltijdKetzerView($maaltijd);
 		}
 	}
 
 	public function gasten($mid) {
-		$gasten = (int) filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
+		$gasten = (int)filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
 		$aanmelding = MaaltijdAanmeldingenModel::instance()->saveGasten($mid, LoginModel::getUid(), $gasten);
 		$this->view = new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
 	}

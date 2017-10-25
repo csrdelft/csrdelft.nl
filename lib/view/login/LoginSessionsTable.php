@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\login;
+
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\datatable\DataTable;
 use function CsrDelft\classNameZonderNamespace;

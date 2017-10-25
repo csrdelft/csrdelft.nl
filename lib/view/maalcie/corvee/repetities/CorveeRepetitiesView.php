@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\corvee\repetities;
+
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\view\SmartyTemplateView;
 

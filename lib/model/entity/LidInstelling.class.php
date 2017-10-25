@@ -1,16 +1,18 @@
 <?php
+
 namespace CsrDelft\model\entity;
+
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * LidInstelling.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
- * 
+ *
+ *
  * Een LidInstelling beschrijft een Instelling per Lid.
- * 
+ *
  * @see Instelling.class.php
  */
 class LidInstelling extends Instelling {
@@ -41,13 +43,13 @@ class LidInstelling extends Instelling {
 
 	/**
 	 * Cast values to defined type.
-	 * 
+	 *
 	 * @param boolean $attributes Attributes to cast
 	 */
 	protected function castValues(array $attributes) {
 		parent::castValues($attributes);
 		if (LidInstellingenModel::instance()->getType($this->module, $this->instelling_id) === T::Integer) {
-			$this->waarde = (int) $this->waarde;
+			$this->waarde = (int)$this->waarde;
 		}
 	}
 

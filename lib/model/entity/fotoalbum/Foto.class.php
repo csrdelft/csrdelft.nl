@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity\fotoalbum;
 
 use CsrDelft\common\CsrException;
@@ -39,10 +40,10 @@ class Foto extends Afbeelding {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'subdir'	 => array(T::String),
-		'filename'	 => array(T::String),
-		'rotation'	 => array(T::Integer),
-		'owner'		 => array(T::UID)
+		'subdir' => array(T::String),
+		'filename' => array(T::String),
+		'rotation' => array(T::Integer),
+		'owner' => array(T::UID)
 	);
 	/**
 	 * Database primary key

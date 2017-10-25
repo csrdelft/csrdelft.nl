@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\uploadvelden;
+
 use CsrDelft\common\CsrException;
 use function CsrDelft\endsWith;
 use CsrDelft\model\entity\Afbeelding;

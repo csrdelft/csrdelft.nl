@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view;
 
 use CsrDelft\model\DragObjectModel;

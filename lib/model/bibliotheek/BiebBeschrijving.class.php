@@ -1,12 +1,14 @@
 <?php
+
 namespace CsrDelft\model\bibliotheek;
+
 use CsrDelft\common\CsrException;
 use function CsrDelft\getDateTime;
 use CsrDelft\MijnSqli;
 use CsrDelft\model\security\LoginModel;
 
 /**
- * BiebBeschrijving.class.php	| 	Gerrit Uitslag
+ * BiebBeschrijving.class.php  |  Gerrit Uitslag
  *
  * een boekbeschrijving of boekrecensie
  *
@@ -25,15 +27,15 @@ class BiebBeschrijving {
 			$this->id = $init['id'];
 			$this->beschrijving = $init;
 		} else {
-			$this->id = (int) $init;
+			$this->id = (int)$init;
 			if ($this->getId() == 0) {
-				$this->beschrijving = array('id' => 0, 'beschrijving' => '', 'boek_id' => (int) $boekid, 'schrijver_uid' => LoginModel::getUid());
+				$this->beschrijving = array('id' => 0, 'beschrijving' => '', 'boek_id' => (int)$boekid, 'schrijver_uid' => LoginModel::getUid());
 			} else {
 				$db = MijnSqli::instance();
 				$query = "
 					SELECT id, boek_id, schrijver_uid, beschrijving, toegevoegd, bewerkdatum
 					FROM biebbeschrijving
-					WHERE id=" . (int) $this->id . "
+					WHERE id=" . (int)$this->id . "
 					LIMIT 1;";
 				$result = $db->query($query);
 
@@ -98,7 +100,7 @@ class BiebBeschrijving {
 				INSERT INTO biebbeschrijving (
 					boek_id, schrijver_uid, beschrijving, toegevoegd
 				) VALUES (
-					" . (int) $this->beschrijving['boek_id'] . ",
+					" . (int)$this->beschrijving['boek_id'] . ",
 					'" . $db->escape(LoginModel::getUid()) . "',
 					'" . $db->escape($this->getTekst()) . "',
 					'" . getDateTime() . "'
@@ -128,7 +130,7 @@ class BiebBeschrijving {
 
 	public function verwijder() {
 		$db = MijnSqli::instance();
-		$qVerwijderBeschrijving = "DELETE FROM biebbeschrijving WHERE id=" . (int) $this->getId() . " LIMIT 1;";
+		$qVerwijderBeschrijving = "DELETE FROM biebbeschrijving WHERE id=" . (int)$this->getId() . " LIMIT 1;";
 		return $db->query($qVerwijderBeschrijving);
 	}
 

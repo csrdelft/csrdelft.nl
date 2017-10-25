@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
+
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\leden\RechtenGroepLedenModel;
 use CsrDelft\model\security\LoginModel;

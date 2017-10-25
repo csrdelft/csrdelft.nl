@@ -1,13 +1,15 @@
 <?php
+
 namespace CsrDelft\view\courant;
+
 use CsrDelft\model\CourantModel;
 use CsrDelft\view\SmartyTemplateView;
 
 /**
  * CourantBeheerView.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
- * 
+ *
  */
 class CourantBeheerView extends SmartyTemplateView {
 
@@ -26,14 +28,14 @@ class CourantBeheerView extends SmartyTemplateView {
 
 	public function getBreadcrumbs() {
 		$breadcrumbs = '<a href="/courant" title="Courant"><span class="fa fa-envelope module-icon"></span></a>';
-		if (isset($this->formulier['titel']) AND ! empty($this->formulier['titel'])) {
+		if (isset($this->formulier['titel']) AND !empty($this->formulier['titel'])) {
 			$breadcrumbs .= ' » ' . $this->formulier['titel'];
 		}
 		return $breadcrumbs;
 	}
 
 	public function edit($iBerichtID) {
-		$this->_edit = (int) $iBerichtID;
+		$this->_edit = (int)$iBerichtID;
 		//voor bewerken waarden eventueel overschrijven met waarden uit de database
 		if ($this->_edit != 0) {
 			//nog dingen ophalen.

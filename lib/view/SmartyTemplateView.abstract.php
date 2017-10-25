@@ -1,15 +1,16 @@
 <?php
+
 namespace CsrDelft\view;
 
 
 /**
  * SmartyTemplateView.abstract.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Uses the template engine Smarty to compile and
  * display the template.
- * 
+ *
  */
 abstract class SmartyTemplateView implements View {
 

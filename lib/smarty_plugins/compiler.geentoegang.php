@@ -11,8 +11,7 @@
  *
  * @return string
  */
-function smarty_compiler_geentoegang($params, Smarty &$smarty)
-{
-    return "<?php } else { ?>";
+function smarty_compiler_geentoegang($params, Smarty &$smarty) {
+	return "<?php } else { ?>";
 }
 /* vim: set expandtab: */

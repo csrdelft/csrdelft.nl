@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\repetities;
+
 use CsrDelft\view\SmartyTemplateView;
 
 /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\eetplan;
 
 use CsrDelft\model\entity\eetplan\Eetplan;

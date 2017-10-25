@@ -6,8 +6,8 @@
  * @date 07/05/2017
  */
 
-function smarty_modifier_bedrag($bedrag){
-	$bedragFloat = $bedrag/100;
+function smarty_modifier_bedrag($bedrag) {
+	$bedragFloat = $bedrag / 100;
 	return sprintf('€%.2f', $bedragFloat);
 
 }

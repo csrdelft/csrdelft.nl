@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\fiscaat\pin;
 
 use CsrDelft\view\formulier\datatable\DataTableResponse;

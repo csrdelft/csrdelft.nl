@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\formulier\keuzevelden;
 /**
  * RequiredColorField.class.php

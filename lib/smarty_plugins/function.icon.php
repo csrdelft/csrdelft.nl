@@ -16,7 +16,7 @@
  *
  * Examples:
  * <pre>
- * 	{icon get='verwijderen'}
+ *  {icon get='verwijderen'}
  *  {icon get='email' hover='email_add'}
  * </pre>
  * @link http://feuten.csrdelft.nl
@@ -26,6 +26,7 @@
  * @param    Smarty
  * @return   string
  */
+
 use CsrDelft\Icon;
 
 
@@ -39,9 +40,9 @@ function smarty_function_icon($params, &$smarty) {
 		}
 		$hover = null;
 		if (array_key_exists('hover', $params)) {
-		    $hover = $params['hover'];
-        }
+			$hover = $params['hover'];
+		}
 
-        return Icon::getTag($params['get'], $hover, $title);
+		return Icon::getTag($params['get'], $hover, $title);
 	}
 }

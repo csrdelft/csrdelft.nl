@@ -1,12 +1,14 @@
 <?php
+
 namespace CsrDelft\view\formulier;
+
 use function CsrDelft\setMelding;
 
 /**
  * UrlDownloader.class.php
- * 
+ *
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
- * 
+ *
  * Download content van de gegeven url, gebruikt beschikbare mechanisme.
  */
 class UrlDownloader {

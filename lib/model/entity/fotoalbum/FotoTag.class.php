@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity\fotoalbum;
 
 use CsrDelft\model\entity\KeywordTag;
@@ -8,15 +9,15 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * FotoTag.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class FotoTag extends KeywordTag {
 
 	/**
 	 * X-coord
-	 * @var float 
+	 * @var float
 	 */
 	public $x;
 	/**
@@ -34,9 +35,9 @@ class FotoTag extends KeywordTag {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'x'		 => array(T::Float),
-		'y'		 => array(T::Float),
-		'size'	 => array(T::Float)
+		'x' => array(T::Float),
+		'y' => array(T::Float),
+		'size' => array(T::Float)
 	);
 	/**
 	 * Database table name

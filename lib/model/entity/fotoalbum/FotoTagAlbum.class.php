@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\fotoalbum;
+
 use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\fotoalbum\FotoTagsModel;
 use CsrDelft\model\ProfielModel;

@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\invoervelden;
+
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use function CsrDelft\namen2uid;

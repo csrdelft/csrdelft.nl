@@ -1,14 +1,16 @@
 <?php
+
 namespace CsrDelft\model;
+
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\GeoLocation;
 use CsrDelft\Orm\PersistenceModel;
 
 /**
  * GeoLocationModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class GeoLocationModel extends PersistenceModel {
 

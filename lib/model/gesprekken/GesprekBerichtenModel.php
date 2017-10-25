@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\gesprekken;
 
 use function CsrDelft\getDateTime;

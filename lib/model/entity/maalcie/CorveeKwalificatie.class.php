@@ -1,21 +1,23 @@
 <?php
+
 namespace CsrDelft\model\entity\maalcie;
+
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * CorveeKwalificatie.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
- * 
+ *
+ *
  * Een CorveeKwalificatie instantie geeft aan dat een lid gekwalificeerd is voor een functie en sinds wanneer.
  * Dit is benodigd voor sommige CorveeFuncties zoals kwalikok.
- * 
- * 
+ *
+ *
  * Zie ook CorveeFunctie.class.php
- * 
+ *
  */
 class CorveeKwalificatie extends PersistentEntity {
 
@@ -42,8 +44,8 @@ class CorveeKwalificatie extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'uid'				 => array(T::UID),
-		'functie_id'		 => array(T::Integer),
+		'uid' => array(T::UID),
+		'functie_id' => array(T::Integer),
 		'wanneer_toegewezen' => array(T::DateTime)
 	);
 	/**
@@ -59,7 +61,7 @@ class CorveeKwalificatie extends PersistentEntity {
 
 	/**
 	 * Lazy loading by foreign key.
-	 * 
+	 *
 	 * @return CorveeFunctie
 	 */
 	public function getCorveeFunctie() {

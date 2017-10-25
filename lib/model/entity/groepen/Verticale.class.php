@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
+
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\KringenModel;
 use CsrDelft\model\groepen\leden\VerticaleLedenModel;
@@ -7,9 +9,9 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * Verticale.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Verticale extends AbstractGroep {
 

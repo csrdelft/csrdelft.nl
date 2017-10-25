@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\peilingen;
 
 use CsrDelft\model\entity\peilingen\Peiling;
@@ -15,11 +16,11 @@ class PeilingView extends SmartyTemplateView {
 		$this->beheer = $beheer;
 	}
 
-    /**
-     * Wordt gebruikt door de CsrBB parser
-     *
-     * @return string HTML van de peiling
-     */
+	/**
+	 * Wordt gebruikt door de CsrBB parser
+	 *
+	 * @return string HTML van de peiling
+	 */
 	public function getHtml() {
 		$this->smarty->assign('peiling', $this->model);
 		$this->smarty->assign('beheer', $this->beheer);
@@ -27,7 +28,7 @@ class PeilingView extends SmartyTemplateView {
 	}
 
 	public function view() {
-	    echo $this->getHtml();
+		echo $this->getHtml();
 	}
 
 }

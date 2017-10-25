@@ -1,13 +1,15 @@
 <?php
+
 namespace CsrDelft\model\entity\maalcie;
+
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
- * MaaltijdArchief.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
- * 
+ * MaaltijdArchief.class.php  |  P.W.G. Brussee (brussee@live.nl)
+ *
+ *
  * Een mlt_archief instantie beschrijft een individuele archiefmaaltijd als volgt:
  *  - uniek identificatienummer
  *  - titel (bijv. Donderdagmaaltijd)
@@ -15,12 +17,12 @@ use CsrDelft\Orm\Entity\T;
  *  - de prijs van de maaltijd
  *  - het aantal aanmeldingen op moment van archiveren
  *  - de aanmeldingen en aanmelder in tekstvorm
- * 
+ *
  * Een gearchiveerde maaltijd is alleen-lezen en kan nooit meer uit het archief worden gehaald.
- * 
- * 
+ *
+ *
  * Zie ook Maaltijd.class.php
- * 
+ *
  */
 class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
 	# primary key
@@ -33,7 +35,7 @@ class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
 	public $aanmeldingen; # text
 
 	public function getPrijsFloat() {
-		return (float) $this->prijs / 100.0;
+		return (float)$this->prijs / 100.0;
 	}
 
 	public function getAanmeldingenArray() {
@@ -53,9 +55,9 @@ class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
 
 	// Agendeerbaar ############################################################
 
-    public function getTitel() {
-        return $this->titel;
-    }
+	public function getTitel() {
+		return $this->titel;
+	}
 
 	public function getBeginMoment() {
 		return strtotime($this->datum . ' ' . $this->tijd);
@@ -81,19 +83,19 @@ class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
 		return false;
 	}
 
-    protected static $table_name = 'mlt_archief';
-    protected static $persistent_attributes = array(
-        'maaltijd_id' => array(T::Integer, false, 'auto_increment'),
-        'titel' => array(T::String),
-        'datum' => array(T::Date),
-        'tijd' => array(T::Time),
-        'prijs' => array(T::Integer),
-        'aanmeldingen' => array(T::Text),
-    );
+	protected static $table_name = 'mlt_archief';
+	protected static $persistent_attributes = array(
+		'maaltijd_id' => array(T::Integer, false, 'auto_increment'),
+		'titel' => array(T::String),
+		'datum' => array(T::Date),
+		'tijd' => array(T::Time),
+		'prijs' => array(T::Integer),
+		'aanmeldingen' => array(T::Text),
+	);
 
-    protected static $primary_key = array('maaltijd_id');
+	protected static $primary_key = array('maaltijd_id');
 
-    public function jsonSerialize() {
+	public function jsonSerialize() {
 		$json = parent::jsonSerialize();
 		$json['aanmeldingen'] = count($this->getAanmeldingenArray());
 		return $json;

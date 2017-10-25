@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\forms;
+
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\keuzevelden\DateField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;

@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model;
+
 use CsrDelft\model\documenten\DocumentCategorieModel;
 use CsrDelft\model\entity\documenten\DocumentCategorie;
 use CsrDelft\model\entity\MenuItem;
@@ -83,7 +85,7 @@ class MenuModel extends CachedPersistenceModel {
 			case 'Forum':
 				foreach (ForumModel::instance()->prefetch() as $categorie) {
 					$item = $this->nieuw($parent->item_id);
-					$item->item_id = - $categorie->categorie_id; // nodig voor getParent()
+					$item->item_id = -$categorie->categorie_id; // nodig voor getParent()
 					$item->rechten_bekijken = $categorie->rechten_lezen;
 					$item->link = '/forum#' . $categorie->categorie_id;
 					$item->tekst = $categorie->titel;
@@ -104,7 +106,7 @@ class MenuModel extends CachedPersistenceModel {
 				break;
 
 			case 'Documenten':
-								$overig = false;
+				$overig = false;
 				foreach (DocumentCategorieModel::instance()->find() as $categorie) {
 					/** @var DocumentCategorie $categorie */
 					$item = $this->nieuw($parent->item_id);
@@ -239,7 +241,7 @@ class MenuModel extends CachedPersistenceModel {
 	 * @return void
 	 */
 	public function create(PersistentEntity $entity) {
-		$entity->item_id = (int) parent::create($entity);
+		$entity->item_id = (int)parent::create($entity);
 		$this->flushCache(true);
 	}
 

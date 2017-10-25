@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
@@ -7,7 +8,7 @@ use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;
 
 /**
- * CorveeToewijzenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * CorveeToewijzenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
  *
  */
 class CorveeToewijzenModel {
@@ -49,7 +50,7 @@ class CorveeToewijzenModel {
 			}
 			$avg /= sizeof($lijst);
 			foreach ($lijst as $uid => $punten) {
-				$lijst[$uid]['relatief'] = $lijst[$uid]['aantal'] - (int) $avg;
+				$lijst[$uid]['relatief'] = $lijst[$uid]['aantal'] - (int)$avg;
 			}
 			$sorteer = 'sorteerKwali';
 		} else {

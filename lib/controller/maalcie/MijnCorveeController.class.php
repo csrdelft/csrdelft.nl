@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
@@ -26,8 +27,8 @@ class MijnCorveeController extends AclController {
 		parent::__construct($query, CorveeTakenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'mijn'		 => 'P_CORVEE_IK',
-				'rooster'	 => 'P_CORVEE_IK'
+				'mijn' => 'P_CORVEE_IK',
+				'rooster' => 'P_CORVEE_IK'
 			);
 		} else {
 			$this->acl = array();

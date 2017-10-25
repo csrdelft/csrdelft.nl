@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model;
+
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\ChangeLogEntry;
 use CsrDelft\model\security\LoginModel;
@@ -48,7 +50,7 @@ class ChangeLogModel extends PersistenceModel {
 	 * @return void
 	 */
 	public function create(PersistentEntity $change) {
-		$change->id = (int) parent::create($change);
+		$change->id = (int)parent::create($change);
 	}
 
 	/**

@@ -1,13 +1,14 @@
 <?php
+
 namespace CsrDelft\model\entity\agenda;
 
 /**
  * Agendeerbaar.interface.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
- * 
+ *
  * Item dat in de agenda kan worden weergegeven.
- * 
+ *
  */
 interface Agendeerbaar {
 

@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\persoonlijk\abonnementen;
+
 use CsrDelft\view\SmartyTemplateView;
 
 /**

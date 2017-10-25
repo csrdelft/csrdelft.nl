@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\eetplan;
+
 use CsrDelft\view\SmartyTemplateView;
 
 /**
@@ -8,12 +9,10 @@ use CsrDelft\view\SmartyTemplateView;
  *
  * Is gebasseerd op EetplanModel->getEetplan
  */
-class EetplanTableView extends SmartyTemplateView
-{
-    function view()
-    {
-        $this->smarty->assign('avonden', $this->model['avonden']);
-        $this->smarty->assign('novieten', $this->model['novieten']);
-        $this->smarty->display('eetplan/table.tpl');
-    }
+class EetplanTableView extends SmartyTemplateView {
+	function view() {
+		$this->smarty->assign('avonden', $this->model['avonden']);
+		$this->smarty->assign('novieten', $this->model['novieten']);
+		$this->smarty->display('eetplan/table.tpl');
+	}
 }

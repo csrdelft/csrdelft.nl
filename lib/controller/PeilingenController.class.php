@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
@@ -24,13 +25,13 @@ class PeilingenController extends AclController {
 		parent::__construct($query, PeilingenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer'		 => 'P_PEILING_MOD',
-				'verwijderen'	 => 'P_PEILING_MOD',
+				'beheer' => 'P_PEILING_MOD',
+				'verwijderen' => 'P_PEILING_MOD',
 			);
 		} else {
 			$this->acl = array(
 				'beheer' => 'P_PEILING_MOD',
-				'stem'	 => 'P_PEILING_VOTE',
+				'stem' => 'P_PEILING_VOTE',
 			);
 		}
 	}
@@ -79,7 +80,7 @@ class PeilingenController extends AclController {
 	}
 
 	public function verwijderen($peiling_id) {
-		$peiling = $this->model->getPeilingById((int) $peiling_id);
+		$peiling = $this->model->getPeilingById((int)$peiling_id);
 		if ($peiling === false) {
 			setMelding('Peiling al verwijderd!', 2);
 		} else {

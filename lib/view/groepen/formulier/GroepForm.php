@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\groepen\formulier;
+
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
@@ -66,7 +68,7 @@ class GroepForm extends ModalForm {
 
 		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
 
-		if (property_exists($groep, 'in_agenda') AND ! LoginModel::mag('P_AGENDA_MOD')) {
+		if (property_exists($groep, 'in_agenda') AND !LoginModel::mag('P_AGENDA_MOD')) {
 			unset($fields['in_agenda']);
 		}
 

@@ -1,17 +1,18 @@
 <?php
+
 namespace CsrDelft\view\formulier\invoervelden;
 
 /**
  * BBCodeField.class.php
- * 
+ *
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
- * 
+ *
+ *
  * Bevat de uitbreidingen van TextareaField:
- * 
- * 	- BBCodeField		Textarea met bbcode voorbeeld
- * 
+ *
+ *  - BBCodeField    Textarea met bbcode voorbeeld
+ *
  */
 class BBCodeField extends TextareaField {
 

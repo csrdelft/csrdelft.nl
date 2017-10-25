@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity\security;
 
 use CsrDelft\Orm\Entity\PersistentEnum;

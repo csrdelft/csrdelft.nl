@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\mededelingen;
 
 use function CsrDelft\getDateTime;
@@ -78,7 +79,7 @@ class MededelingenModel extends PersistenceModel {
 				$i = 1;
 				while (file_exists($image_path)) {
 					// Vind een unieke hash
-					$image_path = PHOTOS_PATH . 'mededelingen/' .substr(md5(time() + $i++), 0, 8) . '.' . $image_extension;
+					$image_path = PHOTOS_PATH . 'mededelingen/' . substr(md5(time() + $i++), 0, 8) . '.' . $image_extension;
 				}
 				if (move_uploaded_file($image['tmp_name'], $image_path) === false) {
 					$img_errors .= 'Plaatje verplaatsen is mislukt.<br/>';
@@ -108,34 +109,34 @@ class MededelingenModel extends PersistenceModel {
 		$doelgroepClause = " AND ";
 		switch ($doelgroep) {
 			case 'nietleden':
-				$doelgroepClause.="doelgroep='iedereen'";
+				$doelgroepClause .= "doelgroep='iedereen'";
 				break;
 			case 'leden': // De gebruiker mag alleen leden-berichten zien als hij daar rechten toe heeft.
-				$doelgroepClause.=LoginModel::mag('P_LEDEN_READ') ? "doelgroep!='oudleden'" : "doelgroep='iedereen'"; // Let op de != en =
+				$doelgroepClause .= LoginModel::mag('P_LEDEN_READ') ? "doelgroep!='oudleden'" : "doelgroep='iedereen'"; // Let op de != en =
 				break;
 			case 'oudleden': // De gebruiker mag alleen oudlid-berichten zien als hij oudlid of moderator is.
 				if (LoginModel::mag('status:oudlid') OR LoginModel::mag('P_NEWS_MOD')) {
-					$doelgroepClause.="doelgroep!='leden'";
+					$doelgroepClause .= "doelgroep!='leden'";
 				} elseif (LoginModel::mag('P_LEDEN_READ')) { // Anders mag een normaal lid ledenberichten zien én de berichten voor iedereen.
-					$doelgroepClause.="doelgroep!='oudleden'";
+					$doelgroepClause .= "doelgroep!='oudleden'";
 				} else { // Anders mag een niet-lid alleen de berichten zien die voor iedereen bestemd zijn.
-					$doelgroepClause.="doelgroep='iedereen'";
+					$doelgroepClause .= "doelgroep='iedereen'";
 				}
 				break;
 			default:
 				// Indien $doelgroep niet is opgegeven of ongeldig is, kijken we wat het beste past bij de huidige gebruiker.
 				if (LoginModel::mag('status:oudlid')) {
-					$doelgroepClause.="doelgroep!='leden'";
+					$doelgroepClause .= "doelgroep!='leden'";
 				} elseif (LoginModel::mag('P_LEDEN_READ')) {
-					$doelgroepClause.="doelgroep!='oudleden'";
+					$doelgroepClause .= "doelgroep!='oudleden'";
 				} else {
-					$doelgroepClause.="doelgroep='iedereen'";
+					$doelgroepClause .= "doelgroep='iedereen'";
 				}
 				break;
 		}
 
 		return $this->find(
-			"(vervaltijd IS NULL OR vervaltijd > ?) AND zichtbaarheid='zichtbaar'".$doelgroepClause,
+			"(vervaltijd IS NULL OR vervaltijd > ?) AND zichtbaarheid='zichtbaar'" . $doelgroepClause,
 			array(getDateTime()),
 			null,
 			'prioriteit ASC, datum DESC',
@@ -151,7 +152,7 @@ class MededelingenModel extends PersistenceModel {
 	 */
 	public function getLijstVanPagina($pagina = 1, $aantal, $prullenbak = false) {
 		// Prullenbak checken.
-		if ($prullenbak AND ! LoginModel::mag('P_NEWS_MOD')) {
+		if ($prullenbak AND !LoginModel::mag('P_NEWS_MOD')) {
 			$prullenbak = false;
 		}
 
@@ -163,7 +164,7 @@ class MededelingenModel extends PersistenceModel {
 			array(),
 			null,
 			'datum DESC',
-			$aantal, (($pagina-1) * $aantal));
+			$aantal, (($pagina - 1) * $aantal));
 
 		foreach ($resultaat as $mededeling) {
 			$groepeerstring = strftime('%B %Y', strtotime($mededeling->datum)); // Maand voluit en jaar.
@@ -181,7 +182,7 @@ class MededelingenModel extends PersistenceModel {
 	public function getLijstWachtGoedkeuring() {
 		$mededelingen = array();
 		// Moderators of niet-ingelogden hebben geen berichten die wachten op goedkeuring.
-		if (LoginModel::mag('P_NEWS_MOD') OR ! LoginModel::mag('P_LEDEN_READ'))
+		if (LoginModel::mag('P_NEWS_MOD') OR !LoginModel::mag('P_LEDEN_READ'))
 			return $mededelingen;
 
 		$resultaat = $this->find('uid=? AND zichtbaarheid="wacht_goedkeuring"',
@@ -217,10 +218,10 @@ class MededelingenModel extends PersistenceModel {
 		$clauses = MededelingenModel::getClauses($prullenbak);
 
 		$positie = $this->count(
-			$clauses.' AND datum >= ?',
+			$clauses . ' AND datum >= ?',
 			array($mededeling->datum));
 
-		$paginaNummer = (int) ceil($positie / LidInstellingenModel::get('mededelingen', 'aantalPerPagina'));
+		$paginaNummer = (int)ceil($positie / LidInstellingenModel::get('mededelingen', 'aantalPerPagina'));
 		$paginaNummer = $paginaNummer >= 1 ? $paginaNummer : 1; // Het moet natuurlijk wel groter dan 0 zijn.
 		return $paginaNummer;
 	}
@@ -238,7 +239,7 @@ class MededelingenModel extends PersistenceModel {
 			$doelgroepClause = " AND doelgroep='iedereen'";
 		}
 
-		return static::instance()->find("vervaltijd IS NULL OR vervaltijd > '?' AND ". $zichtbaarheidClause.$doelgroepClause,
+		return static::instance()->find("vervaltijd IS NULL OR vervaltijd > '?' AND " . $zichtbaarheidClause . $doelgroepClause,
 			array(getDateTime()),
 			null,
 			'datum DESC, id DESC',
@@ -324,6 +325,6 @@ class MededelingenModel extends PersistenceModel {
 			$doelgroepClause = " AND doelgroep!='leden'";
 		}
 
-		return '('.$vervalClause.' '.$operator.' '.$verborgenClause.')'.$doelgroepClause;
+		return '(' . $vervalClause . ' ' . $operator . ' ' . $verborgenClause . ')' . $doelgroepClause;
 	}
 }

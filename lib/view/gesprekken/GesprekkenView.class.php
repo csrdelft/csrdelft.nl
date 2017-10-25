@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\gesprekken;
+
 use CsrDelft\model\entity\gesprekken\Gesprek;
 use CsrDelft\model\gesprekken\GesprekBerichtenModel;
 use CsrDelft\view\View;
@@ -7,9 +9,9 @@ use function CsrDelft\getMelding;
 
 /**
  * GesprekkenView.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class GesprekkenView implements View {
 

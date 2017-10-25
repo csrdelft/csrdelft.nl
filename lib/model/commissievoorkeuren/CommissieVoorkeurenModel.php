@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\commissievoorkeuren;
+
 use CsrDelft\MijnSqli;
 
 /**
@@ -26,9 +28,9 @@ class CommissieVoorkeurenModel {
 		$query = 'DELETE FROM voorkeurVoorkeur WHERE uid =\'' . $this->uid . '\' AND cid = ' . $cid;
 		$db->query($query);
 		$query = 'INSERT INTO `voorkeurVoorkeur` VALUES ("'
-				. $this->uid . '", '
-				. $cid . ', 1, '
-				. $voorkeur . ', CURRENT_TIMESTAMP )';
+			. $this->uid . '", '
+			. $cid . ', 1, '
+			. $voorkeur . ', CURRENT_TIMESTAMP )';
 		$db->query($query);
 	}
 
@@ -70,7 +72,7 @@ class CommissieVoorkeurenModel {
 
 	public function setLidOpmerking($opmerking) {
 		$db = MijnSqli::instance();
-		$query = 'UPDATE voorkeurOpmerking Set lidOpmerking = "' . $opmerking . '" WHERE uid = \'' . $this->uid . '\'';
+		$query = 'UPDATE voorkeurOpmerking SET lidOpmerking = "' . $opmerking . '" WHERE uid = \'' . $this->uid . '\'';
 		$db->query($query);
 	}
 
@@ -90,7 +92,7 @@ class CommissieVoorkeurenModel {
 
 	public function setPraesesOpmerking($opmerking) {
 		$db = MijnSqli::instance();
-		$query = 'UPDATE voorkeurOpmerking Set praesesOpmerking = "' . $opmerking . '" WHERE uid = \'' . $this->uid . '\'';
+		$query = 'UPDATE voorkeurOpmerking SET praesesOpmerking = "' . $opmerking . '" WHERE uid = \'' . $this->uid . '\'';
 		$db->query($query);
 	}
 

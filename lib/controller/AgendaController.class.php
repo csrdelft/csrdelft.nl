@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
@@ -38,18 +39,18 @@ class AgendaController extends AclController {
 		parent::__construct($query, AgendaModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'maand'	 => 'P_AGENDA_READ',
-				'ical'	 => 'P_AGENDA_READ',
+				'maand' => 'P_AGENDA_READ',
+				'ical' => 'P_AGENDA_READ',
 				'zoeken' => 'P_AGENDA_READ'
 			);
 		} else {
 			$this->acl = array(
-				'courant'		 => 'P_MAIL_COMPOSE',
-				'toevoegen'		 => 'P_AGENDA_ADD',
-				'bewerken'		 => 'P_AGENDA_MOD',
-				'verwijderen'	 => 'P_AGENDA_MOD',
-				'verbergen'		 => 'P_LOGGED_IN',
-				'tonen'			 => 'P_LOGGED_IN'
+				'courant' => 'P_MAIL_COMPOSE',
+				'toevoegen' => 'P_AGENDA_ADD',
+				'bewerken' => 'P_AGENDA_MOD',
+				'verwijderen' => 'P_AGENDA_MOD',
+				'verbergen' => 'P_LOGGED_IN',
+				'tonen' => 'P_LOGGED_IN'
 			);
 		}
 	}
@@ -96,7 +97,7 @@ class AgendaController extends AclController {
 		$query = '%' . $this->getParam('q') . '%';
 		$limit = 5;
 		if ($this->hasParam('limit')) {
-			$limit = (int) $this->getParam('limit');
+			$limit = (int)$this->getParam('limit');
 		}
 		$van = date('Y-m-d');
 		$tot = date('Y-m-d', strtotime('+6 months'));
@@ -114,9 +115,9 @@ class AgendaController extends AclController {
 				$url = '/agenda/maand/' . $y . '/' . $m . '/' . $d . '#dag-' . $y . '-' . $m . '-' . $d;
 			}
 			$result[] = array(
-				'url'	 => $url,
-				'label'	 => $d . ' ' . strftime('%b', $begin) . ' ' . $y,
-				'value'	 => $item->getTitel()
+				'url' => $url,
+				'label' => $d . ' ' . strftime('%b', $begin) . ' ' . $y,
+				'value' => $item->getTitel()
 			);
 		}
 		$this->view = new JsonResponse($result);
@@ -130,7 +131,7 @@ class AgendaController extends AclController {
 		$item = $this->model->nieuw($datum);
 		$form = new AgendaItemForm($item, $this->action); // fetches POST values itself
 		if ($form->validate()) {
-			$item->item_id = (int) $this->model->create($item);
+			$item->item_id = (int)$this->model->create($item);
 			if ($datum === 'doorgaan') {
 				$_POST = array(); // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
@@ -145,8 +146,8 @@ class AgendaController extends AclController {
 	}
 
 	public function bewerken($aid) {
-		$item = $this->model->getAgendaItem((int) $aid);
-		if (!$item OR ! $item->magBeheren()) {
+		$item = $this->model->getAgendaItem((int)$aid);
+		if (!$item OR !$item->magBeheren()) {
 			$this->exit_http(403);
 		}
 		$form = new AgendaItemForm($item, $this->action); // fetches POST values itself
@@ -159,8 +160,8 @@ class AgendaController extends AclController {
 	}
 
 	public function verwijderen($aid) {
-		$item = $this->model->getAgendaItem((int) $aid);
-		if (!$item OR ! $item->magBeheren()) {
+		$item = $this->model->getAgendaItem((int)$aid);
+		if (!$item OR !$item->magBeheren()) {
 			$this->exit_http(403);
 		}
 		$this->model->delete($item);

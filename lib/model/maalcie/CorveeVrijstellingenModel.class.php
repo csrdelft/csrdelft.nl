@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\maalcie;
 
 
@@ -9,8 +10,8 @@ use CsrDelft\Orm\PersistenceModel;
 
 
 /**
- * CorveeVrijstellingenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
+ * CorveeVrijstellingenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
+ *
  */
 class CorveeVrijstellingenModel extends PersistenceModel {
 	const ORM = CorveeVrijstelling::class;
@@ -34,7 +35,7 @@ class CorveeVrijstellingenModel extends PersistenceModel {
 		return $vrijstelling;
 	}
 
-	public function getAlleVrijstellingen($groupByUid=false) {
+	public function getAlleVrijstellingen($groupByUid = false) {
 		$vrijstellingen = $this->find();
 		if ($groupByUid) {
 			$vrijstellingenByUid = array();
@@ -53,15 +54,14 @@ class CorveeVrijstellingenModel extends PersistenceModel {
 	public function getVrijstelling($uid) {
 		return $this->retrieveByPrimaryKey(array($uid));
 	}
-	
+
 	public function saveVrijstelling($uid, $begin, $eind, $percentage) {
 		return Database::transaction(function () use ($uid, $begin, $eind, $percentage) {
 			$vrijstelling = $this->getVrijstelling($uid);
 			if ($vrijstelling === false) {
 				$vrijstelling = $this->nieuw($uid, $begin, $eind, $percentage);
 				$this->create($vrijstelling);
-			}
-			else {
+			} else {
 				$vrijstelling->begin_datum = $begin;
 				$vrijstelling->eind_datum = $eind;
 				$vrijstelling->percentage = $percentage;
@@ -70,7 +70,7 @@ class CorveeVrijstellingenModel extends PersistenceModel {
 			return $vrijstelling;
 		});
 	}
-	
+
 	public function verwijderVrijstelling($uid) {
 		$this->deleteByPrimaryKey(array($uid));
 	}

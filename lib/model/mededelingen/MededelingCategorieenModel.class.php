@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\mededelingen;
+
 use CsrDelft\model\entity\mededelingen\MededelingCategorie;
 use CsrDelft\Orm\CachedPersistenceModel;
 

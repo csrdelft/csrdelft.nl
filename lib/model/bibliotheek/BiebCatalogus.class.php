@@ -1,10 +1,12 @@
 <?php
+
 namespace CsrDelft\model\bibliotheek;
+
 use CsrDelft\MijnSqli;
 use CsrDelft\model\security\LoginModel;
 
 /**
- * BiebCatalogus.class.php	| 	Gerrit Uitslag
+ * BiebCatalogus.class.php  |  Gerrit Uitslag
  *
  * catalogus
  *
@@ -24,7 +26,7 @@ class BiebCatalogus {
 	/**
 	 * Zet json in elkaar voor dataTables om catalogustabel mee te vullen
 	 * Filters en sortering worden aan de hand van parameters uit _GET ingesteld
-	 * 
+	 *
 	 * @return json
 	 */
 	protected function loadCatalogusdata() {
@@ -54,7 +56,7 @@ class BiebCatalogus {
 		 */
 		$sLimit = "";
 		if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
-			$sLimit = "LIMIT " . (int) $_GET['iDisplayStart'] . ", " . (int) $_GET['iDisplayLength'];
+			$sLimit = "LIMIT " . (int)$_GET['iDisplayStart'] . ", " . (int)$_GET['iDisplayLength'];
 		}
 
 
@@ -63,10 +65,10 @@ class BiebCatalogus {
 		 */
 
 		//sorteerkeys voor mysql
-		$aSortColumns = array('titel'			 => "titel", 'auteur'		 => "auteur", 'categorie'		 => "categorie",
-			'code'			 => "code", 'isbn'			 => "isbn", 'bsaantal'		 => "bsaantal",
-			'status'		 => "status", 'leningen'		 => "leningen", 'eigenaar'		 => "eigenaar",
-			'lener'			 => "lener", 'uitleendatum'	 => "uitleendatum");
+		$aSortColumns = array('titel' => "titel", 'auteur' => "auteur", 'categorie' => "categorie",
+			'code' => "code", 'isbn' => "isbn", 'bsaantal' => "bsaantal",
+			'status' => "status", 'leningen' => "leningen", 'eigenaar' => "eigenaar",
+			'lener' => "lener", 'uitleendatum' => "uitleendatum");
 
 		//is er een kolom gegeven om op te sorteren?
 		if (isset($_GET['iSortCol_0'])) {
@@ -93,11 +95,11 @@ class BiebCatalogus {
 		 * on very large tables, and MySQL's regex functionality is very limited
 		 */
 		//sorteer key voor mysql
-		$aFilterColumns = array('titel'			 => "titel", 'auteur'		 => "auteur", 'categorie'		 => "CONCAT(c1.categorie, ' - ', c2.categorie )",
-			'code'			 => "code", 'isbn'			 => "isbn", 'bsaantal'		 => "bsaantal", 'status'		 => "e.status", 'leningen'		 => "leningen",
-			'eigenaar'		 => "CONCAT(l1.voornaam, ' ', l1.tussenvoegsel,IFNULL(l1.tussenvoegsel, ' '),l1.achternaam)",
-			'lener'			 => "CONCAT(l2.voornaam, ' ',l2.tussenvoegsel, IFNULL(l1.tussenvoegsel, ' '),l2.achternaam)",
-			'uitleendatum'	 => "uitleendatum");
+		$aFilterColumns = array('titel' => "titel", 'auteur' => "auteur", 'categorie' => "CONCAT(c1.categorie, ' - ', c2.categorie )",
+			'code' => "code", 'isbn' => "isbn", 'bsaantal' => "bsaantal", 'status' => "e.status", 'leningen' => "leningen",
+			'eigenaar' => "CONCAT(l1.voornaam, ' ', l1.tussenvoegsel,IFNULL(l1.tussenvoegsel, ' '),l1.achternaam)",
+			'lener' => "CONCAT(l2.voornaam, ' ',l2.tussenvoegsel, IFNULL(l1.tussenvoegsel, ' '),l2.achternaam)",
+			'uitleendatum' => "uitleendatum");
 
 		$sWhere = "";
 		if ($_GET['sSearch'] != "") {
@@ -225,7 +227,7 @@ class BiebCatalogus {
 
 	/**
 	 * geeft alle waardes in db voor $key
-	 * 
+	 *
 	 * @param $key string waarvoor waardes gezocht moeten worden
 	 * @return array van alle waardes, alfabetisch gesorteerd
 	 */
@@ -235,7 +237,7 @@ class BiebCatalogus {
 			$db = MijnSqli::instance();
 			if ($key == 'naam') {
 				$query = "
-					SELECT uid, concat(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) as naam  
+					SELECT uid, concat(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) AS naam  
 					FROM profielen 
 					WHERE status IN ('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID') 
 					ORDER BY achternaam;";
@@ -274,18 +276,18 @@ class BiebCatalogus {
 		$zoekterm = $db->escape($zoekterm);
 		$limiet = 5;
 		if (isset($_GET['limit'])) {
-			$limiet = (int) $_GET['limit'];
+			$limiet = (int)$_GET['limit'];
 		}
 		$wherelimit = "";
-		if ((int) $limiet > 0) {
-			$wherelimit = " LIMIT 0, " . (int) $limiet;
+		if ((int)$limiet > 0) {
+			$wherelimit = " LIMIT 0, " . (int)$limiet;
 		}
 		$properties = array();
 		$allowedkeys = array('id', 'titel', 'uitgavejaar', 'uitgeverij', 'paginas', 'taal', 'isbn', 'code', 'auteur', 'biebboek');
 		if (in_array($zoek, $allowedkeys)) {
 			$wherecat = "";
 			if ($categorie > 0) {
-				$wherecat = "categorie_id = " . (int) $categorie . " AND ";
+				$wherecat = "categorie_id = " . (int)$categorie . " AND ";
 			}
 			if ($zoek == 'biebboek') {
 				$query = "
@@ -318,8 +320,8 @@ class BiebCatalogus {
 							$data = array($prop[$zoek]);
 						}
 						$properties[] = array(
-							'data'	 => $data,
-							'value'	 => $prop[$zoek],
+							'data' => $data,
+							'value' => $prop[$zoek],
 							'result' => $prop[$zoek]);
 					}
 				}
@@ -401,7 +403,7 @@ class BiebCatalogus {
 				$select = ", e.status AS status, e.eigenaar_uid";
 				$join = "biebexemplaar e ON(b.id = e.boek_id)";
 				$where = "(e.status =  'uitgeleend' OR e.status =  'teruggegeven') " .
-						"AND e.uitgeleend_uid =  '" . $db->escape($uid) . "'";
+					"AND e.uitgeleend_uid =  '" . $db->escape($uid) . "'";
 				break;
 			default:
 				return false;

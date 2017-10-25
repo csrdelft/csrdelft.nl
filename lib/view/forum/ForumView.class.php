@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\forum;
+
 use CsrDelft\view\SmartyTemplateView;
 
 /**

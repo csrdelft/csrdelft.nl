@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrException;
@@ -10,7 +11,7 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
 
 /**
- * CorveePuntenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * CorveePuntenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
  *
  */
 class CorveePuntenModel {
@@ -60,16 +61,16 @@ class CorveePuntenModel {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		if ($punten !== 0 OR $bonus_malus !== 0) {
-			self::savePuntenVoorLid($profiel, (int) $profiel->corvee_punten + $punten, (int) $profiel->corvee_punten_bonus + $bonus_malus);
+			self::savePuntenVoorLid($profiel, (int)$profiel->corvee_punten + $punten, (int)$profiel->corvee_punten_bonus + $bonus_malus);
 		}
 	}
 
-    public static function puntenIntrekken($uid, $punten, $bonus_malus) {
-        if (!is_int($punten) || !is_int($bonus_malus)) {
-            throw new CsrGebruikerException('Punten intrekken faalt: geen integer');
-        }
-        self::puntenToekennen($uid, -$punten, -$bonus_malus);
-    }
+	public static function puntenIntrekken($uid, $punten, $bonus_malus) {
+		if (!is_int($punten) || !is_int($bonus_malus)) {
+			throw new CsrGebruikerException('Punten intrekken faalt: geen integer');
+		}
+		self::puntenToekennen($uid, -$punten, -$bonus_malus);
+	}
 
 	public static function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null) {
 		if (!is_int($punten) && !is_int($bonus_malus)) {
@@ -92,13 +93,13 @@ class CorveePuntenModel {
 
 	private static function loadPuntenTotaal($where = null, $values = array(), $limit = null) {
 		$sql = 'SELECT uid, corvee_punten, corvee_punten_bonus';
-		$sql.= ' FROM profielen';
+		$sql .= ' FROM profielen';
 		if ($where !== null) {
-			$sql.= ' WHERE ' . $where;
+			$sql .= ' WHERE ' . $where;
 		}
-		$sql.= ' ORDER BY achternaam, voornaam ASC';
+		$sql .= ' ORDER BY achternaam, voornaam ASC';
 		if (is_int($limit) && $limit > 0) {
-			$sql.= ' LIMIT ' . $limit;
+			$sql .= ' LIMIT ' . $limit;
 		}
 		$db = Database::instance();
 		$query = $db->getDatabase()->prepare($sql);
@@ -107,8 +108,8 @@ class CorveePuntenModel {
 		$totalen = array();
 		foreach ($result as $row) {
 			$totalen[$row['uid']] = array(
-				'puntenTotaal'	 => (int) $row['corvee_punten'],
-				'bonusTotaal'	 => (int) $row['corvee_punten_bonus']
+				'puntenTotaal' => (int)$row['corvee_punten'],
+				'bonusTotaal' => (int)$row['corvee_punten_bonus']
 			);
 		}
 		return $totalen;
@@ -158,8 +159,8 @@ class CorveePuntenModel {
 		}
 
 		$lijst['lid'] = $profiel;
-		$lijst['puntenTotaal'] = (int) $profiel->corvee_punten;
-		$lijst['bonusTotaal'] = (int) $profiel->corvee_punten_bonus;
+		$lijst['puntenTotaal'] = (int)$profiel->corvee_punten;
+		$lijst['bonusTotaal'] = (int)$profiel->corvee_punten_bonus;
 		$lijst['prognose'] += $lijst['puntenTotaal'] + $lijst['bonusTotaal'];
 		$lijst['prognoseColor'] = self::rgbCalculate($lijst['prognose']);
 		if ($profiel->isLid()) {

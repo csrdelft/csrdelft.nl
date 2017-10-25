@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\beheer;
+
 use CsrDelft\view\SmartyTemplateView;
 
 /**

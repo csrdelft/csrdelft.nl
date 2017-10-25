@@ -1,15 +1,17 @@
 <?php
+
 namespace CsrDelft\model\entity\security;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * AccessControl.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * ACL-entry.
- * 
+ *
  */
 class AccessControl extends PersistentEntity {
 
@@ -38,10 +40,10 @@ class AccessControl extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'environment'	 => array(T::String),
-		'action'		 => array(T::String),
-		'resource'		 => array(T::String),
-		'subject'		 => array(T::String)
+		'environment' => array(T::String),
+		'action' => array(T::String),
+		'resource' => array(T::String),
+		'subject' => array(T::String)
 	);
 	/**
 	 * Database primary key

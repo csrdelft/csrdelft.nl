@@ -1,17 +1,19 @@
 <?php
+
 namespace CsrDelft\model;
+
 use function CsrDelft\getDateTime;
 use CsrDelft\MijnSqli;
 use CsrDelft\model\security\LoginModel;
 
 /**
  * CourantModel.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
- * 
- * 
+ *
+ *
  * Verzorgt het opvragen van courantgegevens.
- * 
+ *
  */
 class CourantModel {
 
@@ -43,7 +45,7 @@ class CourantModel {
 	 * Courant inladen uit de database.
 	 */
 	public function load($courantID) {
-		$this->courantID = (int) $courantID;
+		$this->courantID = (int)$courantID;
 		//leegmaken van de berichtenarray
 		$this->berichten = array();
 		if ($this->isCache()) {
@@ -187,7 +189,7 @@ class CourantModel {
 	}
 
 	public function isZichtbaar($iBerichtID) {
-		$iBerichtID = (int) $iBerichtID;
+		$iBerichtID = (int)$iBerichtID;
 		if ($this->isCache()) {
 			if ($this->magBeheren()) {
 				return true;
@@ -208,7 +210,7 @@ class CourantModel {
 	}
 
 	public function bewerkBericht($iBerichtID, $titel, $categorie, $bericht) {
-		$iBerichtID = (int) $iBerichtID;
+		$iBerichtID = (int)$iBerichtID;
 		if (!$this->isZichtbaar($iBerichtID)) {
 			return false;
 		}
@@ -294,7 +296,7 @@ class CourantModel {
 	}
 
 	public function getBericht($iBerichtID) {
-		$iBerichtID = (int) $iBerichtID;
+		$iBerichtID = (int)$iBerichtID;
 		if (!$this->isZichtbaar($iBerichtID)) {
 			return false;
 		}
@@ -302,7 +304,7 @@ class CourantModel {
 	}
 
 	public function verwijderBericht($iBerichtID) {
-		$iBerichtID = (int) $iBerichtID;
+		$iBerichtID = (int)$iBerichtID;
 		if (!$this->isZichtbaar($iBerichtID)) {
 			return false;
 		}

@@ -1,16 +1,18 @@
 <?php
+
 namespace CsrDelft\model\entity\security;
+
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * Account.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Login account.
- * 
+ *
  */
 class Account extends PersistentEntity {
 
@@ -80,18 +82,18 @@ class Account extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'uid'					 => array(T::UID),
-		'username'				 => array(T::String),
-		'email'					 => array(T::String),
-		'pass_hash'				 => array(T::String),
-		'pass_since'			 => array(T::DateTime),
-		'last_login_success'	 => array(T::DateTime, true),
-		'last_login_attempt'	 => array(T::DateTime, true),
-		'failed_login_attempts'	 => array(T::Integer),
-		'blocked_reason'		 => array(T::Text, true),
-		'perm_role'				 => array(T::Enumeration, false, AccessRole::class),
-		'private_token'			 => array(T::String, true),
-		'private_token_since'	 => array(T::DateTime, true)
+		'uid' => array(T::UID),
+		'username' => array(T::String),
+		'email' => array(T::String),
+		'pass_hash' => array(T::String),
+		'pass_since' => array(T::DateTime),
+		'last_login_success' => array(T::DateTime, true),
+		'last_login_attempt' => array(T::DateTime, true),
+		'failed_login_attempts' => array(T::Integer),
+		'blocked_reason' => array(T::Text, true),
+		'perm_role' => array(T::Enumeration, false, AccessRole::class),
+		'private_token' => array(T::String, true),
+		'private_token_since' => array(T::DateTime, true)
 	);
 	/**
 	 * Database primary key

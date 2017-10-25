@@ -7,6 +7,7 @@
  */
 
 namespace CsrDelft\view\maalcie\forms;
+
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdBeoordeling;
 use CsrDelft\model\InstellingenModel;

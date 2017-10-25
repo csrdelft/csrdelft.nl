@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
@@ -26,17 +27,17 @@ class CourantController extends AclController {
 		parent::__construct($query, new CourantModel());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'archief'		 => 'P_LEDEN_READ',
-				'bekijken'		 => 'P_LEDEN_READ',
-				'toevoegen'		 => 'P_MAIL_POST',
-				'bewerken'		 => 'P_MAIL_POST',
-				'verwijderen'	 => 'P_MAIL_POST',
-				'verzenden'		 => 'P_MAIL_SEND'
+				'archief' => 'P_LEDEN_READ',
+				'bekijken' => 'P_LEDEN_READ',
+				'toevoegen' => 'P_MAIL_POST',
+				'bewerken' => 'P_MAIL_POST',
+				'verwijderen' => 'P_MAIL_POST',
+				'verzenden' => 'P_MAIL_SEND'
 			);
 		} else {
 			$this->acl = array(
-				'toevoegen'	 => 'P_MAIL_POST',
-				'bewerken'	 => 'P_MAIL_COMPOSE'
+				'toevoegen' => 'P_MAIL_POST',
+				'bewerken' => 'P_MAIL_COMPOSE'
 			);
 		}
 	}
@@ -48,11 +49,11 @@ class CourantController extends AclController {
 		}
 		if ($this->hasParam(3)) {
 			if ($this->action === 'archief' OR $this->action === 'bekijken') {
-				$id = (int) $this->getParam(3);
+				$id = (int)$this->getParam(3);
 			} else {
 				$id = 0;
 			}
-			$success = $this->model->load((int) $id);
+			$success = $this->model->load((int)$id);
 			if ($this->action === 'archief') {
 				if ($success) {
 					$this->action = 'bekijken';
@@ -65,7 +66,7 @@ class CourantController extends AclController {
 	}
 
 	public function archief() {
-				$body = new CourantArchiefView($this->model);
+		$body = new CourantArchiefView($this->model);
 		$this->view = new CsrLayoutPage($body);
 	}
 
@@ -96,7 +97,7 @@ class CourantController extends AclController {
 
 	public function bewerken($iBerichtID) {
 		$bericht = $this->model->getBericht($iBerichtID);
-		if (!$bericht OR ! isset($bericht['uid']) OR ! $this->model->magBeheren($bericht['uid'])) {
+		if (!$bericht OR !isset($bericht['uid']) OR !$this->model->magBeheren($bericht['uid'])) {
 			$this->exit_http(403);
 		}
 		if ($this->getMethod() == 'POST') {
@@ -117,7 +118,7 @@ class CourantController extends AclController {
 
 	public function verwijderen($iBerichtID) {
 		$bericht = $this->model->getBericht($iBerichtID);
-		if (!$bericht OR ! isset($bericht['uid']) OR ! $this->model->magBeheren($bericht['uid'])) {
+		if (!$bericht OR !isset($bericht['uid']) OR !$this->model->magBeheren($bericht['uid'])) {
 			$this->exit_http(403);
 		}
 		if ($this->model->verwijderBericht($iBerichtID)) {

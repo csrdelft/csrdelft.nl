@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\model\LidInstellingenModel;
@@ -127,39 +128,39 @@ JS;
 			$html .= ucfirst($option) . '</a></li>';
 		}
 		?>
-        <div class="input-group">
-            <div class="input-group-btn">
+		<div class="input-group">
+			<div class="input-group-btn">
 				<?= parent::getHtml() ?>
-                <button id="cd-zoek-engines" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                        aria-expanded="false">
-                    <span class="fa fa-search"></span>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li>
-                        <a onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Oudleden</a>
-                    </li>
-                    <li>
-                        <a onclick="window.location.href = '/ledenlijst?status=ALL&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Iedereen</a>
-                    </li>
-                    <li>
-                        <a onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Forum
-                            reacties</a></li>
-                    <li>
-                        <a onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Wiki
-                            inhoud</a></li>
-                    <li class="divider"></li>
-                    <li class="dropdown-submenu">
-                        <a href="#">Snelzoeken</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/instellingen#lidinstellingenform-tab-Zoeken">Aanpassen...</a></li>
-                            <li class="divider"></li>
+				<button id="cd-zoek-engines" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+								aria-expanded="false">
+					<span class="fa fa-search"></span>
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-right" role="menu">
+					<li>
+						<a onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Oudleden</a>
+					</li>
+					<li>
+						<a onclick="window.location.href = '/ledenlijst?status=ALL&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Iedereen</a>
+					</li>
+					<li>
+						<a onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Forum
+							reacties</a></li>
+					<li>
+						<a onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Wiki
+							inhoud</a></li>
+					<li class="divider"></li>
+					<li class="dropdown-submenu">
+						<a href="#">Snelzoeken</a>
+						<ul class="dropdown-menu">
+							<li><a href="/instellingen#lidinstellingenform-tab-Zoeken">Aanpassen...</a></li>
+							<li class="divider"></li>
 							<?= $html; ?>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
 		<?php
 	}
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
 
 use CsrDelft\model\groepen\leden\OnderverenigingsLedenModel;
@@ -7,9 +8,9 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * Ondervereniging.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Ondervereniging extends AbstractGroep {
 

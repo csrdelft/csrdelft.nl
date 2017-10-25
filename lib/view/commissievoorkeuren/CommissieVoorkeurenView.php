@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\commissievoorkeuren;
 
 use CsrDelft\model\commissievoorkeuren\VoorkeurCommissie;

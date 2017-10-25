@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity;
+
 use CsrDelft\common\CsrException;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\MenuModel;
@@ -69,13 +71,13 @@ class MenuItem extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'item_id'			 => array(T::Integer, false, 'auto_increment'),
-		'parent_id'			 => array(T::Integer),
-		'volgorde'			 => array(T::Integer),
-		'tekst'				 => array(T::String),
-		'link'				 => array(T::String),
-		'rechten_bekijken'	 => array(T::String, true),
-		'zichtbaar'			 => array(T::Boolean)
+		'item_id' => array(T::Integer, false, 'auto_increment'),
+		'parent_id' => array(T::Integer),
+		'volgorde' => array(T::Integer),
+		'tekst' => array(T::String),
+		'link' => array(T::String),
+		'rechten_bekijken' => array(T::String, true),
+		'zichtbaar' => array(T::Boolean)
 	);
 	/**
 	 * Database primary key
@@ -148,7 +150,7 @@ class MenuItem extends PersistentEntity {
 				$draad_id = substr($this->link, $begin);
 			}
 			try {
-				$draad = ForumDradenModel::get((int) $draad_id);
+				$draad = ForumDradenModel::get((int)$draad_id);
 				return $draad->isOngelezen();
 			} catch (CsrException $e) {
 				setMelding('Uw favoriete forumdraadje bestaat helaas niet meer: ' . htmlspecialchars($this->tekst), 2);

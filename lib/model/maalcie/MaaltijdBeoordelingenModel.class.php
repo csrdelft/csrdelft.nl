@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\maalcie;
+
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdBeoordeling;
 use CsrDelft\model\security\LoginModel;
@@ -8,9 +10,9 @@ use CsrDelft\Orm\PersistenceModel;
 
 /**
  * MaaltijdBeoordelingenModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class MaaltijdBeoordelingenModel extends PersistenceModel {
 

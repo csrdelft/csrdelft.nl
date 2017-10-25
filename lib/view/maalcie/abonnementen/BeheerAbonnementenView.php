@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\abonnementen;
+
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\view\SmartyTemplateView;
 

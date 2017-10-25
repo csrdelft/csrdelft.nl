@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\api;
 
 use function CsrDelft\crypto_rand_token;

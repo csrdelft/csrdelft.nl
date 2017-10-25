@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\maalcie;
+
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeRepetitie;

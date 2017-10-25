@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
 
 use CsrDelft\model\entity\security\AccessAction;
@@ -9,11 +10,11 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * Commissie.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een commissie is een groep waarvan de groepsleden een specifieke functie (kunnen) hebben.
- * 
+ *
  */
 class Commissie extends AbstractGroep {
 
@@ -43,7 +44,7 @@ class Commissie extends AbstractGroep {
 
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
-	 * 
+	 *
 	 * @param AccessAction $action
 	 * @param string $soort
 	 * @return boolean

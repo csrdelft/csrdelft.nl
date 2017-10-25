@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
@@ -31,11 +32,11 @@ class MaaltijdRepetitiesController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'nieuw'		 => 'P_MAAL_MOD',
-				'bewerk'	 => 'P_MAAL_MOD',
-				'opslaan'	 => 'P_MAAL_MOD',
-				'verwijder'	 => 'P_MAAL_MOD',
-				'bijwerken'	 => 'P_MAAL_MOD'
+				'nieuw' => 'P_MAAL_MOD',
+				'bewerk' => 'P_MAAL_MOD',
+				'opslaan' => 'P_MAAL_MOD',
+				'verwijder' => 'P_MAAL_MOD',
+				'bijwerken' => 'P_MAAL_MOD'
 			);
 		}
 	}
@@ -47,7 +48,7 @@ class MaaltijdRepetitiesController extends AclController {
 		}
 		$mrid = null;
 		if ($this->hasParam(3)) {
-			$mrid = (int) $this->getParam(3);
+			$mrid = (int)$this->getParam(3);
 		}
 		parent::performAction(array($mrid));
 	}
@@ -79,10 +80,10 @@ class MaaltijdRepetitiesController extends AclController {
 			$this->nieuw();
 		}
 		if ($this->view->validate()) {
-            $repetitie = $this->view->getModel();
+			$repetitie = $this->view->getModel();
 
-            $aantal = $this->model->saveRepetitie($repetitie);
-            $this->view = new MaaltijdRepetitieView($repetitie);
+			$aantal = $this->model->saveRepetitie($repetitie);
+			$this->view = new MaaltijdRepetitieView($repetitie);
 			if ($aantal > 0) {
 				setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 			}

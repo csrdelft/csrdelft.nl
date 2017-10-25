@@ -13,35 +13,33 @@ use CsrDelft\view\formulier\knoppen\DeleteKnop;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
-class ForumDeelForm extends ModalForm
-{
+class ForumDeelForm extends ModalForm {
 
-    public function __construct(ForumDeel $deel)
-    {
-        parent::__construct($deel, '/forum/beheren/' . $deel->forum_id);
-        $this->titel = 'Deelforum beheren';
-        $this->css_classes[] = 'ReloadPage';
-        $this->css_classes[] = 'PreventUnchanged';
+	public function __construct(ForumDeel $deel) {
+		parent::__construct($deel, '/forum/beheren/' . $deel->forum_id);
+		$this->titel = 'Deelforum beheren';
+		$this->css_classes[] = 'ReloadPage';
+		$this->css_classes[] = 'PreventUnchanged';
 
-        $lijst = array();
-        foreach (ForumModel::instance()->prefetch() as $categorie) {
-            $lijst[$categorie->categorie_id] = $categorie->titel;
-        }
+		$lijst = array();
+		foreach (ForumModel::instance()->prefetch() as $categorie) {
+			$lijst[$categorie->categorie_id] = $categorie->titel;
+		}
 
-        $fields[] = new SelectField('categorie_id', $deel->categorie_id, 'Categorie', $lijst);
-        $fields[] = new RequiredTextField('titel', $deel->titel, 'Titel');
-        $fields[] = new TextareaField('omschrijving', $deel->omschrijving, 'Omschrijving');
-        $fields[] = new RechtenField('rechten_lezen', $deel->rechten_lezen, 'Lees-rechten');
-        $fields[] = new RechtenField('rechten_posten', $deel->rechten_posten, 'Post-rechten');
-        $fields[] = new RechtenField('rechten_modereren', $deel->rechten_modereren, 'Mod-rechten');
-        $fields[] = new IntField('volgorde', $deel->volgorde, 'Volgorde');
+		$fields[] = new SelectField('categorie_id', $deel->categorie_id, 'Categorie', $lijst);
+		$fields[] = new RequiredTextField('titel', $deel->titel, 'Titel');
+		$fields[] = new TextareaField('omschrijving', $deel->omschrijving, 'Omschrijving');
+		$fields[] = new RechtenField('rechten_lezen', $deel->rechten_lezen, 'Lees-rechten');
+		$fields[] = new RechtenField('rechten_posten', $deel->rechten_posten, 'Post-rechten');
+		$fields[] = new RechtenField('rechten_modereren', $deel->rechten_modereren, 'Mod-rechten');
+		$fields[] = new IntField('volgorde', $deel->volgorde, 'Volgorde');
 
-        $fields['btn'] = new FormDefaultKnoppen();
+		$fields['btn'] = new FormDefaultKnoppen();
 
-        $delete = new DeleteKnop('/forum/opheffen/' . $deel->forum_id);
-        $fields['btn']->addKnop($delete, true);
+		$delete = new DeleteKnop('/forum/opheffen/' . $deel->forum_id);
+		$fields['btn']->addKnop($delete, true);
 
-        $this->addFields($fields);
-    }
+		$this->addFields($fields);
+	}
 
 }

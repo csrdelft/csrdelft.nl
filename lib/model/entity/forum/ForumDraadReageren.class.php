@@ -1,16 +1,18 @@
 <?php
+
 namespace CsrDelft\model\entity\forum;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * ForumDraadReageren.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Concept berichten opslaan per draadje.
  * Bijhouden als iemand bezig is een reactie te schrijven.
- * 
+ *
  */
 class ForumDraadReageren extends PersistentEntity {
 
@@ -53,12 +55,12 @@ class ForumDraadReageren extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'forum_id'	 => array(T::Integer),
-		'draad_id'	 => array(T::Integer),
-		'uid'		 => array(T::UID),
+		'forum_id' => array(T::Integer),
+		'draad_id' => array(T::Integer),
+		'uid' => array(T::UID),
 		'datum_tijd' => array(T::DateTime),
-		'concept'	 => array(T::Text, true),
-		'titel'		 => array(T::String, true)
+		'concept' => array(T::Text, true),
+		'titel' => array(T::String, true)
 	);
 	/**
 	 * Database primary key

@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\keuzevelden;
+
 use CsrDelft\view\formulier\invoervelden\InputField;
 
 /**
@@ -10,8 +12,6 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 30/03/2017
  */
-
-
 class ColorField extends InputField {
 
 	public $type = 'color';

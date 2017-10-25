@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\knoppen;
+
 use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\Icon;
 use CsrDelft\view\formulier\elementen\FormElement;

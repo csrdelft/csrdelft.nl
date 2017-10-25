@@ -4,6 +4,7 @@
  * @package Smarty
  * @subpackage plugins
  */
+
 use CsrDelft\model\security\LoginModel;
 
 /**
@@ -13,6 +14,6 @@ use CsrDelft\model\security\LoginModel;
  * @return string
  */
 function smarty_compiler_toegang($params, Smarty &$smarty) {
-    return '<?php if (' . LoginModel::class . '::mag(' . $params[0] . ')) { ?>';
+	return '<?php if (' . LoginModel::class . '::mag(' . $params[0] . ')) { ?>';
 }
 /* vim: set expandtab: */

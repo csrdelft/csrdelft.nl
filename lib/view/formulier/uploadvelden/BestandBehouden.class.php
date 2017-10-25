@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\uploadvelden;
+
 use CsrDelft\common\CsrException;
 use function CsrDelft\format_filesize;
 use CsrDelft\model\entity\Afbeelding;

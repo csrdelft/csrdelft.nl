@@ -7,25 +7,23 @@ use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\view\SmartyTemplateView;
 
-class MijnMaaltijdView extends SmartyTemplateView
-{
+class MijnMaaltijdView extends SmartyTemplateView {
 
-    private $aanmelding;
+	private $aanmelding;
 
-    public function __construct(
-        Maaltijd $maaltijd,
-        MaaltijdAanmelding $aanmelding = null
-    ) {
-        parent::__construct($maaltijd);
-        $this->aanmelding = $aanmelding;
-    }
+	public function __construct(
+		Maaltijd $maaltijd,
+		MaaltijdAanmelding $aanmelding = null
+	) {
+		parent::__construct($maaltijd);
+		$this->aanmelding = $aanmelding;
+	}
 
-    public function view()
-    {
-        $this->smarty->assign('maaltijd', $this->model);
-        $this->smarty->assign('aanmelding', $this->aanmelding);
-        $this->smarty->assign('standaardprijs', intval(InstellingenModel::get('maaltijden', 'standaard_prijs')));
-        $this->smarty->display('maalcie/maaltijd/mijn_maaltijd_lijst.tpl');
-    }
+	public function view() {
+		$this->smarty->assign('maaltijd', $this->model);
+		$this->smarty->assign('aanmelding', $this->aanmelding);
+		$this->smarty->assign('standaardprijs', intval(InstellingenModel::get('maaltijden', 'standaard_prijs')));
+		$this->smarty->display('maalcie/maaltijd/mijn_maaltijd_lijst.tpl');
+	}
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;

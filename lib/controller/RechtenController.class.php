@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
@@ -13,9 +14,9 @@ use CsrDelft\view\RechtenTable;
 
 /**
  * RechtenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van de ACL.
  *
  * @property AccessModel $model
@@ -30,10 +31,10 @@ class RechtenController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'bekijken'		 => 'P_LOGGED_IN',
-				'aanmaken'		 => 'P_LOGGED_IN',
-				'wijzigen'		 => 'P_LOGGED_IN',
-				'verwijderen'	 => 'P_LOGGED_IN'
+				'bekijken' => 'P_LOGGED_IN',
+				'aanmaken' => 'P_LOGGED_IN',
+				'wijzigen' => 'P_LOGGED_IN',
+				'verwijderen' => 'P_LOGGED_IN'
 			);
 		}
 	}

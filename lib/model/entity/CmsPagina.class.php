@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity;
+
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
@@ -54,13 +56,13 @@ class CmsPagina extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'naam'				 => array(T::String),
-		'titel'				 => array(T::String),
-		'inhoud'			 => array(T::LongText),
-		'laatst_gewijzigd'	 => array(T::DateTime),
-		'rechten_bekijken'	 => array(T::String),
-		'rechten_bewerken'	 => array(T::String),
-		'inline_html'		 => array(T::Boolean)
+		'naam' => array(T::String),
+		'titel' => array(T::String),
+		'inhoud' => array(T::LongText),
+		'laatst_gewijzigd' => array(T::DateTime),
+		'rechten_bekijken' => array(T::String),
+		'rechten_bewerken' => array(T::String),
+		'inline_html' => array(T::Boolean)
 	);
 	/**
 	 * Database primary key

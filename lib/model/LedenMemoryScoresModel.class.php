@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model;
+
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\LedenMemoryScore;
@@ -10,9 +12,9 @@ use PDO;
 
 /**
  * LedenMemoryScoresModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class LedenMemoryScoresModel extends PersistenceModel {
 

@@ -1,8 +1,9 @@
 <?php
+
 namespace CsrDelft;
 
 /**
- * class.btn.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
+ * class.btn.php  |  Jan Pieter Waagmeester (jieter@jpwaag.com)
  *
  * Algemene code om knopjes in html te regelen.
  * Door dit te centraliseren komen er niet op 100 plekken links naar plaatjes te staan enzo.
@@ -87,7 +88,7 @@ class Knop {
 			}
 		} else {
 			//we gaan een plaatje erbij doen.
-			$html.=$this->getImgTag();
+			$html .= $this->getImgTag();
 		}
 		if ($this->text !== null) {
 			$html .= ' ' . $this->text;

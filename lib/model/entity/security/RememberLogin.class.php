@@ -1,13 +1,15 @@
 <?php
+
 namespace CsrDelft\model\entity\security;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * RememberLogin.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class RememberLogin extends PersistentEntity {
 
@@ -51,13 +53,13 @@ class RememberLogin extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'			 => array(T::Integer, false, 'auto_increment'),
-		'token'			 => array(T::String),
-		'uid'			 => array(T::UID),
+		'id' => array(T::Integer, false, 'auto_increment'),
+		'token' => array(T::String),
+		'uid' => array(T::UID),
 		'remember_since' => array(T::DateTime),
-		'device_name'	 => array(T::String),
-		'ip'			 => array(T::String),
-		'lock_ip'		 => array(T::Boolean)
+		'device_name' => array(T::String),
+		'ip' => array(T::String),
+		'lock_ip' => array(T::Boolean)
 	);
 	/**
 	 * Database primary key

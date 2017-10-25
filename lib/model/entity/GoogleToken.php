@@ -11,13 +11,13 @@ use CsrDelft\Orm\Entity\T;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class GoogleToken extends PersistentEntity {
-    public $uid;
-    public $token;
+	public $uid;
+	public $token;
 
-    protected static $persistent_attributes = [
-        'uid' => [T::UID],
-        'token' => [T::String],
-    ];
-    protected static $table_name = 'GoogleToken';
-    protected static $primary_key = ['uid'];
+	protected static $persistent_attributes = [
+		'uid' => [T::UID],
+		'token' => [T::String],
+	];
+	protected static $table_name = 'GoogleToken';
+	protected static $primary_key = ['uid'];
 }

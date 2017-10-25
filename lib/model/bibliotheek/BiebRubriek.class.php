@@ -1,10 +1,12 @@
 <?php
+
 namespace CsrDelft\model\bibliotheek;
+
 use CsrDelft\common\CsrException;
 use CsrDelft\MijnSqli;
 
 /**
- * BiebRubriek.class.php	| 	Gerrit Uitslag
+ * BiebRubriek.class.php  |  Gerrit Uitslag
  *
  * rubriek
  *
@@ -30,7 +32,7 @@ class BiebRubriek {
 				FROM biebcategorie c1, biebcategorie c2
 				WHERE c2.p_id = c1.id
 				AND c1.p_id =0
-				AND c2.id = " . (int) $init . ";";
+				AND c2.id = " . (int)$init . ";";
 			$categorie = $db->getRow($query);
 
 			if (is_array($categorie)) {
@@ -93,8 +95,8 @@ class BiebRubriek {
 						$categorien[$categorie['id']] = $samengevoegderubrieken;
 					} else {
 						$categorien[] = array(
-							'id'	 => $categorie['id'],
-							'cat'	 => $samengevoegderubrieken
+							'id' => $categorie['id'],
+							'cat' => $samengevoegderubrieken
 						);
 					}
 				} else {

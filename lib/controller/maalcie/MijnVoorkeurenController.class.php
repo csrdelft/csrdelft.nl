@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
@@ -29,9 +30,9 @@ class MijnVoorkeurenController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'inschakelen'	 => 'P_CORVEE_IK',
-				'uitschakelen'	 => 'P_CORVEE_IK',
-				'eetwens'		 => 'P_CORVEE_IK'
+				'inschakelen' => 'P_CORVEE_IK',
+				'uitschakelen' => 'P_CORVEE_IK',
+				'eetwens' => 'P_CORVEE_IK'
 			);
 		}
 	}

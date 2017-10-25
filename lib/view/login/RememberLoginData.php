@@ -6,24 +6,22 @@ use CsrDelft\Icon;
 use function CsrDelft\reldate;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 
-class RememberLoginData extends DataTableResponse
-{
+class RememberLoginData extends DataTableResponse {
 
-    public function getJson($remember)
-    {
-        $array = $remember->jsonSerialize();
+	public function getJson($remember) {
+		$array = $remember->jsonSerialize();
 
-        $array['token'] = null; // keep it private
+		$array['token'] = null; // keep it private
 
-        $array['remember_since'] = reldate($array['remember_since']);
+		$array['remember_since'] = reldate($array['remember_since']);
 
-        if ($remember->lock_ip) {
-            $array['lock_ip'] = Icon::getTag('lock', null, 'Gekoppeld aan IP-adres');
-        } else {
-            $array['lock_ip'] = '';
-        }
+		if ($remember->lock_ip) {
+			$array['lock_ip'] = Icon::getTag('lock', null, 'Gekoppeld aan IP-adres');
+		} else {
+			$array['lock_ip'] = '';
+		}
 
-        return parent::getJson($array);
-    }
+		return parent::getJson($array);
+	}
 
 }

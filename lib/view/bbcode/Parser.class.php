@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\bbcode;
 
 /**
@@ -29,12 +30,12 @@ class Parser {
 	 *
 	 * An array, like this ->
 	 * Array (
-	 * 		[0] => Hello, this is
-	 * 		[1] => [b]
-	 * 		[2] => bold
-	 * 		[3] => [/b]
-	 * 		[4] => , cool huh?!
-	 * 		  )
+	 *    [0] => Hello, this is
+	 *    [1] => [b]
+	 *    [2] => bold
+	 *    [3] => [/b]
+	 *    [4] => , cool huh?!
+	 *      )
 	 */
 	protected $parseArray = array();
 
@@ -42,8 +43,8 @@ class Parser {
 	 * Aliasses, like * for lishort
 	 */
 	private $aliassen = array(
-		'*'		 => 'lishort',
-		'ulist'	 => 'list'
+		'*' => 'lishort',
+		'ulist' => 'list'
 	);
 
 	/**

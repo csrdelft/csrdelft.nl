@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\formulier\uploadvelden;
 
 use CsrDelft\common\CsrException;
@@ -28,10 +29,10 @@ class FileField extends RadioField {
 		$this->existingField = new ExistingFileField($name . '_EF', $filterMime, $dir);
 		$this->urlField = new DownloadUrlField($name . '_DU', $filterMime);
 		$this->uploaders = array(
-			$this->behoudenField->name	 => $this->behoudenField,
-			$this->uploadField->name	 => $this->uploadField,
-			$this->existingField->name	 => $this->existingField,
-			$this->urlField->name		 => $this->urlField
+			$this->behoudenField->name => $this->behoudenField,
+			$this->uploadField->name => $this->uploadField,
+			$this->existingField->name => $this->existingField,
+			$this->urlField->name => $this->urlField
 		);
 		$default = null;
 		$opties = array();

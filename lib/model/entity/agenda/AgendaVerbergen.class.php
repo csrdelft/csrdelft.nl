@@ -1,13 +1,15 @@
 <?php
+
 namespace CsrDelft\model\entity\agenda;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * AgendaVerbergen.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Items in de agenda kunnen worden verborgen per gebruiker.
  */
 class AgendaVerbergen extends PersistentEntity {
@@ -29,8 +31,8 @@ class AgendaVerbergen extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'uid'		 => array(T::UID),
-		'refuuid'	 => array(T::String)
+		'uid' => array(T::UID),
+		'refuuid' => array(T::String)
 	);
 	/**
 	 * Database primary key

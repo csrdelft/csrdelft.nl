@@ -1,13 +1,15 @@
 <?php
+
 namespace CsrDelft\model;
+
 use CsrDelft\model\entity\ExecutionTime;
 use CsrDelft\Orm\PersistenceModel;
 
 /**
  * TimerModel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class TimerModel extends PersistenceModel {
 

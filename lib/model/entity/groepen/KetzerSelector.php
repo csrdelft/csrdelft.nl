@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
 
 use CsrDelft\model\groepen\KetzerOptiesModel;
@@ -8,11 +9,11 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * KetzerSelector.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een soort selector (AND/XOR) heeft keuzemogelijkheden.
- * 
+ *
  */
 class KetzerSelector extends PersistentEntity {
 
@@ -36,9 +37,9 @@ class KetzerSelector extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'select_id'		 => array(T::Integer, false, 'auto_increment'),
-		'ketzer_id'		 => array(T::Integer),
-		'keuze_soort'	 => array(T::Enumeration, false, KetzerSelectorSoort::class)
+		'select_id' => array(T::Integer, false, 'auto_increment'),
+		'ketzer_id' => array(T::Integer),
+		'keuze_soort' => array(T::Enumeration, false, KetzerSelectorSoort::class)
 	);
 	/**
 	 * Database table name
@@ -53,7 +54,7 @@ class KetzerSelector extends PersistentEntity {
 
 	/**
 	 * Lazy loading by foreign key.
-	 * 
+	 *
 	 * @return KetzerOptie[]
 	 */
 	public function getOpties() {

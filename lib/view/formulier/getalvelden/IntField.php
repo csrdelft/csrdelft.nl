@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\getalvelden;
+
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\invoervelden\InputField;
@@ -59,7 +61,7 @@ JS;
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_NUMBER_INT);
 			if ($this->value !== '') {
-				$this->value = (int) $this->value;
+				$this->value = (int)$this->value;
 			}
 		}
 		if ($this->empty_null AND $this->value == '' AND $this->value !== 0) {
@@ -92,7 +94,7 @@ JS;
 
 	public function getHtml($showButtons = true) {
 		$html = '';
-		if (!$this->readonly AND ! $this->hidden) {
+		if (!$this->readonly AND !$this->hidden) {
 			$class = 'fa fa-minus lichtgrijs';
 			if ($this->min !== null AND $this->getValue() === $this->min) {
 				$class .= ' disabled"';
@@ -136,7 +138,7 @@ JS;
 
 		$html .= ' <input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'pattern', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'min', 'max', 'step')) . ' /> ';
 
-		if (!$this->readonly AND ! $this->hidden) {
+		if (!$this->readonly AND !$this->hidden) {
 			$class = 'fa fa-plus lichtgrijs';
 			if ($this->max !== null AND $this->getValue() === $this->max) {
 				$class .= ' disabled';

@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\fotoalbum;
 
 use CsrDelft\common\CsrException;
@@ -86,7 +87,7 @@ class FotoAlbumModel extends PersistenceModel {
 			return null;
 		}
 		if (AccountModel::isValidUid($path) AND ProfielModel::existsUid($path)) {
-						$album = new FotoTagAlbum($path);
+			$album = new FotoTagAlbum($path);
 		} else {
 			$album = new FotoAlbum($path);
 		}
@@ -124,8 +125,7 @@ class FotoAlbumModel extends PersistenceModel {
 					if (false === @chmod($path, 0755)) {
 						throw new CsrException('Geen eigenaar van album: ' . $path);
 					}
-				}
-				// Foto
+				} // Foto
 				else {
 					$filename = basename($path);
 					if ($filename === 'Thumbs.db') {
@@ -204,7 +204,7 @@ HTML;
 			$this->create($subdir);
 		}
 		foreach ($this->fotoModel->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
-		    /** @var Foto $foto */
+			/** @var Foto $foto */
 			$oldUUID = $foto->getUUID();
 			// updaten gaat niet vanwege primary key
 			$this->fotoModel->delete($foto);
@@ -269,7 +269,7 @@ HTML;
 
 	public function opschonen(FotoAlbum $fotoalbum) {
 		foreach ($this->find('subdir LIKE ?', array($fotoalbum->subdir . '%')) as $album) {
-		    /** @var FotoAlbum $album */
+			/** @var FotoAlbum $album */
 			if (!$album->exists()) {
 				foreach ($this->fotoModel->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {
 					$this->fotoModel->delete($foto);

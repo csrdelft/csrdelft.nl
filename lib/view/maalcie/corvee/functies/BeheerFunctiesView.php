@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\corvee\functies;
+
 use CsrDelft\view\SmartyTemplateView;
 
 /**

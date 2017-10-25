@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\model\AbstractGroepenModel;

@@ -1,12 +1,14 @@
 <?php
+
 namespace CsrDelft\view;
+
 use CsrDelft\model\entity\MenuItem;
 
 /**
  * MenuView.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Tonen van een menu waarbij afhankelijk van
  * de rechten van de gebruiker menu items wel
  * of niet worden getoond.

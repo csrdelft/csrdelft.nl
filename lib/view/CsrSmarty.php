@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view;
+
 use CsrDelft\Orm\Persistence\Database;
 use Smarty;
 
@@ -18,7 +20,7 @@ class CsrSmarty extends Smarty {
 
 	/**
 	 * Get singleton CsrSmarty instance.
-	 * 
+	 *
 	 * @return CsrSmarty
 	 */
 	public static function instance() {

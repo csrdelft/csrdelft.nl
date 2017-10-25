@@ -11,5 +11,5 @@ use CsrDelft\Orm\PersistenceModel;
  * @author G.J.W. Oolbekkink Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class GoogleTokenModel extends PersistenceModel {
-    const ORM = GoogleToken::class;
+	const ORM = GoogleToken::class;
 }

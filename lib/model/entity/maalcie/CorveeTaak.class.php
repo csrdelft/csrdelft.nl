@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\maalcie;
+
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\InstellingenModel;
@@ -9,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
- * CorveeTaak.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * CorveeTaak.class.php  |  P.W.G. Brussee (brussee@live.nl)
  *
  *
  * Een crv_taak instantie beschrijft een taak die een lid moet uitvoeren of (niet) uitgevoerd heeft als volgt:
@@ -88,8 +90,8 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 		for ($i = intval(InstellingenModel::get('corvee', 'herinnering_aantal_mails')); $i > 0; $i--) {
 
 			if ($aantal < $i &&
-					$nu >= strtotime(InstellingenModel::get('corvee', 'herinnering_' . $i . 'e_mail'), $datum) &&
-					$nu <= strtotime(InstellingenModel::get('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk'), $datum)
+				$nu >= strtotime(InstellingenModel::get('corvee', 'herinnering_' . $i . 'e_mail'), $datum) &&
+				$nu <= strtotime(InstellingenModel::get('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk'), $datum)
 			) {
 				return true;
 			}

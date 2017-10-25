@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\corvee\taken;
+
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\view\SmartyTemplateView;
 
@@ -42,7 +44,7 @@ class BeheerTakenView extends SmartyTemplateView {
 			if (!array_key_exists($datum, $this->model)) {
 				$this->model[$datum] = array();
 			}
-			$this->model[$datum][	$taak->functie_id][] = $taak;
+			$this->model[$datum][$taak->functie_id][] = $taak;
 		}
 
 		$this->smarty->assign('prullenbak', $this->prullenbak);

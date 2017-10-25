@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
@@ -17,7 +18,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 
 
 /**
- * MaaltijdAanmeldingenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MaaltijdAanmeldingenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
  *
  */
 class MaaltijdAanmeldingenModel extends PersistenceModel {
@@ -43,7 +44,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 			$verschil = $aantalGasten - $aanmelding->aantal_gasten;
 			$aanmelding->aantal_gasten = $aantalGasten;
 			$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
-            $this->update($aanmelding);
+			$this->update($aanmelding);
 			$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
 		} else {
 			$aanmelding = new MaaltijdAanmelding();
@@ -109,7 +110,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 		$aantal = 0;
 		foreach ($aanmeldingen as $mid => $aanmelding) {
 			if ($mrid === $aanmelding->door_abonnement) {
-                $this->deleteByPrimaryKey(array($mid, $uid));
+				$this->deleteByPrimaryKey(array($mid, $uid));
 				$aantal++;
 			}
 		}
@@ -189,7 +190,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 	 * @return MaaltijdAanmelding[]
 	 */
 	public function getAanmeldingenVoorMaaltijd(Maaltijd $maaltijd) {
-        $aanmeldingen = $this->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
+		$aanmeldingen = $this->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
 			$aanmelding->maaltijd = $maaltijd;
@@ -217,8 +218,8 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 
 		$aanmeldingen = array();
 		foreach ($maaltijdenById as $maaltijd) {
-            $aanmeldingen = array_merge($aanmeldingen, $this->find('maaltijd_id = ? AND uid = ?', array($maaltijd->maaltijd_id, $uid))->fetchAll());
-        }
+			$aanmeldingen = array_merge($aanmeldingen, $this->find('maaltijd_id = ? AND uid = ?', array($maaltijd->maaltijd_id, $uid))->fetchAll());
+		}
 
 		$result = array();
 		foreach ($aanmeldingen as $aanmelding) {
@@ -237,7 +238,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 	}
 
 	public function loadAanmelding($mid, $uid) {
-        $aanmelding = $this->retrieveByPrimaryKey(array($mid, $uid));
+		$aanmelding = $this->retrieveByPrimaryKey(array($mid, $uid));
 		if ($aanmelding === false) {
 			throw new CsrGebruikerException('Load aanmelding faalt: Not found $mid =' . $mid);
 		}

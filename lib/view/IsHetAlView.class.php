@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view;
 
 use CsrDelft\model\agenda\AgendaModel;
@@ -28,9 +29,9 @@ class IsHetAlView implements View {
 	 * @var array
 	 */
 	public static $wistudat = array(
-		'u de webstek geheel naar wens kan instellen?'	 => '/instellingen',
-		'u de C.S.R.-agenda kan importeren met ICAL?'	 => '/profiel#agenda',
-		'u het forum kan volgen met RSS?'				 => '/profiel#forum'
+		'u de webstek geheel naar wens kan instellen?' => '/instellingen',
+		'u de C.S.R.-agenda kan importeren met ICAL?' => '/profiel#agenda',
+		'u het forum kan volgen met RSS?' => '/profiel#forum'
 	);
 
 	public function __construct($ishetal) {
@@ -56,13 +57,16 @@ class IsHetAlView implements View {
 				}
 				break;
 
-			case 'jarig': $this->ja = LoginModel::getProfiel()->getJarigOver();
+			case 'jarig':
+				$this->ja = LoginModel::getProfiel()->getJarigOver();
 				break;
 
-			case 'lunch': $this->ja = (date('Hi') > '1230' AND date('Hi') < '1330');
+			case 'lunch':
+				$this->ja = (date('Hi') > '1230' AND date('Hi') < '1330');
 				break;
 
-			case 'weekend': $this->ja = (date('w') == 0 OR date('w') > 5 OR ( date('w') == 5 AND date('Hi') > '1700'));
+			case 'weekend':
+				$this->ja = (date('w') == 0 OR date('w') > 5 OR (date('w') == 5 AND date('Hi') > '1700'));
 				break;
 
 			case 'studeren':
@@ -80,12 +84,12 @@ class IsHetAlView implements View {
 				$this->ja = null;
 				break;
 
-            case 'foutmelding':
-                $this->ja = null;
-                break;
+			case 'foutmelding':
+				$this->ja = null;
+				break;
 
 			default:
-								$vandaag = AgendaModel::instance()->zoekWoordAgenda($this->model);
+				$vandaag = AgendaModel::instance()->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
 					$this->ja = true;
 					/*
@@ -136,9 +140,9 @@ class IsHetAlView implements View {
 				echo 'Is er een ' . $this->model . ' vanavond?';
 				break;
 
-            case 'foutmelding':
-                echo sprintf('<div class="ja"><abbr class="timeago" title="%s"></abbr></div><div>sinds de laatste foutmelding!</div>', date('c', filemtime(DATA_PATH . 'foutmelding.last')));
-                break;
+			case 'foutmelding':
+				echo sprintf('<div class="ja"><abbr class="timeago" title="%s"></abbr></div><div>sinds de laatste foutmelding!</div>', date('c', filemtime(DATA_PATH . 'foutmelding.last')));
+				break;
 
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);

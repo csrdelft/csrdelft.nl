@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\fiscaat\saldo;
 
 use CsrDelft\model\entity\fiscaat\CiviSaldo;

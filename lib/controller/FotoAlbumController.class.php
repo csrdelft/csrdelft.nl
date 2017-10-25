@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
@@ -39,25 +40,25 @@ class FotoAlbumController extends AclController {
 		parent::__construct($query, FotoAlbumModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'bekijken'	 => 'P_ALBUM_READ',
-				'download'	 => 'P_ALBUM_READ',
+				'bekijken' => 'P_ALBUM_READ',
+				'download' => 'P_ALBUM_READ',
 				'downloaden' => 'P_ALBUM_DOWN',
-				'verwerken'	 => 'P_ALBUM_MOD',
-				'uploaden'	 => 'P_ALBUM_ADD',
-				'zoeken'	 => 'P_LEDEN_READ'
+				'verwerken' => 'P_ALBUM_MOD',
+				'uploaden' => 'P_ALBUM_ADD',
+				'zoeken' => 'P_LEDEN_READ'
 			);
 		} else {
 			$this->acl = array(
-				'albumcover'	 => 'P_ALBUM_ADD',
-				'verwijderen'	 => 'P_ALBUM_ADD',
-				'hernoemen'		 => 'P_ALBUM_ADD',
-				'roteren'		 => 'P_ALBUM_ADD',
-				'toevoegen'		 => 'P_ALBUM_ADD',
-				'bestaande'		 => 'P_ALBUM_ADD',
-				'uploaden'		 => 'P_ALBUM_ADD',
-				'gettags'		 => 'P_LEDEN_READ',
-				'addtag'		 => 'P_LEDEN_READ',
-				'removetag'		 => 'P_LEDEN_READ'
+				'albumcover' => 'P_ALBUM_ADD',
+				'verwijderen' => 'P_ALBUM_ADD',
+				'hernoemen' => 'P_ALBUM_ADD',
+				'roteren' => 'P_ALBUM_ADD',
+				'toevoegen' => 'P_ALBUM_ADD',
+				'bestaande' => 'P_ALBUM_ADD',
+				'uploaden' => 'P_ALBUM_ADD',
+				'gettags' => 'P_LEDEN_READ',
+				'addtag' => 'P_LEDEN_READ',
+				'removetag' => 'P_LEDEN_READ'
 			);
 		}
 	}
@@ -247,7 +248,7 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function hernoemen(FotoAlbum $album) {
-		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $album->isOwner()) {
+		if (!LoginModel::mag('P_ALBUM_MOD') AND !$album->isOwner()) {
 			$this->exit_http(403);
 		}
 		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
@@ -259,7 +260,7 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function albumcover(FotoAlbum $album) {
-		if (!LoginModel::mag('P_ALBUM_MOD') AND ! $album->isOwner()) {
+		if (!LoginModel::mag('P_ALBUM_MOD') AND !$album->isOwner()) {
 			$this->exit_http(403);
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
@@ -284,7 +285,7 @@ class FotoAlbumController extends AclController {
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
-		if (!$foto->exists() OR ! LoginModel::mag('P_ALBUM_DEL') AND ! $foto->isOwner()) {
+		if (!$foto->exists() OR !LoginModel::mag('P_ALBUM_DEL') AND !$foto->isOwner()) {
 			$this->exit_http(403);
 		}
 		if (FotoModel::instance()->verwijderFoto($foto)) {
@@ -298,10 +299,10 @@ class FotoAlbumController extends AclController {
 	public function roteren(FotoAlbum $album) {
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
-		if (!$foto->exists() OR ! LoginModel::mag('P_ALBUM_MOD') AND ! $foto->isOwner()) {
+		if (!$foto->exists() OR !LoginModel::mag('P_ALBUM_MOD') AND !$foto->isOwner()) {
 			$this->exit_http(403);
 		}
-		$degrees = (int) filter_input(INPUT_POST, 'rotation', FILTER_SANITIZE_NUMBER_INT);
+		$degrees = (int)filter_input(INPUT_POST, 'rotation', FILTER_SANITIZE_NUMBER_INT);
 		$foto->rotate($degrees);
 		$this->view = new JsonResponse(true);
 	}
@@ -313,15 +314,15 @@ class FotoAlbumController extends AclController {
 		$query = iconv('utf-8', 'ascii//TRANSLIT', $this->getParam('q')); // convert accented characters to regular
 		$limit = 5;
 		if ($this->hasParam('limit')) {
-			$limit = (int) $this->getParam('limit');
+			$limit = (int)$this->getParam('limit');
 		}
 		$result = array();
 		foreach ($this->model->find('replace(subdir, "é", "e") REGEXP ?', array($query . '[^/]*[/]{1}$'), null, 'subdir DESC', $limit) as $album) {
 			/** @var FotoAlbum $album */
 			$result[] = array(
-				'url'	 => $album->getUrl(),
-				'label'	 => $album->getParentName(),
-				'value'	 => ucfirst($album->dirname)
+				'url' => $album->getUrl(),
+				'label' => $album->getParentName(),
+				'value' => ucfirst($album->dirname)
 			);
 		}
 		$this->view = new JsonResponse($result);
@@ -362,7 +363,7 @@ class FotoAlbumController extends AclController {
 	public function removetag() {
 		$refuuid = filter_input(INPUT_POST, 'refuuid', FILTER_SANITIZE_STRING);
 		$keyword = filter_input(INPUT_POST, 'keyword', FILTER_SANITIZE_STRING);
-		if (!LoginModel::mag('P_ALBUM_MOD') AND ! LoginModel::mag($keyword)) {
+		if (!LoginModel::mag('P_ALBUM_MOD') AND !LoginModel::mag($keyword)) {
 			$this->exit_http(403);
 		}
 		FotoTagsModel::instance()->removeTag($refuuid, $keyword);

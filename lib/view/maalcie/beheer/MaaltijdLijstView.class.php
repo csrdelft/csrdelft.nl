@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\beheer;
+
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\view\CompressedLayout;

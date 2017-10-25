@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\controller\framework;
+
 use CsrDelft\common\CsrException;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
@@ -190,8 +192,7 @@ abstract class Controller {
 		$action = $this->getMethod() . '_' . $this->action;
 		if ($this->hasAction($action)) {
 			$this->action = $action;
-		}
-		// Controleer of de actie bestaat
+		} // Controleer of de actie bestaat
 		elseif (!$this->hasAction($this->action)) {
 			throw new CsrException('Action undefined: ' . $this->action);
 		}
@@ -202,8 +203,7 @@ abstract class Controller {
 		http_response_code($response_code);
 		if ($this->getMethod() == 'POST') {
 			die($response_code);
-		}
-		// Redirect to login form
+		} // Redirect to login form
 		elseif (LoginModel::getUid() === 'x999') {
 			setGoBackCookie(REQUEST_URI);
 			redirect(CSR_ROOT . "#login");

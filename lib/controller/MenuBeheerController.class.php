@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
@@ -28,10 +29,10 @@ class MenuBeheerController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'toevoegen'		 => 'P_LOGGED_IN',
-				'bewerken'		 => 'P_LOGGED_IN',
-				'verwijderen'	 => 'P_LOGGED_IN',
-				'zichtbaar'		 => 'P_LOGGED_IN'
+				'toevoegen' => 'P_LOGGED_IN',
+				'bewerken' => 'P_LOGGED_IN',
+				'verwijderen' => 'P_LOGGED_IN',
+				'zichtbaar' => 'P_LOGGED_IN'
 			);
 		}
 	}
@@ -45,11 +46,11 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function beheer($menu_name = 'main') {
-		if ($menu_name != LoginModel::getUid() AND ! LoginModel::mag('P_ADMIN')) {
+		if ($menu_name != LoginModel::getUid() AND !LoginModel::mag('P_ADMIN')) {
 			$this->exit_http(403);
 		}
 		$root = $this->model->getMenu($menu_name);
-		if (!$root OR ! $root->magBeheren()) {
+		if (!$root OR !$root->magBeheren()) {
 			$this->exit_http(403);
 		}
 		$body = new MenuBeheerView($root);
@@ -61,13 +62,13 @@ class MenuBeheerController extends AclController {
 		if ($parent_id == 'favoriet') {
 			$parent = $this->model->getMenuRoot(LoginModel::getUid());
 		} else {
-			$parent = $this->model->getMenuItem((int) $parent_id);
+			$parent = $this->model->getMenuItem((int)$parent_id);
 		}
-		if (!$parent OR ! $parent->magBeheren()) {
+		if (!$parent OR !$parent->magBeheren()) {
 			$this->exit_http(403);
 		}
 		$item = $this->model->nieuw($parent->item_id);
-		if (!$item OR ! $item->magBeheren()) {
+		if (!$item OR !$item->magBeheren()) {
 			$this->exit_http(403);
 		}
 		$form = new MenuItemForm($item, $this->action, $parent_id); // fetches POST values itself
@@ -81,8 +82,8 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function bewerken($item_id) {
-		$item = $this->model->getMenuItem((int) $item_id);
-		if (!$item OR ! $item->magBeheren()) {
+		$item = $this->model->getMenuItem((int)$item_id);
+		if (!$item OR !$item->magBeheren()) {
 			$this->exit_http(403);
 		}
 		$form = new MenuItemForm($item, $this->action, $item->item_id); // fetches POST values itself
@@ -100,8 +101,8 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function verwijderen($item_id) {
-		$item = $this->model->getMenuItem((int) $item_id);
-		if (!$item OR ! $item->magBeheren()) {
+		$item = $this->model->getMenuItem((int)$item_id);
+		if (!$item OR !$item->magBeheren()) {
 			$this->exit_http(403);
 		}
 		$rowCount = $this->model->removeMenuItem($item);
@@ -113,8 +114,8 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function zichtbaar($item_id) {
-		$item = $this->model->getMenuItem((int) $item_id);
-		if (!$item OR ! $item->magBeheren()) {
+		$item = $this->model->getMenuItem((int)$item_id);
+		if (!$item OR !$item->magBeheren()) {
 			$this->exit_http(403);
 		}
 		$item->zichtbaar = !$item->zichtbaar;

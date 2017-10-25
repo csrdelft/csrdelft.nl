@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model;
+
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\DebugLogEntry;
 use CsrDelft\model\security\LoginModel;

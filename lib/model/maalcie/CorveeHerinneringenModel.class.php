@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;

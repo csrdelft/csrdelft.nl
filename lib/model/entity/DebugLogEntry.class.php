@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\entity;
 
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -61,10 +62,10 @@ class DebugLogEntry extends PersistentEntity {
 	 * @var string
 	 */
 	public $request;
-    /**
-     * Referer
-     * @var string
-     */
+	/**
+	 * Referer
+	 * @var string
+	 */
 	public $referer;
 	/**
 	 * User agent
@@ -76,17 +77,17 @@ class DebugLogEntry extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'id'			 => array(T::Integer, false, 'auto_increment'),
+		'id' => array(T::Integer, false, 'auto_increment'),
 		'class_function' => array(T::String),
-		'dump'			 => array(T::LongText, true),
-		'call_trace'	 => array(T::Text),
-		'moment'		 => array(T::DateTime),
-		'uid'			 => array(T::UID, true),
-		'su_uid'		 => array(T::UID, true),
-		'ip'			 => array(T::String),
-		'request'		 => array(T::String),
-		'referer'		 => array(T::String, true),
-		'user_agent'	 => array(T::String)
+		'dump' => array(T::LongText, true),
+		'call_trace' => array(T::Text),
+		'moment' => array(T::DateTime),
+		'uid' => array(T::UID, true),
+		'su_uid' => array(T::UID, true),
+		'ip' => array(T::String),
+		'request' => array(T::String),
+		'referer' => array(T::String, true),
+		'user_agent' => array(T::String)
 	);
 	/**
 	 * Database primary key

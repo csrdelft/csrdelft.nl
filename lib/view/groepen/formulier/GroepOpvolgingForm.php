@@ -9,27 +9,26 @@ use CsrDelft\view\formulier\keuzevelden\RadioField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
-class GroepOpvolgingForm extends ModalForm
-{
+class GroepOpvolgingForm extends ModalForm {
 
-    public function __construct(
-        AbstractGroep $groep,
-        $action
-    ) {
-        parent::__construct($groep, $action, 'Opvolging instellen', true);
+	public function __construct(
+		AbstractGroep $groep,
+		$action
+	) {
+		parent::__construct($groep, $action, 'Opvolging instellen', true);
 
-        $fields['fam'] = new TextField('familie', $groep->familie, 'Familienaam');
-        $fields['fam']->suggestions[] = $groep->getFamilieSuggesties();
+		$fields['fam'] = new TextField('familie', $groep->familie, 'Familienaam');
+		$fields['fam']->suggestions[] = $groep->getFamilieSuggesties();
 
-        $options = array();
-        foreach (GroepStatus::getTypeOptions() as $status) {
-            $options[$status] = GroepStatus::getChar($status);
-        }
-        $fields[] = new RadioField('status', $groep->status, Groepstatus::class, $options);
+		$options = array();
+		foreach (GroepStatus::getTypeOptions() as $status) {
+			$options[$status] = GroepStatus::getChar($status);
+		}
+		$fields[] = new RadioField('status', $groep->status, Groepstatus::class, $options);
 
-        $fields[] = new FormDefaultKnoppen();
+		$fields[] = new FormDefaultKnoppen();
 
-        $this->addFields($fields);
-    }
+		$this->addFields($fields);
+	}
 
 }

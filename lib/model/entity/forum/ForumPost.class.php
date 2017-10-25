@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\forum;
+
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -7,11 +9,11 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * ForumPost.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een forumpost zit in een ForumDraad.
- * 
+ *
  */
 class ForumPost extends PersistentEntity {
 
@@ -80,16 +82,16 @@ class ForumPost extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'post_id'			 => array(T::Integer, false, 'auto_increment'),
-		'draad_id'			 => array(T::Integer),
-		'uid'				 => array(T::UID),
-		'tekst'				 => array(T::Text),
-		'datum_tijd'		 => array(T::DateTime),
-		'laatst_gewijzigd'	 => array(T::DateTime),
-		'bewerkt_tekst'		 => array(T::Text, true),
-		'verwijderd'		 => array(T::Boolean),
-		'auteur_ip'			 => array(T::String),
-		'wacht_goedkeuring'	 => array(T::Boolean)
+		'post_id' => array(T::Integer, false, 'auto_increment'),
+		'draad_id' => array(T::Integer),
+		'uid' => array(T::UID),
+		'tekst' => array(T::Text),
+		'datum_tijd' => array(T::DateTime),
+		'laatst_gewijzigd' => array(T::DateTime),
+		'bewerkt_tekst' => array(T::Text, true),
+		'verwijderd' => array(T::Boolean),
+		'auteur_ip' => array(T::String),
+		'wacht_goedkeuring' => array(T::Boolean)
 	);
 	/**
 	 * Database primary key

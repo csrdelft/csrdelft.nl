@@ -28,6 +28,7 @@
  *
  * @return   string
  */
+
 use CsrDelft\Knop;
 
 function smarty_function_knop($params, &$smarty) {

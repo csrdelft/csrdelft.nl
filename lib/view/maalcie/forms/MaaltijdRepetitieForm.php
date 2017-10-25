@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\forms;
+
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\fiscaat\CiviProductModel;
@@ -26,10 +28,10 @@ use CsrDelft\view\formulier\ModalForm;
  */
 class MaaltijdRepetitieForm extends ModalForm {
 
-    /**
-     * MaaltijdRepetitieForm constructor.
-     * @param $model MaaltijdRepetitie
-     */
+	/**
+	 * MaaltijdRepetitieForm constructor.
+	 * @param $model MaaltijdRepetitie
+	 */
 	public function __construct($model, $verplaats = null) {
 		parent::__construct($model, maalcieUrl . '/opslaan/' . $model->mlt_repetitie_id);
 

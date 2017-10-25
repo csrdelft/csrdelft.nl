@@ -1,13 +1,14 @@
 <?php
+
 namespace CsrDelft\view;
 
 /**
  * HtmlPage.abstract.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een HTML pagina met stylesheets en scripts.
- * 
+ *
  */
 abstract class HtmlPage implements View {
 
@@ -23,7 +24,7 @@ abstract class HtmlPage implements View {
 	protected $titel;
 	/**
 	 * <CSS>
-	 * @var array 
+	 * @var array
 	 */
 	private $stylesheets = array();
 	/**

@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
@@ -38,7 +39,7 @@ class FunctiesModel extends CachedPersistenceModel {
 
 	public function nieuw() {
 		$functie = new CorveeFunctie();
-		$functie->kwalificatie_benodigd = (boolean) InstellingenModel::get('corvee', 'standaard_kwalificatie');
+		$functie->kwalificatie_benodigd = (boolean)InstellingenModel::get('corvee', 'standaard_kwalificatie');
 		return $functie;
 	}
 

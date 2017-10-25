@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\formulier\invoervelden;
 /**
  * RequiredUrlField.class.php

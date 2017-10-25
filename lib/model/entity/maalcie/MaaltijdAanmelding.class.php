@@ -1,12 +1,14 @@
 <?php
+
 namespace CsrDelft\model\entity\maalcie;
+
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
- * MaaltijdAanmelding.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MaaltijdAanmelding.class.php  |  P.W.G. Brussee (brussee@live.nl)
  *
  *
  * Een mlt_aanmelding instantie beschrijft een individuele aanmelding van een lid voor een maaltijd als volgt:
@@ -27,7 +29,7 @@ use CsrDelft\Orm\Entity\T;
  * Zie ook MaaltijdAbonnement.class.php
  *
  */
-class MaaltijdAanmelding extends PersistentEntity  {
+class MaaltijdAanmelding extends PersistentEntity {
 	# shared primary key
 
 	public $maaltijd_id; # foreign key maaltijd.id
@@ -93,25 +95,30 @@ class MaaltijdAanmelding extends PersistentEntity  {
 		$status = $this->getSaldoStatus();
 		$prijs = sprintf('%.2f', $this->getMaaltijd()->getPrijsFloat());
 		switch ($status) {
-			case 3: return 'ok';
-			case 2: return $prijs;
-			case 1: return '&lt; ' . $prijs;
-			case 0: return '0';
-			case -1: return '&lt; 0';
+			case 3:
+				return 'ok';
+			case 2:
+				return $prijs;
+			case 1:
+				return '&lt; ' . $prijs;
+			case 0:
+				return '0';
+			case -1:
+				return '&lt; 0';
 		}
 	}
 
-    protected static $table_name = 'mlt_aanmeldingen';
-    protected static $persistent_attributes = array(
-        'maaltijd_id' => array(T::Integer),
-        'uid' => array(T::UID),
-        'aantal_gasten' => array(T::Integer),
-        'gasten_eetwens' => array(T::String, true),
-        'door_abonnement' => array(T::Integer, true),
-        'door_uid' => array(T::UID, true),
-        'laatst_gewijzigd' => array(T::DateTime),
-    );
+	protected static $table_name = 'mlt_aanmeldingen';
+	protected static $persistent_attributes = array(
+		'maaltijd_id' => array(T::Integer),
+		'uid' => array(T::UID),
+		'aantal_gasten' => array(T::Integer),
+		'gasten_eetwens' => array(T::String, true),
+		'door_abonnement' => array(T::Integer, true),
+		'door_uid' => array(T::UID, true),
+		'laatst_gewijzigd' => array(T::DateTime),
+	);
 
-    protected static $primary_key = array('maaltijd_id', 'uid');
+	protected static $primary_key = array('maaltijd_id', 'uid');
 
 }

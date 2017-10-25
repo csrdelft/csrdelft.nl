@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\security;
+
 use CsrDelft\common\CsrGebruikerException;
 use function CsrDelft\crypto_rand_token;
 use function CsrDelft\getDateTime;
@@ -157,10 +159,18 @@ class AccountModel extends CachedPersistenceModel {
 		 * @source OWASP best-practice
 		 */
 		switch ($account->failed_login_attempts) {
-			case 0: $wacht = 0; break;
-			case 1: $wacht = 5; break;
-			case 2: $wacht = 15; break;
-			default: $wacht = 45; break;
+			case 0:
+				$wacht = 0;
+				break;
+			case 1:
+				$wacht = 5;
+				break;
+			case 2:
+				$wacht = 15;
+				break;
+			default:
+				$wacht = 45;
+				break;
 		}
 		$diff = strtotime($account->last_login_attempt) + $wacht - time();
 		if ($diff > 0) {

@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\agenda;
+
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -60,14 +62,14 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'item_id'			 => array(T::Integer, false, 'auto_increment'),
-		'titel'				 => array(T::String),
-		'beschrijving'		 => array(T::Text, true),
-		'begin_moment'		 => array(T::DateTime),
-		'eind_moment'		 => array(T::DateTime),
-		'rechten_bekijken'	 => array(T::String),
-		'locatie'			 => array(T::String, true),
-		'link'				 => array(T::String, true)
+		'item_id' => array(T::Integer, false, 'auto_increment'),
+		'titel' => array(T::String),
+		'beschrijving' => array(T::Text, true),
+		'begin_moment' => array(T::DateTime),
+		'eind_moment' => array(T::DateTime),
+		'rechten_bekijken' => array(T::String),
+		'locatie' => array(T::String, true),
+		'link' => array(T::String, true)
 	);
 	/**
 	 * Database primary key
@@ -110,7 +112,7 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	public function isHeledag() {
 		$begin = date('H:i', $this->getBeginMoment());
 		$eind = date('H:i', $this->getEindMoment());
-		return $begin == '00:00' AND ( $eind == '23:59' OR $eind == '00:00' );
+		return $begin == '00:00' AND ($eind == '23:59' OR $eind == '00:00');
 	}
 
 	public function magBekijken($ical = false) {

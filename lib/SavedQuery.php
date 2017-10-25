@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft;
 
 # C.S.R. Delft | pubcie@csrdelft.nl
@@ -17,7 +18,7 @@ class SavedQuery {
 	private $resultCount = 0;
 
 	public function __construct($id) {
-		$this->queryID = (int) $id;
+		$this->queryID = (int)$id;
 		$this->load();
 	}
 

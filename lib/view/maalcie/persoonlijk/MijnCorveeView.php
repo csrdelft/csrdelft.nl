@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\persoonlijk;
+
 use CsrDelft\model\entity\maalcie\CorveeVrijstelling;
 use CsrDelft\view\SmartyTemplateView;
 

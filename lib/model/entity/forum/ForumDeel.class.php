@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\forum;
+
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumModel;
@@ -9,11 +11,11 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * ForumDeel.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een deelforum zit in een forumcategorie bevat ForumDraden.
- * 
+ *
  */
 class ForumDeel extends PersistentEntity {
 
@@ -67,14 +69,14 @@ class ForumDeel extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'forum_id'			 => array(T::Integer, false, 'auto_increment'),
-		'categorie_id'		 => array(T::Integer),
-		'titel'				 => array(T::String),
-		'omschrijving'		 => array(T::Text),
-		'rechten_lezen'		 => array(T::String),
-		'rechten_posten'	 => array(T::String),
-		'rechten_modereren'	 => array(T::String),
-		'volgorde'			 => array(T::Integer)
+		'forum_id' => array(T::Integer, false, 'auto_increment'),
+		'categorie_id' => array(T::Integer),
+		'titel' => array(T::String),
+		'omschrijving' => array(T::Text),
+		'rechten_lezen' => array(T::String),
+		'rechten_posten' => array(T::String),
+		'rechten_modereren' => array(T::String),
+		'volgorde' => array(T::Integer)
 	);
 	/**
 	 * Database primary key
@@ -110,7 +112,7 @@ class ForumDeel extends PersistentEntity {
 
 	/**
 	 * Lazy loading by foreign key.
-	 * 
+	 *
 	 * @return ForumDraad[]
 	 */
 	public function getForumDraden() {
@@ -127,7 +129,7 @@ class ForumDeel extends PersistentEntity {
 
 	/**
 	 * Public for search results and all sorts of prefetching.
-	 * 
+	 *
 	 * @param array $forum_draden
 	 */
 	public function setForumDraden(array $forum_draden) {

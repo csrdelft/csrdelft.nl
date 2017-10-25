@@ -4,6 +4,7 @@
  * @package Smarty
  * @subpackage plugins
  */
+
 use function CsrDelft\reldate;
 
 
@@ -25,6 +26,6 @@ use function CsrDelft\reldate;
  * @param bool
  * @return string
  */
-function smarty_modifier_reldate($datetime){
+function smarty_modifier_reldate($datetime) {
 	return reldate($datetime);
 }

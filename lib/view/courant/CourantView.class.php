@@ -1,13 +1,15 @@
 <?php
+
 namespace CsrDelft\view\courant;
+
 use CsrDelft\model\CourantModel;
 use CsrDelft\view\SmartyTemplateView;
 
 /**
  * CourantView.class.php
- * 
+ *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
- * 
+ *
  */
 class CourantView extends SmartyTemplateView {
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\Controller;
@@ -7,9 +8,9 @@ use CsrDelft\model\security\LoginModel;
 
 /**
  * GroepenRouterController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Router voor de groepen module.
  */
 class GroepenRouterController extends Controller {
@@ -41,7 +42,7 @@ class GroepenRouterController extends Controller {
 
 	/**
 	 * Check permissions & valid params in sub-controller.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	protected function mag($action, array $args) {

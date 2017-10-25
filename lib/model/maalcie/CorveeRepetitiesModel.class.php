@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrException;
@@ -11,7 +12,7 @@ use PDOStatement;
 
 
 /**
- * CorveeRepetitiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * CorveeRepetitiesModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
  *
  */
 class CorveeRepetitiesModel extends PersistenceModel {
@@ -19,7 +20,7 @@ class CorveeRepetitiesModel extends PersistenceModel {
 
 	public function nieuw($crid = 0, $mrid = null, $dag = null, $periode = null, $fid = 0, $punten = 0, $aantal = null, $voorkeur = null) {
 		$repetitie = new CorveeRepetitie();
-		$repetitie->crv_repetitie_id = (int) $crid;
+		$repetitie->crv_repetitie_id = (int)$crid;
 		$repetitie->mlt_repetitie_id = $mrid;
 		if ($dag === null) {
 			$dag = intval(InstellingenModel::get('corvee', 'standaard_repetitie_weekdag'));
@@ -36,7 +37,7 @@ class CorveeRepetitiesModel extends PersistenceModel {
 		}
 		$repetitie->standaard_aantal = $aantal;
 		if ($voorkeur === null) {
-			$voorkeur = (boolean) InstellingenModel::get('corvee', 'standaard_voorkeurbaar');
+			$voorkeur = (boolean)InstellingenModel::get('corvee', 'standaard_voorkeurbaar');
 		}
 		$repetitie->voorkeurbaar = $voorkeur;
 

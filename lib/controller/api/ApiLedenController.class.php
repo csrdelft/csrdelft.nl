@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\api;
 
 use CsrDelft\lid\LidZoeker;
@@ -23,12 +24,12 @@ class ApiLedenController {
 		$zoeker = new LidZoeker();
 		$leden = [];
 
-		foreach($zoeker->getLeden() as $profiel) {
+		foreach ($zoeker->getLeden() as $profiel) {
 			$leden[] = array(
-				'id'            => $profiel->uid,
-				'voornaam'      => $profiel->voornaam,
+				'id' => $profiel->uid,
+				'voornaam' => $profiel->voornaam,
 				'tussenvoegsel' => $profiel->tussenvoegsel,
-				'achternaam'    => $profiel->achternaam
+				'achternaam' => $profiel->achternaam
 			);
 		}
 
@@ -47,30 +48,30 @@ class ApiLedenController {
 
 		$woonoord = $profiel->getWoonoord();
 		$lid = array(
-			'id'               => $profiel->uid,
+			'id' => $profiel->uid,
 			'naam' => array(
-				'voornaam'       => $profiel->voornaam,
-				'tussenvoegsel'  => $profiel->tussenvoegsel,
-				'achternaam'     => $profiel->achternaam,
-				'formeel'        => $profiel->getNaam('civitas')
+				'voornaam' => $profiel->voornaam,
+				'tussenvoegsel' => $profiel->tussenvoegsel,
+				'achternaam' => $profiel->achternaam,
+				'formeel' => $profiel->getNaam('civitas')
 			),
-			'pasfoto'          => $profiel->getPasfotoPath(true),
-			'geboortedatum'    => $profiel->gebdatum,
-			'email'            => $profiel->email,
-			'mobiel'           => $profiel->mobiel,
+			'pasfoto' => $profiel->getPasfotoPath(true),
+			'geboortedatum' => $profiel->gebdatum,
+			'email' => $profiel->email,
+			'mobiel' => $profiel->mobiel,
 			'huis' => array(
-				'naam'           => $woonoord ? $woonoord->naam : null,
-				'adres'          => $profiel->adres,
-				'postcode'       => $profiel->postcode,
-				'woonplaats'     => $profiel->woonplaats,
-				'land'           => $profiel->land
+				'naam' => $woonoord ? $woonoord->naam : null,
+				'adres' => $profiel->adres,
+				'postcode' => $profiel->postcode,
+				'woonplaats' => $profiel->woonplaats,
+				'land' => $profiel->land
 			),
 			'studie' => array(
-				'naam'           => $profiel->studie,
-				'sinds'          => $profiel->studiejaar
+				'naam' => $profiel->studie,
+				'sinds' => $profiel->studiejaar
 			),
-			'lichting'         => $profiel->lidjaar,
-			'verticale'        => $profiel->getVerticale()->naam,
+			'lichting' => $profiel->lidjaar,
+			'verticale' => $profiel->getVerticale()->naam,
 		);
 
 		return array('data' => $lid);

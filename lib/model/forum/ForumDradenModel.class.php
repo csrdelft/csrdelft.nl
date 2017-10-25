@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\forum;
+
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use function CsrDelft\endsWith;

@@ -61,7 +61,7 @@ AND aantal = ?
 ORDER BY ABS(TIMEDIFF(moment, ?)) 
 LIMIT 1
 SQL
-);
+		);
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		$success = $statement->execute([$pinTransactie->getBedragInCenten(), $pinTransactie->datetime]);
 

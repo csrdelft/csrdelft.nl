@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\formulier;
 
 use function CsrDelft\classNameZonderNamespace;
@@ -34,7 +35,7 @@ class Formulier implements View, Validator {
 	protected $dataTableId;
 	protected $action = null;
 	public $post = true;
-    protected $error;
+	protected $error;
 	private $enctype = 'multipart/form-data';
 	/**
 	 * Fields must be added via addFields()
@@ -157,8 +158,8 @@ class Formulier implements View, Validator {
 					break;
 				case T::Text:
 				case T::LongText:
-				$namespace .= 'invoervelden';
-				$class .= 'TextareaField';
+					$namespace .= 'invoervelden';
+					$class .= 'TextareaField';
 					break;
 				case T::Enumeration:
 					$namespace .= 'keuzevelden';
@@ -166,7 +167,7 @@ class Formulier implements View, Validator {
 					break;
 				case T::UID:
 					$namespace .= 'invoervelden';
-					$class .='LidField';
+					$class .= 'LidField';
 					break;
 			}
 			$namespacedClass = $namespace . '\\' . $class;
@@ -239,7 +240,7 @@ class Formulier implements View, Validator {
 	 */
 	public function isPosted() {
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField AND ! $field->isPosted()) {
+			if ($field instanceof InputField AND !$field->isPosted()) {
 				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}
@@ -257,7 +258,7 @@ class Formulier implements View, Validator {
 		}
 		$valid = true;
 		foreach ($this->fields as $field) {
-			if ($field instanceof Validator AND ! $field->validate()) { // geen comments bijv.
+			if ($field instanceof Validator AND !$field->validate()) { // geen comments bijv.
 				$valid = false; // niet gelijk retourneren om voor alle velden eventueel errors te zetten
 			}
 		}
@@ -345,9 +346,9 @@ HTML;
 		if (!empty($titel)) {
 			echo '<h1 class="Titel">' . $titel . '</h1>';
 		}
-        if (isset($this->error)) {
-            echo '<span class="error">' . $this->error . '</span>';
-        }
+		if (isset($this->error)) {
+			echo '<span class="error">' . $this->error . '</span>';
+		}
 		//debugprint($this->getError()); //DEBUG
 		foreach ($this->fields as $field) {
 			$field->view();
@@ -362,7 +363,7 @@ HTML;
 	 * @returns ChangeLogEntry[]
 	 */
 	public function diff() {
-				$diff = array();
+		$diff = array();
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof InputField) {
 				$old = $field->getOrigValue();

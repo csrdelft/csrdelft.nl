@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\peilingen;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -7,7 +9,7 @@ use CsrDelft\Orm\Entity\T;
  * Class PeilingStem
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * 
+ *
  */
 class PeilingStem extends PersistentEntity {
 
@@ -26,8 +28,8 @@ class PeilingStem extends PersistentEntity {
 	public $uid;
 
 	protected static $persistent_attributes = array(
-		'peiling_id'	=> array(T::Integer),
-		'uid'			=> array(T::UID)
+		'peiling_id' => array(T::Integer),
+		'uid' => array(T::UID)
 	);
 
 	protected static $primary_key = array('peiling_id', 'uid');

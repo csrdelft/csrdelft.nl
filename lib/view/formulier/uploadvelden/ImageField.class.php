@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\uploadvelden;
+
 use function CsrDelft\debugprint;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Map;

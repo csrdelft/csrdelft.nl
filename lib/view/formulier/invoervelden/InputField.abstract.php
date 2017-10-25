@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\invoervelden;
+
 use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;

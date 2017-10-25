@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model;
 
 use CsrDelft\model\entity\groepen\AbstractGroep;
@@ -92,7 +93,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 		$ft = BesturenModel::instance()->find('status = ?', array(GroepStatus::FT), null, null, 1)->fetch();
 		$ht = BesturenModel::instance()->find('status = ?', array(GroepStatus::HT), null, null, 1)->fetch();
 		$ot = BesturenModel::instance()->find('status = ?', array(GroepStatus::OT), null, null, 1)->fetch();
-		if (($ft AND $ft->getLid($uid)) OR ( $ht AND $ht->getLid($uid)) OR ( $ot AND $ot->getLid($uid))) {
+		if (($ft AND $ft->getLid($uid)) OR ($ht AND $ht->getLid($uid)) OR ($ot AND $ot->getLid($uid))) {
 			$result[] = 'bestuur';
 		}
 		foreach (CommissieLedenModel::instance()->prefetch('uid = ?', array($uid)) as $commissielid) {
@@ -126,7 +127,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 * @return void
 	 */
 	public function create(PersistentEntity $groep) {
-		$groep->id = (int) parent::create($groep);
+		$groep->id = (int)parent::create($groep);
 	}
 
 	/**

@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft;
+
 use CsrDelft\lid\LidZoeker;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\ProfielModel;
@@ -42,8 +44,8 @@ class Streeplijstcontent implements View {
 		}
 		$this->parseGoederen($sGoederen);
 
-		if (isset($_GET['moot']) AND (int) $_GET['moot'] == $_GET['moot']) {
-			$this->sVerticale = (int) $_GET['moot'];
+		if (isset($_GET['moot']) AND (int)$_GET['moot'] == $_GET['moot']) {
+			$this->sVerticale = (int)$_GET['moot'];
 		}
 		if (isset($_GET['lichting']) AND preg_match('/^\d{2}$/', $_GET['lichting']) == 1) {
 			$this->sLidjaar = $_GET['lichting'];
@@ -107,7 +109,7 @@ class Streeplijstcontent implements View {
 			$sKop .= '<td class="cell';
 			//switch the row coloring..
 			if (isset($_GET['colorCols'])) {
-				$sKop.=($i % 2);
+				$sKop .= ($i % 2);
 			} else {
 				$sKop .= '0';
 			}
@@ -117,12 +119,12 @@ class Streeplijstcontent implements View {
 		$sKop .= '</tr></thead>';
 
 		//eerte header weergeven.
-		$sReturn.=$sKop;
+		$sReturn .= $sKop;
 
 		$iTeller = 2;
 		foreach ($this->aLeden as $aLid) {
 			if ($iTeller % 43 == 1) {
-				$sReturn.=$sKop . '</tr></table>';
+				$sReturn .= $sKop . '</tr></table>';
 				$sReturn .= '<span class="breekpunt"></span>';
 				$sReturn .= '<table><tr>' . $sKop;
 			}
@@ -133,7 +135,7 @@ class Streeplijstcontent implements View {
 			$sReturn .= '</tr>' . "\r\n";
 			$iTeller++;
 		}
-		$sReturn.=$sKop;
+		$sReturn .= $sKop;
 		$sReturn .= '</table>';
 
 		return $sReturn;
@@ -145,7 +147,7 @@ class Streeplijstcontent implements View {
 
 	function getUrl() {
 		$sReturn = 'streeplijst.php?goederen=' . urlencode($this->getGoederen()) .
-				'&moot=' . $this->sVerticale . '&lichting=' . $this->sLidjaar . '&';
+			'&moot=' . $this->sVerticale . '&lichting=' . $this->sLidjaar . '&';
 		if (isset($_GET['colorCols'])) {
 			$sReturn .= 'colorCols&';
 		}

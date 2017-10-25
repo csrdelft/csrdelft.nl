@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
@@ -21,9 +22,9 @@ use function CsrDelft\getDateTime;
 
 /**
  * GesprekkenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Controller van de chat-functie.
  */
 class GesprekkenController extends AclController {
@@ -37,11 +38,11 @@ class GesprekkenController extends AclController {
 		} else {
 			$this->acl = array(
 				'gesprekken' => 'P_LOGGED_IN',
-				'start'		 => 'P_LOGGED_IN',
-				'toevoegen'	 => 'P_LOGGED_IN',
-				'zeg'		 => 'P_LOGGED_IN',
-				'lees'		 => 'P_LOGGED_IN',
-				'verlaten'	 => 'P_LOGGED_IN'
+				'start' => 'P_LOGGED_IN',
+				'toevoegen' => 'P_LOGGED_IN',
+				'zeg' => 'P_LOGGED_IN',
+				'lees' => 'P_LOGGED_IN',
+				'verlaten' => 'P_LOGGED_IN'
 			);
 		}
 	}
@@ -58,7 +59,7 @@ class GesprekkenController extends AclController {
 		if ($gesprek_id) {
 			$gesprek = GesprekkenModel::get($gesprek_id);
 			$deelnemer = GesprekDeelnemersModel::get($gesprek_id, LoginModel::getUid());
-			if (!$gesprek OR ! $deelnemer) {
+			if (!$gesprek OR !$deelnemer) {
 				$this->exit_http(403);
 			}
 			$deelnemer->gelezen_moment = getDateTime();
@@ -77,7 +78,7 @@ class GesprekkenController extends AclController {
 	}
 
 	public function gesprekken() {
-		$lastUpdate = (int) filter_input(INPUT_POST, 'lastUpdate', FILTER_SANITIZE_NUMBER_INT);
+		$lastUpdate = (int)filter_input(INPUT_POST, 'lastUpdate', FILTER_SANITIZE_NUMBER_INT);
 		$gesprekken = GesprekDeelnemersModel::instance()->getGesprekkenVoorLid(LoginModel::getUid(), $lastUpdate);
 		$this->view = new GesprekkenResponse($gesprekken);
 	}
@@ -107,7 +108,7 @@ class GesprekkenController extends AclController {
 		}
 		$gesprek = GesprekkenModel::get($gesprek_id);
 		$deelnemer = GesprekDeelnemersModel::get($gesprek_id, LoginModel::getUid());
-		if (!$gesprek OR ! $deelnemer) {
+		if (!$gesprek OR !$deelnemer) {
 			$this->exit_http(403);
 		}
 		$form = new GesprekDeelnemerToevoegenForm($gesprek);
@@ -127,14 +128,14 @@ class GesprekkenController extends AclController {
 	public function zeg($gesprek_id = null) {
 		$gesprek = GesprekkenModel::get($gesprek_id);
 		$deelnemer = GesprekDeelnemersModel::get($gesprek_id, LoginModel::getUid());
-		if (!$gesprek OR ! $deelnemer) {
+		if (!$gesprek OR !$deelnemer) {
 			$this->exit_http(403);
 		}
 		$form = new GesprekBerichtForm($gesprek);
 		if ($form->validate()) {
 			$values = $form->getValues();
 			GesprekBerichtenModel::instance()->maakBericht($gesprek, $deelnemer, $values['inhoud']);
-			$lastUpdate = (int) filter_input(INPUT_POST, 'lastUpdate', FILTER_SANITIZE_NUMBER_INT);
+			$lastUpdate = (int)filter_input(INPUT_POST, 'lastUpdate', FILTER_SANITIZE_NUMBER_INT);
 			$berichten = $gesprek->getBerichten($deelnemer, $lastUpdate);
 			$this->view = new BerichtenResponse($berichten);
 			$this->view->autoUpdate = $gesprek->auto_update;
@@ -146,10 +147,10 @@ class GesprekkenController extends AclController {
 	public function lees($gesprek_id = null) {
 		$gesprek = GesprekkenModel::get($gesprek_id);
 		$deelnemer = GesprekDeelnemersModel::get($gesprek_id, LoginModel::getUid());
-		if (!$gesprek OR ! $deelnemer) {
+		if (!$gesprek OR !$deelnemer) {
 			$this->exit_http(403);
 		}
-		$lastUpdate = (int) filter_input(INPUT_POST, 'lastUpdate', FILTER_SANITIZE_NUMBER_INT);
+		$lastUpdate = (int)filter_input(INPUT_POST, 'lastUpdate', FILTER_SANITIZE_NUMBER_INT);
 		$berichten = $gesprek->getBerichten($deelnemer, $lastUpdate);
 		$this->view = new BerichtenResponse($berichten);
 		$this->view->autoUpdate = $gesprek->auto_update;
@@ -162,7 +163,7 @@ class GesprekkenController extends AclController {
 		}
 		$gesprek = GesprekkenModel::get($gesprek_id);
 		$deelnemer = GesprekDeelnemersModel::get($gesprek_id, LoginModel::getUid());
-		if (!$gesprek OR ! $deelnemer) {
+		if (!$gesprek OR !$deelnemer) {
 			$this->exit_http(403);
 		}
 		$gesloten = GesprekDeelnemersModel::instance()->verlaatGesprek($gesprek, $deelnemer);

@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\groepen\leden;
+
 use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;

@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
@@ -26,8 +27,8 @@ class InstellingenBeheerController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'opslaan'	 => 'P_LOGGED_IN',
-				'reset'		 => 'P_LOGGED_IN'
+				'opslaan' => 'P_LOGGED_IN',
+				'reset' => 'P_LOGGED_IN'
 			);
 		}
 	}

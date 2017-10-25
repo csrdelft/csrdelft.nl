@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\lid;
 
 use CsrDelft\MijnSqli;
@@ -35,13 +36,13 @@ class LidZoeker {
 		  } */
 
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
-		if ($zoekveld == 'naam' AND ! preg_match('/^\d{2}$/', $zoekterm)) {
+		if ($zoekveld == 'naam' AND !preg_match('/^\d{2}$/', $zoekterm)) {
 			if (preg_match('/ /', trim($zoekterm))) {
 				$zoekdelen = explode(' ', $zoekterm);
 				$iZoekdelen = count($zoekdelen);
 				if ($iZoekdelen == 2) {
 					$zoekfilter = "( voornaam LIKE '%" . $zoekdelen[0] . "%' AND achternaam LIKE '%" . $zoekdelen[1] . "%' ) OR";
-					$zoekfilter.="( voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR
+					$zoekfilter .= "( voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR
                                     nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%' )";
 				} else {
 					$zoekfilter = "( voornaam LIKE '%" . $zoekdelen[0] . "%' AND achternaam LIKE '%" . $zoekdelen[$iZoekdelen - 1] . "%' )";
@@ -55,7 +56,7 @@ class LidZoeker {
 			$zoekfilter = "adres LIKE '%{$zoekterm}%' OR woonplaats LIKE '%{$zoekterm}%' OR
 				postcode LIKE '%{$zoekterm}%' OR REPLACE(postcode, ' ', '') LIKE '%" . str_replace(' ', '', $zoekterm) . "%'";
 		} else {
-			if (preg_match('/^\d{2}$/', $zoekterm) AND ( $zoekveld == 'uid' OR $zoekveld == 'naam')) {
+			if (preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld == 'uid' OR $zoekveld == 'naam')) {
 				//zoeken op lichtingen...
 				$zoekfilter = "SUBSTRING(uid, 1, 2)='" . $zoekterm . "'";
 			} else {
@@ -93,7 +94,7 @@ class LidZoeker {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
 			if (
-					(LoginModel::mag('P_LEDEN_READ') and ! LoginModel::mag('P_OUDLEDEN_READ') ) or ( LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
+				(LoginModel::mag('P_LEDEN_READ') and !LoginModel::mag('P_OUDLEDEN_READ')) or (LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
 			) {
 				$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
 			}
@@ -101,7 +102,7 @@ class LidZoeker {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
 			if (
-					(!LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ') ) or ( LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
+				(!LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ')) or (LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
 			) {
 				if ($statusfilter != '')
 					$statusfilter .= " OR ";
@@ -115,15 +116,15 @@ class LidZoeker {
 			}
 
 			if (LoginModel::mag('P_LEDEN_READ') and $zoekstatus === 'novieten') {
-			    $statusfilter = "status='S_NOVIET'";
-            }
+				$statusfilter = "status='S_NOVIET'";
+			}
 		}
 
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
 		$mootfilter = ($verticale != 'alle') ? 'AND verticale=\'' . $verticale . '\' ' : '';
 		# is er een maximum aantal resultaten gewenst
-		if ((int) $limiet > 0) {
-			$limit = 'LIMIT ' . (int) $limiet;
+		if ((int)$limiet > 0) {
+			$limit = 'LIMIT ' . (int)$limiet;
 		} else {
 			$limit = '';
 		}
@@ -184,15 +185,15 @@ class LidZoeker {
 	//nette aliassen voor kolommen, als ze niet beschikbaar zijn wordt gewoon
 	//de naam uit $this->allowVelden gebruikt
 	public $veldNamen = array(
-		'telefoon'				 => 'Nummer',
-		'mobiel'				 => 'Pauper',
-		'studie'				 => 'Studie',
-		'gebdatum'				 => 'Geb.datum',
-		'studienr'				 => 'StudieNr.',
-		'ontvangtcontactueel'	 => 'Contactueel?',
-		'machtiging'			 => 'Machtiging getekend?',
-		'adresseringechtpaar'	 => 'Post echtpaar t.n.v.',
-		'linkedin'				 => 'LinkedIn',
+		'telefoon' => 'Nummer',
+		'mobiel' => 'Pauper',
+		'studie' => 'Studie',
+		'gebdatum' => 'Geb.datum',
+		'studienr' => 'StudieNr.',
+		'ontvangtcontactueel' => 'Contactueel?',
+		'machtiging' => 'Machtiging getekend?',
+		'adresseringechtpaar' => 'Post echtpaar t.n.v.',
+		'linkedin' => 'LinkedIn',
 	);
 	//toegestane opties voor het statusfilter.
 	private $allowStatus = array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_EXLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN');
@@ -200,10 +201,10 @@ class LidZoeker {
 	private $allowWeergave = array('lijst', 'kaartje', 'CSV');
 	private $sortable = array(
 		'achternaam' => 'Achternaam',
-		'email'		 => 'Email',
-		'gebdatum'	 => 'Geboortedatum',
-		'lidjaar'	 => 'lichting',
-		'studie'	 => 'Studie'
+		'email' => 'Email',
+		'gebdatum' => 'Geboortedatum',
+		'lidjaar' => 'lichting',
+		'studie' => 'Studie'
 	);
 	//standaardwaarden voor het zoeken zonder parameters
 	private $rawQuery = array('status' => 'LEDEN', 'sort' => 'achternaam');
@@ -347,13 +348,13 @@ class LidZoeker {
 				}
 			}
 		} elseif (preg_match('/^\d{2}$/', $zoekterm)) { //lichting bij een string van 2 cijfers
-			$query = "RIGHT(lidjaar,2)=" . (int) $zoekterm . " ";
+			$query = "RIGHT(lidjaar,2)=" . (int)$zoekterm . " ";
 		} elseif (preg_match('/^lichting:\d\d(\d\d)?$/', $zoekterm)) { //lichting op de explicite manier
 			$lichting = substr($zoekterm, 9);
 			if (strlen($lichting) == 4) {
 				$query = "lidjaar=" . $lichting . " ";
 			} else {
-				$query = "RIGHT(lidjaar,2)=" . (int) $lichting . " ";
+				$query = "RIGHT(lidjaar,2)=" . (int)$lichting . " ";
 			}
 		} elseif (preg_match('/^[a-z0-9][0-9]{3}$/', $zoekterm)) { //uid's is ook niet zo moeilijk.
 			$query = "uid='" . $zoekterm . "' ";
@@ -524,8 +525,8 @@ class LidZoeker {
 
 	public function __toString() {
 		$return = 'Zoeker:';
-		$return.=print_r($this->rawQuery, true);
-		$return.=print_r($this->filters, true);
+		$return .= print_r($this->rawQuery, true);
+		$return .= print_r($this->filters, true);
 		return $return;
 	}
 

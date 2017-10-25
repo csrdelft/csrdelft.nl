@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\maalcie\corvee\punten;
+
 use CsrDelft\view\SmartyTemplateView;
 
 /**

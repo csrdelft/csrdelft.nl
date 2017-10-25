@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrException;
@@ -10,7 +11,7 @@ use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
 /**
- * CorveeVoorkeurenModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * CorveeVoorkeurenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
  *
  */
 class CorveeVoorkeurenModel extends PersistenceModel {
@@ -41,7 +42,8 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false) {
 		$repById = CorveeRepetitiesModel::instance()->getVoorkeurbareRepetities(); // grouped by crid
 		$lijst = array();
-		$voorkeuren = $this->find('uid = ?', array($uid)); /** @var CorveeVoorkeur[] $voorkeuren */
+		/** @var CorveeVoorkeur[] $voorkeuren */
+		$voorkeuren = $this->find('uid = ?', array($uid));
 		foreach ($voorkeuren as $voorkeur) {
 			$crid = $voorkeur->crv_repetitie_id;
 			if (!array_key_exists($crid, $repById)) { // ingeschakelde voorkeuren altijd weergeven
@@ -53,7 +55,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		}
 		foreach ($repById as $crid => $repetitie) {
 			if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
-								if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->functie_id)) {
+				if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->functie_id)) {
 					continue;
 				}
 			}
@@ -110,10 +112,10 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 
 	private function loadLedenVoorkeuren() {
 		$sql = 'SELECT lid.uid AS van, r.crv_repetitie_id AS crid, ';
-		$sql.= ' (EXISTS (SELECT * FROM crv_voorkeuren AS v WHERE v.crv_repetitie_id = crid AND v.uid = van )) AS voorkeur';
-		$sql.= ' FROM profielen AS lid, crv_repetities AS r';
-		$sql.= ' WHERE r.voorkeurbaar = true AND lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")'; // alleen leden
-		$sql.= ' ORDER BY lid.achternaam, lid.voornaam ASC';
+		$sql .= ' (EXISTS (SELECT * FROM crv_voorkeuren AS v WHERE v.crv_repetitie_id = crid AND v.uid = van )) AS voorkeur';
+		$sql .= ' FROM profielen AS lid, crv_repetities AS r';
+		$sql .= ' WHERE r.voorkeurbaar = true AND lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")'; // alleen leden
+		$sql .= ' ORDER BY lid.achternaam, lid.voornaam ASC';
 		$db = Database::instance()->getDatabase();
 		$values = array();
 		$query = $db->prepare($sql);
@@ -138,7 +140,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 			throw new CsrGebruikerException('Niet voorkeurbaar');
 		}
 		if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
-						if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->functie_id)) {
+			if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->functie_id)) {
 				throw new CsrGebruikerException('Niet gekwalificeerd');
 			}
 		}

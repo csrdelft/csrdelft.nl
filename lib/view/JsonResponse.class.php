@@ -1,12 +1,13 @@
 <?php
+
 namespace CsrDelft\view;
 
 
 /**
  * JsonResponse.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class JsonResponse implements View {
 

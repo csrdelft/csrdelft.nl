@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\groepen;
 
 use function CsrDelft\getDateTime;

@@ -1,15 +1,17 @@
 <?php
+
 namespace CsrDelft\model\entity\security;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * OneTimeToken.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * One time token for two-step authentication.
- * 
+ *
  */
 class OneTimeToken extends PersistentEntity {
 
@@ -46,11 +48,11 @@ class OneTimeToken extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'uid'		 => array(T::UID),
-		'url'		 => array(T::String),
-		'token'		 => array(T::String),
-		'expire'	 => array(T::DateTime),
-		'verified'	 => array(T::Boolean)
+		'uid' => array(T::UID),
+		'url' => array(T::String),
+		'token' => array(T::String),
+		'expire' => array(T::DateTime),
+		'verified' => array(T::Boolean)
 	);
 	/**
 	 * Database primary key

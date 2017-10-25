@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model;
 
 use CsrDelft\model\entity\groepen\AbstractGroep;

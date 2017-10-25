@@ -1,13 +1,15 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
+
 use CsrDelft\model\groepen\leden\BestuursLedenModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * Bestuur.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Bestuur extends AbstractGroep {
 

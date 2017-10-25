@@ -22,10 +22,10 @@
  * @param string
  * @return string
  */
-function smarty_modifier_rfc2822($date){
-	if(strlen($date)==strlen((int)$date)){
+function smarty_modifier_rfc2822($date) {
+	if (strlen($date) == strlen((int)$date)) {
 		return date('r', $date);
-	}else{	
-		return date('r', strtotime($date));	
+	} else {
+		return date('r', strtotime($date));
 	}
 }

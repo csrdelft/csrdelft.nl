@@ -224,7 +224,7 @@ class DataTable implements View, FormElement {
 			$this->searchColumn($this->groupByColumn);
 
 			$groupByColumnPosition = $this->columnPosition($this->groupByColumn);
-			$this->settings['columnGroup'] = [ 'column' => $groupByColumnPosition ];
+			$this->settings['columnGroup'] = ['column' => $groupByColumnPosition];
 			$this->settings['orderFixed'] = [
 				[$groupByColumnPosition, 'asc']
 			];

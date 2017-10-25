@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
@@ -31,11 +32,11 @@ class BeheerFunctiesController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'toevoegen'		 => 'P_CORVEE_MOD',
-				'bewerken'		 => 'P_CORVEE_MOD',
-				'verwijderen'	 => 'P_CORVEE_MOD',
-				'kwalificeer'	 => 'P_CORVEE_MOD',
-				'dekwalificeer'	 => 'P_CORVEE_MOD'
+				'toevoegen' => 'P_CORVEE_MOD',
+				'bewerken' => 'P_CORVEE_MOD',
+				'verwijderen' => 'P_CORVEE_MOD',
+				'kwalificeer' => 'P_CORVEE_MOD',
+				'dekwalificeer' => 'P_CORVEE_MOD'
 			);
 		}
 	}
@@ -49,7 +50,7 @@ class BeheerFunctiesController extends AclController {
 	}
 
 	public function beheer($fid = null) {
-		$fid = (int) $fid;
+		$fid = (int)$fid;
 		$modal = null;
 		if ($fid > 0) {
 			$this->bewerken($fid);
@@ -66,7 +67,7 @@ class BeheerFunctiesController extends AclController {
 		$form = new FunctieForm($functie, $this->action); // fetches POST values itself
 		if ($form->validate()) {
 			$id = $this->model->create($functie);
-			$functie->functie_id = (int) $id;
+			$functie->functie_id = (int)$id;
 			setMelding('Toegevoegd', 1);
 			$this->view = new FunctieView($functie);
 		} else {
@@ -75,7 +76,7 @@ class BeheerFunctiesController extends AclController {
 	}
 
 	public function bewerken($fid) {
-		$functie = $this->model->get((int) $fid);
+		$functie = $this->model->get((int)$fid);
 		$form = new FunctieForm($functie, $this->action); // fetches POST values itself
 		if ($form->validate()) {
 			$rowCount = $this->model->update($functie);
@@ -91,14 +92,14 @@ class BeheerFunctiesController extends AclController {
 	}
 
 	public function verwijderen($fid) {
-		$functie = $this->model->get((int) $fid);
+		$functie = $this->model->get((int)$fid);
 		$this->model->removeFunctie($functie);
 		setMelding('Verwijderd', 1);
 		$this->view = new FunctieDeleteView($fid);
 	}
 
 	public function kwalificeer($fid) {
-		$functie = $this->model->get((int) $fid);
+		$functie = $this->model->get((int)$fid);
 		$kwalificatie = KwalificatiesModel::instance()->nieuw($functie);
 		$form = new KwalificatieForm($kwalificatie); // fetches POST values itself
 		if ($form->validate()) {
@@ -110,7 +111,7 @@ class BeheerFunctiesController extends AclController {
 	}
 
 	public function dekwalificeer($fid, $uid) {
-		$functie = $this->model->get((int) $fid);
+		$functie = $this->model->get((int)$fid);
 		KwalificatiesModel::instance()->kwalificatieIntrekken($uid, $functie->functie_id);
 		$this->view = new FunctieView($functie);
 	}

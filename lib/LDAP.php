@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft;
 
 # C.S.R. Delft | pubcie@csrdelft.nl
@@ -17,7 +18,7 @@ use CsrDelft\common\CsrException;
 class LDAP {
 	### private ###
 
-	/** @var resource|bool  */
+	/** @var resource|bool */
 	var $_conn = false;
 	var $_base_leden;
 	var $_base_groepen;
@@ -70,9 +71,9 @@ class LDAP {
 
 	function checkBindPass($mech, $user, $pass) {
 		$validbase = array(
-			'people'	 => $this->_base_people,
-			'antiplesk'	 => $this->_base_antiplesk,
-			'mailbox'	 => $this->_base_mailbox
+			'people' => $this->_base_people,
+			'antiplesk' => $this->_base_antiplesk,
+			'mailbox' => $this->_base_mailbox
 		);
 		if (!array_key_exists($mech, $validbase))
 			return false;
@@ -187,15 +188,15 @@ class LDAP {
 	 *
 	 * $entry zoals die door ldap_add() wordt toegevoegd:
 	 * $entry = Array (
-	  [cn] => kortenaamcommissie
-	  [member] => Array (
-	  [0] => uid=0431,ou=leden,dc=csrdelft,dc=nl
-	  )
-	  [objectClass] => Array (
-	  [0] => top
-	  [1] => groupOfNames
-	  )
-	  )
+	 * [cn] => kortenaamcommissie
+	 * [member] => Array (
+	 * [0] => uid=0431,ou=leden,dc=csrdelft,dc=nl
+	 * )
+	 * [objectClass] => Array (
+	 * [0] => top
+	 * [1] => groupOfNames
+	 * )
+	 * )
 	 */
 	function addGroep($cn, $entry) {
 		$base = $this->_base_groepen;

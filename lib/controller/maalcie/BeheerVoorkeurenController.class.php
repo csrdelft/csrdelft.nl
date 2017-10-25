@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
@@ -28,8 +29,8 @@ class BeheerVoorkeurenController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'inschakelen'	 => 'P_CORVEE_MOD',
-				'uitschakelen'	 => 'P_CORVEE_MOD'
+				'inschakelen' => 'P_CORVEE_MOD',
+				'uitschakelen' => 'P_CORVEE_MOD'
 			);
 		}
 	}
@@ -67,7 +68,7 @@ class BeheerVoorkeurenController extends AclController {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		$voorkeur = new CorveeVoorkeur();
-		$voorkeur->crv_repetitie_id = (int) $crid;
+		$voorkeur->crv_repetitie_id = (int)$crid;
 		$voorkeur->uid = $uid;
 		$voorkeur->setVanUid($uid);
 

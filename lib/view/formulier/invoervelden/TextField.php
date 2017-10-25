@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\invoervelden;
+
 use function CsrDelft\is_utf8;
 
 /**

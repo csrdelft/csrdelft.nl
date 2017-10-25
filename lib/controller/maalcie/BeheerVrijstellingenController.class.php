@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
@@ -30,10 +31,10 @@ class BeheerVrijstellingenController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'nieuw'		 => 'P_CORVEE_MOD',
-				'bewerk'	 => 'P_CORVEE_MOD',
-				'opslaan'	 => 'P_CORVEE_MOD',
-				'verwijder'	 => 'P_CORVEE_MOD'
+				'nieuw' => 'P_CORVEE_MOD',
+				'bewerk' => 'P_CORVEE_MOD',
+				'opslaan' => 'P_CORVEE_MOD',
+				'verwijder' => 'P_CORVEE_MOD'
 			);
 		}
 	}
@@ -51,7 +52,8 @@ class BeheerVrijstellingenController extends AclController {
 	}
 
 	public function beheer() {
-		$vrijstellingen = $this->model->find(); /** @var CorveeVrijstelling[] $vrijstellingen */
+		/** @var CorveeVrijstelling[] $vrijstellingen */
+		$vrijstellingen = $this->model->find();
 		$this->view = new BeheerVrijstellingenView($vrijstellingen);
 		$this->view = new CsrLayoutPage($this->view);
 		$this->view->addCompressedResources('maalcie');

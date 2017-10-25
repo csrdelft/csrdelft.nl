@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\controller\groepen;
+
 use CsrDelft\model\groepen\KetzersModel;
 use CsrDelft\view\groepen\formulier\GroepAanmakenForm;
 use CsrDelft\view\JsonResponse;

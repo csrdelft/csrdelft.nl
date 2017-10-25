@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
@@ -7,14 +8,14 @@ use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
 /**
- * MaaltijdRepetitiesModel.class.php	| 	P.W.G. Brussee (brussee@live.nl)
+ * MaaltijdRepetitiesModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
  *
  */
 class MaaltijdRepetitiesModel extends PersistenceModel {
 
-    const ORM = MaaltijdRepetitie::class;
+	const ORM = MaaltijdRepetitie::class;
 
-    protected $default_order = '(periode_in_dagen = 0) ASC, periode_in_dagen ASC, dag_vd_week ASC, standaard_titel ASC';
+	protected $default_order = '(periode_in_dagen = 0) ASC, periode_in_dagen ASC, dag_vd_week ASC, standaard_titel ASC';
 
 	/**
 	 * Filtert de repetities met het abonnement-filter van de maaltijd-repetitie op de permissies van het ingelogde lid.
@@ -46,11 +47,11 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 		return $repetities;
 	}
 
-    /**
-     * @param $mrid
-     * @return MaaltijdRepetitie
-     * @throws CsrGebruikerException
-     */
+	/**
+	 * @param $mrid
+	 * @return MaaltijdRepetitie
+	 * @throws CsrGebruikerException
+	 */
 	public function getRepetitie($mrid) {
 		$repetitie = $this->retrieveByPrimaryKey(array($mrid));
 		if ($repetitie === false) {
@@ -59,10 +60,10 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 		return $repetitie;
 	}
 
-    /**
-     * @param $repetitie MaaltijdRepetitie
-     * @return array
-     */
+	/**
+	 * @param $repetitie MaaltijdRepetitie
+	 * @return array
+	 */
 	public function saveRepetitie($repetitie) {
 		return Database::transaction(function () use ($repetitie) {
 			$abos = 0;
@@ -90,7 +91,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 			throw new CsrGebruikerException('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 		$aantalAbos = MaaltijdAbonnementenModel::instance()->verwijderAbonnementen($mrid);
-        $this->deleteByPrimaryKey(array($mrid));
+		$this->deleteByPrimaryKey(array($mrid));
 		return $aantalAbos;
 	}
 }

@@ -1,14 +1,16 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
+
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\leden\LichtingLedenModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * Lichting.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  */
 class Lichting extends AbstractGroep {
 

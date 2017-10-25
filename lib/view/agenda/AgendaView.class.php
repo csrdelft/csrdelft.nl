@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\view\agenda;
 
 use CsrDelft\view\SmartyTemplateView;

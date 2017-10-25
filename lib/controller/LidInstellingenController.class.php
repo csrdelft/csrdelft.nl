@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
@@ -13,7 +14,7 @@ use CsrDelft\view\LidInstellingenView;
 
 /**
  * LidInstellingenController.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @property LidInstellingenModel $model
@@ -28,8 +29,8 @@ class LidInstellingenController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'opslaan'	 => 'P_LOGGED_IN',
-				'reset'		 => 'P_ADMIN'
+				'opslaan' => 'P_LOGGED_IN',
+				'reset' => 'P_ADMIN'
 			);
 		}
 	}

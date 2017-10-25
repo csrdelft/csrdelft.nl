@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier\elementen;
+
 use CsrDelft\view\bbcode\CsrBB;
 
 /**

@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view;
+
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\HtmlComment;

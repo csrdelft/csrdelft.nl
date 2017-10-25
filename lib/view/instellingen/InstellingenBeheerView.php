@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\instellingen;
+
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\view\SmartyTemplateView;
 

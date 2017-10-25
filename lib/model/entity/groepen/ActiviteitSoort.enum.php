@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity\groepen;
+
 use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
 

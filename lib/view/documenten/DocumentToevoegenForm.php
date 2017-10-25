@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\documenten;
+
 use CsrDelft\model\documenten\DocumentCategorieModel;
 use CsrDelft\model\entity\documenten\Document;
 use CsrDelft\model\entity\Map;

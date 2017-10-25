@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\model\entity;
+
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use function CsrDelft\email_like;
@@ -209,7 +211,7 @@ class Mail {
 			default:
 				throw new CsrException('unknown mail type: "' . $this->type . '"');
 		}
-		if ($this->inDebugMode() AND ! $debug) {
+		if ($this->inDebugMode() AND !$debug) {
 			setMelding($body, 0);
 			return false;
 		}

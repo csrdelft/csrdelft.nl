@@ -14,7 +14,7 @@
  *
  * Examples:
  * <pre>
- * 	{getMelding}
+ *  {getMelding}
  * </pre>
  * @version  1.0
  * @author   Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>

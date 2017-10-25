@@ -1,4 +1,5 @@
 <?php
+
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\model\groepen\ActiviteitenModel;

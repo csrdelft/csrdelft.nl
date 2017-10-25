@@ -1,5 +1,7 @@
 <?php
+
 namespace CsrDelft\view\formulier;
+
 use function CsrDelft\getMaximumFileUploadSize;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -7,12 +9,12 @@ use CsrDelft\view\formulier\uploadvelden\FileField;
 
 /**
  * Dropzone.class.php
- * 
+ *
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Form consisting of a DropzoneUploader and fallback FileField
- * 
+ *
  */
 class Dropzone extends Formulier {
 

@@ -1,15 +1,17 @@
 <?php
+
 namespace CsrDelft\model\entity\forum;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
  * ForumDraadVerbergen.class.php
- * 
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
- * 
+ *
  * Een ForumDraad kan worden verborgen door een lid.
- * 
+ *
  */
 class ForumDraadVerbergen extends PersistentEntity {
 
@@ -31,8 +33,8 @@ class ForumDraadVerbergen extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'draad_id'	 => array(T::Integer),
-		'uid'		 => array(T::UID)
+		'draad_id' => array(T::Integer),
+		'uid' => array(T::UID)
 	);
 	/**
 	 * Database primary key

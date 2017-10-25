@@ -1,17 +1,19 @@
 <?php
+
 namespace CsrDelft\model\entity\maalcie;
+
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
- * CorveeVoorkeur.class.php	| 	P.W.G. Brussee (brussee@live.nl)
- * 
- * 
+ * CorveeVoorkeur.class.php  |  P.W.G. Brussee (brussee@live.nl)
+ *
+ *
  * Een crv_voorkeur instantie beschrijft een voorkeur van een lid om een periodieke taak uit te voeren.
- * 
- * 
+ *
+ *
  * Zie ook CorveeRepetitie.class.php
- * 
+ *
  */
 class CorveeVoorkeur extends PersistentEntity {
 	# shared primary key
@@ -22,7 +24,7 @@ class CorveeVoorkeur extends PersistentEntity {
 	public $van_uid;
 
 	public function getCorveeRepetitieId() {
-		return (int) $this->crv_repetitie_id;
+		return (int)$this->crv_repetitie_id;
 	}
 
 	public function getUid() {
