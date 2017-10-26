@@ -143,7 +143,7 @@ class BeheerCiviSaldoController extends AclController {
 
 	public function POST_som() {
 		$momentString = filter_input(INPUT_POST, 'moment', FILTER_SANITIZE_STRING);
-		$moment = DateTime::createFromFormat("Y-m-d G:i:s", $momentString);
+		$moment = DateTime::createFromFormat("Y-m-d H:i:s", $momentString);
 		if (!$moment) {
 			$this->exit_http(400);
 		}
