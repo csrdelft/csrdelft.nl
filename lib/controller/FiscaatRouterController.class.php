@@ -39,6 +39,7 @@ class FiscaatRouterController extends AclController {
 
 	public function overzicht() {
 		$this->view = new CsrLayoutPage(new FiscaatOverzichtView(null));
+		$this->view->addCompressedResources('fiscaat');
 	}
 
 	public function producten() {

@@ -8,12 +8,14 @@ use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\fiscaat\saldo\SaldiSommenResponseView;
 use CsrDelft\view\fiscaat\saldo\CiviSaldoTable;
 use CsrDelft\view\fiscaat\saldo\CiviSaldoTableResponse;
 use CsrDelft\view\fiscaat\saldo\InleggenForm;
 use CsrDelft\view\fiscaat\saldo\LidRegistratieForm;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use function CsrDelft\getDateTime;
+use DateTime;
 
 /**
  * BeheerCiviSaldoController.class.php
@@ -32,7 +34,8 @@ class BeheerCiviSaldoController extends AclController {
 				'overzicht' => 'P_MAAL_MOD',
 				'registreren' => 'P_MAAL_MOD',
 				'verwijderen' => 'P_MAAL_MOD',
-				'inleggen' => 'P_MAAL_MOD'
+				'inleggen' => 'P_MAAL_MOD',
+				'som' => 'P_MAAL_MOD'
 			];
 		} else {
 			$this->acl = [
@@ -136,5 +139,15 @@ class BeheerCiviSaldoController extends AclController {
 		}
 
 		$this->view = $form;
+	}
+
+	public function POST_som() {
+		$momentString = filter_input(INPUT_POST, 'moment', FILTER_SANITIZE_STRING);
+		$moment = DateTime::createFromFormat("Y-m-d H:i:s", $momentString);
+		if (!$moment) {
+			$this->exit_http(400);
+		}
+
+		$this->view = new SaldiSommenResponseView(CiviSaldoModel::instance(), $moment);
 	}
 }
