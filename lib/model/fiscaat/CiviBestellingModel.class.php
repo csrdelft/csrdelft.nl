@@ -7,6 +7,7 @@ use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
+use DateTime;
 
 /**
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -60,6 +61,18 @@ class CiviBestellingModel extends PersistenceModel {
 	 */
 	public function getBestellingenVoorLid($uid, $limit = null) {
 		return $this->find('uid = ? AND deleted = FALSE', array($uid), null, 'moment DESC', $limit);
+	}
+
+	/**
+	 * @param DateTime $date
+	 * @param bool $profielOnly
+	 *
+	 * @return mixed
+	 */
+	public function getSomBestellingenVanaf(DateTime $date, $profielOnly = false) {
+		$after = $profielOnly ? "AND uid NOT LIKE 'c%'" : "";
+		$moment = $date->format("Y-m-d G:i:s");
+		return $this->select(['SUM(totaal)'], "deleted = 0 AND moment > ? $after", [$moment])->fetch(\PDO::FETCH_COLUMN);
 	}
 
 	/**

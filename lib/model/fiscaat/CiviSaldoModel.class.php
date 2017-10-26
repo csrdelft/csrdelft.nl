@@ -8,6 +8,7 @@ use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\model\entity\fiscaat\CiviSaldoLogEnum;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
+use DateTime;
 
 /**
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -19,17 +20,24 @@ class CiviSaldoModel extends PersistenceModel {
 	 * @var CiviSaldoLogModel
 	 */
 	private $civiSaldoLogModel;
+	/**
+	 * @var CiviBestellingModel
+	 */
+	private $civiBestellingModel;
 
 	/**
 	 * CiviSaldoModel constructor.
 	 * @param CiviSaldoLogModel $civiSaldoLogModel
+	 * @param CiviBestellingModel $civiBestellingModel
 	 */
 	public function __construct(
-		CiviSaldoLogModel $civiSaldoLogModel
+		CiviSaldoLogModel $civiSaldoLogModel,
+		CiviBestellingModel $civiBestellingModel
 	) {
 		parent::__construct();
 
 		$this->civiSaldoLogModel = $civiSaldoLogModel;
+		$this->civiBestellingModel = $civiBestellingModel;
 	}
 
 	/**
@@ -66,6 +74,17 @@ class CiviSaldoModel extends PersistenceModel {
 		return array_reduce($this->select(['saldo'], "deleted = 0 $after")->fetchAll(), function ($a, $b) {
 			return $a + $b['saldo'];
 		}, 0);
+	}
+
+	/**
+	 * @param DateTime $date
+	 * @param bool $profielOnly
+	 *
+	 * @return mixed
+	 */
+	public function getSomSaldiOp(DateTime $date, $profielOnly = false) {
+		$currentSum = $this->getSomSaldi($profielOnly);
+		return $currentSum + $this->civiBestellingModel->getSomBestellingenVanaf($date, $profielOnly);
 	}
 
 	/**
