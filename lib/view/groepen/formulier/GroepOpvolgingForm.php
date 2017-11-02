@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\view\formulier\invoervelden\TextField;
@@ -24,7 +25,7 @@ class GroepOpvolgingForm extends ModalForm {
 		foreach (GroepStatus::getTypeOptions() as $status) {
 			$options[$status] = GroepStatus::getChar($status);
 		}
-		$fields[] = new RadioField('status', $groep->status, Groepstatus::class, $options);
+		$fields[] = new RadioField('status', $groep->status, classNameZonderNamespace(Groepstatus::class), $options);
 
 		$fields[] = new FormDefaultKnoppen();
 
