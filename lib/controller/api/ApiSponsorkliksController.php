@@ -1,14 +1,12 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: jorai
- * Date: 11/4/17
- * Time: 5:34 PM
- */
 
 namespace CsrDelft\controller\api;
 
 
+/**
+ * @author J. Rijsdijk <jorairijsdijk@gmail.com>
+ * @date 04/11/2017
+ */
 class ApiSponsorkliksController {
 	/**
 	 * @url GET /
