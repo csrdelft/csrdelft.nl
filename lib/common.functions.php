@@ -872,10 +872,10 @@ function url2absolute($baseurl, $relativeurl) {
  * @return mixed The curl_exec result
  */
 function curl_request($url, $options = []) {
-	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt_array($ch, $options);
-	return curl_exec($ch);
+	$curl = curl_init($url);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt_array($curl, $options);
+	return curl_exec($curl);
 }
 
 /**
@@ -886,12 +886,12 @@ function curl_request($url, $options = []) {
  * @return String The final url location
  */
 function curl_follow_location($url, $options = []) {
-	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-	curl_setopt_array($ch, $options);
-	$xpath = init_xpath(curl_exec($ch));
-	$location = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+	$curl = curl_init($url);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt_array($curl, $options);
+	$xpath = init_xpath(curl_exec($curl));
+	$location = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
 
 	$refresh = $xpath->query('//meta[translate(@http-equiv, "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")="REFRESH"]');
 	if ($refresh->length > 0) {
