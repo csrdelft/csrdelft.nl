@@ -88,6 +88,12 @@ try {
 	DebugLogModel::instance()->log('cron.php', 'php pin_transactie_download.php', array(), $e);
 }
 
+try {
+	passthru('php ../bin/sponsorkliks_affiliates_download.php');
+} catch (Exception $e) {
+	DebugLogModel::instance()->log('cron.php', 'php sponsorkliks_affiliates_download.php', array(), $e);
+}
+
 $finish = microtime(true) - $start;
 if (DEBUG) {
 	echo getDateTime() . ' Finished in ' . (int)$finish . " seconds.\r\n";
