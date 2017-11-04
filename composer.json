@@ -18,7 +18,8 @@
         "tedivm/jshrink": "^1.1",
         "tubalmartin/cssmin": "^4.0",
         "oyejorge/less.php": "v1.7.0.14",
-        "maknz/slack": "^1.7"
+        "maknz/slack": "^1.7",
+        "jakeasmith/http_build_url": "^1"
     },
     "config": {
         "platform": {
