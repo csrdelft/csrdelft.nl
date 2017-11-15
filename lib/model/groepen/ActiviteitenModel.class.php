@@ -18,7 +18,7 @@ class ActiviteitenModel extends KetzersModel {
 		$activiteit->soort = $soort;
 		$activiteit->rechten_aanmelden = null;
 		$activiteit->locatie = null;
-		$activiteit->in_agenda = true;
+		$activiteit->in_agenda = false;
 		return $activiteit;
 	}
 
