@@ -12,7 +12,7 @@ use CsrDelft\view\formulier\datatable\DataTable;
  */
 class CiviBestellingTable extends DataTable {
 	public function __construct($uid) {
-		parent::__construct(CiviBestelling::class, '/fiscaat/bestellingen', "Overzicht voor " . ProfielModel::getNaam($uid, 'volledig'));
+		parent::__construct(CiviBestelling::class, '/fiscaat/bestellingen/'.$uid, "Overzicht voor " . ProfielModel::getNaam($uid, 'volledig'));
 
 		$this->addColumn('inhoud');
 		$this->addColumn('totaal', null, null, 'prijs_render', null, 'num-fmt');
