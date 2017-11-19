@@ -19,7 +19,7 @@ class ApiAuthController {
 			throw new RestException(400);
 		}
 
-		$authHeader = $_SERVER['HTTP-X-CSR-AUTHORIZATION'];
+		$authHeader = $_SERVER['HTTP_X_CSR_AUTHORIZATION'];
 
 		$jwt = substr($authHeader, 7);
 
