@@ -69,5 +69,5 @@ define('SMARTY_TEMPLATE_DIR', LIB_PATH . 'templates/');
 define('SMARTY_COMPILE_DIR', DATA_PATH . 'smarty/compiled/');
 define('SMARTY_CACHE_DIR', DATA_PATH . 'smarty/cache/');
 
-# ImageMagick
-define('IMAGEMAGICK_PATH', '/usr/bin/');
+# ImageMagick ('magick' voor v7, 'convert' voor v6)
+define('IMAGEMAGICK', 'magick');
