@@ -612,8 +612,8 @@ class GoogleSync {
 		$telefoons[] = array('mobiel', 'http://schemas.google.com/g/2005#mobile');
 
 		foreach ($telefoons as $telefoon) {
-			if ($profiel->$telefoon[0] != '') {
-				$number = $doc->createElement('gd:phoneNumber', internationalizePhonenumber($profiel->$telefoon[0]));
+			if ($profiel->{$telefoon[0]} != '') {
+				$number = $doc->createElement('gd:phoneNumber', internationalizePhonenumber($profiel->{$telefoon[0]}));
 				if ($telefoon[0] == 'mobiel') {
 					$number->setAttribute('primary', 'true');
 				}
