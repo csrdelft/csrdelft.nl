@@ -40,7 +40,7 @@ class AgendaController extends AclController {
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'maand' => 'P_AGENDA_READ',
-				'ical' => 'P_AGENDA_READ',
+				'ical' => 'P_PUBLIC',
 				'zoeken' => 'P_AGENDA_READ'
 			);
 		} else {
