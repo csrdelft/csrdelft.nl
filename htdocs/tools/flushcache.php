@@ -16,7 +16,7 @@ require_once 'configuratie.include.php';
 
 if (DEBUG OR LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
 
-	if (OrmMemcache::instance()->flush()) {
+	if (OrmMemcache::instance()->getCache()->flush()) {
 		setMelding('Memcache succesvol geflushed', 1);
 	} else {
 		setMelding('Memcache flushen mislukt', -1);

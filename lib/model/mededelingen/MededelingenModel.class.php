@@ -232,14 +232,7 @@ class MededelingenModel extends PersistenceModel {
 	 * @return \PDOStatement|Mededeling[]
 	 */
 	public static function getLaatsteMededelingen($aantal) {
-
-		$zichtbaarheidClause = "zichtbaarheid='zichtbaar'";
-		$doelgroepClause = "";
-		if (!LoginModel::mag('P_LEDEN_READ')) {
-			$doelgroepClause = " AND doelgroep='iedereen'";
-		}
-
-		return static::instance()->find("vervaltijd IS NULL OR vervaltijd > '?' AND " . $zichtbaarheidClause . $doelgroepClause,
+		return static::instance()->find(MededelingenModel::getClauses(false),
 			array(getDateTime()),
 			null,
 			'datum DESC, id DESC',

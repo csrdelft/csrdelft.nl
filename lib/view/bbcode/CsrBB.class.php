@@ -1781,7 +1781,11 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 		if ($style != '') {
 			$style = ' style="' . $style . '" ';
 		}
-		return '<div' . $class . $style . '>' . $content . '</div>';
+		$title = '';
+		if (isset($arguments['title'])) {
+			$title = ' title="' . htmlspecialchars(trim(str_replace('_', ' ', $arguments['title']))) . '" ';
+		}
+		return '<div' . $class . $style . $title . '>' . $content . '</div>';
 	}
 
 }

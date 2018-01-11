@@ -55,6 +55,8 @@ Gebruik [Composer](https://getcomposer.org/) om de dependencies te installeren d
 composer install
 ```
 
+Installeer ImageMagick om het fotoalbum goed te laten werken. Controleer of de `IMAGEMAGICK` constante klopt.
+
 ### Plaetjes
 
 Om jouw development versie goed te laten functioneren zijn er een aantal plaatjes nodig.

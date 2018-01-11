@@ -68,10 +68,6 @@ class GroepForm extends ModalForm {
 
 		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
 
-		if (property_exists($groep, 'in_agenda') AND !LoginModel::mag('P_AGENDA_MOD')) {
-			unset($fields['in_agenda']);
-		}
-
 		$fields[] = $etc[] = new FormDefaultKnoppen($nocancel ? false : null);
 		$this->addFields($fields);
 	}

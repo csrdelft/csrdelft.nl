@@ -52,7 +52,7 @@ class Formulier implements View, Validator {
 
 	public function __construct($model, $action, $titel = false, $dataTableId = false) {
 		$this->model = $model;
-		$this->formId = uniqid(classNameZonderNamespace(get_class($this->model)));
+		$this->formId = uniqid(classNameZonderNamespace(get_class($this->model == null ? $this : $this->model)));
 		$this->action = $action;
 		$this->titel = $titel;
 		$this->css_classes[] = 'Formulier';

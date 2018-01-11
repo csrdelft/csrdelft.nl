@@ -36,8 +36,8 @@ class LoginForm extends Formulier {
 		$this->addFields($fields);
 	}
 
-	public function view() {
-		parent::view(false);
+	public function view($showMelding = false) {
+		parent::view($showMelding);
 		?>
 		<ul>
 			<li>

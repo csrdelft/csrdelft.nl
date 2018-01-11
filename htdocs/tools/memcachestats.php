@@ -20,5 +20,5 @@ if (DEBUG OR LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
 
 	echo '<h1>MemCache statistieken</h1>';
 
-	debugprint(OrmMemcache::instance()->getStats());
+	debugprint(OrmMemcache::instance()->getCache()->getStats());
 }

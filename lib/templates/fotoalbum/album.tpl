@@ -431,67 +431,51 @@
 
 					// knopje rechtsom draaien
 					var btnRight = $('<a id="btnRight" tabindex="-1"><span class="fa fa-repeat"></span> &nbsp; Draai met de klok mee</a>');
-					if (mod) {
-						btnRight.click(function () {
-							var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-							$.post('/fotoalbum/roteren' + dirname(url), {
-								foto: basename(url),
-								rotation: 90
-							}, page_reload);
-						});
-					}
-					else {
-						btnRight.addClass('disabled');
-					}
+					btnRight.click(function () {
+						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+						$.post('/fotoalbum/roteren' + dirname(url), {
+							foto: basename(url),
+							rotation: 90
+						}, page_reload);
+					});
+
 					addCMI(btnRight, true);
 
 					// knopje linksom draaien
 					var btnLeft = $('<a id="btnLeft" tabindex="-1"><span class="fa fa-undo"></span> &nbsp; Draai tegen de klok in</a>');
-					if (mod) {
-						btnLeft.click(function () {
-							var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-							$.post('/fotoalbum/roteren' + dirname(url), {
-								foto: basename(url),
-								rotation: -90
-							}, page_reload);
-						});
-					}
-					else {
-						btnLeft.addClass('disabled');
-					}
+					btnLeft.click(function () {
+						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+						$.post('/fotoalbum/roteren' + dirname(url), {
+							foto: basename(url),
+							rotation: -90
+						}, page_reload);
+					});
+
 					addCMI(btnLeft);
 
 					// knopje albumcover
 					var btnCover = $('<a id="btnCover" tabindex="-1"><span class="fa fa-folder"></span> &nbsp; Instellen als albumcover</a>');
-					if (mod) {
-						btnCover.click(function () {
-							var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-							$.post('/fotoalbum/albumcover' + dirname(url), {
-								foto: basename(url)
-							}, page_redirect);
-						});
-					}
-					else {
-						btnCover.addClass('disabled');
-					}
+					btnCover.click(function () {
+						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+						$.post('/fotoalbum/albumcover' + dirname(url), {
+							foto: basename(url)
+						}, page_redirect);
+					});
+
 					addCMI(btnCover);
 
 					// knopje verwijderen
 					var btnDel = $('<a id="btnDel" tabindex="-1"><span class="fa fa-times"></span> &nbsp; Verwijderen</a>');
-					if (mod) {
-						btnDel.click(function () {
-							if (!confirm('Foto definitief verwijderen. Weet u het zeker?')) {
-								return false;
-							}
-							var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-							$.post('/fotoalbum/verwijderen' + dirname(url), {
-								foto: decodeURI(basename(url))
-							}, page_reload);
-						});
-					}
-					else {
-						btnDel.addClass('disabled');
-					}
+					btnDel.click(function () {
+						if (!confirm('Foto definitief verwijderen. Weet u het zeker?')) {
+							return false;
+						}
+						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+						$.post('/fotoalbum/verwijderen' + dirname(url), {
+							foto: decodeURI(basename(url))
+						}, page_reload);
+					});
+
 					addCMI(btnDel, true);
 		{/if}
 				};

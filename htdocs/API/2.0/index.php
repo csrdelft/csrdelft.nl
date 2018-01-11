@@ -29,6 +29,7 @@ if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], explode(
 $mode = DEBUG ? 'debug' : 'production';
 $server = new RestServer($mode);
 
+$server->root = '/API/2.0';
 $server->cacheDir = DATA_PATH . 'restserver/';
 
 $server->addClass(ApiActiviteitenController::class, '/activiteiten');

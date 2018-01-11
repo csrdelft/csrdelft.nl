@@ -42,7 +42,7 @@ class BeheerCiviBestellingController extends AclController {
 		return parent::performAction($this->getParams(3));
 	}
 
-	public function GET_overzicht($uid) {
+	public function GET_overzicht($uid = null) {
 		$this->view = new CsrLayoutPage(new CiviBestellingTable($uid));
 	}
 
@@ -56,7 +56,7 @@ class BeheerCiviBestellingController extends AclController {
 	}
 
 	public function GET_mijn() {
-		$this->GET_overzicht(LoginModel::getUid());
+		$this->GET_overzicht();
 	}
 
 	public function POST_mijn() {
