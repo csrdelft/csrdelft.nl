@@ -13,6 +13,14 @@ class ApiSponsorkliksController {
 	 */
 	public function getSponsorkliks() {
 		$json = file(DATA_PATH . 'sponsorkliks.json', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-		return ['data' => json_decode($json[0], true)];
+		return json_decode($json[0], true);
 	}
+
+	/**
+     * @url GET /timestamp
+     */
+	public function getTimestamp() {
+	    $timestamp = filemtime(DATA_PATH . 'sponsorkliks.json');
+	    return $timestamp;
+    }
 }
