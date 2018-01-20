@@ -898,10 +898,9 @@ function curl_follow_location($url, $options = []) {
 		preg_match('/(?<=url=)(.*)/i', $refresh->item(0)->getAttribute('content'), $matches);
 		$refreshUrl = trim($matches[0]);
 
-		// clk.tradedoubler.com specific meta-refresh workaround
-		if (endsWith($location, 'f=0')) {
-			return curl_follow_location(str_replace('f=0', '&f=0', $location));
-		}
+        if (empty($refreshUrl)) {
+            return $location;
+        }
 
 		if (!startsWith($refreshUrl, 'http')) {
 			$refreshUrl = http_build_url($location, $refreshUrl, HTTP_URL_REPLACE | HTTP_URL_JOIN_PATH);
