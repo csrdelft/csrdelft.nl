@@ -45,8 +45,14 @@ switch ($class) {
 }
 
 $namespacedClassName = 'CsrDelft\\controller\\' . $class . 'Controller';
-/** @var Controller $controller */
-$controller = new $namespacedClassName(REQUEST_URI);
+
+if (class_exists($namespacedClassName)) {
+	/** @var Controller $controller */
+	$controller = new $namespacedClassName(REQUEST_URI);
+} else {
+	http_response_code(404);
+	exit;
+}
 
 try {
 	$controller->performAction();
