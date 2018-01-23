@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity;
 
-use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 
 /**
  * Afbeelding.class.php
@@ -34,7 +34,7 @@ class Afbeelding extends Bestand {
 	 * @param string $path
 	 * @param bool $parse
 	 *
-	 * @throws CsrException
+	 * @throws CsrGebruikerException
 	 */
 	public function __construct($path, $parse = true) {
 		parent::__construct();
@@ -45,17 +45,17 @@ class Afbeelding extends Bestand {
 		if ($parse) {
 			$this->filesize = @filesize($this->directory . $this->filename);
 			if (!$this->filesize) {
-				throw new CsrException('Afbeelding is leeg: ' . $this->directory . $this->filename);
+				throw new CsrGebruikerException('Afbeelding is leeg of bestaat niet: ' . $this->filename);
 			}
 			$image = @getimagesize($this->directory . $this->filename);
 			if (!$image) {
-				throw new CsrException('Afbeelding parsen mislukt: ' . $this->directory . $this->filename);
+				throw new CsrGebruikerException('Afbeelding is geen afbeelding: ' . $this->filename);
 			}
 			$this->width = $image[0];
 			$this->height = $image[1];
 			$this->mimetype = $image['mime'];
 			if (!in_array($this->mimetype, static::$mimeTypes)) {
-				throw new CsrException('Geen afbeelding: [' . $this->mimetype . '] ' . $this->directory . $this->filename);
+				throw new CsrGebruikerException('Geen afbeelding: [' . $this->mimetype . '] ' . $this->filename);
 			}
 		}
 	}
