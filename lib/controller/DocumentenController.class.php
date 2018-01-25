@@ -111,9 +111,14 @@ class DocumentenController extends AclController {
 
 	protected function categorie($id) {
 		$categorie = $this->model->getCategorieModel()->get($id);
-		$documenten = $this->model->getCategorieModel()->getRecent($categorie, 0);
-		$this->view = new CsrLayoutPage(new DocumentCategorieContent($categorie, $documenten));
-		$this->view->addCompressedResources('documenten');
+		if ($categorie === false) {
+			setMelding('Categorie bestaat niet!', -1);
+			redirect('/documenten');
+		} else {
+			$documenten = $this->model->getCategorieModel()->getRecent($categorie, 0);
+			$this->view = new CsrLayoutPage(new DocumentCategorieContent($categorie, $documenten));
+			$this->view->addCompressedResources('documenten');
+		}
 	}
 
 	protected function GET_bewerken($id) {
