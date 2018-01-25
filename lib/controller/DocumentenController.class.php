@@ -114,6 +114,8 @@ class DocumentenController extends AclController {
 		if ($categorie === false) {
 			setMelding('Categorie bestaat niet!', -1);
 			redirect('/documenten');
+		} elseif (!$categorie->magBekijken()) {
+			$this->exit_http(403);
 		} else {
 			$documenten = $this->model->getCategorieModel()->getRecent($categorie, 0);
 			$this->view = new CsrLayoutPage(new DocumentCategorieContent($categorie, $documenten));
