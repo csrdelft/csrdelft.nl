@@ -43,8 +43,8 @@ class IsHetAlView implements View {
 		switch ($this->model) {
 
 			case 'dies' :
-				$begin = strtotime('2014-02-11');
-				$einde = strtotime('2014-02-21');
+				$begin = strtotime('2018-02-13');
+				$einde = strtotime('2018-02-22');
 				$nu = strtotime(date('Y-m-d'));
 				if ($nu > $einde) {
 					$begin = strtotime('+1 year', $begin);
