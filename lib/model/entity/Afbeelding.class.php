@@ -2,7 +2,9 @@
 
 namespace CsrDelft\model\entity;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use function GuzzleHttp\Psr7\mimetype_from_extension;
 
 /**
  * Afbeelding.class.php
@@ -54,8 +56,13 @@ class Afbeelding extends Bestand {
 			$this->width = $image[0];
 			$this->height = $image[1];
 			$this->mimetype = $image['mime'];
+
+			$fileExtension = pathinfo($this->filename)['extension'];
+			$expectedMimetype = mimetype_from_extension($fileExtension);
 			if (!in_array($this->mimetype, static::$mimeTypes)) {
 				throw new CsrGebruikerException('Geen afbeelding: [' . $this->mimetype . '] ' . $this->filename);
+			} elseif ($this->mimetype !== $expectedMimetype) {
+				throw new CsrException('Extensie afbeelding klopt niet met inhoud [' . $this->mimetype . '] ' . $this->filename);
 			}
 		}
 	}
