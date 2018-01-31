@@ -23,7 +23,7 @@ class IsHetAlView implements View {
 	 * Aftellen voor deze typen IsHetAlContent
 	 * @var array
 	 */
-	public static $aftellen = array('jarig', 'dies');
+	public static $aftellen = array('jarig', 'dies', 'dertienweekeind');
 	/**
 	 * Wist u dat'tjes
 	 * @var array
@@ -54,6 +54,21 @@ class IsHetAlView implements View {
 					$this->ja = true;
 				} else {
 					$this->ja = $dagen;
+				}
+				break;
+
+			case 'dertienweekeind':
+				$begin = strtotime('2018-03-09 16:00');
+				$einde = strtotime('2018-03-12 18:00');
+
+				$nu = time();
+
+				if ($nu > $einde) {
+					$this->ja = false;
+				} elseif ($nu > $begin) {
+					$this->ja = true;
+				} else {
+					$this->ja = round(($begin - $nu) / 86400);
 				}
 				break;
 
