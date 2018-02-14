@@ -171,6 +171,11 @@
                              alt="Pricewise">
                     </a>
                 </li>
+								<li>
+                    <a href="https://www.hoyhoy.nl/autoverzekering/" class="lazy-load"
+                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/logo_hoyhoy.png' alt='Autoverzekering - hoyhoy'/>">
+                    </a>
+                </li>
                 <li>
                     <a href="http://www.tudelft.nl/">
                         <img src="https://csrdelft.nl/plaetjes/banners/TU_Delft_logo_White.png"
