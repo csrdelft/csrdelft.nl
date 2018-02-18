@@ -72,10 +72,6 @@ class IsHetAlView implements View {
 				}
 				break;
 
-			case 'ontvoeren':
-				$this->ja = true;
-				break;
-
 			case 'jarig':
 				$this->ja = LoginModel::getProfiel()->getJarigOver();
 				break;
@@ -148,10 +144,6 @@ class IsHetAlView implements View {
 
 			case 'studeren':
 				echo 'Moet ik alweer studeren?';
-				break;
-
-			case 'ontvoeren':
-				echo 'Is het al tijd om sjaarsch te ontvoeren?';
 				break;
 
 			case 'kring':
