@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\uploadvelden;
 
+use function CsrDelft\checkMimetype;
 use CsrDelft\common\CsrException;
 use function CsrDelft\format_filesize;
 use function CsrDelft\getMaximumFileUploadSize;
@@ -67,7 +68,7 @@ class UploadFileField extends InputField {
 			$this->error = 'Bestand bestaat niet (meer): ' . htmlspecialchars($this->value['tmp_name']);
 		} elseif (!empty($this->filterMime) AND !in_array($this->model->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . htmlspecialchars($this->model->mimetype);
-		} elseif (mimetype_from_filename($this->model->filename) !== $this->model->mimetype) {
+		} elseif (!checkMimetype($this->model->filename, $this->model->mimetype)) {
 			$this->error = 'Bestandstype komt niet overeen met bestandsnaam: ' . $this->model->mimetype;
 		}
 		return $this->error === '';
