@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\fiscaat\pin;
 
-use CsrDelft\model\entity\fiscaat\PinTransactie;
+use CsrDelft\model\entity\fiscaat\pin\PinTransactie;
 use CsrDelft\Orm\PersistenceModel;
 
 /**
@@ -14,7 +14,6 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class PinTransactieModel extends PersistenceModel {
 	const ORM = PinTransactie::class;
-	protected static $instance;
 
 	/**
 	 * @param string $from
@@ -26,5 +25,13 @@ class PinTransactieModel extends PersistenceModel {
 		$pinTransacties = $this->find('datetime > ? AND datetime < ?', [$from, $to], null, 'datetime DESC')->fetchAll();
 
 		return $pinTransacties;
+	}
+
+	/**
+	 * @param int $id
+	 * @return PinTransactie
+	 */
+	public static function get($id) {
+		return static::instance()->find('id = ?', [$id])->fetch();
 	}
 }

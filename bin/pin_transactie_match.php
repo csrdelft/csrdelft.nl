@@ -2,6 +2,7 @@
 
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieMatcher;
+use CsrDelft\model\fiscaat\pin\PinTransactieMatchModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieModel;
 
 const DATE_FORMAT = 'Y-m-d';
@@ -30,6 +31,8 @@ try {
 
 	echo "De volgende matches zijn gevonden." . PHP_EOL;
 	echo PinTransactieMatcher::genereerReport($matches);
+
+	PinTransactieMatchModel::instance()->createAll($matches);
 } catch (Exception $e) {
 	echo "er ging iets mis";
 	print_r($e->getTraceAsString());

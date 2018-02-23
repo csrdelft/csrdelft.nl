@@ -4,7 +4,11 @@ namespace CsrDelft\model\fiscaat\pin;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
-use CsrDelft\model\entity\fiscaat\PinTransactie;
+use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
+use CsrDelft\model\entity\fiscaat\pin\PinTransactie;
+use CsrDelft\model\entity\fiscaat\pin\PinTransactieMatch;
+use CsrDelft\model\entity\fiscaat\pin\PinTransactieMatchStatusEnum;
+use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 
 /**
@@ -19,6 +23,7 @@ class PinTransactieMatcher
 	 * @param PinTransactie[] $pinTransacties
 	 * @param CiviBestellingInhoud[] $pinBestellingen Pin bestellingen
 	 * @return int[][]
+	 * @throws CsrException
 	 */
 	public static function damerauLevenshteinMatrix(array $pinTransacties, array $pinBestellingen)
 	{
@@ -136,6 +141,7 @@ class PinTransactieMatcher
 	/**
 	 * @param PinTransactieMatch[] $matches
 	 * @return string
+	 * @throws CsrException
 	 */
 	public static function genereerReport($matches)
 	{
@@ -144,29 +150,33 @@ class PinTransactieMatcher
 		$verschil = 0;
 
 		foreach ($matches as $match) {
-			$pinTransactie = $match->pinTransactie;
-			$pinBestellingInhoud = $match->bestelling;
 
-			switch ($match->reason) {
-				case PinTransactieMatch::REASON_MISSENDE_BESTELLING:
+			switch ($match->reden) {
+				case PinTransactieMatchStatusEnum::REASON_MISSENDE_BESTELLING:
+					$pinTransactie = PinTransactieModel::get($match->transactie_id);
 					$verschil += $pinTransactie->getBedragInCenten();
 					$moment = date('H:m:s' , strtotime($pinTransactie->datetime));
 
 					printf("%s - Missende bestelling voor pintransactie %d om %s van %s.\n", $moment, $pinTransactie->STAN, $pinTransactie->datetime, $pinTransactie->amount);
 					break;
-				case PinTransactieMatch::REASON_MISSENDE_TRANSACTIE:
-					$pinBestelling = CiviBestellingModel::get($pinBestellingInhoud->bestelling_id);
+				case PinTransactieMatchStatusEnum::REASON_MISSENDE_TRANSACTIE:
+					$pinBestelling = CiviBestellingModel::get($match->bestelling_id);
+					$pinBestellingInhoud = CiviBestellingInhoudModel::instance()->getAll($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE)->fetch();
 					$verschil -= $pinBestellingInhoud->aantal;
 					$moment = date('H:m:s' , strtotime($pinBestelling->moment));
 
 					printf("%s - Missende transactie voor bestelling %d om %s van EUR %.2f door %d.\n", $moment, $pinBestelling->id, $pinBestelling->moment, $pinBestellingInhoud->aantal / 100, $pinBestelling->uid);
 					break;
-				case PinTransactieMatch::REASON_TRANSPOSE:
+				case PinTransactieMatchStatusEnum::REASON_TRANSPOSE:
 					printf("Twee bestellingen zijn omgedraaid.\n");
 					break;
-				case PinTransactieMatch::REASON_VERKEERD_BEDRAG:
+				case PinTransactieMatchStatusEnum::REASON_VERKEERD_BEDRAG:
+					$pinTransactie = PinTransactieModel::get($match->transactie_id);
+					$pinBestelling = CiviBestellingModel::get($match->bestelling_id);
+
+					$pinBestellingInhoud = CiviBestellingInhoudModel::instance()->getAll($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE)->fetch();
+
 					$verschil += $pinTransactie->getBedragInCenten() - $pinBestellingInhoud->aantal;
-					$pinBestelling = CiviBestellingModel::get($pinBestellingInhoud->bestelling_id);
 					$moment = date('H:m:s', strtotime($pinTransactie->datetime));
 
 					printf("%s - Bestelling en transactie hebben geen overeenkomend bedrag.\n", $moment);
@@ -174,10 +184,7 @@ class PinTransactieMatcher
 					printf(" - EUR %.2f Bestelling %d om %s door %d.\n", $pinBestellingInhoud->aantal / 100, $pinBestelling->id, $pinBestelling->moment, $pinBestelling->uid);
 					break;
 				default:
-					$pinBestelling = CiviBestellingModel::get($pinBestellingInhoud->bestelling_id);
-					$moment = date('H:m:s', strtotime($pinBestelling->moment));
-
-					printf("%s - %s. Momentverschil %d seconden.\n", $moment, $pinTransactie->amount, strtotime($pinBestelling->moment) - strtotime($pinTransactie->datetime));
+					// Er is niets mis gegaan.
 					break;
 			}
 		}

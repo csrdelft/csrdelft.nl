@@ -45,4 +45,21 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 		$product = $this->civiProductModel->getProduct($inhoud->product_id);
 		return sprintf("%d %s", $inhoud->aantal, $product->beschrijving);
 	}
+
+	/**
+	 * @param int $bestelling_id
+	 * @param int|null $product_id
+	 * @return \PDOStatement|CiviBestellingInhoud[]
+	 */
+	public function getAll($bestelling_id, $product_id = null) {
+		$query = 'bestelling_id = ?';
+		$query_params = [$bestelling_id];
+
+		if ($product_id !== null) {
+			$query .= ' AND product_id = ?';
+			$query_params[] = $product_id;
+		}
+
+		return $this->find($query, $query_params);
+	}
 }
