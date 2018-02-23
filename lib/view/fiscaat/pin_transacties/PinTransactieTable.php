@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\fiscaat\pin;
+namespace CsrDelft\view\fiscaat\pin_transacties;
 
 use CsrDelft\model\fiscaat\pin_transacties\PinTransactieModel;
 use CsrDelft\view\formulier\datatable\DataTable;

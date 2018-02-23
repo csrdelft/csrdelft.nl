@@ -2,11 +2,12 @@
 
 namespace CsrDelft\controller\fiscaat;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\fiscaat\pin_transacties\PinTransactieModel;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\fiscaat\pin\PinTransactieTableResponse;
-use CsrDelft\view\fiscaat\pin\PinTransactieOverzichtView;
+use CsrDelft\view\fiscaat\pin_transacties\PinTransactieTableResponse;
+use CsrDelft\view\fiscaat\pin_transacties\PinTransactieOverzichtView;
 
 /**
  * Class PinTransactieController
@@ -33,6 +34,11 @@ class PinTransactieController extends AclController {
 		}
 	}
 
+	/**
+	 * @param array $args
+	 * @return mixed
+	 * @throws CsrException
+	 */
 	public function performAction(array $args = array()) {
 		$this->action = 'overzicht';
 
