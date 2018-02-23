@@ -30,7 +30,7 @@ class PinTransactie extends PersistentEntity {
 	public $STAN;
 
 	/**
-	 * @return string
+	 * @return int
 	 */
 	public function getBedragInCenten() {
 		list($valuta, $bedrag) = explode(' ', $this->amount);
@@ -41,7 +41,7 @@ class PinTransactie extends PersistentEntity {
 
 		$centen = ltrim(str_replace(',', '', $bedrag), '0');
 
-		return $centen;
+		return intval($centen);
 	}
 
 	protected static $persistent_attributes = [

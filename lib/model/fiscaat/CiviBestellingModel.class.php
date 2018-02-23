@@ -5,6 +5,7 @@ namespace CsrDelft\model\fiscaat;
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
+use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 use DateTime;
@@ -41,6 +42,37 @@ class CiviBestellingModel extends PersistenceModel {
 
 		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
 		$this->civiProductModel = $civiProductModel;
+	}
+
+	/**
+	 * @param int $id
+	 * @return CiviBestelling
+	 */
+	public static function get($id) {
+		return static::instance()->find('id = ?', [$id])->fetch();
+	}
+
+	/**
+	 * @param string $from
+	 * @param string $to
+	 * @return CiviBestellingInhoud[]
+	 */
+	public function getPinBestellingInMoment($from, $to) {
+		/** @var CiviBestelling[] $bestellingen */
+		$bestellingen = $this->find('moment > ? AND moment < ?', [$from, $to], null, 'moment DESC');
+		$pinBestellingen = [];
+
+		foreach ($bestellingen as $bestelling) {
+			$bestellingInhoud = $bestelling->getInhoud();
+
+			foreach ($bestellingInhoud as $item) {
+				if ($item->product_id == CiviProductTypeEnum::PINTRANSACTIE) {
+					$pinBestellingen[] = $item;
+				}
+			}
+		}
+
+		return $pinBestellingen;
 	}
 
 	/**
@@ -118,7 +150,7 @@ class CiviBestellingModel extends PersistenceModel {
 
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = -$bedrag;
-		$inhoud->product_id = 6; // TODO dynamic, is cent
+		$inhoud->product_id = CiviProductTypeEnum::OVERGEMAAKT;
 
 		$bestelling->inhoud[] = $inhoud;
 		$bestelling->totaal = $this->civiProductModel->getProduct($inhoud->product_id)->prijs * -$bedrag;
