@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\controller\framework\AclController;
-use CsrDelft\model\fiscaat\pin_transacties\PinTransactieModel;
+use CsrDelft\model\fiscaat\pin\PinTransactieModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fiscaat\pin\PinTransactieTableResponse;
 use CsrDelft\view\fiscaat\pin\PinTransactieOverzichtView;

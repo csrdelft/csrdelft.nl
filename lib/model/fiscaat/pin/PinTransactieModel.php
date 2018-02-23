@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\fiscaat\pin_transacties;
+namespace CsrDelft\model\fiscaat\pin;
 
 use CsrDelft\model\entity\fiscaat\PinTransactie;
 use CsrDelft\Orm\PersistenceModel;

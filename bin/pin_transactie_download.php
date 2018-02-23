@@ -6,8 +6,8 @@
  * @date 06/09/2017
  */
 
-use CsrDelft\model\fiscaat\pin_transacties\PinTransactieDownloader;
-use CsrDelft\model\fiscaat\pin_transacties\PinTransactieModel;
+use CsrDelft\model\fiscaat\pin\PinTransactieDownloader;
+use CsrDelft\model\fiscaat\pin\PinTransactieModel;
 
 /**
  * Date constants.
