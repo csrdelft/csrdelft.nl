@@ -4,18 +4,18 @@ namespace CsrDelft\model\fiscaat;
 
 use CsrDelft\model\entity\fiscaat\Saldo;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\PersistenceModel;
 use function CsrDelft\getDateTime;
 
-class SaldoModel extends PersistenceModel {
+class SaldoGrafiekModel {
 	const ORM = Saldo::class;
 
-	public function getDataPoints($uid, $timespan) {
-		return [$this->getDataPointsForCiviSaldo($uid, $timespan)];
-	}
-
-	public function getDataPointsForCiviSaldo($uid, $timespan) {
-		if (!$this->magGrafiekZien($uid)) {
+	/**
+	 * @param string $uid
+	 * @param int $timespan
+	 * @return array|null
+	 */
+	public static function getDataPoints($uid, $timespan) {
+		if (!static::magGrafiekZien($uid)) {
 			return null;
 		}
 		$model = CiviSaldoModel::instance();
@@ -25,7 +25,7 @@ class SaldoModel extends PersistenceModel {
 		}
 		$saldo = $klant->saldo;
 		// Teken het huidige saldo
-		$data = [[$this->flotTime(getDateTime()), round($saldo / 100, 2)]];
+		$data = [[static::flotTime(getDateTime()), round($saldo / 100, 2)]];
 		$model = CiviBestellingModel::instance();
 		$bestellingen = $model->find(
 			'uid = ? AND deleted = FALSE AND moment>(NOW() - INTERVAL ? DAY)',
@@ -35,25 +35,31 @@ class SaldoModel extends PersistenceModel {
 		);
 
 		foreach ($bestellingen as $bestelling) {
-			$data[] = array($this->flotTime($bestelling->moment), round($saldo / 100, 2));
+			$data[] = array(static::flotTime($bestelling->moment), round($saldo / 100, 2));
 			$saldo += $bestelling->totaal;
 		}
 
 		if (!empty($data)) {
 			$row = end($data);
-			$time = $this->flotTime($timespan - 1 . ' days 23 hours ago');
+			$time = static::flotTime($timespan - 1 . ' days 23 hours ago');
 			array_push($data, [$time, $row[1]]);
 		}
 		return [
-			"label" => "CiviSaldo",
-			"data" => array_reverse($data), // Keer de lijst om, flot laat anders veranderingen in de data 1-off zien
-			"color" => "green",
-			"threshold" => ["below" => 0, "color" => "red"],
-			"lines" => ["steps" => true]
+			[
+				"label" => "CiviSaldo",
+				"data" => array_reverse($data), // Keer de lijst om, flot laat anders veranderingen in de data 1-off zien
+				"color" => "green",
+				"threshold" => ["below" => 0, "color" => "red"],
+				"lines" => ["steps" => true]
+			]
 		];
 	}
 
-	public function magGrafiekZien($uid) {
+	/**
+	 * @param string $uid
+	 * @return bool
+	 */
+	public static function magGrafiekZien($uid) {
 		//mogen we uberhaupt een grafiek zien?
 		return LoginModel::getUid() === $uid OR LoginModel::mag('P_LEDEN_MOD,commissie:SocCie,commissie:MaalCie');
 	}
@@ -65,7 +71,7 @@ class SaldoModel extends PersistenceModel {
 	 *
 	 * @return false|int
 	 */
-	private function flotTime($moment) {
+	private static function flotTime($moment) {
 		return strtotime($moment) * 1000;
 	}
 }
