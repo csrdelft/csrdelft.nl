@@ -2,7 +2,7 @@
 
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\pin_transacties\PinTransactieMatcher;
-use CsrDelft\model\fiscaat\PinTransactieModel;
+use CsrDelft\model\fiscaat\pin_transacties\PinTransactieModel;
 
 const DATE_FORMAT = 'Y-m-d';
 const DURATION_DAY_IN_SECONDS = 86400;

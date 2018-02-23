@@ -7,7 +7,7 @@
  */
 
 use CsrDelft\model\fiscaat\pin_transacties\PinTransactieDownloader;
-use CsrDelft\model\fiscaat\PinTransactieModel;
+use CsrDelft\model\fiscaat\pin_transacties\PinTransactieModel;
 
 /**
  * Date constants.
