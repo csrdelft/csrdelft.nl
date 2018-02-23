@@ -46,11 +46,11 @@ class DebugLogModel extends PersistenceModel {
 		if (LoginModel::instance()->isSued()) {
 			$entry->su_uid = LoginModel::getSuedFrom()->uid;
 		}
-		$entry->ip = $_SERVER['REMOTE_ADDR'];
-		$entry->referer = $_SERVER['HTTP_REFERER'];
-		$entry->request = REQUEST_URI;
-		$entry->ip_referer = HTTP_REFERER;
-		$entry->user_agent = $_SERVER['HTTP_USER_AGENT'];
+		$entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '0.0.0.0';
+		$entry->referer = @$_SERVER['HTTP_REFERER'] ?: 'CLI';
+		$entry->request = REQUEST_URI ?: 'CLI';
+		$entry->ip_referer = HTTP_REFERER ?: '';
+		$entry->user_agent = @$_SERVER['HTTP_USER_AGENT'] ?: 'CLI';
 		$entry->id = $this->create($entry);
 		if (DEBUG AND Database::instance()->getDatabase()->inTransaction()) {
 			setMelding('Debug log may not be committed: database transaction', 2);
