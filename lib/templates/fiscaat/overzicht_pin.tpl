@@ -1,1 +1,1 @@
-{$pinTransactieTable->view()}
+{$pinTransactieMatchTable->view()}

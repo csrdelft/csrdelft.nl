@@ -11,6 +11,7 @@ use CsrDelft\Orm\Entity\T;
  * @since 23/02/2018
  */
 class PinTransactieMatch extends PersistentEntity {
+	public $id;
 	public $reden;
 	public $transactie_id;
 	public $bestelling_id;
@@ -88,9 +89,10 @@ class PinTransactieMatch extends PersistentEntity {
 		return $pinTransactieMatch;
 	}
 
-	protected static $primary_key = ['transactie_id', 'bestelling_id'];
-	protected static $table_name = ['pin_transactie_match'];
+	protected static $primary_key = ['id'];
+	protected static $table_name = 'pin_transactie_match';
 	protected static $persistent_attributes = [
+		'id' => [T::Integer, false, 'auto_increment'],
 		'reden' => [T::Enumeration, false, PinTransactieMatchStatusEnum::class],
 		'transactie_id' => [T::Integer, true],
 		'bestelling_id' => [T::Integer, true],

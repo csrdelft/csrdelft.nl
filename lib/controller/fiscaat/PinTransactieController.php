@@ -3,9 +3,9 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\controller\framework\AclController;
-use CsrDelft\model\fiscaat\pin\PinTransactieModel;
+use CsrDelft\model\fiscaat\pin\PinTransactieMatchModel;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\fiscaat\pin\PinTransactieTableResponse;
+use CsrDelft\view\fiscaat\pin\PinTransactieMatchTableResponse;
 use CsrDelft\view\fiscaat\pin\PinTransactieOverzichtView;
 
 /**
@@ -17,7 +17,7 @@ use CsrDelft\view\fiscaat\pin\PinTransactieOverzichtView;
 class PinTransactieController extends AclController {
 
 	public function __construct($query) {
-		parent::__construct($query, PinTransactieModel::instance());
+		parent::__construct($query, PinTransactieMatchModel::instance());
 
 		if ($this->getMethod() == "POST") {
 			$this->acl = [
@@ -42,7 +42,6 @@ class PinTransactieController extends AclController {
 		return parent::performAction($args);
 	}
 
-
 	public function GET_overzicht() {
 		$this->view = new CsrLayoutPage(new PinTransactieOverzichtView());
 	}
@@ -51,14 +50,16 @@ class PinTransactieController extends AclController {
 		$filter = $this->hasParam('filter') ? $this->getParam('filter') : '';
 
 		switch ($filter) {
-			case 'alles':
-				$data = $this->model->find();
+			case 'metFout':
+				$data = $this->model->find('reden <> \'match\'');
 				break;
+
+			case 'alles':
 			default:
-				$data = $this->model->find('bestelling_id IS NULL');
+				$data = $this->model->find();
 				break;
 		}
 
-		$this->view = new PinTransactieTableResponse($data);
+		$this->view = new PinTransactieMatchTableResponse($data);
 	}
 }

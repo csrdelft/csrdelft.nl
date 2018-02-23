@@ -20,7 +20,10 @@ class PinTransactieTable extends DataTable {
 
 		$weergave = new DataTableKnop('', $this->dataTableId, '', '', 'Weergave', 'Weergave van de tabel', 'cart', 'collection');
 		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/fiscaat/pin/overzicht', '', 'Zonder besteling', 'Zonder bestelling weergeven', 'cart_error', 'sourceChange'));
-		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/fiscaat/pin/overzicht?filter=alles', '', 'Alles', 'Alles weergeven', 'cart_add', 'sourceChange'));
+		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/fiscaat/pin/overzicht?filter=alles', '', 'Alles', 'Alles weergeven', 'cart', 'sourceChange'));
 		$this->addKnop($weergave);
+
+		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/pin/nieuw', '', 'Nieuwe bestelling', 'Maak een nieuwe bestelling voor deze transactie', 'cart_add'));
+		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/pin/verwijder', '', 'Verwijder bestelling', 'Verwijder deze bestelling', 'cart_delete'));
 	}
 }
