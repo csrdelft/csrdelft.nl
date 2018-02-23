@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\fiscaat\pin_transacties;
+namespace CsrDelft\view\fiscaat\pin;
 
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 
