@@ -46,7 +46,7 @@ class DebugLogModel extends PersistenceModel {
 		if (LoginModel::instance()->isSued()) {
 			$entry->su_uid = LoginModel::getSuedFrom()->uid;
 		}
-		$entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '0.0.0.0';
+		$entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '127.0.0.1';
 		$entry->referer = @$_SERVER['HTTP_REFERER'] ?: 'CLI';
 		$entry->request = REQUEST_URI ?: 'CLI';
 		$entry->ip_referer = HTTP_REFERER ?: '';
