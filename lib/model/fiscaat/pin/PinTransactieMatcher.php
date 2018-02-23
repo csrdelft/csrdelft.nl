@@ -84,13 +84,6 @@ class PinTransactieMatcher
 
 		$distanceMatrix = static::damerauLevenshteinMatrix($pinTransacties, $pinBestellingen);
 
-		foreach ($distanceMatrix as $row) {
-			foreach ($row as $cell) {
-				printf("%-3s", $cell);
-			}
-			echo "\n";
-		}
-
 		while ($i != -1 && $j != -1) {
 			if ($i > 1 && $j > 1 && $pinTransacties[$i - 1]->getBedragInCenten() == $pinBestellingen[$j - 2]->aantal && $pinTransacties[$i - 2]->getBedragInCenten() == $pinBestellingen[$j - 1]->aantal) {
 				if ($distanceMatrix[$i - 2][$j - 2] < $distanceMatrix[$i][$j]) {
