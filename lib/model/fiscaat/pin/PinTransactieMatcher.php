@@ -17,8 +17,7 @@ use CsrDelft\model\fiscaat\CiviBestellingModel;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 20/02/2018
  */
-class PinTransactieMatcher
-{
+class PinTransactieMatcher {
 	/**
 	 * @param PinTransactie[] $pinTransacties
 	 * @param CiviBestellingInhoud[] $pinBestellingen
@@ -40,22 +39,24 @@ class PinTransactieMatcher
 			}
 		}
 	}
+
 	/**
 	 * @param PinTransactie[] $pinTransacties
 	 * @param CiviBestellingInhoud[] $pinBestellingen Pin bestellingen
 	 * @return int[][]
 	 * @throws CsrException
 	 */
-	public static function levenshteinMatrix(array $pinTransacties, array $pinBestellingen)
-	{
+	public static function levenshteinMatrix(array $pinTransacties, array $pinBestellingen) {
 		$pinTransactiesCount = count($pinTransacties);
 		$pinBestellingenCount = count($pinBestellingen);
 
 		$distanceMatrix = [];
+
 		for ($i = 0; $i <= $pinTransactiesCount; $i++) {
 			$distanceMatrix[$i] = array_fill(0, $pinBestellingenCount + 1, 0);
 			$distanceMatrix[$i][0] = $i;
 		}
+
 		for ($j = 0; $j <= $pinBestellingenCount; $j++) {
 			$distanceMatrix[0][$j] = $j;
 		}
@@ -83,63 +84,60 @@ class PinTransactieMatcher
 	 * @return PinTransactieMatch[]
 	 * @throws CsrException
 	 */
-	public static function match(array $pinTransacties, array $pinBestellingen)
-	{
-		$i = count($pinTransacties);
-		$j = count($pinBestellingen);
-		$matches = [];
-
-		if ($i === 0) {
-			foreach ($pinBestellingen as $pinBestelling) {
-				$matches[] = PinTransactieMatch::missendeTransactie($pinBestelling);
-			}
-
-			return $matches;
-		} elseif ($j === 0) {
-			foreach ($pinTransacties as $pinTransactie) {
-				$matches[] = PinTransactieMatch::missendeBestelling($pinTransactie);
-			}
-
-			return $matches;
-		}
-
+	public static function match(array $pinTransacties, array $pinBestellingen) {
 		$distanceMatrix = static::levenshteinMatrix($pinTransacties, $pinBestellingen);
 
-		while ($i != -1 && $j != -1) {
-			$isMatch = isset($distanceMatrix[$i - 1][$j - 1]) ? $distanceMatrix[$i - 1][$j - 1] : PHP_INT_MAX;
-			$isMissendeBestelling = isset($distanceMatrix[$i - 1][$j]) ? $distanceMatrix[$i - 1][$j] : PHP_INT_MAX;
-			$isMissendeTransactie = isset($distanceMatrix[$i][$j - 1]) ? $distanceMatrix[$i][$j - 1] : PHP_INT_MAX;
+		foreach ($distanceMatrix as $row) {
+			foreach ($row as $item) {
+				printf('%-3d', $item);
+			}
+			echo PHP_EOL;
+		}
 
-			$operationArray = [$isMatch, $isMissendeBestelling, $isMissendeTransactie];
+		$matches = [];
+		$indexTransactie = 0;
+		$indexBestelling = 0;
 
-			$index = array_keys($operationArray, min($operationArray))[0];
+		while ($indexTransactie < count($pinTransacties) && $indexBestelling < count($pinBestellingen)) {
+			$isMatch = $distanceMatrix[$indexTransactie + 1][$indexBestelling + 1];
+			$isMissendeBestelling = $distanceMatrix[$indexTransactie + 1][$indexBestelling];
+			$isMissendeTransactie = $distanceMatrix[$indexTransactie][$indexBestelling + 1];
 
-			if ($index === 0) {
-				if (isset($distanceMatrix[$i - 1][$j - 1]) && $distanceMatrix[$i][$j] > $distanceMatrix[$i - 1][$j - 1]) {
-					$matches[] = PinTransactieMatch::verkeerdBedrag($pinTransacties[$i - 1], $pinBestellingen[$j - 1]);
-				} elseif ($i != 0 && $j != 0) {
-					$matches[] = PinTransactieMatch::match($pinTransacties[$i - 1], $pinBestellingen[$j - 1]);
-				}
+			$index = min($isMatch, $isMissendeBestelling, $isMissendeTransactie);
 
-				$i--;
-				$j--;
-			} elseif ($index === 1) {
-				$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$i - 1]);
-				$j--;
-			} elseif ($index === 2) {
-				$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$j - 1]);
-				$i--;
+			switch ($index) {
+				case $isMatch:
+					if ($distanceMatrix[$indexTransactie][$indexBestelling] < $isMatch) {
+						$matches[] = PinTransactieMatch::verkeerdBedrag($pinTransacties[$indexTransactie], $pinBestellingen[$indexBestelling]);
+					} else {
+						$matches[] = PinTransactieMatch::match($pinTransacties[$indexTransactie], $pinBestellingen[$indexBestelling]);
+					}
+
+					$indexTransactie++;
+					$indexBestelling++;
+
+					break;
+				case $isMissendeBestelling:
+					$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexTransactie]);
+					$indexTransactie++;
+
+					break;
+				case $isMissendeTransactie:
+					$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexBestelling]);
+					$indexBestelling++;
+
+					break;
 			}
 		}
 
-		while ($i != -1) {
-			$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$i]);
-			$i--;
+		while ($indexTransactie < count($pinBestellingen) - 1) {
+			$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexTransactie]);
+			$indexTransactie++;
 		}
 
-		while ($j != -1) {
-			$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$j]);
-			$j--;
+		while ($indexBestelling < count($pinTransacties) - 1) {
+			$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexBestelling]);
+			$indexBestelling++;
 		}
 
 		return $matches;
@@ -150,8 +148,7 @@ class PinTransactieMatcher
 	 * @return string
 	 * @throws CsrException
 	 */
-	public static function genereerReport($matches)
-	{
+	public static function genereerReport($matches) {
 		ob_start();
 
 		$verschil = 0;
@@ -162,7 +159,7 @@ class PinTransactieMatcher
 				case PinTransactieMatchStatusEnum::REASON_MISSENDE_BESTELLING:
 					$pinTransactie = PinTransactieModel::get($match->transactie_id);
 					$verschil += $pinTransactie->getBedragInCenten();
-					$moment = date('H:m:s' , strtotime($pinTransactie->datetime));
+					$moment = date('H:m:s', strtotime($pinTransactie->datetime));
 
 					printf("%s - Missende bestelling voor pintransactie %d om %s van %s.\n", $moment, $pinTransactie->STAN, $pinTransactie->datetime, $pinTransactie->amount);
 					break;
@@ -170,7 +167,7 @@ class PinTransactieMatcher
 					$pinBestelling = CiviBestellingModel::get($match->bestelling_id);
 					$pinBestellingInhoud = CiviBestellingInhoudModel::instance()->getAll($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE)->fetch();
 					$verschil -= $pinBestellingInhoud->aantal;
-					$moment = date('H:m:s' , strtotime($pinBestelling->moment));
+					$moment = date('H:m:s', strtotime($pinBestelling->moment));
 
 					printf("%s - Missende transactie voor bestelling %d om %s van EUR %.2f door %d.\n", $moment, $pinBestelling->id, $pinBestelling->moment, $pinBestellingInhoud->aantal / 100, $pinBestelling->uid);
 					break;

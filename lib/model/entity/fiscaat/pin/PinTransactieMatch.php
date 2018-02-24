@@ -24,7 +24,7 @@ class PinTransactieMatch extends PersistentEntity {
 	public static function verkeerdBedrag($pinTransactie, $pinBestelling)
 	{
 		$pinTransactieMatch = new static();
-		$pinTransactieMatch->reden = PinTransactieMatchStatusEnum::REASON_MATCH;
+		$pinTransactieMatch->reden = PinTransactieMatchStatusEnum::REASON_VERKEERD_BEDRAG;
 		$pinTransactieMatch->transactie_id = $pinTransactie->id;
 		$pinTransactieMatch->bestelling_id = $pinBestelling->bestelling_id;
 
@@ -38,7 +38,7 @@ class PinTransactieMatch extends PersistentEntity {
 	public static function missendeTransactie($pinBestelling)
 	{
 		$pinTransactieMatch = new static();
-		$pinTransactieMatch->reden = PinTransactieMatchStatusEnum::REASON_MATCH;
+		$pinTransactieMatch->reden = PinTransactieMatchStatusEnum::REASON_MISSENDE_TRANSACTIE;
 		$pinTransactieMatch->transactie_id = null;
 		$pinTransactieMatch->bestelling_id = $pinBestelling->bestelling_id;
 
@@ -52,7 +52,7 @@ class PinTransactieMatch extends PersistentEntity {
 	public static function missendeBestelling($pinTransactie)
 	{
 		$pinTransactieMatch = new static();
-		$pinTransactieMatch->reden = PinTransactieMatchStatusEnum::REASON_MATCH;
+		$pinTransactieMatch->reden = PinTransactieMatchStatusEnum::REASON_MISSENDE_BESTELLING;
 		$pinTransactieMatch->transactie_id = $pinTransactie->id;
 		$pinTransactieMatch->bestelling_id = null;
 
