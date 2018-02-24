@@ -21,11 +21,32 @@ class PinTransactieMatcher
 {
 	/**
 	 * @param PinTransactie[] $pinTransacties
+	 * @param CiviBestellingInhoud[] $pinBestellingen
+	 */
+	public static function clean(array $pinTransacties, array $pinBestellingen) {
+		foreach ($pinTransacties as $pinTransactie) {
+			$matches = PinTransactieMatchModel::instance()->find('transactie_id = ?', [$pinTransactie->id])->fetchAll();
+
+			foreach ($matches as $match) {
+				PinTransactieMatchModel::instance()->delete($match);
+			}
+		}
+
+		foreach ($pinBestellingen as $pinBestelling) {
+			$matches = PinTransactieMatchModel::instance()->find('bestelling_id = ?', [$pinBestelling->bestelling_id])->fetchAll();
+
+			foreach ($matches as $match) {
+				PinTransactieMatchModel::instance()->delete($match);
+			}
+		}
+	}
+	/**
+	 * @param PinTransactie[] $pinTransacties
 	 * @param CiviBestellingInhoud[] $pinBestellingen Pin bestellingen
 	 * @return int[][]
 	 * @throws CsrException
 	 */
-	public static function damerauLevenshteinMatrix(array $pinTransacties, array $pinBestellingen)
+	public static function levenshteinMatrix(array $pinTransacties, array $pinBestellingen)
 	{
 		$pinTransactiesCount = count($pinTransacties);
 		$pinBestellingenCount = count($pinBestellingen);
@@ -50,11 +71,6 @@ class PinTransactieMatcher
 				$distanceMatrix[$i + 1][$j + 1] = min($distanceMatrix[$i][$j + 1] + 1, // insert
 					$distanceMatrix[$i + 1][$j] + 1, // delete
 					$distanceMatrix[$i][$j] + $cost); // replace
-
-				if ($i > 0 && $j > 0 && $pinTransacties[$i]->getBedragInCenten() == $pinBestellingen[$j - 1]->aantal && $pinTransacties[$i - 1]->getBedragInCenten() == $pinBestellingen[$j]->aantal) {
-					$distanceMatrix[$i + 1][$j + 1] = min($distanceMatrix[$i + 1][$j + 1],
-						$distanceMatrix[$i - 1][$j - 1] + $cost); // transposition
-				}
 			}
 		}
 
@@ -87,18 +103,9 @@ class PinTransactieMatcher
 			return $matches;
 		}
 
-		$distanceMatrix = static::damerauLevenshteinMatrix($pinTransacties, $pinBestellingen);
+		$distanceMatrix = static::levenshteinMatrix($pinTransacties, $pinBestellingen);
 
 		while ($i != -1 && $j != -1) {
-			if ($i > 1 && $j > 1 && $pinTransacties[$i - 1]->getBedragInCenten() == $pinBestellingen[$j - 2]->aantal && $pinTransacties[$i - 2]->getBedragInCenten() == $pinBestellingen[$j - 1]->aantal) {
-				if ($distanceMatrix[$i - 2][$j - 2] < $distanceMatrix[$i][$j]) {
-					$matches[] = PinTransactieMatch::omgedraaid($pinTransacties[$i - 1], $pinBestellingen[$j - 2]);
-					$i -= 2;
-					$j -= 2;
-					continue;
-				}
-			}
-
 			$isMatch = isset($distanceMatrix[$i - 1][$j - 1]) ? $distanceMatrix[$i - 1][$j - 1] : PHP_INT_MAX;
 			$isMissendeBestelling = isset($distanceMatrix[$i - 1][$j]) ? $distanceMatrix[$i - 1][$j] : PHP_INT_MAX;
 			$isMissendeTransactie = isset($distanceMatrix[$i][$j - 1]) ? $distanceMatrix[$i][$j - 1] : PHP_INT_MAX;
@@ -166,9 +173,6 @@ class PinTransactieMatcher
 					$moment = date('H:m:s' , strtotime($pinBestelling->moment));
 
 					printf("%s - Missende transactie voor bestelling %d om %s van EUR %.2f door %d.\n", $moment, $pinBestelling->id, $pinBestelling->moment, $pinBestellingInhoud->aantal / 100, $pinBestelling->uid);
-					break;
-				case PinTransactieMatchStatusEnum::REASON_TRANSPOSE:
-					printf("Twee bestellingen zijn omgedraaid.\n");
 					break;
 				case PinTransactieMatchStatusEnum::REASON_VERKEERD_BEDRAG:
 					$pinTransactie = PinTransactieModel::get($match->transactie_id);

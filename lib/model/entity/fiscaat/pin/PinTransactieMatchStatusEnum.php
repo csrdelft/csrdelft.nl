@@ -14,7 +14,6 @@ class PinTransactieMatchStatusEnum extends PersistentEnum {
 	 * PinTransactieMatchStatus opties.
 	 */
 	const REASON_MATCH = 'match';
-	const REASON_TRANSPOSE = 'transpose';
 	const REASON_VERKEERD_BEDRAG = 'verkeerd bedrag';
 	const REASON_MISSENDE_TRANSACTIE = 'missende transactie';
 	const REASON_MISSENDE_BESTELLING = 'missende bestelling';

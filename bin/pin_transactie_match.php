@@ -27,6 +27,8 @@ echo sprintf("We kijken van %s tot %s.\n", $from, $to);
 echo sprintf("Er zijn %d pin transacties\nEr zijn %d pin bestellingen.\n", count($pintransacties), count($pinbestellingen));
 
 try {
+	PinTransactieMatcher::clean($pintransacties, $pinbestellingen);
+
 	$matches = PinTransactieMatcher::match($pintransacties, $pinbestellingen);
 
 	echo "De volgende matches zijn gevonden." . PHP_EOL;

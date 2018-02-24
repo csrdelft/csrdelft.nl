@@ -21,21 +21,6 @@ class PinTransactieMatch extends PersistentEntity {
 	 * @param CiviBestellingInhoud $pinBestelling
 	 * @return static
 	 */
-	public static function omgedraaid($pinTransactie, $pinBestelling)
-	{
-		$pinTransactieMatch = new static();
-		$pinTransactieMatch->reden = PinTransactieMatchStatusEnum::REASON_MATCH;
-		$pinTransactieMatch->transactie_id = $pinTransactie->id;
-		$pinTransactieMatch->bestelling_id = $pinBestelling->bestelling_id;
-
-		return $pinTransactieMatch;
-	}
-
-	/**
-	 * @param PinTransactie $pinTransactie
-	 * @param CiviBestellingInhoud $pinBestelling
-	 * @return static
-	 */
 	public static function verkeerdBedrag($pinTransactie, $pinBestelling)
 	{
 		$pinTransactieMatch = new static();
