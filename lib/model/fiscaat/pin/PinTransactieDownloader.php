@@ -146,12 +146,12 @@ class PinTransactieDownloader
 	 */
 	public static function getPage($url, $sessionCookie): string
 	{
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_COOKIE, $sessionCookie);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$result = curl_exec($ch);
+		$curl_handle = curl_init();
+		curl_setopt($curl_handle, CURLOPT_URL, $url);
+		curl_setopt($curl_handle, CURLOPT_COOKIE, $sessionCookie);
+		curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+		$result = curl_exec($curl_handle);
 
 		return $result;
 	}
@@ -165,16 +165,16 @@ class PinTransactieDownloader
 	 */
 	public static function postPage($url, $postFields, $sessionCookie, $returnHeader = false): string
 	{
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postFields));
-		curl_setopt($ch, CURLOPT_COOKIE, $sessionCookie);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-		curl_setopt($ch, CURLOPT_HEADER, $returnHeader);
-		$result = curl_exec($ch);
+		$curl_handle = curl_init();
+		curl_setopt($curl_handle, CURLOPT_URL, $url);
+		curl_setopt($curl_handle, CURLOPT_POST, true);
+		curl_setopt($curl_handle, CURLOPT_POSTFIELDS, http_build_query($postFields));
+		curl_setopt($curl_handle, CURLOPT_COOKIE, $sessionCookie);
+		curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl_handle, CURLOPT_HEADER, $returnHeader);
+		$result = curl_exec($curl_handle);
 
 		return $result;
 	}
