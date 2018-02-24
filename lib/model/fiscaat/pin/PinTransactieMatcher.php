@@ -87,13 +87,6 @@ class PinTransactieMatcher {
 	public static function match(array $pinTransacties, array $pinBestellingen) {
 		$distanceMatrix = static::levenshteinMatrix($pinTransacties, $pinBestellingen);
 
-		foreach ($distanceMatrix as $row) {
-			foreach ($row as $item) {
-				printf('%-3d', $item);
-			}
-			echo PHP_EOL;
-		}
-
 		$matches = [];
 		$indexTransactie = 0;
 		$indexBestelling = 0;
