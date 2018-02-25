@@ -59,7 +59,7 @@ class CiviBestellingModel extends PersistenceModel {
 	 */
 	public function getPinBestellingInMoment($from, $to) {
 		/** @var CiviBestelling[] $bestellingen */
-		$bestellingen = $this->find('moment > ? AND moment < ?', [$from, $to], null, 'moment DESC');
+		$bestellingen = $this->find('moment > ? AND moment < ? AND deleted = false', [$from, $to], null, 'moment DESC');
 		$pinBestellingen = [];
 
 		foreach ($bestellingen as $bestelling) {
@@ -105,6 +105,26 @@ class CiviBestellingModel extends PersistenceModel {
 		$after = $profielOnly ? "AND uid NOT LIKE 'c%'" : "";
 		$moment = $date->format("Y-m-d G:i:s");
 		return $this->select(['SUM(totaal)'], "deleted = 0 AND moment > ? $after", [$moment])->fetch(\PDO::FETCH_COLUMN);
+	}
+
+	/**
+	 * @param CiviBestelling $bestelling
+	 * @return string
+	 */
+	public function getPinBeschrijving($bestelling) {
+		/** @var CiviBestellingInhoud $inhoud */
+		$inhoud = $this->civiBestellingInhoudModel->getAll($bestelling->id, CiviProductTypeEnum::PINTRANSACTIE)->fetch();
+		$beschrijving = sprintf('€%.2f PIN', $inhoud->aantal / 100);
+
+		$aantalInhoud = $this->civiBestellingInhoudModel->count('bestelling_id = ?', [$bestelling->id]);
+
+		if ($aantalInhoud == 2) {
+			$beschrijving .= sprintf(' en 1 ander product');
+		} elseif ($aantalInhoud > 2) {
+			$beschrijving .= sprintf(' en %d andere producten', $aantalInhoud - 1);
+		}
+
+		return $beschrijving;
 	}
 
 	/**

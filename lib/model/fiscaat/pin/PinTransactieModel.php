@@ -28,6 +28,15 @@ class PinTransactieModel extends PersistenceModel {
 	}
 
 	/**
+	 * @param PinTransactie $pinTransactie
+	 * @return string
+	 * @throws \CsrDelft\common\CsrException
+	 */
+	public function getKorteBeschrijving($pinTransactie) {
+		return sprintf('€%.2f',$pinTransactie->getBedragInCenten()/100);
+	}
+
+	/**
 	 * @param int $id
 	 * @return PinTransactie
 	 */

@@ -91,6 +91,13 @@ class PinTransactieMatcher {
 		$indexTransactie = 0;
 		$indexBestelling = 0;
 
+		foreach ($distanceMatrix as $row) {
+			foreach ($row as $item) {
+				printf('%-3d', $item);
+			}
+			echo PHP_EOL;
+		}
+
 		while ($indexTransactie < count($pinTransacties) && $indexBestelling < count($pinBestellingen)) {
 			$isMatch = $distanceMatrix[$indexTransactie + 1][$indexBestelling + 1];
 			$isMissendeBestelling = $distanceMatrix[$indexTransactie + 1][$indexBestelling];
