@@ -8,7 +8,7 @@ class PinTransactieMatch extends AbstractMigration {
 		$this->query(<<<SQL
 CREATE TABLE pin_transactie_match (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`reden` ENUM('match','verkeerd bedrag','missende transactie','missende bestelling') NOT NULL,
+	`status` ENUM('match','verkeerd bedrag','missende transactie','missende bestelling') NOT NULL,
 	`transactie_id` INT(11) NULL DEFAULT NULL,
 	`bestelling_id` INT(11) NULL DEFAULT NULL,
 	PRIMARY KEY (`id`)

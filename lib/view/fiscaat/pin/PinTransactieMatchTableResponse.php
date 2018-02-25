@@ -36,7 +36,7 @@ class PinTransactieMatchTableResponse extends DataTableResponse {
 			return parent::getJson([
 				'UUID' => $entity->getUUID(),
 				'id' => $entity->id,
-				'reden' => $entity->reden,
+				'status' => $entity->status,
 				'moment' => PinTransactieMatchModel::instance()->getMoment($entity),
 				'transactie_id' => $entity->transactie_id,
 				'transactie' => $transactieBeschrijving,

@@ -12,7 +12,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class PinTransactieMatch extends PersistentEntity {
 	public $id;
-	public $reden;
+	public $status;
 	public $transactie_id;
 	public $bestelling_id;
 
@@ -24,7 +24,7 @@ class PinTransactieMatch extends PersistentEntity {
 	public static function verkeerdBedrag($pinTransactie, $pinBestelling)
 	{
 		$pinTransactieMatch = new static();
-		$pinTransactieMatch->reden = PinTransactieMatchStatusEnum::REASON_VERKEERD_BEDRAG;
+		$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_VERKEERD_BEDRAG;
 		$pinTransactieMatch->transactie_id = $pinTransactie->id;
 		$pinTransactieMatch->bestelling_id = $pinBestelling->bestelling_id;
 
@@ -38,7 +38,7 @@ class PinTransactieMatch extends PersistentEntity {
 	public static function missendeTransactie($pinBestelling)
 	{
 		$pinTransactieMatch = new static();
-		$pinTransactieMatch->reden = PinTransactieMatchStatusEnum::REASON_MISSENDE_TRANSACTIE;
+		$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE;
 		$pinTransactieMatch->transactie_id = null;
 		$pinTransactieMatch->bestelling_id = $pinBestelling->bestelling_id;
 
@@ -52,7 +52,7 @@ class PinTransactieMatch extends PersistentEntity {
 	public static function missendeBestelling($pinTransactie)
 	{
 		$pinTransactieMatch = new static();
-		$pinTransactieMatch->reden = PinTransactieMatchStatusEnum::REASON_MISSENDE_BESTELLING;
+		$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING;
 		$pinTransactieMatch->transactie_id = $pinTransactie->id;
 		$pinTransactieMatch->bestelling_id = null;
 
@@ -67,7 +67,7 @@ class PinTransactieMatch extends PersistentEntity {
 	public static function match($pinTransactie, $pinBestelling)
 	{
 		$pinTransactieMatch = new static();
-		$pinTransactieMatch->reden = PinTransactieMatchStatusEnum::REASON_MATCH;
+		$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_MATCH;
 		$pinTransactieMatch->transactie_id = $pinTransactie->id;
 		$pinTransactieMatch->bestelling_id = $pinBestelling->bestelling_id;
 
@@ -78,7 +78,7 @@ class PinTransactieMatch extends PersistentEntity {
 	protected static $table_name = 'pin_transactie_match';
 	protected static $persistent_attributes = [
 		'id' => [T::Integer, false, 'auto_increment'],
-		'reden' => [T::Enumeration, false, PinTransactieMatchStatusEnum::class],
+		'status' => [T::Enumeration, false, PinTransactieMatchStatusEnum::class],
 		'transactie_id' => [T::Integer, true],
 		'bestelling_id' => [T::Integer, true],
 	];

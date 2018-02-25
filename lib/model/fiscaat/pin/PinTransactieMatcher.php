@@ -148,27 +148,27 @@ class PinTransactieMatcher {
 
 		foreach ($matches as $match) {
 
-			switch ($match->reden) {
-				case PinTransactieMatchStatusEnum::REASON_MISSENDE_BESTELLING:
+			switch ($match->status) {
+				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING:
 					$pinTransactie = PinTransactieModel::get($match->transactie_id);
 					$verschil += $pinTransactie->getBedragInCenten();
 					$moment = date('H:m:s', strtotime($pinTransactie->datetime));
 
 					printf("%s - Missende bestelling voor pintransactie %d om %s van %s.\n", $moment, $pinTransactie->STAN, $pinTransactie->datetime, $pinTransactie->amount);
 					break;
-				case PinTransactieMatchStatusEnum::REASON_MISSENDE_TRANSACTIE:
+				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE:
 					$pinBestelling = CiviBestellingModel::get($match->bestelling_id);
-					$pinBestellingInhoud = CiviBestellingInhoudModel::instance()->getAll($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE)->fetch();
+					$pinBestellingInhoud = CiviBestellingInhoudModel::instance()->getVoorBestellingEnProduct($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
 					$verschil -= $pinBestellingInhoud->aantal;
 					$moment = date('H:m:s', strtotime($pinBestelling->moment));
 
 					printf("%s - Missende transactie voor bestelling %d om %s van EUR %.2f door %d.\n", $moment, $pinBestelling->id, $pinBestelling->moment, $pinBestellingInhoud->aantal / 100, $pinBestelling->uid);
 					break;
-				case PinTransactieMatchStatusEnum::REASON_VERKEERD_BEDRAG:
+				case PinTransactieMatchStatusEnum::STATUS_VERKEERD_BEDRAG:
 					$pinTransactie = PinTransactieModel::get($match->transactie_id);
 					$pinBestelling = CiviBestellingModel::get($match->bestelling_id);
 
-					$pinBestellingInhoud = CiviBestellingInhoudModel::instance()->getAll($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE)->fetch();
+					$pinBestellingInhoud = CiviBestellingInhoudModel::instance()->getVoorBestellingEnProduct($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
 
 					$verschil += $pinTransactie->getBedragInCenten() - $pinBestellingInhoud->aantal;
 					$moment = date('H:m:s', strtotime($pinTransactie->datetime));

@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\fiscaat\pin;
+
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;

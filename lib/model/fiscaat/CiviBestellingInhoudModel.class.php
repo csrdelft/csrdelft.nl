@@ -47,19 +47,13 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	}
 
 	/**
+	 * PK van CiviBestellingInhoud is [bestelling_id, product_id] en een combi van de twee is dus uniek.
+	 *
 	 * @param int $bestelling_id
-	 * @param int|null $product_id
-	 * @return \PDOStatement|CiviBestellingInhoud[]
+	 * @param int $product_id
+	 * @return CiviBestellingInhoud
 	 */
-	public function getAll($bestelling_id, $product_id = null) {
-		$query = 'bestelling_id = ?';
-		$query_params = [$bestelling_id];
-
-		if ($product_id !== null) {
-			$query .= ' AND product_id = ?';
-			$query_params[] = $product_id;
-		}
-
-		return $this->find($query, $query_params);
+	public function getVoorBestellingEnProduct($bestelling_id, $product_id) {
+		return $this->find('bestelling_id = ? AND product_id = ?', [$bestelling_id, $product_id])->fetch();
 	}
 }

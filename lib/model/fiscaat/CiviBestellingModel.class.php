@@ -113,7 +113,7 @@ class CiviBestellingModel extends PersistenceModel {
 	 */
 	public function getPinBeschrijving($bestelling) {
 		/** @var CiviBestellingInhoud $inhoud */
-		$inhoud = $this->civiBestellingInhoudModel->getAll($bestelling->id, CiviProductTypeEnum::PINTRANSACTIE)->fetch();
+		$inhoud = $this->civiBestellingInhoudModel->getVoorBestellingEnProduct($bestelling->id, CiviProductTypeEnum::PINTRANSACTIE);
 		$beschrijving = sprintf('€%.2f PIN', $inhoud->aantal / 100);
 
 		$aantalInhoud = $this->civiBestellingInhoudModel->count('bestelling_id = ?', [$bestelling->id]);
