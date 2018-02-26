@@ -15,7 +15,6 @@ use CsrDelft\view\formulier\ModalForm;
  */
 class PinBestellingAanmakenForm extends ModalForm {
 	/**
-	 * PinBestellingAanmakenForm constructor.
 	 * @param PinTransactieMatch|null $pinTransactieMatch
 	 * @throws CsrGebruikerException
 	 */

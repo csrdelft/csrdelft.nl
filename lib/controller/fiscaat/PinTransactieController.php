@@ -19,6 +19,7 @@ use CsrDelft\model\fiscaat\pin\PinTransactieModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fiscaat\pin\PinBestellingAanmakenForm;
+use CsrDelft\view\fiscaat\pin\PinBestellingInfoForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVeranderenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVerwijderenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTableResponse;
@@ -46,6 +47,7 @@ class PinTransactieController extends AclController {
 				'verwijder' => 'P_MAAL_MOD',
 				'aanmaken' => 'P_MAAL_MOD',
 				'update' => 'P_MAAL_MOD',
+				'info' => 'P_MAAL_MOD',
 			];
 		} else {
 			$this->acl = [
@@ -375,6 +377,27 @@ class PinTransactieController extends AclController {
 			]);
 		} else {
 			$this->view = $form;
+		}
+	}
+
+	/**
+	 * @throws CsrGebruikerException
+	 */
+	public function POST_info() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+
+		if (count($selection) !== 1) {
+			throw new CsrGebruikerException('Selecteer één regel tegelijk.');
+		} else {
+			/** @var PinTransactieMatch $pinTransactieMatch */
+			$pinTransactieMatch = $this->model->retrieveByUUID($selection[0]);
+
+			if ($pinTransactieMatch->bestelling_id === null) {
+				throw new CsrGebruikerException('Geen bestelling gevonden');
+			} else {
+				$pinBestelling = CiviBestellingModel::get($pinTransactieMatch->bestelling_id);
+				$this->view = new PinBestellingInfoForm($pinBestelling);
+			}
 		}
 	}
 

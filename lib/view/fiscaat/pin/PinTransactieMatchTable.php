@@ -22,6 +22,7 @@ class PinTransactieMatchTable extends DataTable {
 		$this->addKnop(new DataTableKnop('== 1',  $this->dataTableId, '/fiscaat/pin/verwerk', '',  'Verwerk', 'Dit probleem verwerken', 'cart_edit'));
 		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/pin/ontkoppel', '', 'Ontkoppel', 'Ontkoppel bestelling en transactie', 'arrow_divide', 'confirm'));
 		$this->addKnop(new DataTableKnop('== 2', $this->dataTableId, '/fiscaat/pin/koppel', '', 'Koppel', 'Koppel een bestelling en transactie', 'arrow_join'));
+		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/pin/info', '', 'Info', 'Bekijk informatie over de gekoppelde bestelling', 'magnifier'));
 
 		$this->addColumn('moment');
 		$this->addColumn('transactie');
