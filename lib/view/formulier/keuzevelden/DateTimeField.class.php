@@ -69,6 +69,9 @@ class DateTimeField extends TextField {
 	}
 
 	public function getJavascript() {
+		if ($this->readonly) {
+			return '';
+		}
 		if ($this->from_datetime) {
 			$min = $this->from_datetime->getValue();
 		} else {
