@@ -210,7 +210,8 @@ class DocumentenController extends AclController {
 				$result[] = array(
 					'url' => '/documenten/bekijken/' . $doc->id . '/' . $doc->filename,
 					'label' => $this->model->getCategorieModel()->find('id = ?', [$doc->categorie_id])->fetch()->naam,
-					'value' => $doc->naam
+					'value' => $doc->naam,
+					'id' => $doc->id
 				);
 			}
 		}
