@@ -17,13 +17,35 @@ use CsrDelft\model\fiscaat\CiviBestellingModel;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 20/02/2018
  */
-class PinTransactieMatcher {
+class PinTransactieMatcherFactory {
 	/**
+	 * @var PinTransactie[]
+	 */
+	private $pinTransacties;
+	/**
+	 * @var CiviBestellingInhoud[]
+	 */
+	private $pinBestellingen;
+
+	/**
+	 * @var PinTransactieMatch[]
+	 */
+	private $matches;
+
+	/**
+	 * PinTransactieMatcher constructor.
 	 * @param PinTransactie[] $pinTransacties
 	 * @param CiviBestellingInhoud[] $pinBestellingen
 	 */
-	public static function clean(array $pinTransacties, array $pinBestellingen) {
-		foreach ($pinTransacties as $pinTransactie) {
+	public function __construct(array $pinTransacties, array $pinBestellingen) {
+		$this->pinTransacties = $pinTransacties;
+		$this->pinBestellingen = $pinBestellingen;
+	}
+
+	/**
+	 */
+	public function clean() {
+		foreach ($this->pinTransacties as $pinTransactie) {
 			$matches = PinTransactieMatchModel::instance()->find('transactie_id = ?', [$pinTransactie->id])->fetchAll();
 
 			foreach ($matches as $match) {
@@ -31,7 +53,7 @@ class PinTransactieMatcher {
 			}
 		}
 
-		foreach ($pinBestellingen as $pinBestelling) {
+		foreach ($this->pinBestellingen as $pinBestelling) {
 			$matches = PinTransactieMatchModel::instance()->find('bestelling_id = ?', [$pinBestelling->bestelling_id])->fetchAll();
 
 			foreach ($matches as $match) {
@@ -46,7 +68,7 @@ class PinTransactieMatcher {
 	 * @return int[][]
 	 * @throws CsrException
 	 */
-	public static function levenshteinMatrix(array $pinTransacties, array $pinBestellingen) {
+	protected function levenshteinMatrix(array $pinTransacties, array $pinBestellingen) {
 		$pinTransactiesCount = count($pinTransacties);
 		$pinBestellingenCount = count($pinBestellingen);
 
@@ -79,13 +101,12 @@ class PinTransactieMatcher {
 	}
 
 	/**
-	 * @param PinTransactie[] $pinTransacties
-	 * @param CiviBestellingInhoud[] $pinBestellingen
-	 * @return PinTransactieMatch[]
 	 * @throws CsrException
 	 */
-	public static function match(array $pinTransacties, array $pinBestellingen) {
-		$distanceMatrix = static::levenshteinMatrix($pinTransacties, $pinBestellingen);
+	public function match() {
+		$pinTransacties = $this->pinTransacties;
+		$pinBestellingen = $this->pinBestellingen;
+		$distanceMatrix = $this->levenshteinMatrix($pinTransacties, $pinBestellingen);
 
 		$matches = [];
 		$indexTransactie = 0;
@@ -133,20 +154,32 @@ class PinTransactieMatcher {
 			$indexBestelling++;
 		}
 
-		return $matches;
+		$this->matches = $matches;
 	}
 
 	/**
-	 * @param PinTransactieMatch[] $matches
+	 * @return bool
+	 */
+	public function bevatFouten() {
+		foreach ($this->matches as $match) {
+			if ($match->status !== PinTransactieMatchStatusEnum::STATUS_MATCH) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * @return string
 	 * @throws CsrException
 	 */
-	public static function genereerReport($matches) {
+	public function genereerReport() {
 		ob_start();
 
 		$verschil = 0;
 
-		foreach ($matches as $match) {
+		foreach ($this->matches as $match) {
 
 			switch ($match->status) {
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING:
@@ -190,5 +223,11 @@ class PinTransactieMatcher {
 		ob_end_clean();
 
 		return $report;
+	}
+
+	/**
+	 */
+	public function save() {
+		PinTransactieMatchModel::instance()->createAll($this->matches);
 	}
 }
