@@ -19,9 +19,16 @@ use CsrDelft\model\fiscaat\CiviBestellingModel;
  */
 class PinTransactieMatcherFactory {
 	/**
+	 * Constants.
+	 */
+	const COST_VERKEERD_BEDRAG = 1;
+	const TIME_FORMAT = 'H:m:s';
+
+	/**
 	 * @var PinTransactie[]
 	 */
 	private $pinTransacties;
+
 	/**
 	 * @var CiviBestellingInhoud[]
 	 */
@@ -33,7 +40,6 @@ class PinTransactieMatcherFactory {
 	private $matches;
 
 	/**
-	 * PinTransactieMatcher constructor.
 	 * @param PinTransactie[] $pinTransacties
 	 * @param CiviBestellingInhoud[] $pinBestellingen
 	 */
@@ -88,12 +94,14 @@ class PinTransactieMatcherFactory {
 				if ($pinTransacties[$i]->getBedragInCenten() == $pinBestellingen[$j]->aantal) {
 					$cost = 0;
 				} else {
-					$cost = 2;
+					$cost = self::COST_VERKEERD_BEDRAG;
 				}
 
-				$distanceMatrix[$i + 1][$j + 1] = min($distanceMatrix[$i][$j + 1] + 1, // insert
+				$distanceMatrix[$i + 1][$j + 1] = min(
+					$distanceMatrix[$i][$j + 1] + 1, // insert
 					$distanceMatrix[$i + 1][$j] + 1, // delete
-					$distanceMatrix[$i][$j] + $cost); // replace
+					$distanceMatrix[$i][$j] + $cost // replace
+				);
 			}
 		}
 
@@ -132,15 +140,15 @@ class PinTransactieMatcherFactory {
 
 					break;
 
-				case $isMissendeBestelling:
-					$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexTransactie]);
-					$indexTransactie++;
-
-					break;
-
 				case $isMissendeTransactie:
 					$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexBestelling]);
 					$indexBestelling++;
+
+					break;
+
+				case $isMissendeBestelling:
+					$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexTransactie]);
+					$indexTransactie++;
 
 					break;
 			}
@@ -187,7 +195,7 @@ class PinTransactieMatcherFactory {
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING:
 					$pinTransactie = PinTransactieModel::get($match->transactie_id);
 					$verschil += $pinTransactie->getBedragInCenten();
-					$moment = date('H:m:s', strtotime($pinTransactie->datetime));
+					$moment = date(self::TIME_FORMAT, strtotime($pinTransactie->datetime));
 
 					printf("%s - Missende bestelling voor pintransactie %d om %s van %s.\n", $moment, $pinTransactie->STAN, $pinTransactie->datetime, $pinTransactie->amount);
 					break;
@@ -195,7 +203,7 @@ class PinTransactieMatcherFactory {
 					$pinBestelling = CiviBestellingModel::get($match->bestelling_id);
 					$pinBestellingInhoud = CiviBestellingInhoudModel::instance()->getVoorBestellingEnProduct($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
 					$verschil -= $pinBestellingInhoud->aantal;
-					$moment = date('H:m:s', strtotime($pinBestelling->moment));
+					$moment = date(self::TIME_FORMAT, strtotime($pinBestelling->moment));
 
 					printf("%s - Missende transactie voor bestelling %d om %s van EUR %.2f door %d.\n", $moment, $pinBestelling->id, $pinBestelling->moment, $pinBestellingInhoud->aantal / 100, $pinBestelling->uid);
 					break;
@@ -206,7 +214,7 @@ class PinTransactieMatcherFactory {
 					$pinBestellingInhoud = CiviBestellingInhoudModel::instance()->getVoorBestellingEnProduct($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
 
 					$verschil += $pinTransactie->getBedragInCenten() - $pinBestellingInhoud->aantal;
-					$moment = date('H:m:s', strtotime($pinTransactie->datetime));
+					$moment = date(self::TIME_FORMAT, strtotime($pinTransactie->datetime));
 
 					printf("%s - Bestelling en transactie hebben geen overeenkomend bedrag.\n", $moment);
 					printf(" - %s Transactie %d om %s.\n", $pinTransactie->amount, $pinTransactie->STAN, $pinTransactie->datetime);
@@ -230,6 +238,8 @@ class PinTransactieMatcherFactory {
 	/**
 	 */
 	public function save() {
-		PinTransactieMatchModel::instance()->createAll($this->matches);
+		foreach ($this->matches as $match) {
+			PinTransactieMatchModel::instance()->create($match);
+		}
 	}
 }

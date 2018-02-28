@@ -26,13 +26,4 @@ class PinTransactieMatchModel extends PersistenceModel {
 			throw new CsrException('Pin Transactie Match heeft geen bestelling en transactie.');
 		}
 	}
-
-	/**
-	 * @param PinTransactieMatch[] $matches
-	 */
-	public function createAll($matches) {
-		foreach ($matches as $match) {
-			$this->create($match);
-		}
-	}
 }

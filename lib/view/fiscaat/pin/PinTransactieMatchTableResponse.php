@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\pin;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\fiscaat\pin\PinTransactieMatch;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieMatchModel;
@@ -16,28 +17,32 @@ class PinTransactieMatchTableResponse extends DataTableResponse {
 	/**
 	 * @param PinTransactieMatch|array $entity
 	 * @return string
-	 * @throws \CsrDelft\common\CsrException
+	 * @throws CsrException
 	 */
 	public function getJson($entity) {
 		if ($entity instanceof PinTransactieMatch) {
-
 			if ($entity->bestelling_id !== null) {
-				$bestellingBeschrijving = CiviBestellingModel::instance()->getPinBeschrijving(CiviBestellingModel::get($entity->bestelling_id));
+				$bestelling = CiviBestellingModel::get($entity->bestelling_id);
+				$bestellingBeschrijving = CiviBestellingModel::instance()->getPinBeschrijving($bestelling);
 			} else {
 				$bestellingBeschrijving = '';
 			}
 
 			if ($entity->transactie_id !== null) {
-				$transactieBeschrijving = PinTransactieModel::instance()->getKorteBeschrijving(PinTransactieModel::get($entity->transactie_id));
+				echo $entity->transactie_id;
+				$pinTransactie = PinTransactieModel::get($entity->transactie_id);
+				$transactieBeschrijving = PinTransactieModel::instance()->getKorteBeschrijving($pinTransactie);
 			} else {
 				$transactieBeschrijving = '';
 			}
+
+			$moment = PinTransactieMatchModel::instance()->getMoment($entity);
 
 			return parent::getJson([
 				'UUID' => $entity->getUUID(),
 				'id' => $entity->id,
 				'status' => $entity->status,
-				'moment' => PinTransactieMatchModel::instance()->getMoment($entity),
+				'moment' => $moment,
 				'transactie_id' => $entity->transactie_id,
 				'transactie' => $transactieBeschrijving,
 				'bestelling_id' => $entity->bestelling_id,

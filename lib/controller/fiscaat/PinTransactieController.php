@@ -5,6 +5,7 @@ namespace CsrDelft\controller\fiscaat;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
+use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
@@ -33,8 +34,9 @@ use CsrDelft\view\fiscaat\pin\PinTransactieOverzichtView;
  */
 class PinTransactieController extends AclController {
 
-	const DATETIME_FORMAT = 'Y-m-d H:i:s';
-
+	/**
+	 * @param string $query
+	 */
 	public function __construct($query) {
 		parent::__construct($query, PinTransactieMatchModel::instance());
 
@@ -105,7 +107,7 @@ class PinTransactieController extends AclController {
 
 			switch ($pinTransactieMatch->status) {
 				case PinTransactieMatchStatusEnum::STATUS_MATCH:
-					throw new CsrGebruikerException('Niets te doen');
+					throw new CsrGebruikerException('Er is geen fout om op te lossen.');
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING:
 					// Maak een nieuwe bestelling met bedrag en uid.
 					$this->view = new PinBestellingAanmakenForm($pinTransactieMatch);
@@ -153,7 +155,7 @@ class PinTransactieController extends AclController {
 			$bestelling->totaal = $pinTransactie->getBedragInCenten() * -1;
 			$bestelling->cie = CiviSaldoCommissieEnum::SOCCIE;
 			$bestelling->deleted = false;
-			$bestelling->comment = sprintf('Aangemaakt door de fiscus op %s.', date(self::DATETIME_FORMAT));
+			$bestelling->comment = sprintf('Aangemaakt door de fiscus op %s.', getDateTime());
 
 			$bestellingInhoud = new CiviBestellingInhoud();
 			$bestellingInhoud->product_id = CiviProductTypeEnum::PINTRANSACTIE;
@@ -164,11 +166,7 @@ class PinTransactieController extends AclController {
 			$bestelling->id = CiviBestellingModel::instance()->create($bestelling);
 			PinTransactieMatchModel::instance()->delete($pinTransactieMatch);
 
-			$nieuwePinTransactieMatch = new PinTransactieMatch();
-			$nieuwePinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_MATCH;
-			$nieuwePinTransactieMatch->bestelling_id = $bestelling->id;
-			$nieuwePinTransactieMatch->transactie_id = $pinTransactie->id;
-
+			$nieuwePinTransactieMatch = PinTransactieMatch::match($pinTransactie, $bestellingInhoud);
 			$nieuwePinTransactieMatch->id = PinTransactieMatchModel::instance()->create($nieuwePinTransactieMatch);
 
 			$this->view = new PinTransactieMatchTableResponse([
@@ -202,7 +200,7 @@ class PinTransactieController extends AclController {
 				throw new CsrGebruikerException('Ontkoppelen niet mogelijk, geen transactie gevonden.');
 			} else {
 
-				list($missendeBestelling, $missendeTransactie) = Database::transaction(function () use ($pinTransactieMatch) {
+				$nieuweMatches = Database::transaction(function () use ($pinTransactieMatch) {
 					$missendeBestelling = PinTransactieMatch::missendeBestelling(PinTransactieModel::get($pinTransactieMatch->transactie_id));
 					$missendeTransactie = PinTransactieMatch::missendeTransactie(CiviBestellingInhoudModel::instance()->getVoorBestellingEnProduct($pinTransactieMatch->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE));
 
@@ -213,14 +211,12 @@ class PinTransactieController extends AclController {
 					return [$missendeBestelling, $missendeTransactie];
 				});
 
-				$this->view = new PinTransactieMatchTableResponse([
-					[
-						'UUID' => $pinTransactieMatch->getUUID(),
-						'remove' => true
-					],
-					$missendeTransactie,
-					$missendeBestelling,
-				]);
+				$this->view = new PinTransactieMatchTableResponse($nieuweMatches + [
+						[
+							'UUID' => $pinTransactieMatch->getUUID(),
+							'remove' => true
+						],
+					]);
 			}
 		}
 	}
@@ -312,7 +308,7 @@ class PinTransactieController extends AclController {
 					$nieuweBestelling->moment = $oudeBestelling->moment;
 					$nieuweBestelling->cie = $oudeBestelling->cie;
 					$nieuweBestelling->totaal = $oudeBestelling->totaal - $pinBestellingInhoud->aantal;
-					$nieuweBestelling->comment = sprintf('Veranderd door de fiscus op %s.', date(self::DATETIME_FORMAT));
+					$nieuweBestelling->comment = sprintf('Veranderd door de fiscus op %s.', getDateTime());
 
 					CiviBestellingModel::instance()->create($nieuweBestelling);
 				}
@@ -354,7 +350,7 @@ class PinTransactieController extends AclController {
 
 				$bestellingInhoud->aantal = $transactie->getBedragInCenten();
 				$bestelling->totaal += $oudAantal - $nieuwAantal;
-				$bestelling->comment = sprintf('Veranderd door de fiscus op %s.', date(self::DATETIME_FORMAT));
+				$bestelling->comment = sprintf('Veranderd door de fiscus op %s.', getDateTime());
 
 				if ($oudAantal < $nieuwAantal) {
 					// Is nu meer gepind

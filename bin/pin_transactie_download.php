@@ -64,7 +64,7 @@ Zojuist zijn de pin transacties en bestellingen tussen {$from} en {$to} geanalys
 
 De volgende fouten zijn gevonden.
 
-{$report}.
+{$report}
 
 Met vriendelijke groet,
 
