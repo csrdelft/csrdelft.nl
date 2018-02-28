@@ -88,7 +88,7 @@ class PinTransactieMatcherFactory {
 				if ($pinTransacties[$i]->getBedragInCenten() == $pinBestellingen[$j]->aantal) {
 					$cost = 0;
 				} else {
-					$cost = 1;
+					$cost = 2;
 				}
 
 				$distanceMatrix[$i + 1][$j + 1] = min($distanceMatrix[$i][$j + 1] + 1, // insert
@@ -131,11 +131,13 @@ class PinTransactieMatcherFactory {
 					$indexBestelling++;
 
 					break;
+
 				case $isMissendeBestelling:
 					$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexTransactie]);
 					$indexTransactie++;
 
 					break;
+
 				case $isMissendeTransactie:
 					$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexBestelling]);
 					$indexBestelling++;
