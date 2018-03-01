@@ -17,7 +17,7 @@ class CiviSaldoLog extends PersistentEntity {
 		'id' => array(T::Integer, false, 'auto_increment'),
 		'ip' => array(T::String),
 		'type' => array(T::Enumeration, false, CiviSaldoLogEnum::class),
-		'data' => array(T::String),
+		'data' => array(T::Text),
 		'timestamp' => array(T::Timestamp)
 	);
 	protected static $primary_key = array('id');
