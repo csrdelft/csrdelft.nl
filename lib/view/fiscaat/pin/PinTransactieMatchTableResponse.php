@@ -29,7 +29,6 @@ class PinTransactieMatchTableResponse extends DataTableResponse {
 			}
 
 			if ($entity->transactie_id !== null) {
-				echo $entity->transactie_id;
 				$pinTransactie = PinTransactieModel::get($entity->transactie_id);
 				$transactieBeschrijving = PinTransactieModel::instance()->getKorteBeschrijving($pinTransactie);
 			} else {
