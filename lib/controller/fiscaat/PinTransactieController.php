@@ -211,12 +211,12 @@ class PinTransactieController extends AclController {
 					return [$missendeBestelling, $missendeTransactie];
 				});
 
-				$this->view = new PinTransactieMatchTableResponse($nieuweMatches + [
+				$this->view = new PinTransactieMatchTableResponse(array_merge($nieuweMatches, [
 						[
 							'UUID' => $pinTransactieMatch->getUUID(),
 							'remove' => true
 						],
-					]);
+					]));
 			}
 		}
 	}

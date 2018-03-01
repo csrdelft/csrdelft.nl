@@ -11,7 +11,11 @@ CREATE TABLE pin_transactie_match (
 	`status` ENUM('match','verkeerd bedrag','missende transactie','missende bestelling') NOT NULL,
 	`transactie_id` INT(11) NULL DEFAULT NULL,
 	`bestelling_id` INT(11) NULL DEFAULT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `transactie_id` (`transactie_id`),
+	UNIQUE INDEX `bestelling_id` (`bestelling_id`),
+	CONSTRAINT `transactie_id` FOREIGN KEY (`transactie_id`) REFERENCES `pin_transacties` (`id`),
+	CONSTRAINT `bestelling_id` FOREIGN KEY (`bestelling_id`) REFERENCES `civibestelling` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 SQL
 		);

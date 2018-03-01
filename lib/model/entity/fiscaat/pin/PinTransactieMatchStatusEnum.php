@@ -32,9 +32,9 @@ class PinTransactieMatchStatusEnum extends PersistentEnum {
 	 * @var string[]
 	 */
 	protected static $mapChoiceToDescription = [
-		self::STATUS_MATCH => self::STATUS_MATCH,
-		self::STATUS_VERKEERD_BEDRAG => self::STATUS_VERKEERD_BEDRAG,
-		self::STATUS_MISSENDE_TRANSACTIE => self::STATUS_MISSENDE_TRANSACTIE,
-		self::STATUS_MISSENDE_BESTELLING => self::STATUS_MISSENDE_BESTELLING,
+		self::STATUS_MATCH => 'Match',
+		self::STATUS_VERKEERD_BEDRAG => 'Verkeerd bedrag',
+		self::STATUS_MISSENDE_TRANSACTIE => 'Missende transactie',
+		self::STATUS_MISSENDE_BESTELLING => 'Missende bestelling',
 	];
 }
