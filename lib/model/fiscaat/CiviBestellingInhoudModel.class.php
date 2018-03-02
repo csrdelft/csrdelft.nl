@@ -45,4 +45,15 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 		$product = $this->civiProductModel->getProduct($inhoud->product_id);
 		return sprintf("%d %s", $inhoud->aantal, $product->beschrijving);
 	}
+
+	/**
+	 * PK van CiviBestellingInhoud is [bestelling_id, product_id] en een combi van de twee is dus uniek.
+	 *
+	 * @param int $bestelling_id
+	 * @param int $product_id
+	 * @return CiviBestellingInhoud
+	 */
+	public function getVoorBestellingEnProduct($bestelling_id, $product_id) {
+		return $this->find('bestelling_id = ? AND product_id = ?', [$bestelling_id, $product_id])->fetch();
+	}
 }

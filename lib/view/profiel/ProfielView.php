@@ -7,7 +7,7 @@ use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\fiscaat\SaldoModel;
+use CsrDelft\model\fiscaat\SaldoGrafiekModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\fotoalbum\FotoTagsModel;
@@ -147,7 +147,7 @@ class ProfielView extends SmartyTemplateView {
 			$this->smarty->assign('abos', MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($this->model->uid));
 		}
 
-		if (SaldoModel::instance()->magGrafiekZien($this->model->uid)) {
+		if (SaldoGrafiekModel::magGrafiekZien($this->model->uid)) {
 			$this->smarty->assign('saldografiek', 'ja');
 		}
 

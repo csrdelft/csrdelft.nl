@@ -2,10 +2,13 @@
 
 namespace CsrDelft\controller\fiscaat;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\fiscaat\bestellingen\CiviBestellingInhoudTableResponse;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTable;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTableResponse;
 
@@ -22,7 +25,8 @@ class BeheerCiviBestellingController extends AclController {
 		if ($this->getMethod() == "POST") {
 			$this->acl = [
 				'mijn' => 'P_MAAL_IK',
-				'overzicht' => 'P_MAAL_MOD'
+				'overzicht' => 'P_MAAL_MOD',
+				'inhoud' => 'P_MAAL_MOD',
 			];
 		} else {
 			$this->acl = [
@@ -32,8 +36,19 @@ class BeheerCiviBestellingController extends AclController {
 		}
 	}
 
+	/**
+	 * @param array $args
+	 * @return mixed
+	 * @throws CsrException
+	 */
 	public function performAction(array $args = array()) {
 		$this->action = 'mijn';
+
+		if ($this->hasParam(4)) {
+			$this->action = $this->getParam(3);
+
+			return parent::performAction($this->getParams(4));
+		}
 
 		if ($this->hasParam(3)) {
 			$this->action = 'overzicht';
@@ -61,5 +76,11 @@ class BeheerCiviBestellingController extends AclController {
 
 	public function POST_mijn() {
 		$this->POST_overzicht(LoginModel::getUid());
+	}
+
+	public function POST_inhoud($bestelling_id) {
+		$data = CiviBestellingInhoudModel::instance()->find('bestelling_id = ?', [$bestelling_id]);
+
+		$this->view = new CiviBestellingInhoudTableResponse($data);
 	}
 }

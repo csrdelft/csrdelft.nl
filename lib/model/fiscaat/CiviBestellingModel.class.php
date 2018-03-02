@@ -5,6 +5,7 @@ namespace CsrDelft\model\fiscaat;
 use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
+use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 use DateTime;
@@ -44,6 +45,37 @@ class CiviBestellingModel extends PersistenceModel {
 	}
 
 	/**
+	 * @param int $id
+	 * @return CiviBestelling
+	 */
+	public static function get($id) {
+		return static::instance()->find('id = ?', [$id])->fetch();
+	}
+
+	/**
+	 * @param string $from
+	 * @param string $to
+	 * @return CiviBestellingInhoud[]
+	 */
+	public function getPinBestellingInMoment($from, $to) {
+		/** @var CiviBestelling[] $bestellingen */
+		$bestellingen = $this->find('moment > ? AND moment < ? AND deleted = false', [$from, $to], null, 'moment ASC');
+		$pinBestellingen = [];
+
+		foreach ($bestellingen as $bestelling) {
+			$bestellingInhoud = $bestelling->getInhoud();
+
+			foreach ($bestellingInhoud as $item) {
+				if ($item->product_id == CiviProductTypeEnum::PINTRANSACTIE) {
+					$pinBestellingen[] = $item;
+				}
+			}
+		}
+
+		return $pinBestellingen;
+	}
+
+	/**
 	 * @param string $uid
 	 * @param int $limit
 	 *
@@ -73,6 +105,26 @@ class CiviBestellingModel extends PersistenceModel {
 		$after = $profielOnly ? "AND uid NOT LIKE 'c%'" : "";
 		$moment = $date->format("Y-m-d G:i:s");
 		return $this->select(['SUM(totaal)'], "deleted = 0 AND moment > ? $after", [$moment])->fetch(\PDO::FETCH_COLUMN);
+	}
+
+	/**
+	 * @param CiviBestelling $bestelling
+	 * @return string
+	 */
+	public function getPinBeschrijving($bestelling) {
+		/** @var CiviBestellingInhoud $inhoud */
+		$inhoud = $this->civiBestellingInhoudModel->getVoorBestellingEnProduct($bestelling->id, CiviProductTypeEnum::PINTRANSACTIE);
+		$beschrijving = sprintf('€%.2f PIN', $inhoud->aantal / 100);
+
+		$aantalInhoud = $this->civiBestellingInhoudModel->count('bestelling_id = ?', [$bestelling->id]);
+
+		if ($aantalInhoud == 2) {
+			$beschrijving .= sprintf(' en 1 ander product');
+		} elseif ($aantalInhoud > 2) {
+			$beschrijving .= sprintf(' en %d andere producten', $aantalInhoud - 1);
+		}
+
+		return $beschrijving;
 	}
 
 	/**
@@ -118,7 +170,7 @@ class CiviBestellingModel extends PersistenceModel {
 
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = -$bedrag;
-		$inhoud->product_id = 6; // TODO dynamic, is cent
+		$inhoud->product_id = CiviProductTypeEnum::OVERGEMAAKT;
 
 		$bestelling->inhoud[] = $inhoud;
 		$bestelling->totaal = $this->civiProductModel->getProduct($inhoud->product_id)->prijs * -$bedrag;

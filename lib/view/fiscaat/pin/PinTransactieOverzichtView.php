@@ -22,7 +22,7 @@ class PinTransactieOverzichtView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('pinTransactieTable', new PinTransactieTable());
+		$this->smarty->assign('pinTransactieMatchTable', new PinTransactieMatchTable());
 		$this->smarty->display('fiscaat/overzicht_pin.tpl');
 	}
 }

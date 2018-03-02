@@ -119,9 +119,6 @@ class CliLoginModel extends LoginModel {
 		// Subject assignment:
 		self::$uid = $account->uid;
 
-		// Permissions change: delete old session
-		session_regenerate_id(true);
-
 		// Login sessie aanmaken in database
 		$session = new LoginSession();
 		$session->session_hash = hash('sha512', session_id());

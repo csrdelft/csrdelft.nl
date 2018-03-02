@@ -6,10 +6,9 @@ use CsrDelft\common\CsrException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\GoogleSync;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
-use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Profiel;
-use CsrDelft\model\fiscaat\SaldoModel;
+use CsrDelft\model\fiscaat\SaldoGrafiekModel;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
@@ -215,8 +214,8 @@ class ProfielController extends AclController {
 	}
 
 	public function saldo($uid, $timespan) {
-		if (SaldoModel::instance()->magGrafiekZien($uid)) {
-			$data = SaldoModel::instance()->getDataPoints($uid, $timespan);
+		if (SaldoGrafiekModel::magGrafiekZien($uid)) {
+			$data = SaldoGrafiekModel::getDataPoints($uid, $timespan);
 			$this->view = new JsonResponse($data);
 		} else {
 			$this->exit_http(403);
