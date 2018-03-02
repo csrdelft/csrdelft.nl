@@ -212,11 +212,11 @@ class PinTransactieController extends AclController {
 				});
 
 				$this->view = new PinTransactieMatchTableResponse(array_merge($nieuweMatches, [
-						[
-							'UUID' => $pinTransactieMatch->getUUID(),
-							'remove' => true
-						],
-					]));
+					[
+						'UUID' => $pinTransactieMatch->getUUID(),
+						'remove' => true
+					],
+				]));
 			}
 		}
 	}
@@ -318,10 +318,10 @@ class PinTransactieController extends AclController {
 				return $pinTransactieMatch;
 			});
 
-			$this->view = new PinTransactieMatchTableResponse([
+			$this->view = new PinTransactieMatchTableResponse([[
 				'UUID' => $pinTransactieMatch->getUUID(),
 				'remove' => true,
-			]);
+			]]);
 		} else {
 			$this->view = $form;
 		}
