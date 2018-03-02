@@ -1,7 +1,4 @@
-;
-; Dit is onze sponsorkliks clubid
-;
-
 [sponsor]
 sl_host = ;
 clubid = ;
+useragent = ;
