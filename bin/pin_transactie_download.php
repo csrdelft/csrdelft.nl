@@ -74,7 +74,9 @@ MAIL;
 
 		if ($interactive) {
 			echo $body;
-			echo "\n\nDe email is niet verzonden, want de sessie is in interactieve modus.";
+			echo "\n\nDe email is niet verzonden, want de sessie is in interactieve modus.\n";
+			echo sprintf("Er zijn %d pin transacties gedownload.\n", count($pintransacties));
+
 		} else {
 			$mail = new Mail([$settings['monitoring_email'] => 'Pin Transactie Monitoring'], '[CiviSaldo] Pin transactie fouten gevonden.', $body);
 			$mail->send();
@@ -83,6 +85,7 @@ MAIL;
 
 } catch (Exception $e) {
 	if ($interactive) {
+		echo $e->getMessage() . "\n";
 		echo $e->getTraceAsString();
 	} else {
 		// Throw naar shutdownhandler.
@@ -91,4 +94,3 @@ MAIL;
 	}
 }
 
-echo sprintf("Er zijn %d pin transacties gedownload.\n", count($pintransacties));
