@@ -14,20 +14,22 @@ use function CsrDelft\init_xpath;
  * Settings constants.
  */
 const SETTINGS_CLUBID = 'clubid';
+const SETTINGS_SL_HOST = 'sl_host';
 
 /**
  * Url constants.
  */
-const SK_HOST = 'https://www.sponsorkliks.com';
-const PAGE_URL = SK_HOST . '/products/shops.php?show=all&club=';
 
 require_once __DIR__ . '/../lib/configuratie.include.php';
 
 //Steps
-$settings = parse_ini_file(__DIR__ . '/../etc/sponsorkliks_affiliates_download.ini');
+$settings = parse_ini_file(__DIR__ . '/../etc/sponsor_affiliates_download.ini');
+
+$SL_HOST = $settings[SETTINGS_SL_HOST];
+$PAGE_URL = $SL_HOST . '/products/shops.php?show=all&club=';
 
 $clubId = $settings[SETTINGS_CLUBID];
-$scrapeUrl = PAGE_URL . $clubId;
+$scrapeUrl = $PAGE_URL . $clubId;
 
 //1. GET affiliates pagina
 $result = curl_request($scrapeUrl);
@@ -40,7 +42,7 @@ $affiliateBoxes = $xpath->query('//div[@class = "ibox-content product-box"]');
 $data = ["club_id" => $clubId];
 $affiliates = [];
 $amount = 0;
-$shop_desc_url = SK_HOST . "/products/shop.php?club=$clubId&id=";
+$shop_desc_url = $SL_HOST . "/products/shop.php?club=$clubId&id=";
 foreach ($affiliateBoxes as $affiliate) {
 	$element = $xpath->query('div/a[@class="product-name orderlink"]', $affiliate)->item(0);
 	$shopName = trim($element->textContent);
@@ -56,7 +58,7 @@ foreach ($affiliateBoxes as $affiliate) {
     $shopPriceLong = $shop_xpath->query('//h2', $productDetail)->item(2)->textContent;
     $shopDesc = trim($shop_xpath->query('//h4', $productDetail)->item(0)->nextSibling->textContent);
 
-	$sponsorUrl = curl_follow_location(SK_HOST . $href);
+	$sponsorUrl = curl_follow_location($SL_HOST . $href);
 	$host = parse_url($sponsorUrl, PHP_URL_HOST);
 	$entry = [
 	    "shop_name" => $shopName,
@@ -89,9 +91,9 @@ unset($affiliates['www.sponsorkliks.com']);
 // Store affiliates map in (soon to be JSON) output data
 $data["affiliates"] = $affiliates;
 
-//4. Save results to sponsorkliks.json in data folder (overwriting existing)
+//4. Save results to sponsorlinks.json in data folder (overwriting existing)
 $json = json_encode($data);
-$outputFile = fopen(DATA_PATH . 'sponsorkliks.json', 'w');
+$outputFile = fopen(DATA_PATH . 'sponsorlinks.json', 'w');
 fwrite($outputFile, $json);
 fclose($outputFile);
 

@@ -2,5 +2,6 @@
 ; Dit is onze sponsorkliks clubid
 ;
 
-[sponsorkliks]
+[sponsor]
+sl_host = ;
 clubid = ;

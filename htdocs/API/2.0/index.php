@@ -6,7 +6,7 @@ use CsrDelft\controller\api\ApiAuthController;
 use CsrDelft\controller\api\ApiForumController;
 use CsrDelft\controller\api\ApiLedenController;
 use CsrDelft\controller\api\ApiMaaltijdenController;
-use CsrDelft\controller\api\ApiSponsorkliksController;
+use CsrDelft\controller\api\ApiSponsorlinksController;
 use Jacwright\RestServer\RestServer;
 
 require_once 'configuratie.include.php';
@@ -38,6 +38,6 @@ $server->addClass(ApiAuthController::class, '/auth');
 $server->addClass(ApiForumController::class, '/forum');
 $server->addClass(ApiLedenController::class, '/leden');
 $server->addClass(ApiMaaltijdenController::class, '/maaltijden');
-$server->addClass(ApiSponsorkliksController::class, '/sponsorkliks');
+$server->addClass(ApiSponsorlinksController::class, '/sponsorlinks');
 
 $server->handle();
