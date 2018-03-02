@@ -59,7 +59,7 @@ class CiviBestellingModel extends PersistenceModel {
 	 */
 	public function getPinBestellingInMoment($from, $to) {
 		/** @var CiviBestelling[] $bestellingen */
-		$bestellingen = $this->find('moment > ? AND moment < ? AND deleted = false', [$from, $to], null, 'moment DESC');
+		$bestellingen = $this->find('moment > ? AND moment < ? AND deleted = false', [$from, $to], null, 'moment ASC');
 		$pinBestellingen = [];
 
 		foreach ($bestellingen as $bestelling) {

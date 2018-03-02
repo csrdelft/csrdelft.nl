@@ -154,12 +154,12 @@ class PinTransactieMatcherFactory {
 			}
 		}
 
-		while ($indexTransactie < count($pinBestellingen) - 1) {
+		while ($indexTransactie < count($pinBestellingen)) {
 			$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexTransactie]);
 			$indexTransactie++;
 		}
 
-		while ($indexBestelling < count($pinTransacties) - 1) {
+		while ($indexBestelling < count($pinTransacties)) {
 			$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexBestelling]);
 			$indexBestelling++;
 		}
@@ -218,7 +218,7 @@ class PinTransactieMatcherFactory {
 
 					printf("%s - Bestelling en transactie hebben geen overeenkomend bedrag.\n", $moment);
 					printf(" - %s Transactie %d om %s.\n", $pinTransactie->amount, $pinTransactie->STAN, $pinTransactie->datetime);
-					printf(" - EUR %.2f Bestelling %d om %s door %d.\n", $pinBestellingInhoud->aantal / 100, $pinBestelling->id, $pinBestelling->moment, $pinBestelling->uid);
+					printf(" - EUR %.2f Bestelling %d om %s door %s.\n", $pinBestellingInhoud->aantal / 100, $pinBestelling->id, $pinBestelling->moment, $pinBestelling->uid);
 					break;
 				default:
 					// Er is niets mis gegaan.
