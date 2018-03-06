@@ -177,6 +177,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="https://www.independer.nl/autoverzekering/intro.aspx">
+                        <img src="https://csrdelft.nl/plaetjes/banners/independer.jpg"
+                             alt="Independer">
+                    </a>
+                </li>
+                <li>
                     <a href="http://www.tudelft.nl/">
                         <img src="https://csrdelft.nl/plaetjes/banners/TU_Delft_logo_White.png"
                              alt="TUDelft">
