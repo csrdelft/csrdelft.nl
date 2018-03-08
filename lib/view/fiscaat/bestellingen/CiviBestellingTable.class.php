@@ -4,6 +4,8 @@ namespace CsrDelft\view\fiscaat\bestellingen;
 
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\view\formulier\datatable\CellRender;
+use CsrDelft\view\formulier\datatable\CellType;
 use CsrDelft\view\formulier\datatable\DataTable;
 
 /**
@@ -17,21 +19,12 @@ class CiviBestellingTable extends DataTable {
 		parent::__construct(CiviBestelling::class, $dataUrl, $titel);
 
 		$this->addColumn('inhoud');
-		$this->addColumn('totaal', null, null, 'prijs_render', null, 'num-fmt');
+		$this->addColumn('totaal', null, null, CellRender::Bedrag(), null, CellType::FormattedNumber());
 		$this->hideColumn('deleted');
 		$this->searchColumn('inhoud');
 		$this->searchColumn('moment');
 
-		$this->setOrder(array('moment' => 'desc'));
-	}
-
-	public function getJavascript() {
-		return /** @lang JavaScript */
-			parent::getJavascript() . <<<JS
-function prijs_render(data) {
-	return "€" + (data/100).toFixed(2);
-}
-JS;
+		$this->setOrder(['moment' => 'desc']);
 	}
 
 	public function getBreadcrumbs() {

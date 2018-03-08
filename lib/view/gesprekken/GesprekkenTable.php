@@ -10,7 +10,8 @@ namespace CsrDelft\view\gesprekken;
 
 use CsrDelft\model\gesprekken\GesprekkenModel;
 use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
+use CsrDelft\view\formulier\datatable\Multiplicity;
 
 class GesprekkenTable extends DataTable {
 
@@ -24,13 +25,13 @@ class GesprekkenTable extends DataTable {
 		$this->addColumn('deelnemers');
 		$this->searchColumn('deelnemers');
 
-		$create = new DataTableKnop('== 0', $this->dataTableId, '/gesprekken/start', 'post popup', 'Nieuw', 'Nieuw gesprek starten', 'email_add');
+		$create = new DataTableKnop(Multiplicity::Zero(), '/gesprekken/start', 'Nieuw', 'Nieuw gesprek starten', 'email_add');
 		$this->addKnop($create);
 
-		$sluiten = new DataTableKnop('== 1', $this->dataTableId, '/gesprekken/verlaten', 'post confirm', 'Verlaten', 'Gesprek verlaten', 'delete');
+		$sluiten = new DataTableKnop(Multiplicity::One(), '/gesprekken/verlaten', 'Verlaten', 'Gesprek verlaten', 'delete');
 		$this->addKnop($sluiten);
 
-		$add = new DataTableKnop('== 1', $this->dataTableId, '/gesprekken/toevoegen', 'post popup', 'Toevoegen', 'Deelnemer toevoegen aan het gesprek', 'user_add');
+		$add = new DataTableKnop(Multiplicity::One(), '/gesprekken/toevoegen', 'Toevoegen', 'Deelnemer toevoegen aan het gesprek', 'user_add');
 		$this->addKnop($add);
 	}
 

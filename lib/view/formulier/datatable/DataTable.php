@@ -3,12 +3,12 @@
 namespace CsrDelft\view\formulier\datatable;
 
 use function CsrDelft\classNameZonderNamespace;
+use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\View;
 
 /**
- * DataTable.php
- *
  * @author P.W.G. Brussee <brussee@live.nl
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
@@ -18,60 +18,23 @@ use CsrDelft\view\View;
  */
 class DataTable implements View, FormElement {
 
-	public $nestedForm = true;
 	public $filter = null;
+	/** @var PersistenceModel */
+	public $model;
+
 	protected $dataUrl;
-	private $groupByColumn;
 	protected $titel;
 	protected $dataTableId;
-	public $model;
 	protected $defaultLength = 10;
-	private $columns = array();
-	protected $settings = array(
-		'deferRender' => true,
+	protected $settings = [
 		'dom' => 'Bfrtpli',
-		'buttons' => array('copy', 'csv', 'excel', 'print'),
-		'userButtons' => array(),
+		'buttons' => ['copy', 'csv', 'excel', 'print'],
+		'userButtons' => [],
 		'select' => true,
-		'lengthMenu' => array(
-			array(10, 25, 50, 100, -1),
-			array(10, 25, 50, 100, 'Alles')
-		),
-		'language' => array(
-			'sProcessing' => 'Bezig...',
-			'sLengthMenu' => '_MENU_ resultaten weergeven',
-			'sZeroRecords' => 'Geen resultaten gevonden',
-			'sInfo' => '_START_ tot _END_ van _TOTAL_ resultaten',
-			'sInfoEmpty' => 'Geen resultaten om weer te geven',
-			'sInfoFiltered' => ' (gefilterd uit _MAX_ resultaten)',
-			'sInfoPostFix' => '',
-			'sSearch' => 'Zoeken',
-			'sEmptyTable' => 'Geen resultaten aanwezig in de tabel',
-			'sInfoThousands' => '.',
-			'sLoadingRecords' => 'Een moment geduld aub - bezig met laden...',
-			'oPaginate' => array(
-				'sFirst' => 'Eerste',
-				'sLast' => 'Laatste',
-				'sNext' => 'Volgende',
-				'sPrevious' => 'Vorige'
-			),
-			'select' => array(
-				'rows' => array(
-					'_' => '%d rijen geselecteerd',
-					'0' => '',
-					'1' => '1 rij geselecteerd'
-				)
-			),
-			'buttons' => array(
-				'copy' => 'Kopiëren',
-				'print' => 'Printen'
-			),
-			// Eigen definities
-			'csr' => array(
-				'zeker' => 'Weet u het zeker?'
-			)
-		)
-	);
+	];
+
+	private $columns = array();
+	private $groupByColumn;
 
 	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null) {
 		$this->model = new $orm();
@@ -110,7 +73,11 @@ class DataTable implements View, FormElement {
 		return $this->dataTableId;
 	}
 
+	/**
+	 * @param DataTableKnop $knop
+	 */
 	protected function addKnop(DataTableKnop $knop) {
+		$knop->setDataTableId($this->dataTableId);
 		$this->settings['userButtons'][] = $knop;
 	}
 
@@ -126,7 +93,18 @@ class DataTable implements View, FormElement {
 		$this->settings['order'] = $orders;
 	}
 
-	protected function addColumn($newName, $before = null, $defaultContent = null, $render = null, $order_by = null, $type = 'string') {
+	/**
+	 * @param string $newName
+	 * @param string|null $before
+	 * @param string|null $defaultContent
+	 * @param CellRender|null $render
+	 * @param string|null $order_by
+	 * @param CellType|null $type
+	 */
+	protected function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null) {
+		$type = $type ?: CellType::String();
+		$render = $render ?: CellRender::None();
+
 		// column definition
 		$newColumn = array(
 			'name' => $newName,
@@ -135,7 +113,7 @@ class DataTable implements View, FormElement {
 			'defaultContent' => $defaultContent,
 			'type' => $type,
 			'searchable' => false,
-			'render' => $render
+			'render' => $render->getChoice()
 			/*
 			  //TODO: sort by other column
 			  { "iDataSort": 1 },
@@ -167,7 +145,7 @@ class DataTable implements View, FormElement {
 	 *
 	 * Gebruik de veiligere @see hideColumn als je de inhoud van een kolom nog wil kunnen opvragen.
 	 *
-	 * @param $name
+	 * @param string $name
 	 */
 	protected function deleteColumn($name) {
 		if (isset($this->columns[$name])) {
@@ -175,18 +153,30 @@ class DataTable implements View, FormElement {
 		}
 	}
 
+	/**
+	 * @param string $name
+	 * @param bool $hide
+	 */
 	protected function hideColumn($name, $hide = true) {
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['visible'] = !$hide;
 		}
 	}
 
+	/**
+	 * @param string $name
+	 * @param bool $searchable
+	 */
 	protected function searchColumn($name, $searchable = true) {
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['searchable'] = (boolean)$searchable;
 		}
 	}
 
+	/**
+	 * @param string $name
+	 * @param string $title
+	 */
 	protected function setColumnTitle($name, $title) {
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['title'] = $title;
@@ -215,7 +205,6 @@ class DataTable implements View, FormElement {
 				'dataSrc' => 'fnAjaxUpdateCallback'
 			);
 		}
-		$this->settings['createdRow'] = 'fnCreatedRowCallback';
 
 		// group by column
 		if (isset($this->columns[$this->groupByColumn])) {
@@ -259,12 +248,9 @@ class DataTable implements View, FormElement {
 
 	public function view() {
 		echo $this->getHtml();
-		// Voorkom globals in javascript
 		echo <<<HTML
 <script type="text/javascript">
-	(function() {
 		{$this->getJavascript()}
-	})();
 </script>
 HTML;
 	}
@@ -303,7 +289,6 @@ HTML;
 		// js function calls
 		$settingsJson = str_replace('"fnGetLastUpdate"', 'fnGetLastUpdate', $settingsJson);
 		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
-		$settingsJson = str_replace('"fnCreatedRowCallback"', 'fnCreatedRowCallback', $settingsJson);
 		$settingsJson = preg_replace('/"render":\s?"(.+?)"/', '"render": $1', $settingsJson);
 
 		$filter = str_replace("'", "\'", $this->filter);
@@ -317,25 +302,6 @@ HTML;
 				};
 				var fnSetLastUpdate = function (lastUpdate) {
 					$(tableId).attr('data-lastupdate', lastUpdate);
-				};
-				/**
-				 * Called after row addition and row data update.
-				 *
-				 * @param tr
-				 * @param data
-				 * @param rowIndex
-				 */
-				var fnCreatedRowCallback = function (tr, data, rowIndex) {
-					var table = this;
-					$(tr).attr('data-uuid', data.UUID);
-					init_context(tr);
-					
-					$(tr).children().each(function (columnIndex, td) {
-						// Init custom buttons in rows
-						$(td).children('a.post').each(function (i, a) {
-							$(a).attr('data-tableid', table.attr('id'));
-						});
-					});
 				};
 				/**
 				 * Called after ajax load complete.
@@ -353,38 +319,27 @@ HTML;
 							window.setTimeout(function () {
 								$.post(table.ajax.url(), {
 									'lastUpdate': fnGetLastUpdate()
-								}, function (data, textStatus, jqXHR) {
+								}, function (data) {
 									fnUpdateDataTable(tableId, data);
 									fnAjaxUpdateCallback(data);
 								});
 							}, timeout);
 						}
 					}
-					if (json.page) {
-						var info = table.page.info();
-						// Stay on last page
-						if (json.page !== 'last' || info.page + 1 === info.pages) {
-							window.setTimeout(function () {
-								table.page(json.page).draw(false);
-							}, 200);
-						}
-					} else {
-						fnAutoScroll(tableId);
-					}
-					fnDeselectItemsOnPageChange(table);
+					
+					fnAutoScroll(tableId);
+					
 					return json.data;
 				};
 				// Init DataTable
 				var jtable = $(tableId);
 				var table = jtable.dataTable({$settingsJson});
-				table.fnFilter('{$filter}');
+				table.api().search('{$filter}');
+				
+				table.on('page', function() {
+				  table.rows({selected: true}).deselect();
+				})
 			});
-
-			var fnDeselectItemsOnPageChange = function (dt) {
-				dt.on('page', function() {
-					dt.rows({ selected: true }).deselect();
-				});
-			};
 JS;
 	}
 }

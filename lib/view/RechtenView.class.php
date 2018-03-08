@@ -9,7 +9,7 @@ use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\invoervelden\RequiredRechtenField;
@@ -17,6 +17,7 @@ use CsrDelft\view\formulier\invoervelden\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
+use CsrDelft\view\formulier\datatable\Multiplicity;
 
 /**
  * RechtenView.class.php
@@ -40,13 +41,13 @@ class RechtenTable extends DataTable {
 			}
 		}
 
-		$create = new DataTableKnop('== 0', $this->dataTableId, '/rechten/aanmaken/' . $environment . '/' . $resource, 'post popup', 'Instellen', 'Rechten instellen', 'key_add');
+		$create = new DataTableKnop(Multiplicity::Zero(), '/rechten/aanmaken/' . $environment . '/' . $resource, 'Instellen', 'Rechten instellen', 'key_add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->dataTableId, '/rechten/wijzigen', 'post popup', 'Wijzigen', 'Rechten wijzigen', 'key_edit');
+		$update = new DataTableKnop(Multiplicity::One(), '/rechten/wijzigen', 'Wijzigen', 'Rechten wijzigen', 'key_edit');
 		$this->addKnop($update);
 
-		$delete = new DataTableKnop('>= 1', $this->dataTableId, '/rechten/verwijderen', 'post confirm', 'Intrekken', 'Rechten intrekken', 'key_delete');
+		$delete = new DataTableKnop(Multiplicity::Any(), '/rechten/verwijderen', 'Intrekken', 'Rechten intrekken', 'key_delete');
 		$this->addKnop($delete);
 	}
 
@@ -63,6 +64,7 @@ class RechtenData extends DataTableResponse {
 	/**
 	 * @param AccessControl $ac
 	 * @return string
+	 * @throws \Exception
 	 */
 	public function getJson($ac) {
 		$array = $ac->jsonSerialize();
@@ -82,6 +84,12 @@ class RechtenData extends DataTableResponse {
 
 class RechtenForm extends ModalForm {
 
+	/**
+	 * RechtenForm constructor.
+	 * @param AccessControl $ac
+	 * @param $action
+	 * @throws \Exception
+	 */
 	public function __construct(AccessControl $ac, $action) {
 		parent::__construct($ac, '/rechten/' . $action . '/' . $ac->environment . '/' . $ac->resource, 'Rechten aanpassen voor ', true);
 		if ($ac->resource === '*') {

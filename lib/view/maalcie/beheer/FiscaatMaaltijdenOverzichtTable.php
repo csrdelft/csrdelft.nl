@@ -3,8 +3,11 @@
 namespace CsrDelft\view\maalcie\beheer;
 
 use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\view\formulier\datatable\CellRender;
+use CsrDelft\view\formulier\datatable\CellType;
 use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\PopupDataTableKnop;
+use CsrDelft\view\formulier\datatable\Multiplicity;
 
 class FiscaatMaaltijdenOverzichtTable extends DataTable {
 	public function __construct() {
@@ -21,21 +24,11 @@ class FiscaatMaaltijdenOverzichtTable extends DataTable {
 		$this->deleteColumn('omschrijving');
 
 		$this->addColumn('aantal_aanmeldingen');
-		$this->addColumn('prijs', null, null, 'prijs_render', null, 'num-fmt');
-		$this->addColumn('totaal', null, null, 'prijs_render', null, 'num-fmt');
+		$this->addColumn('prijs', null, null, CellRender::Bedrag(), null, CellType::FormattedNumber());
+		$this->addColumn('totaal', null, null, CellRender::Bedrag(), null, CellType::FormattedNumber());
 
 		$this->setOrder(array('datum' => 'desc'));
 
-		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/lijst/:maaltijd_id', '', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal', 'popup'));
-	}
-
-	public function getJavascript() {
-		return /** @lang JavaScript */
-			parent::getJavascript() . <<<JS
-function prijs_render(data) {
-	return "€" + (data/100).toFixed(2);
-}
-JS;
-
+		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/maaltijden/lijst/:maaltijd_id', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal'));
 	}
 }

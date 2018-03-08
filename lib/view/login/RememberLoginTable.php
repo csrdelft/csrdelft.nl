@@ -4,7 +4,8 @@ namespace CsrDelft\view\login;
 
 use CsrDelft\model\security\RememberLoginModel;
 use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
+use CsrDelft\view\formulier\datatable\Multiplicity;
 
 class RememberLoginTable extends DataTable {
 
@@ -16,16 +17,16 @@ class RememberLoginTable extends DataTable {
 		$this->searchColumn('remember_since');
 		$this->searchColumn('device_name');
 
-		$create = new DataTableKnop('== 0', $this->dataTableId, '/loginremember', 'post popup', 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat', 'add');
+		$create = new DataTableKnop(Multiplicity::Zero(), '/loginremember', 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat', 'add');
 		$this->addKnop($create);
 
-		$update = new DataTableKnop('== 1', $this->dataTableId, '/loginremember', 'post popup', 'Naam wijzigen', 'Wijzig naam van apparaat', 'edit');
+		$update = new DataTableKnop(Multiplicity::One(), '/loginremember', 'Naam wijzigen', 'Wijzig naam van apparaat', 'edit');
 		$this->addKnop($update);
 
-		$lock = new DataTableKnop('>= 1', $this->dataTableId, '/loginlockip', 'post', '(Ont)Koppel IP', 'Alleen inloggen vanaf bepaald IP-adres', 'lock');
+		$lock = new DataTableKnop(Multiplicity::Any(), '/loginlockip', '(Ont)Koppel IP', 'Alleen inloggen vanaf bepaald IP-adres', 'lock');
 		$this->addKnop($lock);
 
-		$delte = new DataTableKnop('>= 1', $this->dataTableId, '/loginforget', 'post', 'Verwijderen', 'Stop automatische login voor dit apparaat', 'delete');
+		$delte = new DataTableKnop(Multiplicity::Any(), '/loginforget', 'Verwijderen', 'Stop automatische login voor dit apparaat', 'delete');
 		$this->addKnop($delte);
 	}
 
