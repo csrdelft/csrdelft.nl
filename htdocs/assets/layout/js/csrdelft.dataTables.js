@@ -58,45 +58,45 @@ var fnCreatedRowCallback = function (tr, data) {
 };
 
 $.extend(true, $.fn.dataTable.defaults, {
-	'deferRender': true,
-	'createdRow': fnCreatedRowCallback,
-	'lengthMenu': [
+	deferRender: true,
+	createdRow: fnCreatedRowCallback,
+	lengthMenu: [
 		[10, 25, 50, 100, -1],
 		[10, 25, 50, 100, 'Alles']
 	],
-	'language': {
-		'sProcessing': 'Bezig...',
-		'sLengthMenu': '_MENU_ resultaten weergeven',
-		'sZeroRecords': 'Geen resultaten gevonden',
-		'sInfo': '_START_ tot _END_ van _TOTAL_ resultaten',
-		'sInfoEmpty': 'Geen resultaten om weer te geven',
-		'sInfoFiltered': ' (gefilterd uit _MAX_ resultaten)',
-		'sInfoPostFix': '',
-		'sSearch': 'Zoeken',
-		'sEmptyTable': 'Geen resultaten aanwezig in de tabel',
-		'sInfoThousands': '.',
-		'sLoadingRecords': 'Een moment geduld aub - bezig met laden...',
-		'oPaginate': {
-			'sFirst': 'Eerste',
-			'sLast': 'Laatste',
-			'sNext': 'Volgende',
-			'sPrevious': 'Vorige'
+	language: {
+		sProcessing: 'Bezig...',
+		sLengthMenu: '_MENU_ resultaten weergeven',
+		sZeroRecords: 'Geen resultaten gevonden',
+		sInfo: '_START_ tot _END_ van _TOTAL_ resultaten',
+		sInfoEmpty: 'Geen resultaten om weer te geven',
+		sInfoFiltered: ' (gefilterd uit _MAX_ resultaten)',
+		sInfoPostFix: '',
+		sSearch: 'Zoeken',
+		sEmptyTable: 'Geen resultaten aanwezig in de tabel',
+		sInfoThousands: '.',
+		sLoadingRecords: 'Een moment geduld aub - bezig met laden...',
+		oPaginate: {
+			sFirst: 'Eerste',
+			sLast: 'Laatste',
+			sNext: 'Volgende',
+			sPrevious: 'Vorige'
 		},
-		'select': {
-			'rows': {
+		select: {
+			rows: {
 				'_': '%d rijen geselecteerd',
 				'0': '',
 				'1': '1 rij geselecteerd'
 			}
 		},
-		'buttons': {
-			'copy': 'Kopiëren',
-			'print': 'Printen',
-			'colvis': 'Kolom weergave'
+		buttons: {
+			copy: 'Kopiëren',
+			print: 'Printen',
+			colvis: 'Kolom weergave'
 		},
 		// Eigen definities
-		'csr': {
-			'zeker': 'Weet u het zeker?'
+		csr: {
+			zeker: 'Weet u het zeker?'
 		}
 	}
 });
@@ -238,7 +238,7 @@ $.fn.dataTable.ext.buttons.defaultCollection = {
 };
 
 $.fn.dataTable.render.bedrag = function (data) {
-	return "€" + (data / 100).toFixed(2);
+	return '€' + (data / 100).toFixed(2);
 };
 
 $.fn.dataTable.render.check = function (data) {
@@ -250,7 +250,7 @@ $.fn.dataTable.render.aanmeldFilter = function (data) {
 };
 
 $.fn.dataTable.render.aanmeldingen = function (data, type, row) {
-	return row.aantal_aanmeldingen + " (" + row.aanmeld_limiet + ")";
+	return row.aantal_aanmeldingen + ' (' + row.aanmeld_limiet + ')';
 };
 
 $.fn.dataTable.render.totaalPrijs = function (data, type, row) {
