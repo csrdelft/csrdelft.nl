@@ -4,7 +4,11 @@ namespace CsrDelft\view\fiscaat\pin;
 
 use CsrDelft\model\fiscaat\pin\PinTransactieMatchModel;
 use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\CollectionDataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\ConfirmDataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\SourceChangeDataTableKnop;
+use CsrDelft\view\formulier\datatable\Multiplicity;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -14,15 +18,15 @@ class PinTransactieMatchTable extends DataTable {
 	public function __construct() {
 		parent::__construct(PinTransactieMatchModel::ORM, '/fiscaat/pin/overzicht?filter=metFout', 'Overzicht van pintransacties matches');
 
-		$weergave = new DataTableKnop('', $this->dataTableId, '', '', 'Weergave', 'Weergave van de tabel', 'cart', 'collection');
-		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/fiscaat/pin/overzicht?filter=metFout', '', 'Met fouten', 'Fouten weergeven', 'cart_error', 'sourceChange'));
-		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/fiscaat/pin/overzicht?filter=alles', '', 'Alles', 'Alles weergeven', 'cart', 'sourceChange'));
+		$weergave = new CollectionDataTableKnop(Multiplicity::None(), 'Weergave', 'Weergave van de tabel', 'cart');
+		$weergave->addKnop(new SourceChangeDataTableKnop('/fiscaat/pin/overzicht?filter=metFout', 'Met fouten', 'Fouten weergeven', 'cart_error'));
+		$weergave->addKnop(new SourceChangeDataTableKnop('/fiscaat/pin/overzicht?filter=alles', 'Alles', 'Alles weergeven', 'cart'));
 		$this->addKnop($weergave);
 
-		$this->addKnop(new DataTableKnop('== 1',  $this->dataTableId, '/fiscaat/pin/verwerk', '',  'Verwerk', 'Dit probleem verwerken', 'cart_edit'));
-		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/pin/ontkoppel', '', 'Ontkoppel', 'Ontkoppel bestelling en transactie', 'arrow_divide', 'confirm'));
-		$this->addKnop(new DataTableKnop('== 2', $this->dataTableId, '/fiscaat/pin/koppel', '', 'Koppel', 'Koppel een bestelling en transactie', 'arrow_join'));
-		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/fiscaat/pin/info', '', 'Info', 'Bekijk informatie over de gekoppelde bestelling', 'magnifier'));
+		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/fiscaat/pin/verwerk',  'Verwerk', 'Dit probleem verwerken', 'cart_edit'));
+		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/fiscaat/pin/ontkoppel', 'Ontkoppel', 'Ontkoppel bestelling en transactie', 'arrow_divide'));
+		$this->addKnop(new DataTableKnop(Multiplicity::Two(), '/fiscaat/pin/koppel', 'Koppel', 'Koppel een bestelling en transactie', 'arrow_join'));
+		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/fiscaat/pin/info', 'Info', 'Bekijk informatie over de gekoppelde bestelling', 'magnifier'));
 
 		$this->addColumn('moment');
 		$this->addColumn('transactie');

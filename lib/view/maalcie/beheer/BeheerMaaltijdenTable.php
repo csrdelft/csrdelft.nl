@@ -4,8 +4,16 @@ namespace CsrDelft\view\maalcie\beheer;
 
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\view\formulier\datatable\CellRender;
+use CsrDelft\view\formulier\datatable\CellType;
 use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\CollectionDataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\PopupDataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\SourceChangeDataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\UrlDataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\ConfirmDataTableKnop;
+use CsrDelft\view\formulier\datatable\Multiplicity;
 
 class BeheerMaaltijdenTable extends DataTable {
 	/**
@@ -22,11 +30,11 @@ class BeheerMaaltijdenTable extends DataTable {
 		$this->hideColumn('mlt_repetitie_id');
 
 		$this->addColumn('repetitie_naam', 'titel');
-		$this->addColumn('aanmeld_filter', null, null, 'aanmeldFilter_render');
-		$this->addColumn('gesloten', null, null, 'check_render');
-		$this->addColumn('verwerkt', null, null, 'check_render');
-		$this->addColumn('aanmeldingen', 'aanmeld_limiet', null, 'aanmeldingen_render');
-		$this->addColumn('prijs', null, null, 'prijs_render', null, 'num-fmt');
+		$this->addColumn('aanmeld_filter', null, null, CellRender::AanmeldFilter());
+		$this->addColumn('gesloten', null, null, CellRender::Check());
+		$this->addColumn('verwerkt', null, null, CellRender::Check());
+		$this->addColumn('aanmeldingen', 'aanmeld_limiet', null, CellRender::Aanmeldingen());
+		$this->addColumn('prijs', null, null, CellRender::Bedrag(), null, CellType::FormattedNumber());
 
 		$this->setOrder(array('datum' => 'asc'));
 
@@ -34,55 +42,33 @@ class BeheerMaaltijdenTable extends DataTable {
 		$this->searchColumn('prijs');
 		$this->searchColumn('aanmeld_filter');
 
-		$weergave = new DataTableKnop('', $this->dataTableId, '', '', "Weergave", 'Weergave van tabel', '', 'collection');
-		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer', '', 'Toekomst', 'Toekomst weergeven', 'time_go', 'sourceChange'));
-		$weergave->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer?filter=alles', '', 'Alles', 'Alles weergeven', 'time', 'sourceChange'));
+		$weergave = new CollectionDataTableKnop(Multiplicity::None(), 'Weergave', 'Weergave van tabel', '');
+		$weergave->addKnop(new SourceChangeDataTableKnop($this->dataUrl, 'Toekomst', 'Toekomst weergeven', 'time_go'));
+		$weergave->addKnop(new SourceChangeDataTableKnop($this->dataUrl . '?filter=alles', 'Alles', 'Alles weergeven', 'time'));
 		$this->addKnop($weergave);
 
-		$nieuw = new DataTableKnop('', $this->dataTableId, '', '', 'Nieuw', 'Nieuwe maaltijd aanmaken', 'add', 'collection');
+		$nieuw = new CollectionDataTableKnop(Multiplicity::None(),'Nieuw', 'Nieuwe maaltijd aanmaken', 'add');
 
 		foreach ($repetities as $repetitie) {
-			$nieuw->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer/nieuw?mrid=' . $repetitie->mlt_repetitie_id, '', $repetitie->standaard_titel, "Nieuwe $repetitie->standaard_titel aanmaken"));
+			$nieuw->addKnop(new DataTableKnop(Multiplicity::None(), $this->dataUrl . '/nieuw?mrid=' . $repetitie->mlt_repetitie_id, $repetitie->standaard_titel, "Nieuwe $repetitie->standaard_titel aanmaken"));
 		}
 
-		$nieuw->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer/nieuw', '', 'Anders', 'Maaltijd zonder repetitie aanmaken', 'calendar_edit'));
+		$nieuw->addKnop(new DataTableKnop(Multiplicity::None(), $this->dataUrl . '/nieuw', 'Anders', 'Maaltijd zonder repetitie aanmaken', 'calendar_edit'));
 		$this->addKnop($nieuw);
 
-		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/toggle/:maaltijd_id', '', 'Open/Sluit', 'Maaltijd openen of sluiten'));
+		$this->addKnop(new DataTableKnop(Multiplicity::One(), $this->dataUrl . '/toggle/:maaltijd_id', 'Open/Sluit', 'Maaltijd openen of sluiten'));
 
-		$aanmeldingen = new DataTableKnop('== 1', $this->dataTableId, '', '', 'Aanmeldingen', 'Aanmeldingen bewerken', 'user', 'defaultCollection');
-		$aanmeldingen->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer/aanmelden', '', 'Toevoegen', 'Aanmelding toevoegen', 'user_add'));
-		$aanmeldingen->addKnop(new DataTableKnop('', $this->dataTableId, '/maaltijden/beheer/afmelden', '', 'Verwijderen', 'Aanmelding verwijderen', 'user_delete'));
+		$aanmeldingen = new CollectionDataTableKnop(Multiplicity::One(), 'Aanmeldingen', 'Aanmeldingen bewerken', 'user');
+		$aanmeldingen->addKnop(new DataTableKnop(Multiplicity::None(), $this->dataUrl . '/aanmelden', 'Toevoegen', 'Aanmelding toevoegen', 'user_add'));
+		$aanmeldingen->addKnop(new DataTableKnop(Multiplicity::None(), $this->dataUrl . '/afmelden', 'Verwijderen', 'Aanmelding verwijderen', 'user_delete'));
 
 		$this->addKnop($aanmeldingen);
 
-		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/bewerk', '', 'Bewerken', 'Maaltijd bewerken', 'pencil'));
-		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/corvee/beheer/maaltijd/:maaltijd_id', '', 'Corvee bewerken', 'Gekoppelde corveetaken bewerken', 'chart_organisation', 'url'));
-		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/beheer/verwijder', '', 'Verwijderen', 'Maaltijd verwijderen', 'cross', 'confirm'));
+		$this->addKnop(new DataTableKnop(Multiplicity::One(), $this->dataUrl . '/bewerk', 'Bewerken', 'Maaltijd bewerken', 'pencil'));
+		$this->addKnop(new UrlDataTableKnop(Multiplicity::One(), '/corvee/beheer/maaltijd/:maaltijd_id', 'Corvee bewerken', 'Gekoppelde corveetaken bewerken', 'chart_organisation'));
+		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), $this->dataUrl . '/verwijder', 'Verwijderen', 'Maaltijd verwijderen', 'cross'));
 
-		$this->addKnop(new DataTableKnop('== 1', $this->dataTableId, '/maaltijden/lijst/:maaltijd_id', '', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal', 'popup'));
-	}
-
-	public function getJavascript() {
-		return /** @lang JavaScript */
-			parent::getJavascript() . <<<JS
-function aanmeldFilter_render(data) {
-	return data ? '<span class="ico group_key" title="Aanmeld filter actief: \'' + data + '\'"></span>' : '';
-}
-
-function check_render(data) {
-    return '<span class="ico '+(data=='1'?'tick':'cross')+'"></span>';
-}
-
-function aanmeldingen_render(data, type, row) {
-	return row.aantal_aanmeldingen + " (" + row.aanmeld_limiet + ")"; 
-}
-
-function prijs_render(data) {
-	return "€" + (data/100).toFixed(2);
-}
-JS;
-
+		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/maaltijden/lijst/:maaltijd_id', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal'));
 	}
 
 	public function getBreadcrumbs() {

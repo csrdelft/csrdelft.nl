@@ -4,7 +4,8 @@ namespace CsrDelft\view\eetplan;
 
 use CsrDelft\model\eetplan\EetplanModel;
 use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
+use CsrDelft\view\formulier\datatable\Multiplicity;
 
 class EetplanBekendeHuizenTable extends DataTable {
 	public function __construct() {
@@ -15,7 +16,7 @@ class EetplanBekendeHuizenTable extends DataTable {
 		$this->addColumn('woonoord');
 		$this->addColumn('naam');
 
-		$this->addKnop(new DataTableKnop("== 0", $this->dataTableId, $this->dataUrl . 'toevoegen', 'post popup', 'Toevoegen', 'Bekende toevoegen', 'toevoegen'));
-		$this->addKnop(new DataTableKnop("== 1", $this->dataTableId, $this->dataUrl . 'verwijderen', 'post confirm', 'Verwijderen', 'Bekende verwijderen', 'verwijderen'));
+		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $this->dataUrl . 'toevoegen', 'Toevoegen', 'Bekende toevoegen', 'toevoegen'));
+		$this->addKnop(new DataTableKnop(Multiplicity::One(), $this->dataUrl . 'verwijderen', 'Verwijderen', 'Bekende verwijderen', 'verwijderen'));
 	}
 }

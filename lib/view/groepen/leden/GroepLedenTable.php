@@ -6,7 +6,8 @@ use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\DataTableKnop;
+use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
+use CsrDelft\view\formulier\datatable\Multiplicity;
 
 /**
  * GroepLedenTable.php
@@ -25,13 +26,13 @@ class GroepLedenTable extends DataTable {
 
 		if ($groep->mag(AccessAction::Beheren)) {
 
-			$create = new DataTableKnop('== 0', $this->dataTableId, $groep->getUrl() . 'aanmelden', 'post popup', 'Aanmelden', 'Lid toevoegen', 'user_add');
+			$create = new DataTableKnop(Multiplicity::Zero(), $this->dataUrl . 'aanmelden', 'Aanmelden', 'Lid toevoegen', 'user_add');
 			$this->addKnop($create);
 
-			$update = new DataTableKnop('== 1', $this->dataTableId, $groep->getUrl() . 'bewerken', 'post popup', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
+			$update = new DataTableKnop(Multiplicity::One(), $this->dataUrl . 'bewerken', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
 			$this->addKnop($update);
 
-			$delete = new DataTableKnop('>= 1', $this->dataTableId, $groep->getUrl() . 'afmelden', 'post confirm', 'Afmelden', 'Leden verwijderen', 'user_delete');
+			$delete = new DataTableKnop(Multiplicity::Any(), $this->dataUrl . 'afmelden', 'Afmelden', 'Leden verwijderen', 'user_delete');
 			$this->addKnop($delete);
 		}
 	}
