@@ -26,6 +26,7 @@ abstract class AccessRole extends PersistentEnum {
 	const MaalCie = 'R_MAALCIE';
 	const Bestuur = 'R_BESTUUR';
 	const PubCie = 'R_PUBCIE';
+	const Fiscaat = 'R_FISCAAT';
 
 	/**
 	 * Extra rechtenset voor Am. de Vlieger.
@@ -45,6 +46,7 @@ abstract class AccessRole extends PersistentEnum {
 		self::MaalCie => self::MaalCie,
 		self::Bestuur => self::Bestuur,
 		self::PubCie => self::PubCie,
+		self::Fiscaat => self::Fiscaat,
 		self::Vlieger => self::Vlieger,
 	];
 
@@ -60,6 +62,7 @@ abstract class AccessRole extends PersistentEnum {
 		self::MaalCie => 'MaalCie-rechten',
 		self::Bestuur => 'Bestuur-rechten',
 		self::PubCie => 'PubCie-rechten',
+		self::Fiscaat => 'Fiscaat-rechten',
 		self::Vlieger => 'Vlieger-rechten',
 	];
 
@@ -75,6 +78,7 @@ abstract class AccessRole extends PersistentEnum {
 		self::MaalCie => 'M',
 		self::Bestuur => 'B',
 		self::PubCie => 'P',
+		self::Fiscaat => 'F',
 		self::Vlieger => 'V',
 	];
 

@@ -429,6 +429,8 @@ class AccessModel extends CachedPersistenceModel {
 			'P_MAIL_SEND' => $this->createPermStr(10, 1 + 2 + 4), // Courant verzenden
 			'P_PEILING_VOTE' => $this->createPermStr(11, 1), // Stemmen op peilingen
 			'P_PEILING_MOD' => $this->createPermStr(11, 1 + 2), // Peilingen aanmaken en verwijderen
+			'P_FISCAAT_READ' => $this->createPermStr(12, 1), // Fiscale dingen inzien
+			'P_FISCAAT_MOD' => $this->createPermStr(12, 1 + 2), // Fiscale bewerkingen maken
 		);
 		/**
 		 * Deze waarden worden samengesteld uit bovenstaande permissies en
@@ -447,7 +449,8 @@ class AccessModel extends CachedPersistenceModel {
 		$this->roles[AccessRole::Eter] = $this->roles[AccessRole::Nobody] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'] | $p['P_AGENDA_READ'];
 		$this->roles[AccessRole::Lid] = $this->roles[AccessRole::Eter] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_ADD'] | $p['P_PEILING_VOTE'];
 		$this->roles[AccessRole::Oudlid] = $this->roles[AccessRole::Lid];
-		$this->roles[AccessRole::MaalCie] = $this->roles[AccessRole::Lid] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
+		$this->roles[AccessRole::Fiscaat] = $this->roles[AccessRole::Lid] | $p['P_FISCAAT_READ'] | $p['P_FISCAAT_MOD'];
+		$this->roles[AccessRole::MaalCie] = $this->roles[AccessRole::Fiscaat] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];
 		$this->roles[AccessRole::BASFCie] = $this->roles[AccessRole::Lid] | $p['P_DOCS_MOD'] | $p['P_ALBUM_DEL'] | $p['P_BIEB_MOD'] | $p['P_PEILING_MOD'];
 		$this->roles[AccessRole::Bestuur] = $this->roles[AccessRole::BASFCie] | $this->roles[AccessRole::MaalCie] | $p['P_LEDEN_MOD'] | $p['P_FORUM_MOD'] | $p['P_DOCS_MOD'] | $p['P_AGENDA_MOD'] | $p['P_NEWS_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_ALBUM_DEL'] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAIL_COMPOSE'] | $p['P_FORUM_BELANGRIJK'];
 		$this->roles[AccessRole::PubCie] = $this->roles[AccessRole::Bestuur] | $p['P_ADMIN'] | $p['P_MAIL_SEND'] | $p['P_CORVEE_SCHED'] | $p['P_FORUM_ADMIN'];

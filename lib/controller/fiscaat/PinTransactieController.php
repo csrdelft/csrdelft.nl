@@ -40,20 +40,20 @@ class PinTransactieController extends AclController {
 	public function __construct($query) {
 		parent::__construct($query, PinTransactieMatchModel::instance());
 
-		if ($this->getMethod() == "POST") {
+		if ($this->getMethod() == 'POST') {
 			$this->acl = [
-				'overzicht' => 'P_MAAL_MOD',
-				'verwerk' => 'P_MAAL_MOD',
-				'ontkoppel' => 'P_MAAL_MOD',
-				'koppel' => 'P_MAAL_MOD',
-				'verwijder' => 'P_MAAL_MOD',
-				'aanmaken' => 'P_MAAL_MOD',
-				'update' => 'P_MAAL_MOD',
-				'info' => 'P_MAAL_MOD',
+				'overzicht' => 'P_FISCAAT_READ',
+				'verwerk' => 'P_FISCAAT_MOD',
+				'ontkoppel' => 'P_FISCAAT_MOD',
+				'koppel' => 'P_FISCAAT_MOD',
+				'verwijder' => 'P_FISCAAT_MOD',
+				'aanmaken' => 'P_FISCAAT_MOD',
+				'update' => 'P_FISCAAT_MOD',
+				'info' => 'P_FISCAAT_READ',
 			];
 		} else {
 			$this->acl = [
-				'overzicht' => 'P_MAAL_MOD',
+				'overzicht' => 'P_FISCAAT_READ',
 			];
 		}
 	}
