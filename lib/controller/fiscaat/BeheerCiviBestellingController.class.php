@@ -25,13 +25,13 @@ class BeheerCiviBestellingController extends AclController {
 		if ($this->getMethod() == "POST") {
 			$this->acl = [
 				'mijn' => 'P_MAAL_IK',
-				'overzicht' => 'P_MAAL_MOD',
-				'inhoud' => 'P_MAAL_MOD',
+				'overzicht' => 'P_FISCAAT_READ',
+				'inhoud' => 'P_FISCAAT_READ',
 			];
 		} else {
 			$this->acl = [
 				'mijn' => 'P_MAAL_IK',
-				'overzicht' => 'P_MAAL_MOD'
+				'overzicht' => 'P_FISCAAT_READ'
 			];
 		}
 	}

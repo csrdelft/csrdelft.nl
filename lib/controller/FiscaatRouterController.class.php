@@ -16,12 +16,12 @@ class FiscaatRouterController extends AclController {
 		parent::__construct($query, $query);
 
 		$this->acl = array(
-			'overzicht' => 'P_MAAL_MOD',
-			'producten' => 'P_MAAL_MOD',
-			'saldo' => 'P_MAAL_MOD',
+			'overzicht' => 'P_FISCAAT_READ',
+			'producten' => 'P_FISCAAT_READ',
+			'saldo' => 'P_FISCAAT_READ',
 			'bestellingen' => 'P_MAAL_IK',
-			'categorien' => 'P_MAAL_MOD',
-			'pin' => 'P_MAAL_MOD',
+			'categorien' => 'P_FISCAAT_READ',
+			'pin' => 'P_FISCAAT_READ',
 		);
 	}
 
