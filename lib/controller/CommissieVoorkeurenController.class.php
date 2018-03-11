@@ -4,6 +4,8 @@ namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
+use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
+use CsrDelft\model\entity\commissievoorkeuren\VoorkeurOpmerking;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenProfiel;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenView;
@@ -51,11 +53,13 @@ class CommissieVoorkeurenController extends AclController {
 		if (!ProfielModel::existsUid($uid)) {
 			$this->exit_http(403);
 		}
-		if (isset($_POST['opmerkingen'])) {
-			$voorkeur = new CommissieVoorkeurenModel($uid);
-			$voorkeur->setPraesesOpmerking(filter_input(INPUT_POST, 'opmerkingen', FILTER_SANITIZE_STRING));
+		$profiel = ProfielModel::get($uid);
+		if (isset($_POST['praeses-opmerking'])) {
+			$opmerking = VoorkeurOpmerkingModel::instance()->getOpmerkingVoorLid($profiel);
+			VoorkeurOpmerkingModel::instance()->setPraesesOpmerking($opmerking, filter_input(INPUT_POST, 'praeses-opmerking', FILTER_SANITIZE_STRING));
 		}
-		$body = new CommissieVoorkeurenProfiel($uid);
+
+		$body = new CommissieVoorkeurenProfiel($profiel);
 		$this->view = new CsrLayoutPage($body);
 	}
 

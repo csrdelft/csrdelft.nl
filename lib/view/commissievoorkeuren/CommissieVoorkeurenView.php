@@ -2,7 +2,9 @@
 
 namespace CsrDelft\view\commissievoorkeuren;
 
-use CsrDelft\model\commissievoorkeuren\VoorkeurCommissie;
+use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
+use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
+use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\View;
 
@@ -29,20 +31,20 @@ class CommissieVoorkeurenView implements View {
 	public function view() {
 		$format = array('', 'nee', 'misschien', 'ja');
 		if ($this->id >= 0) {
-			$commissie = VoorkeurCommissie::getCommissie($this->id);
-			echo '<h1>' . $commissie->getNaam() . ' </h1>';
+			$commissie = VoorkeurCommissieModel::instance()->retrieveByUUID($this->id);
+			echo '<h1>' . $commissie->naam . ' </h1>';
 			echo '<table><tr><td><h4>Lid</h4></td><td><h4>Interesse</h4></td></tr>';
-			$geinteresseerde = $commissie->getGeinteresseerde();
-			foreach ($geinteresseerde as $uid => $voorkeur) {
-				echo '<tr ' . ($voorkeur['gedaan'] ? 'style="opacity: .50"' : '') . '><td><a href="/commissievoorkeuren/lidpagina/' . $uid . '">' . ProfielModel::get($uid)->getNaam() . '</a></td><td>' . $format[$voorkeur['voorkeur']] . '</td></tr>';
+			$voorkeuren = CommissieVoorkeurModel::instance()->getVoorkeurenVoorCommissie($commissie, 2);
+			foreach ($voorkeuren as $voorkeur) {
+				echo '<tr ' . ($voorkeur->heeftGedaan() ? 'style="opacity: .50"' : '') . '><td><a href="/commissievoorkeuren/lidpagina/' . $voorkeur->uid . '">' . $voorkeur->getProfiel()->getNaam() . '</a></td><td>' . $format[$voorkeur->voorkeur] . '</td></tr>';
 			}
 			echo '</table>';
 		} else {
 			echo '<h1>' . $this->getTitel() . ' </h1>';
 			echo '<p>klik op een commissie om de voorkeuren te bekijken';
 			echo '<ul>';
-			foreach (VoorkeurCommissie::getCommissies() as $cid => $naam) {
-				echo '<li> <a href="/commissievoorkeuren/overzicht/' . $cid . '" >' . $naam . '</a></li>';
+			foreach (VoorkeurCommissieModel::instance()->find() as $commissie) {
+				echo '<li> <a href="/commissievoorkeuren/overzicht/' . $commissie->id . '" >' . $commissie->naam . '</a></li>';
 			}
 			echo '</ul>';
 		}

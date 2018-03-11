@@ -3,6 +3,11 @@
 namespace CsrDelft\view\commissievoorkeuren;
 
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
+use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
+use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
+use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
+use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
+use CsrDelft\model\entity\commissievoorkeuren\VoorkeurVoorkeur;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
@@ -13,37 +18,49 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 class CommissieVoorkeurenForm extends Formulier {
 
 	public function getBreadcrumbs() {
-		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » ' . $this->model->getLink('civitas') . ' » <span class="active">' . $this->titel . '</span>';
+		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » ' . $this->profiel->getLink('civitas') . ' » <span class="active">' . $this->titel . '</span>';
 	}
 
+	private $voorkeuren = array();
+	private $opmerking;
+    private $profiel;
 	public function __construct(Profiel $profiel) {
-		parent::__construct($profiel, '/profiel/' . $profiel->uid . '/voorkeuren', 'Commissie-voorkeuren');
+		parent::__construct(null, '/profiel/' . $profiel->uid . '/voorkeuren', 'Commissie-voorkeuren');
+        $this->profiel = $profiel;
+        $this->addFields([new HtmlComment('<p>Hier kunt u per commissie opgeven of u daar interesse in heeft!</p>')]);
 
-		//permissies
-		$opties = array(1 => 'nee', 2 => 'misschien', 3 => 'ja');
+        $commissies = VoorkeurCommissieModel::instance()->find("zichtbaar = 1");
+        foreach ($commissies as $commissie) {
+            $this->addVoorkeurVeld($commissie);
+        }
 
-		$model = new CommissieVoorkeurenModel($profiel->uid);
-		$commissies = $model->getCommissies();
-		$voorkeuren = $model->getVoorkeur();
+        $this->opmerking = VoorkeurOpmerkingModel::instance()->getOpmerkingVoorLid($profiel);
+		$opmerkingVeld = new TextareaField('lidOpmerking', $this->opmerking->lidOpmerking, 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
+		$this->opmerking->lidOpmerking = $opmerkingVeld->getValue();
+        $fields[] = $opmerkingVeld;
 
-		$fields[] = new HtmlComment('<p>Hier kunt u per commissie opgeven of u daar interesse in heeft!</p>');
-		foreach ($commissies as $id => $comm) {
-			$fields[] = new SelectField('comm' . $id, $this->getVoorkeur($voorkeuren, $id), $comm, $opties);
-		}
-		$fields[] = new TextareaField('lidOpmerking', $model->getLidOpmerking(), 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
 		$fields[] = new FormDefaultKnoppen('/profiel/' . $profiel->uid);
 
 		$this->addFields($fields);
 	}
 
-	private function getVoorkeur(
-		$voorkeur,
-		$id
-	) {
-		if (array_key_exists($id, $voorkeur)) {
-			return $voorkeur[$id];
-		}
-		return 0;
+	private function addVoorkeurVeld(VoorkeurCommissie $commissie) {
+        $opties = array(1 => 'nee', 2 => 'misschien', 3 => 'ja');
+        $voorkeur = CommissieVoorkeurModel::instance()->getVoorkeur($this->profiel, $commissie);
+        $this->voorkeuren[] = $voorkeur;
+	    $field = new SelectField('comm' . $commissie->id, $voorkeur->voorkeur, $commissie->naam, $opties);
+	    $this->addFields([$field]);
+		$voorkeur->voorkeur = $field;
 	}
+
+    public function getVoorkeuren() : array
+    {
+        return $this->voorkeuren;
+    }
+
+    public function getOpmerking()
+    {
+        return $this->opmerking;
+    }
 
 }

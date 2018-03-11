@@ -6,6 +6,8 @@ use CsrDelft\common\CsrException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\GoogleSync;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
+use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
+use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
@@ -173,14 +175,12 @@ class ProfielController extends AclController {
 		}
 		$form = new CommissieVoorkeurenForm($profiel);
 		if ($form->validate()) {
-			$model = new CommissieVoorkeurenModel($profiel->uid);
-			foreach ($form->getValues() as $attribute => $value) {
-				if ($attribute == 'lidOpmerking') {
-					$model->setLidOpmerking($value);
-				} else {
-					$model->setCommissieVoorkeur(substr($attribute, 4), $value);
-				}
+			$voorkeuren = $form->getVoorkeuren();
+			$opmerking = $form->getOpmerking();
+			foreach ($voorkeuren as $voorkeur) {
+                CommissieVoorkeurModel::instance()->update($voorkeur);
 			}
+			VoorkeurOpmerkingModel::instance()->update($opmerking);
 			setMelding('Voorkeuren opgeslagen', 1);
 		}
 		return $form;
