@@ -26,13 +26,13 @@ class GroepLedenTable extends DataTable {
 
 		if ($groep->mag(AccessAction::Beheren)) {
 
-			$create = new DataTableKnop(Multiplicity::Zero(), $this->dataUrl . 'aanmelden', 'Aanmelden', 'Lid toevoegen', 'user_add');
+			$create = new DataTableKnop(Multiplicity::Zero(), $groep->getUrl() . 'aanmelden', 'Aanmelden', 'Lid toevoegen', 'user_add');
 			$this->addKnop($create);
 
-			$update = new DataTableKnop(Multiplicity::One(), $this->dataUrl . 'bewerken', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
+			$update = new DataTableKnop(Multiplicity::One(), $groep->getUrl() . 'bewerken', 'Bewerken', 'Lidmaatschap bewerken', 'user_edit');
 			$this->addKnop($update);
 
-			$delete = new DataTableKnop(Multiplicity::Any(), $this->dataUrl . 'afmelden', 'Afmelden', 'Leden verwijderen', 'user_delete');
+			$delete = new DataTableKnop(Multiplicity::Any(), $groep->getUrl() . 'afmelden', 'Afmelden', 'Leden verwijderen', 'user_delete');
 			$this->addKnop($delete);
 		}
 	}
