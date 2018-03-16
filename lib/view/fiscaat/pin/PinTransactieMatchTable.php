@@ -34,5 +34,7 @@ class PinTransactieMatchTable extends DataTable {
 
 		$this->hideColumn('transactie_id');
 		$this->hideColumn('bestelling_id');
+
+		$this->setOrder(['moment' => 'desc']);
 	}
 }
