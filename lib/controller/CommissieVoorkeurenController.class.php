@@ -78,30 +78,4 @@ class CommissieVoorkeurenController extends AclController {
 		$this->view = new CsrLayoutPage($body);
 	}
 
-	public function GET_beheer() {
-        $body = new BeheerCommissieTable('Maaltijdenbeheer');
-        $this->view = new CsrLayoutPage($body);
-    }
-
-    public function POST_beheer() {
-        $filter = $this->hasParam('filter') ? $this->getParam('filter') : '';
-        switch ($filter) {
-            case 'prullenbak':
-                $data = $this->model->find('verwijderd = true');
-                break;
-            case 'onverwerkt':
-                $data = $this->model->find('verwijderd = false AND gesloten = true AND verwerkt = false');
-                break;
-            case 'alles':
-                $data = $this->model->find();
-                break;
-            case 'toekomst':
-            default:
-                $data = VoorkeurCommissieModel::instance()->find();
-                break;
-        }
-
-        $this->view = new BeheerVoorkeurCommissieLijst($data);
-    }
-
 }
