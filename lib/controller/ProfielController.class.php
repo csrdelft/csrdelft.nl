@@ -174,7 +174,7 @@ class ProfielController extends AclController {
 			$this->exit_http(403);
 		}
 		$form = new CommissieVoorkeurenForm($profiel);
-		if ($form->validate()) {
+		if ($form->isPosted() && $form->validate()) {
 			$voorkeuren = $form->getVoorkeuren();
 			$opmerking = $form->getOpmerking();
 			foreach ($voorkeuren as $voorkeur) {
