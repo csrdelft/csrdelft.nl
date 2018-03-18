@@ -41,7 +41,7 @@ class CommissieVoorkeurenOverzicht extends Formulier {
 	    $output = '<p>klik op een commissie om de voorkeuren te bekijken';
 
         $cat2commissie = VoorkeurCommissieModel::instance()->getByCategorie();
-        foreach ($cat2commissie as $id=> $categorie) {
+        foreach ($cat2commissie as $categorie) {
             $output .= '<h2>' . $categorie["categorie"]->naam . ' </h2>';
             $output .= '<ul>';
             foreach ($categorie["commissies"] as $commissie) {

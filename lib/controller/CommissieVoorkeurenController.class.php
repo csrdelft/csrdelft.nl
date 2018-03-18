@@ -94,7 +94,7 @@ class CommissieVoorkeurenController extends AclController {
     public function nieuwecategorie() {
         $cat = new VoorkeurCommissieCategorie();
         $cat->naam = filter_input(INPUT_POST, 'categorienaam', FILTER_SANITIZE_STRING);
-        $id = VoorkeurCommissieCategorieModel::instance()->create($cat);
+        VoorkeurCommissieCategorieModel::instance()->create($cat);
         redirect("/commissievoorkeuren/");
     }
 
