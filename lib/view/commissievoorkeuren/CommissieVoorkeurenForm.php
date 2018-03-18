@@ -63,7 +63,7 @@ class CommissieVoorkeurenForm extends Formulier {
         $this->voorkeuren[] = $voorkeur;
 	    $field = new SelectField('comm' . $commissie->id, $voorkeur->voorkeur, $commissie->naam, $opties);
 	    $this->addFields([$field]);
-		$voorkeur->voorkeur = $field;
+		$voorkeur->voorkeur = $field->getValue();
 	}
 
     public function getVoorkeuren() : array
