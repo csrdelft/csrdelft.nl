@@ -1015,9 +1015,7 @@ function checkMimetype($filename, $mime) {
 		'application/x-zip-compressed' => 'zip',
 	];
 
-	echo 'got' . $extension;
 	$expectedExtension = $mimeToExtension[$mime] ?? null;
-	echo 'expected ' . $expectedExtension;
 
 	if (is_null($expectedExtension)) {
 		return false;
