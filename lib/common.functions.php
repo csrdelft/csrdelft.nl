@@ -932,7 +932,7 @@ function init_xpath($html) {
  * @return bool
  */
 function checkMimetype($filename, $mime) {
-	$extension = pathinfo($filename, PATHINFO_EXTENSION);
+	$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
 	$mimeToExtension = [
 		'application/x-7z-compressed' => '7z',
