@@ -29,7 +29,7 @@ class AssetsController extends AclController {
 		// GetParam(2) is timehash voor cache.
 
 		if ($this->hasParam(3) && $this->hasParam(4) && $this->hasParam(5)) {
-			return parent::performAction($this->getParams(3));
+			return call_user_func_array(array($this, $this->action), $args);
 		} else {
 			$this->exit_http(404);
 		}
