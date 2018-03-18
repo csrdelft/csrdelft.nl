@@ -5,13 +5,18 @@ namespace CsrDelft\controller;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
+use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieCategorieModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
+use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
+use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurOpmerking;
 use CsrDelft\model\ProfielModel;
+use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
 use CsrDelft\view\commissievoorkeuren\BeheerCommissieTable;
 use CsrDelft\view\commissievoorkeuren\BeheerVoorkeurCommissieLijst;
+use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenOverzicht;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenProfiel;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenView;
 use CsrDelft\view\CsrLayoutPage;
@@ -41,13 +46,21 @@ class CommissieVoorkeurenController extends AclController {
 			$this->acl = array(
 				'lidpagina' => 'bestuur',
                 'beheer' => 'bestuur',
-                'overzicht' => 'bestuur'
+                'overzicht' => 'bestuur',
+                'nieuwecommissie' => 'bestuur',
+                'nieuwecategorie' => 'bestuur'
 			);
 		}
 	}
 
 	public function performAction(array $args = array()) {
 		$this->action = 'overzicht';
+        if (isset($_POST["nieuwecommissie"])) {
+            $this->action = "nieuwecommissie";
+        }
+        if (isset($_POST["nieuwecategorie"])) {
+            $this->action = "nieuwecategorie";
+        }
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
@@ -55,14 +68,35 @@ class CommissieVoorkeurenController extends AclController {
 	}
 
 	public function overzicht($commissieId = null) {
-	    $commissie = $commissieId != null ? VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId) : null;
-		$form = new CommissieVoorkeurenView($commissie);
-        if ($commissie != null && $form->validate()) {
-            VoorkeurCommissieModel::instance()->update($commissie);
-            setMelding('Aanpassingen commissie opgeslagen', 1);
+	    $body = null;
+	    if ($commissieId == null) {
+	        $body = new CommissieVoorkeurenOverzicht();
+        } else {
+            $commissie = $commissieId != null ? VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId) : null;
+            $body = new CommissieVoorkeurenView($commissie);
+            if ($commissie != null && $body->validate()) {
+                VoorkeurCommissieModel::instance()->update($commissie);
+                setMelding('Aanpassingen commissie opgeslagen', 1);
+            }
         }
-		$this->view = new CsrLayoutPage($form);
+		$this->view = new CsrLayoutPage($body);
 	}
+
+    public function nieuwecommissie() {
+        $commissie = new VoorkeurCommissie();
+        $commissie->naam = filter_input(INPUT_POST, 'commissienaam', FILTER_SANITIZE_STRING);
+        $commissie->zichtbaar = false;
+        $commissie->categorie_id = 1;
+        $id = VoorkeurCommissieModel::instance()->create($commissie);
+        redirect("/commissievoorkeuren/overzicht/".$id);
+    }
+
+    public function nieuwecategorie() {
+        $cat = new VoorkeurCommissieCategorie();
+        $cat->naam = filter_input(INPUT_POST, 'categorienaam', FILTER_SANITIZE_STRING);
+        $id = VoorkeurCommissieCategorieModel::instance()->create($cat);
+        redirect("/commissievoorkeuren/");
+    }
 
 	public function lidpagina($uid = -1) {
 		if (!ProfielModel::existsUid($uid)) {
