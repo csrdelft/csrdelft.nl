@@ -8,26 +8,28 @@ use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
 use SplObjectStorage;
 
-class VoorkeurCommissieModel extends PersistenceModel {
+class VoorkeurCommissieModel extends PersistenceModel
+{
 
-    const ORM = VoorkeurCommissie::class;
-    public function getByCategorie()
-    {
+	const ORM = VoorkeurCommissie::class;
 
-        $categorien = VoorkeurCommissieCategorieModel::instance()->find();
-        $cat2commissie = [];
-        foreach ($categorien as $cat) {
-            $cat2commissie[$cat->id] = ['categorie'=>$cat, 'commissies'=>[]];
-        }
+	public function getByCategorie()
+	{
 
-        $commissies = $this->find();
+		$categorien = VoorkeurCommissieCategorieModel::instance()->find();
+		$cat2commissie = [];
+		foreach ($categorien as $cat) {
+			$cat2commissie[$cat->id] = ['categorie' => $cat, 'commissies' => []];
+		}
 
-        foreach ($commissies as $commissie) {
-            $cat2commissie[$commissie->categorie_id]['commissies'][] = $commissie;
+		$commissies = $this->find();
 
-        }
-        return $cat2commissie;
+		foreach ($commissies as $commissie) {
+			$cat2commissie[$commissie->categorie_id]['commissies'][] = $commissie;
 
-    }
+		}
+		return $cat2commissie;
+
+	}
 
 }

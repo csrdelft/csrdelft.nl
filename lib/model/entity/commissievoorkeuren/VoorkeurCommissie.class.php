@@ -6,7 +6,8 @@ use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieCategorieModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
-class VoorkeurCommissie extends PersistentEntity {
+class VoorkeurCommissie extends PersistentEntity
+{
 	/**
 	 * @var int
 	 */
@@ -22,9 +23,9 @@ class VoorkeurCommissie extends PersistentEntity {
 	 */
 	public $zichtbaar;
 
-    /**
-     * @var integer
-     */
+	/**
+	 * @var integer
+	 */
 	public $categorie_id;
 
 	/**
@@ -39,7 +40,7 @@ class VoorkeurCommissie extends PersistentEntity {
 		'id' => [T::Integer, false, "auto_increment"],
 		'naam' => [T::String, false],
 		'zichtbaar' => [T::Boolean, false],
-        'categorie_id' => [T::Integer, false]
+		'categorie_id' => [T::Integer, false]
 	];
 
 	/**
@@ -47,7 +48,8 @@ class VoorkeurCommissie extends PersistentEntity {
 	 */
 	protected static $primary_key = ['id'];
 
-	public function getCategorie() : VoorkeurCommissieCategorie {
-	    return VoorkeurCommissieCategorieModel::instance()->retrieveByUUID($this->categorie_id);
-    }
+	public function getCategorie(): VoorkeurCommissieCategorie
+	{
+		return VoorkeurCommissieCategorieModel::instance()->retrieveByUUID($this->categorie_id);
+	}
 }

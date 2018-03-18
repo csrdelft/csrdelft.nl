@@ -23,7 +23,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 
 
-
 /**
  * CommissieVoorkeurenController.class.php
  *
@@ -32,73 +31,80 @@ use CsrDelft\view\formulier\datatable\DataTableResponse;
  *
  * Controller voor commissie voorkeuren.
  */
-class CommissieVoorkeurenController extends AclController {
+class CommissieVoorkeurenController extends AclController
+{
 
-	public function __construct($query) {
+	public function __construct($query)
+	{
 		parent::__construct($query, null);
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'overzicht' => 'bestuur',
 				'lidpagina' => 'bestuur',
-                'beheer' => 'bestuur'
+				'beheer' => 'bestuur'
 			);
 		} else {
 			$this->acl = array(
 				'lidpagina' => 'bestuur',
-                'beheer' => 'bestuur',
-                'overzicht' => 'bestuur',
-                'nieuwecommissie' => 'bestuur',
-                'nieuwecategorie' => 'bestuur'
+				'beheer' => 'bestuur',
+				'overzicht' => 'bestuur',
+				'nieuwecommissie' => 'bestuur',
+				'nieuwecategorie' => 'bestuur'
 			);
 		}
 	}
 
-	public function performAction(array $args = array()) {
+	public function performAction(array $args = array())
+	{
 		$this->action = 'overzicht';
-        if (isset($_POST["nieuwecommissie"])) {
-            $this->action = "nieuwecommissie";
-        }
-        if (isset($_POST["nieuwecategorie"])) {
-            $this->action = "nieuwecategorie";
-        }
+		if (isset($_POST["nieuwecommissie"])) {
+			$this->action = "nieuwecommissie";
+		}
+		if (isset($_POST["nieuwecategorie"])) {
+			$this->action = "nieuwecategorie";
+		}
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
 		parent::performAction($this->getParams(3));
 	}
 
-	public function overzicht($commissieId = null) {
-	    $body = null;
-	    if ($commissieId == null) {
-	        $body = new CommissieVoorkeurenOverzicht();
-        } else {
-            $commissie = $commissieId != null ? VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId) : null;
-            $body = new CommissieVoorkeurenView($commissie);
-            if ($commissie != null && $body->validate()) {
-                VoorkeurCommissieModel::instance()->update($commissie);
-                setMelding('Aanpassingen commissie opgeslagen', 1);
-            }
-        }
+	public function overzicht($commissieId = null)
+	{
+		$body = null;
+		if ($commissieId == null) {
+			$body = new CommissieVoorkeurenOverzicht();
+		} else {
+			$commissie = $commissieId != null ? VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId) : null;
+			$body = new CommissieVoorkeurenView($commissie);
+			if ($commissie != null && $body->validate()) {
+				VoorkeurCommissieModel::instance()->update($commissie);
+				setMelding('Aanpassingen commissie opgeslagen', 1);
+			}
+		}
 		$this->view = new CsrLayoutPage($body);
 	}
 
-    public function nieuwecommissie() {
-        $commissie = new VoorkeurCommissie();
-        $commissie->naam = filter_input(INPUT_POST, 'commissienaam', FILTER_SANITIZE_STRING);
-        $commissie->zichtbaar = false;
-        $commissie->categorie_id = 1;
-        $id = VoorkeurCommissieModel::instance()->create($commissie);
-        redirect("/commissievoorkeuren/overzicht/".$id);
-    }
+	public function nieuwecommissie()
+	{
+		$commissie = new VoorkeurCommissie();
+		$commissie->naam = filter_input(INPUT_POST, 'commissienaam', FILTER_SANITIZE_STRING);
+		$commissie->zichtbaar = false;
+		$commissie->categorie_id = 1;
+		$id = VoorkeurCommissieModel::instance()->create($commissie);
+		redirect("/commissievoorkeuren/overzicht/" . $id);
+	}
 
-    public function nieuwecategorie() {
-        $cat = new VoorkeurCommissieCategorie();
-        $cat->naam = filter_input(INPUT_POST, 'categorienaam', FILTER_SANITIZE_STRING);
-        VoorkeurCommissieCategorieModel::instance()->create($cat);
-        redirect("/commissievoorkeuren/");
-    }
+	public function nieuwecategorie()
+	{
+		$cat = new VoorkeurCommissieCategorie();
+		$cat->naam = filter_input(INPUT_POST, 'categorienaam', FILTER_SANITIZE_STRING);
+		VoorkeurCommissieCategorieModel::instance()->create($cat);
+		redirect("/commissievoorkeuren/");
+	}
 
-	public function lidpagina($uid = -1) {
+	public function lidpagina($uid = -1)
+	{
 		if (!ProfielModel::existsUid($uid)) {
 			$this->exit_http(403);
 		}

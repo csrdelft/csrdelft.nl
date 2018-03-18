@@ -5,7 +5,8 @@ namespace CsrDelft\model\entity\commissievoorkeuren;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
-class VoorkeurCommissieCategorie extends PersistentEntity {
+class VoorkeurCommissieCategorie extends PersistentEntity
+{
 	/**
 	 * @var int
 	 */

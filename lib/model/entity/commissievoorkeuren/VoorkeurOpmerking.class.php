@@ -6,7 +6,8 @@ use CsrDelft\model\entity\Profiel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
-class VoorkeurOpmerking extends PersistentEntity {
+class VoorkeurOpmerking extends PersistentEntity
+{
 	/**
 	 * @var string
 	 */
@@ -27,12 +28,13 @@ class VoorkeurOpmerking extends PersistentEntity {
 	 */
 	protected static $table_name = 'voorkeurOpmerking';
 
-    /**
-     * @return Profiel
-     */
-    public function getProfiel() {
-        return ProfielModel::get($this->uid);
-    }
+	/**
+	 * @return Profiel
+	 */
+	public function getProfiel()
+	{
+		return ProfielModel::get($this->uid);
+	}
 
 	/**
 	 * @var array
