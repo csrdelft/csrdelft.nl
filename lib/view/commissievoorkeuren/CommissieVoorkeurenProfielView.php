@@ -12,30 +12,24 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\view\SmartyTemplateView;
 use CsrDelft\view\View;
 
-class CommissieVoorkeurenProfielView extends SmartyTemplateView
-{
-	public function __construct($profiel)
-	{
+class CommissieVoorkeurenProfielView extends SmartyTemplateView {
+	public function __construct($profiel) {
 		parent::__construct($profiel);
 	}
 
-	public function getModel()
-	{
+	public function getModel() {
 		return $this->profiel;
 	}
 
-	public function getBreadcrumbs()
-	{
+	public function getBreadcrumbs() {
 		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » <a href="/commissievoorkeuren">Voorkeuren voor commissies</a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 
-	public function getTitel()
-	{
+	public function getTitel() {
 		return 'Voorkeur van lid';
 	}
 
-	public function view()
-	{
+	public function view() {
 		$voorkeuren = CommissieVoorkeurModel::instance()->getVoorkeurenVoorLid($this->model);
 		$voorkeurenMap = array();
 		foreach ($voorkeuren as $voorkeur) {
