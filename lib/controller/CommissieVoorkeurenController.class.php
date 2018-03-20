@@ -36,11 +36,9 @@ use CsrDelft\view\formulier\datatable\DataTableResponse;
  *
  * Controller voor commissie voorkeuren.
  */
-class CommissieVoorkeurenController extends AclController
-{
+class CommissieVoorkeurenController extends AclController {
 
-	public function __construct($query)
-	{
+	public function __construct($query) {
 		parent::__construct($query, null);
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
@@ -59,8 +57,7 @@ class CommissieVoorkeurenController extends AclController
 		}
 	}
 
-	public function performAction(array $args = array())
-	{
+	public function performAction(array $args = array()) {
 		$this->action = 'overzicht';
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
@@ -68,8 +65,7 @@ class CommissieVoorkeurenController extends AclController
 		parent::performAction($this->getParams(3));
 	}
 
-	public function POST_overzicht($commissieId)
-	{
+	public function POST_overzicht($commissieId) {
 		$commissie = VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId);
 		$body = new CommissieFormulier($commissie);
 		if ($body->validate()) {
@@ -80,8 +76,7 @@ class CommissieVoorkeurenController extends AclController
 
 	}
 
-	public function GET_overzicht($commissieId = null)
-	{
+	public function GET_overzicht($commissieId = null) {
 		$body = null;
 		if ($commissieId == null) {
 			$body = new CommissieVoorkeurenOverzicht();
@@ -93,8 +88,7 @@ class CommissieVoorkeurenController extends AclController
 		$this->view->addCompressedResources('commissievoorkeuren');
 	}
 
-	public function nieuwecommissie()
-	{
+	public function nieuwecommissie() {
 		$model = new VoorkeurCommissie();
 		if ((new AddCommissieFormulier($model))->validate()) {
 			$id = VoorkeurCommissieModel::instance()->create($model);
@@ -105,8 +99,7 @@ class CommissieVoorkeurenController extends AclController
 
 	}
 
-	public function nieuwecategorie()
-	{
+	public function nieuwecategorie() {
 		$model = new VoorkeurCommissieCategorie();
 		if ((new AddCategorieFormulier($model))->validate()) {
 			VoorkeurCommissieCategorieModel::instance()->create($model);
@@ -115,8 +108,7 @@ class CommissieVoorkeurenController extends AclController
 		redirect("/commissievoorkeuren/");
 	}
 
-	public function GET_lidpagina($uid)
-	{
+	public function GET_lidpagina($uid) {
 		if (!ProfielModel::existsUid($uid)) {
 			$this->exit_http(403);
 		}
@@ -125,8 +117,7 @@ class CommissieVoorkeurenController extends AclController
 		$this->view = new CsrLayoutPage($body);
 	}
 
-	public function POST_lidpagina($uid)
-	{
+	public function POST_lidpagina($uid) {
 		$opmerking = VoorkeurOpmerkingModel::instance()->retrieveByUUID($uid);
 		$form = (new CommissieVoorkeurPraesesOpmerkingForm($opmerking));
 		if ($form->validate()) {

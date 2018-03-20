@@ -7,8 +7,7 @@ use CsrDelft\model\entity\commissievoorkeuren\VoorkeurVoorkeur;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\Orm\PersistenceModel;
 
-class CommissieVoorkeurModel extends PersistenceModel
-{
+class CommissieVoorkeurModel extends PersistenceModel {
 
 	const ORM = VoorkeurVoorkeur::class;
 
@@ -17,8 +16,7 @@ class CommissieVoorkeurModel extends PersistenceModel
 	 * @param Profiel $profiel
 	 * @return VoorkeurVoorkeur[]|false
 	 */
-	public function getVoorkeurenVoorLid(Profiel $profiel): \PDOStatement
-	{
+	public function getVoorkeurenVoorLid(Profiel $profiel): \PDOStatement {
 		return $this->find("uid = ?", array($profiel->uid));
 	}
 
@@ -26,8 +24,7 @@ class CommissieVoorkeurModel extends PersistenceModel
 	 * @param VoorkeurCommissie $commissie
 	 * @return VoorkeurVoorkeur[]|false
 	 */
-	public function getVoorkeurenVoorCommissie(VoorkeurCommissie $commissie, int $minVoorkeurWaarde = 1): \PDOStatement
-	{
+	public function getVoorkeurenVoorCommissie(VoorkeurCommissie $commissie, int $minVoorkeurWaarde = 1): \PDOStatement {
 		return $this->find("cid = ? and voorkeur >= ?", array($commissie->id, $minVoorkeurWaarde));
 	}
 
@@ -36,8 +33,7 @@ class CommissieVoorkeurModel extends PersistenceModel
 	 * @param VoorkeurCommissie $commissie
 	 * @return VoorkeurVoorkeur|false
 	 */
-	public function getVoorkeur(Profiel $profiel, VoorkeurCommissie $commissie): VoorkeurVoorkeur
-	{
+	public function getVoorkeur(Profiel $profiel, VoorkeurCommissie $commissie): VoorkeurVoorkeur {
 		$voorkeur = $this->retrieveByPrimaryKey([$profiel->uid, $commissie->id]);
 		if ($voorkeur == null) {
 			$voorkeur = new VoorkeurVoorkeur();

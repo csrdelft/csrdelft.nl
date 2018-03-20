@@ -15,14 +15,12 @@ use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 
-class AddCommissieFormulier extends Formulier
-{
+class AddCommissieFormulier extends Formulier {
 
 	/**
 	 * AddCommissieFormulier constructor.
 	 */
-	public function __construct($model)
-	{
+	public function __construct($model) {
 		parent::__construct($model, "/commissievoorkeuren/nieuwecommissie");
 		$this->addFields([new HtmlComment("<h2>Commissie toevoegen</h2>")]);
 		$this->addFields([new TextField("naam", "", "Naam")]);

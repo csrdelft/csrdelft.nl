@@ -41,10 +41,8 @@ use function CsrDelft\startsWith;
  *
  * @property ProfielModel $model
  */
-class ProfielController extends AclController
-{
-	public function __construct($query)
-	{
+class ProfielController extends AclController {
+	public function __construct($query) {
 		parent::__construct($query, ProfielModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
@@ -75,8 +73,7 @@ class ProfielController extends AclController
 		}
 	}
 
-	public function performAction(array $args = array())
-	{
+	public function performAction(array $args = array()) {
 		// Profiel
 		if ($this->hasParam(1) AND $this->getParam(1) === 'profiel') {
 			if ($this->hasParam(2)) {
@@ -115,19 +112,16 @@ class ProfielController extends AclController
 		}
 	}
 
-	public function profiel(Profiel $profiel)
-	{
+	public function profiel(Profiel $profiel) {
 		return new ProfielView($profiel);
 	}
 
-	public function resetPrivateToken(Profiel $profiel)
-	{
+	public function resetPrivateToken(Profiel $profiel) {
 		AccountModel::instance()->resetPrivateToken($profiel->getAccount());
 		return $this->profiel($profiel);
 	}
 
-	public function nieuw($lidjaar, $status)
-	{
+	public function nieuw($lidjaar, $status) {
 		// Controleer invoer
 		$lidstatus = 'S_' . strtoupper($status);
 		if (!preg_match('/^[0-9]{4}$/', $lidjaar) OR !in_array($lidstatus, LidStatus::getTypeOptions())) {
@@ -142,8 +136,7 @@ class ProfielController extends AclController
 		return $this->bewerken($profiel);
 	}
 
-	public function bewerken(Profiel $profiel)
-	{
+	public function bewerken(Profiel $profiel) {
 		if (!$profiel->magBewerken()) {
 			$this->exit_http(403);
 		}
@@ -176,8 +169,7 @@ class ProfielController extends AclController
 		return $form;
 	}
 
-	public function voorkeuren(Profiel $profiel)
-	{
+	public function voorkeuren(Profiel $profiel) {
 		if (!$profiel->magBewerken()) {
 			$this->exit_http(403);
 		}
@@ -194,8 +186,7 @@ class ProfielController extends AclController
 		return $form;
 	}
 
-	public function addToGoogleContacts(Profiel $profiel)
-	{
+	public function addToGoogleContacts(Profiel $profiel) {
 		try {
 			GoogleSync::doRequestToken(CSR_ROOT . "/profiel/" . $profiel->uid . "/addToGoogleContacts");
 			$gSync = GoogleSync::instance();
@@ -207,26 +198,22 @@ class ProfielController extends AclController
 		redirect(CSR_ROOT . '/profiel/' . $profiel->uid);
 	}
 
-	public function lijst()
-	{
+	public function lijst() {
 		redirect('/ledenlijst');
 	}
 
-	public function stamboom($uid = null)
-	{
+	public function stamboom($uid = null) {
 		$body = new StamboomView($uid);
 		$this->view = new CsrLayoutPage($body);
 		$this->view->addCompressedResources('stamboom');
 	}
 
-	public function verjaardagen()
-	{
+	public function verjaardagen() {
 		$body = new AlleVerjaardagenView(VerjaardagenModel::getJaar());
 		$this->view = new CsrLayoutPage($body);
 	}
 
-	public function saldo($uid, $timespan)
-	{
+	public function saldo($uid, $timespan) {
 		if (SaldoGrafiekModel::magGrafiekZien($uid)) {
 			$data = SaldoGrafiekModel::getDataPoints($uid, $timespan);
 			$this->view = new JsonResponse($data);
@@ -235,14 +222,12 @@ class ProfielController extends AclController
 		}
 	}
 
-	public function memory()
-	{
+	public function memory() {
 		$this->view = new LedenMemoryView();
 		$this->view->addCompressedResources('ledenmemory');
 	}
 
-	public function memoryscore()
-	{
+	public function memoryscore() {
 		$score = LedenMemoryScoresModel::instance()->nieuw();
 		$form = new LedenMemoryScoreForm($score);
 		if ($form->validate()) {
@@ -251,8 +236,7 @@ class ProfielController extends AclController
 		$this->view = new JsonResponse($score);
 	}
 
-	public function memoryscores($groep = null)
-	{
+	public function memoryscores($groep = null) {
 		$parts = explode('@', $groep);
 		if (isset($parts[0], $parts[1])) {
 			switch ($parts[1]) {

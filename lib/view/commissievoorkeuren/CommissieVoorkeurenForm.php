@@ -17,11 +17,9 @@ use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
-class CommissieVoorkeurenForm extends Formulier
-{
+class CommissieVoorkeurenForm extends Formulier {
 
-	public function getBreadcrumbs()
-	{
+	public function getBreadcrumbs() {
 		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » ' . $this->profiel->getLink('civitas') . ' » <span class="active">' . $this->titel . '</span>';
 	}
 
@@ -30,13 +28,10 @@ class CommissieVoorkeurenForm extends Formulier
 	private $profiel;
 	private $categorieMap = array();
 
-	public function __construct(Profiel $profiel)
-	{
+	public function __construct(Profiel $profiel) {
 		parent::__construct(null, '/profiel/' . $profiel->uid . '/voorkeuren', 'Commissie-voorkeuren');
 		$this->profiel = $profiel;
-
 		$this->addFields([new HtmlComment('<p>Hier kunt u per commissie opgeven of u daar interesse in heeft!</p>')]);
-
 		$categorieCommissie = $this->getCategorieCommissieMap();
 
 		foreach ($categorieCommissie as $cid => $commissies) {
@@ -59,8 +54,7 @@ class CommissieVoorkeurenForm extends Formulier
 		$this->addFields($fields);
 	}
 
-	private function addVoorkeurVeld(VoorkeurCommissie $commissie)
-	{
+	private function addVoorkeurVeld(VoorkeurCommissie $commissie) {
 		$opties = array(1 => 'nee', 2 => 'misschien', 3 => 'ja');
 		$voorkeur = CommissieVoorkeurModel::instance()->getVoorkeur($this->profiel, $commissie);
 		$this->voorkeuren[] = $voorkeur;
@@ -69,18 +63,15 @@ class CommissieVoorkeurenForm extends Formulier
 		$voorkeur->voorkeur = $field->getValue();
 	}
 
-	public function getVoorkeuren(): array
-	{
+	public function getVoorkeuren(): array {
 		return $this->voorkeuren;
 	}
 
-	public function getOpmerking()
-	{
+	public function getOpmerking() {
 		return $this->opmerking;
 	}
 
-	private function getCategorieCommissieMap(): array
-	{
+	private function getCategorieCommissieMap(): array {
 		$categorieCommissie = array();
 		$categorien = VoorkeurCommissieCategorieModel::instance()->find()->fetchAll();
 		foreach ($categorien as $cat) {

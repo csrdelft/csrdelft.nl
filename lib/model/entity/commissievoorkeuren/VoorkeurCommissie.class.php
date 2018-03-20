@@ -6,8 +6,7 @@ use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieCategorieModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
-class VoorkeurCommissie extends PersistentEntity
-{
+class VoorkeurCommissie extends PersistentEntity {
 	/**
 	 * @var int
 	 */

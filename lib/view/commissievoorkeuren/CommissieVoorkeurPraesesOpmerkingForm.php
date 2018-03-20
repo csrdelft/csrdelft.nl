@@ -14,14 +14,12 @@ use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 
-class CommissieVoorkeurPraesesOpmerkingForm extends Formulier
-{
+class CommissieVoorkeurPraesesOpmerkingForm extends Formulier {
 
 	/**
 	 * CommissieVoorkeurOpmerkingForm constructor.
 	 */
-	public function __construct(VoorkeurOpmerking $model)
-	{
+	public function __construct(VoorkeurOpmerking $model) {
 		parent::__construct($model, '/commissievoorkeuren/lidpagina/' . $model->uid);
 		$this->addFields([new TextareaField("praesesOpmerking", $model->praesesOpmerking, "Opmerking van praeses")]);
 		$this->addFields([new SubmitKnop(null, 'submit', "Opslaan")]);

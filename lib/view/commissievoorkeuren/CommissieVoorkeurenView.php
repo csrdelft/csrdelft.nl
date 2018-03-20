@@ -16,27 +16,22 @@ use CsrDelft\view\formulier\knoppen\SubmitKnop;
 use CsrDelft\view\SmartyTemplateView;
 use CsrDelft\view\View;
 
-class CommissieVoorkeurenView extends SmartyTemplateView
-{
+class CommissieVoorkeurenView extends SmartyTemplateView {
 
 
-	public function __construct($model)
-	{
+	public function __construct($model) {
 		parent::__construct($model);
 	}
 
-	public function getBreadcrumbs()
-	{
+	public function getBreadcrumbs() {
 		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » <a href="/commissievoorkeuren">Commissievoorkeuren</a>»<span>' . $this->getTitel() . '</span>';
 	}
 
-	public function getTitel()
-	{
+	public function getTitel() {
 		return $this->model->naam;
 	}
 
-	public function view()
-	{
+	public function view() {
 		$this->smarty->assign('voorkeuren', CommissieVoorkeurModel::instance()->getVoorkeurenVoorCommissie($this->model, 2));
 		$this->smarty->assign('commissie', $this->model);
 		$this->smarty->assign('commissieFormulier', new CommissieFormulier($this->model));

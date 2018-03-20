@@ -16,16 +16,14 @@ use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 
-class CommissieFormulier extends Formulier
-{
+class CommissieFormulier extends Formulier {
 
 	/**
 	 * CommissieFormulier constructor.
 	 * @param mixed $model
 	 */
-	public function __construct($model)
-	{
-		parent::__construct($model, "/commissievoorkeuren/overzicht/".$model->id);
+	public function __construct($model) {
+		parent::__construct($model, "/commissievoorkeuren/overzicht/" . $model->id);
 		$opties = [];
 		foreach (VoorkeurCommissieCategorieModel::instance()->find() as $cat) {
 			$opties[$cat->id] = $cat->naam;

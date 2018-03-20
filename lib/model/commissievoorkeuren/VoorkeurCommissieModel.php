@@ -8,13 +8,11 @@ use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
 use SplObjectStorage;
 
-class VoorkeurCommissieModel extends PersistenceModel
-{
+class VoorkeurCommissieModel extends PersistenceModel {
 
 	const ORM = VoorkeurCommissie::class;
 
-	public function getByCategorie()
-	{
+	public function getByCategorie() {
 
 		$categorien = VoorkeurCommissieCategorieModel::instance()->find();
 		$cat2commissie = [];
