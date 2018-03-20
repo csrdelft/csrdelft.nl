@@ -11,14 +11,19 @@ use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurOpmerking;
+use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\ProfielModel;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
+use CsrDelft\view\commissievoorkeuren\AddCategorieFormulier;
+use CsrDelft\view\commissievoorkeuren\AddCommissieFormulier;
 use CsrDelft\view\commissievoorkeuren\BeheerCommissieTable;
 use CsrDelft\view\commissievoorkeuren\BeheerVoorkeurCommissieLijst;
+use CsrDelft\view\commissievoorkeuren\CommissieFormulier;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenOverzicht;
-use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenProfiel;
+use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenProfielView;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenView;
+use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurPraesesOpmerkingForm;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 
@@ -49,7 +54,7 @@ class CommissieVoorkeurenController extends AclController
 				'beheer' => 'bestuur',
 				'overzicht' => 'bestuur',
 				'nieuwecommissie' => 'bestuur',
-				'nieuwecategorie' => 'bestuur'
+				'nieuwecategorie' => 'bestuur',
 			);
 		}
 	}
@@ -57,65 +62,77 @@ class CommissieVoorkeurenController extends AclController
 	public function performAction(array $args = array())
 	{
 		$this->action = 'overzicht';
-		if (isset($_POST["nieuwecommissie"])) {
-			$this->action = "nieuwecommissie";
-		}
-		if (isset($_POST["nieuwecategorie"])) {
-			$this->action = "nieuwecategorie";
-		}
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
 		parent::performAction($this->getParams(3));
 	}
 
-	public function overzicht($commissieId = null)
+	public function POST_overzicht($commissieId)
+	{
+		$commissie = VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId);
+		$body = new CommissieFormulier($commissie);
+		if ($body->validate()) {
+			VoorkeurCommissieModel::instance()->update($commissie);
+			setMelding('Aanpassingen commissie opgeslagen', 1);
+		}
+		redirect();
+
+	}
+
+	public function GET_overzicht($commissieId = null)
 	{
 		$body = null;
 		if ($commissieId == null) {
 			$body = new CommissieVoorkeurenOverzicht();
 		} else {
-			$commissie = $commissieId != null ? VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId) : null;
+			$commissie = VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId);
 			$body = new CommissieVoorkeurenView($commissie);
-			if ($commissie != null && $body->validate()) {
-				VoorkeurCommissieModel::instance()->update($commissie);
-				setMelding('Aanpassingen commissie opgeslagen', 1);
-			}
 		}
 		$this->view = new CsrLayoutPage($body);
+		$this->view->addCompressedResources('commissievoorkeuren');
 	}
 
 	public function nieuwecommissie()
 	{
-		$commissie = new VoorkeurCommissie();
-		$commissie->naam = filter_input(INPUT_POST, 'commissienaam', FILTER_SANITIZE_STRING);
-		$commissie->zichtbaar = false;
-		$commissie->categorie_id = 1;
-		$id = VoorkeurCommissieModel::instance()->create($commissie);
-		redirect("/commissievoorkeuren/overzicht/" . $id);
+		$model = new VoorkeurCommissie();
+		if ((new AddCommissieFormulier($model))->validate()) {
+			$id = VoorkeurCommissieModel::instance()->create($model);
+			redirect("/commissievoorkeuren/overzicht/" . $id);
+		} else {
+			redirect("/commissievoorkeuren/");
+		}
+
 	}
 
 	public function nieuwecategorie()
 	{
-		$cat = new VoorkeurCommissieCategorie();
-		$cat->naam = filter_input(INPUT_POST, 'categorienaam', FILTER_SANITIZE_STRING);
-		VoorkeurCommissieCategorieModel::instance()->create($cat);
+		$model = new VoorkeurCommissieCategorie();
+		if ((new AddCategorieFormulier($model))->validate()) {
+			VoorkeurCommissieCategorieModel::instance()->create($model);
+		}
+
 		redirect("/commissievoorkeuren/");
 	}
 
-	public function lidpagina($uid = -1)
+	public function GET_lidpagina($uid)
 	{
 		if (!ProfielModel::existsUid($uid)) {
 			$this->exit_http(403);
 		}
 		$profiel = ProfielModel::get($uid);
-		if (isset($_POST['praeses-opmerking'])) {
-			$opmerking = VoorkeurOpmerkingModel::instance()->getOpmerkingVoorLid($profiel);
-			VoorkeurOpmerkingModel::instance()->setPraesesOpmerking($opmerking, filter_input(INPUT_POST, 'praeses-opmerking', FILTER_SANITIZE_STRING));
-		}
-
-		$body = new CommissieVoorkeurenProfiel($profiel);
+		$body = new CommissieVoorkeurenProfielView($profiel);
 		$this->view = new CsrLayoutPage($body);
+	}
+
+	public function POST_lidpagina($uid)
+	{
+		$opmerking = VoorkeurOpmerkingModel::instance()->retrieveByUUID($uid);
+		$form = (new CommissieVoorkeurPraesesOpmerkingForm($opmerking));
+		if ($form->validate()) {
+			VoorkeurOpmerkingModel::instance()->update($opmerking);
+			redirect();
+		}
 	}
 
 }

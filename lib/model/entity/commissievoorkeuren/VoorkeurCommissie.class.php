@@ -21,12 +21,12 @@ class VoorkeurCommissie extends PersistentEntity
 	/**
 	 * @var boolean
 	 */
-	public $zichtbaar;
+	public $zichtbaar = false;
 
 	/**
 	 * @var integer
 	 */
-	public $categorie_id;
+	public $categorie_id = 1;
 
 	/**
 	 * @var string
@@ -48,8 +48,4 @@ class VoorkeurCommissie extends PersistentEntity
 	 */
 	protected static $primary_key = ['id'];
 
-	public function getCategorie(): VoorkeurCommissieCategorie
-	{
-		return VoorkeurCommissieCategorieModel::instance()->retrieveByUUID($this->categorie_id);
-	}
 }

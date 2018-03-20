@@ -14,22 +14,16 @@ use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
+use CsrDelft\view\SmartyTemplateView;
 use CsrDelft\view\View;
 
-class CommissieVoorkeurenOverzicht extends Formulier
+class CommissieVoorkeurenOverzicht extends SmartyTemplateView
 {
 
 
 	public function __construct($model = null)
 	{
 		parent::__construct($model, "/commissievoorkeuren/");
-		$this->addFields([new HtmlComment($this->buildPage())]);
-		$this->addFields([new HtmlComment("<h2>Categorie toevoegen</h2>")]);
-		$this->addFields([new TextField("categorienaam", "", "Naam nieuwe categorie")]);
-		$this->addFields([new HtmlComment("<input type=submit name=nieuwecategorie value='Categorie toevoegen' />")]);
-		$this->addFields([new HtmlComment("<h2>Commissie toevoegen</h2>")]);
-		$this->addFields([new TextField("commissienaam", "", "Naam nieuwe commissie")]);
-		$this->addFields([new HtmlComment("<input type=submit name=nieuwecommissie value='Commissie toevoegen' />")]);
 	}
 
 	public function getBreadcrumbs()
@@ -42,22 +36,18 @@ class CommissieVoorkeurenOverzicht extends Formulier
 		return 'Voorkeuren voor commissies';
 	}
 
-	public function buildPage()
+	public function view()
 	{
-		$output = '<p>klik op een commissie om de voorkeuren te bekijken';
 
-		$cat2commissie = VoorkeurCommissieModel::instance()->getByCategorie();
-		foreach ($cat2commissie as $categorie) {
-			$output .= '<h2>' . $categorie["categorie"]->naam . ' </h2>';
-			$output .= '<ul>';
-			foreach ($categorie["commissies"] as $commissie) {
-				$output .= '<li ' . (!$commissie->zichtbaar ? 'style="opacity: .50"' : '') . ' > <a href="/commissievoorkeuren/overzicht/' . $commissie->id . '" >' . $commissie->naam . '</a></li>';
-			}
-			$output .= '</ul>';
-		}
-		return $output;
 
+		$this->smarty->assign("categorieFormulier", new AddCategorieFormulier(new VoorkeurCommissieCategorie()));
+		$this->smarty->assign("commissieFormulier", new AddCommissieFormulier(new VoorkeurCommissie()));
+		$this->smarty->assign("categorien", VoorkeurCommissieModel::instance()->getByCategorie());
+		$this->smarty->display("commissievoorkeuren/overzicht.tpl");
 	}
 
-
+	public function getModel()
+	{
+		return null;
+	}
 }

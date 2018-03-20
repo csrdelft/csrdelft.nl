@@ -17,27 +17,9 @@ class VoorkeurOpmerkingModel extends PersistenceModel
 	 */
 	public function getOpmerkingVoorLid(Profiel $profiel)
 	{
-		return $this->retrieveByUUID($profiel->uid);
+		$result = $this->retrieveByPrimaryKey([$profiel->uid]);
+		return $result === false ? new VoorkeurOpmerking() : $result;
 	}
 
-	/**
-	 * @param VoorkeurOpmerking $opmerking
-	 * @param string $text
-	 */
-	public function setLidOpmerking(VoorkeurOpmerking $opmerking, string $text)
-	{
-		$opmerking->lidOpmerking = $text;
-		$this->update($opmerking);
-	}
-
-	/**
-	 * @param VoorkeurOpmerking $opmerking
-	 * @param string $text
-	 */
-	public function setPraesesOpmerking(VoorkeurOpmerking $opmerking, string $text)
-	{
-		$opmerking->praesesOpmerking = $text;
-		$this->update($opmerking);
-	}
 
 }

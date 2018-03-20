@@ -15,7 +15,7 @@ class CommissieVoorkeurModel extends PersistenceModel
 
 	/**
 	 * @param Profiel $profiel
-	 * @return \PDOStatement
+	 * @return VoorkeurVoorkeur[]|false
 	 */
 	public function getVoorkeurenVoorLid(Profiel $profiel): \PDOStatement
 	{
@@ -24,7 +24,7 @@ class CommissieVoorkeurModel extends PersistenceModel
 
 	/**
 	 * @param VoorkeurCommissie $commissie
-	 * @return \PDOStatement
+	 * @return VoorkeurVoorkeur[]|false
 	 */
 	public function getVoorkeurenVoorCommissie(VoorkeurCommissie $commissie, int $minVoorkeurWaarde = 1): \PDOStatement
 	{
@@ -34,7 +34,7 @@ class CommissieVoorkeurModel extends PersistenceModel
 	/**
 	 * @param Profiel $profiel
 	 * @param VoorkeurCommissie $commissie
-	 * @return VoorkeurVoorkeur
+	 * @return VoorkeurVoorkeur|false
 	 */
 	public function getVoorkeur(Profiel $profiel, VoorkeurCommissie $commissie): VoorkeurVoorkeur
 	{
@@ -42,7 +42,7 @@ class CommissieVoorkeurModel extends PersistenceModel
 		if ($voorkeur == null) {
 			$voorkeur = new VoorkeurVoorkeur();
 			$voorkeur->uid = $profiel->uid;
-			$voorkeur->cid = $commissie->cid;
+			$voorkeur->cid = $commissie->id;
 			$voorkeur->voorkeur = 1;
 		}
 		return $voorkeur;
