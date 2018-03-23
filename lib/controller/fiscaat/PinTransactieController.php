@@ -147,27 +147,34 @@ class PinTransactieController extends AclController {
 				throw new CsrGebruikerException('Geen transactie gevonden om een bestelling voor aan te maken');
 			}
 
-			$pinTransactie = PinTransactieModel::get($pinTransactieMatch->transactie_id);
+			$nieuwePinTransactieMatch = Database::transaction(function () use ($pinTransactieMatch, $values) {
+				$pinTransactie = PinTransactieModel::get($pinTransactieMatch->transactie_id);
 
-			$bestelling = new CiviBestelling();
-			$bestelling->moment = $pinTransactie->datetime;
-			$bestelling->uid = $values['uid'];
-			$bestelling->totaal = $pinTransactie->getBedragInCenten() * -1;
-			$bestelling->cie = CiviSaldoCommissieEnum::SOCCIE;
-			$bestelling->deleted = false;
-			$bestelling->comment = sprintf('Aangemaakt door de fiscus op %s.', getDateTime());
+				$bestelling = new CiviBestelling();
+				$bestelling->moment = $pinTransactie->datetime;
+				$bestelling->uid = $values['uid'];
+				$bestelling->totaal = $pinTransactie->getBedragInCenten() * -1;
+				$bestelling->cie = CiviSaldoCommissieEnum::SOCCIE;
+				$bestelling->deleted = false;
+				$bestelling->comment = sprintf('Aangemaakt door de fiscus op %s.', getDateTime());
 
-			$bestellingInhoud = new CiviBestellingInhoud();
-			$bestellingInhoud->product_id = CiviProductTypeEnum::PINTRANSACTIE;
-			$bestellingInhoud->aantal = $pinTransactie->getBedragInCenten();
+				$bestellingInhoud = new CiviBestellingInhoud();
+				$bestellingInhoud->product_id = CiviProductTypeEnum::PINTRANSACTIE;
+				$bestellingInhoud->aantal = $pinTransactie->getBedragInCenten();
 
-			$bestelling->inhoud[] = $bestellingInhoud;
+				$bestelling->inhoud[] = $bestellingInhoud;
 
-			$bestelling->id = CiviBestellingModel::instance()->create($bestelling);
-			PinTransactieMatchModel::instance()->delete($pinTransactieMatch);
+				$bestelling->id = CiviBestellingModel::instance()->create($bestelling);
 
-			$nieuwePinTransactieMatch = PinTransactieMatch::match($pinTransactie, $bestellingInhoud);
-			$nieuwePinTransactieMatch->id = PinTransactieMatchModel::instance()->create($nieuwePinTransactieMatch);
+				CiviSaldoModel::instance()->ophogen($values['uid'], $pinTransactie->getBedragInCenten());
+
+				PinTransactieMatchModel::instance()->delete($pinTransactieMatch);
+
+				$nieuwePinTransactieMatch = PinTransactieMatch::match($pinTransactie, $bestellingInhoud);
+				$nieuwePinTransactieMatch->id = PinTransactieMatchModel::instance()->create($nieuwePinTransactieMatch);
+
+				return $nieuwePinTransactieMatch;
+			});
 
 			$this->view = new PinTransactieMatchTableResponse([
 				[
