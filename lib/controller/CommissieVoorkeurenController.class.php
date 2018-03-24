@@ -53,6 +53,7 @@ class CommissieVoorkeurenController extends AclController {
 				'overzicht' => 'bestuur',
 				'nieuwecommissie' => 'bestuur',
 				'nieuwecategorie' => 'bestuur',
+				'verwijdercategorie' => 'bestuur'
 			);
 		}
 	}
@@ -90,19 +91,36 @@ class CommissieVoorkeurenController extends AclController {
 
 	public function nieuwecommissie() {
 		$model = new VoorkeurCommissie();
-		if ((new AddCommissieFormulier($model))->validate()) {
+		$form = (new AddCommissieFormulier($model));
+		if ($form->validate() && trim($model->naam) != '') {
 			$id = VoorkeurCommissieModel::instance()->create($model);
-			redirect("/commissievoorkeuren/overzicht/" . $id);
+			redirect('/commissievoorkeuren/overzicht/' . $id);
 		} else {
-			redirect("/commissievoorkeuren/");
+			setMelding('Naam van commissie mag niet leeg zijn', 2);
+			redirect('/commissievoorkeuren/');
 		}
 
 	}
 
 	public function nieuwecategorie() {
 		$model = new VoorkeurCommissieCategorie();
-		if ((new AddCategorieFormulier($model))->validate()) {
+		if ((new AddCategorieFormulier($model))->validate() && trim($model->naam) != '') {
 			VoorkeurCommissieCategorieModel::instance()->create($model);
+		} else {
+			setMelding('Naam van categorie mag niet leeg zijn', 2);
+		}
+
+		redirect('' / commissievoorkeuren / '');
+	}
+
+	public function verwijdercategorie($categorieId) {
+		$model = VoorkeurCommissieCategorieModel::instance()->retrieveByUUID($categorieId);
+		if (count($model->getCommissies()) == 0) {
+			VoorkeurCommissieCategorieModel::instance()->delete($model);
+			setMelding("Categorie '{$model->naam}' succesvol verwijderd", 1);
+
+		} else {
+			setMelding('Kan categorie niet verwijderen: is niet leeg', 2);
 		}
 
 		redirect("/commissievoorkeuren/");

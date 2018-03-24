@@ -12,6 +12,7 @@ namespace CsrDelft\view\commissievoorkeuren;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 
@@ -23,7 +24,7 @@ class AddCommissieFormulier extends Formulier {
 	public function __construct($model) {
 		parent::__construct($model, "/commissievoorkeuren/nieuwecommissie");
 		$this->addFields([new HtmlComment("<h2>Commissie toevoegen</h2>")]);
-		$this->addFields([new TextField("naam", "", "Naam")]);
+		$this->addFields([new RequiredTextField("naam", "", "Naam")]);
 		$this->addFields([new SubmitKnop()]);
 	}
 }

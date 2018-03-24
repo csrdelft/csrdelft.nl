@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\commissievoorkeuren;
 
+use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -33,4 +34,11 @@ class VoorkeurCommissieCategorie extends PersistentEntity {
 	 * @var string[]
 	 */
 	protected static $primary_key = ['id'];
+
+	/**
+	 * @return VoorkeurCommissie[]
+	 */
+	public function getCommissies() {
+		return VoorkeurCommissieModel::instance()->find("categorie_id = ?", [$this->id])->fetchAll();
+	}
 }
