@@ -71,13 +71,17 @@ class ApiAgendaController {
 
 		// Maaltijden
 		$maaltijden = MaaltijdenModel::instance()->getMaaltijdenVoorAgenda($from, $to);
-		$result = array_merge($result, $maaltijden);
+
 
 		// Maaltijd aanmeldingen
 		$mids = array();
 		foreach ($maaltijden as $maaltijd) {
 			$id = $maaltijd->maaltijd_id;
 			$mids[$id] = $maaltijd;
+
+			$maaltijd->gesloten = $maaltijd->gesloten ? '1' : '0';
+			$result[] = $maaltijd;
+
 		}
 		$maaltijdAanmeldingen = array_keys(MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid($mids, $_SESSION['_uid']));
 
