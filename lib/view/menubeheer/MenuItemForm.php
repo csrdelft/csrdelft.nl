@@ -7,6 +7,8 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
+use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\invoervelden\RequiredUrlField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
@@ -25,7 +27,6 @@ class MenuItemForm extends ModalForm {
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
-		$this->css_classes[] = 'ReloadPage';
 
 		$fields['pid'] = new RequiredIntField('parent_id', $item->parent_id, 'Parent ID', 0);
 		$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
@@ -37,9 +38,9 @@ class MenuItemForm extends ModalForm {
 		$fields['v'] = new IntField('volgorde', $item->volgorde, 'Volgorde');
 		$fields['v']->title = 'Volgorde van menu-items';
 
-		$fields[] = new TextField('tekst', $item->tekst, 'Korte aanduiding', 50);
+		$fields[] = new RequiredTextField('tekst', $item->tekst, 'Korte aanduiding', 50);
 
-		$fields['url'] = new UrlField('link', $item->link, 'Link');
+		$fields['url'] = new RequiredUrlField('link', $item->link, 'Link');
 		$fields['url']->title = 'URL als er op het menu-item geklikt wordt';
 
 		$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Lees-rechten');
