@@ -5,6 +5,7 @@ namespace CsrDelft\model\commissievoorkeuren;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurVoorkeur;
 use CsrDelft\model\entity\Profiel;
+use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 
 class CommissieVoorkeurModel extends PersistenceModel {
@@ -42,6 +43,14 @@ class CommissieVoorkeurModel extends PersistenceModel {
 			$voorkeur->voorkeur = 1;
 		}
 		return $voorkeur;
+	}
+
+	public function update(PersistentEntity $entity) {
+		if ($this->exists($entity)) {
+			return parent::update($entity);
+		} else {
+			return $this->create($entity);
+		}
 	}
 
 }
