@@ -28,8 +28,8 @@ if (isset($argv[1])) {
 	$interactive = false;
 }
 
-$from = date(DATE_FORMAT . ' 12:00:00', $moment);
-$to = date(DATE_FORMAT . ' 12:00:00', $moment + DURATION_DAY_IN_SECONDS);
+$from = date(DATE_FORMAT . ' 12:00:00', $moment - DURATION_DAY_IN_SECONDS);
+$to = date(DATE_FORMAT . ' 12:00:00', $moment);
 
 // Verwijder eerdere download.
 $vorigePinTransacties = PinTransactieModel::instance()->getPinTransactieInMoment($from, $to);
