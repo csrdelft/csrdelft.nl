@@ -10,9 +10,7 @@
         {/foreach}
         {if count($cat["commissies"]) == 0}
             Deze categorie bevat geen commissies.
-            <form method="post" action="/commissievoorkeuren/verwijdercategorie/{$cid}">
-                <button type="submit" >Categorie verwijderen</button>
-            </form>
+            <a href="/commissievoorkeuren/verwijdercategorie/{$cid}" class="btn post ReloadPage">Categorie verwijderen</a>
         {/if}
     </ul>
 {/foreach}

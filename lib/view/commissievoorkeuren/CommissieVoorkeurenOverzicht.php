@@ -19,9 +19,13 @@ use CsrDelft\view\View;
 
 class CommissieVoorkeurenOverzicht extends SmartyTemplateView {
 
-
-	public function __construct($model = null) {
+	protected $categorieFormulier;
+	protected $commissieFormulier;
+	public function __construct($model = null, $commissieFormulier = null, $categorieFormulier = null) {
 		parent::__construct($model, "/commissievoorkeuren/");
+		$this->categorieFormulier = $categorieFormulier ?? new AddCategorieFormulier(new VoorkeurCommissieCategorie());
+		$this->commissieFormulier = $commissieFormulier ?? new AddCommissieFormulier(new VoorkeurCommissie());
+
 	}
 
 	public function getBreadcrumbs() {
@@ -33,10 +37,8 @@ class CommissieVoorkeurenOverzicht extends SmartyTemplateView {
 	}
 
 	public function view() {
-
-
-		$this->smarty->assign("categorieFormulier", new AddCategorieFormulier(new VoorkeurCommissieCategorie()));
-		$this->smarty->assign("commissieFormulier", new AddCommissieFormulier(new VoorkeurCommissie()));
+		$this->smarty->assign("categorieFormulier", $this->categorieFormulier);
+		$this->smarty->assign("commissieFormulier", $this->commissieFormulier);
 		$this->smarty->assign("categorien", VoorkeurCommissieModel::instance()->getByCategorie());
 		$this->smarty->display("commissievoorkeuren/overzicht.tpl");
 	}

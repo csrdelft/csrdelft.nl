@@ -91,26 +91,24 @@ class CommissieVoorkeurenController extends AclController {
 
 	public function nieuwecommissie() {
 		$model = new VoorkeurCommissie();
-		$form = (new AddCommissieFormulier($model));
-		if ($form->validate() && trim($model->naam) != '') {
+		$form = new AddCommissieFormulier($model);
+		if ($form->validate()) {
 			$id = VoorkeurCommissieModel::instance()->create($model);
 			redirect('/commissievoorkeuren/overzicht/' . $id);
-		} else {
-			setMelding('Naam van commissie mag niet leeg zijn', 2);
-			redirect('/commissievoorkeuren/');
 		}
-
+		$body = new CommissieVoorkeurenOverzicht(VoorkeurCommissieModel::instance()->getByCategorie(), $form, null);
+		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function nieuwecategorie() {
 		$model = new VoorkeurCommissieCategorie();
-		if ((new AddCategorieFormulier($model))->validate() && trim($model->naam) != '') {
+		$form = new AddCategorieFormulier($model);
+		if ($form->validate()) {
 			VoorkeurCommissieCategorieModel::instance()->create($model);
-		} else {
-			setMelding('Naam van categorie mag niet leeg zijn', 2);
+			redirect('/commissievoorkeuren/'); // Prevent resubmit
 		}
-
-		redirect('' / commissievoorkeuren / '');
+		$body = new CommissieVoorkeurenOverzicht(VoorkeurCommissieModel::instance()->getByCategorie(), null, $form);
+		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function verwijdercategorie($categorieId) {
