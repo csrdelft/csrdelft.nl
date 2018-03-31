@@ -48,7 +48,9 @@ class CheckboxField extends InputField {
 	 * @return boolean
 	 */
 	public function getValue() {
-		$this->value = parent::isPosted();
+	    if ($this->isPosted()) {
+            $this->value = parent::isPosted();
+		}
 		return $this->value;
 	}
 
