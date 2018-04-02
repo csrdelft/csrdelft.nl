@@ -10,5 +10,6 @@
         </tr>
     {/foreach}
 </table><br/>
-<h3>Lid opmerkingen</h3><p>{$opmerking->lidOpmerking}</p>
+<h3>Opmerkingen van lid</h3><p>{$lidOpmerking}</p>
+<h3>Opmerkingen van praeses</h3>
 {$opmerkingForm->view()}
