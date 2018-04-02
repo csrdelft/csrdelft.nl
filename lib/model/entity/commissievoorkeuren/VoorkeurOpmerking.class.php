@@ -39,8 +39,8 @@ class VoorkeurOpmerking extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = [
 		'uid' => [T::UID, false],
-		'lidOpmerking' => [T::Text, false],
-		'praesesOpmerking' => [T::Text, false]
+		'lidOpmerking' => [T::Text, true],
+		'praesesOpmerking' => [T::Text, true]
 	];
 
 	/**
