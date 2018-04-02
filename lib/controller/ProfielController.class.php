@@ -178,10 +178,11 @@ class ProfielController extends AclController {
 			$voorkeuren = $form->getVoorkeuren();
 			$opmerking = $form->getOpmerking();
 			foreach ($voorkeuren as $voorkeur) {
-				CommissieVoorkeurModel::instance()->update($voorkeur);
+				CommissieVoorkeurModel::instance()->updateOrCreate($voorkeur);
 			}
-			VoorkeurOpmerkingModel::instance()->update($opmerking);
+			VoorkeurOpmerkingModel::instance()->updateOrCreate($opmerking);
 			setMelding('Voorkeuren opgeslagen', 1);
+			redirect();
 		}
 		return $form;
 	}

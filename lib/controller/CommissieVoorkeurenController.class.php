@@ -134,10 +134,10 @@ class CommissieVoorkeurenController extends AclController {
 	}
 
 	public function POST_lidpagina($uid) {
-		$opmerking = VoorkeurOpmerkingModel::instance()->retrieveByUUID($uid);
+		$opmerking = VoorkeurOpmerkingModel::instance()->getOpmerkingVoorLid(ProfielModel::get($uid));
 		$form = (new CommissieVoorkeurPraesesOpmerkingForm($opmerking));
 		if ($form->validate()) {
-			VoorkeurOpmerkingModel::instance()->update($opmerking);
+			VoorkeurOpmerkingModel::instance()->updateOrCreate($opmerking);
 			redirect();
 		}
 	}
