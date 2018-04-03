@@ -10,6 +10,7 @@ use CsrDelft\model\entity\Mail;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieDownloader;
 use CsrDelft\model\fiscaat\pin\PinTransactieMatcherFactory;
+use CsrDelft\model\fiscaat\pin\PinTransactieMatchModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieModel;
 
 /**
@@ -35,13 +36,21 @@ $to = date(DATE_FORMAT . ' 12:00:00', $moment);
 $vorigePinTransacties = PinTransactieModel::instance()->getPinTransactieInMoment($from, $to);
 
 foreach ($vorigePinTransacties as $pinTransactie) {
+    $matches = PinTransactieMatchModel::instance()->find('transactie_id = ?', [$pinTransactie->id])->fetchAll();
+
+    foreach ($matches as $match) {
+        PinTransactieMatchModel::instance()->delete($match);
+    }
+}
+
+foreach ($vorigePinTransacties as $pinTransactie) {
 	PinTransactieModel::instance()->delete($pinTransactie);
 }
 
 $settings = parse_ini_file(__DIR__ . '/../etc/pin_transactie_download.ini');
 
 // Download pintransacties en sla op in DB.
-$pintransacties = PinTransactieDownloader::download($settings, $moment);
+$pintransacties = PinTransactieDownloader::download($settings, $from);
 
 // Haal pinbestellingen op.
 $pinbestellingen = CiviBestellingModel::instance()->getPinBestellingInMoment($from, $to);
