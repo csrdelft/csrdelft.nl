@@ -65,6 +65,9 @@ abstract class InlineForm extends Formulier implements FormElement {
 		return $html . '</form></div>';
 	}
 
+	/**
+     * @param bool $showMelding ignored
+     */
 	public function view() {
 		echo $this->getHtml();
 	}
