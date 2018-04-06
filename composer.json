@@ -27,6 +27,11 @@
         }
     },
     "scripts": {
-        "clear-assets-cache": "php bin/clear-assets-cache.php"
-    }
+        "clear-assets-cache": "php bin/clear-assets-cache.php",
+        "analyse": "vendor/bin/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^0.9.2"
+    },
+    "include-path": ["lib/"]
 }

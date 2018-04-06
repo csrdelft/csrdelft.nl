@@ -1,0 +1,12 @@
+parameters:
+    paths:
+        - lib
+        - htdocs
+        - %rootDir%/lib
+    excludes_analyse:
+        - htdocs/wiki
+        - htdocs/bar
+        - htdocs/tools
+    autoload_files:
+        - lib/autoload.php
+        - lib/phpstan_consts.php

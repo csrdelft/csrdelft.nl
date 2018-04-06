@@ -19,8 +19,6 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\CsrBB;
 
-require_once 'configuratie.include.php';
-
 class Roodschopper {
 
 	private $cie = 'soccie';

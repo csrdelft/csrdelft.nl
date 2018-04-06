@@ -20,8 +20,6 @@ define('GOOGLE_CONTACTS_BATCH_URL', 'https://www.google.com/m8/feeds/contacts/de
 
 define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
 
-require_once 'configuratie.include.php';
-
 /**
  * Documentatie voor Google Contacts API:
  * algemeen, interactie: https://developers.google.com/google-apps/contacts/v3/
