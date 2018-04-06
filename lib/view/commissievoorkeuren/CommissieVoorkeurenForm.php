@@ -32,12 +32,12 @@ class CommissieVoorkeurenForm extends Formulier {
 		parent::__construct(null, '/profiel/' . $profiel->uid . '/voorkeuren', 'Commissie-voorkeuren');
 		$this->profiel = $profiel;
 		$this->addFields([new HtmlComment('<p>Hier kunt u per commissie opgeven of u daar interesse in heeft!</p>')]);
-		$categorieCommissie = $this->getCategorieCommissieMap();
+		$categorieCommissie = VoorkeurCommissieModel::instance()->getByCategorie();
 
-		foreach ($categorieCommissie as $cid => $commissies) {
-			$cat = $this->categorieMap[$cid];
-			$this->addFields([new Subkopje($cat->naam)]);
-			foreach ($commissies as $commissie) {
+		foreach ($categorieCommissie as $cat) {
+			$categorie = $cat['categorie'];
+			$this->addFields([new Subkopje($categorie->naam)]);
+			foreach ($cat['commissies'] as $commissie) {
 				$this->addVoorkeurVeld($commissie);
 			}
 		}
@@ -69,20 +69,6 @@ class CommissieVoorkeurenForm extends Formulier {
 
 	public function getOpmerking() {
 		return $this->opmerking;
-	}
-
-	private function getCategorieCommissieMap(): array {
-		$categorieCommissie = array();
-		$categorien = VoorkeurCommissieCategorieModel::instance()->find()->fetchAll();
-		foreach ($categorien as $cat) {
-			$this->categorieCommissie[$cat->id] = [];
-			$this->categorieMap[$cat->id] = $cat;
-		}
-		$commissies = VoorkeurCommissieModel::instance()->find("zichtbaar = 1");
-		foreach ($commissies as $commissie) {
-			$categorieCommissie[$commissie->categorie_id][] = $commissie;
-		}
-		return $categorieCommissie;
 	}
 
 }

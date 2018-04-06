@@ -80,7 +80,7 @@ class CommissieVoorkeurenController extends AclController {
 	public function GET_overzicht($commissieId = null) {
 		$body = null;
 		if ($commissieId == null) {
-			$body = new CommissieVoorkeurenOverzicht();
+			$body = new CommissieVoorkeurenOverzicht(VoorkeurCommissieModel::instance()->getByCategorie());
 		} else {
 			$commissie = VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId);
 			$body = new CommissieVoorkeurenView($commissie);

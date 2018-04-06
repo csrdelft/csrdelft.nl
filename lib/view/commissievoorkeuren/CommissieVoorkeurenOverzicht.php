@@ -39,7 +39,7 @@ class CommissieVoorkeurenOverzicht extends SmartyTemplateView {
 	public function view() {
 		$this->smarty->assign("categorieFormulier", $this->categorieFormulier);
 		$this->smarty->assign("commissieFormulier", $this->commissieFormulier);
-		$this->smarty->assign("categorien", VoorkeurCommissieModel::instance()->getByCategorie());
+		$this->smarty->assign("categorien", $this->model);
 		$this->smarty->display("commissievoorkeuren/overzicht.tpl");
 	}
 
