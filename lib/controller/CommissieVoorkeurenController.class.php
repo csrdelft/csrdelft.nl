@@ -131,6 +131,7 @@ class CommissieVoorkeurenController extends AclController {
 		$profiel = ProfielModel::get($uid);
 		$body = new CommissieVoorkeurenProfielView($profiel);
 		$this->view = new CsrLayoutPage($body);
+		$this->view->addCompressedResources('commissievoorkeuren');
 	}
 
 	public function POST_lidpagina($uid) {
