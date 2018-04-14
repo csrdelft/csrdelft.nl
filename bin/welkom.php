@@ -24,7 +24,7 @@ Via de webstek kun je onder andere:
 - Berichten plaatsen in de C.S.R.-courant, die wekelijks aan alle leden wordt verzonden
 - Gegevens van andere leden opzoeken
 - Aan/afmelden voor de maaltijd, hierover het volgende:
-Je hebt een abbonement op de donderdagmaaltijd in Confide. Dit om jullie te stimuleren deel te nemen aan C.S.R. activiteiten en te integreren met leden. Als je inlogt op de webstek zie je meteen op de hoofdpagina een blokje waarin je jezelf kunt af- of aanmelden voor de eerstvolgende maaltijd.
+Je hebt een abonnement op de donderdagmaaltijd in Confide. Dit om jullie te stimuleren deel te nemen aan C.S.R. activiteiten en te integreren met leden. Als je inlogt op de webstek zie je meteen op de hoofdpagina een blokje waarin je jezelf kunt af- of aanmelden voor de eerstvolgende maaltijd.
 Kun je niet op een maaltijd aanwezig zijn, meld je dan af op de webstek, voor omstreeks 15:00 op de dag van de maaltijd, want na dat tijdstip beginnen de koks met koken en wordt er op jou gerekend met boodschappen doen. Als je er na 15:00 achter komt dat je juist wel of juist niet aanwezig kunt zijn, bel dan even de koks of bel Confide, met een goede reden kan je dan eventueel doorgestreept of toegevoegd worden op de maaltijdlijst.
 Waarom is dit belangrijk? Omdat een maaltijd €3,50 kost en als je jezelf vergeet af te melden en niet komt, dit bedrag toch van je CiviSaldo wordt afgeschreven. Het is goed om naar maaltijden te gaan, maar als je niet kunt, meld je dan af! Dat scheelt je pieken.
 
