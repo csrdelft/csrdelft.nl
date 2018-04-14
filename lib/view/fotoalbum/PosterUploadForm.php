@@ -29,8 +29,8 @@ class PosterUploadForm extends Formulier {
 		return $view->getBreadcrumbs(false, true);
 	}
 
-	public function view($showMelding = true) {
-		parent::view($showMelding);
+	public function view() {
+		parent::view();
 		// Uitleg foto's toevoegen
 		$body = new CmsPaginaView(CmsPaginaModel::get('fotostoevoegen'));
 		$body->view();

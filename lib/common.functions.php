@@ -779,16 +779,16 @@ function errorName($type) {
  * @return string
  */
 function aaidrom($voornaam, $tussenvoegsel, $achternaam) {
-	$voornaam = strtolower($voornaam);
-	$achternaam = strtolower($achternaam);
+	$voornaam = mb_strtolower($voornaam);
+	$achternaam = mb_strtolower($achternaam);
 
-	$voor = array();
-	preg_match('/^([^aeiuoy]*)(.*)$/', $voornaam, $voor);
-	$achter = array();
-	preg_match('/^([^aeiuoy]*)(.*)$/', $achternaam, $achter);
+	$voor = [];
+	preg_match('/^([^aeiuoyáéíóúàèëïöü]*)(.*)$/u', $voornaam, $voor);
+	$achter = [];
+	preg_match('/^([^aeiuoyáéíóúàèëïöü]*)(.*)$/u', $achternaam, $achter);
 
-	$nwvoor = ucwords($achter[1] . $voor[2]);
-	$nwachter = ucwords($voor[1] . $achter[2]);
+	$nwvoor = preg_replace("/^Ij/", "IJ", ucwords($achter[1] . $voor[2]), 1);
+	$nwachter = preg_replace("/^Ij/", "IJ", ucwords($voor[1] . $achter[2]), 1);
 
 	return sprintf("%s %s%s", $nwvoor, !empty($tussenvoegsel) ? $tussenvoegsel . ' ' : '', $nwachter);
 }

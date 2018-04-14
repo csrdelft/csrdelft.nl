@@ -37,6 +37,7 @@ class Formulier implements View, Validator {
 	public $post = true;
 	protected $error;
 	private $enctype = 'multipart/form-data';
+	public $showMelding = true;
 	/**
 	 * Fields must be added via addFields()
 	 * or insertElementBefore() methods,
@@ -334,11 +335,11 @@ HTML;
 	/**
 	 * Toont het formulier en javascript van alle fields.
 	 *
-	 * @param boolean $showMelding Toon meldingen bovenaan formulier
+	 * @param boolean $showMelding Toon meldingen bovenaan formulier (set through property)
 	 * @return void
 	 */
-	public function view($showMelding = true) {
-		if ($showMelding) {
+	public function view() {
+		if ($this->showMelding) {
 			echo getMelding();
 		}
 		echo $this->getFormTag();

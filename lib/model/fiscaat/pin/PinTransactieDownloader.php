@@ -80,7 +80,7 @@ class PinTransactieDownloader
 
 		//7. POST Search with correct date
 		$postFields = [
-			self::POST_FIELD_PERIOD_FROM_DATE_DATE => date(self::DATE_FORMAT_ONLINE, $moment),
+			self::POST_FIELD_PERIOD_FROM_DATE_DATE => date(self::DATE_FORMAT_ONLINE, strtotime($moment)),
 			self::POST_FIELD_PERIOD_FROM_DATE_HOURS => self::DATE_START_HOURS,
 			self::POST_FIELD_PERIOD_FROM_DATE_MINUTES => self::DATE_START_MINUTES,
 			self::POST_FIELD_PERIOD_DURATION => self::DURATION_DAY,

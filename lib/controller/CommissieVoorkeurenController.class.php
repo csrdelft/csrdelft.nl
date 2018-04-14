@@ -80,7 +80,7 @@ class CommissieVoorkeurenController extends AclController {
 	public function GET_overzicht($commissieId = null) {
 		$body = null;
 		if ($commissieId == null) {
-			$body = new CommissieVoorkeurenOverzicht();
+			$body = new CommissieVoorkeurenOverzicht(VoorkeurCommissieModel::instance()->getByCategorie());
 		} else {
 			$commissie = VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId);
 			$body = new CommissieVoorkeurenView($commissie);
@@ -131,6 +131,7 @@ class CommissieVoorkeurenController extends AclController {
 		$profiel = ProfielModel::get($uid);
 		$body = new CommissieVoorkeurenProfielView($profiel);
 		$this->view = new CsrLayoutPage($body);
+		$this->view->addCompressedResources('commissievoorkeuren');
 	}
 
 	public function POST_lidpagina($uid) {

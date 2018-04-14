@@ -11,9 +11,10 @@ use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 
 class LoginForm extends Formulier {
 
-	public function __construct() {
+	public function __construct($showMelding = false) {
 		parent::__construct(null, '/login');
 		$this->formId = 'loginform';
+		$this->showMelding = $showMelding;
 
 		$fields['user'] = new TextField('user', null, null);
 		$fields['user']->placeholder = 'Bijnaam of lidnummer';
@@ -36,8 +37,8 @@ class LoginForm extends Formulier {
 		$this->addFields($fields);
 	}
 
-	public function view($showMelding = false) {
-		parent::view($showMelding);
+	public function view() {
+		parent::view();
 		?>
 		<ul>
 			<li>

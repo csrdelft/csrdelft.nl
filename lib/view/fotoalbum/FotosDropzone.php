@@ -21,8 +21,8 @@ class FotosDropzone extends Dropzone {
 		return $view->getBreadcrumbs(false, true);
 	}
 
-	public function view($showMelding = true) {
-		echo parent::view($showMelding);
+	public function view() {
+		echo parent::view();
 		echo '<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>';
 		echo '<div class="float-right"><a class="btn" onclick="showExisting_' . $this->formId . '();$(this).remove();">' . Icon::getTag('photos') . ' Toon bestaande foto\'s in dit album</a></div>';
 		// Uitleg foto's toevoegen

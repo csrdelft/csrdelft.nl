@@ -51,14 +51,6 @@ class PinTransactieMatcherFactory {
 	/**
 	 */
 	public function clean() {
-		foreach ($this->pinTransacties as $pinTransactie) {
-			$matches = PinTransactieMatchModel::instance()->find('transactie_id = ?', [$pinTransactie->id])->fetchAll();
-
-			foreach ($matches as $match) {
-				PinTransactieMatchModel::instance()->delete($match);
-			}
-		}
-
 		foreach ($this->pinBestellingen as $pinBestelling) {
 			$matches = PinTransactieMatchModel::instance()->find('bestelling_id = ?', [$pinBestelling->bestelling_id])->fetchAll();
 

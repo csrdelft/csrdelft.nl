@@ -20,7 +20,7 @@ class VoorkeurCommissieModel extends PersistenceModel {
 			$cat2commissie[$cat->id] = ['categorie' => $cat, 'commissies' => []];
 		}
 
-		$commissies = $this->find();
+		$commissies = $this->find(null, [], null, "naam");
 
 		foreach ($commissies as $commissie) {
 			$cat2commissie[$commissie->categorie_id]['commissies'][] = $commissie;
