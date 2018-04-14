@@ -230,7 +230,7 @@ class LDAP {
 	/**
 	 * verwijder de hele groep uit ldap
 	 *
-	 * @param $cn string kortegroepnaam
+	 * @param string $cn kortegroepnaam
 	 * @return bool gelukt/mislukt
 	 */
 	function removeGroep($cn) {

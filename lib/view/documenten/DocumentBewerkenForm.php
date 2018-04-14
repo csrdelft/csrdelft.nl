@@ -19,7 +19,7 @@ class DocumentBewerkenForm extends Formulier {
 
 	public function __construct(Document $document) {
 		parent::__construct($document, '/documenten/bewerken/' . $document->id, 'Document bewerken');
-
+		$fields = [];
 		$fields[] = new SelectField('categorie_id', $document->categorie_id, 'Categorie', DocumentCategorieModel::instance()->getCategorieNamen());
 		$fields[] = new RequiredTextField('naam', $document->naam, 'Documentnaam');
 		$fields['rechten'] = new RechtenField('leesrechten', $document->leesrechten, 'Leesrechten');

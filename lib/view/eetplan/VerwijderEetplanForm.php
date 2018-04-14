@@ -16,6 +16,7 @@ class VerwijderEetplanForm extends ModalForm {
 	public function __construct($avonden) {
 		parent::__construct(null, '/eetplan/verwijderen', 'Eetplan verwijderen');
 
+		$fields = [];
 		$fields[] = new HtmlBbComment('[b]Let op, verwijderen van een eetplan kan niet ongedaan gemaakt worden.[/b]');
 
 		$avondenLijst = [];

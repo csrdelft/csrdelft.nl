@@ -15,6 +15,8 @@ class FotoTagToevoegenForm extends InlineForm {
 		$field = new LidField('uid', null, null, LidInstellingenModel::get('fotoalbum', 'tag_suggestions'));
 		$field->placeholder = 'Naam of lidnummer';
 		parent::__construct(null, '/fotoalbum/addtag/' . $foto->subdir, $field, false, false);
+
+		$fields = [];
 		$fields[] = new RequiredTextField('foto', $foto->filename, null);
 		$fields[] = new RequiredIntField('x', null, null, 1, 99);
 		$fields[] = new RequiredIntField('y', null, null, 1, 99);

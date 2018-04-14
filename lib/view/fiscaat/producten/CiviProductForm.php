@@ -26,7 +26,7 @@ class CiviProductForm extends ModalForm {
 		if ($categorie == false) {
 			$categorie = new CiviCategorie();
 		}
-
+		$fields = [];
 		$fields['id'] = new IntField('id', $model->id, 'id');
 		$fields['id']->hidden = true;
 		$fields[] = new RequiredIntField('status', $model->status, 'Status');

@@ -12,6 +12,7 @@ class LedenMemoryScoreForm extends Formulier {
 	public function __construct(LedenMemoryScore $score) {
 		parent::__construct($score, '/leden/memoryscore');
 
+		$fields = [];
 		$fields[] = new RequiredIntField('tijd', $score->tijd, null, 1);
 		$fields[] = new RequiredIntField('beurten', $score->beurten, null, 1);
 		$fields[] = new RequiredIntField('goed', $score->goed, null, 1);

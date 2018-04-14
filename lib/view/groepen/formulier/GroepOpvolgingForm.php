@@ -18,6 +18,7 @@ class GroepOpvolgingForm extends ModalForm {
 	) {
 		parent::__construct($groep, $action, 'Opvolging instellen', true);
 
+		$fields = [];
 		$fields['fam'] = new TextField('familie', $groep->familie, 'Familienaam');
 		$fields['fam']->suggestions[] = $groep->getFamilieSuggesties();
 

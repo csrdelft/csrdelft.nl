@@ -18,6 +18,7 @@ class WachtwoordWijzigenForm extends Formulier {
 	) {
 		parent::__construct($account, '/wachtwoord/' . $action, 'Wachtwoord instellen');
 
+		$fields = [];
 		if ($account->email == '') {
 			setMelding('Vul uw e-mailadres in om uw wachtwoord te kunnen resetten als u deze bent vergeten.', 0);
 			$fields[] = new RequiredEmailField('email', $account->email, 'E-mailadres');

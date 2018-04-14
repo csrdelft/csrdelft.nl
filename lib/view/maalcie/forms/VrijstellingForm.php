@@ -29,6 +29,7 @@ class VrijstellingForm extends ModalForm {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
+		$fields = [];
 		$fields[] = new RequiredLidField('uid', $vrijstelling->uid, 'Naam of lidnummer');
 		$fields[] = new DateField('begin_datum', $vrijstelling->begin_datum, 'Vanaf', date('Y') + 14, date('Y'));
 		$fields[] = new DateField('eind_datum', $vrijstelling->eind_datum, 'Tot en met', date('Y') + 14, date('Y'));

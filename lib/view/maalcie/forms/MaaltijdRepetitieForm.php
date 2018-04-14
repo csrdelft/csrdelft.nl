@@ -47,6 +47,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 			$product = new CiviProduct();
 		}
 
+		$fields = [];
 		$fields[] = new RequiredTextField('standaard_titel', $model->standaard_titel, 'Standaard titel', 255);
 		$fields[] = new TimeField('standaard_tijd', $model->standaard_tijd, 'Standaard tijd', 15);
 		$fields['dag'] = new WeekdagField('dag_vd_week', $model->dag_vd_week, 'Dag v/d week');

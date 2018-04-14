@@ -75,7 +75,7 @@ class Icon {
 	}
 
 	/**
-	 * @param $key string Naam van het icoon, mag een alias zijn
+	 * @param string $key Naam van het icoon, mag een alias zijn
 	 * @param null $hover string Naam van het icoon bij muis-over
 	 * @param null $title string Titel van het icoon
 	 * @param string $class

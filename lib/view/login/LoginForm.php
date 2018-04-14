@@ -16,6 +16,7 @@ class LoginForm extends Formulier {
 		$this->formId = 'loginform';
 		$this->showMelding = $showMelding;
 
+		$fields = [];
 		$fields['user'] = new TextField('user', null, null);
 		$fields['user']->placeholder = 'Bijnaam of lidnummer';
 

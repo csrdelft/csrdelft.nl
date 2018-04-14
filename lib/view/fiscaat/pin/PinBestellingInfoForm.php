@@ -19,6 +19,7 @@ class PinBestellingInfoForm extends ModalForm {
 	public function __construct($pinBestelling) {
 		parent::__construct([], '/fiscaat/pin/aanmaken', 'Bestelling informatie', true);
 
+		$fields = [];
 		$fields['lid'] = new LidField('uid', $pinBestelling->uid, 'Lid');
 		$fields['lid']->readonly = true;
 		$fields['moment'] = new DateTimeField('moment', $pinBestelling->moment, 'Moment');

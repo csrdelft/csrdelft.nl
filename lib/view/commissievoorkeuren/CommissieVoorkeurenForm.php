@@ -44,6 +44,7 @@ class CommissieVoorkeurenForm extends Formulier {
 
 		$this->opmerking = VoorkeurOpmerkingModel::instance()->getOpmerkingVoorLid($profiel);
 
+		$fields = [];
 		$fields[] = new Subkopje("Extra opmerkingen");
 		$opmerkingVeld = new TextareaField('lidOpmerking', $this->opmerking->lidOpmerking, 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
 		$this->opmerking->lidOpmerking = $opmerkingVeld->getValue();

@@ -26,6 +26,7 @@ class ForumDeelForm extends ModalForm {
 			$lijst[$categorie->categorie_id] = $categorie->titel;
 		}
 
+		$fields = [];
 		$fields[] = new SelectField('categorie_id', $deel->categorie_id, 'Categorie', $lijst);
 		$fields[] = new RequiredTextField('titel', $deel->titel, 'Titel');
 		$fields[] = new TextareaField('omschrijving', $deel->omschrijving, 'Omschrijving');

@@ -24,7 +24,8 @@ class AgendaItemForm extends ModalForm {
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
-
+		
+		$fields = [];
 		$fields['titel'] = new RequiredTextField('titel', $item->titel, 'Titel');
 		$fields['titel']->suggestions[] = array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond');
 

@@ -14,6 +14,7 @@ class PinBestellingVerwijderenForm extends ModalForm {
 	public function __construct($model) {
 		parent::__construct($model, '/fiscaat/pin/verwijder', 'Verwijder bestelling.', true);
 
+		$fields = [];
 		$fields[] = new HtmlComment('Er is geen transactie gevonden voor deze bestelling, druk op opslaan om deze bestelling te verwijderen.');
 		$fields['id'] = new TextField('id', $model->id, 'Id');
 		$fields['id']->hidden = true;
