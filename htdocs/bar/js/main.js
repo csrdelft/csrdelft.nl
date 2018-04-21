@@ -214,32 +214,39 @@ $(function () {
     var personen = {};
     var producten = {};
 
-	function laadPersonen() {
+    function laadPersonen() {
 
-		$.ajax({
-			url: "ajax.php",
-			method: "POST",
-			data: {"personen": "waar"},
-			dataType: "json"
-		})
-			.done(function (data) {
-				personen = data;
-				updateOnKeyPress();
+        $.ajax({
+            url: "ajax.php",
+            method: "POST",
+            data: {"personen": "waar"},
+            dataType: "json"
+        }).done(function (data) {
+           personen = data;
+           updateOnKeyPress();
 
-				var pl = $(".personList");
-				if(pl.size() > 0) {
-					var html = '';
-					$.each(personen, function() {
+           var pl = $(".personList");
+           if (pl.size() > 0) {
+               var html = '';
+               var sortedPersonen = [];
+               for (var key in personen) {
+                   if (personen.hasOwnProperty(key)) {
+                       sortedPersonen.push(personen[key]);
+                   }
+               }
+               sortedPersonen = sortedPersonen.filter(function (persoon) {
+                   return persoon.deleted == 0
+               }).sort(function (a, b) {
+                   return (a.naam || "ZZ").localeCompare(b.naam || "ZZ");
+               });
+               $.each(sortedPersonen, function () {
+                   html += '<option value="' + this.socCieId + '">' + this.naam + '</option>';
+               });
+               pl.html(html);
+            }
+        });
 
-                        if(this.deleted == 0)
-						    html += '<option value="' + this.socCieId + '">' + this.naam + '</option>';
-
-					});
-					pl.html(html);
-				}
-			});
-
-	} laadPersonen();
+    }
 
 	function laadProducten() {
 		$.ajax({
