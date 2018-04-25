@@ -100,15 +100,16 @@ class DataTable implements View, FormElement {
 	 * @param CellRender|null $render
 	 * @param string|null $order_by
 	 * @param CellType|null $type
+	 * @param string|null $data The data source for the column. Defaults to the column name.
 	 */
-	protected function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null) {
+	protected function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null, $data = null) {
 		$type = $type ?: CellType::String();
 		$render = $render ?: CellRender::None();
 
 		// column definition
 		$newColumn = array(
 			'name' => $newName,
-			'data' => $newName,
+			'data' => $data ?? $newName,
 			'title' => ucfirst(str_replace('_', ' ', $newName)),
 			'defaultContent' => $defaultContent,
 			'type' => $type,
