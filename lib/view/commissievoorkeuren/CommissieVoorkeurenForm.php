@@ -26,7 +26,6 @@ class CommissieVoorkeurenForm extends Formulier {
 	private $voorkeuren = array();
 	private $opmerking;
 	private $profiel;
-	private $categorieMap = array();
 
 	public function __construct(Profiel $profiel) {
 		parent::__construct(null, '/profiel/' . $profiel->uid . '/voorkeuren', 'Commissie-voorkeuren');
