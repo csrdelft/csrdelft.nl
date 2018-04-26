@@ -38,7 +38,9 @@ class CommissieVoorkeurenForm extends Formulier {
 			$categorie = $cat['categorie'];
 			$this->addFields([new Subkopje($categorie->naam)]);
 			foreach ($cat['commissies'] as $commissie) {
-				$this->addVoorkeurVeld($commissie);
+				if ($commissie->zichtbaar) {
+					$this->addVoorkeurVeld($commissie);
+				}
 			}
 		}
 
