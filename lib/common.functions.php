@@ -1020,3 +1020,26 @@ function checkMimetype($filename, $mime) {
 		}
 	}
 }
+
+/**
+ * Mag de op dit moment ingelogde gebruiker $permissie?
+ *
+ * Korte methode voor gebruik in smarty templates.
+ *
+ * @param string $permission
+ * @param array|null $allowedAuthenticationMethods
+ * @return bool
+ */
+function mag($permission, array $allowedAuthenticationMethods = null) {
+    return LoginModel::mag($permission, $allowedAuthenticationMethods);
+}
+
+/**
+ * Is $uid de op dit moment ingelogde gebruiker?
+ *
+ * @param string $uid
+ * @return bool
+ */
+function is_ingelogde_gebruiker($uid) {
+    return LoginModel::getUid() == $uid;
+}

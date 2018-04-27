@@ -12,7 +12,7 @@
 						<a href="/profiel/{$profiel->uid}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="pencil"}</a>
 						<a href="/profiel/{$profiel->uid}/voorkeuren" class="btn" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
 					{/if}
-					{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid OR CsrDelft\model\security\LoginModel::mag('P_ADMIN')}
+					{if mag('P_ADMIN') OR is_ingelogd_account($profiel->uid)}
 						{if CsrDelft\model\security\AccountModel::existsUid($profiel->uid)}
 							<a href="/account/{$profiel->uid}/bewerken" class="btn" title="Inloggegevens bewerken">{icon get="key"}</a>
 						{else}
@@ -156,11 +156,11 @@
 				{if $profiel->verticale!=''}
 					<div class="label">Verticale:</div>
 					<div class="data"><a href="/ledenlijst?q=verticale:{$profiel->verticale}">{$profiel->getVerticale()->naam}</a></div>
-					{/if}
-					{if $profiel->moot}
+				{/if}
+				{if $profiel->moot}
 					<div class="label">Oude moot:</div>
 					<div class="data"><a href="/ledenlijst?q=moot:{$profiel->moot}">{$profiel->moot}</a></div>
-					{/if}
+				{/if}
 			</div>
 			<div class="half">
 				{if $kring}
@@ -198,7 +198,7 @@
 		</div>
 	</div>
 
-	{if ($profiel->isLid() OR (CsrDelft\model\security\LoginModel::mag('P_LEDEN_MOD') AND ($profiel->getCiviSaldo() < 0))) AND (isset($saldografiek) OR $profiel->bankrekening!='')}
+	{if ($profiel->isLid() OR (mag('P_LEDEN_MOD') AND ($profiel->getCiviSaldo() < 0))) AND (isset($saldografiek) OR $profiel->bankrekening!='')}
 		<div class="profielregel">
 			<div class="gegevens">
 				{if $profiel->bankrekening!=''}
@@ -208,7 +208,7 @@
 					{/toegang}
 				{/if}
 				<div class="clear-left"></div>
-				{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid || CsrDelft\model\security\LoginModel::mag('P_MAAL_MOD')}
+				{if mag('P_MAAL_MOD') OR is_ingelogd_account($profiel->uid)}
 					<a id="CiviSaldo"></a>
 					<div class="label">Saldohistorie:</div>
 					{foreach from=$bestellinglog item=bestelling}
@@ -243,64 +243,64 @@
 					{else}
 						-
 					{/if}
-					{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid}
+					{if is_ingelogd_account($profiel->uid)}
 						&nbsp;<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="btn">{icon get="pencil"}</a></div>
-						{/if}
+					{/if}
 				</div>
 			{/strip}
 			<br />
-			{if isset($abos) && CsrDelft\model\security}
-				<div class="label">Abo's:</div>
-				<ul class="nobullets data">
-					{foreach from=$abos item=abonnement}
-						<li>{$abonnement->maaltijd_repetitie->standaard_titel}</li>
-						{/foreach}
-				</ul>
-			{/if}
-			<div class="clear"></div>
-			<div class="half">
-				<div class="label">Corvee-<br />voorkeuren:</div>
-				<ul class="nobullets data">
-					{foreach from=$corveevoorkeuren item=vrk}
-						<li>{$vrk->getCorveeRepetitie()->getDagVanDeWeekText()|truncate:2:""} {$vrk->getCorveeRepetitie()->getCorveeFunctie()->naam}</li>
-						{/foreach}
-				</ul>
-			</div>
-			<div class="half">
-				{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid OR CsrDelft\model\security\LoginModel::mag('P_MAAL_MOD')}
+			{if mag('P_MAAL_MOD') || is_ingelogd_account($profiel->uid)}
+				{if isset($abos)}
+					<div class="label">Abo's:</div>
+					<ul class="nobullets data">
+						{foreach from=$abos item=abonnement}
+							<li>{$abonnement->maaltijd_repetitie->standaard_titel}</li>
+							{/foreach}
+					</ul>
+				{/if}
+				<div class="clear"></div>
+				<div class="half">
+					<div class="label">Corvee-<br />voorkeuren:</div>
+					<ul class="nobullets data">
+						{foreach from=$corveevoorkeuren item=vrk}
+							<li>{$vrk->getCorveeRepetitie()->getDagVanDeWeekText()|truncate:2:""} {$vrk->getCorveeRepetitie()->getCorveeFunctie()->naam}</li>
+							{/foreach}
+					</ul>
+				</div>
+				<div class="half">
 					<div class="label">Recent:</div>
 					<ul class="nobullets data">
 						{foreach from=$recenteAanmeldingen item=aanmelding}
 							<li>{$aanmelding->maaltijd->getTitel()} <span class="lichtgrijs">({$aanmelding->maaltijd->datum|date_format:"%a %e %b"})</span></li>
 							{/foreach}
 					</ul>
-				{/if}
-			</div>
-			<div class="clear"></div>
-			<div class="half">
-				<div class="label">Corveepunten:</div>
-				<div class="data">{$corveepunten}{if $corveebonus > 0}+{/if}{if $corveebonus != 0}{$corveebonus}{/if}</div>
-			</div>
-			<div class="half">
-				<div class="label">Kwalificaties:</div>
+				</div>
+				<div class="clear"></div>
+				<div class="half">
+					<div class="label">Corveepunten:</div>
+					<div class="data">{$corveepunten}{if $corveebonus > 0}+{/if}{if $corveebonus != 0}{$corveebonus}{/if}</div>
+				</div>
+				<div class="half">
+					<div class="label">Kwalificaties:</div>
+					<ul class="nobullets data">
+						{foreach from=$corveekwalificaties item=kwali}
+							<li>{$kwali->getCorveeFunctie()->naam}<span class="lichtgrijs"> (sinds {$kwali->wanneer_toegewezen})</span></li>
+							{/foreach}
+					</ul>
+				</div>
+				<div class="clear"></div>
+				<div class="label">Corveetaken:</div>
 				<ul class="nobullets data">
-					{foreach from=$corveekwalificaties item=kwali}
-						<li>{$kwali->getCorveeFunctie()->naam}<span class="lichtgrijs"> (sinds {$kwali->wanneer_toegewezen})</span></li>
+					{foreach from=$corveetaken item=taak}
+						<li>{$taak->getCorveeFunctie()->naam} <span class="lichtgrijs">({$taak->datum|date_format:"%a %e %b"})</span></li>
 						{/foreach}
 				</ul>
-			</div>
-			<div class="clear"></div>
-			<div class="label">Corveetaken:</div>
-			<ul class="nobullets data">
-				{foreach from=$corveetaken item=taak}
-					<li>{$taak->getCorveeFunctie()->naam} <span class="lichtgrijs">({$taak->datum|date_format:"%a %e %b"})</span></li>
-					{/foreach}
-			</ul>
+			{/if}
 			<br />
 		</div>
 	</div>
 
-	{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid}
+	{if is_ingelogd_account($profiel->uid)}
 		<div class="profielregel" id="agenda">
 			<div class="gegevens" id="agenda_gegevens">
 				<div class="label">Persoonlijke<br />ICal-feed:</div>
@@ -315,10 +315,10 @@
 		</div>
 	{/if}
 
-	{if $forumpostcount > 0 OR CsrDelft\model\security\LoginModel::getUid() === $profiel->uid}
+	{if $forumpostcount > 0 OR is_ingelogd_account($profiel->uid)}
 		<div class="profielregel" id="forum">
 			<div class="gegevens" id="forum_gegevens">
-				{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid}
+				{if is_ingelogd_account($profiel->uid)}
 					<div class="label">Persoonlijk<br />RSS-feed:</div>
 					<div class="data">
 						{if $profiel->getAccount()->hasPrivateToken()}
@@ -357,7 +357,7 @@
 		</div>
 	{/if}
 
-	{if $boeken OR CsrDelft\model\security\LoginModel::getUid() === $profiel->uid OR $gerecenseerdeboeken}
+	{if $boeken OR is_ingelogd_account($profiel->uid) OR $gerecenseerdeboeken}
 		<div class="profielregel boeken" id="boeken">
 			<div class="gegevens">
 				{if $boeken}
@@ -374,7 +374,7 @@
 							{/foreach}
 					</ul>
 				{/if}
-				{if CsrDelft\model\security\LoginModel::getUid() === $profiel->uid}
+				{if is_ingelogd_account($profiel->uid)}
 					<a class="btn" href="/bibliotheek/nieuwboek">{icon get="book_add"} Nieuw boek</a>
 					<br />
 				{/if}
