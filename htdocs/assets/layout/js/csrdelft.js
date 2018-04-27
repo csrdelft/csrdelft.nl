@@ -959,3 +959,7 @@ function CsrBBPreview(sourceId, targetId) {
 		$(targetId).show();
 	}).fail(alert);
 }
+
+function selectRadioByValue(value) {
+	$('input[value="' + value + '"]').prop('checked', true);
+}

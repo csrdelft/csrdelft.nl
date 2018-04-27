@@ -1,0 +1,1 @@
+<a href="javascript:selectRadioByValue('ja')">Alles Ja</a>&nbsp;<a href="javascript:selectRadioByValue('nee')">Alles Nee</a>

@@ -3,6 +3,7 @@
 namespace CsrDelft\view;
 
 use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\invoervelden\UrlField;
@@ -20,7 +21,7 @@ use CsrDelft\view\login\RememberLoginTable;
  */
 class LidInstellingenView extends TabsForm {
 
-	public function __construct(LidInstellingenModel $model) {
+    public function __construct(LidInstellingenModel $model, LidToestemmingModel $toestemmingModel) {
 		parent::__construct($model, '/instellingen/opslaan', 'Webstekinstellingen');
 		$this->formId = 'lidinstellingenform';
 		$this->vertical = true;
@@ -50,6 +51,23 @@ class LidInstellingenView extends TabsForm {
 		$this->addFields(array(new RememberLoginTable()), 'Beveiliging');
 		$this->addFields(array(new LoginSessionsTable()), 'Beveiliging');
 
+        foreach ($toestemmingModel->getInstellingen() as $module => $instellingen) {
+            $fields = array();
+
+            foreach ($instellingen as $id) {
+                $smarty->assign('module', $module);
+                $smarty->assign('id', $id);
+                $smarty->assign('type', $toestemmingModel->getType($module, $id));
+                $smarty->assign('opties', $toestemmingModel->getTypeOptions($module, $id));
+                $smarty->assign('label', $toestemmingModel->getDescription($module, $id));
+                $smarty->assign('waarde', $toestemmingModel->getValue($module, $id));
+                $smarty->assign('default', $toestemmingModel->getDefault($module, $id));
+                $smarty->assign('reset', $reset);
+                $fields[] = new HtmlComment($smarty->fetch('instellingen/lidtoestemming.tpl'));
+            }
+            $this->addFields($fields, ucfirst($module));
+        }
+
 		$fields = array();
 
 		$fields['r'] = new UrlField('referer', HTTP_REFERER, null);
@@ -58,6 +76,6 @@ class LidInstellingenView extends TabsForm {
 		$fields[] = new FormDefaultKnoppen('/');
 
 		$this->addFields($fields, 'foot');
-	}
+    }
 
 }
