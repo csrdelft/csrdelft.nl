@@ -1035,11 +1035,11 @@ function mag($permission, array $allowedAuthenticationMethods = null) {
 }
 
 /**
- * Is $uid de op dit moment ingelogde gebruiker?
+ * Is $uid de op dit moment ingelogde account?
  *
  * @param string $uid
  * @return bool
  */
-function is_ingelogde_gebruiker($uid) {
+function is_ingelogd_account($uid) {
     return LoginModel::getUid() == $uid;
 }

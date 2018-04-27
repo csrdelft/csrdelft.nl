@@ -249,7 +249,7 @@
 				</div>
 			{/strip}
 			<br />
-			{if mag('P_MAAL_MOD') || is_ingelogd_account($profiel->uid)}
+			{if mag('P_MAAL_MOD') OR is_ingelogd_account($profiel->uid)}
 				{if isset($abos)}
 					<div class="label">Abo's:</div>
 					<ul class="nobullets data">
