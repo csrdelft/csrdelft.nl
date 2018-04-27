@@ -10,10 +10,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\corvee\repetities\CorveeRepetitiesView;
 use CsrDelft\view\maalcie\corvee\repetities\CorveeRepetitieView;
 use CsrDelft\view\maalcie\forms\CorveeRepetitieForm;
-use function CsrDelft\endsWith;
-use function CsrDelft\getMelding;
-use function CsrDelft\setMelding;
-
 
 /**
  * CorveeRepetitiesController.class.php

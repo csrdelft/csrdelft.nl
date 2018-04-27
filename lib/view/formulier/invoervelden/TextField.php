@@ -2,8 +2,6 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use function CsrDelft\is_utf8;
-
 /**
  * TextField.class.php
  *

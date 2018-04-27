@@ -26,7 +26,7 @@
 				{$body->view()}
 			</div>
 			<footer class="cd-footer">
-				{CsrDelft\printDebug()}
+				{printDebug()}
 			</footer>
 		</main>
 		{$mainmenu->view()}

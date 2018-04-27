@@ -8,9 +8,6 @@ use CsrDelft\GoogleSync;
 use CsrDelft\model\entity\GoogleToken;
 use CsrDelft\model\GoogleTokenModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-
 
 /**
  * Class GoogleController.

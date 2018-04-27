@@ -3,7 +3,6 @@
 namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\entity\maalcie\Maaltijd;
@@ -14,8 +13,6 @@ use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\PersistenceModel;
 use MongoDB\BSON\Type;
-use Symfony\Component\Config\Definition\Exception\Exception;
-
 
 /**
  * MaaltijdAanmeldingenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)

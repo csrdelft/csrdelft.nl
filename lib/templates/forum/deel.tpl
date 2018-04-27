@@ -1,4 +1,4 @@
-{CsrDelft\getMelding()}
+{getMelding()}
 
 {$zoekform->view()}
 

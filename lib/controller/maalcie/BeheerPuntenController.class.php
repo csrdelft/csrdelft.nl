@@ -10,8 +10,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenLidView;
 use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenView;
-use function CsrDelft\setMelding;
-
 
 /**
  * BeheerPuntenController.class.php

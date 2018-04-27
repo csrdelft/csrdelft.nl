@@ -12,10 +12,6 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\cms\CmsPaginaZijbalkView;
 use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
-use function CsrDelft\getDateTime;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-
 
 /**
  * CmsPaginaController.class.php

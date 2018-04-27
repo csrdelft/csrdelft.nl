@@ -14,8 +14,6 @@ use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
-use function CsrDelft\classNameZonderNamespace;
-use function CsrDelft\setMelding;
 
 /**
  * GroepForm.php

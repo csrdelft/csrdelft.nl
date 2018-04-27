@@ -10,9 +10,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
 use CsrDelft\view\maalcie\repetities\MaaltijdRepetitiesView;
 use CsrDelft\view\maalcie\repetities\MaaltijdRepetitieView;
-use function CsrDelft\getMelding;
-use function CsrDelft\setMelding;
-
 
 /**
  * MaaltijdRepetitiesController.class.php

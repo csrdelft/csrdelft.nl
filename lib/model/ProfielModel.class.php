@@ -17,8 +17,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
-use function CsrDelft\getDateTime;
-use function CsrDelft\setMelding;
 
 /**
  * ProfielModel.class.php

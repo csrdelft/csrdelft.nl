@@ -2,8 +2,6 @@
 
 namespace CsrDelft\model\mededelingen;
 
-use function CsrDelft\getDateTime;
-use function CsrDelft\isGeldigeDatum;
 use CsrDelft\model\entity\mededelingen\Mededeling;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;

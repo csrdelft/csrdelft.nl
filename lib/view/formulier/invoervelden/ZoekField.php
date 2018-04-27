@@ -5,7 +5,6 @@ namespace CsrDelft\view\formulier\invoervelden;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\setMelding;
 
 class ZoekField extends TextField {
 

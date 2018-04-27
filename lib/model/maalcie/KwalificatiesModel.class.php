@@ -3,7 +3,6 @@
 namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
-use function CsrDelft\group_by;
 use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\model\entity\maalcie\CorveeKwalificatie;
 use CsrDelft\Orm\CachedPersistenceModel;

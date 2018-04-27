@@ -26,7 +26,7 @@
 					{/if}
 				</div>
 			</div>
-			{CsrDelft\getMelding()}
+			{getMelding()}
 			<h1 title="Lid-status: {CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}">
 				{if CsrDelft\model\entity\LidStatus::getChar($profiel->status)!=''}<span class="status">{CsrDelft\model\entity\LidStatus::getChar($profiel->status)}&nbsp;</span>{/if}
 				{$profiel->getNaam('volledig')}
@@ -249,7 +249,7 @@
 				</div>
 			{/strip}
 			<br />
-			{if isset($abos)}
+			{if isset($abos) && CsrDelft\model\security}
 				<div class="label">Abo's:</div>
 				<ul class="nobullets data">
 					{foreach from=$abos item=abonnement}

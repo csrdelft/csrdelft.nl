@@ -1,9 +1,7 @@
 <?php
 
-use function CsrDelft\internationalizePhonenumber;
 use CsrDelft\MijnSqli;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\redirect;
 
 require_once 'configuratie.include.php';
 

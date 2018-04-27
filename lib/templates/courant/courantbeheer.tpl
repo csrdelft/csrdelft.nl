@@ -9,7 +9,7 @@
 <hr />
 
 {* feutmeldingen weergeven... *}
-{CsrDelft\getMelding()}
+{getMelding()}
 
 <h1>C.S.R.-courant</h1>
 <p>

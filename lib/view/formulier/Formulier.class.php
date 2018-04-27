@@ -2,15 +2,11 @@
 
 namespace CsrDelft\view\formulier;
 
-use function CsrDelft\classNameZonderNamespace;
-use function CsrDelft\getDateTime;
-use function CsrDelft\getMelding;
 use CsrDelft\model\ChangeLogModel;
 use CsrDelft\model\entity\ChangeLogEntry;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use function CsrDelft\startsWith;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\uploadvelden\FileField;

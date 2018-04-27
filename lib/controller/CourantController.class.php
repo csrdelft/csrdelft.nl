@@ -4,8 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\CourantModel;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
 use CsrDelft\view\courant\CourantArchiefView;
 use CsrDelft\view\courant\CourantBeheerView;
 use CsrDelft\view\courant\CourantView;

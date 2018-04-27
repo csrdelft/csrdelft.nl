@@ -3,8 +3,6 @@
 namespace CsrDelft\model\security;
 
 use CsrDelft\common\CsrGebruikerException;
-use function CsrDelft\getDateTime;
-use function CsrDelft\getSessionMaxLifeTime;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\entity\security\AuthenticationMethod;
@@ -13,10 +11,6 @@ use CsrDelft\model\entity\security\RememberLogin;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\PersistenceModel;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-use function CsrDelft\setRememberCookie;
-use function CsrDelft\startsWith;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use CsrDelft\view\Validator;
 

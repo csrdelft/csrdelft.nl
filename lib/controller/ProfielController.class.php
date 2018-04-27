@@ -28,9 +28,6 @@ use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\profiel\ProfielView;
 use CsrDelft\view\StamboomView;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-use function CsrDelft\startsWith;
 
 /**
  * ProfielController.class.php

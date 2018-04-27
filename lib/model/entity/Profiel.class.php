@@ -2,7 +2,6 @@
 
 namespace CsrDelft\model\entity;
 
-use function CsrDelft\aaidrom;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\GoogleSync;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
@@ -22,9 +21,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\view\bbcode\CsrBB;
-use function CsrDelft\array_filter_empty;
-use function CsrDelft\setMelding;
-use function CsrDelft\square_crop;
 use GuzzleHttp\Exception\RequestException;
 
 

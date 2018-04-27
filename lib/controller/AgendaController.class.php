@@ -20,8 +20,6 @@ use CsrDelft\view\agenda\AgendaMaandView;
 use CsrDelft\view\agenda\AgendeerbaarMaandView;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
-use function CsrDelft\setMelding;
-
 
 /**
  * ApiAgendaController.class.php

@@ -8,8 +8,6 @@
 
 namespace CsrDelft\view\formulier;
 
-use function CsrDelft\printDebug;
-
 /**
  * Form as modal content.
  */

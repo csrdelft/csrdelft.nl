@@ -19,10 +19,6 @@ use CsrDelft\view\maalcie\corvee\taken\BeheerTakenView;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\TaakForm;
 use CsrDelft\view\maalcie\forms\ToewijzenForm;
-use function CsrDelft\endsWith;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-
 
 /**
  * BeheerTakenController.class.php

@@ -6,5 +6,5 @@
 	{/foreach}
 </ul>
 <hr/>
-<table><tr id="melding"><td id="melding-veld">{CsrDelft\getMelding()}</td></tr></table>
+<table><tr id="melding"><td id="melding-veld">{getMelding()}</td></tr></table>
 <h1>{$titel}</h1>

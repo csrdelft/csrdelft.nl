@@ -2,7 +2,6 @@
 
 namespace CsrDelft\model;
 
-use function CsrDelft\getDateTime;
 use CsrDelft\MijnSqli;
 use CsrDelft\model\security\LoginModel;
 

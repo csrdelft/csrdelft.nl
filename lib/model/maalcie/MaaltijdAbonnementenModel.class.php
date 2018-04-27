@@ -8,7 +8,6 @@ use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
-use function CsrDelft\setMelding;
 
 /**
  * MaaltijdAbonnementenModel.class.php    |    P.W.G. Brussee (brussee@live.nl)

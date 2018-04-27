@@ -3,7 +3,6 @@
 namespace CsrDelft\model\fiscaat\pin;
 
 use CsrDelft\model\entity\fiscaat\pin\PinTransactie;
-use function CsrDelft\url2absolute;
 use DOMDocument;
 use DOMXPath;
 

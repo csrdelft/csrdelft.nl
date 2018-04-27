@@ -6,10 +6,6 @@ use CsrDelft\model\entity\Map;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
-use function CsrDelft\direncode;
-use function CsrDelft\endsWith;
-use function CsrDelft\startsWith;
-
 
 /**
  * FotoAlbum.class.php

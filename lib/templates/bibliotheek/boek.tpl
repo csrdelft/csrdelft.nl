@@ -2,7 +2,7 @@
  *	Boek weergeven
  *}
 
-<div class="foutje">{CsrDelft\getMelding()}</div>
+<div class="foutje">{getMelding()}</div>
 <ul class="horizontal">
 	<li>
 		<a href="/bibliotheek/" title="Naar de catalogus">Catalogus</a>

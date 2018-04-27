@@ -7,9 +7,6 @@ use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
-use function CsrDelft\debugprint;
-use function CsrDelft\direncode;
-
 
 /**
  * Foto.class.php

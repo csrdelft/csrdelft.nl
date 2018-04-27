@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\view\formulier\invoervelden\TextField;

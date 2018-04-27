@@ -41,14 +41,6 @@ use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
 use CsrDelft\view\mededelingen\MededelingenView;
 use CsrDelft\view\peilingen\PeilingView;
-use function CsrDelft\email_like;
-use function CsrDelft\endsWith;
-use function CsrDelft\external_url;
-use function CsrDelft\format_filesize;
-use function CsrDelft\reldate;
-use function CsrDelft\startsWith;
-use function CsrDelft\url_like;
-
 
 /**
  * CsrBB.class.php

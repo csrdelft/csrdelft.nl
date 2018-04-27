@@ -14,7 +14,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
-use function CsrDelft\group_by_distinct;
 
 class GroepLijstView extends GroepTabView {
 

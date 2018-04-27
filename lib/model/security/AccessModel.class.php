@@ -30,8 +30,6 @@ use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
-use function CsrDelft\in_array_i;
-use function CsrDelft\setMelding;
 
 /**
  * AccessModel.class.php

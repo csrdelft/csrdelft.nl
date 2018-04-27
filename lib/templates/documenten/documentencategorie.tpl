@@ -6,7 +6,7 @@
 	{/toegang}
 </div>
 
-{CsrDelft\getMelding()}
+{getMelding()}
 
 <h1>{$categorie->naam}</h1>
 

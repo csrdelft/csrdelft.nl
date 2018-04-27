@@ -17,8 +17,6 @@ use CsrDelft\view\gesprekken\GesprekForm;
 use CsrDelft\view\gesprekken\GesprekkenResponse;
 use CsrDelft\view\gesprekken\GesprekkenView;
 use CsrDelft\view\JsonResponse;
-use function CsrDelft\getDateTime;
-
 
 /**
  * GesprekkenController.class.php

@@ -40,7 +40,7 @@
 <hr/>
 <table>
 	<tr id="maalcie-melding">
-		<td id="maalcie-melding-veld">{CsrDelft\getMelding()}</td>
+		<td id="maalcie-melding-veld">{getMelding()}</td>
 	</tr>
 </table>
 <h1>{$titel}</h1>

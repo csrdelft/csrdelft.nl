@@ -3,7 +3,6 @@
 namespace CsrDelft\model\fiscaat;
 
 use CsrDelft\common\CsrGebruikerException;
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\model\entity\fiscaat\CiviSaldoLogEnum;
 use CsrDelft\Orm\Entity\PersistentEntity;

@@ -5,7 +5,6 @@ namespace CsrDelft\model\entity\gesprekken;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use function CsrDelft\reldate;
 
 /**
  * GesprekBericht.class.php

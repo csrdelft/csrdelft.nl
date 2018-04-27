@@ -1,28 +1,17 @@
 <?php
 
-namespace CsrDelft;
-
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # common.functions.php
 # -------------------------------------------------------------------
+use CsrDelft\Icon;
 use CsrDelft\lid\LidZoeker;
+use CsrDelft\MijnSqli;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
-use DateTime;
-
-/**
- * PDO does a stringcast (false = '') and MySql uses tinyint for booleans so expects 0/1
- */
-function werkomheen_pdo_bool($value) {
-	if (is_bool($value)) {
-		$value = (int)$value;
-	}
-	return $value;
-}
 
 /**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
@@ -53,7 +42,7 @@ function endsWith($haystack, $needle) {
  * @return array
  */
 function array_filter_empty($array) {
-	return array_filter($array, 'CsrDelft\not_empty');
+	return array_filter($array, 'not_empty');
 }
 
 function not_empty($value) {
@@ -736,7 +725,11 @@ function className($className) {
  * @return string
  */
 function classNameZonderNamespace($className) {
-	return (new \ReflectionClass($className))->getShortName();
+    try {
+        return (new \ReflectionClass($className))->getShortName();
+    } catch (ReflectionException $e) {
+        return '';
+    }
 }
 
 /**

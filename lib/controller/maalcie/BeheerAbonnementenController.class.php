@@ -11,8 +11,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementenLijstView;
 use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementenView;
 use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementView;
-use function CsrDelft\setMelding;
-
 
 /**
  * BeheerMaaltijdenController.class.php

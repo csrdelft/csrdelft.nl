@@ -9,8 +9,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\menubeheer\MenuBeheerView;
 use CsrDelft\view\menubeheer\MenuItemForm;
-use function CsrDelft\setMelding;
-
 
 /**
  * MenuBeheerController.class.php

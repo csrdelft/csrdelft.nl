@@ -1,4 +1,4 @@
-{CsrDelft\getMelding()}
+{getMelding()}
 
 <h1>{$titel}</h1>
 

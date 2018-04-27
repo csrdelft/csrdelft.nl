@@ -10,8 +10,6 @@ use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
-use function CsrDelft\setMelding;
-
 
 /**
  * MaaltijdenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)

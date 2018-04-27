@@ -3,7 +3,6 @@
 namespace CsrDelft\model\fotoalbum;
 
 use CsrDelft\common\CsrGebruikerException;
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoTag;
 use CsrDelft\model\ProfielModel;

@@ -2,7 +2,6 @@
 
 namespace CsrDelft\model\security;
 
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
 use CsrDelft\model\entity\security\RememberLogin;

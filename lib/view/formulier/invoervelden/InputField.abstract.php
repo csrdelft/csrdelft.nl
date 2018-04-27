@@ -2,13 +2,10 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\Icon;
-use function CsrDelft\in_array_i;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\valid_filename;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\uploadvelden\BestandBehouden;
 use CsrDelft\view\Validator;

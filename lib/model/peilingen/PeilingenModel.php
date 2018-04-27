@@ -8,8 +8,6 @@ use CsrDelft\model\entity\peilingen\PeilingStem;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
-use function CsrDelft\setMelding;
-
 
 /**
  * PeilingenModel.php

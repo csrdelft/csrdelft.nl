@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\maalcie\abonnementen;
 
-use function CsrDelft\getMelding;
 use CsrDelft\view\SmartyTemplateView;
 
 class BeheerAbonnementenLijstView extends SmartyTemplateView {

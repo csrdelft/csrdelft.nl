@@ -22,9 +22,6 @@ use CsrDelft\view\maalcie\beheer\PrullenbakMaaltijdenTable;
 use CsrDelft\view\maalcie\forms\AanmeldingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdForm;
 use CsrDelft\view\maalcie\forms\RepetitieMaaltijdenForm;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-
 
 /**
  * BeheerMaaltijdenController.class.php

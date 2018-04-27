@@ -11,7 +11,6 @@ use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\RadioField;
 use CsrDelft\view\formulier\knoppen\DeleteKnop;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
-use function CsrDelft\reldate;
 
 /**
  * CmsPaginaForm.class.php

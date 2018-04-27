@@ -10,10 +10,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\mededelingen\MededelingenOverzichtView;
 use CsrDelft\view\mededelingen\MededelingenView;
 use CsrDelft\view\mededelingen\MededelingView;
-use function CsrDelft\getDateTime;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-
 
 /**
  * Class MededelingenController

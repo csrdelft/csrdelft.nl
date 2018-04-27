@@ -24,7 +24,6 @@ use CsrDelft\model\LogModel;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\security\OneTimeTokensModel;
-use function CsrDelft\getDateTime;
 
 chdir(dirname(__FILE__) . '/../lib/');
 

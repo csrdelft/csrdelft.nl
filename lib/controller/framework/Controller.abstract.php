@@ -10,9 +10,6 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\View;
-use function CsrDelft\redirect;
-use function CsrDelft\setGoBackCookie;
-use function CsrDelft\setMelding;
 
 /**
  * Controller.abstract.php

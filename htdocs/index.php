@@ -12,9 +12,6 @@ use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
-use function CsrDelft\debugprint;
-use function CsrDelft\redirect;
-use function CsrDelft\setGoBackCookie;
 
 require_once 'configuratie.include.php';
 

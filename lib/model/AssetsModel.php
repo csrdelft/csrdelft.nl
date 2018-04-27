@@ -12,7 +12,6 @@ use Stash\Interfaces\ItemInterface;
 use Stash\Pool as CachePool;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use tubalmartin\CssMin\Minifier as CssMin;
-use function CsrDelft\endsWith;
 
 /**
  * Class AssetsModel.

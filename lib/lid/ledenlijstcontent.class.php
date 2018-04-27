@@ -7,7 +7,6 @@ use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\View;
-use function CsrDelft\getMelding;
 
 require_once 'lid/LidZoeker.php';
 

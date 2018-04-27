@@ -13,8 +13,6 @@ use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
-use function CsrDelft\getDateTime;
-
 
 /**
  * BiebBoek.php  |  Gerrit Uitslag

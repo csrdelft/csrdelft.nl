@@ -3,7 +3,6 @@
 namespace CsrDelft\model\bibliotheek;
 
 use CsrDelft\common\CsrException;
-use function CsrDelft\getDateTime;
 use CsrDelft\MijnSqli;
 use CsrDelft\model\security\LoginModel;
 

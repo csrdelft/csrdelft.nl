@@ -5,7 +5,6 @@ namespace CsrDelft\view\formulier\uploadvelden;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
-use function CsrDelft\url_like;
 use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\formulier\UrlDownloader;
 

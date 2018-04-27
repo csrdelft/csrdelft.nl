@@ -13,7 +13,6 @@
  */
 
 use CsrDelft\model\DebugLogModel;
-use function CsrDelft\getDateTime;
 
 chdir(dirname(__FILE__) . '/../lib/');
 

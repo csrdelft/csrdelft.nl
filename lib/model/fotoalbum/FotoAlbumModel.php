@@ -14,9 +14,6 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use function CsrDelft\debugprint;
-use function CsrDelft\setMelding;
-use function CsrDelft\valid_filename;
 
 /**
  * FotoAlbumModel.php

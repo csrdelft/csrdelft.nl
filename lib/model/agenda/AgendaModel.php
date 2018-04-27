@@ -16,9 +16,6 @@ use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
 use CsrDelft\Orm\PersistenceModel;
-use function CsrDelft\getDateTime;
-use function CsrDelft\getWeekNumber;
-
 
 /**
  * AgendaModel.php

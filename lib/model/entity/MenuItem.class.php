@@ -8,8 +8,6 @@ use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use function CsrDelft\setMelding;
-use function CsrDelft\startsWith;
 
 /**
  * MenuItem.class.php

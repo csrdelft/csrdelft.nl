@@ -9,8 +9,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\persoonlijk\abonnementen\MijnAbonnementenView;
 use CsrDelft\view\maalcie\persoonlijk\abonnementen\MijnAbonnementView;
-use function CsrDelft\setMelding;
-
 
 /**
  * MijnAbonnementenController.class.php

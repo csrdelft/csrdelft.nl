@@ -30,9 +30,6 @@ use CsrDelft\view\login\RememberLoginForm;
 use CsrDelft\view\login\VerifyForm;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
-use function CsrDelft\redirect;
-use function CsrDelft\setGoBackCookie;
-use function CsrDelft\setMelding;
 
 /**
  * LoginController.class.php

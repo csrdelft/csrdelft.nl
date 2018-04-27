@@ -122,7 +122,41 @@ class LidInstellingenModel extends InstellingenModel {
 			'wiki' => array('Wiki', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'documenten' => array('Documenten', T::Enumeration, array('ja', 'nee'), 'nee'),
 			'boeken' => array('Boeken', T::Enumeration, array('ja', 'nee'), 'nee')
-		)
+		),
+        'toestemming' => [
+            'naam' => ['Naam', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'bijnaam' => ['Bijnaam', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'voorletters' => ['Voorletters', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'gebdatum' => ['Geboortedatum', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'adres' => ['Woonadres', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'telefoon' => ['Telefoonnummer', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'mobiel' => ['Mobiele nummer', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'o_adres' => ['Woonadres ouders', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'o_telefoon' => ['Telefoonnummer ouders', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'email' => ['E-mailadres', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'studie' => ['Studie', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'studiejaar' => ['Studielichting', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'Verenigingslichting' => ['Verenigingslichting', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'Profielfoto' => ['Profielfoto', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'Verticale' => ['Verticale', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'Kring' => ['Kring', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'Werkgroepen' => ['Werkgroepen', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'Bankrekeningnummer' => ['Bankrekeningnummer', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'Commissies' => ['Commissies', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'Allergie/dieet' => ['Allergie/dieet', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'corvee' => ['Corveepunten en -taken', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'foto\'s' => ['Getagde foto’s', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'forum_posts' => ['Forumbijdragen', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'abo' => ['Abonnement', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'ondervereniging' => ['Ondervereniging', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'groepen' => ['Groepen', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'activiteiten' => ['Recent bezochte activiteiten', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'kwalificaties' => ['Kwalificaties', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'patroon' => ['Patroon/matroon', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'kinderen' => ['Verenigingskinderen', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'voorkeuren' => ['Corveevoorkeuren', T::Enumeration, ['ja', 'nee'], 'nee'],
+            'status' => ['Lidstatus', T::Enumeration, ['ja', 'nee'], 'nee'],
+        ]
 	);
 
 	/**

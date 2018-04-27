@@ -1,4 +1,4 @@
-{CsrDelft\getMelding()}
+{getMelding()}
 {capture name='navlinks'}
 	<div class="maandnavigatie">
 		<a class="btn float-left" href="{$urlVorige}">&laquo; {$prevMaand}</a>

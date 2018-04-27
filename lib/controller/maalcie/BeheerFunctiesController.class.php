@@ -11,8 +11,6 @@ use CsrDelft\view\maalcie\corvee\functies\FunctieDeleteView;
 use CsrDelft\view\maalcie\corvee\functies\FunctieForm;
 use CsrDelft\view\maalcie\corvee\functies\FunctieView;
 use CsrDelft\view\maalcie\corvee\functies\KwalificatieForm;
-use function CsrDelft\setMelding;
-
 
 /**
  * BeheerFunctiesController.class.php

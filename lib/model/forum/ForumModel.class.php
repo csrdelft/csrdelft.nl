@@ -3,8 +3,6 @@
 namespace CsrDelft\model\forum;
 
 use CsrDelft\common\CsrGebruikerException;
-use function CsrDelft\getDateTime;
-use function CsrDelft\group_by;
 use CsrDelft\model\entity\forum\ForumCategorie;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\ProfielModel;

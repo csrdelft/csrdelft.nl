@@ -3,8 +3,6 @@
 namespace CsrDelft\model\security;
 
 use CsrDelft\common\CsrGebruikerException;
-use function CsrDelft\crypto_rand_token;
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\ProfielModel;

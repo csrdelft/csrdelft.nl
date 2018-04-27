@@ -19,10 +19,6 @@ use CsrDelft\view\fotoalbum\FotosDropzone;
 use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
 use CsrDelft\view\fotoalbum\PosterUploadForm;
 use CsrDelft\view\JsonResponse;
-use function CsrDelft\endsWith;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-
 
 /**
  * FotoAlbumController.class.php

@@ -6,7 +6,6 @@ use CsrDelft\MijnSqli;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\redirect;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\View;
 

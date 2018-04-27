@@ -13,8 +13,6 @@ use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurOpmerking;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\ProfielModel;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
 use CsrDelft\view\commissievoorkeuren\AddCategorieFormulier;
 use CsrDelft\view\commissievoorkeuren\AddCommissieFormulier;
 use CsrDelft\view\commissievoorkeuren\BeheerCommissieTable;

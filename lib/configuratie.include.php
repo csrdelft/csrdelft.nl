@@ -22,8 +22,6 @@ use CsrDelft\model\LogModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\ShutdownHandler;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
 
 require __DIR__ . '/../vendor/autoload.php';
 require_once 'defines.include.php';
