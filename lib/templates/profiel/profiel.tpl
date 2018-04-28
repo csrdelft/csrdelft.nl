@@ -43,11 +43,11 @@
 				{else}
 					{$profiel->uid}
 				{/if}</div>
-			{if $profiel->nickname!=''}<div class="label">Bijnaam:</div><div class="data">{$profiel->nickname}</div>{/if}
+			{if $profiel->nickname!='' AND is_zichtbaar($profiel->uid, 'bijnaam')}<div class="label">Bijnaam:</div><div class="data">{$profiel->nickname}</div>{/if}
 			{if $profiel->duckname!=''}<div class="label">Duckstad-naam:</div><div class="data">{$profiel->duckname}</div>{/if}
 			<br />
-			{if $profiel->voorletters!=''}<div class="label">Voorletters:</div><div class="data">{$profiel->voorletters}</div>{/if}
-			{if $profiel->gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div><div class="data">{$profiel->gebdatum|date_format:"%d-%m-%Y"}</div>{/if}
+			{if $profiel->voorletters!='' AND is_zichtbaar($profiel->uid, 'voorletters')}<div class="label">Voorletters:</div><div class="data">{$profiel->voorletters}</div>{/if}
+			{if $profiel->gebdatum!='0000-00-00' AND is_zichtbaar($profiel->uid, 'gebdatum')}<div class="label">Geb.datum:</div><div class="data">{$profiel->gebdatum|date_format:"%d-%m-%Y"}</div>{/if}
 			{if $profiel->status === CsrDelft\model\entity\LidStatus::Overleden AND $profiel->sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div><div class="data">{$profiel->sterfdatum|date_format:"%d-%m-%Y"}</div>{/if}
 			{if CsrDelft\model\ProfielModel::get($profiel->echtgenoot)}
 				<div class="label">{if CsrDelft\model\ProfielModel::get($profiel->echtgenoot)->geslacht === CsrDelft\model\entity\Geslacht::Vrouw}Echtgenote{else}Echtgenoot{/if}:</div>

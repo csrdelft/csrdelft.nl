@@ -7,7 +7,6 @@ use CsrDelft\model\entity\LidToestemming;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\PersistenceModel;
 
 
 /**
@@ -101,6 +100,15 @@ class LidToestemmingModel extends InstellingenModel {
         return $instelling;
     }
 
+    public static function toestemmingGegeven() {
+        if ($_SERVER['REQUEST_URI'] == '/privacy') // Doe niet naggen op de privacy info pagina.
+            return true;
+
+        $uid = LoginModel::getUid();
+
+        return static::instance()->count('uid = ? AND waarde <> \'\'', [$uid]) > 0;
+    }
+
     public function toestemming($uid, $id, $except = 'P_LEDEN_MOD') {
         if ($uid == LoginModel::getUid())
             return true;
@@ -108,6 +116,7 @@ class LidToestemmingModel extends InstellingenModel {
         if (LoginModel::mag($except))
             return true;
 
+        /** @var LidToestemming $toestemming */
         $toestemming = parent::retrieveByPrimaryKey(['toestemming', $id, $uid]);
 
         if (!$toestemming)
@@ -144,18 +153,6 @@ class LidToestemmingModel extends InstellingenModel {
                     return true;
                 }
                 break;
-
-            case T::Integer:
-                if ($waarde >= $options[0] AND $waarde <= $options[1]) {
-                    return true;
-                }
-                break;
-
-            case T::String:
-                if (strlen($waarde) >= $options[0] AND strlen($waarde) <= $options[1] AND preg_match('/^[\w\-_\. ]*$/', $waarde)) {
-                    return true;
-                }
-                break;
         }
         return false;
     }
@@ -175,7 +172,7 @@ class LidToestemmingModel extends InstellingenModel {
                 }
                 $waarde = filter_input(INPUT_POST, $module . '_' . $id, $filter);
                 if (!$this->isValidValue($module, $id, $waarde)) {
-                    $waarde = $this->getDefault($module, $id);
+                    continue;
                 }
                 $properties[] = array($module, $id, $waarde, LoginModel::getUid());
             }
