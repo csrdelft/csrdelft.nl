@@ -24,8 +24,16 @@ class ToestemmingModalForm extends ModalForm {
         $model = LidToestemmingModel::instance();
         $fields = [];
 
+        $akkoord = null;
+
         foreach (LidToestemmingModel::instance()->getInstellingen() as $module => $instellingen) {
             foreach ($instellingen as $id) {
+                if ($model->getValue($module, $id) == 'ja' && $akkoord == null) {
+                    $akkoord = 'ja';
+                } elseif ($model->getValue($module, $id) == 'nee') {
+                    $akkoord = 'nee';
+                }
+
                 $smarty->assign('module', $module);
                 $smarty->assign('id', $id);
                 $smarty->assign('type', $model->getType($module, $id));
@@ -37,10 +45,26 @@ class ToestemmingModalForm extends ModalForm {
             }
         }
 
+        $smarty->assign('akkoord', $akkoord);
         $smarty->assign('fields', $fields);
         $this->addFields([new HtmlComment($smarty->fetch('toestemming/toestemming_head.tpl'))]);
 
-        $this->addFields([new FormDefaultKnoppen()]);
+        $this->addFields([new FormDefaultKnoppen(null, false)]);
+    }
 
+    public function validate() {
+        if (!parent::validate()) {
+            return false;
+        }
+
+        $toestemmingJa = filter_input(INPUT_POST, 'toestemming-ja', FILTER_VALIDATE_BOOLEAN);
+        $toestemmingNee = filter_input(INPUT_POST, 'toestemming-nee', FILTER_VALIDATE_BOOLEAN);
+
+        if ($toestemmingJa || $toestemmingNee) {
+            return true;
+        }
+
+        setMelding('Maak een keuze', -1);
+        return false;
     }
 }

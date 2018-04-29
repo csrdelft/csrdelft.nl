@@ -44,12 +44,15 @@ class ToestemmingController extends AclController {
 
             $this->model->save();
             setMelding('Toestemming opgeslagen', 1);
-            $this->view = new ToestemmingModalForm(); // Rerun constructor
+            $this->view = new CmsPaginaView(CmsPaginaModel::get('thuis'));
         } else {
             $this->view =  $form;
         }
     }
 
+    /**
+     * @throws \SmartyException
+     */
     public function GET_overzicht()
     {
         $this->view = new CsrLayoutPage(new CmsPaginaView(CmsPaginaModel::get('thuis')), [], new ToestemmingModalForm());

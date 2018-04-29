@@ -7,13 +7,13 @@
     </p>
 
     <p>
-        <label><input type="checkbox" id="toestemming-ja"/> Mijn gegevens mogen gedeeld worden voor interne doeleinden. Dit geldt totdat ik dat verander.</label>
+        <label><input type="checkbox" name="toestemming-ja" id="toestemming-ja"{if $akkoord == 'ja'} checked="checked"{/if}/> Mijn gegevens mogen gedeeld worden voor interne doeleinden. Dit geldt totdat ik dat verander.</label>
     </p>
     <p>
-        <label><input type="checkbox" id="toestemming-nee"/> Ik wil graag instellen welke gegevens met gedeeld worden.</label>
+        <label><input type="checkbox" name="toestemming-nee" id="toestemming-nee"{if $akkoord == 'nee'} checked="checked"{/if}/> Ik wil graag instellen welke gegevens met gedeeld worden.</label>
     </p>
 
-    <div id="toestemming-opties" style="display:none; width: 500px; clear: both;"><p>Maak een keuze, voor ieder veld moet een waarde ingevuld worden. Commissies die bepaalde gegevens nodig hebben om te kunnen functioneren blijven deze mogelijkheid houden.</p>
+    <div id="toestemming-opties" style="{if $akkoord == 'nee'}display:none;{/if} width: 500px; clear: both;"><p>Maak een keuze, voor ieder veld moet een waarde ingevuld worden. Commissies die bepaalde gegevens nodig hebben om te kunnen functioneren blijven deze mogelijkheid houden.</p>
         {foreach from=$fields item=field}
             {$field}
         {/foreach}
@@ -21,7 +21,7 @@
 </div>
 
 <script type="text/javascript">
-    $(function () {
+    (function () {
         var toestemmingJa = $('#toestemming-ja'),
             toestemmingNee = $('#toestemming-nee'),
             toestemmingOpties = $('#toestemming-opties');
@@ -42,5 +42,5 @@
                 toestemmingOpties.hide();
             }
         });
-    });
+    })();
 </script>
