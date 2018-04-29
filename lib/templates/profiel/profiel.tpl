@@ -182,6 +182,7 @@
 			</div>
 			<div class="half">
 				{$werkgroepen}
+				{if mag('P_LEDEN_MOD') OR is_ingelogd_account($profiel)}
 				<div class="label">&nbsp;</div><a class="btn" onclick="$(this).remove();
 						$('#meerGroepenContainer').slideDown();">Toon activiteiten</a>
 			</div>
@@ -194,6 +195,7 @@
 					{$activiteiten}
 				</div>
 				<div class="clear-left"></div>
+				{/if}
 			</div>
 		</div>
 	</div>
