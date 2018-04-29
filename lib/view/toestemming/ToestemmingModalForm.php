@@ -26,25 +26,37 @@ class ToestemmingModalForm extends ModalForm {
 
         $akkoord = null;
 
-        foreach (LidToestemmingModel::instance()->getInstellingen() as $module => $instellingen) {
-            foreach ($instellingen as $id) {
-                if ($model->getValue($module, $id) == 'ja' && $akkoord == null) {
-                    $akkoord = 'ja';
-                } elseif ($model->getValue($module, $id) == 'nee') {
-                    $akkoord = 'nee';
-                }
+        $module = 'intern';
 
-                $smarty->assign('module', $module);
-                $smarty->assign('id', $id);
-                $smarty->assign('type', $model->getType($module, $id));
-                $smarty->assign('opties', $model->getTypeOptions($module, $id));
-                $smarty->assign('label', $model->getDescription($module, $id));
-                $smarty->assign('waarde', $model->getValue($module, $id));
-                $smarty->assign('default', $model->getDefault($module, $id));
-                $fields[] = $smarty->fetch('toestemming/toestemming.tpl');
+        foreach (LidToestemmingModel::instance()->getModuleInstellingen($module) as $id) {
+            if ($model->getValue($module, $id) == 'ja' && $akkoord == null) {
+                $akkoord = 'ja';
+            } elseif ($model->getValue($module, $id) == 'nee') {
+                $akkoord = 'nee';
             }
+
+            $smarty->assign('module', $module);
+            $smarty->assign('id', $id);
+            $smarty->assign('type', $model->getType($module, $id));
+            $smarty->assign('opties', $model->getTypeOptions($module, $id));
+            $smarty->assign('label', $model->getDescription($module, $id));
+            $smarty->assign('waarde', $model->getValue($module, $id));
+            $smarty->assign('default', $model->getDefault($module, $id));
+            $fields[] = $smarty->fetch('toestemming/toestemming.tpl');
         }
 
+        $id = 'foto';
+        $module = 'extern';
+
+        $smarty->assign('module', $module);
+        $smarty->assign('id', $id);
+        $smarty->assign('type', $model->getType($module, $id));
+        $smarty->assign('opties', $model->getTypeOptions($module, $id));
+        $smarty->assign('label', $model->getDescription($module, $id));
+        $smarty->assign('waarde', $model->getValue($module, $id));
+        $smarty->assign('default', $model->getDefault($module, $id));
+
+        $smarty->assign('akkoordExtern', $smarty->fetch('toestemming/toestemming.tpl'));
         $smarty->assign('akkoord', $akkoord);
         $smarty->assign('fields', $fields);
         $this->addFields([new HtmlComment($smarty->fetch('toestemming/toestemming_head.tpl'))]);
@@ -57,10 +69,9 @@ class ToestemmingModalForm extends ModalForm {
             return false;
         }
 
-        $toestemmingJa = filter_input(INPUT_POST, 'toestemming-ja', FILTER_VALIDATE_BOOLEAN);
-        $toestemmingNee = filter_input(INPUT_POST, 'toestemming-nee', FILTER_VALIDATE_BOOLEAN);
+        $toestemming = filter_input(INPUT_POST, 'toestemming-intern', FILTER_VALIDATE_BOOLEAN);
 
-        if ($toestemmingJa || $toestemmingNee) {
+        if ($toestemming) {
             return true;
         }
 

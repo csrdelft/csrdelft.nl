@@ -35,7 +35,7 @@ class LidToestemmingModel extends InstellingenModel {
      * @var array
      */
     protected static $defaults = [
-        'toestemming' => [
+        'intern' => [
             // MaalCie
 //             'abo' => ['Abonnement', T::Enumeration, ['', 'ja', 'nee'], ''],  // Alleen maalcie
 //            'voorkeuren' => ['Corveevoorkeuren', T::Enumeration, ['', 'ja', 'nee'], ''],  // Alleen maalcie
@@ -76,6 +76,9 @@ class LidToestemmingModel extends InstellingenModel {
             'bankrekening' => ['Bankrekeningnummer', T::Enumeration, ['', 'ja', 'nee'], ''],
             'fotos' => ['Getagde foto\'s', T::Enumeration, ['', 'ja', 'nee'], ''],
             'beroep' => ['Beroep', T::Enumeration, ['', 'ja', 'nee'], ''], // Niet in bestuursdocument
+        ],
+        'extern' => [
+            'foto' => ['Foto op externe stek', T::Enumeration, ['', 'ja', 'nee'], ''],
         ]
     ];
 
