@@ -141,6 +141,21 @@
             </ul>
             <ul class="sponsors">
                 <li>
+                    <a href="https://autoverzekering.nl/" class="lazy-load"
+                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/logo-AVZ.png' alt='autoverzekering vergelijken'>">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.easyswitch.nl/energie-vergelijken/" class="lazy-load"
+                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/logo-ES.png' alt='energie vergelijken'>">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://overstappen.nl/autoverzekering" class="lazy-load"
+                       data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/logo-OS.png' alt='goedkope autoverzekering'>">
+                    </a>
+                </li>
+                <li>
                     <a href="https://dosign.nl/" class="lazy-load"
                        data-lazy="<img src='https://csrdelft.nl/plaetjes/banners/dosign.gif' alt='Dosignadvertentie'>">
                     </a>
