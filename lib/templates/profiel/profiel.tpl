@@ -11,6 +11,7 @@
 					{if $profiel->magBewerken()}
 						<a href="/profiel/{$profiel->uid}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="pencil"}</a>
 						<a href="/profiel/{$profiel->uid}/voorkeuren" class="btn" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
+						<a href="/toestemming" class="btn" title="Pas toestemming aan">{icon get="lock_edit"}</a>
 					{/if}
 					{if mag('P_ADMIN') OR is_ingelogd_account($profiel->uid)}
 						{if CsrDelft\model\security\AccountModel::existsUid($profiel->uid)}
@@ -29,21 +30,21 @@
 			{getMelding()}
 			<h1 title="Lid-status: {if is_zichtbaar($profiel, 'status')}{CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}{/if}">
 				{if CsrDelft\model\entity\LidStatus::getChar($profiel->status)!='' AND is_zichtbaar($profiel, 'status')}<span class="status">{CsrDelft\model\entity\LidStatus::getChar($profiel->status)}&nbsp;</span>{/if}
-				{if is_zichtbaar($profiel, 'naam')}{$profiel->getNaam('volledig')}{else}Anoniempje{/if}
+				{$profiel->getNaam('volledig')}
 			</h1>
 		</div>
 	</div>
 
 	<div class="profielregel">
 		<div class="gegevens">
-			{if is_zichtbaar($profiel, 'naam')}<div class="label">Naam:</div><div class="data">{$profiel->getNaam('civitas')}</div>{/if}
+			<div class="label">Naam:</div><div class="data">{$profiel->getNaam('civitas')}</div>
 			<div class="label">Lidnummer:</div><div class="data">
 				{if CsrDelft\model\security\AccountModel::existsUid($profiel->uid) AND CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->getAccount())}
 					<a href="/su/{$profiel->uid}/" title="Su naar dit lid">{$profiel->uid}</a>
 				{else}
 					{$profiel->uid}
 				{/if}</div>
-			{if $profiel->nickname!='' AND is_zichtbaar($profiel, 'bijnaam')}<div class="label">Bijnaam:</div><div class="data">{$profiel->nickname}</div>{/if}
+			{if $profiel->nickname!=''}<div class="label">Bijnaam:</div><div class="data">{$profiel->nickname}</div>{/if}
 			{if $profiel->duckname!=''}<div class="label">Duckstad-naam:</div><div class="data">{$profiel->duckname}</div>{/if}
 			<br />
 			{if $profiel->voorletters!='' AND is_zichtbaar($profiel, 'voorletters')}<div class="label">Voorletters:</div><div class="data">{$profiel->voorletters}</div>{/if}
@@ -66,25 +67,23 @@
 						{/if}
 					</div>
 					<div class="data">
-						{if is_zichtbaar($profiel, 'adres')}
 							{$woonoord}<br />
 							{$profiel->adres}<br />
 							{$profiel->postcode} {$profiel->woonplaats}<br />
 							{$profiel->land}<br />
-						{/if}
-						{if $profiel->telefoon!='' AND is_zichtbaar($profiel, 'telefoon')}{$profiel->telefoon}<br />{/if}
-						{if $profiel->mobiel!='' AND is_zichtbaar($profiel, 'mobiel')}{$profiel->mobiel}<br />{/if}
+						{if $profiel->telefoon!=''}{$profiel->telefoon}<br />{/if}
+						{if $profiel->mobiel!=''}{$profiel->mobiel}<br />{/if}
 					</div>
 				</div>
 				{if $profiel->isLid()}
 					<div class="half">
-						{if $profiel->o_adres!='' AND is_zichtbaar($profiel, ['o_adres', 'o_telefoon'])}
+						{if $profiel->o_adres!=''}
 							<div class="label">
 								<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->o_adres|urlencode}+{$profiel->o_woonplaats|urlencode}+{$profiel->o_land|urlencode}" title="Open kaart" class="lichtgrijs fa fa-map-marker fa-5x"></a>
 							</div>
 						{/if}
 						<div class="data">
-							{if $profiel->o_adres!='' AND is_zichtbaar($profiel, ['o_adres', 'o_telefoon'])}
+							{if $profiel->o_adres!=''}
 								<strong>Ouders:</strong><br />
 								{$profiel->o_adres}<br />
 								{$profiel->o_postcode} {$profiel->o_woonplaats}<br />

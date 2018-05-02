@@ -20,6 +20,7 @@ class ToestemmingController extends AclController {
 
         $this->acl = [
             'overzicht' => 'P_LOGGED_IN',
+            'annuleren' => 'P_LOGGED_IN',
         ];
     }
 
@@ -29,7 +30,11 @@ class ToestemmingController extends AclController {
      * @throws \CsrDelft\common\CsrException
      */
     public function performAction(array $args = array()) {
-        $this->action = 'overzicht';
+        if ($this->hasParam(2)) {
+            $this->action = $this->getParam(2);
+        } else {
+            $this->action = 'overzicht';
+        }
         return parent::performAction($args);
     }
 
@@ -56,5 +61,12 @@ class ToestemmingController extends AclController {
     public function GET_overzicht()
     {
         $this->view = new CsrLayoutPage(new CmsPaginaView(CmsPaginaModel::get('thuis')), [], new ToestemmingModalForm());
+    }
+
+    public function POST_annuleren()
+    {
+        $_SESSION['stop_nag'] = time();
+
+        $this->view = new CmsPaginaView(CmsPaginaModel::get('thuis'));
     }
 }

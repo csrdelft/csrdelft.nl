@@ -15,6 +15,7 @@ use CsrDelft\model\groepen\leden\CommissieLedenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
@@ -45,7 +46,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $tussenvoegsel;
 	public $achternaam;
 	public $postfix;
-	public $nickname;
+	protected $nickname;
 	public $duckname;
 	// fysiek
 	public $geslacht;
@@ -57,19 +58,19 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $adresseringechtpaar;
 	public $ontvangtcontactueel;
 	// adres
-	public $adres;
-	public $postcode;
+	protected $adres;
+	protected $postcode;
 	public $woonplaats;
 	public $land;
-	public $telefoon;
-	public $o_adres;
-	public $o_postcode;
+	protected $telefoon;
+	protected $o_adres;
+	protected $o_postcode;
 	public $o_woonplaats;
 	public $o_land;
-	public $o_telefoon;
+	protected $o_telefoon;
 	// contact
-	public $email;
-	public $mobiel;
+	protected $email;
+	protected $mobiel;
 	public $linkedin;
 	public $website;
 	// studie
@@ -191,7 +192,29 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'novietSoort' => array(T::String),
 		'kgb' => array(T::Text, true)
 	);
-	/**
+
+	public function __get($name) {
+        if (is_zichtbaar($this, $name)) {
+            return $this->$name;
+        } elseif (property_exists(get_class(), $name)) {
+            switch (gettype($this->$name)) {
+                case 'boolean':
+                    return false;
+                case 'string':
+                    return '';
+                case 'integer':
+                    return 0;
+                case 'array':
+                    return [];
+                default:
+                    return null;
+            }
+        }
+
+        throw new \InvalidArgumentException(sprintf("Property %s does not exist.", $name));
+    }
+
+    /**
 	 * Database primary key
 	 * @var array
 	 */
@@ -227,6 +250,9 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getPrimaryEmail() {
+	    if (!is_zichtbaar($this, 'email')) {
+	        return 'CENSUUR';
+        }
 		if (AccountModel::existsUid($this->uid)) {
 			return $this->getAccount()->email;
 		}
@@ -263,10 +289,12 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function isJarig() {
+	    if (!is_zichtbaar($this, 'gebdatum')) return false;
 		return substr($this->gebdatum, 5, 5) === date('m-d');
 	}
 
 	public function getJarigOver() {
+	    if (!is_zichtbaar($this, 'gebdatum')) return false;
 		$verjaardag = strtotime(date('Y') . '-' . date('m-d', strtotime($this->gebdatum)));
 		$nu = strtotime(date('Y-m-d'));
 		if ($verjaardag < $nu) {
@@ -291,6 +319,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * @return int timestamp
 	 */
 	public function getBeginMoment() {
+	    if (!is_zichtbaar($this, 'gebdatum')) return 0;
 		$jaar = date('Y');
 		if (isset($GLOBALS['agenda_jaar'], $GLOBALS['agenda_maand'])) { //FIEES, Patrick.
 			/*
@@ -388,16 +417,18 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				$bestuur = BesturenModel::get($bestuurslid->groep_id);
 				$k .= '<p><a href="' . $bestuur->getUrl() . '">' . GroepStatus::getChar($bestuur->status) . ' ' . $bestuurslid->opmerking . '</a></p>';
 			}
-			foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->uid), null, 'lid_sinds DESC') as $commissielid) {
-				$commissie = CommissiesModel::get($commissielid->groep_id);
-				if ($commissie->status === GroepStatus::HT) {
-					$k .= '<p>';
-					if (!empty($commissielid->opmerking)) {
-						$k .= $commissielid->opmerking . '<br />';
-					}
-					$k .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a></p>';
-				}
-			}
+			if (is_zichtbaar($this, 'commissies')) {
+                foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->uid), null, 'lid_sinds DESC') as $commissielid) {
+                    $commissie = CommissiesModel::get($commissielid->groep_id);
+                    if ($commissie->status === GroepStatus::HT) {
+                        $k .= '<p>';
+                        if (!empty($commissielid->opmerking)) {
+                            $k .= $commissielid->opmerking . '<br />';
+                        }
+                        $k .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a></p>';
+                    }
+                }
+            }
 			$k .= '</div>';
 			if ($vorm === 'leeg') {
 				$naam = $k . $naam;
@@ -419,6 +450,8 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * @return string
 	 */
 	public function getNaam($vorm = 'volledig', $force = false) {
+	    if (!is_zichtbaar($this, 'naam')) return '';
+
 		if ($vorm === 'user') {
 			$vorm = LidInstellingenModel::get('forum', 'naamWeergave');
 		}
@@ -536,7 +569,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getPasfotoPath($vierkant = false, $vorm = 'user') {
 		$path = null;
-		if (LoginModel::mag('P_OUDLEDEN_READ')) {
+		if (LoginModel::mag('P_OUDLEDEN_READ') && is_zichtbaar($this, 'pasfoto')) {
 			// in welke (sub)map moeten we zoeken?
 			if ($vierkant) {
 				$folders = array('');
@@ -581,6 +614,8 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getKinderen() {
+	    if (!is_zichtbaar($this, 'kinderen')) return [];
+
 		if (!isset($this->kinderen)) {
 			$this->kinderen = ProfielModel::instance()->find('patroon = ?', array($this->uid));
 		}
@@ -601,6 +636,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getWoonoord() {
+	    if (!is_zichtbaar($this, 'adres')) return false;
 		$woonoorden = WoonoordenModel::instance()->getGroepenVoorLid($this->uid, GroepStatus::HT);
 		if (empty($woonoorden)) {
 			return false;
@@ -609,10 +645,12 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getVerticale() {
+	    if (!is_zichtbaar($this, 'verticale')) return false;
 		return VerticalenModel::get($this->verticale);
 	}
 
 	public function getKring() {
+	    if (!is_zichtbaar($this, 'kring')) return false;
 		$kringen = KringenModel::instance()->getGroepenVoorLid($this->uid, GroepStatus::HT);
 		if (empty($kringen)) {
 			return false;

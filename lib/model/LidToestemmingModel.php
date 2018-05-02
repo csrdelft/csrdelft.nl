@@ -35,52 +35,81 @@ class LidToestemmingModel extends InstellingenModel {
      * @var array
      */
     protected static $defaults = [
-        'intern' => [
-            // MaalCie
-//             'abo' => ['Abonnement', T::Enumeration, ['', 'ja', 'nee'], ''],  // Alleen maalcie
-//            'voorkeuren' => ['Corveevoorkeuren', T::Enumeration, ['', 'ja', 'nee'], ''],  // Alleen maalcie
-//            'kwalificaties' => ['Kwalificaties', T::Enumeration, ['', 'ja', 'nee'], ''],  // Alleen maalcie
-            'eetwens' => ['Allergie/dieet', T::Enumeration, ['', 'ja', 'nee'], ''],
-//            'corvee' => ['Corveepunten en -taken', T::Enumeration, ['', 'ja', 'nee'], ''], // Alleen maalcie
-
+        'algemeen' => [
+            'extern' => ['Mijn foto\'s mogen op de externe stek geplaatst worden en voor promotiedoeleinden gebruikt worden.', T::Enumeration, ['', 'ja', 'nee'], ''],
+            'vereniging' => ['Het bestuur en commissies van C.S.R. mogen mijn gegevens gebruiken om hun taken uit te voeren.', T::Enumeration, ['', 'ja', 'nee'], ''],
+        ],
+        'intern' => [ // Gegevens die niet directe velden in Profiel zijn
             // C.S.R. Groepen
             'commissies' => ['Commissies', T::Enumeration, ['', 'ja', 'nee'], ''],
             'werkgroepen' => ['Werkgroepen', T::Enumeration, ['', 'ja', 'nee'], ''],
             'ondervereniging' => ['Ondervereniging', T::Enumeration, ['', 'ja', 'nee'], ''],
             'groepen' => ['Groepen', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'activiteiten' => ['Recent bezochte activiteiten', T::Enumeration, ['', 'ja', 'nee'], ''],
             'kring' => ['Kring', T::Enumeration, ['', 'ja', 'nee'], ''],
             'verticale' => ['Verticale', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'ketzers' => ['Aanschafketzers', T::Enumeration, ['', 'ja', 'nee'], ''], // Niet in bestuursdocument
 
             // C.S.R. overig
             'forum_posts' => ['Forumbijdragen', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'status' => ['Lidstatus', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'patroon' => ['Patroon/matroon', T::Enumeration, ['', 'ja', 'nee'], ''],
             'kinderen' => ['Verenigingskinderen', T::Enumeration, ['', 'ja', 'nee'], ''],
 
             // Gegevens
             'naam' => ['Naam', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'bijnaam' => ['Bijnaam', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'voorletters' => ['Voorletters', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'gebdatum' => ['Geboortedatum', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'adres' => ['Woonadres', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'telefoon' => ['Telefoonnummer', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'mobiel' => ['Mobiele nummer', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'o_adres' => ['Woonadres ouders', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'o_telefoon' => ['Telefoonnummer ouders', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'email' => ['E-mailadres', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'studie' => ['Studie', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'studiejaar' => ['Studielichting', T::Enumeration, ['', 'ja', 'nee'], ''],
             'profielfoto' => ['Profielfoto', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'bankrekening' => ['Bankrekeningnummer', T::Enumeration, ['', 'ja', 'nee'], ''],
             'fotos' => ['Getagde foto\'s', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'beroep' => ['Beroep', T::Enumeration, ['', 'ja', 'nee'], ''], // Niet in bestuursdocument
         ],
-        'extern' => [
-            'foto' => ['Foto op externe stek', T::Enumeration, ['', 'ja', 'nee'], ''],
-        ]
+        'profiel' => [ // Matcht velden in Profiel
+            // naam
+            'voorletters' => ['Voorletters', T::Enumeration, ['', 'ja', 'nee'], ''],
+            'nickname' => ['Bijnaam', T::Enumeration, ['', 'ja', 'nee'], ''],
+            // fysiek
+            'geslacht' => ['Geslacht', T::Enumeration, ['', 'ja', 'nee'], ''],
+            'gebdatum' => ['Geboortedatum', T::Enumeration, ['', 'ja', 'nee'], ''],
+            // adres
+            'adres' => ['Straat + Huisnummer', T::Enumeration, ['', 'ja', 'nee'], ''],
+            'postcode' => ['Postcode', T::Enumeration, ['', 'ja', 'nee'], ''],
+            'woonplaats' => ['Woonplaats', T::Enumeration, ['', 'ja', 'nee'], ''],
+            'land' => ['Land', T::Enumeration, ['', 'ja', 'nee'], ''],
+            'mobiel' => ['Mobiel', T::Enumeration, ['', 'ja', 'nee'], ''],
+            // contact
+            'email' => ['Email', T::Enumeration, ['', 'ja', 'nee'], ''],
+            // lidmaatschap
+            'status' => ['Status', T::Enumeration, ['', 'ja', 'nee'], ''], // Willen we dit?
+            // geld
+            'bankrekening' => ['Bankrekening', T::Enumeration, ['', 'ja', 'nee'], ''],
+            // verticale
+            'verticale' => ['Bankrekening', T::Enumeration, ['', 'ja', 'nee'], ''], // Willen we dit?
+            // civi-gegevens
+            'patroon' => ['Patroon/Matroon', T::Enumeration, ['', 'ja', 'nee'], ''],
+            // Persoonlijk
+            'eetwens' => ['Allergie/dieet', T::Enumeration, ['', 'ja', 'nee'], ''],
+        ],
+        'profiel_lid' => [
+            'bankrekening' => ['Bankrekeningnummer', T::Enumeration, ['', 'ja', 'nee'], ''],
+        ],
+        'profiel_oudlid' => [
+            'echtgenoot' => ['Echtgenoot', T::Enumeration, ['', 'ja', 'nee'], ''],
+        ],
     ];
+
+    /**
+     * Geef de categorien waar een lid toestemming voor kan geven. Oudleden hebben minder gegevens dan leden.
+     *
+     * @param boolean $islid
+     * @return array
+     */
+    public function getRelevantToestemmingCategories($islid) {
+        $instellingen = [];
+
+        if ($islid) {
+            $instellingen['profiel_lid'] = array_merge($instellingen, $this->getModuleInstellingen('profiel_lid'));
+        }
+
+        $instellingen['profiel_oudlid'] = $this->getModuleInstellingen('profiel_oudlid');
+        $instellingen['profiel'] = $this->getModuleInstellingen('profiel');
+        $instellingen['intern'] = $this->getModuleInstellingen('intern');
+
+        return $instellingen;
+    }
 
     /**
      * Functie getInstelling aanvullen met uid.
@@ -107,6 +136,9 @@ class LidToestemmingModel extends InstellingenModel {
         if ($_SERVER['REQUEST_URI'] == '/privacy') // Doe niet naggen op de privacy info pagina.
             return true;
 
+        if (isset($_SESSION['stop_nag']) && $_SESSION['stop_nag'] > time() - 3600) // Doe niet naggen voor een uur als een lid op annuleren heeft geklikt.
+            return true;
+
         $uid = LoginModel::getUid();
 
         return static::instance()->count('uid = ? AND waarde <> \'\'', [$uid]) > 0;
@@ -121,6 +153,22 @@ class LidToestemmingModel extends InstellingenModel {
 
         /** @var LidToestemming $toestemming */
         $toestemming = parent::retrieveByPrimaryKey(['toestemming', $id, $profiel->uid]);
+
+        if (!$toestemming)
+            return false;
+
+        return $toestemming->waarde == "ja";
+    }
+
+    public function toestemmingUid($uid, $id, $except = 'P_LEDEN_MOD') {
+        if ($uid == LoginModel::getUid())
+            return true;
+
+        if (LoginModel::mag($except))
+            return true;
+
+        /** @var LidToestemming $toestemming */
+        $toestemming = parent::retrieveByPrimaryKey(['toestemming', $id, $uid]);
 
         if (!$toestemming)
             return false;

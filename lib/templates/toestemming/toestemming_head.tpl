@@ -1,22 +1,5 @@
-<div style="width: 500px">
-    <p>
-        Hier kunt u aangeven of u akkoord gaat met het delen van uw gegevens.
-    </p>
-    <p>
-        Kijk op de <a href="/privacy">privacy</a> pagina voor meer informatie.
-    </p>
-
-    <p>
-        Met het volgende vinkje kun je aangeven of je akkoord gaat met het laten zien van foto's met jou erop op de externe stek en het gebruik van deze foto's voor promotie doeleinden.
-    </p>
-
-    <p>
-        {$akkoordExtern}
-    </p>
-
-    <p class="clear">
-        Maak hieronder een keuze of u akkoord gaat met het delen van uw gegevens met leden, novieten en oudleden van C.S.R.
-    </p>
+<div style="width: 700px">
+    {include "string:$beleid"}
 
     <p>
         <label><input type="radio" name="toestemming-intern" id="toestemming-ja"{if $akkoord == 'ja'} checked="checked"{/if}/> Mijn gegevens mogen gedeeld worden voor interne doeleinden. Dit geldt totdat ik dat verander.</label>
