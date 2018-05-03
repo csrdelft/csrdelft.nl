@@ -66,7 +66,7 @@ class IsHetAlView implements View {
 				break;
 
 			case 'weekend':
-				$this->ja = (date('w') == 0 OR date('w') > 5 OR (date('w') == 5 AND date('Hi') > '1700'));
+				$this->ja = (date('w') == 0 OR date('w') > 5 OR (date('w') == 5 AND date('Hi') >= '1700'));
 				break;
 
 			case 'studeren':
