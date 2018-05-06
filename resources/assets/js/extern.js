@@ -12,7 +12,7 @@ $(function () {
 
 	let hasLoaded = false;
 
-	if (typeof $banner[0] === "undefined") {
+	if (typeof $banner[0] === 'undefined') {
 		$banner = $('#banner-small');
 	}
 
@@ -41,7 +41,7 @@ $(function () {
 					const hasAnchor = $(this).closest('a').length !== 0;
 					$(this).parent().replaceWith($(this));
 					if (!foto && !video && !hasAnchor) {
-						$(this).wrap('<a class="lightbox-link" href="' + $(this).attr('src') + '" data-lightbox="page-lightbox"></a>');
+						$(this).wrap(`<a class="lightbox-link" href="${$(this).attr('src')}" data-lightbox="page-lightbox"></a>`);
 					}
 				});
 			});
@@ -49,9 +49,11 @@ $(function () {
 	});
 
 	function lazyLoad() {
-		if (hasLoaded === true) return;
-		hasLoaded = true;
+		if (hasLoaded === true) {
+            return;
+        }
 
+		hasLoaded = true;
 
 		// Lazy load frontpage
 		setTimeout(function () {
@@ -64,31 +66,22 @@ $(function () {
 	}
 
 	// Lazy load after animations have finished and user has scrolled
-	$window.scroll(function () {
+	$window.scroll(() => {
 		if (hasLoaded === false && $(window).scrollTop() > 0) {
 			lazyLoad();
 		}
 	});
 
-	if ($banner.length > 0
-		&& $header.hasClass('alt')) {
+	if ($banner.length > 0 && $header.hasClass('alt')) {
 
-		$window.on('resize', function () {
-			$window.trigger('scroll');
-		});
+		$window.on('resize', () => $window.trigger('scroll'));
 
 		$banner.scrollex({
 			bottom: $header.outerHeight(),
-			terminate: function () {
-				$header.removeClass('alt');
-			},
-			enter: function () {
-				$header.addClass('alt');
-			},
-			leave: function () {
-				$header.removeClass('alt');
-			}
-		});
+			terminate: () => $header.removeClass('alt'),
+			enter: () => $header.addClass('alt'),
+			leave: () => $header.removeClass('alt')
+        });
 
 	}
 });

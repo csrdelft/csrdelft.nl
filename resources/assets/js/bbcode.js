@@ -1,11 +1,48 @@
-const $ = require('jquery');
+import $ from 'jquery';
+
+/**
+ * @see templates/courant/courantbeheer.tpl
+ * @see templates/forum/post_forum.tpl
+ * @see templates/mededelingen/mededeling.tpl
+ * @see templates/roodschopper/roodschopper.tpl
+ * @see forum.js
+ * @see view/formulier/invoervelden/BBCodeField.class.php
+ * @param sourceId
+ * @param targetId
+ * @constructor
+ */
+export const CsrBBPreview = (sourceId, targetId) => {
+    if (sourceId.charAt(0) !== '#') {
+        sourceId = `#${sourceId}`;
+    }
+    if (targetId.charAt(0) !== '#') {
+        targetId = `#${targetId}`;
+    }
+    let bbcode = $(sourceId).val();
+    if (typeof bbcode !== 'string' || bbcode.trim() === '') {
+        $(targetId).html('').hide();
+        return;
+    }
+    $.post('/tools/bbcode.php', {
+        data: encodeURIComponent(bbcode)
+    }).done((data) => {
+        if (targetId.charAt(0) !== '#') {
+            targetId = `#${targetId}`;
+        }
+        $(targetId).html(data);
+        init_context($(targetId));
+        $(targetId).show();
+    }).fail(function (error) {
+        alert(error)
+    });
+};
 
 /**
  * @see view/bbcode/CsrBB.class.php
  * @param elem
  * @returns {boolean}
  */
-window.bbvideoDisplay = function(elem) {
+export const bbvideoDisplay = function(elem) {
     let $previewdiv = $(elem);
     let params = $previewdiv.data('params');
     if(params.iframe) {

@@ -1,5 +1,7 @@
 const $ = require('jquery');
 
+const Bloodhound = require('typeahead.js');
+
 /*
  *	Bibliotheekjavascriptcode.
  */
@@ -10,40 +12,61 @@ $(document).ready(function ($) {
 	//catalogus: tabellen naar zebra converteren.
 	$('#boeken').find('tr:odd').addClass('odd');
 
+    function getKolommen() {
+        let kolommen;
+
+        if ($('#boekencatalogus').hasClass('lid')) {
+            kolommen = {'aoKolommen': [
+                    {'sType': 'html'}, // titel
+                    {'sType': 'html'}, // auteur
+                    {'sType': 'html'}, // rubriek
+                    {'sType': 'html', 'sWidth': '40px'},
+                    {'sType': 'html', 'sWidth': '125px', 'bVisible': false}, // eigenaar
+                    {'sType': 'html', 'sWidth': '125px', 'bVisible': false}, //uitgeleend aan
+                    {'sType': 'html', 'sWidth': '100px', 'bVisible': false} // uitleendatum
+                ]};
+        } else {
+            kolommen = {'aoKolommen': [
+                    {'sType': 'html', 'sWidth': '400px'}, // titel
+                    {'sType': 'html'}, // auteur
+                    {'sType': 'html', 'sWidth': '300px'} // rubriek
+                ]};
+        }
+        return kolommen.aoKolommen;
+    }
 
 	//catalogus: hippe sorteerbare tabel fixen.
-	let oTableCatalogus = $("#boekencatalogus").dataTable({
-		"oLanguage": {
-			"sZeroRecords": "Geen boeken gevonden",
-			"sInfoEmtpy": "Geen boeken gevonden",
-			"sSearch": "Zoeken:",
+	let oTableCatalogus = $('#boekencatalogus').dataTable({
+		'oLanguage': {
+			'sZeroRecords': 'Geen boeken gevonden',
+			'sInfoEmtpy': 'Geen boeken gevonden',
+			'sSearch': 'Zoeken:',
 			oPaginate: {
-				"sFirst": "Eerste",
-				"sPrevious": "Vorige",
-				"sNext": "Volgende",
-				"sLast": "Laatste"}
+				'sFirst': 'Eerste',
+				'sPrevious': 'Vorige',
+				'sNext': 'Volgende',
+				'sLast': 'Laatste'}
 		},
 		//"bProcessing": true,
-		"bServerSide": true,
-		"sAjaxSource": "/bibliotheek/catalogusdata",
-		"fnServerParams": function (aoData) {
-			aoData.push({"name": "sEigenaarFilter", "value": $('span.filter.actief').attr('id')});
-			aoData.push({"name": "sView", "value": $('input[name=boekstatus]').is(':checked')});
+		'bServerSide': true,
+		'sAjaxSource': '/bibliotheek/catalogusdata',
+		'fnServerParams': (aoData) => {
+			aoData.push({'name': 'sEigenaarFilter', 'value': $('span.filter.actief').attr('id')});
+			aoData.push({'name': 'sView', 'value': $('input[name=boekstatus]').is(':checked')});
 		},
-		"iDisplayLength": 30,
-		"bInfo": false,
-		"bLengthChange": false,
-		"bStateSave": true,
-		"iCookieDuration": 60 * 15, // 15 min
-		"fnStateSaveCallback": function (oSettings, sValue) {
-			sValue += ',"sEigenaarFilter": "' + $('span.filter.actief').attr('id') + '"';
-			sValue += ',"sView": ' + $('input[name=boekstatus]').is(':checked');
+		'iDisplayLength': 30,
+		'bInfo': false,
+		'bLengthChange': false,
+		'bStateSave': true,
+		'iCookieDuration': 60 * 15, // 15 min
+		'fnStateSaveCallback': (oSettings, sValue) => {
+			sValue += `,"sEigenaarFilter": "${$('span.filter.actief').attr('id')}","sView": ${$('input[name=boekstatus]').is(':checked')}`;
 			init_hoverIntents();
 			return sValue;
 		},
-		"fnStateLoadCallback": function (oSettings) {
+		'fnStateLoadCallback': oSettings => {
 			let oData = oSettings.aoData;
-			let aEigenaarfilters = ["alle", "csr", "leden", "eigen", "geleend"];
+			let aEigenaarfilters = ['alle', 'csr', 'leden', 'eigen', 'geleend'];
 			if ($.inArray(oData.sEigenaarFilter, aEigenaarfilters) === -1) {
 				oData.sEigenaarFilter = 'csr';
 			}
@@ -53,33 +76,10 @@ $(document).ready(function ($) {
 			$('input[name=boekstatus]').attr('checked', oData.sView);
 			return true;
 		},
-		"aaSorting": [[0, 'asc']],
-		"sPaginationType": "full_numbers",
-		"aoColumns": getKolommen()
+		'aaSorting': [[0, 'asc']],
+		'sPaginationType': 'full_numbers',
+		'aoColumns': getKolommen()
 	});
-
-	function getKolommen() {
-		let kolommen;
-
-		if ($("#boekencatalogus").hasClass("lid")) {
-			kolommen = {"aoKolommen": [
-					{'sType': 'html'}, // titel
-					{'sType': 'html'}, // auteur
-					{'sType': 'html'}, // rubriek
-					{'sType': 'html', "sWidth": "40px"},
-					{'sType': 'html', "sWidth": "125px", "bVisible": false}, // eigenaar
-					{'sType': 'html', "sWidth": "125px", "bVisible": false}, //uitgeleend aan
-					{'sType': 'html', "sWidth": "100px", "bVisible": false} // uitleendatum
-				]};
-		} else {
-			kolommen = {"aoKolommen": [
-					{'sType': 'html', "sWidth": "400px"}, // titel
-					{'sType': 'html'}, // auteur
-					{'sType': 'html', "sWidth": "300px"} // rubriek
-				]};
-		}
-		return kolommen.aoKolommen;
-	}
 
 	//catalogus: update de tabel bij kiezen van een filteroptie
 	$('span.filter').click(function () {
@@ -109,11 +109,11 @@ $(document).ready(function ($) {
 	// boekpagina: vult code-veld
     //voeg 'genereer'-knop toe aan codefield, die een biebcode geneert met waardes uit andere velden
     function biebCodeVakvuller() {
-        let codeveld = $("input[name=code]");
+        let codeveld = $('input[name=code]');
         let codeknop = $('<a class="btn genereer" title="Biebcode invullen">Genereer</a>').mousedown(function (event) {
             event.preventDefault();
             codeveld.val(
-                $("select[name=rubriek]").val() + '.' + $("input[name=auteur]").val().substring(0, 3).toLowerCase()
+                $('select[name=rubriek]').val() + '.' + $('input[name=auteur]').val().substring(0, 3).toLowerCase()
             ).focus();
         });
         codeveld.after(codeknop);
@@ -140,14 +140,14 @@ $(document).ready(function ($) {
 	}
 	function getLanguage(datarow) {
 		let lang = {
-			nl: "Nederlands", en: "Engels", fr: "Frans",
-			de: "Duits", bg: "Bulgaars", es: "Spaans",
-			cs: "Tsjechisch", da: "Deens", et: "Ests",
-			el: "Grieks", ga: "Iers", it: "Italiaans",
-			lv: "Lets", lt: "Litouws", hu: "Hongaars",
-			mt: "Maltees", pl: "Pools", pt: "Portugees",
-			ro: "Roemeens", sk: "Slowaaks", sl: "Sloveens",
-			fi: "Fins", sv: "Zweeds"
+			nl: 'Nederlands', en: 'Engels', fr: 'Frans',
+			de: 'Duits', bg: 'Bulgaars', es: 'Spaans',
+			cs: 'Tsjechisch', da: 'Deens', et: 'Ests',
+			el: 'Grieks', ga: 'Iers', it: 'Italiaans',
+			lv: 'Lets', lt: 'Litouws', hu: 'Hongaars',
+			mt: 'Maltees', pl: 'Pools', pt: 'Portugees',
+			ro: 'Roemeens', sk: 'Slowaaks', sl: 'Sloveens',
+			fi: 'Fins', sv: 'Zweeds'
 		};
 
 		return lang[datarow.language] ? lang[datarow.language] : datarow.language;
@@ -160,7 +160,7 @@ $(document).ready(function ($) {
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			limit: 25,
 			remote: {
-				url: "https://www.googleapis.com/books/v1/volumes?q=%QUERY",
+				url: 'https://www.googleapis.com/books/v1/volumes?q=%QUERY',
 				filter: function (data) {
 					let rows = [];
 					data = data.items;
@@ -186,14 +186,14 @@ $(document).ready(function ($) {
 			highlight: true,
 			minLength: 7
 		}, {
-			name: "boekenSource",
-			displayKey: "title",
+			name: 'boekenSource',
+			displayKey: 'title',
 			source: boekenSource.ttAdapter(),
 			templates: {
-				header: "<h3>Boeken</h3>",
+				header: '<h3>Boeken</h3>',
 				suggestion: function (row) {
-					let item = '<div style="margin: 5px 10px" title="Titel: ' + row.title + " | Auteur: " + getAuteur(row) + " | Pagina's: " + row.pageCount + " | Taal: " + getLanguage(row) + " | ISBN: " + getIsbn(row) + " | Uitgeverij: " + row.publisher + " | Uitgavejaar: " + getPublishedDate(row) + '">';
-					item += '<span class="dikgedrukt">' + row.title + '</span><br /><span class="cursief">' + getAuteur(row) + '</span>';
+					let item = `<div style="margin: 5px 10px" title="Titel: ${row.title} | Auteur: ${getAuteur(row)} | Pagina's: ${row.pageCount} | Taal: ${getLanguage(row)} | ISBN: ${getIsbn(row)} | Uitgeverij: ${row.publisher} | Uitgavejaar: ${getPublishedDate(row)}">`;
+					item += `<span class="dikgedrukt">${row.title}</span><br /><span class="cursief">${getAuteur(row)}</span>`;
 					item += '</div>';
 					return item;
 				}
@@ -202,11 +202,11 @@ $(document).ready(function ($) {
 			let inputlen = $(this).val().length;
 
 			if (inputlen > 0 && inputlen < 7) {
-				$(this).css("background-color", "#ffcc96");
+				$(this).css('background-color', '#ffcc96');
 			} else {
-				$(this).css("background-color", "white");
+				$(this).css('background-color', 'white');
 			}
-		}).on("typeahead:selected", function(event, row, dataset) {
+		}).on('typeahead:selected', function(event, row, dataset) {
 			//gegevens in invulvelden plaatsen
 			let values = [
 				{key: 'titel', value: row.title},
@@ -218,7 +218,7 @@ $(document).ready(function ($) {
 				{key: 'uitgavejaar', value: getPublishedDate(row)}
 			];
 			values.forEach(function(el) {
-				$("input[name=" + el.key + "]").val(el.value);
+				$(`input[name=${el.key}]`).val(el.value);
 			});
 		});
 
@@ -233,7 +233,7 @@ $(document).ready(function ($) {
 			datumTokenizer: Bloodhound.tokenizers.whitespace,
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			limit: 20,
-			remote: "autocomplete/titel?q=%QUERY"
+			remote: 'autocomplete/titel?q=%QUERY'
 		});
 		bestaandeBoekenSource.initialize();
 		$("form.Formulier input:not(.tt-hint):first").typeahead({
@@ -241,17 +241,17 @@ $(document).ready(function ($) {
 			hint: true,
 			highlight: true
 		}, {
-			name: "bestaandeBoekenSource",
+			name: 'bestaandeBoekenSource',
 			displayKey: "value",
 			source: bestaandeBoekenSource.ttAdapter(),
 			templates: {
-				header: "<h3>Bestaande Boeken</h3>",
+				header: '<h3>Bestaande Boeken</h3>',
 				suggestion: function (row) {
-					return '<div style="margin: 5px 10px">Ga naar: <a href="/bibliotheek/boek/' + row.data.id + '" target="_blank">' + row.data.titel + '</a></div>';
+					return `<div style="margin: 5px 10px">Ga naar: <a href="/bibliotheek/boek/${row.data.id}" target="_blank">${row.data.titel}</a></div>`;
 				}
 			}
-		}).on("typeahead:select", function (event, row) {
-			window.open('/bibliotheek/boek/' + row.data.id)
+		}).on('typeahead:select', function (event, row) {
+			window.open(`/bibliotheek/boek/${row.data.id}`);
 		});
 	} catch (err) {
 		console.log(err);
@@ -262,21 +262,21 @@ $(document).ready(function ($) {
 	//opslaan-knop toevoegen, met event die met ajax de veldwaarde opslaat
 	$('.blok .InputField input,.blok .InputField textarea,.blok .InputField select').each(function (index, input) {
 		$(this).after('<div class="melding"></div>').after($('<a class="btn opslaan">Opslaan</a>').mousedown(function () {
-			let boekid = $(".boek").attr('id'),
-				$input = $("#" + input.id),
+			let boekid = $('.boek').attr('id'),
+				$input = $(`#${input.id}`),
 				fieldname = $input.attr('name'),
 				waarde = $input.val(),
-				dataString = 'id=' + fieldname + '&' + fieldname + '=' + waarde;
+				dataString = `id=${fieldname}&${fieldname}=${waarde}`;
 
 			$.ajax({
 				type: "POST",
-				url: '/bibliotheek/bewerkboek/' + boekid,
+				url: `/bibliotheek/bewerkboek/${boekid}`,
 				data: dataString,
 				cache: false,
 				dataType: "json",
-				success: function (result) {
-					let field = $("#" + input.id.substring(6)),
-						$inputelem = $("#" + input.id);
+				success: (result) => {
+					let field = $(`#${input.id.substring(6)}`),
+						$inputelem = $(`#${input.id}`);
 
 					if (result.value) {
 						//opgeslagen waarde in input zetten en een tijdelijke succesmelding
@@ -305,9 +305,9 @@ $(document).ready(function ($) {
 		}).change(function () {
 			//lege velden krijgen een border
 			if ($(this).val().length === 0) {
-				$(this).addClass("leeg");
+				$(this).addClass('leeg');
 			} else {
-				$(this).removeClass("leeg");
+				$(this).removeClass('leeg');
 			}
 		}).change();
 	});

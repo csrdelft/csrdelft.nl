@@ -1,7 +1,23 @@
 /**
  * Laad alle externe libs en knoop de goede dingen aan elkaar.
  */
-window._ = require('lodash');
+import _ from 'lodash';
+
+/**
+ * Globale objecten gebruikt in PHP code.
+ */
+import Bloodhound from 'typeahead.js';
+import Dropzone from 'dropzone/dist/dropzone-amd-module';
+import * as bbcode from './bbcode';
+import * as utils from './util';
+
+_.assign(window, {
+    ...utils,
+    ...bbcode,
+    _,
+    Bloodhound,
+    Dropzone,
+});
 
 /**
  * Laad jQuery in globale scope.
@@ -25,10 +41,3 @@ require('./lib/jquery.markitup');
 require('./lib/jquery.contextMenu');
 require('timeago');
 
-/**
- * Globale objecten gebruikt in PHP code.
- */
-window.Bloodhound = require('typeahead.js');
-window.Dropzone = require('dropzone/dist/dropzone-amd-module');
-
-require('./util');

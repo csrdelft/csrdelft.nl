@@ -2,7 +2,8 @@
  * csrdelft.nl javascript libje...
  */
 
-const $ = require('jquery');
+import $ from 'jquery';
+import Dropzone from 'dropzone/dist/dropzone-amd-module';
 
 function preloadImg(href) {
     let img = $(document.createElement('img'));
@@ -56,22 +57,22 @@ function init_dropzone() {
 function init_timeago_once() {
     try {
         $.timeago.settings.strings = {
-            prefiprefixAgo: "",
-            prefixFromNow: "sinds",
-            suffixAgo: "geleden",
-            suffixFromNow: "",
-            seconds: "nog geen minuut",
-            minute: "1 minuut",
-            minutes: "%d minuten",
-            hour: "1 uur",
-            hours: "%d uur",
-            day: "1 dag",
-            days: "%d dagen",
-            month: "1 maand",
-            months: "%d maanden",
-            year: "1 jaar",
-            years: "%d jaar",
-            wordSeparator: " ",
+            prefiprefixAgo: '',
+            prefixFromNow: 'sinds',
+            suffixAgo: 'geleden',
+            suffixFromNow: '',
+            seconds: 'nog geen minuut',
+            minute: '1 minuut',
+            minutes: '%d minuten',
+            hour: '1 uur',
+            hours: '%d uur',
+            day: '1 dag',
+            days: '%d dagen',
+            month: '1 maand',
+            months: '%d maanden',
+            year: '1 jaar',
+            years: '%d jaar',
+            wordSeparator: ' ',
             numbers: []
         };
     }
@@ -116,7 +117,7 @@ function init_tooltips(parent) {
 
 function init_markitup(parent) {
     try {
-        $(parent).find('textarea.BBCodeField').markItUp(require('./bbcode-set')); // CsrBBcodeMarkItUpSet is located in: /layout/js/markitup/sets/bbcode/set.js
+        $(parent).find('textarea.BBCodeField').markItUp(require('./bbcode-set'));
     }
     catch (err) {
         console.log(err);
@@ -177,7 +178,7 @@ function init_lazy_images(parent) {
             let hasAnchor = $(this).closest('a').length !== 0;
             $(this).parent().replaceWith($(this));
             if (!foto && !video && !hasAnchor) {
-                $(this).wrap('<a class="lightbox-link" href="' + $(this).attr('src') + '" data-lightbox="page-lightbox"></a>');
+                $(this).wrap(`<a class="lightbox-link" href="${$(this).attr('src')}" data-lightbox="page-lightbox"></a>`);
             }
         });
     });
@@ -285,10 +286,10 @@ window.page_redirect = function(htmlString) {
  */
 window.init_hoverIntents = function(parent) {
     $(parent).find('.hoverIntent').hoverIntent({
-        over: function () {
+        over() {
             $(this).find('.hoverIntentContent').fadeIn();
         },
-        out: function () {
+        out() {
             $(this).find('.hoverIntentContent').fadeOut();
         },
         timeout: 250
@@ -321,9 +322,7 @@ function knop_vergroot(knop) {
         oud = knop.attr('data-vergroot-oud');
 
     if (oud) {
-        $(id).animate({
-            'height': oud
-        }, 600);
+        $(id).animate({'height': oud}, 600);
         knop.removeAttr('data-vergroot-oud');
         knop.find('span.fa').removeClass('fa-compress').addClass('fa-expand');
         knop.attr('title', 'Uitklappen');
@@ -498,7 +497,7 @@ function form_ischanged(form) {
  * @see templates/instellingen/beheer/instelling_row.tpl
  * @param form
  */
-window.form_inline_toggle = function(form) {
+window.form_inline_toggle = form => {
     form.prev('.InlineFormToggle').toggle();
     form.toggle();
     form.children(':first').focus();
@@ -699,7 +698,7 @@ window.dom_update = function(htmlString) {
         else {
             let parentid = $(this).attr('parentid');
             if (parentid) {
-                $(this).prependTo('#' + parentid).show().effect('highlight');
+                $(this).prependTo(`#${parentid}`).show().effect('highlight');
             }
             else {
                 $(this).prependTo('#maalcie-tabel tbody:visible:first').show().effect('highlight'); //FIXME: make generic
@@ -730,11 +729,11 @@ function remove() {
  * @param onerror
  * @param onfinish
  */
-window.ajax_request = function(type, url, data, source, onsuccess, onerror, onfinish) {
+window.ajax_request = (type, url, data, source, onsuccess, onerror, onfinish) => {
     if (source) {
         if (!source.hasClass('noanim')) {
-            $(source).replaceWith('<img id="' + source.attr('id') + '" title="' + url + '" src="/images/loading-arrows.gif" />');
-            source = 'img[title="' + url + '"]';
+            $(source).replaceWith(`<img id="${source.attr('id')}" title="${url}" src="/images/loading-arrows.gif" />`);
+            source = `img[title="${url}"]`;
         }
         else if (source.hasClass('InlineForm')) {
             $(source).find('.FormElement:first').css({
@@ -827,140 +826,22 @@ window.ketzer_ajax = function(url, ketzer) {
  */
 window.peiling_bevestig_stem = function(peiling) {
     let id = $('input[name=optie]:checked', peiling).val();
-    let waarde = $('#label' + id).text();
+    let waarde = $(`#label${id}`).text();
     if (waarde.length > 0 && confirm('Bevestig uw stem:\n\n' + waarde + '\n\n')) {
         $(peiling).submit();
     }
 };
 
 /**
- * Selecteer de tekst van een DOM-element.
- * @source http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
- *
- * @see templates/fotoalbum/album.tpl
- * @param elmnt DOM-object
- */
-window.selectText = function(elmnt) {
-    let range, selection;
-    if (document.body.createTextRange) { //ms
-        range = document.body.createTextRange();
-        range.moveToElementText(elmnt);
-        range.select();
-    } else if (window.getSelection) { //all others
-        selection = window.getSelection();
-        range = document.createRange();
-        range.selectNodeContents(elmnt);
-        selection.removeAllRanges();
-        selection.addRange(range);
-    }
-};
-
-/**
- * @see templates/fotoalbum/album.tpl
- * @param path
- */
-window.dirname = function(path) {
-    //  discuss at: http://phpjs.org/functions/dirname/
-    // original by: Ozh
-    // improved by: XoraX (http://www.xorax.info)
-    //   example 1: dirname('/etc/passwd');
-    //   returns 1: '/etc'
-    //   example 2: dirname('c:/Temp/x');
-    //   returns 2: 'c:/Temp'
-    //   example 3: dirname('/dir/test/');
-    //   returns 3: '/dir'
-
-    return path.replace(/\\/g, '/')
-        .replace(/\/[^\/]*\/?$/, '');
-};
-
-/**
- * @see templates/fotoalbum/album.tpl
- * @param path
- * @param suffix
- * @returns {*}
- */
-window.basename = function(path, suffix) {
-    //  discuss at: http://phpjs.org/functions/basename/
-    // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    // improved by: Ash Searle (http://hexmen.com/blog/)
-    // improved by: Lincoln Ramsay
-    // improved by: djmix
-    // improved by: Dmitry Gorelenkov
-    //   example 1: basename('/www/site/home.htm', '.htm');
-    //   returns 1: 'home'
-    //   example 2: basename('ecra.php?p=1');
-    //   returns 2: 'ecra.php?p=1'
-    //   example 3: basename('/some/path/');
-    //   returns 3: 'path'
-    //   example 4: basename('/some/path_ext.ext/','.ext');
-    //   returns 4: 'path_ext'
-
-    let b = path;
-    let lastChar = b.charAt(b.length - 1);
-
-    if (lastChar === '/' || lastChar === '\\') {
-        b = b.slice(0, -1);
-    }
-
-    b = b.replace(/^.*[\/\\]/g, '');
-
-    if (typeof suffix === 'string' && b.substr(b.length - suffix.length) === suffix) {
-        b = b.substr(0, b.length - suffix.length);
-    }
-
-    return b;
-};
-
-/**
  * @see templates/courant/courantbeheer.tpl
  * @param id
  */
-window.importAgenda = function(id) {
+window.importAgenda = (id) => {
     let jqXHR = $.ajax({
         type: 'POST',
         cache: false,
         url: '/agenda/courant/',
         data: ''
     });
-    jqXHR.done(function (data, textStatus, jqXHR) {
-        document.getElementById(id).value += "\n" + data;
-    });
-};
-
-/**
- * @see templates/courant/courantbeheer.tpl
- * @see templates/forum/post_forum.tpl
- * @see templates/mededelingen/mededeling.tpl
- * @see templates/roodschopper/roodschopper.tpl
- * @see forum.js
- * @see view/formulier/invoervelden/BBCodeField.class.php
- * @param sourceId
- * @param targetId
- * @constructor
- */
-window.CsrBBPreview = function(sourceId, targetId) {
-    if (sourceId.charAt(0) !== '#') {
-        sourceId = '#' + sourceId;
-    }
-    if (targetId.charAt(0) !== '#') {
-        targetId = '#' + targetId;
-    }
-    let bbcode = $(sourceId).val();
-    if (typeof bbcode !== 'string' || bbcode.trim() === '') {
-        $(targetId).html('').hide();
-        return;
-    }
-    $.post('/tools/bbcode.php', {
-        data: encodeURIComponent(bbcode)
-    }).done(function (data, textStatus, jqXHR) {
-        if (targetId.charAt(0) !== '#') {
-            targetId = '#' + targetId;
-        }
-        $(targetId).html(data);
-        init_context($(targetId));
-        $(targetId).show();
-    }).fail(function (error) {
-        alert(error)
-    });
+    jqXHR.done(data => document.getElementById(id).value += '\n' + data);
 };

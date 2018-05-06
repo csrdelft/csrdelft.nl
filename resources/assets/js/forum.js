@@ -1,4 +1,5 @@
-const $ = require('jquery');
+import $ from 'jquery';
+import {CsrBBPreview} from "./bbcode";
 
 function toggleForumConceptBtn(enable) {
     let $concept = $('#forumConcept');
@@ -9,7 +10,7 @@ function toggleForumConceptBtn(enable) {
     }
 }
 
-window.saveConceptForumBericht = function() {
+window.saveConceptForumBericht = () => {
     toggleForumConceptBtn(false);
     let $concept = $('#forumConcept');
     let $textarea = $('#forumBericht');
@@ -50,18 +51,18 @@ window.forumBewerken = function(postId) {
     $.ajax({
         url: '/forum/tekst/' + postId,
         method: 'POST'
-    }).done(function(data) {
+    }).done((data) => {
         if (document.getElementById('forumEditForm')) {
-            restorePost();
+            window.restorePost();
         }
         bewerkContainer = document.getElementById('post' + postId);
         bewerkContainerInnerHTML = bewerkContainer.innerHTML;
-        let bewerkForm = '<form id="forumEditForm" class="Formulier" action="/forum/bewerken/' + postId + '" method="post">';
+        let bewerkForm = `<form id="forumEditForm" class="Formulier" action="/forum/bewerken/${postId}" method="post">`;
         bewerkForm += '<div id="bewerkPreview" class="preview forumBericht"></div>';
         bewerkForm += '<textarea name="forumBericht" id="forumBewerkBericht" class="FormElement BBCodeField" rows="8"></textarea>';
         bewerkForm += 'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />';
         bewerkForm += '<div class="float-right"><a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a></div>';
-        bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> <input type="button" value="Voorbeeld" onclick="CsrBBPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> <input type="button" value="Annuleren" onclick="restorePost();" />';
+        bewerkForm += '<input type="button" value="Opslaan" onclick="submitPost();" /> <input type="button" value="Voorbeeld" onclick="CsrBBPreview(\'forumBewerkBericht\', \'bewerkPreview\');" /> <input type="button" value="Annuleren" onclick="window.restorePost();" />';
         bewerkForm += '</form>';
         bewerkContainer.innerHTML = bewerkForm;
         let $forumBewerkBericht = $('#forumBewerkBericht');
@@ -79,7 +80,7 @@ function forumCiteren(postId) {
     $.ajax({
         url: '/forum/citeren/' + postId,
         method: 'POST'
-    }).done(function (data) {
+    }).done((data) => {
         let bericht = $('#forumBericht');
         bericht.val(bericht.val() + data);
         $(window).scrollTo('#reageren');
@@ -92,19 +93,17 @@ function forumCiteren(postId) {
 /**
  * Wordt in gegenereerde code gebruikt.
  */
-window.submitPost = function() {
+window.submitPost = () => {
     let form = $('#forumEditForm');
     $.ajax({
         type: 'POST',
         cache: false,
         url: form.attr('action'),
         data: form.serialize()
-    }).done(function (data) {
-        restorePost();
-        dom_update(data);
-    }).fail(function (jqXHR) {
-        alert(jqXHR.responseJSON);
-    });
+    }).done((data) => {
+        window.restorePost();
+        window.dom_update(data);
+    }).fail(jqXHR => alert(jqXHR.responseJSON));
 };
 
 $(document).ready(function ($) {
@@ -113,14 +112,12 @@ $(document).ready(function ($) {
     let $concept = $('#forumConcept');
 
     if ($concept.length === 1) {
-        let updateReageren = function () {
+
+        /*var ping = */setInterval(() => {
             $.post($concept.attr('data-url'), {
                 ping: ($textarea.val() !== $textarea.attr('origvalue'))
-            }).done(dom_update).fail(function(error) {
-                alert(error);
-            });
-        };
-        /*var ping = */setInterval(updateReageren, 60000);
+            }).done(dom_update).fail(error => alert(error));
+        }, 60000);
         /*var autosave;
          $textarea.focusin(function () {
          autosave = setInterval(saveConceptForumBericht, 3000);
@@ -136,7 +133,7 @@ $(document).ready(function ($) {
         window.location.hash = '#' + reactieid;
     }
 
-    $textarea.keyup(function (event) {
+    $textarea.keyup((event) => {
         if (event.keyCode === 13) { // enter
             CsrBBPreview('forumBericht', 'berichtPreview');
         }
@@ -145,12 +142,9 @@ $(document).ready(function ($) {
     let $nieuweTitel = $('#nieuweTitel');
 
     if ($nieuweTitel.length !== 0) {
-        $nieuweTitel.focusin(function () {
-            $('#draad-melding').slideDown(200);
-        });
-        $nieuweTitel.focusout(function () {
-            $('#draad-melding').slideUp(200);
-        });
+        let $draadMelding = $('#draad-melding');
+        $nieuweTitel.focusin(() => $draadMelding.slideDown(200));
+        $nieuweTitel.focusout(() => $draadMelding.slideUp(200));
     }
 
     $('.togglePasfoto').each(function () {

@@ -40,58 +40,41 @@ require('./lib/dataTables.columnGroup');
  * @param {number} num
  * @returns {boolean}
  */
-const evaluateMultiplicity = function (expression, num) {
+const evaluateMultiplicity = (expression, num) => {
     // Altijd laten zien bij geen expressie
-    if (expression.length === 0) return true;
-    let operator_num = expression.split(' ');
-    let expression_operator = operator_num[0];
-    let expression_num = parseInt(operator_num[1]);
-    let operatorToFunction = {
-        '==': function (a, b) {
-            return a === b;
-        },
-        '!=': function (a, b) {
-            return a !== b;
-        },
-        '>=': function (a, b) {
-            return a >= b;
-        },
-        '>': function (a, b) {
-            return a > b;
-        },
-        '<=': function (a, b) {
-            return a <= b;
-        },
-        '<': function (a, b) {
-            return a < b;
-        }
+    if (expression.length === 0){
+        return true;
+    }
+
+    let operator_num = expression.split(' '),
+        expression_operator = operator_num[0],
+        expression_num = parseInt(operator_num[1]),
+        operatorToFunction = {
+        '==': (a, b) => a === b,
+        '!=': (a, b) => a !== b,
+        '>=': (a, b) => a >= b,
+        '>': (a, b) => a > b,
+        '<=': (a, b) => a <= b,
+        '<': (a, b) => a < b
     };
 
     return operatorToFunction[expression_operator](num, expression_num);
 };
 
-/**
- * Called after row addition and row data update.
- *
- * @param tr
- * @param data
- */
-const fnCreatedRowCallback = function (tr, data) {
-    let table = this;
-    $(tr).attr('data-uuid', data.UUID);
-    init_context(tr);
-
-    $(tr).children().each(function (columnIndex, td) {
-        // Init custom buttons in rows
-        $(td).children('a.post').each(function (i, a) {
-            $(a).attr('data-tableid', table.attr('id'));
-        });
-    });
-};
-
 $.extend(true, $.fn.dataTable.defaults, {
     deferRender: true,
-    createdRow: fnCreatedRowCallback,
+    createdRow(tr, data) {
+        let table = this;
+        $(tr).attr('data-uuid', data.UUID);
+        window.init_context(tr);
+
+        $(tr).children().each((columnIndex, td) => {
+            // Init custom buttons in rows
+            $(td).children('a.post').each((i, a) => {
+                $(a).attr('data-tableid', table.attr('id'));
+            });
+        });
+    },
     lengthMenu: [
         [10, 25, 50, 100, -1],
         [10, 25, 50, 100, 'Alles']
@@ -146,7 +129,7 @@ $.fn.dataTable.ext.buttons.print.className += ' dt-button-ico dt-ico-printer';
 
 // Laat een modal zien, of doe een ajax call gebasseerd op selectie.
 $.fn.dataTable.ext.buttons.default = {
-    init: function (dt, node, config) {
+    init(dt, node, config) {
         let that = this;
         let toggle = function () {
             that.enable(
@@ -164,7 +147,7 @@ $.fn.dataTable.ext.buttons.default = {
         // Dit wordt alleen geprobeerd als dit voorkomt
         if (config.href.indexOf(':') !== -1) {
             let replacements = /:(\w+)/g.exec(config.href);
-            dt.on('select.dt.DT', function (e, dt, type, indexes) {
+            dt.on('select.dt.DT', (e, dt, type, indexes) => {
                 if (indexes.length === 1) {
                     let newHref = config.href;
                     let row = dt.row(indexes).data();
@@ -175,29 +158,29 @@ $.fn.dataTable.ext.buttons.default = {
 
                     node.attr('href', newHref)
                 }
-            })
+            });
         }
 
         // Settings voor knop_ajax
         node.attr('href', config.href);
         node.attr('data-tableid', dt.context[0].sTableId);
     },
-    action: function (e, dt, button) {
-        knop_post.call(button, e)
+    action(e, dt, button) {
+        knop_post.call(button, e);
     },
     className: 'post DataTableResponse'
 };
 
 $.fn.dataTable.ext.buttons.popup = {
     extend: 'default',
-    action: function (e, dt, button) {
+    action(e, dt, button) {
         window.open(button.attr('href'));
     }
 };
 
 $.fn.dataTable.ext.buttons.url = {
     extend: 'default',
-    action: function (e, dt, button) {
+    action(e, dt, button) {
         window.location.href = button.attr('href');
     }
 };
@@ -206,7 +189,7 @@ $.fn.dataTable.ext.buttons.url = {
 // De knop is ingedrukt als de bron van de datatable
 // gelijk is aan de bron van de knop.
 $.fn.dataTable.ext.buttons.sourceChange = {
-    init: function (dt, node, config) {
+    init(dt, node, config) {
         let enable = function () {
             dt.buttons(node).active(dt.ajax.url() === config.href);
         };
@@ -214,7 +197,7 @@ $.fn.dataTable.ext.buttons.sourceChange = {
 
         enable();
     },
-    action: function (e, dt, button, config) {
+    action(e, dt, button, config) {
         dt.ajax.url(config.href).load();
     }
 };
@@ -223,7 +206,7 @@ $.fn.dataTable.ext.buttons.confirm = {
     extend: 'collection',
     init: function (dt, node, config) {
         let that = this;
-        let toggle = function () {
+        let toggle = () => {
             that.enable(
                 evaluateMultiplicity(
                     config.multiplicity,
@@ -241,10 +224,8 @@ $.fn.dataTable.ext.buttons.confirm = {
             buttons: [
                 {
                     extend: 'default',
-                    text: function (dt) {
-                        return dt.i18n('csr.zeker', 'Are you sure?');
-                    },
-                    action: action,
+                    text: dt => dt.i18n('csr.zeker', 'Are you sure?'),
+                    action,
                     multiplicity: '', // altijd mogelijk
                     className: 'dt-button-ico dt-ico-exclamation dt-button-warning',
                     href: config.href
@@ -257,40 +238,38 @@ $.fn.dataTable.ext.buttons.confirm = {
         // Reset action to extend one.
         config.action = $.fn.dataTable.ext.buttons.collection.action;
     },
-    action: function (e, dt, button) {
+    action(e, dt, button) {
         knop_post.call(button, e)
     }
 };
 
 $.fn.dataTable.ext.buttons.defaultCollection = {
     extend: 'collection',
-    init: function (dt, node, config) {
+    init(dt, node, config) {
         $.fn.dataTable.ext.buttons.default.init.call(this, dt, node, config);
     }
 };
 
-$.fn.dataTable.render.bedrag = function (data) {
-    return '€' + (data / 100).toFixed(2);
-};
+$.fn.dataTable.render.bedrag = (data) => '€' + (data / 100).toFixed(2);
 
-$.fn.dataTable.render.check = function (data) {
+$.fn.dataTable.render.check = (data) => {
     return '<span class="ico ' + (data ? 'tick' : 'cross') + '"></span>';
 };
 
-$.fn.dataTable.render.aanmeldFilter = function (data) {
-    return data ? '<span class="ico group_key" title="Aanmeld filter actief: \'' + data + '\'"></span>' : '';
+$.fn.dataTable.render.aanmeldFilter = data => {
+    return data ? `<span class="ico group_key" title="Aanmeld filter actief: '${data}'"></span>` : '';
 };
 
-$.fn.dataTable.render.aanmeldingen = function (data, type, row) {
+$.fn.dataTable.render.aanmeldingen = (data, type, row) => {
     return row.aantal_aanmeldingen + ' (' + row.aanmeld_limiet + ')';
 };
 
-$.fn.dataTable.render.totaalPrijs = function (data, type, row) {
+$.fn.dataTable.render.totaalPrijs = (data, type, row) => {
     return $.fn.dataTable.render.bedrag(row.aantal_aanmeldingen * parseInt(row.prijs));
 };
 
 $(document).ready(function () {
-    $('body').on('click', function () {
+    $('body').on('click', () => {
         // Verwijder tooltips als de datatable modal wordt gesloten
         $(".ui-tooltip-content").parents('div').remove();
     });
@@ -309,7 +288,7 @@ window.fnAutoScroll = function(tableId) {
         // autoscroll if already on bottom
         if ($scroll.scrollTop() + $scroll.innerHeight() >= $scroll[0].scrollHeight - 20) {
             // check before draw and scroll after
-            window.setTimeout(function () {
+            window.setTimeout(() => {
                 $scroll.animate({
                     scrollTop: $scroll[0].scrollHeight
                 }, 800);
@@ -328,7 +307,7 @@ window.fnUpdateDataTable = function(tableId, response) {
     let $table = $(tableId);
     let table = $table.DataTable();
     // update or remove existing rows or add new rows
-    response.data.forEach(function (row) {
+    response.data.forEach((row) => {
         let $tr = $('tr[data-uuid="' + row.UUID + '"]');
         if ($tr.length === 1) {
             if ('remove' in row) {

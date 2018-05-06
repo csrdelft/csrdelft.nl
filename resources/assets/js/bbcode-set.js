@@ -9,7 +9,7 @@
 // ----------------------------------------------------------------------------
 // Feel free to add more tags
 // ----------------------------------------------------------------------------
-module.exports = CsrBBcodeMarkItUpSet = {
+export default {
     nameSpace: 'CsrBB',
     previewParserPath: '/tools/bbcode.php', // path to your BBCode parser
     markupSet: [
@@ -24,9 +24,9 @@ module.exports = CsrBBcodeMarkItUpSet = {
         {className: 'btn-link', name: 'Link', key: 'L', openWith: '[url=[![Url]!]]', closeWith: '[/url]', placeHolder: 'Link tekst'},
         {className: 'btn-mail', name: 'Email', key: 'E', openWith: '[email=[![Email adres]!]]', closeWith: '[/email]', placeHolder: 'Link tekst'},
         {separator: '|'},
-        {className: 'btn-album', name: 'Fotoalbum', replaceWith: function (markitup) {
-                var url = decodeURIComponent(window.prompt('Url', '').trim());
-                var pos = url.indexOf('/fotoalbum/');
+        {className: 'btn-album', name: 'Fotoalbum', replaceWith: (markitup) => {
+                let url = decodeURIComponent(window.prompt('Url', '').trim());
+                let pos = url.indexOf('/fotoalbum/');
                 if (pos > 0) {
                     url = url.substring(pos + 10);
                     return '[fotoalbum]' + url + '[/fotoalbum]';
@@ -34,9 +34,9 @@ module.exports = CsrBBcodeMarkItUpSet = {
                 alert('Ongeldige url!');
                 return markitup.selection;
             }},
-        {className: 'btn-foto', name: 'Poster of foto uit album', replaceWith: function (markitup) {
-                var url = decodeURIComponent(window.prompt('Url', '').trim());
-                var pos = url.indexOf('/fotoalbum/');
+        {className: 'btn-foto', name: 'Poster of foto uit album', replaceWith: (markitup) => {
+                let url = decodeURIComponent(window.prompt('Url', '').trim());
+                let pos = url.indexOf('/fotoalbum/');
                 if (pos > 0) {
                     url = url.substring(pos + 10).replace('_resized/', '').replace('_thumbs/', '').replace('#', '');
                     return '[foto]' + url + '[/foto]';
@@ -67,9 +67,7 @@ module.exports = CsrBBcodeMarkItUpSet = {
         {className: 'btn-code', name: 'Code', openWith: '[code]', closeWith: '[/code]'},
         {className: 'btn-off', name: 'Opmaakcode tonen', openWith: '[tekst]', closeWith: '[/tekst]'},
         {separator: '|'},
-        {className: 'btn-clean', name: 'Opmaak wissen', replaceWith: function (markitup) {
-                return markitup.selection.replace(/\[(.*?)\]/g, '');
-            }}
+        {className: 'btn-clean', name: 'Opmaak wissen', replaceWith: (markitup) => markitup.selection.replace(/\[(.*?)\]/g, '')}
         //{className: 'btn-preview', name: 'Voorbeeld', call: 'preview'}
     ]
 };
