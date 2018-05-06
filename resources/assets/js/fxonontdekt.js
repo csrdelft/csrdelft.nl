@@ -1,0 +1,1 @@
+window.Parallax = require('parallax-js');

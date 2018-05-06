@@ -1,0 +1,78 @@
+/*!
+ * flip.less
+ */
+
+.flip {
+	box-shadow: none;
+	perspective: 600px;
+	-webkit-perspective: 600px;
+	-moz-perspective: 600px;
+
+	.front {
+		float: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: inherit;
+		height: inherit;
+
+		transform-style: preserve-3d;
+		backface-visibility: hidden;
+
+		-webkit-transform-style: preserve-3d;
+		-webkit-backface-visibility: hidden;
+
+		-moz-transform-style: preserve-3d;
+		-moz-backface-visibility: hidden;
+
+		transition: all .4s ease-in-out;
+		-o-transition: all .4s ease-in-out;
+		-ms-transition: all .4s ease-in-out;
+		-moz-transition: all .4s ease-in-out;
+		-webkit-transition: all .4s ease-in-out;
+
+		transform: rotateX(0deg);
+		-webkit-transform: rotateX(0deg);
+		-moz-transform: rotateX(0deg);
+	}
+	.back {
+		float: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: inherit;
+		height: inherit;
+
+		transform-style: preserve-3d;
+		backface-visibility: hidden;
+
+		-webkit-transform-style: preserve-3d;
+		-webkit-backface-visibility: hidden;
+
+		-moz-transform-style: preserve-3d;
+		-moz-backface-visibility: hidden;
+
+		transition: all .4s ease-in-out;
+		-o-transition: all .4s ease-in-out;
+		-ms-transition: all .4s ease-in-out;
+		-moz-transition: all .4s ease-in-out;
+		-webkit-transition: all .4s ease-in-out;
+
+		transform: rotateX(-180deg);
+		-webkit-transform: rotateX(-180deg);
+		-moz-transform: rotateX(-180deg);
+	}
+}
+
+.flipped, .fliphover:hover {
+	.front {
+		transform: rotateX(180deg);
+		-webkit-transform: rotateX(180deg);
+		-moz-transform: rotateX(180deg);
+	}
+	.back {
+		transform: rotateY(0deg);
+		-webkit-transform: rotateY(0deg);
+		-moz-transform: rotateY(0deg);
+	}
+}

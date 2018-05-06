@@ -1,0 +1,222 @@
+@import "~raty-js/lib/jquery.raty";
+@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon";
+@import "../lib/markitup.css";
+@import "../markitup-icons";
+@import "../knoppen";
+
+input, optgroup, select, textarea {
+  color: #000;
+  background-color: #fff;
+}
+input, textarea, select {
+  border: 1px solid #A9A9A9;
+}
+input[type="file"] {
+  background-color: transparent;
+  border: none;
+}
+input[type="radio"] {
+  vertical-align: middle;
+}
+label, select, select option {
+  font-weight: normal;
+}
+select optgroup {
+  font-weight: bold;
+}
+
+textarea.breed, input.breed, select.breed {
+  width: 100%;
+}
+
+h1.Titel {
+  margin: 10px 0 30px 0;
+}
+
+/** FORMULIER **************************************************************/
+
+.Formulier {
+  .ui-tabs {
+
+    .ui-tabs-panel {
+      padding: 0;
+    }
+  }
+  .ui-tabs-vertical {
+    padding: 0;
+
+    .ui-tabs-nav {
+      float: left;
+      width: 20%;
+      padding: 2px 0 4px 3px;
+
+      li {
+        clear: left;
+        width: 100%;
+
+        a {
+          display: block;
+          width: 100%;
+        }
+      }
+      li.ui-tabs-active {
+
+      }
+    }
+    .ui-tabs-panel {
+      float: right;
+      width: 80%;
+      padding: 2em !important;
+    }
+  }
+  input, textarea, select {
+    padding: 0.3em 0.5em;
+  }
+  select {
+    padding: 0.4em 0.5em;
+  }
+  input[type="number"] {
+    padding: 0.1em .5em;
+  }
+  .readonly {
+    border: none;
+    cursor: default;
+  }
+  label, div {
+    line-height: 2em;
+  }
+  label {
+    padding-left: 5px;
+    float: left;
+    width: 35%;
+    vertical-align: middle;
+    cursor: default;
+  }
+  label .required {
+    color: red;
+  }
+  label .help {
+    position: absolute;
+    margin: 5px 0 0 -25px;
+  }
+  .BBCodeField {
+    height: 225px;
+    max-width: 578px;
+    border: none;
+    padding: 5px;
+    resize: none;
+  }
+  textarea {
+    width: 100%;
+    line-height: 1.25em;
+  }
+  input[type="text"], input[type="password"] {
+    width: 16em;
+    line-height: 1.5em;
+  }
+  .AutoSize {
+    resize: none;
+  }
+  .CsrBB {
+    clear: left;
+  }
+  .FormKnoppen {
+    clear: left;
+    margin-top: 25px;
+  }
+  .GroepAanmeldKnoppen {
+    margin: 0;
+  }
+  .InputField, h3, .WachtwoordField {
+    clear: both;
+  }
+  .InputField {
+    border: 1px solid transparent;
+  }
+  .InputField:hover {
+    border: 1px solid #ddd;
+    background-color: #eee;
+  }
+  .CheckboxField {
+    margin: 4px 0 0 4px;
+  }
+  .CheckboxFieldLabel, .KeuzeRondjeLabel {
+    float: none;
+    width: auto;
+  }
+  .KeuzeRondjeLabel {
+    margin-top: 1em;
+    margin-right: 1em;
+  }
+  .KeuzeRondjeOptions {
+    display: inline-block;
+  }
+  .KeuzeRondjeOptions.breed {
+    width: 100%;
+  }
+  .KeuzeRondjeOptions.columns-2 {
+    -webkit-columns: auto 2;
+    -moz-columns: auto 2;
+    columns: auto 2;
+  }
+  .previewDiv {
+    display: inline-block;
+    margin-left: 10px;
+  }
+  .CsrBBPreview {
+    float: left;
+    clear: both;
+    width: 100%;
+  }
+  input.UidField {
+    width: 4em;
+  }
+  .lidPreview {
+    float: right;
+  }
+  input.LidField, input.RequiredLidField {
+    width: 10em;
+  }
+  input.IntField, input.FloatField, input.BedragField, input.RequiredIntField, input.RequiredFloatField, input.RequiredBedragField {
+    width: 5em;
+    text-align: right;
+  }
+  .metFouten {
+    display: block !important;
+    background-color: #FFC3CE;
+    padding: 4px 2px;
+  }
+  .InputField .waarschuwing {
+    float: right;
+    margin-right: 10px;
+  }
+  .password {
+    padding: 2px 1px;
+  }
+
+  .CollapsableSubkopje {
+    padding-left: 10px;
+  }
+  .CollapsableSubkopje:hover {
+    font-weight: bold;
+  }
+
+}
+
+/* Inline Formulier */
+.InlineForm {
+
+  input[type="text"] {
+    width: auto;
+  }
+
+  .InlineFormToggle {
+    border-bottom: 1px dotted grey;
+    width: 100%;
+    min-height: 1em;
+    cursor: url("../../images/edit.png"), text;
+  }
+  .InlineForm.ToggleForm {
+    display: none;
+  }
+}

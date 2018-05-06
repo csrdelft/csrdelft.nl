@@ -34,34 +34,14 @@ abstract class CompressedLayout extends HtmlPage {
 	public function __construct($layout, View $body, $titel) {
 		parent::__construct($body, $titel);
 		$this->layout = $layout;
+
+		foreach ($this->getUserModules('general', 'css') as $module) {
+		    parent::addStylesheet('/dist/css/' . $module . '.css');
+        }
 	}
 
 	protected function getLayout() {
 		return $this->layout;
-	}
-
-	/**
-	 * Controleer de cache.
-	 *
-	 * @param $layout
-	 * @param $module
-	 * @param $extension
-	 *
-	 * @param array $modules Dependencies
-	 *
-	 * @return string Hash voor de timestamp van de laatste cache.
-	 */
-	public function cacheHash($layout, $module, $extension, $modules = []) {
-		$driver = new FileSystemDriver(['path' => DATA_PATH . 'assets/']);
-		$cachePool = new CachePool($driver);
-		$item = $cachePool->getItem(sprintf('/%s/%s/%s/%s', $extension, $layout, $module, hash('crc32', implode('', $modules))));
-
-		if ($item->isHit()) {
-			return hash('crc32', $item->getCreation()->format('U'));
-		} else {
-			// Er bestaat geen cache, alleen nadat cache geleegd is.
-			return hash('crc32', date('U'));
-		}
 	}
 
 	/**
@@ -70,23 +50,8 @@ abstract class CompressedLayout extends HtmlPage {
 	 * @param string $module
 	 */
 	public function addCompressedResources($module) {
-		$cssModules = static::getUserModules($module, 'css');
-		$sheet = sprintf('/styles/%s/%s/%s/%s.css',
-			$this->cacheHash($this->getLayout(), $module, 'css', $cssModules),
-			hash('crc32', 'a' . implode('', $cssModules)),
-			$this->getLayout(),
-			$module
-		);
+		$sheet = sprintf('/dist/css/module/%s.css', $module);
 		parent::addStylesheet($sheet, true);
-
-		$jsModules = static::getUserModules($module, 'js');
-		$script = sprintf('/scripts/%s/%s/%s/%s.js',
-			$this->cacheHash($this->getLayout(), $module, 'js', $jsModules),
-			hash('crc32', 'a' . implode('', $jsModules)),
-			$this->getLayout(),
-			$module
-		);
-		parent::addScript($script, true);
 	}
 
 	/**
@@ -98,7 +63,7 @@ abstract class CompressedLayout extends HtmlPage {
 	 *
 	 * @return array
 	 */
-	public static function getUserModules($module, $extension) {
+	private function getUserModules($module, $extension) {
 		$modules = array();
 
 		if ($module == 'front-page') {
@@ -106,35 +71,28 @@ abstract class CompressedLayout extends HtmlPage {
 		} elseif ($module == 'general') {
 			// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
 			$modules[] = 'general';
-			$modules[] = 'formulier';
-			$modules[] = 'datatable';
-			$modules[] = 'grafiek';
+			$modules[] = 'module/formulier';
+			$modules[] = 'module/datatable';
 
 			if ($extension == 'css') {
 				//voeg modules toe afhankelijk van instelling
-				$modules[] = LidInstellingenModel::get('layout', 'opmaak');
+				$modules[] = 'opmaak/' . LidInstellingenModel::get('layout', 'opmaak');
 
 				if (LidInstellingenModel::get('layout', 'toegankelijk') == 'bredere letters') {
 					$modules[] = 'bredeletters';
 				}
 				if (LidInstellingenModel::get('layout', 'fx') == 'sneeuw') {
-					$modules[] = 'fxsnow';
+					$modules[] = 'effect/snow';
 				} elseif (LidInstellingenModel::get('layout', 'fx') == 'space') {
-					$modules[] = 'fxspace';
-				}
-			} elseif ($extension == 'js') {
-				if (LidInstellingenModel::get('layout', 'fx') == 'wolken') {
-					$modules[] = 'fxclouds';
+					$modules[] = 'effect/space';
 				}
 			}
 
 			if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
-				$modules[] = 'minion';
+				$modules[] = 'effect/minion';
 			}
 			if (LidInstellingenModel::get('layout', 'fx') == 'onontdekt') {
-				$modules[] = 'fxonontdekt';
-			} elseif (LidInstellingenModel::get('layout', 'fx') == 'civisaldo') {
-				$modules[] = 'fxcivisaldo';
+				$modules[] = 'effect/onontdekt';
 			}
 		} else {
 			// een niet-algemene module gevraagd

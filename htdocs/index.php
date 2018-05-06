@@ -30,7 +30,6 @@ switch ($class) {
     case 'FotoAlbum':
     case 'Agenda':
     case 'Mededelingen':
-    case 'Assets':
         break;
 
     // de rest alleen voor ingelogde gebruikers:

@@ -1,0 +1,191 @@
+/* --------------------------------
+
+Externe links & Knoppen
+
+-------------------------------- */
+
+a[href^="http://"], a[href^="https://"] {
+  padding-right: 16px;
+  background: url("../images/external-link-blue.png") no-repeat center right;
+}
+a[href^="mailto:"] {
+  padding-right: 16px;
+  background: url("../images/email-link-blue.png") no-repeat center right;
+}
+a.lichtgrijs {
+  padding: 0;
+  background: none;
+}
+/* Typeahead */
+a.suggestionUrl, a.suggestionUrl:hover {
+  text-decoration: none;
+  color: inherit;
+}
+a.suggestionUrl img.icon {
+  position: absolute;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+}
+
+a:hover { text-decoration: underline; }
+a, a.btn, a.btn:hover { text-decoration: none; }
+
+.btn, input[type=submit], input[type=button], .progress-bar-info,
+.btn:focus, input[type=submit]:focus, input[type=button]:focus {
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 1em;
+  line-height: 1em;
+  text-decoration: none;
+  font-weight: bold;
+  color: #fff;
+  border: 1px solid #224baf;
+  text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+  background-color: #3262D7;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#3262D7), to(#23538A));
+  background-image: -webkit-linear-gradient(top, #3262D7, #23538A);
+  background-image: -moz-linear-gradient(top, #3262D7, #23538A);
+  background-image: -ms-linear-gradient(top, #3262D7, #23538A);
+  background-image: -o-linear-gradient(top, #3262D7, #23538A);
+  background-image: linear-gradient(to bottom, #3262D7, #23538A);
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#3262D7, endColorstr=#23538A);
+}
+.progress-bar-info {
+  cursor: default;
+}
+
+.btn:hover, input[type=submit]:hover, input[type=button]:hover {
+  color: #fff;
+  border: 1px solid #1b3b88;
+  background-color: #234db3;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#234db3), to(#193b61));
+  background-image: -webkit-linear-gradient(top, #234db3, #193b61);
+  background-image: -moz-linear-gradient(top, #234db3, #193b61);
+  background-image: -ms-linear-gradient(top, #234db3, #193b61);
+  background-image: -o-linear-gradient(top, #234db3, #193b61);
+  background-image: linear-gradient(to bottom, #234db3, #193b61);
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#234db3, endColorstr=#193b61);
+}
+
+.icon {
+  vertical-align: text-bottom;
+}
+.module-icon {
+  color: black;
+  font-size: 1.7em;
+  opacity: 0.2;
+}
+.module-icon:hover {
+  opacity: 0.5;
+}
+input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner {
+  padding: 0;
+  border: 0
+}
+
+.btn.disabled, button:disabled, input[type=button]:disabled {
+  color: #D3D3D3;
+  border: 1px solid #D3D3D3 !important;
+  cursor: default;
+}
+.disabled img {
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+}
+
+/* --------------------------------
+
+DataTable knoppen
+
+-------------------------------- */
+.dataTables_wrapper {
+
+  .DTTT_button .ico {
+    margin: 1px 2px 2px 0;
+  }
+
+  .DTTT_button, .DTTT_button:hover, .DTTT_button:focus {
+    background-color: white;
+    background-repeat: no-repeat;
+    background-position: 8px;
+    padding: 5px 10px 5px 30px;
+    line-height: 1.5em;
+    font-size: 1em;
+    font-weight: normal;
+    text-shadow: none;
+    box-shadow: none;
+    vertical-align: middle;
+  }
+  .DTTT_button_text, .DTTT_button_text:hover, .DTTT_button_text:focus {
+    padding-left: 10px;
+    background: none;
+    background-color: white;
+  }
+  .DTTT_button_show, .DTTT_button_show:hover, .DTTT_button_show:focus {
+    background-image: url("/plaetjes/famfamfam/eye.png");
+  }
+  .DTTT_button_timeline, .DTTT_button_timeline:hover, .DTTT_button_timeline:focus {
+    background-image: url("/plaetjes/famfamfam/timeline_marker.png");
+  }
+  .DTTT_button_lightning, .DTTT_button_lightning:hover, .DTTT_button_lightning:focus {
+    background-image: url("/plaetjes/famfamfam/lightning.png");
+  }
+  .DTTT_button_log, .DTTT_button_log:hover, .DTTT_button_log:focus {
+    background-image: url("/plaetjes/famfamfam/report.png");
+  }
+  .DTTT_button_key, .DTTT_button_key:hover, .DTTT_button_key:focus {
+    background-image: url("/plaetjes/famfamfam/key.png");
+  }
+  .DTTT_button_key_add, .DTTT_button_key_add:hover, .DTTT_button_key_add:focus {
+    background-image: url("/plaetjes/famfamfam/key_add.png");
+  }
+  .DTTT_button_key_edit, .DTTT_button_key_edit:hover, .DTTT_button_key_edit:focus {
+    background-image: url("/plaetjes/famfamfam/textfield_key.png");
+  }
+  .DTTT_button_key_delete, .DTTT_button_key_delete:hover, .DTTT_button_key_delete:focus {
+    background-image: url("/plaetjes/famfamfam/key_delete.png");
+  }
+  .DTTT_button_email_add, .DTTT_button_email_add:hover, .DTTT_button_email_add:focus {
+    background-image: url("/plaetjes/famfamfam/email_add.png");
+  }
+  .DTTT_button_user_add, .DTTT_button_user_add:hover, .DTTT_button_user_add:focus {
+    background-image: url("/plaetjes/famfamfam/user_add.png");
+  }
+  .DTTT_button_user_edit, .DTTT_button_user_edit:hover, .DTTT_button_user_edit:focus {
+    background-image: url("/plaetjes/famfamfam/user_edit.png");
+  }
+  .DTTT_button_user_delete, .DTTT_button_user_delete:hover, .DTTT_button_user_delete:focus {
+    background-image: url("/plaetjes/famfamfam/user_delete.png");
+  }
+  .DTTT_button_add, .DTTT_button_add:hover, .DTTT_button_add:focus {
+    background-image: url("/plaetjes/famfamfam/add.png");
+  }
+  .DTTT_button_edit, .DTTT_button_edit:hover, .DTTT_button_edit:focus {
+    background-image: url("/plaetjes/famfamfam/pencil.png");
+  }
+  .DTTT_button_delete, .DTTT_button_delete:hover, .DTTT_button_delete:focus {
+    background-image: url("/plaetjes/famfamfam/cross.png");
+  }
+  .DTTT_button_remove, .DTTT_button_remove:hover, .DTTT_button_remove:focus {
+    background-image: url("/plaetjes/famfamfam/bin_closed.png");
+  }
+  .DTTT_button_lock, .DTTT_button_lock:hover, .DTTT_button_lock:focus {
+    background-image: url("/plaetjes/famfamfam/lock.png");
+  }
+  .DTTT_button_copy, .DTTT_button_copy:hover, .DTTT_button_copy:focus {
+    background-image: url("/plaetjes/famfamfam/page_white_copy.png");
+  }
+  .DTTT_button_csv, .DTTT_button_csv:hover, .DTTT_button_csv:focus {
+    background-image: url("/plaetjes/famfamfam/pilcrow.png");
+  }
+  .DTTT_button_xls, .DTTT_button_xls:hover, .DTTT_button_xls:focus {
+    background-image: url("/plaetjes/famfamfam/page_white_excel.png");
+  }
+  .DTTT_button_pdf, .DTTT_button_pdf:hover, .DTTT_button_pdf:focus {
+    background-image: url("/plaetjes/famfamfam/page_white_acrobat.png");
+  }
+  .DTTT_button_print, .DTTT_button_print:hover, .DTTT_button_print:focus {
+    background-image: url("/plaetjes/famfamfam/printer.png");
+  }
+}

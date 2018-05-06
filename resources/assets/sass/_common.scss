@@ -1,0 +1,432 @@
+.dropdown-menu {
+  cursor: default;
+  z-index: 9999999;
+}
+
+/* --------------------------------
+
+Bootstrap submenu
+
+-------------------------------- */
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+}
+
+.dropdown-submenu:hover > .dropdown-menu {
+  display: block;
+}
+
+.dropdown-submenu > a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #999;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+
+/* --------------------------------
+
+Fonts
+
+-------------------------------- */
+
+@font-face {
+  font-family: "Source Sans Pro Light";
+  font-weight: 300;
+  font-style: normal;
+  src: local("Source Sans Pro Light"),
+  url("../fonts/SourceSansPro-Light.ttf") format("truetype");
+}
+
+/* --------------------------------
+
+Primary style
+
+-------------------------------- */
+html * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  border-collapse: collapse;
+}
+
+html {
+  font-family: "Source Sans Pro Light", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+}
+
+body {
+  color: #000;
+  background-color: #fff;
+}
+
+.cd-page-top {
+  position: absolute;
+  top: 25px;
+  left: 185px;
+}
+
+.cd-page-content {
+  min-width: 640px;
+  margin-left: 179px;
+  padding-top: 75px;
+}
+
+@media only screen and (min-width: 960px) {
+  .cd-page-content {
+    margin-left: 225px;
+    padding-right: 50px;
+  }
+  .cd-page-top {
+    left: 225px;
+  }
+}
+
+.cd-footer {
+  /*
+  height: 400px;
+  background-color: #555;
+  color: #fff;
+  */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Source Sans Pro Light", Helvetica, Arial, sans-serif;
+  text-align: left;
+}
+
+.pre {
+  display: block;
+  unicode-bidi: embed;
+  font-family: monospace;
+  white-space: pre;
+}
+
+.scrollpane {
+  overflow: auto;
+}
+
+.float-none {
+  float: none;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.clear {
+  clear: both;
+}
+
+.clear-left {
+  clear: left;
+}
+
+.clear-right {
+  clear: right;
+}
+
+.block {
+  display: block;
+}
+
+.inline {
+  display: inline;
+}
+
+div.inline, form.inline, h1.inline, h2.inline, h3.inline, h4.inline, h5.inline, h6.inline {
+  display: inline-block;
+}
+
+table.inline {
+  display: inline-table;
+}
+
+.small {
+  font-size: smaller;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-bottom {
+  vertical-align: bottom;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.select-text {
+  -webkit-touch-callout: text;
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* --------------------------------
+
+Easy positioning: use these within a
+position: relative element
+-------------------------------- */
+.top-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.bottom-left {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.bottom-right {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.onzichtbaar {
+  visibility: hidden;
+}
+
+.verborgen {
+  display: none;
+}
+
+.recht {
+  font-style: normal;
+}
+
+.cursief {
+  font-style: italic;
+}
+
+.dikgedrukt {
+  font-weight: bold;
+}
+
+.niet-dik {
+  font-weight: normal;
+}
+
+.onderstreept {
+  text-decoration: underline;
+}
+
+.doorgestreept {
+  text-decoration: line-through;
+}
+
+.lichtgrijs {
+  color: #bbb;
+}
+
+.staatrood {
+  color: red;
+}
+
+.error {
+  color: red !important;
+  font-weight: bold !important;
+}
+
+.badge.badge-red {
+  color: #fff;
+  background-color: #d9534f;
+}
+
+.progress {
+  margin: 0;
+}
+
+.neus2013 {
+  text-align: center;
+  color: transparent;
+  width: 16px;
+  height: 16px;
+  margin: -5px;
+}
+
+/* --------------------------------
+
+Dynamic reldate
+
+-------------------------------- */
+abbr.timeago {
+  border: none;
+}
+
+abbr.timeago:hover {
+  border-bottom: 1px dotted grey;
+}
+
+/* --------------------------------
+
+Group expand/collapse toggle
+
+-------------------------------- */
+.toggle-group {
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle-group::after {
+  content: '';
+  display: block;
+  height: 11px;
+  width: 8px;
+  position: absolute;
+  top: 50%;
+  bottom: auto;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+  right: 1em;
+  background: url("../images/cd-arrow.svg") no-repeat center center;
+  background-size: 8px 11px;
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+
+.toggle-group-expanded::after {
+  -webkit-transform: translateY(-50%) rotate(90deg);
+  -moz-transform: translateY(-50%) rotate(90deg);
+  -ms-transform: translateY(-50%) rotate(90deg);
+  -o-transform: translateY(-50%) rotate(90deg);
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.expanded-submenu {
+  margin-bottom: 1em;
+}
+
+/* --------------------------------
+
+Dragable objects
+
+-------------------------------- */
+.dragbject {
+  position: fixed;
+  z-index: 50;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.dragobject:active {
+  cursor: move;
+}
+
+.dragvertical {
+  overflow-y: hidden;
+}
+
+.dragvertical:active {
+  cursor: ns-resize;
+}
+
+.draghorizontal {
+  overflow-x: hidden;
+}
+
+.draghorizontal:active {
+  cursor: ew-resize;
+}
+
+/* --------------------------------
+
+HoverIntent visitekaartjes
+
+-------------------------------- */
+.hoverIntentContent {
+  display: none;
+  position: absolute;
+}
+
+div.hoverIntentContent {
+  border: 1px solid #000;
+  background-color: #fff;
+  -moz-box-shadow: 0 0 11px #000;
+  -webkit-box-shadow: 0 0 11px #000;
+  box-shadow: 0 0 11px #000;
+  z-index: 250;
+  font-weight: normal !important;
+  font-style: normal !important;
+  float: none !important;
+  overflow: visible;
+  padding: 5px;
+}
+
+.visitekaartje {
+  width: 330px;
+
+  img {
+    float: right;
+    height: auto !important;
+    max-width: 100px;
+  }
+
+  p {
+    margin: 8px 0 0 10px;
+    color: #000 !important;
+
+    a {
+      color: #0a338d !important;
+    }
+  }
+  p.naam a {
+    font-weight: bold;
+    color: #000 !important;
+  }
+
+  .uid {
+    float: right;
+    padding-right: 5px;
+    margin-top: 8px;
+    color: #999;
+  }
+}

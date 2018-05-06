@@ -1,0 +1,281 @@
+@import "reset";
+@import "icons";
+@import "~jquery-ui/themes/base/core";
+@import "~jquery-ui/themes/base/theme";
+@import "~jquery-ui/themes/base/tooltip";
+@import "~bootstrap/dist/css/bootstrap";
+@import "~font-awesome/scss/font-awesome";
+@import "~lightbox2/dist/css/lightbox";
+@import "common";
+@import "main-menu";
+@import "bbcode";
+@import "zijbalk";
+@import "maalcie";
+@import "zoeken";
+
+@import "~jgallery/dist/css/jgallery";
+
+/* Standaard Kleuren */
+a, a:hover {
+  color: #0a338d;
+}
+.alternate-bgcolor {
+  background-color: #FAFAFA;
+}
+.alternate-bgcolor:nth-child(even) {
+  background-color: #EBEBEB;
+}
+
+/* Typeahead suggestions */
+span.twitter-typeahead {
+  width: auto;
+}
+.tt-suggestion {
+  cursor: pointer;
+}
+.tt-dropdown-menu h3 {
+  margin: 15px 15px 10px 10px;
+}
+
+/* InstantSearchForm */
+//.input-group-btn {
+//  font-size: inherit;
+//}
+//.cd-search .input-group {
+//
+//  input.form-control {
+//    border-top-left-radius: 4px !important;
+//    border-bottom-left-radius: 4px !important;
+//  }
+//
+//  #cd-zoek-engines {
+//    border-top-right-radius: 4px;
+//    border-bottom-right-radius: 4px;
+//    height: 34px;
+//    padding: 7px;
+//    color: #000;
+//    background-color: #f5f5f5;
+//    border: 1px solid #a9a9a9;
+//    text-shadow: none;
+//    background-image: none;
+//    font-size: 1.5em;
+//  }
+//}
+
+/* Login Form */
+.login-form .InputField, .login-form .InputField:hover {
+  border: none;
+  width: 100px;
+}
+
+/* Courant Archief */
+.CourantArchiefJaar {
+  width: 111px;
+  float: left;
+}
+
+/* Bijbelrooster */
+.bijbelrooster {
+  -webkit-columns: 250px auto;
+  -moz-columns: 250px auto;
+  columns: 250px auto;
+  line-height: 2em;
+}
+
+/* Pasfotos */
+img.pasfoto {
+  float: left;
+  width: 55px;
+  height: 73px;
+  margin: 1px 0 0 1px;
+}
+.lidLink img {
+  -webkit-transition: all .4s ease-out; /* Safari and Chrome */
+  -moz-transition: all .4s ease-out; /* Firefox */
+  -ms-transition: all .4s ease-out; /* Opera */
+  -o-transition: all .4s ease-out; /* IE 9 */
+  transition: all .4s ease-out;
+}
+.lidLink:hover img {
+  -webkit-box-shadow: 0 0 5px #000;
+  -moz-box-shadow: 0 0 5px #000;
+  box-shadow: 0 0 5px #000;
+  -webkit-transform: scale(1.33); /* Safari and Chrome */
+  -moz-transform: scale(1.33); /* Firefox */
+  -ms-transform: scale(1.33); /* IE 9 */
+  -o-transform: scale(1.33); /* Opera */
+  transform: scale(1.33);
+}
+
+/* lidinstellingen */
+.Formulier label.instelling {
+  clear: left;
+  width: 50%;
+}
+
+div.vertical {
+  -webkit-transform: rotate(-90deg); /* Chrome,Saf3.1+ */
+  -moz-transform: rotate(-90deg); /* FF3.5+ */
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg); /* Opera 10.5 */
+  transform: rotate(-90deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); /* IE6,IE7 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)"; /* IE8 */
+}
+
+th { text-align: left; }
+td { vertical-align: text-bottom; }
+
+hr {
+  height: 1px;
+  background-color: black;
+  border: 0 none;
+}
+
+ul.horizontal li {
+  display: inline;
+  padding-right: 20px;
+}
+ul.horizontal li.active { font-weight:bold; }
+ul.nobullets li { list-style-type: none; }
+
+.outer-shadow {
+  -moz-box-shadow: 0 0 20px #000;
+  -webkit-box-shadow: 0 0 20px #000;
+  box-shadow: 0 0 20px #000;
+}
+.breadcrumbs {
+  display: inline-block;
+  font-weight: bold;
+}
+.breadcrumbs * {
+  vertical-align: text-bottom;
+  position: relative;
+  top: 2px;
+}
+.breadcrumbs select {
+  vertical-align: initial;
+}
+
+.fade-content {
+  opacity: 0;
+  -webkit-transition: opacity .3s .1s ease;
+  -moz-transition: opacity .3s .1s ease;
+  -ms-transition: opacity .3s .1s ease;
+  -o-transition: opacity .3s .1s ease;
+  transition: opacity .3s .1s ease;
+}
+.fade-container:hover .fade-content {
+  opacity: 1;
+}
+
+/**** OVERIG ******************************************************************/
+
+#mysql_debug_toggle {
+  cursor: pointer;
+}
+#mysql_debug {
+  display: none;
+}
+.pubcie_debug {
+  margin: 10px;
+  overflow: auto;
+  color: #000;
+  background-color: #fff;
+  border: 1px solid darkred;
+}
+
+div.sqCategorie {
+  float: left;
+  width: 450px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+table.query_table {
+  display: inline-block;
+  margin: 10px;
+  padding: 0;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+table.query_table thead {
+  display: block;
+}
+table.query_table tbody {
+  max-height: 300px;
+  overflow: auto;
+  display: block;
+}
+table.query_table tr {
+  height: 20px;
+  background-color: #FAFAFA;
+}
+table.query_table tr:nth-child(odd) {
+  background-color: #EBEBEB;
+}
+table.query_table thead th {
+  width: 170px !important;
+}
+table.query_table tbody tr td {
+  width: 175px;
+  padding: 5px 10px;
+  vertical-align: middle;
+}
+
+.oneThirth {
+  width: 253px;
+  float: left;
+}
+
+.waarschuwing { color: red; }
+
+div.geelblokje { background-color: #ffffc1; margin: 10px 0; padding: 0; }
+
+
+/* csrmail */
+div#pubciemail_form { background-color: #f5f5f5; border: 1px solid lightgray; padding: 10px; }
+
+
+/* Streeplijstgenereertool */
+form#streeplijst fieldset { padding: 10px;  }
+form#streeplijst fieldset legend { font-weight: bold; }
+form#streeplijst input, form#streeplijst label { text-align: left; margin: 3px; padding: 0; }
+
+
+
+/* Peilingbeheer */
+#nieuwePeiling label { clear: left; float: left; width: 150px; }
+#nieuwePeiling input, #nieuwePeiling textarea { margin-bottom: 4px; }
+#nieuwePeiling textarea { width: 400px; }
+#peilingOpties input { width: 400px; }
+
+/* Gesprekken */
+.Gesprekken, .GesprekBerichten {
+  width: 320px;
+
+  thead {
+    display: none;
+  }
+
+  .dataTables_scrollBody {
+    border: none !important;
+  }
+
+  table.dataTable.display tbody tr.odd > .sorting_1,
+  table.dataTable.order-column.stripe tbody tr.odd > .sorting_1,
+  table.dataTable.display tbody tr.even > .sorting_1,
+  table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
+    background-color: #fff;
+  }
+}
+.Gesprekken {
+
+  span.float-right {
+    width: 100%;
+    text-align: right;
+  }
+
+  table.dataTable tbody tr td {
+    padding: 20px 10px;
+  }
+}
