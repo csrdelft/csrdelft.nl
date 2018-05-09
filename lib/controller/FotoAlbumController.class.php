@@ -41,7 +41,8 @@ class FotoAlbumController extends AclController {
 				'downloaden' => 'P_ALBUM_DOWN',
 				'verwerken' => 'P_ALBUM_MOD',
 				'uploaden' => 'P_ALBUM_ADD',
-				'zoeken' => 'P_LEDEN_READ'
+				'zoeken' => 'P_LEDEN_READ',
+				'raw_image' => 'P_ALBUM_READ'
 			);
 		} else {
 			$this->acl = array(
@@ -60,10 +61,16 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function performAction(array $args = array()) {
+
+
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
-		if (!array_key_exists($this->action, $this->acl)) {
+		if ($this->getParam(1) == 'plaetjes') {
+			$this->action = 'raw_image';
+			$path = $this->getParams(2);
+
+		} elseif (!array_key_exists($this->action, $this->acl)) {
 			$this->action = 'bekijken';
 			$path = $this->getParams(1);
 		} elseif ($this->action === 'removetag') {
@@ -81,7 +88,7 @@ class FotoAlbumController extends AclController {
 		}
 		if (!$album) {
 			$path = PHOTOS_PATH . urldecode(implode('/', $path));
-			if ($this->action === 'download') {
+			if ($this->action === 'download' or $this->action === 'raw_image') {
 				parent::performAction(array($path));
 				return;
 			}
@@ -372,6 +379,26 @@ class FotoAlbumController extends AclController {
 		} else {
 			$this->view = new JsonResponse(array());
 		}
+	}
+
+	public function raw_image($path) {
+		//Extra check to prevent attacks
+		if (!startsWith(realpath($path), realpath(PHOTOS_PATH))) {
+			$this->exit_http(403);
+		}
+
+		$image = Foto::fromFileName($path);
+		if ($image === false || !$image->magBekijken()) {
+			$this->exit_http(403);
+		} else if (!$image->exists()) {
+			$this->exit_http(403);
+		}
+
+		$fp = fopen($image->getFullPath(), 'rb');
+		header("Content-type: " . image_type_to_mime_type(exif_imagetype($image->getFullPath())));
+		header("Content-Length: " . filesize($image->getFullPath()));
+		fpassthru($fp);
+		exit;
 	}
 
 }
