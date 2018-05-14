@@ -60,11 +60,13 @@ $(document).ready(function ($) {
 		'bStateSave': true,
 		'iCookieDuration': 60 * 15, // 15 min
 		'fnStateSaveCallback': (oSettings, sValue) => {
-			sValue += `,"sEigenaarFilter": "${$('span.filter.actief').attr('id')}","sView": ${$('input[name=boekstatus]').is(':checked')}`;
+            let eigenaarFilter = $('span.filter.actief').attr('id'),
+                checked = $('input[name=boekstatus]').is(':checked');
+            sValue += `,"sEigenaarFilter": "${eigenaarFilter}","sView": ${checked}`;
 			init_hoverIntents();
 			return sValue;
 		},
-		'fnStateLoadCallback': oSettings => {
+		'fnStateLoadCallback': (oSettings) => {
 			let oData = oSettings.aoData;
 			let aEigenaarfilters = ['alle', 'csr', 'leden', 'eigen', 'geleend'];
 			if ($.inArray(oData.sEigenaarFilter, aEigenaarfilters) === -1) {
@@ -236,13 +238,13 @@ $(document).ready(function ($) {
 			remote: 'autocomplete/titel?q=%QUERY'
 		});
 		bestaandeBoekenSource.initialize();
-		$("form.Formulier input:not(.tt-hint):first").typeahead({
+		$('form.Formulier input:not(.tt-hint):first').typeahead({
 			autoselect: true,
 			hint: true,
 			highlight: true
 		}, {
 			name: 'bestaandeBoekenSource',
-			displayKey: "value",
+			displayKey: 'value',
 			source: bestaandeBoekenSource.ttAdapter(),
 			templates: {
 				header: '<h3>Bestaande Boeken</h3>',
@@ -269,11 +271,11 @@ $(document).ready(function ($) {
 				dataString = `id=${fieldname}&${fieldname}=${waarde}`;
 
 			$.ajax({
-				type: "POST",
+				type: 'POST',
 				url: `/bibliotheek/bewerkboek/${boekid}`,
 				data: dataString,
 				cache: false,
-				dataType: "json",
+				dataType: 'json',
 				success: (result) => {
 					let field = $(`#${input.id.substring(6)}`),
 						$inputelem = $(`#${input.id}`);
@@ -294,7 +296,7 @@ $(document).ready(function ($) {
 						field.removeClass('opgeslagen').addClass('metFouten');
 					}
 					//meldingsboodschap plaatsen, en verwijder bewerkt-markering
-					field.find(".melding").html(result.melding).show();
+					field.find('.melding').html(result.melding).show();
 					$inputelem.removeClass('nonsavededits');
 				}
 			});

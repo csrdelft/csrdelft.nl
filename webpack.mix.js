@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+let HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -13,6 +14,13 @@ let mix = require('laravel-mix');
 
 mix.setPublicPath('htdocs/dist'); // Verwijder als Laravel draait.
 mix.setResourceRoot('/dist/');
+
+mix.webpackConfig({
+    plugins: [
+        new HardSourceWebpackPlugin() // Maak build 20x sneller
+    ]
+});
+
 
 mix.js('resources/assets/js/app.js', 'js')
     .extract([
@@ -45,6 +53,8 @@ mix.js('resources/assets/js/app.js', 'js')
         'datatables.net-responsive',
         'datatables.net-scroller',
         'datatables.net-select',
+        'event-emitter',
+        'core-js',
     ]);
 
 mix.js('resources/assets/js/extern.js', 'js')

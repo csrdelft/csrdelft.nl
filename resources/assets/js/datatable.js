@@ -1,7 +1,8 @@
 // Wordt na app.js geladen.
 
-let $ = require('jquery');
+import {knopPost} from './knop';
 
+import $ from 'jquery';
 // Excel button in datatables.net-buttons/js/buttons.html5 checkt voor JSZip in window.
 window.JSZip = require('jszip');
 
@@ -166,7 +167,7 @@ $.fn.dataTable.ext.buttons.default = {
         node.attr('data-tableid', dt.context[0].sTableId);
     },
     action(e, dt, button) {
-        knop_post.call(button, e);
+        knopPost.call(button, e);
     },
     className: 'post DataTableResponse'
 };
@@ -239,7 +240,7 @@ $.fn.dataTable.ext.buttons.confirm = {
         config.action = $.fn.dataTable.ext.buttons.collection.action;
     },
     action(e, dt, button) {
-        knop_post.call(button, e)
+        knopPost.call(button, e);
     }
 };
 
@@ -268,7 +269,7 @@ $.fn.dataTable.render.totaalPrijs = (data, type, row) => {
     return $.fn.dataTable.render.bedrag(row.aantal_aanmeldingen * parseInt(row.prijs));
 };
 
-$(document).ready(function () {
+$(function () {
     $('body').on('click', () => {
         // Verwijder tooltips als de datatable modal wordt gesloten
         $(".ui-tooltip-content").parents('div').remove();

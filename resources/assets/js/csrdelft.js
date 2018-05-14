@@ -5,6 +5,10 @@
 import $ from 'jquery';
 import Dropzone from 'dropzone/dist/dropzone-amd-module';
 
+import {modalOpen, modalClose} from './modal';
+import {ajaxRequest} from './ajax';
+import {knopGet, knopPost, knopVergroot} from "./knop";
+
 function preloadImg(href) {
     let img = $(document.createElement('img'));
     img[0].src = href;
@@ -15,11 +19,7 @@ preloadImg('/images/loading-fb.gif');
 preloadImg('/images/loading-arrows.gif');
 preloadImg('/images/loading_bar_black.gif');
 
-$(document).ready(function () {
-    init_page();
-});
-
-function init_page() {
+$(() => {
     zijbalk_scroll_fixed();
     init_dropzone();
     init_timeago_once();
@@ -27,7 +27,7 @@ function init_page() {
     init_sluit_meldingen();
     init_context($('body'));
     //init_geolocation();
-}
+});
 
 /**
  * @see datatable.js
@@ -261,7 +261,7 @@ function zijbalk_scroll_fixed() {
 window.page_reload = function(htmlString) {
     // prevent hidden errors
     if (typeof htmlString === 'string' && htmlString.substring(0, 16) === '<div id="modal" ') {
-        modal_open(htmlString);
+        modalOpen(htmlString);
         return;
     }
     location.reload();
@@ -274,7 +274,7 @@ window.page_reload = function(htmlString) {
 window.page_redirect = function(htmlString) {
     // prevent hidden errors
     if (typeof htmlString === 'string' && htmlString.substring(0, 16) === '<div id="modal" ') {
-        modal_open(htmlString);
+        modalOpen(htmlString);
         return;
     }
     window.location.href = htmlString;
@@ -309,155 +309,10 @@ function init_buttons(parent) {
         }
         content.toggle(800, 'easeInOutCubic');
     });
-    $(parent).find('.popup').bind('click.popup', modal_open);
-    $(parent).find('.post').bind('click.post', knop_post);
-    $(parent).find('.get').bind('click.get', knop_get);
-    $(parent).find('.vergroot').bind('click.vergroot', function (event) {
-        knop_vergroot($(this));
-    });
-}
-
-function knop_vergroot(knop) {
-    let id = knop.attr('data-vergroot'),
-        oud = knop.attr('data-vergroot-oud');
-
-    if (oud) {
-        $(id).animate({'height': oud}, 600);
-        knop.removeAttr('data-vergroot-oud');
-        knop.find('span.fa').removeClass('fa-compress').addClass('fa-expand');
-        knop.attr('title', 'Uitklappen');
-    }
-    else {
-        knop.attr('title', 'Inklappen');
-        knop.find('span.fa').removeClass('fa-expand').addClass('fa-compress');
-        knop.attr('data-vergroot-oud', $(id).height());
-        $(id).animate({
-            'height': $(id).prop('scrollHeight') + 1
-        }, 600);
-    }
-}
-
-function knop_ajax(knop, type) {
-    if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
-        modal_close();
-        return false;
-    }
-    let source = knop,
-        done = dom_update,
-        data = knop.attr('data');
-
-    if (knop.hasClass('popup')) {
-        source = false;
-    }
-    if (knop.hasClass('prompt')) {
-        data = data.split('=');
-        let val = prompt(data[0], data[1]);
-        if (!val) {
-            return false;
-        }
-        data = encodeURIComponent(data[0]) + '=' + encodeURIComponent(val);
-    }
-    if (knop.hasClass('addfav')) {
-        data = {
-            'tekst': document.title.replace('C.S.R. Delft - ', ''),
-            'link': this.location.href
-        };
-    }
-    if (knop.hasClass('DataTableResponse')) {
-
-        let tableId = knop.attr('data-tableid');
-        if (!document.getElementById(tableId)) {
-            tableId = knop.closest('form').attr('data-tableid');
-            if (!document.getElementById(tableId)) {
-                alert('DataTable not found');
-            }
-        }
-
-        let selection = fnGetSelection('#' + tableId);
-        data = {
-            'DataTableId': tableId,
-            'DataTableSelection[]': selection
-        };
-
-        done = function (response) {
-            if (typeof response === 'object') { // JSON
-                fnUpdateDataTable('#' + tableId, response);
-                if (response.modal) {
-                    modal_open(response.modal);
-                    init_context($('#modal'));
-                }
-                else {
-                    modal_close();
-                }
-            }
-            else { // HTML
-                dom_update(response);
-            }
-        };
-
-        if (!knop.hasClass('SingleRow')) {
-            source = false;
-        }
-    }
-    if (knop.hasClass('ReloadPage')) {
-        done = page_reload;
-    }
-    else if (knop.hasClass('redirect')) {
-        done = page_redirect;
-    }
-
-    ajax_request(type, knop.attr('href'), data, source, done, alert);
-}
-
-/**
- * @see datatable.js
- * @param event
- * @returns {boolean}
- */
-window.knop_post = function(event) {
-    event.preventDefault();
-    if ($(this).hasClass('range')) {
-        if (event.target.tagName.toUpperCase() === 'INPUT') {
-            taken_select_range(event);
-        }
-        else {
-            taken_submit_range(event);
-        }
-        return false;
-    }
-    knop_ajax($(this), 'POST');
-    return false;
-};
-
-function knop_get(event) {
-    event.preventDefault();
-    knop_ajax($(this), 'GET');
-    return false;
-}
-
-function modal_open(htmlString) {
-    if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
-        htmlString.preventDefault();
-        return false;
-    }
-
-    let modal = $('#modal'),
-        modalWrapper = $('#modal-wrapper');
-
-    if (typeof htmlString === 'string' && htmlString !== '') {
-        modal.html(htmlString);
-        modal.find('input:visible:first').focus();
-    }
-    else {
-        modalWrapper.modal('hide');
-        modal.html('');
-    }
-
-    modalWrapper.modal();
-}
-
-function modal_close() {
-    $('#modal-wrapper').modal('hide');
+    $(parent).find('.popup').bind('click.popup', modalOpen);
+    $(parent).find('.post').bind('click.post', knopPost);
+    $(parent).find('.get').bind('click.get', knopGet);
+    $(parent).find('.vergroot').bind('click.vergroot', knopVergroot);
 }
 
 function init_forms(parent) {
@@ -582,11 +437,11 @@ window.form_submit = function(event) {
                 if (typeof response === 'object') { // JSON
                     fnUpdateDataTable('#' + tableId, response);
                     if (response.modal) {
-                        modal_open(response.modal);
+                        modalOpen(response.modal);
                         init_context($('#modal'));
                     }
                     else {
-                        modal_close();
+                        modalClose();
                     }
                 }
                 else { // HTML
@@ -606,7 +461,7 @@ window.form_submit = function(event) {
             done = page_redirect;
         }
 
-        ajax_request('POST', form.attr('action'), formData, source, done, alert, function () {
+        ajaxRequest('POST', form.attr('action'), formData, source, done, alert, function () {
             if (form.hasClass('SubmitReset')) {
                 form_reset(event, form);
             }
@@ -658,13 +513,13 @@ window.form_cancel = function(event) {
     }
     if (source.hasClass('post')) {
         event.preventDefault();
-        knop_post(event);
+        knopPost(event);
         return false;
     }
     if (form.hasClass('ModalForm')) {
         event.preventDefault();
         if (!form_ischanged(form) || confirm('Sluiten zonder wijzigingen op te slaan?')) {
-            modal_close();
+            modalClose();
         }
         return false;
     }
@@ -681,10 +536,10 @@ window.dom_update = function(htmlString) {
     $(html).each(function () {
         let id = $(this).attr('id');
         if (id === 'modal') {
-            modal_open();
+            modalOpen();
         }
         else {
-            modal_close();
+            modalClose();
         }
         let elmnt = $('#' + id);
         if (elmnt.length === 1) {
@@ -719,82 +574,6 @@ function remove() {
     $(this).remove();
 }
 
-/**
- * @see maalcie.js
- * @param type
- * @param url
- * @param data
- * @param source
- * @param onsuccess
- * @param onerror
- * @param onfinish
- */
-window.ajax_request = (type, url, data, source, onsuccess, onerror, onfinish) => {
-    if (source) {
-        if (!source.hasClass('noanim')) {
-            $(source).replaceWith(`<img id="${source.attr('id')}" title="${url}" src="/images/loading-arrows.gif" />`);
-            source = `img[title="${url}"]`;
-        }
-        else if (source.hasClass('InlineForm')) {
-            $(source).find('.FormElement:first').css({
-                'background-image': 'url("/images/loading-fb.gif")',
-                'background-repeat': 'no-repeat',
-                'background-position': 'center right'
-            });
-        }
-    }
-    else {
-        modal_open();
-    }
-    let contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
-    let processData = true;
-    if (data instanceof FormData) {
-        contentType = false;
-        processData = false;
-    }
-    let jqXHR = $.ajax({
-        type: type,
-        contentType: contentType,
-        processData: processData,
-        url: url,
-        cache: false,
-        data: data
-    });
-    jqXHR.done(function (data, textStatus, jqXHR) {
-        if (source) {
-            if (!$(source).hasClass('noanim')) {
-                $(source).hide();
-            }
-            else if ($(source).hasClass('InlineForm')) {
-                $(source).find('.FormElement:first').css({
-                    'background-image': '',
-                    'background-repeat': '',
-                    'background-position': ''
-                });
-            }
-        }
-        onsuccess(data);
-    });
-    jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
-        if (errorThrown === '') {
-            errorThrown = 'Nog bezig met laden!';
-        }
-        if (source) {
-            $(source).replaceWith('<img title="' + errorThrown + '" src="/plaetjes/famfamfam/cancel.png" />');
-        }
-        else {
-            modal_close();
-        }
-        if (onerror) {
-            onerror(jqXHR.responseText);
-        }
-    });
-    jqXHR.always(function () {
-        if (onfinish) {
-            onfinish();
-        }
-    });
-};
 
 /**
  * @see templates/maalcie/maaltijd/maaltijd_ketzer.tpl

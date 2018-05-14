@@ -3,6 +3,7 @@
  *
  * requires jQuery & dragobject.js
  */
+import {ajaxRequest} from './ajax';
 
 $(document).ready(function () {
 	$('a.ruilen').each(function () {
@@ -137,7 +138,7 @@ window.taken_submit_range = function(e) {
 	}
 	$('input[name="' + $(e.target).find('input:first').attr('name') + '"]:visible').each(function () {
 		if ($(this).prop('checked')) {
-			ajax_request('POST', $(this).parent().attr('href'), $(this).parent().attr('post'), $(this).parent(), dom_update, alert);
+			ajaxRequest('POST', $(this).parent().attr('href'), $(this).parent().attr('post'), $(this).parent(), dom_update, alert);
 		}
 	});
 };
@@ -167,10 +168,10 @@ function taken_ruilen(e) {
 	if (typeof attr === 'undefined' || attr === false) {
 		attr = '';
 	}
-	ajax_request('POST', $(elmnt).attr('href'), 'uid=' + attr, elmnt, dom_update, alert);
+	ajaxRequest('POST', $(elmnt).attr('href'), 'uid=' + attr, elmnt, dom_update, alert);
 	attr = $(elmnt).attr('uid');
 	if (typeof attr === 'undefined' || attr === false) {
 		attr = '';
 	}
-	ajax_request('POST', $(source).attr('href'), 'uid=' + attr, source, dom_update, alert);
+	ajaxRequest('POST', $(source).attr('href'), 'uid=' + attr, source, dom_update, alert);
 }

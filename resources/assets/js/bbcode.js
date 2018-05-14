@@ -32,8 +32,8 @@ export const CsrBBPreview = (sourceId, targetId) => {
         $(targetId).html(data);
         init_context($(targetId));
         $(targetId).show();
-    }).fail(function (error) {
-        alert(error)
+    }).fail((error) => {
+        alert(error);
     });
 };
 
