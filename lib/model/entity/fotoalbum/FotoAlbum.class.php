@@ -68,7 +68,7 @@ class FotoAlbum extends Map {
 	public function __construct($path = null) {
 		parent::__construct();
 		if ($path === true) { // called from PersistenceModel
-			$this->path = realpath(PHOTOS_PATH . $this->subdir);
+			$this->path = realpath(PHOTOALBUM_PATH . $this->subdir);
 		} else {
 			$path = realpath($path);
 			if (!endsWith($path, '/')) {
@@ -76,7 +76,7 @@ class FotoAlbum extends Map {
 			}
 			$this->path = $path;
 			//We verwijderen het beginstuk van de string
-			$prefix = realpath(PHOTOS_PATH) . "/";
+			$prefix = realpath(PHOTOALBUM_PATH) . "/";
 			$this->subdir = substr($this->path, strlen($prefix));
 		}
 		$this->dirname = basename($this->path);
@@ -209,7 +209,7 @@ class FotoAlbum extends Map {
 	}
 
 	public function magBekijken() {
-		if (!startsWith(realpath($this->path), realpath(PHOTOS_PATH . 'fotoalbum/'))) {
+		if (!startsWith(realpath($this->path), realpath(PHOTOALBUM_PATH . 'fotoalbum/'))) {
 			return false;
 		}
 		if (LoginModel::mag('P_LEDEN_READ')) {

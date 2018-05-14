@@ -61,8 +61,6 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function performAction(array $args = array()) {
-
-
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		}
@@ -87,7 +85,7 @@ class FotoAlbumController extends AclController {
 			$album = $this->model->getFotoAlbum(end($path));
 		}
 		if (!$album) {
-			$path = PHOTOS_PATH . urldecode(implode('/', $path));
+			$path = PHOTOALBUM_PATH . urldecode(implode('/', $path));
 			if ($this->action === 'download' or $this->action === 'raw_image') {
 				parent::performAction(array($path));
 				return;
@@ -383,7 +381,7 @@ class FotoAlbumController extends AclController {
 
 	public function raw_image($path) {
 		//Extra check to prevent attacks
-		if (!startsWith(realpath($path), realpath(PHOTOS_PATH))) {
+		if (!startsWith(realpath($path), realpath(PHOTOALBUM_PATH))) {
 			$this->exit_http(403);
 		}
 
@@ -394,10 +392,11 @@ class FotoAlbumController extends AclController {
 			$this->exit_http(403);
 		}
 
-		$fp = fopen($image->getFullPath(), 'rb');
+		$file = fopen($image->getFullPath(), 'rb');
 		header("Content-type: " . image_type_to_mime_type(exif_imagetype($image->getFullPath())));
 		header("Content-Length: " . filesize($image->getFullPath()));
-		fpassthru($fp);
+		header("Cache-Control: ", "max-age=2592000, public");
+		fpassthru($file);
 		exit;
 	}
 

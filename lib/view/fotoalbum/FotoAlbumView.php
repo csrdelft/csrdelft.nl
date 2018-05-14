@@ -53,7 +53,7 @@ class FotoAlbumView extends SmartyTemplateView {
 				if ($albumnaam === $this->model->dirname) {
 					// laatste
 					if ($dropdown) {
-						$breadcrumbs .= ' » ' . FotoAlbumView::getDropDown(PHOTOS_PATH . $subdir, $albumnaam);
+						$breadcrumbs .= ' » ' . FotoAlbumView::getDropDown(PHOTOALBUM_PATH . $subdir, $albumnaam);
 						break;
 					} elseif (!$self) {
 						// alleen parent folders tonen
