@@ -11,6 +11,7 @@
 					{if $profiel->magBewerken()}
 						<a href="/profiel/{$profiel->uid}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="pencil"}</a>
 						<a href="/profiel/{$profiel->uid}/voorkeuren" class="btn" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
+						<a href="/toestemming" class="btn" title="Pas toestemming aan">{icon get="lock_edit"}</a>
 					{/if}
 					{if mag('P_ADMIN') OR is_ingelogd_account($profiel->uid)}
 						{if CsrDelft\model\security\AccountModel::existsUid($profiel->uid)}
@@ -182,7 +183,7 @@
 			</div>
 			<div class="half">
 				{$werkgroepen}
-				{if mag('P_LEDEN_MOD') OR is_ingelogd_account($profiel->uid)}
+				{if mag('P_LEDEN_MOD') OR is_ingelogd_account($profiel)}
 				<div class="label">&nbsp;</div><a class="btn" onclick="$(this).remove();
 						$('#meerGroepenContainer').slideDown();">Toon activiteiten</a>
 			</div>

@@ -1,6 +1,22 @@
 <div style="width: 700px">
-    {include "string:$beleid"}
-
+    <p>
+        {$beleid}
+    </p>
+    <p>
+        {$beschrijvingBestuur}
+    </p>
+    <p>
+        {$akkoordVereniging}
+    </p>
+    <p class="clear">
+        {$beschrijvingExtern}
+    </p>
+    <p>
+        {$akkoordExtern}
+    </p>
+    <p class="clear">
+        {$beschrijvingVereniging}
+    </p>
     <p>
         <label><input type="radio" name="toestemming-intern" id="toestemming-ja"{if $akkoord == 'ja'} checked="checked"{/if}/> Mijn gegevens mogen gedeeld worden voor interne doeleinden. Dit geldt totdat ik dat verander.</label>
     </p>

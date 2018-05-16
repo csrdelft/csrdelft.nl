@@ -4,6 +4,7 @@ namespace CsrDelft\view\toestemming;
 
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\LidToestemming;
+use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrSmarty;
@@ -42,14 +43,18 @@ class ToestemmingModalForm extends ModalForm {
             }
         }
 
-        $smarty->assign('beleid', CmsPaginaModel::get('privacy-kort')->inhoud);
+        $smarty->assign('beleid', InstellingenModel::get('privacy', 'beleid_kort'));
+		$smarty->assign('beschrijvingBestuur', InstellingenModel::get('privacy', 'beschrijving_bestuur'));
+		$smarty->assign('beschrijvingVereniging', InstellingenModel::get('privacy', 'beschrijving_vereniging'));
+		$smarty->assign('beschrijvingExtern', InstellingenModel::get('privacy', 'beschrijving_extern'));
         $smarty->assign('akkoordExtern', $this->maakToestemmingLine('algemeen', 'extern'));
         $smarty->assign('akkoordVereniging', $this->maakToestemmingLine('algemeen', 'vereniging'));
         $smarty->assign('akkoord', $akkoord);
         $smarty->assign('fields', $fields);
-        $this->addFields([new HtmlComment($smarty->fetch('toestemming/toestemming_head.tpl'))]);
-
-        $this->addFields([new FormDefaultKnoppen('/toestemming/annuleren', false)]);
+        $this->addFields([
+        	new HtmlComment($smarty->fetch('toestemming/toestemming_head.tpl')),
+			new FormDefaultKnoppen('/toestemming/annuleren', false)
+		]);
     }
 
     /**
@@ -70,7 +75,7 @@ class ToestemmingModalForm extends ModalForm {
         $smarty->assign('waarde', $model->getValue($module, $id));
         $smarty->assign('default', $model->getDefault($module, $id));
 
-        return $smarty->fetch('toestemming/toestemming.tpl');
+        return $smarty->fetch('toestemming/toestemming_input.tpl');
     }
 
     public function validate() {
