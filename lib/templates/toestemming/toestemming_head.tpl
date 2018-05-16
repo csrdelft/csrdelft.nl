@@ -47,7 +47,7 @@
 
         toestemmingJa.on('change', function () {
             if (this.checked) {
-                selectRadioByValue('ja');
+                toestemmingOpties.find('input[value="ja"]').prop('checked', true);
                 toestemmingOpties.hide();
             }
         });
