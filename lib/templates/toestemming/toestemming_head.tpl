@@ -8,13 +8,15 @@
     <p>
         {$akkoordVereniging}
     </p>
-    <p class="clear">
+    <hr class="clear">
+    <p>
         {$beschrijvingExtern}
     </p>
     <p>
         {$akkoordExtern}
     </p>
-    <p class="clear">
+    <hr class="clear">
+    <p>
         {$beschrijvingVereniging}
     </p>
     <p>

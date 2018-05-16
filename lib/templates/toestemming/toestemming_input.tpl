@@ -1,4 +1,4 @@
-<p class="instelling">
+<p class="instelling clear">
     <label class="instelling" for="toest_{$module}_{$id}">
         {$label}
     </label>
