@@ -2,7 +2,7 @@
 	<div id="profielregel">
 		<div class="naam">
 			<div class="float-right">
-				{if is_zichtbaar($profiel, 'pasfoto')}<div class="pasfoto float-left">{$profiel->getPasfotoTag(false)}</div>{/if}
+				<div class="pasfoto float-left">{$profiel->getPasfotoTag(false)}</div>
 				<div class="knopjes">
 					{*<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>*}
 					<a href="/profiel/{$profiel->uid}/addToGoogleContacts/" class="btn" title="{if $profiel->isInGoogleContacts()}Dit profiel opdateren in mijn google adresboek{else}Dit profiel toevoegen aan mijn google adresboek{/if}">
@@ -11,7 +11,6 @@
 					{if $profiel->magBewerken()}
 						<a href="/profiel/{$profiel->uid}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="pencil"}</a>
 						<a href="/profiel/{$profiel->uid}/voorkeuren" class="btn" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
-						<a href="/toestemming" class="btn" title="Pas toestemming aan">{icon get="lock_edit"}</a>
 					{/if}
 					{if mag('P_ADMIN') OR is_ingelogd_account($profiel->uid)}
 						{if CsrDelft\model\security\AccountModel::existsUid($profiel->uid)}
@@ -28,8 +27,8 @@
 				</div>
 			</div>
 			{getMelding()}
-			<h1 title="Lid-status: {if is_zichtbaar($profiel, 'status')}{CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}{/if}">
-				{if CsrDelft\model\entity\LidStatus::getChar($profiel->status)!='' AND is_zichtbaar($profiel, 'status')}<span class="status">{CsrDelft\model\entity\LidStatus::getChar($profiel->status)}&nbsp;</span>{/if}
+			<h1 title="Lid-status: {CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}">
+				{if CsrDelft\model\entity\LidStatus::getChar($profiel->status)!=''}<span class="status">{CsrDelft\model\entity\LidStatus::getChar($profiel->status)}&nbsp;</span>{/if}
 				{$profiel->getNaam('volledig')}
 			</h1>
 		</div>
@@ -47,8 +46,8 @@
 			{if $profiel->nickname!=''}<div class="label">Bijnaam:</div><div class="data">{$profiel->nickname}</div>{/if}
 			{if $profiel->duckname!=''}<div class="label">Duckstad-naam:</div><div class="data">{$profiel->duckname}</div>{/if}
 			<br />
-			{if $profiel->voorletters!='' AND is_zichtbaar($profiel, 'voorletters')}<div class="label">Voorletters:</div><div class="data">{$profiel->voorletters}</div>{/if}
-			{if $profiel->gebdatum!='0000-00-00' AND is_zichtbaar($profiel, 'gebdatum')}<div class="label">Geb.datum:</div><div class="data">{$profiel->gebdatum|date_format:"%d-%m-%Y"}</div>{/if}
+			{if $profiel->voorletters!=''}<div class="label">Voorletters:</div><div class="data">{$profiel->voorletters}</div>{/if}
+			{if $profiel->gebdatum!='0000-00-00'}<div class="label">Geb.datum:</div><div class="data">{$profiel->gebdatum|date_format:"%d-%m-%Y"}</div>{/if}
 			{if $profiel->status === CsrDelft\model\entity\LidStatus::Overleden AND $profiel->sterfdatum!='0000-00-00'}<div class="label">Overleden op:</div><div class="data">{$profiel->sterfdatum|date_format:"%d-%m-%Y"}</div>{/if}
 			{if CsrDelft\model\ProfielModel::get($profiel->echtgenoot)}
 				<div class="label">{if CsrDelft\model\ProfielModel::get($profiel->echtgenoot)->geslacht === CsrDelft\model\entity\Geslacht::Vrouw}Echtgenote{else}Echtgenoot{/if}:</div>
@@ -62,15 +61,15 @@
 			<div class="gegevens">
 				<div class="half">
 					<div class="label">
-						{if $profiel->adres!='' AND is_zichtbaar($profiel, 'adres')}
+						{if $profiel->adres!=''}
 							<a target="_blank" href="https://maps.google.nl/maps?q={$profiel->adres|urlencode}+{$profiel->woonplaats|urlencode}+{$profiel->land|urlencode}" title="Open kaart" class="lichtgrijs fa fa-map-marker fa-5x"></a>
 						{/if}
 					</div>
 					<div class="data">
-							{$woonoord}<br />
-							{$profiel->adres}<br />
-							{$profiel->postcode} {$profiel->woonplaats}<br />
-							{$profiel->land}<br />
+						{$woonoord}<br />
+						{$profiel->adres}<br />
+						{$profiel->postcode} {$profiel->woonplaats}<br />
+						{$profiel->land}<br />
 						{if $profiel->telefoon!=''}{$profiel->telefoon}<br />{/if}
 						{if $profiel->mobiel!=''}{$profiel->mobiel}<br />{/if}
 					</div>
@@ -101,7 +100,7 @@
 	<div class="profielregel">
 		<div class="gegevens">
 			{foreach from=$profiel->getContactgegevens() key=key item=contact}
-				{if $contact != '' AND is_zichtbaar($profiel, strtolower($key))}
+				{if $contact != ''}
 					<div class="label">{$key}:</div>
 					{$contact}<br />
 				{/if}
@@ -112,7 +111,7 @@
 	<div class="profielregel">
 		<div class="gegevens">
 			<div class="half">
-				{if $profiel->studie!='' AND is_zichtbaar($profiel, ['studie', 'studiejaar'])}
+				{if $profiel->studie!=''}
 					<div class="label">Studie:</div> <div class="data">{$profiel->studie}</div>
 
 					<div class="label">Studie sinds:</div> {$profiel->studiejaar}<br />
@@ -121,27 +120,24 @@
 				{if $profiel->lidjaar>0}
 					<a href="/ledenlijst?q=lichting:{$profiel->lidjaar}&amp;status=ALL" title="Bekijk de leden van lichting {$profiel->lidjaar}">{$profiel->lidjaar}</a>
 				{/if}
-				{if is_zichtbaar($profiel, 'status')}
 				{if !$profiel->isLid() AND $profiel->lidafdatum!='0000-00-00'} tot {$profiel->lidafdatum|substr:0:4}{/if}<br />
 				<div class="label">Status:</div> {CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}<br />
 				<br />
-				{/if}
-				{if $profiel->isOudlid() AND is_zichtbaar($profiel, 'beroep')}
+				{if $profiel->isOudlid()}
 					{if $profiel->beroep!=''}<div class="label">Beroep/werk:</div><div class="data">{$profiel->beroep}</div><br />{/if}
 				{/if}
 			</div>
-			{if is_zichtbaar($profiel, ['patroon', 'kinderen'])}
 			<div class="half">
 				{if CsrDelft\model\ProfielModel::get($profiel->patroon) OR $profiel->hasKinderen()}
 					<a class="float-right lichtgrijs fa fa-tree fa-3x" href="/leden/stamboom/{$profiel->uid}" title="Stamboom van {$profiel->getNaam()}"></a>
 				{/if}
-				{if CsrDelft\model\ProfielModel::get($profiel->patroon) AND is_zichtbaar($profiel, 'patroon')}
+				{if CsrDelft\model\ProfielModel::get($profiel->patroon)}
 					<div class="label">{if CsrDelft\model\ProfielModel::get($profiel->patroon)->geslacht === CsrDelft\model\entity\Geslacht::Vrouw}M{else}P{/if}atroon:</div>
 					<div class="data">
 						{CsrDelft\model\ProfielModel::get($profiel->patroon)->getLink('civitas')}<br />
 					</div>
 				{/if}
-				{if $profiel->hasKinderen() AND is_zichtbaar($profiel, 'kinderen')}
+				{if $profiel->hasKinderen()}
 					<div class="label">Kinderen:</div>
 					<div class="data">
 						{foreach from=$profiel->getKinderen() item=kind name=kinderen}
@@ -150,14 +146,12 @@
 					</div>
 				{/if}
 			</div>
-			{/if}
 			<div class="clear-left"></div>
 		</div>
 	</div>
 
 	<div class="profielregel clear-right">
 		<div class="gegevens">
-			{if is_zichtbaar($profiel, 'verticale')}
 			<div class="half">
 				{if $profiel->verticale!=''}
 					<div class="label">Verticale:</div>
@@ -168,15 +162,12 @@
 					<div class="data"><a href="/ledenlijst?q=moot:{$profiel->moot}">{$profiel->moot}</a></div>
 				{/if}
 			</div>
-			{/if}
-			{if is_zichtbaar($profiel, 'kring')}
 			<div class="half">
 				{if $kring}
 					<div class="label">Kring:</div>
 					<div class="data">{$kring}</div>
 				{/if}
 			</div>
-			{/if}
 			<div class="clear-left"></div>
 		</div>
 	</div>
@@ -185,30 +176,24 @@
 		<div class="gegevens">
 			<div class="half">
 				{$besturen}
-				{if is_zichtbaar($profiel, 'commissies')}{$commissies}{/if}
-				{if is_zichtbaar($profiel, 'onderverenigingen')}{$onderverenigingen}{/if}
-				{if is_zichtbaar($profiel, 'groepen')}{$groepen}{/if}
+				{$commissies}
+				{$onderverenigingen}
+				{$groepen}
 			</div>
-			{if is_zichtbaar($profiel, 'werkgroepen')}
 			<div class="half">
 				{$werkgroepen}
-				{if mag('P_LEDEN_MOD') OR is_ingelogd_account($profiel)}
+				{if mag('P_LEDEN_MOD') OR is_ingelogd_account($profiel->uid)}
 				<div class="label">&nbsp;</div><a class="btn" onclick="$(this).remove();
 						$('#meerGroepenContainer').slideDown();">Toon activiteiten</a>
 			</div>
-			{/if}
 			<div class="clear-left"></div>
 			<div id="meerGroepenContainer" style="display: none;">
-				{if is_zichtbaar($profiel, 'ketzers')}
 				<div class="half">
 					{$ketzers}
 				</div>
-				{/if}
-				{if is_zichtbaar($profiel, 'activiteiten')}
 				<div class="half">
 					{$activiteiten}
 				</div>
-				{/if}
 				<div class="clear-left"></div>
 				{/if}
 			</div>
@@ -218,7 +203,7 @@
 	{if ($profiel->isLid() OR (mag('P_LEDEN_MOD') AND ($profiel->getCiviSaldo() < 0))) AND (isset($saldografiek) OR $profiel->bankrekening!='')}
 		<div class="profielregel">
 			<div class="gegevens">
-				{if $profiel->bankrekening!='' AND is_zichtbaar($profiel, 'bankrekening')}
+				{if $profiel->bankrekening!=''}
 					<div class="label">Bankrekening:</div> {$profiel->bankrekening}
 					{toegang P_MAAL_MOD}
 						<span class="lichtgrijs">({if !$profiel->machtiging}geen {/if}machtiging getekend)</span>
@@ -240,7 +225,7 @@
 					</div>
 				{/if}
 
-				{if isset($saldografiek)} {* Guard in ProfielView *}
+				{if isset($saldografiek)}
 					<div class="clear-left"></div>
 					<div class="label">Saldografiek:</div>
 					<div class="clear-left"></div>
@@ -252,23 +237,21 @@
 
 	<div class="profielregel" id="maaltijden">
 		<div class="gegevens">
-			{if is_zichtbaar($profiel, 'eetwens', 'P_MAAL_MOD')}
-				<div class="label">Allergie/dieet:</div>
-				<div class="data">
-					{strip}
-						{if $profiel->eetwens != ''}
-							{$profiel->eetwens}
-						{else}
-							-
-						{/if}
-						{if is_ingelogd_account($profiel->uid)}
-							&nbsp;<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="btn">{icon get="pencil"}</a></div>
-						{/if}
-					</div>
-				{/strip}
-			{/if}
+			<div class="label">Allergie/dieet:</div>
+			<div class="data">
+				{strip}
+					{if $profiel->eetwens!=''}
+						{$profiel->eetwens}
+					{else}
+						-
+					{/if}
+					{if is_ingelogd_account($profiel->uid)}
+						&nbsp;<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren" class="btn">{icon get="pencil"}</a></div>
+					{/if}
+				</div>
+			{/strip}
+			<br />
 			{if mag('P_MAAL_MOD') OR is_ingelogd_account($profiel->uid)}
-				<br />
 				{if isset($abos)}
 					<div class="label">Abo's:</div>
 					<ul class="nobullets data">
@@ -347,7 +330,7 @@
 					</div>
 					<br />
 				{/if}
-				{if $forumpostcount > 0 AND is_zichtbaar($profiel, 'forum_posts', 'P_FORUM_MOD')}
+				{if $forumpostcount > 0}
 					<div class="label"># bijdragen:</div>
 					<div class="data">
 						{$forumpostcount} bericht{if $forumpostcount> 1 }en{/if}.
@@ -416,7 +399,6 @@
 		</div>
 	{/if}
 
-	{if is_zichtbaar($profiel, 'fotos')}
 	<div class="profielregel fotos" id="fotos">
 		<div class="gegevens">
 			<div class="label">Fotoalbum:</div>
@@ -432,7 +414,6 @@
 			</div>
 		</div>
 	</div>
-	{/if}
 
 	{toegang 'P_ADMIN,bestuur,commissie:NovCie'}
 	{if $profiel->status === CsrDelft\model\entity\LidStatus::Noviet AND $profiel->kgb!=''}
