@@ -1,1 +1,3 @@
-window.Parallax = require('parallax-js');
+import Parallax from 'parallax-js';
+
+window.Parallax = Parallax;

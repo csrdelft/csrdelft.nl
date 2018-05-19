@@ -1,7 +1,9 @@
-window.$ = window.jQuery = require('jquery');
+import $ from 'jquery';
 
-require('jquery.scrollex');
-require('lightbox2');
+window.$ = window.jQuery = $;
+
+import 'jquery.scrollex';
+import 'lightbox2';
 
 $(function () {
 

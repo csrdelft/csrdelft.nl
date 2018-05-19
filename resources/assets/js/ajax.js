@@ -1,4 +1,4 @@
-import {modalClose, modalOpen} from "./modal";
+import {modalClose, modalOpen} from './modal';
 
 /**
  * @see maalcie.js
@@ -33,15 +33,14 @@ export const ajaxRequest = (type, url, data, source, onsuccess, onerror, onfinis
         contentType = false;
         processData = false;
     }
-    let jqXHR = $.ajax({
-        type: type,
-        contentType: contentType,
-        processData: processData,
-        url: url,
+    $.ajax({
+        type,
         cache: false,
-        data: data
-    });
-    jqXHR.done(function (data, textStatus, jqXHR) {
+        contentType,
+        processData,
+        url,
+        data
+    }).done(function (data) {
         if (source) {
             if (!$(source).hasClass('noanim')) {
                 $(source).hide();
@@ -55,8 +54,7 @@ export const ajaxRequest = (type, url, data, source, onsuccess, onerror, onfinis
             }
         }
         onsuccess(data);
-    });
-    jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
+    }).fail(function (data, textStatus, errorThrown) {
         if (errorThrown === '') {
             errorThrown = 'Nog bezig met laden!';
         }
@@ -67,10 +65,9 @@ export const ajaxRequest = (type, url, data, source, onsuccess, onerror, onfinis
             modalClose();
         }
         if (onerror) {
-            onerror(jqXHR.responseText);
+            onerror(data.responseText);
         }
-    });
-    jqXHR.always(function () {
+    }).always(function () {
         if (onfinish) {
             onfinish();
         }

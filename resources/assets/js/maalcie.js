@@ -3,13 +3,16 @@
  *
  * requires jQuery & dragobject.js
  */
-import {ajaxRequest} from './ajax';
+import $ from 'jquery';
 
-$(document).ready(function () {
+import {ajaxRequest} from './ajax';
+import {domUpdate} from './context';
+
+$(function () {
 	$('a.ruilen').each(function () {
 		$(this).removeClass('ruilen');
-		$(this).attr('ondragover', 'taken_mag_ruilen(event);');
-		$(this).attr('ondrop', 'taken_ruilen(event);');
+		$(this).on('dragover', takenMagRuilen);
+		$(this).on('drop', takenRuilen);
 	});
 });
 
@@ -19,19 +22,19 @@ $(document).ready(function () {
  * @param datum
  */
 window.taken_toggle_datum = function(datum) {
-	taken_toggle_datum_first(datum, 0);
+	takenToggleDatumFirst(datum, 0);
 	$('.taak-datum-' + datum).toggle();
-	taken_toggle_datum_first(datum, 1);
-	taken_color_datum();
+	takenToggleDatumFirst(datum, 1);
+	takenColorDatum();
 
 };
 
-function taken_toggle_datum_first(datum, index) {
+function takenToggleDatumFirst(datum, index) {
 	if ('taak-datum-head-' + datum === $('#maalcie-tabel tr:visible').eq(index).attr('id')) {
 		$('#taak-datum-head-first').toggle();
 	}
 }
-function taken_color_datum() {
+function takenColorDatum() {
 	$('tr.taak-datum-summary:visible:odd th').css('background-color', '#FAFAFA');
 	$('tr.taak-datum-summary:visible:even th').css('background-color', '#f5f5f5');
 }
@@ -42,7 +45,7 @@ function taken_color_datum() {
 window.taken_show_old = function() {
 	$('#taak-datum-head-first').show();
 	$('tr.taak-datum-oud').show();
-	taken_color_datum();
+	takenColorDatum();
 };
 
 /**
@@ -53,8 +56,8 @@ window.taken_show_old = function() {
  */
 window.taken_toggle_suggestie = function(soort, show) {
 	$('#suggesties-tabel .' + soort).each(function () {
-		var verborgen = 0;
-		if (typeof show !== 'undefined') {
+        let verborgen = 0;
+        if (typeof show !== 'undefined') {
 			if (show) {
 				$(this).removeClass(soort + 'verborgen');
 			}
@@ -91,8 +94,8 @@ window.taken_toggle_suggestie = function(soort, show) {
  * @see view/maalcie/forms/SuggestieLijst.php
  */
 window.taken_color_suggesties = function() {
-	var $suggestiesTabel = $('#suggesties-tabel');
-	$suggestiesTabel.find('tr:visible:odd').css('background-color', '#FAFAFA');
+    let $suggestiesTabel = $('#suggesties-tabel');
+    $suggestiesTabel.find('tr:visible:odd').css('background-color', '#FAFAFA');
 	$suggestiesTabel.find('tr:visible:even').css('background-color', '#EBEBEB');
 };
 
@@ -101,34 +104,33 @@ let lastSelectedId;
  * @see csrdelft.js
  * @param e
  */
-window.taken_select_range = function(e) {
-	var shift = bShiftPressed;
-	var withinRange = false;
+export function takenSelectRange(e) {
+	let withinRange = false;
 	$('#maalcie-tabel').find('tbody tr td a input[name="' + $(e.target).attr('name') + '"]:visible').each(function () {
-		var thisId = $(this).attr('id');
+		let thisId = $(this).attr('id');
 		if (thisId === lastSelectedId) {
 			withinRange = !withinRange;
 		}
 		if (thisId === e.target.id) {
 			withinRange = !withinRange;
-			var check = $(this).prop('checked');
+			let check = $(this).prop('checked');
 			setTimeout(function () { // workaround e.preventDefault()
 				$('#' + thisId).prop('checked', check);
 			}, 50);
 		}
-		else if (shift && withinRange) {
+		else if (e.shiftKey && withinRange) {
 			$(this).prop('checked', true);
 		}
 	});
 	lastSelectedId = e.target.id;
-};
+}
 
 /**
  * @see csrdelft.js
  * @param e
  * @returns {boolean}
  */
-window.taken_submit_range = function(e) {
+export function takenSubmitRange(e) {
 	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
 		e.target = $(e.target).parent();
 	}
@@ -138,40 +140,40 @@ window.taken_submit_range = function(e) {
 	}
 	$('input[name="' + $(e.target).find('input:first').attr('name') + '"]:visible').each(function () {
 		if ($(this).prop('checked')) {
-			ajaxRequest('POST', $(this).parent().attr('href'), $(this).parent().attr('post'), $(this).parent(), dom_update, alert);
+			ajaxRequest('POST', $(this).parent().attr('href'), $(this).parent().attr('post'), $(this).parent(), domUpdate, alert);
 		}
 	});
-};
+}
 
 /* Ruilen van CorveeTaak */
 
-function taken_mag_ruilen(e) {
+function takenMagRuilen(e) {
 	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
 		e.target = $(e.target).parent();
 	}
-	var source = $('#' + dragobjectID);
+	let source = $('#' + window.dragobjectID);
 	if ($(source).attr('id') !== $(e.target).attr('id')) {
 		e.preventDefault();
 	}
 }
-function taken_ruilen(e) {
+function takenRuilen(e) {
 	e.preventDefault();
-	var elmnt = e.target;
+	let elmnt = e.target;
 	if (elmnt.tagName.toUpperCase() === 'IMG') { // dropped on image inside of anchor
 		elmnt = $(elmnt).parent();
 	}
-	var source = $('#' + dragobjectID);
+	let source = $('#' + window.dragobjectID);
 	if (!confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
 		return;
 	}
-	var attr = $(source).attr('uid');
+	let attr = $(source).attr('uid');
 	if (typeof attr === 'undefined' || attr === false) {
 		attr = '';
 	}
-	ajaxRequest('POST', $(elmnt).attr('href'), 'uid=' + attr, elmnt, dom_update, alert);
+	ajaxRequest('POST', $(elmnt).attr('href'), 'uid=' + attr, elmnt, domUpdate, alert);
 	attr = $(elmnt).attr('uid');
 	if (typeof attr === 'undefined' || attr === false) {
 		attr = '';
 	}
-	ajaxRequest('POST', $(source).attr('href'), 'uid=' + attr, source, dom_update, alert);
+	ajaxRequest('POST', $(source).attr('href'), 'uid=' + attr, source, domUpdate, alert);
 }

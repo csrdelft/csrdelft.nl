@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 export function modalOpen(htmlString) {
     if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
         htmlString.preventDefault();

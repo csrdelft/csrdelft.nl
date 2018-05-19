@@ -2,11 +2,10 @@
  * Laad alle flot in voor grafiekjes.
  */
 
-require('flot');
-require('flot/jquery.flot.pie');
-require('flot/jquery.flot.stack');
-require('flot/jquery.flot.threshold');
-require('flot/jquery.flot.time');
-require('flot/jquery.flot.selection');
-
-require('jquery.flot.tooltip');
+import 'flot';
+import 'flot/jquery.flot.pie';
+import 'flot/jquery.flot.stack';
+import 'flot/jquery.flot.threshold';
+import 'flot/jquery.flot.time';
+import 'flot/jquery.flot.selection';
+import 'jquery.flot.tooltip';

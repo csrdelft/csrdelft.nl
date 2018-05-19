@@ -33,8 +33,6 @@ class CsrLayoutOweePage extends CompressedLayout {
 		if ($template === 'index') {
 			// Zie CompressedLayout::getUserModules, front-page is héél compact
 			$this->addCompressedResources('front-page');
-		} else {
-			$this->addCompressedResources('general');
 		}
 	}
 

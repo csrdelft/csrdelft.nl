@@ -3,28 +3,30 @@
 import {knopPost} from './knop';
 
 import $ from 'jquery';
+import initContext from './context';
 // Excel button in datatables.net-buttons/js/buttons.html5 checkt voor JSZip in window.
-window.JSZip = require('jszip');
+import JSZip from 'jszip';
+window.JSZip = JSZip;
 
 /**
  * Knoop alle datatable plugins aan jquery.
  */
-require('datatables.net');
-require('datatables.net-autofill');
-require('datatables.net-buttons');
-require('datatables.net-buttons/js/buttons.colVis');
-require('datatables.net-buttons/js/buttons.html5');
-require('datatables.net-buttons/js/buttons.flash');
-require('datatables.net-buttons/js/buttons.print');
-require('datatables.net-colreorder');
-require('datatables.net-fixedcolumns');
-require('datatables.net-fixedheader');
-require('datatables.net-keytable');
-require('datatables.net-responsive');
-require('datatables.net-scroller');
-require('datatables.net-select');
-require('./lib/dataTables.childRow');
-require('./lib/dataTables.columnGroup');
+import 'datatables.net';
+import 'datatables.net-autofill';
+import 'datatables.net-buttons';
+import 'datatables.net-buttons/js/buttons.colVis';
+import 'datatables.net-buttons/js/buttons.html5';
+import 'datatables.net-buttons/js/buttons.flash';
+import 'datatables.net-buttons/js/buttons.print';
+import 'datatables.net-colreorder';
+import 'datatables.net-fixedcolumns';
+import 'datatables.net-fixedheader';
+import 'datatables.net-keytable';
+import 'datatables.net-responsive';
+import 'datatables.net-scroller';
+import 'datatables.net-select';
+import './lib/dataTables.childRow';
+import './lib/dataTables.columnGroup';
 
 /*!
  * csrdelft.dataTables.js
@@ -67,7 +69,7 @@ $.extend(true, $.fn.dataTable.defaults, {
     createdRow(tr, data) {
         let table = this;
         $(tr).attr('data-uuid', data.UUID);
-        window.init_context(tr);
+        initContext(tr);
 
         $(tr).children().each((columnIndex, td) => {
             // Init custom buttons in rows
@@ -316,7 +318,7 @@ window.fnUpdateDataTable = function(tableId, response) {
             }
             else {
                 table.row($tr).data(row);
-                init_context($tr);
+                initContext($tr);
             }
         }
         else if ($tr.length === 0) {

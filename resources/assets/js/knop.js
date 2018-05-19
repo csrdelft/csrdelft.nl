@@ -1,6 +1,9 @@
-import {modalClose, modalOpen} from "./modal";
-import {ajaxRequest} from "./ajax";
-import $ from "jquery";
+import $ from 'jquery';
+
+import {modalClose, modalOpen} from './modal';
+import {ajaxRequest} from './ajax';
+import initContext, {domUpdate} from './context';
+import {takenSubmitRange, takenSelectRange} from './maalcie';
 
 export function knopAjax(knop, type) {
     if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
@@ -8,7 +11,7 @@ export function knopAjax(knop, type) {
         return false;
     }
     let source = knop,
-        done = dom_update,
+        done = domUpdate,
         data = knop.attr('data');
 
     if (knop.hasClass('popup')) {
@@ -49,14 +52,14 @@ export function knopAjax(knop, type) {
                 fnUpdateDataTable('#' + tableId, response);
                 if (response.modal) {
                     modalOpen(response.modal);
-                    init_context($('#modal'));
+                    initContext($('#modal'));
                 }
                 else {
                     modalClose();
                 }
             }
             else { // HTML
-                dom_update(response);
+                domUpdate(response);
             }
         };
 
@@ -83,10 +86,10 @@ export function knopPost(event) {
     event.preventDefault();
     if ($(this).hasClass('range')) {
         if (event.target.tagName.toUpperCase() === 'INPUT') {
-            taken_select_range(event);
+            takenSelectRange(event);
         }
         else {
-            taken_submit_range(event);
+            takenSubmitRange(event);
         }
         return false;
     }

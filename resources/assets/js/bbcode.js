@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import initContext from './context';
 
 /**
  * @see templates/courant/courantbeheer.tpl
@@ -26,11 +27,8 @@ export const CsrBBPreview = (sourceId, targetId) => {
     $.post('/tools/bbcode.php', {
         data: encodeURIComponent(bbcode)
     }).done((data) => {
-        if (targetId.charAt(0) !== '#') {
-            targetId = `#${targetId}`;
-        }
         $(targetId).html(data);
-        init_context($(targetId));
+        initContext($(targetId));
         $(targetId).show();
     }).fail((error) => {
         alert(error);

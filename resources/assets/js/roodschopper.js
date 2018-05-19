@@ -1,4 +1,4 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
 /**
  * @see templates/roodschopper/roodschopper.tpl
@@ -47,4 +47,4 @@ window.restoreRoodschopper = function() {
     }
     $('#submitContainer').show();
     $('#messageContainer').hide();
-}
+};

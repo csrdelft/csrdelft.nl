@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import {CsrBBPreview} from "./bbcode";
+import {CsrBBPreview} from './bbcode';
+import {domUpdate} from './context';
 
 function toggleForumConceptBtn(enable) {
     let $concept = $('#forumConcept');
@@ -102,11 +103,11 @@ window.submitPost = () => {
         data: form.serialize()
     }).done((data) => {
         window.restorePost();
-        window.dom_update(data);
+        domUpdate(data);
     }).fail(jqXHR => alert(jqXHR.responseJSON));
 };
 
-$(document).ready(function ($) {
+$(function ($) {
 
     let $textarea = $('#forumBericht');
     let $concept = $('#forumConcept');
@@ -116,7 +117,7 @@ $(document).ready(function ($) {
         /*var ping = */setInterval(() => {
             $.post($concept.attr('data-url'), {
                 ping: ($textarea.val() !== $textarea.attr('origvalue'))
-            }).done(dom_update).fail(error => alert(error));
+            }).done(domUpdate).fail(error => alert(error));
         }, 60000);
         /*var autosave;
          $textarea.focusin(function () {

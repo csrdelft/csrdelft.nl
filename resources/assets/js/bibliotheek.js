@@ -1,11 +1,12 @@
-const $ = require('jquery');
+import $ from 'jquery';
+import Bloodhound from 'typeahead.js';
 
-const Bloodhound = require('typeahead.js');
+import {initHoverIntents} from './context';
 
 /*
  *	Bibliotheekjavascriptcode.
  */
-$(document).ready(function ($) {
+$(function ($) {
 	/*********************************************
 	 * Catalogus
 	 *********************************************/
@@ -63,7 +64,7 @@ $(document).ready(function ($) {
             let eigenaarFilter = $('span.filter.actief').attr('id'),
                 checked = $('input[name=boekstatus]').is(':checked');
             sValue += `,"sEigenaarFilter": "${eigenaarFilter}","sView": ${checked}`;
-			init_hoverIntents();
+			initHoverIntents();
 			return sValue;
 		},
 		'fnStateLoadCallback': (oSettings) => {
@@ -200,7 +201,7 @@ $(document).ready(function ($) {
 					return item;
 				}
 			}
-		}).keyup(function (event) {
+		}).keyup(function () {
 			let inputlen = $(this).val().length;
 
 			if (inputlen > 0 && inputlen < 7) {
@@ -208,7 +209,7 @@ $(document).ready(function ($) {
 			} else {
 				$(this).css('background-color', 'white');
 			}
-		}).on('typeahead:selected', function(event, row, dataset) {
+		}).on('typeahead:selected', function(event, row) {
 			//gegevens in invulvelden plaatsen
 			let values = [
 				{key: 'titel', value: row.title},

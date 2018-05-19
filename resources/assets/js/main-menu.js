@@ -1,4 +1,4 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
 $(function () {
 	//if you change this breakpoint in the style.css file (or _layout.scss if you use SASS), don't forget to update this value as well

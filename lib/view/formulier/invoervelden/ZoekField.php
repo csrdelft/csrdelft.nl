@@ -30,7 +30,7 @@ if (suggestion) {
 	window.location.href = suggestion.url;
 }
 else {
-	form_submit(event);
+	window.formSubmit(event);
 }
 JS;
 		if (LoginModel::mag('P_LEDEN_READ')) {

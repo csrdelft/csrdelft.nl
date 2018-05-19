@@ -18,7 +18,6 @@
 {foreach from=$stylesheets item=sheet}
 <link rel="stylesheet" href="{$sheet}" type="text/css" />
 {/foreach}
-<link rel="stylesheet" href="/dist/css/general.css"/>
 {foreach from=$scripts item=script}
 <script type="text/javascript" src="{$script}"></script>
 {/foreach}

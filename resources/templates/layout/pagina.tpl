@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js">
+<html>
 	<head>
 		{include file='html_head.tpl'}
 	</head>

@@ -4,11 +4,12 @@
  * requires jQuery
  */
 
-const $ = require('jquery');
+import $ from 'jquery';
 
-$(document).ready(function () {
-	let dragObjectId = false,
-		dragged,
+window.dragObjectId = false;
+
+$(function () {
+	let dragged,
 		oldX,
 		oldY;
 
@@ -43,10 +44,10 @@ $(document).ready(function () {
 	}
 
 	function dragObjLeft() {
-		return $('#' + dragObjectId).offset().left - docScrollLeft();
+		return $('#' + window.dragObjectId).offset().left - docScrollLeft();
 	}
 	function dragObjTop() {
-		return $('#' + dragObjectId).offset().top - docScrollTop();
+		return $('#' + window.dragObjectId).offset().top - docScrollTop();
 	}
 
 	function startDrag(e) {
@@ -56,27 +57,27 @@ $(document).ready(function () {
 		if ((tag !== 'DIV' && tag !== 'H1') || overflow === 'auto' || overflow === 'scroll') { // sliding scrollbar of dropdown menu or input field
 			return;
 		}
-		dragObjectId = $(e.target).attr('id');
-		if (typeof dragObjectId === 'undefined' || dragObjectId === false || !$('#' + dragObjectId).hasClass('dragobject')) {
-			dragObjectId = $(e.target).closest('.dragobject').attr('id');
+        window.dragObjectId = $(e.target).attr('id');
+		if (typeof window.dragObjectId === 'undefined' || window.dragObjectId === false || !$('#' + window.dragObjectId).hasClass('dragobject')) {
+            window.dragObjectId = $(e.target).closest('.dragobject').attr('id');
 		}
-		if (typeof dragObjectId !== 'undefined' && dragObjectId !== false) {
+		if (typeof window.dragObjectId !== 'undefined' && window.dragObjectId !== false) {
 			oldX = mouseX(e);
 			oldY = mouseY(e);
 			window.addEventListener('mousemove', mouseMoveHandler, true);
 		}
 		else {
-			dragObjectId = false;
+            window.dragObjectId = false;
 		}
 		dragged = false;
 	}
 	function stopDrag() {
-		if (!dragObjectId) {
+		if (!window.dragObjectId) {
 			return;
 		}
 		window.removeEventListener('mousemove', mouseMoveHandler, true);
 		if (dragged) {
-			let dragObject = $('#' + dragObjectId);
+			let dragObject = $('#' + window.dragObjectId);
 			let top, left;
 			if (dragObject.hasClass('dragvertical') || dragObject.hasClass('draghorizontal')) {
 				top = dragObject.scrollTop();
@@ -87,7 +88,7 @@ $(document).ready(function () {
 				left = dragObjLeft();
 			}
 			$.post('/tools/dragobject', {
-				id: dragObjectId,
+				id: window.dragObjectId,
 				coords: {
 					top: top,
 					left: left
@@ -95,13 +96,13 @@ $(document).ready(function () {
 			});
 			dragged = false;
 		}
-		dragObjectId = false;
+        window.dragObjectId = false;
 	}
 	function mouseMoveHandler(e) {
-		if (!dragObjectId) {
+		if (!window.dragObjectId) {
 			return;
 		}
-		let dragobject = $('#' + dragObjectId);
+		let dragobject = $('#' + window.dragObjectId);
 		e = e || window.event;
 		let newX = mouseX(e);
 		let newY = mouseY(e);

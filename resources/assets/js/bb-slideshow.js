@@ -1,4 +1,4 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
 /*
  * bb-slideshow
@@ -21,7 +21,7 @@ $(function() {
 	$('.image_reel').css({'width' : imageReelWidth});
 
 	//Paging + Slider Function
-	let rotate = function(){
+	function rotate(){
 		let triggerID = $active.attr('rel') - 1; //Get number of times to slide
 		let imageReelPosition = triggerID * imageWidth; //Determines the distance the image reel needs to slide
 
@@ -32,26 +32,25 @@ $(function() {
 		$('.image_reel').animate({
 			left: -imageReelPosition
 		}, 500 );
-
-	};
+	}
 
 	//Rotation + Timing Event
-	let rotateSwitch = function(){
-		play = setInterval(function(){ //Set timer - this will repeat itself every 3 seconds
+	function rotateSwitch(){
+		play = setInterval(() => { //Set timer - this will repeat itself every 3 seconds
 			$active = $('.paging a.active').next();
 			if ( $active.length === 0) { //If paging reaches the end...
 				$active = $('.paging a:first'); //go back to first
 			}
 			rotate(); //Trigger the paging and slider function
 		}, slideshowSpeed); //Timer speed in milliseconds (3 seconds)
-	};
+	}
 
 	rotateSwitch(); //Run function on launch
 
 	//On Hover
-	$('.image_reel a').hover(function() {
+	$('.image_reel a').hover(() => {
 		clearInterval(play); //Stop the rotation
-	}, function() {
+	}, () => {
 		rotateSwitch(); //Resume rotation
 	});
 
