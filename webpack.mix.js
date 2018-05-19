@@ -15,6 +15,13 @@ let HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 mix.setPublicPath('htdocs/dist'); // Verwijder als Laravel draait.
 mix.setResourceRoot('/dist/');
 
+// Zolang travis nog moeilijk doet met imagemin
+mix.options({
+    imgLoaderOptions: {
+        enabled: false
+    }
+});
+
 mix.webpackConfig({
     plugins: [
         new HardSourceWebpackPlugin() // Maak build 20x sneller
