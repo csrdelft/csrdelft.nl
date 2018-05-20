@@ -2,14 +2,12 @@ language: node_js
 node_js:
   - "8"
 
-addons:
-  apt:
-    packages:
-      - libpng-dev
-
 cache:
   directories:
     - "node_modules"
+
+git:
+  submodules: false
 
 install: npm install
 
