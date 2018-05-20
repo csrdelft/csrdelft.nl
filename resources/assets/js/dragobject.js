@@ -99,8 +99,8 @@ $(function () {
 			$.post('/tools/dragobject', {
 				id: dragObject.id,
 				coords: {
-					top: top,
-					left: left
+					top,
+					left
 				}
 			});
 			dragged = false;

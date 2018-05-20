@@ -5,46 +5,7 @@ import _ from 'lodash';
 
 import Bloodhound from 'typeahead.js';
 import Dropzone from 'dropzone/dist/dropzone-amd-module';
-import * as bbcode from './bbcode';
-import * as utils from './util';
 import $ from 'jquery';
-
-import {formInlineToggle, formSubmit, formCancel} from './formulier';
-import initContext, {domUpdate} from './context';
-import {fnUpdateDataTable} from './datatable';
-import {forumBewerken, saveConceptForumBericht} from './forum';
-
-/**
- * Globale objecten gebruikt in PHP code.
- */
-_.assign(window, {
-    ...utils,
-    ...bbcode,
-    _,
-    $,
-    jQuery: $,
-    Bloodhound,
-    Dropzone,
-    // See resources/templates/instellingen/beheer/instelling_row.tpl
-    formInlineToggle,
-    // See view/formulier/invoervelden/InputField.abstract.php
-    // See view/formulier/invoervelden/ZoekField.class.php
-    formSubmit,
-    // See view/formulier/invoervelden/InputField.abstract.php
-    formCancel,
-    // See view/formulier/invoervelden/LidField.class.php
-    initContext,
-    // See view/groepen/leden/GroepTabView.class.php
-    domUpdate,
-    // See view/formulier/datatable/DataTable.php
-    fnUpdateDataTable,
-    // See templates/forum/post_lijst.tpl
-    forumBewerken,
-    // See templates/forum/post_forum.tpl
-    saveConceptForumBericht,
-});
-
-Dropzone.autoDiscover = false;
 
 /**
  * jQuery extensies registreren zichzelf aan bovenstaande jQuery.
@@ -63,6 +24,73 @@ import './lib/jquery.markitup';
 import './lib/jquery.contextMenu';
 import 'timeago';
 
+import {basename, dirname, randomIntFromInterval, selectText} from './util';
+import {bbvideoDisplay, CsrBBPreview} from './bbcode';
+import {formCancel, formInlineToggle, formSubmit} from './formulier';
+import initContext, {domUpdate} from './context';
+import {fnUpdateDataTable} from './datatable';
+import {forumBewerken, saveConceptForumBericht} from './forum';
+import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';
+
+
+/**
+ * Globale objecten gebruikt in PHP code.
+ */
+_.assign(window, {
+    _,
+    $,
+    jQuery: $,
+    Bloodhound,
+    Dropzone,
+    utils: {
+        basename,
+        dirname,
+        randomIntFromInterval,
+        selectText,
+    },
+    bbcode: {
+        CsrBBPreview,
+        bbvideoDisplay,
+    },
+    formulier: {
+        // See resources/templates/instellingen/beheer/instelling_row.tpl
+        formInlineToggle,
+        // See view/formulier/invoervelden/InputField.abstract.php
+        // See view/formulier/invoervelden/ZoekField.class.php
+        formSubmit,
+        // See view/formulier/invoervelden/InputField.abstract.php
+        formCancel,
+    },
+    context: {
+        // See view/formulier/invoervelden/LidField.class.php
+        initContext,
+        // See view/groepen/leden/GroepTabView.class.php
+        domUpdate,
+    },
+    // See view/formulier/datatable/DataTable.php
+    fnUpdateDataTable,
+    forum: {
+        // See templates/forum/post_lijst.tpl
+        forumBewerken,
+        // See templates/forum/post_forum.tpl
+        saveConceptForumBericht,
+    },
+    maalcie: {
+        // See templates/maalcie/corveetaak/beheer_taak_datum.tpl
+        // See templates/maalcie/corveetaak/beheer_taak_head.tpl
+        takenToggleDatum,
+        // See templates/maalcie/corveetaak/beheer_taken.tpl
+        takenShowOld,
+        // See templates/maalcie/corveetaak/suggesties_lijst.tpl
+        // See view/maalcie/forms/SuggestieLijst.php
+        takenToggleSuggestie,
+        // See view/maalcie/forms/SuggestieLijst.php
+        takenColorSuggesties,
+    },
+});
+
+Dropzone.autoDiscover = false;
+
 $.timeago.settings.strings = {
     prefiprefixAgo: '',
     prefixFromNow: 'sinds',
@@ -80,5 +108,5 @@ $.timeago.settings.strings = {
     year: '1 jaar',
     years: '%d jaar',
     wordSeparator: ' ',
-    numbers: []
+    numbers: [],
 };

@@ -41,6 +41,31 @@ $(function () {
 		});
 	}
 
+    function flipback() {
+        if (delayed) {
+            delayed = false;
+            if (learnmode) {
+                $('.memorycard').fadeTo('slow', 1.0);
+                if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
+                    flip1.removeClass('flipped');
+                    flip2.removeClass('flipped');
+                } else {
+                    $('.memorycard[uid=' + flip1.attr('uid') + ']').not(flip1).effect('shake');
+                }
+            } else {
+                if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
+                    flip1.fadeTo('slow', 0.5);
+                    flip2.fadeTo('slow', 0.5);
+                } else {
+                    flip1.removeClass('flipped');
+                    flip2.removeClass('flipped');
+                }
+            }
+            flip1 = false;
+            flip2 = false;
+        }
+    }
+
 	function checkCorrectness() {
 		beurten += 1;
 
@@ -62,31 +87,6 @@ $(function () {
 			window.setTimeout(flipback, 1000);
 		}
 
-	}
-
-	function flipback() {
-		if (delayed) {
-			delayed = false;
-			if (learnmode) {
-				$('.memorycard').fadeTo('slow', 1.0);
-				if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
-					flip1.removeClass('flipped');
-					flip2.removeClass('flipped');
-				} else {
-					$('.memorycard[uid=' + flip1.attr('uid') + ']').not(flip1).effect('shake');
-				}
-			} else {
-				if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
-					flip1.fadeTo('slow', 0.5);
-					flip2.fadeTo('slow', 0.5);
-				} else {
-					flip1.removeClass('flipped');
-					flip2.removeClass('flipped');
-				}
-			}
-			flip1 = false;
-			flip2 = false;
-		}
 	}
 
 	function updateTitle() {
@@ -126,8 +126,8 @@ $(function () {
 				'Ja': function () {
 					$.post('/leden/memoryscore/', {
 						tijd: minutes * 60 + seconds,
-						beurten: beurten,
-						goed: goed,
+						beurten,
+						goed,
 						groep: $('body').data('groep'),
 						eerlijk: eerlijk ? 1 : 0
 					});

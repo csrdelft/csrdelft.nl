@@ -63,9 +63,9 @@
 			<textarea name="forumBericht" id="forumBericht" class="FormElement BBCodeField forumBericht" tabindex="2" rows="12" origvalue="{$post_form_tekst}">{$post_form_tekst}</textarea>
 			<div class="butn">
 				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" class="btn" />
-				<input type="button" value="Voorbeeld" id="forumVoorbeeld" class="btn" onclick="CsrBBPreview('forumBericht', 'berichtPreview');" />
+				<input type="button" value="Voorbeeld" id="forumVoorbeeld" class="btn" onclick="window.bbcode.CsrBBPreview('forumBericht', 'berichtPreview');" />
 				{toegang P_LOGGED_IN}
-					<input type="button" value="Concept opslaan" id="forumConcept" class="btn" onclick="saveConceptForumBericht();" data-url="/forum/concept/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" />
+					<input type="button" value="Concept opslaan" id="forumConcept" class="btn" onclick="window.forum.saveConceptForumBericht();" data-url="/forum/concept/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" />
 				{/toegang}
 				<div class="float-right">
 					{toegang P_LOGGED_IN}

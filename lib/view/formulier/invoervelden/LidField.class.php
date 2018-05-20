@@ -87,7 +87,7 @@ var preview{$this->getId()} = function() {
 		url: "/tools/naamlink.php?zoekin={$this->zoekin}&naam=" + val,
 	}).done(function(response) {
 		$('#lidPreview_{$this->getId()}').html(response);
-		window.initContext('#lidPreview_{$this->getId()}');
+		window.context.initContext('#lidPreview_{$this->getId()}');
 	});
 };
 preview{$this->getId()}();

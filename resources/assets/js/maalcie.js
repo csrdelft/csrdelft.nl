@@ -25,35 +25,28 @@ function takenColorDatum() {
 }
 
 /**
- * @see templates/maalcie/corveetaak/beheer_taak_datum.tpl
- * @see templates/maalcie/corveetaak/beheer_taak_head.tpl
  * @param {string} datum
  */
-window.taken_toggle_datum = function(datum) {
+export function takenToggleDatum(datum) {
 	takenToggleDatumFirst(datum, 0);
 	$('.taak-datum-' + datum).toggle();
 	takenToggleDatumFirst(datum, 1);
 	takenColorDatum();
 
-};
+}
 
 
-/**
- * @see templates/maalcie/corveetaak/beheer_taken.tpl
- */
-window.taken_show_old = function() {
+export function takenShowOld() {
 	$('#taak-datum-head-first').show();
 	$('tr.taak-datum-oud').show();
 	takenColorDatum();
-};
+}
 
 /**
- * @see templates/maalcie/corveetaak/suggesties_lijst.tpl
- * @see view/maalcie/forms/SuggestieLijst.php
  * @param {string} soort
  * @param {boolean} show
  */
-window.taken_toggle_suggestie = function(soort, show) {
+export function takenToggleSuggestie(soort, show) {
 	$('#suggesties-tabel .' + soort).each(function () {
         let verborgen = 0;
         if (typeof show !== 'undefined') {
@@ -86,21 +79,17 @@ window.taken_toggle_suggestie = function(soort, show) {
 			$(this).show();
 		}
 	});
-	taken_color_suggesties();
-};
+	takenColorSuggesties();
+}
 
-/**
- * @see view/maalcie/forms/SuggestieLijst.php
- */
-window.taken_color_suggesties = function() {
+export function takenColorSuggesties() {
     let $suggestiesTabel = $('#suggesties-tabel');
     $suggestiesTabel.find('tr:visible:odd').css('background-color', '#FAFAFA');
 	$suggestiesTabel.find('tr:visible:even').css('background-color', '#EBEBEB');
-};
+}
 
 let lastSelectedId;
 /**
- * @see csrdelft.js
  * @param {KeyboardEvent} e
  */
 export function takenSelectRange(e) {
@@ -125,7 +114,6 @@ export function takenSelectRange(e) {
 }
 
 /**
- * @see csrdelft.js
  * @param {Event} e
  * @returns {boolean}
  */

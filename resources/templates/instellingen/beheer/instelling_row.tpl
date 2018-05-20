@@ -7,7 +7,7 @@
 		<a title="Instelling wijzigen" class="btn wijzigknop" onclick="
 			if (confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
 				var form = $('#form-{$id}');
-				window.formInlineToggle(form);
+				window.formulier.formInlineToggle(form);
 				form.find('.InstellingToggle').toggle();
 				$(this).toggle();
 			}

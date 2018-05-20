@@ -416,7 +416,7 @@ JS;
 		if ($this->onchange_submit) {
 			$this->onchange .= <<<JS
 
-	window.formSubmit(event);
+	window.formulier.formSubmit(event);
 JS;
 		}
 		if ($this->enter_submit) {
@@ -429,7 +429,7 @@ JS;
 			$this->onkeyup .= <<<JS
 
 	if (event.keyCode === 13) {
-		window.formSubmit(event);
+		window.formulier.formSubmit(event);
 	}
 JS;
 		}
@@ -437,7 +437,7 @@ JS;
 			$this->onkeydown .= <<<JS
 
 	if (event.keyCode === 27) {
-		window.formCancel(event);
+		window.formulier.formCancel(event);
 	}
 JS;
 		}

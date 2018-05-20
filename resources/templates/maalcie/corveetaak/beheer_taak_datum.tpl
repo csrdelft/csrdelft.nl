@@ -9,7 +9,7 @@
 	{/if} taak-oud
 {/if}
 {if isset($show)} verborgen
-{/if}" onclick="taken_toggle_datum('{$datum}');">
+{/if}" onclick="window.maalcie.takenToggleDatum('{$datum}');">
 	<th colspan="7" class="{cycle values="rowColor0,rowColor1"}">
 	{foreach name=functie from=$perdatum key=fid item=perfunctie}
 		{foreach name=taken from=$perfunctie item=taak}

@@ -42,7 +42,7 @@ HTML;
 			$js .= <<<JS
 
 var preview{$this->getId()} = function () {
-	CsrBBPreview('#{$this->getId()}', '#bbcodePreview_{$this->getId()}');
+	window.bbcode.CsrBBPreview('#{$this->getId()}', '#bbcodePreview_{$this->getId()}');
 };
 $('#{$this->getId()}').keyup(function(event) {
 	if(event.keyCode === 13) { // enter
