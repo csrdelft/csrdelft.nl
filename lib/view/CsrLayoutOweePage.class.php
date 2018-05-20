@@ -27,7 +27,7 @@ class CsrLayoutOweePage extends CompressedLayout {
 	public $menutmpl;
 
 	function __construct(View $body, $template = 'content', $menu = '') {
-		parent::__construct('layout-owee', $body, $body->getTitel());
+		parent::__construct($body, $body->getTitel());
 		$this->tmpl = $template;
 		$this->menutmpl = $menu;
 		if ($template === 'index') {

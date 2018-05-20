@@ -17,7 +17,7 @@ use CsrDelft\view\CsrSmarty;
  */
 class MaaltijdLijstView extends CompressedLayout {
 	public function __construct(Maaltijd $maaltijd, $aanmeldingen, $corvee) {
-		parent::__construct('layout', $this, $maaltijd->getTitel());
+		parent::__construct($this, $maaltijd->getTitel());
 
 		$this->addCompressedResources('maalcielijst');
 		$smarty = CsrSmarty::instance();

@@ -3,8 +3,6 @@
 namespace CsrDelft\view;
 
 use CsrDelft\model\LidInstellingenModel;
-use Stash\Driver\FileSystem as FileSystemDriver;
-use Stash\Pool as CachePool;
 
 /**
  * CompressedLayout.abstract.php
@@ -19,29 +17,19 @@ use Stash\Pool as CachePool;
  * @see htdocs/tools/js.php
  */
 abstract class CompressedLayout extends HtmlPage {
-	/**
-	 * @var string
-	 */
-	private $layout;
 
 	/**
 	 * CompressedLayout constructor.
 	 *
-	 * @param string $layout
 	 * @param View $body
 	 * @param string $titel
 	 */
-	public function __construct($layout, View $body, $titel) {
+	public function __construct(View $body, $titel) {
 		parent::__construct($body, $titel);
-		$this->layout = $layout;
 
-		foreach ($this->getUserModules('general', 'css') as $module) {
+		foreach ($this->getUserModules() as $module) {
 		    parent::addStylesheet('/dist/css/' . $module . '.css');
         }
-	}
-
-	protected function getLayout() {
-		return $this->layout;
 	}
 
 	/**
@@ -56,47 +44,35 @@ abstract class CompressedLayout extends HtmlPage {
 
 	/**
 	 * Geeft een array met gevraagde modules, afhankelijk van lidinstellingen
-	 * [elke module bestaat uit een set css- of js-bestanden]
-	 *
-	 * @param $module
-	 * @param $extension
+	 * De modules zijn terug te vinden in /resources/assets/sass
 	 *
 	 * @return array
 	 */
-	private function getUserModules($module, $extension) {
+	private function getUserModules() {
 		$modules = array();
 
-		if ($module == 'front-page') {
-			$modules[] = 'general';
-		} elseif ($module == 'general') {
-			// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
-			$modules[] = 'general';
-			$modules[] = 'module/formulier';
-			$modules[] = 'module/datatable';
+		// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
+		$modules[] = 'general';
+		$modules[] = 'module/formulier';
+		$modules[] = 'module/datatable';
 
-			if ($extension == 'css') {
-				//voeg modules toe afhankelijk van instelling
-				$modules[] = 'opmaak/' . LidInstellingenModel::get('layout', 'opmaak');
+		//voeg modules toe afhankelijk van instelling
+		$modules[] = 'opmaak/' . LidInstellingenModel::get('layout', 'opmaak');
 
-				if (LidInstellingenModel::get('layout', 'toegankelijk') == 'bredere letters') {
-					$modules[] = 'bredeletters';
-				}
-				if (LidInstellingenModel::get('layout', 'fx') == 'sneeuw') {
-					$modules[] = 'effect/snow';
-				} elseif (LidInstellingenModel::get('layout', 'fx') == 'space') {
-					$modules[] = 'effect/space';
-				}
-			}
+		if (LidInstellingenModel::get('layout', 'toegankelijk') == 'bredere letters') {
+			$modules[] = 'bredeletters';
+		}
+		if (LidInstellingenModel::get('layout', 'fx') == 'sneeuw') {
+			$modules[] = 'effect/snow';
+		} elseif (LidInstellingenModel::get('layout', 'fx') == 'space') {
+			$modules[] = 'effect/space';
+		}
 
-			if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
-				$modules[] = 'effect/minion';
-			}
-			if (LidInstellingenModel::get('layout', 'fx') == 'onontdekt') {
-				$modules[] = 'effect/onontdekt';
-			}
-		} else {
-			// een niet-algemene module gevraagd
-			$modules[] = $module;
+		if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
+			$modules[] = 'effect/minion';
+		}
+		if (LidInstellingenModel::get('layout', 'fx') == 'onontdekt') {
+			$modules[] = 'effect/onontdekt';
 		}
 
 		return $modules;
