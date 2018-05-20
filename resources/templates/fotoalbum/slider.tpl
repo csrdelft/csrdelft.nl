@@ -8,7 +8,7 @@
 					"height": "{$height}px",
 					"slideshowInterval": "{$interval}s",
 					"slideshowRandom": {if $random}true{else}false{/if},
-					"autostartAtImage": {if $random}randomIntFromInterval(0, $('#{$sliderId} img').length - 1){else}0{/if},
+					"autostartAtImage": {if $random}window.util.randomIntFromInterval(0, $('#{$sliderId} img').length - 1){else}0{/if},
 					"hideThumbnailsOnInit": true,
 					"transition": "random",
 					"transitionBackward": "random",

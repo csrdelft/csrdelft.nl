@@ -61,7 +61,7 @@
 		<input type="submit" name="verzenden" value="Opslaan" /> 
 		<input type="button" value="Voorbeeld" onclick="window.bbcode.CsrBBPreview('courantBericht', 'bewerkPreview');" />
 		{if $courant->magBeheren()}
-			<input type="button" value="Importeer agenda" onclick="importAgenda('courantBericht');" />
+			<input type="button" value="Importeer agenda" onclick="window.courant.importAgenda('courantBericht');" />
 		{/if}
 	</div>
 </form>

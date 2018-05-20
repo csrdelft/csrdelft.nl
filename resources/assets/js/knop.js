@@ -5,6 +5,7 @@ import {ajaxRequest} from './ajax';
 import initContext, {domUpdate} from './context';
 import {takenSubmitRange, takenSelectRange} from './maalcie';
 import {fnUpdateDataTable, fnGetSelection} from './datatable';
+import {redirect, reload} from './util';
 
 export function knopAjax(knop, type) {
     if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
@@ -69,10 +70,10 @@ export function knopAjax(knop, type) {
         }
     }
     if (knop.hasClass('ReloadPage')) {
-        done = page_reload;
+        done = reload;
     }
     else if (knop.hasClass('redirect')) {
-        done = page_redirect;
+        done = redirect;
     }
 
     ajaxRequest(type, knop.attr('href'), data, source, done, alert);

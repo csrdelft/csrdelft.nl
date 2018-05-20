@@ -6,7 +6,6 @@ import _ from 'lodash';
 import Bloodhound from 'typeahead.js';
 import Dropzone from 'dropzone/dist/dropzone-amd-module';
 import $ from 'jquery';
-
 /**
  * jQuery extensies registreren zichzelf aan bovenstaande jQuery.
  */
@@ -24,14 +23,16 @@ import './lib/jquery.markitup';
 import './lib/jquery.contextMenu';
 import 'timeago';
 
-import {basename, dirname, randomIntFromInterval, selectText} from './util';
+import {basename, dirname, randomIntFromInterval, redirect, reload, selectText} from './util';
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
 import {formCancel, formInlineToggle, formSubmit} from './formulier';
 import initContext, {domUpdate} from './context';
 import {fnUpdateDataTable} from './datatable';
 import {forumBewerken, saveConceptForumBericht} from './forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';
-
+import {ketzerAjax} from './ajax';
+import {peilingBevestigStem} from './peiling';
+import {importAgenda} from './courant';
 
 /**
  * Globale objecten gebruikt in PHP code.
@@ -42,18 +43,32 @@ _.assign(window, {
     jQuery: $,
     Bloodhound,
     Dropzone,
-    utils: {
+    util: {
+        // See templates/fotoalbum/album.tpl
         basename,
+        // See templates/fotoalbum/album.tpl
         dirname,
+        // See templates/fotoalbum/slider.tpl
         randomIntFromInterval,
+        // See templates/fotoalbum/album.tpl
+        redirect,
+        // See templates/fotoalbum/album.tpl
+        reload,
+        // See templates/fotoalbum/album.tpl
         selectText,
     },
     bbcode: {
+        // See view/formulier/invoervelden/BBCodeField.class.php
+        // See templates/roodschopper/roodschopper.tpl
+        // See templates/mededelingen/mededeling.tpl
+        // See templates/courant/courantbeheer.tpl
+        // See template/forum/post_form.tpl
         CsrBBPreview,
+        // See view/bbcode/CsrBB.class.php
         bbvideoDisplay,
     },
     formulier: {
-        // See resources/templates/instellingen/beheer/instelling_row.tpl
+        // See templates/instellingen/beheer/instelling_row.tpl
         formInlineToggle,
         // See view/formulier/invoervelden/InputField.abstract.php
         // See view/formulier/invoervelden/ZoekField.class.php
@@ -69,6 +84,8 @@ _.assign(window, {
     },
     // See view/formulier/datatable/DataTable.php
     fnUpdateDataTable,
+    // See templates/maalcie/maaltijd/maaltijd_ketzer.tpl
+    ketzerAjax,
     forum: {
         // See templates/forum/post_lijst.tpl
         forumBewerken,
@@ -87,6 +104,14 @@ _.assign(window, {
         // See view/maalcie/forms/SuggestieLijst.php
         takenColorSuggesties,
     },
+    peiling: {
+        // See templates/peiling/peiling.bb.tpl
+        peilingBevestigStem,
+    },
+    courant: {
+        // See templates/courant/courantbeheer.tpl
+        importAgenda,
+    }
 });
 
 Dropzone.autoDiscover = false;
@@ -110,3 +135,5 @@ $.timeago.settings.strings = {
     wordSeparator: ' ',
     numbers: [],
 };
+
+$.widget.bridge('uitooltip', $.ui.tooltip);

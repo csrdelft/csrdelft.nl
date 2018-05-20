@@ -18,6 +18,7 @@ import './lib/jquery-ui-sliderAccess';
 import 'jquery-ui-timepicker-addon';
 import './lib/jquery-ui-timepicker-nl';
 import 'jquery.maskedinput';
+import {redirect, reload} from './util';
 
 export function formIsChanged(form) {
     let changed = false;
@@ -150,10 +151,10 @@ export function formSubmit(event) {
         }
 
         if (form.hasClass('ReloadPage')) {
-            done = page_reload;
+            done = reload;
         }
         else if (form.hasClass('redirect')) {
-            done = page_redirect;
+            done = redirect;
         }
 
         ajaxRequest('POST', form.attr('action'), formData, source, done, alert, function () {

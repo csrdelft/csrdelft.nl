@@ -1,3 +1,5 @@
+import {modalOpen} from './modal';
+
 /**
  * @source http://stackoverflow.com/a/7228322
  * @see templates/fotoalbum/slider.tpl
@@ -87,4 +89,28 @@ export function basename(path, suffix) {
     }
 
     return base;
+}
+
+/**
+ * @param {string} htmlString
+ */
+export function reload(htmlString) {
+    // prevent hidden errors
+    if (typeof htmlString === 'string' && htmlString.substring(0, 16) === '<div id="modal" ') {
+        modalOpen(htmlString);
+        return;
+    }
+    location.reload();
+}
+
+/**
+ * @param {string} htmlString
+ */
+export function redirect(htmlString) {
+    // prevent hidden errors
+    if (typeof htmlString === 'string' && htmlString.substring(0, 16) === '<div id="modal" ') {
+        modalOpen(htmlString);
+        return;
+    }
+    window.location.href = htmlString;
 }

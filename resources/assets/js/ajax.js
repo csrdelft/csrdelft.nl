@@ -1,20 +1,21 @@
+import $ from "jquery";
 import {modalClose, modalOpen} from './modal';
 
 /**
  * @see maalcie.js
- * @param type
- * @param url
- * @param data
- * @param source
- * @param onsuccess
- * @param onerror
- * @param onfinish
+ * @param {string} type
+ * @param {string} url
+ * @param {string} data
+ * @param {jQuery} source
+ * @param {function} onsuccess
+ * @param {function|null} onerror
+ * @param {function|null} onfinish
  */
-export const ajaxRequest = (type, url, data, source, onsuccess, onerror, onfinish) => {
+export function ajaxRequest(type, url, data, source, onsuccess, onerror, onfinish) {
     if (source) {
         if (!source.hasClass('noanim')) {
             $(source).replaceWith(`<img id="${source.attr('id')}" title="${url}" src="/images/loading-arrows.gif" />`);
-            source = `img[title="${url}"]`;
+            source = $(`img[title="${url}"]`);
         }
         else if (source.hasClass('InlineForm')) {
             $(source).find('.FormElement:first').css({
@@ -40,7 +41,7 @@ export const ajaxRequest = (type, url, data, source, onsuccess, onerror, onfinis
         processData,
         url,
         data
-    }).done(function (data) {
+    }).done((data) => {
         if (source) {
             if (!$(source).hasClass('noanim')) {
                 $(source).hide();
@@ -54,7 +55,7 @@ export const ajaxRequest = (type, url, data, source, onsuccess, onerror, onfinis
             }
         }
         onsuccess(data);
-    }).fail(function (data, textStatus, errorThrown) {
+    }).fail((data, textStatus, errorThrown) => {
         if (errorThrown === '') {
             errorThrown = 'Nog bezig met laden!';
         }
@@ -67,9 +68,30 @@ export const ajaxRequest = (type, url, data, source, onsuccess, onerror, onfinis
         if (onerror) {
             onerror(data.responseText);
         }
-    }).always(function () {
+    }).always(() => {
         if (onfinish) {
             onfinish();
         }
     });
-};
+}
+
+/**
+ * @param url
+ * @param ketzer
+ * @returns {boolean}
+ */
+export function ketzerAjax(url, ketzer) {
+    $(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img src="/images/loading-arrows.gif" />');
+    $.ajax({
+        type: 'GET',
+        cache: false,
+        url: url,
+        data: ''
+    }).done((data) => {
+        $(ketzer).replaceWith(data);
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        $(ketzer + ' .aanmelddata').html('<span class="error">Error: </span>' + errorThrown);
+        alert(errorThrown);
+    });
+    return true;
+}

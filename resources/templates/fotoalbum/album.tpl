@@ -77,8 +77,8 @@
 					$('div.fototag').remove();
 					// get new ones
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-					$.post('/fotoalbum/gettags' + window.utils.dirname(url), {
-						foto: window.utils.basename(url)
+					$.post('/fotoalbum/gettags' + window.util.dirname(url), {
+						foto: window.util.basename(url)
 					}, drawTags);
 				};
 				var removeTag = function (tagDiv) {
@@ -154,8 +154,8 @@
 				};
 				var addTag = function (relX, relY, size) {
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-					$.post('/fotoalbum/addtag' + window.utils.dirname(url), {
-						foto: window.utils.basename(url),
+					$.post('/fotoalbum/addtag' + window.util.dirname(url), {
+						foto: window.util.basename(url),
 						x: Math.round(relX),
 						y: Math.round(relY),
 						size: Math.round(size)
@@ -433,10 +433,10 @@
 					var btnRight = $('<a id="btnRight" tabindex="-1"><span class="fa fa-repeat"></span> &nbsp; Draai met de klok mee</a>');
 					btnRight.click(function () {
 						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-						$.post('/fotoalbum/roteren' + window.utils.dirname(url), {
-							foto: window.utils.basename(url),
+						$.post('/fotoalbum/roteren' + window.util.dirname(url), {
+							foto: window.util.basename(url),
 							rotation: 90
-						}, page_reload);
+						}, window.util.reload);
 					});
 
 					addCMI(btnRight, true);
@@ -445,10 +445,10 @@
 					var btnLeft = $('<a id="btnLeft" tabindex="-1"><span class="fa fa-undo"></span> &nbsp; Draai tegen de klok in</a>');
 					btnLeft.click(function () {
 						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-						$.post('/fotoalbum/roteren' + window.utils.dirname(url), {
-							foto: window.utils.basename(url),
+						$.post('/fotoalbum/roteren' + window.util.dirname(url), {
+							foto: window.util.basename(url),
 							rotation: -90
-						}, page_reload);
+						}, window.util.reload);
 					});
 
 					addCMI(btnLeft);
@@ -457,9 +457,9 @@
 					var btnCover = $('<a id="btnCover" tabindex="-1"><span class="fa fa-folder"></span> &nbsp; Instellen als albumcover</a>');
 					btnCover.click(function () {
 						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-						$.post('/fotoalbum/albumcover' + window.utils.dirname(url), {
-							foto: window.utils.basename(url)
-						}, page_redirect);
+						$.post('/fotoalbum/albumcover' + window.util.dirname(url), {
+							foto: window.util.basename(url)
+						}, window.util.redirect);
 					});
 
 					addCMI(btnCover);
@@ -471,9 +471,9 @@
 							return false;
 						}
 						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-						$.post('/fotoalbum/verwijderen' + window.utils.dirname(url), {
-							foto: decodeURI(window.utils.basename(url))
-						}, page_reload);
+						$.post('/fotoalbum/verwijderen' + window.util.dirname(url), {
+							foto: decodeURI(window.util.basename(url))
+						}, window.util.reload);
 					});
 
 					addCMI(btnDel, true);
@@ -566,7 +566,7 @@
 
 				// user selectable foto url
 				container.find('div.title').off().on('click', function (event) {
-					selectText(this);
+					window.util.selectText(this);
 				}).addClass('select-text');
 
 				// keyboard shortcuts
@@ -604,7 +604,7 @@
 					if (container.hasClass('jgallery-full-screen')) {
 						fullscreen = '?fullscreen';
 					}
-					window.location.href = window.utils.dirname(window.utils.dirname(url)).replace('plaetjes/', '') + fullscreen;
+					window.location.href = window.util.dirname(window.util.dirname(url)).replace('plaetjes/', '') + fullscreen;
 				}).prependTo(container.find('div.icons'));
 
 				// toggle thumbnails
