@@ -156,110 +156,105 @@ $(function ($) {
 		return lang[datarow.language] ? lang[datarow.language] : datarow.language;
 	}
 
-	try {
-		//suggestiemenu configureren
-		let boekenSource = new Bloodhound({
-			datumTokenizer: Bloodhound.tokenizers.whitespace,
-			queryTokenizer: Bloodhound.tokenizers.whitespace,
-			limit: 25,
-			remote: {
-				url: 'https://www.googleapis.com/books/v1/volumes?q=%QUERY',
-				filter: function (data) {
-					let rows = [];
-					data = data.items;
-					for (let i = 0; i < data.length; i++) {
-						let datarow = data[i].volumeInfo;
-						datarow.index = i;
-						rows[i] = datarow;
-					}
-					return rows;
-				},
-				ajax: {
-					data: {
-						fields: 'items(volumeInfo(authors,industryIdentifiers,language,pageCount,publishedDate,publisher,title))',
-						key: 'AIzaSyC7zu4-25xbizddFWuIbn107WTTPr37jos'
-					}
+	//suggestiemenu configureren
+	let boekenSource = new Bloodhound({
+		datumTokenizer: Bloodhound.tokenizers.whitespace,
+		queryTokenizer: Bloodhound.tokenizers.whitespace,
+		limit: 25,
+		remote: {
+			url: 'https://www.googleapis.com/books/v1/volumes?q=%QUERY',
+			filter: (data) => {
+				let rows = [];
+				data = data.items;
+				for (let i = 0; i < data.length; i++) {
+					let datarow = data[i].volumeInfo;
+					datarow.index = i;
+					rows[i] = datarow;
+				}
+				return rows;
+			},
+			ajax: {
+				data: {
+					fields: 'items(volumeInfo(authors,industryIdentifiers,language,pageCount,publishedDate,publisher,title))',
+					key: 'AIzaSyC7zu4-25xbizddFWuIbn107WTTPr37jos'
 				}
 			}
-		});
-		boekenSource.initialize();
-		$("#boekzoeker").typeahead({
-			autoselect: true,
-			hint: true,
-			highlight: true,
-			minLength: 7
-		}, {
-			name: 'boekenSource',
-			displayKey: 'title',
-			source: boekenSource.ttAdapter(),
-			templates: {
-				header: '<h3>Boeken</h3>',
-				suggestion: function (row) {
-					let item = `<div style="margin: 5px 10px" title="Titel: ${row.title} | Auteur: ${getAuteur(row)} | Pagina's: ${row.pageCount} | Taal: ${getLanguage(row)} | ISBN: ${getIsbn(row)} | Uitgeverij: ${row.publisher} | Uitgavejaar: ${getPublishedDate(row)}">`;
-					item += `<span class="dikgedrukt">${row.title}</span><br /><span class="cursief">${getAuteur(row)}</span>`;
-					item += '</div>';
-					return item;
-				}
+		}
+	});
+	boekenSource.initialize();
+	$('#boekzoeker').typeahead({
+		autoselect: true,
+		hint: true,
+		highlight: true,
+		minLength: 7
+	}, {
+		name: 'boekenSource',
+		displayKey: 'title',
+		source: boekenSource.ttAdapter(),
+		templates: {
+			header: '<h3>Boeken</h3>',
+			suggestion: (row) => {
+				let item = `<div style="margin: 5px 10px" title="Titel: ${row.title} | Auteur: ${getAuteur(row)} | Pagina's: ${row.pageCount} | Taal: ${getLanguage(row)} | ISBN: ${getIsbn(row)} | Uitgeverij: ${row.publisher} | Uitgavejaar: ${getPublishedDate(row)}">`;
+				item += `<span class="dikgedrukt">${row.title}</span><br /><span class="cursief">${getAuteur(row)}</span>`;
+				item += '</div>';
+				return item;
 			}
-		}).keyup(function () {
-			let inputlen = $(this).val().length;
+		}
+	}).keyup(function () {
+		let inputlen = $(this).val().length;
 
-			if (inputlen > 0 && inputlen < 7) {
-				$(this).css('background-color', '#ffcc96');
-			} else {
-				$(this).css('background-color', 'white');
-			}
-		}).on('typeahead:selected', function(event, row) {
-			//gegevens in invulvelden plaatsen
-			let values = [
-				{key: 'titel', value: row.title},
-				{key: 'auteur', value: getAuteur(row)},
-				{key: 'paginas', value: row.pageCount},
-				{key: 'taal', value: getLanguage(row)},
-				{key: 'isbn', value: getIsbn(row)},
-				{key: 'uitgeverij', value: row.publisher},
-				{key: 'uitgavejaar', value: getPublishedDate(row)}
-			];
-			values.forEach(function(el) {
-				$(`input[name=${el.key}]`).val(el.value);
-			});
+		if (inputlen > 0 && inputlen < 7) {
+			$(this).css('background-color', '#ffcc96');
+		} else {
+			$(this).css('background-color', 'white');
+		}
+	}).on('typeahead:selected', function(event, row) {
+		//gegevens in invulvelden plaatsen
+		let values = [
+			{key: 'titel', value: row.title},
+			{key: 'auteur', value: getAuteur(row)},
+			{key: 'paginas', value: row.pageCount},
+			{key: 'taal', value: getLanguage(row)},
+			{key: 'isbn', value: getIsbn(row)},
+			{key: 'uitgeverij', value: row.publisher},
+			{key: 'uitgavejaar', value: getPublishedDate(row)}
+		];
+		values.forEach(function(el) {
+			$(`input[name=${el.key}]`).val(el.value);
 		});
+	});
 
-		//boekpagina: autocomplete voor bewerkvelden uit C.S.R.-database.
-		/* result = array(
-		 *		array(data:array(..,..,..), value: "string", result:"string"),
-		 * 		array(... )
-		 * )
-		 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
-		 */
-		let bestaandeBoekenSource = new Bloodhound({
-			datumTokenizer: Bloodhound.tokenizers.whitespace,
-			queryTokenizer: Bloodhound.tokenizers.whitespace,
-			limit: 20,
-			remote: 'autocomplete/titel?q=%QUERY'
-		});
-		bestaandeBoekenSource.initialize();
-		$('form.Formulier input:not(.tt-hint):first').typeahead({
-			autoselect: true,
-			hint: true,
-			highlight: true
-		}, {
-			name: 'bestaandeBoekenSource',
-			displayKey: 'value',
-			source: bestaandeBoekenSource.ttAdapter(),
-			templates: {
-				header: '<h3>Bestaande Boeken</h3>',
-				suggestion: function (row) {
-					return `<div style="margin: 5px 10px">Ga naar: <a href="/bibliotheek/boek/${row.data.id}" target="_blank">${row.data.titel}</a></div>`;
-				}
+	//boekpagina: autocomplete voor bewerkvelden uit C.S.R.-database.
+	/* result = array(
+	 *		array(data:array(..,..,..), value: "string", result:"string"),
+	 * 		array(... )
+	 * )
+	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
+	 */
+	let bestaandeBoekenSource = new Bloodhound({
+		datumTokenizer: Bloodhound.tokenizers.whitespace,
+		queryTokenizer: Bloodhound.tokenizers.whitespace,
+		limit: 20,
+		remote: 'autocomplete/titel?q=%QUERY'
+	});
+	bestaandeBoekenSource.initialize();
+	$('form.Formulier input:not(.tt-hint):first').typeahead({
+		autoselect: true,
+		hint: true,
+		highlight: true
+	}, {
+		name: 'bestaandeBoekenSource',
+		displayKey: 'value',
+		source: bestaandeBoekenSource.ttAdapter(),
+		templates: {
+			header: '<h3>Bestaande Boeken</h3>',
+			suggestion: function (row) {
+				return `<div style="margin: 5px 10px">Ga naar: <a href="/bibliotheek/boek/${row.data.id}" target="_blank">${row.data.titel}</a></div>`;
 			}
-		}).on('typeahead:select', function (event, row) {
-			window.open(`/bibliotheek/boek/${row.data.id}`);
-		});
-	} catch (err) {
-		console.log(err);
-		// Missing js file
-	}
+		}
+	}).on('typeahead:select', function (event, row) {
+		window.open(`/bibliotheek/boek/${row.data.id}`);
+	});
 
 	//boekpagina: asynchroon opslaan toevoegen
 	//opslaan-knop toevoegen, met event die met ajax de veldwaarde opslaat
