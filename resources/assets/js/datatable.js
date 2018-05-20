@@ -306,7 +306,7 @@ window.fnAutoScroll = function(tableId) {
  * @param tableId
  * @param response
  */
-window.fnUpdateDataTable = function(tableId, response) {
+export function fnUpdateDataTable(tableId, response) {
     let $table = $(tableId);
     let table = $table.DataTable();
     // update or remove existing rows or add new rows
@@ -329,17 +329,17 @@ window.fnUpdateDataTable = function(tableId, response) {
         }
     });
     table.draw(false);
-};
+}
 
 /**
  * @see csrdelft.js
  * @param tableId
  * @returns {Array}
  */
-window.fnGetSelection = function(tableId) {
+export function fnGetSelection(tableId) {
     let selection = [];
     $(tableId + ' tbody tr.selected').each(function () {
         selection.push($(this).attr('data-uuid'));
     });
     return selection;
-};
+}

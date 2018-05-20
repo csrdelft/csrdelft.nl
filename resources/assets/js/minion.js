@@ -4,18 +4,37 @@
  * requires jQuery
  */
 
-function makeNewPosition() {
-	let h = $(window).height() - 50,
-		w = $(window).width() - 50,
-		nh = Math.floor(Math.random() * h),
-		nw = Math.floor(Math.random() * w);
+class Position {
+    /**
+     * @param {number} top
+     * @param {number} left
+     */
+	constructor(top, left) {
+		this.top = top;
+		this.left = left;
+	}
 
-	return [nh, nw];
+    /**
+	 * @returns {Position}
+     */
+	static create() {
+        let h = $(window).height() - 50,
+            w = $(window).width() - 50,
+            nh = Math.floor(Math.random() * h),
+            nw = Math.floor(Math.random() * w);
+
+        return new Position(nh, nw);
+	}
 }
 
+/**
+ * @param {Position} prev
+ * @param {Position} next
+ * @returns {number}
+ */
 function calcSpeed(prev, next) {
-	let x = Math.abs(prev[1] - next[1]),
-		y = Math.abs(prev[0] - next[0]),
+	let x = Math.abs(prev.left - next.left),
+		y = Math.abs(prev.top - next.top),
 		greatest = x > y ? x : y,
 		speedModifier = 0.5;
 
@@ -29,13 +48,14 @@ function animateMinion() {
 		return;
 	}
 
-	let newq = makeNewPosition(),
+	let newq = Position.create(),
 		oldq = $minion.offset(),
-		speed = calcSpeed([oldq.top, oldq.left], newq);
+		position = new Position(oldq.top, oldq.left),
+		speed = calcSpeed(position, newq);
 
 	$minion.animate({
-		top: newq[0],
-		left: newq[1]
+		top: newq.top,
+		left: newq.left
 	}, speed, function () {
 		animateMinion();
 	});

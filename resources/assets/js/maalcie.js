@@ -7,19 +7,27 @@ import $ from 'jquery';
 
 import {ajaxRequest} from './ajax';
 import {domUpdate} from './context';
+import {dragObject} from './dragobject';
 
-$(function () {
-	$('a.ruilen').each(function () {
-		$(this).removeClass('ruilen');
-		$(this).on('dragover', takenMagRuilen);
-		$(this).on('drop', takenRuilen);
-	});
-});
+/**
+ * @param {string} datum
+ * @param {number} index
+ */
+function takenToggleDatumFirst(datum, index) {
+    if ('taak-datum-head-' + datum === $('#maalcie-tabel tr:visible').eq(index).attr('id')) {
+        $('#taak-datum-head-first').toggle();
+    }
+}
+
+function takenColorDatum() {
+    $('tr.taak-datum-summary:visible:odd th').css('background-color', '#FAFAFA');
+    $('tr.taak-datum-summary:visible:even th').css('background-color', '#f5f5f5');
+}
 
 /**
  * @see templates/maalcie/corveetaak/beheer_taak_datum.tpl
  * @see templates/maalcie/corveetaak/beheer_taak_head.tpl
- * @param datum
+ * @param {string} datum
  */
 window.taken_toggle_datum = function(datum) {
 	takenToggleDatumFirst(datum, 0);
@@ -29,15 +37,6 @@ window.taken_toggle_datum = function(datum) {
 
 };
 
-function takenToggleDatumFirst(datum, index) {
-	if ('taak-datum-head-' + datum === $('#maalcie-tabel tr:visible').eq(index).attr('id')) {
-		$('#taak-datum-head-first').toggle();
-	}
-}
-function takenColorDatum() {
-	$('tr.taak-datum-summary:visible:odd th').css('background-color', '#FAFAFA');
-	$('tr.taak-datum-summary:visible:even th').css('background-color', '#f5f5f5');
-}
 
 /**
  * @see templates/maalcie/corveetaak/beheer_taken.tpl
@@ -51,8 +50,8 @@ window.taken_show_old = function() {
 /**
  * @see templates/maalcie/corveetaak/suggesties_lijst.tpl
  * @see view/maalcie/forms/SuggestieLijst.php
- * @param soort
- * @param show
+ * @param {string} soort
+ * @param {boolean} show
  */
 window.taken_toggle_suggestie = function(soort, show) {
 	$('#suggesties-tabel .' + soort).each(function () {
@@ -102,7 +101,7 @@ window.taken_color_suggesties = function() {
 let lastSelectedId;
 /**
  * @see csrdelft.js
- * @param e
+ * @param {KeyboardEvent} e
  */
 export function takenSelectRange(e) {
 	let withinRange = false;
@@ -127,7 +126,7 @@ export function takenSelectRange(e) {
 
 /**
  * @see csrdelft.js
- * @param e
+ * @param {Event} e
  * @returns {boolean}
  */
 export function takenSubmitRange(e) {
@@ -147,22 +146,30 @@ export function takenSubmitRange(e) {
 
 /* Ruilen van CorveeTaak */
 
+/**
+ * @param {Event} e
+ */
 function takenMagRuilen(e) {
 	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
 		e.target = $(e.target).parent();
 	}
-	let source = $('#' + window.dragobjectID);
+
+	let source= $('#' + dragObject.id);
 	if ($(source).attr('id') !== $(e.target).attr('id')) {
 		e.preventDefault();
 	}
 }
+
+/**
+ * @param {Event} e
+ */
 function takenRuilen(e) {
 	e.preventDefault();
 	let elmnt = e.target;
 	if (elmnt.tagName.toUpperCase() === 'IMG') { // dropped on image inside of anchor
 		elmnt = $(elmnt).parent();
 	}
-	let source = $('#' + window.dragobjectID);
+	let source = $('#' + dragObject.id);
 	if (!confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
 		return;
 	}
@@ -177,3 +184,11 @@ function takenRuilen(e) {
 	}
 	ajaxRequest('POST', $(source).attr('href'), 'uid=' + attr, source, domUpdate, alert);
 }
+
+$(function () {
+    $('a.ruilen').each(function () {
+        $(this).removeClass('ruilen');
+        $(this).on('dragover', takenMagRuilen);
+        $(this).on('drop', takenRuilen);
+    });
+});

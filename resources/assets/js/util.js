@@ -1,22 +1,22 @@
 /**
  * @source http://stackoverflow.com/a/7228322
  * @see templates/fotoalbum/slider.tpl
- * @param {Number} min
- * @param {Number} max
- * @returns {Number}
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
  */
-export const randomIntFromInterval = function(min, max) {
+export function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
-};
+}
 
 /**
  * Selecteer de tekst van een DOM-element.
  * @source http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
  *
  * @see templates/fotoalbum/album.tpl
- * @param elmnt DOM-object
+ * @param {Node} elmnt DOM-object
  */
-export const selectText = (elmnt) => {
+export function selectText(elmnt) {
     let range, selection;
     if (document.body.createTextRange) { //ms
         range = document.body.createTextRange();
@@ -29,7 +29,7 @@ export const selectText = (elmnt) => {
         selection.removeAllRanges();
         selection.addRange(range);
     }
-};
+}
 
 
 /**
@@ -43,19 +43,21 @@ export const selectText = (elmnt) => {
  //   example 3: dirname('/dir/test/');
  //   returns 3: '/dir'
  * @see templates/fotoalbum/album.tpl
- * @param path
+ * @param {string} path
+ * @returns {string}
  */
-export const dirname = (path) =>
-    path.replace(/\\/g, '/')
+export function dirname(path) {
+    return path.replace(/\\/g, '/')
         .replace(/\/[^\/]*\/?$/, '');
+}
 
 /**
  * @see templates/fotoalbum/album.tpl
- * @param path
- * @param suffix
- * @returns {*}
+ * @param {string} path
+ * @param {string} suffix
+ * @returns {string}
  */
-export const basename = (path, suffix) => {
+export function basename(path, suffix) {
     //  discuss at: http://phpjs.org/functions/basename/
     // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
     // improved by: Ash Searle (http://hexmen.com/blog/)
@@ -71,18 +73,18 @@ export const basename = (path, suffix) => {
     //   example 4: basename('/some/path_ext.ext/','.ext');
     //   returns 4: 'path_ext'
 
-    let b = path;
-    let lastChar = b.charAt(b.length - 1);
+    let base = path;
+    let lastChar = base.charAt(base.length - 1);
 
     if (lastChar === '/' || lastChar === '\\') {
-        b = b.slice(0, -1);
+        base = base.slice(0, -1);
     }
 
-    b = b.replace(/^.*[\/\\]/g, '');
+    base = base.replace(/^.*[\/\\]/g, '');
 
-    if (typeof suffix === 'string' && b.substr(b.length - suffix.length) === suffix) {
-        b = b.substr(0, b.length - suffix.length);
+    if (typeof suffix === 'string' && base.substr(base.length - suffix.length) === suffix) {
+        base = base.substr(0, base.length - suffix.length);
     }
 
-    return b;
-};
+    return base;
+}

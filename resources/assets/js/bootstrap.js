@@ -3,9 +3,6 @@
  */
 import _ from 'lodash';
 
-/**
- * Globale objecten gebruikt in PHP code.
- */
 import Bloodhound from 'typeahead.js';
 import Dropzone from 'dropzone/dist/dropzone-amd-module';
 import * as bbcode from './bbcode';
@@ -13,9 +10,13 @@ import * as utils from './util';
 import $ from 'jquery';
 
 import {formInlineToggle, formSubmit, formCancel} from './formulier';
-
 import initContext, {domUpdate} from './context';
+import {fnUpdateDataTable} from './datatable';
+import {forumBewerken, saveConceptForumBericht} from './forum';
 
+/**
+ * Globale objecten gebruikt in PHP code.
+ */
 _.assign(window, {
     ...utils,
     ...bbcode,
@@ -33,7 +34,14 @@ _.assign(window, {
     formCancel,
     // See view/formulier/invoervelden/LidField.class.php
     initContext,
-    domUpdate
+    // See view/groepen/leden/GroepTabView.class.php
+    domUpdate,
+    // See view/formulier/datatable/DataTable.php
+    fnUpdateDataTable,
+    // See templates/forum/post_lijst.tpl
+    forumBewerken,
+    // See templates/forum/post_forum.tpl
+    saveConceptForumBericht,
 });
 
 Dropzone.autoDiscover = false;

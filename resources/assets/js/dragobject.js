@@ -1,12 +1,12 @@
 /**
  * dragobject.js	|	P.W.G. Brussee (brussee@live.nl)
- *
- * requires jQuery
  */
 
 import $ from 'jquery';
 
-window.dragObjectId = false;
+export const dragObject = {
+	id: false
+};
 
 $(function () {
 	let dragged,
@@ -31,6 +31,11 @@ $(function () {
 
 		return null;
 	}
+
+    /**
+     * @param {MouseEvent} e
+     * @returns {number|null}
+     */
 	function mouseY(e) {
 		if (e.pageY) {
 			return e.pageY;
@@ -44,12 +49,15 @@ $(function () {
 	}
 
 	function dragObjLeft() {
-		return $('#' + window.dragObjectId).offset().left - docScrollLeft();
+		return $('#' + dragObject.id).offset().left - docScrollLeft();
 	}
 	function dragObjTop() {
-		return $('#' + window.dragObjectId).offset().top - docScrollTop();
+		return $('#' + dragObject.id).offset().top - docScrollTop();
 	}
 
+    /**
+     * @param {MouseEvent} e
+     */
 	function startDrag(e) {
 		e = e || window.event;
 		let tag = e.target.tagName.toUpperCase();
@@ -57,27 +65,28 @@ $(function () {
 		if ((tag !== 'DIV' && tag !== 'H1') || overflow === 'auto' || overflow === 'scroll') { // sliding scrollbar of dropdown menu or input field
 			return;
 		}
-        window.dragObjectId = $(e.target).attr('id');
-		if (typeof window.dragObjectId === 'undefined' || window.dragObjectId === false || !$('#' + window.dragObjectId).hasClass('dragobject')) {
-            window.dragObjectId = $(e.target).closest('.dragobject').attr('id');
+		dragObject.id = $(e.target).attr('id');
+		if (typeof dragObject.id === 'undefined' || dragObject.id === false || !$('#' + dragObject.id).hasClass('dragobject')) {
+            dragObject.id = $(e.target).closest('.dragobject').attr('id');
 		}
-		if (typeof window.dragObjectId !== 'undefined' && window.dragObjectId !== false) {
+		if (typeof dragObject.id !== 'undefined' && dragObject.id !== false) {
 			oldX = mouseX(e);
 			oldY = mouseY(e);
 			window.addEventListener('mousemove', mouseMoveHandler, true);
 		}
 		else {
-            window.dragObjectId = false;
+            dragObject.id = false;
 		}
 		dragged = false;
 	}
+
 	function stopDrag() {
-		if (!window.dragObjectId) {
+		if (!dragObject.id) {
 			return;
 		}
 		window.removeEventListener('mousemove', mouseMoveHandler, true);
 		if (dragged) {
-			let dragObject = $('#' + window.dragObjectId);
+			let dragObject = $('#' + dragObject.id);
 			let top, left;
 			if (dragObject.hasClass('dragvertical') || dragObject.hasClass('draghorizontal')) {
 				top = dragObject.scrollTop();
@@ -88,7 +97,7 @@ $(function () {
 				left = dragObjLeft();
 			}
 			$.post('/tools/dragobject', {
-				id: window.dragObjectId,
+				id: dragObject.id,
 				coords: {
 					top: top,
 					left: left
@@ -96,13 +105,17 @@ $(function () {
 			});
 			dragged = false;
 		}
-        window.dragObjectId = false;
+        dragObject.id = false;
 	}
+
+    /**
+     * @param {MouseEvent} e
+     */
 	function mouseMoveHandler(e) {
-		if (!window.dragObjectId) {
+		if (!dragObject.id) {
 			return;
 		}
-		let dragobject = $('#' + window.dragObjectId);
+		let dragobject = $('#' + dragObject.id);
 		e = e || window.event;
 		let newX = mouseX(e);
 		let newY = mouseY(e);

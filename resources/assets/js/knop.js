@@ -4,6 +4,7 @@ import {modalClose, modalOpen} from './modal';
 import {ajaxRequest} from './ajax';
 import initContext, {domUpdate} from './context';
 import {takenSubmitRange, takenSelectRange} from './maalcie';
+import {fnUpdateDataTable, fnGetSelection} from './datatable';
 
 export function knopAjax(knop, type) {
     if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {

@@ -4,6 +4,7 @@ import {knopPost} from './knop';
 import {modalClose, modalOpen} from './modal';
 import {ajaxRequest} from './ajax';
 import initContext, {domUpdate} from './context';
+import {fnUpdateDataTable, fnGetSelection} from './datatable';
 
 import './lib/jquery.contextMenu';
 import 'typeahead.js';
