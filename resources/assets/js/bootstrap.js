@@ -6,22 +6,34 @@ import _ from 'lodash';
 import Bloodhound from 'typeahead.js';
 import Dropzone from 'dropzone/dist/dropzone-amd-module';
 import $ from 'jquery';
+
+window.$ = window.jQuery = $;
+
 /**
  * jQuery extensies registreren zichzelf aan bovenstaande jQuery.
  */
-import 'bootstrap';
-import 'jgallery/dist/js/jgallery'; // jGallery moet na de bootstrap geladen worden! Ondersteund geen CommonJS.
-import 'jquery-hoverintent';
-import 'jquery.scrollto';
-import 'jquery-ui';
-import 'jquery-ui/ui/effect';
-import 'jquery-ui/ui/effects/effect-highlight';
-import 'jquery-ui/ui/effects/effect-fade';
-import 'jquery-ui/ui/widgets/tooltip';
-import 'jquery-ui/ui/widgets/tabs';
-import './lib/jquery.markitup';
-import './lib/jquery.contextMenu';
-import 'timeago';
+require('bootstrap');
+require('jgallery/dist/js/jgallery'); // jGallery moet na de bootstrap geladen worden! Ondersteund geen CommonJS.
+require('jquery-hoverintent');
+require('jquery.scrollto');
+require('jquery-ui');
+require('jquery-ui/ui/effect');
+require('jquery-ui/ui/effects/effect-highlight');
+require('jquery-ui/ui/effects/effect-fade');
+require('jquery-ui/ui/widgets/datepicker');
+require('jquery-ui/ui/widgets/slider');
+require('jquery-ui/ui/widgets/tooltip');
+require('jquery-ui/ui/widgets/tabs');
+require('./lib/jquery.markitup');
+require('./lib/jquery.contextMenu');
+require('timeago');
+require('raty-js');
+require('autosize/build/jquery.autosize');
+require('./lib/jquery.formSteps');
+require('./lib/jquery-ui-sliderAccess');
+require('jquery-ui-timepicker-addon');
+require('./lib/jquery-ui-timepicker-nl');
+require('jquery.maskedinput');
 
 import {basename, dirname, randomIntFromInterval, redirect, reload, selectText} from './util';
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
@@ -39,8 +51,6 @@ import {importAgenda} from './courant';
  */
 _.assign(window, {
     _,
-    $,
-    jQuery: $,
     Bloodhound,
     Dropzone,
     util: {

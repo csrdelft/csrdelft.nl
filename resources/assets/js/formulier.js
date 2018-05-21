@@ -6,18 +6,6 @@ import {ajaxRequest} from './ajax';
 import initContext, {domUpdate} from './context';
 import {fnUpdateDataTable, fnGetSelection} from './datatable';
 
-import './lib/jquery.contextMenu';
-import 'typeahead.js';
-import './lib/jquery.markitup';
-import 'raty-js';
-import 'autosize/build/jquery.autosize';
-import './lib/jquery.formSteps';
-import 'jquery-ui/ui/widgets/datepicker';
-import 'jquery-ui/ui/widgets/slider';
-import './lib/jquery-ui-sliderAccess';
-import 'jquery-ui-timepicker-addon';
-import './lib/jquery-ui-timepicker-nl';
-import 'jquery.maskedinput';
 import {redirect, reload} from './util';
 
 export function formIsChanged(form) {
