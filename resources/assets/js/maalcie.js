@@ -42,6 +42,12 @@ export function takenShowOld() {
 	takenColorDatum();
 }
 
+export function takenColorSuggesties() {
+    let $suggestiesTabel = $('#suggesties-tabel');
+    $suggestiesTabel.find('tr:visible:odd').css('background-color', '#FAFAFA');
+    $suggestiesTabel.find('tr:visible:even').css('background-color', '#EBEBEB');
+}
+
 /**
  * @param {string} soort
  * @param {boolean} show
@@ -80,12 +86,6 @@ export function takenToggleSuggestie(soort, show) {
 		}
 	});
 	takenColorSuggesties();
-}
-
-export function takenColorSuggesties() {
-    let $suggestiesTabel = $('#suggesties-tabel');
-    $suggestiesTabel.find('tr:visible:odd').css('background-color', '#FAFAFA');
-	$suggestiesTabel.find('tr:visible:even').css('background-color', '#EBEBEB');
 }
 
 let lastSelectedId;

@@ -49,19 +49,16 @@ const evaluateMultiplicity = (expression, num) => {
         return true;
     }
 
-    let operator_num = expression.split(' '),
-        expression_operator = operator_num[0],
-        expression_num = parseInt(operator_num[1]),
-        operatorToFunction = {
+    let [expressionOperator, expressionAantal] = expression.split(' ');
+
+    return {
         '==': (a, b) => a === b,
         '!=': (a, b) => a !== b,
         '>=': (a, b) => a >= b,
         '>': (a, b) => a > b,
         '<=': (a, b) => a <= b,
         '<': (a, b) => a < b
-    };
-
-    return operatorToFunction[expression_operator](num, expression_num);
+    }[expressionOperator](num, expressionAantal);
 };
 
 $.extend(true, $.fn.dataTable.defaults, {
@@ -159,7 +156,7 @@ $.fn.dataTable.ext.buttons.default = {
                         newHref = newHref.replace(':' + replacements[i], row[replacements[i]]);
                     }
 
-                    node.attr('href', newHref)
+                    node.attr('href', newHref);
                 }
             });
         }
@@ -227,7 +224,7 @@ $.fn.dataTable.ext.buttons.confirm = {
             buttons: [
                 {
                     extend: 'default',
-                    text: dt => dt.i18n('csr.zeker', 'Are you sure?'),
+                    text: (dt) => dt.i18n('csr.zeker', 'Are you sure?'),
                     action,
                     multiplicity: '', // altijd mogelijk
                     className: 'dt-button-ico dt-ico-exclamation dt-button-warning',
@@ -259,7 +256,7 @@ $.fn.dataTable.render.check = (data) => {
     return '<span class="ico ' + (data ? 'tick' : 'cross') + '"></span>';
 };
 
-$.fn.dataTable.render.aanmeldFilter = data => {
+$.fn.dataTable.render.aanmeldFilter = (data) => {
     return data ? `<span class="ico group_key" title="Aanmeld filter actief: '${data}'"></span>` : '';
 };
 
@@ -274,7 +271,7 @@ $.fn.dataTable.render.totaalPrijs = (data, type, row) => {
 $(function () {
     $('body').on('click', () => {
         // Verwijder tooltips als de datatable modal wordt gesloten
-        $(".ui-tooltip-content").parents('div').remove();
+        $('.ui-tooltip-content').parents('div').remove();
     });
 });
 

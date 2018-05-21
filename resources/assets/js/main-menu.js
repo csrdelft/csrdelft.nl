@@ -29,7 +29,7 @@ $(function () {
 
 	//move nav element position according to window width
 	moveNavigation();
-	$(window).on('resize', function () {
+	$(window).on('resize', () => {
 		if (!window.requestAnimationFrame) {
 			setTimeout(moveNavigation, 300);
 		} else {
@@ -39,12 +39,12 @@ $(function () {
 
 	let $overlay = $('#cd-main-overlay');
 
-	let $maintrigger = $('#cd-main-trigger').click(function () {
+	let $maintrigger = $('#cd-main-trigger').on('click', function () {
 		if ($maintrigger.hasClass('selected')) {
 			$(this).addClass('nav-is-visible');
 			$('.cd-primary-nav').addClass('nav-is-visible');
 			$('.cd-main-header').addClass('nav-is-visible');
-			$('.cd-main-content').addClass('nav-is-visible').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
+			$('.cd-main-content').addClass('nav-is-visible').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', () => {
 				$('body').addClass('overflow-hidden');
 			});
 			toggleSearch('close');
@@ -68,26 +68,26 @@ $(function () {
 	});
 
 	//open search form
-	$('.cd-search-trigger').on('click', function (event) {
+	$('.cd-search-trigger').on('click', event => {
 		event.preventDefault();
 		closeNav();
 		toggleSearch();
 	});
 
 	//close lateral menu on mobile
-	$overlay.on('swiperight', function () {
+	$overlay.on('swiperight', () => {
 		if ($('.cd-primary-nav').hasClass('nav-is-visible')) {
 			closeNav();
 			$overlay.removeClass('is-visible');
 		}
 	});
-	$('.nav-on-left #cd-main-overlay').on('swipeleft', function () {
+	$('.nav-on-left #cd-main-overlay').on('swipeleft', () => {
 		if ($('.cd-primary-nav').hasClass('nav-is-visible')) {
 			closeNav();
 			$overlay.removeClass('is-visible');
 		}
 	});
-	$overlay.on('click', function () {
+	$overlay.on('click', () => {
 		closeNav();
 		toggleSearch('close');
 		$overlay.removeClass('is-visible');
@@ -95,7 +95,7 @@ $(function () {
 
 
 	//prevent default clicking on direct children of .cd-primary-nav
-	$('.cd-primary-nav').children('.has-children').children('a').on('click', function (event) {
+	$('.cd-primary-nav').children('.has-children').children('a').on('click', (event) => {
 		event.preventDefault();
 	});
 	//open submenu
@@ -103,7 +103,7 @@ $(function () {
 		if (!checkWindowWidth()) {
 			event.preventDefault();
 		}
-		var selected = $(this);
+		let selected = $(this);
 		if (selected.next('ul').hasClass('is-hidden')) {
 			//desktop version only
 			selected.addClass('selected').next('ul').removeClass('is-hidden').end().parent('.has-children').parent('ul').addClass('moves-out');
@@ -145,7 +145,7 @@ $(function () {
 			$('.cd-search-trigger').toggleClass('search-is-visible');
 		}
 		if ($cdSearch.hasClass('is-visible')) {
-			$searchfield.focus();
+			$searchfield.trigger('focus');
 			$maintrigger.fadeOut();
 			$('#cd-user-avatar').fadeOut();
 			$overlay.addClass('is-visible');
@@ -180,7 +180,7 @@ $(function () {
 	}).trigger('scroll');
 
 	// Catch keystrokes for instant search
-	$(document).keydown(function (event) {
+	$(document).on('keydown', (event) => {
 
 		// Geen instantsearch met modifiers
 		if (event.ctrlKey || event.altKey || event.metaKey) {
@@ -203,7 +203,7 @@ $(function () {
 		}
 	});
 
-	$searchfield.keyup(function (event) {
+	$searchfield.on('keyup', (event) => {
 		if (event.keyCode === 27) { // esc
 			toggleSearch('close');
 		}

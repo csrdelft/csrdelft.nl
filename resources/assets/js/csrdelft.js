@@ -16,21 +16,14 @@ preloadImg('/images/loading-fb.gif');
 preloadImg('/images/loading-arrows.gif');
 preloadImg('/images/loading_bar_black.gif');
 
-$(() => {
-    zijbalkScrollFixed();
-    initSluitMeldingen();
-    initContext($('body'));
-    //initGeolocation();
-});
-
 // noinspection JSUnusedLocalSymbols
 function initGeolocation() {
 
-    let prev_pos = false;
+    let previousPos = false;
 
     function positionSave(position) {
-        if (!prev_pos || ($(prev_pos.coords).not(position.coords).length === 0 && $(position.coords).not(prev_pos.coords).length === 0)) {
-            prev_pos = position;
+        if (!previousPos || ($(previousPos.coords).not(position.coords).length === 0 && $(position.coords).not(previousPos.coords).length === 0)) {
+            previousPos = position;
             $.post('/geolocation/save', {
                 coords: position.coords,
                 timestamp: Math.round(position.timestamp / 1000)
@@ -130,3 +123,10 @@ function zijbalkScrollFixed() {
         elmnt.hover(showscroll, hidescroll);
     }
 }
+
+$(() => {
+    zijbalkScrollFixed();
+    initSluitMeldingen();
+    initContext($('body'));
+    //initGeolocation();
+});

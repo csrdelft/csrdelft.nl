@@ -1,5 +1,4 @@
-import $ from "jquery";
-
+import $ from 'jquery';
 
 /**
  * @param {string} id

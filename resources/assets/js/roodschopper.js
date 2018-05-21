@@ -8,7 +8,7 @@ import $ from 'jquery';
 window.roodschopper = function(actie) {
     let form = document.getElementById('roodschopper');
     let params = {
-        actie: actie,
+        actie,
     };
     params.push('actie=' + encodeURIComponent(actie));
 
@@ -21,7 +21,7 @@ window.roodschopper = function(actie) {
         }
     }
 
-    $.post("/tools/roodschopper.php", params)
+    $.post('/tools/roodschopper.php', params)
         .done(function (data) {
             if (actie === 'verzenden') {
                 window.location.href = '/htdocs/tools/roodschopper.php';

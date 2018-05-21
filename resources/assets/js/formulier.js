@@ -61,6 +61,23 @@ export function formToggle(event) {
     return false;
 }
 
+export function formReset(event, form) {
+    if (!form) {
+        form = $(this).closest('form');
+        event.preventDefault();
+    }
+    if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
+        return false;
+    }
+    form.find('.FormElement').each(function () {
+        let orig = $(this).attr('origvalue');
+        if (typeof orig === 'string') {
+            $(this).val(orig);
+        }
+    });
+    return false;
+}
+
 /**
  * @see view/formulier/invoervelden/InputField.abstract.php
  * @see view/formulier/invoervelden/ZoekField.php
@@ -168,23 +185,6 @@ export function formSubmit(event) {
     form.unbind('submit');
     form.submit();
     return true;
-}
-
-export function formReset(event, form) {
-    if (!form) {
-        form = $(this).closest('form');
-        event.preventDefault();
-    }
-    if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
-        return false;
-    }
-    form.find('.FormElement').each(function () {
-        let orig = $(this).attr('origvalue');
-        if (typeof orig === 'string') {
-            $(this).val(orig);
-        }
-    });
-    return false;
 }
 
 /**

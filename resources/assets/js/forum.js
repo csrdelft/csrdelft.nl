@@ -42,6 +42,19 @@ function restorePost() {
     $('#forumPosten').css('visibility', 'visible');
 }
 
+function submitPost() {
+    let form = $('#forumEditForm');
+    $.ajax({
+        type: 'POST',
+        cache: false,
+        url: form.attr('action'),
+        data: form.serialize()
+    }).done((data) => {
+        restorePost();
+        domUpdate(data);
+    }).fail((jqXHR) => alert(jqXHR.responseJSON));
+}
+
 /**
  * Een post bewerken in het forum.
  * Haal een post op, bouw een formuliertje met javascript.
@@ -95,22 +108,6 @@ function forumCiteren(postId) {
     // We returnen altijd false, dan wordt de href= van <a> niet meer uitgevoerd.
     // Het werkt dan dus nog wel als javascript uit staat.
     return false;
-}
-
-/**
- * Wordt in gegenereerde code gebruikt.
- */
-function submitPost() {
-    let form = $('#forumEditForm');
-    $.ajax({
-        type: 'POST',
-        cache: false,
-        url: form.attr('action'),
-        data: form.serialize()
-    }).done((data) => {
-        restorePost();
-        domUpdate(data);
-    }).fail((jqXHR) => alert(jqXHR.responseJSON));
 }
 
 $(function () {

@@ -58,6 +58,34 @@ $(function () {
     /**
      * @param {MouseEvent} e
      */
+    function mouseMoveHandler(e) {
+        if (!dragObject.id) {
+            return;
+        }
+        let instance = $('#' + dragObject.id);
+        e = e || window.event;
+        let newX = mouseX(e);
+        let newY = mouseY(e);
+        dragged = instance.hasClass('savepos');
+        if (instance.hasClass('dragvertical')) {
+            instance.scrollTop(instance.scrollTop() + oldY - newY);
+        }
+        else if (instance.hasClass('draghorizontal')) {
+            instance.scrollLeft(instance.scrollLeft() + oldX - newX);
+        }
+        else {
+            instance.css({
+                'top': (dragObjTop() + newY - oldY) + 'px',
+                'left': (dragObjLeft() + newX - oldX) + 'px'
+            });
+        }
+        oldX = newX;
+        oldY = newY;
+    }
+
+    /**
+     * @param {MouseEvent} e
+     */
 	function startDrag(e) {
 		e = e || window.event;
 		let tag = e.target.tagName.toUpperCase();
@@ -86,18 +114,18 @@ $(function () {
 		}
 		window.removeEventListener('mousemove', mouseMoveHandler, true);
 		if (dragged) {
-			let dragObject = $('#' + dragObject.id);
+			let instance = $('#' + dragObject.id);
 			let top, left;
-			if (dragObject.hasClass('dragvertical') || dragObject.hasClass('draghorizontal')) {
-				top = dragObject.scrollTop();
-				left = dragObject.scrollLeft();
+			if (instance.hasClass('dragvertical') || instance.hasClass('draghorizontal')) {
+				top = instance.scrollTop();
+				left = instance.scrollLeft();
 			}
 			else {
 				top = dragObjTop();
 				left = dragObjLeft();
 			}
 			$.post('/tools/dragobject', {
-				id: dragObject.id,
+				id: instance.id,
 				coords: {
 					top,
 					left
@@ -106,34 +134,6 @@ $(function () {
 			dragged = false;
 		}
         dragObject.id = false;
-	}
-
-    /**
-     * @param {MouseEvent} e
-     */
-	function mouseMoveHandler(e) {
-		if (!dragObject.id) {
-			return;
-		}
-		let dragobject = $('#' + dragObject.id);
-		e = e || window.event;
-		let newX = mouseX(e);
-		let newY = mouseY(e);
-		dragged = dragobject.hasClass('savepos');
-		if (dragobject.hasClass('dragvertical')) {
-			dragobject.scrollTop(dragobject.scrollTop() + oldY - newY);
-		}
-		else if (dragobject.hasClass('draghorizontal')) {
-			dragobject.scrollLeft(dragobject.scrollLeft() + oldX - newX);
-		}
-		else {
-			dragobject.css({
-				'top': (dragObjTop() + newY - oldY) + 'px',
-				'left': (dragObjLeft() + newX - oldX) + 'px'
-			});
-		}
-		oldX = newX;
-		oldY = newY;
 	}
 
 	window.addEventListener('mousedown', startDrag, false);
