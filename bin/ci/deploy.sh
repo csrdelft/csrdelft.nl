@@ -29,5 +29,5 @@ rsync -a csrdelft/csrdelft.nl/* deploy --exclude node_modules --exclude .git
 cd deploy
 git add -A
 git add -f htdocs/dist # is in .gitignore
-git commit -m "Travis deploy $TRAVIS_BUILD_NUMBER"
-git push --quiet --set-upstream origin master
+git diff-index --quiet HEAD || git commit -m "Travis deploy $TRAVIS_BUILD_NUMBER"
+git push --force --quiet --set-upstream origin master
