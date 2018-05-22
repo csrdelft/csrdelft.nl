@@ -144,7 +144,7 @@ class LidToestemmingModel extends InstellingenModel {
         return static::instance()->count('uid = ? AND waarde <> \'\'', [$uid]) > 0;
     }
 
-    public function toestemming($profiel, $id, $except = 'P_LEDEN_MOD') {
+    public function toestemming($profiel, $id, $cat = 'profiel', $except = 'P_LEDEN_MOD') {
         if ($profiel->uid == LoginModel::getUid())
             return true;
 
@@ -152,7 +152,7 @@ class LidToestemmingModel extends InstellingenModel {
             return true;
 
         /** @var LidToestemming $toestemming */
-        $toestemming = parent::retrieveByPrimaryKey(['toestemming', $id, $profiel->uid]);
+        $toestemming = parent::retrieveByPrimaryKey([$cat, $id, $profiel->uid]);
 
         if (!$toestemming)
             return false;

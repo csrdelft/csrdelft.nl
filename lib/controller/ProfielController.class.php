@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\GoogleSync;
-use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\LidStatus;
@@ -110,6 +109,7 @@ class ProfielController extends AclController {
 	}
 
 	public function profiel(Profiel $profiel) {
+		$profiel = $profiel->bescherm();
 		return new ProfielView($profiel);
 	}
 

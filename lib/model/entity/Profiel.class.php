@@ -649,4 +649,17 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		}
 	}
 
+	/**
+	 * BeschermdProfielProxy ondersteund alle functie aanroepen op Profiel.
+	 *
+	 * @noinspection PhpDocMissingThrowsInspection
+	 * @noinspection PhpDocSignatureInspection
+	 * @return Profiel
+	 */
+	public function bescherm() {
+		/** @noinspection PhpIncompatibleReturnTypeInspection */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		return new BeschermdProfielProxy($this);
+	}
+
 }
