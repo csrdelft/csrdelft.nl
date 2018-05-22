@@ -57,12 +57,12 @@ class Foto extends Afbeelding {
 	 * Get Foto from filename (absolute path)
 	 * @param $filename
 	 */
-	public static function fromFileName(string $filename) {
+	public static function fromFileName(string $filename, $parse = true) {
 		$realfile = realpath($filename);
 		if (!startsWith($realfile, realpath(PHOTOALBUM_PATH))) {
 			return false;
 		}
-		return new Foto(basename($realfile), new FotoAlbum(dirname($realfile)));
+		return new Foto(basename($realfile), new FotoAlbum(dirname($realfile)), $parse);
 	}
 	public function __construct($filename = null, FotoAlbum $album = null, $parse = false) {
 		if ($filename === true) { // called from PersistenceModel

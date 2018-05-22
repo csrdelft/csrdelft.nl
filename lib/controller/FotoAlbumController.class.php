@@ -36,23 +36,23 @@ class FotoAlbumController extends AclController {
 		parent::__construct($query, FotoAlbumModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'bekijken' => 'P_ALBUM_READ',
-				'download' => 'P_ALBUM_READ',
-				'downloaden' => 'P_ALBUM_DOWN',
-				'verwerken' => 'P_ALBUM_MOD',
-				'uploaden' => 'P_ALBUM_ADD',
+				'bekijken' => 'P_ALBUM_READ|P_ALBUM_PUBLIC_READ',
+				'download' => 'P_ALBUM_READ|P_ALBUM_PUBLIC_READ',
+				'downloaden' => 'P_ALBUM_DOWN|P_ALBUM_PUBLIC_READ',
+				'verwerken' => 'P_ALBUM_MOD|P_ALBUM_PUBLIC_MOD',
+				'uploaden' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
 				'zoeken' => 'P_LEDEN_READ',
-				'raw_image' => 'P_ALBUM_READ'
+				'raw_image' => 'P_ALBUM_READ|P_ALBUM_PUBLIC_READ'
 			);
 		} else {
 			$this->acl = array(
-				'albumcover' => 'P_ALBUM_ADD',
-				'verwijderen' => 'P_ALBUM_ADD',
-				'hernoemen' => 'P_ALBUM_ADD',
-				'roteren' => 'P_ALBUM_ADD',
-				'toevoegen' => 'P_ALBUM_ADD',
-				'bestaande' => 'P_ALBUM_ADD',
-				'uploaden' => 'P_ALBUM_ADD',
+				'albumcover' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
+				'verwijderen' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
+				'hernoemen' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
+				'roteren' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
+				'toevoegen' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
+				'bestaande' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
+				'uploaden' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
 				'gettags' => 'P_LEDEN_READ',
 				'addtag' => 'P_LEDEN_READ',
 				'removetag' => 'P_LEDEN_READ'
@@ -94,13 +94,20 @@ class FotoAlbumController extends AclController {
 		}
 		if (!$album) {
 			setMelding('Fotoalbum bestaat niet' . (DEBUG ? ': ' . $path : ''), -1);
-			redirect('/fotoalbum');
+			if (LoginModel::mag('P_ALBUM_READ')) {
+				redirect('/fotoalbum');
+			} else {
+				redirect('/fotoalbum/Publiek');
+			}
 		}
 		$args[] = $album;
 		parent::performAction($args);
 	}
 
 	public function bekijken(FotoAlbum $album) {
+		if (!$album->magBekijken()) {
+			$this->exit_http(403);
+		}
 		if ($album->dirname === 'Posters') {
 			$album->orderByDateModified();
 		}
@@ -115,6 +122,9 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function verwerken(FotoAlbum $album) {
+		if (!$album->magAanpassen()) {
+			$this->exit_http(403);
+		}
 		if ($album->dirname === 'fotoalbum') {
 			setMelding('Niet het complete fotoalbum verwerken', -1);
 			redirect($album->getUrl());
@@ -124,6 +134,9 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function toevoegen(FotoAlbum $album) {
+		if (!$album->magToevoegen()) {
+			$this->exit_http(403);
+		}
 		$formulier = new FotoAlbumToevoegenForm($album);
 		if ($this->getMethod() == 'POST' AND $formulier->validate()) {
 			$subalbum = $formulier->findByName('subalbum')->getValue();
@@ -139,6 +152,9 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function uploaden(FotoAlbum $album) {
+		if (!$album->magToevoegen()) {
+			$this->exit_http(403);
+		}
 		$poster = $album->dirname === 'Posters';
 		if ($poster) {
 			$formulier = new PosterUploadForm($album);
@@ -195,6 +211,9 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function bestaande(FotoAlbum $album) {
+		if (!$album->magToevoegen()) {
+			$this->exit_http(403);
+		}
 		$list = array();
 		$files = @scandir($album->path . '_thumbs/');
 		if ($files !== false) {
@@ -213,7 +232,10 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function download($path) {
-		$foto = new Afbeelding($path);
+		$foto = Foto::fromFileName($path, true);
+		if (!$foto->magBekijken()) {
+			$this->exit_http(403);
+		}
 		if ($foto->exists()) {
 			header('Content-Description: File Transfer');
 			header('Content-Type: ' . $foto->mimetype);
@@ -228,6 +250,9 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function downloaden(FotoAlbum $album) {
+		if (!$album->magDownloaden()) {
+			$this->exit_http(403);
+		}
 		header('Content-Description: File Transfer');
 		header('Content-Type: application/x-tar');
 		header('Content-Disposition: attachment; filename="' . $album->dirname . '.tar"');
@@ -249,7 +274,7 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function hernoemen(FotoAlbum $album) {
-		if (!LoginModel::mag('P_ALBUM_MOD') AND !$album->isOwner()) {
+		if (!$album->magAanpassen()) {
 			$this->exit_http(403);
 		}
 		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
@@ -261,7 +286,7 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function albumcover(FotoAlbum $album) {
-		if (!LoginModel::mag('P_ALBUM_MOD') AND !$album->isOwner()) {
+		if (!$album->magAanpassen()) {
 			$this->exit_http(403);
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
@@ -274,6 +299,9 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function verwijderen(FotoAlbum $album) {
+		if (!$album->magVerwijderen()) {
+			$this->exit_http(403);
+		}
 		if ($album->isEmpty()) {
 			if (1 === FotoAlbumModel::instance()->delete($album)) {
 				setMelding('Fotoalbum verwijderen geslaagd', 1);
@@ -286,9 +314,6 @@ class FotoAlbumController extends AclController {
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
-		if (!$foto->exists() OR !LoginModel::mag('P_ALBUM_DEL') AND !$foto->isOwner()) {
-			$this->exit_http(403);
-		}
 		if (FotoModel::instance()->verwijderFoto($foto)) {
 			echo '<div id="' . md5($filename) . '" class="remove"></div>';
 			exit;
@@ -298,11 +323,11 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function roteren(FotoAlbum $album) {
-		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
-		$foto = new Foto($filename, $album);
-		if (!$foto->exists() OR !LoginModel::mag('P_ALBUM_MOD') AND !$foto->isOwner()) {
+		if (!$album->magAanpassen()) {
 			$this->exit_http(403);
 		}
+		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$foto = new Foto($filename, $album);
 		$degrees = (int)filter_input(INPUT_POST, 'rotation', FILTER_SANITIZE_NUMBER_INT);
 		$foto->rotate($degrees);
 		$this->view = new JsonResponse(true);
@@ -341,6 +366,9 @@ class FotoAlbumController extends AclController {
 	}
 
 	public function addtag(FotoAlbum $album) {
+		if (!$album->magToevoegen()) {
+			$this->exit_http(403);
+		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
 		if (!$foto->exists()) {
