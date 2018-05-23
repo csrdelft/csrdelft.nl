@@ -10,6 +10,13 @@
     </p>
     <hr class="clear">
     <p>
+        {$beschrijvingBijzonder}
+    </p>
+    <p>
+        {$akkoordBijzonder}
+    </p>
+    <hr class="clear">
+    <p>
         {$beschrijvingExternFoto}
     </p>
     <p>

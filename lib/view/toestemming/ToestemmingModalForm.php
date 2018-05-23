@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\toestemming;
 
-use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\LidToestemming;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\LidToestemmingModel;
@@ -45,12 +44,14 @@ class ToestemmingModalForm extends ModalForm {
 
         $smarty->assign('beleid', InstellingenModel::get('privacy', 'beleid_kort'));
 		$smarty->assign('beschrijvingBestuur', InstellingenModel::get('privacy', 'beschrijving_bestuur'));
+		$smarty->assign('beschrijvingBijzonder', InstellingenModel::get('privacy', 'beschrijving_bijzonder'));
 		$smarty->assign('beschrijvingVereniging', InstellingenModel::get('privacy', 'beschrijving_vereniging'));
 		$smarty->assign('beschrijvingExternFoto', InstellingenModel::get('privacy', 'beschrijving_foto_extern'));
 		$smarty->assign('beschrijvingInternFoto', InstellingenModel::get('privacy', 'beschrijving_foto_intern'));
 		$smarty->assign('akkoordExternFoto', $this->maakToestemmingLine('algemeen', 'foto_extern'));
 		$smarty->assign('akkoordInternFoto', $this->maakToestemmingLine('algemeen', 'foto_intern'));
         $smarty->assign('akkoordVereniging', $this->maakToestemmingLine('algemeen', 'vereniging'));
+        $smarty->assign('akkoordBijzonder', $this->maakToestemmingLine('algemeen', 'bijzonder'));
         $smarty->assign('akkoord', $akkoord);
         $smarty->assign('fields', $fields);
         $this->addFields([
