@@ -10,10 +10,17 @@
     </p>
     <hr class="clear">
     <p>
-        {$beschrijvingExtern}
+        {$beschrijvingExternFoto}
     </p>
     <p>
-        {$akkoordExtern}
+        {$akkoordExternFoto}
+    </p>
+    <hr class="clear">
+    <p>
+        {$beschrijvingInternFoto}
+    </p>
+    <p>
+        {$akkoordInternFoto}
     </p>
     <hr class="clear">
     <p>

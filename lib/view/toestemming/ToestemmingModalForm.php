@@ -46,8 +46,10 @@ class ToestemmingModalForm extends ModalForm {
         $smarty->assign('beleid', InstellingenModel::get('privacy', 'beleid_kort'));
 		$smarty->assign('beschrijvingBestuur', InstellingenModel::get('privacy', 'beschrijving_bestuur'));
 		$smarty->assign('beschrijvingVereniging', InstellingenModel::get('privacy', 'beschrijving_vereniging'));
-		$smarty->assign('beschrijvingExtern', InstellingenModel::get('privacy', 'beschrijving_extern'));
-        $smarty->assign('akkoordExtern', $this->maakToestemmingLine('algemeen', 'extern'));
+		$smarty->assign('beschrijvingExternFoto', InstellingenModel::get('privacy', 'beschrijving_foto_extern'));
+		$smarty->assign('beschrijvingInternFoto', InstellingenModel::get('privacy', 'beschrijving_foto_intern'));
+		$smarty->assign('akkoordExternFoto', $this->maakToestemmingLine('algemeen', 'foto_extern'));
+		$smarty->assign('akkoordInternFoto', $this->maakToestemmingLine('algemeen', 'foto_intern'));
         $smarty->assign('akkoordVereniging', $this->maakToestemmingLine('algemeen', 'vereniging'));
         $smarty->assign('akkoord', $akkoord);
         $smarty->assign('fields', $fields);
