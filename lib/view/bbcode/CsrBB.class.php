@@ -240,7 +240,7 @@ HTML;
 		$url = urldecode($this->parseArray(array('[/foto]'), array()));
 		$parts = explode('/', $url);
 		$filename = str_replace('#', '', array_pop($parts)); // replace # (foolproof)
-		$path = PHOTOS_PATH . 'fotoalbum' . implode('/', $parts);
+		$path = PHOTOALBUM_PATH . 'fotoalbum' . implode('/', $parts);
 		$album = FotoAlbumModel::instance()->getFotoAlbum($path);
 		if (!$album) {
 			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
