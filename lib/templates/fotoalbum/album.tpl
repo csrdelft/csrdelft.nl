@@ -427,7 +427,7 @@
 						btnZoom.find('span.fa').addClass('fa-search-minus');
 					}
 
-		{if CsrDelft\model\security\LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
+		{if $album->magAanpassen()}
 
 					// knopje rechtsom draaien
 					var btnRight = $('<a id="btnRight" tabindex="-1"><span class="fa fa-repeat"></span> &nbsp; Draai met de klok mee</a>');
@@ -707,16 +707,16 @@
 	</script>
 {/if}
 <div class="float-right" style="margin-top: 30px;">
-	{toegang P_ALBUM_ADD}
+	{if $album->magToevoegen()}
 		<a class="btn" href="/fotoalbum/uploaden/{$album->subdir}">{icon get="picture_add"} Toevoegen</a>
 		<a class="btn post popup" href="/fotoalbum/toevoegen/{$album->subdir}">{icon get="folder_add"} Nieuw album</a>
-	{/toegang}
-	{if CsrDelft\model\security\LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
+	{/if}
+	{if $album->magAanpassen()}
 		<a href="/fotoalbum/hernoemen/{$album->subdir}" class="btn post prompt redirect" title="Fotoalbum hernoemen" data="Nieuwe naam={$album->dirname|ucfirst}">{icon get=pencil} Naam wijzigen</a>
 		{if $album->isEmpty()}
 			<a href="/fotoalbum/verwijderen/{$album->subdir}" class="btn post confirm redirect" title="Fotoalbum verwijderen">{icon get=cross} Verwijderen</a>
 		{/if}
-		{toegang P_ALBUM_MOD}
+		{toegang $album->magAanpassen()}
 			<a class="btn popup confirm" href="/fotoalbum/verwerken/{$album->subdir}" title="Fotoalbum verwerken (dit kan even duren). Verwijder magick-* files in /tmp handmatig bij timeout!">{icon get="application_view_gallery"} Verwerken</a>
 		{/toegang}
 	{/if}

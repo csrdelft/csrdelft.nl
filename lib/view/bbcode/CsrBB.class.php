@@ -290,7 +290,7 @@ HTML;
 		} else {
 			//vervang url met pad
 			$url = str_ireplace(CSR_ROOT, '', $url);
-			$path = PHOTOS_PATH;
+			$path = PHOTOALBUM_PATH;
 			//check fotoalbum in url
 			$url = str_ireplace('fotoalbum/', '', $url);
 			$path .= 'fotoalbum/';
