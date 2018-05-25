@@ -38,8 +38,8 @@ class LidToestemmingModel extends InstellingenModel {
         'algemeen' => [
         	'foto_intern' => ['Mijn foto\'s mogen op de interne stek geplaatst worden.', T::Enumeration, ['', 'ja', 'nee'], ''],
             'foto_extern' => ['Mijn foto\'s mogen op de externe stek geplaatst worden en voor promotiedoeleinden gebruikt worden.', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'vereniging' => ['Het bestuur en commissies van C.S.R. mogen mijn gegevens gebruiken om hun taken uit te voeren.', T::Enumeration, ['', 'ja', 'nee'], ''],
-			'bijzonder' => ['Bijzondere persoonsgegevens', T::Enumeration, ['', 'ja', 'nee'], ''],
+            'vereniging' => ['Het bestuur en commissies van C.S.R. mogen mijn persoonsgegevens gebruiken om hun taken uit te voeren.', T::Enumeration, ['', 'ja', 'nee'], ''],
+			'bijzonder' => ['Het bestuur en commissies van C.S.R. mogen mijn bijzondere persoonsgegevens gebruiken om hun taken uit te voeren.', T::Enumeration, ['', 'ja', 'nee'], ''],
         ],
         'intern' => [ // Gegevens die niet directe velden in Profiel zijn
             // C.S.R. Groepen
@@ -152,7 +152,7 @@ class LidToestemmingModel extends InstellingenModel {
 
         $uid = LoginModel::getUid();
 
-        return static::instance()->count('uid = ? AND waarde <> \'\'', [$uid]) > 0;
+        return static::instance()->count('uid = ? AND waarde = \'\'', [$uid]) > 0;
     }
 
     public function toestemming($profiel, $id, $except = 'P_LEDEN_MOD') {
