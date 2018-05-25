@@ -7,7 +7,9 @@
 use CsrDelft\Icon;
 use CsrDelft\lid\LidZoeker;
 use CsrDelft\MijnSqli;
+use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
@@ -1042,4 +1044,24 @@ function mag($permission, array $allowedAuthenticationMethods = null) {
  */
 function is_ingelogd_account($uid) {
     return LoginModel::getUid() == $uid;
+}
+
+/**
+ * @param Profiel $profiel
+ * @param string $key
+ * @param string $uitzondering Sommige commissie mogen wel dit veld zien.
+ * @return bool
+ */
+function is_zichtbaar($profiel, $key, $uitzondering = 'P_LEDEN_MOD') {
+    if (is_array($key)) {
+        foreach ($key as $item) {
+            if (!LidToestemmingModel::instance()->toestemming($profiel, $item, $uitzondering)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    return LidToestemmingModel::instance()->toestemming($profiel, $key, $uitzondering);
 }

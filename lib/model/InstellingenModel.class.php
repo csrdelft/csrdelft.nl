@@ -46,6 +46,14 @@ class InstellingenModel extends CachedPersistenceModel {
 	 * @var string[][]
 	 */
 	protected static $defaults = array(
+		'privacy' => array(
+			'beleid_kort' => 'Hier kunt u aangeven of u akkoord gaat met het delen van uw gegevens. Deze keuze geldt totdat u lid-af of oud-lid wordt. Het zal altijd mogelijk zijn om uw keuze aan te passen. Een knop hier voor is te vinden op uw profiel onder uw foto. Kijk op de <a href="/privacy">privacy</a> pagina voor meer informatie. Stuur een berichtje naar de Vice-Abactis als er nog verdere vragen of opmerkingen zijn. Als u op annuleren klikt zult u voor een uur lang niet lastig gevallen worden met dit bericht.',
+			'beschrijving_bestuur' => 'Met de volgende optie kunt u aangeven of u akkoord gaat met het gebruik van uw gegevens door het bestuur en commissies van C.S.R. om hun taak volledig te kunnen voldoen. Hiervoor gebruiken zij slechts de gegevens die zij nodig hebben. (Bij \'nee\' zal er contact worden opgenomen om zo tot een goede oplossing te komen.)',
+			'beschrijving_bijzonder' => 'Met de volgende optie kunt u aangeven of u akkoord gaat met het gebruik van uw bijzondere persoonsgegevens, in dit geval alleen allergie, voor gebruik door het bestuur en commissies.',
+			'beschrijving_foto_extern' => 'Met de volgende optie kunt u aangeven of u akkoord gaat met het gebruik van foto\'s waar u op te zien bent op de externe stek of voor promotiedoeleinden.',
+			'beschrijving_foto_intern' => 'Met de volgende optie kunt u aangeven of u akkoord gaat met het plaatsen van foto\'s op het interne gedeelte van de stek.',
+			'beschrijving_vereniging' => 'Maak hieronder een keuze of u akkoord gaat met het delen van uw gegevens met leden, novieten en oudleden van C.S.R.'
+		),
 		'agenda' => array(
 			'standaard_rechten' => 'P_LOGGED_IN',
 			'ical_from' => '-1 month',
