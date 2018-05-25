@@ -4,7 +4,7 @@ import $ from 'jquery';
  * @param {string} htmlString
  * @returns {boolean}
  */
-export function modalOpen(htmlString) {
+export function modalOpen(htmlString = '') {
     if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
         htmlString.preventDefault();
         return false;

@@ -128,5 +128,10 @@ $(() => {
     zijbalkScrollFixed();
     initSluitMeldingen();
     initContext($('body'));
+
+    let modal = $('#modal');
+    if (modal.html() !== '') {
+        modal.modal();
+    }
     //initGeolocation();
 });

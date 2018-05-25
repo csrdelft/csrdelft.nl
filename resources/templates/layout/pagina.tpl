@@ -41,7 +41,7 @@
 		{if isset($modal)}
 			{$modal->view()}
 		{else}
-			<div id="modal" class="modal-content outer-shadow dragobject" tabindex="-1"></div>
+			<div id="modal" tabindex="-1"></div>
 		{/if}
 		{if isset($minion)}
 			{$minion}
