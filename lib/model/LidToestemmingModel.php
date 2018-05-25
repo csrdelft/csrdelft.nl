@@ -152,7 +152,7 @@ class LidToestemmingModel extends InstellingenModel {
 
         $uid = LoginModel::getUid();
 
-        return static::instance()->count('uid = ? AND waarde = \'\'', [$uid]) != 0;
+        return static::instance()->count('uid = ? AND waarde = \'\'', [$uid]) == 0;
     }
 
     public function toestemming($profiel, $id, $except = 'P_LEDEN_MOD') {
