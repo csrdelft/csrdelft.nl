@@ -69,50 +69,50 @@
             <div class="content">
                 <h2 class="major">Foto's</h2>
                 <div class="grid">
-                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic01.jpg"
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic01.jpg"
                        data-lightbox="page-lightbox"
-                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic01.jpg'
-                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic01.jpg'>">
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Publiek/Voorpagina/pic01.jpg'
+                    src='/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic01.jpg'>">
                     </a>
-                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic02.jpg"
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic02.jpg"
                        data-lightbox="page-lightbox"
-                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic02.jpg'
-                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic02.jpg'>">
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Publiek/Voorpagina/pic02.jpg'
+                    src='/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic02.jpg'>">
                     </a>
-                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic03.jpg"
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic03.jpg"
                        data-lightbox="page-lightbox"
-                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic03.jpg'
-                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic03.jpg'>">
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Publiek/Voorpagina/pic03.jpg'
+                    src='/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic03.jpg'>">
                     </a>
-                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic04.jpg"
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic04.jpg"
                        data-lightbox="page-lightbox"
-                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic04.jpg'
-                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic04.jpg'>">
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Publiek/Voorpagina/pic04.jpg'
+                    src='/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic04.jpg'>">
                     </a>
-                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic05.jpg"
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic05.jpg"
                        data-lightbox="page-lightbox"
-                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic05.jpg'
-                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic05.jpg'>">
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Publiek/Voorpagina/pic05.jpg'
+                    src='/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic05.jpg'>">
                     </a>
-                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic06.jpg"
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic06.jpg"
                        data-lightbox="page-lightbox"
-                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic06.jpg'
-                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic06.jpg'>">
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Publiek/Voorpagina/pic06.jpg'
+                    src='/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic06.jpg'>">
                     </a>
-                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic07.jpg"
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic07.jpg"
                        data-lightbox="page-lightbox"
-                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic07.jpg'
-                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic07.jpg'>">
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Publiek/Voorpagina/pic07.jpg'
+                    src='/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic07.jpg'>">
                     </a>
-                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic08.jpg"
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic08.jpg"
                        data-lightbox="page-lightbox"
-                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic08.jpg'
-                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic08.jpg'>">
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Publiek/Voorpagina/pic08.jpg'
+                    src='/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic08.jpg'>">
                     </a>
-                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Voorpagina/Extern/pic09.jpg"
+                    <a class="lightbox-link lazy-load" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic09.jpg"
                        data-lightbox="page-lightbox"
-                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Voorpagina/Extern/pic09.jpg'
-                    src='/plaetjes/fotoalbum/Voorpagina/Extern/_resized/pic09.jpg'>">
+                       data-lazy="<img class='bb-img' alt='/plaetjes/fotoalbum/Publiek/Voorpagina/pic09.jpg'
+                    src='/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic09.jpg'>">
                     </a>
                 </div>
             </div>
@@ -205,7 +205,7 @@
                 </li>
             </ul>
             <ul class="copyright">
-                <li>&copy; {date('Y')} - C.S.R. Delft</li>
+                <li>&copy; {date('Y')} - C.S.R. Delft - <a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">Privacy</a></li>
             </ul>
         </div>
     </section>

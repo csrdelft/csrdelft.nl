@@ -4,6 +4,7 @@ namespace CsrDelft\model\entity\fotoalbum;
 
 use CsrDelft\model\entity\Map;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
+use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 
@@ -68,13 +69,16 @@ class FotoAlbum extends Map {
 	public function __construct($path = null) {
 		parent::__construct();
 		if ($path === true) { // called from PersistenceModel
-			$this->path = PHOTOS_PATH . $this->subdir;
+			$this->path = realpath(PHOTOALBUM_PATH . $this->subdir);
 		} else {
+			$path = realpath($path);
 			if (!endsWith($path, '/')) {
 				$path .= '/';
 			}
 			$this->path = $path;
-			$this->subdir = str_replace(PHOTOS_PATH, '', $this->path);
+			//We verwijderen het beginstuk van de string
+			$prefix = realpath(PHOTOALBUM_PATH) . "/";
+			$this->subdir = substr($this->path, strlen($prefix));
 		}
 		$this->dirname = basename($this->path);
 	}
@@ -205,17 +209,22 @@ class FotoAlbum extends Map {
 		return $recent;
 	}
 
+	/**
+	 * Zegt of dit album publiek toegankelijk is.
+	 * @return bool
+	 */
+	public function isPubliek() {
+		return preg_match('/^fotoalbum\/Publiek\/.*$/', $this->subdir) == 1;
+	}
 	public function magBekijken() {
-		if (!startsWith($this->path, PHOTOS_PATH . 'fotoalbum/')) {
+		if (!startsWith(realpath($this->path), realpath(PHOTOALBUM_PATH . 'fotoalbum/'))) {
 			return false;
 		}
-		if (LoginModel::mag('P_LEDEN_READ')) {
-			return true;
+		if ($this->isPubliek()) {
+			return LoginModel::mag('P_ALBUM_PUBLIC_READ');
+		} else {
+			return LoginModel::mag('P_ALBUM_READ');
 		}
-		if (preg_match(self::$alleenLeden, $this->path)) {
-			return false;
-		}
-		return true;
 	}
 
 	public function isOwner() {
@@ -271,6 +280,44 @@ class FotoAlbum extends Map {
 		}
 
 		return $fotos;
+	}
+	public function magVerwijderen() {
+		if($this->isOwner()) {
+			return true;
+		}
+		if($this->isPubliek()) {
+			return LoginModel::mag('P_ALBUM_PUBLIC_DEL');
+		}
+		else{
+			return LoginModel::mag('P_ALBUM_DEL');
+		}
+	}
+
+	public function magToevoegen() {
+		if($this->isPubliek()) {
+			return LoginModel::mag('P_ALBUM_PUBLIC_ADD');
+		}
+		else{
+			return LoginModel::mag('P_ALBUM_ADD');
+		}
+	}
+
+	public function magAanpassen() {
+		if($this->isPubliek()) {
+			return LoginModel::mag('P_ALBUM_PUBLIC_MOD');
+		}
+		else{
+			return LoginModel::mag('P_ALBUM_MOD') || $this->isOwner();
+		}
+	}
+
+	public function magDownloaden() {
+		if($this->isPubliek()) {
+			return LoginModel::mag('P_ALBUM_PUBLIC_DOWN');
+		}
+		else{
+			return LoginModel::mag('P_ALBUM_DOWN');
+		}
 	}
 
 }

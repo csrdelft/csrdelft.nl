@@ -4,10 +4,12 @@ namespace CsrDelft\view;
 
 use CsrDelft\model\DragObjectModel;
 use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\ModalForm;
 use CsrDelft\view\login\LoginForm;
 use CsrDelft\view\menu\MainMenuView;
+use CsrDelft\view\toestemming\ToestemmingModalForm;
 
 
 /**
@@ -41,6 +43,9 @@ class CsrLayoutPage extends CompressedLayout {
 		return '<a href="/" title="Startpagina"><span class="fa fa-home module-icon"></span></a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 
+	/**
+	 * @throws \SmartyException
+	 */
 	public function view() {
 		header('Content-Type: text/html; charset=UTF-8');
 
@@ -50,7 +55,12 @@ class CsrLayoutPage extends CompressedLayout {
 		$smarty->assign('titel', $this->getTitel());
 		$smarty->assign('mainmenu', new MainMenuView());
 		$smarty->assign('body', $this->getBody());
-		$smarty->assign('modal', $this->modal);
+
+		if ($this->modal) {
+			$smarty->assign('modal', $this->modal);
+		} elseif (!LidToestemmingModel::toestemmingGegeven()) {
+			$smarty->assign('modal', new ToestemmingModalForm());
+		}
 
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
 		if (!$breadcrumbs) {
@@ -73,6 +83,7 @@ class CsrLayoutPage extends CompressedLayout {
 			$smarty->assign('minioncoords', DragObjectModel::getCoords('minion', 40, 40));
 			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
 		}
+
 
 		if (LoginModel::instance()->isPauper()) {
 			$smarty->assign('loginform', new LoginForm());

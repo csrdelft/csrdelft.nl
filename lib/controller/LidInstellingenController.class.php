@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\JsonResponse;
@@ -42,12 +43,13 @@ class LidInstellingenController extends AclController {
 	}
 
 	public function beheer() {
-		$body = new LidInstellingenView($this->model);
+		$body = new LidInstellingenView($this->model, LidToestemmingModel::instance());
 		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function opslaan() {
 		$this->model->save(); // fetches $_POST values itself
+        LidToestemmingModel::instance()->save();
 		setMelding('Instellingen opgeslagen', 1);
 		$from = new UrlField('referer', HTTP_REFERER, null);
 		redirect($from->getValue());
