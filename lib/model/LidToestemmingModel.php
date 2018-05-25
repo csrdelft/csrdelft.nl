@@ -71,13 +71,22 @@ class LidToestemmingModel extends InstellingenModel {
             'postcode' => ['Postcode', T::Enumeration, ['', 'ja', 'nee'], ''],
             'woonplaats' => ['Woonplaats', T::Enumeration, ['', 'ja', 'nee'], ''],
             'land' => ['Land', T::Enumeration, ['', 'ja', 'nee'], ''],
-            'mobiel' => ['Mobiel', T::Enumeration, ['', 'ja', 'nee'], ''],
+			'mobiel' => ['Mobiel nummer', T::Enumeration, ['', 'ja', 'nee'], ''],
+			'telefoon' => ['Telefoonnummer', T::Enumeration, ['', 'ja', 'nee'], ''],
+			// Ouders
+			'o_adres' => ['Straat + Huisnummer ouders', T::Enumeration, ['', 'ja', 'nee'], ''],
+			'o_postcode' => ['Postcode ouders', T::Enumeration, ['', 'ja', 'nee'], ''],
+			'o_woonplaats' => ['Woonplaats ouders', T::Enumeration, ['', 'ja', 'nee'], ''],
+			'o_land' => ['Land ouders', T::Enumeration, ['', 'ja', 'nee'], ''],
+			'o_telefoon' => ['Telefoonnummer ouders', T::Enumeration, ['', 'ja', 'nee'], ''],
+			// studie
+			'studie' => ['Studie', T::Enumeration, ['', 'ja', 'nee'], ''],
+			'studienr' => ['Studie nummer', T::Enumeration, ['', 'ja', 'nee'], ''],
+			'studiejaar' => ['Studiejaar', T::Enumeration, ['', 'ja', 'nee'], ''],
             // contact
             'email' => ['Email', T::Enumeration, ['', 'ja', 'nee'], ''],
             // lidmaatschap
             'status' => ['Status', T::Enumeration, ['', 'ja', 'nee'], ''], // Willen we dit?
-            // geld
-            'bankrekening' => ['Bankrekening', T::Enumeration, ['', 'ja', 'nee'], ''],
             // verticale
             'verticale' => ['Bankrekening', T::Enumeration, ['', 'ja', 'nee'], ''], // Willen we dit?
             // civi-gegevens
