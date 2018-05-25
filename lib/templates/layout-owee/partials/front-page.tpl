@@ -205,7 +205,7 @@
                 </li>
             </ul>
             <ul class="copyright">
-                <li>&copy; {date('Y')} - C.S.R. Delft</li>
+                <li>&copy; {date('Y')} - C.S.R. Delft - <a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">Privacy</a></li>
             </ul>
         </div>
     </section>
