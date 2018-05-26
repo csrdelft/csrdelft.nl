@@ -170,8 +170,8 @@ export function formSubmit(event) {
 
         return false;
     }
-    form.unbind('submit');
-    form.submit();
+    form.off('submit');
+    form.trigger('submit');
     return true;
 }
 

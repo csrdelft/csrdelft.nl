@@ -15,7 +15,7 @@ class ModalForm extends Formulier {
 
 	public function view() {
 		$this->css_classes[] = 'ModalForm';
-		echo '<div id="modal" class="modal"><div class="modal-dialog modal-content" tabindex="-1" style="display: block;">';
+		echo '<div id="modal" class="modal"><div class="modal-dialog modal-content modal-lg" tabindex="-1" style="display: block;">';
 
 		$titel = $this->getTitel();
 		if (!empty($titel)) {
@@ -41,8 +41,9 @@ class ModalForm extends Formulier {
 		}
 		echo '</form>';
 		printDebug();
-		echo '</div></div></div>';
+		echo '</div></div>';
 		echo $this->getScriptTag();
+		echo '</div>';
 	}
 
 }

@@ -6,27 +6,24 @@ import $ from 'jquery';
  */
 export function modalOpen(htmlString = '') {
     if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
-        htmlString.preventDefault();
         return false;
     }
 
-    let modal = $('#modal'),
-        modalWrapper = $('#modal-wrapper');
+    let modal = $('#modal');
+
+    if (modal.html() === '' && htmlString === '')
+        return false;
+
+    modal.modal();
 
     if (typeof htmlString === 'string' && htmlString !== '') {
         modal.html(htmlString);
-        modal.find('input:visible:first').focus();
+        modal.find('input:visible:first').trigger('focus');
     }
-    else {
-        modalWrapper.modal('hide');
-        modal.html('');
-    }
-
-    modalWrapper.modal();
 
     return true;
 }
 
 export function modalClose() {
-    $('#modal-wrapper').modal('hide');
+    $('#modal').modal('hide');
 }

@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {modalClose, modalOpen} from './modal';
+import {modalClose} from './modal';
 
 /**
  * @see maalcie.js
@@ -11,7 +11,7 @@ import {modalClose, modalOpen} from './modal';
  * @param {function|null} onerror
  * @param {function|null} onfinish
  */
-export function ajaxRequest(type, url, data, source, onsuccess, onerror, onfinish) {
+export function ajaxRequest(type, url, data, source, onsuccess, onerror, onfinish = null) {
     if (source) {
         if (!source.hasClass('noanim')) {
             $(source).replaceWith(`<img id="${source.attr('id')}" title="${url}" src="/images/loading-arrows.gif" />`);
@@ -24,9 +24,6 @@ export function ajaxRequest(type, url, data, source, onsuccess, onerror, onfinis
                 'background-position': 'center right'
             });
         }
-    }
-    else {
-        modalOpen();
     }
     let contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
     let processData = true;

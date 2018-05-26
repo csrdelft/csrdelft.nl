@@ -4,7 +4,6 @@ namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\Icon;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\uploadvelden\BestandBehouden;
@@ -44,6 +43,10 @@ use CsrDelft\view\Validator;
  */
 abstract class InputField implements FormElement, Validator {
 
+	const WRAPPER_CLASS_NAME = 'form-group row';
+	const LABEL_CLASS_NAME = 'col-sm-2 col-form-label';
+	const FIELD_CLASS_NAME = 'col-sm-10';
+
 	private $id; // unique id
 	protected $model; // model voor remote data source en validatie
 	protected $name; // naam van het veld in POST
@@ -72,11 +75,12 @@ abstract class InputField implements FormElement, Validator {
 	public $max_len = null; // maximale lengte van de invoer
 	public $min_len = null; // minimale lengte van de invoer
 	public $rows = 0; // aantal rijen van textarea
-	public $css_classes = array('FormElement'); // array met classnames die later in de class-tag komen
+	public $css_classes = array('form-control'); // array met classnames die later in de class-tag komen
 	public $suggestions = array(); // lijst van search providers
 	public $blacklist = null; // array met niet tegestane waarden
 	public $whitelist = null; // array met exclusief toegestane waarden
 	public $pattern = null; // html5 input validation pattern
+
 
 	public function __construct($name, $value, $description, $model = null) {
 		$this->id = uniqid('field_');
@@ -174,6 +178,8 @@ abstract class InputField implements FormElement, Validator {
 	/**
 	 * Bestand opslaan op de juiste plek.
 	 *
+	 * TODO: Hoort hier niet.
+	 *
 	 * @param string $directory fully qualified path with trailing slash
 	 * @param string $filename filename with extension
 	 * @param boolean $overwrite allowed to overwrite existing file
@@ -213,15 +219,12 @@ abstract class InputField implements FormElement, Validator {
 	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
 	 */
 	public function getDiv() {
-		$cssclass = 'InputField';
+		$cssclass = static::WRAPPER_CLASS_NAME;
 		if ($this->hidden) {
 			$cssclass .= ' verborgen';
 		}
 		if ($this->title) {
 			$cssclass .= ' hoverIntent';
-		}
-		if ($this->getError() !== '') {
-			$cssclass .= ' metFouten';
 		}
 		return '<div id="wrapper_' . $this->getId() . '" class="' . $cssclass . '" ' . $this->getInputAttribute('title') . '>';
 	}
@@ -239,11 +242,7 @@ abstract class InputField implements FormElement, Validator {
 					$required = '<span class="required"> *</span>';
 				}
 			}
-			$help = '';
-			if ($this->title) {
-				$help = '<div class="help" onclick="alert(\'' . addslashes($this->title) . '\');">' . Icon::getTag('help', null, null, 'icon hoverIntentContent') . '</div>';
-			}
-			return '<label for="' . $this->getId() . '">' . $help . $this->description . $required . '</label>';
+			return '<div class="'.static::LABEL_CLASS_NAME.'"><label for="' . $this->getId() . '">' . $this->description . $required . '</label></div>';
 		}
 		return '';
 	}
@@ -260,7 +259,7 @@ abstract class InputField implements FormElement, Validator {
 	 */
 	public function getErrorDiv() {
 		if ($this->getError() != '') {
-			return '<div class="waarschuwing">' . $this->getError() . '</div>';
+			return '<div class="invalid-feedback">' . $this->getError() . '</div>';
 		}
 		return '';
 	}
@@ -283,6 +282,11 @@ abstract class InputField implements FormElement, Validator {
 		if ($this->readonly) {
 			$this->css_classes[] = 'readonly';
 		}
+
+		if ($this->getError() != '') {
+			$this->css_classes[] = 'is-invalid';
+		}
+
 		return $this->css_classes;
 	}
 
@@ -384,8 +388,10 @@ abstract class InputField implements FormElement, Validator {
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo $this->getErrorDiv();
+		echo '<div class="' . static::FIELD_CLASS_NAME . '">';
 		echo $this->getHtml();
+		echo $this->getErrorDiv();
+		echo '</div>';
 		if ($this->preview) {
 			echo $this->getPreviewDiv();
 		}

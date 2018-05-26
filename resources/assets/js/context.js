@@ -101,12 +101,7 @@ export function domUpdate(htmlString) {
     let html = $.parseHTML(htmlString, document, true);
     $(html).each(function () {
         let id = $(this).attr('id');
-        if (id === 'modal') {
-            modalOpen();
-        }
-        else {
-            modalClose();
-        }
+
         let elmnt = $('#' + id);
         if (elmnt.length === 1) {
             if ($(this).hasClass('remove')) {
@@ -128,9 +123,12 @@ export function domUpdate(htmlString) {
             }
         }
         initContext($(this));
+
         if (id === 'modal') {
-            $('#modal-background').css('background-image', 'none');
-            $('#modal').find('input:visible:first').focus();
+            modalOpen();
+        }
+        else {
+            modalClose();
         }
     });
 }

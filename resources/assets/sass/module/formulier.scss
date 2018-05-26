@@ -69,9 +69,6 @@ h1.Titel {
       padding: 2em !important;
     }
   }
-  input, textarea, select {
-    padding: 0.3em 0.5em;
-  }
   select {
     padding: 0.4em 0.5em;
   }
@@ -81,9 +78,6 @@ h1.Titel {
   .readonly {
     border: none;
     cursor: default;
-  }
-  label, div {
-    line-height: 2em;
   }
   label {
     padding-left: 5px;
@@ -108,10 +102,6 @@ h1.Titel {
   textarea {
     width: 100%;
     line-height: 1.25em;
-  }
-  input[type="text"], input[type="password"] {
-    width: 16em;
-    line-height: 1.5em;
   }
   .AutoSize {
     resize: none;
@@ -170,20 +160,9 @@ h1.Titel {
   input.UidField {
     width: 4em;
   }
-  .lidPreview {
-    float: right;
-  }
-  input.LidField, input.RequiredLidField {
-    width: 10em;
-  }
   input.IntField, input.FloatField, input.BedragField, input.RequiredIntField, input.RequiredFloatField, input.RequiredBedragField {
     width: 5em;
     text-align: right;
-  }
-  .metFouten {
-    display: block !important;
-    background-color: #FFC3CE;
-    padding: 4px 2px;
   }
   .InputField .waarschuwing {
     float: right;
