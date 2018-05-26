@@ -16,7 +16,6 @@ function initButtons(parent) {
         }
         content.toggle(800, 'easeInOutCubic');
     });
-    $(parent).find('.popup').bind('click.popup', modalOpen);
     $(parent).find('.post').bind('click.post', knopPost);
     $(parent).find('.get').bind('click.get', knopGet);
     $(parent).find('.vergroot').bind('click.vergroot', knopVergroot);

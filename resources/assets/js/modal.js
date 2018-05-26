@@ -9,12 +9,18 @@ export function modalOpen(htmlString = '') {
         return false;
     }
 
-    let modal = $('#modal');
+    let modal = $('#modal'),
+        modalBackdrop = $('.modal-backdrop');
 
     if (modal.html() === '' && htmlString === '')
         return false;
 
-    modal.modal();
+    if (modalBackdrop.length){
+        modalBackdrop.remove();
+    }
+
+    modal.modal('show');
+
 
     if (typeof htmlString === 'string' && htmlString !== '') {
         modal.html(htmlString);

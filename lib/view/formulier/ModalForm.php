@@ -20,6 +20,8 @@ class ModalForm extends Formulier {
 	protected $modalBreedte = '';
 
 	public function view() {
+		$this->css_classes[] = 'ModalForm';
+
 		echo <<<HTML
 <div id="modal" class="modal">
 	{$this->getFormTag()}
