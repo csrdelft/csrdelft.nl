@@ -19,6 +19,8 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * Produceert drie velden.
  */
 class DateField extends InputField {
+	const WRAPPER_CLASS_NAME = 'form-group row form-inline';
+	const FIELD_CLASS_NAME = 'col-6';
 
 	protected $max_jaar;
 	protected $min_jaar;
@@ -42,6 +44,7 @@ class DateField extends InputField {
 		if ($jaar < $this->min_jaar) {
 			$this->min_jaar = $jaar;
 		}
+
 	}
 
 	public function isPosted() {
@@ -94,7 +97,7 @@ class DateField extends InputField {
 	}
 
 	public function getPreviewDiv() {
-		return '<div id="datumPreview_' . $this->getId() . '" class="previewDiv"></div>';
+		return '<div id="datumPreview_' . $this->getId() . '" class="col-3"></div>';
 	}
 
 	public function getJavascript() {
