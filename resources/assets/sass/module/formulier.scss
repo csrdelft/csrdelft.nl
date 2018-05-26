@@ -36,6 +36,11 @@ h1.Titel {
 /** FORMULIER **************************************************************/
 
 .Formulier {
+  .field-required::after {
+    content: '*';
+    color: red;
+  }
+
   .ui-tabs {
 
     .ui-tabs-panel {
@@ -108,10 +113,6 @@ h1.Titel {
   }
   .CsrBB {
     clear: left;
-  }
-  .FormKnoppen {
-    clear: left;
-    margin-top: 25px;
   }
   .GroepAanmeldKnoppen {
     margin: 0;

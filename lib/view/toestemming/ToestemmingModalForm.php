@@ -22,6 +22,8 @@ class ToestemmingModalForm extends ModalForm {
     public function __construct() {
         parent::__construct(new LidToestemming(), '/toestemming', 'Toestemming geven');
 
+        $this->modalBreedte = 'modal-lg';
+
         $smarty = CsrSmarty::instance();
         $model = LidToestemmingModel::instance();
         $fields = [];
@@ -56,8 +58,9 @@ class ToestemmingModalForm extends ModalForm {
         $smarty->assign('fields', $fields);
         $this->addFields([
         	new HtmlComment($smarty->fetch('toestemming/toestemming_head.tpl')),
-			new FormDefaultKnoppen('/toestemming/annuleren', false)
 		]);
+
+        $this->formKnoppen = new FormDefaultKnoppen('/toestemming/annuleren', false);
     }
 
     /**

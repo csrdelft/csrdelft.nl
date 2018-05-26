@@ -44,8 +44,8 @@ use CsrDelft\view\Validator;
 abstract class InputField implements FormElement, Validator {
 
 	const WRAPPER_CLASS_NAME = 'form-group row';
-	const LABEL_CLASS_NAME = 'col-sm-2 col-form-label';
-	const FIELD_CLASS_NAME = 'col-sm-10';
+	const LABEL_CLASS_NAME = 'col-3 col-form-label';
+	const FIELD_CLASS_NAME = 'col-9';
 
 	private $id; // unique id
 	protected $model; // model voor remote data source en validatie
@@ -239,10 +239,10 @@ abstract class InputField implements FormElement, Validator {
 				if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
 					// exception for leden mod
 				} else {
-					$required = '<span class="required"> *</span>';
+					$required = ' field-required';
 				}
 			}
-			return '<div class="'.static::LABEL_CLASS_NAME.'"><label for="' . $this->getId() . '">' . $this->description . $required . '</label></div>';
+			return '<div class="' . static::LABEL_CLASS_NAME . $required . '"><label for="' . $this->getId() . '">' . $this->description . '</label></div>';
 		}
 		return '';
 	}
@@ -506,7 +506,10 @@ JS;
 			} else {
 				$js .= <<<JS
 
-	remote: "{$source}%QUERY"
+	remote: { 
+    	url:"{$source}%QUERY",
+		wildcard: '%QUERY'
+	}
 
 JS;
 			}

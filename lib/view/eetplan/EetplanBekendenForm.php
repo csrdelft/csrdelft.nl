@@ -14,11 +14,14 @@ use CsrDelft\view\formulier\ModalForm;
  */
 class EetplanBekendenForm extends ModalForm {
 	function __construct(EetplanBekenden $model) {
-		parent::__construct($model, '/eetplan/novietrelatie/toevoegen', false, true);
+		parent::__construct($model, '/eetplan/novietrelatie/toevoegen', 'Novieten die elkaar kennen toevoegen', true);
 		$fields[] = new RequiredLidField('uid1', $model->uid1, 'Noviet 1', 'novieten');
 		$fields[] = new RequiredLidField('uid2', $model->uid2, 'Noviet 2', 'novieten');
-		$fields['btn'] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
+
+		$this->modalBreedte = '';
 	}
 }

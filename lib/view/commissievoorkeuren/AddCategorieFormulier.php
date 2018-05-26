@@ -25,6 +25,7 @@ class AddCategorieFormulier extends Formulier {
 		parent::__construct($model, "/commissievoorkeuren/nieuwecategorie");
 		$this->addFields([new HtmlComment("<h2>Categorie toevoegen</h2>")]);
 		$this->addFields([new RequiredTextField("naam", "", "Naam")]);
-		$this->addFields([new SubmitKnop()]);
+
+		$this->addButtons([new SubmitKnop()]);
 	}
 }
