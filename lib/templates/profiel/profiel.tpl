@@ -5,24 +5,24 @@
 				<div class="pasfoto float-left">{$profiel->getPasfotoTag(false)}</div>
 				<div class="knopjes">
 					{*<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>*}
-					<a href="/profiel/{$profiel->uid}/addToGoogleContacts/" class="btn" title="{if $profiel->isInGoogleContacts()}Dit profiel opdateren in mijn google adresboek{else}Dit profiel toevoegen aan mijn google adresboek{/if}">
+					<a href="/profiel/{$profiel->uid}/addToGoogleContacts/" class="btn btn-light" title="{if $profiel->isInGoogleContacts()}Dit profiel opdateren in mijn google adresboek{else}Dit profiel toevoegen aan mijn google adresboek{/if}">
 						<img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/>
 					</a>
 					{if $profiel->magBewerken()}
-						<a href="/profiel/{$profiel->uid}/bewerken" class="btn" title="Bewerk dit profiel">{icon get="pencil"}</a>
-						<a href="/profiel/{$profiel->uid}/voorkeuren" class="btn" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
-						<a href="/toestemming" class="btn" title="Pas toestemming aan">{icon get="lock_edit"}</a>
+						<a href="/profiel/{$profiel->uid}/bewerken" class="btn btn-light" title="Bewerk dit profiel">{icon get="pencil"}</a>
+						<a href="/profiel/{$profiel->uid}/voorkeuren" class="btn btn-light" title="Pas voorkeuren voor commissies aan">{icon get="report_edit"}</a>
+						<a href="/toestemming" class="btn btn-light" title="Pas toestemming aan">{icon get="lock_edit"}</a>
 					{/if}
 					{if mag('P_ADMIN') OR is_ingelogd_account($profiel->uid)}
 						{if CsrDelft\model\security\AccountModel::existsUid($profiel->uid)}
-							<a href="/account/{$profiel->uid}/bewerken" class="btn" title="Inloggegevens bewerken">{icon get="key"}</a>
+							<a href="/account/{$profiel->uid}/bewerken" class="btn btn-light" title="Inloggegevens bewerken">{icon get="key"}</a>
 						{else}
                             {toegang P_ADMIN}
-							<a href="/account/{$profiel->uid}/aanmaken" class="btn" title="Account aanmaken">{icon get="key_delete" hover="key_add"}</a>
+							<a href="/account/{$profiel->uid}/aanmaken" class="btn btn-light" title="Account aanmaken">{icon get="key_delete" hover="key_add"}</a>
                             {/toegang}
 						{/if}
 						{toegang P_ADMIN}
-							<a href="/tools/stats.php?uid={$profiel->uid}" class="btn" title="Toon bezoeklog">{icon get="server_chart"}</a>
+							<a href="/tools/stats.php?uid={$profiel->uid}" class="btn btn-light" title="Toon bezoeklog">{icon get="server_chart"}</a>
 						{/toegang}
 					{/if}
 				</div>
@@ -184,8 +184,8 @@
 			<div class="half">
 				{$werkgroepen}
 				{if mag('P_LEDEN_MOD') OR is_ingelogd_account($profiel->uid)}
-				<div class="label">&nbsp;</div><a class="btn" onclick="$(this).remove();
-						$('#meerGroepenContainer').slideDown();">Toon activiteiten</a>
+				<div class="label">&nbsp;</div><a class="btn btn-primary" onclick="$(this).remove();
+						$('#meerGroepenContainer').slideDown();" tabindex="0">Toon activiteiten</a>
 			</div>
 			<div class="clear-left"></div>
 			<div id="meerGroepenContainer" style="display: none;">
