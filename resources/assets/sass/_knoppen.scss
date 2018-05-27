@@ -29,43 +29,8 @@ a.suggestionUrl img.icon {
 }
 
 a:hover { text-decoration: underline; }
-a, a.btn, a.btn:hover { text-decoration: none; }
-
-.btn, input[type=submit], input[type=button], .progress-bar-info,
-.btn:focus, input[type=submit]:focus, input[type=button]:focus {
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 1em;
-  line-height: 1em;
-  text-decoration: none;
-  font-weight: bold;
-  color: #fff;
-  border: 1px solid #224baf;
-  text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
-  background-color: #3262D7;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#3262D7), to(#23538A));
-  background-image: -webkit-linear-gradient(top, #3262D7, #23538A);
-  background-image: -moz-linear-gradient(top, #3262D7, #23538A);
-  background-image: -ms-linear-gradient(top, #3262D7, #23538A);
-  background-image: -o-linear-gradient(top, #3262D7, #23538A);
-  background-image: linear-gradient(to bottom, #3262D7, #23538A);
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#3262D7, endColorstr=#23538A);
-}
 .progress-bar-info {
   cursor: default;
-}
-
-.btn:hover, input[type=submit]:hover, input[type=button]:hover {
-  color: #fff;
-  border: 1px solid #1b3b88;
-  background-color: #234db3;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#234db3), to(#193b61));
-  background-image: -webkit-linear-gradient(top, #234db3, #193b61);
-  background-image: -moz-linear-gradient(top, #234db3, #193b61);
-  background-image: -ms-linear-gradient(top, #234db3, #193b61);
-  background-image: -o-linear-gradient(top, #234db3, #193b61);
-  background-image: linear-gradient(to bottom, #234db3, #193b61);
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#234db3, endColorstr=#193b61);
 }
 
 .icon {

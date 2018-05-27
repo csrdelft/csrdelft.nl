@@ -31,7 +31,7 @@ class FormulierKnop implements FormElement {
 		$this->title = $title;
 		$this->icon = $icon;
 		$this->css_classes[] = $this->getType();
-		$this->css_classes[] = 'btn';
+		$this->css_classes[] = 'btn btn-primary';
 	}
 
 	public function getId() {
@@ -56,7 +56,7 @@ class FormulierKnop implements FormElement {
 
 	public function getHtml() {
 		$this->css_classes[] = $this->action;
-		$html = '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '"';
+		$html = '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '" tabindex="0"';
 		if (isset($this->data)) {
 			$html .= ' data="' . $this->data . '"';
 		}

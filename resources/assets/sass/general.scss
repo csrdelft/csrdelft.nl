@@ -3,7 +3,8 @@
 @import "~jquery-ui/themes/base/core";
 @import "~jquery-ui/themes/base/theme";
 @import "~jquery-ui/themes/base/tooltip";
-@import "~bootstrap/dist/css/bootstrap";
+@import "variables";
+@import "~bootstrap/scss/bootstrap";
 @import "~font-awesome/scss/font-awesome";
 @import "~lightbox2/dist/css/lightbox";
 @import "common";

@@ -25,7 +25,7 @@ class ModalForm extends Formulier {
 		echo <<<HTML
 <div id="modal" class="modal">
 	{$this->getFormTag()}
-		<div class="modal-dialog modal-content {$this->modalBreedte}">
+		<div class="modal-dialog modal-form modal-content {$this->modalBreedte}">
 HTML;
 
 		$titel = $this->getTitel();

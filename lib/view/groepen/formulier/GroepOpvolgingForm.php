@@ -26,9 +26,9 @@ class GroepOpvolgingForm extends ModalForm {
 		}
 		$fields[] = new RadioField('status', $groep->status, classNameZonderNamespace(Groepstatus::class), $options);
 
-		$fields[] = new FormDefaultKnoppen();
-
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 }
