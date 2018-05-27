@@ -1,6 +1,5 @@
 import $ from 'jquery';
 
-import {knopPost} from './knop';
 import {modalClose, modalOpen} from './modal';
 import {ajaxRequest} from './ajax';
 import initContext, {domUpdate} from './context';
@@ -193,11 +192,6 @@ export function formCancel(event) {
     if (form.hasClass('InlineForm')) {
         event.preventDefault();
         formInlineToggle(form);
-        return false;
-    }
-    if (source.hasClass('post')) {
-        event.preventDefault();
-        knopPost(event);
         return false;
     }
     if (form.hasClass('ModalForm')) {
