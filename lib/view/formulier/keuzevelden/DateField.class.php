@@ -20,7 +20,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  */
 class DateField extends InputField {
 	const WRAPPER_CLASS_NAME = 'form-group row form-inline';
-	const FIELD_CLASS_NAME = 'col-6';
+	const FIELD_CLASS_NAME = 'col-3';
 
 	protected $max_jaar;
 	protected $min_jaar;
@@ -97,7 +97,7 @@ class DateField extends InputField {
 	}
 
 	public function getPreviewDiv() {
-		return '<div id="datumPreview_' . $this->getId() . '" class="col-3"></div>';
+		return '<div id="datumPreview_' . $this->getId() . '" class="col"></div>';
 	}
 
 	public function getJavascript() {

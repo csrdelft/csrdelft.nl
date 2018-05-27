@@ -9,22 +9,22 @@
 // ----------------------------------------------------------------------------
 // Feel free to add more tags
 // ----------------------------------------------------------------------------
-export default {
+export const bbCodeSet = {
     nameSpace: 'CsrBB',
     previewParserPath: '/tools/bbcode.php', // path to your BBCode parser
     markupSet: [
-        {className: 'btn-b', name: 'Dikgedrukt', key: 'B', openWith: '[b]', closeWith: '[/b]'},
-        {className: 'btn-i', name: 'Cursief', key: 'I', openWith: '[i]', closeWith: '[/i]'},
-        {className: 'btn-u', name: 'Onderstreept', key: 'U', openWith: '[u]', closeWith: '[/u]'},
-        {className: 'btn-s', name: 'Doorgestreept', key: 'S', openWith: '[s]', closeWith: '[/s]'},
+        {className: 'ico text_bold', name: 'Dikgedrukt', key: 'B', openWith: '[b]', closeWith: '[/b]'},
+        {className: 'ico text_italic', name: 'Cursief', key: 'I', openWith: '[i]', closeWith: '[/i]'},
+        {className: 'ico text_underline', name: 'Onderstreept', key: 'U', openWith: '[u]', closeWith: '[/u]'},
+        {className: 'ico text_strikethrough', name: 'Doorgestreept', key: 'S', openWith: '[s]', closeWith: '[/s]'},
         {separator: '|'},
-        {className: 'btn-ot', name: 'Offtopic', key: 'O', openWith: '[offtopic]', closeWith: '[/offtopic]'},
-        {className: 'btn-quote', name: 'Citaat', key: 'Q', openWith: '[citaat=Naam_of_lidnummer]', closeWith: '[/citaat]'},
+        {className: 'ico text_smallcaps', name: 'Offtopic', key: 'O', openWith: '[offtopic]', closeWith: '[/offtopic]'},
+        {className: 'ico comments', name: 'Citaat', key: 'Q', openWith: '[citaat=Naam_of_lidnummer]', closeWith: '[/citaat]'},
         {separator: '|'},
-        {className: 'btn-link', name: 'Link', key: 'L', openWith: '[url=[![Url]!]]', closeWith: '[/url]', placeHolder: 'Link tekst'},
-        {className: 'btn-mail', name: 'Email', key: 'E', openWith: '[email=[![Email adres]!]]', closeWith: '[/email]', placeHolder: 'Link tekst'},
+        {className: 'ico link', name: 'Link', key: 'L', openWith: '[url=[![Url]!]]', closeWith: '[/url]', placeHolder: 'Link tekst'},
+        {className: 'ico email_link', name: 'Email', key: 'E', openWith: '[email=[![Email adres]!]]', closeWith: '[/email]', placeHolder: 'Link tekst'},
         {separator: '|'},
-        {className: 'btn-album', name: 'Fotoalbum', replaceWith: (markitup) => {
+        {className: 'ico photos', name: 'Fotoalbum', replaceWith: (markitup) => {
                 let url = decodeURIComponent(window.prompt('Url', '').trim());
                 let pos = url.indexOf('/fotoalbum/');
                 if (pos > 0) {
@@ -34,7 +34,7 @@ export default {
                 alert('Ongeldige url!');
                 return markitup.selection;
             }},
-        {className: 'btn-foto', name: 'Poster of foto uit album', replaceWith: (markitup) => {
+        {className: 'ico photo', name: 'Poster of foto uit album', replaceWith: (markitup) => {
                 let url = decodeURIComponent(window.prompt('Url', '').trim());
                 let pos = url.indexOf('/fotoalbum/');
                 if (pos > 0) {
@@ -44,12 +44,12 @@ export default {
                 alert('Ongeldige url!');
                 return markitup.selection;
             }},
-        {className: 'btn-img', name: 'Afbeelding', replaceWith: '[img][![Url]!][/img]'},
-        {className: 'btn-vid', name: 'Video', replaceWith: '[video][![Url]!][/video]'},
+        {className: 'ico picture', name: 'Afbeelding', replaceWith: '[img][![Url]!][/img]'},
+        {className: 'ico film', name: 'Video', replaceWith: '[video][![Url]!][/video]'},
         {separator: '|'},
-        {className: 'btn-map', name: 'Kaart', openWith: '[locatie]', closeWith: '[/locatie]', placeHolder: 'C.S.R. Delft'},
-        {className: 'btn-spoiler', name: 'Verklapper', openWith: '[verklapper]', closeWith: '[/verklapper]'},
-        {className: 'btn-prive', name: 'Privé', openWith: '[prive]', closeWith: '[/prive]', placeHolder: 'Afgeschermde gegevens'},
+        {className: 'ico map', name: 'Kaart', openWith: '[locatie]', closeWith: '[/locatie]', placeHolder: 'C.S.R. Delft'},
+        {className: 'ico sound_mute', name: 'Verklapper', openWith: '[verklapper]', closeWith: '[/verklapper]'},
+        {className: 'ico shield', name: 'Privé', openWith: '[prive]', closeWith: '[/prive]', placeHolder: 'Afgeschermde gegevens'},
         //{className: 'btn-kop', name: 'Kop',
         //	dropMenu: [
         //		{className: 'btn-h1', name: 'H1', openWith: '[h=1]', closeWith: '[/h]'},
@@ -64,10 +64,8 @@ export default {
         //{className: 'btn-lijst-a', name: 'Ongenummerde lijst', openWith: '[list]\n', closeWith: '\n[/list]'},
         //{className: 'btn-lijst-punt', name: 'Lijstpunt', openWith: '[*] '},
         {separator: '|'},
-        {className: 'btn-code', name: 'Code', openWith: '[code]', closeWith: '[/code]'},
-        {className: 'btn-off', name: 'Opmaakcode tonen', openWith: '[tekst]', closeWith: '[/tekst]'},
-        {separator: '|'},
-        {className: 'btn-clean', name: 'Opmaak wissen', replaceWith: (markitup) => markitup.selection.replace(/\[(.*?)\]/g, '')}
+        {className: 'ico script_code_red', name: 'Code', openWith: '[code]', closeWith: '[/code]'},
+        {className: 'ico tag', name: 'Opmaakcode tonen', openWith: '[tekst]', closeWith: '[/tekst]'},
         //{className: 'btn-preview', name: 'Voorbeeld', call: 'preview'}
     ]
 };

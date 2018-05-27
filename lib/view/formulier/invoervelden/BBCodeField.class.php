@@ -31,7 +31,7 @@ class BBCodeField extends TextareaField {
 
 <div class="float-right">
 	<a href="/wiki/cie:diensten:forum" target="_blank" title="Ga naar het overzicht van alle opmaak codes">Opmaakhulp</a>
-	<a class="btn" onclick="preview{$this->getId()}();" title="Toon voorbeeld met opmaak">Voorbeeld</a>
+	<a class="btn preview{$this->getId()}" title="Toon voorbeeld met opmaak">Voorbeeld</a>
 </div>
 HTML;
 	}
@@ -44,6 +44,9 @@ HTML;
 var preview{$this->getId()} = function () {
 	window.bbcode.CsrBBPreview('#{$this->getId()}', '#bbcodePreview_{$this->getId()}');
 };
+
+$('.preview{$this->getId()}').on('click', preview{$this->getId()});
+
 $('#{$this->getId()}').keyup(function(event) {
 	if(event.keyCode === 13) { // enter
 		preview{$this->getId()}();

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import {CsrBBPreview} from './bbcode';
 import {domUpdate} from './context';
+import {bbCodeSet} from './bbcode-set';
 
 function toggleForumConceptBtn(enable) {
     let $concept = $('#forumConcept');
@@ -88,7 +89,7 @@ export function forumBewerken(postId) {
         let $forumBewerkBericht = $('#forumBewerkBericht');
         $forumBewerkBericht.val(data);
         $forumBewerkBericht.autosize();
-        $forumBewerkBericht.markItUp(require('./bbcode-set')); // CsrBBcodeMarkItUpSet is located in: /layout/js/markitup/sets/bbcode/set.js
+        $forumBewerkBericht.markItUp(bbCodeSet);
         $(bewerkContainer).parent().children('td.auteur:first').append('<div id="bewerk-melding">Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</div>');
         $('#bewerk-melding').slideDown(200);
         $('#forumPosten').css('visibility', 'hidden');

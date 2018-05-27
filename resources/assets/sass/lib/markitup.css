@@ -17,7 +17,6 @@
 }
 .markItUpContainer  {
     font: 11px Verdana, Arial, Helvetica, sans-serif;
-    width: 580px;
     background-color: #FFF;
     border: 1px solid #A9A9A9;
 }
@@ -132,7 +131,6 @@
 }
 .markItUpHeader ul ul a {
     display: block;
-    padding-left: 0;
     text-indent: 0;
     width: 120px;
     padding: 5px 5px 5px 25px;

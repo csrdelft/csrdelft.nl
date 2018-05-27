@@ -3,6 +3,8 @@ import {knopGet, knopPost, knopVergroot} from './knop';
 import {modalClose, modalOpen} from './modal';
 import {formCancel, formReset, formSubmit, formToggle} from './formulier';
 
+import {bbCodeSet} from './bbcode-set';
+
 function initButtons(parent) {
     $(parent).find('.spoiler').bind('click.spoiler', function (event) {
         event.preventDefault();
@@ -35,7 +37,7 @@ function initTimeago(parent) {
 }
 
 function initMarkitup(parent) {
-    $(parent).find('textarea.BBCodeField').markItUp(require('./bbcode-set'));
+    $(parent).find('textarea.BBCodeField').markItUp(bbCodeSet);
 }
 
 function initTooltips(parent) {
