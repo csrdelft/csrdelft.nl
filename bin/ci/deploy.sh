@@ -24,10 +24,9 @@ cd /home/travis/build
 
 git clone --quiet --branch=master git@github.com:csrdelft/productie.git deploy > /dev/null
 rm -rf deploy/*
-rsync -a csrdelft/csrdelft.nl/* deploy --exclude node_modules --exclude .git
+rsync -a csrdelft/csrdelft.nl/* deploy --exclude node_modules --exclude .git --exclude resources
 
 cd deploy
-git add -A
-git add -f htdocs/dist # is in .gitignore
+git add -Af
 git diff-index --quiet HEAD || git commit -m "Travis deploy $TRAVIS_BUILD_NUMBER"
 git push --force --quiet --set-upstream origin master
