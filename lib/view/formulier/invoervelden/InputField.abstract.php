@@ -75,7 +75,7 @@ abstract class InputField implements FormElement, Validator {
 	public $max_len = null; // maximale lengte van de invoer
 	public $min_len = null; // minimale lengte van de invoer
 	public $rows = 0; // aantal rijen van textarea
-	public $css_classes = array('form-control'); // array met classnames die later in de class-tag komen
+	public $css_classes = ['FormElement', 'form-control']; // array met classnames die later in de class-tag komen
 	public $suggestions = array(); // lijst van search providers
 	public $blacklist = null; // array met niet tegestane waarden
 	public $whitelist = null; // array met exclusief toegestane waarden
