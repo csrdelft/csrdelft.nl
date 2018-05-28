@@ -688,10 +688,6 @@ Main components
   transform: rotate(-45deg);
 }
 @media only screen and (min-width: 960px) {
-  .has-children > a,
-  .has-children > a::before, .has-children > a::after, .go-back a::before, .go-back a::after {
-    background: #c9cbc4;
-  }
   .has-children > a:hover::before, .has-children > a:hover::after, .go-back a:hover::before, .go-back a:hover::after {
     background: #000;
   }
@@ -739,7 +735,6 @@ Main components
     -ms-transform-origin: 50% 50%;
     -o-transform-origin: 50% 50%;
     transform-origin: 50% 50%;
-    background: #c9cbc4;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     -webkit-transition: width 0.3s, -webkit-transform 0.3s;

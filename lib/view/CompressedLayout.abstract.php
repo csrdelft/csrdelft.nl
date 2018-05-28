@@ -66,6 +66,8 @@ abstract class CompressedLayout extends HtmlPage {
 			$modules[] = 'effect/snow';
 		} elseif (LidInstellingenModel::get('layout', 'fx') == 'space') {
 			$modules[] = 'effect/space';
+		} elseif (LidInstellingenModel::get('layout', 'fx') == 'civisaldo') {
+			$modules[] = 'effect/civisaldo';
 		}
 
 		if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
