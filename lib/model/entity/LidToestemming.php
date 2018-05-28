@@ -2,6 +2,8 @@
 
 namespace CsrDelft\model\entity;
 
+use CsrDelft\model\LidToestemmingModel;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
@@ -16,6 +18,16 @@ class LidToestemming extends Instelling {
      * @var string
      */
     public $uid;
+
+    public function getProfiel()
+	{
+		return ProfielModel::get($this->uid);
+	}
+
+	public function getDescription()
+	{
+		return LidToestemmingModel::instance()->getDescription($this->module, $this->instelling_id);
+	}
 
     /**
      * Database table columns

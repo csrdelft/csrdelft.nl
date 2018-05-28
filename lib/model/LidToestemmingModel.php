@@ -147,6 +147,9 @@ class LidToestemmingModel extends InstellingenModel {
         if ($_SERVER['REQUEST_URI'] == '/privacy') // Doe niet naggen op de privacy info pagina.
             return true;
 
+        if (startsWith($_SERVER['REQUEST_URI'], '/wachtwoord')) // Voorkom problemen tijdens opnieuw instellen wachtwoord
+        	return true;
+
         if (isset($_SESSION['stop_nag']) && $_SESSION['stop_nag'] > time() - 3600) // Doe niet naggen voor een uur als een lid op annuleren heeft geklikt.
             return true;
 
@@ -224,6 +227,13 @@ class LidToestemmingModel extends InstellingenModel {
         }
         return false;
     }
+
+    public function getToestemmingForIds($ids, $waardes = ['ja', 'nee']) {
+    	$placeholdersModule = implode(', ', array_fill(0, count($ids), '?'));
+    	$placeholdersWaarde = implode(', ', array_fill(0, count($waardes), '?'));
+
+    	return $this->find('instelling_id IN (' . $placeholdersModule . ') AND waarde IN (' . $placeholdersWaarde . ')', array_merge($ids, $waardes), null, 'uid');
+	}
 
     /**
      * @throws \Exception
