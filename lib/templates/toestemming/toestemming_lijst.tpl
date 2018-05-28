@@ -4,9 +4,9 @@
 {assign var=uid value=''}
 
 <div class="btn-group float-right">
-    <a class="btn btn-primary" href="/toestemming/lijst?alleen=ja">Alleen Ja</a>
-    <a class="btn btn-primary" href="/toestemming/lijst?alleen=nee">Alleen Nee</a>
-    <a class="btn btn-primary" href="/toestemming/lijst">Alles</a>
+    <a class="btn btn-primary" href="?alleen=ja">Alleen Ja</a>
+    <a class="btn btn-primary" href="?alleen=nee">Alleen Nee</a>
+    <a class="btn btn-primary" href="?alleen=">Alles</a>
 </div>
 
 <table class="table">
