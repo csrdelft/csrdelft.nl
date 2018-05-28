@@ -6,6 +6,7 @@ use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\toestemming\ToestemmingLijstView;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 
 /**
@@ -21,6 +22,8 @@ class ToestemmingController extends AclController {
         $this->acl = [
             'overzicht' => 'P_LOGGED_IN',
             'annuleren' => 'P_LOGGED_IN',
+			'lijst' => 'P_LEDEN_MOD',
+			'lijst_foto' => 'P_ALBUM_MOD',
         ];
     }
 
@@ -69,4 +72,37 @@ class ToestemmingController extends AclController {
 
         $this->view = new CmsPaginaView(CmsPaginaModel::get('thuis'));
     }
+
+    public function GET_lijst()
+	{
+		$keuzes = $this->getKeuzes();
+
+		$ids = ['foto_intern', 'foto_extern', 'vereniging', 'bijzonder'];
+
+		$this->view = new CsrLayoutPage(new ToestemmingLijstView(LidToestemmingModel::instance()->getToestemmingForIds($ids, $keuzes)));
+	}
+
+	public function GET_lijst_foto()
+	{
+		$keuzes = $this->getKeuzes();
+
+		$ids = ['foto_intern', 'foto_extern'];
+
+		$this->view = new CsrLayoutPage(new ToestemmingLijstView(LidToestemmingModel::instance()->getToestemmingForIds($ids, $keuzes)));
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getKeuzes(): array {
+		$alleen = $this->hasParam('alleen') ? $this->getParam('alleen') : '';
+		if ($alleen == 'ja') {
+			$keuzes = ['ja'];
+		} elseif ($alleen == 'nee') {
+			$keuzes = ['nee'];
+		} else {
+			$keuzes = ['ja', 'nee'];
+		}
+		return $keuzes;
+	}
 }

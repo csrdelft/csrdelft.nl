@@ -228,6 +228,13 @@ class LidToestemmingModel extends InstellingenModel {
         return false;
     }
 
+    public function getToestemmingForIds($ids, $waardes = ['ja', 'nee']) {
+    	$placeholdersModule = implode(', ', array_fill(0, count($ids), '?'));
+    	$placeholdersWaarde = implode(', ', array_fill(0, count($waardes), '?'));
+
+    	return $this->find('instelling_id IN (' . $placeholdersModule . ') AND waarde IN (' . $placeholdersWaarde . ')', array_merge($ids, $waardes), null, 'uid');
+	}
+
     /**
      * @throws \Exception
      */
