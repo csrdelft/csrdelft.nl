@@ -155,7 +155,10 @@ class LidToestemmingModel extends InstellingenModel {
 
         $uid = LoginModel::getUid();
 
-        if (static::instance()->count('uid = ? AND waarde = \'\'', [$uid]) != 0) // Er zijn nog opties
+        $modules = ['algemeen', 'intern', 'profiel'];
+		$placeholdersModule = implode(', ', array_fill(0, count($modules), '?'));
+
+		if (static::instance()->count('uid = ? AND waarde = \'\' AND module IN (' . $placeholdersModule . ')', array_merge([$uid], $modules)) != 0) // Er zijn nog opties
         	return false;
 
         if (static::instance()->count('uid = ?', [$uid]) == 0) // Er is geen enkele selectie gemaakt
