@@ -163,6 +163,7 @@ $(function ($) {
 		limit: 25,
 		remote: {
 			url: 'https://www.googleapis.com/books/v1/volumes?q=%QUERY',
+			wildcard: '%QUERY',
 			filter: (data) => {
 				let rows = [];
 				data = data.items;
@@ -235,14 +236,17 @@ $(function ($) {
 		datumTokenizer: Bloodhound.tokenizers.whitespace,
 		queryTokenizer: Bloodhound.tokenizers.whitespace,
 		limit: 20,
-		remote: 'autocomplete/titel?q=%QUERY'
+		remote: {
+			url: 'autocomplete/titel?q=%QUERY',
+			wildcard: '%QUERY'
+		}
 	});
 	bestaandeBoekenSource.initialize();
-	$('form.Formulier input:not(.tt-hint):first').typeahead({
-		autoselect: true,
+	$('form.Formulier input.TitelField').typeahead({
 		hint: true,
-		highlight: true
-	}, {
+		highlight: true,
+        minLength: 1
+    }, {
 		name: 'bestaandeBoekenSource',
 		displayKey: 'value',
 		source: bestaandeBoekenSource.ttAdapter(),

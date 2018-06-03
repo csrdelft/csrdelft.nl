@@ -27,41 +27,42 @@ a, a:hover {
   background-color: #EBEBEB;
 }
 
-/* Typeahead suggestions */
-span.twitter-typeahead {
+// Zie node_modules/bootstrap/scss/_input-group.scss
+// Mixt met twitter-typeahead
+.input-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap; // For form validation feedback
+  align-items: stretch;
   width: 100%;
-}
-.tt-suggestion {
-  cursor: pointer;
-}
-.tt-dropdown-menu h3 {
-  margin: 15px 15px 10px 10px;
-}
 
-/* InstantSearchForm */
-//.input-group-btn {
-//  font-size: inherit;
-//}
-//.cd-search .input-group {
-//
-//  input.form-control {
-//    border-top-left-radius: 4px !important;
-//    border-bottom-left-radius: 4px !important;
-//  }
-//
-//  #cd-zoek-engines {
-//    border-top-right-radius: 4px;
-//    border-bottom-right-radius: 4px;
-//    height: 34px;
-//    padding: 7px;
-//    color: #000;
-//    background-color: #f5f5f5;
-//    border: 1px solid #a9a9a9;
-//    text-shadow: none;
-//    background-image: none;
-//    font-size: 1.5em;
-//  }
-//}
+  > .twitter-typeahead {
+    position: relative; // For focus state's z-index
+    flex: 1 1 auto;
+    // Add width 1% and flex-basis auto to ensure that button will not wrap out
+    // the column. Applies to IE Edge+ and Firefox. Chrome does not require this.
+    width: 1%;
+    margin-bottom: 0;
+
+    > .form-control,
+    > .custom-select,
+    > .custom-file {
+      width: 100%;
+
+      // Bring the "active" form control to the top of surrounding elements
+      &:focus {
+        z-index: 3;
+      }
+    }
+
+    > .form-control,
+    > .custom-select {
+      &:not(:last-child) {
+        @include border-right-radius(0);
+      }
+    }
+  }
+}
 
 /* Login Form */
 .login-form .InputField, .login-form .InputField:hover {

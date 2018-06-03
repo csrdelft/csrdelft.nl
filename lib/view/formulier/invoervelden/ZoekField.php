@@ -18,7 +18,7 @@ class ZoekField extends TextField {
 		$this->onkeydown = <<<JS
 
 if (event.keyCode === 13) { // enter
-	$(this).trigger('typeahead:selected');
+    $('#{$this->getId()}').parent().find('.tt-suggestion').first().trigger('click');
 }
 else if (event.keyCode === 191 || event.keyCode === 220) { // forward and backward slash
 	event.preventDefault();
@@ -113,12 +113,12 @@ JS;
 	public function view() {
 		$html = '';
 		foreach (array('favorieten', 'menu', 'leden', 'commissies', 'kringen', 'onderverenigingen', 'werkgroepen', 'woonoorden', 'groepen', 'agenda', 'forum', 'fotoalbum', 'wiki', 'documenten', 'boeken') as $option) {
-			$html .= '<li><a href="#">';
+			$html .= '<a class="dropdown-item" href="#">';
 			$instelling = LidInstellingenModel::get('zoeken', $option);
 			if ($instelling !== 'nee') {
 				$html .= '<span class="fa fa-check"></span> ';
 				if ($option === 'leden') {
-					$html .= ucfirst(strtolower($instelling)) . '</a></li>';
+					$html .= ucfirst(strtolower($instelling)) . '</a>';
 					continue;
 				}
 			} else {
@@ -128,37 +128,38 @@ JS;
 		}
 		?>
 		<div class="input-group">
-			<div class="input-group-btn">
-				<?= parent::getHtml() ?>
-				<button id="cd-zoek-engines" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-								aria-expanded="false">
-					<span class="fa fa-search"></span>
-					<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu dropdown-menu-right" role="menu">
-					<li>
-						<a onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Oudleden</a>
-					</li>
-					<li>
-						<a onclick="window.location.href = '/ledenlijst?status=ALL&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Iedereen</a>
-					</li>
-					<li>
-						<a onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Forum
-							reacties</a></li>
-					<li>
-						<a onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">Wiki
-							inhoud</a></li>
-					<li class="divider"></li>
-					<li class="dropdown-submenu">
-						<a href="#">Snelzoeken</a>
-						<ul class="dropdown-menu">
-							<li><a href="/instellingen#lidinstellingenform-tab-Zoeken">Aanpassen...</a></li>
-							<li class="divider"></li>
+            <?= parent::getHtml() ?>
+            <div class="input-group-append dropdown">
+                <button id="cd-zoek-engines" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-expanded="false">
+                    <span class="fa fa-search"></span>
+                    <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" role="menu">
+                    <a class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
+                        Oudleden
+                    </a>
+                    <a class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=ALL&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
+                        Iedereen
+                    </a>
+
+                    <a class="dropdown-item" onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
+                        Forum reacties
+                    </a>
+                    <a class="dropdown-item" onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
+                        Wiki inhoud
+                    </a>
+                    <a class="divider"></a>
+                    <div class="dropdown-submenu">
+                        <a class="dropdown-item" href="#">Snelzoeken</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/instellingen#lidinstellingenform-tab-Zoeken">Aanpassen...</a>
+                            <a class="divider"></a>
 							<?= $html; ?>
-						</ul>
-					</li>
-				</ul>
-			</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 		</div>
 		<?php
 	}

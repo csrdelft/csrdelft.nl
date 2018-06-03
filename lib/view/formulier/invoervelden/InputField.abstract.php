@@ -522,7 +522,6 @@ JS;
 			$js .= <<<JS
 
 $('#{$this->getId()}').typeahead({
-	autoselect: true,
 	hint: true,
 	highlight: true,
 	minLength: 1
@@ -578,7 +577,7 @@ JS;
 		if ($this->typeahead_selected !== null) {
 			$js .= <<<JS
 
-$('#{$this->getId()}').on('typeahead:selected', function (event, suggestion, dataset) {
+$('#{$this->getId()}').on('typeahead:select', function (event, suggestion, dataset) {
 	{$this->typeahead_selected}
 });
 JS;
