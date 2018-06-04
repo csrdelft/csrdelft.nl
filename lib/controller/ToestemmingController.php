@@ -73,6 +73,13 @@ class ToestemmingController extends AclController {
         $this->view = new CmsPaginaView(CmsPaginaModel::get('thuis'));
     }
 
+    public function GET_annuleren()
+	{
+		$_SESSION['stop_nag'] = time();
+
+		redirect('/');
+	}
+
     public function GET_lijst()
 	{
 		$keuzes = $this->getKeuzes();
