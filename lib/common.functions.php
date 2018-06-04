@@ -1065,3 +1065,11 @@ function is_zichtbaar($profiel, $key, $uitzondering = 'P_LEDEN_MOD') {
 
     return LidToestemmingModel::instance()->toestemming($profiel, $key, $uitzondering);
 }
+
+function to_unix_path($path) {
+	return str_replace(DIRECTORY_SEPARATOR, "/", $path);
+}
+
+function realpathunix($path) {
+	return to_unix_path(realpath($path));
+}
