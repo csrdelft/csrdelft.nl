@@ -1,17 +1,19 @@
 # Losse bestanden die niet online staan
 
+# Mappen nodig voor goede werking van de stek.
 data/*
 sessie/*
 !sessie/_dummy
+htdocs/plaetjes/*
 
-# configuratie
+# Configuratie bestanden
 etc/*.ini
 lib/defines.include.php
 
 # installatie
 vendor/*
 
-# overige mappen
+# Overige mappen
 htdocs/download/*
 htdocs/owee/*
 htdocs/tools/alphabanner/*
