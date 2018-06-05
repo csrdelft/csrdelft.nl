@@ -121,7 +121,7 @@ $(function () {
         /*var ping = */setInterval(() => {
             $.post($concept.attr('data-url'), {
                 ping: ($textarea.val() !== $textarea.attr('origvalue'))
-            }).done(domUpdate).fail(error => alert(error));
+            }).done(domUpdate).fail((error) => alert(error));
         }, 60000);
         /*var autosave;
          $textarea.focusin(function () {

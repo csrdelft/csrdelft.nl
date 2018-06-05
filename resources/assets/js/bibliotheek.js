@@ -256,7 +256,7 @@ $(function ($) {
 				return `<div style="margin: 5px 10px">Ga naar: <a href="/bibliotheek/boek/${row.data.id}" target="_blank">${row.data.titel}</a></div>`;
 			}
 		}
-	}).on('typeahead:select', function (event, row) {
+	}).on('typeahead:select', (event, row) => {
 		window.open(`/bibliotheek/boek/${row.data.id}`);
 	});
 

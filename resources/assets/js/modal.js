@@ -12,8 +12,9 @@ export function modalOpen(htmlString = '') {
     let modal = $('#modal'),
         modalBackdrop = $('.modal-backdrop');
 
-    if (modal.html() === '' && htmlString === '')
+    if (modal.html() === '' && htmlString === '') {
         return false;
+    }
 
     if (modalBackdrop.length){
         modalBackdrop.remove();

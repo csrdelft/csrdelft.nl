@@ -53,7 +53,7 @@ $(function () {
 	});
 
 	//mobile - open lateral menu clicking on the menu icon
-	$('.cd-nav-trigger').on('click', function (event) {
+	$('.cd-nav-trigger').on('click', (event) => {
 		event.preventDefault();
 		if ($('.cd-main-content').hasClass('nav-is-visible')) {
 			closeNav();
@@ -68,7 +68,7 @@ $(function () {
 	});
 
 	//open search form
-	$('.cd-search-trigger').on('click', event => {
+	$('.cd-search-trigger').on('click', (event) => {
 		event.preventDefault();
 		closeNav();
 		toggleSearch();
