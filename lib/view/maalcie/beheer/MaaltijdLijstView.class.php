@@ -43,7 +43,7 @@ class MaaltijdLijstView extends CompressedLayout {
 
 	public function view() {
 		$smarty = CsrSmarty::instance();
-		$smarty->assign('stylesheets', $this->getStylesheets());
+		$smarty->assign('stylesheets', ['/dist/css/module/maaltijdlijst.css']);
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
 
