@@ -515,7 +515,6 @@ JS;
 			}
 			$js .= <<<JS
 });
-{$dataset[$name]}.initialize();
 JS;
 		}
 		if (!empty($this->suggestions)) {
@@ -523,8 +522,7 @@ JS;
 
 $('#{$this->getId()}').typeahead({
 	hint: true,
-	highlight: true,
-	minLength: 1
+	highlight: true
 }
 JS;
 		}
@@ -542,7 +540,7 @@ JS;
 			$js .= <<<JS
 , {
 	name: "{$dataset[$name]}",
-	displayKey: "value",
+	display: "value",
 	source: {$dataset[$name]}.ttAdapter(),
 	templates: {
 		{$header}

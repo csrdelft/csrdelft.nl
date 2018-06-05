@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Bloodhound from 'typeahead.js';
+import Bloodhound from 'corejs-typeahead';
 
 import {initHoverIntents} from './context';
 

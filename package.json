@@ -47,7 +47,7 @@
         "raty-js": "^2.8.0",
         "three": "^0.91.0",
         "timeago": "^1.6.3",
-        "typeahead.js": "^0.11.1",
+        "corejs-typeahead": "^1.2.1",
         "vue": "^2.5.7"
     },
     "dependencies": {}

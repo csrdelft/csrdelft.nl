@@ -38,7 +38,7 @@ mix.js('resources/assets/js/app.js', 'js')
         'jquery-ui/ui/effects/effect-fade',
         'jquery-ui/ui/widgets/tooltip',
         // 'jgallery/dist/js/jgallery', Moet gebootstrapped worden
-        'typeahead.js',
+        'corejs-typeahead',
         'dropzone/dist/dropzone-amd-module',
         'lodash',
         'bootstrap',

@@ -3,7 +3,7 @@
  */
 import _ from 'lodash';
 
-import Bloodhound from 'typeahead.js';
+import Bloodhound from 'corejs-typeahead';
 import Dropzone from 'dropzone/dist/dropzone-amd-module';
 import $ from 'jquery';
 
