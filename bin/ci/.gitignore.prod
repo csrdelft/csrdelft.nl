@@ -8,6 +8,10 @@ htdocs/plaetjes/*
 
 # Configuratie bestanden
 etc/*.ini
+etc/*.crt
+etc/*.csr
+etc/*.htpasswd
+etc/*.kdbx
 lib/defines.include.php
 
 # installatie
@@ -18,3 +22,4 @@ htdocs/download/*
 htdocs/owee/*
 htdocs/tools/alphabanner/*
 tmp/*
+bin/ldap/*
