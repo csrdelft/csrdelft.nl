@@ -25,8 +25,5 @@
         "platform": {
             "php": "7.0"
         }
-    },
-    "scripts": {
-        "clear-assets-cache": "php bin/clear-assets-cache.php"
     }
 }

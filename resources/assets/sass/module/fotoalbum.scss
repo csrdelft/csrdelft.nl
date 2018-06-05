@@ -1,0 +1,141 @@
+@import "../dropzone";
+
+.dropzone {
+	border: none !important;
+	background: none !important;
+
+	a {
+		cursor: pointer;
+	}
+}
+
+.subalbums {
+	position: absolute;
+
+	.subalbum {
+		position: relative;
+		width: 150px;
+		height: 150px;
+		margin: 0 1px 1px 0;
+		float: left;
+		cursor: pointer;
+
+		.subalbumname {
+			position: absolute;
+			top: 60%;
+			width: 100%;
+			padding: 5px 2px 5px 2px;
+			text-align: center;
+			font-weight: bold;
+			color: black;
+			background-color: white;
+			opacity: 0.8;
+		}
+	}
+	.subalbum:hover {
+		text-decoration: none;
+
+		.subalbumname {
+			opacity: 0.9;
+		}
+	}
+}
+
+.subalbums .subalbum, .jgallery-container-inner a {
+	-webkit-transition: opacity .4s ease-out;
+	-moz-transition: opacity .4s ease-out;
+	-o-transition: opacity .4s ease-out;
+	transition: opacity .4s ease-out;
+}
+.subalbums:hover .subalbum, .jgallery-container-inner:hover a {
+	opacity: 0.8;
+}
+.subalbums:hover .subalbum:hover, .jgallery-container-inner:hover a:hover {
+	opacity: 1;
+}
+
+.jgallery {
+	background-color: #fff !important;
+
+	.zoom-container {
+		.jgallery-container {
+			background: none !important;
+		}
+		.overlay {
+			background-color: #fff !important;
+		}
+	}
+
+	.jgallery-thumbnails {
+
+		.jgallery-container {
+			overflow-x: auto;
+
+			.jgallery-container-inner {
+				height: 150px;
+				padding: 0 !important;
+			}
+		}
+	}
+	.jgallery-thumbnails.full-screen {
+
+		.jgallery-container {
+			overflow-y: auto;
+		}
+
+		.jgallery-close, .change-album {
+			display: none;
+		}
+	}
+}
+
+@media only screen and (min-width: 960px) {
+	.jgallery.jgallery-full-screen {
+
+		.zoom-container {
+
+			.nav {
+				top: 50px;
+			}
+		}
+	}
+}
+@media only screen and (max-width: 959px) {
+	.jgallery.jgallery-full-screen {
+
+		.zoom-container {
+
+			.nav {
+				right: 50px;
+			}
+		}
+	}
+}
+.jgallery.jgallery-slider::after {
+	background: none;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+}
+.jgallery.jgallery-slider {
+
+	.imageLoaderPositionAbsolute {
+		display: none !important;
+	}
+}
+
+.fototag {
+	position: absolute;
+	z-index: 10000;
+	border-radius: 50%;
+	border: 2px solid transparent;
+	-webkit-transition : border 200ms ease-out;
+	-moz-transition : border 200ms ease-out;
+	-o-transition : border 200ms ease-out;
+	transition : border 200ms ease-out;
+}
+.fototag.showborder {
+	border: 2px solid #fff;
+}
+.fototag.active, .fototag:hover {
+	border: 2px solid #e8cf2a;
+}

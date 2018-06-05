@@ -25,6 +25,7 @@ class AddCommissieFormulier extends Formulier {
 		parent::__construct($model, "/commissievoorkeuren/nieuwecommissie");
 		$this->addFields([new HtmlComment("<h2>Commissie toevoegen</h2>")]);
 		$this->addFields([new RequiredTextField("naam", "", "Naam")]);
-		$this->addFields([new SubmitKnop()]);
+
+		$this->addButtons([new SubmitKnop()]);
 	}
 }

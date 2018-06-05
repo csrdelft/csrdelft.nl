@@ -31,6 +31,7 @@ class CommissieFormulier extends Formulier {
 		$this->addFields([new HtmlComment("<p>Hier kunnen instellingen voor de commissie worden aangepast. Onderaan de pagina staan de leden die een voorkeur voor deze commissie hebben opgegeven.</p>")]);
 		$this->addFields([new CheckboxField('zichtbaar', $this->model->zichtbaar, "Tonen aan leden")]);
 		$this->addFields([new SelectField("categorie_id", $this->model->categorie_id, "Categorie", $opties)]);
-		$this->addFields([new SubmitKnop()]);
+
+		$this->addButtons([new SubmitKnop()]);
 	}
 }

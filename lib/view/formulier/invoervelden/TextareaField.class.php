@@ -12,6 +12,11 @@ namespace CsrDelft\view\formulier\invoervelden;
  */
 class TextareaField extends TextField {
 
+	const WRAPPER_CLASS_NAME = 'form-group';
+	const LABEL_CLASS_NAME = '';
+	const FIELD_CLASS_NAME = '';
+
+
 	public function __construct($name, $value, $description, $rows = 2, $max_len = null, $min_len = null) {
 		parent::__construct($name, $value, $description, $max_len, $min_len);
 		if (is_int($rows)) {

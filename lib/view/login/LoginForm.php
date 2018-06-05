@@ -40,7 +40,7 @@ class LoginForm extends Formulier {
 	public function view() {
 		parent::view();
 		?>
-		<ul>
+		<ul class="login-buttons">
 			<li>
 				<a href="#" class="login-submit" onclick="document.getElementById('loginform').submit();">Inloggen</a>
 				&raquo;

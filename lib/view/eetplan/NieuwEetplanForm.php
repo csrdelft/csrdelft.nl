@@ -11,8 +11,9 @@ class NieuwEetplanForm extends ModalForm {
 		parent::__construct(null, '/eetplan/nieuw', 'Nieuw eetplan toevoegen');
 
 		$fields[] = new RequiredDateField('avond', date(DATE_ISO8601), 'Avond', (int)date('Y') + 1, (int)date('Y') - 1);
-		$fields['btn'] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 }

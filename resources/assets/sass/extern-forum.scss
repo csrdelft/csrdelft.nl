@@ -1,0 +1,60 @@
+@import "extern/variables";
+
+#forumZoekenForm {
+
+  .InputField {
+    margin: 0.5em;
+    display: flex;
+    align-items: baseline;
+  }
+
+  .forumZoekenGeavanceerd {
+    display: flex;
+    align-items: baseline;
+  }
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+
+  >* {
+    margin: 1ex;
+  }
+
+  select {
+    width: auto;
+  }
+}
+
+.forumdeel {
+  background-color: $basiskleur;
+  box-shadow: none;
+}
+
+#forumtabel {
+  table-layout: fixed;
+
+  .bericht {
+    text-align: left;
+  }
+}
+
+#forumPosten {
+  text-align: left;
+  .verborgen {
+    display: none;
+  }
+
+  #forumBericht {
+    color: black;
+  }
+
+  #berichtPreview {
+    color: black;
+    strong {
+      color: black;
+    }
+  }
+}

@@ -3,20 +3,20 @@
 		<tbody>
 			<tr>
 				<td>
-					<a href="/forum/wijzigen/{$draad->draad_id}/plakkerig" class="btn post ReloadPage" title="Verander plakkerigheid">
+					<a href="/forum/wijzigen/{$draad->draad_id}/plakkerig" class="btn btn-light post ReloadPage" title="Verander plakkerigheid">
 						{icon get="note"} maak {if $draad->plakkerig}<span class="dikgedrukt">niet</span> {/if}plakkerig
 					</a>
 					<br /><br />
-					<a href="/forum/wijzigen/{$draad->draad_id}/eerste_post_plakkerig" class="btn post ReloadPage" title="Verander plakkerigheid van eerste post">
+					<a href="/forum/wijzigen/{$draad->draad_id}/eerste_post_plakkerig" class="btn btn-light post ReloadPage" title="Verander plakkerigheid van eerste post">
 						<input type="checkbox" {if $draad->eerste_post_plakkerig}checked="checked"{/if}/> 1e post plakkerig
 					</a>
 					<br /><br />
-					<a href="/forum/wijzigen/{$draad->draad_id}/pagina_per_post" class="btn post ReloadPage" title="Verander 1 pagina per post">
+					<a href="/forum/wijzigen/{$draad->draad_id}/pagina_per_post" class="btn btn-light post ReloadPage" title="Verander 1 pagina per post">
 						<input type="checkbox" {if $draad->pagina_per_post}checked="checked"{/if}/> 1 pagina per post
 					</a>
 				</td>
 				<td>
-					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="btn post confirm ReloadPage" title="Verander status verwijderd (incl. alle reacties)">
+					<a href="/forum/wijzigen/{$draad->draad_id}/verwijderd" class="btn btn-light post confirm ReloadPage" title="Verander status verwijderd (incl. alle reacties)">
 						{if $draad->verwijderd}
 							{icon get="arrow_undo"} draad herstellen
 						{else}
@@ -24,7 +24,7 @@
 						{/if}
 					</a>
 					&nbsp;
-					<a href="/forum/onderwerp/{$draad->draad_id}/prullenbak" class="btn" title="Bekijk de reacties die zijn verwijderd">{icon get="bin_closed"} verwijderde reacties</a>
+					<a href="/forum/onderwerp/{$draad->draad_id}/prullenbak" class="btn btn-light" title="Bekijk de reacties die zijn verwijderd">{icon get="bin_closed"} verwijderde reacties</a>
 					<br /><br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/forum_id" method="post">
 						<label>Verplaats naar &nbsp;</label>
@@ -37,13 +37,13 @@
 								</optgroup>
 							{/foreach}
 						</select>
-						<input type="submit" value="Opslaan" class="btn" />
+						<input type="submit" value="Opslaan" class="btn btn-primary" />
 					</form>
 					<br />
 					<form action="/forum/wijzigen/{$draad->draad_id}/titel" method="post">
 						<label>Titel aanpassen &nbsp;</label>
 						<input type="text" name="titel" value="{$draad->titel}" />
-						<input type="submit" value="Opslaan" class="btn" />
+						<input type="submit" value="Opslaan" class="btn btn-primary" />
 					</form>
 					{toegang P_FORUM_BELANGRIJK}
 						<br />
@@ -59,7 +59,7 @@
 									</optgroup>
 								{/foreach}
 							</select>
-							<input type="submit" value="Opslaan" class="btn" />
+							<input type="submit" value="Opslaan" class="btn btn-primary" />
 						</form>
 					{/toegang}
 					{if $gedeeld_met_opties}
@@ -72,7 +72,7 @@
 									<option value="{$gedeeld_deel->forum_id}"{if $draad->gedeeld_met === $gedeeld_deel->forum_id} selected="selected"{/if}>{$gedeeld_deel->titel}</option>
 								{/foreach}
 							</select>
-							<input type="submit" value="Opslaan" class="btn" />
+							<input type="submit" value="Opslaan" class="btn btn-primary" />
 						</form>
 					{/if}
 				</td>

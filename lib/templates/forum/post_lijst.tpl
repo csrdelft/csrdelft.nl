@@ -45,7 +45,7 @@
 				<a href="/tools/stats.php?ip={$post->auteur_ip}" class="btn" title="IP-log">IP-log</a>
 				<a href="/forum/verwijderen/{$post->post_id}" class="btn post confirm" title="Verwijder bericht of draad">{icon get="cross"}</a>
 				{if $post->magBewerken()}
-					<a href="#{$post->post_id}" class="{if $post->uid !== CsrDelft\model\security\LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop{/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
+					<a href="#{$post->post_id}" class="{if $post->uid !== CsrDelft\model\security\LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop{/if}" onclick="window.forum.forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
 				{/if}
 			{else}
 				{if $post->verwijderd}
@@ -56,7 +56,7 @@
 					<a href="#reageren" class="btn citeren" data-citeren="{$post->post_id}" title="Citeer bericht">{icon get="comments"}</a>
 				{/if}
 				{if $post->magBewerken()}
-					<a href="#{$post->post_id}" class="{if $post->uid !== CsrDelft\model\security\LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop{/if}" onclick="forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
+					<a href="#{$post->post_id}" class="{if $post->uid !== CsrDelft\model\security\LoginModel::getUid() AND !$post->wacht_goedkeuring} forummodknop{/if}" onclick="window.forum.forumBewerken({$post->post_id});" title="Bewerk bericht">{icon get="pencil"}</a>
 				{/if}
 				{toegang P_LOGGED_IN}
 					{assign var=timestamp value=strtotime($post->datum_tijd)}

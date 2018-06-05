@@ -34,10 +34,9 @@ class CsrLayoutPage extends CompressedLayout {
 	public $modal;
 
 	public function __construct(View $body, array $zijbalk = array(), ModalForm $modal = null) {
-		parent::__construct('layout', $body, $body->getTitel());
+		parent::__construct($body, $body->getTitel());
 		$this->zijbalk = $zijbalk;
 		$this->modal = $modal;
-		$this->addCompressedResources('general');
 	}
 
 	public function getBreadcrumbs() {

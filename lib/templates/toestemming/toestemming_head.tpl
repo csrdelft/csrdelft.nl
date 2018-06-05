@@ -1,4 +1,4 @@
-<div style="width: 700px">
+<div>
     <p>
         {$beleid}
     </p>
@@ -33,14 +33,14 @@
     <p>
         {$beschrijvingVereniging}
     </p>
-    <p>
+    <div class="form-group">
         <label><input type="radio" name="toestemming-intern" id="toestemming-ja"{if $akkoord == 'ja'} checked="checked"{/if}/> Mijn gegevens mogen gedeeld worden voor interne doeleinden. Dit geldt totdat ik dat verander.</label>
-    </p>
+    </div>
     <p>
         <label><input type="radio" name="toestemming-intern" id="toestemming-nee"{if $akkoord == 'nee'} checked="checked"{/if}/> Ik wil graag instellen welke gegevens met gedeeld worden.</label>
     </p>
 
-    <div id="toestemming-opties" style="{if $akkoord != 'nee'}display:none;{/if} width: 500px; clear: both;"><p>Maak een keuze, voor ieder veld moet een waarde ingevuld worden. Commissies die bepaalde gegevens nodig hebben om te kunnen functioneren blijven deze mogelijkheid houden.</p>
+    <div id="toestemming-opties" style="{if $akkoord != 'nee'}display:none;{/if} clear: both;"><p>Maak een keuze, voor ieder veld moet een waarde ingevuld worden. Commissies die bepaalde gegevens nodig hebben om te kunnen functioneren blijven deze mogelijkheid houden.</p>
         {foreach from=$fields item=field}
             {$field}
         {/foreach}

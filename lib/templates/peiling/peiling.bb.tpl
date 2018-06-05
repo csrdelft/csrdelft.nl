@@ -33,7 +33,7 @@
 			</ul>
 			<br /><br />
 	{if $peiling->magStemmen()}
-			<input type="button" value="Stem" onclick="peiling_bevestig_stem('#peilingForm{$peiling->id}');" />
+			<input type="button" value="Stem" onclick="window.peiling.peilingBevestigStem('#peilingForm{$peiling->id}');" />
 		</form>
 	{/if}
 </div>

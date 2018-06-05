@@ -767,7 +767,7 @@ HTML;
 
 		$html = <<<HTML
 <div class="bb-video">
-	<div class="bb-video-preview" onclick="event.preventDefault();bbvideoDisplay(this);" data-params='{$params}' title="Klik om de video af te spelen">
+	<div class="bb-video-preview" onclick="event.preventDefault();window.bbcode.bbvideoDisplay(this);" data-params='{$params}' title="Klik om de video af te spelen">
 		<div class="play-button fa fa-play-circle-o fa-5x"></div>
 		<div class="bb-img-loading" src="{$previewthumb}"></div>
 	</div>

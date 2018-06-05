@@ -39,11 +39,11 @@
                 {$toestemming->instelling_id}
             </td>
             {if $toestemming->waarde == 'ja'}
-                <td class="success">
+                <td class="table-success">
                     {$toestemming->waarde}
                 </td>
             {elseif $toestemming->waarde == 'nee'}
-                <td class="danger">
+                <td class="table-danger">
                     {$toestemming->waarde}
                 </td>
             {/if}

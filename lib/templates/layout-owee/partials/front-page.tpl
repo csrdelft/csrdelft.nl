@@ -1,7 +1,7 @@
 <!-- Banner -->
 <section id="banner">
     <div class="inner">
-        <img src="/assets/layout-owee/plaetjes/logo-next-level.svg">
+        <img src="/images/logo-next-level.svg">
     </div>
 </section>
 
@@ -11,7 +11,7 @@
     <!-- One -->
     <section id="one" class="wrapper kleur1">
         <div class="inner">
-            <span class="image"><img src="/assets/layout-owee/plaetjes/vereniging.jpg" alt=""/></span>
+            <span class="image"><img src="/images/vereniging.jpg" alt=""/></span>
             <div class="content">
                 <h2 class="major">C.S.R. Delft</h2>
                 <p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
@@ -30,7 +30,7 @@
     <section id="two" class="wrapper alt kleur2">
         <div class="inner">
             <span class="image lazy-load"
-                  data-lazy="<img src='/assets/layout-owee/plaetjes/podium.jpg' alt=''/>"></span>
+                  data-lazy="<img src='/images/podium.jpg' alt=''/>"></span>
             <div class="content">
                 <h2 class="major">C.S.R. in de OWee</h2>
                 <p>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee. Dit jaar
@@ -46,7 +46,7 @@
     <!-- Three -->
     <section id="three" class="wrapper kleur3">
         <div class="inner">
-            <span class="image lazy-load" data-lazy="<img src='/assets/layout-owee/plaetjes/OC-2017.jpg' alt=''/>"></span>
+            <span class="image lazy-load" data-lazy="<img src='/images/OC-2017.jpg' alt=''/>"></span>
             <div class="content">
                 <h2 class="major">Interesse/vragen</h2>
                 <p>Uiteraard ben je welkom om tijdens de OWee langs te komen op onze sociëteit Confide aan de Oude Delft
