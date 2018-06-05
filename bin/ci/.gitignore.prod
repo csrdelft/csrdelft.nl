@@ -1,0 +1,18 @@
+# Losse bestanden die niet online staan
+
+data/*
+sessie/*
+!sessie/_dummy
+
+# configuratie
+etc/*.ini
+lib/defines.include.php
+
+# installatie
+vendor/*
+
+# overige mappen
+htdocs/download/*
+htdocs/owee/*
+htdocs/tools/alphabanner/*
+tmp/*

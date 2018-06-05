@@ -25,6 +25,7 @@ cd /home/travis/build
 git clone --quiet --branch=master git@github.com:csrdelft/productie.git deploy > /dev/null
 rm -rf deploy/*
 rsync -a csrdelft/csrdelft.nl/* deploy --exclude node_modules --exclude .git --exclude resources
+mv deploy/bin/ci/.gitignore.prod deploy/
 
 cd deploy
 git add -Af
