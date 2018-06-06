@@ -7,14 +7,14 @@
 				{if !$maaltijd->gesloten && CsrDelft\model\security\LoginModel::mag('P_MAAL_IK')}
 
 					{if $aanmelding}
-						<a onclick="window.ketzerAjax('/maaltijdenketzer/afmelden/{$maaltijd->maaltijd_id}', '.maaltijdketzer-{$maaltijd->maaltijd_id}');" class="btn maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
+						<a onclick="window.ketzerAjax('/maaltijdenketzer/afmelden/{$maaltijd->maaltijd_id}', '.maaltijdketzer-{$maaltijd->maaltijd_id}');" class="btn maaltijd-aangemeld" tabindex="0"><input type="checkbox" checked="checked" /> Ja</a>
 
 					{elseif $maaltijd->getAantalAanmeldingen() >= $maaltijd->aanmeld_limiet}
 						{icon get="stop" title="Maaltijd is vol"}&nbsp;
 						<span class="maaltijd-afgemeld">Nee</span>
 
 					{else}
-						<a onclick="window.ketzerAjax('/maaltijdenketzer/aanmelden/{$maaltijd->maaltijd_id}', '.maaltijdketzer-{$maaltijd->maaltijd_id}');" class="btn maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
+						<a onclick="window.ketzerAjax('/maaltijdenketzer/aanmelden/{$maaltijd->maaltijd_id}', '.maaltijdketzer-{$maaltijd->maaltijd_id}');" class="btn maaltijd-afgemeld" tabindex="0"><input type="checkbox" /> Nee</a>
 
 					{/if}
 
