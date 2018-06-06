@@ -358,6 +358,7 @@ HTML;
 		foreach ($this->fields as $field) {
 			$field->view();
 		}
+		echo $this->formKnoppen->getHtml();
 		echo $this->getScriptTag();
 		echo '</form>';
 	}
