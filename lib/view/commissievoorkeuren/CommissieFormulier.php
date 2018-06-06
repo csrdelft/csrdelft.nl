@@ -32,6 +32,6 @@ class CommissieFormulier extends Formulier {
 		$this->addFields([new CheckboxField('zichtbaar', $this->model->zichtbaar, "Tonen aan leden")]);
 		$this->addFields([new SelectField("categorie_id", $this->model->categorie_id, "Categorie", $opties)]);
 
-		$this->addButtons([new SubmitKnop()]);
+		$this->formKnoppen->addKnop(new SubmitKnop());
 	}
 }
