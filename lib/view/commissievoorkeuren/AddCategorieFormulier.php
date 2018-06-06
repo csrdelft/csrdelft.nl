@@ -26,6 +26,6 @@ class AddCategorieFormulier extends Formulier {
 		$this->addFields([new HtmlComment("<h2>Categorie toevoegen</h2>")]);
 		$this->addFields([new RequiredTextField("naam", "", "Naam")]);
 
-		$this->addButtons([new SubmitKnop()]);
+		$this->formKnoppen->addKnop(new SubmitKnop());
 	}
 }
