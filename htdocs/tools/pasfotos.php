@@ -54,6 +54,6 @@ if (isset($_GET['string'])) {
 		} else { //assumption is the mother of all...
 			header('Content-Type: image/jpeg');
 		}
-		echo file_get_contents(PHOTOS_PATH . $pasfoto);
+		echo file_get_contents(PHOTOALBUM_PATH . $pasfoto);
 	}
 }

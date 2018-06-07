@@ -85,15 +85,15 @@ public function getBreadcrumbs() {
 private function getPasfotoPath($uid) {
 	$pasfoto = 'pasfoto/geen-foto.jpg';
 	foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
-		if (file_exists(PHOTOS_PATH . 'pasfoto/' . $uid . '.' . $validExtension)) {
+		if (file_exists(PHOTOALBUM_PATH . 'pasfoto/' . $uid . '.' . $validExtension)) {
 			$pasfoto = 'pasfoto/' . $uid . '.' . $validExtension;
 			break;
 		}
 	}
 	// kijken of de vierkante bestaat, en anders maken.
-	$vierkant = PHOTOS_PATH . 'pasfoto/' . $uid . '.vierkant.png';
+	$vierkant = PHOTOALBUM_PATH . 'pasfoto/' . $uid . '.vierkant.png';
 	if (!file_exists($vierkant)) {
-		square_crop(PHOTOS_PATH . $pasfoto, $vierkant, 150);
+		square_crop(PHOTOALBUM_PATH . $pasfoto, $vierkant, 150);
 	}
 	return CSR_ROOT . '/plaetjes/pasfoto/' . $uid . '.vierkant.png';
 }
