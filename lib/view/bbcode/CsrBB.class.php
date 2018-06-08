@@ -1355,7 +1355,7 @@ src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOG
 			}
 			$content .= '</div>' . "\n"; //end paging
 			if ($this->slideshowJsIncluded === false) {
-				$content .= '<script type="text/javascript" src="/layout/js/bb-slideshow.js"></script>';
+				$content .= '<script type="text/javascript" src="/js/bb-slideshow.js"></script>';
 				$this->slideshowJsIncluded = true;
 			}
 		}

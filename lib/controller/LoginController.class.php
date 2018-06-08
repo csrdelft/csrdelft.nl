@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use App\View\Formulieren\AccountForm;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\CmsPaginaModel;
@@ -21,7 +22,6 @@ use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\login\AccountForm;
 use CsrDelft\view\login\LoginForm;
 use CsrDelft\view\login\LoginSessionsData;
 use CsrDelft\view\login\RememberAfterLoginForm;

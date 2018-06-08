@@ -43,6 +43,7 @@
 	<td class="bericht0">
 
 		<form id="forumForm" class="Formulier" action="/forum/posten/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" method="post">
+			<input type="hidden" name="_token" value="{CSRF_TOKEN}" />
 			{toegang P_LOGGED_IN}
 			{geentoegang}
 				<div class="bericht">

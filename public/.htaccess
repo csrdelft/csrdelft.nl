@@ -1,0 +1,48 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    AddDefaultCharset utf-8
+    RewriteEngine On
+
+    # afbeeldingen afschermen voor externen kan hier:
+    #RewriteRule ^plaetjes/pasfoto/(.*)$		tools/plaetjes.php?img=pasfoto/$1 [QSA,L] # todo: caching headers fixen
+
+    #RewriteRule ^nieuws/?(.*)		/mededelingen/$1/ [L]
+    #RewriteRule ^owee/?$			/csrindeowee [L]
+    #RewriteRule ^facebook			https://www.facebook.com/delftcsr [R,L]
+    #RewriteRule ^feuten				https://trac.knorrie.org/csrdelft.nl/report/1 [R,L]
+
+    #RewriteRule ^(leden)?lijst/?(.*)$	../htdocs/tools/lijst.php [QSA,L]
+
+    RewriteRule ^forum/rss/([0-9a-zA-Z]*)/csrdelft.xml		old_index.php?c=Forum&private_token=$1 [L]
+    RewriteRule ^agenda/ical/([0-9a-zA-Z]*)/csrdelft.ics	old_index.php?c=Agenda&private_token=$1 [L]
+
+    RewriteRule ^login_oud				old_index.php?c=Login [L]
+    RewriteRule ^logout_oud				old_index.php?c=Login [L]
+    RewriteRule ^su					old_index.php?c=Login [L]
+    RewriteRule ^endsu				old_index.php?c=Login [L]
+
+    # business club
+    RewriteRule ^bc$ ../htdocs/bc/index.html [L]
+    RewriteRule ^bc/partners$ ../htdocs/bc/partners.html [L]
+    RewriteRule ^bc/mogelijkheden$ ../htdocs/bc/mogelijkheden.html [L]
+    RewriteRule ^bc/contact$ ../htdocs/bc/contact.html [L]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>

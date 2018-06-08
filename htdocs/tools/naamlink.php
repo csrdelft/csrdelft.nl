@@ -4,8 +4,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 
-require_once 'configuratie.include.php';
-
 /**
  * naamlink.php	| 	Jan Pieter Waagmeester (jieter@jpwaag.com)
  *

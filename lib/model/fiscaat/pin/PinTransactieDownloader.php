@@ -25,14 +25,6 @@ class PinTransactieDownloader
 	const POST_FIELD_STORE = 'select.store.container:select.store';
 
 	/**
-	 * Settings constants.
-	 */
-	const SETTINGS_USERNAME = 'username';
-	const SETTINGS_PASSWORD = 'password';
-	const SETTINGS_STORE = 'store';
-	const SETTINGS_URL = 'url';
-
-	/**
 	 * Url constants.
 	 */
 	const RELATIVE_URL_LOGIN = '../nl/login/wicket:interface/:0:form::IFormSubmitListener::';
@@ -47,14 +39,12 @@ class PinTransactieDownloader
 	const DATE_START_MINUTES = '00';
 	const DURATION_DAY = '0';
 
-	public static function download($settings, $moment)
+	public static function download(string $baseUrl, string $store, string $username, string $password, int $moment)
 	{
-		$baseUrl = $settings[self::SETTINGS_URL];
-
 		//1. Login
 		$postFields = [
-			self::POST_FIELD_LOGIN_USERNAME => $settings[self::SETTINGS_USERNAME],
-			self::POST_FIELD_LOGIN_PASSWORD => $settings[self::SETTINGS_PASSWORD],
+			self::POST_FIELD_LOGIN_USERNAME => $username,
+			self::POST_FIELD_LOGIN_PASSWORD => $password,
 		];
 		$result = static::postPage(url2absolute($baseUrl, self::RELATIVE_URL_LOGIN), $postFields, null, true);
 
@@ -83,7 +73,7 @@ class PinTransactieDownloader
 			self::POST_FIELD_PERIOD_FROM_DATE_HOURS => self::DATE_START_HOURS,
 			self::POST_FIELD_PERIOD_FROM_DATE_MINUTES => self::DATE_START_MINUTES,
 			self::POST_FIELD_PERIOD_DURATION => self::DURATION_DAY,
-			self::POST_FIELD_STORE => $settings[self::SETTINGS_STORE],
+			self::POST_FIELD_STORE => $store,
 		];
 		$result = self::postPage(url2absolute($baseUrl, $searchUrl), $postFields, $sessionCookie);
 

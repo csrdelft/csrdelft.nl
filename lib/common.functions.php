@@ -4,6 +4,7 @@
 # -------------------------------------------------------------------
 # common.functions.php
 # -------------------------------------------------------------------
+# Ingeladen door composer, zie composer.json
 use CsrDelft\Icon;
 use CsrDelft\lid\LidZoeker;
 use CsrDelft\MijnSqli;
@@ -147,24 +148,27 @@ function getSessionMaxLifeTime() {
 	return $lifetime;
 }
 
-/**
- * Invokes a client page (re)load the url.
- *
- * @param string $url
- * @param boolean $refresh allow a refresh; redirect to CSR_ROOT otherwise
- */
-function redirect($url = null, $refresh = true) {
-	if (empty($url)) {
-		$url = REQUEST_URI;
-	}
-	if (!$refresh AND $url == REQUEST_URI) {
-		$url = CSR_ROOT;
-	}
-	if (!startsWith($url, CSR_ROOT)) {
-		$url = CSR_ROOT . $url;
-	}
-	header('location: ' . $url);
-	exit;
+if (!function_exists('redirect')) {
+    /**
+     * Invokes a client page (re)load the url.
+     *
+     * @param string $url
+     * @param boolean $refresh allow a refresh; redirect to CSR_ROOT otherwise
+     */
+    function redirect($url = null, $refresh = true)
+    {
+        if (empty($url)) {
+            $url = REQUEST_URI;
+        }
+        if (!$refresh AND $url == REQUEST_URI) {
+            $url = CSR_ROOT;
+        }
+        if (!startsWith($url, CSR_ROOT)) {
+            $url = CSR_ROOT . $url;
+        }
+        header('location: ' . $url);
+        exit;
+    }
 }
 
 /**
@@ -635,7 +639,7 @@ function getDebug(
 		$debug .= '<hr />COOKIE<hr />' . htmlspecialchars(print_r($_COOKIE, true));
 	}
 	if ($session) {
-		$debug .= '<hr />SESSION<hr />' . htmlspecialchars(print_r($_SESSION, true));
+		//$debug .= '<hr />SESSION<hr />' . htmlspecialchars(print_r($_SESSION, true));
 	}
 	if ($server) {
 		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SERVER, true));
@@ -686,6 +690,16 @@ function setMelding($msg, $lvl) {
  * @return string html van melding(en) of lege string
  */
 function getMelding() {
+    if ($melding = session()->get('message')) {
+        $sMelding = '<div id="melding">';
+        $sMelding .= '<div class="alert alert-1">';
+        $sMelding .= Icon::getTag('alert-1');
+        $sMelding .= $melding;
+        $sMelding .= '</div>';
+        $sMelding .= '</div>';
+        return $sMelding;
+    }
+
 	if (isset($_SESSION['melding']) AND is_array($_SESSION['melding'])) {
 		$sMelding = '<div id="melding">';
 		$shown = array();

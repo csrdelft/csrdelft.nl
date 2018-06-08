@@ -43,8 +43,20 @@ bin/ldap/settings.pyc
 /vendor/
 .DS_Store
 
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+/.idea
+/.vscode
+/.vagrant
+Homestead.json
+Homestead.yaml
+.env
+_ide_helper.php
+
 # JS
 /node_modules
 npm-debug.log
 yarn-error.log
-htdocs/dist
+public/dist

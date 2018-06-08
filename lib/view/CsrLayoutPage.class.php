@@ -20,7 +20,7 @@ use CsrDelft\view\toestemming\ToestemmingModalForm;
  *
  * De stek layout van 2006
  */
-class CsrLayoutPage extends CompressedLayout {
+class CsrLayoutPage extends HtmlPage {
 
 	/**
 	 * Zijbalk
@@ -51,7 +51,6 @@ class CsrLayoutPage extends CompressedLayout {
 
 		$smarty = CsrSmarty::instance();
 		$smarty->assign('stylesheets', $this->getStylesheets());
-		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
 		$smarty->assign('mainmenu', new MainMenuView());
 		$smarty->assign('body', $this->getBody());
@@ -93,5 +92,7 @@ class CsrLayoutPage extends CompressedLayout {
 			$smarty->display('layout/pagina.tpl');
 		}
 	}
+
+
 
 }

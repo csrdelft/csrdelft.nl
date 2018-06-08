@@ -6,6 +6,7 @@ use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\view\CompressedLayout;
 use CsrDelft\view\CsrSmarty;
+use CsrDelft\view\HtmlPage;
 
 /**
  * MaaltijdLijstView.class.php
@@ -15,7 +16,7 @@ use CsrDelft\view\CsrSmarty;
  * Tonen van de lijst van aanmeldingen, betaalmogelijkheden en maaltijdgegevens.
  *
  */
-class MaaltijdLijstView extends CompressedLayout {
+class MaaltijdLijstView extends HtmlPage {
 	public function __construct(Maaltijd $maaltijd, $aanmeldingen, $corvee) {
 		parent::__construct($this, $maaltijd->getTitel());
 

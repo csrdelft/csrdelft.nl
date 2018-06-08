@@ -15,8 +15,12 @@ use CsrDelft\model\security\LoginModel;
  */
 class GroepenRouterController extends Controller {
 
-	public function __construct($query) {
+    private $query;
+
+    public function __construct($query) {
 		parent::__construct($query, null);
+
+		$this->query = $query;
 	}
 
 	public function performAction(array $args = array()) {
@@ -34,7 +38,7 @@ class GroepenRouterController extends Controller {
 		}
 		$class = ucfirst($class) . 'Controller';
 		$namespacedClass = 'CsrDelft\\controller\\groepen\\' . $class;
-		$controller = new $namespacedClass(REQUEST_URI);
+		$controller = new $namespacedClass($this->query);
 		$controller->performAction();
 
 		$this->view = $controller->getView();
