@@ -116,12 +116,18 @@ $(function () {
     let $textarea = $('#forumBericht');
     let $concept = $('#forumConcept');
 
+    // The last value that we pinged
+    let lastPing = null;
     if ($concept.length === 1) {
 
         /*var ping = */setInterval(() => {
-            $.post($concept.attr('data-url'), {
-                ping: ($textarea.val() !== $textarea.attr('origvalue'))
-            }).done(domUpdate).fail((error) => alert(error));
+            let pingValue = $textarea.val() !== $textarea.attr('origvalue');
+            if (pingValue !== false || lastPing !== false) {
+                $.post($concept.attr('data-url'), {
+                    ping: pingValue
+                }).done(domUpdate).fail((error) => console.log(error));
+                lastPing = pingValue;
+            }
         }, 60000);
         /*var autosave;
          $textarea.focusin(function () {
