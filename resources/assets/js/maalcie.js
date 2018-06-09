@@ -142,7 +142,7 @@ function takenMagRuilen(e) {
 		e.target = $(e.target).parent();
 	}
 
-	let source= $('#' + dragObject.id);
+	let source= dragObject.el;
 	if ($(source).attr('id') !== $(e.target).attr('id')) {
 		e.preventDefault();
 	}
@@ -157,7 +157,7 @@ function takenRuilen(e) {
 	if (elmnt.tagName.toUpperCase() === 'IMG') { // dropped on image inside of anchor
 		elmnt = $(elmnt).parent();
 	}
-	let source = $('#' + dragObject.id);
+	let source = dragObject.el;
 	if (!confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
 		return;
 	}
