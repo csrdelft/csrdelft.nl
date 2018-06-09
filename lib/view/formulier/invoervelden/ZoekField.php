@@ -18,7 +18,7 @@ class ZoekField extends TextField {
 		$this->onkeydown = <<<JS
 
 if (event.keyCode === 13) { // enter
-    $('#{$this->getId()}').parent().find('.tt-suggestion').first().trigger('click');
+    $(this).trigger('typeahead:select')
 }
 else if (event.keyCode === 191 || event.keyCode === 220) { // forward and backward slash
 	event.preventDefault();
