@@ -25,7 +25,7 @@ $(function () {
 		setTimeout(function () {
 			$('div.bb-img-loading').each(function () {
 				const content = $(document.createElement('img'));
-				content.error(function () {
+				content.on('error', function () {
 					$(this).attr('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
 					$(this).attr('src', '/plaetjes/famfamfam/picture_error.png');
 					$(this).css('width', '16px');
