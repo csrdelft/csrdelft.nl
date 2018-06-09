@@ -25,7 +25,18 @@ mix.options({
 mix.webpackConfig({
     plugins: [
         new HardSourceWebpackPlugin() // Maak build 20x sneller
-    ]
+    ],
+    resolve: {
+        extensions: ['.ts']
+    },
+    module: {
+        rules: [
+            {
+                test: /\.ts$/,
+                loader: 'ts-loader'
+            }
+        ]
+    }
 });
 
 

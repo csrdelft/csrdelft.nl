@@ -17,6 +17,9 @@ class DragObjectModel {
 			$top = (int)$_SESSION['dragobject'][$id]['top'];
 			$left = (int)$_SESSION['dragobject'][$id]['left'];
 		}
+
+		$top = max($top, 0);
+		$left = max($left, 0);
 		return array('top' => $top, 'left' => $left);
 	}
 
