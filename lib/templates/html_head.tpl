@@ -21,9 +21,6 @@
 {foreach from=$scripts item=script}
 <script type="text/javascript" src="{$script}"></script>
 {/foreach}
-<script type="text/javascript" src="/dist/js/manifest.js"></script>
-<script type="text/javascript" src="/dist/js/vendor.js"></script>
-<script type="text/javascript" src="/dist/js/app.js"></script>
 <!-- Google Analytics -->
 {literal}
 <script>

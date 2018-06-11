@@ -35,6 +35,9 @@ class MaaltijdLijstView extends CompressedLayout {
 
 		$smarty->assign('maaltijd', $maaltijd);
 		$smarty->assign('prijs', sprintf('%.2f', $maaltijd->getPrijsFloat()));
+		$this->addScript('/dist/js/manifest.js');
+		$this->addScript('/dist/js/vendor.js');
+		$this->addScript('/dist/js/app.js');
 	}
 
 	public function getBreadcrumbs() {

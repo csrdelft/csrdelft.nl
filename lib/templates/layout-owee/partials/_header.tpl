@@ -14,12 +14,12 @@
     <link rel="shortcut icon" href="{$smarty.const.CSR_ROOT}/images/favicon.ico"/>
     <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"
           href="{$smarty.const.CSR_ROOT}/forum/rss.xml"/>
-    <link rel="stylesheet" href="/dist/css/extern.css"/>
-    <link rel="stylesheet" href="/dist/css/extern-forum.css"/>
-    <link rel="stylesheet" href="/dist/css/extern-fotoalbum.css"/>
-    <script type="text/javascript" src="/dist/js/manifest.js"></script>
-    <script type="text/javascript" src="/dist/js/vendor.js"></script>
-    <script type="text/javascript" src="/dist/js/extern.js"></script>
+    {foreach from=$stylesheets item=sheet}
+        <link rel="stylesheet" href="{$sheet}" type="text/css" />
+    {/foreach}
+    {foreach from=$scripts item=script}
+        <script type="text/javascript" src="{$script}"></script>
+    {/foreach}
 </head>
 
 <body class="is-loading">

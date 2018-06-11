@@ -34,6 +34,12 @@ class CsrLayoutOweePage extends CompressedLayout {
 			// Zie CompressedLayout::getUserModules, front-page is héél compact
 			$this->addCompressedResources('front-page');
 		}
+		$this->addScript('/dist/js/manifest.js');
+		$this->addScript('/dist/js/vendor.js');
+		$this->addScript('/dist/js/app.js');
+		$this->addStylesheet('/dist/css/extern.css');
+		$this->addStylesheet('/dist/css/extern-forum.css');
+		$this->addStylesheet('/dist/css/extern-fotoalbum.css');
 	}
 
 	public function getBreadcrumbs() {
