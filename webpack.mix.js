@@ -60,12 +60,21 @@ mix.js('resources/assets/js/app.js', 'js')
         'datatables.net-responsive',
         'datatables.net-scroller',
         'datatables.net-select',
-        'event-emitter',
-        'core-js',
-    ]);
+    ], 'js/vendor.js');
 
 mix.js('resources/assets/js/extern.js', 'js')
-    .js('resources/assets/js/bb-slideshow.js', 'js')
+    .extract([
+        'jquery',
+        'jquery-ui/ui/widgets/tooltip',
+        'jquery-ui/ui/widgets/datepicker',
+        'jquery-ui-timepicker-addon',
+        'jquery.scrollex',
+        'jquery-hoverintent',
+        'timeago',
+        'lightbox2',
+    ], 'js/extern-vendor.js');
+
+mix.js('resources/assets/js/bb-slideshow.js', 'js')
     .js('resources/assets/js/ledenmemory.js', 'js')
     .sass('resources/assets/sass/bredeletters.scss', 'css')
     .sass('resources/assets/sass/extern-forum.scss', 'css')

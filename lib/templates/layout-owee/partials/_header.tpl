@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="/dist/css/extern-forum.css"/>
     <link rel="stylesheet" href="/dist/css/extern-fotoalbum.css"/>
     <script type="text/javascript" src="/dist/js/manifest.js"></script>
-    <script type="text/javascript" src="/dist/js/vendor.js"></script>
+    <script type="text/javascript" src="/dist/js/extern-vendor.js"></script>
     <script type="text/javascript" src="/dist/js/extern.js"></script>
 </head>
 

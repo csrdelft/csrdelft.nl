@@ -12,6 +12,10 @@ import initContext from './context';
 
 $.widget.bridge('uitooltip', $.ui.tooltip);
 
+require('jquery-ui/ui/widgets/datepicker');
+require('jquery-ui-timepicker-addon');
+require('./lib/jquery-ui-timepicker-nl');
+
 $(function () {
 
 	let $window = $(window),
