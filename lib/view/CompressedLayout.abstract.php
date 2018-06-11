@@ -3,6 +3,7 @@
 namespace CsrDelft\view;
 
 use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\security\LoginModel;
 
 /**
  * CompressedLayout.abstract.php
@@ -50,6 +51,10 @@ abstract class CompressedLayout extends HtmlPage {
 	 */
 	private function getUserModules() {
 		$modules = array();
+
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			return [];
+		}
 
 		// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
 		$modules[] = 'general';

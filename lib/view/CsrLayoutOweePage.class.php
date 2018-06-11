@@ -30,10 +30,6 @@ class CsrLayoutOweePage extends CompressedLayout {
 		parent::__construct($body, $body->getTitel());
 		$this->tmpl = $template;
 		$this->menutmpl = $menu;
-		if ($template === 'index') {
-			// Zie CompressedLayout::getUserModules, front-page is héél compact
-			$this->addCompressedResources('front-page');
-		}
 		$this->addScript('/dist/js/manifest.js');
 		$this->addScript('/dist/js/vendor.js');
 		$this->addScript('/dist/js/extern.js');
