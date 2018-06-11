@@ -39,7 +39,7 @@ import {basename, dirname, randomIntFromInterval, redirect, reload, selectText} 
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
 import {formCancel, formInlineToggle, formSubmit} from './formulier';
 import initContext, {domUpdate} from './context';
-import {fnUpdateDataTable} from './datatable';
+import {fnUpdateDataTable} from './datatable-api';
 import {forumBewerken, saveConceptForumBericht} from './forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';
 import {ketzerAjax} from './ajax';

@@ -3,8 +3,8 @@ import $ from 'jquery';
 import {modalClose, modalOpen} from './modal';
 import {ajaxRequest} from './ajax';
 import initContext, {domUpdate} from './context';
-import {takenSubmitRange, takenSelectRange} from './maalcie';
-import {fnUpdateDataTable, fnGetSelection} from './datatable';
+import {takenSelectRange, takenSubmitRange} from './maalcie';
+import {fnGetSelection, fnUpdateDataTable} from './datatable-api';
 import {redirect, reload} from './util';
 
 export function knopAjax(knop, type) {
