@@ -36,7 +36,7 @@ class CsrLayoutOweePage extends CompressedLayout {
 		}
 		$this->addScript('/dist/js/manifest.js');
 		$this->addScript('/dist/js/vendor.js');
-		$this->addScript('/dist/js/app.js');
+		$this->addScript('/dist/js/extern.js');
 		$this->addStylesheet('/dist/css/extern.css');
 		$this->addStylesheet('/dist/css/extern-forum.css');
 		$this->addStylesheet('/dist/css/extern-fotoalbum.css');

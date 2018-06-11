@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import 'jquery-ui/ui/widgets/dialog';
 
 $(function () {
 	let first = true,
