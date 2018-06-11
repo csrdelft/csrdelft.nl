@@ -68,7 +68,6 @@ mix.js('resources/assets/js/extern.js', 'js')
         'jquery-ui/ui/widgets/tooltip',
         'jquery-ui/ui/widgets/datepicker',
         'jquery-ui-timepicker-addon',
-        'jquery.scrollex',
         'jquery-hoverintent',
         'timeago',
         'lightbox2',
