@@ -4,6 +4,13 @@ window.$ = window.jQuery = $;
 
 require('jquery.scrollex');
 require('lightbox2');
+require('./lib/jquery.markitup');
+require('jquery-ui/ui/widgets/tooltip');
+require('jquery-hoverintent');
+
+import initContext from './context';
+
+$.widget.bridge('uitooltip', $.ui.tooltip);
 
 $(function () {
 
@@ -86,4 +93,6 @@ $(function () {
         });
 
 	}
+
+	initContext($body);
 });
