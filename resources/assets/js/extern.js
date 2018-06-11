@@ -2,7 +2,6 @@ import $ from 'jquery';
 
 window.$ = window.jQuery = $;
 
-require('jquery.scrollex');
 require('lightbox2');
 require('./lib/jquery.markitup');
 require('jquery-ui/ui/widgets/tooltip');
@@ -79,24 +78,19 @@ $(function () {
 	}
 
 	// Lazy load after animations have finished and user has scrolled
-	$window.scroll(() => {
+	$window.on('scroll', () => {
 		if (hasLoaded === false && $(window).scrollTop() > 0) {
 			lazyLoad();
 		}
+
+        if (window.pageYOffset > $banner.outerHeight()) {
+			$header.removeClass('alt');
+        } else{
+			$header.addClass('alt');
+        }
 	});
 
-	if ($banner.length > 0 && $header.hasClass('alt')) {
-
-		$window.on('resize', () => $window.trigger('scroll'));
-
-		$banner.scrollex({
-			bottom: $header.outerHeight(),
-			terminate: () => $header.removeClass('alt'),
-			enter: () => $header.addClass('alt'),
-			leave: () => $header.removeClass('alt')
-        });
-
-	}
+    $window.on('resize', () => $window.trigger('scroll'));
 
 	initContext($body);
 });
