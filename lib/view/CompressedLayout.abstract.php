@@ -39,6 +39,9 @@ abstract class CompressedLayout extends HtmlPage {
 	 * @param string $module
 	 */
 	public function addCompressedResources($module) {
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			return;
+		}
 		$sheet = sprintf('/dist/css/module/%s.css', $module);
 		parent::addStylesheet($sheet, true);
 	}
