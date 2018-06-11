@@ -706,7 +706,7 @@
 		}
 	</script>
 {/if}
-<div class="float-right" style="margin-top: 30px;">
+<div class="float-right">
 	{if $album->magToevoegen()}
 		<a class="btn" href="/fotoalbum/uploaden/{$album->subdir}">{icon get="picture_add"} Toevoegen</a>
 		<a class="btn post popup" href="/fotoalbum/toevoegen/{$album->subdir}">{icon get="folder_add"} Nieuw album</a>
