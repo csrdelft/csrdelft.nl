@@ -38,6 +38,7 @@ class CsrLayoutPage extends CompressedLayout {
 		$this->zijbalk = $zijbalk;
 		$this->modal = $modal;
 		$this->addScript('/dist/js/manifest.js');
+		$this->addScript('/dist/js/extern-vendor.js');
 		$this->addScript('/dist/js/vendor.js');
 		$this->addScript('/dist/js/app.js');
 	}
