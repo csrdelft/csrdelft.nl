@@ -37,6 +37,8 @@ mix.js('resources/assets/js/app.js', 'js')
         'jquery-ui/ui/effects/effect-highlight',
         'jquery-ui/ui/effects/effect-fade',
         'jquery-ui/ui/widgets/tooltip',
+        'jquery-ui/ui/widgets/tabs',
+        'jquery-ui/ui/widgets/slider',
         // 'jgallery/dist/js/jgallery', Moet gebootstrapped worden
         'corejs-typeahead',
         'dropzone/dist/dropzone-amd-module',
@@ -60,6 +62,9 @@ mix.js('resources/assets/js/app.js', 'js')
         'datatables.net-responsive',
         'datatables.net-scroller',
         'datatables.net-select',
+        'pako',
+        'jszip',
+        'parallax-js',
     ], 'js/vendor.js');
 
 mix.js('resources/assets/js/extern.js', 'js')
