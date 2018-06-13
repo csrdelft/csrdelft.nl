@@ -82,9 +82,9 @@ try {
 }
 
 try {
-    passthru('php ../bin/pin_transactie_download.php');
+    passthru('php ../artisan pin_transactie:run');
 } catch (Exception $e) {
-	DebugLogModel::instance()->log('cron.php', 'php pin_transactie_download.php', array(), $e);
+	DebugLogModel::instance()->log('cron.php', 'artisan pin_transactie:run', array(), $e);
 }
 
 $finish = microtime(true) - $start;

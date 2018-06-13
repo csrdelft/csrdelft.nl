@@ -12,7 +12,7 @@ let HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
  |
  */
 
-mix.setPublicPath('htdocs/dist'); // Verwijder als Laravel draait.
+mix.setPublicPath('public/dist'); // Verwijder als Laravel draait.
 mix.setResourceRoot('/dist/');
 
 // Zolang travis nog moeilijk doet met imagemin

@@ -1,27 +1,27 @@
-[submodule "htdocs/beaufort"]
-	path = htdocs/beaufort
+[submodule "public/beaufort"]
+	path = public/beaufort
 	url = https://github.com/csrdelft/beaufort.git
-[submodule "htdocs/ccd"]
-	path = htdocs/ccd
+[submodule "public/ccd"]
+	path = public/ccd
 	url = https://github.com/csrdelft/ccd.git
-[submodule "htdocs/bakeliet"]
-	path = htdocs/bakeliet
+[submodule "public/bakeliet"]
+	path = public/bakeliet
 	url = https://github.com/csrdelft/bakeliet.git
-[submodule "htdocs/dies/2013"]
-	path = htdocs/dies/2013
+[submodule "public/dies/2013"]
+	path = public/dies/2013
 	url = https://github.com/csrdelft/dies2013.git
-[submodule "htdocs/dies/2015"]
-	path = htdocs/dies/2015
+[submodule "public/dies/2015"]
+	path = public/dies/2015
 	url = https://github.com/csrdelft/dies2015.git
-[submodule "htdocs/dies/2016"]
-	path = htdocs/dies/2016
+[submodule "public/dies/2016"]
+	path = public/dies/2016
 	url = https://github.com/csrdelft/dies2016.git
-[submodule "htdocs/lustrum"]
-	path = htdocs/lustrum
+[submodule "public/lustrum"]
+	path = public/lustrum
 	url = https://github.com/csrdelft/lustrum.git
-[submodule "htdocs/wiki"]
-	path = htdocs/wiki
+[submodule "public/wiki"]
+	path = public/wiki
 	url = https://github.com/csrdelft/wiki.git
-[submodule "htdocs/bc"]
-	path = htdocs/bc
+[submodule "public/bc"]
+	path = public/bc
 	url = https://github.com/csrdelft/bc.git

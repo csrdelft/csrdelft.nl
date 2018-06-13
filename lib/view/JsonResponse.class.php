@@ -1,6 +1,8 @@
 <?php
 
 namespace CsrDelft\view;
+use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Http\Response;
 
 
 /**
@@ -9,7 +11,7 @@ namespace CsrDelft\view;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class JsonResponse implements View {
+class JsonResponse implements View, Responsable {
 
 	protected $model;
 	protected $code;
@@ -41,4 +43,25 @@ class JsonResponse implements View {
 		return null;
 	}
 
+	public function __toString() {
+        ob_start();
+        $this->view();
+        return ob_get_clean();
+	}
+
+    /**
+     * Create an HTTP response that represents the object.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function toResponse($request)
+    {
+        $response = new Response();
+        $response->setStatusCode($this->code);
+        $response->setContent($this);
+        $response->header('Content-Type', 'application/json');
+
+        return $response;
+    }
 }

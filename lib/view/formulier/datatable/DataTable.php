@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\datatable;
 
-use CsrDelft\Orm\PersistenceModel;
+use App\Models\BaseModel;
 use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\View;
@@ -18,7 +18,7 @@ use CsrDelft\view\View;
 class DataTable implements View, FormElement {
 
 	public $filter = null;
-	/** @var PersistenceModel */
+	/** @var BaseModel */
 	public $model;
 
 	protected $dataUrl;
@@ -54,15 +54,26 @@ class DataTable implements View, FormElement {
 			'defaultContent' => ''
 		);
 
-		// generate columns from entity attributes
-		foreach ($this->model->getAttributes() as $attribute) {
-			$this->addColumn($attribute);
-		}
+        // Compatibility ORM / Eloquent
+		if (method_exists($this->model, 'attributesToArray')) {
+		    foreach (array_keys($this->model->attributesToArray()) as $attibute) {
+		        $this->addColumn($attibute);
+            }
+        } else {
+            // generate columns from entity attributes
+            foreach ($this->model->getAttributes() as $attribute) {
+                $this->addColumn($attribute);
+            }
+        }
 
-		// hide primary key columns
-		foreach ($this->model->getPrimaryKey() as $attribute) {
-			$this->hideColumn($attribute);
-		}
+        if (method_exists($this->model, 'getKey')) {
+            $this->hideColumn($this->model->getKeyName());
+        } elseif (method_exists($this->model, 'getPrimaryKey')) {
+            // hide primary key columns
+            foreach ($this->model->getPrimaryKey() as $attribute) {
+                $this->hideColumn($attribute);
+            }
+        }
 	}
 
 	/**
@@ -342,4 +353,11 @@ HTML;
 			});
 JS;
 	}
+
+	public function __toString()
+    {
+        ob_start();
+        $this->view();
+        return ob_get_clean();
+    }
 }

@@ -44,38 +44,38 @@ JS;
 
 			$instelling = LidInstellingenModel::get('zoeken', 'leden');
 			if ($instelling !== 'nee') {
-				$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=' . $instelling . '&q=';
+				$this->suggestions['Leden'] = '/tools/naamsuggesties?zoekin=leden&status=' . $instelling . '&q=';
 			}
 
 			// TODO: bundelen om simultane verbindingen te sparen
 			foreach (array('commissies', 'kringen', 'onderverenigingen', 'werkgroepen', 'woonoorden', 'groepen') as $option) {
 				if (LidInstellingenModel::get('zoeken', $option) === 'ja') {
-					$this->suggestions[ucfirst($option)] = '/groepen/' . $option . '/zoeken/?q=';
+					$this->suggestions[ucfirst($option)] = '/groepen/' . $option . '/zoeken?q=';
 				}
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'agenda') === 'ja') {
-				$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';
+				$this->suggestions['Agenda'] = '/agenda/zoeken?q=';
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'forum') === 'ja') {
-				$this->suggestions['Forum'] = '/forum/titelzoeken/?q=';
+				$this->suggestions['Forum'] = '/forum/titelzoeken?q=';
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'fotoalbum') === 'ja') {
-				$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/?q=';
+				$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken?q=';
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'wiki') === 'ja') {
-				$this->suggestions['Wiki'] = '/tools/wikisuggesties/?q=';
+				$this->suggestions['Wiki'] = '/tools/wikisuggesties?q=';
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'documenten') === 'ja') {
-				$this->suggestions['Documenten'] = '/documenten/zoeken/?q=';
+				$this->suggestions['Documenten'] = '/documenten/zoeken?q=';
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'boeken') === 'ja') {
-				$this->suggestions['Boeken'] = '/bibliotheek/zoeken/?q=';
+				$this->suggestions['Boeken'] = '/bibliotheek/zoeken?q=';
 			}
 
 			// Favorieten en menu tellen niet
@@ -124,7 +124,7 @@ JS;
 			} else {
 				$html .= '<span style="margin-right: 18px;"></span> ';
 			}
-			$html .= ucfirst($option) . '</a></li>';
+			$html .= ucfirst($option) . '</a>';
 		}
 		?>
 		<div class="input-group">

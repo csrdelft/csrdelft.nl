@@ -325,6 +325,10 @@ JS;
 		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->formId . '" data-tableid="' . $this->dataTableId . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
 	}
 
+	protected function getCsrfTag() {
+	    return sprintf('<input type="hidden" name="_token" value="%s" />', CSRF_TOKEN);
+    }
+
 	protected function getScriptTag() {
 		return <<<HTML
 <script type="text/javascript">
@@ -347,6 +351,7 @@ HTML;
 			echo getMelding();
 		}
 		echo $this->getFormTag();
+		echo $this->getCsrfTag();
 		$titel = $this->getTitel();
 		if (!empty($titel)) {
 			echo '<h1 class="Titel">' . $titel . '</h1>';
@@ -401,4 +406,9 @@ HTML;
 		return $changelog;
 	}
 
+    public function __toString() {
+        ob_start();
+        $this->view();
+        return ob_get_clean();
+    }
 }

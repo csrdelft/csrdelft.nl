@@ -13,7 +13,7 @@ use CsrDelft\view\login\LoginForm;
  *
  * Externe layout voor Owee 2016
  */
-class CsrLayoutOweePage extends CompressedLayout {
+class CsrLayoutOweePage extends HtmlPage {
 
 	/**
 	 * Content template
@@ -47,7 +47,6 @@ class CsrLayoutOweePage extends CompressedLayout {
 
 		$smarty = CsrSmarty::instance();
 		$smarty->assign('stylesheets', $this->getStylesheets());
-		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
 		$smarty->assign('loginform', new LoginForm());
 		$smarty->assign('body', $this->getBody());

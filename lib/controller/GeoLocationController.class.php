@@ -12,6 +12,10 @@ use CsrDelft\view\JsonResponse;
 /**
  * GeoLocationController.class.php
  *
+ * TODO: Repareren.
+ *
+ * Zie https://www.npmjs.com/package/pleasejs en https://www.npmjs.com/package/googlemaps-v3-utility-library (bevat styledmarker)
+ *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @Remember to also enable geolocation.watchPosition in /htdocs/layout/js/csrdelft.js

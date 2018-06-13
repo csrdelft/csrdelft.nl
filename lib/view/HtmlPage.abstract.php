@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view;
+use CsrDelft\model\LidInstellingenModel;
 
 /**
  * HtmlPage.abstract.php
@@ -27,15 +28,12 @@ abstract class HtmlPage implements View {
 	 * @var array
 	 */
 	private $stylesheets = array();
-	/**
-	 * <SCRIPT>
-	 * @var array
-	 */
-	private $scripts = array();
 
 	public function __construct(View $body, $titel) {
 		$this->body = $body;
 		$this->titel = $titel;
+
+		$this->stylesheets = $this->loadDefaultStylesheets();
 	}
 
 	public function getTitel() {
@@ -50,46 +48,56 @@ abstract class HtmlPage implements View {
 		return null;
 	}
 
-	/**
-	 * Zorg dat de HTML pagina een stylesheet inlaadt. Er zijn twee verianten:
-	 *
-	 * - lokaal:
-	 * een timestamp van de creatie van het bestand wordt toegoevoegd,
-	 * zodat de browsercache het bestand vernieuwt.
-	 *
-	 * - extern:
-	 * Buiten de huidige server, gewoon een url dus.
-	 */
-	public function addStylesheet($sheet, $remote = false) {
-		if (!$remote) {
-			$sheet .= '?' . filemtime(HTDOCS_PATH . $sheet);
-		}
-		$this->stylesheets[md5($sheet)] = $sheet;
-	}
+    /**
+     * Add compressed css en js to page for module.
+     *
+     * @param string $module
+     */
+    public function addCompressedResources($module) {
+        $this->stylesheets[] = 'module/' . $module;
+    }
 
 	public function getStylesheets() {
-		return $this->stylesheets;
+		return array_map(function ($module) { return "/css/{$module}.css"; }, array_unique($this->stylesheets));
 	}
 
-	/**
-	 * Zorg dat de HTML pagina een script inlaadt. Er zijn twee verianten:
-	 *
-	 * - lokaal:
-	 * een timestamp van de creatie van het bestand wordt toegoevoegd,
-	 * zodat de browsercache het bestand vernieuwt.
-	 *
-	 * - extern:
-	 * Buiten de huidige server, gewoon een url dus.
-	 */
-	public function addScript($script, $remote = false) {
-		if (!$remote) {
-			$script .= '?' . filemtime(HTDOCS_PATH . $script);
-		}
-		$this->scripts[md5($script)] = $script;
-	}
+	private function loadDefaultStylesheets() {
+        $modules = array();
+        $modules[] = 'module/formulier';
+        $modules[] = 'module/datatable';
 
-	public function getScripts() {
-		return $this->scripts;
+        //voeg modules toe afhankelijk van instelling
+        $modules[] = 'opmaak/' . LidInstellingenModel::get('layout', 'opmaak');
+
+        if (LidInstellingenModel::get('layout', 'toegankelijk') == 'bredere letters') {
+            $modules[] = 'bredeletters';
+        }
+        if (LidInstellingenModel::get('layout', 'fx') == 'sneeuw') {
+            $modules[] = 'effect/snow';
+        } elseif (LidInstellingenModel::get('layout', 'fx') == 'space') {
+            $modules[] = 'effect/space';
+        }
+
+        if (LidInstellingenModel::get('layout', 'fx') == 'wolken') {
+            $modules[] = 'effect/clouds';
+        }
+
+        if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
+            $modules[] = 'effect/minion';
+        }
+        if (LidInstellingenModel::get('layout', 'fx') == 'onontdekt') {
+            $modules[] = 'effect/onontdekt';
+        } elseif (LidInstellingenModel::get('layout', 'fx') == 'civisaldo') {
+            $modules[] = 'effect/civisaldo';
+        }
+
+        return $modules;
+    }
+
+	public function __toString() {
+        ob_start();
+        $this->view();
+        return ob_get_clean();
 	}
 
 }

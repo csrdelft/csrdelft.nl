@@ -1,0 +1,9 @@
+# C.S.R. Delft
+# Niet-relevante pagina's uitsluiten van indexering
+# mailto:pubcie@csrdelft.nl
+
+User-agent: *
+Disallow: /tools/
+Disallow: /forum/posten/
+Disallow: /fotoalbum/
+Disallow: /groepen/

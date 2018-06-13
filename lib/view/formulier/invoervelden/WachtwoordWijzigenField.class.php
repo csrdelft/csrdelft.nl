@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\model\entity\security\Account;
+use App\Models\Account;
 use CsrDelft\model\security\AccountModel;
 
 /**
@@ -39,7 +39,7 @@ class WachtwoordWijzigenField extends InputField {
 		}
 
 		// blacklist gegevens van profiel
-		$profiel = $account->getProfiel();
+		$profiel = $account->profiel;
 		$this->blacklist[] = $profiel->uid;
 		$this->blacklist[] = $profiel->voornaam;
 		foreach (explode(' ', $profiel->achternaam) as $part) {

@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\cms;
 
-use CsrDelft\model\entity\CmsPagina;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\BBCodeField;
@@ -22,7 +21,7 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
  */
 class CmsPaginaForm extends Formulier {
 
-	function __construct(CmsPagina $pagina) {
+	function __construct($pagina) {
 		parent::__construct($pagina, '/pagina/bewerken/' . $pagina->naam);
 		$this->titel = 'Pagina bewerken: ' . $pagina->naam;
 

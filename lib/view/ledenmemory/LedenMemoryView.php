@@ -16,7 +16,7 @@ use CsrDelft\view\CsrSmarty;
  *
  * Het spelletje memory met pasfotos en namen van leden
  */
-class LedenMemoryView extends CompressedLayout {
+class LedenMemoryView extends HtmlPage {
 
 private $leden = array();
 private $learnmode;
@@ -123,7 +123,6 @@ public function view() {
 $smarty = CsrSmarty::instance();
 $smarty->assign('titel', $this->getTitel());
 $smarty->assign('stylesheets', $this->getStylesheets());
-$smarty->assign('scripts', $this->getScripts());
 ?><!DOCTYPE html>
 <html>
 <head>

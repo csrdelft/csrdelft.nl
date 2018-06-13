@@ -104,4 +104,10 @@ class GroepenDeelnameGrafiek implements View {
 		<?php
 	}
 
+	public function __toString()
+    {
+        ob_start();
+        $this->view();
+        return ob_get_clean();
+    }
 }

@@ -5,6 +5,7 @@
 # -------------------------------------------------------------------
 # allerlei paden enzo goed zetten.
 # -------------------------------------------------------------------
+# Ingeladen door composer, zie composer.json
 #
 # database automatisch controleren
 define('DB_CHECK', true); # zie PersistentEntity::checkTable()
@@ -57,7 +58,7 @@ define('DATA_PATH', BASE_PATH . 'data/');
 define('SESSION_PATH', BASE_PATH . 'sessie/');
 define('TMP_PATH', BASE_PATH . 'tmp/');
 define('LIB_PATH', BASE_PATH . 'lib/');
-define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
+define('HTDOCS_PATH', BASE_PATH . 'public/');
 define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
 define('PHOTOALBUM_PATH', DATA_PATH . 'foto/');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');

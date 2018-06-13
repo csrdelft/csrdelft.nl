@@ -144,9 +144,6 @@ class ForumController extends Controller {
 		// uitgelogd heeft nieuwe layout
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($this->view);
-			if ($this->action === 'forum') {
-				$this->view->addCompressedResources('grafiek');
-			}
 		} else {
 			$this->view = new CsrLayoutOweePage($this->view);
 		}

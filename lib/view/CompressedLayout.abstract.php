@@ -11,11 +11,6 @@ use CsrDelft\model\security\LoginModel;
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
- * Gebruikt .ini files voor stylesheets en scripts per module en layout.
- *
- * @see htdocs/tools/css.php
- * @see htdocs/tools/js.php
  */
 abstract class CompressedLayout extends HtmlPage {
 

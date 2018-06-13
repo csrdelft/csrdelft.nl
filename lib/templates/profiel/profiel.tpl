@@ -6,7 +6,7 @@
 				<div class="knopjes">
 					{*<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>*}
 					<a href="/profiel/{$profiel->uid}/addToGoogleContacts/" class="btn btn-light" title="{if $profiel->isInGoogleContacts()}Dit profiel opdateren in mijn google adresboek{else}Dit profiel toevoegen aan mijn google adresboek{/if}">
-						<img src="/plaetjes/knopjes/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/>
+						<img src="/images/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/>
 					</a>
 					{if $profiel->magBewerken()}
 						<a href="/profiel/{$profiel->uid}/bewerken" class="btn btn-light" title="Bewerk dit profiel">{icon get="pencil"}</a>
@@ -39,8 +39,8 @@
 		<div class="gegevens">
 			<div class="label">Naam:</div><div class="data">{$profiel->getNaam('civitas')}</div>
 			<div class="label">Lidnummer:</div><div class="data">
-				{if CsrDelft\model\security\AccountModel::existsUid($profiel->uid) AND CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->getAccount())}
-					<a href="/su/{$profiel->uid}/" title="Su naar dit lid">{$profiel->uid}</a>
+				{if App\Models\Account::existsByUid($profiel->uid) AND Auth::maySuTo($profiel->getAccount())}
+					<a href="/account/{$profiel->uid}/su" title="Su naar dit lid">{$profiel->uid}</a>
 				{else}
 					{$profiel->uid}
 				{/if}</div>
