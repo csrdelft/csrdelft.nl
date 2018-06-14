@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import initContext from './context';
 
 window.$ = window.jQuery = $;
 
@@ -6,8 +7,6 @@ require('lightbox2');
 require('./lib/jquery.markitup');
 require('jquery-ui/ui/widgets/tooltip');
 require('jquery-hoverintent');
-
-import initContext from './context';
 
 $.widget.bridge('uitooltip', $.ui.tooltip);
 
@@ -60,37 +59,40 @@ $(function () {
 		});
 	});
 
-	function lazyLoad() {
-		if (hasLoaded === true) {
-            return;
-        }
+	const lazyLoad = (function () {
+		let hasLoaded = false;
 
-		hasLoaded = true;
+		return function () {
+			if (hasLoaded) {
+				return;
+			}
 
-		// Lazy load frontpage
-		setTimeout(function () {
-            $('.lazy-load').each(function () {
-				const html = $(this).data('lazy');
-				$(this).data('lazy', '');
-				$(this).append(html);
+			hasLoaded = true;
+
+			// Lazy load frontpage
+			setTimeout(function () {
+				$('.lazy-load').each(function () {
+					$(this).replaceWith(this.innerHTML);
+				});
 			});
-		});
-	}
+		}
+	})();
 
 	// Lazy load after animations have finished and user has scrolled
 	$window.on('scroll', () => {
-		if (hasLoaded === false && $(window).scrollTop() > 0) {
+		if ($(window).scrollTop() > 0) {
 			lazyLoad();
 		}
 
-        if (window.pageYOffset > $banner.outerHeight()) {
+		if (window.pageYOffset > $banner.outerHeight()) {
 			$header.removeClass('alt');
-        } else{
+		} else {
 			$header.addClass('alt');
-        }
+		}
 	});
 
-    $window.on('resize', () => $window.trigger('scroll'));
+	$window.on('resize', () => $window.trigger('scroll'));
+	$window.trigger('scroll');
 
 	initContext($body);
 });
