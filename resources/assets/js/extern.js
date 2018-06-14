@@ -72,7 +72,7 @@ $(function () {
 			// Lazy load frontpage
 			setTimeout(function () {
 				$('.lazy-load').each(function () {
-					$(this).replaceWith(this.innerHTML);
+					$(this).replaceWith(this.textContent);
 				});
 			});
 		}
