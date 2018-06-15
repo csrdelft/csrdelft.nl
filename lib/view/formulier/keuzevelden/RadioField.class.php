@@ -23,6 +23,8 @@ class RadioField extends SelectField {
 
 	public function __construct($name, $value, $description, array $options) {
 		parent::__construct($name, $value, $description, $options, array(), 1, false);
+
+		$this->css_classes = ['FormElement', 'form-check-input'];
 	}
 
 	public function getHtml() {
@@ -36,7 +38,7 @@ class RadioField extends SelectField {
 	protected function getOptionHtml($value, $description) {
 		$id = $this->getId() . 'Option_' . $value;
 
-		$html = '<div class="form-check form-check-inline">';
+		$html = '<div class="form-check">';
 		$html .= '<input id="' . $id . '" value="' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'class', 'origvalue', 'disabled', 'readonly', 'onclick'));
 		if ($value === $this->value) {
 			$html .= ' checked="checked"';
@@ -45,7 +47,7 @@ class RadioField extends SelectField {
 		if ($description instanceof FormElement) {
 			$html .= $description->getHtml();
 		} else {
-			$html .= '<label for="' . $id . '" class="KeuzeRondjeLabel">' . htmlspecialchars($description) . '</label>';
+			$html .= '<label for="' . $id . '" class="form-check-label">' . htmlspecialchars($description) . '</label>';
 		}
 		$html .= '</div>';
 		return $html;

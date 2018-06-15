@@ -3,23 +3,11 @@
 @import "../lib/markitup.css";
 @import "../knoppen";
 
-input, optgroup, select, textarea {
-  color: #000;
-  background-color: #fff;
-}
-input, textarea, select {
-  border: 1px solid #A9A9A9;
-}
 input[type="file"] {
   background-color: transparent;
   border: none;
 }
-input[type="radio"] {
-  vertical-align: middle;
-}
-label, select, select option {
-  font-weight: normal;
-}
+
 select optgroup {
   font-weight: bold;
 }
@@ -87,12 +75,6 @@ h1.Titel {
     border: none;
     cursor: default;
   }
-  label {
-    padding-left: 5px;
-    float: left;
-    vertical-align: middle;
-    cursor: default;
-  }
   label .required {
     color: red;
   }
@@ -136,21 +118,6 @@ h1.Titel {
   .CheckboxFieldLabel, .KeuzeRondjeLabel {
     float: none;
     width: auto;
-  }
-  .KeuzeRondjeLabel {
-    margin-top: 1em;
-    margin-right: 1em;
-  }
-  .KeuzeRondjeOptions {
-    display: inline-block;
-  }
-  .KeuzeRondjeOptions.breed {
-    width: 100%;
-  }
-  .KeuzeRondjeOptions.columns-2 {
-    -webkit-columns: auto 2;
-    -moz-columns: auto 2;
-    columns: auto 2;
   }
   .previewDiv {
     display: inline-block;
