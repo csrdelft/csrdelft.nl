@@ -68,7 +68,6 @@ class MijnMaaltijdenController extends AclController {
 		$recent = MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid(LoginModel::getUid(), $timestamp);
 		$this->view = new MijnMaaltijdenView($maaltijden, $aanmeldingen, $recent);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function lijst($mid) {
