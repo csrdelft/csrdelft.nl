@@ -52,7 +52,7 @@ class Formulier implements View, Validator {
 
 	public function __construct($model, $action, $titel = false, $dataTableId = false) {
 		$this->model = $model;
-		$this->formId = uniqid(classNameZonderNamespace(get_class($this->model == null ? $this : $this->model)));
+		$this->formId = uniqid_safe(classNameZonderNamespace(get_class($this->model == null ? $this : $this->model)));
 		$this->action = $action;
 		$this->titel = $titel;
 		$this->css_classes[] = 'Formulier';
@@ -117,6 +117,7 @@ class Formulier implements View, Validator {
 				$class = '';
 			}
 			$desc = ucfirst(str_replace('_', ' ', $fieldName));
+			$extraOpts = [];
 			switch ($definition[0]) {
 				case T::String:
 					if (startsWith($fieldName, 'rechten_')) {
@@ -141,6 +142,7 @@ class Formulier implements View, Validator {
 				case T::Integer:
 					$namespace .= 'getalvelden';
 					$class .= 'IntField';
+					$extraOpts = [0];
 					break;
 				case T::Float:
 					$namespace .= 'getalvelden';
@@ -182,7 +184,7 @@ class Formulier implements View, Validator {
 			} elseif ($definition[0] == T::Char) {
 				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc, 1);
 			} else {
-				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc);
+				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc, ...$extraOpts);
 			}
 		}
 		foreach ($this->model->getPrimaryKey() as $fieldName) {

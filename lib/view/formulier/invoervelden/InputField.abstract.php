@@ -83,7 +83,7 @@ abstract class InputField implements FormElement, Validator {
 
 
 	public function __construct($name, $value, $description, $model = null) {
-		$this->id = uniqid('field_');
+		$this->id = uniqid_safe('field_');
 		$this->model = $model;
 		$this->name = $name;
 		$this->origvalue = $value;
@@ -239,10 +239,10 @@ abstract class InputField implements FormElement, Validator {
 				if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
 					// exception for leden mod
 				} else {
-					$required = ' field-required';
+					$required = '<span class="field-required">*</span>';
 				}
 			}
-			return '<div class="' . static::LABEL_CLASS_NAME . $required . '"><label for="' . $this->getId() . '">' . $this->description . '</label></div>';
+			return '<div class="' . static::LABEL_CLASS_NAME . '"><label for="' . $this->getId() . '">' . $this->description . $required . '</label></div>';
 		}
 		return '';
 	}
@@ -481,7 +481,7 @@ JS;
 		}
 		$dataset = array();
 		foreach ($this->suggestions as $name => $source) {
-			$dataset[$name] = uniqid($this->name);
+			$dataset[$name] = uniqid_safe($this->name);
 
 			$js .= <<<JS
 

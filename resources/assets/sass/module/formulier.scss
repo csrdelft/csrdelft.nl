@@ -27,8 +27,7 @@ h1.Titel {
 /** FORMULIER **************************************************************/
 
 .Formulier {
-  .field-required::after {
-    content: '*';
+  .field-required {
     color: red;
   }
 

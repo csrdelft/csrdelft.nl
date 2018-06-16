@@ -1073,3 +1073,19 @@ function to_unix_path($path) {
 function realpathunix($path) {
 	return to_unix_path(realpath($path));
 }
+
+/**
+ * Versie van uniqid die het ook normaal op Windows doet. Als uniqid te snel achter elkaar aangeroepen wordt kan
+ * twee keer hetzelfde gereturned worden. Op Windows gebeurt dit eerder.
+ *
+ * Replacet de punt omdat het anders geen javascript identifier kan zijn.
+ *
+ * Heeft de vorm:
+ *  $prefix_f0f0f0f0f0f0f0_00000000
+ *
+ * @param string $prefix
+ * @return string
+ */
+function uniqid_safe($prefix = "") {
+	return str_replace('.', '_', uniqid($prefix, true));
+}

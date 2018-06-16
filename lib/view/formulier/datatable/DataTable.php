@@ -40,7 +40,7 @@ class DataTable implements View, FormElement {
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
-		$this->dataTableId = uniqid(classNameZonderNamespace(get_class($this->model)));
+		$this->dataTableId = uniqid_safe(classNameZonderNamespace(get_class($this->model)));
 		$this->groupByColumn = $groupByColumn;
 
 		// create group expand / collapse column

@@ -24,7 +24,7 @@ class FormulierKnop implements FormElement {
 	public $css_classes = array('FormulierKnop');
 
 	public function __construct($url, $action, $label, $title, $icon) {
-		$this->id = uniqid('knop_');
+		$this->id = uniqid_safe('knop_');
 		$this->url = $url;
 		$this->action = $action;
 		$this->label = $label;

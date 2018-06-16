@@ -92,18 +92,8 @@ JS;
 		return $this->error === '';
 	}
 
-	public function getHtml($showButtons = true) {
+	public function getHtml() {
 		$html = '';
-		if (!$this->readonly AND !$this->hidden) {
-			$class = 'fa fa-minus lichtgrijs';
-			if ($this->min !== null AND $this->getValue() === $this->min) {
-				$class .= ' disabled"';
-			}
-			$style = $showButtons ? 'cursor:pointer;padding:7px;' : 'display:none;';
-			$html .= <<<HTML
-<span id="substract_{$this->getId()}" class="{$class}" style="{$style}"></span>
-HTML;
-		}
 
 		if ($this->min !== null) {
 			if ($this->min_alert) {
@@ -138,15 +128,6 @@ JS;
 
 		$html .= ' <input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'pattern', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'min', 'max', 'step')) . ' /> ';
 
-		if (!$this->readonly AND !$this->hidden) {
-			$class = 'fa fa-plus lichtgrijs';
-			if ($this->max !== null AND $this->getValue() === $this->max) {
-				$class .= ' disabled';
-			}
-			$html .= <<<HTML
-<span id="add_{$this->getId()}" class="{$class}" style="{$style}"></span>
-HTML;
-		}
 		return $html;
 	}
 
