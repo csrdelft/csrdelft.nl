@@ -22,7 +22,8 @@
     {/foreach}
 </head>
 
-<body class="is-loading">
+<body>
+<script>document.body.classList.add('is-loading')</script>
 <!-- Page Wrapper -->
 <div id="page-wrapper">
 

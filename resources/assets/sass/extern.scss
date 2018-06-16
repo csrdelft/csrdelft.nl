@@ -52,13 +52,7 @@ body {
 
 	&.is-loading {
 		*, *:before, *:after {
-			-moz-animation: none !important;
-			-webkit-animation: none !important;
-			-ms-animation: none !important;
 			animation: none !important;
-			-moz-transition: none !important;
-			-webkit-transition: none !important;
-			-ms-transition: none !important;
 			transition: none !important;
 		}
 	}
@@ -95,9 +89,6 @@ body, input, select, textarea {
 }
 
 a {
-	-moz-transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
-	-webkit-transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
-	-ms-transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
 	transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
 	border-bottom: dotted 1px rgba(255, 255, 255, 0.35);
 	color: #ffffff;
@@ -128,9 +119,6 @@ a {
 				font-style: normal;
 				font-weight: normal;
 				text-transform: none !important;
-				-moz-transition: background-color 0.2s ease-in-out;
-				-webkit-transition: background-color 0.2s ease-in-out;
-				-ms-transition: background-color 0.2s ease-in-out;
 				transition: background-color 0.2s ease-in-out;
 				border-radius: 100%;
 				border: solid 2px rgba(255, 255, 255, 0.5);

@@ -83,13 +83,9 @@ input[type="tel"],
 input[type="number"],
 select,
 textarea {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  -ms-appearance: none;
   appearance: none;
   background: rgba(255, 255, 255, 0.025);
   border-radius: 5px;
-  border: none;
   border: solid 2px rgba(255, 255, 255, 0.5);
   color: inherit;
   display: block;
@@ -137,9 +133,6 @@ textarea {
 
 input[type="checkbox"],
 input[type="radio"] {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  -ms-appearance: none;
   appearance: none;
   display: block;
   float: left;
@@ -231,13 +224,7 @@ input[type="reset"],
 input[type="button"],
 button,
 .button {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  -ms-appearance: none;
   appearance: none;
-  -moz-transition: background-color 0.2s ease-in-out;
-  -webkit-transition: background-color 0.2s ease-in-out;
-  -ms-transition: background-color 0.2s ease-in-out;
   transition: background-color 0.2s ease-in-out;
   background-color: transparent;
   border-radius: 5px;
