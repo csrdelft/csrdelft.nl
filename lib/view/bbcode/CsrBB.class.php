@@ -604,20 +604,14 @@ HTML;
 	 * @example [spotify]spotify:user:...:playlist:...[/spotify]
 	 */
 	function bb_spotify($arguments = array()) {
-		$id = $this->parseArray(array('[/spotify]'), array());
+		$uri = $this->parseArray(array('[/spotify]'), array());
 		if (isset($arguments['spotify'])) { // [spotify=
-			$id = $arguments['spotify'];
+			$uri = $arguments['spotify'];
 		}
 
-		if (startsWith($id, 'spotify')) { // Spotify uri
-			$uri = $id;
-		} elseif (startsWith($id, 'https')) { // Link naar afspeellijst
-			$uri = preg_replace('/.+\/(\w+)\/(\w+)\/(\w+)\/(\w+)$/', 'spotify:$1:$2:$3:$4', $id);
-		} else {
-			return '[spotify] Geen geldige url (' . htmlspecialchars($id) . ')';
+		if (!startsWith($uri, 'spotify') || !filter_var($uri, FILTER_VALIDATE_URL)) {
+			return '[spotify] Geen geldige url (' . $uri . ')';
 		}
-
-		$uri = html_entity_decode($uri);
 
 		if ($this->light_mode) {
 			$url = 'https://open.spotify.com/' . str_replace(':', '/', str_replace('spotify:', '', $uri));
