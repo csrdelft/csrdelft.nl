@@ -609,7 +609,7 @@ HTML;
 			$uri = $arguments['spotify'];
 		}
 
-		if (!startsWith($uri, 'spotify') || !filter_var($uri, FILTER_VALIDATE_URL)) {
+		if (!startsWith($uri, 'spotify') && !filter_var($uri, FILTER_VALIDATE_URL)) {
 			return '[spotify] Geen geldige url (' . $uri . ')';
 		}
 
