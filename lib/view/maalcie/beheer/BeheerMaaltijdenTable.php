@@ -29,6 +29,7 @@ class BeheerMaaltijdenTable extends DataTable {
 		$this->hideColumn('omschrijving');
 		$this->hideColumn('mlt_repetitie_id');
 
+		$this->addcolumn('maaltijd_id', 'product_id');
 		$this->addColumn('repetitie_naam', 'titel');
 		$this->addColumn('aanmeld_filter', null, null, CellRender::AanmeldFilter());
 		$this->addColumn('gesloten', null, null, CellRender::Check());
