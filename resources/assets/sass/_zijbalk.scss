@@ -134,7 +134,8 @@ Initieel verbergen, weergeven als :target of .target op #zijbalk
 		left: 0;
 	}
 
-	#zijbalk.target, #zijbalk:target {
+	#zijbalk.target,
+	#zijbalk:target {
 		transform: translateX(0);
 
 		~ .cd-main-content {

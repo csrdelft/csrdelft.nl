@@ -1,135 +1,48 @@
 import $ from 'jquery';
-// import ee from 'event-emitter'
-//
-//
+
 $(function () {
-	//if you change this breakpoint in the style.css file (or _layout.scss if you use SASS), don't forget to update this value as well
-	let MqL = 960;
+	document.addEventListener('touchstart', handleTouchStart, false);
+	document.addEventListener('touchmove', handleTouchMove, false);
 
-	function checkWindowWidth() {
-		//check window width (scrollbar included)
-		let e = window;
-		let a = 'inner';
-		if (!('innerWidth' in window)) {
-			a = 'client';
-			e = document.documentElement || document.body;
-		}
-		return e[a + 'Width'] >= MqL;
+	let xDown = null;
+	let yDown = null;
+
+	function handleTouchStart(evt) {
+		xDown = evt.touches[0].clientX;
+		yDown = evt.touches[0].clientY;
 	}
-//
-// 	function moveNavigation() {
-// 		let navigation = $('.cd-nav');
-// 		let desktop = checkWindowWidth();
-// 		if (desktop) {
-// 			navigation.detach();
-// 			navigation.insertBefore('.cd-header-buttons');
-// 		} else {
-// 			navigation.detach();
-// 			navigation.insertAfter('.cd-main-content');
-// 		}
-// 	}
-//
-// 	//move nav element position according to window width
-// 	moveNavigation();
-// 	$(window).on('resize', () => {
-// 		if (!window.requestAnimationFrame) {
-// 			setTimeout(moveNavigation, 300);
-// 		} else {
-// 			window.requestAnimationFrame(moveNavigation);
-// 		}
-// 	});
 
-	let $overlay = $('#cd-main-overlay');
+	function handleTouchMove(evt) {
+		if (!xDown || !yDown) { // Geen touch gestart
+			return;
+		}
 
-// 	let $zijbalktrigger = $('#zijbalk-trigger').on('click', function () {
-// 		if ($zijbalktrigger.hasClass('selected')) {
-// 			$(this).addClass('nav-is-visible');
-// 			$('body').addClass('overflow-hidden').one('click', function () {
-// 				closeZijbalk();
-// 			});
-// 			toggleSearch('close');
-// 			$overlay.addClass('is-visible');
-// 		}
-// 	});
-//
-	let $maintrigger = $('#cd-main-trigger');//.on('click', function () {
-// 		if ($maintrigger.hasClass('selected')) {
-// 			$(this).addClass('nav-is-visible');
-// 			$('.cd-primary-nav').addClass('nav-is-visible');
-// 			$('.cd-main-header').addClass('nav-is-visible');
-// 			$('.cd-main-content').addClass('nav-is-visible').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', () => {
-// 				$('body').addClass('overflow-hidden');
-// 			});
-// 			toggleSearch('close');
-// 			$overlay.addClass('is-visible');
-// 		}
-// 	});
-//
-// 	//mobile - open lateral menu clicking on the menu icon
-// 	$('.cd-nav-trigger').on('click', (event) => {
-// 		event.preventDefault();
-// 		if ($('.cd-main-content').hasClass('nav-is-visible')) {
-// 			closeNav();
-// 			$overlay.removeClass('is-visible');
-// 		} else {
-// 			//open main menu
-// 			if (!$maintrigger.hasClass('selected')) {
-// 				$maintrigger.addClass('selected');
-// 				$maintrigger.trigger('click');
-// 			}
-// 		}
-// 	});
-//
-// 	let $zijbalk = $('#zijbalk');
-//
-// 	$('.zijbalk-trigger').on('click', (event) => {
-// 		event.preventDefault();
-// 		console.log('click');
-//
-// 		$zijbalk.toggleClass('visible');
-// 		$('body').toggleClass('zijbalk-visible').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
-// 			$('.cd-main-content').one('click', function() {
-// 				closeZijbalk();
-// 			})
-// 		});
-// 	});
-//
-// 	//open search form
-// 	$('.cd-search-trigger').on('click', (event) => {
-// 		event.preventDefault();
-// 		closeNav();
-// 		toggleSearch();
-// 	});
-//
-// 	//close lateral menu on mobile
-// 	$overlay.on('swiperight', () => {
-// 		if ($('.cd-primary-nav').hasClass('nav-is-visible')) {
-// 			closeNav();
-// 			$overlay.removeClass('is-visible');
-// 		}
-// 	});
-// 	$('.nav-on-left #cd-main-overlay').on('swipeleft', () => {
-// 		if ($('.cd-primary-nav').hasClass('nav-is-visible')) {
-// 			closeNav();
-// 			$overlay.removeClass('is-visible');
-// 		}
-// 	});
-// 	$overlay.on('click', () => {
-// 		closeNav();
-// 		toggleSearch('close');
-// 		$overlay.removeClass('is-visible');
-// 	});
-//
-//
-	//prevent default clicking on direct children of .cd-primary-nav
-	// $('.cd-primary-nav').children('.has-children').children('a').on('click', (event) => {
-	// 	event.preventDefault();
-	// });
+		let xDiff = xDown - evt.touches[0].clientX;
+		let yDiff = yDown - evt.touches[0].clientY;
+
+		if (Math.abs(xDiff) > Math.abs(yDiff)) { // Als er horizontall geswiped wordt.
+			if (xDiff > 0) {
+				if (visible('#zijbalk')) {
+					reset();
+				} else {
+					view('#menu');
+				}
+			} else {
+				if (visible('#menu')) {
+					reset();
+				} else {
+					view('#zijbalk');
+				}
+			}
+		}
+		/* reset values */
+		xDown = null;
+		yDown = null;
+	}
+
 	//open submenu
 	$('.has-children').children('a').on('click', function (event) {
-		if (!checkWindowWidth()) {
-			event.preventDefault();
-		}
+		event.preventDefault();
 		let selected = $(this);
 		if (selected.next('ul').hasClass('is-hidden')) {
 			//desktop version only
@@ -144,104 +57,96 @@ $(function () {
 	$('.go-back').on('click', function () {
 		$(this).parent('ul').addClass('is-hidden').parent('.has-children').parent('ul').removeClass('moves-out');
 	});
-//
-// 	function closeNav() {
-// 		$('.cd-nav-trigger').removeClass('nav-is-visible');
-// 		$('.cd-main-header').removeClass('nav-is-visible');
-// 		$('.cd-primary-nav').removeClass('nav-is-visible');
-// 		$('.has-children ul').addClass('is-hidden');
-// 		$('.has-children a').removeClass('selected');
-// 		$('.moves-out').removeClass('moves-out');
-// 		$('.cd-main-content').removeClass('nav-is-visible').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
-// 			$('body').removeClass('overflow-hidden');
-// 		});
-// 	}
-//
-// 	function closeZijbalk() {
-// 		$zijbalk.removeClass('visible');
-// 		$('body').removeClass('zijbalk-visible')
-// 	}
-//
-//
-	let $searchfield = $('.cd-search').find('input[type="search"]');
 
-	function toggleSearch(type) {
-		let $cdSearch = $('.cd-search'),
-			  $icon = $('.cd-search-trigger .fa');
+	let active = undefined;
 
-		if (type === 'close') {
-			$cdSearch.removeClass('is-visible');
-			$('.cd-search-trigger').removeClass('search-is-visible');
-			$icon.addClass('fa-cross');
-			$icon.removeClass('fa-times');
+	function visible(id) {
+		return active === id;
+	}
+
+	function view(id) {
+		active = id;
+
+		$('.target').not(id).removeClass('target');
+		$(id).addClass('target');
+
+		toggleScroll();
+	}
+
+	/**
+	 * Zorg ervoor dat de body niet kan scrollen als de overlay zichtbaar is.
+	 */
+	function toggleScroll() {
+		if (active === '#search' || active === '#menu') {
+			$('body')
+				.removeClass('overflow-x-hidden')
+				.addClass('overflow-hidden');
+		} else if (active === '#zijbalk') {
+			$('body')
+				.removeClass('overflow-hidden')
+				.addClass('overflow-x-hidden');
 		} else {
-			$cdSearch.toggleClass('is-visible');
-			$('.cd-search-trigger').toggleClass('search-is-visible');
-			$icon.toggleClass('fa-cross');
-			$icon.toggleClass('fa-times');
-		}
-		if ($cdSearch.hasClass('is-visible')) {
-			$searchfield.trigger('focus');
-			$maintrigger.fadeOut();
-			$('#cd-user-avatar').fadeOut();
-			$overlay.addClass('is-visible');
-		} else {
-			$maintrigger.fadeIn();
-			$('#cd-user-avatar').fadeIn();
-			if (!$maintrigger.hasClass('selected')) {
-				$overlay.removeClass('is-visible');
-			}
+			// Sta toe om te scrollen _nadat_ de animatie klaar is.
+			setTimeout(() => $('body').removeClass('overflow-hidden overflow-x-hidden'), 300);
 		}
 	}
-//
-// 	let fadeToggle = false;
-// 	// Fade header when leaving top of page
-// 	function toggleFade() {
-// 		if ($(window).scrollTop() > 100) {
-// 			$maintrigger.addClass('fade');
-// 			$('#cd-user-avatar').addClass('fade');
-// 		}
-// 		else {
-// 			$maintrigger.removeClass('fade');
-// 			$('#cd-user-avatar').removeClass('fade');
-// 		}
-// 		fadeToggle = false;
-// 	}
-//
-// 	$(window).on('scroll', function () {
-// 		if (!fadeToggle) {
-// 			fadeToggle = true;
-// 			$maintrigger.data('timer', setTimeout(toggleFade, 3000));
-// 		}
-// 	}).trigger('scroll');
-//
-// 	// Catch keystrokes for instant search
-// 	$(document).on('keydown', (event) => {
-//
-// 		// Geen instantsearch met modifiers
-// 		if (event.ctrlKey || event.altKey || event.metaKey) {
-// 			return;
-// 		}
-//
-// 		// Geen instantsearch als we in een input-element of text-area zitten.
-// 		let element = event.target.tagName.toUpperCase();
-// 		if (element === 'INPUT' || element === 'TEXTAREA' || element === 'SELECT') {
-// 			return;
-// 		}
-//
-// 		// a-z en 0-9 incl. numpad
-// 		if ((event.keyCode > 64 && event.keyCode < 91) || (event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106)) {
-// 			$searchfield.trigger('focus');
-// 			if (!$('.cd-search').hasClass('is-visible')) {
-// 				closeNav();
-// 				toggleSearch();
-// 			}
-// 		}
-// 	});
-//
-// 	$searchfield.on('keyup', (event) => {
-// 		if (event.keyCode === 27) { // esc
-// 			toggleSearch('close');
-// 		}
-// 	});
+
+	function toggle(id) {
+		return function (event) {
+			event.preventDefault();
+			if (active === id) {
+				reset();
+			} else {
+				active = id;
+
+				$('.target').not(id).removeClass('target');
+				$(id).toggleClass('target');
+
+				toggleScroll();
+			}
+		};
+	}
+
+	function reset() {
+		active = undefined;
+
+		$('.target').removeClass('target');
+
+		toggleScroll();
+	}
+
+	$('.trigger[href="#menu"]').on('click', toggle('#menu'));
+	$('.trigger[href="#zijbalk"]').on('click', toggle('#zijbalk'));
+	$('.trigger[href="#search"]').on('click', toggle('#search'));
+
+	$('#cd-main-overlay,.cd-main-content').on('click', reset);
+
+	let $searchfield = $('.cd-search').find('input[type="search"]');
+
+	// Catch keystrokes for instant search
+	$(document).on('keydown', (event) => {
+		// Geen instantsearch met modifiers
+		if (event.ctrlKey || event.altKey || event.metaKey) {
+			return;
+		}
+
+		// Geen instantsearch als we in een input-element of text-area zitten.
+		let element = event.target.tagName.toUpperCase();
+		if (element === 'INPUT' || element === 'TEXTAREA' || element === 'SELECT') {
+			return;
+		}
+
+		// a-z en 0-9 incl. numpad
+		if ((event.keyCode > 64 && event.keyCode < 91) || (event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106)) {
+			$searchfield.val('');
+			$searchfield.trigger('focus');
+			view('#search');
+		}
+	});
+
+	$(document).on('keyup', (event) => {
+		if (event.keyCode === 27) { // esc
+			reset();
+		}
+	});
 });

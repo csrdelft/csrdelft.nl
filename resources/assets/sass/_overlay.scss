@@ -12,7 +12,11 @@
 }
 
 #cd-main-overlay.is-visible,
-.cd-search:target ~ #cd-main-overlay {
+#menu.target ~ #cd-main-overlay,
+#menu:target ~ #cd-main-overlay,
+#search:target ~ #cd-main-overlay,
+#search.target ~ #cd-main-overlay {
+	/* Laat overlay zien als target is op menu of search */
 	opacity: 1;
 	visibility: visible;
 	transition: opacity .3s 0s, visibility 0s 0s;

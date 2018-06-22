@@ -14,7 +14,9 @@
 	width: 100%;
 }
 
-#search.is-visible, #search:target {
+#search.is-visible,
+#search.target,
+#search:target {
 	z-index: 3;
 	opacity: 1;
 	visibility: visible;

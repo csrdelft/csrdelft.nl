@@ -17,6 +17,10 @@ Primary style
 	}
 }
 
+.navbar {
+	width: 100vw;
+}
+
 .cd-user-avatar {
 	width: 32px;
 	height: 32px;
@@ -84,7 +88,7 @@ Main components
 
 .cd-nav {
 	position: relative;
-	z-index: 4;
+	z-index: 6;
 }
 
 .cd-primary-nav, .cd-primary-nav ul {
@@ -197,7 +201,6 @@ Main components
 	.cd-primary-nav.nav-is-visible,
 	#menu:target .cd-primary-nav,
 	#menu.target .cd-primary-nav {
-		z-index: 2;
 		visibility: visible;
 		transition: visibility 0s 0s, transform 0.3s;
 		transform: translateX(0);
@@ -350,7 +353,6 @@ Main components
 	.cd-secondary-nav.nav-is-visible,
 	#menu:target .cd-secondary-nav,
 	#menu.target .cd-secondary-nav {
-		z-index: 2;
 		visibility: visible;
 		opacity: 1;
 		transition: opacity .3s 0s, visibility 0s 0s;

@@ -5,10 +5,10 @@
 	</head>
 	<body class="nav-is-fixed">
 		<nav class="navbar navbar-dark bg-primary fixed-top">
-			<a class="zijbalk-trigger nav-option" href="#zijbalk"><span class="sr-only">Zijbalk openen</span><i class="fa fa-lg fa-fw fa-bars"></i></a>
+			<a class="nav-option trigger" href="#zijbalk"><span class="sr-only">Zijbalk openen</span><i class="fa fa-lg fa-fw fa-bars"></i></a>
 			<a class="navbar-brand" href="#">C.S.R. Delft</a>
-			<a class="cd-search-trigger nav-option" href="#search"><span class="sr-only">Zoeken</span><i class="fa fa-lg fa-fw fa-search"></i></a>
-			<a class="cd-nav-trigger nav-option" href="#menu"><span class="sr-only">Menu</span><i class="fa fa-lg fa-fw fa-bars"></i></a>
+			<a class="nav-option trigger" href="#search"><span class="sr-only">Zoeken</span><i class="fa fa-lg fa-fw fa-search"></i></a>
+			<a class="nav-option trigger" href="#menu"><span class="sr-only">Menu</span><i class="fa fa-lg fa-fw fa-bars"></i></a>
 		</nav>
 		<nav id="zijbalk"{if CsrDelft\model\LidInstellingenModel::get('zijbalk', 'scrollen')!='met pagina mee'} class="{if CsrDelft\model\LidInstellingenModel::get('zijbalk', 'scrollen')=='pauper/desktop'}desktop-only {/if}{if CsrDelft\model\LidInstellingenModel::get('zijbalk', 'scrollbalk')=='ja'}scroll-hover {/if}scroll-fixed dragobject dragvertical" data-scrollfix="{$scrollfix}"{/if}>
 			<a href="/">
