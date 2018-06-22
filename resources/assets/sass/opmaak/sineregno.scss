@@ -23,7 +23,7 @@
  */
 
 /*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
-#cd-zijbalk, #forumtabel th, .cd-primary-nav ul {
+#zijbalk, #forumtabel th, .cd-primary-nav ul {
   background-color: #7cadd3 !important;
 }
 
@@ -66,20 +66,20 @@ h1, a, a:hover,
 
 /*ZIJBALK*/
 
-#cd-zijbalk .cd-beeldmerk {
+#zijbalk .cd-beeldmerk {
   background: url("../../images/dank.png") no-repeat center;
   background-size: contain;
   height: 100px;
 }
 
 /*Veel tekst van de zijbalk in het geel*/
-#cd-zijbalk .ishetal .ja, #cd-zijbalk .ishetal .nee, .staatrood,
-#cd-zijbalk .blok .item a, #cd-zijbalk .ishetal, #cd-zijbalk .blok .item {
+#zijbalk .ishetal .ja, #zijbalk .ishetal .nee, .staatrood,
+#zijbalk .blok .item a, #zijbalk .ishetal, #zijbalk .blok .item {
   color: #404041;
 }
 
 /*Zijbalk grens van het scherm in grijs*/
-#cd-zijbalk {
+#zijbalk {
   border-color: #404041;
 }
 
