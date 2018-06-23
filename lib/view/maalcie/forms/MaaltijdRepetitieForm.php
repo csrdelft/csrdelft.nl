@@ -5,7 +5,6 @@ namespace CsrDelft\view\maalcie\forms;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\fiscaat\CiviProductModel;
-use CsrDelft\view\formulier\getalvelden\BedragField;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\RequiredEntityField;
@@ -74,10 +73,11 @@ if (this.checked) {
 }
 JS;
 		}
-		$fields['btn'] = new FormDefaultKnoppen();
-		$fields['btn']->addKnop($bijwerken, false, true);
-
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
+		$this->formKnoppen->addKnop($bijwerken, false, true);
+
 	}
 
 }

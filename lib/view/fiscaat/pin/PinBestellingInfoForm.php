@@ -24,8 +24,9 @@ class PinBestellingInfoForm extends ModalForm {
 		$fields['moment'] = new DateTimeField('moment', $pinBestelling->moment, 'Moment');
 		$fields['moment']->readonly = true;
 		$fields[] = new CiviBestellingInhoudTable($pinBestelling);
-		$fields['btn'] = new ModalCloseButtons();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new ModalCloseButtons();
 	}
 }

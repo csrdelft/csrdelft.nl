@@ -64,9 +64,10 @@ class MaaltijdForm extends ModalForm {
 		$fields[] = new RequiredIntField('aanmeld_limiet', $maaltijd->aanmeld_limiet, 'Aanmeldlimiet', 0, 200);
 		$fields[] = new RechtenField('aanmeld_filter', $maaltijd->aanmeld_filter, 'Aanmeldrestrictie');
 		$fields[] = new BBCodeField('omschrijving', $maaltijd->omschrijving, 'Omschrijving');
-		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 }

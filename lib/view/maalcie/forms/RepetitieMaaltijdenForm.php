@@ -25,9 +25,10 @@ class RepetitieMaaltijdenForm extends ModalForm {
 		$fields[] = new HtmlComment('<p>Aanmaken <span class="dikgedrukt">' . $repetitie->getPeriodeInDagenText() . '</span> op <span class="dikgedrukt">' . $repetitie->getDagVanDeWeekText() . '</span> in de periode:</p>');
 		$fields['begin'] = new DateField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y'));
 		$fields['eind'] = new DateField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y'));
-		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 	public function validate() {

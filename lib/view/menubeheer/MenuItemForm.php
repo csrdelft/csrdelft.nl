@@ -9,8 +9,6 @@ use CsrDelft\view\formulier\getalvelden\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\RequiredUrlField;
-use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -53,8 +51,9 @@ class MenuItemForm extends ModalForm {
 		$fields['z'] = new SelectField('zichtbaar', ($item->zichtbaar ? '1' : '0'), 'Tonen', array('1' => 'Zichtbaar', '0' => 'Verborgen'));
 		$fields['z']->title = 'Wel of niet tonen';
 
-		$fields[] = new FormDefaultKnoppen();
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 }

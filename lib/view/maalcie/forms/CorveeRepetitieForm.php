@@ -77,10 +77,10 @@ if (this.checked) {
 }
 JS;
 		}
-		$fields['btn'] = new FormDefaultKnoppen();
-		$fields['btn']->addKnop($bijwerken, false, true);
-
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
+		$this->formKnoppen->addKnop($bijwerken, false, true);
 	}
 
 }

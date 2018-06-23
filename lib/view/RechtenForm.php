@@ -50,9 +50,10 @@ class RechtenForm extends ModalForm {
 			$fields[] = new HtmlComment('<label>Actie</label><div class="dikgedrukt">' . AccessAction::getDescription($ac->action) . '</div>');
 		}
 		$fields[] = new RequiredRechtenField('subject', $ac->subject, 'Toegestaan voor');
-		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 }

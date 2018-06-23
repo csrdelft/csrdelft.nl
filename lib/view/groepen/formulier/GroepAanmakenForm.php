@@ -22,11 +22,11 @@ class GroepAanmakenForm extends ModalForm {
 		}
 		$fields[] = new KetzerSoortField('model', $default, null, $groep);
 
+		$this->addFields($fields);
+
 		$this->formKnoppen = new FormDefaultKnoppen(null, false);
 		$this->formKnoppen->submit->icon = 'add';
 		$this->formKnoppen->submit->label = 'Aanmaken';
-
-		$this->addFields($fields);
 	}
 
 	public function getValues() {
