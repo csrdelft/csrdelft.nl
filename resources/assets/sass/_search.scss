@@ -1,3 +1,5 @@
+@import "~bootstrap/scss/mixins/breakpoints";
+
 #search {
 	position: absolute;
 	top: 50px;
@@ -17,7 +19,7 @@
 #search.is-visible,
 #search.target,
 #search:target {
-	z-index: 3;
+	z-index: 4;
 	opacity: 1;
 	visibility: visible;
 	-webkit-transition: opacity .3s 0s, visibility 0s 0s;
@@ -29,11 +31,15 @@
 	position: fixed;
 }
 
-@media screen and (max-width: 960px){
+.cd-search {
+	width: 100%;
+	padding: 10px;
+	right: 0;
+}
+
+@include media-breakpoint-up(lg) {
 	.cd-search {
-		width: 100%;
-		padding: 10px;
-		right: 0;
+		padding: 10px 30%;
 	}
 }
 
