@@ -9,6 +9,7 @@
 	opacity: 0;
 	backface-visibility: hidden;
 	transition: opacity .3s 0s, visibility 0s .3s;
+	z-index: 3;
 }
 
 #cd-main-overlay.is-visible,
