@@ -1,76 +1,11 @@
 import $ from 'jquery';
 
 $(function () {
-	document.addEventListener('touchstart', handleTouchStart, false);
-	document.addEventListener('touchmove', handleTouchMove, false);
 
-	let xDown = null;
-	let yDown = null;
+	let active = null;
 
-	function handleTouchStart(evt) {
-		xDown = evt.touches[0].clientX;
-		yDown = evt.touches[0].clientY;
-	}
-
-	function handleTouchMove(evt) {
-		if (!xDown || !yDown) { // Geen touch gestart
-			return;
-		}
-
-		let xDiff = xDown - evt.touches[0].clientX;
-		let yDiff = yDown - evt.touches[0].clientY;
-
-		if (Math.abs(xDiff) > Math.abs(yDiff)) { // Als er horizontall geswiped wordt.
-			if (xDiff > 0) {
-				if (visible('#zijbalk')) {
-					reset();
-				} else {
-					view('#menu');
-				}
-			} else {
-				if (visible('#menu')) {
-					reset();
-				} else {
-					view('#zijbalk');
-				}
-			}
-		}
-		/* reset values */
-		xDown = null;
-		yDown = null;
-	}
-
-	//open submenu
-	$('.has-children').children('a').on('click', function (event) {
-		event.preventDefault();
-		let selected = $(this);
-		if (selected.next('ul').hasClass('is-hidden')) {
-			//desktop version only
-			selected.addClass('selected').next('ul').removeClass('is-hidden').end().parent('.has-children').parent('ul').addClass('moves-out');
-			selected.parent('.has-children').siblings('.has-children').children('ul').addClass('is-hidden').end().children('a').removeClass('selected');
-		} else {
-			selected.removeClass('selected').next('ul').addClass('is-hidden').end().parent('.has-children').parent('ul').removeClass('moves-out');
-		}
-	});
-
-	//submenu items - go back link
-	$('.go-back').on('click', function () {
-		$(this).parent('ul').addClass('is-hidden').parent('.has-children').parent('ul').removeClass('moves-out');
-	});
-
-	let active = undefined;
-
-	function visible(id) {
+	function isVisible(id) {
 		return active === id;
-	}
-
-	function view(id) {
-		active = id;
-
-		$('.target').not(id).removeClass('target');
-		$(id).addClass('target');
-
-		toggleScroll();
 	}
 
 	/**
@@ -91,6 +26,34 @@ $(function () {
 		}
 	}
 
+	/**
+	 * Terug naar gewone view.
+	 */
+	function reset() {
+		active = null;
+
+		$('.target').removeClass('target');
+
+		toggleScroll();
+	}
+
+	/**
+	 *
+	 * @param id
+	 */
+	function view(id) {
+		active = id;
+
+		$('.target').not(id).removeClass('target');
+		$(id).addClass('target');
+
+		toggleScroll();
+	}
+
+	/**
+	 * Toggle view met id.
+	 * @param id
+	 */
 	function toggle(id) {
 		return function (event) {
 			event.preventDefault();
@@ -107,13 +70,70 @@ $(function () {
 		};
 	}
 
-	function reset() {
-		active = undefined;
+	let xDown = null;
+	let yDown = null;
 
-		$('.target').removeClass('target');
-
-		toggleScroll();
+	function handleTouchStart(evt) {
+		xDown = evt.touches[0].clientX;
+		yDown = evt.touches[0].clientY;
 	}
+
+	function swipeLeft() {
+		if (isVisible('#zijbalk')) {
+			reset();
+		} else {
+			view('#menu');
+		}
+	}
+
+	function swipeRight() {
+		if (isVisible('#menu')) {
+			reset();
+		} else {
+			view('#zijbalk');
+		}
+	}
+
+	function handleTouchMove(evt) {
+		if (!xDown || !yDown) { // Geen touch gestart
+			return;
+		}
+
+		let xDiff = xDown - evt.touches[0].clientX;
+		let yDiff = yDown - evt.touches[0].clientY;
+
+		if (Math.abs(xDiff) > Math.abs(yDiff)) { // Als er horizontall geswiped wordt.
+			if (xDiff > 0) {
+				swipeLeft();
+			} else {
+				swipeRight();
+			}
+		}
+		/* reset values */
+		xDown = null;
+		yDown = null;
+	}
+
+	document.addEventListener('touchstart', handleTouchStart, false);
+	document.addEventListener('touchmove', handleTouchMove, false);
+
+	//open submenu
+	$('.has-children').children('a').on('click', function (event) {
+		event.preventDefault();
+		let selected = $(this);
+		if (selected.next('ul').hasClass('is-hidden')) {
+			//desktop version only
+			selected.addClass('selected').next('ul').removeClass('is-hidden').end().parent('.has-children').parent('ul').addClass('moves-out');
+			selected.parent('.has-children').siblings('.has-children').children('ul').addClass('is-hidden').end().children('a').removeClass('selected');
+		} else {
+			selected.removeClass('selected').next('ul').addClass('is-hidden').end().parent('.has-children').parent('ul').removeClass('moves-out');
+		}
+	});
+
+	//submenu items - go back link
+	$('.go-back').on('click', function () {
+		$(this).parent('ul').addClass('is-hidden').parent('.has-children').parent('ul').removeClass('moves-out');
+	});
 
 	$('.trigger[href="#menu"]').on('click', toggle('#menu'));
 	$('.trigger[href="#zijbalk"]').on('click', toggle('#zijbalk'));
