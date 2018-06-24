@@ -7,15 +7,6 @@
 Primary style
 
 -------------------------------- */
-@include media-breakpoint-down(lg) {
-	body.nav-on-left.overflow-hidden {
-		overflow: hidden;
-	}
-
-	#cd-user-avatar {
-		display: none;
-	}
-}
 
 .navbar {
 	width: 100vw;
@@ -65,7 +56,7 @@ Main components
 	transition: transform 0.3s;
 }
 
-@media only screen and (max-width: 959px) {
+@include media-breakpoint-down(md) {
 	#menu.target ~ .cd-main-content,
 	#menu:target ~ .cd-main-content {
 		transform: translateX(-260px);
@@ -128,7 +119,7 @@ Main components
 	transition: transform 0.3s, opacity 0.3s;
 }
 
-@media only screen and (max-width: 959px) {
+@include media-breakpoint-down(md) {
 	.cd-primary-nav a, .cd-primary-nav ul a {
 		font-size: 1.4em;
 	}
@@ -181,7 +172,7 @@ Main components
 	}
 }
 
-@media only screen and (max-width: 959px) {
+@include media-breakpoint-down(md) {
 	.nav-on-left .cd-primary-nav, .nav-on-left .cd-primary-nav ul {
 		right: auto;
 		left: 0;
@@ -193,7 +184,7 @@ Main components
 	color: #fff;
 }
 
-@media only screen and (max-width: 959px) {
+@include media-breakpoint-down(md) {
 	.cd-primary-nav {
 		/* by default .cd-primary-nav is hidden - trick for iOS devices where you can see the navigation if you pull down */
 		visibility: hidden;
@@ -210,7 +201,7 @@ Main components
 	}
 }
 
-@media only screen and (min-width: 960px) {
+@include media-breakpoint-up(lg) {
 	.navbar {
 		display: none;
 	}
@@ -383,7 +374,7 @@ support for no js
 	visibility: visible;
 }
 
-@include media-breakpoint-up(lg) {
+@include media-breakpoint-up(md) {
 	.no-js .cd-primary-nav {
 		position: absolute;
 		display: inline-block;

@@ -1,3 +1,5 @@
+@import "~bootstrap/scss/mixins/breakpoints";
+
 span.twitter-typeahead {
 	.tt-menu {
 		position: absolute;
@@ -18,7 +20,7 @@ span.twitter-typeahead {
 		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
 		background-clip: padding-box;
 
-		@media screen and (max-width: 960px){
+		@include media-breakpoint-down(md) {
 			max-height: 80vh;
 			overflow: auto;
 		}
