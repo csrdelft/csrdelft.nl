@@ -172,7 +172,7 @@ $(function () {
         });
     });
 
-    $('td.auteur').hoverIntent(
+    $('.auteur').hoverIntent(
         function () {
             $(this).find('a.forummodknop').fadeIn();
         },

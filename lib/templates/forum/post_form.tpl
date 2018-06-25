@@ -1,10 +1,9 @@
-<tr>
-	<td colspan="2">
-		{include file='forum/draad_reageren.tpl'}
-	</td>
-</tr>
-<tr id="forumPosten">
-	<td class="auteur">
+<div>
+	{include file='forum/draad_reageren.tpl'}
+</div>
+
+<div id="forumPosten" class="forum-posten">
+	<div class="auteur">
 
 		<table>
 			<tr>
@@ -39,8 +38,8 @@
 			{/toegang}
 		</div>
 
-	</td>
-	<td class="bericht0">
+	</div>
+	<div class="bericht0">
 
 		<form id="forumForm" class="Formulier" action="/forum/posten/{$deel->forum_id}{if isset($draad)}/{$draad->draad_id}{/if}" method="post">
 			{toegang P_LOGGED_IN}
@@ -77,7 +76,5 @@
 			</div>
 
 		</form>
-		<br /><br />
-
-	</td>
-</tr>
+	</div>
+</div>
