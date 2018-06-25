@@ -1049,13 +1049,14 @@ function is_ingelogd_account($uid) {
 /**
  * @param Profiel $profiel
  * @param string $key
+ * @param string $cat
  * @param string $uitzondering Sommige commissie mogen wel dit veld zien.
  * @return bool
  */
-function is_zichtbaar($profiel, $key, $uitzondering = 'P_LEDEN_MOD') {
+function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = 'P_LEDEN_MOD') {
     if (is_array($key)) {
         foreach ($key as $item) {
-            if (!LidToestemmingModel::instance()->toestemming($profiel, $item, $uitzondering)) {
+            if (!LidToestemmingModel::instance()->toestemming($profiel, $item, $cat, $uitzondering)) {
                 return false;
             }
         }
@@ -1063,7 +1064,7 @@ function is_zichtbaar($profiel, $key, $uitzondering = 'P_LEDEN_MOD') {
         return true;
     }
 
-    return LidToestemmingModel::instance()->toestemming($profiel, $key, $uitzondering);
+    return LidToestemmingModel::instance()->toestemming($profiel, $key, $cat, $uitzondering);
 }
 
 function to_unix_path($path) {
