@@ -30,7 +30,7 @@
 					<a href="/forum/wijzigen/{$draad->draad_id}/gesloten" class="btn btn-light post ReloadPage slotjeAan" title="Sluiten (geen reactie mogelijk)">{icon get="lock_open" hover="lock"}</a>
 				{/if}
 				&nbsp;&nbsp;&nbsp;
-				<a class="btn btn-light" title="Moderatie-functies weergeven" onclick="$('#forumtabel a.forummodknop').fadeIn();
+				<a class="btn btn-light modfuncties" title="Moderatie-functies weergeven" onclick="$('#forumtabel a.forummodknop').fadeIn();
 						$('#modereren').slideDown();
 						$(window).scrollTo('#modereren', 600, {
 							easing: 'easeInOutCubic',

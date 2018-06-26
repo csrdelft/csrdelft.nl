@@ -8,9 +8,9 @@
 {/if}
 <div id="forumpost-row-{$post->post_id}" class="forum-post{if $post->gefilterd} verborgen{/if}">
 	<div class="auteur">
-		<div class="postlink">
-			<a href="/forum/reactie/{$post->post_id}#{$post->post_id}" id="{$post->post_id}" class="postlink"
-				 title="Link naar deze post">&rarr;</a>
+		<div class="postpijl">
+			<a class="postanchor" id="{$post->post_id}"></a>
+			<a class="postlink" href="/forum/reactie/{$post->post_id}#{$post->post_id}" title="Link naar deze post">&rarr;</a>
 		</div>
 		<div class="naam">
 			{CsrDelft\model\ProfielModel::getLink($post->uid, 'user')}
