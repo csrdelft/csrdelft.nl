@@ -17,7 +17,7 @@
 		<h3><a name="{$categorie->categorie_id}">{$categorie->titel}</a></h3>
 		<div class="forumdelen">
 			{foreach from=$categorie->getForumDelen() item=deel}
-				<div class="forumdeel bb-block col-md-2">
+				<div class="forumdeel">
 					<h4><a href="/forum/deel/{$deel->forum_id}">{$deel->titel}</a></h4>
 					<p class="forumdeel-omschrijving">{$deel->omschrijving}</p>
 				</div>
@@ -31,7 +31,7 @@
 		<h3><a name="{$remoteCategorie->tekst}">{$remoteCategorie->tekst}</a></h3>
 		<div class="forumdelen">
 			{foreach from=$remoteCategorie->getChildren() item=remoteForum}
-				<div class="forumdeel bb-block col-md-2">
+				<div class="forumdeel">
 					<h4><a href="{$remoteForum->link}" target="_blank">{$remoteForum->tekst}</a></h4>
 					<p class="forumdeel-omschrijving">Het forum van onze {$remoteCategorie->tekst|lcfirst} bij {$remoteForum->tekst}.</p>
 				</div>

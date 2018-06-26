@@ -31,8 +31,8 @@ class MededelingenController extends AclController {
 		parent::__construct($query, MededelingenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'lijst' => 'P_PUBLIC',
-				'bekijken' => 'P_PUBLIC',
+				'lijst' => 'P_LOGGED_IN',
+				'bekijken' => 'P_LOGGED_IN',
 				'bewerken' => 'P_NEWS_POST',
 				'verwijderen' => 'P_NEWS_POST',
 				'toevoegen' => 'P_NEWS_POST',
