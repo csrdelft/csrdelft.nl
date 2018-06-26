@@ -1,5 +1,5 @@
-<tr class="forumdraad kleur{cycle values="0,1"}">
-	<td class="titel">
+<div class="forum-deel-draad kleur{cycle values="0,1"}">
+	<div class="titel">
 		{if $draad->wacht_goedkeuring}
 			<small class="niet-dik">[ter goedkeuring...]</small>
 		{/if}
@@ -19,18 +19,18 @@
 		{/if}
 		{/toegang}
 		{if !isset($deel->forum_id)}
-			<span class="float-right lichtgrijs">[<a href="/forum/deel/{$draad->getForumDeel()->forum_id}" class="lichtgrijs">{$draad->getForumDeel()->titel}</a>]</span>
+			<span class="lichtgrijs">[<a href="/forum/deel/{$draad->getForumDeel()->forum_id}" class="lichtgrijs">{$draad->getForumDeel()->titel}</a>]</span>
 		{/if}
-	</td>
-	<td class="datumwijziging">
+	</div>
+	<div class="datumwijziging">
 		{if CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief'}
 			{$draad->laatst_gewijzigd|reldate}
 		{else}
 			{$draad->laatst_gewijzigd}
 		{/if}
-	</td>
-	<td class="laatstewijziging">
+	</div>
+	<div class="laatstewijziging">
 		<a href="/forum/reactie/{$draad->laatste_post_id}#{$draad->laatste_post_id}">bericht</a>
 		door {CsrDelft\model\ProfielModel::getLink($draad->laatste_wijziging_uid, 'user')}
-	</td>
-</tr>
+	</div>
+</div>
