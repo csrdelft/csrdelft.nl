@@ -134,7 +134,7 @@
 	</div>
 
 	<div class="forumfooter">
-		<div class="breadcrumb">{$breadcrumbs}</div>
+		<div class="breadcrumbs">{$breadcrumbs}</div>
 		{$smarty.capture.kop}
 	</div>
 

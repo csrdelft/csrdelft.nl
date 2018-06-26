@@ -19,7 +19,7 @@
 		{/if}
 		{/toegang}
 		{if !isset($deel->forum_id)}
-			<span class="float-right lichtgrijs">[<a href="/forum/deel/{$draad->getForumDeel()->forum_id}" class="lichtgrijs">{$draad->getForumDeel()->titel}</a>]</span>
+			<span class="lichtgrijs">[<a href="/forum/deel/{$draad->getForumDeel()->forum_id}" class="lichtgrijs">{$draad->getForumDeel()->titel}</a>]</span>
 		{/if}
 	</div>
 	<div class="datumwijziging">

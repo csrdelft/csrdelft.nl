@@ -38,7 +38,7 @@
 		background-color: #d3d3d3;
 	}
 
-	.forum-post {
+	.forum-post, .forum-posten {
 		display: flex;
 		flex-direction: row;
 
@@ -102,6 +102,11 @@
 			&.bericht1 {
 				background-color: #f5f5f5;
 			}
+		}
+
+		.meldingen {
+			flex: 0;
+			margin: .2em;
 		}
 	}
 }
@@ -207,18 +212,21 @@ span.curpage {
 	display: flex;
 	flex-direction: column;
 
-	.forum-deel-titel {
+	.forum-deel-titel,.paging {
 		font-weight: bold;
 		color: #fff;
 		background-color: #0a338d;
 		padding: 1em;
-		height: 3em;
+
+		a, a:hover {
+			color: white;
+		}
 	}
 
 	.forum-deel-draad, .forum-deel-titel {
 		display: flex;
 		flex-direction: row;
-		justify-content: space-around;
+		justify-content: space-between;
 
 		padding: 0.7em;
 
@@ -231,15 +239,15 @@ span.curpage {
 		}
 
 		.titel {
-			flex: 2;
+			flex: 1 0 0;
 		}
 
 		.datumwijziging {
-			flex: 1;
+			flex: 0 0 20%;
 		}
 
 		.laatstewijziging {
-			flex: 1;
+			flex: 1 0 0;
 			white-space: nowrap;
 		}
 
@@ -249,6 +257,13 @@ span.curpage {
 			text-decoration: none;
 		}
 	}
+}
+
+.forumdeel-omschrijving {
+	padding: 10px;
+	margin: 10px 0;
+	background-color: #f5f5f5;
+	border: 1px solid #b8b8b8;
 }
 
 div.forumheadbtn {
@@ -285,14 +300,6 @@ div.forumcategorie {
 
 			padding: 8px 12px;
 			margin: 10px;
-			background-color: #f5f5f5;
-			box-shadow: 0 0 10px #ccc;
-			transition: box-shadow .4s ease-out;
-
-			&:hover {
-				-webkit-box-shadow: 0 0 10px #999;
-				box-shadow: 0 0 10px #999;
-			}
 
 			h3 {
 				margin: 0.5em 0 1em 0;

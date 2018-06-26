@@ -5,7 +5,8 @@
 {toegang P_ADMIN}
 {if isset($deel->forum_id)}
 	<div class="forumheadbtn">
-		<a href="/forum/beheren/{$deel->forum_id}" class="btn post popup" title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
+		<a href="/forum/beheren/{$deel->forum_id}" class="btn post popup"
+			 title="Deelforum beheren">{icon get="wrench_orange"} Beheren</a>
 	</div>
 {/if}
 {/toegang}
@@ -16,7 +17,9 @@
 
 <div class="forum-deel">
 	<div class="forum-deel-titel">
-		<div class="titel">Titel</div><div class="datumwijziging">Laatste wijziging</div><div class="laatstewijziging"></div>
+		<div class="titel">Titel</div>
+		<div class="datumwijziging">Laatste wijziging</div>
+		<div class="laatstewijziging"></div>
 	</div>
 
 	{if !$deel->hasForumDraden()}
@@ -28,17 +31,19 @@
 	{/foreach}
 
 	{if $paging}
-
-		<div>
+		<div class="paging">
 			{if isset($deel->forum_id)}
 				{sliding_pager baseurl="/forum/deel/"|cat:$deel->forum_id|cat:"/"
-					pagecount=CsrDelft\model\forum\ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina()
-					separator=" &nbsp;" show_prev_next=true}
+				pagecount=CsrDelft\model\forum\ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) curpage=CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina()
+				separator=" &nbsp;" show_prev_next=true}
 			{else}
 				{sliding_pager baseurl="/forum/recent/" url_append=$belangrijk
-					pagecount=CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina() curpage=CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina()
-					separator=" &nbsp;"}
-				&nbsp;<a href="/forum/recent/{CsrDelft\model\forum\ForumDradenModel::instance()->getAantalPaginas(null)}{$belangrijk}">verder terug</a>
+				pagecount=CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina() curpage=CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina()
+				separator=" &nbsp;"}
+				&nbsp;
+				<a
+					href="/forum/recent/{CsrDelft\model\forum\ForumDradenModel::instance()->getAantalPaginas(null)}{$belangrijk}">verder
+					terug</a>
 			{/if}
 		</div>
 	{/if}
@@ -61,14 +66,7 @@
 
 
 	{if $deel->magPosten()}
-		<tr>
-			<td colspan="3">
-				<br />
-				<table>
-					{include file='forum/post_form.tpl' draad=null}
-				</table>
-			</td>
-		</tr>
+		{include file='forum/post_form.tpl' draad=null}
 	{/if}
 </div>
 
