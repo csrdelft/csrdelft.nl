@@ -104,7 +104,7 @@
 		{* Als posts gewijzigd zijn zonder draad gewijzigd te triggeren voorkomt $draad->isOngelezen() dat de gele lijn wordt getoond *}
 		{if !$vanaf AND $draad_ongelezen AND (!$gelezen_moment OR strtotime($post->laatst_gewijzigd) > $gelezen_moment)}
 			{assign var=vanaf value=true}
-			<div id="ongelezen" class="tussenschot ongelezenvanaf"></div>
+			<div class="tussenschot ongelezenvanaf"><a id="ongelezen"></a></div>
 		{else}
 			<div class="tussenschot"></div>
 		{/if}
@@ -124,7 +124,7 @@
 
 	{* Geen ongelezen berichten op de laatste pagina betekend in het geheel geen ongelezen berichten *}
 	{if !$vanaf AND CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina() === CsrDelft\model\forum\ForumPostsModel::instance()->getAantalPaginas($draad->draad_id)}
-		<div id="ongelezen" class="tussenschot ongelezenvanaf"></div>
+		<div class="tussenschot ongelezenvanaf"><a id="ongelezen"></a></div>
 	{else}
 		<div class="tussenschot"></div>
 	{/if}
