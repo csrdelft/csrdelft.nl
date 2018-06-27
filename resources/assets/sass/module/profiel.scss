@@ -1,0 +1,152 @@
+
+.label {
+  text-align: left;
+  font-weight: normal;
+  float: left;
+  width: 75px;
+  color: #999;
+}
+
+.data {
+  margin-left: 75px;
+  text-align: left;
+
+  li {
+    margin-left: 0;
+  }
+}
+
+#profiel {
+  .profielregel {
+    margin-bottom: 20px;
+    clear: left;
+  }
+
+  .left {
+    display: none;
+    float: left;
+    width: 10px;
+    text-align: right;
+    font-style: italic;
+    font-size: 0.9em;
+  }
+
+  .gegevens {
+    margin-left: 20px;
+    padding-right: 20px;
+    padding-left: 15px;
+    border-left: 1px solid #0a338d;
+    max-width: 675px;
+  }
+
+  .half {
+    width: 270px;
+    float: left;
+  }
+
+  .knopjes {
+    text-align: center;
+  }
+
+  .pasfoto {
+    margin: 25px;
+    -moz-box-shadow: 0 0 11px #000;
+    -webkit-box-shadow: 0 0 11px #000;
+    box-shadow: 0 0 11px #000;
+  }
+
+  .naam {
+    .status {
+      float: left;
+      color: #aaa;
+      width: 60px;
+      padding: 0 20px;
+    }
+
+    h1 {
+      padding-left: 20px;
+    }
+  }
+
+  #corveeTaken {
+    width: 550px;
+
+    tr.old {
+      opacity: .50;
+    }
+  }
+
+  #recenteForumberichten {
+    width: 600px;
+
+    td {
+      text-align: left;
+    }
+  }
+
+  .donker {
+    background-color: #F5F5F5;
+  }
+
+  .bestelling-moment {
+    margin-left: 5px;
+  }
+
+  .boeken {
+    a {
+      text-align: left;
+      text-decoration: none !important;
+
+      .auteur {
+        color: #777;
+        margin-left: 10px;
+      }
+
+      .titel:hover {
+        color: #0a338d;
+        text-decoration: underline;
+      }
+
+      &.btn {
+        margin-left: 75px;
+      }
+    }
+
+    li {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -o-text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
+
+li.verborgen {
+  display: none;
+}
+
+#wijzigstatus {
+
+  label {
+    width: 153px;
+    margin: 0;
+    float: left;
+  }
+
+  .lidgegevens {
+    margin: 10px 0 15px 13px;
+    padding: 2px;
+  }
+
+  .novieten, #wijzigstatus .leden {
+    margin: 0 0 5px 167px;
+  }
+}
+
+#statusForm input#field_postfix.FormElement {
+  width: 100px;
+}
+
+.jarig {
+  background-image: url(../../images/jarig.jpg);
+}

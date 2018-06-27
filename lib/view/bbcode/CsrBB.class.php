@@ -604,20 +604,14 @@ HTML;
 	 * @example [spotify]spotify:user:...:playlist:...[/spotify]
 	 */
 	function bb_spotify($arguments = array()) {
-		$id = $this->parseArray(array('[/spotify]'), array());
+		$uri = $this->parseArray(array('[/spotify]'), array());
 		if (isset($arguments['spotify'])) { // [spotify=
-			$id = $arguments['spotify'];
+			$uri = $arguments['spotify'];
 		}
 
-		if (startsWith($id, 'spotify')) { // Spotify uri
-			$uri = $id;
-		} elseif (startsWith($id, 'https')) { // Link naar afspeellijst
-			$uri = preg_replace('/.+\/(\w+)\/(\w+)\/(\w+)\/(\w+)$/', 'spotify:$1:$2:$3:$4', $id);
-		} else {
-			return '[spotify] Geen geldige url (' . htmlspecialchars($id) . ')';
+		if (!startsWith($uri, 'spotify') && !filter_var($uri, FILTER_VALIDATE_URL)) {
+			return '[spotify] Geen geldige url (' . $uri . ')';
 		}
-
-		$uri = html_entity_decode($uri);
 
 		if ($this->light_mode) {
 			$url = 'https://open.spotify.com/' . str_replace(':', '/', str_replace('spotify:', '', $uri));
@@ -767,7 +761,7 @@ HTML;
 
 		$html = <<<HTML
 <div class="bb-video">
-	<div class="bb-video-preview" onclick="event.preventDefault();bbvideoDisplay(this);" data-params='{$params}' title="Klik om de video af te spelen">
+	<div class="bb-video-preview" onclick="event.preventDefault();window.bbcode.bbvideoDisplay(this);" data-params='{$params}' title="Klik om de video af te spelen">
 		<div class="play-button fa fa-play-circle-o fa-5x"></div>
 		<div class="bb-img-loading" src="{$previewthumb}"></div>
 	</div>
@@ -795,8 +789,7 @@ HTML;
 		}
 
 		// widget size
-		$lines = 4;
-		$width = 355;
+		$width = 580;
 		$height = 300;
 		if (isset($arguments['lines']) AND (int)$arguments['lines'] > 0) {
 			$lines = (int)$arguments['lines'];
@@ -808,37 +801,32 @@ HTML;
 			$height = (int)$arguments['height'];
 		}
 
-		$html = <<<HTML
-			<script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
-			<script>
-			new TWTR.Widget({
-			  version: 2,
-			  type: 'profile',
+		$script = <<<HTML
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 HTML;
-		$html .= " rpp: " . $lines . ",
-			  interval: 30000,
-			  width: " . $width . ",
-			  height: " . $height . ",
-			  theme: {
-				shell: {
-				  background: '#f5f5f5',
-				  color: '#000000'
-				},
-				tweets: {
-				  background: 'whiteSmoke',
-				  color: '#000000',
-				  links: '#0A338D'
-				}
-			  },
-			  features: {
-				scrollbar: false,
-				loop: false,
-				live: false,
-				behavior: 'all'
-			  }
-			}).render().setUser('" . htmlspecialchars($content) . "').start();
-			</script>";
-		return $html;
+
+		if (preg_match('/status/', $content)) {
+			return <<<HTML
+<blockquote class="twitter-tweet" data-lang="nl" data-dnt="true" data-link-color="#0a338d">
+	<a href="{$content}">Tweet op Twitter</a>
+</blockquote>
+{$script}
+HTML;
+		}
+
+		if (startsWith($content, '@')) {
+			$content = 'https://twitter.com/' . $content;
+		}
+
+		return <<<HTML
+<a class="twitter-timeline" 
+	 data-lang="nl" data-width="{$width}" data-height="{$height}" data-dnt="true" data-theme="light"data-link-color="#0a338d" 
+	 href="https://twitter.com/{$content}">
+	 	Tweets van {$content}
+</a>
+{$script}
+HTML;
+
 	}
 
 	protected function groep(AbstractGroep $groep, $tag, $leden) {

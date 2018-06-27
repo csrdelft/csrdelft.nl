@@ -33,9 +33,10 @@ class VrijstellingForm extends ModalForm {
 		$fields[] = new DateField('begin_datum', $vrijstelling->begin_datum, 'Vanaf', date('Y') + 14, date('Y'));
 		$fields[] = new DateField('eind_datum', $vrijstelling->eind_datum, 'Tot en met', date('Y') + 14, date('Y'));
 		$fields[] = new IntField('percentage', $vrijstelling->percentage, 'Percentage (%)', 0, 100);
-		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 }

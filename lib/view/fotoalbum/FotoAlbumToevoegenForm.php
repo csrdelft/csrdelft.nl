@@ -14,8 +14,9 @@ class FotoAlbumToevoegenForm extends ModalForm {
 		$this->titel = 'Fotoalbum toevoegen in: ' . $album->dirname;
 		$this->css_classes[] = 'redirect';
 		$fields[] = new RequiredFileNameField('subalbum', null, 'Naam');
-		$fields[] = new FormDefaultKnoppen('/fotoalbum', false);
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen('/fotoalbum', false);
 	}
 
 }

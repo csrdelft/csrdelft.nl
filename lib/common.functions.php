@@ -1052,10 +1052,10 @@ function is_ingelogd_account($uid) {
  * @param string $uitzondering Sommige commissie mogen wel dit veld zien.
  * @return bool
  */
-function is_zichtbaar($profiel, $key, $uitzondering = 'P_LEDEN_MOD') {
+function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = 'P_LEDEN_MOD') {
     if (is_array($key)) {
         foreach ($key as $item) {
-            if (!LidToestemmingModel::instance()->toestemming($profiel, $item, $uitzondering)) {
+            if (!LidToestemmingModel::instance()->toestemming($profiel, $item, $cat, $uitzondering)) {
                 return false;
             }
         }
@@ -1063,7 +1063,11 @@ function is_zichtbaar($profiel, $key, $uitzondering = 'P_LEDEN_MOD') {
         return true;
     }
 
-    return LidToestemmingModel::instance()->toestemming($profiel, $key, $uitzondering);
+    return LidToestemmingModel::instance()->toestemming($profiel, $key, $cat, $uitzondering);
+}
+
+function to_unix_path($path) {
+	return str_replace(DIRECTORY_SEPARATOR, "/", $path);
 }
 
 /**
@@ -1083,4 +1087,24 @@ function safe_combine_path($folder, $subpath) {
 		return null;
 	}
 	return $combined;
+}
+
+function realpathunix($path) {
+	return to_unix_path(realpath($path));
+}
+
+/**
+ * Versie van uniqid die het ook normaal op Windows doet. Als uniqid te snel achter elkaar aangeroepen wordt kan
+ * twee keer hetzelfde gereturned worden. Op Windows gebeurt dit eerder.
+ *
+ * Replacet de punt omdat het anders geen javascript identifier kan zijn.
+ *
+ * Heeft de vorm:
+ *  $prefix_f0f0f0f0f0f0f0_00000000
+ *
+ * @param string $prefix
+ * @return string
+ */
+function uniqid_safe($prefix = "") {
+	return str_replace('.', '_', uniqid($prefix, true));
 }

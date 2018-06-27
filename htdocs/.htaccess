@@ -50,9 +50,6 @@ RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
 RewriteRule ^commissievoorkeuren index.php?c=CommissieVoorkeuren [L]
 RewriteRule ^toestemming        index.php?c=Toestemming [L]
 
-RewriteRule ^styles             index.php?c=Assets [L]
-RewriteRule ^scripts            index.php?c=Assets [L]
-
 # business club
 RewriteRule ^bc$ bc/index.html [L]
 RewriteRule ^bc/partners$ bc/partners.html [L]

@@ -35,8 +35,9 @@ class CiviProductForm extends ModalForm {
 		$fields[] = new RequiredJaNeeField('beheer', $model->beheer, 'Beheer');
 		$fields[] = new RequiredBedragField('prijs', $model->prijs, 'Prijs', '€', 0, 50, 0.50);
 		$fields[] = new RequiredEntityField('categorie', 'type', 'Categorie', CiviCategorieModel::instance(), '/fiscaat/categorien/suggesties?q=', $categorie);
-		$fields['btn'] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 }

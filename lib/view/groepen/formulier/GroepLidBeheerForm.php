@@ -26,8 +26,9 @@ class GroepLidBeheerForm extends ModalForm {
 		$fields['door_uid']->readonly = true;
 		$fields['door_uid']->hidden = true;
 
-		$fields[] = new FormDefaultKnoppen();
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 }

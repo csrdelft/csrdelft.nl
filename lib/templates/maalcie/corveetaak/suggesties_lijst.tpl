@@ -81,12 +81,12 @@ suggesties_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 								   {if $voorkeur}
 									   checked="checked"
 								   {/if}
-								   onchange="taken_toggle_suggestie('geenvoorkeur');"
+								   onchange="window.maalcie.takenToggleSuggestie('geenvoorkeur');"
 							   {/if}
 							   />
 						<label for="voorkeur" class="CheckboxFieldLabel">Met voorkeur</label>
 						<br />
-						<input type="checkbox" id="recent" onchange="taken_toggle_suggestie('recent');"
+						<input type="checkbox" id="recent" onchange="window.maalcie.takenToggleSuggestie('recent');"
 							   {if $recent}
 								   checked="checked"
 							   {/if}
@@ -97,20 +97,20 @@ suggesties_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 						Toon novieten/sjaars<br />
 
 						<input type="radio" id="jongste_ja" name="jongste" value="ja" onchange="
-								taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
-								taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
+								window.maalcie.takenToggleSuggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
+								window.maalcie.takenToggleSuggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 							   " checked="checked" />
 						<label for="jongste_ja" class="KeuzeRondjeLabel">Ja</label>
 
 						<input type="radio" id="jongste_nee" name="jongste" value="nee" onchange="
-								taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
-								taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
+								window.maalcie.takenToggleSuggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
+								window.maalcie.takenToggleSuggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 							   " />
 						<label for="jongste_nee" class="KeuzeRondjeLabel">Nee</label>
 
 						<input type="radio" id="jongste_alleen" name="jongste" value="alleen" onchange="
-								taken_toggle_suggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
-								taken_toggle_suggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
+								window.maalcie.takenToggleSuggestie('oudere', 'alleen' !== $('#jongste_alleen:checked').val());
+								window.maalcie.takenToggleSuggestie('jongste', 'nee' !== $('#jongste_nee:checked').val());
 							   " />
 						<label for="jongste_alleen" class="KeuzeRondjeLabel">Alleen</label>
 					</td>

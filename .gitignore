@@ -42,3 +42,9 @@ tmp/*
 bin/ldap/settings.pyc
 /vendor/
 .DS_Store
+
+# JS
+/node_modules
+npm-debug.log
+yarn-error.log
+htdocs/dist

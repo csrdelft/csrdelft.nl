@@ -17,7 +17,7 @@ use CsrDelft\view\CsrSmarty;
  */
 class MaaltijdLijstView extends CompressedLayout {
 	public function __construct(Maaltijd $maaltijd, $aanmeldingen, $corvee) {
-		parent::__construct('layout', $this, $maaltijd->getTitel());
+		parent::__construct($this, $maaltijd->getTitel());
 
 		$this->addCompressedResources('maalcielijst');
 		$smarty = CsrSmarty::instance();
@@ -35,6 +35,10 @@ class MaaltijdLijstView extends CompressedLayout {
 
 		$smarty->assign('maaltijd', $maaltijd);
 		$smarty->assign('prijs', sprintf('%.2f', $maaltijd->getPrijsFloat()));
+		$this->addScript('/dist/js/manifest.js');
+		$this->addScript('/dist/js/extern-vendor.js');
+		$this->addScript('/dist/js/vendor.js');
+		$this->addScript('/dist/js/app.js');
 	}
 
 	public function getBreadcrumbs() {
@@ -43,7 +47,7 @@ class MaaltijdLijstView extends CompressedLayout {
 
 	public function view() {
 		$smarty = CsrSmarty::instance();
-		$smarty->assign('stylesheets', $this->getStylesheets());
+		$smarty->assign('stylesheets', ['/dist/css/module/maaltijdlijst.css']);
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
 

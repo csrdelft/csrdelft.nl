@@ -65,9 +65,9 @@ class GroepForm extends ModalForm {
 		}
 
 		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
-
-		$fields[] = $etc[] = new FormDefaultKnoppen($nocancel ? false : null);
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen($nocancel ? false : null);
 	}
 
 	public function validate() {

@@ -69,15 +69,15 @@ class FotoAlbum extends Map {
 	public function __construct($path = null) {
 		parent::__construct();
 		if ($path === true) { // called from PersistenceModel
-			$this->path = realpath(PHOTOALBUM_PATH . $this->subdir);
+			$this->path = realpathunix(PHOTOALBUM_PATH . $this->subdir);
 		} else {
-			$path = realpath($path);
+			$path = realpathunix($path);
 			if (!endsWith($path, '/')) {
 				$path .= '/';
 			}
 			$this->path = $path;
 			//We verwijderen het beginstuk van de string
-			$prefix = realpath(PHOTOALBUM_PATH) . "/";
+			$prefix = realpathunix(PHOTOALBUM_PATH) . "/";
 			$this->subdir = substr($this->path, strlen($prefix));
 		}
 		$this->dirname = basename($this->path);

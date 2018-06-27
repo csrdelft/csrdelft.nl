@@ -42,8 +42,9 @@ class FunctieForm extends ModalForm {
 		$fields['m'] = new JaNeeField('maaltijden_sluiten', $functie->maaltijden_sluiten, 'Maaltijden sluiten');
 		$fields['m']->title = 'Geeft deze functie speciale rechten om maaltijden te mogen sluiten';
 
-		$fields[] = new FormDefaultKnoppen();
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 }

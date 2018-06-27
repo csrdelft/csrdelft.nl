@@ -15,12 +15,12 @@ use CsrDelft\view\formulier\ModalForm;
  */
 class EetplanBekendeHuizenForm extends ModalForm {
 	public function __construct($model) {
-		parent::__construct($model, '/eetplan/bekendehuizen/toevoegen', false, true);
+		parent::__construct($model, '/eetplan/bekendehuizen/toevoegen', 'Noviet die een huis kent toevoegen', true);
 		$fields[] = new RequiredLidField('uid', $model->uid, 'Noviet', 'novieten');
 		$fields[] = new RequiredEntityField('woonoord', 'naam', 'Woonoord', WoonoordenModel::instance(), '/eetplan/bekendehuizen/zoeken?q=');
 
-		$fields['btn'] = new FormDefaultKnoppen();
-
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 }

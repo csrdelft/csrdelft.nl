@@ -22,6 +22,7 @@ class CommissieVoorkeurPraesesOpmerkingForm extends Formulier {
 	public function __construct(VoorkeurOpmerking $model) {
 		parent::__construct($model, '/commissievoorkeuren/lidpagina/' . $model->uid);
 		$this->addFields([new TextareaField("praesesOpmerking", $model->praesesOpmerking, "Opmerking van praeses")]);
-		$this->addFields([new SubmitKnop(null, 'submit', "Opslaan")]);
+
+		$this->formKnoppen->addKnop(new SubmitKnop(null, 'submit', 'Opslaan'));
 	}
 }

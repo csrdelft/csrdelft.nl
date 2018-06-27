@@ -9,7 +9,6 @@ use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\LidField;
-use CsrDelft\view\formulier\keuzevelden\DateField;
 use CsrDelft\view\formulier\keuzevelden\RequiredDateField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -58,9 +57,10 @@ class TaakForm extends ModalForm {
 		$fields['crid']->hidden = true;
 		$fields['mid'] = new IntField('maaltijd_id', $taak->maaltijd_id, 'Gekoppelde maaltijd', 0);
 		$fields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
-		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 	public function validate() {

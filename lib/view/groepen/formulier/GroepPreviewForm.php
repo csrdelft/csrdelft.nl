@@ -18,9 +18,10 @@ class GroepPreviewForm extends ModalForm implements FormElement {
 		$fields[] = new HtmlBbComment('<div style="max-width: 580px;">Gebruik de volgende code in uw forumbericht voor onderstaand resultaat: [code][' . strtolower(classNameZonderNamespace(get_class($groep))) . '=' . $groep->id . '][/code][rn]');
 		$fields[] = new GroepView($groep, null, false, true);
 		$fields[] = new HtmlComment('</div>');
-		$fields[] = new ModalCloseButtons();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new ModalCloseButtons();
 	}
 
 	public function getHtml() {

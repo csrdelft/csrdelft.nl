@@ -1,0 +1,113 @@
+#cd-zijbalk {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 179px;
+  padding: 0 5px 40px 5px;
+  background-color: #f5f5f5;
+
+  .cd-beeldmerk {
+    height: 200px;
+    margin: auto;
+    background-size: contain;
+    background-image: url("../images/beeldmerk.png");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .blok {
+
+    .zijbalk-kopje {
+      border: none;
+      font-weight: normal;
+      margin: 10px 0 5px 0;
+      padding: 2px 0 5px 0;
+      background: transparent url("../images/portal-break.png") no-repeat bottom left;
+    }
+
+    .item {
+      padding: 1px 0;
+      border: none;
+      background-color: transparent;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -o-text-overflow: ellipsis;
+      white-space: nowrap;
+
+      a {
+        color: #000;
+      }
+    }
+  }
+
+  .zijbalk-dag {
+    display: inline-block;
+    width: 15px;
+    text-align: right;
+  }
+
+  .ishetal {
+    text-align: center;
+    width: 180px;
+    margin: 15px 20px 20px 0;
+
+    .ja, .nee {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: red;
+      text-align: center;
+    }
+    .ja {
+      color: green;
+    }
+  }
+
+  /* Verjaardag in de zijbalk */
+  #komende_pasfotos .verjaardag {
+    position: relative;
+    float: left;
+    text-align: center;
+    margin: 0 1px 1px 0;
+    width: 55px;
+    height: 73px;
+
+    .datum {
+      position: absolute;
+      display: block;
+      width: 100%;
+      bottom: 0;
+      background-color: white;
+      color: black;
+      opacity: 0.7;
+      filter: alpha(opacity=70);
+    }
+  }
+
+  #zijbalk_fotoalbum {
+
+    div.fotos a {
+      text-decoration: none;
+    }
+    img {
+      float: left;
+      width: 55px;
+      height: 55px;
+      margin: 0 1px 1px 0;
+    }
+  }
+}
+
+
+/* --------------------------------
+
+Overrides voor bredere schermen
+
+-------------------------------- */
+@media only screen and (min-width: 960px) {
+  #cd-zijbalk {
+    width: 200px;
+    padding-left: 10px;
+    border-left: 7px solid #0A3292;
+  }
+}

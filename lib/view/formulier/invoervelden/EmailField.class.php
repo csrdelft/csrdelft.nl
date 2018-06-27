@@ -32,4 +32,12 @@ class EmailField extends TextField {
 		return $this->error === '';
 	}
 
+	/**
+	 * Trim whitespace van email
+	 *
+	 * @return string
+	 */
+	public function getValue() {
+		return trim(parent::getValue());
+	}
 }

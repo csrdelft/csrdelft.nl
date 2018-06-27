@@ -34,12 +34,12 @@ class ForumDeelForm extends ModalForm {
 		$fields[] = new RechtenField('rechten_modereren', $deel->rechten_modereren, 'Mod-rechten');
 		$fields[] = new IntField('volgorde', $deel->volgorde, 'Volgorde');
 
-		$fields['btn'] = new FormDefaultKnoppen();
+		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 
 		$delete = new DeleteKnop('/forum/opheffen/' . $deel->forum_id);
-		$fields['btn']->addKnop($delete, true);
-
-		$this->addFields($fields);
+		$this->formKnoppen->addKnop($delete, true);
 	}
 
 }

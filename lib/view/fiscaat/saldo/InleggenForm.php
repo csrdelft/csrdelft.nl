@@ -19,8 +19,9 @@ class InleggenForm extends ModalForm {
 		$fields['saldo'] = new BedragField('saldo', $model->saldo, 'Huidig saldo');
 		$fields['saldo']->readonly = true;
 		$fields[] = new BedragField('inleg', 0, 'Inleg', '€', 0.01);
-		$fields['btn'] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 }

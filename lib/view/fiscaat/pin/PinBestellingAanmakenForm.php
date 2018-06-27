@@ -25,8 +25,8 @@ class PinBestellingAanmakenForm extends ModalForm {
 		$fields['pinTransactieId'] = new RequiredIntField('pinTransactieId', $pinTransactieMatch ? $pinTransactieMatch->id : null, 'Pin Transactie Id');
 		$fields['pinTransactieId']->hidden = true;
 
-		$fields['btn'] = new FormDefaultKnoppen();
-
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 }

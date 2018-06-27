@@ -1,0 +1,99 @@
+/* owee 2017*/
+/** oranje: #f15025*/
+/** paars: #853d7d*/
+/** oranje-tekst: #fa7921 */
+
+/*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
+
+#cd-zijbalk,
+#forumtabel th,
+.cd-primary-nav ul {
+  background-color: #853d7d !important;
+}
+
+/*Koppen in oranje*/
+
+h1,
+a,
+a:hover,
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+  color: #fa7921;
+}
+
+/*NAVIGATIE MENU*/
+/*Andere koppen in het blauw*/
+
+.cd-primary-nav .cd-secondary-nav a,
+.cd-primary-nav .cd-secondary-nav > li > a:hover,
+.cd-primary-nav .cd-secondary-nav > li > a {
+  color: #fff;
+}
+
+/*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
+
+.cd-primary-nav .cd-secondary-nav a:hover {
+  text-decoration: underline !important;
+  color: #fa7921;
+}
+
+/*Streepje onder naam*/
+
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+  box-shadow: inset 0 -2px 0 #f15025;
+}
+
+/*ZIJBALK*/
+/*Veel tekst van de zijbalk in het blauw*/
+
+#cd-zijbalk .ishetal .ja,
+#cd-zijbalk .ishetal .nee,
+.staatrood,
+#cd-zijbalk .blok .item a,
+#cd-zijbalk .ishetal,
+#cd-zijbalk .blok .item {
+  color: white;
+}
+
+/*Zijbalk grens van het scherm in blauw*/
+
+#cd-zijbalk {
+  border-color: #f15025;
+}
+
+/*OWee logo*/
+
+#cd-zijbalk .cd-beeldmerk {
+  background-image: url("/images/logo-next-level.svg");
+}
+
+/*KNOPPEN*/
+/*Knoppen in blauw gradient*/
+
+.btn,
+input[type=submit],
+input[type=button],
+.progress-bar-info,
+.btn:focus,
+input[type=submit]:focus,
+input[type=button]:focus {
+  border-color: #e53d00;
+  background-image: linear-gradient(to bottom, #f15025, #fa7921);
+}
+
+/*Voor een mouse hover wordt de gradient omgedraaid*/
+
+.btn:hover,
+input[type=submit]:hover,
+input[type=button]:hover {
+  border-color: #e53d00;
+  background-image: linear-gradient(to bottom, #fa7921, #f15025);
+}
+
+/*Actieve knoppen in geel gradient -> zo ontstaat verschil tussen hover en active*/
+
+.btn.active {
+  border-color: #e53d00;
+  background-image: linear-gradient(to bottom, #853d7d, #864CB5);
+}

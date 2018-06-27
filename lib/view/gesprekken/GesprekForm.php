@@ -23,9 +23,10 @@ class GesprekForm extends ModalForm {
 		$fields['to'] = new RequiredLidField('to', null, 'Naam of lidnummer');
 		$fields['to']->blacklist = array(LoginModel::getUid());
 		$fields[] = new RequiredTextareaField('inhoud', null, 'Bericht');
-		$fields[] = new FormDefaultKnoppen(null, false);
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen(null, false);
 	}
 
 }

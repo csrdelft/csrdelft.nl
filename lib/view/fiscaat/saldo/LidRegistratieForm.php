@@ -22,9 +22,10 @@ class LidRegistratieForm extends ModalForm {
 		$fields['naam'] = new TextField('naam', $model->naam, 'Bijnaam');
 		$fields['uid'] = new LidField('uid', $model->uid, 'Lid');
 		$fields[] = new IntField('saldo', $model->saldo, 'Initieel saldo');
-		$fields['btn'] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 	public function validate() {

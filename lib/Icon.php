@@ -57,7 +57,7 @@ class Icon {
 		// mededelingen
 		'legenda' => 'tag_yellow',
 		// Melding
-		'alert-danger' => 'exlamation',
+		'alert-danger' => 'exclamation',
 		'alert-info' => 'information',
 		'alert-success' => 'accept',
 		'alert-warning' => 'bell',

@@ -46,13 +46,13 @@ class AgendaItemForm extends ModalForm {
 		$fields['b'] = new TextareaField('beschrijving', $item->beschrijving, 'Beschrijving');
 		$fields['b']->title = 'Extra info als de cursor boven de titel gehouden wordt';
 
-		$fields['btn'] = new FormDefaultKnoppen();
+		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 		if ($actie === 'toevoegen') {
 			$doorgaan = new FormulierKnop('/agenda/toevoegen/doorgaan', 'submit', 'Opslaan en doorgaan', 'Opslaan & nog een agenda item toevoegen', 'add');
-			$fields['btn']->addKnop($doorgaan, false, true);
+			$this->formKnoppen->addKnop($doorgaan, false, true);
 		}
-
-		$this->addFields($fields);
 	}
 
 	public function validate() {

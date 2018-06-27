@@ -51,6 +51,7 @@
                             <textarea name="opmerking" id="opmerking" rows="4"></textarea>
                         </div>
                         <div class="field">
+													<noscript>Schakel Javascript in om dit formulier te kunnen verzenden.</noscript>
                             <div class="g-recaptcha" data-sitekey="6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX"></div>
                         </div>
                         <div class="field">

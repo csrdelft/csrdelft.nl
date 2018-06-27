@@ -39,9 +39,10 @@ class AanmeldingForm extends ModalForm {
 		if ($nieuw) {
 			$fields[] = new RequiredIntField('aantal_gasten', $gasten, 'Aantal gasten', 0, 200);
 		}
-		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 }

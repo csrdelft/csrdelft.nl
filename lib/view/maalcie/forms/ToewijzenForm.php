@@ -29,9 +29,10 @@ class ToewijzenForm extends ModalForm {
 
 		$fields[] = new LidField('uid', $taak->uid, 'Naam of lidnummer', 'leden');
 		$fields[] = new SuggestieLijst($suggesties, $taak);
-		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 }

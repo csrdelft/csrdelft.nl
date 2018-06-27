@@ -17,11 +17,11 @@ class GroepConverteerForm extends ModalForm {
 
 		$fields[] = new GroepSoortField('model', get_class($huidig), 'Converteren naar', $groep);
 
-		$fields['btn'] = new FormDefaultKnoppen();
-		$fields['btn']->submit->icon = 'lightning';
-		$fields['btn']->submit->label = 'Converteren';
-
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
+		$this->formKnoppen->submit->icon = 'lightning';
+		$this->formKnoppen->submit->label = 'Converteren';
 	}
 
 	public function getValues() {

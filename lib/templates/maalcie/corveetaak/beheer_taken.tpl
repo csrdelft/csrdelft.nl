@@ -38,7 +38,7 @@
 	*}
 	<div class="float-right">
 		{if !isset($maaltijd) OR !$maaltijd->verwijderd}
-			<a class="btn" onclick="$(this).hide(); taken_show_old();">{icon get="eye"} Toon verleden</a>
+			<a class="btn" onclick="$(this).hide(); window.maalcie.takenShowOld();">{icon get="eye"} Toon verleden</a>
 			<a href="{$smarty.const.maalcieUrl}/prullenbak" class="btn">{icon get="bin_closed"} Open prullenbak</a>
 			<a href="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->maaltijd_id}{/if}" class="btn post popup">{icon get="add"} Nieuwe taak</a>
 		{/if}

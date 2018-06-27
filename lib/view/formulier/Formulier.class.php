@@ -9,6 +9,8 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
+use CsrDelft\view\formulier\knoppen\FormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
 use CsrDelft\view\Validator;
 use CsrDelft\view\View;
@@ -42,6 +44,7 @@ class Formulier implements View, Validator {
 	 * @var FormElement[]
 	 */
 	private $fields = array();
+	protected $formKnoppen;
 	public $css_classes = array();
 	protected $javascript = '';
 	public $titel;
@@ -49,7 +52,7 @@ class Formulier implements View, Validator {
 
 	public function __construct($model, $action, $titel = false, $dataTableId = false) {
 		$this->model = $model;
-		$this->formId = uniqid(classNameZonderNamespace(get_class($this->model == null ? $this : $this->model)));
+		$this->formId = uniqid_safe(classNameZonderNamespace(get_class($this->model == null ? $this : $this->model)));
 		$this->action = $action;
 		$this->titel = $titel;
 		$this->css_classes[] = 'Formulier';
@@ -59,6 +62,8 @@ class Formulier implements View, Validator {
 		} else {
 			$this->dataTableId = $dataTableId;
 		}
+
+		$this->formKnoppen = new EmptyFormKnoppen();
 	}
 
 	public function getFormId() {
@@ -112,6 +117,7 @@ class Formulier implements View, Validator {
 				$class = '';
 			}
 			$desc = ucfirst(str_replace('_', ' ', $fieldName));
+			$extraOpts = [];
 			switch ($definition[0]) {
 				case T::String:
 					if (startsWith($fieldName, 'rechten_')) {
@@ -136,6 +142,7 @@ class Formulier implements View, Validator {
 				case T::Integer:
 					$namespace .= 'getalvelden';
 					$class .= 'IntField';
+					$extraOpts = [0];
 					break;
 				case T::Float:
 					$namespace .= 'getalvelden';
@@ -177,7 +184,7 @@ class Formulier implements View, Validator {
 			} elseif ($definition[0] == T::Char) {
 				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc, 1);
 			} else {
-				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc);
+				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc, ...$extraOpts);
 			}
 		}
 		foreach ($this->model->getPrimaryKey() as $fieldName) {
@@ -195,7 +202,6 @@ class Formulier implements View, Validator {
 	public function hasFields() {
 		return !empty($this->fields);
 	}
-
 	/**
 	 * Zoekt een InputField met exact de gegeven naam.
 	 *
@@ -230,6 +236,10 @@ class Formulier implements View, Validator {
 	public function removeField(FormElement $field) {
 		$pos = array_search($field, $this->fields);
 		unset($this->fields[$pos]);
+	}
+
+	public function getFormKnoppen() {
+		return $this->formKnoppen;
 	}
 
 	/**
@@ -350,6 +360,7 @@ HTML;
 		foreach ($this->fields as $field) {
 			$field->view();
 		}
+		echo $this->formKnoppen->getHtml();
 		echo $this->getScriptTag();
 		echo '</form>';
 	}

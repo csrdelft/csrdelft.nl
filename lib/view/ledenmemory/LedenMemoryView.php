@@ -68,6 +68,9 @@ public function __construct() {
 			}
 		}
 	}
+	$this->addScript('/dist/js/manifest.js');
+	$this->addScript('/dist/js/vendor.js');
+	$this->addScript('/dist/js/ledenmemory.js');
 }
 
 public function getLayout() {
@@ -82,27 +85,15 @@ public function getBreadcrumbs() {
 	return null;
 }
 
-private function getPasfotoPath($uid) {
-	$pasfoto = 'geen-foto.jpg';
-	foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
-		if (file_exists(PHOTOALBUM_PATH . 'pasfoto/' . $uid . '.' . $validExtension)) {
-			$pasfoto = $uid . '.' . $validExtension;
-			break;
-		}
-	}
-	// kijken of de vierkante bestaat, en anders maken.
-	$vierkant = PASFOTO_PATH . $uid . '.vierkant.png';
-	if (!file_exists($vierkant)) {
-		square_crop(PHOTOALBUM_PATH . $pasfoto, $vierkant, 150);
-	}
-	return PASFOTO_PATH . $uid . '.vierkant.png';
+private function getPasfotoPath(Profiel $profiel) {
+    return "/plaetjes/pasfoto/".$profiel->getPasfotoPath(true);
 }
 
 private function getPasfotoMemorycard(Profiel $profiel) {
 	$cheat = ($this->cheat ? $profiel->uid : '');
 	$title = htmlspecialchars($this->cheat ? $profiel->voornaam . ' ' . $profiel->tussenvoegsel . ' ' . $profiel->achternaam : '');
 	$flipped = ($this->learnmode ? 'flipped' : '');
-	$src = $this->getPasfotoPath($profiel->uid);
+	$src = $this->getPasfotoPath($profiel);
 	return <<<HTML
 <div uid="{$profiel->uid}" class="flip memorycard pasfoto {$flipped}">
 	<div class="blue front">{$cheat}</div>

@@ -46,7 +46,7 @@
 		<label for="submit">&nbsp;</label>
 		<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 		<input type="button" name="submit" id="submit" value="Verder gaan" onclick="roodschopper('simulate'); return false;" />
-		<input id="forumVoorbeeld" type="button" onclick="CsrBBPreview('berichtInvoer', 'berichtPreview')" value="Voorbeeld"/>
+		<input id="forumVoorbeeld" type="button" onclick="window.bbcode.CsrBBPreview('berichtInvoer', 'berichtPreview')" value="Voorbeeld"/>
 	</div>
 	<div id="messageContainer" class="verborgen"></div>
 	

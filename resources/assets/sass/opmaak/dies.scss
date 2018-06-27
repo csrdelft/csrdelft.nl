@@ -1,0 +1,29 @@
+/*Invert kleuren*/
+html, img, .alert, .ongelezenvanaf, .progress, .progress-bar-info, #minion,
+.groep-stat, .markItUpButton a, .btn::before, iframe, .aanmelddata, #saldografiek,
+td.maaltijd-aangemeld, td.maaltijd-afgemeld, td.abonnement-ingeschakeld,
+td.abonnement-uitgeschakeld, ul.ui-tabs-nav, li[role=tab], li[role=tab] a, .badge-red {
+  -webkit-filter: invert(100%);
+  filter: invert(100%);
+}
+
+/*Kleuren fixes*/
+#cd-zijbalk .ishetal .ja, #cd-zijbalk .ishetal .nee, .staatrood {
+  color: #5DCCF3;
+}
+#cd-zijbalk .ishetal .ja {
+  color: #F883B1;
+}
+.bb-block:hover {
+  -webkit-box-shadow: 0 0 10px #0A3292;
+  -moz-box-shadow: 0 0 10px #0A3292;
+  box-shadow: 0 0 10px #0A3292;
+}
+.bb-block:hover .bb-block {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+td.maaltijd-aangemeld, td.abonnement-ingeschakeld, td.maaltijd-afgemeld, td.abonnement-uitgeschakeld {
+  color: #fff;
+}
