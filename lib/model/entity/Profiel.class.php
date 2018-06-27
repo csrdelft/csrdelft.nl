@@ -549,25 +549,25 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
 			foreach ($folders as $subfolder) {
 				foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
-					if (file_exists(PHOTOS_PATH . 'pasfoto/' . $subfolder . $this->uid . '.' . $validExtension)) {
-						$path = 'pasfoto/' . $subfolder . $this->uid . '.' . $validExtension;
+					if (file_exists(PASFOTO_PATH . $subfolder . $this->uid . '.' . $validExtension)) {
+						$path = $subfolder . $this->uid . '.' . $validExtension;
 						break;
 					}
 				}
 				if ($path) {
 					break;
 				} elseif ($vorm === 'Duckstad') {
-					$path = 'pasfoto/' . $vorm . '/eend.jpg';
+					$path = $vorm . '/eend.jpg';
 					break;
 				}
 			}
 		}
 		if (!$path) {
-			$path = 'pasfoto/geen-foto.jpg';
+			$path = 'geen-foto.jpg';
 		}
 		// als het vierkant moet, kijken of de vierkante bestaat, en anders maken
 		if ($vierkant) {
-			$crop = 'pasfoto/' . $this->uid . '.vierkant.png';
+			$crop = '' . $this->uid . '.vierkant.png';
 			if (!file_exists(PHOTOS_PATH . $crop)) {
 				square_crop(PHOTOS_PATH . $path, PHOTOS_PATH . $crop, 150);
 			}
@@ -577,7 +577,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getPasfotoTag($cssClass = 'pasfoto', $vierkant = false) {
-		return '<img class="' . htmlspecialchars($cssClass) . '" src="/plaetjes/' . $this->getPasfotoPath($vierkant) . '" alt="Pasfoto van ' . $this->getNaam('volledig') . '" />';
+		return '<img class="' . htmlspecialchars($cssClass) . '" src="/plaetjes/pasfoto/' . $this->getPasfotoPath($vierkant) . '" alt="Pasfoto van ' . $this->getNaam('volledig') . '" />';
 	}
 
 	public function getKinderen() {

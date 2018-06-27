@@ -1,6 +1,5 @@
 RewriteEngine On
 
-RewriteRule ^pasfoto/([0-9a-z]+).png$		pasfotos.php?uid=$1&image
 RewriteRule ^leden.csv$						leden-csv.php [L]
 
 # Typeahead suggesties

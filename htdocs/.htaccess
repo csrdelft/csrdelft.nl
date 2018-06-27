@@ -2,7 +2,7 @@ AddDefaultCharset utf-8
 RewriteEngine On
 
 # afbeeldingen afschermen voor externen kan hier:
-#RewriteRule ^plaetjes/pasfoto/(.*)$		tools/plaetjes.php?img=pasfoto/$1 [QSA,L] # todo: caching headers fixen
+RewriteRule ^plaetjes/pasfoto/(.*)$			index.php?c=Profiel [QSA,L]
 
 RewriteRule ^nieuws/?(.*)		/mededelingen/$1/ [L]
 RewriteRule ^owee/?$			/csrindeowee [L]

@@ -62,6 +62,7 @@ define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
 define('ASSETS_PATH', HTDOCS_PATH . 'assets/');
 define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
 define('PHOTOALBUM_PATH', DATA_PATH . 'foto/');
+define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
 
 # smarty template engine

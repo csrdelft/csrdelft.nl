@@ -419,13 +419,7 @@ class FotoAlbumController extends AclController {
 		} else if (!$image->exists()) {
 			$this->exit_http(403);
 		}
-
-		$file = fopen($image->getFullPath(), 'rb');
-		header("Content-type: " . image_type_to_mime_type(exif_imagetype($image->getFullPath())));
-		header("Content-Length: " . filesize($image->getFullPath()));
-		header("Cache-Control: ", "max-age=2592000, public");
-		fpassthru($file);
-		exit;
+		$image->serve();
 	}
 
 }

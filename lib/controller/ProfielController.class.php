@@ -8,6 +8,7 @@ use CsrDelft\GoogleSync;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
+use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Profiel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
@@ -50,6 +51,7 @@ class ProfielController extends AclController {
 				'resetPrivateToken' => 'P_PROFIEL_EDIT',
 				'addToGoogleContacts' => 'P_LEDEN_READ',
 				// Leden
+				'pasfoto' => 'P_OUDLEDEN_READ',
 				'nieuw' => 'P_LEDEN_MOD,commissie:NovCie',
 				'lijst' => 'P_OUDLEDEN_READ',
 				'stamboom' => 'P_OUDLEDEN_READ',
@@ -97,7 +99,12 @@ class ProfielController extends AclController {
 			$this->view = new CsrLayoutPage($body);
 			$this->view->addCompressedResources('profiel');
 			$this->view->addCompressedResources('grafiek');
-		} // Leden
+		}
+		else if ($this->hasParam(2) AND $this->getParam(2) === 'pasfoto') {
+			$this->action = 'pasfoto';
+			return parent::performAction([implode('/', $this->getParams(3))]);
+		}
+		// Leden
 		else {
 			$this->action = 'lijst';
 			if ($this->hasParam(2)) {
@@ -252,5 +259,13 @@ class ProfielController extends AclController {
 			$data = LedenMemoryScoresModel::instance()->getAllTopScores();
 		}
 		$this->view = new LedenMemoryScoreResponse($data);
+	}
+
+	public function pasfoto($path) {
+		$image = new Afbeelding(safe_combine_path(PASFOTO_PATH, $path));
+		if ($image == null) {
+			$this->exit_http(403);
+		}
+		$image->serve();
 	}
 }

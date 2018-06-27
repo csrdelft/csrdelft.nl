@@ -141,7 +141,7 @@ $(document).ready(function ($) {
 			var parts = $(this).attr('id').substr(1).split('-');
 			var pasfoto = $('#p' + parts[1]);
 			if (pasfoto.html() === '') {
-				pasfoto.html('<img src="/tools/pasfoto/' + parts[0] + '.png" class="pasfoto" />');
+				pasfoto.html('<img src="/plaetjes/pasfoto/' + parts[0] + '.jpg" class="pasfoto" />');
 			}
 			if (pasfoto.hasClass('verborgen')) {
 				pasfoto.toggleClass('verborgen');

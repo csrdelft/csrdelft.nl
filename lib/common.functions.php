@@ -1065,3 +1065,22 @@ function is_zichtbaar($profiel, $key, $uitzondering = 'P_LEDEN_MOD') {
 
     return LidToestemmingModel::instance()->toestemming($profiel, $key, $uitzondering);
 }
+
+/**
+ * Combines two parts of a file path safely, meaning that the resulting path will be inside $folder.
+ * If directory traversal is applied using ../ et cetera, making the path no longer be inside $folder, null is returned;
+ * @param $folder
+ * @param $subpath
+ */
+function safe_combine_path($folder, $subpath) {
+	if ($folder == null || $subpath == null)
+		return null;
+	$combined = $folder;
+	if (!endsWith($combined, '/'))
+		$combined .= '/';
+	$combined .= $subpath;
+	if (!startsWith(realpath($combined), realpath($folder))) {
+		return null;
+	}
+	return $combined;
+}
