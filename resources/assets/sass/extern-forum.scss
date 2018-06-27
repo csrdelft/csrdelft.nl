@@ -8,9 +8,17 @@
     align-items: baseline;
   }
 
-  .forumZoekenGeavanceerd {
-    display: flex;
-    align-items: baseline;
+  .forumZoekenGeavanceerd  {
+		position: absolute;
+		background-color: #E53D00;
+		border-radius: 5px;
+		display: none;
+		margin-top: 60px;
+		.form-inline {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
   }
 }
 
@@ -57,4 +65,332 @@
       color: black;
     }
   }
+}
+
+.bericht0 .citaat {
+	background-color: #E53D00;
+}
+
+.bericht1 .citaat {
+	background-color: #f15025;
+}
+
+.draad-readonly {
+	font-style: italic;
+}
+
+.draad-gesloten {
+	font-style: italic;
+}
+
+.draad-verwijderd, .post-verwijderd {
+	font-weight: bold;
+	color: red;
+}
+
+.forum-posten {
+	display: flex;
+
+	.auteur {
+		flex: 0 0 160px;
+	}
+}
+
+.moment {
+	font-size: .9em;
+	color: #bbb;
+	cursor: default;
+}
+
+.forum-draad {
+	display: flex;
+	flex-direction: column;
+
+	width: 800px;
+
+	.tussenschot {
+		height: 2px;
+		margin: 0;
+		padding: 0;
+		background-color: #d3d3d3;
+
+		&.ongelezenvanaf {
+			background-color: #e8cf2a;
+		}
+	}
+
+	.forum-post, .forum-posten {
+		display: flex;
+		flex-direction: row;
+
+		.forumpostKnoppen {
+			min-height: 70px;
+
+			a {
+				border: none;
+				background: none;
+				float: left;
+				padding: 2px;
+				margin: 2px;
+				width: 22px;
+				height: 22px;
+			}
+
+			.forummodknop {
+				display: none;
+			}
+		}
+
+		.auteur {
+			flex: 0 0 160px; /* vast */
+			padding: 2px 10px;
+
+			.postlink {
+				float: right;
+			}
+
+			.forumpasfoto {
+				float: right;
+			}
+		}
+
+		.forum-bericht {
+			flex: 1; /* grow */
+
+			margin: 0;
+			padding: .2em .6em 10px;
+			vertical-align: top;
+			text-align: justify;
+
+			.bewerkt {
+				font-size: .8em;
+				color: #bbb;
+				a {
+					color: #bbb;
+				}
+
+				hr {
+					margin-bottom: 0;
+					text-align: left;
+					background-color: #bbb;
+				}
+			}
+
+			&.bericht0 {
+				background-color: #f15025;
+			}
+
+			&.bericht1 {
+				background-color: #E53D00;
+			}
+		}
+
+		.meldingen {
+			flex: 0;
+			margin: .2em;
+		}
+	}
+}
+
+#ongelezen {
+	visibility: hidden;
+	position: relative;
+	top: -100px;
+}
+
+#draad-melding {
+	display: none;
+	background-color: #ffffc1;
+}
+
+#bewerk-melding {
+	display: none;
+	background-color: #ffffc1;
+}
+
+#public-melding {
+	color: #fff;
+	background-color: #f66;
+}
+
+#draad-melding, #bewerk-melding, #public-melding {
+	margin-bottom: 5px;
+	padding: 4px 8px 4px 4px;
+	text-align: left;
+}
+
+/* Paginering */
+span.curpage {
+	padding: 4px 5px;
+	font-weight: bold;
+	background-color: #e8cf2a;
+	color: #000;
+}
+
+.forum-paginering {
+	padding: 5px;
+	margin-left: 160px;
+	a {
+		padding: 4px 5px;
+
+		&:hover {
+			background-color: #ddd;
+			text-decoration: none;
+		}
+	}
+
+	.curpage {
+		background-color: initial;
+	}
+}
+
+/* Modereren */
+#modereren {
+	display: none;
+	border: 1px solid #999;
+	margin: 10px;
+	padding: 10px;
+
+	table {
+		width: 100%;
+
+		input[type="text"] {
+			width: 300px;
+		}
+	}
+
+	label {
+		display: inline-block;
+		width: 120px;
+		text-align: right;
+	}
+}
+
+/* Zoeken */
+#forumZoekenForm {
+	float: right;
+}
+
+#forumZoekenForm #field_zoekopdracht {
+	width: 150px;
+	background-image: url('/plaetjes/famfamfam/find.png');
+	background-repeat: no-repeat;
+	background-position: center right;
+	padding-right: 16px;
+}
+
+#forumZoekenForm .forumZoekenGeavanceerd {
+	right: 250px;
+	padding: 25px;
+
+	.InputField {
+		display: inline-block;
+	}
+}
+
+/* Forum deel */
+.forum-deel {
+	display: flex;
+	flex-direction: column;
+
+	.forum-deel-titel,.paging {
+		font-weight: bold;
+		padding: 1em;
+
+		a, a:hover {
+			color: white;
+		}
+	}
+
+	.forum-deel-draad, .forum-deel-titel {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+
+		padding: 0.7em;
+
+		&.kleur0 {
+			background-color: #f15025;
+		}
+
+		&.kleur1 {
+			background-color: #E53D00;
+		}
+
+		.titel {
+			flex: 1 0 0;
+		}
+
+		.datumwijziging {
+			flex: 0 0 20%;
+		}
+
+		.laatstewijziging {
+			flex: 1 0 0;
+			white-space: nowrap;
+		}
+
+		span.togglePasfoto:hover,
+		a.postlink:hover {
+			color: black;
+			text-decoration: none;
+		}
+	}
+}
+
+.forumdeel-omschrijving {
+	padding: 10px;
+	margin: 10px 0;
+}
+
+div.forumheadbtn {
+	float: right;
+	margin-right: 15px;
+}
+
+/* Forum Categorie */
+div.forumcategorie {
+	clear: left;
+
+	h3 {
+
+		a {
+			color: #000;
+		}
+		a:hover {
+			text-decoration: none;
+			cursor: default;
+		}
+	}
+
+	p.forumcategorie-omschrijving, p.forumdeel-omschrijving {
+		text-align: justify;
+	}
+
+	div.forumdelen {
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: flex-start;
+
+		div.forumdeel {
+			flex: 0 1 20%;
+
+			padding: 8px 12px;
+			margin: 10px;
+
+			h3 {
+				margin: 0.5em 0 1em 0;
+			}
+
+			hr {
+				background-color: #ccc;
+				border-bottom: 1px solid #fff;
+			}
+
+			h4 {
+				margin-top: 0.5em;
+				text-align: center;
+			}
+		}
+	}
 }
