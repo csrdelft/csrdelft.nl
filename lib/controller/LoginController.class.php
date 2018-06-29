@@ -115,7 +115,7 @@ class LoginController extends AclController {
 			// Remember login form
 			if ($values['remember']) {
 				$remember = RememberLoginModel::instance()->nieuw();
-				$form = new RememberAfterLoginForm($remember);
+				$form = new RememberAfterLoginForm($remember, $values['redirect']);
 				$form->css_classes[] = 'redirect';
 
 
@@ -440,7 +440,9 @@ class LoginController extends AclController {
 			}
 			if (isset($_POST['DataTableId'])) {
 				$this->view = new RememberLoginData(array($remember));
-			} // after login
+			} else if (isset($_POST['redirect'])) {
+				$this->view = new JsonResponse($_POST['redirect']);
+			}
 			else {
 				$this->view = new JsonResponse(CSR_ROOT);
 			}
