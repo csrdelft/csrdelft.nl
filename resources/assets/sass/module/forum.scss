@@ -273,13 +273,13 @@ span.curpage {
 	border: 1px solid #b8b8b8;
 }
 
-div.forumheadbtn {
+.forumheadbtn {
 	float: right;
 	margin-right: 15px;
 }
 
 /* Forum Categorie */
-div.forumcategorie {
+.forumcategorie {
 	clear: left;
 
 	h3 {
@@ -297,15 +297,14 @@ div.forumcategorie {
 		text-align: justify;
 	}
 
-	div.forumdelen {
+	.forumdelen {
 		display: flex;
 		flex-flow: row wrap;
 		justify-content: flex-start;
 
-		div.forumdeel {
+		.forumdeel {
 			flex: 0 1 20%;
 
-			padding: 8px 12px;
 			margin: 10px;
 
 			h3 {
@@ -345,6 +344,10 @@ div.forumcategorie {
 @media screen and (max-width: 960px){
 	.modfuncties {
 		font-size: 0;
+	}
+
+	.forumcategorie .forumdelen .forumdeel {
+		flex: 0 1 100%;
 	}
 
 	.forum-draad {

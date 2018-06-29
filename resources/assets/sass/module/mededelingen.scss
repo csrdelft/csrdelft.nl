@@ -1,3 +1,7 @@
+.mededelingen {
+	margin-left: 0;
+}
+
 /* nieuws */
 .nieuwsbericht, .nieuwsbericht-vast {
   float: left;
@@ -5,7 +9,6 @@
   padding: 10px;
   min-height: 200px;
   background-color: #ffef7d;
-  width: 400px;
 }
 .nieuwsbericht .informatie {
   color: gray;
@@ -20,18 +23,6 @@
 .nieuwstitel a { color:  black;}
 .nieuwsbericht-vast { height: 100px;	}
 
-#mededelingenketser {
-  float:left;
-}
-#mededelingenketser #kolomlinks {
-  width: 320px;
-  float: left;
-  margin-bottom: 30px;
-}
-#mededelingenketser #kolomrechts {
-  width: 400px;
-  float: left;
-}
 #mededelingen-titel {
   height: 20px;
   width: 70%;
@@ -44,7 +35,6 @@
 }
 .mededelingenlijst-block {
   margin: 0 10px 10px 0;
-  width: 300px;
 }
 .mededelingenlijst-block-titel {
   padding: .5em 1em;
