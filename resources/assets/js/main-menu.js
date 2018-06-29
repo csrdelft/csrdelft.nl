@@ -4,10 +4,6 @@ $(function () {
 
 	let active = null;
 
-	function isVisible(id) {
-		return active === id;
-	}
-
 	/**
 	 * Zorg ervoor dat de body niet kan scrollen als de overlay zichtbaar is.
 	 */
@@ -69,53 +65,6 @@ $(function () {
 			}
 		};
 	}
-
-	let xDown = null;
-	let yDown = null;
-
-	function handleTouchStart(evt) {
-		xDown = evt.touches[0].clientX;
-		yDown = evt.touches[0].clientY;
-	}
-
-	function swipeLeft() {
-		if (isVisible('#zijbalk')) {
-			reset();
-		} else {
-			view('#menu');
-		}
-	}
-
-	function swipeRight() {
-		if (isVisible('#menu')) {
-			reset();
-		} else {
-			view('#zijbalk');
-		}
-	}
-
-	function handleTouchMove(evt) {
-		if (!xDown || !yDown) { // Geen touch gestart
-			return;
-		}
-
-		let xDiff = xDown - evt.touches[0].clientX;
-		let yDiff = yDown - evt.touches[0].clientY;
-
-		if (Math.abs(xDiff) > Math.abs(yDiff)) { // Als er horizontall geswiped wordt.
-			if (xDiff > 0) {
-				swipeLeft();
-			} else {
-				swipeRight();
-			}
-		}
-		/* reset values */
-		xDown = null;
-		yDown = null;
-	}
-
-	document.addEventListener('touchstart', handleTouchStart, false);
-	document.addEventListener('touchmove', handleTouchMove, false);
 
 	//open submenu
 	$('.has-children').children('a').on('click', function (event) {
