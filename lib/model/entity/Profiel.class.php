@@ -568,8 +568,8 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		// als het vierkant moet, kijken of de vierkante bestaat, en anders maken
 		if ($vierkant) {
 			$crop = '' . $this->uid . '.vierkant.png';
-			if (!file_exists(PHOTOS_PATH . $crop)) {
-				square_crop(PHOTOS_PATH . $path, PHOTOS_PATH . $crop, 150);
+			if (!file_exists(PASFOTO_PATH . $crop)) {
+				square_crop(PASFOTO_PATH . $path, PASFOTO_PATH . $crop, 150);
 			}
 			return $crop;
 		}
