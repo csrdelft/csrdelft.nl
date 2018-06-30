@@ -50,7 +50,6 @@ class MijnAbonnementenController extends AclController {
 		$abonnementen = $this->model->getAbonnementenVoorLid(LoginModel::getUid(), true, true);
 		$this->view = new MijnAbonnementenView($abonnementen);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function inschakelen($mrid) {

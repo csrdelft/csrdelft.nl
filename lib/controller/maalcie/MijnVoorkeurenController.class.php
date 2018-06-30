@@ -53,7 +53,6 @@ class MijnVoorkeurenController extends AclController {
 		$voorkeuren = $this->model->getVoorkeurenVoorLid(LoginModel::getUid(), true);
 		$this->view = new MijnVoorkeurenView($voorkeuren);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function inschakelen($crid) {

@@ -58,7 +58,6 @@ class MaaltijdRepetitiesController extends AclController {
 		}
 		$this->view = new MaaltijdRepetitiesView($this->model->getAlleRepetities());
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 		$this->view->modal = $modal;
 	}
 

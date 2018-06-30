@@ -51,7 +51,6 @@ class BeheerPuntenController extends AclController {
 		$matrix = CorveePuntenModel::loadPuntenVoorAlleLeden($functies);
 		$this->view = new BeheerPuntenView($matrix, $functies);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function wijzigpunten($uid) {

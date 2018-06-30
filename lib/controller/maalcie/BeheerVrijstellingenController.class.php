@@ -56,7 +56,6 @@ class BeheerVrijstellingenController extends AclController {
 		$vrijstellingen = $this->model->find();
 		$this->view = new BeheerVrijstellingenView($vrijstellingen);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function nieuw() {

@@ -63,7 +63,6 @@ class InstellingenBeheerController extends AclController {
 	public function module($module = null) {
 		$body = new InstellingenBeheerView($this->model, $module);
 		$this->view = new CsrLayoutPage($body);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function opslaan($module, $id) {
