@@ -84,7 +84,6 @@ $(function () {
 		$(this).parent('ul').addClass('is-hidden').parent('.has-children').parent('ul').removeClass('moves-out');
 	});
 
-	$('.trigger[href="#"]').on('click', reset);
 	$('.trigger[href="#menu"]').on('click', toggle('#menu'));
 	$('.trigger[href="#zijbalk"]').on('click', toggle('#zijbalk'));
 	$('.trigger[href="#search"]').on('click', toggle('#search'));

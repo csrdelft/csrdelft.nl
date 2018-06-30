@@ -6,7 +6,7 @@
 	<body class="nav-is-fixed">
 		<nav class="navbar navbar-dark bg-primary fixed-top">
 			<a class="nav-option trigger text-white" href="#zijbalk"><span class="sr-only">Zijbalk openen</span><i class="fa fa-lg fa-fw fa-bookmark"></i></a>
-			<a class="navbar-brand trigger" href="#">C.S.R. Delft</a>
+			<a class="navbar-brand trigger" href="/">C.S.R. Delft</a>
 			<a class="nav-option trigger text-white" href="#search"><span class="sr-only">Zoeken</span><i class="fa fa-lg fa-fw fa-search"></i></a>
 			<a class="nav-option trigger text-white" href="#menu"><span class="sr-only">Menu</span><i class="fa fa-lg fa-fw fa-bars"></i></a>
 		</nav>
