@@ -83,9 +83,6 @@ class Foto extends Afbeelding {
 		return $this->directory;
 	}
 
-	public function getFullPath() {
-		return $this->directory . $this->filename;
-	}
 
 	public function getThumbPath() {
 		return $this->directory . '_thumbs/' . $this->filename;

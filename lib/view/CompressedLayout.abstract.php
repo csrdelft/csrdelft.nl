@@ -43,7 +43,7 @@ abstract class CompressedLayout extends HtmlPage {
 			return;
 		}
 		$sheet = sprintf('/dist/css/module/%s.css', $module);
-		parent::addStylesheet($sheet, true);
+		parent::addStylesheet($sheet, false);
 	}
 
 	/**

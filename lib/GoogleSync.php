@@ -493,7 +493,7 @@ class GoogleSync {
 
 		$url = $contact['photo']['href'];
 
-		$path = PHOTOS_PATH . $profiel->getPasfotoPath(true);
+		$path = PASFOTO_PATH . $profiel->getPasfotoPath(true);
 
 		$headers = array('GData-Version' => '3.0', 'Content-Type' => "image/*");
 

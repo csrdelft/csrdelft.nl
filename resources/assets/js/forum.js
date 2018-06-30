@@ -163,7 +163,7 @@ $(function () {
             let parts = $(this).attr('id').substr(1).split('-');
             let pasfoto = $('#p' + parts[1]);
             if (pasfoto.html() === '') {
-                pasfoto.html('<img src=' + parts[0] + '"/htdocs/tools/pasfoto/.png" class="pasfoto" />');
+                pasfoto.html('<img src="/htdocs/tools/pasfoto/'+ parts[0] +'.jpg" class="pasfoto" />');
             }
             if (pasfoto.hasClass('verborgen')) {
                 pasfoto.toggleClass('verborgen');

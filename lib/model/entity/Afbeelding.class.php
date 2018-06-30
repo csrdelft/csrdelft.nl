@@ -30,6 +30,13 @@ class Afbeelding extends Bestand {
 	public $height;
 
 	/**
+	 * @return string
+	 */
+	public function getFullPath() {
+		return $this->directory . $this->filename;
+	}
+
+	/**
 	 * Constructor is called late (after attributes are set)
 	 * by PDO::FETCH_CLASS with $cast = true
 	 *
@@ -61,6 +68,18 @@ class Afbeelding extends Bestand {
 				throw new CsrGebruikerException('Geen afbeelding: [' . $this->mimetype . '] ' . $this->filename);
 			}
 		}
+	}
+
+	/**
+	 * Serve this image with the correct http headers.
+	 */
+	public function serve() {
+		$file = fopen($this->getFullPath(), 'rb');
+		header("Content-type: " . image_type_to_mime_type(exif_imagetype($this->getFullPath())));
+		header("Content-Length: " . filesize($this->getFullPath()));
+		header("Cache-Control: ", "max-age=2592000, public");
+		fpassthru($file);
+		exit;
 	}
 
 }

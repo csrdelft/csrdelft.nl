@@ -1049,7 +1049,6 @@ function is_ingelogd_account($uid) {
 /**
  * @param Profiel $profiel
  * @param string $key
- * @param string $cat
  * @param string $uitzondering Sommige commissie mogen wel dit veld zien.
  * @return bool
  */
@@ -1069,6 +1068,25 @@ function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = 'P_LEDEN
 
 function to_unix_path($path) {
 	return str_replace(DIRECTORY_SEPARATOR, "/", $path);
+}
+
+/**
+ * Combines two parts of a file path safely, meaning that the resulting path will be inside $folder.
+ * If directory traversal is applied using ../ et cetera, making the path no longer be inside $folder, null is returned;
+ * @param $folder
+ * @param $subpath
+ */
+function safe_combine_path($folder, $subpath) {
+	if ($folder == null || $subpath == null)
+		return null;
+	$combined = $folder;
+	if (!endsWith($combined, '/'))
+		$combined .= '/';
+	$combined .= $subpath;
+	if (!startsWith(realpath($combined), realpath($folder))) {
+		return null;
+	}
+	return $combined;
 }
 
 function realpathunix($path) {

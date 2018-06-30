@@ -86,7 +86,7 @@ public function getBreadcrumbs() {
 }
 
 private function getPasfotoPath(Profiel $profiel) {
-    return "/plaetjes/".$profiel->getPasfotoPath(true);
+    return "/plaetjes/pasfoto/".$profiel->getPasfotoPath(true);
 }
 
 private function getPasfotoMemorycard(Profiel $profiel) {

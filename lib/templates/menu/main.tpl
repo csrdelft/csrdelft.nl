@@ -3,7 +3,7 @@
 		{toegang P_LOGGED_IN}
 			<li>
 				<a id="cd-main-trigger" class="mobiel-hidden trigger" href="#menu">
-					<img id="cd-user-avatar" class="cd-user-avatar" src="/plaetjes/{CsrDelft\model\security\LoginModel::getProfiel()->getPasfotoPath(true)}">
+					<img id="cd-user-avatar" class="cd-user-avatar" src="/plaetjes/pasfoto/{CsrDelft\model\security\LoginModel::getProfiel()->getPasfotoPath(true)}">
 					{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('civitas')}
 					{if $gesprekOngelezen > 0}&nbsp;<span class="badge badge-red" title="{$gesprekOngelezen} ongelezen bericht{if $gesprekOngelezen !== 1}en{/if}">{$gesprekOngelezen}</span>{/if}
 				</a>
