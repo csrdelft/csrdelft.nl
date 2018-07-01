@@ -107,20 +107,6 @@ function group_by_distinct($prop, $in, $del = true) {
 }
 
 /**
- * Set cookie with url to go back to after login.
- *
- * @param string $url
- */
-function setGoBackCookie($url) {
-	if ($url == null) {
-		unset($_COOKIE['goback']);
-		setcookie('goback', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
-	} else {
-		setcookie('goback', $url, time() + (int)InstellingenModel::get('beveiliging', 'session_lifetime_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
-	}
-}
-
-/**
  * Set cookie with token to automatically login.
  *
  * @param string $token
@@ -161,12 +147,19 @@ function redirect($url = null, $refresh = true) {
 		$url = CSR_ROOT;
 	}
 	if (!startsWith($url, CSR_ROOT)) {
-		$url = CSR_ROOT . $url;
+		if (preg_match("/^[\?#\/]/", $url) === 1) {
+			$url = CSR_ROOT . $url;
+		} else {
+			$url = CSR_ROOT;
+		}
 	}
 	header('location: ' . $url);
 	exit;
 }
 
+function redirect_via_login($url) {
+	redirect(CSR_ROOT . "?redirect=".urlencode($url)."#login");
+}
 /**
  * rawurlencode() met uitzondering van slashes.
  *

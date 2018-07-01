@@ -115,7 +115,7 @@ class LoginController extends AclController {
 			// Remember login form
 			if ($values['remember']) {
 				$remember = RememberLoginModel::instance()->nieuw();
-				$form = new RememberAfterLoginForm($remember);
+				$form = new RememberAfterLoginForm($remember, $values['redirect']);
 				$form->css_classes[] = 'redirect';
 
 
@@ -123,10 +123,8 @@ class LoginController extends AclController {
 				$this->view = new CsrLayoutPage($body, array(), $form);
 				return;
 			}
-			if (isset($_COOKIE['goback'])) {
-				$url = $_COOKIE['goback'];
-				setGoBackCookie(null);
-				redirect($url);
+			if ($values['redirect']) {
+				redirect($values['redirect']);
 			}
 			redirect(CSR_ROOT);
 		} else {
@@ -442,11 +440,10 @@ class LoginController extends AclController {
 			}
 			if (isset($_POST['DataTableId'])) {
 				$this->view = new RememberLoginData(array($remember));
-			} // after login
-			elseif (isset($_COOKIE['goback'])) {
-				$this->view = new JsonResponse($_COOKIE['goback']);
-				setGoBackCookie(null);
-			} else {
+			} else if (isset($_POST['redirect'])) {
+				$this->view = new JsonResponse($_POST['redirect']);
+			}
+			else {
 				$this->view = new JsonResponse(CSR_ROOT);
 			}
 		} else {

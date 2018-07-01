@@ -5,6 +5,8 @@ namespace CsrDelft\view\login;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\invoervelden\HiddenField;
+use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\WachtwoordField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
@@ -15,6 +17,9 @@ class LoginForm extends Formulier {
 		parent::__construct(null, '/login');
 		$this->formId = 'loginform';
 		$this->showMelding = $showMelding;
+
+		$redirectUri = filter_input(INPUT_GET, 'redirect', FILTER_UNSAFE_RAW);
+		$fields['redirect'] = new HiddenField('redirect', $redirectUri);
 
 		$fields['user'] = new TextField('user', null, null);
 		$fields['user']->placeholder = 'Bijnaam of lidnummer';

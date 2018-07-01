@@ -35,8 +35,7 @@ switch ($class) {
     // de rest alleen voor ingelogde gebruikers:
     default:
         if (!LoginModel::mag('P_LOGGED_IN')) {
-            setGoBackCookie(REQUEST_URI);
-            redirect(CSR_ROOT . "#login");
+			redirect_via_login(REQUEST_URI);
         }
 }
 
