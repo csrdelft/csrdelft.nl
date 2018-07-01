@@ -174,10 +174,10 @@ $(function () {
 
     $('.auteur').hoverIntent(
         function () {
-            $(this).find('a.forummodknop').fadeIn();
+            $(this).find('a.forummodknop').css('opacity', '1');
         },
         function () {
-            $(this).find('a.forummodknop').fadeOut();
+            $(this).find('a.forummodknop').css('opacity', '0');
         }
     );
 

@@ -1,7 +1,7 @@
 <li class="has-children{if CsrDelft\model\security\LoginModel::instance()->isSued()} sued{/if}">
-	<a href="#0">{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('volledig')}</a>
+	<a href="#menu">{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('volledig')}</a>
 	<ul class="is-hidden">
-		<li class="go-back"><a href="#0">{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('volledig')}</a></li>
+		<li class="go-back"><a class="trigger" href="#menu">{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('volledig')}</a></li>
 	{if CsrDelft\model\security\LoginModel::instance()->isSued()}
 		<li><a href="/endsu" class="error" title="Switch user actie beeindingen">SU {CsrDelft\model\ProfielModel::getNaam(CsrDelft\model\security\LoginModel::getSuedFrom()->uid, 'civitas')}</a></li>
 	{/if}
@@ -13,13 +13,13 @@
 			</a>
 		</li>
 		<li class="has-children">
-			<a href="#0">Favorieten</a>
+			<a href="#menu">Favorieten</a>
 			<ul class="is-hidden">
-				<li class="go-back"><a href="#0">Favorieten</a></li>
+				<li class="go-back"><a href="#menu">Favorieten</a></li>
 				{include file='menu/main_tree.tpl' parent=$favorieten}
 			</ul>
 		</li>
-		<li><a href="/menubeheer/toevoegen/favoriet" class="post popup addfav" onclick="$('.cd-nav-trigger').click();" title="Huidige pagina toevoegen aan favorieten">Favoriet toevoegen</a></li>
+		<li><a href="/menubeheer/toevoegen/favoriet" class="post popup addfav" onclick="console.log('FIXME');" title="Huidige pagina toevoegen aan favorieten">Favoriet toevoegen</a></li>
 		{include file='menu/main_tree.tpl' parent=$item}
 	</ul>
 </li>

@@ -530,7 +530,7 @@ JS;
 			if (is_int($name)) {
 				$header = '';
 			} else {
-				$header = 'header: "<h3>' . $name . '</h3>",';
+				$header = 'header: "<h3 class=\"tt-header\">' . $name . '</h3>",';
 			}
 			if (array_search('clicktogo', $this->css_classes)) {
 				$clicktogo = '';

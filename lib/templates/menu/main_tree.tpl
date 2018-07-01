@@ -4,9 +4,9 @@
 	{elseif $item->magBekijken()}
 		{if $item->hasChildren()}
 			<li class="has-children">
-				<a href="#0">{$item->tekst}</a>
+				<a href="#menu">{$item->tekst}</a>
 				<ul class="is-hidden">
-					<li class="go-back"><a href="#0">{$item->tekst}</a></li>
+					<li class="go-back"><a href="#menu">{$item->tekst}</a></li>
 					{include file='menu/main_tree.tpl' parent=$item}
 				</ul>
 			</li>

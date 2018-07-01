@@ -71,36 +71,6 @@ body {
   background-color: #fff;
 }
 
-.cd-page-top {
-  position: absolute;
-  top: 25px;
-  left: 185px;
-}
-
-.cd-page-content {
-  min-width: 640px;
-  margin-left: 179px;
-  padding-top: 75px;
-}
-
-@media only screen and (min-width: 960px) {
-  .cd-page-content {
-    margin-left: 225px;
-    padding-right: 50px;
-  }
-  .cd-page-top {
-    left: 225px;
-  }
-}
-
-.cd-footer {
-  /*
-  height: 400px;
-  background-color: #555;
-  color: #fff;
-  */
-}
-
 h1, h2, h3, h4, h5, h6 {
   font-family: "Source Sans Pro Light", Helvetica, Arial, sans-serif;
   text-align: left;
@@ -115,18 +85,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .scrollpane {
   overflow: auto;
-}
-
-.float-none {
-  float: none;
-}
-
-.float-left {
-  float: left;
-}
-
-.float-right {
-  float: right;
 }
 
 .clear {

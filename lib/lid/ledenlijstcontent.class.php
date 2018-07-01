@@ -337,7 +337,7 @@ class LedenlijstContent implements View {
 	}
 
 	public function viewSelect($name, $options) {
-		echo '<select name="' . $name . '" id="f' . $name . '">';
+		echo '<select class="form-control" name="' . $name . '" id="f' . $name . '">';
 		foreach ($options as $key => $value) {
 			echo '<option value="' . htmlspecialchars($key) . '"';
 			if ($key == $this->lidzoeker->getRawQuery($name)) {
@@ -349,19 +349,21 @@ class LedenlijstContent implements View {
 	}
 
 	public function viewVeldselectie() {
+		echo '<div class="form-group">';
 		echo '<label for="veldselectie">Veldselectie: </label>';
-		echo '<div id="veldselectie">';
+		echo '<div class="veldselectie">';
 		$velden = $this->lidzoeker->getSelectableVelden();
 		foreach ($velden as $key => $veld) {
-			echo '<div class="selectVeld">';
-			echo '<input type="checkbox" name="velden[]" id="veld' . $key . '" value="' . $key . '" ';
+			echo '<div class="form-check">';
+			echo '<input class="form-check-input" type="checkbox" name="velden[]" id="veld' . $key . '" value="' . $key . '" ';
 			if (in_array($key, $this->lidzoeker->getSelectedVelden())) {
 				echo 'checked="checked" ';
 			}
 			echo ' />';
-			echo '<label for="veld' . $key . '">' . ucfirst($veld) . '</label>';
+			echo '<label class="form-check-label" for="veld' . $key . '">' . ucfirst($veld) . '</label>';
 			echo '</div>';
 		}
+		echo '</div>';
 		echo '</div>';
 	}
 
@@ -377,28 +379,32 @@ class LedenlijstContent implements View {
 		echo getMelding();
 		echo '<h1>' . (LoginModel::getProfiel()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
 		echo '<form id="zoekform" method="get">';
-		echo '<label for="q"></label><input type="text" name="q" value="' . htmlspecialchars($this->lidzoeker->getQuery()) . '" /> ';
-		echo '<button class="btn submit">Zoeken</button> <a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
+		echo '<div class="input-group">';
+		echo '<input type="text" class="form-control" name="q" value="' . htmlspecialchars($this->lidzoeker->getQuery()) . '" /> ';
+		echo '<div class="input-group-append"><button class="btn submit">Zoeken</button></div></div><a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
 
 		echo '<div id="advanced" class="verborgen">';
+		echo '<div class="form-group">';
 		echo '<label for="status">Status:</label>';
 		$this->viewSelect('status', array(
 			'LEDEN' => 'Leden',
 			'NOVIET' => 'Novieten', 'GASTLID' => 'Gastlid',
 			'OUDLEDEN' => 'Oudleden',
 			'LEDEN|OUDLEDEN' => 'Leden & oudleden', 'ALL' => 'Alles'));
-		echo '<br />';
+		echo '</div>';
+		echo '<div class="form-group">';
 		echo '<label for="weergave">Weergave:</label>';
 		$this->viewSelect('weergave', array(
 			'lijst' => 'Lijst (standaard)',
 			'kaartje' => 'Visitekaartjes',
 			'CSV' => 'CSV-bestand'));
-		echo '<br />';
+		echo '</div>';
 
 		//sorteren op:
+		echo '<div class="form-group">';
 		echo '<label for="sort">Sorteer op:</label>';
 		$this->viewSelect('sort', $this->lidzoeker->getSortableVelden());
-		echo '<br />';
+		echo '</div>';
 
 		//selecteer velden
 		echo '<div id="veldselectiecontainer">';

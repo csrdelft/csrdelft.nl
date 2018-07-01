@@ -14,6 +14,7 @@ class InstantSearchForm extends Formulier {
 	public function __construct() {
 		parent::__construct(null, '/ledenlijst?status=ALL');
 		$this->post = false;
+		$this->showMelding = false;
 		$fields[] = new ZoekField('q');
 		$this->addFields($fields);
 	}

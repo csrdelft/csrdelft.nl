@@ -16,18 +16,28 @@
 @import "zijbalk";
 @import "maalcie";
 @import "zoeken";
+@import "overlay";
+@import "search";
 
 @import "~jgallery/dist/css/jgallery";
 
 /* Standaard Kleuren */
 a, a:hover {
-  color: #0a338d;
+  //color: #0a338d;
 }
 .alternate-bgcolor {
   background-color: #FAFAFA;
 }
 .alternate-bgcolor:nth-child(even) {
   background-color: #EBEBEB;
+}
+
+.overflow-x-hidden {
+	overflow-x: hidden;
+}
+
+.overflow-hidden {
+	overflow: hidden;
 }
 
 // Zie node_modules/bootstrap/scss/_input-group.scss
@@ -176,6 +186,10 @@ ul.nobullets li { list-style-type: none; }
 
 /**** OVERIG ******************************************************************/
 
+.cd-page-content {
+	margin-top: 30px;
+}
+
 #mysql_debug_toggle {
   cursor: pointer;
 }
@@ -283,4 +297,15 @@ form#streeplijst input, form#streeplijst label { text-align: left; margin: 3px; 
   table.dataTable tbody tr td {
     padding: 20px 10px;
   }
+}
+
+@include media-breakpoint-down(md) {
+	.cd-main-content {
+		/* Compenseer voor navbar */
+		margin-top: 42px;
+	}
+
+	.mobiel-hidden {
+		display: none;
+	}
 }

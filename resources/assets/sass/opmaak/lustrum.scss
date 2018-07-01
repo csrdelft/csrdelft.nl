@@ -6,7 +6,7 @@
 
 /*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
 
-#cd-zijbalk,
+#zijbalk,
 #forumtabel th,
 .cd-primary-nav ul {
   background-color: #20648f !important;
@@ -32,7 +32,7 @@ a:hover,
 
 /*Zorg voor rode borders*/
 
-#cd-zijbalk .blok .zijbalk-kopje {
+#zijbalk .blok .zijbalk-kopje {
   border-width: 0px 0px 2px 0px;
   border-style: solid;
   border-color: #c52d30;
@@ -42,18 +42,18 @@ a:hover,
 
 /* letters moeten wit */
 
-#cd-zijbalk .blok .zijbalk-kopje a {
+#zijbalk .blok .zijbalk-kopje a {
   color: #ffffff;
 }
 
 /*Veel tekst van de zijbalk in het wit*/
 
-#cd-zijbalk .ishetal .ja,
-#cd-zijbalk .ishetal .nee,
+#zijbalk .ishetal .ja,
+#zijbalk .ishetal .nee,
 .staatrood,
-#cd-zijbalk .blok .item a,
-#cd-zijbalk .ishetal,
-#cd-zijbalk .blok .item {
+#zijbalk .blok .item a,
+#zijbalk .ishetal,
+#zijbalk .blok .item {
   color: #ffffff;
 }
 
@@ -81,13 +81,13 @@ a:hover,
 
 /*Zijbalk grens van het scherm in donkerblauw*/
 
-#cd-zijbalk {
+#zijbalk {
   border-color: #151b29;
 }
 
 /*Logo*/
 
-#cd-zijbalk .cd-beeldmerk {
+#zijbalk .cd-beeldmerk {
   background-image: url("../../images/onontdekt_beeldmerk.png");
 }
 

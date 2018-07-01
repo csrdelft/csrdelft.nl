@@ -59,7 +59,7 @@ function initSluitMeldingen() {
 }
 
 function zijbalkScrollFixed() {
-    let elmnt = $('#cd-zijbalk');
+    let elmnt = $('#zijbalk');
     if (!elmnt.length || !elmnt.hasClass('scroll-fixed')) {
         return;
     }
