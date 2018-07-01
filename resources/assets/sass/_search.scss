@@ -6,8 +6,10 @@
 	right: 0;
 	opacity: 0;
 	visibility: hidden;
-	-webkit-transition: opacity .3s 0s, visibility 0s .3s;
-	-moz-transition: opacity .3s 0s, visibility 0s .3s;
+
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: inset 0 1px 0 #ccc, 0 3px 6px #ccc;
+
 	transition: opacity .3s 0s, visibility 0s .3s;
 }
 
