@@ -9,10 +9,10 @@ cache:
 git:
   submodules: false
 
-install: npm install
+install: yarn
 
 script:
-  - npm run production
+  - yarn run production
 
 deploy:
   provider: script
