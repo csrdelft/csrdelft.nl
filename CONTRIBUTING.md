@@ -1,13 +1,45 @@
-# Contribueren aan de stek
+# Stappenplan tot contribueren aan de stek
 
-## Installatie
-Hieronder is uitleg te vinden voor het installeren van alle componenten voor het lokaal gebruiken van de stek.
+## Stap 0
 
-### Apache2
+Zorg ervoor dat je een database dump krijgt van de PubCie, zonder deze dump is het erg ingewikkeld om de boel draaiende te krijgen. Zorg er ook voor dat je een plaetjes dump hebt.
 
-Installeer een stack met Apache2 en MySQL (gebruik bijv. WampServer)
+## Stap 1
+Maak een account aan op [GitHub](https://github.com).
 
-Maak in je `hosts` bestand een verwijzing van `dev.csrdelft.nl` naar `localhost`.
+## Stap 2
+Installeer [git](https://git-scm.com). En vertel git met welke gegevens je aanpassingen wil maken, zorg dat het emailadres overeen komt met het account op GitHub. (Regels met een `$` er voor moeten uitgevoerd worden in powershell/bash)
+
+```
+$ git config --global user.name "John Doe"
+$ git config --global user.email johndoe@example.com
+```
+
+### Stap 2.1
+Ben je geen lid van de PubCie, [maak een fork van de stek](https://github.com/csrdelft/csrdelft.nl/fork)
+
+## Stap 3
+Download de stek op je computer, als je net een fork hebt gemaakt gebruik dan de url van je zelfgemaakte repository.
+
+```
+$ git clone git@github.com:csrdelft/csrdelft.nl
+$ cd csrdelft.nl
+$ git submodule init
+$ git submodule update
+```
+
+## Stap 4: Installatie
+
+Er zijn twee mogelijke manieren om te installeren, met Docker of met de hand. Als je actief gaat ontwikkelen aan de stek is het met de hand opzetten aan te raden.
+
+
+### Met de hand
+
+Installeer Apache2 met PHP en MySQL. Op Windows is er XAMPP, wat dit makkelijk maakt.
+
+#### Apache2
+
+Maak in je `hosts` (`/etc/hosts` of `C:\Windows\system32\drivers\etc\hosts`) bestand een verwijzing van `dev.csrdelft.nl` naar `localhost`.
 
 De volgende configuratie werkt goed voor Apache2, let op de `php_value include_path ...`.
 
@@ -28,26 +60,25 @@ De volgende configuratie werkt goed voor Apache2, let op de `php_value include_p
 </VirtualHost>
 ```
 
-### PHP
+#### PHP
 
 Enable `mod_ldap` en .. in `php.ini`
 
-### MySQL
+#### MySQL
 
 Maak een database `csrdelft` aan.
 
-```SQL
-CREATE USER 'csrdelft'@'localhost' IDENTIFIED BY 'wachtwoord';
+```
+CREATE USER 'csrdelft'@'localhost' IDENTIFIED BY 'bl44t';
 CREATE DATABASE `csrdelft` ;
 GRANT ALL PRIVILEGES ON `csrdelft` . * TO 'csrdelft'@'localhost';
 ``` 
 
 Hernoem `etc/mysql.ini.sample` naar `etc/mysql.ini` en voer de goede waarden in.
 
-Fix een export van de database en plaats deze in je lokale database.
-Hiervoor kun je de fixtures gebruiken in de root folder. (user=x404, pass=civitasstekdebugaccount404)
+Plaats de export die je in stap 0 hebt gefixt in de database.
 
-### Dependencies
+#### Dependencies
 
 Gebruik [Composer](https://getcomposer.org/) om de dependencies te installeren door het volgende commando in de projectmap uit te voeren.
 
@@ -57,7 +88,22 @@ composer install
 
 Installeer ImageMagick om het fotoalbum goed te laten werken. Controleer of de `IMAGEMAGICK` constante klopt.
 
-### Plaetjes
+Gebruik [yarn](https://yarnpkg.com) om javascript dependencies te installeren en om javascript te builden.
+
+```bash
+# Installeer dependencies
+$ yarn
+
+# Run build
+$ yarn run dev
+
+# Run build en blijf watchen
+$ yarn run watch
+# of
+$ yarn run watch-poll
+```
+
+#### Plaetjes
 
 Om jouw development versie goed te laten functioneren zijn er een aantal plaatjes nodig.
 Probeer om ten minste deze te verkrijgen.
@@ -66,35 +112,29 @@ Probeer om ten minste deze te verkrijgen.
 * /htdocs/plaetjes/geen-foto.jpg
 * /htdocs/pleatjes/layout/
 
-## CmsPaginas
-
-De volgende CMS pagina's zijn gehardcoded in de stek, zorg dat deze in de `cms_paginas` tabel aanwezig zijn.
-
-* De lege CMS pagina, alle velden leeg
-* `thuis`
-* `accountaanvragen`
-* `mobiel`
-* `UitlegACL`
-* `fotostoevoegen`
-* `403`
-
 ### Docker
 
-Op Linux en mac moet dit makkelijk draaien.
-Op andere platforms kun je docker beter niet overwegen.
+Installeer [Docker](http://docker.com).
 
-    # Run the stek and database
-    docker-compose up stek
+Kopieer de database dump naar de `data` map. Kopieer de plaetjes naar de `htdocs/plaetjes` map. Kopieer eventuele pasfoto's en fotoalbums naar `data/foto`
 
-    # initialize the database (only need to do this once)
-    # make sure you have the dump.sql in the root of your repo
-    docker run -ti --rm --link <reponame>_stekdb_1:db -v `pwd`:/mnt mariadb bash -c 'exec mysql  -h"$DB_PORT_3306_TCP_ADDR" -u root -p csrdelft < /mnt/dump.sql'
+    # Start alles op, dit duurt de eerste keer ongeveer een kwartier
+    $ docker-compose up
+
+Dit zet alles klaar om de stek te runnen. Als dit klaar is kun je naar `http://localhost:8080` navigeren. Aanpassingen worden direct doorgevoerd.
+
+Je kan met de database verbinden op `localhost:3306`, met PhpStorm, HeidiSQL, of wat anders. Met gebruikersnaam `csrdelft`, wachtwoord `bl44t` op database `csrdelft`.
     
-    # install composer dependencies
-    docker-compose run --rm composer install
+Handige Docker commando's 
+
+    # Voeg een php dependency toe
+    $ docker-compose run composer require myVendor/package
     
-    # add a dependency
-    docker-compose run --rm composer require myVendor/package
+    # Voeg een npm dependency toe
+    $ docker-compose run yarn add myPackage
+    
+    # Als de javascript build om de een of andere reden is omgevallen
+    $ docker-compose restart yarn
 
 ## Development
 
@@ -134,3 +174,15 @@ Het component label is altijd zwart en beschrijft het onderdeel van de stek waar
 `compnent:forum`
 `component:soccie`
 ...
+
+## CmsPaginas
+
+De volgende CMS pagina's zijn gehardcoded in de stek, zorg dat deze in de `cms_paginas` tabel aanwezig zijn.
+
+* De lege CMS pagina, alle velden leeg
+* `thuis`
+* `accountaanvragen`
+* `mobiel`
+* `UitlegACL`
+* `fotostoevoegen`
+* `403`
