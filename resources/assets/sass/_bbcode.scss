@@ -296,7 +296,8 @@ pre.bbcode {
   min-height: 11px;
   background: url('../images/loading-fb.gif') no-repeat bottom left;
 }
-img.bb-img {
+.bb-img {
+	width: 100%;
   max-width: 570px;
   border: 0;
 }
