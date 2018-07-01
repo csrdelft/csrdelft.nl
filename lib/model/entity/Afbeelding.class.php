@@ -77,7 +77,7 @@ class Afbeelding extends Bestand {
 		$file = fopen($this->getFullPath(), 'rb');
 		header("Content-type: " . image_type_to_mime_type(exif_imagetype($this->getFullPath())));
 		header("Content-Length: " . filesize($this->getFullPath()));
-		header("Cache-Control: ", "max-age=2592000, public");
+		header("Cache-Control: max-age=2592000, public");
 		fpassthru($file);
 		exit;
 	}
