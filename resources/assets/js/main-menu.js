@@ -107,9 +107,9 @@ $(function () {
 
 		// a-z en 0-9 incl. numpad
 		if ((event.keyCode > 64 && event.keyCode < 91) || (event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106)) {
+			view('#search');
 			$searchfield.val('');
 			$searchfield.trigger('focus');
-			view('#search');
 		}
 	});
 
