@@ -397,13 +397,14 @@
 	<div class="profielregel fotos gegevens row" id="fotos">
 		<div class="col">
 			<div class="label">Fotoalbum:</div>
-			<div>
+			<div class="row">
 				{if empty($fotos)}
 					Er zijn geen foto's gevonden met {$profiel->getNaam('civitas')} erop.
 				{else}
 					{foreach from=$fotos item=foto}
 						{$foto->view()}
 					{/foreach}
+					<div class="w-100"></div>
 					<a class="btn" href="/fotoalbum/{$profiel->uid}">Toon alle foto's</a>
 				{/if}
 			</div>
