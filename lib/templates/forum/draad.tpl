@@ -133,7 +133,7 @@
 		{$smarty.capture.magreageren}
 	</div>
 
-	<div class="forumfooter">
+	<div class="forum-draad-footer">
 		<div class="breadcrumbs">{$breadcrumbs}</div>
 		{$smarty.capture.kop}
 	</div>
