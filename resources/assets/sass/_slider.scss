@@ -1,0 +1,17 @@
+.VueCarousel {
+	height: 100%;
+
+	display: flex;
+	flex-direction: column;
+
+	.VueCarousel-inner {
+		height: 100%;
+
+		.VueCarousel-slide img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+
+		}
+	}
+}
