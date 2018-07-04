@@ -18,6 +18,9 @@ define('DB_DROP', false); # heb je een backup gemaakt?
 # debug modus
 define('DEBUG', false);
 #
+# minify js & css
+define('MINIFY', false);
+#
 # measure time
 define('TIME_MEASURE', false);
 #
@@ -28,7 +31,7 @@ define('FORCE_HTTPS', false);
 #define('CONFIDE_IP', '80.112.180.173');
 
 # wordt gebruikt voor secure cookies
-define('CSR_DOMAIN', 'dev.csrdelft.nl');
+define('CSR_DOMAIN', 'localhost');
 
 # urls ZONDER trailing slash
 define('CSR_ROOT', 'http://' . CSR_DOMAIN . ':8080');
@@ -43,23 +46,29 @@ define('JWT_LIFETIME', 3600);
 # Toegestane API origins
 define('API_ORIGINS', 'http://localhost:8080,https://csrdelft.github.io');
 
+define('CAPTCHA_SECRET', '<Zet mij>');
+define('GOOGLE_CLIENT_ID', '<Zet mij>');
+define('GOOGLE_CLIENT_SECRET', '<Zet mij>');
+define('GOOGLE_EMBED_KEY', '<Zet mij>');
+
 # paden MET trailing slash
-define('BASE_PATH', realpath(dirname(__FILE__)) . "/../");
+define('BASE_PATH', '/var/www/csrdelft.nl/');
 define('ETC_PATH', BASE_PATH . 'etc/');
 define('DATA_PATH', BASE_PATH . 'data/');
 define('SESSION_PATH', BASE_PATH . 'sessie/');
 define('TMP_PATH', BASE_PATH . 'tmp/');
 define('LIB_PATH', BASE_PATH . 'lib/');
 define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
-define('ASSETS_PATH', HTDOCS_PATH . 'assets/');
 define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
+define('PHOTOALBUM_PATH', DATA_PATH . 'foto/');
+define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
 
 # smarty template engine
-define('SMARTY_DIR', LIB_PATH . 'smarty/libs/');
+define('SMARTY_PLUGIN_DIR', LIB_PATH. 'smarty_plugins');
 define('SMARTY_TEMPLATE_DIR', LIB_PATH . 'templates/');
 define('SMARTY_COMPILE_DIR', DATA_PATH . 'smarty/compiled/');
 define('SMARTY_CACHE_DIR', DATA_PATH . 'smarty/cache/');
 
-# ImageMagick
-define('IMAGEMAGICK_PATH', '/usr/bin/');
+# ImageMagick ('magick' voor v7, 'convert' voor v6)
+define('IMAGEMAGICK', 'magick');

@@ -3,32 +3,32 @@ version: '3'
 volumes:
   mysqldata:
     driver: local
+  vendor:
 
 services:
   stek:
     build:
-      context: ./
-      dockerfile: ./conf/stek.dockerfile
-    links:
-      - stekdb:db
+      context: .
+      dockerfile: "conf/Dockerfile-stek"
     ports:
       - "8080:80" # Expose stek op poort 8080
     volumes:
       - ./:/var/www/csrdelft.nl
+      - ./conf/dev/defines.include.php:/var/www/csrdelft.nl/lib/defines.include.php
+      - ./conf/dev/mysql.ini:/var/www/csrdelft.nl/etc/mysql.ini
+      - vendor:/var/www/csrdelft.nl/vendor
 
   composer:
-    restart: 'no'
     build:
-      context: ./
-      dockerfile: ./conf/composer.dockerfile
-    links:
-     - stekdb:db # Link db in stek met stekdb container
+      context: .
+      dockerfile: "conf/Dockerfile-composer"
     command: install # Doe initieel een install
     volumes:
-      - ./:/app # Docker composer start in /app
+      - vendor:/app/vendor
+      - ./:/app
 
   stekdb:
-    image: mysql:5.5
+    image: mariadb:10.1
     environment:
       MYSQL_ROOT_PASSWORD: bl44t
       MYSQL_USER: csrdelft
@@ -36,5 +36,14 @@ services:
       MYSQL_DATABASE: csrdelft
     volumes:
       - mysqldata:/var/lib/mysql/
+      - ./data:/docker-entrypoint-initdb.d # laad sql bestanden
     ports:
       - "3306:3306" # Expose mysql op poort 3306
+
+  yarn:
+    build:
+      context: .
+      dockerfile: "conf/Dockerfile-yarn"
+    volumes:
+      - ./:/app
+      - /app/node_modules
