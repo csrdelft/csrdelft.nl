@@ -121,7 +121,7 @@ Initieel verbergen, weergeven als :target of .target op #zijbalk
 	#zijbalk {
 		transform: translateX(-179px);
 		transition: transform 0.3s;
-		margin-top: 42px;
+		top: auto;
 	}
 
 	.cd-main-content {
