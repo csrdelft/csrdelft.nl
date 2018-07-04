@@ -7,13 +7,10 @@
 		{* todo: invoerveld voor naam niet-ingelogd*}
 
 		{CsrDelft\model\ProfielModel::getNaam(CsrDelft\model\security\LoginModel::getUid(), 'user')}
-		{if CsrDelft\model\LidInstellingenModel::get('forum', 'toonpasfotos') == 'nee'}
-			<span id="t{CsrDelft\model\security\LoginModel::getUid()}-reageren" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
-		{/if}
 		<div class="postlink"><a id="reageren" name="reageren" class="postlink">&rarr;</a></div>
 
 		{toegang P_LEDEN_READ}
-			<div class="forumpasfoto{if CsrDelft\model\LidInstellingenModel::get('forum', 'toonpasfotos') == 'nee'} verborgen">{else}{toegang P_LEDEN_READ}">{CsrDelft\model\ProfielModel::getLink(CsrDelft\model\security\LoginModel::getUid(), 'pasfoto')}{/toegang}{/if}</div>
+			<div class="forumpasfoto">{CsrDelft\model\ProfielModel::getLink(CsrDelft\model\security\LoginModel::getUid(), 'pasfoto')}</div>
 		{/toegang}
 	</div>
 

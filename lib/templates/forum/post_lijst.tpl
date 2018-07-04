@@ -15,9 +15,7 @@
 		<div class="naam">
 			{CsrDelft\model\ProfielModel::getLink($post->uid, 'user')}
 		</div>
-		{if CsrDelft\model\LidInstellingenModel::get('forum', 'toonpasfotos') == 'nee'}
-			<span id="t{$post->uid}-{$post->post_id}" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
-		{/if}
+
 
 		<span class="moment">
 			{if CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief'}
@@ -26,24 +24,16 @@
 				{$post->datum_tijd}
 			{/if}
 		</span>
-		{toegang P_LEDEN_READ}
-		{if $post->uid !== 'x999'}
-			<div class="forumpasfoto{if CsrDelft\model\LidInstellingenModel::get('forum', 'toonpasfotos') == 'nee'} verborgen{/if}">{CsrDelft\model\ProfielModel::getLink($post->uid, 'pasfoto')}</div>
-		{/if}
-		{/toegang}
-		<br/>
+
 		{if isset($statistiek)}
 			<span class="lichtgrijs small"
 						title="Gelezen door {$post->getAantalGelezen()} van de {$draad->getAantalLezers()} lezers">{$post->getGelezenPercentage()|string_format:"%.0f"}
 				% gelezen</span>
 		{/if}
-		<br/>
 		<div class="forumpostKnoppen">
 			{if $post->wacht_goedkeuring}
 				<a href="/forum/goedkeuren/{$post->post_id}" class="btn post confirm"
 				title="Bericht goedkeuren">goedkeuren</a>
-				<br/>
-				<br/>
 				<a href="/tools/stats.php?ip={$post->auteur_ip}" class="btn" title="IP-log">IP-log</a>
 				<a href="/forum/verwijderen/{$post->post_id}" class="btn post confirm"
 					 title="Verwijder bericht of draad">{icon get="cross"}</a>
@@ -88,6 +78,12 @@
 				{/if}
 			{/if}
 		</div>
+
+		{toegang P_LEDEN_READ}
+		{if $post->uid !== 'x999'}
+			<div class="forumpasfoto">{CsrDelft\model\ProfielModel::getLink($post->uid, 'pasfoto')}</div>
+		{/if}
+		{/toegang}
 	</div>
 	<div class="forum-bericht bericht{cycle values="0,1"}" id="post{$post->post_id}">
 		{assign var=account value=CsrDelft\model\security\AccountModel::get($post->uid)}
