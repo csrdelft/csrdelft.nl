@@ -126,8 +126,6 @@ Groepen
 
 -------------------------------- */
 .groep-samenvatting {
-  float: left;
-  width: 55%;
   padding-right: 2em;
   line-height: 1.5em;
   text-align: justify;
@@ -139,8 +137,6 @@ Groepen
   }
 }
 .groep-leden {
-  float: right;
-  width: 45%;
 
   .groep-tab-content {
     height: 0px;
@@ -169,6 +165,10 @@ Groepen
       font-size: 1.1em;
     }
   }
+}
+
+.bb-groep {
+	display: flex;
 }
 .bb-groep.state-geschiedenis {
 
@@ -368,4 +368,14 @@ a.responsive {
   width: 49%;
   float: left;
   margin-bottom: 0;
+}
+
+@media screen and (max-width: 960px){
+	.bb-groep {
+		flex-direction: column;
+		.groep-samenvatting {
+			padding-left: 0;
+			padding-bottom: 1em;
+		}
+	}
 }
