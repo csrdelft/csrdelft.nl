@@ -1,0 +1,11 @@
+@font-face {
+  font-family: "Adult";
+  src: url("../../fonts/WC_XXXplicit_Bta.ttf") format("ttf");
+  src: url("../../fonts/WC_XXXplicit_Bta.otf") format("otf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body, h1, h2, h3, h4, h5 {
+  font-family: "Adult";
+}
