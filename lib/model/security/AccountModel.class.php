@@ -86,43 +86,43 @@ class AccountModel extends CachedPersistenceModel {
 	 * Verify SSHA hash.
 	 *
 	 * @param Account $account
-	 * @param string $pass_plain
+	 * @param string $passPlain
 	 * @return boolean
 	 */
-	public function controleerWachtwoord(Account $account, $pass_plain) {
+	public function controleerWachtwoord(Account $account, $passPlain) {
 		$valid = false;
 		// Controleer of het wachtwoord klopt
 		$hash = $account->pass_hash;
 		if (startsWith($hash, "{SSHA}")) {
-			$valid = $this->checkLegacyPasswordHash($pass_plain, $hash);
+			$valid = $this->checkLegacyPasswordHash($passPlain, $hash);
 		} else {
-			$valid = password_verify($pass_plain, $hash);
+			$valid = password_verify($passPlain, $hash);
 		}
 
 		// Rehash wachtwoord als de hash niet aan de eisen voldoet
 		if ($valid && password_needs_rehash($hash, AccountModel::PASSWORD_HASH_ALGORITHM)) {
-			$this->wijzigWachtwoord($account, $pass_plain, false);
+			$this->wijzigWachtwoord($account, $passPlain, false);
 		}
 
 		return $valid === true;
 	}
 
-	private function checkLegacyPasswordHash($pass_plain, $hash) {
+	private function checkLegacyPasswordHash($passPlain, $hash) {
 		$ohash = base64_decode(substr($hash, 6));
 		$osalt = substr($ohash, 20);
 		$ohash = substr($ohash, 0, 20);
-		$nhash = pack("H*", sha1($pass_plain . $osalt));
+		$nhash = pack("H*", sha1($passPlain . $osalt));
 		return $ohash == $nhash;
 	}
 
 	/**
 	 * Create SSH hash.
 	 *
-	 * @param string $pass_plain
+	 * @param string $passPlain
 	 * @return string
 	 */
-	public function maakWachtwoord($pass_plain) {
-		return password_hash($pass_plain, AccountModel::PASSWORD_HASH_ALGORITHM);
+	public function maakWachtwoord($passPlain) {
+		return password_hash($passPlain, AccountModel::PASSWORD_HASH_ALGORITHM);
 	}
 
 	/**
