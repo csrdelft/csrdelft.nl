@@ -11,10 +11,5 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-COPY package.json .
-COPY yarn.lock .
-
-RUN yarn
-
 ENTRYPOINT ["yarn"]
-CMD ["run", "watch-poll"]
+CMD ["run", "docker"]

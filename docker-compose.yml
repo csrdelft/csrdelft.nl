@@ -3,7 +3,6 @@ version: '3'
 volumes:
   mysqldata:
     driver: local
-  vendor:
 
 services:
   stek:
@@ -16,7 +15,7 @@ services:
       - ./:/var/www/csrdelft.nl
       - ./conf/dev/defines.include.php:/var/www/csrdelft.nl/lib/defines.include.php
       - ./conf/dev/mysql.ini:/var/www/csrdelft.nl/etc/mysql.ini
-      - vendor:/var/www/csrdelft.nl/vendor
+      - ./vendor:/var/www/csrdelft.nl/vendor
 
   composer:
     build:
@@ -24,7 +23,7 @@ services:
       dockerfile: "conf/Dockerfile-composer"
     command: install # Doe initieel een install
     volumes:
-      - vendor:/app/vendor
+      - ./vendor:/app/vendor
       - ./:/app
 
   stekdb:
@@ -46,4 +45,4 @@ services:
       dockerfile: "conf/Dockerfile-yarn"
     volumes:
       - ./:/app
-      - /app/node_modules
+      - ./node_modules:/app/node_modules

@@ -4,16 +4,16 @@
 
 <div id="forumPosten" class="forum-posten">
 	<div class="auteur">
-		{* todo: invoerveld voor naam niet-ingelogd*}
-
-		{CsrDelft\model\ProfielModel::getNaam(CsrDelft\model\security\LoginModel::getUid(), 'user')}
-		{if CsrDelft\model\LidInstellingenModel::get('forum', 'toonpasfotos') == 'nee'}
-			<span id="t{CsrDelft\model\security\LoginModel::getUid()}-reageren" class="togglePasfoto" title="Toon pasfoto">&raquo;</span>
-		{/if}
-		<div class="postlink"><a id="reageren" name="reageren" class="postlink">&rarr;</a></div>
+		<div class="postpijl">
+			<a class="postanchor"></a>
+			<a class="postlink">&rarr;</a>
+		</div>
+		<div class="naam">
+			{CsrDelft\model\ProfielModel::getNaam(CsrDelft\model\security\LoginModel::getUid(), 'user')}
+		</div>
 
 		{toegang P_LEDEN_READ}
-			<div class="forumpasfoto{if CsrDelft\model\LidInstellingenModel::get('forum', 'toonpasfotos') == 'nee'} verborgen">{else}{toegang P_LEDEN_READ}">{CsrDelft\model\ProfielModel::getLink(CsrDelft\model\security\LoginModel::getUid(), 'pasfoto')}{/toegang}{/if}</div>
+			<div class="forumpasfoto">{CsrDelft\model\ProfielModel::getLink(CsrDelft\model\security\LoginModel::getUid(), 'pasfoto')}</div>
 		{/toegang}
 	</div>
 
@@ -27,19 +27,15 @@
 					Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
 					&eacute;&eacute;rst door de PubCie worden goedgekeurd. Zoekmachines nemen berichten van dit openbare
 					forumdeel op in hun zoekresultaten.<br/>
-					Het vermelden van <span class="cursief">uw naam en e-mailadres</span> is verplicht.
+					Het vermelden van <span class="cursief">uw e-mailadres</span> is verplicht.
 				</div>
 				<input type="text" name="email" class="FormElement TextField forumEmail" placeholder="E-mailadres"/>
 				<input type="text" name="firstname" value="" class="FormElement TextField verborgen"/>
 				{* spam trap, must be kept empty! *}
-				<br/>
-				<br/>
 			{/toegang}
 			{if $draad === null}
 				<input type="text" id="nieuweTitel" name="titel" class="FormElement TextField" tabindex="1"
 							 placeholder="Onderwerp titel" value="{$post_form_titel}" origvalue="{$post_form_titel}"/>
-				<br/>
-				<br/>
 			{/if}
 			<div id="berichtPreview" class="bbcodePreview forumBericht"></div>
 			<textarea name="forumBericht" id="forumBericht" class="FormElement BBCodeField forumBericht" tabindex="2"

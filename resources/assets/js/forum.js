@@ -158,19 +158,9 @@ $(function () {
         $nieuweTitel.on('focusout', () => $draadMelding.slideUp(200));
     }
 
-    $('.togglePasfoto').each(function () {
-        $(this).on('click', function () {
-            let parts = $(this).attr('id').substr(1).split('-');
-            let pasfoto = $('#p' + parts[1]);
-            if (pasfoto.html() === '') {
-                pasfoto.html('<img src="/htdocs/tools/pasfoto/'+ parts[0] +'.jpg" class="pasfoto" />');
-            }
-            if (pasfoto.hasClass('verborgen')) {
-                pasfoto.toggleClass('verborgen');
-                $(this).html('');
-            }
-        });
-    });
+		$('.togglePasfoto').on('click', function () {
+			$(this).parent().find('.forumpasfoto').toggleClass('verborgen');
+		});
 
     $('.auteur').hoverIntent(
         function () {
