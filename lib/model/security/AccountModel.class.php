@@ -130,13 +130,13 @@ class AccountModel extends CachedPersistenceModel {
 	 *  - Controleert GEEN eisen aan wachtwoord
 	 *  - Wordt NIET gelogged in de changelog van het profiel
 	 * @param Account $account
-	 * @param $pass_plain
+	 * @param $passPlain
 	 * @param bool $updateTimestamp Of we het 'pass_since' veld moeten updaten
 	 * @return bool
 	 */
-	public function wijzigWachtwoord(Account $account, $pass_plain, bool $updateTimestamp = true) {
-		if ($pass_plain != '') {
-			$account->pass_hash = $this->maakWachtwoord($pass_plain);
+	public function wijzigWachtwoord(Account $account, $passPlain, bool $updateTimestamp = true) {
+		if ($passPlain != '') {
+			$account->pass_hash = $this->maakWachtwoord($passPlain);
 			if ($updateTimestamp) {
 				$account->pass_since = getDateTime();
 			}
