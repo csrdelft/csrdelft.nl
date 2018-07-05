@@ -19,7 +19,7 @@ use CsrDelft\Orm\Persistence\Database;
 class AccountModel extends CachedPersistenceModel {
 
 	const ORM = Account::class;
-
+	const PASSWORD_HASH_ALGORITHM = PASSWORD_DEFAULT;
 	/**
 	 * @param $uid
 	 * @return Account|false
@@ -90,14 +90,29 @@ class AccountModel extends CachedPersistenceModel {
 	 * @return boolean
 	 */
 	public function controleerWachtwoord(Account $account, $pass_plain) {
-		$ohash = base64_decode(substr($account->pass_hash, 6));
+		$valid = false;
+		// Controleer of het wachtwoord klopt
+		$hash = $account->pass_hash;
+		if (startsWith($hash, "{SSHA}")) {
+			$valid = $this->checkLegacyPasswordHash($pass_plain, $hash);
+		} else {
+			$valid = password_verify($pass_plain, $hash);
+		}
+
+		// Rehash wachtwoord als de hash niet aan de eisen voldoet
+		if ($valid && password_needs_rehash($hash, AccountModel::PASSWORD_HASH_ALGORITHM)) {
+			$this->wijzigWachtwoord($account, $pass_plain, false);
+		}
+
+		return $valid === true;
+	}
+
+	private function checkLegacyPasswordHash($pass_plain, $hash) {
+		$ohash = base64_decode(substr($hash, 6));
 		$osalt = substr($ohash, 20);
 		$ohash = substr($ohash, 0, 20);
 		$nhash = pack("H*", sha1($pass_plain . $osalt));
-		if ($ohash === $nhash) {
-			return true;
-		}
-		return false;
+		return $ohash == $nhash;
 	}
 
 	/**
@@ -107,8 +122,7 @@ class AccountModel extends CachedPersistenceModel {
 	 * @return string
 	 */
 	public function maakWachtwoord($pass_plain) {
-		$salt = \mhash_keygen_s2k(MHASH_SHA1, $pass_plain, substr(pack('h*', md5(mt_rand())), 0, 8), 4);
-		return "{SSHA}" . base64_encode(mhash(MHASH_SHA1, $pass_plain . $salt) . $salt);
+		return password_hash($pass_plain, AccountModel::PASSWORD_HASH_ALGORITHM);
 	}
 
 	/**
@@ -117,16 +131,15 @@ class AccountModel extends CachedPersistenceModel {
 	 *  - Wordt NIET gelogged in de changelog van het profiel
 	 * @param Account $account
 	 * @param $pass_plain
+	 * @param bool $updateTimestamp Of we het 'pass_since' veld moeten updaten
 	 * @return bool
 	 */
-	public function wijzigWachtwoord(Account $account, $pass_plain) {
-		// Niet veranderd?
-		if ($this->controleerWachtwoord($account, $pass_plain)) {
-			return false;
-		}
+	public function wijzigWachtwoord(Account $account, $pass_plain, bool $updateTimestamp = true) {
 		if ($pass_plain != '') {
 			$account->pass_hash = $this->maakWachtwoord($pass_plain);
-			$account->pass_since = getDateTime();
+			if ($updateTimestamp) {
+				$account->pass_since = getDateTime();
+			}
 		}
 		$this->update($account);
 		// Sync LDAP
