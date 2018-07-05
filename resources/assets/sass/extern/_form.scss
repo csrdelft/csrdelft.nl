@@ -93,6 +93,7 @@ textarea {
   padding: 0 1em;
   text-decoration: none;
   width: 100%;
+	margin-bottom: 1em;
 
   &:invalid {
     box-shadow: none;
@@ -280,6 +281,6 @@ button,
   }
 
   @media screen and (max-width: $scherm-middelsmal) {
-    padding: 0;
+    padding: 0 1em;
   }
 }

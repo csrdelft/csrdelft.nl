@@ -359,13 +359,13 @@ span.curpage {
 	margin: 10px 0;
 }
 
-div.forumheadbtn {
+.forumheadbtn {
 	float: right;
 	margin-right: 15px;
 }
 
 /* Forum Categorie */
-div.forumcategorie {
+.forumcategorie {
 	clear: left;
 
 	h3 {
@@ -383,12 +383,12 @@ div.forumcategorie {
 		text-align: justify;
 	}
 
-	div.forumdelen {
+	.forumdelen {
 		display: flex;
 		flex-flow: row wrap;
 		justify-content: flex-start;
 
-		div.forumdeel {
+		.forumdeel {
 			flex: 0 1 20%;
 
 			padding: 8px 12px;
@@ -407,6 +407,73 @@ div.forumcategorie {
 				margin-top: 0.5em;
 				text-align: center;
 			}
+		}
+	}
+}
+
+@media screen and (max-width: 960px){
+	.modfuncties {
+		font-size: 0;
+	}
+
+	.forumcategorie .forumdelen .forumdeel {
+		flex: 0 1 100%;
+	}
+
+	.forum-deel {
+		.forum-deel-draad, .forum-deel-titel {
+			flex-direction: column;
+		}
+	}
+
+	.forum-draad, .forum-deel {
+		width: auto;
+		clear: both;
+
+		.forum-post, .forum-posten {
+			flex-direction: column;
+
+			.auteur {
+				flex: 1 0 ;
+
+				grid-template-columns: 1fr auto auto;
+				border-bottom: 2px solid #d3d3d3;
+
+				.postpijl {
+					padding: 0 10px;
+					align-self: end;
+					grid-row: 3;
+					grid-column: 3;
+
+					.postlink {
+						display: block;
+						transform: rotate(90deg);
+					}
+
+					.postanchor {
+						// Compenseer voor navbar
+						padding-top:44px;
+						margin-top:-44px;
+					}
+				}
+
+				.forumpasfoto {
+					grid-row-start: 1;
+				}
+
+				.forumpostKnoppen {
+					min-height: 0;
+
+					a {
+						// Disable JS
+						opacity: 1 !important;
+					}
+				}
+			}
+		}
+
+		.forum-paginering {
+			margin-left: 0;
 		}
 	}
 }

@@ -9,8 +9,6 @@
 			{icon get="note" title="Dit onderwerp is plakkerig, het blijft bovenaan"}
 		{elseif $draad->gesloten}
 			{icon get="lock" title="Dit onderwerp is gesloten, u kunt niet meer reageren"}
-		{else}
-			<div class="inline" style="width: 16px;"></div>
 		{/if}
 		<a id="{$draad->draad_id}" href="/forum/onderwerp/{$draad->draad_id}{if CsrDelft\model\LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'ongelezen'}#ongelezen{elseif CsrDelft\model\LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'laatste'}#reageren{/if}"{toegang P_LOGGED_IN}{if $draad->isOngelezen()} class="{CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave')}"{/if}{/toegang}>{$draad->titel}</a>
 		{toegang P_LOGGED_IN}

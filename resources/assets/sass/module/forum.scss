@@ -25,7 +25,7 @@
 	cursor: default;
 }
 
-.forum-draad, .forum-zoeken {
+.forum-draad, .forum-deel, .forum-zoeken {
 	display: flex;
 	flex-direction: column;
 
@@ -383,7 +383,7 @@ span.curpage {
 		flex: 0 1 100%;
 	}
 
-	.forum-draad {
+	.forum-draad, .forum-deel {
 		width: auto;
 		clear: both;
 
