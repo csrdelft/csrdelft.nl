@@ -1,4 +1,7 @@
 @import "extern/variables";
+@import "lib/markitup.css";
+@import "icons";
+
 
 #forumZoekenForm {
 
@@ -65,6 +68,19 @@
       color: black;
     }
   }
+
+	.markItUpEditor {
+		font-size: initial;
+	}
+
+	.markItUpHeader ul li.markItUpButton {
+		margin: 4px;
+		cursor: pointer;
+
+		&:hover {
+			border: 0;
+		}
+	}
 }
 
 .bericht0 .citaat {
