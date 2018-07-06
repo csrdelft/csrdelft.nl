@@ -19,7 +19,7 @@ use CsrDelft\Orm\Persistence\Database;
 class AccountModel extends CachedPersistenceModel {
 
 	const ORM = Account::class;
-
+	const PASSWORD_HASH_ALGORITHM = PASSWORD_DEFAULT;
 	/**
 	 * @param $uid
 	 * @return Account|false
@@ -86,29 +86,43 @@ class AccountModel extends CachedPersistenceModel {
 	 * Verify SSHA hash.
 	 *
 	 * @param Account $account
-	 * @param string $pass_plain
+	 * @param string $passPlain
 	 * @return boolean
 	 */
-	public function controleerWachtwoord(Account $account, $pass_plain) {
-		$ohash = base64_decode(substr($account->pass_hash, 6));
+	public function controleerWachtwoord(Account $account, $passPlain) {
+		$valid = false;
+		// Controleer of het wachtwoord klopt
+		$hash = $account->pass_hash;
+		if (startsWith($hash, "{SSHA}")) {
+			$valid = $this->checkLegacyPasswordHash($passPlain, $hash);
+		} else {
+			$valid = password_verify($passPlain, $hash);
+		}
+
+		// Rehash wachtwoord als de hash niet aan de eisen voldoet
+		if ($valid && password_needs_rehash($hash, AccountModel::PASSWORD_HASH_ALGORITHM)) {
+			$this->wijzigWachtwoord($account, $passPlain, false);
+		}
+
+		return $valid === true;
+	}
+
+	private function checkLegacyPasswordHash($passPlain, $hash) {
+		$ohash = base64_decode(substr($hash, 6));
 		$osalt = substr($ohash, 20);
 		$ohash = substr($ohash, 0, 20);
-		$nhash = pack("H*", sha1($pass_plain . $osalt));
-		if ($ohash === $nhash) {
-			return true;
-		}
-		return false;
+		$nhash = pack("H*", sha1($passPlain . $osalt));
+		return $ohash == $nhash;
 	}
 
 	/**
 	 * Create SSH hash.
 	 *
-	 * @param string $pass_plain
+	 * @param string $passPlain
 	 * @return string
 	 */
-	public function maakWachtwoord($pass_plain) {
-		$salt = \mhash_keygen_s2k(MHASH_SHA1, $pass_plain, substr(pack('h*', md5(mt_rand())), 0, 8), 4);
-		return "{SSHA}" . base64_encode(mhash(MHASH_SHA1, $pass_plain . $salt) . $salt);
+	public function maakWachtwoord($passPlain) {
+		return password_hash($passPlain, AccountModel::PASSWORD_HASH_ALGORITHM);
 	}
 
 	/**
@@ -116,17 +130,16 @@ class AccountModel extends CachedPersistenceModel {
 	 *  - Controleert GEEN eisen aan wachtwoord
 	 *  - Wordt NIET gelogged in de changelog van het profiel
 	 * @param Account $account
-	 * @param $pass_plain
+	 * @param $passPlain
+	 * @param bool $updateTimestamp Of we het 'pass_since' veld moeten updaten
 	 * @return bool
 	 */
-	public function wijzigWachtwoord(Account $account, $pass_plain) {
-		// Niet veranderd?
-		if ($this->controleerWachtwoord($account, $pass_plain)) {
-			return false;
-		}
-		if ($pass_plain != '') {
-			$account->pass_hash = $this->maakWachtwoord($pass_plain);
-			$account->pass_since = getDateTime();
+	public function wijzigWachtwoord(Account $account, $passPlain, bool $updateTimestamp = true) {
+		if ($passPlain != '') {
+			$account->pass_hash = $this->maakWachtwoord($passPlain);
+			if ($updateTimestamp) {
+				$account->pass_since = getDateTime();
+			}
 		}
 		$this->update($account);
 		// Sync LDAP
