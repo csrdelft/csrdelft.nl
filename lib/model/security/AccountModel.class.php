@@ -131,22 +131,25 @@ class AccountModel extends CachedPersistenceModel {
 	 *  - Wordt NIET gelogged in de changelog van het profiel
 	 * @param Account $account
 	 * @param $passPlain
-	 * @param bool $updateTimestamp Of we het 'pass_since' veld moeten updaten
+	 * @param bool $isVeranderd
 	 * @return bool
 	 */
-	public function wijzigWachtwoord(Account $account, $passPlain, bool $updateTimestamp = true) {
+	public function wijzigWachtwoord(Account $account, $passPlain, bool $isVeranderd = true) {
 		if ($passPlain != '') {
 			$account->pass_hash = $this->maakWachtwoord($passPlain);
-			if ($updateTimestamp) {
+			if ($isVeranderd) {
 				$account->pass_since = getDateTime();
 			}
 		}
 		$this->update($account);
-		// Sync LDAP
-		$profiel = $account->getProfiel();
-		if ($profiel) {
-			$profiel->email = $account->email;
-			ProfielModel::instance()->update($profiel);
+
+		if ($isVeranderd) {
+			// Sync LDAP
+			$profiel = $account->getProfiel();
+			if ($profiel) {
+				$profiel->email = $account->email;
+				ProfielModel::instance()->update($profiel);
+			}
 		}
 		return true;
 	}
