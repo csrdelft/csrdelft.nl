@@ -1,0 +1,26 @@
+{
+	"name": "C.S.R. Delft - Vereniging van Christenstudenten",
+	"short_name": "C.S.R. Delft",
+	"icons": [
+		{
+			"src": "images/beeldmerk_192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "images/beeldmerk_512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		},
+		{
+			"src": "images/beeldmerk_1024.png",
+			"sizes": "1024x1024",
+			"type": "image/png"
+		}
+	],
+	"start_url": "/",
+	"background_color": "#0a3292",
+	"theme_color": "#0a3292",
+	"display": "standalone",
+	"orientation": "portrait"
+}
