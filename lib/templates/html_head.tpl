@@ -3,6 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="msapplication-tap-highlight" content="no" />
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="theme-color" content="#0a3292">
 <meta name="robots" content="index, follow" />
 <meta name="author" content="PubCie C.S.R. Delft" />
 <meta name="description" content="{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}">
@@ -15,6 +16,7 @@
 <meta property="og:description" content="{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}" />
 <title>C.S.R. Delft - {$titel}</title>
 <link rel="shortcut icon" href="{$smarty.const.CSR_ROOT}/images/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
 <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{$smarty.const.CSR_ROOT}/forum/rss.xml" />
 {foreach from=$stylesheets item=sheet}
 <link rel="stylesheet" href="{$sheet}" type="text/css" />
