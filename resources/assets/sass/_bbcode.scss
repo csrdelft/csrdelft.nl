@@ -169,6 +169,14 @@ Groepen
 
 .bb-groep {
 	display: flex;
+
+	.groep-leden {
+		width: 55%;
+	}
+
+	.groep-samenvatting {
+		flex-grow: 1;
+	}
 }
 .bb-groep.state-geschiedenis {
 
@@ -376,6 +384,9 @@ a.responsive {
 		.groep-samenvatting {
 			padding-left: 0;
 			padding-bottom: 1em;
+		}
+		.groep-leden {
+			width: auto;
 		}
 	}
 }
