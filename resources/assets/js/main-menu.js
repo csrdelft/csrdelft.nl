@@ -29,8 +29,11 @@ $(function () {
 
 	/**
 	 * Terug naar gewone view.
+	 * @param event
 	 */
-	function reset() {
+	function reset(event) {
+		if (event && active != null) event.preventDefault();
+
 		active = null;
 
 		$('.target').removeClass('target');
