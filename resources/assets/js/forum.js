@@ -43,7 +43,8 @@ function restorePost() {
     $('#forumPosten').css('visibility', 'visible');
 }
 
-function submitPost() {
+function submitPost(event) {
+	event.preventDefault();
     let form = $('#forumEditForm');
     $.ajax({
         type: 'POST',
@@ -77,12 +78,12 @@ export function forumBewerken(postId) {
             '<textarea name="forumBericht" id="forumBewerkBericht" class="FormElement BBCodeField" rows="8"></textarea>' +
             'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />' +
             '<div class="float-right"><a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a></div>' +
-            '<input type="button" class="opslaan" value="Opslaan" /> ' +
+            '<input type="submit" class="opslaan" value="Opslaan" /> ' +
             '<input type="button" class="voorbeeld" value="Voorbeeld" /> ' +
             '<input type="button" class="annuleren" value="Annuleren" /> ' +
             '</form>';
         bewerkContainer.html(bewerkForm);
-        bewerkContainer.find('input.opslaan').on('click', submitPost);
+        bewerkContainer.find('form').on('submit', submitPost);
         bewerkContainer.find('input.voorbeeld').on('click', CsrBBPreview.bind(null, 'forumBewerkBericht', 'bewerkPreview'));
         bewerkContainer.find('input.annuleren').on('click', restorePost);
 
