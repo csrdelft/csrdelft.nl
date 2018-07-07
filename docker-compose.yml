@@ -24,7 +24,8 @@ services:
     command: install # Doe initieel een install
     volumes:
       - ./vendor:/app/vendor
-      - ./:/app
+      - ./composer.json:/app/composer.json
+      - ./composer.lock:/app/composer.lock
 
   stekdb:
     image: mariadb:10.1
@@ -44,5 +45,10 @@ services:
       context: .
       dockerfile: "conf/Dockerfile-yarn"
     volumes:
-      - ./:/app
+      - ./package.json:/app/package.json
+      - ./yarn.lock:/app/yarn.lock
+      - ./webpack.mix.js:/app/webpack.mix.js
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./htdocs/dist:/app/htdocs/dist
+      - ./resources/assets:/app/resources/assets
       - ./node_modules:/app/node_modules
