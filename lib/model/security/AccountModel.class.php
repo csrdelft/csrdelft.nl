@@ -112,7 +112,7 @@ class AccountModel extends CachedPersistenceModel {
 		$osalt = substr($ohash, 20);
 		$ohash = substr($ohash, 0, 20);
 		$nhash = pack("H*", sha1($passPlain . $osalt));
-		return $ohash == $nhash;
+		return hash_equals($ohash, $nhash);
 	}
 
 	/**
