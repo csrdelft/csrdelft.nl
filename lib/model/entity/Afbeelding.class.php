@@ -2,9 +2,7 @@
 
 namespace CsrDelft\model\entity;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use function GuzzleHttp\Psr7\mimetype_from_extension;
 
 /**
  * Afbeelding.class.php
@@ -74,13 +72,20 @@ class Afbeelding extends Bestand {
 	 * Serve this image with the correct http headers.
 	 */
 	public function serve() {
-		$file = fopen($this->getFullPath(), 'rb');
-		header("Content-type: " . image_type_to_mime_type(exif_imagetype($this->getFullPath())));
-		header("Content-Length: " . filesize($this->getFullPath()));
+		$filename = $this->getFullPath();
+
+		if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= filemtime($filename)) {
+			header("HTTP/1.1 304 Not Modified");
+			exit;
+		}
+
+		header("Content-type: " . image_type_to_mime_type(exif_imagetype($filename)));
+		header("Content-Length: " . filesize($filename));
+		header('Last-Modified: ' . gmdate(\DateTime::RFC7231, filemtime($filename)));
 		header('Pragma: public');
 		header("Cache-Control: max-age=2592000, public");
-		header('Expires: '. gmdate('D, d M Y H:i:s \G\M\T', time() + 2592000));
-		fpassthru($file);
+		header('Expires: ' . gmdate(\DateTime::RFC7231, time() + 2592000));
+		readfile($filename);
 		exit;
 	}
 
