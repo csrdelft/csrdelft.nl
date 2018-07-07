@@ -73,17 +73,25 @@ class Afbeelding extends Bestand {
 	 */
 	public function serve() {
 		$filename = $this->getFullPath();
+		$lastModified = filemtime($filename);
+		$etagFile = md5_file(__FILE__);
 
-		if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= filemtime($filename)) {
-			header("HTTP/1.1 304 Not Modified");
+		if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] === $etagFile) {
+			header('HTTP/1.1 304 Not Modified');
+			exit;
+		}
+
+		if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $lastModified) {
+			header('HTTP/1.1 304 Not Modified');
 			exit;
 		}
 
 		header("Content-type: " . image_type_to_mime_type(exif_imagetype($filename)));
-		header("Content-Length: " . filesize($filename));
-		header('Last-Modified: ' . gmdate(\DateTime::RFC7231, filemtime($filename)));
+		header('Content-Length: ' . filesize($filename));
+		header('ETag: ' . $etagFile);
+		header('Last-Modified: ' . gmdate(\DateTime::RFC7231, $lastModified));
 		header('Pragma: public');
-		header("Cache-Control: max-age=2592000, public");
+		header('Cache-Control: max-age=2592000, public');
 		header('Expires: ' . gmdate(\DateTime::RFC7231, time() + 2592000));
 		readfile($filename);
 		exit;
