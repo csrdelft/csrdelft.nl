@@ -30,7 +30,7 @@ export function knopAjax(knop, type) {
     if (knop.hasClass('addfav')) {
         data = {
             'tekst': document.title.replace('C.S.R. Delft - ', ''),
-            'link': this.location.href
+            'link': window.location.href
         };
     }
     if (knop.hasClass('DataTableResponse')) {

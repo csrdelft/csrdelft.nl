@@ -19,7 +19,7 @@
 				{include file='menu/main_tree.tpl' parent=$favorieten}
 			</ul>
 		</li>
-		<li><a href="/menubeheer/toevoegen/favoriet" class="post popup addfav" onclick="console.log('FIXME');" title="Huidige pagina toevoegen aan favorieten">Favoriet toevoegen</a></li>
+		<li><a href="/menubeheer/toevoegen/favoriet" class="post popup addfav" title="Huidige pagina toevoegen aan favorieten">Favoriet toevoegen</a></li>
 		{include file='menu/main_tree.tpl' parent=$item}
 	</ul>
 </li>
