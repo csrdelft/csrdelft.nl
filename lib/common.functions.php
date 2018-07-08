@@ -654,12 +654,14 @@ function getDebug(
  *
  * @see    getMelding()
  * gebaseerd op DokuWiki code
+ * @param string $msg
+ * @param int $lvl
  */
-function setMelding($msg, $lvl) {
-	$errors[-1] = 'danger';
-	$errors[0] = 'info';
-	$errors[1] = 'success';
-	$errors[2] = 'warning';
+function setMelding(string $msg, int $lvl) {
+	$levels[-1] = 'danger';
+	$levels[0] = 'info';
+	$levels[1] = 'success';
+	$levels[2] = 'warning';
 	$msg = trim($msg);
 	if (!empty($msg) AND ($lvl === -1 OR $lvl === 0 OR $lvl === 1 OR $lvl === 2)) {
 		if (!isset($_SESSION['melding'])) {
@@ -669,7 +671,7 @@ function setMelding($msg, $lvl) {
 		if (is_string($_SESSION['melding'])) {
 			$_SESSION['melding'] = array();
 		}
-		$_SESSION['melding'][] = array('lvl' => $errors[$lvl], 'msg' => $msg);
+		$_SESSION['melding'][] = array('lvl' => $levels[$lvl], 'msg' => $msg);
 	}
 }
 
@@ -680,25 +682,33 @@ function setMelding($msg, $lvl) {
  */
 function getMelding() {
 	if (isset($_SESSION['melding']) AND is_array($_SESSION['melding'])) {
-		$sMelding = '<div id="melding">';
-		$shown = array();
+		$melding = '';
 		foreach ($_SESSION['melding'] as $msg) {
-			$hash = md5($msg['msg']);
-			//if (isset($shown[$hash]))
-			//	continue; // skip double messages
-			$sMelding .= '<div class="alert alert-' . $msg['lvl'] . '">';
-			$sMelding .= Icon::getTag('alert-' . $msg['lvl']);
-			$sMelding .= $msg['msg'];
-			$sMelding .= '</div>';
-			$shown[$hash] = 1;
+			$melding .= formatMelding($msg['msg'], $msg['lvl']);
 		}
-		$sMelding .= '</div>';
-		// maar één keer tonen, de melding.
+		// de melding maar één keer tonen.
 		unset($_SESSION['melding']);
-		return $sMelding;
 	} else {
-		return '';
+		$melding = '';
 	}
+
+	return '<div id="melding">'.$melding.'</div>';
+}
+
+/**
+ * @param string $msg
+ * @param string $lvl
+ * @return string
+ */
+function formatMelding(string $msg, string $lvl) {
+	$icon = Icon::getTag('alert-' . $lvl);
+
+	return <<<HTML
+<div class="alert alert-${lvl}">
+${icon}${msg}
+</div>
+HTML;
+
 }
 
 /**
