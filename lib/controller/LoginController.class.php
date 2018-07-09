@@ -50,7 +50,6 @@ class LoginController extends AclController {
 				'su' => 'P_ADMIN',
 				'endsu' => 'P_LOGGED_IN',
 				'verify' => 'P_PUBLIC',
-				'pauper' => 'P_PUBLIC',
 				'account' => 'P_PUBLIC',
 				'accountaanvragen' => 'P_PUBLIC',
 				'accountaanmaken' => 'P_ADMIN',
@@ -66,7 +65,6 @@ class LoginController extends AclController {
 				'login' => 'P_PUBLIC',
 				'logout' => 'P_LOGGED_IN',
 				'verify' => 'P_PUBLIC',
-				'pauper' => 'P_PUBLIC',
 				'account' => 'P_LOGGED_IN',
 				'accountaanmaken' => 'P_ADMIN',
 				'accountbewerken' => 'P_LOGGED_IN',
@@ -106,12 +104,6 @@ class LoginController extends AclController {
 		$values = $form->getValues();
 
 		if ($form->validate() AND $this->model->login($values['user'], $values['pass'])) {
-
-			// Switch to mobile webstek
-			if ($values['pauper']) {
-				$this->pauper();
-				return;
-			}
 			// Remember login form
 			if ($values['remember']) {
 				$remember = RememberLoginModel::instance()->nieuw();
@@ -133,12 +125,7 @@ class LoginController extends AclController {
 	}
 
 	public function logout() {
-		$wasPauper = $this->model->isPauper();
 		$this->model->logout();
-		if ($wasPauper) {
-			$this->pauper();
-			return;
-		}
 		redirect(CSR_ROOT);
 	}
 
@@ -156,18 +143,6 @@ class LoginController extends AclController {
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
 		redirect(HTTP_REFERER, false);
-	}
-
-	public function pauper($terug = null) {
-		DebugLogModel::instance()->log(get_class(), 'Pauper gebruikt');
-		if ($terug === 'terug') {
-			$this->model->setPauper(false);
-			redirect(CSR_ROOT);
-		} else {
-			$this->model->setPauper(true);
-		}
-		$body = new CmsPaginaView(CmsPaginaModel::get('mobiel'));
-		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function account($uid = null, $action = null) {

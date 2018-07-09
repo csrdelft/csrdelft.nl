@@ -88,14 +88,7 @@ class CsrLayoutPage extends CompressedLayout {
 			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
 		}
 
-
-		if (LoginModel::instance()->isPauper()) {
-			$smarty->assign('loginform', new LoginForm());
-			$smarty->assign('mainmenu', new SitemapView());
-			$smarty->display('layout/pauper.tpl');
-		} else {
-			$smarty->display('layout/pagina.tpl');
-		}
+		$smarty->display('layout/pagina.tpl');
 	}
 
 }
