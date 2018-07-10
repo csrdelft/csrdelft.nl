@@ -1,7 +1,7 @@
 <!-- Banner -->
 <section id="banner">
 	<div class="inner">
-		<img src="/images/logo-next-level.svg">
+		<img src="/images/logo-bonfire.svg">
 	</div>
 </section>
 
