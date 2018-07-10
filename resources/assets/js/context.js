@@ -33,6 +33,25 @@ function initForms(parent) {
 }
 
 function initTimeago(parent) {
+	$.timeago.settings.strings = {
+		prefiprefixAgo: '',
+		prefixFromNow: 'sinds',
+		suffixAgo: 'geleden',
+		suffixFromNow: '',
+		seconds: 'nog geen minuut',
+		minute: '1 minuut',
+		minutes: '%d minuten',
+		hour: '1 uur',
+		hours: '%d uur',
+		day: '1 dag',
+		days: '%d dagen',
+		month: '1 maand',
+		months: '%d maanden',
+		year: '1 jaar',
+		years: '%d jaar',
+		wordSeparator: ' ',
+		numbers: [],
+	};
     $(parent).find('abbr.timeago').timeago();
 }
 
