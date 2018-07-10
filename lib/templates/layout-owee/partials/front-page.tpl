@@ -1,7 +1,7 @@
 <!-- Banner -->
 <section id="banner">
 	<div class="inner">
-		<img src="/images/logo-next-level.svg">
+		<img src="/images/logo-bonfire.svg">
 	</div>
 </section>
 
@@ -15,7 +15,7 @@
 			<div class="content">
 				<h2 class="major">C.S.R. Delft</h2>
 				<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
-					Delft, rijk aan tradities die zijn ontstaan in haar 55-jarig bestaan. Het is een breed gezelschap
+					Delft, rijk aan tradities die zijn ontstaan in haar 56-jarig bestaan. Het is een breed gezelschap
 					van zo'n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
 					eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
 					vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
@@ -35,7 +35,7 @@
 			<div class="content">
 				<h2 class="major">C.S.R. in de OWee</h2>
 				<p>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee. Dit jaar
-					duurt de OWee van 20 t/m 24 augustus met op zondag 20 augustus de offici&euml;le opening. Tijdens deze
+					duurt de OWee van 19 t/m 23 augustus met op zondag 22 augustus de offici&euml;le opening. Tijdens deze
 					week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,
 					studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
 					deze groepen en dus ook C.S.R. zullen zichzelf tijdens deze week op verschillende momenten en
@@ -59,7 +59,7 @@
 					Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hieronder voor de
 					mogelijkheden of voor het opvragen van een informatiepakket.</p>
 				<a href="#footer" class="special">Vul interesseformulier in</a>
-				<p class="lidworden">Wil je lid worden? Zorg ervoor dat je de week van 28 augustus t/m 3 september vrij
+				<p class="lidworden">Wil je lid worden? Zorg ervoor dat je de week van 27 augustus t/m 2 september vrij
 					houdt voor de novitiaatsweek.</p>
 				<a href="/lidworden" class="special">Meer informatie over lid worden</a>
 			</div>
