@@ -1,0 +1,6 @@
+node_modules
+.git
+vendor
+data/assets
+data/smarty
+data/less

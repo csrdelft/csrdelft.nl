@@ -1,8 +1,13 @@
 import $ from 'jquery';
+import Hammer from 'hammerjs';
 
 $(function () {
 
 	let active = null;
+
+	function isVisible(id) {
+		return active === id;
+	}
 
 	/**
 	 * Zorg ervoor dat de body niet kan scrollen als de overlay zichtbaar is.
@@ -24,8 +29,11 @@ $(function () {
 
 	/**
 	 * Terug naar gewone view.
+	 * @param event
 	 */
-	function reset() {
+	function reset(event) {
+		if (event && active != null) event.preventDefault();
+
 		active = null;
 
 		$('.target').removeClass('target');
@@ -116,6 +124,32 @@ $(function () {
 	$(document).on('keyup', (event) => {
 		if (event.keyCode === 27) { // esc
 			reset();
+		}
+	});
+
+	// Maak het mogelijk om nog tekst te kunnen selecteren.
+	delete Hammer.defaults.cssProps.userSelect;
+
+	let hammertime = new Hammer(
+		document.body,
+		{
+			inputClass: Hammer.SUPPORT_POINTER_EVENTS ? Hammer.PointerEventInput : Hammer.TouchInput,
+		},
+	);
+
+	hammertime.on('swiperight', () => {
+		if (isVisible('#zijbalk') || isVisible('#menu')) {
+			reset();
+		} else {
+			view('#zijbalk');
+		}
+	});
+
+	hammertime.on('swipeleft', () => {
+		if (isVisible('#zijbalk') || isVisible('#menu')) {
+			reset();
+		} else {
+			view('#menu');
 		}
 	});
 });

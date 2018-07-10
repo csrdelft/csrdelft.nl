@@ -1058,7 +1058,7 @@ HTML;
 				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(LoginModel::getUid()); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
-					return 'Geen aankomende maaltijd.';
+					return '<div class="bb-block bb-maaltijd">Geen aankomende maaltijd.</div>';
 				}
 				$maaltijd = reset($maaltijden);
 				if (endsWith($mid, '2') && $aantal >= 2) {

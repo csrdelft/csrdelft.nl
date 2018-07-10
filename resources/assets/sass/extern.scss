@@ -2,6 +2,7 @@
 
 @import "~lightbox2/dist/css/lightbox";
 @import "~font-awesome/css/font-awesome";
+@import "~jquery-ui/themes/base/tooltip.css";
 
 // common
 @import "reset";
@@ -288,6 +289,12 @@ hr {
 	position: relative;
 	overflow: hidden;
 	padding: 54.05% 0 0 0;
+}
+
+.ui-tooltip {
+	background: $kleur3;
+	border-radius: 5px;
+	white-space: nowrap;
 }
 
 .white-background {

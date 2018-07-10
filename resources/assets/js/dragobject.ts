@@ -4,7 +4,7 @@
 
 import $ from 'jquery';
 
-export const dragObject: { el: JQuery | undefined; } = {
+export const dragObject: { el: JQuery<Element> | undefined; } = {
 	el: undefined
 };
 
