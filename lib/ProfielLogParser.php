@@ -6,7 +6,6 @@ use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\model\entity\profiel\UnparsedProfielLogGroup;
-use Ferno\Loco\Conc;
 use Ferno\Loco\Grammar;
 use Ferno\Loco\GreedyMultiParser;
 use Ferno\Loco\LazyAltParser;
