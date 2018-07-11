@@ -135,8 +135,8 @@ $cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 if ($cred === false) {
 	$cred = array(
 		'host' => 'localhost',
-		'user' => 'admin',
-		'pass' => 'password',
+		'user' => 'csrdelft',
+		'pass' => 'test123',
 		'db' => 'csrdelft'
 	);
 }

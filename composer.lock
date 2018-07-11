@@ -4,30 +4,31 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "451b7abde5a07993202b4e6aebafba23",
+    "content-hash": "cf190e5353774cb587f3103732f0056c",
     "packages": [
         {
             "name": "csrdelft/orm",
-            "version": "v1.7.2",
+            "version": "dev-allow_json_mapping",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
-                "reference": "2bed26845962d326ae9ee7c707cb4745f0e9d4dd"
+                "reference": "e49e4476ae325faadc1963605a6d9e741892dab0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/orm/zipball/2bed26845962d326ae9ee7c707cb4745f0e9d4dd",
-                "reference": "2bed26845962d326ae9ee7c707cb4745f0e9d4dd",
+                "url": "https://api.github.com/repos/csrdelft/orm/zipball/e49e4476ae325faadc1963605a6d9e741892dab0",
+                "reference": "e49e4476ae325faadc1963605a6d9e741892dab0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.0",
-                "phpunit/dbunit": "^2.0"
+                "php": ">=7.1",
+                "zumba/json-serializer": "^2.2"
             },
             "require-dev": {
                 "codacy/coverage": "dev-master",
-                "phpunit/php-code-coverage": "^4.0",
-                "phpunit/phpunit": "^5.7"
+                "phpunit/dbunit": "^4.0",
+                "phpunit/php-code-coverage": "^6.0",
+                "phpunit/phpunit": "^7.0"
             },
             "type": "library",
             "autoload": {
@@ -61,7 +62,7 @@
             ],
             "description": "The creatively named object-relational mapping library for csrdelft.nl",
             "homepage": "https://csrdelft.github.io/orm",
-            "time": "2018-02-01T14:31:18+00:00"
+            "time": "2018-07-11T11:06:14+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -116,6 +117,42 @@
                 "instantiate"
             ],
             "time": "2015-06-14T21:17:01+00:00"
+        },
+        {
+            "name": "ferno/loco",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ferno/loco.git",
+                "reference": "75743fe66f1dedb96ed8453e0360e19815e6cd7f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ferno/loco/zipball/75743fe66f1dedb96ed8453e0360e19815e6cd7f",
+                "reference": "75743fe66f1dedb96ed8453e0360e19815e6cd7f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "jakub-onderka/php-parallel-lint": "0.*",
+                "squizlabs/php_codesniffer": "^2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Loco.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "homepage": "http://qntm.org/loco",
+            "keywords": [
+                "lexer",
+                "parser",
+                "parsing"
+            ],
+            "time": "2016-09-04T14:01:17+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -2917,19 +2954,75 @@
                 "validate"
             ],
             "time": "2018-01-29T19:49:41+00:00"
+        },
+        {
+            "name": "zumba/json-serializer",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zumba/json-serializer.git",
+                "reference": "b7415a88841f4493eddfba390456b25fe22e286a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zumba/json-serializer/zipball/b7415a88841f4493eddfba390456b25fe22e286a",
+                "reference": "b7415a88841f4493eddfba390456b25fe22e286a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.*"
+            },
+            "suggest": {
+                "jeremeamia/superclosure": "Allow to serialize PHP closures"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Zumba\\": "src/",
+                    "Zumba\\JsonSerializer\\Test\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Juan Basso",
+                    "email": "juan.basso@zumba.com"
+                },
+                {
+                    "name": "Zumba Fitness, LLC",
+                    "email": "engineering@zumba.com"
+                }
+            ],
+            "description": "Serialize PHP variables, including objects, in JSON format. Support to unserialize it too.",
+            "homepage": "http://tech.zumba.com",
+            "keywords": [
+                "json",
+                "serialize",
+                "serializer"
+            ],
+            "time": "2018-02-07T18:14:13+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "jacwright/restserver": 20
+        "jacwright/restserver": 20,
+        "csrdelft/orm": 20,
+        "ferno/loco": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.0"
+        "php": "7.2"
     }
 }

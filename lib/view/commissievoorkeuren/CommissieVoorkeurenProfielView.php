@@ -7,7 +7,7 @@ use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\SmartyTemplateView;
 use CsrDelft\view\View;

@@ -4,7 +4,7 @@ namespace CsrDelft;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\GoogleToken;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\GoogleTokenModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;

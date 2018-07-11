@@ -3,7 +3,7 @@
 namespace CsrDelft\model\security;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
