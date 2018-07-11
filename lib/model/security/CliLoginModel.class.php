@@ -156,12 +156,4 @@ class CliLoginModel extends LoginModel {
 	public function getAuthenticationMethod() {
 		return AuthenticationMethod::password_login;
 	}
-
-	/**
-	 * @return bool
-	 */
-	public function isPauper() {
-		return false;
-	}
-
 }

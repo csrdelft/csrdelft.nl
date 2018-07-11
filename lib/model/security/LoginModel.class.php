@@ -472,24 +472,6 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	/**
-	 * @return bool
-	 */
-	public function isPauper() {
-		return isset($_SESSION['pauper']);
-	}
-
-	/**
-	 * @param bool $value
-	 */
-	public function setPauper($value) {
-		if ($value) {
-			$_SESSION['pauper'] = true;
-		} else {
-			unset($_SESSION['pauper']);
-		}
-	}
-
-	/**
 	 */
 	public function opschonen() {
 		foreach ($this->find('expire <= ?', array(getDateTime())) as $this->current_session) {
