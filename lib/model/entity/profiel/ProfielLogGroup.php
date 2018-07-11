@@ -21,7 +21,7 @@ abstract class ProfielLogGroup {
 	 */
 	public $timestamp;
 
-	public function _construct($editor, $timestamp) {
+	public function __construct($editor, $timestamp) {
 		$this->editor = $editor;
 		$this->timestamp = $timestamp;
 	}

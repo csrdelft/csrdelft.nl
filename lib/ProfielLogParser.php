@@ -48,15 +48,10 @@ class ProfielLogParser {
 							"CORVEE_CHANGES",
 							0,
 							1
-						), new StringParser("[/div][hr]")], function($x, $abo, $corvee) {
+						), new StringParser("[/div][hr]")], function($xignore, $abo, $corvee) {
 							return new ProfielUpdateLogGroup(null, null, filter_null([$abo, $corvee]));
 						}),
-					//	//,
 					]),
-					//	"DIV" => new ConcParser([new StringParser("[div]"), "DIV_CONTENT", new StringParser("[/div][hr]")], function ($x, $content, $xx) {
-					//		return new UnparsedProfielLogEntry($content);
-					//	}),
-					//	"DIV_CONTENT" => new GreedyMultiParser(new LazyAltParser([new StringParser("[hr]"), "LID", "DATE", new StringParser("[br]"), "SIMPLESTRING"]), 1, null),
 					"LOGITEM_STATUS" => new ConcParser([
 						new StringParser("[div]Statusverandering van "),
 						"LID",
@@ -65,7 +60,7 @@ class ProfielLogParser {
 						new StringParser("[br]"),
 						"CHANGES",
 						new StringParser("[/div][hr]")],
-						function ($x, $lid, $xx, $date, $xxx, $changes) {
+						function ($xignore, $lid, $xxignore, $date, $xxxignore, $changes) {
 							return new ProfielUpdateLogGroup($lid, $date, filter_null($changes));
 						}
 					),
@@ -79,7 +74,7 @@ class ProfielLogParser {
 							"CHANGES",
 							new RegexParser("/^(\[\/div\])?\[hr\]/")
 						],
-						function ($x, $lid, $xx, $date, $xxx, $changes) {
+						function ($xignore, $lid, $xx, $date, $xxx, $changes) {
 							return new ProfielUpdateLogGroup($lid, $date, filter_null($changes));
 						}
 					),
@@ -112,13 +107,13 @@ class ProfielLogParser {
 						new RegexParser("/^Verwijderde corveetaken:?\[br\]/"),
 						new GreedyMultiParser(
 							new ConcParser([new RegexParser("/^(ma|di|wo|do|vr)/"), "SIMPLESTRING", new StringParser("[br]")],
-								function ($day, $rest, $br) {
+								function ($day, $rest) {
 									return $day . $rest;
 								}),
 								0,
 								null
 							)
-					], function ($x, $taken) {
+					], function ($xignore, $taken) {
 						return new ProfielLogCoveeTakenVerwijderChange($taken);
 					}),
 					'AFMELDEN_ABO' => new ConcParser([
@@ -133,8 +128,7 @@ class ProfielLogParser {
 						new StringParser(" op "),
 						"DATE",
 						"STRING"
-						//new RegexParser("/^(\[/div\]\[hr\]|\[br\])/")
-					], function ($x, $lid, $xx, $date, $xxx) {
+					], function ($xignore, $lid, $xxignore, $date, $xxxignore) {
 						return new \CsrDelft\model\entity\profiel\ProfielCreateLogGroup($lid, $date);
 					}),
 					"LOGITEM_CREATED" => new ConcParser([
@@ -143,7 +137,7 @@ class ProfielLogParser {
 						new StringParser(" op "),
 						"DATE",
 						new StringParser("[br]")
-					], function ($x, $lid, $xx, $date, $xxx) {
+					], function ($xignore, $lid, $xxignore, $date, $xxxignore) {
 						return new \CsrDelft\model\entity\profiel\ProfielCreateLogGroup($lid, $date);
 					}),
 					"CHANGE" => new RegexParser("/^\(([^\(\)]*)\) ([^\[\]]*) => ([^\[\]]*)\[br\]/", function ($all, $prop, $old, $new) {
@@ -153,14 +147,14 @@ class ProfielLogParser {
 					"LID" => new ConcParser([new StringParser("[lid="),
 						"SIMPLESTRING",
 						new StringParser("]")],
-						function ($x, $uid, $xx) {
+						function ($xignore, $uid, $xxignore) {
 							return $uid;
 						}),
 
 					"DATE" => new ConcParser([new StringParser("[reldate]"),
 						"SIMPLESTRING",
 						new StringParser("[/reldate]")],
-						function ($x, $date, $xx) {
+						function ($xignore, $date, $xxingore) {
 							$date = date_create_from_format('Y-m-d H:i:s', $date);
 							return $date == false ? null : $date;
 
@@ -192,7 +186,7 @@ class ProfielLogParser {
 }
 
 function filter_null($array) {
-	return array_filter($array, function($a) {
-		return $a !== null;
+	return array_filter($array, function($elem) {
+		return $elem !== null;
 	});
 }

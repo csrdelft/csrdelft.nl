@@ -15,4 +15,8 @@ abstract class AbstractProfielLogValueChangeEntry extends AbstractProfielLogChan
 	 * @var string
 	 */
 	public $field;
+
+	public function __construct($property) {
+		$this->field = $property;
+	}
 }

@@ -16,6 +16,8 @@ class ProfielLogValueChangeCensuur extends AbstractProfielLogValueChangeEntry {
 
 	public function __construct($property, $oldEmpty, $newEmpty) {
 		parent::__construct($property);
+		$this->oldEmpty = $oldEmpty;
+		$this->newEmpty = $newEmpty;
 	}
 
 	/**
