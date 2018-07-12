@@ -35,7 +35,7 @@
 			<div class="content">
 				<h2 class="major">C.S.R. in de OWee</h2>
 				<p>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee. Dit jaar
-					duurt de OWee van 19 t/m 23 augustus met op zondag 22 augustus de offici&euml;le opening. Tijdens deze
+					duurt de OWee van 19 t/m 23 augustus met op zondag 19 augustus de offici&euml;le opening. Tijdens deze
 					week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,
 					studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
 					deze groepen en dus ook C.S.R. zullen zichzelf tijdens deze week op verschillende momenten en
