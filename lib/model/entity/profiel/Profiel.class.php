@@ -24,6 +24,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\view\bbcode\CsrBB;
+use DateTime;
 use GuzzleHttp\Exception\RequestException;
 
 
@@ -121,7 +122,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	protected static $persistent_attributes = array(
 		// account
 		'uid' => array(T::UID),
-		'changelog' => array(T::JSON),
+		'changelog' => array(T::JSON, false, [ProfielLogGroup::class, ProfielCreateLogGroup::class, ProfielLogCoveeTakenVerwijderChange::class, ProfielLogTextEntry::class, ProfielLogValueChangeCensuur::class, ProfielLogValueChange::class, ProfielUpdateLogGroup::class, UnparsedProfielLogGroup::class, DateTime::class]),
 		// naam
 		'voornamen' => array(T::String, true),
 		'voorletters' => array(T::String),
