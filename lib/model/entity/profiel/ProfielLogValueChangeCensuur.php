@@ -1,14 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sander
- * Date: 25-5-18
- * Time: 21:27
- */
 
 namespace CsrDelft\model\entity\profiel;
 
-
+/**
+ * ProfielLogValueChangeCensuur.class.php
+ *
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author Sander Borst <s.borst@live.nl>
+ *
+ * Gencensureerde wijziging van een waarde in het profiel.
+ *
+ */
 class ProfielLogValueChangeCensuur extends AbstractProfielLogValueChangeEntry {
 
 	public $oldEmpty;

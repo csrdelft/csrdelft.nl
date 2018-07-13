@@ -1,14 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sander
- * Date: 25-5-18
- * Time: 21:23
- */
 
 namespace CsrDelft\model\entity\profiel;
 
-
+/**
+ * ProfielLogTextEntry.class.php
+ *
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author Sander Borst <s.borst@live.nl>
+ *
+ * Textuele toelichting op wijziging aan profiel.
+ *
+ */
 class ProfielLogTextEntry extends AbstractProfielLogEntry {
 
 	public $text;

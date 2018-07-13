@@ -1,14 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sander
- * Date: 11-7-18
- * Time: 0:28
- */
 
 namespace CsrDelft\model\entity\profiel;
 
-
+/**
+ * ProfielLogGroup.class.php
+ *
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author Sander Borst <s.borst@live.nl>
+ *
+ * Verzameling van wijzigingen aan een profiel, met dezelfde datum en auteur.
+ *
+ */
 abstract class ProfielLogGroup {
 	/**
 	 * UID of editor

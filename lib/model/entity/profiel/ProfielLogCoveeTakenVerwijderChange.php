@@ -1,14 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sander
- * Date: 11-7-18
- * Time: 15:59
- */
 
 namespace CsrDelft\model\entity\profiel;
 
-
+/**
+ * ProfielLogCorveeTakenVerwijderChange.class.php
+ *
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author Sander Borst <s.borst@live.nl>
+ *
+ * Log voor verwijderen van corveetaken.
+ *
+ */
 class ProfielLogCoveeTakenVerwijderChange extends AbstractProfielLogChangeEntry {
 	/**
 	 * @var string[]

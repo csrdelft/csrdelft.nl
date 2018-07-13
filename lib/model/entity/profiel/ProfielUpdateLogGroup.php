@@ -1,16 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sander
- * Date: 25-5-18
- * Time: 21:12
- */
 
 namespace CsrDelft\model\entity\profiel;
 
 
 use CsrDelft\model\ProfielModel;
 
+/**
+ * ProfielUpdateLogGroup.class.php
+ *
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author Sander Borst <s.borst@live.nl>
+ *
+ * LogGroup uit het legacy log die nog niet geparsed is.
+ *
+ */
 class ProfielUpdateLogGroup extends ProfielLogGroup {
 	/**
 	 * All changes in the entry
@@ -21,7 +24,7 @@ class ProfielUpdateLogGroup extends ProfielLogGroup {
 
 
 	public function __construct($editor, $timestamp, $entries) {
-		parent::_construct($editor, $timestamp);
+		parent::__construct($editor, $timestamp);
 		$this->entries = $entries;
 
 	}
@@ -34,7 +37,6 @@ class ProfielUpdateLogGroup extends ProfielLogGroup {
 		foreach ($this->entries as $change) {
 			$changesHtml[] = "<div class='change'>{$change->toHtml()}</div>";
 		}
-		//return json_encode($this, JSON_PRETTY_PRINT);
 		return "<div class='ProfielLogEntry'>
 			<div class='metadata'>Gewijzigd door ".ProfielModel::getLink($this->editor, 'civitas')." ".($this->timestamp === null ? "?" : reldate($this->timestamp->format('Y-m-d H:i:s')))."</div>
 			".implode($changesHtml)."

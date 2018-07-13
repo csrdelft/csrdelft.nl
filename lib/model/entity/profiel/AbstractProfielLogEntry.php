@@ -1,14 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sander
- * Date: 11-7-18
- * Time: 15:44
- */
 
 namespace CsrDelft\model\entity\profiel;
 
-
+/**
+ * AbstractProfielLogEntry.class.php
+ *
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author Sander Borst <s.borst@live.nl>
+ *
+ */
 abstract class AbstractProfielLogEntry {
 
 	public abstract function toHtml();

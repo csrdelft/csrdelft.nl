@@ -4,21 +4,27 @@ namespace CsrDelft\model\entity\profiel;
 use CsrDelft\view\bbcode\CsrBB;
 
 /**
- * Created by PhpStorm.
- * User: sander
- * Date: 11-7-18
- * Time: 10:04
+ * UnparsedProfielLogGroup.class.php
+ *
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author Sander Borst <s.borst@live.nl>
+ *
+ * LogGroup uit het legacy log die nog niet geparsed is.
+ *
  */
-
 class UnparsedProfielLogGroup extends ProfielLogGroup {
 
+	/**
+	 * BB-code uit het oude log.
+	 * @var content
+	 */
 	public $content;
 	/**
 	 * UnparsedProfielLogEntry constructor.
 	 * @param $content
 	 */
 	public function __construct($content) {
-		parent::_construct(null, null);
+		parent::__construct(null, null);
 		$this->content = $content;
 	}
 

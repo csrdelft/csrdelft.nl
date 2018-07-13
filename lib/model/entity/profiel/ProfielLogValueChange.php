@@ -1,14 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sander
- * Date: 25-5-18
- * Time: 21:23
- */
 
 namespace CsrDelft\model\entity\profiel;
 
-
+/**
+ * ProfielLogValueChange.class.php
+ *
+ * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author Sander Borst <s.borst@live.nl>
+ *
+ * Log voor wijziging van een waarde in het profiel, met betreffende waarde.
+ *
+ */
 class ProfielLogValueChange extends AbstractProfielLogValueChangeEntry {
 
 	/**
