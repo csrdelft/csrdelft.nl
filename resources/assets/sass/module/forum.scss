@@ -26,13 +26,10 @@
 }
 
 .forum-header, .forum-footer {
-	display: flex;
-	flex-wrap: wrap;
-
 	max-width: 800px;
 
 	h1 {
-		flex-grow: 1;
+		width: 100%;
 	}
 }
 
