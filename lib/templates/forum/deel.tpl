@@ -1,6 +1,9 @@
 {getMelding()}
 
-{$zoekform->view()}
+<div class="forum-header">
+	<h1>{$deel->titel}</h1>
+
+	{$zoekform->view()}
 
 {toegang P_ADMIN}
 {if isset($deel->forum_id)}
@@ -12,15 +15,13 @@
 {/toegang}
 
 {include file='forum/head_buttons.tpl'}
+</div>
 
-<h1>{$deel->titel}</h1>
 
 <div class="forum-deel">
-	<div class="forum-deel-titel">
-		<div class="titel">Titel</div>
-		<div class="datumwijziging">Laatste wijziging</div>
-		<div class="laatstewijziging"></div>
-	</div>
+	<div class="header">Titel</div>
+	<div class="header">Laatste wijziging</div>
+	<div class="header"></div>
 
 	{if !$deel->hasForumDraden()}
 		<div>Dit forum is nog leeg.</div>

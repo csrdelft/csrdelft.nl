@@ -1,6 +1,4 @@
-<div>
-	{include file='forum/draad_reageren.tpl'}
-</div>
+{include file='forum/draad_reageren.tpl'}
 
 <div id="forumPosten" class="forum-posten">
 	<div class="auteur">

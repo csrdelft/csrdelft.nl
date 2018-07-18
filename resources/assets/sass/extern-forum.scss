@@ -53,13 +53,26 @@
 }
 
 #forumPosten {
-  text-align: left;
   .verborgen {
     display: none;
   }
 
-  #forumBericht {
-    color: black;
+  #forumForm {
+		text-align: left;
+
+		.markItUpEditor {
+			color: black;
+			font-size: initial;
+		}
+
+		.markItUpHeader ul li.markItUpButton {
+			margin: 4px;
+			cursor: pointer;
+
+			&:hover {
+				border: 0;
+			}
+		}
   }
 
   #berichtPreview {
@@ -69,26 +82,15 @@
     }
   }
 
-	.markItUpEditor {
-		font-size: initial;
-	}
 
-	.markItUpHeader ul li.markItUpButton {
-		margin: 4px;
-		cursor: pointer;
-
-		&:hover {
-			border: 0;
-		}
-	}
 }
 
 .bericht0 .citaat {
-	background-color: #E53D00;
+	background-color: $kleur1;
 }
 
 .bericht1 .citaat {
-	background-color: #f15025;
+	background-color: $kleur4;
 }
 
 .draad-readonly {
@@ -104,25 +106,24 @@
 	color: red;
 }
 
-.forum-posten {
-	display: flex;
-
-	.auteur {
-		flex: 0 0 160px;
-	}
-}
-
 .moment {
 	font-size: .9em;
 	color: #bbb;
 	cursor: default;
 }
 
+.forum-header, .forum-footer {
+	display: flex;
+	flex-wrap: wrap;
+
+	h1 {
+		width: 100%;
+	}
+}
+
 .forum-draad {
 	display: flex;
 	flex-direction: column;
-
-	width: 800px;
 
 	.tussenschot {
 		height: 2px;
@@ -157,19 +158,6 @@
 			}
 		}
 
-		.auteur {
-			flex: 0 0 160px; /* vast */
-			padding: 2px 10px;
-
-			.postlink {
-				float: right;
-			}
-
-			.forumpasfoto {
-				float: right;
-			}
-		}
-
 		.forum-bericht {
 			flex: 1; /* grow */
 
@@ -193,11 +181,11 @@
 			}
 
 			&.bericht0 {
-				background-color: #f15025;
+				background-color: $kleur4;
 			}
 
 			&.bericht1 {
-				background-color: #E53D00;
+				background-color: $kleur1;
 			}
 		}
 
@@ -305,51 +293,78 @@ span.curpage {
 }
 
 /* Forum deel */
-.forum-deel {
-	display: flex;
-	flex-direction: column;
+.auteur {
+	flex: 0 0 200px; /* vast */
+	padding: 4px;
 
-	.forum-deel-titel,.paging {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: auto auto auto 1fr;
+
+	.forumpostKnoppen {
+		display: none;
+	}
+
+	.postpijl {
+		grid-column: 2;
+		grid-row: 1;
+		justify-self: end;
+		align-self: start;
+
+		a {
+			border: 0;
+
+			&:hover {
+				color: black;
+				text-decoration: none;
+			}
+		}
+	}
+
+	.naam, .moment, .forumpostKnoppen {
+		grid-column: 1;
+	}
+
+	.forumpasfoto {
+		grid-column: 2;
+		grid-row-start: 2;
+		grid-row-end: 4;
+	}
+}
+
+.forum-deel {
+	display: grid;
+
+	grid-template-columns: auto 1fr auto;
+
+	// CSS grid ondersteund niet echt gekleurde rows.
+	// Dit is second-best. Er zijn 3 divs per row,
+	// iedere 6e moet een kleurtje krijgen, en de divs daarna.
+	.alternate-row {
+		padding: 0.7em;
+		&:nth-child(6n +1),
+		&:nth-child(6n + 2),
+		&:nth-child(6n + 3) {
+			background-color: $kleur4;
+		}
+	}
+
+	.paging,
+	.forumdeel-omschrijving,
+	.forum-posten,
+	.forum-reageren {
+		grid-column: 1 / span 3;
+	}
+
+	.paging,
+	.header {
 		font-weight: bold;
+		color: #fff;
+		background-color: $kleur3;
 		padding: 1em;
 
 		a, a:hover {
 			color: white;
-		}
-	}
-
-	.forum-deel-draad, .forum-deel-titel {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-
-		padding: 0.7em;
-
-		&.kleur0 {
-			background-color: #f15025;
-		}
-
-		&.kleur1 {
-			background-color: #E53D00;
-		}
-
-		.titel {
-			flex: 1 0 0;
-		}
-
-		.datumwijziging {
-			flex: 0 0 20%;
-		}
-
-		.laatstewijziging {
-			flex: 1 0 0;
-			white-space: nowrap;
-		}
-
-		span.togglePasfoto:hover,
-		a.postlink:hover {
-			color: black;
-			text-decoration: none;
 		}
 	}
 }
@@ -411,6 +426,12 @@ span.curpage {
 	}
 }
 
+@media screen and (max-width: 1280px) {
+	.auteur {
+		flex: 0 0 160px;
+	}
+}
+
 @media screen and (max-width: 960px){
 	.modfuncties {
 		font-size: 0;
@@ -432,48 +453,48 @@ span.curpage {
 
 		.forum-post, .forum-posten {
 			flex-direction: column;
-
-			.auteur {
-				flex: 1 0 ;
-
-				grid-template-columns: 1fr auto auto;
-				border-bottom: 2px solid #d3d3d3;
-
-				.postpijl {
-					padding: 0 10px;
-					align-self: end;
-					grid-row: 3;
-					grid-column: 3;
-
-					.postlink {
-						display: block;
-						transform: rotate(90deg);
-					}
-
-					.postanchor {
-						// Compenseer voor navbar
-						padding-top:44px;
-						margin-top:-44px;
-					}
-				}
-
-				.forumpasfoto {
-					grid-row-start: 1;
-				}
-
-				.forumpostKnoppen {
-					min-height: 0;
-
-					a {
-						// Disable JS
-						opacity: 1 !important;
-					}
-				}
-			}
 		}
 
 		.forum-paginering {
 			margin-left: 0;
+		}
+	}
+
+	.auteur {
+		flex: 1 0 ;
+
+		grid-template-columns: 1fr auto auto;
+		border-bottom: 2px solid #d3d3d3;
+
+		.postpijl {
+			padding: 0 10px;
+			align-self: end;
+			grid-row: 2;
+			grid-column: 3;
+
+			.postlink {
+				display: block;
+				transform: rotate(90deg);
+			}
+
+			.postanchor {
+				// Compenseer voor navbar
+				padding-top:44px;
+				margin-top:-44px;
+			}
+		}
+
+		.forumpasfoto {
+			grid-row-start: 1;
+		}
+
+		.forumpostKnoppen {
+			min-height: 0;
+
+			a {
+				// Disable JS
+				opacity: 1 !important;
+			}
 		}
 	}
 }

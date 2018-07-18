@@ -12,6 +12,7 @@ class ForumZoekenForm extends Formulier {
 
 	public function __construct() {
 		parent::__construct(null, '/forum/zoeken');
+		$this->showMelding = false;
 		$this->formId = 'forumZoekenForm';
 		$this->css_classes[] = 'hoverIntent';
 

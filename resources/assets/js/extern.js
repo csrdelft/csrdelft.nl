@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import initContext from './context';
+import {bbvideoDisplay, CsrBBPreview} from './bbcode';
 
 window.$ = window.jQuery = $;
 
@@ -13,6 +14,11 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 require('jquery-ui/ui/widgets/datepicker');
 require('jquery-ui-timepicker-addon');
 require('./lib/jquery-ui-timepicker-nl');
+
+window.bbcode = {
+	CsrBBPreview,
+	bbvideoDisplay,
+};
 
 $(function () {
 
