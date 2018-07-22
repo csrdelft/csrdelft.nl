@@ -4,9 +4,12 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\controller\framework\Controller;
-use CsrDelft\model\bibliotheek\BewerkBoek;
+use CsrDelft\model\bibliotheek\BewerkBoekModel;
+use CsrDelft\model\bibliotheek\BoekImporter;
+use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\bibliotheek\BiebCatalogus;
-use CsrDelft\model\bibliotheek\NieuwBoek;
+use CsrDelft\model\bibliotheek\NieuwBoekModel;
+use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bibliotheek\BibliotheekBoekContent;
@@ -21,7 +24,7 @@ use CsrDelft\view\JsonResponse;
  */
 class BibliotheekController extends Controller {
 
-	/** @var BewerkBoek|NieuwBoek */
+	/** @var BewerkBoekModel|NieuwBoekModel */
 	public $boek;
 	public $baseurl = '/bibliotheek/';
 
@@ -40,7 +43,12 @@ class BibliotheekController extends Controller {
 	}
 
 	public function performAction(array $args = array()) {
-		parent::performAction($args);
+		if (($this->action == 'boek' || $this->action == 'import') && $this->hasParam(3)) {
+			echo $this->getParam(3);
+			parent::performAction([BoekModel::get($this->getParam(3))]);
+		} else {
+			parent::performAction($args);
+		}
 		if ($this->action != "autocomplete") {
 			$this->view = new CsrLayoutPage($this->view);
 			$this->view->addCompressedResources('bibliotheek');
@@ -55,8 +63,11 @@ class BibliotheekController extends Controller {
 				'boek', 'nieuwboek', 'bewerkboek', 'verwijderboek',
 				'bewerkbeschrijving', 'verwijderbeschrijving',
 				'addexemplaar', 'verwijderexemplaar',
-				'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'exemplaarvermist', 'exemplaargevonden'
+				'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'exemplaarvermist', 'exemplaargevonden', 'import'
 			));
+		}
+		if (LoginModel::mag('P_BIEB_READ')) {
+			$allow = array_merge($allow, ['import']);
 		}
 		if (!in_array($action, $allow)) {
 			$this->action = 'catalogustonen';
@@ -116,7 +127,7 @@ class BibliotheekController extends Controller {
 				$beschrijvingsid = 0; //nieuwe beschrijving
 			}
 			try {
-				$this->boek = new BewerkBoek($boekid, $beschrijvingsid);
+				$this->boek = new BewerkBoekModel($boekid, $beschrijvingsid);
 			} catch (CsrException $e) {
 				setMelding($e->getMessage(), -1);
 				redirect('/bibliotheek/');
@@ -129,9 +140,14 @@ class BibliotheekController extends Controller {
 	 *
 	 * /boek/id
 	 */
-	protected function boek() {
-		$this->loadBoek();
-		$this->view = new BibliotheekBoekContent($this->boek);
+	protected function boek(Boek $boek) {
+		$this->view = new BibliotheekBoekContent($boek);
+	}
+
+	protected function import(Boek $boek) {
+		$importer = new BoekImporter();
+		$importer->import($boek);
+		BoekModel::instance()->update($boek);
 	}
 
 	/**
@@ -172,7 +188,7 @@ class BibliotheekController extends Controller {
 	 */
 	protected function nieuwboek() {
 		//leeg object Boek laden
-		$this->boek = new NieuwBoek();
+		$this->boek = new NieuwBoekModel();
 		//Eerst ongewensten de deur wijzen
 		if (!$this->boek->magBekijken()) {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addboek', -1);

@@ -5,8 +5,10 @@ namespace CsrDelft\model\bibliotheek;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\MijnSqli;
+use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\IntField;
@@ -20,16 +22,24 @@ use CsrDelft\view\formulier\keuzevelden\SelectField;
  * boeken
  *
  */
-class BiebBoek {
+class BoekModel extends PersistenceModel {
+
+	const ORM = Boek::class;
 
 	protected $id = 0;   //boekId
 	protected $titel;   //String
+	protected $titel_imp;
 	protected $auteur;   //String Auteur
+	protected $auteur_imp;
 	protected $rubriek = null; //Rubriek object
 	protected $uitgavejaar;
+	protected $uitgavejaar_imp;
 	protected $uitgeverij;
+	protected $uitgeverij_imp;
 	protected $paginas;
+	protected $paginas_imp;
 	protected $taal = 'Nederlands';
+	protected $taal_imp;
 	protected $isbn;
 	protected $code;
 	protected $status; //'beschikbaar'/'teruggeven'/'geen'
@@ -38,10 +48,13 @@ class BiebBoek {
 	protected $exemplaren = null; // array
 	protected $formulier; // Form objecten voor recensieformulier of nieuwboekformulier
 
-	public function __construct($init) {
-		$this->load($init);
+	public static function get($id) {
+		$boek = static::instance()->retrieveByPrimaryKey(array($id));
+		if (!$boek) {
+			return false;
+		}
+		return $boek;
 	}
-
 	/**
 	 * Laad object Boek afhankelijk van parameters van de constructor
 	 *
@@ -49,6 +62,7 @@ class BiebBoek {
 	 * @throws CsrException
 	 */
 	private function load($init = 0) {
+		throw new \Exception();
 		if (is_array($init)) {
 			$this->array2properties($init);
 		} else {
@@ -235,15 +249,6 @@ class BiebBoek {
 		return LoginModel::mag('commissie:BASFCie');
 	}
 
-	public function isBiebboek($exemplaarid = null) {
-		$eigenaars = $this->getEigenaars($exemplaarid);
-		foreach ($eigenaars as $eigenaar) {
-			if ($eigenaar == 'x222') {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	/**
 	 * Check of ingelogd lener is van exemplaar
@@ -263,28 +268,6 @@ class BiebBoek {
 			return $lener['uitgeleend_uid'] == LoginModel::getUid();
 		} else {
 			$this->error .= $db->error();
-			return false;
-		}
-	}
-
-	/**
-	 * Verwijder een boek
-	 *
-	 * @return bool
-	 */
-	public function delete() {
-		if ($this->getId() == 0) {
-			$this->error .= 'Kan geen lege boek met id=0 wegkekken. Boek::delete()';
-			return false;
-		}
-		$db = MijnSqli::instance();
-		$qDeleteBeschrijvingen = "DELETE FROM biebbeschrijving WHERE boek_id=" . $this->getId() . ";";
-		$qDeleteExemplaren = "DELETE FROM biebexemplaar WHERE boek_id=" . $this->getId() . " LIMIT 1;";
-		$qDeleteBoek = "DELETE FROM biebboek WHERE id=" . $this->getId() . " LIMIT 1;";
-		if ($db->query($qDeleteBeschrijvingen) AND $db->query($qDeleteExemplaren) AND $db->query($qDeleteBoek)) {
-			return true;
-		} else {
-			$this->error .= 'Fout bij verwijderen. Boek::delete() ' . $db->error();
 			return false;
 		}
 	}

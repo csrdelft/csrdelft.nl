@@ -9,7 +9,7 @@ use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
-class NieuwBoek extends BiebBoek {
+class NieuwBoekModel extends BoekModel {
 
 	public function __construct() {
 		parent::__construct(array());

@@ -88,6 +88,21 @@ class BiebBeschrijving {
 		return $this->beschrijving['schrijver_uid'] == $uid;
 	}
 
+	/**
+	 * controleert rechten voor bewerkactie
+	 *
+	 * @return bool
+	 *        een beschrijving mag door schrijver van beschrijving en door admins bewerkt worden.
+	 */
+	public function magVerwijderen() {
+		//TODO Fix this
+		/*if (magVerwijderen()) {
+			return true;
+		}*/
+
+		return $this->isSchrijver();
+	}
+
 	/*
 	 * Sla boekrecensie/beschrijving op
 	 */

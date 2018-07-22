@@ -27,9 +27,9 @@
 				<a class="btn verwijderen" href="/bibliotheek/verwijderboek/{$boek->getId()}" title="Boek verwijderen" onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">{icon get="verwijderen"} Verwijderen</a><br />
 			{/if}
 			<a class="btn" href="/bibliotheek/addexemplaar/{$boek->getId()}" title="Ik bezit dit boek ook" onclick="return confirm('U bezit zelf een exemplaar van dit boek? Door het toevoegen aan de catalogus geef je aan dat anderen dit boek kunnen lenen.')">{icon get="user_add"} Ik bezit dit boek</a>
-			{if $boek->isBASFCie()}
+			{toegang P_BIEB_ADD}
 				<a class="btn" href="/bibliotheek/addexemplaar/{$boek->getId()}/x222" title="C.S.R.-bieb bezit dit boek ook" onclick="return confirm('Bezit de C.S.R.-bieb een exemplaar van dit boek?')">{icon get="user_add"} Is een biebboek</a>
-			{/if}
+			{/toegang}
 		{/if}
 	</div>
 {/if}
@@ -65,11 +65,11 @@
 			<div class="blok gegevens boekgegevens">
 				{$boek->ajaxformuliervelden->findByName('rubriek')->view()}
 				{if $boek->isBiebboek()}
-					{if $boek->isBASFCie()}
+					{toegang P_BIEB_MOD}
 						{$boek->ajaxformuliervelden->findByName('code')->view()}
-					{else}
+					{/toegang}
 						<div class="regel"><label>Code</label>{$boek->getCode()}</div>
-					{/if}
+
 				{/if}
 			</div>
 
@@ -218,7 +218,7 @@
 							<span class="moment">{$beschrijving.toegevoegd|reldate}</span><br />
 
 						{* knopjes bij elke post *}
-							{if $boek->magBeschrijvingVerwijderen($beschrijving.id)}
+							{if $beschr->magVerwijderen()}
 								{knop url="/bibliotheek/bewerkbeschrijving/`$boek->getId()`/`$beschrijving.id`#Beschrijvingsformulier" type=bewerken}
 								{knop url="/bibliotheek/verwijderbeschrijving/`$boek->getId()`/`$beschrijving.id`" type=verwijderen confirm='Weet u zeker dat u deze beschrijving wilt verwijderen?'}
 							{/if}

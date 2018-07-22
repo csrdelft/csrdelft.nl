@@ -14,7 +14,7 @@ use CsrDelft\view\formulier\invoervelden\RequiredLidField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
-class BewerkBoek extends BiebBoek {
+class BewerkBoekModel extends BoekModel {
 
 	/** @var  Formulier */
 	public $ajaxformuliervelden;  // Form objecten info v. boek
@@ -499,25 +499,6 @@ class BewerkBoek extends BiebBoek {
 		} else {
 			throw new CsrException('Beschrijving niet bij dit boek gevonden! Boek::getEditBeschrijving() mislukt. ');
 		}
-	}
-
-	/**
-	 * controleert rechten voor bewerkactie
-	 *
-	 * @param null|int id van een beschrijving
-	 *                    of null: in Boek geladen beschrijving wordt bekeken
-	 *
-	 * @return bool
-	 *        een beschrijving mag door schrijver van beschrijving en door admins bewerkt worden.
-	 */
-	public function magBeschrijvingVerwijderen($beschrijvingsid = null) {
-		if ($this->magVerwijderen()) {
-			return true;
-		}
-		if ($beschrijvingsid === null) {
-			$beschrijvingsid = $this->editbeschrijving;
-		}
-		return $this->beschrijvingen[$beschrijvingsid]->isSchrijver();
 	}
 
 	/**

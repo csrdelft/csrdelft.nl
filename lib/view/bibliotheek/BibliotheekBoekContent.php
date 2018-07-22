@@ -2,14 +2,15 @@
 
 namespace CsrDelft\view\bibliotheek;
 
-use CsrDelft\model\bibliotheek\BiebBoek;
+use CsrDelft\model\bibliotheek\BoekModel;
+use CsrDelft\model\entity\bibliotheek\Boek;
 
 /**
  * Boek weergeven
  */
 class BibliotheekBoekContent extends AbstractBibliotheekView {
 
-	public function __construct(BiebBoek $boek) {
+	public function __construct(Boek $boek) {
 		parent::__construct($boek);
 	}
 

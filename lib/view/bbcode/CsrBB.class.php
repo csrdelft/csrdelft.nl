@@ -4,7 +4,7 @@ namespace CsrDelft\view\bbcode;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\Icon;
-use CsrDelft\model\bibliotheek\BiebBoek;
+use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\groepen\AbstractGroep;
@@ -998,7 +998,7 @@ HTML;
 		}
 
 		try {
-			$boek = new BiebBoek((int)$boekid);
+			$boek = new BoekModel((int)$boekid);
 			if ($this->light_mode) {
 				return $this->lightLinkBlock('boek', $boek->getUrl(), $boek->getTitel(), 'Auteur: ' . $boek->getAuteur());
 			}

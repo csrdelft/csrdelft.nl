@@ -2,14 +2,14 @@
 
 namespace CsrDelft\view\bibliotheek;
 
-use CsrDelft\model\bibliotheek\BiebBoek;
+use CsrDelft\model\bibliotheek\BoekModel;
 
 /**
  * Contentclasse voor de boek-bbcode-tag
  */
 class BoekBBView extends AbstractBibliotheekView {
 
-	public function __construct(BiebBoek $boek) {
+	public function __construct(BoekModel $boek) {
 		parent::__construct($boek);
 	}
 
