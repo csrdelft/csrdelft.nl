@@ -304,7 +304,11 @@ class LoginController extends AclController {
 			$mail->send();
 			redirect(CSR_ROOT);
 		}
-		$this->view = new CsrLayoutPage($form);
+		if (AccessModel::mag($account, 'P_LOGGED_IN')){
+			$this->view = new CsrLayoutPage($form);
+		} else {
+			$this->view = new CsrLayoutOweePage($form);
+		}
 	}
 
 	public function wachtwoordvergeten() {
