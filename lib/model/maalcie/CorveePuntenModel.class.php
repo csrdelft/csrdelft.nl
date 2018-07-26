@@ -17,39 +17,41 @@ use CsrDelft\Orm\Persistence\Database;
 class CorveePuntenModel {
 
 	public static function resetCorveejaar() {
-		$aantal = 0;
-		$errors = array();
-		/** @var CorveeVrijstelling[] $vrijstellingen */
-		$vrijstellingen = CorveeVrijstellingenModel::instance()->getAlleVrijstellingen(true); // grouped by uid
-		$matrix = self::loadPuntenTotaalVoorAlleLeden();
-		foreach ($matrix as $uid => $totalen) {
-			try {
-				$profiel = ProfielModel::get($uid); // false if lid does not exist
-				if (!$profiel) {
-					throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
-				}
-				$punten = $totalen['puntenTotaal'];
-				$punten += $totalen['bonusTotaal'];
-				$vrijstelling = null;
-				if (array_key_exists($uid, $vrijstellingen) && time() > strtotime($vrijstellingen[$uid]->begin_datum)) {
-					$vrijstelling = $vrijstellingen[$uid];
-					$punten += $vrijstelling->getPunten();
-					if (time() > strtotime($vrijstelling->eind_datum)) {
-						CorveeVrijstellingenModel::instance()->verwijderVrijstelling($vrijstelling->uid);
-						$aantal++;
-					} else { // niet dubbel toekennen
-						$vrijstelling->percentage = 0;
-						CorveeVrijstellingenModel::instance()->saveVrijstelling($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage);
+		return Database::transaction(function () {
+			$aantal = 0;
+			$errors = array();
+			/** @var CorveeVrijstelling[] $vrijstellingen */
+			$vrijstellingen = CorveeVrijstellingenModel::instance()->getAlleVrijstellingen(true); // grouped by uid
+			$matrix = self::loadPuntenTotaalVoorAlleLeden();
+			foreach ($matrix as $uid => $totalen) {
+				try {
+					$profiel = ProfielModel::get($uid); // false if lid does not exist
+					if (!$profiel) {
+						throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 					}
+					$punten = $totalen['puntenTotaal'];
+					$punten += $totalen['bonusTotaal'];
+					$vrijstelling = null;
+					if (array_key_exists($uid, $vrijstellingen) && time() > strtotime($vrijstellingen[$uid]->begin_datum)) {
+						$vrijstelling = $vrijstellingen[$uid];
+						$punten += $vrijstelling->getPunten();
+						if (time() > strtotime($vrijstelling->eind_datum)) {
+							CorveeVrijstellingenModel::instance()->verwijderVrijstelling($vrijstelling->uid);
+							$aantal++;
+						} else { // niet dubbel toekennen
+							$vrijstelling->percentage = 0;
+							CorveeVrijstellingenModel::instance()->saveVrijstelling($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage);
+						}
+					}
+					$punten -= intval(InstellingenModel::get('corvee', 'punten_per_jaar'));
+					self::savePuntenVoorLid($profiel, $punten, 0);
+				} catch (CsrGebruikerException $e) {
+					$errors[] = $e;
 				}
-				$punten -= intval(InstellingenModel::get('corvee', 'punten_per_jaar'));
-				self::savePuntenVoorLid($profiel, $punten, 0);
-			} catch (CsrGebruikerException $e) {
-				$errors[] = $e;
 			}
-		}
-		$taken = CorveeTakenModel::instance()->verwijderOudeTaken();
-		return array($aantal, $taken, $errors);
+			$taken = CorveeTakenModel::instance()->verwijderOudeTaken();
+			return array($aantal, $taken, $errors);
+		});
 	}
 
 	public static function puntenToekennen($uid, $punten, $bonus_malus) {
@@ -74,7 +76,7 @@ class CorveePuntenModel {
 
 	public static function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null) {
 		if (!is_int($punten) && !is_int($bonus_malus)) {
-			throw new CsrGebruikerException('Save punten voor lid faalt: geen integer');
+			throw new CsrGebruikerException('Save punten voor lid ' . $profiel->uid . ' faalt: geen integer');
 		}
 		if (is_int($punten)) {
 			$profiel->corvee_punten = $punten;
@@ -82,9 +84,7 @@ class CorveePuntenModel {
 		if (is_int($bonus_malus)) {
 			$profiel->corvee_punten_bonus = $bonus_malus;
 		}
-		if (ProfielModel::instance()->update($profiel) !== 1) {
-			throw new CsrException('Save punten voor lid faalt: opslaan mislukt');
-		}
+		ProfielModel::instance()->update($profiel);
 	}
 
 	public static function loadPuntenTotaalVoorAlleLeden() {
