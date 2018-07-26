@@ -8,6 +8,7 @@ use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\model\fiscaat\CiviProductModel;
+use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
@@ -350,6 +351,9 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 	 * @throws CsrGebruikerException
 	 */
 	protected function assertMagAanmelden(Maaltijd $maaltijd, $uid) {
+		if (CiviSaldoModel::instance()->getSaldo($uid) === false) {
+			throw new CsrGebruikerException('Aanmelden voor maaltijden niet toegestaan, geen CiviSaldo.');
+		}
 		if (!$this->checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) {
 			throw new CsrGebruikerException('Niet toegestaan vanwege aanmeldrestrictie: ' . $maaltijd->aanmeld_filter);
 		}

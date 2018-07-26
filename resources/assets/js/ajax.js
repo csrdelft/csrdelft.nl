@@ -88,7 +88,7 @@ export function ketzerAjax(url, ketzer) {
         $(ketzer).replaceWith(data);
     }).fail((jqXHR, textStatus, errorThrown) => {
         $(ketzer + ' .aanmelddata').html('<span class="error">Error: </span>' + errorThrown);
-        alert(errorThrown);
+        alert(jqXHR.responseText);
     });
     return true;
 }
