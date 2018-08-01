@@ -6,6 +6,8 @@ import _ from 'lodash';
 import Bloodhound from 'corejs-typeahead';
 import Dropzone from 'dropzone/dist/dropzone-amd-module';
 import $ from 'jquery';
+import Vue from 'vue';
+import VueCarousel from 'vue-carousel';
 
 window.$ = window.jQuery = $;
 
@@ -127,3 +129,12 @@ _.assign(window, {
 Dropzone.autoDiscover = false;
 
 $.widget.bridge('uitooltip', $.ui.tooltip);
+
+// Initialiseer Vue
+Vue.use(VueCarousel);
+
+$(() => {
+	new Vue({
+		el: '.cd-main-content'
+	});
+});

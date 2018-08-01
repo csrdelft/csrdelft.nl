@@ -54,6 +54,7 @@
 		"timeago": "^1.6.3",
 		"ts-loader": "^3.5.0",
 		"typescript": "^2.9.1",
-		"vue": "^2.5.7"
+		"vue": "^2.5.7",
+		"vue-carousel": "^0.9.0"
 	}
 }
