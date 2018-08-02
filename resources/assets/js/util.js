@@ -1,4 +1,4 @@
-import {modalOpen} from './modal';
+import {domUpdate} from './context';
 
 /**
  * @source http://stackoverflow.com/a/7228322
@@ -97,7 +97,7 @@ export function basename(path, suffix) {
 export function reload(htmlString) {
     // prevent hidden errors
     if (typeof htmlString === 'string' && htmlString.substring(0, 16) === '<div id="modal" ') {
-        modalOpen(htmlString);
+				domUpdate(htmlString);
         return;
     }
     location.reload();
@@ -109,7 +109,7 @@ export function reload(htmlString) {
 export function redirect(htmlString) {
     // prevent hidden errors
     if (typeof htmlString === 'string' && htmlString.substring(0, 16) === '<div id="modal" ') {
-        modalOpen(htmlString);
+        domUpdate(htmlString);
         return;
     }
     window.location.href = htmlString;
