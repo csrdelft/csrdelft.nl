@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\GoogleSync;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
@@ -261,10 +262,11 @@ class ProfielController extends AclController {
 	}
 
 	public function pasfoto($path) {
-		$image = new Afbeelding(safe_combine_path(PASFOTO_PATH, $path));
-		if ($image == null) {
-			$this->exit_http(403);
+		try {
+			$image = new Afbeelding(safe_combine_path(PASFOTO_PATH, $path));
+			$image->serve();
+		} catch (CsrGebruikerException $ex) {
+			redirect("/plaetjes/geen-foto.jpg");
 		}
-		$image->serve();
 	}
 }
