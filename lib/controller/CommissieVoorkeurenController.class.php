@@ -11,7 +11,7 @@ use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurOpmerking;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\commissievoorkeuren\AddCategorieFormulier;
 use CsrDelft\view\commissievoorkeuren\AddCommissieFormulier;

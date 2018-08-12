@@ -1,11 +1,14 @@
 <?php
 
-namespace CsrDelft\model\entity;
+namespace CsrDelft\model\entity\profiel;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\GoogleSync;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\OntvangtContactueel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\model\groepen\CommissiesModel;
@@ -21,6 +24,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\view\bbcode\CsrBB;
+use DateTime;
 use GuzzleHttp\Exception\RequestException;
 
 
@@ -118,7 +122,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	protected static $persistent_attributes = array(
 		// account
 		'uid' => array(T::UID),
-		'changelog' => array(T::Text),
+		'changelog' => array(T::JSON, false, [ProfielLogGroup::class, ProfielCreateLogGroup::class, ProfielLogCoveeTakenVerwijderChange::class, ProfielLogTextEntry::class, ProfielLogValueChangeCensuur::class, ProfielLogValueChange::class, ProfielUpdateLogGroup::class, UnparsedProfielLogGroup::class, DateTime::class]),
 		// naam
 		'voornamen' => array(T::String, true),
 		'voorletters' => array(T::String),

@@ -10,7 +10,7 @@ use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\VerticalenModel;
@@ -151,14 +151,13 @@ class ProfielController extends AclController {
 				setMelding('Geen wijzigingen', 0);
 			} else {
 				$nieuw = !$this->model->exists($profiel);
-				$changelog = $form->changelog($diff, $nieuw);
-				// LidStatus wijzigen
+				$changeEntry = ProfielModel::changelog($diff, LoginModel::getUid());
 				foreach ($diff as $change) {
 					if ($change->property === 'status') {
-						$changelog .= '[div]' . $this->model->wijzig_lidstatus($profiel, $change->old_value) . '[/div][hr]';
+						array_push($changeEntry->entries, ...$this->model->wijzig_lidstatus($profiel, $change->old_value));
 					}
 				}
-				$profiel->changelog = $changelog . $profiel->changelog;
+				$profiel->changelog[] = $changeEntry;
 				if ($nieuw) {
 					$this->model->create($profiel);
 					setMelding('Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid, 1);

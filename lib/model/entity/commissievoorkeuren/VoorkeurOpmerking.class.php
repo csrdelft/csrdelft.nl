@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity\commissievoorkeuren;
 
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

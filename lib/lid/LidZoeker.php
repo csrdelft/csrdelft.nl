@@ -3,7 +3,7 @@
 namespace CsrDelft\lid;
 
 use CsrDelft\MijnSqli;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;

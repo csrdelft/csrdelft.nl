@@ -5,7 +5,7 @@ namespace CsrDelft\view\profiel;
 use CsrDelft\model\bibliotheek\BiebCatalogus;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
 use CsrDelft\model\forum\ForumPostsModel;

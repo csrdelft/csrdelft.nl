@@ -3,7 +3,7 @@
 namespace CsrDelft\lid;
 
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\View;
