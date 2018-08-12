@@ -1,16 +1,17 @@
 <?php
-/**
- * AgendaItemsView.php
- *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/05/2017
- */
+
 
 namespace CsrDelft\view\agenda;
 
 use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\view\agenda;
 
+/**
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @date 06/05/2017
+ *
+ * @property AgendaModel $model
+ */
 abstract class AgendaItemsView extends AgendaView {
 
 	protected $items;
