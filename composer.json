@@ -1,30 +1,33 @@
 {
-    "name": "csr/csrdelft.nl",
-    "authors": [
-        {
-            "name": "PubCie",
-            "email": "pubcie@csrdelft.nl"
-        }
-    ],
-    "require": {
-        "smarty/smarty": "~3.1",
-        "google/apiclient": "^2.0",
-        "firebase/php-jwt": "^4.0",
-        "jacwright/restserver": "dev-master",
-        "globalcitizen/php-iban": "^2.6",
-        "robmorgan/phinx": "^0.9",
-        "csrdelft/orm": "1.7.5",
-        "tedivm/stash": "^0.14.1",
-        "tedivm/jshrink": "^1.1",
-        "tubalmartin/cssmin": "^4.0",
-        "oyejorge/less.php": "v1.7.0.14",
-        "maknz/slack": "^1.7",
-        "jakeasmith/http_build_url": "^1",
-        "ferno/loco": "dev-master"
-    },
-    "config": {
-        "platform": {
-            "php": "7.1"
-        }
-    }
+	"name": "csr/csrdelft.nl",
+	"authors": [
+		{
+			"name": "PubCie",
+			"email": "pubcie@csrdelft.nl"
+		}
+	],
+	"require": {
+		"smarty/smarty": "~3.1",
+		"google/apiclient": "^2.0",
+		"firebase/php-jwt": "^4.0",
+		"jacwright/restserver": "dev-master",
+		"globalcitizen/php-iban": "^2.6",
+		"robmorgan/phinx": "^0.9",
+		"csrdelft/orm": "1.7.5",
+		"tedivm/stash": "^0.14.1",
+		"tedivm/jshrink": "^1.1",
+		"tubalmartin/cssmin": "^4.0",
+		"oyejorge/less.php": "v1.7.0.14",
+		"maknz/slack": "^1.7",
+		"jakeasmith/http_build_url": "^1",
+		"ferno/loco": "dev-master"
+	},
+	"config": {
+		"platform": {
+			"php": "7.1"
+		}
+	},
+	"scripts": {
+		"post-install-cmd": "php ./bin/dev/post-install.php"
+	}
 }
