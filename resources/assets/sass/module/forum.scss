@@ -245,7 +245,7 @@ span.curpage {
 	display: grid;
 	max-width: 800px;
 	grid-template-columns: auto 1fr auto;
-
+	width: 100%;
 	// CSS grid ondersteund niet echt gekleurde rows.
 	// Dit is second-best. Er zijn 3 divs per row,
 	// iedere 6e moet een kleurtje krijgen, en de divs daarna.
