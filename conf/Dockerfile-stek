@@ -13,15 +13,13 @@ RUN pecl install xdebug && docker-php-ext-enable xdebug
 # enable apache mods
 RUN a2enmod rewrite
 
-ENV BASE /var/www/csrdelft.nl
-
 # copy config
 COPY conf/dev/apache2.conf /etc/apache2/apache2.conf
 
 # copy the source
-COPY . /var/www/csrdelft.nl
+COPY . /app
 
 # set permissions on DATA directories
-RUN chown -R www-data "${BASE}/data" && \
-  chmod -R u+rw "${BASE}/data/" && \
-  chmod -R u+rw "${BASE}/htdocs/wiki/data/"
+RUN chown -R www-data "/app/data" && \
+  chmod -R u+rw "/app/data/" && \
+  chmod -R u+rw "/app/htdocs/wiki/data/"

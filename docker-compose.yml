@@ -12,10 +12,10 @@ services:
     ports:
       - "8080:80" # Expose stek op poort 8080
     volumes:
-      - ./:/var/www/csrdelft.nl
-      - ./conf/dev/defines.include.php:/var/www/csrdelft.nl/lib/defines.include.php
-      - ./conf/dev/mysql.ini:/var/www/csrdelft.nl/etc/mysql.ini
-      - ./vendor:/var/www/csrdelft.nl/vendor
+      - ./:/app
+      - ./conf/dev/defines.include.php:/app/lib/defines.include.php
+      - ./conf/dev/mysql.ini:/app/etc/mysql.ini
+      - ./vendor:/app/vendor
 
   composer:
     build:
@@ -23,9 +23,10 @@ services:
       dockerfile: "conf/Dockerfile-composer"
     command: install # Doe initieel een install
     volumes:
+      - ./:/app
+      - ./conf/dev/defines.include.php:/app/lib/defines.include.php
+      - ./conf/dev/mysql.ini:/app/etc/mysql.ini
       - ./vendor:/app/vendor
-      - ./composer.json:/app/composer.json
-      - ./composer.lock:/app/composer.lock
 
   stekdb:
     image: mariadb:10.1
