@@ -1,8 +1,6 @@
 /**
  * Laad alle externe libs en knoop de goede dingen aan elkaar.
  */
-import _ from 'lodash';
-
 import Bloodhound from 'corejs-typeahead';
 import Dropzone from 'dropzone/dist/dropzone-amd-module';
 import $ from 'jquery';
@@ -49,8 +47,7 @@ import {importAgenda} from './courant';
 /**
  * Globale objecten gebruikt in PHP code.
  */
-_.assign(window, {
-    _,
+$.extend(window, {
     Bloodhound,
     Dropzone,
     util: {

@@ -50,7 +50,7 @@
 		"parallax-js": "^3.1.0",
 		"popper.js": "^1.12",
 		"raty-js": "^2.8.0",
-		"three": "^0.91.0",
+		"three": "^0.55.0",
 		"timeago": "^1.6.3",
 		"ts-loader": "^3.5.0",
 		"typescript": "^2.9.1",

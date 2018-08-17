@@ -53,7 +53,6 @@ mix.js('resources/assets/js/app.js', 'js')
         // 'jgallery/dist/js/jgallery', Moet gebootstrapped worden
         'corejs-typeahead',
         'dropzone/dist/dropzone-amd-module',
-        'lodash',
         'bootstrap',
         'timeago',
         'axios',
