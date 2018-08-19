@@ -324,7 +324,7 @@ JS;
 		if ($this->dataTableId) {
 			$this->css_classes[] = 'DataTableResponse';
 		}
-		return '<form enctype="' . $this->enctype . '" action="' . $this->action . '" id="' . $this->formId . '" data-tableid="' . $this->dataTableId . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
+		return '<form enctype="' . $this->enctype . '" action="' . htmlspecialchars ($this->action) . '" id="' . $this->formId . '" data-tableid="' . $this->dataTableId . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
 	}
 
 	protected function getScriptTag() {

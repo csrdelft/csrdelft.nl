@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\security;
 
+use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\entity\security\OneTimeToken;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\PersistenceModel;
@@ -18,23 +19,18 @@ class OneTimeTokensModel extends PersistenceModel {
 	const ORM = OneTimeToken::class;
 
 	/**
-	 * Verify a one time token for a user and redirect to the url.
+	 * Verify that the token for the given url is valid. If valid returns the associated account. Otherwise returns null.
 	 *
-	 * @param string $uid
-	 * @param string $rand
-	 * @return boolean|OneTimeToken
+	 * @param string $url
+	 * @param string $token
+	 * @return Account|null
 	 */
-	public function verifyToken($uid, $rand) {
-		$token = $this->find('uid = ? AND verified = FALSE AND expire > NOW() AND token = ?', array($uid, hash('sha512', $rand)), null, null, 1)->fetch();
+	public function verifyToken($url, $token) {
+		$token = $this->find('url = ? AND expire > NOW() AND token = ?', array($url, hash('sha512', $token)), null, null, 1)->fetch();
 		if (!$token) {
-			return false;
+			return null;
 		}
-		if (LoginModel::instance()->login($token->uid, null, false, null, true, true, $token->expire)) {
-			$token->verified = true;
-			$this->update($token);
-			return $token;
-		}
-		return false;
+		return AccountModel::get($token->uid);
 	}
 
 	/**
