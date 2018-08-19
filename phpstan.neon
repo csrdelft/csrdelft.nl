@@ -9,3 +9,5 @@ parameters:
         - htdocs/tools
     autoload_files:
         - phpstan.autoload.php
+    ignoreErrors:
+        - '#PHPDoc tag @param has invalid value .*#'
