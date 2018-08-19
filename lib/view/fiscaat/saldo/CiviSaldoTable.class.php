@@ -20,8 +20,10 @@ class CiviSaldoTable extends DataTable {
 
 		$this->addColumn('naam', 'saldo');
 		$this->addColumn('lichting', 'saldo');
-		$this->addColumn('saldo', null, null, CellRender::Bedrag(), 'saldo', CellType::FormattedNumber());
-		$this->setOrder(array('saldo' => 'asc'));
+		$this->addColumn('hidden_saldo', null, null, null, null, null, 'saldo');
+		$this->hideColumn('hidden_saldo');
+		$this->addColumn('saldo', null, null, CellRender::Bedrag(), 'hidden_saldo', CellType::FormattedNumber());
+		$this->setOrder(array('hidden_saldo' => 'asc'));
 
 		$this->searchColumn('naam');
 

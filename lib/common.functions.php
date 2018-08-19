@@ -1,28 +1,19 @@
 <?php
 
-namespace CsrDelft;
-
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 # common.functions.php
 # -------------------------------------------------------------------
+use CsrDelft\Icon;
 use CsrDelft\lid\LidZoeker;
+use CsrDelft\MijnSqli;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
-use DateTime;
-
-/**
- * PDO does a stringcast (false = '') and MySql uses tinyint for booleans so expects 0/1
- */
-function werkomheen_pdo_bool($value) {
-	if (is_bool($value)) {
-		$value = (int)$value;
-	}
-	return $value;
-}
 
 /**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
@@ -53,7 +44,7 @@ function endsWith($haystack, $needle) {
  * @return array
  */
 function array_filter_empty($array) {
-	return array_filter($array, 'CsrDelft\not_empty');
+	return array_filter($array, 'not_empty');
 }
 
 function not_empty($value) {
@@ -116,20 +107,6 @@ function group_by_distinct($prop, $in, $del = true) {
 }
 
 /**
- * Set cookie with url to go back to after login.
- *
- * @param string $url
- */
-function setGoBackCookie($url) {
-	if ($url == null) {
-		unset($_COOKIE['goback']);
-		setcookie('goback', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
-	} else {
-		setcookie('goback', $url, time() + (int)InstellingenModel::get('beveiliging', 'session_lifetime_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
-	}
-}
-
-/**
  * Set cookie with token to automatically login.
  *
  * @param string $token
@@ -170,12 +147,19 @@ function redirect($url = null, $refresh = true) {
 		$url = CSR_ROOT;
 	}
 	if (!startsWith($url, CSR_ROOT)) {
-		$url = CSR_ROOT . $url;
+		if (preg_match("/^[\?#\/]/", $url) === 1) {
+			$url = CSR_ROOT . $url;
+		} else {
+			$url = CSR_ROOT;
+		}
 	}
 	header('location: ' . $url);
 	exit;
 }
 
+function redirect_via_login($url) {
+	redirect(CSR_ROOT . "?redirect=".urlencode($url)."#login");
+}
 /**
  * rawurlencode() met uitzondering van slashes.
  *
@@ -255,7 +239,7 @@ function valid_date($date, $format = 'Y-m-d H:i:s') {
  * @return bool
  */
 function valid_filename($name) {
-	return preg_match('/^(?:[a-z0-9 \-_\(\)é]|\.(?!\.))+$/iD', $name);
+	return preg_match('/^(?:[a-z0-9 \-_\(\)éê]|\.(?!\.))+$/iD', $name);
 }
 
 /**
@@ -670,12 +654,14 @@ function getDebug(
  *
  * @see    getMelding()
  * gebaseerd op DokuWiki code
+ * @param string $msg
+ * @param int $lvl
  */
-function setMelding($msg, $lvl) {
-	$errors[-1] = 'danger';
-	$errors[0] = 'info';
-	$errors[1] = 'success';
-	$errors[2] = 'warning';
+function setMelding(string $msg, int $lvl) {
+	$levels[-1] = 'danger';
+	$levels[0] = 'info';
+	$levels[1] = 'success';
+	$levels[2] = 'warning';
 	$msg = trim($msg);
 	if (!empty($msg) AND ($lvl === -1 OR $lvl === 0 OR $lvl === 1 OR $lvl === 2)) {
 		if (!isset($_SESSION['melding'])) {
@@ -685,7 +671,7 @@ function setMelding($msg, $lvl) {
 		if (is_string($_SESSION['melding'])) {
 			$_SESSION['melding'] = array();
 		}
-		$_SESSION['melding'][] = array('lvl' => $errors[$lvl], 'msg' => $msg);
+		$_SESSION['melding'][] = array('lvl' => $levels[$lvl], 'msg' => $msg);
 	}
 }
 
@@ -696,25 +682,33 @@ function setMelding($msg, $lvl) {
  */
 function getMelding() {
 	if (isset($_SESSION['melding']) AND is_array($_SESSION['melding'])) {
-		$sMelding = '<div id="melding">';
-		$shown = array();
+		$melding = '';
 		foreach ($_SESSION['melding'] as $msg) {
-			$hash = md5($msg['msg']);
-			//if (isset($shown[$hash]))
-			//	continue; // skip double messages
-			$sMelding .= '<div class="alert alert-' . $msg['lvl'] . '">';
-			$sMelding .= Icon::getTag('alert-' . $msg['lvl']);
-			$sMelding .= $msg['msg'];
-			$sMelding .= '</div>';
-			$shown[$hash] = 1;
+			$melding .= formatMelding($msg['msg'], $msg['lvl']);
 		}
-		$sMelding .= '</div>';
-		// maar één keer tonen, de melding.
+		// de melding maar één keer tonen.
 		unset($_SESSION['melding']);
-		return $sMelding;
 	} else {
-		return '';
+		$melding = '';
 	}
+
+	return '<div id="melding">'.$melding.'</div>';
+}
+
+/**
+ * @param string $msg
+ * @param string $lvl
+ * @return string
+ */
+function formatMelding(string $msg, string $lvl) {
+	$icon = Icon::getTag('alert-' . $lvl);
+
+	return <<<HTML
+<div class="alert alert-${lvl}">
+${icon}${msg}
+</div>
+HTML;
+
 }
 
 /**
@@ -736,7 +730,11 @@ function className($className) {
  * @return string
  */
 function classNameZonderNamespace($className) {
-	return (new \ReflectionClass($className))->getShortName();
+    try {
+        return (new \ReflectionClass($className))->getShortName();
+    } catch (ReflectionException $e) {
+        return '';
+    }
 }
 
 /**
@@ -1026,4 +1024,90 @@ function checkMimetype($filename, $mime) {
 			return $extension === $expectedExtension;
 		}
 	}
+}
+
+/**
+ * Mag de op dit moment ingelogde gebruiker $permissie?
+ *
+ * Korte methode voor gebruik in smarty templates.
+ *
+ * @param string $permission
+ * @param array|null $allowedAuthenticationMethods
+ * @return bool
+ */
+function mag($permission, array $allowedAuthenticationMethods = null) {
+    return LoginModel::mag($permission, $allowedAuthenticationMethods);
+}
+
+/**
+ * Is $uid de op dit moment ingelogde account?
+ *
+ * @param string $uid
+ * @return bool
+ */
+function is_ingelogd_account($uid) {
+    return LoginModel::getUid() == $uid;
+}
+
+/**
+ * @param Profiel $profiel
+ * @param string $key
+ * @param string $uitzondering Sommige commissie mogen wel dit veld zien.
+ * @return bool
+ */
+function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = 'P_LEDEN_MOD') {
+    if (is_array($key)) {
+        foreach ($key as $item) {
+            if (!LidToestemmingModel::instance()->toestemming($profiel, $item, $cat, $uitzondering)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    return LidToestemmingModel::instance()->toestemming($profiel, $key, $cat, $uitzondering);
+}
+
+function to_unix_path($path) {
+	return str_replace(DIRECTORY_SEPARATOR, "/", $path);
+}
+
+/**
+ * Combines two parts of a file path safely, meaning that the resulting path will be inside $folder.
+ * If directory traversal is applied using ../ et cetera, making the path no longer be inside $folder, null is returned;
+ * @param $folder
+ * @param $subpath
+ */
+function safe_combine_path($folder, $subpath) {
+	if ($folder == null || $subpath == null)
+		return null;
+	$combined = $folder;
+	if (!endsWith($combined, '/'))
+		$combined .= '/';
+	$combined .= $subpath;
+	if (!startsWith(realpath($combined), realpath($folder))) {
+		return null;
+	}
+	return $combined;
+}
+
+function realpathunix($path) {
+	return to_unix_path(realpath($path));
+}
+
+/**
+ * Versie van uniqid die het ook normaal op Windows doet. Als uniqid te snel achter elkaar aangeroepen wordt kan
+ * twee keer hetzelfde gereturned worden. Op Windows gebeurt dit eerder.
+ *
+ * Replacet de punt omdat het anders geen javascript identifier kan zijn.
+ *
+ * Heeft de vorm:
+ *  $prefix_f0f0f0f0f0f0f0_00000000
+ *
+ * @param string $prefix
+ * @return string
+ */
+function uniqid_safe($prefix = "") {
+	return str_replace('.', '_', uniqid($prefix, true));
 }

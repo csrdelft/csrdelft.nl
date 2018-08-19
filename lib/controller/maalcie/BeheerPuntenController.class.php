@@ -10,8 +10,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenLidView;
 use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenView;
-use function CsrDelft\setMelding;
-
 
 /**
  * BeheerPuntenController.class.php
@@ -53,7 +51,6 @@ class BeheerPuntenController extends AclController {
 		$matrix = CorveePuntenModel::loadPuntenVoorAlleLeden($functies);
 		$this->view = new BeheerPuntenView($matrix, $functies);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function wijzigpunten($uid) {

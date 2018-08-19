@@ -26,8 +26,6 @@ use CsrDelft\view\eetplan\EetplanView;
 use CsrDelft\view\eetplan\NieuwEetplanForm;
 use CsrDelft\view\eetplan\VerwijderEetplanForm;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
-use function CsrDelft\setMelding;
-
 
 /**
  * EetplanController.class.php

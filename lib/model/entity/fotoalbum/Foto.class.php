@@ -7,9 +7,6 @@ use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
-use function CsrDelft\debugprint;
-use function CsrDelft\direncode;
-
 
 /**
  * Foto.class.php
@@ -56,9 +53,20 @@ class Foto extends Afbeelding {
 	 */
 	protected static $table_name = 'fotos';
 
+	/**
+	 * Get Foto from filename (absolute path)
+	 * @param $filename
+	 */
+	public static function fromFileName(string $filename, $parse = true) {
+		$realfile = realpath($filename);
+		if (!startsWith($realfile, realpath(PHOTOALBUM_PATH))) {
+			return false;
+		}
+		return new Foto(basename($realfile), new FotoAlbum(dirname($realfile)), $parse);
+	}
 	public function __construct($filename = null, FotoAlbum $album = null, $parse = false) {
 		if ($filename === true) { // called from PersistenceModel
-			$this->directory = PHOTOS_PATH . $this->subdir;
+			$this->directory = PHOTOALBUM_PATH . $this->subdir;
 		} elseif ($album !== null) {
 			$this->filename = $filename;
 			$this->directory = $album->path;
@@ -75,9 +83,6 @@ class Foto extends Afbeelding {
 		return $this->directory;
 	}
 
-	public function getFullPath() {
-		return $this->directory . $this->filename;
-	}
 
 	public function getThumbPath() {
 		return $this->directory . '_thumbs/' . $this->filename;
@@ -90,7 +95,9 @@ class Foto extends Afbeelding {
 	public function getAlbumUrl() {
 		return '/' . direncode($this->subdir);
 	}
-
+	public function getAlbum() {
+		return new FotoAlbum($this->directory);
+	}
 	public function getFullUrl() {
 		return '/plaetjes/' . direncode($this->subdir . $this->filename);
 	}
@@ -196,6 +203,10 @@ class Foto extends Afbeelding {
 			FotoModel::instance()->retrieveAttributes($this, array('rotation', 'owner'));
 		}
 		return LoginModel::mag($this->owner);
+	}
+
+	public function magBekijken() {
+		return $this->getAlbum()->magBekijken();
 	}
 
 }

@@ -8,8 +8,6 @@
 
 namespace CsrDelft\view\formulier;
 
-use function CsrDelft\className;
-use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;

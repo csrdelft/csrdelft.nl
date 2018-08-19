@@ -10,7 +10,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use function CsrDelft\getDateTime;
 
 /**
  * Gesprek.class.php

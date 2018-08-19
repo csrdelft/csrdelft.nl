@@ -14,9 +14,6 @@ use CsrDelft\view\bibliotheek\BibliotheekCatalogusContent;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableContent;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-
 
 /**
  * BibliotheekController.class.php  |  Gerrit Uitslag (klapinklapin@gmail.com)

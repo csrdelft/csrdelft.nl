@@ -2,7 +2,6 @@
 
 namespace CsrDelft\model\groepen;
 
-use function CsrDelft\getDateTime;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\Ondervereniging;
 use CsrDelft\model\entity\groepen\OnderverenigingStatus;

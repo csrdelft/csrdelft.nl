@@ -18,7 +18,6 @@ use CsrDelft\view\groepen\leden\GroepEmailsView;
 use CsrDelft\view\groepen\leden\GroepLijstView;
 use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
-use function CsrDelft\classNameZonderNamespace;
 
 class GroepView implements FormElement {
 

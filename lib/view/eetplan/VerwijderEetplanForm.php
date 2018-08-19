@@ -25,8 +25,9 @@ class VerwijderEetplanForm extends ModalForm {
 		}
 
 		$fields[] = new RequiredSelectField('avond', null, 'Avond', $avondenLijst);
-		$fields['btn'] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 }

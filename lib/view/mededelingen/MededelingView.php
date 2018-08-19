@@ -7,7 +7,6 @@ use CsrDelft\model\mededelingen\MededelingCategorieenModel;
 use CsrDelft\model\mededelingen\MededelingenModel;
 use CsrDelft\view\SmartyTemplateView;
 use DateTime;
-use function CsrDelft\getDateTime;
 
 /**
  * Class MededelingView

@@ -4,7 +4,6 @@ namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
-use function CsrDelft\namen2uid;
 
 /**
  * LidField.class.php
@@ -14,6 +13,8 @@ use function CsrDelft\namen2uid;
  * @date 30/03/2017
  */
 class LidField extends TextField {
+
+	const FIELD_CLASS_NAME = 'col-sm-4';
 
 	// zoekfilter voor door namen2uid gebruikte LidZoeker::zoekLeden. 
 	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
@@ -71,11 +72,12 @@ class LidField extends TextField {
 	}
 
 	public function getPreviewDiv() {
-		return '<div id="lidPreview_' . $this->getId() . '" class="previewDiv"></div>';
+		return '<div id="lidPreview_' . $this->getId() . '"></div>';
 	}
 
 	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
+		return /** @lang JavaScript */
+			parent::getJavascript() . <<<JS
 
 var preview{$this->getId()} = function() {
 	var val = $('#{$this->getId()}').val();
@@ -87,7 +89,7 @@ var preview{$this->getId()} = function() {
 		url: "/tools/naamlink.php?zoekin={$this->zoekin}&naam=" + val,
 	}).done(function(response) {
 		$('#lidPreview_{$this->getId()}').html(response);
-		init_context('#lidPreview_{$this->getId()}');
+		window.context.initContext('#lidPreview_{$this->getId()}');
 	});
 };
 preview{$this->getId()}();

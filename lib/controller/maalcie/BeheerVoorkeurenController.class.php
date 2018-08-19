@@ -47,7 +47,6 @@ class BeheerVoorkeurenController extends AclController {
 		$matrix_repetities = $this->model->getVoorkeurenMatrix();
 		$this->view = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function inschakelen($crid, $uid) {

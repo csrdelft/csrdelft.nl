@@ -5,6 +5,8 @@ namespace CsrDelft\view\login;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
+use CsrDelft\view\formulier\invoervelden\HiddenField;
+use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\WachtwoordField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
@@ -17,6 +19,10 @@ class LoginForm extends Formulier {
 		$this->showMelding = $showMelding;
 
 		$fields = [];
+
+		$redirectUri = filter_input(INPUT_GET, 'redirect', FILTER_UNSAFE_RAW);
+		$fields['redirect'] = new HiddenField('redirect', $redirectUri);
+
 		$fields['user'] = new TextField('user', null, null);
 		$fields['user']->placeholder = 'Bijnaam of lidnummer';
 
@@ -27,9 +33,6 @@ class LoginForm extends Formulier {
 			$fields[] = new HtmlComment('<p class="error">' . LoginModel::instance()->getError() . '</p>');
 		} else {
 			$fields[] = new HtmlComment('<div class="float-left">');
-
-			$fields['pauper'] = new CheckboxField('pauper', false, null, 'Mobiel');
-
 			$fields[] = new HtmlComment('</div>');
 
 			$fields['remember'] = new CheckboxField('remember', false, null, 'Blijf ingelogd');
@@ -41,7 +44,7 @@ class LoginForm extends Formulier {
 	public function view() {
 		parent::view();
 		?>
-		<ul>
+		<ul class="login-buttons">
 			<li>
 				<a href="#" class="login-submit" onclick="document.getElementById('loginform').submit();">Inloggen</a>
 				&raquo;

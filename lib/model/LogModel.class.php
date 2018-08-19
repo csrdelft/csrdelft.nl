@@ -2,7 +2,6 @@
 
 namespace CsrDelft\model;
 
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\LogEntry;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;

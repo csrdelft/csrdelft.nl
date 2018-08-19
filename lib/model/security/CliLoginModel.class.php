@@ -2,7 +2,6 @@
 
 namespace CsrDelft\model\security;
 
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
 use CsrDelft\model\entity\security\RememberLogin;
@@ -157,12 +156,4 @@ class CliLoginModel extends LoginModel {
 	public function getAuthenticationMethod() {
 		return AuthenticationMethod::password_login;
 	}
-
-	/**
-	 * @return bool
-	 */
-	public function isPauper() {
-		return false;
-	}
-
 }

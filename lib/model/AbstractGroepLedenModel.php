@@ -7,8 +7,6 @@ use CsrDelft\model\entity\groepen\AbstractGroepLid;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
-use function CsrDelft\getDateTime;
-use function CsrDelft\group_by_distinct;
 
 /**
  * AbstractGroepLedenModel.php

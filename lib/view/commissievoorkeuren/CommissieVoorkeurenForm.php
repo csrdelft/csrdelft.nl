@@ -9,7 +9,7 @@ use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurVoorkeur;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\elementen\Subkopje;
 use CsrDelft\view\formulier\Formulier;
@@ -26,7 +26,6 @@ class CommissieVoorkeurenForm extends Formulier {
 	private $voorkeuren = array();
 	private $opmerking;
 	private $profiel;
-	private $categorieMap = array();
 
 	public function __construct(Profiel $profiel) {
 		parent::__construct(null, '/profiel/' . $profiel->uid . '/voorkeuren', 'Commissie-voorkeuren');
@@ -38,7 +37,9 @@ class CommissieVoorkeurenForm extends Formulier {
 			$categorie = $cat['categorie'];
 			$this->addFields([new Subkopje($categorie->naam)]);
 			foreach ($cat['commissies'] as $commissie) {
-				$this->addVoorkeurVeld($commissie);
+				if ($commissie->zichtbaar) {
+					$this->addVoorkeurVeld($commissie);
+				}
 			}
 		}
 

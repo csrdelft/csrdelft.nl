@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\formulier\knoppen;
 
-use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\view\formulier\elementen\FormElement;
 
 

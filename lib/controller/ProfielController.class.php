@@ -3,13 +3,15 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\GoogleSync;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
+use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\VerticalenModel;
@@ -28,9 +30,6 @@ use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\profiel\ProfielView;
 use CsrDelft\view\StamboomView;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-use function CsrDelft\startsWith;
 
 /**
  * ProfielController.class.php
@@ -53,6 +52,7 @@ class ProfielController extends AclController {
 				'resetPrivateToken' => 'P_PROFIEL_EDIT',
 				'addToGoogleContacts' => 'P_LEDEN_READ',
 				// Leden
+				'pasfoto' => 'P_OUDLEDEN_READ',
 				'nieuw' => 'P_LEDEN_MOD,commissie:NovCie',
 				'lijst' => 'P_OUDLEDEN_READ',
 				'stamboom' => 'P_OUDLEDEN_READ',
@@ -100,7 +100,12 @@ class ProfielController extends AclController {
 			$this->view = new CsrLayoutPage($body);
 			$this->view->addCompressedResources('profiel');
 			$this->view->addCompressedResources('grafiek');
-		} // Leden
+		}
+		else if ($this->hasParam(2) AND $this->getParam(2) === 'pasfoto') {
+			$this->action = 'pasfoto';
+			return parent::performAction([implode('/', $this->getParams(3))]);
+		}
+		// Leden
 		else {
 			$this->action = 'lijst';
 			if ($this->hasParam(2)) {
@@ -147,14 +152,13 @@ class ProfielController extends AclController {
 				setMelding('Geen wijzigingen', 0);
 			} else {
 				$nieuw = !$this->model->exists($profiel);
-				$changelog = $form->changelog($diff, $nieuw);
-				// LidStatus wijzigen
+				$changeEntry = ProfielModel::changelog($diff, LoginModel::getUid());
 				foreach ($diff as $change) {
 					if ($change->property === 'status') {
-						$changelog .= '[div]' . $this->model->wijzig_lidstatus($profiel, $change->old_value) . '[/div][hr]';
+						array_push($changeEntry->entries, ...$this->model->wijzig_lidstatus($profiel, $change->old_value));
 					}
 				}
-				$profiel->changelog = $changelog . $profiel->changelog;
+				$profiel->changelog[] = $changeEntry;
 				if ($nieuw) {
 					$this->model->create($profiel);
 					setMelding('Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid, 1);
@@ -255,5 +259,14 @@ class ProfielController extends AclController {
 			$data = LedenMemoryScoresModel::instance()->getAllTopScores();
 		}
 		$this->view = new LedenMemoryScoreResponse($data);
+	}
+
+	public function pasfoto($path) {
+		try {
+			$image = new Afbeelding(safe_combine_path(PASFOTO_PATH, $path));
+			$image->serve();
+		} catch (CsrGebruikerException $ex) {
+			redirect("/plaetjes/geen-foto.jpg");
+		}
 	}
 }

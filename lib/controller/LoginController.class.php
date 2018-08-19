@@ -30,9 +30,6 @@ use CsrDelft\view\login\RememberLoginForm;
 use CsrDelft\view\login\VerifyForm;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
-use function CsrDelft\redirect;
-use function CsrDelft\setGoBackCookie;
-use function CsrDelft\setMelding;
 
 /**
  * LoginController.class.php
@@ -53,7 +50,6 @@ class LoginController extends AclController {
 				'su' => 'P_ADMIN',
 				'endsu' => 'P_LOGGED_IN',
 				'verify' => 'P_PUBLIC',
-				'pauper' => 'P_PUBLIC',
 				'account' => 'P_PUBLIC',
 				'accountaanvragen' => 'P_PUBLIC',
 				'accountaanmaken' => 'P_ADMIN',
@@ -69,7 +65,6 @@ class LoginController extends AclController {
 				'login' => 'P_PUBLIC',
 				'logout' => 'P_LOGGED_IN',
 				'verify' => 'P_PUBLIC',
-				'pauper' => 'P_PUBLIC',
 				'account' => 'P_LOGGED_IN',
 				'accountaanmaken' => 'P_ADMIN',
 				'accountbewerken' => 'P_LOGGED_IN',
@@ -109,16 +104,10 @@ class LoginController extends AclController {
 		$values = $form->getValues();
 
 		if ($form->validate() AND $this->model->login($values['user'], $values['pass'])) {
-
-			// Switch to mobile webstek
-			if ($values['pauper']) {
-				$this->pauper();
-				return;
-			}
 			// Remember login form
 			if ($values['remember']) {
 				$remember = RememberLoginModel::instance()->nieuw();
-				$form = new RememberAfterLoginForm($remember);
+				$form = new RememberAfterLoginForm($remember, $values['redirect']);
 				$form->css_classes[] = 'redirect';
 
 
@@ -126,10 +115,8 @@ class LoginController extends AclController {
 				$this->view = new CsrLayoutPage($body, array(), $form);
 				return;
 			}
-			if (isset($_COOKIE['goback'])) {
-				$url = $_COOKIE['goback'];
-				setGoBackCookie(null);
-				redirect($url);
+			if ($values['redirect']) {
+				redirect($values['redirect']);
 			}
 			redirect(CSR_ROOT);
 		} else {
@@ -138,12 +125,7 @@ class LoginController extends AclController {
 	}
 
 	public function logout() {
-		$wasPauper = $this->model->isPauper();
 		$this->model->logout();
-		if ($wasPauper) {
-			$this->pauper();
-			return;
-		}
 		redirect(CSR_ROOT);
 	}
 
@@ -161,18 +143,6 @@ class LoginController extends AclController {
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
 		redirect(HTTP_REFERER, false);
-	}
-
-	public function pauper($terug = null) {
-		DebugLogModel::instance()->log(get_class(), 'Pauper gebruikt');
-		if ($terug === 'terug') {
-			$this->model->setPauper(false);
-			redirect(CSR_ROOT);
-		} else {
-			$this->model->setPauper(true);
-		}
-		$body = new CmsPaginaView(CmsPaginaModel::get('mobiel'));
-		$this->view = new CsrLayoutPage($body);
 	}
 
 	public function account($uid = null, $action = null) {
@@ -334,7 +304,11 @@ class LoginController extends AclController {
 			$mail->send();
 			redirect(CSR_ROOT);
 		}
-		$this->view = new CsrLayoutPage($form);
+		if (AccessModel::mag($account, 'P_LOGGED_IN')){
+			$this->view = new CsrLayoutPage($form);
+		} else {
+			$this->view = new CsrLayoutOweePage($form);
+		}
 	}
 
 	public function wachtwoordvergeten() {
@@ -445,11 +419,10 @@ class LoginController extends AclController {
 			}
 			if (isset($_POST['DataTableId'])) {
 				$this->view = new RememberLoginData(array($remember));
-			} // after login
-			elseif (isset($_COOKIE['goback'])) {
-				$this->view = new JsonResponse($_COOKIE['goback']);
-				setGoBackCookie(null);
-			} else {
+			} else if (isset($_POST['redirect'])) {
+				$this->view = new JsonResponse($_POST['redirect']);
+			}
+			else {
 				$this->view = new JsonResponse(CSR_ROOT);
 			}
 		} else {

@@ -5,7 +5,6 @@ namespace CsrDelft\model\gesprekken;
 use CsrDelft\model\entity\gesprekken\Gesprek;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\Orm\PersistenceModel;
-use function CsrDelft\getDateTime;
 
 /**
  * GesprekkenModel.class.php

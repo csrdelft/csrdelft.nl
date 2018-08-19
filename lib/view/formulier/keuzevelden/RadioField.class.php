@@ -20,14 +20,15 @@ use CsrDelft\view\formulier\elementen\FormElement;
 class RadioField extends SelectField {
 
 	public $type = 'radio';
-	public $columns = 0;
 
 	public function __construct($name, $value, $description, array $options) {
 		parent::__construct($name, $value, $description, $options, array(), 1, false);
+
+		$this->css_classes = ['FormElement', 'form-check-input'];
 	}
 
 	public function getHtml() {
-		$html = '<div class="KeuzeRondjeOptions columns-' . $this->columns . ($this->description ? '' : ' breed') . '">';
+		$html = '<div class="KeuzeRondjeOptions'. ($this->description ? '' : ' breed') . '">';
 		foreach ($this->options as $value => $description) {
 			$html .= $this->getOptionHtml($value, $description);
 		}
@@ -35,7 +36,10 @@ class RadioField extends SelectField {
 	}
 
 	protected function getOptionHtml($value, $description) {
-		$html = '<input id="' . $this->getId() . 'Option_' . $value . '" value="' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'class', 'origvalue', 'disabled', 'readonly', 'onclick'));
+		$id = $this->getId() . 'Option_' . $value;
+
+		$html = '<div class="form-check">';
+		$html .= '<input id="' . $id . '" value="' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'class', 'origvalue', 'disabled', 'readonly', 'onclick'));
 		if ($value === $this->value) {
 			$html .= ' checked="checked"';
 		}
@@ -43,11 +47,9 @@ class RadioField extends SelectField {
 		if ($description instanceof FormElement) {
 			$html .= $description->getHtml();
 		} else {
-			$html .= '<label for="' . $this->getId() . 'Option_' . $value . '" class="KeuzeRondjeLabel">' . htmlspecialchars($description) . '</label>';
+			$html .= '<label for="' . $id . '" class="form-check-label">' . htmlspecialchars($description) . '</label>';
 		}
-		if ($this->columns) {
-			$html .= '<br />';
-		}
+		$html .= '</div>';
 		return $html;
 	}
 

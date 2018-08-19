@@ -2,9 +2,6 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use function CsrDelft\startsWith;
-use function CsrDelft\url_like;
-
 /**
  * UrlField.class.php
  *

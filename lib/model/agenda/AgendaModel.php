@@ -16,9 +16,6 @@ use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
 use CsrDelft\Orm\PersistenceModel;
-use function CsrDelft\getDateTime;
-use function CsrDelft\getWeekNumber;
-
 
 /**
  * AgendaModel.php
@@ -102,7 +99,7 @@ class AgendaModel extends PersistenceModel {
 		$begin_moment = date('Y-m-d', $van);
 		$eind_moment = date('Y-m-d', $tot);
 		/** @var AgendaItem[] $items */
-		$items = $this->find('(begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
+        $items = $this->find('(begin_moment >= ? AND begin_moment < ? + INTERVAL 1 DAY) OR (eind_moment >= ? AND eind_moment < ? + INTERVAL 1 DAY)', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
 		foreach ($items as $item) {
 			if ($item->magBekijken($ical)) {
 				$result[] = $item;
@@ -134,7 +131,7 @@ class AgendaModel extends PersistenceModel {
 
 		// Verjaardagen
 		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
-		if (LoginModel::mag('P_VERJAARDAGEN', $auth) AND LidInstellingenModel::get('agenda', 'toonVerjaardagen') === 'ja') {
+		if (!$zijbalk && LoginModel::mag('P_VERJAARDAGEN', $auth) AND LidInstellingenModel::get('agenda', 'toonVerjaardagen') === 'ja') {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.

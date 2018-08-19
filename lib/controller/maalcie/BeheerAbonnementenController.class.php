@@ -11,8 +11,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementenLijstView;
 use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementenView;
 use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementView;
-use function CsrDelft\setMelding;
-
 
 /**
  * BeheerMaaltijdenController.class.php
@@ -52,21 +50,18 @@ class BeheerAbonnementenController extends AclController {
 		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenWaarschuwingenMatrix();
 		$this->view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], true, null);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function ingeschakeld() {
 		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenMatrix(true);
 		$this->view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], false, true);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function abonneerbaar() {
 		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenAbonneerbaarMatrix();
 		$this->view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], true, null);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function novieten() {

@@ -58,7 +58,6 @@ class LidInstellingenModel extends InstellingenModel {
 			'datumWeergave' => array('Datumweergave', T::Enumeration, array('relatief', 'vast'), 'relatief'),
 			'ongelezenWeergave' => array('Ongelezenweergave', T::Enumeration, array('cursief', 'dikgedrukt', 'onderstreept', 'alsof-gelezen'), 'cursief'),
 			'open_draad_op_pagina' => array('Open onderwerp op pagina', T::Enumeration, array('1', 'ongelezen', 'laatste'), 'ongelezen'),
-			'toonpasfotos' => array('Pasfoto\'s standaard weergeven', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'fotoWeergave' => array('Toon groter formaat foto\'s', T::Enumeration, array('nee', 'boven bericht', 'in bericht'), 'boven bericht'),
 			'filter2008' => array('Berichten van 2008 eerst verbergen', T::Enumeration, array('ja', 'nee'), 'nee')
 		),
@@ -67,7 +66,6 @@ class LidInstellingenModel extends InstellingenModel {
 		),
 		'googleContacts' => array(
 			'groepnaam' => array('Naam van groep voor contacten in Google contacts', T::String, array(1, 100), 'C.S.R.-leden'),
-			'extended' => array('Uitgebreide export (nickname, duckname, voorletters, adres/tel ouders, website, chataccounts, eetwens) ', T::Enumeration, array('ja', 'nee'), 'ja')
 		),
 		'mededelingen' => array(
 			'aantalPerPagina' => array('Aantal mededeling per pagina', T::Integer, array(5, 50), 10)

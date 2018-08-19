@@ -4,8 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\LidInstellingenModel;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\JsonResponse;

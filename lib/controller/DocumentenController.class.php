@@ -14,10 +14,6 @@ use CsrDelft\view\documenten\DocumentDownloadContent;
 use CsrDelft\view\documenten\DocumentenContent;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\JsonResponse;
-use function CsrDelft\getDateTime;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-
 
 /**
  * DocumentenController.class.php

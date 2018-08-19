@@ -3,7 +3,6 @@
 namespace CsrDelft\view\formulier\uploadvelden;
 
 use CsrDelft\common\CsrException;
-use function CsrDelft\format_filesize;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\view\formulier\invoervelden\InputField;
@@ -61,7 +60,7 @@ class BestandBehouden extends InputField {
 
 	public function getPreviewDiv() {
 		if ($this->model instanceof Afbeelding) {
-			return '<div id="imagePreview_' . $this->getId() . '" class="previewDiv"><img src="' . str_replace(PHOTOS_PATH, CSR_ROOT . '/plaetjes/', $this->model->directory) . $this->model->filename . '" width="' . $this->model->width . '" height="' . $this->model->height . '" /></div>';
+			return '<div id="imagePreview_' . $this->getId() . '" class="previewDiv"><img src="' . str_replace(PHOTOALBUM_PATH, CSR_ROOT . '/plaetjes/', $this->model->directory) . $this->model->filename . '" width="' . $this->model->width . '" height="' . $this->model->height . '" /></div>';
 		}
 		return '';
 	}

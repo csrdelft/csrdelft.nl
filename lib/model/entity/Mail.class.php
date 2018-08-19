@@ -4,9 +4,6 @@ namespace CsrDelft\model\entity;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use function CsrDelft\email_like;
-use function CsrDelft\isSyrinx;
-use function CsrDelft\setMelding;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\MailTemplateView;
 

@@ -7,7 +7,6 @@ use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\beheer\MaalCieBoekjaarSluitenView;
 use CsrDelft\view\maalcie\forms\BoekjaarSluitenForm;
-use function CsrDelft\setMelding;
 
 /**
  * MaalCieSaldiController.class.php

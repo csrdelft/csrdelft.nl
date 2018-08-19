@@ -1,6 +1,5 @@
 <?php
 
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;

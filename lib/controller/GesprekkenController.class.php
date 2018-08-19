@@ -17,8 +17,6 @@ use CsrDelft\view\gesprekken\GesprekForm;
 use CsrDelft\view\gesprekken\GesprekkenResponse;
 use CsrDelft\view\gesprekken\GesprekkenView;
 use CsrDelft\view\JsonResponse;
-use function CsrDelft\getDateTime;
-
 
 /**
  * GesprekkenController.class.php
@@ -26,6 +24,8 @@ use function CsrDelft\getDateTime;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Controller van de chat-functie.
+ *
+ * @property GesprekkenModel $model
  */
 class GesprekkenController extends AclController {
 

@@ -25,7 +25,11 @@ use CsrDelft\ShutdownHandler;
 use function CsrDelft\redirect;
 use function CsrDelft\setMelding;
 
+require __DIR__ . '/../vendor/autoload.php';
+require_once 'defines.include.php';
+require_once 'common.functions.php';
 require_once 'autoload.php';
+
 
 // Registreer foutmelding handlers
 if (DEBUG) {
@@ -109,7 +113,7 @@ CsrDelft\Orm\Configuration::load(array(
 // Router
 switch (constant('MODE')) {
 	case 'CLI':
-		require_once 'model/security/CliLoginModel.class.php';
+		//require_once 'model/security/CliLoginModel.class.php';
 		// Late static binding requires explicitly
 		// calling instance() before any static method!
 		LoginModel::instance();

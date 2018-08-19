@@ -9,7 +9,7 @@
 <hr />
 
 {* feutmeldingen weergeven... *}
-{CsrDelft\getMelding()}
+{getMelding()}
 
 <h1>C.S.R.-courant</h1>
 <p>
@@ -59,9 +59,9 @@
 		<div id="bewerkPreview" class="bbcodePreview"></div>
 		<textarea id="courantBericht" name="bericht" class="breed" rows="15" style="resize:vertical;">{$form.bericht|escape:'html'}</textarea>
 		<input type="submit" name="verzenden" value="Opslaan" /> 
-		<input type="button" value="Voorbeeld" onclick="CsrBBPreview('courantBericht', 'bewerkPreview');" />
+		<input type="button" value="Voorbeeld" onclick="window.bbcode.CsrBBPreview('courantBericht', 'bewerkPreview');" />
 		{if $courant->magBeheren()}
-			<input type="button" value="Importeer agenda" onclick="importAgenda('courantBericht');" />
+			<input type="button" value="Importeer agenda" onclick="window.courant.importAgenda('courantBericht');" />
 		{/if}
 	</div>
 </form>

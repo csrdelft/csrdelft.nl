@@ -32,9 +32,6 @@ use CsrDelft\view\forum\ForumResultatenView;
 use CsrDelft\view\forum\ForumRssView;
 use CsrDelft\view\forum\ForumZoekenForm;
 use CsrDelft\view\JsonResponse;
-use function CsrDelft\email_like;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
 
 
 /**

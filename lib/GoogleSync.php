@@ -4,7 +4,7 @@ namespace CsrDelft;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\GoogleToken;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\GoogleTokenModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;
@@ -112,9 +112,6 @@ class GoogleSync {
 
 			//then load the contacts for this group.
 			$this->loadContactsForGroup($this->groupid);
-
-			//copy setting from settings manager.
-			$this->extendedExport = LidInstellingenModel::get('googleContacts', 'extended') == 'ja';
 		} catch (CsrException $ex) {
 			setMelding("Verbinding met Google verbroken." . $ex->getMessage(), 2);
 			GoogleTokenModel::instance()->delete($google_token);
@@ -494,7 +491,7 @@ class GoogleSync {
 
 		$url = $contact['photo']['href'];
 
-		$path = PHOTOS_PATH . $profiel->getPasfotoPath(true);
+		$path = PASFOTO_PATH . $profiel->getPasfotoPath(true);
 
 		$headers = array('GData-Version' => '3.0', 'Content-Type' => "image/*");
 
@@ -533,35 +530,14 @@ class GoogleSync {
 		$fullName = $doc->createElement('gd:fullName', $profiel->getNaam());
 		$name->appendChild($fullName);
 
-
-		if ($this->extendedExport) {
-			//nickname
-			if ($profiel->nickname != '') {
-				$nick = $doc->createElement('gContact:nickname', $profiel->nickname);
-				$entry->appendChild($nick);
-			}
-			//initialen
-			if ($profiel->voorletters != '') {
-				$entry->appendChild($doc->createElement('gContact:initials', $profiel->voorletters));
-			}
-
-			//adres ouders toevoegen, alleen bij leden...
-			if ($profiel->isLid() AND $profiel->o_adres != '' AND $profiel->adres != $profiel->o_adres) {
-				$address = $doc->createElement('gd:structuredPostalAddress');
-				//$address->setAttribute('rel', 'http://schemas.google.com/g/2005#other');
-				$address->setAttribute('label', 'Ouders');
-
-				$address->appendChild($doc->createElement('gd:street', $profiel->o_adres));
-				if ($profiel->o_postcode != '') {
-					$address->appendChild($doc->createElement('gd:postcode', $profiel->o_postcode));
-				}
-				$address->appendChild($doc->createElement('gd:city', $profiel->o_woonplaats));
-				if ($profiel->o_land != '') {
-					$address->appendChild($doc->createElement('gd:country', $profiel->o_land));
-				}
-				$address->appendChild($doc->createElement('gd:formattedAddress', $profiel->getFormattedAddressOuders()));
-				$entry->appendChild($address);
-			}
+		//nickname
+		if ($profiel->nickname != '') {
+			$nick = $doc->createElement('gContact:nickname', $profiel->nickname);
+			$entry->appendChild($nick);
+		}
+		//initialen
+		if ($profiel->voorletters != '') {
+			$entry->appendChild($doc->createElement('gContact:initials', $profiel->voorletters));
 		}
 
 		//add home address
@@ -602,10 +578,6 @@ class GoogleSync {
 		//phone numbers
 		$telefoons = array();
 
-		//ouders nummer...
-		if ($this->extendedExport && $profiel->isLid()) {
-			$telefoons[] = array('o_telefoon', 'http://schemas.google.com/g/2005#other');
-		}
 		$telefoons[] = array('telefoon', 'http://schemas.google.com/g/2005#home');
 		$telefoons[] = array('mobiel', 'http://schemas.google.com/g/2005#mobile');
 
@@ -630,21 +602,12 @@ class GoogleSync {
 			$entry->appendChild($geboortedatum);
 		}
 
-		if ($this->extendedExport) {
-			if ($profiel->website != '') {
-				$website = $doc->createElement('gContact:website');
+		if ($profiel->website != '') {
+			$website = $doc->createElement('gContact:website');
 
-				$website->setAttribute('href', $profiel->website);
-				$website->setAttribute('rel', 'home');
-				$entry->appendChild($website);
-			}
-
-			if ($profiel->eetwens != '') {
-				$eetwens = $doc->createElement('gContact:userDefinedField');
-				$eetwens->setAttribute('key', 'Eetwens');
-				$eetwens->setAttribute('value', $profiel->eetwens);
-				$entry->appendChild($eetwens);
-			}
+			$website->setAttribute('href', $profiel->website);
+			$website->setAttribute('rel', 'home');
+			$entry->appendChild($website);
 		}
 
 		//system group 'my contacts' er bij, als die bestaat..

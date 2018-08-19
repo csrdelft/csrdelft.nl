@@ -2,9 +2,6 @@
 
 namespace CsrDelft\view\formulier;
 
-use function CsrDelft\getMelding;
-
-
 /**
  * TabsForm.class.php
  *

@@ -24,5 +24,5 @@
  */
 function smarty_function_getMelding($params, &$smarty) {
 
-	return \CsrDelft\getMelding();
+	return getMelding();
 }

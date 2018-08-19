@@ -2,14 +2,10 @@
 
 namespace CsrDelft\view\formulier\uploadvelden;
 
-use function CsrDelft\checkMimetype;
 use CsrDelft\common\CsrException;
-use function CsrDelft\format_filesize;
-use function CsrDelft\getMaximumFileUploadSize;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\view\formulier\invoervelden\InputField;
-use function GuzzleHttp\Psr7\mimetype_from_filename;
 
 /**
  * UploadFileField.class.php

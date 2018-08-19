@@ -10,10 +10,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\mededelingen\MededelingenOverzichtView;
 use CsrDelft\view\mededelingen\MededelingenView;
 use CsrDelft\view\mededelingen\MededelingView;
-use function CsrDelft\getDateTime;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-
 
 /**
  * Class MededelingenController
@@ -35,8 +31,8 @@ class MededelingenController extends AclController {
 		parent::__construct($query, MededelingenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'lijst' => 'P_PUBLIC',
-				'bekijken' => 'P_PUBLIC',
+				'lijst' => 'P_LOGGED_IN',
+				'bekijken' => 'P_LOGGED_IN',
 				'bewerken' => 'P_NEWS_POST',
 				'verwijderen' => 'P_NEWS_POST',
 				'toevoegen' => 'P_NEWS_POST',

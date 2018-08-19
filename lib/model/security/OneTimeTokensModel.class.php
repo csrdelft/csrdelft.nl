@@ -2,8 +2,6 @@
 
 namespace CsrDelft\model\security;
 
-use function CsrDelft\crypto_rand_token;
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\security\OneTimeToken;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\PersistenceModel;

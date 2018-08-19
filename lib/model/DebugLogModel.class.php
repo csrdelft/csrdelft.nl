@@ -2,12 +2,10 @@
 
 namespace CsrDelft\model;
 
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\DebugLogEntry;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
-use function CsrDelft\setMelding;
 
 /**
  * DebugLogModel.class.php

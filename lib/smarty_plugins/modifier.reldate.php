@@ -5,9 +5,6 @@
  * @subpackage plugins
  */
 
-use function CsrDelft\reldate;
-
-
 /**
  * Smarty cat modifier plugin
  *

@@ -8,9 +8,6 @@ use CsrDelft\model\entity\peilingen\PeilingOptie;
 use CsrDelft\model\peilingen\PeilingenModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\peilingen\PeilingenBeheerView;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-
 
 /**
  * Class PeilingenController

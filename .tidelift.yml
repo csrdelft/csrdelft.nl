@@ -1,0 +1,4 @@
+ci:
+  # don't run unlicensed test on any dependencies
+  tests:
+    unlicensed: skip

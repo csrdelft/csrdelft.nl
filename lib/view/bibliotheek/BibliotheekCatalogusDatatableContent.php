@@ -5,7 +5,6 @@ namespace CsrDelft\view\bibliotheek;
 use CsrDelft\model\bibliotheek\BiebCatalogus;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\reldate;
 
 class BibliotheekCatalogusDatatableContent extends AbstractBibliotheekView {
 

@@ -10,9 +10,6 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\View;
-use function CsrDelft\redirect;
-use function CsrDelft\setGoBackCookie;
-use function CsrDelft\setMelding;
 
 /**
  * Controller.abstract.php
@@ -205,8 +202,7 @@ abstract class Controller {
 			die($response_code);
 		} // Redirect to login form
 		elseif (LoginModel::getUid() === 'x999') {
-			setGoBackCookie(REQUEST_URI);
-			redirect(CSR_ROOT . "#login");
+			redirect_via_login(REQUEST_URI);
 		}
 		// GUI 403
 		$body = new CmsPaginaView(CmsPaginaModel::get($response_code));

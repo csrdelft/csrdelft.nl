@@ -10,9 +10,6 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
 use CsrDelft\view\maalcie\repetities\MaaltijdRepetitiesView;
 use CsrDelft\view\maalcie\repetities\MaaltijdRepetitieView;
-use function CsrDelft\getMelding;
-use function CsrDelft\setMelding;
-
 
 /**
  * MaaltijdRepetitiesController.class.php
@@ -61,7 +58,6 @@ class MaaltijdRepetitiesController extends AclController {
 		}
 		$this->view = new MaaltijdRepetitiesView($this->model->getAlleRepetities());
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 		$this->view->modal = $modal;
 	}
 

@@ -2,8 +2,6 @@
 
 namespace CsrDelft\view\formulier\elementen;
 
-use function CsrDelft\classNameZonderNamespace;
-
 /**
  * Subkopje.class.php
  *

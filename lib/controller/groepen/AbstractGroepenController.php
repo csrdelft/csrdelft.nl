@@ -2,7 +2,6 @@
 
 namespace CsrDelft\controller\groepen;
 
-use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\AbstractGroepLedenModel;
@@ -38,10 +37,6 @@ use CsrDelft\view\groepen\leden\GroepOmschrijvingView;
 use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use CsrDelft\view\JsonResponse;
-use function CsrDelft\getDateTime;
-use function CsrDelft\group_by_distinct;
-use function CsrDelft\setMelding;
-
 
 /**
  * AbstractGroepenController.php

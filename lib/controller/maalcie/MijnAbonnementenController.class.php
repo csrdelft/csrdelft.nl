@@ -9,8 +9,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\persoonlijk\abonnementen\MijnAbonnementenView;
 use CsrDelft\view\maalcie\persoonlijk\abonnementen\MijnAbonnementView;
-use function CsrDelft\setMelding;
-
 
 /**
  * MijnAbonnementenController.class.php
@@ -52,7 +50,6 @@ class MijnAbonnementenController extends AclController {
 		$abonnementen = $this->model->getAbonnementenVoorLid(LoginModel::getUid(), true, true);
 		$this->view = new MijnAbonnementenView($abonnementen);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function inschakelen($mrid) {

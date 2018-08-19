@@ -66,14 +66,14 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 		$js = <<<JS
 
 /* {$this->getTitel()} */
-taken_color_suggesties();
+window.maalcie.takenColorSuggesties();
 
 JS;
 		if (isset($this->voorkeurbaar) and $this->voorkeur) {
-			$js .= "taken_toggle_suggestie('geenvoorkeur');";
+			$js .= "window.maalcie.takenToggleSuggestie('geenvoorkeur');";
 		}
 		if ($this->recent) {
-			$js .= "taken_toggle_suggestie('recent');";
+			$js .= "window.maalcie.takenToggleSuggestie('recent');";
 		}
 		return $js;
 	}

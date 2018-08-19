@@ -8,7 +8,7 @@ namespace CsrDelft\view\formulier\datatable;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 08/03/2018
  *
- * @see assets/layout/js/csrdelft.dataTables.js
+ * @see resources/assets/js/datatable.js
  */
 class CellRender {
 	const NONE = 'null';

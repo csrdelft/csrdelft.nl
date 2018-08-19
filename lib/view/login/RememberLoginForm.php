@@ -16,9 +16,10 @@ class RememberLoginForm extends ModalForm {
 		$fields = [];
 		$fields[] = new HtmlComment('<div class="dikgedrukt">Gebruik deze functie alleen voor een veilig apparaat op een veilige locatie.</div>');
 		$fields[] = new RequiredTextField('device_name', $remember->device_name, 'Naam apparaat');
-		$fields[] = new FormDefaultKnoppen('/', false, true, true, true, false, true);
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen('/', false, true, true, true, false, true);
 	}
 
 }

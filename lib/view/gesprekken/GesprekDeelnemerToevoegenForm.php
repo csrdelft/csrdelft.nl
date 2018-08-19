@@ -8,7 +8,6 @@
 
 namespace CsrDelft\view\gesprekken;
 
-use function CsrDelft\group_by_distinct;
 use CsrDelft\model\entity\gesprekken\Gesprek;
 use CsrDelft\view\formulier\invoervelden\RequiredLidField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -22,9 +21,10 @@ class GesprekDeelnemerToevoegenForm extends ModalForm {
 		$fields = [];
 		$fields['to'] = new RequiredLidField('to', null, 'Naam of lidnummer');
 		$fields['to']->blacklist = array_keys(group_by_distinct('uid', $gesprek->getDeelnemers()));
-		$fields[] = new FormDefaultKnoppen(null, false);
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen(null, false);
 	}
 
 }

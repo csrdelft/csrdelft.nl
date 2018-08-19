@@ -6,7 +6,7 @@ use CsrDelft\lid\LidZoeker;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\OntvangtContactueel;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\CollapsableSubkopje;

@@ -11,8 +11,6 @@ use CsrDelft\view\maalcie\corvee\functies\FunctieDeleteView;
 use CsrDelft\view\maalcie\corvee\functies\FunctieForm;
 use CsrDelft\view\maalcie\corvee\functies\FunctieView;
 use CsrDelft\view\maalcie\corvee\functies\KwalificatieForm;
-use function CsrDelft\setMelding;
-
 
 /**
  * BeheerFunctiesController.class.php
@@ -59,7 +57,6 @@ class BeheerFunctiesController extends AclController {
 		$functies = $this->model->getAlleFuncties(); // grouped by functie_id
 		$this->view = new BeheerFunctiesView($functies);
 		$this->view = new CsrLayoutPage($this->view, array(), $modal);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function toevoegen() {

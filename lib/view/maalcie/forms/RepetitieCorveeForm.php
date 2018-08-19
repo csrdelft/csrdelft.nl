@@ -30,9 +30,10 @@ class RepetitieCorveeForm extends ModalForm {
 		$fields['mid'] = new IntField('maaltijd_id', $mid, null);
 		$fields['mid']->readonly = true;
 		$fields['mid']->hidden = true;
-		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 	public function validate() {

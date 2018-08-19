@@ -105,7 +105,7 @@ final class ShutdownHandler {
 			$slackClient = new SlackClient($slackConfig['url'], $slackConfig);
 			$foutmelding = $slackClient->createMessage();
 
-			$errorName = \CsrDelft\errorName($errno);
+			$errorName = errorName($errno);
 			$moment = date('r');
 
 			$foutmelding->setText(<<<MD

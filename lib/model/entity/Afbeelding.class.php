@@ -2,9 +2,7 @@
 
 namespace CsrDelft\model\entity;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use function GuzzleHttp\Psr7\mimetype_from_extension;
 
 /**
  * Afbeelding.class.php
@@ -28,6 +26,13 @@ class Afbeelding extends Bestand {
 	 * @var int
 	 */
 	public $height;
+
+	/**
+	 * @return string
+	 */
+	public function getFullPath() {
+		return $this->directory . $this->filename;
+	}
 
 	/**
 	 * Constructor is called late (after attributes are set)
@@ -61,6 +66,35 @@ class Afbeelding extends Bestand {
 				throw new CsrGebruikerException('Geen afbeelding: [' . $this->mimetype . '] ' . $this->filename);
 			}
 		}
+	}
+
+	/**
+	 * Serve this image with the correct http headers.
+	 */
+	public function serve() {
+		$filename = $this->getFullPath();
+		$lastModified = filemtime($filename);
+		$etagFile = md5_file(__FILE__);
+
+		if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] === $etagFile) {
+			header('HTTP/1.1 304 Not Modified');
+			exit;
+		}
+
+		if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $lastModified) {
+			header('HTTP/1.1 304 Not Modified');
+			exit;
+		}
+
+		header("Content-type: " . image_type_to_mime_type(exif_imagetype($filename)));
+		header('Content-Length: ' . filesize($filename));
+		header('ETag: ' . $etagFile);
+		header('Last-Modified: ' . gmdate(\DateTime::RFC7231, $lastModified));
+		header('Pragma: public');
+		header('Cache-Control: max-age=2592000, public');
+		header('Expires: ' . gmdate(\DateTime::RFC7231, time() + 2592000));
+		readfile($filename);
+		exit;
 	}
 
 }

@@ -2,8 +2,6 @@
 
 namespace CsrDelft\view\formulier;
 
-use function CsrDelft\setMelding;
-
 /**
  * UrlDownloader.class.php
  *

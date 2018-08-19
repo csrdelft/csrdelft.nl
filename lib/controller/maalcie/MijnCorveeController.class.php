@@ -51,7 +51,6 @@ class MijnCorveeController extends AclController {
 		$vrijstelling = CorveeVrijstellingenModel::instance()->getVrijstelling(LoginModel::getUid());
 		$this->view = new MijnCorveeView($rooster, $punten, $functies, $vrijstelling);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function rooster($toonverleden = false) {
@@ -65,7 +64,6 @@ class MijnCorveeController extends AclController {
 		$rooster = $this->model->getRoosterMatrix($taken->fetchAll());
 		$this->view = new CorveeRoosterView($rooster, $toonverleden);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 }

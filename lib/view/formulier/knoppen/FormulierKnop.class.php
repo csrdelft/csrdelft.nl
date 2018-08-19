@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\formulier\knoppen;
 
-use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\Icon;
 use CsrDelft\view\formulier\elementen\FormElement;
 
@@ -25,14 +24,14 @@ class FormulierKnop implements FormElement {
 	public $css_classes = array('FormulierKnop');
 
 	public function __construct($url, $action, $label, $title, $icon) {
-		$this->id = uniqid('knop_');
+		$this->id = uniqid_safe('knop_');
 		$this->url = $url;
 		$this->action = $action;
 		$this->label = $label;
 		$this->title = $title;
 		$this->icon = $icon;
 		$this->css_classes[] = $this->getType();
-		$this->css_classes[] = 'btn';
+		$this->css_classes[] = 'btn btn-primary';
 	}
 
 	public function getId() {
@@ -57,7 +56,7 @@ class FormulierKnop implements FormElement {
 
 	public function getHtml() {
 		$this->css_classes[] = $this->action;
-		$html = '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '"';
+		$html = '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '" tabindex="0"';
 		if (isset($this->data)) {
 			$html .= ' data="' . $this->data . '"';
 		}

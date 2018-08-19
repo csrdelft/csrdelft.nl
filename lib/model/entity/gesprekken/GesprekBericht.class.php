@@ -5,7 +5,6 @@ namespace CsrDelft\model\entity\gesprekken;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use function CsrDelft\reldate;
 
 /**
  * GesprekBericht.class.php
@@ -64,7 +63,7 @@ class GesprekBericht extends PersistentEntity {
 
 	public function getAuteurFormatted() {
 		$profiel = ProfielModel::get($this->auteur_uid);
-		return '<img class="cd-user-avatar float-left" src="/plaetjes/' . $profiel->getPasfotoPath(true) . '"/><div class="dikgedrukt">' . $profiel->getLink('volledig') . '</div>';
+		return '<img class="cd-user-avatar float-left" src="/plaetjes/pasfoto/' . $profiel->getPasfotoPath(true) . '"/><div class="dikgedrukt">' . $profiel->getLink('volledig') . '</div>';
 	}
 
 	public function getFormatted($previous, $max = false) {

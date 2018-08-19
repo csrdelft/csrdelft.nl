@@ -7,26 +7,23 @@
     <meta property="og:url" content="{$smarty.const.CSR_ROOT}{$REQUEST_URI}"/>
     <meta property="og:title" content="C.S.R. Delft | {$titel}"/>
     <meta property="og:locale" content="nl_nl"/>
-    <meta property="og:image" content="{$smarty.const.CSR_ROOT}/assets/layout/plaetjes/beeldmerk.png"/>
+    <meta property="og:image" content="{$smarty.const.CSR_ROOT}/images/beeldmerk.png"/>
     <meta property="og:description" content="{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C.S.R. Delft - {$titel}</title>
-    <link rel="shortcut icon" href="{$smarty.const.CSR_ROOT}/assets/layout/plaetjes/favicon.ico"/>
+    <link rel="shortcut icon" href="{$smarty.const.CSR_ROOT}/images/favicon.ico"/>
     <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"
           href="{$smarty.const.CSR_ROOT}/forum/rss.xml"/>
     {foreach from=$stylesheets item=sheet}
-        <link rel="stylesheet" href="{$sheet}" type="text/css"/>
+        <link rel="stylesheet" href="{$sheet}" type="text/css" />
     {/foreach}
-    <link rel="stylesheet" type="text/css"
-          href="https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic"/>
-    <!--[if lte IE 9]>
-    <link rel="stylesheet" href="/assets/layout-owee/css/ie9.css"/><![endif]-->
     {foreach from=$scripts item=script}
         <script type="text/javascript" src="{$script}"></script>
     {/foreach}
 </head>
 
-<body class="is-loading">
+<body>
+<script>document.body.classList.add('is-loading')</script>
 <!-- Page Wrapper -->
 <div id="page-wrapper">
 

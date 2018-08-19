@@ -4,9 +4,6 @@ namespace CsrDelft\model\forum;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use function CsrDelft\endsWith;
-use function CsrDelft\getDateTime;
-use function CsrDelft\group_by_distinct;
 use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\InstellingenModel;
@@ -15,7 +12,6 @@ use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
-use function CsrDelft\setMelding;
 use PDO;
 
 /**

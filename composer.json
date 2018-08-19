@@ -13,21 +13,21 @@
         "jacwright/restserver": "dev-master",
         "globalcitizen/php-iban": "^2.6",
         "robmorgan/phinx": "^0.9",
-        "csrdelft/orm": "^1.7",
+        "csrdelft/orm": "1.7.5",
         "tedivm/stash": "^0.14.1",
         "tedivm/jshrink": "^1.1",
         "tubalmartin/cssmin": "^4.0",
         "oyejorge/less.php": "v1.7.0.14",
         "maknz/slack": "^1.7",
-        "jakeasmith/http_build_url": "^1"
+        "jakeasmith/http_build_url": "^1",
+        "ferno/loco": "dev-master"
     },
     "config": {
         "platform": {
-            "php": "7.0"
+            "php": "7.1"
         }
     },
     "scripts": {
-        "clear-assets-cache": "php bin/clear-assets-cache.php",
         "analyse": "vendor/bin/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs"
     },
     "require-dev": {

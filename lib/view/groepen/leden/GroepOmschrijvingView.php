@@ -8,7 +8,6 @@
 
 namespace CsrDelft\view\groepen\leden;
 
-use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\elementen\FormElement;

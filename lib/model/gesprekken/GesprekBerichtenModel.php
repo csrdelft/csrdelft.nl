@@ -2,7 +2,6 @@
 
 namespace CsrDelft\model\gesprekken;
 
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\gesprekken\Gesprek;
 use CsrDelft\model\entity\gesprekken\GesprekBericht;
 use CsrDelft\model\entity\gesprekken\GesprekDeelnemer;

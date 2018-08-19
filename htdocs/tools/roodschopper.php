@@ -1,11 +1,8 @@
 <?php
 
-use function CsrDelft\email_like;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\redirect;
 use CsrDelft\Roodschopper;
 use CsrDelft\RoodschopperContent;
-use function CsrDelft\setMelding;
 use CsrDelft\view\CsrLayoutPage;
 
 require_once 'configuratie.include.php';

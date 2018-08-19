@@ -5,7 +5,6 @@
 use CsrDelft\MijnSqli;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\redirect;
 
 require_once 'configuratie.include.php';
 

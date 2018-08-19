@@ -2,7 +2,6 @@
 
 namespace CsrDelft\model;
 
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\CmsPagina;
 use CsrDelft\Orm\PersistenceModel;
 

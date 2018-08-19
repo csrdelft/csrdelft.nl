@@ -2,7 +2,6 @@
 
 namespace CsrDelft\model;
 
-use function CsrDelft\getDateTime;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\LedenMemoryScore;
 use CsrDelft\model\security\LoginModel;

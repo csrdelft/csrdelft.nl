@@ -9,8 +9,6 @@
  */
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\OrmMemcache;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
 
 require_once 'configuratie.include.php';
 

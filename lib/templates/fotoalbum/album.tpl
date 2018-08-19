@@ -77,8 +77,8 @@
 					$('div.fototag').remove();
 					// get new ones
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-					$.post('/fotoalbum/gettags' + dirname(url), {
-						foto: basename(url)
+					$.post('/fotoalbum/gettags' + window.util.dirname(url), {
+						foto: window.util.basename(url)
 					}, drawTags);
 				};
 				var removeTag = function (tagDiv) {
@@ -154,8 +154,8 @@
 				};
 				var addTag = function (relX, relY, size) {
 					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-					$.post('/fotoalbum/addtag' + dirname(url), {
-						foto: basename(url),
+					$.post('/fotoalbum/addtag' + window.util.dirname(url), {
+						foto: window.util.basename(url),
 						x: Math.round(relX),
 						y: Math.round(relY),
 						size: Math.round(size)
@@ -427,16 +427,16 @@
 						btnZoom.find('span.fa').addClass('fa-search-minus');
 					}
 
-		{if CsrDelft\model\security\LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
+		{if $album->magAanpassen()}
 
 					// knopje rechtsom draaien
 					var btnRight = $('<a id="btnRight" tabindex="-1"><span class="fa fa-repeat"></span> &nbsp; Draai met de klok mee</a>');
 					btnRight.click(function () {
 						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-						$.post('/fotoalbum/roteren' + dirname(url), {
-							foto: basename(url),
+						$.post('/fotoalbum/roteren' + window.util.dirname(url), {
+							foto: window.util.basename(url),
 							rotation: 90
-						}, page_reload);
+						}, window.util.reload);
 					});
 
 					addCMI(btnRight, true);
@@ -445,10 +445,10 @@
 					var btnLeft = $('<a id="btnLeft" tabindex="-1"><span class="fa fa-undo"></span> &nbsp; Draai tegen de klok in</a>');
 					btnLeft.click(function () {
 						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-						$.post('/fotoalbum/roteren' + dirname(url), {
-							foto: basename(url),
+						$.post('/fotoalbum/roteren' + window.util.dirname(url), {
+							foto: window.util.basename(url),
 							rotation: -90
-						}, page_reload);
+						}, window.util.reload);
 					});
 
 					addCMI(btnLeft);
@@ -457,9 +457,9 @@
 					var btnCover = $('<a id="btnCover" tabindex="-1"><span class="fa fa-folder"></span> &nbsp; Instellen als albumcover</a>');
 					btnCover.click(function () {
 						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-						$.post('/fotoalbum/albumcover' + dirname(url), {
-							foto: basename(url)
-						}, page_redirect);
+						$.post('/fotoalbum/albumcover' + window.util.dirname(url), {
+							foto: window.util.basename(url)
+						}, window.util.redirect);
 					});
 
 					addCMI(btnCover);
@@ -471,9 +471,9 @@
 							return false;
 						}
 						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
-						$.post('/fotoalbum/verwijderen' + dirname(url), {
-							foto: decodeURI(basename(url))
-						}, page_reload);
+						$.post('/fotoalbum/verwijderen' + window.util.dirname(url), {
+							foto: decodeURI(window.util.basename(url))
+						}, window.util.reload);
 					});
 
 					addCMI(btnDel, true);
@@ -566,7 +566,7 @@
 
 				// user selectable foto url
 				container.find('div.title').off().on('click', function (event) {
-					selectText(this);
+					window.util.selectText(this);
 				}).addClass('select-text');
 
 				// keyboard shortcuts
@@ -604,7 +604,7 @@
 					if (container.hasClass('jgallery-full-screen')) {
 						fullscreen = '?fullscreen';
 					}
-					window.location.href = dirname(dirname(url)).replace('plaetjes/', '') + fullscreen;
+					window.location.href = window.util.dirname(window.util.dirname(url)).replace('plaetjes/', '') + fullscreen;
 				}).prependTo(container.find('div.icons'));
 
 				// toggle thumbnails
@@ -706,17 +706,17 @@
 		}
 	</script>
 {/if}
-<div class="float-right" style="margin-top: 30px;">
-	{toegang P_ALBUM_ADD}
+<div class="float-right">
+	{if $album->magToevoegen()}
 		<a class="btn" href="/fotoalbum/uploaden/{$album->subdir}">{icon get="picture_add"} Toevoegen</a>
 		<a class="btn post popup" href="/fotoalbum/toevoegen/{$album->subdir}">{icon get="folder_add"} Nieuw album</a>
-	{/toegang}
-	{if CsrDelft\model\security\LoginModel::mag('P_ALBUM_MOD') OR $album->isOwner()}
+	{/if}
+	{if $album->magAanpassen()}
 		<a href="/fotoalbum/hernoemen/{$album->subdir}" class="btn post prompt redirect" title="Fotoalbum hernoemen" data="Nieuwe naam={$album->dirname|ucfirst}">{icon get=pencil} Naam wijzigen</a>
 		{if $album->isEmpty()}
 			<a href="/fotoalbum/verwijderen/{$album->subdir}" class="btn post confirm redirect" title="Fotoalbum verwijderen">{icon get=cross} Verwijderen</a>
 		{/if}
-		{toegang P_ALBUM_MOD}
+		{toegang $album->magAanpassen()}
 			<a class="btn popup confirm" href="/fotoalbum/verwerken/{$album->subdir}" title="Fotoalbum verwerken (dit kan even duren). Verwijder magick-* files in /tmp handmatig bij timeout!">{icon get="application_view_gallery"} Verwerken</a>
 		{/toegang}
 	{/if}

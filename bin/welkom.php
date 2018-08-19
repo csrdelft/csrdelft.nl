@@ -37,7 +37,7 @@ Stuur dan een e-mail: pubcie@csrdelft.nl
 
 Met amicale groet,
 
-Robin van Heukelum,
+Job Bakker,
 h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 TEXT;
     $mail = new Mail(array($profiel->email => $profiel->voornaam), 'Inloggegevens C.S.R.-webstek', $tekst);

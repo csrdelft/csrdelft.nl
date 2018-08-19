@@ -20,8 +20,8 @@ class PinBestellingVeranderenForm extends ModalForm {
 		$fields['id'] = new TextField('id', $model->id, 'id');
 		$fields['id']->hidden = true;
 
-		$fields['btn'] = new FormDefaultKnoppen(null, false);
-
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen(null, false);
 	}
 }

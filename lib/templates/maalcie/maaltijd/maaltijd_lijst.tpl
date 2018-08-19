@@ -10,7 +10,7 @@
 		{/foreach}
 	</head>
 	<body>
-		<a href="/" class="float-right"><img alt="Beeldmerk van de Vereniging" src="/assets/layout/plaetjes/beeldmerk.jpg" /></a>
+		<a href="/" class="float-right"><img alt="Beeldmerk van de Vereniging" src="/dist/images/beeldmerk.png" /></a>
 		<h1>{$titel} op {$maaltijd->datum|date_format:"%A %e %B %Y"}</h1>
 		<div class="header">{CsrDelft\model\InstellingenModel::get('maaltijden', 'maaltijdlijst_tekst')|replace:'MAALTIJDPRIJS':$prijs}</div>
 		{if !$maaltijd->gesloten}

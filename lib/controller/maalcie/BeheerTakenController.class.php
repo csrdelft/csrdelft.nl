@@ -19,10 +19,6 @@ use CsrDelft\view\maalcie\corvee\taken\BeheerTakenView;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\TaakForm;
 use CsrDelft\view\maalcie\forms\ToewijzenForm;
-use function CsrDelft\endsWith;
-use function CsrDelft\redirect;
-use function CsrDelft\setMelding;
-
 
 /**
  * BeheerTakenController.class.php
@@ -86,7 +82,6 @@ class BeheerTakenController extends AclController {
 		}
 		$this->view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::instance()->getAlleRepetities());
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 		$this->view->modal = $modal;
 	}
 
@@ -97,7 +92,6 @@ class BeheerTakenController extends AclController {
 	public function prullenbak() {
 		$this->view = new BeheerTakenView($this->model->getVerwijderdeTaken(), null, true);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function herinneren() {

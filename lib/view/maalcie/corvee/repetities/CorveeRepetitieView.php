@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\maalcie\corvee\repetities;
 
-use function CsrDelft\getMelding;
 use CsrDelft\model\entity\maalcie\CorveeRepetitie;
 use CsrDelft\view\SmartyTemplateView;
 

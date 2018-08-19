@@ -19,9 +19,10 @@ class KwalificatieForm extends ModalForm {
 
 		$fields = [];
 		$fields[] = new LidField('uid', $kwalificatie->uid, 'Naam of lidnummer', 'leden');
-		$fields[] = new FormDefaultKnoppen();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
 }

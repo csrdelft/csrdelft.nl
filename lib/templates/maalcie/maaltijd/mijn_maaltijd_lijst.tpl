@@ -25,7 +25,7 @@
 					{/if}
 				</div>
 			</div>
-			{CsrDelft\view\bbcode\CsrBB::parse($maaltijd->omschrijving)}
+			{$maaltijd->omschrijving|bbcode}
 		</td>
 		<td class="text-center">
 			{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->aanmeld_limiet})

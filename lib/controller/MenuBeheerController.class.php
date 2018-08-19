@@ -7,10 +7,9 @@ use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
+use CsrDelft\view\MeldingResponse;
 use CsrDelft\view\menubeheer\MenuBeheerView;
 use CsrDelft\view\menubeheer\MenuItemForm;
-use function CsrDelft\setMelding;
-
 
 /**
  * MenuBeheerController.class.php
@@ -75,7 +74,7 @@ class MenuBeheerController extends AclController {
 		if ($form->validate()) { // form checks if hidden fields are modified
 			$this->model->create($item);
 			setMelding('Toegevoegd: ' . $item->tekst, 1);
-			$this->view = new JsonResponse(true);
+			$this->view = new MeldingResponse();
 		} else {
 			$this->view = $form;
 		}

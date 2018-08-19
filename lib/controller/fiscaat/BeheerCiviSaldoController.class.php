@@ -14,7 +14,6 @@ use CsrDelft\view\fiscaat\saldo\CiviSaldoTableResponse;
 use CsrDelft\view\fiscaat\saldo\InleggenForm;
 use CsrDelft\view\fiscaat\saldo\LidRegistratieForm;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
-use function CsrDelft\getDateTime;
 use DateTime;
 
 /**

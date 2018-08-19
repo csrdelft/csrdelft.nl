@@ -1,0 +1,111 @@
+@import "extern/variables";
+
+@import "~jgallery/dist/css/jgallery";
+
+.dropdown-menu {
+  display: none;
+
+  z-index: 1002;
+  color: white;
+  background: $kleur2;
+  border: $kleur3;
+  border-radius: 5px;
+  border-width: 3px;
+  padding: 5px;
+  li {
+    list-style: none;
+  }
+
+  a {
+    border: 0;
+    cursor: pointer;
+  }
+}
+
+h1 {
+  padding-bottom: 1em;
+  border-bottom: solid 2px rgba(255, 255, 255, 0.5);
+}
+
+.subalbums {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 1em;
+  font-size: 12pt;
+
+  .subalbum {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 1px 1px 0;
+    float: left;
+    cursor: pointer;
+
+    a {
+      border: 0;
+      img {
+        margin: 0;
+      }
+    }
+
+    .subalbumname {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 5px 2px 5px 2px;
+      text-align: center;
+      font-weight: bold;
+      color: black;
+      background-color: white;
+      opacity: 0.8;
+    }
+  }
+  .subalbum:hover {
+    text-decoration: none;
+
+    .subalbumname {
+      opacity: 0.9;
+    }
+  }
+}
+
+.subalbums .subalbum, .jgallery-container-inner a {
+  -webkit-transition: opacity .4s ease-out;
+  -moz-transition: opacity .4s ease-out;
+  -o-transition: opacity .4s ease-out;
+  transition: opacity .4s ease-out;
+}
+
+.subalbums:hover .subalbum, .jgallery-container-inner:hover a {
+  opacity: 0.8;
+}
+
+.subalbums:hover .subalbum:hover, .jgallery-container-inner:hover a:hover {
+  opacity: 1;
+}
+
+.jgallery {
+  background-color: #fff !important;
+
+  .zoom-container {
+    .jgallery-container {
+      background: none !important;
+    }
+  }
+
+  .jgallery-thumbnails {
+    .jgallery-container {
+      overflow-x: auto;
+      img {
+        margin: 0;
+      }
+    }
+  }
+  .jgallery-thumbnails.full-screen {
+
+    .jgallery-container {
+      overflow-y: auto;
+    }
+  }
+}

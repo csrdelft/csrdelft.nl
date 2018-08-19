@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\formulier\datatable;
 
-use function CsrDelft\classNameZonderNamespace;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
 use CsrDelft\view\formulier\elementen\FormElement;
@@ -41,7 +40,7 @@ class DataTable implements View, FormElement {
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
-		$this->dataTableId = uniqid(classNameZonderNamespace(get_class($this->model)));
+		$this->dataTableId = uniqid_safe(classNameZonderNamespace(get_class($this->model)));
 		$this->groupByColumn = $groupByColumn;
 
 		// create group expand / collapse column
@@ -100,15 +99,16 @@ class DataTable implements View, FormElement {
 	 * @param CellRender|null $render
 	 * @param string|null $order_by
 	 * @param CellType|null $type
+	 * @param string|null $data The data source for the column. Defaults to the column name.
 	 */
-	protected function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null) {
+	protected function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null, $data = null) {
 		$type = $type ?: CellType::String();
 		$render = $render ?: CellRender::None();
 
 		// column definition
 		$newColumn = array(
 			'name' => $newName,
-			'data' => $newName,
+			'data' => $data ?? $newName,
 			'title' => ucfirst(str_replace('_', ' ', $newName)),
 			'defaultContent' => $defaultContent,
 			'type' => $type,

@@ -14,8 +14,6 @@ use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
-use function CsrDelft\classNameZonderNamespace;
-use function CsrDelft\setMelding;
 
 /**
  * GroepForm.php
@@ -67,9 +65,9 @@ class GroepForm extends ModalForm {
 		}
 
 		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
-
-		$fields[] = $etc[] = new FormDefaultKnoppen($nocancel ? false : null);
 		$this->addFields($fields);
+
+		$this->formKnoppen = new FormDefaultKnoppen($nocancel ? false : null);
 	}
 
 	public function validate() {

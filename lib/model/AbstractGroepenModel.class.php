@@ -14,9 +14,6 @@ use CsrDelft\Orm\DynamicEntityModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use PDO;
-use function CsrDelft\classNameZonderNamespace;
-use function CsrDelft\setMelding;
-
 
 /**
  * AbstractGroepenModel.class.php

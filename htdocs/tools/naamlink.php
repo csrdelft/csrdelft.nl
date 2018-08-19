@@ -3,7 +3,6 @@
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\namen2uid;
 
 require_once 'configuratie.include.php';
 

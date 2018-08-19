@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+  - "8"
+
+cache:
+  directories:
+    - "node_modules"
+
+git:
+  submodules: false
+
+install: yarn
+
+script:
+  - yarn run production
+
+deploy:
+  provider: script
+  script: ./bin/ci/deploy.sh
+  skip_cleanup: true
+  on:
+    branch: master

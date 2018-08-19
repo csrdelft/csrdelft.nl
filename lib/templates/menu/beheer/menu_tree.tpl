@@ -1,7 +1,7 @@
 {*
 menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
-{CsrDelft\getMelding()}
+{getMelding()}
 {if $menus}
 	<div class="float-right">
 		<label>Toon menu:</label>

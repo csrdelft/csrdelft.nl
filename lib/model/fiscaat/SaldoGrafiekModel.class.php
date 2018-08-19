@@ -4,7 +4,6 @@ namespace CsrDelft\model\fiscaat;
 
 use CsrDelft\model\entity\fiscaat\Saldo;
 use CsrDelft\model\security\LoginModel;
-use function CsrDelft\getDateTime;
 
 class SaldoGrafiekModel {
 	const ORM = Saldo::class;

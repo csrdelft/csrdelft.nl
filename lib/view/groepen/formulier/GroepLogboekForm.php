@@ -14,9 +14,10 @@ class GroepLogboekForm extends ModalForm {
 
 		$fields = [];
 		$fields[] = new GroepLogboekTable($groep);
-		$fields[] = new ModalCloseButtons();
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new ModalCloseButtons();
 	}
 
 }
