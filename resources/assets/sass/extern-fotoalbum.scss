@@ -1,6 +1,6 @@
 @import "extern/variables";
 
-@import "~jgallery/dist/css/jgallery";
+@import "~jgallery/dist/css/jgallery.css";
 
 .dropdown-menu {
   display: none;
@@ -71,9 +71,6 @@ h1 {
 }
 
 .subalbums .subalbum, .jgallery-container-inner a {
-  -webkit-transition: opacity .4s ease-out;
-  -moz-transition: opacity .4s ease-out;
-  -o-transition: opacity .4s ease-out;
   transition: opacity .4s ease-out;
 }
 
