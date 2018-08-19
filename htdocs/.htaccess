@@ -19,7 +19,7 @@ RewriteRule ^logout				index.php?c=Login [L]
 RewriteRule ^su					index.php?c=Login [L]
 RewriteRule ^endsu				index.php?c=Login [L]
 RewriteRule ^verify				index.php?c=Login [L]
-RewriteRule ^wachtwoord			index.php?c=Login [L]
+RewriteRule ^wachtwoord			index.php?c=Login [QSA,L]
 RewriteRule ^account			index.php?c=Login [L]
 
 RewriteRule ^eetplan			index.php?c=Eetplan		[QSA,L]

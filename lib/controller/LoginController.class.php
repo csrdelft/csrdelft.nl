@@ -27,7 +27,6 @@ use CsrDelft\view\login\LoginSessionsData;
 use CsrDelft\view\login\RememberAfterLoginForm;
 use CsrDelft\view\login\RememberLoginData;
 use CsrDelft\view\login\RememberLoginForm;
-use CsrDelft\view\login\VerifyForm;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
 
@@ -49,7 +48,6 @@ class LoginController extends AclController {
 				'logout' => 'P_LOGGED_IN',
 				'su' => 'P_ADMIN',
 				'endsu' => 'P_LOGGED_IN',
-				'verify' => 'P_PUBLIC',
 				'account' => 'P_PUBLIC',
 				'accountaanvragen' => 'P_PUBLIC',
 				'accountaanmaken' => 'P_ADMIN',
@@ -64,14 +62,13 @@ class LoginController extends AclController {
 			$this->acl = array(
 				'login' => 'P_PUBLIC',
 				'logout' => 'P_LOGGED_IN',
-				'verify' => 'P_PUBLIC',
 				'account' => 'P_LOGGED_IN',
 				'accountaanmaken' => 'P_ADMIN',
 				'accountbewerken' => 'P_LOGGED_IN',
 				'accountverwijderen' => 'P_LOGGED_IN',
 				'wachtwoord' => 'P_PUBLIC',
 				'wachtwoordwijzigen' => 'P_LOGGED_IN',
-				'wachtwoordreset' => 'P_LOGGED_IN',
+				'wachtwoordreset' => 'P_PUBLIC',
 				'wachtwoordvergeten' => 'P_PUBLIC',
 				'loginsessionsdata' => 'P_LOGGED_IN',
 				'loginendsession' => 'P_LOGGED_IN',
@@ -274,12 +271,13 @@ class LoginController extends AclController {
 	}
 
 	public function wachtwoordreset() {
-		$account = LoginModel::getAccount();
-		// mag inloggen met url_token?
-		if (!$account OR !AccessModel::mag($account, 'P_LOGGED_IN', AuthenticationMethod::getTypeOptions()) OR !OneTimeTokensModel::instance()->isVerified($account->uid, '/wachtwoord/reset')) {
+		$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
+		$account = OneTimeTokensModel::instance()->verifyToken('/wachtwoord/reset', $token);
+
+		if ($account == null) {
 			$this->exit_http(403);
 		}
-		$form = new WachtwoordWijzigenForm($account, 'reset', false);
+		$form = new WachtwoordWijzigenForm($account, 'reset?token=' . rawurlencode($token), false);
 		if ($form->validate()) {
 			// wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
@@ -304,7 +302,7 @@ class LoginController extends AclController {
 			$mail->send();
 			redirect(CSR_ROOT);
 		}
-		if (AccessModel::mag($account, 'P_LOGGED_IN')){
+		if (LoginModel::mag('P_LOGGED_IN')){
 			$this->view = new CsrLayoutPage($form);
 		} else {
 			$this->view = new CsrLayoutOweePage($form);
@@ -324,38 +322,16 @@ class LoginController extends AclController {
 				$token = OneTimeTokensModel::instance()->createToken($account->uid, '/wachtwoord/reset');
 				// stuur resetmail
 				$profiel = $account->getProfiel();
+				$url =  CSR_ROOT ."/wachtwoord/reset?token=". rawurlencode($token[0]);
 				require_once 'model/entity/Mail.class.php';
 				$bericht = "Geachte " . $profiel->getNaam('civitas') .
 					",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1] .
-					".\n\n[url=" . CSR_ROOT . "/verify/" . $token[0] .
+					".\n\n[url=". $url  .
 					"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
 				$emailNaam = $profiel->getNaam('volledig', true); // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
 				$mail = new Mail(array($account->email => $emailNaam), '[C.S.R. webstek] Wachtwoord vergeten', $bericht);
 				$mail->send();
 				setMelding('Wachtwoord reset email verzonden', 1);
-			}
-		}
-		$this->view = new CsrLayoutOweePage($form);
-	}
-
-	public function verify($tokenString = null) {
-		$form = new VerifyForm($tokenString);
-		if ($form->validate()) {
-			$uid = $form->findByName('user')->getValue();
-			$account = AccountModel::get($uid);
-			// mag inloggen met url_token?
-			if ($account !== false AND AccessModel::mag($account, 'P_LOGGED_IN', AuthenticationMethod::getTypeOptions())) {
-				$token = OneTimeTokensModel::instance()->verifyToken($account->uid, $tokenString);
-
-				if ($token === false) {
-					setMelding('Deze link is niet (meer) geldig', -1);
-					redirect(CSR_ROOT . '/wachtwoord/vergeten');
-				} else {
-					redirect($token->url);
-				}
-			} else {
-				setMelding('Mag niet inloggen', -1);
-				redirect(CSR_ROOT . '/wachtwoord/vergeten');
 			}
 		}
 		$this->view = new CsrLayoutOweePage($form);
