@@ -3,7 +3,7 @@
  * @author mr.doob / http://mrdoob.com/
  */
 
-export const Detector = {
+export default {
 
 	canvas : !! window.CanvasRenderingContext2D,
 	webgl : ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )(),
@@ -12,7 +12,7 @@ export const Detector = {
 
 	getWebGLErrorMessage : function () {
 
-		var domElement = document.createElement( 'div' );
+		let domElement = document.createElement( 'div' );
 
 		domElement.style.fontFamily = 'monospace';
 		domElement.style.fontSize = '13px';
@@ -43,7 +43,7 @@ export const Detector = {
 
 	addGetWebGLMessage : function ( parameters ) {
 
-		var parent, id, domElement;
+		let parent, id, domElement;
 
 		parameters = parameters || {};
 

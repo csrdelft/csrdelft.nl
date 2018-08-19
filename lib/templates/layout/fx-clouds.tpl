@@ -32,6 +32,7 @@
 	}
 </script>
 
+<script type="text/javascript" src="/dist/js/fxclouds.js"></script>
 <script type="text/javascript">
 
 	if (!Detector.webgl) {
