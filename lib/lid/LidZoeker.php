@@ -8,7 +8,6 @@ use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 
-require_once 'common.functions.php';
 
 /**
  * LidZoeker
@@ -323,12 +322,12 @@ class LidZoeker {
 			$query = '1 ';
 		} elseif (preg_match('/^groep:([0-9]+|[a-z]+)$/i', $zoekterm)) { //leden van een groep
 			$uids = array();
-			try {
+			/*try {
 				//FIXME: $groep = new OldGroep(substr($zoekterm, 6));
 				$uids = array_keys($groep->getLeden());
 			} catch (\Exception $e) {
 				//care.
-			}
+			}*/
 			$query = "uid IN('" . implode("','", $uids) . "') ";
 		} elseif (preg_match('/^verticale:\w*$/', $zoekterm)) { //verticale, id, letter
 			$v = substr($zoekterm, 10);
@@ -417,7 +416,7 @@ class LidZoeker {
 		$query .= $this->getFilterSQL();
 		$query .= ' ORDER BY ' . implode($this->sort) . ';';
 
-		$this->sqlquery = $query;
+
 		$result = $db->query2array($query);
 
 		//De uid's omzetten naar Lid-objectjes

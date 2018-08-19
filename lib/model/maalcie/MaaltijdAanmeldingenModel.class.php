@@ -88,9 +88,9 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 	 * Called when a MaaltijdAbonnement is being deleted (turned off) or a MaaltijdRepetitie is being deleted.
 	 *
 	 * @param int $mrid id van de betreffede MaaltijdRepetitie
-	 * @param type $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
+	 * @param string $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
 	 *
-	 * @return int|void
+	 * @return int|null
 	 */
 	public function afmeldenDoorAbonnement($mrid, $uid) {
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
@@ -258,7 +258,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 	/**
 	 * Controleer of alle aanmeldingen voor de maaltijden nog in overeenstemming zijn met het aanmeldfilter.
 	 *
-	 * @param $filter
+	 * @param string $filter
 	 * @param Maaltijd[] $maaltijden
 	 * @return int
 	 */
@@ -287,6 +287,12 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 		return $aantal;
 	}
 
+	/**
+	 * @param string $uid
+	 * @param string $filter
+	 * @return bool Of de gebruiker voldoet aan het filter
+	 * @throws CsrGebruikerException Als de gebruiker niet bestaat
+	 */
 	public function checkAanmeldFilter($uid, $filter) {
 		$account = AccountModel::get($uid); // false if account does not exist
 		if (!$account) {

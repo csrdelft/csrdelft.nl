@@ -1,0 +1,154 @@
+<?php
+
+namespace CsrDelft\lid;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\model\ProfielModel;
+
+/**
+ * De 'normale' ledenlijst, zoals het is zoals het was.
+ */
+class LLLijst extends LLWeergave {
+
+	private function viewVeldnamen() {
+		echo '<tr>';
+		foreach ($this->velden as $veld) {
+			echo '<th>' . ucfirst($veld) . '</th>';
+		}
+		echo '</tr>';
+	}
+
+	public function viewHeader() {
+		echo '<table class="zoekResultaat" id="zoekResultaat">';
+		echo '<thead>';
+		$this->viewVeldnamen();
+		echo '</thead><tbody>';
+	}
+
+	public function viewFooter() {
+		echo "</tbody>\n<tfoot>";
+		$this->viewVeldnamen();
+		echo '</tfoot></table>';
+
+		//fix jQuery datatables op deze tabel.
+		$aoColumns = array();
+		foreach ($this->velden as $veld) {
+			switch ($veld) {
+				case 'pasfoto':
+					$aoColumns[] = '{"bSortable": false}';
+					break;
+				case 'email':
+				case 'naam':
+				case 'kring':
+				case 'patroon':
+				case 'verticale':
+					$aoColumns[] = '{"sType": \'html\'}';
+					break;
+				case 'woonoord':
+					$aoColumns[] = '{"sType": \'html\'}';
+					break;
+				default:
+					$aoColumns[] = 'null';
+			}
+		}
+		?>
+        <script type="text/javascript">
+            jQuery(document).ready(function ($) {
+                $("#zoekResultaat").dataTable({
+                    "aaSorting": [],
+                    "bStateSave": true,
+                    "oLanguage": {
+                        "sSearch": "Zoeken in selectie:"
+                    },
+                    "iDisplayLength": 50,
+                    "bInfo": false,
+                    "bLengthChange": false,
+                    "aoColumns": [<?php echo implode(', ', $aoColumns); ?>]
+                });
+            });
+        </script><?php
+	}
+
+	public function viewLid(Profiel $profiel) {
+		echo '<tr id="lid' . $profiel->uid . '">';
+		foreach ($this->velden as $veld) {
+			echo '<td class="' . $veld . '">';
+			switch ($veld) {
+
+				case 'email':
+					$email = $profiel->getPrimaryEmail();
+					if ($email) {
+						echo '<a href="mailto:' . $email . '">' . $email . '</a>';
+					}
+					break;
+
+				case 'adres':
+					echo htmlspecialchars($profiel->getAdres());
+					break;
+
+				case 'kring':
+					$kring = $profiel->getKring();
+					if ($kring) {
+						echo '<a href="' . $kring->getUrl() . '">' . $kring->naam . '</a>';
+					}
+					break;
+
+				case 'naam':
+					//we stoppen er een verborgen <span> bij waar op gesorteerd wordt door datatables.
+					echo '<span class="verborgen">' . $profiel->getNaam('streeplijst') . '</span>';
+					echo $profiel->getLink('volledig');
+					break;
+
+				case 'pasfoto':
+					echo $profiel->getPasfotoTag();
+					break;
+
+				case 'patroon':
+					$patroon = ProfielModel::get($profiel->patroon);
+					if ($patroon) {
+						echo $patroon->getLink('volledig');
+					} else {
+						echo '-';
+					}
+					break;
+
+				case 'echtgenoot':
+					$echtgenoot = ProfielModel::get($profiel->echtgenoot);
+					if ($echtgenoot) {
+						echo $echtgenoot->getLink('volledig');
+					} else {
+						echo '-';
+					}
+					break;
+
+				case 'status':
+					echo LidStatus::getDescription($profiel->status);
+					break;
+
+				case 'verticale':
+					echo htmlspecialchars($profiel->getVerticale()->naam);
+					break;
+
+				case 'woonoord':
+					echo $profiel->getWoonoord()->naam;
+					break;
+
+				case 'linkedin':
+				case 'website':
+					echo '<a target="_blank" href="' . htmlspecialchars($profiel->$veld) . '">' . htmlspecialchars($profiel->$veld) . '</a>';
+					break;
+
+				default:
+					try {
+						echo htmlspecialchars($profiel->$veld);
+					} catch (\Exception $e) {
+						echo ' - ';
+					}
+			}
+			echo '</td>';
+		}
+
+		echo '</tr>';
+	}
+
+}

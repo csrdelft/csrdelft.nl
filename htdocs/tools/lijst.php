@@ -9,7 +9,7 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
 
 require_once 'configuratie.include.php';
-require_once 'lid/ledenlijstcontent.class.php';
+
 
 if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 	# geen rechten

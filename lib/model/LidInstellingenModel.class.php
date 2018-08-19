@@ -131,7 +131,9 @@ class LidInstellingenModel extends InstellingenModel {
 	 */
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
 		$primary_key_values[] = LoginModel::getUid();
-		return parent::retrieveByPrimaryKey($primary_key_values);
+		/** @var LidInstelling|false */
+		$value = parent::retrieveByPrimaryKey($primary_key_values);
+		return $value;
 	}
 
 	protected function newInstelling($module, $id) {

@@ -42,7 +42,7 @@ class CiviSaldoModel extends PersistenceModel {
 	/**
 	 * @param string $uid
 	 *
-	 * @return CiviSaldo
+	 * @return CiviSaldo|false
 	 */
 	public function getSaldo($uid) {
 		return $this->find('uid = ?', array($uid))->fetch();

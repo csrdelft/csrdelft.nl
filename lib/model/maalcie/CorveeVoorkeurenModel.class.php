@@ -83,9 +83,9 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	}
 
 	/**
-	 * Bouwt matrix voor alle repetities en voorkeuren van alle leden
+	 * Bouwt matrix voor alle repetities en voorkeuren van alle leden in format CorveeVoorkeur[uid][crid]
 	 *
-	 * @return CorveeVoorkeur[uid][crid]
+	 * @return CorveeVoorkeur[][]
 	 */
 	public function getVoorkeurenMatrix() {
 		$repById = CorveeRepetitiesModel::instance()->getVoorkeurbareRepetities(); // grouped by crid
