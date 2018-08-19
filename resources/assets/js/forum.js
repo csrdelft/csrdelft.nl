@@ -126,7 +126,7 @@ $(function () {
             if (pingValue !== false || lastPing !== false) {
                 $.post($concept.attr('data-url'), {
                     ping: pingValue
-                }).done(domUpdate).fail((error) => console.log(error));
+                }).done(domUpdate);
                 lastPing = pingValue;
             }
         }, 60000);

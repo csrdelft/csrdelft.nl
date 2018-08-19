@@ -50,7 +50,7 @@ export function selectText(elmnt) {
  */
 export function dirname(path) {
     return path.replace(/\\/g, '/')
-        .replace(/\/[^\/]*\/?$/, '');
+        .replace(/\/[^/]*\/?$/, '');
 }
 
 /**
@@ -82,7 +82,7 @@ export function basename(path, suffix) {
         base = base.slice(0, -1);
     }
 
-    base = base.replace(/^.*[\/\\]/g, '');
+    base = base.replace(/^.*[/\\]/g, '');
 
     if (typeof suffix === 'string' && base.substr(base.length - suffix.length) === suffix) {
         base = base.substr(0, base.length - suffix.length);
