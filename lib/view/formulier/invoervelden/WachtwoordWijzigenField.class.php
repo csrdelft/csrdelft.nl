@@ -20,6 +20,8 @@ use CsrDelft\model\security\AccountModel;
  * Bij wachtwoord resetten produceert deze 2 velden.
  */
 class WachtwoordWijzigenField extends InputField {
+	const FIELD_CLASS_NAME = '';
+	const WRAPPER_CLASS_NAME = '';
 
 	private $require_current;
 
@@ -146,14 +148,41 @@ class WachtwoordWijzigenField extends InputField {
 
 	public function getHtml() {
 		$html = '';
+		$inputCssClasses = join(" ", $this->css_classes);
+		$labelCssClasses = self::LABEL_CLASS_NAME;
+
 		if ($this->require_current) {
-			$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_current">Huidig wachtwoord' . ($this->require_current ? '<span class="required"> *</span>' : '') . '</label>';
-			$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_current" name="' . $this->name . '_current" /></div>';
+			$html .= <<<HTML
+<div class="form-group row">
+	<div class="{$labelCssClasses}">
+		<label for="{$this->getId()}_current">Huidig wachtwoord<span class="required">*</span></label>
+	</div>
+	<div class="col-9">
+		<input type="password" class="$inputCssClasses" autocomplete="off" id="{$this->getId()}_current" name="{$this->name}_current" />
+	</div>
+</div>
+HTML;
 		}
-		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_new">Nieuw wachtwoord' . ($this->required ? '<span class="required"> *</span>' : '') . '</label>';
-		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_new" name="' . $this->name . '_new" /></div>';
-		$html .= '<div class="WachtwoordField"><label for="' . $this->getId() . '_confirm">Herhaal nieuw wachtwoord' . ($this->required ? '<span class="required"> *</span>' : '') . '</label>';
-		$html .= '<input type="password" autocomplete="off" id="' . $this->getId() . '_confirm" name="' . $this->name . '_confirm" /></div>';
+
+		$required = $this->required ? '<span class="required"> *</span>' : '';
+		$html .= <<<HTML
+<div class="form-group row">
+	<div class="{$labelCssClasses}">
+		<label for="{$this->getId()}_new">Nieuw wachtwoord{$required}</label>
+	</div>
+	<div class="col-9">
+		<input type="password" class="$inputCssClasses" autocomplete="off" id="{$this->getId()}_new" name="{$this->name}_new" />
+	</div>
+</div>
+<div class="form-group row">
+	<div class="{$labelCssClasses}">
+		<label for="{$this->getId()}_confirm">Herhaal nieuw wachtwoord{$required}</label>
+	</div>
+	<div class="col-9">
+		<input type="password" class="$inputCssClasses" autocomplete="off" id="{$this->getId()}_confirm" name="{$this->name}_confirm" />
+	</div>
+</div>
+HTML;
 		return $html;
 	}
 

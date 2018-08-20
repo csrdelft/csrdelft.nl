@@ -20,6 +20,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  */
 class DateField extends InputField {
 	const WRAPPER_CLASS_NAME = 'form-group row form-inline';
+	const LABEL_CLASS_NAME = 'col-3 col-form-label d-flex justify-content-start'; // Bootstrap plaatst labels in het midden in form-inline; forceer links.
 	const FIELD_CLASS_NAME = 'col-6';
 
 	protected $max_jaar;

@@ -52,7 +52,7 @@ define('GOOGLE_CLIENT_SECRET', '<Zet mij>');
 define('GOOGLE_EMBED_KEY', '<Zet mij>');
 
 # paden MET trailing slash
-define('BASE_PATH', '/var/www/csrdelft.nl/');
+define('BASE_PATH', '/app/');
 define('ETC_PATH', BASE_PATH . 'etc/');
 define('DATA_PATH', BASE_PATH . 'data/');
 define('SESSION_PATH', BASE_PATH . 'sessie/');

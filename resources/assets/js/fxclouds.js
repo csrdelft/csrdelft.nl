@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import Detector from 'three/examples/js/Detector';
+import Detector from './lib/three.detector';
 
 window.THREE = THREE;
-window.Detector = Detector;
+window['Detector'] = Detector;

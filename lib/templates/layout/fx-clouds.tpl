@@ -32,6 +32,7 @@
 	}
 </script>
 
+<script type="text/javascript" src="/dist/js/fxclouds.js"></script>
 <script type="text/javascript">
 
 	if (!Detector.webgl) {
@@ -165,7 +166,7 @@
 
 		requestAnimationFrame(animateClouds);
 
-		if (container.hasClass('is-visible')) {
+		if (container.css('visibility') !== 'hidden') {
 
 			position = ((Date.now() - start_time) * 0.03) % 8000;
 
