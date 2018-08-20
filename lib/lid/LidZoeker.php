@@ -175,7 +175,7 @@ class LidZoeker {
 	//velden die ook door mensen met P_LEDEN_MOD bekeken mogen worden
 	//(merge in de constructor)
 	private $allowVeldenLEDENMOD = array(
-		'studienr', 'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum',
+		'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum',
 		'echtgenoot', 'adresseringechtpaar', 'land', 'bankrekening', 'machtiging');
 	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te
 	//filteren en te sorteren.
@@ -189,7 +189,6 @@ class LidZoeker {
 		'mobiel' => 'Pauper',
 		'studie' => 'Studie',
 		'gebdatum' => 'Geb.datum',
-		'studienr' => 'StudieNr.',
 		'ontvangtcontactueel' => 'Contactueel?',
 		'machtiging' => 'Machtiging getekend?',
 		'adresseringechtpaar' => 'Post echtpaar t.n.v.',
