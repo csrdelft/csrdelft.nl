@@ -78,7 +78,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $website;
 	// studie
 	public $studie;
-	public $studienr;
 	public $studiejaar;
 	public $beroep;
 	// lidmaatschap
@@ -109,7 +108,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $vrienden;
 	public $middelbareSchool;
 	// overig
-	public $ovkaart;
 	public $kerk;
 	public $muziek;
 	public $zingen;
@@ -158,7 +156,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'website' => array(T::String, true),
 		// studie
 		'studie' => array(T::String, true),
-		'studienr' => array(T::Integer, true),
 		'studiejaar' => array(T::Integer, true),
 		'beroep' => array(T::String, true),
 		// lidmaatschap
@@ -180,7 +177,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		// Persoonlijk
 		'eetwens' => array(T::String, true),
 		'lengte' => array(T::Integer),
-		'ovkaart' => array(T::String),
 		'kerk' => array(T::String, true),
 		'muziek' => array(T::String, true),
 		'zingen' => array(T::String, true),
