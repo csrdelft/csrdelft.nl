@@ -5,7 +5,7 @@
 	</div>
 	<div style="margin-top:40px" class="inner">
 		<a href="/plaetjes/fotoalbum/Publiek/ProgrammaPosterOwee.jpg" class="special lightbox-link" data-lightbox="page-lightbox">Bekijk het programma voor de OWee</a>
-		<a href="https://www.youtube.com/watch?v=a7hhtoo_kzY" target="_blank" class="special">Video: Delft, studie is maar de helft</a>
+		<a href="https://www.youtube.com/watch?v=a7hhtoo_kzY&list=PLXBOhyG24-WnNgg2RloapxC5X73J1Zxvi" target="_blank" class="special">Video: Delft - studie is maar de helft</a>
 	</div>
 </section>
 
