@@ -23,9 +23,8 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
-use function CsrDelft\getDateTime;
-use function CsrDelft\setMelding;
 use Exception;
+
 
 
 /**
@@ -227,11 +226,11 @@ class ProfielModel extends CachedPersistenceModel {
 			$account = AccountModel::get($profiel->uid);
 			if (!$account OR $account->perm_role !== AccessRole::Eter) {
 				$removedabos = $this->disableMaaltijdabos($profiel, $oudestatus);
-				array_push($changes, ...$removedabos);
+				$changes = array_merge($changes, $removedabos);
 			}
 			// Toekomstige corveetaken verwijderen
 			$removedcorvee = $this->removeToekomstigeCorvee($profiel, $oudestatus);
-			array_push($changes, ...$removedcorvee);
+			$changes = array_merge($changes, $removedcorvee);
 		}
 		// Mailen naar fisci,bibliothecaris...
 		$wordtinactief = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden);
