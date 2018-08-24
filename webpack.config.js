@@ -23,6 +23,7 @@ assign(entryPoint, {
 	'bb-slideshow': './js/bb-slideshow.js',
 	'ledenmemory': './js/ledenmemory.js',
 	'fxclouds': './js/fxclouds.js',
+	'fxonontdekt': './js/fxonontdekt.js',
 	'extern': './js/extern.js'
 });
 

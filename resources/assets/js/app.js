@@ -3,7 +3,6 @@ import './csrdelft';
 import './main-menu';
 import './formulier';
 import './datatable';
-import './fxonontdekt';
 import './minion';
 import './grafiek';
 import './forum';
