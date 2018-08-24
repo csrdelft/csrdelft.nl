@@ -239,7 +239,7 @@ class BiebCatalogus {
 				$query = "
 					SELECT uid, concat(voornaam, ' ', tussenvoegsel,  IF(tussenvoegsel='','',' '), achternaam) AS naam  
 					FROM profielen 
-					WHERE status IN ('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID')  AND uid NOT LIKE '18%'
+					WHERE status IN ('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID','S_ERELID') 
 					ORDER BY achternaam;";
 			} else {
 				$query = "

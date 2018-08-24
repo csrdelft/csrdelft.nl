@@ -25,7 +25,7 @@ class VerjaardagenModel {
 	 * @return \PDOStatement|Profiel[]
 	 */
 	public static function get($maand) {
-		return ProfielModel::instance()->find("status in ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND EXTRACT(MONTH FROM gebdatum) = ? AND uid NOT LIKE '18%'", array($maand), null, 'EXTRACT(DAY FROM gebdatum)');
+		return ProfielModel::instance()->find("status in ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND EXTRACT(MONTH FROM gebdatum) = ? ", array($maand), null, 'EXTRACT(DAY FROM gebdatum)');
 	}
 
 	/**
@@ -34,7 +34,7 @@ class VerjaardagenModel {
 	 * @return \PDOStatement|Profiel[]
 	 */
 	public static function getKomende($aantal = 10) {
-		return ProfielModel::instance()->find("status IN ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND NOT gebdatum = '0000-00-00' AND uid NOT LIKE '18%'", array(), null, "DATE_ADD(
+		return ProfielModel::instance()->find("status IN ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND NOT gebdatum = '0000-00-00'", array(), null, "DATE_ADD(
 					gebdatum,
 					INTERVAL TIMESTAMPDIFF(
 						year,
@@ -61,7 +61,7 @@ class VerjaardagenModel {
             (CONCAT(?, SUBSTRING(gebdatum, 5)) >= ? AND CONCAT(?, SUBSTRING(gebdatum, 5)) < ?)
             OR
             (CONCAT(?, SUBSTRING(gebdatum, 5)) >= ? AND CONCAT(?, SUBSTRING(gebdatum, 5)) < ?)
-        ) AND uid NOT LIKE '18%'", array($vanjaar, $van, $vanjaar, $tot, $totjaar, $van, $totjaar, $tot), null, "DATE_ADD(
+        )", array($vanjaar, $van, $vanjaar, $tot, $totjaar, $van, $totjaar, $tot), null, "DATE_ADD(
 					gebdatum,
 					INTERVAL TIMESTAMPDIFF(
 						year,
