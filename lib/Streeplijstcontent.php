@@ -86,7 +86,7 @@ class Streeplijstcontent implements View {
 						table{ border-collapse: collapse; width: 100%; }
 						td.naam{
 							border-right: 2px solid black;
-							width: 25%; white-space: no-wrap;
+							width: 25%; white-space: nowrap;
 						}
 						td.cell0{  }
 						td.cell1{ background-color: darkgrey;}

@@ -11,9 +11,6 @@ require('jquery-hoverintent');
 
 $.widget.bridge('uitooltip', $.ui.tooltip);
 
-require('jquery-ui/ui/widgets/datepicker');
-require('jquery-ui-timepicker-addon');
-require('./lib/jquery-ui-timepicker-nl');
 require('timeago');
 
 window.bbcode = {
