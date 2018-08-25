@@ -1,3 +1,8 @@
+@extends('layout-owee.layout')
+
+@section('titel', $titel)
+
+@section('content')
 <!-- Banner -->
 <section id="banner">
 	<div class="inner">
@@ -132,7 +137,7 @@
 	<section id="footer">
 		<div class="inner">
 			<h2 class="major">Interesseformulier</h2>
-			{include file='layout-owee/partials/_form.tpl'}
+			@include('layout-owee.form')
 			<ul class="contact">
 				<li class="fa-home">
 					Soci&euml;teit Confide <br/>
@@ -229,10 +234,11 @@
 				</ul>
 			</noscript>
 			<ul class="copyright">
-				<li>&copy; {date('Y')} - C.S.R. Delft - <a
+				<li>&copy; {{date('Y')}} - C.S.R. Delft - <a
 						href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">Privacy</a></li>
 			</ul>
 		</div>
 	</section>
 
 </section>
+@endsection

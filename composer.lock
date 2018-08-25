@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "89c85d91ec1049344ef0300e30f01cc8",
+    "content-hash": "62c34fd6a2896bdc4378640c93f0c680",
     "packages": [
         {
             "name": "csrdelft/orm",
@@ -63,6 +63,51 @@
             "description": "The creatively named object-relational mapping library for csrdelft.nl",
             "homepage": "https://csrdelft.github.io/orm",
             "time": "2018-07-18T19:59:59+00:00"
+        },
+        {
+            "name": "eftec/bladeone",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/EFTEC/BladeOne.git",
+                "reference": "f7270d66595721c197fee97fd30e1049c8d29733"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/f7270d66595721c197fee97fd30e1049c8d29733",
+                "reference": "f7270d66595721c197fee97fd30e1049c8d29733",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "eftec\\bladeone\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jorge Patricio Castro Castillo",
+                    "email": "jcastro@eftec.cl"
+                }
+            ],
+            "description": "The standalone version Blade Template Engine from Laravel in a single php file",
+            "homepage": "https://github.com/EFTEC/BladeOne",
+            "keywords": [
+                "blade",
+                "php",
+                "template",
+                "view"
+            ],
+            "time": "2018-08-25T13:33:39+00:00"
         },
         {
             "name": "ferno/loco",
@@ -1758,7 +1803,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "jacwright/restserver": 20,
-        "ferno/loco": 20
+        "ferno/loco": 20,
+        "eftec/bladeone": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

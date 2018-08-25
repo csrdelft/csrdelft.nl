@@ -10,7 +10,7 @@ use CsrDelft\view\formulier\datatable\DataTableResponse;
  *
  * Class EetplanRelatieView
  */
-class EetplanRelatieView extends DataTableResponse {
+class EetplanRelatieResponse extends DataTableResponse {
 	/**
 	 * @param EetplanBekenden $entity
 	 *

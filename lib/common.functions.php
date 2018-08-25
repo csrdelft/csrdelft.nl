@@ -14,6 +14,7 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\view\renderer\TemplateView;
 
 /**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
@@ -1110,4 +1111,9 @@ function realpathunix($path) {
  */
 function uniqid_safe($prefix = "") {
 	return str_replace('.', '_', uniqid($prefix, true));
+}
+
+function view(string $template, array $variables) {
+	return new TemplateView($template, $variables);
+
 }

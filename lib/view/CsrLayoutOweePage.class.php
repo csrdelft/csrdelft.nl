@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\view\login\LoginForm;
+use CsrDelft\view\renderer\BladeRenderer;
 
 
 /**
@@ -24,12 +24,12 @@ class CsrLayoutOweePage extends CompressedLayout {
 	 * Menu template
 	 * @var string
 	 */
-	public $menutmpl;
+	public $showMenu;
 
-	function __construct(View $body, $template = 'content', $menu = '') {
+	function __construct(View $body, $template = 'content', $menu = false) {
 		parent::__construct($body, $body->getTitel());
 		$this->tmpl = $template;
-		$this->menutmpl = $menu;
+		$this->showMenu = $menu;
 		$this->addScript('/dist/js/extern.js');
 		$this->addStylesheet('/dist/css/extern.css');
 		$this->addStylesheet('/dist/css/extern-forum.css');
@@ -43,23 +43,20 @@ class CsrLayoutOweePage extends CompressedLayout {
 	function view() {
 		header('Content-Type: text/html; charset=UTF-8');
 
-		$smarty = CsrSmarty::instance();
-		$smarty->assign('stylesheets', $this->getStylesheets());
-		$smarty->assign('scripts', $this->getScripts());
-		$smarty->assign('titel', $this->getTitel());
-		$smarty->assign('loginform', new LoginForm());
-		$smarty->assign('body', $this->getBody());
+		$renderer = new BladeRenderer('layout-owee.' . $this->tmpl);
+		$renderer->assign('stylesheets', $this->getStylesheets());
+		$renderer->assign('scripts', $this->getScripts());
+		$renderer->assign('titel', $this->getTitel());
+		$renderer->assign('body', $this->getBody());
+		$renderer->assign('showmenu', $this->showMenu);
 
-		if ($this->menutmpl !== '') {
-			$smarty->assign('menutpl', $this->menutmpl);
-		}
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
 		if (!$breadcrumbs) {
 			$breadcrumbs = $this->getBreadcrumbs();
 		}
-		$smarty->assign('breadcrumbs', $breadcrumbs);
+		$renderer->assign('breadcrumbs', $breadcrumbs);
 
-		$smarty->display('layout-owee/' . $this->tmpl . '.tpl');
+		$renderer->display();
 	}
 
 }

@@ -63,6 +63,7 @@ define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
 define('PHOTOALBUM_PATH', DATA_PATH . 'foto/');
 define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
+define('TEMPLATE_PATH', LIB_PATH . 'blade_templates/');
 
 # smarty template engine
 define('SMARTY_PLUGIN_DIR', LIB_PATH. 'smarty_plugins');

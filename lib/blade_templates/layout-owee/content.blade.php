@@ -1,0 +1,33 @@
+@extends('layout-owee.layout')
+
+@section('titel', $titel)
+
+@section('content')
+	<!-- Banner -->
+	<section id="banner-small">
+		<div class="inner">
+			<a href="/"><img src="/images/logo-bonfire-klein.svg" height="140"></a>
+		</div>
+	</section>
+
+	<!-- Wrapper -->
+	<section id="wrapper">
+		<section class="wrapper detail kleur1">
+			<div class="inner">
+				<div class="content">
+					@if($showMenu)
+						@include('layout-owee/menu')
+					@endif
+					@php($body->view())
+				</div>
+			</div>
+		</section>
+		<section id="footer">
+			<div class="inner">
+				<ul class="copyright">
+					<li>&copy; {{date('Y')}} - C.S.R. Delft - <a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">Privacy</a></li>
+				</ul>
+			</div>
+		</section>
+	</section>
+@endsection
