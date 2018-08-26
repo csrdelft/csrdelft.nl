@@ -46,7 +46,7 @@ module.exports = {
 	plugins: [
 		// Maak webpack sneller door een boel te cachen.
 		new HardSourcePlugin({
-			cacheDirectory: __dirname + 'node_modules/.cache/hard-source/[confighash]',
+			cacheDirectory: __dirname + '/node_modules/.cache/hard-source/[confighash]',
 		}),
 		new MiniCssExtractPlugin({
 			// Css bestanden komen in de map css terecht.
