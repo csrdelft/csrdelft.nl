@@ -55,7 +55,9 @@ date_default_timezone_set('Europe/Amsterdam');
 
 
 // default is website mode
-if (php_sapi_name() === 'cli') {
+if (getenv('CI')) {
+	define('MODE', 'TRAVIS');
+} elseif (php_sapi_name() === 'cli') {
 	define('MODE', 'CLI');
 } else {
 	define('MODE', 'WEB');
@@ -78,7 +80,7 @@ define('HTTP_REFERER', $ref);
 
 // Use HTTP Strict Transport Security to force client to use secure connections only
 if (FORCE_HTTPS) {
-	if (!(isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') && MODE !== 'CLI') {
+	if (!(isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') && MODE !== 'CLI' && MODE !== 'TRAVIS') {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
@@ -111,6 +113,9 @@ CsrDelft\Orm\Configuration::load(array(
 
 // Router
 switch (constant('MODE')) {
+	case 'TRAVIS':
+		if (isSyrinx()) die("Syrinx is geen Travis!");
+		break;
 	case 'CLI':
 		//require_once 'model/security/CliLoginModel.class.php';
 		// Late static binding requires explicitly
