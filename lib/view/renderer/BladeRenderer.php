@@ -17,20 +17,23 @@ class BladeRenderer implements Renderer {
 		$this->bladeOne = new BladeOne(TEMPLATE_PATH, BLADE_CACHE_PATH, BladeOne::MODE_AUTO);
 		$this->data = $variables;
 
-		$this->bladeOne->setInjectResolver(function ($className) {
-			if (is_a($className, DependencyManager::class, true)) {
-				/** @var $className DependencyManager */
-				return $className::instance();
-			} else {
-				return new $className();
-			}
-		});
+		// Tijden compilen doet dit er niet toe.
+		if (MODE !== 'TRAVIS') {
+			$this->bladeOne->setInjectResolver(function ($className) {
+				if (is_a($className, DependencyManager::class, true)) {
+					/** @var $className DependencyManager */
+					return $className::instance();
+				} else {
+					return new $className();
+				}
+			});
 
-		// @auth en @guest maken puur onderscheid tussen ingelogd of niet.
-		if (LoginModel::mag('P_LOGGED_IN')) {
-			$this->bladeOne->setAuth(LoginModel::getUid());
+			// @auth en @guest maken puur onderscheid tussen ingelogd of niet.
+			if (LoginModel::mag('P_LOGGED_IN')) {
+				$this->bladeOne->setAuth(LoginModel::getUid());
+			}
+			$this->bladeOne->authCallBack = [LoginModel::class, 'mag'];
 		}
-		$this->bladeOne->authCallBack = [LoginModel::class, 'mag'];
 
 		$this->bladeOne->directive('icon', function ($expr) {
 			$options = trim($expr, "()");
