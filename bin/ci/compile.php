@@ -5,7 +5,7 @@ use CsrDelft\view\renderer\BladeRenderer;
 /**
  * @throws Exception
  */
-function compileBlade(): void {
+function compileBlade() {
 	$bladeExtension = ".blade.php";
 
 	$files = glob(TEMPLATE_PATH . '**/*' . $bladeExtension);
