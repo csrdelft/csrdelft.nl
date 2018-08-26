@@ -6,16 +6,23 @@ cache:
   directories:
     - "node_modules"
     - "vendor"
+services:
+  - mysql
 
 git:
   submodules: false
 
 before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS csrdelft;'
   - nvm install 8
 
 install:
   - yarn
   - composer install
+
+before_script:
+	- cp ./bin/ci/mysql.ini.travis ./etc/mysql.ini
+	- cp ./lib/defines.include.php.sample ./lib/defines.include.php
 
 script:
   - yarn run production

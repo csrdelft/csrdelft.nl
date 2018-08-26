@@ -2,11 +2,6 @@
 
 use CsrDelft\view\renderer\BladeRenderer;
 
-// defines.include.php moet bestaan anders wil er niets werken.
-if (getenv('CI')) {
-	copy(__DIR__ . '/../../lib/defines.include.php.sample', __DIR__ . '/../../lib/defines.include.php');
-}
-
 /**
  * @throws Exception
  */
