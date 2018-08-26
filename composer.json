@@ -29,6 +29,7 @@
 		}
 	},
 	"scripts": {
-		"post-install-cmd": "php ./bin/dev/post-install.php"
+		"post-install-cmd": "php ./bin/dev/post-install.php",
+		"production": "php ./bin/ci/compile.php"
 	}
 }

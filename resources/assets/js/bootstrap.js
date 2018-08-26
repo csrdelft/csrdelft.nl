@@ -69,7 +69,7 @@ $.extend(window, {
         // See templates/roodschopper/roodschopper.tpl
         // See templates/mededelingen/mededeling.tpl
         // See templates/courant/courantbeheer.tpl
-        // See template/forum/post_form.tpl
+        // See blade_templates/forum/partial/post_form.blade.php
         CsrBBPreview,
         // See view/bbcode/CsrBB.class.php
         bbvideoDisplay,
@@ -94,9 +94,9 @@ $.extend(window, {
     // See templates/maalcie/maaltijd/maaltijd_ketzer.tpl
     ketzerAjax,
     forum: {
-        // See templates/forum/post_lijst.tpl
+        // See blade_templates/forum/partial/post_lijst.blade.php
         forumBewerken,
-        // See templates/forum/post_forum.tpl
+        // See blade_templates/forum/partial/post_forum.blade.php
         saveConceptForumBericht,
     },
     maalcie: {

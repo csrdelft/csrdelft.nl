@@ -1,18 +1,29 @@
-language: node_js
+language: php
 node_js:
-  - "8"
+  - 7
 
 cache:
   directories:
     - "node_modules"
+    - "vendor"
 
 git:
   submodules: false
 
-install: yarn
+env:
+  - NOTE_RELEASE=8.x
+
+before_install:
+  - sudo rm -rf ~/.nvm - curl -sL "https://deb.nodesource.com/setup_${NODE_RELEASE}" | sudo -E bash -
+  - sudo apt-get install -y nodejs
+
+install:
+  - yarn
+  - composer install
 
 script:
   - yarn run production
+  - composer run-script production
 
 deploy:
   provider: script

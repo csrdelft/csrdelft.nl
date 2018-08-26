@@ -24,7 +24,7 @@
 	<div class="mededelingen_paginering">
 		Pagina: {sliding_pager baseurl="`$pagina_root`pagina/"
 					pagecount=$totaalAantalPaginas curpage=$huidigePagina
-					txt_prev="&lt;" separator="" txt_next="&gt;" show_always=true show_first_last=false show_prev_next=false}
+					separator="" show_always=true}
 	</div>
 
 </div> {* Einde mededelingen-overzichtlijst *}

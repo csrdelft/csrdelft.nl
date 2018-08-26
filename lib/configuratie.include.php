@@ -26,6 +26,7 @@ use CsrDelft\ShutdownHandler;
 require __DIR__ . '/../vendor/autoload.php';
 require_once 'defines.include.php';
 require_once 'common.functions.php';
+require_once 'common.view.functions.php';
 require_once 'autoload.php';
 
 

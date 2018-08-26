@@ -9,15 +9,12 @@ use eftec\bladeone\BladeOne;
  * @since 24/08/2018
  */
 class BladeRenderer implements Renderer {
-	const VIEWS = TEMPLATE_PATH;
-	const CACHE = DATA_PATH . 'bladeOne/';
-
 	private $bladeOne;
 	private $data;
 	private $template;
 
 	public function __construct($template, $variables = []) {
-		$this->bladeOne = new BladeOne(self::VIEWS, self::CACHE, BladeOne::MODE_AUTO);
+		$this->bladeOne = new BladeOne(TEMPLATE_PATH, BLADE_CACHE_PATH, BladeOne::MODE_AUTO);
 		$this->data = $variables;
 
 		$this->bladeOne->setInjectResolver(function ($className) {
@@ -29,14 +26,25 @@ class BladeRenderer implements Renderer {
 			}
 		});
 
+		// @auth en @guest maken puur onderscheid tussen ingelogd of niet.
+		if (LoginModel::mag('P_LOGGED_IN')) {
+			$this->bladeOne->setAuth(LoginModel::getUid());
+		}
 		$this->bladeOne->authCallBack = [LoginModel::class, 'mag'];
+
+		$this->bladeOne->directive('icon', function ($expr) {
+			$options = trim($expr, "()");
+
+			return "<?php echo call_user_func_array([\"CsrDelft\Icon\", \"getTag\"], [$options]); ?>";
+		});
 
 		$this->bladeOne->directive('cycle', function ($expr) {
 			$numOptions = count(explode(',', $expr));
-
 			$options = trim($expr, "()");
+			$varName = uniqid('i_');
 
-			return "<?php echo [$options][(\$loop->index) % $numOptions]; ?>";
+			// Create the variable if it does not exist.
+			return "<?php \$this->$varName = @\$this->$varName; echo [$options][(\$this->$varName++) % $numOptions]; ?>";
 		});
 		$this->template = $template;
 	}
@@ -58,5 +66,12 @@ class BladeRenderer implements Renderer {
 	 */
 	public function display() {
 		echo $this->render();
+	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public function compile() {
+		$this->bladeOne->compile($this->template, true);
 	}
 }

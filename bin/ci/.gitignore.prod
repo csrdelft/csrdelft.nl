@@ -2,6 +2,7 @@
 
 # Mappen nodig voor goede werking van de stek.
 data/*
+!data/blade
 sessie/*
 !sessie/_dummy
 htdocs/plaetjes/*
