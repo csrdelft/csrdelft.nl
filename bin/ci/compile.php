@@ -8,16 +8,19 @@ use CsrDelft\view\renderer\BladeRenderer;
 function compileBlade() {
 	$bladeExtension = ".blade.php";
 
-	$files = glob(TEMPLATE_PATH . '**/*' . $bladeExtension);
+	$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(TEMPLATE_PATH, FilesystemIterator::UNIX_PATHS));
 
 	echo "Compiling blade templates in " . TEMPLATE_PATH . PHP_EOL;
 
 	foreach ($files as $file) {
-		$file = str_replace(TEMPLATE_PATH, '', $file);
-		$file = str_replace($bladeExtension, '', $file);
-		echo "Compiling template " . $file . PHP_EOL;
-		$renderer = new BladeRenderer($file);
-		$renderer->compile();
+		if (endsWith($file, $bladeExtension)) {
+			$file = str_replace(TEMPLATE_PATH, '', $file);
+			$file = str_replace($bladeExtension, '', $file);
+			$file = str_replace('/', '.', $file);
+			echo "Compiling template " . $file . PHP_EOL;
+			$renderer = new BladeRenderer($file);
+			$renderer->compile();
+		}
 	}
 }
 
