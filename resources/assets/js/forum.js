@@ -293,14 +293,7 @@ $(function () {
 		$(this).parent().find('.forumpasfoto').toggleClass('verborgen');
 	});
 
-	$('.auteur').hoverIntent(
-		function () {
-			$(this).find('a.forummodknop').css('opacity', '1');
-		},
-		function () {
-			$(this).find('a.forummodknop').css('opacity', '0');
-		},
-	);
+	$('.auteur').hoverIntent(function () {$(this).find('a.forummodknop').css('opacity', '1');}, function () {$(this).find('a.forummodknop').css('opacity', '0');});
 
 	$('a.citeren').on('click', function () {
 		let postid = $(this).attr('data-citeren');
