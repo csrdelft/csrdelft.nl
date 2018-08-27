@@ -27,7 +27,7 @@
 		@php($ongelezenWeergave = CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave'))
 
 		<div class="item" id="forumdraad-row-{{$draad->draad_id}}">
-			<a href="/forum/onderwerp/{{$draad->draad_id}}{{$urlHash}}" title="{$draad->titel}"
+			<a href="/forum/onderwerp/{{$draad->draad_id}}{{$urlHash}}" title="{{$draad->titel}}"
 				 @auth @if($draad->isOngelezen()) class="{{$ongelezenWeergave}}" @endif @endauth>
 				<span class="zijbalk-moment">{{zijbalk_date_format($timestamp)}}</span>&nbsp;{{$draad->titel}}
 			</a>
