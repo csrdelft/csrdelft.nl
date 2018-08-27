@@ -30,4 +30,4 @@ mv deploy/bin/ci/.gitignore.prod deploy/.gitignore
 cd deploy
 git add -Af
 git diff-index --quiet HEAD || git commit -m "Travis deploy $TRAVIS_BUILD_NUMBER"
-git push --force --quiet --set-upstream origin master
+git push --force --quiet --set-upstream origin blade-test
