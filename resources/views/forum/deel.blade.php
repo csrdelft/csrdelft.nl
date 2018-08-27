@@ -1,6 +1,6 @@
 @extends('forum.base')
 
-@section('title', $deel->titel)
+@section('titel', $deel->titel)
 
 @section('breadcrumbs')
 	<a href="/forum" title="Forum"><span class="fa fa-wechat module-icon"></span></a>

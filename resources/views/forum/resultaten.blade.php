@@ -1,6 +1,6 @@
 @extends('forum.base')
 
-@section('title')
+@section('titel')
 	@if(isset($query))
 		Resultaten voor {{$query}}
 	@else

@@ -1,6 +1,6 @@
 @extends('forum.base')
 
-@section('title', $draad->titel)
+@section('titel', $draad->titel)
 
 @section('breadcrumbs')
 	@php($deel = $draad->getForumDeel())

@@ -1,5 +1,7 @@
 @extends('eetplan.overzicht')
 
+@section('titel', 'Eetplanbeheer')
+
 @section('breadcrumbs')
 	@parent
 	» <span>Beheer</span>

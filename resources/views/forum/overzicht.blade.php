@@ -1,6 +1,6 @@
 @extends('forum.base')
 
-@section('title', 'Forum')
+@section('titel', 'Forum')
 
 @section('breadcrumbs')
 	@parent
