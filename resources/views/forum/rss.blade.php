@@ -11,7 +11,7 @@
 	<channel>
 		<copyright>Copyright {{date('Y')}} C.S.R. Delft</copyright>
 		<pubDate>{{rfc2822(null)}}</pubDate>
-		<lastBuildDate>{$smarty.now|rfc2822}</lastBuildDate>
+		<lastBuildDate>{{rfc2882(null)}}</lastBuildDate>
 		<docs>{{CSR_ROOT}}</docs>
 		<description>C.S.R. Delft: Vereniging van Christen-studenten te Delft.</description>
 		<image>

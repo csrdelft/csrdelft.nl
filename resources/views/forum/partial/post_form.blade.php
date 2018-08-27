@@ -29,7 +29,7 @@
 				</div>
 				<input type="text" name="email" class="FormElement TextField forumEmail" placeholder="E-mailadres"/>
 				<input type="text" name="firstname" value="" class="FormElement TextField verborgen"/>
-				{* spam trap, must be kept empty! *}
+				{{-- spam trap, must be kept empty! --}}
 			@endguest
 			@if($draad === null)
 				<input type="text" id="nieuweTitel" name="titel" class="FormElement TextField" tabindex="1"
