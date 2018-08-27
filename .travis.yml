@@ -32,4 +32,4 @@ deploy:
   script: ./bin/ci/deploy.sh
   skip_cleanup: true
   on:
-    branch: blade-zonder-laravel
+    branch: master

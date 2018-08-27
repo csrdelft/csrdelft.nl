@@ -22,7 +22,7 @@ git config --global user.name "Travis CI"
 
 cd /home/travis/build
 
-git clone --quiet --branch=blade-test git@github.com:csrdelft/productie.git deploy > /dev/null
+git clone --quiet --branch=master git@github.com:csrdelft/productie.git deploy > /dev/null
 rm -rf deploy/*
 rsync -a csrdelft/csrdelft.nl/ deploy/ --exclude node_modules --exclude .git --exclude resources --exclude vendor
 mv deploy/bin/ci/.gitignore.prod deploy/.gitignore
@@ -30,4 +30,4 @@ mv deploy/bin/ci/.gitignore.prod deploy/.gitignore
 cd deploy
 git add -A
 git diff-index --quiet HEAD || git commit -m "Travis deploy $TRAVIS_BUILD_NUMBER"
-git push --force --quiet --set-upstream origin blade-test
+git push --force --quiet --set-upstream origin master
