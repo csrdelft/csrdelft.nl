@@ -11,7 +11,7 @@ use CsrDelft\view\View;
 class TemplateView implements View {
 	protected $template;
 
-	public function __construct(string $template, array $variables = [], array $zijbalk = []) {
+	public function __construct(string $template, array $variables = []) {
 		$this->template = new BladeRenderer($template, $variables);
 	}
 

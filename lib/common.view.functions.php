@@ -1,5 +1,6 @@
 <?php
 
+use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\renderer\TemplateView;
 
 /**
@@ -60,20 +61,20 @@ function sliding_pager($params) {
 	  @param  int     $linknum            - max. number of links to show on one page (default: 5)
 	  @param  int     $curpage            - current page number
 	  @param  string  baseurl             - baseurl to which the pagenumber will appended
-	  @param  string  url_append          - text to append to url after pagenumber, e.g. "html" (default: "")
-	  @param  string  txt_pre             - laat zien voor de paginering
-	  @param  string  txt_first           - text for link to first page (default: "<<")
-	  @param  string  txt_prev            - text for link to previous page (default: "<")
+	  @param  string  urlAppend          - text to append to url after pagenumber, e.g. "html" (default: "")
+	  @param  string  txtPre             - laat zien voor de paginering
+	  @param  string  txtFirst           - text for link to first page (default: "<<")
+	  @param  string  txtPrev            - text for link to previous page (default: "<")
 	  @param  string  separator           - text to print between page numbers (default: " ")
-	  @param  string  txt_next            - text for link to next page (default: ">")
-	  @param  string  txt_last            - text for link to last page (default: ">>")
-	  @param  string  txt_post            - laat zien na de paginering
-	  @param  string  txt_skip            - text shown when page s are skipped (not shown) (default: "…")
-	  @param  string  css_class           - css class for the pager (default: "")
-	  @param  boolean link_current        - whether to link the current page (default: false)
-	  @param  boolean show_always         - als er maar 1 pagina is, toch laten zien
-	  @param  boolean show_first_last     - eerste/laatste links laten zien
-	  @param  boolean show_prev_next      - vorige/volgende links laten zien
+	  @param  string  txtNext            - text for link to next page (default: ">")
+	  @param  string  txtLast            - text for link to last page (default: ">>")
+	  @param  string  txtPost            - laat zien na de paginering
+	  @param  string  txtSkip            - text shown when page s are skipped (not shown) (default: "…")
+	  @param  string  cssClass           - css class for the pager (default: "")
+	  @param  boolean linkCurrent        - whether to link the current page (default: false)
+	  @param  boolean showAlways         - als er maar 1 pagina is, toch laten zien
+	  @param  boolean showFirstLast     - eerste/laatste links laten zien
+	  @param  boolean showPrevNext      - vorige/volgende links laten zien
 	 */
 
 	/* Define all vars with default value */
@@ -81,20 +82,20 @@ function sliding_pager($params) {
 	$curpage = 0;
 	$baseurl = '';
 	$linknum = 5;
-	$url_append = '';
-	$txt_pre = '';
-	$txt_first = '<<';
-	$txt_prev = '<';
+	$urlAppend = '';
+	$txtPre = '';
+	$txtFirst = '<<';
+	$txtPrev = '<';
 	$separator = ' ';
-	$txt_next = '>';
-	$txt_last = '>>';
-	$txt_post = '';
-	$txt_skip = '…';
-	$css_class = '';
-	$link_current = false;
-	$show_always = false;
-	$show_first_last = false;
-	$show_prev_next = false;
+	$txtNext = '>';
+	$txtLast = '>>';
+	$txtPost = '';
+	$txtSkip = '…';
+	$cssClass = '';
+	$linkCurrent = false;
+	$showAlways = false;
+	$showFirstLast = false;
+	$showPrevNext = false;
 
 	/* Import parameters */
 	extract($params);
@@ -105,23 +106,21 @@ function sliding_pager($params) {
 	}
 
 	/* Define additional required vars */
-	$delta_l = 0;
-	$delta_r = 0;
 	if ($linknum % 2 == 0) {
-		$delta_l = ($linknum / 2) - 1;
-		$delta_r = $linknum / 2;
+		$deltaL = ($linknum / 2) - 1;
+		$deltaR = $linknum / 2;
 	} else {
-		$delta_l = $delta_r = ($linknum - 1) / 2;
+		$deltaL = $deltaR = ($linknum - 1) / 2;
 	}
 
 	/* There is no 0th page: assume last page */
 	$curpage = $curpage == 0 ? $pagecount : $curpage;
 
 	/* Internally we need an "array-compatible" index */
-	$int_curpage = $curpage - 1;
+	$intCurpage = $curpage - 1;
 
 	/* Paging needed? */
-	if (!$show_always && $pagecount <= 1) {
+	if (!$showAlways && $pagecount <= 1) {
 		// No paging needed for one page
 		return '';
 	}
@@ -134,46 +133,46 @@ function sliding_pager($params) {
 
 	/* Sliding needed? */
 	if ($pagecount > $linknum) { // Yes
-		if (($int_curpage - $delta_l) < 1) { // Delta_l needs adjustment, we are too far left
-			$delta_l = $int_curpage - 1;
-			$delta_r = $linknum - $delta_l - 1;
+		if (($intCurpage - $deltaL) < 1) { // Delta_l needs adjustment, we are too far left
+			$deltaL = $intCurpage - 1;
+			$deltaR = $linknum - $deltaL - 1;
 		}
-		if (($int_curpage + $delta_r) > $pagecount) { // Delta_r needs adjustment, we are too far right
-			$delta_r = $pagecount - $int_curpage;
-			$delta_l = $linknum - $delta_r - 1;
+		if (($intCurpage + $deltaR) > $pagecount) { // Delta_r needs adjustment, we are too far right
+			$deltaR = $pagecount - $intCurpage;
+			$deltaL = $linknum - $deltaR - 1;
 		}
-		if ($int_curpage - $delta_l > 1) { // Let's do some cutting on the left side
-			array_splice($links, 0, $int_curpage - $delta_l);
+		if ($intCurpage - $deltaL > 1) { // Let's do some cutting on the left side
+			array_splice($links, 0, $intCurpage - $deltaL);
 		}
-		if ($int_curpage + $delta_r < $pagecount) { // The right side will also need some treatment
-			array_splice($links, $int_curpage + $delta_r + 2 - $links[0]);
+		if ($intCurpage + $deltaR < $pagecount) { // The right side will also need some treatment
+			array_splice($links, $intCurpage + $deltaR + 2 - $links[0]);
 		}
 	}
 
 	/* Build link bar */
-	$retval = $txt_pre;
-	$css_class = $css_class ? 'class="' . $css_class . '"' : '';
+	$retval = $txtPre;
+	$cssClass = $cssClass ? 'class="' . $cssClass . '"' : '';
 	if ($curpage > 1) {
-		if ($show_first_last) {
-			$retval .= '<a href="' . $baseurl . '1' . $url_append . '" ' . $css_class . '>' . $txt_first . '</a>';
+		if ($showFirstLast) {
+			$retval .= '<a href="' . $baseurl . '1' . $urlAppend . '" ' . $cssClass . '>' . $txtFirst . '</a>';
 			$retval .= $separator;
 		}
-		if ($show_prev_next) {
-			$retval .= '<a href="' . $baseurl . ($curpage - 1) . $url_append . '" ' . $css_class . '>' . $txt_prev . '</a>';
+		if ($showPrevNext) {
+			$retval .= '<a href="' . $baseurl . ($curpage - 1) . $urlAppend . '" ' . $cssClass . '>' . $txtPrev . '</a>';
 			$retval .= $separator;
 		}
 	}
 	if ($links[0] != 1) {
-		$retval .= '<a href="' . $baseurl . '1' . $url_append . '" ' . $css_class . '>1</a>';
+		$retval .= '<a href="' . $baseurl . '1' . $urlAppend . '" ' . $cssClass . '>1</a>';
 		if ($links[0] == 2) {
 			$retval .= $separator;
 		} else {
-			$retval .= $separator . $txt_skip . $separator;
+			$retval .= $separator . $txtSkip . $separator;
 		}
 	}
 	for ($i = 0; $i < sizeof($links); $i++) {
-		if ($links[$i] != $curpage or $link_current) {
-			$retval .= '<a href="' . $baseurl . $links[$i] . $url_append . '" ' . $css_class . '>' . $links[$i] . '</a>';
+		if ($links[$i] != $curpage or $linkCurrent) {
+			$retval .= '<a href="' . $baseurl . $links[$i] . $urlAppend . '" ' . $cssClass . '>' . $links[$i] . '</a>';
 		} else {
 			$retval .= '<span class="curpage">' . $links[$i] . '</span>';
 		}
@@ -184,31 +183,31 @@ function sliding_pager($params) {
 	}
 	if ($links[sizeof($links) - 1] != $pagecount) {
 		if ($links[sizeof($links) - 2] != $pagecount - 1) {
-			$retval .= $separator . $txt_skip . $separator;
+			$retval .= $separator . $txtSkip . $separator;
 		} else {
 			$retval .= $separator;
 		}
-		$retval .= '<a href="' . $baseurl . $pagecount . $url_append . '" ' . $css_class . '>' . $pagecount . '</a>';
+		$retval .= '<a href="' . $baseurl . $pagecount . $urlAppend . '" ' . $cssClass . '>' . $pagecount . '</a>';
 	}
 	if ($curpage != $pagecount) {
-		if ($show_prev_next) {
+		if ($showPrevNext) {
 			$retval .= $separator;
-			$retval .= '<a href="' . $baseurl . ($curpage + 1) . $url_append . '" ' . $css_class . '>' . $txt_next . '</a>';
+			$retval .= '<a href="' . $baseurl . ($curpage + 1) . $urlAppend . '" ' . $cssClass . '>' . $txtNext . '</a>';
 		}
-		if ($show_first_last) {
+		if ($showFirstLast) {
 			$retval .= $separator;
-			$retval .= '<a href="' . $baseurl . $pagecount . $url_append . '" ' . $css_class . '>' . $txt_last . '</a>';
+			$retval .= '<a href="' . $baseurl . $pagecount . $urlAppend . '" ' . $cssClass . '>' . $txtLast . '</a>';
 		}
 	}
-	$retval .= $txt_post;
+	$retval .= $txtPost;
 	return $retval;
 }
 
 function bbcode(string $string, string $mode = 'normal') {
 	if ($mode === 'html') {
-		return \CsrDelft\view\bbcode\CsrBB::parseHtml($string);
+		return CsrBB::parseHtml($string);
 	} else {
-		return \CsrDelft\view\bbcode\CsrBB::parse($string);
+		return CsrBB::parse($string);
 	}
 }
 
