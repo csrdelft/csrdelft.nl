@@ -32,7 +32,7 @@
 @php((new \CsrDelft\view\menu\MainMenuView())->view())
 <main class="cd-main-content">
 	<nav class="cd-page-top">
-		<div class="breadcrumbs">@yield('breadcrumbs'){{$breadcrumbs}}</div>
+		<div class="breadcrumbs">@yield('breadcrumbs')</div>
 	</nav>
 	<div class="cd-page-content">
 		{!! getMelding() !!}
@@ -44,9 +44,9 @@
 </main>
 <div id="cd-main-overlay">
 	@if(CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'onontdekt')
-		@include('effect/onontdekt')
+		@include('effect.onontdekt')
 	@elseif(CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'civisaldo')
-		@include('effect/civisaldo')
+		@include('effect.civisaldo')
 	@endif
 </div>
 <div id="modal-background" @if(isset($modal)) style="display: block;"@endif></div>
@@ -56,10 +56,10 @@
 	<div id="modal" tabindex="-1"></div>
 @endif
 @if(CsrDelft\model\LidInstellingenModel::get('layout', 'minion') == 'ja')
-	@include('effect/minion')
+	@include('effect.minion')
 @endif
 @if(CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'wolken')
-	@include('effect/clouds')
+	@include('effect.clouds')
 @endif
 </body>
 </html>

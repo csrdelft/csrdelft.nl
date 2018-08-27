@@ -86,7 +86,7 @@
 				@else
 					{!! sliding_pager([
                 'baseurl' => '/forum/recent/',
-                'url_append' => $belankrijk,
+                'url_append' => $belangrijk,
                 'pagecount' => \CsrDelft\model\forum\ForumDradenModel::instance()->getAantalPaginas(),
                 'curpage' => \CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina(),
                 'separator' => ' &nbsp;'
