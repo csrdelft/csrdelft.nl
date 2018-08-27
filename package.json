@@ -3,11 +3,11 @@
 	"scripts": {
 		"dev": "yarn run development",
 		"development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules",
-		"watch": "cross-env node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --mode=development",
+		"watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --mode=development",
 		"watch-poll": "yarn run watch -- --watch-poll",
 		"hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot",
 		"prod": "yarn run production",
-		"production": "cross-env node_modules/webpack/bin/webpack.js --no-progress --hide-modules --mode=production",
+		"production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --mode=production",
 		"docker": "yarn && yarn run watch-poll"
 	},
 	"devDependencies": {
