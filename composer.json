@@ -29,7 +29,7 @@
 		}
 	},
 	"scripts": {
-		"post-install-cmd": "php ./bin/dev/post-install.php",
+		"generator": "php ./bin/dev/generate.php",
 		"production": "php ./bin/ci/compile.php"
 	}
 }
