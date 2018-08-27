@@ -2,7 +2,9 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\Icon;
 use CsrDelft\model\DebugLogModel;
@@ -13,25 +15,17 @@ use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumDradenReagerenModel;
 use CsrDelft\model\forum\ForumDradenVerbergenModel;
 use CsrDelft\model\forum\ForumDradenVolgenModel;
+use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\SimpleSpamFilter;
-use CsrDelft\view\CsrLayoutOweePage;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\FlotTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
-use CsrDelft\view\forum\ForumDeelView;
-use CsrDelft\view\forum\ForumDraadReagerenView;
-use CsrDelft\view\forum\ForumDraadView;
-use CsrDelft\view\forum\ForumOverzichtView;
-use CsrDelft\view\forum\ForumPostDeleteView;
-use CsrDelft\view\forum\ForumPostView;
-use CsrDelft\view\forum\ForumResultatenView;
-use CsrDelft\view\forum\ForumRssView;
 use CsrDelft\view\forum\ForumZoekenForm;
 use CsrDelft\view\JsonResponse;
+use CsrDelft\view\View;
 
 
 /**
@@ -74,6 +68,7 @@ class ForumController extends Controller {
 			// ForumDeel
 			case 'aanmaken':
 			case 'beheren':
+			/** @noinspection PhpMissingBreakStatementInspection */
 			case 'opheffen':
 				if (!LoginModel::mag('P_FORUM_ADMIN')) {
 					return false;
@@ -84,6 +79,7 @@ class ForumController extends Controller {
 			case 'citeren':
 			case 'bladwijzer':
 			case 'concept':
+			/** @noinspection PhpMissingBreakStatementInspection */
 			case 'grafiekdata':
 				if (!LoginModel::mag('P_LOGGED_IN')) {
 					return false;
@@ -113,6 +109,11 @@ class ForumController extends Controller {
 		}
 	}
 
+	/**
+	 * @param array $args
+	 * @return mixed|void
+	 * @throws CsrException
+	 */
 	public function performAction(array $args = array()) {
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
@@ -121,11 +122,11 @@ class ForumController extends Controller {
 			$this->action = 'rss';
 		}
 		try {
-			parent::performAction($this->getParams(3));
+			$this->view = parent::performAction($this->getParams(3));
 		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), -1);
 			$this->action = 'forum';
-			parent::performAction(array());
+			$this->view = parent::performAction(array());
 		}
 		switch ($this->action) {
 			case 'titelzoeken':
@@ -141,23 +142,16 @@ class ForumController extends Controller {
 					return;
 				}
 		}
-		// uitgelogd heeft nieuwe layout
-		if (LoginModel::mag('P_LOGGED_IN')) {
-			$this->view = new CsrLayoutPage($this->view);
-			if ($this->action === 'forum') {
-				$this->view->addCompressedResources('grafiek');
-			}
-		} else {
-			$this->view = new CsrLayoutOweePage($this->view);
-		}
-		$this->view->addCompressedResources('forum');
 	}
 
 	/**
 	 * Overzicht met categorien en forumdelen laten zien.
 	 */
 	public function forum() {
-		$this->view = new ForumOverzichtView();
+		return view('forum.overzicht', [
+			'zoekform' => new ForumZoekenForm(),
+			'categorien' => ForumModel::instance()->getForumIndelingVoorLid()
+		]);
 	}
 
 	public function grafiekdata() {
@@ -166,7 +160,7 @@ class ForumController extends Controller {
 		foreach (ForumDelenModel::instance()->getForumDelenVoorLid() as $deel) {
 			$series[$deel->titel] = $model->getStatsVoorForumDeel($deel);
 		}
-		$this->view = new FlotTimeSeries($series);
+		return new FlotTimeSeries($series);
 	}
 
 	/**
@@ -174,16 +168,19 @@ class ForumController extends Controller {
 	 */
 	public function rss() {
 		header('Content-Type: application/rss+xml; charset=UTF-8');
-		$draden = ForumDradenModel::instance()->getRecenteForumDraden(null, null, true);
-		$this->view = new ForumRssView($draden);
+		return view('forum.rss', [
+			'draden' => ForumDradenModel::instance()->getRecenteForumDraden(null, null, true),
+			'privatelink' => LoginModel::getAccount()->getRssLink()
+		]);
 	}
 
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
 	 */
 	public function wacht() {
-		$draden = ForumDelenModel::instance()->getWachtOpGoedkeuring();
-		$this->view = new ForumResultatenView($draden);
+		return view('forum.resultaten', [
+			'resultaten' => ForumDelenModel::instance()->getWachtOpGoedkeuring()
+		]);
 	}
 
 	/**
@@ -191,6 +188,7 @@ class ForumController extends Controller {
 	 *
 	 * @param string $query
 	 * @param int $pagina
+	 * @return View
 	 */
 	public function zoeken($query = null, $pagina = 1) {
 		ForumPostsModel::instance()->setHuidigePagina((int)$pagina, 0);
@@ -210,14 +208,17 @@ class ForumController extends Controller {
 			$jaar = 1;
 		}
 		$limit = (int)LidInstellingenModel::get('forum', 'zoekresultaten');
-		$draden = ForumDelenModel::instance()->zoeken($query, false, $datum, $ouder, $jaar, $limit);
-		$this->view = new ForumResultatenView($draden, $query);
+
+		return view('forum.resultaten', [
+			'resultaten' => ForumDelenModel::instance()->zoeken($query, false, $datum, $ouder, $jaar, $limit),
+			'query' => $query
+		]);
 	}
 
 	/**
 	 * Draden zoeken op titel voor auto-aanvullen.
 	 *
-	 * @param string $query
+	 * @return View
 	 */
 	public function titelzoeken() {
 		$result = array();
@@ -269,7 +270,7 @@ class ForumController extends Controller {
 				'value' => htmlspecialchars($query)
 			);
 		}
-		$this->view = new JsonResponse($result);
+		return new JsonResponse($result);
 	}
 
 	/**
@@ -277,25 +278,32 @@ class ForumController extends Controller {
 	 *
 	 * @param int $pagina
 	 * @param string $belangrijk
+	 * @return View
 	 */
 	public function recent($pagina = 1, $belangrijk = null) {
 		ForumDradenModel::instance()->setHuidigePagina((int)$pagina, 0);
-		if ($belangrijk === 'belangrijk' OR $pagina === 'belangrijk') {
-			$belangrijk = true;
-		} else {
-			$belangrijk = null;
-		}
+		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
 		$deel = ForumDelenModel::instance()->getRecent($belangrijk);
-		$this->view = new ForumDeelView($deel, true, $belangrijk);
+
+		return view('forum.deel', [
+			'zoekform' => new ForumZoekenForm(),
+			'deel' => $deel,
+			'paging' => ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) > 1,
+			'belangrijk' => $belangrijk ? '/belangrijk' : '',
+			'post_form_titel' => ForumDradenReagerenModel::instance()->getConceptTitel($deel),
+			'post_form_tekst' => ForumDradenReagerenModel::instance()->getConcept($deel),
+			'reageren' => ForumDradenReagerenModel::instance()->getReagerenVoorDeel($deel)
+		]);
 	}
 
 	/**
 	 * Shortcut to /recent/1/belangrijk.
 	 *
 	 * @param int $pagina
+	 * @return View
 	 */
 	public function belangrijk($pagina = 1) {
-		$this->recent($pagina, $this->action);
+		return $this->recent($pagina, $this->action);
 	}
 
 	/**
@@ -303,6 +311,8 @@ class ForumController extends Controller {
 	 *
 	 * @param int $forum_id
 	 * @param int $pagina or 'laatste' or 'prullenbak'
+	 * @return View
+	 * @throws CsrGebruikerException
 	 */
 	public function deel($forum_id, $pagina = 1) {
 		$deel = ForumDelenModel::get((int)$forum_id);
@@ -321,7 +331,15 @@ class ForumController extends Controller {
 		} else {
 			ForumDradenModel::instance()->setHuidigePagina((int)$pagina, $deel->forum_id);
 		}
-		$this->view = new ForumDeelView($deel, $paging); // lazy loading ForumDraad[]
+		return view('forum.deel', [
+			'zoekform' => new ForumZoekenForm(),
+			'deel' => $deel,
+			'paging' => $paging AND ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) > 1,
+			'belangrijk' => '',
+			'post_form_titel' => ForumDradenReagerenModel::instance()->getConceptTitel($deel),
+			'post_form_tekst' => ForumDradenReagerenModel::instance()->getConcept($deel),
+			'reageren' => ForumDradenReagerenModel::instance()->getReagerenVoorDeel($deel)
+		]);
 	}
 
 	/**
@@ -329,6 +347,9 @@ class ForumController extends Controller {
 	 *
 	 * @param int $draad_id
 	 * @param int $pagina or 'laatste' or 'ongelezen'
+	 * @param null $statistiek
+	 * @return View
+	 * @throws CsrGebruikerException
 	 */
 	public function onderwerp($draad_id, $pagina = null, $statistiek = null) {
 		$draad = ForumDradenModel::get((int)$draad_id);
@@ -354,32 +375,46 @@ class ForumController extends Controller {
 		} else {
 			ForumPostsModel::instance()->setHuidigePagina((int)$pagina, $draad->draad_id);
 		}
-		if ($statistiek === 'statistiek' AND $draad->magStatistiekBekijken()) {
-			$statistiek = true;
-		} else {
-			$statistiek = false;
-		}
-		$this->view = new ForumDraadView($draad, $paging, $statistiek); // lazy loading ForumPost[]
+
+		$view = view('forum.draad', [
+			'zoekform' => new ForumZoekenForm(),
+			'draad' => $draad,
+			'paging' => $paging && ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1,
+			'post_form_tekst' => ForumDradenReagerenModel::instance()->getConcept($draad->getForumDeel(), $draad->draad_id),
+			'reageren' => ForumDradenReagerenModel::instance()->getReagerenVoorDraad($draad),
+			'categorien' => ForumModel::instance()->getForumIndelingVoorLid(),
+			'gedeeld_met_opties' => ForumDelenModel::instance()->getForumDelenOptiesOmTeDelen($draad->getForumDeel()),
+			'statistiek' => $statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
+			'draad_ongelezen' => $gelezen ? $draad->isOngelezen() : true,
+			'gelezen_moment' => $gelezen ? strtotime($gelezen->datum_tijd) : false,
+		]);
+
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		}
+
+		return $view;
 	}
 
 	/**
 	 * Opzoeken forumdraad van forumpost.
 	 *
 	 * @param int $post_id
+	 * @return View
+	 * @throws CsrGebruikerException
 	 */
 	public function reactie($post_id) {
 		$post = ForumPostsModel::get((int)$post_id);
 		if ($post->verwijderd) {
 			setMelding('Deze reactie is verwijderd', 0);
 		}
-		$this->onderwerp($post->draad_id, ForumPostsModel::instance()->getPaginaVoorPost($post));
+		return $this->onderwerp($post->draad_id, ForumPostsModel::instance()->getPaginaVoorPost($post));
 	}
 
 	/**
 	 * Forum deel aanmaken.
+	 * @return View
+	 * @throws CsrGebruikerException
 	 */
 	public function aanmaken() {
 		$deel = ForumDelenModel::instance()->nieuwForumDeel();
@@ -389,9 +424,9 @@ class ForumController extends Controller {
 			if ($rowCount !== 1) {
 				throw new CsrGebruikerException('Forum aanmaken mislukt!');
 			}
-			$this->view = new JsonResponse(true);
+			return new JsonResponse(true);
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 
@@ -400,6 +435,7 @@ class ForumController extends Controller {
 	 *
 	 * @param int $forum_id
 	 *
+	 * @return View
 	 * @throws CsrGebruikerException
 	 */
 	public function beheren($forum_id) {
@@ -410,9 +446,9 @@ class ForumController extends Controller {
 			if ($rowCount !== 1) {
 				throw new CsrGebruikerException('Forum beheren mislukt!');
 			}
-			$this->view = new JsonResponse(true);
+			return new JsonResponse(true);
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 
@@ -420,6 +456,9 @@ class ForumController extends Controller {
 	 * Forum deel verwijderen.
 	 *
 	 * @param int $forum_id
+	 * @return View
+	 * @throws CsrGebruikerException
+	 * @throws CsrException
 	 */
 	public function opheffen($forum_id) {
 		$deel = ForumDelenModel::get((int)$forum_id);
@@ -430,7 +469,7 @@ class ForumController extends Controller {
 			ForumDelenModel::instance()->verwijderForumDeel($deel->forum_id);
 			setMelding('Deelforum verwijderd', 1);
 		}
-		$this->view = new JsonResponse('/forum'); // redirect
+		return new JsonResponse('/forum'); // redirect
 	}
 
 	/**
@@ -438,7 +477,9 @@ class ForumController extends Controller {
 	 *
 	 * @param int $draad_id
 	 *
+	 * @return View
 	 * @throws CsrGebruikerException
+	 * @throws CsrException
 	 */
 	public function verbergen($draad_id) {
 		$draad = ForumDradenModel::get((int)$draad_id);
@@ -449,7 +490,7 @@ class ForumController extends Controller {
 			throw new CsrGebruikerException('Onderwerp is al verborgen');
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad);
-		$this->view = new JsonResponse(true);
+		return new JsonResponse(true);
 	}
 
 	/**
@@ -457,7 +498,9 @@ class ForumController extends Controller {
 	 *
 	 * @param int $draad_id
 	 *
+	 * @return View
 	 * @throws CsrGebruikerException
+	 * @throws CsrException
 	 */
 	public function tonen($draad_id) {
 		$draad = ForumDradenModel::get((int)$draad_id);
@@ -465,7 +508,7 @@ class ForumController extends Controller {
 			throw new CsrGebruikerException('Onderwerp is niet verborgen');
 		}
 		ForumDradenVerbergenModel::instance()->setVerbergenVoorLid($draad, false);
-		$this->view = new JsonResponse(true);
+		return new JsonResponse(true);
 	}
 
 	/**
@@ -475,7 +518,7 @@ class ForumController extends Controller {
 		$aantal = ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid();
 		ForumDradenVerbergenModel::instance()->toonAllesVoorLid(LoginModel::getUid());
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
-		$this->view = new JsonResponse(true);
+		return new JsonResponse(true);
 	}
 
 	/**
@@ -483,7 +526,9 @@ class ForumController extends Controller {
 	 *
 	 * @param int $draad_id
 	 *
+	 * @return View
 	 * @throws CsrGebruikerException
+	 * @throws CsrException
 	 */
 	public function volgenaan($draad_id) {
 		$draad = ForumDradenModel::get((int)$draad_id);
@@ -494,7 +539,7 @@ class ForumController extends Controller {
 			throw new CsrGebruikerException('Onderwerp wordt al gevolgd');
 		}
 		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad);
-		$this->view = new JsonResponse(true);
+		return new JsonResponse(true);
 	}
 
 	/**
@@ -502,7 +547,9 @@ class ForumController extends Controller {
 	 *
 	 * @param int $draad_id
 	 *
+	 * @return JsonResponse
 	 * @throws CsrGebruikerException
+	 * @throws CsrException
 	 */
 	public function volgenuit($draad_id) {
 		$draad = ForumDradenModel::get((int)$draad_id);
@@ -510,7 +557,7 @@ class ForumController extends Controller {
 			throw new CsrGebruikerException('Onderwerp wordt niet gevolgd');
 		}
 		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad, false);
-		$this->view = new JsonResponse(true);
+		return new JsonResponse(true);
 	}
 
 	/**
@@ -520,13 +567,14 @@ class ForumController extends Controller {
 		$aantal = ForumDradenVolgenModel::instance()->getAantalVolgenVoorLid();
 		ForumDradenVolgenModel::instance()->volgNietsVoorLid(LoginModel::getUid());
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' niet meer gevolgd', 1);
-		$this->view = new JsonResponse(true);
+		return new JsonResponse(true);
 	}
 
 	/**
 	 * Leg bladwijzer
 	 *
 	 * @param int $draad_id
+	 * @throws CsrGebruikerException
 	 */
 	public function bladwijzer($draad_id) {
 		$draad = ForumDradenModel::get((int)$draad_id);
@@ -542,9 +590,12 @@ class ForumController extends Controller {
 	 *
 	 * @param int $draad_id
 	 * @param string $property
-	 * @param mixed $value
+	 * @return View
+	 * @throws CsrException
+	 * @throws CsrGebruikerException
+	 * @throws CsrToegangException
 	 */
-	public function wijzigen($draad_id, $property, $value = null) {
+	public function wijzigen($draad_id, $property) {
 		$draad = ForumDradenModel::get((int)$draad_id);
 		// gedeelde moderators mogen dit niet
 		if (!$draad->getForumDeel()->magModereren()) {
@@ -571,7 +622,7 @@ class ForumController extends Controller {
 				$value = null;
 			}
 		} else {
-			$this->exit_http(403);
+			throw new CsrToegangException("Kan draad niet wijzigen", 403);
 		}
 		ForumDradenModel::instance()->wijzigForumDraad($draad, $property, $value);
 		if (is_bool($value)) {
@@ -582,8 +633,9 @@ class ForumController extends Controller {
 		setMelding('Wijziging geslaagd: ' . $wijziging, 1);
 		if ($property === 'belangrijk' OR $property === 'forum_id' OR $property === 'titel' OR $property === 'gedeeld_met') {
 			redirect('/forum/onderwerp/' . $draad_id);
+			return null;
 		} else {
-			$this->view = new JsonResponse(true);
+			return new JsonResponse(true);
 		}
 	}
 
@@ -592,6 +644,9 @@ class ForumController extends Controller {
 	 *
 	 * @param int $forum_id
 	 * @param int $draad_id
+	 * @throws CsrException
+	 * @throws CsrGebruikerException
+	 * @throws CsrToegangException
 	 */
 	public function posten($forum_id, $draad_id = null) {
 		$deel = ForumDelenModel::get((int)$forum_id);
@@ -602,13 +657,13 @@ class ForumController extends Controller {
 
 			// check draad in forum deel
 			if (!$draad OR $draad->forum_id !== $deel->forum_id OR !$draad->magPosten()) {
-				$this->exit_http(403);
+				throw new CsrToegangException('Draad bestaat niet', 403);
 			}
 			$url = '/forum/onderwerp/' . $draad->draad_id;
 			$nieuw = false;
 		} else {
 			if (!$deel->magPosten()) {
-				$this->exit_http(403);
+				throw new CsrToegangException('Mag niet posten', 403);
 			}
 			$url = '/forum/deel/' . $deel->forum_id;
 			$nieuw = true;
@@ -623,7 +678,7 @@ class ForumController extends Controller {
 		if (!empty($spamtrap) OR $filter->isSpam($tekst) OR (isset($titel) AND $filter->isSpam($titel))) {
 			DebugLogModel::instance()->log(static::class, 'posten', [$forum_id, $draad_id], 'SPAM ' . $tekst);
 			setMelding('SPAM', -1);
-			$this->exit_http(403);
+			throw new CsrToegangException("", 403);
 		}
 
 		// voorkom dubbelposts
@@ -659,7 +714,7 @@ class ForumController extends Controller {
 			}
 			if ($filter->isSpam($mailadres)) { //TODO: logging
 				setMelding('SPAM', -1);
-				$this->exit_http(403);
+				throw new CsrToegangException('SPAM', 403);
 			}
 		}
 
@@ -724,81 +779,126 @@ class ForumController extends Controller {
 		redirect($url);
 	}
 
+	/**
+	 * @param $post_id
+	 * @throws CsrGebruikerException
+	 * @throws CsrToegangException
+	 */
 	public function citeren($post_id) {
 		$post = ForumPostsModel::get((int)$post_id);
 		if (!$post->magCiteren()) {
-			$this->exit_http(403);
+			throw new CsrToegangException("Mag niet citeren", 403);
 		}
 		echo ForumPostsModel::instance()->citeerForumPost($post);
 		exit; //TODO: JsonResponse
 	}
 
+	/**
+	 * @param $post_id
+	 * @throws CsrGebruikerException
+	 * @throws CsrToegangException
+	 */
 	public function tekst($post_id) {
 		$post = ForumPostsModel::get((int)$post_id);
 		if (!$post->magBewerken()) {
-			$this->exit_http(403);
+			throw new CsrToegangException("Mag niet berwerken", 403);
 		}
 		echo $post->tekst;
 		exit; //TODO: JsonResponse
 	}
 
+	/**
+	 * @param $post_id
+	 * @return View
+	 * @throws CsrException
+	 * @throws CsrGebruikerException
+	 */
 	public function bewerken($post_id) {
 		$post = ForumPostsModel::get((int)$post_id);
 		if (!$post->magBewerken()) {
-			$this->exit_http(403);
+			throw new CsrToegangException("Mag niet bewerken", 403);
 		}
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
 		ForumPostsModel::instance()->bewerkForumPost($tekst, $reden, $post);
 		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($post->getForumDraad(), strtotime($post->laatst_gewijzigd));
-		$this->view = new ForumPostView($post);
+		return view('forum.partial.post_lijst', ['post' => $post]);
 	}
 
+	/**
+	 * @param $post_id
+	 * @return View
+	 * @throws CsrException
+	 * @throws CsrGebruikerException
+	 */
 	public function verplaatsen($post_id) {
 		$post = ForumPostsModel::get((int)$post_id);
 		$oudDraad = $post->getForumDraad();
 		if (!$oudDraad->magModereren()) {
-			$this->exit_http(403);
+			throw new CsrToegangException("Geen moderator", 403);
 		}
 		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
 		$nieuwDraad = ForumDradenModel::get((int)$nieuw);
 		if (!$nieuwDraad->magModereren()) {
-			$this->exit_http(403);
+			throw new CsrToegangException("Geen moderator", 403);
 		}
 		ForumPostsModel::instance()->verplaatsForumPost($nieuwDraad, $post);
 		ForumPostsModel::instance()->goedkeurenForumPost($post);
-		$this->view = new ForumPostDeleteView($post->post_id);
+		return view('forum.partial.post_delete', ['post' => $post]);
 	}
 
+	/**
+	 * @param $post_id
+	 * @return View
+	 * @throws CsrException
+	 * @throws CsrGebruikerException
+	 */
 	public function verwijderen($post_id) {
 		$post = ForumPostsModel::get((int)$post_id);
 		if (!$post->getForumDraad()->magModereren()) {
-			$this->exit_http(403);
+			throw new CsrToegangException("Geen moderator", 403);
 		}
 		ForumPostsModel::instance()->verwijderForumPost($post);
-		$this->view = new ForumPostDeleteView($post->post_id);
+		return view('forum.partial.post_delete', ['post' => $post]);
 	}
 
+	/**
+	 * @param $post_id
+	 * @return View
+	 * @throws CsrException
+	 * @throws CsrGebruikerException
+	 */
 	public function offtopic($post_id) {
 		$post = ForumPostsModel::get((int)$post_id);
 		if (!$post->getForumDraad()->magModereren()) {
-			$this->exit_http(403);
+			throw new CsrToegangException("Geen moderator", 403);
 		}
 		ForumPostsModel::instance()->offtopicForumPost($post);
-		$this->view = new ForumPostView($post);
+		return view('forum.partial.post_lijst', ['post' => $post]);
 	}
 
+	/**
+	 * @param $post_id
+	 * @return View
+	 * @throws CsrException
+	 * @throws CsrGebruikerException
+	 */
 	public function goedkeuren($post_id) {
 		$post = ForumPostsModel::get((int)$post_id);
 		if (!$post->getForumDraad()->magModereren()) {
-			$this->exit_http(403);
+			throw new CsrToegangException("Geen moderator", 403);
 		}
 		ForumPostsModel::instance()->goedkeurenForumPost($post);
-		$this->view = new ForumPostView($post);
+		return view('forum.partial.post_lijst', ['post' => $post]);
 	}
 
 	/**
 	 * Concept bericht opslaan
+	 * @param $forum_id
+	 * @param null $draad_id
+	 * @return View
+	 * @throws CsrGebruikerException
+	 * @throws CsrToegangException
 	 */
 	public function concept($forum_id, $draad_id = null) {
 		$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
@@ -812,7 +912,7 @@ class ForumController extends Controller {
 			$draad_id = $draad->draad_id;
 			// check draad in forum deel
 			if (!$draad OR $draad->forum_id !== $deel->forum_id OR !$draad->magPosten()) {
-				$this->exit_http(403);
+				throw new CsrToegangException("Draad bevindt zich niet in deel", 403);
 			}
 			if (empty($ping)) {
 				ForumDradenReagerenModel::instance()->setConcept($deel, $draad_id, $concept);
@@ -822,7 +922,7 @@ class ForumController extends Controller {
 			$reageren = ForumDradenReagerenModel::instance()->getReagerenVoorDraad($draad);
 		} else {
 			if (!$deel->magPosten()) {
-				$this->exit_http(403);
+				throw new CsrToegangException("Mag niet posten", 403);
 			}
 			if (empty($ping)) {
 				ForumDradenReagerenModel::instance()->setConcept($deel, null, $concept, $titel);
@@ -831,7 +931,9 @@ class ForumController extends Controller {
 			}
 			$reageren = ForumDradenReagerenModel::instance()->getReagerenVoorDeel($deel);
 		}
-		$this->view = new ForumDraadReagerenView($reageren);
-	}
 
+		return view('forum.partial.draad_reageren', [
+			'reageren' => $reageren
+		]);
+	}
 }

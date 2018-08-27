@@ -17,6 +17,7 @@ RUN a2enmod rewrite
 
 # copy config
 COPY conf/dev/apache2.conf /etc/apache2/apache2.conf
+COPY conf/dev/php.ini  /usr/local/etc/php/php.ini
 
 # copy the source
 COPY . /app

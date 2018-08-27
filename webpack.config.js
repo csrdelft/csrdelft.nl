@@ -3,6 +3,8 @@ const HardSourcePlugin = require('hard-source-webpack-plugin');
 const path = require('path');
 const glob = require('glob');
 
+const devMode = process.env.NODE_ENV !== 'production';
+
 let contextPath = path.resolve(__dirname, 'resources/assets');
 let sassPath = path.resolve(contextPath, 'sass');
 
@@ -45,14 +47,14 @@ module.exports = {
 	},
 	plugins: [
 		// Maak webpack sneller door een boel te cachen.
-		new HardSourcePlugin({
-			cacheDirectory: __dirname + 'node_modules/.cache/hard-source/[confighash]',
-		}),
+		devMode ? new HardSourcePlugin({
+			cacheDirectory: __dirname + '/node_modules/.cache/hard-source/[confighash]',
+		}) : false,
 		new MiniCssExtractPlugin({
 			// Css bestanden komen in de map css terecht.
 			filename: 'css/[name].css',
 		}),
-	],
+	].filter(Boolean),
 	module: {
 		// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
 		rules: [
@@ -110,15 +112,15 @@ module.exports = {
 					{
 						loader: 'css-loader',
 						options: {
-							sourceMap: true,
-							minimize: true,
+							sourceMap: devMode,
+							minimize: !devMode,
 							importLoaders: 1,
 						},
 					},
 					{
 						loader: 'postcss-loader',
 						options: {
-							sourceMap: true,
+							sourceMap: devMode,
 							ident: 'postcss',
 							plugins: [require('autoprefixer')],
 						},

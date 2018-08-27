@@ -1,18 +1,31 @@
-language: node_js
-node_js:
-  - "8"
+language: php
+php:
+  - 7
 
 cache:
   directories:
     - "node_modules"
+    - "vendor"
+
+services:
+  - mysql
 
 git:
   submodules: false
 
-install: yarn
+before_install:
+  - cp ./bin/ci/mysql.ini.travis ./etc/mysql.ini
+  - cp ./lib/defines.include.php.sample ./lib/defines.include.php
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS csrdelft;'
+  - nvm install 8
+
+install:
+  - yarn
+  - composer install
 
 script:
   - yarn run production
+  - composer run-script production
 
 deploy:
   provider: script

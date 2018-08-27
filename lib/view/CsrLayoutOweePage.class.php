@@ -2,9 +2,6 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\view\login\LoginForm;
-
-
 /**
  * CsrLayoutOweePage.class.php
  *
@@ -24,42 +21,35 @@ class CsrLayoutOweePage extends CompressedLayout {
 	 * Menu template
 	 * @var string
 	 */
-	public $menutmpl;
+	public $showMenu;
 
-	function __construct(View $body, $template = 'content', $menu = '') {
+	function __construct(View $body, $template = 'content', $menu = false) {
 		parent::__construct($body, $body->getTitel());
 		$this->tmpl = $template;
-		$this->menutmpl = $menu;
-		$this->addScript('/dist/js/extern.js');
-		$this->addStylesheet('/dist/css/extern.css');
-		$this->addStylesheet('/dist/css/extern-forum.css');
-		$this->addStylesheet('/dist/css/extern-fotoalbum.css');
+		$this->showMenu = $menu;
 	}
 
 	public function getBreadcrumbs() {
 		return null;
 	}
 
+	/**
+	 * @throws \Exception
+	 */
 	function view() {
 		header('Content-Type: text/html; charset=UTF-8');
 
-		$smarty = CsrSmarty::instance();
-		$smarty->assign('stylesheets', $this->getStylesheets());
-		$smarty->assign('scripts', $this->getScripts());
-		$smarty->assign('titel', $this->getTitel());
-		$smarty->assign('loginform', new LoginForm());
-		$smarty->assign('body', $this->getBody());
-
-		if ($this->menutmpl !== '') {
-			$smarty->assign('menutpl', $this->menutmpl);
-		}
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
 		if (!$breadcrumbs) {
 			$breadcrumbs = $this->getBreadcrumbs();
 		}
-		$smarty->assign('breadcrumbs', $breadcrumbs);
 
-		$smarty->display('layout-owee/' . $this->tmpl . '.tpl');
+		view('layout-owee.' . $this->tmpl, [
+			'titel' => $this->getTitel(),
+			'body' => $this->getBody(),
+			'showmenu' => $this->showMenu,
+			'breadcrumbs' => $breadcrumbs
+		])->view();
 	}
 
 }

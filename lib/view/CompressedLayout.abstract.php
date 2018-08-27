@@ -28,9 +28,9 @@ abstract class CompressedLayout extends HtmlPage {
 	public function __construct(View $body, $titel) {
 		parent::__construct($body, $titel);
 
-		foreach ($this->getUserModules() as $module) {
+		foreach (static::getUserModules() as $module) {
 		    parent::addStylesheet('/dist/css/' . $module . '.css');
-        }
+		}
 	}
 
 	/**
@@ -52,7 +52,7 @@ abstract class CompressedLayout extends HtmlPage {
 	 *
 	 * @return array
 	 */
-	private function getUserModules() {
+	public static function getUserModules() {
 		$modules = array();
 
 		if (!LoginModel::mag('P_LOGGED_IN')) {

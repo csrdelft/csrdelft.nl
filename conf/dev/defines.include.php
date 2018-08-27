@@ -63,6 +63,8 @@ define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
 define('PHOTOALBUM_PATH', DATA_PATH . 'foto/');
 define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
+define('TEMPLATE_PATH', BASE_PATH . 'resources/views/');
+define('BLADE_CACHE_PATH', DATA_PATH . 'blade/');
 
 # smarty template engine
 define('SMARTY_PLUGIN_DIR', LIB_PATH. 'smarty_plugins');
@@ -72,3 +74,9 @@ define('SMARTY_CACHE_DIR', DATA_PATH . 'smarty/cache/');
 
 # ImageMagick ('magick' voor v7, 'convert' voor v6)
 define('IMAGEMAGICK', 'magick');
+
+# BladeOne
+# - gebruik MODE_AUTO = 0 voor normale development
+# - gebruik MODE_SLOW = 1 als je grote veranderingen maakt
+# - gebruik MODE_FAST = 2 in productie
+define('BLADEONE_MODE', 0);

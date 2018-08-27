@@ -20,7 +20,8 @@
 		"oyejorge/less.php": "v1.7.0.14",
 		"maknz/slack": "^1.7",
 		"jakeasmith/http_build_url": "^1",
-		"ferno/loco": "dev-master"
+		"ferno/loco": "dev-master",
+		"eftec/bladeone": "dev-master"
 	},
 	"config": {
 		"platform": {
@@ -28,6 +29,7 @@
 		}
 	},
 	"scripts": {
-		"post-install-cmd": "php ./bin/dev/post-install.php"
+		"generator": "php ./bin/dev/generate.php",
+		"production": "php ./bin/ci/compile.php"
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\CmsPagina;
@@ -35,6 +36,11 @@ class CmsPaginaController extends Controller {
 		parent::__construct($query, CmsPaginaModel::instance());
 	}
 
+	/**
+	 * @param array $args
+	 * @return mixed|void
+	 * @throws CsrException
+	 */
 	public function performAction(array $args = array()) {
 		$this->action = 'bekijken';
 		if ($this->hasParam(3) AND $this->getParam(2) === 'bewerken') {
@@ -73,11 +79,11 @@ class CmsPaginaController extends Controller {
 		$body = new CmsPaginaView($pagina);
 		if (!LoginModel::mag('P_LOGGED_IN')) { // nieuwe layout altijd voor uitgelogde bezoekers
 			$tmpl = 'content';
-			$menu = '';
+			$menu = false;
 			if ($pagina->naam === 'thuis') {
 				$tmpl = 'index';
 			} elseif ($this->hasParam(1) AND $this->getParam(1) === 'vereniging') {
-				$menu = 'Vereniging';
+				$menu = true;
 			}
 			$this->view = new CsrLayoutOweePage($body, $tmpl, $menu);
 		} else {

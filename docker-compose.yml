@@ -48,7 +48,8 @@ services:
     volumes:
       - ./package.json:/app/package.json
       - ./yarn.lock:/app/yarn.lock
-      - ./webpack.mix.js:/app/webpack.mix.js
+      - ./.eslintrc.js:/app/.eslintrc.js
+      - ./webpack.config.js:/app/webpack.config.js
       - ./tsconfig.json:/app/tsconfig.json
       - ./htdocs/dist:/app/htdocs/dist
       - ./resources/assets:/app/resources/assets

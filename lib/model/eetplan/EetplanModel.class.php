@@ -125,10 +125,16 @@ class EetplanModel extends PersistenceModel {
 	 * @param int $id Id van het huis
 	 * @param string $lichting
 	 *
-	 * @return Eetplan[] lijst van eetplansessies voor dit huis, gesorteerd op datum (oplopend)
+	 * @return Eetplan[] lijst van eetplansessies voor dit huis, gegroepeerd op avond (oplopend)
 	 */
 	public function getEetplanVoorHuis($id, $lichting) {
-		return $this->find('uid LIKE ? AND woonoord_id = ? AND avond <> "0000-00-00"', array($lichting . "%", $id), null, 'avond')->fetchAll();
+		 $sessies = $this->find('uid LIKE ? AND woonoord_id = ? AND avond <> "0000-00-00"', array($lichting . "%", $id), null, 'avond')->fetchAll();
+
+		 return array_reduce($sessies, function (array $accumulator, Eetplan $eetplan) {
+		 	$accumulator[$eetplan->avond][] = $eetplan;
+
+		 	return $accumulator;
+		 }, []);
 	}
 
 	/**

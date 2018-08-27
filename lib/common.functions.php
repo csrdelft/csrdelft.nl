@@ -1111,3 +1111,4 @@ function realpathunix($path) {
 function uniqid_safe($prefix = "") {
 	return str_replace('.', '_', uniqid($prefix, true));
 }
+
