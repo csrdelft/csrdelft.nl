@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "62c34fd6a2896bdc4378640c93f0c680",
+    "content-hash": "101dad78a1a40aa08a52139ad00aae63",
     "packages": [
         {
             "name": "csrdelft/orm",
@@ -1808,7 +1808,14 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-exif": "*",
+        "ext-gd": "*",
+        "ext-mysqli": "*",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-hash": "*"
+    },
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1"
