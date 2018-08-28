@@ -140,7 +140,7 @@ function getSessionMaxLifeTime() {
  * @param boolean $refresh allow a refresh; redirect to CSR_ROOT otherwise
  */
 function redirect($url = null, $refresh = true) {
-	if (empty($url)) {
+	if (empty($url) || $url === null) {
 		$url = REQUEST_URI;
 	}
 	if (!$refresh AND $url == REQUEST_URI) {
@@ -362,7 +362,7 @@ function debugprint($sString, $cssID = 'pubcie_debug') {
  * @param  string $sNamen string met namen en/of uids op nieuwe regels en/of gescheiden door komma's
  * @param   array|string $filter zoekfilter voor LidZoeker::zoekLeden, toegestane input: '', 'leden', 'oudleden' of array met stati
  *
- * @return  bool false bij geen matches
+ * @return  Profiel[]|bool false bij geen matches
  *      of een array met per zoekterm een entry met een unieke uid en naam òf een array met naamopties.
  * Voorbeeld:
  * Input: $sNamen = 'Lid, Klaassen'
@@ -408,6 +408,7 @@ function namen2uid($sNamen, $filter = 'leden') {
 		} else {
 			//geen enkelvoudige match, dan een array teruggeven
 			foreach ($aZoekNamen as $aZoekNaam) {
+				/** @var Profiel $profiel  */
 				$profiel = ProfielModel::get($aZoekNaam['uid']);
 				$aNaamOpties[] = array(
 					'uid' => $aZoekNaam['uid'],
@@ -1051,7 +1052,7 @@ function is_ingelogd_account($uid) {
 
 /**
  * @param Profiel $profiel
- * @param string $key
+ * @param string|string[] $key
  * @param string $uitzondering Sommige commissie mogen wel dit veld zien.
  * @return bool
  */

@@ -245,8 +245,8 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	 * Check leesrechten van gebruiker.
 	 * RSS: use token & return delen.
 	 *
-	 * @param int $aantal
-	 * @param boolean $belangrijk
+	 * @param int|null $aantal
+	 * @param boolean|null $belangrijk
 	 * @param boolean $rss
 	 * @param int $offset
 	 * @param boolean $getLatestPosts

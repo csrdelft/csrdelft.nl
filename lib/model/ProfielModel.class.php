@@ -23,6 +23,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\PersistenceModel;
 
 
 /**
@@ -97,10 +98,11 @@ class ProfielModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * @param PersistentEntity|Profiel $profiel
+	 * @param PersistentEntity $profiel
 	 * @return string
 	 */
 	public function create(PersistentEntity $profiel) {
+		/** @var Profiel $profiel */
 		// Lichting zijn de laatste 2 cijfers van lidjaar
 		$jj = substr($profiel->lidjaar, 2, 2);
 		$laatste_uid = Database::instance()->sqlSelect(array('MAX(uid)'), $this->getTableName(), 'LEFT(uid, 2) = ?', array($jj), null, null, 1)->fetchColumn();

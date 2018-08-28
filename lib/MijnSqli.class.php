@@ -149,7 +149,7 @@ class MijnSqli {
 
 		$this->query("INSERT INTO `" . $table . "` (" . $q1 . ") VALUES (" . $q2 . ")");
 
-		return mysqli_insert_id();
+		return mysqli_insert_id($this->_db);
 	}
 
 	public function update($query) {
@@ -177,14 +177,16 @@ class MijnSqli {
 
 	// zet een resultaat ding om in een array
 	public function result2array($rResult) {
+		
 		if ($this->numRows($rResult) >= 1) {
+			$aArray = [];
 			while ($aDataArray = $this->next($rResult)) {
 				$aArray[] = $aDataArray;
 			}
+			return $aArray;
 		} else {
-			$aArray = false;
+			return false;
 		}
-		return $aArray;
 	}
 
 	//geef array terug met resultaten uit de aangeboden query

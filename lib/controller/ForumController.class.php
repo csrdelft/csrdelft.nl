@@ -168,9 +168,13 @@ class ForumController extends Controller {
 	 */
 	public function rss() {
 		header('Content-Type: application/rss+xml; charset=UTF-8');
+		/**
+		 * @var \CsrDelft\model\entity\security\Account $account
+		 */
+		$account = LoginModel::getAccount();
 		return view('forum.rss', [
 			'draden' => ForumDradenModel::instance()->getRecenteForumDraden(null, null, true),
-			'privatelink' => LoginModel::getAccount()->getRssLink()
+			'privatelink' => $account->getRssLink()
 		]);
 	}
 
@@ -190,9 +194,9 @@ class ForumController extends Controller {
 	 * @param int $pagina
 	 * @return View
 	 */
-	public function zoeken($query = null, $pagina = 1) {
-		ForumPostsModel::instance()->setHuidigePagina((int)$pagina, 0);
-		ForumDradenModel::instance()->setHuidigePagina((int)$pagina, 0);
+	public function zoeken($query = null, int $pagina = 1) {
+		ForumPostsModel::instance()->setHuidigePagina($pagina, 0);
+		ForumDradenModel::instance()->setHuidigePagina($pagina, 0);
 		if ($query === null) {
 			$zoekform = new ForumZoekenForm();
 			$values = $zoekform->getValues();
@@ -260,15 +264,15 @@ class ForumController extends Controller {
 					'value' => $draad->titel
 				);
 			}
-		}
-		if (empty($result)) {
-			$result[] = array(
-				'url' => '/forum/zoeken/' . urlencode($query),
-				'icon' => Icon::getTag('magnifier'),
-				'title' => 'Zoeken in forumreacties',
-				'label' => 'Zoeken in reacties',
-				'value' => htmlspecialchars($query)
-			);
+			if (empty($result)) {
+				$result[] = array(
+					'url' => '/forum/zoeken/' . urlencode($query),
+					'icon' => Icon::getTag('magnifier'),
+					'title' => 'Zoeken in forumreacties',
+					'label' => 'Zoeken in reacties',
+					'value' => htmlspecialchars($query)
+				);
+			}
 		}
 		return new JsonResponse($result);
 	}
@@ -277,12 +281,12 @@ class ForumController extends Controller {
 	 * Recente draadjes laten zien in tabel.
 	 *
 	 * @param int $pagina
-	 * @param string $belangrijk
+	 * @param string|null $belangrijk
 	 * @return View
 	 */
-	public function recent($pagina = 1, $belangrijk = null) {
-		ForumDradenModel::instance()->setHuidigePagina((int)$pagina, 0);
-		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
+	public function recent(int $pagina = 1, $belangrijk = null) {
+		ForumDradenModel::instance()->setHuidigePagina($pagina, 0);
+		$belangrijk = $belangrijk === 'belangrijk';
 		$deel = ForumDelenModel::instance()->getRecent($belangrijk);
 
 		return view('forum.deel', [
@@ -310,12 +314,12 @@ class ForumController extends Controller {
 	 * Deelforum laten zien met draadjes in tabel.
 	 *
 	 * @param int $forum_id
-	 * @param int $pagina or 'laatste' or 'prullenbak'
+	 * @param int|string $pagina or 'laatste' or 'prullenbak'
 	 * @return View
 	 * @throws CsrGebruikerException
 	 */
-	public function deel($forum_id, $pagina = 1) {
-		$deel = ForumDelenModel::get((int)$forum_id);
+	public function deel(int $forum_id, $pagina = 1) {
+		$deel = ForumDelenModel::get($forum_id);
 		if (!$deel->magLezen()) {
 			$this->exit_http(403);
 		}
@@ -347,12 +351,12 @@ class ForumController extends Controller {
 	 *
 	 * @param int $draad_id
 	 * @param int $pagina or 'laatste' or 'ongelezen'
-	 * @param null $statistiek
+	 * @param string|null $statistiek
 	 * @return View
 	 * @throws CsrGebruikerException
 	 */
-	public function onderwerp($draad_id, $pagina = null, $statistiek = null) {
-		$draad = ForumDradenModel::get((int)$draad_id);
+	public function onderwerp(int $draad_id, $pagina = null, $statistiek = null) {
+		$draad = ForumDradenModel::get($draad_id);
 		if (!$draad->magLezen()) {
 			$this->exit_http(403);
 		}
@@ -403,8 +407,8 @@ class ForumController extends Controller {
 	 * @return View
 	 * @throws CsrGebruikerException
 	 */
-	public function reactie($post_id) {
-		$post = ForumPostsModel::get((int)$post_id);
+	public function reactie(int $post_id) {
+		$post = ForumPostsModel::get($post_id);
 		if ($post->verwijderd) {
 			setMelding('Deze reactie is verwijderd', 0);
 		}
@@ -438,8 +442,8 @@ class ForumController extends Controller {
 	 * @return View
 	 * @throws CsrGebruikerException
 	 */
-	public function beheren($forum_id) {
-		$deel = ForumDelenModel::get((int)$forum_id);
+	public function beheren(int $forum_id) {
+		$deel = ForumDelenModel::get($forum_id);
 		$form = new ForumDeelForm($deel); // fetches POST values itself
 		if ($form->validate()) {
 			$rowCount = ForumDelenModel::instance()->update($deel);
@@ -460,8 +464,8 @@ class ForumController extends Controller {
 	 * @throws CsrGebruikerException
 	 * @throws CsrException
 	 */
-	public function opheffen($forum_id) {
-		$deel = ForumDelenModel::get((int)$forum_id);
+	public function opheffen(int $forum_id) {
+		$deel = ForumDelenModel::get($forum_id);
 		$count = ForumDradenModel::instance()->count('forum_id = ?', array($deel->forum_id));
 		if ($count > 0) {
 			setMelding('Verwijder eerst alle ' . $count . ' draadjes van dit deelforum uit de database!', -1);
@@ -481,8 +485,8 @@ class ForumController extends Controller {
 	 * @throws CsrGebruikerException
 	 * @throws CsrException
 	 */
-	public function verbergen($draad_id) {
-		$draad = ForumDradenModel::get((int)$draad_id);
+	public function verbergen(int $draad_id) {
+		$draad = ForumDradenModel::get($draad_id);
 		if (!$draad->magVerbergen()) {
 			throw new CsrGebruikerException('Onderwerp mag niet verborgen worden');
 		}
@@ -502,8 +506,8 @@ class ForumController extends Controller {
 	 * @throws CsrGebruikerException
 	 * @throws CsrException
 	 */
-	public function tonen($draad_id) {
-		$draad = ForumDradenModel::get((int)$draad_id);
+	public function tonen(int $draad_id) {
+		$draad = ForumDradenModel::get($draad_id);
 		if (!$draad->isVerborgen()) {
 			throw new CsrGebruikerException('Onderwerp is niet verborgen');
 		}
@@ -530,8 +534,8 @@ class ForumController extends Controller {
 	 * @throws CsrGebruikerException
 	 * @throws CsrException
 	 */
-	public function volgenaan($draad_id) {
-		$draad = ForumDradenModel::get((int)$draad_id);
+	public function volgenaan(int $draad_id) {
+		$draad = ForumDradenModel::get($draad_id);
 		if (!$draad->magVolgen()) {
 			throw new CsrGebruikerException('Onderwerp mag niet gevolgd worden');
 		}
@@ -551,8 +555,8 @@ class ForumController extends Controller {
 	 * @throws CsrGebruikerException
 	 * @throws CsrException
 	 */
-	public function volgenuit($draad_id) {
-		$draad = ForumDradenModel::get((int)$draad_id);
+	public function volgenuit(int $draad_id) {
+		$draad = ForumDradenModel::get($draad_id);
 		if (!$draad->isGevolgd()) {
 			throw new CsrGebruikerException('Onderwerp wordt niet gevolgd');
 		}
@@ -576,8 +580,8 @@ class ForumController extends Controller {
 	 * @param int $draad_id
 	 * @throws CsrGebruikerException
 	 */
-	public function bladwijzer($draad_id) {
-		$draad = ForumDradenModel::get((int)$draad_id);
+	public function bladwijzer(int $draad_id) {
+		$draad = ForumDradenModel::get($draad_id);
 		$timestamp = (int)filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
 		if (ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad, $timestamp - 1)) {
 			echo '<img id="timestamp' . $timestamp . '" src="/plaetjes/famfamfam/tick.png" class="icon" title="Bladwijzer succesvol geplaatst">';
@@ -590,13 +594,13 @@ class ForumController extends Controller {
 	 *
 	 * @param int $draad_id
 	 * @param string $property
-	 * @return View
+	 * @return View|null
 	 * @throws CsrException
 	 * @throws CsrGebruikerException
 	 * @throws CsrToegangException
 	 */
-	public function wijzigen($draad_id, $property) {
-		$draad = ForumDradenModel::get((int)$draad_id);
+	public function wijzigen(int $draad_id, $property) {
+		$draad = ForumDradenModel::get($draad_id);
 		// gedeelde moderators mogen dit niet
 		if (!$draad->getForumDeel()->magModereren()) {
 			$this->exit_http(403);
@@ -641,16 +645,17 @@ class ForumController extends Controller {
 
 	/**
 	 * Forum post toevoegen en evt. nieuw draadje aanmaken.
+	 * @TODO refactor deze veel te ingewikkelde functie en splits in meerdere functies, bijvoorbeeld in het ForumPostsModel
 	 *
 	 * @param int $forum_id
-	 * @param int $draad_id
+	 * @param int|null $draad_id
 	 * @throws CsrException
 	 * @throws CsrGebruikerException
 	 * @throws CsrToegangException
 	 */
-	public function posten($forum_id, $draad_id = null) {
-		$deel = ForumDelenModel::get((int)$forum_id);
-
+	public function posten(int $forum_id, $draad_id = null) {
+		$deel = ForumDelenModel::get($forum_id);
+		$draad = null;
 		// post in bestaand draadje?
 		if ($draad_id !== null) {
 			$draad = ForumDradenModel::get((int)$draad_id);
@@ -696,7 +701,7 @@ class ForumController extends Controller {
 		}
 
 		// concept opslaan
-		if ($nieuw) {
+		if ($draad == null) {
 			ForumDradenReagerenModel::instance()->setConcept($deel, null, $tekst, $titel);
 		} else {
 			ForumDradenReagerenModel::instance()->setConcept($deel, $draad->draad_id, $tekst);

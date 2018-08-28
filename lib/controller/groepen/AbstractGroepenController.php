@@ -279,33 +279,37 @@ abstract class AbstractGroepenController extends Controller {
 		if (empty($selection)) {
 			$old = null;
 			$groep = $this->model->nieuw($soort);
+			/**
+			 * @var \CsrDelft\model\entity\profiel\Profiel $profiel
+			 */
+			$profiel = LoginModel::getProfiel();
 			if (property_exists($groep, 'rechten_aanmelden') AND empty($groep->rechten_aanmelden)) {
 				switch ($groep->soort) {
 
 					case ActiviteitSoort::Lichting:
-						$groep->rechten_aanmelden = 'Lichting:' . LoginModel::getProfiel()->lidjaar;
+						$groep->rechten_aanmelden = 'Lichting:' . $profiel->lidjaar;
 						break;
 
 					case ActiviteitSoort::Verticale:
-						$groep->rechten_aanmelden = 'Verticale:' . LoginModel::getProfiel()->verticale;
+						$groep->rechten_aanmelden = 'Verticale:' . $profiel->verticale;
 						break;
 
 					case ActiviteitSoort::Kring:
-						$kring = LoginModel::getProfiel()->getKring();
+						$kring = $profiel->getKring();
 						if ($kring) {
 							$groep->rechten_aanmelden = 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer;
 						}
 						break;
 
 					case ActiviteitSoort::Huis:
-						$woonoord = LoginModel::getProfiel()->getWoonoord();
+						$woonoord = $profiel->getWoonoord();
 						if ($woonoord) {
 							$groep->rechten_aanmelden = 'Woonoord:' . $woonoord->familie;
 						}
 						break;
 
 					case ActiviteitSoort::Ondervereniging:
-						$groep->rechten_aanmelden = 'Lichting:' . LoginModel::getProfiel()->lidjaar;
+						$groep->rechten_aanmelden = 'Lichting:' . $profiel->lidjaar;
 						break;
 				}
 			}

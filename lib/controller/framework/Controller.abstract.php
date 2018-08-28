@@ -91,7 +91,7 @@ abstract class Controller {
 	 * REST: positional parameters
 	 * KVP: named parameters
 	 *
-	 * @param string $key
+	 * @param string|int $key
 	 * @return boolean
 	 */
 	protected function hasParam($key) {
@@ -108,7 +108,7 @@ abstract class Controller {
 	 * REST: positional parameters
 	 * KVP: named parameters
 	 *
-	 * @param string $key
+	 * @param string|int $key
 	 * @return string
 	 */
 	protected function getParam($key) {

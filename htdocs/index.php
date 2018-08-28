@@ -61,16 +61,18 @@ try {
 	exit;
 } catch (CsrToegangException $exception) {
 	http_response_code($exception->getCode());
-	if ($this->getMethod() == 'POST') {
+	if ($controller->getMethod() == 'POST') {
 		die($exception->getMessage());
 	} // Redirect to login form
 	elseif (LoginModel::getUid() === 'x999') {
 		redirect_via_login(REQUEST_URI);
 	}
-	// GUI 403
-	$body = new CmsPaginaView(CmsPaginaModel::get($exception->getCode()));
-	$this->view = new CsrLayoutPage($body);
-	$this->view->view();
+    // GUI 403
+    /** @var CsrDelft\model\entity\CmsPagina $errorpage */
+    $errorpage = CmsPaginaModel::get($exception->getCode());
+	$body = new CmsPaginaView($errorpage);
+	$view = new CsrLayoutPage($body);
+	$view->view();
 }
 
 

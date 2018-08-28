@@ -25,6 +25,10 @@ class Roodschopper {
 	private $saldogrens;
 	private $bericht;
 	private $doelgroep = 'leden';
+	/**
+	 * @var String onderwerp
+	 */
+	private $onderwerp;
 	private $uitsluiten = array();
 	private $from;
 	private $bcc;
