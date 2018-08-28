@@ -4,7 +4,12 @@ require('../sass/effect/trein.scss');
 
 $(function () {
 	const treinen = [
-		'trein ns-ddz', 'trein ns-koploper', 'trein ns-intercity',
+		'trein ns-ddz',
+		'lange trein ns-ddz',
+		'trein ns-koploper',
+		'lange trein ns-koploper',
+		'trein ns-intercity',
+		'lange trein ns-intercity',
 	];
 
 	const rails = $('.rails');

@@ -1,9 +1,10 @@
 @keyframes trein {
-	0% { left: -1000px; }
+	0% { left: -1200px; }
 	100% { left: 4000px; }
 }
 
 .rails {
+	pointer-events: none;
 	height: 50px;
 	position: fixed;
 	bottom: 0;
@@ -13,7 +14,7 @@
 }
 
 .trein {
-	left: -1000px;
+	left: -1200px;
 	position: absolute;
 	width: 545px;
 	height: 50px;
@@ -21,7 +22,11 @@
 	animation-name: trein;
 	animation-duration: 10s;
 
+	&.lange {
+		width: 1090px;
+	}
 }
+
 
 .ns-ddz {
 	background-image: url("../../images/trein/NS_DDZ_Treinstel.svg");
