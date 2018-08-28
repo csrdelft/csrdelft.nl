@@ -1,40 +1,41 @@
 {
-    "name": "csr/csrdelft.nl",
-    "authors": [
-        {
-            "name": "PubCie",
-            "email": "pubcie@csrdelft.nl"
-        }
-    ],
-    "require": {
-        "smarty/smarty": "~3.1",
-        "google/apiclient": "^2.0",
-        "firebase/php-jwt": "^4.0",
-        "jacwright/restserver": "dev-master",
-        "globalcitizen/php-iban": "^2.6",
-        "robmorgan/phinx": "^0.9",
-        "csrdelft/orm": "1.7.5",
-        "tedivm/stash": "^0.14.1",
-        "tedivm/jshrink": "^1.1",
-        "tubalmartin/cssmin": "^4.0",
-        "oyejorge/less.php": "v1.7.0.14",
-        "maknz/slack": "^1.7",
-        "jakeasmith/http_build_url": "^1",
-        "ferno/loco": "dev-master",
-        "eftec/bladeone": "dev-master"
-    },
-  "require-dev": {
-    "phpstan/phpstan": "^0.9.2"
-  },
-    "config": {
-        "platform": {
-            "php": "7.1"
-        }
-    },
-  "scripts": {
-    "generator": "php ./bin/dev/generate.php",
-    "production": "php ./bin/ci/compile.php",
-    "analyse": "vendor/bin/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs"
-  },
-  "include-path": ["lib/"]
+	"name": "csr/csrdelft.nl",
+	"authors": [
+		{
+			"name": "PubCie",
+			"email": "pubcie@csrdelft.nl"
+		}
+	],
+	"require": {
+		"smarty/smarty": "~3.1",
+		"google/apiclient": "^2.0",
+		"firebase/php-jwt": "^4.0",
+		"jacwright/restserver": "dev-master",
+		"globalcitizen/php-iban": "^2.6",
+		"robmorgan/phinx": "^0.9",
+		"csrdelft/orm": "1.7.5",
+		"tedivm/stash": "^0.14.1",
+		"tedivm/jshrink": "^1.1",
+		"tubalmartin/cssmin": "^4.0",
+		"oyejorge/less.php": "v1.7.0.14",
+		"maknz/slack": "^1.7",
+		"jakeasmith/http_build_url": "^1",
+		"ferno/loco": "dev-master",
+		"eftec/bladeone": "dev-master",
+        "ext-exif": "*",
+        "ext-gd": "*",
+        "ext-mysqli": "*",
+        "ext-PDO": "*",
+        "ext-pdo_mysql": "*",
+        "ext-hash": "*"
+	},
+	"config": {
+		"platform": {
+			"php": "7.1"
+		}
+	},
+	"scripts": {
+		"generator": "php ./bin/dev/generate.php",
+		"production": "php ./bin/ci/compile.php"
+	}
 }
