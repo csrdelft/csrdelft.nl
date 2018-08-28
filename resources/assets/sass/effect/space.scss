@@ -33,9 +33,10 @@
   background-image:  url('../../images/bg/stars.jpg');
   background-size: cover;
 }
-#cd-main-overlay.is-visible {
-  -webkit-animation: space 360s linear infinite;
-  -moz-animation: space 360s linear infinite;
-  -ms-animation: space 360s linear infinite;
+#cd-main-overlay.is-visible,
+#menu.target ~ #cd-main-overlay,
+#menu:target ~ #cd-main-overlay,
+#search:target ~ #cd-main-overlay,
+#search.target ~ #cd-main-overlay {
   animation: space 360s linear infinite;
 }
