@@ -14,10 +14,16 @@ const assign = (entries, newEntries) =>
 		.forEach((name) =>
 			entries.hasOwnProperty(name) ? entries[name].push(newEntries[name]) : entries[name] = [newEntries[name]]);
 
+const formatModule = (context, entry, extension) =>
+	path.relative(context, entry)
+		.replace(extension, '')
+		.replace('\\', '/')
+		.replace('/', '-');
+
 // Sass bestanden die niet met _ beginnen zijn entrypoints.
 let entryPoint = glob
 	.sync(path.resolve(sassPath, '**/!(_)*.scss'))
-	.reduce((entries, entry) => Object.assign(entries, {[path.relative(sassPath, entry).replace('.scss', '')]: [entry]}), {});
+	.reduce((entries, entry) => Object.assign(entries, {[formatModule(sassPath, entry, '.scss')]: [entry]}), {});
 
 // Javascript heeft maar een paar entry points en deze zijn voorgedefinieerd.
 assign(entryPoint, {
@@ -52,7 +58,7 @@ module.exports = {
 		}) : false,
 		new MiniCssExtractPlugin({
 			// Css bestanden komen in de map css terecht.
-			filename: 'css/[name].css',
+			filename: 'css/[name].css'
 		}),
 	].filter(Boolean),
 	module: {
@@ -143,8 +149,7 @@ module.exports = {
 				use: [{
 					loader: 'file-loader',
 					options: {
-						name: '[name].[ext]',
-						outputPath: 'fonts/',
+						name: 'fonts/[name].[ext]',
 					},
 				}],
 			},
@@ -154,8 +159,7 @@ module.exports = {
 				use: [{
 					loader: 'file-loader',
 					options: {
-						name: '[name].[ext]',
-						outputPath: 'images/',
+						name: 'images/[name].[ext]',
 					},
 				}],
 			},

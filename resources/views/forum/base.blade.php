@@ -2,7 +2,7 @@
 	@extends('layout')
 
 	@push('styles')
-		<link rel="stylesheet" href="{{asset("/dist/css/module/forum.css")}}"/>
+		<link rel="stylesheet" href="{{asset("/dist/css/module-forum.css")}}"/>
 	@endpush
 @endauth
 @guest
