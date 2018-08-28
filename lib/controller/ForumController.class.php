@@ -280,13 +280,13 @@ class ForumController extends Controller {
 	/**
 	 * Recente draadjes laten zien in tabel.
 	 *
-	 * @param int $pagina
+	 * @param int|string $pagina
 	 * @param string|null $belangrijk
 	 * @return View
 	 */
-	public function recent(int $pagina = 1, $belangrijk = null) {
+	public function recent($pagina = 1, $belangrijk = null) {
 		ForumDradenModel::instance()->setHuidigePagina($pagina, 0);
-		$belangrijk = $belangrijk === 'belangrijk';
+		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
 		$deel = ForumDelenModel::instance()->getRecent($belangrijk);
 
 		return view('forum.deel', [
