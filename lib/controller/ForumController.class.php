@@ -122,6 +122,9 @@ class ForumController extends Controller {
 			$this->action = 'rss';
 		}
 		try {
+			if ($this->action == "reactie" && (!$this->hasParam(3) || filter_var($this->getParam(3), FILTER_VALIDATE_INT) === false)) {
+				$this->exit_http(404);
+			}
 			$this->view = parent::performAction($this->getParams(3));
 		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), -1);
