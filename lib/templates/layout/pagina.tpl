@@ -50,5 +50,8 @@
 		{if CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'wolken'}
 			{include file='layout/fx-clouds.tpl'}
 		{/if}
+		{if CsrDelft\model\LidInstellingenModel::get('layout', 'trein') != 'nee'}
+			{include file='layout/fx-trein.tpl'}
+		{/if}
 	</body>
 </html>

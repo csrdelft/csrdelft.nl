@@ -32,6 +32,7 @@ assign(entryPoint, {
 	'ledenmemory': './js/ledenmemory.js',
 	'fxclouds': './js/fxclouds.js',
 	'fxonontdekt': './js/fxonontdekt.js',
+	'fxtrein': './js/fxtrein.js',
 	'extern': './js/extern.js'
 });
 

@@ -49,6 +49,7 @@ class LidInstellingenModel extends InstellingenModel {
 			'visitekaartjes' => array('Civikaartjes', T::Enumeration, array('ja', 'nee'), 'ja'),
 			'neuzen' => array('Neuzen', T::Enumeration, array('2013', 'nee'), '2013'),
 			'minion' => array('Minion', T::Enumeration, array('ja', 'nee'), 'nee'),
+			'trein' => array('Trein', T::Enumeration, array('nee', 'willekeurig'), 'nee'),
 		),
 		'forum' => array(
 			'draden_per_pagina' => array('Draadjes per pagina', T::Integer, array(5, 100), 20),
