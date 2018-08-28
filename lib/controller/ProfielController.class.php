@@ -6,7 +6,6 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\GoogleSync;
-use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\Afbeelding;
@@ -16,10 +15,12 @@ use CsrDelft\model\fiscaat\SaldoGrafiekModel;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
+use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
+use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\AlleVerjaardagenView;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\CsrLayoutPage;
@@ -30,6 +31,7 @@ use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\profiel\ProfielView;
 use CsrDelft\view\StamboomView;
+use CsrDelft\view\toestemming\ToestemmingModalForm;
 
 /**
  * ProfielController.class.php
@@ -160,7 +162,24 @@ class ProfielController extends AclController {
 				}
 				$profiel->changelog[] = $changeEntry;
 				if ($nieuw) {
-					$this->model->create($profiel);
+					try {
+						Database::transaction(function () use ($profiel) {
+							$this->model->create($profiel);
+
+							if (filter_input(INPUT_POST, 'toestemming_geven') === 'true') {
+								// Sla toesteming op.
+								$toestemmingForm = new ToestemmingModalForm(true);
+								if ($toestemmingForm->validate()) {
+									LidToestemmingModel::instance()->save($profiel->uid);
+								} else {
+									throw new CsrException('Opslaan van toestemming mislukt');
+								}
+							}
+						});
+					} /** @noinspection PhpRedundantCatchClauseInspection */ catch (CsrException $ex) {
+						setMelding($ex->getMessage(), -1);
+					}
+
 					setMelding('Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid, 1);
 				} elseif (1 === $this->model->update($profiel)) {
 					setMelding(count($diff) . ' wijziging(en) succesvol opgeslagen', 1);

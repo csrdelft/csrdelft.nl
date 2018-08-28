@@ -1,15 +1,15 @@
-@import "~jquery-ui/themes/base/theme";
+@import "~jquery-ui/themes/base/theme.css";
 @import "../icons";
 
 /**
  * maaltijdlijst.css	|	P.W.G. Brussee (brussee@live.nl)
- * 
+ *
  */
 html {
 	font-size: 10px;
 }
 body {
-	font-family: verdana;
+	font-family: verdana, sans-serif;
 	font-size: 1.1em;
 	width: 920px;
 	margin: 0;
@@ -29,8 +29,7 @@ p, ul {
 	padding-left: 2px;
 }
 li {
-	list-style-type: square;
-	list-style-position: inside;
+	list-style: square inside;
 }
 #gesloten-melding {
 	color: red;
@@ -109,8 +108,6 @@ div.visitekaartje {
 	font-size: 1em !important;
 	border: 1px solid #000;
 	background-color: #fff;
-	-moz-box-shadow: 0 0 11px #000000;
-	-webkit-box-shadow: 0 0 11px #000000;
 	box-shadow: 0 0 11px #000000;
 	z-index: 111;
 	font-weight: normal !important;

@@ -250,7 +250,7 @@ class DataTable implements View, FormElement {
 		echo $this->getHtml();
 		echo <<<HTML
 <script type="text/javascript">
-		{$this->getJavascript()}
+		{$this->getScript()}
 </script>
 HTML;
 	}
@@ -282,7 +282,7 @@ HTML;
 HTML;
 	}
 
-	public function getJavascript() {
+	public function getScript() {
 		// encode settings
 		$settingsJson = json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0);
 
@@ -341,5 +341,10 @@ HTML;
 				})
 			});
 JS;
+	}
+
+	public function getJavascript() {
+		//Nothing should be returned here because the script is already embedded in getView
+		return "";
 	}
 }

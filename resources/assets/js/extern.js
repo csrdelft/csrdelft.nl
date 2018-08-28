@@ -11,9 +11,7 @@ require('jquery-hoverintent');
 
 $.widget.bridge('uitooltip', $.ui.tooltip);
 
-require('jquery-ui/ui/widgets/datepicker');
-require('jquery-ui-timepicker-addon');
-require('./lib/jquery-ui-timepicker-nl');
+require('timeago');
 
 window.bbcode = {
 	CsrBBPreview,
@@ -26,8 +24,6 @@ $(function () {
 		$body = $('body'),
 		$header = $('#header'),
 		$banner = $('#banner');
-
-	let hasLoaded = false;
 
 	if (typeof $banner[0] === 'undefined') {
 		$banner = $('#banner-small');
@@ -81,7 +77,7 @@ $(function () {
 					$(this).replaceWith(this.textContent);
 				});
 			});
-		}
+		};
 	})();
 
 	// Lazy load after animations have finished and user has scrolled

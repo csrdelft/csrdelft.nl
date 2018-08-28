@@ -3,7 +3,6 @@
 namespace CsrDelft\view\profiel;
 
 use CsrDelft\lid\LidZoeker;
-use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\OntvangtContactueel;
 use CsrDelft\model\entity\profiel\Profiel;
@@ -17,8 +16,7 @@ use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\RequiredIntField;
 use CsrDelft\view\formulier\getalvelden\RequiredTelefoonField;
 use CsrDelft\view\formulier\getalvelden\TelefoonField;
-use CsrDelft\view\formulier\invoervelden\DuckField;
-use CsrDelft\view\formulier\invoervelden\EmailField;
+use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\LandField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\RequiredEmailField;
@@ -38,8 +36,11 @@ use CsrDelft\view\formulier\keuzevelden\RequiredSelectField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\keuzevelden\VerticaleField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
-use CsrDelft\view\formulier\uploadvelden\ImageField;
+use CsrDelft\view\toestemming\ToestemmingModalForm;
 
+/**
+ * @property ProfielModel $model
+ */
 class ProfielForm extends Formulier {
 
 	public function getBreadcrumbs() {
@@ -164,7 +165,7 @@ class ProfielForm extends Formulier {
 			$fields[] = new TextField('o_adres', $profiel->o_adres, 'Straatnaam + Huisnummer', 100);
 			$fields[] = new TextField('o_postcode', $profiel->o_postcode, 'Postcode', 20);
 			$fields[] = new TextField('o_woonplaats', $profiel->o_woonplaats, 'Woonplaats', 50);
-			$fields[] = new LandField('o_land', $profiel->o_land, 'Land', 50);
+			$fields[] = new LandField('o_land', $profiel->o_land, 'Land');
 			$fields[] = new TelefoonField('o_telefoon', $profiel->o_telefoon, 'Telefoonnummer', 20);
 		}
 
@@ -191,10 +192,6 @@ class ProfielForm extends Formulier {
 		$fields['studiejaar'] = new IntField('studiejaar', (int)$profiel->studiejaar, 'Beginjaar studie', 1950, date('Y'));
 		$fields['studiejaar']->leden_mod = $admin;
 
-		if (!$profiel->isOudlid()) {
-			$fields[] = new TextField('studienr', $profiel->studienr, 'Studienummer (TU)', 20);
-		}
-
 		if (!$inschrijven AND ($admin OR $profiel->isOudlid())) {
 			$fields[] = new TextField('beroep', $profiel->beroep, 'Beroep/werk', 4096);
 			$fields[] = new IntField('lidjaar', (int)$profiel->lidjaar, 'Lid sinds', 1950, date('Y'));
@@ -213,7 +210,6 @@ class ProfielForm extends Formulier {
 		$fields[] = new Subkopje('Persoonlijk');
 		$fields[] = new TextField('eetwens', $profiel->eetwens, 'Dieet/voedselallergie');
 		$fields[] = new RequiredIntField('lengte', (int)$profiel->lengte, 'Lengte (cm)', 50, 250);
-		$fields[] = new RequiredSelectField('ovkaart', $profiel->ovkaart, 'OV-kaart', array('' => 'Kies...', 'geen' => '(Nog) geen OV-kaart', 'week' => 'Week', 'weekend' => 'Weekend', 'niet' => 'Niet geactiveerd'));
 		$fields[] = new TextField('kerk', $profiel->kerk, 'Kerk', 50);
 		$fields[] = new TextField('muziek', $profiel->muziek, 'Muziekinstrument', 50);
 		$fields[] = new SelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
@@ -221,6 +217,13 @@ class ProfielForm extends Formulier {
 		if ($admin OR $inschrijven) {
 			$fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
 			$fields[] = new RequiredTextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
+		}
+
+		if ($inschrijven) {
+			// Zorg ervoor dat toestemming bij inschrijven wordt opgegeven.
+			$fields[] = new Subkopje('Privacy');
+			$fields[] = new HiddenField('toestemming_geven', 'true');
+			$fields = array_merge($fields, (new ToestemmingModalForm(true))->getFields());
 		}
 
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');

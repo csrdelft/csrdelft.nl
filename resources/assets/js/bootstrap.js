@@ -1,8 +1,6 @@
 /**
  * Laad alle externe libs en knoop de goede dingen aan elkaar.
  */
-import _ from 'lodash';
-
 import Bloodhound from 'corejs-typeahead';
 import Dropzone from 'dropzone/dist/dropzone-amd-module';
 import $ from 'jquery';
@@ -49,8 +47,7 @@ import {importAgenda} from './courant';
 /**
  * Globale objecten gebruikt in PHP code.
  */
-_.assign(window, {
-    _,
+$.extend(window, {
     Bloodhound,
     Dropzone,
     util: {
@@ -72,7 +69,7 @@ _.assign(window, {
         // See templates/roodschopper/roodschopper.tpl
         // See templates/mededelingen/mededeling.tpl
         // See templates/courant/courantbeheer.tpl
-        // See template/forum/post_form.tpl
+        // See blade_templates/forum/partial/post_form.blade.php
         CsrBBPreview,
         // See view/bbcode/CsrBB.class.php
         bbvideoDisplay,
@@ -97,9 +94,9 @@ _.assign(window, {
     // See templates/maalcie/maaltijd/maaltijd_ketzer.tpl
     ketzerAjax,
     forum: {
-        // See templates/forum/post_lijst.tpl
+        // See blade_templates/forum/partial/post_lijst.blade.php
         forumBewerken,
-        // See templates/forum/post_forum.tpl
+        // See blade_templates/forum/partial/post_forum.blade.php
         saveConceptForumBericht,
     },
     maalcie: {

@@ -68,8 +68,6 @@ public function __construct() {
 			}
 		}
 	}
-	$this->addScript('/dist/js/manifest.js');
-	$this->addScript('/dist/js/vendor.js');
 	$this->addScript('/dist/js/ledenmemory.js');
 }
 

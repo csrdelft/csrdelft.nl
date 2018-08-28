@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\groepen\leden;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\view\groepen;
 
 class GroepStatistiekView extends groepen\leden\GroepTabView {
@@ -14,27 +15,10 @@ class GroepStatistiekView extends groepen\leden\GroepTabView {
 				'data' => $row[1]
 			);
 		}
-		$this->javascript .= <<<JS
 
-	series: {
-		pie: {
-			show: true,
-			radius: 1,
-			label: {
-				show: true,
-				radius: 2/3,
-				formatter: function(label, series) {
-					return '<div class="pie-chart-label">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-				},
-				threshold: 0.1
-			}
-		}
-	},
-	legend: {
-		show: false
-	}
-JS;
-		return $series;
+		$data = json_encode($series);
+
+		return "\$.plot(div, {$data}, window.flot.preset.verticale);";
 	}
 
 	private function geslacht($data) {
@@ -59,23 +43,9 @@ JS;
 					break;
 			}
 		}
-		$this->javascript .= <<<JS
+		$data = json_encode($series);
 
-	series: {
-		pie: {
-			show: true,
-			radius: 1,
-			innerRadius: .5,
-			label: {
-				show: false
-			}
-		}
-	},
-	legend: {
-		show: false
-	}
-JS;
-		return $series;
+		return "\$.plot(div, {$data}, window.flot.preset.geslacht);";
 	}
 
 	private function lichting($data) {
@@ -83,25 +53,9 @@ JS;
 		foreach ($data as $row) {
 			$series[] = array('data' => array(array((int)$row[0], (int)$row[1])));
 		}
-		$this->javascript .= <<<JS
+		$data = json_encode($series);
 
-	series: {
-		bars: {
-			show: true,
-			barWidth: 0.5,
-			align: "center",
-			lineWidth: 0,
-			fill: 1
-		}
-	},
-	xaxis: {
-		tickDecimals: 0
-	},
-	yaxis: {
-		tickDecimals: 0
-	}
-JS;
-		return $series;
+		return "\$.plot(div, {$data}, window.flot.preset.lichting);";
 	}
 
 	private function tijd($data) {
@@ -111,18 +65,15 @@ JS;
 			$totaal += $aantal;
 			$series[0][] = array($tijd, $totaal);
 		}
-		$this->javascript .= <<<JS
+		$data = json_encode($series);
 
-	xaxes: [{
-		mode: "time"
-	}],
-	yaxis: {
-		tickDecimals: 0
-	}
-JS;
-		return $series;
+		return "\$.plot(div, {$data}, window.flot.preset.tijd);";
 	}
 
+	/**
+	 * @return string
+	 * @throws CsrException
+	 */
 	public function getTabContent() {
 		$html = '';
 
@@ -134,37 +85,30 @@ JS;
 			}
 			$html .= '<div id="groep-stat-' . $titel . '-' . $this->groep->id . '" class="groep-stat"></div>';
 			$this->javascript .= <<<JS
-
 var div = $("#groep-stat-{$titel}-{$this->groep->id}");
 div.height(div.width());
-$.plot(div, data{$titel}{$this->groep->id}, {
 JS;
 			switch ($titel) {
 
 				case 'Verticale':
-					$series = $this->verticale($data);
+					$this->javascript .= $this->verticale($data);
 					break;
 
 				case 'Geslacht':
-					$series = $this->geslacht($data);
+					$this->javascript .= $this->geslacht($data);
 					break;
 
 				case 'Lichting':
-					$series = $this->lichting($data);
+					$this->javascript .= $this->lichting($data);
 					break;
 
 				case 'Tijd':
-					$series = $this->tijd($data);
+					$this->javascript .= $this->tijd($data);
 					break;
-			}
-			// prepend data
-			$data = json_encode($series);
-			$this->javascript = <<<JS
 
-var data{$titel}{$this->groep->id} = {$data};
-{$this->javascript}
-});
-JS;
+				default:
+					throw new CsrException('Onbekende statistiek soort ' . $titel);
+			}
 		}
 		return $html;
 	}

@@ -20,18 +20,21 @@
         "oyejorge/less.php": "v1.7.0.14",
         "maknz/slack": "^1.7",
         "jakeasmith/http_build_url": "^1",
-        "ferno/loco": "dev-master"
+        "ferno/loco": "dev-master",
+        "eftec/bladeone": "dev-master"
     },
+  "require-dev": {
+    "phpstan/phpstan": "^0.9.2"
+  },
     "config": {
         "platform": {
             "php": "7.1"
         }
     },
-    "scripts": {
-        "analyse": "vendor/bin/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs"
-    },
-    "require-dev": {
-        "phpstan/phpstan": "^0.9.2"
-    },
-    "include-path": ["lib/"]
+  "scripts": {
+    "generator": "php ./bin/dev/generate.php",
+    "production": "php ./bin/ci/compile.php",
+    "analyse": "vendor/bin/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs"
+  },
+  "include-path": ["lib/"]
 }

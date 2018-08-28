@@ -46,10 +46,9 @@ a:hover,
 /*Zorg voor rode borders*/
 
 #zijbalk .blok .zijbalk-kopje {
-  border-width: 0px 0px 2px 0px;
-  border-style: solid;
-  border-color: #c52d30;
-  margin-right: 40px;
+	border: 0 solid #c52d30;
+	border-bottom-width: 2px;
+	margin-right: 40px;
   background-image: none;
 }
 

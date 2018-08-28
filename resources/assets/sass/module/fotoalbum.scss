@@ -42,9 +42,6 @@
 }
 
 .subalbums .subalbum, .jgallery-container-inner a {
-	-webkit-transition: opacity .4s ease-out;
-	-moz-transition: opacity .4s ease-out;
-	-o-transition: opacity .4s ease-out;
 	transition: opacity .4s ease-out;
 }
 .subalbums:hover .subalbum, .jgallery-container-inner:hover a {
@@ -110,7 +107,6 @@
 .jgallery.jgallery-slider::after {
 	background: none;
 	box-shadow: none;
-	-webkit-box-shadow: none;
 }
 .jgallery.jgallery-slider {
 
@@ -124,9 +120,6 @@
 	z-index: 10000;
 	border-radius: 50%;
 	border: 2px solid transparent;
-	-webkit-transition : border 200ms ease-out;
-	-moz-transition : border 200ms ease-out;
-	-o-transition : border 200ms ease-out;
 	transition : border 200ms ease-out;
 }
 .fototag.showborder {
