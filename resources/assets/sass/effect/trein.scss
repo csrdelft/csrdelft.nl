@@ -5,7 +5,7 @@
 
 .rails {
 	pointer-events: none;
-	height: 50px;
+	height: 80px;
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -13,29 +13,43 @@
 	z-index: 3;
 }
 
-.trein {
-	left: -1200px;
-	position: absolute;
-	width: 545px;
-	height: 50px;
-	background-size: 545px 50px;
-	animation-name: trein;
-	animation-duration: 10s;
+.ns-ddz-4 { background: url("../../images/trein/ddz_4.png") 0 -1px; }
+.ns-ddz-6 { background: url("../../images/trein/ddz_6.png") 0 -2px; }
+.ns-icm-3 { background: url("../../images/trein/icm_3.png") 0 0px; }
+.ns-icm-4 { background: url("../../images/trein/icm_4.png") 0 0px; }
+.ns-icr-7 { background: url("../../images/trein/icr_7.png") 0 2px; }
+.ns-icr-9 { background: url("../../images/trein/icr_9.png") 0 4px; }
+.flirt3-blauw { background: url("../../images/trein/keolis_flirt3_blauwnet.png") 0 -4px; }
+.arriva { background: url("../../images/trein/gtw_e_8_arriva.png") 0 -4px; }
+.ns-virm-4 { background: url("../../images/trein/virm_4.png") 0 -2px; }
+.ns-virm-6 { background: url("../../images/trein/virm_6.png") 0 -2px; }
+.ns-sgmm-2 { background: url("../../images/trein/sgmm_2.png") 0 4px; }
+.ns-sgmm-3 { background: url("../../images/trein/sgmm_3.png") 0 5px; }
 
-	&.lange {
-		width: 1090px;
+.ns-icr-9, .ns-icr-7 {
+	// De ICR heeft een locomotief
+	margin-left: 258px;
+
+	&::before {
+		content: '';
+		display: inline-block;
+		margin-left: -258px;
+		width: 258px;
+		height: 100px;
+		background: url("../../images/trein/e-loc_tr25.png") 0 4px;
+		background-size: contain;
 	}
 }
 
-
-.ns-ddz {
-	background-image: url("../../images/trein/NS_DDZ_Treinstel.svg");
-}
-
-.ns-intercity {
-	background-image: url("../../images/trein/NS_Intercity_Treinstel.svg");
-}
-
-.ns-koploper {
-	background-image: url("../../images/trein/NS_Koploper_Treinstel.svg");
+.trein {
+	will-change: left;
+	left: -1200px;
+	position: absolute;
+	width: 200vw;
+	height: 100px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	animation-name: trein;
+	animation-duration: 10s;
+	animation-timing-function: linear;
 }
