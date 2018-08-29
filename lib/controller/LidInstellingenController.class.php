@@ -29,7 +29,7 @@ class LidInstellingenController extends AclController {
 			$this->acl = array(
 				'opslaan' => 'P_LOGGED_IN',
 				'reset' => 'P_ADMIN',
-				'update' => 'P_ADMIN'
+				'update' => 'P_LOGGED_IN'
 			);
 		}
 	}
