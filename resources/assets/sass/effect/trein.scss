@@ -1,6 +1,6 @@
 @keyframes trein {
-	0% { left: -1200px; }
-	100% { left: 4000px; }
+	0% { left: -4000px; }
+	100% { left: 6000px; }
 }
 
 .rails {
@@ -15,8 +15,8 @@
 
 .ns-ddz-4 { background: url("../../images/trein/ddz_4.png") 0 -1px; }
 .ns-ddz-6 { background: url("../../images/trein/ddz_6.png") 0 -2px; }
-.ns-icm-3 { background: url("../../images/trein/icm_3.png") 0 0px; }
-.ns-icm-4 { background: url("../../images/trein/icm_4.png") 0 0px; }
+.ns-icm-3 { background: url("../../images/trein/icm_3.png") 0 0; }
+.ns-icm-4 { background: url("../../images/trein/icm_4.png") 0 0; }
 .ns-icr-7 { background: url("../../images/trein/icr_7.png") 0 2px; }
 .ns-icr-9 { background: url("../../images/trein/icr_9.png") 0 4px; }
 .flirt3-blauw { background: url("../../images/trein/keolis_flirt3_blauwnet.png") 0 -4px; }
@@ -45,11 +45,11 @@
 	will-change: left;
 	left: -1200px;
 	position: absolute;
-	width: 200vw;
+	width: 4000px;
 	height: 100px;
 	background-size: contain;
 	background-repeat: no-repeat;
 	animation-name: trein;
-	animation-duration: 10s;
+	animation-duration: 13s;
 	animation-timing-function: linear;
 }

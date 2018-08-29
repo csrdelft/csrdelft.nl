@@ -24,9 +24,7 @@ $(function () {
 		setTimeout(() => {
 			stuurTrein(treinen[Math.floor((Math.random() * treinen.length))]);
 		}, Math.floor((Math.random() * treinen.length)) * 2000);
-	}, 2000);
-
-	stuurTrein('ns-koploper');
+	}, 10000);
 
 	function stuurTrein(type) {
 		let trein = $('<div>');
@@ -36,7 +34,7 @@ $(function () {
 
 		setTimeout(() => {
 			trein.remove();
-		}, 8000);
+		}, 13000);
 
 		return trein;
 	}
