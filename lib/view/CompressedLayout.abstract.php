@@ -75,7 +75,7 @@ abstract class CompressedLayout extends HtmlPage {
 		} elseif (LidInstellingenModel::get('layout', 'fx') == 'space') {
 			$modules[] = 'effect-space';
 		} elseif (LidInstellingenModel::get('layout', 'fx') == 'civisaldo') {
-			$modules[] = 'effectcivisaldo';
+			$modules[] = 'effect-civisaldo';
 		}
 
 		if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
