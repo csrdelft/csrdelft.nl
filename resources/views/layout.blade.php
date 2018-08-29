@@ -61,7 +61,6 @@
 @if(CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'wolken')
 	@include('effect.clouds')
 @endif
-Hieronder komt de trein
 @if(CsrDelft\model\LidInstellingenModel::get('layout', 'trein') !== 'nee')
 	@include('effect.trein')
 @endif
