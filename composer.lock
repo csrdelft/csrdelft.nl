@@ -4,24 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "51820dd4fdf3f27e3bae80f88751291e",
+    "content-hash": "9f155b8fafd59ad11c9e65a2becf14f1",
     "packages": [
         {
             "name": "csrdelft/orm",
-            "version": "1.7.5",
+            "version": "1.7.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
-                "reference": "96ee67121a063f3e1bd117e0cac2247270168313"
+                "reference": "7a07317746039aa3ea855aa177138408f139556f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/orm/zipball/96ee67121a063f3e1bd117e0cac2247270168313",
-                "reference": "96ee67121a063f3e1bd117e0cac2247270168313",
+                "url": "https://api.github.com/repos/csrdelft/orm/zipball/7a07317746039aa3ea855aa177138408f139556f",
+                "reference": "7a07317746039aa3ea855aa177138408f139556f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1",
+                "php": ">=7.0.27",
                 "zumba/json-serializer": "^2.2"
             },
             "require-dev": {
@@ -62,7 +62,7 @@
             ],
             "description": "The creatively named object-relational mapping library for csrdelft.nl",
             "homepage": "https://csrdelft.github.io/orm",
-            "time": "2018-07-18T19:59:59+00:00"
+            "time": "2018-08-30T11:38:35+00:00"
         },
         {
             "name": "eftec/bladeone",
@@ -2380,27 +2380,27 @@
         },
         {
             "name": "ocramius/package-versions",
-            "version": "1.3.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ocramius/PackageVersions.git",
-                "reference": "4489d5002c49d55576fa0ba786f42dbb009be46f"
+                "reference": "ad8a245decad4897cc6b432743913dad0d69753c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/4489d5002c49d55576fa0ba786f42dbb009be46f",
-                "reference": "4489d5002c49d55576fa0ba786f42dbb009be46f",
+                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/ad8a245decad4897cc6b432743913dad0d69753c",
+                "reference": "ad8a245decad4897cc6b432743913dad0d69753c",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.0.0",
-                "php": "^7.1.0"
+                "composer-plugin-api": "^1.0",
+                "php": "~7.0"
             },
             "require-dev": {
-                "composer/composer": "^1.6.3",
+                "composer/composer": "^1.3",
                 "ext-zip": "*",
-                "infection/infection": "^0.7.1",
-                "phpunit/phpunit": "^7.0.0"
+                "humbug/humbug": "dev-master",
+                "phpunit/phpunit": "^6.4"
             },
             "type": "composer-plugin",
             "extra": {
@@ -2425,7 +2425,7 @@
                 }
             ],
             "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
-            "time": "2018-02-05T13:05:30+00:00"
+            "time": "2017-11-24T11:07:03+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
@@ -2604,6 +2604,6 @@
     },
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.1"
+        "php": "7.0.27"
     }
 }
