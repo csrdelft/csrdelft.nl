@@ -28,7 +28,8 @@ class LidInstellingenController extends AclController {
 		} else {
 			$this->acl = array(
 				'opslaan' => 'P_LOGGED_IN',
-				'reset' => 'P_ADMIN'
+				'reset' => 'P_ADMIN',
+				'update' => 'P_LOGGED_IN'
 			);
 		}
 	}
@@ -44,6 +45,11 @@ class LidInstellingenController extends AclController {
 	public function beheer() {
 		$body = new LidInstellingenView($this->model);
 		$this->view = new CsrLayoutPage($body);
+	}
+
+	public function POST_update($module, $instelling, $waarde) {
+		$this->model->wijzigInstelling($module, $instelling, $waarde);
+		$this->view = new JsonResponse(['success' => true]);
 	}
 
 	public function opslaan() {
