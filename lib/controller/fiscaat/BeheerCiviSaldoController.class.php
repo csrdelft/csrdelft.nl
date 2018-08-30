@@ -119,12 +119,17 @@ class BeheerCiviSaldoController extends AclController {
 		$form = new LidRegistratieForm(new CiviSaldo());
 
 		if ($form->validate()) {
+			/** @var CiviSaldo $saldo */
 			$saldo = $form->getModel();
 			$saldo->laatst_veranderd = date_create()->format(DATE_ISO8601);
 
 			if (is_null($saldo->uid)) {
 				$laatsteSaldo = $this->model->find("uid LIKE 'c%'", [], null, 'uid DESC', 1)->fetch();
 				$saldo->uid = ++$laatsteSaldo->uid;
+			}
+
+			if (is_null($saldo->naam)) {
+				$saldo->naam = '';
 			}
 
 			if ($this->model->find('uid = ?', [$saldo->uid])->rowCount() === 1) {
