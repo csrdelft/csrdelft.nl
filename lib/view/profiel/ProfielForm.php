@@ -174,6 +174,7 @@ class ProfielForm extends Formulier {
 		$fields['email'] = new RequiredEmailField('email', $profiel->email, 'E-mailadres');
 		if (!$inschrijven) {
 			$fields['email']->readonly = true;
+			$fields['email']->required = false;
 			$fields['email']->title = 'Wijzig je e-mailadres met het inloggegevens-formulier.';
 			$fields[] = new UrlField('linkedin', $profiel->linkedin, 'Publiek LinkedIn-profiel');
 			$fields[] = new UrlField('website', $profiel->website, 'Website');
