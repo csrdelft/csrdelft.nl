@@ -157,7 +157,7 @@ class Foto extends Afbeelding {
 		} else {
 			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
-		$command = IMAGEMAGICK . ' ' . escapeshellarg($this->getFullPath()) . ' -resize 1024x1024 -format jpg -quality 85 -interlace Line ' . $rotate . escapeshellarg($this->getResizedPath());
+		$command = IMAGEMAGICK . ' ' . escapeshellarg($this->getFullPath()) . ' -resize 1024x1024 -format jpg -quality 85 -interlace Line  -auto-orient ' . $rotate . escapeshellarg($this->getResizedPath());
 		if (defined('RESIZE_OUTPUT')) {
 			debugprint($command);
 		}
