@@ -22,20 +22,25 @@
 		"jakeasmith/http_build_url": "^1",
 		"ferno/loco": "dev-master",
 		"eftec/bladeone": "dev-master",
-        "ext-exif": "*",
-        "ext-gd": "*",
-        "ext-mysqli": "*",
-        "ext-PDO": "*",
-        "ext-pdo_mysql": "*",
-        "ext-hash": "*"
+		"ext-exif": "*",
+		"ext-gd": "*",
+		"ext-mysqli": "*",
+		"ext-PDO": "*",
+		"ext-pdo_mysql": "*",
+		"ext-hash": "*"
 	},
 	"config": {
 		"platform": {
 			"php": "7.1"
 		}
 	},
+	"include-path": ["lib/"],
+	"require-dev": {
+		"phpstan/phpstan": "^0.9.2"
+	},
 	"scripts": {
 		"generator": "php ./bin/dev/generate.php",
-		"production": "php ./bin/ci/compile.php"
+		"production": "php ./bin/ci/compile.php",
+		"analyse": "vendor/bin/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs"
 	}
 }
