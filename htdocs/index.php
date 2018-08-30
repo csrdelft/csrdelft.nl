@@ -53,8 +53,10 @@ if (class_exists($namespacedClassName)) {
 	exit;
 }
 
+$view = null;
 try {
 	$controller->performAction();
+	$view = $controller->getView();
 } catch (CsrGebruikerException $exception) {
 	http_response_code(400);
 	echo $exception->getMessage();
@@ -72,7 +74,6 @@ try {
     $errorpage = CmsPaginaModel::get($exception->getCode());
 	$body = new CmsPaginaView($errorpage);
 	$view = new CsrLayoutPage($body);
-	$view->view();
 }
 
 
@@ -97,5 +98,5 @@ if (TIME_MEASURE) {
     TimerModel::instance()->time();
 }
 
-$controller->getView()->view();
+$view->view();
 // einde MVC
