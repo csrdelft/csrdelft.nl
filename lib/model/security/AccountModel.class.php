@@ -66,7 +66,7 @@ class AccountModel extends CachedPersistenceModel {
 		if (!$profiel) {
 			throw new CsrGebruikerException('Profiel bestaat niet');
 		}
-		if (!CiviSaldoModel::instance()->existsByPrimaryKey([$uid])){
+		if (CiviSaldoModel::instance()->find('uid = ?', array($uid))->rowCount() === 0){
 			// Maak een CiviSaldo voor dit account
 			CiviSaldoModel::instance()->maakSaldo($uid);
 		}
