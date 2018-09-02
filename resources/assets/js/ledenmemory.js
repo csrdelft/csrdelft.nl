@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import 'jquery-ui/ui/effect.js';
+import 'jquery-ui/ui/effects/effect-shake.js';
 import 'jquery-ui/ui/widgets/dialog';
 
 $(function () {
