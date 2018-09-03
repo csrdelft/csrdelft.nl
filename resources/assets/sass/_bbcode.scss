@@ -378,6 +378,12 @@ a.responsive {
   margin-bottom: 0;
 }
 
+.bb-slider img {
+	object-fit: cover;
+	height: 360px;
+	width: 100%;
+}
+
 @media screen and (max-width: 960px){
 	.bb-groep {
 		flex-direction: column;

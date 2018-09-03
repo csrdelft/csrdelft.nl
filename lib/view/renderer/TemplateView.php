@@ -23,6 +23,14 @@ class TemplateView implements View {
 	}
 
 	/**
+	 * @return string
+	 * @throws \Exception
+	 */
+	public function getHtml() {
+		return $this->template->render();
+	}
+
+	/**
 	 * @throws \Exception
 	 */
 	public function getTitel() {

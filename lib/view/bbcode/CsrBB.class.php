@@ -33,7 +33,6 @@ use CsrDelft\view\bibliotheek\BoekBBView;
 use CsrDelft\view\documenten\DocumentBBContent;
 use CsrDelft\view\formulier\UrlDownloader;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
-use CsrDelft\view\fotoalbum\FotoAlbumSliderView;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
@@ -282,6 +281,7 @@ HTML;
 	 *
 	 * @example [fotoalbum slider interval=10 random height=200]/pad/naar/album[/fotoalbum]
 	 * @example [fotoalbum]laatste[/fotoalbum]
+	 * @return string
 	 */
 	protected function bb_fotoalbum($arguments = array()) {
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
@@ -310,7 +310,9 @@ HTML;
 			return $this->lightLinkBlock('fotoalbum', $album->getUrl(), $album->dirname, $beschrijving, $cover);
 		}
 		if (isset($arguments['slider'])) {
-			$view = new FotoAlbumSliderView($album);
+			$view = view('fotoalbum.slider', [
+				'fotos' => array_shuffle($album->getFotos())
+			]);
 			if (isset($arguments['height'])) {
 				$view->height = (int)$arguments['height'];
 			}

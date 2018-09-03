@@ -1113,3 +1113,14 @@ function uniqid_safe($prefix = "") {
 	return str_replace('.', '_', uniqid($prefix, true));
 }
 
+/**
+ * Versie van shuffle die niet de originele array veranderd en wel een waarde terug geeft.
+ *
+ * @param array $arr
+ * @return array
+ */
+function array_shuffle(array $arr) {
+	shuffle($arr);
+
+	return $arr;
+}
