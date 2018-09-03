@@ -5,14 +5,15 @@
 		@else
 			<a href="/forum/recent">Forum</a>
 		@endif
+
+		@can('P_FORUM_MOD')
+			@if ($aantalWacht > 0)
+				&nbsp;<a href="/forum/wacht" class="badge"
+								 title="{{$aantalWacht}} forumbericht{{($aantalWacht === 1 ? '' : 'en')}} wacht{{($aantalWacht === 1 ? '' : 'en')}} op goedkeuring">{{$aantalWacht}}</a>
+			@endif
+		@endcan
 	</div>
 
-
-	@can('P_FORUM_MOD')
-		@if ($aantalWacht > 0)
-			&nbsp;<a href="/forum/wacht" class="badge" title="{{$aantalWacht}} forumbericht{{($aantalWacht === 1 ? '' : 'en')}} wacht{{($aantalWacht === 1 ? '' : 'en')}} op goedkeuring">{{$aantalWacht}}</a>
-		@endif
-	@endcan
 	@foreach($draden as $draad)
 		@php($timestamp = strtotime($draad->laatst_gewijzigd))
 
