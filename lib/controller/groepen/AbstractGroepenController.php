@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\AbstractGroepLedenModel;
@@ -510,6 +511,10 @@ abstract class AbstractGroepenController extends Controller {
 		$this->view = new GroepPreviewForm($groep);
 	}
 
+	/**
+	 * @param AbstractGroep|null $groep
+	 * @throws CsrToegangException
+	 */
 	public function logboek(AbstractGroep $groep = null) {
 		// data request
 		if ($groep) {
@@ -523,8 +528,8 @@ abstract class AbstractGroepenController extends Controller {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			/** @var AbstractGroep $groep */
 			$groep = $this->model->retrieveByUUID($selection[0]);
-			if (!$groep->mag(AccessAction::Bekijken)) {
-				$this->exit_http(403);
+			if (!$groep || !$groep->mag(AccessAction::Bekijken)) {
+				throw new CsrToegangException('Kan logboek niet vinden', 403);
 			}
 			$this->view = new GroepLogboekForm($groep);
 		}
