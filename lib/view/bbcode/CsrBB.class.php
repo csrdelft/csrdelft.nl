@@ -690,9 +690,9 @@ HTML;
 	 *
 	 * Tot nu toe youtube, vimeo, dailymotion, 123video, godtube
 	 *
-	 * @example [video]http://www.youtube.com/watch?v=Zo0LJrw5nCs[/video]
+	 * @example [video]https://www.youtube.com/watch?v=Zo0LJrw5nCs[/video]
 	 * @example [video]Zo0LJrw5nCs[/video]
-	 * @example [video]http://vimeo.com/1582112[/video]
+	 * @example [video]https://vimeo.com/1582112[/video]
 	 */
 	function bb_video($arguments = array()) {
 		$content = $this->parseArray(array('[/video]'), array());
@@ -721,7 +721,7 @@ HTML;
 			}
 			$params['src'] = '//player.vimeo.com/video/' . $id . '?autoplay=1';
 
-			$videodataurl = 'http://vimeo.com/api/v2/video/' . $id . '.php';
+			$videodataurl = 'https://vimeo.com/api/v2/video/' . $id . '.php';
 			$data = '';
 			$downloader = new UrlDownloader;
 			if ($downloader->isAvailable()) {
@@ -737,7 +737,7 @@ HTML;
 				$id = $matches[1];
 			}
 			$params['src'] = '//www.dailymotion.com/embed/video/' . $id . '?autoPlay=1';
-			$previewthumb = 'http://www.dailymotion.com/thumbnail/video/' . $id;
+			$previewthumb = 'https://www.dailymotion.com/thumbnail/video/' . $id;
 		} elseif (strstr($content, 'godtube')) {
 			$type = 'GodTube';
 			if (preg_match('#godtube\.com/watch/\?v=([a-zA-Z0-9]+)#', $content, $matches) > 0) {
@@ -746,7 +746,7 @@ HTML;
 			$params['id'] = $id;
 			$params['iframe'] = false;
 
-			$previewthumb = 'http://www.godtube.com/resource/mediaplayer/' . $id . '.jpg';
+			$previewthumb = 'https://www.godtube.com/resource/mediaplayer/' . $id . '.jpg';
 		}
 
 		if (empty($type) OR empty($id)) {

@@ -10,7 +10,7 @@
 	<div class="carousel-inner">
 		@foreach($fotos as $foto)
 			<div class="carousel-item @if($loop->first) active @endif">
-				<img class="" style="height: 360px;" src="{{$foto->getResizedUrl()}}" alt="{{$foto->filename}}">
+				<img style="height: 360px;" src="{{$foto->getResizedUrl()}}" alt="{{$foto->filename}}">
 			</div>
 		@endforeach
 	</div>
