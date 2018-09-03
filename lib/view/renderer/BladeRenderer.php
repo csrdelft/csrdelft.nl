@@ -41,13 +41,16 @@ class BladeRenderer implements Renderer {
 			return "<?php echo call_user_func_array([\"CsrDelft\Icon\", \"getTag\"], [$options]); ?>";
 		});
 
-		$this->bladeOne->directive('cycle', function ($expr) {
+		$this->bladeOne->directive('cycle', function ($expr) use ($template) {
+			$this->cycleCount = isset($this->cycleCount) ? $this->cycleCount : 0;
+
 			$numOptions = count(explode(',', $expr));
 			$options = trim($expr, "()");
-			$varName = uniqid('i_');
+
+			$cycleCount = str_replace(".", "_", $template) . $this->cycleCount++;
 
 			// Create the variable if it does not exist.
-			return "<?php \$this->$varName = @\$this->$varName; echo [$options][(\$this->$varName++) % $numOptions]; ?>";
+			return "<?php \$this->cycle_$cycleCount = @\$this->cycle_$cycleCount; echo [$options][(\$this->cycle_$cycleCount++) % $numOptions]; ?>";
 		});
 		$this->template = $template;
 	}
