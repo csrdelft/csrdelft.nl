@@ -275,8 +275,10 @@ HTML;
 	}
 
 	public function getHtml() {
+		$id = str_replace(' ', '-', strtolower($this->getTitel()));
+
 		return <<<HTML
-<h2 class="Titel">{$this->getTitel()}</h2>
+<h2 id="table-{$id}" class="Titel">{$this->getTitel()}</h2>
 
 <table id="{$this->dataTableId}" class="display"></table>
 HTML;
