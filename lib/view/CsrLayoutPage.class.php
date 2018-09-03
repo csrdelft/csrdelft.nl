@@ -74,9 +74,6 @@ class CsrLayoutPage extends CompressedLayout {
 				$this->zijbalk = array();
 			}
 			$this->zijbalk = Zijbalk::addStandaardZijbalk($this->zijbalk);
-			if (LidInstellingenModel::get('zijbalk', 'scrollen') != 'met pagina mee') {
-				$smarty->assign('scrollfix', DragObjectModel::getCoords('zijbalk', 0, 0)['top']);
-			}
 		}
 		$smarty->assign('zijbalk', $this->zijbalk);
 

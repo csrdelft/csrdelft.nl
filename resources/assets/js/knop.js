@@ -7,6 +7,18 @@ import {takenSelectRange, takenSubmitRange} from './maalcie';
 import {fnGetSelection, fnUpdateDataTable} from './datatable-api';
 import {redirect, reload} from './util';
 
+export function radioButtonGroep(parent) {
+	$(parent).find('[data-buttons=radio]').each(function () {
+		let container = $(this);
+
+		container.find('a.btn').on('click', function (event) {
+			container.find('.active').removeClass('active');
+
+			$(event.target).addClass('active');
+		});
+	});
+}
+
 export function knopAjax(knop, type) {
     if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
         modalClose();
@@ -14,7 +26,7 @@ export function knopAjax(knop, type) {
     }
     let source = knop,
         done = domUpdate,
-        data = knop.attr('data');
+        data = knop.data();
 
     if (knop.hasClass('popup')) {
         source = false;

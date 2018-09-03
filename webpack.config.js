@@ -46,6 +46,8 @@ module.exports = {
 		path: path.resolve(__dirname, 'htdocs/dist'),
 		// Alle javascript bestanden worden in de map js geplaatst.
 		filename: 'js/[name].js',
+		chunkFilename: 'js/[id].js',
+		publicPath: '/dist/',
 	},
 	devtool: 'source-map',
 	resolve: {
@@ -84,6 +86,7 @@ module.exports = {
 					loader: 'babel-loader',
 					options: {
 						presets: ['env'],
+						plugins: ['syntax-dynamic-import']
 					},
 				},
 			},

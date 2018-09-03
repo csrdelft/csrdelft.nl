@@ -101,7 +101,6 @@ class ProfielController extends AclController {
 			$body = parent::performAction($args);
 			$this->view = new CsrLayoutPage($body);
 			$this->view->addCompressedResources('profiel');
-			$this->view->addCompressedResources('grafiek');
 		}
 		else if ($this->hasParam(2) AND $this->getParam(2) === 'pasfoto') {
 			$this->action = 'pasfoto';

@@ -4,10 +4,9 @@ namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\LidInstellingenModel;
-use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\LidInstellingenView;
 
 
 /**
@@ -43,12 +42,18 @@ class LidInstellingenController extends AclController {
 	}
 
 	public function beheer() {
-		$body = new LidInstellingenView($this->model);
-		$this->view = new CsrLayoutPage($body);
+		$this->view = view('instellingen.lidinstellingen', [
+			'defaultInstellingen' => $this->model->getAll(),
+			'instellingen' => $this->model->getAllForLid(LoginModel::getUid())
+		]);
 	}
 
-	public function POST_update($module, $instelling, $waarde) {
-		$this->model->wijzigInstelling($module, $instelling, $waarde);
+	public function POST_update($module, $instelling, $waarde = null) {
+		if ($waarde === null) {
+			$waarde = filter_input(INPUT_POST, 'waarde', FILTER_SANITIZE_STRING);
+		}
+
+		$this->model->wijzigInstelling($module, $instelling, urldecode($waarde));
 		$this->view = new JsonResponse(['success' => true]);
 	}
 

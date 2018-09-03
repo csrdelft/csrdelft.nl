@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {knopGet, knopPost, knopVergroot} from './knop';
+import {knopGet, knopPost, knopVergroot, radioButtonGroep} from './knop';
 import {modalClose, modalOpen} from './modal';
 import {formCancel, formReset, formSubmit, formToggle} from './formulier';
 
@@ -110,6 +110,7 @@ export default function initContext(parent) {
     initTooltips(parent);
     initHoverIntents(parent);
     initLazyImages(parent);
+    radioButtonGroep(parent);
 }
 
 export function domUpdate(htmlString) {

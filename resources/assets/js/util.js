@@ -114,3 +114,9 @@ export function redirect(htmlString) {
     }
     window.location.href = htmlString;
 }
+
+export function route(path, cb) {
+	if (window.location.pathname.startsWith(path)) {
+		cb();
+	}
+}

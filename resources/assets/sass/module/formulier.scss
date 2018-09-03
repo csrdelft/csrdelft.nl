@@ -167,3 +167,9 @@ h1.Titel {
     display: none;
   }
 }
+
+.form-control.loading {
+	background-image: url(../../images/loading-fb.gif);
+	background-repeat: no-repeat;
+	background-position: right 40px center;
+}

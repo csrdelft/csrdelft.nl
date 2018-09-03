@@ -59,6 +59,13 @@ input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner {
   filter: alpha(opacity=30);
 }
 
+.btn.loading {
+	background-image: url("../images/loading-fb.gif");
+	background-repeat: no-repeat;
+	background-position: center center;
+	color: transparent;
+}
+
 /* --------------------------------
 
 DataTable knoppen

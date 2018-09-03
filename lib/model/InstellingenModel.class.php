@@ -139,6 +139,10 @@ class InstellingenModel extends CachedPersistenceModel {
 		)
 	);
 
+	public function getAll() {
+		return static::$defaults;
+	}
+
 	/**
 	 * @return string[]
 	 */
