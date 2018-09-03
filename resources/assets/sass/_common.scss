@@ -372,3 +372,19 @@ div.hoverIntentContent {
     color: #999;
   }
 }
+
+/**
+Bootstrap overrides / uitbreidingen
+ */
+
+.sticky-top {
+	// Default 0 is wel heel krap.
+	top: 5px;
+}
+
+@include media-breakpoint-down(md) {
+	.sticky-top {
+		// In down md is er een bovenbalk van 42px
+		top: 47px;
+	}
+}

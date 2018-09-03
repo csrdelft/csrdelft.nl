@@ -6,7 +6,7 @@
 
 @section('content')
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col">
 			<h1>Lid instellingen</h1>
 
 			<p>
@@ -14,11 +14,13 @@
 				deze instellingen veranderd.
 			</p>
 
-			<div class="alert alert-warning d-none instellingen-bericht">
-				<a href="{{REQUEST_URI}}">Er zijn instellingen veranderd, klik hier of ververs de pagina om de veranderingen te
-					zien.</a>
-				@icon('page_error', 'page_refresh', 'Pagina verversen', 'float-right')
-			</div>
+			<a href="{{REQUEST_URI}}">
+				<div class="instellingen-bericht alert alert-warning d-none sticky-top">
+					Er zijn instellingen veranderd, klik hier of ververs de pagina om de veranderingen te
+					zien.
+					@icon('page_error', 'page_refresh', 'Pagina verversen', 'float-right')
+				</div>
+			</a>
 
 			@foreach($defaultInstellingen as $module => $moduleInstellingen)
 				<h2 id="instelling-{{$module}}">{{ucfirst($module)}}</h2>
@@ -86,7 +88,7 @@
 			@php((new \CsrDelft\view\login\LoginSessionsTable())->view())
 		</div>
 
-		<div class="col-md-4">
+		<div class="col-md-4 d-none d-lg-block">
 			<div id="instellingen" class="sticky-top list-group">
 				@foreach($defaultInstellingen as $module => $moduleInstellingen)
 					<a class="list-group-item list-group-item-action" href="#instelling-{{$module}}">{{ucfirst($module)}}</a>
