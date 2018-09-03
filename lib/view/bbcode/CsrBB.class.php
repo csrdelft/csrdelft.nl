@@ -1279,7 +1279,7 @@ HTML;
 		}
 
 		return '<iframe height="' . $height . '" frameborder="0" style="border:0;width:100%"
-src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOGLE_EMBED_KEY . '"></iframe>';
+src="https://www.google.com/maps/embed/v1/place?q=' . $address . '&key=' . GOOGLE_EMBED_KEY . '"></iframe>';
 	}
 
 	/**
