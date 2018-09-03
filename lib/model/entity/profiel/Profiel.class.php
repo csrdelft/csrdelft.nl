@@ -330,7 +330,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getUrl() {
-		return '/profiel' . $this->uid;
+		return '/profiel/' . $this->uid;
 	}
 
 	public function getLink($vorm = 'civitas') {
