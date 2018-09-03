@@ -329,6 +329,10 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		return $this->getAdres();
 	}
 
+	public function getUrl() {
+		return '/profiel' . $this->uid;
+	}
+
 	public function getLink($vorm = 'civitas') {
 		if (!LoginModel::mag('P_LEDEN_READ') OR in_array($this->uid, array('x999', 'x101', 'x027', 'x222', '4444'))) {
 			if ($vorm === 'pasfoto' AND LoginModel::mag('P_LEDEN_READ')) {

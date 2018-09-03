@@ -105,7 +105,7 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 		return $this->locatie;
 	}
 
-	public function getLink() {
+	public function getUrl() {
 		return $this->link;
 	}
 

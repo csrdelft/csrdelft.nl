@@ -30,7 +30,7 @@ interface Agendeerbaar {
 
 	public function getLocatie();
 
-	public function getLink();
+	public function getUrl();
 
 	public function isHeledag();
 }

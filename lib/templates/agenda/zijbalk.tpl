@@ -4,8 +4,8 @@
 	</div>
 	{foreach from=$items item=item}
 		<div class="item">
-			{if $item->getLink()}
-			<a href="{$item->getLink()}" title="{$item->getBeschrijving()}">
+			{if $item->getUrl()}
+			<a href="{$item->getUrl()}" title="{$item->getBeschrijving()}">
 				{else}
 				<a title="{$item->getBeschrijving()}"
 					 href="/agenda/maand/{$item->getBeginMoment()|date_format:"%Y/%m/%d"}#dag-{$item->getBeginMoment()|date_format:"%Y-%m-%d"}">

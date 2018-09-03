@@ -75,7 +75,7 @@ class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
 		return 'C.S.R. Delft';
 	}
 
-	public function getLink() {
+	public function getUrl() {
 		return '/maaltijdenbeheer/archief';
 	}
 

@@ -134,10 +134,6 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 		return $this->locatie;
 	}
 
-	public function getLink() {
-		return $this->getUrl();
-	}
-
 	public function isHeledag() {
 		$begin = date('H:i', $this->getBeginMoment());
 		$eind = date('H:i', $this->getEindMoment());

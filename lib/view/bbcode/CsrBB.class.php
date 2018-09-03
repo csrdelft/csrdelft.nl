@@ -1083,7 +1083,7 @@ HTML;
 			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 		}
 		if ($this->light_mode) {
-			$url = $maaltijd->getLink() . '#' . $maaltijd->maaltijd_id;
+			$url = $maaltijd->getUrl() . '#' . $maaltijd->maaltijd_id;
 			return $this->lightLinkBlock('maaltijd', $url, $maaltijd->titel, $maaltijd->datum . ' ' . $maaltijd->tijd);
 		}
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), LoginModel::getUid());

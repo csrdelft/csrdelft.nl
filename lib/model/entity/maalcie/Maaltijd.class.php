@@ -128,7 +128,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 		return 'C.S.R. Delft';
 	}
 
-	public function getLink() {
+	public function getUrl() {
 		return '/maaltijden';
 	}
 

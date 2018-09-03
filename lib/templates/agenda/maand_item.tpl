@@ -9,16 +9,13 @@
 	{/if}
 	{if $item instanceof CsrDelft\model\entity\Profiel}
 		{icon get="verjaardag"}
-		{$item->getLink()}
-	{elseif $item instanceof CsrDelft\model\entity\Bijbelrooster}
-		{icon get="book_open"}
-		{$item->getLink(true)}
+		{$item->getUrl()}
 	{elseif $item instanceof CsrDelft\model\entity\maalcie\Maaltijd}
 		<img src="/plaetjes/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon" />
 		<div class="tijd">
 			{$item->getBeginMoment()|date_format:"%R"} - {$item->getEindMoment()|date_format:"%R"}
 		</div>
-		<a href="{$item->getLink()}">
+		<a href="{$item->getUrl()}">
 			{$item->getTitel()}
 		</a>
 	{elseif $item instanceof CsrDelft\model\entity\CorveeTaak}
@@ -27,7 +24,7 @@
 		{else}
 			{icon get="paintcan"}
 		{/if}
-		<a href="{$item->getLink()}">
+		<a href="{$item->getUrl()}">
 			{$item->getTitel()}
 		</a>
 	{elseif $item instanceof CsrDelft\model\entity\agenda\Agendeerbaar}
@@ -41,8 +38,8 @@
 			</div>
 		{/if}
 		<div class="hoverIntent">
-			{if $item->getLink()}
-				<a href="{$item->getLink()}">{$item->getTitel()}</a>
+			{if $item->getUrl()}
+				<a href="{$item->getUrl()}">{$item->getTitel()}</a>
 			{else}
 				{$item->getTitel()}
 			{/if}

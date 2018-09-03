@@ -103,8 +103,8 @@ class AgendaController extends AclController {
 		$items = $this->model->find('eind_moment >= ? AND begin_moment <= ? AND (titel LIKE ? OR beschrijving LIKE ? OR locatie LIKE ?)', array($van, $tot, $query, $query, $query), null, 'begin_moment ASC, titel ASC', $limit);
 		$result = array();
 		foreach ($items as $item) {
-			if ($item->getLink()) {
-				$url = $item->getLink();
+			if ($item->getUrl()) {
+				$url = $item->getUrl();
 			} else {
 				$begin = $item->getBeginMoment();
 				$d = date('d', $begin);
