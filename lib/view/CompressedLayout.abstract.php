@@ -79,7 +79,7 @@ abstract class CompressedLayout extends HtmlPage {
 		}
 
 		if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
-			$modules[] = 'effectminion';
+			$modules[] = 'effect-minion';
 		}
 		if (LidInstellingenModel::get('layout', 'fx') == 'onontdekt') {
 			$modules[] = 'effect-onontdekt';
