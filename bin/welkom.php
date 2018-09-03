@@ -3,6 +3,7 @@
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccountModel;
 
 chdir(dirname(__FILE__) . '/../lib/');
 
@@ -44,8 +45,10 @@ TEXT;
     $mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
     $mail->send();
 
-    // Maak een account aan voor deze noviet
-    AccountModel::instance()->maakAccount($profiel->uid);
+	if (!AccountModel::existsUid($profiel->uid)) {
+		// Maak een account aan voor deze noviet
+		AccountModel::instance()->maakAccount($profiel->uid);
+	}
 
     echo $profiel->email . " SEND!\n";
 }
