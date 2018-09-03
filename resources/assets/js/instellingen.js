@@ -5,7 +5,6 @@ import $ from 'jquery';
  */
 
 function instellingVeranderd() {
-	console.log('instellingen veranderd');
 	$('.instellingen-bericht').removeClass('d-none');
 }
 
@@ -29,8 +28,6 @@ function instellingOpslaan() {
 }
 
 $(() => {
-	console.log('instellingen geladen');
 	$('.instellingKnop').on('click', instellingVeranderd);
-
 	$('.change-opslaan').on('change', instellingOpslaan);
 });
