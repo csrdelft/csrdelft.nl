@@ -4,6 +4,7 @@ namespace CsrDelft\model;
 
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\model\groepen\CommissiesModel;
 use CsrDelft\model\groepen\leden\CommissieLedenModel;
@@ -13,6 +14,11 @@ use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\DynamicEntityModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\view\groepen\leden\GroepEetwensView;
+use CsrDelft\view\groepen\leden\GroepEmailsView;
+use CsrDelft\view\groepen\leden\GroepLijstView;
+use CsrDelft\view\groepen\leden\GroepPasfotosView;
+use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use PDO;
 
 /**
@@ -240,4 +246,35 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 		return $this->prefetch($where, $ids);
 	}
 
+	/**
+	 * Return view voor een specifiek tabblad type.
+	 * @param AbstractGroep $groep De groep voor de tabview
+	 * @param GroepTab|null $tab Het tab type voor de tabview
+	 * @return GroepEetwensView|GroepEmailsView|GroepLijstView|GroepPasfotosView|GroepStatistiekView De juiste tabview
+	 */
+	public static function getTabView($groep, $tab = null){
+		switch ($tab) {
+			case GroepTab::Pasfotos:
+				return new GroepPasfotosView($groep);
+
+			case GroepTab::Lijst:
+				return new GroepLijstView($groep);
+
+			case GroepTab::Statistiek:
+				return new GroepStatistiekView($groep);
+
+			case GroepTab::Emails:
+				return new GroepEmailsView($groep);
+
+			case GroepTab::Eetwens:
+				return new GroepEetwensView($groep);
+
+			default:
+				if ($groep->keuzelijst) {
+					return new GroepLijstView($groep);
+				} else {
+					return new GroepPasfotosView($groep);
+				}
+		}
+	}
 }

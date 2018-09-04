@@ -10,7 +10,6 @@ use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\groepen;
 use CsrDelft\view\View;
 
 class GroepenView implements View {
@@ -76,7 +75,11 @@ class GroepenView implements View {
 				continue;
 			}
 			echo '<hr>';
-			$view = new groepen\GroepView($groep, $this->tab, $this->geschiedenis);
+
+			$view = view(
+				'groepen.' . strtolower(classNameZonderNamespace(get_class($groep))),
+				["groep" => $groep, "tab" => $this->tab, "geschiedenis" => $this->geschiedenis, "bbAan" => false]
+			);
 			$view->view();
 		}
 	}

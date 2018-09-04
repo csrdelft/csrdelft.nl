@@ -34,7 +34,6 @@ use CsrDelft\view\documenten\DocumentBBContent;
 use CsrDelft\view\formulier\UrlDownloader;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 use CsrDelft\view\fotoalbum\FotoBBView;
-use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
 use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
@@ -831,7 +830,7 @@ HTML;
 
 	}
 
-	protected function groep(AbstractGroep $groep, $tag, $leden) {
+	protected function groep(AbstractGroep $groep, $tag, $leden, $template = 'groep') {
 		// Controleer rechten
 		if (!$groep->mag(AccessAction::Bekijken)) {
 			return '';
@@ -839,7 +838,14 @@ HTML;
 		if ($this->light_mode) {
 			return $this->lightLinkBlock($tag, $groep->getUrl(), $groep->naam, $groep->aantalLeden() . ' ' . $leden);
 		}
-		$view = new GroepView($groep, null, false, true);
+		if (empty($template)) {
+			$template = $tag;
+		}
+		$view = view("groepen.$template", [
+			"groep" => $groep,
+			"geschiedenis" => false,
+			"bbAan" => true
+		]);
 		return $view->getHtml();
 	}
 
@@ -851,7 +857,7 @@ HTML;
 		}
 		$groep = KetzersModel::get($id);
 		if ($groep) {
-			return $this->groep($groep, 'ketzer', 'aanmeldingen');
+			return $this->groep($groep, 'ketzer', 'aanmeldingen', 'ketzer');
 		} else {
 			return 'Ketzer met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/ketzers/beheren">Zoeken</a>';
 		}
@@ -865,7 +871,7 @@ HTML;
 		}
 		$groep = ActiviteitenModel::get($id);
 		if ($groep) {
-			return $this->groep($groep, 'activiteit', 'aanmeldingen');
+			return $this->groep($groep, 'activiteit', 'aanmeldingen', 'activiteit');
 		} else {
 			return 'Activiteit met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/activiteiten/beheren">Zoeken</a>';
 		}
@@ -907,7 +913,7 @@ HTML;
 		}
 		$groep = WerkgroepenModel::get($id);
 		if ($groep) {
-			return $this->groep($groep, 'werkgroep', 'aanmeldingen');
+			return $this->groep($groep, 'werkgroep', 'aanmeldingen', 'ketzer');
 		} else {
 			return 'Werkgroep met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="/groepen/werkgroepen/beheren">Zoeken</a>';
 		}

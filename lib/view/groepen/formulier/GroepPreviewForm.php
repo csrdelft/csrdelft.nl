@@ -8,7 +8,6 @@ use CsrDelft\view\formulier\elementen\HtmlBbComment;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\knoppen\ModalCloseButtons;
 use CsrDelft\view\formulier\ModalForm;
-use CsrDelft\view\groepen\GroepView;
 
 class GroepPreviewForm extends ModalForm implements FormElement {
 
@@ -17,7 +16,10 @@ class GroepPreviewForm extends ModalForm implements FormElement {
 
 		$fields = [];
 		$fields[] = new HtmlBbComment('<div style="max-width: 580px;">Gebruik de volgende code in uw forumbericht voor onderstaand resultaat: [code][' . strtolower(classNameZonderNamespace(get_class($groep))) . '=' . $groep->id . '][/code][rn]');
-		$fields[] = new GroepView($groep, null, false, true);
+		$fields[] = view(
+			'groepen.'.strtolower(classNameZonderNamespace(get_class($groep))),
+			["groep" => $groep, "geschiedenis" => false, "bbAan" => true]
+		);
 		$fields[] = new HtmlComment('</div>');
 
 		$this->addFields($fields);

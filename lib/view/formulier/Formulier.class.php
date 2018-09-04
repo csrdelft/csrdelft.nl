@@ -309,7 +309,10 @@ class Formulier implements View, Validator {
 
 	protected function getJavascript() {
 		foreach ($this->fields as $field) {
-			$this->javascript .= $field->getJavascript();
+			// Tijdelijke fix voor overgang naar normale manier van javascript management
+			if (method_exists('getJavascript', $field)) {
+				$this->javascript .= $field->getJavascript();
+			}
 		}
 		if ($this->stappen_submit) {
 			$this->javascript .= <<<JS

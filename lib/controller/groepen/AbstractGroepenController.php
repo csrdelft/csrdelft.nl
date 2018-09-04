@@ -28,7 +28,6 @@ use CsrDelft\view\groepen\GroepenBeheerTable;
 use CsrDelft\view\groepen\GroepenDeelnameGrafiek;
 use CsrDelft\view\groepen\GroepenView;
 use CsrDelft\view\groepen\GroepLogboekData;
-use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\groepen\leden\GroepEetwensView;
 use CsrDelft\view\groepen\leden\GroepEmailsView;
 use CsrDelft\view\groepen\leden\GroepLedenData;
@@ -629,7 +628,10 @@ abstract class AbstractGroepenController extends Controller {
 			$lid = $model->get($groep, $uid);
 			ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
 			$model->delete($lid);
-			$this->view = new GroepView($groep);
+			$this->view = view(
+				'groepen.'.strtolower(classNameZonderNamespace(get_class($groep))),
+				["groep" => $groep, "geschiedenis" => false, "bbAan" => false]
+			);
 		} // beheren
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
