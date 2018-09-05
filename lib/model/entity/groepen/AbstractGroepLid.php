@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -60,5 +61,12 @@ abstract class AbstractGroepLid extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $primary_key = array('groep_id', 'uid');
+
+	public function jsonSerialize() {
+		return array_merge(parent::jsonSerialize(),
+			[
+				'lid' => ProfielModel::get($this->uid)
+			]);
+	}
 
 }

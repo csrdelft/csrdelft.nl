@@ -7,6 +7,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\view\bbcode\CsrBB;
 use PDO;
 
 
@@ -208,6 +209,26 @@ abstract class AbstractGroep extends PersistentEntity {
 		}
 		// Moderators mogen alles
 		return LoginModel::mag('P_LEDEN_MOD,groep:P_GROEP:_MOD');
+	}
+
+	public function jsonSerialize() {
+		return array_merge(
+			parent::jsonSerialize(),
+			[
+				'samenvatting' => CsrBB::parse($this->samenvatting),
+				'leden' => $this->getLeden(),
+				'rechten' => $this->getRechten()
+			]
+		);
+	}
+
+	public function getRechten()
+	{
+		$rechten = [];
+		foreach (AccessAction::getTypeOptions() as $accessAction) {
+			$rechten[$accessAction] = !!$this->mag($accessAction);
+		}
+		return $rechten;
 	}
 
 }

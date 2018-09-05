@@ -4,13 +4,20 @@ Externe links & Knoppen
 
 -------------------------------- */
 
-a[href^="http://"], a[href^="https://"] {
-  padding-right: 16px;
-  background: url("../images/external-link-blue.png") no-repeat center right;
+a[href^="http://"]::after,
+a[href^="https://"]::after{
+	font-family: FontAwesome, sans-serif;
+	content: "\f08e";
+	color: blue;
+	font-size: 0.7em;
+	vertical-align: top;
 }
-a[href^="mailto:"] {
-  padding-right: 16px;
-  background: url("../images/email-link-blue.png") no-repeat center right;
+a[href^="mailto:"]::after {
+	font-family: FontAwesome, sans-serif;
+	content: "\f003";
+	color: blue;
+	font-size: 0.7em;
+	vertical-align: top;
 }
 a.lichtgrijs {
   padding: 0;

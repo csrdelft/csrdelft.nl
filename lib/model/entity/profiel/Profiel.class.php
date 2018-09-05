@@ -653,4 +653,20 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		}
 	}
 
+	public function jsonSerialize() {
+		$raw = parent::jsonSerialize();
+
+		$checked = [
+			'naam' => $this->getNaam(),
+			'uid' => $this->uid,
+		];
+		foreach ($raw as $prop => $val) {
+			if (is_zichtbaar($this, $prop)) {
+				$checked[$prop] = $val;
+			}
+		}
+
+		return $checked;
+	}
+
 }

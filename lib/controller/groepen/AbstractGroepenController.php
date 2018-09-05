@@ -27,7 +27,9 @@ use CsrDelft\view\groepen\GroepenBeheerData;
 use CsrDelft\view\groepen\GroepenBeheerTable;
 use CsrDelft\view\groepen\GroepenDeelnameGrafiek;
 use CsrDelft\view\groepen\GroepenView;
+use CsrDelft\view\groepen\GroepJsonResponse;
 use CsrDelft\view\groepen\GroepLogboekData;
+use CsrDelft\view\groepen\GroepResponse;
 use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\groepen\leden\GroepEetwensView;
 use CsrDelft\view\groepen\leden\GroepEmailsView;
@@ -160,6 +162,7 @@ abstract class AbstractGroepenController extends Controller {
 			case 'aanmelden':
 			case 'bewerken':
 			case 'afmelden':
+			case 'json':
 				return $this->getMethod() == 'POST';
 
 			default:
@@ -175,6 +178,13 @@ abstract class AbstractGroepenController extends Controller {
 		}
 		$body = new GroepenView($this->model, $groepen, $soort); // controleert rechten bekijken per groep
 		$this->view = new CsrLayoutPage($body);
+	}
+
+	public function json(AbstractGroep $groep) {
+		if (!$groep->mag(AccessAction::Bekijken)) {
+			$this->exit_http(403);
+		}
+		$this->view = new GroepResponse($groep);
 	}
 
 	public function bekijken(AbstractGroep $groep) {

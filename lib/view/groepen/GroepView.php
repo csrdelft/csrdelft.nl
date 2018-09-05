@@ -74,31 +74,32 @@ class GroepView implements FormElement {
 	}
 
 	public function getHtml() {
-		$html = '<a name="' . $this->groep->id . '"></a><div id="groep-' . $this->groep->id . '" class="bb-groep';
-		if ($this->geschiedenis) {
-			$html .= ' state-geschiedenis';
-		}
-		if ($this->bbAan) {
-			$html .= ' bb-block';
-		}
-		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting">';
-		if ($this->groep->mag(AccessAction::Wijzigen)) {
-			$html .= '<div class="float-right"><a class="btn" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-pencil"></span></a></div>';
-		}
-		$html .= '<h3>' . $this->getTitel();
-		if (property_exists($this->groep, 'locatie') AND !empty($this->groep->locatie)) {
-			$html .= ' &nbsp; <a target="_blank" href="https://maps.google.nl/maps?q=' . urlencode($this->groep->locatie) . '" title="' . $this->groep->locatie . '" class="lichtgrijs fa fa-map-marker fa-lg"></a>';
-		}
-		$html .= ' <span class="groep-id-hint">(<a href="' . $this->groep->getUrl() . '">#' . $this->groep->id . '</a>)</span>';
-		$html .= '</h3>';
-		$html .= CsrBB::parse($this->groep->samenvatting);
-		if (!empty($this->groep->omschrijving)) {
-			$html .= '<div class="clear">&nbsp;</div><a id="groep-omschrijving-' . $this->groep->id . '" class="post noanim" href="' . $this->groep->getUrl() . 'omschrijving">Meer lezen »</a>';
-		}
-		$html .= '</div>';
-		$html .= $this->leden->getHtml();
-		$html .= '<div class="clear">&nbsp</div></div>';
-		return $html;
+//		$html = '<a name="' . $this->groep->id . '"></a><div id="groep-' . $this->groep->id . '" class="bb-groep';
+//		if ($this->geschiedenis) {
+//			$html .= ' state-geschiedenis';
+//		}
+//		if ($this->bbAan) {
+//			$html .= ' bb-block';
+//		}
+//		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting">';
+//		if ($this->groep->mag(AccessAction::Wijzigen)) {
+//			$html .= '<div class="float-right"><a class="btn" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-pencil"></span></a></div>';
+//		}
+//		$html .= '<h3>' . $this->getTitel();
+//		if (property_exists($this->groep, 'locatie') AND !empty($this->groep->locatie)) {
+//			$html .= ' &nbsp; <a target="_blank" href="https://maps.google.nl/maps?q=' . urlencode($this->groep->locatie) . '" title="' . $this->groep->locatie . '" class="lichtgrijs fa fa-map-marker fa-lg"></a>';
+//		}
+//		$html .= ' <span class="groep-id-hint">(<a href="' . $this->groep->getUrl() . '">#' . $this->groep->id . '</a>)</span>';
+//		$html .= '</h3>';
+//		$html .= CsrBB::parse($this->groep->samenvatting);
+//		if (!empty($this->groep->omschrijving)) {
+//			$html .= '<div class="clear">&nbsp;</div><a id="groep-omschrijving-' . $this->groep->id . '" class="post noanim" href="' . $this->groep->getUrl() . 'omschrijving">Meer lezen »</a>';
+//		}
+//		$html .= '</div>';
+//		$html .= $this->leden->getHtml();
+//		$html .= '<div class="clear">&nbsp</div></div>';
+//		return $html;
+		return '<div class="vue-context"><groep id="'. $this->groep->id .'"></groep></div>';
 	}
 
 	public function view() {

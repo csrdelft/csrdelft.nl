@@ -169,8 +169,8 @@ class LidToestemmingModel extends InstellingenModel {
 		if ($profiel->uid == LoginModel::getUid())
 			return true;
 
-		if (LoginModel::mag($except))
-			return true;
+//        if (LoginModel::mag($except))
+//            return true;
 
 		/** @var LidToestemming $toestemming */
 		$toestemming = parent::retrieveByPrimaryKey([$cat, $id, $profiel->uid]);
