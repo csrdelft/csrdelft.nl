@@ -605,7 +605,8 @@ function getMaximumFileUploadSize() {
 }
 
 function printDebug() {
-	if (DEBUG OR (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())) {
+	$debugOverride = filter_input(INPUT_GET, 'debug') !== null;
+	if (DEBUG OR ((LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) AND $debugOverride)) {
 		echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
 		echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
 	}
