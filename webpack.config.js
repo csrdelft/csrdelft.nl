@@ -158,7 +158,7 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				use: 'css-loader'
+				use: ['style-loader', 'css-loader']
 			},
 			// Sla fonts op in de fonts map.
 			{

@@ -97,10 +97,10 @@
 						this.groep = response.data.data;
 					})
 					.catch((err) => {
-						this.error = true;
+						// this.error = true;
 					})
 					.then(() => {
-						this.loading = false;
+						// this.loading = false;
 					});
 			},
 		},
