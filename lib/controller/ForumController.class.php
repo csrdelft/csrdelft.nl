@@ -429,7 +429,7 @@ class ForumController extends Controller {
 	 */
 	public function aanmaken() {
 		$deel = ForumDelenModel::instance()->nieuwForumDeel();
-		$form = new ForumDeelForm($deel); // fetches POST values itself
+		$form = new ForumDeelForm($deel, true); // fetches POST values itself
 		if ($form->validate()) {
 			$rowCount = ForumDelenModel::instance()->create($deel);
 			if ($rowCount !== 1) {
