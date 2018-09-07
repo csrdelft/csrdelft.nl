@@ -101,7 +101,7 @@
 
 
 		<div class="forumdeel-omschrijving">
-			<div class="breadcrumbs float-right">@yield('breadcrumbs')</div>
+			<div class="breadcrumbs">@yield('breadcrumbs')</div>
 			<h2>{{$deel->titel}}</h2>
 			{{$deel->omschrijving}}
 

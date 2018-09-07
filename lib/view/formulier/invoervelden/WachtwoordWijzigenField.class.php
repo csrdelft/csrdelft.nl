@@ -20,8 +20,8 @@ use CsrDelft\model\security\AccountModel;
  * Bij wachtwoord resetten produceert deze 2 velden.
  */
 class WachtwoordWijzigenField extends InputField {
-	const FIELD_CLASS_NAME = '';
-	const WRAPPER_CLASS_NAME = '';
+	protected $fieldClassName = '';
+	protected $wrapperClassName = '';
 
 	private $require_current;
 
@@ -149,12 +149,11 @@ class WachtwoordWijzigenField extends InputField {
 	public function getHtml() {
 		$html = '';
 		$inputCssClasses = join(" ", $this->css_classes);
-		$labelCssClasses = self::LABEL_CLASS_NAME;
 
 		if ($this->require_current) {
 			$html .= <<<HTML
 <div class="form-group row">
-	<div class="{$labelCssClasses}">
+	<div class="{$this->labelClassName}">
 		<label for="{$this->getId()}_current">Huidig wachtwoord<span class="required">*</span></label>
 	</div>
 	<div class="col-9">
@@ -167,7 +166,7 @@ HTML;
 		$required = $this->required ? '<span class="required"> *</span>' : '';
 		$html .= <<<HTML
 <div class="form-group row">
-	<div class="{$labelCssClasses}">
+	<div class="{$this->labelClassName}">
 		<label for="{$this->getId()}_new">Nieuw wachtwoord{$required}</label>
 	</div>
 	<div class="col-9">
@@ -175,7 +174,7 @@ HTML;
 	</div>
 </div>
 <div class="form-group row">
-	<div class="{$labelCssClasses}">
+	<div class="{$this->labelClassName}">
 		<label for="{$this->getId()}_confirm">Herhaal nieuw wachtwoord{$required}</label>
 	</div>
 	<div class="col-9">

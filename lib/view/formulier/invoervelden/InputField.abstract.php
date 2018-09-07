@@ -42,10 +42,9 @@ use CsrDelft\view\Validator;
  * behalve FileField zelf die wel meerdere InputFields bevat.
  */
 abstract class InputField implements FormElement, Validator {
-
-	const WRAPPER_CLASS_NAME = 'form-group row';
-	const LABEL_CLASS_NAME = 'col-3 col-form-label';
-	const FIELD_CLASS_NAME = 'col-9';
+	protected $wrapperClassName = 'form-group row';
+	protected $labelClassName = 'col-3 col-form-label';
+	protected $fieldClassName = 'col-9';
 
 	private $id; // unique id
 	protected $model; // model voor remote data source en validatie
@@ -95,6 +94,11 @@ abstract class InputField implements FormElement, Validator {
 		$this->description = $description;
 		// add *Field classname to css_classes
 		$this->css_classes[] = classNameZonderNamespace(get_class($this));
+
+		if ($description === null) {
+			$this->labelClassName .= ' d-none';
+			$this->fieldClassName = str_replace('col-9', 'col', $this->fieldClassName);
+		}
 	}
 
 	public function getType() {
@@ -219,7 +223,7 @@ abstract class InputField implements FormElement, Validator {
 	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
 	 */
 	public function getDiv() {
-		$cssclass = static::WRAPPER_CLASS_NAME;
+		$cssclass = $this->wrapperClassName;
 		if ($this->hidden) {
 			$cssclass .= ' verborgen';
 		}
@@ -242,7 +246,7 @@ abstract class InputField implements FormElement, Validator {
 					$required = '<span class="field-required">*</span>';
 				}
 			}
-			return '<div class="' . static::LABEL_CLASS_NAME . '"><label for="' . $this->getId() . '">' . $this->description . $required . '</label></div>';
+			return '<div class="' . $this->labelClassName . '"><label for="' . $this->getId() . '">' . $this->description . $required . '</label></div>';
 		}
 		return '';
 	}
@@ -388,7 +392,7 @@ abstract class InputField implements FormElement, Validator {
 	public function view() {
 		echo $this->getDiv();
 		echo $this->getLabel();
-		echo '<div class="' . static::FIELD_CLASS_NAME . '">';
+		echo '<div class="' . $this->fieldClassName . '">';
 		echo $this->getHtml();
 		echo $this->getErrorDiv();
 		echo '</div>';
