@@ -248,7 +248,6 @@ span.curpage {
 .forum-deel {
 	display: grid;
 	max-width: 800px;
-	grid-template-columns: auto 1fr auto;
 	width: 100%;
 	// CSS grid ondersteund niet echt gekleurde rows.
 	// Dit is second-best. Er zijn 3 divs per row,
@@ -459,7 +458,7 @@ span.curpage {
 		.paging, .draad-titel, .forumdeel-omschrijving {
 			width: 100%;
 		}
-		
+
 		.forum-posten {
 			display: flex;
 			flex-direction: column;
