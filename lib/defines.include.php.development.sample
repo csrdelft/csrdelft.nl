@@ -10,7 +10,7 @@ define('DB_CHECK', true);
 define('DB_MODIFY', false);
 define('DB_DROP', false);
 define('DEBUG', true);
-define('TIME_MEASURE', true);
+define('TIME_MEASURE', false);
 define('FORCE_HTTPS', false);
 define('SERVER_PORT', ':8080');
 define('CSR_DOMAIN', 'localhost');
