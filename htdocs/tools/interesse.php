@@ -17,7 +17,7 @@ function checkCaptcha($captcha)
     $ch = curl_init("https://www.google.com/recaptcha/api/siteverify");
 
     $fields = array(
-        'secret' => CAPTCHA_SECRET,
+        'secret' => leesConfig('google.ini', 'captcha_secret', ''),
         'response' => $captcha
     );
 

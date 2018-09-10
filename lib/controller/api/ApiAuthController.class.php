@@ -27,7 +27,7 @@ class ApiAuthController {
 		}
 
 		try {
-			$token = JWT::decode($jwt, JWT_SECRET, array('HS512'));
+			$token = JWT::decode($jwt, leesConfig('jwt.ini', 'secret'), array('HS512'));
 		} catch (\Exception $e) {
 			throw new RestException(401);
 		}
@@ -92,7 +92,7 @@ class ApiAuthController {
 
 		$data = [
 			'iat' => $issuedAt,
-			'exp' => $issuedAt + JWT_LIFETIME,
+			'exp' => $issuedAt + leesConfig('jwt.ini', 'secret'),
 			'jti' => $tokenId,
 			'data' => [
 				'userId' => $account->uid
@@ -100,7 +100,7 @@ class ApiAuthController {
 		];
 
 		// Encode the JWT
-		$token = JWT::encode($data, JWT_SECRET, 'HS512');
+		$token = JWT::encode($data, leesConfig('jwt.ini', 'secret'), 'HS512');
 
 		// Register uid for this session
 		$_SESSION['_uid'] = $account->uid;
@@ -150,7 +150,7 @@ class ApiAuthController {
 
 		$data = [
 			'iat' => $issuedAt,
-			'exp' => $issuedAt + JWT_LIFETIME,
+			'exp' => $issuedAt + leesConfig('jwt.ini', 'secret'),
 			'jti' => $tokenId,
 			'data' => [
 				'userId' => $remember->uid
@@ -158,7 +158,7 @@ class ApiAuthController {
 		];
 
 		// Encode the new JWT
-		$token = JWT::encode($data, JWT_SECRET, 'HS512');
+		$token = JWT::encode($data, leesConfig('jwt.ini', 'secret'), 'HS512');
 
 		// Respond
 		$unencodedArray = [
