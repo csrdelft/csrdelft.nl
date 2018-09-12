@@ -92,7 +92,7 @@ class ApiAuthController {
 
 		$data = [
 			'iat' => $issuedAt,
-			'exp' => $issuedAt + leesConfig('jwt.ini', 'secret'),
+			'exp' => $issuedAt + leesConfig('jwt.ini', 'lifetime'),
 			'jti' => $tokenId,
 			'data' => [
 				'userId' => $account->uid
@@ -150,7 +150,7 @@ class ApiAuthController {
 
 		$data = [
 			'iat' => $issuedAt,
-			'exp' => $issuedAt + leesConfig('jwt.ini', 'secret'),
+			'exp' => $issuedAt + leesConfig('jwt.ini', 'lifetime'),
 			'jti' => $tokenId,
 			'data' => [
 				'userId' => $remember->uid
