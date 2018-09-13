@@ -21,7 +21,7 @@
 		"maknz/slack": "^1.7",
 		"jakeasmith/http_build_url": "^1",
 		"ferno/loco": "dev-master",
-		"eftec/bladeone": "dev-master",
+		"eftec/bladeone": "3.8",
 		"ext-exif": "*",
 		"ext-gd": "*",
 		"ext-mysqli": "*",

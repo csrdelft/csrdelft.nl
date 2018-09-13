@@ -21,7 +21,7 @@ services:
     build:
       context: .
       dockerfile: "conf/Dockerfile-composer"
-    command: install # Doe initieel een install
+    command: install --ignore-platform-reqs # Doe initieel een install
     volumes:
       - ./:/app
       - ./conf/dev/defines.include.php:/app/lib/defines.include.php
