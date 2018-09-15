@@ -605,7 +605,8 @@ function getMaximumFileUploadSize() {
 }
 
 function printDebug() {
-	if (DEBUG OR (LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued())) {
+	$debugOverride = filter_input(INPUT_GET, 'debug') !== null;
+	if (DEBUG OR ((LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) AND $debugOverride)) {
 		echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
 		echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
 	}
@@ -1123,4 +1124,38 @@ function array_shuffle(array $arr) {
 	shuffle($arr);
 
 	return $arr;
+}
+
+$configCache = [];
+
+/**
+ * Lees een configuratie waarde uit ini.
+ *
+ * Haalt niet vaker het config bestand op dan nodig is.
+ *
+ * @param string $iniFile
+ * @param string $key
+ * @param string $default
+ * @return string|array
+ * @throws \CsrDelft\common\CsrException
+ */
+function leesConfig(string $iniFile, string $key = null, string $default = null) {
+	global $configCache; // Sorry
+
+	if (!isset($configCache[$iniFile])) {
+		$config = parse_ini_file(ETC_PATH . $iniFile);
+		$configCache[$iniFile] = $config ?? [];
+	}
+
+	$config = $configCache[$iniFile];
+
+	if ($key === null) {
+		return $config ?? [];
+	} elseif (isset($config[$key])) {
+		return $config[$key];
+	} elseif ($default !== null) {
+		return $default;
+	} else {
+		throw new \CsrDelft\common\CsrException('Instelling ' . $key . ' in ' . $iniFile . ' niet gevonden.');
+	}
 }

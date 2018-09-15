@@ -14,9 +14,9 @@ use CsrDelft\model\security\AccountModel;
  */
 class LidField extends TextField {
 
-	const FIELD_CLASS_NAME = 'col-sm-4';
+	protected $fieldClassName = 'col-sm-4';
 
-	// zoekfilter voor door namen2uid gebruikte LidZoeker::zoekLeden. 
+	// zoekfilter voor door namen2uid gebruikte LidZoeker::zoekLeden.
 	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
 	private $zoekin;
 

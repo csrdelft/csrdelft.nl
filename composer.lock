@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f155b8fafd59ad11c9e65a2becf14f1",
+    "content-hash": "dfa4516d0ce3058cd68fc849f26316fb",
     "packages": [
         {
             "name": "csrdelft/orm",
@@ -66,22 +66,22 @@
         },
         {
             "name": "eftec/bladeone",
-            "version": "dev-master",
+            "version": "3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EFTEC/BladeOne.git",
-                "reference": "a66e9dccba16432f6c99a1f4753e8fb26951580c"
+                "reference": "ed5216921dc946c9f894ba60579bd9fcbf3a3b22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/a66e9dccba16432f6c99a1f4753e8fb26951580c",
-                "reference": "a66e9dccba16432f6c99a1f4753e8fb26951580c",
+                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/ed5216921dc946c9f894ba60579bd9fcbf3a3b22",
+                "reference": "ed5216921dc946c9f894ba60579bd9fcbf3a3b22",
                 "shasum": ""
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.5-dev"
+                    "dev-master": "3.8-dev"
                 }
             },
             "autoload": {
@@ -107,7 +107,7 @@
                 "template",
                 "view"
             ],
-            "time": "2018-08-29T19:50:09+00:00"
+            "time": "2018-09-01T15:46:07+00:00"
         },
         {
             "name": "ferno/loco",
@@ -221,12 +221,12 @@
             "version": "v2.2.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-api-php-client.git",
+                "url": "https://github.com/googleapis/google-api-php-client.git",
                 "reference": "4e0fd83510e579043e10e565528b323b7c2b3c81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/4e0fd83510e579043e10e565528b323b7c2b3c81",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client/zipball/4e0fd83510e579043e10e565528b323b7c2b3c81",
                 "reference": "4e0fd83510e579043e10e565528b323b7c2b3c81",
                 "shasum": ""
             },
@@ -277,16 +277,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.67",
+            "version": "v0.69",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "32f65995935033e40cc94d4f484905b38eb039f8"
+                "url": "https://github.com/googleapis/google-api-php-client-services.git",
+                "reference": "6e2507a5bb39d970ae98cc2f1421012e7b38248f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/32f65995935033e40cc94d4f484905b38eb039f8",
-                "reference": "32f65995935033e40cc94d4f484905b38eb039f8",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/6e2507a5bb39d970ae98cc2f1421012e7b38248f",
+                "reference": "6e2507a5bb39d970ae98cc2f1421012e7b38248f",
                 "shasum": ""
             },
             "require": {
@@ -310,19 +310,19 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-08-25T00:23:06+00:00"
+            "time": "2018-09-08T00:22:43+00:00"
         },
         {
             "name": "google/auth",
             "version": "v1.3.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-auth-library-php.git",
+                "url": "https://github.com/googleapis/google-auth-library-php.git",
                 "reference": "af72b3f50420c801dc35cc07b1fa429ae027b847"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-auth-library-php/zipball/af72b3f50420c801dc35cc07b1fa429ae027b847",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/af72b3f50420c801dc35cc07b1fa429ae027b847",
                 "reference": "af72b3f50420c801dc35cc07b1fa429ae027b847",
                 "shasum": ""
             },
@@ -1118,16 +1118,16 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v3.1.32",
+            "version": "v3.1.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smarty-php/smarty.git",
-                "reference": "ac9d4b587e5bf53381e21881820a9830765cb459"
+                "reference": "dd55b23121e55a3b4f1af90a707a6c4e5969530f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/ac9d4b587e5bf53381e21881820a9830765cb459",
-                "reference": "ac9d4b587e5bf53381e21881820a9830765cb459",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/dd55b23121e55a3b4f1af90a707a6c4e5969530f",
+                "reference": "dd55b23121e55a3b4f1af90a707a6c4e5969530f",
                 "shasum": ""
             },
             "require": {
@@ -1167,7 +1167,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2018-04-24T14:53:33+00:00"
+            "time": "2018-09-12T20:54:16+00:00"
         },
         {
             "name": "symfony/config",
@@ -2589,8 +2589,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "jacwright/restserver": 20,
-        "ferno/loco": 20,
-        "eftec/bladeone": 20
+        "ferno/loco": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

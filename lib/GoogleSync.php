@@ -661,6 +661,7 @@ class GoogleSync {
 	 * @param $state string, moet de url bevatten waar naar geredirect moet worden als
 	 * de authenticatie gelukt is, de url zonder `addToGoogleContacts` wordt gebruikt als
 	 * de authenticatie mislukt.
+	 * @throws CsrException
 	 */
 	public static function doRequestToken($state) {
 		if (!static::isAuthenticated()) {
@@ -678,13 +679,14 @@ class GoogleSync {
 	 * Maak een nieuwe Google_Client met de settings van de stek.
 	 *
 	 * @return Google_Client
+	 * @throws CsrException
 	 */
 	public static function createGoogleCLient() {
 		$redirect_uri = CSR_ROOT . '/google/callback';
 		$client = new Google_Client();
 		$client->setApplicationName('Stek');
-		$client->setClientId(GOOGLE_CLIENT_ID);
-		$client->setClientSecret(GOOGLE_CLIENT_SECRET);
+		$client->setClientId(leesConfig('google.ini', 'client_id', ''));
+		$client->setClientSecret(leesConfig('google.ini', 'client_secret', ''));
 		$client->setRedirectUri($redirect_uri);
 		$client->setAccessType('offline');
 		// Zonder force kunnen we nog een oude sessie krijgen (zonder refresh token)

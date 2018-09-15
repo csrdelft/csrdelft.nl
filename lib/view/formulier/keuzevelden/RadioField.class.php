@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
-use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\FormElement;
 
 /**
  * RadioField.class.php

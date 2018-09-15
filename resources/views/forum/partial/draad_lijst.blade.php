@@ -1,4 +1,4 @@
-<div class="alternate-row">
+<div class="alternate-row draad-titel">
 	@if($draad->wacht_goedkeuring)
 		<small class="niet-dik">[ter goedkeuring...]</small>
 	@endif
@@ -34,14 +34,13 @@
 																 class="lichtgrijs">{{$draad->getForumDeel()->titel}}</a>]</span>
 	@endif
 </div>
-<div class="alternate-row">
+<div class="alternate-row draad-laatst-gewijzigd">
 	@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
 		{!! reldate($draad->laatst_gewijzigd) !!}
 	@else
 		{{$draad->laatst_gewijzigd}}
 	@endif
 </div>
-<div class="alternate-row">
-	<a href="/forum/reactie/{{$draad->laatste_post_id}}#{{$draad->laatste_post_id}}">bericht</a>
-	door {!! CsrDelft\model\ProfielModel::getLink($draad->laatste_wijziging_uid, 'user') !!}
+<div class="alternate-row draad-laatste-post">
+	{!! CsrDelft\model\ProfielModel::getLink($draad->laatste_wijziging_uid, 'user') !!}
 </div>

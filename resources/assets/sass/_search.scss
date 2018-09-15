@@ -21,7 +21,7 @@
 #search.is-visible,
 #search.target,
 #search:target {
-	z-index: 4;
+	z-index: $zindex-modal;
 	opacity: 1;
 	visibility: visible;
 	-webkit-transition: opacity .3s 0s, visibility 0s 0s;

@@ -15,10 +15,15 @@ class CourantView extends SmartyTemplateView {
 
 	private $instellingen;
 
+	/**
+	 * CourantView constructor.
+	 * @param CourantModel $courant
+	 * @throws \CsrDelft\common\CsrException
+	 */
 	public function __construct(CourantModel $courant) {
 		parent::__construct($courant);
 		setlocale(LC_ALL, 'nl_NL@euro');
-		$this->instellingen = parse_ini_file(ETC_PATH . 'csrmail.ini');
+		$this->instellingen = leesConfig('csrmail.ini');
 	}
 
 	public function getTitel() {

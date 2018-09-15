@@ -7,10 +7,8 @@ use CsrDelft\model\entity\ChangeLogEntry;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
-use CsrDelft\view\formulier\knoppen\FormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
 use CsrDelft\view\Validator;
 use CsrDelft\view\View;
@@ -101,98 +99,6 @@ class Formulier implements View, Validator {
 		if ($this->model instanceof PersistentEntity AND property_exists($this->model, $fieldName)) {
 			$this->model->$fieldName = $field->getValue();
 		}
-	}
-
-	public function generateFields() {
-		if (!$this->model instanceof PersistentEntity) {
-			return;
-		}
-		$fields = array();
-		foreach ($this->model->getAttributes() as $fieldName) {
-			$definition = $this->model->getAttributeDefinition($fieldName);
-			$namespace = "CsrDelft\\view\\formulier\\";
-			if (!isset($definition[1]) OR $definition[1] === false) {
-				$class = 'Required';
-			} else {
-				$class = '';
-			}
-			$desc = ucfirst(str_replace('_', ' ', $fieldName));
-			$extraOpts = [];
-			switch ($definition[0]) {
-				case T::String:
-					if (startsWith($fieldName, 'rechten_')) {
-						$namespace .= 'invoervelden';
-						$class .= 'RechtenField';
-						break;
-					}
-				// fall through
-				case T::Char:
-					if ($fieldName === 'verticale') {
-						$namespace .= 'keuzevelden';
-						$class .= 'VerticaleField';
-						break;
-					}
-					$namespace .= 'invoervelden';
-					$class .= 'TextField';
-					break;
-				case T::Boolean:
-					$namespace .= 'keuzevelden';
-					$class .= 'JaNeeField';
-					break;
-				case T::Integer:
-					$namespace .= 'getalvelden';
-					$class .= 'IntField';
-					$extraOpts = [0];
-					break;
-				case T::Float:
-					$namespace .= 'getalvelden';
-					$class .= 'FloatField';
-					break;
-				case T::Date:
-					$namespace .= 'keuzevelden';
-					$class .= 'DateField';
-					break;
-				case T::Time:
-					$namespace .= 'keuzevelden';
-					$class .= 'TimeField';
-					break;
-				case T::DateTime:
-					$namespace .= 'keuzevelden';
-					$class .= 'DateTimeField';
-					break;
-				case T::Text:
-				case T::LongText:
-					$namespace .= 'invoervelden';
-					$class .= 'TextareaField';
-					break;
-				case T::Enumeration:
-					$namespace .= 'keuzevelden';
-					$class .= 'SelectField';
-					break;
-				case T::UID:
-					$namespace .= 'invoervelden';
-					$class .= 'LidField';
-					break;
-			}
-			$namespacedClass = $namespace . '\\' . $class;
-			if ($definition[0] == T::Enumeration) {
-				$options = array();
-				foreach ($definition[2]::getTypeOptions() as $option) {
-					$options[$option] = $definition[2]::getDescription($option);
-				}
-				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc, $options);
-			} elseif ($definition[0] == T::Char) {
-				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc, 1);
-			} else {
-				$fields[$fieldName] = new $namespacedClass($fieldName, $this->model->$fieldName, $desc, ...$extraOpts);
-			}
-		}
-		foreach ($this->model->getPrimaryKey() as $fieldName) {
-			$fields[$fieldName]->readonly = true;
-			$fields[$fieldName]->hidden = true;
-			$fields[$fieldName]->required = false;
-		}
-		return $fields;
 	}
 
 	public function getFields() {
