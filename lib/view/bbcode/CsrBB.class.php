@@ -629,27 +629,18 @@ HTML;
 			return $this->lightLinkBlock('spotify', $url, 'Spotify', $beschrijving);
 		}
 
-		# stiekem is het formaat altijd breed ?
-		$width = 580;
-		$height = 80;
-		$class = '';
+		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$uri\" frameborder=\"0\" allowtransparency=\"true\"";
 
 		if (isset($arguments['formaat'])) {
 			$formaat = $arguments['formaat'];
 			if ($formaat == "hoog") {
-				$width = 300;
-				$height = 380;
+				return "<iframe width=\"300\" height=\"380\" $commonAttributen></iframe>";
 			} elseif ($formaat == "blok") {
-				$width = 80;
-				$height = 80;
-				$class = "class='float-left'"; # Blokje float in tekst
+				return "<iframe width=\"80\" height=\"80\" class=\"float-left\" $commonAttributen></iframe>";
 			}
 		}
 
-		return "<iframe $class
-					src=\"https://embed.spotify.com/?uri=$uri\"
-					width=\"$width\" height=\"$height\"
-					frameborder=\"0\" allowtransparency=\"true\"></iframe>";
+		return "<iframe class=\"w-100\" height=\"80\" $commonAttributen></iframe>";
 	}
 
 	/**
