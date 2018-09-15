@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\knoppen;
 
-use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\FormElement;
 
 
 /**

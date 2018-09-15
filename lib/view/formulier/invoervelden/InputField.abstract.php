@@ -5,7 +5,7 @@ namespace CsrDelft\view\formulier\invoervelden;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\uploadvelden\BestandBehouden;
 use CsrDelft\view\Validator;
 

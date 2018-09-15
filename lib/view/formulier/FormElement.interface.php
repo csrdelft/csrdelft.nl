@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\formulier\elementen;
+namespace CsrDelft\view\formulier;
 
 use CsrDelft\view\View;
 

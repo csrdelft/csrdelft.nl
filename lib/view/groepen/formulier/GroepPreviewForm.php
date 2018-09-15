@@ -3,9 +3,9 @@
 namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
 use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\knoppen\ModalCloseButtons;
 use CsrDelft\view\formulier\ModalForm;
 use CsrDelft\view\groepen\GroepView;

@@ -7,7 +7,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\MijnSqli;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\InputField;

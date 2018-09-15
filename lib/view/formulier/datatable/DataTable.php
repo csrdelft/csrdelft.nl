@@ -4,7 +4,7 @@ namespace CsrDelft\view\formulier\datatable;
 
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
-use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\View;
 
 /**
