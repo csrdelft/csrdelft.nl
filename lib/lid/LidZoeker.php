@@ -17,155 +17,6 @@ use CsrDelft\model\security\LoginModel;
  * @deprecated
  */
 class LidZoeker {
-
-	/**
-	 * @deprecated Dit is de oude zoekfunctie, maar deze functie wordt nog veelvuldig gebruikt...
-	 */
-	public static function zoekLeden($zoekterm, $zoekveld, $verticale, $sort, $zoekstatus = '', $velden = array(), $limiet = 0) {
-		$db = MijnSqli::instance();
-		$leden = array();
-		$zoekfilter = '';
-
-		# mysql escape dingesen
-		$zoekterm = trim($db->escape($zoekterm));
-		$zoekveld = trim($db->escape($zoekveld));
-		/* TODO: velden checken op rare dingen. Niet dat de velden() array nu buiten code opgegeven kan worden, maar het moet nog wel
-		  foreach ($velden as &$veld) {
-		  $veld = trim, escape, lalala
-		  } */
-
-		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
-		if ($zoekveld == 'naam' AND !preg_match('/^\d{2}$/', $zoekterm)) {
-			if (preg_match('/ /', trim($zoekterm))) {
-				$zoekdelen = explode(' ', $zoekterm);
-				$iZoekdelen = count($zoekdelen);
-				if ($iZoekdelen == 2) {
-					$zoekfilter = "( voornaam LIKE '%" . $zoekdelen[0] . "%' AND achternaam LIKE '%" . $zoekdelen[1] . "%' ) OR";
-					$zoekfilter .= "( voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR
-                                    nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%' )";
-				} else {
-					$zoekfilter = "( voornaam LIKE '%" . $zoekdelen[0] . "%' AND achternaam LIKE '%" . $zoekdelen[$iZoekdelen - 1] . "%' )";
-				}
-			} else {
-				$zoekfilter = "
-					voornaam LIKE '%{$zoekterm}%' OR achternaam LIKE '%{$zoekterm}%' OR
-					nickname LIKE '%{$zoekterm}%' OR uid LIKE '%{$zoekterm}%'";
-			}
-		} elseif ($zoekveld == 'adres') {
-			$zoekfilter = "adres LIKE '%{$zoekterm}%' OR woonplaats LIKE '%{$zoekterm}%' OR
-				postcode LIKE '%{$zoekterm}%' OR REPLACE(postcode, ' ', '') LIKE '%" . str_replace(' ', '', $zoekterm) . "%'";
-		} else {
-			if (preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld == 'uid' OR $zoekveld == 'naam')) {
-				//zoeken op lichtingen...
-				$zoekfilter = "SUBSTRING(uid, 1, 2)='" . $zoekterm . "'";
-			} else {
-				$zoekfilter = "{$zoekveld} LIKE '%{$zoekterm}%'";
-			}
-		}
-
-		$sort = $db->escape($sort);
-
-		# In welke status wordt gezocht, is afhankelijk van wat voor rechten de
-		# ingelogd persoon heeft.
-		#
-		# R_LID en R_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen
-		# de volgende afkortingen gebruiken:
-		#  - '' (lege string) of alleleden: novieten, (gast)leden, kringels, ere- en oudleden
-		#  - leden :  						novieten, (gast)leden en kringels
-		#  - oudleden : 					oud- en ereleden
-		#  - allepersonen:					novieten, (gast)leden, kringels, oud- en ereleden, overleden leden en nobodies (alleen geen commissies)
-		# én alleen voor OUDLEDENMOD:
-		#  - nobodies : 					alleen nobodies
-
-		$statusfilter = '';
-		if ($zoekstatus == 'alleleden') {
-			$zoekstatus = '';
-		}
-		if ($zoekstatus == 'allepersonen') {
-			$zoekstatus = array('S_NOVIET', 'S_LID', 'S_GASTLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN', 'S_NOBODY', 'S_EXLID');
-		}
-		if (is_array($zoekstatus)) {
-			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu
-			//geen controle of een gebruiker dat mag, dat moet dus eerder gebeuren.
-			$statusfilter = "status='" . implode("' OR status='", $zoekstatus) . "'";
-		} else {
-			# we zoeken in leden als
-			# 1. ingelogde persoon dat alleen maar mag of
-			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
-			if (
-				(LoginModel::mag('P_LEDEN_READ') and !LoginModel::mag('P_OUDLEDEN_READ')) or (LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
-			) {
-				$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
-			}
-			# we zoeken in oudleden als
-			# 1. ingelogde persoon dat alleen maar mag of
-			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
-			if (
-				(!LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ')) or (LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
-			) {
-				if ($statusfilter != '')
-					$statusfilter .= " OR ";
-				$statusfilter .= "status='S_OUDLID' OR status='S_ERELID'";
-			}
-			# we zoeken in nobodies als
-			# de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if ($zoekstatus === 'nobodies' and LoginModel::mag('P_LEDEN_MOD')) {
-				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
-				$statusfilter = "status='S_NOBODY' OR status='S_EXLID'";
-			}
-
-			if (LoginModel::mag('P_LEDEN_READ') and $zoekstatus === 'novieten') {
-				$statusfilter = "status='S_NOVIET'";
-			}
-		}
-
-		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
-		$mootfilter = ($verticale != 'alle') ? 'AND verticale=\'' . $verticale . '\' ' : '';
-		# is er een maximum aantal resultaten gewenst
-		if ((int)$limiet > 0) {
-			$limit = 'LIMIT ' . (int)$limiet;
-		} else {
-			$limit = '';
-		}
-
-		# controleer of we ueberhaupt wel wat te zoeken hebben hier
-		if ($statusfilter != '') {
-
-			# standaardvelden
-			if (empty($velden)) {
-				$velden = array('uid', 'nickname', 'duckname', 'voornaam', 'tussenvoegsel', 'achternaam', 'postfix', 'adres', 'postcode', 'woonplaats', 'land', 'telefoon',
-					'mobiel', 'email', 'geslacht', 'gebdatum', 'voornamen', 'website', 'beroep', 'studie', 'studiejaar',
-					'o_adres', 'o_postcode', 'o_woonplaats', 'o_land', 'o_telefoon', 'kerk', 'muziek', 'eetwens', 'status');
-			}
-
-			# velden kiezen om terug te geven
-			$velden_sql = implode(', ', $velden);
-			$velden_sql = str_replace('corvee_punten_totaal', 'corvee_punten+corvee_punten_bonus AS corvee_punten_totaal', $velden_sql);
-			$sZoeken = "
-				SELECT
-					" . $velden_sql . "
-				FROM profielen
-				WHERE
-					(" . $zoekfilter . ")
-				AND
-					($statusfilter)
-				{$mootfilter}
-				ORDER BY
-					{$sort}
-				{$limit}
-			";
-			$result = $db->select($sZoeken);
-
-			if ($result !== false and $db->numRows($result) > 0) {
-				while ($lid = $db->next($result)) {
-					$leden[] = $lid;
-				}
-			}
-		}
-
-		return $leden;
-	}
-
 	//velden die door gewone leden geselecteerd mogen worden.
 	private $allowVelden = array(
 		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'duckname', 'geslacht',
@@ -196,7 +47,11 @@ class LidZoeker {
 	//toegestane opties voor het statusfilter.
 	private $allowStatus = array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_EXLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN');
 	//toegestane opties voor de weergave.
-	private $allowWeergave = array('lijst', 'kaartje', 'CSV');
+	private $allowWeergave = [
+		'lijst' => LLLijst::class,
+		'kaartje' => LLKaartje::class,
+		'csv' => LLCSV::class
+	];
 	private $sortable = array(
 		'achternaam' => 'Achternaam',
 		'email' => 'Email',
@@ -210,7 +65,7 @@ class LidZoeker {
 	private $filters = array();
 	private $sort = array('achternaam');
 	private $velden = array('naam', 'email', 'telefoon', 'mobiel');
-	private $weergave = 'lijst';
+	private $weergave = LLLijst::class;
 	private $result = null;
 
 	public function __construct() {
@@ -245,8 +100,8 @@ class LidZoeker {
 					break;
 
 				case 'weergave':
-					if (in_array($value, $this->allowWeergave)) {
-						$this->weergave = $value;
+					if (isset($this->allowWeergave[$value])) {
+						$this->weergave = $this->allowWeergave[$value];
 					}
 					break;
 
@@ -457,7 +312,7 @@ class LidZoeker {
 	}
 
 	public function getWeergave() {
-		return 'LL' . ucfirst($this->weergave);
+		return $this->weergave;
 	}
 
 	public function getRawQuery($key) {

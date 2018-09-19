@@ -1,6 +1,7 @@
 <?php
 
 use CsrDelft\model\ProfielModel;
+use CsrDelft\model\ProfielService;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 
@@ -52,7 +53,7 @@ function uid2naam($uid) {
 
 //zoekt uid op en returnt met uid2naam weer de naam
 function naam2naam($naam, $zoekin) {
-    $rnaam = namen2uid($naam, $zoekin);
+    $rnaam = ProfielService::instance()->zoekLeden($naam, 'naam', 'alle', 'achternaam', $zoekin);
     if ($rnaam) {
         if (isset($rnaam[0]['uid'])) {
             return uid2naam($rnaam[0]['uid']);

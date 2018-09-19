@@ -2,9 +2,9 @@
 
 namespace CsrDelft;
 
-use CsrDelft\lid\LidZoeker;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\model\ProfielService;
 use CsrDelft\view\View;
 
 /**
@@ -18,6 +18,7 @@ class Streeplijstcontent implements View {
 	private $sVerticale = 'alle';
 	private $sLidjaar = '';
 	private $aGoederen;
+	/** @var Profiel[] */
 	private $aLeden;
 
 	function __construct() {
@@ -52,7 +53,7 @@ class Streeplijstcontent implements View {
 		}
 		//leden welke in de lijst moeten laden.
 		require_once 'lid/LidZoeker.php';
-		$this->aLeden = LidZoeker::zoekLeden($this->sLidjaar, 'uid', $this->sVerticale, 'achternaam', 'leden');
+		$this->aLeden = ProfielService::instance()->zoekLeden($this->sLidjaar, 'uid', $this->sVerticale, 'achternaam', 'leden');
 	}
 
 	function parseGoederen($sGoederen) {
@@ -128,7 +129,7 @@ class Streeplijstcontent implements View {
 				$sReturn .= '<span class="breekpunt"></span>';
 				$sReturn .= '<table><tr>' . $sKop;
 			}
-			$sReturn .= '<tr><td class="naam">' . ProfielModel::getNaam($aLid['uid'], 'streeplijst') . '</td>';
+			$sReturn .= '<tr><td class="naam">' . $aLid->getNaam('streeplijst') . '</td>';
 			for ($i = 1; $i <= $this->goederenCount(); $i++) {
 				$sReturn .= '<td class="cell' . ($i % 2) . '">&nbsp;</td>';
 			}

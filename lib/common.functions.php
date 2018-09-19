@@ -5,12 +5,10 @@
 # common.functions.php
 # -------------------------------------------------------------------
 use CsrDelft\Icon;
-use CsrDelft\lid\LidZoeker;
 use CsrDelft\MijnSqli;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\LidToestemmingModel;
-use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
@@ -354,72 +352,6 @@ function debugprint($sString, $cssID = 'pubcie_debug') {
 	if (DEBUG OR LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}
-}
-
-/**
- * Probeert uit invoer van uids of namen per zoekterm een unieke uid te bepalen, zoniet een lijstje suggesties en anders false.
- *
- * @param  string $sNamen string met namen en/of uids op nieuwe regels en/of gescheiden door komma's
- * @param   array|string $filter zoekfilter voor LidZoeker::zoekLeden, toegestane input: '', 'leden', 'oudleden' of array met stati
- *
- * @return  Profiel[]|bool false bij geen matches
- *      of een array met per zoekterm een entry met een unieke uid en naam òf een array met naamopties.
- * Voorbeeld:
- * Input: $sNamen = 'Lid, Klaassen'
- * Output: Array(
- * [0] => Array (
- * [naamOpties] => Array (
- * [0] => Array (
- * [uid] => 4444
- * [naam] => Oud Lid
- * )
- * [1] => Array (
- * [uid] => x101
- * [naam] => Jan Lid
- * )
- * [2] => Array (
- * ...
- * )
- * )
- * [1] => Array (
- * [uid] => 0431
- * [naam] => Jan Klaassen
- * )
- * )
- */
-function namen2uid($sNamen, $filter = 'leden') {
-	$return = array();
-	$sNamen = trim($sNamen);
-	$sNamen = str_replace(array(', ', "\r\n", "\n"), ',', $sNamen);
-	$aNamen = explode(',', $sNamen);
-	foreach ($aNamen as $sNaam) {
-		$aNaamOpties = array();
-		require_once 'lid/LidZoeker.php';
-		$aZoekNamen = LidZoeker::zoekLeden($sNaam, 'naam', 'alle', 'achternaam', $filter, array('uid', 'voornaam', 'tussenvoegsel', 'achternaam'));
-		if (count($aZoekNamen) == 1) {
-			$naam = $aZoekNamen[0]['voornaam'] . ' ';
-			if (trim($aZoekNamen[0]['tussenvoegsel']) != '') {
-				$naam .= $aZoekNamen[0]['tussenvoegsel'] . ' ';
-			}
-			$naam .= $aZoekNamen[0]['achternaam'];
-			$return[] = array('uid' => $aZoekNamen[0]['uid'], 'naam' => $naam);
-		} elseif (count($aZoekNamen) == 0) {
-
-		} else {
-			//geen enkelvoudige match, dan een array teruggeven
-			foreach ($aZoekNamen as $aZoekNaam) {
-				/** @var Profiel $profiel  */
-				$profiel = ProfielModel::get($aZoekNaam['uid']);
-				$aNaamOpties[] = array(
-					'uid' => $aZoekNaam['uid'],
-					'naam' => $profiel->getNaam());
-			}
-			$return[]['naamOpties'] = $aNaamOpties;
-		}
-	}
-	if (count($return) === 0)
-		return false;
-	return $return;
 }
 
 function reldate($datum) {
@@ -1158,4 +1090,8 @@ function leesConfig(string $iniFile, string $key = null, string $default = null)
 	} else {
 		throw new \CsrDelft\common\CsrException('Instelling ' . $key . ' in ' . $iniFile . ' niet gevonden.');
 	}
+}
+
+function sql_contains($field) {
+	return "%$field%";
 }

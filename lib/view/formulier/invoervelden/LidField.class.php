@@ -3,6 +3,7 @@
 namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\model\ProfielModel;
+use CsrDelft\model\ProfielService;
 use CsrDelft\model\security\AccountModel;
 
 /**
@@ -35,9 +36,9 @@ class LidField extends TextField {
 			return null;
 		}
 		if (!AccountModel::isValidUid($this->value)) {
-			$uid = namen2uid($this->value, $this->zoekin);
-			if (isset($uid[0]['uid'])) {
-				$this->value = $uid[0]['uid'];
+			$profielen = ProfielService::instance()->zoekLeden($this->value, 'naam', 'alle', 'achternaam', $this->zoekin);
+			if (!empty($profielen)) {
+				$this->value = $profielen[0]->uid;
 			}
 		}
 		return $this->value;
@@ -56,13 +57,11 @@ class LidField extends TextField {
 		if (AccountModel::isValidUid($value) AND ProfielModel::existsUid($value)) {
 			return true;
 		}
-		$uid = namen2uid($value, $this->zoekin);
-		if ($uid) {
-			// uniek bestaand lid?
-			if (isset($uid[0]['uid']) AND ProfielModel::existsUid($uid[0]['uid'])) {
+		$profielen = ProfielService::instance()->zoekLeden($value, 'naam', 'alle', 'achternaam', $this->zoekin);
+		if (!empty($profielen)) {
+			if (count($profielen) == 1) {
 				return true;
-			} // meerdere naamopties?
-			elseif (count($uid[0]['naamOpties']) > 0) {
+			} else {
 				$this->error = 'Meerdere leden mogelijk';
 				return false;
 			}

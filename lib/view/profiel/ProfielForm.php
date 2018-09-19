@@ -2,11 +2,11 @@
 
 namespace CsrDelft\view\profiel;
 
-use CsrDelft\lid\LidZoeker;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\OntvangtContactueel;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\model\ProfielService;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\CollapsableSubkopje;
 use CsrDelft\view\formulier\elementen\HtmlComment;
@@ -90,19 +90,19 @@ class ProfielForm extends Formulier {
 			if ($profiel->voornaam == '') {
 				$gelijknamigenovieten = array();
 			} else {
-				$gelijknamigenovieten = LidZoeker::zoekLeden($profiel->voornaam, 'voornaam', 'alle', 'achternaam', array(LidStatus::Noviet), array('uid'));
+				$gelijknamigenovieten = ProfielService::instance()->zoekLeden($profiel->voornaam, 'voornaam', 'alle', 'achternaam', array(LidStatus::Noviet));
 			}
 			if ($profiel->achternaam == '') {
 				$gelijknamigeleden = array();
 			} else {
-				$gelijknamigeleden = LidZoeker::zoekLeden($profiel->achternaam, 'achternaam', 'alle', 'lidjaar', array(LidStatus::Lid, LidStatus::Gastlid), array('uid'));
+				$gelijknamigeleden = ProfielService::instance()->zoekLeden($profiel->achternaam, 'achternaam', 'alle', 'lidjaar', array(LidStatus::Lid, LidStatus::Gastlid));
 			}
 
 			$html = '<div class="novieten">';
 			if (count($gelijknamigenovieten) > 1 OR ($profiel->status !== LidStatus::Noviet AND !empty($gelijknamigenovieten))) {
 				$html .= 'Gelijknamige novieten:<ul class="nobullets">';
 				foreach ($gelijknamigenovieten as $noviet) {
-					$html .= '<li>' . ProfielModel::getLink($noviet['uid'], 'volledig') . '</li>';
+					$html .= '<li>' . $noviet->getLink('volledig') . '</li>';
 				}
 				$html .= '</ul>';
 			} else {
@@ -112,7 +112,7 @@ class ProfielForm extends Formulier {
 			if (count($gelijknamigeleden) > 1 OR (!($profiel->status == LidStatus::Lid OR $profiel->status == LidStatus::Gastlid) AND !empty($gelijknamigeleden))) {
 				$html .= 'Gelijknamige (gast)leden:<ul class="nobullets">';
 				foreach ($gelijknamigeleden as $lid) {
-					$html .= '<li>' . ProfielModel::getLink($lid['uid'], 'volledig') . '</li>';
+					$html .= '<li>' . $lid->getLink('volledig') . '</li>';
 				}
 				$html .= '</ul>';
 			} else {
