@@ -1,11 +1,10 @@
 <?php
 
-namespace CsrDelft;
+namespace CsrDelft\view;
 
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\ProfielService;
-use CsrDelft\view\View;
 
 /**
  * C.S.R. Delft | pubcie@csrdelft.nl

@@ -1,8 +1,7 @@
 <?php
 
-namespace CsrDelft;
+namespace CsrDelft\common;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\GoogleToken;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\GoogleTokenModel;

@@ -1,9 +1,7 @@
 <?php
 
-namespace CsrDelft\lid;
-use CsrDelft\model\entity\profiel\{
-	Profiel
-};
+namespace CsrDelft\view\lid;
+use CsrDelft\model\entity\profiel\Profiel;
 
 /**
  * Visitekaartjes, 3 op één regel.

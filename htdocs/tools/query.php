@@ -1,9 +1,9 @@
 <?php
 
+use CsrDelft\model\SavedQuery;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\SavedQuery;
-use CsrDelft\SavedQueryContent;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\SavedQueryContent;
 
 require_once 'configuratie.include.php';
 require_once 'SavedQuery.php';

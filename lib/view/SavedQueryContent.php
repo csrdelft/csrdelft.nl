@@ -1,9 +1,9 @@
 <?php
 
-namespace CsrDelft;
+namespace CsrDelft\view;
 
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\View;
+use CsrDelft\model\SavedQuery;
 
 class SavedQueryContent implements View {
 

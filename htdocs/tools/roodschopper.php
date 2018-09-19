@@ -1,9 +1,9 @@
 <?php
 
+use CsrDelft\model\Roodschopper;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Roodschopper;
-use CsrDelft\RoodschopperContent;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\RoodschopperContent;
 
 require_once 'configuratie.include.php';
 require_once 'roodschopper.class.php';
@@ -11,7 +11,7 @@ require_once 'roodschoppercontent.class.php';
 
 /**
  * roodschopper.php
- * 
+ *
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  *
  * @deprecated

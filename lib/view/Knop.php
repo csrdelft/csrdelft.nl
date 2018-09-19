@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft;
+namespace CsrDelft\view;
 
 /**
  * class.btn.php  |  Jan Pieter Waagmeester (jieter@jpwaag.com)

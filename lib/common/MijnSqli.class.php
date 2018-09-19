@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft;
+namespace CsrDelft\common;
 
 /**
  * MijnSqli.class.php
@@ -177,7 +177,7 @@ class MijnSqli {
 
 	// zet een resultaat ding om in een array
 	public function result2array($rResult) {
-		
+
 		if ($this->numRows($rResult) >= 1) {
 			$aArray = [];
 			while ($aDataArray = $this->next($rResult)) {

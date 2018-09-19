@@ -1,12 +1,12 @@
 <?php
 
-use CsrDelft\GoogleSync;
-use CsrDelft\lid\LedenlijstContent;
-use CsrDelft\lid\LidZoeker;
+use CsrDelft\common\GoogleSync;
 use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\LidZoeker;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\lid\LedenlijstContent;
 
 require_once 'configuratie.include.php';
 

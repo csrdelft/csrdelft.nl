@@ -29,7 +29,7 @@
  * @return   string
  */
 
-use CsrDelft\Knop;
+use CsrDelft\view\Knop;
 
 function smarty_function_knop($params, &$smarty) {
 	if (!isset($params['url'])) {

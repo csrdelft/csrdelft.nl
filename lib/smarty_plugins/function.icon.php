@@ -27,7 +27,7 @@
  * @return   string
  */
 
-use CsrDelft\Icon;
+use CsrDelft\view\Icon;
 
 
 function smarty_function_icon($params, &$smarty) {

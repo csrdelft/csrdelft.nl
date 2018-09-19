@@ -1,13 +1,12 @@
 <?php
 
-namespace CsrDelft;
+namespace CsrDelft\model;
 
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 
-use CsrDelft\model\ProfielModel;
+use CsrDelft\common\MijnSqli;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\View;
 
 class SavedQuery {
 

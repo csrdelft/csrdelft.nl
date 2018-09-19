@@ -4,8 +4,8 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\GoogleSync;
 use CsrDelft\controller\framework\AclController;
-use CsrDelft\GoogleSync;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\Afbeelding;

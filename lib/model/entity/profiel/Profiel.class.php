@@ -3,7 +3,7 @@
 namespace CsrDelft\model\entity\profiel;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\GoogleSync;
+use CsrDelft\common\GoogleSync;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\groepen\GroepStatus;

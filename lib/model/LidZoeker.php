@@ -1,12 +1,14 @@
 <?php
 
-namespace CsrDelft\lid;
+namespace CsrDelft\model;
 
-use CsrDelft\MijnSqli;
+use CsrDelft\common\MijnSqli;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\lid\LLCSV;
+use CsrDelft\view\lid\LLKaartje;
+use CsrDelft\view\lid\LLLijst;
 
 
 /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft;
+namespace CsrDelft\view;
 
 /**
  * Icon dingetje voor csrdelft.nl.

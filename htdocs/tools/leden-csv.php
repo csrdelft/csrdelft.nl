@@ -1,6 +1,6 @@
 <?php
 
-use CsrDelft\MijnSqli;
+use CsrDelft\common\MijnSqli;
 use CsrDelft\model\security\LoginModel;
 
 require_once 'configuratie.include.php';

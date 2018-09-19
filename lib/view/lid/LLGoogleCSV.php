@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\lid;
+namespace CsrDelft\view\lid;
 
 /**
  * Google wil een CSV met kolomnamen erboven.

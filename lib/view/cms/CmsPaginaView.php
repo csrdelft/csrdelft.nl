@@ -2,9 +2,9 @@
 
 namespace CsrDelft\view\cms;
 
-use CsrDelft\Icon;
 use CsrDelft\model\entity\CmsPagina;
 use CsrDelft\view\bbcode\CsrBB;
+use CsrDelft\view\Icon;
 use CsrDelft\view\View;
 
 /**

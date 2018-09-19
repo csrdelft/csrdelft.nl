@@ -14,6 +14,7 @@
 //header('location: https://csrdelft.nl/onderhoud.html');
 //exit;
 
+use CsrDelft\common\ShutdownHandler;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\InstellingenModel;
@@ -21,12 +22,11 @@ use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\ShutdownHandler;
 
 require __DIR__ . '/../vendor/autoload.php';
 require_once 'defines.defaults.php';
-require_once 'common.functions.php';
-require_once 'common.view.functions.php';
+require_once 'common/common.functions.php';
+require_once 'common/common.view.functions.php';
 require_once 'autoload.php';
 
 

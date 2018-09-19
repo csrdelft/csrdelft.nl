@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft;
+namespace CsrDelft\common;
 
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\security\LoginModel;

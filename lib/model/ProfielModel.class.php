@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model;
 
-use CsrDelft\LDAP;
+use CsrDelft\common\LDAP;
 use CsrDelft\model\bibliotheek\BiebCatalogus;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\LidStatus;
@@ -23,7 +23,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\PersistenceModel;
 
 
 /**

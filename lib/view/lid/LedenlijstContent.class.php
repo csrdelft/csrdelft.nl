@@ -1,15 +1,10 @@
 <?php
 
-namespace CsrDelft\lid;
+namespace CsrDelft\view\lid;
 
-use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\model\LidZoeker;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\View;
-
-require_once 'lid/LidZoeker.php';
-
 
 /**
  *  C.S.R. Delft | pubcie@csrdelft.nl

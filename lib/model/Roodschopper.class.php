@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft;
+namespace CsrDelft\model;
 
 /**
  * Roodschopperklasse.
@@ -13,8 +13,8 @@ namespace CsrDelft;
  * @deprecated
  */
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\MijnSqli;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\CsrBB;

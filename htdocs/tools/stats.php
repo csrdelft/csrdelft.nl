@@ -2,7 +2,7 @@
 
 //holymoly, wat een kekcode is dit zeg.
 
-use CsrDelft\MijnSqli;
+use CsrDelft\common\MijnSqli;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;

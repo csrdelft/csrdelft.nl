@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\groepen;
 
-use CsrDelft\Icon;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
@@ -11,6 +10,7 @@ use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\groepen;
+use CsrDelft\view\Icon;
 use CsrDelft\view\View;
 
 class GroepenView implements View {

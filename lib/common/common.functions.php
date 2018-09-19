@@ -4,14 +4,14 @@
 # -------------------------------------------------------------------
 # common.functions.php
 # -------------------------------------------------------------------
-use CsrDelft\Icon;
-use CsrDelft\MijnSqli;
+use CsrDelft\common\MijnSqli;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\view\Icon;
 
 /**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
