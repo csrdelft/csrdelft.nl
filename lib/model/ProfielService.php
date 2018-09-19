@@ -19,7 +19,7 @@ class ProfielService extends DependencyManager {
 	 * @param int $limiet
 	 * @return Profiel[]
 	 */
-	public static function zoekLeden(string $zoekterm, string $zoekveld, string $verticale, string $sort, string $zoekstatus = '', int $limiet = 0) {
+	public function zoekLeden(string $zoekterm, string $zoekveld, string $verticale, string $sort, $zoekstatus = '', int $limiet = 0) {
 		$zoekfilterparams = [
 			':zoekterm' => $zoekterm,
 			':containsZoekterm' => sql_contains($zoekterm),
