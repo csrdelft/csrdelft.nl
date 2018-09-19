@@ -20,12 +20,9 @@ class ProfielService extends DependencyManager {
 	 * @return Profiel[]
 	 */
 	public function zoekLeden(string $zoekterm, string $zoekveld, string $verticale, string $sort, $zoekstatus = '', int $limiet = 0) {
-		$zoekfilterparams = [
-			':zoekterm' => $zoekterm,
-			':containsZoekterm' => sql_contains($zoekterm),
-			':containsZonderSpatiesZoekterm' => sql_contains(str_replace(' ', '', $zoekterm))
-		];
-
+		$containsZoekterm = sql_contains($zoekterm);
+		$containsZonderSpatiesZoekterm = sql_contains(str_replace(' ', '', $zoekterm));
+		$zoekfilterparams = [];
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
 		if ($zoekveld == 'naam' AND !preg_match('/^\d{2}$/', $zoekterm)) {
 			if (preg_match('/ /', trim($zoekterm))) {
@@ -37,6 +34,8 @@ class ProfielService extends DependencyManager {
 					$zoekfilter = "( voornaam LIKE :voornaam AND achternaam LIKE :achternaam ) OR";
 					$zoekfilter .= "( voornaam LIKE :zoekterm OR achternaam LIKE :containsZoekterm OR
                                     nickname LIKE :containsZoekterm OR uid LIKE :containsZoekterm )";
+					$zoekfilterparams[':zoekterm']=  $zoekterm;
+					$zoekfilterparams[':containsZoekterm']=  $zoekterm;
 				} else {
 					$zoekfilterparams[':voornaam'] = sql_contains($zoekdelen[0]);
 					$zoekfilterparams[':achternaam'] = sql_contains($zoekdelen[$iZoekdelen - 1]);
@@ -47,16 +46,22 @@ class ProfielService extends DependencyManager {
 				$zoekfilter = "
 					voornaam LIKE :containsZoekterm OR achternaam LIKE :containsZoekterm OR
 					nickname LIKE :containsZoekterm OR uid LIKE :containsZoekterm";
+				$zoekfilterparams[':containsZoekterm']=  $zoekterm;
 			}
 		} elseif ($zoekveld == 'adres') {
 			$zoekfilter = "adres LIKE :containsZoekterm OR woonplaats LIKE :containsZoekterm OR
 				postcode LIKE :containsZoekterm OR REPLACE(postcode, ' ', '') LIKE :containsZonderSpatiesZoekterm";
+			$zoekfilterparams[':containsZoekterm']=  $zoekterm;
+			$zoekfilterparams[':containsZonderSpatiesZoekterm']=  $containsZonderSpatiesZoekterm;
 		} else {
 			if (preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld == 'uid' OR $zoekveld == 'naam')) {
 				//zoeken op lichtingen...
 				$zoekfilter = "SUBSTRING(uid, 1, 2)=:zoekterm";
+				$zoekfilterparams[':zoekterm']=  $zoekterm;
+
 			} else {
 				$zoekfilter = "{$zoekveld} LIKE :containsZoekterm";
+				$zoekfilterparams[':containsZoekterm']=  $zoekterm;
 			}
 		}
 
