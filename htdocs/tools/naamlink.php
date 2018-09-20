@@ -52,17 +52,15 @@ function uid2naam($uid) {
 }
 
 //zoekt uid op en returnt met uid2naam weer de naam
-function naam2naam($naam, $zoekin) {
-    $rnaam = ProfielService::instance()->zoekLeden($naam, 'naam', 'alle', 'achternaam', $zoekin);
-    if ($rnaam) {
-        if (isset($rnaam[0]['uid'])) {
-            return uid2naam($rnaam[0]['uid']);
-        } else {
-            if (count($rnaam[0]['naamOpties']) > 0) {
-                return 'Meerdere leden mogelijk';
-            }
-        }
-    }
+function zoekNaam($naam, $zoekin) {
+    $namen = ProfielService::instance()->zoekLeden($naam, 'naam', 'alle', 'achternaam', $zoekin);
+    if (!empty($namen)) {
+    	if (count($namen) === 1) {
+    		return $namen[0]->getLink('civitas');
+			} else {
+    		return 'Meerdere leden mogelijk';
+			}
+		}
     return 'Geen lid gevonden';
 }
 
@@ -76,5 +74,5 @@ if ($given == 'uid') {
         }
     }
 } elseif ($given == 'naam') {
-    echo naam2naam($string, $zoekin);
+    echo zoekNaam($string, $zoekin);
 }
