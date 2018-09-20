@@ -253,6 +253,16 @@ $.fn.dataTable.ext.buttons.defaultCollection = {
     }
 };
 
+$.fn.dataTable.render.default = (data, type, row) => {
+	if (data === null || typeof data !== 'object') return data;
+
+	switch (type) {
+		case 'sort': return data['sort'];
+		case 'export': return data['export'];
+		default: return data['display'];
+	}
+};
+
 $.fn.dataTable.render.bedrag = (data) => '€' + (data / 100).toFixed(2);
 
 $.fn.dataTable.render.check = (data) => {

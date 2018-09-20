@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\model;
+
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
@@ -10,6 +11,25 @@ use CsrDelft\Orm\DependencyManager;
  * @since 19/09/2018
  */
 class ProfielService extends DependencyManager {
+
+	const VELDEN = [
+		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'duckname', 'geslacht',
+		'email', 'adres', 'telefoon', 'mobiel', 'linkedin', 'website', 'studie', 'status',
+		'gebdatum', 'beroep', 'verticale', 'moot', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening', 'eetwens'];
+
+	const VELDEN_MOD = [
+		'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum',
+		'echtgenoot', 'adresseringechtpaar', 'land', 'bankrekening', 'machtiging'];
+
+	/**
+	 * @var ProfielModel
+	 */
+	private $profielModel;
+
+	public function __construct(ProfielModel $profielModel) {
+		$this->profielModel = $profielModel;
+	}
+
 	/**
 	 * @param string $zoekterm
 	 * @param string $zoekveld
@@ -34,8 +54,8 @@ class ProfielService extends DependencyManager {
 					$zoekfilter = "( voornaam LIKE :voornaam AND achternaam LIKE :achternaam ) OR";
 					$zoekfilter .= "( voornaam LIKE :zoekterm OR achternaam LIKE :containsZoekterm OR
                                     nickname LIKE :containsZoekterm OR uid LIKE :containsZoekterm )";
-					$zoekfilterparams[':zoekterm']=  $zoekterm;
-					$zoekfilterparams[':containsZoekterm']=  $zoekterm;
+					$zoekfilterparams[':zoekterm'] = $zoekterm;
+					$zoekfilterparams[':containsZoekterm'] = $zoekterm;
 				} else {
 					$zoekfilterparams[':voornaam'] = sql_contains($zoekdelen[0]);
 					$zoekfilterparams[':achternaam'] = sql_contains($zoekdelen[$iZoekdelen - 1]);
@@ -46,22 +66,22 @@ class ProfielService extends DependencyManager {
 				$zoekfilter = "
 					voornaam LIKE :containsZoekterm OR achternaam LIKE :containsZoekterm OR
 					nickname LIKE :containsZoekterm OR uid LIKE :containsZoekterm";
-				$zoekfilterparams[':containsZoekterm']=  $zoekterm;
+				$zoekfilterparams[':containsZoekterm'] = $zoekterm;
 			}
 		} elseif ($zoekveld == 'adres') {
 			$zoekfilter = "adres LIKE :containsZoekterm OR woonplaats LIKE :containsZoekterm OR
 				postcode LIKE :containsZoekterm OR REPLACE(postcode, ' ', '') LIKE :containsZonderSpatiesZoekterm";
-			$zoekfilterparams[':containsZoekterm']=  $zoekterm;
-			$zoekfilterparams[':containsZonderSpatiesZoekterm']=  $containsZonderSpatiesZoekterm;
+			$zoekfilterparams[':containsZoekterm'] = $zoekterm;
+			$zoekfilterparams[':containsZonderSpatiesZoekterm'] = $containsZonderSpatiesZoekterm;
 		} else {
 			if (preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld == 'uid' OR $zoekveld == 'naam')) {
 				//zoeken op lichtingen...
 				$zoekfilter = "SUBSTRING(uid, 1, 2)=:zoekterm";
-				$zoekfilterparams[':zoekterm']=  $zoekterm;
+				$zoekfilterparams[':zoekterm'] = $zoekterm;
 
 			} else {
 				$zoekfilter = "{$zoekveld} LIKE :containsZoekterm";
-				$zoekfilterparams[':containsZoekterm']=  $zoekterm;
+				$zoekfilterparams[':containsZoekterm'] = $zoekterm;
 			}
 		}
 
@@ -136,7 +156,7 @@ class ProfielService extends DependencyManager {
 
 		# controleer of we ueberhaupt wel wat te zoeken hebben hier
 		if ($statusfilter != '') {
-			$result = ProfielModel::instance()->find("($zoekfilter) AND ($statusfilter) $mootfilter", $zoekfilterparams, null, $sort, $limit);
+			$result = $this->profielModel->find("($zoekfilter) AND ($statusfilter) $mootfilter", $zoekfilterparams, null, $sort, $limit);
 
 			return $result->fetchAll();
 		}

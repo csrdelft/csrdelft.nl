@@ -27,12 +27,38 @@ class DataTable implements View, FormElement {
 	protected $defaultLength = 10;
 	protected $settings = [
 		'dom' => 'Bfrtpli',
-		'buttons' => ['copy', 'csv', 'excel', 'print'],
+		'buttons' => [
+			[
+				'extend' => 'copy',
+				'exportOptions' => [
+					'columns' => ':visible',
+					'orthogonal' => 'export',
+				]
+			], [
+				'extend' => 'csv',
+				'exportOptions' => [
+					'columns' => ':visible',
+					'orthogonal' => 'export',
+				]
+			], [
+				'extend' => 'excel',
+				'exportOptions' => [
+					'columns' => ':visible',
+					'orthogonal' => 'export',
+				]
+			], [
+				'extend' => 'print',
+				'exportOptions' => [
+					'columns' => ':visible',
+					'orthogonal' => 'export',
+				]
+			]
+		],
 		'userButtons' => [],
 		'select' => true,
 	];
 
-	private $columns = array();
+	protected $columns = array();
 	private $groupByColumn;
 
 	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null) {
@@ -55,7 +81,7 @@ class DataTable implements View, FormElement {
 		);
 
 		// generate columns from entity attributes
-		foreach ($this->model->getAttributes() as $attribute) {
+		foreach ($this->getColumnDefinition() as $attribute) {
 			$this->addColumn($attribute);
 		}
 
@@ -63,6 +89,10 @@ class DataTable implements View, FormElement {
 		foreach ($this->model->getPrimaryKey() as $attribute) {
 			$this->hideColumn($attribute);
 		}
+	}
+
+	protected function getColumnDefinition() {
+		return $this->model->getAttributes();
 	}
 
 	/**
@@ -103,7 +133,7 @@ class DataTable implements View, FormElement {
 	 */
 	protected function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null, $data = null) {
 		$type = $type ?: CellType::String();
-		$render = $render ?: CellRender::None();
+		$render = $render ?: CellRender::Default();
 
 		// column definition
 		$newColumn = array(

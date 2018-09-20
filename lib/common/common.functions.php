@@ -1095,3 +1095,51 @@ function leesConfig(string $iniFile, string $key = null, string $default = null)
 function sql_contains($field) {
 	return "%$field%";
 }
+
+function is_assoc(array $arr)
+{
+	if (array() === $arr)
+		return false;
+	ksort($arr);
+	return array_keys($arr) !== range(0, count($arr) - 1);
+}
+
+/**
+ * Wrapper om filter_input_array, met support voor geneste filters.
+ * @param int $type <p>
+ * One of <b>INPUT_GET</b>, <b>INPUT_POST</b>,
+ * <b>INPUT_COOKIE</b>, <b>INPUT_SERVER</b>, or
+ * <b>INPUT_ENV</b>.
+ * </p>
+ * @param array $definition Zie de definitie van filter_input_array
+ * Accepteerd ook van de volgende vorm:
+ * 'search' => [
+ *   'filter' => [
+ *     'value' => FILTER_SANITIZE_STRING,
+ *     'regex' => FILTER_VALIDATE_BOOLEAN,
+ *   ],
+ *   'flags' => FILTER_REQUIRE_ARRAY,
+ * ]
+ * Om een input te filteren met de velden search[value] en search[regex].
+ * @param bool $add_empty [optional] <p>
+ * Add missing keys as <b>NULL</b> to the return value.
+ * </p>
+ * @return mixed
+ */
+function filter_input_array_plus($type, $definition, $add_empty = true) {
+	$data = filter_input_array($type, $definition, $add_empty);
+
+	foreach ($definition as $key => $subDefinition) {
+		if (is_array($subDefinition['filter'])) {
+			if (is_assoc($data[$key])) {
+				$data[$key] = filter_var_array($data[$key], $subDefinition['filter']);
+			} else {
+				foreach ($data[$key] as $index => $element) {
+					$data[$key][$index] = filter_var_array($data[$key][$index], $subDefinition['filter']);
+				}
+			}
+		}
+	}
+
+	return $data;
+}
