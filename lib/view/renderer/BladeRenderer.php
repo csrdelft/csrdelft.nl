@@ -2,6 +2,7 @@
 namespace CsrDelft\view\renderer;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
+use CsrDelft\view\Icon;
 use eftec\bladeone\BladeOne;
 
 /**
@@ -38,7 +39,8 @@ class BladeRenderer implements Renderer {
 		$this->bladeOne->directive('icon', function ($expr) {
 			$options = trim($expr, "()");
 
-			return "<?php echo call_user_func_array(['CsrDelft\\view\\Icon', 'getTag'], [$options]); ?>";
+			$iconClassName = Icon::class;
+			return "<?php echo call_user_func_array(['{$iconClassName}', 'getTag'], [$options]); ?>";
 		});
 
 		$this->bladeOne->directive('cycle', function ($expr) use ($template) {
