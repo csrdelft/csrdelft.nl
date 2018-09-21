@@ -48,3 +48,4 @@ bin/ldap/settings.pyc
 npm-debug.log
 yarn-error.log
 htdocs/dist
+package-lock.json
