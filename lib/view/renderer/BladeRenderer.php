@@ -38,7 +38,7 @@ class BladeRenderer implements Renderer {
 		$this->bladeOne->directive('icon', function ($expr) {
 			$options = trim($expr, "()");
 
-			return "<?php echo call_user_func_array([\"CsrDelft\Icon\", \"getTag\"], [$options]); ?>";
+			return "<?php echo call_user_func_array(['CsrDelft\\view\\Icon', 'getTag'], [$options]); ?>";
 		});
 
 		$this->bladeOne->directive('cycle', function ($expr) use ($template) {
