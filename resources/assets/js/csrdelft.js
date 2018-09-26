@@ -12,10 +12,6 @@ function preloadImg(href) {
     return img;
 }
 
-preloadImg('/images/loading-fb.gif');
-preloadImg('/images/loading-arrows.gif');
-preloadImg('/images/loading_bar_black.gif');
-
 function initGeolocation() { // eslint-disable-line
 
 	let previousPos = false;
