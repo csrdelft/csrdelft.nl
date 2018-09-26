@@ -6,12 +6,6 @@ import $ from 'jquery';
 
 import initContext from './context';
 
-function preloadImg(href) {
-    let img = $(document.createElement('img'));
-    img[0].src = href;
-    return img;
-}
-
 function initGeolocation() { // eslint-disable-line
 
 	let previousPos = false;
