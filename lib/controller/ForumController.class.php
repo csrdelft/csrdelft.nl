@@ -288,11 +288,7 @@ class ForumController extends Controller {
 	 * @return View
 	 */
 	public function recent($pagina = 1, $belangrijk = null) {
-		if (is_int($pagina)) {
-			ForumDradenModel::instance()->setHuidigePagina($pagina, 0);
-		} else {
-			ForumDradenModel::instance()->setHuidigePagina(1, 0);
-		}
+		ForumDradenModel::instance()->setHuidigePagina((int)$pagina, null);
 		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
 		$deel = ForumDelenModel::instance()->getRecent($belangrijk);
 
