@@ -103,13 +103,13 @@ class AgendaController extends AclController {
 		$items = $this->model->find('eind_moment >= ? AND begin_moment <= ? AND (titel LIKE ? OR beschrijving LIKE ? OR locatie LIKE ?)', array($van, $tot, $query, $query, $query), null, 'begin_moment ASC, titel ASC', $limit);
 		$result = array();
 		foreach ($items as $item) {
+			$begin = $item->getBeginMoment();
+			$d = date('d', $begin);
+			$m = date('m', $begin);
+			$y = date('Y', $begin);
 			if ($item->getUrl()) {
 				$url = $item->getUrl();
 			} else {
-				$begin = $item->getBeginMoment();
-				$d = date('d', $begin);
-				$m = date('m', $begin);
-				$y = date('Y', $begin);
 				$url = '/agenda/maand/' . $y . '/' . $m . '/' . $d . '#dag-' . $y . '-' . $m . '-' . $d;
 			}
 			$result[] = array(
@@ -147,6 +147,7 @@ class AgendaController extends AclController {
 		$item = $this->model->getAgendaItem((int)$aid);
 		if (!$item OR !$item->magBeheren()) {
 			$this->exit_http(403);
+			return;
 		}
 		$form = new AgendaItemForm($item, $this->action); // fetches POST values itself
 		if ($form->validate()) {
@@ -161,6 +162,7 @@ class AgendaController extends AclController {
 		$item = $this->model->getAgendaItem((int)$aid);
 		if (!$item OR !$item->magBeheren()) {
 			$this->exit_http(403);
+			return;
 		}
 		$this->model->delete($item);
 		$this->view = new AgendaItemDeleteView($item->item_id);
@@ -194,9 +196,16 @@ class AgendaController extends AclController {
 			default:
 				throw new CsrException('invalid UUID');
 		}
-		/** @var Agendeerbaar $item */
-		AgendaVerbergenModel::instance()->toggleVerbergen($item);
-		$this->view = new AgendeerbaarMaandView($item);
+		if (!$item) {
+			$this->exit_http(403);
+			return;
+		}
+		/**
+		 * @var Agendeerbaar $agendaitem
+		 */
+		$agendaitem = $item;
+		AgendaVerbergenModel::instance()->toggleVerbergen($agendaitem);
+		$this->view = new AgendeerbaarMaandView($agendaitem);
 	}
 
 }

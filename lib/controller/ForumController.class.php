@@ -661,7 +661,7 @@ class ForumController extends Controller {
 		$draad = null;
 		// post in bestaand draadje?
 		if ($draad_id !== null) {
-			$draad = ForumDradenModel::get((int)$draad_id);
+			$draad = ForumDradenModel::get($draad_id);
 
 			// check draad in forum deel
 			if (!$draad OR $draad->forum_id !== $deel->forum_id OR !$draad->magPosten()) {
@@ -749,7 +749,11 @@ class ForumController extends Controller {
 			// direct goedkeuren voor ingelogd
 			ForumPostsModel::instance()->goedkeurenForumPost($post);
 			$self = LoginModel::getUid();
-			$auteur = ProfielModel::get($post->uid)->getNaam('civitas');
+			/**
+			 * @var \CsrDelft\model\entity\profiel\Profiel $auteurProfiel
+			 */
+			$auteurProfiel = ProfielModel::get($post->uid);
+			$auteur = $auteurProfiel->getNaam('civitas');
 			foreach ($draad->getVolgers() as $volger) {
 				$profiel = ProfielModel::get($volger->uid);
 				if ($volger->uid === $self OR !$profiel) {
