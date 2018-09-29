@@ -21,6 +21,7 @@ install:
   - composer install
 
 script:
+  - composer test
   - yarn run production
   - composer run-script production
 
