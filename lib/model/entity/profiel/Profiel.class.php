@@ -194,7 +194,10 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'novietSoort' => array(T::String, true),
 		'kgb' => array(T::Text, true)
 	);
-
+	/**
+	 * In $properties_lidstatus kan per property worden aangegeven voor welke lidstatusen deze nodig. Bij wijziging van
+	 * lidstatus wordt een property verwijderd als deze niet langer nodig is.
+	 */
 	public static $properties_lidstatus = [
 		'o_adres' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
 		'o_postcode' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
