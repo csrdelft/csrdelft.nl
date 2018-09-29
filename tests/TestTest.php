@@ -12,7 +12,7 @@ final class ExampleTest extends TestCase
     	$profiel = new Profiel();
     	$profiel->status = LidStatus::Lid;
     	$profiel->voornaam = "Jan";
-		$profiel->achternaam = "Lid";
-		$this->assertEquals("Am. Lid", $profiel->getNaam('civitas'));
+    	$profiel->achternaam = "Lid";
+    	$this->assertEquals("Am. Lid", $profiel->getNaam('civitas'));
     }
 }
