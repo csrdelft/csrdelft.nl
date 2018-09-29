@@ -41,5 +41,12 @@ class ProfielLogValueChange extends AbstractProfielLogValueChangeEntry {
 		return new ProfielLogValueChangeCensuur($this->field, $oldEmpty, $newEmpty);
 	}
 
+	public function censureerVeld($naam) {
+		if ($this->field == $naam) {
+			return $this->censureer();
+		} else {
+			return $this;
+		}
+	}
 
 }

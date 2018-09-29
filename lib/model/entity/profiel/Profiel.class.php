@@ -41,6 +41,9 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	// account
 	public $uid;
+	/**
+	 * @var ProfielLogGroup[] changelog
+	 */
 	public $changelog;
 	// naam
 	public $voornamen;
@@ -120,7 +123,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	protected static $persistent_attributes = array(
 		// account
 		'uid' => array(T::UID),
-		'changelog' => array(T::JSON, false, [ProfielLogGroup::class, ProfielCreateLogGroup::class, ProfielLogCoveeTakenVerwijderChange::class, ProfielLogTextEntry::class, ProfielLogValueChangeCensuur::class, ProfielLogValueChange::class, ProfielUpdateLogGroup::class, UnparsedProfielLogGroup::class, DateTime::class]),
+		'changelog' => array(T::JSON, false, [ProfielLogGroup::class, ProfielCreateLogGroup::class, ProfielLogVeldenVerwijderChange::class, ProfielLogCoveeTakenVerwijderChange::class, ProfielLogTextEntry::class, ProfielLogValueChangeCensuur::class, ProfielLogValueChange::class, ProfielUpdateLogGroup::class, UnparsedProfielLogGroup::class, DateTime::class]),
 		// naam
 		'voornamen' => array(T::String, true),
 		'voorletters' => array(T::String),
@@ -181,16 +184,34 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'muziek' => array(T::String, true),
 		'zingen' => array(T::String, true),
 		'vrienden' => array(T::Text, true),
-		'middelbareSchool' => array(T::String),
+		'middelbareSchool' => array(T::String, true),
 		// novitiaat
-		'novitiaat' => array(T::Text),
+		'novitiaat' => array(T::Text, true),
 		'novitiaatBijz' => array(T::Text, true),
 		'medisch' => array(T::Text, true),
-		'startkamp' => array(T::String),
-		'matrixPlek' => array(T::String),
-		'novietSoort' => array(T::String),
+		'startkamp' => array(T::String, true),
+		'matrixPlek' => array(T::String, true),
+		'novietSoort' => array(T::String, true),
 		'kgb' => array(T::Text, true)
 	);
+
+	public static $properties_lidstatus = [
+		'o_adres' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
+		'o_postcode' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
+		'o_woonplaats' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
+		'o_land' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
+		'o_telefoon' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
+		'eetwens' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet, LidStatus::Kringel],
+		'vrienden' => [LidStatus::Noviet],
+		// novitiaat
+		'novitiaat' => [LidStatus::Noviet],
+		'novitiaatBijz' => [LidStatus::Noviet],
+		'medisch' => [LidStatus::Noviet],
+		'startkamp' => [LidStatus::Noviet],
+		'matrixPlek' => [LidStatus::Noviet],
+		'novietSoort' => [LidStatus::Noviet],
+		'kgb' => [LidStatus::Noviet]
+	];
 	/**
 	 * Database primary key
 	 * @var array
@@ -653,4 +674,10 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		}
 	}
 
+	public function propertyMogelijk(string $name) {
+		if (!array_key_exists($name, Profiel::$properties_lidstatus)) {
+			return true;
+		}
+		return in_array($this->status, Profiel::$properties_lidstatus[$name]);
+	}
 }
