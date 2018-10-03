@@ -36,6 +36,9 @@
 														{$eetwens}
 													</span>
 												{/if}
+												{if ! CsrDelft\model\ProfielModel::get($aanmelding->uid)->propertyMogelijk("eetwens") }
+													<b class="geeneetwens">Let op!</b> Van deze gast is geen eetwens of allergie bekend (vanwege de lidstatus). Neem contact met deze persoon op voor informatie.
+												{/if}
 												{if $aanmelding->gasten_eetwens !== ''}
 													{if $eetwens !== ''}
 														<br />
