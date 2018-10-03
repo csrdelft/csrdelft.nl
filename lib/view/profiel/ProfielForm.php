@@ -231,14 +231,14 @@ class ProfielForm extends Formulier {
 		if (($admin OR LoginModel::mag('commissie:NovCie')) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
 			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);
 
-			$fields[] = new TextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht Noviet van novitiaat?');
-			end($fields)->required = $inschrijven;
-			$fields[] = new SelectField('novietSoort', $profiel->novietSoort, 'Soort Noviet', array('noviet', 'nanoviet'));
-			end($fields)->required = $inschrijven;
-			$fields[] = new SelectField('matrixPlek', $profiel->matrixPlek, 'Matrix plek', array('voor', 'midden', 'achter'));
-			end($fields)->required = $inschrijven;
-			$fields[] = new SelectField('startkamp', $profiel->startkamp, 'Startkamp', array('ja', 'nee'));
-			end($fields)->required = $inschrijven;
+			$fields['novitiaat'] = new TextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht Noviet van novitiaat?');
+			$fields['novitiaat']->required = $inschrijven;
+			$fields['novietSoort'] = new SelectField('novietSoort', $profiel->novietSoort, 'Soort Noviet', array('noviet', 'nanoviet'));
+			$fields['novietSoort']->required = $inschrijven;
+			$fields['matrixPlek'] = new SelectField('matrixPlek', $profiel->matrixPlek, 'Matrix plek', array('voor', 'midden', 'achter'));
+			$fields['matrixPlek']->required = $inschrijven;
+			$fields['startkamp'] = new SelectField('startkamp', $profiel->startkamp, 'Startkamp', array('ja', 'nee'));
+			$fields['startkamp']->required = $inschrijven;
 
 			$fields[] = new TextareaField('medisch', $profiel->medisch, 'medisch (NB alleen als relevant voor hele NovCie, bijv. allergieen)');
 			$fields[] = new TextareaField('novitiaatBijz', $profiel->novitiaatBijz, 'Bijzonderheden novitiaat (op dag x ...)');
