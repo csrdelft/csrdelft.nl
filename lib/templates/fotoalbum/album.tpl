@@ -74,11 +74,14 @@
 						$('div.fototag').removeClass('verborgen');
 					}
 				};
+				var getUrl = function () {
+				    return decodeURI(container.find('div.nav-bottom div.title').html()).replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                }
 				var loadTags = function () {
 					// remove old ones
 					$('div.fototag').remove();
 					// get new ones
-					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+					var url = getUrl();
 					$.post('/fotoalbum/gettags' + window.util.dirname(url), {
 						foto: window.util.basename(url)
 					}, drawTags);
@@ -155,7 +158,7 @@
 					tagFormDiv = false;
 				};
 				var addTag = function (relX, relY, size) {
-					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                    var url = getUrl();
 					$.post('/fotoalbum/addtag' + window.util.dirname(url), {
 						foto: window.util.basename(url),
 						x: Math.round(relX),
@@ -371,7 +374,7 @@
 					// knopje downloaden
 					var btnDown = $('<a id="btnDown" tabindex="-1"><span class="fa fa-download"></span> &nbsp; Downloaden</a>');
 					btnDown.click(function () {
-						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                        var url = getUrl();
 						window.location.href = '/fotoalbum/download' + url;
 					});
 					addCMI(btnDown);
@@ -435,7 +438,7 @@
 					// knopje rechtsom draaien
 					var btnRight = $('<a id="btnRight" tabindex="-1"><span class="fa fa-repeat"></span> &nbsp; Draai met de klok mee</a>');
 					btnRight.click(function () {
-						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                        var url = getUrl();
 						$.post('/fotoalbum/roteren' + window.util.dirname(url), {
 							foto: window.util.basename(url),
 							rotation: 90
@@ -447,7 +450,7 @@
 					// knopje linksom draaien
 					var btnLeft = $('<a id="btnLeft" tabindex="-1"><span class="fa fa-undo"></span> &nbsp; Draai tegen de klok in</a>');
 					btnLeft.click(function () {
-						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                        var url = getUrl();
 						$.post('/fotoalbum/roteren' + window.util.dirname(url), {
 							foto: window.util.basename(url),
 							rotation: -90
@@ -459,7 +462,7 @@
 					// knopje albumcover
 					var btnCover = $('<a id="btnCover" tabindex="-1"><span class="fa fa-folder"></span> &nbsp; Instellen als albumcover</a>');
 					btnCover.click(function () {
-						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                        var url = getUrl();
 						$.post('/fotoalbum/albumcover' + window.util.dirname(url), {
 							foto: window.util.basename(url)
 						}, window.util.redirect);
@@ -473,7 +476,7 @@
 						if (!confirm('Foto definitief verwijderen. Weet u het zeker?')) {
 							return false;
 						}
-						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                        var url = getUrl();
 						$.post('/fotoalbum/verwijderen' + window.util.dirname(url), {
 							foto: decodeURI(window.util.basename(url))
 						}, window.util.reload);
@@ -607,7 +610,7 @@
 
 				// knopje map omhoog
 				$('<span class="fa fa-level-up jgallery-btn jgallery-btn-small" tooltip="Open parent album"></span>').click(function () {
-					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                    var url = getUrl();
 					var fullscreen = '';
 					if (container.hasClass('jgallery-full-screen')) {
 						fullscreen = '?fullscreen';
