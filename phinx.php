@@ -4,7 +4,7 @@
  */
 // PHP from Phinx might not have a proper path
 set_include_path(get_include_path() . PATH_SEPARATOR . 'lib');
-require_once 'defines.include.php';
+require_once 'defines.defaults.php';
 
 $db_cred = parse_ini_file(ETC_PATH . 'mysql.ini');
 

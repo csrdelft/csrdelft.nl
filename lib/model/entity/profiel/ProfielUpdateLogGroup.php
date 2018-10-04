@@ -42,4 +42,19 @@ class ProfielUpdateLogGroup extends ProfielLogGroup {
 			".implode($changesHtml)."
 			</div>";
 	}
+
+	/**
+	 * Censureer alle velden met gegeven naam
+	 * @param $naam
+	 * @returns boolean Of er data gecensureerd is
+	 */
+	public function censureerVeld($naam) : bool {
+		$data_verwijderd = false;
+		for ($i = 0; $i < sizeof($this->entries); $i++) {
+			$gecensureerd = $this->entries[$i]->censureerVeld($naam);
+			$data_verwijderd |= $gecensureerd !== $this->entries[$i];
+			$this->entries[$i] = $gecensureerd;
+		}
+		return $data_verwijderd;
+	}
 }

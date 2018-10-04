@@ -61,11 +61,11 @@ class SelectField extends InputField {
 			$options = $this->options;
 		}
 		if ($this->multiple) {
-			if (array_intersect($this->value, $options) !== $this->value) {
+			if (($this->required || $this->getValue() !== null) && array_intersect($this->value, $options) !== $this->value) {
 				$this->error = 'Onbekende optie gekozen';
 			}
 		} else {
-			if (!array_key_exists($this->value, $options)) {
+			if (($this->required || $this->getValue() !== null) && !array_key_exists($this->value, $options)) {
 				$this->error = 'Onbekende optie gekozen';
 			}
 		}
@@ -91,7 +91,8 @@ JS;
 	}
 
 	public function getHtml() {
-		$html = '<select name="' . $this->name;
+		$html = '<input type="hidden" name="' . $this->name . '" value="" />';
+		$html .= '<select name="' . $this->name;
 		if ($this->multiple) {
 			$html .= '[]" multiple';
 		} else {
@@ -121,6 +122,9 @@ JS;
 				$html .= ' selected="selected"';
 			}
 			$html .= '>' . str_replace('&amp;', '&', htmlspecialchars($description)) . '</option>';
+		}
+		if ($this->value == '') {
+			$html .= "<option hidden disabled selected value=''></option>";
 		}
 		return $html;
 	}

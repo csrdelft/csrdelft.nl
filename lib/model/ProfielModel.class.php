@@ -14,6 +14,7 @@ use CsrDelft\model\entity\profiel\ProfielCreateLogGroup;
 use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
 use CsrDelft\model\entity\profiel\ProfielLogValueChange;
+use CsrDelft\model\entity\profiel\ProfielLogVeldenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\maalcie\CorveeTakenModel;
@@ -228,6 +229,7 @@ class ProfielModel extends CachedPersistenceModel {
 			$this->notifyFisci($profiel, $oudestatus);
 			$this->notifyBibliothecaris($profiel, $oudestatus);
 		}
+		$changes = array_merge($changes, $this->verwijderVelden($profiel));
 		return $changes;
 	}
 
@@ -274,7 +276,7 @@ class ProfielModel extends CachedPersistenceModel {
 				'UID' => $profiel->uid,
 				'OUD' => $oudestatus,
 				'NIEUW' => $profiel->status,
-				'CHANGE' => str_replace('[br]', "\n", $changelog),
+				'CHANGE' => $change->toHtml(),
 				'ADMIN' => LoginModel::getProfiel()->getNaam()
 			);
 			$mail = new Mail(array('corvee@csrdelft.nl' => 'CorveeCaesar'), 'Lid-af: toekomstig corvee verwijderd', $bericht);
@@ -383,6 +385,45 @@ class ProfielModel extends CachedPersistenceModel {
 		$mail->setPlaceholders($values);
 
 		return $mail->send();
+	}
+
+	/**
+	 * Verwijdert overbodige velden van het profiel.
+	 * @param Profiel $profiel
+	 * @return AbstractProfielLogEntry[]	Een logentry als er wijzigingen zijn.
+	 */
+	private function verwijderVelden(Profiel $profiel) {
+		$velden_verwijderd = [];
+		foreach (Profiel::$properties_lidstatus as $key => $status_allowed) {
+			if (!$profiel->propertyMogelijk($key)) {
+				$was_gevuld = $profiel->$key !== null;
+				$profiel->$key = null;
+				foreach ($profiel->changelog as $logGroup) {
+					$was_gevuld |= $logGroup->censureerVeld($key);
+				}
+				if ($was_gevuld) {
+					$velden_verwijderd[] = $key;
+				}
+			}
+		}
+		if (sizeof($velden_verwijderd) != 0) {
+			return [new ProfielLogVeldenVerwijderChange($velden_verwijderd)];
+		} else {
+			return [];
+		}
+	}
+
+	/**
+	 * Verwijder onnodige velden van het profiel. Slaat wijzigingen op in database.
+	 * @param Profiel $profiel
+	 */
+	public function verwijderVeldenUpdate(Profiel $profiel) {
+		$changes = $this->verwijderVelden($profiel);
+		if (sizeof($changes) == 0)
+			return false;
+		$profiel->changelog[] = new ProfielUpdateLogGroup(LoginModel::getUid(), new \DateTime(), $changes);
+		$this->update($profiel);
+		return true;
 	}
 
 }
