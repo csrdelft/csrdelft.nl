@@ -224,7 +224,7 @@ class LidInstellingenModel extends InstellingenModel {
 		  'twitterblokje'			 => array('Twitter-feed weergeven', T::Enumeration, array('ja', 'nee'), 'nee')
 		  ), */
 		'zijbalk' => [
-			'ishetal' => ['Is het al… weergeven', T::Enumeration, ['niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren', 'foutmelding'], 'willekeurig', ''],
+			'ishetal' => ['Is het al… weergeven', T::Enumeration, ['niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren', 'foutmelding', 'sponsorkliks'], 'willekeurig', ''],
 			'favorieten' => ['Favorieten menu weergeven', T::Enumeration, ['ja', 'nee'], 'ja', ''],
 			'agendaweken' => ['Aantal weken in agenda weergeven', T::Integer, [0, 10], 2, ''],
 			'agenda_max' => ['Maximaal aantal agenda-items', T::Integer, [0, 50], 15, ''],
