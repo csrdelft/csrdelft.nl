@@ -90,8 +90,11 @@ preview{$this->getId()}();
 JS;
 	}
 
-	public function getHtml() {
-		$html = '<input type="hidden" name="' . $this->name . '" value="" />';
+	public function getHtml($include_hidden = true) {
+		$html = '';
+		if ($include_hidden) { 
+			$html .= '<input type="hidden" name="' . $this->name . '" value="" />';
+		}
 		$html .= '<select name="' . $this->name;
 		if ($this->multiple) {
 			$html .= '[]" multiple';

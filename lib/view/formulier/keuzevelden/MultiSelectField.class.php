@@ -61,7 +61,7 @@ class MultiSelectField extends InputField {
 			if ($this->hidden) {
 				$select->css_classes[] = 'verborgen';
 			}
-			$html .= $select->getHtml();
+			$html .= $select->getHtml(false);
 		}
 		return $html . '</div>';
 	}
