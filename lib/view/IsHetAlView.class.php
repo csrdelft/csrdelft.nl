@@ -41,6 +41,9 @@ class IsHetAlView implements View {
 			$this->model = $opties[array_rand($opties)];
 		}
 		switch ($this->model) {
+			case 'sponsorkliks':
+				$this->ja = null;
+				break;
 
 			case 'dies' :
 				$begin = strtotime('2019-02-12');
@@ -122,6 +125,9 @@ class IsHetAlView implements View {
 	public function view() {
 		echo '<div class="ishetal">';
 		switch ($this->model) {
+			case 'sponsorkliks':
+				echo '<iframe src="https://bannerbuilder.sponsorkliks.com/skinfo.php?&background-color=F5F5F5&text-color=000000&header-background-color=F5F5F5&header-text-color=F5F5F5&odd-row=FFFFFF&even-row=09494a&odd-row-text=09494a&even-row-text=ffffff&type=financial&club_id=3605&width=193&height=80" frameborder="0" referrerpolicy="no-referrer" width="193" height="80" style="margin-left:-10px;"></iframe>';
+				break;
 
 			case 'jarig':
 				echo 'Ben ik al jarig?';
