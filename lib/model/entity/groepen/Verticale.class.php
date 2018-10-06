@@ -64,13 +64,13 @@ class Verticale extends AbstractGroep {
 	 * @param string $action
 	 * @return bool
 	 */
-	public static function magAlgemeen($action) {
+	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {
 		switch ($action) {
 
 			case AccessAction::Bekijken:
 			case AccessAction::Aanmaken:
 			case AccessAction::Wijzigen:
-				return parent::magAlgemeen($action);
+				return parent::magAlgemeen($action, $allowedAuthenticationMethods);
 		}
 		return false;
 	}

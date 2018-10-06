@@ -106,13 +106,15 @@ class AgendaModel extends PersistenceModel {
 			}
 		}
 
+		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
+
 		// Activiteiten
 		$activiteiten = $this->activiteitenModel->find('in_agenda = TRUE AND (
 		    (begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)
 		  )', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
 		foreach ($activiteiten as $activiteit) {
 			// Alleen bekijken in agenda (leden bekijken mag dus niet)
-			if (in_array($activiteit->soort, [ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES]) OR $activiteit->mag(AccessAction::Bekijken)) {
+			if (in_array($activiteit->soort, [ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES]) OR $activiteit->mag(AccessAction::Bekijken, $auth)) {
 				$result[] = $activiteit;
 			}
 		}
@@ -130,7 +132,6 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Verjaardagen
-		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
 		if (!$zijbalk && LoginModel::mag('P_VERJAARDAGEN', $auth) AND LidInstellingenModel::get('agenda', 'toonVerjaardagen') === 'ja') {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,

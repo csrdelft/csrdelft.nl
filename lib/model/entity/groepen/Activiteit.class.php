@@ -63,50 +63,52 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	 * Has permission for action?
 	 *
 	 * @param AccessAction $action
+	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public function mag($action) {
+	public function mag($action, $allowedAuthenticationMethods = null) {
 		switch ($action) {
 
 			case AccessAction::Bekijken:
 			case AccessAction::Aanmelden:
-				if (!empty($this->rechten_aanmelden) AND !LoginModel::mag($this->rechten_aanmelden)) {
+				if (!empty($this->rechten_aanmelden) AND !LoginModel::mag($this->rechten_aanmelden, $allowedAuthenticationMethods)) {
 					return false;
 				}
 				break;
 		}
-		return parent::mag($action);
+		return parent::mag($action, $allowedAuthenticationMethods);
 	}
 
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
 	 *
 	 * @param AccessAction $action
+	 * @param array|null $allowedAuthenticationMethods
 	 * @param string $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action, $soort = null) {
+	public static function magAlgemeen($action, $allowedAuthenticationMethods=null, $soort = null) {
 		switch ($soort) {
 
 			case ActiviteitSoort::OWee:
-				if (LoginModel::mag('commissie:OWeeCie')) {
+				if (LoginModel::mag('commissie:OWeeCie', $allowedAuthenticationMethods)) {
 					return true;
 				}
 				break;
 
 			case ActiviteitSoort::Dies:
-				if (LoginModel::mag('commissie:DiesCie')) {
+				if (LoginModel::mag('commissie:DiesCie', $allowedAuthenticationMethods)) {
 					return true;
 				}
 				break;
 
 			case ActiviteitSoort::Lustrum:
-				if (LoginModel::mag('commissie:LustrumCie')) {
+				if (LoginModel::mag('commissie:LustrumCie', $allowedAuthenticationMethods)) {
 					return true;
 				}
 				break;
 		}
-		return parent::magAlgemeen($action);
+		return parent::magAlgemeen($action, $allowedAuthenticationMethods);
 	}
 
 	// Agendeerbaar:
