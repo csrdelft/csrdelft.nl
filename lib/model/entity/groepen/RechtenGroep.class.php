@@ -46,7 +46,7 @@ class RechtenGroep extends AbstractGroep {
 	 * @param AccessAction $action
 	 * @return boolean
 	 */
-	public function mag($action) {
+	public function mag($action, $allowedAuthenticationMethods = null) {
 		switch ($action) {
 
 			case AccessAction::Bekijken:
@@ -58,7 +58,7 @@ class RechtenGroep extends AbstractGroep {
 				}
 				break;
 		}
-		return parent::mag($action);
+		return parent::mag($action, $allowedAuthenticationMethods);
 	}
 
 }
