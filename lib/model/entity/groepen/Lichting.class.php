@@ -41,7 +41,7 @@ class Lichting extends AbstractGroep {
 	/**
 	 * Read-only: generated group
 	 */
-	public function mag($action) {
+	public function mag($action, $allowedAuthenticationMethods = null) {
 		return $action === AccessAction::Bekijken;
 	}
 
