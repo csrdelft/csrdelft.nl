@@ -114,7 +114,7 @@ class ExistingFileField extends SelectField {
 		$this->model->filename = $filename;
 	}
 
-	public function getHtml() {
+	public function getHtml($include_hidden = false) {
 		if (sizeof($this->options) > 0) {
 			return parent::getHtml() . '<br />' . $this->verplaats->getHtml();
 		} else {

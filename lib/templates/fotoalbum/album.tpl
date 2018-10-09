@@ -6,9 +6,11 @@
 			$(function () {
 
 				var container;
+				var tagMode = false;
+
+			{toegang P_LOGGED_IN}
 
 				// BEGIN tagging code
-				var tagMode = false;
 				var getScreenPos = function (relX, relY, size) {
 					var img = container.find('img.active');
 					var parent = img.parent();
@@ -72,11 +74,14 @@
 						$('div.fototag').removeClass('verborgen');
 					}
 				};
+				var getUrl = function () {
+				    return decodeURI(container.find('div.nav-bottom div.title').html()).replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                }
 				var loadTags = function () {
 					// remove old ones
 					$('div.fototag').remove();
 					// get new ones
-					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+					var url = getUrl();
 					$.post('/fotoalbum/gettags' + window.util.dirname(url), {
 						foto: window.util.basename(url)
 					}, drawTags);
@@ -153,7 +158,7 @@
 					tagFormDiv = false;
 				};
 				var addTag = function (relX, relY, size) {
-					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                    var url = getUrl();
 					$.post('/fotoalbum/addtag' + window.util.dirname(url), {
 						foto: window.util.basename(url),
 						x: Math.round(relX),
@@ -259,7 +264,7 @@
 				var btnDelTag = $('<a id="btnDelTag" tabindex="-1"><span class="fa fa-user-times"></span> &nbsp; Etiket verwijderen</a>');
 				$('<li></li>').append(btnDelTag).appendTo('#tagMenu');
 				// END tagging code
-
+				{/toegang}
 				// BEGIN toggle full screen
 				var toggleFullScreen = function () {
 						//moveTagDivs();
@@ -348,6 +353,7 @@
 				};
 				// END zoom full resolution
 
+				{toegang P_LOGGED_IN}
 				// BEGIN dynamic context menu
 				var updateContextMenu = function () {
 					var foto = container.find('img.active');
@@ -368,7 +374,7 @@
 					// knopje downloaden
 					var btnDown = $('<a id="btnDown" tabindex="-1"><span class="fa fa-download"></span> &nbsp; Downloaden</a>');
 					btnDown.click(function () {
-						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                        var url = getUrl();
 						window.location.href = '/fotoalbum/download' + url;
 					});
 					addCMI(btnDown);
@@ -432,7 +438,7 @@
 					// knopje rechtsom draaien
 					var btnRight = $('<a id="btnRight" tabindex="-1"><span class="fa fa-repeat"></span> &nbsp; Draai met de klok mee</a>');
 					btnRight.click(function () {
-						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                        var url = getUrl();
 						$.post('/fotoalbum/roteren' + window.util.dirname(url), {
 							foto: window.util.basename(url),
 							rotation: 90
@@ -444,7 +450,7 @@
 					// knopje linksom draaien
 					var btnLeft = $('<a id="btnLeft" tabindex="-1"><span class="fa fa-undo"></span> &nbsp; Draai tegen de klok in</a>');
 					btnLeft.click(function () {
-						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                        var url = getUrl();
 						$.post('/fotoalbum/roteren' + window.util.dirname(url), {
 							foto: window.util.basename(url),
 							rotation: -90
@@ -456,7 +462,7 @@
 					// knopje albumcover
 					var btnCover = $('<a id="btnCover" tabindex="-1"><span class="fa fa-folder"></span> &nbsp; Instellen als albumcover</a>');
 					btnCover.click(function () {
-						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                        var url = getUrl();
 						$.post('/fotoalbum/albumcover' + window.util.dirname(url), {
 							foto: window.util.basename(url)
 						}, window.util.redirect);
@@ -470,7 +476,7 @@
 						if (!confirm('Foto definitief verwijderen. Weet u het zeker?')) {
 							return false;
 						}
-						var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                        var url = getUrl();
 						$.post('/fotoalbum/verwijderen' + window.util.dirname(url), {
 							foto: decodeURI(window.util.basename(url))
 						}, window.util.reload);
@@ -480,6 +486,7 @@
 		{/if}
 				};
 				// END dynamic context menu
+				{/toegang}
 
 				$('#gallery').jGallery({
 					"width": "100%",
@@ -516,7 +523,7 @@
 					"transitionDuration": "0.7s",
 					"transitionCols": "1",
 					"transitionRows": "1",
-					"title": true,
+					"title": {toegang P_LOGGED_IN}true{geentoegang}false{/toegang},
 					"titleExpanded": false,
 					"tooltips": true,
 					"tooltipZoom": "Zoom",
@@ -545,8 +552,10 @@
 					},
 					"afterLoadPhoto": function () {
 						container = $('div.jgallery');
+						{toegang P_LOGGED_IN}
 						// dynamic context menu
 						updateContextMenu();
+						{/toegang}
 						var zoom = container.find('div.zoom-container');
 						// if zoomed in
 						if (zoom.attr('data-size') !== 'fit') {
@@ -563,11 +572,6 @@
 				});
 				container = $('div.jgallery');
 				container.addClass('noselect');
-
-				// user selectable foto url
-				container.find('div.title').off().on('click', function (event) {
-					window.util.selectText(this);
-				}).addClass('select-text');
 
 				// keyboard shortcuts
 				$(window).on('keydown', function (event) {
@@ -597,9 +601,16 @@
 					}
 				});
 
+				{toegang P_LOGGED_IN}
+
+				// user selectable foto url
+				container.find('div.title').off().on('click', function (event) {
+					window.util.selectText(this);
+				}).addClass('select-text');
+
 				// knopje map omhoog
 				$('<span class="fa fa-level-up jgallery-btn jgallery-btn-small" tooltip="Open parent album"></span>').click(function () {
-					var url = container.find('div.nav-bottom div.title').html().replace('{$smarty.const.CSR_ROOT}/plaetjes', '');
+                    var url = getUrl();
 					var fullscreen = '';
 					if (container.hasClass('jgallery-full-screen')) {
 						fullscreen = '?fullscreen';
@@ -609,6 +620,7 @@
 
 				// toggle thumbnails
 				container.find('.minimalize-thumbnails.jgallery-btn').click(moveTagDivs);
+				{/toegang}
 
 				// knopje subalbums
 				container.find('.fa-list-ul').removeClass('fa-list-ul').addClass('fa-folder-open-o');
@@ -633,15 +645,13 @@
 					$('span.change-mode').click();
 				}
 
+		{toegang P_LEDEN_READ}
 				// foto context menu
 				container.find('div.zoom').contextMenu({
 					menuSelector: "#contextMenu",
 					menuSelected: function (invokedOn, selectedMenu) {
 					}
 				});
-
-				// toggle tag mode
-		{toegang P_LEDEN_READ}
 
 				// knopje taggen
 				var btnTag = $('<span class="fa fa-smile-o jgallery-btn jgallery-btn-small" tooltip="Leden etiketteren"></span>');

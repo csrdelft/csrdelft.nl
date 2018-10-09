@@ -160,7 +160,7 @@ class ProfielForm extends Formulier {
 		$fields[] = new RequiredTextField('woonplaats', $profiel->woonplaats, 'Woonplaats', 50);
 		$fields[] = new RequiredLandField('land', $profiel->land, 'Land');
 
-		if (!$profiel->isOudlid()) {
+		if ($profiel->propertyMogelijk('o_adres') || $inschrijven) {
 			$fields[] = new Subkopje('Adres ouders');
 			$fields[] = new TextField('o_adres', $profiel->o_adres, 'Straatnaam + Huisnummer', 100);
 			$fields[] = new TextField('o_postcode', $profiel->o_postcode, 'Postcode', 20);
@@ -228,12 +228,18 @@ class ProfielForm extends Formulier {
 		}
 
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
-		if ($admin OR LoginModel::mag('commissie:NovCie')) {
+		if (($admin OR LoginModel::mag('commissie:NovCie')) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
 			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);
-			$fields[] = new RequiredTextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht Noviet van novitiaat?');
-			$fields[] = new RequiredSelectField('novietSoort', $profiel->novietSoort, 'Soort Noviet', array('noviet', 'nanoviet'));
-			$fields[] = new RequiredSelectField('matrixPlek', $profiel->matrixPlek, 'Matrix plek', array('voor', 'midden', 'achter'));
-			$fields[] = new RequiredSelectField('startkamp', $profiel->startkamp, 'Startkamp', array('ja', 'nee'));
+
+			$fields['novitiaat'] = new TextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht Noviet van novitiaat?');
+			$fields['novitiaat']->required = $inschrijven;
+			$fields['novietSoort'] = new SelectField('novietSoort', $profiel->novietSoort, 'Soort Noviet', array('noviet', 'nanoviet'));
+			$fields['novietSoort']->required = $inschrijven;
+			$fields['matrixPlek'] = new SelectField('matrixPlek', $profiel->matrixPlek, 'Matrix plek', array('voor', 'midden', 'achter'));
+			$fields['matrixPlek']->required = $inschrijven;
+			$fields['startkamp'] = new SelectField('startkamp', $profiel->startkamp, 'Startkamp', array('ja', 'nee'));
+			$fields['startkamp']->required = $inschrijven;
+
 			$fields[] = new TextareaField('medisch', $profiel->medisch, 'medisch (NB alleen als relevant voor hele NovCie, bijv. allergieen)');
 			$fields[] = new TextareaField('novitiaatBijz', $profiel->novitiaatBijz, 'Bijzonderheden novitiaat (op dag x ...)');
 			$fields[] = new TextareaField('kgb', $profiel->kgb, 'Overige NovCie-opmerking');

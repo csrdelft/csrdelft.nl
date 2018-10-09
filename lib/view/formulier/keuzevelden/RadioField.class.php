@@ -27,8 +27,12 @@ class RadioField extends SelectField {
 		$this->css_classes = ['FormElement', 'form-check-input'];
 	}
 
-	public function getHtml() {
-		$html = '<div class="KeuzeRondjeOptions'. ($this->description ? '' : ' breed') . '">';
+	public function getHtml($include_hidden = true) {
+		$html = '';
+		if ($include_hidden) {
+			$html .= '<input type="hidden" name="' . $this->name . '" value="" />';
+		}
+		$html .= '<div class="KeuzeRondjeOptions'. ($this->description ? '' : ' breed') . '">';
 		foreach ($this->options as $value => $description) {
 			$html .= $this->getOptionHtml($value, $description);
 		}
@@ -37,7 +41,6 @@ class RadioField extends SelectField {
 
 	protected function getOptionHtml($value, $description) {
 		$id = $this->getId() . 'Option_' . $value;
-
 		$html = '<div class="form-check form-check-inline">';
 		$html .= '<input id="' . $id . '" value="' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'class', 'origvalue', 'disabled', 'readonly', 'onclick'));
 		if ($value === $this->value) {

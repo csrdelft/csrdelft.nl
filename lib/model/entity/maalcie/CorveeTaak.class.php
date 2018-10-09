@@ -189,7 +189,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function isHeledag() {
-		return false;
+		return true;
 	}
 
 	protected static $table_name = 'crv_taken';

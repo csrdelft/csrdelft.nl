@@ -123,16 +123,17 @@ class LoginModel extends PersistenceModel implements Validator {
 				if ($remember) {
 					$this->login($remember->uid, null, false, $remember, $remember->lock_ip);
 				}
-			} else {
-				/**
-				 * Als we x999 zijn checken we of er misschien een private token in de $_GET staat.
-				 * Deze staat toe zonder wachtwoord gelimiteerde rechten te krijgen op iemands naam.
-				 */
-				$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
-				if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-					$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
-					$this->login($account->uid, null, false, null, true, true, getDateTime());
-				}
+			}
+		}
+		if ($_SESSION['_uid'] == 'x999')  {
+			/**
+			 * Als we x999 zijn checken we of er misschien een private token in de $_GET staat.
+			 * Deze staat toe zonder wachtwoord gelimiteerde rechten te krijgen op iemands naam.
+			 */
+			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
+			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
+				$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
+				$this->login($account->uid, null, false, null, true, true, getDateTime());
 			}
 		}
 		if (!static::getAccount()) {

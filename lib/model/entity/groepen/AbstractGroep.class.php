@@ -150,10 +150,11 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * Has permission for action?
 	 *
 	 * @param string $action
+	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public function mag($action) {
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+	public function mag($action, $allowedAuthenticationMethods = null) {
+		if (!LoginModel::mag('P_LOGGED_IN', $allowedAuthenticationMethods)) {
 			return false;
 		}
 		$leden = static::leden;
@@ -185,20 +186,21 @@ abstract class AbstractGroep extends PersistentEntity {
 				}
 				break;
 		}
-		return static::magAlgemeen($action);
+		return static::magAlgemeen($action, $allowedAuthenticationMethods);
 	}
 
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
 	 *
 	 * @param string $action
+	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action) {
+	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {
 		switch ($action) {
 
 			case AccessAction::Bekijken:
-				return LoginModel::mag('P_LEDEN_READ');
+				return LoginModel::mag('P_LEDEN_READ', $allowedAuthenticationMethods);
 
 			// Voorkom dat moderators overal een normale aanmeldknop krijgen
 			case AccessAction::Aanmelden:
@@ -207,7 +209,7 @@ abstract class AbstractGroep extends PersistentEntity {
 				return false;
 		}
 		// Moderators mogen alles
-		return LoginModel::mag('P_LEDEN_MOD,groep:P_GROEP:_MOD');
+		return LoginModel::mag('P_LEDEN_MOD,groep:P_GROEP:_MOD', $allowedAuthenticationMethods);
 	}
 
 }

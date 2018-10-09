@@ -3,7 +3,7 @@ define('HTTP_REFERER', '');
 define('REQUEST_URI', '');
 define('MODE', '');
 
-include 'defines.include.php';
+include 'defines.defaults.php';
 include 'common/common.functions.php';
 include 'common/common.view.functions.php';
 include 'autoload.php';

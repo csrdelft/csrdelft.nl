@@ -6,16 +6,6 @@ import $ from 'jquery';
 
 import initContext from './context';
 
-function preloadImg(href) {
-    let img = $(document.createElement('img'));
-    img[0].src = href;
-    return img;
-}
-
-preloadImg('/images/loading-fb.gif');
-preloadImg('/images/loading-arrows.gif');
-preloadImg('/images/loading_bar_black.gif');
-
 function initGeolocation() { // eslint-disable-line
 
 	let previousPos = false;

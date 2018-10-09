@@ -1,4 +1,3 @@
-#!/usr/bin/php5
 <?php
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
