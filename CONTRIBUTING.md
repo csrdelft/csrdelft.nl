@@ -130,6 +130,9 @@ Handige Docker commando's
     # Voeg een php dependency toe
     $ docker-compose run composer require myVendor/package
     
+    # Voer de migraties uit
+    $ docker-compose run composer run-script migrate
+    
     # Voeg een npm dependency toe
     $ docker-compose run yarn add myPackage
     
