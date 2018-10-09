@@ -96,6 +96,12 @@
 			margin: 0 1px 1px 0;
 		}
 	}
+
+	.sponsorkliks-zijbalk {
+		margin-left: -10px;
+		width: 177px;
+		height: 80px;
+	}
 }
 
 /* --------------------------------
@@ -108,6 +114,10 @@ Overrides voor bredere schermen
 		width: 200px;
 		padding-left: 10px;
 		border-left: 7px solid #0A3292;
+
+		.sponsorkliks-zijbalk {
+			width: 193px;
+		}
 	}
 }
 
