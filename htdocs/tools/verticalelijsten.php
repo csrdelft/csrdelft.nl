@@ -2,7 +2,7 @@
 
 # Verticalenlijsten maken
 
-use CsrDelft\MijnSqli;
+use CsrDelft\common\MijnSqli;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\security\LoginModel;
 

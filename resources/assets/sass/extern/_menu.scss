@@ -80,10 +80,6 @@
   }
 
   &:target {
-
-    -moz-pointer-events: auto;
-    -webkit-pointer-events: auto;
-    -ms-pointer-events: auto;
     pointer-events: auto;
 
     opacity: 1;
@@ -106,6 +102,10 @@
       opacity: 1;
     }
   }
+}
+
+#login .Formulier {
+	text-align: left;
 }
 
 @media screen and (max-width: $scherm-middel) {

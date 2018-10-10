@@ -12,6 +12,7 @@ class GroepLogboekForm extends ModalForm {
 	public function __construct(AbstractGroep $groep) {
 		parent::__construct($groep, null, $groep->naam . ' logboek', true);
 
+		$fields = [];
 		$fields[] = new GroepLogboekTable($groep);
 
 		$this->addFields($fields);

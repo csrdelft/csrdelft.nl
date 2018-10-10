@@ -27,6 +27,7 @@ class ToewijzenForm extends ModalForm {
 		$this->titel = 'Taak toewijzen aan lid';
 		$this->css_classes[] = 'PreventUnchanged';
 
+		$fields = [];
 		$fields[] = new LidField('uid', $taak->uid, 'Naam of lidnummer', 'leden');
 		$fields[] = new SuggestieLijst($suggesties, $taak);
 

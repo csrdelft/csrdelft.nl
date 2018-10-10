@@ -49,7 +49,7 @@ class Commissie extends AbstractGroep {
 	 * @param string $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action, $soort = null) {
+	public static function magAlgemeen($action, $allowedAuthenticationMethods=null, $soort = null) {
 		switch ($soort) {
 
 			case CommissieSoort::SjaarCie:
@@ -58,7 +58,7 @@ class Commissie extends AbstractGroep {
 				}
 				break;
 		}
-		return parent::magAlgemeen($action);
+		return parent::magAlgemeen($action, $allowedAuthenticationMethods);
 	}
 
 }

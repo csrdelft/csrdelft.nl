@@ -21,6 +21,7 @@ class PinBestellingAanmakenForm extends ModalForm {
 	public function __construct($pinTransactieMatch = null) {
 		parent::__construct([], '/fiscaat/pin/aanmaken', 'Voeg een bestelling toe.', true);
 
+		$fields = [];
 		$fields[] = new RequiredLidField('uid', null, 'Lid');
 		$fields['pinTransactieId'] = new RequiredIntField('pinTransactieId', $pinTransactieMatch ? $pinTransactieMatch->id : null, 'Pin Transactie Id');
 		$fields['pinTransactieId']->hidden = true;

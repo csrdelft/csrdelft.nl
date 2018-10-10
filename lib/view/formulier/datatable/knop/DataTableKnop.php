@@ -2,9 +2,9 @@
 
 namespace CsrDelft\view\formulier\datatable\knop;
 
-use CsrDelft\Icon;
-use JsonSerializable;
 use CsrDelft\view\formulier\datatable\Multiplicity;
+use CsrDelft\view\Icon;
+use JsonSerializable;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

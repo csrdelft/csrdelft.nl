@@ -2,9 +2,9 @@
 
 namespace CsrDelft\view\login;
 
-use CsrDelft\Icon;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\Icon;
 
 class LoginSessionsData extends DataTableResponse {
 

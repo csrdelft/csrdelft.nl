@@ -3,7 +3,7 @@ import initContext from './context';
 
 /**
  * @see templates/courant/courantbeheer.tpl
- * @see templates/forum/post_forum.tpl
+ * @see blade_templates/forum/partial/post_forum.blade.php
  * @see templates/mededelingen/mededeling.tpl
  * @see templates/roodschopper/roodschopper.tpl
  * @see forum.js

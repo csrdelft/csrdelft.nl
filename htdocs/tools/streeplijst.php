@@ -1,8 +1,8 @@
 <?php
 
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Streeplijstcontent;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\Streeplijstcontent;
 
 require_once 'configuratie.include.php';
 

@@ -401,8 +401,8 @@ class MaaltijdenModel extends PersistenceModel {
 	 * Alle leden met een abonnement hierop worden automatisch aangemeld.
 	 *
 	 * @param MaaltijdRepetitie $repetitie
-	 * @param $beginDatum
-	 * @param $eindDatum
+	 * @param int $beginDatum
+	 * @param int $eindDatum
 	 *
 	 * @return Maaltijd[]
 	 * @throws CsrGebruikerException

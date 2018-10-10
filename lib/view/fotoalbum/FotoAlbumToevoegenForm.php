@@ -13,6 +13,8 @@ class FotoAlbumToevoegenForm extends ModalForm {
 		parent::__construct($album, '/fotoalbum/toevoegen/' . $album->subdir);
 		$this->titel = 'Fotoalbum toevoegen in: ' . $album->dirname;
 		$this->css_classes[] = 'redirect';
+
+		$fields = [];
 		$fields[] = new RequiredFileNameField('subalbum', null, 'Naam');
 		$this->addFields($fields);
 

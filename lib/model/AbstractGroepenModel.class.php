@@ -101,7 +101,6 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 		}
 		return $result;
 	}
-
 	public function nieuw() {
 		$orm = static::ORM;
 		$groep = new $orm();

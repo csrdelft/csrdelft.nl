@@ -50,6 +50,7 @@ class CorveeRepetitieForm extends ModalForm {
 			$repetitieNamen[$rep->mlt_repetitie_id] = $rep->standaard_titel;
 		}
 
+		$fields = [];
 		$fields['fid'] = new SelectField('functie_id', $repetitie->functie_id, 'Functie', $functieNamen);
 		$fields['fid']->onchange = $functiePunten . "$('#field_standaard_punten').val(punten[this.value]);";
 		$fields[] = new WeekdagField('dag_vd_week', $repetitie->dag_vd_week, 'Dag v/d week');

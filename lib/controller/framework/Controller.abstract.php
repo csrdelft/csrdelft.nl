@@ -3,6 +3,8 @@
 namespace CsrDelft\controller\framework;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
@@ -89,7 +91,7 @@ abstract class Controller {
 	 * REST: positional parameters
 	 * KVP: named parameters
 	 *
-	 * @param string $key
+	 * @param string|int $key
 	 * @return boolean
 	 */
 	protected function hasParam($key) {
@@ -106,7 +108,7 @@ abstract class Controller {
 	 * REST: positional parameters
 	 * KVP: named parameters
 	 *
-	 * @param string $key
+	 * @param string|int $key
 	 * @return string
 	 */
 	protected function getParam($key) {
@@ -169,6 +171,13 @@ abstract class Controller {
 
 	abstract protected function mag($action, array $args);
 
+	/**
+	 * @param array $args
+	 * @return mixed
+	 * @throws CsrException
+	 * @throws CsrGebruikerException
+	 * @throws CsrToegangException
+	 */
 	public function performAction(array $args = array()) {
 		// Controleer of er een ban is ingesteld
 		$account = LoginModel::getAccount();

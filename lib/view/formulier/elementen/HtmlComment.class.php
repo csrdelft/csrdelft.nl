@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\formulier\elementen;
+use CsrDelft\view\formulier\FormElement;
 
 /**
  * HtmlComment.class.php

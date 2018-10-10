@@ -3,15 +3,14 @@
 namespace CsrDelft\view\eetplan;
 
 use CsrDelft\model\entity\groepen\Woonoord;
-use CsrDelft\view\JsonLijstResponse;
+use CsrDelft\view\formulier\datatable\DataTableResponse;
 
 /**
- * Typeahead response voor EetplanBekendeHuizenForm op /eetplan/bekendehuizen/zoeken
+ * Data voor EetplanHuizenTable op /eetplan/woonoorden
  *
- * Class EetplanHuizenResponse
+ * Class EetplanHuizenView
  */
-class EetplanHuizenResponse extends JsonLijstResponse {
-
+class EetplanHuizenResponse extends DataTableResponse {
 	/**
 	 * @param Woonoord $entity
 	 *
@@ -19,10 +18,11 @@ class EetplanHuizenResponse extends JsonLijstResponse {
 	 */
 	public function getJson($entity) {
 		return parent::getJson(array(
-			'url' => $entity->getUrl(),
-			'label' => $entity->id,
-			'value' => $entity->naam,
+			'UUID' => $entity->getUUID(),
 			'id' => $entity->id,
+			'naam' => $entity->naam,
+			'soort' => $entity->soort,
+			'eetplan' => $entity->eetplan
 		));
 	}
 }

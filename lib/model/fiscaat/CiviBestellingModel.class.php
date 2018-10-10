@@ -5,9 +5,12 @@ namespace CsrDelft\model\fiscaat;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use DateTime;
+use Exception;
 
 /**
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -75,6 +78,24 @@ class CiviBestellingModel extends PersistenceModel {
 	}
 
 	/**
+	 * @param CiviBestelling $bestelling
+	 */
+	public function revert(CiviBestelling $bestelling) {
+		return Database::transaction(function () use ($bestelling) {
+			/**
+			 * @var CiviBestelling|false $bestelling
+			 */
+			$bestelling = $this->retrieve($bestelling);
+			if ($bestelling === false || $bestelling->deleted) {
+				throw new Exception("Bestelling bestaat niet, kan niet worden teruggedraaid.");
+			}
+			CiviSaldoModel::instance()->ophogen($bestelling->uid, $bestelling->totaal);
+			$bestelling->deleted = true;
+			CiviBestellingModel::instance()->update($bestelling);
+
+		});
+	}
+	/**
 	 * @param string $uid
 	 * @param int $limit
 	 *
@@ -113,6 +134,11 @@ class CiviBestellingModel extends PersistenceModel {
 	public function getPinBeschrijving($bestelling) {
 		/** @var CiviBestellingInhoud $inhoud */
 		$inhoud = $this->civiBestellingInhoudModel->getVoorBestellingEnProduct($bestelling->id, CiviProductTypeEnum::PINTRANSACTIE);
+
+		if ($inhoud === false) {
+			return "";
+		}
+
 		$beschrijving = sprintf('€%.2f PIN', $inhoud->aantal / 100);
 
 		$aantalInhoud = $this->civiBestellingInhoudModel->count('bestelling_id = ?', [$bestelling->id]);

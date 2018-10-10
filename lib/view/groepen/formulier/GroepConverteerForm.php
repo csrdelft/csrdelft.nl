@@ -15,6 +15,7 @@ class GroepConverteerForm extends ModalForm {
 	) {
 		parent::__construct($groep, $huidig->getUrl() . 'converteren', $huidig::ORM . ' converteren', true);
 
+		$fields = [];
 		$fields[] = new GroepSoortField('model', get_class($huidig), 'Converteren naar', $groep);
 
 		$this->addFields($fields);

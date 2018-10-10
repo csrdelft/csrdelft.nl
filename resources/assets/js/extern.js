@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import initContext from './context';
+import {bbvideoDisplay, CsrBBPreview} from './bbcode';
 
 window.$ = window.jQuery = $;
 
@@ -7,12 +8,16 @@ require('lightbox2');
 require('./lib/jquery.markitup');
 require('jquery-ui/ui/widgets/tooltip');
 require('jquery-hoverintent');
+require('jgallery/dist/js/jgallery');
 
 $.widget.bridge('uitooltip', $.ui.tooltip);
 
-require('jquery-ui/ui/widgets/datepicker');
-require('jquery-ui-timepicker-addon');
-require('./lib/jquery-ui-timepicker-nl');
+require('timeago');
+
+window.bbcode = {
+	CsrBBPreview,
+	bbvideoDisplay,
+};
 
 $(function () {
 
@@ -20,8 +25,6 @@ $(function () {
 		$body = $('body'),
 		$header = $('#header'),
 		$banner = $('#banner');
-
-	let hasLoaded = false;
 
 	if (typeof $banner[0] === 'undefined') {
 		$banner = $('#banner-small');
@@ -75,7 +78,7 @@ $(function () {
 					$(this).replaceWith(this.textContent);
 				});
 			});
-		}
+		};
 	})();
 
 	// Lazy load after animations have finished and user has scrolled

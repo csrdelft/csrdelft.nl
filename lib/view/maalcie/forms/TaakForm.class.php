@@ -44,6 +44,7 @@ class TaakForm extends ModalForm {
 			}
 		}
 
+		$fields = [];
 		$fields['fid'] = new SelectField('functie_id', $taak->functie_id, 'Functie', $functieNamen);
 		$fields['fid']->onchange = $functiePunten . "$('.punten_field').val(punten[this.value]);";
 		$fields['lid'] = new LidField('uid', $taak->uid, 'Naam of lidnummer');

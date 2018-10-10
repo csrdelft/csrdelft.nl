@@ -17,6 +17,7 @@ class AccountForm extends Formulier {
 
 	public function __construct(Account $account) {
 		parent::__construct($account, '/account/' . $account->uid . '/bewerken', 'Inloggegevens aanpassen');
+		$fields = [];
 
 		if (LoginModel::mag('P_LEDEN_MOD')) {
 			$roles = array();

@@ -2,10 +2,10 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\lid\LidZoeker;
+use CsrDelft\model\LidZoeker;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
-use \Jacwright\RestServer\RestException;
+use Jacwright\RestServer\RestException;
 
 class ApiLedenController {
 

@@ -1,4 +1,6 @@
 @import "~font-awesome/scss/variables";
+@import "~bootstrap/scss/functions";
+@import "variables";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins/breakpoints";
 
@@ -82,7 +84,7 @@ Main components
 .cd-nav {
 	position: fixed;
 	right: 0;
-	z-index: 6;
+	z-index: $zindex-modal;
 }
 
 .cd-primary-nav, .cd-primary-nav ul {

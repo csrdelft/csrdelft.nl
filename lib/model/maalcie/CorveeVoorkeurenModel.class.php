@@ -5,7 +5,7 @@ namespace CsrDelft\model\maalcie;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
@@ -83,9 +83,9 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	}
 
 	/**
-	 * Bouwt matrix voor alle repetities en voorkeuren van alle leden
+	 * Bouwt matrix voor alle repetities en voorkeuren van alle leden in format CorveeVoorkeur[uid][crid]
 	 *
-	 * @return CorveeVoorkeur[uid][crid]
+	 * @return CorveeVoorkeur[][]
 	 */
 	public function getVoorkeurenMatrix() {
 		$repById = CorveeRepetitiesModel::instance()->getVoorkeurbareRepetities(); // grouped by crid

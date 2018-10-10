@@ -19,6 +19,7 @@ class LidRegistratieForm extends ModalForm {
 	public function __construct(CiviSaldo $model) {
 		parent::__construct($model, '/fiscaat/saldo/registreren/lid', false, true);
 
+		$fields = [];
 		$fields['naam'] = new TextField('naam', $model->naam, 'Bijnaam');
 		$fields['uid'] = new LidField('uid', $model->uid, 'Lid');
 		$fields[] = new IntField('saldo', $model->saldo, 'Initieel saldo');

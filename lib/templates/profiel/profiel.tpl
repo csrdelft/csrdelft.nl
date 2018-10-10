@@ -427,7 +427,9 @@
 				<div style="cursor: pointer;" onclick="$('#changelog_gegevens').toggle();
 						this.remove()">Bewerklog &raquo;</div>
 				<div class="verborgen" id="changelog_gegevens">
-					{$profiel->changelog|bbcode}
+                    {foreach from= array_reverse($profiel->changelog) item=$loggroup}
+					{$loggroup->toHtml()}
+					{/foreach}
 				</div>
 			</div>
 		</div>

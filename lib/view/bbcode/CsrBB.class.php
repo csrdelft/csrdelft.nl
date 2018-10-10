@@ -3,7 +3,6 @@
 namespace CsrDelft\view\bbcode;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\Icon;
 use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\fotoalbum\Foto;
@@ -26,21 +25,21 @@ use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\peilingen\PeilingenModel;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\model\SavedQuery;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\SavedQuery;
-use CsrDelft\SavedQueryContent;
 use CsrDelft\view\bibliotheek\BoekBBView;
 use CsrDelft\view\documenten\DocumentBBContent;
 use CsrDelft\view\formulier\UrlDownloader;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
-use CsrDelft\view\fotoalbum\FotoAlbumSliderView;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\groepen\GroepView;
+use CsrDelft\view\Icon;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
 use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
 use CsrDelft\view\mededelingen\MededelingenView;
 use CsrDelft\view\peilingen\PeilingView;
+use CsrDelft\view\SavedQueryContent;
 
 /**
  * CsrBB.class.php
@@ -282,6 +281,7 @@ HTML;
 	 *
 	 * @example [fotoalbum slider interval=10 random height=200]/pad/naar/album[/fotoalbum]
 	 * @example [fotoalbum]laatste[/fotoalbum]
+	 * @return string
 	 */
 	protected function bb_fotoalbum($arguments = array()) {
 		$url = urldecode($this->parseArray(array('[/fotoalbum]'), array()));
@@ -310,7 +310,9 @@ HTML;
 			return $this->lightLinkBlock('fotoalbum', $album->getUrl(), $album->dirname, $beschrijving, $cover);
 		}
 		if (isset($arguments['slider'])) {
-			$view = new FotoAlbumSliderView($album);
+			$view = view('fotoalbum.slider', [
+				'fotos' => array_shuffle($album->getFotos())
+			]);
 			if (isset($arguments['height'])) {
 				$view->height = (int)$arguments['height'];
 			}
@@ -627,27 +629,18 @@ HTML;
 			return $this->lightLinkBlock('spotify', $url, 'Spotify', $beschrijving);
 		}
 
-		# stiekem is het formaat altijd breed ?
-		$width = 580;
-		$height = 80;
-		$class = '';
+		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$uri\" frameborder=\"0\" allowtransparency=\"true\"";
 
 		if (isset($arguments['formaat'])) {
 			$formaat = $arguments['formaat'];
 			if ($formaat == "hoog") {
-				$width = 300;
-				$height = 380;
+				return "<iframe width=\"300\" height=\"380\" $commonAttributen></iframe>";
 			} elseif ($formaat == "blok") {
-				$width = 80;
-				$height = 80;
-				$class = "class='float-left'"; # Blokje float in tekst
+				return "<iframe width=\"80\" height=\"80\" class=\"float-left\" $commonAttributen></iframe>";
 			}
 		}
 
-		return "<iframe $class
-					src=\"https://embed.spotify.com/?uri=$uri\"
-					width=\"$width\" height=\"$height\"
-					frameborder=\"0\" allowtransparency=\"true\"></iframe>";
+		return "<iframe class=\"w-100\" height=\"80\" $commonAttributen></iframe>";
 	}
 
 	/**
@@ -688,9 +681,9 @@ HTML;
 	 *
 	 * Tot nu toe youtube, vimeo, dailymotion, 123video, godtube
 	 *
-	 * @example [video]http://www.youtube.com/watch?v=Zo0LJrw5nCs[/video]
+	 * @example [video]https://www.youtube.com/watch?v=Zo0LJrw5nCs[/video]
 	 * @example [video]Zo0LJrw5nCs[/video]
-	 * @example [video]http://vimeo.com/1582112[/video]
+	 * @example [video]https://vimeo.com/1582112[/video]
 	 */
 	function bb_video($arguments = array()) {
 		$content = $this->parseArray(array('[/video]'), array());
@@ -719,7 +712,7 @@ HTML;
 			}
 			$params['src'] = '//player.vimeo.com/video/' . $id . '?autoplay=1';
 
-			$videodataurl = 'http://vimeo.com/api/v2/video/' . $id . '.php';
+			$videodataurl = 'https://vimeo.com/api/v2/video/' . $id . '.php';
 			$data = '';
 			$downloader = new UrlDownloader;
 			if ($downloader->isAvailable()) {
@@ -735,7 +728,7 @@ HTML;
 				$id = $matches[1];
 			}
 			$params['src'] = '//www.dailymotion.com/embed/video/' . $id . '?autoPlay=1';
-			$previewthumb = 'http://www.dailymotion.com/thumbnail/video/' . $id;
+			$previewthumb = 'https://www.dailymotion.com/thumbnail/video/' . $id;
 		} elseif (strstr($content, 'godtube')) {
 			$type = 'GodTube';
 			if (preg_match('#godtube\.com/watch/\?v=([a-zA-Z0-9]+)#', $content, $matches) > 0) {
@@ -744,7 +737,7 @@ HTML;
 			$params['id'] = $id;
 			$params['iframe'] = false;
 
-			$previewthumb = 'http://www.godtube.com/resource/mediaplayer/' . $id . '.jpg';
+			$previewthumb = 'https://www.godtube.com/resource/mediaplayer/' . $id . '.jpg';
 		}
 
 		if (empty($type) OR empty($id)) {
@@ -1081,7 +1074,7 @@ HTML;
 			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
 		}
 		if ($this->light_mode) {
-			$url = $maaltijd->getLink() . '#' . $maaltijd->maaltijd_id;
+			$url = $maaltijd->getUrl() . '#' . $maaltijd->maaltijd_id;
 			return $this->lightLinkBlock('maaltijd', $url, $maaltijd->titel, $maaltijd->datum . ' ' . $maaltijd->tijd);
 		}
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), LoginModel::getUid());
@@ -1277,7 +1270,7 @@ HTML;
 		}
 
 		return '<iframe height="' . $height . '" frameborder="0" style="border:0;width:100%"
-src="https://www.google.com/maps/embed/v1/search?q=' . $address . '&key=' . GOOGLE_EMBED_KEY . '"></iframe>';
+src="https://www.google.com/maps/embed/v1/place?q=' . urlencode($address) . '&key=' . leesConfig('google.ini', 'embed_key') . '"></iframe>';
 	}
 
 	/**

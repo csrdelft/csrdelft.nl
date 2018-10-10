@@ -6,7 +6,8 @@
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-use CsrDelft\LDAP;
+
+use CsrDelft\common\LDAP;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 

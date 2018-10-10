@@ -18,6 +18,8 @@ class LoginForm extends Formulier {
 		$this->formId = 'loginform';
 		$this->showMelding = $showMelding;
 
+		$fields = [];
+
 		$redirectUri = filter_input(INPUT_GET, 'redirect', FILTER_UNSAFE_RAW);
 		$fields['redirect'] = new HiddenField('redirect', $redirectUri);
 
@@ -31,9 +33,6 @@ class LoginForm extends Formulier {
 			$fields[] = new HtmlComment('<p class="error">' . LoginModel::instance()->getError() . '</p>');
 		} else {
 			$fields[] = new HtmlComment('<div class="float-left">');
-
-			$fields['pauper'] = new CheckboxField('pauper', false, null, 'Mobiel');
-
 			$fields[] = new HtmlComment('</div>');
 
 			$fields['remember'] = new CheckboxField('remember', false, null, 'Blijf ingelogd');

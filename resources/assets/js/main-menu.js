@@ -130,12 +130,7 @@ $(function () {
 	// Maak het mogelijk om nog tekst te kunnen selecteren.
 	delete Hammer.defaults.cssProps.userSelect;
 
-	let hammertime = new Hammer(
-		document.body,
-		{
-			inputClass: Hammer.SUPPORT_POINTER_EVENTS ? Hammer.PointerEventInput : Hammer.TouchInput,
-		},
-	);
+	let hammertime = new Hammer(document.body, {inputClass: Hammer.SUPPORT_POINTER_EVENTS ? Hammer.PointerEventInput : Hammer.TouchInput});
 
 	hammertime.on('swiperight', () => {
 		if (isVisible('#zijbalk') || isVisible('#menu')) {

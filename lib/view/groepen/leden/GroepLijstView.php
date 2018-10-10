@@ -8,12 +8,12 @@
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\Icon;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
+use CsrDelft\view\Icon;
 
 class GroepLijstView extends GroepTabView {
 

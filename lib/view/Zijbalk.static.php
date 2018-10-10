@@ -13,11 +13,10 @@ use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
 use CsrDelft\view\agenda\AgendaZijbalkView;
-use CsrDelft\view\forum\ForumDraadZijbalkView;
-use CsrDelft\view\forum\ForumPostZijbalkView;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
 use CsrDelft\view\ledenmemory\LedenMemoryZijbalkView;
 use CsrDelft\view\mededelingen\MededelingenZijbalkView;
+use CsrDelft\view\menu\BlockMenuView;
 
 /**
  * Zijbalk.static.php
@@ -56,21 +55,25 @@ abstract class Zijbalk {
 		}
 		// Nieuwste belangrijke forumberichten
 		if (LidInstellingenModel::get('zijbalk', 'forum_belangrijk') > 0) {
-			$zijbalk[] = new ForumDraadZijbalkView(
-				ForumDradenModel::instance()->getRecenteForumDraden(
-					(int)LidInstellingenModel::get('zijbalk', 'forum_belangrijk'), true), true);
+			$zijbalk[] = view('forum.partial.draad_zijbalk', [
+				'draden' => ForumDradenModel::instance()->getRecenteForumDraden((int)LidInstellingenModel::get('zijbalk', 'forum_belangrijk'), true),
+				'aantalWacht' => ForumPostsModel::instance()->getAantalWachtOpGoedkeuring(),
+				'belangrijk' => true
+			]);
 		}
 		// Nieuwste forumberichten
 		if (LidInstellingenModel::get('zijbalk', 'forum') > 0) {
 			$belangrijk = (LidInstellingenModel::get('zijbalk', 'forum_belangrijk') > 0 ? false : null);
-			$zijbalk[] = new ForumDraadZijbalkView(
-				ForumDradenModel::instance()->getRecenteForumDraden(
-					(int)LidInstellingenModel::get('zijbalk', 'forum'), $belangrijk), $belangrijk);
+			$zijbalk[] = view('forum.partial.draad_zijbalk', [
+				'draden' => ForumDradenModel::instance()->getRecenteForumDraden((int)LidInstellingenModel::get('zijbalk', 'forum'), $belangrijk),
+				'aantalWacht' => ForumPostsModel::instance()->getAantalWachtOpGoedkeuring(),
+				'belangrijk' => $belangrijk
+			]);
 		}
 		// Zelfgeposte forumberichten
 		if (LidInstellingenModel::get('zijbalk', 'forum_zelf') > 0) {
 			$posts = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginModel::getUid(), (int)LidInstellingenModel::get('zijbalk', 'forum_zelf'), true);
-			$zijbalk[] = new ForumPostZijbalkView($posts);
+			$zijbalk[] = view('forum.partial.post_zijbalk', ['posts' => $posts]);
 		}
 		// Ledenmemory topscores
 		if (LoginModel::mag('P_LEDEN_READ') AND LidInstellingenModel::get('zijbalk', 'ledenmemory_topscores') > 0) {

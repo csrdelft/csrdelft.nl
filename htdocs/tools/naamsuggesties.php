@@ -1,6 +1,6 @@
 <?php
 
-use CsrDelft\lid\LidZoeker;
+use CsrDelft\model\ProfielService;
 use CsrDelft\model\security\LoginModel;
 
 require_once 'configuratie.include.php';
@@ -27,24 +27,22 @@ $query = '';
 if (isset($_GET['q'])) {
 	$query = $_GET['q'];
 }
-$velden = array('uid', 'voornaam', 'tussenvoegsel', 'achternaam');
 $limiet = 5;
 if (isset($_GET['limit'])) {
 	$limiet = (int) $_GET['limit'];
 }
 
-require_once 'lid/LidZoeker.php';
-$namen = LidZoeker::zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $velden, $limiet);
+$profielen = ProfielService::instance()->zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $limiet);
 
 $result = array();
-foreach ($namen as $naam) {
-	$tussenvoegsel = ($naam['tussenvoegsel'] != '') ? $naam['tussenvoegsel'] . ' ' : '';
-	$fullname = $naam['voornaam'] . ' ' . $tussenvoegsel . $naam['achternaam'];
+foreach ($profielen as $profiel) {
+	$tussenvoegsel = ($profiel->tussenvoegsel != '') ? $profiel->tussenvoegsel . ' ' : '';
+	$fullname = $profiel->voornaam . ' ' . $tussenvoegsel . $profiel->achternaam;
 
 	$result[] = array(
-		'url'	 => '/profiel/' . $naam['uid'],
-		'label'	 => $naam['uid'],
-		'value'	 => $fullname
+		'url'	 => '/profiel/' . $profiel->uid,
+		'label'	 => $profiel->uid,
+		'value'	 => $profiel->getNaam('volledig')
 	);
 }
 /*

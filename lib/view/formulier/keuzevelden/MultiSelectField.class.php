@@ -56,14 +56,14 @@ class MultiSelectField extends InputField {
 	}
 
 	public function getHtml() {
-		$html = '';
+		$html = '<div class="input-group">';
 		foreach ($this->selects as $select) {
 			if ($this->hidden) {
 				$select->css_classes[] = 'verborgen';
 			}
-			$html .= $select->getHtml();
+			$html .= $select->getHtml(false);
 		}
-		return $html;
+		return $html . '</div>';
 	}
 
 }

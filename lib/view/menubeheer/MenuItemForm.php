@@ -26,6 +26,7 @@ class MenuItemForm extends ModalForm {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
+		$fields = [];
 		$fields['pid'] = new RequiredIntField('parent_id', $item->parent_id, 'Parent ID', 0);
 		$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
 		if (!LoginModel::mag('P_ADMIN') OR $id == 'favoriet') {

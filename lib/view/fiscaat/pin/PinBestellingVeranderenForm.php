@@ -15,6 +15,7 @@ class PinBestellingVeranderenForm extends ModalForm {
 	public function __construct($model) {
 		parent::__construct($model, '/fiscaat/pin/update', 'Update bestelling.', true);
 
+		$fields = [];
 		$fields[] = new HtmlComment('Het bedrag van de bestelling is niet correct. Druk op opslaan om de bestelling te veranderen naar het goede bedrag.');
 		$fields['id'] = new TextField('id', $model->id, 'id');
 		$fields['id']->hidden = true;

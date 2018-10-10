@@ -18,6 +18,7 @@ class GesprekDeelnemerToevoegenForm extends ModalForm {
 	public function __construct(Gesprek $gesprek) {
 		parent::__construct(null, '/gesprekken/toevoegen/' . $gesprek->gesprek_id, 'Deelnemer toevoegen', true);
 
+		$fields = [];
 		$fields['to'] = new RequiredLidField('to', null, 'Naam of lidnummer');
 		$fields['to']->blacklist = array_keys(group_by_distinct('uid', $gesprek->getDeelnemers()));
 

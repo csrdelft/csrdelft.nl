@@ -3,6 +3,7 @@
 namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\model\entity\groepen\AbstractGroepLid;
+use CsrDelft\view\formulier\FormFieldFactory;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -14,7 +15,7 @@ class GroepLidBeheerForm extends ModalForm {
 		array $blacklist = null
 	) {
 		parent::__construct($lid, $action, 'Aanmelding bewerken', true);
-		$fields = $this->generateFields();
+		$fields = FormFieldFactory::generateFields($this->model);
 
 		if ($blacklist !== null) {
 			$fields['uid']->blacklist = $blacklist;

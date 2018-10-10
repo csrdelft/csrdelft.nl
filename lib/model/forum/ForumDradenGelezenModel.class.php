@@ -27,6 +27,10 @@ class ForumDradenGelezenModel extends CachedPersistenceModel {
 		return $gelezen;
 	}
 
+	/**
+	 * @param ForumDraad $draad
+	 * @return ForumDraadGelezen|false
+	 */
 	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
 		return $this->retrieveByPrimaryKey(array($draad->draad_id, LoginModel::getUid()));
 	}

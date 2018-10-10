@@ -8,7 +8,6 @@
 
 namespace CsrDelft\view\formulier;
 
-use CsrDelft\view\formulier\elementen\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormKnoppen;

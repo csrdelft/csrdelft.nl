@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\login;
 
-use CsrDelft\Icon;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\Icon;
 
 class RememberLoginData extends DataTableResponse {
 

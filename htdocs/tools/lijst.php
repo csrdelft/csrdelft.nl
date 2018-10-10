@@ -1,15 +1,15 @@
 <?php
 
-use CsrDelft\GoogleSync;
-use CsrDelft\lid\LedenlijstContent;
-use CsrDelft\lid\LidZoeker;
+use CsrDelft\common\GoogleSync;
 use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\LidZoeker;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\lid\LedenlijstContent;
 
 require_once 'configuratie.include.php';
-require_once 'lid/ledenlijstcontent.class.php';
+
 
 if (!LoginModel::mag('P_OUDLEDEN_READ')) {
 	# geen rechten
@@ -60,8 +60,7 @@ if (isset($_GET['addToGoogleContacts'])) {
 
 		setMelding(
 				'<h3>Google-sync-resultaat:</h3>' . $message . '<br />' .
-				'<a href="/ledenlijst?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 'Google-sync resultaat'
-				, 0);
+				'<a href="/ledenlijst?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 0);
 
 		if (LoginModel::mag('P_ADMIN')) {
 			setMelding('Tijd nodig voor deze sync: ' . $elapsed . 's', 0);

@@ -184,12 +184,12 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 		return 'C.S.R. Delft';
 	}
 
-	public function getLink() {
+	public function getUrl() {
 		return '/corveerooster';
 	}
 
 	public function isHeledag() {
-		return false;
+		return true;
 	}
 
 	protected static $table_name = 'crv_taken';

@@ -2,12 +2,12 @@
 
 namespace CsrDelft\view\fotoalbum;
 
-use CsrDelft\Icon;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\formulier\Dropzone;
 use CsrDelft\view\formulier\uploadvelden\ImageField;
+use CsrDelft\view\Icon;
 
 class FotosDropzone extends Dropzone {
 

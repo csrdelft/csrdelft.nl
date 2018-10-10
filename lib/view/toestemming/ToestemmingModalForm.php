@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\toestemming;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\LidToestemming;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\LidToestemmingModel;
@@ -17,12 +18,20 @@ use CsrDelft\view\formulier\ModalForm;
  */
 class ToestemmingModalForm extends ModalForm {
 	/**
+	 * @var bool
+	 */
+	private $nieuw;
+
+	/**
+	 * @param bool $nieuw
+	 * @throws CsrException
 	 * @throws \SmartyException
 	 */
-	public function __construct() {
+	public function __construct($nieuw = false) {
 		parent::__construct(new LidToestemming(), '/toestemming', 'Toestemming geven');
 
 		$this->modalBreedte = 'modal-lg';
+		$this->nieuw = $nieuw;
 
 		$smarty = CsrSmarty::instance();
 		$model = LidToestemmingModel::instance();
@@ -67,18 +76,20 @@ class ToestemmingModalForm extends ModalForm {
 	 * @param string $module
 	 * @param string $id
 	 * @return string
-	 * @throws \SmartyException
+	 * @throws \SmartyException|CsrException
 	 */
 	private function maakToestemmingLine($module, $id) {
 		$model = LidToestemmingModel::instance();
 		$smarty = CsrSmarty::instance();
+
+		$eerdereWaarde = filter_input(INPUT_POST, $module . '_' . $id, FILTER_SANITIZE_STRING) ?? 'ja';
 
 		$smarty->assign('module', $module);
 		$smarty->assign('id', $id);
 		$smarty->assign('type', $model->getType($module, $id));
 		$smarty->assign('opties', $model->getTypeOptions($module, $id));
 		$smarty->assign('label', $model->getDescription($module, $id));
-		$smarty->assign('waarde', $model->getValue($module, $id));
+		$smarty->assign('waarde', $this->nieuw ? $eerdereWaarde : $model->getValue($module, $id));
 		$smarty->assign('default', $model->getDefault($module, $id));
 
 		return $smarty->fetch('toestemming/toestemming_input.tpl');

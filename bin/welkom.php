@@ -1,8 +1,8 @@
-#!/usr/bin/php5
 <?php
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccountModel;
 
 chdir(dirname(__FILE__) . '/../lib/');
 
@@ -10,7 +10,7 @@ require_once 'configuratie.include.php';
 
 # Scriptje om voor sjaars een wachtwoord te genereren en dat toe te mailen.
 # Vergeet niet voor gebruik hieronder het jaar aan te passen.
-$jaar = '17';
+$jaar = '18';
 
 foreach (ProfielModel::instance()->find('status = ? AND uid LIKE ?', array(LidStatus::Noviet, sprintf("%s%%", $jaar))) as $profiel) {
     $url = CSR_ROOT . '/wachtwoord/aanvragen';
@@ -37,12 +37,17 @@ Stuur dan een e-mail: pubcie@csrdelft.nl
 
 Met amicale groet,
 
-Robin van Heukelum,
+Job Bakker,
 h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 TEXT;
     $mail = new Mail(array($profiel->email => $profiel->voornaam), 'Inloggegevens C.S.R.-webstek', $tekst);
     $mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
     $mail->send();
+
+	if (!AccountModel::existsUid($profiel->uid)) {
+		// Maak een account aan voor deze noviet
+		AccountModel::instance()->maakAccount($profiel->uid);
+	}
 
     echo $profiel->email . " SEND!\n";
 }

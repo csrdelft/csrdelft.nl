@@ -37,9 +37,6 @@ class CsrLayoutPage extends CompressedLayout {
 		parent::__construct($body, $body->getTitel());
 		$this->zijbalk = $zijbalk;
 		$this->modal = $modal;
-		$this->addScript('/dist/js/manifest.js');
-		$this->addScript('/dist/js/extern-vendor.js');
-		$this->addScript('/dist/js/vendor.js');
 		$this->addScript('/dist/js/app.js');
 	}
 
@@ -77,9 +74,6 @@ class CsrLayoutPage extends CompressedLayout {
 				$this->zijbalk = array();
 			}
 			$this->zijbalk = Zijbalk::addStandaardZijbalk($this->zijbalk);
-			if (LidInstellingenModel::get('zijbalk', 'scrollen') != 'met pagina mee') {
-				$smarty->assign('scrollfix', DragObjectModel::getCoords('zijbalk', 0, 0)['top']);
-			}
 		}
 		$smarty->assign('zijbalk', $this->zijbalk);
 
@@ -88,14 +82,7 @@ class CsrLayoutPage extends CompressedLayout {
 			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
 		}
 
-
-		if (LoginModel::instance()->isPauper()) {
-			$smarty->assign('loginform', new LoginForm());
-			$smarty->assign('mainmenu', new SitemapView());
-			$smarty->display('layout/pauper.tpl');
-		} else {
-			$smarty->display('layout/pagina.tpl');
-		}
+		$smarty->display('layout/pagina.tpl');
 	}
 
 }

@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\groepen;
 
-use CsrDelft\Icon;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
@@ -11,6 +10,7 @@ use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\groepen;
+use CsrDelft\view\Icon;
 use CsrDelft\view\View;
 
 class GroepenView implements View {
@@ -61,7 +61,7 @@ class GroepenView implements View {
 	public function view() {
 		$model = $this->model;
 		$orm = $model::ORM;
-		if ($orm::magAlgemeen(AccessAction::Aanmaken, $this->soort)) {
+		if ($orm::magAlgemeen(AccessAction::Aanmaken, null, $this->soort)) {
 			echo '<a class="btn" href="' . $this->model->getUrl() . 'nieuw/' . $this->soort . '">' . Icon::getTag('add') . ' Toevoegen</a>';
 		}
 		echo '<a class="btn" href="' . $this->model->getUrl() . 'beheren">' . Icon::getTag('table') . ' Beheren</a>';

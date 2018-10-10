@@ -28,9 +28,9 @@ abstract class CompressedLayout extends HtmlPage {
 	public function __construct(View $body, $titel) {
 		parent::__construct($body, $titel);
 
-		foreach ($this->getUserModules() as $module) {
+		foreach (static::getUserModules() as $module) {
 		    parent::addStylesheet('/dist/css/' . $module . '.css');
-        }
+		}
 	}
 
 	/**
@@ -42,7 +42,7 @@ abstract class CompressedLayout extends HtmlPage {
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			return;
 		}
-		$sheet = sprintf('/dist/css/module/%s.css', $module);
+		$sheet = sprintf('/dist/css/module-%s.css', $module);
 		parent::addStylesheet($sheet, false);
 	}
 
@@ -52,7 +52,7 @@ abstract class CompressedLayout extends HtmlPage {
 	 *
 	 * @return array
 	 */
-	private function getUserModules() {
+	public static function getUserModules() {
 		$modules = array();
 
 		if (!LoginModel::mag('P_LOGGED_IN')) {
@@ -61,28 +61,28 @@ abstract class CompressedLayout extends HtmlPage {
 
 		// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
 		$modules[] = 'general';
-		$modules[] = 'module/formulier';
-		$modules[] = 'module/datatable';
+		$modules[] = 'module-formulier';
+		$modules[] = 'module-datatable';
 
 		//voeg modules toe afhankelijk van instelling
-		$modules[] = 'opmaak/' . LidInstellingenModel::get('layout', 'opmaak');
+		$modules[] = 'opmaak-' . LidInstellingenModel::get('layout', 'opmaak');
 
 		if (LidInstellingenModel::get('layout', 'toegankelijk') == 'bredere letters') {
 			$modules[] = 'bredeletters';
 		}
 		if (LidInstellingenModel::get('layout', 'fx') == 'sneeuw') {
-			$modules[] = 'effect/snow';
+			$modules[] = 'effect-snow';
 		} elseif (LidInstellingenModel::get('layout', 'fx') == 'space') {
-			$modules[] = 'effect/space';
+			$modules[] = 'effect-space';
 		} elseif (LidInstellingenModel::get('layout', 'fx') == 'civisaldo') {
-			$modules[] = 'effect/civisaldo';
+			$modules[] = 'effect-civisaldo';
 		}
 
 		if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
-			$modules[] = 'effect/minion';
+			$modules[] = 'effect-minion';
 		}
 		if (LidInstellingenModel::get('layout', 'fx') == 'onontdekt') {
-			$modules[] = 'effect/onontdekt';
+			$modules[] = 'effect-onontdekt';
 		}
 
 		return $modules;

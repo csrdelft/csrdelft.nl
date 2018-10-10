@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\AbstractGroepLedenModel;
@@ -279,33 +280,37 @@ abstract class AbstractGroepenController extends Controller {
 		if (empty($selection)) {
 			$old = null;
 			$groep = $this->model->nieuw($soort);
+			/**
+			 * @var \CsrDelft\model\entity\profiel\Profiel $profiel
+			 */
+			$profiel = LoginModel::getProfiel();
 			if (property_exists($groep, 'rechten_aanmelden') AND empty($groep->rechten_aanmelden)) {
 				switch ($groep->soort) {
 
 					case ActiviteitSoort::Lichting:
-						$groep->rechten_aanmelden = 'Lichting:' . LoginModel::getProfiel()->lidjaar;
+						$groep->rechten_aanmelden = 'Lichting:' . $profiel->lidjaar;
 						break;
 
 					case ActiviteitSoort::Verticale:
-						$groep->rechten_aanmelden = 'Verticale:' . LoginModel::getProfiel()->verticale;
+						$groep->rechten_aanmelden = 'Verticale:' . $profiel->verticale;
 						break;
 
 					case ActiviteitSoort::Kring:
-						$kring = LoginModel::getProfiel()->getKring();
+						$kring = $profiel->getKring();
 						if ($kring) {
 							$groep->rechten_aanmelden = 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer;
 						}
 						break;
 
 					case ActiviteitSoort::Huis:
-						$woonoord = LoginModel::getProfiel()->getWoonoord();
+						$woonoord = $profiel->getWoonoord();
 						if ($woonoord) {
 							$groep->rechten_aanmelden = 'Woonoord:' . $woonoord->familie;
 						}
 						break;
 
 					case ActiviteitSoort::Ondervereniging:
-						$groep->rechten_aanmelden = 'Lichting:' . LoginModel::getProfiel()->lidjaar;
+						$groep->rechten_aanmelden = 'Lichting:' . $profiel->lidjaar;
 						break;
 				}
 			}
@@ -506,6 +511,10 @@ abstract class AbstractGroepenController extends Controller {
 		$this->view = new GroepPreviewForm($groep);
 	}
 
+	/**
+	 * @param AbstractGroep|null $groep
+	 * @throws CsrToegangException
+	 */
 	public function logboek(AbstractGroep $groep = null) {
 		// data request
 		if ($groep) {
@@ -519,8 +528,8 @@ abstract class AbstractGroepenController extends Controller {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			/** @var AbstractGroep $groep */
 			$groep = $this->model->retrieveByUUID($selection[0]);
-			if (!$groep->mag(AccessAction::Bekijken)) {
-				$this->exit_http(403);
+			if (!$groep || !$groep->mag(AccessAction::Bekijken)) {
+				throw new CsrToegangException('Kan logboek niet vinden', 403);
 			}
 			$this->view = new GroepLogboekForm($groep);
 		}

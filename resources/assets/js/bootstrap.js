@@ -1,8 +1,6 @@
 /**
  * Laad alle externe libs en knoop de goede dingen aan elkaar.
  */
-import _ from 'lodash';
-
 import Bloodhound from 'corejs-typeahead';
 import Dropzone from 'dropzone/dist/dropzone-amd-module';
 import $ from 'jquery';
@@ -49,8 +47,7 @@ import {importAgenda} from './courant';
 /**
  * Globale objecten gebruikt in PHP code.
  */
-_.assign(window, {
-    _,
+$.extend(window, {
     Bloodhound,
     Dropzone,
     util: {
@@ -72,7 +69,7 @@ _.assign(window, {
         // See templates/roodschopper/roodschopper.tpl
         // See templates/mededelingen/mededeling.tpl
         // See templates/courant/courantbeheer.tpl
-        // See template/forum/post_form.tpl
+        // See blade_templates/forum/partial/post_form.blade.php
         CsrBBPreview,
         // See view/bbcode/CsrBB.class.php
         bbvideoDisplay,
@@ -97,9 +94,9 @@ _.assign(window, {
     // See templates/maalcie/maaltijd/maaltijd_ketzer.tpl
     ketzerAjax,
     forum: {
-        // See templates/forum/post_lijst.tpl
+        // See blade_templates/forum/partial/post_lijst.blade.php
         forumBewerken,
-        // See templates/forum/post_forum.tpl
+        // See blade_templates/forum/partial/post_forum.blade.php
         saveConceptForumBericht,
     },
     maalcie: {
@@ -125,25 +122,5 @@ _.assign(window, {
 });
 
 Dropzone.autoDiscover = false;
-
-$.timeago.settings.strings = {
-    prefiprefixAgo: '',
-    prefixFromNow: 'sinds',
-    suffixAgo: 'geleden',
-    suffixFromNow: '',
-    seconds: 'nog geen minuut',
-    minute: '1 minuut',
-    minutes: '%d minuten',
-    hour: '1 uur',
-    hours: '%d uur',
-    day: '1 dag',
-    days: '%d dagen',
-    month: '1 maand',
-    months: '%d maanden',
-    year: '1 jaar',
-    years: '%d jaar',
-    wordSeparator: ' ',
-    numbers: [],
-};
 
 $.widget.bridge('uitooltip', $.ui.tooltip);

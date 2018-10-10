@@ -20,6 +20,7 @@ class GesprekForm extends ModalForm {
 		parent::__construct(null, '/gesprekken/start', 'Nieuw gesprek');
 		$this->css_classes[] = 'redirect';
 
+		$fields = [];
 		$fields['to'] = new RequiredLidField('to', null, 'Naam of lidnummer');
 		$fields['to']->blacklist = array(LoginModel::getUid());
 		$fields[] = new RequiredTextareaField('inhoud', null, 'Bericht');

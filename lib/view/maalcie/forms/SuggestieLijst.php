@@ -6,7 +6,7 @@ use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
-use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\SmartyTemplateView;
 
 class SuggestieLijst extends SmartyTemplateView implements FormElement {

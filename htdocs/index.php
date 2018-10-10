@@ -8,10 +8,14 @@
  */
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\Controller;
+use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\view\cms\CmsPaginaView;
+use CsrDelft\view\CsrLayoutPage;
 
 require_once 'configuratie.include.php';
 
@@ -49,12 +53,27 @@ if (class_exists($namespacedClassName)) {
 	exit;
 }
 
+$view = null;
 try {
 	$controller->performAction();
+	$view = $controller->getView();
 } catch (CsrGebruikerException $exception) {
 	http_response_code(400);
 	echo $exception->getMessage();
 	exit;
+} catch (CsrToegangException $exception) {
+	http_response_code($exception->getCode());
+	if ($controller->getMethod() == 'POST') {
+		die($exception->getMessage());
+	} // Redirect to login form
+	elseif (LoginModel::getUid() === 'x999') {
+		redirect_via_login(REQUEST_URI);
+	}
+    // GUI 403
+    /** @var CsrDelft\model\entity\CmsPagina $errorpage */
+    $errorpage = CmsPaginaModel::get($exception->getCode());
+	$body = new CmsPaginaView($errorpage);
+	$view = new CsrLayoutPage($body);
 }
 
 
@@ -79,5 +98,5 @@ if (TIME_MEASURE) {
     TimerModel::instance()->time();
 }
 
-$controller->getView()->view();
+$view->view();
 // einde MVC

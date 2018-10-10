@@ -25,6 +25,7 @@ class FunctieForm extends ModalForm {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
+		$fields = [];
 		$fields[] = new TextField('naam', $functie->naam, 'Functienaam', 25);
 
 		$fields['afk'] = new TextField('afkorting', $functie->afkorting, 'Afkorting', 3);

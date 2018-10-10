@@ -3,7 +3,7 @@
 namespace CsrDelft\model\bibliotheek;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\MijnSqli;
+use CsrDelft\common\MijnSqli;
 
 /**
  * BiebRubriek.class.php  |  Gerrit Uitslag

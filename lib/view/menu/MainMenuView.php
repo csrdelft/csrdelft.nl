@@ -10,10 +10,9 @@ namespace CsrDelft\view\menu;
 
 use CsrDelft\model\gesprekken\GesprekDeelnemersModel;
 use CsrDelft\model\MenuModel;
+use CsrDelft\model\SavedQuery;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\SavedQuery;
 use CsrDelft\view\formulier\InstantSearchForm;
-use CsrDelft\view\MenuView;
 
 class MainMenuView extends MenuView {
 

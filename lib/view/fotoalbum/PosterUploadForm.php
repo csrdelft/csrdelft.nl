@@ -16,6 +16,8 @@ class PosterUploadForm extends Formulier {
 	public function __construct(FotoAlbum $album) {
 		parent::__construct($album, '/fotoalbum/uploaden/' . $album->subdir);
 		$this->titel = 'Poster toevoegen in: ' . $album->getParentName();
+
+		$fields = [];
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
 		$fields[] = new RequiredFileNameField('posternaam', null, 'Posternaam', 50, 5);
 		$fields[] = new RequiredImageField('afbeelding', 'Poster', null, null, array('image/jpeg'));

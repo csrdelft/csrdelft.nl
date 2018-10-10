@@ -24,6 +24,8 @@ use CsrDelft\view\JsonResponse;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Controller van de chat-functie.
+ *
+ * @property GesprekkenModel $model
  */
 class GesprekkenController extends AclController {
 

@@ -12,6 +12,7 @@ use CsrDelft\model\entity\groepen\Kring;
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\FormFieldFactory;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -37,7 +38,7 @@ class GroepForm extends ModalForm {
 		} else {
 			$this->titel .= ' aanmaken';
 		}
-		$fields = $this->generateFields();
+		$fields = FormFieldFactory::generateFields($this->model);
 
 		$fields['familie']->title = 'Vul hier een \'achternaam\' in zodat de juiste ketzers elkaar opvolgen';
 		$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
@@ -80,7 +81,7 @@ class GroepForm extends ModalForm {
 		/**
 		 * @Notice: Similar function in GroepSoortField->validate()
 		 */
-		if (!$groep::magAlgemeen($this->mode, $soort)) {
+		if (!$groep::magAlgemeen($this->mode, null, $soort)) {
 			if (!$groep->mag($this->mode, $soort)) {
 				// beide aanroepen vanwege niet doorsturen van param $soort door mag() naar magAlgemeen()
 				if ($groep instanceof Activiteit) {

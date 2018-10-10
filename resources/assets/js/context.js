@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {knopGet, knopPost, knopVergroot} from './knop';
+import {knopGet, knopPost, knopVergroot, radioButtonGroep} from './knop';
 import {modalClose, modalOpen} from './modal';
 import {formCancel, formReset, formSubmit, formToggle} from './formulier';
 
@@ -33,6 +33,25 @@ function initForms(parent) {
 }
 
 function initTimeago(parent) {
+	$.timeago.settings.strings = {
+		prefiprefixAgo: '',
+		prefixFromNow: 'sinds',
+		suffixAgo: 'geleden',
+		suffixFromNow: '',
+		seconds: 'nog geen minuut',
+		minute: '1 minuut',
+		minutes: '%d minuten',
+		hour: '1 uur',
+		hours: '%d uur',
+		day: '1 dag',
+		days: '%d dagen',
+		month: '1 maand',
+		months: '%d maanden',
+		year: '1 jaar',
+		years: '%d jaar',
+		wordSeparator: ' ',
+		numbers: [],
+	};
     $(parent).find('abbr.timeago').timeago();
 }
 
@@ -91,6 +110,7 @@ export default function initContext(parent) {
     initTooltips(parent);
     initHoverIntents(parent);
     initLazyImages(parent);
+    radioButtonGroep(parent);
 }
 
 export function domUpdate(htmlString) {

@@ -2,7 +2,6 @@ import {knopPost} from './knop';
 
 import $ from 'jquery';
 import initContext from './context';
-// Excel button in datatables.net-buttons/js/buttons.html5 checkt voor JSZip in window.
 import JSZip from 'jszip';
 
 /**
@@ -25,6 +24,7 @@ import 'datatables.net-select';
 import './lib/dataTables.childRow';
 import './lib/dataTables.columnGroup';
 
+// Excel button in datatables.net-buttons/js/buttons.html5 checkt voor JSZip in window.
 window.JSZip = JSZip;
 
 /*!

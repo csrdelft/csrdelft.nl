@@ -2,6 +2,7 @@
 
 # Mappen nodig voor goede werking van de stek.
 data/*
+!data/blade
 sessie/*
 !sessie/_dummy
 htdocs/plaetjes/*
@@ -23,3 +24,8 @@ htdocs/owee/*
 htdocs/tools/alphabanner/*
 tmp/*
 bin/ldap/*
+
+# Dev mappen
+conf/*
+bin/dev/*
+bin/ci/*

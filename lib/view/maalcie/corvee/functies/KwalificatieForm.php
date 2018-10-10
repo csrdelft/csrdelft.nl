@@ -17,6 +17,7 @@ class KwalificatieForm extends ModalForm {
 		$this->titel = 'Kwalificatie toewijzen';
 		$this->css_classes[] = 'PreventUnchanged';
 
+		$fields = [];
 		$fields[] = new LidField('uid', $kwalificatie->uid, 'Naam of lidnummer', 'leden');
 
 		$this->addFields($fields);

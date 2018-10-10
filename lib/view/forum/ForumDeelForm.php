@@ -15,9 +15,15 @@ use CsrDelft\view\formulier\ModalForm;
 
 class ForumDeelForm extends ModalForm {
 
-	public function __construct(ForumDeel $deel) {
-		parent::__construct($deel, '/forum/beheren/' . $deel->forum_id);
-		$this->titel = 'Deelforum beheren';
+	/**
+	 * @param ForumDeel $deel
+	 * @param bool $aanmaken
+	 * @throws \CsrDelft\common\CsrGebruikerException
+	 */
+	public function __construct(ForumDeel $deel, bool $aanmaken = false) {
+		$action = $aanmaken ? 'aanmaken' : 'beheren';
+		parent::__construct($deel, '/forum/' . $action . '/' . $deel->forum_id);
+		$this->titel = 'Deelforum ' . $action;
 		$this->css_classes[] = 'ReloadPage';
 		$this->css_classes[] = 'PreventUnchanged';
 
@@ -26,6 +32,7 @@ class ForumDeelForm extends ModalForm {
 			$lijst[$categorie->categorie_id] = $categorie->titel;
 		}
 
+		$fields = [];
 		$fields[] = new SelectField('categorie_id', $deel->categorie_id, 'Categorie', $lijst);
 		$fields[] = new RequiredTextField('titel', $deel->titel, 'Titel');
 		$fields[] = new TextareaField('omschrijving', $deel->omschrijving, 'Omschrijving');
@@ -38,8 +45,10 @@ class ForumDeelForm extends ModalForm {
 
 		$this->formKnoppen = new FormDefaultKnoppen();
 
-		$delete = new DeleteKnop('/forum/opheffen/' . $deel->forum_id);
-		$this->formKnoppen->addKnop($delete, true);
+		if (!$aanmaken) {
+			$delete = new DeleteKnop('/forum/opheffen/' . $deel->forum_id);
+			$this->formKnoppen->addKnop($delete, true);
+		}
 	}
 
 }

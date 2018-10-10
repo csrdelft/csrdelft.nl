@@ -10,7 +10,7 @@ namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\view\bbcode\CsrBB;
-use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\FormElement;
 
 class GroepOmschrijvingView implements FormElement {
 

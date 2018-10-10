@@ -3,8 +3,8 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\GoogleSync;
 use CsrDelft\controller\framework\AclController;
-use CsrDelft\GoogleSync;
 use CsrDelft\model\entity\GoogleToken;
 use CsrDelft\model\GoogleTokenModel;
 use CsrDelft\model\security\LoginModel;

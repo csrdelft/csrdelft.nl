@@ -1,6 +1,6 @@
 {* maaltijd_ketzer.tpl	|	P.W.G. Brussee (brussee@live.nl) *}
 {strip}
-	<div class="bb-block bb-maaltijd maaltijdketzer-{$maaltijd->maaltijd_id}">
+	<div class="bb-block bb-maaltijd maaltijdketzer-{$maaltijd->maaltijd_id} maaltijdstijl-{htmlentities(CsrDelft\model\LidInstellingenModel::get('layout', 'maaltijd2053'))}">
 		{toegang P_LOGGED_IN}
 			<div class="aanmelddata maaltijd-{if $aanmelding}aan{else}af{/if}gemeld">Aangemeld:<br />
 

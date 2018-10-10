@@ -6,20 +6,9 @@ import $ from 'jquery';
 
 import initContext from './context';
 
-function preloadImg(href) {
-    let img = $(document.createElement('img'));
-    img[0].src = href;
-    return img;
-}
+function initGeolocation() { // eslint-disable-line
 
-preloadImg('/images/loading-fb.gif');
-preloadImg('/images/loading-arrows.gif');
-preloadImg('/images/loading_bar_black.gif');
-
-// noinspection JSUnusedLocalSymbols
-function initGeolocation() {
-
-    let previousPos = false;
+	let previousPos = false;
 
     function positionSave(position) {
         if (!previousPos || ($(previousPos.coords).not(position.coords).length === 0 && $(position.coords).not(previousPos.coords).length === 0)) {

@@ -19,10 +19,6 @@ class GroepLogboekTable extends DataTable {
 		$this->setColumnTitle('uid', 'Door');
 	}
 
-	public function getHtml() {
-		throw new CsrException('not implemented');
-	}
-
 	public function getType() {
 		return className($this);
 	}

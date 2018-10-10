@@ -16,6 +16,7 @@ class InleggenForm extends ModalForm {
 	public function __construct(Civisaldo $model) {
 		parent::__construct($model, '/fiscaat/saldo/inleggen', "Inleggen: " . ProfielModel::getNaam($model->uid, 'volledig'), true);
 
+		$fields = [];
 		$fields['saldo'] = new BedragField('saldo', $model->saldo, 'Huidig saldo');
 		$fields['saldo']->readonly = true;
 		$fields[] = new BedragField('inleg', 0, 'Inleg', '€', 0.01);

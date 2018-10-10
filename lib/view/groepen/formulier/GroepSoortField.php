@@ -98,7 +98,7 @@ JS;
 		/**
 		 * @Warning: Duplicate function in GroepForm->validate()
 		 */
-		if (!$orm::magAlgemeen($this->mode, $soort)) {
+		if (!$orm::magAlgemeen($this->mode, null, $soort)) {
 			if ($model instanceof ActiviteitenModel) {
 				$naam = ActiviteitSoort::getDescription($soort);
 			} elseif ($model instanceof CommissiesModel) {

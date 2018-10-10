@@ -28,11 +28,10 @@ Bootstrap submenu
   float: right;
   width: 0;
   height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #999;
-  margin-top: 5px;
+	border: 5px solid transparent;
+	border-right-width: 0;
+	border-left-color: #999;
+	margin-top: 5px;
   margin-right: -10px;
 }
 
@@ -133,19 +132,11 @@ table.inline {
 
 .noselect {
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
 .select-text {
   -webkit-touch-callout: text;
-  -webkit-user-select: text;
-  -khtml-user-select: text;
-  -moz-user-select: text;
-  -ms-user-select: text;
   user-select: text;
 }
 
@@ -307,10 +298,6 @@ Dragable objects
   position: fixed;
   z-index: 50;
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -347,8 +334,6 @@ HoverIntent visitekaartjes
 div.hoverIntentContent {
   border: 1px solid #000;
   background-color: #fff;
-  -moz-box-shadow: 0 0 11px #000;
-  -webkit-box-shadow: 0 0 11px #000;
   box-shadow: 0 0 11px #000;
   z-index: 250;
   font-weight: normal !important;
@@ -386,4 +371,20 @@ div.hoverIntentContent {
     margin-top: 8px;
     color: #999;
   }
+}
+
+/**
+Bootstrap overrides / uitbreidingen
+ */
+
+.sticky-top {
+	// Default 0 is wel heel krap.
+	top: 5px;
+}
+
+@include media-breakpoint-down(md) {
+	.sticky-top {
+		// In down md is er een bovenbalk van 42px
+		top: 47px;
+	}
 }

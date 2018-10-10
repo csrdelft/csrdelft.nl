@@ -139,15 +139,12 @@ Groepen
 .groep-leden {
 
   .groep-tab-content {
-    height: 0px;
+    height: 0;
     overflow-y: auto;
   }
   .groep-tab-content.GroepPasfotosView {
     min-height: 74px;
   }
-}
-.GroepAanmeldenForm {
-  max-height: 73px;
 }
 .GroepAanmeldenForm.pasfotos {
 
@@ -171,11 +168,11 @@ Groepen
 	display: flex;
 
 	.groep-leden {
-		width: 55%;
+		flex-basis: 55%;
 	}
 
 	.groep-samenvatting {
-		flex-grow: 1;
+		flex-basis: 45%;
 	}
 }
 .bb-groep.state-geschiedenis {
@@ -378,6 +375,12 @@ a.responsive {
   margin-bottom: 0;
 }
 
+.bb-slider img {
+	object-fit: cover;
+	height: 360px;
+	width: 100%;
+}
+
 @media screen and (max-width: 960px){
 	.bb-groep {
 		flex-direction: column;
@@ -389,4 +392,24 @@ a.responsive {
 			width: auto;
 		}
 	}
+}
+
+/*
+Speciale styling voor een speciale maaltijd
+*/
+.maaltijdketzer-2053, .maaltijdketzer-2021 {
+background-color: #00541b;
+background-image: url("/plaetjes/specialemaaltijd/rand.png");
+border: solid 10px #030;
+border-image: url("/plaetjes/specialemaaltijd/rand.png") 50;
+color: #cfc;
+
+.titel a {color:white;}
+@media screen and (min-width: 500px) and (max-width:767px), screen and (min-width:1150px) {
+&::after {background:url("/plaetjes/specialemaaltijd/logo1.png") no-repeat; height:80px; width: 54px; content:""; display:block; float:right; margin:-68px 20px; }
+  }
+&.maaltijdstijl-Faculteit::after {background-image:url("/plaetjes/specialemaaltijd/logo.png");}
+padding:8px 2px 8px 12px;
+position:relative;
+overflow:hidden;
 }

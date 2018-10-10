@@ -35,6 +35,7 @@ class AanmeldingForm extends ModalForm {
 		}
 		$this->css_classes[] = 'PreventUnchanged';
 
+		$fields = [];
 		$fields[] = new RequiredLidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
 		if ($nieuw) {
 			$fields[] = new RequiredIntField('aantal_gasten', $gasten, 'Aantal gasten', 0, 200);

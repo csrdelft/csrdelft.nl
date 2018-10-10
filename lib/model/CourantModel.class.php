@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model;
 
-use CsrDelft\MijnSqli;
+use CsrDelft\common\MijnSqli;
 use CsrDelft\model\security\LoginModel;
 
 /**

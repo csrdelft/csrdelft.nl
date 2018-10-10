@@ -80,9 +80,8 @@ class Ketzer extends AbstractGroep {
 	 * @param AccessAction $action
 	 * @return boolean
 	 */
-	public function mag($action) {
+	public function mag($action, $allowedAuthenticationMethods = null) {
 		switch ($action) {
-
 			case AccessAction::Aanmelden:
 				// Controleer maximum leden
 				if (isset($this->aanmeld_limiet) AND $this->aantalLeden() >= $this->aanmeld_limiet) {
@@ -108,7 +107,7 @@ class Ketzer extends AbstractGroep {
 				}
 				break;
 		}
-		return parent::mag($action);
+		return parent::mag($action, $allowedAuthenticationMethods);
 	}
 
 	/**
@@ -117,7 +116,7 @@ class Ketzer extends AbstractGroep {
 	 * @param string $action
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action) {
+	public static function magAlgemeen($action, $allowedAuthenticationMethods=null) {
 		switch ($action) {
 
 			case AccessAction::Aanmaken:
@@ -126,7 +125,7 @@ class Ketzer extends AbstractGroep {
 			case AccessAction::Afmelden:
 				return true;
 		}
-		return parent::magAlgemeen($action);
+		return parent::magAlgemeen($action, $allowedAuthenticationMethods);
 	}
 
 }

@@ -25,11 +25,50 @@
 	cursor: default;
 }
 
-.forum-draad, .forum-deel, .forum-zoeken {
+.forum-header, .forum-footer {
+	max-width: 800px;
+
+	h1 {
+		width: 100%;
+	}
+}
+
+.auteur {
+	flex: 0 0 160px; /* vast */
+	padding: 4px;
+
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: auto auto auto 1fr;
+
+	.postpijl {
+		grid-column: 2;
+		grid-row: 1;
+		justify-self: end;
+		align-self: start;
+	}
+
+	.naam, .moment, .forumpostKnoppen {
+		grid-column: 1;
+	}
+
+	.postpijl a:hover {
+		color: black;
+		text-decoration: none;
+	}
+
+	.forumpasfoto {
+		grid-column: 2;
+		grid-row-start: 2;
+		grid-row-end: 4;
+	}
+}
+
+.forum-draad, .forum-zoeken {
 	display: flex;
 	flex-direction: column;
 
-	width: 800px;
+	max-width: 800px;
 
 	.tussenschot {
 		height: 2px;
@@ -65,36 +104,7 @@
 			}
 		}
 
-		.auteur {
-			flex: 0 0 160px; /* vast */
-			padding: 4px;
 
-			display: grid;
-			grid-template-columns: auto 1fr;
-			grid-template-rows: auto auto auto 1fr;
-
-			.postpijl {
-				grid-column: 2;
-				grid-row: 1;
-				justify-self: end;
-				align-self: start;
-			}
-
-			.naam, .moment, .forumpostKnoppen {
-				grid-column: 1;
-			}
-
-			.postpijl a:hover {
-				color: black;
-				text-decoration: none;
-			}
-
-			.forumpasfoto {
-				grid-column: 2;
-				grid-row-start: 2;
-				grid-row-end: 4;
-			}
-		}
 
 		.forum-bericht {
 			flex: 1; /* grow */
@@ -222,8 +232,12 @@ span.curpage {
 }
 
 #forumZoekenForm .forumZoekenGeavanceerd {
-	right: 250px;
+	margin-top: 30px;
 	padding: 25px;
+
+	.form-group {
+		margin-bottom: 0;
+	}
 
 	.InputField {
 		display: inline-block;
@@ -232,10 +246,30 @@ span.curpage {
 
 /* Forum deel */
 .forum-deel {
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	max-width: 800px;
+	width: 100%;
+	// CSS grid ondersteund niet echt gekleurde rows.
+	// Dit is second-best. Er zijn 3 divs per row,
+	// iedere 6e moet een kleurtje krijgen, en de divs daarna.
+	.alternate-row {
+		padding: 0.7em;
+		&:nth-child(6n +1),
+		&:nth-child(6n + 2),
+		&:nth-child(6n + 3) {
+			background-color: #f5f5f5;
+		}
+	}
 
-	.forum-deel-titel,.paging {
+	.paging,
+	.forumdeel-omschrijving,
+	.forum-posten,
+	.forum-reageren {
+		grid-column: 1 / span 3;
+	}
+
+	.paging,
+	.header {
 		font-weight: bold;
 		color: #fff;
 		background-color: #0a338d;
@@ -243,41 +277,6 @@ span.curpage {
 
 		a, a:hover {
 			color: white;
-		}
-	}
-
-	.forum-deel-draad, .forum-deel-titel {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-
-		padding: 0.7em;
-
-		&.kleur0 {
-			background-color: #fff;
-		}
-
-		&.kleur1 {
-			background-color: #f5f5f5;
-		}
-
-		.titel {
-			flex: 1 0 0;
-		}
-
-		.datumwijziging {
-			flex: 0 0 20%;
-		}
-
-		.laatstewijziging {
-			flex: 1 0 0;
-			white-space: nowrap;
-		}
-
-		span.togglePasfoto:hover,
-		.postpijl a:hover {
-			color: black;
-			text-decoration: none;
 		}
 	}
 }
@@ -374,7 +373,15 @@ span.curpage {
 	height: 100%;
 }
 
-@media screen and (max-width: 960px){
+@media screen and (max-width: 576px) { // sm
+	.forum-header, .forum-footer {
+		h1 {
+			width: 100%;
+		}
+	}
+}
+
+@media screen and (max-width: 960px){ // lg
 	.modfuncties {
 		font-size: 0;
 	}
@@ -383,7 +390,7 @@ span.curpage {
 		flex: 0 1 100%;
 	}
 
-	.forum-draad, .forum-deel {
+	.forum-draad {
 		width: auto;
 		clear: both;
 
@@ -400,6 +407,72 @@ span.curpage {
 					padding: 0 10px;
 					align-self: end;
 					grid-row: 3;
+					grid-column: 3;
+
+					.postlink {
+						display: block;
+						transform: rotate(90deg);
+					}
+
+					.postanchor {
+						// Compenseer voor navbar
+						padding-top:44px;
+						margin-top:-44px;
+					}
+				}
+
+				.forumpasfoto {
+					grid-row-start: 1;
+				}
+
+				.forumpostKnoppen {
+					min-height: 0;
+
+					a {
+						// Disable JS
+						opacity: 1 !important;
+					}
+				}
+			}
+		}
+
+		.forum-paginering {
+			margin-left: 0;
+		}
+	}
+
+	#forumZoekenForm {
+		float: none;
+	}
+
+
+	.forum-deel {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		.header { display: none; }
+		.draad-titel { padding-bottom: 0; }
+		.draad-laatste-post { flex-grow: 1; }
+
+		.paging, .draad-titel, .forumdeel-omschrijving {
+			width: 100%;
+		}
+
+		.forum-posten {
+			display: flex;
+			flex-direction: column;
+
+			.auteur {
+				flex: 0;
+				grid-template-columns: 1fr auto auto;
+				grid-template-rows: auto;
+				border-bottom: 2px solid #d3d3d3;
+
+				.postpijl {
+					padding: 0 10px;
+					align-self: end;
+					grid-row: 1;
 					grid-column: 3;
 
 					.postlink {

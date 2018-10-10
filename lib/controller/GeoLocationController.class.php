@@ -94,7 +94,7 @@ class GeoLocationController extends AclController {
 		<body style="margin: 0;">
 		<div id="google_canvas" style="height: 100%;"></div>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-		<script src="//maps.googleapis.com/maps/api/js?key=<?= GOOGLE_EMBED_KEY ?>"></script>
+		<script src="//maps.googleapis.com/maps/api/js?key=<?= leesConfig('google.ini', 'embed_key') ?>"></script>
 		<script src="//<?= CSR_DOMAIN; ?>/assets/layout/js/google.maps.v3.StyledMarker.js"></script>
 		<script src="//<?= CSR_DOMAIN; ?>/assets/layout/js/Please.min.js"></script>
 		<script type="text/javascript">

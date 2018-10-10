@@ -2,13 +2,20 @@
 
 namespace CsrDelft\model;
 
-use CsrDelft\LDAP;
+use CsrDelft\common\LDAP;
 use CsrDelft\model\bibliotheek\BiebCatalogus;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\OntvangtContactueel;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\AbstractProfielLogEntry;
+use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\model\entity\profiel\ProfielCreateLogGroup;
+use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;
+use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
+use CsrDelft\model\entity\profiel\ProfielLogValueChange;
+use CsrDelft\model\entity\profiel\ProfielLogVeldenVerwijderChange;
+use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
@@ -17,6 +24,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
+
 
 /**
  * ProfielModel.class.php
@@ -28,6 +36,17 @@ use CsrDelft\Orm\Persistence\Database;
 class ProfielModel extends CachedPersistenceModel {
 
 	const ORM = Profiel::class;
+
+	public static function changelog(array $diff, $uid) {
+		if (empty($diff)) {
+			return null;
+		}
+		$changes = [];
+		foreach ($diff as $change) {
+			$changes[] = new ProfielLogValueChange($change->property, $change->old_value, $change->new_value);
+		}
+		return new ProfielUpdateLogGroup($uid, new \DateTime(), $changes);
+	}
 
 	/**
 	 * @param string $uid
@@ -49,7 +68,7 @@ class ProfielModel extends CachedPersistenceModel {
 		return $profiel->getNaam($vorm);
 	}
 
-	public static function getLink($uid, $vorm) {
+	public static function getLink($uid, $vorm='civitas') {
 		$profiel = static::get($uid);
 		if (!$profiel) {
 			return null;
@@ -74,15 +93,16 @@ class ProfielModel extends CachedPersistenceModel {
 		$profiel->lidjaar = $lidjaar;
 		$profiel->status = $lidstatus;
 		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee;
-		$profiel->changelog = '[div]Aangemaakt als ' . LidStatus::getDescription($profiel->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
+		$profiel->changelog = [new ProfielCreateLogGroup(LoginModel::getUid(), new \DateTime())];
 		return $profiel;
 	}
 
 	/**
-	 * @param PersistentEntity|Profiel $profiel
+	 * @param PersistentEntity $profiel
 	 * @return string
 	 */
 	public function create(PersistentEntity $profiel) {
+		/** @var Profiel $profiel */
 		// Lichting zijn de laatste 2 cijfers van lidjaar
 		$jj = substr($profiel->lidjaar, 2, 2);
 		$laatste_uid = Database::instance()->sqlSelect(array('MAX(uid)'), $this->getTableName(), 'LEFT(uid, 2) = ?', array($jj), null, null, 1)->fetchColumn();
@@ -188,7 +208,7 @@ class ProfielModel extends CachedPersistenceModel {
 	}
 
 	public function wijzig_lidstatus(Profiel $profiel, $oudestatus) {
-		$changelog = '';
+		$changes = [];
 		// Maaltijd en corvee bijwerken
 		$geenAboEnCorveeVoor = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Commissie, LidStatus::Overleden);
 		if (in_array($profiel->status, $geenAboEnCorveeVoor)) {
@@ -196,15 +216,11 @@ class ProfielModel extends CachedPersistenceModel {
 			$account = AccountModel::get($profiel->uid);
 			if (!$account OR $account->perm_role !== AccessRole::Eter) {
 				$removedabos = $this->disableMaaltijdabos($profiel, $oudestatus);
-				if ($removedabos != '') {
-					$changelog .= $removedabos;
-				}
+				$changes = array_merge($changes, $removedabos);
 			}
 			// Toekomstige corveetaken verwijderen
 			$removedcorvee = $this->removeToekomstigeCorvee($profiel, $oudestatus);
-			if ($removedcorvee != '') {
-				$changelog .= $removedcorvee;
-			}
+			$changes = array_merge($changes, $removedcorvee);
 		}
 		// Mailen naar fisci,bibliothecaris...
 		$wordtinactief = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden);
@@ -213,7 +229,8 @@ class ProfielModel extends CachedPersistenceModel {
 			$this->notifyFisci($profiel, $oudestatus);
 			$this->notifyBibliothecaris($profiel, $oudestatus);
 		}
-		return $changelog;
+		$changes = array_merge($changes, $this->verwijderVelden($profiel));
+		return $changes;
 	}
 
 	/**
@@ -221,14 +238,14 @@ class ProfielModel extends CachedPersistenceModel {
 	 *
 	 * @param Profiel $profiel
 	 * @param $oudestatus
-	 * @return string changelogregel
+	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
 		$aantal = MaaltijdAbonnementenModel::instance()->verwijderAbonnementenVoorLid($profiel->uid);
 		if ($aantal > 0) {
-			return 'Afmelden abo\'s: ' . $aantal . ' uitgezet.[br]';
+			return [new ProfielLogTextEntry('Afmelden abo\'s: ' . $aantal . ' uitgezet.')];
 		}
-		return null;
+		return [];
 	}
 
 	/**
@@ -236,7 +253,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 *
 	 * @param Profiel $profiel
 	 * @param $oudestatus
-	 * @return string changelogregel
+	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
 	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus) {
 		$taken = CorveeTakenModel::instance()->getKomendeTakenVoorLid($profiel->uid);
@@ -244,12 +261,13 @@ class ProfielModel extends CachedPersistenceModel {
 		if (sizeof($taken) !== $aantal) {
 			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
 		}
-		$changelog = null;
+		$changes = [];
 		if ($aantal > 0) {
-			$changelog = 'Verwijderde corveetaken:[br]';
+			$change = new ProfielLogCoveeTakenVerwijderChange([]);
 			foreach ($taken as $taak) {
-				$changelog .= strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->getCorveeFunctie()->naam . '[br]';
+				$change->corveetaken[] = strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->getCorveeFunctie()->naam;
 			}
+			$changes[] = $change;
 			// Corveeceasar mailen over vrijvallende corveetaken.
 			$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/toekomstigcorveeverwijderd.mail');
 			$values = array(
@@ -258,7 +276,7 @@ class ProfielModel extends CachedPersistenceModel {
 				'UID' => $profiel->uid,
 				'OUD' => $oudestatus,
 				'NIEUW' => $profiel->status,
-				'CHANGE' => str_replace('[br]', "\n", $changelog),
+				'CHANGE' => $change->toHtml(),
 				'ADMIN' => LoginModel::getProfiel()->getNaam()
 			);
 			$mail = new Mail(array('corvee@csrdelft.nl' => 'CorveeCaesar'), 'Lid-af: toekomstig corvee verwijderd', $bericht);
@@ -266,7 +284,7 @@ class ProfielModel extends CachedPersistenceModel {
 			$mail->setPlaceholders($values);
 			$mail->send();
 		}
-		return $changelog;
+		return $changes;
 	}
 
 	/**
@@ -367,6 +385,45 @@ class ProfielModel extends CachedPersistenceModel {
 		$mail->setPlaceholders($values);
 
 		return $mail->send();
+	}
+
+	/**
+	 * Verwijdert overbodige velden van het profiel.
+	 * @param Profiel $profiel
+	 * @return AbstractProfielLogEntry[]	Een logentry als er wijzigingen zijn.
+	 */
+	private function verwijderVelden(Profiel $profiel) {
+		$velden_verwijderd = [];
+		foreach (Profiel::$properties_lidstatus as $key => $status_allowed) {
+			if (!$profiel->propertyMogelijk($key)) {
+				$was_gevuld = $profiel->$key !== null;
+				$profiel->$key = null;
+				foreach ($profiel->changelog as $logGroup) {
+					$was_gevuld |= $logGroup->censureerVeld($key);
+				}
+				if ($was_gevuld) {
+					$velden_verwijderd[] = $key;
+				}
+			}
+		}
+		if (sizeof($velden_verwijderd) != 0) {
+			return [new ProfielLogVeldenVerwijderChange($velden_verwijderd)];
+		} else {
+			return [];
+		}
+	}
+
+	/**
+	 * Verwijder onnodige velden van het profiel. Slaat wijzigingen op in database.
+	 * @param Profiel $profiel
+	 */
+	public function verwijderVeldenUpdate(Profiel $profiel) {
+		$changes = $this->verwijderVelden($profiel);
+		if (sizeof($changes) == 0)
+			return false;
+		$profiel->changelog[] = new ProfielUpdateLogGroup(LoginModel::getUid(), new \DateTime(), $changes);
+		$this->update($profiel);
+		return true;
 	}
 
 }

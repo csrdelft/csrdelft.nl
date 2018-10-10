@@ -20,6 +20,8 @@ class GroepAanmakenForm extends ModalForm {
 		if (property_exists($groep, 'soort')) {
 			$default .= '_' . $groep->soort;
 		}
+
+		$fields = [];
 		$fields[] = new KetzerSoortField('model', $default, null, $groep);
 
 		$this->addFields($fields);

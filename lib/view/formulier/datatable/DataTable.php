@@ -4,7 +4,7 @@ namespace CsrDelft\view\formulier\datatable;
 
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
-use CsrDelft\view\formulier\elementen\FormElement;
+use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\View;
 
 /**
@@ -250,7 +250,7 @@ class DataTable implements View, FormElement {
 		echo $this->getHtml();
 		echo <<<HTML
 <script type="text/javascript">
-		{$this->getJavascript()}
+		{$this->getScript()}
 </script>
 HTML;
 	}
@@ -275,14 +275,16 @@ HTML;
 	}
 
 	public function getHtml() {
+		$id = str_replace(' ', '-', strtolower($this->getTitel()));
+
 		return <<<HTML
-<h2 class="Titel">{$this->getTitel()}</h2>
+<h2 id="table-{$id}" class="Titel">{$this->getTitel()}</h2>
 
 <table id="{$this->dataTableId}" class="display"></table>
 HTML;
 	}
 
-	public function getJavascript() {
+	public function getScript() {
 		// encode settings
 		$settingsJson = json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0);
 
@@ -341,5 +343,10 @@ HTML;
 				})
 			});
 JS;
+	}
+
+	public function getJavascript() {
+		//Nothing should be returned here because the script is already embedded in getView
+		return "";
 	}
 }

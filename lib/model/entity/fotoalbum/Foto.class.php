@@ -131,7 +131,7 @@ class Foto extends Afbeelding {
 		} else {
 			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
-		$command = IMAGEMAGICK . ' ' . escapeshellarg($this->getFullPath()) . ' -thumbnail 150x150^ -gravity center -extent 150x150 -format jpg -quality 80 ' . $rotate . escapeshellarg($this->getThumbPath());
+		$command = IMAGEMAGICK . ' ' . escapeshellarg($this->getFullPath()) . ' -thumbnail 150x150^ -gravity center -extent 150x150 -format jpg -quality 80 -auto-orient ' . $rotate . escapeshellarg($this->getThumbPath());
 		if (defined('RESIZE_OUTPUT')) {
 			debugprint($command);
 		}
@@ -157,7 +157,7 @@ class Foto extends Afbeelding {
 		} else {
 			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
-		$command = IMAGEMAGICK . ' ' . escapeshellarg($this->getFullPath()) . ' -resize 1024x1024 -format jpg -quality 85 -interlace Line ' . $rotate . escapeshellarg($this->getResizedPath());
+		$command = IMAGEMAGICK . ' ' . escapeshellarg($this->getFullPath()) . ' -resize 1024x1024 -format jpg -quality 85 -interlace Line  -auto-orient ' . $rotate . escapeshellarg($this->getResizedPath());
 		if (defined('RESIZE_OUTPUT')) {
 			debugprint($command);
 		}

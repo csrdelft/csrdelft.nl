@@ -254,7 +254,7 @@ class ForumDraad extends PersistentEntity {
 	/**
 	 * FALSE if ongelezen!
 	 *
-	 * @return ForumDraadGelezen|boolean $gelezen
+	 * @return ForumDraadGelezen|false $gelezen
 	 */
 	public function getWanneerGelezen() {
 		return ForumDradenGelezenModel::instance()->getWanneerGelezenDoorLid($this);

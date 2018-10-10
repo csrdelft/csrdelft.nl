@@ -9,7 +9,7 @@ use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurVoorkeur;
-use CsrDelft\model\entity\Profiel;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\elementen\Subkopje;
 use CsrDelft\view\formulier\Formulier;
@@ -45,6 +45,7 @@ class CommissieVoorkeurenForm extends Formulier {
 
 		$this->opmerking = VoorkeurOpmerkingModel::instance()->getOpmerkingVoorLid($profiel);
 
+		$fields = [];
 		$fields[] = new Subkopje("Extra opmerkingen");
 		$opmerkingVeld = new TextareaField('lidOpmerking', $this->opmerking->lidOpmerking, 'Vul hier je eventuele voorkeur voor functie in, of andere opmerkingen');
 		$this->opmerking->lidOpmerking = $opmerkingVeld->getValue();

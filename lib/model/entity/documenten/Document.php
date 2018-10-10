@@ -4,10 +4,10 @@ namespace CsrDelft\model\entity\documenten;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\Icon;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\view\Icon;
 
 /**
  * Class Document.
