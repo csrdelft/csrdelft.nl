@@ -44,7 +44,6 @@ class BibliotheekController extends Controller {
 
 	public function performAction(array $args = array()) {
 		if (($this->action == 'boek' || $this->action == 'import') && $this->hasParam(3)) {
-			echo $this->getParam(3);
 			parent::performAction([BoekModel::get($this->getParam(3))]);
 		} else {
 			parent::performAction($args);
@@ -65,9 +64,6 @@ class BibliotheekController extends Controller {
 				'addexemplaar', 'verwijderexemplaar',
 				'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'exemplaarvermist', 'exemplaargevonden', 'import'
 			));
-		}
-		if (LoginModel::mag('P_BIEB_READ')) {
-			$allow = array_merge($allow, ['import']);
 		}
 		if (!in_array($action, $allow)) {
 			$this->action = 'catalogustonen';
@@ -145,9 +141,14 @@ class BibliotheekController extends Controller {
 	}
 
 	protected function import(Boek $boek) {
-		$importer = new BoekImporter();
-		$importer->import($boek);
-		BoekModel::instance()->update($boek);
+		if (!$boek->isEigenaar()) {
+			$this->exit_http(403);
+		} else {
+			$importer = new BoekImporter();
+			$importer->import($boek);
+			BoekModel::instance()->update($boek);
+			redirect("/bibliotheek/boek/$boek->id");
+		}
 	}
 
 	/**

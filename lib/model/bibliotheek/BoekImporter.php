@@ -23,10 +23,11 @@ class BoekImporter {
 		$rdf = new \EasyRdf_Graph("http://worldcat.org/isbn/" . $isbn);
 		$rdf->load(null);
 		$topic = $rdf->resource("schema:Book")->get("^a");
+		if ($topic !== null) {
+			$rdf->load($topic->getUri() . ".nt");
 
-		$rdf->load($topic->getUri() . ".nt");
-
-		$boek->titel_imp = $topic->get("schema:name")->__toString();
-		$boek->auteur_imp = $topic->get("schema:creator/schema:name")->__toString();
+			$boek->titel_imp = $topic->get("schema:name")->__toString();
+			$boek->auteur_imp = $topic->get("schema:creator/schema:name")->__toString();
+		}
 	}
 }

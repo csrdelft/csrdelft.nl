@@ -51,10 +51,10 @@
 	{* weergave bestaand boek, soms met bewerkbare velden *}
 	<div class="boek" id="{$boek->getId()}">
 
-		{if $boek->isEigenaar()}
+		{if $boek->isEigenaar() and false}
 
 			<div class="blok header boekgegevens">
-				{$boek->ajaxformuliervelden->findByName('titel')->view()}
+				{$boek->getTitel()}
 			</div>
 			<div class="blok gegevens boekgegevens">
 				{assign var='fields' value=','|explode:"auteur,paginas,taal,isbn,uitgeverij,uitgavejaar"}

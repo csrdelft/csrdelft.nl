@@ -4,12 +4,13 @@
 namespace CsrDelft\model\entity\bibliotheek;
 
 
-use CsrDelft\MijnSqli;
+use CsrDelft\common\MijnSqli;
 use CsrDelft\model\bibliotheek\BiebBeschrijving;
 use CsrDelft\model\bibliotheek\BiebRubriek;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use dokuwiki\Action\Login;
 
 class Boek extends PersistentEntity {
 
@@ -115,7 +116,7 @@ class Boek extends PersistentEntity {
 				return true;
 			}
 		}
-		return false;
+		return LoginModel::mag('P_ADMIN');
 	}
 
 	/**
