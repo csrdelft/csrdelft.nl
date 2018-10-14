@@ -16,9 +16,7 @@ class Boek extends PersistentEntity {
 
 	public $id;   //boekId
 	public $titel;   //String
-	public $titel_imp;
 	public $auteur;   //String Auteur
-	public $auteur_imp;
 	public $uitgavejaar;
 	public $uitgeverij;
 	public $paginas;
@@ -35,7 +33,7 @@ class Boek extends PersistentEntity {
 	}
 
 	public function getTitel() {
-		return $this->titel_imp;
+		return $this->titel;
 	}
 
 	public function getUitgavejaar() {
@@ -63,7 +61,7 @@ class Boek extends PersistentEntity {
 	}
 
 	public function getAuteur() {
-		return $this->auteur_imp;
+		return $this->auteur;
 	}
 
 	public function getRubriek() {
@@ -244,20 +242,14 @@ class Boek extends PersistentEntity {
 	protected static $persistent_attributes = [
 		'id' => [T::Integer, false, "auto_increment"],
 		'auteur' => [T::String, false],
-		'auteur_imp' => [T::String, true],
 		'auteur_id' => [T::Integer, false],
 		'titel' => [T::String, false],
-		'titel_imp' => [T::String, true],
 		'taal' => [T::String, false],
-		'taal_imp' => [T::String, true],
 		'isbn' => [T::String, false],
 		'categorie_id' => [T::Integer, false],
 		'paginas' => [T::Integer, false],
-		'paginas_imp' => [T::Integer, true],
 		'uitgavejaar' => [T::Integer, false],
-		'uitgavejaar_imp' => [T::Integer, true],
 		'uitgeverij' => [T::String, false],
-		'uitgeverij_imp' => [T::String, false],
 		'code' => [T::String, false],
 	];
 
