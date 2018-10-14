@@ -237,7 +237,7 @@ $(function ($) {
 		queryTokenizer: Bloodhound.tokenizers.whitespace,
 		limit: 20,
 		remote: {
-			url: 'autocomplete/titel?q=%QUERY',
+			url: '/bibliotheek/autocomplete/titel?q=%QUERY',
 			wildcard: '%QUERY'
 		}
 	});
@@ -258,60 +258,6 @@ $(function ($) {
 		}
 	}).on('typeahead:select', (event, row) => {
 		window.open(`/bibliotheek/boek/${row.data.id}`);
-	});
-
-	//boekpagina: asynchroon opslaan toevoegen
-	//opslaan-knop toevoegen, met event die met ajax de veldwaarde opslaat
-	$('.blok .InputField input,.blok .InputField textarea,.blok .InputField select').each(function (index, input) {
-		$(this).after('<div class="melding"></div>').after($('<a class="btn opslaan">Opslaan</a>').mousedown(function () {
-			let boekid = $('.boek').attr('id'),
-				$input = $(`#${input.id}`),
-				fieldname = $input.attr('name'),
-				waarde = $input.val(),
-				dataString = `id=${fieldname}&${fieldname}=${waarde}`;
-
-			$.ajax({
-				type: 'POST',
-				url: `/bibliotheek/bewerkboek/${boekid}`,
-				data: dataString,
-				cache: false,
-				dataType: 'json',
-				success: (result) => {
-					let field = $(`#${input.id.substring(6)}`),
-						$inputelem = $(`#${input.id}`);
-
-					if (result.value) {
-						//opgeslagen waarde in input zetten en een tijdelijke succesmelding
-						$inputelem.val(result.value);
-						field.removeClass('metFouten').addClass('opgeslagen');
-						window.setTimeout(function () {
-							field.removeClass('opgeslagen');
-						}, 3000);
-						//bij boek uitlenen pagina herladen
-						if (input.id.substring(6, 11) === 'lener') {
-							location.reload();
-						}
-					} else {
-						//rode foutmelding
-						field.removeClass('opgeslagen').addClass('metFouten');
-					}
-					//meldingsboodschap plaatsen, en verwijder bewerkt-markering
-					field.find('.melding').html(result.melding).show();
-					$inputelem.removeClass('nonsavededits');
-				}
-			});
-		})
-				).keydown(function () {
-			//bewerkte velden markeren
-			$(this).addClass('nonsavededits');
-		}).change(function () {
-			//lege velden krijgen een border
-			if ($(this).val().length === 0) {
-				$(this).addClass('leeg');
-			} else {
-				$(this).removeClass('leeg');
-			}
-		}).change();
 	});
 });
 
