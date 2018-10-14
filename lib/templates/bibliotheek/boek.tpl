@@ -22,9 +22,8 @@
 	<div class="controls">
 		<a class="btn" href="/bibliotheek/nieuwboek">{icon get="book_add"} Nieuw boek</a>
 		{if $boek->getId()!=0}
-			<br /><br /><br />
 			{if $boek->magVerwijderen()}
-				<a class="btn verwijderen" href="/bibliotheek/verwijderboek/{$boek->getId()}" title="Boek verwijderen" onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">{icon get="verwijderen"} Verwijderen</a><br />
+				<a class="btn verwijderen" href="/bibliotheek/verwijderboek/{$boek->getId()}" title="Boek verwijderen" onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">{icon get="verwijderen"} Verwijderen</a>
 			{/if}
 			<a class="btn" href="/bibliotheek/addexemplaar/{$boek->getId()}" title="Ik bezit dit boek ook" onclick="return confirm('U bezit zelf een exemplaar van dit boek? Door het toevoegen aan de catalogus geef je aan dat anderen dit boek kunnen lenen.')">{icon get="user_add"} Ik bezit dit boek</a>
 			{toegang P_BIEB_ADD}
@@ -51,27 +50,9 @@
 	{* weergave bestaand boek, soms met bewerkbare velden *}
 	<div class="boek" id="{$boek->getId()}">
 
-		{if $boek->isEigenaar() and false}
+		{if $formulier->hasFields()}
 
-			<div class="blok header boekgegevens">
-				{$boek->getTitel()}
-			</div>
-			<div class="blok gegevens boekgegevens">
-				{assign var='fields' value=','|explode:"auteur,paginas,taal,isbn,uitgeverij,uitgavejaar"}
-				{foreach from=$fields item=field}
-					{$boek->ajaxformuliervelden->findByName($field)->view()}
-				{/foreach}
-			</div>
-			<div class="blok gegevens boekgegevens">
-				{$boek->ajaxformuliervelden->findByName('rubriek')->view()}
-				{if $boek->isBiebboek()}
-					{toegang P_BIEB_MOD}
-						{$boek->ajaxformuliervelden->findByName('code')->view()}
-					{/toegang}
-						<div class="regel"><label>Code</label>{$boek->getCode()}</div>
-
-				{/if}
-			</div>
+			{$formulier->view()}
 
 		{else}
 

@@ -10,8 +10,11 @@ use CsrDelft\model\entity\bibliotheek\Boek;
  */
 class BibliotheekBoekContent extends AbstractBibliotheekView {
 
-	public function __construct(Boek $boek) {
+	public $formulier;
+	public function __construct(Boek $boek, BoekFormulier $formulier) {
 		parent::__construct($boek);
+		$this->formulier = $formulier;
+
 	}
 
 	public function getTitel() {
@@ -20,6 +23,7 @@ class BibliotheekBoekContent extends AbstractBibliotheekView {
 
 	public function view() {
 		$this->smarty->assign('boek', $this->model);
+		$this->smarty->assign('formulier', $this->formulier);
 		$this->smarty->display('bibliotheek/boek.tpl');
 	}
 

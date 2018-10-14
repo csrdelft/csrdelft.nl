@@ -15,6 +15,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bibliotheek\BibliotheekBoekContent;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusContent;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableContent;
+use CsrDelft\view\bibliotheek\BoekFormulier;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
 
@@ -137,7 +138,11 @@ class BibliotheekController extends Controller {
 	 * /boek/id
 	 */
 	protected function boek(Boek $boek) {
-		$this->view = new BibliotheekBoekContent($boek);
+		$form = new BoekFormulier($boek);
+		if ($form->validate()) {
+			BoekModel::instance()->update($boek);
+		}
+		$this->view = new BibliotheekBoekContent($boek, $form);
 	}
 
 	protected function import(Boek $boek) {

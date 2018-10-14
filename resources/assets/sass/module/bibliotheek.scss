@@ -14,7 +14,7 @@ h1 {
 }
 /*knoppen in zijbalk rechts*/
 .controls		 {float: right; }
-.controls .btn {line-height: 2em; width: 125px; }
+.controls .btn {line-height: 2em; width: 125px; display:block; }
 
 /****************************
  *  cataloguspagina			*
@@ -294,12 +294,13 @@ div.beschrijvingen { margin-top: 40px; }
 	float: left;
 	margin: 0 4px 0 2px;
 }
-
+.Formulier.boekformulier {
+	margin-right: 200px;
+}
 .Formulier input.FormElement,.Formulier textarea, .boekzoeker input {
 	width: 400px;
 	padding: 1px 2px;
 }
-
 .Formulier select {
 	width: 406px;
 }
@@ -370,5 +371,14 @@ div.beschrijvingen { margin-top: 40px; }
 	margin-right: 10px;
 }
 
-
-
+@media screen and (max-width: 750px) {
+	.controls {
+		float: none;
+		.btn {
+			display: inline-block;
+		}
+	}
+	.Formulier.boekformulier {
+		margin-right: 0px;
+	}
+}
