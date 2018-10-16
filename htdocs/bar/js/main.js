@@ -882,6 +882,8 @@ $(function () {
 				button.parent().find("> button").addClass("btn-default").removeClass("btn-primary");
 				button.removeClass("btn-default").addClass("btn-primary");
 
+				var nietInTotaal = ["PIN", "Overgemaakt", "Contant", "Cent"]
+
 				var html = [];
 
 				$.each(data, function() {
@@ -893,11 +895,14 @@ $(function () {
 
 					var total = 0;
 					$.each(this.content, function() {
+						var inTotaal = !nietInTotaal.includes(this.type);
 
-                        var add = parseFloat(this.total);
-						total += add < 0 ? 0 : add;
-						addhtml += '<tr><td>' + this.type + (add < 0 ? ' <strong>(niet in totaal)</strong>' : '') + '</td><td>' + saldoStr(this.total) + '</td></tr>';
-
+						if (inTotaal) {
+							total += parseFloat(this.total);
+							addhtml += '<tr><td>' + this.type + '</td><td>' + saldoStr(this.total) + '</td></tr>';
+						} else {
+							addhtml += '<tr><td>' + this.type + ' <strong>(niet in totaal)</strong></td><td>' + saldoStr(this.total) + '</td></tr>';
+						}
 					});
 
 					addhtml += '<tr><td>Week totaal</td><td>' + saldoStr(total) + '</td></tr>';
