@@ -146,12 +146,12 @@ class PinTransactieMatcherFactory {
 			}
 		}
 
-		while ($indexTransactie < count($pinBestellingen)) {
+		while ($indexTransactie < count($pinBestellingen) - 1) {
 			$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexTransactie]);
 			$indexTransactie++;
 		}
 
-		while ($indexBestelling < count($pinTransacties)) {
+		while ($indexBestelling < count($pinTransacties) - 1) {
 			$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexBestelling]);
 			$indexBestelling++;
 		}
