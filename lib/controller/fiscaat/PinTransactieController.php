@@ -434,6 +434,35 @@ class PinTransactieController extends AclController {
 	}
 
 	/**
+	 * Verwijder matches die geen bestelling en transactie hebben. Dit kan gebeuren als een probleem binnen het
+	 * socciesysteem wordt opgelost.
+	 */
+	public function POST_heroverweeg() {
+		$model = $this->model;
+
+		$deleted = Database::transaction(function () use ($model) {
+			/** @var PinTransactieMatch[] $alleMatches */
+			$alleMatches = $model->find();
+			$deleted = [];
+
+			foreach ($alleMatches as $match) {
+				$bestelling = CiviBestellingInhoudModel::instance()->getVoorBestellingEnProduct($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
+				if ($bestelling === false && $match->transactie_id == null) {
+					$model->delete($match);
+					$deleted[] = [
+						'UUID' => $match->getUUID(),
+						'remove' => true,
+					];
+				}
+			}
+
+			return $deleted;
+		});
+
+		$this->view = new PinTransactieMatchTableResponse($deleted);
+	}
+
+	/**
 	 * @param PinTransactieMatch $missendeTransactie
 	 * @param PinTransactieMatch $missendeBestelling
 	 * @return PinTransactieMatch

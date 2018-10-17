@@ -28,6 +28,7 @@ class PinTransactieMatchTable extends DataTable {
 		$this->addKnop(new DataTableKnop(Multiplicity::Two(), '/fiscaat/pin/koppel', 'Koppel', 'Koppel een bestelling en transactie', 'arrow_join'));
 		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/fiscaat/pin/info', 'Info', 'Bekijk informatie over de gekoppelde bestelling', 'magnifier'));
 		$this->addKnop(new DataTableKnop(Multiplicity::Any(), '/fiscaat/pin/verwijderen', 'Verwijder', 'Verwijder matches', 'delete'));
+		$this->addKnop(new DataTableKnop(Multiplicity::None(), '/fiscaat/pin/heroverweeg', 'Heroverweeg', 'Controleer op veranderingen in andere systemen', 'cart_go'));
 
 		$this->addColumn('moment');
 		$this->addColumn('transactie');
