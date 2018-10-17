@@ -14,6 +14,7 @@ class PinTransactieMatchStatusEnum extends PersistentEnum {
 	 * PinTransactieMatchStatus opties.
 	 */
 	const STATUS_MATCH = 'match';
+	const STATUS_VERWIJDERD = 'verwijderd';
 	const STATUS_VERKEERD_BEDRAG = 'verkeerd bedrag';
 	const STATUS_MISSENDE_TRANSACTIE = 'missende transactie';
 	const STATUS_MISSENDE_BESTELLING = 'missende bestelling';
@@ -23,6 +24,7 @@ class PinTransactieMatchStatusEnum extends PersistentEnum {
 	 */
 	protected static $supportedChoices = [
 		self::STATUS_MATCH => self::STATUS_MATCH,
+		self::STATUS_VERWIJDERD => self::STATUS_VERWIJDERD,
 		self::STATUS_VERKEERD_BEDRAG => self::STATUS_VERKEERD_BEDRAG,
 		self::STATUS_MISSENDE_TRANSACTIE => self::STATUS_MISSENDE_TRANSACTIE,
 		self::STATUS_MISSENDE_BESTELLING => self::STATUS_MISSENDE_BESTELLING,
@@ -33,6 +35,7 @@ class PinTransactieMatchStatusEnum extends PersistentEnum {
 	 */
 	protected static $mapChoiceToDescription = [
 		self::STATUS_MATCH => 'Match',
+		self::STATUS_VERWIJDERD => 'Verwijderd',
 		self::STATUS_VERKEERD_BEDRAG => 'Verkeerd bedrag',
 		self::STATUS_MISSENDE_TRANSACTIE => 'Missende transactie',
 		self::STATUS_MISSENDE_BESTELLING => 'Missende bestelling',

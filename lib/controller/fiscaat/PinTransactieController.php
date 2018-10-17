@@ -24,6 +24,7 @@ use CsrDelft\view\fiscaat\pin\PinBestellingVeranderenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVerwijderenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTableResponse;
 use CsrDelft\view\fiscaat\pin\PinTransactieOverzichtView;
+use CsrDelft\view\JsonResponse;
 
 /**
  * Class PinTransactieController
@@ -49,6 +50,8 @@ class PinTransactieController extends AclController {
 				'aanmaken' => 'P_FISCAAT_MOD',
 				'update' => 'P_FISCAAT_MOD',
 				'info' => 'P_FISCAAT_READ',
+				'verwijderen' => 'P_FISCAAT_MOD',
+				'heroverweeg' => 'P_FISCAAT_MOD',
 			];
 		} else {
 			$this->acl = [
@@ -401,6 +404,33 @@ class PinTransactieController extends AclController {
 				$this->view = new PinBestellingInfoForm($pinBestelling);
 			}
 		}
+	}
+
+	public function POST_verwijderen() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+
+		$deleted = Database::transaction(function () use ($selection) {
+			$deleted = [];
+
+			foreach ($selection as $uuid) {
+				/** @var PinTransactieMatch $pinTransactieMatch */
+				$pinTransactieMatch = $this->model->retrieveByUUID($uuid);
+
+				$bestelling = CiviBestellingInhoudModel::instance()->getVoorBestellingEnProduct($pinTransactieMatch->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
+
+				if ($bestelling != false) {
+					throw new CsrGebruikerException("Match kan niet verwijderd worden.");
+				} else {
+					$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_VERWIJDERD;
+					$this->model->update($pinTransactieMatch);
+					$deleted[] = $pinTransactieMatch;
+				}
+			}
+
+			return $deleted;
+		});
+
+		$this->view = new PinTransactieMatchTableResponse($deleted);
 	}
 
 	/**
