@@ -10,6 +10,7 @@
   -o-transition: box-shadow .4s ease-out;
   transition: box-shadow .4s ease-out;
 }
+
 .bb-block:hover {
   -webkit-box-shadow: 0 0 10px #999;
   -moz-box-shadow: 0 0 10px #999;
@@ -19,16 +20,19 @@
 .bb-block h3 {
   margin: 0.5em 0 1em 0;
 }
+
 .bb-block hr {
   background-color: #ccc;
   border-bottom: 1px solid #fff;
 }
+
 /* ketzerception */
 .bb-block .bb-block {
   padding: 0;
   margin: 0;
   box-shadow: none;
 }
+
 .bb-block .bb-block .groep-tabs {
   visibility: hidden;
 }
@@ -41,19 +45,35 @@
   border: 1px solid #ccc;
 
   &::after {
-    content:"";
-    display:block;
-    clear:both;
+    content: "";
+    display: block;
+    clear: both;
   }
 }
+
 .bbcodePreview, .bbcodePreview div, .Formulier .bbcodePreview {
   line-height: inherit;
 }
-.offtopic { font-size: .9em; line-height: 1em; color: #bbb; }
-.offtopic a { color: #bbb; }
-.offtopic hr { text-align: left; background-color: #bbb; }
-.offtopic img { opacity: 0.3; filter: alpha(opacity=30); }
 
+.offtopic {
+  font-size: .9em;
+  line-height: 1em;
+  color: #bbb;
+}
+
+.offtopic a {
+  color: #bbb;
+}
+
+.offtopic hr {
+  text-align: left;
+  background-color: #bbb;
+}
+
+.offtopic img {
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+}
 
 .bb-prive {
   background-color: #FFF0F5;
@@ -62,39 +82,45 @@
 .bb-maaltijd {
   overflow: auto;
 }
+
 .bb-maaltijd .titel {
   font-size: 1.1em;
   font-weight: bold;
 }
+
 .bb-maaltijd {
   line-height: 2em;
 }
+
 .bb-maaltijd .aanmelddata {
   text-align: center;
   float: right;
   padding: 5px 15px 10px 15px;
   margin: 10px;
 }
+
 div.maaltijd-aangemeld {
-  background-image: -webkit-linear-gradient(top,#5cb85c 0,#077b4e 100%);
-  background-image: -o-linear-gradient(top,#5cb85c 0,#077b4e 100%);
-  background-image: -webkit-gradient(linear,left top,left bottom,from(#5cb85c),to(#077b4e));
-  background-image: linear-gradient(to bottom,#5cb85c 0,#077b4e 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c',endColorstr='#ff077b4e',GradientType=0);
+  background-image: -webkit-linear-gradient(top, #5cb85c 0, #077b4e 100%);
+  background-image: -o-linear-gradient(top, #5cb85c 0, #077b4e 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#5cb85c), to(#077b4e));
+  background-image: linear-gradient(to bottom, #5cb85c 0, #077b4e 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c', endColorstr='#ff077b4e', GradientType=0);
   background-repeat: repeat-x;
   color: white;
   font-weight: bold;
 }
+
 div.maaltijd-afgemeld {
-  background-image: -webkit-linear-gradient(top,#d9534f 0,#7c2507 100%);
-  background-image: -o-linear-gradient(top,#d9534f 0,#7c2507 100%);
-  background-image: -webkit-gradient(linear,left top,left bottom,from(#d9534f),to(#7c2507));
-  background-image: linear-gradient(to bottom,#d9534f 0,#7c2507 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f',endColorstr='#ff7c2507',GradientType=0);
+  background-image: -webkit-linear-gradient(top, #d9534f 0, #7c2507 100%);
+  background-image: -o-linear-gradient(top, #d9534f 0, #7c2507 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#d9534f), to(#7c2507));
+  background-image: linear-gradient(to bottom, #d9534f 0, #7c2507 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f', endColorstr='#ff7c2507', GradientType=0);
   background-repeat: repeat-x;
   color: white;
   font-weight: bold;
 }
+
 a.maaltijd-aangemeld, span.maaltijd-aangemeld {
   font-weight: bold;
   color: green;
@@ -103,6 +129,7 @@ a.maaltijd-aangemeld, span.maaltijd-aangemeld {
   text-shadow: none;
   background-image: none;
 }
+
 a.maaltijd-afgemeld, span.maaltijd-afgemeld {
   font-weight: bold;
   color: red;
@@ -119,7 +146,6 @@ a.maaltijd-afgemeld, span.maaltijd-afgemeld {
   margin: 2px;
 }
 
-
 /* --------------------------------
 
 Groepen
@@ -130,12 +156,14 @@ Groepen
   line-height: 1.5em;
   text-align: justify;
 }
+
 .groep-id-hint {
   color: #999999;
   a {
     color: inherit;
   }
 }
+
 .groep-leden {
 
   .groep-tab-content {
@@ -146,12 +174,14 @@ Groepen
     min-height: 74px;
   }
 }
+
 .GroepAanmeldenForm.pasfotos {
 
   span.twitter-typeahead {
     display: none !important;
   }
 }
+
 .groep-tabs {
   text-align: center;
 
@@ -165,16 +195,17 @@ Groepen
 }
 
 .bb-groep {
-	display: flex;
+  display: flex;
 
-	.groep-leden {
-		flex-basis: 55%;
-	}
+  .groep-leden {
+    flex-basis: 55%;
+  }
 
-	.groep-samenvatting {
-		flex-basis: 45%;
-	}
+  .groep-samenvatting {
+    flex-basis: 45%;
+  }
 }
+
 .bb-groep.state-geschiedenis {
 
   .groep-tabs {
@@ -184,6 +215,7 @@ Groepen
     }
   }
 }
+
 table.groep-lijst {
   width: 100%;
 
@@ -205,20 +237,69 @@ table.groep-lijst {
   text-align: center;
 }
 
-.bb-document { padding: 4px 6px; display: block; text-align: left; }
-.bb-document .size { float: right; color: #777; }
-.bb-document .download { float: right; margin-right: 5px; }
-.bb-document .download .module-icon { position: initial; top: initial; }
-.bb-document .icon { float: left; margin-right: 5px; }
+.bb-document {
+  padding: 4px 6px;
+  display: block;
+  text-align: left;
+}
 
-.bb-boek { padding: 4px 6px; display: block; text-align: left; text-decoration: none !important; }
-.bb-boek .auteur { color: #777; margin-left: 10px; }
-.bb-boek .titel:hover { color: #0a338d; text-decoration: underline; }
-.bb-boek .icon { float: left; padding-right: 5px; }
-.boekindicator { margin-right: 5px; }
-.boekindicator.beschikbaar	 { color: green; }
-.boekindicator.teruggegeven	 { color: orange; }
-.boekindicator.geen			 { color: red; }
+.bb-document .size {
+  float: right;
+  color: #777;
+}
+
+.bb-document .download {
+  float: right;
+  margin-right: 5px;
+}
+
+.bb-document .download .module-icon {
+  position: initial;
+  top: initial;
+}
+
+.bb-document .icon {
+  float: left;
+  margin-right: 5px;
+}
+
+.bb-boek {
+  padding: 4px 6px;
+  display: block;
+  text-align: left;
+  text-decoration: none !important;
+}
+
+.bb-boek .auteur {
+  color: #777;
+  margin-left: 10px;
+}
+
+.bb-boek .titel:hover {
+  color: #0a338d;
+  text-decoration: underline;
+}
+
+.bb-boek .icon {
+  float: left;
+  padding-right: 5px;
+}
+
+.boekindicator {
+  margin-right: 5px;
+}
+
+.boekindicator.beschikbaar {
+  color: green;
+}
+
+.boekindicator.teruggegeven {
+  color: orange;
+}
+
+.boekindicator.geen {
+  color: red;
+}
 
 pre.bbcode {
   font-family: monospace;
@@ -232,41 +313,129 @@ pre.bbcode {
   overflow-y: auto;
 }
 
-.bb-peiling { margin: 10px;  padding: 5px 10px; }
-.bb-peiling .beheer { float: right; }
-.bb-peiling .totaal { float: right; color: #666; padding-left: 20px; }
-.bb-peiling ul { list-style-type: none; padding: 5px; }
-.bb-peiling ul li { overflow: auto; border-bottom: 1px solid #eee; margin-left: 0; clear: both;  padding: 4px; }
-.bb-peiling input, .bb-peiling label { margin: 0; padding: 4px; }
-.bb-peiling ul li .stemmen { float: right; color: #666; width: 30px; text-align: right; }
-.bb-peiling ul li .percentage { float: right; color: #666; width: 50px; text-align: right; }
-.bb-peiling .vraag { margin: 10px 0; }
-.bb-peiling .optie { float: left; width: 300px; vertical-align: middle; min-height: 18px; }
-.bb-peiling .grafisch { float: right; width: 300px; vertical-align: top; padding: 4px; }
-.bb-peiling .balk { height: 10px; background-color: #6060FF;  border: 1px outset #0a338d; float: right; }
+.bb-peiling {
+  margin: 10px;
+  padding: 5px 10px;
+}
 
-.bb-table { padding: 0; border-collapse: collapse; }
-.bb-table tr { margin: 0; padding: 0; }
-.bb-table td, .bb-table th { margin: 0; padding: 2px; }
+.bb-peiling .beheer {
+  float: right;
+}
+
+.bb-peiling .totaal {
+  float: right;
+  color: #666;
+  padding-left: 20px;
+}
+
+.bb-peiling ul {
+  list-style-type: none;
+  padding: 5px;
+}
+
+.bb-peiling ul li {
+  overflow: auto;
+  border-bottom: 1px solid #eee;
+  margin-left: 0;
+  clear: both;
+  padding: 4px;
+}
+
+.bb-peiling input, .bb-peiling label {
+  margin: 0;
+  padding: 4px;
+}
+
+.bb-peiling ul li .stemmen {
+  float: right;
+  color: #666;
+  width: 30px;
+  text-align: right;
+}
+
+.bb-peiling ul li .percentage {
+  float: right;
+  color: #666;
+  width: 50px;
+  text-align: right;
+}
+
+.bb-peiling .vraag {
+  margin: 10px 0;
+}
+
+.bb-peiling .optie {
+  float: left;
+  width: 300px;
+  vertical-align: middle;
+  min-height: 18px;
+}
+
+.bb-peiling .grafisch {
+  float: right;
+  width: 300px;
+  vertical-align: top;
+  padding: 4px;
+}
+
+.bb-peiling .balk {
+  height: 10px;
+  background-color: #6060FF;
+  border: 1px outset #0a338d;
+  float: right;
+}
+
+.bb-table {
+  padding: 0;
+  border-collapse: collapse;
+}
+
+.bb-table tr {
+  margin: 0;
+  padding: 0;
+}
+
+.bb-table td, .bb-table th {
+  margin: 0;
+  padding: 2px;
+}
 
 .bb-fotoalbum img.compact {
   float: right;
   width: 50px;
   margin-top: -1em;
 }
-.bb-fotoalbum .images { margin-top: 6px; position: relative; }
-.bb-fotoalbum .images a { position: absolute; }
-.bb-fotoalbum .images a.sml img { width: 75px; height: 75px; }
-.bb-fotoalbum .images a.big img { width: 151px; height: 151px; }
+
+.bb-fotoalbum .images {
+  margin-top: 6px;
+  position: relative;
+}
+
+.bb-fotoalbum .images a {
+  position: absolute;
+}
+
+.bb-fotoalbum .images a.sml img {
+  width: 75px;
+  height: 75px;
+}
+
+.bb-fotoalbum .images a.big img {
+  width: 151px;
+  height: 151px;
+}
+
 .bb-fotoalbum .images a {
   -webkit-transition: opacity .4s ease-out;
   -moz-transition: opacity .4s ease-out;
   -o-transition: opacity .4s ease-out;
   transition: opacity .4s ease-out;
 }
+
 .bb-fotoalbum .images:hover a {
   opacity: 0.8;
 }
+
 .bb-fotoalbum .images:hover a:hover {
   opacity: 1;
 }
@@ -274,6 +443,7 @@ pre.bbcode {
 .spoiler {
   display: block;
 }
+
 .spoiler-content {
   display: none;
 }
@@ -281,16 +451,20 @@ pre.bbcode {
 .citaatpuntjes {
   cursor: pointer;
 }
+
 .citaatContainer {
   margin: 5px 5px 5px 20px;
 }
+
 .citaat {
   background-color: #e1e1e1;
   padding: 5px 10px 5px 10px;
 }
+
 .citaatContainer .citaat .citaatContainer .citaat {
   background-color: #e9e9e9;
 }
+
 .citaatContainer .citaat .citaatContainer .citaat .citaatContainer .citaat {
   background-color: #efefef;
 }
@@ -301,11 +475,13 @@ pre.bbcode {
   min-height: 11px;
   background: url('../images/loading-fb.gif') no-repeat bottom left;
 }
+
 .bb-img {
-	width: 100%;
+  width: 100%;
   max-width: 570px;
   border: 0;
 }
+
 a.responsive {
   width: 100%;
 
@@ -318,6 +494,7 @@ a.responsive {
 .citaatContainer .citaat img.bb-img {
   max-width: 540px;
 }
+
 .citaatContainer .citaat .citaatContainer .citaat img.bb-img {
   max-width: 510px;
 }
@@ -328,9 +505,11 @@ a.responsive {
   position: relative;
   cursor: pointer;
 }
+
 .bb-video-preview img {
   max-height: 150px;
 }
+
 .bb-video-preview .play-button {
   color: #fff;
   position: absolute;
@@ -345,10 +524,10 @@ a.responsive {
   -o-transition: opacity .4s ease-out;
   transition: opacity .4s ease-out;
 }
+
 .bb-video-preview:hover .play-button {
   opacity: 1;
 }
-
 
 /** Mededelingen Top3 [mededelingen=...] **************************************************************/
 .mededeling-grotebalk .plaatje {
@@ -359,16 +538,19 @@ a.responsive {
   float: left;
   overflow: hidden;
 }
+
 .mededeling-grotebalk .titel {
   font-weight: bold;
   font-size: 1.1em;
   padding: 0 0 5px 0;
   margin: 0 0 0 80px;
 }
+
 .mededeling-grotebalk .bericht {
   text-align: justify;
   line-height: 1.4375em;
 }
+
 .mededeling-grotebalk .half {
   width: 49%;
   float: left;
@@ -376,40 +558,49 @@ a.responsive {
 }
 
 .bb-slider img {
-	object-fit: cover;
-	height: 360px;
-	width: 100%;
+  object-fit: cover;
+  height: 360px;
+  width: 100%;
 }
 
-@media screen and (max-width: 960px){
-	.bb-groep {
-		flex-direction: column;
-		.groep-samenvatting {
-			padding-left: 0;
-			padding-bottom: 1em;
-		}
-		.groep-leden {
-			width: auto;
-		}
-	}
+@media screen and (max-width: 960px) {
+  .bb-groep {
+    flex-direction: column;
+    .groep-samenvatting {
+      padding-left: 0;
+      padding-bottom: 1em;
+    }
+    .groep-leden {
+      width: auto;
+    }
+  }
 }
 
 /*
-Speciale styling voor een speciale maaltijd
+Speciale styling voor speciale maaltijdsoorten
 */
-.maaltijdketzer-2053, .maaltijdketzer-2021 {
-background-color: #00541b;
-background-image: url("/plaetjes/specialemaaltijd/rand.png");
-border: solid 10px #030;
-border-image: url("/plaetjes/specialemaaltijd/rand.png") 50;
-color: #cfc;
+.bb-maaltijd[data-maaltijdnaam='Verticalekring Primitus'] {
+  background-color: #00541b;
+  background-image: url("/plaetjes/maaltijdstijlen/rand.png");
+  border: solid 10px #030;
+  border-image: url("/plaetjes/maaltijdstijlen/rand.png") 50;
+  color: #cfc;
 
-.titel a {color:white;}
-@media screen and (min-width: 500px) and (max-width:767px), screen and (min-width:1150px) {
-&::after {background:url("/plaetjes/specialemaaltijd/logo1.png") no-repeat; height:80px; width: 54px; content:""; display:block; float:right; margin:-68px 20px; }
+  .titel a {
+    color: white;
   }
-&.maaltijdstijl-Faculteit::after {background-image:url("/plaetjes/specialemaaltijd/logo.png");}
-padding:8px 2px 8px 12px;
-position:relative;
-overflow:hidden;
+  @media screen and (min-width: 500px) and (max-width: 767px), screen and (min-width: 1150px) {
+    &::after {
+      background: url("/plaetjes/maaltijdstijlen/primituslogo.png") no-repeat;
+      height: 80px;
+      width: 54px;
+      content: "";
+      display: block;
+      float: right;
+      margin: -68px 20px;
+    }
+  }
+  padding: 8px 2px 8px 12px;
+  position: relative;
+  overflow: hidden;
 }

@@ -117,13 +117,6 @@ class LidInstellingenModel extends InstellingenModel {
 				['nee', 'willekeurig'],
 				'nee',
 				'Tjoek tjoek!'
-			],
-			'maaltijd2053' => [
-				'Maaltijd 2053',
-				T::Enumeration,
-				['Primitus', 'Faculteit'],
-				'Primitus',
-				'Bij zijn is meemaken'
 			]
 		],
 		'forum' => [
