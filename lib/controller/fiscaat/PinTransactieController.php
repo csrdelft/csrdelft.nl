@@ -24,13 +24,13 @@ use CsrDelft\view\fiscaat\pin\PinBestellingVeranderenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVerwijderenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTableResponse;
 use CsrDelft\view\fiscaat\pin\PinTransactieOverzichtView;
-use CsrDelft\view\JsonResponse;
 
 /**
  * Class PinTransactieController
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 19/09/2017
+ * @property PinTransactieMatchModel $model
  */
 class PinTransactieController extends AclController {
 
@@ -50,7 +50,7 @@ class PinTransactieController extends AclController {
 				'aanmaken' => 'P_FISCAAT_MOD',
 				'update' => 'P_FISCAAT_MOD',
 				'info' => 'P_FISCAAT_READ',
-				'verwijderen' => 'P_FISCAAT_MOD',
+				'verwijder_transactie' => 'P_FISCAAT_MOD',
 				'heroverweeg' => 'P_FISCAAT_MOD',
 			];
 		} else {
@@ -83,7 +83,7 @@ class PinTransactieController extends AclController {
 
 		switch ($filter) {
 			case 'metFout':
-				$data = $this->model->find('status <> \'match\'');
+				$data = $this->model->find('status <> \'match\' AND status <> \'verwijderd\'');
 				break;
 
 			case 'alles':
@@ -406,31 +406,40 @@ class PinTransactieController extends AclController {
 		}
 	}
 
-	public function POST_verwijderen() {
+	/**
+	 * Markeer een match als verwijderd, deze transactie is niet relevant en al op een andere manier verwerkt.
+	 */
+	public function POST_verwijder_transactie() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$model = $this->model;
 
-		$deleted = Database::transaction(function () use ($selection) {
-			$deleted = [];
+		$updated = Database::transaction(function () use ($selection, $model) {
+			$updated = [];
 
 			foreach ($selection as $uuid) {
 				/** @var PinTransactieMatch $pinTransactieMatch */
-				$pinTransactieMatch = $this->model->retrieveByUUID($uuid);
+				$pinTransactieMatch = $model->retrieveByUUID($uuid);
 
 				$bestelling = CiviBestellingInhoudModel::instance()->getVoorBestellingEnProduct($pinTransactieMatch->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
 
 				if ($bestelling != false) {
-					throw new CsrGebruikerException("Match kan niet verwijderd worden.");
+					throw new CsrGebruikerException("Match kan niet verwijderd worden, er hangt een bestelling aan.");
+				}
+
+				if ($pinTransactieMatch->status == PinTransactieMatchStatusEnum::STATUS_VERWIJDERD) {
+					$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING;
 				} else {
 					$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_VERWIJDERD;
-					$this->model->update($pinTransactieMatch);
-					$deleted[] = $pinTransactieMatch;
 				}
+
+				$model->update($pinTransactieMatch);
+				$updated[] = $pinTransactieMatch;
 			}
 
-			return $deleted;
+			return $updated;
 		});
 
-		$this->view = new PinTransactieMatchTableResponse($deleted);
+		$this->view = new PinTransactieMatchTableResponse($updated);
 	}
 
 	/**
