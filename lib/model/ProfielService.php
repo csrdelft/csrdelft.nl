@@ -46,7 +46,7 @@ class ProfielService extends DependencyManager {
 				$zoekfilter = "
 					voornaam LIKE :containsZoekterm OR achternaam LIKE :containsZoekterm OR
 					nickname LIKE :containsZoekterm OR uid LIKE :containsZoekterm";
-				$zoekfilterparams[':containsZoekterm']=  $zoekterm;
+				$zoekfilterparams[':containsZoekterm']= sql_contains($zoekterm);
 			}
 		} elseif ($zoekveld == 'adres') {
 			$zoekfilter = "adres LIKE :containsZoekterm OR woonplaats LIKE :containsZoekterm OR

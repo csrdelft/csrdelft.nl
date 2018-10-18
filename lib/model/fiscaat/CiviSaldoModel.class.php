@@ -168,4 +168,8 @@ class CiviSaldoModel extends PersistenceModel {
 		$this->civiSaldoLogModel->log(CiviSaldoLogEnum::UPDATE_SALDO, $entity);
 		return parent::update($entity);
 	}
+
+	public function existsByUid(string $uid) {
+		return $this->count('uid = ?', [$uid]) == 1;
+	}
 }

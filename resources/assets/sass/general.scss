@@ -41,6 +41,10 @@ a, a:hover {
 	overflow: hidden;
 }
 
+.form-group .twitter-typeahead {
+	width: 100%;
+}
+
 // Zie node_modules/bootstrap/scss/_input-group.scss
 // Mixt met twitter-typeahead
 .input-group {
