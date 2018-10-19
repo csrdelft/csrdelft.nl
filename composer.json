@@ -28,8 +28,9 @@
 		"ext-PDO": "*",
 		"ext-pdo_mysql": "*",
 		"ext-hash": "*",
-        "easyrdf/easyrdf": "^0.9.1",
-        "ml/json-ld": "^1.0"
+        "ext-json": "*",
+		"easyrdf/easyrdf": "^0.9.1",
+		"ml/json-ld": "^1.0"
 	},
 	"config": {
 		"platform": {

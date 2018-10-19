@@ -5,12 +5,15 @@ namespace CsrDelft\model\entity\bibliotheek;
 
 
 use CsrDelft\common\MijnSqli;
-use CsrDelft\model\bibliotheek\BiebBeschrijving;
-use CsrDelft\model\bibliotheek\BiebRubriek;
+use CsrDelft\model\bibliotheek\BiebRubriekModel;
+use CsrDelft\model\bibliotheek\BoekExemplaarModel;
+use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use dokuwiki\Action\Login;
+use CsrDelft\model\entity\bibliotheek\BoekExemplaar;
+use Nette\NotImplementedException;
 
 class Boek extends PersistentEntity {
 
@@ -65,8 +68,18 @@ class Boek extends PersistentEntity {
 	}
 
 	public function getRubriek() {
-		return new BiebRubriek($this->categorie_id);
+		return BiebRubriekModel::get($this->categorie_id);
+
 	}
+	public function getStatus() {
+		throw new NotImplementedException();
+	}
+
+	//url naar dit boek
+	public function getUrl() {
+		return '/bibliotheek/boek/' . $this->getId();
+	}
+
 	/**
 	 * Controleert rechten voor wijderactie
 	 *
@@ -105,53 +118,20 @@ class Boek extends PersistentEntity {
 	 *      false
 	 *        geen geen resultaat of niet de eigenaar
 	 */
-	public function isEigenaar($exemplaarid = null) {
-		$eigenaars = $this->getEigenaars($exemplaarid);
-		foreach ($eigenaars as $eigenaar) {
-			if ($eigenaar == LoginModel::getUid()) {
-				return true;
-			} elseif ($eigenaar == 'x222' AND LoginModel::mag('R_BASF')) {
+	public function isEigenaar() {
+		$exemplaren = $this->getExemplaren();
+		foreach ($exemplaren as $exemplaar) {
+			if ($exemplaar->isEigenaar()) {
 				return true;
 			}
 		}
-		return LoginModel::mag('P_ADMIN');
+		return false;
 	}
 
-	/**
-	 * Returns an array of eigenaaruids van boek of exemplaar
-	 *
-	 * @param null|int $exemplaarid
-	 * @return array
-	 */
-	public function getEigenaars($exemplaarid = null) {
-		$db = MijnSqli::instance();
-		if ($exemplaarid == null) {
-			$where = "WHERE boek_id =" . (int)$this->getId();
-		} else {
-			$where = "WHERE id =" . (int)$exemplaarid;
-		}
-		$qEigenaar = "
-			SELECT eigenaar_uid
-			FROM  `biebexemplaar` 
-			" . $where . ";";
-		$result = $db->query($qEigenaar);
-
-		$eigenaars = array();
-		if ($db->numRows($result) > 0) {
-			while ($eigenaar = $db->next($result)) {
-				$eigenaars[] = $eigenaar['eigenaar_uid'];
-			}
-		}
-		return $eigenaars;
-	}
-
-
-	public function isBiebboek($exemplaarid = null) {
-		$eigenaars = $this->getEigenaars($exemplaarid);
-		foreach ($eigenaars as $eigenaar) {
-			if ($eigenaar == 'x222') {
-				return true;
-			}
+	public function isBiebBoek($exemplaarid = null) {
+		$exemplaren = $this->getExemplaren();
+		foreach ($exemplaren as $exemplaar) {
+			$exemplaar->isBiebBoek();
 		}
 		return false;
 	}
@@ -159,61 +139,14 @@ class Boek extends PersistentEntity {
 	/**
 	 * Geeft alle exemplaren van dit boek
 	 *
-	 * @return array met exemplaren
+	 * @return BoekExemplaar[]
 	 */
-	public function getExemplaren() {
-		if ($this->exemplaren === null) {
-			$this->loadExemplaren();
-		}
-		return $this->exemplaren;
+	public function getExemplaren() : array {
+		return BoekExemplaarModel::getExemplaren($this)->fetchAll();
 	}
 
 
-	/**
-	 * Laad exemplaren van dit boek in Boek
-	 *
-	 * @return bool|int
-	 */
-	public function loadExemplaren() {
-		$db = MijnSqli::instance();
-		$query = "
-			SELECT id, eigenaar_uid, opmerking, uitgeleend_uid, toegevoegd, status, uitleendatum
-			FROM biebexemplaar
-			WHERE boek_id=" . (int)$this->getId() . "
-			ORDER BY toegevoegd;";
-		$result = $db->query($query);
 
-		if ($db->numRows($result) > 0) {
-			while ($exemplaar = $db->next($result)) {
-				$this->exemplaren[$exemplaar['id']] = $exemplaar;
-			}
-		} else {
-			$this->error .= $db->error();
-			return false;
-		}
-		return $db->numRows($result);
-	}
-
-	/**
-	 * laad beschrijvingen van dit boek, inclusief Beschrijving(0) indien nodig.
-	 */
-	protected function loadBeschrijvingen() {
-		$db = MijnSqli::instance();
-		$query = "
-			SELECT id, boek_id, schrijver_uid, beschrijving, toegevoegd, bewerkdatum
-			FROM biebbeschrijving
-			WHERE boek_id=" . (int)$this->getId() . "
-			ORDER BY toegevoegd;";
-		$result = $db->query($query);
-		if ($db->numRows($result) > 0) {
-			while ($beschrijving = $db->next($result)) {
-				$this->beschrijvingen[$beschrijving['id']] = new BiebBeschrijving($beschrijving);
-			}
-		} else {
-			$this->error .= $db->error();
-		}
-
-	}
 
 	/**
 	 * Geeft array met beschrijvingen van dit boek
@@ -221,10 +154,7 @@ class Boek extends PersistentEntity {
 	 * @return array Beschrijving[]
 	 */
 	public function getBeschrijvingen() {
-		if ($this->beschrijvingen === null) {
-			$this->loadBeschrijvingen();
-		}
-		return $this->beschrijvingen;
+
 	}
 
 	/**
@@ -257,4 +187,8 @@ class Boek extends PersistentEntity {
 	 * @var string[]
 	 */
 	protected static $primary_key = ['id'];
+
+	public function getRecensies() {
+		return BoekRecensieModel::instance()->find("boek_id = ?", [$this->id])->fetchAll();
+	}
 }

@@ -4,11 +4,13 @@ namespace CsrDelft\view\bibliotheek;
 
 use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\entity\bibliotheek\Boek;
+use CsrDelft\view\SmartyTemplateView;
+use CsrDelft\view\View;
 
 /**
  * Boek weergeven
  */
-class BibliotheekBoekContent extends AbstractBibliotheekView {
+class BibliotheekBoekContent extends SmartyTemplateView {
 
 	public $formulier;
 	public function __construct(Boek $boek, BoekFormulier $formulier) {
@@ -26,5 +28,6 @@ class BibliotheekBoekContent extends AbstractBibliotheekView {
 		$this->smarty->assign('formulier', $this->formulier);
 		$this->smarty->display('bibliotheek/boek.tpl');
 	}
+
 
 }

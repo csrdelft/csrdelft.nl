@@ -1,8 +1,6 @@
 <?php
 
-namespace CsrDelft\model\bibliotheek;
-
-use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+namespace CsrDelft\view\formulier\invoervelden;
 
 class TitelField extends RequiredTextField {
 

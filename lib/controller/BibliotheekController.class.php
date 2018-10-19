@@ -35,7 +35,7 @@ class BibliotheekController extends Controller {
 	 * actie[/id[/opties]]
 	 */
 	public function __construct($query) {
-		parent::__construct($query, null);
+		parent::__construct($query, BoekModel::instance());
 		if ($this->hasParam(2)) {
 			$this->action = $this->getParam(2);
 		} else {
@@ -100,8 +100,8 @@ class BibliotheekController extends Controller {
 	 * Inhoud voor tabel op de cataloguspagina ophalen
 	 */
 	protected function catalogusdata() {
-		$catalogus = new BiebCatalogus();
-		$this->view = new BibliotheekCatalogusDatatableContent($catalogus);
+		$data = $this->model->find();
+		$this->view = new BibliotheekCatalogusDatatableContent($data);
 		$this->view->view();
 		exit;
 	}

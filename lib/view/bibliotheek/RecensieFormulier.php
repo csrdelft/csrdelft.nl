@@ -2,24 +2,22 @@
 
 namespace CsrDelft\view\bibliotheek;
 
-use CsrDelft\model\bibliotheek\BiebRubriekModel;
-use CsrDelft\model\entity\bibliotheek\BiebRubriek;
+use CsrDelft\model\bibliotheek\BiebRubriek;
 use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\invoervelden\TitelField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 
 /**
  * Boek weergeven
  */
-class BoekFormulier extends Formulier {
+class RecensieFormulier extends Formulier {
 
 	public $formulier;
-	public function __construct(Boek $boek) {
-		parent::__construct($boek, "/bibliotheek/boek/$boek->id", '');
+	public function __construct(Recensie $recensie) {
+		parent::__construct($recensie, "/bibliotheek/recensie/$boek->id", '');
 		if ($boek->magBewerken()) {
 			$fields = [];
 			$fields['titel'] = new TitelField('titel', $boek->getTitel(), "Titel:", 200);
@@ -34,7 +32,7 @@ class BoekFormulier extends Formulier {
 			$fields['uitgeverij'] = new TextField('uitgeverij', $boek->getUitgeverij(), 'Uitgeverij', 100);
 			$fields['uitgeverij']->suggestions[] = '/bibliotheek/autocomplete/uitgeverij?q=';
 			$fields['uitgavejaar'] = new IntField('uitgavejaar', $boek->getUitgavejaar(), 'Uitgavejaar', 0, 2100);
-			$fields['rubriek'] = new SelectField('rubriek', $boek->getRubriek()->id, 'Rubriek', BiebRubriekModel::instance()->find()->fetchAll());
+			$fields['rubriek'] = new SelectField('rubriek', $boek->getRubriek()->getId(), 'Rubriek', BiebRubriek::getAllRubrieken($samenvoegen = true, $short = true));
 			$fields['code'] = new TextField('code', $boek->getCode(), 'Biebcode', 7);
 			$fields[] = new SubmitKnop();
 			$this->addFields($fields);
