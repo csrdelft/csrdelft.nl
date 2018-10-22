@@ -4,6 +4,7 @@
 namespace CsrDelft\model\entity\bibliotheek;
 
 
+use CsrDelft\model\bibliotheek\BiebRubriekModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -32,6 +33,21 @@ class BiebRubriek extends PersistentEntity {
 		'toegevoegd' => [T::DateTime, false],
 		'bewerkdatum' => [T::DateTime, false]
 	];
+
+	public function __toString()
+	{
+		if ($this->p_id == $this->id) {
+			return '';
+		}
+		else {
+			$parent = (string) BiebRubriekModel::get($this->p_id);
+			if ($parent !== '') {
+				$parent .= ' - ';
+			}
+			return $parent.$this->categorie;
+
+		}
+	}
 
 	/**
 	 * @var string[]

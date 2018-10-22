@@ -154,7 +154,7 @@ class Boek extends PersistentEntity {
 	 * @return array Beschrijving[]
 	 */
 	public function getBeschrijvingen() {
-
+		return BoekRecensieModel::getVoorBoek($this->id);
 	}
 
 	/**

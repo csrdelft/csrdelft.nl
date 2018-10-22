@@ -2,13 +2,15 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\model\bibliotheek\BoekModel;
+
 class TitelField extends RequiredTextField {
 
 	public function validate() {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (BiebCatalogus::existsProperty('titel', $this->getValue())) {
+		if (BoekModel::existsTitel($this->value)) {
 			$this->error = 'Titel bestaat al.';
 		}
 		return $this->error == '';

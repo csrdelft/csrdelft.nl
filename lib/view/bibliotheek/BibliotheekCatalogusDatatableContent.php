@@ -14,11 +14,12 @@ class BibliotheekCatalogusDatatableContent extends DataTableResponse {
 
 	/**
 	 * @param Boek $entity
-	 * @return false|string|void
+	 * @return false|string
 	 */
 	public function getJson($entity) {
-		$entity->titel = "<a href='{$entity->getUrl()}'>$entity->titel</a>";
-		return json_encode($entity);
+		$arr = (array) $entity;
+		$arr['titel_link'] = "<a href='{$entity->getUrl()}'>$entity->titel</a>";
+		return json_encode($arr);
 	}
 
 

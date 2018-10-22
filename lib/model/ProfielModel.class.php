@@ -60,7 +60,7 @@ class ProfielModel extends CachedPersistenceModel {
 		return static::instance()->cache($profiel, true);
 	}
 
-	public static function getNaam($uid, $vorm) {
+	public static function getNaam($uid, $vorm='civitas') {
 		$profiel = static::get($uid);
 		if (!$profiel) {
 			return null;

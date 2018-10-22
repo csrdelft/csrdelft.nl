@@ -55,6 +55,10 @@ class BoekExemplaar extends PersistentEntity {
 		return false;
 	}
 
+	public function getStatus() {
+		// @TODO geef juiste status
+		return "beschikbaar";
+	}
 
 	/**
 	 * @var array

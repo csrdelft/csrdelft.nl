@@ -23,11 +23,15 @@ class BibliotheekCatalogusContent extends DataTable {
 		$this->defaultLength = 30;
 		$this->settings['select'] = false;
 		$this->settings['buttons'] = [];
-		$this->setOrder(['titel'=>'asc', 'auteur'=> 'asc']);
+
 		$this->hideColumn('auteur_id');
 		$this->hideColumn('isbn');
 		$this->hideColumn('categorie_id');
 		$this->hideColumn('code');
+		$this->hideColumn('titel');
+		$this->addColumn('titel_link', 'auteur', null,null, 'titel');
+		$this->setColumnTitle('titel_link', 'Titel');
+		$this->setOrder(['auteur'=>'asc']);
 		$this->searchColumn('titel');
 		$this->searchColumn('auteur');
 	}

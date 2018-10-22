@@ -18,4 +18,8 @@ class BoekRecensieModel extends PersistenceModel {
 
 
 	const ORM = BoekRecensie::class;
+
+	public static function getVoorBoek($id) {
+		return self::instance()->find("boek_id = ?", [$id])->fetchAll();
+	}
 }
