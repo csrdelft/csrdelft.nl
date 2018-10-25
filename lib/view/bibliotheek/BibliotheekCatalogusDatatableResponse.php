@@ -10,7 +10,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\datatable\DataTable;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 
-class BibliotheekCatalogusDatatableContent extends DataTableResponse {
+class BibliotheekCatalogusDatatableResponse extends DataTableResponse {
 
 	/**
 	 * @param Boek $entity
@@ -19,6 +19,7 @@ class BibliotheekCatalogusDatatableContent extends DataTableResponse {
 	public function getJson($entity) {
 		$arr = (array) $entity;
 		$arr['titel_link'] = "<a href='{$entity->getUrl()}'>$entity->titel</a>";
+		$arr['recensie_count'] = sizeof($entity->getRecensies());
 		return json_encode($arr);
 	}
 

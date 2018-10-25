@@ -13,8 +13,8 @@ use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bibliotheek\BibliotheekBoekContent;
-use CsrDelft\view\bibliotheek\BibliotheekCatalogusContent;
-use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableContent;
+use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatable;
+use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableResponse;
 use CsrDelft\view\bibliotheek\BoekFormulier;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
@@ -93,15 +93,29 @@ class BibliotheekController extends Controller {
 	 *
 	 */
 	protected function catalogustonen() {
-		$this->view = new BibliotheekCatalogusContent();
+		$this->view = new BibliotheekCatalogusDatatable();
 	}
 
 	/**
 	 * Inhoud voor tabel op de cataloguspagina ophalen
 	 */
 	protected function catalogusdata() {
-		$data = $this->model->find();
-		$this->view = new BibliotheekCatalogusDatatableContent($data);
+		/**
+		 * @var Boek[] $data
+		 */
+		$data = $this->model->find()->fetchAll();
+		$uid = filter_input(INPUT_GET,"eigenaar", FILTER_SANITIZE_STRING);
+		$results = [];
+		if ($uid !== null) {
+			foreach ($data as $boek) {
+				if($boek->isEigenaar($uid)) {
+					$results[] = $boek;
+				}
+			}
+		} else {
+			$results = $data;
+		}
+		$this->view = new BibliotheekCatalogusDatatableResponse($results);
 		$this->view->view();
 		exit;
 	}

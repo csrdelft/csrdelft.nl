@@ -118,10 +118,15 @@ class Boek extends PersistentEntity {
 	 *      false
 	 *        geen geen resultaat of niet de eigenaar
 	 */
-	public function isEigenaar() {
+	public function isEigenaar($uid = null) {
 		$exemplaren = $this->getExemplaren();
 		foreach ($exemplaren as $exemplaar) {
-			if ($exemplaar->isEigenaar()) {
+			if($uid != null) {
+				if($uid == $exemplaar->eigenaar_uid) {
+					return true;
+				}
+			}
+			else if ($exemplaar->isEigenaar($uid)) {
 				return true;
 			}
 		}
