@@ -253,7 +253,7 @@ $.fn.dataTable.ext.buttons.defaultCollection = {
     }
 };
 
-$.fn.dataTable.render.bedrag = (data) => '€' + (data / 100).toFixed(2);
+$.fn.dataTable.render.bedrag = (data) => data > 0 ? '€' + (data / 100).toFixed(2) : '-€' + (data / -100).toFixed(2);
 
 $.fn.dataTable.render.check = (data) => {
     return '<span class="ico ' + (data ? 'tick' : 'cross') + '"></span>';
