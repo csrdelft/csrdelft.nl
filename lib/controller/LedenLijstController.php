@@ -36,6 +36,6 @@ class LedenLijstController extends AclController {
 	}
 
 	public function POST_lijst() {
-		return new LedenLijstResponse(ProfielModel::instance());
+		return new LedenLijstResponse(ProfielService::instance());
 	}
 }

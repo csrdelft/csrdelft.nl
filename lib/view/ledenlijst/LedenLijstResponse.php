@@ -4,6 +4,7 @@ namespace CsrDelft\view\ledenlijst;
 
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\model\ProfielService;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\datatable\ServerSideDataTableResponse;
 
@@ -12,6 +13,18 @@ use CsrDelft\view\formulier\datatable\ServerSideDataTableResponse;
  * @since 19/09/2018
  */
 class LedenLijstResponse extends ServerSideDataTableResponse {
+	public function count($zoekFilter) {
+		return ProfielService::instance()->count($zoekFilter);
+	}
+
+	public function find($zoekWaarde, $kolommen, $oderBy, $length, $start) {
+		return ProfielService::instance()->find($zoekWaarde, $kolommen, $oderBy, $length, $start)->fetchAll();
+	}
+
+	public function getOrderAlias() {
+		return ProfielService::ORDER_ALIAS;
+	}
+
 	/**
 	 * @param Profiel $entity
 	 * @return string

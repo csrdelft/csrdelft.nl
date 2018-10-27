@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\datatable;
 
+use CsrDelft\model\ProfielService;
 use CsrDelft\Orm\PersistenceModel;
 
 /**
@@ -62,7 +63,7 @@ abstract class ServerSideDataTableResponse extends DataTableResponse {
 	private $entries;
 	private $recordsFiltered;
 
-	public function __construct(PersistenceModel $model, int $code = 200) {
+	public function __construct($model, int $code = 200) {
 		parent::__construct($model, $code);
 
 		// Zie https://datatables.net/manual/server-side#Sent-parameters
@@ -104,7 +105,7 @@ abstract class ServerSideDataTableResponse extends DataTableResponse {
 		$this->columnsRaw = $input['columns'];
 		$this->order = $input['order'];
 
-		$this->columns = $this->filterColumns($this->columnsRaw);
+		$this->columns = $this->columnsRaw;
 
 		$zoekKolommen = array_filter($this->columns, function ($column) {
 			return $column['searchable'];
@@ -119,11 +120,17 @@ abstract class ServerSideDataTableResponse extends DataTableResponse {
 		}, $zoekKolommen));
 
 		$orderBy = join(", ", array_map(function ($column) {
-			return "${column['data']} ${column['dir']}";
+			$columnName = $column['data'];
+
+			if (isset($this->getOrderAlias()[$columnName])) {
+				$columnName = $this->getOrderAlias()[$columnName];
+			}
+
+			return "$columnName ${column['dir']}";
 		}, $orderKolommen));
 
-		$this->recordsFiltered = $this->model->count($criteria, [':searchTerm' => sql_contains($this->searchValue)]);
-		$this->entries = $this->model->find($criteria, [':searchTerm' => sql_contains($this->searchValue)], null, $orderBy, $this->length, $this->start)->fetchAll();
+		$this->recordsFiltered = $this->count($this->searchValue);// $this->model->count($criteria, [':searchTerm' => sql_contains($this->searchValue)]);
+		$this->entries = $this->find($this->searchValue, $this->filterColumns($this->columns), $orderBy, $this->length, $this->start);
 	}
 
 	/**
@@ -146,6 +153,14 @@ abstract class ServerSideDataTableResponse extends DataTableResponse {
 		return $ret;
 	}
 
+	protected abstract function count($zoekFilter);
+
+	protected abstract function find($zoekWaarde, $kolommen, $oderBy, $length, $start);
+
+	protected function getOrderAlias() {
+		return [];
+	}
+
 	protected function toArray($entity) {
 		return $entity;
 	}
@@ -155,7 +170,7 @@ abstract class ServerSideDataTableResponse extends DataTableResponse {
 		header('Content-Type: application/json');
 
 		echo json_encode([
-			"draw" => filter_input(INPUT_POST, 'draw', FILTER_VALIDATE_INT),
+			"draw" => $this->draw,
 			"recordsTotal" => $this->model->find()->rowCount(),
 			"recordsFiltered" => $this->recordsFiltered,
 			"modal" => $this->modal,

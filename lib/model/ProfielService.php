@@ -2,7 +2,9 @@
 
 namespace CsrDelft\model;
 
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
 
@@ -10,7 +12,7 @@ use CsrDelft\Orm\DependencyManager;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 19/09/2018
  */
-class ProfielService extends DependencyManager {
+class ProfielService extends DependencyManager implements Service {
 
 	const VELDEN = [
 		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'duckname', 'geslacht',
@@ -20,6 +22,14 @@ class ProfielService extends DependencyManager {
 	const VELDEN_MOD = [
 		'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum',
 		'echtgenoot', 'adresseringechtpaar', 'land', 'bankrekening', 'machtiging'];
+
+	const ORDER_ALIAS = [
+		'naam' => 'achternaam',
+	];
+
+	const DEFAULT_FILTER = [
+		'status' => [LidStatus::Lid, LidStatus::Noviet, LidStatus::Gastlid]
+	];
 
 	/**
 	 * @var ProfielModel
@@ -162,5 +172,100 @@ class ProfielService extends DependencyManager {
 		}
 
 		return [];
+	}
+
+	public function getAttributes() {
+		return $this->profielModel->getAttributes();
+	}
+
+	public function count($zoekFilter) {
+		return $this->find($zoekFilter, ['*'], [], -1, 0)->rowCount();
+	}
+
+	public function find($zoekFilter = null, $zoekVelden = [], $order = null, $limit = -1, $start = 0) {
+		if ($zoekFilter == null || $zoekFilter == '*' || trim($zoekFilter) == '') {
+			return $this->profielModel->find(null, [], null, $order, $limit, $start);
+		} elseif (preg_match('/^groep:([0-9]+|[a-z]+)$/i', $zoekFilter)) { //leden van een groep
+			$criteria_params = [];
+			/*try {
+				//FIXME: $groep = new OldGroep(substr($zoekterm, 6));
+				$uids = array_keys($groep->getLeden());
+			} catch (\Exception $e) {
+				//care.
+			}*/
+			$criteria = "uid IN('" . implode("','", $criteria_params) . "') ";
+		} elseif (preg_match('/^verticale:\w*$/', $zoekFilter)) { //verticale, id, letter
+			$v = substr($zoekFilter, 10);
+			if (strlen($v) > 1 || strtolower($v) == 'x') {
+				$result = VerticalenModel::instance()->find('naam LIKE ?', array(sql_contains($v)))->fetchAll();
+				$criteria_params = array_map(function ($verticale) { return $verticale->letter; }, $result);
+				$criteria = 'verticale IN (' . implode(', ', array_fill(0, count($criteria_params), '?')) . ')';
+			} else {
+				$verticale = VerticalenModel::get($v);
+				if ($verticale) {
+					$criteria_params = [':verticale' => $verticale->letter];
+				} else {
+					$criteria_params = [':verticale' => ''];
+				}
+
+				$criteria = 'verticale = :verticale';
+			}
+		} elseif (preg_match('/^\d{2}$/', $zoekFilter)) { //lichting bij een string van 2 cijfers
+			$criteria = 'RIGHT(lidjaar,2) = :search';
+			$criteria_params = [':search' => $zoekFilter];
+		} elseif (preg_match('/^lichting:\d\d(\d\d)?$/', $zoekFilter)) { //lichting op de explicite manier
+			$lichting = substr($zoekFilter, 9);
+
+			$criteria_params = [':lichting' => $lichting];
+
+			if (strlen($lichting) == 4) {
+				$criteria = 'lidjaar = :lichting';
+			} else {
+				$criteria = 'RIGHT(lidjaar, 2) = :lichting';
+			}
+		} elseif (preg_match('/^[a-z0-9][0-9]{3}$/', $zoekFilter)) { //uid's is ook niet zo moeilijk.
+			$criteria = 'uid = :search';
+			$criteria_params = [':search' => $zoekFilter];
+		} elseif (preg_match('/^([a-z0-9][0-9]{3} ?,? ?)*([a-z0-9][0-9]{3})$/', $zoekFilter)) {
+			//meerdere uid's gescheiden door komma's.
+			//explode en trim() elke waarde van de array.
+			$criteria_params = array_map('trim', explode(',', $zoekFilter));
+			$criteria = 'uid IN(' . implode(', ', array_fill(0, count($criteria_params), '?')) . ') ';
+		} elseif (preg_match('/^(' . implode('|', $zoekVelden) . '):=?([a-z0-9\-_])+$/i', $zoekFilter)) {
+			//Zoeken in de velden van $this->allowVelden. Zoektermen met 'veld:' ervoor.
+			//met 'veld:=<zoekterm> wordt exact gezocht.
+			$parts = explode(':', $zoekFilter);
+
+			if ($parts[1][0] == '=') {
+				$criteria = "{$parts[0]} = :search";
+				$criteria_params = [':search' => $parts[1]];
+			} else {
+				$criteria = "{$parts[0]} LIKE :search";
+				$criteria_params = [':search' => sql_contains($parts[1])];
+			}
+		} else {
+			$criteria = <<<'QUERY'
+voornaam LIKE :search 
+OR achternaam LIKE :search 
+OR CONCAT_WS(' ', voornaam, tussenvoegsel, achternaam) LIKE :search 
+OR CONCAT_WS{' ', voornaam, achternaam) LIKE :search
+OR CONCAT_WS(' ', tussenvoegsel, achternaam) LIKE :search
+OR CONCAT_WS(' ', achternaam, tussenvoegsel) LIKE :search
+OR nickname LIKE :search
+OR duckname LIKE :search
+OR eetwens LIKE :search
+OR CONCAT_WS(' ', adres, postcode, woonplaats) LIKE :search
+OR adres LIKE :search
+OR postcode LIKE :search
+OR woonplaats LIKE :search
+OR mobiel LIKE :search
+OR telefoon LIKE :search
+OR studie LIKE :search
+OR email LIKE :search
+QUERY;
+			$criteria_params = [':search' => sql_contains($zoekFilter)];
+		}
+
+		return $this->profielModel->find($criteria, $criteria_params, null, $order, $limit, $start);
 	}
 }
