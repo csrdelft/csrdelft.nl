@@ -6,6 +6,8 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\ProfielService;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fiscaat\saldo\SaldiSommenResponseView;
@@ -14,6 +16,7 @@ use CsrDelft\view\fiscaat\saldo\CiviSaldoTableResponse;
 use CsrDelft\view\fiscaat\saldo\InleggenForm;
 use CsrDelft\view\fiscaat\saldo\LidRegistratieForm;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\JsonResponse;
 use DateTime;
 
 /**
@@ -34,11 +37,12 @@ class BeheerCiviSaldoController extends AclController {
 				'registreren' => 'P_FISCAAT_MOD',
 				'verwijderen' => 'P_FISCAAT_MOD',
 				'inleggen' => 'P_FISCAAT_MOD',
-				'som' => 'P_FISCAAT_READ'
+				'som' => 'P_FISCAAT_READ',
 			];
 		} else {
 			$this->acl = [
 				'overzicht' => 'P_FISCAAT_READ',
+				'zoek' => 'P_FISCAAT_READ',
 			];
 		}
 	}
@@ -153,5 +157,34 @@ class BeheerCiviSaldoController extends AclController {
 		}
 
 		$this->view = new SaldiSommenResponseView(CiviSaldoModel::instance(), $moment);
+	}
+
+	public function GET_zoek() {
+		$zoekterm = $this->getParam('q');
+
+		$pdo = Database::instance()->getDatabase();
+
+		$leden = ProfielService::instance()->zoekLeden($zoekterm, 'naam', 'alle', 'achternaam');
+		$uids = array_map(function ($profiel) use ($pdo) { return $pdo->quote($profiel->uid); }, $leden);
+
+		if (count($uids) > 0) {
+			$whereUids = ' OR uid IN ('. join(', ', $uids) .')';
+		} else {
+			$whereUids = '';
+		}
+
+		$civiSaldi = $this->model->find('deleted <> 1 AND (uid LIKE :zoekTerm OR naam LIKE :zoekTerm' . $whereUids . ')', [':zoekTerm' => sql_contains($zoekterm)])->fetchAll();
+
+
+		$resp = [];
+		foreach ($civiSaldi as $civiSaldo) {
+			$profiel = ProfielModel::get($civiSaldo->uid);
+			$resp[] = [
+				'label' => $profiel === false ? $civiSaldo->naam : $profiel->getNaam('volledig'),
+				'value' => $civiSaldo->uid
+			];
+		}
+
+		$this->view = new JsonResponse($resp);
 	}
 }

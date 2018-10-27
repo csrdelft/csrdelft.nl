@@ -40,6 +40,7 @@
 		"phpunit/phpunit": "^6.5"
 	},
 	"scripts": {
+		"migrate": "vendor/bin/phinx migrate",
 		"generator": "php ./bin/dev/generate.php",
 		"production": "php ./bin/ci/compile.php",
 		"analyse": "vendor/bin/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs",

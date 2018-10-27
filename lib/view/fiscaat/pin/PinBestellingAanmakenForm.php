@@ -5,7 +5,7 @@ namespace CsrDelft\view\fiscaat\pin;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\fiscaat\pin\PinTransactieMatch;
 use CsrDelft\view\formulier\getalvelden\RequiredIntField;
-use CsrDelft\view\formulier\invoervelden\RequiredLidField;
+use CsrDelft\view\formulier\invoervelden\CivisaldoField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -22,7 +22,8 @@ class PinBestellingAanmakenForm extends ModalForm {
 		parent::__construct([], '/fiscaat/pin/aanmaken', 'Voeg een bestelling toe.', true);
 
 		$fields = [];
-		$fields[] = new RequiredLidField('uid', null, 'Lid');
+		$fields['civisaldo'] = new CivisaldoField('uid', null, 'Lid');
+		$fields['civisaldo']->required = true;
 		$fields['pinTransactieId'] = new RequiredIntField('pinTransactieId', $pinTransactieMatch ? $pinTransactieMatch->id : null, 'Pin Transactie Id');
 		$fields['pinTransactieId']->hidden = true;
 
