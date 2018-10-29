@@ -57,6 +57,7 @@ class LoginController extends AclController {
 				'wachtwoordwijzigen' => 'P_LOGGED_IN',
 				'wachtwoordreset' => 'P_LOGGED_IN',
 				'wachtwoordvergeten' => 'P_PUBLIC',
+				'wachtwoordverlopen' => 'P_LOGGED_IN',
 			);
 		} else {
 			$this->acl = array(
@@ -248,6 +249,8 @@ class LoginController extends AclController {
 				return $this->wachtwoordwijzigen();
 			case 'reset':
 				return $this->wachtwoordreset();
+			case 'verlopen':
+				return $this->wachtwoordwijzigen();
 			case 'vergeten':
 			default:
 				return $this->wachtwoordvergeten();
