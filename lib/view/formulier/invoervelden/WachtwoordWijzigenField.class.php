@@ -27,7 +27,7 @@ class WachtwoordWijzigenField extends InputField {
 
 	public function __construct($name, Account $account, $require_current = true) {
 		$this->require_current = $require_current;
-		parent::__construct($name, null, null, $account);
+		parent::__construct($name, null, '', $account);
 		$this->title = 'Het nieuwe wachtwoord moet langer zijn dan 23 tekens of langer dan 10 en ook hoofdletters, kleine letters, cijfers en speciale tekens bevatten.';
 
 		// blacklist gegevens van account
@@ -112,6 +112,8 @@ class WachtwoordWijzigenField extends InputField {
 			$this->error = 'U moet uw huidige wachtwoord invoeren';
 		} elseif ($this->required AND empty($new)) {
 			$this->error = 'U moet een nieuw wachtwoord invoeren';
+		} elseif ($this->require_current AND !AccountModel::instance()->controleerWachtwoord($this->model, $current)) {
+				$this->error = 'Uw huidige wachtwoord is niet juist';
 		} elseif (!empty($new)) {
 			if ($this->require_current AND $current == $new) {
 				$this->error = 'Het nieuwe wachtwoord is hetzelfde als het huidige wachtwoord';
@@ -139,8 +141,6 @@ class WachtwoordWijzigenField extends InputField {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
 			} elseif ($new != $confirm) {
 				$this->error = 'Nieuwe wachtwoorden komen niet overeen';
-			} elseif ($this->require_current AND !AccountModel::instance()->controleerWachtwoord($this->model, $current)) {
-				$this->error = 'Uw huidige wachtwoord is niet juist';
 			}
 		}
 		return $this->error === '';
@@ -148,6 +148,9 @@ class WachtwoordWijzigenField extends InputField {
 
 	public function getHtml() {
 		$html = '';
+		if ($this->isPosted()&& !$this->validate()) {
+			$this->css_classes[] = 'is-invalid';
+		}
 		$inputCssClasses = join(" ", $this->css_classes);
 
 		if ($this->require_current) {
@@ -185,4 +188,10 @@ HTML;
 		return $html;
 	}
 
+	public function getErrorDiv() {
+		if ($this->getError() != '') {
+			return '<div class="d-block invalid-feedback">' . $this->getError() . '</div>';
+		}
+		return '';
+	}
 }
