@@ -4,6 +4,7 @@ namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
+use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\view\CsrLayoutPage;
@@ -12,6 +13,7 @@ use CsrDelft\view\fiscaat\producten\CiviProductSuggestiesView;
 use CsrDelft\view\fiscaat\producten\CiviProductTable;
 use CsrDelft\view\fiscaat\producten\CiviProductTableResponse;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\peilingen\PeilingForm;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -77,6 +79,16 @@ class BeheerCiviProductenController extends AclController {
 		}
 
 		$this->view = $form;
+	}
+
+	/**
+	 * @throws \CsrDelft\common\CsrGebruikerException
+	 */
+	public function POST_nieuw() {
+		$peiling = new Peiling();
+		$peiling->id = -1;
+
+		$this->view = new PeilingForm($peiling, true);
 	}
 
 	public function POST_bewerken() {

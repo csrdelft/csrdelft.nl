@@ -6,8 +6,18 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\model\entity\peilingen\PeilingOptie;
 use CsrDelft\model\peilingen\PeilingenModel;
+use CsrDelft\model\peilingen\PeilingOptiesModel;
+use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\peilingen\PeilingOptieResponse;
+use CsrDelft\view\peilingen\PeilingResponse;
+use CsrDelft\view\peilingen\PeilingBeheerTable;
 use CsrDelft\view\peilingen\PeilingenBeheerView;
+use CsrDelft\view\peilingen\PeilingForm;
+use CsrDelft\view\peilingen\PeilingOptieTable;
 
 /**
  * Class PeilingenController
@@ -18,30 +28,44 @@ use CsrDelft\view\peilingen\PeilingenBeheerView;
  */
 class PeilingenController extends AclController {
 
+	/**
+	 * @var PeilingOptiesModel
+	 */
+	private $peilingOptiesModel;
+	private $query;
+
 	public function __construct($query) {
 		parent::__construct($query, PeilingenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'beheer' => 'P_PEILING_MOD',
+				'opties' => 'P_PEILING_MOD',
 				'verwijderen' => 'P_PEILING_MOD',
 			);
 		} else {
 			$this->acl = array(
 				'beheer' => 'P_PEILING_MOD',
 				'stem' => 'P_PEILING_VOTE',
+				'bewerken' => 'P_PEILING_MOD',
+				'nieuw' => 'P_PEILING_MOD',
+				'verwijderen' => 'P_PEILING_MOD',
+				'opties' => 'P_PEILING_MOD',
 			);
 		}
+		$this->peilingOptiesModel = PeilingOptiesModel::instance();
+		$this->query = $query;
 	}
 
 	public function performAction(array $args = array()) {
 		$this->action = $this->getParam(2);
-		if ($this->action == 'verwijderen') {
-			$args = $this->getParams(3);
-		}
+		$args = $this->getParams(3);
 		$this->view = parent::performAction($args);
 	}
 
-	public function beheer() {
+	public function GET_beheer() {
+		return new CsrLayoutPage(new PeilingBeheerTable());
+
+
 		$peiling = new Peiling();
 
 		if ($this->getMethod() == 'POST') {
@@ -76,16 +100,55 @@ class PeilingenController extends AclController {
 		return $view;
 	}
 
-	public function verwijderen($peiling_id) {
-		$peiling = $this->model->getPeilingById((int)$peiling_id);
-		if ($peiling === false) {
-			setMelding('Peiling al verwijderd!', 2);
-		} else {
-			$this->model->delete($peiling);
-			setMelding('Peiling is verwijderd!', 1);
+	public function POST_beheer() {
+		return new PeilingResponse($this->model->find());
+	}
+
+	public function POST_nieuw() {
+		$peiling = new Peiling();
+		$form = new PeilingForm($peiling, true);
+
+		if ($form->isPosted() && $form->validate()) {
+			$peiling = $form->getModel();
+			$peiling->eigenaar = LoginModel::getUid();
+			$peiling->mag_bewerken = false;
+
+			$peiling->id = $this->model->create($form->getModel());
+			return new PeilingResponse([$peiling]);
 		}
 
-		redirect('/peilingen/beheer');
+		return $form;
+	}
+
+	public function POST_bewerken() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$peiling = $this->model->retrieveByUUID($selection[0]);
+		$form = new PeilingForm($peiling, false);
+
+		if ($form->isPosted() && $form->validate()) {
+			$peiling = $form->getModel();
+
+			$this->model->update($peiling);
+			return new PeilingResponse([$peiling]);
+		}
+
+		return $form;
+	}
+
+	public function opties() {
+		$router = new PeilingOptiesController($this->query);
+		$router->performAction();
+
+		return $router->view;
+	}
+
+	public function verwijderen() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$peiling = $this->model->retrieveByUUID($selection[0]);
+
+		$this->model->delete($peiling);
+
+		return new RemoveRowsResponse([$peiling]);
 	}
 
 	public function stem() {

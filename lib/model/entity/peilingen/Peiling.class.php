@@ -16,7 +16,12 @@ use CsrDelft\Orm\Entity\T;
 class Peiling extends PersistentEntity {
 	public $id;
 	public $titel;
-	public $tekst;
+	public $beschrijving;
+	public $eigenaar;
+	public $mag_bewerken;
+	public $resultaat_zichtbaar;
+	public $aantal_voorstellen;
+	public $aantal_stemmen;
 
 	private $opties;
 
@@ -54,9 +59,14 @@ class Peiling extends PersistentEntity {
 	protected static $table_name = 'peiling';
 	protected static $primary_key = array('id');
 	protected static $persistent_attributes = array(
-		'id' => array(T::Integer, false, 'auto_increment'),
-		'titel' => array(T::String),
-		'tekst' => array(T::Text)
+		'id' => [T::Integer, false, 'auto_increment'],
+		'titel' => [T::String],
+		'beschrijving' => [T::Text],
+		'eigenaar' => [T::UID],
+		'mag_bewerken' => [T::Boolean],
+		'resultaat_zichtbaar' => [T::Boolean],
+		'aantal_voorstellen' => [T::Integer],
+		'aantal_stemmen' => [T::Integer],
 	);
 }
 

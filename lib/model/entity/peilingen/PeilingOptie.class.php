@@ -27,12 +27,16 @@ class PeilingOptie extends PersistentEntity {
 	 * Titel
 	 * @var string
 	 */
-	public $optie;
+	public $titel;
+
+	public $beschrijving;
 	/**
 	 * Aantal stemmen
 	 * @var int
 	 */
 	public $stemmen = 0;
+
+	public $ingebracht_door;
 
 	public static function init($optie) {
 		$peilingoptie = new PeilingOptie();
@@ -43,8 +47,10 @@ class PeilingOptie extends PersistentEntity {
 	protected static $persistent_attributes = array(
 		'id' => array(T::Integer, false, 'auto_increment'),
 		'peiling_id' => array(T::Integer),
-		'optie' => array(T::String),
-		'stemmen' => array(T::Integer)
+		'titel' => array(T::String),
+		'beschrijving' => array(T::Text),
+		'stemmen' => array(T::Integer),
+		'ingebracht_door' => array(T::UID),
 	);
 
 	protected static $primary_key = array('id');
