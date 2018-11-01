@@ -18,9 +18,9 @@ use CsrDelft\view\formulier\ModalForm;
 class PeilingOptieForm extends ModalForm
 {
 	/**
-	 * PeilingOptieForm constructor.
 	 * @param PeilingOptie $model
 	 * @param $id
+	 * @throws \CsrDelft\common\CsrGebruikerException
 	 */
 	public function __construct($model, $id)
 	{

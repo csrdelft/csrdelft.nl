@@ -2,22 +2,20 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\peilingen\Peiling;
-use CsrDelft\model\entity\peilingen\PeilingOptie;
 use CsrDelft\model\peilingen\PeilingenModel;
 use CsrDelft\model\peilingen\PeilingOptiesModel;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
-use CsrDelft\view\JsonResponse;
-use CsrDelft\view\peilingen\PeilingOptieResponse;
 use CsrDelft\view\peilingen\PeilingResponse;
 use CsrDelft\view\peilingen\PeilingBeheerTable;
-use CsrDelft\view\peilingen\PeilingenBeheerView;
 use CsrDelft\view\peilingen\PeilingForm;
-use CsrDelft\view\peilingen\PeilingOptieTable;
+use CsrDelft\view\View;
 
 /**
  * Class PeilingenController
@@ -31,7 +29,6 @@ class PeilingenController extends AclController {
 	/**
 	 * @var PeilingOptiesModel
 	 */
-	private $peilingOptiesModel;
 	private $query;
 
 	public function __construct($query) {
@@ -52,7 +49,6 @@ class PeilingenController extends AclController {
 				'opties' => 'P_PEILING_MOD',
 			);
 		}
-		$this->peilingOptiesModel = PeilingOptiesModel::instance();
 		$this->query = $query;
 	}
 
@@ -64,40 +60,6 @@ class PeilingenController extends AclController {
 
 	public function GET_beheer() {
 		return new CsrLayoutPage(new PeilingBeheerTable());
-
-
-		$peiling = new Peiling();
-
-		if ($this->getMethod() == 'POST') {
-			$peiling->tekst = filter_input(INPUT_POST, 'verhaal', FILTER_SANITIZE_STRING);
-			$peiling->titel = filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING);
-			$opties = filter_input(INPUT_POST, 'opties', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
-
-			if (count($opties) > 0) {
-				foreach ($opties as $optie_tekst) {
-					if (trim($optie_tekst) != '') {
-						$peilingOptie = new PeilingOptie();
-						$peilingOptie->optie = $optie_tekst;
-						$peiling->nieuwOptie($peilingOptie);
-					}
-				}
-			}
-
-			if (($errors = PeilingenModel::instance()->validate($peiling)) != '') {
-				setMelding($errors, -1);
-			} else {
-				$peiling_id = PeilingenModel::instance()->create($peiling);
-				setMelding('Peiling is aangemaakt', 1);
-
-				// Voorkom dubbele submit
-				redirect(HTTP_REFERER . "#peiling" . $peiling_id);
-			}
-		}
-
-		$view = new CsrLayoutPage(new PeilingenBeheerView($this->model->getLijst(), $peiling));
-		$view->addCompressedResources('peilingbeheer');
-
-		return $view;
 	}
 
 	public function POST_beheer() {
@@ -135,6 +97,12 @@ class PeilingenController extends AclController {
 		return $form;
 	}
 
+	/**
+	 * @return View
+	 * @throws CsrException
+	 * @throws CsrGebruikerException
+	 * @throws CsrToegangException
+	 */
 	public function opties() {
 		$router = new PeilingOptiesController($this->query);
 		$router->performAction();
