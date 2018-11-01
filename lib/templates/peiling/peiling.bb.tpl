@@ -10,7 +10,7 @@
 			{$peiling->titel|escape:'html'}
 		{if $peiling->magBewerken()}</a>{/if}
 	</h3>
-	<div class="vraag">{$peiling->tekst}</div>
+	<div class="vraag">{$peiling->beschrijving}</div>
 	{if $peiling->magStemmen()}
 		<form id="peilingForm{$peiling->id}" action="/peilingen/stem" method="post">
 			<input type="hidden" name="id" value="{$peiling->id}"/>
@@ -20,10 +20,10 @@
 					<li>
 						{if $peiling->magStemmen()}
 							<input type="radio" name="optie" value="{$optie->id}" id="optie{$optie->id}" />
-							<label for="optie{$optie->id}" id="label{$optie->id}">{$optie->optie}</label>
+							<label for="optie{$optie->id}" id="label{$optie->id}">{$optie->titel}</label>
 						{else}
 							{assign var="percentage" value=$optie->stemmen/$peiling->getStemmenAantal()*100}
-							<div class="optie">{$optie->optie}</div>
+							<div class="optie">{$optie->titel}</div>
 							<div class="stemmen">({$optie->stemmen})</div>
 							<div class="percentage">{$percentage|string_format:'%01.1f'}%</div>
 							<div class="grafisch"><div class="balk" style="width: {$percentage|string_format:'%d'}%;">&nbsp;</div></div>

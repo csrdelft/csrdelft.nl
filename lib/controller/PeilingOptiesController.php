@@ -2,9 +2,12 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\peilingen\PeilingOptie;
 use CsrDelft\model\peilingen\PeilingOptiesModel;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use CsrDelft\view\peilingen\PeilingOptieForm;
 use CsrDelft\view\peilingen\PeilingOptieResponse;
 use CsrDelft\view\peilingen\PeilingOptieTable;
@@ -28,6 +31,7 @@ class PeilingOptiesController extends AclController
 			$this->acl = [
 				'opties' => 'P_PEILING_MOD',
 				'toevoegen' => 'P_PEILING_MOD',
+				'verwijderen' => 'P_PEILING_MOD',
 			];
 		}
 	}
@@ -60,11 +64,33 @@ class PeilingOptiesController extends AclController
 		$form = new PeilingOptieForm(new PeilingOptie(), $id);
 
 		if ($form->isPosted() && $form->validate()) {
+			/** @var PeilingOptie $optie */
 			$optie = $form->getModel();
-			$this->model->create($optie);
-			return new PeilingOptieResponse($optie);
+			$optie->ingebracht_door = LoginModel::getUid();
+			$optie->peiling_id = $id;
+			$optie->id = $this->model->create($optie);
+			return new PeilingOptieResponse([$optie]);
 		}
 
 		return $form;
+	}
+
+	/**
+	 * @param $id
+	 * @return RemoveRowsResponse
+	 * @throws CsrGebruikerException
+	 */
+	public function POST_verwijderen($id) {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+
+		/** @var PeilingOptie $peilingOptie */
+		$peilingOptie = $this->model->retrieveByUUID($selection[0]);
+
+		if ($peilingOptie !== false && $peilingOptie->stemmen == 0) {
+			$this->model->delete($peilingOptie);
+			return new RemoveRowsResponse([$peilingOptie]);
+		} else {
+			throw new CsrGebruikerException('Peiling optie bestaat niet of er is al een keer op gestemd.');
+		}
 	}
 }

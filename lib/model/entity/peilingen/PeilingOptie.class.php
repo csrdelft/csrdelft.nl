@@ -48,9 +48,9 @@ class PeilingOptie extends PersistentEntity {
 		'id' => array(T::Integer, false, 'auto_increment'),
 		'peiling_id' => array(T::Integer),
 		'titel' => array(T::String),
-		'beschrijving' => array(T::Text),
+		'beschrijving' => array(T::Text, true),
 		'stemmen' => array(T::Integer),
-		'ingebracht_door' => array(T::UID),
+		'ingebracht_door' => array(T::UID, true),
 	);
 
 	protected static $primary_key = array('id');

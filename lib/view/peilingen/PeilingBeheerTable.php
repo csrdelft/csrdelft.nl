@@ -19,6 +19,9 @@ class PeilingBeheerTable extends DataTable
 
 		$this->hideColumn('id', false);
 
+		$this->searchColumn('titel');
+		$this->searchColumn('beschrijving');
+
 		$this->setOrder(['id' => 'desc']);
 
 		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/peilingen/bewerken', 'Bewerken', 'Deze peiling bewerken', 'pencil'));
