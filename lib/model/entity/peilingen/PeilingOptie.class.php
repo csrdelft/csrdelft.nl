@@ -12,7 +12,6 @@ use CsrDelft\Orm\Entity\T;
  *
  */
 class PeilingOptie extends PersistentEntity {
-
 	/**
 	 * Primary key
 	 * @var int
@@ -28,14 +27,18 @@ class PeilingOptie extends PersistentEntity {
 	 * @var string
 	 */
 	public $titel;
-
+	/**
+	 * @var string
+	 */
 	public $beschrijving;
 	/**
 	 * Aantal stemmen
 	 * @var int
 	 */
 	public $stemmen = 0;
-
+	/**
+	 * @var string
+	 */
 	public $ingebracht_door;
 
 	public static function init($optie) {
