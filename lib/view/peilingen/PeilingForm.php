@@ -4,9 +4,12 @@ namespace CsrDelft\view\peilingen;
 use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\view\formulier\getalvelden\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
+use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\RequiredTextareaField;
 use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
+use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\keuzevelden\RequiredCheckboxField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -34,9 +37,10 @@ class PeilingForm extends ModalForm
 		$fields[] = new HiddenField('id', $model->id);
 		$fields[] = new RequiredTextField('titel', $model->titel, 'Titel');
 		$fields[] = new RequiredTextareaField('beschrijving', $model->beschrijving, 'Beschrijving');
-		$fields[] = new CheckboxField('resultaat_zichtbaar', $model->resultaat_zichtbaar, 'Resultaat zichtbaar');
-		$fields[] = new RequiredIntField('aantal_voorstellen', $model->aantal_voorstellen, 'Aantal voorstellen', 0, 10);
-		$fields[] = new RequiredIntField('aantal_stemmen', $model->aantal_stemmen, 'Aantal stemmen', 0, 10);
+		$fields[] = new JaNeeField('resultaat_zichtbaar', $model->resultaat_zichtbaar, 'Resultaat zichtbaar');
+		$fields[] = new RequiredIntField('aantal_voorstellen', $model->aantal_voorstellen ?? 0, 'Aantal voorstellen', 0, 10);
+		$fields[] = new RequiredIntField('aantal_stemmen', $model->aantal_stemmen ?? 1, 'Aantal stemmen', 0, 10);
+		$fields[] = new RechtenField('rechten_stemmen', $model->rechten_stemmen, 'Rechten stemmen');
 
 		$this->addFields($fields);
 

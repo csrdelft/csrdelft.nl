@@ -12,9 +12,9 @@ use CsrDelft\model\peilingen\PeilingOptiesModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
-use CsrDelft\view\peilingen\PeilingResponse;
 use CsrDelft\view\peilingen\PeilingBeheerTable;
 use CsrDelft\view\peilingen\PeilingForm;
+use CsrDelft\view\peilingen\PeilingResponse;
 use CsrDelft\view\View;
 
 /**
@@ -46,7 +46,8 @@ class PeilingenController extends AclController {
 				'bewerken' => 'P_PEILING_MOD',
 				'nieuw' => 'P_PEILING_MOD',
 				'verwijderen' => 'P_PEILING_MOD',
-				'opties' => 'P_PEILING_MOD',
+				'opties' => 'P_PEILING_VOTE',
+				'stem2' => 'P_PEILING_VOTE',
 			);
 		}
 		$this->query = $query;
@@ -58,8 +59,17 @@ class PeilingenController extends AclController {
 		$this->view = parent::performAction($args);
 	}
 
-	public function GET_beheer() {
-		return new CsrLayoutPage(new PeilingBeheerTable());
+	public function GET_beheer($id = null) {
+		$table = new PeilingBeheerTable();
+		$view = new CsrLayoutPage($table);
+
+		if ($id) {
+			$peiling = $this->model->find('id = ?', [$id])->fetch();
+			$table->filter = $peiling->titel;
+			$view->modal = new PeilingForm($peiling, false);
+		}
+
+		return $view;
 	}
 
 	public function POST_beheer() {
@@ -117,6 +127,10 @@ class PeilingenController extends AclController {
 		$this->model->delete($peiling);
 
 		return new RemoveRowsResponse([$peiling]);
+	}
+
+	public function stem2() {
+
 	}
 
 	public function stem() {

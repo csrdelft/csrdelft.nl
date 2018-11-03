@@ -5,6 +5,7 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\peilingen\PeilingOptie;
+use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\peilingen\PeilingOptiesModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
@@ -20,6 +21,8 @@ use CsrDelft\view\peilingen\PeilingOptieTable;
  */
 class PeilingOptiesController extends AclController
 {
+	private $peilingenLogic;
+
 	public function __construct($query)
 	{
 		parent::__construct($query, PeilingOptiesModel::instance());
@@ -29,11 +32,13 @@ class PeilingOptiesController extends AclController
 			];
 		} else {
 			$this->acl = [
-				'opties' => 'P_PEILING_MOD',
-				'toevoegen' => 'P_PEILING_MOD',
+				'opties' => 'P_PEILING_VOTE',
+				'toevoegen' => 'P_PEILING_VOTE',
 				'verwijderen' => 'P_PEILING_MOD',
 			];
 		}
+
+		$this->peilingenLogic = PeilingenLogic::instance();
 	}
 
 	public function performAction(array $args = array()) {
@@ -60,8 +65,17 @@ class PeilingOptiesController extends AclController
 		return new PeilingOptieResponse($this->model->find('peiling_id = ?', [$id]));
 	}
 
+	/**
+	 * @param $id
+	 * @return PeilingOptieForm|PeilingOptieResponse
+	 * @throws CsrGebruikerException
+	 */
 	public function POST_toevoegen($id) {
 		$form = new PeilingOptieForm(new PeilingOptie(), $id);
+
+		if (!$this->peilingenLogic->magOptieToevoegen($id, LoginModel::getUid())) {
+			throw new CsrGebruikerException("Mag geen opties meer toevoegen!");
+		}
 
 		if ($form->isPosted() && $form->validate()) {
 			/** @var PeilingOptie $optie */
@@ -80,11 +94,11 @@ class PeilingOptiesController extends AclController
 	 * @return RemoveRowsResponse
 	 * @throws CsrGebruikerException
 	 */
-	public function POST_verwijderen($id) {
+	public function POST_verwijderen($id = null) {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 
 		/** @var PeilingOptie $peilingOptie */
-		$peilingOptie = $this->model->retrieveByUUID($selection[0]);
+		$peilingOptie = $this->model->retrieveByUUI.D($selection[0]);
 
 		if ($peilingOptie !== false && $peilingOptie->stemmen == 0) {
 			$this->model->delete($peilingOptie);

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\peilingen;
 use CsrDelft\model\peilingen\PeilingenModel;
+use CsrDelft\view\formulier\datatable\CellRender;
 use CsrDelft\view\formulier\datatable\DataTable;
 use CsrDelft\view\formulier\datatable\knop\ConfirmDataTableKnop;
 use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
@@ -18,6 +19,9 @@ class PeilingBeheerTable extends DataTable
 		parent::__construct(PeilingenModel::ORM, '/peilingen/beheer', 'Peilingen beheer');
 
 		$this->hideColumn('id', false);
+
+		$this->addColumn('resultaat_zichtbaar', null, null, CellRender::Check());
+		$this->addColumn('mag_bewerken', null, null, CellRender::Check());
 
 		$this->searchColumn('titel');
 		$this->searchColumn('beschrijving');

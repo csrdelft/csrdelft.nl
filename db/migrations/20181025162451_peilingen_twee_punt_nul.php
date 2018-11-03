@@ -14,6 +14,7 @@ class PeilingenTweePuntNul extends AbstractMigration
 			->addColumn('resultaat_zichtbaar', 'boolean', ['default' => true])
 			->addColumn('aantal_voorstellen', 'integer', ['default' => 0])
 			->addColumn('aantal_stemmen', 'integer', ['default' => 1])
+			->addColumn('rechten_stemmen', 'string', ['null' => true])
 		  ->save();
 
 		$this->table('peiling_optie')

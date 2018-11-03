@@ -9,7 +9,6 @@ use CsrDelft\Orm\Entity\T;
  * Class PeilingStem
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
  */
 class PeilingStem extends PersistentEntity {
 

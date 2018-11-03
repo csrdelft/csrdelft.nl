@@ -41,7 +41,6 @@ import {fnUpdateDataTable} from './datatable-api';
 import {forumBewerken, saveConceptForumBericht} from './forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';
 import {ketzerAjax} from './ajax';
-import {peilingBevestigStem} from './peiling';
 import {importAgenda} from './courant';
 
 /**
@@ -110,10 +109,6 @@ $.extend(window, {
         takenToggleSuggestie,
         // See view/maalcie/forms/SuggestieLijst.php
         takenColorSuggesties,
-    },
-    peiling: {
-        // See templates/peiling/peiling.bb.tpl
-        peilingBevestigStem,
     },
     courant: {
         // See templates/courant/courantbeheer.tpl

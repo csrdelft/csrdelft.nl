@@ -3,6 +3,7 @@
 namespace CsrDelft\view\peilingen;
 
 use CsrDelft\model\entity\peilingen\PeilingOptie;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\LidField;
@@ -30,9 +31,6 @@ class PeilingOptieForm extends ModalForm
 		$fields[] = new HiddenField('peiling_id', $model->peiling_id);
 		$fields[] = new RequiredTextField('titel', $model->titel, 'Titel');
 		$fields[] = new TextareaField('beschrijving', $model->beschrijving, 'Beschrijving');
-		$fields['stemmen'] = new IntField('stemmen', $model->stemmen, 'Stemmen');
-		$fields['stemmen']->readonly = true;
-		$fields[] = new LidField('ingebracht_door', $model->ingebracht_door, 'Ingebracht door');
 
 		$this->addFields($fields);
 

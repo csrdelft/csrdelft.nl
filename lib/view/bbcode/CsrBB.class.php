@@ -38,7 +38,6 @@ use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
 use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
 use CsrDelft\view\mededelingen\MededelingenView;
-use CsrDelft\view\peilingen\PeilingView;
 use CsrDelft\view\SavedQueryContent;
 
 /**
@@ -1293,7 +1292,7 @@ src="https://www.google.com/maps/embed/v1/place?q=' . urlencode($address) . '&ke
 				$url = '#/peiling/' . urlencode($peiling_id);
 				return $this->lightLinkBlock('peiling', $url, $peiling->titel, $peiling->tekst);
 			}
-			$peilingcontent = new PeilingView($peiling);
+			$peilingcontent = view('peilingen.peiling', ['peiling' => $peiling]);
 			return $peilingcontent->getHtml();
 		} catch (CsrException $e) {
 			return '[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')';

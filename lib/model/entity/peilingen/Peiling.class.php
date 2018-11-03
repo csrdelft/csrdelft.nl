@@ -22,6 +22,7 @@ class Peiling extends PersistentEntity {
 	public $resultaat_zichtbaar;
 	public $aantal_voorstellen;
 	public $aantal_stemmen;
+	public $rechten_stemmen;
 
 	private $opties;
 
@@ -43,6 +44,10 @@ class Peiling extends PersistentEntity {
 	public static function magBewerken() {
 		//Elk BASFCie-lid heeft voorlopig peilingbeheerrechten.
 		return LoginModel::mag('P_ADMIN,bestuur,commissie:BASFCie');
+	}
+
+	public function isMod() {
+		return LoginModel::mag('P_PEILING_MOD') || LoginModel::getUid() == $this->eigenaar;
 	}
 
 	public function magStemmen() {
@@ -67,6 +72,7 @@ class Peiling extends PersistentEntity {
 		'resultaat_zichtbaar' => [T::Boolean],
 		'aantal_voorstellen' => [T::Integer],
 		'aantal_stemmen' => [T::Integer],
+		'rechten_stemmen' => [T::String, true],
 	);
 }
 
