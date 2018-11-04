@@ -18,8 +18,9 @@
 							 :value="id"
 							 :id="'PeilingOptie' + id"
 							 :disabled="isDisabled"
-							 v-model="selected"
-							 @change="$emit('input', $event.target)"
+							 :checked="dataSelected"
+							 v-model="dataSelected"
+							 @change="$emit('input', $event.target.checked)"
 				/>
 				<label :for="'PeilingOptie' + id"
 							 class="form-check-label">{{ titel }}</label>
@@ -42,10 +43,14 @@
 			beschrijving: String,
 			stemmen: Number,
 			ingebrachtDoor: String,
+			selected: Boolean
 		},
 		data: () => ({
-			selected: false,
+			dataSelected: false,
 		}),
+		created() {
+			this.dataSelected = this.selected;
+		},
 		computed: {
 			heeftGestemd() {
 				return this.$parent.dataHeeftGestemd;

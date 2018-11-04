@@ -12,21 +12,26 @@
 			<div v-if="dataHeeftGestemd && !resultaatZichtbaar">
 				<div class="card-body">Bedankt voor het stemmen!</div>
 			</div>
-
-			<ul v-else class="list-group list-group-flush"
-					v-for="(optie, index) in alleOpties"
-					:item="optie">
-				<li class="list-group-item">
-					<PeilingOptie
-						v-model="selectedOpties[index]"
-						:id="optie.id"
-						:peilingId="optie.peiling_id"
-						:titel="optie.titel"
-						:beschrijving="optie.beschrijving"
-						:stemmen="optie.stemmen"
-						:ingebrachtDoor="optie.ingebracht_door"></PeilingOptie>
-				</li>
-			</ul>
+			<div v-else class="card-body">
+        <div v-if="zoekbalkZichtbaar">
+					<input type="text" placeholder="zoekterm" v-model="zoekterm"/>
+				</div>
+				<ul class="list-group list-group-flush"
+						v-for="optie in optiesFiltered">
+					<li class="list-group-item">
+						<PeilingOptie
+							v-model="optie.selected"
+							:key="optie.id"
+							:id="optie.id"
+							:peilingId="optie.peiling_id"
+							:titel="optie.titel"
+							:beschrijving="optie.beschrijving"
+							:stemmen="optie.stemmen"
+							:selected="optie.selected"
+							:ingebrachtDoor="optie.ingebracht_door"></PeilingOptie>
+					</li>
+				</ul>
+			</div>
 		</div>
 
 		<div class="card-body">
@@ -71,9 +76,9 @@
 		},
 		data: () => ({
 			alleOpties: [],
-			selectedOpties: [],
 			dataHeeftGestemd: false,
 			dataAantalStemmen: 0,
+			zoekterm: '',
 		}),
 		created() {
 			// Sla opties op in een data attribuut, deze wordt niet van boven veranderd,
@@ -93,7 +98,10 @@
 				return `/peilingen/beheer/${this.id}`;
 			},
 			selected() {
-				return this.selectedOpties.filter((o) => o !== null && o.checked);
+				return this.alleOpties.filter((o) => o.selected);
+			},
+			optiesFiltered() {
+				return this.alleOpties.filter((o) => o.titel.toLowerCase().includes(this.zoekterm.toLowerCase()));
 			},
 			keuzesOver() {
 				return this.aantalKeuzes - this.selected.length > 0;
@@ -104,15 +112,20 @@
 			strAantalStemmen() {
 				return this.dataAantalStemmen > 0 ? `(${this.dataAantalStemmen} stem${this.dataAantalStemmen > 1 ? 'men' : ''})` : '';
 			},
+			zoekbalkZichtbaar() {
+				return this.alleOpties.length > 10;
+			}
 		},
 		methods: {
 			stem() {
 				axios
 					.post(`/peilingen/stem/${this.id}`, {
-						opties: this.selected.map((o) => o.value)
+						opties: this.selected.map((o) => o.id)
 					})
 					.then(() => {
 						this.dataHeeftGestemd = true; // To data
+						this.dataAantalStemmen = this.dataAantalStemmen + this.selected.length;
+						console.log('dataantalstemmen', this.dataAantalStemmen, this.selected);
 						this.reload();
 					});
 			},
@@ -121,7 +134,6 @@
 					.post(`/peilingen/opties/${this.id}`)
 					.then((response) => {
 						this.alleOpties = response.data.data;
-						this.dataAantalStemmen += this.selected.length;
 					});
 			}
 		}
