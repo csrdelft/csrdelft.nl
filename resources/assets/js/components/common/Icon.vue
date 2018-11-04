@@ -11,7 +11,7 @@
 				return `ico ${this.icon}`;
 			}
 		}
-	}
+	};
 </script>
 
 <style scoped>

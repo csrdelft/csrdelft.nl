@@ -22,7 +22,6 @@ class PeilingResponse extends DataTableResponse
 		$arr = $entity->jsonSerialize();
 
 		$arr['detailSource'] = '/peilingen/opties/' . $entity->id;
-
 		$arr['eigenaar'] = ProfielModel::getLink($arr['eigenaar']);
 
 		return parent::getJson($arr);

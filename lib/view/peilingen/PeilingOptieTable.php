@@ -18,6 +18,7 @@ class PeilingOptieTable extends DataTable
 		parent::__construct(PeilingOptiesModel::ORM, '/peilingen/opties/' . $id, null);
 
 		$this->hideColumn('peiling_id');
+
 		$this->searchColumn('titel');
 		$this->searchColumn('beschrijving');
 

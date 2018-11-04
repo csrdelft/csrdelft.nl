@@ -41,7 +41,7 @@
 	import axios from 'axios';
 	import PeilingOptieToevoegen from './PeilingOptieToevoegen';
 	import PeilingOptie from './PeilingOptie';
-	import Icon from "../common/Icon";
+	import Icon from '../common/Icon';
 
 	export default {
 		name: 'Peiling',

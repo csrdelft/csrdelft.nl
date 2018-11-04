@@ -9,8 +9,6 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
- * Class Peiling
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class Peiling extends PersistentEntity {
@@ -62,8 +60,8 @@ class Peiling extends PersistentEntity {
 	}
 
 	protected static $table_name = 'peiling';
-	protected static $primary_key = array('id');
-	protected static $persistent_attributes = array(
+	protected static $primary_key = ['id'];
+	protected static $persistent_attributes = [
 		'id' => [T::Integer, false, 'auto_increment'],
 		'titel' => [T::String],
 		'beschrijving' => [T::Text],
@@ -73,7 +71,7 @@ class Peiling extends PersistentEntity {
 		'aantal_voorstellen' => [T::Integer],
 		'aantal_stemmen' => [T::Integer],
 		'rechten_stemmen' => [T::String, true],
-	);
+	];
 }
 
 

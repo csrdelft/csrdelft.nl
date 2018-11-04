@@ -10,5 +10,4 @@ use CsrDelft\view\formulier\datatable\DataTableResponse;
  */
 class PeilingOptieResponse extends DataTableResponse
 {
-
 }

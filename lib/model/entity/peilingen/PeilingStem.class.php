@@ -6,8 +6,6 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
- * Class PeilingStem
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class PeilingStem extends PersistentEntity {
@@ -31,13 +29,13 @@ class PeilingStem extends PersistentEntity {
 	 */
 	public $aantal;
 
-	protected static $persistent_attributes = array(
-		'peiling_id' => array(T::Integer),
-		'uid' => array(T::UID),
-		'aantal' => [T::Integer, true, 'DEFAULT 1'],
-	);
+	protected static $persistent_attributes = [
+		'peiling_id' => [T::Integer],
+		'uid' => [T::UID],
+		'aantal' => [T::Integer],
+	];
 
-	protected static $primary_key = array('peiling_id', 'uid');
+	protected static $primary_key = ['peiling_id', 'uid'];
 
 	protected static $table_name = 'peiling_stemmen';
 

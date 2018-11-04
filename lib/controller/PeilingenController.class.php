@@ -9,19 +9,15 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\peilingen\PeilingenModel;
-use CsrDelft\model\peilingen\PeilingOptiesModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\peilingen\PeilingBeheerTable;
+use CsrDelft\view\peilingen\PeilingTable;
 use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingResponse;
 use CsrDelft\view\View;
 
 /**
- * Class PeilingenController
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  * @property PeilingenModel $model
@@ -29,7 +25,7 @@ use CsrDelft\view\View;
 class PeilingenController extends AclController {
 
 	/**
-	 * @var PeilingOptiesModel
+	 * @var string
 	 */
 	private $query;
 
@@ -49,7 +45,6 @@ class PeilingenController extends AclController {
 				'nieuw' => 'P_PEILING_MOD',
 				'verwijderen' => 'P_PEILING_MOD',
 				'opties' => 'P_PEILING_VOTE',
-				'stem2' => 'P_PEILING_VOTE',
 			);
 		}
 		$this->query = $query;
@@ -61,23 +56,38 @@ class PeilingenController extends AclController {
 		$this->view = parent::performAction($args);
 	}
 
+	/**
+	 * @param null $id
+	 * @return View
+	 * @throws CsrGebruikerException
+	 */
 	public function GET_beheer($id = null) {
-		$table = new PeilingBeheerTable();
-		$view = new CsrLayoutPage($table);
-
+		// Laat een modal zien als een specifieke peiling bewerkt wordt
 		if ($id) {
+			$table = new PeilingTable();
 			$peiling = $this->model->find('id = ?', [$id])->fetch();
 			$table->filter = $peiling->titel;
-			$view->modal = new PeilingForm($peiling, false);
-		}
 
-		return $view;
+			return view('default', [
+				'content' => $table,
+				'modal' => new PeilingForm($peiling, false)
+			]);
+		} else {
+			return view('default', ['content' => new PeilingTable()]);
+		}
 	}
 
+	/**
+	 * @return View
+	 */
 	public function POST_beheer() {
 		return new PeilingResponse($this->model->find());
 	}
 
+	/**
+	 * @return View
+	 * @throws CsrGebruikerException
+	 */
 	public function POST_nieuw() {
 		$peiling = new Peiling();
 		$form = new PeilingForm($peiling, true);
@@ -94,6 +104,10 @@ class PeilingenController extends AclController {
 		return $form;
 	}
 
+	/**
+	 * @return View
+	 * @throws CsrGebruikerException
+	 */
 	public function POST_bewerken() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$peiling = $this->model->retrieveByUUID($selection[0]);
@@ -122,6 +136,9 @@ class PeilingenController extends AclController {
 		return $router->view;
 	}
 
+	/**
+	 * @return View
+	 */
 	public function verwijderen() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$peiling = $this->model->retrieveByUUID($selection[0]);
@@ -131,7 +148,11 @@ class PeilingenController extends AclController {
 		return new RemoveRowsResponse([$peiling]);
 	}
 
-	public function stem2($id) {
+	/**
+	 * @param int $id
+	 * @return View
+	 */
+	public function stem($id) {
 		$inputJSON = file_get_contents('php://input');
 		$input = json_decode($inputJSON, TRUE);
 
@@ -143,19 +164,4 @@ class PeilingenController extends AclController {
 			return new JsonResponse(false, 400);
 		}
 	}
-
-	public function stem() {
-		$peiling_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-		$optie = filter_input(INPUT_POST, 'optie', FILTER_VALIDATE_INT);
-		// optie en id zijn null of false als filter_input faalt
-		if (is_numeric($peiling_id) && is_numeric($optie)) {
-			$this->model->stem($peiling_id, $optie);
-			redirect(HTTP_REFERER . '#peiling' . $peiling_id);
-		} else {
-			setMelding("Kies een optie om op te stemmen", 0);
-		}
-
-		redirect(HTTP_REFERER);
-	}
-
 }

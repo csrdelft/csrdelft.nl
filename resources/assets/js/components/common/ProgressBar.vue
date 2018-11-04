@@ -19,7 +19,7 @@
 				default: () => false,
 			}
 		},
-	}
+	};
 </script>
 
 <style scoped>

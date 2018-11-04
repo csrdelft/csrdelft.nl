@@ -37,36 +37,36 @@ class PeilingenLogic extends DependencyManager {
 		$this->peilingStemmenModel = $peilingStemmenModel;
 	}
 
-	public function magOptieToevoegen($peiling_id, $uid) {
+	public function magOptieToevoegen($peilingId, $uid) {
 		if (LoginModel::mag('P_PEILING_MOD')) {
 			return true;
 		}
 
-		if ($this->peilingStemmenModel->heeftGestemd($peiling_id, $uid)) {
+		if ($this->peilingStemmenModel->heeftGestemd($peilingId, $uid)) {
 			return false;
 		}
 
-		$peiling = $this->peilingenModel->getPeilingById($peiling_id);
-		$aantalVoorgesteld = $this->peilingOptiesModel->count('peiling_id = ? AND ingebracht_door = ?', [$peiling_id, $uid]);
+		$peiling = $this->peilingenModel->getPeilingById($peilingId);
+		$aantalVoorgesteld = $this->peilingOptiesModel->count('peiling_id = ? AND ingebracht_door = ?', [$peilingId, $uid]);
 		return $aantalVoorgesteld < $peiling->aantal_voorstellen;
 	}
 
-	public function stem($peiling_id, $opties, $uid) {
+	public function stem($peilingId, $opties, $uid) {
 		$peilingOptiesModel  = $this->peilingOptiesModel;
 		$peilingStemmenModel = $this->peilingStemmenModel;
-		return Database::transaction(function () use ($peiling_id, $opties, $uid, $peilingOptiesModel, $peilingStemmenModel) {
-			if ($this->isGeldigeStem($peiling_id, $opties, $uid)) {
-				$opties = $this->valideerOpties($peiling_id, $opties);
+		return Database::transaction(function () use ($peilingId, $opties, $uid, $peilingOptiesModel, $peilingStemmenModel) {
+			if ($this->isGeldigeStem($peilingId, $opties, $uid)) {
+				$opties = $this->valideerOpties($peilingId, $opties);
 
-				foreach ($opties as $optie_id) {
-					$optie = $peilingOptiesModel->getById($optie_id);
+				foreach ($opties as $optieId) {
+					$optie = $peilingOptiesModel->getById($optieId);
 					$optie->stemmen += 1;
 
 					$peilingOptiesModel->update($optie);
 				}
 
 				$stem = new PeilingStem();
-				$stem->peiling_id = $peiling_id;
+				$stem->peiling_id = $peilingId;
 				$stem->uid = $uid;
 				$stem->aantal = count($opties);
 
@@ -82,12 +82,12 @@ class PeilingenLogic extends DependencyManager {
 	/**
 	 * Geef alle geldige opties voor een peiling. Gegeven een set met opties.
 	 *
-	 * @param int $peiling_id
+	 * @param int $peilingId
 	 * @param int[] $opties
 	 * @return int[]
 	 */
-	public function valideerOpties($peiling_id, $opties) {
-		$mogelijkeOpties = $this->peilingOptiesModel->find('peiling_id = ?', [$peiling_id])->fetchAll();
+	public function valideerOpties($peilingId, $opties) {
+		$mogelijkeOpties = $this->peilingOptiesModel->find('peiling_id = ?', [$peilingId])->fetchAll();
 		$mogelijkeOptieIds = array_map(function ($optie) {
 			return $optie->id;
 		}, $mogelijkeOpties);
@@ -95,14 +95,14 @@ class PeilingenLogic extends DependencyManager {
 	}
 
 	/**
-	 * @param $peiling_id
+	 * @param $peilingId
 	 * @param $opties
 	 * @param $uid
 	 * @return bool
 	 * @throws CsrGebruikerException
 	 */
-	public function isGeldigeStem($peiling_id, $opties, $uid) {
-		if ($this->peilingStemmenModel->heeftGestemd($peiling_id, $uid)) {
+	public function isGeldigeStem($peilingId, $opties, $uid) {
+		if ($this->peilingStemmenModel->heeftGestemd($peilingId, $uid)) {
 			throw new CsrGebruikerException('Alreeds gestemd.');
 		}
 
@@ -110,9 +110,9 @@ class PeilingenLogic extends DependencyManager {
 			throw new CsrGebruikerException('Selecteer tenminste een optie.');
 		}
 
-		$peiling = $this->peilingenModel->getPeilingById($peiling_id);
+		$peiling = $this->peilingenModel->getPeilingById($peilingId);
 
-		$geldigeOptieIds = $this->valideerOpties($peiling_id, $opties);
+		$geldigeOptieIds = $this->valideerOpties($peilingId, $opties);
 
 		if (count($geldigeOptieIds) > $peiling->aantal_stemmen) {
 			throw new CsrGebruikerException(sprintf('Selecteer maximaal %d opties.', $peiling->aantal_stemmen));
@@ -126,10 +126,10 @@ class PeilingenLogic extends DependencyManager {
 		return true;
 	}
 
-	public function getOptionsAsJson($peiling_id, $uid) {
-		$opties = $this->peilingOptiesModel->getByPeilingId($peiling_id);
+	public function getOptionsAsJson($peilingId, $uid) {
+		$opties = $this->peilingOptiesModel->getByPeilingId($peilingId);
 
-		$heeftGestemd = $this->peilingStemmenModel->heeftgestemd($peiling_id, $uid);
+		$heeftGestemd = $this->peilingStemmenModel->heeftgestemd($peilingId, $uid);
 
 		return array_map(function (PeilingOptie $optie) use ($heeftGestemd) {
 			$arr = $optie->jsonSerialize();

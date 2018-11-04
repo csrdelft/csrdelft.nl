@@ -1,16 +1,14 @@
 <?php
 
 namespace CsrDelft\view\peilingen;
+
 use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\view\formulier\getalvelden\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\RequiredTextareaField;
 use CsrDelft\view\formulier\invoervelden\RequiredTextField;
-use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
-use CsrDelft\view\formulier\keuzevelden\RequiredCheckboxField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -21,9 +19,8 @@ use CsrDelft\view\formulier\ModalForm;
 class PeilingForm extends ModalForm
 {
 	/**
-	 * PeilingForm constructor.
 	 * @param Peiling $model
-	 * @param $nieuw
+	 * @param boolean $nieuw
 	 * @throws \CsrDelft\common\CsrGebruikerException
 	 */
 	public function __construct($model, $nieuw)

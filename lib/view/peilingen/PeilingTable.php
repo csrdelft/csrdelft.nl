@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\peilingen;
+
 use CsrDelft\model\peilingen\PeilingenModel;
 use CsrDelft\view\formulier\datatable\CellRender;
 use CsrDelft\view\formulier\datatable\DataTable;
@@ -12,7 +13,7 @@ use CsrDelft\view\formulier\datatable\Multiplicity;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/10/2018
  */
-class PeilingBeheerTable extends DataTable
+class PeilingTable extends DataTable
 {
 	public function __construct()
 	{

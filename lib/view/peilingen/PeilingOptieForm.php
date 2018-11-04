@@ -20,8 +20,7 @@ class PeilingOptieForm extends ModalForm
 {
 	/**
 	 * @param PeilingOptie $model
-	 * @param $id
-	 * @throws \CsrDelft\common\CsrGebruikerException
+	 * @param int $id
 	 */
 	public function __construct($model, $id)
 	{
