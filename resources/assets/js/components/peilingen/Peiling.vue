@@ -121,7 +121,7 @@
 					.post(`/peilingen/opties/${this.id}`)
 					.then((response) => {
 						this.alleOpties = response.data.data;
-						this.dataAantalStemmen++;
+						this.dataAantalStemmen += this.selected.length;
 					});
 			}
 		}
