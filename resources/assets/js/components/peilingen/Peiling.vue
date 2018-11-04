@@ -73,12 +73,14 @@
 			alleOpties: [],
 			selectedOpties: [],
 			dataHeeftGestemd: false,
+			dataAantalStemmen: 0,
 		}),
 		created() {
 			// Sla opties op in een data attribuut, deze wordt niet van boven veranderd,
 			// maar wel wanneer er een request wordt gedaan.
 			this.alleOpties = this.opties;
 			this.dataHeeftGestemd = this.heeftGestemd;
+			this.dataAantalStemmen = this.aantalStemmen;
 
 			// Als er op deze pagina een modal gesloten wordt is dat misschien die van
 			// de optie toevoegen modal. Dit is de enige manier om dit te weten op dit moment
@@ -100,7 +102,7 @@
 				return `${this.selected.length} van de ${this.aantalKeuzes} geselecteerd`;
 			},
 			strAantalStemmen() {
-				return this.aantalStemmen > 0 ? `(${this.aantalStemmen} stem${this.aantalStemmen > 1 ? 'men' : ''})` : '';
+				return this.dataAantalStemmen > 0 ? `(${this.dataAantalStemmen} stem${this.dataAantalStemmen > 1 ? 'men' : ''})` : '';
 			},
 		},
 		methods: {
@@ -119,6 +121,7 @@
 					.post(`/peilingen/opties/${this.id}`)
 					.then((response) => {
 						this.alleOpties = response.data.data;
+						this.dataAantalStemmen++;
 					});
 			}
 		}

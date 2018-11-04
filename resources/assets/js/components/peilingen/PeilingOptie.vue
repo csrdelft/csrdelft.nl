@@ -51,7 +51,7 @@
 				return this.$parent.dataHeeftGestemd;
 			},
 			totaalStemmen() {
-				return this.$parent.aantalStemmen;
+				return this.$parent.dataAantalStemmen;
 			},
 			progress() {
 				return (this.stemmen / this.totaalStemmen * 100).toFixed(2);
