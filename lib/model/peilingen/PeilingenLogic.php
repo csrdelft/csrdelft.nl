@@ -128,14 +128,15 @@ class PeilingenLogic extends DependencyManager {
 
 	public function getOptionsAsJson($peilingId, $uid) {
 		$opties = $this->peilingOptiesModel->getByPeilingId($peilingId);
+		$peiling = $this->peilingenModel->getPeilingById($peilingId);
 
-		$heeftGestemd = $this->peilingStemmenModel->heeftgestemd($peilingId, $uid);
+		$magStemmenZien = $this->peilingStemmenModel->heeftgestemd($peilingId, $uid) && $peiling->resultaat_zichtbaar;
 
-		return array_map(function (PeilingOptie $optie) use ($heeftGestemd) {
+		return array_map(function (PeilingOptie $optie) use ($magStemmenZien) {
 			$arr = $optie->jsonSerialize();
 
 			// Als iemand nog niet gestemd heeft is deze info niet zichtbaar.
-			if (!$heeftGestemd && !LoginModel::mag('P_PEILING_MOD')) {
+			if (!$magStemmenZien && !LoginModel::mag('P_PEILING_MOD')) {
 				$arr['stemmen']	= 0;
 			}
 

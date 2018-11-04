@@ -110,9 +110,15 @@ class PeilingenController extends AclController {
 	 */
 	public function POST_bewerken() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$peiling = $this->model->retrieveByUUID($selection[0]);
-		$form = new PeilingForm($peiling, false);
 
+		if ($selection) {
+			$peiling = $this->model->retrieveByUUID($selection[0]);
+		} else {
+			// Hier is de id in post gezet
+			$peiling = new Peiling();
+		}
+
+		$form = new PeilingForm($peiling, false);
 		if ($form->isPosted() && $form->validate()) {
 			$peiling = $form->getModel();
 

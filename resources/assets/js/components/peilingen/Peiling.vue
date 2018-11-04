@@ -1,26 +1,33 @@
 <template>
 	<div class="card peiling">
 		<div class="card-body">
-			<a :href="beheerUrl" v-if="isMod" class="bewerken"><Icon icon="pencil" /></a>
+			<a :href="beheerUrl" v-if="isMod" class="bewerken">
+				<Icon icon="pencil"/>
+			</a>
 			<span class="totaal">{{strAantalStemmen}}</span>
 			<h3 class="card-title">{{titel}}</h3>
 			<p class="card-text">{{beschrijving}}</p>
 		</div>
+		<div>
+			<div v-if="dataHeeftGestemd && !resultaatZichtbaar">
+				<div class="card-body">Bedankt voor het stemmen!</div>
+			</div>
 
-		<ul class="list-group list-group-flush"
-				v-for="(optie, index) in alleOpties"
-				:item="optie">
-			<li class="list-group-item">
-				<PeilingOptie
-					v-model="selectedOpties[index]"
-					:id="optie.id"
-					:peilingId="optie.peiling_id"
-					:titel="optie.titel"
-					:beschrijving="optie.beschrijving"
-					:stemmen="optie.stemmen"
-					:ingebrachtDoor="optie.ingebracht_door"></PeilingOptie>
-			</li>
-		</ul>
+			<ul v-else class="list-group list-group-flush"
+					v-for="(optie, index) in alleOpties"
+					:item="optie">
+				<li class="list-group-item">
+					<PeilingOptie
+						v-model="selectedOpties[index]"
+						:id="optie.id"
+						:peilingId="optie.peiling_id"
+						:titel="optie.titel"
+						:beschrijving="optie.beschrijving"
+						:stemmen="optie.stemmen"
+						:ingebrachtDoor="optie.ingebracht_door"></PeilingOptie>
+				</li>
+			</ul>
+		</div>
 
 		<div class="card-body">
 			<div v-if="!dataHeeftGestemd">{{strKeuzes}}</div>
@@ -99,7 +106,7 @@
 		methods: {
 			stem() {
 				axios
-					.post(`/peilingen/stem2/${this.id}`, {
+					.post(`/peilingen/stem/${this.id}`, {
 						opties: this.selected.map((o) => o.value)
 					})
 					.then(() => {
