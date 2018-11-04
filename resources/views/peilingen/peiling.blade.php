@@ -1,7 +1,7 @@
 <Peiling
 	class="vue-context"
 	:id="{{ $peiling->id }}"
-	:titel="'{{ $peiling->titel }}'"
+	:titel="{{ json_encode($peiling->titel) }}"
 	:beschrijving="{!! htmlspecialchars(json_encode(\CsrDelft\view\bbcode\CsrBB::parse($peiling->beschrijving))) !!}"
 	:resultaat-zichtbaar="{{ json_encode($peiling->resultaat_zichtbaar) }}"
 	:aantal-voorstellen="{{ $peiling->aantal_voorstellen }}"
