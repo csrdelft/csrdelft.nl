@@ -20,6 +20,7 @@ class PeilingTable extends DataTable
 		parent::__construct(PeilingenModel::ORM, '/peilingen/beheer', 'Peilingen beheer');
 
 		$this->hideColumn('id', false);
+		$this->hideColumn('rechten_stemmen');
 
 		$this->addColumn('resultaat_zichtbaar', null, null, CellRender::Check());
 		$this->addColumn('mag_bewerken', null, null, CellRender::Check());

@@ -13,8 +13,8 @@
 				<div class="card-body">Bedankt voor het stemmen!</div>
 			</div>
 			<div v-else class="card-body">
-        <div v-if="zoekbalkZichtbaar">
-					<input type="text" placeholder="zoekterm" v-model="zoekterm"/>
+				<div v-if="zoekbalkZichtbaar">
+					<input type="text" placeholder="zoekterm" v-model="zoekterm" class="form-control"/>
 				</div>
 				<ul class="list-group list-group-flush"
 						v-for="optie in optiesFiltered">
@@ -34,17 +34,16 @@
 			</div>
 		</div>
 
-		<div class="card-body">
-			<div v-if="!dataHeeftGestemd">{{strKeuzes}}</div>
-			<PeilingOptieToevoegen v-if="aantalVoorstellen > 0 && !dataHeeftGestemd"></PeilingOptieToevoegen>
+		<div v-if="!dataHeeftGestemd" class="card-footer d-flex flex-row justify-content-between">
+			<div>{{strKeuzes}}</div>
+			<PeilingOptieToevoegen v-if="aantalVoorstellen > 0"></PeilingOptieToevoegen>
 
 			<input
 				type="button"
 				class="btn btn-primary"
 				value="Stem"
 				:disabled="selected.length === 0"
-				v-on:click="stem"
-				v-if="!dataHeeftGestemd"/>
+				v-on:click="stem"/>
 		</div>
 	</div>
 </template>
@@ -125,7 +124,6 @@
 					.then(() => {
 						this.dataHeeftGestemd = true; // To data
 						this.dataAantalStemmen = this.dataAantalStemmen + this.selected.length;
-						console.log('dataantalstemmen', this.dataAantalStemmen, this.selected);
 						this.reload();
 					});
 			},

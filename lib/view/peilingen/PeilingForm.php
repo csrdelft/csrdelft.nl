@@ -38,7 +38,7 @@ class PeilingForm extends ModalForm
 		$fields[] = new JaNeeField('resultaat_zichtbaar', $model->resultaat_zichtbaar, 'Resultaat zichtbaar');
 		$fields[] = new RequiredIntField('aantal_voorstellen', $model->aantal_voorstellen ?? 0, 'Aantal voorstellen', 0, 10);
 		$fields[] = new RequiredIntField('aantal_stemmen', $model->aantal_stemmen ?? 1, 'Aantal stemmen', 0, 10);
-		$fields[] = new RechtenField('rechten_stemmen', $model->rechten_stemmen, 'Rechten stemmen');
+		$fields[] = new HiddenField('rechten_stemmen', $model->rechten_stemmen); // TODO: implement
 
 		$this->addFields($fields);
 
