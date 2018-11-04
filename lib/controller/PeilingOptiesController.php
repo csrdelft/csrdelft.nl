@@ -62,7 +62,7 @@ class PeilingOptiesController extends AclController
 	}
 
 	public function POST_opties($id) {
-		return new PeilingOptieResponse($this->model->find('peiling_id = ?', [$id]));
+		return new PeilingOptieResponse($this->peilingenLogic->getOptionsAsJson($id, LoginModel::getUid()));
 	}
 
 	/**
@@ -98,7 +98,7 @@ class PeilingOptiesController extends AclController
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 
 		/** @var PeilingOptie $peilingOptie */
-		$peilingOptie = $this->model->retrieveByUUI.D($selection[0]);
+		$peilingOptie = $this->model->retrieveByUUID($selection[0]);
 
 		if ($peilingOptie !== false && $peilingOptie->stemmen == 0) {
 			$this->model->delete($peilingOptie);

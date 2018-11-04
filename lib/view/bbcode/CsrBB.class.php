@@ -23,6 +23,7 @@ use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\peilingen\PeilingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\SavedQuery;
@@ -1290,9 +1291,12 @@ src="https://www.google.com/maps/embed/v1/place?q=' . urlencode($address) . '&ke
 			$peiling = PeilingenModel::instance()->getPeilingById((int)$peiling_id);
 			if ($this->light_mode) {
 				$url = '#/peiling/' . urlencode($peiling_id);
-				return $this->lightLinkBlock('peiling', $url, $peiling->titel, $peiling->tekst);
+				return $this->lightLinkBlock('peiling', $url, $peiling->titel, $peiling->beschrijving);
 			}
-			$peilingcontent = view('peilingen.peiling', ['peiling' => $peiling]);
+			$peilingcontent = view('peilingen.peiling', [
+				'peiling' => $peiling,
+				'opties' => PeilingenLogic::instance()->getOptionsAsJson($peiling_id, LoginModel::getUid()),
+			]);
 			return $peilingcontent->getHtml();
 		} catch (CsrException $e) {
 			return '[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')';

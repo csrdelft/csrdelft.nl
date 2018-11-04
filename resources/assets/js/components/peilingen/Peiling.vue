@@ -1,7 +1,7 @@
 <template>
 	<div class="card peiling">
-		<a :href="beheerUrl" v-if="isMod" class="bewerken"><span class="ico pencil"></span></a>
 		<div class="card-body">
+			<a :href="beheerUrl" v-if="isMod" class="bewerken"><Icon icon="pencil" /></a>
 			<span class="totaal">{{strAantalStemmen}}</span>
 			<h3 class="card-title">{{titel}}</h3>
 			<p class="card-text">{{beschrijving}}</p>
@@ -23,8 +23,8 @@
 		</ul>
 
 		<div class="card-body">
-			<div v-if="!heeftGestemd">{{strKeuzes}}</div>
-			<PeilingOptieToevoegen v-if="aantalVoorstellen > 0 && !heeftGestemd"></PeilingOptieToevoegen>
+			<div v-if="!dataHeeftGestemd">{{strKeuzes}}</div>
+			<PeilingOptieToevoegen v-if="aantalVoorstellen > 0 && !dataHeeftGestemd"></PeilingOptieToevoegen>
 
 			<input
 				type="button"
@@ -32,7 +32,7 @@
 				value="Stem"
 				:disabled="selected.length === 0"
 				v-on:click="stem"
-				v-if="!heeftGestemd"/>
+				v-if="!dataHeeftGestemd"/>
 		</div>
 	</div>
 </template>
@@ -41,10 +41,11 @@
 	import axios from 'axios';
 	import PeilingOptieToevoegen from './PeilingOptieToevoegen';
 	import PeilingOptie from './PeilingOptie';
+	import Icon from "../common/Icon";
 
 	export default {
 		name: 'Peiling',
-		components: {PeilingOptie, PeilingOptieToevoegen},
+		components: {Icon, PeilingOptie, PeilingOptieToevoegen},
 		props: {
 			id: Number,
 			titel: String,
@@ -64,11 +65,13 @@
 		data: () => ({
 			alleOpties: [],
 			selectedOpties: [],
+			dataHeeftGestemd: false,
 		}),
 		created() {
 			// Sla opties op in een data attribuut, deze wordt niet van boven veranderd,
 			// maar wel wanneer er een request wordt gedaan.
 			this.alleOpties = this.opties;
+			this.dataHeeftGestemd = this.heeftGestemd;
 
 			// Als er op deze pagina een modal gesloten wordt is dat misschien die van
 			// de optie toevoegen modal. Dit is de enige manier om dit te weten op dit moment
@@ -78,7 +81,7 @@
 		},
 		computed: {
 			beheerUrl() {
-				return `/peilinge/beheer/${this.id}`;
+				return `/peilingen/beheer/${this.id}`;
 			},
 			selected() {
 				return this.selectedOpties.filter((o) => o !== null && o.checked);
@@ -96,11 +99,12 @@
 		methods: {
 			stem() {
 				axios
-					.post(`/peilingen/stem/${this.id}`, {
-						opties: this.selected
+					.post(`/peilingen/stem2/${this.id}`, {
+						opties: this.selected.map((o) => o.value)
 					})
 					.then(() => {
-						this.heeftGestemd = true; // To data
+						this.dataHeeftGestemd = true; // To data
+						this.reload();
 					});
 			},
 			reload() {

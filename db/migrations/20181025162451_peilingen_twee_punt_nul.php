@@ -22,5 +22,9 @@ class PeilingenTweePuntNul extends AbstractMigration
 			->addColumn('beschrijving', 'text', ['null' => true])
 			->addColumn('ingebracht_door', 'string', ['length' => 4, 'collation' => 'utf8_general_ci', 'null' => true])
 		  ->save();
+
+		$this->table('peiling_stemmen')
+			->addColumn('aantal', 'integer', ['default' => 1])
+			->save();
 	}
 }

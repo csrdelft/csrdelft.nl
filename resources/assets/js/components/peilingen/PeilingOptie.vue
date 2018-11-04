@@ -1,5 +1,5 @@
 <template>
-	<div v-if="heeft_gestemd"
+	<div v-if="heeftGestemd"
 			 class="row">
 		<div class="col-md-4">{{titel}}</div>
 		<div class="col-md-6">
@@ -42,14 +42,14 @@
 			selected: false,
 		}),
 		computed: {
-			heeft_gestemd() {
-				return this.$parent.heeftGestemd;
+			heeftGestemd() {
+				return this.$parent.dataHeeftGestemd;
 			},
 			totaalStemmen() {
 				return this.$parent.aantalStemmen;
 			},
 			progress() {
-				return this.stemmen / this.totaalStemmen * 100;
+				return (this.stemmen / this.totaalStemmen * 100).toFixed(2);
 			},
 			progressText() {
 				return `${this.progress}% (${this.stemmen})`;

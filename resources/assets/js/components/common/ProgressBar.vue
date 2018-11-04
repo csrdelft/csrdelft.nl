@@ -11,7 +11,7 @@
 		name: 'ProgressBar',
 		props: {
 			progress: {
-				type: Number
+				type: [Number, String] // Liever een nummer, maar een string kunnen we ook mee overweg.
 			},
 			reverse: {
 				type: Boolean,

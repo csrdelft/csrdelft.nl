@@ -26,9 +26,15 @@ class PeilingStem extends PersistentEntity {
 	 */
 	public $uid;
 
+	/**
+	 * @var int
+	 */
+	public $aantal;
+
 	protected static $persistent_attributes = array(
 		'peiling_id' => array(T::Integer),
-		'uid' => array(T::UID)
+		'uid' => array(T::UID),
+		'aantal' => [T::Integer, true, 'DEFAULT 1'],
 	);
 
 	protected static $primary_key = array('peiling_id', 'uid');

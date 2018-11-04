@@ -7,11 +7,13 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\peilingen\Peiling;
+use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\peilingen\PeilingenModel;
 use CsrDelft\model\peilingen\PeilingOptiesModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\JsonResponse;
 use CsrDelft\view\peilingen\PeilingBeheerTable;
 use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingResponse;
@@ -129,8 +131,17 @@ class PeilingenController extends AclController {
 		return new RemoveRowsResponse([$peiling]);
 	}
 
-	public function stem2() {
+	public function stem2($id) {
+		$inputJSON = file_get_contents('php://input');
+		$input = json_decode($inputJSON, TRUE);
 
+		$ids = filter_var_array($input['opties'], FILTER_VALIDATE_INT);
+
+		if(PeilingenLogic::instance()->stem($id, $ids, LoginModel::getUid())) {
+			return new JsonResponse(true);
+		} else {
+			return new JsonResponse(false, 400);
+		}
 	}
 
 	public function stem() {
