@@ -55,7 +55,7 @@ module.exports = {
 		// Vanuit javascript kun je automatisch .js en .ts bestanden includen.
 		extensions: ['.ts', '.js', '.vue'],
 		alias: {
-			vue: 'vue/dist/vue.js'
+			'vue$': 'vue/dist/vue.esm.js'
 		}
 	},
 	plugins: [
