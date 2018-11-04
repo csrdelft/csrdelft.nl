@@ -6,21 +6,26 @@
 			<ProgressBar :progress="progress" :reverse="true"></ProgressBar>
 		</div>
 		<div class="col-md-2">{{progressText}}</div>
-		<div class="col text-muted">{{beschrijving}}</div>
+		<div class="col text-muted pt-2" v-html="beschrijving"></div>
 	</div>
 	<div v-else=""
-			 class="form-check">
-		<input type="checkbox"
-					 class="form-check-input"
-					 name="optie"
-					 :value="id"
-					 :id="'PeilingOptie' + id"
-					 :disabled="isDisabled"
-					 v-model="selected"
-					 @change="$emit('input', $event.target)"
-					 />
-		<label :for="'PeilingOptie' + id"
-					 class="form-check-label">{{ titel }}</label>
+			 class="row">
+		<div class="col-md-12">
+			<div class="form-check">
+				<input type="checkbox"
+							 class="form-check-input"
+							 name="optie"
+							 :value="id"
+							 :id="'PeilingOptie' + id"
+							 :disabled="isDisabled"
+							 v-model="selected"
+							 @change="$emit('input', $event.target)"
+				/>
+				<label :for="'PeilingOptie' + id"
+							 class="form-check-label">{{ titel }}</label>
+			</div>
+		</div>
+		<div class="col-md-12 pt-2" v-html="beschrijving"></div>
 	</div>
 </template>
 

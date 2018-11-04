@@ -6,6 +6,7 @@ use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\view\formulier\getalvelden\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
+use CsrDelft\view\formulier\invoervelden\RequiredBBCodeField;
 use CsrDelft\view\formulier\invoervelden\RequiredTextareaField;
 use CsrDelft\view\formulier\invoervelden\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
@@ -33,7 +34,7 @@ class PeilingForm extends ModalForm
 
 		$fields[] = new HiddenField('id', $model->id);
 		$fields[] = new RequiredTextField('titel', $model->titel, 'Titel');
-		$fields[] = new RequiredTextareaField('beschrijving', $model->beschrijving, 'Beschrijving');
+		$fields[] = new RequiredBBCodeField('beschrijving', $model->beschrijving, 'Beschrijving');
 		$fields[] = new JaNeeField('resultaat_zichtbaar', $model->resultaat_zichtbaar, 'Resultaat zichtbaar');
 		$fields[] = new RequiredIntField('aantal_voorstellen', $model->aantal_voorstellen ?? 0, 'Aantal voorstellen', 0, 10);
 		$fields[] = new RequiredIntField('aantal_stemmen', $model->aantal_stemmen ?? 1, 'Aantal stemmen', 0, 10);

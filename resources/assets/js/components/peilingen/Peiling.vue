@@ -6,7 +6,7 @@
 			</a>
 			<span class="totaal">{{strAantalStemmen}}</span>
 			<h3 class="card-title">{{titel}}</h3>
-			<p class="card-text">{{beschrijving}}</p>
+			<p class="card-text pt-2" v-html="beschrijving"></p>
 		</div>
 		<div>
 			<div v-if="dataHeeftGestemd && !resultaatZichtbaar">

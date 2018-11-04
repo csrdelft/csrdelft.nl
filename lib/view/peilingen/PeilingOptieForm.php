@@ -5,6 +5,7 @@ namespace CsrDelft\view\peilingen;
 use CsrDelft\model\entity\peilingen\PeilingOptie;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\invoervelden\BBCodeField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\RequiredTextField;
@@ -29,7 +30,7 @@ class PeilingOptieForm extends ModalForm
 		$fields = [];
 		$fields[] = new HiddenField('peiling_id', $model->peiling_id);
 		$fields[] = new RequiredTextField('titel', $model->titel, 'Titel');
-		$fields[] = new TextareaField('beschrijving', $model->beschrijving, 'Beschrijving');
+		$fields[] = new BBCodeField('beschrijving', $model->beschrijving, 'Beschrijving');
 
 		$this->addFields($fields);
 

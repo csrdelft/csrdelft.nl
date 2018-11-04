@@ -8,6 +8,7 @@ use CsrDelft\model\entity\peilingen\PeilingStem;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\view\bbcode\CsrBB;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -139,6 +140,8 @@ class PeilingenLogic extends DependencyManager {
 			if (!$magStemmenZien && !LoginModel::mag('P_PEILING_MOD')) {
 				$arr['stemmen']	= 0;
 			}
+
+			$arr['beschrijving'] = CsrBB::parse($arr['beschrijving']);
 
 			return $arr;
 		}, $opties);
