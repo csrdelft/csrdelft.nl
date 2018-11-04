@@ -6,13 +6,9 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
- * Class PeilingOptie
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
  */
 class PeilingOptie extends PersistentEntity {
-
 	/**
 	 * Primary key
 	 * @var int
@@ -27,28 +23,31 @@ class PeilingOptie extends PersistentEntity {
 	 * Titel
 	 * @var string
 	 */
-	public $optie;
+	public $titel;
+	/**
+	 * @var string
+	 */
+	public $beschrijving;
 	/**
 	 * Aantal stemmen
 	 * @var int
 	 */
 	public $stemmen = 0;
+	/**
+	 * @var string
+	 */
+	public $ingebracht_door;
 
-	public static function init($optie) {
-		$peilingoptie = new PeilingOptie();
-		$peilingoptie->optie = $optie;
-		return $peilingoptie;
-	}
+	protected static $persistent_attributes = [
+		'id' => [T::Integer, false, 'auto_increment'],
+		'peiling_id' => [T::Integer],
+		'titel' => [T::String],
+		'beschrijving' => [T::Text, true],
+		'stemmen' => [T::Integer],
+		'ingebracht_door' => [T::UID, true],
+	];
 
-	protected static $persistent_attributes = array(
-		'id' => array(T::Integer, false, 'auto_increment'),
-		'peiling_id' => array(T::Integer),
-		'optie' => array(T::String),
-		'stemmen' => array(T::Integer)
-	);
-
-	protected static $primary_key = array('id');
+	protected static $primary_key = ['id'];
 
 	protected static $table_name = 'peiling_optie';
-
 }

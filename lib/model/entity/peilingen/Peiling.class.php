@@ -9,19 +9,27 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
- * Class Peiling
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class Peiling extends PersistentEntity {
 	public $id;
 	public $titel;
-	public $tekst;
+	public $beschrijving;
+	public $eigenaar;
+	public $mag_bewerken;
+	public $resultaat_zichtbaar;
+	public $aantal_voorstellen;
+	public $aantal_stemmen;
+	public $rechten_stemmen;
 
 	private $opties;
 
 	public function getStemmenAantal() {
-		return PeilingStemmenModel::instance()->count('peiling_id = ?', array($this->id));
+		$opties = $this->getOpties();
+
+		return array_reduce($opties, function (int $carry, PeilingOptie $optie) {
+			return $carry + $optie->stemmen;
+		}, 0);
 	}
 
 	public function getOpties() {
@@ -40,6 +48,10 @@ class Peiling extends PersistentEntity {
 		return LoginModel::mag('P_ADMIN,bestuur,commissie:BASFCie');
 	}
 
+	public function isMod() {
+		return LoginModel::mag('P_PEILING_MOD') || LoginModel::getUid() == $this->eigenaar;
+	}
+
 	public function magStemmen() {
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			return false;
@@ -52,12 +64,18 @@ class Peiling extends PersistentEntity {
 	}
 
 	protected static $table_name = 'peiling';
-	protected static $primary_key = array('id');
-	protected static $persistent_attributes = array(
-		'id' => array(T::Integer, false, 'auto_increment'),
-		'titel' => array(T::String),
-		'tekst' => array(T::Text)
-	);
+	protected static $primary_key = ['id'];
+	protected static $persistent_attributes = [
+		'id' => [T::Integer, false, 'auto_increment'],
+		'titel' => [T::String],
+		'beschrijving' => [T::Text],
+		'eigenaar' => [T::UID],
+		'mag_bewerken' => [T::Boolean],
+		'resultaat_zichtbaar' => [T::Boolean],
+		'aantal_voorstellen' => [T::Integer],
+		'aantal_stemmen' => [T::Integer],
+		'rechten_stemmen' => [T::String, true],
+	];
 }
 
 

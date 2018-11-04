@@ -1,4 +1,5 @@
 import './bootstrap';
+import './register-vue';
 import './csrdelft';
 import './main-menu';
 import './formulier';

@@ -127,5 +127,4 @@ class PeilingenModel extends PersistenceModel {
 	public function getLijst() {
 		return $this->find(null, array(), null, 'id DESC');
 	}
-
 }

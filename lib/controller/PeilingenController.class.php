@@ -2,104 +2,174 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\peilingen\Peiling;
-use CsrDelft\model\entity\peilingen\PeilingOptie;
+use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\peilingen\PeilingenModel;
-use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\peilingen\PeilingenBeheerView;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\peilingen\PeilingTable;
+use CsrDelft\view\peilingen\PeilingForm;
+use CsrDelft\view\peilingen\PeilingResponse;
+use CsrDelft\view\View;
 
 /**
- * Class PeilingenController
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  * @property PeilingenModel $model
  */
 class PeilingenController extends AclController {
 
+	/**
+	 * @var string
+	 */
+	private $query;
+
 	public function __construct($query) {
 		parent::__construct($query, PeilingenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				'beheer' => 'P_PEILING_MOD',
+				'opties' => 'P_PEILING_MOD',
 				'verwijderen' => 'P_PEILING_MOD',
 			);
 		} else {
 			$this->acl = array(
 				'beheer' => 'P_PEILING_MOD',
 				'stem' => 'P_PEILING_VOTE',
+				'bewerken' => 'P_PEILING_MOD',
+				'nieuw' => 'P_PEILING_MOD',
+				'verwijderen' => 'P_PEILING_MOD',
+				'opties' => 'P_PEILING_VOTE',
 			);
 		}
+		$this->query = $query;
 	}
 
 	public function performAction(array $args = array()) {
 		$this->action = $this->getParam(2);
-		if ($this->action == 'verwijderen') {
-			$args = $this->getParams(3);
-		}
+		$args = $this->getParams(3);
 		$this->view = parent::performAction($args);
 	}
 
-	public function beheer() {
+	/**
+	 * @param null $id
+	 * @return View
+	 * @throws CsrGebruikerException
+	 */
+	public function GET_beheer($id = null) {
+		// Laat een modal zien als een specifieke peiling bewerkt wordt
+		if ($id) {
+			$table = new PeilingTable();
+			$peiling = $this->model->find('id = ?', [$id])->fetch();
+			$table->filter = $peiling->titel;
+			$form = new PeilingForm($peiling, false);
+			$form->setDataTableId($table->getDataTableId());
+
+			return view('default', [
+				'content' => $table,
+				'modal' => $form
+			]);
+		} else {
+			return view('default', ['content' => new PeilingTable()]);
+		}
+	}
+
+	/**
+	 * @return View
+	 */
+	public function POST_beheer() {
+		return new PeilingResponse($this->model->find());
+	}
+
+	/**
+	 * @return View
+	 * @throws CsrGebruikerException
+	 */
+	public function POST_nieuw() {
 		$peiling = new Peiling();
+		$form = new PeilingForm($peiling, true);
 
-		if ($this->getMethod() == 'POST') {
-			$peiling->tekst = filter_input(INPUT_POST, 'verhaal', FILTER_SANITIZE_STRING);
-			$peiling->titel = filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING);
-			$opties = filter_input(INPUT_POST, 'opties', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
+		if ($form->isPosted() && $form->validate()) {
+			$peiling = $form->getModel();
+			$peiling->eigenaar = LoginModel::getUid();
+			$peiling->mag_bewerken = false;
 
-			if (count($opties) > 0) {
-				foreach ($opties as $optie_tekst) {
-					if (trim($optie_tekst) != '') {
-						$peilingOptie = new PeilingOptie();
-						$peilingOptie->optie = $optie_tekst;
-						$peiling->nieuwOptie($peilingOptie);
-					}
-				}
-			}
-
-			if (($errors = PeilingenModel::instance()->validate($peiling)) != '') {
-				setMelding($errors, -1);
-			} else {
-				$peiling_id = PeilingenModel::instance()->create($peiling);
-				setMelding('Peiling is aangemaakt', 1);
-
-				// Voorkom dubbele submit
-				redirect(HTTP_REFERER . "#peiling" . $peiling_id);
-			}
+			$peiling->id = $this->model->create($form->getModel());
+			return new PeilingResponse([$peiling]);
 		}
 
-		$view = new CsrLayoutPage(new PeilingenBeheerView($this->model->getLijst(), $peiling));
-		$view->addCompressedResources('peilingbeheer');
-
-		return $view;
+		return $form;
 	}
 
-	public function verwijderen($peiling_id) {
-		$peiling = $this->model->getPeilingById((int)$peiling_id);
-		if ($peiling === false) {
-			setMelding('Peiling al verwijderd!', 2);
+	/**
+	 * @return View
+	 * @throws CsrGebruikerException
+	 */
+	public function POST_bewerken() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+
+		if ($selection) {
+			$peiling = $this->model->retrieveByUUID($selection[0]);
 		} else {
-			$this->model->delete($peiling);
-			setMelding('Peiling is verwijderd!', 1);
+			// Hier is de id in post gezet
+			$peiling = new Peiling();
 		}
 
-		redirect('/peilingen/beheer');
+		$form = new PeilingForm($peiling, false);
+		if ($form->isPosted() && $form->validate()) {
+			$peiling = $form->getModel();
+
+			$this->model->update($peiling);
+			return new PeilingResponse([$peiling]);
+		}
+
+		return $form;
 	}
 
-	public function stem() {
-		$peiling_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-		$optie = filter_input(INPUT_POST, 'optie', FILTER_VALIDATE_INT);
-		// optie en id zijn null of false als filter_input faalt
-		if (is_numeric($peiling_id) && is_numeric($optie)) {
-			$this->model->stem($peiling_id, $optie);
-			redirect(HTTP_REFERER . '#peiling' . $peiling_id);
+	/**
+	 * @return View
+	 * @throws CsrException
+	 * @throws CsrGebruikerException
+	 * @throws CsrToegangException
+	 */
+	public function opties() {
+		$router = new PeilingOptiesController($this->query);
+		$router->performAction();
+
+		return $router->view;
+	}
+
+	/**
+	 * @return View
+	 */
+	public function verwijderen() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$peiling = $this->model->retrieveByUUID($selection[0]);
+
+		$this->model->delete($peiling);
+
+		return new RemoveRowsResponse([$peiling]);
+	}
+
+	/**
+	 * @param int $id
+	 * @return View
+	 */
+	public function stem($id) {
+		$inputJSON = file_get_contents('php://input');
+		$input = json_decode($inputJSON, TRUE);
+
+		$ids = filter_var_array($input['opties'], FILTER_VALIDATE_INT);
+
+		if(PeilingenLogic::instance()->stem($id, $ids, LoginModel::getUid())) {
+			return new JsonResponse(true);
 		} else {
-			setMelding("Kies een optie om op te stemmen", 0);
+			return new JsonResponse(false, 400);
 		}
-
-		redirect(HTTP_REFERER);
 	}
-
 }
