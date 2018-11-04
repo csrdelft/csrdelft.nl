@@ -8,7 +8,7 @@
 
 <script>
 	import axios from 'axios';
-	import {domUpdate} from "../../context";
+	import {domUpdate} from '../../context';
 
 	export default {
 		name: 'PeilingOptieToevoegen',
@@ -36,7 +36,7 @@
 					});
 			},
 		}
-	}
+	};
 </script>
 
 <style scoped>

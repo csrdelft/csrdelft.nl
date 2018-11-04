@@ -17,7 +17,7 @@
 					 :id="'PeilingOptie' + id"
 					 :disabled="isDisabled"
 					 v-model="selected"
-					 v-on:change="$emit('input', $event.target)"
+					 @change="$emit('input', $event.target)"
 					 />
 		<label :for="'PeilingOptie' + id"
 					 class="form-check-label">{{ titel }}</label>
@@ -32,21 +32,21 @@
 		components: {ProgressBar},
 		props: {
 			id: Number,
-			peiling_id: Number,
+			peilingId: Number,
 			titel: String,
 			beschrijving: String,
 			stemmen: Number,
-			ingebracht_door: String,
+			ingebrachtDoor: String,
 		},
 		data: () => ({
 			selected: false,
 		}),
 		computed: {
 			heeft_gestemd() {
-				return this.$parent.heeft_gestemd;
+				return this.$parent.heeftGestemd;
 			},
 			totaalStemmen() {
-				return this.$parent.aantal_stemmen;
+				return this.$parent.aantalStemmen;
 			},
 			progress() {
 				return this.stemmen / this.totaalStemmen * 100;
@@ -58,7 +58,7 @@
 				return !this.selected && !this.$parent.keuzesOver;
 			}
 		}
-	}
+	};
 </script>
 
 <style scoped>
