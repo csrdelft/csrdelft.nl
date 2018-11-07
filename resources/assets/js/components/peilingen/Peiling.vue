@@ -35,8 +35,13 @@
 		</div>
 
 		<div v-if="optiesFiltered > optiesZichtbaar" class="card-body">
-			<b-pagination size="md" :total-rows="optiesFiltered.length" v-model="huidigePagina" :per-page="paginaSize"
-										align="center">
+			<b-pagination
+				size="md"
+				align="center"
+				v-model="huidigePagina"
+				:limit="17"
+				:total-rows="optiesFiltered.length"
+				:per-page="paginaSize">
 			</b-pagination>
 		</div>
 		<div v-if="!dataHeeftGestemd" class="card-footer d-flex flex-row justify-content-between">
