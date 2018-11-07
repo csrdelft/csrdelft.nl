@@ -9,14 +9,7 @@
 		<div class="item">
 			<a href="/forum/reactie/{{$post->post_id}}#{{$post->post_id}}" title="{{$draad->titel}}"
 				 @if($draad->isOngelezen())class="{{$ongelezenWeergave}}" @endif>
-				@if(date('d-m', $timestamp) === date('d-m')) {{-- Vandaag --}}
-				{{date_format($timestamp, '%H:%M')}}
-				@elseif(strftime('%U', $timestamp) === strftime('%U')) {{-- Zelfde week --}}
-				<div class="zijbalk-dag">{{date_format($timestamp, '%a')}}&nbsp;</div>{{date_format($timestamp, '%d')}}
-				@else
-					{{date_format($timestamp, '%d-%m')}}
-				@endif
-				&nbsp;{{$draad->titel}}
+				<span class="zijbalk-moment">{{zijbalk_date_format($timestamp)}}</span>&nbsp;{{$draad->titel}}
 			</a>
 		</div>
 	@endforeach
