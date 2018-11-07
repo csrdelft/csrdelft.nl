@@ -17,7 +17,7 @@
 					<input type="text" placeholder="zoekterm" v-model="zoekterm" class="form-control"/>
 				</div>
 				<ul class="list-group list-group-flush"
-						v-for="optie in optiesFiltered">
+						v-for="optie in optiesZichtbaar">
 					<li class="list-group-item">
 						<PeilingOptie
 							v-model="optie.selected"
@@ -34,6 +34,11 @@
 			</div>
 		</div>
 
+		<div v-if="optiesFiltered > optiesZichtbaar" class="card-body">
+			<b-pagination size="md" :total-rows="optiesFiltered.length" v-model="huidigePagina" :per-page="paginaSize"
+										align="center">
+			</b-pagination>
+		</div>
 		<div v-if="!dataHeeftGestemd" class="card-footer d-flex flex-row justify-content-between">
 			<div>{{strKeuzes}}</div>
 			<PeilingOptieToevoegen v-if="aantalVoorstellen > 0"></PeilingOptieToevoegen>
@@ -78,6 +83,8 @@
 			dataHeeftGestemd: false,
 			dataAantalStemmen: 0,
 			zoekterm: '',
+			huidigePagina: 1,
+			paginaSize: 5,
 		}),
 		created() {
 			// Sla opties op in een data attribuut, deze wordt niet van boven veranderd,
@@ -101,6 +108,12 @@
 			},
 			optiesFiltered() {
 				return this.alleOpties.filter((o) => o.titel.toLowerCase().includes(this.zoekterm.toLowerCase()));
+			},
+			optiesZichtbaar() {
+				let begin = (this.huidigePagina - 1) * this.paginaSize;
+				let eind = begin + this.paginaSize;
+
+				return this.optiesFiltered.slice(begin, eind);
 			},
 			keuzesOver() {
 				return this.aantalKeuzes - this.selected.length > 0;
