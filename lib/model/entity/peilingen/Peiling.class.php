@@ -21,6 +21,7 @@ class Peiling extends PersistentEntity {
 	public $aantal_voorstellen;
 	public $aantal_stemmen;
 	public $rechten_stemmen;
+	public $rechten_mod;
 
 	private $opties;
 
@@ -75,6 +76,7 @@ class Peiling extends PersistentEntity {
 		'aantal_voorstellen' => [T::Integer],
 		'aantal_stemmen' => [T::Integer],
 		'rechten_stemmen' => [T::String, true],
+		'rechten_mod' => [T::String, true],
 	];
 }
 

@@ -28,13 +28,13 @@ class PeilingOptiesController extends AclController
 		parent::__construct($query, PeilingOptiesModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = [
-				'opties' => 'P_PEILING_MOD',
+				'opties' => 'P_PEILING_EDIT',
 			];
 		} else {
 			$this->acl = [
 				'opties' => 'P_PEILING_VOTE',
 				'toevoegen' => 'P_PEILING_VOTE',
-				'verwijderen' => 'P_PEILING_MOD',
+				'verwijderen' => 'P_PEILING_EDIT',
 			];
 		}
 
@@ -73,7 +73,7 @@ class PeilingOptiesController extends AclController
 	public function POST_toevoegen($id) {
 		$form = new PeilingOptieForm(new PeilingOptie(), $id);
 
-		if (!$this->peilingenLogic->magOptieToevoegen($id, LoginModel::getUid())) {
+		if (!$this->peilingenLogic->magOptieToevoegen($id)) {
 			throw new CsrGebruikerException("Mag geen opties meer toevoegen!");
 		}
 

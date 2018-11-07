@@ -20,6 +20,8 @@ class PeilingOptiesModel extends PersistenceModel {
 	}
 
 	/**
+	 * Zie PeilingenLogic::getOptiesVoorPeiling
+	 *
 	 * @param $peilingId
 	 * @return PeilingOptie[]
 	 */

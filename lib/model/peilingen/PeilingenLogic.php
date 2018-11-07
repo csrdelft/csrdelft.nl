@@ -38,22 +38,34 @@ class PeilingenLogic extends DependencyManager {
 		$this->peilingStemmenModel = $peilingStemmenModel;
 	}
 
-	public function magOptieToevoegen($peilingId, $uid) {
-		if (LoginModel::mag('P_PEILING_MOD')) {
+	public function getOptiesVoorPeiling($peilingId) {
+		$peiling = $this->peilingenModel->getPeilingById($peilingId);
+		if ($peiling) {
+			return $this->peilingOptiesModel->getByPeilingId($peilingId);
+		}
+		return [];
+	}
+
+	public function magOptieToevoegen($peilingId) {
+		$peiling = $this->peilingenModel->getPeilingById($peilingId);
+		if ($this->peilingenModel->magBewerken($peiling)) {
 			return true;
 		}
 
-		if ($this->peilingStemmenModel->heeftGestemd($peilingId, $uid)) {
+		if ($this->peilingStemmenModel->heeftGestemd($peilingId, LoginModel::getUid())) {
 			return false;
 		}
 
-		$peiling = $this->peilingenModel->getPeilingById($peilingId);
-		$aantalVoorgesteld = $this->peilingOptiesModel->count('peiling_id = ? AND ingebracht_door = ?', [$peilingId, $uid]);
+		if (!$this->peilingenModel->magStemmen($peiling)) {
+			return false;
+		}
+
+		$aantalVoorgesteld = $this->peilingOptiesModel->count('peiling_id = ? AND ingebracht_door = ?', [$peilingId, LoginModel::getUid()]);
 		return $aantalVoorgesteld < $peiling->aantal_voorstellen;
 	}
 
 	public function stem($peilingId, $opties, $uid) {
-		$peilingOptiesModel  = $this->peilingOptiesModel;
+		$peilingOptiesModel = $this->peilingOptiesModel;
 		$peilingStemmenModel = $this->peilingStemmenModel;
 		return Database::transaction(function () use ($peilingId, $opties, $uid, $peilingOptiesModel, $peilingStemmenModel) {
 			if ($this->isGeldigeStem($peilingId, $opties, $uid)) {
@@ -103,6 +115,16 @@ class PeilingenLogic extends DependencyManager {
 	 * @throws CsrGebruikerException
 	 */
 	public function isGeldigeStem($peilingId, $opties, $uid) {
+		$peiling = $this->peilingenModel->getPeilingById($peilingId);
+
+		if (!$peiling) {
+			throw new CsrGebruikerException('Deze peiling bestaat niet');
+		}
+
+		if (!$this->peilingenModel->magStemmen($peiling)) {
+			throw new CsrGebruikerException('Mag niet op deze peiling stemmen.');
+		}
+
 		if ($this->peilingStemmenModel->heeftGestemd($peilingId, $uid)) {
 			throw new CsrGebruikerException('Alreeds gestemd.');
 		}
@@ -111,7 +133,6 @@ class PeilingenLogic extends DependencyManager {
 			throw new CsrGebruikerException('Selecteer tenminste een optie.');
 		}
 
-		$peiling = $this->peilingenModel->getPeilingById($peilingId);
 
 		$geldigeOptieIds = $this->valideerOpties($peilingId, $opties);
 
@@ -128,17 +149,17 @@ class PeilingenLogic extends DependencyManager {
 	}
 
 	public function getOptionsAsJson($peilingId, $uid) {
-		$opties = $this->peilingOptiesModel->getByPeilingId($peilingId);
 		$peiling = $this->peilingenModel->getPeilingById($peilingId);
+		$opties = $this->peilingOptiesModel->getByPeilingId($peilingId);
 
 		$magStemmenZien = $this->peilingStemmenModel->heeftgestemd($peilingId, $uid) && $peiling->resultaat_zichtbaar;
 
-		return array_map(function (PeilingOptie $optie) use ($magStemmenZien) {
+		return array_map(function (PeilingOptie $optie) use ($magStemmenZien, $peiling) {
 			$arr = $optie->jsonSerialize();
 
 			// Als iemand nog niet gestemd heeft is deze info niet zichtbaar.
-			if (!$magStemmenZien && !LoginModel::mag('P_PEILING_MOD')) {
-				$arr['stemmen']	= 0;
+			if (!$magStemmenZien && !$this->peilingenModel->magBewerken($peiling)) {
+				$arr['stemmen'] = 0;
 			}
 
 			$arr['beschrijving'] = CsrBB::parse($arr['beschrijving']);

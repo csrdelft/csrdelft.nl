@@ -33,16 +33,16 @@ class PeilingenController extends AclController {
 		parent::__construct($query, PeilingenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer' => 'P_PEILING_MOD',
-				'opties' => 'P_PEILING_MOD',
+				'beheer' => 'P_PEILING_EDIT',
+				'opties' => 'P_PEILING_EDIT',
 				'verwijderen' => 'P_PEILING_MOD',
 			);
 		} else {
 			$this->acl = array(
-				'beheer' => 'P_PEILING_MOD',
+				'beheer' => 'P_PEILING_EDIT',
 				'stem' => 'P_PEILING_VOTE',
-				'bewerken' => 'P_PEILING_MOD',
-				'nieuw' => 'P_PEILING_MOD',
+				'bewerken' => 'P_PEILING_EDIT',
+				'nieuw' => 'P_PEILING_EDIT',
 				'verwijderen' => 'P_PEILING_MOD',
 				'opties' => 'P_PEILING_VOTE',
 			);
@@ -83,7 +83,7 @@ class PeilingenController extends AclController {
 	 * @return View
 	 */
 	public function POST_beheer() {
-		return new PeilingResponse($this->model->find());
+		return new PeilingResponse($this->model->getPeilingenVoorBeheer());
 	}
 
 	/**
@@ -115,6 +115,10 @@ class PeilingenController extends AclController {
 
 		if ($selection) {
 			$peiling = $this->model->retrieveByUUID($selection[0]);
+
+			if (!$this->model->magBewerken($peiling)) {
+				throw new CsrGebruikerException('Je mag deze peiling niet bewerken!');
+			}
 		} else {
 			// Hier is de id in post gezet
 			$peiling = new Peiling();

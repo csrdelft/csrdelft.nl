@@ -113,6 +113,24 @@ class PeilingenModel extends PersistenceModel {
 		return $errors;
 	}
 
+	public function getPeilingenVoorBeheer() {
+
+		$peilingen = $this->find();
+		if (LoginModel::mag('P_PEILING_MOD')) {
+			return $peilingen->fetchAll();
+		} else {
+			$zichtbarePeilingen = $this->find('eigenaar = ?', [LoginModel::getUid()])->fetchAll();
+			$peilingenMetRechten = $this->find('eigenaar <> ? AND rechten_mod <> ""', [LoginModel::getUid()]);
+			foreach ($peilingenMetRechten as $peiling) {
+				if (LoginModel::mag($peiling->rechten_mod)) {
+					$zichtbarePeilingen[] = $peiling;
+				}
+			}
+
+			return $zichtbarePeilingen;
+		}
+	}
+
 	/**
 	 * @param $peiling_id
 	 * @return Peiling|false
@@ -121,10 +139,25 @@ class PeilingenModel extends PersistenceModel {
 		return $this->retrieveByPrimaryKey(array($peiling_id));
 	}
 
+	public function magBewerken($peiling) {
+		if (LoginModel::mag('P_PEILING_MOD')
+			|| $peiling->eigenaar == LoginModel::getUid()
+			|| LoginModel::mag($peiling->rechten_mod)) {
+			return $peiling;
+		}
+
+		return false;
+	}
+
 	/**
 	 * @return \PDOStatement|Peiling[]
 	 */
 	public function getLijst() {
 		return $this->find(null, array(), null, 'id DESC');
+	}
+
+	public function magStemmen(Peiling $peiling) {
+		return $peiling->eigenaar == LoginModel::getUid()
+			|| LoginModel::mag($peiling->rechten_stemmen);
 	}
 }
