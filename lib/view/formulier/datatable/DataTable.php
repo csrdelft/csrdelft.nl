@@ -27,7 +27,33 @@ class DataTable implements View, FormElement {
 	protected $defaultLength = 10;
 	protected $settings = [
 		'dom' => 'Bfrtpli',
-		'buttons' => ['copy', 'csv', 'excel', 'print'],
+		'buttons' => [
+			[
+				'extend' => 'copy',
+				'exportOptions' => [
+					'columns' => ':visible',
+					'orthogonal' => 'export',
+				]
+			], [
+				'extend' => 'csv',
+				'exportOptions' => [
+					'columns' => ':visible',
+					'orthogonal' => 'export',
+				]
+			], [
+				'extend' => 'excel',
+				'exportOptions' => [
+					'columns' => ':visible',
+					'orthogonal' => 'export',
+				]
+			], [
+				'extend' => 'print',
+				'exportOptions' => [
+					'columns' => ':visible',
+					'orthogonal' => 'export',
+				]
+			]
+		],
 		'userButtons' => [],
 		'select' => true,
 	];
@@ -103,7 +129,7 @@ class DataTable implements View, FormElement {
 	 */
 	protected function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null, $data = null) {
 		$type = $type ?: CellType::String();
-		$render = $render ?: CellRender::None();
+		$render = $render ?: CellRender::Default();
 
 		// column definition
 		$newColumn = array(

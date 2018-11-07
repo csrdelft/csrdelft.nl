@@ -4,6 +4,7 @@ namespace CsrDelft\view\peilingen;
 
 use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\view\formulier\datatable\DataTableColumn;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 
 /**
@@ -22,7 +23,13 @@ class PeilingResponse extends DataTableResponse
 		$arr = $entity->jsonSerialize();
 
 		$arr['detailSource'] = '/peilingen/opties/' . $entity->id;
-		$arr['eigenaar'] = ProfielModel::getLink($arr['eigenaar']);
+
+		$eigenaar = ProfielModel::get($entity->eigenaar);
+		$arr['eigenaar'] = $eigenaar ? new DataTableColumn(
+			$eigenaar->getLink('volledig'),
+			$eigenaar->achternaam,
+			$eigenaar->getNaam('volledig')
+		) : '';
 
 		return parent::getJson($arr);
 	}

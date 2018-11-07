@@ -12,6 +12,7 @@ namespace CsrDelft\view\formulier\datatable;
  */
 class CellRender {
 	const NONE = 'null';
+	const DEFAULT = '$.fn.dataTable.render.default';
 	const CHECK = '$.fn.dataTable.render.check';
 	const BEDRAG = '$.fn.dataTable.render.bedrag';
 	const AANMELD_FILTER = '$.fn.dataTable.render.aanmeldFilter';
@@ -35,8 +36,18 @@ class CellRender {
 		return $this->choice;
 	}
 
+	/**
+	 * @return static
+	 */
 	public static function None() {
 		return new static(self::NONE);
+	}
+
+	/**
+	 * @return static
+	 */
+	public static function Default() {
+		return new static(self::DEFAULT);
 	}
 
 	/**
