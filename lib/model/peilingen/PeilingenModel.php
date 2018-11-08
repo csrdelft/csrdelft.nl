@@ -158,6 +158,6 @@ class PeilingenModel extends PersistenceModel {
 
 	public function magStemmen(Peiling $peiling) {
 		return $peiling->eigenaar == LoginModel::getUid()
-			|| LoginModel::mag($peiling->rechten_stemmen);
+			|| LoginModel::mag(!empty(trim($peiling->rechten_stemmen)) ? $peiling->rechten_stemmen : 'P_LOGGED_IN');
 	}
 }
