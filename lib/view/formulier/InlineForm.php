@@ -41,7 +41,7 @@ abstract class InlineForm extends Formulier implements FormElement {
 			$this->field->enter_submit = true;
 			$this->field->escape_cancel = true;
 		}
-		if (!isset($this->field->title) AND property_exists($this->field, 'description')) {
+		if (!isset($this->field->title)) {
 			$this->field->title = $this->field->description;
 		}
 
@@ -62,9 +62,6 @@ abstract class InlineForm extends Formulier implements FormElement {
 		return $html . '</form></div>';
 	}
 
-	/**
-     * @param bool $showMelding ignored
-     */
 	public function view() {
 		echo $this->getHtml();
 	}

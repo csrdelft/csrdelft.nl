@@ -2,7 +2,10 @@
 
 namespace CsrDelft\model\entity\maalcie;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
@@ -36,7 +39,7 @@ use CsrDelft\Orm\Entity\T;
  * Zie ook MaaltijdAanmelding.class.php
  *
  */
-class Maaltijd extends PersistentEntity implements Agendeerbaar {
+class Maaltijd extends PersistentEntity implements Agendeerbaar, HeeftAanmeldLimiet {
 	# primary key
 
 	public $maaltijd_id; # int 11
@@ -143,6 +146,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	 *
 	 * @param string $uid
 	 * @return boolean
+	 * @throws CsrException
 	 */
 	public function magBekijken($uid) {
 		if (!isset($this->maaltijdcorvee)) {
@@ -165,6 +169,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	 *
 	 * @param string $uid
 	 * @return boolean
+	 * @throws CsrException
 	 */
 	public function magSluiten($uid) {
 		return $this->magBekijken($uid) AND $this->maaltijdcorvee->getCorveeFunctie()->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
@@ -193,6 +198,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 	 * De API voor de app gebruikt json_encode
 	 *
 	 * @return array|mixed
+	 * @throws CsrGebruikerException
 	 */
 	public function jsonSerialize() {
 		$json = parent::jsonSerialize();
@@ -203,4 +209,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar {
 		return $json;
 	}
 
+	function getAanmeldLimiet() {
+		return $this->aanmeld_limiet;
+	}
 }

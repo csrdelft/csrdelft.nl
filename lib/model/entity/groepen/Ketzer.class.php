@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\KetzerSelectorsModel;
 use CsrDelft\model\groepen\leden\KetzerDeelnemersModel;
@@ -15,7 +16,7 @@ use CsrDelft\Orm\Entity\T;
  * Een ketzer is een aanmeldbare groep.
  *
  */
-class Ketzer extends AbstractGroep {
+class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 
 	const leden = KetzerDeelnemersModel::class;
 
@@ -78,6 +79,7 @@ class Ketzer extends AbstractGroep {
 	 * Has permission for action?
 	 *
 	 * @param AccessAction $action
+	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
 	public function mag($action, $allowedAuthenticationMethods = null) {
@@ -114,9 +116,10 @@ class Ketzer extends AbstractGroep {
 	 * Rechten voor de gehele klasse of soort groep?
 	 *
 	 * @param string $action
+	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods=null) {
+	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {
 		switch ($action) {
 
 			case AccessAction::Aanmaken:
@@ -128,4 +131,7 @@ class Ketzer extends AbstractGroep {
 		return parent::magAlgemeen($action, $allowedAuthenticationMethods);
 	}
 
+	function getAanmeldLimiet() {
+		return $this->aanmeld_limiet;
+	}
 }

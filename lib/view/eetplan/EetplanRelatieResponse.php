@@ -3,6 +3,7 @@
 namespace CsrDelft\view\eetplan;
 
 use CsrDelft\model\entity\eetplan\EetplanBekenden;
+use CsrDelft\view\formulier\datatable\DataTableColumn;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 
 /**
@@ -18,8 +19,10 @@ class EetplanRelatieResponse extends DataTableResponse {
 	 */
 	public function getJson($entity) {
 		$array = $entity->jsonSerialize();
-		$array['noviet1'] = $entity->getNoviet1()->getNaam();
-		$array['noviet2'] = $entity->getNoviet2()->getNaam();
+		$noviet1 = $entity->getNoviet1();
+		$noviet2 = $entity->getNoviet2();
+		$array['noviet1'] = new DataTableColumn($noviet1->getLink('volledig'), $noviet1->achternaam, $noviet1->getNaam('volledig'));
+		$array['noviet2'] = new DataTableColumn($noviet2->getLink('volledig'), $noviet2->achternaam, $noviet2->getNaam('volledig'));
 		return parent::getJson($array);
 	}
 }

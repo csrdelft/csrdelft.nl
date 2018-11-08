@@ -10,6 +10,7 @@ namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\groepen\Verticale;
+use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 
@@ -78,13 +79,13 @@ JS;
 
 		$html .= '</div>';
 
-		if (property_exists($this->groep, 'aanmeld_limiet') AND isset($this->groep->aanmeld_limiet)) {
+		if ($this->groep instanceof HeeftAanmeldLimiet AND $this->groep->getAanmeldLimiet() != null) {
 			// Progress bar
 			$aantal = $this->groep->aantalLeden();
-			$percent = round($aantal * 100 / $this->groep->aanmeld_limiet);
+			$percent = round($aantal * 100 / $this->groep->getAanmeldLimiet());
 			// Aanmelden mogelijk?
 			if (time() > strtotime($this->groep->aanmelden_vanaf) AND time() < strtotime($this->groep->aanmelden_tot)) {
-				$verschil = $this->groep->aanmeld_limiet - $aantal;
+				$verschil = $this->groep->getAanmeldLimiet() - $aantal;
 				if ($verschil === 0) {
 					$title = 'Inschrijvingen vol!';
 					$color = ' progress-bar-info';

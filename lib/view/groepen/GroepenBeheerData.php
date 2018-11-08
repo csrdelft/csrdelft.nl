@@ -2,11 +2,17 @@
 
 namespace CsrDelft\view\groepen;
 
+use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\view\formulier\datatable\DataTableResponse;
 
 class GroepenBeheerData extends DataTableResponse {
 
+	/**
+	 * @param AbstractGroep $groep
+	 * @return string
+	 * @throws \Exception
+	 */
 	public function getJson($groep) {
 		$array = $groep->jsonSerialize();
 

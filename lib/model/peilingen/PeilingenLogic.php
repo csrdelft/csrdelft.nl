@@ -10,6 +10,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\bbcode\CsrBB;
+use CsrDelft\view\formulier\datatable\DataTableColumn;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -167,12 +168,9 @@ class PeilingenLogic extends DependencyManager {
 
 			$ingebrachtDoor = ProfielModel::get($optie->ingebracht_door);
 
-			$arr['ingebracht_door'] = $ingebrachtDoor ? [
-				'display' => $ingebrachtDoor->getLink('volledig'),
-				'sort' => $ingebrachtDoor->achternaam,
-				'export' => $ingebrachtDoor->getNaam('volledig'),
-				'filter' => $ingebrachtDoor->getNaam('volledig'),
-			] : null;
+			$arr['ingebracht_door'] = $ingebrachtDoor
+				? new DataTableColumn($ingebrachtDoor->getLink('volledig'), $ingebrachtDoor->achternaam, $ingebrachtDoor->getNaam('volledig'))
+				: null;
 
 			return $arr;
 		}, $opties);

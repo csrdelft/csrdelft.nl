@@ -4,6 +4,7 @@ namespace CsrDelft\model;
 
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\AbstractGroepLid;
+use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
@@ -89,11 +90,11 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 			}
 		}
 		$stats['Totaal'] = $count;
-		if (property_exists($groep, 'aanmeld_limiet')) {
-			if ($groep->aanmeld_limiet === null) {
+		if ($groep instanceof HeeftAanmeldLimiet) {
+			if ($groep->getAanmeldLimiet() === null) {
 				$stats['Totaal'] .= ' (geen limiet)';
 			} else {
-				$stats['Totaal'] .= ' van ' . $groep->aanmeld_limiet;
+				$stats['Totaal'] .= ' van ' . $groep->getAanmeldLimiet();
 			}
 		}
 		return $stats;
