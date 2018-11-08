@@ -167,12 +167,12 @@ class PeilingenLogic extends DependencyManager {
 
 			$ingebrachtDoor = ProfielModel::get($optie->ingebracht_door);
 
-			$arr['ingebracht_door'] = [
+			$arr['ingebracht_door'] = $ingebrachtDoor ? [
 				'display' => $ingebrachtDoor->getLink('volledig'),
 				'sort' => $ingebrachtDoor->achternaam,
 				'export' => $ingebrachtDoor->getNaam('volledig'),
 				'filter' => $ingebrachtDoor->getNaam('volledig'),
-			];
+			] : null;
 
 			return $arr;
 		}, $opties);
