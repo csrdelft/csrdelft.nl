@@ -14,7 +14,7 @@
 			</div>
 			<div v-else class="card-body">
 				<div v-if="zoekbalkZichtbaar">
-					<input type="text" placeholder="zoekterm" v-model="zoekterm" class="form-control"/>
+					<input type="text" placeholder="Zoeken" v-model="zoekterm" class="form-control"/>
 				</div>
 				<ul class="list-group list-group-flush"
 						v-for="optie in optiesZichtbaar">
@@ -34,7 +34,7 @@
 			</div>
 		</div>
 
-		<div v-if="optiesFiltered > optiesZichtbaar" class="card-body">
+		<div v-if="optiesFiltered.length > optiesZichtbaar.length" class="card-body">
 			<b-pagination
 				size="md"
 				align="center"
@@ -157,10 +157,6 @@
 </script>
 
 <style scoped>
-	.peiling {
-
-	}
-
 	.bewerken, .totaal {
 		float: right;
 	}
