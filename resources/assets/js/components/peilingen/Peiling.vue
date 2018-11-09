@@ -13,7 +13,7 @@
 				<div class="card-body">Bedankt voor het stemmen!</div>
 			</div>
 			<div v-else class="card-body">
-				<div v-if="zoekbalkZichtbaar">
+				<div v-if="zoekbalkZichtbaar" class="pb-2">
 					<input type="text" placeholder="Zoeken" v-model="zoekterm" class="form-control"/>
 				</div>
 				<ul class="list-group list-group-flush"
@@ -44,7 +44,7 @@
 				:per-page="paginaSize">
 			</b-pagination>
 		</div>
-		<div v-if="!dataHeeftGestemd" class="card-footer d-flex flex-row justify-content-between">
+		<div v-if="!dataHeeftGestemd" class="card-footer footer">
 			<div>{{strKeuzes}}</div>
 			<PeilingOptieToevoegen v-if="aantalVoorstellen > 0"></PeilingOptieToevoegen>
 
@@ -159,5 +159,11 @@
 <style scoped>
 	.bewerken, .totaal {
 		float: right;
+	}
+
+	.footer {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
 	}
 </style>

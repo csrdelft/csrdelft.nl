@@ -42,7 +42,7 @@
 			titel: String,
 			beschrijving: String,
 			stemmen: Number,
-			ingebrachtDoor: String,
+			ingebrachtDoor: Object, // DataTableColumn
 			selected: Boolean
 		},
 		data: () => ({
