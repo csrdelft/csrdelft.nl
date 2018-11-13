@@ -123,7 +123,7 @@ Kopieer de database dump naar de `data` map. Kopieer de plaetjes naar de `htdocs
 
 Dit zet alles klaar om de stek te runnen. Als dit klaar is kun je naar `http://localhost:8080` navigeren. Aanpassingen worden direct doorgevoerd.
 
-Je kan met de database verbinden op `localhost:3306`, met PhpStorm, HeidiSQL, of wat anders. Met gebruikersnaam `csrdelft`, wachtwoord `bl44t` op database `csrdelft`.
+Je kan met de database verbinden op `localhost:3307`, met PhpStorm, HeidiSQL, of wat anders. Met gebruikersnaam `csrdelft`, wachtwoord `bl44t` op database `csrdelft`.
     
 Handige Docker commando's 
 
@@ -174,7 +174,7 @@ Het inschatten van dit label kan lastig zijn. Hieronder enkele richtlijnen. De k
 #### Component
 Het component label is altijd zwart en beschrijft het onderdeel van de stek waar dit over gaat. Deze wordt, in tegenstelling tot de vorige 2, niet consistent gebruikt. Dit zou in een later stadium nog gedaan kunnen worden. Mogelijk zou dit ook met milestones kunnen.
 
-`compnent:forum`
+`component:forum`
 `component:soccie`
 ...
 
