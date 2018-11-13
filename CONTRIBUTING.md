@@ -174,7 +174,7 @@ Het inschatten van dit label kan lastig zijn. Hieronder enkele richtlijnen. De k
 #### Component
 Het component label is altijd zwart en beschrijft het onderdeel van de stek waar dit over gaat. Deze wordt, in tegenstelling tot de vorige 2, niet consistent gebruikt. Dit zou in een later stadium nog gedaan kunnen worden. Mogelijk zou dit ook met milestones kunnen.
 
-`compnent:forum`
+`component:forum`
 `component:soccie`
 ...
 
