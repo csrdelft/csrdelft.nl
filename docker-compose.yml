@@ -39,7 +39,7 @@ services:
       - mysqldata:/var/lib/mysql/
       - ./data:/docker-entrypoint-initdb.d # laad sql bestanden
     ports:
-      - "3306:3306" # Expose mysql op poort 3306
+      - "3307:3306" # Expose mysql op poort 3307
 
   yarn:
     build:
