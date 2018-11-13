@@ -123,7 +123,7 @@ Kopieer de database dump naar de `data` map. Kopieer de plaetjes naar de `htdocs
 
 Dit zet alles klaar om de stek te runnen. Als dit klaar is kun je naar `http://localhost:8080` navigeren. Aanpassingen worden direct doorgevoerd.
 
-Je kan met de database verbinden op `localhost:3306`, met PhpStorm, HeidiSQL, of wat anders. Met gebruikersnaam `csrdelft`, wachtwoord `bl44t` op database `csrdelft`.
+Je kan met de database verbinden op `localhost:3307`, met PhpStorm, HeidiSQL, of wat anders. Met gebruikersnaam `csrdelft`, wachtwoord `bl44t` op database `csrdelft`.
     
 Handige Docker commando's 
 
