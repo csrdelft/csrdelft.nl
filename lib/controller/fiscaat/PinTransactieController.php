@@ -17,13 +17,12 @@ use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieMatchModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fiscaat\pin\PinBestellingAanmakenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingInfoForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVeranderenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVerwijderenForm;
+use CsrDelft\view\fiscaat\pin\PinTransactieMatchTable;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTableResponse;
-use CsrDelft\view\fiscaat\pin\PinTransactieOverzichtView;
 
 /**
  * Class PinTransactieController
@@ -75,7 +74,10 @@ class PinTransactieController extends AclController {
 	}
 
 	public function GET_overzicht() {
-		$this->view = new CsrLayoutPage(new PinTransactieOverzichtView());
+		$this->view = view('fiscaat.pagina', [
+			'titel' => 'Pin transacties beheer',
+			'view' => new PinTransactieMatchTable(),
+		]);
 	}
 
 	public function POST_overzicht() {

@@ -54,6 +54,11 @@ class BladeRenderer implements Renderer {
 			// Create the variable if it does not exist.
 			return "<?php \$this->cycle_$cycleCount = @\$this->cycle_$cycleCount; echo [$options][(\$this->cycle_$cycleCount++) % $numOptions]; ?>";
 		});
+
+		$this->bladeOne->directive('link', function ($expr) {
+			return "<?php echo link_for$expr; ?>";
+		});
+
 		$this->template = $template;
 	}
 

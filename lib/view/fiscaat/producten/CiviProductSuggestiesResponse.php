@@ -9,7 +9,7 @@ use CsrDelft\view\JsonLijstResponse;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 04/04/2017
  */
-class CiviProductSuggestiesView extends JsonLijstResponse {
+class CiviProductSuggestiesResponse extends JsonLijstResponse {
 	/**
 	 * @param CiviProduct $entity
 	 * @return string

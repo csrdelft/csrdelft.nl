@@ -5,7 +5,7 @@ namespace CsrDelft\controller\fiscaat;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviCategorieModel;
-use CsrDelft\view\fiscaat\CiviCategorieSuggestiesView;
+use CsrDelft\view\fiscaat\CiviCategorieSuggestiesResponse;
 
 
 /**
@@ -39,6 +39,6 @@ class BeheerCiviCategorienController extends AclController {
 
 	public function GET_suggesties() {
 		$query = '%' . $this->getParam('q') . '%';
-		$this->view = new CiviCategorieSuggestiesView($this->model->find('type LIKE ?', array($query)));
+		$this->view = new CiviCategorieSuggestiesResponse($this->model->find('type LIKE ?', array($query)));
 	}
 }

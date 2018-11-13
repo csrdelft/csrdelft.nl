@@ -58,7 +58,10 @@ class BeheerCiviBestellingController extends AclController {
 	}
 
 	public function GET_overzicht($uid = null) {
-		$this->view = new CsrLayoutPage(new CiviBestellingTable($uid));
+		$this->view = view('fiscaat.pagina', [
+			'titel' => 'Beheer bestellingen',
+			'view' => new CiviBestellingTable($uid)
+		]);
 	}
 
 	public function POST_overzicht($uid) {

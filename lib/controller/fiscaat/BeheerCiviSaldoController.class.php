@@ -9,12 +9,11 @@ use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\ProfielService;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\fiscaat\saldo\SaldiSommenResponseView;
 use CsrDelft\view\fiscaat\saldo\CiviSaldoTable;
 use CsrDelft\view\fiscaat\saldo\CiviSaldoTableResponse;
 use CsrDelft\view\fiscaat\saldo\InleggenForm;
 use CsrDelft\view\fiscaat\saldo\LidRegistratieForm;
+use CsrDelft\view\fiscaat\saldo\SaldiSomForm;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use CsrDelft\view\JsonResponse;
 use DateTime;
@@ -57,7 +56,10 @@ class BeheerCiviSaldoController extends AclController {
 	}
 
 	public function GET_overzicht() {
-		$this->view = new CsrLayoutPage(new CiviSaldoTable());
+		$this->view = view('fiscaat.pagina', [
+			'titel' => 'Saldo beheer',
+			'view' => new CiviSaldoTable(),
+		]);
 	}
 
 	public function POST_overzicht() {
@@ -156,7 +158,11 @@ class BeheerCiviSaldoController extends AclController {
 			$this->exit_http(400);
 		}
 
-		$this->view = new SaldiSommenResponseView(CiviSaldoModel::instance(), $moment);
+		$this->view = view('fiscaat.saldisom', [
+			'saldisomform' => new SaldiSomForm($this->model, $moment),
+			'saldisom' => $this->model->getSomSaldiOp($moment),
+			'saldisomleden' => $this->model->getSomSaldiOp($moment, true),
+		]);
 	}
 
 	public function GET_zoek() {

@@ -8,7 +8,7 @@ use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fiscaat\producten\CiviProductForm;
-use CsrDelft\view\fiscaat\producten\CiviProductSuggestiesView;
+use CsrDelft\view\fiscaat\producten\CiviProductSuggestiesResponse;
 use CsrDelft\view\fiscaat\producten\CiviProductTable;
 use CsrDelft\view\fiscaat\producten\CiviProductTableResponse;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
@@ -49,7 +49,7 @@ class BeheerCiviProductenController extends AclController {
 
 	public function GET_suggesties() {
 		$query = '%' . $this->getParam('q') . '%';
-		$this->view = new CiviProductSuggestiesView($this->model->find('beschrijving LIKE ?', array($query)));
+		$this->view = new CiviProductSuggestiesResponse($this->model->find('beschrijving LIKE ?', array($query)));
 	}
 
 	public function POST_overzicht() {
@@ -57,7 +57,10 @@ class BeheerCiviProductenController extends AclController {
 	}
 
 	public function GET_overzicht() {
-		$this->view = new CsrLayoutPage(new CiviProductTable());
+		$this->view = view('fiscaat.pagina', [
+			'titel' => 'Producten beheer',
+			'view' => new CiviProductTable(),
+		]);
 	}
 
 	public function POST_toevoegen() {
