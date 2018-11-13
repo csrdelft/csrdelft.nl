@@ -75,7 +75,10 @@ class PeilingenController extends AclController {
 				'modal' => $form
 			]);
 		} else {
-			return view('default', ['content' => new PeilingTable()]);
+			return view('default', [
+				'titel' => 'Peilingen beheer',
+				'content' => new PeilingTable(),
+			]);
 		}
 	}
 
