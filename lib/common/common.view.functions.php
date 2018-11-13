@@ -235,3 +235,19 @@ function zijbalk_date_format($datetime) {
 		return strftime('%d-%m', $datetime);
 	}
 }
+
+function link_for($title, $href, $class, $activeClass) {
+	if ($_SERVER['REQUEST_URI'] == $href) {
+		$class .= ' ' . $activeClass;
+	}
+
+	return '<a href="' . $href . '" class="' . $class . '">' . $title . '</a>';
+}
+
+/**
+ * @param int $bedrag Bedrag in centen
+ * @return string
+ */
+function format_bedrag($bedrag) {
+	return sprintf('€%.2f', $bedrag / 100);
+}

@@ -8,8 +8,10 @@ use CsrDelft\controller\fiscaat\BeheerCiviProductenController;
 use CsrDelft\controller\fiscaat\BeheerCiviSaldoController;
 use CsrDelft\controller\fiscaat\PinTransactieController;
 use CsrDelft\controller\framework\AclController;
-use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\fiscaat\FiscaatOverzichtView;
+use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\view\fiscaat\producten\CiviProductTable;
+use CsrDelft\view\fiscaat\saldo\CiviSaldoTable;
+use CsrDelft\view\fiscaat\saldo\SaldiSomForm;
 
 class FiscaatRouterController extends AclController {
 	public function __construct($query) {
@@ -38,8 +40,13 @@ class FiscaatRouterController extends AclController {
 	}
 
 	public function overzicht() {
-		$this->view = new CsrLayoutPage(new FiscaatOverzichtView(null));
-		$this->view->addCompressedResources('fiscaat');
+		$this->view = view('fiscaat.overzicht', [
+			'saldisomform' => new SaldiSomForm(CiviSaldoModel::instance()),
+			'saldisom' => CiviSaldoModel::instance()->getSomSaldi(),
+			'saldisomleden' => CiviSaldoModel::instance()->getSomSaldi(true),
+			'productenbeheer' => new CiviProductTable(),
+			'saldobeheer' => new CiviSaldoTable(),
+		]);
 	}
 
 	public function producten() {
