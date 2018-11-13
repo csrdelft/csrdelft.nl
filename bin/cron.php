@@ -82,7 +82,7 @@ try {
 }
 
 try {
-    passthru('php ../bin/pin_transactie_download.php');
+    passthru('php ../bin/cron/pin_transactie_download.php');
 } catch (Exception $e) {
 	DebugLogModel::instance()->log('cron.php', 'php pin_transactie_download.php', array(), $e);
 }

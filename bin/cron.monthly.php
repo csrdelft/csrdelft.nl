@@ -21,7 +21,7 @@ require_once 'configuratie.include.php';
 $start = microtime(true);
 
 try {
-    passthru('php ../bin/sponsor_affiliates_download.php');
+    passthru('php ../bin/cron/sponsor_affiliates_download.php');
 } catch (Exception $e) {
     DebugLogModel::instance()->log('cron.php', 'php sponsor_affiliates_download.php', array(), $e);
 }
