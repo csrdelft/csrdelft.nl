@@ -16,12 +16,20 @@ use CsrDelft\view\formulier\ModalForm;
  * Maak het mogelijk om een lid te registreren, wordt uiteindelijk samengetrokken met het aanmaken van een lid.
  */
 class LidRegistratieForm extends ModalForm {
+	/** @var TextField */
+	private $naamField;
+	/** @var TextField */
+	private $uidField;
+
+	/**
+	 * @param CiviSaldo $model
+	 */
 	public function __construct(CiviSaldo $model) {
 		parent::__construct($model, '/fiscaat/saldo/registreren/lid', false, true);
 
 		$fields = [];
-		$fields['naam'] = new TextField('naam', $model->naam, 'Bijnaam');
-		$fields['uid'] = new LidField('uid', $model->uid, 'Lid');
+		$fields['naam'] = $this->naamField =  new TextField('naam', $model->naam, 'Bijnaam');
+		$fields['uid'] = $this->uidField = new LidField('uid', $model->uid, 'Lid');
 		$fields[] = new IntField('saldo', $model->saldo, 'Initieel saldo');
 
 		$this->addFields($fields);
@@ -34,9 +42,7 @@ class LidRegistratieForm extends ModalForm {
 			return false;
 		}
 
-		$fields = $this->getFields();
-
-		if (is_null($fields['naam']->getValue()) && is_null($fields['uid']->getValue())) {
+		if (is_null($this->naamField->getValue()) && is_null($this->uidField->getValue())) {
 			$this->error = 'Vul in ieder geval een uid of een naam in.';
 			$this->css_classes[] = 'metFouten';
 
