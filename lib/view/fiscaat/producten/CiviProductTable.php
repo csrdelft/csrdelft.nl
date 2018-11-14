@@ -6,6 +6,7 @@ use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\view\formulier\datatable\CellRender;
 use CsrDelft\view\formulier\datatable\CellType;
 use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\formulier\datatable\knop\ConfirmDataTableKnop;
 use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
 use CsrDelft\view\formulier\datatable\Multiplicity;
 
@@ -28,7 +29,7 @@ class CiviProductTable extends DataTable {
 
 		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $this->dataUrl . '/toevoegen', 'Nieuw', 'Nieuw product toevoegen', 'add'));
 		$this->addKnop(new DataTableKnop(Multiplicity::One(), $this->dataUrl . '/bewerken', 'Bewerken', 'Product bewerken', 'pencil'));
-		$this->addKnop(new DataTableKnop(Multiplicity::One(), $this->dataUrl . '/verwijderen', 'Verwijderen', 'Product verwijderen', 'cross'));
+		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), $this->dataUrl . '/verwijderen', 'Verwijderen', 'Product verwijderen', 'cross'));
 	}
 
 	public function getBreadcrumbs() {

@@ -2,16 +2,20 @@
 
 namespace CsrDelft\controller\fiscaat;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
+use CsrDelft\model\fiscaat\CiviPrijsModel;
 use CsrDelft\model\fiscaat\CiviProductModel;
+use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fiscaat\producten\CiviProductForm;
 use CsrDelft\view\fiscaat\producten\CiviProductSuggestiesResponse;
 use CsrDelft\view\fiscaat\producten\CiviProductTable;
 use CsrDelft\view\fiscaat\producten\CiviProductTableResponse;
 use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use TheSeer\Tokenizer\Exception;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -48,7 +52,7 @@ class BeheerCiviProductenController extends AclController {
 	}
 
 	public function GET_suggesties() {
-		$query = '%' . $this->getParam('q') . '%';
+		$query = sql_contains($this->getParam('q'));
 		$this->view = new CiviProductSuggestiesResponse($this->model->find('beschrijving LIKE ?', array($query)));
 	}
 
@@ -94,29 +98,35 @@ class BeheerCiviProductenController extends AclController {
 	public function POST_verwijderen() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 
-		$removed = array();
-		$existingOrders = array();
-		foreach ($selection as $uuid) {
-			$product = $this->model->retrieveByUUID($uuid);
+		list($removed, $existingOrders) = Database::transaction(function () use ($selection) {
+			$removed = array();
+			$existingOrders = array();
+			foreach ($selection as $uuid) {
+				/** @var CiviProduct $product */
+				$product = $this->model->retrieveByUUID($uuid);
 
-			if ($product) {
-				if (CiviBestellingInhoudModel::instance()->count('product_id = ?', array($product->id)) == 0) {
-					$this->model->delete($product);
-					$removed[] = $product;
-				} else {
-					$existingOrders[] = $product;
+				if ($product) {
+					if (CiviBestellingInhoudModel::instance()->count('product_id = ?', array($product->id)) == 0) {
+						CiviPrijsModel::instance()->verwijderVoorProduct($product);
+						$this->model->delete($product);
+						$removed[] = $product;
+					} else {
+						$existingOrders[] = $product;
+					}
 				}
 			}
-		}
+
+			return [$removed, $existingOrders];
+		});
 
 		if (!empty($removed)) {
 			$this->view = new RemoveRowsResponse($removed);
 			return;
 		} elseif (!empty($existingOrders)) {
-			$this->exit_http(403);
+			throw new CsrGebruikerException('Mag product niet verwijderen, het is al eens besteld');
 		}
 
-		$this->exit_http(404);
+		throw new CsrGebruikerException('Geen product verwijderd');
 	}
 
 	public function POST_opslaan() {
