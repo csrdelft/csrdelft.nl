@@ -353,7 +353,7 @@
 		</div>
 	{/if}
 
-	{if $boeken OR is_ingelogd_account($profiel->uid) OR $gerecenseerdeboeken}
+	{if !empty($boeken) OR is_ingelogd_account($profiel->uid) OR !empty($gerecenseerdeboeken)}
 		<div class="profielregel boeken gegevens row" id="boeken">
 			<div class="col">
 				{if $boeken}
@@ -361,8 +361,8 @@
 					<ul class="nobullets data">
 						{foreach from=$boeken item=boek}
 							<li>
-								<a href="/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
-									<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
+								<a href="/bibliotheek/boek/{$boek->id}" title="Boek: {$boek->titel|escape:'html'}">
+									<span title="{$boek->status} boek" class="boekindicator {$boek->status}">•</span><span class="titel">{$boek->titel|escape:'html'}</span><span class="auteur">{$boek->auteur|escape:'html'}</span>
 								</a>
 							</li>
 						{foreachelse}
@@ -371,7 +371,7 @@
 					</ul>
 				{/if}
 				{if is_ingelogd_account($profiel->uid)}
-					<a class="btn" href="/bibliotheek/nieuwboek">{icon get="book_add"} Nieuw boek</a>
+					<a class="btn" href="/bibliotheek/boek">{icon get="book_add"} Nieuw boek</a>
 					<br />
 				{/if}
 				{if $gerecenseerdeboeken}
@@ -380,8 +380,8 @@
 					<ul class="nobullets data">
 						{foreach from=$gerecenseerdeboeken item=boek}
 							<li>
-								<a href="/bibliotheek/boek/{$boek.id}" title="Boek: {$boek.titel|escape:'html'}">
-									<span title="{$boek.status} boek" class="boekindicator {$boek.status}">•</span><span class="titel">{$boek.titel|escape:'html'}</span><span class="auteur">{$boek.auteur|escape:'html'}</span>
+								<a href="/bibliotheek/boek/{$boek->id}" title="Boek: {$boek->titel|escape:'html'}">
+									<span title="{$boek->status} boek" class="boekindicator {$boek->status}">•</span><span class="titel">{$boek->titel|escape:'html'}</span><span class="auteur">{$boek->auteur|escape:'html'}</span>
 								</a>
 							</li>
 						{foreachelse}

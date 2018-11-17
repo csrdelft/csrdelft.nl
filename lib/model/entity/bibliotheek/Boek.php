@@ -27,6 +27,7 @@ class Boek extends PersistentEntity {
 	public $isbn;
 	public $code;
 	public $categorie_id;
+	public $auteur_id = 0;
 	protected static $table_name = 'biebboek';
 	protected $beschrijvingen;
 
@@ -68,7 +69,7 @@ class Boek extends PersistentEntity {
 	}
 
 	public function getRubriek() {
-		return BiebRubriekModel::get($this->categorie_id);
+		return $this->categorie_id != null ? BiebRubriekModel::get($this->categorie_id) : null;
 
 	}
 	public function getStatus() {
@@ -126,7 +127,7 @@ class Boek extends PersistentEntity {
 					return true;
 				}
 			}
-			else if ($exemplaar->isEigenaar($uid)) {
+			else if ($exemplaar->isEigenaar()) {
 				return true;
 			}
 		}
@@ -193,6 +194,9 @@ class Boek extends PersistentEntity {
 	 */
 	protected static $primary_key = ['id'];
 
+	/**
+	 * @return BoekRecensie[]
+	 */
 	public function getRecensies() {
 		return BoekRecensieModel::instance()->find("boek_id = ?", [$this->id])->fetchAll();
 	}

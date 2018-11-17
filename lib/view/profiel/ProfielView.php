@@ -2,7 +2,8 @@
 
 namespace CsrDelft\view\profiel;
 
-use CsrDelft\model\bibliotheek\BiebCatalogus;
+use CsrDelft\model\bibliotheek\BoekExemplaarModel;
+use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
@@ -169,8 +170,19 @@ class ProfielView extends SmartyTemplateView {
 
 		$this->smarty->assign('forumpostcount', ForumPostsModel::instance()->getAantalForumPostsVoorLid($this->model->uid));
 
-		$this->smarty->assign('boeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'eigendom'));
-		$this->smarty->assign('gerecenseerdeboeken', BiebCatalogus::getBoekenByUid($this->model->uid, 'gerecenseerd'));
+
+		$exemplaren = BoekExemplaarModel::getEigendom($this->model->uid);
+		$boekenEigendom = [];
+		foreach ($exemplaren as $exemplaar) {
+			$boekenEigendom[] = $exemplaar->getBoek();
+		}
+		$this->smarty->assign('boeken', $boekenEigendom);
+		$recensies = BoekRecensieModel::getVoorLid($this->model->uid);
+		$boekenGerecenseerd = [];
+		foreach ($recensies as $recensie) {
+			$boekenGerecenseerd[] = $recensie->getBoek();
+		}
+		$this->smarty->assign('gerecenseerdeboeken', $boekenGerecenseerd);
 
 		$fotos = array();
 		foreach (FotoTagsModel::instance()->find('keyword = ?', array($this->model->uid), null, null, 3) as $tag) {

@@ -4,6 +4,7 @@
 namespace CsrDelft\model\entity\bibliotheek;
 
 
+use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
@@ -29,17 +30,18 @@ class BoekExemplaar extends PersistentEntity {
 	 */
 	public $opmerking;
 
-	public $uigeleend_uid;
+	public $uitgeleend_uid;
 
 	public $toegevoegd;
 
-	public $status;
+	public $status = 'beschikbaar';
 
 	public $uitleendatum;
 	/**
 	 * @var int leningen
 	 */
 	public $leningen;
+
 
 
 	public function isBiebBoek() : bool {
@@ -49,15 +51,24 @@ class BoekExemplaar extends PersistentEntity {
 	public function isEigenaar() : bool {
 		if ($this->eigenaar_uid == LoginModel::getUid()) {
 			return true;
-		} elseif ($this->isBiebBoek() AND LoginModel::mag('R_BASF')) {
+		} elseif ($this->isBiebBoek() AND LoginModel::mag('P_BIEB_MOD')) {
 			return true;
 		}
 		return false;
 	}
 
+	public function magBewerken() : bool {
+		return $this->isEigenaar();
+	}
 	public function getStatus() {
-		// @TODO geef juiste status
-		return "beschikbaar";
+		return $this->status;
+	}
+
+	/**
+	 * @return Boek
+	 */
+	public function getBoek() {
+		return BoekModel::instance()->get($this->boek_id);
 	}
 
 	/**
@@ -79,4 +90,28 @@ class BoekExemplaar extends PersistentEntity {
 	 * @var string[]
 	 */
 	protected static $primary_key = ['id'];
+
+	public function magBekijken() {
+		return LoginModel::mag('P_BIEB_READ') OR $this->magBewerken();
+	}
+
+	public function isBeschikbaar() {
+		return $this->getStatus() == 'beschikbaar';
+	}
+
+	public function kanLenen(string $uid) {
+		return $this->eigenaar_uid != $uid && $this->isBeschikbaar();
+	}
+
+	public function isUitgeleend() {
+		return $this->status == 'uitgeleend';
+	}
+
+	public function isTeruggegeven() {
+		return $this->status == 'teruggegeven';
+	}
+
+	public function isVermist() {
+		return $this->status == 'vermist';
+	}
 }

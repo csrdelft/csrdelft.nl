@@ -22,7 +22,11 @@ class BiebRubriekModel extends PersistenceModel {
 	 * @return BiebRubriek|false
 	 */
 	public static function get(int $id) {
-		return self::instance()->retrieveByPrimaryKey([$id]);
+		/**
+		 * @var BiebRubriek $ret
+		 */
+		$ret = self::instance()->retrieveByPrimaryKey([$id]);
+		return $ret;
 	}
 
 

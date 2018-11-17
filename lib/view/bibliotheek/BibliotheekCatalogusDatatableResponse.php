@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\bibliotheek;
 
-use CsrDelft\model\bibliotheek\BiebCatalogus;
 use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\model\ProfielModel;

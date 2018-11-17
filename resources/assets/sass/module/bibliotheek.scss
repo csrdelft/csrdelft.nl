@@ -138,8 +138,6 @@ p.biebuitleg {
 }
 .boek input, .boek textarea {
 	width: 428px;
-	background: none;
-	border: 1px solid white;
 	padding: 1px 2px 1px 2px;
 	margin: 0 0;
 }
@@ -161,21 +159,8 @@ select {
 
 
 .InputField label {	width:71px; }
-.boek .InputField:hover {
-	background: url("/plaetjes/famfamfam/pencil.png") no-repeat 488px #f3f3f3;
-}
-.InputField:hover input,
-.InputField:hover textarea,
-.InputField:hover select {
-	border: 1px solid #999;
-}
-.InputField input:focus,
-.InputField textarea:focus,
-.InputField select:focus {
-	background-color: #FFC;
-	border: 1px solid black;
-}
-/* opslaan-knopje weergeven bij focus*/
+
+/* opslaan-knopje weergeven bij focus
 div.opslaan {
 	display: none;
 	margin: 2px 12px 0 0;
@@ -192,7 +177,7 @@ div.opslaan {
 .InputField textarea.leeg {
 	border: 1px solid #D9D9D9;
 }
-/* nog niet opgeslagen: geel, opslagen: groen, fout bij opslaan: rood */
+/* nog niet opgeslagen: geel, opslagen: groen, fout bij opslaan: rood
 .InputField input.nonsavededits,
 .InputField textarea.nonsavededits { background-color: #FFFFC1; }
 
@@ -207,7 +192,7 @@ div.opslaan {
 .InputField.metFouten textarea 	 { background-color: #E88; }
 .InputField.metFouten .melding	 { color: red; display: block; margin-left: 77px; }
 
-/* InputField voor biebcode */
+/* InputField voor biebcode
 .InputField input#field_code {
 	width: 100px;
 }
@@ -236,10 +221,7 @@ li.ac_over a, li.ac_over a:hover {
 	float: left;
 	width: 649px;
 }
-.exemplaar .opmerking {
-    width: 425px;
-    display: inline-block;
-}
+
 .exemplaar .regel.actieknoppen {
 	height: 20px;
 }
@@ -282,9 +264,9 @@ div.beschrijvingen { margin-top: 40px; }
 	background-color: lightgray;
 }
 
-/* 
- * Formulier voor nieuw boek en die voor boekbeschrijving bestaand boek
- */
+
+
+
 .Formulier label, .boekzoeker label {
 	width: 150px;
 	float: left;
@@ -302,31 +284,6 @@ div.beschrijvingen { margin-top: 40px; }
 }
 .Formulier select {
 	width: 406px;
-}
-.Formulier .InputField, .Formulier h3, .Formulier .password {
-	clear: both;
-}
-.Formulier .InputField, .boekzoeker {
-	margin-left: 10px;
-	padding: 1px 2px;
-	border: 1px solid white;
-}
-.boekzoeker {
-	margin: 0 0 10px 10px;
-	padding: 7px 2px 7px 2px;
-}
-
-.Formulier .InputField:hover,.boekzoeker {
-	border: 1px  solid #ddd;
-	background-color: #eee;
-}
-.Formulier .metFouten {
-	background-color: #FFC3CE;
-	padding: 4px 2px;
-}
-.Formulier .InputField .waarschuwing {
-	float: right;
-	margin-right: 10px;
 }
 
 .Formulier h3 {

@@ -116,7 +116,7 @@ $(function ($) {
         let codeknop = $('<a class="btn genereer" title="Biebcode invullen">Genereer</a>').mousedown(function (event) {
             event.preventDefault();
             codeveld.val(
-                $('select[name=rubriek]').val() + '.' + $('input[name=auteur]').val().substring(0, 3).toLowerCase()
+                $('select[name=categorie_id]').val() + '.' + $('input[name=auteur]').val().substring(0, 3).toLowerCase()
             ).focus();
         });
         codeveld.after(codeknop);

@@ -72,8 +72,9 @@ try {
     // GUI 403
     /** @var CsrDelft\model\entity\CmsPagina $errorpage */
     $errorpage = CmsPaginaModel::get($exception->getCode());
-	$body = new CmsPaginaView($errorpage);
-	$view = new CsrLayoutPage($body);
+    throw $exception;
+//	$body = new CmsPaginaView($errorpage);
+//	$view = new CsrLayoutPage($body);
 }
 
 

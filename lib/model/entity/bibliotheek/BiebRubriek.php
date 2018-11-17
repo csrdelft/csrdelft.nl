@@ -27,11 +27,8 @@ class BiebRubriek extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = [
 		'id' => [T::Integer, false, "auto_increment"],
-		'boek_id' => [T::Integer, false],
-		'schrijver_uid' => [T::String, false],
-		'beschrijving' => [T::Text, false],
-		'toegevoegd' => [T::DateTime, false],
-		'bewerkdatum' => [T::DateTime, false]
+		'p_id' => [T::Integer, false],
+		'categorie' => [T::String, false]
 	];
 
 	public function __toString()

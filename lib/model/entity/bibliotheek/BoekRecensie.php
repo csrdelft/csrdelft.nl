@@ -4,6 +4,7 @@
 namespace CsrDelft\model\entity\bibliotheek;
 
 
+use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
@@ -62,4 +63,15 @@ class BoekRecensie extends PersistentEntity {
 	 * @var string[]
 	 */
 	protected static $primary_key = ['id'];
+
+	public function magBewerken() {
+		return $this->isSchrijver();
+	}
+
+	/**
+	 * @return Boek
+	 */
+	public function getBoek() {
+		return BoekModel::instance()->get($this->boek_id);
+	}
 }

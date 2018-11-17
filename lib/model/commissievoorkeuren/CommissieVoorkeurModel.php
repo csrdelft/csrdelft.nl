@@ -45,21 +45,4 @@ class CommissieVoorkeurModel extends PersistenceModel {
 		return $voorkeur;
 	}
 
-	/**
-	 * Updates the model if it exists,
-	 * otherwise creates it.
-	 * @TODO remove this function when implemented in ORM
-	 * @param PersistentEntity $entity
-	 * @return boolean whether a new row was created
-	 */
-	public function updateOrCreate(PersistentEntity $entity) {
-		if ($this->exists($entity)) {
-			$this->update($entity);
-			return true;
-		} else {
-			$this->create($entity);
-			return false;
-		}
-	}
-
 }
