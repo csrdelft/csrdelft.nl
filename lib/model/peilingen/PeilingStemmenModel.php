@@ -19,7 +19,7 @@ class PeilingStemmenModel extends PersistenceModel {
 	 * @return bool
 	 */
 	public function heeftGestemd($peiling_id, $uid) {
-		return $this->existsByPrimaryKey(array($peiling_id, $uid));
+		return $this->existsByPrimaryKey([$peiling_id, $uid]);
 	}
 
 }

@@ -113,12 +113,40 @@ class PeilingenModel extends PersistenceModel {
 		return $errors;
 	}
 
+	public function getPeilingenVoorBeheer() {
+
+		$peilingen = $this->find();
+		if (LoginModel::mag('P_PEILING_MOD')) {
+			return $peilingen->fetchAll();
+		} else {
+			$zichtbarePeilingen = $this->find('eigenaar = ?', [LoginModel::getUid()])->fetchAll();
+			$peilingenMetRechten = $this->find('eigenaar <> ? AND rechten_mod <> ""', [LoginModel::getUid()]);
+			foreach ($peilingenMetRechten as $peiling) {
+				if (LoginModel::mag($peiling->rechten_mod)) {
+					$zichtbarePeilingen[] = $peiling;
+				}
+			}
+
+			return $zichtbarePeilingen;
+		}
+	}
+
 	/**
 	 * @param $peiling_id
 	 * @return Peiling|false
 	 */
 	public function getPeilingById($peiling_id) {
 		return $this->retrieveByPrimaryKey(array($peiling_id));
+	}
+
+	public function magBewerken($peiling) {
+		if (LoginModel::mag('P_PEILING_MOD')
+			|| $peiling->eigenaar == LoginModel::getUid()
+			|| LoginModel::mag($peiling->rechten_mod)) {
+			return $peiling;
+		}
+
+		return false;
 	}
 
 	/**
@@ -128,4 +156,7 @@ class PeilingenModel extends PersistenceModel {
 		return $this->find(null, array(), null, 'id DESC');
 	}
 
+	public function magStemmen(Peiling $peiling) {
+		return LoginModel::mag('P_PEILING_VOTE') && ($peiling->eigenaar == LoginModel::getUid() || empty(trim($peiling->rechten_stemmen)) || LoginModel::mag($peiling->rechten_stemmen));
+	}
 }

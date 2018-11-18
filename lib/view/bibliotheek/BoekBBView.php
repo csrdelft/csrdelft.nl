@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bibliotheek;
 
-use CsrDelft\model\bibliotheek\BoekModel;
+use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\view\SmartyTemplateView;
 
 /**
@@ -10,7 +10,7 @@ use CsrDelft\view\SmartyTemplateView;
  */
 class BoekBBView extends SmartyTemplateView {
 
-	public function __construct(BoekModel $boek) {
+	public function __construct(Boek $boek) {
 		parent::__construct($boek);
 	}
 

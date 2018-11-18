@@ -183,7 +183,7 @@ class ProfielForm extends Formulier {
 		$fields[] = new TelefoonField('telefoon', $profiel->telefoon, 'Telefoonnummer (vast)', 20);
 
 		$fields[] = new Subkopje('Boekhouding');
-		$fields[] = new RequiredIBANField('bankrekening', $profiel->bankrekening, 'Bankrekening', 18);
+		$fields[] = new RequiredIBANField('bankrekening', $profiel->bankrekening, 'Bankrekening', 34);
 		if ($admin) {
 			$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
 		}

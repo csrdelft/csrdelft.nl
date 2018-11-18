@@ -73,7 +73,7 @@ class Boek extends PersistentEntity {
 
 	}
 	public function getStatus() {
-		throw new NotImplementedException();
+		return "";
 	}
 
 	//url naar dit boek

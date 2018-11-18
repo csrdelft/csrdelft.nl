@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import Vue from 'vue';
 import {knopGet, knopPost, knopVergroot, radioButtonGroep} from './knop';
 import {modalClose, modalOpen} from './modal';
 import {formCancel, formReset, formSubmit, formToggle} from './formulier';
@@ -102,6 +103,12 @@ function initLazyImages(parent) {
     });
 }
 
+function initVue(parent) {
+	$(parent).find('.vue-context').each(function () {
+		new Vue({el: this});
+	});
+}
+
 export default function initContext(parent) {
     initButtons(parent);
     initForms(parent);
@@ -111,6 +118,7 @@ export default function initContext(parent) {
     initHoverIntents(parent);
     initLazyImages(parent);
     radioButtonGroep(parent);
+    initVue(parent);
 }
 
 export function domUpdate(htmlString) {

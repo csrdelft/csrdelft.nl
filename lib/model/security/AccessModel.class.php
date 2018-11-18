@@ -426,7 +426,8 @@ class AccessModel extends CachedPersistenceModel {
 			'P_MAIL_COMPOSE' => $this->createPermStr(10, 1 + 2), // Alle berichtjes in de courant bewerken en volgorde wijzigen
 			'P_MAIL_SEND' => $this->createPermStr(10, 1 + 2 + 4), // Courant verzenden
 			'P_PEILING_VOTE' => $this->createPermStr(11, 1), // Stemmen op peilingen
-			'P_PEILING_MOD' => $this->createPermStr(11, 1 + 2), // Peilingen aanmaken en verwijderen
+			'P_PEILING_EDIT' => $this->createPermStr(11, 1 + 2), // Peilingen aanmaken en eigen peiling bewerken
+			'P_PEILING_MOD' => $this->createPermStr(11, 1 + 2 + 4), // Peilingen aanmaken en verwijderen
 			'P_FISCAAT_READ' => $this->createPermStr(12, 1), // Fiscale dingen inzien
 			'P_FISCAAT_MOD' => $this->createPermStr(12, 1 + 2), // Fiscale bewerkingen maken
 			'P_ALBUM_PUBLIC_READ' => $this->createPermStr(13, 1), // Publiek foto-album bekijken
@@ -450,7 +451,7 @@ class AccessModel extends CachedPersistenceModel {
 
 		$this->roles[AccessRole::Nobody] = $p['P_PUBLIC'] | $p['P_FORUM_READ'] | $p['P_ALBUM_PUBLIC_READ'];
 		$this->roles[AccessRole::Eter] = $this->roles[AccessRole::Nobody] | $p['P_LOGGED_IN'] | $p['P_PROFIEL_EDIT'] | $p['P_MAAL_IK'] | $p['P_AGENDA_READ'];
-		$this->roles[AccessRole::Lid] = $this->roles[AccessRole::Eter] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_ADD']  | $p['P_ALBUM_PUBLIC_DOWN'] | $p['P_PEILING_VOTE'];
+		$this->roles[AccessRole::Lid] = $this->roles[AccessRole::Eter] | $p['P_OUDLEDEN_READ'] | $p['P_FORUM_POST'] | $p['P_DOCS_READ'] | $p['P_BIEB_READ'] | $p['P_CORVEE_IK'] | $p['P_MAIL_POST'] | $p['P_NEWS_POST'] | $p['P_ALBUM_ADD']  | $p['P_ALBUM_PUBLIC_DOWN'] | $p['P_PEILING_VOTE'] | $p['P_PEILING_EDIT'];
 		$this->roles[AccessRole::Oudlid] = $this->roles[AccessRole::Lid];
 		$this->roles[AccessRole::Fiscaat] = $this->roles[AccessRole::Lid] | $p['P_FISCAAT_READ'] | $p['P_FISCAAT_MOD'];
 		$this->roles[AccessRole::MaalCie] = $this->roles[AccessRole::Fiscaat] | $p['P_MAAL_MOD'] | $p['P_CORVEE_MOD'] | $p['P_MAAL_SALDI'];

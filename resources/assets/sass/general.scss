@@ -8,6 +8,7 @@
 @import "~jquery-ui-timepicker-addon/src/jquery-ui-timepicker-addon.css";
 @import "variables";
 @import "~bootstrap/scss/bootstrap";
+@import "~bootstrap-vue/dist/bootstrap-vue.css";
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome";
 @import "~lightbox2/dist/css/lightbox.css";
@@ -39,6 +40,10 @@ a, a:hover {
 
 .overflow-hidden {
 	overflow: hidden;
+}
+
+.form-group .twitter-typeahead {
+	width: 100%;
 }
 
 // Zie node_modules/bootstrap/scss/_input-group.scss

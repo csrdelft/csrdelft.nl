@@ -192,7 +192,12 @@ class LoginModel extends PersistenceModel implements Validator {
 		$verloop_na = strtotime(InstellingenModel::get('beveiliging', 'wachtwoorden_verlopen_ouder_dan'));
 		$waarschuwing_vooraf = strtotime(InstellingenModel::get('beveiliging', 'wachtwoorden_verlopen_waarschuwing_vooraf'), $verloop_na);
 		if ($pass_since < $verloop_na) {
-			if (!startsWith(REQUEST_URI, '/wachtwoord') AND !startsWith(REQUEST_URI, '/verify/') AND !startsWith(REQUEST_URI, '/styles/') AND !startsWith(REQUEST_URI, '/scripts/') AND REQUEST_URI !== '/endsu') {
+			if (!startsWith(REQUEST_URI, '/wachtwoord')
+				AND !startsWith(REQUEST_URI, '/verify/')
+				AND !startsWith(REQUEST_URI, '/styles/')
+				AND !startsWith(REQUEST_URI, '/scripts/')
+				AND REQUEST_URI !== '/endsu'
+			  AND REQUEST_URI !== '/logout') {
 				setMelding('Uw wachtwoord is verlopen', 2);
 				redirect('/wachtwoord/verlopen');
 			}

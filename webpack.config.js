@@ -1,5 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HardSourcePlugin = require('hard-source-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 const path = require('path');
 const glob = require('glob');
 
@@ -52,17 +53,21 @@ module.exports = {
 	devtool: 'source-map',
 	resolve: {
 		// Vanuit javascript kun je automatisch .js en .ts bestanden includen.
-		extensions: ['.ts', '.js'],
+		extensions: ['.ts', '.js', '.vue'],
+		alias: {
+			'vue$': 'vue/dist/vue.esm.js'
+		}
 	},
 	plugins: [
 		// Maak webpack sneller door een boel te cachen.
 		devMode ? new HardSourcePlugin({
-			cacheDirectory: __dirname + '/node_modules/.cache/hard-source/[confighash]',
+			cacheDirectory: __dirname + '/data/webpack-hard-source/[confighash]',
 		}) : false,
 		new MiniCssExtractPlugin({
 			// Css bestanden komen in de map css terecht.
 			filename: 'css/[name].css'
 		}),
+		new VueLoaderPlugin(),
 	].filter(Boolean),
 	module: {
 		// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
@@ -101,6 +106,10 @@ module.exports = {
 						transpileOnly: true,
 					},
 				},
+			},
+			{
+				test: /\.vue$/,
+				use: 'vue-loader'
 			},
 			// Verwerk sass bestanden.
 			// `sass-loader` > Compileer naar css
@@ -146,6 +155,10 @@ module.exports = {
 						},
 					},
 				],
+			},
+			{
+				test: /\.css$/,
+				use: ['style-loader', 'css-loader']
 			},
 			// Sla fonts op in de fonts map.
 			{

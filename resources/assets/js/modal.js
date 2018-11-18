@@ -21,6 +21,7 @@ export function modalOpen(htmlString = '') {
     }
 
     modal.modal('show');
+    $(document.body).trigger('modalOpen');
 
 
     if (typeof htmlString === 'string' && htmlString !== '') {
@@ -33,4 +34,5 @@ export function modalOpen(htmlString = '') {
 
 export function modalClose() {
     $('#modal').modal('hide');
+    $(document.body).trigger('modalClose');
 }
