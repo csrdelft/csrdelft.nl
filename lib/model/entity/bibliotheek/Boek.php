@@ -178,7 +178,7 @@ class Boek extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = [
-		'id' => [T::Integer, false, "auto_increment"],
+		'id' => [T::Integer, false, 'auto_increment'],
 		'auteur' => [T::String, false],
 		'auteur_id' => [T::Integer, false],
 		'titel' => [T::String, false],
@@ -200,6 +200,6 @@ class Boek extends PersistentEntity {
 	 * @return BoekRecensie[]
 	 */
 	public function getRecensies() {
-		return BoekRecensieModel::instance()->find("boek_id = ?", [$this->id])->fetchAll();
+		return BoekRecensieModel::instance()->find('boek_id = ?', [$this->id])->fetchAll();
 	}
 }

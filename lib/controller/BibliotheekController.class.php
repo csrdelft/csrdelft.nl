@@ -170,7 +170,7 @@ class BibliotheekController extends Controller {
 
 		if ($boekForm->validate()) {
 			if (!$boek->magBewerken()) {
-				throw new CsrToegangException("U mag dit boek niet bewerken");
+				throw new CsrToegangException('U mag dit boek niet bewerken');
 			} else {
 				$boekid = BoekModel::instance()->updateOrCreate($boek);
 				if ($boekid !== false) {
@@ -266,7 +266,7 @@ class BibliotheekController extends Controller {
 			$eigenaar = LoginModel::getUid();
 		}
 		if ($eigenaar != LoginModel::getUid() && !($eigenaar == 'x222' && LoginModel::mag('P_BIEB_MOD'))) {
-			throw new CsrToegangException("Mag deze eigenaar niet kiezen");
+			throw new CsrToegangException('Mag deze eigenaar niet kiezen');
 		}
 		BoekExemplaarModel::addExemplaar($boek, $eigenaar);
 
@@ -330,15 +330,15 @@ class BibliotheekController extends Controller {
 	 * /exemplaaruitlenen/[exemplaarid]
 	 */
 	protected function exemplaaruitlenen(BoekExemplaar $exemplaar) {
-		$uid = filter_input(INPUT_POST, "lener_uid", FILTER_SANITIZE_STRING);
+		$uid = filter_input(INPUT_POST, 'lener_uid', FILTER_SANITIZE_STRING);
 		if (!$exemplaar->isEigenaar()) {
-			setMelding("Alleen de eigenaar mag boeken uitlenen", -1);
+			setMelding('Alleen de eigenaar mag boeken uitlenen', -1);
 		} else if (!ProfielModel::existsUid($uid)) {
-			setMelding("Incorrecte lener", -1);
+			setMelding('Incorrecte lener', -1);
 		} else if (BoekExemplaarModel::leen($exemplaar, $uid)) {
 			redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->getId() . '#exemplaren');
 		} else {
-			setMelding("Kan dit exemplaar niet lenen", -1);
+			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
 	}
 
@@ -350,7 +350,7 @@ class BibliotheekController extends Controller {
 		if (BoekExemplaarModel::leen($exemplaar, LoginModel::getUid())) {
 			redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->getId() . '#exemplaren');
 		} else {
-			setMelding("Kan dit exemplaar niet lenen", -1);
+			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
 	}
 
@@ -414,7 +414,7 @@ class BibliotheekController extends Controller {
 			$results = BoekModel::autocompleteProperty($this->getParam(3), $zoekterm);
 			$data = [];
 			foreach ($results as $result) {
-				$data[] = ["data" => [$result], "value" => $result, "result" => $result];
+				$data[] = ['data' => [$result], 'value' => $result, 'result' => $result];
 			}
 			$this->view = new JsonResponse($data);
 		} else {
