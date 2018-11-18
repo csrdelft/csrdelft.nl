@@ -235,7 +235,7 @@ class BibliotheekController extends Controller {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addbeschrijving', -1);
 			redirect('/bibliotheek/');
 		} else {
-			BoekModel::instance()->delete($boek);
+			$this->model->delete($boek);
 			setMelding('Boek met succes verwijderd.', 1);
 			redirect('/bibliotheek/');
 		}
