@@ -167,6 +167,19 @@ class BibliotheekController extends Controller {
 	 */
 	protected function boek(Boek $boek) {
 		$boekForm = new BoekFormulier($boek);
+
+		if ($boekForm->validate()) {
+			if (!$boek->magBewerken()) {
+				throw new CsrToegangException("U mag dit boek niet bewerken");
+			} else {
+				$boekid = BoekModel::instance()->updateOrCreate($boek);
+				if ($boekid !== false) {
+					redirect("/bibliotheek/boek/$boekid");
+					exit;
+				}
+			}
+		}
+
 		$alleRecensies = $boek->getRecensies();
 		$andereRecensies = [];
 		$mijnRecensie = new BoekRecensie();
@@ -185,18 +198,6 @@ class BibliotheekController extends Controller {
 
 		}
 		$recensieForm = new RecensieFormulier($mijnRecensie);
-		if ($boekForm->validate()) {
-			if (!$boek->magBewerken()) {
-				throw new CsrToegangException("U mag dit boek niet bewerken");
-			} else {
-				$boekid = BoekModel::instance()->updateOrCreate($boek);
-				if ($boekid !== false) {
-					redirect("/bibliotheek/boek/$boekid");
-					exit;
-				}
-			}
-		}
-
 		$this->view = new BibliotheekBoekView($boek, $boekForm, $andereRecensies, $recensieForm, $exemplaarFormulieren);
 	}
 
