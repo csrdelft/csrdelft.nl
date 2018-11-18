@@ -11,26 +11,12 @@ use CsrDelft\Orm\Entity\T;
 
 class BoekRecensie extends PersistentEntity {
 
-	protected static $table_name = 'biebbeschrijving';
-
 	public $id;
 	public $boek_id;
 	public $schrijver_uid;
 	public $beschrijving;
 	public $toegevoegd;
 	public $bewerkdatum;
-
-	/**
-	 * @var array
-	 */
-	protected static $persistent_attributes = [
-		'id' => [T::Integer, false, "auto_increment"],
-		'boek_id' => [T::Integer, false],
-		'schrijver_uid' => [T::String, false],
-		'beschrijving' => [T::Text, false],
-		'toegevoegd' => [T::DateTime, false],
-		'bewerkdatum' => [T::DateTime, false]
-	];
 
 	/*
 	 * @param 	$uid lidnummer of null
@@ -74,4 +60,18 @@ class BoekRecensie extends PersistentEntity {
 	public function getBoek() {
 		return BoekModel::instance()->get($this->boek_id);
 	}
+
+	/**
+	 * @var array
+	 */
+	protected static $persistent_attributes = [
+		'id' => [T::Integer, false, "auto_increment"],
+		'boek_id' => [T::Integer, false],
+		'schrijver_uid' => [T::String, false],
+		'beschrijving' => [T::Text, false],
+		'toegevoegd' => [T::DateTime, false],
+		'bewerkdatum' => [T::DateTime, false]
+	];
+
+	protected static $table_name = 'biebbeschrijving';
 }

@@ -11,8 +11,6 @@ use CsrDelft\Orm\Entity\T;
 
 class BoekExemplaar extends PersistentEntity {
 
-	protected static $table_name = 'biebexemplaar';
-
 	/**
 	 * @var int id
 	 */
@@ -71,26 +69,6 @@ class BoekExemplaar extends PersistentEntity {
 		return BoekModel::instance()->get($this->boek_id);
 	}
 
-	/**
-	 * @var array
-	 */
-	protected static $persistent_attributes = [
-		'id' => [T::Integer, false, "auto_increment"],
-		'boek_id' => [T::Integer, false],
-		'eigenaar_uid' => [T::String, false],
-		'opmerking' => [T::Text, false],
-		'uitgeleend_uid' => [T::String, true],
-		'toegevoegd' => [T::DateTime, false],
-		'uitleendatum' => [T::DateTime, true],
-		'status' => [T::Enumeration, false],
-		'leningen' => [T::Integer, false]
-	];
-
-	/**
-	 * @var string[]
-	 */
-	protected static $primary_key = ['id'];
-
 	public function magBekijken() {
 		return LoginModel::mag('P_BIEB_READ') OR $this->magBewerken();
 	}
@@ -114,4 +92,26 @@ class BoekExemplaar extends PersistentEntity {
 	public function isVermist() {
 		return $this->status == 'vermist';
 	}
+
+	/**
+	 * @var array
+	 */
+	protected static $persistent_attributes = [
+		'id' => [T::Integer, false, "auto_increment"],
+		'boek_id' => [T::Integer, false],
+		'eigenaar_uid' => [T::String, false],
+		'opmerking' => [T::Text, false],
+		'uitgeleend_uid' => [T::String, true],
+		'toegevoegd' => [T::DateTime, false],
+		'uitleendatum' => [T::DateTime, true],
+		'status' => [T::Enumeration, false],
+		'leningen' => [T::Integer, false]
+	];
+
+
+	/**
+	 * @var string[]
+	 */
+	protected static $primary_key = ['id'];
+	protected static $table_name = 'biebexemplaar';
 }
