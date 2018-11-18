@@ -5,7 +5,7 @@ use Phinx\Migration\AbstractMigration;
 
 class BoekFields extends AbstractMigration
 {
-    public function change()
+    public function up()
     {
 		$this->query(<<<SQL
  			ALTER TABLE biebboek CHANGE auteur auteur varchar(255) NOT NULL;
@@ -19,4 +19,7 @@ class BoekFields extends AbstractMigration
 SQL
 );
     }
+
+    public function down() {
+	}
 }
