@@ -134,10 +134,12 @@ class Boek extends PersistentEntity {
 		return false;
 	}
 
-	public function isBiebBoek($exemplaarid = null) {
+	public function isBiebBoek() {
 		$exemplaren = $this->getExemplaren();
 		foreach ($exemplaren as $exemplaar) {
-			$exemplaar->isBiebBoek();
+			if ($exemplaar->isBiebBoek()) {
+				return true;
+			}
 		}
 		return false;
 	}
