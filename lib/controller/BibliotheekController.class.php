@@ -175,7 +175,6 @@ class BibliotheekController extends Controller {
 				$boekid = BoekModel::instance()->updateOrCreate($boek);
 				if ($boekid !== false) {
 					redirect("/bibliotheek/boek/$boekid");
-					exit;
 				}
 			}
 		}
