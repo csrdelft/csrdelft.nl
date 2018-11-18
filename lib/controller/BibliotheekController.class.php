@@ -59,7 +59,11 @@ class BibliotheekController extends Controller {
 				$boek = new Boek();
 			}
 			parent::performAction([$boek]);
-		} else if (in_array($this->action, ['exemplaar', 'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'deleteexemplaar', 'exemplaaruitlenen', 'exemplaarvermist', 'exemplaargevonden']) && $this->hasParam(3)) {
+		} else if (in_array($this->action, ['verwijderbeschrijving']) && $this->hasParam(3) && $this->hasParam(4)) {
+			$recensie = BoekRecensieModel::instance()->get($this->getParam(3), $this->getParam(4));
+			parent::performAction([$recensie]);
+		}
+		else if (in_array($this->action, ['exemplaar', 'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'deleteexemplaar', 'exemplaaruitlenen', 'exemplaarvermist', 'exemplaargevonden']) && $this->hasParam(3)) {
 			$exemplaar = BoekExemplaarModel::instance()->get($this->getParam(3));
 			parent::performAction([$exemplaar]);
 		} else {
@@ -176,9 +180,9 @@ class BibliotheekController extends Controller {
 		foreach ($alleRecensies as $recensie) {
 			if ($recensie->schrijver_uid == LoginModel::getUid()) {
 				$mijnRecensie = $recensie;
-			} else {
-				$andereRecensies[] = $recensie;
 			}
+			$andereRecensies[] = $recensie;
+
 		}
 		$recensieForm = new RecensieFormulier($mijnRecensie);
 		if ($boekForm->validate()) {
@@ -205,6 +209,19 @@ class BibliotheekController extends Controller {
 			BoekModel::instance()->update($boek);
 			redirect("/bibliotheek/boek/$boek->id");
 		}
+	}
+
+
+	protected function verwijderbeschrijving(BoekRecensie $recensie) {
+		if (!$recensie->magVerwijderen()) {
+			setMelding('Onvoldoende rechten voor deze actie.', -1);
+			$this->exit_http(403);
+		} else {
+			BoekRecensieModel::instance()->delete($recensie);
+			setMelding('Recensie met succes verwijderd.', 1);
+
+		}
+		exit;
 	}
 
 	/**

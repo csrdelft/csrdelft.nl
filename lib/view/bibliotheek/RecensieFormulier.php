@@ -28,4 +28,12 @@ class RecensieFormulier extends Formulier {
 
 	}
 
+	public function getModel() {
+		return $this->model;
+	}
+
+	public function isNieuw() {
+		return $this->model->id == null;
+	}
+
 }
