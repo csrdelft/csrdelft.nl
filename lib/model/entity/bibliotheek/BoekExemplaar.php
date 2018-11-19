@@ -104,7 +104,7 @@ class BoekExemplaar extends PersistentEntity {
 		'uitgeleend_uid' => [T::String, true],
 		'toegevoegd' => [T::DateTime, false],
 		'uitleendatum' => [T::DateTime, true],
-		'status' => [T::Enumeration, false],
+		'status' => [T::Enumeration, false, BoekExemplaarStatus::class],
 		'leningen' => [T::Integer, false]
 	];
 
