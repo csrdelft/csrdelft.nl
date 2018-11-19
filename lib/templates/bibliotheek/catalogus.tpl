@@ -16,7 +16,7 @@
 </ul>
 {toegang P_BIEB_READ}
 	<div class="controls">
-		<a class="btn" href="/bibliotheek/nieuwboek">{icon get="book_add"} Nieuw boek</a>
+		<a class="btn" href="/bibliotheek/boek">{icon get="book_add"} Nieuw boek</a>
 	</div>
 {/toegang}
 

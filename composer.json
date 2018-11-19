@@ -13,7 +13,7 @@
 		"jacwright/restserver": "dev-master",
 		"globalcitizen/php-iban": "^2.6",
 		"robmorgan/phinx": "^0.9",
-		"csrdelft/orm": "1.7.6",
+		"csrdelft/orm": "1.7.7",
 		"tedivm/stash": "^0.14.1",
 		"tedivm/jshrink": "^1.1",
 		"tubalmartin/cssmin": "^4.0",
@@ -27,7 +27,10 @@
 		"ext-mysqli": "*",
 		"ext-PDO": "*",
 		"ext-pdo_mysql": "*",
-		"ext-hash": "*"
+		"ext-hash": "*",
+        "ext-json": "*",
+		"easyrdf/easyrdf": "^0.9.1",
+		"ml/json-ld": "^1.0"
 	},
 	"config": {
 		"platform": {

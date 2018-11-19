@@ -1,8 +1,8 @@
 <?php
 
-namespace CsrDelft\model\bibliotheek;
+namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\model\bibliotheek\BoekModel;
 
 class TitelField extends RequiredTextField {
 
@@ -10,7 +10,7 @@ class TitelField extends RequiredTextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (BiebCatalogus::existsProperty('titel', $this->getValue())) {
+		if (BoekModel::existsTitel($this->value)) {
 			$this->error = 'Titel bestaat al.';
 		}
 		return $this->error == '';

@@ -62,12 +62,7 @@ class Knop {
 	}
 
 	private function getImgTag() {
-		$img = '<img src="/plaetjes/knopjes/' . $this->type . '.png"';
-		if ($this->title === null) {
-			$img .= ' title="' . ucfirst($this->type) . '"';
-		}
-		$img .= 'alt="' . ucfirst($this->type) . '" />';
-		return $img;
+		return Icon::getTag($this->type, null, ucfirst($this->type));
 	}
 
 	public function getHtml() {

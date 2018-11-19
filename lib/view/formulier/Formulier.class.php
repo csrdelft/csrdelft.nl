@@ -158,7 +158,7 @@ class Formulier implements View, Validator {
 				return false;
 			}
 		}
-		return true;
+		return $_SERVER['REQUEST_METHOD'] == 'POST';
 	}
 
 	/**

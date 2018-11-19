@@ -3,7 +3,8 @@
 namespace CsrDelft\model;
 
 use CsrDelft\common\LDAP;
-use CsrDelft\model\bibliotheek\BiebCatalogus;
+use CsrDelft\model\bibliotheek\BoekExemplaarModel;
+use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
@@ -60,7 +61,7 @@ class ProfielModel extends CachedPersistenceModel {
 		return static::instance()->cache($profiel, true);
 	}
 
-	public static function getNaam($uid, $vorm) {
+	public static function getNaam($uid, $vorm='civitas') {
 		$profiel = static::get($uid);
 		if (!$profiel) {
 			return null;
@@ -329,9 +330,9 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyBibliothecaris(Profiel $profiel, $oudestatus) {
-		$boeken = BiebCatalogus::getBoekenByUid($profiel->uid, 'geleend');
-		if (!is_array($boeken)) {
-			$boeken = array();
+		$geleend = BoekExemplaarModel::getGeleend($profiel);
+		if (!is_array($geleend)) {
+			$geleend = array();
 		}
 		// Lijst van boeken genereren
 		$bknleden = $bkncsr = array(
@@ -339,16 +340,17 @@ class ProfielModel extends CachedPersistenceModel {
 			'lijst' => '',
 			'aantal' => 0
 		);
-		foreach ($boeken as $boek) {
-			if ($boek['eigenaar_uid'] == 'x222') {
+		foreach ($geleend as $exemplaar) {
+			$boek = $exemplaar->getBoek();
+			if ($exemplaar->isBiebBoek()) {
 				$bkncsr['aantal']++;
-				$bkncsr['lijst'] .= "{$boek['titel']} door {$boek['auteur']}\n";
-				$bkncsr['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek['id']}\n";
+				$bkncsr['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
+				$bkncsr['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek->id}\n";
 			} else {
 				$bknleden['aantal']++;
-				$bknleden['lijst'] .= "{$boek['titel']} door {$boek['auteur']}\n";
-				$bknleden['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek['id']}\n";
-				$naam = ProfielModel::getNaam($boek['eigenaar_uid'], 'volledig');
+				$bknleden['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
+				$bknleden['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek->id}\n";
+				$naam = ProfielModel::getNaam($exemplaar->eigenaar_uid, 'volledig');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}
 		}

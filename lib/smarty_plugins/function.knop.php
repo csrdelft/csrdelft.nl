@@ -51,6 +51,8 @@ function smarty_function_knop($params, &$smarty) {
 		$knop->setText($params['text']);
 	} elseif (isset($params['tekst'])) {
 		$knop->setText($params['tekst']);
+	} else {
+		$knop->setText(ucfirst($params['type']));
 	}
 	if (isset($params['title'])) {
 		$knop->setTitle($params['title']);

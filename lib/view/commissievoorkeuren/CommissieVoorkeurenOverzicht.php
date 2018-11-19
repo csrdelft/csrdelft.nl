@@ -21,10 +21,10 @@ class CommissieVoorkeurenOverzicht extends SmartyTemplateView {
 
 	protected $categorieFormulier;
 	protected $commissieFormulier;
-	public function __construct($model = null, $commissieFormulier = null, $categorieFormulier = null) {
+	public function __construct($model = null, $commissieBoekFormulier = null, $categorieFormulier = null) {
 		parent::__construct($model, "/commissievoorkeuren/");
 		$this->categorieFormulier = $categorieFormulier ?? new AddCategorieFormulier(new VoorkeurCommissieCategorie());
-		$this->commissieFormulier = $commissieFormulier ?? new AddCommissieFormulier(new VoorkeurCommissie());
+		$this->commissieFormulier = $commissieBoekFormulier ?? new AddCommissieFormulier(new VoorkeurCommissie());
 
 	}
 
