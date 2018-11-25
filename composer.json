@@ -13,7 +13,7 @@
 		"jacwright/restserver": "dev-master",
 		"globalcitizen/php-iban": "^2.6",
 		"robmorgan/phinx": "^0.9",
-		"csrdelft/orm": "1.7.7",
+		"csrdelft/orm": "1.8.0",
 		"tedivm/stash": "^0.14.1",
 		"tedivm/jshrink": "^1.1",
 		"tubalmartin/cssmin": "^4.0",
@@ -22,15 +22,15 @@
 		"jakeasmith/http_build_url": "^1",
 		"ferno/loco": "dev-master",
 		"eftec/bladeone": "3.8",
+		"easyrdf/easyrdf": "^0.9.1",
+		"ml/json-ld": "^1.0",
 		"ext-exif": "*",
 		"ext-gd": "*",
 		"ext-mysqli": "*",
 		"ext-PDO": "*",
 		"ext-pdo_mysql": "*",
 		"ext-hash": "*",
-        "ext-json": "*",
-		"easyrdf/easyrdf": "^0.9.1",
-		"ml/json-ld": "^1.0"
+		"ext-json": "*"
 	},
 	"config": {
 		"platform": {
