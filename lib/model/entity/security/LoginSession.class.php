@@ -60,7 +60,7 @@ class LoginSession extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'session_hash' => array(T::String),
+		'session_hash' => array(T::StringKey),
 		'uid' => array(T::UID),
 		'login_moment' => array(T::DateTime),
 		'expire' => array(T::DateTime),

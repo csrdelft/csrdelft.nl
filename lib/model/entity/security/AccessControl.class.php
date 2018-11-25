@@ -40,9 +40,9 @@ class AccessControl extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'environment' => array(T::String),
-		'action' => array(T::String),
-		'resource' => array(T::String),
+		'environment' => array(T::StringKey),
+		'action' => array(T::StringKey),
+		'resource' => array(T::StringKey),
 		'subject' => array(T::String)
 	);
 	/**
