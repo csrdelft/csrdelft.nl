@@ -83,7 +83,7 @@ class Account extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'uid' => array(T::UID),
-		'username' => array(T::String),
+		'username' => array(T::StringKey),
 		'email' => array(T::String),
 		'pass_hash' => array(T::String),
 		'pass_since' => array(T::DateTime),

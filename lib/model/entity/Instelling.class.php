@@ -45,8 +45,8 @@ class Instelling extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'module' => array(T::String),
-		'instelling_id' => array(T::String),
+		'module' => array(T::StringKey),
+		'instelling_id' => array(T::StringKey),
 		'waarde' => array(T::Text)
 	);
 	/**
