@@ -121,6 +121,13 @@
 
 
 		@if($deel->magPosten())
+			@include('forum.partial.draad_reageren')
+			<div class="meldingen">
+				<div id="draad-melding" class="alert alert-warning">
+					Hier kunt u een onderwerp toevoegen in deze categorie van het forum.
+					Kijkt u vooraf goed of het onderwerp waarover u post hier wel thuishoort.
+				</div>
+			</div>
 			@include('forum.partial.post_form', ['draad' => null])
 		@endif
 	</div>

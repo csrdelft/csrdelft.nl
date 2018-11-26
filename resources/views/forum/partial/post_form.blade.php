@@ -1,4 +1,13 @@
-@include('forum.partial.draad_reageren')
+
+@if($deel->isOpenbaar())
+	<div class="meldingen">
+		<div id="public-melding" class="alert alert-danger">
+			<div class="dikgedrukt">Openbaar forum</div>
+			Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br/>
+			Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.
+		</div>
+	</div>
+@endif
 
 <div id="forumPosten" class="forum-posten">
 	<div class="auteur">
@@ -16,7 +25,7 @@
 		@endauth
 	</div>
 
-	<div class="bericht0">
+	<div class="bericht0 flex-grow-1">
 
 		<form id="forumForm" class="Formulier"
 					action="/forum/posten/{{$deel->forum_id}}@if(isset($draad))/{{$draad->draad_id}}@endif" method="post">
@@ -27,12 +36,12 @@
 					forumdeel op in hun zoekresultaten.<br/>
 					Het vermelden van <span class="cursief">uw e-mailadres</span> is verplicht.
 				</div>
-				<input type="text" name="email" class="FormElement TextField forumEmail" placeholder="E-mailadres"/>
+				<input type="text" name="email" class="FormElement TextField forumEmail form-control" placeholder="E-mailadres"/>
 				<input type="text" name="firstname" value="" class="FormElement TextField verborgen"/>
 				{{-- spam trap, must be kept empty! --}}
 			@endguest
 			@if($draad === null)
-				<input type="text" id="nieuweTitel" name="titel" class="FormElement TextField" tabindex="1"
+				<input type="text" id="nieuweTitel" name="titel" class="FormElement TextField form-control" tabindex="1"
 							 placeholder="Onderwerp titel" value="{{$post_form_titel}}" origvalue="{{$post_form_titel}}"/>
 			@endif
 			<div id="berichtPreview" class="bbcodePreview forumBericht"></div>
@@ -61,19 +70,4 @@
 		</form>
 	</div>
 
-	<div class="meldingen">
-		@if($deel->isOpenbaar())
-			<div id="public-melding">
-				<div class="dikgedrukt">Openbaar forum</div>
-				Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br/>
-				Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.
-			</div>
-		@endif
-		@auth
-			<div id="draad-melding">
-				Hier kunt u een onderwerp toevoegen in deze categorie van het forum.
-				Kijkt u vooraf goed of het onderwerp waarover u post hier wel thuishoort.
-			</div>
-		@endauth
-	</div>
 </div>

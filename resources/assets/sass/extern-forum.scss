@@ -202,27 +202,6 @@
 	top: -100px;
 }
 
-#draad-melding {
-	display: none;
-	background-color: #ffffc1;
-}
-
-#bewerk-melding {
-	display: none;
-	background-color: #ffffc1;
-}
-
-#public-melding {
-	color: #fff;
-	background-color: #f66;
-}
-
-#draad-melding, #bewerk-melding, #public-melding {
-	margin-bottom: 5px;
-	padding: 4px 8px 4px 4px;
-	text-align: left;
-}
-
 /* Paginering */
 span.curpage {
 	padding: 4px 5px;
@@ -350,6 +329,7 @@ span.curpage {
 	}
 
 	.paging,
+	.meldingen,
 	.forumdeel-omschrijving,
 	.forum-posten,
 	.forum-reageren {

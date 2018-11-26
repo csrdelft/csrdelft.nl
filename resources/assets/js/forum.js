@@ -92,7 +92,7 @@ export function forumBewerken(postId) {
 		$forumBewerkBericht.val(data);
 		$forumBewerkBericht.autosize();
 		$forumBewerkBericht.markItUp(bbCodeSet);
-		$(bewerkContainer).parent().children('td.auteur:first').append('<div id="bewerk-melding">Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</div>');
+		$(bewerkContainer).parent().children('td.auteur:first').append('<div id="bewerk-melding" class="alert alert-warning">Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</div>');
 		$('#bewerk-melding').slideDown(200);
 		$('#forumPosten').css('visibility', 'hidden');
 	});
@@ -281,13 +281,7 @@ $(function () {
 		}
 	});
 
-	let $nieuweTitel = $('#nieuweTitel');
-
-	if ($nieuweTitel.length !== 0) {
-		let $draadMelding = $('#draad-melding');
-		$nieuweTitel.on('focusin', () => $draadMelding.slideDown(200));
-		$nieuweTitel.on('focusout', () => $draadMelding.slideUp(200));
-	}
+	$('#nieuweTitel').on('focusin', () => $('#draad-melding').slideDown(200));
 
 	$('.togglePasfoto').on('click', function () {
 		$(this).parent().find('.forumpasfoto').toggleClass('verborgen');

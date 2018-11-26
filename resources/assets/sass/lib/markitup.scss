@@ -64,3 +64,10 @@
 		display: none;
 	}
 }
+
+@media screen and (max-width: 576px) { // sm
+  .markItUpContainer .markItUpHeader  ul {
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+}
