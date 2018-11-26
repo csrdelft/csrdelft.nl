@@ -19,7 +19,7 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{{CSR_ROOT}}/forum/rss.xml" />
 @foreach(\CsrDelft\view\CompressedLayout::getUserModules() as $sheet)
-<link rel="stylesheet" href="/dist/css/{{$sheet}}.css" type="text/css" />
+<link rel="stylesheet" href="{{asset("/dist/css/$sheet.css")}}" type="text/css" />
 @endforeach
 @stack('styles')
 <script type="text/javascript" src="/dist/js/app.js"></script>
