@@ -1,6 +1,6 @@
 @import "~raty-js/lib/jquery.raty.css";
 @import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";
-@import "../lib/markitup.css";
+@import "../lib/markitup";
 @import "../knoppen";
 
 input[type="file"] {
@@ -84,7 +84,6 @@ h1.Titel {
   .BBCodeField {
     height: 225px;
     border: none;
-    padding: 5px;
     resize: none;
   }
   textarea {

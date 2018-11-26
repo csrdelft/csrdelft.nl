@@ -40,9 +40,10 @@
 .bbcodePreview {
   display: none;
   margin: 7px 0;
-  padding: 2px;
   background-color: #ffffc1;
   border: 1px solid #ccc;
+  padding: .2em .6em 10px;
+  text-align: justify;
 
   &::after {
     content: "";
