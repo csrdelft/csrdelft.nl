@@ -67,6 +67,7 @@ class FormFieldFactory {
 
 		switch ($type) {
 			case T::String:
+			case T::StringKey:
 				if (startsWith($fieldName, 'rechten_')) {
 					return new RechtenField($fieldName, $value, $desc);
 				}
