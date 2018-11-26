@@ -42,7 +42,7 @@ class DocumentModel extends PersistenceModel {
 	public function zoek($zoekterm, $limiet = 0) {
 
 		return $this->find(
-			'MATCH (naam, filename) AGAINST (? IN BOOLEAN MODE)',
+			'MATCH (naam, filename) AGAINST (? IN NATURAL LANGUAGE MODE)',
 			[$zoekterm],
 			null,
 			null,

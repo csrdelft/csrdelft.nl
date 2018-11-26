@@ -183,14 +183,8 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 
 	public function zoeken($query, $datumsoort, $ouder, $jaar, $limit) {
 		$this->per_pagina = (int)$limit;
-		$attributes = array('*', 'MATCH(titel) AGAINST (? IN BOOLEAN MODE) AS score');
-		$terms = explode(' ', $query);
-		foreach ($terms as $i => $term) {
-			if (!endsWith($term, '*')) {
-				$terms[$i] .= '*'; // append wildcard
-			}
-		}
-		$where_params = array(implode(' +', $terms)); // set terms to AND
+		$attributes = ['*', 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score'];
+		$where_params = [$query];
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
