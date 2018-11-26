@@ -23,7 +23,7 @@
 					&nbsp;&nbsp;&nbsp;
 				@endif
 				<a title="Onderwerp toevoegen aan favorieten" class="btn btn-light post popup addfav"
-					 href="/menubeheer/toevoegen/favoriet">@icon('start')</a>
+					 href="/menubeheer/toevoegen/favoriet">@icon('heart', 'heart_add')</a>
 				&nbsp;&nbsp;&nbsp;
 				@if($draad->isGevolgd())
 					<a href="/forum/volgenuit/{{$draad->draad_id}}" class="btn btn-light post ReloadPage volgenUit"
@@ -44,7 +44,7 @@
 				@if($draad->magModereren())
 					@if($draad->gesloten)
 						<a href="/forum/wijzigen/{{$draad->draad_id}}/gesloten" class="btn btn-light post ReloadPage slotjeUit"
-							 title="Openen (reactie mogelijk)">@icon('lcok', 'lock_break')</a>
+							 title="Openen (reactie mogelijk)">@icon('lock', 'lock_break')</a>
 					@else
 						<a href="/forum/wijzigen/{{$draad->draad_id}}/gesloten" class="btn btn-light post ReloadPage slotjeAan"
 							 title="Sluiten (geen reactie mogelijk)">@icon('lock_open', 'lock')</a>
