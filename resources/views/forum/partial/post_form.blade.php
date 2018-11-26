@@ -2,10 +2,17 @@
 @if($deel->isOpenbaar())
 	<div class="meldingen">
 		<div id="public-melding" class="alert alert-danger">
-			<div class="dikgedrukt">Openbaar forum</div>
+			<strong>Openbaar forum</strong>
 			Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br/>
 			Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.
 		</div>
+		@guest
+			<div class="alert alert-info">
+				Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
+				&eacute;&eacute;rst door de PubCie worden goedgekeurd.
+				Het vermelden van <em>uw e-mailadres</em> is verplicht.
+			</div>
+		@endguest
 	</div>
 @endif
 
@@ -30,12 +37,6 @@
 		<form id="forumForm" class="Formulier"
 					action="/forum/posten/{{$deel->forum_id}}@if(isset($draad))/{{$draad->draad_id}}@endif" method="post">
 			@guest
-				<div class="bericht">
-					Hier kunt u een bericht toevoegen aan het forum. Het zal echter niet direct zichtbaar worden, maar
-					&eacute;&eacute;rst door de PubCie worden goedgekeurd. Zoekmachines nemen berichten van dit openbare
-					forumdeel op in hun zoekresultaten.<br/>
-					Het vermelden van <span class="cursief">uw e-mailadres</span> is verplicht.
-				</div>
 				<input type="text" name="email" class="FormElement TextField forumEmail form-control" placeholder="E-mailadres"/>
 				<input type="text" name="firstname" value="" class="FormElement TextField verborgen"/>
 				{{-- spam trap, must be kept empty! --}}
