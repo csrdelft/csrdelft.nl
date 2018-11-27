@@ -3,15 +3,18 @@
 namespace CsrDelft\view\documenten;
 
 use CsrDelft\model\entity\documenten\Document;
+use CsrDelft\view\View;
 
 /**
  * Document bekijken.
  * Ongeldig aangevraagde documenten worden in de controller afgehandeld.
  */
-class DocumentContent extends DocumentenView {
+class DocumentContent implements View {
+
+	private $model;
 
 	public function __construct(Document $document) {
-		parent::__construct($document);
+		$this->model = $document;
 	}
 
 	public function view() {
@@ -27,4 +30,15 @@ class DocumentContent extends DocumentenView {
 		readfile($this->model->getFullPath());
 	}
 
+	public function getTitel() {
+		return $this->model->filename;
+	}
+
+	public function getBreadcrumbs() {
+		return '';
+	}
+
+	public function getModel() {
+		return $this->model;
+	}
 }
