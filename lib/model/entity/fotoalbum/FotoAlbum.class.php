@@ -52,7 +52,7 @@ class FotoAlbum extends Map {
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
-		'subdir' => array(T::String),
+		'subdir' => array(T::StringKey),
 		'owner' => array(T::UID)
 	);
 	/**

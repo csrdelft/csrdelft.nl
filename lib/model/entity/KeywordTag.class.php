@@ -39,7 +39,7 @@ class KeywordTag extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'refuuid' => array(T::StringKey),
-		'keyword' => array(T::String),
+		'keyword' => array(T::StringKey),
 		'door' => array(T::UID),
 		'wanneer' => array(T::DateTime)
 	);
