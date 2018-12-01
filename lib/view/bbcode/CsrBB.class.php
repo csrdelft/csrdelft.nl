@@ -1021,7 +1021,7 @@ HTML;
 				$beschrijving = $document->getFriendlyMimetype() . ' (' . format_filesize((int)$document->filesize) . ')';
 				return $this->lightLinkBlock('document', $document->getDownloadUrl(), $document->naam, $beschrijving);
 			}
-			return view('documenten.document.bb', ['document' => $document])->getHtml();
+			return view('documenten.document_bb', ['document' => $document])->getHtml();
 		} else {
 			return '<div class="bb-document">[document] Ongeldig document (id:' . $id . ')</div>';
 		}

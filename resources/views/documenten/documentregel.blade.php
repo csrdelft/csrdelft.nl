@@ -15,7 +15,7 @@
 				 onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">@icon('verwijderen')</a>
 		@endif
 		@if($document->magBewerken())
-			<a class="bewerken" href="/documenten/bewerken/{$document->id}"
+			<a class="bewerken" href="/documenten/bewerken/{{$document->id}}"
 				 title="Document bewerken">@icon('bewerken')</a>
 		@endif
 	</td>

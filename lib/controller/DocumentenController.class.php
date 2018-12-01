@@ -141,8 +141,6 @@ class DocumentenController extends AclController {
 				'titel' => 'Document bewerken',
 				'content' => $form,
 			]);
-			$this->view = new CsrLayoutPage($form);
-			$this->view->addCompressedResources('documenten');
 		}
 
 	}
