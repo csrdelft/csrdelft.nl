@@ -186,6 +186,7 @@ class ForumController extends Controller {
 	 */
 	public function wacht() {
 		return view('forum.resultaten', [
+			'titel' => 'Wacht op goedkeuring',
 			'resultaten' => ForumDelenModel::instance()->getWachtOpGoedkeuring()
 		]);
 	}
