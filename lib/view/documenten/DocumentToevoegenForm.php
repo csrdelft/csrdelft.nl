@@ -17,6 +17,7 @@ use CsrDelft\view\formulier\uploadvelden\RequiredFileField;
  * Class DocumentForm.
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @property Document $model
  */
 class DocumentToevoegenForm extends Formulier {
 
@@ -28,6 +29,10 @@ class DocumentToevoegenForm extends Formulier {
 		$map = new Map();
 		$map->path = PUBLIC_FTP . 'documenten/';
 		$map->dirname = basename($map->path);
+
+		if (!$this->isPosted()) {
+			$this->model->categorie_id = filter_input(INPUT_GET, 'catID', FILTER_VALIDATE_INT);
+		}
 
 		$fields[] = new SelectField('categorie_id', $this->model->categorie_id, 'Categorie', DocumentCategorieModel::instance()->getCategorieNamen());
 		$fields[] = new RequiredTextField('naam', $this->model->naam, 'Documentnaam');

@@ -2,16 +2,16 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\documenten\DocumentCategorieModel;
 use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\documenten\Document;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\documenten\DocumentBewerkenForm;
-use CsrDelft\view\documenten\DocumentCategorieContent;
 use CsrDelft\view\documenten\DocumentContent;
 use CsrDelft\view\documenten\DocumentDownloadContent;
-use CsrDelft\view\documenten\DocumentenContent;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\JsonResponse;
 
@@ -56,8 +56,11 @@ class DocumentenController extends AclController {
 	 * Recente documenten uit alle categorieën tonen
 	 */
 	protected function recenttonen() {
-		$this->view = new CsrLayoutPage(new DocumentenContent());
-		$this->view->addCompressedResources('documenten');
+		$model = DocumentCategorieModel::instance();
+		$this->view = view('documenten.documenten', [
+			'categorieen' => $model->find(),
+			'model' => $model
+		]);
 	}
 
 	protected function verwijderen($id) {
@@ -111,56 +114,41 @@ class DocumentenController extends AclController {
 			setMelding('Categorie bestaat niet!', -1);
 			redirect('/documenten');
 		} elseif (!$categorie->magBekijken()) {
-			$this->exit_http(403);
+			throw new CsrToegangException('Mag deze categorie niet bekijken');
 		} else {
-			$documenten = $this->model->getCategorieModel()->getRecent($categorie, 0);
-			$this->view = new CsrLayoutPage(new DocumentCategorieContent($categorie, $documenten));
-			$this->view->addCompressedResources('documenten');
+			$this->view = view('documenten.categorie', [
+				'documenten' => $this->model->getCategorieModel()->getRecent($categorie, 0),
+				'categorie' => $categorie,
+			]);
 		}
 	}
 
-	protected function GET_bewerken($id) {
-		$document = $this->model->get($id);
-		if ($document === false) {
-			setMelding('Document niet gevonden', 2);
-			redirect('/documenten');
-		} else {
-			$form = new DocumentBewerkenForm($document);
-			$this->view = new CsrLayoutPage($form);
-			$this->view->addCompressedResources('documenten');
-		}
-	}
-
-	protected function POST_bewerken($id) {
+	protected function bewerken($id) {
 		$document = $this->model->get($id);
 
 		if ($document === false) {
 			setMelding('Document niet gevonden', 2);
 			redirect('/documenten');
-		} else {
-			$form = new DocumentBewerkenForm($document);
-			if ($form->validate()) {
-				$this->model->update($document);
-
-				redirect('/documenten/categorie/' . $document->categorie_id);
-			} else {
-				$this->view = new CsrLayoutPage($form);
-				$this->view->addCompressedResources('documenten');
-			}
 		}
+
+		$form = new DocumentBewerkenForm($document);
+		if ($form->isPosted() && $form->validate()) {
+			$this->model->update($document);
+
+			redirect('/documenten/categorie/' . $document->categorie_id);
+		} else {
+			$this->view = view('default', [
+				'titel' => 'Document bewerken',
+				'content' => $form,
+			]);
+		}
+
 	}
 
-	protected function GET_toevoegen() {
+	protected function toevoegen() {
 		$form = new DocumentToevoegenForm();
 
-		$this->view = new CsrLayoutPage($form);
-		$this->view->addCompressedResources('documenten');
-	}
-
-	protected function POST_toevoegen() {
-		$form = new DocumentToevoegenForm();
-
-		if ($form->validate()) {
+		if ($form->isPosted() && $form->validate()) {
 			/** @var Document $document */
 			$document = $form->getModel();
 
@@ -183,8 +171,10 @@ class DocumentenController extends AclController {
 
 			redirect('/documenten/categorie/' . $document->categorie_id);
 		} else {
-			$this->view = new CsrLayoutPage($form);
-			$this->view->addCompressedResources('documenten');
+			$this->view = view('default', [
+				'titel' => 'Document toevoegen',
+				'content' => $form,
+			]);
 		}
 	}
 

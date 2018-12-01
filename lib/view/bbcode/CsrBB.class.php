@@ -29,7 +29,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\SavedQuery;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bibliotheek\BoekBBView;
-use CsrDelft\view\documenten\DocumentBBContent;
 use CsrDelft\view\formulier\UrlDownloader;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 use CsrDelft\view\fotoalbum\FotoBBView;
@@ -1022,8 +1021,7 @@ HTML;
 				$beschrijving = $document->getFriendlyMimetype() . ' (' . format_filesize((int)$document->filesize) . ')';
 				return $this->lightLinkBlock('document', $document->getDownloadUrl(), $document->naam, $beschrijving);
 			}
-			$content = new DocumentBBContent($document);
-			return $content->getHtml();
+			return view('documenten.document_bb', ['document' => $document])->getHtml();
 		} else {
 			return '<div class="bb-document">[document] Ongeldig document (id:' . $id . ')</div>';
 		}

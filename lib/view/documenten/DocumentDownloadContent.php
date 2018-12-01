@@ -3,17 +3,18 @@
 namespace CsrDelft\view\documenten;
 
 use CsrDelft\model\entity\documenten\Document;
+use CsrDelft\view\View;
 
 /**
  * Document downloaden, allemaal headers goedzetten.
  * Ongeldig aangevraagde documenten worden in de controller afgehandeld.
- *
- * @property Document $model
  */
-class DocumentDownloadContent extends DocumentenView {
+class DocumentDownloadContent implements View {
+
+	private $model;
 
 	public function __construct(Document $document) {
-		parent::__construct($document);
+		$this->model = $document;
 	}
 
 	public function view() {
@@ -25,5 +26,17 @@ class DocumentDownloadContent extends DocumentenView {
 		header('Pragma: public');
 		header('Content-Length: ' . $this->model->filesize);
 		readfile($this->model->getFullPath());
+	}
+
+	public function getTitel() {
+		return $this->model->filename;
+	}
+
+	public function getBreadcrumbs() {
+		return '';
+	}
+
+	public function getModel() {
+		return $this->model;
 	}
 }
