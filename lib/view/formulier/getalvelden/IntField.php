@@ -23,8 +23,6 @@ class IntField extends InputField {
 	public $step = 1;
 	public $min = null;
 	public $max = null;
-	public $min_alert = null;
-	public $max_alert = null;
 
 	public function __construct($name, $value, $description, $min = null, $max = null) {
 		parent::__construct($name, $value, $description, 11);
@@ -36,25 +34,10 @@ class IntField extends InputField {
 		}
 		if (is_int($min)) {
 			$this->min = $min;
-			$this->min_alert = 'Minimaal ' . $this->min;
 		}
 		if (is_int($max)) {
 			$this->max = $max;
-			$this->max_alert = 'Maximaal ' . $this->max;
 		}
-		$this->onkeydown .= <<<JS
-
-	if (event.keyCode === 107 || event.keyCode === 109) {
-		event.preventDefault();
-		if (event.keyCode === 107) {
-			$('#add_{$this->getId()}').click();
-		}
-		else if (event.keyCode === 109) {
-			$('#substract_{$this->getId()}').click();
-		}
-		return false;
-	}
-JS;
 	}
 
 	public function getValue() {
@@ -93,62 +76,6 @@ JS;
 	}
 
 	public function getHtml() {
-		$html = '';
-
-		if ($this->min !== null) {
-			if ($this->min_alert) {
-				$alert = "alert('{$this->min_alert}');";
-			} else {
-				$alert = '';
-			}
-			$this->onchange .= <<<JS
-
-	if (parseInt( $(this).val() ) < $(this).attr('min')) {
-		{$alert}
-		$(this).val( $(this).attr('min') );
+		return ' <input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'pattern', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'min', 'max', 'step')) . ' /> ';
 	}
-	$('#substract_{$this->getId()}').toggleClass('disabled', parseInt( $(this).val() ) <= $(this).attr('min'));
-JS;
-		}
-		if ($this->max !== null) {
-			if ($this->max_alert) {
-				$alert = "alert('{$this->max_alert}');";
-			} else {
-				$alert = '';
-			}
-			$this->onchange .= <<<JS
-
-	if (parseInt( $(this).val() ) >  $(this).attr('max')) {
-		{$alert}
-		$(this).val( $(this).attr('max') );
-	}
-	$('#add_{$this->getId()}').toggleClass('disabled', parseInt( $(this).val() ) >=  $(this).attr('max'));
-JS;
-		}
-
-		$html .= ' <input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'pattern', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete', 'min', 'max', 'step')) . ' /> ';
-
-		return $html;
-	}
-
-	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-
-$('#add_{$this->getId()}').click(function () {
-	var val = parseInt($('#{$this->getId()}').val());
-	if ($(this).hasClass('disabled') || isNaN(val)) {
-		return;
-	}
-	$('#{$this->getId()}').val(val + {$this->step}).change();
-});
-$('#substract_{$this->getId()}').click(function () {
-	var val = parseInt($('#{$this->getId()}').val());
-	if ($(this).hasClass('disabled') || isNaN(val)) {
-		return;
-	}
-	$('#{$this->getId()}').val(val - {$this->step}).change();
-});
-JS;
-	}
-
 }

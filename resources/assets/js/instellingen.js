@@ -9,22 +9,24 @@ function instellingVeranderd() {
 }
 
 function instellingOpslaan() {
-	let input = $(this);
+	if (this.checkValidity()) {
+		let input = $(this);
 
-	let href = input.data('href');
+		let href = input.data('href');
 
-	input.addClass('loading');
+		input.addClass('loading');
 
-	$.ajax({
-		url: href,
-		method: 'POST',
-		data: {
-			waarde: input.val()
-		}
-	}).then(() => {
-		instellingVeranderd();
-		input.removeClass('loading');
-	});
+		$.ajax({
+			url: href,
+			method: 'POST',
+			data: {
+				waarde: input.val()
+			}
+		}).then(() => {
+			instellingVeranderd();
+			input.removeClass('loading');
+		});
+	}
 }
 
 $(() => {

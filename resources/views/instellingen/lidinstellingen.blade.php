@@ -45,18 +45,19 @@
 								{{-- Verticaal op xs --}}
 								<div class="d-block d-sm-none w-100">
 									<div class="btn-group-vertical btn-group-toggle col-md-9" data-buttons="radio">
-										@foreach($opties as $optie)
+										@foreach($opties as $optieId => $optie)
 											<a class="post noanim instellingKnop btn btn-secondary @if($optie === $keuze) active @endif"
-												 href="/instellingen/update/{{$module}}/{{$id}}/{{urlencode($optie)}}">{{ucfirst($optie)}}</a>
+												 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
 										@endforeach
 									</div>
 								</div>
 								{{-- Horizontaal op alle andere --}}
 								<div class="d-none d-sm-block">
 									<div class="btn-group btn-group-toggle col-md-9" data-buttons="radio">
-										@foreach($opties as $optie)
-											<a class="post noanim instellingKnop btn btn-secondary @if($optie === $keuze) active @endif"
-												 href="/instellingen/update/{{$module}}/{{$id}}/{{urlencode($optie)}}">{{ucfirst($optie)}}</a>
+										@foreach($opties as $optieId => $optie)
+											@php($optieId = is_int($optieId) ? $optie : $optieId)
+											<a class="post noanim instellingKnop btn btn-secondary @if($optieId === $keuze) active @endif"
+												 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
 										@endforeach
 									</div>
 								</div>
@@ -78,7 +79,8 @@
 							<div class="col-md-9 bg-danger">Voor dit type bestaat geen optie.</div>
 						@endif
 						<small class="col-md-9 offset-md-3 form-text text-muted">
-							{{$beschrijving}} Standaard waarde: "{{$default}}".
+							@php($default = isset($opties[$default]) ? $opties[$default] : $default)
+							{{$beschrijving}} Standaard waarde: "{{ucfirst($default)}}".
 						</small>
 					</div>
 				@endforeach

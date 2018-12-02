@@ -53,8 +53,12 @@ class LidInstellingenController extends AclController {
 			$waarde = filter_input(INPUT_POST, 'waarde', FILTER_SANITIZE_STRING);
 		}
 
-		$this->model->wijzigInstelling($module, $instelling, urldecode($waarde));
-		$this->view = new JsonResponse(['success' => true]);
+		if ($this->model->isValidValue($module, $instelling, urldecode($waarde))) {
+			$this->model->wijzigInstelling($module, $instelling, urldecode($waarde));
+			$this->view = new JsonResponse(['success' => true]);
+		} else {
+			$this->view = new JsonResponse(['success' => false], 400);
+		}
 	}
 
 	public function opslaan() {
