@@ -71,6 +71,7 @@ class PeilingenController extends AclController {
 			$form->setDataTableId($table->getDataTableId());
 
 			return view('default', [
+				'titel' => 'Peilingen beheer',
 				'content' => $table,
 				'modal' => $form
 			]);

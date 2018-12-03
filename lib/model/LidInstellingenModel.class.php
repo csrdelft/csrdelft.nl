@@ -328,7 +328,7 @@ class LidInstellingenModel extends InstellingenModel {
 		$options = $this->getTypeOptions($module, $id);
 		switch ($this->getType($module, $id)) {
 			case T::Enumeration:
-				if (isset($options[$waarde])) {
+				if (isset($options[$waarde]) || in_array($waarde, $options)) {
 					return true;
 				}
 				break;
