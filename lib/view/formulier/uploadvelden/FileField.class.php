@@ -19,19 +19,16 @@ class FileField extends RadioField {
 
 	private $behoudenField;
 	private $uploadField;
-	private $existingField;
 	private $urlField;
 	protected $uploaders;
 
 	public function __construct($name, $description, Bestand $bestand = null, Map $dir = null, array $filterMime = array()) {
 		$this->behoudenField = new BestandBehouden($name . '_BB', $filterMime, $bestand);
 		$this->uploadField = new UploadFileField($name . '_HF', $filterMime);
-		$this->existingField = new ExistingFileField($name . '_EF', $filterMime, $dir);
 		$this->urlField = new DownloadUrlField($name . '_DU', $filterMime);
 		$this->uploaders = array(
 			$this->behoudenField->name => $this->behoudenField,
 			$this->uploadField->name => $this->uploadField,
-			$this->existingField->name => $this->existingField,
 			$this->urlField->name => $this->urlField
 		);
 		$default = null;
