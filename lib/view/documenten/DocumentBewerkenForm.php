@@ -6,7 +6,7 @@ use CsrDelft\model\documenten\DocumentCategorieModel;
 use CsrDelft\model\entity\documenten\Document;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
-use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 

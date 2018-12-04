@@ -4,20 +4,12 @@ namespace CsrDelft\view;
 
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\entity\security\AccessControl;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
-use CsrDelft\view\formulier\elementen\HtmlComment;
-use CsrDelft\view\formulier\invoervelden\RequiredRechtenField;
-use CsrDelft\view\formulier\invoervelden\RequiredTextField;
-use CsrDelft\view\formulier\keuzevelden\SelectField;
-use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
-use CsrDelft\view\formulier\ModalForm;
-use CsrDelft\view\formulier\datatable\Multiplicity;
+use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\Multiplicity;
 
 /**
  * RechtenView.class.php

@@ -4,7 +4,7 @@ namespace CsrDelft\view\fiscaat\producten;
 
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\fiscaat\CiviCategorieModel;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\datatable\DataTableResponse;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

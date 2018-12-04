@@ -5,7 +5,7 @@ namespace CsrDelft\view\fiscaat\bestellingen;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviProductModel;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\datatable\DataTableResponse;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

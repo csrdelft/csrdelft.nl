@@ -4,9 +4,9 @@ namespace CsrDelft\view\fiscaat\bestellingen;
 
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\formulier\datatable\CellRender;
-use CsrDelft\view\formulier\datatable\CellType;
-use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\datatable\CellRender;
+use CsrDelft\view\datatable\CellType;
+use CsrDelft\view\datatable\DataTable;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

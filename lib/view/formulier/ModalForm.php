@@ -1,15 +1,12 @@
 <?php
-/**
- * ModalForm.php
- *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/05/2017
- */
 
 namespace CsrDelft\view\formulier;
 
 /**
  * Form as modal content.
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @date 06/05/2017
  */
 class ModalForm extends Formulier {
 	/**

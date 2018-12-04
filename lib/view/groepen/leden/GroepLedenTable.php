@@ -5,9 +5,9 @@ namespace CsrDelft\view\groepen\leden;
 use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
-use CsrDelft\view\formulier\datatable\Multiplicity;
+use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\Multiplicity;
 
 /**
  * GroepLedenTable.php

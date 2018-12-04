@@ -14,7 +14,7 @@ use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
 use CsrDelft\view\groepen\formulier\GroepConverteerForm;

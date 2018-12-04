@@ -4,7 +4,7 @@ namespace CsrDelft\view\fiscaat\bestellingen;
 
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
-use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\datatable\DataTable;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

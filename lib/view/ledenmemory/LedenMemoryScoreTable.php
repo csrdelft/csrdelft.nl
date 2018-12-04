@@ -4,7 +4,7 @@ namespace CsrDelft\view\ledenmemory;
 
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\LedenMemoryScoresModel;
-use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\datatable\DataTable;
 
 class LedenMemoryScoreTable extends DataTable {
 

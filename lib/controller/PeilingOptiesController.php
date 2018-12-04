@@ -8,7 +8,7 @@ use CsrDelft\model\entity\peilingen\PeilingOptie;
 use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\peilingen\PeilingOptiesModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\peilingen\PeilingOptieForm;
 use CsrDelft\view\peilingen\PeilingOptieResponse;
 use CsrDelft\view\peilingen\PeilingOptieTable;

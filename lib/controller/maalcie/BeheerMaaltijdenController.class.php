@@ -12,7 +12,7 @@ use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenTable;

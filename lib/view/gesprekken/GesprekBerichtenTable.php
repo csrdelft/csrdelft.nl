@@ -10,7 +10,7 @@ namespace CsrDelft\view\gesprekken;
 
 use CsrDelft\model\entity\gesprekken\Gesprek;
 use CsrDelft\model\gesprekken\GesprekBerichtenModel;
-use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\datatable\DataTable;
 
 class GesprekBerichtenTable extends DataTable {
 

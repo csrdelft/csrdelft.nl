@@ -10,7 +10,7 @@ namespace CsrDelft\view\gesprekken;
 
 use CsrDelft\model\entity\gesprekken\Gesprek;
 use CsrDelft\view\formulier\InlineForm;
-use CsrDelft\view\formulier\invoervelden\RequiredTextareaField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredTextareaField;
 
 class GesprekBerichtForm extends InlineForm {
 

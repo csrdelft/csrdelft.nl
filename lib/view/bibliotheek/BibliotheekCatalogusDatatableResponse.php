@@ -2,12 +2,8 @@
 
 namespace CsrDelft\view\bibliotheek;
 
-use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\entity\bibliotheek\Boek;
-use CsrDelft\model\ProfielModel;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\datatable\DataTableResponse;
 
 class BibliotheekCatalogusDatatableResponse extends DataTableResponse {
 

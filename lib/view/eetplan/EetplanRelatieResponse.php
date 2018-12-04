@@ -3,8 +3,8 @@
 namespace CsrDelft\view\eetplan;
 
 use CsrDelft\model\entity\eetplan\EetplanBekenden;
-use CsrDelft\view\formulier\datatable\DataTableColumn;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\datatable\DataTableColumn;
+use CsrDelft\view\datatable\DataTableResponse;
 
 /**
  * View voor EetplanBekendenTable op /eetplan/novietrelatie

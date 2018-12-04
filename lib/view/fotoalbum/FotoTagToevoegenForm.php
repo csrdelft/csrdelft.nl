@@ -4,10 +4,10 @@ namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\LidInstellingenModel;
-use CsrDelft\view\formulier\getalvelden\RequiredIntField;
+use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\InlineForm;
 use CsrDelft\view\formulier\invoervelden\LidField;
-use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 
 class FotoTagToevoegenForm extends InlineForm {
 

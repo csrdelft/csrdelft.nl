@@ -2,10 +2,10 @@
 
 namespace CsrDelft\view\peilingen;
 use CsrDelft\model\peilingen\PeilingOptiesModel;
-use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\knop\ConfirmDataTableKnop;
-use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
-use CsrDelft\view\formulier\datatable\Multiplicity;
+use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
+use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\Multiplicity;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

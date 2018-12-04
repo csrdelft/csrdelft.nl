@@ -4,7 +4,7 @@ namespace CsrDelft\view\fiscaat\saldo;
 
 use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\datatable\DataTableResponse;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

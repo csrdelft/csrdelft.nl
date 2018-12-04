@@ -4,11 +4,11 @@ namespace CsrDelft\view\agenda;
 
 use CsrDelft\model\entity\agenda\AgendaItem;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\invoervelden\RequiredRechtenField;
-use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredRechtenField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\keuzevelden\RequiredDateTimeField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredDateTimeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormulierKnop;
 use CsrDelft\view\formulier\ModalForm;
@@ -24,7 +24,7 @@ class AgendaItemForm extends ModalForm {
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
-		
+
 		$fields = [];
 		$fields['titel'] = new RequiredTextField('titel', $item->titel, 'Titel');
 		$fields['titel']->suggestions[] = array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond');

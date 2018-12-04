@@ -4,7 +4,7 @@ namespace CsrDelft\view\login;
 
 use CsrDelft\model\entity\security\RememberLogin;
 use CsrDelft\view\formulier\elementen\HtmlComment;
-use CsrDelft\view\formulier\invoervelden\RequiredTextField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 

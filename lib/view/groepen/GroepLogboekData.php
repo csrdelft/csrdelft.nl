@@ -3,7 +3,7 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\datatable\DataTableResponse;
 
 class GroepLogboekData extends DataTableResponse {
 

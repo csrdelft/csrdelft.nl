@@ -3,7 +3,7 @@
 namespace CsrDelft\view\login;
 
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\datatable\DataTable;
 
 /**
  * LoginSessionsTable.php

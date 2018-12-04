@@ -3,7 +3,7 @@
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\view\formulier\invoervelden\RequiredFileNameField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredFileNameField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 

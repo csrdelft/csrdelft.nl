@@ -4,14 +4,11 @@ namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
-use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieCategorieModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
-use CsrDelft\model\entity\commissievoorkeuren\VoorkeurOpmerking;
-use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\commissievoorkeuren\AddCategorieFormulier;
 use CsrDelft\view\commissievoorkeuren\AddCommissieFormulier;
@@ -23,7 +20,6 @@ use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenProfielView;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenView;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurPraesesOpmerkingForm;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
 
 
 /**

@@ -14,18 +14,18 @@ use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenForm;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenResponse;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenTable;
 use CsrDelft\view\eetplan\EetplanBekendenForm;
 use CsrDelft\view\eetplan\EetplanBekendenTable;
-use CsrDelft\view\eetplan\EetplanHuizenZoekenResponse;
-use CsrDelft\view\eetplan\EetplanHuizenTable;
 use CsrDelft\view\eetplan\EetplanHuizenResponse;
+use CsrDelft\view\eetplan\EetplanHuizenTable;
+use CsrDelft\view\eetplan\EetplanHuizenZoekenResponse;
 use CsrDelft\view\eetplan\EetplanRelatieResponse;
 use CsrDelft\view\eetplan\NieuwEetplanForm;
 use CsrDelft\view\eetplan\VerwijderEetplanForm;
-use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use CsrDelft\view\View;
 
 /**

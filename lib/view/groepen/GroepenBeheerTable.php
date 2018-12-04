@@ -5,10 +5,10 @@ namespace CsrDelft\view\groepen;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
-use CsrDelft\view\formulier\datatable\knop\ConfirmDataTableKnop;
-use CsrDelft\view\formulier\datatable\Multiplicity;
+use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
+use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\Multiplicity;
 
 
 /**

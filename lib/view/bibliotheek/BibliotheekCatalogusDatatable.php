@@ -4,9 +4,8 @@ namespace CsrDelft\view\bibliotheek;
 
 use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
-use CsrDelft\view\formulier\datatable\knop\SourceChangeDataTableKnop;
+use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\datatable\knoppen\SourceChangeDataTableKnop;
 
 class BibliotheekCatalogusDatatable extends DataTable {
 

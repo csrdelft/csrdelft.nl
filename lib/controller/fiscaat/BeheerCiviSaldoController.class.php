@@ -9,12 +9,12 @@ use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\ProfielService;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\fiscaat\saldo\CiviSaldoTable;
 use CsrDelft\view\fiscaat\saldo\CiviSaldoTableResponse;
 use CsrDelft\view\fiscaat\saldo\InleggenForm;
 use CsrDelft\view\fiscaat\saldo\LidRegistratieForm;
 use CsrDelft\view\fiscaat\saldo\SaldiSomForm;
-use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
 use CsrDelft\view\JsonResponse;
 use DateTime;
 

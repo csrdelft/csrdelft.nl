@@ -9,8 +9,8 @@
 namespace CsrDelft\view\gesprekken;
 
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\invoervelden\RequiredLidField;
-use CsrDelft\view\formulier\invoervelden\RequiredTextareaField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredLidField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredTextareaField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 

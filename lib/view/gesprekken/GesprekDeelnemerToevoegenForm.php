@@ -9,7 +9,7 @@
 namespace CsrDelft\view\gesprekken;
 
 use CsrDelft\model\entity\gesprekken\Gesprek;
-use CsrDelft\view\formulier\invoervelden\RequiredLidField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredLidField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 

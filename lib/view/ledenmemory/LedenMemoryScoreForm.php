@@ -4,7 +4,7 @@ namespace CsrDelft\view\ledenmemory;
 
 use CsrDelft\model\entity\LedenMemoryScore;
 use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\getalvelden\RequiredIntField;
+use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 
 class LedenMemoryScoreForm extends Formulier {

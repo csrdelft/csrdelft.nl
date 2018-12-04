@@ -3,12 +3,12 @@
 namespace CsrDelft\view\fiscaat\pin;
 
 use CsrDelft\model\fiscaat\pin\PinTransactieMatchModel;
-use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\knop\CollectionDataTableKnop;
-use CsrDelft\view\formulier\datatable\knop\ConfirmDataTableKnop;
-use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
-use CsrDelft\view\formulier\datatable\knop\SourceChangeDataTableKnop;
-use CsrDelft\view\formulier\datatable\Multiplicity;
+use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\datatable\knoppen\CollectionDataTableKnop;
+use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
+use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\knoppen\SourceChangeDataTableKnop;
+use CsrDelft\view\datatable\Multiplicity;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

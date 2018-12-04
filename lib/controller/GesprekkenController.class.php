@@ -9,7 +9,7 @@ use CsrDelft\model\gesprekken\GesprekkenModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\gesprekken\BerichtenResponse;
 use CsrDelft\view\gesprekken\GesprekBerichtForm;
 use CsrDelft\view\gesprekken\GesprekDeelnemerToevoegenForm;

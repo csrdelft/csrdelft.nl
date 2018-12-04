@@ -4,7 +4,7 @@ namespace CsrDelft\view\ledenmemory;
 
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\datatable\DataTableResponse;
 
 class LedenMemoryScoreResponse extends DataTableResponse {
 

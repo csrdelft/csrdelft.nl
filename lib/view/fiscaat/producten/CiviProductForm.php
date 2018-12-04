@@ -6,11 +6,11 @@ use CsrDelft\model\entity\fiscaat\CiviCategorie;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\fiscaat\CiviCategorieModel;
 use CsrDelft\view\formulier\getalvelden\IntField;
-use CsrDelft\view\formulier\getalvelden\RequiredBedragField;
-use CsrDelft\view\formulier\getalvelden\RequiredIntField;
-use CsrDelft\view\formulier\invoervelden\RequiredEntityField;
-use CsrDelft\view\formulier\invoervelden\RequiredTextField;
-use CsrDelft\view\formulier\keuzevelden\RequiredJaNeeField;
+use CsrDelft\view\formulier\getalvelden\required\RequiredBedragField;
+use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredEntityField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredJaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 

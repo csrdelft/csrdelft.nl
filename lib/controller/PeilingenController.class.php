@@ -10,11 +10,11 @@ use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\peilingen\PeilingenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
+use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\peilingen\PeilingTable;
 use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingResponse;
+use CsrDelft\view\peilingen\PeilingTable;
 use CsrDelft\view\View;
 
 /**

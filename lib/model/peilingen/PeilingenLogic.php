@@ -10,7 +10,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\bbcode\CsrBB;
-use CsrDelft\view\formulier\datatable\DataTableColumn;
+use CsrDelft\view\datatable\DataTableColumn;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

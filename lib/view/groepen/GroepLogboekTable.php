@@ -2,10 +2,9 @@
 
 namespace CsrDelft\view\groepen;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\model\ChangeLogModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\datatable\DataTable;
 
 class GroepLogboekTable extends DataTable {
 

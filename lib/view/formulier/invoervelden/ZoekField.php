@@ -6,6 +6,8 @@ use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 
+/**
+ */
 class ZoekField extends TextField {
 
 	public $type = 'search';

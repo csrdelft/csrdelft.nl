@@ -3,8 +3,8 @@
 namespace CsrDelft\view\eetplan;
 
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\view\formulier\invoervelden\RequiredEntityField;
-use CsrDelft\view\formulier\invoervelden\RequiredLidField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredEntityField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredLidField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 

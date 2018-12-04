@@ -4,16 +4,16 @@ namespace CsrDelft\view\maalcie\beheer;
 
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\view\formulier\datatable\CellRender;
-use CsrDelft\view\formulier\datatable\CellType;
-use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\knop\CollectionDataTableKnop;
-use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
-use CsrDelft\view\formulier\datatable\knop\PopupDataTableKnop;
-use CsrDelft\view\formulier\datatable\knop\SourceChangeDataTableKnop;
-use CsrDelft\view\formulier\datatable\knop\UrlDataTableKnop;
-use CsrDelft\view\formulier\datatable\knop\ConfirmDataTableKnop;
-use CsrDelft\view\formulier\datatable\Multiplicity;
+use CsrDelft\view\datatable\CellRender;
+use CsrDelft\view\datatable\CellType;
+use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\datatable\knoppen\CollectionDataTableKnop;
+use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
+use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\knoppen\PopupDataTableKnop;
+use CsrDelft\view\datatable\knoppen\SourceChangeDataTableKnop;
+use CsrDelft\view\datatable\knoppen\UrlDataTableKnop;
+use CsrDelft\view\datatable\Multiplicity;
 
 class BeheerMaaltijdenTable extends DataTable {
 	/**

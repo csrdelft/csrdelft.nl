@@ -4,7 +4,7 @@ namespace CsrDelft\view\groepen;
 
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\GroepStatus;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\datatable\DataTableResponse;
 
 class GroepenBeheerData extends DataTableResponse {
 

@@ -1,10 +1,4 @@
 <?php
-/**
- * InlineForm.php
- *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/05/2017
- */
 
 namespace CsrDelft\view\formulier;
 
@@ -13,6 +7,9 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormKnoppen;
 
 /**
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @date 06/05/2017
+ *
  * InlineForm with single InputField and FormDefaultKnoppen.
  */
 abstract class InlineForm extends Formulier implements FormElement {

@@ -10,7 +10,7 @@ namespace CsrDelft\view;
 
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AccessControl;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\datatable\DataTableResponse;
 
 class RechtenData extends DataTableResponse {
 

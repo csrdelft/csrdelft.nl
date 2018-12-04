@@ -7,9 +7,9 @@ use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\invoervelden\RequiredFileNameField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredFileNameField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
-use CsrDelft\view\formulier\uploadvelden\RequiredImageField;
+use CsrDelft\view\formulier\uploadvelden\required\RequiredImageField;
 
 class PosterUploadForm extends Formulier {
 

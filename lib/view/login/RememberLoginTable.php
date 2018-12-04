@@ -3,9 +3,9 @@
 namespace CsrDelft\view\login;
 
 use CsrDelft\model\security\RememberLoginModel;
-use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
-use CsrDelft\view\formulier\datatable\Multiplicity;
+use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\Multiplicity;
 
 class RememberLoginTable extends DataTable {
 

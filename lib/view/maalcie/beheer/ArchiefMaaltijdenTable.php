@@ -3,9 +3,9 @@
 namespace CsrDelft\view\maalcie\beheer;
 
 use CsrDelft\model\maalcie\ArchiefMaaltijdModel;
-use CsrDelft\view\formulier\datatable\CellRender;
-use CsrDelft\view\formulier\datatable\CellType;
-use CsrDelft\view\formulier\datatable\DataTable;
+use CsrDelft\view\datatable\CellRender;
+use CsrDelft\view\datatable\CellType;
+use CsrDelft\view\datatable\DataTable;
 
 class ArchiefMaaltijdenTable extends DataTable {
 	public function __construct() {

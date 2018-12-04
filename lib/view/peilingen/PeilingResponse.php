@@ -4,8 +4,8 @@ namespace CsrDelft\view\peilingen;
 
 use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\formulier\datatable\DataTableColumn;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\datatable\DataTableColumn;
+use CsrDelft\view\datatable\DataTableResponse;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

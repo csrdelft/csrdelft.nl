@@ -6,7 +6,7 @@ use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\invoervelden\RequiredEmailField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
 use CsrDelft\view\formulier\invoervelden\UsernameField;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;

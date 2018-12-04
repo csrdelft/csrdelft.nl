@@ -5,7 +5,7 @@ namespace CsrDelft\view\eetplan;
 
 use CsrDelft\model\entity\eetplan\Eetplan;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
-use CsrDelft\view\formulier\keuzevelden\RequiredSelectField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 

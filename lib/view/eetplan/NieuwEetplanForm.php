@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\eetplan;
 
-use CsrDelft\view\formulier\keuzevelden\RequiredDateField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredDateField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 

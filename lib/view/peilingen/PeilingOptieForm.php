@@ -3,13 +3,9 @@
 namespace CsrDelft\view\peilingen;
 
 use CsrDelft\model\entity\peilingen\PeilingOptie;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\BBCodeField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
-use CsrDelft\view\formulier\invoervelden\LidField;
-use CsrDelft\view\formulier\invoervelden\RequiredTextField;
-use CsrDelft\view\formulier\invoervelden\TextareaField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 

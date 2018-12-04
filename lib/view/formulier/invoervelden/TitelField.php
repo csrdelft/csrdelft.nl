@@ -4,7 +4,10 @@ namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\model\bibliotheek\BoekModel;
 
-class TitelField extends RequiredTextField {
+/**
+ */
+class TitelField extends TextField {
+  public $required = true;
 
 	public function validate() {
 		if (!parent::validate()) {

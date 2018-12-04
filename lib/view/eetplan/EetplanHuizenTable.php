@@ -2,10 +2,10 @@
 
 namespace CsrDelft\view\eetplan;
 
-use CsrDelft\view\formulier\datatable\CellRender;
-use CsrDelft\view\formulier\datatable\DataTable;
-use CsrDelft\view\formulier\datatable\knop\DataTableKnop;
-use CsrDelft\view\formulier\datatable\Multiplicity;
+use CsrDelft\view\datatable\CellRender;
+use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\Multiplicity;
 
 class EetplanHuizenTable extends DataTable {
 	public function __construct() {

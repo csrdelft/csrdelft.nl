@@ -9,13 +9,11 @@ use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviPrijsModel;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\fiscaat\producten\CiviProductForm;
 use CsrDelft\view\fiscaat\producten\CiviProductSuggestiesResponse;
 use CsrDelft\view\fiscaat\producten\CiviProductTable;
 use CsrDelft\view\fiscaat\producten\CiviProductTableResponse;
-use CsrDelft\view\formulier\datatable\RemoveRowsResponse;
-use TheSeer\Tokenizer\Exception;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

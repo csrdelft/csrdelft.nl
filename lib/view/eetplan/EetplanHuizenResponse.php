@@ -3,7 +3,7 @@
 namespace CsrDelft\view\eetplan;
 
 use CsrDelft\model\entity\groepen\Woonoord;
-use CsrDelft\view\formulier\datatable\DataTableResponse;
+use CsrDelft\view\datatable\DataTableResponse;
 
 /**
  * Data voor EetplanHuizenTable op /eetplan/woonoorden
