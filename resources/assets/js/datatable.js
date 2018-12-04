@@ -289,7 +289,7 @@ $.fn.dataTable.render.timeago = (data, type, row, meta) => {
 		case 'export':
 			return cell.dateTime;
 		default:
-			return data
+			return data;
 	}
 };
 
