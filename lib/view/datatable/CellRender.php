@@ -19,6 +19,7 @@ class CellRender {
 	const AANMELDINGEN = '$.fn.dataTable.render.aanmeldingen';
 	const TOTAAL_PRIJS = '$.fn.dataTable.render.totaalPrijs';
 	const TIMEAGO = '$.fn.dataTable.render.timeago';
+	const FILESIZE = '$.fn.dataTable.render.filesize';
 
 	/** @var string */
 	protected $choice;
@@ -91,5 +92,12 @@ class CellRender {
 	 */
 	public static function Timeago() {
 		return new static(self::TIMEAGO);
+	}
+
+	/**
+	 * @return static
+	 */
+	public static function Filesize() {
+		return new static(self::FILESIZE);
 	}
 }

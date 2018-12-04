@@ -4,10 +4,13 @@ import $ from 'jquery';
  * Documentenketzerjavascriptcode.
  */
 $(() => {
-	//tabellen naar zebra converteren.
-	$('#documenten').find('tr:odd').addClass('odd');
+	let $documenten = $('#documenten');
 
-	//hippe sorteerbare tabel fixen.
+	//tabellen naar zebra converteren.
+	$documenten.find('tr:odd').addClass('odd');
+	// render de filesize cellen
+	$documenten.find('.size').each((i, el) => el.innerText = $.fn.dataTable.render.filesize(el.innerText, 'display'));
+
 	$('#documentencategorie').dataTable({
 		language: {
 			zeroRecords: 'Geen documenten gevonden',
@@ -20,7 +23,7 @@ $(() => {
 		sorting: [[3, 'desc']], // moment toegevoegd
 		columns: [
 			{type: 'html'}, // documentnaam
-			null, // Bestandsgrootte
+			{type: 'num', render: $.fn.dataTable.render.filesize}, // Bestandsgrootte
 			{type: 'string'}, // mime-type, forceer string anders werkt sorteren uberhaupt niet
 			{render: $.fn.dataTable.render.timeago}, //moment toegevoegd
 			null, // Eigenaar

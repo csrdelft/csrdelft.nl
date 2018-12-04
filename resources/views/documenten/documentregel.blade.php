@@ -19,7 +19,7 @@
 				 title="Document bewerken">@icon('bewerken')</a>
 		@endif
 	</td>
-	<td class="size">{{format_filesize($document->filesize)}}</td>
+	<td class="size">{{$document->filesize}}</td>
 	<td title="{{$document->mimetype}}">{!! $document->getMimetypeIcon() !!}</td>
 	<td>{!! reldate($document->toegevoegd) !!}</td>
 	<td>{!! CsrDelft\model\ProfielModel::getLink($document->eigenaar, 'civitas') !!}</td>

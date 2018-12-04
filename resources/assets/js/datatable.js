@@ -3,7 +3,6 @@ import {knopPost} from './knop';
 import $ from 'jquery';
 import initContext from './context';
 import JSZip from 'jszip';
-
 /**
  * Knoop alle datatable plugins aan jquery.
  */
@@ -290,6 +289,22 @@ $.fn.dataTable.render.timeago = (data, type, row, meta) => {
 			return cell.dateTime;
 		default:
 			return data;
+	}
+};
+
+$.fn.dataTable.render.filesize = (data, type) => {
+	let units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+	let i = 0;
+	let size = Number(data);
+	while (size >= 1024) {
+		size /= 1024;
+		++i;
+	}
+	let formattedSize = size.toFixed(1) + ' ' + units[i];
+
+	switch (type) {
+		case 'sort': return Number(data);
+		default: return formattedSize;
 	}
 };
 
