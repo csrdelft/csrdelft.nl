@@ -18,6 +18,7 @@ class CellRender {
 	const AANMELD_FILTER = '$.fn.dataTable.render.aanmeldFilter';
 	const AANMELDINGEN = '$.fn.dataTable.render.aanmeldingen';
 	const TOTAAL_PRIJS = '$.fn.dataTable.render.totaalPrijs';
+	const TIMEAGO = '$.fn.dataTable.render.timeago';
 
 	/** @var string */
 	protected $choice;
@@ -83,5 +84,12 @@ class CellRender {
 	 */
 	public static function TotaalPrijs() {
 		return new static(self::TOTAAL_PRIJS);
+	}
+
+	/**
+	 * @return static
+	 */
+	public static function Timeago() {
+		return new static(self::TIMEAGO);
 	}
 }
