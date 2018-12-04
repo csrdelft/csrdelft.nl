@@ -147,7 +147,7 @@ class IsHetAlView implements View {
 				break;
 
 			case 'foutmelding':
-				echo sprintf('<div class="ja"><abbr class="timeago" title="%s"></abbr></div><div>sinds de laatste foutmelding!</div>', date('c', filemtime(DATA_PATH . 'foutmelding.last')));
+				echo '<div class="ja">' . reldate(date('c', filemtime(DATA_PATH . 'foutmelding.last'))) . '</div><div>sinds de laatste foutmelding!</div>';
 				break;
 
 			case 'wist u dat':

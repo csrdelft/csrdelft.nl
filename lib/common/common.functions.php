@@ -356,27 +356,6 @@ function debugprint($sString, $cssID = 'pubcie_debug') {
 
 function reldate($datum) {
 	$moment = strtotime($datum);
-	/* $nu = time();
-	  $verschil = $nu - $moment;
-	  if ($verschil <= 60) {
-	  $return = $verschil . ' ';
-	  if ($verschil == 1) {
-	  $return .= 'seconde';
-	  } else {
-	  $return .= 'seconden';
-	  }
-	  $return .= ' geleden';
-	  } elseif ($verschil <= 60 * 60) {
-	  $return = floor($verschil / 60);
-	  if (floor($verschil / 60) == 1) {
-	  $return .= ' minuut';
-	  } else {
-	  $return .= ' minuten';
-	  }
-	  $return .= ' geleden';
-	  } elseif ($verschil <= (60 * 60 * 4)) {
-	  $return = floor($verschil / (60 * 60)) . ' uur geleden';
-	  } else */
 	if (date('Y-m-d') == date('Y-m-d', $moment)) {
 		$return = 'vandaag om ' . strftime('%H:%M', $moment);
 	} elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
@@ -384,7 +363,7 @@ function reldate($datum) {
 	} else {
 		$return = strftime('%A %e %B %Y om %H:%M', $moment); // php-bug: %e does not work on Windows
 	}
-	return '<abbr class="timeago" title="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</abbr>'; // ISO8601
+	return '<time class="timeago" datetime="' . date('Y-m-d\TG:i:sO', $moment) .'">' . $return . '</time>'; // ISO8601
 }
 
 /**

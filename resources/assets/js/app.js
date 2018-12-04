@@ -11,6 +11,5 @@ import './maalcie';
 import './bibliotheek';
 import './peilingbeheer';
 import './dragobject';
-import './documenten';
 import './roodschopper';
 import './router';

@@ -280,6 +280,19 @@ $.fn.dataTable.render.totaalPrijs = (data, type, row) => {
     return $.fn.dataTable.render.bedrag(row.aantal_aanmeldingen * parseInt(row.prijs));
 };
 
+$.fn.dataTable.render.timeago = (data, type, row, meta) => {
+	let api = new $.fn.dataTable.Api(meta.settings);
+	let cell = api.cell(meta.row, meta.col).node().firstChild;
+
+	switch (type) {
+		case 'sort':
+		case 'export':
+			return cell.dateTime;
+		default:
+			return data
+	}
+};
+
 $(function () {
     $('body').on('click', () => {
         // Verwijder tooltips als de datatable modal wordt gesloten

@@ -53,7 +53,7 @@ function initTimeago(parent) {
 		wordSeparator: ' ',
 		numbers: [],
 	};
-    $(parent).find('abbr.timeago').timeago();
+    $(parent).find('time.timeago').timeago();
 }
 
 function initMarkitup(parent) {
