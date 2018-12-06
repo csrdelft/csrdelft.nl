@@ -16,9 +16,8 @@
 				<div v-if="zoekbalkZichtbaar" class="pb-2">
 					<input type="text" placeholder="Zoeken" v-model="zoekterm" class="form-control"/>
 				</div>
-				<ul class="list-group list-group-flush"
-						v-for="optie in optiesZichtbaar">
-					<li class="list-group-item">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item" v-for="optie in optiesZichtbaar">
 						<PeilingOptie
 							v-model="optie.selected"
 							:key="optie.id"
@@ -31,19 +30,17 @@
 							:ingebrachtDoor="optie.ingebracht_door"></PeilingOptie>
 					</li>
 				</ul>
+				<b-pagination
+					size="md"
+					align="center"
+					v-model="huidigePagina"
+					:limit="15"
+					:total-rows="optiesFiltered.length"
+					:per-page="paginaSize">
+				</b-pagination>
 			</div>
 		</div>
 
-		<div v-if="optiesFiltered.length > optiesZichtbaar.length" class="card-body">
-			<b-pagination
-				size="md"
-				align="center"
-				v-model="huidigePagina"
-				:limit="17"
-				:total-rows="optiesFiltered.length"
-				:per-page="paginaSize">
-			</b-pagination>
-		</div>
 		<div v-if="!dataHeeftGestemd" class="card-footer footer">
 			<div>{{strKeuzes}}</div>
 			<PeilingOptieToevoegen v-if="aantalVoorstellen > 0"></PeilingOptieToevoegen>
