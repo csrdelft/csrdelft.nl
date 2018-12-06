@@ -7,7 +7,7 @@ RewriteRule ^plaetjes/pasfoto/(.*)$			index.php?c=Profiel [QSA,L]
 RewriteRule ^nieuws/?(.*)		/mededelingen/$1/ [L]
 RewriteRule ^owee/?$			/csrindeowee [L]
 RewriteRule ^facebook			https://www.facebook.com/delftcsr [R,L]
-RewriteRule ^feuten				https://trac.knorrie.org/csrdelft.nl/report/1 [R,L]
+RewriteRule ^feuten				https://github.com/csrdelft/csrdelft.nl [R,L]
 
 RewriteRule ^(leden)?lijst/?(.*)$	tools/lijst.php [QSA,L]
 
