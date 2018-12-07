@@ -169,6 +169,42 @@ abstract class Controller {
 		return method_exists($this, $action);
 	}
 
+	/**
+	 * Check of een bepaalde actie aangeroepen kan worden.
+	 *
+	 * @param string $action
+	 * @param mixed[] $args
+	 * @return bool Of de actie kan worden aangeroepen.
+	 */
+	protected function canCallAction(string $action, array $args) {
+		try {
+			$method = new \ReflectionMethod(get_class($this), $action);
+			$parameters = $method->getParameters();
+
+			if (count($args) > count($parameters)) {
+				// Er zijn mogelijk meer (nullable) parameters, maar er kunnen niet teveel argumenten zijn.
+				return false;
+			}
+
+			for ($i = 0; $i < count($parameters); $i++) {
+				$parameter = $parameters[$i];
+				$arg = isset($args[$i]) ? $args[$i] : null;
+				if ($arg == null && !$parameter->allowsNull()) {
+					// Het argument is null en de paramter mag geen null zijn
+					return false;
+				} elseif ($parameter->hasType() && $parameter->getType() != gettype($arg)) {
+					// Er is een typehint, en het type komt niet overeen
+					return false;
+				}
+			}
+
+			return true;
+
+		} catch (\ReflectionException $ex) {
+			throw new CsrException('canCallAction gefaalt', 0, $ex);
+		}
+	}
+
 	abstract protected function mag($action, array $args);
 
 	/**
@@ -201,13 +237,12 @@ abstract class Controller {
 		} // Controleer of de actie bestaat
 		elseif (!$this->hasAction($this->action)) {
 			throw new CsrException('Action undefined: ' . $this->action);
-		}
-		try {
-			return call_user_func_array(array($this, $this->action), $args);
-		} catch (\TypeError $error) {
-			// Kan deze functie niet aanroepen, int in string oid.
+		} // Controleer of de actie aangeroepen kan worden
+		elseif (!$this->canCallAction($this->action, $args)) {
 			throw new CsrToegangException('Pagina niet gevonden', 404);
 		}
+
+		return call_user_func_array(array($this, $this->action), $args);
 	}
 
 	protected function exit_http($response_code) {
