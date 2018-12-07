@@ -202,7 +202,12 @@ abstract class Controller {
 		elseif (!$this->hasAction($this->action)) {
 			throw new CsrException('Action undefined: ' . $this->action);
 		}
-		return call_user_func_array(array($this, $this->action), $args);
+		try {
+			return call_user_func_array(array($this, $this->action), $args);
+		} catch (\TypeError $error) {
+			// Kan deze functie niet aanroepen, int in string oid.
+			throw new CsrToegangException('Pagina niet gevonden', 404);
+		}
 	}
 
 	protected function exit_http($response_code) {
