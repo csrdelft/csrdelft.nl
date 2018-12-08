@@ -159,12 +159,15 @@ MD
 	private static function getDebug() {
 		$error = error_get_last();
 		if ($error !== null) {
+			// Voorkom dump van mysql wachtwoord als de database eruit ligt
+			$error['message'] = preg_replace('/PDO->__construct\(.*/', 'PDO->__construct(...)', $error['message']);
 			$debug['error'] = $error;
 			$debug['trace'] = debug_backtrace();
 			$debug['POST'] = $_POST;
 			$debug['GET'] = $_GET;
 			$debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
 			$debug['SERVER'] = $_SERVER;
+			unset($debug['SERVER']['HTTP_COOKIE']); // Voorkom dat sessie en remember cookies gemaild worden
 			return $debug;
 		}
 		return null;
