@@ -178,23 +178,32 @@ abstract class Controller {
 	 */
 	protected function canCallAction(string $action, array $args) {
 		try {
+			$args = array_values($args);
 			$method = new \ReflectionMethod(get_class($this), $action);
 			$parameters = $method->getParameters();
 
-			if (count($args) > count($parameters)) {
-				// Er zijn mogelijk meer (nullable) parameters, maar er kunnen niet teveel argumenten zijn.
+			$requiredParams = array_filter($parameters, function(\ReflectionParameter $param) { return !$param->allowsNull();});
+
+			// Als het aantal parameters kleiner is dan het aantal verplichte parameters wordt er een TypeError gegooid.
+			if (count($args) < count($requiredParams)) {
 				return false;
 			}
 
 			for ($i = 0; $i < count($parameters); $i++) {
 				$parameter = $parameters[$i];
 				$arg = isset($args[$i]) ? $args[$i] : null;
-				if ($arg == null && !$parameter->allowsNull()) {
-					// Het argument is null en de paramter mag geen null zijn
-					return false;
-				} elseif ($parameter->hasType() && $parameter->getType() != gettype($arg)) {
-					// Er is een typehint, en het type komt niet overeen
-					return false;
+
+				if ($arg == null && $parameter->allowsNull()) {
+					continue;
+				}
+
+				switch ($parameter->getType()) {
+					case 'int':
+						// Als de waarde stilletjes naar een int geconverteerd kan worden gaat het systeem akkoord.
+						if (!is_numeric($arg)) return false;
+						break;
+					default:
+						break;
 				}
 			}
 
