@@ -16,10 +16,10 @@ $(function () {
 		'trein ns-virm-6',
 		'trein ns-sgmm-2',
 		'trein ns-sgmm-3',
-        'trein ns-flirt-3',
-        'trein ns-slt-6',
+		'trein ns-flirt-3',
+		'trein ns-slt-6',
 		'trein ns-sng-4',
-        'trein rnet-gtw',
+		'trein rnet-gtw',
 	];
 
 	const rails = $('.rails');
