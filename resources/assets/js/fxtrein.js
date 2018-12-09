@@ -24,13 +24,6 @@ $(function () {
 
 	const rails = $('.rails');
 
-	setTimeout(() => {
-		stuurTrein();
-		setInterval(() => {
-			stuurTrein();
-		}, 18000);
-	}, Math.random() * 5000 + 5000);
-
 	function stuurTrein() {
 		let trein = $('<div>');
 		trein.attr('class', treinen[Math.floor((Math.random() * treinen.length))]);
@@ -43,4 +36,11 @@ $(function () {
 
 		return trein;
 	}
+
+	setTimeout(() => {
+		stuurTrein();
+		setInterval(() => {
+			stuurTrein();
+		}, 18000);
+	}, Math.random() * 5000 + 5000);
 });
