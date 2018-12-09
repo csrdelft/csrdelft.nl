@@ -24,15 +24,16 @@ $(function () {
 
 	const rails = $('.rails');
 
-	setInterval(() => {
-		setTimeout(() => {
-			stuurTrein(treinen[Math.floor((Math.random() * treinen.length))]);
-		}, Math.floor((Math.random() * treinen.length)) * 2000);
-	}, 10000);
+	setTimeout(() => {
+		stuurTrein();
+		setInterval(() => {
+			stuurTrein();
+		}, 18000);
+	}, Math.random() * 5000 + 5000);
 
-	function stuurTrein(type) {
+	function stuurTrein() {
 		let trein = $('<div>');
-		trein.attr('class', type);
+		trein.attr('class', treinen[Math.floor((Math.random() * treinen.length))]);
 
 		rails.append(trein);
 
