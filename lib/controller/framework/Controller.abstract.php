@@ -182,7 +182,7 @@ abstract class Controller {
 			$method = new \ReflectionMethod(get_class($this), $action);
 			$parameters = $method->getParameters();
 
-			$requiredParams = array_filter($parameters, function(\ReflectionParameter $param) { return !$param->allowsNull();});
+			$requiredParams = array_filter($parameters, function(\ReflectionParameter $param) { return !$param->isOptional();});
 
 			// Als het aantal parameters kleiner is dan het aantal verplichte parameters wordt er een TypeError gegooid.
 			if (count($args) < count($requiredParams)) {
@@ -193,7 +193,7 @@ abstract class Controller {
 				$parameter = $parameters[$i];
 				$arg = isset($args[$i]) ? $args[$i] : null;
 
-				if ($arg == null && $parameter->allowsNull()) {
+				if ($arg == null && $parameter->isOptional()) {
 					continue;
 				}
 

@@ -218,6 +218,7 @@ class ForumController extends Controller {
 		$limit = (int)LidInstellingenModel::get('forum', 'zoekresultaten');
 
 		return view('forum.resultaten', [
+			'titel' => 'Zoeken',
 			'resultaten' => ForumDelenModel::instance()->zoeken($query, false, $datum, $ouder, $jaar, $limit),
 			'query' => $query
 		]);
