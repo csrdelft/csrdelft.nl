@@ -16,19 +16,17 @@ $(function () {
 		'trein ns-virm-6',
 		'trein ns-sgmm-2',
 		'trein ns-sgmm-3',
+		'trein ns-flirt-3',
+		'trein ns-slt-6',
+		'trein ns-sng-4',
+		'trein rnet-gtw',
 	];
 
 	const rails = $('.rails');
 
-	setInterval(() => {
-		setTimeout(() => {
-			stuurTrein(treinen[Math.floor((Math.random() * treinen.length))]);
-		}, Math.floor((Math.random() * treinen.length)) * 2000);
-	}, 10000);
-
-	function stuurTrein(type) {
+	function stuurTrein() {
 		let trein = $('<div>');
-		trein.attr('class', type);
+		trein.attr('class', treinen[Math.floor((Math.random() * treinen.length))]);
 
 		rails.append(trein);
 
@@ -38,4 +36,11 @@ $(function () {
 
 		return trein;
 	}
+
+	setTimeout(() => {
+		stuurTrein();
+		setInterval(() => {
+			stuurTrein();
+		}, 18000);
+	}, Math.random() * 5000 + 5000);
 });
