@@ -6,7 +6,7 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\SavedQueryContent;
 
 require_once 'configuratie.include.php';
-require_once 'SavedQuery.php';
+
 
 # C.S.R. Delft
 # -------------------------------------------------------------------
