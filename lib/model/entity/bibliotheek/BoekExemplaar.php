@@ -99,9 +99,9 @@ class BoekExemplaar extends PersistentEntity {
 	protected static $persistent_attributes = [
 		'id' => [T::Integer, false, "auto_increment"],
 		'boek_id' => [T::Integer, false],
-		'eigenaar_uid' => [T::String, false],
+		'eigenaar_uid' => [T::StringKey, false],
 		'opmerking' => [T::Text, false],
-		'uitgeleend_uid' => [T::String, true],
+		'uitgeleend_uid' => [T::StringKey, true],
 		'toegevoegd' => [T::DateTime, false],
 		'uitleendatum' => [T::DateTime, true],
 		'status' => [T::Enumeration, false, BoekExemplaarStatus::class],
