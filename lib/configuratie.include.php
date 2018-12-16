@@ -148,6 +148,7 @@ switch (constant('MODE')) {
 		ini_set('session.cookie_domain', CSR_DOMAIN);
 		ini_set('session.cookie_secure', FORCE_HTTPS);
 		ini_set('session.cookie_httponly', true);
+		ini_set('xdebug.max_nesting_level', 2000);
 		session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 
 		session_start();

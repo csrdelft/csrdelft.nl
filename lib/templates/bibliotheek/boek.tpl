@@ -17,26 +17,11 @@
 	{/toegang}
 </ul>
 
-{if $boek->magBekijken()}
-	{* blok rechts met knopjes *}
-	<div class="controls">
-		<a class="btn" href="/bibliotheek/boek">{icon get="book_add"} Nieuw boek</a>
-		{if $boek->getId()!=0}
-			{if $boek->magVerwijderen()}
-				<a class="btn post verwijderen" href="/bibliotheek/verwijderboek/{$boek->getId()}" title="Boek verwijderen" onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">{icon get="verwijderen"} Verwijderen</a>
-			{/if}
-			<a class="btn post ReloadPage" href="/bibliotheek/addexemplaar/{$boek->getId()}" title="Ik bezit dit boek ook" onclick="return confirm('U bezit zelf een exemplaar van dit boek? Door het toevoegen aan de catalogus geef je aan dat anderen dit boek kunnen lenen.')">{icon get="user_add"} Ik bezit dit boek</a>
-			{toegang P_BIEB_MOD}
-				<a class="btn post ReloadPage" href="/bibliotheek/addexemplaar/{$boek->getId()}/x222" title="C.S.R.-bieb bezit dit boek ook" onclick="return confirm('Bezit de C.S.R.-bieb een exemplaar van dit boek?')">{icon get="user_add"} Is een biebboek</a>
-			{/toegang}
-		{/if}
-	</div>
-{/if}
-
 
 
 {* nieuw boek formulier *}
 {if $boek->getId()==0}
+	<div class="col-md-8">
 	<h1>Nieuw boek toevoegen</h1>
 	<p>Zoek via het Google Books-zoekveld je boek en kies een van de suggesties om de boekgegevens hieronder in te vullen.</p>
 	<div class="boekzoeker" title="Geef titel, auteur, isbn of een ander kenmerk van het boek. Minstens 7 tekens, na 1 seconde verschijnen suggesties.">
@@ -44,38 +29,50 @@
 	</div>
 
 	{$boekFormulier->view()}
+	</div>
 
 
 {else}
+<div class="row">
 	{* weergave bestaand boek, soms met bewerkbare velden *}
-	<div class="boek" id="{$boek->getId()}">
+	<div class="boek col-md-8" id="{$boek->getId()}">
 
 		{if $boekFormulier->hasFields()}
 
 			{$boekFormulier->view()}
 
 		{else}
-
-			<div class="blok header boekgegevens">
-				<div class="regel"><label>Boek</label><span>{$boek->getTitel()}</span></div>
-			</div>
-			<div class="blok gegevens boekgegevens">
-				{if $boek->getAuteur()!=''}<div class="regel"><label>Auteur</label>{$boek->getAuteur()}</div>{/if}
-				{if $boek->getPaginas()!=0}<div class="regel"><label>Pagina's</label>{$boek->getPaginas()}</div>{/if}
-				{if $boek->getTaal()!=''}<div class="regel"><label>Taal</label>{$boek->getTaal()}</div>{/if}
-				{if $boek->getISBN()!=''}<div class="regel"><label>ISBN</label>{$boek->getISBN()}</div>{/if}
-				{if $boek->getUitgeverij()!=''}<div class="regel"><label>Uitgeverij</label>{$boek->getUitgeverij()}</div>{/if}
-				{if $boek->getUitgavejaar()!=0}<div class="regel"><label>Uitgavejaar</label>{$boek->getUitgavejaar()}</div>{/if}
-			</div>
-			<div class="blok gegevens boekgegevens">
-				<div class="regel"><label>Rubriek</label>{$boek->getRubriek()}</div>
-				{if $boek->getCode()!='' AND $boek->isBiebboek()}<div class="regel"><label>Code</label>{$boek->getCode()}</div>{/if}
-			</div>
+			<div class="row"><div class="col-3 col-form-label">Boek</div><div class="col-9">{$boek->getTitel()}</div></div>
+			{if $boek->getAuteur()!=''}<div class="row"><div class="col-3 col-form-label">Auteur</div><div class="col-9">{$boek->getAuteur()}</div></div>{/if}
+			{if $boek->getPaginas()!=0}<div class="row"><div class="col-3 col-form-label">Pagina's</div><div class="col-9">{$boek->getPaginas()}</div></div>{/if}
+			{if $boek->getTaal()!=''}<div class="row"><div class="col-3 col-form-label">Taal</div><div class="col-9">{$boek->getTaal()}</div></div>{/if}
+			{if $boek->getISBN()!=''}<div class="row"><div class="col-3 col-form-label">ISBN</div><div class="col-9">{$boek->getISBN()}</div></div>{/if}
+			{if $boek->getUitgeverij()!=''}<div class="row"><div class="col-3 col-form-label">Uitgeverij</div><div class="col-9">{$boek->getUitgeverij()}</div></div>{/if}
+			{if $boek->getUitgavejaar()!=0}<div class="row"><div class="col-3 col-form-label">Uitgavejaar</div><div class="col-9">{$boek->getUitgavejaar()}</div></div>{/if}
+			<div class="row"><div class="col-3 col-form-label">Rubriek</div><div class="col-9">{$boek->getRubriek()}</div></div>
+			{if $boek->getCode()!='' AND $boek->isBiebboek()}<div class="row"><div class="col-3 col-form-label">Code</div><div class="col-9">{$boek->getCode()}</div></div>{/if}
 		{/if}
 
 		<div class="clear-left"></div>
 
 	</div>
+
+	{if $boek->magBekijken()}
+		{* blok rechts met knopjes *}
+		<ul class="col-md-4 list-group">
+			<li class="list-group-item"><a href="/bibliotheek/boek">{icon get="book_add"} Nieuw boek</a></li>
+		{if $boek->getId()!=0}
+			{if $boek->magVerwijderen()}
+				<li class="list-group-item"><a class="post verwijderen" href="/bibliotheek/verwijderboek/{$boek->getId()}" title="Boek verwijderen" onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">{icon get="verwijderen"} Verwijderen</a></li>
+			{/if}
+			<li class="list-group-item"><a class="post ReloadPage" href="/bibliotheek/addexemplaar/{$boek->getId()}" title="Ik bezit dit boek ook" onclick="return confirm('U bezit zelf een exemplaar van dit boek? Door het toevoegen aan de catalogus geef je aan dat anderen dit boek kunnen lenen.')">{icon get="user_add"} Ik bezit dit boek</a></li>
+			{toegang P_BIEB_MOD}
+				<li class="list-group-item"><a class="post ReloadPage" href="/bibliotheek/addexemplaar/{$boek->getId()}/x222" title="C.S.R.-bieb bezit dit boek ook" onclick="return confirm('Bezit de C.S.R.-bieb een exemplaar van dit boek?')">{icon get="user_add"} Is een biebboek</a></li>
+			{/toegang}
+		{/if}
+		</ul>
+	{/if}
+</div>
 
 	{* Exemplaren *}
 	<div class="row">
@@ -209,7 +206,7 @@
 			{/foreach}
 				{if $recensieFormulier->isNieuw() }
 				<tr>
-					<td>
+					<td colspan="2">
 						{$recensieFormulier->view()}
 					</td>
 				</tr>
