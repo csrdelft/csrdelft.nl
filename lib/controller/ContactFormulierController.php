@@ -19,6 +19,7 @@ class ContactFormulierController extends AclController {
 		if ($this->getMethod() == 'POST') {
 			$this->acl = [
 				'dies' => 'P_PUBLIC',
+				'interesse' => 'P_PUBLIC',
 			];
 		} else {
 			$this->acl = [];
@@ -61,7 +62,7 @@ TEXT
 		}
 	}
 
-	public function POST_extern() {
+	public function POST_interesse() {
 		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);
 		$email = filter_input(INPUT_POST, "submit_by", FILTER_SANITIZE_STRING);
 		$adres = filter_input(INPUT_POST, "straat", FILTER_SANITIZE_STRING);
@@ -107,7 +108,7 @@ Met vriendelijke groeten,
 De PubCie.
 ";
 
-		$mail = new Mail(array("oweecie@csrdelft.nl" => "OweeCie", $email => $naam), "Interesseformulier", $bericht);
+		$mail = new Mail(array("pubcie@csrdelft.nl" => "OweeCie", $email => $naam), "Interesseformulier", $bericht);
 		$mail->setFrom($email);
 		$mail->send();
 	}

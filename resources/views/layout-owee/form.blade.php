@@ -1,4 +1,4 @@
-<form method="post" action="/tools/interesse.php">
+<form method="post" id="contact-form" action="/contactformulier/interesse">
 	<div class="field">
 		<label for="naam">Naam</label>
 		<input type="text" name="naam" id="naam" required/>
@@ -51,13 +51,9 @@
 		<textarea name="opmerking" id="opmerking" rows="4"></textarea>
 	</div>
 	<div class="field">
-		<noscript>Schakel Javascript in om dit formulier te kunnen verzenden.</noscript>
-		<div class="g-recaptcha" data-sitekey="6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX"></div>
-	</div>
-	<div class="field">
 		Met het verzenden van dit formulier ga je akkoord met de <a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">privacyverklaring</a> van C.S.R. Delft.
 	</div>
 	<ul class="actions">
-		<li><input type="submit" value="Verzenden"/></li>
+		<li><button type="submit" class="g-recaptcha" data-sitekey="6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX" data-callbcak="onFormSubmit">Verzenden</button></li>
 	</ul>
 </form>
