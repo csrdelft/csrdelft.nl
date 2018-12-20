@@ -21,7 +21,7 @@ window.bbcode = {
 
 window.onFormSubmit = function () {
 	document.getElementById('contact-form').submit();
-}
+};
 
 $(function () {
 
