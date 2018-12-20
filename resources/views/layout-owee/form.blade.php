@@ -54,6 +54,6 @@
 		Met het verzenden van dit formulier ga je akkoord met de <a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">privacyverklaring</a> van C.S.R. Delft.
 	</div>
 	<ul class="actions">
-		<li><button type="submit" class="g-recaptcha" data-sitekey="6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX" data-callbcak="onFormSubmit">Verzenden</button></li>
+		<li><button type="submit" class="g-recaptcha" data-sitekey="6Le9vYMUAAAAAP7Nal5IMAL5gPEw-KzHKMs_xX9_" data-callbcak="onFormSubmit">Verzenden</button></li>
 	</ul>
 </form>
