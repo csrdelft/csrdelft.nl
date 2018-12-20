@@ -25,3 +25,7 @@
 [submodule "htdocs/bc"]
 	path = htdocs/bc
 	url = https://github.com/csrdelft/bc.git
+[submodule "htdocs/dies/2019"]
+	path = htdocs/dies/2019
+	url = https://github.com/csrdelft/dies2019
+	branch = gh-pages
