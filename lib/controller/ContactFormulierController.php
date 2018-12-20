@@ -11,11 +11,10 @@ use CsrDelft\view\JsonResponse;
  * @since 19/12/2018
  */
 class ContactFormulierController extends AclController {
-	const CAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify";
-	const EMAIL_DIESCIE = 'diescie@csrdelft.nl';
+	const EMAIL_DIESCIE = 'pubcie@csrdelft.nl'; // TODO, goedzetten
 
-	public function __construct($query, $model, array $methods = array('GET', 'POST')) {
-		parent::__construct($query, null);
+	public function __construct($query) {
+		parent::__construct($query, null, ['GET', 'POST']);
 
 		if ($this->getMethod() == 'POST') {
 			$this->acl = [
@@ -26,16 +25,31 @@ class ContactFormulierController extends AclController {
 		}
 	}
 
+	public function performAction(array $args = array()) {
+		if ($this->hasParam(2)) {
+			$this->action = $this->getParam(2);
+		}
+		return parent::performAction();
+	}
+
 	public function POST_dies() {
 		$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 		$naam = filter_input(INPUT_POST, 'naam', FILTER_SANITIZE_STRING);
 		$verhaal = filter_input(INPUT_POST, 'verhaal', FILTER_SANITIZE_STRING);
 
 		if (GoogleCaptcha::verify() && $email && $naam && $verhaal) {
-			$mail = new Mail([self::EMAIL_DIESCIE], 'Bericht van de stek', <<<TEXT
+			$mail = new Mail([self::EMAIL_DIESCIE => 'DiesCie'], 'Bericht van de stek', <<<TEXT
+Beste DiesCie,
+
+Er is een bericht geplaatst via de dies webstek.
+
 email: $email
 naam: $naam
 verhaal: $verhaal
+
+Groetjes,
+Feut
+namens de PubCie
 TEXT
 			);
 			$mail->setFrom($email);
