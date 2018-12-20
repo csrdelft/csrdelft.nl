@@ -48,6 +48,7 @@ RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
 RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
 RewriteRule ^commissievoorkeuren index.php?c=CommissieVoorkeuren [L]
 RewriteRule ^toestemming        index.php?c=Toestemming [L]
+RewriteRule ^contactformulier   index.php?c=ContactFormulier [L]
 
 # business club
 RewriteRule ^bc$ bc/index.html [L]

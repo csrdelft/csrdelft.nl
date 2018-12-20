@@ -8,31 +8,10 @@
  * Submit voor interesseformulier
  */
 
+use CsrDelft\common\GoogleCaptcha;
 use CsrDelft\model\entity\Mail;
 
 require_once "configuratie.include.php";
-
-function checkCaptcha($captcha)
-{
-    $ch = curl_init("https://www.google.com/recaptcha/api/siteverify");
-
-    $fields = array(
-        'secret' => leesConfig('google.ini', 'captcha_secret', ''),
-        'response' => $captcha
-    );
-
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-    $result = curl_exec($ch);
-
-    curl_close($ch);
-
-    return json_decode($result)->success;
-}
-
-$g_recaptcha_response = $_POST["g-recaptcha-response"];
 
 $naam = $_POST["naam"];
 $email = $_POST["submit_by"];
@@ -48,7 +27,7 @@ if (isset($_POST["interesse1"])) array_push($interesses, $_POST["interesse1"]);
 if (isset($_POST["interesse2"])) array_push($interesses, $_POST["interesse2"]);
 if (isset($_POST["interesse3"])) array_push($interesses, $_POST["interesse3"]);
 if (isset($_POST["interesse4"])) array_push($interesses, $_POST["interesse4"]);
-if (!checkCaptcha($g_recaptcha_response)) {
+if (!GoogleCaptcha::verify()) {
     echo "Verzenden mislukt";
     exit;
 }
