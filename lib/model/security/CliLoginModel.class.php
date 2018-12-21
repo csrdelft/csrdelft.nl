@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\security;
 
+use CsrDelft\common\Ini;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
 use CsrDelft\model\entity\security\RememberLogin;
@@ -53,7 +54,7 @@ class CliLoginModel extends LoginModel {
 	 */
 	public function validate() {
 		if (defined('ETC_PATH')) {
-			$cred = parse_ini_file(ETC_PATH . 'cron.ini');
+			$cred = Ini::lees(Ini::CRON);
 		} else {
 			$cred = array(
 				'user' => 'cron',

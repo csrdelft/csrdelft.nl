@@ -38,10 +38,10 @@ class LDAP {
 		if ($this->_conn !== false)
 			$this->disconnect();
 
-		if (!file_exists(ETC_PATH . "ldap.ini")) {
+		if (!Ini::bestaat(Ini::LDAP)) {
 			throw new CsrException('LDAP not available');
 		}
-		$ldapini = parse_ini_file(ETC_PATH . "ldap.ini");
+		$ldapini = Ini::lees(Ini::LDAP);
 		$conn = ldap_connect($ldapini['ldap_host'], $ldapini['ldap_port']);
 		ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
 		ldap_start_tls($conn);

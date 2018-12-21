@@ -13,6 +13,7 @@ namespace CsrDelft\model;
  * @deprecated
  */
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Ini;
 use CsrDelft\common\MijnSqli;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\security\AccountModel;
@@ -50,7 +51,7 @@ class Roodschopper {
 		$this->bericht = htmlspecialchars($bericht);
 
 		if ($this->cie == 'maalcie') {
-			$this->from = 'maalcie-fiscus@csrdelft.nl';
+			$this->from = Ini::lees(Ini::EMAILS, 'maalcief');
 		} else {
 			$this->from = $this->cie . '@csrdelft.nl';
 		}

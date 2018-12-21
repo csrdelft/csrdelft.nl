@@ -99,9 +99,9 @@ final class ShutdownHandler {
 
 		$debug = self::getDebug();
 		if ($debug !== null
-			&& file_exists(ETC_PATH . 'slack.ini')
+			&& Ini::bestaat(Ini::SLACK)
 		) {
-			$slackConfig = parse_ini_file(ETC_PATH . 'slack.ini');
+			$slackConfig = Ini::lees(Ini::SLACK);
 			$slackClient = new SlackClient($slackConfig['url'], $slackConfig);
 			$foutmelding = $slackClient->createMessage();
 

@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Ini;
 use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\fotoalbum\Foto;
@@ -1268,7 +1269,7 @@ HTML;
 		}
 
 		return '<iframe height="' . $height . '" frameborder="0" style="border:0;width:100%"
-src="https://www.google.com/maps/embed/v1/place?q=' . urlencode($address) . '&key=' . leesConfig('google.ini', 'embed_key') . '"></iframe>';
+src="https://www.google.com/maps/embed/v1/place?q=' . urlencode($address) . '&key=' . Ini::lees(Ini::GOOGLE, 'embed_key') . '"></iframe>';
 	}
 
 	/**

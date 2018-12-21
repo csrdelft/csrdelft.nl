@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\courant;
 
+use CsrDelft\common\Ini;
 use CsrDelft\model\CourantModel;
 use CsrDelft\view\SmartyTemplateView;
 
@@ -23,7 +24,7 @@ class CourantView extends SmartyTemplateView {
 	public function __construct(CourantModel $courant) {
 		parent::__construct($courant);
 		setlocale(LC_ALL, 'nl_NL@euro');
-		$this->instellingen = leesConfig('csrmail.ini');
+		$this->instellingen = Ini::lees(Ini::CSRMAIL);
 	}
 
 	public function getTitel() {

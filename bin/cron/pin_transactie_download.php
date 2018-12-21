@@ -6,6 +6,7 @@
  * @date 06/09/2017
  */
 
+use CsrDelft\common\Ini;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieDownloader;
@@ -47,7 +48,7 @@ foreach ($vorigePinTransacties as $pinTransactie) {
 	PinTransactieModel::instance()->delete($pinTransactie);
 }
 
-$settings = parse_ini_file(__DIR__ . '/../etc/pin_transactie_download.ini');
+$settings = Ini::lees(Ini::PIN_TRANSACTIE_DOWNLOAD);
 
 // Download pintransacties en sla op in DB.
 $pintransacties = PinTransactieDownloader::download($settings, $from);

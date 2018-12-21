@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\common\GoogleCaptcha;
+use CsrDelft\common\Ini;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\Mail;
@@ -13,9 +13,6 @@ use CsrDelft\view\JsonResponse;
  * @since 19/12/2018
  */
 class ContactFormulierController extends AclController {
-	const EMAIL_DIESCIE = 'pubcie@csrdelft.nl'; // TODO, goedzetten
-	const EMAIL_OWEECIE = "pubcie@csrdelft.nl";
-
 	public function __construct($query) {
 		parent::__construct($query, null, ['GET', 'POST']);
 
@@ -46,14 +43,17 @@ class ContactFormulierController extends AclController {
 		}
 
 		if ($email && $naam && $verhaal) {
-			$mail = new Mail([self::EMAIL_DIESCIE => 'DiesCie'], 'Bericht van de stek', <<<TEXT
+			$mail = new Mail([Ini::lees(Ini::EMAILS, 'diescie') => 'DiesCie'], 'Bericht van de stek', <<<TEXT
 Beste DiesCie,
 
 Er is een bericht geplaatst via de dies webstek.
 
-email: $email
-naam: $naam
-verhaal: $verhaal
+Email: $email
+Over mij: 
+$naam
+
+Over mij date:
+$verhaal
 
 Groetjes,
 Feut
@@ -80,11 +80,15 @@ TEXT
 
 		$interesses = [];
 
-		if (isset($_POST["interesse1"]))
-			array_push($interesses, filter_input(INPUT_POST, "interesse1", FILTER_SANITIZE_STRING));
-		if (isset($_POST["interesse2"])) array_push($interesses, $_POST["interesse2"]);
-		if (isset($_POST["interesse3"])) array_push($interesses, $_POST["interesse3"]);
-		if (isset($_POST["interesse4"])) array_push($interesses, $_POST["interesse4"]);
+		$interesse1 = filter_input(INPUT_POST, "interesse1", FILTER_SANITIZE_STRING);
+		$interesse2 = filter_input(INPUT_POST, "interesse2", FILTER_SANITIZE_STRING);
+		$interesse3 = filter_input(INPUT_POST, "interesse3", FILTER_SANITIZE_STRING);
+		$interesse4 = filter_input(INPUT_POST, "interesse4", FILTER_SANITIZE_STRING);
+
+		if ($interesse1) array_push($interesses, $interesse1);
+		if ($interesse2) array_push($interesses, $interesse2);
+		if ($interesse3) array_push($interesses, $interesse3);
+		if ($interesse4) array_push($interesses, $interesse4);
 
 		$interessestring = '';
 		foreach ($interesses as $interesse) $interessestring .= " * " . $interesse . "\n";
@@ -115,7 +119,7 @@ Met vriendelijke groeten,
 De PubCie.
 ";
 
-		$mail = new Mail(array(self::EMAIL_OWEECIE => "OweeCie", $email => $naam), "Interesseformulier", $bericht);
+		$mail = new Mail([Ini::lees(Ini::EMAILS, 'oweecie') => "OweeCie", $email => $naam], "Interesseformulier", $bericht);
 		$mail->setFrom($email);
 		$mail->send();
 

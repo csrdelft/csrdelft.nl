@@ -14,6 +14,7 @@
 //header('location: https://csrdelft.nl/onderhoud.html');
 //exit;
 
+use CsrDelft\common\Ini;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\groepen\VerticalenModel;
@@ -96,7 +97,7 @@ if (FORCE_HTTPS) {
 	}
 }
 
-$cred = parse_ini_file(ETC_PATH . 'mysql.ini');
+$cred = Ini::lees(Ini::MYSQL);
 if ($cred === false) {
 	$cred = array(
 		'host' => 'localhost',

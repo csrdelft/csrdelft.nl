@@ -33,7 +33,7 @@ class MijnSqli {
 
 	private function connect() {
 		if (defined('ETC_PATH')) {
-			$cred = parse_ini_file(ETC_PATH . 'mysql.ini');
+			$cred = Ini::lees(Ini::MYSQL);
 		} else {
 			$cred = array(
 				'host' => 'localhost',

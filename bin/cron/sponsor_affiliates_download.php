@@ -6,6 +6,8 @@
  * @date 26/10/2017
  */
 
+use CsrDelft\common\Ini;
+
 /**
  * Settings constants.
  */
@@ -20,7 +22,7 @@ const SETTINGS_UA = 'useragent';
 require_once __DIR__ . '/../lib/configuratie.include.php';
 
 //Steps
-$settings = parse_ini_file(__DIR__ . '/../etc/sponsor_affiliates_download.ini');
+$settings = Ini::lees(Ini::SPONSOR_AFFILIATES_DOWNLOAD);
 
 $SL_HOST = $settings[SETTINGS_SL_HOST];
 $PAGE_URL = $SL_HOST . '/api/?call=webshops_club_extension&club=';
