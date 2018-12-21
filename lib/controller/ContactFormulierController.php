@@ -45,7 +45,7 @@ class ContactFormulierController extends AclController {
 			throw new CsrToegangException("spam", 400);
 		}
 
-		if (GoogleCaptcha::verify() && $email && $naam && $verhaal) {
+		if ($email && $naam && $verhaal) {
 			$mail = new Mail([self::EMAIL_DIESCIE => 'DiesCie'], 'Bericht van de stek', <<<TEXT
 Beste DiesCie,
 
@@ -63,9 +63,9 @@ TEXT
 			$mail->setFrom($email);
 			$mail->send();
 
-			$this->view = new JsonResponse([true]);
+			$this->view = new JsonResponse(true);
 		} else {
-			$this->view = new JsonResponse([false]);
+			throw new CsrToegangException("Verzenden mislukt", 400);
 		}
 	}
 
@@ -118,6 +118,9 @@ De PubCie.
 		$mail = new Mail(array(self::EMAIL_OWEECIE => "OweeCie", $email => $naam), "Interesseformulier", $bericht);
 		$mail->setFrom($email);
 		$mail->send();
+
+		setMelding('Bericht verzonden.', 1);
+		redirect('/#contact-form');
 	}
 
 	private function isSpam(string... $input) {
