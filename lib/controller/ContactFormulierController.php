@@ -1,7 +1,9 @@
 <?php
 
 namespace CsrDelft\controller;
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\GoogleCaptcha;
+use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\view\JsonResponse;
@@ -12,6 +14,7 @@ use CsrDelft\view\JsonResponse;
  */
 class ContactFormulierController extends AclController {
 	const EMAIL_DIESCIE = 'pubcie@csrdelft.nl'; // TODO, goedzetten
+	const EMAIL_OWEECIE = "pubcie@csrdelft.nl";
 
 	public function __construct($query) {
 		parent::__construct($query, null, ['GET', 'POST']);
@@ -37,6 +40,10 @@ class ContactFormulierController extends AclController {
 		$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 		$naam = filter_input(INPUT_POST, 'naam', FILTER_SANITIZE_STRING);
 		$verhaal = filter_input(INPUT_POST, 'verhaal', FILTER_SANITIZE_STRING);
+
+		if ($this->isSpam($email, $naam, $verhaal)) {
+			throw new CsrToegangException("spam", 400);
+		}
 
 		if (GoogleCaptcha::verify() && $email && $naam && $verhaal) {
 			$mail = new Mail([self::EMAIL_DIESCIE => 'DiesCie'], 'Bericht van de stek', <<<TEXT
@@ -78,13 +85,13 @@ TEXT
 		if (isset($_POST["interesse2"])) array_push($interesses, $_POST["interesse2"]);
 		if (isset($_POST["interesse3"])) array_push($interesses, $_POST["interesse3"]);
 		if (isset($_POST["interesse4"])) array_push($interesses, $_POST["interesse4"]);
-		if (!GoogleCaptcha::verify()) {
-			echo "Verzenden mislukt";
-			exit;
-		}
 
 		$interessestring = '';
 		foreach ($interesses as $interesse) $interessestring .= " * " . $interesse . "\n";
+
+		if ($this->isSpam($naam, $email, $adres, $postcode, $woonplaats, $telefoon, $opmerking, $interessestring)) {
+			throw new CsrToegangException("spam", 400);
+		}
 
 		$bericht = "
 Beste OweeCie,
@@ -108,8 +115,18 @@ Met vriendelijke groeten,
 De PubCie.
 ";
 
-		$mail = new Mail(array("pubcie@csrdelft.nl" => "OweeCie", $email => $naam), "Interesseformulier", $bericht);
+		$mail = new Mail(array(self::EMAIL_OWEECIE => "OweeCie", $email => $naam), "Interesseformulier", $bericht);
 		$mail->setFrom($email);
 		$mail->send();
+	}
+
+	private function isSpam(string... $input) {
+		$filter = new SimpleSpamFilter();
+		foreach ($input as $item) {
+			if ($filter->isSpam($item)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

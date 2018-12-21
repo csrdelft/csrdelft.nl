@@ -19,10 +19,6 @@ window.bbcode = {
 	bbvideoDisplay,
 };
 
-window.onFormSubmit = function () {
-	document.getElementById('contact-form').submit();
-};
-
 $(function () {
 
 	let $window = $(window),
