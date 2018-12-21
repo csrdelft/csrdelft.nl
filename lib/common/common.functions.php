@@ -1036,3 +1036,9 @@ function array_shuffle(array $arr) {
 
 	return $arr;
 }
+
+$configCache = [];
+
+function sql_contains($field) {
+	return "%$field%";
+}
