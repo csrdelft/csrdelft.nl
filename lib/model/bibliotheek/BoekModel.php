@@ -2,21 +2,10 @@
 
 namespace CsrDelft\model\bibliotheek;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\MijnSqli;
 use CsrDelft\model\entity\bibliotheek\Boek;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\security\AccountModel;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
-use CsrDelft\view\formulier\FormElement;
-use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\getalvelden\IntField;
-use CsrDelft\view\formulier\invoervelden\InputField;
-use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\keuzevelden\SelectField;
 
 /**
  * BiebBoek.php  |  Gerrit Uitslag

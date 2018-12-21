@@ -41,11 +41,10 @@ function animateMinion() {
 
     $minion.animate(newq, speed, animateMinion);
 }
-
-/**
- * @see templates/minion.tpl
- */
-window.superman = function () {
-    $('#minion').toggleClass('superman');
-    animateMinion();
-};
+$(() => {
+	const minion = $('#minion');
+	minion.on('dblclick', () => {
+		minion.toggleClass('superman');
+		animateMinion();
+	});
+});

@@ -4,16 +4,12 @@
 namespace CsrDelft\model\entity\bibliotheek;
 
 
-use CsrDelft\common\MijnSqli;
 use CsrDelft\model\bibliotheek\BiebRubriekModel;
 use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use dokuwiki\Action\Login;
-use CsrDelft\model\entity\bibliotheek\BoekExemplaar;
-use Nette\NotImplementedException;
 
 class Boek extends PersistentEntity {
 

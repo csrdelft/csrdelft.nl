@@ -79,7 +79,7 @@ class CsrLayoutPage extends CompressedLayout {
 
 		if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
 			$smarty->assign('minioncoords', DragObjectModel::getCoords('minion', 40, 40));
-			$smarty->assign('minion', $smarty->fetch('minion.tpl'));
+			$smarty->assign('minion', view('effect.minion')->getHtml());
 		}
 
 		$smarty->display('layout/pagina.tpl');

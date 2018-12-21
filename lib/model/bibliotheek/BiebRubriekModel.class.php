@@ -2,8 +2,6 @@
 
 namespace CsrDelft\model\bibliotheek;
 
-use CsrDelft\common\CsrException;
-use CsrDelft\common\MijnSqli;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\model\entity\bibliotheek\BiebRubriek;
 
