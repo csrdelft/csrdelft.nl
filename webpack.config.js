@@ -59,10 +59,6 @@ module.exports = {
 		}
 	},
 	plugins: [
-		// Maak webpack sneller door een boel te cachen.
-		devMode ? new HardSourcePlugin({
-			cacheDirectory: __dirname + '/data/webpack-hard-source/[confighash]',
-		}) : false,
 		new MiniCssExtractPlugin({
 			// Css bestanden komen in de map css terecht.
 			filename: 'css/[name].css'
@@ -87,13 +83,16 @@ module.exports = {
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader',
-					options: {
-						presets: ['env'],
-						plugins: ['syntax-dynamic-import']
-					},
-				},
+				use: [
+					'cache-loader',
+					{
+						loader: 'babel-loader',
+						options: {
+							presets: ['env'],
+							plugins: ['syntax-dynamic-import']
+						},
+					}
+				],
 			},
 			// Verwerk .ts (typescript) bestanden en maak er javascript van.
 			{
@@ -121,6 +120,7 @@ module.exports = {
 			{
 				test: /\.scss$/,
 				use: [
+					'cache-loader',
 					{
 						loader: MiniCssExtractPlugin.loader,
 						options: {
@@ -158,7 +158,7 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				use: ['style-loader', 'css-loader']
+				use: ['cache-loader', 'style-loader', 'css-loader']
 			},
 			// Sla fonts op in de fonts map.
 			{

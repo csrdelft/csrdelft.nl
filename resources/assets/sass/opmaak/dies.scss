@@ -1,11 +1,21 @@
+$kleur-groen: #368C70;
+$kleur-blauw-donker: #0A4F51;
+$kleur-oranje: #E9600B;
+$kleur-beige: #F2EBC7;
+$kleur-blauw: #197173;
+$kleur-rood: #C33A3A;
+$kleur-rood-donker: #5A1C1C;
+
+$theme-colors: (
+	"primary": $kleur-groen,
+	"danger": #ff4136,
+	"white": $kleur-beige,
+);
+$body-bg: $kleur-blauw-donker;
+$body-color: $kleur-beige;
+$zijbalk-bg: $kleur-blauw;
+$zijbalk-border: $kleur-oranje;
 /*Invert kleuren*/
-html, img, .alert, .ongelezenvanaf, .progress, .progress-bar-info, #minion,
-.groep-stat, .markItUpButton a, .btn::before, iframe, .aanmelddata, #saldografiek,
-td.maaltijd-aangemeld, td.maaltijd-afgemeld, td.abonnement-ingeschakeld,
-td.abonnement-uitgeschakeld, ul.ui-tabs-nav, li[role=tab], li[role=tab] a, .badge-red {
-  -webkit-filter: invert(100%);
-  filter: invert(100%);
-}
 
 /*Kleuren fixes*/
 #zijbalk .ishetal .ja, #zijbalk .ishetal .nee, .staatrood {
@@ -27,3 +37,5 @@ td.abonnement-uitgeschakeld, ul.ui-tabs-nav, li[role=tab], li[role=tab] a, .badg
 td.maaltijd-aangemeld, td.abonnement-ingeschakeld, td.maaltijd-afgemeld, td.abonnement-uitgeschakeld {
   color: #fff;
 }
+
+@import "../base";

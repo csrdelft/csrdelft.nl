@@ -59,13 +59,12 @@ abstract class CompressedLayout extends HtmlPage {
 			return [];
 		}
 
-		// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
-		$modules[] = 'general';
-		$modules[] = 'module-formulier';
-		$modules[] = 'module-datatable';
-
 		//voeg modules toe afhankelijk van instelling
 		$modules[] = 'opmaak-' . LidInstellingenModel::get('layout', 'opmaak');
+
+		// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
+		$modules[] = 'module-formulier';
+		$modules[] = 'module-datatable';
 
 		if (LidInstellingenModel::get('layout', 'toegankelijk') == 'bredere letters') {
 			$modules[] = 'bredeletters';

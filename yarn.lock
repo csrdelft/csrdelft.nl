@@ -1184,6 +1184,15 @@ cache-base@^1.0.1:
     union-value "^1.0.0"
     unset-value "^1.0.0"
 
+cache-loader@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/cache-loader/-/cache-loader-2.0.0.tgz#75cad9eb1e1c882c2b8c31ea008b41ebb0787de0"
+  dependencies:
+    loader-utils "^1.1.0"
+    mkdirp "^0.5.1"
+    neo-async "^2.5.0"
+    schema-utils "^1.0.0"
+
 caller-path@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/caller-path/-/caller-path-0.1.0.tgz#94085ef63581ecd3daa92444a8fe94e82577751f"
