@@ -64,7 +64,7 @@ module.exports = {
 			filename: 'css/[name].css'
 		}),
 		new VueLoaderPlugin(),
-	].filter(Boolean),
+	],
 	module: {
 		// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
 		rules: [
@@ -120,7 +120,7 @@ module.exports = {
 			{
 				test: /\.scss$/,
 				use: [
-					'cache-loader',
+					// 'cache-loader',
 					{
 						loader: MiniCssExtractPlugin.loader,
 						options: {
@@ -131,9 +131,10 @@ module.exports = {
 					{
 						loader: 'css-loader',
 						options: {
+							// url: false,
 							sourceMap: devMode,
 							minimize: !devMode,
-							importLoaders: 1,
+							importLoaders: 3,
 						},
 					},
 					{
@@ -144,7 +145,10 @@ module.exports = {
 							plugins: [require('autoprefixer')],
 						},
 					},
-					'resolve-url-loader',
+					{
+						loader:'resolve-url-loader',
+						options: {}
+					},
 					{
 						loader: 'sass-loader',
 						options: {
@@ -152,6 +156,7 @@ module.exports = {
 							outputStyle: 'expanded',
 							// Source maps moeten aan staan om `resolve-url-loader` te laten werken.
 							sourceMap: true,
+							sourceMapContents: false,
 						},
 					},
 				],

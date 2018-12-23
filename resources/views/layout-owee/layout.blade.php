@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl">
 
 <head>
 	<meta name="description" content="{{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}}">
@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="{{asset("/dist/css/extern.css")}}" type="text/css"/>
 	<link rel="stylesheet" href="{{asset("/dist/css/extern-forum.css")}}" type="text/css"/>
 	<link rel="stylesheet" href="{{asset("/dist/css/extern-fotoalbum.css")}}" type="text/css"/>
-	<script type="text/javascript" src="{{asset("/dist/js/extern.js")}}"></script>
+	<script type="text/javascript" src="{{asset("/dist/js/extern.js")}}" defer></script>
 </head>
 
 <body>
@@ -67,7 +67,7 @@
 	<!-- Banner -->
 		<section id="banner-small">
 			<div class="inner">
-				<a href="/"><img src="/images/logo-bonfire-klein.svg" height="140"></a>
+				<a href="/"><img src="/images/logo-bonfire-klein.svg" alt="Logo Bonfire klein" height="140"></a>
 			</div>
 		</section>
 

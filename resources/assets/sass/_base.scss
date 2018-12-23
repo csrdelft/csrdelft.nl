@@ -1,18 +1,7 @@
-@import "reset";
-@import "icons";
-@import "~jquery-ui/themes/base/core.css";
-@import "~jquery-ui/themes/base/theme.css";
-@import "~jquery-ui/themes/base/tooltip.css";
-@import "~jquery-ui/themes/base/datepicker.css";
-@import "~jquery-ui/themes/base/slider.css";
-@import "~jquery-ui-timepicker-addon/src/jquery-ui-timepicker-addon.css";
 @import "defaults";
 @import "~bootstrap/scss/bootstrap";
-@import "~bootstrap-vue/dist/bootstrap-vue.css";
-$fa-font-path: "~font-awesome/fonts";
-@import "~font-awesome/scss/font-awesome";
-@import "~lightbox2/dist/css/lightbox.css";
-@import "common";
+@import "~bootstrap-vue/dist/bootstrap-vue.css"; // Moet na Bootstrap geladen worden.
+@import "_common";
 @import "main-menu";
 @import "bbcode";
 @import "zijbalk";
@@ -20,8 +9,6 @@ $fa-font-path: "~font-awesome/fonts";
 @import "zoeken";
 @import "overlay";
 @import "search";
-
-@import "~jgallery/dist/css/jgallery.css";
 
 /* Standaard Kleuren */
 a, a:hover {

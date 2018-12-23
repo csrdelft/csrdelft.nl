@@ -60,6 +60,7 @@ abstract class CompressedLayout extends HtmlPage {
 		}
 
 		//voeg modules toe afhankelijk van instelling
+		$modules[] = 'common';
 		$modules[] = 'opmaak-' . LidInstellingenModel::get('layout', 'opmaak');
 
 		// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
