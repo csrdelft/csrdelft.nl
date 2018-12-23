@@ -1,6 +1,10 @@
 AddDefaultCharset utf-8
 RewriteEngine On
 
+<If "%{REQUEST_URI} =~ m#^/dist/#">
+  Header set Cache-Control "max-age=2592000, public"
+</If>
+
 # afbeeldingen afschermen voor externen kan hier:
 RewriteRule ^plaetjes/pasfoto/(.*)$			index.php?c=Profiel [QSA,L]
 
