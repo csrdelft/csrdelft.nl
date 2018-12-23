@@ -37,20 +37,6 @@ Bootstrap submenu
 
 /* --------------------------------
 
-Fonts
-
--------------------------------- */
-
-@font-face {
-  font-family: "Source Sans Pro Light";
-  font-weight: 300;
-  font-style: normal;
-  src: local("Source Sans Pro Light"),
-  url("../fonts/SourceSansPro-Light.ttf") format("truetype");
-}
-
-/* --------------------------------
-
 Primary style
 
 -------------------------------- */
@@ -61,7 +47,7 @@ html * {
 }
 
 html {
-  font-family: "Source Sans Pro Light", Helvetica, Arial, sans-serif;
+  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
   font-size: 12px;
 }
 
@@ -71,7 +57,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Source Sans Pro Light", Helvetica, Arial, sans-serif;
+  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
   text-align: left;
 }
 
