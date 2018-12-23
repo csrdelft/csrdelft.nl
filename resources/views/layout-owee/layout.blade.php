@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="{{asset("/dist/css/extern.css")}}" type="text/css"/>
 	<link rel="stylesheet" href="{{asset("/dist/css/extern-forum.css")}}" type="text/css"/>
 	<link rel="stylesheet" href="{{asset("/dist/css/extern-fotoalbum.css")}}" type="text/css"/>
-	<script type="text/javascript" src="{{asset("/dist/js/extern.js")}}" defer></script>
+	<script type="text/javascript" src="{{asset("/dist/js/extern.js")}}"></script>
 </head>
 
 <body>
