@@ -67,7 +67,7 @@
 	<!-- Banner -->
 		<section id="banner-small">
 			<div class="inner">
-				<a href="/"><img src="/images/logo-bonfire-klein.svg" height="140"></a>
+				<a href="/"><img src="/images/logo-bonfire-klein.svg" alt="Logo Bonfire klein" height="140"></a>
 			</div>
 		</section>
 

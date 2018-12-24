@@ -6,7 +6,7 @@
 	<!-- Banner -->
 	<section id="banner">
 		<div class="inner">
-			<img src="/images/logo-bonfire.svg">
+			<img src="/images/logo-bonfire.svg" alt="Logo Bonfire">
 		</div>
 		<div style="margin-top:40px" class="inner">
 			<a href="https://www.youtube.com/watch?v=a7hhtoo_kzY&list=PLXBOhyG24-WnNgg2RloapxC5X73J1Zxvi" rel="noreferrer" target="_blank"

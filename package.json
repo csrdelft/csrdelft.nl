@@ -25,6 +25,7 @@
 		"hard-source-webpack-plugin": "^0.6.7",
 		"mini-css-extract-plugin": "^0.4.1",
 		"node-sass": "^4.9.3",
+		"optimize-css-assets-webpack-plugin": "^5.0.1",
 		"path": "^0.12.7",
 		"postcss-loader": "^3.0.0",
 		"resolve-url-loader": "^2.3.0",

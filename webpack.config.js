@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HardSourcePlugin = require('hard-source-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const path = require('path');
@@ -57,6 +58,11 @@ module.exports = {
 		alias: {
 			'vue$': 'vue/dist/vue.esm.js'
 		}
+	},
+	optimization: {
+		minimizer: [
+			new OptimizeCSSAssetsPlugin({}),
+		]
 	},
 	plugins: [
 		// Maak webpack sneller door een boel te cachen.
