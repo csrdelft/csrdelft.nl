@@ -2,7 +2,13 @@ AddDefaultCharset utf-8
 RewriteEngine On
 
 <If "%{REQUEST_URI} =~ m#^/dist/#">
+  # 1 maand cache
   Header set Cache-Control "max-age=2592000, public"
+</If>
+
+<If "%{REQUEST_URI} =~ m#^/images/#">
+  # 1 week cache
+  Header set Cache-Control "max-age=604800, public"
 </If>
 
 # afbeeldingen afschermen voor externen kan hier:
