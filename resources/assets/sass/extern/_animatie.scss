@@ -11,11 +11,11 @@
 }
 
 #banner img {
-  @include fade-in(3s, translateY(40px), blur(10px));
+  @include fade-in(1s, translateY(40px), blur(10px));
 }
 
 #banner-small img {
-  @include fade-in(3s, translateY(20px), blur(10px));
+  @include fade-in(1s, translateY(20px), blur(10px));
 }
 
 .wrapper:not(.alt) {
