@@ -42,9 +42,11 @@ $dark:          $gray-800 !default;
 //
 // Settings for the `<body>` element.
 
-$body-bg:                   $gray-100 !default;
+$body-bg:                   $white !default;
 $body-color:                $black !default;
 $headings-color: 						inherit !default;
+
+$headings-font-family: "Source Sans Pro", Helvetica, Arial, sans-serif !default;
 
 /**
  * Stek specifieke variabelen.
