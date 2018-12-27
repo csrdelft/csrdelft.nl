@@ -13,7 +13,7 @@
 		height: 200px;
 		margin: auto;
 		background-size: contain;
-		background-image: url("../images/beeldmerk.png");
+		background-image: $beeldmerk;
 		background-repeat: no-repeat;
 		background-position: center;
 	}
@@ -25,6 +25,10 @@
 			margin: 10px 0 5px 0;
 			padding: 2px 0 5px 0;
 			background: transparent url("../images/portal-break.png") no-repeat bottom left;
+
+			a {
+				color: $zijbalk-kopje;
+			}
 		}
 
 		.item {
@@ -56,11 +60,11 @@
 		.ja, .nee {
 			font-size: 1.4em;
 			font-weight: bold;
-			color: red;
+			color: $zijbalk-ishetal-nee;
 			text-align: center;
 		}
 		.ja {
-			color: green;
+			color: $zijbalk-ishetal-ja;
 		}
 	}
 
@@ -79,7 +83,7 @@
 			width: 100%;
 			bottom: 0;
 			background-color: white;
-			color: $body-color;
+			color: $black;
 			opacity: 0.7;
 			filter: alpha(opacity=70);
 		}

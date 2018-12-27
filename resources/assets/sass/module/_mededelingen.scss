@@ -105,20 +105,10 @@
 }
 
 /* Mededelingen bewerken: */
-label { float: left; clear: left; width: 110px; }
 input.titel { width: 635px; }
 .indent { margin-left: 116px; width: 635px;}
 .btn#vergroot, .btn#opmaakhulp, .btn#voorbeeld { float: right; }
 
-#instellingen {
-  height: 300px;
-  clear: both;
-  width: 300px;
-  float: left;
-  margin-top: 10px;
-  text-align: left;
-  overflow: auto;
-}
 #instellingen .vervalt label input { float: right; }
 #instellingen img { float: right; }
 

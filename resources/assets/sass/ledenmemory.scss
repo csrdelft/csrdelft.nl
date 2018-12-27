@@ -1,16 +1,15 @@
-@import "../flip";
-
+@import "lib/flip";
 
 body {
 	color: #fff;
 	overflow-x: hidden;
-	background: url("../../images/memory/bg-image-16.jpg") fixed;
+	background: url("../images/memory/bg-image-16.jpg") fixed;
 	background-size: contain;
 }
 
 .blue {
     background: #1255a3;
-    background-image: url("../../images/memory/blue-box.png");
+    background-image: url("../images/memory/blue-box.png");
     background: -webkit-linear-gradient(#1255a3 0%, #063379 100%);
     background: linear-gradient(#1255a3 0%, #063379 100%);
     background: -moz-linear-gradient(#1255a3 0%, #063379 100%);
@@ -26,7 +25,7 @@ body {
 	height: 222px;
 }
 .box, #dialog-finish {
-	background-image: url("../../images/memory/blue-box-h2-w2.png");
+	background-image: url("../images/memory/blue-box-h2-w2.png");
 }
 
 

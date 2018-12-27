@@ -126,7 +126,6 @@ module.exports = {
 			{
 				test: /\.scss$/,
 				use: [
-					// 'cache-loader',
 					{
 						loader: MiniCssExtractPlugin.loader,
 						options: {
@@ -134,6 +133,7 @@ module.exports = {
 							publicPath: '../',
 						},
 					},
+					'cache-loader',
 					{
 						loader: 'css-loader',
 						options: {

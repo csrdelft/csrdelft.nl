@@ -49,12 +49,12 @@ span.twitter-typeahead {
 		color: #ffffff;
 		text-decoration: none;
 		outline: 0;
-		background-color: #428bca;
+		background-color: $zoeken-active-bg;
 	}
 
 	.tt-suggestion.tt-cursor {
 		color: #ffffff;
-		background-color: #428bca;
+		background-color: $zoeken-active-bg;
 	}
 }
 

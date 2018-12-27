@@ -25,7 +25,11 @@ function view(string $template, array $variables) {
  * @return string
  */
 function asset(string $asset) {
-	return CSR_ROOT . $asset . "?" . filemtime(HTDOCS_PATH . $asset);
+	if (file_exists(HTDOCS_PATH . $asset)) {
+		return CSR_ROOT . $asset . "?" . filemtime(HTDOCS_PATH . $asset);
+	} else {
+		return '';
+	}
 }
 
 /**

@@ -11,10 +11,24 @@ $theme-colors: (
 	"danger": #ff4136,
 	"white": $kleur-beige,
 );
+$link-hover-color: $kleur-oranje;
 $body-bg: $kleur-blauw-donker;
 $body-color: $kleur-beige;
+$beeldmerk: url(/dies/2019/images/logo.svg);
 $zijbalk-bg: $kleur-blauw;
+$zijbalk-kopje: $kleur-beige;
 $zijbalk-border: $kleur-oranje;
+$zijbalk-ishetal-ja: $kleur-groen;
+$zijbalk-ishetal-nee: $kleur-rood;
+
+$bb-block-bg: $kleur-blauw;
+$menu-primary-hover: $kleur-beige;
+$menu-bg: $body-bg;
+$menu-color: $body-color;
+$menu-small-bg: $body-bg;
+$menu-small-color: $body-color;
+
+$zoeken-active-bg: lighten($body-bg, 10%);
 /*Invert kleuren*/
 
 /*Kleuren fixes*/

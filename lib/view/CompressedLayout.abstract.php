@@ -42,7 +42,7 @@ abstract class CompressedLayout extends HtmlPage {
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			return;
 		}
-		$sheet = sprintf('/dist/css/module-%s.css', $module);
+		$sheet = sprintf('/dist/css/%s.css', $module);
 		parent::addStylesheet($sheet, false);
 	}
 
@@ -61,11 +61,9 @@ abstract class CompressedLayout extends HtmlPage {
 
 		//voeg modules toe afhankelijk van instelling
 		$modules[] = 'common';
-		$modules[] = 'opmaak-' . LidInstellingenModel::get('layout', 'opmaak');
+		$modules[] = 'thema-' . LidInstellingenModel::get('layout', 'opmaak');
 
 		// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
-		$modules[] = 'module-formulier';
-		$modules[] = 'module-datatable';
 
 		if (LidInstellingenModel::get('layout', 'toegankelijk') == 'bredere letters') {
 			$modules[] = 'bredeletters';

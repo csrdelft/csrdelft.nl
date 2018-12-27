@@ -94,7 +94,7 @@ Main components
 	bottom: 0;
 	margin-bottom: 0;
 	width: 260px;
-	background: #0a338d;
+	background: $menu-small-bg;
 	overflow-y: auto;
 	overflow-x: hidden;
 	-webkit-overflow-scrolling: touch;
@@ -110,7 +110,7 @@ Main components
 	height: 50px;
 	line-height: 50px;
 	padding: 0 20px;
-	color: #fff;
+	color: $menu-small-color;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	overflow: hidden;
@@ -183,7 +183,7 @@ Main components
 
 .cd-primary-nav .see-all a {
 	/* different style for the See all button on mobile and tablet */
-	color: #fff;
+	color: $menu-small-color;
 }
 
 @include media-breakpoint-down(md) {
@@ -243,7 +243,7 @@ Main components
 				line-height: 50px;
 				font-size: 1.4em;
 				padding: 0 10px;
-				color: #000;
+				color: $menu-color;
 				overflow: visible;
 				-webkit-transition: color 0.3s, box-shadow 0.3s;
 				-moz-transition: color 0.3s, box-shadow 0.3s;
@@ -251,8 +251,8 @@ Main components
 
 				&:hover,
 				&.selected {
-					color: #0a338d;
-					box-shadow: inset 0 -2px 0 #0a338d;
+					color: $menu-primary-hover;
+					box-shadow: inset 0 -2px 0 $menu-primary-hover;
 					text-decoration: none;
 				}
 			}
@@ -268,7 +268,7 @@ Main components
 			top: 50px;
 			bottom: auto;
 			width: 100vw;
-			background: #ffffff;
+			background: $menu-bg;
 			padding: 50px 0 100px 65px;
 			box-shadow: inset 0 1px 0 #ccc, 0 3px 6px #ccc;
 			transform: translateX(0);
@@ -291,7 +291,7 @@ Main components
 
 				& > a, & > a:hover {
 					/* secondary nav title */
-					color: #0a338d;
+					color: $headings-color;
 					font-weight: bold;
 					font-size: 1.6rem;
 					margin-bottom: .6em;
@@ -309,11 +309,11 @@ Main components
 				height: 30px;
 				line-height: 30px;
 				padding: 0 18% 0 0;
-				color: #000;
+				color: $menu-color;
 				font-size: 1.4rem;
 
 				&:hover {
-					color: black;
+					color: $menu-color;
 				}
 			}
 

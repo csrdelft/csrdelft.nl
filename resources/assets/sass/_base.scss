@@ -6,22 +6,26 @@
 @import "main-menu";
 @import "bbcode";
 @import "zijbalk";
-@import "maalcie";
+@import "module/maalcie";
 @import "zoeken";
 @import "overlay";
 @import "search";
+@import "module/agenda";
+@import "module/bibliotheek";
+@import "module/commissievoorkeuren";
+@import "module/datatable";
+@import "module/documenten";
+@import "module/fiscaat";
+@import "module/formulier";
+@import "module/forum";
+@import "module/fotoalbum";
+@import "module/ledenlijst";
+@import "module/mededelingen";
+@import "module/menubeheer";
+@import "module/profiel";
+@import "module/stamboom";
 
 /* Standaard Kleuren */
-a, a:hover {
-  //color: #0a338d;
-}
-.alternate-bgcolor {
-  background-color: #FAFAFA;
-}
-.alternate-bgcolor:nth-child(even) {
-  background-color: #EBEBEB;
-}
-
 .overflow-x-hidden {
 	overflow-x: hidden;
 }

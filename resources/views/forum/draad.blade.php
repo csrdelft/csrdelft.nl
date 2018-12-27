@@ -50,7 +50,7 @@
 							 title="Sluiten (geen reactie mogelijk)">@icon('lock_open', 'lock')</a>
 					@endif
 					&nbsp;&nbsp;&nbsp;
-					<a class="btn btn-light modfuncties" title="Moderatie-functies weergeven" onclick="$('#forumtabel a.forummodknop').fadeIn();
+					<a href="#" class="btn btn-light modfuncties" title="Moderatie-functies weergeven" onclick="$('#forumtabel a.forummodknop').fadeIn();
 					$('#modereren').slideDown();
 					$(window).scrollTo('#modereren', 600, {
 						easing: 'easeInOutCubic',
