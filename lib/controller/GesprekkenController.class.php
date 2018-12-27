@@ -74,7 +74,6 @@ class GesprekkenController extends AclController {
 		}
 		$body = new GesprekkenView($gesprek, $filter);
 		$this->view = new CsrLayoutPage($body);
-		$this->view->addCompressedResources('gesprekken');
 	}
 
 	public function gesprekken() {

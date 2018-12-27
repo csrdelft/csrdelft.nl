@@ -16,7 +16,6 @@
  */
 
 .dataTables_wrapper {
-
 	.dataTables_info {
 		clear: none;
 		margin-left: 10%;
@@ -51,13 +50,8 @@ button, a, div {
 .dataTable {
 	width: 100% !important;
 
-	thead {
-
-		tr:hover {
-			background-color: white !important;
-		}
-	}
 	tbody {
+		color: #000;
 
 		.innerDetails {
 			margin-left: 30px;

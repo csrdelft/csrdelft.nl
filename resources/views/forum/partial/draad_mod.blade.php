@@ -7,12 +7,14 @@
 					@icon('note') maak @if($draad->plakkerig)<span class="dikgedrukt">niet</span> @endif plakkerig
 				</a>
 				<br /><br />
-				<a href="/forum/wijzigen/{{$draad->draad_id}}/eerste_post_plakkerig" class="btn btn-light post ReloadPage" title="Verander plakkerigheid van eerste post">
-					<label><input type="checkbox" @if($draad->eerste_post_plakkerig)checked="checked" @endif/> 1e post plakkerig</label>
+				<a href="/forum/wijzigen/{{$draad->draad_id}}/eerste_post_plakkerig" class="btn btn-light post ReloadPage form-check form-check-inline" title="Verander plakkerigheid van eerste post">
+					<input id="forummod-plakkerig" class="form-check-input" type="checkbox" @if($draad->eerste_post_plakkerig)checked="checked" @endif/>
+					<label for="forummod-plakkerig" class="form-check-label">1e post plakkerig</label>
 				</a>
 				<br /><br />
-				<a href="/forum/wijzigen/{{$draad->draad_id}}/pagina_per_post" class="btn btn-light post ReloadPage" title="Verander 1 pagina per post">
-					<label><input type="checkbox" @if($draad->pagina_per_post)checked="checked" @endif/> 1 pagina per post</label>
+				<a href="/forum/wijzigen/{{$draad->draad_id}}/pagina_per_post" class="btn btn-light post ReloadPage form-check form-check-inline" title="Verander 1 pagina per post">
+					<input id="forummod-paginaperpost" class="form-check-input" type="checkbox" @if($draad->pagina_per_post)checked="checked" @endif/>
+					<label for="forummod-paginaperpost" class="form-check-label">1 pagina per post</label>
 				</a>
 			</td>
 			<td>

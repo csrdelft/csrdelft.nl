@@ -69,7 +69,6 @@ class MaaltijdenFiscaatController extends AclController {
 	public function GET_onverwerkt() {
 		$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
 		$this->view = new CsrLayoutPage($body);
-		$this->view->addCompressedResources('datatable');
 	}
 
 	public function POST_verwerk() {

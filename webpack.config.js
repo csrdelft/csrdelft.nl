@@ -65,16 +65,12 @@ module.exports = {
 		]
 	},
 	plugins: [
-		// Maak webpack sneller door een boel te cachen.
-		devMode ? new HardSourcePlugin({
-			cacheDirectory: __dirname + '/data/webpack-hard-source/[confighash]',
-		}) : false,
 		new MiniCssExtractPlugin({
 			// Css bestanden komen in de map css terecht.
 			filename: 'css/[name].css'
 		}),
 		new VueLoaderPlugin(),
-	].filter(Boolean),
+	],
 	module: {
 		// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
 		rules: [
@@ -93,13 +89,16 @@ module.exports = {
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader',
-					options: {
-						presets: ['env'],
-						plugins: ['syntax-dynamic-import']
-					},
-				},
+				use: [
+					'cache-loader',
+					{
+						loader: 'babel-loader',
+						options: {
+							presets: ['env'],
+							plugins: ['syntax-dynamic-import']
+						},
+					}
+				],
 			},
 			// Verwerk .ts (typescript) bestanden en maak er javascript van.
 			{
@@ -134,12 +133,14 @@ module.exports = {
 							publicPath: '../',
 						},
 					},
+					'cache-loader',
 					{
 						loader: 'css-loader',
 						options: {
+							// url: false,
 							sourceMap: devMode,
 							minimize: !devMode,
-							importLoaders: 1,
+							importLoaders: 3,
 						},
 					},
 					{
@@ -150,7 +151,10 @@ module.exports = {
 							plugins: [require('autoprefixer')],
 						},
 					},
-					'resolve-url-loader',
+					{
+						loader:'resolve-url-loader',
+						options: {}
+					},
 					{
 						loader: 'sass-loader',
 						options: {
@@ -158,13 +162,14 @@ module.exports = {
 							outputStyle: 'expanded',
 							// Source maps moeten aan staan om `resolve-url-loader` te laten werken.
 							sourceMap: true,
+							sourceMapContents: false,
 						},
 					},
 				],
 			},
 			{
 				test: /\.css$/,
-				use: ['style-loader', 'css-loader']
+				use: ['cache-loader', 'style-loader', 'css-loader']
 			},
 			// Sla fonts op in de fonts map.
 			{

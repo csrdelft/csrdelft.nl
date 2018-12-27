@@ -138,24 +138,24 @@ JS;
                     <span class="caret"></span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" role="menu">
-                    <a class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
+                    <a href="#" class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
                         Oudleden
                     </a>
-                    <a class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=ALL&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
+                    <a href="#" class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=ALL&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
                         Iedereen
                     </a>
 
-                    <a class="dropdown-item" onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
+                    <a href="#" class="dropdown-item" onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
                         Forum reacties
                     </a>
-                    <a class="dropdown-item" onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
+                    <a href="#" class="dropdown-item" onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
                         Wiki inhoud
                     </a>
                     <a class="divider"></a>
                     <div class="dropdown-submenu">
                         <a class="dropdown-item" href="#">Snelzoeken</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/instellingen#lidinstellingenform-tab-Zoeken">Aanpassen...</a>
+                            <a href="#" class="dropdown-item" href="/instellingen#lidinstellingenform-tab-Zoeken">Aanpassen...</a>
                             <a class="divider"></a>
 							<?= $html; ?>
                         </div>

@@ -1,0 +1,56 @@
+$kleur-groen: #368C70;
+$kleur-blauw-donker: #0A4F51;
+$kleur-oranje: #E9600B;
+$kleur-beige: #F2EBC7;
+$kleur-blauw: #197173;
+$kleur-rood: #C33A3A;
+$kleur-rood-donker: #5A1C1C;
+
+@font-face {
+	font-family: 'Futura';
+	src: url('../../fonts/motown-fever/Futura-Bold.woff2') format('woff2'),
+	url('../../fonts/motown-fever/Futura-Bold.woff') format('woff');
+	font-weight: 500;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Futura Bk BT';
+	src: url('../../fonts/motown-fever/FuturaBT-Book.woff2') format('woff2'),
+	url('../../fonts/motown-fever/FuturaBT-Book.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+$font-family-base: "Futura Bk BT", sans-serif;
+$headings-font-family: "Futura", sans-serif;
+
+$theme-colors: (
+	"primary": $kleur-groen,
+	"danger": #ff4136,
+	"white": $kleur-beige,
+);
+
+$link-hover-color: $kleur-oranje;
+$body-bg: $kleur-blauw-donker;
+$body-color: $kleur-beige;
+$beeldmerk: url(/dies/2019/images/logo.svg);
+$zijbalk-bg: $kleur-blauw;
+$zijbalk-kopje: $kleur-beige;
+$zijbalk-border: $kleur-oranje;
+$zijbalk-ishetal-ja: $kleur-groen;
+$zijbalk-ishetal-nee: $kleur-rood;
+
+$bb-block-bg: $kleur-blauw;
+$menu-primary-hover: $kleur-beige;
+$menu-bg: $body-bg;
+$menu-color: $body-color;
+$menu-small-bg: $body-bg;
+$menu-small-color: $body-color;
+
+$modal-content-bg: $kleur-blauw-donker;
+
+$zoeken-active-bg: lighten($body-bg, 10%);
+
+/* importeer basis */
+@import "../base";

@@ -67,7 +67,6 @@ class MededelingenController extends AclController {
 		}
 		$body = parent::performAction($args);
 		$this->view = new CsrLayoutPage($body);
-		$this->view->addCompressedResources('mededelingen');
 	}
 
 	public function top3overzicht() {

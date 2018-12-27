@@ -6,7 +6,7 @@
 				<div class="knopjes">
 					{*<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>*}
 					<a href="/profiel/{$profiel->uid}/addToGoogleContacts/" class="btn btn-light" title="{if $profiel->isInGoogleContacts()}Dit profiel opdateren in mijn google adresboek{else}Dit profiel toevoegen aan mijn google adresboek{/if}">
-						<img src="/images/google.ico" width="16" height="16" alt="tovoegen aan Google contacts"/>
+						<img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts"/>
 					</a>
 					{if $profiel->magBewerken()}
 						<a href="/profiel/{$profiel->uid}/bewerken" class="btn btn-light" title="Bewerk dit profiel">{icon get="pencil"}</a>

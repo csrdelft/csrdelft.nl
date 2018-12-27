@@ -1,40 +1,31 @@
-@import "reset";
-@import "icons";
+@import "defaults";
 @import "fonts";
-@import "~jquery-ui/themes/base/core.css";
-@import "~jquery-ui/themes/base/theme.css";
-@import "~jquery-ui/themes/base/tooltip.css";
-@import "~jquery-ui/themes/base/datepicker.css";
-@import "~jquery-ui/themes/base/slider.css";
-@import "~jquery-ui-timepicker-addon/src/jquery-ui-timepicker-addon.css";
-@import "variables";
 @import "~bootstrap/scss/bootstrap";
-@import "~bootstrap-vue/dist/bootstrap-vue.css";
-$fa-font-path: "~font-awesome/fonts";
-@import "~font-awesome/scss/font-awesome";
-@import "~lightbox2/dist/css/lightbox.css";
-@import "common";
+@import "~bootstrap-vue/dist/bootstrap-vue.css"; // Moet na Bootstrap geladen worden.
+@import "_common";
 @import "main-menu";
 @import "bbcode";
 @import "zijbalk";
-@import "maalcie";
+@import "module/maalcie";
 @import "zoeken";
 @import "overlay";
 @import "search";
-
-@import "~jgallery/dist/css/jgallery.css";
+@import "module/agenda";
+@import "module/bibliotheek";
+@import "module/commissievoorkeuren";
+@import "module/datatable";
+@import "module/documenten";
+@import "module/fiscaat";
+@import "module/formulier";
+@import "module/forum";
+@import "module/fotoalbum";
+@import "module/ledenlijst";
+@import "module/mededelingen";
+@import "module/menubeheer";
+@import "module/profiel";
+@import "module/stamboom";
 
 /* Standaard Kleuren */
-a, a:hover {
-  //color: #0a338d;
-}
-.alternate-bgcolor {
-  background-color: #FAFAFA;
-}
-.alternate-bgcolor:nth-child(even) {
-  background-color: #EBEBEB;
-}
-
 .overflow-x-hidden {
 	overflow-x: hidden;
 }
@@ -228,9 +219,6 @@ table.query_table tbody tr td {
 }
 
 .waarschuwing { color: red; }
-
-div.geelblokje { background-color: #ffffc1; margin: 10px 0; padding: 0; }
-
 
 /* csrmail */
 div#pubciemail_form { background-color: #f5f5f5; border: 1px solid lightgray; padding: 10px; }

@@ -61,7 +61,7 @@ abstract class HtmlPage implements View {
 	 * Buiten de huidige server, gewoon een url dus.
 	 */
 	public function addStylesheet($sheet, $remote = false) {
-		if (!$remote) {
+		if (!$remote && file_exists(HTDOCS_PATH . $sheet)) {
 			$sheet .= '?' . filemtime(HTDOCS_PATH . $sheet);
 		}
 		$this->stylesheets[md5($sheet)] = $sheet;
@@ -82,7 +82,7 @@ abstract class HtmlPage implements View {
 	 * Buiten de huidige server, gewoon een url dus.
 	 */
 	public function addScript($script, $remote = false) {
-		if (!$remote) {
+		if (!$remote && file_exists(HTDOCS_PATH . $script)) {
 			$script .= '?' . filemtime(HTDOCS_PATH . $script);
 		}
 		$this->scripts[md5($script)] = $script;

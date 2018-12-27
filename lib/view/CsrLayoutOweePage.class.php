@@ -51,5 +51,4 @@ class CsrLayoutOweePage extends CompressedLayout {
 			'breadcrumbs' => $breadcrumbs
 		])->view();
 	}
-
 }

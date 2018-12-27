@@ -14,9 +14,7 @@
 	<link rel="shortcut icon" href="{{CSR_ROOT}}/images/favicon.ico"/>
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"
 				href="{{CSR_ROOT}}/forum/rss.xml"/>
-	<link rel="stylesheet" href="{{asset("/dist/css/extern.css")}}" type="text/css"/>
-	<link rel="stylesheet" href="{{asset("/dist/css/extern-forum.css")}}" type="text/css"/>
-	<link rel="stylesheet" href="{{asset("/dist/css/extern-fotoalbum.css")}}" type="text/css"/>
+	@yield('styles')
 	<script type="text/javascript" src="{{asset("/dist/js/extern.js")}}"></script>
 </head>
 

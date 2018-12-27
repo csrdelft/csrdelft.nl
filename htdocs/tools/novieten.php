@@ -68,5 +68,4 @@ class NovietenView implements View {
 $content .= '</table>';
 
 $pagina = new CsrLayoutPage(new NovietenView($content));
-$pagina->addCompressedResources('ledenlijst');
 $pagina->view();

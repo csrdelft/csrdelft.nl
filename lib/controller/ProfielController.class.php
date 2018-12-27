@@ -100,7 +100,6 @@ class ProfielController extends AclController {
 			}
 			$body = parent::performAction($args);
 			$this->view = new CsrLayoutPage($body);
-			$this->view->addCompressedResources('profiel');
 		}
 		else if ($this->hasParam(2) AND $this->getParam(2) === 'pasfoto') {
 			$this->action = 'pasfoto';
@@ -228,7 +227,6 @@ class ProfielController extends AclController {
 	public function stamboom($uid = null) {
 		$body = new StamboomView($uid);
 		$this->view = new CsrLayoutPage($body);
-		$this->view->addCompressedResources('stamboom');
 	}
 
 	public function verjaardagen() {
@@ -247,7 +245,6 @@ class ProfielController extends AclController {
 
 	public function memory() {
 		$this->view = new LedenMemoryView();
-		$this->view->addCompressedResources('ledenmemory');
 	}
 
 	public function memoryscore() {

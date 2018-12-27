@@ -116,9 +116,8 @@ class FotoAlbumController extends AclController {
 		if (LoginModel::mag('P_LOGGED_IN')) {
 			$this->view = new CsrLayoutPage($body);
 		} else {
-			$this->view = new CsrLayoutOweePage($body);
+			$this->view = new CsrLayoutOweePage($body, 'fotoalbum');
 		}
-		$this->view->addCompressedResources('fotoalbum');
 	}
 
 	public function verwerken(FotoAlbum $album) {
@@ -207,7 +206,6 @@ class FotoAlbumController extends AclController {
 			}
 		}
 		$this->view = new CsrLayoutPage($formulier);
-		$this->view->addCompressedResources('fotoalbum');
 	}
 
 	public function bestaande(FotoAlbum $album) {

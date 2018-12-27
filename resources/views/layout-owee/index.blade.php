@@ -2,6 +2,10 @@
 
 @section('titel', $titel)
 
+@section('styles')
+	<link rel="stylesheet" href="{{asset("/dist/css/extern.css")}}" type="text/css"/>
+@endsection
+
 @section('body')
 	<!-- Banner -->
 	<section id="banner">

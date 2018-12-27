@@ -66,7 +66,6 @@ class CorveeRepetitiesController extends AclController {
 		}
 		$this->view = new CorveeRepetitiesView($repetities, $maaltijdrepetitie);
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 		$this->view->modal = $modal;
 	}
 

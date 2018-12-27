@@ -82,7 +82,6 @@ class BeheerMaaltijdenController extends AclController {
 		} else {
 			$body = new BeheerMaaltijdenView(new PrullenbakMaaltijdenTable(), 'Prullenbak maaltijdenbeheer');
 			$this->view = new CsrLayoutPage($body);
-			$this->view->addCompressedResources('datatable');
 		}
 	}
 
@@ -120,7 +119,6 @@ class BeheerMaaltijdenController extends AclController {
 		$repetities = MaaltijdRepetitiesModel::instance()->find();
 		$body = new BeheerMaaltijdenView(new BeheerMaaltijdenTable($repetities), 'Maaltijdenbeheer');
 		$this->view = new CsrLayoutPage($body, array(), $modal);
-		$this->view->addCompressedResources('datatable');
 	}
 
 	public function archief() {
@@ -130,7 +128,6 @@ class BeheerMaaltijdenController extends AclController {
 		} else {
 			$body = new BeheerMaaltijdenView(new ArchiefMaaltijdenTable(), 'Archief maaltijdenbeheer');
 			$this->view = new CsrLayoutPage($body);
-			$this->view->addCompressedResources('datatable');
 		}
 	}
 
@@ -285,7 +282,6 @@ class BeheerMaaltijdenController extends AclController {
 		} else {
 			$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
 			$this->view = new CsrLayoutPage($body);
-			$this->view->addCompressedResources('datatable');
 		}
 	}
 }

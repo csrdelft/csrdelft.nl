@@ -77,7 +77,7 @@
 		background-color: #d3d3d3;
 
 		&.ongelezenvanaf {
-			background-color: #e8cf2a;
+			background-color: $ongelezen-lijn;
 		}
 	}
 
@@ -129,11 +129,11 @@
 			}
 
 			&.bericht0 {
-				background-color: #fff;
+				background-color: $forum-bericht0-bg;
 			}
 
 			&.bericht1 {
-				background-color: #f5f5f5;
+				background-color: $forum-bericht1-bg;
 			}
 		}
 
@@ -192,12 +192,6 @@ span.curpage {
 		input[type="text"] {
 			width: 300px;
 		}
-	}
-
-	label {
-		display: inline-block;
-		width: 120px;
-		text-align: right;
 	}
 }
 
