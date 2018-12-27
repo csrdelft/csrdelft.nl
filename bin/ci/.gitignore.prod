@@ -24,6 +24,7 @@ htdocs/owee/*
 htdocs/tools/alphabanner/*
 tmp/*
 bin/ldap/*
+.cache-loader
 
 # Dev mappen
 conf/*
