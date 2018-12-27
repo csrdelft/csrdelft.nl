@@ -19,7 +19,6 @@ class MaaltijdLijstView extends CompressedLayout {
 	public function __construct(Maaltijd $maaltijd, $aanmeldingen, $corvee) {
 		parent::__construct($this, $maaltijd->getTitel());
 
-		$this->addCompressedResources('maalcielijst');
 		$smarty = CsrSmarty::instance();
 
 		for ($i = $maaltijd->getMarge(); $i > 0; $i--) { // ruimte voor marge eters

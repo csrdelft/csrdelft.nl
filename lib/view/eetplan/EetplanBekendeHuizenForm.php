@@ -9,7 +9,7 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
 /**
- * Formulier voor noviet-huis relatie tovoegen op /eetplan/bekendehuizen/toevoegen
+ * Formulier voor noviet-huis relatie toevoegen op /eetplan/bekendehuizen/toevoegen
  *
  * Class EetplanBekendeHuizenForm
  */

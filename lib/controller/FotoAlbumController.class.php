@@ -118,7 +118,6 @@ class FotoAlbumController extends AclController {
 		} else {
 			$this->view = new CsrLayoutOweePage($body);
 		}
-		$this->view->addCompressedResources('fotoalbum');
 	}
 
 	public function verwerken(FotoAlbum $album) {
@@ -207,7 +206,6 @@ class FotoAlbumController extends AclController {
 			}
 		}
 		$this->view = new CsrLayoutPage($formulier);
-		$this->view->addCompressedResources('fotoalbum');
 	}
 
 	public function bestaande(FotoAlbum $album) {

@@ -71,7 +71,6 @@ class BibliotheekController extends Controller {
 		}
 		if ($this->action != "autocomplete") {
 			$this->view = new CsrLayoutPage($this->view);
-			$this->view->addCompressedResources('bibliotheek');
 		}
 	}
 

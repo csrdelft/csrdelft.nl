@@ -6,16 +6,9 @@ use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 
 /**
- * CompressedLayout.abstract.php
- *
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
- * Gebruikt .ini files voor stylesheets en scripts per module en layout.
- *
- * @see htdocs/tools/css.php
- * @see htdocs/tools/js.php
  */
 abstract class CompressedLayout extends HtmlPage {
 
@@ -34,26 +27,13 @@ abstract class CompressedLayout extends HtmlPage {
 	}
 
 	/**
-	 * Add compressed css en js to page for module.
-	 *
-	 * @param string $module
-	 */
-	public function addCompressedResources($module) {
-		if (!LoginModel::mag('P_LOGGED_IN')) {
-			return;
-		}
-		$sheet = sprintf('/dist/css/%s.css', $module);
-		parent::addStylesheet($sheet, false);
-	}
-
-	/**
 	 * Geeft een array met gevraagde modules, afhankelijk van lidinstellingen
 	 * De modules zijn terug te vinden in /resources/assets/sass
 	 *
 	 * @return array
 	 */
 	public static function getUserModules() {
-		$modules = array();
+		$modules = [];
 
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			return [];

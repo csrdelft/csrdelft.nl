@@ -40,7 +40,6 @@ class MaalCieBoekjaarController extends AclController {
 	public function beheer() {
 		$this->view = new MaalCieBoekjaarSluitenView();
 		$this->view = new CsrLayoutPage($this->view);
-		$this->view->addCompressedResources('maalcie');
 	}
 
 	public function sluitboekjaar() {

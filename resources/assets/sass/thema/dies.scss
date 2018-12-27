@@ -6,11 +6,31 @@ $kleur-blauw: #197173;
 $kleur-rood: #C33A3A;
 $kleur-rood-donker: #5A1C1C;
 
+@font-face {
+	font-family: 'Futura';
+	src: url('../../fonts/motown-fever/Futura-Bold.woff2') format('woff2'),
+	url('../../fonts/motown-fever/Futura-Bold.woff') format('woff');
+	font-weight: 500;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Futura Bk BT';
+	src: url('../../fonts/motown-fever/FuturaBT-Book.woff2') format('woff2'),
+	url('../../fonts/motown-fever/FuturaBT-Book.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+$font-family-base: "Futura Bk BT", sans-serif;
+$headings-font-family: "Futura", sans-serif;
+
 $theme-colors: (
 	"primary": $kleur-groen,
 	"danger": #ff4136,
 	"white": $kleur-beige,
 );
+
 $link-hover-color: $kleur-oranje;
 $body-bg: $kleur-blauw-donker;
 $body-color: $kleur-beige;
@@ -29,27 +49,10 @@ $menu-small-bg: $body-bg;
 $menu-small-color: $body-color;
 
 $zoeken-active-bg: lighten($body-bg, 10%);
-/*Invert kleuren*/
 
-/*Kleuren fixes*/
-#zijbalk .ishetal .ja, #zijbalk .ishetal .nee, .staatrood {
-  color: #5DCCF3;
-}
-#zijbalk .ishetal .ja {
-  color: #F883B1;
-}
-.bb-block:hover {
-  -webkit-box-shadow: 0 0 10px #0A3292;
-  -moz-box-shadow: 0 0 10px #0A3292;
-  box-shadow: 0 0 10px #0A3292;
-}
-.bb-block:hover .bb-block {
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-}
-td.maaltijd-aangemeld, td.abonnement-ingeschakeld, td.maaltijd-afgemeld, td.abonnement-uitgeschakeld {
-  color: #fff;
-}
-
+/* importeer basis */
 @import "../base";
+
+body {
+	font-size: 0.9rem;
+}

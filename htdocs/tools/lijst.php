@@ -85,5 +85,4 @@ if ($message != '') {
 }
 
 $pagina = new CsrLayoutPage($ledenlijstcontent);
-$pagina->addCompressedResources('ledenlijst');
 $pagina->view();
