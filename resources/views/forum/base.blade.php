@@ -7,6 +7,11 @@
 @endauth
 @guest
 	@extends('layout-owee.layout')
+
+	@section('styles')
+		<link rel="stylesheet" href="{{asset("/dist/css/extern.css")}}" type="text/css"/>
+		<link rel="stylesheet" href="{{asset("/dist/css/extern-forum.css")}}" type="text/css"/>
+	@endsection
 @endguest
 
 @section('breadcrumbs')
