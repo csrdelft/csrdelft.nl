@@ -3,6 +3,7 @@
 namespace CsrDelft\view\courant;
 
 use CsrDelft\model\CourantModel;
+use CsrDelft\model\InstellingenModel;
 use CsrDelft\view\SmartyTemplateView;
 
 /**
@@ -63,6 +64,7 @@ class CourantBeheerView extends SmartyTemplateView {
 		}
 		$this->smarty->assign('courant', $this->model);
 		$this->smarty->assign('form', $this->formulier);
+		$this->smarty->assign('sponsor', 'https://www.csrdelft.nl/plaetjes/banners/' . InstellingenModel::get('courant', 'sponsor'));
 		$this->smarty->display('courant/courantbeheer.tpl');
 	}
 

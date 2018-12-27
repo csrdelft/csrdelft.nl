@@ -62,7 +62,7 @@
 		<input type="button" value="Voorbeeld" onclick="window.bbcode.CsrBBPreview('courantBericht', 'bewerkPreview');" />
 		{if $courant->magBeheren()}
 			<input type="button" value="Importeer agenda" onclick="window.courant.importAgenda('courantBericht');" />
-			<input type="button" value="Importeer sponsor" onclick="document.getElementById('courantBericht').value += '[img]https://csrdelft.nl/plaetjes/banners/Projectkwadraat.jpg[/img]'" />
+			<input type="button" value="Importeer sponsor" onclick="document.getElementById('courantBericht').value += '[img]{$sponsor|escape:'html'}[/img]'" />
 		{/if}
 	</div>
 </form>

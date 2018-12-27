@@ -92,6 +92,9 @@ class InstellingenModel extends CachedPersistenceModel {
 			'mail_wel_meeeten' => 'P.S.: U eet WEL mee met de maaltijd.',
 			'mail_niet_meeeten' => 'P.S.: U eet NIET mee met de maaltijd.'
 		),
+		'courant' => [
+			'sponsor' => ''
+		],
 		'forum' => array(
 			'reageren_tijd' => '-2 minutes',
 			'grafiek_draad_recent' => '-1 month',
