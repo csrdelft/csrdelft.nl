@@ -1,6 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const HardSourcePlugin = require('hard-source-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const path = require('path');
 const glob = require('glob');
@@ -62,6 +62,7 @@ module.exports = {
 	optimization: {
 		minimizer: [
 			new OptimizeCSSAssetsPlugin({}),
+			new UglifyJsPlugin(),
 		]
 	},
 	plugins: [
