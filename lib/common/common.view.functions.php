@@ -25,7 +25,11 @@ function view(string $template, array $variables) {
  * @return string
  */
 function asset(string $asset) {
-	if (file_exists(HTDOCS_PATH . $asset)) {
+	$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/manifest.json'), true);
+
+	if (isset($manifest[$asset])) {
+		return CSR_ROOT . $manifest[$asset];
+	} elseif (file_exists(HTDOCS_PATH . $asset)) {
 		return CSR_ROOT . $asset . "?" . filemtime(HTDOCS_PATH . $asset);
 	} else {
 		return '';

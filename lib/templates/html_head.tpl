@@ -19,10 +19,10 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{$smarty.const.CSR_ROOT}/forum/rss.xml" />
 {foreach from=$stylesheets item=sheet}
-<link rel="stylesheet" href="{$sheet}" type="text/css" />
+<link rel="stylesheet" href="{asset($sheet)}" type="text/css" />
 {/foreach}
 {foreach from=$scripts item=script}
-<script type="text/javascript" src="{$script}"></script>
+<script type="text/javascript" src="{asset($script)}"></script>
 {/foreach}
 <!-- Google Analytics -->
 {literal}

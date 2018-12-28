@@ -37,7 +37,7 @@ class CsrLayoutPage extends CompressedLayout {
 		parent::__construct($body, $body->getTitel());
 		$this->zijbalk = $zijbalk;
 		$this->modal = $modal;
-		$this->addScript('/dist/js/app.js');
+		$this->addScript('app.js');
 	}
 
 	public function getBreadcrumbs() {
