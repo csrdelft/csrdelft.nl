@@ -30,4 +30,4 @@
 	}
 </script>
 
-<script type="text/javascript" src="{{asset("/dist/js/fxclouds.js")}}"></script>
+<script type="text/javascript" src="{{asset("fxclouds.js")}}"></script>
