@@ -5505,9 +5505,9 @@ text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
-three@^0.55.0:
-  version "0.55.0"
-  resolved "http://registry.npmjs.org/three/-/three-0.55.0.tgz#7feb435f6f18248f5fe31ec48537367d2a1ec0dd"
+three@^0.99.0:
+  version "0.99.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.99.0.tgz#65711fda7a16501da83948121437d824df1fea19"
 
 through2@^2.0.0:
   version "2.0.5"

@@ -24,10 +24,10 @@
 	float fogFactor = smoothstep( fogNear, fogFar, depth );
 
 	gl_FragColor = texture2D( map, vUv );
-	gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );
+	gl_FragColor.w *= pow( abs(gl_FragCoord.z), 20.0 );
 	gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
 
 	}
 </script>
 
-<script type="text/javascript" src="{{asset("fxclouds.js")}}"></script>
+@script('fxclouds.js')
