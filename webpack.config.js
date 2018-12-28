@@ -2,47 +2,44 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
-const { VueLoaderPlugin } = require('vue-loader');
+const {VueLoaderPlugin} = require('vue-loader');
 const path = require('path');
-const glob = require('glob');
 
 const devMode = process.env.NODE_ENV !== 'production';
 
 let contextPath = path.resolve(__dirname, 'resources/assets');
-let sassPath = path.resolve(contextPath, 'sass');
-
-// De volgende functie maakt het mogelijk om entrypoints toe te voegen.
-const assign = (entries, newEntries) =>
-	Object.keys(newEntries)
-		.forEach((name) =>
-			entries.hasOwnProperty(name) ? entries[name].push(newEntries[name]) : entries[name] = [newEntries[name]]);
-
-const formatModule = (context, entry, extension) =>
-	path.relative(context, entry)
-		.replace(extension, '')
-		.replace('\\', '/')
-		.replace('/', '-');
-
-// Sass bestanden die niet met _ beginnen zijn entrypoints.
-let entryPoint = glob
-	.sync(path.resolve(sassPath, '**/!(_)*.scss'))
-	.reduce((entries, entry) => Object.assign(entries, {[formatModule(sassPath, entry, '.scss')]: [entry]}), {});
-
-// Javascript heeft maar een paar entry points en deze zijn voorgedefinieerd.
-assign(entryPoint, {
-	'app': './js/app.js',
-	'ledenmemory': './js/ledenmemory.js',
-	'fxclouds': './js/fxclouds.js',
-	'fxonontdekt': './js/fxonontdekt.js',
-	'fxtrein': './js/fxtrein.js',
-	'extern': './js/extern.js'
-});
 
 // De Webpack configuratie.
 module.exports = {
 	mode: 'development',
 	context: contextPath,
-	entry: entryPoint,
+	entry: {
+		'app': './js/app.js',
+		'ledenmemory': ['./js/ledenmemory.js', './sass/ledenmemory.scss'],
+		'fxclouds': './js/fxclouds.js',
+		'fxonontdekt': './js/fxonontdekt.js',
+		'fxtrein': './js/fxtrein.js',
+		'extern': ['./js/extern.js', './sass/extern.scss'],
+		'bredeletters': './sass/bredeletters.scss',
+		'common': './sass/common.scss',
+		'extern-forum': './sass/extern-forum.scss',
+		'extern-fotoalbum': './sass/extern-fotoalbum.scss',
+		'maaltijdlijst': './sass/maaltijdlijst.scss',
+		'roodschopper': './sass/roodschopper.scss',
+		'thema-civitasia': './sass/thema/civitasia.scss',
+		'thema-dies': './sass/thema/dies.scss',
+		'thema-lustrum': './sass/thema/lustrum.scss',
+		'thema-normaal': './sass/thema/normaal.scss',
+		'thema-owee': './sass/thema/owee.scss',
+		'thema-roze': './sass/thema/roze.scss',
+		'thema-sineregno': './sass/thema/sineregno.scss',
+		'effect-civisaldo': './sass/effect/civisaldo.scss',
+		'effect-minion': './sass/effect/minion.scss',
+		'effect-onontdekt': './sass/effect/onontdekt.scss',
+		'effect-snow': './sass/effect/snow.scss',
+		'effect-space': './sass/effect/space.scss',
+		'effect-trein': './sass/effect/trein.scss',
+	},
 	output: {
 		// De map waarin alle bestanden geplaatst worden.
 		path: path.resolve(__dirname, 'htdocs/dist'),
@@ -154,7 +151,7 @@ module.exports = {
 						},
 					},
 					{
-						loader:'resolve-url-loader',
+						loader: 'resolve-url-loader',
 						options: {}
 					},
 					{
