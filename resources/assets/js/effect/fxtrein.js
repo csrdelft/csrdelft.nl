@@ -20,6 +20,8 @@ $(function () {
 		'trein ns-slt-6',
 		'trein ns-sng-4',
 		'trein rnet-gtw',
+		'trein thalys',
+		'trein iceje',
 	];
 
 	const rails = $('.rails');
