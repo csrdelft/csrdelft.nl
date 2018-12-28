@@ -14,6 +14,7 @@ etc/*.csr
 etc/*.htpasswd
 etc/*.kdbx
 lib/defines.include.php
+htdocs/dist/manifest.json
 
 # installatie
 vendor/*
