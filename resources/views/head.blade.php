@@ -22,7 +22,7 @@
 <link rel="stylesheet" href="{{asset("$sheet.css")}}" type="text/css" />
 @endforeach
 @stack('styles')
-<script type="text/javascript" src="/dist/js/app.js"></script>
+@script('app.js')
 @stack('scripts')
 <!-- Google Analytics -->
 <script>

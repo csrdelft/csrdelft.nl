@@ -43,9 +43,16 @@ class BladeRenderer implements Renderer {
 				$asset = trim($expr, "()");
 				return '<link rel="stylesheet" href="' . asset($asset) . '" type="text/css"/>';
 			});
+			$this->bladeOne->directive('script', function ($expr) {
+				$asset = trim($expr, "()");
+				return '<script type="text/javascript" src="' . asset($asset) . '"></script>';
+			});
 		} else {
 			$this->bladeOne->directive('stylesheet', function ($expr) {
 				return '<link rel="stylesheet" href="<?php echo asset' . $expr . '; ?>" type="text/css"/>';
+			});
+			$this->bladeOne->directive('script', function ($expr) {
+				return '<script type="text/javascript" src="<?php echo asset' . $expr . '?>"></script>';
 			});
 		}
 
