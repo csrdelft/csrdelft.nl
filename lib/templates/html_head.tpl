@@ -18,6 +18,7 @@
 <link rel="shortcut icon" href="{$smarty.const.CSR_ROOT}/images/favicon.ico" />
 <link rel="manifest" href="/manifest.json">
 <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{$smarty.const.CSR_ROOT}/forum/rss.xml" />
+<link rel="stylesheet" href="{asset('common.css')}" type="text/css" />
 {foreach from=$stylesheets item=sheet}
 <link rel="stylesheet" href="{asset($sheet)}" type="text/css" />
 {/foreach}

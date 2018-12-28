@@ -40,7 +40,6 @@ abstract class CompressedLayout extends HtmlPage {
 		}
 
 		//voeg modules toe afhankelijk van instelling
-		$modules[] = 'common';
 		$modules[] = 'thema-' . LidInstellingenModel::get('layout', 'opmaak');
 
 		// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
@@ -54,13 +53,6 @@ abstract class CompressedLayout extends HtmlPage {
 			$modules[] = 'effect-space';
 		} elseif (LidInstellingenModel::get('layout', 'fx') == 'civisaldo') {
 			$modules[] = 'effect-civisaldo';
-		}
-
-		if (LidInstellingenModel::get('layout', 'minion') == 'ja') {
-			$modules[] = 'effect-minion';
-		}
-		if (LidInstellingenModel::get('layout', 'fx') == 'onontdekt') {
-			$modules[] = 'effect-onontdekt';
 		}
 
 		return $modules;

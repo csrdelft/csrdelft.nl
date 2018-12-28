@@ -1,5 +1,7 @@
 import $ from 'jquery';
 
+import '../../sass/effect/minion.scss';
+
 /**
  * minion.js  |  P.W.G. Brussee (brussee@live.nl)
  *
@@ -41,6 +43,7 @@ function animateMinion() {
 
     $minion.animate(newq, speed, animateMinion);
 }
+
 $(() => {
 	const minion = $('#minion');
 	minion.on('dblclick', () => {

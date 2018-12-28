@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-require('../sass/effect/trein.scss');
+require('../../sass/effect/trein.scss');
 
 $(function () {
 	const treinen = [

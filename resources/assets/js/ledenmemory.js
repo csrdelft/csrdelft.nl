@@ -3,6 +3,8 @@ import 'jquery-ui/ui/effect.js';
 import 'jquery-ui/ui/effects/effect-shake.js';
 import 'jquery-ui/ui/widgets/dialog';
 
+import '../sass/ledenmemory.scss';
+
 $(function () {
 	let first = true,
 		delayed = false,
