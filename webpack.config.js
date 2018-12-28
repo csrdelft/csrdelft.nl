@@ -31,7 +31,6 @@ let entryPoint = glob
 // Javascript heeft maar een paar entry points en deze zijn voorgedefinieerd.
 assign(entryPoint, {
 	'app': './js/app.js',
-	'bb-slideshow': './js/bb-slideshow.js',
 	'ledenmemory': './js/ledenmemory.js',
 	'fxclouds': './js/fxclouds.js',
 	'fxonontdekt': './js/fxonontdekt.js',

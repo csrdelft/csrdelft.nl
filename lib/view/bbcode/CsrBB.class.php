@@ -1302,49 +1302,6 @@ src="https://www.google.com/maps/embed/v1/place?q=' . urlencode($address) . '&ke
 		}
 	}
 
-	private $slideshowJsIncluded = false;
-
-	/**
-	 * Slideshow
-	 *
-	 * @example [slideshow]http://example.com/image_1.jpg[/slideshow]
-	 */
-	public function bb_slideshow($arguments = array()) {
-		$content = $this->parseArray(array('[/slideshow]'), array());
-		$slides_tainted = explode('[br]', $content);
-		$slides = array();
-		foreach ($slides_tainted as $slide) {
-			$slide = trim($slide);
-			if (url_like($slide) && $slide != '') {
-				$slides[] = $slide;
-			}
-		}
-		if (count($slides) == 0) {
-			$content = '[slideshow]: geen geldige afbeeldingen gegeven';
-		} else {
-			if ($this->light_mode) {
-				$url = '#/slideshow/' . urlencode(json_encode($slides));
-				return $this->lightLinkBlock('slideshow', $url, 'Slideshow', count($slides) . ' foto\'s');
-			}
-			$content = '
-				<div class="image_reel">';
-			foreach ($slides as $slide) {
-				$content .= '<img src="' . $slide . '" alt="slide" />' . "\n";
-			}
-			$content .= '</div>'; //end image_reel
-			$content .= '<div class="paging">';
-			for ($i = 1; $i <= count($slides); $i++) {
-				$content .= '<a href="#" rel="' . $i . '">&bull;</a>' . "\n";
-			}
-			$content .= '</div>' . "\n"; //end paging
-			if ($this->slideshowJsIncluded === false) {
-				$content .= '<script type="text/javascript" src="/layout/js/bb-slideshow.js"></script>';
-				$this->slideshowJsIncluded = true;
-			}
-		}
-		return '<div class="bb-slideshow">' . $content . '</div>';
-	}
-
 	function bb_bijbel($arguments = array()) {
 		$content = $this->parseArray(array('[/bijbel]'), array());
 		if (isset($arguments['bijbel'])) { // [bijbel=
