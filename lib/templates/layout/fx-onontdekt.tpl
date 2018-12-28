@@ -5,4 +5,4 @@
 	<div class="layer" data-depth="0.60" style="background-image: url('/images/onontdekt/laag4.png')"></div>
 	<div class="layer" data-depth="0.80" style="background-image: url('/images/onontdekt/laag5.png')"></div>
 </div>
-<script type="text/javascript" src="/dist/js/fxonontdekt.js"></script>
+<script type="text/javascript" src="{asset('fxonontdekt.js')}"></script>
