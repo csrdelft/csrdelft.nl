@@ -38,7 +38,6 @@ module.exports = {
 		'effect-onontdekt': './sass/effect/onontdekt.scss',
 		'effect-snow': './sass/effect/snow.scss',
 		'effect-space': './sass/effect/space.scss',
-		'effect-trein': './sass/effect/trein.scss',
 	},
 	output: {
 		// De map waarin alle bestanden geplaatst worden.

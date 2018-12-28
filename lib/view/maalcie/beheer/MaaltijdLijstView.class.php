@@ -34,7 +34,7 @@ class MaaltijdLijstView extends CompressedLayout {
 
 		$smarty->assign('maaltijd', $maaltijd);
 		$smarty->assign('prijs', sprintf('%.2f', $maaltijd->getPrijsFloat()));
-		$this->addScript('/dist/js/app.js');
+		$this->addScript(asset('app.js'));
 	}
 
 	public function getBreadcrumbs() {
@@ -43,7 +43,7 @@ class MaaltijdLijstView extends CompressedLayout {
 
 	public function view() {
 		$smarty = CsrSmarty::instance();
-		$smarty->assign('stylesheets', ['/dist/css/maaltijdlijst.css']);
+		$smarty->assign('stylesheets', [asset('maaltijdlijst.css')]);
 		$smarty->assign('scripts', $this->getScripts());
 		$smarty->assign('titel', $this->getTitel());
 
