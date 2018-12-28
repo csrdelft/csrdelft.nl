@@ -36,6 +36,19 @@ class BladeRenderer implements Renderer {
 			$this->bladeOne->authCallBack = [LoginModel::class, 'mag'];
 		}
 
+		if ($this->bladeOne->getMode() === BladeOne::MODE_FAST) {
+			$this->bladeOne->directive('stylesheet', function ($expr) {
+				$options = trim($expr, "()");
+				$filename = asset($options);
+
+				return '<link rel="stylesheet" href="' . $filename . '" type="text/css"/>';
+			});
+		} else {
+			$this->bladeOne->directive('stylesheet', function ($expr) {
+				return '<link rel="stylesheet" href="<?php echo asset' . $expr . '; ?>" type="text/css"/>';
+			});
+		}
+
 		$this->bladeOne->directive('icon', function ($expr) {
 			$options = trim($expr, "()");
 

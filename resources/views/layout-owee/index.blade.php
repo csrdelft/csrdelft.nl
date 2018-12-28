@@ -3,7 +3,7 @@
 @section('titel', $titel)
 
 @section('styles')
-	<link rel="stylesheet" href="{{asset("/dist/css/extern.css")}}" type="text/css"/>
+	@stylesheet('extern.css')
 @endsection
 
 @section('body')

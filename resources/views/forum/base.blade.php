@@ -1,16 +1,12 @@
 @auth
 	@extends('layout')
-
-	@push('styles')
-		<link rel="stylesheet" href="{{asset("/dist/css/module-forum.css")}}"/>
-	@endpush
 @endauth
 @guest
 	@extends('layout-owee.layout')
 
 	@section('styles')
-		<link rel="stylesheet" href="{{asset("/dist/css/extern.css")}}" type="text/css"/>
-		<link rel="stylesheet" href="{{asset("/dist/css/extern-forum.css")}}" type="text/css"/>
+		@stylesheet('extern.css')
+		@stylesheet('extern-forum.css')
 	@endsection
 @endguest
 

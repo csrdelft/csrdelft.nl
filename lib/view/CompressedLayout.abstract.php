@@ -22,7 +22,7 @@ abstract class CompressedLayout extends HtmlPage {
 		parent::__construct($body, $titel);
 
 		foreach (static::getUserModules() as $module) {
-		    parent::addStylesheet('/dist/css/' . $module . '.css');
+		    parent::addStylesheet($module . '.css');
 		}
 	}
 

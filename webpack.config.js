@@ -1,6 +1,7 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const path = require('path');
 const glob = require('glob');
@@ -47,8 +48,8 @@ module.exports = {
 		// De map waarin alle bestanden geplaatst worden.
 		path: path.resolve(__dirname, 'htdocs/dist'),
 		// Alle javascript bestanden worden in de map js geplaatst.
-		filename: 'js/[name].js',
-		chunkFilename: 'js/[id].js',
+		filename: 'js/[name].[chunkhash].js',
+		chunkFilename: 'js/[id].[chunkhash].js',
 		publicPath: '/dist/',
 	},
 	devtool: 'source-map',
@@ -68,9 +69,10 @@ module.exports = {
 	plugins: [
 		new MiniCssExtractPlugin({
 			// Css bestanden komen in de map css terecht.
-			filename: 'css/[name].css'
+			filename: 'css/[name].[chunkhash].css'
 		}),
 		new VueLoaderPlugin(),
+		new ManifestPlugin(),
 	],
 	module: {
 		// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
