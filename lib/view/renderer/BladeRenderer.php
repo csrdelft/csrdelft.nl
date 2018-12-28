@@ -36,12 +36,12 @@ class BladeRenderer implements Renderer {
 			$this->bladeOne->authCallBack = [LoginModel::class, 'mag'];
 		}
 
+		// In mode fast (productie) wordt de stylesheet in de html gehangen,
+		// in andere modi wordt een aanroep naar asset gedaan.
 		if ($this->bladeOne->getMode() === BladeOne::MODE_FAST) {
 			$this->bladeOne->directive('stylesheet', function ($expr) {
-				$options = trim($expr, "()");
-				$filename = asset($options);
-
-				return '<link rel="stylesheet" href="' . $filename . '" type="text/css"/>';
+				$asset = trim($expr, "()");
+				return '<link rel="stylesheet" href="' . asset($asset) . '" type="text/css"/>';
 			});
 		} else {
 			$this->bladeOne->directive('stylesheet', function ($expr) {

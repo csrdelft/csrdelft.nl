@@ -18,7 +18,6 @@ function view(string $template, array $variables) {
 	return new TemplateView($template, $variables);
 }
 
-$manifest = null;
 /**
  * Genereer een unieke url voor een asset.
  *
@@ -26,10 +25,7 @@ $manifest = null;
  * @return string
  */
 function asset(string $asset) {
-	global $manifest;
-	if ($manifest == null) {
-		$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/manifest.json'), true);
-	}
+	$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/manifest.json'), true);
 
 	if (isset($manifest[$asset])) {
 		return CSR_ROOT . $manifest[$asset];
