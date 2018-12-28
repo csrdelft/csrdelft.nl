@@ -43,8 +43,8 @@ module.exports = {
 		// De map waarin alle bestanden geplaatst worden.
 		path: path.resolve(__dirname, 'htdocs/dist'),
 		// Alle javascript bestanden worden in de map js geplaatst.
-		filename: 'js/[name].[chunkhash].js',
-		chunkFilename: 'js/[id].[chunkhash].js',
+		filename: 'js/[name].[contenthash].js',
+		chunkFilename: 'js/[id].[contenthash].js',
 		publicPath: '/dist/',
 	},
 	devtool: 'source-map',
@@ -64,7 +64,7 @@ module.exports = {
 	plugins: [
 		new MiniCssExtractPlugin({
 			// Css bestanden komen in de map css terecht.
-			filename: 'css/[name].[chunkhash].css'
+			filename: 'css/[name].[contenthash].css'
 		}),
 		new VueLoaderPlugin(),
 		new ManifestPlugin(),
