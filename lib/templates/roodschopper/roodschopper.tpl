@@ -5,6 +5,7 @@
 {if !isSyrinx()}<p><br />Niet op csrdelft.nl server: Debugmode staat aan.</p>{/if}
 
 <form id="roodschopper" action="roodschopper.php" method="post">
+	{printCsrfField()}
 	<fieldset>
 	<label for="commissie">Commissie:</label>
 	<select name="commissie" id="commissie">

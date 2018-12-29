@@ -57,6 +57,7 @@
 					<div class="InlineForm">
 						<div class="InlineFormToggle maaltijd-gasten">{$aanmelding->aantal_gasten}</div>
 						<form action="{$smarty.const.maalcieUrl}/gasten/{$maaltijd->maaltijd_id}" method="post" class="Formulier InlineForm ToggleForm">
+							{printCsrfField()}
 							<input type="text" name="aantal_gasten" value="{$aanmelding->aantal_gasten}" origvalue="{$aanmelding->aantal_gasten}" class="FormElement" maxlength="4" size="4" />
 							<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
 							<a class="btn reset cancel" title="Annuleren">{icon get="delete"}</a>
@@ -80,6 +81,7 @@
 								{/if}
 							</div>
 							<form action="{$smarty.const.maalcieUrl}/opmerking/{$maaltijd->maaltijd_id}" method="post" class="Formulier InlineForm ToggleForm">
+								{printCsrfField("{$smarty.const.maalcieUrl}/opmerking/{$maaltijd->maaltijd_id}")}
 								<input type="text" name="gasten_eetwens" value="{$aanmelding->gasten_eetwens}" origvalue="{$aanmelding->gasten_eetwens}" class="FormElement" maxlength="255" size="20" />
 								<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
 								<a class="btn reset cancel" title="Annuleren">{icon get="delete"}</a>

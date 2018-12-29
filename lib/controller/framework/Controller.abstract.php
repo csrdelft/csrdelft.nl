@@ -48,6 +48,13 @@ abstract class Controller {
 	 */
 	protected $methods;
 	/**
+	 * Use this to list all actions for which csrf protection should not be applied.
+	 * For example:
+	 * $csrf_unsafe = ['POST'=>['bewerken']]
+	 * @var array
+	 */
+	protected $csrf_unsafe = [];
+	/**
 	 * Query broken down to positional (REST) parameters
 	 * @var array
 	 */
@@ -224,6 +231,10 @@ abstract class Controller {
 	 * @throws CsrToegangException
 	 */
 	public function performAction(array $args = array()) {
+		if (!$this->csrfUnsafeAllowed($this->getMethod(), $this->action)) {
+			preventCsrf();
+		}
+
 		// Controleer of er een ban is ingesteld
 		$account = LoginModel::getAccount();
 		if (isset($account->blocked_reason)) {
@@ -250,7 +261,6 @@ abstract class Controller {
 		elseif (!$this->canCallAction($this->action, $args)) {
 			throw new CsrToegangException('Pagina niet gevonden', 404);
 		}
-
 		return call_user_func_array(array($this, $this->action), $args);
 	}
 
@@ -269,4 +279,7 @@ abstract class Controller {
 		exit;
 	}
 
+	private function csrfUnsafeAllowed($method, $action) {
+		return isset($csrf_unsafe[$method][$action]);
+	}
 }

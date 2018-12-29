@@ -36,6 +36,7 @@
 
 		<form id="forumForm" class="Formulier"
 					action="/forum/posten/{{$deel->forum_id}}@if(isset($draad))/{{$draad->draad_id}}@endif" method="post">
+			@csrf
 			@guest
 				<input type="text" name="email" class="FormElement TextField forumEmail form-control" placeholder="E-mailadres"/>
 				<input type="text" name="firstname" value="" class="FormElement TextField verborgen"/>
