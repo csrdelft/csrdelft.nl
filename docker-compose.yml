@@ -51,6 +51,5 @@ services:
       - ./.eslintrc.js:/app/.eslintrc.js
       - ./webpack.config.js:/app/webpack.config.js
       - ./tsconfig.json:/app/tsconfig.json
-      - ./htdocs/dist:/app/htdocs/dist
-      - ./resources/assets:/app/resources/assets
-      - ./node_modules:/app/node_modules
+      - ./htdocs/dist:/app/htdocs/dist # output
+      - ./resources/assets:/app/resources/assets # input
