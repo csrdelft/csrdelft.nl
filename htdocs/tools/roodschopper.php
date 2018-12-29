@@ -20,7 +20,7 @@ require_once 'roodschoppercontent.class.php';
 if (!LoginModel::mag('P_LEDEN_MOD,commissie:MaalCie,commissie:SocCie')) {
 	redirect(CSR_ROOT);
 }
-
+preventCsrf();
 if (isset($_POST['commissie'], $_POST['bcc'], $_POST['saldogrens'], $_POST['uitsluiten'], $_POST['bericht'], $_POST['from'], $_POST['doelgroep'])) {
 	$cie = 'soccie';
 	if ($_POST['commissie'] == 'maalcie') {

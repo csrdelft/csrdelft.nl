@@ -10,6 +10,8 @@ require_once 'configuratie.include.php';
  *
  * Wordt gebruikt in de preview van bbcode op het forum
  */
+
+preventCsrf();
 if (isset($_POST['data'])) {
 	$string = urldecode($_POST['data']);
 } elseif (isset($_GET['data'])) {
