@@ -24,9 +24,24 @@ htdocs/owee/*
 htdocs/tools/alphabanner/*
 tmp/*
 bin/ldap/*
-.cache-loader
 
-# Dev mappen
+# Dev bestanden
 conf/*
 bin/dev/*
 bin/ci/*
+docker-compose.yml
+tsconfig.json
+webpack.config.js
+.travis.yml
+.tidelift.yml
+.codacy.yml
+phpstan.autoload.php
+phpstan.neon
+CONTRIBUTING.md
+README.md
+.eslintrc.js
+
+# Build bestanden
+.cache-loader
+package.json
+yarn.lock
