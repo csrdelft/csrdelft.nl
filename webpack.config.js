@@ -10,8 +10,7 @@ const devMode = process.env.NODE_ENV !== 'production';
 let contextPath = path.resolve(__dirname, 'resources/assets');
 
 // De Webpack configuratie.
-module.exports = {
-	mode: 'development',
+module.exports = (env, argv) => ({
 	context: contextPath,
 	entry: {
 		'app': './js/app.js',
@@ -42,8 +41,8 @@ module.exports = {
 		// De map waarin alle bestanden geplaatst worden.
 		path: path.resolve(__dirname, 'htdocs/dist'),
 		// Alle javascript bestanden worden in de map js geplaatst.
-		filename: devMode ? 'js/[name].js' : 'js/[name].[contenthash].js',
-		chunkFilename: devMode ? 'js/[name].js' : 'js/[id].[contenthash].js',
+		filename: argv.mode === 'development' ? 'js/[name].js' : 'js/[name].[contenthash].js',
+		chunkFilename: argv.mode === 'development' ? 'js/[name].js' : 'js/[id].[contenthash].js',
 		publicPath: '/dist/',
 	},
 	devtool: 'source-map',
@@ -63,7 +62,7 @@ module.exports = {
 	plugins: [
 		new MiniCssExtractPlugin({
 			// Css bestanden komen in de map css terecht.
-			filename: devMode ? 'css/[name].css' : 'css/[name].[contenthash].css'
+			filename: argv.mode === 'development' ? 'css/[name].css' : 'css/[name].[contenthash].css'
 		}),
 		new VueLoaderPlugin(),
 		new ManifestPlugin(),
@@ -134,16 +133,12 @@ module.exports = {
 					{
 						loader: 'css-loader',
 						options: {
-							// url: false,
-							sourceMap: devMode,
-							minimize: !devMode,
 							importLoaders: 3,
 						},
 					},
 					{
 						loader: 'postcss-loader',
 						options: {
-							sourceMap: devMode,
 							ident: 'postcss',
 							plugins: [require('autoprefixer')],
 						},
@@ -190,4 +185,4 @@ module.exports = {
 			},
 		],
 	},
-};
+});
