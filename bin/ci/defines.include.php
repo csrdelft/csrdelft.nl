@@ -5,6 +5,6 @@
 # -------------------------------------------------------------------
 # Standaard instellingen voor travis, zie ook defines.defaults.php
 # -------------------------------------------------------------------
-define('CSR_DOMAIN', 'localhost');
-define('CSR_ROOT', 'http://' . CSR_DOMAIN);
+define('CSR_DOMAIN', 'csrdelft.nl');
+define('CSR_ROOT', 'https://' . CSR_DOMAIN);
 define('BLADEONE_MODE', 2); // FAST

@@ -40,11 +40,11 @@ class BladeRenderer implements Renderer {
 		// in andere modi wordt een aanroep naar asset gedaan.
 		if ($this->bladeOne->getMode() === BladeOne::MODE_FAST) {
 			$this->bladeOne->directive('stylesheet', function ($expr) {
-				$asset = trim($expr, "()");
+				$asset = trim(trim($expr, "()"), "\"'");
 				return '<link rel="stylesheet" href="' . asset($asset) . '" type="text/css"/>';
 			});
 			$this->bladeOne->directive('script', function ($expr) {
-				$asset = trim($expr, "()");
+				$asset = trim(trim($expr, "()"), "\"'");
 				return '<script type="text/javascript" src="' . asset($asset) . '"></script>';
 			});
 		} else {
