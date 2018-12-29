@@ -78,5 +78,6 @@
 		"timeago": "^1.6.3",
 		"uglifyjs-webpack-plugin": "^2.1.1",
 		"vue": "^2.5.7"
-	}
+	},
+	"version": "1.12.3"
 }
