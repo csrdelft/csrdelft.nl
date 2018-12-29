@@ -14,8 +14,19 @@ use CsrDelft\view\renderer\TemplateView;
  * @param array $variables
  * @return TemplateView
  */
-function view(string $template, array $variables) {
+function view(string $template, array $variables = []) {
 	return new TemplateView($template, $variables);
+}
+
+/**
+ * Shorthand voor het weergeven van een TemplateView
+ *
+ * @param string $template
+ * @param array $variables
+ * @throws Exception
+ */
+function display(string $template, array $variables = []) {
+	(new TemplateView($template, $variables))->view();
 }
 
 /**

@@ -91,8 +91,8 @@ module.exports = {
 					{
 						loader: 'babel-loader',
 						options: {
-							presets: ['env'],
-							plugins: ['syntax-dynamic-import']
+							presets: ['@babel/preset-env'],
+							plugins: ['@babel/syntax-dynamic-import', '@babel/plugin-proposal-class-properties']
 						},
 					}
 				],

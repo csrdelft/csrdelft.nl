@@ -33,9 +33,9 @@
 		</main>
 		<div id="cd-main-overlay">
 			{if CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'onontdekt'}
-				{include file='layout/fx-onontdekt.tpl'}
+				{display('effect.onontdekt')}
 			{elseif CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'civisaldo'}
-				{include file='layout/fx-civisaldo.tpl'}
+				{display('effect.civisaldo')}
 			{/if}
 		</div>
 		<div id="modal-background"{if isset($modal)} style="display: block;"{/if}></div>
@@ -48,10 +48,10 @@
 			{$minion}
 		{/if}
 		{if CsrDelft\model\LidInstellingenModel::get('layout', 'fx') == 'wolken'}
-			{include file='layout/fx-clouds.tpl'}
+			{display('effect.clouds')}
 		{/if}
 		{if CsrDelft\model\LidInstellingenModel::get('layout', 'trein') != 'nee'}
-			{include file='layout/fx-trein.tpl'}
+			{display('effect.trein')}
 		{/if}
 	</body>
 </html>
