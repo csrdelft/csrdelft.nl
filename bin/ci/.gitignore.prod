@@ -29,6 +29,8 @@ bin/ldap/*
 conf/*
 bin/dev/*
 bin/ci/*
+sql/*
+docs/*
 docker-compose.yml
 tsconfig.json
 webpack.config.js
@@ -40,6 +42,13 @@ phpstan.neon
 CONTRIBUTING.md
 README.md
 .eslintrc.js
+fixturesSQL_minimal.sql
+.editorconfig
+.dockerignore
+
+# Tests bestanden
+tests/*
+phpunit.init.php
 
 # Build bestanden
 .cache-loader
