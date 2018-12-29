@@ -12,7 +12,7 @@ services:
 
 before_install:
   - cp ./bin/ci/mysql.ini.travis ./etc/mysql.ini
-  - cp ./lib/defines.include.php.development.sample ./lib/defines.include.php
+  - cp ./bin/ci/defines.include.php ./lib/defines.include.php
   - mysql -e 'CREATE DATABASE IF NOT EXISTS csrdelft;'
   - nvm install 8
 
