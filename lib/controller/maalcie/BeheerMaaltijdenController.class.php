@@ -264,7 +264,7 @@ class BeheerMaaltijdenController extends AclController {
 
 	public function beoordelingen() {
 		if ($this->getMethod() == 'POST') {
-			$maaltijden = $this->model->find('datum <= CURDATE()');
+			$maaltijden = $this->model->getMaaltijden('datum <= CURDATE()');
 			$this->view = new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
 		} else {
 			$body = new BeheerMaaltijdenBeoordelingenView(
