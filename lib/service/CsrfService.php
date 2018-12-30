@@ -49,4 +49,26 @@ class CsrfService {
 		}
 		return $this->manager->getToken("global");
 	}
+
+	public static function preventCsrf() {
+		if (strtolower($_SERVER['REQUEST_METHOD']) == 'get') {
+			return null;
+		}
+		$id = filter_input(INPUT_SERVER,'HTTP_X_CSRF_ID', FILTER_SANITIZE_STRING);
+		$value = filter_input(INPUT_SERVER,'HTTP_X_CSRF_VALUE', FILTER_SANITIZE_STRING);
+		if ($id == null || $value == null) {
+			$id = filter_input(INPUT_POST,'X-CSRF-ID', FILTER_SANITIZE_STRING);
+			$value = filter_input(INPUT_POST,'X-CSRF-VALUE', FILTER_SANITIZE_STRING);
+		}
+		if ($id != null && $value != null) {
+			$token = new CsrfToken($id, $value);
+			$url = filter_input(INPUT_SERVER,'REQUEST_URI', FILTER_SANITIZE_STRING);
+			$method = filter_input(INPUT_SERVER,'REQUEST_METHOD', FILTER_SANITIZE_STRING);
+			if (CsrfService::instance()->isValid($token, $url, $method)) {
+				return null;
+			}
+		}
+		// No valid token has been posted, so we redirect to prevent sensitive operations from taking place
+		redirect();
+	}
 }

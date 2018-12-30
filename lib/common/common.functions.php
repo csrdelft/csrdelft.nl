@@ -1047,27 +1047,6 @@ function sql_contains($field) {
 	return "%$field%";
 }
 
-function preventCsrf() {
-	if (session_status() == PHP_SESSION_NONE) {
-		return null;
-	}
-	if (strtolower($_SERVER['REQUEST_METHOD']) == 'get') {
-		return null;
-	}
-	$token = null;
-	if (isset($_SERVER['HTTP_X_CSRF_ID']) && isset($_SERVER['HTTP_X_CSRF_VALUE'])) {
-		$token = new CsrfToken($_SERVER['HTTP_X_CSRF_ID'], $_SERVER['HTTP_X_CSRF_VALUE']);
-	}
-	if (isset($_POST['X-CSRF-ID']) && isset($_POST['X-CSRF-VALUE'])) {
-		$token = new CsrfToken($_POST['X-CSRF-ID'], $_POST['X-CSRF-VALUE']);
-	}
-	if (CsrfService::instance()->isValid($token, parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH), $_SERVER['REQUEST_METHOD'])) {
-		return null;
-	}
-	// No valid token has been posted, so we redirect to prevent sensitive operations from taking place
-	redirect();
-}
-
 function printCsrfField($path = '', $method = 'post') {
 	(new CsrfField(CsrfService::instance()->generateToken($path, $method)))->view();
 }

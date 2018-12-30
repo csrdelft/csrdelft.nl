@@ -1,5 +1,6 @@
 <form method="post" id="contact-form" action="/contactformulier/interesse">
   {!! getMelding() !!}
+	@csrf
 	<div class="field">
 		<label for="naam">Naam</label>
 		<input type="text" name="naam" id="naam" required/>

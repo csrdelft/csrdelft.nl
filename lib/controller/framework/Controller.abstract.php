@@ -8,6 +8,7 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\service\CsrfService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\CsrLayoutPage;
@@ -50,10 +51,10 @@ abstract class Controller {
 	/**
 	 * Use this to list all actions for which csrf protection should not be applied.
 	 * For example:
-	 * $csrf_unsafe = ['POST'=>['bewerken']]
+	 * $csrfUnsafe = ['POST'=>['bewerken']]
 	 * @var array
 	 */
-	protected $csrf_unsafe = [];
+	protected $csrfUnsafe = [];
 	/**
 	 * Query broken down to positional (REST) parameters
 	 * @var array
@@ -232,7 +233,7 @@ abstract class Controller {
 	 */
 	public function performAction(array $args = array()) {
 		if (!$this->csrfUnsafeAllowed($this->getMethod(), $this->action)) {
-			preventCsrf();
+			CsrfService::preventCsrf();
 		}
 
 		// Controleer of er een ban is ingesteld
@@ -280,6 +281,6 @@ abstract class Controller {
 	}
 
 	private function csrfUnsafeAllowed($method, $action) {
-		return isset($csrf_unsafe[$method][$action]);
+		return isset($this->csrfUnsafe[$method][$action]);
 	}
 }
