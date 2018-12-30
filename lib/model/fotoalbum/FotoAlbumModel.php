@@ -214,10 +214,6 @@ HTML;
 				$this->fotoTagsModel->create($tag);
 			}
 		}
-		if (false === @rmdir(PHOTOALBUM_PATH . $oldDir)) {
-			$error = error_get_last();
-			setMelding($error['message'], -1);
-		}
 		return true;
 	}
 
