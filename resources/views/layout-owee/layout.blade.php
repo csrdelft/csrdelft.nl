@@ -15,7 +15,7 @@
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"
 				href="{{CSR_ROOT}}/forum/rss.xml"/>
 	@yield('styles')
-	<script type="text/javascript" src="{{asset("/dist/js/extern.js")}}"></script>
+	<script type="text/javascript" src="{{asset("extern.js")}}"></script>
 </head>
 
 <body>
