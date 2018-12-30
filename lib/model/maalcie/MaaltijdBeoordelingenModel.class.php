@@ -33,8 +33,8 @@ class MaaltijdBeoordelingenModel extends PersistenceModel {
 		foreach ($beoordelingen as $b) {
 			$normalize = Database::instance()->sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), $this->getTableName(), 'uid = ?', array($b->uid));
 			foreach ($normalize as $avg) {
-				$b->kwantiteit /= $avg[0];
-				$b->kwaliteit /= $avg[1];
+			    if (!is_null($b->kwantiteit)) $b->kwantiteit /= $avg[0];
+				if (!is_null($b->kwaliteit)) $b->kwaliteit /= $avg[1];
 			}
 		}
 		return $beoordelingen;
