@@ -34,6 +34,14 @@ $(function () {
 
     });
 
+    // Voeg CSRF token toe aan alle ajax requests
+    $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+        if (!options.crossDomain) {
+            jqXHR.setRequestHeader('X-BARSYSTEEM-CSRF', $('meta[property=\'X-BARSYSTEEM-CSRF\']').attr('content'));
+        }
+    });
+
+
     /*************************************************************************************************/
     /* End Clock
      /*************************************************************************************************/

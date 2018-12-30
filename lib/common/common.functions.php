@@ -5,13 +5,16 @@
 # common.functions.php
 # -------------------------------------------------------------------
 use CsrDelft\common\MijnSqli;
+use CsrDelft\service\CsrfService;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
+use Symfony\Component\Security\Csrf\CsrfToken;
 
 /**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
@@ -156,8 +159,9 @@ function redirect($url = null, $refresh = true) {
 }
 
 function redirect_via_login($url) {
-	redirect(CSR_ROOT . "?redirect=".urlencode($url)."#login");
+	redirect(CSR_ROOT . "?redirect=" . urlencode($url) . "#login");
 }
+
 /**
  * rawurlencode() met uitzondering van slashes.
  *
@@ -363,7 +367,7 @@ function reldate($datum) {
 	} else {
 		$return = strftime('%A %e %B %Y om %H:%M', $moment); // php-bug: %e does not work on Windows
 	}
-	return '<time class="timeago" datetime="' . date('Y-m-d\TG:i:sO', $moment) .'">' . $return . '</time>'; // ISO8601
+	return '<time class="timeago" datetime="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</time>'; // ISO8601
 }
 
 /**
@@ -605,7 +609,7 @@ function getMelding() {
 		$melding = '';
 	}
 
-	return '<div id="melding">'.$melding.'</div>';
+	return '<div id="melding">' . $melding . '</div>';
 }
 
 /**
@@ -643,11 +647,11 @@ function className($className) {
  * @return string
  */
 function classNameZonderNamespace($className) {
-    try {
-        return (new \ReflectionClass($className))->getShortName();
-    } catch (ReflectionException $e) {
-        return '';
-    }
+	try {
+		return (new \ReflectionClass($className))->getShortName();
+	} catch (ReflectionException $e) {
+		return '';
+	}
 }
 
 /**
@@ -809,9 +813,9 @@ function curl_follow_location($url, $options = []) {
 		preg_match('/(?<=url=)(.*)/i', $refresh->item(0)->getAttribute('content'), $matches);
 		$refreshUrl = trim($matches[0]);
 
-        if (empty($refreshUrl)) {
-            return $location;
-        }
+		if (empty($refreshUrl)) {
+			return $location;
+		}
 
 		if (!startsWith($refreshUrl, 'http')) {
 			$refreshUrl = http_build_url($location, $refreshUrl, HTTP_URL_REPLACE | HTTP_URL_JOIN_PATH);
@@ -949,7 +953,7 @@ function checkMimetype($filename, $mime) {
  * @return bool
  */
 function mag($permission, array $allowedAuthenticationMethods = null) {
-    return LoginModel::mag($permission, $allowedAuthenticationMethods);
+	return LoginModel::mag($permission, $allowedAuthenticationMethods);
 }
 
 /**
@@ -959,7 +963,7 @@ function mag($permission, array $allowedAuthenticationMethods = null) {
  * @return bool
  */
 function is_ingelogd_account($uid) {
-    return LoginModel::getUid() == $uid;
+	return LoginModel::getUid() == $uid;
 }
 
 /**
@@ -969,17 +973,17 @@ function is_ingelogd_account($uid) {
  * @return bool
  */
 function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = 'P_LEDEN_MOD') {
-    if (is_array($key)) {
-        foreach ($key as $item) {
-            if (!LidToestemmingModel::instance()->toestemming($profiel, $item, $cat, $uitzondering)) {
-                return false;
-            }
-        }
+	if (is_array($key)) {
+		foreach ($key as $item) {
+			if (!LidToestemmingModel::instance()->toestemming($profiel, $item, $cat, $uitzondering)) {
+				return false;
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    return LidToestemmingModel::instance()->toestemming($profiel, $key, $cat, $uitzondering);
+	return LidToestemmingModel::instance()->toestemming($profiel, $key, $cat, $uitzondering);
 }
 
 function to_unix_path($path) {
@@ -1041,4 +1045,13 @@ $configCache = [];
 
 function sql_contains($field) {
 	return "%$field%";
+}
+
+function printCsrfField($path = '', $method = 'post') {
+	(new CsrfField(CsrfService::instance()->generateToken($path, $method)))->view();
+}
+
+function csrfMetaTag() {
+	$token = CsrfService::instance()->generateToken('', 'POST');
+	return '<meta property="X-CSRF-ID" content="'. htmlentities($token->getId()) .'" /><meta property="X-CSRF-VALUE" content="'. htmlentities($token->getValue()) .'" />';
 }

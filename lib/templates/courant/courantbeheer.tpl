@@ -44,6 +44,7 @@
 {/if}
 
 <form action="/courant/{if $form.ID==0}toevoegen{else}bewerken/{$form.ID}{/if}" method="post">
+	{printCsrfField()}
 	<div id="pubciemail_form">
 		<h3>{if $form.ID==0}Nieuw bericht invoeren{else}Bericht bewerken{/if}</h3>
 		<strong>Titel:</strong><br />

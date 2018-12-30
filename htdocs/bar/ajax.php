@@ -11,7 +11,7 @@ require_once 'controller/Barsysteem.class.php';
 
 $barsysteem = new Barsysteem();
 
-if ($barsysteem->isLoggedIn()){
+if ($barsysteem->isLoggedIn() && $barsysteem->preventCsrf()){
 
 	/* Start beheer */
 

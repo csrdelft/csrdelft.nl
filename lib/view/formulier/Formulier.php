@@ -3,10 +3,12 @@
 namespace CsrDelft\view\formulier;
 
 use CsrDelft\model\ChangeLogModel;
+use CsrDelft\service\CsrfService;
 use CsrDelft\model\entity\ChangeLogEntry;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
@@ -32,6 +34,7 @@ class Formulier implements View, Validator {
 	protected $error;
 	private $enctype = 'multipart/form-data';
 	public $showMelding = true;
+	public $preventCsrf = true;
 	/**
 	 * Fields must be added via addFields()
 	 * or insertElementBefore() methods,
@@ -264,9 +267,20 @@ HTML;
 		foreach ($this->fields as $field) {
 			$field->view();
 		}
+		$csrfField = $this->getCsrfField();
+		if ($csrfField != null)
+			$csrfField->view();
 		echo $this->formKnoppen->getHtml();
 		echo $this->getScriptTag();
 		echo '</form>';
+	}
+
+	public function getCsrfField() {
+		if (!$this->preventCsrf) {
+			return null;
+		}
+		$token = CsrfService::instance()->generateToken($this->action, $this->getMethod());
+		return new CsrfField($token);
 	}
 
 	/**
@@ -307,4 +321,7 @@ HTML;
 		return $changelog;
 	}
 
+	public function getMethod() {
+		return $this->post ? 'post' : 'get';
+	}
 }

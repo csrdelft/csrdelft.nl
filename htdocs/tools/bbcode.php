@@ -1,5 +1,6 @@
 <?php
 
+use CsrDelft\service\CsrfService;
 use CsrDelft\view\bbcode\CsrBB;
 
 require_once 'configuratie.include.php';
@@ -10,6 +11,8 @@ require_once 'configuratie.include.php';
  *
  * Wordt gebruikt in de preview van bbcode op het forum
  */
+
+CsrfService::preventCsrf();
 if (isset($_POST['data'])) {
 	$string = urldecode($_POST['data']);
 } elseif (isset($_GET['data'])) {

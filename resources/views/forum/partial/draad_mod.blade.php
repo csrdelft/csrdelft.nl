@@ -30,6 +30,7 @@
 					 title="Bekijk de reacties die zijn verwijderd">@icon('bin_closed') verwijderde reacties</a>
 				<br/><br/>
 				<form action="/forum/wijzigen/{{$draad->draad_id}}/forum_id" method="post">
+					@csrf
 					<label>Verplaats naar &nbsp;</label>
 					<select name="forum_id">
 						@foreach($categorien as $categorie)
@@ -45,6 +46,7 @@
 				</form>
 				<br />
 				<form action="/forum/wijzigen/{{$draad->draad_id}}/titel" method="post">
+					@csrf
 					<label for="titel">Titel aanpassen &nbsp;</label>
 					<input id="titel" type="text" name="titel" value="{{$draad->titel}}" />
 					<input type="submit" value="Opslaan" class="btn btn-primary" />
@@ -52,6 +54,7 @@
 				@can('P_FORUM_BELANGRIJK')
 				<br />
 				<form action="/forum/wijzigen/{{$draad->draad_id}}/belangrijk" method="post">
+					@csrf
 					<label for="belangrijk">Belangrijk markeren &nbsp;</label>
 					<select id="belangrijk" name="belangrijk">
 						<option value="" @if(!$draad->belangrijk)selected="selected"@endif>Niet belangrijk</option>
@@ -69,6 +72,7 @@
 				@if($gedeeld_met_opties)
 				<br />
 				<form action="/forum/wijzigen/{{$draad->draad_id}}/gedeeld_met" method="post">
+					@csrf
 					<label for="gedeeld_met">Delen met &nbsp;</label>
 					<select id="gedeeld_met" name="gedeeld_met">
 						<option value=""></option>

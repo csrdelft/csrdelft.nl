@@ -11,6 +11,7 @@ window.$ = window.jQuery = $;
  * jQuery extensies registreren zichzelf aan bovenstaande jQuery.
  */
 require('bootstrap');
+require('./ajax-csrf');
 require('jgallery/dist/js/jgallery'); // jGallery moet na de bootstrap geladen worden! Ondersteund geen CommonJS.
 require('jquery-hoverintent');
 require('jquery.scrollto');

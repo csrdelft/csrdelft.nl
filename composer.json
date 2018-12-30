@@ -26,7 +26,8 @@
 		"ext-PDO": "*",
 		"ext-pdo_mysql": "*",
 		"ext-hash": "*",
-		"ext-json": "*"
+		"ext-json": "*",
+		"symfony/security-csrf": "^3.4"
 	},
 	"config": {
 		"platform": {

@@ -4,6 +4,12 @@ require_once 'controller/Barsysteem.class.php';
 
 $barsysteem = new Barsysteem();
 
+function barCsrf() {
+    global $barsysteem;
+    echo "<input type='hidden' name=\"X-BARSYSTEEM-CSRF\" value=\"".htmlentities($barsysteem->getCsrfToken())."\" />";
+}
+
+
 if ($barsysteem->isLoggedIn()) {
 
     ?>
@@ -13,7 +19,7 @@ if ($barsysteem->isLoggedIn()) {
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <meta property="X-BARSYSTEEM-CSRF" content="<?php echo htmlentities($barsysteem->getCsrfToken()); ?>" />
         <title>Barsysteem C.S.R.</title>
 
         <!-- Bootstrap core CSS -->
@@ -239,7 +245,7 @@ if ($barsysteem->isLoggedIn()) {
                             <h2>Product toevoegen</h2>
 
                             <form id="addProduct" class="form-inline" action="ajax.php" method="post">
-
+                                <?php barCsrf(); ?>
                                 <div id="input-group">
 
                                     <input type="hidden" name="add_product" value="on" />
@@ -287,7 +293,7 @@ if ($barsysteem->isLoggedIn()) {
 							<h2>Persoon wijzigen</h2>
 					
 							<form id="updatePerson" class="form-inline" action="ajax.php" method="post">
-							
+								<?php barCsrf(); ?>
 								<div id="input-group">
 								
 									<input type="hidden" name="update_person" value="on" />
@@ -304,7 +310,7 @@ if ($barsysteem->isLoggedIn()) {
 							<h2>Persoon toevoegen</h2>
 					
 							<form id="addPerson" class="form-inline" action="ajax.php" method="post">
-							
+								<?php barCsrf(); ?>
 								<div id="input-group">
 								
 									<input type="hidden" name="add_person" value="on" />
@@ -320,7 +326,7 @@ if ($barsysteem->isLoggedIn()) {
 							<h2>Persoon verwijderen</h2>
 					
 							<form id="removePerson" class="form-inline" action="ajax.php" method="post">
-							
+								<?php barCsrf(); ?>
 								<div id="input-group">
 								
 									<input type="hidden" name="remove_person" value="on" />

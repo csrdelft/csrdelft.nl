@@ -14,6 +14,7 @@
 <meta property="og:locale" content="nl_nl" />
 <meta property="og:image" content="{{CSR_ROOT}}/dist/images/beeldmerk.png" />
 <meta property="og:description" content="{{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}}" />
+{!! csrfMetaTag() !!}
 <title>C.S.R. Delft - @yield('titel')</title>
 <link rel="shortcut icon" href="{{CSR_ROOT}}/images/favicon.ico" />
 <link rel="manifest" href="/manifest.json">

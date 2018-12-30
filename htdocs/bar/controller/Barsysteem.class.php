@@ -8,7 +8,7 @@ class Barsysteem {
 
 	var $db;
 	private $beheer;
-
+	private $csrfToken;
 	function __construct() {
 		$this->db = Database::instance()->getDatabase();
 	}
@@ -22,6 +22,27 @@ class Barsysteem {
 			$this->beheer = isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) == '5367b4668337c47a02cf87793a6a05d5';
 
 		return $this->beheer;
+	}
+
+	function getCsrfToken() {
+		if ($this->csrfToken === null) {
+			if ($this->isBeheer()) {
+				$this->csrfToken = md5('Barsysteem CSRF-token C.S.R. Delft' . $_COOKIE['barsysteembeheer']);
+			} else {
+				$this->csrfToken = md5('Barsysteem CSRF-token C.S.R. Delft' . $_COOKIE['barsysteem']);
+			}
+		}
+		return $this->csrfToken;
+	}
+
+	public function preventCsrf() {
+		$token = null;
+		if (isset($_SERVER['HTTP_X_BARSYSTEEM_CSRF'])) {
+			$token = $_SERVER['HTTP_X_BARSYSTEEM_CSRF'];
+		} else if (isset($_POST["X-BARSYSTEEM-CSRF"])) {
+			$token = $_POST("X-BARSYSTEEM-CSRF");
+		}
+		return $token != null && $this->getCsrfToken() === $token;
 	}
 
 	function getNaam($profiel) {

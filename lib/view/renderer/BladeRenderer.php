@@ -15,7 +15,7 @@ class BladeRenderer implements Renderer {
 	private $template;
 
 	public function __construct($template, $variables = []) {
-		$this->bladeOne = new BladeOne(TEMPLATE_PATH, BLADE_CACHE_PATH, BladeOne::MODE_AUTO);
+		$this->bladeOne = new CustomBladeOne(TEMPLATE_PATH, BLADE_CACHE_PATH, BladeOne::MODE_AUTO);
 		$this->data = $variables;
 
 		// Tijden compilen doet dit er niet toe.
@@ -35,7 +35,6 @@ class BladeRenderer implements Renderer {
 			}
 			$this->bladeOne->authCallBack = [LoginModel::class, 'mag'];
 		}
-
 		// In mode fast (productie) wordt de stylesheet in de html gehangen,
 		// in andere modi wordt een aanroep naar asset gedaan.
 		if ($this->bladeOne->getMode() === BladeOne::MODE_FAST) {

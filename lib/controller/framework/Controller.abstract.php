@@ -8,6 +8,7 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\service\CsrfService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\CsrLayoutPage;
@@ -47,6 +48,13 @@ abstract class Controller {
 	 * @var array
 	 */
 	protected $methods;
+	/**
+	 * Use this to list all actions for which csrf protection should not be applied.
+	 * For example:
+	 * $csrfUnsafe = ['POST'=>['bewerken']]
+	 * @var array
+	 */
+	protected $csrfUnsafe = [];
 	/**
 	 * Query broken down to positional (REST) parameters
 	 * @var array
@@ -224,6 +232,10 @@ abstract class Controller {
 	 * @throws CsrToegangException
 	 */
 	public function performAction(array $args = array()) {
+		if (!$this->csrfUnsafeAllowed($this->getMethod(), $this->action)) {
+			CsrfService::preventCsrf();
+		}
+
 		// Controleer of er een ban is ingesteld
 		$account = LoginModel::getAccount();
 		if (isset($account->blocked_reason)) {
@@ -250,7 +262,6 @@ abstract class Controller {
 		elseif (!$this->canCallAction($this->action, $args)) {
 			throw new CsrToegangException('Pagina niet gevonden', 404);
 		}
-
 		return call_user_func_array(array($this, $this->action), $args);
 	}
 
@@ -269,4 +280,7 @@ abstract class Controller {
 		exit;
 	}
 
+	private function csrfUnsafeAllowed($method, $action) {
+		return isset($this->csrfUnsafe[$method][$action]);
+	}
 }
