@@ -45,14 +45,14 @@ class BeheerMaaltijdenController extends AclController {
 				//'leegmaken' => 'P_MAAL_MOD',
 				'archief' => 'P_MAAL_MOD',
 				'onverwerkt' => 'P_MAAL_MOD',
-                'beoordelingen' => 'P_MAAL_MOD',
+				'beoordelingen' => 'P_MAAL_MOD',
 			);
 		} else {
 			$this->acl = array(
 				'beheer' => 'P_MAAL_MOD',
 				'prullenbak' => 'P_MAAL_MOD',
 				'archief' => 'P_MAAL_MOD',
-                'beoordelingen' => 'P_MAAL_MOD',
+				'beoordelingen' => 'P_MAAL_MOD',
 				'sluit' => 'P_MAAL_MOD',
 				'open' => 'P_MAAL_MOD',
 				'toggle' => 'P_MAAL_MOD',
@@ -263,16 +263,16 @@ class BeheerMaaltijdenController extends AclController {
 	}
 
 	public function beoordelingen() {
-	    if ($this->getMethod() == 'POST') {
+		if ($this->getMethod() == 'POST') {
 			$maaltijden = $this->model->find('datum <= CURDATE()');
 			$this->view = new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
 		} else {
 			$body = new BeheerMaaltijdenBeoordelingenView(
-			    new BeheerMaaltijdenBeoordelingenTable(), 'Maaltijdbeoordelingen'
-            );
+				new BeheerMaaltijdenBeoordelingenTable(), 'Maaltijdbeoordelingen'
+			);
 			$this->view = new CsrLayoutPage($body);
 		}
-    }
+	}
 
 	// Repetitie-Maaltijden ############################################################
 

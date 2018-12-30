@@ -110,26 +110,26 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar, HeeftAanmeldLim
 		return floatval($budget) / 100.0;
 	}
 
-    /**
-     * Vind corveetaken van gegeven functie bij deze maaltijd
-     *
-     * @param $functienaam string Naam van de functie
-     * @return CorveeTaak[]
-     */
+	/**
+	 * Vind corveetaken van gegeven functie bij deze maaltijd
+	 *
+	 * @param $functienaam string Naam van de functie
+	 * @return CorveeTaak[]
+	 */
 	public function getCorveeTaken($functienaam) {
-        $gevonden = [];
+		$gevonden = [];
 
-        /** @var CorveeFunctie[] $functies */
-	    $functies = FunctiesModel::instance()->find('naam = ?', [$functienaam], null, null, 1, 0);
-	    foreach ($functies as $functie) {
-            $taken = CorveeTakenModel::instance()->find('functie_id = ? AND maaltijd_id = ? AND verwijderd = 0', [$functie->functie_id, $this->maaltijd_id]);
-            foreach ($taken as $taak) {
-                $gevonden[] = $taak;
-            }
-        }
+		/** @var CorveeFunctie[] $functies */
+		$functies = FunctiesModel::instance()->find('naam = ?', [$functienaam], null, null, 1, 0);
+		foreach ($functies as $functie) {
+			$taken = CorveeTakenModel::instance()->find('functie_id = ? AND maaltijd_id = ? AND verwijderd = 0', [$functie->functie_id, $this->maaltijd_id]);
+			foreach ($taken as $taak) {
+				$gevonden[] = $taak;
+			}
+		}
 
-        return $gevonden;
-    }
+		return $gevonden;
+	}
 
 	// Agendeerbaar ############################################################
 
