@@ -23,6 +23,9 @@ if (!defined('DB_DROP')) define('DB_DROP', false); # heb je een backup gemaakt?
 # debug modus
 if (!defined('DEBUG')) define('DEBUG', false);
 #
+# onderhoud modus
+if (!defined('ONDERHOUD')) define('ONDERHOUD', false);
+#
 # measure time
 if (!defined('TIME_MEASURE')) define('TIME_MEASURE', false);
 #
