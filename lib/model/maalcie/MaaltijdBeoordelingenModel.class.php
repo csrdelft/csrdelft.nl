@@ -62,12 +62,12 @@ class MaaltijdBeoordelingenModel extends PersistenceModel {
 
         // Geef resultaat terug in object, null als er geen beoordelingen zijn
         $object = new \stdClass();
-        $object->kwantiteit = $kwantiteit_aantal === 0 ? null : round($kwantiteit / $kwantiteit_aantal, 3);
-        $object->kwantiteit_afwijking = $kwantiteit_aantal === 0 ? null : round($kwantiteit_afwijking / $kwantiteit_aantal, 3);
+        $object->kwantiteit = $kwantiteit_aantal === 0 ? null : $kwantiteit / $kwantiteit_aantal;
+        $object->kwantiteit_afwijking = $kwantiteit_aantal === 0 ? null : $kwantiteit_afwijking / $kwantiteit_aantal;
         $object->kwantiteit_aantal = $kwantiteit_aantal;
 
-        $object->kwaliteit = $kwaliteit_aantal === 0 ? null : round($kwaliteit / $kwaliteit_aantal, 3);
-        $object->kwaliteit_afwijking = $kwaliteit_aantal === 0 ? null : round($kwaliteit_afwijking / $kwaliteit_aantal, 3);
+        $object->kwaliteit = $kwaliteit_aantal === 0 ? null : $kwaliteit / $kwaliteit_aantal;
+        $object->kwaliteit_afwijking = $kwaliteit_aantal === 0 ? null : $kwaliteit_afwijking / $kwaliteit_aantal;
         $object->kwaliteit_aantal = $kwaliteit_aantal;
 
         return $object;

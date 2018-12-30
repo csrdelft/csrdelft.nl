@@ -16,11 +16,23 @@ class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
 		$data = $maaltijd->jsonSerialize();
 
 		// Haal beoordelingsamenvatting op
-        $beoordelingSamenvatting = MaaltijdBeoordelingenModel::instance()->getBeoordelingSamenvatting($maaltijd);
-        foreach ($beoordelingSamenvatting as $key => $value) {
-            $data[$key] = $value;
-        }
+        $stat = MaaltijdBeoordelingenModel::instance()->getBeoordelingSamenvatting($maaltijd);
+
+        $data['aantal_beoordelingen'] = $stat->kwantiteit_aantal . ", " . $stat->kwaliteit_aantal;
+        $data['kwantiteit'] = $this->getalWeergave($stat->kwantiteit, 'n.a.', 3);
+        $data['kwaliteit'] = $this->getalWeergave($stat->kwaliteit, 'n.a.', 3);
+        $data['kwantiteit_afwijking'] = $this->getalWeergave($stat->kwantiteit_afwijking, 'n.a.', 3, true);
+        $data['kwaliteit_afwijking'] = $this->getalWeergave($stat->kwaliteit_afwijking, 'n.a.', 3, true);
 
 		return parent::getJson($data);
 	}
+
+	private function getalWeergave($number, $placeholder, $precision, $showPlus = false) {
+	    if ($number === null) {
+	        return $placeholder;
+        } else {
+	        $plus = $showPlus && $number > 0 ? '+' : '';
+            return $plus . round($number, $precision);
+        }
+    }
 }
