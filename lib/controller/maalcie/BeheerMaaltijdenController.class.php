@@ -16,6 +16,7 @@ use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenTable;
+use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenView;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenView;
@@ -266,7 +267,9 @@ class BeheerMaaltijdenController extends AclController {
 			$maaltijden = $this->model->find('datum <= CURDATE()');
 			$this->view = new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
 		} else {
-			$body = new BeheerMaaltijdenView(new BeheerMaaltijdenBeoordelingenTable(), 'Maaltijdbeoordelingen');
+			$body = new BeheerMaaltijdenBeoordelingenView(
+			    new BeheerMaaltijdenBeoordelingenTable(), 'Maaltijdbeoordelingen'
+            );
 			$this->view = new CsrLayoutPage($body);
 		}
     }

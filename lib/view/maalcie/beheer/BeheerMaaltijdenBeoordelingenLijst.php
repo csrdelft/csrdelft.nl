@@ -4,6 +4,7 @@ namespace CsrDelft\view\maalcie\beheer;
 
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\view\datatable\DataTableResponse;
 
 class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
@@ -17,12 +18,19 @@ class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
 
 		// Haal beoordelingsamenvatting op
         $stat = MaaltijdBeoordelingenModel::instance()->getBeoordelingSamenvatting($maaltijd);
-
         $data['aantal_beoordelingen'] = $stat->kwantiteit_aantal . ", " . $stat->kwaliteit_aantal;
         $data['kwantiteit'] = $this->getalWeergave($stat->kwantiteit, 'n.a.', 3);
         $data['kwaliteit'] = $this->getalWeergave($stat->kwaliteit, 'n.a.', 3);
         $data['kwantiteit_afwijking'] = $this->getalWeergave($stat->kwantiteit_afwijking, 'n.a.', 3, true);
         $data['kwaliteit_afwijking'] = $this->getalWeergave($stat->kwaliteit_afwijking, 'n.a.', 3, true);
+
+        // Haal koks op
+        $kokTaken = $maaltijd->getCorveeTaken('Kwalikok');
+        $data['koks'] = "";
+        for ($i = 0; $i < count($kokTaken); $i++) {
+            $data['koks'] .= ProfielModel::getLink($kokTaken[$i]->uid);
+            if ($i < count($kokTaken) - 1) $data['koks'] .= '<br>';
+        }
 
 		return parent::getJson($data);
 	}

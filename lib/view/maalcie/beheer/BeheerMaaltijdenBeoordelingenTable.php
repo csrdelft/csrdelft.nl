@@ -30,6 +30,7 @@ class BeheerMaaltijdenBeoordelingenTable extends DataTable {
         $this->addColumn('aanmeldingen', null, null, CellRender::Aanmeldingen());
 
 		// Beoordeling
+        $this->addColumn('kwalikok(s)', null, null, null, null, null, 'koks');
         $this->addColumn('aantal_beoordelingen');
         $this->addColumn('kwantiteit');
         $this->addColumn('kwaliteit');
