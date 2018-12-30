@@ -18,11 +18,11 @@ class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
 
 		// Haal beoordelingsamenvatting op
 		$stat = MaaltijdBeoordelingenModel::instance()->getBeoordelingSamenvatting($maaltijd);
-		$data['aantal_beoordelingen'] = $stat->kwantiteit_aantal . ", " . $stat->kwaliteit_aantal;
+		$data['aantal_beoordelingen'] = $stat->kwantiteitAantal . ", " . $stat->kwaliteitAantal;
 		$data['kwantiteit'] = $this->getalWeergave($stat->kwantiteit, 'n.a.', 3);
 		$data['kwaliteit'] = $this->getalWeergave($stat->kwaliteit, 'n.a.', 3);
-		$data['kwantiteit_afwijking'] = $this->getalWeergave($stat->kwantiteit_afwijking, 'n.a.', 3, true);
-		$data['kwaliteit_afwijking'] = $this->getalWeergave($stat->kwaliteit_afwijking, 'n.a.', 3, true);
+		$data['kwantiteit_afwijking'] = $this->getalWeergave($stat->kwantiteitAfwijking, 'n.a.', 3, true);
+		$data['kwaliteit_afwijking'] = $this->getalWeergave($stat->kwaliteitAfwijking, 'n.a.', 3, true);
 
 		// Haal koks op
 		$kokTaken = $maaltijd->getCorveeTaken('Kwalikok');

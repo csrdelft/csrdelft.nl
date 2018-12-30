@@ -34,11 +34,11 @@ class MaaltijdBeoordelingenModel extends PersistenceModel {
 
 		// Bepaal gemiddelde en gemiddelde afwijking
 		$kwantiteit = 0;
-		$kwantiteit_afwijking = 0;
-		$kwantiteit_aantal = 0;
-		$kwaliteit_afwijking = 0;
+		$kwantiteitAfwijking = 0;
+		$kwantiteitAantal = 0;
+		$kwaliteitAfwijking = 0;
 		$kwaliteit = 0;
-		$kwaliteit_aantal = 0;
+		$kwaliteitAantal = 0;
 		foreach ($beoordelingen as $b) {
 			// Haal gemiddelde beoordeling van lid op
 			$userAverage = Database::instance()->sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), $this->getTableName(), 'uid = ?', array($b->uid));
@@ -49,26 +49,26 @@ class MaaltijdBeoordelingenModel extends PersistenceModel {
 			if (!is_null($b->kwantiteit)) {
 				$kwantiteit += $b->kwantiteit;
 				// Bepaal afwijking en tel op
-				$kwantiteit_afwijking += $b->kwantiteit - $avg[0][0];
-				$kwantiteit_aantal++;
+				$kwantiteitAfwijking += $b->kwantiteit - $avg[0][0];
+				$kwantiteitAantal++;
 			}
 			if (!is_null($b->kwaliteit)) {
 				$kwaliteit += $b->kwaliteit;
 				// Bepaal afwijking en tel op
-				$kwaliteit_afwijking += $b->kwaliteit - $avg[0][1];
-				$kwaliteit_aantal++;
+				$kwaliteitAfwijking += $b->kwaliteit - $avg[0][1];
+				$kwaliteitAantal++;
 			}
 		}
 
 		// Geef resultaat terug in object, null als er geen beoordelingen zijn
 		$object = new \stdClass();
-		$object->kwantiteit = $kwantiteit_aantal === 0 ? null : $kwantiteit / $kwantiteit_aantal;
-		$object->kwantiteit_afwijking = $kwantiteit_aantal === 0 ? null : $kwantiteit_afwijking / $kwantiteit_aantal;
-		$object->kwantiteit_aantal = $kwantiteit_aantal;
+		$object->kwantiteit = $kwantiteitAantal === 0 ? null : $kwantiteit / $kwantiteitAantal;
+		$object->kwantiteitAfwijking = $kwantiteitAantal === 0 ? null : $kwantiteitAfwijking / $kwantiteitAantal;
+		$object->kwantiteitAantal = $kwantiteitAantal;
 
-		$object->kwaliteit = $kwaliteit_aantal === 0 ? null : $kwaliteit / $kwaliteit_aantal;
-		$object->kwaliteit_afwijking = $kwaliteit_aantal === 0 ? null : $kwaliteit_afwijking / $kwaliteit_aantal;
-		$object->kwaliteit_aantal = $kwaliteit_aantal;
+		$object->kwaliteit = $kwaliteitAantal === 0 ? null : $kwaliteit / $kwaliteitAantal;
+		$object->kwaliteitAfwijking = $kwaliteitAantal === 0 ? null : $kwaliteitAfwijking / $kwaliteitAantal;
+		$object->kwaliteitAantal = $kwaliteitAantal;
 
 		return $object;
 	}
