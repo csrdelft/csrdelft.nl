@@ -41,10 +41,19 @@
 	},
 	"scripts": {
 		"migrate": "vendor/bin/phinx migrate",
-		"generator": "php ./bin/dev/generate.php",
-		"production": "php ./bin/ci/compile.php",
-		"flushcache": "php ./bin/flushcache.php",
+		"generator": "@php bin/dev/generate.php",
+		"production": "@php bin/ci/compile.php",
+		"flushcache": "@php bin/flushcache.php",
+		"onderhoud": "bin/prod/onderhoud.sh",
 		"analyse": "vendor/bin/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs",
-		"test": "./vendor/bin/phpunit --bootstrap phpunit.init.php tests"
+		"test": "vendor/bin/phpunit --bootstrap phpunit.init.php tests",
+		"update-prod": [
+			"@onderhoud true",
+			"git pull",
+			"@composer install --no-dev",
+			"@migrate",
+			"@flushcache",
+			"@onderhoud false"
+		]
 	}
 }

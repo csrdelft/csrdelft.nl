@@ -10,9 +10,11 @@
  * Configure sessions.
  * Boot framework.
  */
-// Uncomment de volgende twee regels om de boel in onderhoudsmode te ketzen:
-//header('location: https://csrdelft.nl/onderhoud.html');
-//exit;
+require_once 'defines.defaults.php';
+if (ONDERHOUD) {
+	header('location: https://csrdelft.nl/onderhoud.html');
+	exit;
+}
 
 use CsrDelft\common\Ini;
 use CsrDelft\common\ShutdownHandler;
@@ -25,7 +27,6 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 
 require __DIR__ . '/../vendor/autoload.php';
-require_once 'defines.defaults.php';
 require_once 'common/common.functions.php';
 require_once 'common/common.view.functions.php';
 require_once 'autoload.php';
