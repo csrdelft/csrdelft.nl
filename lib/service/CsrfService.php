@@ -51,7 +51,8 @@ class CsrfService {
 	}
 
 	public static function preventCsrf() {
-		if (strtolower($_SERVER['REQUEST_METHOD']) == 'get') {
+		$method = filter_input(INPUT_SERVER,'REQUEST_METHOD', FILTER_SANITIZE_STRING);
+		if (strtolower($method) == 'get') {
 			return null;
 		}
 		$id = filter_input(INPUT_SERVER,'HTTP_X_CSRF_ID', FILTER_SANITIZE_STRING);
@@ -63,7 +64,6 @@ class CsrfService {
 		if ($id != null && $value != null) {
 			$token = new CsrfToken($id, $value);
 			$url = filter_input(INPUT_SERVER,'REQUEST_URI', FILTER_SANITIZE_STRING);
-			$method = filter_input(INPUT_SERVER,'REQUEST_METHOD', FILTER_SANITIZE_STRING);
 			if (CsrfService::instance()->isValid($token, $url, $method)) {
 				return null;
 			}
