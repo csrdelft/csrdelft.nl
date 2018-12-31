@@ -1,17 +1,6 @@
 import {domUpdate} from './context';
 
 /**
- * @source http://stackoverflow.com/a/7228322
- * @see templates/fotoalbum/slider.tpl
- * @param {number} min
- * @param {number} max
- * @returns {number}
- */
-export function randomIntFromInterval(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-/**
  * Selecteer de tekst van een DOM-element.
  * @source http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
  *

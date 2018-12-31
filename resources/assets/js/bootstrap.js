@@ -33,7 +33,6 @@ require('jquery-ui-timepicker-addon');
 require('./lib/jquery-ui-timepicker-nl');
 require('jquery.maskedinput');
 
-import {basename, dirname, randomIntFromInterval, redirect, reload, selectText} from './util';
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
 import {formCancel, formInlineToggle, formSubmit} from './formulier';
 import initContext, {domUpdate} from './context';
@@ -49,20 +48,6 @@ import {importAgenda} from './courant';
 $.extend(window, {
     Bloodhound,
     Dropzone,
-    util: {
-        // See templates/fotoalbum/album.tpl
-        basename,
-        // See templates/fotoalbum/album.tpl
-        dirname,
-        // See templates/fotoalbum/slider.tpl
-        randomIntFromInterval,
-        // See templates/fotoalbum/album.tpl
-        redirect,
-        // See templates/fotoalbum/album.tpl
-        reload,
-        // See templates/fotoalbum/album.tpl
-        selectText,
-    },
     bbcode: {
         // See view/formulier/invoervelden/BBCodeField.class.php
         // See templates/roodschopper/roodschopper.tpl
