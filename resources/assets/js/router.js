@@ -4,6 +4,6 @@ import {route} from './util';
  * Voer specifieke code uit voor specifieke routes.
  */
 
-route('/instellingen', () => import('./instellingen'));
-route('/documenten', () => import('./documenten'));
-route('/fotoalbum', () => import('./fotoalbum'));
+route('/instellingen', () => import(/* webpackChunkName: "instellingen" */ './instellingen'));
+route('/documenten', () => import(/* webpackChunkName: "documenten" */ './documenten'));
+route('/fotoalbum', () => import(/* webpackChunkName: "fotoalbum" */'./fotoalbum/FotoAlbum'));

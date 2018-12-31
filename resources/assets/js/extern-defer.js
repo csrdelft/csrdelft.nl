@@ -4,12 +4,12 @@
 import $ from 'jquery';
 import initContext from './context';
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
+import './fotoalbum/FotoAlbum';
 
 require('lightbox2');
 require('./lib/jquery.markitup');
 require('jquery-ui/ui/widgets/tooltip');
 require('jquery-hoverintent');
-require('./fotoalbum');
 
 $.widget.bridge('uitooltip', $.ui.tooltip);
 
