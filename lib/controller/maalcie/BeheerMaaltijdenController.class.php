@@ -262,16 +262,16 @@ class BeheerMaaltijdenController extends AclController {
 		redirect(maalcieUrl . '/prullenbak');
 	}
 
-	public function beoordelingen() {
-		if ($this->getMethod() == 'POST') {
-			$maaltijden = $this->model->getMaaltijden('datum <= CURDATE()');
-			$this->view = new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
-		} else {
-			$body = new BeheerMaaltijdenBeoordelingenView(
-				new BeheerMaaltijdenBeoordelingenTable(), 'Maaltijdbeoordelingen'
-			);
-			$this->view = new CsrLayoutPage($body);
-		}
+	public function GET_beoordelingen() {
+        $body = new BeheerMaaltijdenBeoordelingenView(
+            new BeheerMaaltijdenBeoordelingenTable(), 'Maaltijdbeoordelingen'
+        );
+        $this->view = new CsrLayoutPage($body);
+	}
+
+	public function POST_beoordelingen() {
+        $maaltijden = $this->model->getMaaltijden('datum <= CURDATE()');
+        $this->view = new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
 	}
 
 	// Repetitie-Maaltijden ############################################################
