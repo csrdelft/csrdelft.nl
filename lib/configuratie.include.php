@@ -10,7 +10,6 @@
  * Configure sessions.
  * Boot framework.
  */
-define('ONDERHOUD', true);
 require_once 'defines.defaults.php';
 if (ONDERHOUD) {
 	http_response_code(503);
