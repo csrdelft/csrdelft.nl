@@ -22,10 +22,10 @@ class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
 		// Haal beoordelingsamenvatting op
 		$stat = MaaltijdBeoordelingenModel::instance()->getBeoordelingSamenvatting($maaltijd);
 		$data['aantal_beoordelingen'] = $stat->kwantiteitAantal . ", " . $stat->kwaliteitAantal;
-		$data['kwantiteit'] = $this->getalWeergave($stat->kwantiteit, 'n.a.', 3);
-		$data['kwaliteit'] = $this->getalWeergave($stat->kwaliteit, 'n.a.', 3);
-		$data['kwantiteit_afwijking'] = $this->getalWeergave($stat->kwantiteitAfwijking, 'n.a.', 3, true);
-		$data['kwaliteit_afwijking'] = $this->getalWeergave($stat->kwaliteitAfwijking, 'n.a.', 3, true);
+		$data['kwantiteit'] = $this->getalWeergave($stat->kwantiteit, '-', 3);
+		$data['kwaliteit'] = $this->getalWeergave($stat->kwaliteit, '-', 3);
+		$data['kwantiteit_afwijking'] = $this->getalWeergave($stat->kwantiteitAfwijking, '-', 3, true);
+		$data['kwaliteit_afwijking'] = $this->getalWeergave($stat->kwaliteitAfwijking, '-', 3, true);
 
 		// Haal koks op
 		$kokTaken = $maaltijd->getCorveeTaken(self::KWALIKOK_FUNCTIE_ID);
