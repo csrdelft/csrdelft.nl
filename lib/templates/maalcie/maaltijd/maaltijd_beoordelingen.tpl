@@ -3,7 +3,7 @@
 <p>Hieronder vind je per maaltijd de gegeven beoordelingen. Onder aantal beoordelingen
 staat eerst het aantal leden dat de kwantiteit heeft beoordeeld, gevolgd door het aantal
 leden dat de kwaliteit heeft beoordeeld. De volgende getallen zijn het gemiddelde aantal
-sterren wat is gegeven voor de kwantiteit en de kwaliteit (op een schaal van 1 tot 5).</p>
+sterren wat is gegeven voor de kwantiteit en de kwaliteit (op een schaal van 1 tot 4).</p>
 
 <p>Om rekening te houden met het verschil in manier van beoordelen van leden, worden na de
 ruwe gemiddelden ook afwijkingen getoond. Dit is het gemiddelde van de afwijking van de
