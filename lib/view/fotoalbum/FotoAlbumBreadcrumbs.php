@@ -37,7 +37,7 @@ class FotoAlbumBreadcrumbs {
 					}
 				}
 				$subdir .= $albumnaam . '/';
-				$breadcrumbs .= '   <a href="/' . $subdir . '">' . ucfirst($albumnaam) . '</a>';
+				$breadcrumbs .= ' » <a href="/' . $subdir . '">' . ucfirst($albumnaam) . '</a>';
 			}
 		}
 		return $breadcrumbs;
