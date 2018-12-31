@@ -2,15 +2,13 @@
 
 namespace CsrDelft\view\maalcie\beheer;
 
+use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\datatable\DataTableResponse;
 
 class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
-    # ID om functie van kwalikok op te halen, wijzigen als ID van Kwalikok wijzigt
-    const KWALIKOK_FUNCTIE_ID = 1;
-
 	/**
 	 * @param Maaltijd $maaltijd
 	 *
@@ -28,7 +26,7 @@ class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
 		$data['kwaliteit_afwijking'] = $this->getalWeergave($stat->kwaliteitAfwijking, '-', 3, true);
 
 		// Haal koks op
-		$kokTaken = $maaltijd->getCorveeTaken(self::KWALIKOK_FUNCTIE_ID);
+		$kokTaken = $maaltijd->getCorveeTaken(CorveeFunctie::KWALIKOK_FUNCTIE_ID);
 		$data['koks'] = "";
 		for ($i = 0; $i < count($kokTaken); $i++) {
 			$data['koks'] .= ProfielModel::getLink($kokTaken[$i]->uid);
