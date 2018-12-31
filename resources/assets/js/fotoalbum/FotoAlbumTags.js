@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import {basename, dirname} from '../util';
 
-export default class FotoAlbumTags {
+export class FotoAlbumTags {
 	tagMode = false;
 	tagFormDiv = null;
 
@@ -83,7 +83,7 @@ export default class FotoAlbumTags {
 			}
 		});
 		btnTag.on('mouseout', () => btnTag.removeClass('fa-toggle-on').removeClass('fa-toggle-off').addClass('fa-smile-o'));
-		btnTag.appendTo(this.fotoalbum.container.find('div.icons'));
+		btnTag.insertBefore(this.fotoalbum.container.find('div.icons .change-album'));
 
 		// toggle thumbnails
 		this.fotoalbum.container.find('.minimalize-thumbnails.jgallery-btn').on('click', () => this.moveTagDivs());
