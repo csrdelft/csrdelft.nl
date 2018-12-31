@@ -17,8 +17,7 @@ class FotosDropzone extends Dropzone {
 	}
 
 	public function getBreadcrumbs() {
-		$view = new FotoAlbumView($this->model);
-		return $view->getBreadcrumbs(false, true);
+		return FotoAlbumBreadcrumbs::getBreadcrumbs($this->model, false, true);
 	}
 
 	public function view() {

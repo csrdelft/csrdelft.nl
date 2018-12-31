@@ -11,8 +11,10 @@ namespace CsrDelft\view\fotoalbum;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\view\View;
 
-class FotoAlbumZijbalkView extends FotoAlbumView {
+class FotoAlbumZijbalkView implements View {
+	protected $model;
 
 	public function __construct(FotoAlbum $fotoalbum) {
 		// als het album alleen subalbums bevat kies een willkeurige daarvan om fotos van te tonen
@@ -24,7 +26,8 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 				$fotoalbum = $subalbums[$idx];
 			}
 		}
-		parent::__construct($fotoalbum);
+
+		$this->model = $fotoalbum;
 	}
 
 	public function view() {
@@ -45,4 +48,13 @@ class FotoAlbumZijbalkView extends FotoAlbumView {
 		echo '</div></div></div>';
 	}
 
+	public function getTitel() {
+	}
+
+	public function getBreadcrumbs() {
+	}
+
+	public function getModel() {
+		return $this->model;
+	}
 }

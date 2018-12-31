@@ -9,6 +9,7 @@ require('lightbox2');
 require('./lib/jquery.markitup');
 require('jquery-ui/ui/widgets/tooltip');
 require('jquery-hoverintent');
+require('./fotoalbum');
 
 $.widget.bridge('uitooltip', $.ui.tooltip);
 

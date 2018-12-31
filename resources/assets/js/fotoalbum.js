@@ -1,12 +1,6 @@
 import $ from 'jquery';
 import {basename, dirname, redirect, reload, selectText} from './util';
 
-$(() => {
-		$('.fotoalbum').each(function () {
-			initializeerFotoalbum($(this));
-		});
-	});
-
 const initializeerFotoalbum = (wrapper) => {
 	let tagMode = false;
 	let container;
@@ -330,37 +324,10 @@ const initializeerFotoalbum = (wrapper) => {
 				$(window).trigger('resize');
 			}
 		};
-		// get the full res url
-		const href = wrapper.find('.gallery').find('a[href="' + foto.attr('src') + '"]').attr('data-href');
-
-
 		if (foto[0].src !== getFullUrl()) {
 			foto[0].src = getFullUrl();
-		} else
-
-		// only load if valid url is not loaded yet
-		if (typeof href === 'string' && foto.attr('src') !== href) {
-			// show loading indicator after waiting longer than 400ms
-			const timer = setTimeout(function () {
-				if (zoom.attr('data-size') === 'original') {
-					container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeIn();
-				}
-			}, 400);
-			console.log('ga laden');
-			// load full res in background process
-			// TODO fix dit
-			// preloadImg(href).one('load', function () {
-			// 	// replace with full res image
-			// 	foto.attr('src', href).one('load', function () {
-			// 		// stop timer for loading indicator
-			// 		clearTimeout(timer);
-			// 		setDimensions(this);
-			// 		// remove loading indicator
-			// 		container.find('div.overlay, div.imageLoaderPositionAbsolute').fadeOut();
-			// 	});
-			// });
 		}
-		else if (zoom.attr('data-size') === 'original') {
+		if (zoom.attr('data-size') === 'original') {
 			setDimensions(foto[0]);
 		}
 		if (zoom.attr('data-size') === 'fill') {
@@ -695,3 +662,7 @@ const initializeerFotoalbum = (wrapper) => {
 	// mode change album selector to last position
 	container.find('div.icons .jgallery-btn.change-album').appendTo(container.find('div.icons'));
 };
+
+$('.fotoalbum').each(function () {
+	initializeerFotoalbum($(this));
+});

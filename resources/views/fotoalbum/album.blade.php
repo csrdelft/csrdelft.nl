@@ -1,7 +1,19 @@
-@extends('layout')
+@auth
+	@extends('layout')
+@endauth
+@guest
+	@extends('layout-owee.layout')
+
+@section('styles')
+	@stylesheet('extern.css')
+	@stylesheet('extern-fotoalbum.css')
+@endsection
+@endguest
+
+@section('titel', ucfirst($album->dirname))
 
 @section('breadcrumbs')
-
+	{!! \CsrDelft\view\fotoalbum\FotoAlbumBreadcrumbs::getBreadcrumbs($album) !!}
 @endsection
 
 @section('content')
