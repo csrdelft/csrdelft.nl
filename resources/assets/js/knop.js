@@ -26,7 +26,7 @@ export function knopAjax(knop, type) {
     }
     let source = knop,
         done = domUpdate,
-        data = knop.data();
+        data = knop.attr('data');
 
     if (knop.hasClass('popup')) {
         source = false;

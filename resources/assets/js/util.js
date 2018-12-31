@@ -59,7 +59,7 @@ export function dirname(path) {
  * @param {string} suffix
  * @returns {string}
  */
-export function basename(path, suffix) {
+export function basename(path, suffix = '') {
     //  discuss at: http://phpjs.org/functions/basename/
     // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
     // improved by: Ash Searle (http://hexmen.com/blog/)
@@ -84,7 +84,7 @@ export function basename(path, suffix) {
 
     base = base.replace(/^.*[/\\]/g, '');
 
-    if (typeof suffix === 'string' && base.substr(base.length - suffix.length) === suffix) {
+    if (suffix !== '' && base.substr(base.length - suffix.length) === suffix) {
         base = base.substr(0, base.length - suffix.length);
     }
 

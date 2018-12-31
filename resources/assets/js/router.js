@@ -6,3 +6,4 @@ import {route} from './util';
 
 route('/instellingen', () => import('./instellingen'));
 route('/documenten', () => import('./documenten'));
+route('/fotoalbum', () => import('./fotoalbum'));

@@ -111,10 +111,10 @@ class FotoAlbumController extends AclController {
 		if ($album->dirname === 'Posters') {
 			$album->orderByDateModified();
 		}
-		$body = new FotoAlbumView($album);
+		$body = view('fotoalbum.album', ['album' => $album]); //new FotoAlbumView($album);
 		// uitgelogd heeft nieuwe layout
 		if (LoginModel::mag('P_LOGGED_IN')) {
-			$this->view = new CsrLayoutPage($body);
+			$this->view = $body;//new CsrLayoutPage($body);
 		} else {
 			$this->view = new CsrLayoutOweePage($body, 'fotoalbum');
 		}
