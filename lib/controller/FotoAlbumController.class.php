@@ -14,7 +14,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fotoalbum\FotoAlbumToevoegenForm;
-use CsrDelft\view\fotoalbum\FotoAlbumView;
 use CsrDelft\view\fotoalbum\FotosDropzone;
 use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
 use CsrDelft\view\fotoalbum\PosterUploadForm;
@@ -111,13 +110,7 @@ class FotoAlbumController extends AclController {
 		if ($album->dirname === 'Posters') {
 			$album->orderByDateModified();
 		}
-		$body = new FotoAlbumView($album);
-		// uitgelogd heeft nieuwe layout
-		if (LoginModel::mag('P_LOGGED_IN')) {
-			$this->view = new CsrLayoutPage($body);
-		} else {
-			$this->view = new CsrLayoutOweePage($body, 'fotoalbum');
-		}
+		$this->view = view('fotoalbum.album', ['album' => $album]);
 	}
 
 	public function verwerken(FotoAlbum $album) {
