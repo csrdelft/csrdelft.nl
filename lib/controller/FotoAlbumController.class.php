@@ -110,7 +110,7 @@ class FotoAlbumController extends AclController {
 		if ($album->dirname === 'Posters') {
 			$album->orderByDateModified();
 		}
-		$this->view = view('fotoalbum.album', ['album' => $album]); //new FotoAlbumView($album);
+		$this->view = view('fotoalbum.album', ['album' => $album]);
 	}
 
 	public function verwerken(FotoAlbum $album) {

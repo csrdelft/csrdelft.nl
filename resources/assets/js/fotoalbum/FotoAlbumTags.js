@@ -42,8 +42,7 @@ export default class FotoAlbumTags {
 				if (this.tagFormDiv) {
 					this.moveTagForm();
 				}
-			}
-			else {
+			} else {
 				if (this.tagFormDiv) {
 					this.exitTagForm();
 				}

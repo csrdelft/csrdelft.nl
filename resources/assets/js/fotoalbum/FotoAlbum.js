@@ -144,7 +144,6 @@ class FotoAlbum extends EventEmitter {
 				menuSelected: function () {
 				}
 			});
-
 		}
 		// mode change album selector to last position
 		this.container.find('div.icons .jgallery-btn.change-album').appendTo(this.container.find('div.icons'));
@@ -152,12 +151,10 @@ class FotoAlbum extends EventEmitter {
 
 	static requestFullscreen() {
 		const docelem = $('.jgallery').get(0);
-		if (FotoAlbum.requestFullscreen) {
-			FotoAlbum.requestFullscreen();
+		if (docelem.requestFullscreen) {
+			docelem.requestFullscreen();
 		} else if (docelem.webkitRequestFullscreen) {
 			docelem.webkitRequestFullscreen();
-		} else if (docelem.mozRequestFullScreen) {
-			docelem.mozRequestFullScreen();
 		} else if (docelem.msRequestFullscreen) {
 			docelem.msRequestFullscreen();
 		}
@@ -166,14 +163,9 @@ class FotoAlbum extends EventEmitter {
 	static exitFullScreen() {
 		if (document.exitFullscreen) {
 			document.exitFullscreen();
-		}
-		else if (document.webkitExitFullscreen) {
+		} else if (document.webkitExitFullscreen) {
 			document.webkitExitFullscreen();
-		}
-		else if (document.mozCancelFullScreen) {
-			document.mozCancelFullScreen();
-		}
-		else if (document.msExitFullscreen) {
+		} else if (document.msExitFullscreen) {
 			document.msExitFullscreen();
 		}
 	}
@@ -187,7 +179,6 @@ class FotoAlbum extends EventEmitter {
 	}
 
 	toggleFullScreen() {
-		//moveTagDivs();
 		if (this.container.hasClass('jgallery-full-screen')) {
 			FotoAlbum.requestFullscreen();
 		}
@@ -237,18 +228,15 @@ class FotoAlbum extends EventEmitter {
 			}
 		};
 
-		if (this.isLoggedIn) {
-			// knopje downloaden
-			const btnDown = $('<a id="btnDown" class="dropdown-item" tabindex="-1"><span class="fa fa-download"></span> &nbsp; Downloaden</a>');
-			btnDown.on('click', () => window.location.href = `/fotoalbum/download${this.getUrl()}`);
-			addCMI(btnDown);
-		}
-		if (this.isLoggedIn) {
-			// knopje taggen
-			const btnTag = $('<a id="btnTag" class="dropdown-item" tabindex="-1"><span class="fa fa-smile-o"></span> &nbsp; Leden etiketteren</a>');
-			btnTag.on('click', () => this.container.find('span.fa-smile-o.jgallery-btn').click());
-			addCMI(btnTag);
-		}
+		// knopje downloaden
+		const btnDown = $('<a id="btnDown" class="dropdown-item" tabindex="-1"><span class="fa fa-download"></span> &nbsp; Downloaden</a>');
+		btnDown.on('click', () => window.location.href = `/fotoalbum/download${this.getUrl()}`);
+		addCMI(btnDown);
+
+		// knopje taggen
+		const btnTag = $('<a id="btnTag" class="dropdown-item" tabindex="-1"><span class="fa fa-smile-o"></span> &nbsp; Leden etiketteren</a>');
+		btnTag.on('click', () => this.container.find('span.fa-smile-o.jgallery-btn').click());
+		addCMI(btnTag);
 
 		// knopje full screen
 		const btnFS = $('<a id="btnFS" class="dropdown-item" tabindex="-1"><span class="fa"></span> &nbsp; Volledig scherm</a>');

@@ -12,7 +12,6 @@ window.$ = window.jQuery = $;
  */
 require('bootstrap');
 require('./ajax-csrf');
-require('jgallery/dist/js/jgallery'); // jGallery moet na de bootstrap geladen worden! Ondersteund geen CommonJS.
 require('jquery-hoverintent');
 require('jquery.scrollto');
 require('jquery-ui');
