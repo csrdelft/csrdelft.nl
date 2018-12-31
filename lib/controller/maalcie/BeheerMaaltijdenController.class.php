@@ -14,6 +14,9 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
+use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
+use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenTable;
+use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenView;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenView;
@@ -42,12 +45,14 @@ class BeheerMaaltijdenController extends AclController {
 				//'leegmaken' => 'P_MAAL_MOD',
 				'archief' => 'P_MAAL_MOD',
 				'onverwerkt' => 'P_MAAL_MOD',
+				'beoordelingen' => 'P_MAAL_MOD',
 			);
 		} else {
 			$this->acl = array(
 				'beheer' => 'P_MAAL_MOD',
 				'prullenbak' => 'P_MAAL_MOD',
 				'archief' => 'P_MAAL_MOD',
+				'beoordelingen' => 'P_MAAL_MOD',
 				'sluit' => 'P_MAAL_MOD',
 				'open' => 'P_MAAL_MOD',
 				'toggle' => 'P_MAAL_MOD',
@@ -255,6 +260,18 @@ class BeheerMaaltijdenController extends AclController {
 		$aantal = $this->model->prullenbakLeegmaken();
 		setMelding($aantal . ($aantal === 1 ? ' maaltijd' : ' maaltijden') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
 		redirect(maalcieUrl . '/prullenbak');
+	}
+
+	public function GET_beoordelingen() {
+        $body = new BeheerMaaltijdenBeoordelingenView(
+            new BeheerMaaltijdenBeoordelingenTable(), 'Maaltijdbeoordelingen'
+        );
+        $this->view = new CsrLayoutPage($body);
+	}
+
+	public function POST_beoordelingen() {
+        $maaltijden = $this->model->getMaaltijden('datum <= CURDATE()');
+        $this->view = new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
 	}
 
 	// Repetitie-Maaltijden ############################################################

@@ -14,6 +14,7 @@
 					<option value="/maaltijden/beheer">Beheer</option>
 					<option value="/maaltijden/beheer/prullenbak">Prullenbak</option>
 					<option value="/maaltijden/beheer/archief">Archief</option>
+					<option value="/maaltijden/beheer/beoordelingen">Beoordelingen</option>
 					<option value="/maaltijden/repetities">Repetities</option>
 					<option value="/instellingenbeheer/module/maaltijden">Instellingen</option>
 					<option value="/maaltijden/abonnementenbeheer">Abonnementen</option>

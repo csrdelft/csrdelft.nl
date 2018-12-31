@@ -29,6 +29,8 @@ use CsrDelft\Orm\Entity\T;
  *
  */
 class CorveeFunctie extends PersistentEntity {
+    # ID om functie van kwalikok op te halen, wijzigen als ID van Kwalikok wijzigt
+    const KWALIKOK_FUNCTIE_ID = 7;
 
 	/**
 	 * Primary key
