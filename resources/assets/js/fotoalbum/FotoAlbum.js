@@ -339,6 +339,7 @@ $('.fotoalbum').each((i, el) => {
 	let wrapper = $(el);
 	let fotoalbum = new FotoAlbum(wrapper);
 	if (wrapper.data('isLoggedIn')) {
+		// Laad de FotoAlbumTags code niet als dat niet nodig is.
 		import(/* webpackChunkName: "fotoalbumtags" */ './FotoAlbumTags').then((FotoAlbumTags) => new FotoAlbumTags(fotoalbum));
 	}
 });
