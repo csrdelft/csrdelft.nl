@@ -113,20 +113,18 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar, HeeftAanmeldLim
 	/**
 	 * Vind corveetaken van gegeven functie bij deze maaltijd
 	 *
-	 * @param $functienaam string Naam van de functie
+	 * @param $functieID int ID van de functie
 	 * @return CorveeTaak[]
 	 */
-	public function getCorveeTaken($functienaam) {
+	public function getCorveeTaken($functieID) {
 		$gevonden = [];
 
 		/** @var CorveeFunctie[] $functies */
-		$functies = FunctiesModel::instance()->find('naam = ?', [$functienaam], null, null, 1, 0);
-		foreach ($functies as $functie) {
-			$taken = CorveeTakenModel::instance()->find('functie_id = ? AND maaltijd_id = ? AND verwijderd = 0', [$functie->functie_id, $this->maaltijd_id]);
-			foreach ($taken as $taak) {
-				$gevonden[] = $taak;
-			}
-		}
+		$functie = FunctiesModel::get($functieID);
+        $taken = CorveeTakenModel::instance()->find('functie_id = ? AND maaltijd_id = ? AND verwijderd = 0', [$functie->functie_id, $this->maaltijd_id]);
+        foreach ($taken as $taak) {
+            $gevonden[] = $taak;
+        }
 
 		return $gevonden;
 	}
