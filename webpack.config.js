@@ -11,6 +11,7 @@ let contextPath = path.resolve(__dirname, 'resources/assets');
 
 // De Webpack configuratie.
 module.exports = (env, argv) => ({
+	mode: "development",
 	context: contextPath,
 	entry: {
 		'app': './js/app.js',
@@ -41,8 +42,8 @@ module.exports = (env, argv) => ({
 		// De map waarin alle bestanden geplaatst worden.
 		path: path.resolve(__dirname, 'htdocs/dist'),
 		// Alle javascript bestanden worden in de map js geplaatst.
-		filename: argv.mode === 'development' ? 'js/[name].js' : 'js/[name].[contenthash].js',
-		chunkFilename: argv.mode === 'development' ? 'js/[name].js' : 'js/[id].[contenthash].js',
+		filename: argv.mode !== 'production' ? 'js/[name].js' : 'js/[name].[contenthash].js',
+		chunkFilename: argv.mode !== 'production' ? 'js/[name].js' : 'js/[id].[contenthash].js',
 		publicPath: '/dist/',
 	},
 	devtool: 'source-map',
@@ -62,7 +63,7 @@ module.exports = (env, argv) => ({
 	plugins: [
 		new MiniCssExtractPlugin({
 			// Css bestanden komen in de map css terecht.
-			filename: argv.mode === 'development' ? 'css/[name].css' : 'css/[name].[contenthash].css'
+			filename: argv.mode !== 'production' ? 'css/[name].css' : 'css/[name].[contenthash].css'
 		}),
 		new VueLoaderPlugin(),
 		new ManifestPlugin(),
