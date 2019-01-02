@@ -52,8 +52,8 @@
 			"git pull",
 			"@composer install --no-dev",
 			"@migrate",
-			"@flushcache",
-			"@onderhoud false"
+			"@onderhoud false",
+			"@flushcache"
 		]
 	}
 }
