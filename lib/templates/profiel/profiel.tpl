@@ -123,7 +123,7 @@
 				{if $profiel->beroep!=''}<div class="label">Beroep/werk:</div><div class="data">{$profiel->beroep}</div><br />{/if}
 			{/if}
 		</div>
-		{if is_zichtbaar($profiel, ['kinderen', 'patroon'], 'intern')}
+		{if is_zichtbaar($profiel, ['kinderen'], 'intern') && is_zichtbaar($profiel, ['patroon'], 'profiel')}
 		<div class="col-md-6">
 			{if CsrDelft\model\ProfielModel::get($profiel->patroon) OR $profiel->hasKinderen()}
 				<a class="float-right lichtgrijs fa fa-tree fa-3x" href="/leden/stamboom/{$profiel->uid}" title="Stamboom van {$profiel->getNaam()}"></a>
