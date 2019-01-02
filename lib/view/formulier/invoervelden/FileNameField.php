@@ -9,6 +9,15 @@ namespace CsrDelft\view\formulier\invoervelden;
  */
 class FileNameField extends TextField {
 
+	/**
+	 * Trailing whitespace kan voor problemen zorgen bij het aanmaken van fotoalbums.
+	 *
+	 * @return string
+	 */
+	public function getValue() {
+		return trim(parent::getValue());
+	}
+
 	public function validate() {
 		if (!parent::validate()) {
 			return false;
