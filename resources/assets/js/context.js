@@ -5,7 +5,7 @@ import {modalClose, modalOpen} from './modal';
 import {formCancel, formReset, formSubmit, formToggle} from './formulier';
 
 import {bbCodeSet} from './bbcode-set';
-import {initDeelnamegrafiek} from "./deelnamegrafiek";
+import {initDeelnamegrafiek} from './deelnamegrafiek';
 
 function initButtons(parent) {
     $(parent).find('.spoiler').bind('click.spoiler', function (event) {
@@ -153,7 +153,6 @@ export function domUpdate(htmlString) {
                 $(this).prependTo('#maalcie-tabel tbody:visible:first').show().effect('highlight'); //FIXME: make generic
             }
         }
-        console.log('initcontext', this);
         initContext($(this));
 
         if (id === 'modal') {

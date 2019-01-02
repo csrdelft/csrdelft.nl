@@ -31,6 +31,5 @@ export function initDeelnamegrafiek(parent) {
 				minTickSize: $el.data('step'),
 			}]
 		});
-	})
+	});
 }
-
