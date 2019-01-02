@@ -221,7 +221,7 @@ export class FotoAlbumTags {
 			}
 		});
 		// set focus
-		this.tagFormDiv.find('input').trigger('focus');
+		setTimeout(() => this.tagFormDiv.find('input[name="uid"]').trigger('focus'));
 	}
 
 	moveTagForm() {
