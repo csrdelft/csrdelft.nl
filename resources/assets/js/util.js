@@ -109,3 +109,51 @@ export function route(path, cb) {
 		cb();
 	}
 }
+
+/**
+ * Verwerk een multipliciteit in de vorm van `== 1` of `!= 0` of `> 3` voor de selecties
+ *
+ * @param {string} expression
+ * @param {number} num
+ * @returns {boolean}
+ */
+export function evaluateMultiplicity(expression, num) {
+	// Altijd laten zien bij geen expressie
+	if (expression.length === 0) {
+		return true;
+	}
+
+	let [expressionOperator, expressionAantalString] = expression.split(' ');
+
+	let expressionAantal = parseInt(expressionAantalString);
+
+	let mapOperationToFunction = {
+		'==': (a, b) => a === b,
+		'!=': (a, b) => a !== b,
+		'>=': (a, b) => a >= b,
+		'>': (a, b) => a > b,
+		'<=': (a, b) => a <= b,
+		'<': (a, b) => a < b
+	};
+
+	return mapOperationToFunction[expressionOperator](num, expressionAantal);
+}
+
+export function formatFilesize(data) {
+	let units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+	let i = 0;
+	let size = Number(data);
+	while (size >= 1024) {
+		size /= 1024;
+		++i;
+	}
+	return size.toFixed(1) + ' ' + units[i];
+}
+
+export function formatBedrag(data) {
+	if (data > 0) {
+		return '€' + (data / 100).toFixed(2);
+	} else {
+		return '-€' + (data / -100).toFixed(2);
+	}
+}

@@ -8,18 +8,17 @@ namespace CsrDelft\view\datatable;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 08/03/2018
  *
- * @see resources/assets/js/datatable.js
+ * @see resources/assets/js/datatable/render.js
  */
 class CellRender {
-	const NONE = 'null';
-	const DEFAULT = '$.fn.dataTable.render.default';
-	const CHECK = '$.fn.dataTable.render.check';
-	const BEDRAG = '$.fn.dataTable.render.bedrag';
-	const AANMELD_FILTER = '$.fn.dataTable.render.aanmeldFilter';
-	const AANMELDINGEN = '$.fn.dataTable.render.aanmeldingen';
-	const TOTAAL_PRIJS = '$.fn.dataTable.render.totaalPrijs';
-	const TIMEAGO = '$.fn.dataTable.render.timeago';
-	const FILESIZE = '$.fn.dataTable.render.filesize';
+	const DEFAULT = 'default';
+	const CHECK = 'check';
+	const BEDRAG = 'bedrag';
+	const AANMELD_FILTER = 'aanmeldFilter';
+	const AANMELDINGEN = 'aanmeldingen';
+	const TOTAAL_PRIJS = 'totaalPrijs';
+	const TIMEAGO = 'timeago';
+	const FILESIZE = 'filesize';
 
 	/** @var string */
 	protected $choice;
@@ -36,13 +35,6 @@ class CellRender {
 	 */
 	public function getChoice() {
 		return $this->choice;
-	}
-
-	/**
-	 * @return static
-	 */
-	public static function None() {
-		return new static(self::NONE);
 	}
 
 	/**

@@ -3,10 +3,10 @@ import $ from 'jquery';
 import {modalClose, modalOpen} from './modal';
 import {ajaxRequest} from './ajax';
 import initContext, {domUpdate} from './context';
-import {fnUpdateDataTable} from './datatable-api';
+import {fnUpdateDataTable} from './datatable/api';
 
 import {redirect, reload} from './util';
-import {fnGetSelection} from './datatable-api';
+import {fnGetSelection} from './datatable/api';
 
 export function formIsChanged(form) {
     let changed = false;

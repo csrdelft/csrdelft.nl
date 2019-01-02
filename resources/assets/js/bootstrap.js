@@ -36,7 +36,6 @@ require('jquery.maskedinput');
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
 import {formCancel, formInlineToggle, formSubmit} from './formulier';
 import initContext, {domUpdate} from './context';
-import {fnUpdateDataTable} from './datatable-api';
 import {forumBewerken, saveConceptForumBericht} from './forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';
 import {ketzerAjax} from './ajax';
@@ -73,8 +72,6 @@ $.extend(window, {
         // See view/groepen/leden/GroepTabView.class.php
         domUpdate,
     },
-    // See view/formulier/datatable/DataTable.php
-    fnUpdateDataTable,
     // See templates/maalcie/maaltijd/maaltijd_ketzer.tpl
     ketzerAjax,
     forum: {

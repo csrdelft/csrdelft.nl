@@ -11,6 +11,8 @@ use CsrDelft\view\View;
  * @author P.W.G. Brussee <brussee@live.nl
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
+ * Bouwt een configuratie voor een datatable.
+ *
  * Uses DataTables plug-in for jQuery.
  * @see http://www.datatables.net/
  *
@@ -226,9 +228,9 @@ class DataTable implements View, FormElement {
 				'url' => $this->dataUrl,
 				'type' => 'POST',
 				'data' => array(
-					'lastUpdate' => 'fnGetLastUpdate'
+					'lastUpdate' => '' // Overridden in datatable.js
 				),
-				'dataSrc' => 'fnAjaxUpdateCallback'
+				'dataSrc' => '' // Overriden in datatable.js
 			);
 		}
 
@@ -274,11 +276,6 @@ class DataTable implements View, FormElement {
 
 	public function view() {
 		echo $this->getHtml();
-		echo <<<HTML
-<script type="text/javascript">
-		{$this->getScript()}
-</script>
-HTML;
 	}
 
 	public function getTitel() {
@@ -302,73 +299,15 @@ HTML;
 
 	public function getHtml() {
 		$id = str_replace(' ', '-', strtolower($this->getTitel()));
+		$filter = str_replace("'", "\'", $this->filter);
+
+		$settingsJson = htmlspecialchars(json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0));
 
 		return <<<HTML
 <h2 id="table-{$id}" class="Titel">{$this->getTitel()}</h2>
 
-<table id="{$this->dataTableId}" class="display"></table>
+<table id="{$this->dataTableId}" class="ctx-datatable display" data-filter="{$filter}" data-settings="{$settingsJson}"></table>
 HTML;
-	}
-
-	public function getScript() {
-		// encode settings
-		$settingsJson = json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0);
-
-		// js function calls
-		$settingsJson = str_replace('"fnGetLastUpdate"', 'fnGetLastUpdate', $settingsJson);
-		$settingsJson = str_replace('"fnAjaxUpdateCallback"', 'fnAjaxUpdateCallback', $settingsJson);
-		$settingsJson = preg_replace('/"render":\s?"(.+?)"/', '"render": $1', $settingsJson);
-
-		$filter = str_replace("'", "\'", $this->filter);
-
-		return <<<JS
-			$(document).ready(function () {
-				var tableId = '#{$this->dataTableId}';
-			
-				var fnGetLastUpdate = function () {
-					return Number($(tableId).attr('data-lastupdate'));
-				};
-				var fnSetLastUpdate = function (lastUpdate) {
-					$(tableId).attr('data-lastupdate', lastUpdate);
-				};
-				/**
-				 * Called after ajax load complete.
-				 *
-				 * @param json
-				 * @returns object
-				 */
-				var fnAjaxUpdateCallback = function (json) {
-					fnSetLastUpdate(json.lastUpdate);
-					var table = $(tableId).DataTable();
-
-					if (json.autoUpdate) {
-						var timeout = parseInt(json.autoUpdate);
-						if (!isNaN(timeout) && timeout < 600000) { // max 10 min
-							window.setTimeout(function () {
-								$.post(table.ajax.url(), {
-									'lastUpdate': fnGetLastUpdate()
-								}, function (data) {
-									fnUpdateDataTable(tableId, data);
-									fnAjaxUpdateCallback(data);
-								});
-							}, timeout);
-						}
-					}
-					
-					fnAutoScroll(tableId);
-					
-					return json.data;
-				};
-				// Init DataTable
-				var jtable = $(tableId);
-				var table = jtable.dataTable({$settingsJson});
-				table.api().search('{$filter}');
-				
-				table.on('page', function() {
-				  table.rows({selected: true}).deselect();
-				})
-			});
-JS;
 	}
 
 	public function getJavascript() {

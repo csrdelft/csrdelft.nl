@@ -3,7 +3,7 @@ import './register-vue';
 import './csrdelft';
 import './main-menu';
 import './formulier';
-import './datatable';
+import './datatable/datatable';
 import './grafiek';
 import './forum';
 import './maalcie';
