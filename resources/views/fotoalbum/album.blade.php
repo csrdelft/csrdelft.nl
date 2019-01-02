@@ -18,7 +18,7 @@
 
 @section('content')
 	<div id="contextMenu" class="dropdown-menu" role="menu"></div>
-	<ul id="tagMenu" class="dropdown-menu" role="menu"></ul>
+	<div id="tagMenu" class="dropdown-menu" role="menu"></div>
 	<div class="fotoalbum"
 			 data-fotos="{!! htmlspecialchars(json_encode($album->getAlbumArrayRecursive())) !!}"
 			 data-is-logged-in="{{ \CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN') }}"

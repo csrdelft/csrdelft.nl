@@ -49,7 +49,7 @@ export class FotoAlbumTags {
 			}
 		});
 
-		const btnDelTag = $('<a id="btnDelTag" tabindex="-1"><span class="fa fa-user-times"></span> &nbsp; Etiket verwijderen</a>');
+		const btnDelTag = '<a id="btnDelTag" class="dropdown-item" tabindex="-1"><span class="fa fa-user-times"></span> &nbsp; Etiket verwijderen</a>';
 		$('<li></li>').append(btnDelTag).appendTo('#tagMenu');
 
 		// knopje taggen
