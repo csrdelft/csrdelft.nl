@@ -5,6 +5,7 @@ import {modalClose, modalOpen} from './modal';
 import {formCancel, formReset, formSubmit, formToggle} from './formulier';
 
 import {bbCodeSet} from './bbcode-set';
+import {initDeelnamegrafiek} from "./deelnamegrafiek";
 
 function initButtons(parent) {
     $(parent).find('.spoiler').bind('click.spoiler', function (event) {
@@ -119,6 +120,7 @@ export default function initContext(parent) {
     initLazyImages(parent);
     radioButtonGroep(parent);
     initVue(parent);
+    initDeelnamegrafiek(parent);
 }
 
 export function domUpdate(htmlString) {
@@ -151,6 +153,7 @@ export function domUpdate(htmlString) {
                 $(this).prependTo('#maalcie-tabel tbody:visible:first').show().effect('highlight'); //FIXME: make generic
             }
         }
+        console.log('initcontext', this);
         initContext($(this));
 
         if (id === 'modal') {

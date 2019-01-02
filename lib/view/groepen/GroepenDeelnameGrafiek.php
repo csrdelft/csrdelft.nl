@@ -65,43 +65,15 @@ class GroepenDeelnameGrafiek implements View {
 	}
 
 	public function view() {
-		?>
-		<div id="deelnamegrafiek" style="height: 360px;">
-			<script type="text/javascript">
-				$(document).ready(function () {
-					var series = [{
-						data: <?= json_encode($this->series[1]); ?>,
-						label: "",
-						color: "#FFCBDB"
-					}, {
-						data: <?= json_encode($this->series[0]); ?>,
-						label: "",
-						color: "#AFD8F8"
-					}
-					];
-					var options = {
-						series: {
-							bars: {
-								show: true,
-								lineWidth: 20
-							},
-							stack: true
-						}, yaxis: {
-							tickDecimals: 0
-						},
-						xaxis: {
-							autoscaleMargin: .01
-						},
-						xaxes: [{
-							mode: "time",
-							minTickSize: <?= json_encode($this->step); ?>
-						}]
-					};
-					$.plot("#deelnamegrafiek", series, options);
-				});
-			</script>
-		</div>
-		<?php
+		$series1 = htmlspecialchars(json_encode($this->series[1]));
+		$series0 = htmlspecialchars(json_encode($this->series[0]));
+		$step = htmlspecialchars(json_encode($this->step));
+
+		echo <<<HTML
+<div id="deelnamegrafiek">
+	<div class="ctx-deelnamegrafiek" style="height: 360px;" data-series-1="{$series1}" data-series-0="{$series0}" data-step="{$step}"></div>
+</div>
+HTML;
 	}
 
 }
