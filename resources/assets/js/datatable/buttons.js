@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 import {knopPost} from '../knop';
-import {evaluateMultiplicity} from "../util";
+import {evaluateMultiplicity} from '../util';
 
 // Zet de icons van de default buttons
 $.fn.dataTable.ext.buttons.copyHtml5.className += ' dt-button-ico dt-ico-page_white_copy';

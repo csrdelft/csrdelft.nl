@@ -25,6 +25,8 @@ import 'datatables.net-select';
 import '../lib/dataTables.childRow';
 import '../lib/dataTables.columnGroup';
 
+import './buttons';
+
 // Excel button in datatables.net-buttons/js/buttons.html5 checkt voor JSZip in window.
 window.JSZip = JSZip;
 
