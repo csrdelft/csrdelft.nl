@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 export function initDeelnamegrafiek(parent) {
-	parent.find('.ctx-deelnamegrafiek').each((i, el) => {
+	$(parent).find('.ctx-deelnamegrafiek').each((i, el) => {
 		let $el = $(el);
 		$.plot($el, [
 			{
