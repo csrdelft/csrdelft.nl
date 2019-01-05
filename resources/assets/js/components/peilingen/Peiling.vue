@@ -60,7 +60,7 @@
 	import PeilingOptieToevoegen from './PeilingOptieToevoegen';
 	import PeilingOptie from './PeilingOptie';
 	import Icon from '../common/Icon';
-
+	import {AXIOS_LOCAL_CSRF_CONF} from '../../ajax-csrf'
 	export default {
 		name: 'Peiling',
 		components: {Icon, PeilingOptie, PeilingOptieToevoegen},
@@ -135,7 +135,9 @@
 				axios
 					.post(`/peilingen/stem/${this.id}`, {
 						opties: this.selected.map((o) => o.id)
-					})
+					},
+						AXIOS_LOCAL_CSRF_CONF
+					)
 					.then(() => {
 						this.dataHeeftGestemd = true; // To data
 						this.dataAantalStemmen = this.dataAantalStemmen + this.selected.length;
@@ -144,7 +146,7 @@
 			},
 			reload() {
 				axios
-					.post(`/peilingen/opties/${this.id}`)
+					.post(`/peilingen/opties/${this.id}`, null, AXIOS_LOCAL_CSRF_CONF)
 					.then((response) => {
 						this.alleOpties = response.data.data;
 					});

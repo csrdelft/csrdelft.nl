@@ -1288,6 +1288,9 @@ src="https://www.google.com/maps/embed/v1/place?q=' . urlencode($address) . '&ke
 		}
 		try {
 			$peiling = PeilingenModel::instance()->getPeilingById((int)$peiling_id);
+			if ($peiling === false) {
+				throw new CsrException("Peiling bestaat niet");
+			}
 			if ($this->light_mode) {
 				$url = '#/peiling/' . urlencode($peiling_id);
 				return $this->lightLinkBlock('peiling', $url, $peiling->titel, $peiling->beschrijving);
