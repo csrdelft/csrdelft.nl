@@ -41,7 +41,7 @@
 			</div>
 		</div>
 
-		<div v-if="!dataHeeftGestemd" class="card-footer footer">
+		<div v-if="!dataHeeftGestemd && magStemmen" class="card-footer footer">
 			<div>{{strKeuzes}}</div>
 			<PeilingOptieToevoegen v-if="aantalVoorstellen > 0"></PeilingOptieToevoegen>
 
@@ -75,6 +75,7 @@
 			rechtenStemmen: String,
 			isMod: Boolean,
 			heeftGestemd: Boolean,
+			magStemmen: Boolean,
 			opties: {
 				type: Array,
 				default: () => []

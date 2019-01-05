@@ -8,6 +8,7 @@
 	:aantal-keuzes="{{ $peiling->aantal_stemmen }}"
 	:aantal-stemmen="{{ $peiling->getStemmenAantal() }}"
 	:rechten-stemmen="'{{ $peiling->rechten_stemmen }}'"
+	:mag-stemmen="{{json_encode($peiling->magStemmen())}}"
 	:is-mod="{{ json_encode($peiling->isMod()) }}"
 	:heeft-gestemd="{{ json_encode($peiling->heeftGestemd(\CsrDelft\model\security\LoginModel::getUid()))  }}"
 	:opties="{!! htmlspecialchars(json_encode($opties)) !!}">

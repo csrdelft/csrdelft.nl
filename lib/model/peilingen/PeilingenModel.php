@@ -71,7 +71,7 @@ class PeilingenModel extends PersistenceModel {
 	 */
 	public function stem($peiling_id, $optie_id) {
 		$peiling = $this->getPeilingById((int)$peiling_id);
-		if ($peiling->magStemmen()) {
+		if ($peiling->magStemmen() && !$peiling->heeftGestemd(LoginModel::getUid())) {
 			$optie = PeilingOptiesModel::instance()->find('peiling_id = ? AND id = ?', array($peiling_id, $optie_id))->fetch();
 			$optie->stemmen += 1;
 
@@ -154,9 +154,5 @@ class PeilingenModel extends PersistenceModel {
 	 */
 	public function getLijst() {
 		return $this->find(null, array(), null, 'id DESC');
-	}
-
-	public function magStemmen(Peiling $peiling) {
-		return LoginModel::mag('P_PEILING_VOTE') && ($peiling->eigenaar == LoginModel::getUid() || empty(trim($peiling->rechten_stemmen)) || LoginModel::mag($peiling->rechten_stemmen));
 	}
 }

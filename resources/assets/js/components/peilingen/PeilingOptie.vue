@@ -1,5 +1,5 @@
 <template>
-	<div v-if="heeftGestemd"
+	<div v-if="!kanStemmen"
 			 class="row">
 		<div class="col-md-4">{{titel}}</div>
 		<div class="col-md-6">
@@ -52,8 +52,8 @@
 			this.dataSelected = this.selected;
 		},
 		computed: {
-			heeftGestemd() {
-				return this.$parent.dataHeeftGestemd;
+			kanStemmen() {
+				return this.$parent.magStemmen && !this.$parent.dataHeeftGestemd;
 			},
 			totaalStemmen() {
 				return this.$parent.dataAantalStemmen;

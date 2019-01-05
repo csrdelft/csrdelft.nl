@@ -54,11 +54,9 @@ class Peiling extends PersistentEntity {
 	}
 
 	public function magStemmen() {
-		if (!LoginModel::mag('P_LOGGED_IN')) {
-			return false;
-		}
-		return !$this->heeftGestemd(LoginModel::getUid());
+		return LoginModel::mag('P_PEILING_VOTE') && ($this->eigenaar == LoginModel::getUid() || empty(trim($this->rechten_stemmen)) || LoginModel::mag($this->rechten_stemmen));
 	}
+
 
 	public function heeftGestemd($uid) {
 		return PeilingStemmenModel::instance()->heeftGestemd($this->id, $uid);
