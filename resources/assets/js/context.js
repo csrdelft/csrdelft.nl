@@ -6,6 +6,8 @@ import {formCancel, formReset, formSubmit, formToggle} from './formulier';
 
 import {bbCodeSet} from './bbcode-set';
 import {initDeelnamegrafiek} from './deelnamegrafiek';
+import {fnAjaxUpdateCallback, fnGetLastUpdate} from './datatable/datatable';
+import render from './datatable/render';
 
 function initButtons(parent) {
     $(parent).find('.spoiler').bind('click.spoiler', function (event) {
@@ -110,6 +112,33 @@ function initVue(parent) {
 	});
 }
 
+function initDataTable(parent) {
+
+	$(parent).find('.ctx-datatable').each((i, el) => {
+		let $el = $(el);
+
+		let settingsJson = $el.data('settings');
+		let filter = $el.data('filter');
+
+		// Zet de callback voor ajax
+		if (settingsJson.ajax) {
+			settingsJson.ajax.data.lastUpdate = fnGetLastUpdate($el);
+			settingsJson.ajax.dataSrc = fnAjaxUpdateCallback($el);
+		}
+
+		// Zet de render method op de columns
+		settingsJson.columns.forEach((col) => col.render = render[col.render]);
+
+		// Init DataTable
+		const table = $el.dataTable(settingsJson);
+		table.api().search(filter);
+
+		table.on('page', () => table.rows({selected: true}).deselect());
+
+		table.on('childRow.dt', (event, data) => initContext(data.container));
+	});
+}
+
 export default function initContext(parent) {
     initButtons(parent);
     initForms(parent);
@@ -121,6 +150,7 @@ export default function initContext(parent) {
     radioButtonGroep(parent);
     initVue(parent);
     initDeelnamegrafiek(parent);
+    initDataTable(parent);
 }
 
 export function domUpdate(htmlString) {

@@ -2,7 +2,6 @@ import $ from 'jquery';
 import JSZip from 'jszip';
 
 import {fnUpdateDataTable} from './api';
-import render from './render';
 import defaults from './defaults';
 
 /**
@@ -52,8 +51,8 @@ const fnAutoScroll = $table => {
 	}
 };
 
-const fnGetLastUpdate = $table => () => Number($table.data('lastupdate'));
-const fnSetLastUpdate = $table => lastUpdate => $table.data('lastupdate', lastUpdate);
+export const fnGetLastUpdate = $table => () => Number($table.data('lastupdate'));
+export const fnSetLastUpdate = $table => lastUpdate => $table.data('lastupdate', lastUpdate);
 
 /**
  * Called after ajax load complete.
@@ -61,7 +60,7 @@ const fnSetLastUpdate = $table => lastUpdate => $table.data('lastupdate', lastUp
  * @returns object
  * @param {jQuery} $table
  */
-const fnAjaxUpdateCallback = $table => json => {
+export const fnAjaxUpdateCallback = $table => json => {
 	fnSetLastUpdate(json.lastUpdate);
 	const tableConfig = $table.DataTable();
 
@@ -88,27 +87,5 @@ $(() => {
 	$('body').on('click', () => {
 		// Verwijder tooltips als de datatable modal wordt gesloten
 		$('.ui-tooltip-content').parents('div').remove();
-	});
-
-	$('.ctx-datatable').each((i, el) => {
-		let $el = $(el);
-
-		let settingsJson = $el.data('settings');
-		let filter = $el.data('filter');
-
-		// Zet de callback voor ajax
-		if (settingsJson.ajax) {
-			settingsJson.ajax.data.lastUpdate = fnGetLastUpdate($el);
-			settingsJson.ajax.dataSrc = fnAjaxUpdateCallback($el);
-		}
-
-		// Zet de render method op de columns
-		settingsJson.columns.forEach((col) => col.render = render[col.render]);
-
-		// Init DataTable
-		const table = $el.dataTable(settingsJson);
-		table.api().search(filter);
-
-		table.on('page', () => table.rows({selected: true}).deselect());
 	});
 });

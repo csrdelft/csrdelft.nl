@@ -107,6 +107,7 @@
 					if (row.child.isShown()) {
 						tr.removeClass('loading');
 						innerDiv.html(data).slideDown();
+						$(table.node()).trigger('childRow.dt', {container:  innerDiv})
 					}
 				});
 				jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
