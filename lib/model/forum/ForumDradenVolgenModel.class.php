@@ -5,6 +5,7 @@ namespace CsrDelft\model\forum;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadVolgen;
+use CsrDelft\model\entity\forum\ForumDraadVolgenNiveau;
 use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\ProfielModel;
@@ -35,7 +36,7 @@ class ForumDradenVolgenModel extends CachedPersistenceModel {
 	}
 
 	public function getVolgersVanDraad(ForumDraad $draad) {
-		return $this->prefetch('draad_id = ?', array($draad->draad_id));
+		return $this->prefetch('draad_id = ? AND niveau = ?', array($draad->draad_id, ForumDraadVolgenNiveau::altijd));
 	}
 
 	public function getVolgenVoorLid(ForumDraad $draad) {

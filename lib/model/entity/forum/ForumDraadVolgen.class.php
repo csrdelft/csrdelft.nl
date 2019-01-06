@@ -28,13 +28,19 @@ class ForumDraadVolgen extends PersistentEntity {
 	 * @var string
 	 */
 	public $uid;
+    /**
+     * Volgniveau
+     * @var string
+     */
+	public $niveau = 'altijd';
 	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'draad_id' => array(T::Integer),
-		'uid' => array(T::UID)
+		'uid' => array(T::UID),
+        'niveau' => array(T::Enumeration, false, ForumDraadVolgenNiveau::class)
 	);
 	/**
 	 * Database primary key
