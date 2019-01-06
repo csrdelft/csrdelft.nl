@@ -31,6 +31,7 @@
 					</li>
 				</ul>
 				<b-pagination
+					v-if="optiesFiltered.length > paginaSize"
 					size="md"
 					align="center"
 					v-model="huidigePagina"
@@ -87,7 +88,7 @@
 			dataAantalStemmen: 0,
 			zoekterm: '',
 			huidigePagina: 1,
-			paginaSize: 5,
+			paginaSize: 10,
 		}),
 		created() {
 			// Sla opties op in een data attribuut, deze wordt niet van boven veranderd,
@@ -165,5 +166,10 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
+	}
+
+	.pagination {
+		margin-top: 1.25rem;
+		margin-bottom: 0;
 	}
 </style>
