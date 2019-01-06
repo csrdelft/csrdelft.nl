@@ -750,25 +750,7 @@ class ForumController extends Controller {
 
 			// direct goedkeuren voor ingelogd
 			ForumPostsModel::instance()->goedkeurenForumPost($post);
-			$self = LoginModel::getUid();
-			/**
-			 * @var \CsrDelft\model\entity\profiel\Profiel $auteurProfiel
-			 */
-			$auteurProfiel = ProfielModel::get($post->uid);
-			$auteur = $auteurProfiel->getNaam('civitas');
-			foreach ($draad->getVolgers() as $volger) {
-				$profiel = ProfielModel::get($volger->uid);
-				if ($volger->uid === $self OR !$profiel) {
-					continue;
-				}
-				$lidnaam = $profiel->getNaam('civitas');
-				$bericht =
-					"Geachte " . $lidnaam . ",\n\nEr is een nieuwe reactie geplaatst door " . $auteur . " in een draad dat u volgt: " .
-					"[url=" . CSR_ROOT . "/forum/reactie/" . $post->post_id . "#" . $post->post_id . "]" . $draad->titel . "[/url]" .
-					"\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT";
-				$mail = new Mail(array($profiel->getPrimaryEmail() => $lidnaam), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
-				$mail->send();
-			}
+			ForumDradenVolgenModel::instance()->stuurMeldingenNaarVolgers($post);
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 
 			$url = '/forum/reactie/' . $post->post_id . '#' . $post->post_id;

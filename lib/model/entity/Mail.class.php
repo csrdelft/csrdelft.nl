@@ -28,6 +28,7 @@ class Mail {
 	private $charset = 'UTF-8';
 	private $layout = 'letter';
 	private $placeholders = array();
+	private $lightBB = false;
 
 	public function __construct(array $to, $onderwerp, $bericht) {
 		$this->onderwerp = $onderwerp;
@@ -42,6 +43,10 @@ class Mail {
 	public function setLayout($template) {
 		$this->layout = $template;
 	}
+
+	public function setLightBB($lightBB = true) {
+	    $this->lightBB = $lightBB;
+    }
 
 	public function getFrom($email_only = false) {
 		$name = reset($this->from);
@@ -187,7 +192,7 @@ class Mail {
 			$body = str_replace($key, $value, $body);
 		}
 		if ($this->type === 'html') {
-			$body = CsrBB::parseMail($body);
+			$body = CsrBB::parseMail($body, $this->lightBB);
 		}
 		return $body;
 	}

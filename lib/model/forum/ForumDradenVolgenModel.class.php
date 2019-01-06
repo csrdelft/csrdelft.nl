@@ -5,6 +5,9 @@ namespace CsrDelft\model\forum;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadVolgen;
+use CsrDelft\model\entity\forum\ForumPost;
+use CsrDelft\model\entity\Mail;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 
@@ -64,4 +67,37 @@ class ForumDradenVolgenModel extends CachedPersistenceModel {
 		}
 	}
 
+    /**
+     * Stuurt meldingen van nieuw bericht naar volgers van draadje
+     *
+     * @param ForumPost $post
+     */
+	public function stuurMeldingenNaarVolgers(ForumPost $post) {
+        $auteur = ProfielModel::get($post->uid);
+        $draad = $post->getForumDraad();
+
+        // Laad meldingsbericht in
+        $bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/forumvolgendmelding.mail');
+	    foreach ($draad->getVolgers() as $volger) {
+            $volger = ProfielModel::get($volger->uid);
+            if ($volger->uid === $post->uid OR !$volger) {
+                continue;
+            }
+
+            $volgerNaam = $volger->getNaam('civitas');
+
+			$values = array(
+				'NAAM' => $volgerNaam,
+                'AUTEUR' => $auteur->getNaam('civitas'),
+                'POSTLINK' => $post->getLink(true),
+                'TITEL' => $draad->titel,
+                'TEKST' => str_replace('\r\n', "\n", $post->tekst),
+			);
+
+            $mail = new Mail(array($volger->getPrimaryEmail() => $volgerNaam), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
+            $mail->setPlaceholders($values);
+            $mail->setLightBB();
+            $mail->send();
+        }
+    }
 }
