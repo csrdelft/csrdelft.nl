@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import axios from 'axios';
 
 function getCsrfToken() {
     return {
@@ -15,6 +16,10 @@ $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
     }
 });
 
-export const AXIOS_LOCAL_CSRF_CONF = {
-    headers: getCsrfToken()
-};
+axios.interceptors.request.use((config) => ({
+	...config,
+	headers: {
+		...config.headers,
+		...getCsrfToken(),
+	}
+}));
