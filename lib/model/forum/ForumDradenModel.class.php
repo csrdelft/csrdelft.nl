@@ -87,9 +87,9 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	private $forumDradenVerbergenModel;
 
 	/**
-	 * @var ForumDradenVolgenModel
+	 * @var ForumDradenMeldingModel
 	 */
-	private $forumDradenVolgenModel;
+	private $forumDradenMeldingModel;
 
 	/**
 	 * @var ForumPostsModel
@@ -113,7 +113,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		ForumDradenGelezenModel $forumDradenGelezenModel,
 		ForumDradenReagerenModel $forumDradenReagerenModel,
 		ForumDradenVerbergenModel $forumDradenVerbergenModel,
-		ForumDradenVolgenModel $forumDradenVolgenModel,
+		ForumDradenMeldingModel $forumDradenMeldingModel,
 		ForumPostsModel $forumPostsModel
 	) {
 		parent::__construct();
@@ -125,7 +125,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
 		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
 		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
-		$this->forumDradenVolgenModel = $forumDradenVolgenModel;
+		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
 		$this->forumPostsModel = $forumPostsModel;
 	}
 
@@ -339,9 +339,9 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		if ($property === 'belangrijk') {
 			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
 		} elseif ($property === 'gesloten') {
-			$this->forumDradenVolgenModel->stopVolgenVoorIedereen($draad);
+			$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draad);
 		} elseif ($property === 'verwijderd') {
-			$this->forumDradenVolgenModel->stopVolgenVoorIedereen($draad);
+			$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draad);
 			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
 			$this->forumDradenGelezenModel->verwijderDraadGelezen($draad);
 			$this->forumDradenReagerenModel->verwijderReagerenVoorDraad($draad);

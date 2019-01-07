@@ -45,8 +45,8 @@ class Mail {
 	}
 
 	public function setLightBB($lightBB = true) {
-	    $this->lightBB = $lightBB;
-    }
+		$this->lightBB = $lightBB;
+	}
 
 	public function getFrom($email_only = false) {
 		$name = reset($this->from);

@@ -8,17 +8,15 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\DebugLogModel;
-use CsrDelft\model\entity\Mail;
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenGelezenModel;
+use CsrDelft\model\forum\ForumDradenMeldingModel;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumDradenReagerenModel;
 use CsrDelft\model\forum\ForumDradenVerbergenModel;
-use CsrDelft\model\forum\ForumDradenVolgenModel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\LidInstellingenModel;
-use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\FlotTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
@@ -68,7 +66,7 @@ class ForumController extends Controller {
 			// ForumDeel
 			case 'aanmaken':
 			case 'beheren':
-			/** @noinspection PhpMissingBreakStatementInspection */
+				/** @noinspection PhpMissingBreakStatementInspection */
 			case 'opheffen':
 				if (!LoginModel::mag('P_FORUM_ADMIN')) {
 					return false;
@@ -79,7 +77,7 @@ class ForumController extends Controller {
 			case 'citeren':
 			case 'bladwijzer':
 			case 'concept':
-			/** @noinspection PhpMissingBreakStatementInspection */
+				/** @noinspection PhpMissingBreakStatementInspection */
 			case 'grafiekdata':
 				if (!LoginModel::mag('P_LOGGED_IN')) {
 					return false;
@@ -98,9 +96,6 @@ class ForumController extends Controller {
 			case 'verbergen':
 			case 'tonen':
 			case 'toonalles':
-			case 'volgenaan':
-			case 'volgenuit':
-			case 'volgniets':
 				return $this->getMethod() == 'POST';
 
 			default:
@@ -531,55 +526,6 @@ class ForumController extends Controller {
 	}
 
 	/**
-	 * Forum draad volgen per email.
-	 *
-	 * @param int $draad_id
-	 *
-	 * @return View
-	 * @throws CsrGebruikerException
-	 * @throws CsrException
-	 */
-	public function volgenaan(int $draad_id) {
-		$draad = ForumDradenModel::get($draad_id);
-		if (!$draad->magVolgen()) {
-			throw new CsrGebruikerException('Onderwerp mag niet gevolgd worden');
-		}
-		if ($draad->isGevolgd()) {
-			throw new CsrGebruikerException('Onderwerp wordt al gevolgd');
-		}
-		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad);
-		return new JsonResponse(true);
-	}
-
-	/**
-	 * Forum draad niet meer volgen.
-	 *
-	 * @param int $draad_id
-	 *
-	 * @return JsonResponse
-	 * @throws CsrGebruikerException
-	 * @throws CsrException
-	 */
-	public function volgenuit(int $draad_id) {
-		$draad = ForumDradenModel::get($draad_id);
-		if (!$draad->isGevolgd()) {
-			throw new CsrGebruikerException('Onderwerp wordt niet gevolgd');
-		}
-		ForumDradenVolgenModel::instance()->setVolgenVoorLid($draad, false);
-		return new JsonResponse(true);
-	}
-
-	/**
-	 * Forum draden die gevolgd worden door lid niet meer volgen.
-	 */
-	public function volgniets() {
-		$aantal = ForumDradenVolgenModel::instance()->getAantalVolgenVoorLid();
-		ForumDradenVolgenModel::instance()->volgNietsVoorLid(LoginModel::getUid());
-		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' niet meer gevolgd', 1);
-		return new JsonResponse(true);
-	}
-
-	/**
 	 * Leg bladwijzer
 	 *
 	 * @param int $draad_id
@@ -750,7 +696,7 @@ class ForumController extends Controller {
 
 			// direct goedkeuren voor ingelogd
 			ForumPostsModel::instance()->goedkeurenForumPost($post);
-			ForumDradenVolgenModel::instance()->stuurMeldingenNaarVolgers($post);
+			ForumDradenMeldingModel::instance()->stuurMeldingen($post);
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 
 			$url = '/forum/reactie/' . $post->post_id . '#' . $post->post_id;

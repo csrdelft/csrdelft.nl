@@ -5,7 +5,7 @@ namespace CsrDelft\model\entity\forum;
 use CsrDelft\common\CsrException;
 use CsrDelft\Orm\Entity\PersistentEnum;
 
-class ForumDraadVolgenNiveau extends PersistentEnum {
+class ForumDraadMeldingNiveau extends PersistentEnum {
 
 	const nooit = 'nooit';
 	const vermelding = 'vermelding';
