@@ -33,6 +33,18 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 		return $this->prefetch('draad_id = ? AND niveau = ?', array($draad->draad_id, ForumDraadMeldingNiveau::altijd));
 	}
 
+	public function getVoorkeursNiveauVoorLid(ForumDraad $draad, $uid = null) {
+		if ($uid === null) $uid = LoginModel::getUid();
+
+		/** @var ForumDraadMelding $voorkeur */
+		$voorkeur = $this->retrieveByPrimaryKey(array($draad->draad_id, $uid));
+		if ($voorkeur) {
+			return $voorkeur->niveau;
+		} else {
+			return false;
+		}
+	}
+
 	public function getNiveauVoorLid(ForumDraad $draad, $uid = null) {
 		if ($uid === null) $uid = LoginModel::getUid();
 
@@ -54,7 +66,7 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 			$voorkeur->niveau = $niveau;
 			$this->update($voorkeur);
 		} else {
-			$this->maakForumDraadMelding($draad, $uid, $niveau);
+			$this->maakForumDraadMelding($draad->draad_id, $uid, $niveau);
 		}
 	}
 

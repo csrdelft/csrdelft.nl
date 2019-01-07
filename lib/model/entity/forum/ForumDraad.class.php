@@ -202,6 +202,10 @@ class ForumDraad extends PersistentEntity {
 		return !$this->belangrijk AND LoginModel::mag('P_LOGGED_IN');
 	}
 
+	public function magMeldingKrijgen() {
+		return $this->magLezen();
+	}
+
 	public function isVerborgen() {
 		if (!isset($this->verbergen)) {
 			$this->verbergen = ForumDradenVerbergenModel::instance()->getVerbergenVoorLid($this);

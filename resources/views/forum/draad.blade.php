@@ -25,6 +25,17 @@
 				<a title="Onderwerp toevoegen aan favorieten" class="btn btn-light post popup addfav"
 					 href="/menubeheer/toevoegen/favoriet">@icon('heart', 'heart_add')</a>
 				&nbsp;&nbsp;&nbsp;
+				@if($draad->magMeldingKrijgen())
+					<div class="btn-group">
+						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/nooit" class="btn btn-light post ReloadPage melding-nooit @if($meldingsniveau == 'nooit') active @endif"
+							 title="Nooit meldingen ontvangen">@icon('email_delete', 'email_delete')</a>
+						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/vermelding" class="btn btn-light post ReloadPage melding-vermelding @if($meldingsniveau == 'vermelding') active @endif"
+							 title="Melding ontvangen als ik genoemd word">@icon('email_error', 'email_error')</a>
+						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/altijd" class="btn btn-light post ReloadPage melding-altijd @if($meldingsniveau == 'altijd') active @endif"
+							 title="Melding ontvangen bij elk nieuw bericht">@icon('email_add', 'email_add')</a>
+					</div>
+				@endif
+				&nbsp;&nbsp;&nbsp;
 				@if($draad->isVerborgen())
 					<a href="/forum/tonen/{{$draad->draad_id}}" class="btn btn-light post ReloadPage tonenAan"
 						 title="Onderwerp tonen in zijbalk">@icon('layout', 'layout_add')</a>

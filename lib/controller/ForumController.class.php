@@ -8,6 +8,7 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\DebugLogModel;
+use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenGelezenModel;
 use CsrDelft\model\forum\ForumDradenMeldingModel;
@@ -90,8 +91,9 @@ class ForumController extends Controller {
 			case 'verplaatsen':
 			case 'offtopic':
 			case 'goedkeuren':
+			case 'meldingsniveau':
 
-				// ForumPost
+			// ForumPost
 			case 'tekst':
 			case 'verbergen':
 			case 'tonen':
@@ -391,6 +393,7 @@ class ForumController extends Controller {
 			'statistiek' => $statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
 			'draad_ongelezen' => $gelezen ? $draad->isOngelezen() : true,
 			'gelezen_moment' => $gelezen ? strtotime($gelezen->datum_tijd) : false,
+			'meldingsniveau' => $draad->magMeldingKrijgen() ? ForumDradenMeldingModel::instance()->getVoorkeursNiveauVoorLid($draad) : '',
 		]);
 
 		if (LoginModel::mag('P_LOGGED_IN')) {
@@ -522,6 +525,28 @@ class ForumController extends Controller {
 		$aantal = ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid();
 		ForumDradenVerbergenModel::instance()->toonAllesVoorLid(LoginModel::getUid());
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
+		return new JsonResponse(true);
+	}
+
+	/**
+	 * Niveau voor meldingen instellen.
+	 *
+	 * @param int $draad_id
+	 * @param string $niveau
+	 *
+	 * @return View
+	 * @throws CsrGebruikerException
+	 * @throws CsrException
+	 */
+	public function meldingsniveau(int $draad_id, $niveau) {
+		$draad = ForumDradenModel::get($draad_id);
+		if (!$draad || !$draad->magLezen() || !$draad->magMeldingKrijgen()) {
+			throw new CsrToegangException('Onderwerp mag geen melding voor ontvangen worden');
+		}
+		if (!ForumDraadMeldingNiveau::isOptie($niveau)) {
+			throw new CsrToegangException('Ongeldig meldingsniveau gespecificeerd');
+		}
+		ForumDradenMeldingModel::instance()->setNiveauVoorLid($draad, $niveau);
 		return new JsonResponse(true);
 	}
 

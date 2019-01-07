@@ -41,4 +41,8 @@ class ForumDraadMeldingNiveau extends PersistentEnum {
 			throw new CsrException('BoekExemplaarStatus onbekend');
 		}
 	}
+
+	public static function isOptie($optie) {
+		return isset(static::$supportedChoices[$optie]);
+	}
 }
