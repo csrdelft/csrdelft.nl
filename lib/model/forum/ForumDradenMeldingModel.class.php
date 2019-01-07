@@ -176,6 +176,16 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 				continue;
 			}
 
+			// Controleer of lid bij draad mag, stel hiervoor tijdelijk de ingelogde gebruiker in op gegeven lid
+			$curUid = $_SESSION['_uid'];
+			$_SESSION['_uid'] = $genoemde->uid;
+			$magMeldingKrijgen = $draad->magMeldingKrijgen();
+			$_SESSION['_uid'] = $curUid;
+
+			if (!$magMeldingKrijgen) {
+				continue;
+			}
+
 			$this->stuurMelding($genoemde, $auteur, $post, $draad, $bericht);
 		}
 	}
