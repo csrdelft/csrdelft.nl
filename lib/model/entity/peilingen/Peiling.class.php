@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity\peilingen;
 
-use CsrDelft\model\ComputedAttribute;
+use CsrDelft\model\ComputedAttributeTrait;
 use CsrDelft\model\peilingen\PeilingOptiesModel;
 use CsrDelft\model\peilingen\PeilingStemmenModel;
 use CsrDelft\model\security\LoginModel;
@@ -16,7 +16,7 @@ use CsrDelft\Orm\Entity\T;
  * @property PeilingOptie[] opties
  */
 class Peiling extends PersistentEntity {
-	use ComputedAttribute;
+	use ComputedAttributeTrait;
 
 	public $id;
 	public $titel;

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity\peilingen;
 
-use CsrDelft\model\HasForeignKeys;
+use CsrDelft\model\ForeignKeysTrait;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -10,7 +10,7 @@ use CsrDelft\Orm\Entity\T;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class PeilingOptie extends PersistentEntity {
-	use HasForeignKeys;
+	use ForeignKeysTrait;
 	/**
 	 * Primary key
 	 * @var int

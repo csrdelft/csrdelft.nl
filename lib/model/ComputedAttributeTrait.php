@@ -8,9 +8,9 @@ use CsrDelft\Orm\PersistenceModel;
 /**
  * Maak het mogelijk om berekende attributen te definieren. Op deze manier kun je logica achter een attribuut hangen.
  *
- * @package CsrDelft\model
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-trait ComputedAttribute {
+trait ComputedAttributeTrait {
 	/** @var array cache voor deze request */
 	private static $computed_attribute_cache = [];
 
@@ -67,10 +67,10 @@ trait ComputedAttribute {
 		/** @var PersistenceModel $foreignModel */
 		$foreignEntityClass = $foreignModel::ORM;
 
-		if (!isset(class_uses($foreignEntityClass)[HasForeignKeys::class])) throw new CsrException('ForeignKey in computed attribute verwijst niet naar entity met foreign keys: ' . $foreignEntityClass);
+		if (!isset(class_uses($foreignEntityClass)[ForeignKeysTrait::class])) throw new CsrException('ForeignKey in computed attribute verwijst niet naar entity met foreign keys: ' . $foreignEntityClass);
 
-		/** @var HasForeignKeys $foreignEntityClass */
-		$foreignKey = array_search(static::class, $foreignEntityClass::getForeignKeys());
+		/** @var ForeignKeysTrait $foreignEntityClass */
+		$foreignKey = $foreignEntityClass::getForeignKey(static::class);
 		$primaryKey = $this->getPrimaryKey();
 
 		if (count($primaryKey) !== 1) throw new CsrException('Kan geen foreign key van model met multi-column key opzoeken: ' . $foreignEntityClass);
