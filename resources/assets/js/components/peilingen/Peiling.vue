@@ -9,7 +9,7 @@
 			<p class="card-text pt-2" v-html="beschrijving"></p>
 		</div>
 		<div>
-			<div v-if="dataHeeftGestemd && !resultaatZichtbaar">
+			<div v-if="heeftGestemd && !resultaatZichtbaar">
 				<div class="card-body">Bedankt voor het stemmen!</div>
 			</div>
 			<div v-else class="card-body">
@@ -26,8 +26,11 @@
 							:titel="optie.titel"
 							:beschrijving="optie.beschrijving"
 							:stemmen="optie.stemmen"
-							:selected="optie.selected"
-							:ingebrachtDoor="optie.ingebracht_door"></PeilingOptie>
+							:magStemmen="magStemmen"
+							:heeftGestemd="heeftGestemd"
+							:aantalGestemd="aantalGestemd"
+							:keuzesOver="keuzesOver"
+							:selected="optie.selected"></PeilingOptie>
 					</li>
 				</ul>
 				<b-pagination
@@ -42,7 +45,7 @@
 			</div>
 		</div>
 
-		<div v-if="!dataHeeftGestemd && magStemmen" class="card-footer footer">
+		<div v-if="!heeftGestemd && magStemmen" class="card-footer footer">
 			<div>{{strKeuzes}}</div>
 			<PeilingOptieToevoegen v-if="aantalVoorstellen > 0"></PeilingOptieToevoegen>
 
@@ -61,56 +64,56 @@
 	import PeilingOptieToevoegen from './PeilingOptieToevoegen';
 	import PeilingOptie from './PeilingOptie';
 	import Icon from '../common/Icon';
+
 	export default {
 		name: 'Peiling',
 		components: {Icon, PeilingOptie, PeilingOptieToevoegen},
 		props: {
-			id: Number,
-			titel: String,
-			beschrijving: String,
-			resultaatZichtbaar: Boolean,
-			aantalVoorstellen: Number,
-			aantalKeuzes: Number,
-			aantalStemmen: Number,
-			rechtenStemmen: String,
-			isMod: Boolean,
-			heeftGestemd: Boolean,
-			magStemmen: Boolean,
-			opties: {
-				type: Array,
-				default: () => []
-			}
+			settings: {}
 		},
 		data: () => ({
+			id: null,
+			titel: null,
+			beschrijving: null,
+			resultaatZichtbaar: null,
+			aantalVoorstellen: null,
+			aantalKeuzes: null,
+			aantalGestemd: null,
+			isMod: null,
+			heeftGestemd: null,
+			magStemmen: null,
+			opties: null,
 			alleOpties: [],
-			dataHeeftGestemd: false,
-			dataAantalStemmen: 0,
 			zoekterm: '',
 			huidigePagina: 1,
 			paginaSize: 10,
 		}),
 		created() {
-			// Sla opties op in een data attribuut, deze wordt niet van boven veranderd,
-			// maar wel wanneer er een request wordt gedaan.
-			this.alleOpties = this.opties;
-			this.dataHeeftGestemd = this.heeftGestemd;
-			this.dataAantalStemmen = this.aantalStemmen;
+			this.id = this.settings.id;
+			this.titel = this.settings.titel;
+			this.beschrijving = this.settings.beschrijving;
+			this.resultaatZichtbaar = this.settings.resultaat_zichtbaar;
+			this.aantalVoorstellen = this.settings.aantal_voorstellen;
+			this.aantalKeuzes = this.settings.aantal_keuzes;
+			this.aantalGestemd = this.settings.aantal_gestemd;
+			this.isMod = this.settings.is_mod;
+			this.heeftGestemd = this.settings.heeft_gestemd;
+			this.magStemmen = this.settings.mag_stemmen;
+			this.opties = this.settings.opties;
 
 			// Als er op deze pagina een modal gesloten wordt is dat misschien die van
 			// de optie toevoegen modal. Dit is de enige manier om dit te weten op dit moment
-			$(document.body).on('modalClose', () => {
-				this.reload();
-			});
+			$(document.body).on('modalClose', () => this.reload());
 		},
 		computed: {
 			beheerUrl() {
 				return `/peilingen/beheer/${this.id}`;
 			},
 			selected() {
-				return this.alleOpties.filter((o) => o.selected);
+				return this.opties.filter((o) => o.selected);
 			},
 			optiesFiltered() {
-				return this.alleOpties.filter((o) => o.titel.toLowerCase().includes(this.zoekterm.toLowerCase()));
+				return this.opties.filter((o) => o.titel.toLowerCase().includes(this.zoekterm.toLowerCase()));
 			},
 			optiesZichtbaar() {
 				let begin = (this.huidigePagina - 1) * this.paginaSize;
@@ -125,10 +128,10 @@
 				return `${this.selected.length} van de ${this.aantalKeuzes} geselecteerd`;
 			},
 			strAantalStemmen() {
-				return this.dataAantalStemmen > 0 ? `(${this.dataAantalStemmen} stem${this.dataAantalStemmen > 1 ? 'men' : ''})` : '';
+				return this.aantalGestemd > 0 ? `(${this.aantalGestemd} stem${this.aantalGestemd> 1 ? 'men' : ''})` : '';
 			},
 			zoekbalkZichtbaar() {
-				return this.alleOpties.length > 10;
+				return this.opties.length > 10;
 			}
 		},
 		methods: {
@@ -138,8 +141,8 @@
 						opties: this.selected.map((o) => o.id)
 					})
 					.then(() => {
-						this.dataHeeftGestemd = true; // To data
-						this.dataAantalStemmen = this.dataAantalStemmen + this.selected.length;
+						this.heeftGestemd = true;
+						this.aantalGestemd = this.aantalGestemd + this.selected.length;
 						this.reload();
 					});
 			},
@@ -147,7 +150,7 @@
 				axios
 					.post(`/peilingen/opties/${this.id}`)
 					.then((response) => {
-						this.alleOpties = response.data.data;
+						this.opties = response.data.data;
 					});
 			}
 		}

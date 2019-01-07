@@ -18,10 +18,8 @@
 							 :value="id"
 							 :id="'PeilingOptie' + id"
 							 :disabled="isDisabled"
-							 :checked="dataSelected"
-							 v-model="dataSelected"
-							 @change="$emit('input', $event.target.checked)"
-				/>
+							 :checked="selected"
+							 @change="$emit('input', $event.target.checked)" />
 				<label :for="'PeilingOptie' + id"
 							 class="form-check-label">{{ titel }}</label>
 			</div>
@@ -42,30 +40,24 @@
 			titel: String,
 			beschrijving: String,
 			stemmen: Number,
-			ingebrachtDoor: Object, // DataTableColumn
+			magStemmen: Boolean,
+			aantalGestemd: Number,
+			heeftGestemd: Boolean,
+			keuzesOver: Boolean,
 			selected: Boolean
-		},
-		data: () => ({
-			dataSelected: false,
-		}),
-		created() {
-			this.dataSelected = this.selected;
 		},
 		computed: {
 			kanStemmen() {
-				return this.$parent.magStemmen && !this.$parent.dataHeeftGestemd;
-			},
-			totaalStemmen() {
-				return this.$parent.dataAantalStemmen;
+				return this.magStemmen && !this.heeftGestemd;
 			},
 			progress() {
-				return (this.stemmen / this.totaalStemmen * 100).toFixed(2);
+				return (this.stemmen / this.aantalGestemd * 100).toFixed(2);
 			},
 			progressText() {
 				return `${this.progress}% (${this.stemmen})`;
 			},
 			isDisabled() {
-				return !this.selected && !this.$parent.keuzesOver;
+				return !this.selected && !this.keuzesOver;
 			}
 		}
 	};
