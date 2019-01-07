@@ -200,7 +200,14 @@ class LidInstellingenModel extends InstellingenModel {
 				['ja', 'nee'],
 				'ja',
 				'Ontvang een e-mail als iemand u noemt of citeert in een draadje, ook in en uit te schakelen per draadje.'
-			]
+			],
+			'meldingEigenDraad' => [
+				'Meldingen voor eigen draadjes',
+				T::Enumeration,
+				['ja', 'nee'],
+				'ja',
+				'Zet meldingen voor draadjes die u maakt standaard aan.'
+			],
 		],
 		'fotoalbum' => [
 			'tag_suggestions' => [
