@@ -35,10 +35,6 @@ class Peiling extends PersistentEntity {
 		}, 0);
 	}
 
-	public function getAantalKeuzes() {
-		return $this->aantal_stemmen ?? 0;
-	}
-
 	public function getMagBewerken() {
 		//Elk BASFCie-lid heeft voorlopig peilingbeheerrechten.
 		return LoginModel::mag('P_ADMIN,bestuur,commissie:BASFCie');
@@ -75,7 +71,6 @@ class Peiling extends PersistentEntity {
 		'is_mod' => [T::Boolean],
 		'heeft_gestemd' => [T::Boolean],
 		'mag_stemmen' => [T::Boolean],
-		'aantal_keuzes' => [T::Integer],
 		'aantal_gestemd' => [T::Integer],
 		'opties' => [T2::ForeignKey, PeilingOptiesModel::class]
 	];

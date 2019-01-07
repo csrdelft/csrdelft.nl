@@ -4,7 +4,7 @@
 			<a :href="beheerUrl" v-if="isMod" class="bewerken">
 				<Icon icon="pencil"/>
 			</a>
-			<span class="totaal">{{strAantalStemmen}}</span>
+			<span class="totaal">{{strAantalGestemd}}</span>
 			<h3 class="card-title">{{titel}}</h3>
 			<p class="card-text pt-2" v-html="beschrijving"></p>
 		</div>
@@ -77,7 +77,7 @@
 			beschrijving: null,
 			resultaatZichtbaar: null,
 			aantalVoorstellen: null,
-			aantalKeuzes: null,
+			aantalStemmen: null,
 			aantalGestemd: null,
 			isMod: null,
 			heeftGestemd: null,
@@ -94,7 +94,7 @@
 			this.beschrijving = this.settings.beschrijving;
 			this.resultaatZichtbaar = this.settings.resultaat_zichtbaar;
 			this.aantalVoorstellen = this.settings.aantal_voorstellen;
-			this.aantalKeuzes = this.settings.aantal_keuzes;
+			this.aantalStemmen = this.settings.aantal_stemmen;
 			this.aantalGestemd = this.settings.aantal_gestemd;
 			this.isMod = this.settings.is_mod;
 			this.heeftGestemd = this.settings.heeft_gestemd;
@@ -122,12 +122,12 @@
 				return this.optiesFiltered.slice(begin, eind);
 			},
 			keuzesOver() {
-				return this.aantalKeuzes - this.selected.length > 0;
+				return this.aantalStemmen - this.selected.length > 0;
 			},
 			strKeuzes() {
-				return `${this.selected.length} van de ${this.aantalKeuzes} geselecteerd`;
+				return `${this.selected.length} van de ${this.aantalStemmen} geselecteerd`;
 			},
-			strAantalStemmen() {
+			strAantalGestemd() {
 				return this.aantalGestemd > 0 ? `(${this.aantalGestemd} stem${this.aantalGestemd> 1 ? 'men' : ''})` : '';
 			},
 			zoekbalkZichtbaar() {
