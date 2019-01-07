@@ -16,10 +16,16 @@ $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
     }
 });
 
-axios.interceptors.request.use((config) => ({
-	...config,
-	headers: {
-		...config.headers,
-		...getCsrfToken(),
+axios.interceptors.request.use((config) => {
+	if (config.url.startsWith(window.location.origin) || config.url.startsWith('/')) {
+		return {
+			...config,
+			headers: {
+				...config.headers,
+				...getCsrfToken(),
+			}
+		};
+	} else {
+		return config;
 	}
-}));
+});
