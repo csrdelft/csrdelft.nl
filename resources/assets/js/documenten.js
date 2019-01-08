@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import render from './datatable/render';
 
 /**
  * Documentenketzerjavascriptcode.
@@ -9,7 +10,7 @@ $(() => {
 	//tabellen naar zebra converteren.
 	$documenten.find('tr:odd').addClass('odd');
 	// render de filesize cellen
-	$documenten.find('.size').each((i, el) => el.innerText = $.fn.dataTable.render.filesize(el.innerText, 'display'));
+	$documenten.find('.size').each((i, el) => el.innerText = render.filesize(el.innerText, 'display'));
 
 	$('#documentencategorie').dataTable({
 		language: {
@@ -23,9 +24,9 @@ $(() => {
 		sorting: [[3, 'desc']], // moment toegevoegd
 		columns: [
 			{type: 'html'}, // documentnaam
-			{type: 'num', render: $.fn.dataTable.render.filesize}, // Bestandsgrootte
+			{type: 'num', render: render.filesize}, // Bestandsgrootte
 			{type: 'string'}, // mime-type, forceer string anders werkt sorteren uberhaupt niet
-			{render: $.fn.dataTable.render.timeago}, //moment toegevoegd
+			{render: render.timeago}, //moment toegevoegd
 			null, // Eigenaar
 		],
 	});
