@@ -74,9 +74,10 @@ class CsrBB extends Parser {
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseMail($bbcode) {
+	public static function parseMail($bbcode, $light = false) {
 		$parser = new CsrBB();
 		$parser->email_mode = true;
+		$parser->light_mode = $light;
 		return $parser->getHtml($bbcode);
 	}
 
@@ -148,6 +149,11 @@ class CsrBB extends Parser {
 	 * Templates for light mode
 	 */
 	private function lightLinkInline($tag, $url, $content) {
+	    if ($this->email_mode && isset($url[0]) && $url[0] === '/') {
+	        // Zorg voor werkende link in e-mail
+	        $url = CSR_ROOT . $url;
+        }
+
 		return <<<HTML
 			<a class="bb-link-inline bb-tag-{$tag}" href="{$url}">{$content}</a>
 HTML;

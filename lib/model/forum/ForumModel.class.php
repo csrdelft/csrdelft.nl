@@ -56,9 +56,9 @@ class ForumModel extends CachedPersistenceModel {
 	 */
 	private $forumDradenVerbergenModel;
 	/**
-	 * @var ForumDradenVolgenModel
+	 * @var ForumDradenMeldingModel
 	 */
-	private $forumDradenVolgenModel;
+	private $forumDradenMeldingModel;
 	/**
 	 * @var ForumPostsModel
 	 */
@@ -70,7 +70,7 @@ class ForumModel extends CachedPersistenceModel {
 		ForumDradenGelezenModel $forumDradenGelezenModel,
 		ForumDradenReagerenModel $forumDradenReagerenModel,
 		ForumDradenVerbergenModel $forumDradenVerbergenModel,
-		ForumDradenVolgenModel $forumDradenVolgenModel,
+		ForumDradenMeldingModel $forumDradenMeldingModel,
 		ForumPostsModel $forumPostsModel
 	) {
 		parent::__construct();
@@ -80,7 +80,7 @@ class ForumModel extends CachedPersistenceModel {
 		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
 		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
 		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
-		$this->forumDradenVolgenModel = $forumDradenVolgenModel;
+		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
 		$this->forumPostsModel = $forumPostsModel;
 	}
 
@@ -133,7 +133,7 @@ class ForumModel extends CachedPersistenceModel {
 			if (AccountModel::isValidUid($uid)) {
 				$this->forumDradenGelezenModel->verwijderDraadGelezenVoorLid($uid);
 				$this->forumDradenVerbergenModel->toonAllesVoorLid($uid);
-				$this->forumDradenVolgenModel->volgNietsVoorLid($uid);
+				$this->forumDradenMeldingModel->stopAlleMeldingenVoorLid($uid);
 				$this->forumDradenReagerenModel->verwijderReagerenVoorLid($uid);
 			}
 		}
@@ -144,7 +144,7 @@ class ForumModel extends CachedPersistenceModel {
 		foreach ($draden as $draad) {
 
 			// Settings verwijderen
-			$this->forumDradenVolgenModel->stopVolgenVoorIedereen($draad);
+			$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draad);
 			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
 			$this->forumDradenGelezenModel->verwijderDraadGelezen($draad);
 			$this->forumDradenReagerenModel->verwijderReagerenVoorDraad($draad);

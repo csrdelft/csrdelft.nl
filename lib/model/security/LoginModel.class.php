@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\security;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\entity\security\Account;
@@ -27,6 +28,7 @@ use CsrDelft\view\Validator;
 class LoginModel extends PersistenceModel implements Validator {
 
 	const ORM = LoginSession::class;
+	private $tempSwitchUid;
 
 	/**
 	 * @param mixed[] $arguments
@@ -439,6 +441,32 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 		$suedFrom = static::getSuedFrom();
 		return $suedFrom AND AccessModel::mag($suedFrom, 'P_ADMIN');
+	}
+
+	/**
+	 * Schakel tijdelijk naar een lid om gedrag van functies te simuleren alsof dit lid is ingelogd.
+	 * Moet z.s.m. (binnen dit request) weer ongedaan worden met `endTempSwitchUser()`
+	 * @param string $uid Uid van lid waarnaartoe geschakeld moet worden
+	 * @throws CsrException als er al een tijdelijke schakeling actief is.
+	 */
+	public function overrideUid($uid) {
+		if (isset($this->tempSwitchUid)) {
+			throw new CsrException("Er is al een tijdelijke schakeling actief, beëindig deze eerst.");
+		}
+		$this->tempSwitchUid = $_SESSION['_uid'];
+		$_SESSION['_uid'] = $uid;
+	}
+
+	/**
+	 * Beëindig tijdelijke schakeling naar lid.
+	 * @throws CsrException als er geen tijdelijke schakeling actief is.
+	 */
+	public function resetUid() {
+		if (!isset($this->tempSwitchUid)) {
+			throw new CsrException("Geen tijdelijke schakeling actief, kan niet terug.");
+		}
+		$_SESSION['_uid'] = $this->tempSwitchUid;
+		$this->tempSwitchUid = null;
 	}
 
 	/**

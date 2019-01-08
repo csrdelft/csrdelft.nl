@@ -5,7 +5,7 @@ namespace CsrDelft\model\entity\forum;
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenGelezenModel;
 use CsrDelft\model\forum\ForumDradenVerbergenModel;
-use CsrDelft\model\forum\ForumDradenVolgenModel;
+use CsrDelft\model\forum\ForumDradenMeldingModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\security\LoginModel;
@@ -129,16 +129,6 @@ class ForumDraad extends PersistentEntity {
 	 */
 	private $verbergen;
 	/**
-	 * Volgen door gebruiker
-	 * @var boolean
-	 */
-	private $volgen;
-	/**
-	 * Volgers
-	 * @var ForumDraadVolgen[]
-	 */
-	private $volgers;
-	/**
 	 * Database table columns
 	 * @var array
 	 */
@@ -212,29 +202,15 @@ class ForumDraad extends PersistentEntity {
 		return !$this->belangrijk AND LoginModel::mag('P_LOGGED_IN');
 	}
 
+	public function magMeldingKrijgen() {
+		return $this->magLezen();
+	}
+
 	public function isVerborgen() {
 		if (!isset($this->verbergen)) {
 			$this->verbergen = ForumDradenVerbergenModel::instance()->getVerbergenVoorLid($this);
 		}
 		return $this->verbergen;
-	}
-
-	public function magVolgen() {
-		return LoginModel::mag('P_LOGGED_IN');
-	}
-
-	public function isGevolgd() {
-		if (!isset($this->volgen)) {
-			$this->volgen = ForumDradenVolgenModel::instance()->getVolgenVoorLid($this);
-		}
-		return $this->volgen;
-	}
-
-	public function getVolgers() {
-		if (!isset($this->volgers)) {
-			$this->volgers = ForumDradenVolgenModel::instance()->getVolgersVanDraad($this);
-		}
-		return $this->volgers;
 	}
 
 	public function getLezers() {
