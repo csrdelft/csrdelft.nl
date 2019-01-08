@@ -7,26 +7,26 @@ use CsrDelft\Orm\Entity\PersistentEnum;
 
 class ForumDraadMeldingNiveau extends PersistentEnum {
 
-	const nooit = 'nooit';
-	const vermelding = 'vermelding';
-	const altijd = 'altijd';
+	const NOOIT = 'nooit';
+	const VERMELDING = 'vermelding';
+	const ALTIJD = 'altijd';
 
 	/**
 	 * @var string[]
 	 */
 	protected static $supportedChoices = [
-		self::nooit => self::nooit,
-		self::vermelding => self::vermelding,
-		self::altijd => self::altijd
+		self::NOOIT => self::NOOIT,
+		self::VERMELDING => self::VERMELDING,
+		self::ALTIJD => self::ALTIJD
 	];
 
 	/**
 	 * @var string[]
 	 */
 	protected static $mapChoiceToDescription = [
-		self::nooit => 'Nooit',
-		self::vermelding => 'Bij vermelding',
-		self::altijd => 'Altijd'
+		self::NOOIT => 'Nooit',
+		self::VERMELDING => 'Bij vermelding',
+		self::ALTIJD => 'Altijd'
 	];
 
 	/**
@@ -38,7 +38,7 @@ class ForumDraadMeldingNiveau extends PersistentEnum {
 		if (isset(static::$supportedChoices[$option])) {
 			return strtoupper(substr($option, 0, 2));
 		} else {
-			throw new CsrException('BoekExemplaarStatus onbekend');
+			throw new CsrException('ForumDraadMeldingNiveau onbekend');
 		}
 	}
 

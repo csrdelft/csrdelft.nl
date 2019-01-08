@@ -30,7 +30,7 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 	}
 
 	public function getAltijdMeldingVoorDraad(ForumDraad $draad) {
-		return $this->prefetch('draad_id = ? AND niveau = ?', array($draad->draad_id, ForumDraadMeldingNiveau::altijd));
+		return $this->prefetch('draad_id = ? AND niveau = ?', array($draad->draad_id, ForumDraadMeldingNiveau::ALTIJD));
 	}
 
 	public function getVoorkeursNiveauVoorLid(ForumDraad $draad, $uid = null) {
@@ -54,7 +54,7 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 			return $voorkeur->niveau;
 		} else {
 			$wilMeldingBijVermelding = LidInstellingenModel::getInstellingVoorLid('forum', 'meldingStandaard', $uid);
-			return $wilMeldingBijVermelding === 'ja' ? ForumDraadMeldingNiveau::vermelding : ForumDraadMeldingNiveau::nooit;
+			return $wilMeldingBijVermelding === 'ja' ? ForumDraadMeldingNiveau::VERMELDING : ForumDraadMeldingNiveau::NOOIT;
 		}
 	}
 
@@ -172,7 +172,7 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 
 			// Stuur geen meldingen als lid niet gevonden is, lid de auteur is of als lid geen meldingen wil voor draadje
 			// Met laatste voorwaarde worden ook leden afgevangen die sowieso al een melding zouden ontvangen
-			if (!$genoemde || $genoemde->uid === $post->uid || $this->getNiveauVoorLid($draad, $genoemde->uid) !== ForumDraadMeldingNiveau::vermelding) {
+			if (!$genoemde || $genoemde->uid === $post->uid || $this->getNiveauVoorLid($draad, $genoemde->uid) !== ForumDraadMeldingNiveau::VERMELDING) {
 				continue;
 			}
 

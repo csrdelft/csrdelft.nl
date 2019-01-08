@@ -724,7 +724,7 @@ class ForumController extends Controller {
 			ForumDradenMeldingModel::instance()->stuurMeldingen($post);
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 			if ($nieuw && LidInstellingenModel::get('forum', 'meldingEigenDraad') === 'ja') {
-				ForumDradenMeldingModel::instance()->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::altijd);
+				ForumDradenMeldingModel::instance()->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::ALTIJD);
 			}
 
 			$url = '/forum/reactie/' . $post->post_id . '#' . $post->post_id;
