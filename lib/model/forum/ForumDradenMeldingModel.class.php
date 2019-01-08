@@ -108,7 +108,7 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 		);
 
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		LoginModel::instance()->tempSwitchUser($ontvanger->uid);
+		LoginModel::instance()->overrideUid($ontvanger->uid);
 
 		// Verzend mail
 		$mail = new Mail(array($ontvanger->getPrimaryEmail() => $ontvanger->getNaam('volledig')), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
@@ -117,7 +117,7 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 		$mail->send();
 
 		// Zet UID terug in sessie
-		LoginModel::instance()->endTempSwitchUser();
+		LoginModel::instance()->resetUid();
 	}
 
 	/**
@@ -177,9 +177,9 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 			}
 
 			// Controleer of lid bij draad mag, stel hiervoor tijdelijk de ingelogde gebruiker in op gegeven lid
-			LoginModel::instance()->tempSwitchUser($genoemde->uid);
+			LoginModel::instance()->overrideUid($genoemde->uid);
 			$magMeldingKrijgen = $draad->magMeldingKrijgen();
-			LoginModel::instance()->endTempSwitchUser();
+			LoginModel::instance()->resetUid();
 
 			if (!$magMeldingKrijgen) {
 				continue;

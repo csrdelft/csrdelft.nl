@@ -449,7 +449,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @param string $uid Uid van lid waarnaartoe geschakeld moet worden
 	 * @throws CsrException als er al een tijdelijke schakeling actief is.
 	 */
-	public function tempSwitchUser($uid) {
+	public function overrideUid($uid) {
 		if (isset($this->tempSwitchUid)) {
 			throw new CsrException("Er is al een tijdelijke schakeling actief, beëindig deze eerst.");
 		}
@@ -461,7 +461,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * Beëindig tijdelijke schakeling naar lid.
 	 * @throws CsrException als er geen tijdelijke schakeling actief is.
 	 */
-	public function endTempSwitchUser() {
+	public function resetUid() {
 		if (!isset($this->tempSwitchUid)) {
 			throw new CsrException("Geen tijdelijke schakeling actief, kan niet terug.");
 		}
