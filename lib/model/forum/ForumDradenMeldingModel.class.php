@@ -99,9 +99,8 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 	 * @param string $bericht
 	 */
 	private function stuurMelding($ontvanger, $auteur, $post, $draad, $bericht) {
-		$ontvangerNaam = $ontvanger->getNaam('civitas');
 		$values = array(
-			'NAAM' => $ontvangerNaam,
+			'NAAM' => $ontvanger->getNaam('civitas'),
 			'AUTEUR' => $auteur->getNaam('civitas'),
 			'POSTLINK' => $post->getLink(true),
 			'TITEL' => $draad->titel,
@@ -109,17 +108,16 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 		);
 
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		$curUID = $_SESSION['_uid'];
-		$_SESSION['_uid'] = $ontvanger->uid;
+		LoginModel::instance()->tempSwitchUser($ontvanger->uid);
 
 		// Verzend mail
-		$mail = new Mail(array($ontvanger->getPrimaryEmail() => $ontvangerNaam), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
+		$mail = new Mail(array($ontvanger->getPrimaryEmail() => $ontvanger->getNaam('volledig')), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
 		$mail->setPlaceholders($values);
 		$mail->setLightBB();
 		$mail->send();
 
 		// Zet UID terug in sessie
-		$_SESSION['_uid'] = $curUID;
+		LoginModel::instance()->endTempSwitchUser();
 	}
 
 	/**
@@ -179,10 +177,9 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 			}
 
 			// Controleer of lid bij draad mag, stel hiervoor tijdelijk de ingelogde gebruiker in op gegeven lid
-			$curUid = $_SESSION['_uid'];
-			$_SESSION['_uid'] = $genoemde->uid;
+			LoginModel::instance()->tempSwitchUser($genoemde->uid);
 			$magMeldingKrijgen = $draad->magMeldingKrijgen();
-			$_SESSION['_uid'] = $curUid;
+			LoginModel::instance()->endTempSwitchUser();
 
 			if (!$magMeldingKrijgen) {
 				continue;
