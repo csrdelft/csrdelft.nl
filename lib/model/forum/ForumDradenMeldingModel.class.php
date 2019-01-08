@@ -14,7 +14,9 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 
 /**
- * ForumDradenMeldingModel.class.php
+ * Model voor bijhouden, bewerken en verzenden van meldingen voor forumberichten
+ *
+ * @author J.P.T. Nederveen <ik@tim365.nl>
  */
 class ForumDradenMeldingModel extends CachedPersistenceModel {
 
