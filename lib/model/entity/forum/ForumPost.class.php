@@ -140,7 +140,7 @@ class ForumPost extends PersistentEntity {
 	}
 
 	public function getLink($external = false) {
-	    return ($external ? CSR_ROOT : '') . "/forum/reactie/" . $this->getForumDraad()->post_id . "#" . $this->post_id;
+	    return ($external ? CSR_ROOT : '') . "/forum/reactie/" . $this->post_id . "#" . $this->post_id;
     }
 
 }
