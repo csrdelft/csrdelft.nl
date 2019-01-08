@@ -23,7 +23,7 @@ class LidInstellingenModel extends InstellingenModel {
 	const ORM = LidInstelling::class;
 
 	/**
-	 * UUID van lid waarvoor instellingen opgehaald moeten worden.
+	 * Uid van lid waarvoor instellingen opgehaald moeten worden.
 	 * Indien niet ingevuld wordt huidig lid gebruikt.
 	 * @var int
 	 */
