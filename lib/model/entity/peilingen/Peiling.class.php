@@ -10,8 +10,11 @@ use CsrDelft\Orm\Entity\T;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ *
+ * @property PeilingOptie[] opties
  */
 class Peiling extends PersistentEntity {
+
 	public $id;
 	public $titel;
 	public $beschrijving;
@@ -23,43 +26,31 @@ class Peiling extends PersistentEntity {
 	public $rechten_stemmen;
 	public $rechten_mod;
 
-	private $opties;
+	public function getOpties() {
+		return PeilingOptiesModel::instance()->find('peiling_id = ?', [$this->id])->fetchAll();
+	}
 
-	public function getStemmenAantal() {
-		$opties = $this->getOpties();
-
-		return array_reduce($opties, function (int $carry, PeilingOptie $optie) {
+	public function getAantalGestemd() {
+		return array_reduce($this->opties, function (int $carry, PeilingOptie $optie) {
 			return $carry + $optie->stemmen;
 		}, 0);
 	}
 
-	public function getOpties() {
-		if ($this->opties == null) {
-			$this->opties = PeilingOptiesModel::instance()->find('peiling_id = ?', array($this->id))->fetchAll();
-		}
-		return $this->opties;
-	}
-
-	public function nieuwOptie($optie) {
-		$this->opties[] = $optie;
-	}
-
-	public static function magBewerken() {
+	public function getMagBewerken() {
 		//Elk BASFCie-lid heeft voorlopig peilingbeheerrechten.
 		return LoginModel::mag('P_ADMIN,bestuur,commissie:BASFCie');
 	}
 
-	public function isMod() {
+	public function getIsMod() {
 		return LoginModel::mag('P_PEILING_MOD') || LoginModel::getUid() == $this->eigenaar;
 	}
 
-	public function magStemmen() {
+	public function getMagStemmen() {
 		return LoginModel::mag('P_PEILING_VOTE') && ($this->eigenaar == LoginModel::getUid() || empty(trim($this->rechten_stemmen)) || LoginModel::mag($this->rechten_stemmen));
 	}
 
-
-	public function heeftGestemd($uid) {
-		return PeilingStemmenModel::instance()->heeftGestemd($this->id, $uid);
+	public function getHeeftGestemd() {
+		return PeilingStemmenModel::instance()->heeftGestemd($this->id, LoginModel::getUid());
 	}
 
 	protected static $table_name = 'peiling';
@@ -75,6 +66,14 @@ class Peiling extends PersistentEntity {
 		'aantal_stemmen' => [T::Integer],
 		'rechten_stemmen' => [T::String, true],
 		'rechten_mod' => [T::String, true],
+	];
+
+	protected static $computed_attributes = [
+		'is_mod' => [T::Boolean],
+		'heeft_gestemd' => [T::Boolean],
+		'mag_stemmen' => [T::Boolean],
+		'aantal_gestemd' => [T::Integer],
+		'opties' => []
 	];
 }
 

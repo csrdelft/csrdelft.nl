@@ -13,7 +13,7 @@
 		"jacwright/restserver": "dev-master",
 		"globalcitizen/php-iban": "^2.6",
 		"robmorgan/phinx": "^0.10.0",
-		"csrdelft/orm": "1.8.0",
+		"csrdelft/orm": "1.8.1",
 		"maknz/slack": "^1.7",
 		"jakeasmith/http_build_url": "^1",
 		"ferno/loco": "dev-master",
