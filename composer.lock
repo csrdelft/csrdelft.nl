@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "0135eaac1a27b86144c0ee96343e5bd8",
@@ -303,15 +303,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
-                "reference": "354899e9ff9c774e1161e3a08ee806c7bab7c0c7"
+                "reference": "f2cb3ea275fd3ea3c526b8c5ba38d9ea42a8cc20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/orm/zipball/354899e9ff9c774e1161e3a08ee806c7bab7c0c7",
-                "reference": "354899e9ff9c774e1161e3a08ee806c7bab7c0c7",
+                "url": "https://api.github.com/repos/csrdelft/orm/zipball/f2cb3ea275fd3ea3c526b8c5ba38d9ea42a8cc20",
+                "reference": "f2cb3ea275fd3ea3c526b8c5ba38d9ea42a8cc20",
                 "shasum": ""
             },
             "require": {
+                "ext-json": "*",
+                "ext-pdo": "*",
                 "php": ">=7.0.27",
                 "zumba/json-serializer": "^2.2"
             },
@@ -353,7 +355,7 @@
             ],
             "description": "The creatively named object-relational mapping library for csrdelft.nl",
             "homepage": "https://csrdelft.github.io/orm",
-            "time": "2018-11-25T23:27:42+00:00"
+            "time": "2019-01-11T10:36:22+00:00"
         },
         {
             "name": "easyrdf/easyrdf",
