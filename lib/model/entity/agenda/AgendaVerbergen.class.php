@@ -32,7 +32,7 @@ class AgendaVerbergen extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'uid' => array(T::UID),
-		'refuuid' => array(T::String)
+		'refuuid' => array(T::StringKey)
 	);
 	/**
 	 * Database primary key
