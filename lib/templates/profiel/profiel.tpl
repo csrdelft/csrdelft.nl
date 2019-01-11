@@ -362,7 +362,7 @@
 						{foreach from=$boeken item=boek}
 							<li>
 								<a href="/bibliotheek/boek/{$boek->id}" title="Boek: {$boek->titel|escape:'html'}">
-									<span title="{$boek->status} boek" class="boekindicator {$boek->status}">•</span><span class="titel">{$boek->titel|escape:'html'}</span><span class="auteur">{$boek->auteur|escape:'html'}</span>
+									<span title="boek" class="boekindicator">•</span><span class="titel">{$boek->titel|escape:'html'}</span><span class="auteur">{$boek->auteur|escape:'html'}</span>
 								</a>
 							</li>
 						{foreachelse}
@@ -381,7 +381,7 @@
 						{foreach from=$gerecenseerdeboeken item=boek}
 							<li>
 								<a href="/bibliotheek/boek/{$boek->id}" title="Boek: {$boek->titel|escape:'html'}">
-									<span title="{$boek->status} boek" class="boekindicator {$boek->status}">•</span><span class="titel">{$boek->titel|escape:'html'}</span><span class="auteur">{$boek->auteur|escape:'html'}</span>
+									<span title="boek" class="boekindicator">•</span><span class="titel">{$boek->titel|escape:'html'}</span><span class="auteur">{$boek->auteur|escape:'html'}</span>
 								</a>
 							</li>
 						{foreachelse}

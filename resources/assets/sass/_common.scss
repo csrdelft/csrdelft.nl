@@ -378,3 +378,7 @@ Bootstrap overrides / uitbreidingen
 		top: 47px;
 	}
 }
+// Fix plek icoontje in een alert
+.alert .ico {
+	margin-right: 0.75rem;
+}
