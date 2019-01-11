@@ -6,14 +6,10 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
 /**
- * ForumDraadVolgen.class.php
- *
- * @author P.W.G. Brussee <brussee@live.nl>
- *
- * Een ForumDraad kan worden gevolgd door een lid.
- *
+ * ForumDraadMelding.class.php
+ * Leden kunnen meldingen krijgen voor een forumdraad
  */
-class ForumDraadVolgen extends PersistentEntity {
+class ForumDraadMelding extends PersistentEntity {
 
 	/**
 	 * Shared primary key
@@ -29,12 +25,18 @@ class ForumDraadVolgen extends PersistentEntity {
 	 */
 	public $uid;
 	/**
+	 * Volgniveau
+	 * @var string
+	 */
+	public $niveau = 'altijd';
+	/**
 	 * Database table columns
 	 * @var array
 	 */
 	protected static $persistent_attributes = array(
 		'draad_id' => array(T::Integer),
-		'uid' => array(T::UID)
+		'uid' => array(T::UID),
+		'niveau' => array(T::Enumeration, false, ForumDraadMeldingNiveau::class)
 	);
 	/**
 	 * Database primary key

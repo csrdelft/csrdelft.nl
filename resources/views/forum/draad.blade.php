@@ -25,12 +25,15 @@
 				<a title="Onderwerp toevoegen aan favorieten" class="btn btn-light post popup addfav"
 					 href="/menubeheer/toevoegen/favoriet">@icon('heart', 'heart_add')</a>
 				&nbsp;&nbsp;&nbsp;
-				@if($draad->isGevolgd())
-					<a href="/forum/volgenuit/{{$draad->draad_id}}" class="btn btn-light post ReloadPage volgenUit"
-						 title="Onderwerp niet meer volgen per email">@icon('email_go', 'email_delete')</a>
-				@elseif($draad->magVolgen())
-					<a href="/forum/volgenaan/{{$draad->draad_id}}" class="btn btn-light post ReloadPage volgenAan"
-						 title="Onderwerp volgen per email">@icon('email', 'email_add')</a>
+				@if($draad->magMeldingKrijgen())
+					<div class="btn-group">
+						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/nooit" class="btn btn-light post ReloadPage melding-nooit @if($meldingsniveau == \CsrDelft\model\entity\forum\ForumDraadMeldingNiveau::NOOIT) active @endif"
+							 title="Nooit meldingen ontvangen">@icon('email_delete', 'email_delete')</a>
+						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/vermelding" class="btn btn-light post ReloadPage melding-vermelding @if($meldingsniveau == \CsrDelft\model\entity\forum\ForumDraadMeldingNiveau::VERMELDING) active @endif"
+							 title="Melding ontvangen als ik genoemd word">@icon('email_error', 'email_error')</a>
+						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/altijd" class="btn btn-light post ReloadPage melding-altijd @if($meldingsniveau == \CsrDelft\model\entity\forum\ForumDraadMeldingNiveau::ALTIJD) active @endif"
+							 title="Melding ontvangen bij elk nieuw bericht">@icon('email_add', 'email_add')</a>
+					</div>
 				@endif
 				&nbsp;&nbsp;&nbsp;
 				@if($draad->isVerborgen())

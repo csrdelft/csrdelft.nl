@@ -139,4 +139,8 @@ class ForumPost extends PersistentEntity {
 		return $this->getAantalGelezen() * 100 / $this->getForumDraad()->getAantalLezers();
 	}
 
+	public function getLink($external = false) {
+	    return ($external ? CSR_ROOT : '') . "/forum/reactie/" . $this->post_id . "#" . $this->post_id;
+    }
+
 }

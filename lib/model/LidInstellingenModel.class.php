@@ -23,6 +23,17 @@ class LidInstellingenModel extends InstellingenModel {
 	const ORM = LidInstelling::class;
 
 	/**
+	 * Uid van lid waarvoor instellingen opgehaald moeten worden.
+	 * Indien niet ingevuld wordt huidig lid gebruikt.
+	 * @var int
+	 */
+	private $uid;
+
+	private function getUid() {
+		return $this->uid ? $this->uid : LoginModel::getUid();
+	}
+
+	/**
 	 * 'module' => array( 'key' => array('beschrijving', 'type', type-opties, 'default value', technical-values) )
 	 *
 	 * type-opties:
@@ -182,7 +193,21 @@ class LidInstellingenModel extends InstellingenModel {
 				['ja', 'nee'],
 				'nee',
 				'Verberg berichten van leden uit 2008'
-			]
+			],
+			'meldingStandaard' => [
+				'E-mail bij vermelding',
+				T::Enumeration,
+				['ja', 'nee'],
+				'ja',
+				'Ontvang een e-mail als iemand u noemt of citeert in een draadje, ook in en uit te schakelen per draadje.'
+			],
+			'meldingEigenDraad' => [
+				'Meldingen voor eigen draadjes',
+				T::Enumeration,
+				['ja', 'nee'],
+				'ja',
+				'Zet meldingen voor draadjes die u maakt standaard aan.'
+			],
 		],
 		'fotoalbum' => [
 			'tag_suggestions' => [
@@ -288,7 +313,7 @@ class LidInstellingenModel extends InstellingenModel {
 	 * @return LidInstelling|false
 	 */
 	protected function retrieveByPrimaryKey(array $primary_key_values) {
-		$primary_key_values[] = LoginModel::getUid();
+		$primary_key_values[] = $this->getUid();
 		/** @var LidInstelling|false */
 		$value = parent::retrieveByPrimaryKey($primary_key_values);
 		return $value;
@@ -299,7 +324,7 @@ class LidInstellingenModel extends InstellingenModel {
 		$instelling->module = $module;
 		$instelling->instelling_id = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
-		$instelling->uid = LoginModel::getUid();
+		$instelling->uid = $this->getUid();
 		$this->create($instelling);
 		return $instelling;
 	}
@@ -362,7 +387,7 @@ class LidInstellingenModel extends InstellingenModel {
 				if (!$this->isValidValue($module, $id, $waarde)) {
 					$waarde = $this->getDefault($module, $id);
 				}
-				$properties[] = array($module, $id, $waarde, LoginModel::getUid());
+				$properties[] = array($module, $id, $waarde, $this->getUid());
 			}
 		}
 		Database::instance()->sqlInsertMultiple($this->getTableName(), $properties, true);
@@ -415,4 +440,18 @@ class LidInstellingenModel extends InstellingenModel {
 		return parent::update($entity);
 	}
 
+	/**
+	 * Haal een instelling op uit het cache of de database voor opgegeven lid.
+	 * Als een instelling niet is gezet wordt deze aangemaakt met de default waarde en opgeslagen.
+	 *
+	 * @param string $module
+	 * @param string $id
+	 * @param int $uid
+	 * @return string
+	 */
+	public static function getInstellingVoorLid($module, $id, $uid) {
+		$instellingen = static::instance();
+		$instellingen->uid = $uid;
+		return $instellingen->getInstelling($module, $id)->waarde;
+	}
 }
