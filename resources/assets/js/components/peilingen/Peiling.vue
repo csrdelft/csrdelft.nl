@@ -24,7 +24,7 @@
 							:id="optie.id"
 							:peilingId="optie.peiling_id"
 							:titel="optie.titel"
-							:beschrijving="optie.beschrijving"
+							:beschrijving="optie.beschrijving_formatted"
 							:stemmen="optie.stemmen"
 							:magStemmen="magStemmen"
 							:heeftGestemd="heeftGestemd"

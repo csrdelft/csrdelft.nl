@@ -6,7 +6,7 @@
 			<ProgressBar :progress="progress" :reverse="true"></ProgressBar>
 		</div>
 		<div class="col-md-2">{{progressText}}</div>
-		<div class="col text-muted pt-2" v-html="beschrijving"></div>
+		<div ref="beschrijving_gestemd" class="col text-muted pt-2" v-html="beschrijving"></div>
 	</div>
 	<div v-else=""
 			 class="row">
@@ -24,12 +24,14 @@
 							 class="form-check-label">{{ titel }}</label>
 			</div>
 		</div>
-		<div class="col-md-12 pt-2" v-html="beschrijving"></div>
+		<div ref="beschrijving" class="col-md-12 pt-2" v-html="beschrijving"></div>
 	</div>
 </template>
 
 <script>
 	import ProgressBar from '../common/ProgressBar';
+	import initContext from '../../context';
+	import $ from 'jquery';
 
 	export default {
 		name: 'PeilingOptie',
@@ -45,6 +47,20 @@
 			heeftGestemd: Boolean,
 			keuzesOver: Boolean,
 			selected: Boolean
+		},
+		mounted() {
+			this.initBeschrijvingContext();
+
+			this.$watch('kanStemmen', () => this.initBeschrijvingContext());
+		},
+		methods: {
+			initBeschrijvingContext() {
+				if (this.kanStemmen) {
+					initContext($(this.$refs.beschrijving));
+				} else {
+					initContext($(this.$refs.beschrijving_gestemd));
+				}
+			}
 		},
 		computed: {
 			kanStemmen() {
