@@ -2,11 +2,9 @@
 
 namespace CsrDelft\model\entity\peilingen;
 
-use CsrDelft\model\ComputedAttributeTrait;
 use CsrDelft\model\peilingen\PeilingOptiesModel;
 use CsrDelft\model\peilingen\PeilingStemmenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\T2;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -16,7 +14,6 @@ use CsrDelft\Orm\Entity\T;
  * @property PeilingOptie[] opties
  */
 class Peiling extends PersistentEntity {
-	use ComputedAttributeTrait;
 
 	public $id;
 	public $titel;
@@ -28,6 +25,10 @@ class Peiling extends PersistentEntity {
 	public $aantal_stemmen;
 	public $rechten_stemmen;
 	public $rechten_mod;
+
+	public function getOpties() {
+		return PeilingOptiesModel::instance()->find('peiling_id = ?', [$this->id])->fetchAll();
+	}
 
 	public function getAantalGestemd() {
 		return array_reduce($this->opties, function (int $carry, PeilingOptie $optie) {
@@ -72,7 +73,7 @@ class Peiling extends PersistentEntity {
 		'heeft_gestemd' => [T::Boolean],
 		'mag_stemmen' => [T::Boolean],
 		'aantal_gestemd' => [T::Integer],
-		'opties' => [T2::ForeignKey, PeilingOptiesModel::class]
+		'opties' => []
 	];
 }
 

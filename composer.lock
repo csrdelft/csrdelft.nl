@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fece8ff9f1c7c9f9c2bb60a4a953e265",
+    "content-hash": "0135eaac1a27b86144c0ee96343e5bd8",
     "packages": [
         {
             "name": "cakephp/cache",
@@ -299,7 +299,7 @@
         },
         {
             "name": "csrdelft/orm",
-            "version": "v1.8.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
@@ -4672,6 +4672,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "jacwright/restserver": 20,
+        "csrdelft/orm": 20,
         "ferno/loco": 20
     },
     "prefer-stable": false,
