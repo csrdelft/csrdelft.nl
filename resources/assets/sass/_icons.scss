@@ -9,7 +9,7 @@
   background: url('../images/icons.png') no-repeat;
   width: 16px;
   height: 16px;
-  vertical-align: middle;
+  vertical-align: text-bottom;
 }
 
 .ico {
@@ -32,7 +32,7 @@
 .dt-button-ico {
   span::before {
     content: '';
-    margin: -2px 5px -2px -1px;
+    margin: -1px 0.5em -1px -1px;
     @include ico;
   }
 }
