@@ -24,9 +24,9 @@ class Bestuur extends AbstractGroep {
 	 * Database table columns
 	 * @var array
 	 */
-	protected static $persistent_attributes = array(
-		'bijbeltekst' => array(T::Text)
-	);
+	protected static $persistent_attributes = [
+		'bijbeltekst' => [T::Text]
+	];
 	/**
 	 * Database table name
 	 * @var string

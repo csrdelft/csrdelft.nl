@@ -40,6 +40,9 @@ class Lichting extends AbstractGroep {
 
 	/**
 	 * Read-only: generated group
+	 * @param $action
+	 * @param null $allowedAuthenticationMethods
+	 * @return bool
 	 */
 	public function mag($action, $allowedAuthenticationMethods = null) {
 		return $action === AccessAction::Bekijken;
@@ -47,6 +50,9 @@ class Lichting extends AbstractGroep {
 
 	/**
 	 * Read-only: generated group
+	 * @param $action
+	 * @param null $allowedAuthenticationMethods
+	 * @return bool
 	 */
 	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {
 		return $action === AccessAction::Bekijken;

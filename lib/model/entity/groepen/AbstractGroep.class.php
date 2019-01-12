@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
@@ -19,7 +20,11 @@ use PDO;
  */
 abstract class AbstractGroep extends PersistentEntity {
 
-	const leden = 'Error';
+	/**
+	 * Model voor leden van deze groep.
+	 * @var AbstractGroepLedenModel
+	 */
+	const leden = null;
 
 	/**
 	 * Primary key
@@ -75,18 +80,18 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * Database table columns
 	 * @var array
 	 */
-	protected static $persistent_attributes = array(
-		'id' => array(T::Integer, false, 'auto_increment'),
-		'naam' => array(T::StringKey),
-		'familie' => array(T::StringKey),
-		'begin_moment' => array(T::DateTime),
-		'eind_moment' => array(T::DateTime, true),
-		'status' => array(T::Enumeration, false, GroepStatus::class),
-		'samenvatting' => array(T::Text),
-		'omschrijving' => array(T::Text, true),
-		'keuzelijst' => array(T::String, true),
-		'maker_uid' => array(T::UID)
-	);
+	protected static $persistent_attributes = [
+		'id' => [T::Integer, false, 'auto_increment'],
+		'naam' => [T::StringKey],
+		'familie' => [T::StringKey],
+		'begin_moment' => [T::DateTime],
+		'eind_moment' => [T::DateTime, true],
+		'status' => [T::Enumeration, false, GroepStatus::class],
+		'samenvatting' => [T::Text],
+		'omschrijving' => [T::Text, true],
+		'keuzelijst' => [T::String, true],
+		'maker_uid' => [T::UID]
+	];
 	/**
 	 * Database primary key
 	 * @var array
@@ -122,7 +127,7 @@ abstract class AbstractGroep extends PersistentEntity {
 
 	public function aantalLeden() {
 		$leden = static::leden;
-		return $leden::instance()->count('groep_id = ?', array($this->id));
+		return $leden::instance()->count('groep_id = ?', [$this->id]);
 	}
 
 	public function getStatistieken() {
@@ -158,7 +163,7 @@ abstract class AbstractGroep extends PersistentEntity {
 			return false;
 		}
 		$leden = static::leden;
-		$aangemeld = Database::instance()->sqlExists($leden::instance()->getTableName(), 'groep_id = ? AND uid = ?', array($this->id, LoginModel::getUid()));
+		$aangemeld = Database::instance()->sqlExists($leden::instance()->getTableName(), 'groep_id = ? AND uid = ?', [$this->id, LoginModel::getUid()]);
 		switch ($action) {
 
 			case AccessAction::Aanmelden:

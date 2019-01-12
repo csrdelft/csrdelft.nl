@@ -14,6 +14,7 @@ class ActiviteitenModel extends KetzersModel {
 		if (!in_array($soort, ActiviteitSoort::getTypeOptions())) {
 			$soort = ActiviteitSoort::SjaarsActie;
 		}
+		/** @var Activiteit $activiteit */
 		$activiteit = parent::nieuw();
 		$activiteit->soort = $soort;
 		$activiteit->rechten_aanmelden = null;

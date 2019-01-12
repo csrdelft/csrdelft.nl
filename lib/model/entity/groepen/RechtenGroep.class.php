@@ -44,6 +44,7 @@ class RechtenGroep extends AbstractGroep {
 	 * Has permission for action?
 	 *
 	 * @param AccessAction $action
+	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
 	public function mag($action, $allowedAuthenticationMethods = null) {

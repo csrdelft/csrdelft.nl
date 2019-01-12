@@ -24,7 +24,8 @@ class KringenModel extends AbstractGroepenModel {
 		return reset($kringen);
 	}
 
-	public function nieuw($letter = '') {
+	public function nieuw($letter = null) {
+		/** @var Kring $kring */
 		$kring = parent::nieuw();
 		$kring->verticale = $letter;
 		return $kring;

@@ -25,7 +25,8 @@ class VerticalenModel extends AbstractGroepenModel {
 		return reset($verticalen);
 	}
 
-	public function nieuw() {
+	public function nieuw($soort = null) {
+		/** @var Verticale $verticale */
 		$verticale = parent::nieuw();
 		$verticale->letter = null;
 		return $verticale;

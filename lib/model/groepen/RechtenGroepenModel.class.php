@@ -9,7 +9,8 @@ class RechtenGroepenModel extends AbstractGroepenModel {
 
 	const ORM = RechtenGroep::class;
 
-	public function nieuw() {
+	public function nieuw($soort = null) {
+		/** @var RechtenGroep $groep */
 		$groep = parent::nieuw();
 		$groep->rechten_aanmelden = 'P_LOGGED_IN';
 		return $groep;

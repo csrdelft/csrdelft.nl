@@ -31,6 +31,7 @@ class Werkgroep extends Ketzer {
 	 * Rechten voor de gehele klasse of soort groep?
 	 *
 	 * @param string $action
+	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {

@@ -19,6 +19,7 @@ class LichtingenModel extends AbstractGroepenModel {
 		if ($lidjaar === null) {
 			$lidjaar = date('Y');
 		}
+		/** @var Lichting $lichting */
 		$lichting = parent::nieuw();
 		$lichting->lidjaar = (int)$lidjaar;
 		$lichting->id = $lichting->lidjaar;

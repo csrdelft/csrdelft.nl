@@ -9,7 +9,8 @@ class BesturenModel extends AbstractGroepenModel {
 
 	const ORM = Bestuur::class;
 
-	public function nieuw() {
+	public function nieuw($soort = null) {
+		/** @var Bestuur $bestuur */
 		$bestuur = parent::nieuw();
 		$bestuur->bijbeltekst = '';
 		return $bestuur;

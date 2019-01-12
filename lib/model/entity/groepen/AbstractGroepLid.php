@@ -48,17 +48,17 @@ abstract class AbstractGroepLid extends PersistentEntity {
 	 * Database table columns
 	 * @var array
 	 */
-	protected static $persistent_attributes = array(
-		'groep_id' => array(T::Integer),
-		'uid' => array(T::UID),
-		'opmerking' => array(T::String, true),
-		'lid_sinds' => array(T::DateTime),
-		'door_uid' => array(T::UID)
-	);
+	protected static $persistent_attributes = [
+		'groep_id' => [T::Integer],
+		'uid' => [T::UID],
+		'opmerking' => [T::String, true],
+		'lid_sinds' => [T::DateTime],
+		'door_uid' => [T::UID]
+	];
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('groep_id', 'uid');
+	protected static $primary_key = ['groep_id', 'uid'];
 
 }

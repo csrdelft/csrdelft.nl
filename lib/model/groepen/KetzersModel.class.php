@@ -9,7 +9,8 @@ class KetzersModel extends AbstractGroepenModel {
 
 	const ORM = Ketzer::class;
 
-	public function nieuw() {
+	public function nieuw($soort = null) {
+		/** @var Ketzer $ketzer */
 		$ketzer = parent::nieuw();
 		$ketzer->aanmeld_limiet = null;
 		$ketzer->aanmelden_vanaf = getDateTime();

@@ -952,9 +952,6 @@ HTML;
 			$id = $this->parseArray(array('[/groep]'), array());
 		}
 		$groep = RechtenGroepenModel::get($id);
-		if (!$groep) {
-			$groep = RechtenGroepenModel::omnummeren($id);
-		}
 		if ($groep) {
 			return $this->groep($groep, 'groep', 'personen');
 		} else {
