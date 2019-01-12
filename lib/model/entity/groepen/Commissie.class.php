@@ -18,7 +18,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Commissie extends AbstractGroep {
 
-	const leden = CommissieLedenModel::class;
+	const LEDEN = CommissieLedenModel::class;
 
 	/**
 	 * (Bestuurs-)Commissie / SjaarCie

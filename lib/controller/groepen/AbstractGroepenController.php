@@ -539,18 +539,15 @@ abstract class AbstractGroepenController extends Controller {
 		if (!$groep->mag(AccessAction::Bekijken)) {
 			$this->exit_http(403);
 		}
-		$leden = $groep::leden;
 		if ($this->getMethod() == 'POST') {
-			$this->view = new GroepLedenData($leden::instance()->getLedenVoorGroep($groep));
+			$this->view = new GroepLedenData($groep::getLedenModel()->getLedenVoorGroep($groep));
 		} else {
-			$this->view = new GroepLedenTable($leden::instance(), $groep);
+			$this->view = new GroepLedenTable($groep::getLedenModel(), $groep);
 		}
 	}
 
 	public function aanmelden(AbstractGroep $groep, $uid = null) {
-		$leden = $groep::leden;
-		/** @var AbstractGroepLedenModel $model */
-		$model = $leden::instance();
+		$model = $groep::getLedenModel();
 		if ($uid) {
 			if (!$groep->mag(AccessAction::Aanmelden)) {
 				$this->exit_http(403);
@@ -583,9 +580,7 @@ abstract class AbstractGroepenController extends Controller {
 	}
 
 	public function bewerken(AbstractGroep $groep, $uid = null) {
-		/** @var AbstractGroepLedenModel $model */
-		$leden = $groep::leden;
-		$model = $leden::instance();
+		$model = $groep::getLedenModel();
 		if ($uid) {
 			if (!$groep->mag(AccessAction::Bewerken)) {
 				$this->exit_http(403);
@@ -619,9 +614,7 @@ abstract class AbstractGroepenController extends Controller {
 	}
 
 	public function afmelden(AbstractGroep $groep, $uid = null) {
-		/** @var AbstractGroepLedenModel $model */
-		$leden = $groep::leden;
-		$model = $leden::instance();
+		$model = $groep::getLedenModel();
 		if ($uid) {
 			if (!$groep->mag(AccessAction::Afmelden) AND !$groep->mag(AccessAction::Beheren)) { // A::Beheren voor afmelden via context-menu
 				$this->exit_http(403);

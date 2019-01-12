@@ -15,7 +15,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Verticale extends AbstractGroep {
 
-	const leden = VerticaleLedenModel::class;
+	const LEDEN = VerticaleLedenModel::class;
 
 	/**
 	 * Primary key

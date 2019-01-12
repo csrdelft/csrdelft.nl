@@ -13,7 +13,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Bestuur extends AbstractGroep {
 
-	const leden = BestuursLedenModel::class;
+	const LEDEN = BestuursLedenModel::class;
 
 	/**
 	 * Bestuurstekst

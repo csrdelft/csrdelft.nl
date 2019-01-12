@@ -16,7 +16,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class RechtenGroep extends AbstractGroep {
 
-	const leden = RechtenGroepLedenModel::class;
+	const LEDEN = RechtenGroepLedenModel::class;
 
 	/**
 	 * Rechten benodigd voor aanmelden
@@ -27,9 +27,9 @@ class RechtenGroep extends AbstractGroep {
 	 * Database table columns
 	 * @var array
 	 */
-	protected static $persistent_attributes = array(
-		'rechten_aanmelden' => array(T::String)
-	);
+	protected static $persistent_attributes = [
+		'rechten_aanmelden' => [T::String]
+	];
 	/**
 	 * Database table name
 	 * @var string

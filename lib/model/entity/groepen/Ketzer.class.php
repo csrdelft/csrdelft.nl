@@ -18,7 +18,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 
-	const leden = KetzerDeelnemersModel::class;
+	const LEDEN = KetzerDeelnemersModel::class;
 
 	/**
 	 * Maximaal aantal groepsleden

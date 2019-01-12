@@ -12,20 +12,11 @@ use PDO;
 
 
 /**
- * AbstractGroep.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Een groep met leden.
  */
 abstract class AbstractGroep extends PersistentEntity {
-
-	/**
-	 * Model voor leden van deze groep.
-	 * @var AbstractGroepLedenModel
-	 */
-	const leden = null;
-
 	/**
 	 * Primary key
 	 * @var int
@@ -96,7 +87,7 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('id');
+	protected static $primary_key = ['id'];
 
 	/**
 	 * De URL van de groep
@@ -105,14 +96,28 @@ abstract class AbstractGroep extends PersistentEntity {
 	abstract public function getUrl();
 
 	/**
+	 * Model voor leden van deze groep.
+	 * @var AbstractGroepLedenModel
+	 */
+	const LEDEN = null;
+
+	/**
+	 * @return AbstractGroepLedenModel
+	 */
+	public static function getLedenModel() {
+		$orm = static::LEDEN;
+
+		return $orm::instance();
+	}
+
+	/**
 	 * Is lid van deze groep?
 	 *
 	 * @param string $uid
 	 * @return AbstractGroepLid
 	 */
 	public function getLid($uid) {
-		$leden = static::leden;
-		return $leden::get($this, $uid);
+		return (static::LEDEN)::get($this, $uid);
 	}
 
 	/**
@@ -121,32 +126,28 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * @return AbstractGroepLid[]
 	 */
 	public function getLeden() {
-		$leden = static::leden;
-		return $leden::instance()->getLedenVoorGroep($this);
+		return static::getLedenModel()->getLedenVoorGroep($this);
 	}
 
 	public function aantalLeden() {
-		$leden = static::leden;
-		return $leden::instance()->count('groep_id = ?', [$this->id]);
+		return static::getLedenModel()->count('groep_id = ?', [$this->id]);
 	}
 
 	public function getStatistieken() {
-		$leden = static::leden;
-		return $leden::instance()->getStatistieken($this);
+		return static::getLedenModel()->getStatistieken($this);
 	}
 
 	public function getFamilieSuggesties() {
-		return Database::instance()->sqlSelect(array('DISTINCT familie'), $this->getTableName())->fetchAll(PDO::FETCH_COLUMN);
+		return Database::instance()->sqlSelect(['DISTINCT familie'], $this->getTableName())->fetchAll(PDO::FETCH_COLUMN);
 	}
 
 	public function getOpmerkingSuggesties() {
 		if (isset($this->keuzelijst)) {
-			$suggesties = array();
+			$suggesties = [];
 		} elseif ($this instanceof Commissie OR $this instanceof Bestuur) {
 			$suggesties = CommissieFunctie::getTypeOptions();
 		} else {
-			$leden = static::leden;
-			$suggesties = Database::instance()->sqlSelect(array('DISTINCT opmerking'), $leden::instance()->getTableName(), 'groep_id = ?', array($this->id))->fetchAll(PDO::FETCH_COLUMN);
+			$suggesties = Database::instance()->sqlSelect(['DISTINCT opmerking'], static::getLedenModel()->getTableName(), 'groep_id = ?', [$this->id])->fetchAll(PDO::FETCH_COLUMN);
 		}
 		return $suggesties;
 	}
@@ -162,8 +163,7 @@ abstract class AbstractGroep extends PersistentEntity {
 		if (!LoginModel::mag('P_LOGGED_IN', $allowedAuthenticationMethods)) {
 			return false;
 		}
-		$leden = static::leden;
-		$aangemeld = Database::instance()->sqlExists($leden::instance()->getTableName(), 'groep_id = ? AND uid = ?', [$this->id, LoginModel::getUid()]);
+		$aangemeld = Database::instance()->sqlExists(static::getLedenModel()->getTableName(), 'groep_id = ? AND uid = ?', [$this->id, LoginModel::getUid()]);
 		switch ($action) {
 
 			case AccessAction::Aanmelden:

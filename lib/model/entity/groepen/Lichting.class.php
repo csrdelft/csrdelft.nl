@@ -14,7 +14,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Lichting extends AbstractGroep {
 
-	const leden = LichtingLedenModel::class;
+	const LEDEN = LichtingLedenModel::class;
 
 	/**
 	 * Lidjaar

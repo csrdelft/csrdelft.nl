@@ -27,6 +27,10 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 */
 	protected $default_order = 'begin_moment DESC';
 
+	/**
+	 * @param $id
+	 * @return AbstractGroep|false
+	 */
 	public static function get($id) {
 		if (is_numeric($id)) {
 			return static::instance()->retrieveByPrimaryKey([$id]);
@@ -136,9 +140,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 				$this->create($newgroep);
 
 				// leden converteren
-				$leden = $newgroep::leden;
-				/** @var AbstractGroepLedenModel $ledenmodel */
-				$ledenmodel = $leden::instance();
+				$ledenmodel = $newgroep::getLedenModel();
 				foreach ($oldgroep->getLeden() as $oldlid) {
 					$newlid = $ledenmodel->nieuw($newgroep, $oldlid->uid);
 					foreach ($oldlid->getValues() as $attribute => $value) {
@@ -151,9 +153,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 				}
 
 				// leden verwijderen
-				$oldleden = $oldgroep::leden;
-				/** @var AbstractGroepLedenModel $oldledenmodel */
-				$oldledenmodel = $oldleden::instance();
+				$oldledenmodel = $oldgroep::getLedenModel();
 				foreach ($oldgroep->getLeden() as $oldlid) {
 					$oldledenmodel->delete($oldlid);
 				}
@@ -178,8 +178,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	public function getGroepenVoorLid($uid, $status = null) {
 		/** @var AbstractGroep $orm */
 		$orm = static::ORM;
-		$leden = $orm::leden;
-		$ids = Database::instance()->sqlSelect(array('DISTINCT groep_id'), $leden::instance()->getTableName(), 'uid = ?', array($uid))->fetchAll(PDO::FETCH_COLUMN);
+		$ids = Database::instance()->sqlSelect(array('DISTINCT groep_id'), $orm::getLedenModel()->getTableName(), 'uid = ?', array($uid))->fetchAll(PDO::FETCH_COLUMN);
 		if (empty($ids)) {
 			return array();
 		}

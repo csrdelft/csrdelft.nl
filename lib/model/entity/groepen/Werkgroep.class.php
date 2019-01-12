@@ -15,7 +15,7 @@ use CsrDelft\model\security\LoginModel;
  */
 class Werkgroep extends Ketzer {
 
-	const leden = WerkgroepDeelnemersModel::class;
+	const LEDEN = WerkgroepDeelnemersModel::class;
 
 	/**
 	 * Database table name
