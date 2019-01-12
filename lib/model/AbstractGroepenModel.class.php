@@ -54,7 +54,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 * @return array
 	 */
 	public static function getWikiToegang($uid) {
-		$result = array();
+		$result = [];
 		$profiel = ProfielModel::get($uid);
 		if (!$profiel) {
 			return $result;
@@ -63,9 +63,9 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 			$result[] = 'htleden-oudleden';
 		}
 		// 1 generatie vooruit en 1 achteruit (default order by)
-		$ft = BesturenModel::instance()->find('status = ?', array(GroepStatus::FT), null, null, 1)->fetch();
-		$ht = BesturenModel::instance()->find('status = ?', array(GroepStatus::HT), null, null, 1)->fetch();
-		$ot = BesturenModel::instance()->find('status = ?', array(GroepStatus::OT), null, null, 1)->fetch();
+		$ft = BesturenModel::instance()->find('status = ?', [GroepStatus::FT], null, null, 1)->fetch();
+		$ht = BesturenModel::instance()->find('status = ?', [GroepStatus::HT], null, null, 1)->fetch();
+		$ot = BesturenModel::instance()->find('status = ?', [GroepStatus::OT], null, null, 1)->fetch();
 		if (($ft AND $ft->getLid($uid)) OR ($ht AND $ht->getLid($uid)) OR ($ot AND $ot->getLid($uid))) {
 			$result[] = 'bestuur';
 		}
@@ -178,9 +178,9 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	public function getGroepenVoorLid($uid, $status = null) {
 		/** @var AbstractGroep $orm */
 		$orm = static::ORM;
-		$ids = Database::instance()->sqlSelect(array('DISTINCT groep_id'), $orm::getLedenModel()->getTableName(), 'uid = ?', array($uid))->fetchAll(PDO::FETCH_COLUMN);
+		$ids = Database::instance()->sqlSelect(['DISTINCT groep_id'], $orm::getLedenModel()->getTableName(), 'uid = ?', [$uid])->fetchAll(PDO::FETCH_COLUMN);
 		if (empty($ids)) {
-			return array();
+			return [];
 		}
 		$where = 'id IN (' . implode(', ', array_fill(0, count($ids), '?')) . ')';
 		if ($status === null) {

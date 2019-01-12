@@ -32,7 +32,7 @@ class KringenModel extends AbstractGroepenModel {
 	}
 
 	public function getKringenVoorVerticale(Verticale $verticale) {
-		return $this->prefetch('verticale = ?', array($verticale->letter));
+		return $this->prefetch('verticale = ?', [$verticale->letter]);
 	}
 
 }
