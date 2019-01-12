@@ -33,7 +33,7 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 	 * @return AbstractGroepLid|false
 	 */
 	public static function get(AbstractGroep $groep, $uid) {
-		return static::instance()->retrieveByPrimaryKey(array($groep->id, $uid));
+		return static::instance()->retrieveByPrimaryKey([$groep->id, $uid]);
 	}
 
 	/**
@@ -60,7 +60,7 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 	 * @return AbstractGroepLid[]
 	 */
 	public function getLedenVoorGroep(AbstractGroep $groep) {
-		return $this->prefetch('groep_id = ?', array($groep->id));
+		return $this->prefetch('groep_id = ?', [$groep->id]);
 	}
 
 	/**
@@ -72,15 +72,15 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 	public function getStatistieken(AbstractGroep $groep) {
 		$leden = group_by_distinct('uid', $groep->getLeden());
 		if (empty($leden)) {
-			return array();
+			return [];
 		}
 		$uids = array_keys($leden);
 		$count = count($uids);
 		$sqlIn = implode(', ', array_fill(0, $count, '?'));
-		$stats['Verticale'] = Database::instance()->sqlSelect(array('naam', 'count(*)'), 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $sqlIn . ')', $uids, 'verticale', null)->fetchAll();
-		$stats['Geslacht'] = Database::instance()->sqlSelect(array('geslacht', 'count(*)'), ProfielModel::instance()->getTableName(), 'uid IN (' . $sqlIn . ')', $uids, 'geslacht', null)->fetchAll();
-		$stats['Lichting'] = Database::instance()->sqlSelect(array('lidjaar', 'count(*)'), ProfielModel::instance()->getTableName(), 'uid IN (' . $sqlIn . ')', $uids, 'lidjaar', null)->fetchAll();
-		$stats['Tijd'] = array();
+		$stats['Verticale'] = Database::instance()->sqlSelect(['naam', 'count(*)'], 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $sqlIn . ')', $uids, 'verticale', null)->fetchAll();
+		$stats['Geslacht'] = Database::instance()->sqlSelect(['geslacht', 'count(*)'], ProfielModel::instance()->getTableName(), 'uid IN (' . $sqlIn . ')', $uids, 'geslacht', null)->fetchAll();
+		$stats['Lichting'] = Database::instance()->sqlSelect(['lidjaar', 'count(*)'], ProfielModel::instance()->getTableName(), 'uid IN (' . $sqlIn . ')', $uids, 'lidjaar', null)->fetchAll();
+		$stats['Tijd'] = [];
 		foreach ($leden as $groeplid) {
 			$time = strtotime($groeplid->lid_sinds) * 1000;
 			if (isset($stats['Tijd'][$time])) {

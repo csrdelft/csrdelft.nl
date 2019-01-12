@@ -18,7 +18,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Woonoord extends AbstractGroep {
 
-	const leden = BewonersModel::class;
+	const LEDEN = BewonersModel::class;
 
 	/**
 	 * Woonoord / Huis
@@ -34,10 +34,11 @@ class Woonoord extends AbstractGroep {
 	 * Database table columns
 	 * @var array
 	 */
-	protected static $persistent_attributes = array(
-		'soort' => array(T::Enumeration, false, HuisStatus::class),
-		'eetplan' => array(T::Boolean)
-	);
+	protected static $persistent_attributes = [
+		'soort' => [T::Enumeration, false, HuisStatus::class],
+		'eetplan' => [T::Boolean]
+	];
+
 	/**
 	 * Database table name
 	 * @var string

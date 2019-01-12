@@ -10,7 +10,6 @@ use CsrDelft\model\groepen\leden\CommissieLedenModel;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\Orm\DynamicEntityModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use PDO;
@@ -19,7 +18,6 @@ use PDO;
  * AbstractGroepenModel.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
  */
 abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
@@ -29,11 +27,15 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 */
 	protected $default_order = 'begin_moment DESC';
 
+	/**
+	 * @param $id
+	 * @return AbstractGroep|false
+	 */
 	public static function get($id) {
 		if (is_numeric($id)) {
-			return static::instance()->retrieveByPrimaryKey(array($id));
+			return static::instance()->retrieveByPrimaryKey([$id]);
 		}
-		$groepen = static::instance()->prefetch('familie = ? AND status = ?', array($id, GroepStatus::HT), null, null, 1);
+		$groepen = static::instance()->prefetch('familie = ? AND status = ?', [$id, GroepStatus::HT], null, null, 1);
 		return reset($groepen);
 	}
 
@@ -45,32 +47,6 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 		return '/groepen/' . static::getNaam() . '/';
 	}
 
-	private static $old;
-
-	/**
-	 * Oude groep-id's omnummeren. 'snaam' mag ook.
-	 *
-	 * @param int|string $id
-	 * @return boolean
-	 */
-	public static function omnummeren($id) {
-		if (!isset(self::$old)) {
-			self::$old = DynamicEntityModel::makeModel('groep');
-		}
-		$groep = self::$old->find('id = ? OR (snaam = ? AND status = ?)', array($id, $id, 'ht'), null, null, 1)->fetch();
-		if (!$groep) {
-			setMelding('Groep niet gevonden: ' . htmlspecialchars($id), -1);
-			return false;
-		}
-		$model = $groep->model;
-		$namespacedModel = 'CsrDelft\\model\\groepen\\' . $model;
-		if (!class_exists($namespacedModel)) {
-			setMelding('Model niet gevonden: ' . $model, -1);
-			return false;
-		}
-		return $namespacedModel::get($groep->omnummering);
-	}
-
 	/**
 	 * Groepen waarvan de gevraagde gebruiker de wikipagina's mag lezen en bewerken.
 	 *
@@ -78,7 +54,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 * @return array
 	 */
 	public static function getWikiToegang($uid) {
-		$result = array();
+		$result = [];
 		$profiel = ProfielModel::get($uid);
 		if (!$profiel) {
 			return $result;
@@ -87,9 +63,9 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 			$result[] = 'htleden-oudleden';
 		}
 		// 1 generatie vooruit en 1 achteruit (default order by)
-		$ft = BesturenModel::instance()->find('status = ?', array(GroepStatus::FT), null, null, 1)->fetch();
-		$ht = BesturenModel::instance()->find('status = ?', array(GroepStatus::HT), null, null, 1)->fetch();
-		$ot = BesturenModel::instance()->find('status = ?', array(GroepStatus::OT), null, null, 1)->fetch();
+		$ft = BesturenModel::instance()->find('status = ?', [GroepStatus::FT], null, null, 1)->fetch();
+		$ht = BesturenModel::instance()->find('status = ?', [GroepStatus::HT], null, null, 1)->fetch();
+		$ot = BesturenModel::instance()->find('status = ?', [GroepStatus::OT], null, null, 1)->fetch();
 		if (($ft AND $ft->getLid($uid)) OR ($ht AND $ht->getLid($uid)) OR ($ot AND $ot->getLid($uid))) {
 			$result[] = 'bestuur';
 		}
@@ -101,7 +77,12 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 		}
 		return $result;
 	}
-	public function nieuw() {
+
+	/**
+	 * @param null $soort
+	 * @return AbstractGroep
+	 */
+	public function nieuw(/* @noinspection PhpUnusedParameterInspection */$soort = null) {
 		$orm = static::ORM;
 		$groep = new $orm();
 		$groep->naam = null;
@@ -119,7 +100,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	/**
 	 * Set primary key.
 	 *
-	 * @param PersistentEntity $groep
+	 * @param PersistentEntity|AbstractGroep $groep
 	 * @return void
 	 */
 	public function create(PersistentEntity $groep) {
@@ -143,75 +124,48 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 * @param AbstractGroep $oldgroep
 	 * @param AbstractGroepenModel $oldmodel
 	 * @param string $soort
-	 * @return boolean
+	 * @return AbstractGroep|bool
 	 */
 	public function converteer(AbstractGroep $oldgroep, AbstractGroepenModel $oldmodel, $soort = null) {
-		// groep converteren
 		try {
-			$newgroep = $this->nieuw($soort);
-			foreach ($oldgroep->getValues() as $attribute => $value) {
-				if (property_exists($newgroep, $attribute)) {
-					$newgroep->$attribute = $value;
-				}
-			}
-			$newgroep->id = null;
-			$this->create($newgroep);
-		} catch (\Exception $e) {
-			setMelding('Converteren mislukt: ' . $e->getMessage(), -1);
-			return false;
-		}
-		// leden converteren
-		try {
-			$leden = $newgroep::leden;
-			$ledenmodel = $leden::instance();
-			foreach ($oldgroep->getLeden() as $oldlid) {
-				$newlid = $ledenmodel->nieuw($newgroep, $oldlid->uid);
-				foreach ($oldlid->getValues() as $attribute => $value) {
-					if (property_exists($newlid, $attribute)) {
-						$newlid->$attribute = $value;
+			return Database::transaction(function () use ($oldgroep, $oldmodel, $soort) {
+				// groep converteren
+				$newgroep = $this->nieuw($soort);
+				foreach ($oldgroep->getValues() as $attribute => $value) {
+					if (property_exists($newgroep, $attribute)) {
+						$newgroep->$attribute = $value;
 					}
 				}
-				$newlid->groep_id = $newgroep->id;
-				$ledenmodel->create($newlid);
-			}
-		} catch (\Exception $e) {
-			setMelding('Leden converteren mislukt: ' . $e->getMessage(), -1);
-			return false;
-		}
-		// omnummeren
-		try {
-			if (!isset(self::$old)) {
-				self::$old = DynamicEntityModel::makeModel('groep');
-			}
-			$omnummering = self::$old->find('omnummering = ? AND model = ?', array($oldgroep->id, classNameZonderNamespace(get_class($oldmodel))), null, null, 1)->fetch();
-			if ($omnummering) {
-				$omnummering->omnummering = $newgroep->id;
-				$omnummering->model = get_class($this);
-				self::$old->update($omnummering);
-			}
+				$newgroep->id = null;
+				$this->create($newgroep);
+
+				// leden converteren
+				$ledenmodel = $newgroep::getLedenModel();
+				foreach ($oldgroep->getLeden() as $oldlid) {
+					$newlid = $ledenmodel->nieuw($newgroep, $oldlid->uid);
+					foreach ($oldlid->getValues() as $attribute => $value) {
+						if (property_exists($newlid, $attribute)) {
+							$newlid->$attribute = $value;
+						}
+					}
+					$newlid->groep_id = $newgroep->id;
+					$ledenmodel->create($newlid);
+				}
+
+				// leden verwijderen
+				$oldledenmodel = $oldgroep::getLedenModel();
+				foreach ($oldgroep->getLeden() as $oldlid) {
+					$oldledenmodel->delete($oldlid);
+				}
+
+				// groep verwijderen
+				$oldmodel->delete($oldgroep);
+				return $newgroep;
+			});
 		} catch (\Exception $ex) {
-			setMelding('Omnummeren mislukt: ' . $ex->getMessage(), -1);
+			setMelding($ex->getMessage(), -1);
 			return false;
 		}
-		// leden verwijderen
-		try {
-			$oldleden = $oldgroep::leden;
-			$oldledenmodel = $oldleden::instance();
-			foreach ($oldgroep->getLeden() as $oldlid) {
-				$oldledenmodel->delete($oldlid);
-			}
-		} catch (\Exception $ex) {
-			setMelding('Leden verwijderen mislukt: ' . $ex->getMessage(), -1);
-			return false;
-		}
-		// groep verwijderen
-		try {
-			$oldmodel->delete($oldgroep);
-		} catch (\Exception $ex) {
-			setMelding('Groep verwijderen mislukt: ' . $ex->getMessage(), -1);
-			return false;
-		}
-		return $newgroep;
 	}
 
 	/**
@@ -222,11 +176,11 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 * @return AbstractGroep[]
 	 */
 	public function getGroepenVoorLid($uid, $status = null) {
+		/** @var AbstractGroep $orm */
 		$orm = static::ORM;
-		$leden = $orm::leden;
-		$ids = Database::instance()->sqlSelect(array('DISTINCT groep_id'), $leden::instance()->getTableName(), 'uid = ?', array($uid))->fetchAll(PDO::FETCH_COLUMN);
+		$ids = Database::instance()->sqlSelect(['DISTINCT groep_id'], $orm::getLedenModel()->getTableName(), 'uid = ?', [$uid])->fetchAll(PDO::FETCH_COLUMN);
 		if (empty($ids)) {
-			return array();
+			return [];
 		}
 		$where = 'id IN (' . implode(', ', array_fill(0, count($ids), '?')) . ')';
 		if ($status === null) {

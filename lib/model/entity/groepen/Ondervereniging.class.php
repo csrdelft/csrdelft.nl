@@ -14,7 +14,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Ondervereniging extends AbstractGroep {
 
-	const leden = OnderverenigingsLedenModel::class;
+	const LEDEN = OnderverenigingsLedenModel::class;
 
 	/**
 	 * (Adspirant-)Ondervereniging

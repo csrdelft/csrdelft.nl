@@ -19,6 +19,7 @@ class LichtingenModel extends AbstractGroepenModel {
 		if ($lidjaar === null) {
 			$lidjaar = date('Y');
 		}
+		/** @var Lichting $lichting */
 		$lichting = parent::nieuw();
 		$lichting->lidjaar = (int)$lidjaar;
 		$lichting->id = $lichting->lidjaar;
@@ -30,11 +31,18 @@ class LichtingenModel extends AbstractGroepenModel {
 
 	/**
 	 * Override normal behaviour.
+	 * @param string|null $criteria
+	 * @param array $criteria_params
+	 * @param string|null $groupby
+	 * @param string|null $orderby
+	 * @param int|null $limit
+	 * @param int $start
+	 * @return array
 	 */
-	public function find($criteria = null, array $criteria_params = array(), $groupby = null, $orderby = null, $limit = null, $start = 0) {
+	public function find($criteria = null, array $criteria_params = [], $groupby = null, $orderby = null, $limit = null, $start = 0) {
 		$jongste = static::getJongsteLidjaar();
 		$oudste = static::getOudsteLidjaar();
-		$lichtingen = array();
+		$lichtingen = [];
 		for ($lidjaar = $jongste; $lidjaar >= $oudste; $lidjaar--) {
 			$lichtingen[] = $this->nieuw($lidjaar);
 		}
@@ -51,11 +59,11 @@ class LichtingenModel extends AbstractGroepenModel {
 	}
 
 	public static function getJongsteLidjaar() {
-		return (int)Database::instance()->sqlSelect(array('MAX(lidjaar)'), ProfielModel::instance()->getTableName())->fetchColumn();
+		return (int)Database::instance()->sqlSelect(['MAX(lidjaar)'], ProfielModel::instance()->getTableName())->fetchColumn();
 	}
 
 	public static function getOudsteLidjaar() {
-		return (int)Database::instance()->sqlSelect(array('MIN(lidjaar)'), ProfielModel::instance()->getTableName(), 'lidjaar > 0')->fetchColumn();
+		return (int)Database::instance()->sqlSelect(['MIN(lidjaar)'], ProfielModel::instance()->getTableName(), 'lidjaar > 0')->fetchColumn();
 	}
 
 }

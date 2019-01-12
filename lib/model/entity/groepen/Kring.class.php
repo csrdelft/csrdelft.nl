@@ -13,7 +13,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Kring extends AbstractGroep {
 
-	const leden = KringLedenModel::class;
+	const LEDEN = KringLedenModel::class;
 
 	/**
 	 * Verticaleletter
@@ -29,10 +29,10 @@ class Kring extends AbstractGroep {
 	 * Database table columns
 	 * @var array
 	 */
-	protected static $persistent_attributes = array(
-		'verticale' => array(T::Char),
-		'kring_nummer' => array(T::Integer)
-	);
+	protected static $persistent_attributes = [
+		'verticale' => [T::Char],
+		'kring_nummer' => [T::Integer]
+	];
 	/**
 	 * Database table name
 	 * @var string

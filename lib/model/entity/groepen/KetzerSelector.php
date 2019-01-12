@@ -36,11 +36,11 @@ class KetzerSelector extends PersistentEntity {
 	 * Database table columns
 	 * @var array
 	 */
-	protected static $persistent_attributes = array(
-		'select_id' => array(T::Integer, false, 'auto_increment'),
-		'ketzer_id' => array(T::Integer),
-		'keuze_soort' => array(T::Enumeration, false, KetzerSelectorSoort::class)
-	);
+	protected static $persistent_attributes = [
+		'select_id' => [T::Integer, false, 'auto_increment'],
+		'ketzer_id' => [T::Integer],
+		'keuze_soort' => [T::Enumeration, false, KetzerSelectorSoort::class]
+	];
 	/**
 	 * Database table name
 	 * @var string
@@ -50,7 +50,7 @@ class KetzerSelector extends PersistentEntity {
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array('select_id');
+	protected static $primary_key = ['select_id'];
 
 	/**
 	 * Lazy loading by foreign key.

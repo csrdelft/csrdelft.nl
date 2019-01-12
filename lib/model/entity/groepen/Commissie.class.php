@@ -18,7 +18,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Commissie extends AbstractGroep {
 
-	const leden = CommissieLedenModel::class;
+	const LEDEN = CommissieLedenModel::class;
 
 	/**
 	 * (Bestuurs-)Commissie / SjaarCie
@@ -29,9 +29,9 @@ class Commissie extends AbstractGroep {
 	 * Database table columns
 	 * @var array
 	 */
-	protected static $persistent_attributes = array(
-		'soort' => array(T::Enumeration, false, CommissieSoort::class),
-	);
+	protected static $persistent_attributes = [
+		'soort' => [T::Enumeration, false, CommissieSoort::class],
+	];
 	/**
 	 * Database table name
 	 * @var string
@@ -46,6 +46,7 @@ class Commissie extends AbstractGroep {
 	 * Rechten voor de gehele klasse of soort groep?
 	 *
 	 * @param AccessAction $action
+	 * @param null $allowedAuthenticationMethods
 	 * @param string $soort
 	 * @return boolean
 	 */

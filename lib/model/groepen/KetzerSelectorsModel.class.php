@@ -11,7 +11,7 @@ class KetzerSelectorsModel extends AbstractGroepenModel {
 	const ORM = KetzerSelector::class;
 
 	public function getSelectorsVoorKetzer(Ketzer $ketzer) {
-		return $this->prefetch('ketzer_id = ?', array($ketzer->id));
+		return $this->prefetch('ketzer_id = ?', [$ketzer->id]);
 	}
 
 }
