@@ -29,7 +29,7 @@ module.exports = (env, argv) => ({
 		'roodschopper': './sass/roodschopper.scss',
 		'thema-civitasia': './sass/thema/civitasia.scss',
 		'thema-dies': './sass/thema/dies.scss',
-        'thema-dark': './sass/thema/dark.scss',
+        'thema-dark': './sass/thema/donker.scss',
 		'thema-lustrum': './sass/thema/lustrum.scss',
 		'thema-normaal': './sass/thema/normaal.scss',
 		'thema-owee': './sass/thema/owee.scss',
