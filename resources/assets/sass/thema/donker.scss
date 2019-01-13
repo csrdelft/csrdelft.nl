@@ -1,42 +1,13 @@
-/**
- * Standaardwaarden voor variabelen, kunnen vanuit een thema aangepast worden.
- */
-
-/* Variabelen uit Bootstrap */
-
-/* kleuren */
 $dark-grey: #1E1F23;
 $darker-grey: #101011;
 
 $white: #fff;
 $gray-100: #f8f9fa;
-$gray-200: #e9ecef;
-$gray-300: #dee2e6;
-$gray-400: #ced4da;
-$gray-500: #adb5bd;
 $gray-600: #6c757d;
-$gray-700: #495057;
 $gray-800: #343a40;
-$gray-900: #212529;
-$black: #000;
 
-$blue: #224baf;
-$indigo: #6610f2;
-$purple: #6f42c1;
-$pink: #e83e8c;
-$red: #dc3545;
-$orange: #fd7e14;
-$yellow: #ffc107;
-$green: #28a745;
-$teal: #20c997;
-$cyan: #17a2b8;
-
-$primary: $blue;
+$primary: #006699;
 $secondary: $gray-600;
-$success: $green;
-$info: $cyan;
-$warning: $yellow;
-$danger: $red;
 $light: $gray-100;
 $dark: $gray-800;
 
@@ -44,7 +15,16 @@ $body-bg: $dark-grey;
 $body-color: $white;
 $headings-color: inherit;
 
-$headings-font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+@font-face {
+  font-family: 'Ubuntu-Medium';
+  src: url('../../fonts/dark-mode/Ubuntu-Medium.ttf') format('truetype'),
+  url('../../fonts/dark-mode/Ubuntu-Medium.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+$font-family-base: "Ubuntu-Medium", sans-serif;
+$headings-font-family: "Ubuntu-Medium", sans-serif;
 
 /** Stek specifieke variabelen. */
 
@@ -52,11 +32,17 @@ $headings-font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
 $beeldmerk: url(../images/beeldmerk-wit.png);
 
 $zijbalk-bg: $darker-grey;
-$zijbalk-border: #0A3292;
+$zijbalk-border: darken($primary, 12%);
 $zijbalk-kopje: $primary;
 $zijbalk-ishetal-nee: red;
 $zijbalk-ishetal-ja: green;
 $zindex-zijbalk: 800;
+
+.zijbalk-kopje {
+  a {
+    font-size: 1.25em;
+  }
+}
 
 /* bbcode */
 $bb-block-bg: #3F4149;
@@ -67,7 +53,7 @@ $forum-bericht1-bg: darken($body-bg, 4%);
 $ongelezen-lijn: #e8cf2a;
 
 /* main menu */
-$menu-primary-hover: #0a338d;
+$menu-primary-hover: $primary;
 $menu-bg: $body-bg;
 $menu-color: $body-color;
 $menu-small-bg: #0a338d;
