@@ -141,6 +141,12 @@ Handige Docker commando's
 
 ## Development
 
+### Editorconfig
+
+Zorg ervoor dat je editor zo is ingesteld dat de code style (indent/newline types) goed staat ingesteld. Check .editorconfig voor de huidige instellingen.
+
+In PhpStorm kun je de Editorconfig plugin installeren om automatisch de instellingen goed te zetten voor dit project.
+
 ### Branches & PR
 We hebben enkele branches. Niet heel bijzonder.
 
