@@ -27,9 +27,7 @@ window.flot = {
 					label: {
 						show: true,
 						radius: 2 / 3,
-						formatter: function (label, series) {
-							return `<div class="pie-chart-label">${label}<br/>${Math.round(series.percent)}%</div>`;
-						},
+						formatter: (label, series) => `<div class="pie-chart-label">${label}<br/>${Math.round(series.percent)}%</div>`,
 						threshold: 0.1
 					}
 				}
@@ -65,9 +63,7 @@ window.flot = {
 		}
 	},
 	formatter: {
-		piechart: function (label, series) {
-			return `<div class="pie-chart-label">${label}<br/>${Math.round(series.percent)}%</div>`;
-		}
+		piechart: (label, series) => `<div class="pie-chart-label">${label}<br/>${Math.round(series.percent)}%</div>`
 	}
 };
 
@@ -132,9 +128,7 @@ export function initSaldoGrafiek(parent) {
 			},
 			yaxis: {
 				tickDecimals: 2,
-				tickFormatter: function (v, axis) {
-					return '€ ' + v.toFixed(axis.tickDecimals);
-				}
+				tickFormatter: (v, axis) => '€ ' + v.toFixed(axis.tickDecimals)
 			},
 			tooltip: true,
 			tooltipOpts: {
@@ -150,7 +144,7 @@ export function initSaldoGrafiek(parent) {
 			$.ajax({
 				url: `/leden/saldo/${$el.data('uid')}/${timespan}`,
 				dataType: 'json',
-				success: function (data) {
+				success: (data) => {
 					plot.setData(data);
 					plot.setupGrid();
 					plot.draw();
