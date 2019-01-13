@@ -6,16 +6,38 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\GoogleSync;
 use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\bibliotheek\BoekExemplaarModel;
+use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\Afbeelding;
+use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
+use CsrDelft\model\forum\ForumPostsModel;
+use CsrDelft\model\fotoalbum\FotoModel;
+use CsrDelft\model\fotoalbum\FotoTagsModel;
+use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\model\groepen\KetzersModel;
 use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\model\groepen\OnderverenigingenModel;
+use CsrDelft\model\groepen\RechtenGroepenModel;
 use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
+use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\LidToestemmingModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
+use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
+use CsrDelft\model\maalcie\KwalificatiesModel;
+use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
+use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
@@ -24,12 +46,12 @@ use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\AlleVerjaardagenView;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
 use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\profiel\ProfielForm;
-use CsrDelft\view\profiel\ProfielView;
 use CsrDelft\view\StamboomView;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 
@@ -118,7 +140,40 @@ class ProfielController extends AclController {
 	}
 
 	public function profiel(Profiel $profiel) {
-		return new ProfielView($profiel);
+		$uid = $profiel->uid;
+
+		$fotos = [];
+		foreach (FotoTagsModel::instance()->find('keyword = ?', [$uid], null, null, 3) as $tag) {
+			/** @var Foto $foto */
+			$foto = FotoModel::instance()->retrieveByUUID($tag->refuuid);
+			if ($foto) {
+				$fotos[] = new FotoBBView($foto);
+			}
+		}
+
+		return view('profiel.profiel', [
+			'profiel' => $profiel,
+			'besturen' => BesturenModel::instance()->getGroepenVoorLid($uid),
+			'commissies' => CommissiesModel::instance()->getGroepenVoorLid($uid),
+			'werkgroepen' => WerkgroepenModel::instance()->getGroepenVoorLid($uid),
+			'onderverenigingen' => OnderverenigingenModel::instance()->getGroepenVoorLid($uid),
+			'groepen' => RechtenGroepenModel::instance()->getGroepenVoorLid($uid),
+			'ketzers' => KetzersModel::instance()->getGroepenVoorLid($uid),
+			'activiteiten' => ActiviteitenModel::instance()->getGroepenVoorLid($uid),
+			'bestellinglog' => CiviBestellingModel::instance()->getBeschrijving(CiviBestellingModel::instance()->getBestellingenVoorLid($uid, 10)->fetchAll()),
+			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginModel::getUid() === $uid ? '' : '/' . $uid),
+			'corveetaken' => CorveeTakenModel::instance()->getTakenVoorLid($uid),
+			'corveevoorkeuren' => CorveeVoorkeurenModel::instance()->getVoorkeurenVoorLid($uid),
+			'corveevrijstelling' => CorveeVrijstellingenModel::instance()->getVrijstelling($uid),
+			'corveekwalificaties' => KwalificatiesModel::instance()->getKwalificatiesVanLid($uid),
+			'forumpostcount' => ForumPostsModel::instance()->getAantalForumPostsVoorLid($uid),
+			'forumrecent' => ForumPostsModel::instance()->getRecenteForumPostsVanLid($uid, (int)LidInstellingenModel::get('forum', 'draden_per_pagina')),
+			'boeken' => BoekExemplaarModel::getEigendom($uid),
+			'recenteAanmeldingen' => MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid($uid, strtotime(InstellingenModel::get('maaltijden', 'recent_lidprofiel'))),
+			'abos' => MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($uid),
+			'gerecenseerdeboeken' => BoekRecensieModel::getVoorLid($uid),
+			'fotos' => $fotos
+		]);
 	}
 
 	public function resetPrivateToken(Profiel $profiel) {
