@@ -20,6 +20,7 @@
 		"eftec/bladeone": "3.18",
 		"easyrdf/easyrdf": "^0.9.1",
 		"ml/json-ld": "^1.0",
+		"symfony/security-csrf": "^3.4",
 		"ext-exif": "*",
 		"ext-gd": "*",
 		"ext-mysqli": "*",
@@ -27,7 +28,8 @@
 		"ext-pdo_mysql": "*",
 		"ext-hash": "*",
 		"ext-json": "*",
-		"symfony/security-csrf": "^3.4"
+		"ext-curl": "*",
+		"ext-dom": "*"
 	},
 	"config": {
 		"platform": {

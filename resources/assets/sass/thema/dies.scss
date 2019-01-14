@@ -31,6 +31,10 @@ $theme-colors: (
 	"white": $kleur-beige,
 );
 
+$card-bg: $kleur-blauw;
+$list-group-bg: $kleur-blauw;
+
+$link-color: $kleur-beige;
 $link-hover-color: $kleur-oranje;
 $body-bg: $kleur-blauw-donker;
 $body-color: $kleur-beige;
@@ -42,6 +46,8 @@ $zijbalk-ishetal-ja: $kleur-groen;
 $zijbalk-ishetal-nee: $kleur-rood;
 
 $bb-block-bg: $kleur-blauw;
+$bb-alt-bg: darken($body-bg, 4%);
+$bb-hover-bg: $kleur-oranje;
 $menu-primary-hover: $kleur-beige;
 $menu-bg: $body-bg;
 $menu-color: $body-color;

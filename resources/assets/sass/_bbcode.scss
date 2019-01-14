@@ -1,4 +1,6 @@
 $bb-block-bg: #f5f5f5 !default;
+$bb-alt-bg: #E9E9E9 !default;
+$bb-hover-bg: #DDEEFF !default;
 
 .bb-block {
   padding: 8px 12px;
@@ -35,6 +37,7 @@ $bb-block-bg: #f5f5f5 !default;
 .bbcodePreview {
   display: none;
   margin: 7px 0;
+	color: black;
   background-color: #ffffc1;
   border: 1px solid #ccc;
   padding: .2em .6em 10px;
@@ -221,10 +224,10 @@ table.groep-lijst {
   }
 
   tr:nth-child(even) {
-    background-color: #E9E9E9;
+    background-color: $bb-alt-bg;
   }
   tr:hover {
-    background-color: #DDEEFF;
+    background-color: $bb-hover-bg;
   }
 }
 

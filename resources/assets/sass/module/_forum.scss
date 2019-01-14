@@ -179,22 +179,6 @@ span.curpage {
 	}
 }
 
-/* Modereren */
-#modereren {
-	display: none;
-	border: 1px solid #999;
-	margin: 10px;
-	padding: 10px;
-
-	table {
-		width: 100%;
-
-		input[type="text"] {
-			width: 300px;
-		}
-	}
-}
-
 /* Zoeken */
 #forumZoekenForm {
 	float: right;
@@ -234,7 +218,7 @@ span.curpage {
 		&:nth-child(6n +1),
 		&:nth-child(6n + 2),
 		&:nth-child(6n + 3) {
-			background-color: #f5f5f5;
+			background-color: $forum-bericht1-bg;
 		}
 	}
 
@@ -250,7 +234,7 @@ span.curpage {
 	.header {
 		font-weight: bold;
 		color: #fff;
-		background-color: #0a338d;
+		background-color: $primary;
 		padding: 1em;
 
 		a, a:hover {
@@ -325,7 +309,7 @@ span.curpage {
 
 		font-weight: bold;
 		color: #fff;
-		background-color: #0a338d;
+		background-color: $primary;
 		padding: 1em;
 
 		a, a:hover {

@@ -2,6 +2,12 @@ table.agenda {
 	border-collapse: collapse;
 	border: 1px solid #ccc;
 	width: 100%;
+	background: white;
+	color: black;
+
+	a {
+		color: black;
+	}
 }
 table.agenda td {
 	padding: 3px;
