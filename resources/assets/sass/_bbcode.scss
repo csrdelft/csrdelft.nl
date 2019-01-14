@@ -221,10 +221,10 @@ table.groep-lijst {
   }
 
   tr:nth-child(even) {
-    background-color: #E9E9E9;
+    background-color: $forum-bericht1-bg;
   }
   tr:hover {
-    background-color: #DDEEFF;
+    background-color: lighten($forum-bericht1-bg, 5%);
   }
 }
 
