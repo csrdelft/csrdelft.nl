@@ -19,7 +19,6 @@ use CsrDelft\view\View;
  */
 class DataTable implements View, FormElement {
 
-	public $filter = null;
 	/** @var PersistenceModel */
 	public $model;
 
@@ -98,6 +97,10 @@ class DataTable implements View, FormElement {
 	 */
 	public function getDataTableId() {
 		return $this->dataTableId;
+	}
+
+	public function setSearch($searchString) {
+		$this->settings['search'] = ['search' => $searchString];
 	}
 
 	/**
@@ -299,14 +302,13 @@ class DataTable implements View, FormElement {
 
 	public function getHtml() {
 		$id = str_replace(' ', '-', strtolower($this->getTitel()));
-		$filter = str_replace("'", "\'", $this->filter);
 
 		$settingsJson = htmlspecialchars(json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0));
 
 		return <<<HTML
 <h2 id="table-{$id}" class="Titel">{$this->getTitel()}</h2>
 
-<table id="{$this->dataTableId}" class="ctx-datatable display" data-filter="{$filter}" data-settings="{$settingsJson}"></table>
+<table id="{$this->dataTableId}" class="ctx-datatable display" data-settings="{$settingsJson}"></table>
 HTML;
 	}
 

@@ -66,7 +66,7 @@ class PeilingenController extends AclController {
 		if ($id) {
 			$table = new PeilingTable();
 			$peiling = $this->model->find('id = ?', [$id])->fetch();
-			$table->filter = $peiling->titel;
+			$table->setSearch($peiling->titel);
 			$form = new PeilingForm($peiling, false);
 			$form->setDataTableId($table->getDataTableId());
 

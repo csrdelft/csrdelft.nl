@@ -118,7 +118,7 @@ function initDataTable(parent) {
 		let $el = $(el);
 
 		let settingsJson = $el.data('settings');
-		let filter = $el.data('filter');
+		let search = $el.data('search');
 
 		// Zet de callback voor ajax
 		if (settingsJson.ajax) {
@@ -131,10 +131,9 @@ function initDataTable(parent) {
 
 		// Init DataTable
 		const table = $el.dataTable(settingsJson);
-		table.api().search(filter);
+		table.api().search(search);
 
 		table.on('page', () => table.rows({selected: true}).deselect());
-
 		table.on('childRow.dt', (event, data) => initContext(data.container));
 	});
 }
