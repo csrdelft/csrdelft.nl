@@ -120,8 +120,7 @@ class ProfielController extends AclController {
 				setMelding('Dit profiel bestaat niet', -1);
 				redirect('/ledenlijst');
 			}
-			$body = parent::performAction($args);
-			$this->view = new CsrLayoutPage($body);
+			$this->view = parent::performAction($args);
 		}
 		else if ($this->hasParam(2) AND $this->getParam(2) === 'pasfoto') {
 			$this->action = 'pasfoto';
@@ -242,7 +241,7 @@ class ProfielController extends AclController {
 			}
 			redirect('/profiel/' . $profiel->uid);
 		}
-		return $form;
+		return new CsrLayoutPage($form);
 	}
 
 	public function voorkeuren(Profiel $profiel) {
@@ -260,7 +259,7 @@ class ProfielController extends AclController {
 			setMelding('Voorkeuren opgeslagen', 1);
 			redirect();
 		}
-		return $form;
+		return new CsrLayoutPage($form);
 	}
 
 	public function addToGoogleContacts(Profiel $profiel) {
