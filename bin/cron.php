@@ -81,10 +81,10 @@ try {
 	DebugLogModel::instance()->log('cron.php', 'ForumModel::instance()->opschonen()', array(), $e);
 }
 
-try {
-    passthru('php ../bin/cron/pin_transactie_download.php');
-} catch (Exception $e) {
-	DebugLogModel::instance()->log('cron.php', 'php pin_transactie_download.php', array(), $e);
+passthru('php ../bin/cron/pin_transactie_download.php', $ret);
+
+if ($ret !== 0) {
+	DebugLogModel::instance()->log('cron.php', 'pin_transactie_download', [], 'exit '. $ret);
 }
 
 $finish = microtime(true) - $start;
