@@ -29,7 +29,8 @@
 @section('titel', 'Het profiel van '. $profiel->getNaam('volledig'))
 
 @section('breadcrumbs')
-	<div class="breadcrumbs"><a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » <span class="active">{{$profiel->getNaam('civitas')}}</span></div>
+	<div class="breadcrumbs"><a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> »
+		<span class="active">{{$profiel->getNaam('civitas')}}</span></div>
 @endsection
 
 @section('content')
@@ -479,7 +480,8 @@
 					<div class="label">Persoonlijke<br/>ICal-feed:</div>
 					<div class="data">
 						@if($profiel->getAccount()->hasPrivateToken())
-							<input title="ICal-feed" class="form-control" type="text" value="{{$profiel->getAccount()->getICalLink()}}"
+							<input title="ICal-feed" class="form-control" type="text"
+										 value="{{$profiel->getAccount()->getICalLink()}}"
 										 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
 						@endif
 						&nbsp;
@@ -497,7 +499,8 @@
 						<div class="label">Persoonlijk<br/>RSS-feed:</div>
 						<div class="data">
 							@if($profiel->getAccount()->hasPrivateToken())
-								<input title="RSS-feed" class="form-control" type="text" value="{{$profiel->getAccount()->getRssLink()}}"
+								<input title="RSS-feed" class="form-control" type="text"
+											 value="{{$profiel->getAccount()->getRssLink()}}"
 											 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
 							@endif
 							&nbsp; <a name="tokenaanvragen" class="btn" href="/profiel/{{$profiel->uid}}/resetPrivateToken">Nieuwe

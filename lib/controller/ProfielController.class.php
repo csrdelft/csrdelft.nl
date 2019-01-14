@@ -124,7 +124,7 @@ class ProfielController extends AclController {
 		}
 		else if ($this->hasParam(2) AND $this->getParam(2) === 'pasfoto') {
 			$this->action = 'pasfoto';
-			return parent::performAction([implode('/', $this->getParams(3))]);
+			parent::performAction([implode('/', $this->getParams(3))]);
 		}
 		// Leden
 		else {
@@ -132,9 +132,7 @@ class ProfielController extends AclController {
 			if ($this->hasParam(2)) {
 				$this->action = $this->getParam(2);
 			}
-			if (startsWith($this->action, 'memory')) {
-			}
-			return parent::performAction($this->getParams(3));
+			parent::performAction($this->getParams(3));
 		}
 	}
 
