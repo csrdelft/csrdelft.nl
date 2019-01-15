@@ -76,3 +76,8 @@ $zoeken-active-bg: #428bca;
 table.groep-lijst tr:nth-child(even) {
 	background-color: lighten($body-bg, 10%);
 }
+
+.module-icon {
+	color: white;
+	opacity: 0.3;
+}
