@@ -1,6 +1,21 @@
 // Laad styles
 import '../../sass/effect/trein.scss';
 
+/**
+ * Tijd voordat een trein van het spoor wordt gehaald.
+ */
+const TIMEOUT = 13000;
+
+/**
+ * Tijd tussen twee treinen.
+ */
+const INTERVAL = 18000;
+
+/**
+ * Tijd voordat de eerste trein komt.
+ */
+const OFFSET = Math.random() * 5000 + 5000;
+
 class TjoekTjoek {
 	treinen = [
 		'ns-ddz-4',
@@ -23,14 +38,14 @@ class TjoekTjoek {
 		'iceje',
 	];
 
-	rails = null;
+	rails: Element;
 
 	get randomTrein() {
 		return this.treinen[Math.floor(Math.random() * this.treinen.length)];
 	}
 
 	constructor() {
-		this.rails = document.querySelector('.rails');
+		this.rails = document.querySelector('.rails')!;
 	}
 
 	start() {
@@ -38,8 +53,8 @@ class TjoekTjoek {
 			this.stuurTrein();
 			setInterval(() => {
 				this.stuurTrein();
-			}, 18000);
-		}, Math.random() * 5000 + 5000);
+			}, INTERVAL);
+		}, OFFSET);
 	}
 
 	stuurTrein() {
@@ -47,7 +62,7 @@ class TjoekTjoek {
 		trein.setAttribute('class', `trein ${this.randomTrein}`);
 		this.rails.appendChild(trein);
 
-		setTimeout(() => trein.remove(), 13000);
+		setTimeout(() => trein.remove(), TIMEOUT);
 	}
 }
 
