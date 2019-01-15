@@ -11,7 +11,7 @@ let contextPath = path.resolve(__dirname, 'resources/assets');
 
 // De Webpack configuratie.
 module.exports = (env, argv) => ({
-	mode: "development",
+	mode: 'development',
 	context: contextPath,
 	entry: {
 		'app': './js/app.js',
@@ -29,6 +29,7 @@ module.exports = (env, argv) => ({
 		'roodschopper': './sass/roodschopper.scss',
 		'thema-civitasia': './sass/thema/civitasia.scss',
 		'thema-dies': './sass/thema/dies.scss',
+		'thema-donker': './sass/thema/donker.scss',
 		'thema-lustrum': './sass/thema/lustrum.scss',
 		'thema-normaal': './sass/thema/normaal.scss',
 		'thema-owee': './sass/thema/owee.scss',
