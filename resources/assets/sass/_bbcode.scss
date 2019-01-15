@@ -453,11 +453,11 @@ pre.bbcode {
 }
 
 .citaatContainer .citaat .citaatContainer .citaat {
-  background-color: #e9e9e9;
+  background-color: $bb-block-bg;
 }
 
 .citaatContainer .citaat .citaatContainer .citaat .citaatContainer .citaat {
-  background-color: #efefef;
+  background-color: darken($bb-block-bg, 5%);
 }
 
 .bb-img-loading {
