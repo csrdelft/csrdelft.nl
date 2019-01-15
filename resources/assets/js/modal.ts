@@ -1,14 +1,6 @@
 import $ from 'jquery';
 
-/**
- * @param {string} htmlString
- * @returns {boolean}
- */
 export function modalOpen(htmlString = '') {
-    if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
-        return false;
-    }
-
     let modal = $('#modal'),
         modalBackdrop = $('.modal-backdrop');
 
@@ -23,8 +15,7 @@ export function modalOpen(htmlString = '') {
     modal.modal('show');
     $(document.body).trigger('modalOpen');
 
-
-    if (typeof htmlString === 'string' && htmlString !== '') {
+    if (htmlString !== '') {
         modal.html(htmlString);
         modal.find('input:visible:first').trigger('focus');
     }
