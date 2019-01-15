@@ -3,7 +3,7 @@ import {
 	Geometry,
 	Mesh,
 	PerspectiveCamera,
-	PlaneGeometry,
+	PlaneGeometry, Renderer,
 	Scene,
 	ShaderMaterial,
 	TextureLoader,
@@ -15,8 +15,8 @@ if (!Detector.webgl) {
 	Detector.addGetWebGLMessage();
 }
 
-let container;
-let camera, scene, renderer;
+let container: HTMLElement;
+let camera : PerspectiveCamera, scene : Scene, renderer : Renderer;
 let mesh, geometry, material;
 
 let mouseX = 0, mouseY = 0;
@@ -29,7 +29,7 @@ initClouds();
 
 function initClouds() {
 
-	container = document.getElementById('cd-main-overlay');
+	container = document.getElementById('cd-main-overlay')!;
 
 	// Bg gradient
 
@@ -37,7 +37,7 @@ function initClouds() {
 	canvas.width = 32;
 	canvas.height = window.innerHeight;
 
-	const context = canvas.getContext('2d');
+	const context = canvas.getContext('2d')!;
 
 	const gradient = context.createLinearGradient(0, 0, 0, canvas.height);
 	gradient.addColorStop(0, '#1e4877');
@@ -61,6 +61,11 @@ function initClouds() {
 
 	const fog = new Fog(0x4584b4, -100, 3000);
 
+	const vs = document.getElementById('vs'),
+		fs = document.getElementById('fs'),
+		vertexShader = vs!.textContent!,
+		fragmentShader = fs!.textContent!;
+
 	material = new ShaderMaterial({
 		uniforms: {
 			map: {
@@ -80,8 +85,8 @@ function initClouds() {
 				value: fog.far
 			}
 		},
-		vertexShader: document.getElementById('vs').textContent,
-		fragmentShader: document.getElementById('fs').textContent,
+		vertexShader,
+		fragmentShader,
 		depthWrite: false,
 		depthTest: false,
 		transparent: true
@@ -99,7 +104,7 @@ function initClouds() {
 		plane.scale.x = plane.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
 
 		plane.updateMatrix();
-		geometry.merge(plane.geometry, plane.matrix);
+		geometry.merge(plane.geometry as Geometry, plane.matrix);
 	}
 
 	mesh = new Mesh(geometry, material);
@@ -120,7 +125,7 @@ function initClouds() {
 	window.addEventListener('resize', onWindowResizeClouds, false);
 }
 
-function onDocumentMouseMoveClouds(event) {
+function onDocumentMouseMoveClouds(event : MouseEvent) {
 	mouseX = (event.clientX - windowHalfX) * 0.25;
 	mouseY = (event.clientY - windowHalfY) * 0.15;
 }

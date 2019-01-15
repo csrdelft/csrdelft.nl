@@ -112,11 +112,11 @@ export class FotoAlbumTags {
 	getScreenPos(position: Position): Position {
 		const img = this.fotoalbum.container.find('img.active');
 		const parent = img.parent();
-		const w = img.width() || 0;
-		const h = img.height() || 0;
+		const w = img.width()!;
+		const h = img.height()!;
 		const fotoTopLeft = {
-			x: ((parent.width() || 0) - w) / 2,
-			y: ((parent.height() || 0) - h) / 2
+			x: (parent.width()! - w) / 2,
+			y: (parent.height()! - h) / 2
 		};
 		return {
 			x: position.x * w / 100 + fotoTopLeft.x,
@@ -273,9 +273,9 @@ export class FotoAlbumTags {
 		const img = this.fotoalbum.container.find('img.active');
 		const target = e.target as HTMLElement;
 		// calculate relative position to image top left
-		const offset = $(target).offset() || {left: 0, top: 0},
-			width = img.width() || 0,
-			height = img.height() || 0;
+		const offset = $(target).offset()!,
+			width = img.width()!,
+			height = img.height()!;
 		const newTag = <Tag>{
 			name: '',
 			keyword: 'New',
@@ -301,8 +301,8 @@ export class FotoAlbumTags {
 			let prevX = e1.pageX;
 			let prevY = e1.pageY;
 			$(window).on('mousemove.newtag', (e2: JQuery.MouseMoveEvent) => {
-				newTag.size += (e2.pageX - prevX) * 100 / (img.width() || 0);
-				newTag.size += (e2.pageY - prevY) * 100 / (img.height() || 0);
+				newTag.size += (e2.pageX - prevX) * 100 / img.width()!;
+				newTag.size += (e2.pageY - prevY) * 100 / img.height()!;
 				prevX = e2.pageX;
 				prevY = e2.pageY;
 				if (newTag.size < 1) {

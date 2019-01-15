@@ -5,13 +5,12 @@
 
 export default {
 
-	canvas : !! window.CanvasRenderingContext2D,
-	webgl : ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )(),
-	workers : !! window.Worker,
-	fileapi : window.File && window.FileReader && window.FileList && window.Blob,
+	canvas : typeof(CanvasRenderingContext2D) !== 'undefined',
+	webgl : ( function () { try { return typeof(WebGLRenderingContext) !== 'undefined' && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )(),
+	workers : typeof(Worker) !== 'undefined',
+	fileapi : typeof(File) !== 'undefined' && typeof(FileReader) !== 'undefined' && typeof(FileList) !== 'undefined' && typeof(Blob) !== 'undefined',
 
 	getWebGLErrorMessage : function () {
-
 		let domElement = document.createElement( 'div' );
 
 		domElement.style.fontFamily = 'monospace';
@@ -24,8 +23,7 @@ export default {
 		domElement.style.margin = '5em auto 0';
 
 		if ( ! this.webgl ) {
-
-			domElement.innerHTML = window.WebGLRenderingContext ? [
+			domElement.innerHTML = typeof(WebGLRenderingContext) !== 'undefined' ? [
 				'Sorry, your graphics card doesn\'t support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">WebGL</a>'
 			].join( '\n' ) : [
 				'Sorry, your browser doesn\'t support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">WebGL</a><br/>',
@@ -34,27 +32,13 @@ export default {
 				'<a href="http://www.mozilla.com/en-US/firefox/all-beta.html">Firefox 4</a> or',
 				'<a href="http://nightly.webkit.org/">Safari 6</a>'
 			].join( '\n' );
-
 		}
-
 		return domElement;
-
 	},
 
-	addGetWebGLMessage : function ( parameters ) {
-
-		let parent, id, domElement;
-
-		parameters = parameters || {};
-
-		parent = parameters.parent !== undefined ? parameters.parent : document.body;
-		id = parameters.id !== undefined ? parameters.id : 'oldie';
-
-		domElement = Detector.getWebGLErrorMessage();
-		domElement.id = id;
-
-		parent.appendChild( domElement );
-
+	addGetWebGLMessage : function () {
+		let domElement = this.getWebGLErrorMessage();
+		domElement.id = 'oldie';
+		document.body.appendChild( domElement );
 	}
-
 };

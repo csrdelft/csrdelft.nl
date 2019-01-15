@@ -16,7 +16,7 @@ module.exports = (env, argv) => ({
 	entry: {
 		'app': './js/app.js',
 		'ledenmemory': './js/ledenmemory.js',
-		'fxclouds': './js/effect/fxclouds.js',
+		'fxclouds': './js/effect/fxclouds.ts',
 		'fxonontdekt': './js/effect/fxonontdekt.js',
 		'fxtrein': './js/effect/fxtrein.js',
 		'fxminion': './js/effect/minion.ts',

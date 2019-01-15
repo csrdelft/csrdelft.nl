@@ -17,6 +17,7 @@
 		"@babel/preset-env": "^7.2.3",
 		"@types/events": "^1.2.0",
 		"@types/jquery": "^3.3.2",
+		"@types/three": "^0.93.15",
 		"autoprefixer": "^9.1.1",
 		"babel-eslint": "^10.0.0",
 		"babel-loader": "^8.0.0",
