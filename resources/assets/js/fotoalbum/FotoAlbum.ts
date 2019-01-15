@@ -1,13 +1,27 @@
 import $ from 'jquery';
-import EventEmitter from 'events';
+import {EventEmitter} from 'events';
 import {basename, dirname, redirect, reload, selectText} from '../util';
 
 import 'jgallery/dist/js/jgallery';
 
-class FotoAlbum extends EventEmitter {
-	container = null;
+declare global {
+	interface JQuery {
+		jGallery(options: any): void;
 
-	constructor(wrapper) {
+		contextMenu(options: any): void;
+	}
+}
+
+export class FotoAlbum extends EventEmitter {
+	container: JQuery;
+	wrapper: JQuery;
+	isLoggedIn: boolean;
+	magAanpassen: boolean;
+	slideshowInterval: number;
+	root: string;
+	itemsJson: any;
+
+	constructor(wrapper: JQuery) {
 		super();
 		this.wrapper = wrapper;
 		this.isLoggedIn = wrapper.data('isLoggedIn');
@@ -88,7 +102,7 @@ class FotoAlbum extends EventEmitter {
 
 
 		$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', () => {
-			if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+			if (document.fullscreenEnabled) {
 				// Fullscreen gegaan, door ons knopje.
 			} else if (this.container.hasClass('jgallery-full-screen')) {
 				$('span.change-mode').trigger('click');
@@ -124,8 +138,7 @@ class FotoAlbum extends EventEmitter {
 				this.showFullRes();
 				// verberg tags tijdens zoomen
 				$('div.fototag').addClass('verborgen');
-			}
-			else {
+			} else {
 				$('div.fototag').removeClass('verborgen');
 			}
 		}).appendTo(this.container.find('div.icons'));
@@ -150,24 +163,12 @@ class FotoAlbum extends EventEmitter {
 	}
 
 	static requestFullscreen() {
-		const docelem = $('.jgallery').get(0);
-		if (docelem.requestFullscreen) {
-			docelem.requestFullscreen();
-		} else if (docelem.webkitRequestFullscreen) {
-			docelem.webkitRequestFullscreen();
-		} else if (docelem.msRequestFullscreen) {
-			docelem.msRequestFullscreen();
-		}
+		const docelem = document.querySelector('.jgallery');
+		if (docelem) docelem.requestFullscreen();
 	}
 
 	static exitFullScreen() {
-		if (document.exitFullscreen) {
-			document.exitFullscreen();
-		} else if (document.webkitExitFullscreen) {
-			document.webkitExitFullscreen();
-		} else if (document.msExitFullscreen) {
-			document.msExitFullscreen();
-		}
+		document.exitFullscreen();
 	}
 
 	getFullUrl() {
@@ -181,8 +182,7 @@ class FotoAlbum extends EventEmitter {
 	toggleFullScreen() {
 		if (this.container.hasClass('jgallery-full-screen')) {
 			FotoAlbum.requestFullscreen();
-		}
-		else {
+		} else {
 			FotoAlbum.exitFullScreen();
 		}
 	}
@@ -190,7 +190,8 @@ class FotoAlbum extends EventEmitter {
 	showFullRes() {
 		const zoom = this.container.find('div.zoom-container');
 		const foto = zoom.find('img.active');
-		const setDimensions = function (img) {
+		const fotoElem = foto.get(0) as HTMLImageElement;
+		const setDimensions = function (img: HTMLImageElement) {
 			if (zoom.attr('data-size') === 'original') {
 				foto.css({
 					'max-width': '',
@@ -205,11 +206,11 @@ class FotoAlbum extends EventEmitter {
 				$(window).trigger('resize');
 			}
 		};
-		if (foto[0].src !== this.getFullUrl()) {
-			foto[0].src = this.getFullUrl();
+		if (fotoElem.src !== this.getFullUrl()) {
+			fotoElem.src = this.getFullUrl();
 		}
 		if (zoom.attr('data-size') === 'original') {
-			setDimensions(foto[0]);
+			setDimensions(fotoElem);
 		}
 		if (zoom.attr('data-size') === 'fill') {
 			$('span.resize.jgallery-btn').removeClass('fa-search-minus').addClass('fa-search-plus');
@@ -218,7 +219,7 @@ class FotoAlbum extends EventEmitter {
 
 	updateContextMenu() {
 		const cm = $('#contextMenu').empty();
-		const addCMI = function (item, divider) {
+		const addCMI = function (item : JQuery, divider? : boolean) {
 			if (divider) {
 				$('<div class="dropdown-divider"></div>').appendTo(cm);
 			}
@@ -246,8 +247,7 @@ class FotoAlbum extends EventEmitter {
 			// sync state
 			if (btn.hasClass('fa-expand')) {
 				btnFS.find('span.fa').removeClass('fa-compress').addClass('fa-expand');
-			}
-			else {
+			} else {
 				btnFS.find('span.fa').addClass('fa-compress').removeClass('fa-expand');
 			}
 		});
@@ -255,8 +255,7 @@ class FotoAlbum extends EventEmitter {
 		// sync state
 		if (this.container.find('span.change-mode').hasClass('fa-expand')) {
 			btnFS.find('span.fa').addClass('fa-expand');
-		}
-		else {
+		} else {
 			btnFS.find('span.fa').addClass('fa-compress');
 		}
 
@@ -268,8 +267,7 @@ class FotoAlbum extends EventEmitter {
 			// sync state
 			if (btn.hasClass('fa-search-minus')) {
 				btnZoom.find('span.fa').removeClass('fa-search-minus').addClass('fa-search-plus');
-			}
-			else {
+			} else {
 				btnZoom.find('span.fa').addClass('fa-search-minus').removeClass('fa-search-plus');
 			}
 		});
@@ -277,8 +275,7 @@ class FotoAlbum extends EventEmitter {
 		// sync state
 		if (this.container.find('span.resize.jgallery-btn').hasClass('fa-search-plus')) {
 			btnZoom.find('span.fa').addClass('fa-search-plus');
-		}
-		else {
+		} else {
 			btnZoom.find('span.fa').addClass('fa-search-minus');
 		}
 

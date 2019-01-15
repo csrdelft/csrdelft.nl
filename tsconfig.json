@@ -5,7 +5,7 @@
       "dom",
       "es2015"
     ],
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "isolatedModules": false,
     "experimentalDecorators": true,
