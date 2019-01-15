@@ -5,6 +5,7 @@ $white: #fff;
 $gray-100: #f8f9fa;
 $gray-600: #6c757d;
 $gray-800: #343a40;
+$black: #000;
 
 $primary: #006699;
 $secondary: $gray-600;
@@ -44,6 +45,9 @@ $zindex-zijbalk: 800;
 	}
 }
 
+/* Modals */
+$modal-content-bg: $body-bg;
+
 /* bbcode */
 $bb-block-bg: #3F4149;
 
@@ -64,3 +68,11 @@ $zoeken-active-bg: #428bca;
 
 /* importeer basis */
 @import "../base";
+
+.close {
+	color: $white;
+}
+
+table.groep-lijst tr:nth-child(even) {
+	background-color: lighten($body-bg, 10%);
+}
