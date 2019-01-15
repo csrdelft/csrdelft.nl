@@ -16,11 +16,11 @@ $body-color: $white;
 $headings-color: inherit;
 
 @font-face {
-  font-family: 'Ubuntu-Medium';
-  src: url('../../fonts/dark-mode/Ubuntu-Medium.ttf') format('truetype'),
-  url('../../fonts/dark-mode/Ubuntu-Medium.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
+	font-family: 'Ubuntu-Medium';
+	src: url('../../fonts/dark-mode/Ubuntu-Medium.ttf') format('truetype'),
+	url('../../fonts/dark-mode/Ubuntu-Medium.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
 }
 
 $font-family-base: "Ubuntu-Medium", sans-serif;
@@ -39,9 +39,9 @@ $zijbalk-ishetal-ja: green;
 $zindex-zijbalk: 800;
 
 .zijbalk-kopje {
-  a {
-    font-size: 1.25em;
-  }
+	a {
+		font-size: 1.25em;
+	}
 }
 
 /* bbcode */
