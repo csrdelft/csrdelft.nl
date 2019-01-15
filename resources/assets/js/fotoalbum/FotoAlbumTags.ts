@@ -1,11 +1,26 @@
 import $ from 'jquery';
+import axios from 'axios';
 import {basename, dirname} from '../util';
+import {FotoAlbum} from './FotoAlbum';
+
+interface Position {
+	x: number;
+	y: number;
+	size: number;
+}
+
+interface Tag extends Position {
+	name: string;
+	keyword: string;
+}
 
 export class FotoAlbumTags {
 	tagMode = false;
-	tagFormDiv = null;
+	tagFormDiv: JQuery | null;
 
-	constructor(fotoalbum) {
+	fotoalbum: FotoAlbum;
+
+	constructor(fotoalbum: FotoAlbum) {
 		this.fotoalbum = fotoalbum;
 
 		fotoalbum.on('afterLoadPhoto', () => {
@@ -17,18 +32,16 @@ export class FotoAlbumTags {
 
 		// keyboard shortcuts
 		window.addEventListener('keydown', (event) => {
-			if (event.keyCode === 46) { // delete
+			if (event.key === 'Delete') { // delete
 				$('div.fototag.active').each((i, val) => {
 					this.removeTag($(val));
 				});
-			}
-			else if (event.keyCode === 27) { // esc
+			} else if (event.key === 'Escape') { // esc
 				event.preventDefault();
 				if (this.tagMode) {
 					if (this.tagFormDiv) {
 						this.exitTagForm();
-					}
-					else {
+					} else {
 						this.moveTagDivs();
 					}
 				}
@@ -77,8 +90,7 @@ export class FotoAlbumTags {
 		btnTag.on('mouseenter', () => {
 			if (this.tagMode) {
 				btnTag.addClass('fa-toggle-on').removeClass('fa-toggle-off');
-			}
-			else {
+			} else {
 				btnTag.removeClass('fa-toggle-on').addClass('fa-toggle-off');
 			}
 		});
@@ -97,30 +109,30 @@ export class FotoAlbumTags {
 		$('div.fototag').removeClass('showborder');
 	}
 
-	getScreenPos(relX, relY, size) {
+	getScreenPos(position: Position): Position {
 		const img = this.fotoalbum.container.find('img.active');
 		const parent = img.parent();
-		const w = img.width();
-		const h = img.height();
+		const w = img.width() || 0;
+		const h = img.height() || 0;
 		const fotoTopLeft = {
-			x: (parent.width() - w) / 2,
-			y: (parent.height() - h) / 2
+			x: ((parent.width() || 0) - w) / 2,
+			y: ((parent.height() || 0) - h) / 2
 		};
 		return {
-			x: relX * w / 100 + fotoTopLeft.x,
-			y: relY * h / 100 + fotoTopLeft.y,
-			size: (w + h) / 200 * size
+			x: position.x * w / 100 + fotoTopLeft.x,
+			y: position.y * h / 100 + fotoTopLeft.y,
+			size: (w + h) / 200 * position.size
 		};
 	}
 
-	drawTag(tag) {
-		const pos = this.getScreenPos(tag.x, tag.y, tag.size);
+	drawTag(tag: Tag) {
+		const screenPosition = this.getScreenPos(tag);
 		const tagDiv = $(`<div id="tag${tag.keyword}" class="fototag" title="${tag.name}"></div>`).appendTo(this.fotoalbum.container);
 		tagDiv.css({
-			top: pos.y - pos.size / 2,
-			left: pos.x - pos.size / 2,
-			width: pos.size,
-			height: pos.size
+			top: screenPosition.y - screenPosition.size / 2,
+			left: screenPosition.x - screenPosition.size / 2,
+			width: screenPosition.size,
+			height: screenPosition.size
 		});
 		if (this.tagMode) {
 			tagDiv.addClass('showborder');
@@ -143,7 +155,7 @@ export class FotoAlbumTags {
 		return tagDiv;
 	}
 
-	drawTags(tags) {
+	drawTags(tags: Tag[]) {
 		// remove old ones
 		$('div.fototag').remove();
 		if (!Array.isArray(tags)) {
@@ -156,8 +168,7 @@ export class FotoAlbumTags {
 		const zoom = this.fotoalbum.container.find('div.zoom-container');
 		if (zoom.attr('data-size') !== 'fit') {
 			$('div.fototag').addClass('verborgen');
-		}
-		else {
+		} else {
 			$('div.fototag').removeClass('verborgen');
 		}
 	}
@@ -167,25 +178,28 @@ export class FotoAlbumTags {
 		$('div.fototag').remove();
 		// get new ones
 		const url = this.fotoalbum.getUrl();
-		$.post('/fotoalbum/gettags' + dirname(url), {
-			foto: basename(url)
-		}, (tags) => this.drawTags(tags));
+		const data = new FormData();
+		data.append('foto', basename(url));
+		axios
+			.post('/fotoalbum/gettags' + dirname(url), data).then((response) => this.drawTags(response.data));
 	}
 
-	removeTag(tagDiv) {
+	removeTag(tagDiv: JQuery) {
 		if (confirm('Etiket verwijderen?')) {
 			const tag = tagDiv.data('tag');
-			$.post('/fotoalbum/removetag', {
-				refuuid: tag.refuuid,
-				keyword: tag.keyword
-			}, (tags) => this.drawTags(tags));
+			const data = new FormData();
+			data.append('refuuid', tag.refuuid);
+			data.append('keyword', tag.keyword);
+			axios
+				.post('/fotoalbum/removetag', data)
+				.then((response) => this.drawTags(response.data));
 		}
 	}
 
 	moveTagDivs() {
 		$('div.fototag').each((i, el) => {
-			const tag = $(el).data('tag');
-			const pos = this.getScreenPos(tag.x, tag.y, tag.size);
+			const tag = $(el).data('tag') as Tag;
+			const pos = this.getScreenPos(tag);
 			$(this).css({
 				top: pos.y - pos.size / 2,
 				left: pos.x - pos.size / 2,
@@ -195,8 +209,8 @@ export class FotoAlbumTags {
 		});
 	}
 
-	drawTagForm(html, relX, relY, size) {
-		const pos = this.getScreenPos(relX, relY, size);
+	drawTagForm(html: string, position: Position) {
+		const pos = this.getScreenPos(position);
 		this.tagFormDiv = $(html).appendTo(this.fotoalbum.container);
 		this.tagFormDiv.css({
 			position: 'absolute',
@@ -205,30 +219,27 @@ export class FotoAlbumTags {
 			'z-index': 10000
 		});
 		// set attr for move/resize
-		this.tagFormDiv.attr('data-relY', relY);
-		this.tagFormDiv.attr('data-relX', relX);
-		this.tagFormDiv.attr('data-size', size);
+		this.tagFormDiv.data('tagPosition', position);
 		// set submit handler
-		this.tagFormDiv.find('form').data('submitCallback', (response) => {
+		this.tagFormDiv.find('form').data('submitCallback', (response: Tag[] | string) => {
 			if (this.tagFormDiv) {
 				this.exitTagForm();
 			}
 			if (typeof response === 'object') { // JSON tags
 				this.drawTags(response);
-			}
-			else { // HTML form
-				this.drawTagForm(response, relX, relY, size);
+			} else { // HTML form
+				this.drawTagForm(response, position);
 			}
 		});
 		// set focus
-		setTimeout(() => this.tagFormDiv.find('input[name="uid"]').trigger('focus'));
+		setTimeout(() => this.tagFormDiv && this.tagFormDiv.find('input[name="uid"]').trigger('focus'));
 	}
 
 	moveTagForm() {
 		if (!this.tagFormDiv) {
 			return;
 		}
-		const pos = this.getScreenPos(this.tagFormDiv.attr('data-relX'), this.tagFormDiv.attr('data-relY'), this.tagFormDiv.attr('data-size'));
+		const pos = this.getScreenPos(this.tagFormDiv.data("tagPosition") as Position);
 		this.tagFormDiv.css({
 			top: pos.y + pos.size,
 			left: pos.x - (pos.size / 2)
@@ -237,43 +248,46 @@ export class FotoAlbumTags {
 
 	exitTagForm() {
 		$('div[id="tagNew"]').remove();
-		this.tagFormDiv.remove();
-		this.tagFormDiv = false;
+		if (this.tagFormDiv) this.tagFormDiv.remove();
+		this.tagFormDiv = null;
 	}
 
-	addTag(relX, relY, size) {
+	addTag(position: Position) {
 		const url = this.fotoalbum.getUrl();
-		$.post('/fotoalbum/addtag' + dirname(url), {
-			foto: basename(url),
-			x: Math.round(relX),
-			y: Math.round(relY),
-			size: Math.round(size)
-		}, (response) => {
-			if (typeof response === 'object') { // JSON tags
-				this.drawTags(response);
-			}
-			else { // HTML form
-				this.drawTagForm(response, relX, relY, size);
-			}
-		});
+		const data = new FormData();
+		data.append('foto', basename(url));
+		data.append('x', Math.round(position.x).toString());
+		data.append('y', Math.round(position.y).toString());
+		data.append('size', Math.round(position.size).toString());
+		axios.post('/fotoalbum/addtag' + dirname(url), data)
+			.then((response) => {
+				if (typeof response.data === 'object') { // JSON tags
+					this.drawTags(response.data);
+				} else { // HTML form
+					this.drawTagForm(response.data, position);
+				}
+			});
 	}
 
-	newTagStart(e) {
+	newTagStart(e: JQuery.ClickEvent) {
 		const img = this.fotoalbum.container.find('img.active');
+		const target = e.target as HTMLElement;
 		// calculate relative position to image top left
-		const offset = $(e.target).offset();
-		const newTag = {
-			x: (e.pageX - offset.left) * 100 / img.width(), // %,
-			y: (e.pageY - offset.top) * 100 / img.height(), // %,
-			size: 7, // %
+		const offset = $(target).offset() || {left: 0, top: 0},
+			width = img.width() || 0,
+			height = img.height() || 0;
+		const newTag = <Tag>{
 			name: '',
-			keyword: 'New'
+			keyword: 'New',
+			x: (e.pageX - offset.left) * 100 / width, // %,
+			y: (e.pageY - offset.top) * 100 / height, // %,
+			size: 7, // %
 		};
 		// show form
 		if (this.tagFormDiv) {
 			this.exitTagForm();
 		}
-		this.addTag(newTag.x, newTag.y, newTag.size);
+		this.addTag(newTag);
 		// show new resizable tag
 		const tagDiv = this.drawTag(newTag);
 		// not remove-able
@@ -281,26 +295,23 @@ export class FotoAlbumTags {
 		// resize-able
 		tagDiv.css('cursor', 'nw-resize');
 		$(window).off('mouseup.newtag');
-		$(window).on('mouseup.newtag', () => {
-			$(window).off('mousemove.newtag');
-		});
-		tagDiv.bind('mousedown.newtag', (e1) => {
+		$(window).on('mouseup.newtag', () => $(window).off('mousemove.newtag'));
+		tagDiv.on('mousedown.newtag', (e1: JQuery.MouseDownEvent) => {
 			const img = this.fotoalbum.container.find('img.active');
 			let prevX = e1.pageX;
 			let prevY = e1.pageY;
-			$(window).on('mousemove.newtag', (e2) => {
-				newTag.size += (e2.pageX - prevX) * 100 / img.width();
-				newTag.size += (e2.pageY - prevY) * 100 / img.height();
+			$(window).on('mousemove.newtag', (e2: JQuery.MouseMoveEvent) => {
+				newTag.size += (e2.pageX - prevX) * 100 / (img.width() || 0);
+				newTag.size += (e2.pageY - prevY) * 100 / (img.height() || 0);
 				prevX = e2.pageX;
 				prevY = e2.pageY;
 				if (newTag.size < 1) {
 					newTag.size = 1;
-				}
-				else if (newTag.size > 99) {
+				} else if (newTag.size > 99) {
 					newTag.size = 99;
 				}
-				this.tagFormDiv.find('input[name="size"]').val(Math.round(newTag.size));
-				const pos = this.getScreenPos(newTag.x, newTag.y, newTag.size);
+				if (this.tagFormDiv) this.tagFormDiv.find('input[name="size"]').val(Math.round(newTag.size));
+				const pos = this.getScreenPos(newTag);
 				tagDiv.css({
 					top: pos.y - pos.size / 2,
 					left: pos.x - pos.size / 2,
@@ -329,7 +340,7 @@ export class FotoAlbumTags {
 		const img = this.fotoalbum.container.find('img.active');
 		img.css('cursor', 'crosshair');
 		// (re-)bind add new tag handler
-		img.unbind('click.newtag');
-		img.bind('click.newtag', (e) => this.newTagStart(e));
+		img.off('click.newtag');
+		img.on('click', (e) => this.newTagStart(e));
 	}
 }
