@@ -39,6 +39,7 @@ class MaaltijdAanmelding extends PersistentEntity {
 	public $door_abonnement; # foreign key mlt_repetitie.id
 	public $door_uid; # foreign key lid.uid
 	public $laatst_gewijzigd; # datetime
+	/** @var Maaltijd */
 	public $maaltijd;
 
 	/**

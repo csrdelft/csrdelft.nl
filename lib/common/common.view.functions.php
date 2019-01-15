@@ -270,3 +270,34 @@ function link_for($title, $href, $class, $activeClass) {
 function format_bedrag($bedrag) {
 	return sprintf('€%.2f', $bedrag / 100);
 }
+
+/**
+ * @param string  $string      input string
+ * @param integer $length      length of truncated text
+ * @param string  $etc         end string
+ * @param boolean $break_words truncate at word boundary
+ * @param boolean $middle      truncate in the middle of text
+ *
+ * @return string truncated string
+ */
+function truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false) {
+	if ($length === 0) {
+		return '';
+	}
+	if (mb_strlen($string, 'UTF-8') > $length) {
+		$length -= min($length, mb_strlen($etc, 'UTF-8'));
+		if (!$break_words && !$middle) {
+			$string = preg_replace(
+				'/\s+?(\S+)?$/u',
+				'',
+				mb_substr($string, 0, $length + 1, 'UTF-8')
+			);
+		}
+		if (!$middle) {
+			return mb_substr($string, 0, $length, 'UTF-8') . $etc;
+		}
+		return mb_substr($string, 0, $length / 2, 'UTF-8') . $etc .
+			mb_substr($string, -$length / 2, $length, 'UTF-8');
+	}
+	return $string;
+}
