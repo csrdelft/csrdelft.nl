@@ -15,6 +15,18 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 
 require('timeago');
 
+declare global {
+	// Deze functie heeft geen type...
+	namespace JQueryUI {
+		interface Widget {
+			bridge: (newName: string, widget: Widget) => void
+		}
+	}
+	interface Window {
+		bbcode: any
+	}
+}
+
 window.bbcode = {
 	CsrBBPreview,
 	bbvideoDisplay,
@@ -42,12 +54,12 @@ $window.on('load', function () {
 				$(this).removeClass('bb-img-loading').addClass('bb-img');
 			});
 			content.addClass('bb-img');
-			content.attr('alt', $(this).attr('title'));
-			content.attr('style', $(this).attr('style'));
-			content.attr('src', $(this).attr('src'));
-			$(this).html(content);
+			content.attr('alt', $(this).attr('title')!);
+			content.attr('style', $(this).attr('style')!);
+			content.attr('src', $(this).attr('src')!);
+			$(this).html(content.toString());
 			content.on('load', function () {
-				const foto = content.attr('src').indexOf('/plaetjes/fotoalbum/') >= 0;
+				const foto = content.attr('src')!.indexOf('/plaetjes/fotoalbum/') >= 0;
 				const video = $(this).parent().parent().hasClass('bb-video-preview');
 				const hasAnchor = $(this).closest('a').length !== 0;
 				$(this).parent().replaceWith($(this));
@@ -72,7 +84,7 @@ const lazyLoad = (function () {
 		// Lazy load frontpage
 		setTimeout(function () {
 			$('.lazy-load').each(function () {
-				$(this).replaceWith(this.textContent);
+				$(this).replaceWith(this.textContent!);
 			});
 		});
 	};
@@ -80,11 +92,11 @@ const lazyLoad = (function () {
 
 // Lazy load after animations have finished and user has scrolled
 $window.on('scroll', () => {
-	if ($(window).scrollTop() > 0) {
+	if ($(window).scrollTop()! > 0) {
 		lazyLoad();
 	}
 
-	if (window.pageYOffset > $banner.outerHeight()) {
+	if (window.pageYOffset > $banner.outerHeight()!) {
 		$header.removeClass('alt');
 	} else {
 		$header.addClass('alt');

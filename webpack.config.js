@@ -20,7 +20,7 @@ module.exports = (env, argv) => ({
 		'fxonontdekt': './js/effect/fxonontdekt.ts',
 		'fxtrein': './js/effect/fxtrein.ts',
 		'fxminion': './js/effect/minion.ts',
-		'extern': ['./js/extern.js', './sass/extern.scss'],
+		'extern': ['./js/extern.ts', './sass/extern.scss'],
 		'bredeletters': './sass/bredeletters.scss',
 		'common': './sass/common.scss',
 		'extern-forum': './sass/extern-forum.scss',

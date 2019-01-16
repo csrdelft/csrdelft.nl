@@ -8,10 +8,10 @@ import initContext from './context';
 
 function initGeolocation() { // eslint-disable-line
 
-	let previousPos = false;
+	let previousPos: Position;
 
-    function positionSave(position) {
-        if (!previousPos || ($(previousPos.coords).not(position.coords).length === 0 && $(position.coords).not(previousPos.coords).length === 0)) {
+    function positionSave(position : Position) {
+        if (!previousPos || previousPos.coords == position.coords) {
             previousPos = position;
             $.post('/geolocation/save', {
                 coords: position.coords,
@@ -23,7 +23,7 @@ function initGeolocation() { // eslint-disable-line
     /**
      * @param {PositionError} error
      */
-    function positionError(error) {
+    function positionError(error : PositionError) {
         switch (error.code) {
             case error.PERMISSION_DENIED:
                 break;
@@ -67,7 +67,7 @@ function zijbalkScrollFixed() {
     // fix position on screen
     $(window).on('scroll', () => {
         elmnt.css({
-            'top': $(window).scrollTop()
+            'top': $(window).scrollTop()!
         });
     });
 
