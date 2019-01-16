@@ -80,7 +80,7 @@ $zoeken-active-bg: #428bca;
 
 /* maalcie-tabel */
 $maalcie-tabel-header: darken($body-bg, 5%);
-$maalcie-tabel-tr0: lighten($body-bg, 6%);
+$maalcie-tabel-tr0: lighten($body-bg, 4%);
 $maalcie-tabel-tr1: lighten($body-bg, 12%);
 
 /* importeer basis */
@@ -90,10 +90,21 @@ $maalcie-tabel-tr1: lighten($body-bg, 12%);
 	color: $white;
 }
 
+/* Pas om-en-om kleuren in de lichtingen, vertikalen, kringen, etc. aan */
 table.groep-lijst tr:nth-child(even) {
-	background-color: lighten($body-bg, 10%);
+	background-color: lighten($body-bg, 5%);
 }
 
+/* Pas hover op de maalcie-tabel aan*/
+.maalcie-tabel {
+	tr {
+		&:hover {
+			background-color: lighten($body-bg, 40%);
+		}
+	}
+}
+
+/* Pas "icoontje" in de breadcrubs aan */
 .module-icon {
 	color: white;
 	opacity: 0.3;
@@ -103,6 +114,7 @@ table.groep-lijst tr:nth-child(even) {
 	background-color: #3F4149;
 }
 
+/* Pas achtergrond in de fotogallerij aan */
 .jgallery {
 	background-color: lighten($body-bg, 4%) !important;
 
