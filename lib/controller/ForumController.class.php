@@ -9,6 +9,7 @@ use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
+use CsrDelft\model\forum\ForumDelenMeldingModel;
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenGelezenModel;
 use CsrDelft\model\forum\ForumDradenMeldingModel;
@@ -722,6 +723,9 @@ class ForumController extends Controller {
 			// direct goedkeuren voor ingelogd
 			ForumPostsModel::instance()->goedkeurenForumPost($post);
 			ForumDradenMeldingModel::instance()->stuurMeldingen($post);
+			if ($nieuw) {
+				ForumDelenMeldingModel::instance()->stuurMeldingen($post);
+			}
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 			if ($nieuw && LidInstellingenModel::get('forum', 'meldingEigenDraad') === 'ja') {
 				ForumDradenMeldingModel::instance()->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::ALTIJD);
