@@ -9,7 +9,7 @@ class ForumDeelMeldingen extends AbstractMigration
     {
 		$this->table('forum_delen_meldingen')
 			->addColumn('forum_id', 'integer')
-			->addColumn('uid', 'integer')
+			->addColumn('uid', 'string', ['length' => 4])
 			->create();
     }
 }

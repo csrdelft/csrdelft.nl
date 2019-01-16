@@ -106,6 +106,10 @@ class ForumDeel extends PersistentEntity {
 		return LoginModel::mag($this->rechten_modereren);
 	}
 
+	public function magMeldingKrijgen() {
+		return $this->magLezen();
+	}
+
 	public function isOpenbaar() {
 		return strpos($this->rechten_lezen, 'P_FORUM_READ') !== false;
 	}

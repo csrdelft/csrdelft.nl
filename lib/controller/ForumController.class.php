@@ -93,6 +93,7 @@ class ForumController extends Controller {
 			case 'offtopic':
 			case 'goedkeuren':
 			case 'meldingsniveau':
+			case 'deelmelding':
 
 			// ForumPost
 			case 'tekst':
@@ -345,7 +346,8 @@ class ForumController extends Controller {
 			'belangrijk' => '',
 			'post_form_titel' => ForumDradenReagerenModel::instance()->getConceptTitel($deel),
 			'post_form_tekst' => ForumDradenReagerenModel::instance()->getConcept($deel),
-			'reageren' => ForumDradenReagerenModel::instance()->getReagerenVoorDeel($deel)
+			'reageren' => ForumDradenReagerenModel::instance()->getReagerenVoorDeel($deel),
+			'deelmelding' => ForumDelenMeldingModel::instance()->lidWilMeldingVoorDeel($deel)
 		]);
 	}
 
@@ -548,6 +550,28 @@ class ForumController extends Controller {
 			throw new CsrToegangException('Ongeldig meldingsniveau gespecificeerd');
 		}
 		ForumDradenMeldingModel::instance()->setNiveauVoorLid($draad, $niveau);
+		return new JsonResponse(true);
+	}
+
+	/**
+	 * Niveau voor meldingen deelforum instellen
+	 *
+	 * @param int $forum_id
+	 * @param string $niveau
+	 *
+	 * @return View
+	 * @throws CsrGebruikerException
+	 * @throws CsrException
+	 */
+	public function deelmelding(int $forum_id, $niveau) {
+		$deel = ForumDelenModel::get($forum_id);
+		if (!$deel || !$deel->magLezen() || !$deel->magMeldingKrijgen()) {
+			throw new CsrToegangException('Deel mag geen melding voor ontvangen worden');
+		}
+		if ($niveau !== 'aan' && $niveau !== 'uit') {
+			throw new CsrToegangException('Ongeldig meldingsniveau gespecificeerd');
+		}
+		ForumDelenMeldingModel::instance()->setMeldingVoorLid($deel, $niveau === 'aan');
 		return new JsonResponse(true);
 	}
 
