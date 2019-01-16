@@ -107,7 +107,7 @@
 
 			@auth
 				@if(!isset($deel->forum_id))
-					<div class="d-none d-md-block">
+					<div>
 						Berichten per dag: (sleep om te zoomen)
 						<div class="grafiek">
 							{{-- forum.js pikt dit op en vult met een grafiekje. --}}

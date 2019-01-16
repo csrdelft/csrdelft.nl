@@ -7,8 +7,10 @@ use CsrDelft\common\GoogleSync;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\model\entity\groepen\Kring;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\OntvangtContactueel;
+use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\model\groepen\CommissiesModel;
@@ -36,6 +38,9 @@ use GuzzleHttp\Exception\RequestException;
  *
  * Profiel van een lid. Agendeerbaar vanwege verjaardag in agenda.
  *
+ * @property-read Account $account
+ * @property-read Kring $kring
+ * @property-read string $primary_email
  */
 class Profiel extends PersistentEntity implements Agendeerbaar {
 
@@ -194,6 +199,12 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'novietSoort' => array(T::String, true),
 		'kgb' => array(T::Text, true)
 	);
+
+	protected static $computed_attributes = [
+		'primary_email' => [T::String],
+		'account' => [Account::class],
+		'kring' => [Kring::class],
+	];
 	/**
 	 * In $properties_lidstatus kan per property worden aangegeven voor welke lidstatusen deze nodig. Bij wijziging van
 	 * lidstatus wordt een property verwijderd als deze niet langer nodig is.

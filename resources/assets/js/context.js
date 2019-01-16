@@ -5,9 +5,9 @@ import {modalClose, modalOpen} from './modal';
 import {formCancel, formReset, formSubmit, formToggle} from './formulier';
 
 import {bbCodeSet} from './bbcode-set';
-import {initDeelnamegrafiek} from './deelnamegrafiek';
 import {fnAjaxUpdateCallback, fnGetLastUpdate} from './datatable/datatable';
 import render from './datatable/render';
+import {initSaldoGrafiek, initDeelnamegrafiek} from './grafiek';
 
 function initButtons(parent) {
     $(parent).find('.spoiler').bind('click.spoiler', function (event) {
@@ -150,6 +150,7 @@ export default function initContext(parent) {
     initVue(parent);
     initDeelnamegrafiek(parent);
     initDataTable(parent);
+    initSaldoGrafiek(parent);
 }
 
 export function domUpdate(htmlString) {

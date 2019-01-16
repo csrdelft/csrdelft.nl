@@ -541,11 +541,63 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
+"@types/bootstrap@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@types/bootstrap/-/bootstrap-4.2.0.tgz#d3a1eae1ddda9b2ea9984ecd4882b5bc5d58e5c1"
+  integrity sha512-UEoagFb7PJy2yHlwdK9v9nf4EcAtV6BSS+6W+wIwnCdLN6xsCLeF/LMIUz1db4op3oaYVcN96Uc3RxRbME64Yw==
+  dependencies:
+    "@types/jquery" "*"
+    popper.js "^1.14.1"
+
+"@types/datatables.net-buttons@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@types/datatables.net-buttons/-/datatables.net-buttons-1.4.0.tgz#e9c7a0dd4c01c5e5deda7c3fafb002f6d9232d9c"
+  integrity sha512-ocPxBjnNCY3T0wgeJAMHyEKwUf4yGxRo0eP8+Jwg+GGC5PySEjECJql+7kY56fWEa+2L0qFZzUzZSuk7ThHwSw==
+  dependencies:
+    "@types/datatables.net" "*"
+    "@types/jquery" "*"
+
+"@types/datatables.net@*", "@types/datatables.net@^1.10.14":
+  version "1.10.14"
+  resolved "https://registry.yarnpkg.com/@types/datatables.net/-/datatables.net-1.10.14.tgz#36c11c67dee60565c989d16e6c59a4c99f36ebe6"
+  integrity sha512-lvU5UFVzqc3uLkoweCzogiG8LgDGzF3TIVDs8MJt2AcDr1ji/k0NRMTVlcf19EUmP5C4nc80Q05z21GWIyU8CA==
+  dependencies:
+    "@types/jquery" "*"
+
+"@types/events@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
+  integrity sha512-KEIlhXnIutzKwRbQkGWb/I4HFqBuUykAdHgDED6xqwXJfONCjF5VoE0cXEiurh3XauygxzeDzgtXUqvLkxFzzA==
+
+"@types/hammerjs@^2.0.36":
+  version "2.0.36"
+  resolved "https://registry.yarnpkg.com/@types/hammerjs/-/hammerjs-2.0.36.tgz#17ce0a235e9ffbcdcdf5095646b374c2bf615a4c"
+  integrity sha512-7TUK/k2/QGpEAv/BCwSHlYu3NXZhQ9ZwBYpzr9tjlPIL2C5BeGhH3DmVavRx3ZNyELX5TLC91JTz/cen6AAtIQ==
+
+"@types/jquery@*":
+  version "3.3.29"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.29.tgz#680a2219ce3c9250483722fccf5570d1e2d08abd"
+  integrity sha512-FhJvBninYD36v3k6c+bVk1DSZwh7B5Dpb/Pyk3HKVsiohn0nhbefZZ+3JXbWQhFyt0MxSl2jRDdGQPHeOHFXrQ==
+  dependencies:
+    "@types/sizzle" "*"
+
 "@types/jquery@^3.3.2":
   version "3.3.28"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.28.tgz#e4e4e1a72a890b9d5fce34019d961265dd1394c4"
   dependencies:
     "@types/sizzle" "*"
+
+"@types/jszip@^3.1.4":
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/@types/jszip/-/jszip-3.1.4.tgz#9b81e3901a6988e9459ac27abf483e6b892251af"
+  integrity sha512-UaVbz4buRlBEolZYrxqkrGDOypugYlbqGNrUFB4qBaexrLypTH0jyvaF5jolNy5D+5C4kKV1WJ3Yx9cn/JH8oA==
+  dependencies:
+    "@types/node" "*"
+
+"@types/node@*":
+  version "10.12.18"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.18.tgz#1d3ca764718915584fcd9f6344621b7672665c67"
+  integrity sha512-fh+pAqt4xRzPfqA6eh3Z2y6fyZavRIumvjhaCL753+TVkGKGhpPeyrJG2JftD0T9q4GF00KjefsQ+PQNDdWQaQ==
 
 "@types/q@^1.5.1":
   version "1.5.1"
@@ -554,6 +606,11 @@
 "@types/sizzle@*":
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.2.tgz#a811b8c18e2babab7d542b3365887ae2e4d9de47"
+
+"@types/three@^0.93.15":
+  version "0.93.15"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.93.15.tgz#8fbb4ee8c0648372a305469d16e37d0a939f91c3"
+  integrity sha512-AE9kgUDqMrInTfMYzZ8NqgBMzUgHvv+JwUQxCmlWZOfs+TCJDn7CVcvcOyftiUO3MAH1bddwaK0ZvZ/9M1rO5A==
 
 "@vue/component-compiler-utils@^2.0.0":
   version "2.3.1"
@@ -4299,7 +4356,7 @@ pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
 
-popper.js@^1.12, popper.js@^1.12.9:
+popper.js@^1.12, popper.js@^1.12.9, popper.js@^1.14.1:
   version "1.14.6"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.14.6.tgz#ab20dd4edf9288b8b3b6531c47c361107b60b4b0"
 

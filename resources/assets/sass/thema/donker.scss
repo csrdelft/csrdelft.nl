@@ -7,14 +7,14 @@ $gray-600: #6c757d;
 $gray-800: #343a40;
 $black: #000;
 
-$primary: #006699;
-$secondary: $gray-600;
-$light: $gray-100;
-$dark: $gray-800;
-
 $body-bg: $dark-grey;
 $body-color: darken($white, 7%);
 $headings-color: inherit;
+
+$primary: #006699;
+$secondary: lighten($body-bg, 10%);
+$light: $gray-100;
+$dark: $gray-800;
 
 @font-face {
 	font-family: 'Ubuntu-Light';
@@ -61,7 +61,7 @@ $zindex-zijbalk: 800;
 $modal-content-bg: $body-bg;
 
 /* bbcode */
-$bb-block-bg: #3F4149;
+$bb-block-bg: $secondary;
 
 /* forum */
 $forum-bericht0-bg: $body-bg;
@@ -92,7 +92,7 @@ $maalcie-tabel-tr1: lighten($body-bg, 12%);
 
 /* Pas om-en-om kleuren in de lichtingen, vertikalen, kringen, etc. aan */
 table.groep-lijst tr:nth-child(even) {
-	background-color: lighten($body-bg, 5%);
+	background-color: $secondary;
 }
 
 /* Pas hover op de maalcie-tabel aan*/
@@ -108,6 +108,16 @@ table.groep-lijst tr:nth-child(even) {
 .module-icon {
 	color: white;
 	opacity: 0.3;
+}
+
+.forum-deel {
+	.alternate-row {
+		&:nth-child(6n +1),
+		&:nth-child(6n + 2),
+		&:nth-child(6n + 3) {
+			background-color: $secondary;
+		}
+	}
 }
 
 .forumdeel-omschrijving {
