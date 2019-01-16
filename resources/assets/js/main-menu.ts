@@ -1,6 +1,13 @@
 import $ from 'jquery';
 import Hammer from 'hammerjs';
 
+declare global {
+	// Hammer kan een Document als element krijgen, dit zorgt ervoor dat horizontale scroll mogelijk is op mobiel.
+	interface HammerStatic {
+		new(element: HTMLElement | SVGElement | Document, options?: HammerOptions | undefined): HammerManager
+	}
+}
+
 $(function () {
 
 	let active: string | null = null;
