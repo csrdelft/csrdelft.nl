@@ -1,16 +1,20 @@
-import $ from 'jquery';
 import {formatBedrag, formatFilesize} from '../util';
+import {getApiFromSettings} from "./api";
+import FunctionColumnRender = DataTables.FunctionColumnRender;
 
-export default {
+/**
+ * Standaard gedefinieerde render functies.
+ */
+export default <{ [s: string]: FunctionColumnRender }>{
 	default(data, type) {
 		if (data === null || typeof data !== 'object') return data;
 		switch (type) {
 			case 'sort':
-				return data['sort'];
+				return data.sort!;
 			case 'export':
-				return data['export'];
+				return data.export!;
 			default:
-				return data['display'];
+				return data.display!;
 		}
 	},
 	bedrag(data) {
@@ -29,8 +33,8 @@ export default {
 		return formatBedrag(row.aantal_aanmeldingen * parseInt(row.prijs));
 	},
 	timeago(data, type, row, meta) {
-		let api = new $.fn.dataTable.Api(meta.settings);
-		let cell = api.cell(meta.row, meta.col).node().firstChild;
+		let api = getApiFromSettings(meta.settings);
+		let cell = api.cell(meta.row, meta.col).node().firstChild as HTMLTimeElement;
 
 		switch (type) {
 			case 'sort':

@@ -549,6 +549,13 @@
     "@types/jquery" "*"
     popper.js "^1.14.1"
 
+"@types/datatables.net@^1.10.14":
+  version "1.10.14"
+  resolved "https://registry.yarnpkg.com/@types/datatables.net/-/datatables.net-1.10.14.tgz#36c11c67dee60565c989d16e6c59a4c99f36ebe6"
+  integrity sha512-lvU5UFVzqc3uLkoweCzogiG8LgDGzF3TIVDs8MJt2AcDr1ji/k0NRMTVlcf19EUmP5C4nc80Q05z21GWIyU8CA==
+  dependencies:
+    "@types/jquery" "*"
+
 "@types/events@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
@@ -571,6 +578,18 @@
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.28.tgz#e4e4e1a72a890b9d5fce34019d961265dd1394c4"
   dependencies:
     "@types/sizzle" "*"
+
+"@types/jszip@^3.1.4":
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/@types/jszip/-/jszip-3.1.4.tgz#9b81e3901a6988e9459ac27abf483e6b892251af"
+  integrity sha512-UaVbz4buRlBEolZYrxqkrGDOypugYlbqGNrUFB4qBaexrLypTH0jyvaF5jolNy5D+5C4kKV1WJ3Yx9cn/JH8oA==
+  dependencies:
+    "@types/node" "*"
+
+"@types/node@*":
+  version "10.12.18"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.18.tgz#1d3ca764718915584fcd9f6344621b7672665c67"
+  integrity sha512-fh+pAqt4xRzPfqA6eh3Z2y6fyZavRIumvjhaCL753+TVkGKGhpPeyrJG2JftD0T9q4GF00KjefsQ+PQNDdWQaQ==
 
 "@types/q@^1.5.1":
   version "1.5.1"

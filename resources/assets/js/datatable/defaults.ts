@@ -1,9 +1,11 @@
 import $ from 'jquery';
 import initContext from '../context';
+import Settings = DataTables.Settings;
+import {PersistentEntity} from "./api";
 
-export default {
+export default <Settings>{
 	deferRender: true,
-	createdRow(tr, data) {
+	createdRow(this: JQuery, tr, data : PersistentEntity) {
 		let table = this;
 		$(tr).attr('data-uuid', data.UUID);
 		initContext(tr);
@@ -11,7 +13,7 @@ export default {
 		$(tr).children().each((columnIndex, td) => {
 			// Init custom buttons in rows
 			$(td).children('a.post').each((i, a) => {
-				$(a).attr('data-tableid', table.attr('id'));
+				$(a).attr('data-tableid', table.attr('id')!);
 			});
 		});
 	},

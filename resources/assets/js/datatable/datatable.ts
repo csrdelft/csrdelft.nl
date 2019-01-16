@@ -1,9 +1,8 @@
 import $ from 'jquery';
 import JSZip from 'jszip';
 
-import {fnUpdateDataTable} from './api';
+import {DatatableResponse, fnUpdateDataTable} from './api';
 import defaults from './defaults';
-
 /**
  * Knoop alle datatable plugins aan jquery.
  */
@@ -26,6 +25,12 @@ import '../lib/dataTables.columnGroup';
 
 import './buttons';
 
+declare global {
+	interface Window {
+		JSZip: JSZip
+	}
+}
+
 // Excel button in datatables.net-buttons/js/buttons.html5 checkt voor JSZip in window.
 window.JSZip = JSZip;
 
@@ -36,11 +41,11 @@ $.extend(true, $.fn.dataTable.defaults, defaults);
  *
  * @param {jQuery} $table
  */
-const fnAutoScroll = $table => {
+function fnAutoScroll($table: JQuery) {
 	let $scroll = $table.parent();
 	if ($scroll.hasClass('dataTables_scrollBody')) {
 		// autoscroll if already on bottom
-		if ($scroll.scrollTop() + $scroll.innerHeight() >= $scroll[0].scrollHeight - 20) {
+		if ($scroll.scrollTop()! + $scroll.innerHeight()! >= $scroll[0].scrollHeight - 20) {
 			// check before draw and scroll after
 			window.setTimeout(() => {
 				$scroll.animate({
@@ -49,10 +54,11 @@ const fnAutoScroll = $table => {
 			}, 200);
 		}
 	}
-};
+}
 
-export const fnGetLastUpdate = $table => () => Number($table.data('lastupdate'));
-export const fnSetLastUpdate = $table => lastUpdate => $table.data('lastupdate', lastUpdate);
+export const fnGetLastUpdate = ($table: JQuery) => () => Number($table.data('lastupdate'));
+
+export const fnSetLastUpdate = ($table: JQuery) => (lastUpdate: number) => $table.data('lastupdate', lastUpdate);
 
 /**
  * Called after ajax load complete.
@@ -60,8 +66,8 @@ export const fnSetLastUpdate = $table => lastUpdate => $table.data('lastupdate',
  * @returns object
  * @param {jQuery} $table
  */
-export const fnAjaxUpdateCallback = $table => json => {
-	fnSetLastUpdate(json.lastUpdate);
+export const fnAjaxUpdateCallback = ($table: JQuery) => (json: DatatableResponse) => {
+	fnSetLastUpdate($table)(json.lastUpdate);
 	const tableConfig = $table.DataTable();
 
 	if (json.autoUpdate) {
@@ -71,7 +77,7 @@ export const fnAjaxUpdateCallback = $table => json => {
 				$.post(tableConfig.ajax.url(), {
 					'lastUpdate': fnGetLastUpdate($table)
 				}, data => {
-					fnUpdateDataTable($table.attr('id'), data);
+					fnUpdateDataTable($table.attr('id')!, data);
 					fnAjaxUpdateCallback($table)(data);
 				});
 			}, timeout);

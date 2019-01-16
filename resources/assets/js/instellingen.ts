@@ -8,9 +8,9 @@ function instellingVeranderd() {
 	$('.instellingen-bericht').removeClass('d-none');
 }
 
-function instellingOpslaan() {
-	if (this.checkValidity()) {
-		let input = $(this);
+function instellingOpslaan(ev : JQuery.ChangeEvent) {
+	if (ev.target!.checkValidity()) {
+		let input = $(ev.target);
 
 		let href = input.data('href');
 
@@ -31,5 +31,5 @@ function instellingOpslaan() {
 
 $(() => {
 	$('.instellingKnop').on('click', instellingVeranderd);
-	$('.change-opslaan').on('change', instellingOpslaan);
+	$('.change-opslaan').on('change', (ev) => instellingOpslaan(ev));
 });
