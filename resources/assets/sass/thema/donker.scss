@@ -102,3 +102,11 @@ table.groep-lijst tr:nth-child(even) {
 .forumdeel-omschrijving {
 	background-color: #3F4149;
 }
+
+.jgallery {
+	background-color: lighten($body-bg, 4%) !important;
+
+	&-thumbnails {
+		background-color: lighten($body-bg, 4%) !important;;
+	}
+}
