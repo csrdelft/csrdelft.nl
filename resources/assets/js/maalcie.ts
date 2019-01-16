@@ -1,7 +1,5 @@
 /**
  * maalcie.js	|	P.W.G. Brussee (brussee@live.nl)
- *
- * requires jQuery & dragobject.js
  */
 import $ from 'jquery';
 
@@ -9,11 +7,7 @@ import {ajaxRequest} from './ajax';
 import {domUpdate} from './context';
 import {dragObject} from './dragobject';
 
-/**
- * @param {string} datum
- * @param {number} index
- */
-function takenToggleDatumFirst(datum, index) {
+function takenToggleDatumFirst(datum:string, index:number) {
     if ('taak-datum-head-' + datum === $('#maalcie-tabel tr:visible').eq(index).attr('id')) {
         $('#taak-datum-head-first').toggle();
     }
@@ -24,10 +18,7 @@ function takenColorDatum() {
     $('tr.taak-datum-summary:visible:even th').css('background-color', '#f5f5f5');
 }
 
-/**
- * @param {string} datum
- */
-export function takenToggleDatum(datum) {
+export function takenToggleDatum(datum:string) {
 	takenToggleDatumFirst(datum, 0);
 	$('.taak-datum-' + datum).toggle();
 	takenToggleDatumFirst(datum, 1);
@@ -48,11 +39,7 @@ export function takenColorSuggesties() {
     $suggestiesTabel.find('tr:visible:even').css('background-color', '#EBEBEB');
 }
 
-/**
- * @param {string} soort
- * @param {boolean} show
- */
-export function takenToggleSuggestie(soort, show) {
+export function takenToggleSuggestie(soort:string, show:boolean) {
 	$('#suggesties-tabel .' + soort).each(function () {
         let verborgen = 0;
         if (typeof show !== 'undefined') {
@@ -88,18 +75,16 @@ export function takenToggleSuggestie(soort, show) {
 	takenColorSuggesties();
 }
 
-let lastSelectedId;
-/**
- * @param {KeyboardEvent} e
- */
-export function takenSelectRange(e) {
+let lastSelectedId :string;
+
+export function takenSelectRange(e: KeyboardEvent) {
 	let withinRange = false;
-	$('#maalcie-tabel').find('tbody tr td a input[name="' + $(e.target).attr('name') + '"]:visible').each(function () {
+	$('#maalcie-tabel').find('tbody tr td a input[name="' + $(e.target!).attr('name') + '"]:visible').each(function () {
 		let thisId = $(this).attr('id');
 		if (thisId === lastSelectedId) {
 			withinRange = !withinRange;
 		}
-		if (thisId === e.target.id) {
+		if (thisId === (e.target as Element).id) {
 			withinRange = !withinRange;
 			let check = $(this).prop('checked');
 			setTimeout(function () { // workaround e.preventDefault()
@@ -110,67 +95,58 @@ export function takenSelectRange(e) {
 			$(this).prop('checked', true);
 		}
 	});
-	lastSelectedId = e.target.id;
+	lastSelectedId = (e.target as Element).id;
 }
 
-/**
- * @param {Event} e
- * @returns {boolean}
- */
-export function takenSubmitRange(e) {
-	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
-		e.target = $(e.target).parent();
+export function takenSubmitRange(e :Event) {
+	let target = e.target as Element;
+	if (target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
+		target = target.parentElement!;
 	}
-	$(e.target).find('input').prop('checked', true);
-	if ($(e.target).hasClass('confirm') && !confirm($(e.target).attr('title') + '.\n\nWeet u het zeker?')) {
+	$(target).find('input').prop('checked', true);
+	if ($(target).hasClass('confirm') && !confirm($(target).attr('title') + '.\n\nWeet u het zeker?')) {
 		return false;
 	}
-	$('input[name="' + $(e.target).find('input:first').attr('name') + '"]:visible').each(function () {
+	$('input[name="' + $(target).find('input:first').attr('name') + '"]:visible').each(function () {
 		if ($(this).prop('checked')) {
-			ajaxRequest('POST', $(this).parent().attr('href'), $(this).parent().attr('post'), $(this).parent(), domUpdate, alert);
+			ajaxRequest('POST', $(target).parent().attr('href')!, $(target).parent().attr('post')!, $(target).parent(), domUpdate, alert);
 		}
 	});
 }
 
 /* Ruilen van CorveeTaak */
-
-/**
- * @param {Event} e
- */
-function takenMagRuilen(e) {
-	if (e.target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
-		e.target = $(e.target).parent();
+function takenMagRuilen(e : Event) {
+	let target = e.target as Element;
+	if (target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
+		target = target.parentElement!;
 	}
 
-	let source= dragObject.el;
-	if ($(source).attr('id') !== $(e.target).attr('id')) {
+	let source= dragObject.el!;
+	if (source.attr('id') !== target.id){
 		e.preventDefault();
 	}
 }
 
-/**
- * @param {Event} e
- */
-function takenRuilen(e) {
+function takenRuilen(e:Event) {
 	e.preventDefault();
-	let elmnt = e.target;
+	let elmnt = e.target as Element;
 	if (elmnt.tagName.toUpperCase() === 'IMG') { // dropped on image inside of anchor
-		elmnt = $(elmnt).parent();
+		elmnt = elmnt.parentElement!;
 	}
-	let source = dragObject.el;
+	let source = dragObject.el!;
 	if (!confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
 		return;
 	}
-	let attr = $(source).attr('uid');
-	if (typeof attr === 'undefined' || attr === false) {
+	let attr = source.attr('uid');
+	if (!attr) {
 		attr = '';
 	}
-	ajaxRequest('POST', $(elmnt).attr('href'), 'uid=' + attr, elmnt, domUpdate, alert);
+	ajaxRequest('POST', elmnt.getAttribute('href')!, 'uid=' + attr, $(elmnt), domUpdate, alert);
 	attr = $(elmnt).attr('uid');
-	if (typeof attr === 'undefined' || attr === false) {
+	if (!attr) {
 		attr = '';
 	}
-	ajaxRequest('POST', $(source).attr('href'), 'uid=' + attr, source, domUpdate, alert);
+	ajaxRequest('POST', elmnt.getAttribute('href')!, 'uid=' + attr, source, domUpdate, alert);
 }
 
 $(function () {
