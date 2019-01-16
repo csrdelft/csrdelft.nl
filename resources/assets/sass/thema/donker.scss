@@ -13,8 +13,16 @@ $light: $gray-100;
 $dark: $gray-800;
 
 $body-bg: $dark-grey;
-$body-color: $white;
+$body-color: darken($white, 7%);
 $headings-color: inherit;
+
+@font-face {
+	font-family: 'Ubuntu-Light';
+	src: url('../../fonts/dark-mode/Ubuntu-Light.ttf') format('truetype'),
+	url('../../fonts/dark-mode/Ubuntu-Light.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
 
 @font-face {
 	font-family: 'Ubuntu-Medium';
@@ -32,7 +40,7 @@ $headings-font-family: "Ubuntu-Medium", sans-serif;
 /* zijbalk */
 $beeldmerk: url(../images/beeldmerk-wit.png);
 
-$zijbalk-bg: $darker-grey;
+$zijbalk-bg: darken($body-bg, 5%);
 $zijbalk-border: darken($primary, 12%);
 $zijbalk-kopje: $primary;
 $zijbalk-ishetal-nee: red;
@@ -43,6 +51,10 @@ $zindex-zijbalk: 800;
 	a {
 		font-size: 1.25em;
 	}
+}
+
+#zijbalk .blok .item {
+	font-family: "Ubuntu-Light";
 }
 
 /* Modals */
