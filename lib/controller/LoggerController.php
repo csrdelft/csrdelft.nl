@@ -40,6 +40,7 @@ class LoggerController extends AclController {
 			$line = $this->getPost('line');
 			$url = $this->getPost('url');
 			$error = $this->getPost('error');
+			$pagina = $this->getPost('pagina');
 
 			$slackConfig = Ini::lees(Ini::SLACK);
 			$slackClient = new SlackClient($slackConfig['url'], $slackConfig);
@@ -55,8 +56,7 @@ class LoggerController extends AclController {
 • Bestand `$url`
 • Regel `$line`
 • Kolom `$col`
-• Url `{$_SERVER['REQUEST_URI']}`
-• Method `{$_SERVER['REQUEST_METHOD']}`
+• Pagina `$pagina`
 • Veroorzaakt door `{$_SESSION['_uid']}`
 • Browser `{$_SERVER['HTTP_USER_AGENT']}`
 MD

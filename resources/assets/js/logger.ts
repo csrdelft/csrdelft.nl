@@ -13,6 +13,7 @@ window.onerror = function (message: string, url, line, col, error) {
 			url,
 			line,
 			col,
+			pagina: window.location.href,
 			error: JSON.stringify(error)
 		});
 	}
