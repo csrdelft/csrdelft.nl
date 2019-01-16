@@ -3,9 +3,9 @@ import Hammer from 'hammerjs';
 
 $(function () {
 
-	let active = null;
+	let active: string | null = null;
 
-	function isVisible(id) {
+	function isVisible(id: string) {
 		return active === id;
 	}
 
@@ -29,9 +29,8 @@ $(function () {
 
 	/**
 	 * Terug naar gewone view.
-	 * @param event
 	 */
-	function reset(event) {
+	function reset(event?: Event) {
 		if (event && active != null) event.preventDefault();
 
 		active = null;
@@ -41,11 +40,7 @@ $(function () {
 		toggleScroll();
 	}
 
-	/**
-	 *
-	 * @param id
-	 */
-	function view(id) {
+	function view(id: string) {
 		active = id;
 
 		$('.target').not(id).removeClass('target');
@@ -58,8 +53,8 @@ $(function () {
 	 * Toggle view met id.
 	 * @param id
 	 */
-	function toggle(id) {
-		return function (event) {
+	function toggle(id: string) {
+		return function (event: Event) {
 			event.preventDefault();
 			if (active === id) {
 				reset();
@@ -101,7 +96,7 @@ $(function () {
 	let $searchfield = $('.cd-search').find('input[type="search"]');
 
 	// Catch keystrokes for instant search
-	$(document).on('keydown', (event) => {
+	$(document).on('keydown', (event: JQuery.KeyDownEvent) => {
 		// Geen instantsearch met modifiers
 		if (event.ctrlKey || event.altKey || event.metaKey) {
 			return;
@@ -130,7 +125,7 @@ $(function () {
 	// Maak het mogelijk om nog tekst te kunnen selecteren.
 	delete Hammer.defaults.cssProps.userSelect;
 
-	let hammertime = new Hammer(document.body, {inputClass: Hammer.SUPPORT_POINTER_EVENTS ? Hammer.PointerEventInput : Hammer.TouchInput});
+	let hammertime = new Hammer(document, {inputClass: Hammer.TouchInput});
 
 	hammertime.on('swiperight', () => {
 		if (isVisible('#zijbalk') || isVisible('#menu')) {
