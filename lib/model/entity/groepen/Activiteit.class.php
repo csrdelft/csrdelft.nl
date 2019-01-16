@@ -17,7 +17,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Activiteit extends Ketzer implements Agendeerbaar {
 
-	const leden = ActiviteitDeelnemersModel::class;
+	const LEDEN = ActiviteitDeelnemersModel::class;
 
 	/**
 	 * Intern / Extern / SjaarsActie / etc.

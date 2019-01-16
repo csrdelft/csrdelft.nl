@@ -149,7 +149,7 @@
 						2611 BA Delft
 					</li>
 					<li class="fa-phone">06-19470413</li>
-					<li class="fa-envelope"><a href="mailto:{{CsrDelft\common\Ini::lees(CsrDelft\common\Ini::EMAILS, 'abactis')}}">abactis@csrdelft.nl</a></li>
+					<li class="fa-envelope"><a href="mailto:{{CsrDelft\common\Ini::leesOfStandaard(CsrDelft\common\Ini::EMAILS, 'abactis')}}">{{CsrDelft\common\Ini::leesOfStandaard(CsrDelft\common\Ini::EMAILS, 'abactis')}}</a></li>
 					<li class="fa-facebook"><a href="https://www.facebook.com/OWee-CSR-Delft-1570871723180451/?fref=ts">Like
 							de Facebookpagina om de laatste updates te ontvangen</a></li>
 					<li class="fa-map-marker">

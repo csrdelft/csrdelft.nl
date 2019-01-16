@@ -33,9 +33,7 @@ class ApiActiviteitenController {
 			throw new RestException(403, 'Aanmelden niet mogelijk');
 		}
 
-		$leden = $activiteit::leden;
-		/** @var AbstractGroepLedenModel $model */
-		$model = $leden::instance();
+		$model = $activiteit::getLedenModel();
 		$lid = $model->nieuw($activiteit, $_SESSION['_uid']);
 
 		ChangeLogModel::instance()->log($activiteit, 'aanmelden', null, $lid->uid);
@@ -59,8 +57,7 @@ class ApiActiviteitenController {
 			throw new RestException(403, 'Afmelden niet mogelijk');
 		}
 
-		$leden = $activiteit::leden;
-		$model = $leden::instance();
+		$model = $activiteit::getLedenModel();
 		$lid = $model->get($activiteit, $_SESSION['_uid']);
 		ChangeLogModel::instance()->log($activiteit, 'afmelden', $lid->uid, null);
 		$model->delete($lid);

@@ -6,7 +6,8 @@
 	@php($deel = $draad->getForumDeel())
 	<a href="/forum" title="Forum"><span class="fa fa-wechat module-icon"></span></a>
 	» <span class="active">{{$deel->getForumCategorie()->titel}}</span>
-	» <a href="/forum/deel/{{$deel->forum_id}}/{{\CsrDelft\model\forum\ForumDradenModel::instance()->getPaginaVoorDraad($draad)}}#{{$draad->draad_id}}">{{$deel->titel}}</a>
+	» <a
+		href="/forum/deel/{{$deel->forum_id}}/{{\CsrDelft\model\forum\ForumDradenModel::instance()->getPaginaVoorDraad($draad)}}#{{$draad->draad_id}}">{{$deel->titel}}</a>
 @endsection
 
 @section('content')
@@ -27,11 +28,14 @@
 				&nbsp;&nbsp;&nbsp;
 				@if($draad->magMeldingKrijgen())
 					<div class="btn-group">
-						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/nooit" class="btn btn-light post ReloadPage melding-nooit @if($meldingsniveau == \CsrDelft\model\entity\forum\ForumDraadMeldingNiveau::NOOIT) active @endif"
+						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/nooit"
+							 class="btn btn-light post ReloadPage melding-nooit @if($meldingsniveau == \CsrDelft\model\entity\forum\ForumDraadMeldingNiveau::NOOIT) active @endif"
 							 title="Nooit meldingen ontvangen">@icon('email_delete', 'email_delete')</a>
-						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/vermelding" class="btn btn-light post ReloadPage melding-vermelding @if($meldingsniveau == \CsrDelft\model\entity\forum\ForumDraadMeldingNiveau::VERMELDING) active @endif"
+						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/vermelding"
+							 class="btn btn-light post ReloadPage melding-vermelding @if($meldingsniveau == \CsrDelft\model\entity\forum\ForumDraadMeldingNiveau::VERMELDING) active @endif"
 							 title="Melding ontvangen als ik genoemd word">@icon('email_error', 'email_error')</a>
-						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/altijd" class="btn btn-light post ReloadPage melding-altijd @if($meldingsniveau == \CsrDelft\model\entity\forum\ForumDraadMeldingNiveau::ALTIJD) active @endif"
+						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/altijd"
+							 class="btn btn-light post ReloadPage melding-altijd @if($meldingsniveau == \CsrDelft\model\entity\forum\ForumDraadMeldingNiveau::ALTIJD) active @endif"
 							 title="Melding ontvangen bij elk nieuw bericht">@icon('email_add', 'email_add')</a>
 					</div>
 				@endif
@@ -53,7 +57,7 @@
 							 title="Sluiten (geen reactie mogelijk)">@icon('lock_open', 'lock')</a>
 					@endif
 					&nbsp;&nbsp;&nbsp;
-					<a href="#" class="btn btn-light modfuncties" title="Moderatie-functies weergeven" onclick="$('#forumtabel a.forummodknop').fadeIn();
+					<a href="#" class="btn btn-light modfuncties" title="Moderatie-functies weergeven" onclick="
 					$('#modereren').slideDown();
 					$(window).scrollTo('#modereren', 600, {
 						easing: 'easeInOutCubic',
@@ -113,7 +117,7 @@
           ]) !!}
 		</div>
 	@endsection
-	 {{--Paginering boven eerste post op de pagina als de eerste post van het draadje niet plakkerig is of dit de eerste pagina is --}}
+	{{--Paginering boven eerste post op de pagina als de eerste post van het draadje niet plakkerig is of dit de eerste pagina is --}}
 	@if($paging && (!$draad->eerste_post_plakkerig || \CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina() === 1))
 		@yield('paginering')
 	@endif

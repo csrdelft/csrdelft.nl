@@ -2,6 +2,8 @@
 
 namespace CsrDelft\common;
 
+use Couchbase\Exception;
+
 /**
  * Helper klasse om ini bestanden in de `etc` map uit te lezen.
  *
@@ -66,6 +68,21 @@ class Ini {
 			return $config[$key];
 		} else {
 			throw new CsrException('Instelling "' . $key . '" in "' . $iniFile . '" niet gevonden.');
+		}
+	}
+
+	/**
+	 * Lees een configuratie, maar geef geen foutmelding als de configuratie niet bestaat.
+	 * @param string $iniFile
+	 * @param string $key
+	 * @param string $default
+	 * @return array|mixed|string
+	 */
+	public static function leesOfStandaard(string $iniFile, string $key, string $default = '') {
+  	try {
+  		return static::lees($iniFile, $key);
+		} catch (CsrException $e) {
+  		return $default;
 		}
 	}
 }

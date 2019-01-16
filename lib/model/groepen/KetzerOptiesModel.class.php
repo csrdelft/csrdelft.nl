@@ -11,7 +11,7 @@ class KetzerOptiesModel extends AbstractGroepenModel {
 	const ORM = KetzerOptie::class;
 
 	public function getOptiesVoorSelect(KetzerSelector $select) {
-		return $this->prefetch('select_id = ?', array($select->select_id));
+		return $this->prefetch('select_id = ?', [$select->select_id]);
 	}
 
 }

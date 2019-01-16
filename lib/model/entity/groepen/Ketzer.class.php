@@ -18,7 +18,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 
-	const leden = KetzerDeelnemersModel::class;
+	const LEDEN = KetzerDeelnemersModel::class;
 
 	/**
 	 * Maximaal aantal groepsleden
@@ -49,13 +49,13 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	 * Database table columns
 	 * @var array
 	 */
-	protected static $persistent_attributes = array(
-		'aanmeld_limiet' => array(T::Integer, true),
-		'aanmelden_vanaf' => array(T::DateTime),
-		'aanmelden_tot' => array(T::DateTime),
-		'bewerken_tot' => array(T::DateTime, true),
-		'afmelden_tot' => array(T::DateTime, true)
-	);
+	protected static $persistent_attributes = [
+		'aanmeld_limiet' => [T::Integer, true],
+		'aanmelden_vanaf' => [T::DateTime],
+		'aanmelden_tot' => [T::DateTime],
+		'bewerken_tot' => [T::DateTime, true],
+		'afmelden_tot' => [T::DateTime, true]
+	];
 	/**
 	 * Database table name
 	 * @var string

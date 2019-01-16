@@ -20,7 +20,7 @@ use CsrDelft\model\fiscaat\pin\PinTransactieModel;
 const DATE_FORMAT = 'Y-m-d';
 const DURATION_DAY_IN_SECONDS = 86400;
 
-require_once __DIR__ . '/../lib/configuratie.include.php';
+require_once __DIR__ . '/../../lib/configuratie.include.php';
 
 if (isset($argv[1])) {
 	$moment = strtotime($argv[1]);

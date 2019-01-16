@@ -6,8 +6,6 @@ use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\entity\groepen\BestuursLid;
 
 /**
- * BestuursLedenModel.php
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 07/05/2017
  */

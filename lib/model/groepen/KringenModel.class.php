@@ -24,14 +24,15 @@ class KringenModel extends AbstractGroepenModel {
 		return reset($kringen);
 	}
 
-	public function nieuw($letter = '') {
+	public function nieuw($letter = null) {
+		/** @var Kring $kring */
 		$kring = parent::nieuw();
 		$kring->verticale = $letter;
 		return $kring;
 	}
 
 	public function getKringenVoorVerticale(Verticale $verticale) {
-		return $this->prefetch('verticale = ?', array($verticale->letter));
+		return $this->prefetch('verticale = ?', [$verticale->letter]);
 	}
 
 }

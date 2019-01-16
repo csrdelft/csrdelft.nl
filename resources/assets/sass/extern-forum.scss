@@ -227,28 +227,6 @@ span.curpage {
 	}
 }
 
-/* Modereren */
-#modereren {
-	display: none;
-	border: 1px solid #999;
-	margin: 10px;
-	padding: 10px;
-
-	table {
-		width: 100%;
-
-		input[type="text"] {
-			width: 300px;
-		}
-	}
-
-	label {
-		display: inline-block;
-		width: 120px;
-		text-align: right;
-	}
-}
-
 /* Zoeken */
 #forumZoekenForm {
 	float: right;

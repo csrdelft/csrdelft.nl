@@ -798,9 +798,6 @@ class AccessModel extends CachedPersistenceModel {
 					case 'GROEP':
 					default:
 						$groep = RechtenGroepenModel::get($gevraagd);
-						if (!$groep) {
-							$groep = RechtenGroepenModel::omnummeren($gevraagd);
-						}
 						break;
 				}
 

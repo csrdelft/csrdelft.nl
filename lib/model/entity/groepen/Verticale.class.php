@@ -15,7 +15,7 @@ use CsrDelft\Orm\Entity\T;
  */
 class Verticale extends AbstractGroep {
 
-	const leden = VerticaleLedenModel::class;
+	const LEDEN = VerticaleLedenModel::class;
 
 	/**
 	 * Primary key
@@ -26,9 +26,9 @@ class Verticale extends AbstractGroep {
 	 * Database table columns
 	 * @var array
 	 */
-	protected static $persistent_attributes = array(
-		'letter' => array(T::Char)
-	);
+	protected static $persistent_attributes = [
+		'letter' => [T::Char]
+	];
 	/**
 	 * Database table name
 	 * @var string
@@ -46,6 +46,7 @@ class Verticale extends AbstractGroep {
 	/**
 	 * Limit functionality: leden generated
 	 * @param string $action
+	 * @param null $allowedAuthenticationMethods
 	 * @return bool
 	 */
 	public function mag($action, $allowedAuthenticationMethods = null) {
@@ -62,6 +63,7 @@ class Verticale extends AbstractGroep {
 	/**
 	 * Limit functionality: leden generated
 	 * @param string $action
+	 * @param null $allowedAuthenticationMethods
 	 * @return bool
 	 */
 	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {

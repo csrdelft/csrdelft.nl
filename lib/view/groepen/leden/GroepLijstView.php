@@ -8,6 +8,7 @@
 
 namespace CsrDelft\view\groepen\leden;
 
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
@@ -21,9 +22,7 @@ class GroepLijstView extends GroepTabView {
 		$html = '<table class="groep-lijst"><tbody>';
 		if ($this->groep->mag(AccessAction::Aanmelden)) {
 			$html .= '<tr><td colspan="2">';
-			$orm = get_class($this->groep);
-			$leden = $orm::leden;
-			$lid = $leden::instance()->nieuw($this->groep, LoginModel::getUid());
+			$lid = $this->groep::getLedenModel()->nieuw($this->groep, LoginModel::getUid());
 			$form = new GroepAanmeldenForm($lid, $this->groep, false);
 			$html .= $form->getHtml();
 			$html .= '</td></tr>';
@@ -34,6 +33,7 @@ class GroepLijstView extends GroepTabView {
 		}
 		// sorteren op achernaam
 		$uids = array_keys($leden);
+		/** @var Profiel[] $profielen */
 		$profielen = ProfielModel::instance()->prefetch('uid IN (' . implode(', ', array_fill(0, count($uids), '?')) . ')', $uids, null, 'achternaam ASC');
 		foreach ($profielen as $profiel) {
 			$html .= '<tr><td>';

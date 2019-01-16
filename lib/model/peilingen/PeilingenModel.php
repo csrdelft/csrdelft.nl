@@ -26,7 +26,7 @@ class PeilingenModel extends PersistenceModel {
 	 * @return int
 	 */
 	public function update(PersistentEntity $entity) {
-		foreach ($entity->getOpties() as $optie) {
+		foreach ($entity->opties as $optie) {
 			PeilingOptiesModel::instance()->update($optie);
 		}
 
@@ -38,7 +38,7 @@ class PeilingenModel extends PersistenceModel {
 	 * @return int
 	 */
 	public function delete(PersistentEntity $entity) {
-		foreach ($entity->getOpties() as $optie) {
+		foreach ($entity->opties as $optie) {
 			PeilingOptiesModel::instance()->delete($optie);
 		}
 
@@ -57,7 +57,7 @@ class PeilingenModel extends PersistenceModel {
 	public function create(PersistentEntity $entity) {
 		$peiling_id = parent::create($entity);
 
-		foreach ($entity->getOpties() as $optie) {
+		foreach ($entity->opties as $optie) {
 			$optie->peiling_id = $peiling_id;
 			PeilingOptiesModel::instance()->create($optie);
 		}
@@ -71,7 +71,7 @@ class PeilingenModel extends PersistenceModel {
 	 */
 	public function stem($peiling_id, $optie_id) {
 		$peiling = $this->getPeilingById((int)$peiling_id);
-		if ($peiling->magStemmen() && !$peiling->heeftGestemd(LoginModel::getUid())) {
+		if ($peiling->getMagStemmen() && !$peiling->getHeeftGestemd()) {
 			$optie = PeilingOptiesModel::instance()->find('peiling_id = ? AND id = ?', array($peiling_id, $optie_id))->fetch();
 			$optie->stemmen += 1;
 
@@ -107,7 +107,7 @@ class PeilingenModel extends PersistenceModel {
 		if (trim($entity->titel) == '') {
 			$errors .= 'Titel mag niet leeg zijn.<br />';
 		}
-		if (count($entity->getOpties()) == 0) {
+		if (count($entity->opties) == 0) {
 			$errors .= 'Er moet tenminste 1 optie zijn.<br />';
 		}
 		return $errors;

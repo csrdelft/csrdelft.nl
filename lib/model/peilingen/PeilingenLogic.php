@@ -58,7 +58,7 @@ class PeilingenLogic extends DependencyManager {
 			return false;
 		}
 
-		if ($peiling->magStemmen()) {
+		if ($peiling->getMagStemmen()) {
 			return false;
 		}
 
@@ -123,7 +123,7 @@ class PeilingenLogic extends DependencyManager {
 			throw new CsrGebruikerException('Deze peiling bestaat niet');
 		}
 
-		if (!$peiling->magStemmen()) {
+		if (!$peiling->getMagStemmen()) {
 			throw new CsrGebruikerException('Mag niet op deze peiling stemmen.');
 		}
 
@@ -154,7 +154,7 @@ class PeilingenLogic extends DependencyManager {
 		$peiling = $this->peilingenModel->getPeilingById($peilingId);
 		$opties = $this->peilingOptiesModel->getByPeilingId($peilingId);
 
-		$magStemmenZien = ($this->peilingStemmenModel->heeftgestemd($peilingId, $uid) || !$peiling->magStemmen()) && $peiling->resultaat_zichtbaar;
+		$magStemmenZien = ($this->peilingStemmenModel->heeftgestemd($peilingId, $uid) || !$peiling->getMagStemmen()) && $peiling->resultaat_zichtbaar;
 
 		return array_map(function (PeilingOptie $optie) use ($magStemmenZien, $peiling) {
 			$arr = $optie->jsonSerialize();

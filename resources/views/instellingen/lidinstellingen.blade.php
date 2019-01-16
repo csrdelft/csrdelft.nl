@@ -46,6 +46,7 @@
 								<div class="d-block d-sm-none w-100">
 									<div class="btn-group-vertical btn-group-toggle col-md-9" data-buttons="radio">
 										@foreach($opties as $optieId => $optie)
+											@php($optieId = is_int($optieId) ? $optie : $optieId)
 											<a class="post noanim instellingKnop btn btn-secondary @if($optie === $keuze) active @endif"
 												 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
 										@endforeach

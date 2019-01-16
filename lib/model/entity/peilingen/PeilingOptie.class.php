@@ -4,6 +4,7 @@ namespace CsrDelft\model\entity\peilingen;
 
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\view\bbcode\CsrBB;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -50,4 +51,12 @@ class PeilingOptie extends PersistentEntity {
 	protected static $primary_key = ['id'];
 
 	protected static $table_name = 'peiling_optie';
+
+	protected static $computed_attributes = [
+		'beschrijving_formatted' => []
+	];
+
+	public function getBeschrijvingFormatted() {
+		return CsrBB::parse($this->beschrijving);
+	}
 }

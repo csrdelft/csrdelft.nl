@@ -27,7 +27,7 @@ class GesprekkenView implements View {
 			$this->berichtForm = new GesprekBerichtForm($gesprek, $this->berichtenTable->getDataTableId());
 		} else {
 			$this->gesprekkenTable = new GesprekkenTable();
-			$this->gesprekkenTable->filter = $filter;
+			$this->gesprekkenTable->setSearch($filter);
 		}
 	}
 

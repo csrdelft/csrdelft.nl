@@ -217,7 +217,7 @@ position: relative element
   color: transparent;
 
 	display: inline;
-	background-position: -185px -127px;
+	background-position: -185px -124px;
 }
 
 /* --------------------------------
@@ -377,4 +377,8 @@ Bootstrap overrides / uitbreidingen
 		// In down md is er een bovenbalk van 42px
 		top: 47px;
 	}
+}
+// Fix plek icoontje in een alert
+.alert .ico {
+	margin-right: 0.75rem;
 }

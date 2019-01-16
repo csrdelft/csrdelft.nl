@@ -6,7 +6,7 @@
 			<ProgressBar :progress="progress" :reverse="true"></ProgressBar>
 		</div>
 		<div class="col-md-2">{{progressText}}</div>
-		<div class="col text-muted pt-2" v-html="beschrijving"></div>
+		<div ref="beschrijving_gestemd" class="col text-muted pt-2" v-html="beschrijving"></div>
 	</div>
 	<div v-else=""
 			 class="row">
@@ -18,20 +18,20 @@
 							 :value="id"
 							 :id="'PeilingOptie' + id"
 							 :disabled="isDisabled"
-							 :checked="dataSelected"
-							 v-model="dataSelected"
-							 @change="$emit('input', $event.target.checked)"
-				/>
+							 :checked="selected"
+							 @change="$emit('input', $event.target.checked)" />
 				<label :for="'PeilingOptie' + id"
 							 class="form-check-label">{{ titel }}</label>
 			</div>
 		</div>
-		<div class="col-md-12 pt-2" v-html="beschrijving"></div>
+		<div ref="beschrijving" class="col-md-12 pt-2" v-html="beschrijving"></div>
 	</div>
 </template>
 
 <script>
 	import ProgressBar from '../common/ProgressBar';
+	import initContext from '../../context';
+	import $ from 'jquery';
 
 	export default {
 		name: 'PeilingOptie',
@@ -42,30 +42,38 @@
 			titel: String,
 			beschrijving: String,
 			stemmen: Number,
-			ingebrachtDoor: Object, // DataTableColumn
+			magStemmen: Boolean,
+			aantalGestemd: Number,
+			heeftGestemd: Boolean,
+			keuzesOver: Boolean,
 			selected: Boolean
 		},
-		data: () => ({
-			dataSelected: false,
-		}),
-		created() {
-			this.dataSelected = this.selected;
+		mounted() {
+			this.initBeschrijvingContext();
+
+			this.$watch('kanStemmen', () => this.initBeschrijvingContext());
+		},
+		methods: {
+			initBeschrijvingContext() {
+				if (this.kanStemmen) {
+					initContext($(this.$refs.beschrijving));
+				} else {
+					initContext($(this.$refs.beschrijving_gestemd));
+				}
+			}
 		},
 		computed: {
 			kanStemmen() {
-				return this.$parent.magStemmen && !this.$parent.dataHeeftGestemd;
-			},
-			totaalStemmen() {
-				return this.$parent.dataAantalStemmen;
+				return this.magStemmen && !this.heeftGestemd;
 			},
 			progress() {
-				return (this.stemmen / this.totaalStemmen * 100).toFixed(2);
+				return (this.stemmen / this.aantalGestemd * 100).toFixed(2);
 			},
 			progressText() {
 				return `${this.progress}% (${this.stemmen})`;
 			},
 			isDisabled() {
-				return !this.selected && !this.$parent.keuzesOver;
+				return !this.selected && !this.keuzesOver;
 			}
 		}
 	};

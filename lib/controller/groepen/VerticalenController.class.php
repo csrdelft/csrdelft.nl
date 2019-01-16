@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\model\entity\groepen\Verticale;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\view\JsonResponse;
 
@@ -27,13 +28,14 @@ class VerticalenController extends AbstractGroepenController {
 		if ($this->hasParam('limit')) {
 			$limit = (int)$this->getParam('limit');
 		}
-		$result = array();
-		foreach ($this->model->find('naam LIKE ?', array($zoekterm), null, null, $limit) as $verticale) {
-			$result[] = array(
+		$result = [];
+		foreach ($this->model->find('naam LIKE ?', [$zoekterm], null, null, $limit) as $verticale) {
+			/** @var Verticale $verticale */
+			$result[] = [
 				'url' => $verticale->getUrl() . '#' . $verticale->id,
 				'label' => $verticale->naam,
 				'value' => 'Verticale:' . $verticale->letter
-			);
+			];
 		}
 		$this->view = new JsonResponse($result);
 	}

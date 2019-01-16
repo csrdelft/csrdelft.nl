@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fece8ff9f1c7c9f9c2bb60a4a953e265",
+    "content-hash": "6776cf691bbacfaa85819fbd6d255b34",
     "packages": [
         {
             "name": "cakephp/cache",
@@ -299,19 +299,21 @@
         },
         {
             "name": "csrdelft/orm",
-            "version": "v1.8.0",
+            "version": "v1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
-                "reference": "354899e9ff9c774e1161e3a08ee806c7bab7c0c7"
+                "reference": "02314cc18f8c1b06744b68ed045f174055d9c4c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/orm/zipball/354899e9ff9c774e1161e3a08ee806c7bab7c0c7",
-                "reference": "354899e9ff9c774e1161e3a08ee806c7bab7c0c7",
+                "url": "https://api.github.com/repos/csrdelft/orm/zipball/02314cc18f8c1b06744b68ed045f174055d9c4c8",
+                "reference": "02314cc18f8c1b06744b68ed045f174055d9c4c8",
                 "shasum": ""
             },
             "require": {
+                "ext-json": "*",
+                "ext-pdo": "*",
                 "php": ">=7.0.27",
                 "zumba/json-serializer": "^2.2"
             },
@@ -353,7 +355,7 @@
             ],
             "description": "The creatively named object-relational mapping library for csrdelft.nl",
             "homepage": "https://csrdelft.github.io/orm",
-            "time": "2018-11-25T23:27:42+00:00"
+            "time": "2019-01-11T19:34:27+00:00"
         },
         {
             "name": "easyrdf/easyrdf",

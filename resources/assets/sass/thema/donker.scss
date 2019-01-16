@@ -1,0 +1,93 @@
+$dark-grey: #1E1F23;
+$darker-grey: #101011;
+
+$white: #fff;
+$gray-100: #f8f9fa;
+$gray-600: #6c757d;
+$gray-800: #343a40;
+$black: #000;
+
+$body-bg: $dark-grey;
+$body-color: $white;
+$headings-color: inherit;
+
+$primary: #006699;
+$secondary: lighten($body-bg, 10%);
+$light: $gray-100;
+$dark: $gray-800;
+
+@font-face {
+	font-family: 'Ubuntu-Medium';
+	src: url('../../fonts/dark-mode/Ubuntu-Medium.ttf') format('truetype'),
+	url('../../fonts/dark-mode/Ubuntu-Medium.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+$font-family-base: "Ubuntu-Medium", sans-serif;
+$headings-font-family: "Ubuntu-Medium", sans-serif;
+
+/** Stek specifieke variabelen. */
+
+/* zijbalk */
+$beeldmerk: url(../images/beeldmerk-wit.png);
+
+$zijbalk-bg: $darker-grey;
+$zijbalk-border: darken($primary, 12%);
+$zijbalk-kopje: $primary;
+$zijbalk-ishetal-nee: red;
+$zijbalk-ishetal-ja: green;
+$zindex-zijbalk: 800;
+
+.zijbalk-kopje {
+	a {
+		font-size: 1.25em;
+	}
+}
+
+/* Modals */
+$modal-content-bg: $body-bg;
+
+/* bbcode */
+$bb-block-bg: $secondary;
+
+/* forum */
+$forum-bericht0-bg: $body-bg;
+$forum-bericht1-bg: darken($body-bg, 4%);
+$ongelezen-lijn: #e8cf2a;
+
+/* main menu */
+$menu-primary-hover: $primary;
+$menu-bg: $body-bg;
+$menu-color: $body-color;
+$menu-small-bg: #0a338d;
+$menu-small-color: #ffffff;
+
+/* zoeken */
+$zoeken-active-bg: #428bca;
+
+/* importeer basis */
+@import "../base";
+
+.close {
+	color: $white;
+}
+
+table.groep-lijst tr:nth-child(even) {
+	background-color: $secondary;
+}
+
+.module-icon {
+	color: white;
+	opacity: 0.3;
+}
+
+.forum-deel {
+	.alternate-row {
+		&:nth-child(6n +1),
+		&:nth-child(6n + 2),
+		&:nth-child(6n + 3) {
+			background-color: $secondary;
+		}
+	}
+}

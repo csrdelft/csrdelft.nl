@@ -14,6 +14,7 @@ class CommissiesModel extends AbstractGroepenModel {
 		if (!in_array($soort, CommissieSoort::getTypeOptions())) {
 			$soort = CommissieSoort::Commissie;
 		}
+		/** @var Commissie $commissie */
 		$commissie = parent::nieuw();
 		$commissie->soort = $soort;
 		return $commissie;

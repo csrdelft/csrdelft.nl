@@ -65,6 +65,7 @@ abstract class Controller {
 	 * @var array
 	 */
 	private $kvp = array();
+	private $postVariables;
 
 	public function __construct($query, $model, $methods = array('GET', 'POST')) {
 		$this->model = $model;
@@ -93,6 +94,21 @@ abstract class Controller {
 				}
 			}
 		}
+
+		// Filter input kan er niet mee overweg als de body in json formaat is axios stuurt standaard in json formaat.
+		$filter_input = filter_input(INPUT_SERVER, 'CONTENT_TYPE', FILTER_SANITIZE_STRING);
+		if (startsWith($filter_input, 'application/json')) {
+			$body = json_decode(file_get_contents('php://input'), true);
+			$this->postVariables = $body;
+		}
+	}
+
+	protected function getPost($key) {
+		if (isset($this->postVariables[$key])) {
+			return $this->postVariables[$key];
+		}
+
+		return filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
 	}
 
 	/**

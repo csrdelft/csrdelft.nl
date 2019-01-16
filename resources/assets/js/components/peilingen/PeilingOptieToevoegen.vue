@@ -25,7 +25,7 @@
 			toevoegen(event) {
 				event.preventDefault();
 				this.icon = 'ico arrow_rotate_clockwise rotating';
-				axios.post(this.optieToevoegenUrl.toString(), null, AXIOS_LOCAL_CSRF_CONF)
+				axios.post(this.optieToevoegenUrl.toString())
 					.then((response) => {
 						domUpdate(response.data);
 						this.icon = 'ico add';
