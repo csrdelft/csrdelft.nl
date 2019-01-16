@@ -3,12 +3,13 @@ import $ from 'jquery';
 import {modalClose, modalOpen} from './modal';
 import {ajaxRequest} from './ajax';
 import initContext, {domUpdate} from './context';
-import {fnUpdateDataTable} from './datatable/api';
+import {DatatableResponse, fnUpdateDataTable} from './datatable/api';
 
 import {redirect, reload} from './util';
 import {fnGetSelection} from './datatable/api';
+import SubmitEvent = JQuery.SubmitEvent;
 
-export function formIsChanged(form) {
+export function formIsChanged(form: JQuery<EventTarget>) {
     let changed = false;
     $(form).find('.FormElement').not('.tt-hint').each(function () {
         let elmnt = $(this);
@@ -36,29 +37,29 @@ export function formIsChanged(form) {
  * @see templates/instellingen/beheer/instelling_row.tpl
  * @param form
  */
-export function formInlineToggle(form) {
+export function formInlineToggle(form:JQuery<EventTarget>) {
     form.prev('.InlineFormToggle').toggle();
     form.toggle();
-    form.children(':first').focus();
+    form.children(':first').trigger('focus');
 }
 
-export function formToggle(event) {
+export function formToggle(this:JQuery, event:Event) {
     event.preventDefault();
     let form = $(this).next('form');
     formInlineToggle(form);
     return false;
 }
 
-export function formReset(event, form) {
+export function formReset(event:SubmitEvent, form:JQuery<EventTarget>) {
     if (!form) {
-        form = $(this).closest('form');
+        form = $(event.target!).closest('form');
         event.preventDefault();
     }
-    if ($(this).hasClass('confirm') && !confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
+    if ($(event.target!).hasClass('confirm') && !confirm($(event.target!).attr('title') + '.\n\nWeet u het zeker?')) {
         return false;
     }
     form.find('.FormElement').each(function () {
-        let orig = $(this).attr('origvalue');
+        let orig = $(event.target!).attr('origvalue');
         if (typeof orig === 'string') {
             $(this).val(orig);
         }
@@ -72,7 +73,7 @@ export function formReset(event, form) {
  * @param event
  * @returns {boolean}
  */
-export function formSubmit(event) {
+export function formSubmit(this:JQuery, event: SubmitEvent) {
     if ($(this).hasClass('confirm')) {
         let q = $(this).attr('title');
         if (q) {
@@ -104,18 +105,18 @@ export function formSubmit(event) {
     }
 
     if ($(this).attr('href')) {
-        form.attr('action', $(this).attr('href'));
+        form.attr('action', $(this).attr('href')!);
     }
 
     if (form.hasClass('ModalForm') || form.hasClass('InlineForm')) {
         event.preventDefault();
-        let formData = new FormData(form.get(0)),
+        let formData = new FormData(form.get(0) as HTMLFormElement),
             done = domUpdate,
-            source = false;
+            source : JQuery|boolean = false;
 
         if (form.hasClass('InlineForm')) {
             source = form;
-            formData.append('InlineFormId', form.attr('id'));
+            formData.append('InlineFormId', form.attr('id')!);
             if (form.data('submitCallback')) {
                 done = form.data('submitCallback');
             }
@@ -123,7 +124,7 @@ export function formSubmit(event) {
 
         if (form.hasClass('DataTableResponse')) {
 
-            let tableId = form.attr('data-tableid');
+            let tableId = form.attr('data-tableid')!;
             if (!document.getElementById(tableId)) {
                 alert('DataTable not found');
             }
@@ -134,7 +135,7 @@ export function formSubmit(event) {
                 formData.append('DataTableSelection[]', value);
             });
 
-            done = function (response) {
+            done = function (response: DatatableResponse|string) {
                 if (typeof response === 'object') { // JSON
                     fnUpdateDataTable('#' + tableId, response);
                     if (response.modal) {
@@ -162,7 +163,7 @@ export function formSubmit(event) {
             done = redirect;
         }
 
-        ajaxRequest('POST', form.attr('action'), formData, source, done, alert, function () {
+        ajaxRequest('POST', form.attr('action')!, formData, source, done, alert, function () {
             if (form.hasClass('SubmitReset')) {
                 formReset(event, form);
             }
@@ -180,16 +181,13 @@ export function formSubmit(event) {
  * @param event
  * @returns {boolean}
  */
-export function formCancel(event) {
-    let source = $(event.target);
-    if (source.length === 0) {
-        source = $(this);
-    }
+export function formCancel(event:Event) {
+    let source = $(event.target!);
     if (source.hasClass('confirm') && !confirm(source.attr('title') + '.\n\nWeet u het zeker?')) {
         event.preventDefault();
         return false;
     }
-    let form = source.closest('form');
+    let form = source.closest('form')!;
     if (form.hasClass('InlineForm')) {
         event.preventDefault();
         formInlineToggle(form);

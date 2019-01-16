@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import {modalClose} from './modal';
 
-export function ajaxRequest(type: string, url: string, data: string | FormData, source: JQuery, onsuccess: Function, onerror?: Function, onfinish?: Function) {
+export function ajaxRequest(type: string, url: string, data: string | FormData, source: JQuery|false, onsuccess: Function, onerror?: Function, onfinish?: Function) {
 	if (source) {
 		if (!source.hasClass('noanim')) {
 			$(source).replaceWith(`<img alt="Laden" id="${source.attr('id')}" title="${url}" src="/images/loading-arrows.gif" />`);

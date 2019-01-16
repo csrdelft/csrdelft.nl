@@ -8,7 +8,6 @@ import './grafiek';
 import './forum';
 import './maalcie';
 import './bibliotheek';
-import './peilingbeheer';
 import './dragobject';
 import './roodschopper';
 import './router';
