@@ -35,30 +35,38 @@
 .maalcie-tabel {
   width: 100%;
   border-spacing: 0;
+	margin-bottom: 1em;
+
+	th {
+		background-color: $maalcie-tabel-header;
+		font-weight: bold;
+		padding: 1em;
+		border-bottom: 2px solid #FFFFFF;
+	}
+
+	tr {
+		background-color: $maalcie-tabel-tr0;
+
+		&:nth-child(even) {
+			background-color: $maalcie-tabel-tr1;
+		}
+
+		&:hover {
+			background-color: #DDEEFF;
+		}
+	}
+
+	td {
+		vertical-align: middle;
+		padding: 0 1em;
+		white-space: nowrap;
+	}
+
+	.col-del {
+		text-align: center;
+	}
 }
-.maalcie-tabel tr {
-  background-color: #EBEBEB;
-}
-.maalcie-tabel tr:nth-child(even) {
-  background-color: #FAFAFA;
-}
-.maalcie-tabel tr:hover {
-  background-color: #DDEEFF;
-}
-.maalcie-tabel th {
-  background-color: #FAFAFA;
-  font-weight: bold;
-  padding: 1em;
-  border-bottom: 2px solid #FFFFFF;
-}
-.maalcie-tabel td {
-  vertical-align: middle;
-  padding: 0 1em;
-  white-space: nowrap;
-}
-.maalcie-tabel .col-del {
-  text-align: center;
-}
+
 tr.taak-datum-head th, tr.taak-datum-summary th {
   cursor: pointer;
   border-top: 5px solid #FFFFFF;

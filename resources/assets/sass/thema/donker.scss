@@ -66,6 +66,11 @@ $menu-small-color: #ffffff;
 /* zoeken */
 $zoeken-active-bg: #428bca;
 
+/* maalcie-tabel */
+$maalcie-tabel-header: darken($body-bg, 5%);
+$maalcie-tabel-tr0: lighten($body-bg, 6%);
+$maalcie-tabel-tr1: lighten($body-bg, 12%);
+
 /* importeer basis */
 @import "../base";
 
