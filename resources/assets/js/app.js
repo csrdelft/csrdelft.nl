@@ -11,3 +11,4 @@ import './bibliotheek';
 import './dragobject';
 import './roodschopper';
 import './router';
+import './logger';
