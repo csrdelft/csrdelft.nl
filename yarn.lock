@@ -549,7 +549,15 @@
     "@types/jquery" "*"
     popper.js "^1.14.1"
 
-"@types/datatables.net@^1.10.14":
+"@types/datatables.net-buttons@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@types/datatables.net-buttons/-/datatables.net-buttons-1.4.0.tgz#e9c7a0dd4c01c5e5deda7c3fafb002f6d9232d9c"
+  integrity sha512-ocPxBjnNCY3T0wgeJAMHyEKwUf4yGxRo0eP8+Jwg+GGC5PySEjECJql+7kY56fWEa+2L0qFZzUzZSuk7ThHwSw==
+  dependencies:
+    "@types/datatables.net" "*"
+    "@types/jquery" "*"
+
+"@types/datatables.net@*", "@types/datatables.net@^1.10.14":
   version "1.10.14"
   resolved "https://registry.yarnpkg.com/@types/datatables.net/-/datatables.net-1.10.14.tgz#36c11c67dee60565c989d16e6c59a4c99f36ebe6"
   integrity sha512-lvU5UFVzqc3uLkoweCzogiG8LgDGzF3TIVDs8MJt2AcDr1ji/k0NRMTVlcf19EUmP5C4nc80Q05z21GWIyU8CA==
