@@ -2,10 +2,10 @@ import axios from 'axios';
 
 window.onerror = function (message: string, url, line, col, error) {
 	const string = message.toLowerCase();
-	const substring = "script error";
+	const substring = 'script error';
 	if (string.indexOf(substring) > -1) {
 		axios.post('/logger', {
-			message: 'Script error'
+			message: 'Error uit extern bestand, geen informatie beschikbaar.'
 		});
 	} else {
 		message += '\n' + console.trace();
