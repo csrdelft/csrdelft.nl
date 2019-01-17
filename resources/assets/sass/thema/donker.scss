@@ -104,6 +104,14 @@ table.groep-lijst tr:nth-child(even) {
 	}
 }
 
+/* Pas rijkleuren van maalcie-tabel aan die ergens random gebruikt worden in het corveerooster*/
+.rowColor0 {
+	background-color: lighten($body-bg, 4%);
+}
+.rowColor1 {
+	background-color: lighten($body-bg, 12%);
+}
+
 /* Pas "icoontje" in de breadcrubs aan */
 .module-icon {
 	color: white;
