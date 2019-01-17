@@ -60,6 +60,10 @@ class ForumModel extends CachedPersistenceModel {
 	 */
 	private $forumDradenMeldingModel;
 	/**
+	 * @var ForumDradenMeldingModel
+	 */
+	private $forumDelenMeldingModel;
+	/**
 	 * @var ForumPostsModel
 	 */
 	private $forumPostsModel;
@@ -71,7 +75,8 @@ class ForumModel extends CachedPersistenceModel {
 		ForumDradenReagerenModel $forumDradenReagerenModel,
 		ForumDradenVerbergenModel $forumDradenVerbergenModel,
 		ForumDradenMeldingModel $forumDradenMeldingModel,
-		ForumPostsModel $forumPostsModel
+		ForumPostsModel $forumPostsModel,
+		ForumDelenMeldingModel $forumDelenMeldingModel
 	) {
 		parent::__construct();
 
@@ -82,6 +87,7 @@ class ForumModel extends CachedPersistenceModel {
 		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
 		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
 		$this->forumPostsModel = $forumPostsModel;
+		$this->forumDelenMeldingModel = $forumDelenMeldingModel;
 	}
 
 	public static function get($id) {
@@ -134,6 +140,7 @@ class ForumModel extends CachedPersistenceModel {
 				$this->forumDradenGelezenModel->verwijderDraadGelezenVoorLid($uid);
 				$this->forumDradenVerbergenModel->toonAllesVoorLid($uid);
 				$this->forumDradenMeldingModel->stopAlleMeldingenVoorLid($uid);
+				$this->forumDelenMeldingModel->stopAlleMeldingenVoorLid($uid);
 				$this->forumDradenReagerenModel->verwijderReagerenVoorLid($uid);
 			}
 		}

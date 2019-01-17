@@ -9,6 +9,7 @@ use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
+use CsrDelft\model\forum\ForumDelenMeldingModel;
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenGelezenModel;
 use CsrDelft\model\forum\ForumDradenMeldingModel;
@@ -92,6 +93,7 @@ class ForumController extends Controller {
 			case 'offtopic':
 			case 'goedkeuren':
 			case 'meldingsniveau':
+			case 'deelmelding':
 
 			// ForumPost
 			case 'tekst':
@@ -344,7 +346,8 @@ class ForumController extends Controller {
 			'belangrijk' => '',
 			'post_form_titel' => ForumDradenReagerenModel::instance()->getConceptTitel($deel),
 			'post_form_tekst' => ForumDradenReagerenModel::instance()->getConcept($deel),
-			'reageren' => ForumDradenReagerenModel::instance()->getReagerenVoorDeel($deel)
+			'reageren' => ForumDradenReagerenModel::instance()->getReagerenVoorDeel($deel),
+			'deelmelding' => ForumDelenMeldingModel::instance()->lidWilMeldingVoorDeel($deel)
 		]);
 	}
 
@@ -551,6 +554,28 @@ class ForumController extends Controller {
 	}
 
 	/**
+	 * Niveau voor meldingen deelforum instellen
+	 *
+	 * @param int $forum_id
+	 * @param string $niveau
+	 *
+	 * @return View
+	 * @throws CsrGebruikerException
+	 * @throws CsrException
+	 */
+	public function deelmelding(int $forum_id, $niveau) {
+		$deel = ForumDelenModel::get($forum_id);
+		if (!$deel || !$deel->magLezen() || !$deel->magMeldingKrijgen()) {
+			throw new CsrToegangException('Deel mag geen melding voor ontvangen worden');
+		}
+		if ($niveau !== 'aan' && $niveau !== 'uit') {
+			throw new CsrToegangException('Ongeldig meldingsniveau gespecificeerd');
+		}
+		ForumDelenMeldingModel::instance()->setMeldingVoorLid($deel, $niveau === 'aan');
+		return new JsonResponse(true);
+	}
+
+	/**
 	 * Leg bladwijzer
 	 *
 	 * @param int $draad_id
@@ -722,6 +747,9 @@ class ForumController extends Controller {
 			// direct goedkeuren voor ingelogd
 			ForumPostsModel::instance()->goedkeurenForumPost($post);
 			ForumDradenMeldingModel::instance()->stuurMeldingen($post);
+			if ($nieuw) {
+				ForumDelenMeldingModel::instance()->stuurMeldingen($post);
+			}
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 			if ($nieuw && LidInstellingenModel::get('forum', 'meldingEigenDraad') === 'ja') {
 				ForumDradenMeldingModel::instance()->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::ALTIJD);

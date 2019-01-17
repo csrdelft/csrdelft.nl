@@ -87,6 +87,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 	}
 
 	public function verwijderForumDeel($id) {
+		ForumDelenMeldingModel::instance()->stopMeldingenVoorIedereen($id);
 		$rowCount = $this->deleteByPrimaryKey(array($id));
 		if ($rowCount !== 1) {
 			throw new CsrException('Deelforum verwijderen mislukt');

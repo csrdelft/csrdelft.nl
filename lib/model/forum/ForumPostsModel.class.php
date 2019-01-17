@@ -314,6 +314,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$draad->laatste_wijziging_uid = $post->uid;
 		if ($draad->wacht_goedkeuring) {
 			$draad->wacht_goedkeuring = false;
+			ForumDelenMeldingModel::instance()->stuurMeldingen($post);
 		}
 		ForumDradenModel::instance()->update($draad);
 	}
