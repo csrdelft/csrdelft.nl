@@ -47,13 +47,7 @@ class ForumDelenMeldingModel extends CachedPersistenceModel {
 	public function lidWilMeldingVoorDeel(ForumDeel $deel, $uid = null) {
 		if ($uid === null) $uid = LoginModel::getUid();
 
-		/** @var ForumDeelMelding $actief */
-		$actief = $this->retrieveByPrimaryKey([$deel->forum_id, $uid]);
-		if ($actief) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->existsByPrimaryKey([$deel->forum_id, $uid]);
 	}
 
 	/**
