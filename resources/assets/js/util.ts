@@ -64,8 +64,8 @@ export function basename(path : string, suffix : string = '') {
 	return base;
 }
 
-export function reload(htmlString : string) {
-	if (htmlString.substring(0, 16) === '<div id="modal" ') {
+export function reload(htmlString? : string) {
+	if (htmlString && htmlString.substring(0, 16) === '<div id="modal" ') {
 		domUpdate(htmlString);
 		return;
 	}
