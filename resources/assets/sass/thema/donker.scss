@@ -8,13 +8,21 @@ $gray-800: #343a40;
 $black: #000;
 
 $body-bg: $dark-grey;
-$body-color: $white;
+$body-color: darken($white, 7%);
 $headings-color: inherit;
 
 $primary: #006699;
 $secondary: lighten($body-bg, 10%);
 $light: $gray-100;
 $dark: $gray-800;
+
+@font-face {
+	font-family: 'Ubuntu-Light';
+	src: url('../../fonts/dark-mode/Ubuntu-Light.ttf') format('truetype'),
+	url('../../fonts/dark-mode/Ubuntu-Light.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
 
 @font-face {
 	font-family: 'Ubuntu-Medium';
@@ -32,7 +40,7 @@ $headings-font-family: "Ubuntu-Medium", sans-serif;
 /* zijbalk */
 $beeldmerk: url(../images/beeldmerk-wit.png);
 
-$zijbalk-bg: $darker-grey;
+$zijbalk-bg: darken($body-bg, 5%);
 $zijbalk-border: darken($primary, 12%);
 $zijbalk-kopje: $primary;
 $zijbalk-ishetal-nee: red;
@@ -43,6 +51,10 @@ $zindex-zijbalk: 800;
 	a {
 		font-size: 1.25em;
 	}
+}
+
+#zijbalk .blok .item {
+	font-family: "Ubuntu-Light", sans-serif;
 }
 
 /* Modals */
@@ -66,6 +78,11 @@ $menu-small-color: #ffffff;
 /* zoeken */
 $zoeken-active-bg: #428bca;
 
+/* maalcie-tabel */
+$maalcie-tabel-header: darken($body-bg, 5%);
+$maalcie-tabel-tr0: lighten($body-bg, 4%);
+$maalcie-tabel-tr1: lighten($body-bg, 12%);
+
 /* importeer basis */
 @import "../base";
 
@@ -73,10 +90,21 @@ $zoeken-active-bg: #428bca;
 	color: $white;
 }
 
+/* Pas om-en-om kleuren in de lichtingen, vertikalen, kringen, etc. aan */
 table.groep-lijst tr:nth-child(even) {
 	background-color: $secondary;
 }
 
+/* Pas hover op de maalcie-tabel aan*/
+.maalcie-tabel {
+	tr {
+		&:hover {
+			background-color: lighten($body-bg, 40%);
+		}
+	}
+}
+
+/* Pas "icoontje" in de breadcrubs aan */
 .module-icon {
 	color: white;
 	opacity: 0.3;
@@ -89,5 +117,18 @@ table.groep-lijst tr:nth-child(even) {
 		&:nth-child(6n + 3) {
 			background-color: $secondary;
 		}
+	}
+}
+
+.forumdeel-omschrijving {
+	background-color: #3F4149;
+}
+
+/* Pas achtergrond in de fotogallerij aan */
+.jgallery {
+	background-color: lighten($body-bg, 4%) !important;
+
+	&-thumbnails {
+		background-color: lighten($body-bg, 4%) !important;;
 	}
 }
