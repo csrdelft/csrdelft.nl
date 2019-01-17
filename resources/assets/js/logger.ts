@@ -8,6 +8,7 @@ window.onerror = function (message: string, url, line, col, error) {
 			message: 'Script error'
 		});
 	} else {
+		message += '\n' + console.trace();
 		axios.post('/logger', {
 			message,
 			url,
