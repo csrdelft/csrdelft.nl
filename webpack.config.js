@@ -89,7 +89,12 @@ module.exports = (env, argv) => ({
 					/node_modules/,
 					/lib/,
 				],
-				use: 'tslint-loader',
+				use: {
+					loader: 'tslint-loader',
+					options: {
+						failOnHint: true,
+					}
+				},
 			},
 			// Verwerk .js bestanden met babel, dit zorgt ervoor dat alle nieuwe foefjes van javascript gebruikt kunnen worden
 			// terwijl we nog wel oudere browsers ondersteunen.
