@@ -127,3 +127,19 @@ export function formatBedrag(data: number) {
 		return '-€' + (data / -100).toFixed(2);
 	}
 }
+
+export function singleLineString(strings: TemplateStringsArray, ...values: string[]) {
+	// Interweave the strings with the
+	// substitution vars first.
+	let output = '';
+	for (let i = 0; i < values.length; i++) {
+		output += strings[i] + values[i];
+	}
+	output += strings[values.length];
+
+	// Split on newlines.
+	const lines = output.split(/(?:\r\n|\n|\r)/);
+
+	// Rip out the leading whitespace.
+	return lines.map((line) => line.replace(/^\s+/gm, '')).join(' ').trim();
+}

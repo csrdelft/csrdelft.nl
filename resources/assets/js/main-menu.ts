@@ -1,14 +1,15 @@
-import $ from 'jquery';
 import Hammer from 'hammerjs';
+import $ from 'jquery';
 
 declare global {
 	// Hammer kan een Document als element krijgen, dit zorgt ervoor dat horizontale scroll mogelijk is op mobiel.
 	interface HammerStatic {
-		new(element: HTMLElement | SVGElement | Document, options?: HammerOptions | undefined): HammerManager
+		// tslint:disable-next-line:callable-types Deze syntax is nodig omdat HammerStatic ge-extend is.
+		new(element: HTMLElement | SVGElement | Document, options?: HammerOptions | undefined): HammerManager;
 	}
 }
 
-$(function () {
+$(() => {
 
 	let active: string | null = null;
 
@@ -38,7 +39,9 @@ $(function () {
 	 * Terug naar gewone view.
 	 */
 	function reset(event?: Event) {
-		if (event && active != null) event.preventDefault();
+		if (event && active != null) {
+			event.preventDefault();
+		}
 
 		active = null;
 
@@ -61,7 +64,7 @@ $(function () {
 	 * @param id
 	 */
 	function toggle(id: string) {
-		return function (event: Event) {
+		return (event: Event) => {
 			event.preventDefault();
 			if (active === id) {
 				reset();
@@ -76,20 +79,41 @@ $(function () {
 		};
 	}
 
-	//open submenu
+	// open submenu
 	$('.has-children').children('a').on('click', function (event) {
 		event.preventDefault();
-		let selected = $(this);
+		const selected = $(this);
 		if (selected.next('ul').hasClass('is-hidden')) {
-			//desktop version only
-			selected.addClass('selected').next('ul').removeClass('is-hidden').end().parent('.has-children').parent('ul').addClass('moves-out');
-			selected.parent('.has-children').siblings('.has-children').children('ul').addClass('is-hidden').end().children('a').removeClass('selected');
+			// desktop version only
+			selected
+				.addClass('selected')
+				.next('ul')
+				.removeClass('is-hidden')
+				.end()
+				.parent('.has-children')
+				.parent('ul')
+				.addClass('moves-out');
+			selected
+				.parent('.has-children')
+				.siblings('.has-children')
+				.children('ul')
+				.addClass('is-hidden')
+				.end()
+				.children('a')
+				.removeClass('selected');
 		} else {
-			selected.removeClass('selected').next('ul').addClass('is-hidden').end().parent('.has-children').parent('ul').removeClass('moves-out');
+			selected
+				.removeClass('selected')
+				.next('ul')
+				.addClass('is-hidden')
+				.end()
+				.parent('.has-children')
+				.parent('ul')
+				.removeClass('moves-out');
 		}
 	});
 
-	//submenu items - go back link
+	// submenu items - go back link
 	$('.go-back').on('click', function () {
 		$(this).parent('ul').addClass('is-hidden').parent('.has-children').parent('ul').removeClass('moves-out');
 	});
@@ -100,7 +124,7 @@ $(function () {
 
 	$('#cd-main-overlay,.cd-main-content').on('click', reset);
 
-	let $searchfield = $('.cd-search').find('input[type="search"]');
+	const $searchfield = $('.cd-search').find('input[type="search"]');
 
 	// Catch keystrokes for instant search
 	$(document).on('keydown', (event: JQuery.KeyDownEvent) => {
@@ -110,13 +134,15 @@ $(function () {
 		}
 
 		// Geen instantsearch als we in een input-element of text-area zitten.
-		let element = event.target.tagName.toUpperCase();
+		const element = event.target.tagName.toUpperCase();
 		if (element === 'INPUT' || element === 'TEXTAREA' || element === 'SELECT') {
 			return;
 		}
 
 		// a-z en 0-9 incl. numpad
-		if ((event.keyCode > 64 && event.keyCode < 91) || (event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106)) {
+		if ((event.keyCode > 64 && event.keyCode < 91)
+			|| (event.keyCode > 47 && event.keyCode < 58)
+			|| (event.keyCode > 95 && event.keyCode < 106)) {
 			view('#search');
 			$searchfield.val('');
 			$searchfield.trigger('focus');
@@ -132,7 +158,7 @@ $(function () {
 	// Maak het mogelijk om nog tekst te kunnen selecteren.
 	delete Hammer.defaults.cssProps.userSelect;
 
-	let hammertime = new Hammer(document, {inputClass: Hammer.TouchInput});
+	const hammertime = new Hammer(document, {inputClass: Hammer.TouchInput});
 
 	hammertime.on('swiperight', () => {
 		if (isVisible('#zijbalk') || isVisible('#menu')) {

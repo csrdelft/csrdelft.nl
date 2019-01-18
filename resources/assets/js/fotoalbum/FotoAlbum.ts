@@ -1,8 +1,8 @@
-import $ from 'jquery';
 import {EventEmitter} from 'events';
-import {basename, dirname, redirect, reload, selectText} from '../util';
 
 import 'jgallery/dist/js/jgallery';
+import $ from 'jquery';
+import {basename, dirname, redirect, reload, selectText} from '../util';
 
 declare global {
 	interface JQuery {
@@ -13,13 +13,25 @@ declare global {
 }
 
 export class FotoAlbum extends EventEmitter {
-	container: JQuery;
-	wrapper: JQuery;
-	isLoggedIn: boolean;
-	magAanpassen: boolean;
-	slideshowInterval: number;
-	root: string;
-	itemsJson: any;
+
+	public static requestFullscreen() {
+		const docelem = document.querySelector('.jgallery');
+		if (docelem) {
+			docelem.requestFullscreen();
+		}
+	}
+
+	public static exitFullScreen() {
+		document.exitFullscreen();
+	}
+
+	public container: JQuery;
+	public wrapper: JQuery;
+	public isLoggedIn: boolean;
+	public magAanpassen: boolean;
+	public slideshowInterval: number;
+	public root: string;
+	public itemsJson: any;
 
 	constructor(wrapper: JQuery) {
 		super();
@@ -30,76 +42,77 @@ export class FotoAlbum extends EventEmitter {
 		this.root = wrapper.data('root');
 		this.itemsJson = wrapper.data('fotos');
 
+		const afterLoadPhoto = () => {
+			this.container = $('div.jgallery');
+			if (this.isLoggedIn) {
+				// dynamic context menu
+				this.updateContextMenu();
+			}
+			const zoom = this.container.find('div.zoom-container');
+			// if zoomed in
+			if (zoom.attr('data-size') !== 'fit') {
+				this.showFullRes();
+			}
+			this.emit('afterLoadPhoto');
+		};
+
 		wrapper.find('.gallery').jGallery({
-			width: '100%',
-			height: '897px',
-			mode: 'standard',
-			canChangeMode: true,
-			swipeEvents: false,
-			browserHistory: true,
-			disabledOnIE8AndOlder: true,
-			preloadAll: false,
-			maxMobileWidth: 767,
-			draggableZoomHideNavigationOnMobile: true,
-			autostart: true,
-			autostartAtAlbum: 1,
-			canZoom: true,
-			draggableZoom: true,
-			zoomSize: 'fit',
+			'afterLoadPhoto': afterLoadPhoto,
+			'autostart': true,
+			'autostartAtAlbum': 1,
+			'backgroundColor': 'fff',
+			'browserHistory': true,
+			'canChangeMode': true,
+			'canClose': false,
+			'canMinimalizeThumbnails': true,
+			'canZoom': true,
+			'disabledOnIE8AndOlder': true,
+			'draggableZoom': true,
+			'draggableZoomHideNavigationOnMobile': true,
+			'height': '897px',
+			'hideThumbnailsOnInit': false,
+			'items': this.itemsJson,
+			'maxMobileWidth': 767,
+			'mode': 'standard',
+			'preloadAll': false,
+			'slideshow': true,
+			'slideshowAutostart': false,
+			'slideshowCanRandom': true,
+			'slideshowInterval': this.slideshowInterval,
+			'slideshowRandom': false,
+			'swipeEvents': false,
+			'textColor': '193b61',
+			'thumbHeight': 150,
+			'thumbHeightOnFullScreen': 150,
+			'thumbType': 'image',
+			'thumbWidth': 150,
+			'thumbWidthOnFullScreen': 150,
+			'thumbnails': true,
+			'thumbnailsHideOnMobile': false,
+			'thumbnailsPosition': 'bottom',
+			'title': this.isLoggedIn,
+			'titleExpanded': false,
+			'tooltipClose': 'Close',
+			'tooltipFullScreen': 'Full screen',
+			'tooltipRandom': 'Random',
+			'tooltipSeeAllPhotos': 'Grid',
+			'tooltipSeeOtherAlbums': 'Toon sub-albums',
+			'tooltipSlideshow': 'Slideshow',
+			'tooltipToggleThumbnails': 'Toggle thumbnails',
+			'tooltipZoom': 'Zoom',
+			'tooltips': true,
+			'transition': 'moveToLeft_scaleUp',
+			'transitionBackward': 'moveToRight_scaleUp',
+			'transitionCols': '1',
+			'transitionDuration': '0.7s',
+			'transitionRows': '1',
+			'transitionTimingFunction': 'cubic-bezier(0,1,1,1)',
+			'width': '100%',
+			'zoomSize': 'fit',
 			'zoomSize:': 'original',
-			backgroundColor: 'fff',
-			textColor: '193b61',
-			thumbnails: true,
-			thumbType: 'image',
-			thumbWidth: 150,
-			thumbHeight: 150,
-			thumbWidthOnFullScreen: 150,
-			thumbHeightOnFullScreen: 150,
-			thumbnailsPosition: 'bottom',
-			hideThumbnailsOnInit: false,
-			canMinimalizeThumbnails: true,
-			thumbnailsHideOnMobile: false,
-			transition: 'moveToLeft_scaleUp',
-			transitionBackward: 'moveToRight_scaleUp',
-			transitionTimingFunction: 'cubic-bezier(0,1,1,1)',
-			transitionDuration: '0.7s',
-			transitionCols: '1',
-			transitionRows: '1',
-			title: this.isLoggedIn,
-			titleExpanded: false,
-			tooltips: true,
-			tooltipZoom: 'Zoom',
-			tooltipToggleThumbnails: 'Toggle thumbnails',
-			tooltipSeeAllPhotos: 'Grid',
-			tooltipSeeOtherAlbums: 'Toon sub-albums',
-			tooltipSlideshow: 'Slideshow',
-			slideshowInterval: this.slideshowInterval,
-			slideshow: true,
-			slideshowAutostart: false,
-			slideshowRandom: false,
-			slideshowCanRandom: true,
-			tooltipRandom: 'Random',
-			tooltipFullScreen: 'Full screen',
-			tooltipClose: 'Close',
-			canClose: false,
-			afterLoadPhoto: () => {
-				this.container = $('div.jgallery');
-				if (this.isLoggedIn) {
-					// dynamic context menu
-					this.updateContextMenu();
-				}
-				const zoom = this.container.find('div.zoom-container');
-				// if zoomed in
-				if (zoom.attr('data-size') !== 'fit') {
-					this.showFullRes();
-				}
-				this.emit('afterLoadPhoto');
-			},
-			items: this.itemsJson
 		});
 		this.container = $('div.jgallery');
 		this.container.addClass('noselect');
-
 
 		$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', () => {
 			if (document.fullscreenEnabled) {
@@ -117,14 +130,15 @@ export class FotoAlbum extends EventEmitter {
 			}).addClass('select-text');
 
 			// knopje map omhoog
-			$('<span class="fa fa-level-up jgallery-btn jgallery-btn-small" tooltip="Open parent album"></span>').on('click', () => {
-				const url = this.getUrl();
-				let fullscreen = '';
-				if (this.container.hasClass('jgallery-full-screen')) {
-					fullscreen = '?fullscreen';
-				}
-				window.location.href = dirname(dirname(url)).replace('plaetjes/', '') + fullscreen;
-			}).prependTo(this.container.find('div.icons'));
+			$('<span class="fa fa-level-up jgallery-btn jgallery-btn-small" tooltip="Open parent album"></span>')
+				.on('click', () => {
+					const url = this.getUrl();
+					let fullscreen = '';
+					if (this.container.hasClass('jgallery-full-screen')) {
+						fullscreen = '?fullscreen';
+					}
+					window.location.href = dirname(dirname(url)).replace('plaetjes/', '') + fullscreen;
+				}).prependTo(this.container.find('div.icons'));
 
 		}
 
@@ -144,7 +158,8 @@ export class FotoAlbum extends EventEmitter {
 		}).appendTo(this.container.find('div.icons'));
 
 		// toggle full screen
-		this.container.find('span.change-mode').on('click', () => this.toggleFullScreen()).appendTo(this.container.find('div.icons'));
+		this.container.find('span.change-mode')
+			.on('click', () => this.toggleFullScreen()).appendTo(this.container.find('div.icons'));
 		// fullscreen GET param
 		if (window.location.href.indexOf('?fullscreen') > 0 && !this.container.hasClass('jgallery-full-screen')) {
 			$('span.change-mode').trigger('click');
@@ -153,33 +168,23 @@ export class FotoAlbum extends EventEmitter {
 		if (this.isLoggedIn) {
 			// foto context menu
 			this.container.find('div.zoom').contextMenu({
+				menuSelected: () => true,
 				menuSelector: '#contextMenu',
-				menuSelected: function () {
-				}
 			});
 		}
 		// mode change album selector to last position
 		this.container.find('div.icons .jgallery-btn.change-album').appendTo(this.container.find('div.icons'));
 	}
 
-	static requestFullscreen() {
-		const docelem = document.querySelector('.jgallery');
-		if (docelem) docelem.requestFullscreen();
-	}
-
-	static exitFullScreen() {
-		document.exitFullscreen();
-	}
-
-	getFullUrl() {
+	public getFullUrl() {
 		return decodeURI(this.container.find('div.nav-bottom div.title').html());
 	}
 
-	getUrl() {
+	public getUrl() {
 		return this.getFullUrl().replace(this.root, '');
 	}
 
-	toggleFullScreen() {
+	public toggleFullScreen() {
 		if (this.container.hasClass('jgallery-full-screen')) {
 			FotoAlbum.requestFullscreen();
 		} else {
@@ -187,19 +192,19 @@ export class FotoAlbum extends EventEmitter {
 		}
 	}
 
-	showFullRes() {
+	public showFullRes() {
 		const zoom = this.container.find('div.zoom-container');
 		const foto = zoom.find('img.active');
 		const fotoElem = foto.get(0) as HTMLImageElement;
-		const setDimensions = function (img: HTMLImageElement) {
+		const setDimensions = (img: HTMLImageElement) => {
 			if (zoom.attr('data-size') === 'original') {
 				foto.css({
-					'max-width': '',
-					'max-height': '',
-					'width': img.naturalWidth,
 					'height': img.naturalHeight,
 					'margin-left': -img.naturalWidth / 2,
-					'margin-top': -img.naturalHeight / 2
+					'margin-top': -img.naturalHeight / 2,
+					'max-height': '',
+					'max-width': '',
+					'width': img.naturalWidth,
 				});
 				foto.attr('data-width', img.naturalWidth);
 				foto.attr('data-height', img.naturalHeight);
@@ -217,9 +222,20 @@ export class FotoAlbum extends EventEmitter {
 		}
 	}
 
-	updateContextMenu() {
+	public createCMBtn(id: string, text: string, icon: string) {
+		return $('<a>')
+			.attr({
+				class: 'dropdown-item',
+				id,
+				tabindex: '-1',
+			})
+			.append($('<span>').attr('class', `fa fa-${icon}`))
+			.append(`&nbsp; ${text}`);
+	}
+
+	public updateContextMenu() {
 		const cm = $('#contextMenu').empty();
-		const addCMI = function (item : JQuery, divider? : boolean) {
+		const addCMI = (item: JQuery, divider?: boolean) => {
 			if (divider) {
 				$('<div class="dropdown-divider"></div>').appendTo(cm);
 			}
@@ -230,17 +246,17 @@ export class FotoAlbum extends EventEmitter {
 		};
 
 		// knopje downloaden
-		const btnDown = $('<a id="btnDown" class="dropdown-item" tabindex="-1"><span class="fa fa-download"></span> &nbsp; Downloaden</a>');
+		const btnDown = this.createCMBtn('btnDown', 'Downloaden', 'download');
 		btnDown.on('click', () => window.location.href = `/fotoalbum/download${this.getUrl()}`);
 		addCMI(btnDown);
 
 		// knopje taggen
-		const btnTag = $('<a id="btnTag" class="dropdown-item" tabindex="-1"><span class="fa fa-smile-o"></span> &nbsp; Leden etiketteren</a>');
+		const btnTag = this.createCMBtn('btnTag', 'Leden etiketteren', 'smile-o');
 		btnTag.on('click', () => this.container.find('span.fa-smile-o.jgallery-btn').click());
 		addCMI(btnTag);
 
 		// knopje full screen
-		const btnFS = $('<a id="btnFS" class="dropdown-item" tabindex="-1"><span class="fa"></span> &nbsp; Volledig scherm</a>');
+		const btnFS = this.createCMBtn('btnFS', 'Volledig scherm', '');
 		btnFS.on('click', () => {
 			const btn = this.container.find('span.change-mode');
 			btn.click();
@@ -281,49 +297,49 @@ export class FotoAlbum extends EventEmitter {
 
 		if (this.magAanpassen) {
 			// knopje rechtsom draaien
-			const btnRight = $('<a id="btnRight" class="dropdown-item" tabindex="-1"><span class="fa fa-repeat"></span> &nbsp; Draai met de klok mee</a>');
+			const btnRight = this.createCMBtn('btnRight', 'Draai met de klok mee', 'repeat');
 			btnRight.on('click', () => {
 				const url = this.getUrl();
 				$.post('/fotoalbum/roteren' + dirname(url), {
 					foto: basename(url),
-					rotation: 90
+					rotation: 90,
 				}, reload);
 			});
 
 			addCMI(btnRight, true);
 
 			// knopje linksom draaien
-			const btnLeft = $('<a id="btnLeft" class="dropdown-item" tabindex="-1"><span class="fa fa-undo"></span> &nbsp; Draai tegen de klok in</a>');
+			const btnLeft = this.createCMBtn('btnLeft', 'Draai tegen de klok in', 'undo');
 			btnLeft.on('click', () => {
 				const url = this.getUrl();
 				$.post('/fotoalbum/roteren' + dirname(url), {
 					foto: basename(url),
-					rotation: -90
+					rotation: -90,
 				}, reload);
 			});
 
 			addCMI(btnLeft);
 
 			// knopje albumcover
-			const btnCover = $('<a id="btnCover" class="dropdown-item" tabindex="-1"><span class="fa fa-folder"></span> &nbsp; Instellen als albumcover</a>');
+			const btnCover = this.createCMBtn('btnCover', 'Instellen als albumcover', 'folder');
 			btnCover.on('click', () => {
 				const url = this.getUrl();
 				$.post('/fotoalbum/albumcover' + dirname(url), {
-					foto: basename(url)
+					foto: basename(url),
 				}, redirect);
 			});
 
 			addCMI(btnCover);
 
 			// knopje verwijderen
-			const btnDel = $('<a id="btnDel" class="dropdown-item" tabindex="-1"><span class="fa fa-times"></span> &nbsp; Verwijderen</a>');
+			const btnDel = this.createCMBtn('btnDel', 'Verwijderen', 'times');
 			btnDel.on('click', () => {
 				if (!confirm('Foto definitief verwijderen. Weet u het zeker?')) {
 					return false;
 				}
 				const url = this.getUrl();
 				$.post('/fotoalbum/verwijderen' + dirname(url), {
-					foto: decodeURI(basename(url))
+					foto: decodeURI(basename(url)),
 				}, reload);
 			});
 
@@ -333,10 +349,11 @@ export class FotoAlbum extends EventEmitter {
 }
 
 $('.fotoalbum').each((i, el) => {
-	let wrapper = $(el);
-	let fotoalbum = new FotoAlbum(wrapper);
+	const wrapper = $(el);
+	const fotoalbum = new FotoAlbum(wrapper);
 	if (wrapper.data('isLoggedIn')) {
 		// Laad de FotoAlbumTags code niet als dat niet nodig is.
-		import(/* webpackChunkName: "fotoalbumtags" */ './FotoAlbumTags').then(({FotoAlbumTags}) => new FotoAlbumTags(fotoalbum));
+		import(/* webpackChunkName: "fotoalbumtags" */ './FotoAlbumTags')
+			.then(({FotoAlbumTags}) => new FotoAlbumTags(fotoalbum));
 	}
 });

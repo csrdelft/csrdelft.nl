@@ -7,7 +7,7 @@ import {
 	Scene,
 	ShaderMaterial,
 	TextureLoader,
-	WebGLRenderer
+	WebGLRenderer,
 } from 'three';
 import Detector from '../lib/three.detector';
 
@@ -16,11 +16,16 @@ if (!Detector.webgl) {
 }
 
 let container: HTMLElement;
-let camera : PerspectiveCamera, scene : Scene, renderer : Renderer;
-let mesh, geometry, material;
+let camera: PerspectiveCamera;
+let scene: Scene;
+let renderer: Renderer;
+let mesh;
+let geometry;
+let material;
 
-let mouseX = 0, mouseY = 0;
-const start_time = Date.now();
+let mouseX = 0;
+let mouseY = 0;
+const startTime = Date.now();
 
 const windowHalfX = window.innerWidth / 2;
 const windowHalfY = window.innerHeight / 2;
@@ -61,36 +66,35 @@ function initClouds() {
 
 	const fog = new Fog(0x4584b4, -100, 3000);
 
-	const vs = document.getElementById('vs'),
-		fs = document.getElementById('fs'),
-		vertexShader = vs!.textContent!,
-		fragmentShader = fs!.textContent!;
+	const vs = document.getElementById('vs');
+	const fs = document.getElementById('fs');
+	const vertexShader = vs!.textContent!;
+	const fragmentShader = fs!.textContent!;
 
 	material = new ShaderMaterial({
+		depthTest: false,
+		depthWrite: false,
+		fragmentShader,
+		transparent: true,
 		uniforms: {
-			map: {
-				type: 't',
-				value: texture
-			},
 			fogColor: {
 				type: 'c',
-				value: fog.color
-			},
-			fogNear: {
-				type: 'f',
-				value: fog.near
+				value: fog.color,
 			},
 			fogFar: {
 				type: 'f',
-				value: fog.far
-			}
+				value: fog.far,
+			},
+			fogNear: {
+				type: 'f',
+				value: fog.near,
+			},
+			map: {
+				type: 't',
+				value: texture,
+			},
 		},
 		vertexShader,
-		fragmentShader,
-		depthWrite: false,
-		depthTest: false,
-		transparent: true
-
 	});
 
 	const plane = new Mesh(new PlaneGeometry(64, 64));
@@ -115,8 +119,8 @@ function initClouds() {
 	scene.add(mesh);
 
 	renderer = new WebGLRenderer({
+		alpha: true,
 		antialias: false,
-		alpha: true
 	});
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	container.append(renderer.domElement);
@@ -125,7 +129,7 @@ function initClouds() {
 	window.addEventListener('resize', onWindowResizeClouds, false);
 }
 
-function onDocumentMouseMoveClouds(event : MouseEvent) {
+function onDocumentMouseMoveClouds(event: MouseEvent) {
 	mouseX = (event.clientX - windowHalfX) * 0.25;
 	mouseY = (event.clientY - windowHalfY) * 0.15;
 }
@@ -141,7 +145,7 @@ function animateClouds() {
 	requestAnimationFrame(animateClouds);
 
 	if (container.style.visibility !== 'hidden') {
-		let position = ((Date.now() - start_time) * 0.03) % 8000;
+		const position = ((Date.now() - startTime) * 0.03) % 8000;
 		camera.position.x += (mouseX - camera.position.x) * 0.005;
 		camera.position.y += (-mouseY - 70 - camera.position.y) * 0.01;
 		camera.position.z = -position + 8000;

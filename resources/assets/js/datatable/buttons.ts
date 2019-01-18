@@ -9,27 +9,27 @@ declare global {
 	namespace DataTables {
 		interface ExtButtonsSettings {
 			// Default buttons, zitten om de een of andere reden niet in de typedef
-			copyHtml5: ButtonSettings
-			copyFlash: ButtonSettings
-			csvHtml5: ButtonSettings
-			csvFlash: ButtonSettings
-			pdfHtml5: ButtonSettings
-			pdfFlash: ButtonSettings
-			excelHtml5: ButtonSettings
-			excelFlash: ButtonSettings
-			print: ButtonSettings
+			copyHtml5: ButtonSettings;
+			copyFlash: ButtonSettings;
+			csvHtml5: ButtonSettings;
+			csvFlash: ButtonSettings;
+			pdfHtml5: ButtonSettings;
+			pdfFlash: ButtonSettings;
+			excelHtml5: ButtonSettings;
+			excelFlash: ButtonSettings;
+			print: ButtonSettings;
 			// Eigen buttons
-			default: ButtonSettings
-			popup: ButtonSettings
-			url: ButtonSettings
-			sourceChange: ButtonSettings
-			confirm: ButtonSettings
-			defaultCollection: ButtonSettings
+			default: ButtonSettings;
+			popup: ButtonSettings;
+			url: ButtonSettings;
+			sourceChange: ButtonSettings;
+			confirm: ButtonSettings;
+			defaultCollection: ButtonSettings;
 		}
 		// Eigen attributen op ButtonSettings, worden in DatatableKnop gezet
 		interface ButtonSettings {
-			href?: string
-			multiplicity?: string
+			href?: string;
+			multiplicity?: string;
 		}
 	}
 }
@@ -48,12 +48,12 @@ $.fn.dataTable.ext.buttons.print.className += ' dt-button-ico dt-ico-printer';
 // Laat een modal zien, of doe een ajax call gebasseerd op selectie.
 $.fn.dataTable.ext.buttons.default = {
 	init(this: ButtonApi, dt, node, config) {
-		let toggle = () => {
+		const toggle = () => {
 			this.enable(
 				evaluateMultiplicity(
 					config.multiplicity,
-					dt.rows({selected: true}).count()
-				)
+					dt.rows({selected: true}).count(),
+				),
 			);
 		};
 		dt.on('select.dt.DT deselect.dt.DT', toggle);
@@ -63,11 +63,11 @@ $.fn.dataTable.ext.buttons.default = {
 		// Vervang :col door de waarde te vinden in de geselecteerde row
 		// Dit wordt alleen geprobeerd als dit voorkomt
 		if (config.href.indexOf(':') !== -1) {
-			let replacements = /:(\w+)/g.exec(config.href)!;
-			dt.on('select.dt.DT', (e, dt, type, indexes) => {
+			const replacements = /:(\w+)/g.exec(config.href)!;
+			dt.on('select.dt.DT', (e, dt2, type, indexes) => {
 				if (indexes.length === 1) {
 					let newHref = config.href;
-					let row = dt.row(indexes).data();
+					const row = dt2.row(indexes).data();
 					// skipt match, start met groepen
 					for (let i = 1; i < replacements.length; i++) {
 						newHref = newHref.replace(':' + replacements[i], row[replacements[i]]);
@@ -85,21 +85,21 @@ $.fn.dataTable.ext.buttons.default = {
 	action(e, dt, button) {
 		knopPost.call(button, e);
 	},
-	className: 'post DataTableResponse'
+	className: 'post DataTableResponse',
 };
 
 $.fn.dataTable.ext.buttons.popup = {
 	extend: 'default',
 	action(e, dt, button) {
 		window.open(button.attr('href'));
-	}
+	},
 };
 
 $.fn.dataTable.ext.buttons.url = {
 	extend: 'default',
 	action(e, dt, button) {
 		window.location.href = button.attr('href')!;
-	}
+	},
 };
 
 // Verander de bron van een datatable
@@ -107,7 +107,7 @@ $.fn.dataTable.ext.buttons.url = {
 // gelijk is aan de bron van de knop.
 $.fn.dataTable.ext.buttons.sourceChange = {
 	init(dt, node, config) {
-		let enable = () => {
+		const enable = () => {
 			dt.buttons(node).active(dt.ajax.url() === config.href);
 		};
 		dt.on('xhr.sourceChange', enable);
@@ -116,36 +116,37 @@ $.fn.dataTable.ext.buttons.sourceChange = {
 	},
 	action(e, dt, button, config) {
 		dt.ajax.url(config.href!).load();
-	}
+	},
 };
 
 $.fn.dataTable.ext.buttons.confirm = {
 	extend: 'collection',
 	init(this: ButtonApi, dt, node, config) {
-		let toggle = () => {
+		const toggle = () => {
 			this.enable(
 				evaluateMultiplicity(
 					config.multiplicity,
-					dt.rows({selected: true}).count()
-				)
+					dt.rows({selected: true}).count(),
+				),
 			);
 		};
 		dt.on('select.dt.DT deselect.dt.DT', toggle);
 		// Initiele staat
 		toggle();
 
-		new $.fn.dataTable.Buttons(dt, <ButtonsSettings>{
+		// tslint:disable-next-line:no-unused-expression
+		new $.fn.dataTable.Buttons(dt, {
 			buttons: [
 				{
-					extend: 'default',
-					text: (dt) => dt.i18n('csr.zeker', 'Are you sure?'),
 					action: config.action,
-					multiplicity: '', // altijd mogelijk
 					className: 'dt-button-ico dt-ico-exclamation dt-button-warning',
-					href: config.href
-				}
-			]
-		});
+					extend: 'default',
+					href: config.href,
+					multiplicity: '', // altijd mogelijk
+					text: (api) => api.i18n('csr.zeker', 'Are you sure?'),
+				},
+			],
+		} as ButtonsSettings);
 
 		dt.buttons().container().appendTo(config._collection);
 
@@ -154,12 +155,12 @@ $.fn.dataTable.ext.buttons.confirm = {
 	},
 	action(e, dt, button) {
 		knopPost.call(button, e);
-	}
+	},
 };
 
 $.fn.dataTable.ext.buttons.defaultCollection = {
 	extend: 'collection',
 	init(dt, node, config) {
 		$.fn.dataTable.ext.buttons.default.init!.call(this, dt, node, config);
-	}
+	},
 };
