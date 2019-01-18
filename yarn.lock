@@ -587,6 +587,13 @@
   dependencies:
     "@types/sizzle" "*"
 
+"@types/jqueryui@^1.12.6":
+  version "1.12.6"
+  resolved "https://registry.yarnpkg.com/@types/jqueryui/-/jqueryui-1.12.6.tgz#71bb4154c11d3d7048264b935965adfc5a6c5a50"
+  integrity sha512-lF4aIWtQ3Xbd6J+9WXz/day1pyf39ZMO/KUrigFAuMQ6FFVw2xZBIRCUwA7/CEnab1Bb7b4ko304Lxrp2xw8hQ==
+  dependencies:
+    "@types/jquery" "*"
+
 "@types/jszip@^3.1.4":
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/@types/jszip/-/jszip-3.1.4.tgz#9b81e3901a6988e9459ac27abf483e6b892251af"
