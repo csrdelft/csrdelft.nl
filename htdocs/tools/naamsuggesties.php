@@ -32,6 +32,12 @@ if (isset($_GET['limit'])) {
 	$limiet = (int) $_GET['limit'];
 }
 
+$toegestaneNaamVormen = ['user', 'volledig', 'streeplijst', 'voorletters', 'bijnaam', 'Duckstad', 'civitas', 'aaidrom'];
+$vorm = 'volledig';
+if (isset($_GET['vorm']) && in_array($_GET['vorm'], $toegestaneNaamVormen)) {
+	$vorm = $_GET['vorm'];
+}
+
 $profielen = ProfielService::instance()->zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $limiet);
 
 $result = array();
@@ -42,7 +48,7 @@ foreach ($profielen as $profiel) {
 	$result[] = array(
 		'url'	 => '/profiel/' . $profiel->uid,
 		'label'	 => $profiel->uid,
-		'value'	 => $profiel->getNaam('volledig')
+		'value'	 => $profiel->getNaam($vorm)
 	);
 }
 /*

@@ -2,6 +2,7 @@ import $ from 'jquery';
 import {CsrBBPreview} from './bbcode';
 import {domUpdate} from './context';
 import {bbCodeSet} from './bbcode-set';
+import {activeerLidHints} from './bbcode-hints';
 
 function toggleForumConceptBtn(enable) {
 	let $concept = $('#forumConcept');
@@ -92,6 +93,7 @@ export function forumBewerken(postId) {
 		$forumBewerkBericht.val(data);
 		$forumBewerkBericht.autosize();
 		$forumBewerkBericht.markItUp(bbCodeSet);
+		activeerLidHints($forumBewerkBericht.get(0));
 		$(bewerkContainer).parent().children('td.auteur:first').append('<div id="bewerk-melding" class="alert alert-warning">Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</div>');
 		$('#bewerk-melding').slideDown(200);
 		$('#forumPosten').css('visibility', 'hidden');
