@@ -1,5 +1,5 @@
-import $ from 'jquery';
 import axios from 'axios';
+import $ from 'jquery';
 import {basename, dirname} from '../util';
 import {FotoAlbum} from './FotoAlbum';
 
@@ -15,10 +15,18 @@ interface Tag extends Position {
 }
 
 export class FotoAlbumTags {
-	tagMode = false;
-	tagFormDiv: JQuery | null;
 
-	fotoalbum: FotoAlbum;
+	public static showTags() {
+		$('div.fototag').addClass('showborder');
+	}
+
+	public static hideTags() {
+		$('div.fototag').removeClass('showborder');
+	}
+	public tagMode = false;
+	public tagFormDiv: JQuery | null;
+
+	public fotoalbum: FotoAlbum;
 
 	constructor(fotoalbum: FotoAlbum) {
 		this.fotoalbum = fotoalbum;
@@ -62,7 +70,7 @@ export class FotoAlbumTags {
 			}
 		});
 
-		const btnDelTag = '<a id="btnDelTag" class="dropdown-item" tabindex="-1"><span class="fa fa-user-times"></span> &nbsp; Etiket verwijderen</a>';
+		const btnDelTag = this.fotoalbum.createCMBtn('btnDelTag', 'Etiket verwijderen', 'user-times');
 		$('<li></li>').append(btnDelTag).appendTo('#tagMenu');
 
 		// knopje taggen
@@ -101,38 +109,31 @@ export class FotoAlbumTags {
 		this.fotoalbum.container.find('.minimalize-thumbnails.jgallery-btn').on('click', () => this.moveTagDivs());
 	}
 
-	static showTags() {
-		$('div.fototag').addClass('showborder');
-	}
-
-	static hideTags() {
-		$('div.fototag').removeClass('showborder');
-	}
-
-	getScreenPos(position: Position): Position {
+	public getScreenPos(position: Position): Position {
 		const img = this.fotoalbum.container.find('img.active');
 		const parent = img.parent();
 		const w = img.width()!;
 		const h = img.height()!;
 		const fotoTopLeft = {
 			x: (parent.width()! - w) / 2,
-			y: (parent.height()! - h) / 2
+			y: (parent.height()! - h) / 2,
 		};
 		return {
+			size: (w + h) / 200 * position.size,
 			x: position.x * w / 100 + fotoTopLeft.x,
 			y: position.y * h / 100 + fotoTopLeft.y,
-			size: (w + h) / 200 * position.size
 		};
 	}
 
-	drawTag(tag: Tag) {
+	public drawTag(tag: Tag) {
 		const screenPosition = this.getScreenPos(tag);
-		const tagDiv = $(`<div id="tag${tag.keyword}" class="fototag" title="${tag.name}"></div>`).appendTo(this.fotoalbum.container);
+		const tagDiv = $(`<div id="tag${tag.keyword}" class="fototag" title="${tag.name}"></div>`)
+			.appendTo(this.fotoalbum.container);
 		tagDiv.css({
-			top: screenPosition.y - screenPosition.size / 2,
+			height: screenPosition.size,
 			left: screenPosition.x - screenPosition.size / 2,
+			top: screenPosition.y - screenPosition.size / 2,
 			width: screenPosition.size,
-			height: screenPosition.size
 		});
 		if (this.tagMode) {
 			tagDiv.addClass('showborder');
@@ -147,15 +148,15 @@ export class FotoAlbumTags {
 		});
 		// tag context menu
 		tagDiv.contextMenu({
-			menuSelector: '#tagMenu',
 			menuSelected: () => {
 				this.removeTag(tagDiv);
-			}
+			},
+			menuSelector: '#tagMenu',
 		});
 		return tagDiv;
 	}
 
-	drawTags(tags: Tag[]) {
+	public drawTags(tags: Tag[]) {
 		// remove old ones
 		$('div.fototag').remove();
 		if (!Array.isArray(tags)) {
@@ -173,7 +174,7 @@ export class FotoAlbumTags {
 		}
 	}
 
-	loadTags() {
+	public loadTags() {
 		// remove old ones
 		$('div.fototag').remove();
 		// get new ones
@@ -184,7 +185,7 @@ export class FotoAlbumTags {
 			.post('/fotoalbum/gettags' + dirname(url), data).then((response) => this.drawTags(response.data));
 	}
 
-	removeTag(tagDiv: JQuery) {
+	public removeTag(tagDiv: JQuery) {
 		if (confirm('Etiket verwijderen?')) {
 			const tag = tagDiv.data('tag');
 			const data = new FormData();
@@ -196,27 +197,27 @@ export class FotoAlbumTags {
 		}
 	}
 
-	moveTagDivs() {
+	public moveTagDivs() {
 		$('div.fototag').each((i, el) => {
 			const tag = $(el).data('tag') as Tag;
 			const pos = this.getScreenPos(tag);
 			$(this).css({
-				top: pos.y - pos.size / 2,
+				height: pos.size,
 				left: pos.x - pos.size / 2,
+				top: pos.y - pos.size / 2,
 				width: pos.size,
-				height: pos.size
 			});
 		});
 	}
 
-	drawTagForm(html: string, position: Position) {
+	public drawTagForm(html: string, position: Position) {
 		const pos = this.getScreenPos(position);
 		this.tagFormDiv = $(html).appendTo(this.fotoalbum.container);
 		this.tagFormDiv.css({
-			position: 'absolute',
-			top: pos.y + pos.size,
-			left: pos.x - pos.size / 2,
-			'z-index': 10000
+			'left': pos.x - pos.size / 2,
+			'position': 'absolute',
+			'top': pos.y + pos.size,
+			'z-index': 10000,
 		});
 		// set attr for move/resize
 		this.tagFormDiv.data('tagPosition', position);
@@ -235,24 +236,24 @@ export class FotoAlbumTags {
 		setTimeout(() => this.tagFormDiv && this.tagFormDiv.find('input[name="uid"]').trigger('focus'));
 	}
 
-	moveTagForm() {
+	public moveTagForm() {
 		if (!this.tagFormDiv) {
 			return;
 		}
-		const pos = this.getScreenPos(this.tagFormDiv.data("tagPosition") as Position);
+		const pos = this.getScreenPos(this.tagFormDiv.data('tagPosition') as Position);
 		this.tagFormDiv.css({
+			left: pos.x - (pos.size / 2),
 			top: pos.y + pos.size,
-			left: pos.x - (pos.size / 2)
 		});
 	}
 
-	exitTagForm() {
+	public exitTagForm() {
 		$('div[id="tagNew"]').remove();
-		if (this.tagFormDiv) this.tagFormDiv.remove();
+		if (this.tagFormDiv) { this.tagFormDiv.remove(); }
 		this.tagFormDiv = null;
 	}
 
-	addTag(position: Position) {
+	public addTag(position: Position) {
 		const url = this.fotoalbum.getUrl();
 		const data = new FormData();
 		data.append('foto', basename(url));
@@ -269,20 +270,20 @@ export class FotoAlbumTags {
 			});
 	}
 
-	newTagStart(e: JQuery.ClickEvent) {
+	public newTagStart(e: JQuery.ClickEvent) {
 		const img = this.fotoalbum.container.find('img.active');
 		const target = e.target as HTMLElement;
 		// calculate relative position to image top left
-		const offset = $(target).offset()!,
-			width = img.width()!,
-			height = img.height()!;
-		const newTag = <Tag>{
-			name: '',
+		const offset = $(target).offset()!;
+		const width = img.width()!;
+		const height = img.height()!;
+		const newTag = {
 			keyword: 'New',
+			name: '',
+			size: 7, // %
 			x: (e.pageX - offset.left) * 100 / width, // %,
 			y: (e.pageY - offset.top) * 100 / height, // %,
-			size: 7, // %
-		};
+		} as Tag;
 		// show form
 		if (this.tagFormDiv) {
 			this.exitTagForm();
@@ -297,12 +298,12 @@ export class FotoAlbumTags {
 		$(window).off('mouseup.newtag');
 		$(window).on('mouseup.newtag', () => $(window).off('mousemove.newtag'));
 		tagDiv.on('mousedown.newtag', (e1: JQuery.MouseDownEvent) => {
-			const img = this.fotoalbum.container.find('img.active');
+			const imgActive = this.fotoalbum.container.find('img.active');
 			let prevX = e1.pageX;
 			let prevY = e1.pageY;
 			$(window).on('mousemove.newtag', (e2: JQuery.MouseMoveEvent) => {
-				newTag.size += (e2.pageX - prevX) * 100 / img.width()!;
-				newTag.size += (e2.pageY - prevY) * 100 / img.height()!;
+				newTag.size += (e2.pageX - prevX) * 100 / imgActive.width()!;
+				newTag.size += (e2.pageY - prevY) * 100 / imgActive.height()!;
 				prevX = e2.pageX;
 				prevY = e2.pageY;
 				if (newTag.size < 1) {
@@ -310,13 +311,13 @@ export class FotoAlbumTags {
 				} else if (newTag.size > 99) {
 					newTag.size = 99;
 				}
-				if (this.tagFormDiv) this.tagFormDiv.find('input[name="size"]').val(Math.round(newTag.size));
+				if (this.tagFormDiv) { this.tagFormDiv.find('input[name="size"]').val(Math.round(newTag.size)); }
 				const pos = this.getScreenPos(newTag);
 				tagDiv.css({
-					top: pos.y - pos.size / 2,
+					height: pos.size,
 					left: pos.x - pos.size / 2,
+					top: pos.y - pos.size / 2,
 					width: pos.size,
-					height: pos.size
 				});
 				// update attr for move/resize
 				tagDiv.attr('data-size', newTag.size);
@@ -324,7 +325,7 @@ export class FotoAlbumTags {
 		});
 	}
 
-	duringTagMode() {
+	public duringTagMode() {
 		const zoom = this.fotoalbum.container.find('div.zoom-container');
 		if (zoom.attr('data-size') !== 'fit') { // if zoomed in
 			alert('Je kunt niet inzoomen tijdens het etiketteren, dat werkt nog niet.');

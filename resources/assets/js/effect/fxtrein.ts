@@ -17,7 +17,9 @@ const INTERVAL = 18000;
 const OFFSET = Math.random() * 5000 + 5000;
 
 class TjoekTjoek {
-	treinen = [
+	get randomTrein() { return this.treinen[Math.floor(Math.random() * this.treinen.length)]; }
+	private rails: Element;
+	private treinen = [
 		'ns-ddz-4',
 		'ns-ddz-6',
 		'ns-icm-3',
@@ -38,17 +40,11 @@ class TjoekTjoek {
 		'iceje',
 	];
 
-	rails: Element;
-
-	get randomTrein() {
-		return this.treinen[Math.floor(Math.random() * this.treinen.length)];
-	}
-
 	constructor() {
 		this.rails = document.querySelector('.rails')!;
 	}
 
-	start() {
+	public start() {
 		setTimeout(() => {
 			this.stuurTrein();
 			setInterval(() => {
@@ -57,8 +53,8 @@ class TjoekTjoek {
 		}, OFFSET);
 	}
 
-	stuurTrein() {
-		let trein = document.createElement('div');
+	public stuurTrein() {
+		const trein = document.createElement('div');
 		trein.setAttribute('class', `trein ${this.randomTrein}`);
 		this.rails.appendChild(trein);
 

@@ -2,17 +2,16 @@ import $ from 'jquery';
 
 import initContext from '../context';
 import Settings = DataTables.Settings;
-import ObjectColumnData = DataTables.ObjectColumnData;
 
 export interface DatatableResponse {
-	modal?: string
-	autoUpdate: string
-	lastUpdate: number
+	modal?: string;
+	autoUpdate: string;
+	lastUpdate: number;
 	data: PersistentEntity[];
 }
 
 export interface PersistentEntity {
-	UUID: string
+	UUID: string;
 }
 
 /**
@@ -26,18 +25,17 @@ declare global {
 	}
 }
 
-
 /****************************
  * Een paar functies om met datatables te
  * praten, laadt datatables zelf niet in.
  */
 
 export function fnUpdateDataTable(tableId: string, response: DatatableResponse) {
-	let $table = $(tableId);
-	let table = $table.DataTable();
+	const $table = $(tableId);
+	const table = $table.DataTable();
 	// update or remove existing rows or add new rows
 	response.data.forEach((row) => {
-		let $tr = $('tr[data-uuid="' + row.UUID + '"]');
+		const $tr = $('tr[data-uuid="' + row.UUID + '"]');
 		if ($tr.length === 1) {
 			if ('remove' in row) {
 				table.row($tr).remove();
@@ -55,7 +53,7 @@ export function fnUpdateDataTable(tableId: string, response: DatatableResponse) 
 }
 
 export function fnGetSelection(tableId: string) {
-	let selection: string[] = [];
+	const selection: string[] = [];
 	$(tableId + ' tbody tr.selected').each(function () {
 		selection.push($(this).attr('data-uuid')!);
 	});

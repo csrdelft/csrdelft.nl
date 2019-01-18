@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import JSZip from 'jszip';
 
-import {DatatableResponse, fnUpdateDataTable} from './api';
-import defaults from './defaults';
 /**
  * Knoop alle datatable plugins aan jquery.
  */
@@ -10,8 +8,8 @@ import 'datatables.net';
 import 'datatables.net-autofill';
 import 'datatables.net-buttons';
 import 'datatables.net-buttons/js/buttons.colVis';
-import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.flash';
+import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.print';
 import 'datatables.net-colreorder';
 import 'datatables.net-fixedcolumns';
@@ -22,12 +20,14 @@ import 'datatables.net-scroller';
 import 'datatables.net-select';
 import '../lib/dataTables.childRow';
 import '../lib/dataTables.columnGroup';
+import {DatatableResponse, fnUpdateDataTable} from './api';
+import defaults from './defaults';
 
 import './buttons';
 
 declare global {
 	interface Window {
-		JSZip: JSZip
+		JSZip: JSZip;
 	}
 }
 
@@ -42,14 +42,14 @@ $.extend(true, $.fn.dataTable.defaults, defaults);
  * @param {jQuery} $table
  */
 function fnAutoScroll($table: JQuery) {
-	let $scroll = $table.parent();
+	const $scroll = $table.parent();
 	if ($scroll.hasClass('dataTables_scrollBody')) {
 		// autoscroll if already on bottom
 		if ($scroll.scrollTop()! + $scroll.innerHeight()! >= $scroll[0].scrollHeight - 20) {
 			// check before draw and scroll after
 			window.setTimeout(() => {
 				$scroll.animate({
-					scrollTop: $scroll[0].scrollHeight
+					scrollTop: $scroll[0].scrollHeight,
 				}, 800);
 			}, 200);
 		}
@@ -71,12 +71,12 @@ export const fnAjaxUpdateCallback = ($table: JQuery) => (json: DatatableResponse
 	const tableConfig = $table.DataTable();
 
 	if (json.autoUpdate) {
-		const timeout = parseInt(json.autoUpdate);
+		const timeout = parseInt(json.autoUpdate, 10);
 		if (!isNaN(timeout) && timeout < 600000) { // max 10 min
 			setTimeout(() => {
 				$.post(tableConfig.ajax.url(), {
-					'lastUpdate': fnGetLastUpdate($table)
-				}, data => {
+					lastUpdate: fnGetLastUpdate($table),
+				}, (data) => {
 					fnUpdateDataTable($table.attr('id')!, data);
 					fnAjaxUpdateCallback($table)(data);
 				});

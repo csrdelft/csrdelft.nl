@@ -9,39 +9,41 @@ import '../../sass/effect/minion.scss';
  */
 
 declare global {
-    interface Window { superman: () => void; }
+	interface Window {
+		superman: () => void;
+	}
 }
 
 function createPosition(): JQuery.Coordinates {
-    let h = window.innerHeight - 50,
-        w = window.innerWidth - 50,
-        nh = Math.floor(Math.random() * h),
-        nw = Math.floor(Math.random() * w);
+	const h = window.innerHeight - 50;
+	const w = window.innerWidth - 50;
+	const nh = Math.floor(Math.random() * h);
+	const nw = Math.floor(Math.random() * w);
 
-    return {top: nh, left: nw};
+	return {top: nh, left: nw};
 }
 
 function calcSpeed(prev: JQuery.Coordinates, next: JQuery.Coordinates): number {
-    let x = Math.abs(prev.left - next.left),
-        y = Math.abs(prev.top - next.top),
-        greatest = x > y ? x : y,
-        speedModifier = 0.5;
+	const x = Math.abs(prev.left - next.left);
+	const y = Math.abs(prev.top - next.top);
+	const greatest = x > y ? x : y;
+	const speedModifier = 0.5;
 
-    return Math.ceil(greatest / speedModifier);
+	return Math.ceil(greatest / speedModifier);
 }
 
 function animateMinion() {
-    let $minion = $('#minion');
+	const $minion = $('#minion');
 
-    if (!$minion.hasClass('superman')) {
-        return;
-    }
+	if (!$minion.hasClass('superman')) {
+		return;
+	}
 
-    let newq = createPosition(),
-        oldq = $minion.offset() || {top: 0, left: 0},
-        speed = calcSpeed(oldq, newq);
+	const newq = createPosition();
+	const oldq = $minion.offset() || {top: 0, left: 0};
+	const speed = calcSpeed(oldq, newq);
 
-    $minion.animate(newq, speed, animateMinion);
+	$minion.animate(newq, speed, animateMinion);
 }
 
 $(() => {

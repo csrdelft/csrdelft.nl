@@ -1,13 +1,13 @@
 import {formatBedrag, formatFilesize} from '../util';
-import {getApiFromSettings} from "./api";
+import {getApiFromSettings} from './api';
 import FunctionColumnRender = DataTables.FunctionColumnRender;
 
 /**
  * Standaard gedefinieerde render functies.
  */
-export default <{ [s: string]: FunctionColumnRender }>{
+export default {
 	default(data, type) {
-		if (data === null || typeof data !== 'object') return data;
+		if (data === null || typeof data !== 'object') { return data; }
 		switch (type) {
 			case 'sort':
 				return data.sort!;
@@ -30,11 +30,11 @@ export default <{ [s: string]: FunctionColumnRender }>{
 		return row.aantal_aanmeldingen + ' (' + row.aanmeld_limiet + ')';
 	},
 	totaalPrijs(data, type, row) {
-		return formatBedrag(row.aantal_aanmeldingen * parseInt(row.prijs));
+		return formatBedrag(row.aantal_aanmeldingen * parseInt(row.prijs, 10));
 	},
 	timeago(data, type, row, meta) {
-		let api = getApiFromSettings(meta.settings);
-		let cell = api.cell(meta.row, meta.col).node().firstChild as HTMLTimeElement;
+		const api = getApiFromSettings(meta.settings);
+		const cell = api.cell(meta.row, meta.col).node().firstChild as HTMLTimeElement;
 
 		switch (type) {
 			case 'sort':
@@ -51,5 +51,5 @@ export default <{ [s: string]: FunctionColumnRender }>{
 			default:
 				return formatFilesize(data);
 		}
-	}
-};
+	},
+} as { [s: string]: FunctionColumnRender };
