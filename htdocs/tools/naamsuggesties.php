@@ -23,6 +23,10 @@ $toegestanezoekfilters = array('leden', 'oudleden', 'novieten', 'alleleden', 'al
 if (isset($_GET['zoekin']) AND in_array($_GET['zoekin'], $toegestanezoekfilters)) {
 	$zoekin = $_GET['zoekin'];
 }
+if (isset($_GET['zoekin']) && $_GET['zoekin'] === 'voorkeur') {
+	$zoekin = \CsrDelft\model\LidInstellingenModel::get('forum', 'lidSuggesties');
+}
+
 $query = '';
 if (isset($_GET['q'])) {
 	$query = $_GET['q'];

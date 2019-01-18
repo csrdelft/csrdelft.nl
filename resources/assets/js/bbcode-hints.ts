@@ -28,17 +28,13 @@ export function activeerLidHints(textarea: HTMLElement) {
             textcomplete.dropdown.items[0].activate();
         }
     });
-
-    textcomplete.on('selected', function () {
-        console.log('heuj');
-    });
 }
 
 function search(term: string, callback: Function) {
     if (!term || term.length === 1) {
         callback([]);
     } else {
-        $.ajax('/tools/naamsuggesties.php?vorm=user&q=' + encodeURI(term))
+        $.ajax('/tools/naamsuggesties.php?vorm=user&zoekin=voorkeur&q=' + encodeURI(term))
             .done(function (data) {
                 callback(data);
             })

@@ -159,6 +159,16 @@ class LidInstellingenModel extends InstellingenModel {
 				'civitas',
 				'Weergave van namen in het forum.'
 			],
+			'lidSuggesties' => [
+				'Lidsuggesties',
+				T::Enumeration,
+				[
+					'leden' => 'Novieten & leden',
+					'alleleden' => 'Iedereen'
+				],
+				'leden',
+				'Of ook oud- en ereleden als suggestie worden getoond op het forum.'
+			],
 			'datumWeergave' => [
 				'Datumweergave',
 				T::Enumeration,
