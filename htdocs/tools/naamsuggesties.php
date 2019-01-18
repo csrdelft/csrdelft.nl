@@ -23,6 +23,10 @@ $toegestanezoekfilters = array('leden', 'oudleden', 'novieten', 'alleleden', 'al
 if (isset($_GET['zoekin']) AND in_array($_GET['zoekin'], $toegestanezoekfilters)) {
 	$zoekin = $_GET['zoekin'];
 }
+if (isset($_GET['zoekin']) && $_GET['zoekin'] === 'voorkeur') {
+	$zoekin = \CsrDelft\model\LidInstellingenModel::get('forum', 'lidSuggesties');
+}
+
 $query = '';
 if (isset($_GET['q'])) {
 	$query = $_GET['q'];
@@ -30,6 +34,12 @@ if (isset($_GET['q'])) {
 $limiet = 5;
 if (isset($_GET['limit'])) {
 	$limiet = (int) $_GET['limit'];
+}
+
+$toegestaneNaamVormen = ['user', 'volledig', 'streeplijst', 'voorletters', 'bijnaam', 'Duckstad', 'civitas', 'aaidrom'];
+$vorm = 'volledig';
+if (isset($_GET['vorm']) && in_array($_GET['vorm'], $toegestaneNaamVormen)) {
+	$vorm = $_GET['vorm'];
 }
 
 $profielen = ProfielService::instance()->zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $limiet);
@@ -42,7 +52,7 @@ foreach ($profielen as $profiel) {
 	$result[] = array(
 		'url'	 => '/profiel/' . $profiel->uid,
 		'label'	 => $profiel->uid,
-		'value'	 => $profiel->getNaam('volledig')
+		'value'	 => $profiel->getNaam($vorm)
 	);
 }
 /*

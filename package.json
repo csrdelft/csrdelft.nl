@@ -84,6 +84,7 @@
 		"parallax-js": "^3.1.0",
 		"popper.js": "^1.12",
 		"raty-js": "^2.8.0",
+		"textcomplete": "^0.17.1",
 		"three": "^0.99.0",
 		"timeago": "^1.6.3",
 		"uglifyjs-webpack-plugin": "^2.1.1",
