@@ -8,6 +8,7 @@ import {bbCodeSet} from './bbcode-set';
 import {fnAjaxUpdateCallback, fnGetLastUpdate} from './datatable/datatable';
 import render from './datatable/render';
 import {initSaldoGrafiek, initDeelnamegrafiek} from './grafiek';
+import {activeerLidHints} from './bbcode-hints';
 
 function initButtons(parent) {
     $(parent).find('.spoiler').bind('click.spoiler', function (event) {
@@ -61,6 +62,12 @@ function initTimeago(parent) {
 
 function initMarkitup(parent) {
     $(parent).find('textarea.BBCodeField').markItUp(bbCodeSet);
+}
+
+function initLidHints(parent) {
+    let textarea = $(parent).find('textarea.BBCodeField').get(0);
+    if (textarea === undefined) return;
+    activeerLidHints(textarea);
 }
 
 function initTooltips(parent) {
@@ -143,6 +150,7 @@ export default function initContext(parent) {
     initForms(parent);
     initTimeago(parent);
     initMarkitup(parent);
+    initLidHints(parent);
     initTooltips(parent);
     initHoverIntents(parent);
     initLazyImages(parent);
