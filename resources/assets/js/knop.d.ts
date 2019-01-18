@@ -1,1 +1,1 @@
-export function knopPost(event : Event) : void
+export function knopPost(event: Event): void;
