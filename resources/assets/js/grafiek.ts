@@ -1,4 +1,3 @@
-/* tslint:disable:no-console */
 import c3 from 'c3';
 import {timeFormat} from 'd3-time-format';
 import $ from 'jquery';
@@ -74,7 +73,7 @@ export function initDeelnamegrafiek(parent: HTMLElement) {
 	$(parent).find('.ctx-deelnamegrafiek').each((i, el) => {
 		const data = JSON.parse(el.dataset.series!) as any[];
 
-		const chart = c3.generate({
+		c3.generate({
 			axis: {
 				x: {
 					tick: {
@@ -108,68 +107,6 @@ export function initDeelnamegrafiek(parent: HTMLElement) {
 				show: true,
 			},
 		});
-
-		console.log(chart);
-
-		// let chart;
-		// nv.addGraph(() => {
-		// 	chart = nv.models.multiBarChart()
-		// 		.controlLabels({stacked: 'Gestapeld', grouped: 'Gegroepeerd'})
-		// 		.color(['#FFCBDB', '#AFD8F8'])
-		// 		.x((d: any) => new Date(d.moment))
-		// 		.y((d: any) => d.aantal)
-		// 		.stacked(true)
-		// 		.duration(300)
-		// 		.reduceXTicks(false)
-		// 		.xScale(scaleTime())
-		// 	;
-		// 	chart.tooltip
-		// 		.contentGenerator(({data: d}: { data: any }) => `<strong>${d.naam}</strong><br/>${d.key}: ${d.aantal}`);
-		// 	chart.xAxis
-		// 		.showMaxMin(false)
-		// 	// .tickFormat((d) => {
-		// 	// 	return new Date(d).getFullYear();
-		// 	// })
-		// 	;
-		// 	chart.yAxis
-		// 		.tickFormat(d3.format('d'))
-		// 	;
-		// 	d3.select(el)
-		// 		.datum(data)
-		// 		.call(chart as any);
-		// 	nv.utils.windowResize(chart.update);
-		// 	return chart;
-		// });
-
-		// let $el = $(el);
-		// $.plot($el, [
-		// 	{
-		// 		data: $el.data('series-1'),
-		// 		label: '',
-		// 		color: '#FFCBDB'
-		// 	}, {
-		// 		data: $el.data('series-0'),
-		// 		label: '',
-		// 		color: '#AFD8F8'
-		// 	}
-		// ], {
-		// 	series: {
-		// 		bars: {
-		// 			show: true,
-		// 			lineWidth: 20
-		// 		},
-		// 		stack: true
-		// 	}, yaxis: {
-		// 		tickDecimals: 0
-		// 	},
-		// 	xaxis: {
-		// 		autoscaleMargin: .01
-		// 	},
-		// 	xaxes: [{
-		// 		mode: 'time',
-		// 		minTickSize: $el.data('step'),
-		// 	}]
-		// });
 	});
 }
 
