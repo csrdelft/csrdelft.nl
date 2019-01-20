@@ -7,13 +7,13 @@ ul.menubeheer-tree {
 	list-style: none;
 }
 ul.menubeheer-tree li {
-	background-color: #EBEBEB;
+	background-color: $tabel-regel-donker;
 	line-height: 30px;
 	margin-left: 25px;
 }
 ul.menubeheer-tree li:nth-child(even) {
-	background-color: #FAFAFA;
+	background-color: $tabel-regel-licht;
 }
 ul.menubeheer-tree li:hover {
-	background-color: #DDEEFF;
+	background-color: $tabel-hover;
 }

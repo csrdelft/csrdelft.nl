@@ -34,7 +34,7 @@
     margin-left: 20px;
     padding-right: 20px;
     padding-left: 15px;
-    border-left: 1px solid #0a338d;
+    border-left: 1px solid $primary;
     max-width: 675px;
   }
 
@@ -49,8 +49,6 @@
 
   .pasfoto {
     margin: 25px;
-    -moz-box-shadow: 0 0 11px #000;
-    -webkit-box-shadow: 0 0 11px #000;
     box-shadow: 0 0 11px #000;
   }
 
@@ -84,7 +82,7 @@
   }
 
   .donker {
-    background-color: $forum-bericht1-bg;
+    background-color: $tabel-regel-donker;
   }
 
   .bestelling-moment {
