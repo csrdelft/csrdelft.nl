@@ -24,7 +24,7 @@ class SaldoGrafiekModel {
 		}
 		$saldo = $klant->saldo;
 		// Teken het huidige saldo
-		$data = [[static::flotTime(getDateTime()), round($saldo / 100, 2)]];
+		$data = [['moment' => static::flotTime(getDateTime()), 'saldo' => round($saldo / 100, 2)]];
 		$model = CiviBestellingModel::instance();
 		$bestellingen = $model->find(
 			'uid = ? AND deleted = FALSE AND moment>(NOW() - INTERVAL ? DAY)',
@@ -34,24 +34,16 @@ class SaldoGrafiekModel {
 		);
 
 		foreach ($bestellingen as $bestelling) {
-			$data[] = array(static::flotTime($bestelling->moment), round($saldo / 100, 2));
+			$data[] = ['moment' => static::flotTime($bestelling->moment), 'saldo' => round($saldo / 100, 2)];
 			$saldo += $bestelling->totaal;
 		}
 
 		if (!empty($data)) {
 			$row = end($data);
 			$time = static::flotTime($timespan - 1 . ' days 23 hours ago');
-			array_push($data, [$time, $row[1]]);
+			array_push($data, ["moment" => $time, 'saldo' => $row['saldo']]);
 		}
-		return [
-			[
-				"label" => "CiviSaldo",
-				"data" => array_reverse($data), // Keer de lijst om, flot laat anders veranderingen in de data 1-off zien
-				"color" => "green",
-				"threshold" => ["below" => 0, "color" => "red"],
-				"lines" => ["steps" => true]
-			]
-		];
+		return array_reverse($data);
 	}
 
 	/**
