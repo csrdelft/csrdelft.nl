@@ -156,11 +156,15 @@ class ForumController extends Controller {
 		]);
 	}
 
-	public function grafiekdata() {
+	public function grafiekdata($type) {
 		$model = ForumPostsModel::instance();
-		$series['Totaal'] = $model->getStatsTotal();
-		foreach (ForumDelenModel::instance()->getForumDelenVoorLid() as $deel) {
-			$series[$deel->titel] = $model->getStatsVoorForumDeel($deel);
+		$series = [];
+		if ($type == 'details') {
+			foreach (ForumDelenModel::instance()->getForumDelenVoorLid() as $deel) {
+				$series[$deel->titel] = $model->getStatsVoorForumDeel($deel);
+			}
+		} else {
+			$series['Totaal'] = $model->getStatsTotal();
 		}
 		return new FlotTimeSeries($series);
 	}

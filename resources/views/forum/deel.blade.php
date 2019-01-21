@@ -111,8 +111,8 @@
 						Berichten per dag: (sleep om te zoomen)
 						<div class="grafiek">
 							{{-- forum.js pikt dit op en vult met een grafiekje. --}}
-							<div id="stats_grafiek_overview" style="height: 200px;"></div>
-							<div id="stats_grafiek_details" style="height: 500px;"></div>
+							<div id="stats_grafiek_overview" class="ctx-graph-line-xy" data-url="/forum/grafiekdata/overview" style="height: 200px;"></div>
+							<div id="stats_grafiek_details" class="ctx-graph-line-xy" data-url="/forum/grafiekdata/details" style="height: 500px;"></div>
 						</div>
 					</div>
 				@endif

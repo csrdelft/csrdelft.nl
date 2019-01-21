@@ -7,12 +7,22 @@ use CsrDelft\common\CsrException;
 class GroepStatistiekView extends GroepTabView {
 
 	private function verticale($data) {
-		$series = array();
+		$verticalen = [];
+		$deelnemers = [];
 		foreach ($data as $row) {
-			$series[] = [$row[0], $row[1]];
+			$verticalen[] = $row[0];
+			$deelnemers[] = $row[1];
 		}
 
-		return htmlentities(json_encode($series));
+		return htmlentities(json_encode([
+			'labels' => $verticalen,
+			'datasets' => [
+				[
+					'label' => '# van verticale',
+					'data' => $deelnemers,
+				]
+			]
+		]));
 	}
 
 	private function geslacht($data) {
@@ -28,31 +38,54 @@ class GroepStatistiekView extends GroepTabView {
 					break;
 			}
 		}
-		return htmlentities(json_encode([['Mannen', $mannen], ['Vrouwen', $vrouwen]]));
+		return htmlentities(json_encode([
+			'labels' => ['Mannen', 'Vrouwen'],
+			'datasets' => [
+				[
+					'label' => '# mannen en vrouwen',
+					'data' => [$mannen, $vrouwen],
+					'backgroundColor' => ['#AFD8F8', '#FFCBDB'],
+				]
+			]
+		]));
 	}
 
 	private function lichting($data) {
-		$series = [];
-		$moment = [];
+		$aantal = [];
+		$lichting = [];
 		foreach ($data as $row) {
-			$series[] = (int)$row[1];
-			$moment[] = (int)$row[0];
+			$aantal[] = (int)$row[1];
+			$lichting[] = (int)$row[0];
 		}
 
-		return htmlentities(json_encode([$moment, $series]));
+		return htmlentities(json_encode([
+			'labels'=> $lichting,
+			'datasets' => [
+				[
+					'label' => 'Aantal',
+					'data' => $aantal,
+				]
+			]
+		]));
 	}
 
 	private function tijd($data) {
-		$series = ['Aantal'];
-		$moment = ['x'];
 		$totaal = 0;
+		$series = [];
 		foreach ($data as $tijd => $aantal) {
 			$totaal += $aantal;
-			$moment[] = $tijd;
-			$series[] = $totaal;
+			$series[] = ["t" => date("c", $tijd), "y" => $totaal];
 		}
 
-		return htmlentities(json_encode([$moment, $series]));
+		return htmlentities(json_encode([
+			'labels' => ['Aantal'],
+			'datasets' => [
+				[
+					'label' => 'Aantal over tijd',
+					'data' => $series,
+				]
+			]
+		]));
 	}
 
 	/**

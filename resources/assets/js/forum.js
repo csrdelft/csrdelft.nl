@@ -3,6 +3,7 @@ import {CsrBBPreview} from './bbcode';
 import {domUpdate} from './context';
 import {bbCodeSet} from './bbcode-set';
 import {activeerLidHints} from './bbcode-hints';
+import initContext from './context';
 
 function toggleForumConceptBtn(enable) {
 	let $concept = $('#forumConcept');
@@ -115,133 +116,133 @@ function forumCiteren(postId) {
 	return false;
 }
 
-function statsGrafiek() {
-	const detailsDiv = $('#stats_grafiek_details'),
-		overviewDiv = $('#stats_grafiek_overview');
-
-	if (!detailsDiv.length || !overviewDiv.length) {
-		return;
-	}
-
-	$.post('/forum/grafiekdata').done(function (data) {
-
-		// helper for returning the weekends in a period
-
-		function weekendAreas(axes) {
-
-			let markings = [];
-			let d = new Date(axes.xaxis.min);
-
-			// go to the first Saturday
-
-			d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 1) % 7));
-			d.setUTCSeconds(0);
-			d.setUTCMinutes(0);
-			d.setUTCHours(0);
-
-			let i = d.getTime();
-
-			// when we don't set yaxis, the rectangle automatically
-			// extends to infinity upwards and downwards
-
-			do {
-				markings.push({
-					xaxis: {
-						from: i, to: i + 2 * 24 * 60 * 60 * 1000,
-					},
-				});
-				i += 7 * 24 * 60 * 60 * 1000;
-			} while (i < axes.xaxis.max);
-
-			return markings;
-		}
-
-
-		let options = {
-			grid: {
-				markings: weekendAreas,
-				backgroundColor: '#FFFFFF',
-			},
-			selection: {
-				mode: 'x',
-			},
-			xaxis: {
-				mode: 'time',
-				timeformat: '%d %b', // 20%y
-				monthNames: ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
-				tickLength: 5,
-			},
-			series: {
-				lines: {
-					show: true,
-					lineWidth: 1,
-				},
-				shadowSize: 0,
-			},
-		};
-
-		// toon totaal alleen in overview
-		let totaal = [data[0]];
-		data.splice(0, 1);
-
-		options['legend'] = {
-			show: false,
-		};
-		let overview = $.plot(overviewDiv, totaal, options);
-
-		options['legend'] = {
-			sorted(a, b) {
-				// sort alphabetically in ascending order
-				return a.label === b.label ? 0 : (a.label > b.label ? 1 : -1);
-			},
-		};
-		let plot = $.plot(detailsDiv, data, options);
-
-		const getMaxY = function (rangeFrom, rangeTo) {
-			let maxy = 0;
-			$.each(data, function (key, val) {
-				$.each(val['data'], function () {
-					if (this[0] > rangeFrom && this[0] < rangeTo) {
-						maxy = this[1] > maxy ? this[1] : maxy;
-					}
-				});
-			});
-			return maxy;
-		};
-
-		// now connect the two
-
-		detailsDiv.bind('plotselected', (event, ranges) => {
-
-			// do the zooming
-			$.each(plot.getXAxes(), function (_, axis) {
-				axis.options.min = ranges.xaxis.from;
-				axis.options.max = ranges.xaxis.to;
-			});
-
-			// update scale
-			let maxy = 1.05 * getMaxY(ranges.xaxis.from, ranges.xaxis.to);
-
-			$.each(plot.getYAxes(), (_, axis) => {
-				axis.options.min = 0;
-				axis.options.max = maxy;
-			});
-
-			plot.setupGrid();
-			plot.draw();
-			plot.clearSelection();
-
-			// don't fire event on the overview to prevent eternal loop
-			overview.setSelection(ranges, true);
-		});
-
-		overviewDiv.bind('plotselected', function (event, ranges) {
-			plot.setSelection(ranges);
-		});
-
-	}).fail(alert);
-
-}
+// function statsGrafiek() {
+// 	const detailsDiv = $('#stats_grafiek_details'),
+// 		overviewDiv = $('#stats_grafiek_overview');
+//
+// 	if (!detailsDiv.length || !overviewDiv.length) {
+// 		return;
+// 	}
+//
+// 	$.post('/forum/grafiekdata').done(function (data) {
+//
+// 		// helper for returning the weekends in a period
+//
+// 		function weekendAreas(axes) {
+//
+// 			let markings = [];
+// 			let d = new Date(axes.xaxis.min);
+//
+// 			// go to the first Saturday
+//
+// 			d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 1) % 7));
+// 			d.setUTCSeconds(0);
+// 			d.setUTCMinutes(0);
+// 			d.setUTCHours(0);
+//
+// 			let i = d.getTime();
+//
+// 			// when we don't set yaxis, the rectangle automatically
+// 			// extends to infinity upwards and downwards
+//
+// 			do {
+// 				markings.push({
+// 					xaxis: {
+// 						from: i, to: i + 2 * 24 * 60 * 60 * 1000,
+// 					},
+// 				});
+// 				i += 7 * 24 * 60 * 60 * 1000;
+// 			} while (i < axes.xaxis.max);
+//
+// 			return markings;
+// 		}
+//
+//
+// 		let options = {
+// 			grid: {
+// 				markings: weekendAreas,
+// 				backgroundColor: '#FFFFFF',
+// 			},
+// 			selection: {
+// 				mode: 'x',
+// 			},
+// 			xaxis: {
+// 				mode: 'time',
+// 				timeformat: '%d %b', // 20%y
+// 				monthNames: ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
+// 				tickLength: 5,
+// 			},
+// 			series: {
+// 				lines: {
+// 					show: true,
+// 					lineWidth: 1,
+// 				},
+// 				shadowSize: 0,
+// 			},
+// 		};
+//
+// 		// toon totaal alleen in overview
+// 		let totaal = [data[0]];
+// 		data.splice(0, 1);
+//
+// 		options['legend'] = {
+// 			show: false,
+// 		};
+// 		let overview = $.plot(overviewDiv, totaal, options);
+//
+// 		options['legend'] = {
+// 			sorted(a, b) {
+// 				// sort alphabetically in ascending order
+// 				return a.label === b.label ? 0 : (a.label > b.label ? 1 : -1);
+// 			},
+// 		};
+// 		let plot = $.plot(detailsDiv, data, options);
+//
+// 		const getMaxY = function (rangeFrom, rangeTo) {
+// 			let maxy = 0;
+// 			$.each(data, function (key, val) {
+// 				$.each(val['data'], function () {
+// 					if (this[0] > rangeFrom && this[0] < rangeTo) {
+// 						maxy = this[1] > maxy ? this[1] : maxy;
+// 					}
+// 				});
+// 			});
+// 			return maxy;
+// 		};
+//
+// 		// now connect the two
+//
+// 		detailsDiv.bind('plotselected', (event, ranges) => {
+//
+// 			// do the zooming
+// 			$.each(plot.getXAxes(), function (_, axis) {
+// 				axis.options.min = ranges.xaxis.from;
+// 				axis.options.max = ranges.xaxis.to;
+// 			});
+//
+// 			// update scale
+// 			let maxy = 1.05 * getMaxY(ranges.xaxis.from, ranges.xaxis.to);
+//
+// 			$.each(plot.getYAxes(), (_, axis) => {
+// 				axis.options.min = 0;
+// 				axis.options.max = maxy;
+// 			});
+//
+// 			plot.setupGrid();
+// 			plot.draw();
+// 			plot.clearSelection();
+//
+// 			// don't fire event on the overview to prevent eternal loop
+// 			overview.setSelection(ranges, true);
+// 		});
+//
+// 		overviewDiv.bind('plotselected', function (event, ranges) {
+// 			plot.setSelection(ranges);
+// 		});
+//
+// 	}).fail(alert);
+//
+// }
 
 $(function () {
 
@@ -296,5 +297,5 @@ $(function () {
 		forumCiteren(postid);
 	});
 
-	statsGrafiek();
+	// statsGrafiek();
 });

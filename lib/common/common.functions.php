@@ -1055,3 +1055,16 @@ function csrfMetaTag() {
 	$token = CsrfService::instance()->generateToken('', 'POST');
 	return '<meta property="X-CSRF-ID" content="'. htmlentities($token->getId()) .'" /><meta property="X-CSRF-VALUE" content="'. htmlentities($token->getValue()) .'" />';
 }
+
+function unzip_array(array $arrs) {
+	$result = [];
+	foreach ($arrs as $arr) {
+		foreach ($arr as $i=> $el) {
+			if (!isset($result[$i])) $result[$i] = [];
+
+			$result[$i][] = $el;
+		}
+	}
+
+	return $result;
+}

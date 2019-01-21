@@ -11,22 +11,19 @@ namespace CsrDelft\view;
 class FlotTimeSeries extends JsonResponse {
 
 	public function getJson($model) {
-		$array = array();
+		$array = [];
 		foreach ($model as $label => $data) {
-			$entry = array();
+			$entry = [];
 			foreach ($data as $row) {
 				if (isset($row['timestamp'], $row['count'])) {
-					$entry[] = array((int)$row['timestamp'] * 1000, (int)$row['count']);
+					$entry[] = ["key" => $label, "x" => (int)$row['timestamp'] * 1000, "y" => (int)$row['count']];
 				} else {
 					//var_dump($row);
 				}
 			}
-			$array[] = array(
-				'label' => $label,
-				'data' => $entry
-			);
+			$array[] = $entry;
 		}
-		return parent::getJson($array);
+		return parent::getJson(array_merge(...$array));
 	}
 
 }
