@@ -23,72 +23,99 @@ timeFormatDefaultLocale({
 	time: '%H:%M:%S',
 });
 
-// Definieer verschillende configuraties voor grafieken.
-// Wordt gebruikt in GroepStatistiekView.
-// window.flot = {
-// 	preset: {
-// 		geslacht: {
-// 			series: {
-// 				pie: {
-// 					show: true,
-// 					radius: 1,
-// 					innerRadius: .5,
-// 					label: {
-// 						show: false
-// 					}
-// 				}
-// 			},
-// 			legend: {
-// 				show: false
-// 			}
-// 		},
-// 		verticale: {
-// 			series: {
-// 				pie: {
-// 					show: true,
-// 					radius: 1,
-// 					label: {
-// 						show: true,
-// 						radius: 2 / 3,
-// 						formatter: (label, series) => `<div class="pie-chart-label">${label}<br/>${Math.round(series.percent)}%</div>`,
-// 						threshold: 0.1
-// 					}
-// 				}
-// 			},
-// 			legend: {
-// 				show: false
-// 			}
-// 		},
-// 		lichting: {
-// 			series: {
-// 				bars: {
-// 					show: true,
-// 					barWidth: 0.5,
-// 					align: 'center',
-// 					lineWidth: 0,
-// 					fill: 1
-// 				}
-// 			},
-// 			xaxis: {
-// 				tickDecimals: 0
-// 			},
-// 			yaxis: {
-// 				tickDecimals: 0
-// 			}
-// 		},
-// 		tijd: {
-// 			xaxes: [{
-// 				mode: 'time'
-// 			}],
-// 			yaxis: {
-// 				tickDecimals: 0
-// 			}
-// 		}
-// 	},
-// 	formatter: {
-// 		piechart: (label, series) => `<div class="pie-chart-label">${label}<br/>${Math.round(series.percent)}%</div>`
-// 	}
-// };
+export function initGrafiek(parent: HTMLElement) {
+	initDeelnamegrafiek(parent);
+	initSaldoGrafiek(parent);
+	initPie(parent);
+	initLine(parent);
+	initBar(parent);
+}
+
+function initPie(parent: HTMLElement | JQuery) {
+	if (!(parent instanceof HTMLElement)) {
+		parent = parent.get(0);
+	}
+
+	if (!parent.querySelectorAll) {
+		return;
+	}
+
+	parent
+		.querySelectorAll('.ctx-graph-pie')
+		.forEach((el: HTMLElement) => {
+			const data = JSON.parse(el.dataset.data!);
+			c3.generate({
+				bindto: el as HTMLElement,
+				data: {
+					colors: {
+						Mannen: '#AFD8F8',
+						Vrouwen: '#FFCBDB',
+					},
+					columns: data,
+					type: 'pie',
+				},
+			});
+		});
+}
+
+function initLine(parent: HTMLElement | JQuery) {
+	if (!(parent instanceof HTMLElement)) {
+		parent = parent.get(0);
+	}
+
+	if (!parent.querySelectorAll) {
+		return;
+	}
+
+	parent
+		.querySelectorAll('.ctx-graph-line')
+		.forEach((el: HTMLElement) => {
+			const data = JSON.parse(el.dataset.data!);
+			c3.generate({
+				axis: {
+					x: {
+						tick: {
+							centered: true,
+							count: 10,
+							culling: true,
+							format: '%x',
+						},
+						type: 'timeseries',
+					},
+				},
+				bindto: el,
+				data: {
+					columns: data,
+					type: 'line',
+					x: 'x',
+				},
+			});
+		});
+}
+
+function initBar(parent: HTMLElement | JQuery) {
+	if (!(parent instanceof HTMLElement)) {
+		parent = parent.get(0);
+	}
+
+	if (!parent.querySelectorAll) {
+		return;
+	}
+
+	parent
+		.querySelectorAll('.ctx-graph-bar')
+		.forEach((el: HTMLElement) => {
+			const data = JSON.parse(el.dataset.data!);
+			c3.generate({
+				bindto: el,
+				data: {
+					columns: data,
+					type: 'bar',
+					x: 'x',
+				},
+			});
+		});
+}
 
 export function initDeelnamegrafiek(parent: HTMLElement) {
 	$(parent).find('.ctx-deelnamegrafiek').each((i, el) => {
@@ -187,7 +214,7 @@ export function initSaldoGrafiek(parent: HTMLElement) {
 			});
 		}
 
-		let timespan = 88; // TODO maak 11
+		let timespan = 11;
 		gen(timespan);
 
 		const terugButton = document.createElement('a');

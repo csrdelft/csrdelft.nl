@@ -7,7 +7,7 @@ import {formCancel, formReset, formSubmit, formToggle} from './formulier';
 import {bbCodeSet} from './bbcode-set';
 import {fnAjaxUpdateCallback, fnGetLastUpdate} from './datatable/datatable';
 import render from './datatable/render';
-import {initSaldoGrafiek, initDeelnamegrafiek} from './grafiek';
+import {initGrafiek} from './grafiek';
 import {activeerLidHints} from './bbcode-hints';
 
 function initButtons(parent) {
@@ -156,9 +156,8 @@ export default function initContext(parent) {
     initLazyImages(parent);
     radioButtonGroep(parent);
     initVue(parent);
-    initDeelnamegrafiek(parent);
     initDataTable(parent);
-    initSaldoGrafiek(parent);
+    initGrafiek(parent);
 }
 
 export function domUpdate(htmlString) {

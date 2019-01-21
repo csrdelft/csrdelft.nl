@@ -3,71 +3,56 @@
 namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\view\groepen;
 
-class GroepStatistiekView extends groepen\leden\GroepTabView {
+class GroepStatistiekView extends GroepTabView {
 
 	private function verticale($data) {
 		$series = array();
 		foreach ($data as $row) {
-			$series[] = array(
-				'label' => $row[0],
-				'data' => $row[1]
-			);
+			$series[] = [$row[0], $row[1]];
 		}
 
-		$data = json_encode($series);
-
-		return "\$.plot(div, {$data}, window.flot.preset.verticale);";
+		return htmlentities(json_encode($series));
 	}
 
 	private function geslacht($data) {
-		$series = array();
+		$mannen = 0;
+		$vrouwen = 0;
 		foreach ($data as $row) {
 			switch ($row[0]) {
-
 				case 'm':
-					$series[] = array(
-						'label' => '',
-						'data' => $row[1],
-						'color' => '#AFD8F8'
-					);
+					$mannen = $row[1];
 					break;
-
 				case 'v':
-					$series[] = array(
-						'label' => '',
-						'data' => $row[1],
-						'color' => '#FFCBDB'
-					);
+					$vrouwen = $row[1];
 					break;
 			}
 		}
-		$data = json_encode($series);
-
-		return "\$.plot(div, {$data}, window.flot.preset.geslacht);";
+		return htmlentities(json_encode([['Mannen', $mannen], ['Vrouwen', $vrouwen]]));
 	}
 
 	private function lichting($data) {
-		$series = array();
+		$series = [];
+		$moment = [];
 		foreach ($data as $row) {
-			$series[] = array('data' => array(array((int)$row[0], (int)$row[1])));
+			$series[] = (int)$row[1];
+			$moment[] = (int)$row[0];
 		}
-		$data = json_encode($series);
 
-		return "\$.plot(div, {$data}, window.flot.preset.lichting);";
+		return htmlentities(json_encode([$moment, $series]));
 	}
 
 	private function tijd($data) {
-		$series = array();
+		$series = ['Aantal'];
+		$moment = ['x'];
 		$totaal = 0;
 		foreach ($data as $tijd => $aantal) {
 			$totaal += $aantal;
-			$series[0][] = array($tijd, $totaal);
+			$moment[] = $tijd;
+			$series[] = $totaal;
 		}
-		$data = json_encode($series);
 
-		return "\$.plot(div, {$data}, window.flot.preset.tijd);";
+		return htmlentities(json_encode([$moment, $series]));
 	}
 
 	/**
@@ -75,42 +60,27 @@ class GroepStatistiekView extends groepen\leden\GroepTabView {
 	 * @throws CsrException
 	 */
 	public function getTabContent() {
-		$html = '';
+		$statistieken = $this->groep->getStatistieken();
 
-		foreach ($this->groep->getStatistieken() as $titel => $data) {
-			$html .= '<h4>' . $titel . '</h4>';
-			if (!is_array($data)) {
-				$html .= $data;
-				continue;
-			}
-			$html .= '<div id="groep-stat-' . $titel . '-' . $this->groep->id . '" class="groep-stat"></div>';
-			$this->javascript .= <<<JS
-var div = $("#groep-stat-{$titel}-{$this->groep->id}");
-div.height(div.width());
-JS;
-			switch ($titel) {
+		$verticale = $this->verticale($statistieken['verticale']);
+		$geslacht = $this->geslacht($statistieken['geslacht']);
+		$lichting = $this->lichting($statistieken['lichting']);
+		$tijd = $this->tijd($statistieken['tijd']);
+		$totaal = $statistieken['totaal'];
 
-				case 'Verticale':
-					$this->javascript .= $this->verticale($data);
-					break;
+		return <<<HTML
+<h4>Verticale</h4>
+<div class="ctx-graph-pie" data-data="{$verticale}"></div>
+<h4>Geslacht</h4>
+<div class="ctx-graph-pie" data-data="{$geslacht}"></div>
+<h4>Lichting</h4>
+<div class="ctx-graph-bar" data-data="{$lichting}"></div>
+<h4>Tijd</h4>
+<div class="ctx-graph-line" data-data="{$tijd}"></div>
+<h4>Totaal</h4>
+{$totaal}
 
-				case 'Geslacht':
-					$this->javascript .= $this->geslacht($data);
-					break;
-
-				case 'Lichting':
-					$this->javascript .= $this->lichting($data);
-					break;
-
-				case 'Tijd':
-					$this->javascript .= $this->tijd($data);
-					break;
-
-				default:
-					throw new CsrException('Onbekende statistiek soort ' . $titel);
-			}
-		}
-		return $html;
+HTML;
 	}
 
 }
