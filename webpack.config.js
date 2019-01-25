@@ -14,8 +14,8 @@ module.exports = (env, argv) => ({
 	mode: 'development',
 	context: contextPath,
 	entry: {
-		'app': './js/app.js',
-		'ledenmemory': './js/ledenmemory.js',
+		'app': './js/app.ts',
+		'ledenmemory': './js/ledenmemory.ts',
 		'fxclouds': './js/effect/fxclouds.ts',
 		'fxonontdekt': './js/effect/fxonontdekt.ts',
 		'fxtrein': './js/effect/fxtrein.ts',

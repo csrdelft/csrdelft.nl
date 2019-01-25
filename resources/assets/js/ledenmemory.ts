@@ -5,18 +5,21 @@ import 'jquery-ui/ui/widgets/dialog';
 
 import '../sass/ledenmemory.scss';
 
-$(function () {
-	let first = true,
-		delayed = false,
-		learnmode = document.title.indexOf('oefenen') >= 0,
-		finished = false,
-		flip1 = false,
-		flip2 = false,
-		beurten = 0,
-		goed = 0,
-		starttijd;
+$(() => {
+	let first = true;
+	let delayed = false;
+	const learnmode = document.title.indexOf('oefenen') >= 0;
+	let finished = false;
+	let flip1: JQuery | null;
+	let flip2: JQuery | null;
+	let beurten = 0;
+	let goed = 0;
+	let starttijd: Date;
 
 	function showReel() {
+		if (!flip1 || !flip2) {
+			return;
+		}
 		let content = '<div class="box"><table><tbody><tr><td>';
 
 		if (flip1.hasClass('pasfoto')) {
@@ -31,47 +34,54 @@ $(function () {
 
 		content += '</td></tr></tbody></table></div>';
 
-		let box = $(content).appendTo('body');
+		const box = $(content).appendTo('body');
 
 		box.animate({
-			left: '60%'
+			left: '60%',
 		}, 'slow', function () {
 			$(this).css('left', '60%');
 		});
 
 		$(box).delay(1200).animate({
-			left: '-50%'
-		}, 'slow', function () {
+			left: '-50%',
+		}, 'slow', () => {
 			$(box).remove();
 		});
 	}
 
-    function flipback() {
-        if (delayed) {
-            delayed = false;
-            if (learnmode) {
-                $('.memorycard').fadeTo('slow', 1.0);
-                if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
-                    flip1.removeClass('flipped');
-                    flip2.removeClass('flipped');
-                } else {
-                    $('.memorycard[uid=' + flip1.attr('uid') + ']').not(flip1).effect('shake');
-                }
-            } else {
-                if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
-                    flip1.fadeTo('slow', 0.5);
-                    flip2.fadeTo('slow', 0.5);
-                } else {
-                    flip1.removeClass('flipped');
-                    flip2.removeClass('flipped');
-                }
-            }
-            flip1 = false;
-            flip2 = false;
-        }
-    }
+	function flipback() {
+		if (!flip1 || !flip2) {
+			return;
+		}
+
+		if (delayed) {
+			delayed = false;
+			if (learnmode) {
+				$('.memorycard').fadeTo('slow', 1.0);
+				if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
+					flip1.removeClass('flipped');
+					flip2.removeClass('flipped');
+				} else {
+					$('.memorycard[uid=' + flip1.attr('uid') + ']').not(flip1).effect('shake');
+				}
+			} else {
+				if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
+					flip1.fadeTo('slow', 0.5);
+					flip2.fadeTo('slow', 0.5);
+				} else {
+					flip1.removeClass('flipped');
+					flip2.removeClass('flipped');
+				}
+			}
+			flip1 = null;
+			flip2 = null;
+		}
+	}
 
 	function checkCorrectness() {
+		if (!flip1 || !flip2) {
+			return;
+		}
 		beurten += 1;
 
 		if (flip1.attr('uid') === flip2.attr('uid')) { // goed
@@ -81,8 +91,8 @@ $(function () {
 			showReel();
 		}
 
-		let memorycard = $('.memorycard'),
-			memorycardGoed = $('.memorycard.goed');
+		const memorycard = $('.memorycard');
+		const memorycardGoed = $('.memorycard.goed');
 
 		if (memorycard.length === memorycardGoed.length) { // einde: toon alles
 			finished = true;
@@ -96,51 +106,53 @@ $(function () {
 
 	function updateTitle() {
 
-		let nu = new Date(),
-			seconds = (nu - starttijd) / 1000,
-			minutes = parseInt(seconds / 60);
+		const nu = new Date();
+		let seconds = Math.floor((nu.getTime() - starttijd.getTime()) / 1000);
+		const minutes = Math.floor(seconds / 60);
 
-		seconds = parseInt(seconds % 60);
+		seconds = seconds % 60;
 
 		document.title = goed + '/' + beurten + ' (' + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + ')';
 
 		if (!finished) {
-			return window.setTimeout(updateTitle, 1000);
+			return setTimeout(updateTitle, 1000);
 		}
 		// einde: stop de tijd
 
-		let dialog = {
-			modal: true,
-			width: 484,
+		const dialog = {
+			buttons: {},
 			height: 334,
-			resizable: false
+			modal: true,
+			resizable: false,
+			width: 484,
 		};
 		let content = 'Gefeliciteerd! U heeft alle ' + goed + ' namen goed in ' + beurten + ' beurten';
 		content += ' en heeft daar in totaal ' + minutes + ' minuten en ' + seconds + ' seconden over gedaan.';
 
 		if (!learnmode) {
-			content += '<p>Wilt u deze score toevoegen aan de lijst met hoogste scores?</p>';
-			content += '<input name="eerlijk" id="eerlijk" type="checkbox" /><label for="eerlijk"> Ik heb deze score eerlijk verkregen</label>';
+			content += '<p>Wilt u deze score toevoegen aan de lijst met hoogste scores?</p>' +
+				'<input name="eerlijk" id="eerlijk" type="checkbox" />' +
+				'<label for="eerlijk"> Ik heb deze score eerlijk verkregen</label>';
 
 			let eerlijk = false;
 			$(document).on('change', '#eerlijk', function () {
 				eerlijk = this.checked;
 			});
 
-			dialog['buttons'] = {
-				'Ja': function () {
+			dialog.buttons = {
+				Ja() {
 					$.post('/leden/memoryscore/', {
-						tijd: minutes * 60 + seconds,
 						beurten,
+						eerlijk: eerlijk ? 1 : 0,
 						goed,
 						groep: $('body').data('groep'),
-						eerlijk: eerlijk ? 1 : 0
+						tijd: minutes * 60 + seconds,
 					});
 					$(this).dialog('close');
 				},
-				'Nee': function () {
+				Nee() {
 					$(this).dialog('close');
-				}
+				},
 			};
 		}
 		$('<div id="dialog-finish" class="blue">' + content + '</div>').appendTo('body');
@@ -148,7 +160,7 @@ $(function () {
 		$('#dialog-finish').dialog(dialog);
 	}
 
-	$('.memorycard').click(function () {
+	$('.memorycard').on('click', function () {
 
 		flipback(); // gebruiker hoeft niet te wachten op delayed flipback
 
@@ -165,8 +177,8 @@ $(function () {
 			if (flip1 && flip2) {
 				alert('reset failed');
 			} else if (flip1) { // dit is de tweede
-
-				if (($(this).hasClass('naam') && flip1.hasClass('pasfoto')) || ($(this).hasClass('pasfoto') && flip1.hasClass('naam'))) {
+				if (($(this).hasClass('naam') && flip1.hasClass('pasfoto'))
+					|| ($(this).hasClass('pasfoto') && flip1.hasClass('naam'))) {
 					flip2 = $(this);
 					if (flip2.hasClass('pasfoto')) {
 						$('.memorycard.pasfoto').not(flip2).fadeTo('fast', 0.5);
@@ -198,9 +210,9 @@ $(function () {
 
 			if ($(this).hasClass('flipped')) {
 
-				if (flip1.get(0) === $(this).get(0)) {
+				if (flip1 && flip1.get(0) === $(this).get(0)) {
 					// ignore
-				} else if (flip2.get(0) === $(this).get(0)) {
+				} else if (flip2 && flip2.get(0) === $(this).get(0)) {
 					// ignore
 				} else {
 					alert('flipback failed');
@@ -211,7 +223,8 @@ $(function () {
 					alert('reset failed');
 				} else if (flip1) { // dit is de tweede
 
-					if (($(this).hasClass('naam') && flip1.hasClass('pasfoto')) || ($(this).hasClass('pasfoto') && flip1.hasClass('naam'))) {
+					if (($(this).hasClass('naam') && flip1.hasClass('pasfoto'))
+						|| ($(this).hasClass('pasfoto') && flip1.hasClass('naam'))) {
 						flip2 = $(this);
 						flip2.addClass('flipped');
 
