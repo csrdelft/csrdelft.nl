@@ -58,5 +58,10 @@ $modal-content-bg: $kleur-blauw-donker;
 
 $zoeken-active-bg: lighten($body-bg, 10%);
 
+$tabel-header: $kleur-blauw-donker;
+$tabel-regel-licht: $kleur-blauw-donker;
+$tabel-regel-donker: lighten($kleur-blauw-donker, 5%);
+$tabel-hover: darken($kleur-blauw-donker, 5%);
+
 /* importeer basis */
 @import "../base";

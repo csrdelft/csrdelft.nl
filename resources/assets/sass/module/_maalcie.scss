@@ -9,10 +9,10 @@
   color: #FFFFFF;
 }
 .rowColor0 {
-  background-color: #EBEBEB;
+  background-color: $tabel-regel-donker;
 }
 .rowColor1 {
-  background-color: #FAFAFA;
+  background-color: $tabel-regel-licht;
 }
 
 /* maalcie-menu */
@@ -38,21 +38,21 @@
 	margin-bottom: 1em;
 
 	th {
-		background-color: $maalcie-tabel-header;
+		background-color: $tabel-header;
 		font-weight: bold;
 		padding: 1em;
 		border-bottom: 2px solid #FFFFFF;
 	}
 
 	tr {
-		background-color: $maalcie-tabel-tr0;
+		background-color: $tabel-regel-donker;
 
 		&:nth-child(even) {
-			background-color: $maalcie-tabel-tr1;
+			background-color: $tabel-regel-licht;
 		}
 
 		&:hover {
-			background-color: #DDEEFF;
+			background-color: $tabel-hover;
 		}
 	}
 
@@ -78,7 +78,7 @@ tr.taak-datum-head th, tr.taak-datum-summary th {
   padding: 0;
 }
 #suggesties-tabel tr:hover, tr.taak-datum-summary:hover th {
-  background-color: #DDEEFF !important;
+  background-color: $tabel-hover;
 }
 #suggesties-controls {
   width: 100%;
