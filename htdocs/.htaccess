@@ -37,6 +37,7 @@ RewriteRule ^documenten			index.php?c=Documenten	[QSA,L]
 RewriteRule ^bibliotheek		index.php?c=Bibliotheek [QSA,L]
 RewriteRule ^mededelingen       index.php?c=Mededelingen [QSA,L]
 RewriteRule ^peilingen          index.php?c=Peilingen [QSA,L]
+RewriteRule ^ketzertovenaar     index.php?c=KetzerTovenaar [QSA,L]
 
 RewriteRule ^leden				index.php?c=Profiel [QSA,L]
 RewriteRule ^profiel			index.php?c=Profiel [QSA,L]
