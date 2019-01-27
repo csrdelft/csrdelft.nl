@@ -123,3 +123,8 @@ table.groep-lijst tr:nth-child(even) {
 		background-color: lighten($body-bg, 4%) !important;;
 	}
 }
+
+/* Maak tekst zwart in prive bb-code (voor leesbaarheid) */
+.bb-prive {
+	color: black;
+}
