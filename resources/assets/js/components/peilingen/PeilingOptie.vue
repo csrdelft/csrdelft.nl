@@ -19,7 +19,7 @@
 							 :id="'PeilingOptie' + id"
 							 :disabled="isDisabled"
 							 :checked="selected"
-							 @change="$emit('input', $event.target.checked)" />
+							 @change="$emit('input', $event.target.checked)"/>
 				<label :for="'PeilingOptie' + id"
 							 class="form-check-label">{{ titel }}</label>
 			</div>
@@ -28,53 +28,66 @@
 	</div>
 </template>
 
-<script>
-	import ProgressBar from '../common/ProgressBar';
+<script lang="ts">
+	import Vue from 'vue';
+	import {Component, Prop, Watch} from 'vue-property-decorator';
 	import initContext from '../../context';
-	import $ from 'jquery';
+	import ProgressBar from '../common/ProgressBar';
 
-	export default {
-		name: 'PeilingOptie',
-		components: {ProgressBar},
-		props: {
-			id: Number,
-			peilingId: Number,
-			titel: String,
-			beschrijving: String,
-			stemmen: Number,
-			magStemmen: Boolean,
-			aantalGestemd: Number,
-			heeftGestemd: Boolean,
-			keuzesOver: Boolean,
-			selected: Boolean
-		},
+	@Component({
+		components: {ProgressBar}
+	})
+	export default class PeilingOptie extends Vue {
+		@Prop()
+		id: string;
+		@Prop()
+		peilingId: number;
+		@Prop()
+		titel: string;
+		@Prop()
+		beschrijving: string;
+		@Prop()
+		stemmen: number;
+		@Prop()
+		magStemmen: boolean;
+		@Prop()
+		aantalGestemd: number;
+		@Prop()
+		heeftGestemd: boolean;
+		@Prop()
+		keuzesOver: boolean;
+		@Prop()
+		selected: boolean;
+
 		mounted() {
 			this.initBeschrijvingContext();
+		}
 
-			this.$watch('kanStemmen', () => this.initBeschrijvingContext());
-		},
-		methods: {
-			initBeschrijvingContext() {
+		@Watch('kanStemmen')
+		initBeschrijvingContext() {
+			setTimeout(() => {
 				if (this.kanStemmen) {
-					initContext($(this.$refs.beschrijving));
+					initContext(this.$refs.beschrijving as Node);
 				} else {
-					initContext($(this.$refs.beschrijving_gestemd));
+					initContext(this.$refs.beschrijving_gestemd as Node);
 				}
-			}
-		},
-		computed: {
-			kanStemmen() {
-				return this.magStemmen && !this.heeftGestemd;
-			},
-			progress() {
-				return (this.stemmen / this.aantalGestemd * 100).toFixed(2);
-			},
-			progressText() {
-				return `${this.progress}% (${this.stemmen})`;
-			},
-			isDisabled() {
-				return !this.selected && !this.keuzesOver;
-			}
+			});
+		}
+
+		get kanStemmen() {
+			return this.magStemmen && !this.heeftGestemd;
+		}
+
+		get progress() {
+			return (this.stemmen / this.aantalGestemd * 100).toFixed(2);
+		}
+
+		get progressText() {
+			return `${this.progress}% (${this.stemmen})`;
+		}
+
+		get isDisabled() {
+			return !this.selected && !this.keuzesOver;
 		}
 	};
 </script>

@@ -13,6 +13,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.2.0",
 		"@babel/plugin-proposal-class-properties": "^7.2.3",
+		"@babel/plugin-proposal-decorators": "^7.3.0",
 		"@babel/plugin-syntax-dynamic-import": "^7.2.0",
 		"@babel/preset-env": "^7.2.3",
 		"@types/bootstrap": "^4.2.0",
@@ -47,8 +48,11 @@
 		"tslint": "^5.12.1",
 		"tslint-loader": "^3.5.4",
 		"typescript": "^3.2.2",
+		"vue-class-component": "^6.3.2",
 		"vue-loader": "^15.4.1",
+		"vue-property-decorator": "^7.3.0",
 		"vue-template-compiler": "^2.5.17",
+		"vue-typescript-import-dts": "^4.0.0",
 		"webpack": "^4.16.5",
 		"webpack-cli": "^3.1.0",
 		"webpack-manifest-plugin": "^2.0.4"

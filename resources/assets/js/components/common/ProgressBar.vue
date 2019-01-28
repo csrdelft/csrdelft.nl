@@ -6,19 +6,23 @@
 	</div>
 </template>
 
-<script>
-	export default {
-		name: 'ProgressBar',
-		props: {
-			progress: {
-				type: [Number, String] // Liever een nummer, maar een string kunnen we ook mee overweg.
-			},
-			reverse: {
-				type: Boolean,
-				required: false,
-				default: () => false,
-			}
-		},
+<script lang="ts">
+	import Vue from "vue";
+	import {Component, Prop} from 'vue-property-decorator';
+
+	@Component
+	export default class ProgressBar extends Vue {
+		@Prop({
+			type: [Number, String]
+		})
+		progress: number | string; // Liever een nummer, maar een string kunnen we ook mee overweg.
+
+		@Prop({
+			type: Boolean,
+			required: false,
+			default: () => false
+		})
+		reverse: boolean;
 	};
 </script>
 
