@@ -31,8 +31,8 @@
 <script lang="ts">
 	import Vue from 'vue';
 	import {Component, Prop, Watch} from 'vue-property-decorator';
-	import initContext from '../../context';
 	import ProgressBar from '../common/ProgressBar';
+	import {init} from '../../ctx';
 
 	@Component({
 		components: {ProgressBar},
@@ -67,9 +67,9 @@
 		protected initBeschrijvingContext() {
 			setTimeout(() => {
 				if (this.kanStemmen) {
-					initContext(this.$refs.beschrijving as Node);
+					init(this.$refs.beschrijving as Element);
 				} else {
-					initContext(this.$refs.beschrijving_gestemd as Node);
+					init(this.$refs.beschrijving_gestemd as Element);
 				}
 			});
 		}

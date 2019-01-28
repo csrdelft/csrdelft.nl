@@ -153,3 +153,7 @@ export function html(strings: TemplateStringsArray, ...values: string[]): HTMLEl
 
 	return (new DOMParser().parseFromString(output, 'text/html').body.firstChild) as HTMLElement;
 }
+
+export function htmlParse(htmlString: string) {
+	return new DOMParser().parseFromString(htmlString, 'text/html').body.children;
+}

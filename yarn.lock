@@ -594,6 +594,14 @@
     "@types/datatables.net" "*"
     "@types/jquery" "*"
 
+"@types/datatables.net-select@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@types/datatables.net-select/-/datatables.net-select-1.2.4.tgz#6693f0238b1efb13cd593f15b92181075f9c00ce"
+  integrity sha512-eOKwjLgQc4CHOgrv2QCIs5Il8/hPMETtI3MqlzXlK5jVNOKQA9e0o7hk+pgilk/oGOv6mbVRF47XeSu40zwxQA==
+  dependencies:
+    "@types/datatables.net" "*"
+    "@types/jquery" "*"
+
 "@types/datatables.net@*", "@types/datatables.net@^1.10.14":
   version "1.10.14"
   resolved "https://registry.yarnpkg.com/@types/datatables.net/-/datatables.net-1.10.14.tgz#36c11c67dee60565c989d16e6c59a4c99f36ebe6"
