@@ -1,9 +1,33 @@
 <template>
-	<div class="text-input">
-		<label :for="name" v-if="hint">{{ hint }}</label>
-		<input v-if="!multipleLines" :id="name" type="text" :name="name" v-model="enteredText" v-on:input="update" :maxlength="maxLength ? maxLength : ''"/>
-		<textarea v-if="multipleLines" :rows="multipleLines" :id="name" :name="name" v-model="enteredText" v-on:input="update" :maxlength="maxLength ? maxLength : ''"></textarea>
-		<div class="lengthCounter" v-if="maxLength">{{ remainingLength }}/{{ maxLength }}</div>
+	<div class="field">
+		<div v-if="error && validating" class="errorMessage">{{ error }}</div>
+		<div class="textInput">
+			<label :for="name" v-if="hint">{{ hint }}</label>
+
+			<input
+				type="text"
+				:name="name"
+				:id="name"
+				:maxlength="maxLength ? maxLength : ''"
+				v-model="enteredText"
+				v-if="!multipleLines"
+				v-on:input="update"
+				v-on:blur="validate"
+				@keyup.enter="$emit('next')" />
+
+			<textarea
+				:name="name"
+				:id="name"
+				:rows="multipleLines"
+				:maxlength="maxLength ? maxLength : ''"
+				v-if="multipleLines"
+				v-model="enteredText"
+				v-on:input="update"
+				v-on:blur="validate">
+			</textarea>
+
+			<div class="lengthCounter" v-if="maxLength">{{ remainingLength }}/{{ maxLength }}</div>
+		</div>
 	</div>
 </template>
 
@@ -17,12 +41,14 @@
 			hint: String,
 			maxLength: Number,
 			multipleLines: Number,
+			error: String
 		},
 		data: () => ({
-			enteredText: ''
+			enteredText: '',
+			validating: false,
 		}),
 		created() {
-			this.text = this.value;
+			this.enteredText = this.value;
 		},
 		computed: {
 			remainingLength() {
@@ -33,17 +59,27 @@
 			update() {
 				this.$emit('input', this.enteredText);
 			},
+			validate() {
+				this.validating = true;
+			}
 		}
 	}
 </script>
 
 <style scoped>
-	.text-input {
+	.errorMessage {
+		font-size: 14px;
+		font-weight: 400;
+		color: #e67e22;
+		margin-bottom: 12px;
+	}
+
+	.textInput {
 		position: relative;
 		margin-bottom: 20px;
 	}
 
-	.text-input:last-child {
+	.textInput:last-child {
 		margin-bottom: 40px;
 	}
 

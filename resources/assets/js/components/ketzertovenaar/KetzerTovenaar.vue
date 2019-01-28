@@ -8,7 +8,7 @@
 			<SelectButtons
 				name="type"
 				:options="types"
-				v-model="formData.type"
+				v-model="event.type"
 				v-on:done="gotoStep(2, true)">
 			</SelectButtons>
 
@@ -17,14 +17,16 @@
 		<Stap
 			title="Wat is de titel van je activiteit?"
 			:step="2"
-			:show-done="true"
+			:show-done="this.event.title.length > 0"
 			v-on:done="gotoStep(3, true)">
 
 			<TextInput
 				name="title"
 				:max-length="100"
 				hint="Titel"
-				v-model="formData.title">
+				v-model="event.title"
+				v-on:next="event.title.length > 0 ? gotoStep(3, true) : null"
+				:error="event.title.length === 0 ? 'Vul een titel in' : ''">
 			</TextInput>
 
 		</Stap>
@@ -40,14 +42,14 @@
 				:max-length="250"
 				hint="Korte beschrijving"
 				:multiple-lines="5"
-				v-model="formData.shortDescription">
+				v-model="event.shortDescription">
 			</TextInput>
 
 			<TextInput
 				name="readMore"
 				hint="Lees meer"
 				:multiple-lines="5"
-				v-model="formData.readMore">
+				v-model="event.readMore">
 			</TextInput>
 
 		</Stap>
@@ -79,7 +81,7 @@
 				'ifes': 'Activiteit van IFES',
 				'extern': 'Externe activiteit'
 			},
-			formData: {
+			event: {
 				type: null,
 				title: '',
 				shortDescription: '',
@@ -88,11 +90,17 @@
 			step: 1,
 		}),
 		created() {
+			if (sessionStorage.hasOwnProperty('ketzerTovenaar')) {
+				let stored = JSON.parse(sessionStorage.getItem('ketzerTovenaar'));
+				this.event = stored.event;
+				this.step = stored.step;
+			}
 		},
 		computed: {},
 		methods: {
 			gotoStep(step, autofocus) {
 				this.step = Math.max(this.step, step);
+				this.autosave();
 
 				// Scroll to next step
 				this.$nextTick(function () {
@@ -112,6 +120,12 @@
 						}
 					});
 				});
+			},
+			autosave() {
+				sessionStorage.setItem('ketzerTovenaar', JSON.stringify({
+					step: this.step,
+					event: this.event
+				}));
 			}
 		}
 	}
