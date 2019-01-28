@@ -20,7 +20,7 @@ use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\FlotTimeSeries;
+use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumZoekenForm;
 use CsrDelft\view\Icon;
@@ -158,15 +158,15 @@ class ForumController extends Controller {
 
 	public function grafiekdata($type) {
 		$model = ForumPostsModel::instance();
-		$series = [];
+		$datasets = [];
 		if ($type == 'details') {
 			foreach (ForumDelenModel::instance()->getForumDelenVoorLid() as $deel) {
-				$series[$deel->titel] = $model->getStatsVoorForumDeel($deel);
+				$datasets[$deel->titel] = $model->getStatsVoorForumDeel($deel);
 			}
 		} else {
-			$series['Totaal'] = $model->getStatsTotal();
+			$datasets['Totaal'] = $model->getStatsTotal();
 		}
-		return new FlotTimeSeries($series);
+		return new ChartTimeSeries($datasets);
 	}
 
 	/**

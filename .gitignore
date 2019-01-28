@@ -25,7 +25,6 @@ htdocs/enquete
 htdocs/google*.html
 htdocs/handelingen
 htdocs/happening
-htdocs/layout/js/flot/examples
 htdocs/owee
 htdocs/owee/2006/plaetjes/*
 htdocs/owee/2007/plaetjes/*

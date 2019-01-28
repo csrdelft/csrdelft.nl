@@ -38,10 +38,4 @@ class Saldo extends PersistentEntity implements JsonSerializable {
 	 * @var string
 	 */
 	protected static $table_name = 'saldolog';
-
-	public function jsonSerialize() {
-		// Time * 1000 voor flot
-		return array(strtotime($this->moment) * 1000, $this->saldo);
-	}
-
 }

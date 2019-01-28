@@ -24,7 +24,7 @@ class SaldoGrafiekModel {
 		}
 		$saldo = $klant->saldo;
 		// Teken het huidige saldo
-		$data = [['moment' => static::flotTime(getDateTime()), 'saldo' => round($saldo / 100, 2)]];
+		$data = [['t' => date(\DateTime::RFC2822), 'y' => round($saldo / 100, 2)]];
 		$model = CiviBestellingModel::instance();
 		$bestellingen = $model->find(
 			'uid = ? AND deleted = FALSE AND moment>(NOW() - INTERVAL ? DAY)',
@@ -34,16 +34,31 @@ class SaldoGrafiekModel {
 		);
 
 		foreach ($bestellingen as $bestelling) {
-			$data[] = ['moment' => static::flotTime($bestelling->moment), 'saldo' => round($saldo / 100, 2)];
+			$data[] = ['t' => date(\DateTime::RFC2822, strtotime($bestelling->moment)), 'y' => round($saldo / 100, 2)];
 			$saldo += $bestelling->totaal;
 		}
 
 		if (!empty($data)) {
 			$row = end($data);
-			$time = static::flotTime($timespan - 1 . ' days 23 hours ago');
-			array_push($data, ["moment" => $time, 'saldo' => $row['saldo']]);
+			$time = date(\DateTime::RFC2822, strtotime($timespan - 1 . ' days 23 hours ago'));
+			array_push($data, ["t" => $time, 'y' => $row['y']]);
 		}
-		return array_reverse($data);
+
+		return [
+			"labels" => [$time, date(\DateTime::RFC2822)],
+			"datasets" => [
+				[
+					'label' => 'Civisaldo',
+					'steppedLine' => true,
+					'borderWidth' => 2,
+					'pointRadius' => 0,
+					'hitRadius' => 2,
+					'fill' => false,
+					'borderColor' => 'green',
+					'data' => array_reverse($data),
+				],
+			],
+		];
 	}
 
 	/**
@@ -53,16 +68,5 @@ class SaldoGrafiekModel {
 	public static function magGrafiekZien($uid) {
 		//mogen we uberhaupt een grafiek zien?
 		return LoginModel::getUid() === $uid OR LoginModel::mag('P_LEDEN_MOD,commissie:SocCie,commissie:MaalCie');
-	}
-
-	/**
-	 * Flot wil graag een timestamp in milliseconden, php kent timestamps in seconden
-	 *
-	 * @param $moment
-	 *
-	 * @return false|int
-	 */
-	private static function flotTime($moment) {
-		return strtotime($moment) * 1000;
 	}
 }

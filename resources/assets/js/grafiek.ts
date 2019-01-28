@@ -1,31 +1,7 @@
-/* tslint:disable:no-console */
 import axios from 'axios';
-import c3, {ChartConfiguration} from 'c3';
 import Chart, {ChartData, ChartOptions} from 'chart.js';
-import {format, formatDefaultLocale} from 'd3';
-import {timeFormat, timeFormatDefaultLocale} from 'd3-time-format';
 import palette from 'google-palette';
-import $ from 'jquery';
-
-formatDefaultLocale({
-	currency: ['€', ''],
-	decimal: ',',
-	grouping: [3],
-	thousands: '.',
-});
-
-timeFormatDefaultLocale({
-	date: '%d-%m-%Y',
-	dateTime: '%a %e %B %Y %T',
-	days: ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'],
-	months: [
-		'januari', 'februari', 'maart', 'april', 'mei', 'juni',
-		'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
-	periods: ['AM', 'PM'],
-	shortDays: ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],
-	shortMonths: ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
-	time: '%H:%M:%S',
-});
+import {html} from './util';
 
 export function initGrafiek(parent: HTMLElement) {
 	initDeelnamegrafiek(parent);
@@ -33,13 +9,10 @@ export function initGrafiek(parent: HTMLElement) {
 	initPie(parent);
 	initLine(parent);
 	initBar(parent);
-	initLineXY(parent);
 }
 
 function createCtx(parent: HTMLElement) {
-	const ctx = document.createElement('canvas');
-	ctx.style.width = '100%';
-	ctx.style.height = '100%';
+	const ctx = html`<canvas style="width: 100%; height: 100%"/>` as HTMLCanvasElement;
 	parent.append(ctx);
 	return ctx;
 }
@@ -57,60 +30,11 @@ function initPie(parent: HTMLElement | JQuery) {
 		.querySelectorAll('.ctx-graph-pie')
 		.forEach((el: HTMLElement) => {
 			const ctx = createCtx(el);
-			const data = JSON.parse(el.dataset.data!) as ChartData;
+			let data = JSON.parse(el.dataset.data!) as ChartData;
 
-			data.datasets = data.datasets!
-				.map((dataset) => ({
-					backgroundColor: palette('tol', dataset.data!.length).map((col) => `#${col}`),
-					...dataset,
-				}));
+			data = defaultKleuren(data);
 
 			return new Chart(ctx, {data, type: 'pie'});
-		});
-}
-
-function initLineXY(parent: HTMLElement | JQuery) {
-	if (!(parent instanceof HTMLElement)) {
-		parent = parent.get(0);
-	}
-
-	if (!parent.querySelectorAll) {
-		return;
-	}
-
-	parent
-		.querySelectorAll('.ctx-graph-line-xy')
-		.forEach((el: HTMLElement) => {
-			// const ctx = document.createElement('canvas');
-			// el.append(ctx);
-			// const data = JSON.parse(el.dataset.data!) as ChartData;
-			// return new Chart(ctx, {data, type: 'line'});
-			const options: ChartConfiguration = {
-				axis: {
-					x: {
-						type: 'timeseries',
-					},
-				},
-				bindto: el,
-				data: {
-					keys: {
-						value: ['y'],
-						x: 'x',
-					},
-					mimeType: 'json',
-					type: 'line',
-				},
-			};
-
-			if (el.dataset.data) {
-				options.data.json = JSON.parse(el.dataset.data);
-				c3.generate(options);
-			} else if (el.dataset.url) {
-				axios.post(el.dataset.url).then((response) => {
-					options.data.json = response.data;
-					c3.generate(options);
-				});
-			}
 		});
 }
 
@@ -125,27 +49,61 @@ function initLine(parent: HTMLElement | JQuery) {
 
 	parent
 		.querySelectorAll('.ctx-graph-line')
-		.forEach((el: HTMLElement) => {
-			const data = JSON.parse(el.dataset.data!);
+		.forEach(async (el: HTMLElement) => {
+			let data: ChartData;
+			if (el.dataset.data) {
+				data = JSON.parse(el.dataset.data);
+			} else if (el.dataset.url) {
+				data = (await axios.post(el.dataset.url)).data;
+			} else {
+				throw new Error('Hier kan ik niets mee');
+			}
+
+			data = kleurPerDataset(data);
 
 			return new Chart(createCtx(el), {
 				data,
 				options: {
 					scales: {
 						xAxes: [{
+							barPercentage: 1.0,
+							distribution: 'series',
+							stacked: true,
+							time: {
+								round: 'day',
+								tooltipFormat: 'MMM D',
+							},
 							type: 'time',
 						}],
+						yAxes: [{
+							stacked: true,
+							ticks: {
+								min: 0,
+							},
+						}],
+					},
+					tooltips: {
+						intersect: false,
+						mode: 'index',
 					},
 				},
-				type: 'line',
+				type: 'bar',
 			});
 		});
+}
+
+function kleurPerDataset(data: ChartData) {
+	const kleuren = palette(['tol', 'qualitative'], data.datasets!.length)[Symbol.iterator]();
+	data.datasets!.forEach((dataset) => {
+		dataset.pointBorderColor = dataset.backgroundColor = dataset.borderColor = `#${kleuren.next().value}`;
+	});
+	return data;
 }
 
 function defaultKleuren(data: ChartData) {
 	data.datasets = data.datasets!
 		.map((dataset) => ({
-			backgroundColor: palette('tol', dataset.data!.length).map((col) => `#${col}`),
+			backgroundColor: palette('tol-rainbow', dataset.data!.length).map((col) => `#${col}`),
 			...dataset,
 		}));
 	return data;
@@ -220,79 +178,105 @@ export function initDeelnamegrafiek(parent: HTMLElement | JQuery) {
 	});
 }
 
-export function initSaldoGrafiek(parent: HTMLElement) {
-	$(parent).find('.ctx-saldografiek').each((i, el) => {
-		const closed = el.dataset.closed === 'true';
+Chart.defaults.NegativeTransparentLine = Chart.helpers.clone(Chart.defaults.line);
+Chart.controllers.NegativeTransparentLine = Chart.controllers.line.extend({
+	update() {
+		if (this.chart.data.datasets.length) {
+			// get the min and max values
+			const min = this.chart.data.datasets[0].data
+				.reduce((mininum: number, p: any) => p.y < mininum ? p.y : mininum, this.chart.data.datasets[0].data[0].y);
 
-		if (closed) {
-			const button = document.createElement('a');
-			button.setAttribute('href', '#');
-			button.setAttribute('class', 'btn btn-primary');
-			button.textContent = 'Toon saldografiek';
-
-			button.addEventListener('click', () => {
-				el.classList.remove('verborgen');
-				button.remove();
-			});
-
-			el.parentElement!.append(button);
-		} else {
-			el.classList.remove('verborgen');
-		}
-
-		function gen(t: number) {
-			c3.generate({
-				axis: {
-					x: {
-						tick: {
-							centered: true,
-							count: 10,
-							culling: true,
-							format: '%x',
-						},
-						type: 'timeseries',
-					},
-					y: {
-						tick: {
-							format: format('($.2f'),
-						},
-					},
-				},
-				bindto: el,
-				data: {
-					keys: {
-						value: ['saldo'],
-						x: 'moment',
-					},
-					mimeType: 'json',
-					type: 'step',
-					url: `/leden/saldo/${el.dataset.uid}/${t}`,
-				},
-				tooltip: {
-					format: {
-						title: (x) => timeFormat('%x %X')(x),
-					},
-				},
-			});
-		}
-
-		let timespan = 11;
-		gen(timespan);
-
-		const terugButton = document.createElement('a');
-		terugButton.setAttribute('class', 'saldo-terug-button');
-		terugButton.setAttribute('title', 'Verder terug in de tijd...');
-		terugButton.innerHTML = '&laquo;';
-
-		el.parentElement!.append(terugButton);
-
-		terugButton.addEventListener('click', () => {
-			timespan = timespan * 2;
-			if (timespan > (15 * 356)) {
-				return;
+			if (min >= 0) {
+				this.chart.data.datasets[0].borderColor = 'green';
+				return Chart.controllers.line.prototype.update.apply(this, arguments);
 			}
 
-			gen(timespan);
+			const max = this.chart.data.datasets[0].data
+				.reduce((maximum: number, p: any) => p.y > maximum ? p.y : maximum, this.chart.data.datasets[0].data[0].y);
+			const yScale = this.getScaleForId(this.getMeta().yAxisID);
+
+			// figure out the pixels for these and the value 0
+			const top = yScale.getPixelForValue(max);
+			const zero = yScale.getPixelForValue(0);
+			const bottom = yScale.getPixelForValue(min);
+
+			// build a gradient that switches color at the 0 point
+			const ctx = this.chart.chart.ctx;
+			const gradient = ctx.createLinearGradient(0, top, 0, bottom);
+			const ratio = Math.min((zero - top) / (bottom - top), 1);
+			gradient.addColorStop(0, 'green');
+			gradient.addColorStop(ratio, 'green');
+			gradient.addColorStop(ratio, 'red');
+			gradient.addColorStop(1, 'red');
+			this.chart.data.datasets[0].borderColor = gradient;
+		}
+
+		// noinspection JSPotentiallyInvalidConstructorUsage
+		return Chart.controllers.line.prototype.update.apply(this, arguments);
+	},
+});
+
+export function initSaldoGrafiek(parent: HTMLElement | JQuery) {
+	if (!(parent instanceof HTMLElement)) {
+		parent = parent.get(0);
+	}
+
+	if (!parent.querySelectorAll) {
+		return;
+	}
+
+	parent.querySelectorAll('.ctx-saldografiek')
+		.forEach((el: HTMLElement) => {
+			const closed = el.dataset.closed === 'true';
+			const uid = el.dataset.uid!;
+			let timespan = 88;
+
+			const options: ChartOptions = {
+				scales: {
+					xAxes: [{
+						type: 'time',
+					}],
+				},
+			};
+
+			const chart = new Chart(createCtx(el), {data: {}, type: 'NegativeTransparentLine', options});
+
+			function load() {
+				axios.post(`/leden/saldo/${uid}/${timespan}`)
+					.then((response) => {
+						chart.data = response.data;
+						chart.update();
+					});
+
+				if (!el.querySelector('.saldo-terug-button')) {
+					const terugButton = html`<a title="verder terug in de tijd" class="saldo-terug-button">&laquo;</a>`;
+
+					el.append(terugButton);
+
+					terugButton.addEventListener('click', () => {
+						timespan = timespan * 2;
+						if (timespan > (15 * 356)) {
+							return;
+						}
+
+						load();
+					});
+				}
+			}
+
+			if (closed) {
+				const button = html`<a href="#" class="btn btn-primary">Toon saldografiek</a>`;
+
+				button.addEventListener('click', () => {
+					el.classList.remove('verborgen');
+					button.remove();
+					load();
+				});
+
+				el.parentElement!.append(button);
+			} else {
+				el.classList.remove('verborgen');
+				load();
+			}
 		});
-	});
 }

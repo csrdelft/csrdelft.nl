@@ -143,3 +143,13 @@ export function singleLineString(strings: TemplateStringsArray, ...values: strin
 	// Rip out the leading whitespace.
 	return lines.map((line) => line.replace(/^\s+/gm, '')).join(' ').trim();
 }
+
+export function html(strings: TemplateStringsArray, ...values: string[]): HTMLElement {
+	let output = '';
+	for (let i = 0; i < values.length; i++) {
+		output += strings[i] + values[i];
+	}
+	output += strings[values.length];
+
+	return (new DOMParser().parseFromString(output, 'text/html').body.firstChild) as HTMLElement;
+}
