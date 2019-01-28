@@ -1,7 +1,9 @@
 import $ from 'jquery';
 
-import initContext from '../context';
+import ctx from '../ctx';
+import render from './render';
 import Settings = DataTables.Settings;
+import ColumnSettings = DataTables.ColumnSettings;
 
 export interface DatatableResponse {
 	modal?: string;
@@ -25,6 +27,31 @@ declare global {
 	}
 }
 
+ctx.addContext('.ctx-datatable', initDataTable);
+
+function initDataTable(el: HTMLElement) {
+	const $el = $(el);
+
+	const settingsJson = $el.data('settings');
+	const search = $el.data('search');
+
+	// Zet de callback voor ajax
+	if (settingsJson.ajax) {
+		settingsJson.ajax.data.lastUpdate = fnGetLastUpdate($el);
+		settingsJson.ajax.dataSrc = fnAjaxUpdateCallback($el);
+	}
+
+	// Zet de render method op de columns
+	settingsJson.columns.forEach((col: ColumnSettings) => col.render = render[col.render as string]);
+
+	// Init DataTable
+	const table = $el.DataTable(settingsJson);
+	$el.dataTable().api().search(search);
+
+	table.on('page', () => table.rows({selected: true}).deselect());
+	table.on('childRow.dt', (event, data) => ctx.initContext(data.container));
+}
+
 /****************************
  * Een paar functies om met datatables te
  * praten, laadt datatables zelf niet in.
@@ -41,7 +68,7 @@ export function fnUpdateDataTable(tableId: string, response: DatatableResponse) 
 				table.row($tr).remove();
 			} else {
 				table.row($tr).data(row);
-				initContext($tr);
+				ctx.initContext($tr.get(0));
 			}
 		} else if ($tr.length === 0) {
 			table.row.add(row);

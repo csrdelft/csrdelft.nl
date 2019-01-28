@@ -2,22 +2,21 @@ import $ from 'jquery';
 
 import {modalClose, modalOpen} from './modal';
 import {ajaxRequest} from './ajax';
-import initContext, {domUpdate} from './context';
+import {domUpdate} from './context';
 import {takenSelectRange, takenSubmitRange} from './maalcie';
 import {fnGetSelection, fnUpdateDataTable} from './datatable/api';
 import {redirect, reload} from './util';
+import ctx from './ctx';
 
-export function radioButtonGroep(parent) {
-	$(parent).find('[data-buttons=radio]').each(function () {
-		let container = $(this);
+ctx.addContext('[data-buttons=radio]', (el) => {
+	let container = $(el);
 
-		container.find('a.btn').on('click', function (event) {
-			container.find('.active').removeClass('active');
+	container.find('a.btn').on('click', function (event) {
+		container.find('.active').removeClass('active');
 
-			$(event.target).addClass('active');
-		});
+		$(event.target).addClass('active');
 	});
-}
+});
 
 export function knopAjax(knop, type) {
     if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
@@ -66,7 +65,7 @@ export function knopAjax(knop, type) {
                 fnUpdateDataTable('#' + tableId, response);
                 if (response.modal) {
                     modalOpen(response.modal);
-                    initContext($('#modal'));
+                    ctx.initContext(document.querySelector('#modal'));
                 }
                 else {
                     modalClose();
