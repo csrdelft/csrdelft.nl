@@ -1,7 +1,10 @@
 import axios from 'axios';
 import Chart, {ChartData, ChartOptions} from 'chart.js';
 import palette from 'google-palette';
-import {html} from './util';
+import moment from 'moment';
+import {formatBedrag, html} from './util';
+
+moment.locale('nl');
 
 export function initGrafiek(parent: HTMLElement) {
 	initDeelnamegrafiek(parent);
@@ -229,13 +232,29 @@ export function initSaldoGrafiek(parent: HTMLElement | JQuery) {
 		.forEach((el: HTMLElement) => {
 			const closed = el.dataset.closed === 'true';
 			const uid = el.dataset.uid!;
-			let timespan = 88;
+			let timespan = 11;
 
 			const options: ChartOptions = {
 				scales: {
 					xAxes: [{
+						time: {
+							tooltipFormat: 'LLL',
+						},
 						type: 'time',
 					}],
+					yAxes: [{
+						ticks: {
+							callback: formatBedrag,
+						},
+					}],
+				},
+				tooltips: {
+					callbacks: {
+						label(tooltipItem, data) {
+							const datasetLabel = data.datasets![tooltipItem.datasetIndex!].label || '';
+							return datasetLabel + ': ' + formatBedrag(Number(tooltipItem.yLabel));
+						},
+					},
 				},
 			};
 

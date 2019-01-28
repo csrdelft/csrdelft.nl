@@ -24,7 +24,7 @@ class SaldoGrafiekModel {
 		}
 		$saldo = $klant->saldo;
 		// Teken het huidige saldo
-		$data = [['t' => date(\DateTime::RFC2822), 'y' => round($saldo / 100, 2)]];
+		$data = [['t' => date(\DateTime::RFC2822), 'y' => $saldo]];
 		$model = CiviBestellingModel::instance();
 		$bestellingen = $model->find(
 			'uid = ? AND deleted = FALSE AND moment>(NOW() - INTERVAL ? DAY)',
@@ -34,7 +34,7 @@ class SaldoGrafiekModel {
 		);
 
 		foreach ($bestellingen as $bestelling) {
-			$data[] = ['t' => date(\DateTime::RFC2822, strtotime($bestelling->moment)), 'y' => round($saldo / 100, 2)];
+			$data[] = ['t' => date(\DateTime::RFC2822, strtotime($bestelling->moment)), 'y' => $saldo];
 			$saldo += $bestelling->totaal;
 		}
 
