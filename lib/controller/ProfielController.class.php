@@ -82,7 +82,6 @@ class ProfielController extends AclController {
 				'stamboom' => 'P_OUDLEDEN_READ',
 				'verjaardagen' => 'P_LEDEN_READ',
 				'memory' => 'P_OUDLEDEN_READ',
-				'saldo' => 'P_LEDEN_READ'
 			);
 		} else {
 			$this->acl = array(
@@ -92,7 +91,8 @@ class ProfielController extends AclController {
 				// Leden
 				'nieuw' => 'P_LEDEN_MOD,commissie:NovCie',
 				'memoryscore' => 'P_LEDEN_READ',
-				'memoryscores' => 'P_LEDEN_READ'
+				'memoryscores' => 'P_LEDEN_READ',
+				'saldo' => 'P_LEDEN_READ',
 			);
 		}
 	}
