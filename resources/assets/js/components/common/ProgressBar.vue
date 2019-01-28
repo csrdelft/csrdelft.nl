@@ -7,23 +7,23 @@
 </template>
 
 <script lang="ts">
-	import Vue from "vue";
+	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
 
 	@Component
 	export default class ProgressBar extends Vue {
 		@Prop({
-			type: [Number, String]
+			type: [Number, String],
 		})
-		progress: number | string; // Liever een nummer, maar een string kunnen we ook mee overweg.
+		private progress: number | string; // Liever een nummer, maar een string kunnen we ook mee overweg.
 
 		@Prop({
-			type: Boolean,
+			default: () => false,
 			required: false,
-			default: () => false
+			type: Boolean,
 		})
-		reverse: boolean;
-	};
+		private reverse: boolean;
+	}
 </script>
 
 <style scoped>

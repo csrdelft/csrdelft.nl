@@ -34,6 +34,7 @@ docs/*
 docker-compose.yml
 tsconfig.json
 tslint.json
+webpack.config.ts
 webpack.config.js
 .travis.yml
 .tidelift.yml

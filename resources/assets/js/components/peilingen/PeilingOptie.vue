@@ -35,36 +35,36 @@
 	import ProgressBar from '../common/ProgressBar';
 
 	@Component({
-		components: {ProgressBar}
+		components: {ProgressBar},
 	})
 	export default class PeilingOptie extends Vue {
 		@Prop()
-		id: string;
+		private id: string;
 		@Prop()
-		peilingId: number;
+		private peilingId: number;
 		@Prop()
-		titel: string;
+		private titel: string;
 		@Prop()
-		beschrijving: string;
+		private beschrijving: string;
 		@Prop()
-		stemmen: number;
+		private stemmen: number;
 		@Prop()
-		magStemmen: boolean;
+		private magStemmen: boolean;
 		@Prop()
-		aantalGestemd: number;
+		private aantalGestemd: number;
 		@Prop()
-		heeftGestemd: boolean;
+		private heeftGestemd: boolean;
 		@Prop()
-		keuzesOver: boolean;
+		private keuzesOver: boolean;
 		@Prop()
-		selected: boolean;
+		private selected: boolean;
 
-		mounted() {
+		protected mounted() {
 			this.initBeschrijvingContext();
 		}
 
 		@Watch('kanStemmen')
-		initBeschrijvingContext() {
+		protected initBeschrijvingContext() {
 			setTimeout(() => {
 				if (this.kanStemmen) {
 					initContext(this.$refs.beschrijving as Node);
@@ -74,22 +74,22 @@
 			});
 		}
 
-		get kanStemmen() {
+		protected get kanStemmen() {
 			return this.magStemmen && !this.heeftGestemd;
 		}
 
-		get progress() {
+		protected get progress() {
 			return (this.stemmen / this.aantalGestemd * 100).toFixed(2);
 		}
 
-		get progressText() {
+		protected get progressText() {
 			return `${this.progress}% (${this.stemmen})`;
 		}
 
-		get isDisabled() {
+		protected get isDisabled() {
 			return !this.selected && !this.keuzesOver;
 		}
-	};
+	}
 </script>
 
 <style scoped>
