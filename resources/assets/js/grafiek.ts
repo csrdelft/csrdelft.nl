@@ -196,6 +196,12 @@ Chart.controllers.NegativeTransparentLine = Chart.controllers.line.extend({
 
 			const max = this.chart.data.datasets[0].data
 				.reduce((maximum: number, p: any) => p.y > maximum ? p.y : maximum, this.chart.data.datasets[0].data[0].y);
+
+			if (max <= 0) {
+				this.chart.data.datasets[0].borderColor = 'red';
+				return Chart.controllers.line.prototype.update.apply(this, arguments);
+			}
+
 			const yScale = this.getScaleForId(this.getMeta().yAxisID);
 
 			// figure out the pixels for these and the value 0
