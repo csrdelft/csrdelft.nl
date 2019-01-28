@@ -340,8 +340,11 @@ span.curpage {
 }
 
 // Suggesties
-.textcomplete-item.active {
-	background: #e9ecef;
+.textcomplete-item {
+	color: black;
+	&.active {
+		background: #e9ecef;
+	}
 }
 
 @media screen and (max-width: 576px) { // sm

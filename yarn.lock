@@ -569,6 +569,13 @@
   dependencies:
     "@types/jquery" "*"
 
+"@types/dropzone@^5.0.4":
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/@types/dropzone/-/dropzone-5.0.4.tgz#91d3ff382a2348dc7058f77e6d646e4e79779a5c"
+  integrity sha512-P/uEoby2Q+C2cXluKHdaWT3CTs8hfPZCkFjR76UGqJwPEW9yZkCE+TPlFJKmfTuKX0jpMA1jdGps+n7kETbE+A==
+  dependencies:
+    "@types/jquery" "*"
+
 "@types/events@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
@@ -2168,9 +2175,10 @@ dot-prop@^4.1.1:
   dependencies:
     is-obj "^1.0.0"
 
-dropzone@^5.4.0:
+dropzone@^5.5.0:
   version "5.5.1"
   resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.5.1.tgz#06e2f513e61d6aa363d4b556f18574f47cf7ba26"
+  integrity sha512-3VduRWLxx9hbVr42QieQN25mx/I61/mRdUSuxAmDGdDqZIN8qtP7tcKMa3KfpJjuGjOJGYYUzzeq6eGDnkzesA==
 
 duplexify@^3.4.2, duplexify@^3.6.0:
   version "3.6.1"

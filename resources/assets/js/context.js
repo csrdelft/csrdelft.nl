@@ -11,18 +11,6 @@ import {initGrafiek} from './grafiek';
 import {activeerLidHints} from './bbcode-hints';
 
 function initButtons(parent) {
-    $(parent).find('.spoiler').bind('click.spoiler', function (event) {
-        event.preventDefault();
-        let button = $(this);
-        let content = button.next('div.spoiler-content');
-        if (button.html() === 'Toon verklapper') {
-            button.html('Verberg verklapper');
-        }
-        else {
-            button.html('Toon verklapper');
-        }
-        content.toggle(800, 'easeInOutCubic');
-    });
     $(parent).find('.post').bind('click.post', knopPost);
     $(parent).find('.get').bind('click.get', knopGet);
     $(parent).find('.vergroot').bind('click.vergroot', knopVergroot);
