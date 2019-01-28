@@ -1,23 +1,22 @@
 import axios from 'axios';
 
-window.onerror = (message: string, url, line, col, error) => {
-	const substring = 'script error';
-	if (message.toLowerCase().indexOf(substring) > -1) {
+window.addEventListener('error', (ev) => {
+	if (ev.message.toLowerCase().indexOf('script error') > -1) {
 		axios.post('/logger', {
-			message: 'Error uit extern bestand, geen informatie beschikbaar.',
+			message: ev.message,
+			pagina: window.location.href,
+			url: ev.filename,
 		});
 	} else {
-		// tslint:disable-next-line:no-console
-		message += '\n' + console.trace();
 		axios.post('/logger', {
-			col,
-			error: JSON.stringify(error),
-			line,
-			message,
+			col: ev.colno,
+			error: ev.error.stack,
+			line: ev.lineno,
+			message: ev.message,
 			pagina: window.location.href,
-			url,
+			url: ev.filename,
 		});
 	}
 
 	return false;
-};
+});

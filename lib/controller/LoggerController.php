@@ -50,12 +50,12 @@ class LoggerController extends AclController {
 
 			$foutmelding->setText(<<<MD
 *Javascript Foutmelding*
-```$message```
+```
+$message
+$error
+```
 • Moment `$moment`
-• Extra info `$error`
-• Bestand `$url`
-• Regel `$line`
-• Kolom `$col`
+• Bestand `$url:$line:$col`
 • Pagina `$pagina`
 • Veroorzaakt door `{$_SESSION['_uid']}`
 • Browser `{$_SERVER['HTTP_USER_AGENT']}`
