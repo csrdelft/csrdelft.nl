@@ -15,19 +15,18 @@ ctx.init({
 	'.ctx-saldografiek': initSaldoGrafiek,
 });
 
-function createCtx(parent: HTMLElement) {
-	const ctx = html`<canvas style="width: 100%; height: 100%"/>` as HTMLCanvasElement;
-	parent.append(ctx);
-	return ctx;
+function createCanvas(parent: HTMLElement) {
+	const canvas = html`<canvas style="width: 100%; height: 100%"/>` as HTMLCanvasElement;
+	parent.append(canvas);
+	return canvas;
 }
 
 function initPie(el: HTMLElement) {
-	const ctx = createCtx(el);
 	let data = JSON.parse(el.dataset.data!) as ChartData;
 
 	data = defaultKleuren(data);
 
-	return new Chart(ctx, {data, type: 'pie'});
+	return new Chart(createCanvas(el), {data, type: 'pie'});
 }
 
 async function initLine(el: HTMLElement) {
@@ -42,7 +41,7 @@ async function initLine(el: HTMLElement) {
 
 	data = kleurPerDataset(data);
 
-	return new Chart(createCtx(el), {
+	return new Chart(createCanvas(el), {
 		data,
 		options: {
 			scales: {
@@ -104,7 +103,7 @@ function initBar(el: HTMLElement) {
 		},
 	};
 
-	return new Chart(createCtx(el), {data, type: 'bar', options});
+	return new Chart(createCanvas(el), {data, type: 'bar', options});
 }
 
 function initDeelnamegrafiek(el: HTMLElement) {
@@ -133,7 +132,7 @@ function initDeelnamegrafiek(el: HTMLElement) {
 		},
 	};
 
-	return new Chart(createCtx(el), {data, type: 'bar', options});
+	return new Chart(createCanvas(el), {data, type: 'bar', options});
 }
 
 Chart.defaults.NegativeTransparentLine = Chart.helpers.clone(Chart.defaults.line);
@@ -159,8 +158,8 @@ Chart.controllers.NegativeTransparentLine = Chart.controllers.line.extend({
 			const bottom = yScale.getPixelForValue(min);
 
 			// build a gradient that switches color at the 0 point
-			const ctx = this.chart.chart.ctx;
-			const gradient = ctx.createLinearGradient(0, top, 0, bottom);
+			const context = this.chart.chart.ctx;
+			const gradient = context.createLinearGradient(0, top, 0, bottom);
 			const ratio = Math.min((zero - top) / (bottom - top), 1);
 			gradient.addColorStop(0, 'green');
 			gradient.addColorStop(ratio, 'green');
@@ -203,7 +202,7 @@ function initSaldoGrafiek(el: HTMLElement) {
 		},
 	};
 
-	const chart = new Chart(createCtx(el), {data: {}, type: 'NegativeTransparentLine', options});
+	const chart = new Chart(createCanvas(el), {data: {}, type: 'NegativeTransparentLine', options});
 
 	function load() {
 		axios.post(`/leden/saldo/${uid}/${timespan}`)

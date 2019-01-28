@@ -20,7 +20,6 @@ import JSZip from 'jszip';
 import '../lib/dataTables.childRow';
 import '../lib/dataTables.columnGroup';
 
-import ctx from '../ctx';
 import './buttons';
 import defaults from './defaults';
 
@@ -41,4 +40,3 @@ $(() => {
 		$('.ui-tooltip-content').parents('div').remove();
 	});
 });
-
