@@ -31,8 +31,8 @@
 <script lang="ts">
 	import Vue from 'vue';
 	import {Component, Prop, Watch} from 'vue-property-decorator';
-	import ProgressBar from '../common/ProgressBar';
 	import {init} from '../../ctx';
+	import ProgressBar from '../common/ProgressBar';
 
 	@Component({
 		components: {ProgressBar},

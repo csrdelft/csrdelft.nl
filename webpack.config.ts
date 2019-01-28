@@ -1,10 +1,9 @@
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
-import path from 'path';
-import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
-import {VueLoaderPlugin} from 'vue-loader';
-import ManifestPlugin from 'webpack-manifest-plugin';
-import {WebpackOptions} from 'webpack/declarations/WebpackOptions';
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const {VueLoaderPlugin} = require('vue-loader');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
 const devMode = process.env.NODE_ENV !== 'production';
 
@@ -233,4 +232,4 @@ module.exports = (env: string, argv: any) => ({
 			},
 		],
 	},
-} as WebpackOptions);
+});
