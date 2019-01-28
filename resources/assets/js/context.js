@@ -5,10 +5,11 @@ import {modalClose, modalOpen} from './modal';
 import {formCancel, formReset, formSubmit, formToggle} from './formulier';
 
 import {bbCodeSet} from './bbcode-set';
-import {fnAjaxUpdateCallback, fnGetLastUpdate} from './datatable/datatable';
+import {fnGetLastUpdate} from './datatable/api';
 import render from './datatable/render';
 import {initGrafiek} from './grafiek';
 import {activeerLidHints} from './bbcode-hints';
+import {fnAjaxUpdateCallback} from "./datatable/api";
 
 function initButtons(parent) {
     $(parent).find('.post').bind('click.post', knopPost);
