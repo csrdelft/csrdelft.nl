@@ -1,4 +1,8 @@
+import ctx from './ctx';
+
 const {Textcomplete, Textarea} = require('textcomplete');
+
+ctx.addHandler('textarea.BBCodeField', activeerLidHints);
 
 export function activeerLidHints(textarea: HTMLElement) {
 	const editor = new Textarea(textarea);

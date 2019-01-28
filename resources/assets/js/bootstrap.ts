@@ -4,13 +4,29 @@
 import Bloodhound from 'corejs-typeahead';
 import Dropzone from 'dropzone';
 import $ from 'jquery';
+import Vue from 'vue';
 import {ketzerAjax} from './ajax';
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
-import initContext, {domUpdate} from './context';
+import {domUpdate} from './context';
 import {importAgenda} from './courant';
+import ctx, {init} from './ctx';
+import './datatable/bootstrap';
 import {formCancel, formInlineToggle, formSubmit} from './formulier';
 import {forumBewerken, saveConceptForumBericht} from './forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';
+
+declare global {
+	interface JQueryStatic {
+		timeago: any;
+	}
+
+	interface JQuery {
+		timeago: () => void;
+		markItUp: (arg: any) => any;
+		uitooltip: (arg: any) => any;
+		hoverIntent: (arg: any) => any;
+	}
+}
 
 window.$ = window.jQuery = $;
 
@@ -60,7 +76,7 @@ $.extend(window, {
 		// See view/groepen/leden/GroepTabView.class.php
 		domUpdate,
 		// See view/formulier/invoervelden/LidField.class.php
-		initContext,
+		init: (el: HTMLElement) => init(el),
 	},
 	courant: {
 		// See templates/courant/courantbeheer.tpl
@@ -100,3 +116,37 @@ $.extend(window, {
 Dropzone.autoDiscover = false;
 
 $.widget.bridge('uitooltip', $.ui.tooltip);
+
+$.timeago.settings.strings = {
+	day: '1 dag',
+	days: '%d dagen',
+	hour: '1 uur',
+	hours: '%d uur',
+	minute: '1 minuut',
+	minutes: '%d minuten',
+	month: '1 maand',
+	months: '%d maanden',
+	numbers: [],
+	prefiprefixAgo: '',
+	prefixFromNow: 'sinds',
+	seconds: 'nog geen minuut',
+	suffixAgo: 'geleden',
+	suffixFromNow: '',
+	wordSeparator: ' ',
+	year: '1 jaar',
+	years: '%d jaar',
+};
+
+ctx.addHandlers({
+	'': (el) => $(el).uitooltip({track: true}),
+	'.hoverIntent': (el) => $(el).hoverIntent({
+		over() {
+			$(this).find('.hoverIntentContent').fadeIn();
+		},
+		out() {
+			$(this).find('.hoverIntentContent').fadeOut();
+		},
+		timeout: 250,
+	}),
+	'.vue-context': (el) => new Vue({el}),
+});

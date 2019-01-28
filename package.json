@@ -19,6 +19,7 @@
 		"@types/chart.js": "^2.7.42",
 		"@types/datatables.net": "^1.10.14",
 		"@types/datatables.net-buttons": "^1.4.0",
+		"@types/datatables.net-select": "^1.2.4",
 		"@types/dropzone": "^5.0.4",
 		"@types/events": "^1.2.0",
 		"@types/hammerjs": "^2.0.36",

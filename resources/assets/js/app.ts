@@ -1,7 +1,7 @@
 import './bibliotheek';
 import './bootstrap';
 import './csrdelft';
-import './datatable/bootstrap';
+import './ctx';
 import './dragobject';
 import './formulier';
 import './forum';

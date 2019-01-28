@@ -30,8 +30,7 @@
 
 <script>
 	import ProgressBar from '../common/ProgressBar';
-	import initContext from '../../context';
-	import $ from 'jquery';
+	import {init} from "../../ctx";
 
 	export default {
 		name: 'PeilingOptie',
@@ -56,9 +55,9 @@
 		methods: {
 			initBeschrijvingContext() {
 				if (this.kanStemmen) {
-					initContext($(this.$refs.beschrijving));
+					init(this.$refs.beschrijving);
 				} else {
-					initContext($(this.$refs.beschrijving_gestemd));
+					init(this.$refs.beschrijving_gestemd);
 				}
 			}
 		},
