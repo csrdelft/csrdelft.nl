@@ -26,7 +26,7 @@
 				hint="Titel"
 				v-model="event.title"
 				v-on:next="event.title.length > 0 ? gotoStep(3, true) : null"
-				:error="event.title.length === 0 ? 'Vul een titel in' : ''">
+				:error="event.title.length === 0 ? 'Geef je activiteit een titel' : ''">
 			</TextInput>
 
 		</Stap>
@@ -34,7 +34,7 @@
 		<Stap
 			title="Beschrijf je activiteit"
 			:step="3"
-			:show-done="true"
+			:show-done="this.event.shortDescription.length > 0"
 			v-on:done="gotoStep(4)">
 
 			<TextInput
@@ -42,7 +42,8 @@
 				:max-length="250"
 				hint="Korte beschrijving"
 				:multiple-lines="5"
-				v-model="event.shortDescription">
+				v-model="event.shortDescription"
+				:error="event.shortDescription.length === 0 ? 'Omschrijf kort je activiteit' : ''">
 			</TextInput>
 
 			<TextInput
@@ -54,6 +55,62 @@
 
 		</Stap>
 
+		<Stap
+			title="Wanneer is je activiteit?"
+			:step="4"
+			:show-done="this.event.shortDescription.length > 0"
+			v-on:done="gotoStep(5)">
+		</Stap>
+
+		<Stap
+			title="Hoe laat?"
+			:step="5"
+			:show-done="true"
+			v-on:done="gotoStep(6)">
+		</Stap>
+
+		<Stap
+			title="Waar?"
+			:step="6"
+			:show-done="true"
+			v-on:done="gotoStep(7)">
+
+			<TextInput
+				name="location"
+				hint="Locatie"
+				v-model="event.location"
+				v-on:next="event.location.length > 0 ? gotoStep(7, true) : null"
+				:error="event.location.length === 0 ? 'Geef aan waar je evenement plaats zal vinden' : ''">
+			</TextInput>
+
+		</Stap>
+
+		<Stap
+			title="Inketzen"
+			:step="7"
+			:show-done="true"
+			v-on:done="gotoStep(8)">
+		</Stap>
+
+		<Stap
+			title="Wie mag er komen?"
+			:step="8"
+			:show-done="true"
+			v-on:done="gotoStep(9)">
+		</Stap>
+
+		<Stap
+			title="Wat wil je weten?"
+			:step="9"
+			:show-done="true"
+			v-on:done="gotoStep(10)">
+		</Stap>
+
+		<Stap
+			title="Laatste check"
+			:step="10"
+			v-on:done="alert('Joepie')">
+		</Stap>
 	</div>
 </template>
 
@@ -85,7 +142,28 @@
 				type: null,
 				title: '',
 				shortDescription: '',
-				readMore: ''
+				readMore: '',
+				multipleDays: false,
+				startDate: '',
+				endDate: '',
+				entireDay: false,
+				startTime: '',
+				endTime: '',
+				location: '',
+				canEnter: true,
+				enterStart: false,
+				enterStartMoment: '',
+				enterEnd: false,
+				enterEndMoment: '',
+				canExit: true,
+				exitEnd: false,
+				exitEndMoment: '',
+				hasLimit: false,
+				limit: null,
+				hasPermission: false,
+				permission: '',
+				hasChoice: false,
+				choices: '',
 			},
 			step: 1,
 		}),
