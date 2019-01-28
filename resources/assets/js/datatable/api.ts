@@ -49,7 +49,7 @@ function initDataTable(el: HTMLElement) {
 	$el.dataTable().api().search(search);
 
 	table.on('page', () => table.rows({selected: true}).deselect());
-	table.on('childRow.dt', (event, data) => ctx.initContext(data.container));
+	table.on('childRow.dt', (event, data) => ctx.initContext(data.container.get(0)));
 }
 
 /****************************
