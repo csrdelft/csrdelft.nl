@@ -392,7 +392,7 @@
 					<div class="col-12 saldografiek">
 						<div class="label">Saldografiek:</div>
 						<div class="clear-left"></div>
-						<div class="ctx-saldografiek" data-uid="{{$profiel->uid}}"
+						<div class="ctx-saldografiek verborgen" data-uid="{{$profiel->uid}}"
 								 data-closed="{{json_encode(!is_ingelogd_account($profiel->uid))}}"
 								 style="width: 670px; height: 220px;"></div>
 					</div>
