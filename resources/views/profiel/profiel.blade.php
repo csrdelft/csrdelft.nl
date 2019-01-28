@@ -394,7 +394,7 @@
 						<div class="clear-left"></div>
 						<div class="ctx-saldografiek verborgen" data-uid="{{$profiel->uid}}"
 								 data-closed="{{json_encode(!is_ingelogd_account($profiel->uid))}}"
-								 style="width: 670px; height: 220px;"></div>
+								 style="width: 670px;"></div>
 					</div>
 				@endif
 			</div>
