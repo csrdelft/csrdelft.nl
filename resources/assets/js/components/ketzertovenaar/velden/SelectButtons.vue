@@ -12,17 +12,9 @@
 		name: 'SelectButtons',
 		components: {},
 		props: {
-			name: {
-				type: String,
-				required: true
-			},
-			options: {
-				type: Object,
-				required: true,
-			},
-			value: {
-				type: String,
-			},
+			name: {type: String, required: true},
+			options: {type: Object, required: true},
+			value: String,
 		},
 		data: () => ({
 			selected: ''
@@ -34,6 +26,7 @@
 		methods: {
 			update() {
 				this.$emit('input', this.selected);
+				this.$emit('done');
 			},
 		}
 	}
@@ -43,9 +36,14 @@
 	.select-buttons {
 		font-size: 0;
 		display: grid;
-		grid-template-columns: 50% 50%;
+		grid-template-columns: 1fr 1fr;
 		grid-column-gap: 10px;
 		grid-row-gap: 7px;
+		margin-bottom: 20px;
+	}
+
+	.select-buttons:last-child {
+		margin-bottom: 40px;
 	}
 
 	@media screen and (max-width: 400px) {
@@ -70,9 +68,10 @@
 		border: 1px solid #cccccc;
 		border-radius: 3px;
 		margin: 0;
+		transition: background-color 0.1s, color 0.1s, border-color 0.1s;
 	}
 
-	input:checked + label {
+	input:checked + label, label:hover {
 		background: #29abe2;
 		color: white;
 		border-color: #29abe2;
