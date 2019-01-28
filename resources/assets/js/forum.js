@@ -3,7 +3,6 @@ import {CsrBBPreview} from './bbcode';
 import {domUpdate} from './context';
 import {bbCodeSet} from './bbcode-set';
 import {activeerLidHints} from './bbcode-hints';
-import initContext from './context';
 
 function toggleForumConceptBtn(enable) {
 	let $concept = $('#forumConcept');
