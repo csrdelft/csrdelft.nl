@@ -78,7 +78,7 @@ $.extend(window, {
 		// See view/groepen/leden/GroepTabView.class.php
 		domUpdate,
 		// See view/formulier/invoervelden/LidField.class.php
-		initContext: ctx.initContext,
+		initContext: (el: HTMLElement) => ctx.initContext(el),
 	},
 	courant: {
 		// See templates/courant/courantbeheer.tpl
