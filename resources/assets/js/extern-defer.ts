@@ -3,7 +3,7 @@
  */
 import $ from 'jquery';
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
-import ctx from './ctx';
+import {init} from './ctx';
 import './fotoalbum/FotoAlbum';
 
 require('lightbox2');
@@ -33,7 +33,6 @@ window.bbcode = {
 };
 
 const $window = $(window);
-const $body = $('body');
 const $header = $('#header');
 let $banner = $('#banner');
 
@@ -106,4 +105,4 @@ $window.on('scroll', () => {
 $window.on('resize', () => $window.trigger('scroll'));
 $window.trigger('scroll');
 
-ctx.initContext(document.body);
+init(document.body);

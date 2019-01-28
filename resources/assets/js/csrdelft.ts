@@ -4,7 +4,7 @@
 
 import $ from 'jquery';
 
-import ctx from './ctx';
+import {init} from './ctx';
 
 function initGeolocation() { // eslint-disable-line
 
@@ -117,7 +117,7 @@ function zijbalkScrollFixed() {
 $(() => {
 	zijbalkScrollFixed();
 	initSluitMeldingen();
-	ctx.initContext(document.body);
+	init(document.body);
 
 	const modal = $('#modal');
 	if (modal.html() !== '') {

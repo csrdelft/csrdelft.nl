@@ -1,37 +1,49 @@
 /**
  * Context waar aan gehangen kan worden.
+ *
+ * Als de pagina wordt geladen of als er een nieuw object aan de dom wordt gehangen, wordt met de selector gezocht die
+ * aan deze klasse is gegeven. Als deze selector gevonden is in de update aan de dom, wordt de handler uitgevoerd.
  */
-interface ContextListener {
+interface ContextHandler {
 	selector: string;
-	callback: (el: Element) => void;
+	handler: ContextHandlerFunction;
 }
 
-interface InitType {
-	[k: string]: (el: Element) => void;
+interface ContextHandlers {
+	[selector: string]: ContextHandlerFunction;
 }
+
+type ContextHandlerFunction = (el: Element) => void;
 
 class Context {
-	private initFunctions: ContextListener[] = [];
+	private handlers: ContextHandler[] = [];
 
-	public init(selectors: InitType) {
+	public addHandlers(selectors: ContextHandlers) {
 		for (const selector of Object.keys(selectors)) {
-			this.addContext(selector, selectors[selector]);
+			this.addHandler(selector, selectors[selector]);
 		}
 	}
 
-	public addContext(selector: string, callback: (el: Element) => void) {
-		this.initFunctions.push({selector, callback});
+	public addHandler(selector: string, handler: ContextHandlerFunction) {
+		this.handlers.push({selector, handler});
 	}
 
-	public initContext(parent: Element) {
-		for (const {selector, callback} of this.initFunctions) {
+	public init(parent: Element) {
+		for (const {selector, handler} of this.handlers) {
 			if (selector === '') {
-				callback(parent);
+				handler(parent);
 			} else {
-				parent.querySelectorAll(selector).forEach(callback);
+				parent.querySelectorAll(selector).forEach(handler);
 			}
 		}
 	}
 }
 
-export default new Context();
+/**
+ * Singleton Context.
+ */
+const ctx = new Context();
+
+export default ctx;
+
+export const init = (parent: Element) => ctx.init(parent);

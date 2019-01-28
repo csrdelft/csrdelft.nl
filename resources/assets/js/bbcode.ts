@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import ctx from './ctx';
+import {init} from './ctx';
 import {singleLineString} from './util';
 
 /**
@@ -25,7 +25,7 @@ export const CsrBBPreview = (sourceId: string, targetId: string) => {
 		data: encodeURIComponent(bbcode),
 	}).done((data) => {
 		$(targetId).html(data);
-		ctx.initContext(document.querySelector(targetId)!);
+		init(document.querySelector(targetId)!);
 		$(targetId).show();
 	}).fail((error) => {
 		alert(error);

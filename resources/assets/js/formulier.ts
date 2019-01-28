@@ -1,13 +1,24 @@
 import $ from 'jquery';
 import {ajaxRequest} from './ajax';
+import {bbCodeSet} from './bbcode-set';
 import {domUpdate} from './context';
-import ctx from './ctx';
+import ctx, {init} from './ctx';
 import {DatatableResponse, fnGetSelection, fnUpdateDataTable} from './datatable/api';
 
 import {modalClose, modalOpen} from './modal';
 
 import {redirect, reload} from './util';
-import SubmitEvent = JQuery.SubmitEvent;
+
+ctx.addHandlers({
+	'.InlineFormToggle': (el) => el.addEventListener('click.toggle', formToggle),
+	'.SubmitChange': (el) => el.addEventListener('change.change', formSubmit),
+	'.cancel': (el) => el.addEventListener('click.cancel', formCancel),
+	'.reset': (el) => el.addEventListener('click.reset', formReset),
+	'.submit': (el) => el.addEventListener('click.submit', formSubmit),
+	'form': (el) => el.addEventListener('submit', formSubmit),
+	'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
+	'time.timeago': (el) => $(el).timeago(),
+});
 
 export function formIsChanged(form: JQuery<EventTarget>) {
 	let changed = false;
@@ -142,7 +153,7 @@ export function formSubmit(event: Event) {
 					fnUpdateDataTable('#' + tableId, response);
 					if (response.modal) {
 						modalOpen(response.modal);
-						ctx.initContext(document.querySelector('#modal')!);
+						init(document.querySelector('#modal')!);
 					} else {
 						modalClose();
 					}

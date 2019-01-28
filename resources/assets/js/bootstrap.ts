@@ -7,14 +7,12 @@ import $ from 'jquery';
 import Vue from 'vue';
 import {ketzerAjax} from './ajax';
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
-import {bbCodeSet} from './bbcode-set';
 import {domUpdate} from './context';
 import {importAgenda} from './courant';
-import ctx from './ctx';
+import ctx, {init} from './ctx';
 import './datatable/bootstrap';
-import {formCancel, formInlineToggle, formReset, formSubmit, formToggle} from './formulier';
+import {formCancel, formInlineToggle, formSubmit} from './formulier';
 import {forumBewerken, saveConceptForumBericht} from './forum';
-import {knopGet, knopPost, knopVergroot} from './knop';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';
 
 declare global {
@@ -78,7 +76,7 @@ $.extend(window, {
 		// See view/groepen/leden/GroepTabView.class.php
 		domUpdate,
 		// See view/formulier/invoervelden/LidField.class.php
-		initContext: (el: HTMLElement) => ctx.initContext(el),
+		init: (el: HTMLElement) => init(el),
 	},
 	courant: {
 		// See templates/courant/courantbeheer.tpl
@@ -139,12 +137,8 @@ $.timeago.settings.strings = {
 	years: '%d jaar',
 };
 
-ctx.init({
+ctx.addHandlers({
 	'': (el) => $(el).uitooltip({track: true}),
-	'.InlineFormToggle': (el) => el.addEventListener('click.toggle', formToggle),
-	'.SubmitChange': (el) => el.addEventListener('change.change', formSubmit),
-	'.cancel': (el) => el.addEventListener('click.cancel', formCancel),
-	'.get': (el) => el.addEventListener('click.get', knopGet),
 	'.hoverIntent': (el) => $(el).hoverIntent({
 		over() {
 			$(this).find('.hoverIntentContent').fadeIn();
@@ -154,12 +148,5 @@ ctx.init({
 		},
 		timeout: 250,
 	}),
-	'.post': (el) => el.addEventListener('click.post', knopPost),
-	'.reset': (el) => el.addEventListener('click.reset', formReset),
-	'.submit': (el) => el.addEventListener('click.submit', formSubmit),
-	'.vergroot': (el) => el.addEventListener('click.vergroot', knopVergroot),
 	'.vue-context': (el) => new Vue({el}),
-	'form': (el) => el.addEventListener('submit', formSubmit),
-	'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
-	'time.timeago': (el) => $(el).timeago(),
 });

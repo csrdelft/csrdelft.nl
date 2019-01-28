@@ -1,15 +1,9 @@
 import $ from 'jquery';
-import {activeerLidHints} from './bbcode-hints';
-import ctx from './ctx';
+import ctx, {init} from './ctx';
 import {modalClose, modalOpen} from './modal';
-import {html} from './util';
+import {html, htmlParse} from './util';
 
-ctx.init({
-	'div.bb-img-loading': initLazyImages,
-	'textarea.BBCodeField': activeerLidHints,
-});
-
-function initLazyImages(el: HTMLElement) {
+ctx.addHandler('div.bb-img-loading', (el: HTMLElement) => {
 	const content = html`<img
 													class="bb-img"
 													alt="${el.getAttribute('title')!}"
@@ -33,15 +27,15 @@ function initLazyImages(el: HTMLElement) {
 	};
 
 	el.append(content);
-}
+});
 
-export function domUpdate(this: HTMLElement|void, htmlString: string) {
+export function domUpdate(this: HTMLElement | void, htmlString: string) {
 	htmlString = $.trim(htmlString);
 	if (htmlString.substring(0, 9) === '<!DOCTYPE') {
 		alert('response error');
 		document.write(htmlString);
 	}
-	const elements = html`${htmlString}`;
+	const elements = htmlParse(htmlString);
 	$(elements).each(function () {
 		const id = $(this).attr('id');
 
@@ -62,7 +56,7 @@ export function domUpdate(this: HTMLElement|void, htmlString: string) {
 				$(this).prependTo('#maalcie-tabel tbody:visible:first').show().effect('highlight'); // FIXME: make generic
 			}
 		}
-		ctx.initContext(this);
+		init(this);
 
 		if (id === 'modal') {
 			modalOpen();

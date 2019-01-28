@@ -7,7 +7,7 @@ import {formatBedrag, html} from './util';
 
 moment.locale('nl');
 
-ctx.init({
+ctx.addHandlers({
 	'.ctx-deelnamegrafiek': initDeelnamegrafiek,
 	'.ctx-graph-bar': initBar,
 	'.ctx-graph-line': initLine,

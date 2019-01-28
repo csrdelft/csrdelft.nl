@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import ctx from '../ctx';
+import {init} from '../ctx';
 import {PersistentEntity} from './api';
 import Settings = DataTables.Settings;
 
@@ -8,7 +8,7 @@ export default {
 	createdRow(this: JQuery, tr, data: PersistentEntity) {
 		const table = this;
 		$(tr).attr('data-uuid', data.UUID);
-		ctx.initContext(tr as HTMLElement);
+		init(tr as HTMLElement);
 
 		$(tr).children().each((columnIndex, td) => {
 			// Init custom buttons in rows

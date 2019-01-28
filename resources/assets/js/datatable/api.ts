@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import ctx from '../ctx';
+import ctx, {init} from '../ctx';
 import render from './render';
 import Settings = DataTables.Settings;
 import ColumnSettings = DataTables.ColumnSettings;
@@ -27,7 +27,7 @@ declare global {
 	}
 }
 
-ctx.addContext('.ctx-datatable', initDataTable);
+ctx.addHandler('.ctx-datatable', initDataTable);
 
 function initDataTable(el: HTMLElement) {
 	const $el = $(el);
@@ -49,7 +49,7 @@ function initDataTable(el: HTMLElement) {
 	$el.dataTable().api().search(search);
 
 	table.on('page', () => table.rows({selected: true}).deselect());
-	table.on('childRow.dt', (event, data) => ctx.initContext(data.container.get(0)));
+	table.on('childRow.dt', (event, data) => init(data.container.get(0)));
 }
 
 /****************************
@@ -68,7 +68,7 @@ export function fnUpdateDataTable(tableId: string, response: DatatableResponse) 
 				table.row($tr).remove();
 			} else {
 				table.row($tr).data(row);
-				ctx.initContext($tr.get(0));
+				init($tr.get(0));
 			}
 		} else if ($tr.length === 0) {
 			table.row.add(row);

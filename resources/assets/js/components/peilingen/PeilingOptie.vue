@@ -30,7 +30,7 @@
 
 <script>
 	import ProgressBar from '../common/ProgressBar';
-	import ctx from "../../ctx";
+	import {init} from "../../ctx";
 
 	export default {
 		name: 'PeilingOptie',
@@ -55,9 +55,9 @@
 		methods: {
 			initBeschrijvingContext() {
 				if (this.kanStemmen) {
-					ctx.initContext(this.$refs.beschrijving);
+					init(this.$refs.beschrijving);
 				} else {
-					ctx.initContext(this.$refs.beschrijving_gestemd);
+					init(this.$refs.beschrijving_gestemd);
 				}
 			}
 		},
