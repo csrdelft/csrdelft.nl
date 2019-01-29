@@ -10,11 +10,11 @@ import {modalClose, modalOpen} from './modal';
 import {redirect, reload} from './util';
 
 ctx.addHandlers({
-	'.InlineFormToggle': (el) => el.addEventListener('click.toggle', formToggle),
-	'.SubmitChange': (el) => el.addEventListener('change.change', formSubmit),
-	'.cancel': (el) => el.addEventListener('click.cancel', formCancel),
-	'.reset': (el) => el.addEventListener('click.reset', formReset),
-	'.submit': (el) => el.addEventListener('click.submit', formSubmit),
+	'.InlineFormToggle': (el) => el.addEventListener('click', formToggle),
+	'.SubmitChange': (el) => el.addEventListener('change', formSubmit),
+	'.cancel': (el) => el.addEventListener('click', formCancel),
+	'.reset': (el) => el.addEventListener('click', formReset),
+	'.submit': (el) => el.addEventListener('click', formSubmit),
 	'form': (el) => el.addEventListener('submit', formSubmit),
 	'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
 	'time.timeago': (el) => $(el).timeago(),
@@ -83,7 +83,7 @@ export function formReset(event: Event, form?: JQuery<any>) {
  * @returns {boolean}
  */
 export function formSubmit(event: Event) {
-	const target = event.target as HTMLFormElement;
+	const target = event.target as Element;
 	const $target = $(target);
 	if ($target.hasClass('confirm')) {
 		let q = $target.attr('title');
@@ -98,13 +98,9 @@ export function formSubmit(event: Event) {
 		}
 	}
 
-	let form = $target.closest('form');
+	const form = $target.closest('form');
 	if (!form.hasClass('Formulier')) {
-		if (event) {
-			form = $(target.form);
-		} else {
-			return false;
-		}
+		return false;
 	}
 
 	if (form.hasClass('PreventUnchanged') && !formIsChanged(form)) {

@@ -4,6 +4,7 @@
 import $ from 'jquery';
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
 import {init} from './ctx';
+import './formulier';
 import './fotoalbum/FotoAlbum';
 
 require('lightbox2');
