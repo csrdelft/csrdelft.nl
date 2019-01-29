@@ -1,4 +1,3 @@
-import './bibliotheek';
 import './bootstrap';
 import './csrdelft';
 import './ctx';

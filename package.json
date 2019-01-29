@@ -15,6 +15,7 @@
 		"@babel/plugin-proposal-class-properties": "^7.2.3",
 		"@babel/plugin-proposal-decorators": "^7.3.0",
 		"@babel/plugin-syntax-dynamic-import": "^7.2.0",
+		"@babel/plugin-transform-runtime": "^7.2.0",
 		"@babel/preset-env": "^7.2.3",
 		"@types/bootstrap": "^4.2.0",
 		"@types/chart.js": "^2.7.42",
@@ -70,6 +71,7 @@
 		"webpack-manifest-plugin": "^2.0.4"
 	},
 	"dependencies": {
+		"@babel/runtime": "^7.3.1",
 		"autosize": "^1.18.13",
 		"axios": "^0.18",
 		"bootstrap": "^4.0.0",

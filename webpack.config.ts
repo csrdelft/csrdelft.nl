@@ -128,6 +128,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 							plugins: [
 								'@babel/syntax-dynamic-import',
 								'@babel/plugin-proposal-class-properties',
+								'@babel/plugin-transform-runtime',
 								['@babel/plugin-proposal-decorators', {decoratorsBeforeExport: true}],
 							],
 						},
