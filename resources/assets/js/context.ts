@@ -21,12 +21,15 @@ ctx.addHandler('div.bb-img-loading', (el: HTMLElement) => {
 		const foto = content.getAttribute('src')!.indexOf('/plaetjes/fotoalbum/') >= 0;
 		const video = $(el).parent().parent().hasClass('bb-video-preview');
 		const hasAnchor = $(el).closest('a').length !== 0;
+		const parent = el.parentElement!;
 		if (!foto && !video && !hasAnchor) {
 			const link = html`<a class="lightbox-link" href="${el.getAttribute('src')!}" data-lightbox="page-lightbox"></a>`;
 			link.append(content);
-			el.replaceWith(link);
+			parent.removeChild(el);
+			parent.append(link);
 		} else {
-			el.replaceWith(content);
+			parent.removeChild(el);
+			parent.append(content);
 		}
 	});
 });
