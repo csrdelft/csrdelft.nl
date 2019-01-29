@@ -4,7 +4,8 @@ import Bloodhound from 'corejs-typeahead';
 /*
  *	Bibliotheekjavascriptcode.
  */
-$(function ($) {
+$(async function ($) {
+	await import('./datatable/bootstrap');
 	/*********************************************
 	 * Catalogus
 	 *********************************************/

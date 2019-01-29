@@ -10,7 +10,6 @@ import {bbvideoDisplay, CsrBBPreview} from './bbcode';
 import {domUpdate} from './context';
 import {importAgenda} from './courant';
 import ctx, {init} from './ctx';
-import './datatable/bootstrap';
 import {formCancel, formInlineToggle, formSubmit} from './formulier';
 import {forumBewerken, saveConceptForumBericht} from './forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';

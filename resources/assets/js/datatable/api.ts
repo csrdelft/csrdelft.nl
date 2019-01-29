@@ -29,7 +29,9 @@ declare global {
 
 ctx.addHandler('.ctx-datatable', initDataTable);
 
-function initDataTable(el: HTMLElement) {
+async function initDataTable(el: HTMLElement) {
+	await import('./bootstrap');
+
 	const $el = $(el);
 
 	const settingsJson = $el.data('settings');

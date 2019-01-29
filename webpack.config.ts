@@ -1,16 +1,17 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const {VueLoaderPlugin} = require('vue-loader');
-const ManifestPlugin = require('webpack-manifest-plugin');
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+import path from 'path';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+import {VueLoaderPlugin} from 'vue-loader';
+import webpack from 'webpack';
+import ManifestPlugin from 'webpack-manifest-plugin';
 
-const devMode = process.env.NODE_ENV !== 'production';
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 const contextPath = path.resolve(__dirname, 'resources/assets');
 
 // De Webpack configuratie.
-module.exports = (env: string, argv: any) => ({
+const config: (env: string, argv: any) => webpack.Configuration = (env, argv) => ({
 	mode: 'development',
 	context: contextPath,
 	entry: {
@@ -52,7 +53,7 @@ module.exports = (env: string, argv: any) => ({
 		// Vanuit javascript kun je automatisch .js en .ts bestanden includen.
 		extensions: ['.ts', '.js', '.vue'],
 		alias: {
-			'vue$': 'vue/dist/vue.esm.js',
+			vue$: 'vue/dist/vue.esm.js',
 		},
 	},
 	optimization: {
@@ -68,6 +69,9 @@ module.exports = (env: string, argv: any) => ({
 		}),
 		new VueLoaderPlugin(),
 		new ManifestPlugin(),
+		new MomentLocalesPlugin({
+			localesToKeep: ['nl'],
+		}),
 	],
 	module: {
 		// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
@@ -170,7 +174,7 @@ module.exports = (env: string, argv: any) => ({
 				test: /\.scss$/,
 				use: [
 					{
-						loader: MiniCssExtractPlugin.loader,
+						loader: MiniCssExtractPlugin.loader as string, // Om ts tevreden te houden.
 						options: {
 							// De css bestanden zitten in de css map, / is dus te vinden op ../
 							publicPath: '../',
@@ -233,3 +237,5 @@ module.exports = (env: string, argv: any) => ({
 		],
 	},
 });
+
+export default config;
