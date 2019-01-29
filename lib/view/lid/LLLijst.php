@@ -19,7 +19,8 @@ class LLLijst extends LLWeergave {
 	}
 
 	public function viewHeader() {
-		echo '<table class="zoekResultaat" id="zoekResultaat">';
+		echo '<table class="zoekResultaat ctx-offline-datatable"
+						id="zoekResultaat" data-display-length="50" data-length-change="false">';
 		echo '<thead>';
 		$this->viewVeldnamen();
 		echo '</thead><tbody>';
@@ -51,22 +52,6 @@ class LLLijst extends LLWeergave {
 					$aoColumns[] = 'null';
 			}
 		}
-		?>
-        <script type="text/javascript">
-            jQuery(document).ready(function ($) {
-                $("#zoekResultaat").DataTable({
-                    "aaSorting": [],
-                    "bStateSave": true,
-                    "oLanguage": {
-                        "sSearch": "Zoeken in selectie:"
-                    },
-                    "iDisplayLength": 50,
-                    "bInfo": false,
-                    "bLengthChange": false,
-                    "aoColumns": [<?php echo implode(', ', $aoColumns); ?>]
-                });
-            });
-        </script><?php
 	}
 
 	public function viewLid(Profiel $profiel) {

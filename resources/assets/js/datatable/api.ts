@@ -1,6 +1,7 @@
 import $ from 'jquery';
 
 import ctx, {init} from '../ctx';
+import {parseData} from '../util';
 import render from './render';
 import Settings = DataTables.Settings;
 import ColumnSettings = DataTables.ColumnSettings;
@@ -28,6 +29,7 @@ declare global {
 }
 
 ctx.addHandler('.ctx-datatable', initDataTable);
+ctx.addHandler('.ctx-offline-datatable', initOfflineDataTable);
 
 async function initDataTable(el: HTMLElement) {
 	await import('./bootstrap');
@@ -52,6 +54,12 @@ async function initDataTable(el: HTMLElement) {
 
 	table.on('page', () => table.rows({selected: true}).deselect());
 	table.on('childRow.dt', (event, data) => init(data.container.get(0)));
+}
+
+async function initOfflineDataTable(el: HTMLElement) {
+	await import('./bootstrap');
+
+	$(el).DataTable(parseData(el));
 }
 
 /****************************

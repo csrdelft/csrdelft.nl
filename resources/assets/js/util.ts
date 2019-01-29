@@ -163,3 +163,23 @@ export function preloadImage(url: string, callback: () => void) {
 	img.src = url;
 	img.onload = callback;
 }
+
+export function parseData(el: HTMLElement) {
+	const data = el.dataset;
+
+	const out: any = {};
+
+	for (const item of Object.keys(data)) {
+		if (data[item] === 'false') {
+			out[item] = false;
+		} else if (data[item] === 'true') {
+			out[item] = true;
+		} else if (!isNaN(Number(data[item]))) {
+			out[item] = Number(data[item]);
+		} else {
+			out[item] = data[item];
+		}
+	}
+
+	return out;
+}

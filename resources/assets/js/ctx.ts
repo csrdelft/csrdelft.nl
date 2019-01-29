@@ -33,7 +33,9 @@ class Context {
 			if (selector === '') {
 				handler(parent);
 			} else {
-				parent.querySelectorAll(selector).forEach(handler);
+				for (const el of Array.from(parent.querySelectorAll(selector))) {
+					handler(el);
+				}
 			}
 		}
 	}

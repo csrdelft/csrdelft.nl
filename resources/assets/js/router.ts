@@ -8,4 +8,3 @@ route('/instellingen', () => import(/* webpackChunkName: "instellingen" */ './in
 route('/documenten', () => import(/* webpackChunkName: "documenten" */ './documenten'));
 route('/fotoalbum', () => import(/* webpackChunkName: "fotoalbum" */'./fotoalbum/FotoAlbum'));
 route('/bibliotheek', () => import(/* webpackChunkName: "bibliotheek" */'./bibliotheek'));
-route('/ledenlijst', () => import(/* webpackChunkName: "datatable" */'./datatable/bootstrap'));
