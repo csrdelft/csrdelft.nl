@@ -54,7 +54,7 @@ class LLLijst extends LLWeergave {
 		?>
         <script type="text/javascript">
             jQuery(document).ready(function ($) {
-                $("#zoekResultaat").dataTable({
+                $("#zoekResultaat").DataTable({
                     "aaSorting": [],
                     "bStateSave": true,
                     "oLanguage": {
