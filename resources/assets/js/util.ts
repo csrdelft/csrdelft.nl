@@ -157,3 +157,9 @@ export function html(strings: TemplateStringsArray, ...values: string[]): HTMLEl
 export function htmlParse(htmlString: string) {
 	return new DOMParser().parseFromString(htmlString, 'text/html').body.children;
 }
+
+export function preloadImage(url: string, callback: () => void) {
+	const img = new Image();
+	img.src = url;
+	img.onload = callback;
+}

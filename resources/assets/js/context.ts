@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import ctx, {init} from './ctx';
 import {modalClose, modalOpen} from './modal';
-import {html, htmlParse} from './util';
+import {html, htmlParse, preloadImage} from './util';
 
 ctx.addHandler('div.bb-img-loading', (el: HTMLElement) => {
 	const content = html`<img
@@ -16,17 +16,19 @@ ctx.addHandler('div.bb-img-loading', (el: HTMLElement) => {
 		el.style.height = '16px';
 		el.classList.replace('bb-img-loading', 'bb-img');
 	};
-	content.onload = () => {
+
+	preloadImage(el.getAttribute('src')!, () => {
 		const foto = content.getAttribute('src')!.indexOf('/plaetjes/fotoalbum/') >= 0;
 		const video = $(el).parent().parent().hasClass('bb-video-preview');
 		const hasAnchor = $(el).closest('a').length !== 0;
-		el.parentElement!.replaceWith(el);
 		if (!foto && !video && !hasAnchor) {
-			$(el).wrap(`<a class="lightbox-link" href="${$(el).attr('src')}" data-lightbox="page-lightbox"></a>`);
+			const link = html`<a class="lightbox-link" href="${el.getAttribute('src')!}" data-lightbox="page-lightbox"></a>`;
+			link.append(content);
+			el.replaceWith(link);
+		} else {
+			el.replaceWith(content);
 		}
-	};
-
-	el.append(content);
+	});
 });
 
 export function domUpdate(this: HTMLElement | void, htmlString: string) {

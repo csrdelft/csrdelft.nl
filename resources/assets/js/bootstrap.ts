@@ -55,6 +55,7 @@ require('./lib/jquery-ui-sliderAccess');
 require('jquery-ui-timepicker-addon');
 require('./lib/jquery-ui-timepicker-nl');
 require('jquery.maskedinput');
+require('lightbox2');
 
 /**
  * Globale objecten gebruikt in PHP code.
