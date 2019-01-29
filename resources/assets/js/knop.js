@@ -9,9 +9,9 @@ import {redirect, reload} from './util';
 import ctx, {init} from './ctx';
 
 ctx.addHandlers({
-	'.get': (el) => el.addEventListener('click.get', knopGet),
-	'.post': (el) => el.addEventListener('click.post', knopPost),
-	'.vergroot': (el) => el.addEventListener('click.vergroot', knopVergroot),
+	'.get': (el) => el.addEventListener('click', knopGet),
+	'.post': (el) => el.addEventListener('click', knopPost),
+	'.vergroot': (el) => el.addEventListener('click', knopVergroot),
 	'[data-buttons=radio]': (el) => {
 		for (const btn of el.querySelectorAll('a.btn')) {
 			btn.addEventListener('click',
