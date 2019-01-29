@@ -19,7 +19,7 @@
 							 :id="'PeilingOptie' + id"
 							 :disabled="isDisabled"
 							 :checked="selected"
-							 @change="$emit('input', $event.target.checked)" />
+							 @change="$emit('input', $event.target.checked)"/>
 				<label :for="'PeilingOptie' + id"
 							 class="form-check-label">{{ titel }}</label>
 			</div>
@@ -28,54 +28,68 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
+	import Vue from 'vue';
+	import {Component, Prop, Watch} from 'vue-property-decorator';
+	import {init} from '../../ctx';
 	import ProgressBar from '../common/ProgressBar';
-	import {init} from "../../ctx";
 
-	export default {
-		name: 'PeilingOptie',
+	@Component({
 		components: {ProgressBar},
-		props: {
-			id: Number,
-			peilingId: Number,
-			titel: String,
-			beschrijving: String,
-			stemmen: Number,
-			magStemmen: Boolean,
-			aantalGestemd: Number,
-			heeftGestemd: Boolean,
-			keuzesOver: Boolean,
-			selected: Boolean
-		},
-		mounted() {
-			this.initBeschrijvingContext();
+	})
+	export default class PeilingOptie extends Vue {
+		@Prop()
+		private id: string;
+		@Prop()
+		private peilingId: number;
+		@Prop()
+		private titel: string;
+		@Prop()
+		private beschrijving: string;
+		@Prop()
+		private stemmen: number;
+		@Prop()
+		private magStemmen: boolean;
+		@Prop()
+		private aantalGestemd: number;
+		@Prop()
+		private heeftGestemd: boolean;
+		@Prop()
+		private keuzesOver: boolean;
+		@Prop()
+		private selected: boolean;
 
-			this.$watch('kanStemmen', () => this.initBeschrijvingContext());
-		},
-		methods: {
-			initBeschrijvingContext() {
-				if (this.kanStemmen) {
-					init(this.$refs.beschrijving);
-				} else {
-					init(this.$refs.beschrijving_gestemd);
-				}
-			}
-		},
-		computed: {
-			kanStemmen() {
-				return this.magStemmen && !this.heeftGestemd;
-			},
-			progress() {
-				return (this.stemmen / this.aantalGestemd * 100).toFixed(2);
-			},
-			progressText() {
-				return `${this.progress}% (${this.stemmen})`;
-			},
-			isDisabled() {
-				return !this.selected && !this.keuzesOver;
-			}
+		protected mounted() {
+			this.initBeschrijvingContext();
 		}
-	};
+
+		@Watch('kanStemmen')
+		protected initBeschrijvingContext() {
+			setTimeout(() => {
+				if (this.kanStemmen) {
+					init(this.$refs.beschrijving as Element);
+				} else {
+					init(this.$refs.beschrijving_gestemd as Element);
+				}
+			});
+		}
+
+		protected get kanStemmen() {
+			return this.magStemmen && !this.heeftGestemd;
+		}
+
+		protected get progress() {
+			return (this.stemmen / this.aantalGestemd * 100).toFixed(2);
+		}
+
+		protected get progressText() {
+			return `${this.progress}% (${this.stemmen})`;
+		}
+
+		protected get isDisabled() {
+			return !this.selected && !this.keuzesOver;
+		}
+	}
 </script>
 
 <style scoped>
