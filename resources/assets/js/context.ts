@@ -25,9 +25,9 @@ ctx.addHandler('div.bb-img-loading', (el: HTMLElement) => {
 		if (!foto && !video && !hasAnchor) {
 			const link = html`<a class="lightbox-link" href="${el.getAttribute('src')!}" data-lightbox="page-lightbox"></a>`;
 			link.append(content);
-			parent.replaceChild(el, link);
+			parent.replaceChild(link, el);
 		} else {
-			parent.replaceChild(el, content);
+			parent.replaceChild(content, el);
 		}
 	});
 });
