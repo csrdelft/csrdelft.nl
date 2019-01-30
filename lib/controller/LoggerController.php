@@ -55,7 +55,8 @@ $message
 $error
 ```
 • Moment `$moment`
-• Bestand `$url:$line:$col`
+• Bestand `$url`
+• Positie `$line:$col`
 • Pagina `$pagina`
 • Veroorzaakt door `{$_SESSION['_uid']}`
 • Browser `{$_SERVER['HTTP_USER_AGENT']}`
