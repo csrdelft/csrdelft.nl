@@ -66,7 +66,6 @@ $.extend(window, {
 	Dropzone,
 	bbcode: {
 		// See view/formulier/invoervelden/BBCodeField.class.php
-		// See templates/roodschopper/roodschopper.tpl
 		// See templates/mededelingen/mededeling.tpl
 		// See templates/courant/courantbeheer.tpl
 		// See blade_templates/forum/partial/post_form.blade.php

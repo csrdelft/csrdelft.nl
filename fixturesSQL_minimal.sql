@@ -1945,7 +1945,6 @@ INSERT INTO `menus` (`item_id`, `parent_id`, `volgorde`, `tekst`, `link`, `recht
 (60, 4, 0, 'Bijbelrooster', '/bijbelrooster', 'P_PUBLIC', 1),
 (61, 5, 0, 'Bibliotheek', '/bibliotheek', 'P_PUBLIC', 1),
 (66, 4, 0, 'Corvee', '/corvee', 'P_CORVEE_IK', 1),
-(73, 3, 0, 'Roodschopper', '/tools/roodschopper.php', 'Commissie:SocCie:Fiscus,Commissie:MaalCie:Fiscus', 1),
 (74, 3, 0, 'Streeplijstgenerator', '/tools/streeplijst.php', 'P_LEDEN_READ', 1),
 (76, 3, 0, 'Saldostatistieken SocCie', '/pagina/saldostatistiekensoccie', 'Commissie:SocCie:Praeses,Commissie:SocCie:Fiscus,Commissie:SocCie:Provisor', 1),
 (80, 21, 10, 'Maaltijdenbeheer', '/maaltijdenbeheer', 'P_MAAL_MOD', 1),

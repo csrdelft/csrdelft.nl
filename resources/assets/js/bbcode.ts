@@ -6,7 +6,6 @@ import {singleLineString} from './util';
  * @see templates/courant/courantbeheer.tpl
  * @see blade_templates/forum/partial/post_forum.blade.php
  * @see templates/mededelingen/mededeling.tpl
- * @see templates/roodschopper/roodschopper.tpl
  * @see view/formulier/invoervelden/BBCodeField.class.php
  */
 export const CsrBBPreview = (sourceId: string, targetId: string) => {
