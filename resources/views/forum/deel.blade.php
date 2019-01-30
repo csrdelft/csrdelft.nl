@@ -110,7 +110,7 @@
 					<div>
 						Berichten per dag:
 						<div class="grafiek">
-							{{-- forum.js pikt dit op en vult met een grafiekje. --}}
+							{{-- forum.ts pikt dit op en vult met een grafiekje. --}}
 							<div id="stats_grafiek_overview" class="ctx-graph-line" data-url="/forum/grafiekdata/overview" style="height: 200px;"></div>
 						</div>
 					</div>

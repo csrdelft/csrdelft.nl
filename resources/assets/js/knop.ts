@@ -1,46 +1,46 @@
 import $ from 'jquery';
-
-import {modalClose, modalOpen} from './modal';
 import {ajaxRequest} from './ajax';
 import {domUpdate} from './context';
-import {takenSelectRange, takenSubmitRange} from './maalcie';
-import {fnGetSelection, fnUpdateDataTable} from './datatable/api';
-import {redirect, reload} from './util';
 import ctx, {init} from './ctx';
+import {fnGetSelection, fnUpdateDataTable} from './datatable/api';
+import {takenSelectRange, takenSubmitRange} from './maalcie';
+
+import {modalClose, modalOpen} from './modal';
+import {redirect, reload} from './util';
 
 ctx.addHandlers({
 	'.get': (el) => el.addEventListener('click', knopGet),
 	'.post': (el) => el.addEventListener('click', knopPost),
 	'.vergroot': (el) => el.addEventListener('click', knopVergroot),
 	'[data-buttons=radio]': (el) => {
-		for (const btn of el.querySelectorAll('a.btn')) {
+		for (const btn of Array.from(el.querySelectorAll('a.btn'))) {
 			btn.addEventListener('click',
 				(event) => {
-					for (const active of el.querySelectorAll('.active')) {
+					for (const active of Array.from(el.querySelectorAll('.active'))) {
 						active.classList.remove('active');
 					}
-					event.target.classList.add('active');
-				}
+					(event.target as Element).classList.add('active');
+				},
 			);
 		}
-	}
+	},
 });
 
-function knopAjax(knop, type) {
+function knopAjax(knop: JQuery, type: string) {
 	if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
 		modalClose();
 		return false;
 	}
-	let source = knop,
-		done = domUpdate,
-		data = knop.attr('data');
+	let source: JQuery|false = knop;
+	let done = domUpdate;
+	let data: string|string[]|object = knop.attr('data')!;
 
 	if (knop.hasClass('popup')) {
 		source = false;
 	}
 	if (knop.hasClass('prompt')) {
 		data = data.split('=');
-		let val = prompt(data[0], data[1]);
+		const val = prompt(data[0], data[1]);
 		if (!val) {
 			return false;
 		}
@@ -48,32 +48,31 @@ function knopAjax(knop, type) {
 	}
 	if (knop.hasClass('addfav')) {
 		data = {
-			'tekst': document.title.replace('C.S.R. Delft - ', ''),
-			'link': window.location.href
+			tekst: document.title.replace('C.S.R. Delft - ', ''),
+			link: window.location.href,
 		};
 	}
 	if (knop.hasClass('DataTableResponse')) {
 
-		let tableId = knop.attr('data-tableid');
+		let tableId = knop.attr('data-tableid')!;
 		if (!document.getElementById(tableId)) {
-			tableId = knop.closest('form').attr('data-tableid');
+			tableId = knop.closest('form').attr('data-tableid')!;
 			if (!document.getElementById(tableId)) {
 				alert('DataTable not found');
 			}
 		}
 
-		let selection = fnGetSelection('#' + tableId);
 		data = {
 			'DataTableId': tableId,
-			'DataTableSelection[]': selection
+			'DataTableSelection[]': fnGetSelection('#' + tableId),
 		};
 
-		done = function (response) {
+		done = (response: any) => {
 			if (typeof response === 'object') { // JSON
 				fnUpdateDataTable('#' + tableId, response);
 				if (response.modal) {
 					modalOpen(response.modal);
-					init(document.querySelector('#modal'));
+					init(document.querySelector('#modal')!);
 				} else {
 					modalClose();
 				}
@@ -92,14 +91,15 @@ function knopAjax(knop, type) {
 		done = redirect;
 	}
 
-	ajaxRequest(type, knop.attr('href'), data, source, done, alert);
+	ajaxRequest(type, knop.attr('href')!, data, source, done, alert);
 }
 
-export function knopPost(event) {
+export function knopPost(this: HTMLElement, event: Event) {
 	event.preventDefault();
-	if ($(this).hasClass('range')) {
-		if (event.target.tagName.toUpperCase() === 'INPUT') {
-			takenSelectRange(event);
+	const target = event.target as HTMLElement;
+	if ($(target).hasClass('range')) {
+		if ((target).tagName.toUpperCase() === 'INPUT') {
+			takenSelectRange(event as KeyboardEvent);
 		} else {
 			takenSubmitRange(event);
 		}
@@ -109,28 +109,28 @@ export function knopPost(event) {
 	return false;
 }
 
-function knopGet(event) {
+function knopGet(event: Event) {
 	event.preventDefault();
-	knopAjax($(this), 'GET');
+	knopAjax($(event.target as HTMLElement), 'GET');
 	return false;
 }
 
-function knopVergroot() {
-	let knop = $(this),
-		id = knop.attr('data-vergroot'),
-		oud = knop.attr('data-vergroot-oud');
+function knopVergroot(event: Event) {
+	const knop = $(event.target!);
+	const id = knop.attr('data-vergroot')!;
+	const oud = knop.attr('data-vergroot-oud')!;
 
 	if (oud) {
-		$(id).animate({'height': oud}, 600);
+		$(id).animate({height: oud}, 600);
 		knop.removeAttr('data-vergroot-oud');
 		knop.find('span.fa').removeClass('fa-compress').addClass('fa-expand');
 		knop.attr('title', 'Uitklappen');
 	} else {
 		knop.attr('title', 'Inklappen');
 		knop.find('span.fa').removeClass('fa-expand').addClass('fa-compress');
-		knop.attr('data-vergroot-oud', $(id).height());
+		knop.attr('data-vergroot-oud', $(id).height()!);
 		$(id).animate({
-			'height': $(id).prop('scrollHeight') + 1
+			height: $(id).prop('scrollHeight') + 1,
 		}, 600);
 	}
 }

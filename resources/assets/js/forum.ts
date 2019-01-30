@@ -1,53 +1,53 @@
 import $ from 'jquery';
 import {CsrBBPreview} from './bbcode';
-import {domUpdate} from './context';
-import {bbCodeSet} from './bbcode-set';
 import {activeerLidHints} from './bbcode-hints';
+import {bbCodeSet} from './bbcode-set';
+import {domUpdate} from './context';
 
-function toggleForumConceptBtn(enable) {
-	let $concept = $('#forumConcept');
+function toggleForumConceptBtn(enable: boolean) {
+	const $concept = $('#forumConcept');
 	if (typeof enable === 'undefined') {
-		$concept.attr('disabled', !$concept.prop('disabled'));
+		$concept.attr('disabled', String(!Boolean($concept.prop('disabled'))));
 	} else {
-		$concept.attr('disabled', !enable);
+		$concept.attr('disabled', String(!enable));
 	}
 }
 
 export function saveConceptForumBericht() {
 	toggleForumConceptBtn(false);
-	let $concept = $('#forumConcept');
-	let $textarea = $('#forumBericht');
-	let $titel = $('#nieuweTitel');
+	const $concept = $('#forumConcept');
+	const $textarea = $('#forumBericht');
+	const $titel = $('#nieuweTitel');
 	if ($textarea.val() !== $textarea.attr('origvalue')) {
-		$.post($concept.attr('data-url'), {
+		$.post($concept.attr('data-url')!, {
 			forumBericht: $textarea.val(),
 			titel: ($titel.length === 1 ? $titel.val() : ''),
-		}).done(function () {
-			$textarea.attr('origvalue', $textarea.val());
-		}).fail(function (error) {
+		}).done(() => {
+			$textarea.attr('origvalue', String($textarea.val()));
+		}).fail((error) => {
 			alert(error);
 		});
 	}
 	setTimeout(toggleForumConceptBtn, 3000);
 }
 
-let bewerkContainer = null;
-let bewerkContainerInnerHTML = null;
+let bewerkContainer: JQuery | null = null;
+let bewerkContainerInnerHTML: string | null = null;
 
 /**
  * @see inline in forumBewerken
  */
 function restorePost() {
-	bewerkContainer.html(bewerkContainerInnerHTML);
+	bewerkContainer!.html(bewerkContainerInnerHTML!);
 	$('#bewerk-melding').slideUp(200, function () {
 		$(this).remove();
 	});
 	$('#forumPosten').css('visibility', 'visible');
 }
 
-function submitPost(event) {
+function submitPost(event: Event) {
 	event.preventDefault();
-	let form = $('#forumEditForm');
+	const form = $('#forumEditForm');
 	$.ajax({
 		type: 'POST',
 		cache: false,
@@ -65,7 +65,7 @@ function submitPost(event) {
  *
  * @see blade_templates/forum/partial/post_lijst.blade.php
  */
-export function forumBewerken(postId) {
+export function forumBewerken(postId: string) {
 	$.ajax({
 		url: '/forum/tekst/' + postId,
 		method: 'POST',
@@ -75,7 +75,7 @@ export function forumBewerken(postId) {
 		}
 		bewerkContainer = $('#post' + postId);
 		bewerkContainerInnerHTML = bewerkContainer.html();
-		let bewerkForm = `<form id="forumEditForm" class="Formulier" action="/forum/bewerken/${postId}" method="post">` +
+		const bewerkForm = `<form id="forumEditForm" class="Formulier" action="/forum/bewerken/${postId}" method="post">` +
 			'<div id="bewerkPreview" class="preview forumBericht"></div>' +
 			'<textarea name="forumBericht" id="forumBewerkBericht" class="FormElement BBCodeField" rows="8"></textarea>' +
 			'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />' +
@@ -89,24 +89,27 @@ export function forumBewerken(postId) {
 		bewerkContainer.find('input.voorbeeld').on('click', CsrBBPreview.bind(null, 'forumBewerkBericht', 'bewerkPreview'));
 		bewerkContainer.find('input.annuleren').on('click', restorePost);
 
-		let $forumBewerkBericht = $('#forumBewerkBericht');
+		const $forumBewerkBericht = $('#forumBewerkBericht');
 		$forumBewerkBericht.val(data);
 		$forumBewerkBericht.autosize();
 		$forumBewerkBericht.markItUp(bbCodeSet);
 		activeerLidHints($forumBewerkBericht.get(0));
-		$(bewerkContainer).parent().children('td.auteur:first').append('<div id="bewerk-melding" class="alert alert-warning">Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]</div>');
+		$(bewerkContainer).parent().children('.auteur:first')
+			.append(`<div id="bewerk-melding" class="alert alert-warning">
+Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]
+</div>`);
 		$('#bewerk-melding').slideDown(200);
 		$('#forumPosten').css('visibility', 'hidden');
 	});
 	return false;
 }
 
-function forumCiteren(postId) {
+function forumCiteren(postId: string) {
 	$.ajax({
 		url: '/forum/citeren/' + postId,
 		method: 'POST',
 	}).done((data) => {
-		let bericht = $('#forumBericht');
+		const bericht = $('#forumBericht');
 		bericht.val(bericht.val() + data);
 		$(window).scrollTo('#reageren');
 	});
@@ -115,20 +118,20 @@ function forumCiteren(postId) {
 	return false;
 }
 
-$(function () {
+$(() => {
 
-	let $textarea = $('#forumBericht');
-	let $concept = $('#forumConcept');
+	const $textarea = $('#forumBericht');
+	const $concept = $('#forumConcept');
 
 	// The last value that we pinged
-	let lastPing = null;
+	let lastPing = false;
 	if ($concept.length === 1) {
 
 		/*var ping = */
 		setInterval(() => {
-			let pingValue = $textarea.val() !== $textarea.attr('origvalue');
-			if (pingValue !== false || lastPing !== false) {
-				$.post($concept.attr('data-url'), {
+			const pingValue = $textarea.val() !== $textarea.attr('origvalue');
+			if (pingValue || lastPing) {
+				$.post($concept.attr('data-url')!, {
 					ping: pingValue,
 				}).done(domUpdate);
 				lastPing = pingValue;
@@ -145,7 +148,7 @@ $(function () {
 
 	// naar juiste forumreactie scrollen door hash toe te voegen
 	if (!window.location.hash && window.location.pathname.substr(0, 15) === '/forum/reactie/') {
-		let reactieid = parseInt(window.location.pathname.substr(15), 10);
+		const reactieid = parseInt(window.location.pathname.substr(15), 10);
 		window.location.hash = '#' + reactieid;
 	}
 
@@ -161,10 +164,17 @@ $(function () {
 		$(this).parent().find('.forumpasfoto').toggleClass('verborgen');
 	});
 
-	$('.auteur').hoverIntent(function () {$(this).find('a.forummodknop').css('opacity', '1');}, function () {$(this).find('a.forummodknop').css('opacity', '0');});
+	$('.auteur').hoverIntent(
+		function (this: any) {
+			$(this).find('a.forummodknop').css('opacity', '1');
+		},
+		function (this: any) {
+			$(this).find('a.forummodknop').css('opacity', '0');
+		},
+	);
 
 	$('a.citeren').on('click', function () {
-		let postid = $(this).attr('data-citeren');
+		const postid = $(this).attr('data-citeren')!;
 		forumCiteren(postid);
 	});
 });

@@ -23,7 +23,9 @@ declare global {
 		timeago: () => void;
 		markItUp: (arg: any) => any;
 		uitooltip: (arg: any) => any;
-		hoverIntent: (arg: any) => any;
+		hoverIntent: (arg: any, arg1?: any) => any;
+		autosize: () => void;
+		scrollTo: (arg: any) => void;
 	}
 }
 
