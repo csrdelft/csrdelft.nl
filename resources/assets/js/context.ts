@@ -22,12 +22,12 @@ ctx.addHandler('div.bb-img-loading', (el: HTMLElement) => {
 		const video = $(el).parent().parent().hasClass('bb-video-preview');
 		const hasAnchor = $(el).closest('a').length !== 0;
 		const parent = el.parentElement!;
-		if (!foto && !video && !hasAnchor) {
-			const link = html`<a class="lightbox-link" href="${el.getAttribute('src')!}" data-lightbox="page-lightbox"></a>`;
-			link.append(content);
-			parent.replaceChild(link, el);
-		} else {
+		if (foto || video || hasAnchor) {
 			parent.replaceChild(content, el);
+		} else {
+			const link = html`<a class="lightbox-link" href="${el.getAttribute('src')!}" data-lightbox="page-lightbox"></a>`;
+			link.appendChild(content);
+			parent.replaceChild(link, el);
 		}
 	});
 });
