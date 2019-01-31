@@ -17,7 +17,7 @@ ctx.addHandlers({
 
 function createCanvas(parent: HTMLElement) {
 	const canvas = html`<canvas style="width: 100%; height: 100%"/>` as HTMLCanvasElement;
-	parent.append(canvas);
+	parent.appendChild(canvas);
 	return canvas;
 }
 
@@ -220,7 +220,7 @@ function initSaldoGrafiek(el: HTMLElement) {
 		if (!el.querySelector('.saldo-terug-button')) {
 			const terugButton = html`<a title="verder terug in de tijd" class="saldo-terug-button">&laquo;</a>`;
 
-			el.append(terugButton);
+			el.appendChild(terugButton);
 
 			terugButton.addEventListener('click', () => {
 				timespan = timespan * 2;
@@ -242,7 +242,7 @@ function initSaldoGrafiek(el: HTMLElement) {
 			load();
 		});
 
-		el.parentElement!.append(button);
+		el.parentElement!.appendChild(button);
 	} else {
 		el.classList.remove('verborgen');
 		load();
