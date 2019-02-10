@@ -77,7 +77,7 @@
 					</div>
 				</div>
 				{!! getMelding() !!}
-				<h1 title="Lid-status: {CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}">
+				<h1 title="Lid-status: {{CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}}">
 					@if(\CsrDelft\model\entity\LidStatus::getChar($profiel->status) !== '')
 						<span class="status">
 						{{ CsrDelft\model\entity\LidStatus::getChar($profiel->status) }}&nbsp;
