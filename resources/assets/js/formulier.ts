@@ -10,7 +10,7 @@ import {modalClose, modalOpen} from './modal';
 import {redirect, reload} from './util';
 
 ctx.addHandlers({
-	'.InlineFormToggle': (el) => el.addEventListener('click', formToggle),
+	'.InlineFormToggle': (el) => el.addEventListener('click', (event) => formToggle(el, event)),
 	'.SubmitChange': (el) => el.addEventListener('change', formSubmit),
 	'.cancel': (el) => el.addEventListener('click', formCancel),
 	'.reset': (el) => el.addEventListener('click', formReset),
@@ -52,9 +52,9 @@ export function formInlineToggle(form: JQuery<EventTarget>) {
 	form.children(':first').trigger('focus');
 }
 
-export function formToggle(event: Event) {
+export function formToggle(target: Element, event: Event) {
 	event.preventDefault();
-	const form = $(event.target!).next('form');
+	const form = $(target).next('form');
 	formInlineToggle(form);
 	return false;
 }

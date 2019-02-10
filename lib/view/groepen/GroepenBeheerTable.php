@@ -23,7 +23,7 @@ class GroepenBeheerTable extends DataTable {
 	private $pagina;
 
 	public function __construct(AbstractGroepenModel $model) {
-		parent::__construct($model::ORM, $model->getUrl() . 'beheren', null, 'familie');
+		parent::__construct($model::ORM, $model->getUrl() . 'beheren', null);
 
 		$this->naam = $model->getNaam();
 		$this->titel = 'Beheer ' . $this->naam;
@@ -43,6 +43,8 @@ class GroepenBeheerTable extends DataTable {
 		$this->searchColumn('naam');
 		$this->searchColumn('status');
 		$this->searchColumn('soort');
+
+		$this->setOrder(['id' => 'desc']);
 
 		$preview = new DataTableKnop(Multiplicity::One(), $model->getUrl() . 'voorbeeld', 'Voorbeeld', 'Voorbeeldweergave van de ketzer', 'show');
 		$this->addKnop($preview);
