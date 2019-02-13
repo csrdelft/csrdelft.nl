@@ -15,7 +15,7 @@ ctx.addHandlers({
 	'.cancel': (el) => el.addEventListener('click', formCancel),
 	'.reset': (el) => el.addEventListener('click', formReset),
 	'.submit': (el) => el.addEventListener('click', formSubmit),
-	'form': (el) => el.addEventListener('submit', formSubmit),
+	'form': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
 	'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
 	'time.timeago': (el) => $(el).timeago(),
 });
