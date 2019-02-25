@@ -83,6 +83,11 @@ $maalcie-tabel-header: darken($body-bg, 5%);
 $maalcie-tabel-tr0: lighten($body-bg, 4%);
 $maalcie-tabel-tr1: lighten($body-bg, 12%);
 
+/* cards */
+$card-bg: darken($body-bg, 5%);
+$card-border-color: rgba(0, 0, 0, 0.3);
+$card-cap-bg: red;
+
 /* importeer basis */
 @import "../base";
 
@@ -139,4 +144,16 @@ table.groep-lijst tr:nth-child(even) {
 	&-thumbnails {
 		background-color: lighten($body-bg, 4%) !important;;
 	}
+}
+
+/* Pas achtergrond van, onder andere het courant formulier, aan */
+div#pubciemail_form {
+	background-color: transparent;
+	border: 1px solid #d3d3d3;
+	padding: 10px;
+}
+
+/* Peiling uitslag van de peilingen niet meer wit */
+.list-group-item {
+	background-color: lighten($body-bg, 4%);
 }
