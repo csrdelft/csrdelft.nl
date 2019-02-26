@@ -79,9 +79,9 @@ $menu-small-color: #ffffff;
 $zoeken-active-bg: #428bca;
 
 /* maalcie-tabel */
-$maalcie-tabel-header: darken($body-bg, 5%);
-$maalcie-tabel-tr0: lighten($body-bg, 4%);
-$maalcie-tabel-tr1: lighten($body-bg, 12%);
+$tabel-header: darken($body-bg, 5%);
+$tabel-regel-donker: lighten($body-bg, 4%);
+$tabel-regel-licht: lighten($body-bg, 12%);
 
 /* cards */
 $card-bg: darken($body-bg, 5%);
@@ -98,23 +98,6 @@ $card-cap-bg: red;
 /* Pas om-en-om kleuren in de lichtingen, vertikalen, kringen, etc. aan */
 table.groep-lijst tr:nth-child(even) {
 	background-color: $secondary;
-}
-
-/* Pas hover op de maalcie-tabel aan*/
-.maalcie-tabel {
-	tr {
-		&:hover {
-			background-color: lighten($body-bg, 40%);
-		}
-	}
-}
-
-/* Pas rijkleuren van maalcie-tabel aan die ergens random gebruikt worden in het corveerooster*/
-.rowColor0 {
-	background-color: lighten($body-bg, 4%);
-}
-.rowColor1 {
-	background-color: lighten($body-bg, 12%);
 }
 
 /* Pas "icoontje" in de breadcrubs aan */
@@ -144,6 +127,11 @@ table.groep-lijst tr:nth-child(even) {
 	&-thumbnails {
 		background-color: lighten($body-bg, 4%) !important;;
 	}
+}
+
+/* Maak tekst zwart in prive bb-code (voor leesbaarheid) */
+.bb-prive {
+	color: black;
 }
 
 /* Pas achtergrond van, onder andere het courant formulier, aan */

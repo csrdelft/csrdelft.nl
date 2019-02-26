@@ -1,12 +1,11 @@
 import $ from 'jquery';
 import Bloodhound from 'corejs-typeahead';
 
-import {initHoverIntents} from './context';
-
 /*
  *	Bibliotheekjavascriptcode.
  */
-$(function ($) {
+$(async function ($) {
+	await import('./datatable/bootstrap');
 	/*********************************************
 	 * Catalogus
 	 *********************************************/
@@ -64,7 +63,6 @@ $(function ($) {
             let eigenaarFilter = $('span.filter.actief').attr('id'),
                 checked = $('input[name=boekstatus]').is(':checked');
             sValue += `,"sEigenaarFilter": "${eigenaarFilter}","sView": ${checked}`;
-			initHoverIntents();
 			return sValue;
 		},
 		'fnStateLoadCallback': (oSettings) => {

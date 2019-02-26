@@ -225,10 +225,7 @@ abstract class InputField implements FormElement, Validator {
 		if ($this->hidden) {
 			$cssclass .= ' verborgen';
 		}
-		if ($this->title) {
-			$cssclass .= ' hoverIntent';
-		}
-		return '<div id="wrapper_' . $this->getId() . '" class="' . $cssclass . '" ' . $this->getInputAttribute('title') . '>';
+		return '<div id="wrapper_' . $this->getId() . '" class="' . $cssclass . '">';
 	}
 
 	/**
@@ -325,11 +322,6 @@ abstract class InputField implements FormElement, Validator {
 					$type = $this->type;
 				}
 				return 'type="' . $type . '"';
-			case 'title':
-				if ($this->title) {
-					return 'title="' . htmlspecialchars($this->title) . '"';
-				}
-				break;
 			case 'readonly':
 				if ($this->readonly) {
 					return 'readonly';
@@ -384,6 +376,13 @@ abstract class InputField implements FormElement, Validator {
 		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 	}
 
+	public function getHelpDiv() {
+		if ($this->title) {
+			return '<small class="col-md-12 text-muted">' . $this->title . '</small>';
+		}
+		return '';
+	}
+
 	/**
 	 * View die zou moeten werken voor veel velden.
 	 */
@@ -394,6 +393,7 @@ abstract class InputField implements FormElement, Validator {
 		echo $this->getHtml();
 		echo $this->getErrorDiv();
 		echo '</div>';
+		echo $this->getHelpDiv();
 		if ($this->preview) {
 			echo $this->getPreviewDiv();
 		}

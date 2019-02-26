@@ -77,7 +77,7 @@
 					</div>
 				</div>
 				{!! getMelding() !!}
-				<h1 title="Lid-status: {CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}">
+				<h1 title="Lid-status: {{CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}}">
 					@if(\CsrDelft\model\entity\LidStatus::getChar($profiel->status) !== '')
 						<span class="status">
 						{{ CsrDelft\model\entity\LidStatus::getChar($profiel->status) }}&nbsp;
@@ -394,7 +394,7 @@
 						<div class="clear-left"></div>
 						<div class="ctx-saldografiek verborgen" data-uid="{{$profiel->uid}}"
 								 data-closed="{{json_encode(!is_ingelogd_account($profiel->uid))}}"
-								 style="width: 670px; height: 220px;"></div>
+								 style="width: 670px;"></div>
 					</div>
 				@endif
 			</div>

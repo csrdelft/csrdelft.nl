@@ -10,6 +10,7 @@ use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\groepen;
+use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\Icon;
 use CsrDelft\view\View;
 
@@ -76,7 +77,7 @@ class GroepenView implements View {
 				continue;
 			}
 			echo '<hr>';
-			$view = new groepen\GroepView($groep, $this->tab, $this->geschiedenis);
+			$view = new GroepView($groep, $this->tab, $this->geschiedenis);
 			$view->view();
 		}
 	}

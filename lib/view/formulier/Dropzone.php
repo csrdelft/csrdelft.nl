@@ -90,8 +90,8 @@ thisDropzone = new Dropzone('#{$this->formId}', {
 	},
 	maxFilesize: {$maxsize},
 	maxFiles: 500,
-	dictDefaultMessage: "Drop files here to upload",
-	dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
+	dictDefaultMessage: "Sleep hier bestanden om te uploaden",
+	dictFallbackMessage: "Je browser ondersteund niet het slepen van bestanden.",
 	dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
 	dictFileTooBig: "Te groot bestand: ({{filesize}}MiB). Maximum: {{maxFilesize}}MiB.",
 	dictInvalidFileType: "Bestanden van dit type zijn niet toegestaan.",
@@ -135,6 +135,7 @@ showExisting_{$this->formId} = function (){
 			if (typeof value.thumbnail !== 'undefined') {
 				thisDropzone.emit('thumbnail', mockFile, value.thumbnail);
 			}
+			thisDropzone.emit('complete', mockFile);
 		});
 	});
 }

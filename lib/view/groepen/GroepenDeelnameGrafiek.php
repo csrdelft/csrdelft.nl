@@ -3,6 +3,7 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\model\entity\Geslacht;
+use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\View;
 
@@ -11,45 +12,61 @@ class GroepenDeelnameGrafiek implements View {
 	private $series = array();
 	private $step = array();
 
+	private $mannen = [];
+	private $vrouwen = [];
+
+	/**
+	 * GroepenDeelnameGrafiek constructor.
+	 * @param AbstractGroep[] $groepen
+	 */
 	public function __construct($groepen) {
-		$mannen = array();
-		$vrouwen = array();
-		$smallest_diff = PHP_INT_MAX;
-		$previous_time = 0;
+		$aantalMannen = [];
+		$aantalVrouwen = [];
+		$groepNamen = [];
+		$groepJaren = [];
 		foreach ($groepen as $groep) {
-			$time = strtotime($groep->begin_moment);
-			$smallest_diff = min($smallest_diff, abs($time - $previous_time));
-			$previous_time = $time;
-			if (!isset($mannen[$time])) {
-				$mannen[$time] = 0;
-				$vrouwen[$time] = 0;
-			}
+			$mannen = 0;
+			$vrouwen = 0;
+
+			var_dump($groep->getLeden());
+
 			foreach ($groep->getLeden() as $lid) {
 				$profiel = ProfielModel::get($lid->uid);
 				if ($profiel->geslacht === Geslacht::Man) {
-					$mannen[$time] += 1;
+					$mannen += 1;
 				} else {
-					$vrouwen[$time] += 1;
+					$vrouwen += 1;
 				}
 			}
+
+			$this->series[] = [
+				"moment" => strtotime($groep->begin_moment) * 1000,
+				"aantalMannen" => $mannen,
+				"aantalVrouwen" => $vrouwen,
+				"naam" => $groep->naam,
+			];
+
+			$aantalMannen[] = $mannen;
+			$aantalVrouwen[] = $vrouwen;
+			$groepNamen[] = $groep->naam;
+			$groepJaren[] = strftime('%Y', strtotime($groep->begin_moment));
 		}
-		$year = 365 * 24 * 60 * 60;
-		$month = 30 * 24 * 60 * 60;
-		$day = 24 * 60 * 60;
-		if ($smallest_diff >= $year) {
-			$this->step[] = floor($smallest_diff / $year);
-			$this->step[] = 'year';
-		} elseif ($smallest_diff >= $month) {
-			$this->step[] = floor($smallest_diff / $month);
-			$this->step[] = 'month';
-		} else {
-			$this->step[] = floor($smallest_diff / $day);
-			$this->step[] = 'day';
-		}
-		foreach ($mannen as $time => $aantal) {
-			$this->series[0][] = array($time * 1000, $aantal);
-			$this->series[1][] = array($time * 1000, $vrouwen[$time]);
-		}
+		$this->series = [
+			'labels'=> $groepNamen,
+			'jaren' => $groepJaren,
+			'datasets' => [
+				[
+					'label' => 'Aantal mannen',
+					'data' => $aantalMannen,
+					'backgroundColor' => '#AFD8F8',
+				],
+				[
+					'label' => 'Aantal vrouwen',
+					'data' => $aantalVrouwen,
+					'backgroundColor' => '#FFCBDB',
+				]
+			]
+		];
 	}
 
 	public function getBreadcrumbs() {
@@ -65,13 +82,13 @@ class GroepenDeelnameGrafiek implements View {
 	}
 
 	public function view() {
-		$series1 = htmlspecialchars(json_encode($this->series[1]));
-		$series0 = htmlspecialchars(json_encode($this->series[0]));
 		$step = htmlspecialchars(json_encode($this->step));
+
+		$series = htmlspecialchars(json_encode($this->series));
 
 		echo <<<HTML
 <div id="deelnamegrafiek">
-	<div class="ctx-deelnamegrafiek" style="height: 360px;" data-series-1="{$series1}" data-series-0="{$series0}" data-step="{$step}"></div>
+	<div class="ctx-deelnamegrafiek" style="height: 360px;width:100%;" data-data="{$series}" data-step="{$step}"></svg>
 </div>
 HTML;
 	}

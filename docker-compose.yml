@@ -49,7 +49,8 @@ services:
       - ./package.json:/app/package.json
       - ./yarn.lock:/app/yarn.lock
       - ./.eslintrc.js:/app/.eslintrc.js
-      - ./webpack.config.js:/app/webpack.config.js
+      - ./webpack.config.ts:/app/webpack.config.ts
       - ./tsconfig.json:/app/tsconfig.json
+      - ./tsconfig-for-webpack-config.json:/app/tsconfig-for-webpack-config.json
       - ./htdocs/dist:/app/htdocs/dist # output
       - ./resources/assets:/app/resources/assets # input

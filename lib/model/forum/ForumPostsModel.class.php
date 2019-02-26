@@ -326,19 +326,19 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 
 	public function getStatsTotal() {
 		$terug = getDateTime(strtotime(InstellingenModel::get('forum', 'grafiek_stats_periode')));
-		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
+		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count');
 		return Database::instance()->sqlSelect($fields, $this->getTableName(), 'datum_tijd > ?', array($terug), 'timestamp');
 	}
 
 	public function getStatsVoorForumDeel(ForumDeel $deel) {
 		$terug = getDateTime(strtotime(InstellingenModel::get('forum', 'grafiek_stats_periode')));
-		$fields = array('UNIX_TIMESTAMP(DATE(p.datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
+		$fields = array('UNIX_TIMESTAMP(DATE(p.datum_tijd)) AS timestamp', 'COUNT(*) AS count');
 		return Database::instance()->sqlSelect($fields, $this->getTableName() . ' AS p RIGHT JOIN ' . ForumDradenModel::instance()->getTableName() . ' AS d ON p.draad_id = d.draad_id', 'd.forum_id = ? AND p.datum_tijd > ?', array($deel->forum_id, $terug), 'timestamp');
 	}
 
 	public function getStatsVoorDraad(ForumDraad $draad) {
 		$terug = getDateTime(strtotime(InstellingenModel::get('forum', 'grafiek_draad_recent'), strtotime($draad->laatst_gewijzigd)));
-		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count'); // flot date format
+		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count');
 		return Database::instance()->sqlSelect($fields, $this->getTableName(), 'draad_id = ? AND datum_tijd > ?', array($draad->draad_id, $terug), 'timestamp');
 	}
 

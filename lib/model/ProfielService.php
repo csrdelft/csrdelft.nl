@@ -20,7 +20,6 @@ class ProfielService extends DependencyManager {
 	 * @return Profiel[]
 	 */
 	public function zoekLeden(string $zoekterm, string $zoekveld, string $verticale, string $sort, $zoekstatus = '', int $limiet = 0) {
-		$containsZoekterm = sql_contains($zoekterm);
 		$containsZonderSpatiesZoekterm = sql_contains(str_replace(' ', '', $zoekterm));
 		$zoekfilterparams = [];
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
@@ -35,7 +34,7 @@ class ProfielService extends DependencyManager {
 					$zoekfilter .= "( voornaam LIKE :zoekterm OR achternaam LIKE :containsZoekterm OR
                                     nickname LIKE :containsZoekterm OR uid LIKE :containsZoekterm )";
 					$zoekfilterparams[':zoekterm']=  $zoekterm;
-					$zoekfilterparams[':containsZoekterm']=  $zoekterm;
+					$zoekfilterparams[':containsZoekterm']=  sql_contains($zoekterm);
 				} else {
 					$zoekfilterparams[':voornaam'] = sql_contains($zoekdelen[0]);
 					$zoekfilterparams[':achternaam'] = sql_contains($zoekdelen[$iZoekdelen - 1]);

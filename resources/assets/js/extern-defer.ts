@@ -2,8 +2,9 @@
  * Wordt geladen als de pagina geladen is.
  */
 import $ from 'jquery';
-import initContext from './context';
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
+import {init} from './ctx';
+import './formulier';
 import './fotoalbum/FotoAlbum';
 
 require('lightbox2');
@@ -19,11 +20,11 @@ declare global {
 	// Deze functie heeft geen type...
 	namespace JQueryUI {
 		interface Widget {
-			bridge: (newName: string, widget: Widget) => void
+			bridge: (newName: string, widget: Widget) => void;
 		}
 	}
 	interface Window {
-		bbcode: any
+		bbcode: any;
 	}
 }
 
@@ -32,18 +33,17 @@ window.bbcode = {
 	bbvideoDisplay,
 };
 
-let $window = $(window),
-	$body = $('body'),
-	$header = $('#header'),
-	$banner = $('#banner');
+const $window = $(window);
+const $header = $('#header');
+let $banner = $('#banner');
 
 if (typeof $banner[0] === 'undefined') {
 	$banner = $('#banner-small');
 }
 
-$window.on('load', function () {
+$window.on('load', () => {
 	// Lazy load cms pages, these should be loaded always, not on scroll
-	setTimeout(function () {
+	setTimeout(() => {
 		$('div.bb-img-loading').each(function () {
 			const content = $(document.createElement('img'));
 			content.on('error', function () {
@@ -71,10 +71,10 @@ $window.on('load', function () {
 	});
 });
 
-const lazyLoad = (function () {
+const lazyLoad = (() => {
 	let hasLoaded = false;
 
-	return function () {
+	return () => {
 		if (hasLoaded) {
 			return;
 		}
@@ -82,7 +82,7 @@ const lazyLoad = (function () {
 		hasLoaded = true;
 
 		// Lazy load frontpage
-		setTimeout(function () {
+		setTimeout(() => {
 			$('.lazy-load').each(function () {
 				$(this).replaceWith(this.textContent!);
 			});
@@ -106,4 +106,4 @@ $window.on('scroll', () => {
 $window.on('resize', () => $window.trigger('scroll'));
 $window.trigger('scroll');
 
-initContext($body);
+init(document.body);

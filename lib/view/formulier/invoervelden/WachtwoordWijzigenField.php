@@ -146,7 +146,7 @@ class WachtwoordWijzigenField extends InputField {
 
 	public function getHtml() {
 		$html = '';
-		if ($this->isPosted()&& !$this->validate()) {
+		if ($this->error !== '') {
 			$this->css_classes[] = 'is-invalid';
 		}
 		$inputCssClasses = join(" ", $this->css_classes);

@@ -16,3 +16,4 @@ define('SERVER_PORT', ':8080');
 define('CSR_DOMAIN', 'localhost');
 define('BASE_PATH', '/app/'); # Zet mij.
 define('CSR_ROOT', 'http://' . CSR_DOMAIN . SERVER_PORT);
+define('IMAGEMAGICK', 'convert');

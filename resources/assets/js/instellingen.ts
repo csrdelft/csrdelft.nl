@@ -8,20 +8,20 @@ function instellingVeranderd() {
 	$('.instellingen-bericht').removeClass('d-none');
 }
 
-function instellingOpslaan(ev : JQuery.ChangeEvent) {
+function instellingOpslaan(ev: JQuery.ChangeEvent) {
 	if (ev.target!.checkValidity()) {
-		let input = $(ev.target);
+		const input = $(ev.target);
 
-		let href = input.data('href');
+		const href = input.data('href');
 
 		input.addClass('loading');
 
 		$.ajax({
-			url: href,
-			method: 'POST',
 			data: {
-				waarde: input.val()
-			}
+				waarde: input.val(),
+			},
+			method: 'POST',
+			url: href,
 		}).then(() => {
 			instellingVeranderd();
 			input.removeClass('loading');

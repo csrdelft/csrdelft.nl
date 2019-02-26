@@ -1,16 +1,24 @@
 import $ from 'jquery';
 import {modalClose} from './modal';
 
-export function ajaxRequest(type: string, url: string, data: string | FormData, source: JQuery<Element>|false, onsuccess: Function, onerror?: Function, onfinish?: Function) {
+export function ajaxRequest(
+	type: string,
+	url: string,
+	data: string | FormData | object,
+	source: JQuery<Element> | false,
+	onsuccess: (data: string) => void,
+	onerror?: (data: string) => void,
+	onfinish?: () => void) {
 	if (source) {
 		if (!source.hasClass('noanim')) {
-			$(source).replaceWith(`<img alt="Laden" id="${source.attr('id')}" title="${url}" src="/images/loading-arrows.gif" />`);
+			$(source).replaceWith(
+				`<img alt="Laden" id="${source.attr('id')}" title="${url}" src="/images/loading-arrows.gif" />`);
 			source = $(`img[title="${url}"]`);
 		} else if (source.hasClass('InlineForm')) {
 			$(source).find('.FormElement:first').css({
 				'background-image': 'url("/images/loading-fb.gif")',
-				'background-repeat': 'no-repeat',
 				'background-position': 'center right',
+				'background-repeat': 'no-repeat',
 			});
 		} else {
 			source.addClass('loading');
@@ -23,27 +31,27 @@ export function ajaxRequest(type: string, url: string, data: string | FormData, 
 		processData = false;
 	}
 	$.ajax({
-		type,
 		cache: false,
 		contentType,
-		processData,
-		url,
 		data,
-	}).done((data) => {
+		processData,
+		type,
+		url,
+	}).done((response) => {
 		if (source) {
 			if (!$(source).hasClass('noanim')) {
 				$(source).hide();
 			} else if ($(source).hasClass('InlineForm')) {
 				$(source).find('.FormElement:first').css({
 					'background-image': '',
-					'background-repeat': '',
 					'background-position': '',
+					'background-repeat': '',
 				});
 			}
 			source.removeClass('loading');
 		}
-		onsuccess(data);
-	}).fail((data, textStatus, errorThrown) => {
+		onsuccess(response);
+	}).fail((response, textStatus, errorThrown) => {
 		if (errorThrown === '') {
 			errorThrown = 'Nog bezig met laden!';
 		}
@@ -53,7 +61,7 @@ export function ajaxRequest(type: string, url: string, data: string | FormData, 
 			modalClose();
 		}
 		if (onerror) {
-			onerror(data.responseText);
+			onerror(response.responseText);
 		}
 	}).always(() => {
 		if (onfinish) {
@@ -68,12 +76,12 @@ export function ajaxRequest(type: string, url: string, data: string | FormData, 
  * @returns {boolean}
  */
 export function ketzerAjax(url: string, ketzer: string) {
-	$(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img src="/images/loading-arrows.gif" />');
+	$(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img alt="Laden" src="/images/loading-arrows.gif" />');
 	$.ajax({
-		type: 'GET',
 		cache: false,
-		url: url,
 		data: '',
+		type: 'GET',
+		url,
 	}).done((data) => {
 		$(ketzer).replaceWith(data);
 	}).fail((jqXHR, textStatus, errorThrown) => {

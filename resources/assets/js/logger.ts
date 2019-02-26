@@ -1,22 +1,14 @@
 import axios from 'axios';
 
-window.onerror = function (message: string, url, line, col, error) {
-	const string = message.toLowerCase();
-	const substring = "script error";
-	if (string.indexOf(substring) > -1) {
-		axios.post('/logger', {
-			message: 'Script error'
-		});
-	} else {
-		axios.post('/logger', {
-			message,
-			url,
-			line,
-			col,
-			pagina: window.location.href,
-			error: JSON.stringify(error)
-		});
-	}
+window.addEventListener('error', (ev) => {
+	axios.post('/logger', {
+		col: ev.colno,
+		error: ev.error.stack,
+		line: ev.lineno,
+		message: ev.message,
+		pagina: window.location.href,
+		url: ev.filename,
+	});
 
 	return false;
-};
+});

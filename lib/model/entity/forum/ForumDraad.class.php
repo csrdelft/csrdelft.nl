@@ -11,7 +11,7 @@ use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use CsrDelft\view\FlotTimeSeries;
+use CsrDelft\view\ChartTimeSeries;
 
 /**
  * ForumDraad.class.php
@@ -292,7 +292,7 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function getStatsJson() {
-		$formatter = new FlotTimeSeries(array($this->getStats()));
+		$formatter = new ChartTimeSeries(array($this->getStats()));
 		return $formatter->getJson($formatter->getModel());
 	}
 

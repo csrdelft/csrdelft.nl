@@ -339,6 +339,14 @@ span.curpage {
 	height: 100%;
 }
 
+// Suggesties
+.textcomplete-item {
+	color: black;
+	&.active {
+		background: #e9ecef;
+	}
+}
+
 @media screen and (max-width: 576px) { // sm
 	.forum-header, .forum-footer {
 		h1 {

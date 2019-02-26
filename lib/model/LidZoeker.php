@@ -21,12 +21,13 @@ use CsrDelft\view\lid\LLLijst;
 class LidZoeker {
 	//velden die door gewone leden geselecteerd mogen worden.
 	private $allowVelden = array(
-		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'duckname', 'geslacht',
-		'email', 'adres', 'telefoon', 'mobiel', 'linkedin', 'website', 'studie', 'status',
-		'gebdatum', 'beroep', 'verticale', 'moot', 'lidjaar', 'kring', 'patroon', 'woonoord', 'bankrekening', 'eetwens');
+		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'geslacht',
+		'email', 'adres', 'telefoon', 'mobiel', 'studie', 'status',
+		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'kring', 'patroon', 'woonoord');
 	//velden die ook door mensen met P_LEDEN_MOD bekeken mogen worden
 	//(merge in de constructor)
 	private $allowVeldenLEDENMOD = array(
+		'eetwens', 'moot',
 		'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum',
 		'echtgenoot', 'adresseringechtpaar', 'land', 'bankrekening', 'machtiging');
 	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te
@@ -236,8 +237,9 @@ class LidZoeker {
 			$defaults[] = "CONCAT_WS(' ', tussenvoegsel, achternaam) LIKE '%" . $zoekterm . "%' ";
 			$defaults[] = "CONCAT_WS(', ', achternaam, tussenvoegsel) LIKE '%" . $zoekterm . "%' ";
 			$defaults[] = "nickname LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "duckname LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "eetwens LIKE '%" . $zoekterm . "%' ";
+			if (LoginModel::mag('P_LEDEN_MOD')) {
+				$defaults[] = "eetwens LIKE '%" . $zoekterm . "%' ";
+			}
 
 			$defaults[] = "CONCAT_WS(' ', adres, postcode, woonplaats) LIKE '%" . $zoekterm . "%' ";
 			$defaults[] = "adres LIKE '%" . $zoekterm . "%' ";
@@ -281,7 +283,8 @@ class LidZoeker {
 			foreach ($result as $uid) {
 				$profiel = ProfielModel::get($uid['uid']);
 				if ($profiel) {
-					$this->result[] = $profiel;
+					$profiel = $this->zoekMag($profiel, $this->query);
+					if ($profiel !== null) $this->result[] = $profiel;
 				}
 			}
 		}
@@ -383,6 +386,32 @@ class LidZoeker {
 		$return .= print_r($this->rawQuery, true);
 		$return .= print_r($this->filters, true);
 		return $return;
+	}
+
+	/**
+	 * Geef terug of een bepaald resultaat in de zoekresultaten mag zitten.
+	 *
+	 * @param $profiel
+	 * @param string $query
+	 * @return Profiel|null
+	 */
+	private function zoekMag(Profiel $profiel, string $query) {
+		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
+		$queryInNaam = strpos($profiel->getNaam(), $query) !== false;
+
+		$zoekvelden = LidToestemmingModel::instance()->getModuleInstellingen('profiel');
+		foreach ($zoekvelden as $veld) {
+			if (!is_zichtbaar($profiel, $veld)) {
+				if (!$queryInNaam && strpos($profiel->$veld, $query) !== false) {
+					// Als de zoekquery dit veld bevat, terwijl deze niet zichtbaar is, dan is dit profiel niet zichtbaar.
+					return null;
+				} else if ($veld !== 'status') { // Status kunnen we niet leeg maken.
+					$profiel->$veld = null;
+				}
+			}
+		}
+
+		return $profiel;
 	}
 
 }

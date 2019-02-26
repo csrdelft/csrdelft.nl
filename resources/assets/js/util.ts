@@ -2,37 +2,35 @@ import {domUpdate} from './context';
 
 /**
  * Selecteer de tekst van een DOM-element.
- * @source http://stackoverflow.com/questions/985272/jquery-selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
+ * @source http://stackoverflow.com/questions/985272/
  *
  * @see templates/fotoalbum/album.tpl
  */
 export function selectText(elmnt: HTMLElement) {
-	let range, selection;
-	selection = window.getSelection();
-	range = document.createRange();
+	const selection = window.getSelection();
+	const range = document.createRange();
 	range.selectNodeContents(elmnt);
 	selection.removeAllRanges();
 	selection.addRange(range);
 }
 
-
 /**
- //  discuss at: http://phpjs.org/functions/dirname/
- // original by: Ozh
- // improved by: XoraX (http://www.xorax.info)
- //   example 1: dirname('/etc/passwd');
- //   returns 1: '/etc'
- //   example 2: dirname('c:/Temp/x');
- //   returns 2: 'c:/Temp'
- //   example 3: dirname('/dir/test/');
- //   returns 3: '/dir'
+ *  discuss at: http://phpjs.org/functions/dirname/
+ * original by: Ozh
+ * improved by: XoraX (http://www.xorax.info)
+ *   example 1: dirname('/etc/passwd');
+ *   returns 1: '/etc'
+ *   example 2: dirname('c:/Temp/x');
+ *   returns 2: 'c:/Temp'
+ *   example 3: dirname('/dir/test/');
+ *   returns 3: '/dir'
  */
-export function dirname(path : string) {
+export function dirname(path: string) {
 	return path.replace(/\\/g, '/')
 		.replace(/\/[^/]*\/?$/, '');
 }
 
-export function basename(path : string, suffix : string = '') {
+export function basename(path: string, suffix: string = '') {
 	//  discuss at: http://phpjs.org/functions/basename/
 	// original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
 	// improved by: Ash Searle (http://hexmen.com/blog/)
@@ -49,7 +47,7 @@ export function basename(path : string, suffix : string = '') {
 	//   returns 4: 'path_ext'
 
 	let base = path;
-	let lastChar = base.charAt(base.length - 1);
+	const lastChar = base.charAt(base.length - 1);
 
 	if (lastChar === '/' || lastChar === '\\') {
 		base = base.slice(0, -1);
@@ -64,15 +62,15 @@ export function basename(path : string, suffix : string = '') {
 	return base;
 }
 
-export function reload(htmlString : string|object|boolean) {
-	if (typeof htmlString === "string" && htmlString.substring(0, 16) === '<div id="modal" ') {
+export function reload(htmlString: string | object | boolean) {
+	if (typeof htmlString === 'string' && htmlString.substring(0, 16) === '<div id="modal" ') {
 		domUpdate(htmlString);
 		return;
 	}
 	location.reload();
 }
 
-export function redirect(htmlString : string) {
+export function redirect(htmlString: string) {
 	if (htmlString.substring(0, 16) === '<div id="modal" ') {
 		domUpdate(htmlString);
 		return;
@@ -80,7 +78,7 @@ export function redirect(htmlString : string) {
 	window.location.href = htmlString;
 }
 
-export function route(path : string, cb : Function) {
+export function route(path: string, cb: () => void) {
 	if (window.location.pathname.startsWith(path)) {
 		cb();
 	}
@@ -89,30 +87,30 @@ export function route(path : string, cb : Function) {
 /**
  * Verwerk een multipliciteit in de vorm van `== 1` of `!= 0` of `> 3` voor de selecties
  */
-export function evaluateMultiplicity(expression : string, num : number): boolean {
+export function evaluateMultiplicity(expression: string, num: number): boolean {
 	// Altijd laten zien bij geen expressie
 	if (expression.length === 0) {
 		return true;
 	}
 
-	let [expressionOperator, expressionAantalString] = expression.split(' ');
+	const [expressionOperator, expressionAantalString] = expression.split(' ');
 
-	let expressionAantal = parseInt(expressionAantalString);
+	const expressionAantal = parseInt(expressionAantalString, 10);
 
-	let mapOperationToFunction : {[op: string]: (a: number, b: number) => boolean} = {
-		'==': (a, b) => a === b,
+	const mapOperationToFunction: { [op: string]: (a: number, b: number) => boolean } = {
 		'!=': (a, b) => a !== b,
-		'>=': (a, b) => a >= b,
-		'>': (a, b) => a > b,
+		'<': (a, b) => a < b,
 		'<=': (a, b) => a <= b,
-		'<': (a, b) => a < b
+		'==': (a, b) => a === b,
+		'>': (a, b) => a > b,
+		'>=': (a, b) => a >= b,
 	};
 
 	return mapOperationToFunction[expressionOperator](num, expressionAantal);
 }
 
 export function formatFilesize(data: string) {
-	let units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+	const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 	let i = 0;
 	let size = Number(data);
 	while (size >= 1024) {
@@ -122,10 +120,66 @@ export function formatFilesize(data: string) {
 	return size.toFixed(1) + ' ' + units[i];
 }
 
-export function formatBedrag(data : number) {
+export function formatBedrag(data: number) {
 	if (data > 0) {
 		return '€' + (data / 100).toFixed(2);
 	} else {
 		return '-€' + (data / -100).toFixed(2);
 	}
+}
+
+export function singleLineString(strings: TemplateStringsArray, ...values: string[]) {
+	// Interweave the strings with the
+	// substitution vars first.
+	let output = '';
+	for (let i = 0; i < values.length; i++) {
+		output += strings[i] + values[i];
+	}
+	output += strings[values.length];
+
+	// Split on newlines.
+	const lines = output.split(/(?:\r\n|\n|\r)/);
+
+	// Rip out the leading whitespace.
+	return lines.map((line) => line.replace(/^\s+/gm, '')).join(' ').trim();
+}
+
+export function html(strings: TemplateStringsArray, ...values: string[]): HTMLElement {
+	let output = '';
+	for (let i = 0; i < values.length; i++) {
+		output += strings[i] + values[i];
+	}
+	output += strings[values.length];
+
+	return (new DOMParser().parseFromString(output, 'text/html').body.firstChild) as HTMLElement;
+}
+
+export function htmlParse(htmlString: string) {
+	return new DOMParser().parseFromString(htmlString, 'text/html').body.children;
+}
+
+export function preloadImage(url: string, callback: () => void) {
+	const img = new Image();
+	img.src = url;
+	img.onload = callback;
+}
+
+export function parseData(el: HTMLElement) {
+	const data = el.dataset;
+
+	const out: any = {};
+
+	for (const item of Object.keys(data)) {
+		if (data[item] === 'false') {
+			out[item] = false;
+		} else if (data[item] === 'true') {
+			out[item] = true;
+		} else if (!isNaN(Number(data[item]))) {
+			out[item] = Number(data[item]);
+		} else {
+			out[item] = data[item];
+		}
+	}
+
+	return out;
 }

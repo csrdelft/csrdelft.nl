@@ -1140,7 +1140,15 @@ HTML;
 			$content = str_replace('[br]', '<br />', $content);
 			return '<a class="bb-tag-spoiler" href="#/verklapper/' . urlencode($content) . '">Toon verklapper</a>';
 		}
-		return '<button class="spoiler">Toon verklapper</button><div class="spoiler-content">' . $content . '</div>';
+
+		$id = uniqid_safe('verklapper_');
+
+		return <<<HTML
+<div class="card">
+	<a class="btn btn-secondary btn-sm" data-toggle="collapse" href="#$id">Verklapper</a>
+	<div id="$id" class="collapse"><div class="card-body">$content</div></div>
+</div>
+HTML;
 	}
 
 	function bb_1337($arguments = array()) {

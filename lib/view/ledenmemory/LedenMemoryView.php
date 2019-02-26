@@ -68,7 +68,8 @@ public function __construct() {
 			}
 		}
 	}
-	$this->addScript(asset('ledenmemory.js'));
+	$this->addScript('ledenmemory.js');
+	$this->addStylesheet('ledenmemory.css');
 }
 
 public function getLayout() {
