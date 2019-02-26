@@ -9,6 +9,7 @@ services:
     build:
       context: .
       dockerfile: "conf/Dockerfile-stek"
+    image: csrdelft/stek
     ports:
       - "8080:80" # Expose stek op poort 8080
     volumes:
@@ -21,6 +22,7 @@ services:
     build:
       context: .
       dockerfile: "conf/Dockerfile-composer"
+    image: csrdelft/composer
     command: install --ignore-platform-reqs # Doe initieel een install
     volumes:
       - ./:/app
@@ -45,6 +47,7 @@ services:
     build:
       context: .
       dockerfile: "conf/Dockerfile-yarn"
+    image: csrdelft/yarn
     volumes:
       - ./package.json:/app/package.json
       - ./yarn.lock:/app/yarn.lock

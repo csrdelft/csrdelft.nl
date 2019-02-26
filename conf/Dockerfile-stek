@@ -19,10 +19,12 @@ RUN a2enmod rewrite && a2enmod headers
 COPY conf/dev/apache2.conf /etc/apache2/apache2.conf
 COPY conf/dev/php.ini  /usr/local/etc/php/php.ini
 
+RUN mkdir /app && chown -R www-data "/app" && chmod -R u+rw "/app"
+
 # copy the source
-COPY . /app
+# COPY . /app
 
 # set permissions on DATA directories
-RUN chown -R www-data "/app/data" && \
-  chmod -R u+rw "/app/data/" && \
-  chmod -R u+rw "/app/htdocs/wiki/data/"
+#RUN chown -R www-data "/app/data" && \
+#  chmod -R u+rw "/app/data/" && \
+#  chmod -R u+rw "/app/htdocs/wiki/data/"
