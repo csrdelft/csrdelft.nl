@@ -160,7 +160,11 @@ $(() => {
 
 	const hammertime = new Hammer(document, {inputClass: Hammer.TouchInput});
 
-	hammertime.on('swiperight', () => {
+	hammertime.on('swiperight', (e) => {
+		if ($(e.target).closest('.disable-swipe').length > 0) {
+			return;
+		}
+
 		if (isVisible('#zijbalk') || isVisible('#menu')) {
 			reset();
 		} else {
@@ -168,7 +172,11 @@ $(() => {
 		}
 	});
 
-	hammertime.on('swipeleft', () => {
+	hammertime.on('swipeleft', (e) => {
+		if ($(e.target).closest('.disable-swipe').length > 0) {
+			return;
+		}
+
 		if (isVisible('#zijbalk') || isVisible('#menu')) {
 			reset();
 		} else {
