@@ -1,5 +1,5 @@
 <template>
-	<div class="select-buttons">
+	<div class="selectButtons">
 		<div class="button" v-for="(option,key) in options">
 			<input type="radio" :name="name" :id="name + '-' + key" :value="key" v-model="selected" v-on:change="update" />
 			<label :for="name + '-' + key">{{ option }}</label>
@@ -28,12 +28,17 @@
 				this.$emit('input', this.selected);
 				this.$emit('done');
 			},
+		},
+		watch: {
+			value: function (newValue) {
+				this.selected = newValue;
+			}
 		}
 	}
 </script>
 
 <style scoped>
-	.select-buttons {
+	.selectButtons {
 		font-size: 0;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -42,12 +47,12 @@
 		margin-bottom: 20px;
 	}
 
-	.select-buttons:last-child {
+	.selectButtons:last-child {
 		margin-bottom: 40px;
 	}
 
 	@media screen and (max-width: 400px) {
-		.select-buttons {
+		.selectButtons {
 			grid-template-columns: 100%;
 		}
 	}

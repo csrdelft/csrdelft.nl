@@ -60,6 +60,22 @@
 			:step="4"
 			:show-done="this.event.shortDescription.length > 0"
 			v-on:done="gotoStep(5)">
+
+			<Toggle
+				name="multipleDays"
+				question="Activiteit duurt meerdere dagen"
+				v-model="event.multipleDays">
+			</Toggle>
+
+			<functional-calendar
+				:change-month-function="true"
+				:change-year-function="true"
+				v-model="event.calendarData"
+				:sundayStart="true"
+				:date-format="'dd-mm-yyyy'"
+				:is-date-range="event.multipleDays">
+			</functional-calendar>
+
 		</Stap>
 
 		<Stap
@@ -90,6 +106,46 @@
 			:step="7"
 			:show-done="true"
 			v-on:done="gotoStep(8)">
+
+			<Toggle
+				name="canEnter"
+				question="Leden mogen zichzelf inketzen"
+				v-model="event.canEnter">
+			</Toggle>
+
+			<div v-if="event.canEnter" class="subOptions">
+				<Toggle
+					name="enterStart"
+					question="Leden mogen zich pas inketzen na een bepaald moment"
+					v-model="event.enterStart">
+				</Toggle>
+
+				<Toggle
+					name="enterEnd"
+					question="Inketzen niet toestaan na een bepaald moment"
+					v-model="event.enterEnd">
+				</Toggle>
+			</div>
+
+			<Toggle
+				name="multipleDays"
+				question="Leden mogen zichzelf uitketzen"
+				v-model="event.canExit">
+			</Toggle>
+
+			<div v-if="event.canExit" class="subOptions">
+				<Toggle
+					name="exitEnd"
+					question="Uitketzen niet toestaan na een bepaald moment"
+					v-model="event.exitEnd">
+				</Toggle>
+			</div>
+
+			<Toggle
+				name="hasLimit"
+				question="Er mag maar een beperkt aantal leden inketzen"
+				v-model="event.hasLimit">
+			</Toggle>
 		</Stap>
 
 		<Stap
@@ -117,11 +173,13 @@
 <script>
 	import SelectButtons from './velden/SelectButtons';
 	import TextInput from './velden/TextInput';
+	import Toggle from './velden/Toggle';
 	import Stap from './onderdelen/Stap';
+	import FunctionalCalendar from 'vue-functional-calendar';
 
 	export default {
 		name: 'KetzerTovenaar',
-		components: {SelectButtons, Stap, TextInput},
+		components: {SelectButtons, TextInput, Toggle, Stap, FunctionalCalendar},
 		props: {},
 		data: () => ({
 			types: {
@@ -144,8 +202,7 @@
 				shortDescription: '',
 				readMore: '',
 				multipleDays: false,
-				startDate: '',
-				endDate: '',
+				calendarData: null,
 				entireDay: false,
 				startTime: '',
 				endTime: '',
@@ -209,11 +266,20 @@
 	}
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 	.ketzertovenaar {
 		font-family: 'Source Sans Pro', sans-serif;
-		line-height: 220%;
+		line-height: 1.4;
 		max-width: 600px;
 		margin: 0 auto;
+		font-size: 0;
+
+			div {
+				background: red;
+			}
+	}
+
+	.subOptions {
+		padding-left: 20px;
 	}
 </style>

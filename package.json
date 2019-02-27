@@ -89,6 +89,8 @@
 		"three": "^0.99.0",
 		"timeago": "^1.6.3",
 		"uglifyjs-webpack-plugin": "^2.1.1",
-		"vue": "^2.5.7"
+		"vue": "^2.5.7",
+		"vue-functional-calendar": "^2.1.0",
+		"vue-js-toggle-button": "^1.3.1"
 	}
 }

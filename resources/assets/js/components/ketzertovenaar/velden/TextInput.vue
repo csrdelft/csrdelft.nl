@@ -62,6 +62,11 @@
 			validate() {
 				this.validating = true;
 			}
+		},
+		watch: {
+			value: function (newValue) {
+				this.enteredText = newValue;
+			}
 		}
 	}
 </script>
