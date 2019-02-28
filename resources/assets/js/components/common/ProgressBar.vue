@@ -1,5 +1,5 @@
 <template>
-	<div :class="{'progress': true, 'flex-row-reverse': reverse}">
+	<div class="progress">
 		<div class="progress-bar" :style="{width: progress + '%'}">
 			<slot/>
 		</div>
@@ -16,13 +16,6 @@
 			type: [Number, String],
 		})
 		private progress: number | string; // Liever een nummer, maar een string kunnen we ook mee overweg.
-
-		@Prop({
-			default: () => false,
-			required: false,
-			type: Boolean,
-		})
-		private reverse: boolean;
 	}
 </script>
 
