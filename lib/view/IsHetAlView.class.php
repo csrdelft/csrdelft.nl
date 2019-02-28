@@ -165,7 +165,7 @@ class IsHetAlView implements View {
 		} elseif ($this->ja === false) {
 			echo '<div class="nee">NEE.</div>';
 		} elseif (in_array($this->model, self::$aftellen)) {
-			echo '<div class="nee">OVER ' . $this->ja . ' DAGEN!</div>';
+			echo '<div class="nee">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</div>';
 		} else {
 			// wist u dat
 		}
