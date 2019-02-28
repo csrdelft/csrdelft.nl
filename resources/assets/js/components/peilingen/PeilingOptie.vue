@@ -3,7 +3,7 @@
 			 class="row">
 		<div class="col-md-4">{{titel}}</div>
 		<div class="col-md-6">
-			<ProgressBar :progress="progress" :reverse="true"></ProgressBar>
+			<ProgressBar :progress="progress"></ProgressBar>
 		</div>
 		<div class="col-md-2">{{progressText}}</div>
 		<div ref="beschrijving_gestemd" class="col text-muted pt-2" v-html="beschrijving"></div>
