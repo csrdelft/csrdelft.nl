@@ -11,7 +11,7 @@
 		{icon get="verjaardag"}
 		{$item->getUrl()}
 	{elseif $item instanceof CsrDelft\model\entity\maalcie\Maaltijd}
-		<img src="/plaetjes/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon" />
+		<img src="/images/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon" />
 		<div class="tijd">
 			{$item->getBeginMoment()|date_format:"%R"} - {$item->getEindMoment()|date_format:"%R"}
 		</div>
@@ -20,7 +20,7 @@
 		</a>
 	{elseif $item instanceof CsrDelft\model\entity\CorveeTaak}
 		{if $item->getCorveeFunctie()->naam|stristr:"klus"}
-			<img src="/plaetjes/maalcie/drill.png" width="16" height="16" alt="drill" class="icon" />
+			<img src="/images/maalcie/drill.png" width="16" height="16" alt="drill" class="icon" />
 		{else}
 			{icon get="paintcan"}
 		{/if}
