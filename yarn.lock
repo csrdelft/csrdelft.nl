@@ -3430,9 +3430,10 @@ jgallery@^1.6.4:
     tinycolor2 ">=0.9.16"
     touchswipe ">=1.6.0"
 
-jquery-hoverintent@^1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/jquery-hoverintent/-/jquery-hoverintent-1.9.0.tgz#4d92c1ae07b71b9f0d9721b9b412d672abd387c8"
+jquery-hoverintent@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/jquery-hoverintent/-/jquery-hoverintent-1.10.0.tgz#cb5f96486f86d0787408bfe315171b2dbbc83130"
+  integrity sha512-84vzq3xj44kX7KxAa6IeMdFxeyNLRH1YUSs8AFt/mlQ4X2AojCiHYg2mtew8Os0jGCH4nMzK0zBNq/Y7ubFYJA==
   dependencies:
     jquery ">=1.7.0"
 
