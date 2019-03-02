@@ -42,12 +42,13 @@
 	{/foreach}
 </table>
 {$smarty.capture.navlinks}
-<div class="clear" title="Houd deze url privé!&#013;Nieuwe aanvragen: zie je profiel">
-	<a name="ICAL"></a>
-	<img src="/plaetjes/knopjes/ical.gif" alt="ICAL" />
+<div id="ICAL" class="input-group" title="Houd deze url privé!&#013;Nieuwe aanvragen: zie je profiel">
+	<div class="input-group-prepend">
+		<span class="input-group-text"><img src="/images/ical.gif" alt="ICAL" /></span>
+	</div>
 {if CsrDelft\model\security\LoginModel::getUid() == 'x999' OR CsrDelft\model\security\LoginModel::getAccount()->hasPrivateToken()}
-	<input type="text" value="{CsrDelft\model\security\LoginModel::getAccount()->getICalLink()}" size="35" onclick="this.setSelectionRange(0, this.value.length);" readonly />
+	<input class="form-control" type="text" value="{CsrDelft\model\security\LoginModel::getAccount()->getICalLink()}" size="35" onclick="this.setSelectionRange(0, this.value.length);" readonly />
 {else}
-	<a href="/profiel/{CsrDelft\model\security\LoginModel::getUid()}#tokenaanvragen">Privé url aanvragen</a>
+	<a class="input-group-text" href="/profiel/{CsrDelft\model\security\LoginModel::getUid()}#tokenaanvragen">Privé url aanvragen</a>
 {/if}
 </div>
