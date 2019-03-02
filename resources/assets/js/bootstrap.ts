@@ -140,7 +140,6 @@ $.timeago.settings.strings = {
 };
 
 ctx.addHandlers({
-	'': (el) => $(el).uitooltip({track: true}),
 	'.hoverIntent': (el) => $(el).hoverIntent({
 		over() {
 			$(this).find('.hoverIntentContent').fadeIn();
