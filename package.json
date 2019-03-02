@@ -74,7 +74,7 @@
 		"@babel/runtime": "^7.3.1",
 		"autosize": "^1.18.13",
 		"axios": "^0.18",
-		"bootstrap": "^4.0.0",
+		"bootstrap": "^4.3.1",
 		"bootstrap-vue": "^2.0.0-rc.11",
 		"chart.js": "^2.7.3",
 		"corejs-typeahead": "^1.2.1",
