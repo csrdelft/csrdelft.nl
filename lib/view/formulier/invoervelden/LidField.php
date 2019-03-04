@@ -86,7 +86,11 @@ var preview{$this->getId()} = function() {
 		url: "/tools/naamlink.php?zoekin={$this->zoekin}&naam=" + val,
 	}).done(function(response) {
 		$('#lidPreview_{$this->getId()}').html(response);
-		window.context.init(document.getElementById('lidPreview_{$this->getId()}'));
+		var el = document.getElementById('lidPreview_{$this->getId()}');
+		
+		if (el) { // el kan op dit moment niet meer bestaan.
+				window.context.init(el);
+		}
 	});
 };
 preview{$this->getId()}();
