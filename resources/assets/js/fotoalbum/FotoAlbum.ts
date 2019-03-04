@@ -16,13 +16,15 @@ export class FotoAlbum extends EventEmitter {
 
 	public static requestFullscreen() {
 		const docelem = document.querySelector('.jgallery');
-		if (docelem) {
+		if (docelem && typeof docelem.requestFullscreen === 'function') {
 			docelem.requestFullscreen();
 		}
 	}
 
 	public static exitFullScreen() {
-		document.exitFullscreen();
+		if (typeof document.exitFullscreen === 'function') {
+			document.exitFullscreen();
+		}
 	}
 
 	public container: JQuery;
