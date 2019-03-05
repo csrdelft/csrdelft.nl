@@ -222,14 +222,23 @@ HTML;
 					break;
 			}
 		}
-		if (isset($arguments['w']) AND $arguments['w'] > 10) {
+		$heeftBreedte = isset($arguments['w']) AND $arguments['w'] > 10;
+		$heeftHoogte = isset($arguments['h']) AND $arguments['h'] > 10;
+
+		if ($heeftBreedte) {
 			$style .= 'width: ' . ((int)$arguments['w']) . 'px; ';
 		}
-		if (isset($arguments['h']) AND $arguments['h'] > 10) {
+		if ($heeftHoogte) {
 			$style .= 'height: ' . ((int)$arguments['h']) . 'px;';
 		}
+
 		if ($this->email_mode) {
-			return '<img class="bb-img ' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
+			// Geef een standaard breedte op om te voorkomen dat afbeeldingen te breed worden.
+			if (!$heeftBreedte && !$heeftHoogte) {
+				$style .= 'width:500px;';
+			}
+
+			return '<img class="' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
 		}
 		return '<div class="bb-img-loading" src="' . $url . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
 	}
