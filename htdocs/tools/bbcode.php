@@ -23,4 +23,8 @@ if (isset($_POST['data'])) {
 
 $string = trim($string);
 
-echo CsrBB::parse($string);
+if (isset($_POST['mail'])) {
+	echo CsrBB::parseMail($string);
+} else {
+	echo CsrBB::parse($string);
+}

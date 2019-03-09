@@ -143,3 +143,43 @@ export function singleLineString(strings: TemplateStringsArray, ...values: strin
 	// Rip out the leading whitespace.
 	return lines.map((line) => line.replace(/^\s+/gm, '')).join(' ').trim();
 }
+
+export function html(strings: TemplateStringsArray, ...values: string[]): HTMLElement {
+	let output = '';
+	for (let i = 0; i < values.length; i++) {
+		output += strings[i] + values[i];
+	}
+	output += strings[values.length];
+
+	return (new DOMParser().parseFromString(output, 'text/html').body.firstChild) as HTMLElement;
+}
+
+export function htmlParse(htmlString: string) {
+	return new DOMParser().parseFromString(htmlString, 'text/html').body.children;
+}
+
+export function preloadImage(url: string, callback: () => void) {
+	const img = new Image();
+	img.src = url;
+	img.onload = callback;
+}
+
+export function parseData(el: HTMLElement) {
+	const data = el.dataset;
+
+	const out: any = {};
+
+	for (const item of Object.keys(data)) {
+		if (data[item] === 'false') {
+			out[item] = false;
+		} else if (data[item] === 'true') {
+			out[item] = true;
+		} else if (!isNaN(Number(data[item]))) {
+			out[item] = Number(data[item]);
+		} else {
+			out[item] = data[item];
+		}
+	}
+
+	return out;
+}

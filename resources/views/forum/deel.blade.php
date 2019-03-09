@@ -108,11 +108,10 @@
 			@auth
 				@if(!isset($deel->forum_id))
 					<div>
-						Berichten per dag: (sleep om te zoomen)
+						Berichten per dag:
 						<div class="grafiek">
-							{{-- forum.js pikt dit op en vult met een grafiekje. --}}
-							<div id="stats_grafiek_overview" style="height: 200px;"></div>
-							<div id="stats_grafiek_details" style="height: 500px;"></div>
+							{{-- forum.ts pikt dit op en vult met een grafiekje. --}}
+							<div id="stats_grafiek_overview" class="ctx-graph-line" data-url="/forum/grafiekdata/overview" style="height: 200px;"></div>
 						</div>
 					</div>
 				@endif

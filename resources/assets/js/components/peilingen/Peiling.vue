@@ -22,7 +22,7 @@
 							v-model="optie.selected"
 							:key="optie.id"
 							:id="optie.id"
-							:peilingId="optie.peiling_id"
+							:peilingId="id"
 							:titel="optie.titel"
 							:beschrijving="optie.beschrijving_formatted"
 							:stemmen="optie.stemmen"
@@ -47,7 +47,7 @@
 
 		<div v-if="!heeftGestemd && magStemmen" class="card-footer footer">
 			<div>{{strKeuzes}}</div>
-			<PeilingOptieToevoegen v-if="aantalVoorstellen > 0"></PeilingOptieToevoegen>
+			<PeilingOptieToevoegen v-if="aantalVoorstellen > 0" :id="id"></PeilingOptieToevoegen>
 
 			<input
 				type="button"
@@ -59,35 +59,59 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 	import axios from 'axios';
-	import PeilingOptieToevoegen from './PeilingOptieToevoegen';
-	import PeilingOptie from './PeilingOptie';
+	import Vue from 'vue';
+	import {Component, Prop} from 'vue-property-decorator';
 	import Icon from '../common/Icon';
+	import PeilingOptie from './PeilingOptie';
+	import PeilingOptieToevoegen from './PeilingOptieToevoegen';
 
-	export default {
-		name: 'Peiling',
+	interface PeilingSettings {
+		id: string;
+		titel: string;
+		beschrijving: string;
+		resultaat_zichtbaar: boolean;
+		aantal_voorstellen: number;
+		aantal_stemmen: number;
+		aantal_gestemd: number;
+		is_mod: boolean;
+		mag_stemmen: boolean;
+		heeft_gestemd: boolean;
+		opties: PeilingOptieSettings[];
+	}
+
+	interface PeilingOptieSettings {
+		id: string;
+		titel: string;
+		beschrijving_formatted: string;
+		selected: boolean;
+		stemmen: number;
+	}
+
+	@Component({
 		components: {Icon, PeilingOptie, PeilingOptieToevoegen},
-		props: {
-			settings: {}
-		},
-		data: () => ({
-			id: null,
-			titel: null,
-			beschrijving: null,
-			resultaatZichtbaar: null,
-			aantalVoorstellen: null,
-			aantalStemmen: null,
-			aantalGestemd: null,
-			isMod: null,
-			heeftGestemd: null,
-			magStemmen: null,
-			opties: [],
-			zoekterm: '',
-			huidigePagina: 1,
-			paginaSize: 10,
-		}),
-		created() {
+	})
+	export default class Peiling extends Vue {
+		@Prop()
+		private settings: PeilingSettings;
+
+		private id: string = '';
+		private titel: string = '';
+		private beschrijving: string = '';
+		private resultaatZichtbaar: boolean = false;
+		private aantalVoorstellen: number = 0;
+		private aantalStemmen: number = 0;
+		private aantalGestemd: number = 0;
+		private isMod: boolean = false;
+		private heeftGestemd: boolean = false;
+		private magStemmen: boolean = false;
+		private opties: PeilingOptieSettings[] = [];
+		private zoekterm: string = '';
+		private huidigePagina = 1;
+		private paginaSize = 10;
+
+		private created() {
 			this.id = this.settings.id;
 			this.titel = this.settings.titel;
 			this.beschrijving = this.settings.beschrijving;
@@ -103,57 +127,63 @@
 			// Als er op deze pagina een modal gesloten wordt is dat misschien die van
 			// de optie toevoegen modal. Dit is de enige manier om dit te weten op dit moment
 			$(document.body).on('modalClose', () => this.reload());
-		},
-		computed: {
-			beheerUrl() {
-				return `/peilingen/beheer/${this.id}`;
-			},
-			selected() {
-				return this.opties.filter((o) => o.selected);
-			},
-			optiesFiltered() {
-				return this.opties.filter((o) => o.titel.toLowerCase().includes(this.zoekterm.toLowerCase()));
-			},
-			optiesZichtbaar() {
-				let begin = (this.huidigePagina - 1) * this.paginaSize;
-				let eind = begin + this.paginaSize;
-
-				return this.optiesFiltered.slice(begin, eind);
-			},
-			keuzesOver() {
-				return this.aantalStemmen - this.selected.length > 0;
-			},
-			strKeuzes() {
-				return `${this.selected.length} van de ${this.aantalStemmen} geselecteerd`;
-			},
-			strAantalGestemd() {
-				return this.aantalGestemd > 0 ? `(${this.aantalGestemd} stem${this.aantalGestemd> 1 ? 'men' : ''})` : '';
-			},
-			zoekbalkZichtbaar() {
-				return this.opties.length > 10;
-			}
-		},
-		methods: {
-			stem() {
-				axios
-					.post(`/peilingen/stem/${this.id}`, {
-						opties: this.selected.map((o) => o.id)
-					})
-					.then(() => {
-						this.heeftGestemd = true;
-						this.aantalGestemd = this.aantalGestemd + this.selected.length;
-						this.reload();
-					});
-			},
-			reload() {
-				axios
-					.post(`/peilingen/opties/${this.id}`)
-					.then((response) => {
-						this.opties = response.data.data;
-					});
-			}
 		}
-	};
+
+		private get beheerUrl() {
+			return `/peilingen/beheer/${this.id}`;
+		}
+
+		private get selected() {
+			return this.opties.filter((o) => o.selected);
+		}
+
+		private get optiesFiltered() {
+			return this.opties.filter((o) => o.titel.toLowerCase().includes(this.zoekterm.toLowerCase()));
+		}
+
+		private get optiesZichtbaar() {
+			const begin = (this.huidigePagina - 1) * this.paginaSize;
+			const eind = begin + this.paginaSize;
+
+			return this.optiesFiltered.slice(begin, eind);
+		}
+
+		private get keuzesOver() {
+			return this.aantalStemmen - this.selected.length > 0;
+		}
+
+		private get strKeuzes() {
+			return `${this.selected.length} van de ${this.aantalStemmen} geselecteerd`;
+		}
+
+		private get strAantalGestemd() {
+			return this.aantalGestemd > 0 ? `(${this.aantalGestemd} stem${this.aantalGestemd > 1 ? 'men' : ''})` : '';
+		}
+
+		private get zoekbalkZichtbaar() {
+			return this.opties.length > 10;
+		}
+
+		private stem() {
+			axios
+				.post(`/peilingen/stem/${this.id}`, {
+					opties: this.selected.map((o) => o.id),
+				})
+				.then(() => {
+					this.heeftGestemd = true;
+					this.aantalGestemd = this.aantalGestemd + this.selected.length;
+					this.reload();
+				});
+		}
+
+		private reload() {
+			axios
+				.post(`/peilingen/opties/${this.id}`)
+				.then((response) => {
+					this.opties = response.data.data;
+				});
+		}
+	}
 </script>
 
 <style scoped>

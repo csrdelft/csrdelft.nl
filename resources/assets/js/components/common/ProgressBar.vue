@@ -1,25 +1,22 @@
 <template>
-	<div :class="{'progress': true, 'flex-row-reverse': reverse}">
+	<div class="progress">
 		<div class="progress-bar" :style="{width: progress + '%'}">
 			<slot/>
 		</div>
 	</div>
 </template>
 
-<script>
-	export default {
-		name: 'ProgressBar',
-		props: {
-			progress: {
-				type: [Number, String] // Liever een nummer, maar een string kunnen we ook mee overweg.
-			},
-			reverse: {
-				type: Boolean,
-				required: false,
-				default: () => false,
-			}
-		},
-	};
+<script lang="ts">
+	import Vue from 'vue';
+	import {Component, Prop} from 'vue-property-decorator';
+
+	@Component
+	export default class ProgressBar extends Vue {
+		@Prop({
+			type: [Number, String],
+		})
+		private progress: number | string; // Liever een nummer, maar een string kunnen we ook mee overweg.
+	}
 </script>
 
 <style scoped>

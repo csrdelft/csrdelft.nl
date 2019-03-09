@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import initContext from './context';
+import {init} from './ctx';
 import {singleLineString} from './util';
 
 /**
@@ -9,7 +9,7 @@ import {singleLineString} from './util';
  * @see templates/roodschopper/roodschopper.tpl
  * @see view/formulier/invoervelden/BBCodeField.class.php
  */
-export const CsrBBPreview = (sourceId: string, targetId: string) => {
+export const CsrBBPreview = (sourceId: string, targetId: string, params: object) => {
 	if (sourceId.charAt(0) !== '#') {
 		sourceId = `#${sourceId}`;
 	}
@@ -23,9 +23,10 @@ export const CsrBBPreview = (sourceId: string, targetId: string) => {
 	}
 	$.post('/tools/bbcode.php', {
 		data: encodeURIComponent(bbcode),
+		...params,
 	}).done((data) => {
 		$(targetId).html(data);
-		initContext($(targetId));
+		init(document.querySelector(targetId)!);
 		$(targetId).show();
 	}).fail((error) => {
 		alert(error);

@@ -4,3 +4,6 @@ vendor
 data/assets
 data/smarty
 data/less
+lib
+htdocs
+resources

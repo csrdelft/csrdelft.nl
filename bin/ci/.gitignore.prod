@@ -33,6 +33,9 @@ sql/*
 docs/*
 docker-compose.yml
 tsconfig.json
+tsconfig-for-webpack-config.json
+tslint.json
+webpack.config.ts
 webpack.config.js
 .travis.yml
 .tidelift.yml

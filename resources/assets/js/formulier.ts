@@ -1,12 +1,24 @@
 import $ from 'jquery';
 import {ajaxRequest} from './ajax';
-import initContext, {domUpdate} from './context';
+import {bbCodeSet} from './bbcode-set';
+import {domUpdate} from './context';
+import ctx, {init} from './ctx';
 import {DatatableResponse, fnGetSelection, fnUpdateDataTable} from './datatable/api';
 
 import {modalClose, modalOpen} from './modal';
 
 import {redirect, reload} from './util';
-import SubmitEvent = JQuery.SubmitEvent;
+
+ctx.addHandlers({
+	'.InlineFormToggle': (el) => el.addEventListener('click', (event) => formToggle(el, event)),
+	'.SubmitChange': (el) => el.addEventListener('change', formSubmit),
+	'.cancel': (el) => el.addEventListener('click', formCancel),
+	'.reset': (el) => el.addEventListener('click', formReset),
+	'.submit': (el) => el.addEventListener('click', formSubmit),
+	'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
+	'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
+	'time.timeago': (el) => $(el).timeago(),
+});
 
 export function formIsChanged(form: JQuery<EventTarget>) {
 	let changed = false;
@@ -40,14 +52,14 @@ export function formInlineToggle(form: JQuery<EventTarget>) {
 	form.children(':first').trigger('focus');
 }
 
-export function formToggle(this: JQuery, event: Event) {
+export function formToggle(target: Element, event: Event) {
 	event.preventDefault();
-	const form = $(this).next('form');
+	const form = $(target).next('form');
 	formInlineToggle(form);
 	return false;
 }
 
-export function formReset(event: SubmitEvent, form: JQuery<EventTarget>) {
+export function formReset(event: Event, form?: JQuery<any>) {
 	if (!form) {
 		form = $(event.target!).closest('form');
 		event.preventDefault();
@@ -70,9 +82,11 @@ export function formReset(event: SubmitEvent, form: JQuery<EventTarget>) {
  * @param event
  * @returns {boolean}
  */
-export function formSubmit(this: JQuery, event: SubmitEvent) {
-	if ($(this).hasClass('confirm')) {
-		let q = $(this).attr('title');
+export function formSubmit(event: Event) {
+	const target = event.target as Element;
+	const $target = $(target);
+	if ($target.hasClass('confirm')) {
+		let q = $target.attr('title');
 		if (q) {
 			q += '.\n\n';
 		} else {
@@ -84,13 +98,9 @@ export function formSubmit(this: JQuery, event: SubmitEvent) {
 		}
 	}
 
-	let form = $(this).closest('form');
+	const form = $target.closest('form');
 	if (!form.hasClass('Formulier')) {
-		if (event) {
-			form = $(event.target.form);
-		} else {
-			return false;
-		}
+		return false;
 	}
 
 	if (form.hasClass('PreventUnchanged') && !formIsChanged(form)) {
@@ -99,8 +109,8 @@ export function formSubmit(this: JQuery, event: SubmitEvent) {
 		return false;
 	}
 
-	if ($(this).attr('href')) {
-		form.attr('action', $(this).attr('href')!);
+	if ($target.attr('href')) {
+		form.attr('action', $target.attr('href')!);
 	}
 
 	if (!(form.hasClass('ModalForm') || form.hasClass('InlineForm'))) {
@@ -111,7 +121,7 @@ export function formSubmit(this: JQuery, event: SubmitEvent) {
 		event.preventDefault();
 		const formData = new FormData(form.get(0) as HTMLFormElement);
 		let done = domUpdate;
-		let source: JQuery | boolean = false;
+		let source: JQuery<Element> | boolean = false;
 
 		if (form.hasClass('InlineForm')) {
 			source = form;
@@ -139,7 +149,7 @@ export function formSubmit(this: JQuery, event: SubmitEvent) {
 					fnUpdateDataTable('#' + tableId, response);
 					if (response.modal) {
 						modalOpen(response.modal);
-						initContext($('#modal'));
+						init(document.querySelector('#modal')!);
 					} else {
 						modalClose();
 					}

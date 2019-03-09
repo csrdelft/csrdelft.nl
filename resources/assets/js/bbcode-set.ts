@@ -44,25 +44,31 @@ export const bbCodeSet = {
 		{separator: '|'},
 		{
 			className: 'ico photos', name: 'Fotoalbum', replaceWith: (markitup: any) => {
-				let url = decodeURIComponent(window.prompt('Url', '')!.trim());
-				const pos = url.indexOf('/fotoalbum/');
-				if (pos > 0) {
-					url = url.substring(pos + 10);
-					return '[fotoalbum]' + url + '[/fotoalbum]';
+				let url = window.prompt('Url', '');
+				if (url) {
+					url = decodeURIComponent(url.trim());
+					const pos = url.indexOf('/fotoalbum/');
+					if (pos > 0) {
+						url = url.substring(pos + 10);
+						return '[fotoalbum]' + url + '[/fotoalbum]';
+					}
+					alert('Ongeldige url!');
 				}
-				alert('Ongeldige url!');
 				return markitup.selection;
 			},
 		},
 		{
 			className: 'ico photo', name: 'Poster of foto uit album', replaceWith: (markitup: any) => {
-				let url = decodeURIComponent(window.prompt('Url', '')!.trim());
-				const pos = url.indexOf('/fotoalbum/');
-				if (pos > 0) {
-					url = url.substring(pos + 10).replace('_resized/', '').replace('_thumbs/', '').replace('#', '');
-					return '[foto]' + url + '[/foto]';
+				let url = window.prompt('Url', '');
+				if (url) {
+					url = decodeURIComponent(url.trim());
+					const pos = url.indexOf('/fotoalbum/');
+					if (pos > 0) {
+						url = url.substring(pos + 10).replace('_resized/', '').replace('_thumbs/', '').replace('#', '');
+						return '[foto]' + url + '[/foto]';
+					}
+					alert('Ongeldige url!');
 				}
-				alert('Ongeldige url!');
 				return markitup.selection;
 			},
 		},

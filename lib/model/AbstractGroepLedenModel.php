@@ -77,27 +77,30 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 		$uids = array_keys($leden);
 		$count = count($uids);
 		$sqlIn = implode(', ', array_fill(0, $count, '?'));
-		$stats['Verticale'] = Database::instance()->sqlSelect(['naam', 'count(*)'], 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $sqlIn . ')', $uids, 'verticale', null)->fetchAll();
-		$stats['Geslacht'] = Database::instance()->sqlSelect(['geslacht', 'count(*)'], ProfielModel::instance()->getTableName(), 'uid IN (' . $sqlIn . ')', $uids, 'geslacht', null)->fetchAll();
-		$stats['Lichting'] = Database::instance()->sqlSelect(['lidjaar', 'count(*)'], ProfielModel::instance()->getTableName(), 'uid IN (' . $sqlIn . ')', $uids, 'lidjaar', null)->fetchAll();
-		$stats['Tijd'] = [];
+		$tijd = [];
 		foreach ($leden as $groeplid) {
-			$time = strtotime($groeplid->lid_sinds) * 1000;
+			$time = strtotime($groeplid->lid_sinds);
 			if (isset($stats['Tijd'][$time])) {
-				$stats['Tijd'][$time] += 1;
+				$tijd[$time] += 1;
 			} else {
-				$stats['Tijd'][$time] = 1;
+				$tijd[$time] = 1;
 			}
 		}
-		$stats['Totaal'] = $count;
+		$totaal = $count;
 		if ($groep instanceof HeeftAanmeldLimiet) {
 			if ($groep->getAanmeldLimiet() === null) {
-				$stats['Totaal'] .= ' (geen limiet)';
+				$totaal .= ' (geen limiet)';
 			} else {
-				$stats['Totaal'] .= ' van ' . $groep->getAanmeldLimiet();
+				$totaal .= ' van ' . $groep->getAanmeldLimiet();
 			}
 		}
-		return $stats;
+		return [
+			'totaal' => $totaal,
+			'verticale' => Database::instance()->sqlSelect(['naam', 'count(*)'], 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $sqlIn . ')', $uids, 'verticale', null)->fetchAll(),
+			'geslacht' => Database::instance()->sqlSelect(['geslacht', 'count(*)'], ProfielModel::instance()->getTableName(), 'uid IN (' . $sqlIn . ')', $uids, 'geslacht', null)->fetchAll(),
+			'lichting' => Database::instance()->sqlSelect(['lidjaar', 'count(*)'], ProfielModel::instance()->getTableName(), 'uid IN (' . $sqlIn . ')', $uids, 'lidjaar', null)->fetchAll(),
+			'tijd' => $tijd,
+		];
 	}
 
 }

@@ -148,6 +148,16 @@ li.verborgen {
   background-image: url(../../images/jarig.jpg);
 }
 
+.saldo-terug-button {
+	cursor: pointer;
+	font-size: 12px;
+	line-height: 12px;
+	position: absolute;
+	padding: 0;
+	left: 10px;
+	bottom: 0;
+}
+
 @media screen and (max-width: 960px) {
 	#profiel {
 		.saldografiek {

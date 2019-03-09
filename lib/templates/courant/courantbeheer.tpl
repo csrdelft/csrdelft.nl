@@ -43,7 +43,7 @@
 	</dl>
 {/if}
 
-<form action="/courant/{if $form.ID==0}toevoegen{else}bewerken/{$form.ID}{/if}" method="post">
+<form action="/courant/{if $form.ID==0}toevoegen{else}bewerken/{$form.ID}{/if}" class="Formulier" method="post">
 	{printCsrfField()}
 	<div id="pubciemail_form">
 		<h3>{if $form.ID==0}Nieuw bericht invoeren{else}Bericht bewerken{/if}</h3>
@@ -60,7 +60,7 @@
 		<div id="bewerkPreview" class="bbcodePreview"></div>
 		<textarea id="courantBericht" name="bericht" class="breed" rows="15" style="resize:vertical;">{$form.bericht|escape:'html'}</textarea>
 		<input type="submit" name="verzenden" value="Opslaan" /> 
-		<input type="button" value="Voorbeeld" onclick="window.bbcode.CsrBBPreview('courantBericht', 'bewerkPreview');" />
+		<input type="button" value="Voorbeeld" onclick="{literal}window.bbcode.CsrBBPreview('courantBericht', 'bewerkPreview', {mail: true});{/literal}" />
 		{if $courant->magBeheren()}
 			<input type="button" value="Importeer agenda" onclick="window.courant.importAgenda('courantBericht');" />
 			<input type="button" value="Importeer sponsor" onclick="document.getElementById('courantBericht').value += '[img]{$sponsor|escape:'html'}[/img]'" />

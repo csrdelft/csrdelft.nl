@@ -48,7 +48,8 @@ abstract class InlineForm extends Formulier implements FormElement {
 	public function getHtml() {
 		$html = '<div id="wrapper_' . $this->formId . '" class="InlineForm">';
 		if ($this->toggle) {
-			$html .= '<div id="toggle_' . $this->formId . '" class="InlineFormToggle">' . $this->field->getValue() . '</div>';
+			$value = $this->field->getValue() ?? '<div class="text-muted">Geen waarde</div>';
+			$html .= '<div id="toggle_' . $this->formId . '" class="InlineFormToggle">' . $value . '</div>';
 			$this->css_classes[] = 'ToggleForm';
 		}
 		$html .= $this->getFormTag();

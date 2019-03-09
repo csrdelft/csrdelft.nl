@@ -1,16 +1,17 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
-const {VueLoaderPlugin} = require('vue-loader');
-const path = require('path');
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+import path from 'path';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+import {VueLoaderPlugin} from 'vue-loader';
+import webpack from 'webpack';
+import ManifestPlugin from 'webpack-manifest-plugin';
 
-const devMode = process.env.NODE_ENV !== 'production';
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
-let contextPath = path.resolve(__dirname, 'resources/assets');
+const contextPath = path.resolve(__dirname, 'resources/assets');
 
 // De Webpack configuratie.
-module.exports = (env, argv) => ({
+const config: (env: string, argv: any) => webpack.Configuration = (env, argv) => ({
 	mode: 'development',
 	context: contextPath,
 	entry: {
@@ -52,22 +53,25 @@ module.exports = (env, argv) => ({
 		// Vanuit javascript kun je automatisch .js en .ts bestanden includen.
 		extensions: ['.ts', '.js', '.vue'],
 		alias: {
-			'vue$': 'vue/dist/vue.esm.js'
-		}
+			vue$: 'vue/dist/vue.esm.js',
+		},
 	},
 	optimization: {
 		minimizer: [
 			new OptimizeCSSAssetsPlugin({}),
 			new UglifyJsPlugin(),
-		]
+		],
 	},
 	plugins: [
 		new MiniCssExtractPlugin({
 			// Css bestanden komen in de map css terecht.
-			filename: argv.mode !== 'production' ? 'css/[name].css' : 'css/[name].[contenthash].css'
+			filename: argv.mode !== 'production' ? 'css/[name].css' : 'css/[name].[contenthash].css',
 		}),
 		new VueLoaderPlugin(),
 		new ManifestPlugin(),
+		new MomentLocalesPlugin({
+			localesToKeep: ['nl'],
+		}),
 	],
 	module: {
 		// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
@@ -88,13 +92,27 @@ module.exports = (env, argv) => ({
 				exclude: [
 					/node_modules/,
 					/lib/,
+					/\.vue\.tsx?/,
 				],
 				use: {
 					loader: 'tslint-loader',
 					options: {
 						failOnHint: true,
-					}
+					},
 				},
+			},
+			{
+				test: /\.vue.(ts|tsx)$/,
+				exclude: /node_modules/,
+				enforce: 'pre',
+				use: [
+					{
+						loader: 'vue-tslint-loader',
+						options: {
+							failOnHint: true,
+						},
+					},
+				],
 			},
 			// Verwerk .js bestanden met babel, dit zorgt ervoor dat alle nieuwe foefjes van javascript gebruikt kunnen worden
 			// terwijl we nog wel oudere browsers ondersteunen.
@@ -107,9 +125,14 @@ module.exports = (env, argv) => ({
 						loader: 'babel-loader',
 						options: {
 							presets: ['@babel/preset-env'],
-							plugins: ['@babel/syntax-dynamic-import', '@babel/plugin-proposal-class-properties']
+							plugins: [
+								'@babel/syntax-dynamic-import',
+								'@babel/plugin-proposal-class-properties',
+								'@babel/plugin-transform-runtime',
+								['@babel/plugin-proposal-decorators', {decoratorsBeforeExport: true}],
+							],
 						},
-					}
+					},
 				],
 			},
 			// Verwerk .ts (typescript) bestanden en maak er javascript van.
@@ -126,20 +149,33 @@ module.exports = (env, argv) => ({
 			},
 			{
 				test: /\.vue$/,
-				use: 'vue-loader'
+				use: {
+					loader: 'vue-loader',
+					options: {
+						loaders: {
+							ts: 'ts-loader!tslint-loader',
+						},
+					},
+				},
 			},
 			// Verwerk sass bestanden.
-			// `sass-loader` > Compileer naar css
-			// `resolve-url-loader` > Zorg ervoor dat verwijzingen naar externe bestanden kloppen (sass was meerdere bestanden, css één)
-			// `css-loader` > Trek alle afbeeldingen/fonts waar naar verwezen wordt naar de dist/images map
-			// `postcss-loader` > Haal een autoprefixer over de css, deze zorgt ervoor dat eventuele vendor-prefixes (-moz-, -webkit-) worden toegevoegd.
-			// `MiniCssExtractPlugin` > Normaal slaat webpack css op in javascript bestanden, zodat je ze makkelijk specifiek kan opvragen
-			//		hier zorgen we ervoor dat de css eruit wordt getrokken en in een los .css bestand wordt gestopt.
+			// `sass-loader` >
+			// Compileer naar css
+			// `resolve-url-loader` >
+			// Zorg ervoor dat verwijzingen naar externe bestanden kloppen (sass was meerdere bestanden, css één)
+			// `css-loader` >
+			// Trek alle afbeeldingen/fonts waar naar verwezen wordt naar de dist/images map
+			// `postcss-loader` >
+			// Haal een autoprefixer over de css, deze zorgt ervoor dat eventuele vendor-prefixes (-moz-, -webkit-)
+			// worden toegevoegd.
+			// `MiniCssExtractPlugin` >
+			// Normaal slaat webpack css op in javascript bestanden, zodat je ze makkelijk specifiek kan opvragen
+			// hier zorgen we ervoor dat de css eruit wordt getrokken en in een los .css bestand wordt gestopt.
 			{
 				test: /\.scss$/,
 				use: [
 					{
-						loader: MiniCssExtractPlugin.loader,
+						loader: MiniCssExtractPlugin.loader as string, // Om ts tevreden te houden.
 						options: {
 							// De css bestanden zitten in de css map, / is dus te vinden op ../
 							publicPath: '../',
@@ -161,7 +197,7 @@ module.exports = (env, argv) => ({
 					},
 					{
 						loader: 'resolve-url-loader',
-						options: {}
+						options: {},
 					},
 					{
 						loader: 'sass-loader',
@@ -185,7 +221,7 @@ module.exports = (env, argv) => ({
 			},
 			{
 				test: /\.css$/,
-				use: ['cache-loader', 'style-loader', 'css-loader']
+				use: ['cache-loader', 'style-loader', 'css-loader'],
 			},
 			// Sla fonts op in de fonts map.
 			{
@@ -210,3 +246,5 @@ module.exports = (env, argv) => ({
 		],
 	},
 });
+
+export default config;

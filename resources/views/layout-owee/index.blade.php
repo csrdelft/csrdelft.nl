@@ -28,7 +28,7 @@
 				<div class="content">
 					<h2 class="major">C.S.R. Delft</h2>
 					<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
-						Delft, rijk aan tradities die zijn ontstaan in haar 56-jarig bestaan. Het is een breed gezelschap
+						Delft, rijk aan tradities die zijn ontstaan in haar 57-jarig bestaan. Het is een breed gezelschap
 						van zo'n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
 						eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
 						vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
@@ -47,12 +47,12 @@
 				</noscript>
 				<div class="content">
 					<h2 class="major">C.S.R. in de OWee</h2>
-					<p>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee. Dit jaar
-						duurt de OWee van 19 t/m 23 augustus met op zondag 19 augustus de offici&euml;le opening. Tijdens deze
-						week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,
+					<p>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.
+						Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,
 						studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
-						deze groepen en dus ook C.S.R. zullen zichzelf tijdens deze week op verschillende momenten en
-						manieren presenteren.</p>
+						deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
+						Ook bij C.S.R. stellen we van 19 t/m 22 augustus onze deuren open, dus kom vooral langs om de sfeer
+						van C.S.R. en de rest van Delft te proeven!</p>
 				</div>
 			</div>
 		</section>
@@ -72,7 +72,7 @@
 						Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hieronder voor de
 						mogelijkheden of voor het opvragen van een informatiepakket.</p>
 					<a href="#footer" class="special">Vul interesseformulier in</a>
-					<p class="lidworden">Wil je lid worden? Zorg ervoor dat je de week van 27 augustus t/m 2 september vrij
+					<p class="lidworden">Wil je lid worden? Zorg ervoor dat je de week van 26 augustus t/m 1 september vrij
 						houdt voor de novitiaatsweek.</p>
 					<a href="/lidworden" class="special">Meer informatie over lid worden</a>
 				</div>

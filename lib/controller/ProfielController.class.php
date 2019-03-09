@@ -82,7 +82,6 @@ class ProfielController extends AclController {
 				'stamboom' => 'P_OUDLEDEN_READ',
 				'verjaardagen' => 'P_LEDEN_READ',
 				'memory' => 'P_OUDLEDEN_READ',
-				'saldo' => 'P_LEDEN_READ'
 			);
 		} else {
 			$this->acl = array(
@@ -92,7 +91,8 @@ class ProfielController extends AclController {
 				// Leden
 				'nieuw' => 'P_LEDEN_MOD,commissie:NovCie',
 				'memoryscore' => 'P_LEDEN_READ',
-				'memoryscores' => 'P_LEDEN_READ'
+				'memoryscores' => 'P_LEDEN_READ',
+				'saldo' => 'P_LEDEN_READ',
 			);
 		}
 	}
@@ -124,7 +124,8 @@ class ProfielController extends AclController {
 		}
 		else if ($this->hasParam(2) AND $this->getParam(2) === 'pasfoto') {
 			$this->action = 'pasfoto';
-			parent::performAction([implode('/', $this->getParams(3))]);
+		 	$uid = explode('.', $this->getParam(3))[0];
+			parent::performAction([$uid, implode('/', $this->getParams(3))]);
 		}
 		// Leden
 		else {
@@ -328,10 +329,15 @@ class ProfielController extends AclController {
 		$this->view = new LedenMemoryScoreResponse($data);
 	}
 
-	public function pasfoto($path) {
+	public function pasfoto($uid, $path) {
 		try {
-			$image = new Afbeelding(safe_combine_path(PASFOTO_PATH, $path));
-			$image->serve();
+			$profiel = ProfielModel::get($uid);
+			if (is_zichtbaar($profiel, 'profielfoto', 'intern')) {
+				$image = new Afbeelding(safe_combine_path(PASFOTO_PATH, $path));
+				$image->serve();
+			} else {
+				throw new CsrGebruikerException('Niet zichtbaar');
+			}
 		} catch (CsrGebruikerException $ex) {
 			redirect("/plaetjes/geen-foto.jpg");
 		}

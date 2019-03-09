@@ -52,7 +52,7 @@
 		</div>
 		<h1 class="inline">{{ucfirst($album->dirname)}}</h1>
 		@if($album->hasFotos())
-			<div id="gallery" class="gallery">
+			<div id="gallery" class="gallery disable-swipe">
 			</div>
 		@else
 			<div class="subalbums">

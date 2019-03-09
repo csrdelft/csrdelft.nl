@@ -5,7 +5,9 @@ import CellMetaSettings = DataTables.CellMetaSettings;
 /**
  * Documentenketzerjavascriptcode.
  */
-$(() => {
+$(async () => {
+	await import('./datatable/bootstrap');
+
 	const $documenten = $('#documenten');
 
 	// tabellen naar zebra converteren.
