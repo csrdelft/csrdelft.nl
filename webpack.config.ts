@@ -212,14 +212,6 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 				],
 			},
 			{
-				test: /\.scss$/,
-				use: [
-          'vue-style-loader',
-          'css-loader',
-          'sass-loader'
-				]
-			},
-			{
 				test: /\.css$/,
 				use: ['cache-loader', 'style-loader', 'css-loader'],
 			},

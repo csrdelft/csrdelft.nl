@@ -1,9 +1,10 @@
 import BootstrapVue from 'bootstrap-vue';
 import Vue from 'vue';
+import ToggleButton from 'vue-js-toggle-button';
+
+import KetzerTovenaar from './components/ketzertovenaar/KetzerTovenaar';
 import Peiling from './components/peilingen/Peiling.vue';
 import PeilingOptie from './components/peilingen/PeilingOptie.vue';
-import KetzerTovenaar from './components/ketzertovenaar/KetzerTovenaar';
-import ToggleButton from 'vue-js-toggle-button';
 
 Vue.component('peiling', Peiling);
 Vue.component('peilingoptie', PeilingOptie);

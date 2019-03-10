@@ -273,10 +273,6 @@
 		max-width: 600px;
 		margin: 0 auto;
 		font-size: 0;
-
-			div {
-				background: red;
-			}
 	}
 
 	.subOptions {

@@ -39,6 +39,5 @@ class KetzerTovenaarController extends AclController {
 
 	public function nieuw() {
 		$this->view = new KetzerTovenaarView();
-		$this->view = new CsrLayoutPage($this->view);
 	}
 }
