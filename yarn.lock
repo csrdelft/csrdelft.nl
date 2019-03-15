@@ -6236,6 +6236,13 @@ vue-class-component@^6.2.0, vue-class-component@^6.3.2:
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-6.3.2.tgz#e6037e84d1df2af3bde4f455e50ca1b9eec02be6"
   integrity sha512-cH208IoM+jgZyEf/g7mnFyofwPDJTM/QvBNhYMjqGB8fCsRyTf68rH2ISw/G20tJv+5mIThQ3upKwoL4jLTr1A==
 
+vue-functional-calendar@^2.1.0:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/vue-functional-calendar/-/vue-functional-calendar-2.1.5.tgz#97a43b1ba1a89e27cf0a806db5136ca7398fa525"
+  integrity sha512-HlV7HAUcKhOXavc5Xs2zOlaf74RGIuumZ01jaUJhdxjzi8vYnUY93kkPCvOg1w4Lnybbep+kYqMSFn2iQS6NZQ==
+  dependencies:
+    vue "^2.5.21"
+
 vue-functional-data-merge@^2.0.5:
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-2.0.7.tgz#bdee655181eacdcb1f96ce95a4cc14e75313d1da"
@@ -6243,6 +6250,11 @@ vue-functional-data-merge@^2.0.5:
 vue-hot-reload-api@^2.3.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.1.tgz#b2d3d95402a811602380783ea4f566eb875569a2"
+
+vue-js-toggle-button@^1.3.1:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/vue-js-toggle-button/-/vue-js-toggle-button-1.3.2.tgz#d2e538465c321967144d035824cb71eedd82984e"
+  integrity sha512-LS+pvX5lXEhX+Gei5MOAEw7bx99/A+9idFhMtBgz72ApsEHlW69Y7bk+ZKC1rLRUxchL5WlQ+MhJXqXewhkfjg==
 
 vue-loader@^15.4.1:
   version "15.4.2"
@@ -6302,6 +6314,11 @@ vue-typescript-import-dts@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/vue-typescript-import-dts/-/vue-typescript-import-dts-4.0.0.tgz#2ddb5354f61cff69ef2997ca9da1a3183041a880"
   integrity sha1-LdtTVPYc/2nvKZfKnaGjGDBBqIA=
+
+vue@^2.5.21:
+  version "2.6.8"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.8.tgz#f21cbc536bfc14f7d1d792a137bb12f69e60ea91"
+  integrity sha512-+vp9lEC2Kt3yom673pzg1J7T1NVGuGzO9j8Wxno+rQN2WYVBX2pyo/RGQ3fXCLh2Pk76Skw/laAPCuBuEQ4diw==
 
 vue@^2.5.7:
   version "2.5.21"

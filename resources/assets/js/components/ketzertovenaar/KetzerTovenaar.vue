@@ -68,12 +68,27 @@
 			</Toggle>
 
 			<functional-calendar
+				v-if="event.multipleDays"
 				:change-month-function="true"
 				:change-year-function="true"
 				v-model="event.calendarData"
-				:sundayStart="true"
 				:date-format="'dd-mm-yyyy'"
-				:is-date-range="event.multipleDays">
+				:is-date-picker="true"
+				:is-date-range="false"
+				:day-names="['Zo','Ma','Di','Wo','Do','Vr','Za']"
+				:month-names="['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']">
+			</functional-calendar>
+
+			<functional-calendar
+				v-if="!event.multipleDays"
+				:change-month-function="true"
+				:change-year-function="true"
+				v-model="event.calendarData"
+				:date-format="'dd-mm-yyyy'"
+				:is-date-picker="true"
+				:is-date-range="true"
+				:day-names="['Zo','Ma','Di','Wo','Do','Vr','Za']"
+				:month-names="['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']">
 			</functional-calendar>
 
 		</Stap>
@@ -203,6 +218,7 @@
 				readMore: '',
 				multipleDays: false,
 				calendarData: null,
+				calendarData2: null,
 				entireDay: false,
 				startTime: '',
 				endTime: '',
@@ -266,13 +282,21 @@
 	}
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 	.ketzertovenaar {
 		font-family: 'Source Sans Pro', sans-serif;
 		line-height: 1.4;
 		max-width: 600px;
 		margin: 0 auto;
 		font-size: 0;
+	}
+
+	.vfc-calendar {
+		font-size: 18px;
+
+		.vfc-content {
+			font-family: 'Source Sans Pro', sans-serif;
+		}
 	}
 
 	.subOptions {
