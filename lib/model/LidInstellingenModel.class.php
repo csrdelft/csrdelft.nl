@@ -187,7 +187,7 @@ class LidInstellingenModel extends InstellingenModel {
 				'Belangrijke berichten bij recent tonen',
 				T::Enumeration,
 				['ja', 'nee'],
-				'nee',
+				'ja',
 				'Of belangrijke berichten ook getoond moeten worden tussen de recente berichten.'
 			],
 			'open_draad_op_pagina' => [

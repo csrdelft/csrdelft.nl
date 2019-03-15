@@ -274,7 +274,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 			if ($belangrijk) {
 				$where .= ' AND belangrijk IS NOT NULL';
 			} else {
-				if (LidInstellingenModel::get('forum', 'belangrijkBijRecent') === 'nee') {
+				if (!isset($pagina) || LidInstellingenModel::get('forum', 'belangrijkBijRecent') === 'nee') {
 					$where .= ' AND belangrijk IS NULL';
 				}
 			}
