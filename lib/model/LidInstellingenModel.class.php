@@ -183,6 +183,13 @@ class LidInstellingenModel extends InstellingenModel {
 				'cursief',
 				'Hoe ongelezen draadjes eruit zien in de zijbalk en in het forum.'
 			],
+			'belangrijkBijRecent' => [
+				'Belangrijke berichten bij recent tonen',
+				T::Enumeration,
+				['ja', 'nee'],
+				'ja',
+				'Of belangrijke berichten ook getoond moeten worden tussen de recente berichten.'
+			],
 			'open_draad_op_pagina' => [
 				'Open draad op pagina',
 				T::Enumeration,
