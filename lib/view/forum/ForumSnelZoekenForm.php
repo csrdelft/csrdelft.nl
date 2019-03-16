@@ -4,7 +4,6 @@ namespace CsrDelft\view\forum;
 
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 
 /**
@@ -17,6 +16,7 @@ class ForumSnelZoekenForm extends Formulier {
 	public function __construct() {
 		parent::__construct(new ForumZoeken(), '/forum/zoeken');
 		$this->showMelding = false;
+		$this->css_classes[] = 'flex-grow-1';
 
 		$fields = [];
 		$fields['z'] = new TextField('zoekterm', null, null);

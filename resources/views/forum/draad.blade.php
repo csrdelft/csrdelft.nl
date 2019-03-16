@@ -12,22 +12,25 @@
 
 @section('content')
 	{!! getMelding() !!}
-	<div class="forum-header">
-		@php($zoekform->view())
+	<div class="forum-header btn-toolbar">
 
 		@section('kop')
 			@auth
 				@if(!$statistiek && $draad->magStatistiekBekijken())
-					<a
-						href="/forum/onderwerp/{{$draad->draad_id}}/{{CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina()}}/statistiek"
-						class="btn btn-light" title="Toon statistieken">@icon('chart_line')</a>
-					&nbsp;&nbsp;&nbsp;
+					<div class="btn-group mr-2">
+						<a
+							href="/forum/onderwerp/{{$draad->draad_id}}/{{CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina()}}/statistiek"
+							class="btn btn-light" title="Toon statistieken">@icon('chart_line')</a>
+					</div>
+
 				@endif
-				<a title="Onderwerp toevoegen aan favorieten" class="btn btn-light post popup addfav"
-					 href="/menubeheer/toevoegen/favoriet">@icon('heart', 'heart_add')</a>
-				&nbsp;&nbsp;&nbsp;
+				<div class="btn-group mr-2">
+					<a title="Onderwerp toevoegen aan favorieten" class="btn btn-light post popup addfav"
+						 href="/menubeheer/toevoegen/favoriet">@icon('heart', 'heart_add')</a>
+				</div>
+
 				@if($draad->magMeldingKrijgen())
-					<div class="btn-group">
+					<div class="btn-group mr-2">
 						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/nooit"
 							 class="btn btn-light post ReloadPage melding-nooit @if($meldingsniveau == \CsrDelft\model\entity\forum\ForumDraadMeldingNiveau::NOOIT) active @endif"
 							 title="Nooit meldingen ontvangen">@icon('email_delete', 'email_delete')</a>
@@ -39,52 +42,51 @@
 							 title="Melding ontvangen bij elk nieuw bericht">@icon('email_add', 'email_add')</a>
 					</div>
 				@endif
-				&nbsp;&nbsp;&nbsp;
+
 				@if($draad->isVerborgen())
-					<a href="/forum/tonen/{{$draad->draad_id}}" class="btn btn-light post ReloadPage tonenAan"
-						 title="Onderwerp tonen in zijbalk">@icon('layout', 'layout_add')</a>
+					<div class="btn-group mr-2">
+						<a href="/forum/tonen/{{$draad->draad_id}}" class="btn btn-light post ReloadPage tonenAan"
+							 title="Onderwerp tonen in zijbalk">@icon('layout', 'layout_add')</a>
+					</div>
 				@elseif($draad->magVerbergen())
-					<a href="/forum/verbergen/{{$draad->draad_id}}" class="btn btn-light post ReloadPage tonenUit"
-						 title="Onderwerp verbergen in zijbalk">@icon('layout_sidebar', 'layout_delete')</a>
+					<div class="btn-group mr-2">
+						<a href="/forum/verbergen/{{$draad->draad_id}}" class="btn btn-light post ReloadPage tonenUit"
+							 title="Onderwerp verbergen in zijbalk">@icon('layout_sidebar', 'layout_delete')</a>
+					</div>
 				@endif
-				&nbsp;&nbsp;&nbsp;
+
 				@if($draad->magModereren())
-					@if($draad->gesloten)
-						<a href="/forum/wijzigen/{{$draad->draad_id}}/gesloten" class="btn btn-light post ReloadPage slotjeUit"
-							 title="Openen (reactie mogelijk)">@icon('lock', 'lock_break')</a>
-					@else
-						<a href="/forum/wijzigen/{{$draad->draad_id}}/gesloten" class="btn btn-light post ReloadPage slotjeAan"
-							 title="Sluiten (geen reactie mogelijk)">@icon('lock_open', 'lock')</a>
-					@endif
-					&nbsp;&nbsp;&nbsp;
-					<a href="#" class="btn btn-light modfuncties" title="Moderatie-functies weergeven" onclick="
-					$('#modereren').slideDown();
-					$(window).scrollTo('#modereren', 600, {
-						easing: 'easeInOutCubic',
-						offset: {
-							top: -100,
-							left: 0
-						}
-					});
+					<div class="btn-group mr-2">
+						@if($draad->gesloten)
+							<a href="/forum/wijzigen/{{$draad->draad_id}}/gesloten" class="btn btn-light post ReloadPage slotjeUit"
+								 title="Openen (reactie mogelijk)">@icon('lock', 'lock_break')</a>
+						@else
+							<a href="/forum/wijzigen/{{$draad->draad_id}}/gesloten" class="btn btn-light post ReloadPage slotjeAan"
+								 title="Sluiten (geen reactie mogelijk)">@icon('lock_open', 'lock')</a>
+						@endif
+					</div>
+
+					<div class="btn-group mr-2">
+						<a href="#modereren" class="btn btn-light modfuncties" title="Moderatie-functies weergeven" data-toggle="collapse" onclick="
 				 ">@icon('wrench') Modereren</a>
+					</div>
 				@endif
 			@endauth
-			<h1>
-				{{$draad->titel}}
-				@if($statistiek)
-					&nbsp;&nbsp;&nbsp;
-					<span class="lichtgrijs small" title="Aantal lezers">{{$draad->getAantalLezers()}} lezers</span>
-				@endif
-			</h1>
 		@endsection
 
 		@yield('kop')
-
-		@if($draad->magModereren())
-			@include('forum.partial.draad_mod')
-		@endif
+		@php($zoekform->view())
 	</div>
-
+	@if($draad->magModereren())
+		@include('forum.partial.draad_mod')
+	@endif
+	<h1>
+		{{$draad->titel}}
+		@if($statistiek)
+			&nbsp;&nbsp;&nbsp;
+			<span class="lichtgrijs small" title="Aantal lezers">{{$draad->getAantalLezers()}} lezers</span>
+		@endif
+	</h1>
 @section('magreageren')
 	@if($draad->verwijderd)
 		<div class="draad-verwijderd">Dit onderwerp is verwijderd.</div>
