@@ -13,63 +13,80 @@
 
 	<h1>{{$titel}}</h1>
 
+	<div class="forum-zoeken">
+	@php($form->view())
+	</div>
+
 	@if($resultaten)
 		<div class="forum-zoeken">
-			<table id="forumtabel">
-				@foreach($resultaten as $draad)
-					<div class="forum-zoeken-header">
-
-						<div>
-							@if($draad->wacht_goedkeuring)
-								<span title="Nieuw onderwerp in {{$draad->getForumDeel()->titel}}">{{$draad->titel}}<span>[<a
-											href="/forum/deel/{{$draad->forum_id}}">{{$draad->getForumDeel()->titel}}</a>]</span>@icon('new')</span>
-							@else
-								<a id="{{$draad->draad_id}}"
-									 href="/forum/onderwerp/{{$draad->draad_id}}"
-									 @if($draad->isOngelezen())class="{{CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave')}}" @endif>
-									{{$draad->titel}}
-								</a>
-								@if($draad->belangrijk)
-									@icon($draad->belangrijk, null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk')
-								@elseif($draad->gesloten)
-									@icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren')
-								@endif
-								<span>[<a href="/forum/deel/{{$draad->forum_id}}">{{$draad->getForumDeel()->titel}}</a>]</span>
+			@foreach($resultaten as $draad)
+				<div class="forum-zoeken-header">
+					<div>
+						@if($draad->wacht_goedkeuring)
+							<span title="Nieuw onderwerp in {{$draad->getForumDeel()->titel}}">{{$draad->titel}}
+								<span>
+									[<a href="/forum/deel/{{$draad->forum_id}}">{{$draad->getForumDeel()->titel}}</a>]
+								</span>
+								@icon('new')
+							</span>
+						@else
+							<a id="{{$draad->draad_id}}"
+								 href="/forum/onderwerp/{{$draad->draad_id}}"
+								 @if($draad->isOngelezen())class="{{CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave')}}" @endif>
+								{!! highlight_zoekterm($draad->titel, $query) !!}
+							</a>
+							@if($draad->belangrijk)
+								@icon($draad->belangrijk, null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk')
+							@elseif($draad->gesloten)
+								@icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren')
 							@endif
+							<span>[<a href="/forum/deel/{{$draad->forum_id}}">{{$draad->getForumDeel()->titel}}</a>]</span>
+						@endif
+					</div>
+					<div class="niet-dik">
+						@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
+							{!! reldate($draad->datum_tijd) !!}
+						@else
+							{{$draad->datum_tijd}}
+						@endif
+					</div>
+				</div>
+				<div class="forum-zoeken-bericht">
+					@foreach($draad->getForumPosts() as $post)
+						<div id="forumpost-row-{{$post->post_id}}" class="forum-post @if($post->gefilterd) verborgen @endif">
+							<div class="auteur">
+								<div class="postpijl">
+									<a class="postanchor" id="{{$post->post_id}}"></a>
+									<a class="postlink" href="/forum/reactie/{{$post->post_id}}#{{$post->post_id}}"
+										 title="Link naar deze post">&rarr;</a>
+								</div>
+								<div class="naam">
+									{!! CsrDelft\model\ProfielModel::getLink($post->uid, 'user') !!}
+								</div>
+								<span class="moment">
+									@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
+										{!! reldate($post->datum_tijd) !!}
+									@else
+										{{$post->datum_tijd}}
+									@endif
+								</span>
+								@auth
+									@if($post->uid !== 'x999')
+										<div class="forumpasfoto">{!! CsrDelft\model\ProfielModel::getLink($post->uid, 'pasfoto') !!}</div>
+									@endif
+								@endauth
+							</div>
+							<div class="forum-bericht @cycle('bericht0', 'bericht1')" id="post{{$post->post_id}}">
+								{!! highlight_zoekterm(bbcode_light(split_on_keyword($post->tekst, $query)), $query) !!}
+							</div>
 						</div>
-						<div class="niet-dik">
-							@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
-								{!! reldate($draad->datum_tijd) !!}
-							@else
-								{{$draad->datum_tijd}}
-							@endif
-						</div>
-					</div>
-					<div class="forum-zoeken-bericht">
-						@foreach($draad->getForumPosts() as $post)
-							@include('forum.partial.post_lijst', ['draad' => $draad, 'post' => $post])
-							<div class="tussenschot"></div>
-						@endforeach
-					</div>
-				@endforeach
-				@if(isset($query))
-					<div class="forum-zoeken-footer">
-						{!! sliding_pager([
-            'baseurl' => "/forum/zoeken/$query/",
-            'pagecount' => \CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina(),
-            'curpage' => \CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina(),
-            'separator' => ' &nbsp;'
-            ]) !!}
-						{{--&nbsp;<a
-							href="/forum/zoeken/{{$query}}/{{\CsrDelft\model\forum\ForumDradenModel::instance()->getAantalPaginas(0)}}">verder
-							zoeken</a> TODO: Fixen, is kneiterbrak--}}
-					</div>
-				@endif
-			</table>
+						<div class="tussenschot"></div>
+					@endforeach
+				</div>
+			@endforeach
 		</div>
 		<h1>{{$titel}}</h1>
 		@yield('breadcrumbs')
-
 	@else
 		Geen resultaten.
 	@endif

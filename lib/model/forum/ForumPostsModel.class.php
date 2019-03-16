@@ -8,6 +8,7 @@ use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadGelezen;
 use CsrDelft\model\entity\forum\ForumPost;
+use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\Paging;
@@ -130,28 +131,30 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$this->setHuidigePagina((int)ceil($count / $this->per_pagina), $gelezen->draad_id);
 	}
 
-	public function zoeken($query, $datumsoort, $ouder, $jaar, $limit) {
-		$this->per_pagina = (int)$limit;
-		$attributes = array('*', 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score');
-		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
-		$where_params = array($query);
+	/**
+	 * @param ForumZoeken $forumZoeken
+	 * @param $alleen_eerste_post
+	 * @return \Generator|\PDOStatement|ForumPost[]
+	 */
+	public function zoeken(ForumZoeken $forumZoeken, $alleen_eerste_post) {
+		$attributes = ['*', 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score'];
+		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND laatst_gewijzigd >= ? AND laatst_gewijzigd <= ?';
+		$where_params = [$forumZoeken->zoekterm, $forumZoeken->van, $forumZoeken->tot];
 		$order = 'score DESC';
-		if (in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
-			$order .= ', ' . $datumsoort . ' DESC';
-			if (is_int($jaar)) {
-				$where .= ' AND ' . $datumsoort;
-				if ($ouder === 'ouder') {
-					$where .= ' < ?';
-				} else {
-					$where .= ' > ?';
-				}
-				$where_params[] = getDateTime(strtotime('-' . $jaar . ' year'));
-			}
-		}
 		$where .= ' HAVING score > 0';
-		$results = Database::instance()->sqlSelect($attributes, $this->getTableName(), $where, $where_params, null, $order, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::instance()->sqlSelect($attributes, $this->getTableName(), $where, $where_params, null, $order, $forumZoeken->limit);
 		$results->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true));
-		return $results;
+
+		if ($alleen_eerste_post) {
+			foreach ($results as $result) {
+				/** @var $result ForumPost */
+				if ($this->getEerstePostVoorDraad($result->getForumDraad())->post_id == $result->post_id) {
+					yield $result;
+				}
+			}
+		} else {
+			return $results->fetchAll();
+		}
 	}
 
 	public function getAantalForumPostsVoorLid($uid) {
@@ -177,7 +180,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		}
 		$posts = $this->prefetch('draad_id = ?' . $goedkeuring . ' AND verwijderd = FALSE', array($draad->draad_id), null, null, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
 		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
-			$first_post = $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, null, 1)->fetch();
+			$first_post = $this->getEerstePostVoorDraad($draad);
 			array_unshift($posts, $first_post);
 		}
 		// 2008-filter
@@ -189,6 +192,10 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 			}
 		}
 		return $posts;
+	}
+
+	public function getEerstePostVoorDraad(ForumDraad $draad) {
+		return $this->find('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, null, 1)->fetch();
 	}
 
 	/**

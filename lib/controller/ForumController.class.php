@@ -9,6 +9,7 @@ use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
+use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\forum\ForumDelenMeldingModel;
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenGelezenModel;
@@ -22,6 +23,7 @@ use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
+use CsrDelft\view\forum\ForumSnelZoekenForm;
 use CsrDelft\view\forum\ForumZoekenForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
@@ -151,7 +153,7 @@ class ForumController extends Controller {
 	 */
 	public function forum() {
 		return view('forum.overzicht', [
-			'zoekform' => new ForumZoekenForm(),
+			'zoekform' => new ForumSnelZoekenForm(),
 			'categorien' => ForumModel::instance()->getForumIndelingVoorLid()
 		]);
 	}
@@ -204,26 +206,22 @@ class ForumController extends Controller {
 	public function zoeken($query = null, int $pagina = 1) {
 		ForumPostsModel::instance()->setHuidigePagina($pagina, 0);
 		ForumDradenModel::instance()->setHuidigePagina($pagina, 0);
-		if ($query === null) {
-			$zoekform = new ForumZoekenForm();
-			$values = $zoekform->getValues();
-			$query = $values['zoekopdracht'];
-			$datum = $values['datumsoort'];
-			$ouder = $values['ouderjonger'];
-			$jaar = $values['jaaroud'];
-		} else {
-			$query = urldecode($query);
-			$query = filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS);
-			$datum = 'laatst_gewijzigd';
-			$ouder = 'jonger';
-			$jaar = 1;
+		$forumZoeken = new ForumZoeken();
+		$forumZoeken->zoekterm = $query;
+		$zoekform = new ForumZoekenForm($forumZoeken);
+
+		if (!LoginModel::mag('P_LOGGED_IN')) {
+			// Reset de waarden waarbinnen een externe gebruiker mag zoeken.
+			$override = new ForumZoeken();
+			$override->zoekterm = $forumZoeken->zoekterm;
+			$forumZoeken = $override;
 		}
-		$limit = (int)LidInstellingenModel::get('forum', 'zoekresultaten');
 
 		return view('forum.resultaten', [
 			'titel' => 'Zoeken',
-			'resultaten' => ForumDelenModel::instance()->zoeken($query, false, $datum, $ouder, $jaar, $limit),
-			'query' => $query
+			'form' => $zoekform,
+			'resultaten' => ForumDelenModel::instance()->zoeken($forumZoeken),
+			'query' => $forumZoeken->zoekterm,
 		]);
 	}
 
@@ -236,14 +234,17 @@ class ForumController extends Controller {
 		$result = array();
 		if ($this->hasParam('q')) {
 			$query = $this->getParam('q');
-			$datum = 'laatst_gewijzigd';
-			$ouder = 'jonger';
-			$jaar = null;
 			$limit = 5;
 			if ($this->hasParam('limit')) {
 				$limit = (int)$this->getParam('limit');
 			}
-			$draden = ForumDelenModel::instance()->zoeken($query, true, $datum, $ouder, $jaar, $limit);
+			$forumZoeken = new ForumZoeken();
+			$forumZoeken->zoekterm = $query;
+			$forumZoeken->limit = $limit;
+			$forumZoeken->zoek_in = ['titel'];
+
+			$draden = ForumDelenModel::instance()->zoeken($forumZoeken);
+
 			foreach ($draden as $draad) {
 				$url = '/forum/onderwerp/' . $draad->draad_id;
 				if (LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'ongelezen') {
@@ -298,7 +299,7 @@ class ForumController extends Controller {
 		$deel = ForumDelenModel::instance()->getRecent($belangrijk);
 
 		return view('forum.deel', [
-			'zoekform' => new ForumZoekenForm(),
+			'zoekform' => new ForumSnelZoekenForm(),
 			'deel' => $deel,
 			'paging' => ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => $belangrijk ? '/belangrijk' : '',
@@ -344,7 +345,7 @@ class ForumController extends Controller {
 			ForumDradenModel::instance()->setHuidigePagina((int)$pagina, $deel->forum_id);
 		}
 		return view('forum.deel', [
-			'zoekform' => new ForumZoekenForm(),
+			'zoekform' => new ForumSnelZoekenForm(),
 			'deel' => $deel,
 			'paging' => $paging AND ForumDradenModel::instance()->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => '',
@@ -390,7 +391,7 @@ class ForumController extends Controller {
 		}
 
 		$view = view('forum.draad', [
-			'zoekform' => new ForumZoekenForm(),
+			'zoekform' => new ForumSnelZoekenForm(),
 			'draad' => $draad,
 			'paging' => $paging && ForumPostsModel::instance()->getAantalPaginas($draad->draad_id) > 1,
 			'post_form_tekst' => ForumDradenReagerenModel::instance()->getConcept($draad->getForumDeel(), $draad->draad_id),

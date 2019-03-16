@@ -48,7 +48,7 @@
 		"flushcache": "@php bin/flushcache.php",
 		"onderhoud": "bin/prod/onderhoud.sh",
 		"analyse": "vendor/bin/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs",
-		"test": "vendor/bin/phpunit --bootstrap phpunit.init.php tests",
+		"test": "@php vendor/phpunit/phpunit/phpunit --bootstrap ./phpunit.init.php tests",
 		"update-prod": [
 			"@onderhoud true",
 			"git pull",

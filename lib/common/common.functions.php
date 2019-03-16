@@ -69,7 +69,7 @@ function in_array_i($needle, array $haystack) {
  * Group by object property
  *
  * @param string $prop
- * @param array $in
+ * @param array|PDOStatement $in
  * @param boolean $del delete from $in array
  *
  * @return array $out
@@ -90,7 +90,7 @@ function group_by($prop, $in, $del = true) {
  * Group by distinct object property
  *
  * @param string $prop
- * @param array $in
+ * @param array|PDOStatement $in
  * @param boolean $del delete from $in array
  *
  * @return array $out
