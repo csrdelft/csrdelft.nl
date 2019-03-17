@@ -314,7 +314,7 @@ function truncate($string, $length = 80, $etc = '...', $break_words = false, $mi
  * @return bool|int
  */
 function first_space_before(string $string, int $offset = null) {
-	return strrpos(substr($string, 0, $offset), ' ') + 1;
+	return mb_strrpos(substr($string, 0, $offset), ' ') + 1;
 }
 
 /**
@@ -325,7 +325,7 @@ function first_space_before(string $string, int $offset = null) {
  * @return bool|int
  */
 function first_space_after(string $string, int $offset = null) {
-	return strpos($string, ' ', $offset);
+	return mb_strpos($string, ' ', $offset);
 }
 
 /**
@@ -340,23 +340,23 @@ function first_space_after(string $string, int $offset = null) {
  */
 function split_on_keyword(string $string, string $keyword, int $space_around = 100, int $threshold = 10, string $ellipsis = '…') {
 	$prevPos = $lastPos = 0;
-	$firstPos = stripos($string, $keyword);
+	$firstPos = mb_stripos($string, $keyword);
 
 	if ($firstPos === false) {
-		if (strlen($string) )
-		return substr($string, 0, $space_around * 2) . $ellipsis;
+		if (mb_strlen($string) )
+		return mb_substr($string, 0, $space_around * 2) . $ellipsis;
 	}
 
 	if ($firstPos > $space_around) {
 		$split = first_space_before($string, $firstPos - $space_around);
 
 		if ($split > $threshold) {
-			$string = $ellipsis . substr($string, $split);
-			$prevPos = strlen($ellipsis) + $split + strlen($keyword);
+			$string = $ellipsis . mb_substr($string, $split);
+			$prevPos = mb_strlen($ellipsis) + $split + mb_strlen($keyword);
 		}
 	}
 
-	while ($prevPos < strlen($string) && ($lastPos = stripos($string, $keyword, $prevPos)) !== false) {
+	while ($prevPos < mb_strlen($string) && ($lastPos = mb_stripos($string, $keyword, $prevPos)) !== false) {
 		// Split and insert ellipsis if the space between keywords is large enough.
 		if ($lastPos - $prevPos > 2 * $space_around) {
 			$split_l = first_space_after($string, $prevPos + $space_around);
@@ -364,18 +364,18 @@ function split_on_keyword(string $string, string $keyword, int $space_around = 1
 
 			// Only do the split if enough characters are hidden by splitting
 			if ($split_r - $split_l > $threshold) {
-				$string = substr($string, 0, $split_l) . $ellipsis . substr($string, $split_r);
-				$prevPos = $split_l + 2 * ($split_r - $split_l) + strlen($ellipsis) + strlen($keyword);
+				$string = mb_substr($string, 0, $split_l) . $ellipsis . mb_substr($string, $split_r);
+				$prevPos = $split_l + 2 * ($split_r - $split_l) + mb_strlen($ellipsis) + mb_strlen($keyword);
 
 				continue;
 			}
 		}
 
-		$prevPos = $lastPos + strlen($keyword);
+		$prevPos = $lastPos + mb_strlen($keyword);
 	}
 
-	if ($prevPos + $space_around < strlen($string)) {
-		$string = substr($string, 0, first_space_after($string, $prevPos + $space_around)) . $ellipsis;
+	if ($prevPos + $space_around < mb_strlen($string)) {
+		$string = mb_substr($string, 0, first_space_after($string, $prevPos + $space_around)) . $ellipsis;
 	}
 
 	return $string;

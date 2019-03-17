@@ -25,4 +25,10 @@ class HighlightZoektermTest extends TestCase {
 			split_on_keyword('Zij is bijzonder hoogleraar christelijke filosofie aan de Universiteit Leiden. De koffie staat klaar vanaf 19:30, de lezing vangt aan om 20:00. Wees welkom!', 'lezing'));
 	}
 
+	public function testSplitMultiByte() {
+		for ($i = 0; $i < 5; $i++) {
+			$this->assertEquals('…🦄 removed word word split.',
+				split_on_keyword('Test 🦄 removed word word split.', 'split', 16 + $i, 2));
+		}
+	}
 }
