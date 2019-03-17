@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 15/03/2019
  */
-class HighlightZoektermTest extends TestCase {
+class SplitKeywordTest extends TestCase {
 	public function testSplitString() {
 		$this->assertEquals('Lorem ipsum dolor sit amet,…',
 			split_on_keyword('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque aliquam, justo ac blandit fringilla, ', 'do',	10,	2)
