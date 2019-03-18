@@ -204,17 +204,12 @@ class ForumDelenModel extends CachedPersistenceModel {
 		}
 
 		if (in_array('alle_berichten', $zoek_in)) {
-			$generator = $this->forumPostsModel->zoeken($forumZoeken, false);
-			$gevonden_posts += group_by('draad_id', $generator);
+			$gevonden_posts += group_by('draad_id', $this->forumPostsModel->zoeken($forumZoeken, false));
 		}
 
 		if (in_array('eerste_bericht', $zoek_in)) {
 			$gevonden_posts += group_by('draad_id', $this->forumPostsModel->zoeken($forumZoeken, true));
 		}
-
-		// Knoop gevonden posts aan draden
-
-		// Voor draden zonder posts de eerste post fetchen.
 
 		$gevonden_draden += $this->forumDradenModel->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
 
@@ -227,6 +222,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 			}
 			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // posts al gevonden
 				$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
+				$draad->laatst_gewijzigd = $this->laatstGewijzigd($gevonden_posts[$draad->draad_id]);
 				foreach ($draad->getForumPosts() as $post) {
 					$draad->score += (float)$post->score;
 				}
@@ -262,5 +258,9 @@ class ForumDelenModel extends CachedPersistenceModel {
 				};
 			default: throw new CsrGebruikerException('Onbekende sorteermethode');
 		}
+	}
+
+	function laatstGewijzigd($draden) {
+		return max(array_map(function ($draad) { return $draad->laatst_gewijzigd; }, $draden));
 	}
 }

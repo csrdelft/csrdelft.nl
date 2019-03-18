@@ -134,7 +134,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	/**
 	 * @param ForumZoeken $forumZoeken
 	 * @param $alleen_eerste_post
-	 * @return \Generator|\PDOStatement|ForumPost[]
+	 * @return ForumPost[]
 	 */
 	public function zoeken(ForumZoeken $forumZoeken, $alleen_eerste_post) {
 		$attributes = ['*', 'MATCH(tekst) AGAINST (? IN NATURAL LANGUAGE MODE) AS score'];
@@ -146,12 +146,14 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$results->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true));
 
 		if ($alleen_eerste_post) {
+			$out = [];
 			foreach ($results as $result) {
 				/** @var $result ForumPost */
 				if ($this->getEerstePostVoorDraad($result->getForumDraad())->post_id == $result->post_id) {
-					yield $result;
+					$out[] = $result;
 				}
 			}
+			return $out;
 		} else {
 			return $results->fetchAll();
 		}
