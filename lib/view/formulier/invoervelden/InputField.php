@@ -77,6 +77,7 @@ abstract class InputField implements FormElement, Validator {
 	public $blacklist = null; // array met niet tegestane waarden
 	public $whitelist = null; // array met exclusief toegestane waarden
 	public $pattern = null; // html5 input validation pattern
+	public $autoselect = false; // selecteer autoaanvullen automatisch
 
 
 	public function __construct($name, $value, $description, $model = null) {
@@ -520,12 +521,15 @@ JS;
 JS;
 		}
 		if (!empty($this->suggestions)) {
+			$typeaheadOptions = json_encode([
+				'hint' => true,
+				'highlight' => true,
+				'autoselect' => $this->autoselect,
+			]);
+
 			$js .= <<<JS
 
-$('#{$this->getId()}').typeahead({
-	hint: true,
-	highlight: true
-}
+$('#{$this->getId()}').typeahead($typeaheadOptions
 JS;
 		}
 		foreach ($this->suggestions as $name => $source) {

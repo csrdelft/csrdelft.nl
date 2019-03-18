@@ -17,12 +17,9 @@ class ZoekField extends TextField {
 		$this->css_classes[] = 'form-control';
 		$this->css_classes[] = 'clicktogo';
 		$this->placeholder = 'Zoek op titel';
+		$this->autoselect = true;
 		$this->onkeydown = <<<JS
-
-if (event.keyCode === 13) { // enter
-    $(this).trigger('typeahead:select')
-}
-else if (event.keyCode === 191 || event.keyCode === 220) { // forward and backward slash
+if (event.keyCode === 191 || event.keyCode === 220) { // forward and backward slash
 	event.preventDefault();
 }
 JS;
