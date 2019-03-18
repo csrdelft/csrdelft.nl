@@ -2,16 +2,19 @@
 
 namespace CsrDelft\model\forum;
 
+use Cake\Database\Query;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumDraad;
+use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\Persistence\QueryBuilder;
 use PDO;
 
 /**
@@ -181,33 +184,29 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		return (int)ceil($count / $this->per_pagina);
 	}
 
-	public function zoeken($query, $datumsoort, $ouder, $jaar, $limit) {
-		$this->per_pagina = (int)$limit;
+	public function zoeken(ForumZoeken $forumZoeken) {
 		$attributes = ['*', 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score'];
-		$where_params = [$query];
-		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE';
+		$where_params = [$forumZoeken->zoekterm, $forumZoeken->van, $forumZoeken->tot];
+		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND laatst_gewijzigd >= ? AND laatst_gewijzigd <= ?';
 		if (!LoginModel::mag('P_LOGGED_IN')) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
 			$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
 		}
 		$order = 'score DESC, plakkerig DESC';
-		if (in_array($datumsoort, array('datum_tijd', 'laatst_gewijzigd'))) {
-			$order .= ', ' . $datumsoort . ' DESC';
-			if (is_int($jaar)) {
-				$where .= ' AND ' . $datumsoort;
-				if ($ouder === 'ouder') {
-					$where .= ' < ?';
-				} else {
-					$where .= ' > ?';
-				}
-				$where_params[] = getDateTime(strtotime('-' . $jaar . ' year'));
-			}
-		}
 		$where .= ' HAVING score > 0';
-		$results = Database::instance()->sqlSelect($attributes, $this->getTableName(), $where, $where_params, null, $order, $this->per_pagina, ($this->pagina - 1) * $this->per_pagina);
+		$results = Database::instance()->sqlSelect(
+			$attributes,
+			$this->getTableName(),
+			$where,
+			$where_params,
+			null,
+			$order,
+			$forumZoeken->limit
+		);
 		$results->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true));
 		return $results;
 	}
+
 
 	public function getPrullenbakVoorDeel(ForumDeel $deel) {
 		return $this->prefetch('forum_id = ? AND verwijderd = TRUE', array($deel->forum_id));
@@ -299,6 +298,12 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		return $dradenById;
 	}
 
+	/**
+	 * @param array $ids
+	 * @param null $where
+	 * @param array $where_params
+	 * @return array|ForumDraad[]
+	 */
 	public function getForumDradenById(array $ids, $where = null, array $where_params = array()) {
 		$count = count($ids);
 		if ($count < 1) {

@@ -10,7 +10,7 @@ import {singleLineString} from './util';
  * @see templates/roodschopper/roodschopper.tpl
  * @see view/formulier/invoervelden/BBCodeField.class.php
  */
-export const CsrBBPreview = (sourceId: string, targetId: string, params: object) => {
+export const CsrBBPreview = (sourceId: string, targetId: string, params: object = {}) => {
 	if (sourceId.charAt(0) !== '#') {
 		sourceId = `#${sourceId}`;
 	}

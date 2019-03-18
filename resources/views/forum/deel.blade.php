@@ -42,23 +42,20 @@
 @section('content')
 	{!! getMelding() !!}
 
-	<div class="forum-header">
-		<h1>{{$deel->titel}}</h1>
-
-		@php($zoekform->view())
-
+	<div class="forum-header btn-toolbar">
 		@can('P_ADMIN')
 			@if(isset($deel->forum_id))
-				<div class="forumheadbtn">
-					<a href="/forum/beheren/{{$deel->forum_id}}" class="btn post popup"
+				<div class="btn-group mr-2">
+					<a href="/forum/beheren/{{$deel->forum_id}}" class="btn btn-light post popup"
 						 title="Deelforum beheren">@icon('wrench_orange') Beheren</a>
 				</div>
 			@endif
 		@endcan
-
 		@include('forum.partial.head_buttons')
+		@php($zoekform->view())
 	</div>
 
+	<h1>{{$deel->titel}}</h1>
 
 	<div class="forum-deel">
 		<div class="header">Titel</div>

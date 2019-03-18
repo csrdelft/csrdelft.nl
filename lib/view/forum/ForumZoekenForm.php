@@ -2,35 +2,58 @@
 
 namespace CsrDelft\view\forum;
 
-use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\model\entity\forum\ForumZoeken;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\keuzevelden\CheckboxesField;
+use CsrDelft\view\formulier\keuzevelden\DateField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
+use CsrDelft\view\formulier\knoppen\SubmitKnop;
 
 class ForumZoekenForm extends Formulier {
 
-	public function __construct() {
-		parent::__construct(null, '/forum/zoeken');
+	/**
+	 * @param ForumZoeken $model
+	 */
+	public function __construct($model) {
+		parent::__construct($model, '/forum/zoeken');
 		$this->showMelding = false;
-		$this->formId = 'forumZoekenForm';
-		$this->css_classes[] = 'hoverIntent';
+		$this->css_classes[] = 'ForumZoekenForm';
 
 		$fields = [];
-		$fields[] = new HtmlComment('<div class="forumZoekenGeavanceerd hoverIntentContent verborgen"><div class="form-inline">');
-		$fields[] = new SelectField('datumsoort', 'laatst_gewijzigd', null, array('laatst_gewijzigd' => 'Laatste reactie', 'datum_tijd' => 'Aanmaak-datum'));
-		$fields[] = new SelectField('ouderjonger', 'jonger', null, array('jonger' => 'Niet', 'ouder' => 'Wel'));
-		$fields[] = new HtmlComment('<div class="mx-1"> ouder dan </div>');
-		$fields[] = new IntField('jaaroud', 1, null, 0, 99);
-		$fields[] = new HtmlComment('<div class="mx-l"> jaar</div></div></div>'); /*
-		  $fields['l'] = new LidField('auteur', null, 'Auteur');
-		  $fields['l']->no_preview = true; */
-
-		$fields['z'] = new TextField('zoekopdracht', null, null);
+		$fields['z'] = new TextField('zoekterm', $model->zoekterm, 'Zoekterm');
 		$fields['z']->placeholder = 'Zoeken in forum';
 		$fields['z']->enter_submit = true;
 
+		if (LoginModel::mag('P_LOGGED_IN')) {
+			$fields[] = new SelectField('sorteer_volgorde', $model->sorteer_volgorde, 'Sorteervolgorde', [
+				'desc' => 'Van hoog naar laag',
+				'asc' => 'Van laag naar hoog'
+			]);
+			$fields[] = new SelectField('sorteer_op', $model->sorteer_op, 'Sorteer op', [
+				'aangemaakt_op' => 'Moment van aanmaken draad',
+				'laatste_bericht' => 'Moment van plaatsen laatste bericht',
+				'relevantie' => 'Relevantie'
+			]);
+			$fields[] = new DateField('van', $model->van, 'Van', (int)date('Y'), 2006);
+			$fields[] = new DateField('tot', $model->tot, 'Tot', (int)date('Y'), 2006);
+			$fields[] = new CheckboxesField('zoek_in', $model->zoek_in, 'Zoek in', [
+				'titel' => 'Titel',
+				'alle_berichten' => 'Alle berichten',
+				'eerste_bericht' => 'Alleen eerste Bericht',
+			]);
+		}
+
+		$fields[] = new HiddenField('limit', $model->limit);
+
 		$this->addFields($fields);
+
+		$this->formKnoppen = new EmptyFormKnoppen();
+		$this->formKnoppen->css_classes[] = 'mb-3';
+		$this->formKnoppen->addKnop(new SubmitKnop(null, 'submit', 'Zoeken'));
 	}
 
 }

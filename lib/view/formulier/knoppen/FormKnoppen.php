@@ -23,6 +23,7 @@ abstract class FormKnoppen implements FormElement {
 
 	public function __construct() {
 		$this->css_classes[] = 'FormKnoppen';
+		$this->css_classes[] = 'clearfix';
 		$this->css_classes[] = $this->getType();
 	}
 

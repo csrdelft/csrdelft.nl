@@ -121,7 +121,7 @@
 	}
 }
 
-.forum-draad {
+.forum-draad, .forum-zoeken {
 	display: flex;
 	flex-direction: column;
 
@@ -380,6 +380,23 @@ span.curpage {
 				margin-top: 0.5em;
 				text-align: center;
 			}
+		}
+	}
+}
+
+.forum-zoeken {
+	.forum-zoeken-header {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+
+		font-weight: bold;
+		color: #fff;
+		background-color: $headerkleur;
+		padding: 1em;
+
+		a, a:hover {
+			color: white;
 		}
 	}
 }

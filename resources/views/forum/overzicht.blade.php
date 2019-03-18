@@ -4,21 +4,23 @@
 
 @section('breadcrumbs')
 	@parent
- » <a href="/forum/recent">Recent</a>
+	» <a href="/forum/recent">Recent</a>
 @endsection
 
 @section('content')
 	{!! getMelding() !!}
 
-	@php($zoekform->view())
+	<div class="forum-header btn-toolbar">
+		@can('P_ADMIN')
+			<div class="btn-group mr-2">
+				<a href="/forum/aanmaken" class="btn btn-light post popup" title="Deelforum aanmaken">@icon('add')</a>
+			</div>
+		@endcan
 
-	@can('P_ADMIN')
-		<div class="forumheadbtn">
-			<a href="/forum/aanmaken" class="btn post popup" title="Deelforum aanmaken">@icon('add')</a>
-		</div>
-	@endcan
+		@include('forum.partial.head_buttons')
 
-	@include('forum.partial.head_buttons')
+		@php($zoekform->view())
+	</div>
 
 	<h1>Forum</h1>
 

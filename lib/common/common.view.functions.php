@@ -230,6 +230,10 @@ function bbcode(string $string, string $mode = 'normal') {
 	}
 }
 
+function bbcode_light(string $string, string $mode = 'normal') {
+	return CsrBB::parseLight($string);
+}
+
 /**
  * Formatteer een datum voor de zijbalk.
  *
@@ -272,11 +276,11 @@ function format_bedrag($bedrag) {
 }
 
 /**
- * @param string  $string      input string
- * @param integer $length      length of truncated text
- * @param string  $etc         end string
+ * @param string $string input string
+ * @param integer $length length of truncated text
+ * @param string $etc end string
  * @param boolean $break_words truncate at word boundary
- * @param boolean $middle      truncate in the middle of text
+ * @param boolean $middle truncate in the middle of text
  *
  * @return string truncated string
  */
@@ -300,4 +304,86 @@ function truncate($string, $length = 80, $etc = '...', $break_words = false, $mi
 			mb_substr($string, -$length / 2, $length, 'UTF-8');
 	}
 	return $string;
+}
+
+/**
+ * Finds the position of the first space before a given offset.
+ *
+ * @param string $string
+ * @param int $offset
+ * @return bool|int
+ */
+function first_space_before(string $string, int $offset = null) {
+	return mb_strrpos(substr($string, 0, $offset), ' ') + 1;
+}
+
+/**
+ * Finds the position of the first space after a given offset.
+ *
+ * @param string $string
+ * @param int $offset
+ * @return bool|int
+ */
+function first_space_after(string $string, int $offset = null) {
+	return mb_strpos($string, ' ', $offset);
+}
+
+/**
+ * Split a string on keyword with a given space (in characters) around the keyword. Splits on spaces.
+ *
+ * @param string $string The base string
+ * @param string $keyword The keyword to split on
+ * @param int $space_around Amount of characters after which a split should occur
+ * @param int $threshold Least amount of characters that should be hidden for a split to occur
+ * @param string $ellipsis Character(s) to use as ellipsis character. default: …
+ * @return string
+ */
+function split_on_keyword(string $string, string $keyword, int $space_around = 100, int $threshold = 10, string $ellipsis = '…') {
+	$prevPos = $lastPos = 0;
+	$firstPos = mb_stripos($string, $keyword);
+
+	if ($firstPos === false) {
+		if (mb_strlen($string) )
+		return mb_substr($string, 0, $space_around * 2) . $ellipsis;
+	}
+
+	if ($firstPos > $space_around) {
+		$split = first_space_before($string, $firstPos - $space_around);
+
+		if ($split > $threshold) {
+			$string = $ellipsis . mb_substr($string, $split);
+			$prevPos = mb_strlen($ellipsis) + $split + mb_strlen($keyword);
+		}
+	}
+
+	while ($prevPos < mb_strlen($string) && ($lastPos = mb_stripos($string, $keyword, $prevPos)) !== false) {
+		// Split and insert ellipsis if the space between keywords is large enough.
+		if ($lastPos - $prevPos > 2 * $space_around) {
+			$split_l = first_space_after($string, $prevPos + $space_around);
+			$split_r = first_space_before($string, $lastPos - $space_around);
+
+			// Only do the split if enough characters are hidden by splitting
+			if ($split_r - $split_l > $threshold) {
+				$string = mb_substr($string, 0, $split_l) . $ellipsis . mb_substr($string, $split_r);
+				$prevPos = $split_l + 2 * ($split_r - $split_l) + mb_strlen($ellipsis) + mb_strlen($keyword);
+
+				continue;
+			}
+		}
+
+		$prevPos = $lastPos + mb_strlen($keyword);
+	}
+
+	if ($prevPos + $space_around < mb_strlen($string)) {
+		$string = mb_substr($string, 0, first_space_after($string, $prevPos + $space_around)) . $ellipsis;
+	}
+
+	return $string;
+}
+
+function highlight_zoekterm($bericht, $zoekterm, $before = null, $after = null) {
+	$before = $before ?: '<span style="background-color: rgba(255,255,0,0.4);">';
+	$after = $after ?: '</span>';
+
+	return preg_replace('/' . $zoekterm . '/i', $before . '$0' . $after, $bericht);
 }

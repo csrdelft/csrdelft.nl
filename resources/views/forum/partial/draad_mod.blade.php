@@ -1,4 +1,4 @@
-<div id="modereren" class="card verborgen">
+<div id="modereren" class="card collapse forum-header">
 	<div class="modal-header">
 		<h5 class="modal-title">Draad modereren</h5>
 		<button type="button" class="close" aria-label="Close" onclick="$('#modereren').slideUp()">
