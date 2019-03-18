@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import axios from 'axios';
 import {init} from './ctx';
 import {singleLineString} from './util';
 
@@ -21,14 +22,14 @@ export const CsrBBPreview = (sourceId: string, targetId: string, params: object)
 		$(targetId).html('').hide();
 		return;
 	}
-	$.post('/tools/bbcode.php', {
+	axios.post('/tools/bbcode.php', {
 		data: encodeURIComponent(bbcode),
 		...params,
-	}).done((data) => {
-		$(targetId).html(data);
+	}).then((response) => {
+		$(targetId).html(response.data);
 		init(document.querySelector(targetId)!);
 		$(targetId).show();
-	}).fail((error) => {
+	}).catch((error) => {
 		alert(error);
 	});
 };
