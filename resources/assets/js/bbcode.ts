@@ -1,5 +1,5 @@
-import $ from 'jquery';
 import axios from 'axios';
+import $ from 'jquery';
 import {init} from './ctx';
 import {singleLineString} from './util';
 
