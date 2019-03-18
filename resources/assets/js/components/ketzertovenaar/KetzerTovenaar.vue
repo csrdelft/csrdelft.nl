@@ -58,7 +58,7 @@
 		<Stap
 			title="Wanneer is je activiteit?"
 			:step="4"
-			:show-done="this.event.shortDescription.length > 0"
+			:show-done="event.calendarData && (event.calendarData.selectedDate !== false || event.calendarData.dateRange.end !== false)"
 			v-on:done="gotoStep(5)">
 
 			<Toggle
@@ -68,24 +68,26 @@
 			</Toggle>
 
 			<functional-calendar
-				v-if="event.multipleDays"
+				v-if="!event.multipleDays"
+				v-on:input="event.calendarData && event.calendarData.selectedDate !== false ? gotoStep(5) : null"
+				key="singleDaySelector"
 				:change-month-function="true"
 				:change-year-function="true"
 				v-model="event.calendarData"
 				:date-format="'dd-mm-yyyy'"
 				:is-date-picker="true"
-				:is-date-range="false"
 				:day-names="['Zo','Ma','Di','Wo','Do','Vr','Za']"
 				:month-names="['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']">
 			</functional-calendar>
 
 			<functional-calendar
-				v-if="!event.multipleDays"
+				v-else
+				v-on:input="event.calendarData.dateRange.dateRange && event.calendarData.dateRange.dateRange.end !== false ? gotoStep(5) : null"
+				key="multipleDaySelector"
 				:change-month-function="true"
 				:change-year-function="true"
 				v-model="event.calendarData"
 				:date-format="'dd-mm-yyyy'"
-				:is-date-picker="true"
 				:is-date-range="true"
 				:day-names="['Zo','Ma','Di','Wo','Do','Vr','Za']"
 				:month-names="['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']">
@@ -96,8 +98,38 @@
 		<Stap
 			title="Hoe laat?"
 			:step="5"
-			:show-done="true"
-			v-on:done="gotoStep(6)">
+			:show-done="event.entireDay || (validStartTime(true) && validEndTime(true))"
+			v-on:done="gotoStep(6, true)">
+
+			<Toggle
+				name="heleDay"
+				question="Activiteit duurt hele dag"
+				v-model="event.entireDay">
+			</Toggle>
+
+			<template v-if="!event.entireDay">
+				<div class="input-half">
+					<TextInput
+						name="startTime"
+						:max-length="5"
+						hint="Van"
+						v-model="event.startTime"
+						v-on:next="validStartTime(true) && validEndTime(true) ? gotoStep(6, true) : null"
+						:error="validStartTime()">
+					</TextInput>
+				</div>
+
+				<div class="input-half">
+					<TextInput
+						name="endTime"
+						:max-length="5"
+						hint="Van"
+						v-model="event.endTime"
+						v-on:next="validStartTime(true) && validEndTime(true) ? gotoStep(6, true) : null"
+						:error="validEndTime()">
+					</TextInput>
+				</div>
+			</template>
 		</Stap>
 
 		<Stap
@@ -218,7 +250,6 @@
 				readMore: '',
 				multipleDays: false,
 				calendarData: null,
-				calendarData2: null,
 				entireDay: false,
 				startTime: '',
 				endTime: '',
@@ -277,6 +308,29 @@
 					step: this.step,
 					event: this.event
 				}));
+			},
+			validTime(time) {
+				return /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(time);
+			},
+			validStartTime(returning) {
+				if (!this.validTime(this.event.startTime)) {
+					return returning === true ? false : 'Geef een starttijd op';
+				}
+
+				if (returning === true) return true;
+			},
+			validEndTime(returning) {
+				if (!this.validTime(this.event.endTime)) {
+					return returning === true ? false : 'Geef een eindtijd op';
+				}
+
+				let startTime = (this.event.startTime.length === 4 ? '0' : '') + this.event.startTime;
+				let endTime = (this.event.endTime.length === 4 ? '0' : '') + this.event.endTime;
+				if (this.validTime(this.event.startTime) && !this.event.multipleDays && endTime <= startTime) {
+					return returning === true ? false : 'Eind moet na start liggen';
+				}
+
+				if (returning === true) return true;
 			}
 		}
 	}
@@ -291,15 +345,34 @@
 		font-size: 0;
 	}
 
-	.vfc-calendar {
+	.vfc-styles-conditional-class .vfc-main-container {
 		font-size: 18px;
+		font-family: 'Source Sans Pro', sans-serif !important;
+	}
 
-		.vfc-content {
-			font-family: 'Source Sans Pro', sans-serif;
+	.vfc-styles-conditional-class .vfc-main-container .vfc-calendars .vfc-calendar div.vfc-content .vfc-week div.vfc-day span.vfc-today:not(.vfc-marked) {
+		background: none;
+
+		&:after {
+			color: black;
 		}
+	}
+
+	.vfc-styles-conditional-class .vfc-main-container .vfc-calendars .vfc-calendar div.vfc-content .vfc-week div.vfc-day span.vfc-today {
+		border: 1px solid #bfcbd9;
 	}
 
 	.subOptions {
 		padding-left: 20px;
+	}
+
+	.input-half {
+		width: calc(50% - 20px);
+		display: inline-block;
+		margin-right: 40px;
+
+		& + .input-half {
+			margin-right: 0;
+		}
 	}
 </style>

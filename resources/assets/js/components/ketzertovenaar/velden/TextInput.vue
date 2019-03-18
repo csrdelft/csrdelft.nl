@@ -1,6 +1,6 @@
 <template>
 	<div class="field">
-		<div v-if="error && validating" class="errorMessage">{{ error }}</div>
+		<div v-if="error && error !== true && validating" class="errorMessage">{{ error }}</div>
 		<div class="textInput">
 			<label :for="name" v-if="hint">{{ hint }}</label>
 
