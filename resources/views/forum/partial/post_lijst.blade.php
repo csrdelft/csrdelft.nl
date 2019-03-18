@@ -1,7 +1,7 @@
 @if($post->gefilterd)
 	<div class="filtered">
-		<a class="weergeeflink" onclick="jQuery('#forumpost-row-{{$post->post_id}}').show();
-			jQuery(this).remove()">
+		<a class="weergeeflink" onclick="$('#forumpost-row-{{$post->post_id}}').removeClass('verborgen');
+			$(this).remove()">
 			&gt;&gt; {{$post->gefilterd}}, klik om weer te geven. &lt;&lt;
 		</a>
 	</div>
