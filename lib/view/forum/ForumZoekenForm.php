@@ -52,6 +52,7 @@ class ForumZoekenForm extends Formulier {
 		$this->addFields($fields);
 
 		$this->formKnoppen = new EmptyFormKnoppen();
+		$this->formKnoppen->css_classes[] = 'mb-3';
 		$this->formKnoppen->addKnop(new SubmitKnop(null, 'submit', 'Zoeken'));
 	}
 
