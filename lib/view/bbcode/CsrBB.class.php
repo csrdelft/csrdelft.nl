@@ -76,6 +76,7 @@ class CsrBB extends Parser {
 
 	public static function parseMail($bbcode, $light = false) {
 		$parser = new CsrBB();
+		$parser->allow_html = true;
 		$parser->email_mode = true;
 		$parser->light_mode = $light;
 		return $parser->getHtml($bbcode);
