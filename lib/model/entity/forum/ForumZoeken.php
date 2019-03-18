@@ -18,7 +18,7 @@ class ForumZoeken {
 	public function __construct() {
 		$this->zoek_in = ['titel', 'alle_berichten', 'eerste_bericht'];
 		$this->van = (new \DateTime())->modify('-1 year')->format('Y-m-d');
-		$this->tot = (new \DateTime())->format('Y-m-d');
+		$this->tot = (new \DateTime())->modify('+1 day')->format('Y-m-d');
 		$this->sorteer_op = 'laatste_bericht';
 		$this->sorteer_volgorde = 'desc';
 		$this->limit = 20;
