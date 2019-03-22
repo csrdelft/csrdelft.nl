@@ -1,0 +1,122 @@
+/* Kleuren:
+	 - Donkerrood: #a41D2D
+	 - DonkerBlauw: #1E4066
+	 - Grijsblauw: #6F8695
+*/
+
+$body-bg: #6F8695;
+$body-color: #a41D2D;
+
+$zijbalk-ishetal-nee: red;
+$zijbalk-ishetal-ja: green;
+
+
+/* main menu */
+$menu-primary-hover: #a41D2D;
+$menu-bg: $body-bg;
+$menu-color: $body-color;
+$menu-small-bg: #0a338d;
+$menu-small-color: #ffffff;
+
+
+/* zoeken */
+$zoeken-active-bg: #1E4066;
+
+.zijbalk-kopje {
+	a {
+		font-size: 1.25em;
+	}
+}
+
+@import "../base";
+/* sine regno 2019*/
+
+/* Kleuren:
+	 - Donkergrijs: #404041
+	 - Blauw: #7cadd3
+	 - Geel: #ffc556
+ */
+
+/*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
+#zijbalk, #forumtabel th, .cd-primary-nav ul {
+	background-color: #a41D2D !important;
+}
+
+/*Koppen in het blauw*/
+h1, a, a:hover,
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+	color: #1E4066;
+}
+/* Lijntje tussen ongelezen en gelezen berichten */
+#forumtabel tr.ongelezenvanaf td {
+	background-color: #1E4066 !important;
+}
+
+/*BREADCRUMB FONT FIXES*/
+.breadcrumbs * {
+	vertical-align: baseline;
+}
+
+/*NAVIGATIE MENU*/
+
+/*Andere koppen in het wit*/
+.cd-primary-nav .cd-secondary-nav a,
+.cd-primary-nav .cd-secondary-nav > li > a:hover,
+.cd-primary-nav .cd-secondary-nav > li > a {
+	color: #FFFFFF;
+}
+
+/*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
+.cd-primary-nav .cd-secondary-nav a:hover {
+	text-decoration: underline !important;
+	color: #1E4066;
+}
+
+/*Streepje onder naam*/
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+	box-shadow: inset 0 -2px 0 #404041;
+}
+
+/*ZIJBALK*/
+
+/*Veel tekst van de zijbalk in het geel*/
+.staatrood, #zijbalk .blok .item a, #zijbalk .blok .item {
+	color: #6F8695;
+}
+
+/*Zijbalk grens van het scherm in grijs*/
+#zijbalk {
+	border-color: #1E4066;
+}
+
+/*KNOPPEN*/
+
+/*Knoppen in blauw gradient*/
+.btn, input[type=submit], input[type=button], .progress-bar-info, .btn:focus,
+input[type=submit]:focus, input[type=button]:focus {
+	background-image: linear-gradient(to bottom, #46688a, #6F8695);
+	border: none !important;
+}
+
+/*Voor een mouse hover wordt de gradient omgedraaid*/
+.btn:hover, input[type=submit]:hover, input[type=button]:hover {
+	background-image: linear-gradient(to bottom, #6F8695, #46688a);
+	border: none !important;
+}
+
+/*Actieve knoppen iets ruimere kleuren -> zo ontstaat verschil tussen hover en active*/
+.btn.active {
+	background-image: linear-gradient(to bottom, #6F8695, #29435b);
+	border: none !important;
+}
+
+input.btn {
+	margin-top: -14px;
+	padding-bottom: 5px
+}
+
+.btn .ico {
+	vertical-align: text-bottom;
+}
