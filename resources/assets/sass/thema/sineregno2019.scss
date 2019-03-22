@@ -96,19 +96,19 @@ h1, a, a:hover,
 /*Knoppen in blauw gradient*/
 .btn, input[type=submit], input[type=button], .progress-bar-info, .btn:focus,
 input[type=submit]:focus, input[type=button]:focus {
-	background-image: linear-gradient(to bottom, #46688a, #6F8695);
+	background-image: linear-gradient(to bottom, #46688a, #1E4066);
 	border: none !important;
 }
 
 /*Voor een mouse hover wordt de gradient omgedraaid*/
 .btn:hover, input[type=submit]:hover, input[type=button]:hover {
-	background-image: linear-gradient(to bottom, #6F8695, #46688a);
+	background-image: linear-gradient(to bottom, #1E4066, #46688a);
 	border: none !important;
 }
 
 /*Actieve knoppen iets ruimere kleuren -> zo ontstaat verschil tussen hover en active*/
 .btn.active {
-	background-image: linear-gradient(to bottom, #6F8695, #29435b);
+	background-image: linear-gradient(to bottom, #1E4066, #29435b);
 	border: none !important;
 }
 

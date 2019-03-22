@@ -124,7 +124,11 @@ class IsHetAlView implements View {
 
 	public function view() {
 		echo '<div class="ishetal">';
-		switch ($this->model) {
+		switch ('sineregno') {
+			case 'sineregno':
+				echo '<div id="spotify-widget"><iframe src="https://open.spotify.com/embed/track/1u9oQhjWWrrK4YRKtqQips" width="170" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe></div>';
+				break;
+
 			case 'sponsorkliks':
 				echo '<iframe src="https://bannerbuilder.sponsorkliks.com/skinfo.php?&background-color=F5F5F5&text-color=000000&header-background-color=F5F5F5&header-text-color=F5F5F5&odd-row=FFFFFF&even-row=09494a&odd-row-text=09494a&even-row-text=ffffff&type=financial&club_id=3605&width=193&height=80" frameborder="0" referrerpolicy="no-referrer" class="sponsorkliks-zijbalk"></iframe>';
 				break;
@@ -160,15 +164,15 @@ class IsHetAlView implements View {
 				break;
 		}
 
-		if ($this->ja === true) {
-			echo '<div class="ja">JA!</div>';
-		} elseif ($this->ja === false) {
-			echo '<div class="nee">NEE.</div>';
-		} elseif (in_array($this->model, self::$aftellen)) {
-			echo '<div class="nee">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</div>';
-		} else {
-			// wist u dat
-		}
+//		if ($this->ja === true) {
+//			echo '<div class="ja">JA!</div>';
+//		} elseif ($this->ja === false) {
+//			echo '<div class="nee">NEE.</div>';
+//		} elseif (in_array($this->model, self::$aftellen)) {
+//			echo '<div class="nee">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</div>';
+//		} else {
+//			// wist u dat
+//		}
 		echo '</div>';
 	}
 
