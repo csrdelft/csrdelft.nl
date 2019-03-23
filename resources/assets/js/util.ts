@@ -155,7 +155,7 @@ export function html(strings: TemplateStringsArray, ...values: string[]): HTMLEl
 }
 
 export function htmlParse(htmlString: string) {
-	return jQuery.parseHTML(htmlString, null, true);
+	return jQuery.parseHTML(htmlString, null, true) as Node[];
 }
 
 export function preloadImage(url: string, callback: () => void) {
