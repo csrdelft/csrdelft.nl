@@ -29,6 +29,10 @@ class Context {
 	}
 
 	public init(parent: Element) {
+		if (!parent.querySelectorAll) {
+			throw new Error('Kan geen context initializeren op dit element: ' + parent);
+		}
+
 		for (const {selector, handler} of this.handlers) {
 			if (selector === '') {
 				handler(parent);
