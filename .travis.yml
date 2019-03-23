@@ -10,6 +10,11 @@ cache:
 addons:
   sonarcloud:
     organization: "csrdelft"
+env:
+  global:
+    - SKIP_PHP=`[[ $TRAVIS_COMMIT_MESSAGE != *"[skipphp]"* ]]; echo $?`
+    - SKIP_JS=`[[ $TRAVIS_COMMIT_MESSAGE != *"[skipjs]"* ]]; echo $?`
+    - SKIP_SONAR=`[[ $TRAVIS_COMMIT_MESSAGE != *"[skipsonar]"* ]]; echo $?`
 
 services:
   - mysql
@@ -18,16 +23,16 @@ before_install:
   - cp ./bin/ci/mysql.ini.travis ./etc/mysql.ini
   - cp ./bin/ci/defines.include.php ./lib/defines.include.php
   - mysql -e 'CREATE DATABASE IF NOT EXISTS csrdelft;'
-  - nvm install 8
+  - (($SKIP_JS)) || nvm install 8
 
 install:
-  - yarn
-  - composer install
+  - (($SKIP_JS)) || yarn
+  - (($SKIP_PHP)) || composer install
 
 script: # Let op met gebruik van deze opties, als er iets niet gebuild wordt wat wel had moeten gebeuren is het je eigen schuld.
-  - if [[ $TRAVIS_COMMIT_MESSAGE != *"[skipjs]"* ]]; then yarn run production; fi;
-  - if [[ $TRAVIS_COMMIT_MESSAGE != *"[skipphp]"* ]]; then composer run-script production; fi;
-  - if [[ $TRAVIS_COMMIT_MESSAGE != *"[skipsonar]"* ]]; then sonar-scanner; fi;
+  - (($SKIP_JS)) || yarn run production
+  - (($SKIP_PHP)) || composer run-script production
+  - (($SKIP_SONAR)) || sonar-scanner
 
 deploy:
   provider: script
