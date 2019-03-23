@@ -330,6 +330,10 @@ class ProfielController extends AclController {
 	}
 
 	public function pasfoto($uid, $path) {
+		if ($uid === 'geen-foto') {
+			redirect('/plaetjes/geen-foto.jpg');
+		}
+
 		try {
 			$profiel = ProfielModel::get($uid);
 			if (is_zichtbaar($profiel, 'profielfoto', 'intern')) {
