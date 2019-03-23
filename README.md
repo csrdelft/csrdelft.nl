@@ -1,4 +1,4 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5d5cf50e6d6d4b7fb4357e73d987fdfe)](https://www.codacy.com/app/C-S-R-Delft/csrdelft-nl?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=csrdelft/csrdelft.nl&amp;utm_campaign=Badge_Grade)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=csrdelft_csrdelft.nl&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=csrdelft_csrdelft.nl)
 [![Build Status](https://travis-ci.org/csrdelft/csrdelft.nl.svg?branch=master)](https://travis-ci.org/csrdelft/csrdelft.nl)
 # csrdelft.nl stek
 
