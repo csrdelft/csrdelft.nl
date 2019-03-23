@@ -397,15 +397,19 @@ class LidZoeker {
 	 */
 	private function zoekMag(Profiel $profiel, string $query) {
 		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
-		$queryInNaam = $query !== '' && strpos($profiel->getNaam(), $query) !== false;
-
 		$zoekvelden = LidToestemmingModel::instance()->getModuleInstellingen('profiel');
 		foreach ($zoekvelden as $veld) {
+			if ($veld === 'status') {
+				continue;
+			}
+
 			if (!is_zichtbaar($profiel, $veld)) {
-				if (!$queryInNaam && strpos($profiel->$veld, $query) !== false) {
-					// Als de zoekquery dit veld bevat, terwijl deze niet zichtbaar is, dan is dit profiel niet zichtbaar.
+				$queryNietInNaam = $query !== '' && strpos($profiel->getNaam(), $query) === false;
+				$queryInVeld = $query !== '' && strpos($profiel->$veld, $query) !== false;
+
+				if ($queryNietInNaam && $queryInVeld) {
 					return null;
-				} else if ($veld !== 'status') { // Status kunnen we niet leeg maken.
+				} else {
 					$profiel->$veld = null;
 				}
 			}

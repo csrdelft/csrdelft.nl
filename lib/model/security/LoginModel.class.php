@@ -135,7 +135,9 @@ class LoginModel extends PersistenceModel implements Validator {
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
-				$this->login($account->uid, null, false, null, true, true, getDateTime());
+				if ($account) {
+					$this->login($account->uid, null, false, null, true, true, getDateTime());
+				}
 			}
 		}
 		if (!static::getAccount()) {
