@@ -397,7 +397,7 @@ class LidZoeker {
 	 */
 	private function zoekMag(Profiel $profiel, string $query) {
 		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
-		$queryInNaam = strpos($profiel->getNaam(), $query) !== false;
+		$queryInNaam = $query !== '' && strpos($profiel->getNaam(), $query) !== false;
 
 		$zoekvelden = LidToestemmingModel::instance()->getModuleInstellingen('profiel');
 		foreach ($zoekvelden as $veld) {
