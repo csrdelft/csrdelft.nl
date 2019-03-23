@@ -4,17 +4,23 @@
 	 - Grijsblauw: #6F8695
 */
 
-$body-bg: #6F8695;
-$body-color: #a41D2D;
+$donkerrood: #a41D2D;
+$donkerblauw: #0a338d;
+$grijsblauw: #6F8695;
+
+$body-bg: $grijsblauw;
+$body-color: white;
 
 $beeldmerk: url(../images/beeldmerk-wit.png);
 
 /* main menu */
-$menu-primary-hover: #a41D2D;
+$menu-primary-hover: $donkerrood;
 $menu-bg: $body-bg;
 $menu-color: $body-color;
-$menu-small-bg: #0a338d;
+$menu-small-bg: $donkerblauw;
 $menu-small-color: #ffffff;
+
+$bb-block-bg: $donkerrood;
 
 
 /* zoeken */
