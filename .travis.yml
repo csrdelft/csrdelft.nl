@@ -27,7 +27,7 @@ install:
 script:
   - yarn run production
   - composer run-script production
-  - sonar-scanner
+  - if [[ $TRAVIS_COMMIT_MESSAGE != *"[skipsonar]"* ]]; then sonar-scanner; fi;
 
 deploy:
   provider: script
