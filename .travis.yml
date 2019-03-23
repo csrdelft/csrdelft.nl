@@ -7,6 +7,10 @@ cache:
     - "node_modules"
     - "vendor"
 
+addons:
+  sonarcloud:
+    organization: "csrdelft"
+
 services:
   - mysql
 
@@ -23,6 +27,7 @@ install:
 script:
   - yarn run production
   - composer run-script production
+  - sonar-scanner
 
 deploy:
   provider: script
