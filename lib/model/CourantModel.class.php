@@ -29,15 +29,15 @@ class CourantModel {
 	}
 
 	public function magToevoegen() {
-		return LoginModel::mag('P_MAIL_POST');
+		return LoginModel::mag(P_MAIL_POST);
 	}
 
 	public function magBeheren($uid = null) {
-		return LoginModel::mag('P_MAIL_COMPOSE') OR LoginModel::mag($uid);
+		return LoginModel::mag(P_MAIL_COMPOSE) OR LoginModel::mag($uid);
 	}
 
 	public function magVerzenden() {
-		return LoginModel::mag('P_MAIL_SEND');
+		return LoginModel::mag(P_MAIL_SEND);
 	}
 
 	/**

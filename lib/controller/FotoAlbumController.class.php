@@ -35,26 +35,26 @@ class FotoAlbumController extends AclController {
 		parent::__construct($query, FotoAlbumModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'bekijken' => 'P_ALBUM_READ|P_ALBUM_PUBLIC_READ',
-				'download' => 'P_ALBUM_READ|P_ALBUM_PUBLIC_READ',
-				'downloaden' => 'P_ALBUM_DOWN|P_ALBUM_PUBLIC_READ',
-				'verwerken' => 'P_ALBUM_MOD|P_ALBUM_PUBLIC_MOD',
-				'uploaden' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
-				'zoeken' => 'P_LEDEN_READ',
-				'raw_image' => 'P_ALBUM_READ|P_ALBUM_PUBLIC_READ'
+				'bekijken' => P_ALBUM_READ . '|' . P_ALBUM_PUBLIC_READ,
+				'download' => P_ALBUM_READ . '|' . P_ALBUM_PUBLIC_READ,
+				'downloaden' => P_ALBUM_DOWN . '|' . P_ALBUM_PUBLIC_READ,
+				'verwerken' => P_ALBUM_MOD . '|' . P_ALBUM_PUBLIC_MOD,
+				'uploaden' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
+				'zoeken' => P_LEDEN_READ,
+				'raw_image' => P_ALBUM_READ . '|' . P_ALBUM_PUBLIC_READ
 			);
 		} else {
 			$this->acl = array(
-				'albumcover' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
-				'verwijderen' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
-				'hernoemen' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
-				'roteren' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
-				'toevoegen' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
-				'bestaande' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
-				'uploaden' => 'P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD',
-				'gettags' => 'P_LEDEN_READ',
-				'addtag' => 'P_LEDEN_READ',
-				'removetag' => 'P_LEDEN_READ'
+				'albumcover' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
+				'verwijderen' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
+				'hernoemen' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
+				'roteren' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
+				'toevoegen' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
+				'bestaande' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
+				'uploaden' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
+				'gettags' => P_LEDEN_READ,
+				'addtag' => P_LEDEN_READ,
+				'removetag' => P_LEDEN_READ
 			);
 		}
 	}
@@ -93,7 +93,7 @@ class FotoAlbumController extends AclController {
 		}
 		if (!$album) {
 			setMelding('Fotoalbum bestaat niet' . (DEBUG ? ': ' . $path : ''), -1);
-			if (LoginModel::mag('P_ALBUM_READ')) {
+			if (LoginModel::mag(P_ALBUM_READ)) {
 				redirect('/fotoalbum');
 			} else {
 				redirect('/fotoalbum/Publiek');
@@ -383,7 +383,7 @@ class FotoAlbumController extends AclController {
 	public function removetag() {
 		$refuuid = filter_input(INPUT_POST, 'refuuid', FILTER_SANITIZE_STRING);
 		$keyword = filter_input(INPUT_POST, 'keyword', FILTER_SANITIZE_STRING);
-		if (!LoginModel::mag('P_ALBUM_MOD') AND !LoginModel::mag($keyword)) {
+		if (!LoginModel::mag(P_ALBUM_MOD) AND !LoginModel::mag($keyword)) {
 			$this->exit_http(403);
 		}
 		FotoTagsModel::instance()->removeTag($refuuid, $keyword);

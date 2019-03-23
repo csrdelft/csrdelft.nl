@@ -33,16 +33,16 @@ class GesprekkenController extends AclController {
 		parent::__construct($query, GesprekkenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'web' => 'P_LOGGED_IN'
+				'web' => P_LOGGED_IN
 			);
 		} else {
 			$this->acl = array(
-				'gesprekken' => 'P_LOGGED_IN',
-				'start' => 'P_LOGGED_IN',
-				'toevoegen' => 'P_LOGGED_IN',
-				'zeg' => 'P_LOGGED_IN',
-				'lees' => 'P_LOGGED_IN',
-				'verlaten' => 'P_LOGGED_IN'
+				'gesprekken' => P_LOGGED_IN,
+				'start' => P_LOGGED_IN,
+				'toevoegen' => P_LOGGED_IN,
+				'zeg' => P_LOGGED_IN,
+				'lees' => P_LOGGED_IN,
+				'verlaten' => P_LOGGED_IN
 			);
 		}
 	}

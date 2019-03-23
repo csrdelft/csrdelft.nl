@@ -25,7 +25,7 @@ class BoekRecensie extends PersistentEntity {
 	 */
 
 	public function isSchrijver($uid = null) {
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+		if (!LoginModel::mag(P_LOGGED_IN)) {
 			return false;
 		}
 		if ($uid === null) {

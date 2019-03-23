@@ -21,7 +21,7 @@
 	<div id="tagMenu" class="dropdown-menu" role="menu"></div>
 	<div class="fotoalbum"
 			 data-fotos="{!! htmlspecialchars(json_encode($album->getAlbumArrayRecursive())) !!}"
-			 data-is-logged-in="{{ \CsrDelft\model\security\LoginModel::mag('P_LOGGED_IN') }}"
+			 data-is-logged-in="{{ \CsrDelft\model\security\LoginModel::mag(P_LOGGED_IN) }}"
 			 data-mag-aanpassen="{{ json_encode($album->magAanpassen()) }}"
 			 data-root="{{ CSR_ROOT . '/plaetjes' }}"
 			 data-slideshow-interval="{{ \CsrDelft\model\InstellingenModel::get('fotoalbum', 'slideshow_interval') }}">
@@ -43,7 +43,7 @@
 						Verwerken</a>
 				@endcan
 			@endif
-			@can('P_LOGGED_IN')
+			@can(P_LOGGED_IN)
 				@if($album->hasFotos())
 					<a class="btn" href="/fotoalbum/downloaden/{{$album->subdir}}"
 						 title="Download als TAR-bestand">@icon('picture_save') Download album</a>

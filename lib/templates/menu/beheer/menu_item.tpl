@@ -18,7 +18,7 @@
 		<span class="lichtgrijs">{$item->item_id}</span>
 	{/toegang}
 	<div class="float-right">
-		{if $item->rechten_bekijken !== 'P_PUBLIC' and $item->rechten_bekijken != CsrDelft\model\security\LoginModel::getUid()}
+		{if $item->rechten_bekijken !== P_PUBLIC and $item->rechten_bekijken != CsrDelft\model\security\LoginModel::getUid()}
 			&nbsp;{icon get="group_key" title="Rechten bekijken:&#013;"|cat:$item->rechten_bekijken}&nbsp;
 		{/if}
 		<a href="{$item->link}">{$item->link}</a>

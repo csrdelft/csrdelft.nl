@@ -77,7 +77,7 @@ class BibliotheekController extends Controller {
 	protected function mag($action, array $args) {
 		//iedereen(ook uitgelogd) mag catalogus bekijken.
 		$allow = array('catalogustonen', 'catalogusdata', 'rubrieken', 'wenslijst');
-		if (LoginModel::mag('P_BIEB_READ')) {
+		if (LoginModel::mag(P_BIEB_READ)) {
 			$allow = array_merge($allow, array('zoeken', 'autocomplete',
 				'boek', 'recensie'
 			));
@@ -264,7 +264,7 @@ class BibliotheekController extends Controller {
 		} else {
 			$eigenaar = LoginModel::getUid();
 		}
-		if ($eigenaar != LoginModel::getUid() && !($eigenaar == 'x222' && LoginModel::mag('P_BIEB_MOD'))) {
+		if ($eigenaar != LoginModel::getUid() && !($eigenaar == 'x222' && LoginModel::mag(P_BIEB_MOD))) {
 			throw new CsrToegangException('Mag deze eigenaar niet kiezen');
 		}
 		BoekExemplaarModel::addExemplaar($boek, $eigenaar);

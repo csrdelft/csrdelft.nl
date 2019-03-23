@@ -55,7 +55,7 @@ class InstellingenModel extends CachedPersistenceModel {
 			'beschrijving_vereniging' => 'Maak hieronder een keuze of u akkoord gaat met het delen van uw gegevens met leden, novieten en oudleden van C.S.R.'
 		),
 		'agenda' => array(
-			'standaard_rechten' => 'P_LOGGED_IN',
+			'standaard_rechten' => P_LOGGED_IN,
 			'ical_from' => '-1 month',
 			'ical_to' => '+6 months'
 		),

@@ -109,7 +109,7 @@ class ForumPost extends PersistentEntity {
 	}
 
 	public function magCiteren() {
-		return LoginModel::mag('P_LOGGED_IN') AND $this->getForumDraad()->magPosten();
+		return LoginModel::mag(P_LOGGED_IN) AND $this->getForumDraad()->magPosten();
 	}
 
 	public function magBewerken() {
@@ -120,7 +120,7 @@ class ForumPost extends PersistentEntity {
 		if (!$draad->magPosten()) {
 			return false;
 		}
-		return $this->uid === LoginModel::getUid() AND LoginModel::mag('P_LOGGED_IN');
+		return $this->uid === LoginModel::getUid() AND LoginModel::mag(P_LOGGED_IN);
 	}
 
 	public function getAantalGelezen() {

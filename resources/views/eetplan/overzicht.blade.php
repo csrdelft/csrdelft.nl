@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-	@can('P_ADMIN,commissie:NovCie')
+	@can(P_ADMIN . ',commissie:NovCie')
 	<a href="/eetplan/beheer" class="btn btn-primary float-right"><span class="ico wrench"></span> Eetplanbeheer</a>
 	@endcan
 	<h1>Eetplan</h1>

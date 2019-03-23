@@ -175,7 +175,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	}
 
 	public function getForumPostsVoorDraad(ForumDraad $draad) {
-		if (LoginModel::mag('P_FORUM_MOD')) {
+		if (LoginModel::mag(P_FORUM_MOD)) {
 			$goedkeuring = '';
 		} else {
 			$goedkeuring = ' AND wacht_goedkeuring = FALSE';

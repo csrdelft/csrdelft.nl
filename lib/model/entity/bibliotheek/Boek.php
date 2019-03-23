@@ -84,7 +84,7 @@ class Boek extends PersistentEntity {
 	 *    boek mag alleen door admins verwijdert worden
 	 */
 	public function magVerwijderen() {
-		return LoginModel::mag('commissie:BASFCie,P_BIEB_MOD,P_ADMIN');
+		return LoginModel::mag('commissie:BASFCie,'. P_BIEB_MOD . ',' . P_ADMIN);
 	}
 
 	/**
@@ -94,14 +94,14 @@ class Boek extends PersistentEntity {
 	 *    boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
 	 */
 	public function magBewerken() {
-		return LoginModel::mag('P_BIEB_EDIT') OR $this->isEigenaar() OR $this->magVerwijderen();
+		return LoginModel::mag(P_BIEB_EDIT) OR $this->isEigenaar() OR $this->magVerwijderen();
 	}
 
 	/**
 	 * Iedereen met extra rechten en zij met BIEB_READ mogen
 	 */
 	public function magBekijken() {
-		return LoginModel::mag('P_BIEB_READ') OR $this->magBewerken();
+		return LoginModel::mag(P_BIEB_READ) OR $this->magBewerken();
 	}
 
 	/**

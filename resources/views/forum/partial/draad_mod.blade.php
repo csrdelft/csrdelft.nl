@@ -65,7 +65,7 @@
 				</div>
 			</div>
 		</form>
-		@can('P_FORUM_BELANGRIJK')
+		@can(P_FORUM_BELANGRIJK)
 			<form action="/forum/wijzigen/{{$draad->draad_id}}/belangrijk" method="post">
 				@csrf
 				<div class="form-group row">

@@ -88,7 +88,7 @@
 	</div>
 	<div class="forum-bericht @cycle('bericht0', 'bericht1')" id="post{{$post->post_id}}">
 		@php($account = \CsrDelft\model\security\AccountModel::get($post->uid))
-		@if($account && \CsrDelft\model\security\AccessModel::mag($account, 'P_ADMIN'))
+		@if($account && \CsrDelft\model\security\AccessModel::mag($account, P_ADMIN))
 			{!! bbcode($post->tekst, 'html') !!}
 		@else
 			{!! bbcode($post->tekst) !!}

@@ -10,7 +10,7 @@ Documenten in categorie: {{ $categorie->naam }}
 
 @section('content')
 	<div id="controls">
-		@can('P_DOCS_MOD')
+		@can(P_DOCS_MOD)
 			<a class="btn" href="/documenten/toevoegen/?catID={{$categorie->id}}">@icon('toevoegen') Toevoegen</a>
 		@endcan
 	</div>

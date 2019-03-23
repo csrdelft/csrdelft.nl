@@ -12,7 +12,7 @@ require_once 'configuratie.include.php';
  *
  * request url: /tools/naamsuggesties/{$zoekin}?q=zoeknaam&limit=20&timestamp=1336432238620
  */
-if (!LoginModel::mag('P_OUDLEDEN_READ')) {
+if (!LoginModel::mag(P_OUDLEDEN_READ)) {
 	echo 'Niet voldoende rechten';
 	exit;
 }

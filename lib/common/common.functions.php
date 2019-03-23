@@ -353,7 +353,7 @@ function isGeldigeDatum($datum) {
  * @param string $cssID
  */
 function debugprint($sString, $cssID = 'pubcie_debug') {
-	if (DEBUG OR LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
+	if (DEBUG OR LoginModel::mag(P_ADMIN) OR LoginModel::instance()->isSued()) {
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}
 }
@@ -521,7 +521,7 @@ function getMaximumFileUploadSize() {
 
 function printDebug() {
 	$debugOverride = filter_input(INPUT_GET, 'debug') !== null;
-	if (DEBUG OR ((LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) AND $debugOverride)) {
+	if (DEBUG OR ((LoginModel::mag(P_ADMIN) OR LoginModel::instance()->isSued()) AND $debugOverride)) {
 		echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
 		echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
 	}
@@ -972,7 +972,7 @@ function is_ingelogd_account($uid) {
  * @param string $uitzondering Sommige commissie mogen wel dit veld zien.
  * @return bool
  */
-function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = 'P_LEDEN_MOD') {
+function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_MOD) {
 	if (is_array($key)) {
 		foreach ($key as $item) {
 			if (!LidToestemmingModel::instance()->toestemming($profiel, $item, $cat, $uitzondering)) {
@@ -1055,3 +1055,4 @@ function csrfMetaTag() {
 	$token = CsrfService::instance()->generateToken('', 'POST');
 	return '<meta property="X-CSRF-ID" content="'. htmlentities($token->getId()) .'" /><meta property="X-CSRF-VALUE" content="'. htmlentities($token->getValue()) .'" />';
 }
+

@@ -32,7 +32,7 @@ else {
 	window.formulier.formSubmit(event);
 }
 JS;
-		if (LoginModel::mag('P_LEDEN_READ')) {
+		if (LoginModel::mag(P_LEDEN_READ)) {
 
 			if (LidInstellingenModel::get('zoeken', 'favorieten') === 'ja') {
 				$this->addSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());

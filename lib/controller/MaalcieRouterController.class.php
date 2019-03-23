@@ -36,23 +36,23 @@ class MaalcieRouterController extends AclController {
 		$query = str_replace('corvee/', 'corvee', $query);
 		parent::__construct($query, $query); // use model to pass through query
 		$this->acl = array(
-			'maaltijdenketzer' => 'P_MAAL_IK',
-			'maaltijdenlijst' => 'P_MAAL_IK', // shortcut
-			'maaltijdenbeheer' => 'P_MAAL_MOD',
-			'maaltijdenfiscaat' => 'P_MAAL_MOD',
-			'maaltijdenrepetities' => 'P_MAAL_MOD',
-			'maaltijdenabonnementen' => 'P_MAAL_IK',
-			'maaltijdenabonnementenbeheer' => 'P_MAAL_MOD',
-			'maaltijdenboekjaar' => 'P_MAAL_SALDI',
-			'corveemijn' => 'P_CORVEE_IK',
-			'corveerooster' => 'P_CORVEE_IK', // shortcut
-			'corveebeheer' => 'P_CORVEE_MOD',
-			'corveerepetities' => 'P_CORVEE_MOD',
-			'corveevoorkeuren' => 'P_CORVEE_IK',
-			'corveevoorkeurenbeheer' => 'P_CORVEE_MOD',
-			'corveepuntenbeheer' => 'P_CORVEE_MOD',
-			'corveevrijstellingen' => 'P_CORVEE_MOD',
-			'corveefuncties' => 'P_CORVEE_MOD'
+			'maaltijdenketzer' => P_MAAL_IK,
+			'maaltijdenlijst' => P_MAAL_IK, // shortcut
+			'maaltijdenbeheer' => P_MAAL_MOD,
+			'maaltijdenfiscaat' => P_MAAL_MOD,
+			'maaltijdenrepetities' => P_MAAL_MOD,
+			'maaltijdenabonnementen' => P_MAAL_IK,
+			'maaltijdenabonnementenbeheer' => P_MAAL_MOD,
+			'maaltijdenboekjaar' => P_MAAL_SALDI,
+			'corveemijn' => P_CORVEE_IK,
+			'corveerooster' => P_CORVEE_IK, // shortcut
+			'corveebeheer' => P_CORVEE_MOD,
+			'corveerepetities' => P_CORVEE_MOD,
+			'corveevoorkeuren' => P_CORVEE_IK,
+			'corveevoorkeurenbeheer' => P_CORVEE_MOD,
+			'corveepuntenbeheer' => P_CORVEE_MOD,
+			'corveevrijstellingen' => P_CORVEE_MOD,
+			'corveefuncties' => P_CORVEE_MOD
 		);
 	}
 

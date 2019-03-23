@@ -32,16 +32,16 @@ class BeheerCiviSaldoController extends AclController {
 
 		if ($this->getMethod() == "POST") {
 			$this->acl = [
-				'overzicht' => 'P_FISCAAT_READ',
-				'registreren' => 'P_FISCAAT_MOD',
-				'verwijderen' => 'P_FISCAAT_MOD',
-				'inleggen' => 'P_FISCAAT_MOD',
-				'som' => 'P_FISCAAT_READ',
+				'overzicht' => P_FISCAAT_READ,
+				'registreren' => P_FISCAAT_MOD,
+				'verwijderen' => P_FISCAAT_MOD,
+				'inleggen' => P_FISCAAT_MOD,
+				'som' => P_FISCAAT_READ,
 			];
 		} else {
 			$this->acl = [
-				'overzicht' => 'P_FISCAAT_READ',
-				'zoek' => 'P_FISCAAT_READ',
+				'overzicht' => P_FISCAAT_READ,
+				'zoek' => P_FISCAAT_READ,
 			];
 		}
 	}

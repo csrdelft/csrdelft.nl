@@ -29,7 +29,7 @@ class GeoLocationController extends AclController {
 			);
 		} else {
 			$this->acl = array(
-				'save' => 'P_LOGGED_IN',
+				'save' => P_LOGGED_IN,
 				'get' => 'OUDEREJAARS'
 			);
 		}

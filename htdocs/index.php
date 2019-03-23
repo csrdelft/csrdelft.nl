@@ -39,7 +39,7 @@ switch ($class) {
 
     // de rest alleen voor ingelogde gebruikers:
     default:
-        if (!LoginModel::mag('P_LOGGED_IN')) {
+        if (!LoginModel::mag(P_LOGGED_IN)) {
 			redirect_via_login(REQUEST_URI);
         }
 }
@@ -78,7 +78,7 @@ try {
 }
 
 
-if (DB_CHECK AND LoginModel::mag('P_ADMIN')) {
+if (DB_CHECK AND LoginModel::mag(P_ADMIN)) {
 
     $queries = DatabaseAdmin::instance()->getQueries();
     if (!empty($queries)) {

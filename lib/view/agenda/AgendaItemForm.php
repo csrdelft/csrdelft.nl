@@ -36,7 +36,7 @@ class AgendaItemForm extends ModalForm {
 		$fields['begin_moment']->to_datetime = $fields['eind_moment'];
 
 		$fields['r'] = new RequiredRechtenField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor');
-		$fields['r']->readonly = !LoginModel::mag('P_AGENDA_MOD');
+		$fields['r']->readonly = !LoginModel::mag(P_AGENDA_MOD);
 
 		$fields['l'] = new TextField('locatie', $item->locatie, 'Locatie');
 		$fields['l']->title = 'Een kaart kan worden weergegeven in de agenda';

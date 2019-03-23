@@ -20,7 +20,7 @@ class GoogleController extends AclController {
 	public function __construct($query) {
 		parent::__construct($query, GoogleTokenModel::instance());
 		$this->acl = array(
-			'callback' => 'P_LOGGED_IN'
+			'callback' => P_LOGGED_IN
 		);
 	}
 

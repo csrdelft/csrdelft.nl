@@ -1,4 +1,5 @@
 <?php
+
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 
@@ -11,7 +12,7 @@ require_once 'configuratie.include.php';
  * 
  * request url: /tools/admins/
  */
-if (!LoginModel::mag('P_LEDEN_READ')) {
+if (!LoginModel::mag(P_LEDEN_READ)) {
 	echo 'Niet voldoende rechten';
 	exit;
 }

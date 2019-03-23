@@ -41,20 +41,20 @@ class PinTransactieController extends AclController {
 
 		if ($this->getMethod() == 'POST') {
 			$this->acl = [
-				'overzicht' => 'P_FISCAAT_READ',
-				'verwerk' => 'P_FISCAAT_MOD',
-				'ontkoppel' => 'P_FISCAAT_MOD',
-				'koppel' => 'P_FISCAAT_MOD',
-				'verwijder' => 'P_FISCAAT_MOD',
-				'aanmaken' => 'P_FISCAAT_MOD',
-				'update' => 'P_FISCAAT_MOD',
-				'info' => 'P_FISCAAT_READ',
-				'verwijder_transactie' => 'P_FISCAAT_MOD',
-				'heroverweeg' => 'P_FISCAAT_MOD',
+				'overzicht' => P_FISCAAT_READ,
+				'verwerk' => P_FISCAAT_MOD,
+				'ontkoppel' => P_FISCAAT_MOD,
+				'koppel' => P_FISCAAT_MOD,
+				'verwijder' => P_FISCAAT_MOD,
+				'aanmaken' => P_FISCAAT_MOD,
+				'update' => P_FISCAAT_MOD,
+				'info' => P_FISCAAT_READ,
+				'verwijder_transactie' => P_FISCAAT_MOD,
+				'heroverweeg' => P_FISCAAT_MOD,
 			];
 		} else {
 			$this->acl = [
-				'overzicht' => 'P_FISCAAT_READ',
+				'overzicht' => P_FISCAAT_READ,
 			];
 		}
 	}

@@ -28,7 +28,7 @@ class ForumZoekenForm extends Formulier {
 		$fields['z']->placeholder = 'Zoeken in forum';
 		$fields['z']->enter_submit = true;
 
-		if (LoginModel::mag('P_LOGGED_IN')) {
+		if (LoginModel::mag(P_LOGGED_IN)) {
 			$fields[] = new SelectField('sorteer_volgorde', $model->sorteer_volgorde, 'Sorteervolgorde', [
 				'desc' => 'Van hoog naar laag',
 				'asc' => 'Van laag naar hoog'

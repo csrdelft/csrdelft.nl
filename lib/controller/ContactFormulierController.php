@@ -18,8 +18,8 @@ class ContactFormulierController extends AclController {
 
 		if ($this->getMethod() == 'POST') {
 			$this->acl = [
-				'dies' => 'P_PUBLIC',
-				'interesse' => 'P_PUBLIC',
+				'dies' => P_PUBLIC,
+				'interesse' => P_PUBLIC,
 			];
 		} else {
 			$this->acl = [];

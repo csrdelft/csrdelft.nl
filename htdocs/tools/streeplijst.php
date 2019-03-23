@@ -12,7 +12,7 @@ require_once 'configuratie.include.php';
 # tools/streeplijst.php
 # -------------------------------------------------------------------
 
-if (!LoginModel::mag('P_OUDLEDEN_READ')) {
+if (!LoginModel::mag(P_OUDLEDEN_READ)) {
 	redirect(CSR_ROOT);
 }
 

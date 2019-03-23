@@ -13,7 +13,7 @@ use CsrDelft\view\View;
 
 require_once 'configuratie.include.php';
 
-if (!LoginModel::mag('commissie:NovCie,P_ADMIN')) exit;
+if (!LoginModel::mag('commissie:NovCie,' . P_ADMIN)) exit;
 
 $query = "SELECT * FROM profielen WHERE status = 'S_NOVIET'";
 

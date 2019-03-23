@@ -440,7 +440,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 		$suedFrom = static::getSuedFrom();
-		return $suedFrom AND AccessModel::mag($suedFrom, 'P_ADMIN');
+		return $suedFrom AND AccessModel::mag($suedFrom, P_ADMIN);
 	}
 
 	/**
@@ -475,7 +475,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return bool
 	 */
 	public function maySuTo(Account $suNaar) {
-		return LoginModel::mag('P_ADMIN') AND !$this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, 'P_LOGGED_IN');
+		return LoginModel::mag(P_ADMIN) AND !$this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, P_LOGGED_IN);
 	}
 
 	/**

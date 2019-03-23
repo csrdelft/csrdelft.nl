@@ -30,7 +30,7 @@ class BladeRenderer implements Renderer {
 			});
 
 			// @auth en @guest maken puur onderscheid tussen ingelogd of niet.
-			if (LoginModel::mag('P_LOGGED_IN')) {
+			if (LoginModel::mag(P_LOGGED_IN)) {
 				$this->bladeOne->setAuth(LoginModel::getUid());
 			}
 			$this->bladeOne->authCallBack = [LoginModel::class, 'mag'];

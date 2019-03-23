@@ -44,38 +44,38 @@ class LoginController extends AclController {
 		parent::__construct($query, LoginModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'logout' => 'P_LOGGED_IN',
-				'su' => 'P_ADMIN',
-				'endsu' => 'P_LOGGED_IN',
-				'account' => 'P_PUBLIC',
-				'accountaanvragen' => 'P_PUBLIC',
-				'accountaanmaken' => 'P_ADMIN',
-				'accountbewerken' => 'P_LOGGED_IN',
-				'accountverwijderen' => 'P_LOGGED_IN',
-				'wachtwoord' => 'P_PUBLIC',
-				'wachtwoordwijzigen' => 'P_LOGGED_IN',
-				'wachtwoordreset' => 'P_LOGGED_IN',
-				'wachtwoordvergeten' => 'P_PUBLIC',
-				'wachtwoordverlopen' => 'P_LOGGED_IN',
+				'logout' => P_LOGGED_IN,
+				'su' => P_ADMIN,
+				'endsu' => P_LOGGED_IN,
+				'account' => P_PUBLIC,
+				'accountaanvragen' => P_PUBLIC,
+				'accountaanmaken' => P_ADMIN,
+				'accountbewerken' => P_LOGGED_IN,
+				'accountverwijderen' => P_LOGGED_IN,
+				'wachtwoord' => P_PUBLIC,
+				'wachtwoordwijzigen' => P_LOGGED_IN,
+				'wachtwoordreset' => P_LOGGED_IN,
+				'wachtwoordvergeten' => P_PUBLIC,
+				'wachtwoordverlopen' => P_LOGGED_IN,
 			);
 		} else {
 			$this->acl = array(
-				'login' => 'P_PUBLIC',
-				'logout' => 'P_LOGGED_IN',
-				'account' => 'P_LOGGED_IN',
-				'accountaanmaken' => 'P_ADMIN',
-				'accountbewerken' => 'P_LOGGED_IN',
-				'accountverwijderen' => 'P_LOGGED_IN',
-				'wachtwoord' => 'P_PUBLIC',
-				'wachtwoordwijzigen' => 'P_LOGGED_IN',
-				'wachtwoordreset' => 'P_PUBLIC',
-				'wachtwoordvergeten' => 'P_PUBLIC',
-				'loginsessionsdata' => 'P_LOGGED_IN',
-				'loginendsession' => 'P_LOGGED_IN',
-				'loginlockip' => 'P_LOGGED_IN',
-				'loginrememberdata' => 'P_LOGGED_IN',
-				'loginremember' => 'P_LOGGED_IN',
-				'loginforget' => 'P_LOGGED_IN'
+				'login' => P_PUBLIC,
+				'logout' => P_LOGGED_IN,
+				'account' => P_LOGGED_IN,
+				'accountaanmaken' => P_ADMIN,
+				'accountbewerken' => P_LOGGED_IN,
+				'accountverwijderen' => P_LOGGED_IN,
+				'wachtwoord' => P_PUBLIC,
+				'wachtwoordwijzigen' => P_LOGGED_IN,
+				'wachtwoordreset' => P_PUBLIC,
+				'wachtwoordvergeten' => P_PUBLIC,
+				'loginsessionsdata' => P_LOGGED_IN,
+				'loginendsession' => P_LOGGED_IN,
+				'loginlockip' => P_LOGGED_IN,
+				'loginrememberdata' => P_LOGGED_IN,
+				'loginremember' => P_LOGGED_IN,
+				'loginforget' => P_LOGGED_IN
 			);
 		}
 	}
@@ -158,7 +158,7 @@ class LoginController extends AclController {
 
 	public function GET_accountaanvragen() {
 		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+		if (!LoginModel::mag(P_LOGGED_IN)) {
 			$this->view = new CsrLayoutOweePage($body);
 		} else {
 			$this->view = new CsrLayoutPage($body);
@@ -166,7 +166,7 @@ class LoginController extends AclController {
 	}
 
 	public function accountaanmaken($uid = null) {
-		if (!LoginModel::mag('P_ADMIN')) {
+		if (!LoginModel::mag(P_ADMIN)) {
 			$this->exit_http(403);
 		}
 		if ($uid == null) {
@@ -193,7 +193,7 @@ class LoginController extends AclController {
 			$this->GET_accountaanvragen();
 			return;
 		}
-		if ($uid !== $this->model->getUid() AND !LoginModel::mag('P_ADMIN')) {
+		if ($uid !== $this->model->getUid() AND !LoginModel::mag(P_ADMIN)) {
 			$this->exit_http(403);
 		}
 		if (LoginModel::instance()->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
@@ -205,7 +205,7 @@ class LoginController extends AclController {
 			setMelding('Account bestaat niet', -1);
 			$this->exit_http(403);
 		}
-		if (!AccessModel::mag($account, 'P_LOGGED_IN')) {
+		if (!AccessModel::mag($account, P_LOGGED_IN)) {
 			setMelding('Account mag niet inloggen', 2);
 		}
 		$form = new AccountForm($account);
@@ -225,7 +225,7 @@ class LoginController extends AclController {
 		if ($uid == null) {
 			$uid = $this->model->getUid();
 		}
-		if ($uid !== $this->model->getUid() AND !LoginModel::mag('P_ADMIN')) {
+		if ($uid !== $this->model->getUid() AND !LoginModel::mag(P_ADMIN)) {
 			$this->exit_http(403);
 		}
 		$account = AccountModel::get($uid);
@@ -259,7 +259,7 @@ class LoginController extends AclController {
 	public function wachtwoordwijzigen() {
 		$account = LoginModel::getAccount();
 		// mag inloggen?
-		if (!$account OR !AccessModel::mag($account, 'P_LOGGED_IN')) {
+		if (!$account OR !AccessModel::mag($account, P_LOGGED_IN)) {
 			$this->exit_http(403);
 		}
 		$form = new WachtwoordWijzigenForm($account, 'wijzigen');
@@ -304,7 +304,7 @@ class LoginController extends AclController {
 			$mail->send();
 			redirect(CSR_ROOT);
 		}
-		if (LoginModel::mag('P_LOGGED_IN')){
+		if (LoginModel::mag(P_LOGGED_IN)){
 			$this->view = new CsrLayoutPage($form);
 		} else {
 			$this->view = new CsrLayoutOweePage($form);
@@ -318,7 +318,7 @@ class LoginController extends AclController {
 			$account = AccountModel::get($values['user']);
 			// mag wachtwoord reset aanvragen?
 			// (mag ook als na verify($tokenString) niet ingelogd is met wachtwoord en dus AuthenticationMethod::url_token is)
-			if (!$account OR !AccessModel::mag($account, 'P_LOGGED_IN', AuthenticationMethod::getTypeOptions()) OR mb_strtolower($account->email) !== mb_strtolower($values['mail'])) {
+			if (!$account OR !AccessModel::mag($account, P_LOGGED_IN, AuthenticationMethod::getTypeOptions()) OR mb_strtolower($account->email) !== mb_strtolower($values['mail'])) {
 				setMelding('Lidnummer en/of e-mailadres onjuist', -1);
 			} else {
 				$token = OneTimeTokensModel::instance()->createToken($account->uid, '/wachtwoord/reset');

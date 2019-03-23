@@ -23,13 +23,13 @@ class BeheerPuntenController extends AclController {
 		parent::__construct($query, null);
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer' => 'P_CORVEE_MOD',
-				'resetjaar' => 'P_CORVEE_MOD'
+				'beheer' => P_CORVEE_MOD,
+				'resetjaar' => P_CORVEE_MOD
 			);
 		} else {
 			$this->acl = array(
-				'wijzigpunten' => 'P_CORVEE_MOD',
-				'wijzigbonus' => 'P_CORVEE_MOD'
+				'wijzigpunten' => P_CORVEE_MOD,
+				'wijzigbonus' => P_CORVEE_MOD
 			);
 		}
 	}

@@ -37,18 +37,18 @@ class AgendaController extends AclController {
 		parent::__construct($query, AgendaModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'maand' => 'P_AGENDA_READ',
-				'ical' => 'P_PUBLIC',
-				'zoeken' => 'P_AGENDA_READ'
+				'maand' => P_AGENDA_READ,
+				'ical' => P_PUBLIC,
+				'zoeken' => P_AGENDA_READ
 			);
 		} else {
 			$this->acl = array(
-				'courant' => 'P_MAIL_COMPOSE',
-				'toevoegen' => 'P_AGENDA_ADD',
-				'bewerken' => 'P_AGENDA_MOD',
-				'verwijderen' => 'P_AGENDA_MOD',
-				'verbergen' => 'P_LOGGED_IN',
-				'tonen' => 'P_LOGGED_IN'
+				'courant' => P_MAIL_COMPOSE,
+				'toevoegen' => P_AGENDA_ADD,
+				'bewerken' => P_AGENDA_MOD,
+				'verwijderen' => P_AGENDA_MOD,
+				'verbergen' => P_LOGGED_IN,
+				'tonen' => P_LOGGED_IN
 			);
 		}
 	}

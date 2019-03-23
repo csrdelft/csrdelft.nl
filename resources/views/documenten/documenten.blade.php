@@ -4,7 +4,7 @@
 
 @section('content')
 	<div id="controls">
-		@can('P_DOCS_MOD')
+		@can(P_DOCS_MOD)
 			<a class="btn" href="/documenten/toevoegen">@icon('toevoegen') Toevoegen</a>
 		@endcan
 	</div>
@@ -31,7 +31,7 @@
 					<a href="/documenten/categorie/{{$categorie->id}}/" title="Alle documenten in {{$categorie->naam}}">
 						{{ $categorie->naam }}
 					</a>
-					@can('P_DOCS_MOD')
+					@can(P_DOCS_MOD)
 						<a class="toevoegen" href="/documenten/toevoegen/?catID={{$categorie->id}}"
 							 title="Document toevoegen in categorie: {{$categorie->naam}}">
 							@icon('toevoegen')

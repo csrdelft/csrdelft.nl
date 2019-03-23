@@ -65,7 +65,7 @@ class IntField extends InputField {
 			$this->error = 'Alleen gehele getallen toegestaan';
 		} elseif (is_int($this->max) AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} elseif ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
+		} elseif ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
 			// exception for leden mod
 		} elseif (is_int($this->min) AND $this->value < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
