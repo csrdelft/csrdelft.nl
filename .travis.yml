@@ -24,9 +24,9 @@ install:
   - yarn
   - composer install
 
-script:
-  - yarn run production
-  - composer run-script production
+script: # Let op met gebruik van deze opties, als er iets niet gebuild wordt wat wel had moeten gebeuren is het je eigen schuld.
+  - if [[ $TRAVIS_COMMIT_MESSAGE != *"[skipjs]"* ]]; then yarn run production; fi;
+  - if [[ $TRAVIS_COMMIT_MESSAGE != *"[skipphp]"* ]]; then composer run-script production; fi;
   - if [[ $TRAVIS_COMMIT_MESSAGE != *"[skipsonar]"* ]]; then sonar-scanner; fi;
 
 deploy:
