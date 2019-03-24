@@ -25,16 +25,16 @@ class CorveeRepetitiesController extends AclController {
 		parent::__construct($query, CorveeRepetitiesModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer' => 'P_CORVEE_MOD',
-				'maaltijd' => 'P_CORVEE_MOD'
+				'beheer' => P_CORVEE_MOD,
+				'maaltijd' => P_CORVEE_MOD
 			);
 		} else {
 			$this->acl = array(
-				'nieuw' => 'P_CORVEE_MOD',
-				'bewerk' => 'P_CORVEE_MOD',
-				'opslaan' => 'P_CORVEE_MOD',
-				'verwijder' => 'P_CORVEE_MOD',
-				'bijwerken' => 'P_MAAL_MOD'
+				'nieuw' => P_CORVEE_MOD,
+				'bewerk' => P_CORVEE_MOD,
+				'opslaan' => P_CORVEE_MOD,
+				'verwijder' => P_CORVEE_MOD,
+				'bijwerken' => P_MAAL_MOD
 			);
 		}
 	}

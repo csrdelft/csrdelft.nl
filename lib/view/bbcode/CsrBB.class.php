@@ -537,7 +537,7 @@ HTML;
 		if (isset($arguments['prive'])) {
 			$permissie = $arguments['prive'];
 		} else {
-			$permissie = 'P_LOGGED_IN';
+			$permissie = P_LOGGED_IN;
 		}
 		if (!LoginModel::mag($permissie)) {
 			$this->bb_mode = false;

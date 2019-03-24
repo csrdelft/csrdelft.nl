@@ -74,7 +74,7 @@ class LidZoeker {
 	public function __construct() {
 
 		//wat extra velden voor moderators.
-		if (LoginModel::mag('P_LEDEN_MOD')) {
+		if (LoginModel::mag(P_LEDEN_MOD)) {
 			$this->allowVelden = array_merge($this->allowVelden, $this->allowVeldenLEDENMOD);
 		}
 
@@ -237,7 +237,7 @@ class LidZoeker {
 			$defaults[] = "CONCAT_WS(' ', tussenvoegsel, achternaam) LIKE '%" . $zoekterm . "%' ";
 			$defaults[] = "CONCAT_WS(', ', achternaam, tussenvoegsel) LIKE '%" . $zoekterm . "%' ";
 			$defaults[] = "nickname LIKE '%" . $zoekterm . "%' ";
-			if (LoginModel::mag('P_LEDEN_MOD')) {
+			if (LoginModel::mag(P_LEDEN_MOD)) {
 				$defaults[] = "eetwens LIKE '%" . $zoekterm . "%' ";
 			}
 

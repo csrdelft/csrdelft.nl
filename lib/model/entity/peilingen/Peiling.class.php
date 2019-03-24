@@ -38,15 +38,15 @@ class Peiling extends PersistentEntity {
 
 	public function getMagBewerken() {
 		//Elk BASFCie-lid heeft voorlopig peilingbeheerrechten.
-		return LoginModel::mag('P_ADMIN,bestuur,commissie:BASFCie');
+		return LoginModel::mag(P_ADMIN . ',bestuur,commissie:BASFCie');
 	}
 
 	public function getIsMod() {
-		return LoginModel::mag('P_PEILING_MOD') || LoginModel::getUid() == $this->eigenaar;
+		return LoginModel::mag(P_PEILING_MOD) || LoginModel::getUid() == $this->eigenaar;
 	}
 
 	public function getMagStemmen() {
-		return LoginModel::mag('P_PEILING_VOTE') && ($this->eigenaar == LoginModel::getUid() || empty(trim($this->rechten_stemmen)) || LoginModel::mag($this->rechten_stemmen));
+		return LoginModel::mag(P_PEILING_VOTE) && ($this->eigenaar == LoginModel::getUid() || empty(trim($this->rechten_stemmen)) || LoginModel::mag($this->rechten_stemmen));
 	}
 
 	public function getHeeftGestemd() {

@@ -12,7 +12,7 @@ class SavedQuery {
 
 	private $queryID;
 	private $beschrijving;
-	private $permissie = 'P_ADMIN';
+	private $permissie = P_ADMIN;
 	private $result = null;
 	private $resultCount = 0;
 
@@ -52,7 +52,7 @@ class SavedQuery {
 						$this->result = $db->result2array($queryResult);
 						$this->resultCount = count($this->result);
 					}
-				} elseif (LoginModel::mag('P_ADMIN')) {
+				} elseif (LoginModel::mag(P_ADMIN)) {
 					$this->result[] = array('mysqli_error' => $db->error());
 				}
 			}
@@ -90,7 +90,7 @@ class SavedQuery {
 	//Query's mogen worden weergegeven als de permissiestring toegelaten wordt door
 	//Lid::mag()' of als gebruiker P_ADMIN heeft.
 	public static function magWeergeven($permissie) {
-		return LoginModel::mag($permissie) OR LoginModel::mag('P_ADMIN');
+		return LoginModel::mag($permissie) OR LoginModel::mag(P_ADMIN);
 	}
 
 	public function magBekijken() {

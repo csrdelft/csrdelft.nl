@@ -32,19 +32,19 @@ class MijnMaaltijdenController extends AclController {
 		parent::__construct($query, MaaltijdenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'ketzer' => 'P_MAAL_IK',
-				'lijst' => 'P_MAAL_IK',
-				'aanmelden' => 'P_MAAL_IK',
-				'afmelden' => 'P_MAAL_IK'
+				'ketzer' => P_MAAL_IK,
+				'lijst' => P_MAAL_IK,
+				'aanmelden' => P_MAAL_IK,
+				'afmelden' => P_MAAL_IK
 			);
 		} else {
 			$this->acl = array(
-				'sluit' => 'P_MAAL_IK',
-				'aanmelden' => 'P_MAAL_IK',
-				'afmelden' => 'P_MAAL_IK',
-				'gasten' => 'P_MAAL_IK',
-				'opmerking' => 'P_MAAL_IK',
-				'beoordeling' => 'P_MAAL_IK'
+				'sluit' => P_MAAL_IK,
+				'aanmelden' => P_MAAL_IK,
+				'afmelden' => P_MAAL_IK,
+				'gasten' => P_MAAL_IK,
+				'opmerking' => P_MAAL_IK,
+				'beoordeling' => P_MAAL_IK
 			);
 		}
 	}
@@ -72,7 +72,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function lijst($mid) {
 		$maaltijd = $this->model->getMaaltijd($mid, true);
-		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND !LoginModel::mag('P_MAAL_MOD')) {
+		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND !LoginModel::mag(P_MAAL_MOD)) {
 			$this->exit_http(403);
 			return;
 		}
@@ -83,7 +83,7 @@ class MijnMaaltijdenController extends AclController {
 
 	public function sluit($mid) {
 		$maaltijd = $this->model->getMaaltijd($mid);
-		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND !LoginModel::mag('P_MAAL_MOD')) {
+		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND !LoginModel::mag(P_MAAL_MOD)) {
 			$this->exit_http(403);
 			return;
 		}

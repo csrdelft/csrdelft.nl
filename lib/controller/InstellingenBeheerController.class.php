@@ -23,12 +23,12 @@ class InstellingenBeheerController extends AclController {
 		parent::__construct($query, InstellingenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'module' => 'P_LOGGED_IN'
+				'module' => P_LOGGED_IN
 			);
 		} else {
 			$this->acl = array(
-				'opslaan' => 'P_LOGGED_IN',
-				'reset' => 'P_LOGGED_IN'
+				'opslaan' => P_LOGGED_IN,
+				'reset' => P_LOGGED_IN
 			);
 		}
 	}
@@ -40,13 +40,13 @@ class InstellingenBeheerController extends AclController {
 		if ($this->hasParam(3)) {
 			switch ($this->getParam(3)) {
 				case 'agenda':
-					return LoginModel::mag('P_AGENDA_MOD');
+					return LoginModel::mag(P_AGENDA_MOD);
 				case 'corvee':
-					return LoginModel::mag('P_CORVEE_MOD');
+					return LoginModel::mag(P_CORVEE_MOD);
 				case 'maaltijden':
-					return LoginModel::mag('P_MAAL_MOD');
+					return LoginModel::mag(P_MAAL_MOD);
 				default:
-					return LoginModel::mag('P_ADMIN');
+					return LoginModel::mag(P_ADMIN);
 			}
 		}
 		return true; // hoofdpagina: geen module

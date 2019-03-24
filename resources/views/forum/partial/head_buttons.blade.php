@@ -1,4 +1,4 @@
-@can('P_LOGGED_IN')
+@can(P_LOGGED_IN)
 	@if(isset($deelmelding))
 		<div class="btn-group mr-2">
 			<a href="/forum/deelmelding/{{$deel->forum_id}}/uit" class="btn btn-light post ReloadPage melding-nooit @if(!$deelmelding) active @endif"

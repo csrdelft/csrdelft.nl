@@ -134,7 +134,7 @@ class MenuItem extends PersistentEntity {
 	}
 
 	public function magBeheren() {
-		return $this->rechten_bekijken == LoginModel::getUid() OR LoginModel::mag('P_ADMIN');
+		return $this->rechten_bekijken == LoginModel::getUid() OR LoginModel::mag(P_ADMIN);
 	}
 
 	public function isOngelezen() {

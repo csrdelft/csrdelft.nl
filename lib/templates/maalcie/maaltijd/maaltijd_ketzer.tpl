@@ -4,7 +4,7 @@
 		{toegang P_LOGGED_IN}
 			<div class="aanmelddata maaltijd-{if $aanmelding}aan{else}af{/if}gemeld">Aangemeld:<br />
 
-				{if !$maaltijd->gesloten && CsrDelft\model\security\LoginModel::mag('P_MAAL_IK')}
+				{if !$maaltijd->gesloten && CsrDelft\model\security\LoginModel::mag(P_MAAL_IK)}
 
 					{if $aanmelding}
 						<a onclick="window.ketzerAjax('/maaltijdenketzer/afmelden/{$maaltijd->maaltijd_id}', '.maaltijdketzer-{$maaltijd->maaltijd_id}');" class="btn maaltijd-aangemeld" tabindex="0"><input type="checkbox" checked="checked" /> Ja</a>

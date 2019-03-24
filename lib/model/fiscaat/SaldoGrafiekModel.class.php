@@ -67,6 +67,6 @@ class SaldoGrafiekModel {
 	 */
 	public static function magGrafiekZien($uid) {
 		//mogen we uberhaupt een grafiek zien?
-		return LoginModel::getUid() === $uid OR LoginModel::mag('P_LEDEN_MOD,commissie:SocCie,commissie:MaalCie');
+		return LoginModel::getUid() === $uid OR LoginModel::mag(P_LEDEN_MOD . ',commissie:SocCie,commissie:MaalCie');
 	}
 }

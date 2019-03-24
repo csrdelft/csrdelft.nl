@@ -20,11 +20,11 @@ class MaalCieBoekjaarController extends AclController {
 		parent::__construct($query, null);
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer' => 'P_MAAL_SALDI'
+				'beheer' => P_MAAL_SALDI
 			);
 		} else {
 			$this->acl = array(
-				'sluitboekjaar' => 'P_MAAL_SALDI'
+				'sluitboekjaar' => P_MAAL_SALDI
 			);
 		}
 	}

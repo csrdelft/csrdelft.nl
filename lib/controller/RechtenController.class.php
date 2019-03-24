@@ -27,14 +27,14 @@ class RechtenController extends AclController {
 		parent::__construct($query, AccessModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'bekijken' => 'P_LOGGED_IN'
+				'bekijken' => P_LOGGED_IN
 			);
 		} else {
 			$this->acl = array(
-				'bekijken' => 'P_LOGGED_IN',
-				'aanmaken' => 'P_LOGGED_IN',
-				'wijzigen' => 'P_LOGGED_IN',
-				'verwijderen' => 'P_LOGGED_IN'
+				'bekijken' => P_LOGGED_IN,
+				'aanmaken' => P_LOGGED_IN,
+				'wijzigen' => P_LOGGED_IN,
+				'verwijderen' => P_LOGGED_IN
 			);
 		}
 	}

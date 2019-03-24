@@ -69,7 +69,7 @@ class FotoTagAlbum extends FotoAlbum {
 	}
 
 	public function magBekijken() {
-		return LoginModel::mag('P_LEDEN_READ');
+		return LoginModel::mag(P_LEDEN_READ);
 	}
 
 	public function isOwner() {

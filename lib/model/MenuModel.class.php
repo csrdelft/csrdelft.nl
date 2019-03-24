@@ -182,7 +182,7 @@ class MenuModel extends CachedPersistenceModel {
 	 * @return MenuItem[]|false
 	 */
 	public function getMenuBeheerLijst() {
-		if (LoginModel::mag('P_ADMIN')) {
+		if (LoginModel::mag(P_ADMIN)) {
 			return $this->find('parent_id = ?', array(0));
 		} else {
 			return false;

@@ -26,7 +26,7 @@ class RechtenTable extends DataTable {
 		$this->searchColumn('aciton');
 
 		// Has permission to change permissions?
-		if (!LoginModel::mag('P_ADMIN')) {
+		if (!LoginModel::mag(P_ADMIN)) {
 			$rechten = $model::getSubject($environment, AccessAction::Rechten, $resource);
 			if (!$rechten OR !LoginModel::mag($rechten)) {
 				return;

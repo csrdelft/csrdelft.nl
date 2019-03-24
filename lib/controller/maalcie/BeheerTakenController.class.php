@@ -34,24 +34,24 @@ class BeheerTakenController extends AclController {
 		parent::__construct($query, CorveeTakenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer' => 'P_CORVEE_MOD',
-				'prullenbak' => 'P_CORVEE_MOD',
-				//'leegmaken' => 'P_MAAL_MOD',
-				'maaltijd' => 'P_CORVEE_MOD',
-				'herinneren' => 'P_CORVEE_MOD'
+				'beheer' => P_CORVEE_MOD,
+				'prullenbak' => P_CORVEE_MOD,
+				//'leegmaken' => P_MAAL_MOD,
+				'maaltijd' => P_CORVEE_MOD,
+				'herinneren' => P_CORVEE_MOD
 			);
 		} else {
 			$this->acl = array(
-				'nieuw' => 'P_CORVEE_MOD',
-				'bewerk' => 'P_CORVEE_MOD',
-				'opslaan' => 'P_CORVEE_MOD',
-				'verwijder' => 'P_CORVEE_MOD',
-				'herstel' => 'P_CORVEE_MOD',
-				'toewijzen' => 'P_CORVEE_MOD',
-				'puntentoekennen' => 'P_CORVEE_MOD',
-				'puntenintrekken' => 'P_CORVEE_MOD',
-				'email' => 'P_CORVEE_MOD',
-				'aanmaken' => 'P_CORVEE_MOD'
+				'nieuw' => P_CORVEE_MOD,
+				'bewerk' => P_CORVEE_MOD,
+				'opslaan' => P_CORVEE_MOD,
+				'verwijder' => P_CORVEE_MOD,
+				'herstel' => P_CORVEE_MOD,
+				'toewijzen' => P_CORVEE_MOD,
+				'puntentoekennen' => P_CORVEE_MOD,
+				'puntenintrekken' => P_CORVEE_MOD,
+				'email' => P_CORVEE_MOD,
+				'aanmaken' => P_CORVEE_MOD
 			);
 		}
 	}

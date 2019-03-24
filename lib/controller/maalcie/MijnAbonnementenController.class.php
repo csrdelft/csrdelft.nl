@@ -24,12 +24,12 @@ class MijnAbonnementenController extends AclController {
 		parent::__construct($query, MaaltijdAbonnementenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'mijn' => 'P_MAAL_IK'
+				'mijn' => P_MAAL_IK
 			);
 		} else {
 			$this->acl = array(
-				'inschakelen' => 'P_MAAL_IK',
-				'uitschakelen' => 'P_MAAL_IK'
+				'inschakelen' => P_MAAL_IK,
+				'uitschakelen' => P_MAAL_IK
 			);
 		}
 	}

@@ -177,7 +177,7 @@ class ForumDraad extends PersistentEntity {
 		if ($this->verwijderd AND !$this->magModereren()) {
 			return false;
 		}
-		if (!LoginModel::mag('P_LOGGED_IN') AND $this->gesloten AND strtotime($this->laatst_gewijzigd) < strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten'))) {
+		if (!LoginModel::mag(P_LOGGED_IN) AND $this->gesloten AND strtotime($this->laatst_gewijzigd) < strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten'))) {
 			return false;
 		}
 		return $this->getForumDeel()->magLezen() OR ($this->isGedeeld() AND $this->getGedeeldMet()->magLezen());
@@ -199,7 +199,7 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function magVerbergen() {
-		return !$this->belangrijk AND LoginModel::mag('P_LOGGED_IN');
+		return !$this->belangrijk AND LoginModel::mag(P_LOGGED_IN);
 	}
 
 	public function magMeldingKrijgen() {

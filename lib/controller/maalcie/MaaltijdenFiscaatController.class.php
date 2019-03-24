@@ -33,13 +33,13 @@ class MaaltijdenFiscaatController extends AclController {
 		parent::__construct($query, CiviProductModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'onverwerkt' => 'P_MAAL_MOD',
-				'overzicht' => 'P_MAAL_MOD'
+				'onverwerkt' => P_MAAL_MOD,
+				'overzicht' => P_MAAL_MOD
 			);
 		} else {
 			$this->acl = array(
-				'verwerk' => 'P_MAAL_MOD',
-				'overzicht' => 'P_MAAL_MOD'
+				'verwerk' => P_MAAL_MOD,
+				'overzicht' => P_MAAL_MOD
 			);
 		}
 	}

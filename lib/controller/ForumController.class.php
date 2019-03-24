@@ -72,7 +72,7 @@ class ForumController extends Controller {
 			case 'beheren':
 				/** @noinspection PhpMissingBreakStatementInspection */
 			case 'opheffen':
-				if (!LoginModel::mag('P_FORUM_ADMIN')) {
+				if (!LoginModel::mag(P_FORUM_ADMIN)) {
 					return false;
 				}
 
@@ -83,7 +83,7 @@ class ForumController extends Controller {
 			case 'concept':
 				/** @noinspection PhpMissingBreakStatementInspection */
 			case 'grafiekdata':
-				if (!LoginModel::mag('P_LOGGED_IN')) {
+				if (!LoginModel::mag(P_LOGGED_IN)) {
 					return false;
 				}
 
@@ -210,7 +210,7 @@ class ForumController extends Controller {
 		$forumZoeken->zoekterm = $query;
 		$zoekform = new ForumZoekenForm($forumZoeken);
 
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+		if (!LoginModel::mag(P_LOGGED_IN)) {
 			// Reset de waarden waarbinnen een externe gebruiker mag zoeken.
 			$override = new ForumZoeken();
 			$override->zoekterm = $forumZoeken->zoekterm;
@@ -370,7 +370,7 @@ class ForumController extends Controller {
 		if (!$draad->magLezen()) {
 			$this->exit_http(403);
 		}
-		if (LoginModel::mag('P_LOGGED_IN')) {
+		if (LoginModel::mag(P_LOGGED_IN)) {
 			$gelezen = $draad->getWanneerGelezen();
 		} else {
 			$gelezen = false;
@@ -404,7 +404,7 @@ class ForumController extends Controller {
 			'meldingsniveau' => $draad->magMeldingKrijgen() ? ForumDradenMeldingModel::instance()->getVoorkeursNiveauVoorLid($draad) : '',
 		]);
 
-		if (LoginModel::mag('P_LOGGED_IN')) {
+		if (LoginModel::mag(P_LOGGED_IN)) {
 			ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		}
 
@@ -613,7 +613,7 @@ class ForumController extends Controller {
 		}
 		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'eerste_post_plakkerig', 'pagina_per_post'))) {
 			$value = !$draad->$property;
-			if ($property === 'belangrijk' AND !LoginModel::mag('P_FORUM_BELANGRIJK')) {
+			if ($property === 'belangrijk' AND !LoginModel::mag(P_FORUM_BELANGRIJK)) {
 				$this->exit_http(403);
 			}
 		} elseif ($property === 'forum_id' OR $property === 'gedeeld_met') {
@@ -716,7 +716,7 @@ class ForumController extends Controller {
 		// externen checks
 		$mailadres = null;
 		$wacht_goedkeuring = false;
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+		if (!LoginModel::mag(P_LOGGED_IN)) {
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
@@ -771,7 +771,7 @@ class ForumController extends Controller {
 		}
 
 		// markeer als gelezen
-		if (LoginModel::mag('P_LOGGED_IN')) {
+		if (LoginModel::mag(P_LOGGED_IN)) {
 			ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad);
 		}
 
