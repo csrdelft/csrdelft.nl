@@ -77,8 +77,8 @@ class GroepStatistiekView extends GroepTabView {
 			$series[] = ["t" => date(\DateTime::RFC2822, $tijd), "y" => $totaal];
 		}
 
-		$begin = date(\DateTime::RFC2822, array_keys($data)[0]);
-		$eind = date(\DateTime::RFC2822, end(array_keys($data)));
+		$begin = date(\DateTime::RFC2822, array_key_first($data));
+		$eind = date(\DateTime::RFC2822, array_key_last($data));
 
 		return htmlentities(json_encode([
 			'labels' => [$begin, $eind],
