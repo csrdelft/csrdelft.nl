@@ -6,7 +6,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\SimpleSpamFilter;
-use CsrDelft\controller\framework\Controller;
+use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumZoeken;
@@ -31,16 +31,58 @@ use CsrDelft\view\View;
 
 
 /**
- * ApiForumController.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Controller van het forum.
  */
-class ForumController extends Controller {
+class ForumController extends AclController {
 
 	public function __construct($query) {
 		parent::__construct($query, null);
+
+		if ($this->getMethod() == 'GET') {
+			$this->acl = [
+				'zoeken' => P_PUBLIC,
+				'rss' => P_PUBLIC,
+				'recent' => P_PUBLIC,
+				'deel' => P_PUBLIC,
+				'onderwerp' => P_PUBLIC,
+				'reactie' => P_PUBLIC,
+				'titelzoeken' => P_LOGGED_IN,
+				'belangrijk' => P_LOGGED_IN,
+				'wacht' => P_FORUM_ADMIN,
+			];
+		} else {
+			$this->acl = [
+				// Publiek
+				'zoeken' => P_PUBLIC,
+				'posten' => P_PUBLIC,
+				// Admin
+				'aanmaken' => P_FORUM_ADMIN,
+				'beheren' => P_FORUM_ADMIN,
+				'opheffen' => P_FORUM_ADMIN,
+				// Iedereen, checkt zelf rechten
+				'bewerken' => P_LOGGED_IN,
+				'citeren' => P_LOGGED_IN,
+				'bladwijzer' => P_LOGGED_IN,
+				'concept' => P_LOGGED_IN,
+				'grafiekdata' => P_LOGGED_IN,
+				// ForumDraad
+				'wijzigen' => P_LOGGED_IN,
+				'verwijderen' => P_LOGGED_IN,
+				'verplaatsen' => P_LOGGED_IN,
+				'offtopic' => P_LOGGED_IN,
+				'goedkeuren' => P_LOGGED_IN,
+				'meldingsniveau' => P_LOGGED_IN,
+				'deelmelding' => P_LOGGED_IN,
+
+				// ForumPost
+				'tekst' => P_LOGGED_IN,
+				'verbergen' => P_LOGGED_IN,
+				'tonen' => P_LOGGED_IN,
+				'toonalles' => P_LOGGED_IN,
+			];
+		}
 	}
 
 	/**
@@ -52,62 +94,12 @@ class ForumController extends Controller {
 	 * @return boolean
 	 */
 	protected function mag($action, array $args) {
-		switch ($action) {
-			case 'zoeken':
-				return true;
-
-			// Forum
-			case 'titelzoeken':
-			case 'rss':
-			case 'recent':
-			case 'belangrijk':
-			case 'deel':
-			case 'onderwerp':
-			case 'reactie':
-			case 'wacht':
-				return $this->getMethod() == 'GET';
-
-			// ForumDeel
-			case 'aanmaken':
-			case 'beheren':
-				/** @noinspection PhpMissingBreakStatementInspection */
-			case 'opheffen':
-				if (!LoginModel::mag(P_FORUM_ADMIN)) {
-					return false;
-				}
-
-			// ForumPost
-			case 'bewerken':
-			case 'citeren':
-			case 'bladwijzer':
-			case 'concept':
-				/** @noinspection PhpMissingBreakStatementInspection */
-			case 'grafiekdata':
-				if (!LoginModel::mag(P_LOGGED_IN)) {
-					return false;
-				}
-
-			// ForumDraad
-			case 'wijzigen':
-			case 'posten':
-			case 'verwijderen':
-			case 'verplaatsen':
-			case 'offtopic':
-			case 'goedkeuren':
-			case 'meldingsniveau':
-			case 'deelmelding':
-
-			// ForumPost
-			case 'tekst':
-			case 'verbergen':
-			case 'tonen':
-			case 'toonalles':
-				return $this->getMethod() == 'POST';
-
-			default:
+		if (parent::mag($action, $args) == false) {
 				$this->action = 'forum';
 				return true;
 		}
+
+		return true;
 	}
 
 	/**
@@ -123,28 +115,14 @@ class ForumController extends Controller {
 			$this->action = 'rss';
 		}
 		try {
-			if (($this->action == "reactie" || $this->action == "onderwerp") && (!$this->hasParam(3) || filter_var($this->getParam(3), FILTER_VALIDATE_INT) === false)) {
-				throw new CsrToegangException("Niet gevonden, sorry", 404);
+			if (($this->action == 'reactie' || $this->action == 'onderwerp') && (!$this->hasParam(3) || filter_var($this->getParam(3), FILTER_VALIDATE_INT) === false)) {
+				throw new CsrToegangException('Niet gevonden, sorry', 404);
 			}
 			$this->view = parent::performAction($this->getParams(3));
 		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), -1);
 			$this->action = 'forum';
 			$this->view = parent::performAction(array());
-		}
-		switch ($this->action) {
-			case 'titelzoeken':
-			case 'grafiekdata':
-			case 'rss':
-				return;
-
-			case 'zoeken':
-				break;
-
-			default:
-				if ($this->getMethod() == 'POST') {
-					return;
-				}
 		}
 	}
 
