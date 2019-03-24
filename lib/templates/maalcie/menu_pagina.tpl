@@ -44,4 +44,6 @@
 		<td id="maalcie-melding-veld">{getMelding()}</td>
 	</tr>
 </table>
-<h1>{$titel}</h1>
+{if isset($titel)}
+	<h1>{$titel}</h1>
+{/if}
