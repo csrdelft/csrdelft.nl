@@ -2,40 +2,40 @@ language: php
 php:
   - 7
 
+git:
+  depth: false
+
 cache:
   directories:
     - "node_modules"
     - "vendor"
 
-addons:
-  sonarcloud:
-    organization: "csrdelft"
 env:
   global:
-    - SKIP_BUILD=`[[ $TRAVIS_COMMIT_MESSAGE != *"[skipbuild]"* ]]; echo $?`
-    - SKIP_SONAR=`[[ $TRAVIS_COMMIT_MESSAGE != *"[skipsonar]"* ]]; echo $?`
+    - SKIP_BUILD=`[[ $TRAVIS_COMMIT_MESSAGE == *"[skipbuild]"* ]]; echo $?`
 
-services:
-  - mysql
+jobs:
+  include:
+    - stage: build
+      services: mysql
+      before_install: nvm install 8
+      script: ./bin/ci/build.sh
+      deploy:
+        provider: script
+        script: ./bin/ci/deploy.sh
+        skip_cleanup: true
+        on:
+          branch: master
+      if: type != pull_request
+    - stage: analysis
+      script: sonar-scanner
+      if: branch = master OR type = pull_request
+      addons:
+        sonarcloud:
+          organization: "csrdelft"
 
-before_install:
-  - cp ./bin/ci/mysql.ini.travis ./etc/mysql.ini
-  - cp ./bin/ci/defines.include.php ./lib/defines.include.php
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS csrdelft;'
-  - (($SKIP_BUILD)) || nvm install 8
+stages:
+  - build
+  - analysis
 
-install:
-  - (($SKIP_BUILD)) || yarn
-  - (($SKIP_BUILD)) || composer install
-
-script: # Let op met gebruik van deze opties, als er iets niet gebuild wordt wat wel had moeten gebeuren is het je eigen schuld.
-  - (($SKIP_BUILD)) || yarn run production
-  - (($SKIP_BUILD)) || composer run-script production
-  - (($SKIP_SONAR)) || sonar-scanner
-
-deploy:
-  provider: script
-  script: ./bin/ci/deploy.sh
-  skip_cleanup: true
-  on:
-    branch: master
+script: skip

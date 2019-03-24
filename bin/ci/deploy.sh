@@ -30,7 +30,9 @@ mv deploy/bin/ci/.gitignore.prod deploy/.gitignore
 cd deploy
 
 # Als in deze build geen js en php gedraaid is, trek deze dan uit de vorige versie
-(($SKIP_BUILD)) && git checkout -- data/blade htdocs/dist
+if (( $SKIP_BUILD == 1 )); then
+git checkout -- data/blade htdocs/dist
+fi;
 
 git add -A
 git diff-index --quiet HEAD || git commit -m "Travis deploy $TRAVIS_BUILD_NUMBER"
