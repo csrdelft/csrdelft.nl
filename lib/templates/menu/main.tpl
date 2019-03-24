@@ -5,7 +5,6 @@
 				<a id="cd-main-trigger" class="mobiel-hidden trigger" href="#menu">
 					<img id="cd-user-avatar" class="cd-user-avatar" src="/plaetjes/pasfoto/{CsrDelft\model\security\LoginModel::getProfiel()->getPasfotoPath(true)}">
 					{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('civitas')}
-					{if $gesprekOngelezen > 0}&nbsp;<span class="badge badge-red" title="{$gesprekOngelezen} ongelezen bericht{if $gesprekOngelezen !== 1}en{/if}">{$gesprekOngelezen}</span>{/if}
 				</a>
 				<ul class="cd-secondary-nav">
 					{include file='menu/main_tree.tpl' parent=$root}
