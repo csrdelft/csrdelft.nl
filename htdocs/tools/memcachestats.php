@@ -12,7 +12,7 @@ use CsrDelft\Orm\Persistence\OrmMemcache;
 
 require_once 'configuratie.include.php';
 
-if (DEBUG OR LoginModel::mag('P_ADMIN') OR LoginModel::instance()->isSued()) {
+if (DEBUG OR LoginModel::mag(P_ADMIN) OR LoginModel::instance()->isSued()) {
 
 	echo getMelding();
 

@@ -110,12 +110,12 @@ class MededelingenModel extends PersistenceModel {
 				$doelgroepClause .= "doelgroep='iedereen'";
 				break;
 			case 'leden': // De gebruiker mag alleen leden-berichten zien als hij daar rechten toe heeft.
-				$doelgroepClause .= LoginModel::mag('P_LEDEN_READ') ? "doelgroep!='oudleden'" : "doelgroep='iedereen'"; // Let op de != en =
+				$doelgroepClause .= LoginModel::mag(P_LEDEN_READ) ? "doelgroep!='oudleden'" : "doelgroep='iedereen'"; // Let op de != en =
 				break;
 			case 'oudleden': // De gebruiker mag alleen oudlid-berichten zien als hij oudlid of moderator is.
-				if (LoginModel::mag('status:oudlid') OR LoginModel::mag('P_NEWS_MOD')) {
+				if (LoginModel::mag('status:oudlid') OR LoginModel::mag(P_NEWS_MOD)) {
 					$doelgroepClause .= "doelgroep!='leden'";
-				} elseif (LoginModel::mag('P_LEDEN_READ')) { // Anders mag een normaal lid ledenberichten zien én de berichten voor iedereen.
+				} elseif (LoginModel::mag(P_LEDEN_READ)) { // Anders mag een normaal lid ledenberichten zien én de berichten voor iedereen.
 					$doelgroepClause .= "doelgroep!='oudleden'";
 				} else { // Anders mag een niet-lid alleen de berichten zien die voor iedereen bestemd zijn.
 					$doelgroepClause .= "doelgroep='iedereen'";
@@ -125,7 +125,7 @@ class MededelingenModel extends PersistenceModel {
 				// Indien $doelgroep niet is opgegeven of ongeldig is, kijken we wat het beste past bij de huidige gebruiker.
 				if (LoginModel::mag('status:oudlid')) {
 					$doelgroepClause .= "doelgroep!='leden'";
-				} elseif (LoginModel::mag('P_LEDEN_READ')) {
+				} elseif (LoginModel::mag(P_LEDEN_READ)) {
 					$doelgroepClause .= "doelgroep!='oudleden'";
 				} else {
 					$doelgroepClause .= "doelgroep='iedereen'";
@@ -150,7 +150,7 @@ class MededelingenModel extends PersistenceModel {
 	 */
 	public function getLijstVanPagina($pagina = 1, $aantal, $prullenbak = false) {
 		// Prullenbak checken.
-		if ($prullenbak AND !LoginModel::mag('P_NEWS_MOD')) {
+		if ($prullenbak AND !LoginModel::mag(P_NEWS_MOD)) {
 			$prullenbak = false;
 		}
 
@@ -180,7 +180,7 @@ class MededelingenModel extends PersistenceModel {
 	public function getLijstWachtGoedkeuring() {
 		$mededelingen = array();
 		// Moderators of niet-ingelogden hebben geen berichten die wachten op goedkeuring.
-		if (LoginModel::mag('P_NEWS_MOD') OR !LoginModel::mag('P_LEDEN_READ'))
+		if (LoginModel::mag(P_NEWS_MOD) OR !LoginModel::mag(P_LEDEN_READ))
 			return $mededelingen;
 
 		$resultaat = $this->find('uid=? AND zichtbaarheid="wacht_goedkeuring"',
@@ -261,7 +261,7 @@ class MededelingenModel extends PersistenceModel {
 	 * @return bool
 	 */
 	public static function isModerator() {
-		return LoginModel::mag('P_NEWS_MOD');
+		return LoginModel::mag(P_NEWS_MOD);
 	}
 
 	/**
@@ -275,14 +275,14 @@ class MededelingenModel extends PersistenceModel {
 	 * @return bool
 	 */
 	public static function magPriveLezen() {
-		return LoginModel::mag('P_LEDEN_READ');
+		return LoginModel::mag(P_LEDEN_READ);
 	}
 
 	/**
 	 * @return bool
 	 */
 	public static function magToevoegen() {
-		return LoginModel::mag('P_NEWS_POST');
+		return LoginModel::mag(P_NEWS_POST);
 	}
 
 	/**
@@ -305,12 +305,12 @@ class MededelingenModel extends PersistenceModel {
 		$verborgenClause = "zichtbaarheid='zichtbaar'";
 		if ($prullenbak) {
 			$verborgenClause = "(zichtbaarheid='verwijderd' OR zichtbaarheid='onzichtbaar')";
-		} elseif (LoginModel::mag('P_NEWS_MOD')) { // Als de gebruiker moderator is, mag hij ook wacht_goedkeuring-berichten zien.
+		} elseif (LoginModel::mag(P_NEWS_MOD)) { // Als de gebruiker moderator is, mag hij ook wacht_goedkeuring-berichten zien.
 			$verborgenClause = "(zichtbaarheid='zichtbaar' OR zichtbaarheid='wacht_goedkeuring')";
 		}
 		// Doelgroep clause.
 		$doelgroepClause = "";
-		if (!LoginModel::mag('P_LEDEN_READ')) {
+		if (!LoginModel::mag(P_LEDEN_READ)) {
 			$doelgroepClause = " AND doelgroep='iedereen'";
 		} elseif (LoginModel::mag('status:oudlid')) {
 			$doelgroepClause = " AND doelgroep!='leden'";

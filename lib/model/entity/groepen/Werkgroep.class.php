@@ -35,7 +35,7 @@ class Werkgroep extends Ketzer {
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {
-		if ($action === AccessAction::Aanmaken AND !LoginModel::mag('P_LEDEN_MOD')) {
+		if ($action === AccessAction::Aanmaken AND !LoginModel::mag(P_LEDEN_MOD)) {
 			return false;
 		}
 		return parent::magAlgemeen($action, $allowedAuthenticationMethods);

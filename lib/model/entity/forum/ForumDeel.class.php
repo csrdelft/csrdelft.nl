@@ -95,7 +95,7 @@ class ForumDeel extends PersistentEntity {
 
 	public function magLezen($rss = false) {
 		$auth = ($rss ? AuthenticationMethod::getTypeOptions() : null);
-		return LoginModel::mag('P_FORUM_READ', $auth) AND LoginModel::mag($this->rechten_lezen, $auth) AND $this->getForumCategorie()->magLezen();
+		return LoginModel::mag(P_FORUM_READ, $auth) AND LoginModel::mag($this->rechten_lezen, $auth) AND $this->getForumCategorie()->magLezen();
 	}
 
 	public function magPosten() {
@@ -111,7 +111,7 @@ class ForumDeel extends PersistentEntity {
 	}
 
 	public function isOpenbaar() {
-		return strpos($this->rechten_lezen, 'P_FORUM_READ') !== false;
+		return strpos($this->rechten_lezen, P_FORUM_READ) !== false;
 	}
 
 	/**

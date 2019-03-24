@@ -22,7 +22,7 @@ class LoggerController extends AclController {
 		parent::__construct($query, null);
 
 		$this->acl = [
-			'log' => 'P_LOGGED_IN' // Sta alleen leden toe om spam te voorkomen.
+			'log' => P_LOGGED_IN // Sta alleen leden toe om spam te voorkomen.
 		];
 	}
 

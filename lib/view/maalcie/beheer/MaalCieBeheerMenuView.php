@@ -16,7 +16,7 @@ use CsrDelft\view\SmartyTemplateView;
 class MaalCieBeheerMenuView extends SmartyTemplateView {
 
 	public function view() {
-		if (($this->getModel() === 'corvee' AND LoginModel::mag('P_CORVEE_MOD')) OR ($this->getModel() === 'maaltijden' AND LoginModel::mag('P_MAAL_MOD'))) {
+		if (($this->getModel() === 'corvee' AND LoginModel::mag(P_CORVEE_MOD)) OR ($this->getModel() === 'maaltijden' AND LoginModel::mag(P_MAAL_MOD))) {
 			$this->smarty->display('maalcie/menu_beheer_' . $this->getModel() . '.tpl');
 		}
 	}

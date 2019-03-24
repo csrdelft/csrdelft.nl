@@ -22,13 +22,13 @@ class LidInstellingenController extends AclController {
 		parent::__construct($query, LidInstellingenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer' => 'P_LOGGED_IN'
+				'beheer' => P_LOGGED_IN
 			);
 		} else {
 			$this->acl = array(
-				'opslaan' => 'P_LOGGED_IN',
-				'reset' => 'P_ADMIN',
-				'update' => 'P_LOGGED_IN'
+				'opslaan' => P_LOGGED_IN,
+				'reset' => P_ADMIN,
+				'update' => P_LOGGED_IN
 			);
 		}
 	}

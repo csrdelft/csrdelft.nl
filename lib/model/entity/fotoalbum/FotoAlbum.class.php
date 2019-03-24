@@ -221,9 +221,9 @@ class FotoAlbum extends Map {
 			return false;
 		}
 		if ($this->isPubliek()) {
-			return LoginModel::mag('P_ALBUM_PUBLIC_READ');
+			return LoginModel::mag(P_ALBUM_PUBLIC_READ);
 		} else {
-			return LoginModel::mag('P_ALBUM_READ');
+			return LoginModel::mag(P_ALBUM_READ);
 		}
 	}
 
@@ -286,37 +286,37 @@ class FotoAlbum extends Map {
 			return true;
 		}
 		if($this->isPubliek()) {
-			return LoginModel::mag('P_ALBUM_PUBLIC_DEL');
+			return LoginModel::mag(P_ALBUM_PUBLIC_DEL);
 		}
 		else{
-			return LoginModel::mag('P_ALBUM_DEL');
+			return LoginModel::mag(P_ALBUM_DEL);
 		}
 	}
 
 	public function magToevoegen() {
 		if($this->isPubliek()) {
-			return LoginModel::mag('P_ALBUM_PUBLIC_ADD');
+			return LoginModel::mag(P_ALBUM_PUBLIC_ADD);
 		}
 		else{
-			return LoginModel::mag('P_ALBUM_ADD');
+			return LoginModel::mag(P_ALBUM_ADD);
 		}
 	}
 
 	public function magAanpassen() {
 		if($this->isPubliek()) {
-			return LoginModel::mag('P_ALBUM_PUBLIC_MOD');
+			return LoginModel::mag(P_ALBUM_PUBLIC_MOD);
 		}
 		else{
-			return LoginModel::mag('P_ALBUM_MOD') || $this->isOwner();
+			return LoginModel::mag(P_ALBUM_MOD) || $this->isOwner();
 		}
 	}
 
 	public function magDownloaden() {
 		if($this->isPubliek()) {
-			return LoginModel::mag('P_ALBUM_PUBLIC_DOWN');
+			return LoginModel::mag(P_ALBUM_PUBLIC_DOWN);
 		}
 		else{
-			return LoginModel::mag('P_ALBUM_DOWN');
+			return LoginModel::mag(P_ALBUM_DOWN);
 		}
 	}
 

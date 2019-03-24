@@ -146,7 +146,7 @@ MD
 	 */
 	public static function stacktraceHandler($exception = null) {
 		if ($exception instanceof \Exception) {
-			if ((defined('DEBUG') && DEBUG) || LoginModel::mag('P_LOGGED_IN')) {
+			if ((defined('DEBUG') && DEBUG) || LoginModel::mag(P_LOGGED_IN)) {
 				echo str_replace('#', '<br />#', $exception); // stacktrace
 				printDebug();
 			}

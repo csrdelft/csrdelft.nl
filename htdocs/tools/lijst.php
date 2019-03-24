@@ -11,7 +11,7 @@ use CsrDelft\view\lid\LedenlijstContent;
 require_once 'configuratie.include.php';
 
 
-if (!LoginModel::mag('P_OUDLEDEN_READ')) {
+if (!LoginModel::mag(P_OUDLEDEN_READ)) {
 	# geen rechten
 			$body = new CmsPaginaView(CmsPaginaModel::get('403'));
 	$pagina = new CsrLayoutPage($body);
@@ -62,7 +62,7 @@ if (isset($_GET['addToGoogleContacts'])) {
 				'<h3>Google-sync-resultaat:</h3>' . $message . '<br />' .
 				'<a href="/ledenlijst?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 0);
 
-		if (LoginModel::mag('P_ADMIN')) {
+		if (LoginModel::mag(P_ADMIN)) {
 			setMelding('Tijd nodig voor deze sync: ' . $elapsed . 's', 0);
 		}
 	} catch (Exception $e) {

@@ -18,7 +18,7 @@ require_once 'roodschoppercontent.class.php';
  * @deprecated
  */
 //Alleen voor admins, maalcie en Soccie. LET OP: SocCie kan nu ook een maalciemail versturen.
-if (!LoginModel::mag('P_LEDEN_MOD,commissie:MaalCie,commissie:SocCie')) {
+if (!LoginModel::mag(P_LEDEN_MOD . ',commissie:MaalCie,commissie:SocCie')) {
 	redirect(CSR_ROOT);
 }
 CsrfService::preventCsrf();

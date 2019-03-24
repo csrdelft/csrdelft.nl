@@ -28,7 +28,7 @@ abstract class Zijbalk {
 
 	public static function addStandaardZijbalk(array $zijbalk) {
 		// Favorieten menu
-		if (LoginModel::mag('P_LOGGED_IN') AND LidInstellingenModel::get('zijbalk', 'favorieten') == 'ja') {
+		if (LoginModel::mag(P_LOGGED_IN) AND LidInstellingenModel::get('zijbalk', 'favorieten') == 'ja') {
 			$menu = MenuModel::instance()->getMenu(LoginModel::getUid());
 			$menu->tekst = 'Favorieten';
 			array_unshift($zijbalk, new BlockMenuView($menu));
@@ -39,14 +39,14 @@ abstract class Zijbalk {
 		}
 
 		// Sponsors
-		if (LoginModel::mag('P_LOGGED_IN')) {
+		if (LoginModel::mag(P_LOGGED_IN)) {
 			$sponsor_menu = MenuModel::instance()->getMenu("sponsors");
 			$sponsor_menu->tekst = 'Mogelijkheden';
 			$zijbalk[] = new BlockMenuView($sponsor_menu);
 		}
 
 		// Agenda
-		if (LoginModel::mag('P_AGENDA_READ') && LidInstellingenModel::get('zijbalk', 'agendaweken') > 0 && LidInstellingenModel::get('zijbalk', 'agenda_max') > 0) {
+		if (LoginModel::mag(P_AGENDA_READ) && LidInstellingenModel::get('zijbalk', 'agendaweken') > 0 && LidInstellingenModel::get('zijbalk', 'agenda_max') > 0) {
 			$zijbalk[] = new AgendaZijbalkView(AgendaModel::instance(), LidInstellingenModel::get('zijbalk', 'agendaweken'));
 		}
 		// Laatste mededelingen
@@ -76,7 +76,7 @@ abstract class Zijbalk {
 			$zijbalk[] = view('forum.partial.post_zijbalk', ['posts' => $posts]);
 		}
 		// Ledenmemory topscores
-		if (LoginModel::mag('P_LEDEN_READ') AND LidInstellingenModel::get('zijbalk', 'ledenmemory_topscores') > 0) {
+		if (LoginModel::mag(P_LEDEN_READ) AND LidInstellingenModel::get('zijbalk', 'ledenmemory_topscores') > 0) {
 			$lidjaar = LichtingenModel::getJongsteLidjaar();
 			$lichting = LichtingenModel::get($lidjaar);
 			$scores = LedenMemoryScoresModel::instance()->getGroepTopScores($lichting, (int)LidInstellingenModel::get('zijbalk', 'ledenmemory_topscores'));
@@ -90,7 +90,7 @@ abstract class Zijbalk {
 			}
 		}
 		// Komende verjaardagen
-		if (LoginModel::mag('P_LOGGED_IN') AND LidInstellingenModel::get('zijbalk', 'verjaardagen') > 0) {
+		if (LoginModel::mag(P_LOGGED_IN) AND LidInstellingenModel::get('zijbalk', 'verjaardagen') > 0) {
 			$zijbalk[] = new KomendeVerjaardagenView(
 				VerjaardagenModel::getKomende((int)LidInstellingenModel::get('zijbalk', 'verjaardagen')),
 				LidInstellingenModel::get('zijbalk', 'verjaardagen_pasfotos') == 'ja');

@@ -26,16 +26,16 @@ class BeheerCiviProductenController extends AclController {
 
 		if ($this->getMethod() == "POST") {
 			$this->acl = [
-				'overzicht' => 'P_FISCAAT_READ',
-				'toevoegen' => 'P_FISCAAT_MOD',
-				'bewerken' => 'P_FISCAAT_MOD',
-				'opslaan' => 'P_FISCAAT_MOD',
-				'verwijderen' => 'P_FISCAAT_MOD'
+				'overzicht' => P_FISCAAT_READ,
+				'toevoegen' => P_FISCAAT_MOD,
+				'bewerken' => P_FISCAAT_MOD,
+				'opslaan' => P_FISCAAT_MOD,
+				'verwijderen' => P_FISCAAT_MOD
 			];
 		} else {
 			$this->acl = [
-				'overzicht' => 'P_FISCAAT_READ',
-				'suggesties' => 'P_FISCAAT_READ'
+				'overzicht' => P_FISCAAT_READ,
+				'suggesties' => P_FISCAAT_READ
 			];
 		}
 	}

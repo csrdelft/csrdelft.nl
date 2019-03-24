@@ -164,7 +164,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		if (!array_key_exists($forum_id, $this->aantal_paginas)) {
 			$where = 'forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 			$where_params = array($forum_id);
-			if (!LoginModel::mag('P_LOGGED_IN')) {
+			if (!LoginModel::mag(P_LOGGED_IN)) {
 				$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
 				$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
 			}
@@ -188,7 +188,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		$attributes = ['*', 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score'];
 		$where_params = [$forumZoeken->zoekterm, $forumZoeken->van, $forumZoeken->tot];
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND laatst_gewijzigd >= ? AND laatst_gewijzigd <= ?';
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+		if (!LoginModel::mag(P_LOGGED_IN)) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
 			$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
 		}
@@ -215,7 +215,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	public function getBelangrijkeForumDradenVoorDeel(ForumDeel $deel) {
 		$where = 'forum_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE AND belangrijk = TRUE';
 		$where_params = array($deel->forum_id);
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+		if (!LoginModel::mag(P_LOGGED_IN)) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
 			$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
 		}
@@ -225,7 +225,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	public function getForumDradenVoorDeel(ForumDeel $deel) {
 		$where = '(forum_id = ? OR gedeeld_met = ?) AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
 		$where_params = array($deel->forum_id, $deel->forum_id);
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+		if (!LoginModel::mag(P_LOGGED_IN)) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
 			$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
 		}
@@ -278,7 +278,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 				}
 			}
 		}
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+		if (!LoginModel::mag(P_LOGGED_IN)) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
 			$where_params[] = getDateTime(strtotime(InstellingenModel::get('forum', 'externen_geentoegang_gesloten')));
 		}

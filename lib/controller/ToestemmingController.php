@@ -20,10 +20,10 @@ class ToestemmingController extends AclController {
         parent::__construct($query, LidToestemmingModel::instance());
 
         $this->acl = [
-            'overzicht' => 'P_LOGGED_IN',
-            'annuleren' => 'P_LOGGED_IN',
-			'lijst' => 'P_LEDEN_MOD',
-			'lijst_foto' => 'P_ALBUM_MOD',
+            'overzicht' => P_LOGGED_IN,
+            'annuleren' => P_LOGGED_IN,
+						'lijst' => P_LEDEN_MOD,
+						'lijst_foto' => P_ALBUM_MOD,
         ];
     }
 

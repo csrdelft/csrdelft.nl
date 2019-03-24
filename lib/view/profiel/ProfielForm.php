@@ -53,7 +53,7 @@ class ProfielForm extends Formulier {
 			parent::__construct($profiel, '/profiel/' . $profiel->lidjaar . '/nieuw/' . strtolower(substr($profiel->status, 2)));
 		}
 
-		$admin = LoginModel::mag('P_LEDEN_MOD');
+		$admin = LoginModel::mag(P_LEDEN_MOD);
 		$inschrijven = !$profiel->getAccount();
 
 		$fields = [];

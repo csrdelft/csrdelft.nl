@@ -19,7 +19,7 @@ class AccountForm extends Formulier {
 		parent::__construct($account, '/account/' . $account->uid . '/bewerken', 'Inloggegevens aanpassen');
 		$fields = [];
 
-		if (LoginModel::mag('P_LEDEN_MOD')) {
+		if (LoginModel::mag(P_LEDEN_MOD)) {
 			$roles = array();
 			foreach (AccessRole::canChangeAccessRoleTo(LoginModel::getAccount()->perm_role) as $optie) {
 				$roles[$optie] = AccessRole::getDescription($optie);
@@ -29,7 +29,7 @@ class AccountForm extends Formulier {
 
 		$fields[] = new UsernameField('username', $account->username);
 		$fields[] = new RequiredEmailField('email', $account->email, 'E-mailadres');
-		$fields[] = new WachtwoordWijzigenField('wijzigww', $account, !LoginModel::mag('P_LEDEN_MOD'));
+		$fields[] = new WachtwoordWijzigenField('wijzigww', $account, !LoginModel::mag(P_LEDEN_MOD));
 		$fields['btn'] = new FormDefaultKnoppen('/profiel/' . $account->uid, false, true, true, true);
 
 		$delete = new DeleteKnop('/account/' . $account->uid . '/delete');

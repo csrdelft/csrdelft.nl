@@ -31,17 +31,17 @@ class MededelingenController extends AclController {
 		parent::__construct($query, MededelingenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'lijst' => 'P_LOGGED_IN',
-				'bekijken' => 'P_LOGGED_IN',
-				'bewerken' => 'P_NEWS_POST',
-				'verwijderen' => 'P_NEWS_POST',
-				'toevoegen' => 'P_NEWS_POST',
-				'top3overzicht' => 'P_NEWS_MOD',
-				'goedkeuren' => 'P_NEWS_MOD'
+				'lijst' => P_LOGGED_IN,
+				'bekijken' => P_LOGGED_IN,
+				'bewerken' => P_NEWS_POST,
+				'verwijderen' => P_NEWS_POST,
+				'toevoegen' => P_NEWS_POST,
+				'top3overzicht' => P_NEWS_MOD,
+				'goedkeuren' => P_NEWS_MOD
 			);
 		} else {
 			$this->acl = array(
-				'bewerken' => 'P_NEWS_POST'
+				'bewerken' => P_NEWS_POST
 			);
 		}
 	}

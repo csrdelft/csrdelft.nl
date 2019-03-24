@@ -26,13 +26,13 @@ class MijnVoorkeurenController extends AclController {
 		parent::__construct($query, CorveeVoorkeurenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'mijn' => 'P_CORVEE_IK'
+				'mijn' => P_CORVEE_IK
 			);
 		} else {
 			$this->acl = array(
-				'inschakelen' => 'P_CORVEE_IK',
-				'uitschakelen' => 'P_CORVEE_IK',
-				'eetwens' => 'P_CORVEE_IK'
+				'inschakelen' => P_CORVEE_IK,
+				'uitschakelen' => P_CORVEE_IK,
+				'eetwens' => P_CORVEE_IK
 			);
 		}
 	}

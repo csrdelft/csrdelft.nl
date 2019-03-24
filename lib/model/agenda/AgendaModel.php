@@ -132,7 +132,7 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Verjaardagen
-		if (!$zijbalk && LoginModel::mag('P_VERJAARDAGEN', $auth) AND LidInstellingenModel::get('agenda', 'toonVerjaardagen') === 'ja') {
+		if (!$zijbalk && LoginModel::mag(P_VERJAARDAGEN, $auth) AND LidInstellingenModel::get('agenda', 'toonVerjaardagen') === 'ja') {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.
@@ -269,7 +269,7 @@ class AgendaModel extends PersistenceModel {
 		}
 		$item->begin_moment = getDateTime(strtotime($datum) + 72000);
 		$item->eind_moment = getDateTime(strtotime($datum) + 79200);
-		if (LoginModel::mag('P_AGENDA_MOD')) {
+		if (LoginModel::mag(P_AGENDA_MOD)) {
 			$item->rechten_bekijken = InstellingenModel::get('agenda', 'standaard_rechten');
 		} else {
 			$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;

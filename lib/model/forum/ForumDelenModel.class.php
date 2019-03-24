@@ -76,9 +76,9 @@ class ForumDelenModel extends CachedPersistenceModel {
 		$deel->categorie_id = 0;
 		$deel->titel = 'Nieuw deelforum';
 		$deel->omschrijving = '';
-		$deel->rechten_lezen = 'P_FORUM_READ';
-		$deel->rechten_posten = 'P_FORUM_POST';
-		$deel->rechten_modereren = 'P_FORUM_MOD';
+		$deel->rechten_lezen = P_FORUM_READ;
+		$deel->rechten_posten = P_FORUM_POST;
+		$deel->rechten_modereren = P_FORUM_MOD;
 		$deel->volgorde = 0;
 		return $deel;
 	}

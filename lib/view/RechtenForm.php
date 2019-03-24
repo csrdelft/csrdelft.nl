@@ -36,7 +36,7 @@ class RechtenForm extends ModalForm {
 
 		if ($action === 'aanmaken') {
 
-			if (LoginModel::mag('P_ADMIN')) {
+			if (LoginModel::mag(P_ADMIN)) {
 				$fields[] = new RequiredTextField('environment', $ac->environment, 'Klasse');
 				$fields[] = new RequiredTextField('resource', $ac->resource, 'Object');
 			}

@@ -49,7 +49,7 @@ class BoekExemplaar extends PersistentEntity {
 	public function isEigenaar() : bool {
 		if ($this->eigenaar_uid == LoginModel::getUid()) {
 			return true;
-		} elseif ($this->isBiebBoek() AND LoginModel::mag('P_BIEB_MOD')) {
+		} elseif ($this->isBiebBoek() AND LoginModel::mag(P_BIEB_MOD)) {
 			return true;
 		}
 		return false;
@@ -70,7 +70,7 @@ class BoekExemplaar extends PersistentEntity {
 	}
 
 	public function magBekijken() {
-		return LoginModel::mag('P_BIEB_READ') OR $this->magBewerken();
+		return LoginModel::mag(P_BIEB_READ) OR $this->magBewerken();
 	}
 
 	public function isBeschikbaar() {

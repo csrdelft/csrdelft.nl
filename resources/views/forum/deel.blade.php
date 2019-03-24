@@ -43,7 +43,7 @@
 	{!! getMelding() !!}
 
 	<div class="forum-header btn-toolbar">
-		@can('P_ADMIN')
+		@can(P_ADMIN)
 			@if(isset($deel->forum_id))
 				<div class="btn-group mr-2">
 					<a href="/forum/beheren/{{$deel->forum_id}}" class="btn btn-light post popup"

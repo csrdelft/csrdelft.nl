@@ -32,14 +32,14 @@ class DocumentenController extends AclController {
 	public function __construct($query) {
 		parent::__construct($query, DocumentModel::instance());
 		$this->acl = array(
-			'recenttonen' => 'P_DOCS_READ',
-			'bekijken' => 'P_DOCS_READ',
-			'download' => 'P_DOCS_READ',
-			'categorie' => 'P_DOCS_READ',
-			'zoeken' => 'P_DOCS_READ',
-			'bewerken' => 'P_DOCS_MOD',
-			'toevoegen' => 'P_DOCS_MOD',
-			'verwijderen' => 'P_DOCS_MOD'
+			'recenttonen' => P_DOCS_READ,
+			'bekijken' => P_DOCS_READ,
+			'download' => P_DOCS_READ,
+			'categorie' => P_DOCS_READ,
+			'zoeken' => P_DOCS_READ,
+			'bewerken' => P_DOCS_MOD,
+			'toevoegen' => P_DOCS_MOD,
+			'verwijderen' => P_DOCS_MOD
 		);
 	}
 

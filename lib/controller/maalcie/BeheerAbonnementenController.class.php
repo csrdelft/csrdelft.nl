@@ -25,15 +25,15 @@ class BeheerAbonnementenController extends AclController {
 		parent::__construct($query, MaaltijdAbonnementenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'waarschuwingen' => 'P_MAAL_MOD',
-				'ingeschakeld' => 'P_MAAL_MOD',
-				'abonneerbaar' => 'P_MAAL_MOD'
+				'waarschuwingen' => P_MAAL_MOD,
+				'ingeschakeld' => P_MAAL_MOD,
+				'abonneerbaar' => P_MAAL_MOD
 			);
 		} else {
 			$this->acl = array(
-				'inschakelen' => 'P_MAAL_MOD',
-				'uitschakelen' => 'P_MAAL_MOD',
-				'novieten' => 'P_MAAL_MOD'
+				'inschakelen' => P_MAAL_MOD,
+				'uitschakelen' => P_MAAL_MOD,
+				'novieten' => P_MAAL_MOD
 			);
 		}
 	}

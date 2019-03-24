@@ -25,12 +25,12 @@ class BeheerVoorkeurenController extends AclController {
 		parent::__construct($query, CorveeVoorkeurenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer' => 'P_CORVEE_MOD'
+				'beheer' => P_CORVEE_MOD
 			);
 		} else {
 			$this->acl = array(
-				'inschakelen' => 'P_CORVEE_MOD',
-				'uitschakelen' => 'P_CORVEE_MOD'
+				'inschakelen' => P_CORVEE_MOD,
+				'uitschakelen' => P_CORVEE_MOD
 			);
 		}
 	}

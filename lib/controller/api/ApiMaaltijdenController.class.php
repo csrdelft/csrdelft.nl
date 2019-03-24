@@ -13,7 +13,7 @@ class ApiMaaltijdenController {
 	 * @return boolean
 	 */
 	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag('P_MAAL_IK');
+		return ApiAuthController::isAuthorized() && LoginModel::mag(P_MAAL_IK);
 	}
 
 	/**

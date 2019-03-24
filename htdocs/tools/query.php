@@ -14,7 +14,7 @@ require_once 'configuratie.include.php';
 # -------------------------------------------------------------------
 # Geeft de in savedquery opgeslagen query's weer
 
-if (!LoginModel::mag('P_LOGGED_IN')) {
+if (!LoginModel::mag(P_LOGGED_IN)) {
 	redirect(CSR_ROOT);
 }
 

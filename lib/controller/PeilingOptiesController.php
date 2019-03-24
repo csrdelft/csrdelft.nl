@@ -28,13 +28,13 @@ class PeilingOptiesController extends AclController
 		parent::__construct($query, PeilingOptiesModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = [
-				'opties' => 'P_PEILING_EDIT',
+				'opties' => P_PEILING_EDIT,
 			];
 		} else {
 			$this->acl = [
-				'opties' => 'P_PEILING_VOTE',
-				'toevoegen' => 'P_PEILING_VOTE',
-				'verwijderen' => 'P_PEILING_EDIT',
+				'opties' => P_PEILING_VOTE,
+				'toevoegen' => P_PEILING_VOTE,
+				'verwijderen' => P_PEILING_EDIT,
 			];
 		}
 

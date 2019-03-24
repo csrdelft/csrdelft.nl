@@ -25,15 +25,15 @@ class MaaltijdRepetitiesController extends AclController {
 		parent::__construct($query, MaaltijdRepetitiesModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer' => 'P_MAAL_MOD'
+				'beheer' => P_MAAL_MOD
 			);
 		} else {
 			$this->acl = array(
-				'nieuw' => 'P_MAAL_MOD',
-				'bewerk' => 'P_MAAL_MOD',
-				'opslaan' => 'P_MAAL_MOD',
-				'verwijder' => 'P_MAAL_MOD',
-				'bijwerken' => 'P_MAAL_MOD'
+				'nieuw' => P_MAAL_MOD,
+				'bewerk' => P_MAAL_MOD,
+				'opslaan' => P_MAAL_MOD,
+				'verwijder' => P_MAAL_MOD,
+				'bijwerken' => P_MAAL_MOD
 			);
 		}
 	}

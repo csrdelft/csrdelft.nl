@@ -23,7 +23,7 @@ class BeheerCiviCategorienController extends AclController {
 			];
 		} else {
 			$this->acl = [
-				'suggesties' => 'P_FISCAAT_READ',
+				'suggesties' => P_FISCAAT_READ,
 			];
 		}
 	}

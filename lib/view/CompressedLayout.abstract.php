@@ -35,7 +35,7 @@ abstract class CompressedLayout extends HtmlPage {
 	public static function getUserModules() {
 		$modules = [];
 
-		if (!LoginModel::mag('P_LOGGED_IN')) {
+		if (!LoginModel::mag(P_LOGGED_IN)) {
 			return [];
 		}
 
