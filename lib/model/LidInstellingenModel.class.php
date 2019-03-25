@@ -92,7 +92,7 @@ class LidInstellingenModel extends InstellingenModel {
 				T::Enumeration,
 				['normaal', 'lustrum', 'owee', 'dies', 'donker', 'sineregno', 'civitasia', 'roze', 'koevoet'],
 				'normaal',
-				'Ik daag je uit om de stek in de roze opmaak te gebruiken.'
+				'Koevoet.'
 			],
 			'fx' => [
 				'Effect',
