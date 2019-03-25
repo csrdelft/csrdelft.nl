@@ -35,6 +35,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		'thema-normaal': './sass/thema/normaal.scss',
 		'thema-owee': './sass/thema/owee.scss',
 		'thema-roze': './sass/thema/roze.scss',
+		'thema-koevoet': './sass/thema/Koevoet.scss'
 		'thema-sineregno': './sass/thema/sineregno.scss',
 		'effect-civisaldo': './sass/effect/civisaldo.scss',
 		'effect-snow': './sass/effect/snow.scss',
