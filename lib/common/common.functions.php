@@ -1056,3 +1056,16 @@ function csrfMetaTag() {
 	return '<meta property="X-CSRF-ID" content="'. htmlentities($token->getId()) .'" /><meta property="X-CSRF-VALUE" content="'. htmlentities($token->getValue()) .'" />';
 }
 
+if (!function_exists('array_key_first')) {
+	/**
+	 * Deze functie bestaat wel in PHP 7.3
+	 *
+	 * Gets the first key of an array
+	 *
+	 * @param array $array
+	 * @return mixed
+	 */
+	function array_key_first(array $array) {
+		return $array ? array_keys($array)[0] : null;
+	}
+}
