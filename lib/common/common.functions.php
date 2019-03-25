@@ -1069,3 +1069,25 @@ if (!function_exists('array_key_first')) {
 		return $array ? array_keys($array)[0] : null;
 	}
 }
+
+if (!function_exists('array_key_last')) {
+	/**
+	 * Deze functie bestaat wel in PHP 7.3
+	 *
+	 * Gets the last key of an array
+	 *
+	 * @param array $array
+	 * @return mixed
+	 */
+	function array_key_last(array $array) {
+		$key = NULL;
+
+		if ( is_array( $array ) ) {
+
+			end( $array );
+			$key = key( $array );
+		}
+
+		return $key;
+	}
+}
