@@ -1,0 +1,142 @@
+@font-face {
+  font-family: GameOver;
+  src: url('../../fonts/game-over/game-over.eot');
+  src: url('../../fonts/game-over/game-over.eot?#iefix') format('embedded-opentype'),
+  url('../../fonts/game-over/game-over.woff2') format('woff2'),
+  url('../../fonts/game-over/game-over.woff') format('woff'),
+  url('../../fonts/game-over/game-over.ttf') format('truetype'),
+  url('../../fonts/game-over/game-over.svg#Game-Over') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+}
+* {
+  font-family: GameOver, FontAwesome, 'Glyphicons Halflings', sans-serif !important;
+}
+/* Kleuren:
+	 - Rood: #ff0000
+	 - DonkerBlauw: #1E4066
+	 - Grijsblauw: #6F8695
+*/
+
+$donkerrood: #ff0000;
+$donkerblauw: #0a338d;
+$grijsblauw: #6F8695;
+
+$body-bg: $grijsblauw;
+$body-color: white;
+
+$beeldmerk: url(../images/KoetjeVoet.png);
+
+/* main menu */
+$menu-primary-hover: $donkerrood;
+$menu-bg: $body-bg;
+$menu-color: $body-color;
+$menu-small-bg: $donkerblauw;
+$menu-small-color: #ffffff;
+
+$bb-block-bg: $donkerrood;
+
+$zijbalk-border: $donkerblauw;
+
+/* zoeken */
+$zoeken-active-bg: #1E4066;
+
+.zijbalk-kopje {
+	a {
+		font-size: 1.25em;
+	}
+}
+
+@import "../base";
+/* sine regno 2019*/
+
+/* Kleuren:
+	 - Donkergrijs: #404041
+	 - Blauw: #7cadd3
+	 - Geel: #ffc556
+ */
+
+h1, h2, h3, h4 {
+	font-weight: bold;
+}
+
+/*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
+#zijbalk, #forumtabel th, .cd-primary-nav ul {
+	background-color: $donkerrood !important;
+}
+
+/*Koppen in het blauw*/
+h1, a, a:hover,
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+	color: $donkerblauw;
+}
+/* Lijntje tussen ongelezen en gelezen berichten */
+#forumtabel tr.ongelezenvanaf td {
+	background-color: $donkerblauw !important;
+}
+
+/*BREADCRUMB FONT FIXES*/
+.breadcrumbs * {
+	vertical-align: baseline;
+}
+
+/*NAVIGATIE MENU*/
+
+/*Andere koppen in het wit*/
+.cd-primary-nav .cd-secondary-nav a,
+.cd-primary-nav .cd-secondary-nav > li > a:hover,
+.cd-primary-nav .cd-secondary-nav > li > a {
+	color: #FFFFFF;
+}
+
+/*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
+.cd-primary-nav .cd-secondary-nav a:hover {
+	text-decoration: underline !important;
+	color: $donkerblauw;
+}
+
+/*Streepje onder naam*/
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+	box-shadow: inset 0 -2px 0 #404041;
+}
+
+/*ZIJBALK*/
+
+/*Veel tekst van de zijbalk in het geel*/
+.staatrood, #zijbalk .blok .item a, #zijbalk .blok .item {
+	color: darken(#fff, 5%);
+}
+
+/*KNOPPEN*/
+
+/*Knoppen in blauw gradient*/
+.btn, input[type=submit], input[type=button], .progress-bar-info, .btn:focus,
+input[type=submit]:focus, input[type=button]:focus {
+	background-image: linear-gradient(to bottom, #46688a, #1E4066);
+	border: none !important;
+}
+
+/*Voor een mouse hover wordt de gradient omgedraaid*/
+.btn:hover, input[type=submit]:hover, input[type=button]:hover {
+	background-image: linear-gradient(to bottom, #1E4066, #46688a);
+	border: none !important;
+}
+
+/*Actieve knoppen iets ruimere kleuren -> zo ontstaat verschil tussen hover en active*/
+.btn.active {
+	background-image: linear-gradient(to bottom, #1E4066, #29435b);
+	border: none !important;
+}
+
+input.btn {
+	margin-top: -14px;
+	padding-bottom: 5px
+}
+
+.btn .ico {
+	vertical-align: text-bottom;
+}
+
