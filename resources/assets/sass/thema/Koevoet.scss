@@ -1,13 +1,12 @@
 @font-face {
-  font-family: Algol;
-  src: url('../../fonts/');
-  url('../../fonts/algol.ttf') format('truetype'),
+  font-family: "Algol";
+  src: url("../../fonts/Algol.ttf") format("ttf");
   font-weight: normal;
   font-style: normal;
-  font-size: 18px;
 }
-* {
-  font-family: Algol, sans-serif !important;
+
+body, h1, h2, h3, h4, h5 {
+  font-family: "Algol";
 }
 /* Kleuren:
 	 - 'Donker'Rood: #ff0000
