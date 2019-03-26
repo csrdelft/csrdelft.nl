@@ -1,17 +1,13 @@
 @font-face {
-  font-family: GameOver;
-  src: url('../../fonts/game-over/game-over.eot');
-  src: url('../../fonts/game-over/game-over.eot?#iefix') format('embedded-opentype'),
-  url('../../fonts/game-over/game-over.woff2') format('woff2'),
-  url('../../fonts/game-over/game-over.woff') format('woff'),
-  url('../../fonts/game-over/game-over.ttf') format('truetype'),
-  url('../../fonts/game-over/game-over.svg#Game-Over') format('svg');
+  font-family: Algol;
+  src: url('../../fonts/');
+  url('../../fonts/algol.ttf') format('truetype'),
   font-weight: normal;
   font-style: normal;
   font-size: 18px;
 }
 * {
-  font-family: GameOver, FontAwesome, 'Glyphicons Halflings', sans-serif !important;
+  font-family: Algol, sans-serif !important;
 }
 /* Kleuren:
 	 - 'Donker'Rood: #ff0000
