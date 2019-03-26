@@ -259,7 +259,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	}
 
 	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post) {
-		$verschil = levenshtein($post->tekst, $nieuwe_tekst);
+		similar_text($post->tekst, $nieuwe_tekst, $gelijkheid);
 		$post->tekst = $nieuwe_tekst;
 		$post->laatst_gewijzigd = getDateTime();
 		$bewerkt = 'bewerkt door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]';
@@ -272,7 +272,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		if ($rowCount !== 1) {
 			throw new CsrException('Bewerken mislukt');
 		}
-		if ($verschil > 3) {
+		if ($gelijkheid < 90) {
 			$draad = $post->getForumDraad();
 			$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
 			$draad->laatste_post_id = $post->post_id;

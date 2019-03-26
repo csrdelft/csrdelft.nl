@@ -90,9 +90,9 @@ class LidInstellingenModel extends InstellingenModel {
 			'opmaak' => [
 				'Opmaak',
 				T::Enumeration,
-				['normaal', 'lustrum', 'owee', 'dies', 'donker', 'sineregno', 'civitasia', 'roze'],
+				['normaal', 'lustrum', 'owee', 'dies', 'donker', 'sineregno', 'civitasia', 'roze', 'koevoet'],
 				'normaal',
-				'Ik daag je uit om de stek in de roze opmaak te gebruiken.'
+				'Ik daag je uit roze te gebruiken. Of koevoet.'
 			],
 			'fx' => [
 				'Effect',

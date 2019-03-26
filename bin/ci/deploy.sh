@@ -30,7 +30,7 @@ mv deploy/bin/ci/.gitignore.prod deploy/.gitignore
 cd deploy
 
 # Als in deze build geen js en php gedraaid is, trek deze dan uit de vorige versie
-if (( $SKIP_BUILD == 1 )); then
+if (( $SKIP_BUILD == 0 )); then
 git checkout -- data/blade htdocs/dist
 fi;
 
