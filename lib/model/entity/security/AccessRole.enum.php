@@ -35,10 +35,10 @@ abstract class AccessRole extends PersistentEnum {
 	const Vlieger = "R_VLIEGER";
 
 	/**
-	 * Extra rechtenset voor Sineregno i.i.t. besturen 2019.
+	 * Extra rechtenset voor Forum Moderators.
 	 * Een combinatie van normaal lid en P_FORUM_MOD.
 	 */
-	const SineregnoBestuur = "R_SINEREGNO_BESTUUR";
+	const ForumModerator = "R_FORUM_MOD";
 
 	/**
 	 * @var string[]
@@ -54,7 +54,7 @@ abstract class AccessRole extends PersistentEnum {
 		self::PubCie => self::PubCie,
 		self::Fiscaat => self::Fiscaat,
 		self::Vlieger => self::Vlieger,
-		self::SineregnoBestuur => self::SineregnoBestuur,
+		self::ForumModerator => self::ForumModerator,
 	];
 
 	/**
@@ -71,7 +71,7 @@ abstract class AccessRole extends PersistentEnum {
 		self::PubCie => 'PubCie-rechten',
 		self::Fiscaat => 'Fiscaat-rechten',
 		self::Vlieger => 'Vlieger-rechten',
-		self::SineregnoBestuur => 'SineregnoBestuur-rechten',
+		self::ForumModerator => 'ForumModerator-rechten',
 	];
 
 	/**
@@ -88,7 +88,7 @@ abstract class AccessRole extends PersistentEnum {
 		self::PubCie => 'P',
 		self::Fiscaat => 'F',
 		self::Vlieger => 'V',
-		self::SineregnoBestuur => 'S',
+		self::ForumModerator => 'FM',
 	];
 
 	/**
