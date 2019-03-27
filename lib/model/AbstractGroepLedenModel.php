@@ -80,7 +80,7 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 		$tijd = [];
 		foreach ($leden as $groeplid) {
 			$time = strtotime($groeplid->lid_sinds);
-			if (isset($stats['Tijd'][$time])) {
+			if (isset($tijd[$time])) {
 				$tijd[$time] += 1;
 			} else {
 				$tijd[$time] = 1;
