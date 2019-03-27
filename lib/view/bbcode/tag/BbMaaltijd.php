@@ -25,13 +25,7 @@ class BbMaaltijd extends BbTag {
 	}
 
 	public function parseLight($arguments = []) {
-
-		if (isset($arguments['maaltijd'])) {
-			$mid = $arguments['maaltijd'];
-		} else {
-			$mid = $this->getContent();
-		}
-		$mid = trim($mid);
+		$mid = $this->getArgument($arguments);
 		$maaltijd2 = null;
 
 		try {
@@ -66,12 +60,7 @@ class BbMaaltijd extends BbTag {
 	}
 
 	public function parse($arguments = []) {
-		if (isset($arguments['maaltijd'])) {
-			$mid = $arguments['maaltijd'];
-		} else {
-			$mid = $this->getContent();
-		}
-		$mid = trim($mid);
+		$mid = $this->getArgument($arguments);
 		$maaltijd2 = null;
 
 		try {

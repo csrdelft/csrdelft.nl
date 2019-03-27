@@ -20,4 +20,8 @@ class BbHorizontalRule extends BbTag {
 	public function parse($arguments = []) {
 		return '<hr class="bb-tag-hr" />';
 	}
+
+	public function isParagraphLess() {
+		return true;
+	}
 }

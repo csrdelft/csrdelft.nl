@@ -33,4 +33,8 @@ class BbTable extends BbTag {
 
 		return '<table class="bb-table bb-tag-table" style="' . $style . '">' . $this->getContent(['br']) . '</table>';
 	}
+
+	public function isParagraphLess() {
+		return true;
+	}
 }

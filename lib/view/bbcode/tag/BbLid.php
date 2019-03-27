@@ -18,23 +18,14 @@ class BbLid extends BbTag {
 	}
 
 	public function parseLight($arguments = []) {
-		$uid = $this->getUid($arguments);
+		$uid = $this->getArgument($arguments);
 		$profiel = ProfielModel::get($uid);
 
 		return $this->lightLinkInline('lid', '/profiel/' . $uid, $profiel->getNaam('user'));
 	}
 
-	private function getUid($arguments) {
-		if (isset($arguments['lid'])) {
-			$uid = $arguments['lid'];
-		} else {
-			$uid = $this->getContent();
-		}
-		return trim($uid);
-	}
-
 	public function parse($arguments = []) {
-		$uid = $this->getUid($arguments);
+		$uid = $this->getArgument($arguments);
 		$profiel = ProfielModel::get($uid);
 		if (!$profiel) {
 			return '[lid] ' . htmlspecialchars($uid) . '] &notin; db.';

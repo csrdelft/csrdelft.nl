@@ -14,20 +14,12 @@ use CsrDelft\view\bbcode\tag\BbTag;
  * @copyright 2005, Erik Bakker <erik@eamelink.nl>
  * @license http://www.gnu.org/copyleft/lesser.html
  */
-
 class Parser {
 	const BR_TAG = '[br]';
-
-	/**
-	 * Storage for BB code
-	 */
-	private $bbcode;
-
-	/**
-	 * Storage for outgoing HTML
-	 */
-	private $HTML;
-
+	const TAG_NOHTML_OPEN = '[nohtml]';
+	const TAG_HTML_CLOSE = '[/html]';
+	const TAG_HTML_OPEN = '[html]';
+	const TAG_NOHTML_CLOSE = '[/nohtml]';
 	/**
 	 * Array holding tags & text
 	 *
@@ -41,17 +33,6 @@ class Parser {
 	 *      )
 	 */
 	public $parseArray = array();
-
-	/**
-	 * How deep are we; e.g. How many open tags?
-	 */
-	private $level = 0;
-
-	/**
-	 * Amount of tags already parsed
-	 */
-	private $tags_counted = 0;
-
 	/**
 	 * Maximum allowed number of tags
 	 *
@@ -60,7 +41,6 @@ class Parser {
 	 *
 	 */
 	public $max_tags = 700;
-
 	/**
 	 * Allow HTML in code
 	 *
@@ -68,7 +48,6 @@ class Parser {
 	 * @var boolean
 	 */
 	public $allow_html = false;
-
 	/**
 	 * Accept html by default
 	 *
@@ -76,32 +55,6 @@ class Parser {
 	 * @var boolean
 	 */
 	public $standard_html = false;
-
-	/**
-	 * Enable paragraph mode
-	 *
-	 * When set to true, the parser will try to use &lt;p&gt; tags around text, and remove unnecessary br's. <b>This is an experimental feature! Please let me know if you find strange behaviour!</b>
-	 * @var boolean
-	 */
-	protected $paragraph_mode = false;
-
-	/**
-	 * Keep track of open paragraphs
-	 */
-	private $paragraph_open = false;
-
-	/**
-	 * Tags that do not need to be encapsulated in paragraphs
-	 */
-	private $paragraphless_tags = ['h', 'quote', 'hr', 'table', 'br'];
-
-	/**
-	 * Keep track of current paragraph-required-status
-	 *
-	 * When we're in a tag that does not need to be encapsulate in a paragraph, this var will be false, otherwise true. Works only when in paragraph mode.
-	 */
-	private $paragraph_required = true;
-
 	/**
 	 * It's possible with the ubboff tag to switch processing off.
 	 *
@@ -111,12 +64,55 @@ class Parser {
 	 * Also used by [commentaar] and [prive]
 	 */
 	public $bb_mode = true;
-
+	/**
+	 * Enable paragraph mode
+	 *
+	 * When set to true, the parser will try to use &lt;p&gt; tags around text, and remove unnecessary br's. <b>This is an experimental feature! Please let me know if you find strange behaviour!</b>
+	 * @var boolean
+	 */
+	protected $paragraph_mode = false;
+	/**
+	 * List of possible tags.
+	 *
+	 * @var array
+	 */
 	protected $tags = [];
-
-	/** @var BbEnv */
+	/**
+	 * Storage for BB code
+	 */
+	private $bbcode;
+	/**
+	 * Storage for outgoing HTML
+	 */
+	private $HTML;
+	/**
+	 * How deep are we; e.g. How many open tags?
+	 */
+	private $level = 0;
+	/**
+	 * Amount of tags already parsed
+	 */
+	private $tags_counted = 0;
+	/**
+	 * Keep track of open paragraphs
+	 */
+	private $paragraph_open = false;
+	/**
+	 * Tags that do not need to be encapsulated in paragraphs, filled in constructor.
+	 */
+	private $paragraphless_tags = ['br'];
+	/**
+	 * Keep track of current paragraph-required-status
+	 *
+	 * When we're in a tag that does not need to be encapsulate in a paragraph, this var will be false, otherwise true. Works only when in paragraph mode.
+	 */
+	private $paragraph_required = true;
+	/**
+	 * Environment
+	 *
+	 * @var BbEnv
+	 */
 	private $env = [];
-
 	/**
 	 * @var BbTag[]
 	 */
@@ -132,12 +128,16 @@ class Parser {
 		foreach ($this->tags as $tag) {
 			/** @var BbTag $tagInstance */
 			$tagInstance = new $tag($this, $this->env);
-			if (is_array($tagInstance->getTagName() )) {
+			if (is_array($tagInstance->getTagName())) {
 				foreach ($tagInstance->getTagName() as $tagName) {
 					$this->registry[$tagName] = $tagInstance;
 				}
 			} else {
 				$this->registry[$tagInstance->getTagName()] = $tagInstance;
+			}
+
+			if ($tagInstance->isParagraphLess()) {
+				$this->paragraphless_tags[] = $tagInstance->getTagName();
 			}
 		}
 	}
@@ -167,51 +167,6 @@ class Parser {
 		$this->HTML = str_replace(self::BR_TAG, "<br />\n", $this->parseArray());
 
 		return $this->HTML;
-	}
-
-	/**
-	 * Set [html] and [nohtml] tags according to settings
-	 */
-	private function htmlFix() {
-		// First, check if html is allowed
-		if (!$this->allow_html) {
-			$html = false;
-		} elseif ($this->standard_html) {
-			$html = true;
-		} else {
-			$html = false;
-		}
-
-		$newParseArray = array();
-		while ($tag = array_shift($this->parseArray)) {
-			switch ($tag) {
-				case '[nohtml]':
-				case '[/html]':
-					$html = false;
-					break;
-				case '[html]':
-				case '[/nohtml]':
-					if ($this->allow_html) {
-						$html = true;
-					}
-					break;
-
-				default :
-
-					if ($html) {
-
-						if ($tag == self::BR_TAG) {
-							$tag = "\n";
-						} // Really, no BR's in html code is wanted.
-						$newParseArray[] = $tag;
-					} else {
-
-						$newParseArray[] = htmlspecialchars($tag);
-					}
-			}
-		}
-		$this->parseArray = $newParseArray;
-		return true;
 	}
 
 	/**
@@ -274,6 +229,48 @@ class Parser {
 			$rec_arr = Array($rec_arr);
 		}
 		return array_merge($current, $rec_arr);
+	}
+
+	/**
+	 * Set [html] and [nohtml] tags according to settings
+	 */
+	private function htmlFix() {
+		// First, check if html is allowed
+		if (!$this->allow_html) {
+			$html = false;
+		} elseif ($this->standard_html) {
+			$html = true;
+		} else {
+			$html = false;
+		}
+
+		$newParseArray = array();
+		while ($tag = array_shift($this->parseArray)) {
+			switch ($tag) {
+				case self::TAG_NOHTML_OPEN:
+				case self::TAG_HTML_CLOSE:
+					$html = false;
+					break;
+				case self::TAG_HTML_OPEN:
+				case self::TAG_NOHTML_CLOSE:
+					if ($this->allow_html) {
+						$html = true;
+					}
+					break;
+
+				default:
+					if ($html) {
+						if ($tag == self::BR_TAG) {
+							$tag = "\n";
+						} // Really, no BR's in html code is wanted.
+						$newParseArray[] = $tag;
+					} else {
+						$newParseArray[] = htmlspecialchars($tag);
+					}
+			}
+		}
+		$this->parseArray = $newParseArray;
+		return true;
 	}
 
 	/**

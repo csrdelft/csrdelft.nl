@@ -45,4 +45,8 @@ class BbHeading extends BbTag {
 		}
 		return $text;
 	}
+
+	public function isParagraphLess() {
+		return true;
+	}
 }

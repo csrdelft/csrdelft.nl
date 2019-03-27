@@ -19,7 +19,7 @@ class BbYoutube extends BbTag {
 	}
 
 	public function parseLight($arguments = []) {
-		$id = $this->getId($arguments);
+		$id = $this->getArgument($arguments);
 
 		if (preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
 			return $this->lightLinkBlock('youtube', 'https://youtu.be/' . $id, 'YouTube video', '', 'https://img.youtube.com/vi/' . $id . '/0.jpg');
@@ -29,7 +29,7 @@ class BbYoutube extends BbTag {
 	}
 
 	public function parse($arguments = []) {
-		$id = $this->getId($arguments);
+		$id = $this->getArgument($arguments);
 		if (preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
 
 			$attributes['width'] = 570;
@@ -49,7 +49,7 @@ class BbYoutube extends BbTag {
 	 * @param $arguments
 	 * @return string|null
 	 */
-	private function getId($arguments) {
+	private function getArgument($arguments) {
 		$id = $this->parser->parseArray(array('[/youtube]'), array());
 		if (isset($arguments['youtube'])) { // [youtube=
 			$id = $arguments['youtube'];

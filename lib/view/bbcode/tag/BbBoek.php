@@ -22,11 +22,7 @@ class BbBoek extends BbTag {
 	}
 
 	public function parseLight($arguments = []) {
-		if (isset($arguments['boek'])) {
-			$boekid = $arguments['boek'];
-		} else {
-			$boekid = $this->getContent();
-		}
+		$boekid = $this->getArgument($arguments);
 
 		try {
 			$boek = BoekModel::instance()->get((int)$boekid);
@@ -37,11 +33,7 @@ class BbBoek extends BbTag {
 	}
 
 	public function parse($arguments = []) {
-		if (isset($arguments['boek'])) {
-			$boekid = $arguments['boek'];
-		} else {
-			$boekid = $this->getContent();
-		}
+		$boekid = $this->getArgument($arguments);
 
 		try {
 			$boek = BoekModel::instance()->get((int)$boekid);

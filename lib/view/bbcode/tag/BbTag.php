@@ -21,8 +21,11 @@ abstract class BbTag {
 		$this->env = $env;
 	}
 
+	public function isParagraphLess() {
+		return false;
+	}
 	/**
-	 * Probeer deze tag uit te lezen.
+	 * Probeer deze tag uit te lezen. Let op, dit kan je maar één keer doen.
 	 *
 	 * @param string[] $forbidden
 	 * @return string|null
@@ -39,6 +42,28 @@ abstract class BbTag {
 		}
 
 		return $this->parser->parseArray($stoppers, $forbidden);
+	}
+
+	/**
+	 * Probeer een id uit te lezen van deze tag, bijv:
+	 *
+	 * [tag=123] of [tag]123[/tag]
+	 *
+	 * @param $arguments
+	 * @return string|null
+	 */
+	protected function getArgument($arguments) {
+		if (is_array($this->getTagName())) {
+			foreach ($this->getTagName() as $tagName) {
+				if (isset($arguments[$tagName])) {
+					return trim($arguments[$tagName]);
+				}
+			}
+		} elseif (isset($arguments[$this->getTagName()])) {
+			return trim($arguments[$this->getTagName()]);
+		}
+
+		return trim($this->getContent());
 	}
 
 	private function createStopper($tagName) {

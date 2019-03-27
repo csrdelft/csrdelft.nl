@@ -21,7 +21,7 @@ class BbQuery extends BbTag {
 	}
 
 	public function parseLight($arguments = []) {
-		$queryID = $this->getQueryID($arguments);
+		$queryID = (int)$this->getArgument($arguments);
 		if ($queryID != 0) {
 			$sqc = new SavedQueryContent(new SavedQuery($queryID));
 			$url = '/tools/query.php?id=' . urlencode($queryID);
@@ -31,17 +31,8 @@ class BbQuery extends BbTag {
 		}
 	}
 
-	private function getQueryID($arguments) {
-		if (isset($arguments['query'])) {
-			$queryID = $arguments['query'];
-		} else {
-			$queryID = $this->getContent();
-		}
-		return (int)$queryID;
-	}
-
 	public function parse($arguments = []) {
-		$queryID = $this->getQueryID($arguments);
+		$queryID = (int)$this->getArgument($arguments);
 		if ($queryID != 0) {
 			$sqc = new SavedQueryContent(new SavedQuery($queryID));
 			return $sqc->render_queryResult();

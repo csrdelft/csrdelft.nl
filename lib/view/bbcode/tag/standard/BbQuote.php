@@ -32,4 +32,8 @@ class BbQuote extends BbTag {
 			'<div class="citaat">' . $content . '</div></div>';
 		return $text;
 	}
+
+	public function isParagraphLess() {
+		return true;
+	}
 }

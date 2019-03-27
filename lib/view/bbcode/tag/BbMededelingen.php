@@ -19,11 +19,7 @@ class BbMededelingen extends BbTag {
 	}
 
 	public function parseLight($arguments = []) {
-		if (isset($arguments['mededelingen'])) {
-			$type = $arguments['mededelingen'];
-		} else {
-			$type = $this->getContent();
-		}
+		$type = $this->getArgument($arguments);
 		if ($type == '') {
 			return '[mededelingen] Geen geldig mededelingenblok.';
 		}
@@ -31,11 +27,7 @@ class BbMededelingen extends BbTag {
 	}
 
 	public function parse($arguments = []) {
-		if (isset($arguments['mededelingen'])) {
-			$type = $arguments['mededelingen'];
-		} else {
-			$type = $this->getContent();
-		}
+		$type = $this->getArgument($arguments);
 		if ($type == '') {
 			return '[mededelingen] Geen geldig mededelingenblok.';
 		}
