@@ -13,7 +13,7 @@ use CsrDelft\Orm\Entity\T;
  *
  * Een LidInstelling beschrijft een Instelling per Lid.
  *
- * @see Instelling.class.php
+ * @see BbInstelling.class.php
  */
 class LidInstelling extends Instelling {
 
