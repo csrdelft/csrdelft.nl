@@ -275,7 +275,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 		$aantal = 0;
 		$aanmeldingen = array();
 		foreach ($mids as $mid) {
-			array_merge($aanmeldingen, $this->find('maaltijd_id = ?', array($mid))->fetchAll());
+			$aanmeldingen = array_merge($aanmeldingen, $this->find('maaltijd_id = ?', array($mid))->fetchAll());
 		}
 		foreach ($aanmeldingen as $aanmelding) { // check filter voor elk aangemeld lid
 			$uid = $aanmelding->uid;
