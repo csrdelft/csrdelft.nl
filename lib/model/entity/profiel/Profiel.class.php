@@ -665,7 +665,12 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * @return float
 	 */
 	public function getCiviSaldo() {
-		return CiviSaldoModel::instance()->getSaldo($this->uid)->saldo / (float)100;
+		$saldo = CiviSaldoModel::instance()->getSaldo($this->uid);
+		if ($saldo) {
+			return $saldo->saldo / (float) 100;
+		}
+
+		return 0;
 	}
 
 	/**
