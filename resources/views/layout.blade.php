@@ -58,5 +58,7 @@
 @if(CsrDelft\model\LidInstellingenModel::get('layout', 'trein') !== 'nee')
 	@include('effect.trein')
 @endif
+<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css">
+@script('fxclippy.js')
 </body>
 </html>
