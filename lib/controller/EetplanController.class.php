@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\eetplan\EetplanBekendenModel;
@@ -107,13 +108,13 @@ class EetplanController extends AclController {
 
 	public function huis($id = null) {
 		$eetplan = $this->model->getEetplanVoorHuis($id, $this->lichting);
-		if ($eetplan === false) {
-			$this->exit_http(403);
+		if ($eetplan == []) {
+			throw new CsrGebruikerException('Huis niet gevonden', 404);
 		}
 
 		return view('eetplan.huis', [
 			'woonoord' => WoonoordenModel::get($id),
-			'eetplan' => $this->model->getEetplanVoorHuis($id, $this->lichting)
+			'eetplan' => $eetplan,
 		]);
 	}
 
