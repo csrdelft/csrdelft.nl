@@ -19,18 +19,22 @@ class BbUrl extends BbTag {
 
 	public function parseLight($arguments = []) {
 		$content = $this->getContent();
-		if (isset($arguments['url'])) { // [url=
-			$url = $arguments['url'];
-		} elseif (isset($arguments['rul'])) { // [rul=
-			$url = $arguments['rul'];
-		} else { // [url][/url]
-			$url = $content;
-		}
+		$url = $this->getUrl($arguments, $content);
 		return $this->lightLinkInline('url', $url, $content);
 	}
 
 	public function parse($arguments = []) {
 		$content = $this->getContent();
+		$url = $this->getUrl($arguments, $content);
+		return external_url($url, $content);
+	}
+
+	/**
+	 * @param $arguments
+	 * @param string|null $content
+	 * @return string|null
+	 */
+	private function getUrl($arguments, ?string $content) {
 		if (isset($arguments['url'])) { // [url=
 			$url = $arguments['url'];
 		} elseif (isset($arguments['rul'])) { // [rul=
@@ -38,6 +42,6 @@ class BbUrl extends BbTag {
 		} else { // [url][/url]
 			$url = $content;
 		}
-		return external_url($url, $content);
+		return $url;
 	}
 }

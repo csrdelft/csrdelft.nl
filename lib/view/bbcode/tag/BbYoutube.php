@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\view\bbcode\CsrBbException;
+
 /**
  * YouTube speler
  *
@@ -15,45 +17,36 @@ namespace CsrDelft\view\bbcode\tag;
 class BbYoutube extends BbTag {
 
 	public function getTagName() {
-		// TODO: Implement getTagName() method.
+		return 'youtube';
 	}
 
 	public function parseLight($arguments = []) {
 		$id = $this->getArgument($arguments);
+		$this->assertId($id);
 
-		if (preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
-			return $this->lightLinkBlock('youtube', 'https://youtu.be/' . $id, 'YouTube video', '', 'https://img.youtube.com/vi/' . $id . '/0.jpg');
-		} else {
-			return '[youtube] Geen geldig youtube-id (' . htmlspecialchars($id) . ')';
+		return $this->lightLinkBlock('youtube', 'https://youtu.be/' . $id, 'YouTube video', '', 'https://img.youtube.com/vi/' . $id . '/0.jpg');
+	}
+
+	/**
+	 * @param string|null $id
+	 */
+	private function assertId(?string $id): void {
+		if (!preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
+			throw new CsrBbException('[youtube] Geen geldig youtube-id (' . htmlspecialchars($id) . ')');
 		}
 	}
 
 	public function parse($arguments = []) {
 		$id = $this->getArgument($arguments);
-		if (preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
+		$this->assertId($id);
 
-			$attributes['width'] = 570;
-			$attributes['height'] = 360;
-			$attributes['iframe'] = true;
+		$attributes['width'] = 570;
+		$attributes['height'] = 360;
+		$attributes['iframe'] = true;
 
-			$attributes['src'] = '//www.youtube.com/embed/' . $id . '?autoplay=1';
-			$previewthumb = 'https://img.youtube.com/vi/' . $id . '/0.jpg';
+		$attributes['src'] = '//www.youtube.com/embed/' . $id . '?autoplay=1';
+		$previewthumb = 'https://img.youtube.com/vi/' . $id . '/0.jpg';
 
-			return $this->video_preview($attributes, $previewthumb);
-		} else {
-			return '[youtube] Geen geldig youtube-id (' . htmlspecialchars($id) . ')';
-		}
-	}
-
-	/**
-	 * @param $arguments
-	 * @return string|null
-	 */
-	private function getArgument($arguments) {
-		$id = $this->parser->parseArray(array('[/youtube]'), array());
-		if (isset($arguments['youtube'])) { // [youtube=
-			$id = $arguments['youtube'];
-		}
-		return $id;
+		return $this->video_preview($attributes, $previewthumb);
 	}
 }

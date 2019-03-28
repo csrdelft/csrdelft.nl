@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\view\bbcode\CsrBbException;
 use CsrDelft\view\formulier\UrlDownloader;
 
 /**
@@ -25,20 +26,14 @@ class BbVideo extends BbTag {
 
 	public function parseLight($arguments = []) {
 		list($content, $params, $previewthumb, $type, $id) = $this->processVideo();
-
-		if (empty($type) OR empty($id)) {
-			return '[video] Niet-ondersteunde video-website (' . htmlspecialchars($content) . ')';
-		}
+		$this->assertId($type, $id, $content);
 
 		return $this->lightLinkBlock('video', $content, $type . ' video', '', $previewthumb);
 	}
 
 	public function parse($arguments = []) {
 		list($content, $params, $previewthumb, $type, $id) = $this->processVideo();
-
-		if (empty($type) OR empty($id)) {
-			return '[video] Niet-ondersteunde video-website (' . htmlspecialchars($content) . ')';
-		}
+		$this->assertId($type, $id, $content);
 
 		return $this->video_preview($params, $previewthumb);
 	}
@@ -103,5 +98,16 @@ class BbVideo extends BbTag {
 		}
 
 		return [$content, $params, $previewthumb, $type, $id];
+	}
+
+	/**
+	 * @param $type
+	 * @param $id
+	 * @param $content
+	 */
+	private function assertId($type, $id, $content): void {
+		if (empty($type) || empty($id)) {
+			throw new CsrBbException('[video] Niet-ondersteunde video-website (' . htmlspecialchars($content) . ')');
+		}
 	}
 }

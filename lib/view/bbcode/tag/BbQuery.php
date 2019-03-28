@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\model\SavedQuery;
+use CsrDelft\view\bbcode\CsrBbException;
 use CsrDelft\view\SavedQueryContent;
 
 /**
@@ -22,22 +23,25 @@ class BbQuery extends BbTag {
 
 	public function parseLight($arguments = []) {
 		$queryID = (int)$this->getArgument($arguments);
-		if ($queryID != 0) {
-			$sqc = new SavedQueryContent(new SavedQuery($queryID));
-			$url = '/tools/query.php?id=' . urlencode($queryID);
-			return $this->lightLinkBlock('query', $url, $sqc->getModel()->getBeschrijving(), $sqc->getModel()->count() . ' regels');
-		} else {
-			return '[query] Geen geldig query-id opgegeven.<br />';
+		$this->assertId($queryID);
+		$sqc = new SavedQueryContent(new SavedQuery($queryID));
+		$url = '/tools/query.php?id=' . urlencode($queryID);
+		return $this->lightLinkBlock('query', $url, $sqc->getModel()->getBeschrijving(), $sqc->getModel()->count() . ' regels');
+	}
+
+	/**
+	 * @param int $queryID
+	 */
+	private function assertId(int $queryID): void {
+		if ($queryID == 0) {
+			throw new CsrBbException('[query] Geen geldig query-id opgegeven');
 		}
 	}
 
 	public function parse($arguments = []) {
 		$queryID = (int)$this->getArgument($arguments);
-		if ($queryID != 0) {
-			$sqc = new SavedQueryContent(new SavedQuery($queryID));
-			return $sqc->render_queryResult();
-		} else {
-			return '[query] Geen geldig query-id opgegeven.<br />';
-		}
+		$this->assertId($queryID);
+		$sqc = new SavedQueryContent(new SavedQuery($queryID));
+		return $sqc->render_queryResult();
 	}
 }

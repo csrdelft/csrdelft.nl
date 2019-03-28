@@ -22,8 +22,7 @@ class BbTwitter extends BbTag {
 	public function parseLight($arguments = []) {
 		$content = $this->getContent();
 
-		$url = 'https://twitter.com/' . $content;
-		return $this->lightLinkBlock('twitter', $url, 'Twitter', 'Tweets van @' . $content);
+		return $this->lightLinkBlock('twitter', 'https://twitter.com/' . $content, 'Twitter', 'Tweets van @' . $content);
 	}
 
 	public function parse($arguments = []) {
@@ -32,9 +31,6 @@ class BbTwitter extends BbTag {
 		// widget size
 		$width = 580;
 		$height = 300;
-		if (isset($arguments['lines']) AND (int)$arguments['lines'] > 0) {
-			$lines = (int)$arguments['lines'];
-		}
 		if (isset($arguments['width']) AND (int)$arguments['width'] > 100) {
 			$width = (int)$arguments['width'];
 		}

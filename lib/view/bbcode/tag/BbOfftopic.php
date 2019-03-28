@@ -13,7 +13,6 @@ class BbOfftopic extends BbTag {
 	}
 
 	public function parse($arguments = []) {
-		$content = $this->getContent();
-		return '<span class="offtopic bb-tag-offtopic">' . $content . '</span>';
+		return '<span class="offtopic bb-tag-offtopic">' . $this->getContent() . '</span>';
 	}
 }

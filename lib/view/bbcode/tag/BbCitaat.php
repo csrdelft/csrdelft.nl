@@ -28,14 +28,13 @@ class BbCitaat extends BbTag {
 		if ($profiel) {
 			$text .= ' van ' . $this->lightLinkInline('lid', '/profiel/' . $profiel->uid, $profiel->getNaam('user'));
 		} elseif ($van != '') {
-			if (isset($arguments['url']) AND url_like($arguments['url'])) {
+			if (isset($arguments['url']) && url_like($arguments['url'])) {
 				$text .= ' van ' . $this->lightLinkInline('url', $arguments['url'], $van);
 			} else {
 				$text .= ' van ' . $van;
 			}
 		}
-		$text .= ':<div class="citaat">' . trim($content) . '</div></div>';
-		return $text;
+		return $text . ':<div class="citaat">' . trim($content) . '</div></div>';
 	}
 
 	/**
@@ -68,14 +67,13 @@ class BbCitaat extends BbTag {
 		if ($profiel) {
 			$text .= ' van ' . $profiel->getLink('user');
 		} elseif ($van != '') {
-			if (isset($arguments['url']) AND url_like($arguments['url'])) {
+			if (isset($arguments['url']) && url_like($arguments['url'])) {
 				$text .= ' van ' . external_url($arguments['url'], $van);
 			} else {
 				$text .= ' van ' . $van;
 			}
 		}
-		$text .= ':<div class="citaat">' . trim($content) . '</div></div>';
-		return $text;
+		return $text . ':<div class="citaat">' . trim($content) . '</div></div>';
 	}
 
 	public function getTagName() {

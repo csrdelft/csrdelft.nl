@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\model\ProfielModel;
+use CsrDelft\view\bbcode\CsrBbException;
 
 /**
  * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.
@@ -18,18 +19,23 @@ class BbLid extends BbTag {
 	}
 
 	public function parseLight($arguments = []) {
+		$profiel = $this->getProfiel($arguments);
+		return $this->lightLinkInline('lid', '/profiel/' . $profiel->uid, $profiel->getNaam('user'));
+	}
+
+	private function getProfiel($arguments) {
 		$uid = $this->getArgument($arguments);
 		$profiel = ProfielModel::get($uid);
 
-		return $this->lightLinkInline('lid', '/profiel/' . $uid, $profiel->getNaam('user'));
+		if (!$profiel) {
+			throw new CsrBbException('[lid] ' . htmlspecialchars($uid) . '] &notin; db.');
+		}
+
+		return $profiel;
 	}
 
 	public function parse($arguments = []) {
-		$uid = $this->getArgument($arguments);
-		$profiel = ProfielModel::get($uid);
-		if (!$profiel) {
-			return '[lid] ' . htmlspecialchars($uid) . '] &notin; db.';
-		}
+		$profiel = $this->getProfiel($arguments);
 		return $profiel->getLink('user');
 	}
 

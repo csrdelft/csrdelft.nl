@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\view\bbcode\CsrBbException;
+
 /**
  * Laat de embedded spotify player zien
  *
@@ -17,11 +19,8 @@ class BbSpotify extends BbTag {
 	}
 
 	public function parseLight($arguments = []) {
-		$uri = $this->getUri($arguments);
-
-		if (!startsWith($uri, 'spotify') && !filter_var($uri, FILTER_VALIDATE_URL)) {
-			return '[spotify] Geen geldige url (' . $uri . ')';
-		}
+		$uri = $this->getArgument($arguments);
+		$this->assertUri($uri);
 
 		$url = 'https://open.spotify.com/' . str_replace(':', '/', str_replace('spotify:', '', $uri));
 		if (strstr($uri, 'playlist')) {
@@ -37,11 +36,8 @@ class BbSpotify extends BbTag {
 	}
 
 	public function parse($arguments = []) {
-		$uri = $this->getUri($arguments);
-
-		if (!startsWith($uri, 'spotify') && !filter_var($uri, FILTER_VALIDATE_URL)) {
-			return '[spotify] Geen geldige url (' . $uri . ')';
-		}
+		$uri = $this->getArgument($arguments);
+		$this->assertUri($uri);
 
 		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$uri\" frameborder=\"0\" allowtransparency=\"true\"";
 
@@ -57,11 +53,12 @@ class BbSpotify extends BbTag {
 		return "<iframe class=\"w-100\" height=\"80\" $commonAttributen></iframe>";
 	}
 
-	private function getUri($arguments) {
-		$uri = $this->getContent();
-		if (isset($arguments['spotify'])) { // [spotify=
-			$uri = $arguments['spotify'];
+	/**
+	 * @param string|null $uri
+	 */
+	private function assertUri(?string $uri): void {
+		if (!startsWith($uri, 'spotify') && !filter_var($uri, FILTER_VALIDATE_URL)) {
+			throw new CsrBbException('[spotify] Geen geldige url (' . $uri . ')');
 		}
-		return $uri;
 	}
 }

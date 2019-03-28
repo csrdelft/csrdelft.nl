@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\view\bbcode\CsrBbException;
 use CsrDelft\view\mededelingen\MededelingenView;
 
 /**
@@ -20,17 +21,13 @@ class BbMededelingen extends BbTag {
 
 	public function parseLight($arguments = []) {
 		$type = $this->getArgument($arguments);
-		if ($type == '') {
-			return '[mededelingen] Geen geldig mededelingenblok.';
-		}
+		$this->assertType($type);
 		return $this->lightLinkBlock('mededelingen', '/mededelingen', 'Mededelingen', 'Bekijk de laatste mededelingen');
 	}
 
 	public function parse($arguments = []) {
 		$type = $this->getArgument($arguments);
-		if ($type == '') {
-			return '[mededelingen] Geen geldig mededelingenblok.';
-		}
+		$this->assertType($type);
 		$MededelingenView = new MededelingenView(0);
 		switch ($type) {
 			case 'top3nietleden': //lekker handig om dit intern dan weer anders te noemen...
@@ -41,5 +38,14 @@ class BbMededelingen extends BbTag {
 				return $MededelingenView->getTopBlock('oudleden');
 		}
 		return '[mededelingen] Geen geldig type (' . htmlspecialchars($type) . ').';
+	}
+
+	/**
+	 * @param string|null $type
+	 */
+	private function assertType(?string $type): void {
+		if ($type == '') {
+			throw new CsrBbException('[mededelingen] Geen geldig mededelingenblok.');
+		}
 	}
 }

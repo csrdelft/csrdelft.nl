@@ -17,7 +17,7 @@ use CsrDelft\view\fotoalbum\FotoBBView;
 class BbFoto extends BbTag {
 
 	public function getTagName() {
-		// TODO: Implement getTagName() method.
+		return 'foto';
 	}
 
 	public function parseLight($arguments = []) {

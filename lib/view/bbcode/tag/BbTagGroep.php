@@ -5,6 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\view\bbcode\CsrBbException;
 use CsrDelft\view\groepen\GroepView;
 
 /**
@@ -27,8 +28,6 @@ abstract class BbTagGroep extends BbTag {
 		}
 	}
 
-	abstract public function getLidNaam();
-
 	/**
 	 * @return AbstractGroepenModel
 	 */
@@ -41,19 +40,16 @@ abstract class BbTagGroep extends BbTag {
 		return $this->lightLinkBlock($tag, $groep->getUrl(), $groep->naam, $groep->aantalLeden() . ' ' . $leden);
 	}
 
+	abstract public function getLidNaam();
+
 	public function parse($arguments = []) {
-		if (isset($arguments[$this->getTagName()])) {
-			$id = $arguments[$this->getTagName()];
-		} else {
-			$id = $this->parser->parseArray(['[/' . $this->getTagName() . ']'], []);
-		}
+		$id = $this->getArgument($arguments);
 		$groep = $this->getModel()::get($id);
-		if ($groep) {
-			return $this->groep($groep);
-		} else {
+		if (!$groep) {
 			$url = $this->getModel()::getUrl();
-			return ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="' . $url . '/beheren">Zoeken</a>';
+			throw new CsrBbException(ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="' . $url . '/beheren">Zoeken</a>');
 		}
+		return $this->groep($groep);
 	}
 
 	protected function groep(AbstractGroep $groep) {

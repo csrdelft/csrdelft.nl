@@ -352,10 +352,14 @@ class Parser {
 					}
 
 					$this->level++;
-					if ($this->env->light_mode) {
-						$newtext = $tagInstance->parseLight($arguments);
-					} else {
-						$newtext = $tagInstance->parse($arguments);
+					try {
+						if ($this->env->light_mode) {
+							$newtext = $tagInstance->parseLight($arguments);
+						} else {
+							$newtext = $tagInstance->parse($arguments);
+						}
+					} catch (CsrBbException $ex) {
+						$newtext = $ex->getMessage();
 					}
 
 					// Reset paragraph_required.

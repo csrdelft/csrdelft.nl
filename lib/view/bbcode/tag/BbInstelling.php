@@ -39,5 +39,7 @@ class BbInstelling extends BbTag {
 		} catch (CsrException $e) {
 			return '[instelling]: ' . $e->getMessage();
 		}
+
+		return '';
 	}
 }
