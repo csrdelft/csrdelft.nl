@@ -2,7 +2,9 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
+use CsrDelft\view\bbcode\CsrBbException;
 use CsrDelft\view\fotoalbum\FotoBBView;
 
 /**
@@ -22,38 +24,28 @@ class BbFoto extends BbTag {
 
 	public function parseLight($arguments = []) {
 		$url = urldecode($this->getContent());
-		$parts = explode('/', $url);
-		$filename = str_replace('#', '', array_pop($parts)); // replace # (foolproof)
-		$path = PHOTOALBUM_PATH . 'fotoalbum' . implode('/', $parts);
-		$album = FotoAlbumModel::instance()->getFotoAlbum($path);
-		if (!$album) {
-			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
-		}
-		$foto = new \CsrDelft\model\entity\fotoalbum\Foto($filename, $album);
-		if (!$foto) {
-			return '';
-		}
-		$link = $foto->getAlbumUrl() . '#' . $foto->getResizedUrl();
-		$thumb = CSR_ROOT . $foto->getThumbUrl();
-		return $this->lightLinkThumbnail('foto', $link, $thumb);
+		$foto = $this->getFoto(explode('/', $url), $url);
+		return $this->lightLinkThumbnail('foto', $foto->getAlbumUrl() . '#' . $foto->getResizedUrl(), CSR_ROOT . $foto->getThumbUrl());
 	}
 
 	public function parse($arguments = []) {
 		$url = urldecode($this->getContent());
 		$parts = explode('/', $url);
+		$fototag = new FotoBBView($this->getFoto($parts, $url), in_array('Posters', $parts), isset($arguments['responsive']));
+		return $fototag->getHtml();
+	}
+
+	private function getFoto(array $parts, string $url): Foto {
 		$filename = str_replace('#', '', array_pop($parts)); // replace # (foolproof)
 		$path = PHOTOALBUM_PATH . 'fotoalbum' . implode('/', $parts);
 		$album = FotoAlbumModel::instance()->getFotoAlbum($path);
 		if (!$album) {
-			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
+			throw new CsrBbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>');
 		}
-		$foto = new \CsrDelft\model\entity\fotoalbum\Foto($filename, $album);
+		$foto = new Foto($filename, $album);
 		if (!$foto) {
-			return '';
+			throw new CsrBbException('');
 		}
-		$groot = in_array('Posters', $parts);
-		$responsive = isset($arguments['responsive']);
-		$fototag = new FotoBBView($foto, $groot, $responsive);
-		return $fototag->getHtml();
+		return $foto;
 	}
 }

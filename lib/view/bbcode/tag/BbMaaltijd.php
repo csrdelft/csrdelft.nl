@@ -6,6 +6,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\bbcode\CsrBbException;
 use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
 
 /**
@@ -26,70 +27,15 @@ class BbMaaltijd extends BbTag {
 
 	public function parseLight($arguments = []) {
 		$mid = $this->getArgument($arguments);
-		$maaltijd2 = null;
-
-		try {
-			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(LoginModel::getUid()); // met filter
-				$aantal = sizeof($maaltijden);
-				if ($aantal < 1) {
-					return '<div class="bb-block bb-maaltijd">Geen aankomende maaltijd.</div>';
-				}
-				$maaltijd = reset($maaltijden);
-				if (endsWith($mid, '2') && $aantal >= 2) {
-					unset($maaltijden[$maaltijd->maaltijd_id]);
-					$maaltijd2 = reset($maaltijden);
-				}
-			} elseif (preg_match('/\d+/', $mid)) {
-				$maaltijd = MaaltijdenModel::instance()->getMaaltijdVoorKetzer((int)$mid); // met filter
-				if (!$maaltijd) {
-					return '';
-				}
-			}
-		} catch (CsrException $e) {
-			if (strpos($e->getMessage(), 'Not found') !== false) {
-				return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
-			}
-			return $e->getMessage();
-		}
-		if (!isset($maaltijd)) {
-			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
-		}
+		list($maaltijd2, $maaltijd) = $this->getMaaltijd($mid);
 		$url = $maaltijd->getUrl() . '#' . $maaltijd->maaltijd_id;
 		return $this->lightLinkBlock('maaltijd', $url, $maaltijd->titel, $maaltijd->datum . ' ' . $maaltijd->tijd);
 	}
 
 	public function parse($arguments = []) {
 		$mid = $this->getArgument($arguments);
-		$maaltijd2 = null;
+		list($maaltijd2, $maaltijd) = $this->getMaaltijd($mid);
 
-		try {
-			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(LoginModel::getUid()); // met filter
-				$aantal = sizeof($maaltijden);
-				if ($aantal < 1) {
-					return '<div class="bb-block bb-maaltijd">Geen aankomende maaltijd.</div>';
-				}
-				$maaltijd = reset($maaltijden);
-				if (endsWith($mid, '2') && $aantal >= 2) {
-					unset($maaltijden[$maaltijd->maaltijd_id]);
-					$maaltijd2 = reset($maaltijden);
-				}
-			} elseif (preg_match('/\d+/', $mid)) {
-				$maaltijd = MaaltijdenModel::instance()->getMaaltijdVoorKetzer((int)$mid); // met filter
-				if (!$maaltijd) {
-					return '';
-				}
-			}
-		} catch (CsrException $e) {
-			if (strpos($e->getMessage(), 'Not found') !== false) {
-				return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
-			}
-			return $e->getMessage();
-		}
-		if (!isset($maaltijd)) {
-			return '<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>';
-		}
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), LoginModel::getUid());
 		if (empty($aanmeldingen)) {
 			$aanmelding = null;
@@ -110,5 +56,42 @@ class BbMaaltijd extends BbTag {
 			$result .= $ketzer2->getHtml();
 		}
 		return $result;
+	}
+
+	/**
+	 * @param string|null $mid
+	 * @return array
+	 */
+	private function getMaaltijd(?string $mid): array {
+		$maaltijd2 = null;
+
+		try {
+			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
+				$maaltijden = MaaltijdenModel::instance()->getKomendeMaaltijdenVoorLid(LoginModel::getUid()); // met filter
+				$aantal = sizeof($maaltijden);
+				if ($aantal < 1) {
+					throw new CsrBbException('<div class="bb-block bb-maaltijd">Geen aankomende maaltijd.</div>');
+				}
+				$maaltijd = reset($maaltijden);
+				if (endsWith($mid, '2') && $aantal >= 2) {
+					unset($maaltijden[$maaltijd->maaltijd_id]);
+					$maaltijd2 = reset($maaltijden);
+				}
+			} elseif (preg_match('/\d+/', $mid)) {
+				$maaltijd = MaaltijdenModel::instance()->getMaaltijdVoorKetzer((int)$mid); // met filter
+				if (!$maaltijd) {
+					throw new CsrBbException('');
+				}
+			}
+		} catch (CsrException $e) {
+			if (strpos($e->getMessage(), 'Not found') !== false) {
+				throw new CsrBbException('<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>');
+			}
+			throw new CsrBbException($e->getMessage());
+		}
+		if (!isset($maaltijd)) {
+			throw new CsrBbException('<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>');
+		}
+		return array($maaltijd2, $maaltijd);
 	}
 }

@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
+use CsrDelft\view\bbcode\CsrBbException;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 
 /**
@@ -38,25 +39,7 @@ class BbFotoalbum extends BbTag {
 
 	public function parseLight($arguments = []) {
 		$url = urldecode($this->getContent());
-		if ($url === 'laatste') {
-			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
-		} else {
-			//vervang url met pad
-			$url = str_ireplace(CSR_ROOT, '', $url);
-			$path = PHOTOALBUM_PATH;
-			//check fotoalbum in url
-			$url = str_ireplace('fotoalbum/', '', $url);
-			$path .= 'fotoalbum/';
-			//check slash voor pad
-			if (startsWith($url, '/')) {
-				$url = substr($url, 1);
-			}
-			$path .= $url;
-			$album = FotoAlbumModel::instance()->getFotoAlbum($path);
-		}
-		if (!$album) {
-			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
-		}
+		$album = $this->getAlbum($url);
 		$beschrijving = count($album->getFotos()) . ' foto\'s';
 		$cover = CSR_ROOT . $album->getCoverUrl();
 		return $this->lightLinkBlock('fotoalbum', $album->getUrl(), $album->dirname, $beschrijving, $cover);
@@ -64,25 +47,7 @@ class BbFotoalbum extends BbTag {
 
 	public function parse($arguments = []) {
 		$url = urldecode($this->getContent());
-		if ($url === 'laatste') {
-			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
-		} else {
-			//vervang url met pad
-			$url = str_ireplace(CSR_ROOT, '', $url);
-			$path = PHOTOALBUM_PATH;
-			//check fotoalbum in url
-			$url = str_ireplace('fotoalbum/', '', $url);
-			$path .= 'fotoalbum/';
-			//check slash voor pad
-			if (startsWith($url, '/')) {
-				$url = substr($url, 1);
-			}
-			$path .= $url;
-			$album = FotoAlbumModel::instance()->getFotoAlbum($path);
-		}
-		if (!$album) {
-			return '<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>';
-		}
+		$album = $this->getAlbum($url);
 		if (isset($arguments['slider'])) {
 			$view = view('fotoalbum.slider', [
 				'fotos' => array_shuffle($album->getFotos())
@@ -120,5 +85,32 @@ class BbFotoalbum extends BbTag {
 			}
 		}
 		return $view->getHtml();
+	}
+
+	/**
+	 * @param string $url
+	 * @return bool|\CsrDelft\model\entity\fotoalbum\FotoAlbum|\CsrDelft\model\entity\fotoalbum\FotoTagAlbum|null
+	 */
+	private function getAlbum(string $url) {
+		if ($url === 'laatste') {
+			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
+		} else {
+			//vervang url met pad
+			$url = str_ireplace(CSR_ROOT, '', $url);
+			$path = PHOTOALBUM_PATH;
+			//check fotoalbum in url
+			$url = str_ireplace('fotoalbum/', '', $url);
+			$path .= 'fotoalbum/';
+			//check slash voor pad
+			if (startsWith($url, '/')) {
+				$url = substr($url, 1);
+			}
+			$path .= $url;
+			$album = FotoAlbumModel::instance()->getFotoAlbum($path);
+		}
+		if (!$album) {
+			throw new CsrBbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>');
+		}
+		return $album;
 	}
 }
