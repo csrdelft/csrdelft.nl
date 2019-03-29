@@ -3159,6 +3159,11 @@ ini@~1.3.0:
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
 
+inputmask@^4.0.6:
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/inputmask/-/inputmask-4.0.6.tgz#ee8f9478ed4c06b38116e8d0ed55a5798b73bcb6"
+  integrity sha512-zHw2jO1RSTU/aoKjsVsBQF56m3SYA3IEsIZmb6anvoUBlPRMgXtKWtj/Pux7o/O8JNikGLLRN6LGBISzHRlabw==
+
 inquirer@3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-3.0.6.tgz#e04aaa9d05b7a3cb9b0f407d04375f0447190347"

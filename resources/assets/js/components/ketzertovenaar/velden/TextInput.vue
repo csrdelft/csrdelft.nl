@@ -13,7 +13,8 @@
 				v-if="!multipleLines"
 				v-on:input="update"
 				v-on:blur="validate"
-				@keyup.enter="$emit('next')" />
+				@keyup.enter="$emit('next')"
+				ref="inputField" />
 
 			<textarea
 				:name="name"
@@ -32,6 +33,8 @@
 </template>
 
 <script>
+	import InputMask from "inputmask/dist/inputmask/inputmask.date.extensions";
+
 	export default {
 		name: 'TextInput',
 		components: {},
@@ -41,7 +44,9 @@
 			hint: String,
 			maxLength: Number,
 			multipleLines: Number,
-			error: String
+			error: String,
+			mask: String,
+			maskPlaceholder: String,
 		},
 		data: () => ({
 			enteredText: '',
@@ -49,6 +54,12 @@
 		}),
 		created() {
 			this.enteredText = this.value;
+		},
+		mounted() {
+			if (this.mask) {
+				let im = new InputMask({"alias": "datetime", inputFormat: this.mask, placeholder: this.maskPlaceholder});
+				im.mask(this.$refs.inputField);
+			}
 		},
 		computed: {
 			remainingLength() {

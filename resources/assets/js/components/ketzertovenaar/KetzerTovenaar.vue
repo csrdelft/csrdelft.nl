@@ -111,7 +111,8 @@
 				<div class="input-half">
 					<TextInput
 						name="startTime"
-						:max-length="5"
+						mask="HH:MM[:ss]"
+						mask-placeholder="__:__[:__]"
 						hint="Van"
 						v-model="event.startTime"
 						v-on:next="validStartTime(true) && validEndTime(true) ? gotoStep(6, true) : null"
@@ -122,7 +123,8 @@
 				<div class="input-half">
 					<TextInput
 						name="endTime"
-						:max-length="5"
+						mask="HH:MM[:ss]"
+						mask-placeholder="__:__[:__]"
 						hint="Van"
 						v-model="event.endTime"
 						v-on:next="validStartTime(true) && validEndTime(true) ? gotoStep(6, true) : null"
@@ -310,7 +312,7 @@
 				}));
 			},
 			validTime(time) {
-				return /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(time);
+				return /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/.test(time);
 			},
 			validStartTime(returning) {
 				if (!this.validTime(this.event.startTime)) {
@@ -324,9 +326,7 @@
 					return returning === true ? false : 'Geef een eindtijd op';
 				}
 
-				let startTime = (this.event.startTime.length === 4 ? '0' : '') + this.event.startTime;
-				let endTime = (this.event.endTime.length === 4 ? '0' : '') + this.event.endTime;
-				if (this.validTime(this.event.startTime) && !this.event.multipleDays && endTime <= startTime) {
+				if (this.validTime(this.event.startTime) && !this.event.multipleDays && this.event.endTime <= this.event.startTime) {
 					return returning === true ? false : 'Eind moet na start liggen';
 				}
 

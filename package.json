@@ -92,6 +92,7 @@
 		"font-awesome": "^4.7.0",
 		"google-palette": "^1.1.0",
 		"hammerjs": "^2.0.8",
+		"inputmask": "^4.0.6",
 		"jgallery": "^1.6.4",
 		"jquery": "^3.2",
 		"jquery-hoverintent": "^1.10.0",
