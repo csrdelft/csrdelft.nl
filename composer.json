@@ -17,7 +17,7 @@
 		"maknz/slack": "^1.7",
 		"jakeasmith/http_build_url": "^1",
 		"ferno/loco": "dev-master",
-		"eftec/bladeone": "3.18",
+		"eftec/bladeone": "3.21",
 		"easyrdf/easyrdf": "^0.9.1",
 		"ml/json-ld": "^1.0",
 		"symfony/security-csrf": "^3.4",

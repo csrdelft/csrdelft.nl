@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1ccd63a789ad12985896a1c8e1fd3d9",
+    "content-hash": "a2e655a1ba2bca97523656c3b9bcf978",
     "packages": [
         {
             "name": "cakephp/cache",
@@ -464,16 +464,16 @@
         },
         {
             "name": "eftec/bladeone",
-            "version": "3.18",
+            "version": "3.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EFTEC/BladeOne.git",
-                "reference": "99b828cd61c2483694f804fb0c94c55b4576b1d5"
+                "reference": "684d4613ff7ff17eec02c7b3661b5f6489c16e65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/99b828cd61c2483694f804fb0c94c55b4576b1d5",
-                "reference": "99b828cd61c2483694f804fb0c94c55b4576b1d5",
+                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/684d4613ff7ff17eec02c7b3661b5f6489c16e65",
+                "reference": "684d4613ff7ff17eec02c7b3661b5f6489c16e65",
                 "shasum": ""
             },
             "require": {
@@ -486,7 +486,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.18-dev"
+                    "dev-master": "3.21-dev"
                 }
             },
             "autoload": {
@@ -514,7 +514,7 @@
                 "templating",
                 "view"
             ],
-            "time": "2018-12-16T11:10:55+00:00"
+            "time": "2019-03-07T22:20:14+00:00"
         },
         {
             "name": "ferno/loco",
@@ -4011,6 +4011,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2018-08-09T05:50:03+00:00"
         },
         {
