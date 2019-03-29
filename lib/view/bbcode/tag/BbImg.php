@@ -23,7 +23,7 @@ class BbImg extends BbTag {
 	public function parseLight($arguments = []) {
 		$url = $this->getContent();
 		$url = filter_var($url, FILTER_SANITIZE_URL);
-		if (!$url OR (!url_like($url) AND !startsWith($url, '/plaetjes/'))) {
+		if (!$url || (!url_like($url) && !startsWith($url, '/plaetjes/'))) {
 			return $url;
 		}
 
@@ -35,7 +35,7 @@ HTML;
 	public function parse($arguments = []) {
 		$url = $this->getContent();
 		$url = filter_var($url, FILTER_SANITIZE_URL);
-		if (!$url OR (!url_like($url) AND !startsWith($url, '/plaetjes/'))) {
+		if (!$url || (!url_like($url) && !startsWith($url, '/plaetjes/'))) {
 			return $url;
 		}
 

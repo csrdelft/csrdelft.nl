@@ -109,7 +109,7 @@ HTML;
 	function video_preview(array $params, $previewthumb) {
 		$params = json_encode($params);
 
-		$html = <<<HTML
+		return <<<HTML
 <div class="bb-video">
 	<div class="bb-video-preview" onclick="event.preventDefault();window.bbcode.bbvideoDisplay(this);" data-params='{$params}' title="Klik om de video af te spelen">
 		<div class="play-button fa fa-play-circle-o fa-5x"></div>
@@ -117,8 +117,6 @@ HTML;
 	</div>
 </div>
 HTML;
-
-		return $html;
 	}
 
 	abstract public function getTagName();

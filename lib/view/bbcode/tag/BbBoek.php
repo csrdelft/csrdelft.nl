@@ -4,6 +4,7 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\model\bibliotheek\BoekModel;
+use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\view\bibliotheek\BoekBBView;
 
 /**
@@ -25,6 +26,7 @@ class BbBoek extends BbTag {
 		$boekid = $this->getArgument($arguments);
 
 		try {
+			/** @var Boek $boek */
 			$boek = BoekModel::instance()->get((int)$boekid);
 			return $this->lightLinkBlock('boek', $boek->getUrl(), $boek->getTitel(), 'Auteur: ' . $boek->getAuteur());
 		} catch (CsrException $e) {
@@ -36,6 +38,7 @@ class BbBoek extends BbTag {
 		$boekid = $this->getArgument($arguments);
 
 		try {
+			/** @var Boek $boek */
 			$boek = BoekModel::instance()->get((int)$boekid);
 			$content = new BoekBBView($boek);
 			return $content->view();

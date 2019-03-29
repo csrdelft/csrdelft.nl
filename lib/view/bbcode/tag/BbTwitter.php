@@ -31,10 +31,10 @@ class BbTwitter extends BbTag {
 		// widget size
 		$width = 580;
 		$height = 300;
-		if (isset($arguments['width']) AND (int)$arguments['width'] > 100) {
+		if (isset($arguments['width']) && (int)$arguments['width'] > 100) {
 			$width = (int)$arguments['width'];
 		}
-		if (isset($arguments['height']) AND (int)$arguments['height'] > 100) {
+		if (isset($arguments['height']) && (int)$arguments['height'] > 100) {
 			$height = (int)$arguments['height'];
 		}
 

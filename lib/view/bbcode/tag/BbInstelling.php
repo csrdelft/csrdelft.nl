@@ -20,10 +20,10 @@ class BbInstelling extends BbTag {
 
 	public function parse($arguments = []) {
 		$content = $this->getContent();
-		if (!array_key_exists('instelling', $arguments) OR !isset($arguments['instelling'])) {
+		if (!array_key_exists('instelling', $arguments) || !isset($arguments['instelling'])) {
 			return 'Geen of een niet bestaande instelling opgegeven: ' . htmlspecialchars($arguments['instelling']);
 		}
-		if (!array_key_exists('module', $arguments) OR !isset($arguments['module'])) { // backwards compatibility
+		if (!array_key_exists('module', $arguments) || !isset($arguments['module'])) { // backwards compatibility
 			$key = explode('_', $arguments['instelling'], 2);
 			$arguments['module'] = $key[0];
 			$arguments['instelling'] = $key[1];

@@ -16,7 +16,7 @@ class BbClear extends BbTag {
 
 	public function parse($arguments = []) {
 		$clearClass = 'clear';
-		if (isset($arguments['clear']) AND ($arguments['clear'] === 'left' OR $arguments['clear'] === 'right')) {
+		if (isset($arguments['clear']) && ($arguments['clear'] === 'left' || $arguments['clear'] === 'right')) {
 			$clearClass .= '-' . $arguments['clear'];
 		}
 		return '<div class="' . $clearClass . '"></div>';

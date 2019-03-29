@@ -30,9 +30,9 @@ class BbDiv extends BbTag {
 		}
 		if (isset($arguments['clear'])) {
 			$class .= ' clear';
-		} elseif (isset($arguments['float']) AND $arguments['float'] == 'left') {
+		} elseif (isset($arguments['float']) && $arguments['float'] == 'left') {
 			$class .= ' float-left';
-		} elseif (isset($arguments['float']) AND $arguments['float'] == 'right') {
+		} elseif (isset($arguments['float']) && $arguments['float'] == 'right') {
 			$class .= ' float-right';
 		}
 		if ($class != '') {

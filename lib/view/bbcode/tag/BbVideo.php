@@ -55,7 +55,7 @@ class BbVideo extends BbTag {
 		$matches = array();
 
 		//match type and id
-		if (strstr($content, 'youtube.com') OR strstr($content, 'youtu.be')) {
+		if (strstr($content, 'youtube.com') || strstr($content, 'youtu.be')) {
 			$type = 'YouTube';
 			if (preg_match('#(?:youtube\.com/watch\?v=|youtu.be/)([0-9a-zA-Z\-_]{11})#', $content, $matches) > 0) {
 				$id = $matches[1];

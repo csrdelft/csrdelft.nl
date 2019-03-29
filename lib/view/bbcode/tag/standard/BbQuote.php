@@ -28,9 +28,9 @@ class BbQuote extends BbTag {
 			unset($delcontent);
 			$content = '...';
 		}
-		$text = '<div class="citaatContainer bb-tag-quote"><strong>Citaat</strong>' .
+
+		return '<div class="citaatContainer bb-tag-quote"><strong>Citaat</strong>' .
 			'<div class="citaat">' . $content . '</div></div>';
-		return $text;
 	}
 
 	public function isParagraphLess() {

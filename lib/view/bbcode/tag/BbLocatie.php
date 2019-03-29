@@ -30,7 +30,7 @@ class BbLocatie extends BbTag {
 			$maps = 'Geen adres opgegeven';
 		} else {
 			// Hoogte maakt niet veel uit
-			if (isset($arguments['h']) AND $arguments['h'] <= 900) {
+			if (isset($arguments['h']) && $arguments['h'] <= 900) {
 				$height = (int)$arguments['h'];
 			} else {
 				$height = 450;

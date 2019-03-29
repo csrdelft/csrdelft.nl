@@ -19,7 +19,6 @@ class BbLeet extends BbTag {
 		$html = str_replace('er ', '0r ', $html);
 		$html = str_replace('you', 'j00', $html);
 		$html = str_replace('elite', '1337', $html);
-		$html = strtr($html, "abelostABELOST", "48310574831057");
-		return $html;
+		return strtr($html, "abelostABELOST", "48310574831057");
 	}
 }

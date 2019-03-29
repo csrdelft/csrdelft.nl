@@ -14,7 +14,7 @@ class BbBold extends BbTag {
 	}
 
 	public function parse($arguments = []) {
-		if ($this->env->nobold === true AND $this->env->quote_level == 0) {
+		if ($this->env->nobold === true && $this->env->quote_level == 0) {
 			return $this->getContent(['b']);
 		} else {
 			return '<strong class="dikgedrukt bb-tag-b">' . $this->getContent(['b']) . '</strong>';

@@ -52,15 +52,6 @@ class BbFotoalbum extends BbTag {
 			$view = view('fotoalbum.slider', [
 				'fotos' => array_shuffle($album->getFotos())
 			]);
-			if (isset($arguments['height'])) {
-				$view->height = (int)$arguments['height'];
-			}
-			if (isset($arguments['interval'])) {
-				$view->interval = (int)$arguments['interval'];
-			}
-			if (isset($arguments['random'])) {
-				$view->random = $arguments['random'] !== 'false';
-			}
 		} else {
 			$view = new FotoAlbumBBView($album);
 
