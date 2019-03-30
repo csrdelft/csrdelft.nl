@@ -8,15 +8,31 @@ declare module 'clippyjs' {
 	interface Agent {
 		show(): void;
 
+		show(fast: boolean): void;
+
 		play(animation: string): this;
+
+		play(animation: string, timeout: number): this;
+
+		play(animation: string, timeout: number, callback: () => void): this;
 
 		animate(): this;
 
 		animations(): string[];
 
+		hasAnimation(animation: string): boolean
+
+		delay(): void;
+
+		delay(time: number): void;
+
+		closeBalloon(): void;
+
 		speak(text: string): this;
 
 		moveTo(x: number, y: number): this;
+
+		moveTo(x: number, y: number, duration: number): this;
 
 		gestureAt(x: number, y: number): this;
 
