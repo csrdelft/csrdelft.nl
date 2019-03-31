@@ -5,6 +5,7 @@ interface AgentRule {
 	location?: string;
 	probability?: number;
 	noOther?: boolean;
+	messageCondition?: (message: string) => boolean;
 }
 
 function sleep(ms: number) {
@@ -67,20 +68,41 @@ $(() => {
 	];
 	clippy.load(assistant, async (agent) => {
 		const viewPort = currentViewPort();
+		let message = '';
 
 		agent.moveTo(viewPort.width - 250, viewPort.height - 250);
 		agent.show();
-		agent.speak(randomElement(welcomeMessages));
+		if (!sessionStorage.getItem('clippy-first')) {
+			message = 'Hallo, welkom op de stek! Hoe kan ik je vandaag helpen?';
+			sessionStorage.setItem('clippy-first', 'true');
+		} else {
+			message = randomElement(welcomeMessages);
+		}
+		agent.speak(message);
 		agent.play('Wave', 5000, () => {
 			agent.closeBalloon();
 
+			let foundOne = false;
 			rules.forEach((rule) => {
-				if (!rule.cb) {
+				if (!rule.cb || (rule.noOther && foundOne)) {
+					return;
+				}
+
+				if (rule.messageCondition && !rule.messageCondition(message)) {
 					return;
 				}
 
 				if (rule.location && window.location.pathname.startsWith(rule.location)) {
 					rule.cb(agent);
+
+					if (rule.location !== '/') {
+						foundOne = true;
+					}
+				}
+
+				if (rule.probability && rule.probability > Math.random()) {
+					rule.cb(agent);
+					foundOne = true;
 				}
 			});
 
@@ -189,21 +211,30 @@ addRule({location: '/forum'}, async (agent) => {
 	});
 });
 
-addRule({probability: 0.3, noOther: true}, async (agent) => {
+addRule({
+	probability: 0.3,
+	noOther: true,
+	messageCondition: (message: string) => message.indexOf('Sponsorextensie') === -1,
+}, async (agent) => {
 	const times = sessionStorage.getItem('clippy-extensie');
 	const amount = times ? parseInt(times, 10) : 0;
 	if (amount < 3 && sessionStorage.getItem('clippy-first')) {
-		const extensie = $('[title="Sponsorkliks extensie (Chrome)"]').offset();
-		const scrollX = $(window).scrollTop();
-
-		if (extensie && typeof scrollX === 'number' && extensie.left > 0) {
+		const extensie = $('a[title="Sponsorkliks extensie (Chrome)"]');
+		const extOffset = offset(extensie);
+		if (extensie) {
+			extensie[0].scrollIntoView({
+				behavior: 'smooth',
+				block: 'center',
+			});
+			await sleep(500);
 			agent.stopCurrent();
-			agent.moveTo(200, extensie.top - scrollX - 20);
-			agent.play('GestureRight');
+			agent.moveTo(200, extOffset.top - 20);
+			await sleep(1500);
 			agent.speak('Heb je de sponsorkliks extensie al geïnstalleerd?');
-			await sleep(2500);
-			agent.closeBalloon();
-			sessionStorage.setItem('clippy-extensie', (amount + 1).toString());
+			agent.play('GestureRight', 5000, () => {
+				agent.closeBalloon();
+				sessionStorage.setItem('clippy-extensie', (amount + 1).toString());
+			});
 		}
 	}
 });
