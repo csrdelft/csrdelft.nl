@@ -9,6 +9,13 @@ html {
 
 .clippy {
 	z-index: 10000!important;
+	transform: scale(1.5, 1.5) rotate(0deg);
+	transition-duration: 1s;
+	transition-property: transform;
+}
+
+.clippy:hover {
+	transform: scale(5, 5) rotate(360deg);
 }
 
 /* --------------------------------

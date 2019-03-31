@@ -51,26 +51,38 @@ function addRule(options: any, cb: (agent: Agent) => void) {
 $(() => {
 	// @ts-ignore
 	const assistant = ASSISTENT || 'Clippy';
+	const welcomeMessages = [
+		'Hallo, welkom op de stek! Hoe kan ik je vandaag helpen?',
+		'Hoe kan ik je stek ervaring vandaag weer verrijken?',
+		'Weet je zeker dat je niet eigenlijk moet studeren nu?',
+		'Welke stek functie wil je vandaag weer gebruiken?',
+		'Wist je dat er ook een C.S.R. Sponsorextensie is?',
+		'Heb je de C.S.R. Sponsorextensie al geïnstalleerd?',
+		'Weet je eigenlijk al hoe je ketzers kunt maken?',
+		'Wist je dat je uit meerdere assistenten kunt kiezen in instellingen?',
+		'Heb je de stek in het roze thema wel eens geprobeerd?',
+		'Heb je de PubCie al eens bedankt voor al hun werk?',
+	];
 	clippy.load(assistant, async (agent) => {
 		const viewPort = currentViewPort();
 		agent.moveTo(viewPort.width - 250, viewPort.height - 250);
 		agent.show();
-		agent.play('Wave');
-		agent.speak('Hallo, welkom op de stek! Hoe kan ik je vandaag helpen?');
-		await sleep(2500);
-		agent.closeBalloon();
+		agent.speak(randomElement(welcomeMessages));
+		agent.play('Wave', 5000, () => {
+			agent.closeBalloon();
 
-		rules.forEach((rule) => {
-			if (!rule.cb) {
-				return;
-			}
+			rules.forEach((rule) => {
+				if (!rule.cb) {
+					return;
+				}
 
-			if (rule.location && window.location.pathname.startsWith(rule.location)) {
-				rule.cb(agent);
-			}
+				if (rule.location && window.location.pathname.startsWith(rule.location)) {
+					rule.cb(agent);
+				}
+			});
+
+			setInterval(() => agent.animate(), 14000);
 		});
-
-		setInterval(() => agent.animate(), 14000);
 	});
 });
 
@@ -86,15 +98,14 @@ addRule({location: '/profiel'}, async (agent) => {
 	async function pasfotoLoaded() {
 		const box = offset(pasfoto);
 
+		await sleep(2000);
 		agent.stop();
+		agent.moveTo(box.left - 200, box.centerY, 750);
 		await sleep(1000);
-		agent.moveTo(box.left - 100, box.centerY, 750);
-		await sleep(1000);
-		agent.gestureAt(box.centerX, box.centerY);
-		await sleep(1000);
-		agent.moveTo(box.left + (box.width / 2), box.top + box.height + 100, 750);
-		await sleep(1000);
-		agent.gestureAt(box.centerX, box.centerY);
+		agent.play('GestureLeft', 5000, () => {
+			agent.moveTo(box.left + (box.width / 2), box.top + box.height + 100, 500);
+			sleep(1000).then(() => agent.play('GestureUp'));
+		});
 	}
 });
 
@@ -169,7 +180,7 @@ addRule({location: '/forum'}, async (agent) => {
 		if (!writing) {
 			writing = true;
 			agent.stop();
-			agent.moveTo(box.right - 120, box.bottom - 100, 500);
+			agent.moveTo(box.right - 150, box.bottom - 130, 500);
 			agent.play(randomElement(availableAnimations), 5000, () => writing = false);
 		}
 	});
