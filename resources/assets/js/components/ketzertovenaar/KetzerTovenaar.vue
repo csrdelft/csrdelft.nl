@@ -107,7 +107,7 @@
 				v-model="event.entireDay">
 			</Toggle>
 
-			<template v-if="!event.entireDay">
+			<template v-if="loaded && !event.entireDay">
 				<div class="input-half">
 					<TextInput
 						name="startTime"
@@ -231,6 +231,7 @@
 		components: {SelectButtons, TextInput, Toggle, Stap, FunctionalCalendar},
 		props: {},
 		data: () => ({
+			loaded: false,
 			types: {
 				'vereniging': 'Verenigings-activiteit',
 				'lustrum': 'Lustrum-activiteit',
@@ -279,6 +280,7 @@
 				this.event = stored.event;
 				this.step = stored.step;
 			}
+			this.loaded = true;
 		},
 		computed: {},
 		methods: {
