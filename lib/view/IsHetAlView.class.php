@@ -124,53 +124,51 @@ class IsHetAlView implements View {
 
 	public function view() {
 		echo '<div class="ishetal">';
-		echo '<iframe src="https://open.spotify.com/embed/track/1u9oQhjWWrrK4YRKtqQips" width="170" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>';
+		switch ($this->model) {
+			case 'sponsorkliks':
+				echo '<iframe src="https://bannerbuilder.sponsorkliks.com/skinfo.php?&background-color=F5F5F5&text-color=000000&header-background-color=F5F5F5&header-text-color=F5F5F5&odd-row=FFFFFF&even-row=09494a&odd-row-text=09494a&even-row-text=ffffff&type=financial&club_id=3605&width=193&height=80" frameborder="0" referrerpolicy="no-referrer" class="sponsorkliks-zijbalk"></iframe>';
+				break;
 
-//		switch ($this->model) {
-//			case 'sponsorkliks':
-//				echo '<iframe src="https://bannerbuilder.sponsorkliks.com/skinfo.php?&background-color=F5F5F5&text-color=000000&header-background-color=F5F5F5&header-text-color=F5F5F5&odd-row=FFFFFF&even-row=09494a&odd-row-text=09494a&even-row-text=ffffff&type=financial&club_id=3605&width=193&height=80" frameborder="0" referrerpolicy="no-referrer" class="sponsorkliks-zijbalk"></iframe>';
-//				break;
-//
-//			case 'jarig':
-//				echo 'Ben ik al jarig?';
-//				break;
-//
-//			case 'studeren':
-//				echo 'Moet ik alweer studeren?';
-//				break;
-//
-//			case 'kring':
-//				echo 'Is er ' . $this->model . ' vanavond?';
-//				break;
-//
-//			case 'lezing':
-//			case 'borrel':
-//				echo 'Is er een ' . $this->model . ' vanavond?';
-//				break;
-//
-//			case 'foutmelding':
-//				echo '<div class="ja">' . reldate(date('c', filemtime(DATA_PATH . 'foutmelding.last'))) . '</div><div>sinds de laatste foutmelding!</div>';
-//				break;
-//
-//			case 'wist u dat':
-//				$wistudat = array_rand(self::$wistudat);
-//				echo '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a>';
-//				break;
-//
-//			default:
-//				echo 'Is het al ' . $this->model . '?';
-//				break;
-//		}
+			case 'jarig':
+				echo 'Ben ik al jarig?';
+				break;
 
-//		if ($this->ja === true) {
-//			echo '<div class="ja">JA!</div>';
-//		} elseif ($this->ja === false) {
-//			echo '<div class="nee">NEE.</div>';
-//		} elseif (in_array($this->model, self::$aftellen)) {
-//			echo '<div class="nee">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</div>';
-//		} else {
-//			// wist u dat
-//		}
+			case 'studeren':
+				echo 'Moet ik alweer studeren?';
+				break;
+
+			case 'kring':
+				echo 'Is er ' . $this->model . ' vanavond?';
+				break;
+
+			case 'lezing':
+			case 'borrel':
+				echo 'Is er een ' . $this->model . ' vanavond?';
+				break;
+
+			case 'foutmelding':
+				echo '<div class="ja">' . reldate(date('c', filemtime(DATA_PATH . 'foutmelding.last'))) . '</div><div>sinds de laatste foutmelding!</div>';
+				break;
+
+			case 'wist u dat':
+				$wistudat = array_rand(self::$wistudat);
+				echo '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a>';
+				break;
+
+			default:
+				echo 'Is het al ' . $this->model . '?';
+				break;
+		}
+
+		if ($this->ja === true) {
+			echo '<div class="ja">JA!</div>';
+		} elseif ($this->ja === false) {
+			echo '<div class="nee">NEE.</div>';
+		} elseif (in_array($this->model, self::$aftellen)) {
+			echo '<div class="nee">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</div>';
+		} else {
+			// wist u dat
+		}
 		echo '</div>';
 	}
 
