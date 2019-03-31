@@ -21,6 +21,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		'fxonontdekt': './js/effect/fxonontdekt.ts',
 		'fxtrein': './js/effect/fxtrein.ts',
 		'fxminion': './js/effect/minion.ts',
+		'fxclippy': './js/effect/fxclippy.ts',
 		'extern': ['./js/extern.ts', './sass/extern.scss'],
 		'bredeletters': './sass/bredeletters.scss',
 		'common': './sass/common.scss',

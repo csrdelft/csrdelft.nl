@@ -94,6 +94,13 @@ class LidInstellingenModel extends InstellingenModel {
 				'normaal',
 				'Ik daag je uit roze te gebruiken. Of koevoet.'
 			],
+			'assistent' => [
+				'Assistent',
+				T::Enumeration,
+				['Clippy', 'F1', 'Genie', 'Genius', 'Links', 'Merlin', 'Peedy', 'Rocky', 'Rover'],
+				'Clippy',
+				'Verrijk uw ervaring op de stek met een van deze geweldige hulpjes.'
+			],
 			'fx' => [
 				'Effect',
 				T::Enumeration,

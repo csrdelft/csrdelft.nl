@@ -1564,6 +1564,13 @@ cli-width@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/cli-width/-/cli-width-2.2.0.tgz#ff19ede8a9a5e579324147b0c11f0fbcbabed639"
 
+clippyjs@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/clippyjs/-/clippyjs-0.0.3.tgz#34c45e3416b74d3773aeb37296c618a0b658fbbb"
+  integrity sha512-i4sPaKbCA6PfXiwxNK35E1io6AXN7VGwEGZR9sE8RqOgXPNtRWKbFubmx87JwSuwIrdClO/rkTMjhl2ZyOHjug==
+  dependencies:
+    jquery "^3.2.1"
+
 cliui@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/cliui/-/cliui-3.2.0.tgz#120601537a916d29940f934da3b48d585a39213d"
@@ -3460,7 +3467,7 @@ jquery.scrollto@^2.1.2:
   dependencies:
     jquery ">=1.8"
 
-jquery@>=1.11, jquery@>=1.2.3, jquery@>=1.7, jquery@>=1.7.0, jquery@>=1.8, jquery@^3.2, jquery@^3.3.1:
+jquery@>=1.11, jquery@>=1.2.3, jquery@>=1.7, jquery@>=1.7.0, jquery@>=1.8, jquery@^3.2, jquery@^3.2.1, jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
