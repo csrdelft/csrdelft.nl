@@ -3,6 +3,8 @@ import clippy, {Agent} from 'clippyjs';
 interface AgentRule {
 	cb?: (agent: Agent) => void;
 	location?: string;
+	probability?: number;
+	noOther?: boolean;
 }
 
 function sleep(ms: number) {
@@ -53,20 +55,34 @@ $(() => {
 	const assistant = ASSISTENT || 'Clippy';
 	clippy.load(assistant, async (agent) => {
 		const viewPort = currentViewPort();
+
 		agent.moveTo(viewPort.width - 250, viewPort.height - 250);
 		agent.show();
 		agent.play('Wave');
-		agent.speak('Hallo, welkom op de stek! Hoe kan ik je vandaag helpen?');
-		await sleep(2500);
-		agent.closeBalloon();
 
+		if (!sessionStorage.getItem('clippy-first')) {
+			agent.speak('Hallo, welkom op de stek! Hoe kan ik je vandaag helpen?');
+			await sleep(2500);
+			agent.closeBalloon();
+			sessionStorage.setItem('clippy-first', 'true');
+		}
+
+		let foundOne = false;
 		rules.forEach((rule) => {
-			if (!rule.cb) {
+			if (!rule.cb || (rule.noOther && foundOne)) {
 				return;
 			}
 
 			if (rule.location && window.location.pathname.startsWith(rule.location)) {
 				rule.cb(agent);
+				if (rule.location !== '/') {
+					foundOne = true;
+				}
+			}
+
+			if (rule.probability && rule.probability > Math.random()) {
+				rule.cb(agent);
+				foundOne = true;
 			}
 		});
 
@@ -173,4 +189,23 @@ addRule({location: '/forum'}, async (agent) => {
 			agent.play(randomElement(availableAnimations), 5000, () => writing = false);
 		}
 	});
+});
+
+addRule({probability: 0.3, noOther: true}, async (agent) => {
+	const times = sessionStorage.getItem('clippy-extensie');
+	const amount = times ? parseInt(times, 10) : 0;
+	if (amount < 3 && sessionStorage.getItem('clippy-first')) {
+		const extensie = $('[title="Sponsorkliks extensie (Chrome)"]').offset();
+		const scrollX = $(window).scrollTop();
+
+		if (extensie && typeof scrollX === 'number' && extensie.left > 0) {
+			agent.stopCurrent();
+			agent.moveTo(200, extensie.top - scrollX - 20);
+			agent.play('GestureRight');
+			agent.speak('Heb je de sponsorkliks extensie al geïnstalleerd?');
+			await sleep(2500);
+			agent.closeBalloon();
+			sessionStorage.setItem('clippy-extensie', (amount + 1).toString());
+		}
+	}
 });
