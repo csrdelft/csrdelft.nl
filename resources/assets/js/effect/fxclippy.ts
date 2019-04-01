@@ -38,8 +38,22 @@ function currentViewPort() {
 	};
 }
 
+function isInViewport(element: JQuery<HTMLElement>) {
+	const elOffset = offset(element);
+	const viewportTop = $(window).scrollTop() || 0;
+	const viewportBottom = viewportTop + ($(window).height() || 0);
+	return elOffset.top + elOffset.height > viewportTop && elOffset.top < viewportBottom;
+}
+
 function randomElement<T>(array: T[]) {
 	return array[Math.floor(Math.random() * array.length)];
+}
+
+function gestureAt(agent: Agent, x: number, y: number, cb: () => void) {
+	const direction = agent._getDirection(x, y);
+	const gestureAnim = 'Gesture' + direction;
+	const lookAnim = 'Look' + direction;
+	return agent.play(agent.hasAnimation(gestureAnim) ? gestureAnim : lookAnim, 10000, cb);
 }
 
 const rules: AgentRule[] = [];
@@ -167,9 +181,12 @@ addRule({location: '/instellingen'}, async (agent) => {
 		XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
 		null,
 	).snapshotItem(1);
-	const loc = offset($(wolkenKnop as HTMLElement));
-	agent.moveTo(loc.left, loc.top);
-	agent.speak('Kijk, hier kun je een mooi effect kiezen');
+	const $wolkenKnop = $(wolkenKnop as HTMLElement);
+	if (isInViewport($wolkenKnop)) {
+		const loc = offset($wolkenKnop);
+		agent.moveTo(loc.left, loc.top);
+		agent.speak('Kijk, hier kun je een mooi effect kiezen');
+	}
 });
 
 addRule({location: '/forum'}, async (agent) => {
@@ -183,8 +200,12 @@ addRule({location: '/forum'}, async (agent) => {
 				if (laatsteWoord === 'ketze') {
 					laatsteWoord = '';
 					const ketzerLinkLoc = offset($('.butn a[href="/groepen/activiteiten/nieuw"]'));
+					writing = true;
 					agent.stop();
-					agent.play('GetAttention', 5000, () => agent.gestureAt(ketzerLinkLoc.centerX, ketzerLinkLoc.centerY));
+					agent.play('GetAttention');
+					gestureAt(agent, ketzerLinkLoc.centerX, ketzerLinkLoc.centerY, () => {
+						writing = false;
+					});
 					return;
 				}
 				break;
@@ -204,7 +225,6 @@ addRule({location: '/forum'}, async (agent) => {
 		const box = event.target.getBoundingClientRect();
 		if (!writing) {
 			writing = true;
-			agent.stop();
 			agent.moveTo(box.right - 150, box.bottom - 130, 500);
 			agent.play(randomElement(availableAnimations), 5000, () => writing = false);
 		}

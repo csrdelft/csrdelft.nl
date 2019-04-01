@@ -58,10 +58,12 @@
 @if(CsrDelft\model\LidInstellingenModel::get('layout', 'trein') !== 'nee')
 	@include('effect.trein')
 @endif
-<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css">
-<script type="application/javascript">
-	const ASSISTENT = '{{ CsrDelft\model\LidInstellingenModel::get('layout', 'assistent') }}';
-</script>
-@script('fxclippy.js')
+@if(CsrDelft\model\LidInstellingenModel::get('layout', 'assistent') !== 'nee')
+	<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css">
+	<script type="application/javascript">
+		const ASSISTENT = '{{ CsrDelft\model\LidInstellingenModel::get('layout', 'assistent') }}';
+	</script>
+	@script('fxclippy.js')
+@endif
 </body>
 </html>
