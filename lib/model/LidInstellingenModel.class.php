@@ -97,8 +97,8 @@ class LidInstellingenModel extends InstellingenModel {
 			'assistent' => [
 				'Assistent',
 				T::Enumeration,
-				['Clippy', 'F1', 'Genie', 'Genius', 'Links', 'Merlin', 'Peedy', 'Rocky', 'Rover'],
-				'Clippy',
+				['nee', 'Clippy', 'F1', 'Genie', 'Genius', 'Links', 'Merlin', 'Peedy', 'Rocky', 'Rover'],
+				'nee',
 				'Verrijk uw ervaring op de stek met een van deze geweldige hulpjes.'
 			],
 			'fx' => [
