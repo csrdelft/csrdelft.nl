@@ -32,8 +32,6 @@
 						@include('forum.partial.post_lijst', ['draad' => $draad, 'post' => $post])
 						<div class="tussenschot"></div>
 					@endforeach
-					<div class="tussenschot"></div>
-					@endforeach
 				</div>
 			@endforeach
 		</div>
