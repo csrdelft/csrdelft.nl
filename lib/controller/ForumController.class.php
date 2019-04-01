@@ -168,8 +168,7 @@ class ForumController extends AclController {
 	 * Tonen van alle posts die wachten op goedkeuring.
 	 */
 	public function wacht() {
-		return view('forum.resultaten', [
-			'titel' => 'Wacht op goedkeuring',
+		return view('forum.wacht', [
 			'resultaten' => ForumDelenModel::instance()->getWachtOpGoedkeuring()
 		]);
 	}

@@ -1,38 +1,23 @@
 @extends('forum.base')
 
-@section('titel')
-	@if(isset($query))
-		Resultaten voor {{$query}}
-	@else
-		Wacht op goedkeuring
-	@endif
-@endsection
+@section('titel', 'Wacht op goedkeuring')
 
 @section('content')
 	{!! getMelding() !!}
 
-	<h1>{{$titel}}</h1>
-
-	<div class="forum-zoeken">
-		@php($form->view())
-	</div>
+	<h1>Wacht op goedkeuring</h1>
 
 	@if($resultaten)
 		<div class="forum-zoeken">
 			@foreach($resultaten as $draad)
 				<div class="forum-zoeken-header">
 					<div>
-						<a id="{{$draad->draad_id}}"
-							 href="/forum/onderwerp/{{$draad->draad_id}}"
-							 @if($draad->isOngelezen())class="{{CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave')}}" @endif>
-							{!! highlight_zoekterm($draad->titel, $query) !!}
-						</a>
-						@if($draad->belangrijk)
-							@icon($draad->belangrijk, null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk')
-						@elseif($draad->gesloten)
-							@icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren')
-						@endif
-						<span>[<a href="/forum/deel/{{$draad->forum_id}}">{{$draad->getForumDeel()->titel}}</a>]</span>
+							<span title="Nieuw onderwerp in {{$draad->getForumDeel()->titel}}">{{$draad->titel}}
+								<span>
+									[<a href="/forum/deel/{{$draad->forum_id}}">{{$draad->getForumDeel()->titel}}</a>]
+								</span>
+								@icon('new')
+							</span>
 					</div>
 					<div class="niet-dik">
 						@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
@@ -61,14 +46,9 @@
 										{{$post->datum_tijd}}
 									@endif
 								</span>
-								@auth
-									@if($post->uid !== 'x999')
-										<div class="forumpasfoto">{!! CsrDelft\model\ProfielModel::getLink($post->uid, 'pasfoto') !!}</div>
-									@endif
-								@endauth
 							</div>
 							<div class="forum-bericht @cycle('bericht0', 'bericht1')" id="post{{$post->post_id}}">
-								{!! highlight_zoekterm(bbcode_light(split_on_keyword($post->tekst, $query)), $query) !!}
+								{!! bbcode($post->tekst) !!}
 							</div>
 						</div>
 						<div class="tussenschot"></div>
@@ -76,9 +56,10 @@
 				</div>
 			@endforeach
 		</div>
-		<h1>{{$titel}}</h1>
+		<h1>Wacht op goedkeuring</h1>
 		@yield('breadcrumbs')
 	@else
-		Geen resultaten.
+		Geen berichten die op goedkeuring wachten.
 	@endif
 @endsection
+
