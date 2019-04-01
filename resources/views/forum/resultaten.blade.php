@@ -13,9 +13,11 @@
 
 	<h1>{{$titel}}</h1>
 
+	@if(isset($form))
 	<div class="forum-zoeken">
 	@php($form->view())
 	</div>
+	@endif
 
 	@if($resultaten)
 		<div class="forum-zoeken">
