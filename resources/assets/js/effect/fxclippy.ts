@@ -68,6 +68,8 @@ function addRule(options: any, cb: (agent: Agent) => void) {
 $(() => {
 	// @ts-ignore
 	const assistant = ASSISTENT || 'Clippy';
+	// @ts-ignore
+	const geenGeluiden = (ASSISTENT_GELUIDEN || 'nee') === 'nee';
 	const welcomeMessages = [
 		'Hallo, welkom op de stek! Hoe kan ik je vandaag helpen?',
 		'Hoe kan ik je stek ervaring vandaag weer verrijken?',
@@ -81,6 +83,10 @@ $(() => {
 		'Heb je de PubCie al eens bedankt voor al hun werk?',
 	];
 	clippy.load(assistant, async (agent) => {
+		if (geenGeluiden) {
+			agent._animator._sounds = [];
+		}
+
 		const viewPort = currentViewPort();
 		let message = '';
 

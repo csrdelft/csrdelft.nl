@@ -6,6 +6,8 @@ declare module 'clippyjs' {
 	type AgentName = 'Bonzi' | 'Clippy' | 'F1' | 'Genie' | 'Genius' | 'Links' | 'Merlin' | 'Peedy' | 'Rocky' | 'Rover';
 
 	interface Agent {
+		_animator: Animator;
+
 		show(): void;
 
 		show(fast: boolean): void;
@@ -41,5 +43,9 @@ declare module 'clippyjs' {
 		stop(): this;
 
 		_getDirection(x: number, y: number): string;
+	}
+
+	interface Animator {
+		_sounds: HTMLAudioElement[];
 	}
 }
