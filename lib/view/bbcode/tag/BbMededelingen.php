@@ -43,7 +43,7 @@ class BbMededelingen extends BbTag {
 	/**
 	 * @param string|null $type
 	 */
-	private function assertType($type): void {
+	private function assertType($type) {
 		if ($type == '') {
 			throw new CsrBbException('[mededelingen] Geen geldig mededelingenblok.');
 		}

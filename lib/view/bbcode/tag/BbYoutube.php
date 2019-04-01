@@ -30,7 +30,7 @@ class BbYoutube extends BbTag {
 	/**
 	 * @param string|null $id
 	 */
-	private function assertId($id): void {
+	private function assertId($id) {
 		if (!preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
 			throw new CsrBbException('[youtube] Geen geldig youtube-id (' . htmlspecialchars($id) . ')');
 		}

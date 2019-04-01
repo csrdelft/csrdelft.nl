@@ -32,7 +32,7 @@ class BbQuery extends BbTag {
 	/**
 	 * @param int $queryID
 	 */
-	private function assertId(int $queryID): void {
+	private function assertId(int $queryID) {
 		if ($queryID == 0) {
 			throw new CsrBbException('[query] Geen geldig query-id opgegeven');
 		}

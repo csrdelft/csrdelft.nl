@@ -105,7 +105,7 @@ class BbVideo extends BbTag {
 	 * @param $id
 	 * @param $content
 	 */
-	private function assertId($type, $id, $content): void {
+	private function assertId($type, $id, $content) {
 		if (empty($type) || empty($id)) {
 			throw new CsrBbException('[video] Niet-ondersteunde video-website (' . htmlspecialchars($content) . ')');
 		}
