@@ -56,7 +56,7 @@ class BbSpotify extends BbTag {
 	/**
 	 * @param string|null $uri
 	 */
-	private function assertUri(string $uri): void {
+	private function assertUri($uri): void {
 		if (!startsWith($uri, 'spotify') && !filter_var($uri, FILTER_VALIDATE_URL)) {
 			throw new CsrBbException('[spotify] Geen geldige url (' . $uri . ')');
 		}

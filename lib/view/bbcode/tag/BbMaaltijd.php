@@ -62,7 +62,7 @@ class BbMaaltijd extends BbTag {
 	 * @param string|null $mid
 	 * @return array
 	 */
-	private function getMaaltijd(string $mid): array {
+	private function getMaaltijd($mid): array {
 		$maaltijd2 = null;
 
 		try {
