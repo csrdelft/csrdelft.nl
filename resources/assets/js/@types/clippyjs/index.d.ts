@@ -39,5 +39,7 @@ declare module 'clippyjs' {
 		stopCurrent(): this;
 
 		stop(): this;
+
+		_getDirection(x: number, y: number): string;
 	}
 }
