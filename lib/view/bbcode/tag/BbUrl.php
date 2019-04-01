@@ -34,7 +34,7 @@ class BbUrl extends BbTag {
 	 * @param string|null $content
 	 * @return string|null
 	 */
-	private function getUrl($arguments, ?string $content) {
+	private function getUrl($arguments, string $content) {
 		if (isset($arguments['url'])) { // [url=
 			$url = $arguments['url'];
 		} elseif (isset($arguments['rul'])) { // [rul=
