@@ -29,29 +29,10 @@
 				</div>
 				<div class="forum-zoeken-bericht">
 					@foreach($draad->getForumPosts() as $post)
-						<div id="forumpost-row-{{$post->post_id}}" class="forum-post @if($post->gefilterd) verborgen @endif">
-							<div class="auteur">
-								<div class="postpijl">
-									<a class="postanchor" id="{{$post->post_id}}"></a>
-									<a class="postlink" href="/forum/reactie/{{$post->post_id}}#{{$post->post_id}}"
-										 title="Link naar deze post">&rarr;</a>
-								</div>
-								<div class="naam">
-									{!! CsrDelft\model\ProfielModel::getLink($post->uid, 'user') !!}
-								</div>
-								<span class="moment">
-									@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
-										{!! reldate($post->datum_tijd) !!}
-									@else
-										{{$post->datum_tijd}}
-									@endif
-								</span>
-							</div>
-							<div class="forum-bericht @cycle('bericht0', 'bericht1')" id="post{{$post->post_id}}">
-								{!! bbcode($post->tekst) !!}
-							</div>
-						</div>
+						@include('forum.partial.post_lijst', ['draad' => $draad, 'post' => $post])
 						<div class="tussenschot"></div>
+					@endforeach
+					<div class="tussenschot"></div>
 					@endforeach
 				</div>
 			@endforeach
