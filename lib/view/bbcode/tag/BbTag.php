@@ -38,7 +38,7 @@ abstract class BbTag {
 				$stoppers[] = $this->createStopper($tagName);
 			}
 		} else {
-			$stoppers[] = $this->getTagName();
+			$stoppers[] = $this->createStopper($this->getTagName());
 		}
 
 		return $this->parser->parseArray($stoppers, $forbidden);
