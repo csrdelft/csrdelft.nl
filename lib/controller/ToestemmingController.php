@@ -27,8 +27,7 @@ class ToestemmingController extends AclController {
 		$this->acl = [
 			'overzicht' => P_LOGGED_IN,
 			'annuleren' => P_LOGGED_IN,
-			'lijst' => P_LEDEN_MOD,
-			'lijst_foto' => P_ALBUM_MOD,
+			'lijst' => P_LOGGED_IN,
 		];
 	}
 
@@ -119,20 +118,5 @@ class ToestemmingController extends AclController {
                 'body' => new ToestemmingLijstTable($ids)
             ]);
         }
-	}
-
-	/**
-	 * @return array
-	 */
-	private function getKeuzes(): array {
-		$alleen = $this->hasParam('alleen') ? $this->getParam('alleen') : '';
-		if ($alleen == 'ja') {
-			$keuzes = ['ja'];
-		} elseif ($alleen == 'nee') {
-			$keuzes = ['nee'];
-		} else {
-			$keuzes = ['ja', 'nee'];
-		}
-		return $keuzes;
 	}
 }
