@@ -62,6 +62,7 @@
 	<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css">
 	<script type="application/javascript">
 		const ASSISTENT = '{{ CsrDelft\model\LidInstellingenModel::get('layout', 'assistent') }}';
+		const ASSISTENT_GELUIDEN = '{{ \CsrDelft\model\LidInstellingenModel::get('layout', 'assistentGeluiden')}}';
 	</script>
 	@script('fxclippy.js')
 @endif

@@ -101,6 +101,13 @@ class LidInstellingenModel extends InstellingenModel {
 				'nee',
 				'Verrijk uw ervaring op de stek met een van deze geweldige hulpjes.'
 			],
+			'assistentGeluiden' => [
+				'Assistent Geluiden',
+				T::Enumeration,
+				['ja', 'nee'],
+				'nee',
+				'Stel in of de assistent geluid mag maken. Heeft alleen effect als een assistent geselecteerd is.'
+			],
 			'fx' => [
 				'Effect',
 				T::Enumeration,
