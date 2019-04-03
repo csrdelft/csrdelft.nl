@@ -226,6 +226,12 @@
 							</a>
 						</li>
 						<li>
+							<a href="https://www.geld.nl">
+								<img src="https://csrdelft.nl/plaetjes/banners/geld.png"
+										 alt="Geld.nl Vergelijk website">
+							</a>
+						</li>
+						<li>
 							<a href="http://www.tudelft.nl/">
 								<img src="https://csrdelft.nl/plaetjes/banners/TU_Delft_logo_White.png"
 										 alt="TUDelft">
