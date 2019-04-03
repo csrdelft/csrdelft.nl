@@ -44,15 +44,14 @@ class Streeplijstcontent implements View {
 		}
 		$this->parseGoederen($sGoederen);
 
-		if (isset($_GET['moot']) AND (int)$_GET['moot'] == $_GET['moot']) {
-			$this->sVerticale = (int)$_GET['moot'];
+		if (isset($_GET['moot']) AND strlen($_GET['moot']) === 1) {
+			$this->sVerticale = $_GET['moot'];
 		}
 		if (isset($_GET['lichting']) AND preg_match('/^\d{2}$/', $_GET['lichting']) == 1) {
 			$this->sLidjaar = $_GET['lichting'];
 		}
 		//leden welke in de lijst moeten laden.
-		require_once 'lid/LidZoeker.php';
-		$this->aLeden = ProfielService::instance()->zoekLeden($this->sLidjaar, 'uid', $this->sVerticale, 'achternaam', 'leden');
+		$this->aLeden = ProfielService::instance()->zoekLeden(empty($this->sLidjaar) ? '%' : $this->sLidjaar, 'uid', $this->sVerticale, 'achternaam', 'leden');
 	}
 
 	function parseGoederen($sGoederen) {
@@ -175,7 +174,7 @@ class Streeplijstcontent implements View {
 		$verticalen = array('alle', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I');
 		foreach ($verticalen as $letter) {
 			echo '<input type="radio" name="moot" id="m' . $letter . '" value="' . $letter . '" ';
-			if ($letter == $this->sVerticale) {
+			if ($letter == $this->sVerticale || ($letter === 'alle' && empty($this->sVerticale))) {
 				echo 'checked="checked" ';
 			}
 			echo '/> <label for="m' . $letter . '">';
@@ -191,8 +190,8 @@ class Streeplijstcontent implements View {
 		echo '<strong>Lichting:</strong><br />';
 		$jaren = array_merge(array('alle'), range(date('Y') - 7, date('Y')));
 		foreach ($jaren as $jaar) {
-			echo '<input type="radio" name="lichting" id="l' . $jaar . '" value="' . substr($jaar, 2) . '" ';
-			if (substr($jaar, 2) == $this->sLidjaar) {
+			echo '<input type="radio" name="lichting" id="l' . $jaar . '" value="' . ($jaar === 'alle' ? $jaar : substr($jaar, 2)) . '" ';
+			if (substr($jaar, 2) == $this->sLidjaar || ($jaar == 'alle' && empty($this->sLidjaar))) {
 				echo 'checked="checked" ';
 			}
 			echo '/> <label for="l' . $jaar . '">' . $jaar . '</label>';

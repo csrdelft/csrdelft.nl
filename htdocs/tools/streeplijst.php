@@ -16,7 +16,6 @@ if (!LoginModel::mag(P_OUDLEDEN_READ)) {
 	redirect(CSR_ROOT);
 }
 
-require_once 'Streeplijstcontent.php';
 $body = new Streeplijstcontent();
 
 
