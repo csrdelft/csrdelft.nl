@@ -5,17 +5,48 @@ use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\ProfielModel;
 
 /**
- * CSV in een textarea.
- * Eventueel zou het nog geforceerd downloadbaar gemaakt kunnen worden
+ * CSV in een textarea met clientside downloadknop
  */
 class LLCSV extends LLWeergave {
 
 	public function viewHeader() {
 		echo '<textarea class="csv">';
+		foreach ($this->velden as $veld) {
+			switch ($veld) {
+
+				case 'adres':
+					echo 'adres;';
+					echo 'postcode;';
+					echo 'woonplaats;';
+					break;
+
+				case 'naam':
+					echo 'voornaam;';
+					echo 'tussenvoegsel;';
+					echo 'achternaam;';
+					break;
+
+				default:
+					echo $veld . ';';
+			}
+		}
+
+		echo "\n";
 	}
 
 	public function viewFooter() {
 		echo '</textarea>';
+		?>
+		<a href="" class="btn btn-primary download-ledenlijst">Download</a>
+		<script>
+			let csvContent = "data:text/csv;charset=utf-8,";
+			csvContent += $('textarea.csv').text();
+			let encodedUri = encodeURI(csvContent);
+			let link = $('.download-ledenlijst');
+			link.attr("href", encodedUri);
+			link.attr("download", "ledenlijst.csv");
+		</script>
+		<?php
 	}
 
 	public function viewLid(Profiel $profiel) {
@@ -44,7 +75,7 @@ class LLCSV extends LLWeergave {
 					break;
 
 				case 'pasfoto':
-					$return .= $profiel->getPasfotoTag();
+					$return .= $profiel->getPasfotoPath();
 					break;
 
 				case 'patroon':

@@ -103,7 +103,7 @@ class LedenlijstContent implements View {
 		$this->viewSelect('weergave', array(
 			'lijst' => 'Lijst (standaard)',
 			'kaartje' => 'Visitekaartjes',
-			'CSV' => 'CSV-bestand'));
+			'csv' => 'CSV-bestand'));
 		echo '</div>';
 
 		//sorteren op:
