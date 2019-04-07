@@ -62,21 +62,28 @@ class LidInstellingenModel extends InstellingenModel {
 				T::Enumeration,
 				['ja', 'nee'],
 				'ja',
-				'Geef verjaardagen weer in de agenda, geldt ook voor de agenda geimporteerd in je eigen systeem.'
+				'Geef verjaardagen weer in de agenda op de stek.'
+			],
+			'toonVerjaardagenICal' => [
+				'Verjaardagen weergeven in iCal',
+				T::Enumeration,
+				['ja', 'nee'],
+				'ja',
+				'Geef verjaardagen weer in de ge&iuml;mporteerde agenda (iCal) in je eigen systeem.'
 			],
 			'toonMaaltijden' => [
 				'Maaltijden weergeven',
 				T::Enumeration,
 				['ja', 'nee'],
 				'ja',
-				'Geef maaltijden weer in de agenda, geldt ook voor de agenda geimporteerd in je eigen systeem.'
+				'Geef maaltijden weer in de agenda, geldt ook voor de agenda ge&iuml;mporteerd in je eigen systeem.'
 			],
 			'toonCorvee' => [
 				'Corvee weergeven',
 				T::Enumeration,
 				['iedereen', 'eigen', 'nee'],
 				'eigen',
-				'Geef corvee weer in de agenda, geldt ook voor de agenda geimporteerd in je eigen systeem.'
+				'Geef corvee weer in de agenda, geldt ook voor de agenda ge&iuml;mporteerd in je eigen systeem.'
 			]
 		],
 		'layout' => [
