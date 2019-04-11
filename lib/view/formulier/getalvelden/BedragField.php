@@ -24,7 +24,14 @@ class BedragField extends IntField {
 	}
 
 	public function getHtml() {
-		return $this->valuta . parent::getHtml() . '<span class="lichtgrijs">(in centen)</span>';
+		$parent = parent::getHtml();
+		return <<<HTML
+<div class="input-group">
+	<div class="input-group-prepend"><span class="input-group-text">{$this->valuta}</span></div>
+	{$parent}
+	<div class="input-group-append"><span class="input-group-text">in centen</span></div>
+</div>
+HTML;
 	}
 
 }
