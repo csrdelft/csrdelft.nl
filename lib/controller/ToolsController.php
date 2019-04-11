@@ -6,6 +6,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\controller\framework\AclController;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\ProfielService;
@@ -171,7 +172,7 @@ class ToolsController extends AclController {
 		}
 
 //welke subset van leden?
-		$zoekin = ['S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID', 'S_ERELID'];
+		$zoekin = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		$toegestanezoekfilters = ['leden', 'oudleden', 'novieten', 'alleleden', 'allepersonen', 'nobodies'];
 		if (isset($_GET['zoekin']) && in_array($_GET['zoekin'], $toegestanezoekfilters)) {
 			$zoekin = $_GET['zoekin'];
@@ -215,7 +216,7 @@ class ToolsController extends AclController {
 
 	public function naamsuggesties() {
 		//welke subset van leden?
-		$zoekin = array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL', 'S_OUDLID', 'S_ERELID');
+		$zoekin = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		$toegestanezoekfilters = array('leden', 'oudleden', 'novieten', 'alleleden', 'allepersonen', 'nobodies');
 		if (isset($_GET['zoekin']) && in_array($_GET['zoekin'], $toegestanezoekfilters)) {
 			$zoekin = $_GET['zoekin'];

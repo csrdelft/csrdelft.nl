@@ -14,6 +14,7 @@ namespace CsrDelft\model;
  */
 
 use CsrDelft\common\Ini;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
@@ -71,9 +72,9 @@ h.t. Fiscus.';
 
 	public function getSaldi() {
 		if ($this->doelgroep == 'oudleden') {
-			$status = ['S_OUDLID', 'S_ERELID', 'S_NOBODY', 'S_EXLID'];
+			$status = LidStatus::getFiscaalOudlidLike();
 		} else {
-			$status = ['S_LID', 'S_NOVIET', 'S_GASTLID', 'S_KRINGEL'];
+			$status = LidStatus::getFiscaalLidLike();
 		}
 
 		$saldi = CiviSaldoModel::instance()->find('saldo < ?', [$this->saldogrens]);
