@@ -70,7 +70,7 @@
 								@endcan
 							@endif
 							@can(P_ADMIN)
-								<a href="/tools/stats.php?uid={{$profiel->uid}}" class="btn btn-light"
+								<a href="/ttools/stats.php?uid={{$profiel->uid}}" class="btn btn-light"
 									 title="Toon bezoeklog">@icon('server_chart')</a>
 							@endcan
 						@endif

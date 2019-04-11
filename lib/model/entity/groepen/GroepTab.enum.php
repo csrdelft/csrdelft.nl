@@ -19,7 +19,7 @@ abstract class GroepTab extends PersistentEnum {
 	 */
 	const Lijst = 'lijst';
 	const Pasfotos = 'pasfotos';
-	const Statistiek = 'stats';
+	const Statistiek = 'CsrDelft\view\StatsView';
 	const Emails = 'emails';
 	const Eetwens = 'eetwens';
 

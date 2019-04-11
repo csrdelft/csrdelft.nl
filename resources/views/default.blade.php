@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('titel', $titel)
+@section('titel', $content->getTitel())
 
 @section('content')
 	{!! $content->view() !!}

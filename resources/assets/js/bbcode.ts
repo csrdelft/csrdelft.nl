@@ -22,7 +22,7 @@ export const CsrBBPreview = (sourceId: string, targetId: string, params: object 
 		$(targetId).html('').hide();
 		return;
 	}
-	axios.post('/tools/bbcode.php', {
+	axios.post('/tools/bbcode', {
 		data: encodeURIComponent(bbcode),
 		...params,
 	}).then((response) => {

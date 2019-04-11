@@ -126,7 +126,7 @@ $(() => {
 				top = offset.top - docScrollTop();
 				left = offset.left - docScrollLeft();
 			}
-			$.post('/tools/dragobject.php', {
+			$.post('/tools/dragobject', {
 				coords: {left, top},
 				id: instance.attr('id'),
 			});

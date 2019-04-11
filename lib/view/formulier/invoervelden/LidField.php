@@ -25,7 +25,7 @@ class LidField extends TextField {
 			$zoekin = 'leden';
 		}
 		$this->zoekin = $zoekin;
-		$this->suggestions[ucfirst($this->zoekin)] = '/tools/naamsuggesties/' . $this->zoekin . '?q=';
+		$this->suggestions[ucfirst($this->zoekin)] = '/tools/naamsuggesties?zoekin=' . $this->zoekin . '&q=';
 	}
 
 	public function getValue() {
@@ -83,7 +83,7 @@ var preview{$this->getId()} = function() {
 		return;
 	}
 	$.ajax({
-		url: "/tools/naamlink.php?zoekin={$this->zoekin}&naam=" + val,
+		url: "/tools/naamlink?zoekin={$this->zoekin}&naam=" + val,
 	}).done(function(response) {
 		$('#lidPreview_{$this->getId()}').html(response);
 		var el = document.getElementById('lidPreview_{$this->getId()}');

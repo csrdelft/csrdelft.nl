@@ -1,7 +1,0 @@
-RewriteEngine On
-
-RewriteRule ^leden.csv$						leden-csv.php [L]
-
-# Typeahead suggesties
-RewriteRule ^naamsuggesties/([a-z]+)/?$		naamsuggesties.php?zoekin=$1	[QSA,L]
-RewriteRule ^wikisuggesties/?$				../wiki/lib/exe/ajax.php?call=csrlink_wikisuggesties [QSA,L]

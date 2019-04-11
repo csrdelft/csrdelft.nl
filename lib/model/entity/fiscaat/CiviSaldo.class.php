@@ -2,6 +2,8 @@
 
 namespace CsrDelft\model\entity\fiscaat;
 
+use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -15,6 +17,7 @@ use CsrDelft\Orm\Entity\T;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 07/04/2017
+ * @property-read Profiel $profiel
  */
 class CiviSaldo extends PersistentEntity {
 	public $id;
@@ -34,4 +37,12 @@ class CiviSaldo extends PersistentEntity {
 	];
 	protected static $table_name = 'CiviSaldo';
 	protected static $primary_key = array('id');
+
+	protected static $computed_attributes = [
+		'profiel' => [Profiel::class]
+	];
+
+	public function getProfiel() {
+		return ProfielModel::get($this->uid);
+	}
 }

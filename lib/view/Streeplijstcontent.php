@@ -145,7 +145,7 @@ class Streeplijstcontent implements View {
 	}
 
 	function getUrl() {
-		$sReturn = 'streeplijst.php?goederen=' . urlencode($this->getGoederen()) .
+		$sReturn = 'streeplijst?goederen=' . urlencode($this->getGoederen()) .
 			'&moot=' . $this->sVerticale . '&lichting=' . $this->sLidjaar . '&';
 		if (isset($_GET['colorCols'])) {
 			$sReturn .= 'colorCols&';
@@ -158,7 +158,7 @@ class Streeplijstcontent implements View {
 
 	function view() {
 		echo '<h1>' . $this->getTitel() . '</h1>
-			<form id="streeplijst" action="streeplijst.php" method="get">
+			<form id="streeplijst" action="streeplijst" method="get">
 			<fieldset>
 				<legend>Bestellijst</legend>
 				<br />
