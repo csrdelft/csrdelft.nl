@@ -41,7 +41,7 @@ class ToolsController extends AclController {
 				'bbcode' => P_PUBLIC,
 				'dragobject' => P_LOGGED_IN,
 				'naamlink' => P_OUDLEDEN_READ,
-				'roodschopper' => P_LEDEN_MOD . ',commissie:MaalCie,commissie:SocCie',
+				'roodschopper' => P_FISCAAT_MOD,
 			];
 		} else {
 			$this->acl = [
@@ -55,7 +55,7 @@ class ToolsController extends AclController {
 				'naamlink' => P_OUDLEDEN_READ,
 				'streeplijst' => P_OUDLEDEN_READ,
 				'verticalelijsten' => P_ADMIN,
-				'roodschopper' => P_LEDEN_MOD . ',commissie:MaalCie,commissie:SocCie',
+				'roodschopper' => P_FISCAAT_MOD,
 				'syncldap' => P_PUBLIC,
 			];
 		}
