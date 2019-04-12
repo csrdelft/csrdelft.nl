@@ -3,6 +3,7 @@
 namespace CsrDelft\model;
 
 use CsrDelft\common\MijnSqli;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\security\LoginModel;
@@ -48,7 +49,7 @@ class LidZoeker {
 		'linkedin' => 'LinkedIn',
 	);
 	//toegestane opties voor het statusfilter.
-	private $allowStatus = array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_EXLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN');
+	private $allowStatus;
 	//toegestane opties voor de weergave.
 	private $allowWeergave = [
 		'lijst' => LLLijst::class,
@@ -72,6 +73,7 @@ class LidZoeker {
 	private $result = null;
 
 	public function __construct() {
+		$this->allowStatus = LidStatus::getTypeOptions();
 
 		//wat extra velden voor moderators.
 		if (LoginModel::mag(P_LEDEN_MOD)) {
@@ -135,11 +137,11 @@ class LidZoeker {
 					$add = array();
 					foreach ($filters as $filter) {
 						if ($filter == 'LEDEN') {
-							$add = array_merge($add, array('S_LID', 'S_NOVIET', 'S_GASTLID'));
+							$add = array_merge($add, LidStatus::getLidLike());
 							continue;
 						}
 						if ($filter == 'OUDLEDEN') {
-							$add = array_merge($add, array('S_OUDLID', 'S_ERELID'));
+							$add = array_merge($add, LidStatus::getOudlidLike());
 							continue;
 						}
 						$filter = 'S_' . $filter;

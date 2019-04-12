@@ -5,6 +5,7 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
@@ -93,10 +94,10 @@ class ToestemmingController extends AclController {
 		    $filter = $this->hasParam('filter') ? $this->getParam('filter') : 'leden';
 
 		    $filterStatus = [
-		        'leden' => ['S_NOVIET', 'S_LID', 'S_GASTLID'],
-                'oudleden' => ['S_OUDLID', 'S_ERELID'],
-                'ledenoudleden' => ['S_NOVIET', 'S_LID', 'S_GASTLID', 'S_OUDLID', 'S_ERELID'],
-                'iedereen' => ['S_NOVIET', 'S_LID', 'S_GASTLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_EXLID', 'S_OVERLEDEN'],
+		        'leden' => LidStatus::getLidLike(),
+                'oudleden' => LidStatus::getOudlidLike(),
+                'ledenoudleden' => array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike()),
+                'iedereen' => LidStatus::getTypeOptions(),
             ];
 
             $toestemming = group_by('uid', LidToestemmingModel::instance()->getToestemmingForIds($ids));

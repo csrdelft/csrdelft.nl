@@ -13,7 +13,7 @@ menu_tree.tpl	|	P.W.G. Brussee (brussee@live.nl)
 		</select>
 	</div>
 {/if}
-<h1>{$titel}</h1>
+<h1>Menubeheer</h1>
 <ul class="menubeheer-tree">
 	{if $root}
 		<li>

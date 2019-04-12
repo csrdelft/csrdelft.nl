@@ -65,6 +65,8 @@ use CsrDelft\view\toestemming\ToestemmingModalForm;
  * @property ProfielModel $model
  */
 class ProfielController extends AclController {
+	const ALLOW_REDIRECT = ['voorkeuren', 'bewerken'];
+
 	public function __construct($query) {
 		parent::__construct($query, ProfielModel::instance());
 		if ($this->getMethod() == 'GET') {
@@ -116,6 +118,8 @@ class ProfielController extends AclController {
 			} elseif (ProfielModel::existsUid($uid)) {
 				$args = $this->getParams(4);
 				array_unshift($args, ProfielModel::get($uid));
+			} elseif (in_array($this->getParam(2), self::ALLOW_REDIRECT)) {
+				redirect('/profiel/' . LoginModel::getUid() . '/' . $this->getParam(2));
 			} else {
 				setMelding('Dit profiel bestaat niet', -1);
 				redirect('/ledenlijst');

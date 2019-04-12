@@ -24,7 +24,7 @@ window.roodschopper = function(actie) {
     $.post('/tools/roodschopper.php', params)
         .done(function (data) {
             if (actie === 'verzenden') {
-                window.location.href = '/htdocs/tools/roodschopper.php';
+                window.location.href = '../../../htdocs/ttools/roodschopper.php';
             } else {
                 let div = $('#messageContainer');
                 div.html(data);

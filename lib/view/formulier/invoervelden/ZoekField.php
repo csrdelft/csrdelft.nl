@@ -43,7 +43,7 @@ JS;
 
 			$instelling = LidInstellingenModel::get('zoeken', 'leden');
 			if ($instelling !== 'nee') {
-				$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=' . $instelling . '&q=';
+				$this->suggestions['Leden'] = '/tools/naamsuggesties?zoekin=leden&status=' . $instelling . '&q=';
 			}
 
 			// TODO: bundelen om simultane verbindingen te sparen
@@ -66,7 +66,7 @@ JS;
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'wiki') === 'ja') {
-				$this->suggestions['Wiki'] = '/tools/wikisuggesties/?q=';
+				$this->suggestions['Wiki'] = '/wiki/lib/exe/ajax.php?call=csrlink_wikisuggesties&q=';
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'documenten') === 'ja') {

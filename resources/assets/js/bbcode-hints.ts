@@ -38,7 +38,7 @@ function search(term: string, callback: (data: any) => void) {
 	if (!term || term.length === 1) {
 		callback([]);
 	} else {
-		$.ajax('/tools/naamsuggesties.php?vorm=user&zoekin=voorkeur&q=' + encodeURI(term))
+		$.ajax('/tools/naamsuggesties?vorm=user&zoekin=voorkeur&q=' + encodeURI(term))
 			.done((data) => {
 				callback(data);
 			})

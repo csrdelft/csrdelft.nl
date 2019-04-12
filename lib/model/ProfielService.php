@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\model;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
@@ -85,7 +86,7 @@ class ProfielService extends DependencyManager {
 			$zoekstatus = '';
 		}
 		if ($zoekstatus == 'allepersonen') {
-			$zoekstatus = array('S_NOVIET', 'S_LID', 'S_GASTLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN', 'S_NOBODY', 'S_EXLID');
+			$zoekstatus = LidStatus::getTypeOptions();
 		}
 		if (is_array($zoekstatus)) {
 			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu

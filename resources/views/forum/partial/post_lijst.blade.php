@@ -36,7 +36,7 @@
 			@if($post->wacht_goedkeuring)
 				<a href="/forum/goedkeuren/{{$post->post_id}}" class="btn post confirm"
 					 title="Bericht goedkeuren">@icon('check')</a>
-				<a href="/tools/stats.php?ip={{$post->auteur_ip}}" class="btn" title="IP-log">@icon('server_chart')</a>
+				<a href="/ttools/stats.php?ip={{$post->auteur_ip}}" class="btn" title="IP-log">@icon('server_chart')</a>
 				<a href="/forum/verwijderen/{{$post->post_id}}" class="btn post confirm"
 					 title="Verwijder bericht of draad">@icon('cross')</a>
 				@if($post->magBewerken())

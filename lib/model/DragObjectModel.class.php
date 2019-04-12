@@ -8,7 +8,7 @@ namespace CsrDelft\model;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Stores the screen coordinates of a dragable object in the session variable.
- * @see /htdocs/tools/dragobject.php
+ * @see ToolsController
  */
 class DragObjectModel {
 

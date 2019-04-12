@@ -1,22 +1,8 @@
 <?php
 
+namespace CsrDelft\view;
+
 use CsrDelft\model\security\AccountModel;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\View;
-
-require_once 'configuratie.include.php';
-
-/**
- * admins.php  |  P.W.G. Brussee (brussee@live.nl)
- *
- * toont lijst van beheerders met rechten-niveau
- *
- * request url: /tools/admins/
- */
-if (!LoginModel::mag(P_LEDEN_READ)) {
-	echo 'Niet voldoende rechten';
-	exit;
-}
 
 class AdminsView implements View {
 
@@ -25,7 +11,9 @@ class AdminsView implements View {
 		?>
 		<h1>Admins</h1>
 		<p>
-			Op deze pagina vind je een overzicht met alle leden die meer rechten op de stek hebben dan leden. In de broncode van de stek is alles te vinden over welke rechten waar gebruikt worden. Zie hier voor <a href="https://github.com/csrdelft/csrdelft.nl">github.com/csrdelft/csrdelft.nl</a>.
+			Op deze pagina vind je een overzicht met alle leden die meer rechten op de stek hebben dan leden. In de broncode
+			van de stek is alles te vinden over welke rechten waar gebruikt worden. Zie hier voor <a
+				href="https://github.com/csrdelft/csrdelft.nl">github.com/csrdelft/csrdelft.nl</a>.
 		</p>
 		<dl>
 			<dt>R_BASF</dt>
@@ -82,5 +70,3 @@ class AdminsView implements View {
 		return null;
 	}
 }
-
-(new \CsrDelft\view\CsrLayoutPage(new AdminsView))->view();

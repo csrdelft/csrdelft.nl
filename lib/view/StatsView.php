@@ -2,20 +2,13 @@
 
 //holymoly, wat een kekcode is dit zeg.
 
+namespace CsrDelft\view;
+
 use CsrDelft\common\MijnSqli;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\View;
 
-require_once 'configuratie.include.php';
-
-if (!LoginModel::mag('P_ADMIN')) {
-	redirect(CSR_ROOT);
-}
-
-class stats implements View {
+class StatsView implements View {
 
 	public function getModel() {
 		return null;
@@ -49,9 +42,9 @@ class stats implements View {
 				log
 			WHERE 1 ";
 		if (isset($_GET['sjaars'])) {
-			$sLogQuery.="AND status='S_NOVIET' ";
+			$sLogQuery .= "AND status='S_NOVIET' ";
 		}
-		$sLogQuery.="ORDER BY
+		$sLogQuery .= "ORDER BY
 				ID DESC
 			LIMIT
 				0, 30;";
@@ -195,9 +188,3 @@ class stats implements View {
 	}
 
 }
-
-// einde stats klasse
-
-
-$pagina = new CsrLayoutPage(new stats());
-$pagina->view();

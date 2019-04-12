@@ -115,7 +115,7 @@ class SavedQueryContent implements View {
 				$return .= '<div class="sqCategorie "><span class="dikgedrukt">' . $query['categorie'] . '</span><ul>';
 				$current = $query['categorie'];
 			}
-			$return .= '<li><a href="query.php?id=' . $query['ID'] . '">';
+			$return .= '<li><a href="query?id=' . $query['ID'] . '">';
 			if ($id == $query['ID']) {
 				$return .= '<span class="cursief">';
 			}

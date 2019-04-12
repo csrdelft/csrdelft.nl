@@ -50,7 +50,7 @@ class Icon {
 		'gemaildoranje' => 'email_go_orange',
 		'niet_gemaild' => 'email',
 		// profiel
-		'stats' => 'server_chart',
+		'CsrDelft\view\StatsView' => 'server_chart',
 		'su' => 'user_go',
 		'resetpassword' => 'user_gray',
 		'instellingen' => 'cog',

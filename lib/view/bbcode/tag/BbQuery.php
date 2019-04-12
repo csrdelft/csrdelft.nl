@@ -25,7 +25,7 @@ class BbQuery extends BbTag {
 		$queryID = (int)$this->getArgument($arguments);
 		$this->assertId($queryID);
 		$sqc = new SavedQueryContent(new SavedQuery($queryID));
-		$url = '/tools/query.php?id=' . urlencode($queryID);
+		$url = '/tools/query?id=' . urlencode($queryID);
 		return $this->lightLinkBlock('query', $url, $sqc->getModel()->getBeschrijving(), $sqc->getModel()->count() . ' regels');
 	}
 
