@@ -28,9 +28,11 @@ class CmsPaginaController {
 	 * @var CmsPaginaZijbalkView[]
 	 */
 	private $zijbalk = array();
-  private $model;
+	/** @var CmsPaginaModel */
+	private $cmsPaginaModel;
+
 	public function __construct() {
-		$this->model = CmsPaginaModel::instance();
+		$this->cmsPaginaModel = CmsPaginaModel::instance();
 	}
 
 	public function bekijken($naam, $subnaam = "") {
@@ -38,9 +40,9 @@ class CmsPaginaController {
 			$naam = $subnaam;
 		}
 		/** @var CmsPagina $pagina */
-		$pagina = $this->model->get($naam);
+		$pagina = $this->cmsPaginaModel->get($naam);
 		if (!$pagina) { // 404
-			$pagina = $this->model->get('thuis');
+			$pagina = $this->cmsPaginaModel->get('thuis');
 		}
 		if (!$pagina->magBekijken()) { // 403
 			throw new CsrToegangException();
@@ -61,9 +63,9 @@ class CmsPaginaController {
 	}
 
 	public function bewerken($naam) {
-		$pagina = $this->model->get($naam);
+		$pagina = $this->cmsPaginaModel->get($naam);
 		if (!$pagina) {
-			$pagina = $this->model->nieuw($naam);
+			$pagina = $this->cmsPaginaModel->nieuw($naam);
 		}
 		if (!$pagina->magBewerken()) {
 			throw new CsrToegangException();
@@ -71,7 +73,7 @@ class CmsPaginaController {
 		$form = new CmsPaginaForm($pagina); // fetches POST values itself
 		if ($form->validate()) {
 			$pagina->laatst_gewijzigd = getDateTime();
-			$rowCount = $this->model->update($pagina);
+			$rowCount = $this->cmsPaginaModel->update($pagina);
 			if ($rowCount > 0) {
 				setMelding('Bijgewerkt', 1);
 			} else {
@@ -85,11 +87,11 @@ class CmsPaginaController {
 
 	public function verwijderen($naam) {
 		/** @var CmsPagina $pagina */
-		$pagina = $this->model->get($naam);
+		$pagina = $this->cmsPaginaModel->get($naam);
 		if (!$pagina OR !$pagina->magVerwijderen()) {
 			throw new CsrToegangException();
 		}
-		if ($this->model->delete($pagina)) {
+		if ($this->cmsPaginaModel->delete($pagina)) {
 			setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
 		} else {
 			setMelding('Verwijderen mislukt', -1);
