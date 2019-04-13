@@ -10,6 +10,7 @@
 	<meta property="og:image" content="{{CSR_ROOT}}/images/beeldmerk.png"/>
 	<meta property="og:description" content="{{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}}"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	{!! csrfMetaTag() !!}
 	<title>C.S.R. Delft - @yield('titel')</title>
 	<link rel="shortcut icon" href="{{CSR_ROOT}}/images/favicon.ico"/>
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"

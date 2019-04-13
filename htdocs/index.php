@@ -35,6 +35,7 @@ switch ($class) {
     case 'Agenda':
     case 'Mededelingen':
 		case 'ContactFormulier':
+		case 'Tools':
         break;
 
     // de rest alleen voor ingelogde gebruikers:
