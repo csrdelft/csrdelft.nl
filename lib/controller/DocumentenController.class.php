@@ -24,31 +24,33 @@ class DocumentenController {
 	use QueryParamTrait;
 
 	/** @var DocumentModel */
-	private $model;
+	private $documentModel;
+	/** @var DocumentCategorieModel */
+	private $documentCategorieModel;
 
 	public function __construct() {
-		$this->model = DocumentModel::instance();
+		$this->documentModel = DocumentModel::instance();
+		$this->documentCategorieModel = DocumentCategorieModel::instance();
 	}
 
 	/**
 	 * Recente documenten uit alle categorieën tonen
 	 */
 	public function recenttonen() {
-		$model = DocumentCategorieModel::instance();
 		return view('documenten.documenten', [
-			'categorieen' => $model->find(),
-			'model' => $model
+			'categorieen' => $this->documentCategorieModel->find(),
+			'model' => $this->documentCategorieModel
 		]);
 	}
 
 	public function verwijderen($id) {
-		$document = $this->model->get($id);
+		$document = $this->documentModel->get($id);
 
 		if ($document === false) {
 			setMelding('Document bestaat niet!', -1);
 			redirect('/documenten');
 		} elseif ($document->magVerwijderen()) {
-			DocumentModel::instance()->delete($document);
+			$this->documentModel->delete($document);
 		} else {
 			setMelding('Mag document niet verwijderen', -1);
 			return new JsonResponse(false);
@@ -58,7 +60,7 @@ class DocumentenController {
 	}
 
 	public function bekijken($id) {
-		$document = $this->model->get($id);
+		$document = $this->documentModel->get($id);
 
 		if (!$document->magBekijken()) {
 			throw new CsrToegangException();
@@ -73,7 +75,7 @@ class DocumentenController {
 	}
 
 	public function download($id) {
-		$document = $this->model->get($id);
+		$document = $this->documentModel->get($id);
 
 		if (!$document->magBekijken()) {
 			throw new CsrToegangException();
@@ -87,7 +89,7 @@ class DocumentenController {
 	}
 
 	public function categorie($id) {
-		$categorie = $this->model->getCategorieModel()->get($id);
+		$categorie = $this->documentModel->getCategorieModel()->get($id);
 		if ($categorie === false) {
 			setMelding('Categorie bestaat niet!', -1);
 			redirect('/documenten');
@@ -95,14 +97,14 @@ class DocumentenController {
 			throw new CsrToegangException('Mag deze categorie niet bekijken');
 		} else {
 			return view('documenten.categorie', [
-				'documenten' => $this->model->getCategorieModel()->getRecent($categorie, 0),
+				'documenten' => $this->documentModel->getCategorieModel()->getRecent($categorie, 0),
 				'categorie' => $categorie,
 			]);
 		}
 	}
 
 	public function bewerken($id) {
-		$document = $this->model->get($id);
+		$document = $this->documentModel->get($id);
 
 		if ($document === false) {
 			setMelding('Document niet gevonden', 2);
@@ -111,7 +113,7 @@ class DocumentenController {
 
 		$form = new DocumentBewerkenForm($document);
 		if ($form->isPosted() && $form->validate()) {
-			$this->model->update($document);
+			$this->documentModel->update($document);
 
 			redirect('/documenten/categorie/' . $document->categorie_id);
 		} else {
@@ -139,7 +141,7 @@ class DocumentenController {
 			$document->mimetype = $bestand->mimetype;
 			$document->filesize = $bestand->filesize;
 
-			$document->id = $this->model->create($document);
+			$document->id = $this->documentModel->create($document);
 
 			if ($document->hasFile()) {
 				$document->deleteFile();
@@ -169,11 +171,11 @@ class DocumentenController {
 		}
 
 		$result = array();
-		foreach ($this->model->zoek($zoekterm, $limit) as $doc) {
+		foreach ($this->documentModel->zoek($zoekterm, $limit) as $doc) {
 			if ($doc->magBekijken()) {
 				$result[] = array(
 					'url' => '/documenten/bekijken/' . $doc->id . '/' . $doc->filename,
-					'label' => $this->model->getCategorieModel()->find('id = ?', [$doc->categorie_id])->fetch()->naam,
+					'label' => $this->documentModel->getCategorieModel()->find('id = ?', [$doc->categorie_id])->fetch()->naam,
 					'value' => $doc->naam,
 					'id' => $doc->id
 				);
