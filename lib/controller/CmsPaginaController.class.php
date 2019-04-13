@@ -2,11 +2,10 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrException;
-use CsrDelft\controller\framework\Controller;
+use CsrDelft\common\CsrToegangException;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\CmsPagina;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\cms\CmsPaginaForm;
 use CsrDelft\view\cms\CmsPaginaView;
@@ -16,56 +15,22 @@ use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
 
 /**
- * CmsPaginaController.class.php
- *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * Controller van de agenda.
- *
- * @property CmsPaginaModel $model
+ * Controller van cms paginas.
  */
-class CmsPaginaController extends Controller {
+class CmsPaginaController {
+	use QueryParamTrait;
 
 	/**
 	 * Lijst van pagina's om te bewerken in de zijbalk
 	 * @var CmsPaginaZijbalkView[]
 	 */
 	private $zijbalk = array();
-
-	public function __construct($query) {
-		parent::__construct($query, CmsPaginaModel::instance());
-	}
-
-	/**
-	 * @param array $args
-	 * @return mixed|void
-	 * @throws CsrException
-	 */
-	public function performAction(array $args = array()) {
-		$this->action = 'bekijken';
-		if ($this->hasParam(3) AND $this->getParam(2) === 'bewerken') {
-			$this->action = 'bewerken';
-			$naam = $this->getParam(3);
-			$this->zijbalk[] = new CmsPaginaZijbalkView($this->model);
-		} elseif ($this->hasParam(3) AND $this->getParam(2) === 'verwijderen') {
-			$this->action = 'verwijderen';
-			$naam = $this->getParam(3);
-		} elseif ($this->hasParam(2)) {
-			$naam = $this->getParam(2);
-			if ($this->getParam(1) === 'pagina') {
-				$this->zijbalk[] = new CmsPaginaZijbalkView($this->model);
-			}
-		} elseif ($this->hasParam(1)) {
-			$naam = $this->getParam(1);
-		} else {
-			$naam = InstellingenModel::get('stek', 'homepage');
-		}
-		parent::performAction(array($naam));
-	}
-
-	protected function mag($action, array $args) {
-		return true; // check permission on page itself
+  private $model;
+	public function __construct() {
+		$this->model = CmsPaginaModel::instance();
 	}
 
 	public function bekijken($naam, $subnaam = "") {
@@ -78,7 +43,7 @@ class CmsPaginaController extends Controller {
 			$pagina = $this->model->get('thuis');
 		}
 		if (!$pagina->magBekijken()) { // 403
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$body = new CmsPaginaView($pagina);
 		if (!LoginModel::mag(P_LOGGED_IN)) { // nieuwe layout altijd voor uitgelogde bezoekers
@@ -101,7 +66,7 @@ class CmsPaginaController extends Controller {
 			$pagina = $this->model->nieuw($naam);
 		}
 		if (!$pagina->magBewerken()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$form = new CmsPaginaForm($pagina); // fetches POST values itself
 		if ($form->validate()) {
@@ -122,7 +87,7 @@ class CmsPaginaController extends Controller {
 		/** @var CmsPagina $pagina */
 		$pagina = $this->model->get($naam);
 		if (!$pagina OR !$pagina->magVerwijderen()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		if ($this->model->delete($pagina)) {
 			setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
