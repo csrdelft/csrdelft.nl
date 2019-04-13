@@ -1,5 +1,6 @@
 cms-routes: { resource: routes/cms.yml }
 forum-routes: { resource: routes/forum.yaml }
+eetplan-routes: { resource: routes/eetplan.yaml }
 
 default:
   path: /{naam}/{subnaam}

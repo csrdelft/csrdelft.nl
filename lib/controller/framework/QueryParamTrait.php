@@ -57,6 +57,10 @@ trait QueryParamTrait {
 		}
 	}
 
+	protected function getMethod() {
+		return $_SERVER['REQUEST_METHOD'];
+	}
+
 	protected function getPost($key) {
 		if (!$this->initialized) $this->init();
 

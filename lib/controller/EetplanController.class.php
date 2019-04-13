@@ -2,10 +2,9 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\eetplan\EetplanBekendenModel;
 use CsrDelft\model\eetplan\EetplanModel;
 use CsrDelft\model\entity\eetplan\Eetplan;
@@ -30,57 +29,21 @@ use CsrDelft\view\eetplan\VerwijderEetplanForm;
 use CsrDelft\view\View;
 
 /**
- * EetplanController.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Controller voor eetplan.
  */
-class EetplanController extends AclController {
-	/**
-	 * @var EetplanModel
-	 */
-	protected $model;
+class EetplanController {
+	use QueryParamTrait;
+
+	/** @var string */
 	private $lichting;
+	/** @var EetplanModel */
+	private $model;
 
-	public function __construct($query) {
-		parent::__construct($query, EetplanModel::instance());
-		if ($this->getMethod() == 'GET') {
-			$this->acl = array(
-				'view' => P_LEDEN_READ,
-				'noviet' => P_LEDEN_READ,
-				'huis' => P_LEDEN_READ,
-				'beheer' => P_ADMIN . ',commissie:NovCie',
-				'bekendehuizen' => P_ADMIN . ',commissie:NovCie',
-				'json' => P_LEDEN_READ,
-			);
-		} else {
-			$this->acl = array(
-				'beheer' => P_ADMIN . ',commissie:NovCie',
-				'woonoorden' => P_ADMIN . ',commissie:NovCie',
-				'novietrelatie' => P_ADMIN . ',commissie:NovCie',
-				'bekendehuizen' => P_ADMIN . ',commissie:NovCie',
-				'nieuw' => P_ADMIN . ',commissie:NovCie',
-				'verwijderen' => P_ADMIN . ',commissie:NovCie',
-			);
-		}
-	}
-
-	/**
-	 * /eetplan/<$this->action>/<$this->lichting>|huidig/<$args>
-	 *
-	 * @param array $args
-	 * @throws CsrException
-	 */
-	public function performAction(array $args = array()) {
-		$this->action = 'view';
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		}
-
+	public function __construct() {
+		$this->model = EetplanModel::instance();
 		$this->lichting = substr((string)LichtingenModel::getJongsteLidjaar(), 2, 2);
-
-		$this->view = parent::performAction($this->getParams(3));
 	}
 
 	public function view() {
