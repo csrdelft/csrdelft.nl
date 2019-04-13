@@ -3,7 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\peilingen\PeilingOptie;
 use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\peilingen\PeilingOptiesModel;
@@ -19,49 +19,24 @@ use CsrDelft\view\peilingen\PeilingOptieTable;
  *
  * Voor routes in /peilingen/opties
  */
-class PeilingOptiesController extends AclController
-{
+class PeilingOptiesController {
+	use QueryParamTrait;
+
+	/** @var PeilingenLogic */
 	private $peilingenLogic;
+	/** @var PeilingOptiesModel */
+	private $peilingOptiesModel;
 
-	public function __construct($query)
-	{
-		parent::__construct($query, PeilingOptiesModel::instance());
-		if ($this->getMethod() == 'GET') {
-			$this->acl = [
-				'opties' => P_PEILING_EDIT,
-			];
-		} else {
-			$this->acl = [
-				'opties' => P_PEILING_VOTE,
-				'toevoegen' => P_PEILING_VOTE,
-				'verwijderen' => P_PEILING_EDIT,
-			];
-		}
-
+	public function __construct() {
+		$this->peilingOptiesModel = PeilingOptiesModel::instance();
 		$this->peilingenLogic = PeilingenLogic::instance();
 	}
 
-	public function performAction(array $args = array()) {
-		if ($this->hasParam(4)) {
-			$this->action = $this->getParam(4);
-			$args = $this->getParams(5);
-		} else {
-			$this->action = 'opties';
-			$args = [];
-		}
-
-		$id = $this->getParam(3);
-
-		array_unshift($args, $id);
-
-		$this->view = parent::performAction($args);
-	}
-
-	public function GET_opties($id) {
+	public function table($id) {
 		return new PeilingOptieTable($id);
 	}
 
-	public function POST_opties($id) {
+	public function lijst($id) {
 		return new PeilingOptieResponse($this->peilingenLogic->getOptionsAsJson($id, LoginModel::getUid()));
 	}
 
@@ -70,7 +45,7 @@ class PeilingOptiesController extends AclController
 	 * @return PeilingOptieForm|PeilingOptieResponse
 	 * @throws CsrGebruikerException
 	 */
-	public function POST_toevoegen($id) {
+	public function toevoegen($id) {
 		$form = new PeilingOptieForm(new PeilingOptie(), $id);
 
 		if (!$this->peilingenLogic->magOptieToevoegen($id)) {
@@ -82,7 +57,7 @@ class PeilingOptiesController extends AclController
 			$optie = $form->getModel();
 			$optie->ingebracht_door = LoginModel::getUid();
 			$optie->peiling_id = $id;
-			$optie->id = $this->model->create($optie);
+			$optie->id = $this->peilingOptiesModel->create($optie);
 			return new PeilingOptieResponse([$optie]);
 		}
 
@@ -90,18 +65,17 @@ class PeilingOptiesController extends AclController
 	}
 
 	/**
-	 * @param $id
 	 * @return RemoveRowsResponse
 	 * @throws CsrGebruikerException
 	 */
-	public function POST_verwijderen($id = null) {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+	public function verwijderen() {
+		$selection = $this->getDataTableSelection();
 
 		/** @var PeilingOptie $peilingOptie */
-		$peilingOptie = $this->model->retrieveByUUID($selection[0]);
+		$peilingOptie = $this->peilingOptiesModel->retrieveByUUID($selection[0]);
 
 		if ($peilingOptie !== false && $peilingOptie->stemmen == 0) {
-			$this->model->delete($peilingOptie);
+			$this->peilingOptiesModel->delete($peilingOptie);
 			return new RemoveRowsResponse([$peilingOptie]);
 		} else {
 			throw new CsrGebruikerException('Peiling optie bestaat niet of er is al een keer op gestemd.');

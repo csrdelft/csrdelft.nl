@@ -27,6 +27,13 @@ trait QueryParamTrait {
 		return $_SERVER['REQUEST_METHOD'];
 	}
 
+	/**
+	 * @return string[]
+	 */
+	protected function getDataTableSelection() {
+		return filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+	}
+
 	protected function getPost($key) {
 		if (!$this->initialized) {
 			$this->init();
