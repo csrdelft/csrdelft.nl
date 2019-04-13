@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\documenten\DocumentCategorieModel;
 use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\documenten\Document;
@@ -17,40 +18,16 @@ use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
 
 /**
- * DocumentenController.class.php
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
- * @property DocumentModel $model
  */
-class DocumentenController extends AclController {
+class DocumentenController {
+	use QueryParamTrait;
 
-	/**
-	 * querystring:
-	 *
-	 * actie[/id[/opties]]
-	 */
-	public function __construct($query) {
-		parent::__construct($query, DocumentModel::instance());
-		$this->acl = array(
-			'recenttonen' => P_DOCS_READ,
-			'bekijken' => P_DOCS_READ,
-			'download' => P_DOCS_READ,
-			'categorie' => P_DOCS_READ,
-			'zoeken' => P_DOCS_READ,
-			'bewerken' => P_DOCS_MOD,
-			'toevoegen' => P_DOCS_MOD,
-			'verwijderen' => P_DOCS_MOD
-		);
-	}
+	/** @var DocumentModel */
+	private $model;
 
-	public function performAction(array $args = array()) {
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		} else {
-			$this->action = 'recenttonen';
-		}
-		$this->view = parent::performAction($this->getParams(3));
+	public function __construct() {
+		$this->model = DocumentModel::instance();
 	}
 
 	/**
@@ -181,7 +158,7 @@ class DocumentenController extends AclController {
 
 	public function zoeken() {
 		if (!$this->hasParam('q')) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$zoekterm = $this->getParam('q');
 

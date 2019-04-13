@@ -23,6 +23,22 @@ trait QueryParamTrait {
 
 	private $initialized = false;
 
+	public function getMethod() {
+		return $_SERVER['REQUEST_METHOD'];
+	}
+
+	protected function getPost($key) {
+		if (!$this->initialized) {
+			$this->init();
+		}
+
+		if (isset($this->postVariables[$key])) {
+			return $this->postVariables[$key];
+		}
+
+		return filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
+	}
+
 	private function init() {
 		$this->initialized = true;
 		// split into REST and KVP query part
@@ -57,20 +73,6 @@ trait QueryParamTrait {
 		}
 	}
 
-	public function getMethod() {
-		return $_SERVER['REQUEST_METHOD'];
-	}
-
-	protected function getPost($key) {
-		if (!$this->initialized) $this->init();
-
-		if (isset($this->postVariables[$key])) {
-			return $this->postVariables[$key];
-		}
-
-		return filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
-	}
-
 	/**
 	 * REST: positional parameters
 	 * KVP: named parameters
@@ -79,15 +81,13 @@ trait QueryParamTrait {
 	 * @return boolean
 	 */
 	protected function hasParam($key) {
-		if (!$this->initialized) $this->init();
+		if (!$this->initialized) {
+			$this->init();
+		}
 
 		// don't use empty() because 0 is allowed
-		if (isset($this->queryparts[$key]) AND $this->queryparts[$key] !== '') {
-			return true;
-		} elseif (isset($this->kvp[$key]) AND $this->kvp[$key] !== '') {
-			return true;
-		}
-		return false;
+		return (isset($this->queryparts[$key]) && $this->queryparts[$key] !== '')
+			|| (isset($this->kvp[$key]) && $this->kvp[$key] !== '');
 	}
 
 	/**
@@ -98,7 +98,9 @@ trait QueryParamTrait {
 	 * @return string
 	 */
 	protected function getParam($key) {
-		if (!$this->initialized) $this->init();
+		if (!$this->initialized) {
+			$this->init();
+		}
 
 		if (array_key_exists($key, $this->kvp)) {
 			return $this->kvp[$key];
@@ -112,7 +114,9 @@ trait QueryParamTrait {
 	 * @return string[]
 	 */
 	protected function getQueryParams() {
-		if (!$this->initialized) $this->init();
+		if (!$this->initialized) {
+			$this->init();
+		}
 
 		return $this->kvp;
 	}
@@ -124,7 +128,9 @@ trait QueryParamTrait {
 	 * @return array
 	 */
 	protected function getParams($num = 0) {
-		if (!$this->initialized) $this->init();
+		if (!$this->initialized) {
+			$this->init();
+		}
 
 		$params = array_values($this->queryparts);
 		for ($i = 0; $i < $num; $i++) {
