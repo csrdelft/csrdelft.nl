@@ -59,7 +59,7 @@ try {
 		$context->fromRequest(Request::createFromGlobals());
 
 		$matcher = new UrlMatcher($routes, $context);
-		$parameters = $matcher->match(REQUEST_URI);
+		$parameters = $matcher->match(strtok(REQUEST_URI, '?'));
 
 		$acl = $routes->get($parameters['_route'])->getOption('mag');
 

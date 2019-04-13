@@ -39,7 +39,7 @@ class DocumentToevoegenForm extends Formulier {
 		$fields[] = $this->uploader = new RequiredFileField('document', 'Document', $this->model, $map);
 		$fields['rechten'] = new RechtenField('leesrechten', $this->model->leesrechten, 'Leesrechten');
 		$fields['rechten']->readonly = true;
-		$fields[] = new FormDefaultKnoppen('/documenten/');
+		$fields[] = new FormDefaultKnoppen('/documenten');
 
 		$this->addFields($fields);
 	}

@@ -1,4 +1,4 @@
-<tr class="document">
+<tr class="document" id="document-{{ $document->id }}">
 	<td>
 		@if($document->hasFile())
 			<a href="{{$document->getUrl()}}" target="_blank">
@@ -11,11 +11,11 @@
 		@endif
 
 		@if($document->magVerwijderen())
-			<a class="verwijderen" href="/documenten/verwijderen/{{$document->id}}" title="Document verwijderen"
+			<a class="verwijderen mr-2 post float-right" href="/documenten/verwijderen/{{$document->id}}" title="Document verwijderen"
 				 onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">@icon('verwijderen')</a>
 		@endif
 		@if($document->magBewerken())
-			<a class="bewerken" href="/documenten/bewerken/{{$document->id}}"
+			<a class="bewerken mr-2 float-right" href="/documenten/bewerken/{{$document->id}}"
 				 title="Document bewerken">@icon('bewerken')</a>
 		@endif
 	</td>

@@ -14,6 +14,7 @@ use CsrDelft\view\documenten\DocumentContent;
 use CsrDelft\view\documenten\DocumentDownloadContent;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\JsonResponse;
+use CsrDelft\view\PlainView;
 
 /**
  * DocumentenController.class.php
@@ -49,21 +50,21 @@ class DocumentenController extends AclController {
 		} else {
 			$this->action = 'recenttonen';
 		}
-		parent::performAction($this->getParams(3));
+		$this->view = parent::performAction($this->getParams(3));
 	}
 
 	/**
 	 * Recente documenten uit alle categorieën tonen
 	 */
-	protected function recenttonen() {
+	public function recenttonen() {
 		$model = DocumentCategorieModel::instance();
-		$this->view = view('documenten.documenten', [
+		return view('documenten.documenten', [
 			'categorieen' => $model->find(),
 			'model' => $model
 		]);
 	}
 
-	protected function verwijderen($id) {
+	public function verwijderen($id) {
 		$document = $this->model->get($id);
 
 		if ($document === false) {
@@ -71,23 +72,23 @@ class DocumentenController extends AclController {
 			redirect('/documenten');
 		} elseif ($document->magVerwijderen()) {
 			DocumentModel::instance()->delete($document);
-			setMelding('Document verwijderd!', 1);
 		} else {
 			setMelding('Mag document niet verwijderen', -1);
+			return new JsonResponse(false);
 		}
 
-		redirect('/documenten/categorie/' . $document->categorie_id);
+		return new PlainView(sprintf('<tr class="remove" id="document-%s"></tr>', $document->id));
 	}
 
 	public function bekijken($id) {
 		$document = $this->model->get($id);
 
 		if (!$document->magBekijken()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 
 		if ($document->hasFile()) {
-			$this->view = new DocumentContent($document);
+			return new DocumentContent($document);
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
 			redirect('/documenten');
@@ -98,17 +99,17 @@ class DocumentenController extends AclController {
 		$document = $this->model->get($id);
 
 		if (!$document->magBekijken()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		if ($document->hasFile()) {
-			$this->view = new DocumentDownloadContent($document);
+			return new DocumentDownloadContent($document);
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
 			redirect('/documenten');
 		}
 	}
 
-	protected function categorie($id) {
+	public function categorie($id) {
 		$categorie = $this->model->getCategorieModel()->get($id);
 		if ($categorie === false) {
 			setMelding('Categorie bestaat niet!', -1);
@@ -116,14 +117,14 @@ class DocumentenController extends AclController {
 		} elseif (!$categorie->magBekijken()) {
 			throw new CsrToegangException('Mag deze categorie niet bekijken');
 		} else {
-			$this->view = view('documenten.categorie', [
+			return view('documenten.categorie', [
 				'documenten' => $this->model->getCategorieModel()->getRecent($categorie, 0),
 				'categorie' => $categorie,
 			]);
 		}
 	}
 
-	protected function bewerken($id) {
+	public function bewerken($id) {
 		$document = $this->model->get($id);
 
 		if ($document === false) {
@@ -137,7 +138,7 @@ class DocumentenController extends AclController {
 
 			redirect('/documenten/categorie/' . $document->categorie_id);
 		} else {
-			$this->view = view('default', [
+			return view('default', [
 				'titel' => 'Document bewerken',
 				'content' => $form,
 			]);
@@ -145,7 +146,7 @@ class DocumentenController extends AclController {
 
 	}
 
-	protected function toevoegen() {
+	public function toevoegen() {
 		$form = new DocumentToevoegenForm();
 
 		if ($form->isPosted() && $form->validate()) {
@@ -171,7 +172,7 @@ class DocumentenController extends AclController {
 
 			redirect('/documenten/categorie/' . $document->categorie_id);
 		} else {
-			$this->view = view('default', [
+			return view('default', [
 				'titel' => 'Document toevoegen',
 				'content' => $form,
 			]);
@@ -201,6 +202,6 @@ class DocumentenController extends AclController {
 				);
 			}
 		}
-		$this->view = new JsonResponse($result);
+		return new JsonResponse($result);
 	}
 }

@@ -24,7 +24,7 @@ class DocumentBewerkenForm extends Formulier {
 		$fields[] = new RequiredTextField('naam', $document->naam, 'Documentnaam');
 		$fields['rechten'] = new RechtenField('leesrechten', $document->leesrechten, 'Leesrechten');
 		$fields['rechten']->readonly = true;
-		$fields[] = new FormDefaultKnoppen('/documenten/');
+		$fields[] = new FormDefaultKnoppen('/documenten');
 
 		$this->addFields($fields);
 	}
