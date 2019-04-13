@@ -32,8 +32,6 @@
 		"ext-dom": "*",
 		"symfony/routing": "^3.4",
 		"symfony/http-foundation": "^3.4",
-		"symfony/expression-language": "^3.4",
-		"symfony/framework-bundle": "^3.4",
 		"php-di/invoker": "^2.0"
 	},
 	"config": {
