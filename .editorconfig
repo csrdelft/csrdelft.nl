@@ -12,3 +12,6 @@ trim_trailing_whitespace = true
 
 [*.yml]
 indent_style = space
+
+[*.yaml]
+indent_style = space

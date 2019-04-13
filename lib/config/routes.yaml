@@ -1,0 +1,8 @@
+cms-routes: { resource: routes/cms.yml }
+forum-routes: { resource: routes/forum.yaml }
+
+default:
+  path: /{naam}/{subnaam}
+  controller: CsrDelft\controller\CmsPaginaController::bekijken
+  defaults: { naam: thuis, subnaam: "" }
+  options: { mag: P_PUBLIC }

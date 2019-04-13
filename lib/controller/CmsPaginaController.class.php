@@ -13,6 +13,7 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\cms\CmsPaginaZijbalkView;
 use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\JsonResponse;
 
 /**
  * CmsPaginaController.class.php
@@ -67,7 +68,10 @@ class CmsPaginaController extends Controller {
 		return true; // check permission on page itself
 	}
 
-	public function bekijken($naam) {
+	public function bekijken($naam, $subnaam = "") {
+		if ($subnaam) {
+			$naam = $subnaam;
+		}
 		/** @var CmsPagina $pagina */
 		$pagina = $this->model->get($naam);
 		if (!$pagina) { // 404
@@ -85,9 +89,9 @@ class CmsPaginaController extends Controller {
 			} elseif ($this->hasParam(1) AND $this->getParam(1) === 'vereniging') {
 				$menu = true;
 			}
-			$this->view = new CsrLayoutOweePage($body, $tmpl, $menu);
+			return new CsrLayoutOweePage($body, $tmpl, $menu);
 		} else {
-			$this->view = new CsrLayoutPage($body, $this->zijbalk);
+			return new CsrLayoutPage($body, $this->zijbalk);
 		}
 	}
 
@@ -110,7 +114,7 @@ class CmsPaginaController extends Controller {
 			}
 			redirect('/pagina/' . $pagina->naam);
 		} else {
-			$this->view = new CsrLayoutPage($form, $this->zijbalk);
+			return new CsrLayoutPage($form, $this->zijbalk);
 		}
 	}
 
@@ -125,7 +129,7 @@ class CmsPaginaController extends Controller {
 		} else {
 			setMelding('Verwijderen mislukt', -1);
 		}
-		$this->view = new JsonResponse(CSR_ROOT); // redirect
+		return new JsonResponse(CSR_ROOT); // redirect
 	}
 
 }

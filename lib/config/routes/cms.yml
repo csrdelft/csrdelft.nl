@@ -1,0 +1,14 @@
+cms-bekijken:
+  path: /pagina/{naam}
+  controller: CsrDelft\controller\CmsPaginaController::bekijken
+  options: { mag: P_PUBLIC }
+
+cms-bewerken:
+  path: /pagina/bewerken/{naam}
+  controller: CsrDelft\controller\CmsPaginaController::bewerken
+  options: { mag: P_LOGGED_IN }
+
+cms-verwijderen:
+  path: /pagina/verwijderen/{naam}
+  controller: CsrDelft\controller\CmsPaginaController::verwijderen
+  options: { mag: P_ADMIN }

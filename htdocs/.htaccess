@@ -21,7 +21,7 @@ RewriteRule ^feuten				https://github.com/csrdelft/csrdelft.nl [R,L]
 
 RewriteRule ^(leden)?lijst/?(.*)$	ledenlijst.php [QSA,L]
 
-RewriteRule ^forum/rss/([0-9a-zA-Z]*)/csrdelft.xml		index.php?c=Forum&private_token=$1 [L]
+RewriteRule ^forum/rss/([0-9a-zA-Z]*)/csrdelft.xml		index.php?private_token=$1 [L]
 RewriteRule ^agenda/ical/([0-9a-zA-Z]*)/csrdelft.ics	index.php?c=Agenda&private_token=$1 [L]
 
 RewriteRule ^login				index.php?c=Login [L]
@@ -44,7 +44,6 @@ RewriteRule ^groepen			index.php?c=GroepenRouter [L]
 RewriteRule ^maaltijden			index.php?c=MaalcieRouter [L]
 RewriteRule ^corvee				index.php?c=MaalcieRouter [L]
 RewriteRule ^fiscaat            index.php?c=FiscaatRouter [L]
-RewriteRule ^forum				index.php?c=Forum [L]
 RewriteRule ^agenda				index.php?c=Agenda [L]
 RewriteRule ^courant			index.php?c=Courant [L]
 RewriteRule ^plaetjes/fotoalbum			index.php?c=FotoAlbum [L]

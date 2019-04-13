@@ -6,10 +6,11 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\SimpleSpamFilter;
-use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumZoeken;
+use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\forum\ForumDelenMeldingModel;
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenGelezenModel;
@@ -35,97 +36,8 @@ use CsrDelft\view\View;
  *
  * Controller van het forum.
  */
-class ForumController extends AclController {
-
-	public function __construct($query) {
-		parent::__construct($query, null);
-
-		if ($this->getMethod() == 'GET') {
-			$this->acl = [
-				'zoeken' => P_PUBLIC,
-				'rss' => P_PUBLIC,
-				'recent' => P_PUBLIC,
-				'deel' => P_PUBLIC,
-				'onderwerp' => P_PUBLIC,
-				'reactie' => P_PUBLIC,
-				'titelzoeken' => P_LOGGED_IN,
-				'belangrijk' => P_LOGGED_IN,
-				'wacht' => P_FORUM_ADMIN,
-			];
-		} else {
-			$this->acl = [
-				// Publiek
-				'zoeken' => P_PUBLIC,
-				'posten' => P_PUBLIC,
-				// Admin
-				'aanmaken' => P_FORUM_ADMIN,
-				'beheren' => P_FORUM_ADMIN,
-				'opheffen' => P_FORUM_ADMIN,
-				// Iedereen, checkt zelf rechten
-				'bewerken' => P_LOGGED_IN,
-				'citeren' => P_LOGGED_IN,
-				'bladwijzer' => P_LOGGED_IN,
-				'concept' => P_LOGGED_IN,
-				'grafiekdata' => P_LOGGED_IN,
-				// ForumDraad
-				'wijzigen' => P_LOGGED_IN,
-				'verwijderen' => P_LOGGED_IN,
-				'verplaatsen' => P_LOGGED_IN,
-				'offtopic' => P_LOGGED_IN,
-				'goedkeuren' => P_LOGGED_IN,
-				'meldingsniveau' => P_LOGGED_IN,
-				'deelmelding' => P_LOGGED_IN,
-
-				// ForumPost
-				'tekst' => P_LOGGED_IN,
-				'verbergen' => P_LOGGED_IN,
-				'tonen' => P_LOGGED_IN,
-				'toonalles' => P_LOGGED_IN,
-			];
-		}
-	}
-
-	/**
-	 * Check permissions & valid params in actions.
-	 *
-	 * @param string $action
-	 * @param array $args
-	 *
-	 * @return boolean
-	 */
-	protected function mag($action, array $args) {
-		if (parent::mag($action, $args) == false) {
-				$this->action = 'forum';
-				return true;
-		}
-
-		return true;
-	}
-
-	/**
-	 * @param array $args
-	 * @return mixed|void
-	 * @throws CsrException
-	 */
-	public function performAction(array $args = array()) {
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		}
-		if ($this->action === 'rss.xml') {
-			$this->action = 'rss';
-		}
-		try {
-			if (($this->action == 'reactie' || $this->action == 'onderwerp') && (!$this->hasParam(3) || filter_var($this->getParam(3), FILTER_VALIDATE_INT) === false)) {
-				throw new CsrToegangException('Niet gevonden, sorry', 404);
-			}
-			$this->view = parent::performAction($this->getParams(3));
-		} catch (CsrGebruikerException $e) {
-			setMelding($e->getMessage(), -1);
-			$this->action = 'forum';
-			$this->view = parent::performAction(array());
-		}
-	}
-
+class ForumController {
+	use QueryParamTrait;
 	/**
 	 * Overzicht met categorien en forumdelen laten zien.
 	 */
@@ -155,7 +67,7 @@ class ForumController extends AclController {
 	public function rss() {
 		header('Content-Type: application/rss+xml; charset=UTF-8');
 		/**
-		 * @var \CsrDelft\model\entity\security\Account $account
+		 * @var Account $account
 		 */
 		$account = LoginModel::getAccount();
 		return view('forum.rss', [
@@ -307,7 +219,7 @@ class ForumController extends AclController {
 	public function deel(int $forum_id, $pagina = 1) {
 		$deel = ForumDelenModel::get($forum_id);
 		if (!$deel->magLezen()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$paging = true;
 		if ($pagina === 'laatste') {
@@ -345,7 +257,7 @@ class ForumController extends AclController {
 	public function onderwerp(int $draad_id, $pagina = null, $statistiek = null) {
 		$draad = ForumDradenModel::get($draad_id);
 		if (!$draad->magLezen()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		if (LoginModel::mag(P_LOGGED_IN)) {
 			$gelezen = $draad->getWanneerGelezen();
@@ -586,19 +498,19 @@ class ForumController extends AclController {
 		$draad = ForumDradenModel::get($draad_id);
 		// gedeelde moderators mogen dit niet
 		if (!$draad->getForumDeel()->magModereren()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'eerste_post_plakkerig', 'pagina_per_post'))) {
 			$value = !$draad->$property;
 			if ($property === 'belangrijk' AND !LoginModel::mag(P_FORUM_BELANGRIJK)) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
 		} elseif ($property === 'forum_id' OR $property === 'gedeeld_met') {
 			$value = (int)filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
 			if ($property === 'forum_id') {
 				$deel = ForumDelenModel::get($value);
 				if (!$deel->magModereren()) {
-					$this->exit_http(403);
+					throw new CsrToegangException();
 				}
 			} elseif ($value === 0) {
 				$value = null;
