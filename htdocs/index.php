@@ -27,7 +27,7 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
 use Invoker\Invoker;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Router;
@@ -107,7 +107,7 @@ try {
 	} else {
 		$view = (new Invoker())->call([$controller, $method], $parameters);
 	}
-} catch (RouteNotFoundException $exception) {
+} catch (ResourceNotFoundException $exception) {
 	http_response_code(404);
 	$body = new CmsPaginaView(CmsPaginaModel::get('404'));
 	$view = new CsrLayoutPage($body);
