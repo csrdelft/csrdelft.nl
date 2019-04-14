@@ -251,7 +251,7 @@ class ForumController {
 	 * @throws CsrGebruikerException
 	 */
 	public function deel(int $forum_id, $pagina = 1) {
-		$deel = ForumDelenModel::get($forum_id);
+		$deel = $this->forumDelenModel::get($forum_id);
 		if (!$deel->magLezen()) {
 			throw new CsrToegangException();
 		}
@@ -287,7 +287,7 @@ class ForumController {
 	 * @throws CsrGebruikerException
 	 */
 	public function reactie(int $post_id) {
-		$post = ForumPostsModel::get($post_id);
+		$post = $this->forumPostsModel::get($post_id);
 		if ($post->verwijderd) {
 			setMelding('Deze reactie is verwijderd', 0);
 		}
@@ -304,7 +304,7 @@ class ForumController {
 	 * @throws CsrGebruikerException
 	 */
 	public function onderwerp(int $draad_id, $pagina = null, $statistiek = null) {
-		$draad = ForumDradenModel::get($draad_id);
+		$draad = $this->forumDradenModel::get($draad_id);
 		if (!$draad->magLezen()) {
 			throw new CsrToegangException();
 		}
@@ -377,7 +377,7 @@ class ForumController {
 	 * @throws CsrGebruikerException
 	 */
 	public function beheren(int $forum_id) {
-		$deel = ForumDelenModel::get($forum_id);
+		$deel = $this->forumDelenModel::get($forum_id);
 		$form = new ForumDeelForm($deel); // fetches POST values itself
 		if ($form->validate()) {
 			$rowCount = $this->forumDelenModel->update($deel);
@@ -399,7 +399,7 @@ class ForumController {
 	 * @throws CsrException
 	 */
 	public function opheffen(int $forum_id) {
-		$deel = ForumDelenModel::get($forum_id);
+		$deel = $this->forumDelenModel::get($forum_id);
 		$count = $this->forumDradenModel->count('forum_id = ?', array($deel->forum_id));
 		if ($count > 0) {
 			setMelding('Verwijder eerst alle ' . $count . ' draadjes van dit deelforum uit de database!', -1);
@@ -420,7 +420,7 @@ class ForumController {
 	 * @throws CsrException
 	 */
 	public function verbergen(int $draad_id) {
-		$draad = ForumDradenModel::get($draad_id);
+		$draad = $this->forumDradenModel::get($draad_id);
 		if (!$draad->magVerbergen()) {
 			throw new CsrGebruikerException('Onderwerp mag niet verborgen worden');
 		}
@@ -441,7 +441,7 @@ class ForumController {
 	 * @throws CsrException
 	 */
 	public function tonen(int $draad_id) {
-		$draad = ForumDradenModel::get($draad_id);
+		$draad = $this->forumDradenModel::get($draad_id);
 		if (!$draad->isVerborgen()) {
 			throw new CsrGebruikerException('Onderwerp is niet verborgen');
 		}
@@ -470,7 +470,7 @@ class ForumController {
 	 * @throws CsrException
 	 */
 	public function meldingsniveau(int $draad_id, $niveau) {
-		$draad = ForumDradenModel::get($draad_id);
+		$draad = $this->forumDradenModel::get($draad_id);
 		if (!$draad || !$draad->magLezen() || !$draad->magMeldingKrijgen()) {
 			throw new CsrToegangException('Onderwerp mag geen melding voor ontvangen worden');
 		}
@@ -492,7 +492,7 @@ class ForumController {
 	 * @throws CsrException
 	 */
 	public function deelmelding(int $forum_id, $niveau) {
-		$deel = ForumDelenModel::get($forum_id);
+		$deel = $this->forumDelenModel::get($forum_id);
 		if (!$deel || !$deel->magLezen() || !$deel->magMeldingKrijgen()) {
 			throw new CsrToegangException('Deel mag geen melding voor ontvangen worden');
 		}
@@ -510,7 +510,7 @@ class ForumController {
 	 * @throws CsrGebruikerException
 	 */
 	public function bladwijzer(int $draad_id) {
-		$draad = ForumDradenModel::get($draad_id);
+		$draad = $this->forumDradenModel::get($draad_id);
 		$timestamp = (int)filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
 		if ($this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad, $timestamp - 1)) {
 			echo '<img id="timestamp' . $timestamp . '" src="/plaetjes/famfamfam/tick.png" class="icon" title="Bladwijzer succesvol geplaatst">';
@@ -529,7 +529,7 @@ class ForumController {
 	 * @throws CsrToegangException
 	 */
 	public function wijzigen(int $draad_id, $property) {
-		$draad = ForumDradenModel::get($draad_id);
+		$draad = $this->forumDradenModel::get($draad_id);
 		// gedeelde moderators mogen dit niet
 		if (!$draad->getForumDeel()->magModereren()) {
 			throw new CsrToegangException();
@@ -583,11 +583,11 @@ class ForumController {
 	 * @throws CsrToegangException
 	 */
 	public function posten(int $forum_id, $draad_id = null) {
-		$deel = ForumDelenModel::get($forum_id);
+		$deel = $this->forumDelenModel::get($forum_id);
 		$draad = null;
 		// post in bestaand draadje?
 		if ($draad_id !== null) {
-			$draad = ForumDradenModel::get($draad_id);
+			$draad = $this->forumDradenModel::get($draad_id);
 
 			// check draad in forum deel
 			if (!$draad OR $draad->forum_id !== $deel->forum_id OR !$draad->magPosten()) {
@@ -711,7 +711,7 @@ class ForumController {
 	 * @throws CsrToegangException
 	 */
 	public function citeren($post_id) {
-		$post = ForumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel::get((int)$post_id);
 		if (!$post->magCiteren()) {
 			throw new CsrToegangException("Mag niet citeren", 403);
 		}
@@ -725,7 +725,7 @@ class ForumController {
 	 * @throws CsrToegangException
 	 */
 	public function tekst($post_id) {
-		$post = ForumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel::get((int)$post_id);
 		if (!$post->magBewerken()) {
 			throw new CsrToegangException("Mag niet berwerken", 403);
 		}
@@ -740,7 +740,7 @@ class ForumController {
 	 * @throws CsrGebruikerException
 	 */
 	public function bewerken($post_id) {
-		$post = ForumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel::get((int)$post_id);
 		if (!$post->magBewerken()) {
 			throw new CsrToegangException("Mag niet bewerken", 403);
 		}
@@ -758,7 +758,7 @@ class ForumController {
 	 * @throws CsrGebruikerException
 	 */
 	public function verplaatsen($post_id) {
-		$post = ForumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel::get((int)$post_id);
 		$oudDraad = $post->getForumDraad();
 		if (!$oudDraad->magModereren()) {
 			throw new CsrToegangException("Geen moderator", 403);
@@ -780,7 +780,7 @@ class ForumController {
 	 * @throws CsrGebruikerException
 	 */
 	public function verwijderen($post_id) {
-		$post = ForumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel::get((int)$post_id);
 		if (!$post->getForumDraad()->magModereren()) {
 			throw new CsrToegangException("Geen moderator", 403);
 		}
@@ -795,7 +795,7 @@ class ForumController {
 	 * @throws CsrGebruikerException
 	 */
 	public function offtopic($post_id) {
-		$post = ForumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel::get((int)$post_id);
 		if (!$post->getForumDraad()->magModereren()) {
 			throw new CsrToegangException("Geen moderator", 403);
 		}
@@ -810,7 +810,7 @@ class ForumController {
 	 * @throws CsrGebruikerException
 	 */
 	public function goedkeuren($post_id) {
-		$post = ForumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel::get((int)$post_id);
 		if (!$post->getForumDraad()->magModereren()) {
 			throw new CsrToegangException("Geen moderator", 403);
 		}
@@ -831,10 +831,10 @@ class ForumController {
 		$concept = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$ping = filter_input(INPUT_POST, 'ping', FILTER_SANITIZE_STRING);
 
-		$deel = ForumDelenModel::get((int)$forum_id);
+		$deel = $this->forumDelenModel::get((int)$forum_id);
 		// bestaand draadje?
 		if ($draad_id !== null) {
-			$draad = ForumDradenModel::get((int)$draad_id);
+			$draad = $this->forumDradenModel::get((int)$draad_id);
 			$draad_id = $draad->draad_id;
 			// check draad in forum deel
 			if (!$draad OR $draad->forum_id !== $deel->forum_id OR !$draad->magPosten()) {
