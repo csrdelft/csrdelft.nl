@@ -29,7 +29,7 @@ class CiviBestellingInhoudTable extends DataTable {
 		$this->hideColumn('bestelling_id');
 		$this->hideColumn('product_id');
 
-		$this->setOrder('product_id');
+		$this->setOrder(['product_id' => 'asc']);
 	}
 
 	/**
