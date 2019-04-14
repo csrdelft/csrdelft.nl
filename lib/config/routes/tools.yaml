@@ -12,7 +12,7 @@ tools-dragobject:
 
 tools-naamlink:
   path: /tools/naamlink
-  controller: CsrDelft\controller\ToolsController::dragobject
+  controller: CsrDelft\controller\ToolsController::naamlink
   methods: [GET,POST]
   options: { mag: P_OUDLEDEN_READ }
 

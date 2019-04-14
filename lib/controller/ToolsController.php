@@ -119,6 +119,8 @@ class ToolsController {
 		$coords = filter_input(INPUT_POST, 'coords', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
 
 		$_SESSION['dragobject'][$id] = $coords;
+
+		return new JsonResponse(null);
 	}
 
 	public function naamlink() {
