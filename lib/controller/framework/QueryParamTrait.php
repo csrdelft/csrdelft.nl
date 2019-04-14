@@ -48,7 +48,7 @@ trait QueryParamTrait {
 
 	private function init() {
 		$this->initialized = true;
-		if ($this->query) {
+		if (property_exists($this, 'query')) {
 			// split into REST and KVP query part
 			$queryparts = explode('?', $this->query, 2);
 		} else {
