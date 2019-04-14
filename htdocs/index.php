@@ -28,6 +28,7 @@ use CsrDelft\view\CsrLayoutPage;
 use Invoker\Invoker;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RequestContext;
@@ -111,6 +112,10 @@ try {
 		$view = (new Invoker())->call([$controller, $method], $parameters);
 	}
 } catch (ResourceNotFoundException $exception) {
+	http_response_code(404);
+	$body = new CmsPaginaView(CmsPaginaModel::get('404'));
+	$view = new CsrLayoutPage($body);
+} catch (MethodNotAllowedException $exception) {
 	http_response_code(404);
 	$body = new CmsPaginaView(CmsPaginaModel::get('404'));
 	$view = new CsrLayoutPage($body);
