@@ -5,6 +5,19 @@ documenten-routes: { resource: routes/documenten.yaml }
 peilingen-routes: { resource: routes/peilingen.yaml }
 tools-routes: { resource: routes/tools.yaml }
 fiscaat-routes: { resource: routes/fiscaat.yaml }
+commissievoorkeuren-routes: { resource: routes/commissievoorkeuren.yaml }
+
+logger:
+  path: /logger/log
+  controller: CsrDelft\controller\LoggerController::log
+  methods: POST
+  options: { mag: P_LOGGED_IN } # Voorkom spam
+
+contact-interesse:
+  path: /contactformulier/interesse
+  controller: CsrDelft\controller\ContactFormulierController::interesse
+  methods: POST
+  options: { mag: P_PUBLIC }
 
 default:
   path: /{naam}/{subnaam}

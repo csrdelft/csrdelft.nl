@@ -2,15 +2,17 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\Ini;
-use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use Maknz\Slack\Client as SlackClient;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 16/01/2019
  */
-class LoggerController extends AclController {
+class LoggerController {
+	use QueryParamTrait;
 
 	/**
 	 * Na hoe lang je weer een bericht mag loggen. Een half uur.
@@ -18,20 +20,7 @@ class LoggerController extends AclController {
 	const LOG_TIMEOUT = 1800;
 	const LAATSTE_LOG_MELDING = 'laatste_log_melding';
 
-	public function __construct($query) {
-		parent::__construct($query, null);
-
-		$this->acl = [
-			'log' => P_LOGGED_IN // Sta alleen leden toe om spam te voorkomen.
-		];
-	}
-
-	public function performAction(array $args = array()) {
-		$this->action = 'log';
-		return parent::performAction($args);
-	}
-
-	public function POST_log() {
+	public function log() {
 		if (!isset($_SESSION[self::LAATSTE_LOG_MELDING])) $_SESSION[self::LAATSTE_LOG_MELDING] = 0;
 
 		if ($_SESSION[self::LAATSTE_LOG_MELDING] < time() - self::LOG_TIMEOUT && Ini::bestaat(Ini::SLACK)) {
@@ -68,6 +57,6 @@ MD
 
 		$_SESSION[self::LAATSTE_LOG_MELDING] = time();
 
-		$this->exit_http(204);
+		throw new CsrToegangException("", 204);
 	}
 }
