@@ -54,7 +54,7 @@ try {
 		$router = new Router(
 			new YamlFileLoader(new FileLocator([LIB_PATH])),
 			'config/routes.yaml',
-			['cache_dir' => DATA_PATH . 'routes'],
+			['cache_dir' => ROUTES_CACHE_PATH],
 			new RequestContext('/')
 		);
 

@@ -33,10 +33,11 @@ forum-rss:
   options: { mag: P_PUBLIC }
 
 forum-recent:
-  path: /forum/recent/{pagina}/
+  path: /forum/recent/{pagina}
   controller: CsrDelft\controller\ForumController::recent
   methods: GET
   defaults: { pagina: 1 }
+  requirements: { pagina: '\d+' }
   options: { mag: P_PUBLIC }
 
 forum-onderwerp:
