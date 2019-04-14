@@ -4,6 +4,7 @@ namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviPrijsModel;
@@ -20,80 +21,43 @@ use CsrDelft\view\fiscaat\producten\CiviProductTableResponse;
  *
  * @property CiviProductModel $model
  */
-class BeheerCiviProductenController extends AclController {
-	public function __construct($query) {
-		parent::__construct($query, CiviProductModel::instance());
+class BeheerCiviProductenController {
+	use QueryParamTrait;
 
-		if ($this->getMethod() == "POST") {
-			$this->acl = [
-				'overzicht' => P_FISCAAT_READ,
-				'toevoegen' => P_FISCAAT_MOD,
-				'bewerken' => P_FISCAAT_MOD,
-				'opslaan' => P_FISCAAT_MOD,
-				'verwijderen' => P_FISCAAT_MOD
-			];
-		} else {
-			$this->acl = [
-				'overzicht' => P_FISCAAT_READ,
-				'suggesties' => P_FISCAAT_READ
-			];
-		}
+	public function __construct() {
+		$this->model = CiviProductModel::instance();
 	}
 
-	public function performAction(array $args = array()) {
-		$this->action = 'overzicht';
-
-		if ($this->hasParam(3)) {
-			$this->action = $this->getParam(3);
-		}
-		return parent::performAction($args);
-	}
-
-	public function GET_suggesties() {
+	public function suggesties() {
 		$query = sql_contains($this->getParam('q'));
-		$this->view = new CiviProductSuggestiesResponse($this->model->find('beschrijving LIKE ?', array($query)));
+		return new CiviProductSuggestiesResponse($this->model->find('beschrijving LIKE ?', [$query]));
 	}
 
-	public function POST_overzicht() {
-		$this->view = new CiviProductTableResponse($this->model->find());
+	public function lijst() {
+		return new CiviProductTableResponse($this->model->find());
 	}
 
-	public function GET_overzicht() {
-		$this->view = view('fiscaat.pagina', [
+	public function overzicht() {
+		return view('fiscaat.pagina', [
 			'titel' => 'Producten beheer',
 			'view' => new CiviProductTable(),
 		]);
 	}
 
-	public function POST_toevoegen() {
-		$form = new CiviProductForm(new CiviProduct(), 'opslaan/nieuw');
+	public function bewerken() {
+		$selection = $this->getDataTableSelection();
 
-		if ($form->validate()) {
-			$product = $form->getModel();
-
-			if ($this->model->exists($product)) {
-				$this->model->update($product);
-			} else {
-				$this->model->create($product);
-			}
-
-			$this->view = new CiviProductTableResponse(array($product));
-			return;
+		if (empty($selection)) {
+			return new CiviProductForm(new CiviProduct());
 		}
-
-		$this->view = $form;
-	}
-
-	public function POST_bewerken() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 
 		/** @var CiviProduct $product */
 		$product = $this->model->retrieveByUUID($selection[0]);
 		$product->prijs = $this->model->getPrijs($product)->prijs;
-		$this->view = new CiviProductForm($product, 'opslaan');
+		return new CiviProductForm($product);
 	}
 
-	public function POST_verwijderen() {
+	public function verwijderen() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 
 		list($removed, $existingOrders) = Database::transaction(function () use ($selection) {
@@ -118,8 +82,7 @@ class BeheerCiviProductenController extends AclController {
 		});
 
 		if (!empty($removed)) {
-			$this->view = new RemoveRowsResponse($removed);
-			return;
+			return new RemoveRowsResponse($removed);
 		} elseif (!empty($existingOrders)) {
 			throw new CsrGebruikerException('Mag product niet verwijderen, het is al eens besteld');
 		}
@@ -127,27 +90,20 @@ class BeheerCiviProductenController extends AclController {
 		throw new CsrGebruikerException('Geen product verwijderd');
 	}
 
-	public function POST_opslaan() {
-		if ($this->hasParam(4) AND $this->getParam(4) == "nieuw") {
-			$form = new CiviProductForm(new CiviProduct(), 'opslaan/nieuw');
-			if ($form->validate()) {
-				$product = $form->getModel();
-				$this->model->create($product);
+	public function opslaan() {
+		$product = new CiviProduct();
+		$form = new CiviProductForm($product);
 
-				$this->view = new CiviProductTableResponse(array($product));
-				return;
-			}
-		} else {
-			$form = new CiviProductForm(new CiviProduct(), 'opslaan');
-			if ($form->validate()) {
-				$product = $form->getModel();
+		if ($form->isPosted() && $form->validate()) {
+			if ($product->id) {
 				$this->model->update($product);
-
-				$this->view = new CiviProductTableResponse(array($product));
-				return;
+			} else {
+				$this->model->create($product);
 			}
+
+			return new CiviProductTableResponse([$product]);
 		}
 
-		$this->view = $form;
+		return $form;
 	}
 }

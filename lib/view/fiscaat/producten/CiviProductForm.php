@@ -19,8 +19,8 @@ use CsrDelft\view\formulier\ModalForm;
  * @date 07/05/2017
  */
 class CiviProductForm extends ModalForm {
-	function __construct(CiviProduct $model, $target) {
-		parent::__construct($model, '/fiscaat/producten/' . $target, false, true);
+	function __construct(CiviProduct $model) {
+		parent::__construct($model, '/fiscaat/producten/opslaan', false, true);
 
 		$categorie = CiviCategorieModel::instance()->find('id = ?', array($model->categorie_id))->fetch();
 		if ($categorie == false) {

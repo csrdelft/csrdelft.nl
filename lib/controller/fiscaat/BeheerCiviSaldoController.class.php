@@ -2,7 +2,8 @@
 
 namespace CsrDelft\controller\fiscaat;
 
-use CsrDelft\controller\framework\AclController;
+use CsrDelft\common\CsrToegangException;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
@@ -23,50 +24,28 @@ use DateTime;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 07/04/2017
- *
- * @property CiviSaldoModel $model
  */
-class BeheerCiviSaldoController extends AclController {
-	public function __construct($query) {
-		parent::__construct($query, CiviSaldoModel::instance());
+class BeheerCiviSaldoController {
+	use QueryParamTrait;
+	/** @var CiviSaldoModel */
+	private $model;
 
-		if ($this->getMethod() == "POST") {
-			$this->acl = [
-				'overzicht' => P_FISCAAT_READ,
-				'registreren' => P_FISCAAT_MOD,
-				'verwijderen' => P_FISCAAT_MOD,
-				'inleggen' => P_FISCAAT_MOD,
-				'som' => P_FISCAAT_READ,
-			];
-		} else {
-			$this->acl = [
-				'overzicht' => P_FISCAAT_READ,
-				'zoek' => P_FISCAAT_READ,
-			];
-		}
+	public function __construct() {
+		$this->model = CiviSaldoModel::instance();
 	}
 
-	public function performAction(array $args = array()) {
-		$this->action = 'overzicht';
-
-		if ($this->hasParam(3)) {
-			$this->action = $this->getParam(3);
-		}
-		return parent::performAction($this->getParams(4));
-	}
-
-	public function GET_overzicht() {
-		$this->view = view('fiscaat.pagina', [
+	public function overzicht() {
+		return view('fiscaat.pagina', [
 			'titel' => 'Saldo beheer',
 			'view' => new CiviSaldoTable(),
 		]);
 	}
 
-	public function POST_overzicht() {
-		$this->view = new CiviSaldoTableResponse($this->model->find('deleted = false'));
+	public function lijst() {
+		return new CiviSaldoTableResponse($this->model->find('deleted = false'));
 	}
 
-	public function POST_inleggen() {
+	public function inleggen() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 
 		/** @var CiviSaldo $civisaldo */
@@ -88,22 +67,21 @@ class BeheerCiviSaldoController extends AclController {
 					$civisaldo->laatst_veranderd = getDateTime();
 				});
 
-				$this->view = new CiviSaldoTableResponse(array($civisaldo));
+				return new CiviSaldoTableResponse(array($civisaldo));
 			} else {
-				$this->view = $form;
+				return $form;
 			}
-
-			return;
 		}
 
-		$this->exit_http(404);
+		throw new CsrToegangException();
 	}
 
-	public function POST_verwijderen() {
+	public function verwijderen() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 
 		$removed = array();
 		foreach ($selection as $uuid) {
+			/** @var CiviSaldo $civisaldo */
 			$civisaldo = $this->model->retrieveByUUID($uuid);
 
 			if ($civisaldo) {
@@ -114,14 +92,13 @@ class BeheerCiviSaldoController extends AclController {
 		}
 
 		if (!empty($removed)) {
-			$this->view = new RemoveRowsResponse($removed);
-			return;
+			return new RemoveRowsResponse($removed);
 		}
 
-		$this->exit_http(404);
+		throw new CsrToegangException();
 	}
 
-	public function POST_registreren() {
+	public function registreren() {
 		$form = new LidRegistratieForm(new CiviSaldo());
 
 		if ($form->validate()) {
@@ -139,33 +116,32 @@ class BeheerCiviSaldoController extends AclController {
 			}
 
 			if ($this->model->find('uid = ?', [$saldo->uid])->rowCount() === 1) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			} else {
 				$saldo->id = $this->model->create($saldo);
 			}
 
-			$this->view = new CiviSaldoTableResponse(array($saldo));
-			return;
+			return new CiviSaldoTableResponse(array($saldo));
 		}
 
-		$this->view = $form;
+		return $form;
 	}
 
-	public function POST_som() {
+	public function som() {
 		$momentString = filter_input(INPUT_POST, 'moment', FILTER_SANITIZE_STRING);
 		$moment = DateTime::createFromFormat("Y-m-d H:i:s", $momentString);
 		if (!$moment) {
-			$this->exit_http(400);
+			throw new CsrToegangException();
 		}
 
-		$this->view = view('fiscaat.saldisom', [
+		return view('fiscaat.saldisom', [
 			'saldisomform' => new SaldiSomForm($this->model, $moment),
 			'saldisom' => $this->model->getSomSaldiOp($moment),
 			'saldisomleden' => $this->model->getSomSaldiOp($moment, true),
 		]);
 	}
 
-	public function GET_zoek() {
+	public function zoek() {
 		$zoekterm = $this->getParam('q');
 
 		$pdo = Database::instance()->getDatabase();
@@ -191,6 +167,6 @@ class BeheerCiviSaldoController extends AclController {
 			];
 		}
 
-		$this->view = new JsonResponse($resp);
+		return new JsonResponse($resp);
 	}
 }
