@@ -56,7 +56,6 @@ RewriteRule ^commissievoorkeuren index.php?c=CommissieVoorkeuren [L]
 RewriteRule ^toestemming        index.php?c=Toestemming [L]
 RewriteRule ^contactformulier   index.php?c=ContactFormulier [L]
 RewriteRule ^logger							index.php?c=Logger [L]
-RewriteRule ^tools							index.php?c=Tools [QSA,L]
 
 # business club
 RewriteRule ^bc$ bc/index.html [L]

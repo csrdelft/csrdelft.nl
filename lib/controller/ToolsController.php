@@ -5,7 +5,7 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
-use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;
@@ -33,39 +33,8 @@ use CsrDelft\view\VerticaleLijstenView;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 11/04/2019
  */
-class ToolsController extends AclController {
-	public function __construct($query) {
-		parent::__construct($query, null);
-
-		if ($this->getMethod() == 'POST') {
-			$this->acl = [
-				'bbcode' => P_PUBLIC,
-				'dragobject' => P_LOGGED_IN,
-				'naamlink' => P_OUDLEDEN_READ,
-				'roodschopper' => P_FISCAAT_MOD,
-			];
-		} else {
-			$this->acl = [
-				'stats' => P_ADMIN,
-				'query' => P_LEDEN_READ,
-				'bbcode' => P_PUBLIC,
-				'phpinfo' => P_ADMIN,
-				'admins' => P_LEDEN_READ,
-				'novieten' => P_ADMIN . ',commissie:NovCie',
-				'naamsuggesties' => P_OUDLEDEN_READ,
-				'naamlink' => P_OUDLEDEN_READ,
-				'streeplijst' => P_OUDLEDEN_READ,
-				'verticalelijsten' => P_ADMIN,
-				'roodschopper' => P_FISCAAT_MOD,
-				'syncldap' => P_PUBLIC,
-			];
-		}
-	}
-
-	public function performAction(array $args = array()) {
-		$this->action = $this->getParam(2);
-		$this->view = parent::performAction($args);
-	}
+class ToolsController {
+	use QueryParamTrait;
 
 	public function streeplijst() {
 		$body = new Streeplijstcontent();
