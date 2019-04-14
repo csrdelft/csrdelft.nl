@@ -27,10 +27,9 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
 use Invoker\Invoker;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Router;
 
 require_once 'configuratie.include.php';
 
@@ -51,17 +50,16 @@ try {
 	} else {
 		$legacy = false;
 		// Laat Symfony routen
-		$fileLocatior = new FileLocator([LIB_PATH]);
-		$loader = new YamlFileLoader($fileLocatior);
-		$routes = $loader->load('config/routes.yaml');
+		$router = new Router(
+			new YamlFileLoader(new FileLocator([LIB_PATH])),
+			'config/routes.yaml',
+			['cache_dir' => DATA_PATH . 'routes'],
+			new RequestContext('/')
+		);
 
-		$context = new RequestContext();
-		$context->fromRequest(Request::createFromGlobals());
+		$parameters = $router->match(strtok(REQUEST_URI, '?'));
 
-		$matcher = new UrlMatcher($routes, $context);
-		$parameters = $matcher->match(strtok(REQUEST_URI, '?'));
-
-		$acl = $routes->get($parameters['_route'])->getOption('mag');
+		$acl = $router->getRouteCollection()->get($parameters['_route'])->getOption('mag');
 
 		if ($acl == null) {
 			throw new CsrException(sprintf('Route "%s" moet een "mag" optie hebben.', $parameters['_route']));
