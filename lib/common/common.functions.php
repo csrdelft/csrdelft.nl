@@ -1091,3 +1091,11 @@ if (!function_exists('array_key_last')) {
 		return $key;
 	}
 }
+
+function delTree($dir) {
+	$files = array_diff(scandir($dir), array('.','..'));
+	foreach ($files as $file) {
+		(is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
+	}
+	return rmdir($dir);
+}

@@ -15,7 +15,7 @@ if (OrmMemcache::instance()->getCache()->flush()) {
 	echo error_get_last()["message"];
 }
 
-if (rmdir(ROUTES_CACHE_PATH)) {
+if (delTree(ROUTES_CACHE_PATH)) {
 	echo 'Routes succesvol verwijderd';
 } else {
 	echo 'Routes verwijderen mislukt';
