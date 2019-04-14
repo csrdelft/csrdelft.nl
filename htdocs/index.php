@@ -27,6 +27,7 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
 use Invoker\Invoker;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RequestContext;
@@ -51,11 +52,13 @@ try {
 	} else {
 		$legacy = false;
 		// Laat Symfony routen
+		$requestContext = new RequestContext();
+		$requestContext->fromRequest(Request::createFromGlobals());
 		$router = new Router(
 			new YamlFileLoader(new FileLocator([LIB_PATH])),
 			'config/routes.yaml',
-			['cache_dir' => ROUTES_CACHE_PATH],
-			new RequestContext('/')
+			['cache_dir' => ROUTES_CACHE_PATH, 'debug' => DEBUG],
+			$requestContext
 		);
 
 		$parameters = $router->match(strtok(REQUEST_URI, '?'));
