@@ -125,7 +125,7 @@ try {
 	exit;
 } catch (CsrToegangException $exception) {
 	http_response_code($exception->getCode());
-	if ($controller->getMethod() == 'POST') {
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		die($exception->getMessage());
 	} // Redirect to login form
 	elseif (LoginModel::getUid() === 'x999') {
