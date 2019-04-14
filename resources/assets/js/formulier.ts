@@ -131,6 +131,16 @@ export function formSubmit(event: Event) {
 			}
 		}
 
+		if (form.hasClass('ModalForm')) {
+			done = (response: any) => {
+				if (typeof response === 'string') {
+					domUpdate(response);
+				} else {
+					modalClose();
+				}
+			};
+		}
+
 		if (form.hasClass('DataTableResponse')) {
 
 			const tableId = form.attr('data-tableid')!;

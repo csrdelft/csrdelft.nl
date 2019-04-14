@@ -11,13 +11,13 @@ Documenten in categorie: {{ $categorie->naam }}
 @section('content')
 	<div id="controls">
 		@can(P_DOCS_MOD)
-			<a class="btn" href="/documenten/toevoegen/?catID={{$categorie->id}}">@icon('toevoegen') Toevoegen</a>
+			<a class="btn" href="/documenten/toevoegen?catID={{$categorie->id}}">@icon('toevoegen') Toevoegen</a>
 		@endcan
 	</div>
 
 	<h1>{{$categorie->naam}}</h1>
 
-	<table id="documentencategorie" class="documenten">
+	<table id="documentencategorie" class="table table-striped">
 		<thead>
 		<tr>
 			<th>Document</th>

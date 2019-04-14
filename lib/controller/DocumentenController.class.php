@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\documenten\DocumentCategorieModel;
 use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\documenten\Document;
@@ -14,80 +15,59 @@ use CsrDelft\view\documenten\DocumentContent;
 use CsrDelft\view\documenten\DocumentDownloadContent;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\JsonResponse;
+use CsrDelft\view\PlainView;
 
 /**
- * DocumentenController.class.php
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
- * @property DocumentModel $model
  */
-class DocumentenController extends AclController {
+class DocumentenController {
+	use QueryParamTrait;
 
-	/**
-	 * querystring:
-	 *
-	 * actie[/id[/opties]]
-	 */
-	public function __construct($query) {
-		parent::__construct($query, DocumentModel::instance());
-		$this->acl = array(
-			'recenttonen' => P_DOCS_READ,
-			'bekijken' => P_DOCS_READ,
-			'download' => P_DOCS_READ,
-			'categorie' => P_DOCS_READ,
-			'zoeken' => P_DOCS_READ,
-			'bewerken' => P_DOCS_MOD,
-			'toevoegen' => P_DOCS_MOD,
-			'verwijderen' => P_DOCS_MOD
-		);
-	}
+	/** @var DocumentModel */
+	private $documentModel;
+	/** @var DocumentCategorieModel */
+	private $documentCategorieModel;
 
-	public function performAction(array $args = array()) {
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		} else {
-			$this->action = 'recenttonen';
-		}
-		parent::performAction($this->getParams(3));
+	public function __construct() {
+		$this->documentModel = DocumentModel::instance();
+		$this->documentCategorieModel = DocumentCategorieModel::instance();
 	}
 
 	/**
 	 * Recente documenten uit alle categorieën tonen
 	 */
-	protected function recenttonen() {
-		$model = DocumentCategorieModel::instance();
-		$this->view = view('documenten.documenten', [
-			'categorieen' => $model->find(),
-			'model' => $model
+	public function recenttonen() {
+		return view('documenten.documenten', [
+			'categorieen' => $this->documentCategorieModel->find(),
+			'model' => $this->documentCategorieModel
 		]);
 	}
 
-	protected function verwijderen($id) {
-		$document = $this->model->get($id);
+	public function verwijderen($id) {
+		$document = $this->documentModel->get($id);
 
 		if ($document === false) {
 			setMelding('Document bestaat niet!', -1);
 			redirect('/documenten');
 		} elseif ($document->magVerwijderen()) {
-			DocumentModel::instance()->delete($document);
-			setMelding('Document verwijderd!', 1);
+			$this->documentModel->delete($document);
 		} else {
 			setMelding('Mag document niet verwijderen', -1);
+			return new JsonResponse(false);
 		}
 
-		redirect('/documenten/categorie/' . $document->categorie_id);
+		return new PlainView(sprintf('<tr class="remove" id="document-%s"></tr>', $document->id));
 	}
 
 	public function bekijken($id) {
-		$document = $this->model->get($id);
+		$document = $this->documentModel->get($id);
 
 		if (!$document->magBekijken()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 
 		if ($document->hasFile()) {
-			$this->view = new DocumentContent($document);
+			return new DocumentContent($document);
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
 			redirect('/documenten');
@@ -95,36 +75,36 @@ class DocumentenController extends AclController {
 	}
 
 	public function download($id) {
-		$document = $this->model->get($id);
+		$document = $this->documentModel->get($id);
 
 		if (!$document->magBekijken()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		if ($document->hasFile()) {
-			$this->view = new DocumentDownloadContent($document);
+			return new DocumentDownloadContent($document);
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
 			redirect('/documenten');
 		}
 	}
 
-	protected function categorie($id) {
-		$categorie = $this->model->getCategorieModel()->get($id);
+	public function categorie($id) {
+		$categorie = $this->documentModel->getCategorieModel()->get($id);
 		if ($categorie === false) {
 			setMelding('Categorie bestaat niet!', -1);
 			redirect('/documenten');
 		} elseif (!$categorie->magBekijken()) {
 			throw new CsrToegangException('Mag deze categorie niet bekijken');
 		} else {
-			$this->view = view('documenten.categorie', [
-				'documenten' => $this->model->getCategorieModel()->getRecent($categorie, 0),
+			return view('documenten.categorie', [
+				'documenten' => $this->documentModel->getCategorieModel()->getRecent($categorie, 0),
 				'categorie' => $categorie,
 			]);
 		}
 	}
 
-	protected function bewerken($id) {
-		$document = $this->model->get($id);
+	public function bewerken($id) {
+		$document = $this->documentModel->get($id);
 
 		if ($document === false) {
 			setMelding('Document niet gevonden', 2);
@@ -133,11 +113,11 @@ class DocumentenController extends AclController {
 
 		$form = new DocumentBewerkenForm($document);
 		if ($form->isPosted() && $form->validate()) {
-			$this->model->update($document);
+			$this->documentModel->update($document);
 
 			redirect('/documenten/categorie/' . $document->categorie_id);
 		} else {
-			$this->view = view('default', [
+			return view('default', [
 				'titel' => 'Document bewerken',
 				'content' => $form,
 			]);
@@ -145,7 +125,7 @@ class DocumentenController extends AclController {
 
 	}
 
-	protected function toevoegen() {
+	public function toevoegen() {
 		$form = new DocumentToevoegenForm();
 
 		if ($form->isPosted() && $form->validate()) {
@@ -161,7 +141,7 @@ class DocumentenController extends AclController {
 			$document->mimetype = $bestand->mimetype;
 			$document->filesize = $bestand->filesize;
 
-			$document->id = $this->model->create($document);
+			$document->id = $this->documentModel->create($document);
 
 			if ($document->hasFile()) {
 				$document->deleteFile();
@@ -171,7 +151,7 @@ class DocumentenController extends AclController {
 
 			redirect('/documenten/categorie/' . $document->categorie_id);
 		} else {
-			$this->view = view('default', [
+			return view('default', [
 				'titel' => 'Document toevoegen',
 				'content' => $form,
 			]);
@@ -180,7 +160,7 @@ class DocumentenController extends AclController {
 
 	public function zoeken() {
 		if (!$this->hasParam('q')) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$zoekterm = $this->getParam('q');
 
@@ -191,16 +171,16 @@ class DocumentenController extends AclController {
 		}
 
 		$result = array();
-		foreach ($this->model->zoek($zoekterm, $limit) as $doc) {
+		foreach ($this->documentModel->zoek($zoekterm, $limit) as $doc) {
 			if ($doc->magBekijken()) {
 				$result[] = array(
 					'url' => '/documenten/bekijken/' . $doc->id . '/' . $doc->filename,
-					'label' => $this->model->getCategorieModel()->find('id = ?', [$doc->categorie_id])->fetch()->naam,
+					'label' => $this->documentModel->getCategorieModel()->find('id = ?', [$doc->categorie_id])->fetch()->naam,
 					'value' => $doc->naam,
 					'id' => $doc->id
 				);
 			}
 		}
-		$this->view = new JsonResponse($result);
+		return new JsonResponse($result);
 	}
 }

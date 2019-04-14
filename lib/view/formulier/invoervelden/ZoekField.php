@@ -70,7 +70,7 @@ JS;
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'documenten') === 'ja') {
-				$this->suggestions['Documenten'] = '/documenten/zoeken/?q=';
+				$this->suggestions['Documenten'] = '/documenten/zoeken?q=';
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'boeken') === 'ja') {

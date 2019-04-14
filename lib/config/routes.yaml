@@ -1,0 +1,11 @@
+cms-routes: { resource: routes/cms.yml }
+forum-routes: { resource: routes/forum.yaml }
+eetplan-routes: { resource: routes/eetplan.yaml }
+documenten-routes: { resource: routes/documenten.yaml }
+peilingen-routes: { resource: routes/peilingen.yaml }
+
+default:
+  path: /{naam}/{subnaam}
+  controller: CsrDelft\controller\CmsPaginaController::bekijken
+  defaults: { naam: thuis, subnaam: "" }
+  options: { mag: P_PUBLIC }

@@ -2,10 +2,8 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\peilingen\PeilingenModel;
@@ -19,41 +17,18 @@ use CsrDelft\view\View;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
- * @property PeilingenModel $model
  */
-class PeilingenController extends AclController {
+class PeilingenController {
+	use QueryParamTrait;
 
-	/**
-	 * @var string
-	 */
-	private $query;
+	/** @var PeilingenModel */
+	private $peilingenModel;
+	/** @var PeilingenLogic */
+	private $peilingenLogic;
 
-	public function __construct($query) {
-		parent::__construct($query, PeilingenModel::instance());
-		if ($this->getMethod() == 'GET') {
-			$this->acl = array(
-				'beheer' => P_PEILING_EDIT,
-				'opties' => P_PEILING_EDIT,
-				'verwijderen' => P_PEILING_MOD,
-			);
-		} else {
-			$this->acl = array(
-				'beheer' => P_PEILING_EDIT,
-				'stem' => P_PEILING_VOTE,
-				'bewerken' => P_PEILING_EDIT,
-				'nieuw' => P_PEILING_EDIT,
-				'verwijderen' => P_PEILING_MOD,
-				'opties' => P_PEILING_VOTE,
-			);
-		}
-		$this->query = $query;
-	}
-
-	public function performAction(array $args = array()) {
-		$this->action = $this->getParam(2);
-		$args = $this->getParams(3);
-		$this->view = parent::performAction($args);
+	public function __construct() {
+		$this->peilingenModel = PeilingenModel::instance();
+		$this->peilingenLogic = PeilingenLogic::instance();
 	}
 
 	/**
@@ -61,40 +36,33 @@ class PeilingenController extends AclController {
 	 * @return View
 	 * @throws CsrGebruikerException
 	 */
-	public function GET_beheer($id = null) {
+	public function table($id = null) {
 		// Laat een modal zien als een specifieke peiling bewerkt wordt
 		if ($id) {
 			$table = new PeilingTable();
-			$peiling = $this->model->find('id = ?', [$id])->fetch();
+			$peiling = $this->peilingenModel->find('id = ?', [$id])->fetch();
 			$table->setSearch($peiling->titel);
 			$form = new PeilingForm($peiling, false);
 			$form->setDataTableId($table->getDataTableId());
 
-			return view('default', [
-				'titel' => 'Peilingen beheer',
-				'content' => $table,
-				'modal' => $form
-			]);
+			return view('default', ['content' => $table, 'modal' => $form]);
 		} else {
-			return view('default', [
-				'titel' => 'Peilingen beheer',
-				'content' => new PeilingTable(),
-			]);
+			return view('default', ['content' => new PeilingTable()]);
 		}
 	}
 
 	/**
 	 * @return View
 	 */
-	public function POST_beheer() {
-		return new PeilingResponse($this->model->getPeilingenVoorBeheer());
+	public function lijst() {
+		return new PeilingResponse($this->peilingenModel->getPeilingenVoorBeheer());
 	}
 
 	/**
 	 * @return View
 	 * @throws CsrGebruikerException
 	 */
-	public function POST_nieuw() {
+	public function nieuw() {
 		$peiling = new Peiling();
 		$form = new PeilingForm($peiling, true);
 
@@ -103,7 +71,7 @@ class PeilingenController extends AclController {
 			$peiling->eigenaar = LoginModel::getUid();
 			$peiling->mag_bewerken = false;
 
-			$peiling->id = $this->model->create($form->getModel());
+			$peiling->id = $this->peilingenModel->create($form->getModel());
 			return new PeilingResponse([$peiling]);
 		}
 
@@ -114,13 +82,13 @@ class PeilingenController extends AclController {
 	 * @return View
 	 * @throws CsrGebruikerException
 	 */
-	public function POST_bewerken() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+	public function bewerken() {
+		$selection = $this->getDataTableSelection();
 
 		if ($selection) {
-			$peiling = $this->model->retrieveByUUID($selection[0]);
+			$peiling = $this->peilingenModel->retrieveByUUID($selection[0]);
 
-			if (!$this->model->magBewerken($peiling)) {
+			if (!$this->peilingenModel->magBewerken($peiling)) {
 				throw new CsrGebruikerException('Je mag deze peiling niet bewerken!');
 			}
 		} else {
@@ -132,7 +100,7 @@ class PeilingenController extends AclController {
 		if ($form->isPosted() && $form->validate()) {
 			$peiling = $form->getModel();
 
-			$this->model->update($peiling);
+			$this->peilingenModel->update($peiling);
 			return new PeilingResponse([$peiling]);
 		}
 
@@ -141,25 +109,12 @@ class PeilingenController extends AclController {
 
 	/**
 	 * @return View
-	 * @throws CsrException
-	 * @throws CsrGebruikerException
-	 * @throws CsrToegangException
-	 */
-	public function opties() {
-		$router = new PeilingOptiesController($this->query);
-		$router->performAction();
-
-		return $router->view;
-	}
-
-	/**
-	 * @return View
 	 */
 	public function verwijderen() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$peiling = $this->model->retrieveByUUID($selection[0]);
+		$selection = $this->getDataTableSelection();
+		$peiling = $this->peilingenModel->retrieveByUUID($selection[0]);
 
-		$this->model->delete($peiling);
+		$this->peilingenModel->delete($peiling);
 
 		return new RemoveRowsResponse([$peiling]);
 	}
@@ -169,12 +124,9 @@ class PeilingenController extends AclController {
 	 * @return View
 	 */
 	public function stem($id) {
-		$inputJSON = file_get_contents('php://input');
-		$input = json_decode($inputJSON, TRUE);
+		$ids = filter_var_array($this->getPost('opties'), FILTER_VALIDATE_INT);
 
-		$ids = filter_var_array($input['opties'], FILTER_VALIDATE_INT);
-
-		if(PeilingenLogic::instance()->stem($id, $ids, LoginModel::getUid())) {
+		if($this->peilingenLogic->stem($id, $ids, LoginModel::getUid())) {
 			return new JsonResponse(true);
 		} else {
 			return new JsonResponse(false, 400);

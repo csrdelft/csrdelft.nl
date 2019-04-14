@@ -56,7 +56,7 @@ export function domUpdate(this: HTMLElement | void, htmlString: string|object) {
 		if (target.length === 1) {
 			if ($element.hasClass('remove')) {
 				target.effect('fade', {}, 400, () => {
-					$element.remove();
+					target.remove();
 				});
 			} else {
 				target.replaceWith($element.show().get()).effect('highlight');
