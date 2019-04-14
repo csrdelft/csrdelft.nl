@@ -48,8 +48,12 @@ trait QueryParamTrait {
 
 	private function init() {
 		$this->initialized = true;
-		// split into REST and KVP query part
-		$queryparts = explode('?', REQUEST_URI, 2);
+		if ($this->query) {
+			// split into REST and KVP query part
+			$queryparts = explode('?', $this->query, 2);
+		} else {
+			$queryparts = explode('?', REQUEST_URI, 2);
+		}
 
 		// parse REST query
 		$this->queryparts = explode('/', $queryparts[0]);

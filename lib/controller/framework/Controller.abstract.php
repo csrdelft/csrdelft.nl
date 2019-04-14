@@ -55,10 +55,12 @@ abstract class Controller {
 	 * @var array
 	 */
 	protected $csrfUnsafe = [];
+	private $query;
 
 	public function __construct($query, $model, $methods = array('GET', 'POST')) {
 		$this->model = $model;
 		$this->methods = $methods;
+		$this->query = $query;
 	}
 
 	public function getModel() {
