@@ -16,7 +16,7 @@ class FiscaatRouterController {
 	}
 
 	public function overzicht() {
-		$this->view = view('fiscaat.overzicht', [
+		return view('fiscaat.overzicht', [
 			'saldisomform' => new SaldiSomForm($this->civiSaldoModel),
 			'saldisom' => $this->civiSaldoModel->getSomSaldi(),
 			'saldisomleden' => $this->civiSaldoModel->getSomSaldi(true),
