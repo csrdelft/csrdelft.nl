@@ -1,7 +1,7 @@
 <div class="zijbalk_forum">
 	<div class="zijbalk-kopje">
 		@if($belangrijk)
-			<a href="/forum/recent/1/belangrijk">Forum belangrijk</a>
+			<a href="/forum/belangrijk">Forum belangrijk</a>
 		@else
 			<a href="/forum/recent">Forum</a>
 		@endif
