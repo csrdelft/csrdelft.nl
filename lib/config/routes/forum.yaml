@@ -40,6 +40,14 @@ forum-recent:
   requirements: { pagina: '\d+' }
   options: { mag: P_PUBLIC }
 
+forum-recent-belangrijk:
+  path: /forum/recent/{pagina}/belangrijk
+  controller: CsrDelft\controller\ForumController::recent
+  methods: GET
+  defaults: { pagina: 1 }
+  requirements: { pagina: '\d+' }
+  options: { mag: P_PUBLIC }
+
 forum-onderwerp:
   path: /forum/onderwerp/{draad_id}/{pagina}/{statistiek}
   controller: CsrDelft\controller\ForumController::onderwerp
