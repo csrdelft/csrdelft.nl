@@ -99,7 +99,7 @@ class CommissieVoorkeurenController {
 		]);
 	}
 
-	public function lidpaginaLijst($uid) {
+	public function lidpaginaopmerking($uid) {
 		$opmerking = VoorkeurOpmerkingModel::instance()->getOpmerkingVoorLid(ProfielModel::get($uid));
 		$form = (new CommissieVoorkeurPraesesOpmerkingForm($opmerking));
 		if ($form->validate()) {

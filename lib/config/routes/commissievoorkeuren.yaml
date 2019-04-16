@@ -20,7 +20,7 @@ commissievoorkeuren-lidpagina:
 
 commissievoorkeuren-lidpagina-lijst:
   path: /commissievoorkeuren/lidpagina/{uid}
-  controller: CsrDelft\controller\CommissieVoorkeurenController::lidpaginaLijst
+  controller: CsrDelft\controller\CommissieVoorkeurenController::lidpaginaopmerking
   methods: POST
   requirements: { uid: '.{4}' }
   options: { mag: bestuur }
