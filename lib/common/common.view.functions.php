@@ -384,6 +384,5 @@ function split_on_keyword(string $string, string $keyword, int $space_around = 1
 function highlight_zoekterm($bericht, $zoekterm, $before = null, $after = null) {
 	$before = $before ?: '<span style="background-color: rgba(255,255,0,0.4);">';
 	$after = $after ?: '</span>';
-
-	return preg_replace('/' . $zoekterm . '/i', $before . '$0' . $after, $bericht);
+	return preg_replace('/' . preg_quote($zoekterm, '/') . '/i', $before . '$0' . $after, $bericht);
 }
