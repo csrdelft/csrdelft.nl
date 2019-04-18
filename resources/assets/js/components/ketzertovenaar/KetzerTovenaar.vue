@@ -165,15 +165,51 @@
 			<div v-if="event.canEnter" class="subOptions">
 				<Toggle
 					name="enterStart"
-					question="Leden mogen zich pas inketzen na een bepaald moment"
+					question="Ketzer pas open stellen na een bepaald moment"
 					v-model="event.enterStart">
 				</Toggle>
 
+				<div class="moment" v-if="event.enterStart">
+					<div class="input-half">
+						<label>Ketzer openen op</label>
+						<DateInput name="enterStart" v-model="event.enterStartMoment"></DateInput>
+					</div>
+
+					<div class="input-half">
+						<TextInput
+							name="enterStartMomentTime"
+							mask="HH:MM[:ss]"
+							mask-placeholder="__:__[:__]"
+							hint="Tijd"
+							v-model="event.enterStartMomentTime"
+							:error="validTime(event.enterStartMomentTime) ? null : 'Ongeldige tijd'">
+						</TextInput>
+					</div>
+				</div>
+
 				<Toggle
 					name="enterEnd"
-					question="Inketzen niet toestaan na een bepaald moment"
+					question="Ketzer sluiten na een bepaald moment"
 					v-model="event.enterEnd">
 				</Toggle>
+
+				<div class="moment" v-if="event.enterEnd">
+					<div class="input-half">
+						<label>Ketzer sluiten op</label>
+						<DateInput name="enterEnd" v-model="event.enterEndMoment"></DateInput>
+					</div>
+
+					<div class="input-half">
+						<TextInput
+							name="enterEndMomentTime"
+							mask="HH:MM[:ss]"
+							mask-placeholder="__:__[:__]"
+							hint="Tijd"
+							v-model="event.enterEndMomentTime"
+							:error="validTime(event.enterEndMomentTime) ? null : 'Ongeldige tijd'">
+						</TextInput>
+					</div>
+				</div>
 			</div>
 
 			<Toggle
@@ -188,6 +224,24 @@
 					question="Uitketzen niet toestaan na een bepaald moment"
 					v-model="event.exitEnd">
 				</Toggle>
+
+				<div class="moment" v-if="event.exitEnd">
+					<div class="input-half">
+						<label>Uitketzen toestaan tot</label>
+						<DateInput name="exitEnd" v-model="event.exitEndMoment"></DateInput>
+					</div>
+
+					<div class="input-half">
+						<TextInput
+							name="exitEndMomentTime"
+							mask="HH:MM[:ss]"
+							mask-placeholder="__:__[:__]"
+							hint="Tijd"
+							v-model="event.exitEndMomentTime"
+							:error="validTime(event.exitEndMomentTime) ? null : 'Ongeldige tijd'">
+						</TextInput>
+					</div>
+				</div>
 			</div>
 
 			<Toggle
@@ -225,10 +279,11 @@
 	import Toggle from './velden/Toggle';
 	import Stap from './onderdelen/Stap';
 	import FunctionalCalendar from 'vue-functional-calendar';
+	import DateInput from './velden/DateInput';
 
 	export default {
 		name: 'KetzerTovenaar',
-		components: {SelectButtons, TextInput, Toggle, Stap, FunctionalCalendar},
+		components: {SelectButtons, TextInput, Toggle, Stap, FunctionalCalendar, DateInput},
 		props: {},
 		data: () => ({
 			loaded: false,
@@ -259,12 +314,15 @@
 				location: '',
 				canEnter: true,
 				enterStart: false,
-				enterStartMoment: '',
+				enterStartMoment: null,
+				enterStartMomentTime: '',
 				enterEnd: false,
-				enterEndMoment: '',
+				enterEndMoment: null,
+				enterEndMomentTime: '',
 				canExit: true,
 				exitEnd: false,
-				exitEndMoment: '',
+				exitEndMoment: null,
+				exitEndMomentTime: '',
 				hasLimit: false,
 				limit: null,
 				hasPermission: false,
@@ -300,7 +358,7 @@
 
 					$([document.documentElement, document.body]).animate({
 						scrollTop: posTop
-					}, 1000, function () {
+					}, 500, function () {
 						if (autofocus) {
 							nextStep.find('input,textarea').first().focus();
 						}
@@ -375,6 +433,22 @@
 
 		& + .input-half {
 			margin-right: 0;
+		}
+	}
+
+	.moment {
+		position: relative;
+
+		label {
+			position: absolute;
+			background: white;
+			left: 9px;
+			padding: 0 8px;
+			font-size: 14px;
+			font-weight: 400;
+			color: #cccccc;
+			line-height: 18px;
+			top: -9px;
 		}
 	}
 </style>
