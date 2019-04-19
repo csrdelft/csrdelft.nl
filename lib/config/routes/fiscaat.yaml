@@ -88,7 +88,7 @@ fiscaat-bestellingen:
   methods: GET
   requirements: { uid: '.{4}' }
   defaults: { uid: null }
-  options: { mag: P_FISCAAT_READ }
+  options: { mag: P_LOGGED_IN }
 
 fiscaat-bestellingen-lijst:
   path: /fiscaat/bestellingen/{uid}
@@ -96,7 +96,7 @@ fiscaat-bestellingen-lijst:
   methods: POST
   requirements: { uid: '.{4}' }
   defaults: { uid: null }
-  options: { mag: P_FISCAAT_READ }
+  options: { mag: P_LOGGED_IN }
 
 fiscaat-bestellingen-inhoud:
   path: /fiscaat/bestellingen/inhoud/{bestelling_id}
