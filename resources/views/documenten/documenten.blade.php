@@ -5,7 +5,7 @@
 @section('content')
 	<div id="controls">
 		@can(P_DOCS_MOD)
-			<a class="btn post" href="/documenten/toevoegen">@icon('toevoegen') Toevoegen</a>
+			<a class="btn" href="/documenten/toevoegen">@icon('toevoegen') Toevoegen</a>
 		@endcan
 	</div>
 
@@ -32,7 +32,7 @@
 						{{ $categorie->naam }}
 					</a>
 					@can(P_DOCS_MOD)
-						<a class="toevoegen post float-right" href="/documenten/toevoegen?catID={{$categorie->id}}"
+						<a class="toevoegen float-right" href="/documenten/toevoegen?catID={{$categorie->id}}"
 							 title="Document toevoegen in categorie: {{$categorie->naam}}">
 							@icon('toevoegen')
 						</a>
