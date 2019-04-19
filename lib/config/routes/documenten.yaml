@@ -34,7 +34,7 @@ documenten-zoeken:
 documenten-bewerken:
   path: /documenten/bewerken/{id}
   controller: CsrDelft\controller\DocumentenController::bewerken
-  methods: POST
+  methods: [GET,POST]
   requirements: { id: '\d+' }
   options: { mag: P_DOCS_MOD }
 
