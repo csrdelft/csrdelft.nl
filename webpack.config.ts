@@ -28,7 +28,6 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		'extern-forum': './sass/extern-forum.scss',
 		'extern-fotoalbum': './sass/extern-fotoalbum.scss',
 		'maaltijdlijst': './sass/maaltijdlijst.scss',
-		'roodschopper': './sass/roodschopper.scss',
 		'thema-civitasia': './sass/thema/civitasia.scss',
 		'thema-dies': './sass/thema/dies.scss',
 		'thema-donker': './sass/thema/donker.scss',
