@@ -413,7 +413,7 @@ class BibliotheekController extends Controller {
 			$results = BoekModel::autocompleteProperty($this->getParam(3), $zoekterm);
 			$data = [];
 			foreach ($results as $result) {
-				$data[] = ['data' => [$result], 'value' => $result, 'result' => $result];
+				$data[] = ['data' => [$result], 'value' => $result->{$this->getParam(3)}, 'id' => $result->id];
 			}
 			$this->view = new JsonResponse($data);
 		} else {

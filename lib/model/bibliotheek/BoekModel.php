@@ -24,7 +24,7 @@ class BoekModel extends PersistenceModel {
 	/**
 	 * @param string $zoekveld
 	 * @param string $zoekterm
-	 * @return String[]
+	 * @return Boek[]
 	 * @throws CsrGebruikerException
 	 */
 	public static function autocompleteProperty(string $zoekveld, string $zoekterm) {
@@ -32,12 +32,7 @@ class BoekModel extends PersistenceModel {
 		if (!in_array($zoekveld, $allowedFields)) {
 			throw new CsrGebruikerException("Autocomplete niet toegestaan voor dit veld");
 		}
-		$queryResults = Database::instance()->sqlSelect([$zoekveld], "biebboek", "$zoekveld like CONCAT('%',?,'%')", [$zoekterm], $zoekveld);
-		$results = [];
-		foreach ($queryResults as $queryResult) {
-			$results[] = $queryResult[$zoekveld];
-		}
-		return $results;
+		return static::instance()->find("$zoekveld like CONCAT('%', ?, '%')", [$zoekterm]);
 	}
 
 	/**
