@@ -5,7 +5,6 @@
 	{if CsrDelft\model\security\LoginModel::instance()->isSued()}
 		<li><a href="/endsu" class="error" title="Switch user actie beeindingen">SU {CsrDelft\model\ProfielModel::getNaam(CsrDelft\model\security\LoginModel::getSuedFrom()->uid, 'civitas')}</a></li>
 	{/if}
-		<li><a href="/gesprekken" title="{$gesprekOngelezen} ongelezen bericht{if $gesprekOngelezen !== 1}en{/if}">Gesprekken{if $gesprekOngelezen > 0}&nbsp;<span class="badge">{$gesprekOngelezen}</span>{/if}</a></li>
 		<li>
 			<a href="/profiel/{CsrDelft\model\security\LoginModel::getUid()}#CiviSaldo" title="Bekijk CiviSaldo historie">
 				{assign var=saldo value=CsrDelft\model\security\LoginModel::getProfiel()->getCiviSaldo()}
