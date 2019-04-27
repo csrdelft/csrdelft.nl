@@ -5,6 +5,7 @@ namespace CsrDelft\view\formulier\invoervelden;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\PostedValue;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\uploadvelden\BestandBehouden;
 use CsrDelft\view\Validator;
@@ -39,7 +40,7 @@ use CsrDelft\view\Validator;
  * InputField is de base class van alle FormElements die data leveren,
  * behalve FileField zelf die wel meerdere InputFields bevat.
  */
-abstract class InputField implements FormElement, Validator {
+abstract class InputField implements FormElement, Validator, PostedValue {
 	protected $wrapperClassName = 'form-group row';
 	protected $labelClassName = 'col-3 col-form-label';
 	protected $fieldClassName = 'col-9';

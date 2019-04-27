@@ -1,0 +1,5 @@
+declaratie-aanmaken:
+  path: /declaratie/aanmaken
+  controller: CsrDelft\controller\DeclaratieController::aanmaken
+  methods: [GET,POST]
+  options: { mag: P_LOGGED_IN }

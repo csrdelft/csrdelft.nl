@@ -154,7 +154,7 @@ class Formulier implements View, Validator {
 	 */
 	public function isPosted() {
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField AND !$field->isPosted()) {
+			if ($field instanceof PostedValue AND !$field->isPosted()) {
 				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}
@@ -188,7 +188,7 @@ class Formulier implements View, Validator {
 	public function getValues() {
 		$values = array();
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField) {
+			if ($field instanceof PostedValue) {
 				$values[$field->getName()] = $field->getValue();
 			}
 		}
