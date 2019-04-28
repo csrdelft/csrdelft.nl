@@ -69,10 +69,10 @@ De PubCie.
 		redirect('/#contact-form');
 	}
 
-	private function isSpam(string... $input) {
+	private function isSpam(...$input) {
 		$filter = new SimpleSpamFilter();
 		foreach ($input as $item) {
-			if ($filter->isSpam($item)) {
+			if ($item && $filter->isSpam($item)) {
 				return true;
 			}
 		}
