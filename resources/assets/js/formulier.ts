@@ -1,3 +1,4 @@
+import Inputmask from 'inputmask';
 import $ from 'jquery';
 import {ajaxRequest} from './ajax';
 import {bbCodeSet} from './bbcode-set';
@@ -14,11 +15,49 @@ ctx.addHandlers({
 	'.SubmitChange': (el) => el.addEventListener('change', formSubmit),
 	'.cancel': (el) => el.addEventListener('click', formCancel),
 	'.reset': (el) => el.addEventListener('click', formReset),
-	'.submit': (el) => el.addEventListener('click', formSubmit),
-	'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
+	// '.submit': (el) => el.addEventListener('click', formSubmit),
+	// 'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
 	'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
 	'time.timeago': (el) => $(el).timeago(),
+	'[data-sum]': initSum,
+	'input': (el) => Inputmask().mask(el),
 });
+
+Inputmask.extendAliases({
+	bedrag: {
+		prefix: '€ ',
+		removeMaskOnSubmit: true,
+		autoUnmask: true,
+		unmaskAsNumber: true,
+		groupSeparator: '.',
+		radixPoint: ',',
+		alias: 'numeric',
+		placeholder: '0',
+		autoGroup: true,
+		digits: 2,
+		digitsOptional: false,
+		clearMaskOnLostFocus: false,
+		onBeforeMask: (initialValue: string) => String(Number(initialValue) / 100).replace('.', ','),
+		onUnMask: (maskedValue: string, unmaskedValue: string) => Number(unmaskedValue.replace(',', '').replace('.', '')),
+	},
+})
+;
+
+function initSum(el: Element) {
+	const element = el as HTMLInputElement;
+	const target = element.dataset.sum!.split('*');
+	const watch = document.querySelectorAll(`[name*=${target[0]}][name*=${target[1]}]`);
+	const values: number[] = [];
+
+	for (let i = 0; i < watch.length; i++) {
+		watch[i].addEventListener('keyup', (event) => {
+			const eventTarget = event.target as HTMLElement;
+			values[i] = Number((event.target as HTMLInputElement).value);
+
+			element.value = String(values.reduce((a, b) => a + b));
+		});
+	}
+}
 
 export function formIsChanged(form: JQuery<EventTarget>) {
 	let changed = false;

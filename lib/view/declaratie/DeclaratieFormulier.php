@@ -34,7 +34,8 @@ class DeclaratieFormulier extends Formulier {
 		$fields[] = new RequiredTextField('iban', $model->iban, 'IBAN');
 		$fields[] = new RequiredTextField('opmerkingen', $model->opmerkingen, 'Opmerkingen');
 
-		$fields[] = new TableField('declaratie_regel', $model->declaratie_regels, DeclaratieRegel::class);
+		$fields['declaratie_regel'] = new TableField('declaratie_regel', $model->declaratie_regels, DeclaratieRegel::class, 'bedrag');
+		$fields['declaratie_regel']->changeCol('bedrag', ['bedrag']);
 
 		$this->addFields($fields);
 
