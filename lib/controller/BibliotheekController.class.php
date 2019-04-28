@@ -9,6 +9,7 @@ use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\bibliotheek\BoekImporter;
 use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\bibliotheek\BoekRecensieModel;
+use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\model\entity\bibliotheek\BoekExemplaar;
 use CsrDelft\model\entity\bibliotheek\BoekRecensie;
@@ -21,6 +22,7 @@ use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableResponse;
 use CsrDelft\view\bibliotheek\BoekExemplaarFormulier;
 use CsrDelft\view\bibliotheek\BoekFormulier;
 use CsrDelft\view\bibliotheek\RecensieFormulier;
+use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
 use dokuwiki\Action\Login;
@@ -113,17 +115,11 @@ class BibliotheekController extends Controller {
 	}
 
 	public function rubrieken() {
-		$c = new CmsPaginaController($this->action);
-		$c->bekijken($this->action);
-		$c->getView()->view();
-		exit;
+		$this->view = new CmsPaginaView(CmsPaginaModel::get('rubrieken'));
 	}
 
 	public function wenslijst() {
-		$c = new CmsPaginaController($this->action);
-		$c->bekijken($this->action);
-		$c->getView()->view();
-		exit;
+		$this->view = new CmsPaginaView(CmsPaginaModel::get('wenslijst'));
 	}
 
 	/**
