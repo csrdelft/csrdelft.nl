@@ -1,5 +1,5 @@
-import Inputmask from 'inputmask';
 import $ from 'jquery';
+import maskInput from 'vanilla-text-mask';
 import {ajaxRequest} from './ajax';
 import {bbCodeSet} from './bbcode-set';
 import {domUpdate} from './context';
@@ -15,33 +15,78 @@ ctx.addHandlers({
 	'.SubmitChange': (el) => el.addEventListener('change', formSubmit),
 	'.cancel': (el) => el.addEventListener('click', formCancel),
 	'.reset': (el) => el.addEventListener('click', formReset),
-	// '.submit': (el) => el.addEventListener('click', formSubmit),
-	// 'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
+	'.submit': (el) => el.addEventListener('click', formSubmit),
+	'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
 	'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
 	'time.timeago': (el) => $(el).timeago(),
 	'[data-sum]': initSum,
-	'input': (el) => Inputmask().mask(el),
-});
+	'input[data-mask=bedrag]': (el) => {
+		maskInput({
+			inputElement: el,
+			placeholderChar: '0',
+			// mask: (rawValue: string) => ['€', /\d+/, /\d/, ',', /\d/, /\d/],
+			// guide: false,
+			mask: (rawValue: string) => {
+				console.log(rawValue);
 
-Inputmask.extendAliases({
-	bedrag: {
-		prefix: '€ ',
-		removeMaskOnSubmit: true,
-		autoUnmask: true,
-		unmaskAsNumber: true,
-		groupSeparator: '.',
-		radixPoint: ',',
-		alias: 'numeric',
-		placeholder: '0',
-		autoGroup: true,
-		digits: 2,
-		digitsOptional: false,
-		clearMaskOnLostFocus: false,
-		onBeforeMask: (initialValue: string) => String(Number(initialValue) / 100).replace('.', ','),
-		onUnMask: (maskedValue: string, unmaskedValue: string) => Number(unmaskedValue.replace(',', '').replace('.', '')),
+				if (rawValue.length === 0 || rawValue[0].match(/\d/)) {
+					return ['€', /\d/, ',', /\d/, /\d/];
+				}
+
+				rawValue = rawValue.replace('.', ',');
+
+				const sepPosition = rawValue.indexOf(',');
+
+				let beforeSep = 0;
+
+				if (sepPosition === -1) {
+					// const matches = rawValue.match(/\d/g);
+					// console.log(matches);
+					// beforeSep = matches != null ? matches.length : 1;
+				} else {
+					beforeSep = sepPosition === -1 ? (rawValue.length === 2) ? 3 : rawValue.length : Math.max(2, sepPosition - 1);
+				}
+				const mask: Array<string | RegExp> = ['€'];
+
+				for (let i = 0; i < beforeSep; i++) {
+					mask.push(/\d/);
+				}
+
+				mask.push(',', /\d/, /\d/);
+				return mask;
+			},
+			showMask: true,
+			// pipe: (str: string) => ({value: str.replace('.', ','), indexOfPipedChars: [str.length]}),
+			// mask: createNumberMask({
+			// 	prefix: '€',
+			// 	decimalSymbol: ',',
+			// 	allowDecimal: true,
+			// 	requireDecimal: true,
+			// 	fixedDecimalScale: true,
+			// }),
+			// pipe(str: string, config: any) {
+			// 	console.log(str);
+			// 	if (str === ' €_') {
+			// 		return {value: '€0,00', indexOfPipedChars: [0, 1, 2, 3, 4, 5]};
+			// 	}
+			// 	let value = str;
+			// 	let indexOfPipedChars: number[] = [];
+			// 	if (str.indexOf(',') === -1) {
+			// 		value = ',00';
+			// 		indexOfPipedChars = [str.length + 1, str.length + 2, str.length + 3];
+			// 	} else if (str.indexOf(',') > str.length - 1) {
+			// 		value = '00';
+			// 		indexOfPipedChars = [str.length + 1, str.length + 2];
+			// 	} else if (str.indexOf(',') > str.length - 2) {
+			// 		value = '0';
+			// 		indexOfPipedChars = [str.length + 1];
+			// 	}
+			//
+			// 	return {value, indexOfPipedChars};
+			// },
+		});
 	},
-})
-;
+});
 
 function initSum(el: Element) {
 	const element = el as HTMLInputElement;

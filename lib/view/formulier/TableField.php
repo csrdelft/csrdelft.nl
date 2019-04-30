@@ -198,7 +198,7 @@ HTML;
 
 		switch ($definition[0]) {
 			case 'bedrag':
-				$return .= sprintf('<input type="text" class="form-control form-control-sm %s" value="%s" name="%s" data-inputmask-alias="bedrag" />', implode(' ', $classList), $value, $name);
+				$return .= sprintf('<input type="text" class="form-control form-control-sm %s" value="%s" name="%s" data-mask="bedrag" />', implode(' ', $classList), $value, $name);
 				break;
 			case T::String:
 			case T::StringKey:

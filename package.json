@@ -54,6 +54,7 @@
 		"resolve-url-loader": "^3.0.0",
 		"sass-loader": "^7.1.0",
 		"style-loader": "^0.23.0",
+		"text-mask-addons": "^3.8.0",
 		"ts-loader": "^4.5.0",
 		"ts-node": "^8.0.2",
 		"tsconfig-paths": "^3.7.0",
@@ -111,6 +112,7 @@
 		"textcomplete": "^0.17.1",
 		"three": "^0.99.0",
 		"timeago": "^1.6.7",
+		"vanilla-text-mask": "^5.1.1",
 		"vue": "^2.5.7"
 	}
 }
