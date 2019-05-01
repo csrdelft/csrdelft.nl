@@ -8,7 +8,7 @@
 <script lang="ts">
 	import Vue from "vue";
 	import {Component, Prop} from "vue-property-decorator";
-	import {GroepLid, KeuzeOptie} from "../../groep";
+	import {GroepLid, KeuzeOptie} from "../../model/groep";
 
 	@Component({})
 	export default class GroepLidRow extends Vue {

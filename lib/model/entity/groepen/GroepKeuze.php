@@ -8,8 +8,9 @@ namespace CsrDelft\model\entity\groepen;
  */
 class GroepKeuze {
 	public function __wakeup() {
-		assert(isset(GroepKeuzeType::getTypeOptions()[$this->type]));
+		assert(in_array($this->type, GroepKeuzeType::getTypeOptions()));
 	}
+
   public $naam;
 	public $type; // Checks, radios, dropdown, text, slider, number, date
 	public $opties; // String, names, name
@@ -19,7 +20,8 @@ class GroepKeuze {
 	public function __construct($naam = null, $type = null, $default = null, $description = null) {
 		$this->naam = $naam;
 		$this->type = $type;
-		$this->default = $default;
+		// TODO: Niet alleen een bool
+		$this->default = (bool)$default;
 		$this->description = $description;
 	}
 }

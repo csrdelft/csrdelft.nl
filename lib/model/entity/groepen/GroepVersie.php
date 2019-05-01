@@ -21,4 +21,9 @@ class GroepVersie extends PersistentEnum {
 		self::V1 => self::V1,
 		self::V2 => self::V2,
 	];
+
+	protected static $mapChoiceToDescription = [
+		self::V1 => 'Versie 1',
+		self::V2 => 'Versie 2',
+	];
 }

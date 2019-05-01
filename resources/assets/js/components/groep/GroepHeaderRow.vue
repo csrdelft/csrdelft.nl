@@ -10,7 +10,7 @@
 <script lang="ts">
 	import Vue from "vue";
 	import {Component, Prop} from "vue-property-decorator";
-	import {KeuzeOptie} from "../../groep";
+	import {KeuzeOptie} from "../../model/groep";
 
 	@Component({})
 	export default class GroepHeaderRow extends Vue {

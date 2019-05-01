@@ -1,12 +1,13 @@
-export class GroepLid {
-	public uid: string;
-	public link: string;
-	public opmerking: GroepKeuzeSelectie[];
+export interface GroepLid {
+	uid: string;
+	link: string;
+	opmerking: GroepKeuzeSelectie[];
 }
 
 export interface GroepSettings {
 	mijn_uid: string;
 	mijn_link: string;
+	aanmeld_url: string;
 }
 
 export interface GroepInstance {

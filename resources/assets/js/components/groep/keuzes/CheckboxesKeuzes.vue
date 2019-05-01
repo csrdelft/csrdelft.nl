@@ -10,7 +10,7 @@
 <script lang="ts">
 	import Vue from "vue";
 	import {Component, Prop} from "vue-property-decorator";
-	import {GroepKeuzeSelectie, KeuzeOptie} from "../../../groep";
+	import {GroepKeuzeSelectie, KeuzeOptie} from "../../../model/groep";
 
 	@Component({})
 	export default class CheckboxKeuze extends Vue {

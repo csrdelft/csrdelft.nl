@@ -68,6 +68,7 @@ abstract class AbstractGroep extends PersistentEntity {
 	 */
 	public $maker_uid;
 	public $versie = GroepVersie::V1;
+	public $keuzelijst2;
 	/**
 	 * Database table columns
 	 * @var array
@@ -91,6 +92,10 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * @var array
 	 */
 	protected static $primary_key = ['id'];
+
+	protected static $computed_attributes = [
+		'leden' => [T::String],
+	];
 
 	/**
 	 * De URL van de groep

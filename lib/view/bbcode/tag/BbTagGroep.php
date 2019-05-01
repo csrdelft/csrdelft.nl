@@ -60,42 +60,23 @@ abstract class BbTagGroep extends BbTag {
 	}
 
 	protected function groep(AbstractGroep $groep) {
-		$keuze1 = new GroepKeuze('keuze-1', GroepKeuzeType::CHECKBOX, true, 'Keuze 1');
-		$keuze2 = new GroepKeuze('keuze-2', GroepKeuzeType::CHECKBOX, true, 'Keuze 2');
-		$keuze3 = new GroepKeuze('keuze-3', GroepKeuzeType::CHECKBOX, true, 'Keuze 3');
-		$keuze4 = new GroepKeuze('keuze-4', GroepKeuzeType::CHECKBOX, true, 'Keuze 4');
-
-		$lid1 = new KetzerDeelnemer();
-		$lid1->uid = '1346';
-		$lid1->opmerking = [
-			new GroepKeuzeSelectie('keuze-1', false),
-			new GroepKeuzeSelectie('keuze-2', true),
-			new GroepKeuzeSelectie('keuze-3', true),
-			new GroepKeuzeSelectie('keuze-4', true),
-		];
-		return sprintf('<groep class="vue-context" :groep="%s" :settings="%s"></groep>', htmlspecialchars(json_encode([
-			'id' => 1,
-			'mijn_uid' => LoginModel::getUid(),
-			'naam' => 'Mijn groep',
-			'familie' => 'fam',
-			'begin_moment' => date('Y'),
-			'eind_moment' => date('Y'),
-			'status' => 'ht',
-			'samenvatting' => 'Dit is mijn groep',
-			'omschrijving' => 'Lees meer',
-			'keuzelijst' => null,
-			'maker_uid' => '1345',
-			'versie' => 'v2',
-			'keuzelijst2' => [$keuze1, $keuze2, $keuze3, $keuze4],
-			'leden' => [$lid1, $lid1, $lid1, $lid1, $lid1, $lid1, $lid1, $lid1, $lid1, $lid1, $lid1, $lid1, $lid1],
-		])), htmlspecialchars(json_encode(['mijn_uid' => LoginModel::getUid(), 'mijn_link' => ProfielModel::getLink(LoginModel::getUid())])));
+		$uid = LoginModel::getUid();
 
 		// Controleer rechten
 		if (!$groep->mag(AccessAction::Bekijken)) {
 			return '';
 		}
 		if ($groep->versie == GroepVersie::V2) {
-			return sprintf('<groep :settings="%s"></groep>', json_encode($groep));
+			$settings = [
+				'mijn_uid' => $uid,
+				'mijn_link' => ProfielModel::getLink($uid),
+				'aanmeld_url' => $groep->getUrl() . 'aanmelden/' . $uid,
+			];
+
+			return vsprintf('<groep class="vue-context" :groep="%s" :settings="%s"></groep>', [
+				vue_encode($groep),
+				vue_encode($settings)
+			]);
 		}
 		$view = new GroepView($groep, null, false, true);
 		return $view->getHtml();
