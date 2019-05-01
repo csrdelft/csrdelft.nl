@@ -1,9 +1,7 @@
 <template>
 	<div class="card groep">
 		<div class="card-body">
-			<div class="row">
-				<div class="col"><h5 class="card-title">{{naam}}</h5></div>
-			</div>
+			<h3 class="card-title">{{naam}}</h3>
 			<div class="row">
 				<div class="left-col col-md-4" v-if="!aangemeld">
 					<p class="card-text">{{samenvatting}}</p>
@@ -17,7 +15,7 @@
 					<table class="table table-sm">
 						<GroepHeaderRow :keuzes="keuzelijst2"/>
 						<tbody>
-						<GroepLidRow v-for="lid of leden" :lid="lid" :keuzes="keuzelijst2"/>
+						<GroepLidRow v-for="lid of leden" :key="lid.uid" :lid="lid" :keuzes="keuzelijst2"/>
 						</tbody>
 					</table>
 				</div>
@@ -39,6 +37,8 @@
 	// noinspection JSUnusedGlobalSymbols
 	@Component({components: {CheckboxKeuze, GroepLidRow, GroepHeaderRow}})
 	export default class Groep extends Vue {
+		protected GroepKeuzeType = GroepKeuzeType;
+
 		/// Props
 		@Prop()
 		private settings: GroepSettings;
@@ -63,8 +63,6 @@
 		private aanmeldUrl: string = '';
 		private mijnOpmerking: GroepKeuzeSelectie[] = [];
 
-		protected GroepKeuzeType = GroepKeuzeType;
-
 		protected created() {
 			this.id = this.groep.id;
 			this.naam = this.groep.naam;
@@ -86,7 +84,7 @@
 			if (this.aangemeld) {
 				this.mijnOpmerking = this.mijnAanmelding!.opmerking2;
 			} else {
-				this.mijnOpmerking = this.keuzelijst2.map(value => ({
+				this.mijnOpmerking = this.keuzelijst2.map((value) => ({
 					selectie: value.default,
 					naam: value.naam,
 				}));

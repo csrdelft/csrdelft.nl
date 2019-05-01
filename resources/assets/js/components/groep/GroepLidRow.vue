@@ -19,9 +19,9 @@
 		private keuzes: KeuzeOptie[];
 
 		private renderSelectie(keuze: KeuzeOptie) {
-			const lidKeuze = this.lid.opmerking2.find((lidKeuze) => lidKeuze.naam === keuze.naam);
+			const lidKeuze = this.lid.opmerking2.find((k) => k.naam === keuze.naam);
 
-			if (lidKeuze == undefined) {
+			if (lidKeuze === undefined) {
 				return '<span class="ico bullet_error"></span>';
 			}
 
