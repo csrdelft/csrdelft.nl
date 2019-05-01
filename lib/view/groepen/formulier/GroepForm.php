@@ -150,7 +150,7 @@ class GroepForm extends ModalForm {
 		$return = [];
 		$keuzes = explode('|', $keuzelijst);
 		foreach ($keuzes as $keuze) {
-			$attrs = explode(':', $keuzelijst);
+			$attrs = explode(':', $keuze);
 			$return[] = new GroepKeuze(...$attrs);
 		}
 

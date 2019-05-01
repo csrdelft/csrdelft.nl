@@ -1,14 +1,14 @@
 <template>
 		<tr>
-			<td v-html="lid.link"></td>
-			<td v-for="opmerking in lid.opmerking" v-html="renderSelectie(opmerking.type, opmerking.selectie)"></td>
+			<td class="text-nowrap" v-html="lid.link"></td>
+			<td v-for="keuze in keuzes" v-html="renderSelectie(keuze)"></td>
 		</tr>
 </template>
 
 <script lang="ts">
-	import Vue from "vue";
-	import {Component, Prop} from "vue-property-decorator";
-	import {GroepLid, KeuzeOptie} from "../../model/groep";
+	import Vue from 'vue';
+	import {Component, Prop} from 'vue-property-decorator';
+	import {GroepLid, KeuzeOptie} from '../../model/groep';
 
 	@Component({})
 	export default class GroepLidRow extends Vue {
@@ -18,10 +18,16 @@
 		@Prop()
 		private keuzes: KeuzeOptie[];
 
-		private renderSelectie(type: string, selectie: any) {
-			switch (type) {
+		private renderSelectie(keuze: KeuzeOptie) {
+			const lidKeuze = this.lid.opmerking2.find((lidKeuze) => lidKeuze.naam === keuze.naam);
+
+			if (lidKeuze == undefined) {
+				return '<span class="ico bullet_error"></span>';
+			}
+
+			switch (keuze.type) {
 				case 'checkbox_1':
-					if (selectie) {
+					if (lidKeuze.selectie) {
 						return '<span class="ico tick"></span>';
 					} else {
 						return '<span class="ico cross"></span>';

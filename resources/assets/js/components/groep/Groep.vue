@@ -9,7 +9,7 @@
 					<p class="card-text">{{samenvatting}}</p>
 					<div v-for="(keuze, i) in keuzelijst2">
 						<CheckboxKeuze v-if="keuze.type === GroepKeuzeType.CHECKBOX" :key="i" :keuze="keuze"
-													 v-model="mijn_opmerking[i]"/>
+													 v-model="mijnOpmerking[i]"/>
 					</div>
 					<a class="btn btn-primary" href="#" @click="aanmelden">Aanmelden</a>
 				</div>
@@ -27,14 +27,14 @@
 </template>
 
 <script lang="ts">
-	import axios from "axios";
-	import Vue from "vue";
-	import {Component, Prop} from "vue-property-decorator";
-	import GroepKeuzeType from "../../enum/GroepKeuzeType";
-	import {GroepInstance, GroepKeuzeSelectie, GroepLid, GroepSettings, KeuzeOptie} from "../../model/groep";
-	import GroepHeaderRow from "./GroepHeaderRow.vue";
-	import GroepLidRow from "./GroepLidRow.vue";
-	import CheckboxKeuze from "./keuzes/CheckboxesKeuzes.vue";
+	import axios from 'axios';
+	import Vue from 'vue';
+	import {Component, Prop} from 'vue-property-decorator';
+	import GroepKeuzeType from '../../enum/GroepKeuzeType';
+	import {GroepInstance, GroepKeuzeSelectie, GroepLid, GroepSettings, KeuzeOptie} from '../../model/groep';
+	import GroepHeaderRow from './GroepHeaderRow.vue';
+	import GroepLidRow from './GroepLidRow.vue';
+	import CheckboxKeuze from './keuzes/CheckboxesKeuzes.vue';
 
 	// noinspection JSUnusedGlobalSymbols
 	@Component({components: {CheckboxKeuze, GroepLidRow, GroepHeaderRow}})
@@ -47,56 +47,55 @@
 
 		/// Data
 		private id: number = 0;
-		private naam: string = "";
-		private familie: string = "";
-		private begin_moment: Date = new Date();
-		private eind_moment: Date = new Date();
-		private status: string = "";
-		private samenvatting: string = "";
-		private omschrijving: string = "";
-		private maker_uid: string = "";
-		private versie: string = "";
+		private naam: string = '';
+		private familie: string = '';
+		private beginMoment: Date = new Date();
+		private eindMoment: Date = new Date();
+		private status: string = '';
+		private samenvatting: string = '';
+		private omschrijving: string = '';
+		private makerUid: string = '';
+		private versie: string = '';
 		private keuzelijst2: KeuzeOptie[] = [];
 		private leden: GroepLid[] = [];
-		private mijn_uid: string = "";
-		private mijn_link: string = "";
-		private aanmeld_url: string = "";
-		private mijn_opmerking: GroepKeuzeSelectie[] = [];
+		private mijnUid: string = '';
+		private mijnLink: string = '';
+		private aanmeldUrl: string = '';
+		private mijnOpmerking: GroepKeuzeSelectie[] = [];
 
-		GroepKeuzeType = GroepKeuzeType;
+		protected GroepKeuzeType = GroepKeuzeType;
 
 		protected created() {
 			this.id = this.groep.id;
 			this.naam = this.groep.naam;
 			this.familie = this.groep.familie;
-			this.begin_moment = this.groep.begin_moment;
-			this.eind_moment = this.groep.eind_moment;
+			this.beginMoment = this.groep.begin_moment;
+			this.eindMoment = this.groep.eind_moment;
 			this.status = this.groep.status;
 			this.samenvatting = this.groep.samenvatting;
 			this.omschrijving = this.groep.omschrijving;
-			this.maker_uid = this.groep.maker_uid;
+			this.makerUid = this.groep.maker_uid;
 			this.versie = this.groep.versie;
 			this.keuzelijst2 = this.groep.keuzelijst2;
 			this.leden = this.groep.leden;
 
-			this.mijn_uid = this.settings.mijn_uid;
-			this.mijn_link = this.settings.mijn_link;
-			this.aanmeld_url = this.settings.aanmeld_url;
+			this.mijnUid = this.settings.mijn_uid;
+			this.mijnLink = this.settings.mijn_link;
+			this.aanmeldUrl = this.settings.aanmeld_url;
 
 			if (this.aangemeld) {
-				this.mijn_opmerking = this.mijnAanmelding!.opmerking;
+				this.mijnOpmerking = this.mijnAanmelding!.opmerking2;
 			} else {
-				this.mijn_opmerking = this.keuzelijst2.map(value => ({
+				this.mijnOpmerking = this.keuzelijst2.map(value => ({
 					selectie: value.default,
 					naam: value.naam,
-					type: value.type
 				}));
 			}
 		}
 
 		/// Getters
 		private get mijnAanmelding() {
-			return this.leden.find((lid) => lid.uid == this.mijn_uid);
+			return this.leden.find((lid) => lid.uid === this.mijnUid);
 		}
 
 		protected get aangemeld() {
@@ -107,16 +106,14 @@
 		protected aanmelden(event: Event) {
 			event.preventDefault();
 			if (!this.aangemeld) {
-				const aanmelding = <GroepLid> {
-					uid: this.mijn_uid,
-					link: this.mijn_link,
-					opmerking: this.mijn_opmerking,
-				};
-				this.leden.push(aanmelding);
+				this.leden.push({
+					uid: this.mijnUid,
+					link: this.mijnLink,
+					opmerking2: this.mijnOpmerking,
+				});
 
-				axios.post(this.aanmeld_url, aanmelding)
+				axios.post(this.aanmeldUrl, {opmerking2: this.mijnOpmerking});
 			}
-			// TODO: Stuur naar server
 			return false;
 		}
 	}

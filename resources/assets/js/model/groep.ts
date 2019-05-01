@@ -1,7 +1,7 @@
 export interface GroepLid {
 	uid: string;
 	link: string;
-	opmerking: GroepKeuzeSelectie[];
+	opmerking2: GroepKeuzeSelectie[];
 }
 
 export interface GroepSettings {
@@ -36,6 +36,5 @@ export interface KeuzeOptie {
 
 export interface GroepKeuzeSelectie {
 	naam: string;
-	type: string;
 	selectie: string;
 }

@@ -1,5 +1,6 @@
 <?php
 
+use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\Bestuur;
 use CsrDelft\model\entity\groepen\Commissie;
 use CsrDelft\model\entity\groepen\Ketzer;
@@ -8,12 +9,14 @@ use CsrDelft\model\entity\groepen\Lichting;
 use CsrDelft\model\entity\groepen\Ondervereniging;
 use CsrDelft\model\entity\groepen\RechtenGroep;
 use CsrDelft\model\entity\groepen\Verticale;
+use CsrDelft\model\entity\groepen\Werkgroep;
 use CsrDelft\model\entity\groepen\Woonoord;
 use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 
 class GroepVue extends AbstractMigration {
 	const GROEPEN = [
+		Activiteit::class,
 		Bestuur::class,
 		Commissie::class,
 		Ketzer::class,
@@ -22,6 +25,7 @@ class GroepVue extends AbstractMigration {
 		Ondervereniging::class,
 		RechtenGroep::class,
 		Verticale::class,
+		Werkgroep::class,
 		Woonoord::class,
 	];
 

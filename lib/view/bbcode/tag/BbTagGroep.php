@@ -70,7 +70,7 @@ abstract class BbTagGroep extends BbTag {
 			$settings = [
 				'mijn_uid' => $uid,
 				'mijn_link' => ProfielModel::getLink($uid),
-				'aanmeld_url' => $groep->getUrl() . 'aanmelden/' . $uid,
+				'aanmeld_url' => $groep->getUrl() . 'aanmelden2/' . $uid,
 			];
 
 			return vsprintf('<groep class="vue-context" :groep="%s" :settings="%s"></groep>', [
