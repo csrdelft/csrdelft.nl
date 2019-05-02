@@ -5,11 +5,8 @@
 			<div class="row">
 				<div class="left-col col-md-4" v-if="!aangemeld">
 					<p class="card-text">{{samenvatting}}</p>
-					<div v-for="(keuze, i) in keuzelijst2">
-						<CheckboxKeuze v-if="keuze.type === GroepKeuzeType.CHECKBOX" :key="i" :keuze="keuze"
-													 v-model="mijnOpmerking[i]"/>
-					</div>
-					<a class="btn btn-primary" href="#" @click="aanmelden">Aanmelden</a>
+					<GroepAanmeldForm :keuzes="keuzelijst2" :opmerking="mijnOpmerking"/>
+					<button class="btn btn-primary" @click="aanmelden">Aanmelden</button>
 				</div>
 				<div class="col results">
 					<table class="table table-sm">
@@ -30,12 +27,12 @@
 	import {Component, Prop} from 'vue-property-decorator';
 	import GroepKeuzeType from '../../enum/GroepKeuzeType';
 	import {GroepInstance, GroepKeuzeSelectie, GroepLid, GroepSettings, KeuzeOptie} from '../../model/groep';
+	import GroepAanmeldForm from './GroepAanmeldForm.vue';
 	import GroepHeaderRow from './GroepHeaderRow.vue';
 	import GroepLidRow from './GroepLidRow.vue';
-	import CheckboxKeuze from './keuzes/CheckboxesKeuzes.vue';
 
 	// noinspection JSUnusedGlobalSymbols
-	@Component({components: {CheckboxKeuze, GroepLidRow, GroepHeaderRow}})
+	@Component({components: {GroepAanmeldForm, GroepLidRow, GroepHeaderRow}})
 	export default class Groep extends Vue {
 		protected GroepKeuzeType = GroepKeuzeType;
 
@@ -120,10 +117,6 @@
 <style scoped>
 	.left-col {
 		border-right: 1px solid rgba(0, 0, 0, 0.125);
-	}
-
-	.groep {
-		min-height: 300px;
 	}
 
 	.results {

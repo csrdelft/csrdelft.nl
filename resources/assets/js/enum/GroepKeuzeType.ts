@@ -7,13 +7,13 @@
 export default {
 	CHECKBOX: 'checkbox_1',
 	RADIOS: 'radios_1',
-	TEXT: 'test_1',
+	TEXT: 'text_1',
 };
 
 export function getGroepKeuzeTypeDescription(option: string) {
 	return {
 		checkbox_1: 'Een checkbox',
 		radios_1: 'Radiobuttons',
-		test_1: 'Een textbox',
+		text_1: 'Een textbox',
 	}[option];
 }

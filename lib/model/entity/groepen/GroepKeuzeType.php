@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
 class GroepKeuzeType extends PersistentEnum {
 	const CHECKBOX = 'checkbox_1';
 	const RADIOS = 'radios_1';
-	const TEXT = 'test_1';
+	const TEXT = 'text_1';
 
 	protected static $supportedChoices = [
 		self::CHECKBOX => self::CHECKBOX,
