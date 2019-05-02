@@ -60,13 +60,12 @@ abstract class BbTagGroep extends BbTag {
 	}
 
 	protected function groep(AbstractGroep $groep) {
-		$uid = LoginModel::getUid();
-
 		// Controleer rechten
 		if (!$groep->mag(AccessAction::Bekijken)) {
 			return '';
 		}
 		if ($groep->versie == GroepVersie::V2) {
+			$uid = LoginModel::getUid();
 			$settings = [
 				'mijn_uid' => $uid,
 				'mijn_link' => ProfielModel::getLink($uid),

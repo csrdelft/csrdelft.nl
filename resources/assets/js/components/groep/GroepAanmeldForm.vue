@@ -16,7 +16,7 @@
 	import CheckboxKeuze from './keuzes/CheckboxKeuze.vue';
 	import TextKeuze from './keuzes/TextKeuze.vue';
 
-	@Component({components: {CheckboxKeuze, TextKeuze}})
+	@Component({})
 	export default class GroepAanmeldForm extends Vue {
 		@Prop()
 		private keuzes: KeuzeOptie[];
@@ -28,7 +28,7 @@
 			switch (type) {
 				case GroepKeuzeType.CHECKBOX: return CheckboxKeuze;
 				case GroepKeuzeType.TEXT: return TextKeuze;
-				default: throw Error('kannie');
+				default: throw Error(`Kan component voor GroepKeuzeType '${type}' niet vinden.`);
 			}
 		}
 	}

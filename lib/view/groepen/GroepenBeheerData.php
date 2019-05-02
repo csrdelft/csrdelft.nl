@@ -31,6 +31,7 @@ class GroepenBeheerData extends DataTableResponse {
 		$array['omschrijving'] = null;
 		$array['website'] = null;
 		$array['maker_uid'] = null;
+		$array['leden'] = null;
 
 		if (property_exists($groep, 'in_agenda')) {
 			$array['in_agenda'] = $groep->in_agenda ? 'ja' : 'nee';
