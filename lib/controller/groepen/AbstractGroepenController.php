@@ -9,6 +9,7 @@ use CsrDelft\model\ChangeLogModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\AbstractGroepLid;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
@@ -158,6 +159,7 @@ abstract class AbstractGroepenController extends Controller {
 			case GroepTab::Eetwens:
 			case 'verwijderen':
 			case 'aanmelden':
+			case 'aanmelden2':
 			case 'bewerken':
 			case 'afmelden':
 				return $this->getMethod() == 'POST';
@@ -544,6 +546,29 @@ abstract class AbstractGroepenController extends Controller {
 		} else {
 			$this->view = new GroepLedenTable($groep::getLedenModel(), $groep);
 		}
+	}
+
+	public function aanmelden2(AbstractGroep $groep, $uid) {
+		$model = $groep::getLedenModel();
+
+		if (!$groep->mag(AccessAction::Aanmelden)) {
+			$this->exit_http(403);
+		}
+		$lid = $model->nieuw($groep, $uid);
+
+		$opmerking = $this->getPost('opmerking2');
+
+		$keuzes = [];
+		foreach ($opmerking as $keuze) {
+			$keuzes[] = new GroepKeuzeSelectie($keuze['naam'], $keuze['selectie']);
+		}
+
+		$lid->opmerking2 = $keuzes;
+
+		ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
+		$model->create($lid);
+
+		$this->view = new JsonResponse(['success' => true]);
 	}
 
 	public function aanmelden(AbstractGroep $groep, $uid = null) {

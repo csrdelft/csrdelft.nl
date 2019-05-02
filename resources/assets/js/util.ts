@@ -183,3 +183,12 @@ export function parseData(el: HTMLElement) {
 
 	return out;
 }
+
+export function htmlEncode(str: string) {
+	return String(str)
+		.replace(/&/g, '&amp;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;');
+}

@@ -4,7 +4,14 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\groepen\GroepKeuze;
+use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
+use CsrDelft\model\entity\groepen\GroepKeuzeType;
+use CsrDelft\model\entity\groepen\GroepVersie;
+use CsrDelft\model\entity\groepen\KetzerDeelnemer;
 use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\CsrBbException;
 use CsrDelft\view\groepen\GroepView;
 
@@ -53,9 +60,23 @@ abstract class BbTagGroep extends BbTag {
 	}
 
 	protected function groep(AbstractGroep $groep) {
+		$uid = LoginModel::getUid();
+
 		// Controleer rechten
 		if (!$groep->mag(AccessAction::Bekijken)) {
 			return '';
+		}
+		if ($groep->versie == GroepVersie::V2) {
+			$settings = [
+				'mijn_uid' => $uid,
+				'mijn_link' => ProfielModel::getLink($uid),
+				'aanmeld_url' => $groep->getUrl() . 'aanmelden2/' . $uid,
+			];
+
+			return vsprintf('<groep class="vue-context" :groep="%s" :settings="%s"></groep>', [
+				vue_encode($groep),
+				vue_encode($settings)
+			]);
 		}
 		$view = new GroepView($groep, null, false, true);
 		return $view->getHtml();

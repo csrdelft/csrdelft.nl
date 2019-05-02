@@ -1,16 +1,18 @@
 <?php
 
 use CsrDelft\model\entity\Geslacht;
+use CsrDelft\model\entity\groepen\GroepKeuzeType;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\security\AccessAction;
 
 require_once __DIR__ . '/../../lib/configuratie.include.php';
 
-const FILE_TEMPLATE = __DIR__ . '/../../resources/assets/js/enum/%s.js';
+const FILE_TEMPLATE = __DIR__ . '/../../resources/assets/js/enum/%s.ts';
 const ENUMS = [
 	AccessAction::class,
 	LidStatus::class,
-	Geslacht::class
+	Geslacht::class,
+	GroepKeuzeType::class,
 ];
 
 /**
@@ -18,7 +20,7 @@ const ENUMS = [
  */
 function generateEnums() {
 	foreach (ENUMS as $enum) {
-		generateJS($enum);
+		generateTypescript($enum);
 	}
 }
 
@@ -26,37 +28,50 @@ function generateEnums() {
  * @param \CsrDelft\Orm\Entity\PersistentEnum $enum
  * @throws Exception
  */
-function generateJS($enum) {
+function generateTypescript($enum) {
 	$reflectionClass = new ReflectionClass($enum);
+	$className = $reflectionClass->getShortName();
 
 	$classConstants = $reflectionClass->getConstants();
 
 	$typeOptions = $enum::getTypeOptions();
 
-	$options = [];
+	ob_start();
 	foreach ($classConstants as $name => $option) {
 		if (in_array($option, $typeOptions)) {
-
-			$options[$name] = [
-				'value' => $option,
-				'description' => $enum::getDescription($option),
-				'char' => $enum::getChar($option)
-			];
+			echo "	$name: '$option',\n";
 		}
 	}
 
-	$optionsString = json_encode($options, JSON_PRETTY_PRINT);
+	$optionsString = ob_get_clean();
 
-	/** @noinspection JSUnusedGlobalSymbols */
-	$js = <<<JS
+	ob_start();
+
+	foreach ($classConstants as $name => $option) {
+		if (in_array($option, $typeOptions)) {
+			$description = $enum::getDescription($option);
+			echo "		$option: '$description',\n";
+		}
+	}
+
+	$descriptionString = ob_get_clean();
+
+	$js = <<<TS
 /**
-* NIET AANPASSEN.
-* Gegenereerde code voor {$enum}.
-* 
-* Zie bin/dev/generator.enum.php voor generator.
-*/
-export default {$optionsString};
-JS;
+ * NIET AANPASSEN.
+ * Gegenereerde code voor {$enum}.
+ *
+ * Zie bin/dev/generator.enum.php voor generator.
+ */
+export default {
+{$optionsString}};
+
+export function get{$className}Description(option: string) {
+	return {
+{$descriptionString}	}[option];
+}
+
+TS;
 
 	$fp = fopen(sprintf(FILE_TEMPLATE, $reflectionClass->getShortName()), 'w');
 

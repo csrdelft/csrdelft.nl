@@ -45,6 +45,7 @@
 		"phpunit/phpunit": "^6.5"
 	},
 	"scripts": {
+		"phinx": "vendor/bin/phinx",
 		"migrate": "vendor/bin/phinx migrate",
 		"generator": "@php bin/dev/generate.php",
 		"production": "@php bin/ci/compile.php",

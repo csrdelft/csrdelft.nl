@@ -1099,3 +1099,7 @@ function delTree($dir) {
 	}
 	return rmdir($dir);
 }
+
+function vue_encode($object) {
+	return htmlspecialchars(json_encode($object));
+}

@@ -7,6 +7,8 @@ use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\groepen\Commissie;
 use CsrDelft\model\entity\groepen\CommissieSoort;
+use CsrDelft\model\entity\groepen\GroepKeuze;
+use CsrDelft\model\entity\groepen\GroepVersie;
 use CsrDelft\model\entity\groepen\Ketzer;
 use CsrDelft\model\entity\groepen\Kring;
 use CsrDelft\model\entity\groepen\Woonoord;
@@ -63,6 +65,15 @@ class GroepForm extends ModalForm {
 		}
 		if ($groep instanceof Kring) {
 			unset($fields['samenvatting']);
+		}
+
+		// GROEPEN_V2
+		if (!LoginModel::mag(P_ADMIN)) {
+			$fields['versie']->hidden = true;
+			$fields['keuzelijst2']->hidden = true;
+		} else {
+			$fields['versie']->title = 'Versie 2 is een testversie, niet gebruiken als je niet weet wat je doet.';
+			$fields['keuzelijst2']->title = 'Formaat: naam:type:default:description|naam:type:default:description|...';
 		}
 
 		$fields['maker_uid']->readonly = !LoginModel::mag(P_ADMIN);
@@ -127,7 +138,22 @@ class GroepForm extends ModalForm {
 			}
 		}
 
+		// GROEPEN_V2
+		if ($fields['keuzelijst2']->getValue() !== null && $fields['versie']->getValue() === GroepVersie::V2) {
+			$this->model->keuzelijst2 = $this->parseKeuzelijst($fields['keuzelijst2']->getValue());
+		};
+
 		return parent::validate();
 	}
 
+	private function parseKeuzelijst($keuzelijst) {
+		$return = [];
+		$keuzes = explode('|', $keuzelijst);
+		foreach ($keuzes as $keuze) {
+			$attrs = explode(':', $keuze);
+			$return[] = new GroepKeuze(...$attrs);
+		}
+
+		return $return;
+	}
 }
