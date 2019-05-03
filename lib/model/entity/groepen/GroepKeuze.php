@@ -20,8 +20,7 @@ class GroepKeuze {
 	public function __construct($naam = null, $type = null, $default = null, $description = null) {
 		$this->naam = $naam;
 		$this->type = $type;
-		// TODO: Niet alleen een bool
-		$this->default = (bool)$default;
+		$this->default = $default;
 		$this->description = $description;
 	}
 }

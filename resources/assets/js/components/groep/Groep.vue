@@ -3,10 +3,9 @@
 		<div class="card-body">
 			<h3 class="card-title">{{naam}}</h3>
 			<div class="row">
-				<div class="left-col col-md-4" v-if="!aangemeld">
+				<div class="left-col col-md-5" v-if="!aangemeld">
 					<p class="card-text">{{samenvatting}}</p>
-					<GroepAanmeldForm :keuzes="keuzelijst2" :opmerking="mijnOpmerking"/>
-					<button class="btn btn-primary" @click="aanmelden">Aanmelden</button>
+					<GroepAanmeldForm :keuzes="keuzelijst2" :opmerking="mijnOpmerking" :aangemeld="aangemeld" @aanmelden="aanmelden"/>
 				</div>
 				<div class="col results">
 					<table class="table table-sm">
@@ -25,7 +24,6 @@
 	import axios from 'axios';
 	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
-	import GroepKeuzeType from '../../enum/GroepKeuzeType';
 	import {GroepInstance, GroepKeuzeSelectie, GroepLid, GroepSettings, KeuzeOptie} from '../../model/groep';
 	import GroepAanmeldForm from './GroepAanmeldForm.vue';
 	import GroepHeaderRow from './GroepHeaderRow.vue';
@@ -34,8 +32,6 @@
 	// noinspection JSUnusedGlobalSymbols
 	@Component({components: {GroepAanmeldForm, GroepLidRow, GroepHeaderRow}})
 	export default class Groep extends Vue {
-		protected GroepKeuzeType = GroepKeuzeType;
-
 		/// Props
 		@Prop()
 		private settings: GroepSettings;
@@ -99,7 +95,6 @@
 
 		/// Methods
 		protected aanmelden(event: Event) {
-			event.preventDefault();
 			if (!this.aangemeld) {
 				this.leden.push({
 					uid: this.mijnUid,
@@ -109,7 +104,6 @@
 
 				axios.post(this.aanmeldUrl, {opmerking2: this.mijnOpmerking});
 			}
-			return false;
 		}
 	}
 </script>
@@ -119,8 +113,11 @@
 		border-right: 1px solid rgba(0, 0, 0, 0.125);
 	}
 
+	.groep {
+		min-height: 300px;
+	}
+
 	.results {
-		height: 300px;
 		overflow: auto;
 	}
 </style>

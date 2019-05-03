@@ -1,10 +1,11 @@
 <template>
 	<div>
-		<component v-for="(keuze, i) in keuzes"
-							 :is="getComponent(keuze.type)"
-							 v-model="opmerking[i]"
-							 :key="i"
-							 :keuze="keuze"/>
+		<component v-for="opmerking in opmerkingData"
+							 :key="opmerking.naam"
+							 :is="getComponent(opmerking.naam)"
+							 v-model="opmerking.selectie"
+							 :keuze="getKeuze(opmerking.naam)" />
+		<button class="btn btn-primary" @click="$emit('aanmelden', opmerkingData)">Aanmelden</button>
 	</div>
 </template>
 
@@ -14,6 +15,7 @@
 	import GroepKeuzeType from '../../enum/GroepKeuzeType';
 	import {GroepKeuzeSelectie, KeuzeOptie} from '../../model/groep';
 	import CheckboxKeuze from './keuzes/CheckboxKeuze.vue';
+	import MultiSelectKeuze from './keuzes/MultiSelectKeuze.vue';
 	import TextKeuze from './keuzes/TextKeuze.vue';
 
 	@Component({})
@@ -24,10 +26,25 @@
 		@Prop()
 		private opmerking: GroepKeuzeSelectie[];
 
-		private getComponent(type: string) {
+		@Prop()
+		private aangemeld: boolean;
+
+		private opmerkingData: GroepKeuzeSelectie[] = [];
+
+		private created() {
+			this.opmerkingData = this.opmerking;
+		}
+
+		private getKeuze(naam: string) {
+			return this.keuzes.find((keuze) => keuze.naam === naam)!;
+		}
+
+		private getComponent(naam: string) {
+			const type = this.getKeuze(naam).type;
 			switch (type) {
 				case GroepKeuzeType.CHECKBOX: return CheckboxKeuze;
 				case GroepKeuzeType.TEXT: return TextKeuze;
+				case GroepKeuzeType.RADIOS: return MultiSelectKeuze;
 				default: throw Error(`Kan component voor GroepKeuzeType '${type}' niet vinden.`);
 			}
 		}

@@ -30,7 +30,7 @@ export interface KeuzeOptie {
 	type: string;
 	naam: string;
 	default: string;
-	opties: string;
+	opties: string[];
 	description: string;
 }
 

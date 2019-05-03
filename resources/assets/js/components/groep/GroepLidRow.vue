@@ -30,10 +30,8 @@
 			switch (keuze.type) {
 				case GroepKeuzeType.CHECKBOX:
 					return lidKeuze.selectie ? '<span class="ico tick"></span>' : '<span class="ico cross"></span>';
-				case GroepKeuzeType.TEXT:
-					return htmlEncode(lidKeuze.selectie);
 				default:
-					return '';
+					return htmlEncode(lidKeuze.selectie);
 			}
 		}
 	}

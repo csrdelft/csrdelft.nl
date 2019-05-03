@@ -73,7 +73,7 @@ class GroepForm extends ModalForm {
 			$fields['keuzelijst2']->hidden = true;
 		} else {
 			$fields['versie']->title = 'Versie 2 is een testversie, niet gebruiken als je niet weet wat je doet.';
-			$fields['keuzelijst2']->title = 'Formaat: naam:type:default:description|naam:type:default:description|...';
+			$fields['keuzelijst2']->title = 'Formaat: naam:type:default:description:optie,optie,optie|naam:type:default:description:|...';
 		}
 
 		$fields['maker_uid']->readonly = !LoginModel::mag(P_ADMIN);
@@ -151,7 +151,10 @@ class GroepForm extends ModalForm {
 		$keuzes = explode('|', $keuzelijst);
 		foreach ($keuzes as $keuze) {
 			$attrs = explode(':', $keuze);
-			$return[] = new GroepKeuze(...$attrs);
+			$opties = explode(',', $attrs[4]);
+			$groepKeuze = new GroepKeuze($attrs[0], $attrs[1], $attrs[2], $attrs[3]);
+			$groepKeuze->opties = $opties;
+			$return[] = $groepKeuze;
 		}
 
 		return $return;

@@ -1,7 +1,7 @@
 <template>
 	<div class="form-group">
 		<label :for="'customCheck' + keuze.naam">{{keuze.description}}</label>
-		<input type="text" class="form-control" :id="'customCheck' + keuze.naam" v-model="value.selectie">
+		<input type="text" class="form-control" :id="'customCheck' + keuze.naam" :value="value" @input="$emit('input', $event.target.value)">
 	</div>
 </template>
 
@@ -16,7 +16,7 @@
 		private keuze: KeuzeOptie;
 
 		@Prop()
-		private value: GroepKeuzeSelectie;
+		private value: string;
 	}
 </script>
 
