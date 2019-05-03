@@ -227,7 +227,7 @@
 						<li>
 							<a href="https://www.goedkoopsteautoverzekering.net/">
 								<img src="https://csrdelft.nl/plaetjes/banners/goedkoopste-autoverzekering.png"
-										 alt="Goedkoopste autoverzekering advertentie">
+										 alt="Goedkoopste autoverzekering">
 							</a>
 						</li>
 						<li>
