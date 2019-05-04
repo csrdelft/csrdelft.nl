@@ -68,6 +68,9 @@ abstract class AbstractGroep extends PersistentEntity {
 	 */
 	public $maker_uid;
 	public $versie = GroepVersie::V1;
+	/**
+	 * @var GroepKeuze[]
+	 */
 	public $keuzelijst2;
 	/**
 	 * Database table columns
@@ -225,4 +228,22 @@ abstract class AbstractGroep extends PersistentEntity {
 		return LoginModel::mag(P_LEDEN_MOD . ',groep:P_GROEP:_MOD', $allowedAuthenticationMethods);
 	}
 
+	/**
+	 * Controleer of keuzes overeen komen.
+	 *
+	 * @param GroepKeuzeSelectie[] $keuzes
+	 * @return bool
+	 */
+	public function valideerOpmerking(array $keuzes) {
+		$correct = [];
+		foreach ($keuzes as $keuze) {
+			foreach ($this->keuzelijst2 as $optie) {
+				if ($optie->naam == $keuze->naam && !in_array($keuze, $correct)) {
+					$correct[] = $keuze;
+				}
+			}
+		}
+
+		return count($keuzes) == count($correct);
+	}
 }

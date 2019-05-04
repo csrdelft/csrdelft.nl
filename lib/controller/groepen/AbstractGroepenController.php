@@ -563,6 +563,10 @@ abstract class AbstractGroepenController extends Controller {
 			$keuzes[] = new GroepKeuzeSelectie($keuze['naam'], $keuze['selectie']);
 		}
 
+		if (!$groep->valideerOpmerking($keuzes)) {
+			$this->exit_http(400);
+		}
+
 		$lid->opmerking2 = $keuzes;
 
 		ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
