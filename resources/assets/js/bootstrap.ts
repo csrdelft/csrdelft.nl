@@ -57,6 +57,7 @@ require('jquery-ui-timepicker-addon');
 require('./lib/jquery-ui-timepicker-nl');
 require('jquery.maskedinput');
 require('lightbox2');
+require('corejs-typeahead/dist/typeahead.jquery.js');
 
 /**
  * Globale objecten gebruikt in PHP code.

@@ -77,6 +77,10 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 	module: {
 		// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
 		rules: [
+			{
+				test: require.resolve('corejs-typeahead/dist/typeahead.jquery.js'),
+				use: 'imports-loader?this=>window,define=>false,exports=>false',
+			},
 			// Controleer .js bestanden met ESLint. Zie ook .eslintrc.js
 			{
 				enforce: 'pre',
