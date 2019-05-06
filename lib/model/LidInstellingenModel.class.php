@@ -280,7 +280,7 @@ class LidInstellingenModel extends InstellingenModel {
 		  'twitterblokje'			 => array('Twitter-feed weergeven', T::Enumeration, array('ja', 'nee'), 'nee')
 		  ), */
 		'zijbalk' => [
-			'ishetal' => ['Is het al… weergeven', T::Enumeration, ['niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren', 'foutmelding', 'sponsorkliks'], 'willekeurig', ''],
+			'ishetal' => ['Is het al… weergeven', T::Enumeration, ['niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren', 'foutmelding', 'sponsorkliks', 'patronaat', 'patroon'], 'willekeurig', ''],
 			'favorieten' => ['Favorieten menu weergeven', T::Enumeration, ['ja', 'nee'], 'ja', ''],
 			'agendaweken' => ['Aantal weken in agenda weergeven', T::Integer, [0, 10], 2, ''],
 			'agenda_max' => ['Maximaal aantal agenda-items', T::Integer, [0, 50], 15, ''],
@@ -292,7 +292,7 @@ class LidInstellingenModel extends InstellingenModel {
 			'fotoalbum' => ['Laatste fotoalbum weergeven', T::Enumeration, ['ja', 'nee'], 'ja', ''],
 			'fotos' => ['Aantal foto\'s weergeven', T::Integer, [0, 50], 6, ''],
 			'verjaardagen' => ['Aantal verjaardagen weergeven', T::Integer, [0, 50], 9, ''],
-			'verjaardagen_pasfotos' => ['Pasfoto\'s bij verjaardagen', T::Enumeration, ['ja', 'nee'], 'ja', '']
+			'verjaardagen_pasfotos' => ['Pasfoto\'s bij verjaardagen', T::Enumeration, ['ja', 'nee'], 'ja', ''],
 		],
 		'zoeken' => [
 			'favorieten' => ['Favorieten<span class="offtopic"> (telt niet mee voor max.)</span>', T::Enumeration, ['ja', 'nee'], 'ja', ''],

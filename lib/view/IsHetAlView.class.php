@@ -4,10 +4,13 @@ namespace CsrDelft\view;
 
 use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\entity\agenda\AgendaItem;
+use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 
 class IsHetAlView implements View {
+	const PATRONAAT_ACTIVITEIT_ID = '1754';
+	const PATRONAAT_FORUM_DRAAD = "/forum/reactie/121337#121337";
 
 	/**
 	 * Type of IsHetAlContent
@@ -83,6 +86,11 @@ class IsHetAlView implements View {
 				setcookie('studeren', $tijd, time() + 30 * 60, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 				break;
 
+			case 'patroon':
+				$patroonKetzer = ActiviteitenModel::get(self::PATRONAAT_ACTIVITEIT_ID);
+				$this->ja = $patroonKetzer && $patroonKetzer->getLid(LoginModel::getUid()) !== false;
+				break;
+			case 'patronaat':
 			case 'wist u dat':
 				$this->ja = null;
 				break;
@@ -144,6 +152,18 @@ class IsHetAlView implements View {
 			case 'lezing':
 			case 'borrel':
 				echo 'Is er een ' . $this->model . ' vanavond?';
+				break;
+
+			case 'patroon':
+				echo 'Ben ik al patroon?';
+				if ($this->ja === false) {
+					echo sprintf('<a href="%s"><div class="nee">NEE.</div> (klik hier)</a>', self::PATRONAAT_FORUM_DRAAD);
+					$this->ja = null;
+				}
+				break;
+
+			case 'patronaat':
+				echo sprintf('Kan ik mij al aanmelden voor het patronaat?<div class="ja"><a href="%s">JA!</a></div>', self::PATRONAAT_FORUM_DRAAD);
 				break;
 
 			case 'foutmelding':
