@@ -88,7 +88,7 @@ forum-posten:
   methods: POST
   defaults: { draad_id: null }
   requirements: { forum_id: '\d+', draad_id: '\d+' }
-  options: { mag: P_LOGGED_IN }
+  options: { mag: P_PUBLIC }
 
 forum-aanmaken:
   path: /forum/aanmaken
