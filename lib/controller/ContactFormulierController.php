@@ -35,7 +35,7 @@ class ContactFormulierController {
 		$interessestring = '';
 		foreach ($interesses as $interesse) $interessestring .= " * " . $interesse . "\n";
 
-		if ($this->isSpam($naam, $email, $adres, $postcode, $woonplaats, $telefoon, $opmerking, $interessestring)) {
+		if ($this->bevatUrl($opmerking) || $this->isSpam($naam, $email, $adres, $postcode, $woonplaats, $telefoon, $opmerking, $interessestring)) {
 			throw new CsrToegangException("spam", 400);
 		}
 
@@ -77,5 +77,9 @@ De PubCie.
 			}
 		}
 		return false;
+	}
+
+	private function bevatUrl($opmerking) {
+		return preg_match('/https?:|\.(com|ru|pw|pro|nl)\/?($|\W)/', $opmerking) == true;
 	}
 }
