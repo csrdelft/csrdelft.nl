@@ -1,10 +1,11 @@
 <?php
 
 namespace CsrDelft\controller;
-use CsrDelft\common\CsrToegangException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Ini;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\model\entity\Mail;
+use CsrDelft\view\PlainView;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -36,7 +37,7 @@ class ContactFormulierController {
 		foreach ($interesses as $interesse) $interessestring .= " * " . $interesse . "\n";
 
 		if ($this->bevatUrl($opmerking) || $this->isSpam($naam, $email, $adres, $postcode, $woonplaats, $telefoon, $opmerking, $interessestring)) {
-			throw new CsrToegangException("spam", 400);
+			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.', 400);
 		}
 
 		$bericht = "
@@ -65,8 +66,7 @@ De PubCie.
 		$mail->setFrom($email);
 		$mail->send();
 
-		setMelding('Bericht verzonden.', 1);
-		redirect('/#contact-form');
+		return new PlainView('Bericht verzonden');
 	}
 
 	private function isSpam(...$input) {
