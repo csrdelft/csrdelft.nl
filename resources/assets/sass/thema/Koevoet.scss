@@ -47,6 +47,7 @@ $zoeken-active-bg: $knalblauw;
 
 h1, h2, h3, h4 {
 	font-weight: bold;
+	cursor: help;
 }
 
 /*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
@@ -59,7 +60,6 @@ h1, a, a:hover,
 .cd-primary-nav > li > a:hover,
 .cd-primary-nav > li > a.selected {
 	color: $knalblauw;
-	cursor: help;
 }
 /* Lijntje tussen ongelezen en gelezen berichten */
 #forumtabel tr.ongelezenvanaf td {
