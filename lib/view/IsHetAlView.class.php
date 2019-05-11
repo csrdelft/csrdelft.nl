@@ -67,8 +67,16 @@ class IsHetAlView implements View {
 				$this->ja = LoginModel::getProfiel()->getJarigOver();
 				break;
 
+			case 'ontbijt':
+				$this->ja = (date('Hi') > '0730' AND date('Hi') < '0830');
+				break;
+		
 			case 'lunch':
 				$this->ja = (date('Hi') > '1230' AND date('Hi') < '1330');
+				break;
+				
+			case 'avondeten':
+				$this->ja = (date('Hi') > '1830' AND date('Hi') < '1930');
 				break;
 
 			case 'weekend':
