@@ -101,22 +101,28 @@ h1, a, a:hover,
 
 /*KNOPPEN*/
 
-/*Knoppen in blauw gradient*/
+/*Gradients nog lelijker gemaakt*/
+/* Kleuren:
+	 - Knalrood: #FF0000
+	 - Knalblauw: #0000FF
+	 - Grijs: #D3D3D3
+*/
+
 .btn, input[type=submit], input[type=button], .progress-bar-info, .btn:focus,
 input[type=submit]:focus, input[type=button]:focus {
-	background-image: linear-gradient(to bottom, $grijs, $knalblauw);
+	background-image: linear-gradient(to bottom, #d3d3d3, #0000ff);
 	border: none !important;
 }	
 
 /*Voor een mouse hover wordt de gradient omgedraaid*/
 .btn:hover, input[type=submit]:hover, input[type=button]:hover {
-	background-image: linear-gradient(to bottom, $knalblauw, $grijs);
+	background-image: repeating-radial-gradient(#ff0000, #0000ff 10%, #d3d3d3 15%);
 	border: none !important;
 }
 
 /*Actieve knoppen */
 .btn.active {
-	background-image: linear-gradient(to bottom, $knalrood, $knalblauw);
+	background-image: radial-gradient(#ff0000, #0000ff);
 	border: none !important;
 }
 
