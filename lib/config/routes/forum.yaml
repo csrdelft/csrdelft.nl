@@ -80,7 +80,7 @@ forum-wacht:
   path: /forum/wacht
   controller: CsrDelft\controller\ForumController::wacht
   methods: GET
-  options: { mag: P_FORUM_ADMIN }
+  options: { mag: P_FORUM_MOD }
 
 forum-posten:
   path: /forum/posten/{forum_id}/{draad_id}
