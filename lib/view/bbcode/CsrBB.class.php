@@ -156,7 +156,6 @@ class CsrBB extends Parser {
 		$env->light_mode = $light;
 		$env->email_mode = true;
 		$parser = new CsrBB($env);
-		$parser->allow_html = true;
 		return $parser->getHtml($bbcode);
 	}
 
