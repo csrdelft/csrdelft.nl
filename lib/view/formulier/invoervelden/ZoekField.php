@@ -49,20 +49,20 @@ JS;
 			// TODO: bundelen om simultane verbindingen te sparen
 			foreach (array('commissies', 'kringen', 'onderverenigingen', 'werkgroepen', 'woonoorden', 'groepen') as $option) {
 				if (LidInstellingenModel::get('zoeken', $option) === 'ja') {
-					$this->suggestions[ucfirst($option)] = '/groepen/' . $option . '/zoeken/?q=';
+					$this->suggestions[ucfirst($option)] = '/groepen/' . $option . '/zoeken?q=';
 				}
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'agenda') === 'ja') {
-				$this->suggestions['Agenda'] = '/agenda/zoeken/?q=';
+				$this->suggestions['Agenda'] = '/agenda/zoeken?q=';
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'forum') === 'ja') {
-				$this->suggestions['Forum'] = '/forum/titelzoeken/?q=';
+				$this->suggestions['Forum'] = '/forum/titelzoeken?q=';
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'fotoalbum') === 'ja') {
-				$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken/?q=';
+				$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken?q=';
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'wiki') === 'ja') {
@@ -74,7 +74,7 @@ JS;
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'boeken') === 'ja') {
-				$this->suggestions['Boeken'] = '/bibliotheek/zoeken/?q=';
+				$this->suggestions['Boeken'] = '/bibliotheek/zoeken?q=';
 			}
 
 			// Favorieten en menu tellen niet
