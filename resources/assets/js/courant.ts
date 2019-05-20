@@ -10,6 +10,6 @@ export function importAgenda(id: string) {
 		cache: false,
 		data: '',
 		type: 'POST',
-		url: '/agenda/courant/',
+		url: '/agenda/courant',
 	}).done((data) => input.value += '\n' + data);
 }
