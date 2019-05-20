@@ -2,31 +2,43 @@ language: php
 php:
   - 7
 
+git:
+  depth: false
+
 cache:
   directories:
     - "node_modules"
     - "vendor"
 
-services:
-  - mysql
+env:
+  global:
+    - SKIP_BUILD=`[[ $TRAVIS_COMMIT_MESSAGE == *"[skipbuild]"* ]]; echo $?`
 
-before_install:
-  - cp ./bin/ci/mysql.ini.travis ./etc/mysql.ini
-  - cp ./bin/ci/defines.include.php ./lib/defines.include.php
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS csrdelft;'
-  - nvm install 8
+# master: build & sonar
+# pull intern: build & sonar (2 builds, 1 met type pull_request, 1 met type push)
+# pull extern: build
+jobs:
+  include:
+    - stage: build
+      services: mysql
+      before_install: nvm install 8
+      script: ./bin/ci/build.sh
+      deploy:
+        provider: script
+        script: ./bin/ci/deploy.sh
+        skip_cleanup: true
+        on:
+          branch: master
+      if: type != pull_request OR fork = true
+    - stage: analysis
+      script: sonar-scanner
+      if: (branch = master OR type = pull_request) AND fork = false
+      addons:
+        sonarcloud:
+          organization: "csrdelft"
 
-install:
-  - yarn
-  - composer install
+stages:
+  - build
+  - analysis
 
-script:
-  - yarn run production
-  - composer run-script production
-
-deploy:
-  provider: script
-  script: ./bin/ci/deploy.sh
-  skip_cleanup: true
-  on:
-    branch: master
+script: skip

@@ -135,7 +135,9 @@ class LoginModel extends PersistenceModel implements Validator {
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
-				$this->login($account->uid, null, false, null, true, true, getDateTime());
+				if ($account) {
+					$this->login($account->uid, null, false, null, true, true, getDateTime());
+				}
 			}
 		}
 		if (!static::getAccount()) {
@@ -440,7 +442,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 		$suedFrom = static::getSuedFrom();
-		return $suedFrom AND AccessModel::mag($suedFrom, 'P_ADMIN');
+		return $suedFrom AND AccessModel::mag($suedFrom, P_ADMIN);
 	}
 
 	/**
@@ -475,7 +477,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return bool
 	 */
 	public function maySuTo(Account $suNaar) {
-		return LoginModel::mag('P_ADMIN') AND !$this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, 'P_LOGGED_IN');
+		return LoginModel::mag(P_ADMIN) AND !$this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, P_LOGGED_IN);
 	}
 
 	/**

@@ -17,12 +17,9 @@ class ZoekField extends TextField {
 		$this->css_classes[] = 'form-control';
 		$this->css_classes[] = 'clicktogo';
 		$this->placeholder = 'Zoek op titel';
+		$this->autoselect = true;
 		$this->onkeydown = <<<JS
-
-if (event.keyCode === 13) { // enter
-    $(this).trigger('typeahead:select')
-}
-else if (event.keyCode === 191 || event.keyCode === 220) { // forward and backward slash
+if (event.keyCode === 191 || event.keyCode === 220) { // forward and backward slash
 	event.preventDefault();
 }
 JS;
@@ -35,7 +32,7 @@ else {
 	window.formulier.formSubmit(event);
 }
 JS;
-		if (LoginModel::mag('P_LEDEN_READ')) {
+		if (LoginModel::mag(P_LEDEN_READ)) {
 
 			if (LidInstellingenModel::get('zoeken', 'favorieten') === 'ja') {
 				$this->addSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
@@ -46,7 +43,7 @@ JS;
 
 			$instelling = LidInstellingenModel::get('zoeken', 'leden');
 			if ($instelling !== 'nee') {
-				$this->suggestions['Leden'] = '/tools/naamsuggesties/leden/?status=' . $instelling . '&q=';
+				$this->suggestions['Leden'] = '/tools/naamsuggesties?zoekin=leden&status=' . $instelling . '&q=';
 			}
 
 			// TODO: bundelen om simultane verbindingen te sparen
@@ -69,11 +66,11 @@ JS;
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'wiki') === 'ja') {
-				$this->suggestions['Wiki'] = '/tools/wikisuggesties/?q=';
+				$this->suggestions['Wiki'] = '/wiki/lib/exe/ajax.php?call=csrlink_wikisuggesties&q=';
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'documenten') === 'ja') {
-				$this->suggestions['Documenten'] = '/documenten/zoeken/?q=';
+				$this->suggestions['Documenten'] = '/documenten/zoeken?q=';
 			}
 
 			if (LidInstellingenModel::get('zoeken', 'boeken') === 'ja') {

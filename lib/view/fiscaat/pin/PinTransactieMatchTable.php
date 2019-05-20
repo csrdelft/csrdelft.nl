@@ -16,7 +16,7 @@ use CsrDelft\view\datatable\Multiplicity;
  */
 class PinTransactieMatchTable extends DataTable {
 	public function __construct() {
-		parent::__construct(PinTransactieMatchModel::ORM, '/fiscaat/pin/overzicht?filter=metFout', 'Overzicht van pintransacties matches');
+		parent::__construct(PinTransactieMatchModel::ORM, '/fiscaat/pin?filter=metFout', 'Overzicht van pintransacties matches');
 
 		$weergave = new CollectionDataTableKnop(Multiplicity::None(), 'Weergave', 'Weergave van de tabel', 'cart');
 		$weergave->addKnop(new SourceChangeDataTableKnop('/fiscaat/pin/overzicht?filter=metFout', 'Met fouten', 'Fouten weergeven', 'cart_error'));

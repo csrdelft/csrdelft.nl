@@ -40,30 +40,30 @@ class BeheerMaaltijdenController extends AclController {
 		parent::__construct($query, MaaltijdenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer' => 'P_MAAL_MOD',
-				'prullenbak' => 'P_MAAL_MOD',
-				//'leegmaken' => 'P_MAAL_MOD',
-				'archief' => 'P_MAAL_MOD',
-				'onverwerkt' => 'P_MAAL_MOD',
-				'beoordelingen' => 'P_MAAL_MOD',
+				'beheer' => P_MAAL_MOD,
+				'prullenbak' => P_MAAL_MOD,
+				//'leegmaken' => P_MAAL_MOD,
+				'archief' => P_MAAL_MOD,
+				'onverwerkt' => P_MAAL_MOD,
+				'beoordelingen' => P_MAAL_MOD,
 			);
 		} else {
 			$this->acl = array(
-				'beheer' => 'P_MAAL_MOD',
-				'prullenbak' => 'P_MAAL_MOD',
-				'archief' => 'P_MAAL_MOD',
-				'beoordelingen' => 'P_MAAL_MOD',
-				'sluit' => 'P_MAAL_MOD',
-				'open' => 'P_MAAL_MOD',
-				'toggle' => 'P_MAAL_MOD',
-				'nieuw' => 'P_MAAL_MOD',
-				'bewerk' => 'P_MAAL_MOD',
-				'verwijder' => 'P_MAAL_MOD',
-				'herstel' => 'P_MAAL_MOD',
-				'aanmelden' => 'P_MAAL_MOD',
-				'afmelden' => 'P_MAAL_MOD',
-				'aanmaken' => 'P_MAAL_MOD',
-				'verwerk' => 'P_MAAL_MOD'
+				'beheer' => P_MAAL_MOD,
+				'prullenbak' => P_MAAL_MOD,
+				'archief' => P_MAAL_MOD,
+				'beoordelingen' => P_MAAL_MOD,
+				'sluit' => P_MAAL_MOD,
+				'open' => P_MAAL_MOD,
+				'toggle' => P_MAAL_MOD,
+				'nieuw' => P_MAAL_MOD,
+				'bewerk' => P_MAAL_MOD,
+				'verwijder' => P_MAAL_MOD,
+				'herstel' => P_MAAL_MOD,
+				'aanmelden' => P_MAAL_MOD,
+				'afmelden' => P_MAAL_MOD,
+				'aanmaken' => P_MAAL_MOD,
+				'verwerk' => P_MAAL_MOD
 			);
 		}
 	}

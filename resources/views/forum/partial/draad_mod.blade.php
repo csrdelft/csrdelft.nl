@@ -1,4 +1,4 @@
-<div id="modereren" class="card verborgen">
+<div id="modereren" class="card collapse forum-header">
 	<div class="modal-header">
 		<h5 class="modal-title">Draad modereren</h5>
 		<button type="button" class="close" aria-label="Close" onclick="$('#modereren').slideUp()">
@@ -65,7 +65,7 @@
 				</div>
 			</div>
 		</form>
-		@can('P_FORUM_BELANGRIJK')
+		@can(P_FORUM_BELANGRIJK)
 			<form action="/forum/wijzigen/{{$draad->draad_id}}/belangrijk" method="post">
 				@csrf
 				<div class="form-group row">

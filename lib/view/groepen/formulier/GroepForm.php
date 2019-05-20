@@ -7,6 +7,8 @@ use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\groepen\Commissie;
 use CsrDelft\model\entity\groepen\CommissieSoort;
+use CsrDelft\model\entity\groepen\GroepKeuze;
+use CsrDelft\model\entity\groepen\GroepVersie;
 use CsrDelft\model\entity\groepen\Ketzer;
 use CsrDelft\model\entity\groepen\Kring;
 use CsrDelft\model\entity\groepen\Woonoord;
@@ -65,7 +67,16 @@ class GroepForm extends ModalForm {
 			unset($fields['samenvatting']);
 		}
 
-		$fields['maker_uid']->readonly = !LoginModel::mag('P_ADMIN');
+		// GROEPEN_V2
+		if (!LoginModel::mag(P_ADMIN)) {
+			$fields['versie']->hidden = true;
+			$fields['keuzelijst2']->hidden = true;
+		} else {
+			$fields['versie']->title = 'Versie 2 is een testversie, niet gebruiken als je niet weet wat je doet.';
+			$fields['keuzelijst2']->title = 'Formaat: naam:type:default:description:optie,optie,optie|naam:type:default:description:|...';
+		}
+
+		$fields['maker_uid']->readonly = !LoginModel::mag(P_ADMIN);
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen($nocancel ? false : null);
@@ -127,7 +138,25 @@ class GroepForm extends ModalForm {
 			}
 		}
 
+		// GROEPEN_V2
+		if ($fields['keuzelijst2']->getValue() !== null && $fields['versie']->getValue() === GroepVersie::V2) {
+			$this->model->keuzelijst2 = $this->parseKeuzelijst($fields['keuzelijst2']->getValue());
+		};
+
 		return parent::validate();
 	}
 
+	private function parseKeuzelijst($keuzelijst) {
+		$return = [];
+		$keuzes = explode('|', $keuzelijst);
+		foreach ($keuzes as $keuze) {
+			$attrs = explode(':', $keuze);
+			$opties = explode(',', $attrs[4]);
+			$groepKeuze = new GroepKeuze($attrs[0], $attrs[1], $attrs[2], $attrs[3]);
+			$groepKeuze->opties = $opties;
+			$return[] = $groepKeuze;
+		}
+
+		return $return;
+	}
 }

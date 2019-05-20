@@ -22,7 +22,7 @@ class BoekFormulier extends Formulier {
 		parent::__construct($boek, "/bibliotheek/boek/$boek->id", '');
 		if ($boek->magBewerken()) {
 			$fields = [];
-			$fields['titel'] = new TextField('titel', $boek->getTitel(), "Titel:", 200);
+			$fields['titel'] = new TitelField('titel', $boek->getTitel(), "Titel:", 200);
 			$fields['auteur'] = new TextField('auteur', $boek->getAuteur(), 'Auteur', 100);
 			$fields['auteur']->suggestions[] = '/bibliotheek/autocomplete/auteur?q=';
 			$fields['auteur']->placeholder = 'Achternaam, Voornaam V.L. van de';
@@ -34,7 +34,7 @@ class BoekFormulier extends Formulier {
 			$fields['uitgeverij'] = new TextField('uitgeverij', $boek->getUitgeverij(), 'Uitgeverij', 100);
 			$fields['uitgeverij']->suggestions[] = '/bibliotheek/autocomplete/uitgeverij?q=';
 			$fields['uitgavejaar'] = new IntField('uitgavejaar', $boek->getUitgavejaar(), 'Uitgavejaar', 0, 2100);
-			$fields['categorie_id'] = new SelectField('categorie_id', $boek->getRubriek()->id, 'Rubriek', $this->getRubriekOptions());
+			$fields['categorie_id'] = new SelectField('categorie_id', $boek->getRubriek() ? $boek->getRubriek()->id : "", 'Rubriek', $this->getRubriekOptions());
 			$fields['categorie_id']->required = true;
 			$fields['code'] = new TextField('code', $boek->getCode(), 'Biebcode', 7);
 			$fields['code']->required = true;

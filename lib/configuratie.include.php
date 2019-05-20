@@ -135,7 +135,7 @@ switch (constant('MODE')) {
 		// Late static binding requires explicitly
 		// calling instance() before any static method!
 		LoginModel::instance();
-		if (!LoginModel::mag('P_ADMIN')) {
+		if (!LoginModel::mag(P_ADMIN)) {
 			die('access denied');
 		}
 		break;
@@ -186,7 +186,7 @@ switch (constant('MODE')) {
 				if (DB_DROP) {
 					setMelding('DB_DROP enabled', 2);
 				}
-			} elseif (!LoginModel::mag('P_ADMIN')) {
+			} elseif (!LoginModel::mag(P_ADMIN)) {
 				redirect('/onderhoud.html');
 			} elseif (DB_DROP) {
 				setMelding('DB_DROP enabled', 2);

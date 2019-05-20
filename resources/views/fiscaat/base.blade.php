@@ -10,7 +10,7 @@
 
 @section('content')
 	<h1>Civisaldo Beheer</h1>
-	@can('P_FISCAAT_READ')
+	@can(P_FISCAAT_READ)
 		<ul class="nav nav-tabs mb-2">
 			<li class="nav-item">
 				@link('Overzicht', '/fiscaat', 'nav-link', 'active')

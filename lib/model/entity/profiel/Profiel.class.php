@@ -242,7 +242,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function magBewerken() {
-		if (LoginModel::mag('P_LEDEN_MOD')) {
+		if (LoginModel::mag(P_LEDEN_MOD)) {
 			return true;
 		}
 		if ($this->uid == 'x999') {
@@ -369,8 +369,8 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getLink($vorm = 'civitas') {
-		if (!LoginModel::mag('P_LEDEN_READ') OR in_array($this->uid, array('x999', 'x101', 'x027', 'x222', '4444'))) {
-			if ($vorm === 'pasfoto' AND LoginModel::mag('P_LEDEN_READ')) {
+		if (!LoginModel::mag(P_LEDEN_READ) OR in_array($this->uid, array('x999', 'x101', 'x027', 'x222', '4444'))) {
+			if ($vorm === 'pasfoto' AND LoginModel::mag(P_LEDEN_READ)) {
 				return $this->getPasfotoTag();
 			}
 			return $this->getNaam();
@@ -408,7 +408,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			}
 			$k .= '">';
 			$k .= $this->getPasfotoTag(false);
-			$k .= '<div class="uid uitgebreid"><a href="/gesprekken/?zoek=' . urlencode($this->getNaam('civitas')) . '" class="lichtgrijs" title="Gesprek"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span></a></div>';
 			if (AccountModel::existsUid($this->uid) AND LoginModel::instance()->maySuTo($this->getAccount())) {
 				$k .= '<div class="uid uitgebreid">';
 				$k .= '<a href="/su/' . $this->uid . '" title="Su naar dit lid">' . $this->uid . '</a>';
@@ -461,7 +460,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		if ($vorm === 'user') {
 			$vorm = LidInstellingenModel::get('forum', 'naamWeergave');
 		}
-		if (!$force AND !LoginModel::mag('P_LOGGED_IN')) {
+		if (!$force AND !LoginModel::mag(P_LOGGED_IN)) {
 			$vorm = 'civitas';
 		}
 		switch ($vorm) {
@@ -539,7 +538,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 					}
 				} // geen lid
 				else {
-					if (LoginModel::mag('P_LEDEN_READ')) {
+					if (LoginModel::mag(P_LEDEN_READ)) {
 						$naam = $this->voornaam . ' ';
 					} else {
 						$naam = $this->voorletters . ' ';
@@ -575,7 +574,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getPasfotoPath($vierkant = false, $vorm = 'user') {
 		$path = null;
-		if (LoginModel::mag('P_OUDLEDEN_READ')) {
+		if (LoginModel::mag(P_OUDLEDEN_READ)) {
 			// in welke (sub)map moeten we zoeken?
 			if ($vierkant) {
 				$folders = array('');
@@ -665,7 +664,12 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * @return float
 	 */
 	public function getCiviSaldo() {
-		return CiviSaldoModel::instance()->getSaldo($this->uid)->saldo / (float)100;
+		$saldo = CiviSaldoModel::instance()->getSaldo($this->uid);
+		if ($saldo) {
+			return $saldo->saldo / (float) 100;
+		}
+
+		return 0;
 	}
 
 	/**

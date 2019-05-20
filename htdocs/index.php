@@ -7,64 +7,125 @@
  * Entry point voor stek modules.
  */
 
+use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\controller\AgendaController;
+use CsrDelft\controller\CmsPaginaController;
+use CsrDelft\controller\ContactFormulierController;
+use CsrDelft\controller\ForumController;
+use CsrDelft\controller\FotoAlbumController;
 use CsrDelft\controller\framework\Controller;
+use CsrDelft\controller\LoginController;
+use CsrDelft\controller\MededelingenController;
+use CsrDelft\controller\ToolsController;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
+use Invoker\Invoker;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Loader\YamlFileLoader;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Router;
 
 require_once 'configuratie.include.php';
 
-// start MVC
-$class = filter_input(INPUT_GET, 'c', FILTER_SANITIZE_STRING);
-
-if (empty($class)) {
-    $class = 'CmsPagina';
-}
-// toegang tot leden website dicht-timmeren:
-switch ($class) {
-    // toegestaan voor iedereen:
-    case 'Login':
-    case 'CmsPagina':
-    case 'Forum':
-    case 'FotoAlbum':
-    case 'Agenda':
-    case 'Mededelingen':
-		case 'ContactFormulier':
-        break;
-
-    // de rest alleen voor ingelogde gebruikers:
-    default:
-        if (!LoginModel::mag('P_LOGGED_IN')) {
-			redirect_via_login(REQUEST_URI);
-        }
-}
-
-$namespacedClassName = 'CsrDelft\\controller\\' . $class . 'Controller';
-
-if (class_exists($namespacedClassName)) {
-	/** @var Controller $controller */
-	$controller = new $namespacedClassName(REQUEST_URI);
-} else {
-	http_response_code(404);
-	exit;
-}
-
-$view = null;
 try {
-	$controller->performAction();
-	$view = $controller->getView();
+	if (isset($_GET['c'])) {
+		$legacy = true;
+		// We hebben een oude controller te pakken
+		// start MVC
+		$class = filter_input(INPUT_GET, 'c', FILTER_SANITIZE_STRING);
+		$method = 'performAction';
+		$parameters = [];
+
+		if (empty($class)) {
+			$class = 'CmsPagina';
+		}
+
+		$class = 'CsrDelft\\controller\\' . $class . 'Controller';
+	} else {
+		$legacy = false;
+		// Laat Symfony routen
+		$requestContext = new RequestContext();
+		$requestContext->fromRequest(Request::createFromGlobals());
+		$router = new Router(
+			new YamlFileLoader(new FileLocator([LIB_PATH])),
+			'config/routes.yaml',
+			['cache_dir' => ROUTES_CACHE_PATH, 'debug' => DEBUG],
+			$requestContext
+		);
+
+		$parameters = $router->match(strtok(REQUEST_URI, '?'));
+
+		$acl = $router->getRouteCollection()->get($parameters['_route'])->getOption('mag');
+
+		if ($acl == null) {
+			throw new CsrException(sprintf('Route "%s" moet een "mag" optie hebben.', $parameters['_route']));
+		}
+
+		if (!LoginModel::mag($acl)) {
+			throw new CsrToegangException('Geen toegang');
+		}
+
+		list($class, $method) = explode('::', $parameters['_controller']);
+	}
+
+	// toegang tot leden website dicht-timmeren:
+	switch ($class) {
+		// toegestaan voor iedereen:
+		case LoginController::class:
+		case CmsPaginaController::class:
+		case ForumController::class:
+		case FotoAlbumController::class:
+		case AgendaController::class:
+		case MededelingenController::class:
+		case ContactFormulierController::class:
+		case ToolsController::class:
+			break;
+
+		// de rest alleen voor ingelogde gebruikers:
+		default:
+			if (!LoginModel::mag(P_LOGGED_IN)) {
+				redirect_via_login(REQUEST_URI);
+			}
+	}
+
+	if (class_exists($class)) {
+		/** @var Controller $controller */
+		$controller = new $class(REQUEST_URI);
+	} else {
+		http_response_code(404);
+		exit;
+	}
+
+	if ($legacy) {
+		$controller->performAction();
+		$view = $controller->getView();
+	} else {
+		$view = (new Invoker())->call([$controller, $method], $parameters);
+	}
+} catch (ResourceNotFoundException $exception) {
+	http_response_code(404);
+	$body = new CmsPaginaView(CmsPaginaModel::get('404'));
+	$view = new CsrLayoutPage($body);
+} catch (MethodNotAllowedException $exception) {
+	http_response_code(404);
+	$body = new CmsPaginaView(CmsPaginaModel::get('404'));
+	$view = new CsrLayoutPage($body);
 } catch (CsrGebruikerException $exception) {
 	http_response_code(400);
 	echo $exception->getMessage();
 	exit;
 } catch (CsrToegangException $exception) {
 	http_response_code($exception->getCode());
-	if ($controller->getMethod() == 'POST') {
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		die($exception->getMessage());
 	} // Redirect to login form
 	elseif (LoginModel::getUid() === 'x999') {
@@ -78,7 +139,7 @@ try {
 }
 
 
-if (DB_CHECK AND LoginModel::mag('P_ADMIN')) {
+if (DB_CHECK AND LoginModel::mag(P_ADMIN)) {
 
     $queries = DatabaseAdmin::instance()->getQueries();
     if (!empty($queries)) {

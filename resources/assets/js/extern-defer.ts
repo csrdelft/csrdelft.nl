@@ -1,6 +1,7 @@
 /**
  * Wordt geladen als de pagina geladen is.
  */
+import axios from 'axios';
 import $ from 'jquery';
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
 import {init} from './ctx';
@@ -107,3 +108,30 @@ $window.on('resize', () => $window.trigger('scroll'));
 $window.trigger('scroll');
 
 init(document.body);
+
+const contactForm = document.querySelector('#contact-form') as HTMLFormElement;
+const errorContainer = document.querySelector('#melding') as HTMLElement;
+const submitButton = contactForm.submitButton as HTMLButtonElement;
+
+contactForm.addEventListener('submit', (event) => {
+	event.preventDefault();
+	errorContainer.innerHTML = '';
+	submitButton.disabled = true;
+	const formData = new FormData(contactForm);
+	axios.post('/contactformulier/interesse', formData)
+		.then((response) => {
+			contactForm.reset();
+			submitButton.disabled = false;
+			errorContainer.innerHTML = '<div class="alert alert-success">' +
+				'<span class="ico accept"></span>' + response.data +
+				'</div>';
+		})
+		.catch((error) => {
+			submitButton.disabled = false;
+			errorContainer.innerHTML = '<div class="alert alert-danger">' +
+				'<span class="ico exclamation"></span>' + error.response.data +
+				'</div>';
+		});
+
+	return false;
+});

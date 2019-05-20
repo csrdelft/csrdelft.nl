@@ -3,6 +3,7 @@
 namespace CsrDelft\model;
 
 use CsrDelft\common\MijnSqli;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\security\LoginModel;
@@ -48,7 +49,7 @@ class LidZoeker {
 		'linkedin' => 'LinkedIn',
 	);
 	//toegestane opties voor het statusfilter.
-	private $allowStatus = array('S_LID', 'S_NOVIET', 'S_GASTLID', 'S_NOBODY', 'S_EXLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN');
+	private $allowStatus;
 	//toegestane opties voor de weergave.
 	private $allowWeergave = [
 		'lijst' => LLLijst::class,
@@ -72,9 +73,10 @@ class LidZoeker {
 	private $result = null;
 
 	public function __construct() {
+		$this->allowStatus = LidStatus::getTypeOptions();
 
 		//wat extra velden voor moderators.
-		if (LoginModel::mag('P_LEDEN_MOD')) {
+		if (LoginModel::mag(P_LEDEN_MOD)) {
 			$this->allowVelden = array_merge($this->allowVelden, $this->allowVeldenLEDENMOD);
 		}
 
@@ -135,11 +137,11 @@ class LidZoeker {
 					$add = array();
 					foreach ($filters as $filter) {
 						if ($filter == 'LEDEN') {
-							$add = array_merge($add, array('S_LID', 'S_NOVIET', 'S_GASTLID'));
+							$add = array_merge($add, LidStatus::getLidLike());
 							continue;
 						}
 						if ($filter == 'OUDLEDEN') {
-							$add = array_merge($add, array('S_OUDLID', 'S_ERELID'));
+							$add = array_merge($add, LidStatus::getOudlidLike());
 							continue;
 						}
 						$filter = 'S_' . $filter;
@@ -237,7 +239,7 @@ class LidZoeker {
 			$defaults[] = "CONCAT_WS(' ', tussenvoegsel, achternaam) LIKE '%" . $zoekterm . "%' ";
 			$defaults[] = "CONCAT_WS(', ', achternaam, tussenvoegsel) LIKE '%" . $zoekterm . "%' ";
 			$defaults[] = "nickname LIKE '%" . $zoekterm . "%' ";
-			if (LoginModel::mag('P_LEDEN_MOD')) {
+			if (LoginModel::mag(P_LEDEN_MOD)) {
 				$defaults[] = "eetwens LIKE '%" . $zoekterm . "%' ";
 			}
 
@@ -397,15 +399,19 @@ class LidZoeker {
 	 */
 	private function zoekMag(Profiel $profiel, string $query) {
 		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
-		$queryInNaam = strpos($profiel->getNaam(), $query) !== false;
-
 		$zoekvelden = LidToestemmingModel::instance()->getModuleInstellingen('profiel');
 		foreach ($zoekvelden as $veld) {
+			if ($veld === 'status') {
+				continue;
+			}
+
 			if (!is_zichtbaar($profiel, $veld)) {
-				if (!$queryInNaam && strpos($profiel->$veld, $query) !== false) {
-					// Als de zoekquery dit veld bevat, terwijl deze niet zichtbaar is, dan is dit profiel niet zichtbaar.
+				$queryNietInNaam = $query !== '' && strpos($profiel->getNaam(), $query) === false;
+				$queryInVeld = $query !== '' && strpos($profiel->$veld, $query) !== false;
+
+				if ($queryNietInNaam && $queryInVeld) {
 					return null;
-				} else if ($veld !== 'status') { // Status kunnen we niet leeg maken.
+				} else {
 					$profiel->$veld = null;
 				}
 			}

@@ -154,14 +154,19 @@
 							de Facebookpagina om de laatste updates te ontvangen</a></li>
 					<li class="fa-map-marker">
 						<noscript class="lazy-load">
-							<iframe
-								src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2456.0445350385166!2d4.360246300000008!3d52.0060664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5b5c03dabb5b3%3A0xea6a437036970629!2sOude+Delft+9!5e0!3m2!1sen!2s!4v1404470858468'
-								height='300' frameborder='0' style='border:0'></iframe>
+							<iframe title="Confide op Google Maps" height="300" frameborder="0" style="border:0"
+								src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2456.0445350385166!2d4.360246300000008!3d52.0060664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5b5c03dabb5b3%3A0xea6a437036970629!2sOude+Delft+9!5e0!3m2!1sen!2s!4v1404470858468">
+							</iframe>
 						</noscript>
 					</li>
 				</ul>
 				<noscript class="lazy-load">
 					<ul class="sponsors">
+						<li>
+							<a href="https://www.allekabels.nl/">
+								<img src='https://csrdelft.nl/plaetjes/banners/allekabels.png' alt='Alle kabels'>
+							</a>
+						</li>
 						<li>
 							<a href="https://www.huizenmarkt.nl/">
 								<img src='https://csrdelft.nl/plaetjes/banners/logo-huizenmarkt.png' alt='Huurwoningen'>
@@ -169,43 +174,37 @@
 						</li>
 						<li>
 							<a href="https://autoverzekering.nl/">
-								<img src='https://csrdelft.nl/plaetjes/banners/logo-AVZ.png' alt='autoverzekering vergelijken'>
+								<img src='https://csrdelft.nl/plaetjes/banners/logo-AVZ.png' alt='Autoverzekering vergelijken'>
 							</a>
 						</li>
 						<li>
 							<a href="https://www.easyswitch.nl/energie-vergelijken/">
-								<img src='https://csrdelft.nl/plaetjes/banners/logo-ES.png' alt='energie vergelijken'>
+								<img src='https://csrdelft.nl/plaetjes/banners/logo-ES.png' alt='Energie vergelijken'>
 							</a>
 						</li>
 						<li>
 							<a href="https://overstappen.nl/autoverzekering">
-								<img src='https://csrdelft.nl/plaetjes/banners/logo-OS.png' alt='goedkope autoverzekering'>
+								<img src='https://csrdelft.nl/plaetjes/banners/logo-OS.png' alt='Goedkope autoverzekering'>
 							</a>
 						</li>
 						<li>
 							<a href="https://dosign.nl/">
-								<img src='https://csrdelft.nl/plaetjes/banners/dosign.gif' alt='Dosignadvertentie'>
+								<img src='https://csrdelft.nl/plaetjes/banners/dosign.gif' alt='Dosign advertentie'>
 							</a>
 						</li>
 						<li>
 							<a href="http://mechdes.nl/">
-								<img src='https://csrdelft.nl/plaetjes/banners/mechdes.gif' alt='Mechdesadvertentie'>
+								<img src='https://csrdelft.nl/plaetjes/banners/mechdes.gif' alt='Mechdes advertentie'>
 							</a>
 						</li>
 						<li>
 							<a href="http://galjemadetachering.nl/">
-								<img src='https://csrdelft.nl/plaetjes/banners/galjema_banner.jpg' alt='Galjemaadvertentie'>
+								<img src='https://csrdelft.nl/plaetjes/banners/galjema_banner.jpg' alt='Galjema advertentie'>
 							</a>
 						</li>
 						<li>
 							<a href="http://zoover.nl/">
-								<img src='https://csrdelft.nl/plaetjes/banners/Zoover.jpg' alt='Zooveradvertentie'>
-							</a>
-						</li>
-						<li>
-							<a href="https://www.maxilia.nl/banners-drukken/">
-								<img src='https://csrdelft.nl/plaetjes/banners/maxilia.png' class='white-background'
-										 alt='Maxiliaadvertentie'/>
+								<img src='https://csrdelft.nl/plaetjes/banners/Zoover.jpg' alt='Zoover advertentie'>
 							</a>
 						</li>
 						<li>
@@ -220,9 +219,15 @@
 							</a>
 						</li>
 						<li>
-							<a href="https://www.independer.nl/autoverzekering/intro.aspx">
-								<img src="https://csrdelft.nl/plaetjes/banners/independer.jpg"
-										 alt="Independer">
+							<a href="https://www.geld.nl/">
+								<img src="https://csrdelft.nl/plaetjes/banners/geld.png"
+										 alt="Geld.nl Vergelijk website">
+							</a>
+						</li>
+						<li>
+							<a href="https://www.goedkoopsteautoverzekering.net/">
+								<img src="https://csrdelft.nl/plaetjes/banners/goedkoopste-autoverzekering.png"
+										 alt="Goedkoopste autoverzekering">
 							</a>
 						</li>
 						<li>

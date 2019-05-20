@@ -93,14 +93,14 @@ class CmsPagina extends PersistentEntity {
 	 * @return bool
 	 */
 	public function magRechtenWijzigen() {
-		return LoginModel::mag('P_ADMIN');
+		return LoginModel::mag(P_ADMIN);
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function magVerwijderen() {
-		return LoginModel::mag('P_ADMIN');
+		return LoginModel::mag(P_ADMIN);
 	}
 
 }

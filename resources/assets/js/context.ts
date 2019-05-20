@@ -32,24 +32,34 @@ ctx.addHandler('div.bb-img-loading', (el: HTMLElement) => {
 	});
 });
 
-export function domUpdate(this: HTMLElement | void, htmlString: string) {
+export function domUpdate(this: HTMLElement | void, htmlString: string|object) {
+	if (typeof htmlString !== 'string') {
+		return;
+	}
+
 	htmlString = $.trim(htmlString);
 	if (htmlString.substring(0, 9) === '<!DOCTYPE') {
 		alert('response error');
 		document.write(htmlString);
 	}
 	const elements = htmlParse(htmlString);
-	$(elements).each(function () {
-		const id = $(this).attr('id');
+	$(elements).each(function (index, element) {
+		if (!(element instanceof Element)) {
+			// element kan ook een stuk tekst zijn, hier kunnen we niets mee.
+			return;
+		}
 
-		const elmnt = $('#' + id);
-		if (elmnt.length === 1) {
-			if ($(this).hasClass('remove')) {
-				elmnt.effect('fade', {}, 400, () => {
-					$(this).remove();
+		const $element = $(element);
+		const id = $(element).attr('id');
+
+		const target = $('#' + id);
+		if (target.length === 1) {
+			if ($element.hasClass('remove')) {
+				target.effect('fade', {}, 400, () => {
+					target.remove();
 				});
 			} else {
-				elmnt.replaceWith($(this).show()).effect('highlight');
+				target.replaceWith($element.show().get()).effect('highlight');
 			}
 		} else {
 			const parentid = $(this).attr('parentid');
@@ -59,7 +69,7 @@ export function domUpdate(this: HTMLElement | void, htmlString: string) {
 				$(this).prependTo('#maalcie-tabel tbody:visible:first').show().effect('highlight'); // FIXME: make generic
 			}
 		}
-		init(this);
+		init(element);
 
 		if (id === 'modal') {
 			modalOpen();

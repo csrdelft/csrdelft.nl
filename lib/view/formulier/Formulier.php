@@ -97,7 +97,7 @@ class Formulier implements View, Validator {
 
 	private function loadProperty(InputField $field) {
 		$fieldName = $field->getName();
-		if ($this->model instanceof PersistentEntity AND property_exists($this->model, $fieldName)) {
+		if ($this->model && property_exists($this->model, $fieldName)) {
 			$this->model->$fieldName = $field->getValue();
 		}
 	}

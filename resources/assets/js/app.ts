@@ -10,5 +10,4 @@ import './logger';
 import './maalcie';
 import './main-menu';
 import './register-vue';
-import './roodschopper';
 import './router';

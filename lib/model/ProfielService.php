@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\model;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
@@ -85,7 +86,7 @@ class ProfielService extends DependencyManager {
 			$zoekstatus = '';
 		}
 		if ($zoekstatus == 'allepersonen') {
-			$zoekstatus = array('S_NOVIET', 'S_LID', 'S_GASTLID', 'S_OUDLID', 'S_ERELID', 'S_KRINGEL', 'S_OVERLEDEN', 'S_NOBODY', 'S_EXLID');
+			$zoekstatus = LidStatus::getTypeOptions();
 		}
 		if (is_array($zoekstatus)) {
 			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu
@@ -96,7 +97,7 @@ class ProfielService extends DependencyManager {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
 			if (
-				(LoginModel::mag('P_LEDEN_READ') and !LoginModel::mag('P_OUDLEDEN_READ')) or (LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ') and $zoekstatus != 'oudleden')
+				(LoginModel::mag(P_LEDEN_READ) and !LoginModel::mag(P_OUDLEDEN_READ)) or (LoginModel::mag(P_LEDEN_READ) and LoginModel::mag(P_OUDLEDEN_READ) and $zoekstatus != 'oudleden')
 			) {
 				$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
 			}
@@ -104,7 +105,7 @@ class ProfielService extends DependencyManager {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
 			if (
-				(!LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ')) or (LoginModel::mag('P_LEDEN_READ') and LoginModel::mag('P_OUDLEDEN_READ') and $zoekstatus != 'leden')
+				(!LoginModel::mag(P_LEDEN_READ) and LoginModel::mag(P_OUDLEDEN_READ)) or (LoginModel::mag(P_LEDEN_READ) and LoginModel::mag(P_OUDLEDEN_READ) and $zoekstatus != 'leden')
 			) {
 				if ($statusfilter != '')
 					$statusfilter .= " OR ";
@@ -112,12 +113,12 @@ class ProfielService extends DependencyManager {
 			}
 			# we zoeken in nobodies als
 			# de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if ($zoekstatus === 'nobodies' and LoginModel::mag('P_LEDEN_MOD')) {
+			if ($zoekstatus === 'nobodies' and LoginModel::mag(P_LEDEN_MOD)) {
 				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
 				$statusfilter = "status='S_NOBODY' OR status='S_EXLID'";
 			}
 
-			if (LoginModel::mag('P_LEDEN_READ') and $zoekstatus === 'novieten') {
+			if (LoginModel::mag(P_LEDEN_READ) and $zoekstatus === 'novieten') {
 				$statusfilter = "status='S_NOVIET'";
 			}
 		}

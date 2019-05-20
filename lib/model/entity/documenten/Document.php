@@ -20,7 +20,7 @@ class Document extends Bestand {
 	public $categorie_id;
 	public $toegevoegd;
 	public $eigenaar;
-	public $leesrechten = 'P_LOGGED_IN';
+	public $leesrechten = P_LOGGED_IN;
 
 	public function hasFile() {
 		if (!$this->magBekijken()) {
@@ -38,11 +38,11 @@ class Document extends Bestand {
 	}
 
 	public function magBewerken() {
-		return $this->isEigenaar() OR LoginModel::mag('P_DOCS_MOD');
+		return $this->isEigenaar() OR LoginModel::mag(P_DOCS_MOD);
 	}
 
 	public function magVerwijderen() {
-		return LoginModel::mag('P_DOCS_MOD');
+		return LoginModel::mag(P_DOCS_MOD);
 	}
 
 	/**

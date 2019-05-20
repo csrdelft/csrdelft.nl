@@ -27,8 +27,8 @@ class MijnCorveeController extends AclController {
 		parent::__construct($query, CorveeTakenModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'mijn' => 'P_CORVEE_IK',
-				'rooster' => 'P_CORVEE_IK'
+				'mijn' => P_CORVEE_IK,
+				'rooster' => P_CORVEE_IK
 			);
 		} else {
 			$this->acl = array();
@@ -54,12 +54,12 @@ class MijnCorveeController extends AclController {
 	}
 
 	public function rooster($toonverleden = false) {
-		if ($toonverleden === 'verleden' AND LoginModel::mag('P_CORVEE_MOD')) {
+		if ($toonverleden === 'verleden' AND LoginModel::mag(P_CORVEE_MOD)) {
 			$taken = $this->model->getVerledenTaken();
 			$toonverleden = false; // hide button
 		} else {
 			$taken = $this->model->getKomendeTaken();
-			$toonverleden = LoginModel::mag('P_CORVEE_MOD');
+			$toonverleden = LoginModel::mag(P_CORVEE_MOD);
 		}
 		$rooster = $this->model->getRoosterMatrix($taken->fetchAll());
 		$this->view = new CorveeRoosterView($rooster, $toonverleden);

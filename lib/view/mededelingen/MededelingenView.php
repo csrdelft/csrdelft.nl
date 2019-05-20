@@ -61,7 +61,7 @@ class MededelingenView extends SmartyTemplateView {
 				$this->geselecteerdeMededeling = $this->model->retrieveByUUID($mededelingId);;
 				if (!$this->geselecteerdeMededeling) {
 					throw new CsrGebruikerException('Mededeling bestaat niet!');
-				} elseif (!$this->prullenbak OR !LoginModel::mag('P_NEWS_MOD')) {
+				} elseif (!$this->prullenbak OR !LoginModel::mag(P_NEWS_MOD)) {
 					// In de volgende gevallen heeft de gebruiker geen rechten om deze mededeling te bekijken:
 					// 1. Indien deze mededeling reeds verwijderd is.
 					// 2. Indien deze mededeling niet bestemd is voor iedereen en de gebruiker geen leden-lees rechten heeft.
@@ -69,10 +69,10 @@ class MededelingenView extends SmartyTemplateView {
 					// 4. Indien deze mededeling verborgen is en de gebruiker geen moderator is.
 					// 5. Indien deze mededeling wacht op goedkeuring en de gebruiker geen moderator is EN deze mededeling niet van hem is.
 					if (($this->geselecteerdeMededeling->zichtbaarheid == 'verwijderd')
-						OR ($this->geselecteerdeMededeling->prive AND !LoginModel::mag('P_LEDEN_READ'))
+						OR ($this->geselecteerdeMededeling->prive AND !LoginModel::mag(P_LEDEN_READ))
 						OR ($this->geselecteerdeMededeling->doelgroep == 'leden' AND LoginModel::mag('status:oudlid'))
-						OR ($this->geselecteerdeMededeling->zichtbaarheid == 'onzichtbaar' AND !LoginModel::mag('P_NEWS_MOD'))
-						OR ($this->geselecteerdeMededeling->zichtbaarheid == 'wacht_goedkeuring' AND ((LoginModel::getUid() != $this->geselecteerdeMededeling->uid) AND !LoginModel::mag('P_NEWS_MOD'))
+						OR ($this->geselecteerdeMededeling->zichtbaarheid == 'onzichtbaar' AND !LoginModel::mag(P_NEWS_MOD))
+						OR ($this->geselecteerdeMededeling->zichtbaarheid == 'wacht_goedkeuring' AND ((LoginModel::getUid() != $this->geselecteerdeMededeling->uid) AND !LoginModel::mag(P_NEWS_MOD))
 						)
 					) {
 						// De gebruiker heeft geen rechten om deze mededeling te bekijken, dus we resetten het weer.

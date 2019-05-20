@@ -7,6 +7,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\forum\ForumCategorie;
 use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumDraad;
+use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 
@@ -75,9 +76,9 @@ class ForumDelenModel extends CachedPersistenceModel {
 		$deel->categorie_id = 0;
 		$deel->titel = 'Nieuw deelforum';
 		$deel->omschrijving = '';
-		$deel->rechten_lezen = 'P_FORUM_READ';
-		$deel->rechten_posten = 'P_FORUM_POST';
-		$deel->rechten_modereren = 'P_FORUM_MOD';
+		$deel->rechten_lezen = P_FORUM_READ;
+		$deel->rechten_posten = P_FORUM_POST;
+		$deel->rechten_modereren = P_FORUM_MOD;
 		$deel->volgorde = 0;
 		return $deel;
 	}
@@ -182,31 +183,52 @@ class ForumDelenModel extends CachedPersistenceModel {
 	 * Zoek op titel van draadjes en tekst van posts en laad forumdelen die erbij horen.
 	 * Check leesrechten van gebruiker.
 	 *
+	 * @param ForumZoeken $forumZoeken
+	 * @param $query
+	 * @param $titel
+	 * @param $datum
+	 * @param $ouder
+	 * @param $jaar
+	 * @param $per_pagina
+	 * @param $offset
 	 * @return ForumDraad[]
 	 */
-	public function zoeken($query, $titel, $datum, $ouder, $jaar, $limit) {
-		$gevonden_draden = group_by_distinct('draad_id', $this->forumDradenModel->zoeken($query, $datum, $ouder, $jaar, $limit)); // zoek op titel in draden
-		if ($titel === true) {
-			$gevonden_posts = array();
-		} else {
-			$gevonden_posts = group_by('draad_id', $this->forumPostsModel->zoeken($query, $datum, $ouder, $jaar, $limit)); // zoek op tekst in posts
-			$gevonden_draden += $this->forumDradenModel->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
-			// laad posts bij draden
-			foreach ($gevonden_draden as $draad) {
-				if (property_exists($draad, 'score')) { // gevonden op draad titel
-					$draad->score = (float)50;
-				} else { // gevonden op post tekst
-					$draad->score = (float)0;
+	public function zoeken(ForumZoeken $forumZoeken) {
+		$zoek_in = $forumZoeken->zoek_in;
+
+		$gevonden_draden = [];
+		$gevonden_posts = [];
+
+		if (in_array('titel', $zoek_in)) {
+			$gevonden_draden = group_by_distinct('draad_id', $this->forumDradenModel->zoeken($forumZoeken));
+		}
+
+		if (in_array('alle_berichten', $zoek_in)) {
+			$gevonden_posts += group_by('draad_id', $this->forumPostsModel->zoeken($forumZoeken, false));
+		}
+
+		if (in_array('eerste_bericht', $zoek_in)) {
+			$gevonden_posts += group_by('draad_id', $this->forumPostsModel->zoeken($forumZoeken, true));
+		}
+
+		$gevonden_draden += $this->forumDradenModel->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
+
+		// laad posts bij draden
+		foreach ($gevonden_draden as $draad) {
+			if (property_exists($draad, 'score')) { // gevonden op draad titel
+				$draad->score = (float)50;
+			} else { // gevonden op post tekst
+				$draad->score = (float)0;
+			}
+			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // posts al gevonden
+				$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
+				$draad->laatst_gewijzigd = $this->laatstGewijzigd($gevonden_posts[$draad->draad_id]);
+				foreach ($draad->getForumPosts() as $post) {
+					$draad->score += (float)$post->score;
 				}
-				if (array_key_exists($draad->draad_id, $gevonden_posts)) { // posts al gevonden
-					$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
-					foreach ($draad->getForumPosts() as $post) {
-						$draad->score += (float)$post->score;
-					}
-				} else { // laad eerste post
-					$array_first_post = $this->forumPostsModel->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad->draad_id), null, null, 1);
-					$draad->setForumPosts($array_first_post);
-				}
+			} else { // laad eerste post
+				$array_first_post = $this->forumPostsModel->getEerstePostVoorDraad($draad);
+				$draad->setForumPosts([$array_first_post]);
 			}
 		}
 		// check permissies
@@ -215,18 +237,30 @@ class ForumDelenModel extends CachedPersistenceModel {
 				unset($gevonden_draden[$draad_id]);
 			}
 		}
-		if ($titel !== true) {
-			usort($gevonden_draden, array($this, 'sorteren'));
+		usort($gevonden_draden, $this->sorteerFunctie($forumZoeken->sorteer_op));
+
+		if ($forumZoeken->sorteer_volgorde == 'asc') {
+			$gevonden_draden = array_reverse($gevonden_draden);
 		}
 		return $gevonden_draden;
 	}
 
-	function sorteren($a, $b) {
-		if ($a->score < $b->score) {
-			return 1;
-		} else {
-			return -1;
+	function sorteerFunctie($sorteerOp) {
+		switch ($sorteerOp) {
+			case 'aangemaakt_op': return function ($a, $b) {
+					return ($a->datum_tijd < $b->datum_tijd) ? 1 : -1;
+				};
+			case 'laatste_bericht': return function ($a, $b) {
+					return ($a->laatst_gewijzigd < $b->laatst_gewijzigd) ? 1 : -1;
+				};
+			case 'relevantie': return function ($a, $b) {
+					return ($a->score < $b->score) ? 1 : -1;
+				};
+			default: throw new CsrGebruikerException('Onbekende sorteermethode');
 		}
 	}
 
+	function laatstGewijzigd($draden) {
+		return max(array_map(function ($draad) { return $draad->laatst_gewijzigd; }, $draden));
+	}
 }

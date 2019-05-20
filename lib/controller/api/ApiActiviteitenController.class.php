@@ -15,7 +15,7 @@ class ApiActiviteitenController {
 	 * @return boolean
 	 */
 	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag('P_LEDEN_READ');
+		return ApiAuthController::isAuthorized() && LoginModel::mag(P_LEDEN_READ);
 	}
 
 	/**

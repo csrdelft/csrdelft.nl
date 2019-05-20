@@ -13,7 +13,7 @@ class ApiLedenController {
 	 * @return boolean
 	 */
 	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag('P_OUDLEDEN_READ');
+		return ApiAuthController::isAuthorized() && LoginModel::mag(P_OUDLEDEN_READ);
 	}
 
 	/**

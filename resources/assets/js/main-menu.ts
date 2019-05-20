@@ -114,7 +114,8 @@ $(() => {
 	});
 
 	// submenu items - go back link
-	$('.go-back').on('click', function () {
+	$('.go-back').on('click', function (event) {
+		event.preventDefault();
 		$(this).parent('ul').addClass('is-hidden').parent('.has-children').parent('ul').removeClass('moves-out');
 	});
 

@@ -116,7 +116,7 @@ class PeilingenModel extends PersistenceModel {
 	public function getPeilingenVoorBeheer() {
 
 		$peilingen = $this->find();
-		if (LoginModel::mag('P_PEILING_MOD')) {
+		if (LoginModel::mag(P_PEILING_MOD)) {
 			return $peilingen->fetchAll();
 		} else {
 			$zichtbarePeilingen = $this->find('eigenaar = ?', [LoginModel::getUid()])->fetchAll();
@@ -140,7 +140,7 @@ class PeilingenModel extends PersistenceModel {
 	}
 
 	public function magBewerken($peiling) {
-		if (LoginModel::mag('P_PEILING_MOD')
+		if (LoginModel::mag(P_PEILING_MOD)
 			|| $peiling->eigenaar == LoginModel::getUid()
 			|| LoginModel::mag($peiling->rechten_mod)) {
 			return $peiling;

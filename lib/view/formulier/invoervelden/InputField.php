@@ -77,6 +77,7 @@ abstract class InputField implements FormElement, Validator {
 	public $blacklist = null; // array met niet tegestane waarden
 	public $whitelist = null; // array met exclusief toegestane waarden
 	public $pattern = null; // html5 input validation pattern
+	public $autoselect = false; // selecteer autoaanvullen automatisch
 
 
 	public function __construct($name, $value, $description, $model = null) {
@@ -152,7 +153,7 @@ abstract class InputField implements FormElement, Validator {
 			$this->error = 'Dit veld mag niet worden aangepast';
 		} elseif ($this->value == '' AND $this->required) {
 			// vallen over lege velden als dat aangezet is voor het veld
-			if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
+			if ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
 				// tenzij gebruiker P_LEDEN_MOD heeft en deze optie aan staat voor dit veld
 			} else {
 				$this->error = 'Dit is een verplicht veld';
@@ -235,7 +236,7 @@ abstract class InputField implements FormElement, Validator {
 		if (!empty($this->description)) {
 			$required = '';
 			if ($this->required) {
-				if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
+				if ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
 					// exception for leden mod
 				} else {
 					$required = '<span class="field-required">*</span>';
@@ -272,7 +273,7 @@ abstract class InputField implements FormElement, Validator {
 	 */
 	protected function getCssClasses() {
 		if ($this->required) {
-			if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
+			if ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
 				// exception for leden mod
 			} else {
 				$this->css_classes[] = 'required';
@@ -520,12 +521,15 @@ JS;
 JS;
 		}
 		if (!empty($this->suggestions)) {
+			$typeaheadOptions = json_encode([
+				'hint' => true,
+				'highlight' => true,
+				'autoselect' => $this->autoselect,
+			]);
+
 			$js .= <<<JS
 
-$('#{$this->getId()}').typeahead({
-	hint: true,
-	highlight: true
-}
+$('#{$this->getId()}').typeahead($typeaheadOptions
 JS;
 		}
 		foreach ($this->suggestions as $name => $source) {

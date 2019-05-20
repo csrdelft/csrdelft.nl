@@ -55,5 +55,6 @@ phpunit.init.php
 
 # Build bestanden
 .cache-loader
+.scannerwork
 package.json
 yarn.lock

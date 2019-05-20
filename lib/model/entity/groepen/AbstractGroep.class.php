@@ -67,6 +67,11 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * @var string
 	 */
 	public $maker_uid;
+	public $versie = GroepVersie::V1;
+	/**
+	 * @var GroepKeuze[]
+	 */
+	public $keuzelijst2;
 	/**
 	 * Database table columns
 	 * @var array
@@ -81,13 +86,19 @@ abstract class AbstractGroep extends PersistentEntity {
 		'samenvatting' => [T::Text],
 		'omschrijving' => [T::Text, true],
 		'keuzelijst' => [T::String, true],
-		'maker_uid' => [T::UID]
+		'maker_uid' => [T::UID],
+		'versie' => [T::Enumeration, false, GroepVersie::class],
+		'keuzelijst2' => [T::JSON, true, [GroepKeuze::class]],
 	];
 	/**
 	 * Database primary key
 	 * @var array
 	 */
 	protected static $primary_key = ['id'];
+
+	protected static $computed_attributes = [
+		'leden' => [T::String],
+	];
 
 	/**
 	 * De URL van de groep
@@ -160,7 +171,7 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * @return boolean
 	 */
 	public function mag($action, $allowedAuthenticationMethods = null) {
-		if (!LoginModel::mag('P_LOGGED_IN', $allowedAuthenticationMethods)) {
+		if (!LoginModel::mag(P_LOGGED_IN, $allowedAuthenticationMethods)) {
 			return false;
 		}
 		$aangemeld = Database::instance()->sqlExists(static::getLedenModel()->getTableName(), 'groep_id = ? AND uid = ?', [$this->id, LoginModel::getUid()]);
@@ -205,7 +216,7 @@ abstract class AbstractGroep extends PersistentEntity {
 		switch ($action) {
 
 			case AccessAction::Bekijken:
-				return LoginModel::mag('P_LEDEN_READ', $allowedAuthenticationMethods);
+				return LoginModel::mag(P_LEDEN_READ, $allowedAuthenticationMethods);
 
 			// Voorkom dat moderators overal een normale aanmeldknop krijgen
 			case AccessAction::Aanmelden:
@@ -214,7 +225,25 @@ abstract class AbstractGroep extends PersistentEntity {
 				return false;
 		}
 		// Moderators mogen alles
-		return LoginModel::mag('P_LEDEN_MOD,groep:P_GROEP:_MOD', $allowedAuthenticationMethods);
+		return LoginModel::mag(P_LEDEN_MOD . ',groep:P_GROEP:_MOD', $allowedAuthenticationMethods);
 	}
 
+	/**
+	 * Controleer of keuzes overeen komen.
+	 *
+	 * @param GroepKeuzeSelectie[] $keuzes
+	 * @return bool
+	 */
+	public function valideerOpmerking(array $keuzes) {
+		$correct = [];
+		foreach ($keuzes as $keuze) {
+			foreach ($this->keuzelijst2 as $optie) {
+				if ($optie->naam == $keuze->naam && !in_array($keuze, $correct)) {
+					$correct[] = $keuze;
+				}
+			}
+		}
+
+		return count($keuzes) == count($correct);
+	}
 }

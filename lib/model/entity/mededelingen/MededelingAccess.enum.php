@@ -14,8 +14,8 @@ abstract class MededelingAccess extends PersistentEnum {
 	/**
 	 * MededelingAccess opties.
 	 */
-	const Post = 'P_NEWS_POST';
-	const Mod = 'P_NEWS_MOD';
+	const Post = P_NEWS_POST;
+	const Mod = P_NEWS_MOD;
 
 	/**
 	 * @var string[]

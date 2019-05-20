@@ -1,4 +1,4 @@
-@extends('eetplan.overzicht')
+@extends('eetplan.template')
 
 @section('breadcrumbs')
 	@parent

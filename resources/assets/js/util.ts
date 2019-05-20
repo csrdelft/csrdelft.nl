@@ -155,7 +155,7 @@ export function html(strings: TemplateStringsArray, ...values: string[]): HTMLEl
 }
 
 export function htmlParse(htmlString: string) {
-	return new DOMParser().parseFromString(htmlString, 'text/html').body.children;
+	return jQuery.parseHTML(htmlString, null, true) as Node[];
 }
 
 export function preloadImage(url: string, callback: () => void) {
@@ -182,4 +182,13 @@ export function parseData(el: HTMLElement) {
 	}
 
 	return out;
+}
+
+export function htmlEncode(str: string) {
+	return String(str)
+		.replace(/&/g, '&amp;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;');
 }

@@ -54,6 +54,26 @@ abstract class LidStatus extends PersistentEnum {
 	/**
 	 * @var string[]
 	 */
+	protected static $fiscaalOudlidlike = [
+		self::Oudlid => self::Oudlid,
+		self::Erelid => self::Erelid,
+		self::Exlid => self::Exlid,
+		self::Nobody => self::Nobody,
+	];
+
+	/**
+	 * @var string[]
+	 */
+	protected static $fiscaalLidlike = [
+		self::Noviet => self::Noviet,
+		self::Lid => self::Lid,
+		self::Gastlid => self::Gastlid,
+		self::Kringel => self::Kringel,
+	];
+
+	/**
+	 * @var string[]
+	 */
 	protected static $supportedChoices = [
 		self::Noviet => self::Noviet,
 		self::Lid => self::Lid,
@@ -111,6 +131,20 @@ abstract class LidStatus extends PersistentEnum {
 	 */
 	public static function getOudlidLike() {
 		return array_values(static::$oudlidlike);
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public static function getFiscaalLidLike() {
+		return array_values(static::$fiscaalLidlike);
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public static function getFiscaalOudlidLike() {
+		return array_values(static::$fiscaalOudlidlike);
 	}
 
 	/**

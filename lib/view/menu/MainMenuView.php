@@ -8,7 +8,6 @@
 
 namespace CsrDelft\view\menu;
 
-use CsrDelft\model\gesprekken\GesprekDeelnemersModel;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\SavedQuery;
 use CsrDelft\model\security\LoginModel;
@@ -24,7 +23,6 @@ class MainMenuView extends MenuView {
 		parent::view();
 		$mcount = new SavedQuery(62);
 		$this->smarty->assign('mcount', $mcount->count());
-		$this->smarty->assign('gesprekOngelezen', GesprekDeelnemersModel::instance()->getAantalNieuweBerichtenVoorLid(LoginModel::getUid()));
 		$this->smarty->assign('favorieten', MenuModel::instance()->getMenu(LoginModel::getUid()));
 		$this->smarty->assign('zoekbalk', new InstantSearchForm());
 		$this->smarty->display('menu/main.tpl');

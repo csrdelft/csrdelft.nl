@@ -24,14 +24,14 @@ class MenuBeheerController extends AclController {
 		parent::__construct($query, MenuModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer' => 'P_LOGGED_IN'
+				'beheer' => P_LOGGED_IN
 			);
 		} else {
 			$this->acl = array(
-				'toevoegen' => 'P_LOGGED_IN',
-				'bewerken' => 'P_LOGGED_IN',
-				'verwijderen' => 'P_LOGGED_IN',
-				'zichtbaar' => 'P_LOGGED_IN'
+				'toevoegen' => P_LOGGED_IN,
+				'bewerken' => P_LOGGED_IN,
+				'verwijderen' => P_LOGGED_IN,
+				'zichtbaar' => P_LOGGED_IN
 			);
 		}
 	}
@@ -45,7 +45,7 @@ class MenuBeheerController extends AclController {
 	}
 
 	public function beheer($menu_name = 'main') {
-		if ($menu_name != LoginModel::getUid() AND !LoginModel::mag('P_ADMIN')) {
+		if ($menu_name != LoginModel::getUid() AND !LoginModel::mag(P_ADMIN)) {
 			$this->exit_http(403);
 		}
 		$root = $this->model->getMenu($menu_name);

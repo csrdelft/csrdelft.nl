@@ -1,4 +1,5 @@
 import $ from 'jquery';
+require('./ajax-csrf');
 
 declare global {
 	interface Window {

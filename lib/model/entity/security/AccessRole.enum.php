@@ -35,6 +35,12 @@ abstract class AccessRole extends PersistentEnum {
 	const Vlieger = "R_VLIEGER";
 
 	/**
+	 * Extra rechtenset voor Forum Moderators.
+	 * Een combinatie van normaal lid en P_FORUM_MOD.
+	 */
+	const ForumModerator = "R_FORUM_MOD";
+
+	/**
 	 * @var string[]
 	 */
 	protected static $supportedChoices = [
@@ -48,6 +54,7 @@ abstract class AccessRole extends PersistentEnum {
 		self::PubCie => self::PubCie,
 		self::Fiscaat => self::Fiscaat,
 		self::Vlieger => self::Vlieger,
+		self::ForumModerator => self::ForumModerator,
 	];
 
 	/**
@@ -64,6 +71,7 @@ abstract class AccessRole extends PersistentEnum {
 		self::PubCie => 'PubCie-rechten',
 		self::Fiscaat => 'Fiscaat-rechten',
 		self::Vlieger => 'Vlieger-rechten',
+		self::ForumModerator => 'ForumModerator-rechten',
 	];
 
 	/**
@@ -80,6 +88,7 @@ abstract class AccessRole extends PersistentEnum {
 		self::PubCie => 'P',
 		self::Fiscaat => 'F',
 		self::Vlieger => 'V',
+		self::ForumModerator => 'FM',
 	];
 
 	/**

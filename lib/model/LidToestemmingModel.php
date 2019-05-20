@@ -165,7 +165,7 @@ class LidToestemmingModel extends InstellingenModel {
 		return true;
 	}
 
-	public function toestemming($profiel, $id, $cat = 'profiel', $except = 'P_LEDEN_MOD') {
+	public function toestemming($profiel, $id, $cat = 'profiel', $except = P_LEDEN_MOD) {
 		if ($profiel->uid == LoginModel::getUid())
 			return true;
 
@@ -181,7 +181,7 @@ class LidToestemmingModel extends InstellingenModel {
 		return $toestemming->waarde == "ja";
 	}
 
-	public function toestemmingUid($uid, $id, $except = 'P_LEDEN_MOD') {
+	public function toestemmingUid($uid, $id, $except = P_LEDEN_MOD) {
 		if ($uid == LoginModel::getUid())
 			return true;
 

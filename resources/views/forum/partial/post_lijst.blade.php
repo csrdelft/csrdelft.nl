@@ -1,13 +1,13 @@
 @if($post->gefilterd)
 	<div class="filtered">
-		<a class="weergeeflink" onclick="jQuery('#forumpost-row-{{$post->post_id}}').show();
-			jQuery(this).remove()">
+		<a class="weergeeflink" onclick="$('#forumpost-row-{{$post->post_id}}').show();
+			$(this).remove()">
 			&gt;&gt; {{$post->gefilterd}}, klik om weer te geven. &lt;&lt;
 		</a>
 	</div>
 @endif
 
-<div id="forumpost-row-{{$post->post_id}}" class="forum-post @if($post->gefilterd) verborgen @endif">
+<div id="forumpost-row-{{$post->post_id}}" class="forum-post" @if($post->gefilterd) style="display: none;"@endif>
 	<div class="auteur">
 		<div class="postpijl">
 			<a class="postanchor" id="{{$post->post_id}}"></a>
@@ -36,7 +36,7 @@
 			@if($post->wacht_goedkeuring)
 				<a href="/forum/goedkeuren/{{$post->post_id}}" class="btn post confirm"
 					 title="Bericht goedkeuren">@icon('check')</a>
-				<a href="/tools/stats.php?ip={{$post->auteur_ip}}" class="btn" title="IP-log">@icon('server_chart')</a>
+				<a href="/ttools/stats.php?ip={{$post->auteur_ip}}" class="btn" title="IP-log">@icon('server_chart')</a>
 				<a href="/forum/verwijderen/{{$post->post_id}}" class="btn post confirm"
 					 title="Verwijder bericht of draad">@icon('cross')</a>
 				@if($post->magBewerken())
@@ -88,7 +88,7 @@
 	</div>
 	<div class="forum-bericht @cycle('bericht0', 'bericht1')" id="post{{$post->post_id}}">
 		@php($account = \CsrDelft\model\security\AccountModel::get($post->uid))
-		@if($account && \CsrDelft\model\security\AccessModel::mag($account, 'P_ADMIN'))
+		@if($account && \CsrDelft\model\security\AccessModel::mag($account, P_ADMIN))
 			{!! bbcode($post->tekst, 'html') !!}
 		@else
 			{!! bbcode($post->tekst) !!}

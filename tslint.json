@@ -11,7 +11,8 @@
 			"object-literal-sort-keys": false,
 			"space-before-function-paren": [true, {"anonymous": "always", "named": "never"}],
 			"no-var-requires": false,
-			"interface-name": false
+			"interface-name": false,
+			"no-console": false
 		},
     "rulesDirectory": []
 }

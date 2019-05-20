@@ -9,6 +9,7 @@ use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\bibliotheek\BoekImporter;
 use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\bibliotheek\BoekRecensieModel;
+use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\model\entity\bibliotheek\BoekExemplaar;
 use CsrDelft\model\entity\bibliotheek\BoekRecensie;
@@ -21,6 +22,7 @@ use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableResponse;
 use CsrDelft\view\bibliotheek\BoekExemplaarFormulier;
 use CsrDelft\view\bibliotheek\BoekFormulier;
 use CsrDelft\view\bibliotheek\RecensieFormulier;
+use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
 use dokuwiki\Action\Login;
@@ -77,7 +79,7 @@ class BibliotheekController extends Controller {
 	protected function mag($action, array $args) {
 		//iedereen(ook uitgelogd) mag catalogus bekijken.
 		$allow = array('catalogustonen', 'catalogusdata', 'rubrieken', 'wenslijst');
-		if (LoginModel::mag('P_BIEB_READ')) {
+		if (LoginModel::mag(P_BIEB_READ)) {
 			$allow = array_merge($allow, array('zoeken', 'autocomplete',
 				'boek', 'recensie'
 			));
@@ -113,17 +115,11 @@ class BibliotheekController extends Controller {
 	}
 
 	public function rubrieken() {
-		$c = new CmsPaginaController($this->action);
-		$c->bekijken($this->action);
-		$c->getView()->view();
-		exit;
+		$this->view = new CmsPaginaView(CmsPaginaModel::get('rubrieken'));
 	}
 
 	public function wenslijst() {
-		$c = new CmsPaginaController($this->action);
-		$c->bekijken($this->action);
-		$c->getView()->view();
-		exit;
+		$this->view = new CmsPaginaView(CmsPaginaModel::get('wenslijst'));
 	}
 
 	/**
@@ -264,7 +260,7 @@ class BibliotheekController extends Controller {
 		} else {
 			$eigenaar = LoginModel::getUid();
 		}
-		if ($eigenaar != LoginModel::getUid() && !($eigenaar == 'x222' && LoginModel::mag('P_BIEB_MOD'))) {
+		if ($eigenaar != LoginModel::getUid() && !($eigenaar == 'x222' && LoginModel::mag(P_BIEB_MOD))) {
 			throw new CsrToegangException('Mag deze eigenaar niet kiezen');
 		}
 		BoekExemplaarModel::addExemplaar($boek, $eigenaar);
@@ -413,7 +409,7 @@ class BibliotheekController extends Controller {
 			$results = BoekModel::autocompleteProperty($this->getParam(3), $zoekterm);
 			$data = [];
 			foreach ($results as $result) {
-				$data[] = ['data' => [$result], 'value' => $result, 'result' => $result];
+				$data[] = ['data' => [$result], 'value' => $result->{$this->getParam(3)}, 'id' => $result->id];
 			}
 			$this->view = new JsonResponse($data);
 		} else {

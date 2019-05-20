@@ -1,3 +1,4 @@
+import axios from 'axios';
 import $ from 'jquery';
 import {init} from './ctx';
 import {singleLineString} from './util';
@@ -6,10 +7,9 @@ import {singleLineString} from './util';
  * @see templates/courant/courantbeheer.tpl
  * @see blade_templates/forum/partial/post_forum.blade.php
  * @see templates/mededelingen/mededeling.tpl
- * @see templates/roodschopper/roodschopper.tpl
  * @see view/formulier/invoervelden/BBCodeField.class.php
  */
-export const CsrBBPreview = (sourceId: string, targetId: string, params: object) => {
+export const CsrBBPreview = (sourceId: string, targetId: string, params: object = {}) => {
 	if (sourceId.charAt(0) !== '#') {
 		sourceId = `#${sourceId}`;
 	}
@@ -21,14 +21,14 @@ export const CsrBBPreview = (sourceId: string, targetId: string, params: object)
 		$(targetId).html('').hide();
 		return;
 	}
-	$.post('/tools/bbcode.php', {
+	axios.post('/tools/bbcode', {
 		data: encodeURIComponent(bbcode),
 		...params,
-	}).done((data) => {
-		$(targetId).html(data);
+	}).then((response) => {
+		$(targetId).html(response.data);
 		init(document.querySelector(targetId)!);
 		$(targetId).show();
-	}).fail((error) => {
+	}).catch((error) => {
 		alert(error);
 	});
 };

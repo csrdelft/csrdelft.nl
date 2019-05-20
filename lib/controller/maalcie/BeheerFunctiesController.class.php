@@ -26,15 +26,15 @@ class BeheerFunctiesController extends AclController {
 		parent::__construct($query, FunctiesModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'beheer' => 'P_CORVEE_MOD'
+				'beheer' => P_CORVEE_MOD
 			);
 		} else {
 			$this->acl = array(
-				'toevoegen' => 'P_CORVEE_MOD',
-				'bewerken' => 'P_CORVEE_MOD',
-				'verwijderen' => 'P_CORVEE_MOD',
-				'kwalificeer' => 'P_CORVEE_MOD',
-				'dekwalificeer' => 'P_CORVEE_MOD'
+				'toevoegen' => P_CORVEE_MOD,
+				'bewerken' => P_CORVEE_MOD,
+				'verwijderen' => P_CORVEE_MOD,
+				'kwalificeer' => P_CORVEE_MOD,
+				'dekwalificeer' => P_CORVEE_MOD
 			);
 		}
 	}

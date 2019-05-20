@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\renderer;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\view\View;
 
 /**
@@ -34,27 +35,27 @@ class TemplateView implements View {
 	 * @throws \Exception
 	 */
 	public function getTitel() {
-		throw new \Exception("Not supported");
+		throw new CsrException("getTitel: Not supported");
 	}
 
 	/**
 	 * @throws \Exception
 	 */
 	public function getBody() {
-		throw new \Exception("Not supported");
+		throw new CsrException("getBody: Not supported");
 	}
 
 	/**
 	 * @throws \Exception
 	 */
 	public function getModel() {
-		throw new \Exception("Not supported");
+		throw new CsrException("getModel: Not supported");
 	}
 
 	/**
 	 * @throws \Exception
 	 */
 	public function getBreadcrumbs() {
-		throw new \Exception("Not supported");
+		throw new CsrException("getBreadcrumbs: Not supported");
 	}
 }

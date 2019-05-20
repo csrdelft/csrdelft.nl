@@ -49,8 +49,8 @@ class OneTimeToken extends PersistentEntity {
 	 */
 	protected static $persistent_attributes = array(
 		'uid' => array(T::UID),
-		'url' => array(T::String),
-		'token' => array(T::String),
+		'url' => array(T::StringKey),
+		'token' => array(T::StringKey),
 		'expire' => array(T::DateTime),
 		'verified' => array(T::Boolean)
 	);

@@ -34,7 +34,9 @@ class HtmlComment implements FormElement {
 	}
 
 	public function view() {
+		echo '<div class="form-group row"><div class="col">';
 		echo $this->getHtml();
+		echo '</div></div>';
 	}
 
 	public function getJavascript() {

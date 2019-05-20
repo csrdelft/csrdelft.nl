@@ -27,7 +27,7 @@ class CiviProductTable extends DataTable {
 		$this->searchColumn('beschrijving');
 		$this->searchColumn('categorie');
 
-		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $this->dataUrl . '/toevoegen', 'Nieuw', 'Nieuw product toevoegen', 'add'));
+		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $this->dataUrl . '/bewerken', 'Nieuw', 'Nieuw product toevoegen', 'add'));
 		$this->addKnop(new DataTableKnop(Multiplicity::One(), $this->dataUrl . '/bewerken', 'Bewerken', 'Product bewerken', 'pencil'));
 		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), $this->dataUrl . '/verwijderen', 'Verwijderen', 'Product verwijderen', 'cross'));
 	}

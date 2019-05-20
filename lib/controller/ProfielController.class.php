@@ -65,34 +65,36 @@ use CsrDelft\view\toestemming\ToestemmingModalForm;
  * @property ProfielModel $model
  */
 class ProfielController extends AclController {
+	const ALLOW_REDIRECT = ['voorkeuren', 'bewerken'];
+
 	public function __construct($query) {
 		parent::__construct($query, ProfielModel::instance());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
 				// Profiel
-				'profiel' => 'P_OUDLEDEN_READ',
-				'bewerken' => 'P_PROFIEL_EDIT',
-				'voorkeuren' => 'P_PROFIEL_EDIT',
-				'resetPrivateToken' => 'P_PROFIEL_EDIT',
-				'addToGoogleContacts' => 'P_LEDEN_READ',
+				'profiel' => P_OUDLEDEN_READ,
+				'bewerken' => P_PROFIEL_EDIT,
+				'voorkeuren' => P_PROFIEL_EDIT,
+				'resetPrivateToken' => P_PROFIEL_EDIT,
+				'addToGoogleContacts' => P_LEDEN_READ,
 				// Leden
-				'pasfoto' => 'P_OUDLEDEN_READ',
-				'nieuw' => 'P_LEDEN_MOD,commissie:NovCie',
-				'lijst' => 'P_OUDLEDEN_READ',
-				'stamboom' => 'P_OUDLEDEN_READ',
-				'verjaardagen' => 'P_LEDEN_READ',
-				'memory' => 'P_OUDLEDEN_READ',
+				'pasfoto' => P_OUDLEDEN_READ,
+				'nieuw' => P_LEDEN_MOD . ',commissie:NovCie',
+				'lijst' => P_OUDLEDEN_READ,
+				'stamboom' => P_OUDLEDEN_READ,
+				'verjaardagen' => P_LEDEN_READ,
+				'memory' => P_OUDLEDEN_READ,
 			);
 		} else {
 			$this->acl = array(
 				// Profiel
-				'bewerken' => 'P_PROFIEL_EDIT',
-				'voorkeuren' => 'P_PROFIEL_EDIT',
+				'bewerken' => P_PROFIEL_EDIT,
+				'voorkeuren' => P_PROFIEL_EDIT,
 				// Leden
-				'nieuw' => 'P_LEDEN_MOD,commissie:NovCie',
-				'memoryscore' => 'P_LEDEN_READ',
-				'memoryscores' => 'P_LEDEN_READ',
-				'saldo' => 'P_LEDEN_READ',
+				'nieuw' => P_LEDEN_MOD . ',commissie:NovCie',
+				'memoryscore' => P_LEDEN_READ,
+				'memoryscores' => P_LEDEN_READ,
+				'saldo' => P_LEDEN_READ,
 			);
 		}
 	}
@@ -116,6 +118,8 @@ class ProfielController extends AclController {
 			} elseif (ProfielModel::existsUid($uid)) {
 				$args = $this->getParams(4);
 				array_unshift($args, ProfielModel::get($uid));
+			} elseif (in_array($this->getParam(2), self::ALLOW_REDIRECT)) {
+				redirect('/profiel/' . LoginModel::getUid() . '/' . $this->getParam(2));
 			} else {
 				setMelding('Dit profiel bestaat niet', -1);
 				redirect('/ledenlijst');
@@ -186,7 +190,7 @@ class ProfielController extends AclController {
 			$this->exit_http(403);
 		}
 		// NovCie mag novieten aanmaken
-		if ($lidstatus !== LidStatus::Noviet AND !LoginModel::mag('P_LEDEN_MOD')) {
+		if ($lidstatus !== LidStatus::Noviet AND !LoginModel::mag(P_LEDEN_MOD)) {
 			$this->exit_http(403);
 		}
 		// Maak nieuw profiel zonder op te slaan
@@ -330,6 +334,10 @@ class ProfielController extends AclController {
 	}
 
 	public function pasfoto($uid, $path) {
+		if ($uid === 'geen-foto') {
+			redirect('/plaetjes/geen-foto.jpg');
+		}
+
 		try {
 			$profiel = ProfielModel::get($uid);
 			if (is_zichtbaar($profiel, 'profielfoto', 'intern')) {

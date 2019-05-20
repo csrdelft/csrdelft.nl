@@ -59,18 +59,18 @@
 								 title="Pas voorkeuren voor commissies aan">@icon('report_edit')</a>
 							<a href="/toestemming" class="btn btn-light" title="Pas toestemming aan">@icon('lock_edit')</a>
 						@endif
-						@if(mag('P_ADMIN') || is_ingelogd_account($profiel->uid))
+						@if(mag(P_ADMIN) || is_ingelogd_account($profiel->uid))
 							@if(\CsrDelft\model\security\AccountModel::existsUid($profiel->uid))
 								<a href="/account/{{$profiel->uid}}/bewerken" class="btn btn-light"
 									 title="Inloggegevens bewerken">@icon('key')</a>
 							@else
-								@can('P_ADMIN')
+								@can(P_ADMIN)
 									<a href="/account/{{$profiel->uid}}/aanmaken" class="btn btn-light"
 										 title="Account aanmaken">@icon('key_delete', 'key_add')</a>
 								@endcan
 							@endif
-							@can('P_ADMIN')
-								<a href="/tools/stats.php?uid={{$profiel->uid}}" class="btn btn-light"
+							@can(P_ADMIN)
+								<a href="/tools/stats?uid={{$profiel->uid}}" class="btn btn-light"
 									 title="Toon bezoeklog">@icon('server_chart')</a>
 							@endcan
 						@endif
@@ -332,7 +332,7 @@
 					</div>
 				@endif
 			</div>
-			@if(mag('P_LEDEN_MOD') || is_ingelogd_account($profiel->uid))
+			@if(mag(P_LEDEN_MOD) || is_ingelogd_account($profiel->uid))
 				<div class="col-12">
 					<a class="btn btn-primary" onclick="$(this).parent().remove(); $('.meer-groepen').slideDown();" tabindex="0">
 						Toon activiteiten
@@ -361,18 +361,18 @@
 			@endif
 		</div>
 
-		@if(($profiel->isLid() OR (mag('P_LEDEN_MOD') AND $profiel->getCiviSaldo())) AND $profiel->bankrekening)
+		@if(($profiel->isLid() OR (mag(P_LEDEN_MOD) AND $profiel->getCiviSaldo())) AND $profiel->bankrekening)
 			<div class="profielregel gegevens row">
 				<div class="col-12">
 					@if($profiel->bankrekening && is_zichtbaar($profiel, 'bankrekening', 'profiel_lid'))
 						<div class="label">Bankrekening:</div>
 						{{ $profiel->bankrekening }}
-						@can('P_MAAL_MOD')
+						@can(P_MAAL_MOD)
 							<span class="lichtgrijs">(@if(!$profiel->machtiging)geen @endif machtiging getekend)</span>
 						@endcan
 					@endif
 					<div class="clear-left"></div>
-					@if(mag('P_FISCAAT_MOD') || is_ingelogd_account($profiel->uid))
+					@if(mag(P_FISCAAT_MOD) || is_ingelogd_account($profiel->uid))
 						<a id="CiviSaldo"></a>
 						<div class="label">Saldohistorie:</div>
 						@foreach($bestellinglog as $bestelling)
@@ -388,7 +388,7 @@
 						</div>
 					@endif
 				</div>
-				@if(mag('P_FISCAAT_MOD') || is_ingelogd_account($profiel->uid))
+				@if(mag(P_FISCAAT_MOD) || is_ingelogd_account($profiel->uid))
 					<div class="col-12 saldografiek">
 						<div class="label">Saldografiek:</div>
 						<div class="clear-left"></div>
@@ -415,7 +415,7 @@
 					@endif
 				</div>
 			</div>
-			@if(mag('P_MAAL_MOD') || is_ingelogd_account($profiel->uid))
+			@if(mag(P_MAAL_MOD) || is_ingelogd_account($profiel->uid))
 				<div class="col-md-12">
 					@if(isset($abos))
 						<div class="label">Abo's:</div>
@@ -612,7 +612,7 @@
 			</div>
 		@endif
 
-		@can('P_ADMIN,bestuur,commissie:NovCie')
+		@can(P_ADMIN . ',bestuur,commissie:NovCie')
 			@if($profiel->status === \CsrDelft\model\entity\LidStatus::Noviet && $profiel->kgb)
 				<div class="profielregel" id="novcieopmerking">
 					<div style="cursor: pointer;" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
@@ -621,7 +621,7 @@
 			@endif
 		@endcan
 
-		@can('P_LEDEN_MOD')
+		@can(P_LEDEN_MOD)
 			<div class="profielregel gegevens row" id="changelog">
 				<div class="col">
 					<div style="cursor: pointer;" onclick="$('#changelog_gegevens').toggle();this.remove()">

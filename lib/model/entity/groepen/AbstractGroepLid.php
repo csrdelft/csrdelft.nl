@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -35,6 +36,10 @@ abstract class AbstractGroepLid extends PersistentEntity {
 	 */
 	public $opmerking;
 	/**
+	 * @var GroepKeuzeSelectie[]
+	 */
+	public $opmerking2;
+	/**
 	 * Datum en tijd van aanmelden
 	 * @var string
 	 */
@@ -44,6 +49,11 @@ abstract class AbstractGroepLid extends PersistentEntity {
 	 * @var string
 	 */
 	public $door_uid;
+
+	public function getLink() {
+		return ProfielModel::getLink($this->uid);
+	}
+
 	/**
 	 * Database table columns
 	 * @var array
@@ -52,8 +62,13 @@ abstract class AbstractGroepLid extends PersistentEntity {
 		'groep_id' => [T::Integer],
 		'uid' => [T::UID],
 		'opmerking' => [T::String, true],
+		'opmerking2' => [T::JSON, true, [GroepKeuzeSelectie::class]],
 		'lid_sinds' => [T::DateTime],
 		'door_uid' => [T::UID]
+	];
+
+	protected static $computed_attributes = [
+		'link' => [T::String],
 	];
 	/**
 	 * Database primary key

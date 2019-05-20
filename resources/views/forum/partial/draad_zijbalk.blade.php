@@ -1,12 +1,12 @@
 <div class="zijbalk_forum">
 	<div class="zijbalk-kopje">
 		@if($belangrijk)
-			<a href="/forum/recent/1/belangrijk">Forum belangrijk</a>
+			<a href="/forum/belangrijk">Forum belangrijk</a>
 		@else
 			<a href="/forum/recent">Forum</a>
 		@endif
 
-		@can('P_FORUM_MOD')
+		@can(P_FORUM_MOD)
 			@if ($aantalWacht > 0)
 				&nbsp;<a href="/forum/wacht" class="badge"
 								 title="{{$aantalWacht}} forumbericht{{($aantalWacht === 1 ? '' : 'en')}} wacht{{($aantalWacht === 1 ? '' : 'en')}} op goedkeuring">{{$aantalWacht}}</a>

@@ -28,6 +28,12 @@ rsync -a csrdelft/csrdelft.nl/ deploy/ --exclude node_modules --exclude .git --e
 mv deploy/bin/ci/.gitignore.prod deploy/.gitignore
 
 cd deploy
+
+# Als in deze build geen js en php gedraaid is, trek deze dan uit de vorige versie
+if (( $SKIP_BUILD == 0 )); then
+git checkout -- data/blade htdocs/dist
+fi;
+
 git add -A
 git diff-index --quiet HEAD || git commit -m "Travis deploy $TRAVIS_BUILD_NUMBER"
 git push --force --quiet --set-upstream origin master

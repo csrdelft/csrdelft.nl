@@ -1,0 +1,63 @@
+@startuml
+
+abstract class AbstractGroep {
+  GroepKeuze[] keuzelijst2
+  GroepVersie versie
+}
+
+abstract class AbstractGroepLid {
+  string|GroepKeuzeSelectie[] opmerking
+}
+
+AbstractGroepLid <- AbstractGroep
+
+class GroepKeuze {
+  string type
+  string default
+  string keuzes
+}
+
+class GroepKeuzeSelectie {
+  string type
+  string selectie
+}
+
+enum GroepKeuzeType {
+  CHECKBOXES
+  RADIOS
+  DROPDOWN
+  TEXT
+  SLIDER
+  NUMBER
+}
+
+GroepKeuze --> GroepKeuzeType
+GroepKeuzeSelectie --> GroepKeuzeType
+
+AbstractGroepLid --> GroepKeuzeSelectie
+
+GroepKeuzeSelectie .> GroepKeuze
+AbstractGroep --> GroepKeuze
+
+note right of GroepKeuze {
+  Opties is afhankelijk van type, kan zijn: een
+  lijst van keuzes voor dropdown/radios/checkboxes
+  of min/max voor number/slider.
+
+  Default is ook afhankelijk van type, kan een
+  standaard string zijn of aageven welke opties
+  default zijn/is gemarkeerd.
+}
+
+note left of GroepKeuzeSelectie {
+  Selectie is de daadwerkelijke selectie
+  van een lid deze moet overeenkomen
+  met een GroepKeuze, maar als dit niet
+  het geval is, wordt de waarde alsnog weergegeven
+}
+
+note right of AbstractGroep {
+  Een groep heeft een versie veld dat aangeeft
+  of deze groep dit systeem gebruikt.
+}
+@enduml

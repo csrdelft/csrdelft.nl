@@ -1,3 +1,5 @@
+$beeldmerk: url('../images/beeldmerk-wit.png');
+
 @import "../base";
 
 * {
@@ -5,9 +7,4 @@
   border-color: #fff !important;
   color: #fff !important;
   font-family: "Comic Sans MS", Arial, sans-serif !important;
-}
-/*OWee logo met gradient*/
-#zijbalk .cd-beeldmerk {
-  -webkit-filter: invert(100%);
-  filter: invert(100%);
 }

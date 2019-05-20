@@ -1123,8 +1123,6 @@
 		}
 	});
 
-	debugger;
-
 	/*
 	* Public Utility to parse date and time
 	*/

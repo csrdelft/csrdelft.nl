@@ -62,21 +62,28 @@ class LidInstellingenModel extends InstellingenModel {
 				T::Enumeration,
 				['ja', 'nee'],
 				'ja',
-				'Geef verjaardagen weer in de agenda, geldt ook voor de agenda geimporteerd in je eigen systeem.'
+				'Geef verjaardagen weer in de agenda op de stek.'
+			],
+			'toonVerjaardagenICal' => [
+				'Verjaardagen weergeven in iCal',
+				T::Enumeration,
+				['ja', 'nee'],
+				'ja',
+				'Geef verjaardagen weer in de ge&iuml;mporteerde agenda (iCal) in je eigen systeem.'
 			],
 			'toonMaaltijden' => [
 				'Maaltijden weergeven',
 				T::Enumeration,
 				['ja', 'nee'],
 				'ja',
-				'Geef maaltijden weer in de agenda, geldt ook voor de agenda geimporteerd in je eigen systeem.'
+				'Geef maaltijden weer in de agenda, geldt ook voor de agenda ge&iuml;mporteerd in je eigen systeem.'
 			],
 			'toonCorvee' => [
 				'Corvee weergeven',
 				T::Enumeration,
 				['iedereen', 'eigen', 'nee'],
 				'eigen',
-				'Geef corvee weer in de agenda, geldt ook voor de agenda geimporteerd in je eigen systeem.'
+				'Geef corvee weer in de agenda, geldt ook voor de agenda ge&iuml;mporteerd in je eigen systeem.'
 			]
 		],
 		'layout' => [
@@ -90,9 +97,23 @@ class LidInstellingenModel extends InstellingenModel {
 			'opmaak' => [
 				'Opmaak',
 				T::Enumeration,
-				['normaal', 'lustrum', 'owee', 'dies', 'donker', 'sineregno', 'civitasia', 'roze'],
+				['normaal', 'lustrum', 'owee', 'dies', 'donker', 'sineregno', 'civitasia', 'roze', 'koevoet'],
 				'normaal',
-				'Ik daag je uit om de stek in de roze opmaak te gebruiken.'
+				'Ik daag je uit roze te gebruiken. Of koevoet.'
+			],
+			'assistent' => [
+				'Assistent',
+				T::Enumeration,
+				['nee', 'Clippy', 'F1', 'Genie', 'Genius', 'Links', 'Merlin', 'Peedy', 'Rocky', 'Rover'],
+				'nee',
+				'Verrijk uw ervaring op de stek met een van deze geweldige hulpjes.'
+			],
+			'assistentGeluiden' => [
+				'Assistent Geluiden',
+				T::Enumeration,
+				['ja', 'nee'],
+				'nee',
+				'Stel in of de assistent geluid mag maken. Heeft alleen effect als een assistent geselecteerd is.'
 			],
 			'fx' => [
 				'Effect',
@@ -183,6 +204,13 @@ class LidInstellingenModel extends InstellingenModel {
 				'cursief',
 				'Hoe ongelezen draadjes eruit zien in de zijbalk en in het forum.'
 			],
+			'belangrijkBijRecent' => [
+				'Belangrijke berichten bij recent tonen',
+				T::Enumeration,
+				['ja', 'nee'],
+				'ja',
+				'Of belangrijke berichten ook getoond moeten worden tussen de recente berichten.'
+			],
 			'open_draad_op_pagina' => [
 				'Open draad op pagina',
 				T::Enumeration,
@@ -252,7 +280,7 @@ class LidInstellingenModel extends InstellingenModel {
 		  'twitterblokje'			 => array('Twitter-feed weergeven', T::Enumeration, array('ja', 'nee'), 'nee')
 		  ), */
 		'zijbalk' => [
-			'ishetal' => ['Is het al… weergeven', T::Enumeration, ['niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren', 'foutmelding', 'sponsorkliks'], 'willekeurig', ''],
+			'ishetal' => ['Is het al… weergeven', T::Enumeration, ['niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren', 'foutmelding', 'sponsorkliks', 'patronaat', 'patroon'], 'willekeurig', ''],
 			'favorieten' => ['Favorieten menu weergeven', T::Enumeration, ['ja', 'nee'], 'ja', ''],
 			'agendaweken' => ['Aantal weken in agenda weergeven', T::Integer, [0, 10], 2, ''],
 			'agenda_max' => ['Maximaal aantal agenda-items', T::Integer, [0, 50], 15, ''],
@@ -264,7 +292,7 @@ class LidInstellingenModel extends InstellingenModel {
 			'fotoalbum' => ['Laatste fotoalbum weergeven', T::Enumeration, ['ja', 'nee'], 'ja', ''],
 			'fotos' => ['Aantal foto\'s weergeven', T::Integer, [0, 50], 6, ''],
 			'verjaardagen' => ['Aantal verjaardagen weergeven', T::Integer, [0, 50], 9, ''],
-			'verjaardagen_pasfotos' => ['Pasfoto\'s bij verjaardagen', T::Enumeration, ['ja', 'nee'], 'ja', '']
+			'verjaardagen_pasfotos' => ['Pasfoto\'s bij verjaardagen', T::Enumeration, ['ja', 'nee'], 'ja', ''],
 		],
 		'zoeken' => [
 			'favorieten' => ['Favorieten<span class="offtopic"> (telt niet mee voor max.)</span>', T::Enumeration, ['ja', 'nee'], 'ja', ''],

@@ -58,22 +58,7 @@ h1 {
 p.biebuitleg {
     margin-bottom: 0;
 }
-/* boekstatusschakelaar wat ruimte geven */
-#filters input#boekstatus {
-	margin-left: 30px;
-}
 
-/*
- * dataTable layout
- */
-/* zoekvakje uitlijnen met eigenaarfilter */
-#boekencatalogus_filter {
-	margin: 7px 0 15px 0;
-	line-height: 22px;
-}
-#boekencatalogus_filter input {
-	width: 250px;
-}
 .biebindicator.beschikbaar							 {color:green; }
 .biebindicator.teruggegeven							 {color:orange; }
 .biebindicator.vermist, .biebindicator.uitgeleend	 {color:red; }

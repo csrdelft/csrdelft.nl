@@ -44,6 +44,8 @@ class GroepenBeheerTable extends DataTable {
 		$this->searchColumn('status');
 		$this->searchColumn('soort');
 
+		$this->deleteColumn('keuzelijst2');
+
 		$this->setOrder(['id' => 'desc']);
 
 		$preview = new DataTableKnop(Multiplicity::One(), $model->getUrl() . 'voorbeeld', 'Voorbeeld', 'Voorbeeldweergave van de ketzer', 'show');

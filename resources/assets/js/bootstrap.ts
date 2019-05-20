@@ -57,6 +57,7 @@ require('jquery-ui-timepicker-addon');
 require('./lib/jquery-ui-timepicker-nl');
 require('jquery.maskedinput');
 require('lightbox2');
+require('corejs-typeahead/dist/typeahead.jquery.js');
 
 /**
  * Globale objecten gebruikt in PHP code.
@@ -66,7 +67,6 @@ $.extend(window, {
 	Dropzone,
 	bbcode: {
 		// See view/formulier/invoervelden/BBCodeField.class.php
-		// See templates/roodschopper/roodschopper.tpl
 		// See templates/mededelingen/mededeling.tpl
 		// See templates/courant/courantbeheer.tpl
 		// See blade_templates/forum/partial/post_form.blade.php

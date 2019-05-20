@@ -1,14 +1,7 @@
-@extends('layout')
-
-@section('titel', 'Eetplan')
-
-@section('breadcrumbs')
-	<a href="/agenda" title="Agenda"><span class="fa fa-calendar module-icon"></span></a>
-	» <a href="/eetplan">Eetplan</a>
-@endsection
+@extends('eetplan.template')
 
 @section('content')
-	@can('P_ADMIN,commissie:NovCie')
+	@can(P_ADMIN . ',commissie:NovCie')
 	<a href="/eetplan/beheer" class="btn btn-primary float-right"><span class="ico wrench"></span> Eetplanbeheer</a>
 	@endcan
 	<h1>Eetplan</h1>

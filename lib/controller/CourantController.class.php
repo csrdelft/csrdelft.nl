@@ -25,17 +25,17 @@ class CourantController extends AclController {
 		parent::__construct($query, new CourantModel());
 		if ($this->getMethod() == 'GET') {
 			$this->acl = array(
-				'archief' => 'P_LEDEN_READ',
-				'bekijken' => 'P_LEDEN_READ',
-				'toevoegen' => 'P_MAIL_POST',
-				'bewerken' => 'P_MAIL_POST',
-				'verwijderen' => 'P_MAIL_POST',
-				'verzenden' => 'P_MAIL_SEND'
+				'archief' => P_LEDEN_READ,
+				'bekijken' => P_LEDEN_READ,
+				'toevoegen' => P_MAIL_POST,
+				'bewerken' => P_MAIL_POST,
+				'verwijderen' => P_MAIL_POST,
+				'verzenden' => P_MAIL_SEND
 			);
 		} else {
 			$this->acl = array(
-				'toevoegen' => 'P_MAIL_POST',
-				'bewerken' => 'P_MAIL_COMPOSE'
+				'toevoegen' => P_MAIL_POST,
+				'bewerken' => P_MAIL_COMPOSE
 			);
 		}
 	}

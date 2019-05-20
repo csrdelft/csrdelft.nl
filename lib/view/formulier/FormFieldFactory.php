@@ -58,11 +58,11 @@ class FormFieldFactory {
 	 * @param string $fieldName
 	 * @param mixed $value
 	 * @param string $type
-	 * @param string|null $additional
+	 * @param array|string|null $additional
 	 * @return InputField
 	 * @throws \Exception
 	 */
-	private static function getFieldByType(string $fieldName, $value, string $type, string $additional = null) {
+	private static function getFieldByType(string $fieldName, $value, string $type, $additional = null) {
 		$desc = ucfirst(str_replace('_', ' ', $fieldName));
 
 		switch ($type) {
@@ -103,6 +103,8 @@ class FormFieldFactory {
 				return new SelectField($fieldName, $value, $desc, $options);
 			case T::UID:
 				return new LidField($fieldName, $value, $desc);
+			case T::JSON: // GROEPEN_V2
+				return new TextareaField($fieldName, $value, $desc);
 			default:
 				throw new CsrException("Kan geef formulier genereren voor veld $fieldName van type $type.");
 		}

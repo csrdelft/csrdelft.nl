@@ -28,6 +28,10 @@
 .forum-header, .forum-footer {
 	max-width: 800px;
 
+	.form-group {
+		margin-bottom: 0;
+	}
+
 	h1 {
 		width: 100%;
 	}

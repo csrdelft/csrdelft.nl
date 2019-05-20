@@ -54,7 +54,7 @@ class CheckboxField extends InputField {
 
 	public function validate() {
 		if (!$this->value AND $this->required) {
-			if ($this->leden_mod AND LoginModel::mag('P_LEDEN_MOD')) {
+			if ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
 				// exception for leden mod
 			} else {
 				$this->error = 'Dit is een verplicht veld';
