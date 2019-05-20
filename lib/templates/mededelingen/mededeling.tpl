@@ -1,7 +1,7 @@
 <h1>Mededeling {if $mededeling->id==0}toevoegen{else}bewerken{/if}</h1>
 <form action="/mededelingen/bewerken/{$mededeling->id}" method="post" enctype="multipart/form-data">
 	{printCsrfField()}
-	{getMelding}
+	{getMelding()}
 	{toegang P_NEWS_MOD}
 	{geentoegang}
 		Hier kunt u een mededeling toevoegen. Het zal echter niet direct zichtbaar worden, maar &eacute;&eacute;rst door de PubCie worden goedgekeurd.<br /><br />
