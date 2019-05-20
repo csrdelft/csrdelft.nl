@@ -6,6 +6,7 @@ peilingen-routes: { resource: routes/peilingen.yaml }
 tools-routes: { resource: routes/tools.yaml }
 fiscaat-routes: { resource: routes/fiscaat.yaml }
 commissievoorkeuren-routes: { resource: routes/commissievoorkeuren.yaml }
+agenda-routes: { resource: routes/agenda.yaml }
 
 logger:
   path: /logger/log

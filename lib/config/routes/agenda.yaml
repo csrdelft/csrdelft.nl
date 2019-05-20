@@ -1,0 +1,65 @@
+agenda-thuis:
+  path: /agenda/{jaar}/{maand}
+  controller: CsrDelft\controller\AgendaController::maand
+  methods: GET
+  defaults: { jaar: null, maand: null }
+  options: { mag: P_AGENDA_READ }
+
+agenda-maand:
+  path: /agenda/maand/{jaar}/{maand}
+  controller: CsrDelft\controller\AgendaController::maand
+  methods: GET
+  defaults: { jaar: null, maand: null }
+  options: { mag: P_AGENDA_READ }
+
+agenda-ics:
+  path: /agenda/csrdelft.ics
+  controller: CsrDelft\controller\AgendaController::ical
+  methods: GET
+  options: { mag: P_PUBLIC }
+
+agenda-ical:
+  path: /agenda/ical
+  controller: CsrDelft\controller\AgendaController::ical
+  methods: GET
+  options: { mag: P_PUBLIC }
+
+agenda-zoeken:
+  path: /agenda/zoeken
+  controller: CsrDelft\controller\AgendaController::zoeken
+  methods: GET
+  options: { mag: P_AGENDA_READ }
+
+agenda-courant:
+  path: /agenda/courant
+  controller: CsrDelft\controller\AgendaController::courant
+  methods: POST
+  options: { mag: P_MAIL_COMPOSE }
+
+agenda-toevoegen:
+  path: /agenda/toevoegen/{datum}
+  controller: CsrDelft\controller\AgendaController::toevoegen
+  methods: POST
+  defaults: { datum: null }
+  options: { mag: P_AGENDA_ADD }
+
+agenda-bewerken:
+  path: /agenda/bewerken/{aid}
+  controller: CsrDelft\controller\AgendaController::bewerken
+  methods: POST
+  requirements: { aid: '\d+'}
+  options: { mag: P_AGENDA_ADD }
+
+agenda-verwijderen:
+  path: /agenda/verwijderen/{aid}
+  controller: CsrDelft\controller\AgendaController::verwijderen
+  methods: POST
+  requirements: { aid: '\d+'}
+  options: { mag: P_AGENDA_MOD }
+
+agenda-verbergen:
+  path: /agenda/verbergen/{refuuid}
+  controller: CsrDelft\controller\AgendaController::verbergen
+  methods: POST
+  defaults: { refuuid: null }
+  options: { mag: P_LOGGED_IN }
