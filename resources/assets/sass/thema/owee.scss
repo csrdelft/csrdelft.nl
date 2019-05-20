@@ -1,6 +1,6 @@
 /* owee 2019*/
-$owee-blauw: blue;
-$owee-rood: red;
+$owee-groen: #0f8c72;
+$owee-geel: #f0a700;
 
 $white: #fff;
 $gray-100: #f8f9fa;
@@ -8,12 +8,12 @@ $gray-600: #6c757d;
 $gray-800: #343a40;
 $black: #000;
 
-$body-bg: $owee-blauw;
-$body-color: darken($white, 7%);
+$body-bg: $owee-groen;
+$body-color: darken($owee-groen, 17%);
 $headings-color: inherit;
 
-$primary: $owee-blauw;
-$secondary: $owee-rood;
+$primary: $owee-groen;
+$secondary: $owee-geel;
 $light: $gray-100;
 $dark: $gray-800;
 
@@ -33,16 +33,24 @@ $dark: $gray-800;
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Montserrat-Regular';
+  src: url('../../fonts/owee/Montserrat-Regular.ttf') format('truetype'),
+  url('../../fonts/owee/Montserrat-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 $font-family-base: "Ubuntu-Medium", sans-serif;
-$headings-font-family: "Ubuntu-Medium", sans-serif;
+$headings-font-family: "Montserrat-Regular", "Ubuntu-Medium", sans-serif;
 
 /** Stek specifieke variabelen. */
 
 /* zijbalk */
-$beeldmerk: url(../images/beeldmerk-wit.png);
+$beeldmerk: url("/images/logo-light-it-up.png");
 
-$zijbalk-bg: $owee-rood;
-$zijbalk-border: darken($owee-blauw, 12%);
+$zijbalk-bg: $owee-geel;
+$zijbalk-border: darken($owee-groen, 12%);
 $zijbalk-kopje: $primary;
 $zijbalk-ishetal-nee: red;
 $zijbalk-ishetal-ja: green;
@@ -52,6 +60,10 @@ $zindex-zijbalk: 800;
   a {
     font-size: 1.25em;
   }
+}
+
+.titel, .zijbalk-kopje {
+  font-family: "Montserrat-Regular";
 }
 
 #zijbalk .blok .item {
@@ -73,11 +85,11 @@ $ongelezen-lijn: #e8cf2a;
 $menu-primary-hover: $primary;
 $menu-bg: $body-bg;
 $menu-color: $body-color;
-$menu-small-bg: #0a338d;
+$menu-small-bg: $owee-groen;
 $menu-small-color: #ffffff;
 
 /* zoeken */
-$zoeken-active-bg: $owee-blauw;
+$zoeken-active-bg: $owee-groen;
 
 /* maalcie-tabel */
 $tabel-header: darken($body-bg, 5%);
@@ -85,7 +97,7 @@ $tabel-regel-donker: lighten($body-bg, 4%);
 $tabel-regel-licht: lighten($body-bg, 12%);
 
 /* cards */
-$card-bg: darken($body-bg, 5%);
+$card-bg: $owee-geel;
 $card-border-color: rgba(0, 0, 0, 0.3);
 
 /* importeer basis */
@@ -94,7 +106,11 @@ $card-border-color: rgba(0, 0, 0, 0.3);
 a, a:hover,
 .cd-primary-nav > li > a:hover,
 .cd-primary-nav > li > a.selected {
-  color: darken($owee-blauw, 17%);
+  color: darken($owee-groen, 10%);
+}
+
+.bericht {
+  color: $light;
 }
 
 /*KNOPPEN*/
@@ -105,23 +121,24 @@ input[type=button],
 .btn:focus,
 input[type=submit]:focus,
 input[type=button]:focus {
-  border-color: darken($owee-rood, 15%);
-  background-image: linear-gradient(to bottom, darken($owee-rood, 10%), $owee-rood);
+  border-color: darken($owee-geel, 15%);
+  color: $light;
+  background-image: linear-gradient(to bottom, darken($owee-geel, 10%), $owee-geel);
 }
 
 /*Voor een mouse hover wordt de gradient omgedraaid*/
 .btn:hover,
 input[type=submit]:hover,
 input[type=button]:hover {
-  border-color: darken($owee-rood, 15%);
-  background-image: linear-gradient(to bottom, $owee-rood, darken($owee-rood, 10%));
+  border-color: darken($owee-geel, 15%);
+  background-image: linear-gradient(to bottom, $owee-geel, darken($owee-geel, 10%));
 }
 
 /*Actieve knoppen in geel gradient -> zo ontstaat verschil tussen hover en active*/
 
 .btn.active {
-  border-color: darken($owee-blauw, 17%);
-  background-image: linear-gradient(to bottom, $owee-blauw, lighten($owee-blauw, 10%));
+  border-color: darken($owee-groen, 17%);
+  background-image: linear-gradient(to bottom, $owee-groen, lighten($owee-groen, 10%));
 }
 
 .close {
@@ -135,7 +152,7 @@ table.groep-lijst tr:nth-child(even) {
 
 /* Pas "icoontje" in de breadcrubs aan */
 .module-icon {
-  color: $owee-rood;
+  color: $owee-geel;
   opacity: 0.6;
 }
 
@@ -144,8 +161,10 @@ table.groep-lijst tr:nth-child(even) {
     &:nth-child(6n +1),
     &:nth-child(6n + 2),
     &:nth-child(6n + 3) {
-      background-color: $secondary;
+      background-color: lighten($owee-groen, 9%);
     }
+
+    background-color: lighten($owee-groen, 7%);
   }
 }
 
@@ -174,117 +193,17 @@ div#pubciemail_form {
   padding: 10px;
 }
 
-/* Peiling uitslag van de peilingen niet meer wit */
 .list-group-item {
-  background-color: $owee-rood;
-
-  &-action:hover, &-action:focus {
-    background-color: darken($owee-blauw, 5%);
-  }
+  background-color: $owee-groen;
 }
 
+/* Peiling uitslag van de peilingen niet meer wit */
+#instellingen {
+  .list-group-item {
+    background-color: $owee-geel;
 
-//$beeldmerk: url(/images/logo-next-level.svg);
-//
-//$zijbalk-bg: #853d7d;
-//
-//@import "../base";
-///* owee 2017*/
-///** oranje: #f15025*/
-///** paars: #853d7d*/
-///** oranje-tekst: #fa7921 */
-//
-///*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
-//
-//#zijbalk,
-//#forumtabel th,
-//.cd-primary-nav ul {
-//  background-color: #853d7d !important;
-//}
-//
-///*Koppen in oranje*/
-//
-//h1,
-//a,
-//a:hover,
-//.cd-primary-nav > li > a:hover,
-//.cd-primary-nav > li > a.selected {
-//  color: #fa7921;
-//}
-//
-///*NAVIGATIE MENU*/
-///*Andere koppen in het blauw*/
-//
-//.cd-primary-nav .cd-secondary-nav a,
-//.cd-primary-nav .cd-secondary-nav > li > a:hover,
-//.cd-primary-nav .cd-secondary-nav > li > a {
-//  color: #fff;
-//}
-//
-///*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
-//
-//.cd-primary-nav .cd-secondary-nav a:hover {
-//  text-decoration: underline !important;
-//  color: #fa7921;
-//}
-//
-///*Streepje onder naam*/
-//
-//.cd-primary-nav > li > a:hover,
-//.cd-primary-nav > li > a.selected {
-//  box-shadow: inset 0 -2px 0 #f15025;
-//}
-//
-///*ZIJBALK*/
-///*Veel tekst van de zijbalk in het blauw*/
-//
-//#zijbalk .ishetal .ja,
-//#zijbalk .ishetal .nee,
-//.staatrood,
-//#zijbalk .blok .item a,
-//#zijbalk .ishetal,
-//#zijbalk .blok .item {
-//  color: white;
-//}
-//
-///*Zijbalk grens van het scherm in blauw*/
-//
-//#zijbalk {
-//  border-color: #f15025;
-//}
-//
-///*OWee logo*/
-//
-//#zijbalk .cd-beeldmerk {
-//  background-image: url("/images/logo-next-level.svg");
-//}
-//
-///*KNOPPEN*/
-///*Knoppen in blauw gradient*/
-//
-//.btn,
-//input[type=submit],
-//input[type=button],
-//.progress-bar-info,
-//.btn:focus,
-//input[type=submit]:focus,
-//input[type=button]:focus {
-//  border-color: #e53d00;
-//  background-image: linear-gradient(to bottom, #f15025, #fa7921);
-//}
-//
-///*Voor een mouse hover wordt de gradient omgedraaid*/
-//
-//.btn:hover,
-//input[type=submit]:hover,
-//input[type=button]:hover {
-//  border-color: #e53d00;
-//  background-image: linear-gradient(to bottom, #fa7921, #f15025);
-//}
-//
-///*Actieve knoppen in geel gradient -> zo ontstaat verschil tussen hover en active*/
-//
-//.btn.active {
-//  border-color: #e53d00;
-//  background-image: linear-gradient(to bottom, #853d7d, #864CB5);
-//}
+    &-action:hover, &-action:focus {
+      background-color: darken($owee-groen, 5%);
+    }
+  }
+}
