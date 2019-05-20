@@ -3,7 +3,9 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\agenda\AgendaVerbergenModel;
 use CsrDelft\model\entity\agenda\AgendaItem;
@@ -28,40 +30,14 @@ use CsrDelft\view\JsonResponse;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Controller van de agenda.
- *
- * @property AgendaModel $model
  */
-class AgendaController extends AclController {
+class AgendaController {
+	use QueryParamTrait;
 
-	public function __construct($query) {
-		parent::__construct($query, AgendaModel::instance());
-		if ($this->getMethod() == 'GET') {
-			$this->acl = array(
-				'maand' => P_AGENDA_READ,
-				'ical' => P_PUBLIC,
-				'zoeken' => P_AGENDA_READ
-			);
-		} else {
-			$this->acl = array(
-				'courant' => P_MAIL_COMPOSE,
-				'toevoegen' => P_AGENDA_ADD,
-				'bewerken' => P_AGENDA_MOD,
-				'verwijderen' => P_AGENDA_MOD,
-				'verbergen' => P_LOGGED_IN,
-				'tonen' => P_LOGGED_IN
-			);
-		}
-	}
+	private $model;
 
-	public function performAction(array $args = array()) {
-		$this->action = 'maand';
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		}
-		if ($this->action === 'csrdelft.ics') {
-			$this->action = 'ical';
-		}
-		parent::performAction($this->getParams(3));
+	public function __construct() {
+		$this->model = AgendaModel::instance();
 	}
 
 	/**
@@ -79,12 +55,12 @@ class AgendaController extends AclController {
 			$maand = date('n');
 		}
 		$body = new AgendaMaandView($this->model, $jaar, $maand);
-		$this->view = new CsrLayoutPage($body);
+		return new CsrLayoutPage($body);
 	}
 
 	public function ical() {
 		header('Content-Type: text/calendar; charset=UTF-8');
-		$this->view = new AgendaICalendarView($this->model);
+		return new AgendaICalendarView($this->model);
 	}
 
 	public function zoeken() {
@@ -117,54 +93,52 @@ class AgendaController extends AclController {
 				'value' => $item->getTitel()
 			);
 		}
-		$this->view = new JsonResponse($result);
+		return new JsonResponse($result);
 	}
 
 	public function courant() {
-		$this->view = new AgendaCourantView($this->model, 2);
+		return new AgendaCourantView($this->model, 2);
 	}
 
 	public function toevoegen($datum = null) {
 		$item = $this->model->nieuw($datum);
-		$form = new AgendaItemForm($item, $this->action); // fetches POST values itself
+		$form = new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
 		if ($form->validate()) {
 			$item->item_id = (int)$this->model->create($item);
 			if ($datum === 'doorgaan') {
 				$_POST = array(); // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
 				$item->item_id = null;
-				$this->view = new AgendaItemForm($item, $this->action); // fetches POST values itself
+				return new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
 			} else {
-				$this->view = new AgendeerbaarMaandView($item);
+				return new AgendeerbaarMaandView($item);
 			}
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 
 	public function bewerken($aid) {
 		$item = $this->model->getAgendaItem((int)$aid);
 		if (!$item OR !$item->magBeheren()) {
-			$this->exit_http(403);
-			return;
+			throw new CsrToegangException();
 		}
-		$form = new AgendaItemForm($item, $this->action); // fetches POST values itself
+		$form = new AgendaItemForm($item, 'bewerken'); // fetches POST values itself
 		if ($form->validate()) {
 			$this->model->update($item);
-			$this->view = new AgendeerbaarMaandView($item);
+			return new AgendeerbaarMaandView($item);
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 
 	public function verwijderen($aid) {
 		$item = $this->model->getAgendaItem((int)$aid);
 		if (!$item OR !$item->magBeheren()) {
-			$this->exit_http(403);
-			return;
+			throw new CsrToegangException();
 		}
 		$this->model->delete($item);
-		$this->view = new AgendaItemDeleteView($item->item_id);
+		return new AgendaItemDeleteView($item);
 	}
 
 	public function verbergen($refuuid = null) {
@@ -196,15 +170,14 @@ class AgendaController extends AclController {
 				throw new CsrException('invalid UUID');
 		}
 		if (!$item) {
-			$this->exit_http(403);
-			return;
+			throw new CsrToegangException();
 		}
 		/**
 		 * @var Agendeerbaar $agendaitem
 		 */
 		$agendaitem = $item;
 		AgendaVerbergenModel::instance()->toggleVerbergen($agendaitem);
-		$this->view = new AgendeerbaarMaandView($agendaitem);
+		return new AgendeerbaarMaandView($agendaitem);
 	}
 
 }

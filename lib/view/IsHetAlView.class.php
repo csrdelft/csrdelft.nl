@@ -155,7 +155,7 @@ class IsHetAlView implements View {
 				break;
 
 			case 'patroon':
-				echo 'Ben ik al patroon?';
+				echo 'Word ik al patroon?';
 				if ($this->ja === false) {
 					echo sprintf('<a href="%s"><div class="nee">NEE.</div> (klik hier)</a>', self::PATRONAAT_FORUM_DRAAD);
 					$this->ja = null;

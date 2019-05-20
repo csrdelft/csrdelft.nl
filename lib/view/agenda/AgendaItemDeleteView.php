@@ -8,7 +8,7 @@ namespace CsrDelft\view\agenda;
 class AgendaItemDeleteView extends AgendaView {
 
 	public function view() {
-		echo '<div id="item-' . $this->model . '" class="remove"></div>';
+		echo '<div id="item-' . str_replace('@', '-', str_replace('.', '-', $this->model->getUUID())) . '" class="remove"></div>';
 	}
 
 }

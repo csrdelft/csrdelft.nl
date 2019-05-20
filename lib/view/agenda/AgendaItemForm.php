@@ -19,7 +19,7 @@ class AgendaItemForm extends ModalForm {
 		AgendaItem $item,
 		$actie
 	) {
-		parent::__construct($item, '/agenda/' . $actie . '/' . $item->item_id);
+		parent::__construct($item, '/agenda/' . $actie . ($item->item_id ? '/' . $item->item_id : ''));
 		$this->titel = 'Agenda-item ' . $actie;
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
