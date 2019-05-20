@@ -13,13 +13,7 @@ agenda-maand:
   options: { mag: P_AGENDA_READ }
 
 agenda-ics:
-  path: /agenda/csrdelft.ics
-  controller: CsrDelft\controller\AgendaController::ical
-  methods: GET
-  options: { mag: P_PUBLIC }
-
-agenda-ical:
-  path: /agenda/ical
+  path: /agenda/ical/{token}/csrdelft.ics
   controller: CsrDelft\controller\AgendaController::ical
   methods: GET
   options: { mag: P_PUBLIC }
