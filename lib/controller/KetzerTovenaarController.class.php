@@ -11,33 +11,12 @@ use CsrDelft\view\ketzertovenaar\KetzerTovenaarView;
  *
  * @author J.P.T. Nederveen <ik@tim365.nl>
  */
-class KetzerTovenaarController extends AclController {
-	public function __construct($query) {
-		parent::__construct($query, null);
-
-		if ($this->getMethod() == 'GET') {
-			$this->acl = [
-				'nieuw' => 'P_LEDEN_READ',
-			];
-		} else {
-			$this->acl = [
-
-			];
-		}
-	}
-
-	public function performAction(array $args = array()) {
-		// Standaardactie
-		$this->action = 'nieuw';
-
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		}
-
-		parent::performAction($args);
-	}
-
+class KetzerTovenaarController {
+	/**
+	 * @throws \Exception
+	 */
 	public function nieuw() {
-		$this->view = new KetzerTovenaarView();
+		$view = new KetzerTovenaarView();
+		$view->view();
 	}
 }

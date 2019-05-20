@@ -1,0 +1,5 @@
+ketzertovenaar-nieuw:
+  path: /ketzertovenaar
+  controller: CsrDelft\controller\KetzerTovenaarController::nieuw
+  methods: GET
+  options: { mag: P_LOGGED_IN }

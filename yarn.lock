@@ -1954,6 +1954,11 @@ core-js@3.0.1:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
   integrity sha512-klh/kDpwX8hryYL14M9w/xei6vrv6sE8gTHDG7/T/+SEovB/G4ejwcfE/CBzO6Edsu+OETZMZ3wcX/EjUkrl5A==
 
+core-js@^2.6.5:
+  version "2.6.6"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.6.tgz#00eb6d6bf815471cc16d8563edd7d38786dec50b"
+  integrity sha512-Mt/LaAym54NXnrjEMdo918cT2h70tqb/Yl7T3uPHQHRm5SxVoqlKmerUy4mL11k8saSBDWQ7ULIHxmeFyT3pfg==
+
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
@@ -3607,6 +3612,11 @@ ini@^1.3.4, ini@~1.3.0:
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
   integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
+
+inputmask@^4.0.6:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/inputmask/-/inputmask-4.0.8.tgz#876d3209782df079ab69d4c7379767a45ef5762a"
+  integrity sha512-y7TbHasd4tGgOxk1PBF6zZLBzfKt3a5qySF3KuKVNaeuptDpp52jhYOmw1tBJwRxrpJ4s+BOFmWKYsQqjp+r/w==
 
 inquirer@^6.2.2:
   version "6.3.1"
@@ -6965,6 +6975,14 @@ vue-class-component@^6.2.0, vue-class-component@^6.3.2:
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-6.3.2.tgz#e6037e84d1df2af3bde4f455e50ca1b9eec02be6"
   integrity sha512-cH208IoM+jgZyEf/g7mnFyofwPDJTM/QvBNhYMjqGB8fCsRyTf68rH2ISw/G20tJv+5mIThQ3upKwoL4jLTr1A==
 
+vue-functional-calendar@^2.1.0:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/vue-functional-calendar/-/vue-functional-calendar-2.3.4.tgz#047c2c9c2e7e8ae9190b1c847efefe2f82eb01be"
+  integrity sha512-oRTDnO6fQ42Ekc0JcE7PX/E5JiWQRyvyc2B4Bb3yioyq1VHAILVS9nqMzrPiZrAgt8dpAClHkq2BxzlUUjDQow==
+  dependencies:
+    core-js "^2.6.5"
+    vue "^2.5.21"
+
 vue-functional-data-merge@^2.0.7:
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-2.0.7.tgz#bdee655181eacdcb1f96ce95a4cc14e75313d1da"
@@ -6974,6 +6992,11 @@ vue-hot-reload-api@^2.3.0:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
   integrity sha512-KmvZVtmM26BQOMK1rwUZsrqxEGeKiYSZGA7SNWE6uExx8UX/cj9hq2MRV/wWC3Cq6AoeDGk57rL9YMFRel/q+g==
+
+vue-js-toggle-button@^1.3.1:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/vue-js-toggle-button/-/vue-js-toggle-button-1.3.2.tgz#d2e538465c321967144d035824cb71eedd82984e"
+  integrity sha512-LS+pvX5lXEhX+Gei5MOAEw7bx99/A+9idFhMtBgz72ApsEHlW69Y7bk+ZKC1rLRUxchL5WlQ+MhJXqXewhkfjg==
 
 vue-loader@^15.4.1:
   version "15.7.0"
@@ -7038,7 +7061,7 @@ vue-typescript-import-dts@^4.0.0:
   resolved "https://registry.yarnpkg.com/vue-typescript-import-dts/-/vue-typescript-import-dts-4.0.0.tgz#2ddb5354f61cff69ef2997ca9da1a3183041a880"
   integrity sha1-LdtTVPYc/2nvKZfKnaGjGDBBqIA=
 
-vue@^2.5.7:
+vue@^2.5.21, vue@^2.5.7:
   version "2.6.10"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha512-ImThpeNU9HbdZL3utgMCq0oiMzAkt1mcgy3/E6zWC/G6AaQoeuFdsl9nDhTDU3X1R6FK7nsIUuRACVcjI+A2GQ==
