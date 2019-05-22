@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9943ee8267decc1b401100876db0db9f",
+    "content-hash": "5b8b3805b36eec93d276846aeb4099a6",
     "packages": [
         {
             "name": "cakephp/cache",
@@ -344,16 +344,16 @@
         },
         {
             "name": "csrdelft/orm",
-            "version": "v1.8.2",
+            "version": "v1.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
-                "reference": "7319ae4dd39322e86876e4bcb4c58b9992fb1ce0"
+                "reference": "46e90a1fd4fac50308b54ce6e6e4589f3d387272"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/orm/zipball/7319ae4dd39322e86876e4bcb4c58b9992fb1ce0",
-                "reference": "7319ae4dd39322e86876e4bcb4c58b9992fb1ce0",
+                "url": "https://api.github.com/repos/csrdelft/orm/zipball/46e90a1fd4fac50308b54ce6e6e4589f3d387272",
+                "reference": "46e90a1fd4fac50308b54ce6e6e4589f3d387272",
                 "shasum": ""
             },
             "require": {
@@ -399,7 +399,7 @@
             ],
             "description": "The creatively named object-relational mapping library for csrdelft.nl",
             "homepage": "https://csrdelft.github.io/orm",
-            "time": "2019-05-19T14:14:39+00:00"
+            "time": "2019-05-22T08:31:33+00:00"
         },
         {
             "name": "easyrdf/easyrdf",
@@ -688,16 +688,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.98",
+            "version": "v0.99",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "541fc4a4031fc762be4e0902e5dec6e99933c353"
+                "reference": "000516c530f0731ec90a168b6a294d42e062d087"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/541fc4a4031fc762be4e0902e5dec6e99933c353",
-                "reference": "541fc4a4031fc762be4e0902e5dec6e99933c353",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/000516c530f0731ec90a168b6a294d42e062d087",
+                "reference": "000516c530f0731ec90a168b6a294d42e062d087",
                 "shasum": ""
             },
             "require": {
@@ -721,7 +721,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2019-05-11T00:23:08+00:00"
+            "time": "2019-05-18T00:23:17+00:00"
         },
         {
             "name": "google/auth",
