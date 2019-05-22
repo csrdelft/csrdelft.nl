@@ -1,6 +1,6 @@
 <div id="zijbalk_agenda">
 	<div class="zijbalk-kopje">
-		<a href="/agenda/" title="Agenda">Agenda</a>
+		<a href="/agenda" title="Agenda">Agenda</a>
 	</div>
 	{foreach from=$items item=item}
 		<div class="item">
