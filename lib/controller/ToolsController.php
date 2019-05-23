@@ -8,6 +8,7 @@ use CsrDelft\common\LDAP;
 use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\LogModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\ProfielService;
 use CsrDelft\model\Roodschopper;
@@ -23,7 +24,6 @@ use CsrDelft\view\NovietenView;
 use CsrDelft\view\PlainView;
 use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
-use CsrDelft\view\StatsView;
 use CsrDelft\view\Streeplijstcontent;
 use CsrDelft\view\VerticaleLijstenView;
 
@@ -48,7 +48,21 @@ class ToolsController {
 	}
 
 	public function stats() {
-		return view('default', ['content' => new StatsView()]);
+		$criteria = null;
+		$params = [];
+		if($this->hasParam('uid')) {
+			$criteria = "uid = ?";
+			$params[] = $this->getParam('uid');
+		} elseif($this->hasParam('ip')) {
+			$criteria = "ip = ?";
+			$params[] = $this->getParam('ip');
+		}
+
+		$log = LogModel::instance()->find($criteria, $params, null, 'ID DESC',30)->fetchAll();
+
+		return view('stats.stats', [
+			'log' => $log
+		]);
 	}
 
 	public function verticalelijsten() {
