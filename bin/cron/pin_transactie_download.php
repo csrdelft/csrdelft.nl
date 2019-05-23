@@ -10,7 +10,7 @@ use CsrDelft\common\Ini;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieDownloader;
-use CsrDelft\model\fiscaat\pin\PinTransactieMatcherFactory;
+use CsrDelft\model\fiscaat\pin\PinTransactieMatcher;
 use CsrDelft\model\fiscaat\pin\PinTransactieMatchModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieModel;
 
@@ -57,7 +57,7 @@ $pintransacties = PinTransactieDownloader::download($settings, $from);
 $pinbestellingen = CiviBestellingModel::instance()->getPinBestellingInMoment($from, $to);
 
 try {
-	$matcher = new PinTransactieMatcherFactory($pintransacties, $pinbestellingen);
+	$matcher = new PinTransactieMatcher($pintransacties, $pinbestellingen);
 
 	$matcher->clean();
 	$matcher->match();
