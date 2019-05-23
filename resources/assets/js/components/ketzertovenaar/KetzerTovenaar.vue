@@ -69,7 +69,7 @@
 
 			<functional-calendar
 				v-if="!event.multipleDays"
-				v-on:input="event.calendarData && event.calendarData.selectedDate !== false ? gotoStep(5) : null"
+				v-on:input="event.calendarData && event.calendarData.selectedDate !== false ? gotoStep(5, true) : null"
 				key="singleDaySelector"
 				:change-month-function="true"
 				:change-year-function="true"
@@ -82,7 +82,7 @@
 
 			<functional-calendar
 				v-else
-				v-on:input="event.calendarData.dateRange.dateRange && event.calendarData.dateRange.dateRange.end !== false ? gotoStep(5) : null"
+				v-on:input="event.calendarData.dateRange.dateRange && event.calendarData.dateRange.dateRange.end !== false ? gotoStep(5, true) : null"
 				key="multipleDaySelector"
 				:change-month-function="true"
 				:change-year-function="true"
@@ -107,7 +107,7 @@
 				v-model="event.entireDay">
 			</Toggle>
 
-			<template v-if="loaded && !event.entireDay">
+			<template v-if="!event.entireDay">
 				<div class="input-half">
 					<TextInput
 						name="startTime"
@@ -125,7 +125,7 @@
 						name="endTime"
 						mask="HH:MM[:ss]"
 						mask-placeholder="__:__[:__]"
-						hint="Van"
+						hint="Tot"
 						v-model="event.endTime"
 						v-on:next="validStartTime(true) && validEndTime(true) ? gotoStep(6, true) : null"
 						:error="validEndTime()">
@@ -190,13 +190,14 @@
 				<Toggle
 					name="enterEnd"
 					question="Ketzer sluiten na een bepaald moment"
+					@input="prepareEnterEnd()"
 					v-model="event.enterEnd">
 				</Toggle>
 
 				<div class="moment" v-if="event.enterEnd">
 					<div class="input-half">
 						<label>Ketzer sluiten op</label>
-						<DateInput name="enterEnd" v-model="event.enterEndMoment"></DateInput>
+						<DateInput ref="enterEndmoment" name="enterEnd" v-model="event.enterEndMoment"></DateInput>
 					</div>
 
 					<div class="input-half">
@@ -213,7 +214,7 @@
 			</div>
 
 			<Toggle
-				name="multipleDays"
+				name="canExit"
 				question="Leden mogen zichzelf uitketzen"
 				v-model="event.canExit">
 			</Toggle>
@@ -222,13 +223,14 @@
 				<Toggle
 					name="exitEnd"
 					question="Uitketzen niet toestaan na een bepaald moment"
+					@input="prepareExitEnd()"
 					v-model="event.exitEnd">
 				</Toggle>
 
 				<div class="moment" v-if="event.exitEnd">
 					<div class="input-half">
 						<label>Uitketzen toestaan tot</label>
-						<DateInput name="exitEnd" v-model="event.exitEndMoment"></DateInput>
+						<DateInput ref="exitEndMoment" name="exitEnd" v-model="event.exitEndMoment"></DateInput>
 					</div>
 
 					<div class="input-half">
@@ -286,7 +288,6 @@
 		components: {SelectButtons, TextInput, Toggle, Stap, FunctionalCalendar, DateInput},
 		props: {},
 		data: () => ({
-			loaded: false,
 			types: {
 				'vereniging': 'Verenigings-activiteit',
 				'lustrum': 'Lustrum-activiteit',
@@ -332,13 +333,12 @@
 			},
 			step: 1,
 		}),
-		created() {
+		mounted() {
 			if (sessionStorage.hasOwnProperty('ketzerTovenaar')) {
 				let stored = JSON.parse(sessionStorage.getItem('ketzerTovenaar'));
 				this.event = stored.event;
 				this.step = stored.step;
 			}
-			this.loaded = true;
 		},
 		computed: {},
 		methods: {
@@ -391,6 +391,28 @@
 				}
 
 				if (returning === true) return true;
+			},
+			prepareEnterEnd() {
+				if (this.event.enterEnd) {
+					const start = this.event.multipleDays ? this.event.calendarData.dateRange.start : this.event.calendarData.selectedDate;
+					if (start && start.length > 0) {
+						this.$nextTick(function () {
+							this.$refs.enterEndmoment.$children[0].ChooseDate(start);
+						});
+					}
+					this.event.enterEndMomentTime = this.event.startTime;
+				}
+			},
+			prepareExitEnd() {
+				if (this.event.exitEnd) {
+					const start = this.event.multipleDays ? this.event.calendarData.dateRange.start : this.event.calendarData.selectedDate;
+					if (start && start.length > 0) {
+						this.$nextTick(function () {
+							this.$refs.exitEndMoment.$children[0].ChooseDate(start);
+						});
+					}
+					this.event.exitEndMomentTime = this.event.startTime;
+				}
 			}
 		}
 	}
