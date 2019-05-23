@@ -205,6 +205,7 @@ class ProfielForm extends Formulier {
 				$fields[] = new JaNeeField('kringcoach', $profiel->kringcoach, 'Kringcoach');
 			}
 			$fields[] = new LidField('patroon', $profiel->patroon, 'Patroon', 'allepersonen');
+			$fields[] = new TextField('profielOpties', $profiel->profielOpties, 'Profielopties');
 		}
 
 		$fields[] = new Subkopje('Persoonlijk');

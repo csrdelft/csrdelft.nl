@@ -115,6 +115,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $kgb;
 	public $vrienden;
 	public $middelbareSchool;
+	public $profielOpties;
 	// overig
 	public $kerk;
 	public $muziek;
@@ -190,6 +191,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'zingen' => array(T::String, true),
 		'vrienden' => array(T::Text, true),
 		'middelbareSchool' => array(T::String, true),
+		'profielOpties' => array(T::String, true),
 		// novitiaat
 		'novitiaat' => array(T::Text, true),
 		'novitiaatBijz' => array(T::Text, true),
