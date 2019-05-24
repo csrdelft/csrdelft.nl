@@ -23,4 +23,13 @@ class ForumZoeken {
 		$this->sorteer_volgorde = 'desc';
 		$this->limit = 20;
 	}
+
+	public static function nieuw($zoekterm, $limit, $zoek_in) {
+		$forumZoeken = new static();
+		$forumZoeken->zoekterm = $zoekterm;
+		$forumZoeken->limit = $limit;
+		$forumZoeken->zoek_in = $zoek_in;
+
+		return $forumZoeken;
+	}
 }
