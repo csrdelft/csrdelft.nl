@@ -9,12 +9,10 @@ use CsrDelft\model\entity\fiscaat\pin\PinTransactieMatch;
 use CsrDelft\model\fiscaat\pin\PinTransactieMatcher;
 use PHPUnit\Framework\TestCase;
 
-final class PinTransactieMatcherTest extends TestCase
-{
-    public function testMatch(): void
-    {
-    	$transacties = [
-    		$this->trans(0, 100),
+final class PinTransactieMatcherTest extends TestCase {
+	public function testMatch() {
+		$transacties = [
+			$this->trans(0, 100),
 			$this->trans(2, 236),
 			$this->trans(3, 42), #missende bestelling
 			$this->trans(4, 1115),
@@ -22,17 +20,17 @@ final class PinTransactieMatcherTest extends TestCase
 		];
 
 		$bestellingen = [
-			$this->best(100,100),
-			$this->best(101,14), # missende transactie (en B'vo)
-			$this->best(102,236),
-			$this->best(104,1115),
-			$this->best(105,20) #verkeerd bedrag
+			$this->best(100, 100),
+			$this->best(101, 14), # missende transactie (en B'vo)
+			$this->best(102, 236),
+			$this->best(104, 1115),
+			$this->best(105, 20) #verkeerd bedrag
 		];
 
-    	$matcher = new PinTransactieMatcher($transacties, $bestellingen);
-    	$matcher->match();
-    	$matches = $matcher->getMatches();
-    	$this->assertTrue($this->hasMatch($matches, 0, 100, PinTransactieMatchStatusEnum::STATUS_MATCH));
+		$matcher = new PinTransactieMatcher($transacties, $bestellingen);
+		$matcher->match();
+		$matches = $matcher->getMatches();
+		$this->assertTrue($this->hasMatch($matches, 0, 100, PinTransactieMatchStatusEnum::STATUS_MATCH));
 		$this->assertTrue($this->hasMatch($matches, 2, 102, PinTransactieMatchStatusEnum::STATUS_MATCH));
 		$this->assertTrue($this->hasMatch($matches, 4, 104, PinTransactieMatchStatusEnum::STATUS_MATCH));
 		$this->assertTrue($this->hasMatch($matches, null, 101, PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE));
@@ -40,17 +38,16 @@ final class PinTransactieMatcherTest extends TestCase
 		$this->assertTrue($this->hasMatch($matches, null, 101, PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE));
 		$this->assertTrue($this->hasMatch($matches, 5, 105, PinTransactieMatchStatusEnum::STATUS_VERKEERD_BEDRAG));
 
-    }
+	}
 
-	public function testMatchDifferentLength(): void
-	{
+	public function testMatchDifferentLength() {
 		$transacties = [
 			$this->trans(0, 100)
 		];
 
 		$bestellingen = [
-			$this->best(100,100),
-			$this->best(105,20) #missende transactie
+			$this->best(100, 100),
+			$this->best(105, 20) #missende transactie
 		];
 
 		$matcher = new PinTransactieMatcher($transacties, $bestellingen);
@@ -61,19 +58,19 @@ final class PinTransactieMatcherTest extends TestCase
 
 	}
 
-    private function trans($id, $bedrag) {
+	private function trans($id, $bedrag) {
 		$transactie = new PinTransactie();
 		$transactie->id = $id;
-		$transactie->amount = "EUR ".$bedrag;
+		$transactie->amount = "EUR " . $bedrag;
 		return $transactie;
 	}
 
 	private function best($id, $bedrag) {
-    	$bestelling = new CiviBestellingInhoud();
-    	$bestelling->aantal = $bedrag;
-    	$bestelling->bestelling_id = $id;
-    	$bestelling->product_id = CiviProductTypeEnum::PINTRANSACTIE;
-    	return $bestelling;
+		$bestelling = new CiviBestellingInhoud();
+		$bestelling->aantal = $bedrag;
+		$bestelling->bestelling_id = $id;
+		$bestelling->product_id = CiviProductTypeEnum::PINTRANSACTIE;
+		return $bestelling;
 	}
 
 	/**
