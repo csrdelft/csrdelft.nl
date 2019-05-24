@@ -308,7 +308,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * en voegt verjaardag toe indien van toepassing.
 	 */
 	public function getProfielOpties() {
-		$opties = array_map(function($a) { return trim($a); }, explode(',', $this->profielOpties));
+		$opties = $this->profielOpties ? array_map(function($a) { return trim($a); }, explode(',', $this->profielOpties)) : [];
 		if ($this->isJarig()) {
 			$opties[] = 'jarig';
 		}

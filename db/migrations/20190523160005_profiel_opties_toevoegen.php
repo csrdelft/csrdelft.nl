@@ -7,7 +7,7 @@ class ProfielOptiesToevoegen extends AbstractMigration
     public function change()
     {
 			$this->table('profielen')
-				->addColumn('profielOpties', 'string', ['default' => ''])
+				->addColumn('profielOpties', 'string')
 				->save();
     }
 }
