@@ -303,6 +303,27 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		return substr($this->gebdatum, 5, 5) === date('m-d');
 	}
 
+	/**
+	 * Vervormt kommagescheiden opties naar lijst
+	 * en voegt verjaardag toe indien van toepassing.
+	 */
+	public function getProfielOpties() {
+		$opties = array_map(function($a) { return trim($a); }, explode(',', $this->profielOpties));
+		if ($this->isJarig()) {
+			$opties[] = 'jarig';
+		}
+
+		return $opties;
+	}
+
+	/**
+	 * Vervormt kommagescheiden opties naar spatiegescheiden opties
+	 * en voegt verjaardag toe indien van toepassing.
+	 */
+	public function getProfielClasses() {
+		return implode(' ', $this->getProfielOpties());
+	}
+
 	public function getJarigOver() {
 		$verjaardag = strtotime(date('Y') . '-' . date('m-d', strtotime($this->gebdatum)));
 		$nu = strtotime(date('Y-m-d'));
