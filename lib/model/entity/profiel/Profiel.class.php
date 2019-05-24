@@ -115,6 +115,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $kgb;
 	public $vrienden;
 	public $middelbareSchool;
+	public $profielOpties;
 	// overig
 	public $kerk;
 	public $muziek;
@@ -190,6 +191,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'zingen' => array(T::String, true),
 		'vrienden' => array(T::Text, true),
 		'middelbareSchool' => array(T::String, true),
+		'profielOpties' => array(T::String, true),
 		// novitiaat
 		'novitiaat' => array(T::Text, true),
 		'novitiaatBijz' => array(T::Text, true),
@@ -299,6 +301,27 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 
 	public function isJarig() {
 		return substr($this->gebdatum, 5, 5) === date('m-d');
+	}
+
+	/**
+	 * Vervormt kommagescheiden opties naar lijst
+	 * en voegt verjaardag toe indien van toepassing.
+	 */
+	public function getProfielOpties() {
+		$opties = array_map(function($a) { return trim($a); }, explode(',', $this->profielOpties));
+		if ($this->isJarig()) {
+			$opties[] = 'jarig';
+		}
+
+		return $opties;
+	}
+
+	/**
+	 * Vervormt kommagescheiden opties naar spatiegescheiden opties
+	 * en voegt verjaardag toe indien van toepassing.
+	 */
+	public function getProfielClasses() {
+		return implode(' ', $this->getProfielOpties());
 	}
 
 	public function getJarigOver() {
