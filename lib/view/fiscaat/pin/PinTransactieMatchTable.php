@@ -19,8 +19,8 @@ class PinTransactieMatchTable extends DataTable {
 		parent::__construct(PinTransactieMatchModel::ORM, '/fiscaat/pin?filter=metFout', 'Overzicht van pintransacties matches');
 
 		$weergave = new CollectionDataTableKnop(Multiplicity::None(), 'Weergave', 'Weergave van de tabel', 'cart');
-		$weergave->addKnop(new SourceChangeDataTableKnop('/fiscaat/pin/overzicht?filter=metFout', 'Met fouten', 'Fouten weergeven', 'cart_error'));
-		$weergave->addKnop(new SourceChangeDataTableKnop('/fiscaat/pin/overzicht?filter=alles', 'Alles', 'Alles weergeven', 'cart'));
+		$weergave->addKnop(new SourceChangeDataTableKnop('/fiscaat/pin?filter=metFout', 'Met fouten', 'Fouten weergeven', 'cart_error'));
+		$weergave->addKnop(new SourceChangeDataTableKnop('/fiscaat/pin?filter=alles', 'Alles', 'Alles weergeven', 'cart'));
 		$this->addKnop($weergave);
 
 		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/fiscaat/pin/verwerk',  'Verwerk', 'Dit probleem verwerken', 'cart_edit'));
