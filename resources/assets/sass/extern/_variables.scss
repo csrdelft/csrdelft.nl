@@ -1,12 +1,12 @@
-$basiskleur: #ce4e15;
+$basiskleur: #0f8c72;
 
-$headerkleur: rgba(206, 78, 21, 0.95);
+$headerkleur: rgba(15, 140, 114, 0.95);
 $loginkleur: rgba(34, 35, 72, 0.4);
 
-$kleur1: #414262;
-$kleur2: #61617C;
-$kleur3: #222348;
-$kleur4: #353670;
+$kleur1: #f0a700;
+$kleur2: lighten(#f0a700, 3%);
+$kleur3: darken(#f0a700, 3%);
+$kleur4: darken(#f0a700, 1%);
 
 $tekstlicht: #FFFFFF;
 $tekstdonker: #353670;
