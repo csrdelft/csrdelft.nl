@@ -78,4 +78,17 @@ class LogEntry extends PersistentEntity {
 	 */
 	protected static $table_name = 'log';
 
+	public function getFormattedReferer() {
+		if ($this->referer == '') {
+			return '-';
+		} else {
+			if (preg_match('/google/i', $this->referer)) {
+				$iQpos = 2 + strpos($this->referer, 'q=');
+				$iLengte = strpos($this->referer, '&') - $iQpos - 3;
+				return urldecode(substr($this->referer, $iQpos, $iLengte));
+			} else {
+				return $this->referer;
+			}
+		}
+	}
 }
