@@ -23,6 +23,7 @@ use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\service\CsrfService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
 use Invoker\Invoker;
@@ -64,12 +65,16 @@ try {
 
 		$parameters = $router->match(strtok(REQUEST_URI, '?'));
 
+		$allowCsrf = $router->getRouteCollection()->get($parameters['_route'])->getOption('allow_csrf') ?? false;
+		if (!$allowCsrf && $_SERVER['REQUEST_METHOD'] != 'GET') {
+			CsrfService::preventCsrf();
+		}
+
 		$acl = $router->getRouteCollection()->get($parameters['_route'])->getOption('mag');
 
 		if ($acl == null) {
 			throw new CsrException(sprintf('Route "%s" moet een "mag" optie hebben.', $parameters['_route']));
 		}
-
 		if (!LoginModel::mag($acl)) {
 			throw new CsrToegangException('Geen toegang');
 		}
