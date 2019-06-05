@@ -18,10 +18,12 @@ final class ShutdownHandler {
 	 *
 	 * Runt in Productie mode.
 	 */
-	public static function httpStatusHandler() {
+	public static function errorPageHandler() {
 		$debug = self::getDebug();
 		if ($debug !== null && self::isError($debug)) {
 			http_response_code(500);
+			view('fout.500')->view();
+			exit;
 		}
 	}
 
