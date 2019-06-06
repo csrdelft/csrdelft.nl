@@ -203,11 +203,6 @@
 							</a>
 						</li>
 						<li>
-							<a href="http://zoover.nl/">
-								<img src='https://csrdelft.nl/plaetjes/banners/Zoover.jpg' alt='Zoover advertentie'>
-							</a>
-						</li>
-						<li>
 							<a href="http://www.pricewise.nl/">
 								<img width=300px src="https://csrdelft.nl/plaetjes/banners/pricewise.svg"
 										 alt="Pricewise">
