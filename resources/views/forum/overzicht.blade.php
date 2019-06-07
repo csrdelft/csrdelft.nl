@@ -38,20 +38,5 @@
 		</div>
 	@endforeach
 
-	@foreach(CsrDelft\model\MenuModel::instance()->getMenu('remotefora')->getChildren() as $remoteCategorie)
-		<div class="forumcategorie">
-			<h3><a name="{{$remoteCategorie->tekst}}">{{$remoteCategorie->tekst}}</a></h3>
-			<div class="forumdelen">
-				@foreach($remoteCategorie->getChildren() as $remoteForum)
-					<div class="forumdeel">
-						<h4><a href="{{$remoteForum->link}}" target="_blank">{{$remoteForum->tekst}}</a></h4>
-						<p class="forumdeel-omschrijving">Het forum van onze {{lcfirst($remoteCategorie->tekst)}}
-							bij {{$remoteForum->tekst}}.</p>
-					</div>
-				@endforeach
-			</div>
-		</div>
-	@endforeach
-
 	@include('forum.partial.rss_link')
 @endsection
