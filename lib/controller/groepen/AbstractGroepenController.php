@@ -304,13 +304,6 @@ abstract class AbstractGroepenController extends Controller {
 						}
 						break;
 
-					case ActiviteitSoort::Huis:
-						$woonoord = $profiel->getWoonoord();
-						if ($woonoord) {
-							$groep->rechten_aanmelden = 'Woonoord:' . $woonoord->familie;
-						}
-						break;
-
 					case ActiviteitSoort::Ondervereniging:
 						$groep->rechten_aanmelden = 'Lichting:' . $profiel->lidjaar;
 						break;
