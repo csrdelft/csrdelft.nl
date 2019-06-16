@@ -17,11 +17,12 @@ use CsrDelft\model\fiscaat\CiviBestellingModel;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 20/02/2018
  */
-class PinTransactieMatcherFactory {
+class PinTransactieMatcher {
 	/**
 	 * Constants.
 	 */
-	const COST_VERKEERD_BEDRAG = 1;
+	const COST_VERKEERD_BEDRAG = 3;
+	const COST_MISSING = 2;
 	const TIME_FORMAT = 'H:m:s';
 
 	/**
@@ -83,15 +84,11 @@ class PinTransactieMatcherFactory {
 
 		for ($i = 0; $i < $pinTransactiesCount; $i++) {
 			for ($j = 0; $j < $pinBestellingenCount; $j++) {
-				if ($pinTransacties[$i]->getBedragInCenten() == $pinBestellingen[$j]->aantal) {
-					$cost = 0;
-				} else {
-					$cost = self::COST_VERKEERD_BEDRAG;
-				}
+				$cost = $this->matchCost($i, $j);
 
 				$distanceMatrix[$i + 1][$j + 1] = min(
-					$distanceMatrix[$i][$j + 1] + 1, // insert
-					$distanceMatrix[$i + 1][$j] + 1, // delete
+					$distanceMatrix[$i][$j + 1] + self::COST_MISSING, // insert
+					$distanceMatrix[$i + 1][$j] + self::COST_MISSING, // delete
 					$distanceMatrix[$i][$j] + $cost // replace
 				);
 			}
@@ -109,54 +106,55 @@ class PinTransactieMatcherFactory {
 		$distanceMatrix = $this->levenshteinMatrix($pinTransacties, $pinBestellingen);
 
 		$matches = [];
-		$indexTransactie = 0;
-		$indexBestelling = 0;
+		$indexTransactie = count($pinTransacties) - 1;
+		$indexBestelling = count($pinBestellingen) - 1;
 
-		while ($indexTransactie < count($pinTransacties) && $indexBestelling < count($pinBestellingen)) {
-			$isMatch = $distanceMatrix[$indexTransactie + 1][$indexBestelling + 1];
-			$isMissendeBestelling = $distanceMatrix[$indexTransactie + 1][$indexBestelling];
-			$isMissendeTransactie = $distanceMatrix[$indexTransactie][$indexBestelling + 1];
+		while ($indexTransactie >= 0 && $indexBestelling >=0) {
+			$matchCost = $this->matchCost($indexTransactie, $indexBestelling);
+			$matchDistance = $distanceMatrix[$indexTransactie][$indexBestelling] + $matchCost;
+			$missendeBestellingDistance = $distanceMatrix[$indexTransactie][$indexBestelling +1] + self::COST_MISSING;
+			$missendeTransactieDistance = $distanceMatrix[$indexTransactie + 1][$indexBestelling ] + self::COST_MISSING;
 
-			$index = min($isMatch, $isMissendeBestelling, $isMissendeTransactie);
+			$distance = $distanceMatrix[$indexTransactie+1][$indexBestelling+1];
 
-			switch ($index) {
-				case $isMatch:
-					if ($distanceMatrix[$indexTransactie][$indexBestelling] < $isMatch) {
+			switch ($distance) {
+				case $matchDistance:
+					if ($matchCost > 0) {
 						$matches[] = PinTransactieMatch::verkeerdBedrag($pinTransacties[$indexTransactie], $pinBestellingen[$indexBestelling]);
 					} else {
 						$matches[] = PinTransactieMatch::match($pinTransacties[$indexTransactie], $pinBestellingen[$indexBestelling]);
 					}
 
-					$indexTransactie++;
-					$indexBestelling++;
+					$indexTransactie--;
+					$indexBestelling--;
 
 					break;
 
-				case $isMissendeTransactie:
+				case $missendeTransactieDistance:
 					$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexBestelling]);
-					$indexBestelling++;
+					$indexBestelling--;
 
 					break;
 
-				case $isMissendeBestelling:
+				case $missendeBestellingDistance:
 					$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexTransactie]);
-					$indexTransactie++;
+					$indexTransactie--;
 
 					break;
 			}
 		}
 
-		while ($indexTransactie < count($pinBestellingen) - 1) {
+		while ($indexTransactie >= 0) {
 			$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexTransactie]);
-			$indexTransactie++;
+			$indexTransactie--;
 		}
 
-		while ($indexBestelling < count($pinTransacties) - 1) {
+		while ($indexBestelling >= 0) {
 			$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexBestelling]);
-			$indexBestelling++;
+			$indexBestelling--;
 		}
 
-		$this->matches = $matches;
+		$this->matches = array_reverse($matches);
 	}
 
 	/**
@@ -232,6 +230,21 @@ class PinTransactieMatcherFactory {
 	public function save() {
 		foreach ($this->matches as $match) {
 			PinTransactieMatchModel::instance()->create($match);
+		}
+	}
+
+	/**
+	 * @return PinTransactieMatch[]
+	 */
+	public function getMatches() {
+		return $this->matches;
+	}
+
+	private function matchCost($i, $j) {
+		if ($this->pinTransacties[$i]->getBedragInCenten() == $this->pinBestellingen[$j]->aantal) {
+			return 0;
+		} else {
+			return self::COST_VERKEERD_BEDRAG;
 		}
 	}
 }

@@ -10,7 +10,7 @@
 	<!-- Banner -->
 	<section id="banner">
 		<div class="inner">
-			<img src="/images/logo-bonfire.svg" alt="Logo Bonfire">
+			<img src="/images/logo-light-it-up.png" alt="Logo Light It Up">
 		</div>
 		<div style="margin-top:40px" class="inner">
 			<a href="https://www.youtube.com/watch?v=a7hhtoo_kzY&list=PLXBOhyG24-WnNgg2RloapxC5X73J1Zxvi" rel="noreferrer" target="_blank"
@@ -200,11 +200,6 @@
 						<li>
 							<a href="http://galjemadetachering.nl/">
 								<img src='https://csrdelft.nl/plaetjes/banners/galjema_banner.jpg' alt='Galjema advertentie'>
-							</a>
-						</li>
-						<li>
-							<a href="http://zoover.nl/">
-								<img src='https://csrdelft.nl/plaetjes/banners/Zoover.jpg' alt='Zoover advertentie'>
 							</a>
 						</li>
 						<li>

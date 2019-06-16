@@ -1,81 +1,119 @@
-$beeldmerk: url(/images/logo-next-level.svg);
+/* owee 2019*/
+$owee-groen: #0f8c72;
+$owee-geel: #f0a700;
 
-$zijbalk-bg: #853d7d;
+$white: #fff;
+$gray-100: #f8f9fa;
+$gray-600: #6c757d;
+$gray-800: #343a40;
+$black: #000;
 
-@import "../base";
-/* owee 2017*/
-/** oranje: #f15025*/
-/** paars: #853d7d*/
-/** oranje-tekst: #fa7921 */
+$body-bg: $owee-groen;
+$body-color: darken($owee-groen, 17%);
+$headings-color: inherit;
 
-/*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
+$primary: $owee-groen;
+$secondary: $owee-geel;
+$light: $gray-100;
+$dark: $gray-800;
 
-#zijbalk,
-#forumtabel th,
-.cd-primary-nav ul {
-  background-color: #853d7d !important;
+@font-face {
+  font-family: 'Ubuntu-Light';
+  src: url('../../fonts/dark-mode/Ubuntu-Light.ttf') format('truetype'),
+  url('../../fonts/dark-mode/Ubuntu-Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
-/*Koppen in oranje*/
-
-h1,
-a,
-a:hover,
-.cd-primary-nav > li > a:hover,
-.cd-primary-nav > li > a.selected {
-  color: #fa7921;
+@font-face {
+  font-family: 'Ubuntu-Medium';
+  src: url('../../fonts/dark-mode/Ubuntu-Medium.ttf') format('truetype'),
+  url('../../fonts/dark-mode/Ubuntu-Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
-/*NAVIGATIE MENU*/
-/*Andere koppen in het blauw*/
-
-.cd-primary-nav .cd-secondary-nav a,
-.cd-primary-nav .cd-secondary-nav > li > a:hover,
-.cd-primary-nav .cd-secondary-nav > li > a {
-  color: #fff;
+@font-face {
+  font-family: 'Montserrat-Regular';
+  src: url('../../fonts/owee/Montserrat-Regular.ttf') format('truetype'),
+  url('../../fonts/owee/Montserrat-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
-/*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
+$font-family-base: "Ubuntu-Medium", sans-serif;
+$headings-font-family: "Montserrat-Regular", "Ubuntu-Medium", sans-serif;
 
-.cd-primary-nav .cd-secondary-nav a:hover {
-  text-decoration: underline !important;
-  color: #fa7921;
+/** Stek specifieke variabelen. */
+
+/* zijbalk */
+$beeldmerk: url("/images/logo-light-it-up.png");
+
+$zijbalk-bg: $owee-geel;
+$zijbalk-border: darken($owee-groen, 12%);
+$zijbalk-kopje: $primary;
+$zijbalk-ishetal-nee: red;
+$zijbalk-ishetal-ja: green;
+$zindex-zijbalk: 800;
+
+.zijbalk-kopje {
+  a {
+    font-size: 1.25em;
+  }
 }
 
-/*Streepje onder naam*/
-
-.cd-primary-nav > li > a:hover,
-.cd-primary-nav > li > a.selected {
-  box-shadow: inset 0 -2px 0 #f15025;
+.titel, .zijbalk-kopje {
+  font-family: "Montserrat-Regular", sans-serif;
 }
 
-/*ZIJBALK*/
-/*Veel tekst van de zijbalk in het blauw*/
-
-#zijbalk .ishetal .ja,
-#zijbalk .ishetal .nee,
-.staatrood,
-#zijbalk .blok .item a,
-#zijbalk .ishetal,
 #zijbalk .blok .item {
-  color: white;
+  font-family: "Ubuntu-Light", sans-serif;
 }
 
-/*Zijbalk grens van het scherm in blauw*/
+/* Modals */
+$modal-content-bg: $body-bg;
 
-#zijbalk {
-  border-color: #f15025;
+/* bbcode */
+$bb-block-bg: $secondary;
+
+/* forum */
+$forum-bericht0-bg: $body-bg;
+$forum-bericht1-bg: darken($body-bg, 4%);
+$ongelezen-lijn: #e8cf2a;
+
+/* main menu */
+$menu-primary-hover: $primary;
+$menu-bg: $body-bg;
+$menu-color: $body-color;
+$menu-small-bg: $owee-groen;
+$menu-small-color: #ffffff;
+
+/* zoeken */
+$zoeken-active-bg: $owee-groen;
+
+/* maalcie-tabel */
+$tabel-header: darken($body-bg, 5%);
+$tabel-regel-donker: lighten($body-bg, 4%);
+$tabel-regel-licht: lighten($body-bg, 12%);
+
+/* cards */
+$card-bg: $owee-geel;
+$card-border-color: rgba(0, 0, 0, 0.3);
+
+/* importeer basis */
+@import "../base";
+
+a, a:hover,
+.cd-primary-nav > li > a:hover,
+.cd-primary-nav > li > a.selected {
+  color: darken($owee-groen, 10%);
 }
 
-/*OWee logo*/
-
-#zijbalk .cd-beeldmerk {
-  background-image: url("/images/logo-next-level.svg");
+.bericht {
+  color: $light;
 }
 
 /*KNOPPEN*/
-/*Knoppen in blauw gradient*/
-
 .btn,
 input[type=submit],
 input[type=button],
@@ -83,22 +121,89 @@ input[type=button],
 .btn:focus,
 input[type=submit]:focus,
 input[type=button]:focus {
-  border-color: #e53d00;
-  background-image: linear-gradient(to bottom, #f15025, #fa7921);
+  border-color: darken($owee-geel, 15%);
+  color: $light;
+  background-image: linear-gradient(to bottom, darken($owee-geel, 10%), $owee-geel);
 }
 
 /*Voor een mouse hover wordt de gradient omgedraaid*/
-
 .btn:hover,
 input[type=submit]:hover,
 input[type=button]:hover {
-  border-color: #e53d00;
-  background-image: linear-gradient(to bottom, #fa7921, #f15025);
+  border-color: darken($owee-geel, 15%);
+  background-image: linear-gradient(to bottom, $owee-geel, darken($owee-geel, 10%));
 }
 
 /*Actieve knoppen in geel gradient -> zo ontstaat verschil tussen hover en active*/
 
 .btn.active {
-  border-color: #e53d00;
-  background-image: linear-gradient(to bottom, #853d7d, #864CB5);
+  border-color: darken($owee-groen, 17%);
+  background-image: linear-gradient(to bottom, $owee-groen, lighten($owee-groen, 10%));
+}
+
+.close {
+  color: $white;
+}
+
+/* Pas om-en-om kleuren in de lichtingen, vertikalen, kringen, etc. aan */
+table.groep-lijst tr:nth-child(even) {
+  background-color: $secondary;
+}
+
+/* Pas "icoontje" in de breadcrubs aan */
+.module-icon {
+  color: $owee-geel;
+  opacity: 0.6;
+}
+
+.forum-deel {
+  .alternate-row {
+    &:nth-child(6n +1),
+    &:nth-child(6n + 2),
+    &:nth-child(6n + 3) {
+      background-color: lighten($owee-groen, 9%);
+    }
+
+    background-color: lighten($owee-groen, 7%);
+  }
+}
+
+.forumdeel-omschrijving {
+  background-color: #3F4149;
+}
+
+/* Pas achtergrond in de fotogallerij aan */
+.jgallery {
+  background-color: lighten($body-bg, 4%) !important;
+
+  &-thumbnails {
+    background-color: lighten($body-bg, 4%) !important;
+  }
+}
+
+/* Maak tekst zwart in prive bb-code (voor leesbaarheid) */
+.bb-prive {
+  color: black;
+}
+
+/* Pas achtergrond van, onder andere het courant formulier, aan */
+div#pubciemail_form {
+  background-color: transparent;
+  border: 1px solid #d3d3d3;
+  padding: 10px;
+}
+
+.list-group-item {
+  background-color: $owee-groen;
+}
+
+/* Peiling uitslag van de peilingen niet meer wit */
+#instellingen {
+  .list-group-item {
+    background-color: $owee-geel;
+
+    &-action:hover, &-action:focus {
+      background-color: darken($owee-groen, 5%);
+    }
+  }
 }

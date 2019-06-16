@@ -23,6 +23,7 @@ use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\service\CsrfService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
 use Invoker\Invoker;
@@ -64,12 +65,16 @@ try {
 
 		$parameters = $router->match(strtok(REQUEST_URI, '?'));
 
+		$allowCsrf = $router->getRouteCollection()->get($parameters['_route'])->getOption('allow_csrf') ?? false;
+		if (!$allowCsrf && $_SERVER['REQUEST_METHOD'] != 'GET') {
+			CsrfService::preventCsrf();
+		}
+
 		$acl = $router->getRouteCollection()->get($parameters['_route'])->getOption('mag');
 
 		if ($acl == null) {
 			throw new CsrException(sprintf('Route "%s" moet een "mag" optie hebben.', $parameters['_route']));
 		}
-
 		if (!LoginModel::mag($acl)) {
 			throw new CsrToegangException('Geen toegang');
 		}
@@ -113,16 +118,13 @@ try {
 	}
 } catch (ResourceNotFoundException $exception) {
 	http_response_code(404);
-	$body = new CmsPaginaView(CmsPaginaModel::get('404'));
-	$view = new CsrLayoutPage($body);
+	$view = view('fout.404');
 } catch (MethodNotAllowedException $exception) {
 	http_response_code(404);
-	$body = new CmsPaginaView(CmsPaginaModel::get('404'));
-	$view = new CsrLayoutPage($body);
+	$view = view('fout.404');
 } catch (CsrGebruikerException $exception) {
 	http_response_code(400);
-	echo $exception->getMessage();
-	exit;
+	$view = view('fout.400', ['bericht' => $exception->getMessage()]);
 } catch (CsrToegangException $exception) {
 	http_response_code($exception->getCode());
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -131,11 +133,20 @@ try {
 	elseif (LoginModel::getUid() === 'x999') {
 		redirect_via_login(REQUEST_URI);
 	}
-    // GUI 403
-    /** @var CsrDelft\model\entity\CmsPagina $errorpage */
-    $errorpage = CmsPaginaModel::get($exception->getCode());
-	$body = new CmsPaginaView($errorpage);
-	$view = new CsrLayoutPage($body);
+	switch ($exception->getCode()) {
+		case 404:
+			$view = view('fout.404');
+			break;
+		case 403:
+			$view = view('fout.403');
+			break;
+		case 400:
+			$view = view('fout.400', ['bericht' => $e->getMessage()]);
+			break;
+		default:
+			$view = view('fout.500');
+			break;
+	}
 }
 
 

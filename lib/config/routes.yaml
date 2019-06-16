@@ -7,6 +7,7 @@ tools-routes: { resource: routes/tools.yaml }
 fiscaat-routes: { resource: routes/fiscaat.yaml }
 commissievoorkeuren-routes: { resource: routes/commissievoorkeuren.yaml }
 ketzertovenaar-routes: { resource: routes/ketzertovenaar.yaml }
+agenda-routes: { resource: routes/agenda.yaml }
 
 logger:
   path: /logger/log

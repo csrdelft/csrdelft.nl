@@ -34,7 +34,7 @@
 @endsection
 
 @section('content')
-	<div id="profiel" @if($profiel->isJarig())class="jarig" @endif >
+	<div id="profiel" class="{{$profiel->getProfielClasses()}}">
 		<div id="profielregel">
 			<div class="naam">
 				<div class="float-right">
@@ -75,6 +75,9 @@
 							@endcan
 						@endif
 					</div>
+					@if(in_array('banaan', $profiel->getProfielOpties()))
+						<img src="/dist/images/banaan.gif" alt="Dansende banaan" class="banaan clear">
+					@endif
 				</div>
 				{!! getMelding() !!}
 				<h1 title="Lid-status: {{CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}}">
