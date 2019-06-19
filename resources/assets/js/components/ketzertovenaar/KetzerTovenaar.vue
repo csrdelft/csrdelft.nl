@@ -67,31 +67,38 @@
 				v-model="event.multipleDays">
 			</Toggle>
 
-			<functional-calendar
-				v-if="!event.multipleDays"
-				v-on:input="event.calendarData && event.calendarData.selectedDate !== false ? gotoStep(5, true) : null"
-				key="singleDaySelector"
-				:change-month-function="true"
-				:change-year-function="true"
+			<v-date-picker
+				:mode="event.multipleDays ? 'range' : 'single'"
 				v-model="event.calendarData"
-				:date-format="'dd-mm-yyyy'"
-				:is-date-picker="true"
-				:day-names="['Zo','Ma','Di','Wo','Do','Vr','Za']"
-				:month-names="['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']">
-			</functional-calendar>
+				is-inline
+				is-expanded
+			></v-date-picker>
 
-			<functional-calendar
-				v-else
-				v-on:input="event.calendarData.dateRange.dateRange && event.calendarData.dateRange.dateRange.end !== false ? gotoStep(5, true) : null"
-				key="multipleDaySelector"
-				:change-month-function="true"
-				:change-year-function="true"
-				v-model="event.calendarData"
-				:date-format="'dd-mm-yyyy'"
-				:is-date-range="true"
-				:day-names="['Zo','Ma','Di','Wo','Do','Vr','Za']"
-				:month-names="['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']">
-			</functional-calendar>
+			<!--			<functional-calendar-->
+			<!--				v-if="!event.multipleDays"-->
+			<!--				v-on:input="event.calendarData && event.calendarData.selectedDate !== false ? gotoStep(5, true) : null"-->
+			<!--				key="singleDaySelector"-->
+			<!--				:change-month-function="true"-->
+			<!--				:change-year-function="true"-->
+			<!--				v-model="event.calendarData"-->
+			<!--				:date-format="'dd-mm-yyyy'"-->
+			<!--				:is-date-picker="true"-->
+			<!--				:day-names="['Zo','Ma','Di','Wo','Do','Vr','Za']"-->
+			<!--				:month-names="['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']">-->
+			<!--			</functional-calendar>-->
+
+			<!--			<functional-calendar-->
+			<!--				v-else-->
+			<!--				v-on:input="event.calendarData.dateRange.dateRange && event.calendarData.dateRange.dateRange.end !== false ? gotoStep(5, true) : null"-->
+			<!--				key="multipleDaySelector"-->
+			<!--				:change-month-function="true"-->
+			<!--				:change-year-function="true"-->
+			<!--				v-model="event.calendarData"-->
+			<!--				:date-format="'dd-mm-yyyy'"-->
+			<!--				:is-date-range="true"-->
+			<!--				:day-names="['Zo','Ma','Di','Wo','Do','Vr','Za']"-->
+			<!--				:month-names="['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']">-->
+			<!--			</functional-calendar>-->
 
 		</Stap>
 
@@ -280,12 +287,11 @@
 	import TextInput from './velden/TextInput';
 	import Toggle from './velden/Toggle';
 	import Stap from './onderdelen/Stap';
-	import FunctionalCalendar from 'vue-functional-calendar';
 	import DateInput from './velden/DateInput';
 
 	export default {
 		name: 'KetzerTovenaar',
-		components: {SelectButtons, TextInput, Toggle, Stap, FunctionalCalendar, DateInput},
+		components: {SelectButtons, TextInput, Toggle, Stap, DateInput},
 		props: {},
 		data: () => ({
 			types: {
@@ -338,6 +344,9 @@
 				let stored = JSON.parse(sessionStorage.getItem('ketzerTovenaar'));
 				this.event = stored.event;
 				this.step = stored.step;
+				if (typeof this.event.calendarData === 'string') {
+					this.event.calendarData = new Date(this.event.calendarData);
+				}
 			}
 		},
 		computed: {},
@@ -432,16 +441,20 @@
 		font-family: 'Source Sans Pro', sans-serif !important;
 	}
 
-	.vfc-styles-conditional-class .vfc-main-container .vfc-calendars .vfc-calendar div.vfc-content .vfc-week div.vfc-day span.vfc-today:not(.vfc-marked) {
-		background: none;
+	.c-day {
+		min-height: 36px !important;
 
-		&:after {
-			color: black;
+		.c-day-content {
+			width: 33px !important;
+			height: 33px !important;
+			font-size: 16px !important;
 		}
-	}
 
-	.vfc-styles-conditional-class .vfc-main-container .vfc-calendars .vfc-calendar div.vfc-content .vfc-week div.vfc-day span.vfc-today {
-		border: 1px solid #bfcbd9;
+		.c-day-background {
+			min-width: 33px !important;
+			min-height: 33px !important;
+			background-color: #29abe2 !important;
+		}
 	}
 
 	.subOptions {
@@ -471,6 +484,7 @@
 			color: #cccccc;
 			line-height: 18px;
 			top: -9px;
+			z-index: 1;
 		}
 	}
 </style>

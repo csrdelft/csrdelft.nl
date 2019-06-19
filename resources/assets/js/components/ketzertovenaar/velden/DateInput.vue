@@ -1,25 +1,16 @@
 <template>
-	<functional-calendar
-		:is-modal="true"
-		:change-month-function="true"
-		:change-year-function="true"
-		:is-date-picker="true"
-		:key="name + '-dateInput'"
+	<v-date-picker
 		v-model="enteredDate"
 		v-on:input="update"
-		:date-format="'dd-mm-yyyy'"
-		:day-names="['Zo','Ma','Di','Wo','Do','Vr','Za']"
-		:month-names="['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']"
-		placeholder="dd-mm-jjjj">
-	</functional-calendar>
+		:key="name + '-dateInput'"></v-date-picker>
 </template>
 
 <script>
-	import FunctionalCalendar from 'vue-functional-calendar';
+
 
 	export default {
 		name: 'DateInput',
-		components: {FunctionalCalendar},
+		components: {},
 		props: {
 			name: {type: String, required: true},
 			value: Object,
@@ -44,7 +35,35 @@
 </script>
 
 <style>
-	.moment .vfc-styles-conditional-class input.vfc-single-input {
+	.errorMessage {
+		font-size: 14px;
+		font-weight: 400;
+		color: #e67e22;
+		margin-bottom: 12px;
+	}
+
+	.textInput {
+		position: relative;
+		margin-bottom: 20px;
+	}
+
+	.textInput:last-child {
+		margin-bottom: 40px;
+	}
+
+	label {
+		position: absolute;
+		background: white;
+		left: 9px;
+		padding: 0 8px;
+		font-size: 14px;
+		font-weight: 400;
+		color: #cccccc;
+		line-height: 18px;
+		top: -9px;
+	}
+
+	input {
 		border: 1px solid #cccccc;
 		border-radius: 3px;
 		padding: 10px 15px;
@@ -54,12 +73,13 @@
 		display: block;
 		-webkit-appearance: none;
 		-moz-appearance: none;
-		color: black;
-		text-align: left;
 	}
 
-	.vfc-styles-conditional-class .vfc-main-container.vfc-modal {
-		width: 400px !important;
-    max-width: calc(100% - 50px);
+	textarea {
+		font-size: 17px;
+	}
+
+	input:focus, textarea:focus {
+		outline: none;
 	}
 </style>
