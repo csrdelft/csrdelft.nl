@@ -1065,7 +1065,7 @@ if (!function_exists('array_key_first')) {
 	 * @param array $array
 	 * @return mixed
 	 */
-	function array_key_first(array $array) {
+	function array_key_first($array) {
 		return $array ? array_keys($array)[0] : null;
 	}
 }
@@ -1079,7 +1079,7 @@ if (!function_exists('array_key_last')) {
 	 * @param array $array
 	 * @return mixed
 	 */
-	function array_key_last(array $array) {
+	function array_key_last($array) {
 		$key = NULL;
 
 		if ( is_array( $array ) ) {
