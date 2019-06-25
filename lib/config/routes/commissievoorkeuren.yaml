@@ -2,51 +2,51 @@ commissievoorkeuren:
   path: /commissievoorkeuren
   controller: CsrDelft\controller\CommissieVoorkeurenController::overzicht
   methods: GET
-  options: { mag: bestuur }
+  options: { mag: "bestuur,P_ADMIN" }
 
 commissievoorkeuren-commissie:
   path: /commissievoorkeuren/overzicht/{commissieId}
   controller: CsrDelft\controller\CommissieVoorkeurenController::commissie
   methods: GET
   requirements: { commissieId: '\d+' }
-  options: { mag: bestuur }
+  options: { mag: "bestuur,P_ADMIN" }
 
 commissievoorkeuren-lidpagina:
   path: /commissievoorkeuren/lidpagina/{uid}
   controller: CsrDelft\controller\CommissieVoorkeurenController::lidpagina
   methods: GET
   requirements: { uid: '.{4}' }
-  options: { mag: bestuur }
+  options: { mag: "bestuur,P_ADMIN" }
 
 commissievoorkeuren-lidpagina-lijst:
   path: /commissievoorkeuren/lidpagina/{uid}
   controller: CsrDelft\controller\CommissieVoorkeurenController::lidpaginaopmerking
   methods: POST
   requirements: { uid: '.{4}' }
-  options: { mag: bestuur }
+  options: { mag: "bestuur,P_ADMIN" }
 
 commissievoorkeuren-nieuwecommissie:
   path: /commissievoorkeuren/nieuwecommissie
   controller: CsrDelft\controller\CommissieVoorkeurenController::nieuwecommissie
   methods: POST
-  options: { mag: bestuur }
+  options: { mag: "bestuur,P_ADMIN" }
 
 commissievoorkeuren-updatecommissie:
   path: /commissievoorkeuren/overzicht/{commissieId}
   controller: CsrDelft\controller\CommissieVoorkeurenController::updatecommissie
   methods: POST
   requirements: { commissieId: '\d+' }
-  options: { mag: bestuur }
+  options: { mag: "bestuur,P_ADMIN" }
 
 commissievoorkeuren-nieuwecategorie:
   path: /commissievoorkeuren/nieuwecategorie
   controller: CsrDelft\controller\CommissieVoorkeurenController::nieuwecategorie
   methods: POST
-  options: { mag: bestuur }
+  options: { mag: "bestuur,P_ADMIN" }
 
 commissievoorkeuren-verwijdercategorie:
   path: /commissievoorkeuren/verwijdercategorie/{categorieId}
   controller: CsrDelft\controller\CommissieVoorkeurenController::verwijdercategorie
   methods: POST
   requirements: { categorieId: '\d+' }
-  options: { mag: bestuur }
+  options: { mag: "bestuur,P_ADMIN" }
