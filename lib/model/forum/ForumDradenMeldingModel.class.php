@@ -10,6 +10,7 @@ use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 
@@ -174,7 +175,7 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 
 			// Stuur geen meldingen als lid niet gevonden is, lid de auteur is of als lid geen meldingen wil voor draadje
 			// Met laatste voorwaarde worden ook leden afgevangen die sowieso al een melding zouden ontvangen
-			if (!$genoemde || $genoemde->uid === $post->uid || $this->getNiveauVoorLid($draad, $genoemde->uid) !== ForumDraadMeldingNiveau::VERMELDING) {
+			if (!$genoemde || !AccountModel::existsUid($genoemde->uid) || $genoemde->uid === $post->uid || $this->getNiveauVoorLid($draad, $genoemde->uid) !== ForumDraadMeldingNiveau::VERMELDING) {
 				continue;
 			}
 
