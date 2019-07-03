@@ -16,7 +16,6 @@ use CsrDelft\view\agenda\AgendaZijbalkView;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
 use CsrDelft\view\ledenmemory\LedenMemoryZijbalkView;
 use CsrDelft\view\mededelingen\MededelingenZijbalkView;
-use CsrDelft\view\menu\BlockMenuView;
 
 /**
  * Zijbalk.static.php
@@ -31,7 +30,7 @@ abstract class Zijbalk {
 		if (LoginModel::mag(P_LOGGED_IN) AND LidInstellingenModel::get('zijbalk', 'favorieten') == 'ja') {
 			$menu = MenuModel::instance()->getMenu(LoginModel::getUid());
 			$menu->tekst = 'Favorieten';
-			array_unshift($zijbalk, new BlockMenuView($menu));
+			array_unshift($zijbalk, view('menu.block', ['root' => $menu]));
 		}
 		// Is het al...
 		if (LidInstellingenModel::get('zijbalk', 'ishetal') != 'niet weergeven') {
@@ -42,7 +41,7 @@ abstract class Zijbalk {
 		if (LoginModel::mag(P_LOGGED_IN)) {
 			$sponsor_menu = MenuModel::instance()->getMenu("sponsors");
 			$sponsor_menu->tekst = 'Mogelijkheden';
-			$zijbalk[] = new BlockMenuView($sponsor_menu);
+			$zijbalk[] = view('menu.block', ['root' => $sponsor_menu]);
 		}
 
 		// Agenda

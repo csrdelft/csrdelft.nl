@@ -9,23 +9,32 @@
 namespace CsrDelft\view\menu;
 
 use CsrDelft\model\MenuModel;
-use CsrDelft\model\SavedQuery;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\InstantSearchForm;
+use CsrDelft\view\View;
 
-class MainMenuView extends MenuView {
-
-	public function __construct() {
-		parent::__construct(MenuModel::instance()->getMenu('main'));
-	}
+class MainMenuView implements View {
 
 	public function view() {
-		parent::view();
-		$mcount = new SavedQuery(62);
-		$this->smarty->assign('mcount', $mcount->count());
-		$this->smarty->assign('favorieten', MenuModel::instance()->getMenu(LoginModel::getUid()));
-		$this->smarty->assign('zoekbalk', new InstantSearchForm());
-		$this->smarty->display('menu/main.tpl');
+		view('menu.main', [
+			'root' => MenuModel::instance()->getMenu('main'),
+			'favorieten' => MenuModel::instance()->getMenu(LoginModel::getUid()),
+			'zoekbalk' => new InstantSearchForm(),
+		])->view();
 	}
 
+	public function getTitel() {
+		// TODO: Implement getTitel() method.
+	}
+
+	public function getBreadcrumbs() {
+		// TODO: Implement getBreadcrumbs() method.
+	}
+
+	/**
+	 * Hiermee wordt gepoogt af te dwingen dat een view een model heeft om te tonen
+	 */
+	public function getModel() {
+		// TODO: Implement getModel() method.
+	}
 }

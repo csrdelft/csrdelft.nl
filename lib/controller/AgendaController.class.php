@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\AclController;
 use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\agenda\AgendaVerbergenModel;

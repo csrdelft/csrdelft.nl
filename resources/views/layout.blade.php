@@ -23,7 +23,13 @@
 		<div class="blok">@php($block->view())</div>
 	@endforeach
 </nav>
-@php((new \CsrDelft\view\menu\MainMenuView())->view())
+@php(view('menu.main', [
+  'root' => \CsrDelft\model\MenuModel::instance()->getMenu('main'),
+  'favorieten' => \CsrDelft\model\MenuModel::instance()->getMenu(\CsrDelft\model\security\LoginModel::getUid()),
+])->view())
+<div id="search" class="cd-search">
+	@php((new \CsrDelft\view\formulier\InstantSearchForm())->view())
+</div>
 <main class="cd-main-content">
 	<nav class="cd-page-top">
 		<div class="breadcrumbs">@yield('breadcrumbs')</div>
