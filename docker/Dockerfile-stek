@@ -16,7 +16,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 RUN a2enmod rewrite && a2enmod headers
 
 # copy config
-COPY conf/dev/apache2.conf /etc/apache2/apache2.conf
-COPY conf/dev/php.ini  /usr/local/etc/php/php.ini
+COPY docker/dev/apache2.conf /etc/apache2/apache2.conf
+COPY docker/dev/php.ini  /usr/local/etc/php/php.ini
 
 RUN mkdir /app && chown -R www-data "/app" && chmod -R u+rw "/app"
