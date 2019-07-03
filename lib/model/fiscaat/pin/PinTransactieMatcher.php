@@ -145,12 +145,12 @@ class PinTransactieMatcher {
 		}
 
 		while ($indexTransactie >= 0) {
-			$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexTransactie]);
+			$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexBestelling]);
 			$indexTransactie--;
 		}
 
 		while ($indexBestelling >= 0) {
-			$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexBestelling]);
+			$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexTransactie]);
 			$indexBestelling--;
 		}
 
