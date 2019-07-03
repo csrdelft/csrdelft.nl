@@ -22,30 +22,30 @@ eetplan-beheer:
   path: /eetplan/beheer
   controller: CsrDelft\controller\EetplanController::beheer
   methods: [GET,POST]
-  options: { mag: P_ADMIN,commissie:NovCie }
+  options: { mag: "P_ADMIN,commissie:NovCie" }
 
 eetplan-bekendehuizen:
   path: /eetplan/bekendehuizen/{actie}
   controller: CsrDelft\controller\EetplanController::bekendehuizen
   methods: [GET,POST]
   defaults: { actie: null }
-  options: { mag: P_ADMIN,commissie:NovCie }
+  options: { mag: "P_ADMIN,commissie:NovCie" }
 
 eetplan-novietrelatie:
   path: /eetplan/novietrelatie/{actie}
   controller: CsrDelft\controller\EetplanController::novietrelatie
   methods: POST
   defaults: { actie: null }
-  options: { mag: P_ADMIN,commissie:NovCie }
+  options: { mag: "P_ADMIN,commissie:NovCie" }
 
 eetplan-nieuw:
   path: /eetplan/nieuw
   controller: CsrDelft\controller\EetplanController::nieuw
   methods: POST
-  options: { mag: P_ADMIN,commissie:NovCie }
+  options: { mag: "P_ADMIN,commissie:NovCie" }
 
 eetplan-verwijderen:
   path: /eetplan/verwijderen
   controller: CsrDelft\controller\EetplanController::verwijderen
   methods: POST
-  options: { mag: P_ADMIN,commissie:NovCie }
+  options: { mag: "P_ADMIN,commissie:NovCie" }
