@@ -2,8 +2,10 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
+use CsrDelft\bb\BbTag;
 use CsrDelft\model\SavedQuery;
-use CsrDelft\view\bbcode\CsrBbException;
+use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\SavedQueryContent;
 
 /**
@@ -26,15 +28,16 @@ class BbQuery extends BbTag {
 		$this->assertId($queryID);
 		$sqc = new SavedQueryContent(new SavedQuery($queryID));
 		$url = '/tools/query?id=' . urlencode($queryID);
-		return $this->lightLinkBlock('query', $url, $sqc->getModel()->getBeschrijving(), $sqc->getModel()->count() . ' regels');
+		return BbHelper::lightLinkBlock('query', $url, $sqc->getModel()->getBeschrijving(), $sqc->getModel()->count() . ' regels');
 	}
 
 	/**
 	 * @param int $queryID
+	 * @throws BbException
 	 */
 	private function assertId(int $queryID) {
 		if ($queryID == 0) {
-			throw new CsrBbException('[query] Geen geldig query-id opgegeven');
+			throw new BbException('[query] Geen geldig query-id opgegeven');
 		}
 	}
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace CsrDelft\view\bbcode\tag\standard;
+namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\view\bbcode\tag\BbTag;
+use CsrDelft\bb\BbTag;
 
 /**
  * Relatieve datum zoals geparsed door php's strtotime

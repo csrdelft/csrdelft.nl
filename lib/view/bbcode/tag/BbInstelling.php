@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\LidInstellingenModel;
 

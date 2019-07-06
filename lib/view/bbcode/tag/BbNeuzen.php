@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbTag;
 use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\view\Icon;
 

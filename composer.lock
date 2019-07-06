@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5b8b3805b36eec93d276846aeb4099a6",
+    "content-hash": "ab81944167d51572cc078bf9c873d818",
     "packages": [
         {
             "name": "cakephp/cache",
@@ -341,6 +341,43 @@
                 "utility"
             ],
             "time": "2019-03-14T14:41:29+00:00"
+        },
+        {
+            "name": "csrdelft/bb",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/csrdelft/bb.git",
+                "reference": "af433c57c05da2a8ade62c9d6fce5d2cabf67950"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/csrdelft/bb/zipball/af433c57c05da2a8ade62c9d6fce5d2cabf67950",
+                "reference": "af433c57c05da2a8ade62c9d6fce5d2cabf67950",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.33"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CsrDelft\\bb\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PubCie der C.S.R. Delft",
+                    "email": "pubcie@csrdelft.nl"
+                }
+            ],
+            "description": "C.S.R. BB Parser",
+            "homepage": "https://csrdelft.github.io/bb",
+            "time": "2019-07-06T10:30:53+00:00"
         },
         {
             "name": "csrdelft/orm",

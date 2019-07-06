@@ -2,6 +2,33 @@
 
 namespace CsrDelft\view\bbcode;
 
+use CsrDelft\bb\BbEnv;
+use CsrDelft\bb\Parser;
+use CsrDelft\bb\tag\BbBold;
+use CsrDelft\bb\tag\BbClear;
+use CsrDelft\bb\tag\BbCode;
+use CsrDelft\bb\tag\BbCommentaar;
+use CsrDelft\bb\tag\BbDiv;
+use CsrDelft\bb\tag\BbEmail;
+use CsrDelft\bb\tag\BbHeading;
+use CsrDelft\bb\tag\BbHorizontalRule;
+use CsrDelft\bb\tag\BbItalic;
+use CsrDelft\bb\tag\BbLeet;
+use CsrDelft\bb\tag\BbLishort;
+use CsrDelft\bb\tag\BbList;
+use CsrDelft\bb\tag\BbListItem;
+use CsrDelft\bb\tag\BbMe;
+use CsrDelft\bb\tag\BbNewline;
+use CsrDelft\bb\tag\BbNobold;
+use CsrDelft\bb\tag\BbQuote;
+use CsrDelft\bb\tag\BbStrikethrough;
+use CsrDelft\bb\tag\BbSubscript;
+use CsrDelft\bb\tag\BbSuperscript;
+use CsrDelft\bb\tag\BbTable;
+use CsrDelft\bb\tag\BbTableCell;
+use CsrDelft\bb\tag\BbTableHeader;
+use CsrDelft\bb\tag\BbTableRow;
+use CsrDelft\bb\tag\BbUnderline;
 use CsrDelft\view\bbcode\tag\BbActiviteit;
 use CsrDelft\view\bbcode\tag\BbBestuur;
 use CsrDelft\view\bbcode\tag\BbBijbel;
@@ -27,6 +54,7 @@ use CsrDelft\view\bbcode\tag\BbOndervereniging;
 use CsrDelft\view\bbcode\tag\BbPeiling;
 use CsrDelft\view\bbcode\tag\BbPrive;
 use CsrDelft\view\bbcode\tag\BbQuery;
+use CsrDelft\view\bbcode\tag\BbReldate;
 use CsrDelft\view\bbcode\tag\BbSpotify;
 use CsrDelft\view\bbcode\tag\BbTwitter;
 use CsrDelft\view\bbcode\tag\BbUbboff;
@@ -37,32 +65,6 @@ use CsrDelft\view\bbcode\tag\BbVideo;
 use CsrDelft\view\bbcode\tag\BbWerkgroep;
 use CsrDelft\view\bbcode\tag\BbWoonoord;
 use CsrDelft\view\bbcode\tag\BbYoutube;
-use CsrDelft\view\bbcode\tag\standard\BbBold;
-use CsrDelft\view\bbcode\tag\standard\BbClear;
-use CsrDelft\view\bbcode\tag\standard\BbCode;
-use CsrDelft\view\bbcode\tag\standard\BbCommentaar;
-use CsrDelft\view\bbcode\tag\standard\BbDiv;
-use CsrDelft\view\bbcode\tag\standard\BbEmail;
-use CsrDelft\view\bbcode\tag\standard\BbHeading;
-use CsrDelft\view\bbcode\tag\standard\BbHorizontalRule;
-use CsrDelft\view\bbcode\tag\standard\BbItalic;
-use CsrDelft\view\bbcode\tag\standard\BbLeet;
-use CsrDelft\view\bbcode\tag\standard\BbLishort;
-use CsrDelft\view\bbcode\tag\standard\BbList;
-use CsrDelft\view\bbcode\tag\standard\BbListItem;
-use CsrDelft\view\bbcode\tag\standard\BbMe;
-use CsrDelft\view\bbcode\tag\standard\BbNewline;
-use CsrDelft\view\bbcode\tag\standard\BbNobold;
-use CsrDelft\view\bbcode\tag\standard\BbQuote;
-use CsrDelft\view\bbcode\tag\standard\BbReldate;
-use CsrDelft\view\bbcode\tag\standard\BbStrikethrough;
-use CsrDelft\view\bbcode\tag\standard\BbSubscript;
-use CsrDelft\view\bbcode\tag\standard\BbSuperscript;
-use CsrDelft\view\bbcode\tag\standard\BbTable;
-use CsrDelft\view\bbcode\tag\standard\BbTableCell;
-use CsrDelft\view\bbcode\tag\standard\BbTableHeader;
-use CsrDelft\view\bbcode\tag\standard\BbTableRow;
-use CsrDelft\view\bbcode\tag\standard\BbUnderline;
 use function substr_count;
 
 /**
@@ -85,12 +87,12 @@ class CsrBB extends Parser {
 		BbItalic::class,
 		BbLeet::class,
 		BbLishort::class,
+		BbList::class,
 		BbListItem::class,
 		BbMe::class,
 		BbNewline::class,
 		BbNobold::class,
 		BbQuote::class,
-		BbReldate::class,
 		BbStrikethrough::class,
 		BbSubscript::class,
 		BbSuperscript::class,
@@ -98,9 +100,10 @@ class CsrBB extends Parser {
 		BbTableCell::class,
 		BbTableHeader::class,
 		BbTableRow::class,
-		BbList::class,
 		BbUnderline::class,
 		// Custom
+		BbActiviteit::class,
+		BbBestuur::class,
 		BbBijbel::class,
 		BbBoek::class,
 		BbCitaat::class,
@@ -108,15 +111,10 @@ class CsrBB extends Parser {
 		BbDocument::class,
 		BbFoto::class,
 		BbFotoalbum::class,
-		BbActiviteit::class,
-		BbBestuur::class,
 		BbGroep::class,
-		BbKetzer::class,
-		BbOndervereniging::class,
-		BbWerkgroep::class,
-		BbWoonoord::class,
 		BbImg::class,
 		BbInstelling::class,
+		BbKetzer::class,
 		BbLedenmemoryscores::class,
 		BbLid::class,
 		BbLocatie::class,
@@ -125,9 +123,11 @@ class CsrBB extends Parser {
 		BbMededelingen::class,
 		BbNeuzen::class,
 		BbOfftopic::class,
+		BbOndervereniging::class,
 		BbPeiling::class,
 		BbPrive::class,
 		BbQuery::class,
+		BbReldate::class,
 		BbSpotify::class,
 		BbTwitter::class,
 		BbUbboff::class,
@@ -135,6 +135,8 @@ class CsrBB extends Parser {
 		BbVerklapper::class,
 		BbVerticale::class,
 		BbVideo::class,
+		BbWerkgroep::class,
+		BbWoonoord::class,
 		BbYoutube::class,
 	];
 

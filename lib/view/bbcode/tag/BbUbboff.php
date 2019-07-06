@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbTag;
+
 /**
  * UBB off
  *
