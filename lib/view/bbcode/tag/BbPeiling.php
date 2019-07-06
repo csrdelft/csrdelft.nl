@@ -2,11 +2,13 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
+use CsrDelft\bb\BbTag;
 use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\peilingen\PeilingenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\bbcode\CsrBbException;
+use CsrDelft\view\bbcode\BbHelper;
 
 /**
  * Peiling
@@ -27,7 +29,7 @@ class BbPeiling extends BbTag {
 		$peiling = $this->getPeiling($peiling_id);
 
 		$url = '#/peiling/' . urlencode($peiling_id);
-		return $this->lightLinkBlock('peiling', $url, $peiling->titel, $peiling->beschrijving);
+		return BbHelper::lightLinkBlock('peiling', $url, $peiling->titel, $peiling->beschrijving);
 	}
 
 	public function parse($arguments = []) {
@@ -42,11 +44,12 @@ class BbPeiling extends BbTag {
 	/**
 	 * @param string|null $peiling_id
 	 * @return Peiling
+	 * @throws BbException
 	 */
 	private function getPeiling($peiling_id): Peiling {
 		$peiling = PeilingenModel::instance()->getPeilingById($peiling_id);
 		if ($peiling === false) {
-			throw new CsrBbException('[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')');
+			throw new BbException('[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')');
 		}
 
 		return $peiling;

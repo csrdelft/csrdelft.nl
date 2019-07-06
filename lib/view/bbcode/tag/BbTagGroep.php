@@ -2,17 +2,15 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
+use CsrDelft\bb\BbTag;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\GroepKeuze;
-use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
-use CsrDelft\model\entity\groepen\GroepKeuzeType;
 use CsrDelft\model\entity\groepen\GroepVersie;
-use CsrDelft\model\entity\groepen\KetzerDeelnemer;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\bbcode\CsrBbException;
+use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\groepen\GroepView;
 
 /**
@@ -44,7 +42,7 @@ abstract class BbTagGroep extends BbTag {
 		if (!$groep->mag(AccessAction::Bekijken)) {
 			return '';
 		}
-		return $this->lightLinkBlock($tag, $groep->getUrl(), $groep->naam, $groep->aantalLeden() . ' ' . $leden);
+		return BbHelper::lightLinkBlock($tag, $groep->getUrl(), $groep->naam, $groep->aantalLeden() . ' ' . $leden);
 	}
 
 	abstract public function getLidNaam();
@@ -54,7 +52,7 @@ abstract class BbTagGroep extends BbTag {
 		$groep = $this->getModel()::get($id);
 		if (!$groep) {
 			$url = $this->getModel()::getUrl();
-			throw new CsrBbException(ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="' . $url . '/beheren">Zoeken</a>');
+			throw new BbException(ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="' . $url . '/beheren">Zoeken</a>');
 		}
 		return $this->groep($groep);
 	}

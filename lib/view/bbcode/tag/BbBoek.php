@@ -2,9 +2,11 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\entity\bibliotheek\Boek;
+use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\bibliotheek\BoekBBView;
 
 /**
@@ -28,7 +30,7 @@ class BbBoek extends BbTag {
 		try {
 			/** @var Boek $boek */
 			$boek = BoekModel::instance()->get((int)$boekid);
-			return $this->lightLinkBlock('boek', $boek->getUrl(), $boek->getTitel(), 'Auteur: ' . $boek->getAuteur());
+			return BbHelper::lightLinkBlock('boek', $boek->getUrl(), $boek->getTitel(), 'Auteur: ' . $boek->getAuteur());
 		} catch (CsrException $e) {
 			return '[boek] Boek [boekid:' . (int)$boekid . '] bestaat niet.';
 		}
