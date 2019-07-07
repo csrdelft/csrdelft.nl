@@ -6,7 +6,7 @@
 		<li><a href="/endsu" class="error" title="Switch user actie beeindingen">SU {{CsrDelft\model\ProfielModel::getNaam(CsrDelft\model\security\LoginModel::getSuedFrom()->uid, 'civitas')}}</a></li>
 		@endif
 		<li>
-			<a href="/profiel/{CsrDelft\model\security\LoginModel::getUid()}#CiviSaldo" title="Bekijk CiviSaldo historie">
+			<a href="/profiel/{{CsrDelft\model\security\LoginModel::getUid()}}#CiviSaldo" title="Bekijk CiviSaldo historie">
 				@php($saldo = \CsrDelft\model\security\LoginModel::getProfiel()->getCiviSaldo())
 				@if($saldo < 0)
 					CiviSaldo: <span class="staatrood">&euro; {{number_format($saldo, 2, ',', '.')}}</span>
