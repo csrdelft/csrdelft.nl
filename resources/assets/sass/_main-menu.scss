@@ -10,10 +10,6 @@ Primary style
 
 -------------------------------- */
 
-.navbar {
-	width: 100vw;
-}
-
 .cd-user-avatar {
 	width: 32px;
 	height: 32px;
@@ -208,9 +204,9 @@ Main components
 }
 
 @include media-breakpoint-up(lg) {
-	.navbar {
-		display: none;
-	}
+	//.navbar {
+	//	display: none;
+	//}
 
 	.cd-primary-nav {
 		position: static;
