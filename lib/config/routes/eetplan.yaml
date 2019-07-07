@@ -38,6 +38,13 @@ eetplan-novietrelatie:
   defaults: { actie: null }
   options: { mag: "P_ADMIN,commissie:NovCie" }
 
+eetplan-woonoord:
+  path: /eetplan/woonoorden/{actie}
+  controller: CsrDelft\controller\EetplanController::woonoorden
+  methods: POST
+  defaults: { actie: null }
+  options: { mag: "P_ADMIN,commissie:NovCie" }
+
 eetplan-nieuw:
   path: /eetplan/nieuw
   controller: CsrDelft\controller\EetplanController::nieuw
