@@ -13,7 +13,9 @@
 @section('titel', ucfirst($album->dirname))
 
 @section('breadcrumbs')
+	<ol class="breadcrumb">
 	{!! \CsrDelft\view\fotoalbum\FotoAlbumBreadcrumbs::getBreadcrumbs($album) !!}
+	</ol>
 @endsection
 
 @section('content')

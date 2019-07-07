@@ -40,8 +40,8 @@ class CsrLayoutOweePage extends CompressedLayout {
 		header('Content-Type: text/html; charset=UTF-8');
 
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
-		if (!$breadcrumbs) {
-			$breadcrumbs = $this->getBreadcrumbs();
+		if ($breadcrumbs) {
+			$breadcrumbs = '<ol class="breadcrumb">' .$breadcrumbs . '</ol>';
 		}
 
 		view('layout-owee.' . $this->tmpl, [

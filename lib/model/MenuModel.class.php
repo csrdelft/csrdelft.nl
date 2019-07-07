@@ -8,8 +8,8 @@ use CsrDelft\model\entity\MenuItem;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Persistence\Database;
 
 /**
  * MenuModel.class.php
@@ -66,6 +66,33 @@ class MenuModel extends CachedPersistenceModel {
 		$this->cache($root); // cache for getParent()
 		$this->setCache($key, $root, true);
 		return $root;
+	}
+
+	/**
+	 * Flatten tree structure.
+	 *
+	 * @param MenuItem $root
+	 * @return MenuItem[]
+	 */
+	public function flattenMenu(MenuItem $root) {
+		$list = $root->getChildren();
+		foreach ($list as $child) {
+			$list = array_merge($list, $this->flattenMenu($child));
+		}
+		return $list;
+	}
+
+	/**
+	 * @param string $naam
+	 *
+	 * @return bool|MenuItem
+	 */
+	public function getMenuRoot($naam) {
+		$root = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
+		if ($root) {
+			return $this->cache($root);
+		}
+		return false;
 	}
 
 	/**
@@ -128,6 +155,30 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	/**
+	 * @param int $parent_id
+	 *
+	 * @return MenuItem
+	 */
+	public function nieuw($parent_id) {
+		$item = new MenuItem();
+		$item->parent_id = $parent_id;
+		$item->volgorde = 0;
+		$item->rechten_bekijken = LoginModel::getUid();
+		$item->zichtbaar = true;
+		return $item;
+	}
+
+	/**
+	 * @param PersistentEntity|MenuItem $entity
+	 *
+	 * @return void
+	 */
+	public function create(PersistentEntity $entity) {
+		$entity->item_id = (int)parent::create($entity);
+		$this->flushCache(true);
+	}
+
+	/**
 	 * Build tree structure.
 	 *
 	 * @param MenuItem $parent
@@ -138,33 +189,6 @@ class MenuModel extends CachedPersistenceModel {
 			$this->getTree($child);
 		}
 		return $parent;
-	}
-
-	/**
-	 * Flatten tree structure.
-	 *
-	 * @param MenuItem $root
-	 * @return MenuItem[]
-	 */
-	public function flattenMenu(MenuItem $root) {
-		$list = $root->getChildren();
-		foreach ($list as $child) {
-			$list = array_merge($list, $this->flattenMenu($child));
-		}
-		return $list;
-	}
-
-	/**
-	 * @param string $naam
-	 *
-	 * @return bool|MenuItem
-	 */
-	public function getMenuRoot($naam) {
-		$root = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
-		if ($root) {
-			return $this->cache($root);
-		}
-		return false;
 	}
 
 	/**
@@ -202,16 +226,6 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * Get menu item by id (cached).
-	 *
-	 * @param int $id
-	 * @return MenuItem|false
-	 */
-	public function getMenuItem($id) {
-		return $this->retrieveByPrimaryKey(array($id));
-	}
-
-	/**
 	 * Get the parent of a menu item (cached).
 	 *
 	 * @param MenuItem $item
@@ -222,27 +236,13 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * @param int $parent_id
+	 * Get menu item by id (cached).
 	 *
-	 * @return MenuItem
+	 * @param int $id
+	 * @return MenuItem|false
 	 */
-	public function nieuw($parent_id) {
-		$item = new MenuItem();
-		$item->parent_id = $parent_id;
-		$item->volgorde = 0;
-		$item->rechten_bekijken = LoginModel::getUid();
-		$item->zichtbaar = true;
-		return $item;
-	}
-
-	/**
-	 * @param PersistentEntity|MenuItem $entity
-	 *
-	 * @return void
-	 */
-	public function create(PersistentEntity $entity) {
-		$entity->item_id = (int)parent::create($entity);
-		$this->flushCache(true);
+	public function getMenuItem($id) {
+		return $this->retrieveByPrimaryKey(array($id));
 	}
 
 	/**
@@ -269,5 +269,76 @@ class MenuModel extends CachedPersistenceModel {
 			$this->flushCache(true);
 			return $rowCount;
 		});
+	}
+
+	/**
+	 * @param MenuItem[] $breadcrumbs
+	 */
+	public function renderBreadcrumbs($breadcrumbs) {
+		if (empty($breadcrumbs)) {
+			return;
+		}
+
+		$html = '<ol class="breadcrumb">';
+		foreach ($breadcrumbs as $k => $breadcrumb) {
+			if ($k == array_key_last($breadcrumbs)) {
+				$html .= $this->renderBreadcrumb($breadcrumb, true);
+			} else {
+				$html .= $this->renderBreadcrumb($breadcrumb, false);
+			}
+		}
+		$html .= '</ol>';
+
+		echo $html;
+	}
+
+	/**
+	 * @param MenuItem $breadcrumb
+	 * @param $active
+	 * @return string
+	 */
+	protected function renderBreadcrumb($breadcrumb, $active) {
+		switch ($breadcrumb->tekst) {
+			case 'main':
+				$tekst = '<i class="fa fa-home"></i>';
+				break;
+			default:
+				$tekst = $breadcrumb->tekst;
+		}
+
+		if ($active) {
+			return '<li class="breadcrumb-item active">' . $tekst . '</li>';
+		} else {
+			return '<li class="breadcrumb-item"><a href="' . $breadcrumb->link . '">' . $tekst . '</a></li>';
+		}
+	}
+
+	/**
+	 * Haal de breadcrumbs op voor een link.
+	 *
+	 * @param $link
+	 * @return MenuItem[]
+	 */
+	public function getBreadcrumbs($link) {
+		/** @var MenuItem $item */
+		$items = $this->find('link = ? AND zichtbaar = 1', [$link])->fetchAll();
+
+		$item = null;
+
+		foreach ($items as $item) {
+			if ($item->magBekijken()) {
+				$breadcrumbs = [$item];
+
+				while ($item->parent_id !== 0) {
+					$item = $item->getParent();
+
+					$breadcrumbs[] = $item;
+				}
+
+				return array_reverse($breadcrumbs);
+			}
+		}
+
+		return [];
 	}
 }

@@ -49,8 +49,8 @@ class CsrLayoutPage extends CompressedLayout {
 		}
 
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
-		if (!$breadcrumbs) {
-			$breadcrumbs = $this->getBreadcrumbs();
+		if ($breadcrumbs) {
+			$breadcrumbs = '<ol class="breadcrumb">' .$breadcrumbs . '</ol>';
 		}
 
 		view('pagina', [

@@ -29,8 +29,11 @@
 @section('titel', 'Het profiel van '. $profiel->getNaam('volledig'))
 
 @section('breadcrumbs')
-	<div class="breadcrumbs"><a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> »
-		<span class="active">{{$profiel->getNaam('civitas')}}</span></div>
+	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
+		(object) ['link' => '/', 'tekst' => 'main'],
+		(object) ['link' => '/ledenlijst', 'tekst' => 'Leden'],
+		(object) ['link' => '/', 'tekst' => $profiel->getNaam('civitas')]
+	]))
 @endsection
 
 @section('content')

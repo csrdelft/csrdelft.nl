@@ -1,12 +1,9 @@
 @extends('layout')
 
-@section('breadcrumbs')
-	<a href="/" title="Startpagina">
-		<span class="fa fa-home module-icon"></span>
-	</a> » <a href="/fiscaat">
-		Fiscaat
-	</a>
-@endsection
+{{--@section('breadcrumbs')--}}
+{{--	<li class="breadcrumb-item"><a href="/" title="Startpagina">Thuis</a></li>--}}
+{{--	<li class="breadcrumb-item active">Fiscaat</li>--}}
+{{--@endsection--}}
 
 @section('content')
 	<h1>Civisaldo Beheer</h1>

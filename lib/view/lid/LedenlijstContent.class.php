@@ -35,7 +35,8 @@ class LedenlijstContent implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » <span class="active">' . $this->getTitel() . '</span>';
+		return '<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
+			. '<li class="breadcrumb-item active">Ledenlijst der Civitas</li>';
 	}
 
 	public function getTitel() {

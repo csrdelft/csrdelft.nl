@@ -9,10 +9,3 @@
 		@stylesheet('extern-forum.css')
 	@endsection
 @endguest
-
-@section('breadcrumbs')
-	@parent
-<a href="/forum" title="Forum"><span class="fa fa-wechat module-icon"></span></a>
-@endsection
-
-

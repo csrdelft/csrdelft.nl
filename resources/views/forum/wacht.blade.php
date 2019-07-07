@@ -36,7 +36,6 @@
 			@endforeach
 		</div>
 		<h1>Wacht op goedkeuring</h1>
-		@yield('breadcrumbs')
 	@else
 		Geen berichten die op goedkeuring wachten.
 	@endif
