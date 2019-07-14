@@ -6,9 +6,9 @@ Documenten in categorie: {{ $categorie->naam }}
 
 @section('breadcrumbs')
 	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
-		(object) ['link' => '/', 'tekst' => 'main'],
-		(object) ['link' => '/documenten', 'tekst' => 'Documenten'],
-		(object) ['link' => '/', 'tekst' => $categorie->naam],
+		'/' => 'main',
+		'/documenten' => 'Documenten',
+		'' => $categorie->naam,
 	]))
 @endsection
 
