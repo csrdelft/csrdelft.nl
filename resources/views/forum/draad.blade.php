@@ -5,10 +5,10 @@
 @section('breadcrumbs')
 	@php($deel = $draad->getForumDeel())
 	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
-		(object) ['link' => '/', 'tekst' => 'main'],
-		(object) ['link' => '/forum', 'tekst' => 'Forum'],
-		(object) ['link' => '/forum/deel/' . $deel->forum_id, 'tekst' => $deel->titel],
-		(object) ['link' => '/', 'tekst' => $draad->titel],
+		'/' => 'main',
+		'/forum' => 'Forum',
+		'/forum/deel/' . $deel->forum_id => $deel->titel,
+		'' => $draad->titel,
 	]))
 @endsection
 

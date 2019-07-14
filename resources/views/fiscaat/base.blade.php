@@ -1,10 +1,5 @@
 @extends('layout')
 
-{{--@section('breadcrumbs')--}}
-{{--	<li class="breadcrumb-item"><a href="/" title="Startpagina">Thuis</a></li>--}}
-{{--	<li class="breadcrumb-item active">Fiscaat</li>--}}
-{{--@endsection--}}
-
 @section('content')
 	<h1>Civisaldo Beheer</h1>
 	@can(P_FISCAAT_READ)

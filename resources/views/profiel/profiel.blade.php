@@ -30,9 +30,9 @@
 
 @section('breadcrumbs')
 	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
-		(object) ['link' => '/', 'tekst' => 'main'],
-		(object) ['link' => '/ledenlijst', 'tekst' => 'Leden'],
-		(object) ['link' => '/', 'tekst' => $profiel->getNaam('civitas')]
+		'/' => 'main',
+		'/ledenlijst' => 'Leden',
+		'' => $profiel->getNaam('civitas'),
 	]))
 @endsection
 

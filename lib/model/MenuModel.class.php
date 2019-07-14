@@ -4,6 +4,7 @@ namespace CsrDelft\model;
 
 use CsrDelft\model\documenten\DocumentCategorieModel;
 use CsrDelft\model\entity\documenten\DocumentCategorie;
+use CsrDelft\model\entity\forum\ForumCategorie;
 use CsrDelft\model\entity\MenuItem;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\security\LoginModel;
@@ -111,6 +112,7 @@ class MenuModel extends CachedPersistenceModel {
 
 			case 'Forum':
 				foreach (ForumModel::instance()->prefetch() as $categorie) {
+					/** @var ForumCategorie $categorie */
 					$item = $this->nieuw($parent->item_id);
 					$item->item_id = -$categorie->categorie_id; // nodig voor getParent()
 					$item->rechten_bekijken = $categorie->rechten_lezen;
@@ -281,6 +283,10 @@ class MenuModel extends CachedPersistenceModel {
 
 		$html = '<ol class="breadcrumb">';
 		foreach ($breadcrumbs as $k => $breadcrumb) {
+			if (is_string($breadcrumb)) {
+				$breadcrumb = (object) ['link' => $k, 'tekst' => $breadcrumb];
+			}
+
 			if ($k == array_key_last($breadcrumbs)) {
 				$html .= $this->renderBreadcrumb($breadcrumb, true);
 			} else {

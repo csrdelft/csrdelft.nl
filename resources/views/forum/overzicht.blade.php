@@ -3,8 +3,10 @@
 @section('titel', 'Forum')
 
 @section('breadcrumbs')
-	@parent
-	» <a href="/forum/recent">Recent</a>
+	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
+		'/' => 'main',
+		'/forum' => 'Forum',
+	]))
 @endsection
 
 @section('content')

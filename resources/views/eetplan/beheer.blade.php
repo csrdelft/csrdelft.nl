@@ -3,8 +3,11 @@
 @section('titel', 'Eetplanbeheer')
 
 @section('breadcrumbs')
-	@parent
-	» <span>Beheer</span>
+	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
+	'/' => 'main',
+	'/eetplan' => 'Eetplan',
+	'/eetplan/beheer' => 'Eetplanbeheer',
+	]))
 @endsection
 
 @section('content')

@@ -2,6 +2,14 @@
 
 @section('titel', 'Wacht op goedkeuring')
 
+@section('breadcrumbs')
+	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
+    '/' => 'main',
+    '/forum' => 'Forum',
+    '' => 'Wacht',
+	]))
+@endsection
+
 @section('content')
 	{!! getMelding() !!}
 

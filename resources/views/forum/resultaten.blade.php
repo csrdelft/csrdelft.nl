@@ -8,6 +8,14 @@
 	@endif
 @endsection
 
+@section('breadcrumbs')
+	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
+    '/' => 'main',
+    '/forum' => 'Forum',
+    '' => 'Zoeken',
+	]))
+@endsection
+
 @section('content')
 	{!! getMelding() !!}
 

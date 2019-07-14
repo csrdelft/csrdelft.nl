@@ -25,7 +25,9 @@ class AgendaMaandView extends AgendaView {
 	}
 
 	public function getBreadcrumbs() {
-		return parent::getBreadcrumbs() . ' » ' . $this->getDropDownYear() . ' » ' . $this->getDropDownMonth();
+		return parent::getBreadcrumbs()
+			. '<li class="breadcrumb-item">' . $this->getDropDownYear() . '</li>'
+			. '<li class="breadcrumb-item">' . $this->getDropDownMonth() . '</li>';
 	}
 
 	private function getDropDownYear() {

@@ -1,7 +1,8 @@
 <h1>Verjaardagen</h1>
+<div class="row">
 {section name=m start=0 loop=12 step=1}
     {assign var=maand value=($dezemaand - 1 + $smarty.section.m.index) % 12 + 1}
-    <div class="col-md-3">
+    <div class="col-xl-2 col-md-3 col-sm-4 mb-3">
         <table class="inline">
             <tr>
                 <th></th>
@@ -31,3 +32,4 @@
         </table>
     </div>
 {/section}
+</div>
