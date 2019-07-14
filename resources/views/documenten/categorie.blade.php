@@ -5,11 +5,11 @@ Documenten in categorie: {{ $categorie->naam }}
 @endsection
 
 @section('breadcrumbs')
-	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
-		'/' => 'main',
-		'/documenten' => 'Documenten',
-		'' => $categorie->naam,
-	]))
+	{!! breadcrumbs([
+	'/' => 'main',
+	'/documenten' => 'Documenten',
+	'' => $categorie->naam,
+	]) !!}
 @endsection
 
 @section('content')

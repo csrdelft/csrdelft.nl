@@ -1,11 +1,11 @@
 @extends('eetplan.template')
 
 @section('breadcrumbs')
-	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
+	{!! breadcrumbs([
 	'/' => 'main',
 	'/eetplan' => 'Eetplan',
 	'/eetplan/noviet' => $noviet->getLink()
-	]))
+	]) !!}
 @endsection
 
 @section('content')

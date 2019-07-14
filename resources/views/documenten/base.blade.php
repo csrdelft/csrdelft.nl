@@ -1,8 +1,8 @@
 @extends('layout')
 
 @section('breadcrumbs')
-	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
+	{!! breadcrumbs([
 		'/' => 'main',
 		'' => 'Documenten',
-	]))
+	]) !!}
 @endsection

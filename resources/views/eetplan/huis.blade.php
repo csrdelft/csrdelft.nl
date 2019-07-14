@@ -1,11 +1,11 @@
 @extends('eetplan.template')
 
 @section('breadcrumbs')
-	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
+	{!! breadcrumbs([
 	'/' => 'main',
 	'/eetplan' => 'Eetplan',
 	'/eetplan/huis' => '<a href="/groepen/woonoorden/' . $woonoord->id . '">' . $woonoord->naam . '</a>',
-	]))
+	]) !!}
 @endsection
 
 @section('content')

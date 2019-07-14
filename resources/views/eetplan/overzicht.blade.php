@@ -1,10 +1,10 @@
 @extends('eetplan.template')
 
 @section('breadcrumbs')
-	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
+	{!! breadcrumbs([
 	'/' => 'main',
 	'/eetplan' => 'Eetplan',
-	]))
+	]) !!}
 @endsection
 
 @section('content')

@@ -29,11 +29,11 @@
 @section('titel', 'Het profiel van '. $profiel->getNaam('volledig'))
 
 @section('breadcrumbs')
-	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
-		'/' => 'main',
-		'/ledenlijst' => 'Leden',
-		'' => $profiel->getNaam('civitas'),
-	]))
+	{!! breadcrumbs([
+	'/' => 'main',
+	'/ledenlijst' => 'Leden',
+	'' => $profiel->getNaam('civitas'),
+	]) !!}
 @endsection
 
 @section('content')

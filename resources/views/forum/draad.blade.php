@@ -4,12 +4,12 @@
 
 @section('breadcrumbs')
 	@php($deel = $draad->getForumDeel())
-	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
+	{!! breadcrumbs([
 		'/' => 'main',
 		'/forum' => 'Forum',
 		'/forum/deel/' . $deel->forum_id => $deel->titel,
 		'' => $draad->titel,
-	]))
+	]) !!}
 @endsection
 
 @section('content')

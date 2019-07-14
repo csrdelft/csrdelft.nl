@@ -3,10 +3,10 @@
 @section('titel', 'Forum')
 
 @section('breadcrumbs')
-	@php(\CsrDelft\model\MenuModel::instance()->renderBreadcrumbs([
-		'/' => 'main',
-		'/forum' => 'Forum',
-	]))
+	{!! breadcrumbs([
+	'/' => 'main',
+	'/forum' => 'Forum',
+	]) !!}
 @endsection
 
 @section('content')

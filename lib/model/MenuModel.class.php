@@ -275,10 +275,11 @@ class MenuModel extends CachedPersistenceModel {
 
 	/**
 	 * @param MenuItem[] $breadcrumbs
+	 * @return string
 	 */
 	public function renderBreadcrumbs($breadcrumbs) {
 		if (empty($breadcrumbs)) {
-			return;
+			return '';
 		}
 
 		$html = '<ol class="breadcrumb">';
@@ -295,7 +296,7 @@ class MenuModel extends CachedPersistenceModel {
 		}
 		$html .= '</ol>';
 
-		echo $html;
+		return $html;
 	}
 
 	/**
