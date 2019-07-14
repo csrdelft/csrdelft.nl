@@ -4,10 +4,12 @@
 
 @section('breadcrumbs')
 	@php($deel = $draad->getForumDeel())
-	<a href="/forum" title="Forum"><span class="fa fa-wechat module-icon"></span></a>
-	» <span class="active">{{$deel->getForumCategorie()->titel}}</span>
-	» <a
-		href="/forum/deel/{{$deel->forum_id}}/{{\CsrDelft\model\forum\ForumDradenModel::instance()->getPaginaVoorDraad($draad)}}#{{$draad->draad_id}}">{{$deel->titel}}</a>
+	{!! breadcrumbs([
+		'/' => 'main',
+		'/forum' => 'Forum',
+		'/forum/deel/' . $deel->forum_id => $deel->titel,
+		'' => $draad->titel,
+	]) !!}
 @endsection
 
 @section('content')

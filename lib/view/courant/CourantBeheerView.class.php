@@ -28,9 +28,13 @@ class CourantBeheerView extends SmartyTemplateView {
 	}
 
 	public function getBreadcrumbs() {
-		$breadcrumbs = '<a href="/courant" title="Courant"><span class="fa fa-envelope module-icon"></span></a>';
+		$breadcrumbs = '<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>';
+
 		if (isset($this->formulier['titel']) AND !empty($this->formulier['titel'])) {
-			$breadcrumbs .= ' » ' . $this->formulier['titel'];
+			$breadcrumbs .= '<li class="breadcrumb-item"><a href="/courant">Courant</a></li>'
+				. '<li class="breadcrumb-item">' . $this->formulier['titel'] . '</li>';
+		} else {
+			$breadcrumbs .= '<li class="breadcrumb-item">Courant</li>';
 		}
 		return $breadcrumbs;
 	}

@@ -25,7 +25,9 @@ class CourantArchiefView implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/courant" title="Courant"><span class="fa fa-envelope module-icon"></span></a> » <span class="active">' . $this->getTitel() . '</span>';
+		return '<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
+			. '<li class="breadcrumb-item"><a href="/courant">Courant</a></li>'
+			. '<li class="breadcrumb-item">' . $this->getTitel() . '</li>';
 	}
 
 	public function getTitel() {

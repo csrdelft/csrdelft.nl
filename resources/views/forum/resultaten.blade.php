@@ -8,6 +8,14 @@
 	@endif
 @endsection
 
+@section('breadcrumbs')
+	{!! breadcrumbs([
+  '/' => 'main',
+  '/forum' => 'Forum',
+  '' => 'Zoeken',
+	]) !!}
+@endsection
+
 @section('content')
 	{!! getMelding() !!}
 

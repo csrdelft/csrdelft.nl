@@ -1,8 +1,11 @@
 @extends('eetplan.template')
 
 @section('breadcrumbs')
-	@parent
-	» {!! $noviet->getLink() !!}
+	{!! breadcrumbs([
+	'/' => 'main',
+	'/eetplan' => 'Eetplan',
+	'/eetplan/noviet' => $noviet->getLink()
+	]) !!}
 @endsection
 
 @section('content')

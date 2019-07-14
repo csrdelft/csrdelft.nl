@@ -31,8 +31,10 @@
 	@php((new \CsrDelft\view\formulier\InstantSearchForm())->view())
 </div>
 <main class="cd-main-content">
-	<nav class="cd-page-top">
-		<div class="breadcrumbs">@yield('breadcrumbs')</div>
+	<nav aria-label="breadcrumb">
+		@section('breadcrumbs')
+			{!! breadcrumbs(\CsrDelft\model\MenuModel::instance()->getBreadcrumbs($_SERVER['REQUEST_URI'])) !!}
+		@show
 	</nav>
 	<div class="cd-page-content">
 		{!! getMelding() !!}

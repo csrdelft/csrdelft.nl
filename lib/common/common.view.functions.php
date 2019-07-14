@@ -1,5 +1,6 @@
 <?php
 
+use CsrDelft\model\MenuModel;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\renderer\TemplateView;
 
@@ -386,3 +387,8 @@ function highlight_zoekterm($bericht, $zoekterm, $before = null, $after = null) 
 	$after = $after ?: '</span>';
 	return preg_replace('/' . preg_quote($zoekterm, '/') . '/i', $before . '$0' . $after, $bericht);
 }
+
+function breadcrumbs($breadcrumbs) {
+	return MenuModel::instance()->renderBreadcrumbs($breadcrumbs);
+}
+

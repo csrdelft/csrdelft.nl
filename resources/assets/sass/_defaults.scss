@@ -84,3 +84,6 @@ $tabel-header: $gray-100 !default;
 $tabel-hover: #DDEEFF !default;
 $tabel-regel-licht: $gray-100 !default;
 $tabel-regel-donker: $gray-200 !default;
+
+// geen breadcrumb bg, ziet er lelijk uit op cms pagina's
+$breadcrumb-bg: $body-bg;

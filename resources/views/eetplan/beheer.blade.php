@@ -3,8 +3,11 @@
 @section('titel', 'Eetplanbeheer')
 
 @section('breadcrumbs')
-	@parent
-	» <span>Beheer</span>
+	{!! breadcrumbs([
+	'/' => 'main',
+	'/eetplan' => 'Eetplan',
+	'/eetplan/beheer' => 'Eetplanbeheer',
+	]) !!}
 @endsection
 
 @section('content')

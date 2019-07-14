@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\agenda;
 
+use CsrDelft\model\MenuModel;
 use CsrDelft\view\SmartyTemplateView;
 
 /**
@@ -15,7 +16,7 @@ use CsrDelft\view\SmartyTemplateView;
 abstract class AgendaView extends SmartyTemplateView {
 
 	public function getBreadcrumbs() {
-		return '<a href="/agenda" title="Agenda"><span class="fa fa-calendar module-icon"></span></a>';
+		return '<li class="breadcrumb-item"><a href="/agenda" title="Agenda"><span class="fa fa-calendar"></span></a></li>';
 	}
 
 }

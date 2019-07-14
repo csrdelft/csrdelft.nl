@@ -3,8 +3,10 @@
 @section('titel', 'Forum')
 
 @section('breadcrumbs')
-	@parent
-	» <a href="/forum/recent">Recent</a>
+	{!! breadcrumbs([
+	'/' => 'main',
+	'/forum' => 'Forum',
+	]) !!}
 @endsection
 
 @section('content')

@@ -4,12 +4,13 @@ namespace CsrDelft\model;
 
 use CsrDelft\model\documenten\DocumentCategorieModel;
 use CsrDelft\model\entity\documenten\DocumentCategorie;
+use CsrDelft\model\entity\forum\ForumCategorie;
 use CsrDelft\model\entity\MenuItem;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Persistence\Database;
 
 /**
  * MenuModel.class.php
@@ -84,6 +85,7 @@ class MenuModel extends CachedPersistenceModel {
 
 			case 'Forum':
 				foreach (ForumModel::instance()->prefetch() as $categorie) {
+					/** @var ForumCategorie $categorie */
 					$item = $this->nieuw($parent->item_id);
 					$item->item_id = -$categorie->categorie_id; // nodig voor getParent()
 					$item->rechten_bekijken = $categorie->rechten_lezen;
@@ -269,5 +271,79 @@ class MenuModel extends CachedPersistenceModel {
 			$this->flushCache(true);
 			return $rowCount;
 		});
+	}
+
+	/**
+	 * @param MenuItem[] $breadcrumbs
+	 * @return string
+	 */
+	public function renderBreadcrumbs($breadcrumbs) {
+		if (empty($breadcrumbs)) {
+			return '';
+		}
+
+		$html = '<ol class="breadcrumb">';
+		foreach ($breadcrumbs as $k => $breadcrumb) {
+			if (is_string($breadcrumb)) {
+				$breadcrumb = (object) ['link' => $k, 'tekst' => $breadcrumb];
+			}
+
+			if ($k == array_key_last($breadcrumbs)) {
+				$html .= $this->renderBreadcrumb($breadcrumb, true);
+			} else {
+				$html .= $this->renderBreadcrumb($breadcrumb, false);
+			}
+		}
+		$html .= '</ol>';
+
+		return $html;
+	}
+
+	/**
+	 * @param MenuItem $breadcrumb
+	 * @param $active
+	 * @return string
+	 */
+	protected function renderBreadcrumb($breadcrumb, $active) {
+		$tekst = $breadcrumb->tekst;
+
+		if ($tekst == 'main') {
+			$tekst = '<i class="fa fa-home"></i>';
+		}
+
+		if ($active) {
+			return '<li class="breadcrumb-item active">' . $tekst . '</li>';
+		} else {
+			return '<li class="breadcrumb-item"><a href="' . $breadcrumb->link . '">' . $tekst . '</a></li>';
+		}
+	}
+
+	/**
+	 * Haal de breadcrumbs op voor een link.
+	 *
+	 * @param $link
+	 * @return MenuItem[]
+	 */
+	public function getBreadcrumbs($link) {
+		/** @var MenuItem $item */
+		$items = $this->find('link = ? AND zichtbaar = 1', [$link])->fetchAll();
+
+		$item = null;
+
+		foreach ($items as $item) {
+			if ($item->magBekijken()) {
+				$breadcrumbs = [$item];
+
+				while ($item->parent_id !== 0) {
+					$item = $item->getParent();
+
+					$breadcrumbs[] = $item;
+				}
+
+				return array_reverse($breadcrumbs);
+			}
+		}
+
+		return [];
 	}
 }

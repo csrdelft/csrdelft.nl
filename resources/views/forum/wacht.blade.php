@@ -2,6 +2,14 @@
 
 @section('titel', 'Wacht op goedkeuring')
 
+@section('breadcrumbs')
+	{!! breadcrumbs([
+  '/' => 'main',
+  '/forum' => 'Forum',
+  '' => 'Wacht',
+	]) !!}
+@endsection
+
 @section('content')
 	{!! getMelding() !!}
 
@@ -36,7 +44,6 @@
 			@endforeach
 		</div>
 		<h1>Wacht op goedkeuring</h1>
-		@yield('breadcrumbs')
 	@else
 		Geen berichten die op goedkeuring wachten.
 	@endif

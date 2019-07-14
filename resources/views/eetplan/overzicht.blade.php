@@ -1,5 +1,12 @@
 @extends('eetplan.template')
 
+@section('breadcrumbs')
+	{!! breadcrumbs([
+	'/' => 'main',
+	'/eetplan' => 'Eetplan',
+	]) !!}
+@endsection
+
 @section('content')
 	@can(P_ADMIN . ',commissie:NovCie')
 	<a href="/eetplan/beheer" class="btn btn-primary float-right"><span class="ico wrench"></span> Eetplanbeheer</a>
