@@ -70,33 +70,6 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * Flatten tree structure.
-	 *
-	 * @param MenuItem $root
-	 * @return MenuItem[]
-	 */
-	public function flattenMenu(MenuItem $root) {
-		$list = $root->getChildren();
-		foreach ($list as $child) {
-			$list = array_merge($list, $this->flattenMenu($child));
-		}
-		return $list;
-	}
-
-	/**
-	 * @param string $naam
-	 *
-	 * @return bool|MenuItem
-	 */
-	public function getMenuRoot($naam) {
-		$root = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
-		if ($root) {
-			return $this->cache($root);
-		}
-		return false;
-	}
-
-	/**
 	 * Voeg forum-categorien, forum-delen, documenten-categorien en verticalen toe aan menu.
 	 * Deze komen in memcache terecht.
 	 *
@@ -157,30 +130,6 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * @param int $parent_id
-	 *
-	 * @return MenuItem
-	 */
-	public function nieuw($parent_id) {
-		$item = new MenuItem();
-		$item->parent_id = $parent_id;
-		$item->volgorde = 0;
-		$item->rechten_bekijken = LoginModel::getUid();
-		$item->zichtbaar = true;
-		return $item;
-	}
-
-	/**
-	 * @param PersistentEntity|MenuItem $entity
-	 *
-	 * @return void
-	 */
-	public function create(PersistentEntity $entity) {
-		$entity->item_id = (int)parent::create($entity);
-		$this->flushCache(true);
-	}
-
-	/**
 	 * Build tree structure.
 	 *
 	 * @param MenuItem $parent
@@ -191,6 +140,33 @@ class MenuModel extends CachedPersistenceModel {
 			$this->getTree($child);
 		}
 		return $parent;
+	}
+
+	/**
+	 * Flatten tree structure.
+	 *
+	 * @param MenuItem $root
+	 * @return MenuItem[]
+	 */
+	public function flattenMenu(MenuItem $root) {
+		$list = $root->getChildren();
+		foreach ($list as $child) {
+			$list = array_merge($list, $this->flattenMenu($child));
+		}
+		return $list;
+	}
+
+	/**
+	 * @param string $naam
+	 *
+	 * @return bool|MenuItem
+	 */
+	public function getMenuRoot($naam) {
+		$root = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
+		if ($root) {
+			return $this->cache($root);
+		}
+		return false;
 	}
 
 	/**
@@ -228,6 +204,16 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	/**
+	 * Get menu item by id (cached).
+	 *
+	 * @param int $id
+	 * @return MenuItem|false
+	 */
+	public function getMenuItem($id) {
+		return $this->retrieveByPrimaryKey(array($id));
+	}
+
+	/**
 	 * Get the parent of a menu item (cached).
 	 *
 	 * @param MenuItem $item
@@ -238,13 +224,27 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * Get menu item by id (cached).
+	 * @param int $parent_id
 	 *
-	 * @param int $id
-	 * @return MenuItem|false
+	 * @return MenuItem
 	 */
-	public function getMenuItem($id) {
-		return $this->retrieveByPrimaryKey(array($id));
+	public function nieuw($parent_id) {
+		$item = new MenuItem();
+		$item->parent_id = $parent_id;
+		$item->volgorde = 0;
+		$item->rechten_bekijken = LoginModel::getUid();
+		$item->zichtbaar = true;
+		return $item;
+	}
+
+	/**
+	 * @param PersistentEntity|MenuItem $entity
+	 *
+	 * @return void
+	 */
+	public function create(PersistentEntity $entity) {
+		$entity->item_id = (int)parent::create($entity);
+		$this->flushCache(true);
 	}
 
 	/**
@@ -304,12 +304,10 @@ class MenuModel extends CachedPersistenceModel {
 	 * @return string
 	 */
 	protected function renderBreadcrumb($breadcrumb, $active) {
-		switch ($breadcrumb->tekst) {
-			case 'main':
-				$tekst = '<i class="fa fa-home"></i>';
-				break;
-			default:
-				$tekst = $breadcrumb->tekst;
+		$tekst = $breadcrumb->tekst;
+
+		if ($tekst == 'main') {
+			$tekst = '<i class="fa fa-home"></i>';
 		}
 
 		if ($active) {
