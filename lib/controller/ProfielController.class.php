@@ -43,7 +43,6 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\AlleVerjaardagenView;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fotoalbum\FotoBBView;
@@ -287,8 +286,12 @@ class ProfielController extends AclController {
 	}
 
 	public function verjaardagen() {
-		$body = new AlleVerjaardagenView(VerjaardagenModel::getJaar());
-		$this->view = new CsrLayoutPage($body);
+		$nu = time();
+		$this->view = view('verjaardagen.alle', [
+			'dezemaand' => date('n', $nu),
+			'dezedag' => date('d', $nu),
+			'verjaardagen' => VerjaardagenModel::getJaar(),
+		]);
 	}
 
 	public function saldo($uid, $timespan) {

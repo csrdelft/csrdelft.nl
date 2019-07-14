@@ -4,7 +4,7 @@
 		@can(P_LOGGED_IN)
 			<li>
 				<a id="cd-main-trigger" class="mobiel-hidden trigger" href="#menu">
-					<img id="cd-user-avatar" class="cd-user-avatar"
+					<img id="cd-user-avatar" class="cd-user-avatar" alt="Pasfoto ingelogd lid"
 							 src="/plaetjes/pasfoto/{{CsrDelft\model\security\LoginModel::getProfiel()->getPasfotoPath(true)}}">
 					{{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('civitas')}}
 				</a>
@@ -12,7 +12,7 @@
 					@include('menu.main_tree', ['parent' => $root])
 				</ul>
 			</li>
-			<li class="mobiel-hidden"><a class="trigger" href="#search"><i class="fa fa-search"></i></a></li>
+			<li class="mobiel-hidden"><a class="trigger" href="#search"><i class="fa fa-search" aria-hidden="true"></i></a></li>
 		@elsecan
 			<li><a href="/">Log in</a></li>
 		@endcan

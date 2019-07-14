@@ -97,9 +97,10 @@ abstract class Zijbalk {
 		}
 		// Komende verjaardagen
 		if (LoginModel::mag(P_LOGGED_IN) AND LidInstellingenModel::get('zijbalk', 'verjaardagen') > 0) {
-			$zijbalk[] = new KomendeVerjaardagenView(
-				VerjaardagenModel::getKomende((int)LidInstellingenModel::get('zijbalk', 'verjaardagen')),
-				LidInstellingenModel::get('zijbalk', 'verjaardagen_pasfotos') == 'ja');
+			$zijbalk[] = view('verjaardagen.komende', [
+				'verjaardagen' => VerjaardagenModel::getKomende((int)LidInstellingenModel::get('zijbalk', 'verjaardagen')),
+				'toonpasfotos' => LidInstellingenModel::get('zijbalk', 'verjaardagen_pasfotos') == 'ja',
+			]);
 		}
 		return $zijbalk;
 	}
