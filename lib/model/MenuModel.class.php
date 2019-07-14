@@ -325,6 +325,13 @@ class MenuModel extends CachedPersistenceModel {
 	 * @return MenuItem[]
 	 */
 	public function getBreadcrumbs($link) {
+		if ($link == '/') {
+			return [
+				'/' => 'main',
+				'' => 'Vereniging van christenstudenten',
+			];
+		}
+
 		/** @var MenuItem $item */
 		$items = $this->find('link = ? AND zichtbaar = 1', [$link])->fetchAll();
 
