@@ -13,18 +13,11 @@ use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\agenda\AgendaCourantView;
-use CsrDelft\view\agenda\AgendaICalendarView;
-use CsrDelft\view\agenda\AgendaItemDeleteView;
 use CsrDelft\view\agenda\AgendaItemForm;
-use CsrDelft\view\agenda\AgendaMaandView;
-use CsrDelft\view\agenda\AgendeerbaarMaandView;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
+use CsrDelft\view\View;
 
 /**
- * ApiAgendaController.class.php
- *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
@@ -43,28 +36,58 @@ class AgendaController {
 	 * Maandoverzicht laten zien.
 	 * @param int $jaar
 	 * @param int $maand
+	 * @return View
 	 */
 	public function maand($jaar = 0, $maand = 0) {
 		$jaar = intval($jaar);
-		if ($jaar < 1970 OR $jaar > 2100) {
+		if ($jaar < 1970 || $jaar > 2100) {
 			$jaar = date('Y');
 		}
 		$maand = intval($maand);
-		if ($maand < 1 OR $maand > 12) {
+		if ($maand < 1 || $maand > 12) {
 			$maand = date('n');
 		}
-		$body = new AgendaMaandView($this->model, $jaar, $maand);
-		return new CsrLayoutPage($body);
+		$datum = strtotime($jaar . '-' . $maand . '-01');
+
+		// URL voor vorige maand
+		$urlVorige = '/agenda/maand/';
+		if ($maand == 1) {
+			$urlVorige .= ($jaar - 1) . '/12';
+		} else {
+			$urlVorige .= $jaar . '/' . ($maand - 1);
+		}
+
+		// URL voor volgende maand
+		$urlVolgende = '/agenda/maand/';
+		if ($maand == 12) {
+			$urlVolgende .= ($jaar + 1) . '/1';
+		} else {
+			$urlVolgende .= $jaar . '/' . ($maand + 1);
+		}
+
+		return view('agenda.maand', [
+			'datum' => $datum,
+			'maand' => $maand,
+			'jaar' => $jaar,
+			'weken' => $this->model->getItemsByMaand($jaar, $maand),
+			'urlVorige' => $urlVorige,
+			'prevMaand' => strftime('%B', strtotime('-1 Month', $datum)),
+			'urlVolgende' => $urlVolgende,
+			'nextMaand' => strftime('%B', strtotime('+1 Month', $datum)),
+		]);
 	}
 
 	public function ical() {
 		header('Content-Type: text/calendar; charset=UTF-8');
-		return new AgendaICalendarView($this->model);
+		return view('agenda.icalendar', [
+			'items' => $this->model->getICalendarItems(),
+			'published' => str_replace('-', '', str_replace(':', '', str_replace('+00:00', 'Z', gmdate('c')))),
+		]);
 	}
 
 	public function zoeken() {
 		if (!$this->hasParam('q')) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$query = '%' . $this->getParam('q') . '%';
 		$limit = 5;
@@ -74,8 +97,8 @@ class AgendaController {
 		$van = date('Y-m-d');
 		$tot = date('Y-m-d', strtotime('+6 months'));
 		/** @var AgendaItem[] $items */
-		$items = $this->model->find('eind_moment >= ? AND begin_moment <= ? AND (titel LIKE ? OR beschrijving LIKE ? OR locatie LIKE ?)', array($van, $tot, $query, $query, $query), null, 'begin_moment ASC, titel ASC', $limit);
-		$result = array();
+		$items = $this->model->find('eind_moment >= ? AND begin_moment <= ? AND (titel LIKE ? OR beschrijving LIKE ? OR locatie LIKE ?)', [$van, $tot, $query, $query, $query], null, 'begin_moment ASC, titel ASC', $limit);
+		$result = [];
 		foreach ($items as $item) {
 			$begin = $item->getBeginMoment();
 			$d = date('d', $begin);
@@ -96,7 +119,10 @@ class AgendaController {
 	}
 
 	public function courant() {
-		return new AgendaCourantView($this->model, 2);
+		$beginMoment = strtotime(date('Y-m-d'));
+		$eindMoment = strtotime('next saturday', strtotime('+2 weeks', $beginMoment));
+		$items = $this->model->getAllAgendeerbaar($beginMoment, $eindMoment, false, false);
+		return view('agenda.courant', ['items' => $items]);
 	}
 
 	public function toevoegen($datum = null) {
@@ -105,12 +131,12 @@ class AgendaController {
 		if ($form->validate()) {
 			$item->item_id = (int)$this->model->create($item);
 			if ($datum === 'doorgaan') {
-				$_POST = array(); // clear post values of previous input
+				$_POST = []; // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
 				$item->item_id = null;
 				return new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
 			} else {
-				return new AgendeerbaarMaandView($item);
+				return view('agenda.maand_item', ['item' => $item]);
 			}
 		} else {
 			return $form;
@@ -119,13 +145,13 @@ class AgendaController {
 
 	public function bewerken($aid) {
 		$item = $this->model->getAgendaItem((int)$aid);
-		if (!$item OR !$item->magBeheren()) {
+		if (!$item || !$item->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		$form = new AgendaItemForm($item, 'bewerken'); // fetches POST values itself
 		if ($form->validate()) {
 			$this->model->update($item);
-			return new AgendeerbaarMaandView($item);
+			return view('agenda.maand_item', ['item' => $item]);
 		} else {
 			return $form;
 		}
@@ -133,11 +159,11 @@ class AgendaController {
 
 	public function verwijderen($aid) {
 		$item = $this->model->getAgendaItem((int)$aid);
-		if (!$item OR !$item->magBeheren()) {
+		if (!$item || !$item->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		$this->model->delete($item);
-		return new AgendaItemDeleteView($item);
+		return view('agenda.delete', ['uuid' => $item->getUUID()]);
 	}
 
 	public function verbergen($refuuid = null) {
@@ -176,7 +202,7 @@ class AgendaController {
 		 */
 		$agendaitem = $item;
 		AgendaVerbergenModel::instance()->toggleVerbergen($agendaitem);
-		return new AgendeerbaarMaandView($agendaitem);
+		return view('agenda.maand_item', ['item' => $item]);
 	}
 
 }

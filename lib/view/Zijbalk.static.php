@@ -12,7 +12,6 @@ use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
-use CsrDelft\view\agenda\AgendaZijbalkView;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
 use CsrDelft\view\ledenmemory\LedenMemoryZijbalkView;
 use CsrDelft\view\mededelingen\MededelingenZijbalkView;
@@ -46,7 +45,15 @@ abstract class Zijbalk {
 
 		// Agenda
 		if (LoginModel::mag(P_AGENDA_READ) && LidInstellingenModel::get('zijbalk', 'agendaweken') > 0 && LidInstellingenModel::get('zijbalk', 'agenda_max') > 0) {
-			$zijbalk[] = new AgendaZijbalkView(AgendaModel::instance(), LidInstellingenModel::get('zijbalk', 'agendaweken'));
+			$aantalWeken = LidInstellingenModel::get('zijbalk', 'agendaweken');
+			$beginMoment = strtotime(date('Y-m-d'));
+			$eindMoment = strtotime('+' . $aantalWeken . ' weeks', $beginMoment);
+			$eindMoment = strtotime('next saturday', $eindMoment);
+			$items = AgendaModel::instance()->getAllAgendeerbaar($beginMoment, $eindMoment, false, true);
+			if (count($items) > LidInstellingenModel::get('zijbalk', 'agenda_max')) {
+				$items = array_slice($items, 0, LidInstellingenModel::get('zijbalk', 'agenda_max'));
+			}
+			$zijbalk[] = view('agenda.zijbalk', ['items' => $items]);
 		}
 		// Laatste mededelingen
 		if (LidInstellingenModel::get('zijbalk', 'mededelingen') > 0) {
