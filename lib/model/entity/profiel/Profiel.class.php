@@ -120,8 +120,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	public $kerk;
 	public $muziek;
 	public $zingen;
-	// lazy loading
-	private $kinderen;
 	/**
 	 * Database table columns
 	 * @var array
@@ -641,16 +639,31 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		return '<img class="' . htmlspecialchars($cssClass) . '" src="/plaetjes/pasfoto/' . $this->getPasfotoPath($vierkant) . '" alt="Pasfoto van ' . $this->getNaam('volledig') . '" />';
 	}
 
+	private $kinderen;
+
+	/**
+	 * @return Profiel[]
+	 */
 	public function getKinderen() {
-		if (!isset($this->kinderen)) {
-			$this->kinderen = ProfielModel::instance()->find('patroon = ?', array($this->uid));
+		if ($this->kinderen == null) {
+			$this->kinderen = ProfielModel::instance()->find('patroon = ?', array($this->uid))->fetchAll();
 		}
+
 		return $this->kinderen;
 	}
 
 	public function hasKinderen() {
-		$this->getKinderen();
-		return !empty($this->kinderen);
+		return count($this->getKinderen()) !== 0;
+	}
+
+	public function getNageslachtGrootte() {
+		$nageslacht = 0;
+		foreach ($this->getKinderen() as $kind) {
+			$nageslacht++;
+			$nageslacht += $kind->getNageslachtGrootte();
+		}
+
+		return $nageslacht;
 	}
 
 	public function isLid() {

@@ -281,8 +281,9 @@ class ProfielController extends AclController {
 	}
 
 	public function stamboom($uid = null) {
-		$body = new StamboomView($uid);
-		$this->view = new CsrLayoutPage($body);
+		$this->view = view('profiel.stamboom', [
+			'profiel' => ProfielModel::get($uid) ?? LoginModel::getProfiel(),
+		]);
 	}
 
 	public function verjaardagen() {
