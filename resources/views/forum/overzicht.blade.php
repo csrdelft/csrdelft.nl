@@ -3,7 +3,7 @@
 @section('titel', 'Forum')
 
 @section('breadcrumbs')
-	{!! breadcrumbs([
+	{!! csr_breadcrumbs([
 	'/' => 'main',
 	'/forum' => 'Forum',
 	]) !!}

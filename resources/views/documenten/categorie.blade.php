@@ -5,7 +5,7 @@ Documenten in categorie: {{ $categorie->naam }}
 @endsection
 
 @section('breadcrumbs')
-	{!! breadcrumbs([
+	{!! csr_breadcrumbs([
 	'/' => 'main',
 	'/documenten' => 'Documenten',
 	'' => $categorie->naam,

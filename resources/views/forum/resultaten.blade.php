@@ -9,7 +9,7 @@
 @endsection
 
 @section('breadcrumbs')
-	{!! breadcrumbs([
+	{!! csr_breadcrumbs([
   '/' => 'main',
   '/forum' => 'Forum',
   '' => 'Zoeken',

@@ -4,7 +4,7 @@
 
 @section('breadcrumbs')
 	@php($deel = $draad->getForumDeel())
-	{!! breadcrumbs([
+	{!! csr_breadcrumbs([
 		'/' => 'main',
 		'/forum' => 'Forum',
 		'/forum/deel/' . $deel->forum_id => $deel->titel,

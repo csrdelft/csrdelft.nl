@@ -33,7 +33,7 @@
 <main class="cd-main-content">
 	<nav aria-label="breadcrumb">
 		@section('breadcrumbs')
-			{!! breadcrumbs(\CsrDelft\model\MenuModel::instance()->getBreadcrumbs($_SERVER['REQUEST_URI'])) !!}
+			{!! csr_breadcrumbs(\CsrDelft\model\MenuModel::instance()->getBreadcrumbs($_SERVER['REQUEST_URI'])) !!}
 		@show
 	</nav>
 	<div class="cd-page-content">

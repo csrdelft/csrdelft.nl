@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('breadcrumbs')
-	{!! breadcrumbs([
+	{!! csr_breadcrumbs([
 		'/' => 'main',
 		'' => 'Documenten',
 	]) !!}

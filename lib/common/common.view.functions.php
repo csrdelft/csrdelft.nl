@@ -388,7 +388,7 @@ function highlight_zoekterm($bericht, $zoekterm, $before = null, $after = null) 
 	return preg_replace('/' . preg_quote($zoekterm, '/') . '/i', $before . '$0' . $after, $bericht);
 }
 
-function breadcrumbs($breadcrumbs) {
+function csr_breadcrumbs($breadcrumbs) {
 	return MenuModel::instance()->renderBreadcrumbs($breadcrumbs);
 }
 

@@ -29,7 +29,7 @@
 @section('titel', 'Het profiel van '. $profiel->getNaam('volledig'))
 
 @section('breadcrumbs')
-	{!! breadcrumbs([
+	{!! csr_breadcrumbs([
 	'/' => 'main',
 	'/ledenlijst' => 'Leden',
 	'' => $profiel->getNaam('civitas'),

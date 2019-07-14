@@ -3,7 +3,7 @@
 @section('titel', 'Eetplanbeheer')
 
 @section('breadcrumbs')
-	{!! breadcrumbs([
+	{!! csr_breadcrumbs([
 	'/' => 'main',
 	'/eetplan' => 'Eetplan',
 	'/eetplan/beheer' => 'Eetplanbeheer',

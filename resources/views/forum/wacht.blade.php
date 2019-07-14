@@ -3,7 +3,7 @@
 @section('titel', 'Wacht op goedkeuring')
 
 @section('breadcrumbs')
-	{!! breadcrumbs([
+	{!! csr_breadcrumbs([
   '/' => 'main',
   '/forum' => 'Forum',
   '' => 'Wacht',
