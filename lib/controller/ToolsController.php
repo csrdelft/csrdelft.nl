@@ -17,15 +17,13 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\OrmMemcache;
-use CsrDelft\view\AdminsView;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\NovietenView;
 use CsrDelft\view\PlainView;
 use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
-use CsrDelft\view\VerticaleLijstenView;
+use CsrDelft\view\View;
 
 /**
  * Deze controller bevat een aantal beheertools die niet direct onder een andere controller geschaard kunnen worden.
@@ -50,15 +48,15 @@ class ToolsController {
 	public function stats() {
 		$criteria = null;
 		$params = [];
-		if($this->hasParam('uid')) {
+		if ($this->hasParam('uid')) {
 			$criteria = "uid = ?";
 			$params[] = $this->getParam('uid');
-		} elseif($this->hasParam('ip')) {
+		} elseif ($this->hasParam('ip')) {
 			$criteria = "ip = ?";
 			$params[] = $this->getParam('ip');
 		}
 
-		$log = LogModel::instance()->find($criteria, $params, null, 'ID DESC',30)->fetchAll();
+		$log = LogModel::instance()->find($criteria, $params, null, 'ID DESC', 30)->fetchAll();
 
 		return view('stats.stats', [
 			'log' => $log
@@ -66,7 +64,16 @@ class ToolsController {
 	}
 
 	public function verticalelijsten() {
-		return view('default', ['content' => new VerticaleLijstenView()]);
+		return view('tools.verticalelijst', [
+			'verticalen' => array_reduce(
+				['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
+				function ($carry, $letter) {
+					$carry[$letter] = ProfielModel::instance()->find('verticale = ? AND (status="S_LID" OR status="S_NOVIET" OR status="S_GASTLID" OR status="S_KRINGEL")', [$letter]);
+					return $carry;
+				},
+				[]
+			)
+		]);
 	}
 
 	public function roodschopper() {
@@ -119,13 +126,20 @@ class ToolsController {
 	}
 
 	public function admins() {
-		return view('default', ['content' => new AdminsView()]);
+		return view('tools.admins', [
+			'accounts' => AccountModel::instance()->find('perm_role NOT IN (?,?,?,?)', ['R_LID', 'R_NOBODY', 'R_ETER', 'R_OUDLID'], null, 'perm_role'),
+		]);
 	}
 
+	/**
+	 * Voor de NovCie, zorgt ervoor dat novieten bekeken kunnen worden als dat afgeschermd is op de rest van de stek.
+	 *
+	 * @return View
+	 */
 	public function novieten() {
-		$novieten = Database::instance()->sqlSelect(['*'], 'profielen', 'status = ?', ['S_NOVIET']);
-
-		return view('default', ['content' => new NovietenView($novieten)]);
+		return view('tools.novieten', [
+			'novieten' => Database::instance()->sqlSelect(['*'], 'profielen', 'status = ?', ['S_NOVIET'])
+		]);
 	}
 
 	public function dragobject() {
