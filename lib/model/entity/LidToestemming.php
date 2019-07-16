@@ -12,38 +12,38 @@ use CsrDelft\Orm\Entity\T;
  * Een LidToestemming beschrijft een Instelling per Lid.
  */
 class LidToestemming extends Instelling {
-    /**
-     * Lidnummer1
-     * Foreign key
-     * @var string
-     */
-    public $uid;
+	/**
+	 * Database table columns
+	 * @var array
+	 */
+	protected static $persistent_attributes = array(
+		'uid' => array(T::UID),
+		'module' => array(T::StringKey),
+		'instelling_id' => array(T::StringKey),
+		'waarde' => array(T::Text)
+	);
+	/**
+	 * Database primary key
+	 * @var array
+	 */
+	protected static $primary_key = array('module', 'instelling_id', 'uid');
+	/**
+	 * Database table name
+	 * @var string
+	 */
+	protected static $table_name = 'lidtoestemmingen';
+	/**
+	 * Lidnummer1
+	 * Foreign key
+	 * @var string
+	 */
+	public $uid;
 
-    public function getProfiel()
-	{
+	public function getProfiel() {
 		return ProfielModel::get($this->uid);
 	}
 
-	public function getDescription()
-	{
+	public function getDescription() {
 		return LidToestemmingModel::instance()->getDescription($this->module, $this->instelling_id);
 	}
-
-    /**
-     * Database table columns
-     * @var array
-     */
-    protected static $persistent_attributes = array(
-        'uid' => array(T::UID),
-    );
-    /**
-     * Database primary key
-     * @var array
-     */
-    protected static $primary_key = array('module', 'instelling_id', 'uid');
-    /**
-     * Database table name
-     * @var string
-     */
-    protected static $table_name = 'lidtoestemmingen';
 }
