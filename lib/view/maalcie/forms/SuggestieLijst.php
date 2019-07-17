@@ -4,7 +4,6 @@ namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\groepen\LichtingenModel;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\SmartyTemplateView;
@@ -29,11 +28,11 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 		}
 
 		if ($taak->getCorveeFunctie()->kwalificatie_benodigd) {
-			$this->voorkeur = InstellingenModel::get('corvee', 'suggesties_voorkeur_kwali_filter');
-			$this->recent = InstellingenModel::get('corvee', 'suggesties_recent_kwali_filter');
+			$this->voorkeur = instelling('corvee', 'suggesties_voorkeur_kwali_filter');
+			$this->recent = instelling('corvee', 'suggesties_recent_kwali_filter');
 		} else {
-			$this->voorkeur = InstellingenModel::get('corvee', 'suggesties_voorkeur_filter');
-			$this->recent = InstellingenModel::get('corvee', 'suggesties_recent_filter');
+			$this->voorkeur = instelling('corvee', 'suggesties_voorkeur_filter');
+			$this->recent = instelling('corvee', 'suggesties_recent_filter');
 		}
 	}
 

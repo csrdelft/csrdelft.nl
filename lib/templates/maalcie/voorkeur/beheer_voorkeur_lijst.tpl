@@ -5,7 +5,7 @@
 	{if $voorkeur}
 		{if $smarty.foreach.loop.first}
 <tr id="voorkeur-row-{$voorkeur->getVanUid()}">
-	<td>{CsrDelft\model\ProfielModel::getLink($voorkeur->getVanUid(),CsrDelft\model\InstellingenModel::get('corvee', 'weergave_ledennamen_beheer'))}</td>
+	<td>{CsrDelft\model\ProfielModel::getLink($voorkeur->getVanUid(),instelling('corvee', 'weergave_ledennamen_beheer'))}</td>
 		{/if}
 		{include file='maalcie/voorkeur/beheer_voorkeur_veld.tpl' voorkeur=$voorkeur crid=$voorkeur->crv_repetitie_id uid=$voorkeur->uid}
 		{if $smarty.foreach.loop.last}

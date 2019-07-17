@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity;
 
-use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\Orm\Entity\T;
 
 /**
@@ -47,6 +47,7 @@ class LidInstelling extends Instelling {
 	 * @param boolean $attributes Attributes to cast
 	 */
 	protected function castValues(array $attributes) {
+		/** @noinspection PhpUnhandledExceptionInspection */
 		parent::castValues($attributes);
 		if (LidInstellingenModel::instance()->getType($this->module, $this->instelling_id) === T::Integer) {
 			$this->waarde = (int)$this->waarde;

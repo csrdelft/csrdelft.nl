@@ -19,7 +19,6 @@ use CsrDelft\model\groepen\leden\BestuursLedenModel;
 use CsrDelft\model\groepen\leden\CommissieLedenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
@@ -403,13 +402,13 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
 		$k = '';
-		if ($vorm !== 'pasfoto' AND LidInstellingenModel::get('layout', 'visitekaartjes') == 'ja') {
+		if ($vorm !== 'pasfoto' AND lid_instelling('layout', 'visitekaartjes') == 'ja') {
 			$title = '';
 		} else {
 			$title = ' title="' . htmlspecialchars($this->getNaam('volledig')) . '"';
 		}
 		$l = '<a href="/profiel/' . $this->uid . '"' . $title . ' class="lidLink ' . htmlspecialchars($this->status) . '">';
-		if ($vorm !== 'pasfoto' AND ($vorm === 'leeg' OR LidInstellingenModel::get('layout', 'visitekaartjes') == 'ja')) {
+		if ($vorm !== 'pasfoto' AND ($vorm === 'leeg' OR lid_instelling('layout', 'visitekaartjes') == 'ja')) {
 			$k = '<span';
 			if ($vorm !== 'leeg') {
 				$k .= ' class="hoverIntent"';
@@ -479,7 +478,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getNaam($vorm = 'volledig', $force = false) {
 		if ($vorm === 'user') {
-			$vorm = LidInstellingenModel::get('forum', 'naamWeergave');
+			$vorm = lid_instelling('forum', 'naamWeergave');
 		}
 		if (!$force AND !LoginModel::mag(P_LOGGED_IN)) {
 			$vorm = 'civitas';
@@ -601,7 +600,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				$folders = array('');
 			} else {
 				if ($vorm === 'user') {
-					$vorm = LidInstellingenModel::get('forum', 'naamWeergave');
+					$vorm = lid_instelling('forum', 'naamWeergave');
 				}
 				$folders = array($vorm . '/', '');
 			}

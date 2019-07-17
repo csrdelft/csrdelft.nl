@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 
@@ -34,46 +33,46 @@ else {
 JS;
 		if (LoginModel::mag(P_LEDEN_READ)) {
 
-			if (LidInstellingenModel::get('zoeken', 'favorieten') === 'ja') {
+			if (lid_instelling('zoeken', 'favorieten') === 'ja') {
 				$this->addSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
 			}
-			if (LidInstellingenModel::get('zoeken', 'menu') === 'ja') {
+			if (lid_instelling('zoeken', 'menu') === 'ja') {
 				$this->addSuggestions(MenuModel::instance()->flattenMenu(MenuModel::instance()->getMenu('main')));
 			}
 
-			$instelling = LidInstellingenModel::get('zoeken', 'leden');
+			$instelling = lid_instelling('zoeken', 'leden');
 			if ($instelling !== 'nee') {
 				$this->suggestions['Leden'] = '/tools/naamsuggesties?zoekin=leden&status=' . $instelling . '&q=';
 			}
 
 			// TODO: bundelen om simultane verbindingen te sparen
 			foreach (array('commissies', 'kringen', 'onderverenigingen', 'werkgroepen', 'woonoorden', 'groepen') as $option) {
-				if (LidInstellingenModel::get('zoeken', $option) === 'ja') {
+				if (lid_instelling('zoeken', $option) === 'ja') {
 					$this->suggestions[ucfirst($option)] = '/groepen/' . $option . '/zoeken?q=';
 				}
 			}
 
-			if (LidInstellingenModel::get('zoeken', 'agenda') === 'ja') {
+			if (lid_instelling('zoeken', 'agenda') === 'ja') {
 				$this->suggestions['Agenda'] = '/agenda/zoeken?q=';
 			}
 
-			if (LidInstellingenModel::get('zoeken', 'forum') === 'ja') {
+			if (lid_instelling('zoeken', 'forum') === 'ja') {
 				$this->suggestions['Forum'] = '/forum/titelzoeken?q=';
 			}
 
-			if (LidInstellingenModel::get('zoeken', 'fotoalbum') === 'ja') {
+			if (lid_instelling('zoeken', 'fotoalbum') === 'ja') {
 				$this->suggestions['Fotoalbum'] = '/fotoalbum/zoeken?q=';
 			}
 
-			if (LidInstellingenModel::get('zoeken', 'wiki') === 'ja') {
+			if (lid_instelling('zoeken', 'wiki') === 'ja') {
 				$this->suggestions['Wiki'] = '/wiki/lib/exe/ajax.php?call=csrlink_wikisuggesties&q=';
 			}
 
-			if (LidInstellingenModel::get('zoeken', 'documenten') === 'ja') {
+			if (lid_instelling('zoeken', 'documenten') === 'ja') {
 				$this->suggestions['Documenten'] = '/documenten/zoeken?q=';
 			}
 
-			if (LidInstellingenModel::get('zoeken', 'boeken') === 'ja') {
+			if (lid_instelling('zoeken', 'boeken') === 'ja') {
 				$this->suggestions['Boeken'] = '/bibliotheek/zoeken?q=';
 			}
 
@@ -113,7 +112,7 @@ JS;
 		$html = '';
 		foreach (array('favorieten', 'menu', 'leden', 'commissies', 'kringen', 'onderverenigingen', 'werkgroepen', 'woonoorden', 'groepen', 'agenda', 'forum', 'fotoalbum', 'wiki', 'documenten', 'boeken') as $option) {
 			$html .= '<a class="dropdown-item" href="#">';
-			$instelling = LidInstellingenModel::get('zoeken', $option);
+			$instelling = lid_instelling('zoeken', $option);
 			if ($instelling !== 'nee') {
 				$html .= '<span class="fa fa-check"></span> ';
 				if ($option === 'leden') {
@@ -152,7 +151,7 @@ JS;
                     <div class="dropdown-submenu">
                         <a class="dropdown-item" href="#">Snelzoeken</a>
                         <div class="dropdown-menu">
-                            <a href="#" class="dropdown-item" href="/instellingen#lidinstellingenform-tab-Zoeken">Aanpassen...</a>
+                            <a class="dropdown-item" href="/instellingen#lidinstellingenform-tab-Zoeken">Aanpassen...</a>
                             <a class="divider"></a>
 							<?= $html; ?>
                         </div>

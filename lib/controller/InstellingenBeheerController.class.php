@@ -3,7 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
-use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\instellingen\InstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\instellingen\InstellingBeheerView;
@@ -61,6 +61,7 @@ class InstellingenBeheerController extends AclController {
 	}
 
 	public function module($module = null) {
+		\CsrDelft\model\instellingen\InstellingenModel::instance();
 		$body = new InstellingenBeheerView($this->model, $module);
 		$this->view = new CsrLayoutPage($body);
 	}
@@ -72,7 +73,7 @@ class InstellingenBeheerController extends AclController {
 	}
 
 	public function reset($module, $id) {
-		$instelling = $this->model->wijzigInstelling($module, $id, $this->model->getDefault($module, $id));
+		$instelling = $this->model->wijzigInstelling($module, $id, $this->model->getDefinition($module, $id));
 		$this->view = new InstellingBeheerView($instelling);
 	}
 

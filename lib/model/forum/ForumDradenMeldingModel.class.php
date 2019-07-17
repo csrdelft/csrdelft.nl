@@ -8,7 +8,7 @@ use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;

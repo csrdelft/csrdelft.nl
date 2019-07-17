@@ -6,7 +6,6 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
@@ -149,7 +148,7 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @return Maaltijd[]
 	 */
 	public function getKomendeMaaltijdenVoorLid($uid) {
-		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime(InstellingenModel::get('maaltijden', 'toon_ketzer_vooraf')))));
+		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime(instelling('maaltijden', 'toon_ketzer_vooraf')))));
 		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, $uid);
 		return $maaltijden;
 	}

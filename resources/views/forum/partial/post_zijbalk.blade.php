@@ -5,7 +5,7 @@
 	@foreach($posts as $post)
 		@php($timestamp = strtotime($post->datum_tijd))
 		@php($draad = $post->getForumDraad())
-		@php($ongelezenWeergave = CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave'))
+		@php($ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave'))
 		<div class="item">
 			<a href="/forum/reactie/{{$post->post_id}}#{{$post->post_id}}" title="{{$draad->titel}}"
 				 @if($draad->isOngelezen())class="{{$ongelezenWeergave}}" @endif>

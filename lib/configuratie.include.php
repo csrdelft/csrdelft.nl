@@ -32,8 +32,8 @@ use CsrDelft\common\Ini;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\InstellingenModel;
-use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\instellingen\InstellingenModel;
+use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
@@ -153,7 +153,7 @@ switch (constant('MODE')) {
 		ini_set('session.cache_limiter', 'nocache');
 		ini_set('session.use_trans_sid', 0);
 		// Sync lifetime of FS based PHP session with DB based C.S.R. session
-		ini_set('session.gc_maxlifetime', (int)InstellingenModel::get('beveiliging', 'session_lifetime_seconds'));
+		ini_set('session.gc_maxlifetime', (int)instelling('beveiliging', 'session_lifetime_seconds'));
 		ini_set('session.use_strict_mode', true);
 		ini_set('session.use_cookies', true);
 		ini_set('session.use_only_cookies', true);

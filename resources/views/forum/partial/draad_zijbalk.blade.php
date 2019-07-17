@@ -17,15 +17,15 @@
 	@foreach($draden as $draad)
 		@php($timestamp = strtotime($draad->laatst_gewijzigd))
 
-		@if(CsrDelft\model\LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'ongelezen')
+		@if(lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen')
 			@php($urlHash = '#ongelezen')
-		@elseif(CsrDelft\model\LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'laatste')
+		@elseif(lid_instelling('forum', 'open_draad_op_pagina') == 'laatste')
 			@php($urlHash = '#reageren')
 		@else
 			@php($urlHash = '')
 		@endif
 
-		@php($ongelezenWeergave = CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave'))
+		@php($ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave'))
 
 		<div class="item" id="forumdraad-row-{{$draad->draad_id}}">
 			<a href="/forum/onderwerp/{{$draad->draad_id}}{{$urlHash}}" title="{{$draad->titel}}"

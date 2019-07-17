@@ -3,7 +3,6 @@
 namespace CsrDelft\model\mededelingen;
 
 use CsrDelft\model\entity\mededelingen\Mededeling;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
 
@@ -219,7 +218,7 @@ class MededelingenModel extends PersistenceModel {
 			$clauses . ' AND datum >= ?',
 			array($mededeling->datum));
 
-		$paginaNummer = (int)ceil($positie / LidInstellingenModel::get('mededelingen', 'aantalPerPagina'));
+		$paginaNummer = (int)ceil($positie / lid_instelling('mededelingen', 'aantalPerPagina'));
 		$paginaNummer = $paginaNummer >= 1 ? $paginaNummer : 1; // Het moet natuurlijk wel groter dan 0 zijn.
 		return $paginaNummer;
 	}

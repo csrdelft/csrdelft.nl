@@ -4,7 +4,6 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
-use CsrDelft\model\LidInstellingenModel;
 
 /**
  * Toont content als instelling een bepaalde waarde heeft, standaard 'ja';
@@ -34,7 +33,7 @@ class BbInstelling extends BbTag {
 			$testwaarde = $arguments['waarde'];
 		}
 		try {
-			if (LidInstellingenModel::get($arguments['module'], $arguments['instelling']) == $testwaarde) {
+			if (lid_instelling($arguments['module'], $arguments['instelling']) == $testwaarde) {
 				return $content;
 			}
 		} catch (CsrException $e) {

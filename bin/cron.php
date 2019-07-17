@@ -16,10 +16,11 @@
  *
  * @see http://www.cronjob.nl/
  */
+
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\forum\ForumModel;
-use CsrDelft\model\InstellingenModel;
-use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\instellingen\InstellingenModel;
+use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
 use CsrDelft\model\security\LoginModel;

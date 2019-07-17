@@ -2,13 +2,13 @@
 <html lang="nl">
 
 <head>
-	<meta name="description" content="{{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}}">
+	<meta name="description" content="{{instelling('stek', 'beschrijving')}}">
 	<meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE"/>
 	<meta property="og:url" content="{{CSR_ROOT}}{{REQUEST_URI}}"/>
 	<meta property="og:title" content="C.S.R. Delft | @yield('titel')"/>
 	<meta property="og:locale" content="nl_nl"/>
 	<meta property="og:image" content="{{CSR_ROOT}}/images/beeldmerk.png"/>
-	<meta property="og:description" content="{{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}}"/>
+	<meta property="og:description" content="{{instelling('stek', 'beschrijving')}}"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	{!! csrfMetaTag() !!}
 	<title>C.S.R. Delft - @yield('titel')</title>

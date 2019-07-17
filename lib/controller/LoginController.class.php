@@ -8,7 +8,6 @@ use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\RememberLogin;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
@@ -107,8 +106,7 @@ class LoginController extends AclController {
 				$form = new RememberAfterLoginForm($remember, $values['redirect']);
 				$form->css_classes[] = 'redirect';
 
-
-				$body = new CmsPaginaView(CmsPaginaModel::get(InstellingenModel::get('stek', 'homepage')));
+				$body = new CmsPaginaView(CmsPaginaModel::get(instelling('stek', 'homepage')));
 				$this->view = new CsrLayoutPage($body, array(), $form);
 				return;
 			}

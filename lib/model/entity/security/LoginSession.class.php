@@ -2,7 +2,6 @@
 
 namespace CsrDelft\model\entity\security;
 
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -81,7 +80,7 @@ class LoginSession extends PersistentEntity {
 	protected static $table_name = 'login_sessions';
 
 	public function isRecent() {
-		$recent = (int)InstellingenModel::get('beveiliging', 'recent_login_seconds');
+		$recent = (int)instelling('beveiliging', 'recent_login_seconds');
 		if (time() - strtotime($this->login_moment) < $recent) {
 			return true;
 		}

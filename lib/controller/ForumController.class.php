@@ -21,7 +21,6 @@ use CsrDelft\model\forum\ForumDradenReagerenModel;
 use CsrDelft\model\forum\ForumDradenVerbergenModel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\forum\ForumPostsModel;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
@@ -287,7 +286,7 @@ class ForumController {
 			$gelezen = false;
 		}
 		if ($pagina === null) {
-			$pagina = LidInstellingenModel::get('forum', 'open_draad_op_pagina');
+			$pagina = lid_instelling('forum', 'open_draad_op_pagina');
 		}
 		$paging = true;
 		if ($pagina === 'ongelezen' && $gelezen) {
@@ -652,7 +651,7 @@ class ForumController {
 				$this->forumDelenMeldingModel->stuurMeldingen($post);
 			}
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
-			if ($nieuw && LidInstellingenModel::get('forum', 'meldingEigenDraad') === 'ja') {
+			if ($nieuw && lid_instelling('forum', 'meldingEigenDraad') === 'ja') {
 				$this->forumDradenMeldingModel->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::ALTIJD);
 			}
 
@@ -843,9 +842,9 @@ class ForumController {
 	private function draadAutocompleteArray(ForumDraad $draad) {
 		$url = '/forum/onderwerp/' . $draad->draad_id;
 
-		if (LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'ongelezen') {
+		if (lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen') {
 			$url .= '#ongelezen';
-		} elseif (LidInstellingenModel::get('forum', 'open_draad_op_pagina') == 'laatste') {
+		} elseif (lid_instelling('forum', 'open_draad_op_pagina') == 'laatste') {
 			$url .= '#reageren';
 		}
 

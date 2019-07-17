@@ -5,16 +5,16 @@
 # common.functions.php
 # -------------------------------------------------------------------
 use CsrDelft\common\MijnSqli;
-use CsrDelft\service\CsrfService;
 use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\InstellingenModel;
-use CsrDelft\model\LidToestemmingModel;
+use CsrDelft\model\instellingen\InstellingenModel;
+use CsrDelft\model\instellingen\LidInstellingenModel;
+use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\service\CsrfService;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
-use Symfony\Component\Security\Csrf\CsrfToken;
 
 /**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
@@ -117,7 +117,7 @@ function setRememberCookie($token) {
 		unset($_COOKIE['remember']);
 		setcookie('remember', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	} else {
-		setcookie('remember', $token, time() + (int)InstellingenModel::get('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+		setcookie('remember', $token, time() + (int)instelling('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	}
 }
 
@@ -125,7 +125,7 @@ function setRememberCookie($token) {
  * @return int
  */
 function getSessionMaxLifeTime() {
-	$lifetime = (int)InstellingenModel::get('beveiliging', 'session_lifetime_seconds');
+	$lifetime = (int)instelling('beveiliging', 'session_lifetime_seconds');
 	// Sync lifetime of FS based PHP session with DB based C.S.R. session
 	$gc = (int)ini_get('session.gc_maxlifetime');
 	if ($gc > 0 AND $gc < $lifetime) {
@@ -984,6 +984,14 @@ function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_
 	}
 
 	return LidToestemmingModel::instance()->toestemming($profiel, $key, $cat, $uitzondering);
+}
+
+function lid_instelling($module, $key) {
+	return LidInstellingenModel::instance()->getValue($module, $key);
+}
+
+function instelling($module, $key) {
+	return InstellingenModel::instance()->getValue($module, $key);
 }
 
 function to_unix_path($path) {

@@ -7,7 +7,6 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\ProfielService;
@@ -221,7 +220,7 @@ class ToolsController {
 			$zoekin = $_GET['zoekin'];
 		}
 		if (isset($_GET['zoekin']) && $_GET['zoekin'] === 'voorkeur') {
-			$zoekin = LidInstellingenModel::get('forum', 'lidSuggesties');
+			$zoekin = lid_instelling('forum', 'lidSuggesties');
 		}
 
 		$query = '';

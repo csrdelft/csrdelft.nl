@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity;
 
-use CsrDelft\model\LidToestemmingModel;
+use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\T;
 

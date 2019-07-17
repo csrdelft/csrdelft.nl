@@ -1,0 +1,237 @@
+instellingen:
+  algemeen:
+    bijbel:
+      titel: 'Bijbelvertaling'
+      type: Enumeration
+      opties: { NBV: 'De Nieuwe Bijbelvertaling', 'BGT': 'Bijbel in Gewone Taal', 'GNB96': 'Groot Nieuws Bijbel', 'NFB': 'Nije Fryske Bibeloersetting', 'NBG51': 'NBG-vertaling 1951', 'SVJ': 'Statenvertaling (Jongbloed-editie)', 'HSVI': 'Herziene Statenvertaling', 'CEVD': 'Contemporary English Version', 'GNTD': 'Good News Translation'}
+      default: 'NBV'
+      beschrijving: 'Bijbelvertaling die wordt gebruikt als iemand naar een bijbeltekst verwijst op het forum.'
+  agenda:
+    toonVerjaardagen:
+      titel: 'Verjaardagen weergeven'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'ja'
+      beschrijving: 'Geef verjaardagen weer in de agenda op de stek.'
+    toonVerjaardagenICal:
+      titel: 'Verjaardagen weergeven in iCal'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'ja'
+      beschrijving: 'Geef verjaardagen weer in de ge&iuml;mporteerde agenda (iCal) in je eigen systeem.'
+    toonMaaltijden:
+      titel: 'Maaltijden weergeven'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'ja'
+      beschrijving: 'Geef maaltijden weer in de agenda, geldt ook voor de agenda ge&iuml;mporteerd in je eigen systeem.'
+    toonCorvee:
+      titel: 'Corvee weergeven'
+      type: Enumeration
+      opties: ['iedereen', 'eigen', 'nee']
+      default: 'eigen'
+      beschrijving: 'Geef corvee weer in de agenda, geldt ook voor de agenda ge&iuml;mporteerd in je eigen systeem.'
+  layout:
+    toegankelijk:
+      titel: 'Leesbaarheid'
+      type: Enumeration
+      opties: ['standaard', 'bredere letters']
+      default: 'standaard'
+      beschrijving: 'Maak de stek beter leesbaar door een breder lettertype in te stellen.'
+    opmaak:
+      titel: 'Opmaak'
+      type: Enumeration
+      opties: ['normaal', 'lustrum', 'owee', 'dies', 'donker', 'sineregno', 'civitasia', 'roze', 'koevoet']
+      default: 'normaal'
+      beschrijving: 'Ik daag je uit roze te gebruiken. Of koevoet.'
+    assistent:
+      titel: 'Assistent'
+      type: Enumeration
+      opties: ['nee', 'Clippy', 'F1', 'Genie', 'Genius', 'Links', 'Merlin', 'Peedy', 'Rocky', 'Rover']
+      default: 'nee'
+      beschrijving: 'Verrijk uw ervaring op de stek met een van deze geweldige hulpjes.'
+    assistentGeluiden:
+      titel: 'Assistent Geluiden'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'nee'
+      beschrijving: 'Stel in of de assistent geluid mag maken. Heeft alleen effect als een assistent geselecteerd is.'
+    fx:
+      titel: 'Effect'
+      type: Enumeration
+      opties: ['nee', 'civisaldo', 'onontdekt', 'sneeuw', 'space', 'wolken']
+      default: 'nee'
+      beschrijving: 'Het effect wat wordt weergegeven tijdens zoeken en als het menu geopend is.'
+    visitekaartjes:
+      titel: 'Civikaartjes'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'ja'
+      beschrijving: 'Toon een foto en korte beschrijving van een persoon als je met je muis over iemands naam beweegt.'
+    neuzen:
+      titel: 'Neuzen'
+      type: Enumeration
+      opties: ['2013', 'nee']
+      default: '2013'
+      beschrijving: 'Vervang voor leden van lichting 13 iedere "o" door een clownsneus.'
+    minion:
+      titel: 'Minion'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'nee'
+      beschrijving: 'Zet de minion aan of uit.'
+    trein:
+      titel: 'Trein'
+      type: Enumeration
+      opties: ['nee', 'willekeurig']
+      default: 'nee'
+      beschrijving: 'Tjoek tjoek!'
+  forum:
+    draden_per_pagina:
+      titel: 'Draadjes per pagina'
+      type: Integer
+      opties: [5, 100]
+      default: 20
+      beschrijving: 'Aantal draadjes per pagina in het deel en recent overzicht.'
+    posts_per_pagina:
+      titel: 'Berichten per pagina'
+      type: Integer
+      opties: [5, 100]
+      default: 20
+      beschrijving: 'Aantal berichten die per pagina zichtbaar zijn.'
+    zoekresultaten:
+      titel: 'Zoekresultaten per pagina'
+      type: Integer
+      opties: [10, 50]
+      default: 20
+      beschrijving: 'Aantal zoekresultaten die per pagina zichtbaar zijn.'
+    naamWeergave:
+      titel: 'Naamweergave'
+      type: Enumeration
+      opties: ['civitas', 'volledig', 'bijnaam', 'aaidrom', 'Duckstad']
+      default: 'civitas'
+      beschrijving: 'Weergave van namen in het forum.'
+    lidSuggesties:
+      titel: 'Lidsuggesties'
+      type: Enumeration
+      opties:
+        leden: 'Novieten & leden'
+        alleleden: 'Iedereen'
+      default: 'leden'
+      beschrijving: 'Of ook oud- en ereleden als suggestie worden getoond op het forum.'
+    datumWeergave:
+      titel: 'Datumweergave'
+      type: Enumeration
+      opties: ['relatief', 'vast']
+      default: 'relatief'
+      beschrijving: 'Datumweergave voor draadjes en berichten op het forum.'
+    ongelezenWeergave:
+      titel: 'Ongelezenweergave'
+      type: Enumeration
+      opties: ['cursief', 'dikgedrukt', 'onderstreept', 'alsof-gelezen']
+      default: 'cursief'
+      beschrijving: 'Hoe ongelezen draadjes eruit zien in de zijbalk en in het forum.'
+    belangrijkBijRecent:
+      titel: 'Belangrijke berichten bij recent tonen'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'ja'
+      beschrijving: 'Of belangrijke berichten ook getoond moeten worden tussen de recente berichten.'
+    open_draad_op_pagina:
+      titel: 'Open draad op pagina'
+      type: Enumeration
+      opties: ['1', 'ongelezen', 'laatste']
+      default: 'ongelezen'
+      beschrijving: 'Op welke pagina een draad moet openen.'
+    fotoWeergave:
+      titel: "Toon groter formaat foto's"
+      type: Enumeration
+      opties: ['nee', 'boven bericht', 'in bericht']
+      default: 'boven bericht'
+      beschrijving: 'Weergave van fotos op het forum.'
+    filter2008:
+      titel: 'Berichten van 2008 eerst verbergen'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'nee'
+      beschrijving: 'Verberg berichten van leden uit 2008'
+    meldingStandaard:
+      titel: 'E-mail bij vermelding'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'ja'
+      beschrijving: 'Ontvang een e-mail als iemand u noemt of citeert in een draadje, ook in en uit te schakelen per draadje.'
+    meldingEigenDraad:
+      titel: 'Meldingen voor eigen draadjes'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'ja'
+      beschrijving: 'Zet meldingen voor draadjes die u maakt standaard aan.'
+  fotoalbum:
+    tag_suggestions:
+      titel: 'Etiket suggesties'
+      type: Enumeration
+      opties: ['leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies']
+      default: 'leden'
+      beschrijving: 'De groep waaruit suggesties worden gedaan tijdens het etiketteren in het fotoalbum.'
+  googleContacts:
+    groepnaam:
+      titel: 'Naam van groep voor contacten in Google contacts'
+      type: String
+      opties: [1, 100]
+      default: 'C.S.R.-leden'
+      beschrijving: ''
+  mededelingen:
+    aantalPerPagina:
+      titel: 'Aantal mededelingen per pagina'
+      type: Integer
+      opties: [5, 50]
+      default: 10
+      beschrijving: ''
+  zijbalk:
+    ishetal:
+      titel: 'Is het al… weergeven'
+      type: Enumeration
+      opties: ['niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren', 'foutmelding', 'sponsorkliks', 'patronaat', 'patroon']
+      default: 'willekeurig'
+      beschrijving: ''
+    favorieten: {titel: 'Favorieten menu weergeven', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    agendaweken: {titel: 'Aantal weken in agenda weergeven', type: 'Integer', opties: [0, 10], default: 2, beschrijving: ''}
+    agenda_max: {titel: 'Maximaal aantal agenda-items', type: 'Integer', opties: [0, 50], default: 15, beschrijving: ''}
+    mededelingen: {titel: 'Aantal mededelingen', type: 'Integer', opties: [0, 50], default: 5, beschrijving: ''}
+    forum_belangrijk: {titel: 'Aantal belangrijke forumberichten', type: 'Integer', opties: [0, 50], default: 5, beschrijving: ''}
+    forum: {titel: 'Aantal forumberichten', type: 'Integer', opties: [0, 50], default: 10, beschrijving: ''}
+    forum_zelf: {titel: 'Aantal zelf geposte forumberichten', type: 'Integer', opties: [0, 50], default: 0, beschrijving: ''}
+    ledenmemory_topscores: {titel: 'Ledenmemory topscores weergeven', type: 'Integer', opties: [0, 10], default: 0, beschrijving: ''}
+    fotoalbum: {titel: 'Laatste fotoalbum weergeven', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    fotos: {titel: "Aantal foto's weergeven", type: 'Integer', opties: [0, 50], default: 6, beschrijving: ''}
+    verjaardagen: {titel: 'Aantal verjaardagen weergeven', type: 'Integer', opties: [0, 50], default: 9, beschrijving: ''}
+    verjaardagen_pasfotos: {titel: "Pasfoto's bij verjaardagen", type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+  zoeken:
+    favorieten: {titel: 'Favorieten<span class="offtopic"> (telt niet mee voor max.)</span>', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    menu: {titel: 'Menu<span class="offtopic"> (telt niet mee voor max.)</span>', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    leden:
+      titel: 'Leden'
+      type: Enumeration
+      opties:
+        LEDEN: 'Huidige leden'
+        OUDLEDEN: 'Alleen oudleden'
+        LEDEN|OUDLEDEN: 'Leden en oudleden'
+        ALL: 'Ook niet-leden'
+        NOVIET: 'Alleen novieten'
+        GASTLID: 'Alleen gastleden'
+        nee: 'Nee'
+      default: 'LEDEN'
+      beschrijving: ''
+    commissies: {titel: 'Commissies', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    kringen: {titel: 'Kringen', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
+    onderverenigingen: {titel: 'Onderverenigingen', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
+    werkgroepen: {titel: 'Werkgroepen', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
+    woonoorden: {titel: 'Woonoorden', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    groepen: {titel: 'Overige groepen', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
+    agenda: {titel: 'Agenda', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    forum: {titel: 'Forum', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    fotoalbum: {titel: 'Fotoalbum', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
+    wiki: {titel: 'Wiki', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    documenten: {titel: 'Documenten', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
+    boeken: {titel: 'Boeken', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}

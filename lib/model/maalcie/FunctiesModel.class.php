@@ -4,7 +4,6 @@ namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeFunctie;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 
 /**
@@ -38,7 +37,7 @@ class FunctiesModel extends CachedPersistenceModel {
 
 	public function nieuw() {
 		$functie = new CorveeFunctie();
-		$functie->kwalificatie_benodigd = (boolean)InstellingenModel::get('corvee', 'standaard_kwalificatie');
+		$functie->kwalificatie_benodigd = (boolean)instelling('corvee', 'standaard_kwalificatie');
 		return $functie;
 	}
 
