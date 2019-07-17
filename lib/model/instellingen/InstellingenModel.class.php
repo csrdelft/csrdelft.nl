@@ -44,16 +44,6 @@ class InstellingenModel extends CachedPersistenceModel {
 	 *
 	 * @return string
 	 */
-	public static function getDefinition($module, $id) {
-		return static::instance()->getValue($module, $id);
-	}
-
-	/**
-	 * @param string $module
-	 * @param string $id
-	 *
-	 * @return string
-	 */
 	public function getValue($module, $id) {
 		return $this->getInstelling($module, $id)->waarde;
 	}
@@ -134,20 +124,9 @@ class InstellingenModel extends CachedPersistenceModel {
 	 */
 	public function opschonen() {
 		foreach ($this->find() as $instelling) {
-			if (!static::has($instelling->module, $instelling->instelling_id)) {
+			if (!$this->hasKey($instelling->module, $instelling->instelling_id)) {
 				$this->delete($instelling);
 			}
 		}
 	}
-
-	/**
-	 * @param string $module
-	 * @param string $id
-	 *
-	 * @return bool
-	 */
-	public static function has($module, $id) {
-		return static::instance()->hasKey($module, $id);
-	}
-
 }

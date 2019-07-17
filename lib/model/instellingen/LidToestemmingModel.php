@@ -71,7 +71,7 @@ class LidToestemmingModel extends CachedPersistenceModel {
 		$instelling = new LidToestemming();
 		$instelling->module = $module;
 		$instelling->instelling_id = $id;
-		$instelling->waarde = $this->getDefinition($module, $id);
+		$instelling->waarde = $this->getDefault($module, $id);
 		$instelling->uid = $uid ?? LoginModel::getUid();
 		$this->create($instelling);
 		return $instelling;
@@ -149,7 +149,7 @@ class LidToestemmingModel extends CachedPersistenceModel {
 		return $this->getField($module, $id, 'opties');
 	}
 
-	public function getDefinition($module, $id) {
+	public function getDefault($module, $id) {
 		return $this->getField($module, $id, 'default');
 	}
 

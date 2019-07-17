@@ -165,7 +165,7 @@ class LidInstellingenModel extends CachedPersistenceModel {
 				}
 				$waarde = filter_input(INPUT_POST, $module . '_' . $id, $filter);
 				if (!$this->isValidValue($module, $id, $waarde)) {
-					$waarde = $this->getDefinition($module, $id);
+					$waarde = $this->getDefault($module, $id);
 				}
 				$properties[] = array($module, $id, $waarde, $this->getUid());
 			}

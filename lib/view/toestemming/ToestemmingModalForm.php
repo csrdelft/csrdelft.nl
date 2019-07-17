@@ -89,7 +89,7 @@ class ToestemmingModalForm extends ModalForm {
 		$smarty->assign('opties', $model->getTypeOptions($module, $id));
 		$smarty->assign('label', $model->getDescription($module, $id));
 		$smarty->assign('waarde', $this->nieuw ? $eerdereWaarde : $model->getValue($module, $id));
-		$smarty->assign('default', $model->getDefinition($module, $id));
+		$smarty->assign('default', $model->getDefault($module, $id));
 
 		return $smarty->fetch('toestemming/toestemming_input.tpl');
 	}

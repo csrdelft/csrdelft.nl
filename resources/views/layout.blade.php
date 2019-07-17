@@ -70,7 +70,7 @@
 	<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css">
 	<script type="application/javascript">
 		const ASSISTENT = '{{ lid_instelling('layout', 'assistent') }}';
-		const ASSISTENT_GELUIDEN = '{{ \lid_instelling('layout', 'assistentGeluiden')}}';
+		const ASSISTENT_GELUIDEN = '{{ lid_instelling('layout', 'assistentGeluiden')}}';
 	</script>
 	@script('fxclippy.js')
 @endif
