@@ -41,6 +41,7 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 @define('PHOTOALBUM_PATH', DATA_PATH . 'foto/');
 @define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
 @define('ROUTES_CACHE_PATH', DATA_PATH . 'routes/');
+@define('CONFIG_CACHE_PATH', DATA_PATH . 'config_cache/');
 @define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
 @define('TEMPLATE_PATH', BASE_PATH . 'resources/views/');
 @define('BLADE_CACHE_PATH', DATA_PATH . 'blade/');

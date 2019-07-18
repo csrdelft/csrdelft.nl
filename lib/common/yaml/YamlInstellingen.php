@@ -14,6 +14,10 @@ use Symfony\Component\Config\FileLocator;
  * Standaard bestand heeft op het eerste niveau een beschrijving, dan een niveau met categorieen
  * en binnen iedere categorie specifieke velden.
  *
+ * Cached de settings op schijf in productie mode.
+ *
+ * Cache invalidation met bin/flushcache.php
+ *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 15/07/2019
  */
@@ -27,16 +31,23 @@ trait YamlInstellingen {
 	 * @throws FileLoaderLoadException
 	 */
 	protected function load($resource, $configuration) {
-		$configDirectories = [CONFIG_PATH];
+		$file = CONFIG_CACHE_PATH . str_replace('/', '_', $resource) . '.cache.php';
 
-		$fileLocator = new FileLocator($configDirectories);
-		$yamlLoader = new YamlFileLoader($fileLocator);
-		$yamlLoader->setCurrentDir(__DIR__);
-		$config = $yamlLoader->import($resource);
+		/** @noinspection PhpIncludeInspection */
+		$config = @include $file;
 
-		$processor = new Processor();
+		// Config niet eerder geladen of in debug mode.
+    if (DEBUG || $config == null) {
+			$yamlLoader = new YamlFileLoader(new FileLocator([CONFIG_PATH]));
+			$yamlLoader->setCurrentDir(__DIR__);
+			$yaml = $yamlLoader->import($resource);
 
-		$this->defaults = $processor->processConfiguration($configuration, $config);
+			$config = (new Processor())->processConfiguration($configuration, $yaml);
+
+			$this->writeConfig($config, $file);
+		}
+
+    $this->defaults = $config;
 	}
 
 	public function hasKey($module, $key) {
@@ -61,5 +72,14 @@ trait YamlInstellingen {
 
 	public function getModuleKeys($module) {
 		return array_keys($this->defaults[$module]);
+	}
+
+	private function writeConfig($config, $file) {
+		@mkdir(CONFIG_CACHE_PATH);
+		touch($file);
+		/**
+		 * Deze config is direct van schijf gelezen en bevat geen informatie die beinvloedbaar is door gebruikers.
+		 */
+		file_put_contents($file, '<?php return ' . var_export($config, true) . ';');
 	}
 }

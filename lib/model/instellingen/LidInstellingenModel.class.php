@@ -102,10 +102,6 @@ class LidInstellingenModel extends CachedPersistenceModel {
 		return $instelling;
 	}
 
-	public function getDescription($module, $id) {
-		return $this->getField($module, $id, 'description');
-	}
-
 	public function getType($module, $id) {
 		if ($this->hasKey($module, $id)) {
 			return $this->getField($module, $id, 'type');
@@ -221,6 +217,20 @@ class LidInstellingenModel extends CachedPersistenceModel {
 	}
 
 	/**
+	 * @param string $module
+	 * @param string $id
+	 * @param string $waarde
+	 *
+	 * @return LidInstelling
+	 */
+	public function wijzigInstelling($module, $id, $waarde) {
+		$instelling = $this->getInstelling($module, $id);
+		$instelling->waarde = $waarde;
+		$this->update($instelling);
+		return $instelling;
+	}
+
+	/**
 	 * Haal een instelling op uit het cache of de database voor opgegeven lid.
 	 * Als een instelling niet is gezet wordt deze aangemaakt met de default waarde en opgeslagen.
 	 *
@@ -233,5 +243,15 @@ class LidInstellingenModel extends CachedPersistenceModel {
 		$instellingen = static::instance();
 		$instellingen->uid = $uid;
 		return $instellingen->getInstelling($module, $id)->waarde;
+	}
+
+	/**
+	 */
+	public function opschonen() {
+		foreach ($this->find() as $instelling) {
+			if (!$this->hasKey($instelling->module, $instelling->instelling_id)) {
+				$this->delete($instelling);
+			}
+		}
 	}
 }

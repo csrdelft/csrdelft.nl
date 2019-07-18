@@ -86,17 +86,6 @@ class InstellingenModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * @return string[][]
-	 */
-	public function getInstellingen() {
-		$instellingen = array();
-		foreach ($this->getModules() as $module) {
-			$instellingen[$module] = $this->getModuleKeys($module);
-		}
-		return $instellingen;
-	}
-
-	/**
 	 * @param string $module
 	 * @param string $id
 	 *
