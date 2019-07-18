@@ -11,6 +11,11 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  * @since 14/07/2019
  */
 class InstellingConfiguration implements ConfigurationInterface {
+	const FIELD_DEFAULT = 'default';
+	const FIELD_TITEL = 'titel';
+	const FIELD_TYPE = 'type';
+	const FIELD_OPTIES = 'opties';
+	const FIELD_BESCHRIJVING = 'beschrijving';
 
 	/**
 	 * Generates the configuration tree builder.
@@ -28,15 +33,15 @@ class InstellingConfiguration implements ConfigurationInterface {
 			->beforeNormalization()
 			->ifString()
 			->then(function ($v) {
-				return ['default' => $v];
+				return [self::FIELD_DEFAULT => $v];
 			})
 			->end()
 				->validate()
 					->ifTrue(function($options) {
 						if (is_string($options)) {
 							return false;
-						} elseif ($options['type'] == 'Enumeration') {
-							return (!isset($options['opties'][$options['default']]) && !in_array($options['default'], $options['opties']));
+						} elseif ($options[self::FIELD_TYPE] == InstellingType::Enumeration) {
+							return (!isset($options[self::FIELD_OPTIES][$options[self::FIELD_DEFAULT]]) && !in_array($options[self::FIELD_DEFAULT], $options[self::FIELD_OPTIES]));
 						} else {
 							return false;
 						}
@@ -44,19 +49,19 @@ class InstellingConfiguration implements ConfigurationInterface {
 					->thenInvalid('%s default must be in options')
 			->end()
 			->children()
-			->scalarNode('default')->defaultNull()->end()
-			->scalarNode('titel')->defaultNull()->end()
-			->scalarNode('type')
-			->defaultValue('String')
+			->scalarNode(self::FIELD_DEFAULT)->defaultNull()->end()
+			->scalarNode(self::FIELD_TITEL)->defaultNull()->end()
+			->scalarNode(self::FIELD_TYPE)
+			->defaultValue(InstellingType::String)
 					->validate()
 						->ifTrue(function($type) {
-							return !(@constant(T::class . '::' . $type) !== null);
+							return !(isset(InstellingType::getTypeOptions()[$type]));
 						})
 						->thenInvalid('type %s is not in T.')
 			->end()
 			->end()
-			->arrayNode('opties')->scalarPrototype()->end()->end()
-			->scalarNode('beschrijving')->defaultValue('')->end()
+			->arrayNode(self::FIELD_OPTIES)->scalarPrototype()->end()->end()
+			->scalarNode(self::FIELD_BESCHRIJVING)->defaultValue('')->end()
 			->end();
 
 		return $treeBuilder;

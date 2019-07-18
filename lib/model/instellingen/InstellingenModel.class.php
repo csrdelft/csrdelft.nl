@@ -92,7 +92,7 @@ class InstellingenModel extends CachedPersistenceModel {
 	 * @return string
 	 */
 	public function getDefault($module, $id) {
-		return $this->getField($module, $id, 'default');
+		return $this->getField($module, $id, InstellingConfiguration::FIELD_DEFAULT);
 	}
 
 	/**

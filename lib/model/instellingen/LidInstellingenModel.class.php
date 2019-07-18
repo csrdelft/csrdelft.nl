@@ -104,18 +104,18 @@ class LidInstellingenModel extends CachedPersistenceModel {
 
 	public function getType($module, $id) {
 		if ($this->hasKey($module, $id)) {
-			return $this->getField($module, $id, 'type');
+			return $this->getField($module, $id, InstellingConfiguration::FIELD_TYPE);
 		} else {
 			return null;
 		}
 	}
 
 	public function getTypeOptions($module, $id) {
-		return $this->getField($module, $id, 'opties');
+		return $this->getField($module, $id, InstellingConfiguration::FIELD_OPTIES);
 	}
 
 	public function getDefault($module, $id) {
-		return $this->getField($module, $id, 'default');
+		return $this->getField($module, $id, InstellingConfiguration::FIELD_DEFAULT);
 	}
 
 	public function isValidValue($module, $id, $waarde) {

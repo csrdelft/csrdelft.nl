@@ -7,6 +7,7 @@ use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\JsonResponse;
+use Exception;
 
 
 /**
@@ -61,6 +62,9 @@ class LidInstellingenController extends AclController {
 		}
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function opslaan() {
 		$this->model->save(); // fetches $_POST values itself
 		setMelding('Instellingen opgeslagen', 1);
