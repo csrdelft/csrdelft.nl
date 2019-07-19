@@ -41,6 +41,11 @@
 			"php": "7.0.33"
 		}
 	},
+	"autoload": {
+		"psr-4": {
+			"CsrDelft\\": "lib/"
+		}
+	},
 	"include-path": ["lib/"],
 	"require-dev": {
 		"phpstan/phpstan": "^0.9.2",

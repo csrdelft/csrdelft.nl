@@ -41,7 +41,6 @@ use CsrDelft\model\security\LoginModel;
 require __DIR__ . '/../vendor/autoload.php';
 require_once 'common/common.functions.php';
 require_once 'common/common.view.functions.php';
-require_once 'autoload.php';
 
 
 // Registreer foutmelding handlers
