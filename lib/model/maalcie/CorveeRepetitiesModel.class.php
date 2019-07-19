@@ -5,7 +5,6 @@ namespace CsrDelft\model\maalcie;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeRepetitie;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use PDOStatement;
@@ -23,21 +22,21 @@ class CorveeRepetitiesModel extends PersistenceModel {
 		$repetitie->crv_repetitie_id = (int)$crid;
 		$repetitie->mlt_repetitie_id = $mrid;
 		if ($dag === null) {
-			$dag = intval(InstellingenModel::get('corvee', 'standaard_repetitie_weekdag'));
+			$dag = intval(instelling('corvee', 'standaard_repetitie_weekdag'));
 		}
 		$repetitie->dag_vd_week = $dag;
 		if ($periode === null) {
-			$periode = intval(InstellingenModel::get('corvee', 'standaard_repetitie_periode'));
+			$periode = intval(instelling('corvee', 'standaard_repetitie_periode'));
 		}
 		$repetitie->periode_in_dagen = $periode;
 		$repetitie->functie_id = $fid;
 		$repetitie->standaard_punten = $punten;
 		if ($aantal === null) {
-			$aantal = intval(InstellingenModel::get('corvee', 'standaard_aantal_corveers'));
+			$aantal = intval(instelling('corvee', 'standaard_aantal_corveers'));
 		}
 		$repetitie->standaard_aantal = $aantal;
 		if ($voorkeur === null) {
-			$voorkeur = (boolean)InstellingenModel::get('corvee', 'standaard_voorkeurbaar');
+			$voorkeur = (boolean)instelling('corvee', 'standaard_voorkeurbaar');
 		}
 		$repetitie->voorkeurbaar = $voorkeur;
 

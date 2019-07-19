@@ -12,7 +12,7 @@
 	<body>
 		<a href="/" class="float-right"><img alt="Beeldmerk van de Vereniging" src="/dist/images/beeldmerk.png" /></a>
 		<h1>{$titel} op {$maaltijd->datum|date_format:"%A %e %B %Y"}</h1>
-		<div class="header">{CsrDelft\model\InstellingenModel::get('maaltijden', 'maaltijdlijst_tekst')|replace:'MAALTIJDPRIJS':$prijs}</div>
+		<div class="header">{instelling('maaltijden', 'maaltijdlijst_tekst')|replace:'MAALTIJDPRIJS':$prijs}</div>
 		{if !$maaltijd->gesloten}
 			<h1 id="gesloten-melding">De maaltijd is nog niet gesloten
 				{if !$maaltijd->verwijderd and !$maaltijd->gesloten}
@@ -29,7 +29,7 @@
 								{foreach from=$tabel item="aanmelding"}
 									<tr>
 										{if $aanmelding->uid}
-											<td>{CsrDelft\model\ProfielModel::getLink($aanmelding->uid,CsrDelft\model\InstellingenModel::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}<br />
+											<td>{CsrDelft\model\ProfielModel::getLink($aanmelding->uid,instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}<br />
 												{assign var=eetwens value=CsrDelft\model\ProfielModel::get($aanmelding->uid)->eetwens}
 												{if $eetwens !== ''}
 													<span class="eetwens">
@@ -51,7 +51,7 @@
 											</td>
 											<td class="saldo">{$aanmelding->getSaldoMelding()}</td>
 										{elseif $aanmelding->door_uid}
-											<td>Gast van {CsrDelft\model\ProfielModel::getLink($aanmelding->door_uid,CsrDelft\model\InstellingenModel::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
+											<td>Gast van {CsrDelft\model\ProfielModel::getLink($aanmelding->door_uid,instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}</td>
 											<td class="saldo">-</td>
 										{else}
 											<td style="line-height: 2.2em;">&nbsp;</td>
@@ -90,7 +90,7 @@
 					{table_foreach from=$corveetaken inner=rows item=taak table_attr='class="corveetaken"' cols=2 name=corveetaken}
 						&bullet;&nbsp;
 						{if $taak->uid}
-							{CsrDelft\model\ProfielModel::getLink($taak->uid,CsrDelft\model\InstellingenModel::get('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}
+							{CsrDelft\model\ProfielModel::getLink($taak->uid,instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst'))}
 						{else}
 							<span class="cursief">vacature</span>
 						{/if}

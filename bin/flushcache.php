@@ -22,4 +22,11 @@ if (delTree(ROUTES_CACHE_PATH)) {
 	echo error_get_last()["message"];
 }
 
+if (delTree(CONFIG_CACHE_PATH)) {
+	echo 'Instelling cache succesvol verwijderd';
+} else {
+	echo 'Instelling cache verwijderen mislukt';
+	echo error_get_last()["message"];
+}
+
 

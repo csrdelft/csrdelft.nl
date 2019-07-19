@@ -52,15 +52,15 @@
 	</td>
 	<td>{$taak->datum|date_format:"%a %e %b"}</td>
 	<td style="width: 100px;">{$taak->getCorveeFunctie()->naam}</td>
-	<td class="niet-dik taak-{if $taak->uid}toegewezen{elseif  $taak->getBeginMoment() < strtotime(CsrDelft\model\InstellingenModel::get('corvee', 'waarschuwing_taaktoewijzing_vooraf'))}warning{else}open{/if}">
+	<td class="niet-dik taak-{if $taak->uid}toegewezen{elseif  $taak->getBeginMoment() < strtotime(instelling('corvee', 'waarschuwing_taaktoewijzing_vooraf'))}warning{else}open{/if}">
 {if isset($wijzigbaar)}
 		<a href="{$smarty.const.maalcieUrl}/toewijzen/{$taak->taak_id}" id="taak-{$taak->taak_id}" title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="btn post popup dragobject ruilen" style="position: static;"{if $taak->uid} uid="{$taak->uid}">{icon get="user_green"}{else}>{icon get="user_red"}{/if}</a>
 {/if}
 {if $taak->uid}
-		&nbsp;{CsrDelft\model\ProfielModel::getLink($taak->uid,CsrDelft\model\InstellingenModel::get('corvee', 'weergave_ledennamen_beheer'))}
+		&nbsp;{CsrDelft\model\ProfielModel::getLink($taak->uid,instelling('corvee', 'weergave_ledennamen_beheer'))}
 {/if}
 	</td>
-	<td{if $taak->uid and ($taak->punten !== $taak->punten_toegekend or $taak->bonus_malus !== $taak->bonus_toegekend) and $taak->getBeginMoment() < strtotime(CsrDelft\model\InstellingenModel::get('corvee', 'waarschuwing_puntentoewijzing_achteraf'))} class="taak-warning"{/if}>
+	<td{if $taak->uid and ($taak->punten !== $taak->punten_toegekend or $taak->bonus_malus !== $taak->bonus_toegekend) and $taak->getBeginMoment() < strtotime(instelling('corvee', 'waarschuwing_puntentoewijzing_achteraf'))} class="taak-warning"{/if}>
 		{$taak->punten_toegekend}
 {if $taak->bonus_toegekend > 0}
 	+

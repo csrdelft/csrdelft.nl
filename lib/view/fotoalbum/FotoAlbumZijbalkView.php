@@ -10,7 +10,6 @@ namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\groepen\LichtingenModel;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\view\View;
 
 class FotoAlbumZijbalkView implements View {
@@ -38,8 +37,8 @@ class FotoAlbumZijbalkView implements View {
 		echo '<div class="fotos">';
 		$fotos = $this->model->getFotos();
 		$limit = count($fotos);
-		if ($limit > LidInstellingenModel::get('zijbalk', 'fotos')) {
-			$limit = LidInstellingenModel::get('zijbalk', 'fotos');
+		if ($limit > lid_instelling('zijbalk', 'fotos')) {
+			$limit = lid_instelling('zijbalk', 'fotos');
 		}
 		shuffle($fotos);
 		for ($i = 0; $i < $limit; $i++) {

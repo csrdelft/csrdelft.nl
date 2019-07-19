@@ -5,7 +5,6 @@ namespace CsrDelft\model\forum;
 use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadReageren;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
 
@@ -44,15 +43,15 @@ class ForumDradenReagerenModel extends PersistenceModel {
 	}
 
 	public function getReagerenVoorDraad(ForumDraad $draad) {
-		return $this->find('draad_id = ? AND uid != ? AND datum_tijd > ?', array($draad->draad_id, LoginModel::getUid(), getDateTime(strtotime(InstellingenModel::get('forum', 'reageren_tijd')))));
+		return $this->find('draad_id = ? AND uid != ? AND datum_tijd > ?', array($draad->draad_id, LoginModel::getUid(), getDateTime(strtotime(instelling('forum', 'reageren_tijd')))));
 	}
 
 	public function getReagerenVoorDeel(ForumDeel $deel) {
-		return $this->find('forum_id = ? AND draad_id = 0 AND uid != ? AND datum_tijd > ?', array($deel->forum_id, LoginModel::getUid(), getDateTime(strtotime(InstellingenModel::get('forum', 'reageren_tijd')))));
+		return $this->find('forum_id = ? AND draad_id = 0 AND uid != ? AND datum_tijd > ?', array($deel->forum_id, LoginModel::getUid(), getDateTime(strtotime(instelling('forum', 'reageren_tijd')))));
 	}
 
 	public function verwijderLegeConcepten() {
-		foreach ($this->find('concept IS NULL AND datum_tijd < ?', array(getDateTime(strtotime(InstellingenModel::get('forum', 'reageren_tijd'))))) as $reageren) {
+		foreach ($this->find('concept IS NULL AND datum_tijd < ?', array(getDateTime(strtotime(instelling('forum', 'reageren_tijd'))))) as $reageren) {
 			$this->delete($reageren);
 		}
 	}

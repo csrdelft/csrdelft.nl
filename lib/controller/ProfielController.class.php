@@ -28,10 +28,8 @@ use CsrDelft\model\groepen\OnderverenigingenModel;
 use CsrDelft\model\groepen\RechtenGroepenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\groepen\WerkgroepenModel;
-use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\LedenMemoryScoresModel;
-use CsrDelft\model\LidInstellingenModel;
-use CsrDelft\model\LidToestemmingModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
@@ -51,7 +49,6 @@ use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
 use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\profiel\ProfielForm;
-use CsrDelft\view\StamboomView;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 
 /**
@@ -168,9 +165,9 @@ class ProfielController extends AclController {
 			'corveevrijstelling' => CorveeVrijstellingenModel::instance()->getVrijstelling($uid),
 			'corveekwalificaties' => KwalificatiesModel::instance()->getKwalificatiesVanLid($uid),
 			'forumpostcount' => ForumPostsModel::instance()->getAantalForumPostsVoorLid($uid),
-			'forumrecent' => ForumPostsModel::instance()->getRecenteForumPostsVanLid($uid, (int)LidInstellingenModel::get('forum', 'draden_per_pagina')),
+			'forumrecent' => ForumPostsModel::instance()->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
 			'boeken' => BoekExemplaarModel::getEigendom($uid),
-			'recenteAanmeldingen' => MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid($uid, strtotime(InstellingenModel::get('maaltijden', 'recent_lidprofiel'))),
+			'recenteAanmeldingen' => MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid($uid, strtotime(instelling('maaltijden', 'recent_lidprofiel'))),
 			'abos' => MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($uid),
 			'gerecenseerdeboeken' => BoekRecensieModel::getVoorLid($uid),
 			'fotos' => $fotos

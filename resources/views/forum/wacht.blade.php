@@ -28,7 +28,7 @@
 							</span>
 					</div>
 					<div class="niet-dik">
-						@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
+						@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 							{!! reldate($draad->datum_tijd) !!}
 						@else
 							{{$draad->datum_tijd}}

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\model\LidToestemmingModel;
+use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\view\formulier\ModalForm;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 

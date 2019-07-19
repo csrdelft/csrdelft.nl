@@ -5,7 +5,7 @@ namespace CsrDelft\view;
 use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\entity\agenda\AgendaItem;
 use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 
 class IsHetAlView implements View {

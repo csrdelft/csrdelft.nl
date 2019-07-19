@@ -6,14 +6,14 @@
 <meta name="theme-color" content="#0a3292">
 <meta name="robots" content="index, follow" />
 <meta name="author" content="PubCie C.S.R. Delft" />
-<meta name="description" content="{{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}}">
+<meta name="description" content="{{instelling('stek', 'beschrijving')}}">
 <meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE" />
 <meta name="apple-itunes-app" content="app-id=1112148892, app-argument={{CSR_ROOT}}{{REQUEST_URI}}">
 <meta property="og:url" content="{{CSR_ROOT}}{{REQUEST_URI}}" />
 <meta property="og:title" content="C.S.R. Delft | @yield('titel')" />
 <meta property="og:locale" content="nl_nl" />
 <meta property="og:image" content="{{CSR_ROOT}}/dist/images/beeldmerk.png" />
-<meta property="og:description" content="{{CsrDelft\model\InstellingenModel::get('stek', 'beschrijving')}}" />
+<meta property="og:description" content="{{instelling('stek', 'beschrijving')}}" />
 {!! csrfMetaTag() !!}
 <title>C.S.R. Delft - @yield('titel')</title>
 <link rel="shortcut icon" href="{{CSR_ROOT}}/images/favicon.ico" />

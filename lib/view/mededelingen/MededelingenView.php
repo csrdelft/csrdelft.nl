@@ -5,7 +5,6 @@ namespace CsrDelft\view\mededelingen;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\mededelingen\Mededeling;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\mededelingen\MededelingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\SmartyTemplateView;
@@ -116,11 +115,11 @@ class MededelingenView extends SmartyTemplateView {
 			$this->smarty->assign('pagina_root', self::MEDEDELINGEN_ROOT . 'prullenbak/');
 		}
 		$this->smarty->assign('model', $this->model);
-		$this->smarty->assign('lijst', $this->model->getLijstVanPagina($this->paginaNummer, LidInstellingenModel::get('mededelingen', 'aantalPerPagina'), $this->prullenbak));
+		$this->smarty->assign('lijst', $this->model->getLijstVanPagina($this->paginaNummer, lid_instelling('mededelingen', 'aantalPerPagina'), $this->prullenbak));
 		$this->smarty->assign('geselecteerdeMededeling', $this->geselecteerdeMededeling);
 		$this->smarty->assign('wachtGoedkeuring', $this->model->getLijstWachtGoedkeuring());
 		$this->smarty->assign('huidigePagina', $this->paginaNummer);
-		$this->smarty->assign('totaalAantalPaginas', (ceil($this->model->getAantal($this->prullenbak) / LidInstellingenModel::get('mededelingen', 'aantalPerPagina'))));
+		$this->smarty->assign('totaalAantalPaginas', (ceil($this->model->getAantal($this->prullenbak) / lid_instelling('mededelingen', 'aantalPerPagina'))));
 		$this->smarty->assign('datumtijdFormaat', '%d-%m-%Y %H:%M');
 		$this->smarty->display('mededelingen/mededelingen.tpl');
 	}

@@ -4,7 +4,6 @@ namespace CsrDelft\model\entity\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -87,11 +86,11 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 			return false;
 		}
 
-		for ($i = intval(InstellingenModel::get('corvee', 'herinnering_aantal_mails')); $i > 0; $i--) {
+		for ($i = intval(instelling('corvee', 'herinnering_aantal_mails')); $i > 0; $i--) {
 
 			if ($aantal < $i &&
-				$nu >= strtotime(InstellingenModel::get('corvee', 'herinnering_' . $i . 'e_mail'), $datum) &&
-				$nu <= strtotime(InstellingenModel::get('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk'), $datum)
+				$nu >= strtotime(instelling('corvee', 'herinnering_' . $i . 'e_mail'), $datum) &&
+				$nu <= strtotime(instelling('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk'), $datum)
 			) {
 				return true;
 			}
@@ -111,8 +110,8 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 		$nu = strtotime(date('Y-m-d'));
 		$moeten = 0;
 
-		for ($i = intval(InstellingenModel::get('corvee', 'herinnering_aantal_mails')); $i > 0; $i--) {
-			$uiterlijk = strtotime(InstellingenModel::get('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk'), $datum);
+		for ($i = intval(instelling('corvee', 'herinnering_aantal_mails')); $i > 0; $i--) {
+			$uiterlijk = strtotime(instelling('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk'), $datum);
 			if ($nu >= $uiterlijk) {
 				$moeten++;
 			}

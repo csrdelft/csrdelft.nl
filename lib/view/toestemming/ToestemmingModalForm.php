@@ -4,8 +4,7 @@ namespace CsrDelft\view\toestemming;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\LidToestemming;
-use CsrDelft\model\InstellingenModel;
-use CsrDelft\model\LidToestemmingModel;
+use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrSmarty;
 use CsrDelft\view\formulier\elementen\HtmlComment;
@@ -34,18 +33,17 @@ class ToestemmingModalForm extends ModalForm {
 		$this->nieuw = $nieuw;
 
 		$smarty = CsrSmarty::instance();
-		$model = LidToestemmingModel::instance();
 		$fields = [];
 
 		$akkoord = null;
 
-		$instellingen = $model->getRelevantToestemmingCategories(LoginModel::getProfiel()->isLid());
+		$instellingen = LidToestemmingModel::instance()->getRelevantToestemmingCategories(LoginModel::getProfiel()->isLid());
 
 		foreach ($instellingen as $module => $instelling) {
 			foreach ($instelling as $id) {
-				if ($model->getValue($module, $id) == 'ja' && $akkoord == null) {
+				if (LidToestemmingModel::instance()->getValue($module, $id) == 'ja' && $akkoord == null) {
 					$akkoord = 'ja';
-				} elseif ($model->getValue($module, $id) == 'nee') {
+				} elseif (LidToestemmingModel::instance()->getValue($module, $id) == 'nee') {
 					$akkoord = 'nee';
 				}
 
@@ -53,12 +51,12 @@ class ToestemmingModalForm extends ModalForm {
 			}
 		}
 
-		$smarty->assign('beleid', InstellingenModel::get('privacy', 'beleid_kort'));
-		$smarty->assign('beschrijvingBestuur', InstellingenModel::get('privacy', 'beschrijving_bestuur'));
-		$smarty->assign('beschrijvingBijzonder', InstellingenModel::get('privacy', 'beschrijving_bijzonder'));
-		$smarty->assign('beschrijvingVereniging', InstellingenModel::get('privacy', 'beschrijving_vereniging'));
-		$smarty->assign('beschrijvingExternFoto', InstellingenModel::get('privacy', 'beschrijving_foto_extern'));
-		$smarty->assign('beschrijvingInternFoto', InstellingenModel::get('privacy', 'beschrijving_foto_intern'));
+		$smarty->assign('beleid', instelling('privacy', 'beleid_kort'));
+		$smarty->assign('beschrijvingBestuur', instelling('privacy', 'beschrijving_bestuur'));
+		$smarty->assign('beschrijvingBijzonder', instelling('privacy', 'beschrijving_bijzonder'));
+		$smarty->assign('beschrijvingVereniging', instelling('privacy', 'beschrijving_vereniging'));
+		$smarty->assign('beschrijvingExternFoto', instelling('privacy', 'beschrijving_foto_extern'));
+		$smarty->assign('beschrijvingInternFoto', instelling('privacy', 'beschrijving_foto_intern'));
 		$smarty->assign('akkoordExternFoto', $this->maakToestemmingLine('algemeen', 'foto_extern'));
 		$smarty->assign('akkoordInternFoto', $this->maakToestemmingLine('algemeen', 'foto_intern'));
 		$smarty->assign('akkoordVereniging', $this->maakToestemmingLine('algemeen', 'vereniging'));
@@ -68,6 +66,7 @@ class ToestemmingModalForm extends ModalForm {
 		$this->addFields([
 			new HtmlComment($smarty->fetch('toestemming/toestemming_head.tpl')),
 		]);
+
 
 		$this->formKnoppen = new FormDefaultKnoppen('/toestemming/annuleren', false);
 	}

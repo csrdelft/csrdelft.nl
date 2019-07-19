@@ -1,0 +1,75 @@
+instellingen:
+  algemeen:
+    foto_intern:
+      beschrijving: "Mijn foto's mogen op de interne stek geplaatst worden."
+      type: 'Enumeration'
+      opties: ['', 'ja', 'nee']
+      default: ''
+    foto_extern:
+      beschrijving: "Mijn foto's mogen op de externe stek geplaatst worden en voor promotiedoeleinden gebruikt worden."
+      type: 'Enumeration'
+      opties: ['', 'ja', 'nee']
+      default: ''
+    vereniging:
+      beschrijving: 'Het bestuur en commissies van C.S.R. mogen mijn persoonsgegevens gebruiken om hun taken uit te voeren.'
+      type: 'Enumeration'
+      opties: ['', 'ja', 'nee']
+      default: ''
+    bijzonder:
+      beschrijving: 'Het bestuur en commissies van C.S.R. mogen mijn bijzondere persoonsgegevens gebruiken om hun taken uit te voeren.'
+      type: 'Enumeration'
+      opties: ['', 'ja', 'nee']
+      default: ''
+  intern:  # Gegevens die niet directe velden in Profiel zijn
+    # C.S.R. Groepen
+    commissies: {titel: 'Commissies', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    werkgroepen: {titel: 'Werkgroepen', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    ondervereniging: {titel: 'Ondervereniging', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    groepen: {titel: 'Groepen', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    kring: {titel: 'Kring', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    verticale: {titel: 'Verticale', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+
+    # C.S.R. overig
+    forum_posts: {titel: 'Forumbijdragen', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    kinderen: {titel: 'Verenigingskinderen', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+
+    # Gegevens
+    naam: {titel: 'Naam', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    profielfoto: {titel: 'Profielfoto', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    fotos: {titel: "Getagde foto's", type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+  profiel:  # Matcht velden in Profiel
+    # naam
+    voorletters: {titel: 'Voorletters', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    nickname: {titel: 'Bijnaam', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    # fysiek
+    geslacht: {titel: 'Geslacht', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    gebdatum: {titel: 'Geboortedatum', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    # adres
+    adres: {titel: 'Straat + Huisnummer', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    postcode: {titel: 'Postcode', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    woonplaats: {titel: 'Woonplaats', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    land: {titel: 'Land', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    mobiel: {titel: 'Mobiel nummer', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    telefoon: {titel: 'Telefoonnummer', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    # Ouders
+    o_adres: {titel: 'Straat + Huisnummer ouders', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    o_postcode: {titel: 'Postcode ouders', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    o_woonplaats: {titel: 'Woonplaats ouders', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    o_land: {titel: 'Land ouders', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    o_telefoon: {titel: 'Telefoonnummer ouders', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    # studie
+    studie: {titel: 'Studie', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    studienr: {titel: 'Studie nummer', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    studiejaar: {titel: 'Studiejaar', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    # contact
+    email: {titel: 'Email', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    # lidmaatschap
+    status: {titel: 'Status', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''} # Willen we dit?
+    # civi-gegevens
+    patroon: {titel: 'Patroon/Matroon', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+    # Persoonlijk
+    eetwens: {titel: 'Allergie/dieet', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+  profiel_lid:
+    bankrekening: {titel: 'Bankrekeningnummer', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
+  profiel_oudlid:
+    echtgenoot: {titel: 'Echtgenoot', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}

@@ -52,7 +52,7 @@ suggesties_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 								{/if}
 							</td>
 							<td style="width: 140px;">
-								{CsrDelft\model\ProfielModel::get($uid)->getNaam(CsrDelft\model\InstellingenModel::get('corvee', 'weergave_ledennamen_beheer'))}
+								{CsrDelft\model\ProfielModel::get($uid)->getNaam(instelling('corvee', 'weergave_ledennamen_beheer'))}
 							</td>
 							{if $suggestie.laatste}
 								<td>{$suggestie.laatste->getBeginMoment()|date_format:"%d %b %Y"}</td>

@@ -3,7 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\controller\framework\AclController;
-use CsrDelft\model\InstellingenModel;
+use CsrDelft\model\instellingen\InstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\instellingen\InstellingBeheerView;

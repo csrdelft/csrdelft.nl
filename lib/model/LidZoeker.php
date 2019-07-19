@@ -6,6 +6,7 @@ use CsrDelft\common\MijnSqli;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;
@@ -399,7 +400,7 @@ class LidZoeker {
 	 */
 	private function zoekMag(Profiel $profiel, string $query) {
 		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
-		$zoekvelden = LidToestemmingModel::instance()->getModuleInstellingen('profiel');
+		$zoekvelden = LidToestemmingModel::instance()->getModuleKeys('profiel');
 		foreach ($zoekvelden as $veld) {
 			if ($veld === 'status') {
 				continue;

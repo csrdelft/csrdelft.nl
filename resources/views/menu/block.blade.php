@@ -10,7 +10,7 @@
 		<div class="item @if($item->active) active @endif @if($root->tekst == 'Sponsors') ads @endif">
 			&raquo;
 			<a href="{{$item->link}}" title="{{$item->tekst}}"
-				 @if($item->isOngelezen()) class="{CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave')}" @endif>
+				 @if($item->isOngelezen()) class="{{lid_instelling('forum', 'ongelezenWeergave')}}" @endif>
 				{{$item->tekst}}
 			</a>
 		</div>

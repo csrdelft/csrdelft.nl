@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\controller\framework\AclController;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
@@ -64,7 +63,7 @@ class MijnMaaltijdenController extends AclController {
 	public function ketzer() {
 		$maaltijden = $this->model->getKomendeMaaltijdenVoorLid(LoginModel::getUid());
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid($maaltijden, LoginModel::getUid());
-		$timestamp = strtotime(InstellingenModel::get('maaltijden', 'beoordeling_periode'));
+		$timestamp = strtotime(instelling('maaltijden', 'beoordeling_periode'));
 		$recent = MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid(LoginModel::getUid(), $timestamp);
 		$this->view = new MijnMaaltijdenView($maaltijden, $aanmeldingen, $recent);
 		$this->view = new CsrLayoutPage($this->view);

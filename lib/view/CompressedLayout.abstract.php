@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 
 /**
@@ -40,18 +39,18 @@ abstract class CompressedLayout extends HtmlPage {
 		}
 
 		//voeg modules toe afhankelijk van instelling
-		$modules[] = 'thema-' . LidInstellingenModel::get('layout', 'opmaak');
+		$modules[] = 'thema-' . lid_instelling('layout', 'opmaak');
 
 		// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
 
-		if (LidInstellingenModel::get('layout', 'toegankelijk') == 'bredere letters') {
+		if (lid_instelling('layout', 'toegankelijk') == 'bredere letters') {
 			$modules[] = 'bredeletters';
 		}
-		if (LidInstellingenModel::get('layout', 'fx') == 'sneeuw') {
+		if (lid_instelling('layout', 'fx') == 'sneeuw') {
 			$modules[] = 'effect-snow';
-		} elseif (LidInstellingenModel::get('layout', 'fx') == 'space') {
+		} elseif (lid_instelling('layout', 'fx') == 'space') {
 			$modules[] = 'effect-space';
-		} elseif (LidInstellingenModel::get('layout', 'fx') == 'civisaldo') {
+		} elseif (lid_instelling('layout', 'fx') == 'civisaldo') {
 			$modules[] = 'effect-civisaldo';
 		}
 

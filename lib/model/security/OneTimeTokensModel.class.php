@@ -4,7 +4,6 @@ namespace CsrDelft\model\security;
 
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\entity\security\OneTimeToken;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\Orm\PersistenceModel;
 
 /**
@@ -69,7 +68,7 @@ class OneTimeTokensModel extends PersistenceModel {
 		$token->uid = $uid;
 		$token->url = $url;
 		$token->token = hash('sha512', $rand);
-		$token->expire = getDateTime(strtotime(InstellingenModel::get('beveiliging', 'one_time_token_expire_after')));
+		$token->expire = getDateTime(strtotime(instelling('beveiliging', 'one_time_token_expire_after')));
 		$token->verified = false;
 		if ($this->exists($token)) {
 			$this->update($token);

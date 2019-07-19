@@ -5,7 +5,6 @@ namespace CsrDelft\common;
 use CsrDelft\model\entity\GoogleToken;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\GoogleTokenModel;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use DOMDocument;
@@ -92,8 +91,8 @@ class GoogleSync {
 			throw new CsrException('Authsub token not available, use doRequestToken.');
 		}
 
-		if (LidInstellingenModel::get('googleContacts', 'groepnaam') != '') {
-			$this->groupname = trim(LidInstellingenModel::get('googleContacts', 'groepnaam'));
+		if (lid_instelling('googleContacts', 'groepnaam') != '') {
+			$this->groupname = trim(lid_instelling('googleContacts', 'groepnaam'));
 			if ($this->groupname == '') {
 				$this->groupname = 'C.S.R.-import';
 			}

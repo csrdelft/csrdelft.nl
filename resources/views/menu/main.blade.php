@@ -1,6 +1,6 @@
 <nav id="menu" class="cd-nav">
 	<ul id="cd-primary-nav" class="cd-primary-nav"
-			@if (CsrDelft\model\LidInstellingenModel::get('layout', 'fx') != 'nee') style="opacity:0.8;" @endif>
+			@if (lid_instelling('layout', 'fx') != 'nee') style="opacity:0.8;" @endif>
 		@can(P_LOGGED_IN)
 			<li>
 				<a id="cd-main-trigger" class="mobiel-hidden trigger" href="#menu">

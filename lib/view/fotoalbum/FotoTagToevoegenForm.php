@@ -3,7 +3,6 @@
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\model\entity\fotoalbum\Foto;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\InlineForm;
 use CsrDelft\view\formulier\invoervelden\LidField;
@@ -12,7 +11,7 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 class FotoTagToevoegenForm extends InlineForm {
 
 	public function __construct(Foto $foto) {
-		$field = new LidField('uid', null, null, LidInstellingenModel::get('fotoalbum', 'tag_suggestions'));
+		$field = new LidField('uid', null, null, lid_instelling('fotoalbum', 'tag_suggestions'));
 		$field->placeholder = 'Naam of lidnummer';
 		parent::__construct(null, '/fotoalbum/addtag/' . $foto->subdir, $field, false, false);
 

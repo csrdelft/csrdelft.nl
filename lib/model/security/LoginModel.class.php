@@ -9,7 +9,6 @@ use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
 use CsrDelft\model\entity\security\RememberLogin;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
@@ -193,8 +192,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 		// Controleer of wachtwoord is verlopen
 		$pass_since = strtotime($account->pass_since);
-		$verloop_na = strtotime(InstellingenModel::get('beveiliging', 'wachtwoorden_verlopen_ouder_dan'));
-		$waarschuwing_vooraf = strtotime(InstellingenModel::get('beveiliging', 'wachtwoorden_verlopen_waarschuwing_vooraf'), $verloop_na);
+		$verloop_na = strtotime(instelling('beveiliging', 'wachtwoorden_verlopen_ouder_dan'));
+		$waarschuwing_vooraf = strtotime(instelling('beveiliging', 'wachtwoorden_verlopen_waarschuwing_vooraf'), $verloop_na);
 		if ($pass_since < $verloop_na) {
 			if (!startsWith(REQUEST_URI, '/wachtwoord')
 				AND !startsWith(REQUEST_URI, '/verify/')

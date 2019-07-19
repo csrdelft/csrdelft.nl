@@ -3,7 +3,6 @@
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\model\entity\fotoalbum\Foto;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\view\SmartyTemplateView;
 
 class FotoBBView extends SmartyTemplateView {
@@ -30,13 +29,13 @@ class FotoBBView extends SmartyTemplateView {
 		if ($this->responsive) {
 			$html .= 'responsive';
 		}
-		if (!$this->groot AND LidInstellingenModel::get('forum', 'fotoWeergave') == 'boven bericht') {
+		if (!$this->groot AND lid_instelling('forum', 'fotoWeergave') == 'boven bericht') {
 			$html .= ' hoverIntent"><div class="hoverIntentContent"><div class="bb-img-loading" src="' . $this->model->getResizedUrl() . '"></div></div>';
 		} else {
 			$html .= '">';
 		}
 		$html .= '<div class="bb-img-loading" src="';
-		if (($this->groot AND LidInstellingenModel::get('forum', 'fotoWeergave') != 'nee') OR LidInstellingenModel::get('forum', 'fotoWeergave') == 'in bericht') {
+		if (($this->groot AND lid_instelling('forum', 'fotoWeergave') != 'nee') OR lid_instelling('forum', 'fotoWeergave') == 'in bericht') {
 			$html .= $this->model->getResizedUrl();
 		} else {
 			$html .= $this->model->getThumbUrl();

@@ -2,7 +2,7 @@
 	beheer_punten_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <tr id="punten-row-{$puntenlijst.lid->uid}">
-	<td>{$puntenlijst.lid->getNaam(CsrDelft\model\InstellingenModel::get('corvee', 'weergave_ledennamen_beheer'))}</td>
+	<td>{$puntenlijst.lid->getNaam(instelling('corvee', 'weergave_ledennamen_beheer'))}</td>
 {foreach from=$puntenlijst.aantal key=fid item=aantal}
 	<td>{strip}
 	{if $aantal !== 0}

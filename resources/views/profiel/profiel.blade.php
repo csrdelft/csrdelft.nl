@@ -527,14 +527,14 @@
 										<td><a href="/forum/reactie/{{$post->post_id}}#{{$post->post_id}}"
 													 title="{{$post->tekst}}"
 													 @if($post->getForumDraad()->isOngelezen())
-													 class="{{\CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave')}}"
+													 class="{{lid_instelling('forum', 'ongelezenWeergave')}}"
 												@endif
 											>
 												{{truncate($post->getForumDraad()->titel, 75)}}
 											</a>
 										</td>
 										<td>
-											@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
+											@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 												{!! reldate($post->datum_tijd) !!}
 											@else
 												{{$post->datum_tijd}}

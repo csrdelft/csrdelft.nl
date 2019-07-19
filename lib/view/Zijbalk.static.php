@@ -8,7 +8,6 @@ use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
@@ -26,14 +25,14 @@ abstract class Zijbalk {
 
 	public static function addStandaardZijbalk(array $zijbalk) {
 		// Favorieten menu
-		if (LoginModel::mag(P_LOGGED_IN) AND LidInstellingenModel::get('zijbalk', 'favorieten') == 'ja') {
+		if (LoginModel::mag(P_LOGGED_IN) AND lid_instelling('zijbalk', 'favorieten') == 'ja') {
 			$menu = MenuModel::instance()->getMenu(LoginModel::getUid());
 			$menu->tekst = 'Favorieten';
 			array_unshift($zijbalk, view('menu.block', ['root' => $menu]));
 		}
 		// Is het al...
-		if (LidInstellingenModel::get('zijbalk', 'ishetal') != 'niet weergeven') {
-			array_unshift($zijbalk, new IsHetAlView(LidInstellingenModel::get('zijbalk', 'ishetal')));
+		if (lid_instelling('zijbalk', 'ishetal') != 'niet weergeven') {
+			array_unshift($zijbalk, new IsHetAlView(lid_instelling('zijbalk', 'ishetal')));
 		}
 
 		// Sponsors
@@ -44,62 +43,62 @@ abstract class Zijbalk {
 		}
 
 		// Agenda
-		if (LoginModel::mag(P_AGENDA_READ) && LidInstellingenModel::get('zijbalk', 'agendaweken') > 0 && LidInstellingenModel::get('zijbalk', 'agenda_max') > 0) {
-			$aantalWeken = LidInstellingenModel::get('zijbalk', 'agendaweken');
+		if (LoginModel::mag(P_AGENDA_READ) && lid_instelling('zijbalk', 'agendaweken') > 0 && lid_instelling('zijbalk', 'agenda_max') > 0) {
+			$aantalWeken = lid_instelling('zijbalk', 'agendaweken');
 			$beginMoment = strtotime(date('Y-m-d'));
 			$eindMoment = strtotime('+' . $aantalWeken . ' weeks', $beginMoment);
 			$eindMoment = strtotime('next saturday', $eindMoment);
 			$items = AgendaModel::instance()->getAllAgendeerbaar($beginMoment, $eindMoment, false, true);
-			if (count($items) > LidInstellingenModel::get('zijbalk', 'agenda_max')) {
-				$items = array_slice($items, 0, LidInstellingenModel::get('zijbalk', 'agenda_max'));
+			if (count($items) > lid_instelling('zijbalk', 'agenda_max')) {
+				$items = array_slice($items, 0, lid_instelling('zijbalk', 'agenda_max'));
 			}
 			$zijbalk[] = view('agenda.zijbalk', ['items' => $items]);
 		}
 		// Laatste mededelingen
-		if (LidInstellingenModel::get('zijbalk', 'mededelingen') > 0) {
-			$zijbalk[] = new MededelingenZijbalkView((int)LidInstellingenModel::get('zijbalk', 'mededelingen'));
+		if (lid_instelling('zijbalk', 'mededelingen') > 0) {
+			$zijbalk[] = new MededelingenZijbalkView((int)lid_instelling('zijbalk', 'mededelingen'));
 		}
 		// Nieuwste belangrijke forumberichten
-		if (LidInstellingenModel::get('zijbalk', 'forum_belangrijk') > 0) {
+		if (lid_instelling('zijbalk', 'forum_belangrijk') > 0) {
 			$zijbalk[] = view('forum.partial.draad_zijbalk', [
-				'draden' => ForumDradenModel::instance()->getRecenteForumDraden((int)LidInstellingenModel::get('zijbalk', 'forum_belangrijk'), true),
+				'draden' => ForumDradenModel::instance()->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum_belangrijk'), true),
 				'aantalWacht' => ForumPostsModel::instance()->getAantalWachtOpGoedkeuring(),
 				'belangrijk' => true
 			]);
 		}
 		// Nieuwste forumberichten
-		if (LidInstellingenModel::get('zijbalk', 'forum') > 0) {
-			$belangrijk = (LidInstellingenModel::get('zijbalk', 'forum_belangrijk') > 0 ? false : null);
+		if (lid_instelling('zijbalk', 'forum') > 0) {
+			$belangrijk = (lid_instelling('zijbalk', 'forum_belangrijk') > 0 ? false : null);
 			$zijbalk[] = view('forum.partial.draad_zijbalk', [
-				'draden' => ForumDradenModel::instance()->getRecenteForumDraden((int)LidInstellingenModel::get('zijbalk', 'forum'), $belangrijk),
+				'draden' => ForumDradenModel::instance()->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum'), $belangrijk),
 				'aantalWacht' => ForumPostsModel::instance()->getAantalWachtOpGoedkeuring(),
 				'belangrijk' => $belangrijk
 			]);
 		}
 		// Zelfgeposte forumberichten
-		if (LidInstellingenModel::get('zijbalk', 'forum_zelf') > 0) {
-			$posts = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginModel::getUid(), (int)LidInstellingenModel::get('zijbalk', 'forum_zelf'), true);
+		if (lid_instelling('zijbalk', 'forum_zelf') > 0) {
+			$posts = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginModel::getUid(), (int)lid_instelling('zijbalk', 'forum_zelf'), true);
 			$zijbalk[] = view('forum.partial.post_zijbalk', ['posts' => $posts]);
 		}
 		// Ledenmemory topscores
-		if (LoginModel::mag(P_LEDEN_READ) AND LidInstellingenModel::get('zijbalk', 'ledenmemory_topscores') > 0) {
+		if (LoginModel::mag(P_LEDEN_READ) AND lid_instelling('zijbalk', 'ledenmemory_topscores') > 0) {
 			$lidjaar = LichtingenModel::getJongsteLidjaar();
 			$lichting = LichtingenModel::get($lidjaar);
-			$scores = LedenMemoryScoresModel::instance()->getGroepTopScores($lichting, (int)LidInstellingenModel::get('zijbalk', 'ledenmemory_topscores'));
+			$scores = LedenMemoryScoresModel::instance()->getGroepTopScores($lichting, (int)lid_instelling('zijbalk', 'ledenmemory_topscores'));
 			$zijbalk[] = new LedenMemoryZijbalkView($scores, $lidjaar);
 		}
 		// Nieuwste fotoalbum
-		if (LidInstellingenModel::get('zijbalk', 'fotoalbum') == 'ja') {
+		if (lid_instelling('zijbalk', 'fotoalbum') == 'ja') {
 			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
 			if ($album !== null) {
 				$zijbalk[] = new FotoAlbumZijbalkView($album);
 			}
 		}
 		// Komende verjaardagen
-		if (LoginModel::mag(P_LOGGED_IN) AND LidInstellingenModel::get('zijbalk', 'verjaardagen') > 0) {
+		if (LoginModel::mag(P_LOGGED_IN) AND lid_instelling('zijbalk', 'verjaardagen') > 0) {
 			$zijbalk[] = view('verjaardagen.komende', [
-				'verjaardagen' => VerjaardagenModel::getKomende((int)LidInstellingenModel::get('zijbalk', 'verjaardagen')),
-				'toonpasfotos' => LidInstellingenModel::get('zijbalk', 'verjaardagen_pasfotos') == 'ja',
+				'verjaardagen' => VerjaardagenModel::getKomende((int)lid_instelling('zijbalk', 'verjaardagen')),
+				'toonpasfotos' => lid_instelling('zijbalk', 'verjaardagen_pasfotos') == 'ja',
 			]);
 		}
 		return $zijbalk;

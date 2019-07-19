@@ -9,8 +9,6 @@ use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadGelezen;
 use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\forum\ForumZoeken;
-use CsrDelft\model\InstellingenModel;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
@@ -77,7 +75,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	) {
 		parent::__construct();
 		$this->pagina = 1;
-		$this->per_pagina = (int)LidInstellingenModel::get('forum', 'posts_per_pagina');
+		$this->per_pagina = (int)lid_instelling('forum', 'posts_per_pagina');
 		$this->aantal_paginas = array();
 		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
 	}
@@ -113,7 +111,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 			if ($draad->pagina_per_post) {
 				$this->per_pagina = 1;
 			} else {
-				$this->per_pagina = (int)LidInstellingenModel::get('forum', 'posts_per_pagina');
+				$this->per_pagina = (int)lid_instelling('forum', 'posts_per_pagina');
 			}
 			$this->aantal_paginas[$draad_id] = (int)ceil($this->count('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($draad_id)) / $this->per_pagina);
 		}
@@ -186,7 +184,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 			array_unshift($posts, $first_post);
 		}
 		// 2008-filter
-		if (LidInstellingenModel::get('forum', 'filter2008') == 'ja') {
+		if (lid_instelling('forum', 'filter2008') == 'ja') {
 			foreach ($posts as $post) {
 				if (startsWith($post->uid, '08')) {
 					$post->gefilterd = 'Bericht van 2008';
@@ -334,19 +332,19 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	}
 
 	public function getStatsTotal() {
-		$terug = getDateTime(strtotime(InstellingenModel::get('forum', 'grafiek_stats_periode')));
+		$terug = getDateTime(strtotime(instelling('forum', 'grafiek_stats_periode')));
 		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count');
 		return Database::instance()->sqlSelect($fields, $this->getTableName(), 'datum_tijd > ?', array($terug), 'timestamp');
 	}
 
 	public function getStatsVoorForumDeel(ForumDeel $deel) {
-		$terug = getDateTime(strtotime(InstellingenModel::get('forum', 'grafiek_stats_periode')));
+		$terug = getDateTime(strtotime(instelling('forum', 'grafiek_stats_periode')));
 		$fields = array('UNIX_TIMESTAMP(DATE(p.datum_tijd)) AS timestamp', 'COUNT(*) AS count');
 		return Database::instance()->sqlSelect($fields, $this->getTableName() . ' AS p RIGHT JOIN ' . ForumDradenModel::instance()->getTableName() . ' AS d ON p.draad_id = d.draad_id', 'd.forum_id = ? AND p.datum_tijd > ?', array($deel->forum_id, $terug), 'timestamp');
 	}
 
 	public function getStatsVoorDraad(ForumDraad $draad) {
-		$terug = getDateTime(strtotime(InstellingenModel::get('forum', 'grafiek_draad_recent'), strtotime($draad->laatst_gewijzigd)));
+		$terug = getDateTime(strtotime(instelling('forum', 'grafiek_draad_recent'), strtotime($draad->laatst_gewijzigd)));
 		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count');
 		return Database::instance()->sqlSelect($fields, $this->getTableName(), 'draad_id = ? AND datum_tijd > ?', array($draad->draad_id, $terug), 'timestamp');
 	}
