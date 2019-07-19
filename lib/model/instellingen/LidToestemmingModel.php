@@ -4,7 +4,7 @@ namespace CsrDelft\model\instellingen;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\yaml\YamlInstellingen;
-use CsrDelft\model\entity\LidInstelling;
+use CsrDelft\model\entity\instellingen\LidInstelling;
 use CsrDelft\model\entity\LidToestemming;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
