@@ -23,7 +23,6 @@ final class ShutdownHandler {
 		if ($debug !== null && self::isError($debug)) {
 			http_response_code(500);
 			view('fout.500')->view();
-			exit;
 		}
 	}
 
