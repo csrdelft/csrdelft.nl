@@ -1,8 +1,11 @@
 @extends('eetplan.template')
 
 @section('breadcrumbs')
-	@parent
-	» <a href="/groepen/woonoorden/' . {{$woonoord->id}} . '">{{$woonoord->naam}}</a>
+	{!! csr_breadcrumbs([
+	'/' => 'main',
+	'/eetplan' => 'Eetplan',
+	'/eetplan/huis' => '<a href="/groepen/woonoorden/' . $woonoord->id . '">' . $woonoord->naam . '</a>',
+	]) !!}
 @endsection
 
 @section('content')

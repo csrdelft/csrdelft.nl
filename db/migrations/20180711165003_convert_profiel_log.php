@@ -1,5 +1,5 @@
 <?php
-require_once 'autoload.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
 use Phinx\Migration\AbstractMigration;
 use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;

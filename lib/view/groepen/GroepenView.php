@@ -48,7 +48,9 @@ class GroepenView implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/groepen" title="Groepen"><span class="fa fa-users module-icon"></span></a> » <span class="active">' . $this->getTitel() . '</span>';
+		return '<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
+			. '<li class="breadcrumb-item"><a href="/groepen">Groepen</a></li>'
+			. '<li class="breadcrumb-item active">' . $this->getTitel() . '</li>';
 	}
 
 	public function getModel() {

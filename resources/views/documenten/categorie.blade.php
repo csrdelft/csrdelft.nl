@@ -5,7 +5,11 @@ Documenten in categorie: {{ $categorie->naam }}
 @endsection
 
 @section('breadcrumbs')
-	<a href="/documenten" title="Documenten"><span class="fa fa-file-text module-icon"></span></a> » <span class="active">{{$categorie->naam}}</span>
+	{!! csr_breadcrumbs([
+	'/' => 'main',
+	'/documenten' => 'Documenten',
+	'' => $categorie->naam,
+	]) !!}
 @endsection
 
 @section('content')

@@ -6,14 +6,14 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\LidToestemmingModel;
+use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\toestemming\ToestemmingModalForm;
-use CsrDelft\view\toestemming\ToestemmingLijstTable;
 use CsrDelft\view\toestemming\ToestemmingLijstResponse;
+use CsrDelft\view\toestemming\ToestemmingLijstTable;
+use CsrDelft\view\toestemming\ToestemmingModalForm;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

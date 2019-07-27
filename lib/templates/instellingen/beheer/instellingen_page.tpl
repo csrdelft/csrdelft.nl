@@ -32,7 +32,7 @@
 		</thead>
 		<tbody>
 			{foreach from=$instellingen item=id}
-				{include file='instellingen/beheer/instelling_row.tpl' waarde=CsrDelft\model\InstellingenModel::get($module, $id)}
+				{include file='instellingen/beheer/instelling_row.tpl' waarde=instelling($module, $id)}
 			{/foreach}
 		</tbody>
 	</table>

@@ -2,16 +2,18 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbTag;
+
 /**
  * Image
  *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @since 27/03/2019
  * @param string optional $arguments['class'] Class attribute
  * @param string optional $arguments['float'] CSS float left or right
  * @param integer optional $arguments['w'] CSS width in pixels
  * @param integer optional $arguments['h'] CSS height in pixels
  *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @since 27/03/2019
  * @example [img class=special float=left w=20 h=50]URL[/img]
  */
 class BbImg extends BbTag {

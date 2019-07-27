@@ -119,14 +119,10 @@ HTML;
 }
 
 public function view() {
-$smarty = CsrSmarty::instance();
-$smarty->assign('titel', $this->getTitel());
-$smarty->assign('stylesheets', $this->getStylesheets());
-$smarty->assign('scripts', $this->getScripts());
 ?><!DOCTYPE html>
 <html>
 <head>
-	<?= $smarty->fetch('html_head.tpl') ?>
+	<?php view('head')->view() ?>
 </head>
 <body data-groep="<?= $this->groep->getUUID() ?>">
 <table>

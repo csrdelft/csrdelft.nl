@@ -99,11 +99,11 @@ class GroepStatistiekView extends GroepTabView {
 	public function getTabContent() {
 		$statistieken = $this->groep->getStatistieken();
 
-		$verticale = $this->verticale($statistieken['verticale']);
-		$geslacht = $this->geslacht($statistieken['geslacht']);
-		$lichting = $this->lichting($statistieken['lichting']);
-		$tijd = $this->tijd($statistieken['tijd']);
-		$totaal = $statistieken['totaal'];
+		$verticale = $this->verticale($statistieken->verticale);
+		$geslacht = $this->geslacht($statistieken->geslacht);
+		$lichting = $this->lichting($statistieken->lichting);
+		$tijd = $this->tijd($statistieken->tijd);
+		$totaal = $statistieken->totaal;
 
 		return <<<HTML
 <h4>Verticale</h4>

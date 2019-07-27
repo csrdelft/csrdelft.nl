@@ -2,7 +2,9 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\view\bbcode\CsrBbException;
+use CsrDelft\bb\BbException;
+use CsrDelft\bb\BbTag;
+use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\formulier\UrlDownloader;
 
 /**
@@ -28,14 +30,23 @@ class BbVideo extends BbTag {
 		list($content, $params, $previewthumb, $type, $id) = $this->processVideo();
 		$this->assertId($type, $id, $content);
 
-		return $this->lightLinkBlock('video', $content, $type . ' video', '', $previewthumb);
+		return BbHelper::lightLinkBlock('video', $content, $type . ' video', '', $previewthumb);
 	}
 
 	public function parse($arguments = []) {
 		list($content, $params, $previewthumb, $type, $id) = $this->processVideo();
 		$this->assertId($type, $id, $content);
 
-		return $this->video_preview($params, $previewthumb);
+		$params = json_encode($params);
+
+		return <<<HTML
+<div class="bb-video">
+	<div class="bb-video-preview" onclick="event.preventDefault();window.bbcode.bbvideoDisplay(this);" data-params='{$params}' title="Klik om de video af te spelen">
+		<div class="play-button fa fa-play-circle-o fa-5x"></div>
+		<div class="bb-img-loading" src="{$previewthumb}"></div>
+	</div>
+</div>
+HTML;
 	}
 
 	/**
@@ -104,10 +115,11 @@ class BbVideo extends BbTag {
 	 * @param $type
 	 * @param $id
 	 * @param $content
+	 * @throws BbException
 	 */
 	private function assertId($type, $id, $content) {
 		if (empty($type) || empty($id)) {
-			throw new CsrBbException('[video] Niet-ondersteunde video-website (' . htmlspecialchars($content) . ')');
+			throw new BbException('[video] Niet-ondersteunde video-website (' . htmlspecialchars($content) . ')');
 		}
 	}
 }

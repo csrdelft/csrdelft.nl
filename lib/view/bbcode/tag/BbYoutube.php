@@ -2,7 +2,9 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\view\bbcode\CsrBbException;
+use CsrDelft\bb\BbException;
+use CsrDelft\bb\BbTag;
+use CsrDelft\view\bbcode\BbHelper;
 
 /**
  * YouTube speler
@@ -24,15 +26,16 @@ class BbYoutube extends BbTag {
 		$id = $this->getArgument($arguments);
 		$this->assertId($id);
 
-		return $this->lightLinkBlock('youtube', 'https://youtu.be/' . $id, 'YouTube video', '', 'https://img.youtube.com/vi/' . $id . '/0.jpg');
+		return BbHelper::lightLinkBlock('youtube', 'https://youtu.be/' . $id, 'YouTube video', '', 'https://img.youtube.com/vi/' . $id . '/0.jpg');
 	}
 
 	/**
 	 * @param string|null $id
+	 * @throws BbException
 	 */
 	private function assertId($id) {
 		if (!preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
-			throw new CsrBbException('[youtube] Geen geldig youtube-id (' . htmlspecialchars($id) . ')');
+			throw new BbException('[youtube] Geen geldig youtube-id (' . htmlspecialchars($id) . ')');
 		}
 	}
 
@@ -47,6 +50,15 @@ class BbYoutube extends BbTag {
 		$attributes['src'] = '//www.youtube.com/embed/' . $id . '?autoplay=1';
 		$previewthumb = 'https://img.youtube.com/vi/' . $id . '/0.jpg';
 
-		return $this->video_preview($attributes, $previewthumb);
+		$params = json_encode($attributes);
+
+		return <<<HTML
+<div class="bb-video">
+	<div class="bb-video-preview" onclick="event.preventDefault();window.bbcode.bbvideoDisplay(this);" data-params='{$params}' title="Klik om de video af te spelen">
+		<div class="play-button fa fa-play-circle-o fa-5x"></div>
+		<div class="bb-img-loading" src="{$previewthumb}"></div>
+	</div>
+</div>
+HTML;
 	}
 }

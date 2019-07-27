@@ -4,10 +4,12 @@
 
 @section('breadcrumbs')
 	@php($deel = $draad->getForumDeel())
-	<a href="/forum" title="Forum"><span class="fa fa-wechat module-icon"></span></a>
-	» <span class="active">{{$deel->getForumCategorie()->titel}}</span>
-	» <a
-		href="/forum/deel/{{$deel->forum_id}}/{{\CsrDelft\model\forum\ForumDradenModel::instance()->getPaginaVoorDraad($draad)}}#{{$draad->draad_id}}">{{$deel->titel}}</a>
+	{!! csr_breadcrumbs([
+		'/' => 'main',
+		'/forum' => 'Forum',
+		'/forum/deel/' . $deel->forum_id => $deel->titel,
+		'' => $draad->titel,
+	]) !!}
 @endsection
 
 @section('content')
@@ -93,7 +95,7 @@
 	@elseif($draad->gesloten)
 		<div class="draad-gesloten">
 			U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
-			@if($draad->getForumDeel()->isOpenbaar() && strtotime($draad->laatst_gewijzigd) < strtotime(\CsrDelft\model\InstellingenModel::get('forum', 'externen_geentoegang_gesloten')))
+			@if($draad->getForumDeel()->isOpenbaar() && strtotime($draad->laatst_gewijzigd) < strtotime(instelling('forum', 'externen_geentoegang_gesloten')))
 				<div class="dikgedrukt">Dit externe onderwerp is niet meer toegankelijk voor externen en zoekmachines.</div>
 			@endif
 		</div>

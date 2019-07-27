@@ -9,8 +9,6 @@ use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\InstellingenModel;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
@@ -120,20 +118,20 @@ class AgendaModel extends PersistenceModel {
 		}
 
 		// Maaltijden
-		if (LidInstellingenModel::get('agenda', 'toonMaaltijden') === 'ja') {
+		if (lid_instelling('agenda', 'toonMaaltijden') === 'ja') {
 			$result = array_merge($result, $this->maaltijdenModel->getMaaltijdenVoorAgenda($van, $tot));
 		}
 
 		// CorveeTaken
-		if (LidInstellingenModel::get('agenda', 'toonCorvee') === 'iedereen') {
+		if (lid_instelling('agenda', 'toonCorvee') === 'iedereen') {
 			$result = array_merge($result, $this->corveeTakenModel->getTakenVoorAgenda($van, $tot, true));
-		} elseif (LidInstellingenModel::get('agenda', 'toonCorvee') === 'eigen') {
+		} elseif (lid_instelling('agenda', 'toonCorvee') === 'eigen') {
 			$result = array_merge($result, $this->corveeTakenModel->getTakenVoorAgenda($van, $tot, false));
 		}
 
 		// Verjaardagen
 		$toonVerjaardagen = ($ical ? 'toonVerjaardagenICal' : 'toonVerjaardagen');
-		if (!$zijbalk && LoginModel::mag(P_VERJAARDAGEN, $auth) AND LidInstellingenModel::get('agenda', $toonVerjaardagen) === 'ja') {
+		if (!$zijbalk && LoginModel::mag(P_VERJAARDAGEN, $auth) AND lid_instelling('agenda', $toonVerjaardagen) === 'ja') {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.
@@ -195,7 +193,7 @@ class AgendaModel extends PersistenceModel {
 	}
 
 	public function getICalendarItems() {
-		return $this->filterVerborgen($this->getAllAgendeerbaar(strtotime(InstellingenModel::get('agenda', 'ical_from')), strtotime(InstellingenModel::get('agenda', 'ical_to')), true));
+		return $this->filterVerborgen($this->getAllAgendeerbaar(strtotime(instelling('agenda', 'ical_from')), strtotime(instelling('agenda', 'ical_to')), true));
 	}
 
 	public function getItemsByDay($jaar, $maand, $dag) {
@@ -271,7 +269,7 @@ class AgendaModel extends PersistenceModel {
 		$item->begin_moment = getDateTime(strtotime($datum) + 72000);
 		$item->eind_moment = getDateTime(strtotime($datum) + 79200);
 		if (LoginModel::mag(P_AGENDA_MOD)) {
-			$item->rechten_bekijken = InstellingenModel::get('agenda', 'standaard_rechten');
+			$item->rechten_bekijken = instelling('agenda', 'standaard_rechten');
 		} else {
 			$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
 		}

@@ -9,7 +9,7 @@ use CsrDelft\view\datatable\Multiplicity;
 
 class EetplanBekendeHuizenTable extends DataTable {
 	public function __construct() {
-		parent::__construct(EetplanModel::ORM, '/eetplan/bekendehuizen/', 'Novieten die huizen kennen');
+		parent::__construct(EetplanModel::ORM, '/eetplan/bekendehuizen', 'Novieten die huizen kennen');
 		$this->hideColumn('avond');
 		$this->hideColumn('woonoord_id');
 		$this->hideColumn('uid');

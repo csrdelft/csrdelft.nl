@@ -9,7 +9,7 @@ use CsrDelft\view\datatable\Multiplicity;
 
 class EetplanBekendenTable extends DataTable {
 	public function __construct() {
-		parent::__construct(EetplanBekenden::class, '/eetplan/novietrelatie/', 'Novieten die elkaar kennen');
+		parent::__construct(EetplanBekenden::class, '/eetplan/novietrelatie', 'Novieten die elkaar kennen');
 		$this->addColumn('noviet1');
 		$this->addColumn('noviet2');
 		$this->searchColumn('noviet1');

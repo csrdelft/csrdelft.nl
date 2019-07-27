@@ -3,7 +3,6 @@
 namespace CsrDelft\view\maalcie\persoonlijk;
 
 use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\InstellingenModel;
 use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
@@ -56,7 +55,7 @@ class MijnMaaltijdenView extends SmartyTemplateView {
 	}
 
 	public function view() {
-		$this->smarty->assign('standaardprijs', intval(InstellingenModel::get('maaltijden', 'standaard_prijs')));
+		$this->smarty->assign('standaardprijs', intval(instelling('maaltijden', 'standaard_prijs')));
 		$this->smarty->assign('maaltijden', $this->model);
 		$this->smarty->assign('aanmeldingen', $this->aanmeldingen);
 		$this->smarty->assign('beoordelen', $this->beoordelen);

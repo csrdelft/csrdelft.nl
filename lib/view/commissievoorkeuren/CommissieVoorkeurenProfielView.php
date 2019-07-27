@@ -32,10 +32,14 @@ class CommissieVoorkeurenProfielView extends SmartyTemplateView {
 	public function view() {
 		$voorkeuren = CommissieVoorkeurModel::instance()->getVoorkeurenVoorLid($this->model);
 		$voorkeurenMap = array();
+		$commissies = VoorkeurCommissieModel::instance()->find('zichtbaar = 1')->fetchAll();
+		foreach ($commissies as $commissie) {
+			$voorkeurenMap[$commissie->id] = null;
+		}
 		foreach ($voorkeuren as $voorkeur) {
 			$voorkeurenMap[$voorkeur->cid] = $voorkeur;
 		}
-		$commissies = VoorkeurCommissieModel::instance()->find('zichtbaar = 1');
+
 		$opmerking = VoorkeurOpmerkingModel::instance()->getOpmerkingVoorLid($this->model);
 
 		$this->smarty->assign('profiel', $this->model);

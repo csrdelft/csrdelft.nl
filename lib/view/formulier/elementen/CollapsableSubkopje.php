@@ -91,4 +91,8 @@ JS;
 			'</div><div id="expand_kopje_' . $this->id . '" class="expanded-submenu" ' . ($this->collapsed ? 'style="display:none;"' : '') . '>';
 	}
 
+	public function view() {
+		echo $this->getHtml();
+	}
+
 }

@@ -13,7 +13,9 @@
 @section('titel', ucfirst($album->dirname))
 
 @section('breadcrumbs')
+	<ol class="breadcrumb">
 	{!! \CsrDelft\view\fotoalbum\FotoAlbumBreadcrumbs::getBreadcrumbs($album) !!}
+	</ol>
 @endsection
 
 @section('content')
@@ -24,7 +26,7 @@
 			 data-is-logged-in="{{ \CsrDelft\model\security\LoginModel::mag(P_LOGGED_IN) }}"
 			 data-mag-aanpassen="{{ json_encode($album->magAanpassen()) }}"
 			 data-root="{{ CSR_ROOT . '/plaetjes' }}"
-			 data-slideshow-interval="{{ \CsrDelft\model\InstellingenModel::get('fotoalbum', 'slideshow_interval') }}">
+			 data-slideshow-interval="{{ instelling('fotoalbum', 'slideshow_interval') }}">
 		<div class="fotoalbum float-right">
 			@if($album->magToevoegen())
 				<a class="btn" href="/fotoalbum/uploaden/{{$album->subdir}}">@icon('picture_add') Toevoegen</a>

@@ -50,7 +50,7 @@ tools-novieten:
   path: /tools/novieten
   controller: CsrDelft\controller\ToolsController::novieten
   methods: GET
-  options: { mag: P_ADMIN,commissie:NovCie }
+  options: { mag: "P_ADMIN,commissie:NovCie" }
 
 tools-naamsuggesties:
   path: /tools/naamsuggesties

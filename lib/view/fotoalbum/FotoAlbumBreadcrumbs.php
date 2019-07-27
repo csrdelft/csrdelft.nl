@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\fotoalbum;
+
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
 
@@ -14,7 +15,14 @@ class FotoAlbumBreadcrumbs {
 	}
 
 	private static function getBreadcrumbsDropdown(FotoAlbum $album, $dropdown, $self) {
-		$breadcrumbs = '<a href="/fotoalbum" title="Fotoalbum"><span class="fa fa-camera module-icon"></span></a>';
+		$breadcrumbs = '<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>';
+
+		if ($album->subdir == 'fotoalbum/') {
+			// Geen subdir
+			$breadcrumbs .= '<li class="breadcrumb-item active">Fotoalbum</li>';
+		} else {
+			$breadcrumbs .= '<li class="breadcrumb-item"><a href="/fotoalbum">Fotoalbum</a></li>';
+		}
 		$mappen = explode('/', $album->subdir);
 		$subdir = 'fotoalbum/';
 		$first = true;
@@ -29,7 +37,7 @@ class FotoAlbumBreadcrumbs {
 				if ($albumnaam === $album->dirname) {
 					// laatste
 					if ($dropdown) {
-						$breadcrumbs .= ' » ' . static::getDropDown(PHOTOALBUM_PATH . $subdir, $albumnaam);
+						$breadcrumbs .= static::getDropDown(PHOTOALBUM_PATH . $subdir, $albumnaam);
 						break;
 					} elseif (!$self) {
 						// alleen parent folders tonen
@@ -37,7 +45,7 @@ class FotoAlbumBreadcrumbs {
 					}
 				}
 				$subdir .= $albumnaam . '/';
-				$breadcrumbs .= ' » <a href="/' . $subdir . '">' . ucfirst($albumnaam) . '</a>';
+				$breadcrumbs .= '<li class="breadcrumb-item"><a href="/' . $subdir . '">' . ucfirst($albumnaam) . '</a></li>';
 			}
 		}
 		return $breadcrumbs;
@@ -58,6 +66,6 @@ class FotoAlbumBreadcrumbs {
 			$dropdown .= '>' . $album->dirname . '</option>';
 		}
 		$dropdown .= '</select>';
-		return $dropdown;
+		return '<li class="breadcrumb-item">' . $dropdown . '</li>';
 	}
 }

@@ -43,7 +43,9 @@ use CsrDelft\view\toestemming\ToestemmingModalForm;
 class ProfielForm extends Formulier {
 
 	public function getBreadcrumbs() {
-		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » ' . $this->model->getLink('civitas');
+		return '<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
+			. '<li class="breadcrumb-item"><a href="/ledenlijst">Leden</a></li>'
+			. '<li class="breadcrumb-item">'. $this->model->getLink('civitas') . '</li>';
 	}
 
 	public function __construct(Profiel $profiel) {

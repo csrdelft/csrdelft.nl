@@ -3,40 +3,40 @@
 @section('titel', $deel->titel)
 
 @section('breadcrumbs')
-	<a href="/forum" title="Forum"><span class="fa fa-wechat module-icon"></span></a>
-	@if($deel->categorie_id)
-		» {{$deel->getForumCategorie()->titel}}
-	@endif
-	» <select name="forum_id"
-						onchange="if (this.value.substr(0,4) === 'http') { window.open(this.value); } else { window.location.href = this.value; }">
-		<option value="/forum/recent/belangrijk"
-						@if($deel->titel === 'Belangrijk recent gewijzigd')selected="selected"@endif>
-			Belangrijk recent gewijzigd
-		</option>
-		<option value="/forum/recent" @if($deel->titel === 'Recent gewijzigd')selected="selected"@endif>
-			Recent gewijzigd
-		</option>
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/" title="Thuis"><span class="fa fa-home"></span></a></li>
+		<li class="breadcrumb-item"><a href="/forum">Forum</a></li>
+		<li class="breadcrumb-item active"><select name="forum_id" class="form-control form-control-sm"
+							onchange="if (this.value.substr(0,4) === 'http') { window.open(this.value); } else { window.location.href = this.value; }">
+			<option value="/forum/recent/belangrijk"
+							@if($deel->titel === 'Belangrijk recent gewijzigd')selected="selected"@endif>
+				Belangrijk recent gewijzigd
+			</option>
+			<option value="/forum/recent" @if($deel->titel === 'Recent gewijzigd')selected="selected"@endif>
+				Recent gewijzigd
+			</option>
 
-		@foreach(\CsrDelft\model\forum\ForumModel::instance()->getForumIndelingVoorLid() as $categorie)
-			<optgroup label="{{$categorie->titel}}">;
-				@foreach ($categorie->getForumDelen() as $newDeel) {
-				<option value="/forum/deel/{{$newDeel->forum_id}}"
-								@if ($newDeel->forum_id === $deel->forum_id)selected="selected"@endif>{{$newDeel->titel}}</option>
-				@endforeach
-			</optgroup>
-		@endforeach
-		@foreach(\CsrDelft\model\MenuModel::instance()->getMenu('remotefora')->getChildren() as $remotecat)
-			@if($remotecat->magBekijken())
-				<optgroup label="{{$remotecat->tekst}}">
-					@foreach($remotecat->getChildren() as $remoteforum)
-						@if($remoteforum->magBekijken())
-							<option value="{{$remoteforum->link}}">{{$remoteforum->tekst}}</option>
-						@endif
+			@foreach(\CsrDelft\model\forum\ForumModel::instance()->getForumIndelingVoorLid() as $categorie)
+				<optgroup label="{{$categorie->titel}}">;
+					@foreach ($categorie->getForumDelen() as $newDeel) {
+					<option value="/forum/deel/{{$newDeel->forum_id}}"
+									@if ($newDeel->forum_id === $deel->forum_id)selected="selected"@endif>{{$newDeel->titel}}</option>
 					@endforeach
 				</optgroup>
-			@endif
-		@endforeach
-	</select>
+			@endforeach
+			@foreach(\CsrDelft\model\MenuModel::instance()->getMenu('remotefora')->getChildren() as $remotecat)
+				@if($remotecat->magBekijken())
+					<optgroup label="{{$remotecat->tekst}}">
+						@foreach($remotecat->getChildren() as $remoteforum)
+							@if($remoteforum->magBekijken())
+								<option value="{{$remoteforum->link}}">{{$remoteforum->tekst}}</option>
+							@endif
+						@endforeach
+					</optgroup>
+				@endif
+			@endforeach
+			</select></li>
+	</ol>
 @endsection
 
 @section('content')
@@ -108,7 +108,8 @@
 						Berichten per dag:
 						<div class="grafiek">
 							{{-- forum.ts pikt dit op en vult met een grafiekje. --}}
-							<div id="stats_grafiek_overview" class="ctx-graph-line" data-url="/forum/grafiekdata/overview" style="height: 200px;"></div>
+							<div id="stats_grafiek_overview" class="ctx-graph-line" data-url="/forum/grafiekdata/overview"
+									 style="height: 200px;"></div>
 						</div>
 					</div>
 				@endif
@@ -118,13 +119,13 @@
 
 		@if($deel->magPosten())
 			@include('forum.partial.draad_reageren')
-		  @auth
-			<div class="meldingen">
-				<div id="draad-melding" class="alert alert-warning">
-					Hier kunt u een onderwerp toevoegen in deze categorie van het forum.
-					Kijkt u vooraf goed of het onderwerp waarover u post hier wel thuishoort.
+			@auth
+				<div class="meldingen">
+					<div id="draad-melding" class="alert alert-warning">
+						Hier kunt u een onderwerp toevoegen in deze categorie van het forum.
+						Kijkt u vooraf goed of het onderwerp waarover u post hier wel thuishoort.
+					</div>
 				</div>
-			</div>
 			@endauth
 			@include('forum.partial.post_form', ['draad' => null])
 		@endif
