@@ -17,7 +17,7 @@ lidinstellingen-reset:
   options: { mag: P_ADMIN }
 
 lidinstellingen-update:
-  path: /instellingen/update/{module}/{key}/{waarde}
+  path: /instellingen/update/{module}/{instelling}/{waarde}
   controller: CsrDelft\controller\LidInstellingenController::update
   methods: POST
   defaults: { waarde: null }
