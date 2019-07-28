@@ -1,0 +1,24 @@
+lidinstellingen-beheer:
+  path: /instellingen
+  controller: CsrDelft\controller\LidInstellingenController::beheer
+  methods: GET
+  options: { mag: P_LOGGED_IN }
+
+lidinstellingen-opslaan:
+  path: /instellingen/opslaan
+  controller: CsrDelft\controller\LidInstellingenController::opslaan
+  methods: POST
+  options: { mag: P_LOGGED_IN }
+
+lidinstellingen-reset:
+  path: /instellingen/reset/{module}/{key}
+  controller: CsrDelft\controller\LidInstellingenController::reset
+  methods: POST
+  options: { mag: P_ADMIN }
+
+lidinstellingen-update:
+  path: /instellingen/update/{module}/{key}/{waarde}
+  controller: CsrDelft\controller\LidInstellingenController::update
+  methods: POST
+  defaults: { waarde: null }
+  options: { mag: P_LOGGED_IN }

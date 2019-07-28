@@ -11,6 +11,7 @@ session-routes: { resource: routes/session.yaml }
 wachtwoord-routes: { resource: routes/wachtwoord.yaml }
 account-routes: { resource: routes/account.yaml }
 login-routes: { resource: routes/login.yaml }
+lidinstelling-routes: { resource: routes/lidinstellingen.yaml }
 
 logger:
   path: /logger/log

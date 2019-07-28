@@ -38,7 +38,6 @@ RewriteRule ^fotoalbum			index.php?c=FotoAlbum [L]
 RewriteRule ^geolocation		index.php?c=GeoLocation [L]
 RewriteRule ^rechten			index.php?c=Rechten [L]
 RewriteRule ^instellingenbeheer	index.php?c=InstellingenBeheer [L]
-RewriteRule ^instellingen		index.php?c=LidInstellingen [L]
 RewriteRule ^menubeheer			index.php?c=MenuBeheer [L]
 RewriteRule ^toestemming        index.php?c=Toestemming [L]
 
