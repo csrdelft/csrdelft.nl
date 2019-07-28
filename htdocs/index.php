@@ -19,6 +19,7 @@ use CsrDelft\controller\framework\Controller;
 use CsrDelft\controller\LoginController;
 use CsrDelft\controller\MededelingenController;
 use CsrDelft\controller\ToolsController;
+use CsrDelft\controller\WachtwoordController;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
@@ -86,6 +87,7 @@ try {
 	switch ($class) {
 		// toegestaan voor iedereen:
 		case LoginController::class:
+		case WachtwoordController::class:
 		case CmsPaginaController::class:
 		case ForumController::class:
 		case FotoAlbumController::class:
