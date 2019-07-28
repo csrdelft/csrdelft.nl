@@ -294,7 +294,6 @@ class LoginController extends AclController {
 			}
 			// stuur bevestigingsmail
 			$profiel = $account->getProfiel();
-			require_once 'model/entity/Mail.class.php';
 			$bericht = "Geachte " . $profiel->getNaam('civitas') .
 				",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
 			$emailNaam = $profiel->getNaam('volledig');
@@ -323,7 +322,6 @@ class LoginController extends AclController {
 				// stuur resetmail
 				$profiel = $account->getProfiel();
 				$url =  CSR_ROOT ."/wachtwoord/reset?token=". rawurlencode($token[0]);
-				require_once 'model/entity/Mail.class.php';
 				$bericht = "Geachte " . $profiel->getNaam('civitas') .
 					",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1] .
 					".\n\n[url=". $url  .
