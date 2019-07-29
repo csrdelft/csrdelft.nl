@@ -52,8 +52,10 @@ class MenuBeheerController extends AclController {
 		if (!$root OR !$root->magBeheren()) {
 			$this->exit_http(403);
 		}
-		$body = new MenuBeheerView($root);
-		$this->view = new CsrLayoutPage($body);
+		$this->view = view('menubeheer.tree', [
+			'root' => $root,
+			'menus' => MenuModel::instance()->getMenuBeheerLijst(),
+		]);
 	}
 
 	public function toevoegen($parent_id) {

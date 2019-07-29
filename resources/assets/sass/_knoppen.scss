@@ -49,7 +49,7 @@ input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner {
   border: 0
 }
 
-.btn.disabled, button:disabled, input[type=button]:disabled {
+.btn.disabled  {
   color: #D3D3D3;
   border: 1px solid #D3D3D3 !important;
   cursor: default;

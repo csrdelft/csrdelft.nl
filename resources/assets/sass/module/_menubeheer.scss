@@ -1,19 +1,19 @@
-@CHARSET "ISO-8859-1";
 /**
  * menubeheer.css	| 	P.W.G. Brussee (brussee@live.nl)
  *
  */
 ul.menubeheer-tree {
 	list-style: none;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
 }
 ul.menubeheer-tree li {
-	background-color: $tabel-regel-donker;
-	line-height: 30px;
 	margin-left: 25px;
+	position: relative;
 }
-ul.menubeheer-tree li:nth-child(even) {
-	background-color: $tabel-regel-licht;
-}
-ul.menubeheer-tree li:hover {
-	background-color: $tabel-hover;
+
+ul.menubeheer-tree .btn.caret {
+	position: absolute;
+	left: -30px;
 }
