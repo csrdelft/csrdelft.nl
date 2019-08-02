@@ -101,7 +101,7 @@
 				<div class="label">Lidnummer:</div>
 				<div class="data">
 					@if(\CsrDelft\model\security\AccountModel::existsUid($profiel->uid) && \CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->getAccount()))
-						<a href="/su/{{$profiel->uid}}/" title="Su naar dit lid">{{$profiel->uid}}</a>
+						<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 					@else
 						{{$profiel->uid}}
 					@endif
