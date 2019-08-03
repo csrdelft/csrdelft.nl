@@ -8,6 +8,7 @@ use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
 /**
@@ -17,6 +18,8 @@ use CsrDelft\view\datatable\Multiplicity;
 class CiviProductTable extends DataTable {
 	public function __construct() {
 		parent::__construct(CiviProduct::class, '/fiscaat/producten', 'Productenbeheer');
+
+		$this->selectEnabled = false;
 
 		$this->addColumn('prijs', null, null, CellRender::Bedrag(), null, CellType::FormattedNumber());
 		$this->addColumn('beheer', 'prijs', null, CellRender::Check());
@@ -28,8 +31,8 @@ class CiviProductTable extends DataTable {
 		$this->searchColumn('categorie');
 
 		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $this->dataUrl . '/bewerken', 'Nieuw', 'Nieuw product toevoegen', 'add'));
-		$this->addKnop(new DataTableKnop(Multiplicity::One(), $this->dataUrl . '/bewerken', 'Bewerken', 'Product bewerken', 'pencil'));
-		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), $this->dataUrl . '/verwijderen', 'Verwijderen', 'Product verwijderen', 'cross'));
+		$this->addRowKnop(new DataTableRowKnop($this->dataUrl . '/bewerken', 'Product bewerken', 'pencil'));
+		$this->addRowKnop(new DataTableRowKnop( $this->dataUrl . '/verwijderen', 'Product verwijderen', 'bin', 'confirm'));
 	}
 
 	public function getBreadcrumbs() {

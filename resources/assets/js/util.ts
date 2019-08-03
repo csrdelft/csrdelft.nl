@@ -144,7 +144,7 @@ export function singleLineString(strings: TemplateStringsArray, ...values: strin
 	return lines.map((line) => line.replace(/^\s+/gm, '')).join(' ').trim();
 }
 
-export function html(strings: TemplateStringsArray, ...values: string[]): HTMLElement {
+export function html(strings: TemplateStringsArray, ...values: Array<string | undefined>): HTMLElement {
 	let output = '';
 	for (let i = 0; i < values.length; i++) {
 		output += strings[i] + values[i];

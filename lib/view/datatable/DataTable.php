@@ -4,6 +4,7 @@ namespace CsrDelft\view\datatable;
 
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\View;
 
@@ -26,6 +27,7 @@ class DataTable implements View, FormElement {
 	protected $titel;
 	protected $dataTableId;
 	protected $defaultLength = 10;
+	protected $selectEnabled = true;
 	protected $settings = [
 		'dom' => 'Bfrtpli',
 		'buttons' => [
@@ -56,7 +58,7 @@ class DataTable implements View, FormElement {
 			]
 		],
 		'userButtons' => [],
-		'select' => true,
+		'rowButtons' => [],
 	];
 
 	private $columns = array();
@@ -109,6 +111,10 @@ class DataTable implements View, FormElement {
 	protected function addKnop(DataTableKnop $knop) {
 		$knop->setDataTableId($this->dataTableId);
 		$this->settings['userButtons'][] = $knop;
+	}
+
+	protected function addRowKnop(DataTableRowKnop $knop) {
+		$this->settings['rowButtons'][] = $knop;
 	}
 
 	protected function columnPosition($name) {
@@ -225,6 +231,8 @@ class DataTable implements View, FormElement {
 			$this->settings['dom'] = str_replace('i', '', $this->settings['dom']);
 		}
 
+		$this->settings['select'] = $this->selectEnabled;
+
 		// set ajax url
 		if ($this->dataUrl) {
 			$this->settings['ajax'] = array(
@@ -248,6 +256,16 @@ class DataTable implements View, FormElement {
 			$this->settings['orderFixed'] = [
 				[$groupByColumnPosition, 'asc']
 			];
+		}
+
+		if (count($this->settings['userButtons']) > 0) {
+			$this->columns['actionButtons'] = [
+				'name' => 'actionButtons',
+				'searchable' => false,
+				'orderable' => false,
+				'defaultContent' => '',
+			];
+
 		}
 
 		// create visible columns index array and default order

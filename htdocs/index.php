@@ -126,6 +126,9 @@ try {
 	$view = view('fout.404');
 } catch (CsrGebruikerException $exception) {
 	http_response_code(400);
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		die($exception->getMessage());
+	}
 	$view = view('fout.400', ['bericht' => $exception->getMessage()]);
 } catch (CsrToegangException $exception) {
 	http_response_code($exception->getCode());

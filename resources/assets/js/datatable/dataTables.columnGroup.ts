@@ -53,7 +53,7 @@ class ColumnGroup {
 			throw new Error('ColumnGroup already initialized on table ' + dtSettings.nTable.id);
 		}
 
-		dtSettings._fixedHeader = this;
+		dtSettings._columnGroup = this;
 
 		this._fnConstruct();
 	}
