@@ -12,7 +12,6 @@
 
 import $ from 'jquery';
 
-
 class ChildRow {
 	/**
 	 * Version
@@ -20,10 +19,6 @@ class ChildRow {
 	 * @static
 	 */
 	public static version = '1.0.0';
-
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 * Private methods
-	 */
 
 	/**
 	 * Add a toggle button if needed.

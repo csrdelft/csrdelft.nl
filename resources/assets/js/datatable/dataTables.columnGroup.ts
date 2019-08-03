@@ -3,7 +3,6 @@
 
 import $ from 'jquery';
 
-
 interface ColumnGroupConfig {
 	column: any;
 }
