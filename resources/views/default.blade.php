@@ -1,3 +1,4 @@
+{{-- Voor als je niet weet of je bent ingelogd --}}
 @auth
 	@extends('layout')
 @endauth

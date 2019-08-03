@@ -35,6 +35,12 @@ class CmsPaginaController {
 		$this->cmsPaginaModel = CmsPaginaModel::instance();
 	}
 
+	public function overzicht() {
+		return view('cms.overzicht', [
+			'paginas' => CmsPaginaModel::instance()->getAllePaginas(),
+		]);
+	}
+
 	public function bekijken($naam, $subnaam = "") {
 		if ($subnaam) {
 			$naam = $subnaam;
@@ -56,9 +62,13 @@ class CmsPaginaController {
 			} elseif ($this->hasParam(1) AND $this->getParam(1) === 'vereniging') {
 				$menu = true;
 			}
-			return new CsrLayoutOweePage($body, $tmpl, $menu);
+			return view('layout-owee.' . $tmpl, [
+				'titel' => $body->getTitel(),
+				'body' => $body,
+				'showmenu' => $menu,
+			]);
 		} else {
-			return new CsrLayoutPage($body, $this->zijbalk);
+			return view('default', ['content' => $body]);
 		}
 	}
 
@@ -81,7 +91,7 @@ class CmsPaginaController {
 			}
 			redirect('/pagina/' . $pagina->naam);
 		} else {
-			return new CsrLayoutPage($form, $this->zijbalk);
+			return view('default', ['content' => $form]);
 		}
 	}
 

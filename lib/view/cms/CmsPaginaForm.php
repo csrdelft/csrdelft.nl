@@ -27,7 +27,7 @@ class CmsPaginaForm extends Formulier {
 		$this->titel = 'Pagina bewerken: ' . $pagina->naam;
 
 		$fields = [];
-		$fields[] = new HtmlComment('<div><label>Laatst gewijzigd</label>' . reldate($pagina->laatst_gewijzigd) . '</div>');
+		$fields[] = new HtmlComment('<div class="row"><label class="col-3 col-form-label">Laatst gewijzigd</label><div class="col-9"><div class="form-control-plaintext">' . reldate($pagina->laatst_gewijzigd) . '</div></div></div>');
 		$fields[] = new TextField('titel', $pagina->titel, 'Titel');
 		if ($pagina->magRechtenWijzigen()) {
 			$fields[] = new RechtenField('rechten_bekijken', $pagina->rechten_bekijken, 'Rechten bekijken');

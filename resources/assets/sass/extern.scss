@@ -2,12 +2,12 @@
 @import "~font-awesome/css/font-awesome.css";
 @import "~jquery-ui/themes/base/tooltip.css";
 
+@import "extern/fonts";
+@import "extern/variables";
+
 // common
 @import "reset";
 @import "bbcode";
-
-@import "extern/fonts";
-@import "extern/variables";
 
 @import "extern/util";
 @import "extern/grid";

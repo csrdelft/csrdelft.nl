@@ -67,11 +67,7 @@ class WachtwoordController {
 			$mail->send();
 			redirect(CSR_ROOT);
 		}
-		if (LoginModel::mag(P_LOGGED_IN)){
-			return new CsrLayoutPage($form);
-		} else {
-			return new CsrLayoutOweePage($form);
-		}
+		return view('default', ['content' => $form]);
 	}
 
 	public function vergeten() {
@@ -98,6 +94,6 @@ class WachtwoordController {
 				setMelding('Wachtwoord reset email verzonden', 1);
 			}
 		}
-		return new CsrLayoutOweePage($form);
+		return view('default', ['content' => $form]);
 	}
 }

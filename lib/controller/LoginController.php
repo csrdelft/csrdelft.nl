@@ -2,31 +2,14 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\CmsPaginaModel;
-use CsrDelft\model\entity\Mail;
-use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\entity\security\RememberLogin;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\model\security\AccessModel;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\security\OneTimeTokensModel;
 use CsrDelft\model\security\RememberLoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\datatable\RemoveRowsResponse;
-use CsrDelft\view\JsonResponse;
-use CsrDelft\view\login\AccountForm;
 use CsrDelft\view\login\LoginForm;
-use CsrDelft\view\login\LoginSessionsData;
 use CsrDelft\view\login\RememberAfterLoginForm;
-use CsrDelft\view\login\RememberLoginData;
-use CsrDelft\view\login\RememberLoginForm;
-use CsrDelft\view\login\WachtwoordVergetenForm;
-use CsrDelft\view\login\WachtwoordWijzigenForm;
 
 /**
  * LoginController.class.php

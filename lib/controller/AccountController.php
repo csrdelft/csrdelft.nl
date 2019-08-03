@@ -9,8 +9,6 @@ use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\CsrLayoutOweePage;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\AccountForm;
@@ -21,12 +19,7 @@ use CsrDelft\view\login\AccountForm;
  */
 class AccountController {
 	public function aanvragen() {
-		$body = new CmsPaginaView(CmsPaginaModel::get('accountaanvragen'));
-		if (!LoginModel::mag(P_LOGGED_IN)) {
-			return new CsrLayoutOweePage($body);
-		} else {
-			return new CsrLayoutPage($body);
-		}
+		return view('default', ['content' => CmsPaginaModel::get('accountaanvragen')]);
 	}
 
 	public function aanmaken($uid = null) {

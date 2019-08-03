@@ -1,3 +1,8 @@
+cms-overzicht:
+  path: /pagina
+  controller: CsrDelft\controller\CmsPaginaController::overzicht
+  options: { mag: P_LOGGED_IN }
+
 cms-bekijken:
   path: /pagina/{naam}
   controller: CsrDelft\controller\CmsPaginaController::bekijken
