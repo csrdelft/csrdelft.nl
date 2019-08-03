@@ -28,7 +28,7 @@ class RowButtons {
 		}
 		btnGroup.style.marginTop = '-10px';
 		btnGroup.style.marginBottom = '-10px';
-		const wrapper = html`<div class="d-flex"></div>`;
+		const wrapper = html`<div class="d-inline-flex"></div>`;
 		wrapper.append(btnGroup);
 		return wrapper;
 	}

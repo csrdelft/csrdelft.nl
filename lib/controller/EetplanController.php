@@ -88,13 +88,13 @@ class EetplanController {
 	}
 
 	public function woonoorden($actie = null) {
-		if ($actie == 'aan' OR $actie == 'uit') {
+		if ($actie == 'toggle') {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-			$woonoorden = array();
+			$woonoorden = [];
 			foreach ($selection as $woonoord) {
 				/** @var Woonoord $woonoord */
 				$woonoord = $this->woonoordenModel->retrieveByUUID($woonoord);
-				$woonoord->eetplan = $actie == 'aan';
+				$woonoord->eetplan = !$woonoord->eetplan;
 				$this->woonoordenModel->update($woonoord);
 				$woonoorden[] = $woonoord;
 			}

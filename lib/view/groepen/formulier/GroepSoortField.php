@@ -6,6 +6,7 @@ use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\groepen\CommissieSoort;
 use CsrDelft\model\entity\groepen\HuisStatus;
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\model\groepen\CommissiesModel;
@@ -16,6 +17,7 @@ use CsrDelft\model\groepen\WerkgroepenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\view\formulier\keuzevelden\RadioField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
+use function common\short_class;
 
 class GroepSoortField extends RadioField {
 
@@ -61,16 +63,16 @@ JS;
 $('#{$this->getId()}Option_CommissiesModel').click();
 JS;
 
-		$this->options = array(
+		$this->options = [
 			ActiviteitenModel::class => $this->activiteit,
 			KetzersModel::class => 'Aanschafketzer',
-			WerkgroepenModel::class => WerkgroepenModel::ORM,
+			WerkgroepenModel::class => short_class(WerkgroepenModel::ORM),
 			RechtenGroepenModel::class => 'Groep (overig)',
-			OnderverenigingenModel::class => OnderverenigingenModel::ORM,
-			WoonoordenModel::class => WoonoordenModel::ORM,
-			BesturenModel::class => BesturenModel::ORM,
+			OnderverenigingenModel::class => short_class(OnderverenigingenModel::ORM),
+			WoonoordenModel::class => short_class(WoonoordenModel::ORM),
+			BesturenModel::class => short_class(BesturenModel::ORM),
 			CommissiesModel::class => $this->commissie
-		);
+		];
 	}
 
 	public function getSoort() {
@@ -98,7 +100,7 @@ JS;
 		/**
 		 * @Warning: Duplicate function in GroepForm->validate()
 		 */
-		if (!$orm::magAlgemeen($this->mode, null, $soort)) {
+		if (!$orm::magAlgemeen(AccessAction::Beheren, null, $soort)) {
 			if ($model instanceof ActiviteitenModel) {
 				$naam = ActiviteitSoort::getDescription($soort);
 			} elseif ($model instanceof CommissiesModel) {

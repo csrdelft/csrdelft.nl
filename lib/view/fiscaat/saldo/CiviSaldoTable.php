@@ -8,6 +8,7 @@ use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
 /**
@@ -28,8 +29,8 @@ class CiviSaldoTable extends DataTable {
 		$this->searchColumn('naam');
 
 		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $this->dataUrl. '/registreren', 'Registreren', 'Lid registreren', 'toevoegen'));
-		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::Any(), $this->dataUrl . '/verwijderen', 'Verwijderen', 'Saldo van lid verwijderen', 'verwijderen'));
-		$this->addKnop(new DataTableKnop(Multiplicity::One(), $this->dataUrl . '/inleggen', 'Inleggen', 'Saldo van lid ophogen', 'coins_add'));
+		$this->addRowKnop(new DataTableRowKnop($this->dataUrl . '/inleggen', 'Saldo van lid ophogen', 'coins_add'));
+		$this->addRowKnop(new DataTableRowKnop($this->dataUrl . '/verwijderen', 'Saldo van lid verwijderen', 'bin', 'confirm'));
 	}
 
 	public function getBreadcrumbs() {
