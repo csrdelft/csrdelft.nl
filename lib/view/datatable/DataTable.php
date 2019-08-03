@@ -258,14 +258,16 @@ class DataTable implements View, FormElement {
 			];
 		}
 
-		if (count($this->settings['userButtons']) > 0) {
+		if (count($this->settings['rowButtons']) > 0) {
 			$this->columns['actionButtons'] = [
 				'name' => 'actionButtons',
 				'searchable' => false,
 				'orderable' => false,
 				'defaultContent' => '',
 			];
-
+		} else {
+			// Client checkt of rowButtons bestaat
+			unset($this->settings['rowButtons']);
 		}
 
 		// create visible columns index array and default order
