@@ -113,7 +113,7 @@ class ProfielController extends AclController {
 				array_unshift($args, $uid); // lidjaar
 			} elseif ($this->action === 'pasfoto') {
 				$this->action = 'pasfoto';
-				parent::performAction([$uid, $this->getParam(4), $this->getParam(4) and $this->getParam(4) == 'vierkant']);
+				parent::performAction([$uid, $this->getParam(4), $this->getParam(5) and $this->getParam(5) == 'vierkant']);
 			} elseif (ProfielModel::existsUid($uid)) {
 				$args = $this->getParams(4);
 				array_unshift($args, ProfielModel::get($uid));
