@@ -111,21 +111,19 @@ class ProfielController extends AclController {
 			if ($this->action === 'nieuw' AND $this->hasParam(2)) {
 				$args = $this->getParams(4); // status
 				array_unshift($args, $uid); // lidjaar
+			} elseif ($this->action === 'pasfoto') {
+				$this->action = 'pasfoto';
+				parent::performAction([$uid, $this->getParam(4), $this->getParam(4) and $this->getParam(4) == 'vierkant']);
 			} elseif (ProfielModel::existsUid($uid)) {
 				$args = $this->getParams(4);
 				array_unshift($args, ProfielModel::get($uid));
 			} elseif (in_array($this->getParam(2), self::ALLOW_REDIRECT)) {
 				redirect('/profiel/' . LoginModel::getUid() . '/' . $this->getParam(2));
-			} else {
+			}	else {
 				setMelding('Dit profiel bestaat niet', -1);
 				redirect('/ledenlijst');
 			}
 			$this->view = parent::performAction($args);
-		}
-		else if ($this->hasParam(2) AND $this->getParam(2) === 'pasfoto') {
-			$this->action = 'pasfoto';
-		 	$uid = explode('.', $this->getParam(3))[0];
-			parent::performAction([$uid, implode('/', $this->getParams(3))]);
 		}
 		// Leden
 		else {
@@ -334,21 +332,16 @@ class ProfielController extends AclController {
 		$this->view = new LedenMemoryScoreResponse($data);
 	}
 
-	public function pasfoto($uid, $path) {
-		if ($uid === 'geen-foto') {
+	public function pasfoto($uid, $vorm, $vierkant) {
+		$profiel = ProfielModel::get($uid);
+		if (!is_zichtbaar($profiel, 'profielfoto', 'intern')) {
 			redirect('/plaetjes/geen-foto.jpg');
 		}
-
-		try {
-			$profiel = ProfielModel::get($uid);
-			if (is_zichtbaar($profiel, 'profielfoto', 'intern')) {
-				$image = new Afbeelding(safe_combine_path(PASFOTO_PATH, $path));
-				$image->serve();
-			} else {
-				throw new CsrGebruikerException('Niet zichtbaar');
-			}
-		} catch (CsrGebruikerException $ex) {
-			redirect("/plaetjes/geen-foto.jpg");
+		$path = $profiel->getPasfotoInternalPath($vierkant, $vorm);
+		if ($path === '/plaetjes/geen-foto.jpg') {
+			redirect('/plaetjes/geen-foto.jpg');
 		}
+		$image = new Afbeelding(safe_combine_path(PASFOTO_PATH, $path));
+		$image->serve();
 	}
 }

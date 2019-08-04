@@ -11,9 +11,6 @@ RewriteEngine On
   Header set Cache-Control "max-age=604800, public"
 </If>
 
-# afbeeldingen afschermen voor externen kan hier:
-RewriteRule ^plaetjes/pasfoto/(.*)$			index.php?c=Profiel [QSA,L]
-
 RewriteRule ^nieuws/?(.*)		/mededelingen/$1/ [L]
 RewriteRule ^owee/?$			/csrindeowee [L]
 RewriteRule ^facebook			https://www.facebook.com/delftcsr [R,L]

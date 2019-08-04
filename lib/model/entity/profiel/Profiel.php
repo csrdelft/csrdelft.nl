@@ -593,6 +593,10 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * @return string
 	 */
 	public function getPasfotoPath($vierkant = false, $vorm = 'user') {
+		return "/profiel/$this->uid/pasfoto/$vorm/" . ($vierkant ? "vierkant/" : "");
+	}
+
+	public function getPasfotoInternalPath($vierkant = false, $vorm = 'user') {
 		$path = null;
 		if (LoginModel::mag(P_OUDLEDEN_READ)) {
 			// in welke (sub)map moeten we zoeken?
@@ -635,7 +639,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getPasfotoTag($cssClass = 'pasfoto', $vierkant = false) {
-		return '<img class="' . htmlspecialchars($cssClass) . '" src="/plaetjes/pasfoto/' . $this->getPasfotoPath($vierkant) . '" alt="Pasfoto van ' . $this->getNaam('volledig') . '" />';
+		return '<img class="' . htmlspecialchars($cssClass) . '" src="' . $this->getPasfotoPath($vierkant) . '" alt="Pasfoto van ' . $this->getNaam('volledig') . '" />';
 	}
 
 	private $kinderen;
