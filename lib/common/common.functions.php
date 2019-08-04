@@ -24,7 +24,7 @@ use CsrDelft\view\Icon;
  * @return boolean
  */
 function startsWith($haystack, $needle) {
-	return $needle === "" || strpos($haystack, $needle) === 0;
+	return strval($needle) === "" || strpos($haystack, strval($needle)) === 0;
 }
 
 /**
