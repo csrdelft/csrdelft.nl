@@ -593,6 +593,9 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * @return string
 	 */
 	public function getPasfotoPath($vierkant = false, $vorm = 'user') {
+		if ($vorm === 'user') {
+			$vorm = lid_instelling('forum', 'naamWeergave');
+		}
 		return "/profiel/$this->uid/pasfoto/$vorm/" . ($vierkant ? "vierkant/" : "");
 	}
 
@@ -603,9 +606,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			if ($vierkant) {
 				$folders = array('');
 			} else {
-				if ($vorm === 'user') {
-					$vorm = lid_instelling('forum', 'naamWeergave');
-				}
 				$folders = array($vorm . '/', '');
 			}
 			// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
