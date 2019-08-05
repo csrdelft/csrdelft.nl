@@ -13,6 +13,7 @@ account-routes: { resource: routes/account.yaml }
 login-routes: { resource: routes/login.yaml }
 lidinstelling-routes: { resource: routes/lidinstellingen.yaml }
 instellingenbeheer-routes: { resource: routes/instellingenbeheer.yaml }
+menubeheer-routes: { resource: routes/menubeheer.yaml }
 
 logger:
   path: /logger/log
