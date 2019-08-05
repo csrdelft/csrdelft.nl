@@ -36,12 +36,6 @@ RewriteRule ^geolocation		index.php?c=GeoLocation [L]
 RewriteRule ^rechten			index.php?c=Rechten [L]
 RewriteRule ^toestemming        index.php?c=Toestemming [L]
 
-# business club
-RewriteRule ^bc$ bc/index.html [L]
-RewriteRule ^bc/partners$ bc/partners.html [L]
-RewriteRule ^bc/mogelijkheden$ bc/mogelijkheden.html [L]
-RewriteRule ^bc/contact$ bc/contact.html [L]
-
 RewriteRule ^google             index.php?c=Google [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
