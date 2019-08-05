@@ -36,8 +36,6 @@ RewriteRule ^geolocation		index.php?c=GeoLocation [L]
 RewriteRule ^rechten			index.php?c=Rechten [L]
 RewriteRule ^toestemming        index.php?c=Toestemming [L]
 
-RewriteRule ^google             index.php?c=Google [L]
-
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^                   index.php
