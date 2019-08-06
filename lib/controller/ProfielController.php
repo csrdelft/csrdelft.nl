@@ -334,14 +334,17 @@ class ProfielController extends AclController {
 
 	public function pasfoto($uid, $vorm, $vierkant) {
 		$profiel = ProfielModel::get($uid);
+		if (!$profiel) {
+			$this->exit_http(403);
+		}
 		if (!is_zichtbaar($profiel, 'profielfoto', 'intern')) {
 			redirect('/plaetjes/geen-foto.jpg');
 		}
 		$path = $profiel->getPasfotoInternalPath($vierkant, $vorm);
-		if ($path === '/plaetjes/geen-foto.jpg') {
+		if ($path === null) {
 			redirect('/plaetjes/geen-foto.jpg');
 		}
-		$image = new Afbeelding(safe_combine_path(PASFOTO_PATH, $path));
+		$image = new Afbeelding($path);
 		$image->serve();
 	}
 }

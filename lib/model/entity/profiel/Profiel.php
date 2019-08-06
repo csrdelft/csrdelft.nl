@@ -625,7 +625,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			}
 		}
 		if (!$path) {
-			$path = 'geen-foto.jpg';
+			return null;
 		}
 		// als het vierkant moet, kijken of de vierkante bestaat, en anders maken
 		if ($vierkant) {
@@ -633,9 +633,9 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			if (!file_exists(PASFOTO_PATH . $crop)) {
 				square_crop(PASFOTO_PATH . $path, PASFOTO_PATH . $crop, 150);
 			}
-			return $crop;
+			$path = $crop;
 		}
-		return $path;
+		return safe_combine_path(PASFOTO_PATH, $path);
 	}
 
 	public function getPasfotoTag($cssClass = 'pasfoto', $vierkant = false) {
