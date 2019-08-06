@@ -21,7 +21,6 @@ RewriteRule ^(leden)?lijst/?(.*)$	ledenlijst.php [QSA,L]
 RewriteRule ^forum/rss/([0-9a-zA-Z]*)/csrdelft.xml		index.php?private_token=$1 [L]
 RewriteRule ^agenda/ical/([0-9a-zA-Z]*)/csrdelft.ics	index.php?private_token=$1 [L]
 
-RewriteRule ^bibliotheek		index.php?c=Bibliotheek [QSA,L]
 RewriteRule ^mededelingen       index.php?c=Mededelingen [QSA,L]
 
 RewriteRule ^leden				index.php?c=Profiel [QSA,L]

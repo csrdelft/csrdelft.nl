@@ -15,6 +15,7 @@ lidinstelling-routes: { resource: routes/lidinstellingen.yaml }
 instellingenbeheer-routes: { resource: routes/instellingenbeheer.yaml }
 menubeheer-routes: { resource: routes/menubeheer.yaml }
 google-routes: { resource: routes/google.yaml }
+bibliotheek-routes: { resource: routes/bibliotheek.yaml }
 
 logger:
   path: /logger/log

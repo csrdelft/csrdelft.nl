@@ -164,10 +164,10 @@ class ProfielController extends AclController {
 			'corveekwalificaties' => KwalificatiesModel::instance()->getKwalificatiesVanLid($uid),
 			'forumpostcount' => ForumPostsModel::instance()->getAantalForumPostsVoorLid($uid),
 			'forumrecent' => ForumPostsModel::instance()->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
-			'boeken' => BoekExemplaarModel::getEigendom($uid),
+			'boeken' => BoekExemplaarModel::instance()->getEigendom($uid),
 			'recenteAanmeldingen' => MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid($uid, strtotime(instelling('maaltijden', 'recent_lidprofiel'))),
 			'abos' => MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($uid),
-			'gerecenseerdeboeken' => BoekRecensieModel::getVoorLid($uid),
+			'gerecenseerdeboeken' => BoekRecensieModel::instance()->getVoorLid($uid),
 			'fotos' => $fotos
 		]);
 	}
