@@ -16,6 +16,8 @@ instellingenbeheer-routes: { resource: routes/instellingenbeheer.yaml }
 menubeheer-routes: { resource: routes/menubeheer.yaml }
 google-routes: { resource: routes/google.yaml }
 bibliotheek-routes: { resource: routes/bibliotheek.yaml }
+leden-routes: { resource: routes/leden.yaml }
+ledenmemory-routes: { resource: routes/ledenmemory.yaml }
 
 logger:
   path: /logger/log

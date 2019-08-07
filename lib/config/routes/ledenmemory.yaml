@@ -1,0 +1,21 @@
+leden-memory:
+  path: /leden/memory
+  controller: CsrDelft\controller\LedenMemoryController::memory
+  methods: GET
+  options: { mag: P_OUDLEDEN_READ }
+
+ledenmemory-score:
+  path: /leden/memoryscore
+  controller: CsrDelft\controller\LedenMemoryController::memoryscore
+  methods: POST
+  defaults: { groep: null}
+  options: { mag: P_OUDLEDEN_READ }
+
+ledenmemory-scores:
+  path: /leden/memoryscores/{groep}
+  controller: CsrDelft\controller\LedenMemoryController::memoryscores
+  methods: POST
+  defaults: { groep: null}
+  options: { mag: P_OUDLEDEN_READ }
+
+

@@ -1,0 +1,6 @@
+leden-lijst:
+  path: /ledenlijst
+  controller: CsrDelft\controller\LedenLijstController::lijst
+  methods: [GET,POST]
+  options: { mag: P_OUDLEDEN_READ }
+

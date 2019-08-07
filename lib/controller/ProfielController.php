@@ -76,7 +76,6 @@ class ProfielController extends AclController {
 				// Leden
 				'pasfoto' => P_OUDLEDEN_READ,
 				'nieuw' => P_LEDEN_MOD . ',commissie:NovCie',
-				'lijst' => P_OUDLEDEN_READ,
 				'stamboom' => P_OUDLEDEN_READ,
 				'verjaardagen' => P_LEDEN_READ,
 				'memory' => P_OUDLEDEN_READ,
@@ -127,7 +126,6 @@ class ProfielController extends AclController {
 		}
 		// Leden
 		else {
-			$this->action = 'lijst';
 			if ($this->hasParam(2)) {
 				$this->action = $this->getParam(2);
 			}
@@ -271,9 +269,6 @@ class ProfielController extends AclController {
 		redirect(CSR_ROOT . '/profiel/' . $profiel->uid);
 	}
 
-	public function lijst() {
-		redirect('/ledenlijst');
-	}
 
 	public function stamboom($uid = null) {
 		$this->view = view('profiel.stamboom', [
@@ -299,38 +294,6 @@ class ProfielController extends AclController {
 		}
 	}
 
-	public function memory() {
-		$this->view = new LedenMemoryView();
-	}
-
-	public function memoryscore() {
-		$score = LedenMemoryScoresModel::instance()->nieuw();
-		$form = new LedenMemoryScoreForm($score);
-		if ($form->validate()) {
-			LedenMemoryScoresModel::instance()->create($score);
-		}
-		$this->view = new JsonResponse($score);
-	}
-
-	public function memoryscores($groep = null) {
-		$parts = explode('@', $groep);
-		if (isset($parts[0], $parts[1])) {
-			switch ($parts[1]) {
-				case 'verticale.csrdelft.nl':
-					$groep = VerticalenModel::instance()->retrieveByUUID($groep);
-					break;
-				case 'lichting.csrdelft.nl':
-					$groep = LichtingenModel::get($parts[0]);
-					break;
-			}
-		}
-		if ($groep) {
-			$data = LedenMemoryScoresModel::instance()->getGroepTopScores($groep);
-		} else {
-			$data = LedenMemoryScoresModel::instance()->getAllTopScores();
-		}
-		$this->view = new LedenMemoryScoreResponse($data);
-	}
 
 	public function pasfoto($uid, $vorm, $vierkant) {
 		$profiel = ProfielModel::get($uid);
