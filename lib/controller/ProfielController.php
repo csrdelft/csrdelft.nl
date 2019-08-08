@@ -63,6 +63,10 @@ class ProfielController {
 	}
 
 	public function profiel($uid) {
+		if ($uid == null) {
+			$uid = LoginModel::getUid();
+		}
+
 		$profiel = ProfielModel::instance()->get($uid);
 
 		if ($profiel === false) {

@@ -2,6 +2,7 @@ profiel-profiel:
   path: /profiel/{uid}
   controller: CsrDelft\controller\ProfielController::profiel
   methods: GET
+  defaults: { uid: null }
   requirements: { uid: '.{4}' }
   options: { mag: P_OUDLEDEN_READ }
 
