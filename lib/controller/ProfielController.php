@@ -120,10 +120,10 @@ class ProfielController {
 		// Maak nieuw profiel zonder op te slaan
 		$profiel = ProfielModel::instance()->nieuw((int)$lidjaar, $lidstatus);
 
-		return $this->profielBewerken($profiel);
+		return $this->profielBewerken($profiel, true);
 	}
 
-	private function profielBewerken(Profiel $profiel) {
+	private function profielBewerken(Profiel $profiel, $alleenFormulier = false) {
 
 		if (!$profiel->magBewerken()) {
 			throw new CsrToegangException();
@@ -169,6 +169,9 @@ class ProfielController {
 				}
 			}
 			redirect('/profiel/' . $profiel->uid);
+		}
+		if ($alleenFormulier) {
+			return view('plain', ['content' => $form]);
 		}
 		return new CsrLayoutPage($form);
 	}

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html>
-<head lang="nl">
+<html lang="nl">
+<head>
 	@include('head')
 </head>
 <body class="nav-is-fixed" @yield('bodyArgs')>

@@ -63,7 +63,7 @@ class FormulierKnop implements FormElement {
 		}
 		$html .= '>';
 		if ($this->icon) {
-			$html .= Icon::getTag($this->icon);
+			$html .= Icon::getTag($this->icon, null, null, 'mr-1');
 		}
 		$html .= $this->label;
 		return $html . '</a> ';
