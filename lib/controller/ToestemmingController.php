@@ -3,7 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\instellingen\LidToestemmingModel;
@@ -21,29 +21,11 @@ use CsrDelft\view\toestemming\ToestemmingModalForm;
  *
  * @property LidToestemmingModel $model
  */
-class ToestemmingController extends AclController {
-	public function __construct($query) {
-		parent::__construct($query, LidToestemmingModel::instance());
+class ToestemmingController {
+	use QueryParamTrait;
 
-		$this->acl = [
-			'overzicht' => P_LOGGED_IN,
-			'annuleren' => P_LOGGED_IN,
-			'lijst' => P_LOGGED_IN,
-		];
-	}
-
-	/**
-	 * @param array $args
-	 * @return mixed
-	 * @throws \CsrDelft\common\CsrException
-	 */
-	public function performAction(array $args = array()) {
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		} else {
-			$this->action = 'overzicht';
-		}
-		return parent::performAction($args);
+	public function __construct() {
+		$this->model = LidToestemmingModel::instance();
 	}
 
 	/**
@@ -52,13 +34,13 @@ class ToestemmingController extends AclController {
 	public function POST_overzicht() {
 		$form = new ToestemmingModalForm();
 
-		if ($form->validate()) {
+		if ($form->isPosted() && $form->validate()) {
 
 			$this->model->save();
 			setMelding('Toestemming opgeslagen', 1);
-			$this->view = new CmsPaginaView(CmsPaginaModel::get('thuis'));
+			return new CmsPaginaView(CmsPaginaModel::get('thuis'));
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 
@@ -66,13 +48,13 @@ class ToestemmingController extends AclController {
 	 * @throws \SmartyException
 	 */
 	public function GET_overzicht() {
-		$this->view = new CsrLayoutPage(new CmsPaginaView(CmsPaginaModel::get('thuis')), [], new ToestemmingModalForm());
+		return new CsrLayoutPage(new CmsPaginaView(CmsPaginaModel::get('thuis')), [], new ToestemmingModalForm());
 	}
 
 	public function POST_annuleren() {
 		$_SESSION['stop_nag'] = time();
 
-		$this->view = new CmsPaginaView(CmsPaginaModel::get('thuis'));
+		return new CmsPaginaView(CmsPaginaModel::get('thuis'));
 	}
 
 	public function GET_annuleren() {
@@ -111,9 +93,9 @@ class ToestemmingController extends AclController {
                 }
             }
 
-            $this->view = new ToestemmingLijstResponse($toestemmingFiltered, $ids);
+            return new ToestemmingLijstResponse($toestemmingFiltered, $ids);
         } else {
-            $this->view = view('pagina', [
+            return view('pagina', [
                 'titel' => 'Lid toestemming',
                 'breadcrumbs' => 'Lid toestemmingen',
                 'body' => new ToestemmingLijstTable($ids)

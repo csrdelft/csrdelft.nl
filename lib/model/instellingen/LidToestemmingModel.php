@@ -56,24 +56,12 @@ class LidToestemmingModel extends CachedPersistenceModel {
 		return $instellingen;
 	}
 
-	/**
-	 * Functie getInstelling aanvullen met uid.
-	 *
-	 * @param array $primary_key_values
-	 * @return LidInstelling|false
-	 */
-	protected function retrieveByPrimaryKey(array $primary_key_values) {
-		$primary_key_values[] = LoginModel::getUid();
-		return parent::retrieveByPrimaryKey($primary_key_values);
-	}
-
 	protected function newInstelling($module, $id, $uid = null) {
 		$instelling = new LidToestemming();
 		$instelling->module = $module;
 		$instelling->instelling_id = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
 		$instelling->uid = $uid ?? LoginModel::getUid();
-		$this->create($instelling);
 		return $instelling;
 	}
 
@@ -176,7 +164,7 @@ class LidToestemmingModel extends CachedPersistenceModel {
 	}
 
 	protected function getInstelling($module, $id) {
-		$instelling = $this->retrieveByPrimaryKey(array($module, $id));
+		$instelling = $this->retrieveByPrimaryKey(array($module, $id, LoginModel::getUid()));
 		if ($this->hasKey($module, $id)) {
 			if (!$instelling) {
 				$instelling = $this->newInstelling($module, $id);

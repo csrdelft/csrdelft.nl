@@ -35,7 +35,7 @@ class ToestemmingModalForm extends ModalForm {
 		$smarty = CsrSmarty::instance();
 		$fields = [];
 
-		$akkoord = null;
+		$akkoord = 'ja';
 
 		$instellingen = LidToestemmingModel::instance()->getRelevantToestemmingCategories(LoginModel::getProfiel()->isLid());
 
@@ -51,20 +51,21 @@ class ToestemmingModalForm extends ModalForm {
 			}
 		}
 
-		$smarty->assign('beleid', instelling('privacy', 'beleid_kort'));
-		$smarty->assign('beschrijvingBestuur', instelling('privacy', 'beschrijving_bestuur'));
-		$smarty->assign('beschrijvingBijzonder', instelling('privacy', 'beschrijving_bijzonder'));
-		$smarty->assign('beschrijvingVereniging', instelling('privacy', 'beschrijving_vereniging'));
-		$smarty->assign('beschrijvingExternFoto', instelling('privacy', 'beschrijving_foto_extern'));
-		$smarty->assign('beschrijvingInternFoto', instelling('privacy', 'beschrijving_foto_intern'));
-		$smarty->assign('akkoordExternFoto', $this->maakToestemmingLine('algemeen', 'foto_extern'));
-		$smarty->assign('akkoordInternFoto', $this->maakToestemmingLine('algemeen', 'foto_intern'));
-		$smarty->assign('akkoordVereniging', $this->maakToestemmingLine('algemeen', 'vereniging'));
-		$smarty->assign('akkoordBijzonder', $this->maakToestemmingLine('algemeen', 'bijzonder'));
-		$smarty->assign('akkoord', $akkoord);
-		$smarty->assign('fields', $fields);
 		$this->addFields([
-			new HtmlComment($smarty->fetch('toestemming/toestemming_head.tpl')),
+			new HtmlComment(view('toestemming.formulier', [
+				'beleid' => instelling('privacy', 'beleid_kort'),
+				'beschrijvingBestuur' => instelling('privacy', 'beschrijving_bestuur'),
+				'beschrijvingBijzonder' => instelling('privacy', 'beschrijving_bijzonder'),
+				'beschrijvingVereniging' => instelling('privacy', 'beschrijving_vereniging'),
+				'beschrijvingExternFoto' => instelling('privacy', 'beschrijving_foto_extern'),
+				'beschrijvingInternFoto' => instelling('privacy', 'beschrijving_foto_intern'),
+				'akkoordExternFoto' => $this->maakToestemmingLine('algemeen', 'foto_extern'),
+				'akkoordInternFoto' => $this->maakToestemmingLine('algemeen', 'foto_intern'),
+				'akkoordVereniging' => $this->maakToestemmingLine('algemeen', 'vereniging'),
+				'akkoordBijzonder' => $this->maakToestemmingLine('algemeen', 'bijzonder'),
+				'akkoord' => $akkoord,
+				'fields' => $fields,
+			])->getHtml())
 		]);
 
 
@@ -79,19 +80,18 @@ class ToestemmingModalForm extends ModalForm {
 	 */
 	private function maakToestemmingLine($module, $id) {
 		$model = LidToestemmingModel::instance();
-		$smarty = CsrSmarty::instance();
 
 		$eerdereWaarde = filter_input(INPUT_POST, $module . '_' . $id, FILTER_SANITIZE_STRING) ?? 'ja';
 
-		$smarty->assign('module', $module);
-		$smarty->assign('id', $id);
-		$smarty->assign('type', $model->getType($module, $id));
-		$smarty->assign('opties', $model->getTypeOptions($module, $id));
-		$smarty->assign('label', $model->getDescription($module, $id));
-		$smarty->assign('waarde', $this->nieuw ? $eerdereWaarde : $model->getValue($module, $id));
-		$smarty->assign('default', $model->getDefault($module, $id));
-
-		return $smarty->fetch('toestemming/toestemming_input.tpl');
+		return new ToestemmingRegel(
+			$module,
+			$id,
+			$model->getType($module, $id),
+			$model->getTypeOptions($module, $id),
+			$model->getDescription($module, $id),
+			$this->nieuw ? $eerdereWaarde : $model->getValue($module, $id),
+			$model->getDefault($module, $id)
+		);
 	}
 
 	public function validate() {

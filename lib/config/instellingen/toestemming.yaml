@@ -1,22 +1,22 @@
 instellingen:
   algemeen:
     foto_intern:
-      beschrijving: "Mijn foto's mogen op de interne stek geplaatst worden."
+      titel: "Mijn foto's mogen op de interne stek geplaatst worden."
       type: 'Enumeration'
       opties: ['', 'ja', 'nee']
       default: ''
     foto_extern:
-      beschrijving: "Mijn foto's mogen op de externe stek geplaatst worden en voor promotiedoeleinden gebruikt worden."
+      titel: "Mijn foto's mogen op de externe stek geplaatst worden en voor promotiedoeleinden gebruikt worden."
       type: 'Enumeration'
       opties: ['', 'ja', 'nee']
       default: ''
     vereniging:
-      beschrijving: 'Het bestuur en commissies van C.S.R. mogen mijn persoonsgegevens gebruiken om hun taken uit te voeren.'
+      titel: 'Het bestuur en commissies van C.S.R. mogen mijn persoonsgegevens gebruiken om hun taken uit te voeren.'
       type: 'Enumeration'
       opties: ['', 'ja', 'nee']
       default: ''
     bijzonder:
-      beschrijving: 'Het bestuur en commissies van C.S.R. mogen mijn bijzondere persoonsgegevens gebruiken om hun taken uit te voeren.'
+      titel: 'Het bestuur en commissies van C.S.R. mogen mijn bijzondere persoonsgegevens gebruiken om hun taken uit te voeren.'
       type: 'Enumeration'
       opties: ['', 'ja', 'nee']
       default: ''

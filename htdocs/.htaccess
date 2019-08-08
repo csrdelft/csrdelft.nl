@@ -28,7 +28,6 @@ RewriteRule ^plaetjes/fotoalbum			index.php?c=FotoAlbum [L]
 RewriteRule ^fotoalbum			index.php?c=FotoAlbum [L]
 RewriteRule ^geolocation		index.php?c=GeoLocation [L]
 RewriteRule ^rechten			index.php?c=Rechten [L]
-RewriteRule ^toestemming        index.php?c=Toestemming [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
