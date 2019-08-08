@@ -427,7 +427,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 				$k .= ' init';
 			}
 			$k .= '">';
-			$k .= $this->getPasfotoTag(false);
+			$k .= $this->getPasfotoTag('');
 			if (AccountModel::existsUid($this->uid) AND LoginModel::instance()->maySuTo($this->getAccount())) {
 				$k .= '<div class="uid uitgebreid">';
 				$k .= '<a href="/su/' . $this->uid . '" title="Su naar dit lid">' . $this->uid . '</a>';
@@ -589,28 +589,33 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
 	 * Geef anders een standaard-plaatje terug.
 	 *
-	 * @param boolean $square Geef een pad naar een vierkante (150x150px) versie terug. (voor google contacts sync)
+	 * @param string $vorm
 	 * @return string
 	 */
-	public function getPasfotoPath($vierkant = false, $vorm = 'user') {
+	public function getPasfotoPath($vorm = 'user') {
 		if ($vorm === 'user') {
 			$vorm = lid_instelling('forum', 'naamWeergave');
 		}
-		return "/profiel/$this->uid/pasfoto/$vorm/" . ($vierkant ? "vierkant/" : "");
+
+		if (in_array($vorm, ['Duckstad', 'vierkant'])) {
+			return "/profiel/pasfoto/$this->uid.$vorm.jpg";
+		}
+
+		return "/profiel/pasfoto/$this->uid.jpg";
 	}
 
 	public function getPasfotoInternalPath($vierkant = false, $vorm = 'user') {
 		$path = null;
 		if (LoginModel::mag(P_OUDLEDEN_READ)) {
 			// in welke (sub)map moeten we zoeken?
-			if ($vierkant) {
-				$folders = array('');
+			if ($vorm == 'vierkant') {
+				$folders = [''];
 			} else {
-				$folders = array($vorm . '/', '');
+				$folders = [$vorm . '/', ''];
 			}
 			// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
 			foreach ($folders as $subfolder) {
-				foreach (array('png', 'jpeg', 'jpg', 'gif') as $validExtension) {
+				foreach (['png', 'jpeg', 'jpg', 'gif'] as $validExtension) {
 					if (file_exists(PASFOTO_PATH . $subfolder . $this->uid . '.' . $validExtension)) {
 						$path = $subfolder . $this->uid . '.' . $validExtension;
 						break;
@@ -628,7 +633,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			return null;
 		}
 		// als het vierkant moet, kijken of de vierkante bestaat, en anders maken
-		if ($vierkant) {
+		if ($vorm == 'vierkant') {
 			$crop = '' . $this->uid . '.vierkant.png';
 			if (!file_exists(PASFOTO_PATH . $crop)) {
 				square_crop(PASFOTO_PATH . $path, PASFOTO_PATH . $crop, 150);
@@ -638,8 +643,8 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		return safe_combine_path(PASFOTO_PATH, $path);
 	}
 
-	public function getPasfotoTag($cssClass = 'pasfoto', $vierkant = false) {
-		return '<img class="' . htmlspecialchars($cssClass) . '" src="' . $this->getPasfotoPath($vierkant) . '" alt="Pasfoto van ' . $this->getNaam('volledig') . '" />';
+	public function getPasfotoTag($cssClass = 'pasfoto') {
+		return '<img class="' . htmlspecialchars($cssClass) . '" src="' . $this->getPasfotoPath() . '" alt="Pasfoto van ' . $this->getNaam('volledig') . '" />';
 	}
 
 	private $kinderen;

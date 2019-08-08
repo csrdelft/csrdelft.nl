@@ -3,9 +3,8 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\GoogleSync;
-use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
@@ -23,13 +22,10 @@ use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\model\groepen\CommissiesModel;
 use CsrDelft\model\groepen\KetzersModel;
-use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\OnderverenigingenModel;
 use CsrDelft\model\groepen\RechtenGroepenModel;
-use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\groepen\WerkgroepenModel;
 use CsrDelft\model\instellingen\LidToestemmingModel;
-use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
@@ -45,96 +41,33 @@ use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
-use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
-use CsrDelft\view\ledenmemory\LedenMemoryView;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-/**
- * ProfielController.class.php
- *
- * @author P.W.G. Brussee <brussee@live.nl>
- *
- * Controller voor de ledenlijst.
- *
- * @property ProfielModel $model
- */
-class ProfielController extends AclController {
-	const ALLOW_REDIRECT = ['voorkeuren', 'bewerken'];
+class ProfielController {
+	private $model;
 
-	public function __construct($query) {
-		parent::__construct($query, ProfielModel::instance());
-		if ($this->getMethod() == 'GET') {
-			$this->acl = array(
-				// Profiel
-				'profiel' => P_OUDLEDEN_READ,
-				'bewerken' => P_PROFIEL_EDIT,
-				'voorkeuren' => P_PROFIEL_EDIT,
-				'resetPrivateToken' => P_PROFIEL_EDIT,
-				'addToGoogleContacts' => P_LEDEN_READ,
-				// Leden
-				'pasfoto' => P_OUDLEDEN_READ,
-				'nieuw' => P_LEDEN_MOD . ',commissie:NovCie',
-				'stamboom' => P_OUDLEDEN_READ,
-				'verjaardagen' => P_LEDEN_READ,
-				'memory' => P_OUDLEDEN_READ,
-			);
-		} else {
-			$this->acl = array(
-				// Profiel
-				'bewerken' => P_PROFIEL_EDIT,
-				'voorkeuren' => P_PROFIEL_EDIT,
-				// Leden
-				'nieuw' => P_LEDEN_MOD . ',commissie:NovCie',
-				'memoryscore' => P_LEDEN_READ,
-				'memoryscores' => P_LEDEN_READ,
-				'saldo' => P_LEDEN_READ,
-			);
-		}
+	public function __construct() {
+		$this->model = ProfielModel::instance();
 	}
 
-	public function performAction(array $args = array()) {
-		// Profiel
-		if ($this->hasParam(1) AND $this->getParam(1) === 'profiel') {
-			if ($this->hasParam(2)) {
-				$uid = $this->getParam(2);
-			} else {
-				$uid = LoginModel::getUid();
-			}
-			if ($this->hasParam(3)) {
-				$this->action = $this->getParam(3);
-			} else {
-				$this->action = 'profiel';
-			}
-			if ($this->action === 'nieuw' AND $this->hasParam(2)) {
-				$args = $this->getParams(4); // status
-				array_unshift($args, $uid); // lidjaar
-			} elseif ($this->action === 'pasfoto') {
-				$this->action = 'pasfoto';
-				parent::performAction([$uid, $this->getParam(4), $this->getParam(5) and $this->getParam(5) == 'vierkant']);
-			} elseif (ProfielModel::existsUid($uid)) {
-				$args = $this->getParams(4);
-				array_unshift($args, ProfielModel::get($uid));
-			} elseif (in_array($this->getParam(2), self::ALLOW_REDIRECT)) {
-				redirect('/profiel/' . LoginModel::getUid() . '/' . $this->getParam(2));
-			}	else {
-				setMelding('Dit profiel bestaat niet', -1);
-				redirect('/ledenlijst');
-			}
-			$this->view = parent::performAction($args);
+	public function resetPrivateToken($uid) {
+		$profiel = ProfielModel::instance()->get($uid);
+
+		if ($profiel === false) {
+			throw new ResourceNotFoundException();
 		}
-		// Leden
-		else {
-			if ($this->hasParam(2)) {
-				$this->action = $this->getParam(2);
-			}
-			parent::performAction($this->getParams(3));
-		}
+		AccountModel::instance()->resetPrivateToken($profiel->getAccount());
+		return $this->profiel($uid);
 	}
 
-	public function profiel(Profiel $profiel) {
-		$uid = $profiel->uid;
+	public function profiel($uid) {
+		$profiel = ProfielModel::instance()->get($uid);
+
+		if ($profiel === false) {
+			throw new ResourceNotFoundException();
+		}
 
 		$fotos = [];
 		foreach (FotoTagsModel::instance()->find('keyword = ?', [$uid], null, null, 3) as $tag) {
@@ -170,29 +103,26 @@ class ProfielController extends AclController {
 		]);
 	}
 
-	public function resetPrivateToken(Profiel $profiel) {
-		AccountModel::instance()->resetPrivateToken($profiel->getAccount());
-		return $this->profiel($profiel);
-	}
-
 	public function nieuw($lidjaar, $status) {
 		// Controleer invoer
 		$lidstatus = 'S_' . strtoupper($status);
 		if (!preg_match('/^[0-9]{4}$/', $lidjaar) OR !in_array($lidstatus, LidStatus::getTypeOptions())) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		// NovCie mag novieten aanmaken
 		if ($lidstatus !== LidStatus::Noviet AND !LoginModel::mag(P_LEDEN_MOD)) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		// Maak nieuw profiel zonder op te slaan
 		$profiel = ProfielModel::instance()->nieuw((int)$lidjaar, $lidstatus);
-		return $this->bewerken($profiel);
+
+		return $this->profielBewerken($profiel);
 	}
 
-	public function bewerken(Profiel $profiel) {
+	private function profielBewerken(Profiel $profiel) {
+
 		if (!$profiel->magBewerken()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$form = new ProfielForm($profiel);
 		if ($form->validate()) {
@@ -239,9 +169,24 @@ class ProfielController extends AclController {
 		return new CsrLayoutPage($form);
 	}
 
-	public function voorkeuren(Profiel $profiel) {
+	public function bewerken($uid) {
+		$profiel = ProfielModel::instance()->get($uid);
+
+		if ($profiel === false) {
+			throw new ResourceNotFoundException();
+		}
+
+		return $this->profielBewerken($profiel);
+	}
+
+	public function voorkeuren($uid) {
+		$profiel = ProfielModel::instance()->get($uid);
+
+		if ($profiel === false) {
+			throw new ResourceNotFoundException();
+		}
 		if (!$profiel->magBewerken()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$form = new CommissieVoorkeurenForm($profiel);
 		if ($form->isPosted() && $form->validate()) {
@@ -257,7 +202,12 @@ class ProfielController extends AclController {
 		return new CsrLayoutPage($form);
 	}
 
-	public function addToGoogleContacts(Profiel $profiel) {
+	public function addToGoogleContacts($uid) {
+		$profiel = ProfielModel::instance()->get($uid);
+
+		if ($profiel === false) {
+			throw new ResourceNotFoundException();
+		}
 		try {
 			GoogleSync::doRequestToken(CSR_ROOT . "/profiel/" . $profiel->uid . "/addToGoogleContacts");
 			$gSync = GoogleSync::instance();
@@ -271,14 +221,14 @@ class ProfielController extends AclController {
 
 
 	public function stamboom($uid = null) {
-		$this->view = view('profiel.stamboom', [
+		return view('profiel.stamboom', [
 			'profiel' => ProfielModel::get($uid) ?? LoginModel::getProfiel(),
 		]);
 	}
 
 	public function verjaardagen() {
 		$nu = time();
-		$this->view = view('verjaardagen.alle', [
+		return view('verjaardagen.alle', [
 			'dezemaand' => date('n', $nu),
 			'dezedag' => date('d', $nu),
 			'verjaardagen' => VerjaardagenModel::getJaar(),
@@ -288,26 +238,26 @@ class ProfielController extends AclController {
 	public function saldo($uid, $timespan) {
 		if (SaldoGrafiekModel::magGrafiekZien($uid)) {
 			$data = SaldoGrafiekModel::getDataPoints($uid, $timespan);
-			$this->view = new JsonResponse($data);
+			return new JsonResponse($data);
 		} else {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 	}
 
-
-	public function pasfoto($uid, $vorm, $vierkant) {
+	public function pasfoto($uid, $vorm = 'civitas') {
 		$profiel = ProfielModel::get($uid);
 		if (!$profiel) {
-			$this->exit_http(403);
+			redirect('/images/geen-foto.jpg');
 		}
 		if (!is_zichtbaar($profiel, 'profielfoto', 'intern')) {
-			redirect('/plaetjes/geen-foto.jpg');
+			redirect('/images/geen-foto.jpg');
 		}
-		$path = $profiel->getPasfotoInternalPath($vierkant, $vorm);
+		$path = $profiel->getPasfotoInternalPath(false, $vorm);
 		if ($path === null) {
-			redirect('/plaetjes/geen-foto.jpg');
+			redirect('/images/geen-foto.jpg');
 		}
 		$image = new Afbeelding($path);
 		$image->serve();
+		exit;
 	}
 }

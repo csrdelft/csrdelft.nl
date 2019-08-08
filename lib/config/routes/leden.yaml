@@ -4,3 +4,8 @@ leden-lijst:
   methods: [GET,POST]
   options: { mag: P_OUDLEDEN_READ }
 
+leden-verjaardagen:
+  path: /leden/verjaardagen
+  controller: CsrDelft\controller\ProfielController::verjaardagen
+  methods: GET
+  options: { mag: P_OUDLEDEN_READ }
