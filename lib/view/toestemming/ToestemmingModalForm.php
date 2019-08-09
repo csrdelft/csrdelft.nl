@@ -35,13 +35,14 @@ class ToestemmingModalForm extends ModalForm {
 		$smarty = CsrSmarty::instance();
 		$fields = [];
 
-		$akkoord = 'ja';
+		$akkoord = '';
 
 		$instellingen = LidToestemmingModel::instance()->getRelevantToestemmingCategories(LoginModel::getProfiel()->isLid());
 
 		foreach ($instellingen as $module => $instelling) {
 			foreach ($instelling as $id) {
 				if (LidToestemmingModel::instance()->getValue($module, $id) == 'ja' && $akkoord == null) {
+					var_dump($module, $id);
 					$akkoord = 'ja';
 				} elseif (LidToestemmingModel::instance()->getValue($module, $id) == 'nee') {
 					$akkoord = 'nee';
