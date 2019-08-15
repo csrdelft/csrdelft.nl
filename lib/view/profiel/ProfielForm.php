@@ -18,10 +18,10 @@ use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredTelefoonField;
 use CsrDelft\view\formulier\getalvelden\TelefoonField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
+use CsrDelft\view\formulier\invoervelden\IBANField;
 use CsrDelft\view\formulier\invoervelden\LandField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
-use CsrDelft\view\formulier\invoervelden\required\RequiredIBANField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLandField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\StudieField;
@@ -184,7 +184,11 @@ class ProfielForm extends Formulier {
 		$fields[] = new TelefoonField('telefoon', $profiel->telefoon, 'Telefoonnummer (vast)', 20);
 
 		$fields[] = new Subkopje('Boekhouding');
-		$fields[] = new RequiredIBANField('bankrekening', $profiel->bankrekening, 'Bankrekening', 34);
+
+		// Bankrekeningnummer: verplicht voor (nieuwe) leden
+		$fields['bankrekening'] = new IBANField('bankrekening', $profiel->bankrekening, 'Bankrekening', 34);
+		$fields['bankrekening']->required = $inschrijven || $profiel->isLid();
+
 		if ($admin) {
 			$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
 		}
