@@ -137,7 +137,7 @@ class ToolsController {
 	 */
 	public function novieten() {
 		return view('tools.novieten', [
-			'novieten' => Database::instance()->sqlSelect(['*'], 'profielen', 'status = ?', ['S_NOVIET'])
+			'novieten' => Database::instance()->sqlSelect(['*'], 'profielen', 'status = ? AND lidjaar = ?', ['S_NOVIET', date('Y')])
 		]);
 	}
 
