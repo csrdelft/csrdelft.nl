@@ -149,7 +149,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'postcode' => array(T::String),
 		'woonplaats' => array(T::String),
 		'land' => array(T::String),
-		'mobiel' => array(T::String),
+		'mobiel' => array(T::String, true),
 		'telefoon' => array(T::String, true),
 		'o_adres' => array(T::String, true),
 		'o_postcode' => array(T::String, true),

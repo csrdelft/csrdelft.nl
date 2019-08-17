@@ -15,7 +15,6 @@ use CsrDelft\view\formulier\elementen\Subkopje;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
-use CsrDelft\view\formulier\getalvelden\required\RequiredTelefoonField;
 use CsrDelft\view\formulier\getalvelden\TelefoonField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\IBANField;
@@ -180,7 +179,9 @@ class ProfielForm extends Formulier {
 			$fields[] = new UrlField('linkedin', $profiel->linkedin, 'Publiek LinkedIn-profiel');
 			$fields[] = new UrlField('website', $profiel->website, 'Website');
 		}
-		$fields[] = new RequiredTelefoonField('mobiel', $profiel->mobiel, 'Mobiel', 20);
+		// Mobiel & telefoon, mobiel verplicht voor (nieuwe) leden
+		$fields['mobiel'] = new TelefoonField('mobiel', $profiel->mobiel, 'Mobiel', 20);
+		$fields['mobiel']->required = $inschrijven || $profiel->isLid();
 		$fields[] = new TelefoonField('telefoon', $profiel->telefoon, 'Telefoonnummer (vast)', 20);
 
 		$fields[] = new Subkopje('Boekhouding');
