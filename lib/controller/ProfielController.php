@@ -171,7 +171,7 @@ class ProfielController {
 			redirect('/profiel/' . $profiel->uid);
 		}
 		if ($alleenFormulier) {
-			return view('plain', ['content' => $form]);
+			return view('plain', ['titel' => 'Noviet toevoegen', 'content' => $form]);
 		}
 		return new CsrLayoutPage($form);
 	}
