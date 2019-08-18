@@ -39,6 +39,10 @@ class FotoAlbumController {
 	}
 
 	public function bekijken($dir) {
+		if ($dir == "" && !LoginModel::mag(P_ALBUM_READ)) {
+			$dir = 'Publiek';
+		}
+
 		$album = $this->model->getFotoAlbum($dir);
 
 		if (!$album->magBekijken()) {

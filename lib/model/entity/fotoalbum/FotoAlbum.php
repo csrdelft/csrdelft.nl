@@ -210,7 +210,7 @@ class FotoAlbum extends Map {
 	 * @return bool
 	 */
 	public function isPubliek() {
-		return preg_match('/^fotoalbum\/Publiek\/.*$/', $this->subdir) == 1;
+		return preg_match('/Publiek\/?.*$/', $this->subdir) == 1;
 	}
 	public function magBekijken() {
 		if (!startsWith(realpath($this->path), realpath(PHOTOALBUM_PATH . 'fotoalbum/'))) {
