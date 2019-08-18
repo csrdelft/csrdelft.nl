@@ -27,7 +27,7 @@ class LidInstellingenModel extends CachedPersistenceModel {
 	use YamlInstellingen;
 
 	const ORM = LidInstelling::class;
-
+	protected $memcache_prefetch = true;
 	/**
 	 * InstellingenModel constructor.
 	 * @throws FileLoaderImportCircularReferenceException

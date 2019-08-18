@@ -24,7 +24,7 @@ class LidToestemmingModel extends CachedPersistenceModel {
 	use YamlInstellingen;
 
 	const ORM = LidToestemming::class;
-
+	protected $memcache_prefetch = true;
 	/**
 	 * LidToestemmingModel constructor.
 	 * @throws FileLoaderImportCircularReferenceException
