@@ -84,16 +84,16 @@ class DownloadUrlField extends UrlField {
 
 	public function opslaan($directory, $filename, $overwrite = false) {
 		parent::opslaan($directory, $filename, $overwrite);
-		$copied = copy($this->model->directory . $this->model->filename, $directory . $filename);
+		$copied = copy(join_paths($this->model->directory, $this->model->filename), join_paths($directory, $filename));
 		if (!$copied) {
-			throw new CsrException('Bestand kopieren mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
+			throw new CsrException('Bestand kopieren mislukt: ' . htmlspecialchars(join_paths($this->model->directory, $this->model->filename)));
 		}
-		$moved = unlink($this->model->directory . $this->model->filename);
+		$moved = unlink(join_paths($this->model->directory, $this->model->filename));
 		if (!$moved) {
-			throw new CsrException('Verplaatsen mislukt: ' . htmlspecialchars($this->model->directory . $this->model->filename));
+			throw new CsrException('Verplaatsen mislukt: ' . htmlspecialchars(join_paths($this->model->directory, $this->model->filename)));
 		}
-		if (false === @chmod($directory . $filename, 0644)) {
-			throw new CsrException('Geen eigenaar van bestand: ' . htmlspecialchars($directory . $filename));
+		if (false === @chmod(join_paths($directory, $filename), 0644)) {
+			throw new CsrException('Geen eigenaar van bestand: ' . htmlspecialchars(join_paths($directory, $filename)));
 		}
 		$this->model->directory = $directory;
 		$this->model->filename = $filename;

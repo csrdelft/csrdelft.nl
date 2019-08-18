@@ -20,6 +20,7 @@ leden-routes: { resource: routes/leden.yaml }
 ledenmemory-routes: { resource: routes/ledenmemory.yaml }
 profiel-routes: { resource: routes/profiel.yaml }
 toestemming-routes: { resource: routes/toestemming.yaml }
+fotoalbum-routes: { resource: routes/fotoalbum.yaml }
 
 logger:
   path: /logger/log

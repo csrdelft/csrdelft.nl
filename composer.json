@@ -31,6 +31,7 @@
 		"ext-json": "*",
 		"ext-curl": "*",
 		"ext-dom": "*",
+		"ext-iconv": "*",
 		"symfony/routing": "^3.4",
 		"symfony/http-foundation": "^3.4",
 		"php-di/invoker": "^2.0",

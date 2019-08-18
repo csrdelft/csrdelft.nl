@@ -207,13 +207,13 @@ abstract class InputField implements FormElement, Validator {
 		if (!is_writable($directory)) {
 			throw new CsrException('Doelmap is niet beschrijfbaar: ' . htmlspecialchars($directory));
 		}
-		if (file_exists($directory . $filename)) {
+		if (file_exists(join_paths($directory, $filename))) {
 			if ($overwrite) {
-				if (!unlink($directory . $filename)) {
-					throw new CsrException('Overschrijven mislukt: ' . htmlspecialchars($directory . $filename));
+				if (!unlink(join_paths($directory, $filename))) {
+					throw new CsrException('Overschrijven mislukt: ' . htmlspecialchars(join_paths($directory, $filename)));
 				}
 			} elseif (!$this instanceof BestandBehouden) {
-				throw new CsrGebruikerException('Bestandsnaam al in gebruik: ' . htmlspecialchars($directory . $filename));
+				throw new CsrGebruikerException('Bestandsnaam al in gebruik: ' . htmlspecialchars(join_paths($directory, $filename)));
 			}
 		}
 	}

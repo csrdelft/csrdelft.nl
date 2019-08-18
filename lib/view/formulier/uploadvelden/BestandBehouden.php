@@ -47,7 +47,7 @@ class BestandBehouden extends InputField {
 
 	public function opslaan($directory, $filename, $overwrite = false) {
 		parent::opslaan($directory, $filename, $overwrite);
-		if (false === @chmod($this->model->directory . $this->model->filename, 0644)) {
+		if (false === @chmod(join_paths($this->model->directory, $this->model->filename), 0644)) {
 			throw new CsrException('Geen eigenaar van bestand: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
 	}

@@ -38,7 +38,7 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 @define('LIB_PATH', BASE_PATH . 'lib/');
 @define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
 @define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
-@define('PHOTOALBUM_PATH', DATA_PATH . 'foto/');
+@define('PHOTOALBUM_PATH', DATA_PATH . 'foto/fotoalbum/');
 @define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
 @define('ROUTES_CACHE_PATH', DATA_PATH . 'routes/');
 @define('CONFIG_CACHE_PATH', DATA_PATH . 'config_cache/');

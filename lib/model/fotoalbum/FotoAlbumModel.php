@@ -14,6 +14,7 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * FotoAlbumModel.php
@@ -89,10 +90,10 @@ class FotoAlbumModel extends PersistenceModel {
 			$album = new FotoAlbum($path);
 		}
 		if (!$album->exists()) {
-			return null;
+			throw new ResourceNotFoundException("Fotoalbum $path bestaat niet");
 		}
 		if (!$album->magBekijken()) {
-			return false;
+			throw new ResourceNotFoundException();
 		}
 		return $album;
 	}
@@ -115,7 +116,7 @@ class FotoAlbumModel extends PersistenceModel {
 				// FotoAlbum
 				if ($object->isDir()) {
 					$albums++;
-					$album = new FotoAlbum($path);
+					$album = new FotoAlbum($path, true);
 					if (!$this->exists($album)) {
 						$this->create($album);
 					}
@@ -130,7 +131,7 @@ class FotoAlbumModel extends PersistenceModel {
 						continue;
 					}
 					$fotos++;
-					$album = new FotoAlbum(dirname($path));
+					$album = new FotoAlbum(dirname($path), true);
 					$foto = new Foto($filename, $album, true);
 					if (!$foto->exists()) {
 						throw new CsrException('Foto bestaat niet: ' . $foto->directory . $foto->filename);
@@ -161,11 +162,12 @@ HTML;
 	}
 
 	public function getMostRecentFotoAlbum() {
-		$album = $this->getFotoAlbum(PHOTOALBUM_PATH . 'fotoalbum/');
-		if (!$album) {
+		try {
+			$album = $this->getFotoAlbum('');
+			return $album->getMostRecentSubAlbum();
+		} catch (ResourceNotFoundException $ex) {
 			return null;
 		}
-		return $album->getMostRecentSubAlbum();
 	}
 
 	public function hernoemAlbum(FotoAlbum $album, $newName) {
@@ -180,6 +182,11 @@ HTML;
 
 		// nieuwe subdir op basis van path
 		$newDir = dirname($oldDir) . '/' . $newName . '/';
+
+		if (is_dir(PHOTOALBUM_PATH . $newDir)) {
+			throw new CsrException('Nieuwe album naam bestaat al');
+		}
+
 		if (false === @rename($album->path, PHOTOALBUM_PATH . $newDir)) {
 			$error = error_get_last();
 			throw new CsrException($error['message']);
