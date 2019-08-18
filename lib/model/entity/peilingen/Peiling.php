@@ -25,6 +25,7 @@ class Peiling extends PersistentEntity {
 	public $aantal_stemmen;
 	public $rechten_stemmen;
 	public $rechten_mod;
+	public $sluitingsdatum;
 
 	public function getOpties() {
 		return PeilingOptiesModel::instance()->find('peiling_id = ?', [$this->id])->fetchAll();
@@ -45,8 +46,14 @@ class Peiling extends PersistentEntity {
 		return LoginModel::mag(P_PEILING_MOD) || LoginModel::getUid() == $this->eigenaar;
 	}
 
+	private function isPeilingOpen()
+	{
+		return $this->sluitingsdatum == NULL || time() < strtotime($this->sluitingsdatum);
+	}
+
 	public function getMagStemmen() {
-		return LoginModel::mag(P_PEILING_VOTE) && ($this->eigenaar == LoginModel::getUid() || empty(trim($this->rechten_stemmen)) || LoginModel::mag($this->rechten_stemmen));
+		return LoginModel::mag(P_PEILING_VOTE) && ($this->eigenaar == LoginModel::getUid() || empty(trim($this->rechten_stemmen)) || LoginModel::mag($this->rechten_stemmen))
+			&& $this->isPeilingOpen();
 	}
 
 	public function getHeeftGestemd() {
@@ -66,6 +73,7 @@ class Peiling extends PersistentEntity {
 		'aantal_stemmen' => [T::Integer],
 		'rechten_stemmen' => [T::String, true],
 		'rechten_mod' => [T::String, true],
+		'sluitingsdatum' => [T::DateTime, true],
 	];
 
 	protected static $computed_attributes = [
@@ -75,6 +83,7 @@ class Peiling extends PersistentEntity {
 		'aantal_gestemd' => [T::Integer],
 		'opties' => []
 	];
+
 }
 
 
