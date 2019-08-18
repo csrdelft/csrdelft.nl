@@ -31,7 +31,7 @@ class Afbeelding extends Bestand {
 	 * @return string
 	 */
 	public function getFullPath() {
-		return $this->directory . $this->filename;
+		return join_paths($this->directory, $this->filename);
 	}
 
 	/**
@@ -50,11 +50,11 @@ class Afbeelding extends Bestand {
 			$this->filename = basename($path);
 		}
 		if ($parse) {
-			$this->filesize = @filesize($this->directory . $this->filename);
+			$this->filesize = @filesize($this->getFullPath());
 			if (!$this->filesize) {
 				throw new CsrGebruikerException('Afbeelding is leeg of bestaat niet: ' . $this->filename);
 			}
-			$image = @getimagesize($this->directory . $this->filename);
+			$image = @getimagesize($this->getFullPath());
 			if (!$image) {
 				throw new CsrGebruikerException('Afbeelding is geen afbeelding: ' . $this->filename);
 			}
@@ -72,8 +72,8 @@ class Afbeelding extends Bestand {
 	 * Serve this image with the correct http headers.
 	 */
 	public function serve() {
-		$filename = $this->getFullPath();
-		$lastModified = filemtime($filename);
+		$file = $this->getFullPath();
+		$lastModified = filemtime($file);
 		$etagFile = md5_file(__FILE__);
 
 		if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] === $etagFile) {
@@ -86,14 +86,26 @@ class Afbeelding extends Bestand {
 			exit;
 		}
 
-		header("Content-type: " . image_type_to_mime_type(exif_imagetype($filename)));
-		header('Content-Length: ' . filesize($filename));
+		header("Content-type: " . image_type_to_mime_type(exif_imagetype($file)));
+		header('Content-Length: ' . filesize($file));
 		header('ETag: ' . $etagFile);
 		header('Last-Modified: ' . gmdate(\DateTime::RFC7231, $lastModified));
 		header('Pragma: public');
 		header('Cache-Control: max-age=2592000, public');
 		header('Expires: ' . gmdate(\DateTime::RFC7231, time() + 2592000));
-		readfile($filename);
+		readfile($file);
+		exit;
+	}
+
+	public function download() {
+		header('Content-Description: File Transfer');
+		header('Content-Type: ' . $this->mimetype);
+		header('Content-Disposition: attachment; filename="' . $this->filename . '"');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
+		header('Content-Length: ' . $this->filesize);
+		readfile($this->getFullPath());
 		exit;
 	}
 

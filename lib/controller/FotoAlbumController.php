@@ -2,8 +2,10 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\controller\framework\AclController;
+use CsrDelft\common\CsrToegangException;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
@@ -17,6 +19,7 @@ use CsrDelft\view\fotoalbum\FotosDropzone;
 use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
 use CsrDelft\view\fotoalbum\PosterUploadForm;
 use CsrDelft\view\JsonResponse;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * FotoAlbumController.class.php
@@ -25,96 +28,38 @@ use CsrDelft\view\JsonResponse;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Controller van het fotoalbum.
- *
- * @property FotoAlbumModel $model
  */
-class FotoAlbumController extends AclController {
+class FotoAlbumController {
+	use QueryParamTrait;
 
-	public function __construct($query) {
-		parent::__construct($query, FotoAlbumModel::instance());
-		if ($this->getMethod() == 'GET') {
-			$this->acl = array(
-				'bekijken' => P_ALBUM_READ . '|' . P_ALBUM_PUBLIC_READ,
-				'download' => P_ALBUM_READ . '|' . P_ALBUM_PUBLIC_READ,
-				'downloaden' => P_ALBUM_DOWN . '|' . P_ALBUM_PUBLIC_READ,
-				'verwerken' => P_ALBUM_MOD . '|' . P_ALBUM_PUBLIC_MOD,
-				'uploaden' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
-				'zoeken' => P_LEDEN_READ,
-				'raw_image' => P_ALBUM_READ . '|' . P_ALBUM_PUBLIC_READ
-			);
-		} else {
-			$this->acl = array(
-				'albumcover' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
-				'verwijderen' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
-				'hernoemen' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
-				'roteren' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
-				'toevoegen' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
-				'bestaande' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
-				'uploaden' => P_ALBUM_ADD . '|' . P_ALBUM_PUBLIC_ADD,
-				'gettags' => P_LEDEN_READ,
-				'addtag' => P_LEDEN_READ,
-				'removetag' => P_LEDEN_READ
-			);
-		}
+	private $model;
+
+	public function __construct() {
+		$this->model = FotoAlbumModel::instance();
 	}
 
-	public function performAction(array $args = array()) {
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
+	public function bekijken($dir) {
+		if ($dir == "" && !LoginModel::mag(P_ALBUM_READ)) {
+			$dir = 'Publiek';
 		}
-		if ($this->getParam(1) == 'plaetjes') {
-			$this->action = 'raw_image';
-			$path = $this->getParams(2);
 
-		} elseif (!array_key_exists($this->action, $this->acl)) {
-			$this->action = 'bekijken';
-			$path = $this->getParams(1);
-		} elseif ($this->action === 'removetag') {
-			parent::performAction();
-			return;
-		} elseif ($this->action === 'zoeken') {
-			parent::performAction($this->getParams(3));
-			return;
-		} else {
-			$path = $this->getParams(3);
-		}
-		$album = null;
-		if (sizeof($path) === 2) {
-			$album = $this->model->getFotoAlbum(end($path));
-		}
-		if (!$album) {
-			$path = PHOTOALBUM_PATH . urldecode(implode('/', $path));
-			if ($this->action === 'download' or $this->action === 'raw_image') {
-				parent::performAction(array($path));
-				return;
-			}
-			$album = $this->model->getFotoAlbum($path);
-		}
-		if (!$album) {
-			setMelding('Fotoalbum bestaat niet' . (DEBUG ? ': ' . $path : ''), -1);
-			if (LoginModel::mag(P_ALBUM_READ)) {
-				redirect('/fotoalbum');
-			} else {
-				redirect('/fotoalbum/Publiek');
-			}
-		}
-		$args[] = $album;
-		parent::performAction($args);
-	}
+		$album = $this->model->getFotoAlbum($dir);
 
-	public function bekijken(FotoAlbum $album) {
 		if (!$album->magBekijken()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
+
 		if ($album->dirname === 'Posters') {
 			$album->orderByDateModified();
 		}
-		$this->view = view('fotoalbum.album', ['album' => $album]);
+		return view('fotoalbum.album', ['album' => $album]);
 	}
 
-	public function verwerken(FotoAlbum $album) {
+	public function verwerken($dir) {
+		$album = $this->model->getFotoAlbum($dir);
+
 		if (!$album->magAanpassen()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		if ($album->dirname === 'fotoalbum') {
 			setMelding('Niet het complete fotoalbum verwerken', -1);
@@ -124,27 +69,29 @@ class FotoAlbumController extends AclController {
 		redirect($album->getUrl());
 	}
 
-	public function toevoegen(FotoAlbum $album) {
+	public function toevoegen($dir) {
+		$album = new FotoAlbum($dir);
 		if (!$album->magToevoegen()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$formulier = new FotoAlbumToevoegenForm($album);
 		if ($this->getMethod() == 'POST' AND $formulier->validate()) {
 			$subalbum = $formulier->findByName('subalbum')->getValue();
-			$album->path .= $subalbum . '/';
-			$album->subdir .= $subalbum . '/';
+			$album->path = join_paths($album->path, $subalbum);
+			$album->subdir = join_paths($album->subdir, $subalbum);
 			if (!$album->exists()) {
 				$this->model->create($album);
 			}
-			$this->view = new JsonResponse($album->getUrl());
-			return;
+			return new JsonResponse($album->getUrl());
 		}
-		$this->view = $formulier;
+		return $formulier;
 	}
 
-	public function uploaden(FotoAlbum $album) {
+	public function uploaden($dir) {
+		$album = $this->model->getFotoAlbum($dir);
+
 		if (!$album->magToevoegen()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$poster = $album->dirname === 'Posters';
 		if ($poster) {
@@ -175,8 +122,7 @@ class FotoAlbumController extends AclController {
 							if ($poster) {
 								redirect($album->getUrl() . '#' . $foto->getResizedUrl());
 							} else {
-								$this->view = new JsonResponse(true);
-								return;
+								return new JsonResponse(true);
 							}
 						} else {
 							throw new CsrGebruikerException('Verwerken mislukt');
@@ -185,63 +131,47 @@ class FotoAlbumController extends AclController {
 						throw new CsrGebruikerException('Opslaan mislukt');
 					}
 				} catch (CsrGebruikerException $e) {
-					$this->view = new JsonResponse(array('error' => $e->getMessage()), 500);
-					return;
+					return new JsonResponse(array('error' => $e->getMessage()), 500);
 				}
 			} else {
 				if ($poster) {
 					// fall through
 				} elseif ($uploader !== null) {
-					$this->view = new JsonResponse(array('error' => $uploader->getError()), 500);
-					return;
+					return new JsonResponse(array('error' => $uploader->getError()), 500);
 				}
 			}
 		}
-		$this->view = new CsrLayoutPage($formulier);
+		return new CsrLayoutPage($formulier);
 	}
 
-	public function bestaande(FotoAlbum $album) {
+	public function bestaande($dir) {
+		$album = $this->model->getFotoAlbum($dir);
+
 		if (!$album->magToevoegen()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
-		$list = array();
-		$files = @scandir($album->path . '_thumbs/');
+		$list = [];
+		$files = $album->getFotos();
 		if ($files !== false) {
 			foreach ($files as $filename) {
-				if (endsWith($filename, '.jpg')) {
-					$foto = new Foto($filename, $album, true);
-					$obj['name'] = $foto->filename;
-					$obj['size'] = $foto->filesize;
-					$obj['type'] = $foto->mimetype;
-					$obj['thumbnail'] = $foto->getThumbUrl();
+				$afbeelding = new Afbeelding($filename->getThumbPath());
+				if (endsWith($afbeelding->filename, '.jpg')) {
+					$obj['name'] = $afbeelding->filename;
+					$obj['size'] = $afbeelding->filesize;
+					$obj['type'] = $afbeelding->mimetype;
+					$obj['thumbnail'] = $filename->getThumbUrl();
 					$list[] = $obj;
 				}
 			}
 		}
-		$this->view = new JsonResponse($list);
+		return new JsonResponse($list);
 	}
 
-	public function download($path) {
-		$foto = Foto::fromFileName($path, true);
-		if (!$foto->magBekijken()) {
-			$this->exit_http(403);
-		}
-		if ($foto->exists()) {
-			header('Content-Description: File Transfer');
-			header('Content-Type: ' . $foto->mimetype);
-			header('Content-Disposition: attachment; filename="' . $foto->filename . '"');
-			header('Expires: 0');
-			header('Cache-Control: must-revalidate');
-			header('Pragma: public');
-			header('Content-Length: ' . $foto->filesize);
-			readfile($foto->directory . $foto->filename);
-		}
-		exit;
-	}
+	public function downloaden($dir) {
+		$album = $this->model->getFotoAlbum($dir);
 
-	public function downloaden(FotoAlbum $album) {
 		if (!$album->magDownloaden()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		header('Content-Description: File Transfer');
 		header('Content-Type: application/x-tar');
@@ -263,44 +193,54 @@ class FotoAlbumController extends AclController {
 		exit;
 	}
 
-	public function hernoemen(FotoAlbum $album) {
+	public function hernoemen($dir) {
+		$album = $this->model->getFotoAlbum($dir);
+
 		if (!$album->magAanpassen()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
-		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
-		if ($album !== null AND $this->model->hernoemAlbum($album, $naam)) {
-			$this->view = new JsonResponse($album->getUrl());
+		$naam = trim(filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING));
+		if ($album !== null) {
+			try {
+				$this->model->hernoemAlbum($album, $naam);
+			} catch (CsrException $exception) {
+				return new JsonResponse($exception->getMessage(), 400);
+			}
+			return new JsonResponse($album->getUrl());
 		} else {
-			$this->view = new JsonResponse('Fotoalbum hernoemen mislukt', 500);
+			return new JsonResponse('Fotoalbum hernoemen mislukt', 500);
 		}
 	}
 
-	public function albumcover(FotoAlbum $album) {
+	public function albumcover($dir) {
+		$album = $this->model->getFotoAlbum($dir);
+
 		if (!$album->magAanpassen()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$cover = new Foto($filename, $album);
 		if ($cover->exists() AND $this->model->setAlbumCover($album, $cover)) {
-			$this->view = new JsonResponse($album->getUrl() . '#' . $cover->getResizedUrl());
+			return new JsonResponse($album->getUrl() . '#' . $cover->getResizedUrl());
 		} else {
-			$this->view = new JsonResponse('Fotoalbum-cover instellen mislukt', 500);
+			return new JsonResponse('Fotoalbum-cover instellen mislukt', 500);
 		}
 	}
 
-	public function verwijderen(FotoAlbum $album) {
+	public function verwijderen($dir) {
+		$album = $this->model->getFotoAlbum($dir);
+
 		if (!$album->magVerwijderen()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		if ($album->isEmpty()) {
 			if (1 === FotoAlbumModel::instance()->delete($album)) {
 				setMelding('Fotoalbum verwijderen geslaagd', 1);
-				$this->view = new JsonResponse(dirname($album->getUrl()));
+				return new JsonResponse(dirname($album->getUrl()));
 			} else {
 				setMelding('Fotoalbum verwijderen mislukt', -1);
-				$this->view = new JsonResponse($album->getUrl());
+				return new JsonResponse($album->getUrl());
 			}
-			return;
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
@@ -308,24 +248,26 @@ class FotoAlbumController extends AclController {
 			echo '<div id="' . md5($filename) . '" class="remove"></div>';
 			exit;
 		} else {
-			$this->view = new JsonResponse('Foto verwijderen mislukt', 500);
+			return new JsonResponse('Foto verwijderen mislukt', 500);
 		}
 	}
 
-	public function roteren(FotoAlbum $album) {
+	public function roteren($dir) {
+		$album = $this->model->getFotoAlbum($dir);
+
 		if (!$album->magAanpassen()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
 		$degrees = (int)filter_input(INPUT_POST, 'rotation', FILTER_SANITIZE_NUMBER_INT);
 		$foto->rotate($degrees);
-		$this->view = new JsonResponse(true);
+		return new JsonResponse(true);
 	}
 
 	public function zoeken() {
 		if (!$this->hasParam('q')) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$query = iconv('utf-8', 'ascii//TRANSLIT', $this->getParam('q')); // convert accented characters to regular
 		$limit = 5;
@@ -341,28 +283,32 @@ class FotoAlbumController extends AclController {
 				'value' => ucfirst($album->dirname)
 			);
 		}
-		$this->view = new JsonResponse($result);
+		return new JsonResponse($result);
 	}
 
-	public function gettags(FotoAlbum $album) {
+	public function gettags($dir) {
+		$album = $this->model->getFotoAlbum($dir);
+
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
 		if (!$foto->exists()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		// return all tags
 		$tags = FotoTagsModel::instance()->getTags($foto);
-		$this->view = new JsonResponse($tags->fetchAll());
+		return new JsonResponse($tags->fetchAll());
 	}
 
-	public function addtag(FotoAlbum $album) {
+	public function addtag($dir) {
+		$album = $this->model->getFotoAlbum($dir);
+
 		if (!$album->magToevoegen()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
 		if (!$foto->exists()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$formulier = new FotoTagToevoegenForm($foto);
 		if ($this->getMethod() == 'POST' AND $formulier->validate()) {
@@ -373,9 +319,9 @@ class FotoAlbumController extends AclController {
 			FotoTagsModel::instance()->addTag($foto, $uid, $x, $y, $size);
 			// return all tags
 			$tags = FotoTagsModel::instance()->getTags($foto);
-			$this->view = new JsonResponse($tags->fetchAll());
+			return new JsonResponse($tags->fetchAll());
 		} else {
-			$this->view = $formulier;
+			return $formulier;
 		}
 	}
 
@@ -383,7 +329,7 @@ class FotoAlbumController extends AclController {
 		$refuuid = filter_input(INPUT_POST, 'refuuid', FILTER_SANITIZE_STRING);
 		$keyword = filter_input(INPUT_POST, 'keyword', FILTER_SANITIZE_STRING);
 		if (!LoginModel::mag(P_ALBUM_MOD) AND !LoginModel::mag($keyword)) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		FotoTagsModel::instance()->removeTag($refuuid, $keyword);
 		/** @var Foto $foto */
@@ -391,25 +337,46 @@ class FotoAlbumController extends AclController {
 		if ($foto) {
 			// return all tags
 			$tags = FotoTagsModel::instance()->getTags($foto);
-			$this->view = new JsonResponse($tags->fetchAll());
+			return new JsonResponse($tags->fetchAll());
 		} else {
-			$this->view = new JsonResponse(array());
+			return new JsonResponse(array());
 		}
 	}
 
-	public function raw_image($path) {
+	public function raw_image($dir, $foto, $ext) {
 		//Extra check to prevent attacks
-		if (!startsWith(realpath($path), realpath(PHOTOALBUM_PATH))) {
-			$this->exit_http(403);
+		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto . "." . $ext))) {
+			throw new CsrToegangException();
 		}
 
-		$image = Foto::fromFileName($path);
+		$image = new Foto($foto . '.' . $ext, new FotoAlbum($dir), true);
 		if ($image === false || !$image->magBekijken()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		} else if (!$image->exists()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
-		$image->serve();
+		if (isset($_GET['download'])) {
+			$image->download();
+		} else {
+			$image->serve();
+		}
 	}
 
+	public function raw_image_thumb($dir, $foto, $ext) {
+		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto . "." . $ext))) {
+			throw new ResourceNotFoundException();
+		}
+		$foto = new Foto($foto . "." . $ext, new FotoAlbum($dir));
+		$afbeelding = new Afbeelding($foto->getThumbPath());
+		$afbeelding->serve();
+	}
+
+	public function raw_image_resized($dir, $foto, $ext) {
+		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto . "." . $ext))) {
+			throw new ResourceNotFoundException();
+		}
+		$foto = new Foto($foto . "." . $ext, new FotoAlbum($dir));
+		$afbeelding = new Afbeelding($foto->getResizedPath());
+		$afbeelding->serve();
+	}
 }

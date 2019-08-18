@@ -32,7 +32,7 @@ class FotoModel extends PersistenceModel {
 		$parts = explode('@', $UUID, 2);
 		$path = explode('/', $parts[0]);
 		$filename = array_pop($path);
-		$subdir = implode('/', $path) . '/';
+		$subdir = implode('/', $path);
 		return $this->retrieveByPrimaryKey(array($subdir, $filename));
 	}
 
@@ -87,7 +87,7 @@ class FotoModel extends PersistenceModel {
 	 */
 	public function verwijderFoto(Foto $foto) {
 		$ret = true;
-		$ret &= unlink($foto->directory . $foto->filename);
+		$ret &= unlink($foto->getFullPath());
 		if ($foto->hasResized()) {
 			$ret &= unlink($foto->getResizedPath());
 		}

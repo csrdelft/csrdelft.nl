@@ -70,12 +70,12 @@ class UploadFileField extends InputField {
 
 	public function opslaan($directory, $filename, $overwrite = false) {
 		parent::opslaan($directory, $filename, $overwrite);
-		$moved = @move_uploaded_file($this->value['tmp_name'], $directory . $filename);
+		$moved = @move_uploaded_file($this->value['tmp_name'], join_paths($directory, $filename));
 		if (!$moved) {
 			throw new CsrException('Verplaatsen mislukt: ' . htmlspecialchars($this->value['tmp_name']));
 		}
-		if (false === @chmod($directory . $filename, 0644)) {
-			throw new CsrException('Geen eigenaar van bestand: ' . htmlspecialchars($directory . $filename));
+		if (false === @chmod(join_paths($directory, $filename), 0644)) {
+			throw new CsrException('Geen eigenaar van bestand: ' . htmlspecialchars(join_paths($directory, $filename)));
 		}
 		$this->model->directory = $directory;
 		$this->model->filename = $filename;

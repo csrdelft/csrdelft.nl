@@ -1111,3 +1111,24 @@ function delTree($dir) {
 function vue_encode($object) {
 	return htmlspecialchars(json_encode($object));
 }
+
+function join_paths(...$args) {
+	$paths = [];
+
+	foreach ($args as $arg) {
+		if ($arg !== '') { $paths[] = $arg; }
+	}
+
+	return preg_replace('#/+#','/',join('/', $paths));
+}
+
+/**
+ * Checks if $path exists in $prefix and if it is still inside $prefix.
+ *
+ * @param $prefix
+ * @param $path
+ * @return bool
+ */
+function path_valid($prefix, $path) {
+	return startsWith(realpathunix(join_paths($prefix, $path)), realpathunix($prefix));
+}
