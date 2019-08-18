@@ -13,7 +13,7 @@ class TitelField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (BoekModel::existsTitel($this->value)) {
+		if (BoekModel::instance()->existsTitel($this->value)) {
 			$this->error = 'Titel bestaat al.';
 		}
 		return $this->error == '';

@@ -7,6 +7,7 @@ use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * FotoAlbum.class.php
@@ -17,11 +18,6 @@ use CsrDelft\Orm\Entity\T;
  */
 class FotoAlbum extends Map {
 
-	/**
-	 * Als deze regexp matched is het album alleen voor leden toegankelijk
-	 * @var string
-	 */
-	private static $alleenLeden = '/(intern|novitiaat|ontvoering|feuten|slachten|zuipen|prive|privé|Posters)/i';
 	/**
 	 * Relatief pad in fotoalbum
 	 * @var string
@@ -66,19 +62,19 @@ class FotoAlbum extends Map {
 	 */
 	protected static $table_name = 'fotoalbums';
 
-	public function __construct($path = null) {
+	public function __construct($path = null, $absolute = false) {
 		parent::__construct();
 		if ($path === true) { // called from PersistenceModel
-			$this->path = realpathunix(PHOTOALBUM_PATH . $this->subdir);
-		} else {
-			$path = realpathunix($path);
-			if (!endsWith($path, '/')) {
-				$path .= '/';
-			}
-			$this->path = $path;
+			$this->path = realpathunix(join_paths(PHOTOALBUM_PATH, $this->subdir));
+		} else if ($absolute == true && startsWith(realpathunix($path), realpathunix(PHOTOALBUM_PATH))) { // Check that $path is inside PHOTOALBUM_PATH
+			$this->path = rtrim($path, "/");
+			$this->subdir = substr($this->path, strlen(realpathunix(PHOTOALBUM_PATH) . "/"));
+		} else if (path_valid(PHOTOALBUM_PATH, $path)) { // Check if $path not trying to traverse outside PHOTOALBUM_PATH
+			$this->path = rtrim(realpathunix(join_paths(PHOTOALBUM_PATH, $path)), "/");
 			//We verwijderen het beginstuk van de string
-			$prefix = realpathunix(PHOTOALBUM_PATH) . "/";
-			$this->subdir = substr($this->path, strlen($prefix));
+			$this->subdir = $path;
+		} else {
+			throw new ResourceNotFoundException("Fotoalbum niet gevonden");
 		}
 		$this->dirname = basename($this->path);
 	}
@@ -95,12 +91,12 @@ class FotoAlbum extends Map {
 	}
 
 	public function getUrl() {
-		return '/' . direncode($this->subdir);
+		return '/fotoalbum/' . direncode($this->subdir);
 	}
 
 	public function isEmpty() {
 		$subalbums = $this->getSubAlbums();
-		return empty($subalbums) AND !$this->hasFotos(true);
+		return empty($subalbums) && !$this->hasFotos(true);
 	}
 
 	public function hasFotos($incompleet = false) {
@@ -119,7 +115,7 @@ class FotoAlbum extends Map {
 				return false;
 			}
 			foreach ($scan as $entry) {
-				if (is_file($this->path . $entry)) {
+				if (is_file(join_paths($this->path, $entry))) {
 					$foto = new Foto($entry, $this);
 					if ($foto->isComplete()) {
 						$this->fotos[] = $foto;
@@ -159,8 +155,8 @@ class FotoAlbum extends Map {
 				return false;
 			}
 			foreach ($scan as $entry) {
-				if (substr($entry, 0, 1) !== '.' AND is_dir($this->path . $entry)) {
-					$subalbum = FotoAlbumModel::instance()->getFotoAlbum($this->path . $entry);
+				if (substr($entry, 0, 1) !== '.' && is_dir(join_paths($this->path, $entry))) {
+					$subalbum = FotoAlbumModel::instance()->getFotoAlbum(join_paths($this->subdir, $entry));
 					if ($subalbum) {
 						$this->subalbums[] = $subalbum;
 						if ($recursive) {
@@ -214,7 +210,7 @@ class FotoAlbum extends Map {
 	 * @return bool
 	 */
 	public function isPubliek() {
-		return preg_match('/^fotoalbum\/Publiek\/.*$/', $this->subdir) == 1;
+		return preg_match('/Publiek\/?.*$/', $this->subdir) == 1;
 	}
 	public function magBekijken() {
 		if (!startsWith(realpath($this->path), realpath(PHOTOALBUM_PATH . 'fotoalbum/'))) {

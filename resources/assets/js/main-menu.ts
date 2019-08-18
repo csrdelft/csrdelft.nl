@@ -11,6 +11,8 @@ declare global {
 
 $(() => {
 
+	if (!$('#menu').length) { return; }
+
 	let active: string | null = null;
 
 	function isVisible(id: string) {

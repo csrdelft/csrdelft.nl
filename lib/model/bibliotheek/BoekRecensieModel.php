@@ -19,12 +19,12 @@ class BoekRecensieModel extends PersistenceModel {
 	 * @param $id
 	 * @return BoekRecensie[]
 	 */
-	public static function getVoorBoek($id) {
-		return self::instance()->find("boek_id = ?", [$id])->fetchAll();
+	public function getVoorBoek($id) {
+		return $this->find("boek_id = ?", [$id])->fetchAll();
 	}
 
-	public static function get(int $boek_id, string $uid) : BoekRecensie {
-		$recensie = self::instance()->find("boek_id= ? and schrijver_uid = ?", [$boek_id, $uid])->fetch();
+	public function get(int $boek_id, string $uid) : BoekRecensie {
+		$recensie = $this->find("boek_id= ? and schrijver_uid = ?", [$boek_id, $uid])->fetch();
 		if ($recensie === false) {
 			$recensie = new BoekRecensie();
 			$recensie->boek_id = $boek_id;
@@ -38,7 +38,7 @@ class BoekRecensieModel extends PersistenceModel {
 	 * @param $uid
 	 * @return BoekRecensie[]
 	 */
-	public static function getVoorLid($uid) {
-		return self::instance()->find("schrijver_uid = ?", [$uid])->fetchAll();
+	public function getVoorLid($uid) {
+		return $this->find("schrijver_uid = ?", [$uid])->fetchAll();
 	}
 }

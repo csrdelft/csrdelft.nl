@@ -2,7 +2,6 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\invoervelden\UrlField;
@@ -14,51 +13,31 @@ use Exception;
  * LidInstellingenController.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @property LidInstellingenModel $model
  */
-class LidInstellingenController extends AclController {
+class LidInstellingenController {
+	private $model;
 
-	public function __construct($query) {
-		parent::__construct($query, LidInstellingenModel::instance());
-		if ($this->getMethod() == 'GET') {
-			$this->acl = array(
-				'beheer' => P_LOGGED_IN
-			);
-		} else {
-			$this->acl = array(
-				'opslaan' => P_LOGGED_IN,
-				'reset' => P_ADMIN,
-				'update' => P_LOGGED_IN
-			);
-		}
-	}
-
-	public function performAction(array $args = array()) {
-		$this->action = 'beheer';
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		}
-		parent::performAction($this->getParams(3));
+	public function __construct() {
+		$this->model = LidInstellingenModel::instance();
 	}
 
 	public function beheer() {
-		$this->view = view('instellingen.lidinstellingen', [
+		return view('instellingen.lidinstellingen', [
 			'defaultInstellingen' => $this->model->getAll(),
 			'instellingen' => $this->model->getAllForLid(LoginModel::getUid())
 		]);
 	}
 
-	public function POST_update($module, $instelling, $waarde = null) {
+	public function update($module, $instelling, $waarde = null) {
 		if ($waarde === null) {
 			$waarde = filter_input(INPUT_POST, 'waarde', FILTER_SANITIZE_STRING);
 		}
 
 		if ($this->model->isValidValue($module, $instelling, urldecode($waarde))) {
 			$this->model->wijzigInstelling($module, $instelling, urldecode($waarde));
-			$this->view = new JsonResponse(['success' => true]);
+			return new JsonResponse(['success' => true]);
 		} else {
-			$this->view = new JsonResponse(['success' => false], 400);
+			return new JsonResponse(['success' => false], 400);
 		}
 	}
 
@@ -75,7 +54,7 @@ class LidInstellingenController extends AclController {
 	public function reset($module, $key) {
 		$this->model->resetForAll($module, $key);
 		setMelding('Voor iedereen de instelling ge-reset naar de standaard waarde', 1);
-		$this->view = new JsonResponse(true);
+		return new JsonResponse(true);
 	}
 
 }

@@ -330,7 +330,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyBibliothecaris(Profiel $profiel, $oudestatus) {
-		$geleend = BoekExemplaarModel::getGeleend($profiel);
+		$geleend = BoekExemplaarModel::instance()->getGeleend($profiel);
 		if (!is_array($geleend)) {
 			$geleend = array();
 		}

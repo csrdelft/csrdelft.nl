@@ -15,13 +15,12 @@ use CsrDelft\view\formulier\elementen\Subkopje;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
-use CsrDelft\view\formulier\getalvelden\required\RequiredTelefoonField;
 use CsrDelft\view\formulier\getalvelden\TelefoonField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
+use CsrDelft\view\formulier\invoervelden\IBANField;
 use CsrDelft\view\formulier\invoervelden\LandField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
-use CsrDelft\view\formulier\invoervelden\required\RequiredIBANField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLandField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\StudieField;
@@ -43,9 +42,9 @@ use CsrDelft\view\toestemming\ToestemmingModalForm;
 class ProfielForm extends Formulier {
 
 	public function getBreadcrumbs() {
-		return '<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
+		return '<ol class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
 			. '<li class="breadcrumb-item"><a href="/ledenlijst">Leden</a></li>'
-			. '<li class="breadcrumb-item">'. $this->model->getLink('civitas') . '</li>';
+			. '<li class="breadcrumb-item">'. $this->model->getLink('civitas') . '</li></ol>';
 	}
 
 	public function __construct(Profiel $profiel) {
@@ -180,11 +179,17 @@ class ProfielForm extends Formulier {
 			$fields[] = new UrlField('linkedin', $profiel->linkedin, 'Publiek LinkedIn-profiel');
 			$fields[] = new UrlField('website', $profiel->website, 'Website');
 		}
-		$fields[] = new RequiredTelefoonField('mobiel', $profiel->mobiel, 'Mobiel', 20);
+		// Mobiel & telefoon, mobiel verplicht voor (nieuwe) leden
+		$fields['mobiel'] = new TelefoonField('mobiel', $profiel->mobiel, 'Mobiel', 20);
+		$fields['mobiel']->required = $inschrijven || $profiel->isLid();
 		$fields[] = new TelefoonField('telefoon', $profiel->telefoon, 'Telefoonnummer (vast)', 20);
 
 		$fields[] = new Subkopje('Boekhouding');
-		$fields[] = new RequiredIBANField('bankrekening', $profiel->bankrekening, 'Bankrekening', 34);
+
+		// Bankrekeningnummer: verplicht voor (nieuwe) leden
+		$fields['bankrekening'] = new IBANField('bankrekening', $profiel->bankrekening, 'Bankrekening', 34);
+		$fields['bankrekening']->required = $inschrijven || $profiel->isLid();
+
 		if ($admin) {
 			$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
 		}

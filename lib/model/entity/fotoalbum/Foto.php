@@ -7,6 +7,7 @@ use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Foto.class.php
@@ -16,6 +17,9 @@ use CsrDelft\Orm\Entity\T;
  *
  */
 class Foto extends Afbeelding {
+	const FOTOALBUM_ROOT = "/fotoalbum";
+	const THUMBS_DIR = '_thumbs';
+	const RESIZED_DIR = '_resized';
 
 	/**
 	 * Relatief pad in fotoalbum
@@ -53,43 +57,31 @@ class Foto extends Afbeelding {
 	 */
 	protected static $table_name = 'fotos';
 
-	/**
-	 * Get Foto from filename (absolute path)
-	 * @param $filename
-	 */
-	public static function fromFileName(string $filename, $parse = true) {
-		$realfile = realpath($filename);
-		if (!startsWith($realfile, realpath(PHOTOALBUM_PATH))) {
-			return false;
-		}
-		return new Foto(basename($realfile), new FotoAlbum(dirname($realfile)), $parse);
-	}
 	public function __construct($filename = null, FotoAlbum $album = null, $parse = false) {
 		if ($filename === true) { // called from PersistenceModel
-			$this->directory = PHOTOALBUM_PATH . $this->subdir;
+			$this->directory = join_paths(PHOTOALBUM_PATH, $this->subdir);
 		} elseif ($album !== null) {
 			$this->filename = $filename;
 			$this->directory = $album->path;
 			$this->subdir = $album->subdir;
+
+			if (!path_valid(PHOTOALBUM_PATH, join_paths($album->subdir, $filename))) {
+				throw new ResourceNotFoundException(); // Voorkom traversal door filename
+			}
 		}
 		parent::__construct(null, $parse);
 	}
 
 	public function getUUID() {
-		return $this->subdir . $this->filename . '@' . get_class($this) . '.csrdelft.nl';
+		return join_paths($this->subdir, $this->filename) . '@' . get_class($this) . '.csrdelft.nl';
 	}
-
-	public function getAlbumPath() {
-		return $this->directory;
-	}
-
 
 	public function getThumbPath() {
-		return $this->directory . '_thumbs/' . $this->filename;
+		return join_paths(PHOTOALBUM_PATH, $this->subdir, self::THUMBS_DIR, $this->filename);
 	}
 
 	public function getResizedPath() {
-		return $this->directory . '_resized/' . $this->filename;
+		return join_paths(PHOTOALBUM_PATH, $this->subdir, self::RESIZED_DIR, $this->filename);
 	}
 
 	public function getAlbumUrl() {
@@ -99,32 +91,31 @@ class Foto extends Afbeelding {
 		return new FotoAlbum($this->directory);
 	}
 	public function getFullUrl() {
-		return '/plaetjes/' . direncode($this->subdir . $this->filename);
+		return direncode(join_paths(self::FOTOALBUM_ROOT, $this->subdir, $this->filename));
 	}
 
 	public function getThumbUrl() {
-		return '/plaetjes/' . direncode($this->subdir . '_thumbs/' . $this->filename);
+		return direncode(join_paths(self::FOTOALBUM_ROOT, $this->subdir, self::THUMBS_DIR, $this->filename));
 	}
 
 	public function getResizedUrl() {
-		return '/plaetjes/' . direncode($this->subdir . '_resized/' . $this->filename);
+		return direncode(join_paths(self::FOTOALBUM_ROOT, $this->subdir, self::RESIZED_DIR, $this->filename));
 	}
 
 	public function hasThumb() {
 		$path = $this->getThumbPath();
-		return file_exists($path) AND is_file($path);
+		return file_exists($path) && is_file($path);
 	}
 
 	public function hasResized() {
 		$path = $this->getResizedPath();
-		return file_exists($path) AND is_file($path);
+		return file_exists($path) && is_file($path);
 	}
 
 	public function createThumb() {
-		$path = $this->directory . '_thumbs';
+		$path = join_paths(PHOTOALBUM_PATH, $this->subdir, self::THUMBS_DIR);
 		if (!file_exists($path)) {
-			mkdir($path);
-			chmod($path, 0755);
+			mkdir($path, 0755, true);
 		}
 		if (empty($this->rotation)) {
 			$rotate = '';
@@ -132,13 +123,7 @@ class Foto extends Afbeelding {
 			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
 		$command = IMAGEMAGICK . ' ' . escapeshellarg($this->getFullPath()) . ' -thumbnail 150x150^ -gravity center -extent 150x150 -format jpg -quality 80 -auto-orient ' . $rotate . escapeshellarg($this->getThumbPath());
-		if (defined('RESIZE_OUTPUT')) {
-			debugprint($command);
-		}
-		$output = shell_exec($command);
-		if (defined('RESIZE_OUTPUT')) {
-			debugprint($output);
-		}
+		shell_exec($command);
 		if ($this->hasThumb()) {
 			chmod($this->getThumbPath(), 0644);
 		} else {
@@ -147,10 +132,9 @@ class Foto extends Afbeelding {
 	}
 
 	public function createResized() {
-		$path = $this->directory . '_resized';
+		$path = join_paths(PHOTOALBUM_PATH, $this->subdir, self::RESIZED_DIR);
 		if (!file_exists($path)) {
-			mkdir($path);
-			chmod($path, 0755);
+			mkdir($path, 0755, true);
 		}
 		if (empty($this->rotation)) {
 			$rotate = '';
@@ -158,13 +142,7 @@ class Foto extends Afbeelding {
 			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
 		$command = IMAGEMAGICK . ' ' . escapeshellarg($this->getFullPath()) . ' -resize 1024x1024 -format jpg -quality 85 -interlace Line  -auto-orient ' . $rotate . escapeshellarg($this->getResizedPath());
-		if (defined('RESIZE_OUTPUT')) {
-			debugprint($command);
-		}
-		$output = shell_exec($command);
-		if (defined('RESIZE_OUTPUT')) {
-			debugprint($output);
-		}
+		shell_exec($command);
 		if ($this->hasResized()) {
 			chmod($this->getResizedPath(), 0644);
 		} else {
@@ -173,7 +151,7 @@ class Foto extends Afbeelding {
 	}
 
 	public function isComplete() {
-		return $this->hasThumb() AND $this->hasResized();
+		return $this->hasThumb() && $this->hasResized();
 	}
 
 	/**
@@ -208,5 +186,4 @@ class Foto extends Afbeelding {
 	public function magBekijken() {
 		return $this->getAlbum()->magBekijken();
 	}
-
 }

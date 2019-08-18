@@ -5,7 +5,7 @@
 <div class="foutje">{getMelding()}</div>
 <ul class="horizontal">
 	<li>
-		<a href="/bibliotheek/" title="Naar de catalogus">Catalogus</a>
+		<a href="/bibliotheek" title="Naar de catalogus">Catalogus</a>
 	</li>
 	<li>
 		<a href="/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>

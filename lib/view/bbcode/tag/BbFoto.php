@@ -8,6 +8,7 @@ use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoBBView;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Toont de thumbnail van een foto met link naar fotoalbum.
@@ -45,15 +46,17 @@ class BbFoto extends BbTag {
 	 */
 	private function getFoto(array $parts, string $url): Foto {
 		$filename = str_replace('#', '', array_pop($parts)); // replace # (foolproof)
-		$path = PHOTOALBUM_PATH . 'fotoalbum' . implode('/', $parts);
-		$album = FotoAlbumModel::instance()->getFotoAlbum($path);
-		if (!$album) {
+		$path = implode('/', $parts);
+		$path = str_replace('fotoalbum/', '', $path);
+		try {
+			$album = FotoAlbumModel::instance()->getFotoAlbum($path);
+			$foto = new Foto($filename, $album);
+			if (!$foto->exists()) {
+				throw new BbException('Foto niet gevonden.');
+			}
+			return $foto;
+		} catch (ResourceNotFoundException $ex) {
 			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>');
 		}
-		$foto = new Foto($filename, $album);
-		if (!$foto) {
-			throw new BbException('');
-		}
-		return $foto;
 	}
 }

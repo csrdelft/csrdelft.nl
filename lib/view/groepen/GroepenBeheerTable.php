@@ -8,6 +8,7 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
 
@@ -24,6 +25,8 @@ class GroepenBeheerTable extends DataTable {
 
 	public function __construct(AbstractGroepenModel $model) {
 		parent::__construct($model::ORM, $model->getUrl() . 'beheren', null);
+
+		$this->selectEnabled = false;
 
 		$this->naam = $model->getNaam();
 		$this->titel = 'Beheer ' . $this->naam;
@@ -48,34 +51,25 @@ class GroepenBeheerTable extends DataTable {
 
 		$this->setOrder(['id' => 'desc']);
 
-		$preview = new DataTableKnop(Multiplicity::One(), $model->getUrl() . 'voorbeeld', 'Voorbeeld', 'Voorbeeldweergave van de ketzer', 'show');
-		$this->addKnop($preview);
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'voorbeeld', 'Voorbeeldweergave van de ketzer', 'show'));
 
-		$create = new DataTableKnop(Multiplicity::Zero(), $model->getUrl() . 'nieuw', 'Nieuw', 'Nieuwe toevoegen', 'toevoegen');
-		$this->addKnop($create);
+		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $model->getUrl() . 'nieuw', 'Nieuw', 'Nieuwe toevoegen', 'toevoegen'));
 
-		$next = new DataTableKnop(Multiplicity::One(), $model->getUrl() . 'aanmaken', 'Opvolger', 'Nieuwe toevoegen die de huidige opvolgt', 'toevoegen');
-		$this->addKnop($next);
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'aanmaken', 'Nieuwe toevoegen die de huidige opvolgt', 'toevoegen'));
 
-		$update = new DataTableKnop(Multiplicity::One(), $model->getUrl() . 'wijzigen', 'Wijzigen', 'Wijzig eigenschappen', 'bewerken');
-		$this->addKnop($update);
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'wijzigen', 'Wijzig eigenschappen', 'bewerken'));
 
 		if (property_exists($model::ORM, 'aanmelden_vanaf')) {
-			$sluiten = new DataTableKnop(Multiplicity::Any(), $model->getUrl() . 'sluiten', 'Sluiten', 'Inschrijvingen nu sluiten', 'lock');
-			$this->addKnop($sluiten);
+			$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'sluiten', 'Inschrijvingen nu sluiten', 'lock'));
 		}
 
-		$opvolg = new DataTableKnop(Multiplicity::Any(), $model->getUrl() . 'opvolging', 'Opvolging', 'Familienaam en groepstatus instellen', 'timeline_marker');
-		$this->addKnop($opvolg);
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'opvolging', 'Familienaam en groepstatus instellen', 'timeline_marker'));
 
-		$convert = new DataTableKnop(Multiplicity::Any(), $model->getUrl() . 'converteren', 'Converteren', 'Converteer naar ander soort groep', 'lightning');
-		$this->addKnop($convert);
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'converteren', 'Converteer naar ander soort groep', 'lightning'));
 
-		$delete = new ConfirmDataTableKnop(Multiplicity::Any(), $model->getUrl() . 'verwijderen', 'Verwijderen', 'Definitief verwijderen (groep moet hier voor leeg zijn)', 'delete');
-		$this->addKnop($delete);
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'verwijderen', 'Definitief verwijderen (groep moet hier voor leeg zijn)', 'delete', 'confirm'));
 
-		$log = new DataTableKnop(Multiplicity::One(), $model->getUrl() . 'logboek', 'Logboek', 'Logboek bekijken', 'log');
-		$this->addKnop($log);
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'logboek', 'Logboek bekijken', 'log'));
 	}
 
 	public function getBreadcrumbs() {

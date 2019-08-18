@@ -41,7 +41,7 @@
 		<div id="profielregel">
 			<div class="naam">
 				<div class="float-right">
-					<div class="pasfoto float-left">{!! $profiel->getPasfotoTag(false) !!}</div>
+					<div class="pasfoto float-left">{!! $profiel->getPasfotoTag('') !!}</div>
 					<div class="knopjes">
 						{{--{*<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>*}--}}
 						@if($profiel->isInGoogleContacts())
@@ -101,7 +101,7 @@
 				<div class="label">Lidnummer:</div>
 				<div class="data">
 					@if(\CsrDelft\model\security\AccountModel::existsUid($profiel->uid) && \CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->getAccount()))
-						<a href="/su/{{$profiel->uid}}/" title="Su naar dit lid">{{$profiel->uid}}</a>
+						<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 					@else
 						{{$profiel->uid}}
 					@endif

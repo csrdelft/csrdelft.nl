@@ -4,7 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\GoogleSync;
-use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\GoogleToken;
 use CsrDelft\model\GoogleTokenModel;
 use CsrDelft\model\security\LoginModel;
@@ -13,28 +13,20 @@ use CsrDelft\model\security\LoginModel;
  * Class GoogleController.
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
- * @property GoogleTokenModel $model
  */
-class GoogleController extends AclController {
-	public function __construct($query) {
-		parent::__construct($query, GoogleTokenModel::instance());
-		$this->acl = array(
-			'callback' => P_LOGGED_IN
-		);
+class GoogleController {
+	use QueryParamTrait;
+
+	private $model;
+
+	public function __construct() {
+		$this->model = GoogleTokenModel::instance();
 	}
 
-	public function performAction(array $args = array()) {
-		$this->action = $this->getParam(2);
-		$args = array(
-			'state' => $this->hasParam('state') ? $this->getParam('state') : null,
-			'code' => $this->hasParam('code') ? $this->getParam('code') : null,
-			'error' => $this->hasParam('error') ? $this->getParam('error') : null,
-		);
-		return parent::performAction($args);
-	}
-
-	public function callback($state, $code, $error) {
+	public function callback() {
+		$state = $this->hasParam('state') ? $this->getParam('state') : null;
+		$code = $this->hasParam('code') ? $this->getParam('code') : null;
+		$error = $this->hasParam('error') ? $this->getParam('error') : null;
 		if ($code) {
 			$client = GoogleSync::createGoogleCLient();
 			$client->fetchAccessTokenWithAuthCode($code);

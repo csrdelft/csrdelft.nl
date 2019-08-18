@@ -1,0 +1,35 @@
+session-sessionsdata:
+  path: /session/sessionsdata
+  controller: CsrDelft\controller\SessionController::sessionsdata
+  methods: POST
+  options: { mag: P_LOGGED_IN }
+
+session-endsession:
+  path: /session/endsession/{session_hash}
+  controller: CsrDelft\controller\SessionController::endsession
+  methods: POST
+  options: { mag: P_LOGGED_IN }
+
+session-lockip:
+  path: /session/lockip
+  controller: CsrDelft\controller\SessionController::lockip
+  methods: POST
+  options: { mag: P_LOGGED_IN }
+
+session-remember:
+  path: /session/remember
+  controller: CsrDelft\controller\SessionController::remember
+  methods: POST
+  options: { mag: P_LOGGED_IN }
+
+session-rememberdata:
+  path: /session/rememberdata
+  controller: CsrDelft\controller\SessionController::rememberdata
+  methods: POST
+  options: { mag: P_LOGGED_IN }
+
+session-forget:
+  path: /session/forget
+  controller: CsrDelft\controller\SessionController::forget
+  methods: POST
+  options: { mag: P_LOGGED_IN }

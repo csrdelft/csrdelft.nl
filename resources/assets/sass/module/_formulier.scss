@@ -116,10 +116,6 @@ h1.Titel {
     float: none;
     width: auto;
   }
-  .previewDiv {
-    display: inline-block;
-    margin-left: 10px;
-  }
   .CsrBBPreview {
     float: left;
     clear: both;
@@ -139,14 +135,6 @@ h1.Titel {
   .password {
     padding: 2px 1px;
   }
-
-  .CollapsableSubkopje {
-    padding-left: 10px;
-  }
-  .CollapsableSubkopje:hover {
-    font-weight: bold;
-  }
-
 }
 
 /* Inline Formulier */

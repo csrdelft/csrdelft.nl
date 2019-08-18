@@ -20,7 +20,7 @@ class EetplanHuizenResponse extends DataTableResponse {
 		return parent::getJson(array(
 			'UUID' => $entity->getUUID(),
 			'id' => $entity->id,
-			'naam' => $entity->naam,
+			'naam' => '<a href="' . $entity->getUrl() . '">' . $entity->naam . '</a>',
 			'soort' => $entity->soort,
 			'eetplan' => $entity->eetplan
 		));

@@ -19,6 +19,7 @@ use CsrDelft\controller\framework\Controller;
 use CsrDelft\controller\LoginController;
 use CsrDelft\controller\MededelingenController;
 use CsrDelft\controller\ToolsController;
+use CsrDelft\controller\WachtwoordController;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
@@ -86,6 +87,7 @@ try {
 	switch ($class) {
 		// toegestaan voor iedereen:
 		case LoginController::class:
+		case WachtwoordController::class:
 		case CmsPaginaController::class:
 		case ForumController::class:
 		case FotoAlbumController::class:
@@ -124,6 +126,9 @@ try {
 	$view = view('fout.404');
 } catch (CsrGebruikerException $exception) {
 	http_response_code(400);
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		die($exception->getMessage());
+	}
 	$view = view('fout.400', ['bericht' => $exception->getMessage()]);
 } catch (CsrToegangException $exception) {
 	http_response_code($exception->getCode());

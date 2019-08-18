@@ -5,7 +5,7 @@
 			<li>
 				<a id="cd-main-trigger" class="mobiel-hidden trigger" href="#menu">
 					<img id="cd-user-avatar" class="cd-user-avatar" alt="Pasfoto ingelogd lid"
-							 src="/plaetjes/pasfoto/{{CsrDelft\model\security\LoginModel::getProfiel()->getPasfotoPath(true)}}">
+							 src="{{CsrDelft\model\security\LoginModel::getProfiel()->getPasfotoPath('vierkant')}}">
 					{{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('civitas')}}
 				</a>
 				<ul class="cd-secondary-nav">

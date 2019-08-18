@@ -9,10 +9,10 @@ use CsrDelft\view\datatable\DataTable;
 class LedenMemoryScoreTable extends DataTable {
 
 	public function __construct(
-		AbstractGroep $groep = null,
+		AbstractGroep $groep,
 		$titel
 	) {
-		parent::__construct(LedenMemoryScoresModel::ORM, '/leden/memoryscores/' . ($groep ? $groep->getUUID() : null), 'Topscores Ledenmemory' . $titel, 'groep');
+		parent::__construct(LedenMemoryScoresModel::ORM, '/leden/memoryscores' . ($groep ? '/' . $groep->getUUID() : null), 'Topscores Ledenmemory' . $titel, 'groep');
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->settings['dom'] = 'rtpli';
 

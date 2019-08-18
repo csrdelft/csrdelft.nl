@@ -37,7 +37,7 @@ class BiebRubriek extends PersistentEntity {
 			return '';
 		}
 		else {
-			$parent = (string) BiebRubriekModel::get($this->p_id);
+			$parent = (string) BiebRubriekModel::instance()->get($this->p_id);
 			if ($parent !== '') {
 				$parent .= ' - ';
 			}

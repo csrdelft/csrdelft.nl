@@ -1,0 +1,25 @@
+login-login:
+  path: /login
+  controller: CsrDelft\controller\LoginController::login
+  methods: POST
+  options: { mag: P_PUBLIC }
+
+login-logout:
+  path: /logout
+  controller: CsrDelft\controller\LoginController::logout
+  methods: [GET,POST]
+  options: { mag: P_LOGGED_IN }
+
+login-su:
+  path: /su/{uid}
+  controller: CsrDelft\controller\LoginController::su
+  methods: GET
+  requirements: { uid: ".{4}" }
+  options: { mag: P_ADMIN }
+
+login-endsu:
+  path: /endsu
+  controller: CsrDelft\controller\LoginController::endsu
+  methods: GET
+  options: { mag: P_LOGGED_IN }
+

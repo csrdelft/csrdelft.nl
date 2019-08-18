@@ -19,7 +19,7 @@ class BoekFormulier extends Formulier {
 
 	public $formulier;
 	public function __construct(Boek $boek) {
-		parent::__construct($boek, "/bibliotheek/boek/$boek->id", '');
+		parent::__construct($boek, $boek->id == null ? "/bibliotheek/boek" : "/bibliotheek/boek/$boek->id", '');
 		if ($boek->magBewerken()) {
 			$fields = [];
 			$fields['titel'] = new TitelField('titel', $boek->getTitel(), "Titel:", 200);

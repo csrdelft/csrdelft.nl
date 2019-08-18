@@ -2,19 +2,16 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\Controller;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\bibliotheek\BoekImporter;
 use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\bibliotheek\Boek;
-use CsrDelft\model\entity\bibliotheek\BoekExemplaar;
 use CsrDelft\model\entity\bibliotheek\BoekRecensie;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bibliotheek\BibliotheekBoekView;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatable;
@@ -23,119 +20,57 @@ use CsrDelft\view\bibliotheek\BoekExemplaarFormulier;
 use CsrDelft\view\bibliotheek\BoekFormulier;
 use CsrDelft\view\bibliotheek\RecensieFormulier;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
-use dokuwiki\Action\Login;
+use CsrDelft\view\renderer\TemplateView;
 
 /**
  * BibliotheekController.class.php  |  Gerrit Uitslag (klapinklapin@gmail.com)
  *
  */
-class BibliotheekController extends Controller {
+class BibliotheekController {
+	use QueryParamTrait;
 
-	public $baseurl = '/bibliotheek/';
+	private $model;
+	private $boekRecensieModel;
+	private $boekExemplaarModel;
 
-	/**
-	 * query:
-	 *
-	 * actie[/id[/opties]]
-	 */
-	public function __construct($query) {
-		parent::__construct($query, BoekModel::instance());
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		} else {
-			$this->action = 'catalogustonen';
-		}
+	public function __construct() {
+		$this->model = BoekModel::instance();
+		$this->boekRecensieModel = BoekRecensieModel::instance();
+		$this->boekExemplaarModel = BoekExemplaarModel::instance();
 	}
 
-	public function performAction(array $args = array()) {
-		if (in_array($this->action, ['boek', 'import', 'addexemplaar'])) {
-			if ($this->hasParam(4) && $this->getParam(4) == "recensie") {
-				$this->action = "recensie";
-			}
-			$boek = null;
-			if ($this->hasParam(3)) {
-				$boek = BoekModel::instance()->get($this->getParam(3));
-			} else {
-				$boek = new Boek();
-			}
-			parent::performAction([$boek]);
-		} else if (in_array($this->action, ['verwijderbeschrijving']) && $this->hasParam(3) && $this->hasParam(4)) {
-			$recensie = BoekRecensieModel::instance()->get($this->getParam(3), $this->getParam(4));
-			parent::performAction([$recensie]);
-		}
-		else if (in_array($this->action, ['exemplaar', 'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'deleteexemplaar', 'exemplaaruitlenen', 'exemplaarvermist', 'exemplaargevonden']) && $this->hasParam(3)) {
-			$exemplaar = BoekExemplaarModel::instance()->get($this->getParam(3));
-			parent::performAction([$exemplaar]);
-		} else {
-			parent::performAction($args);
-		}
-		if ($this->action != "autocomplete") {
-			$this->view = new CsrLayoutPage($this->view);
-		}
-	}
-
-	protected function mag($action, array $args) {
-		//iedereen(ook uitgelogd) mag catalogus bekijken.
-		$allow = array('catalogustonen', 'catalogusdata', 'rubrieken', 'wenslijst');
-		if (LoginModel::mag(P_BIEB_READ)) {
-			$allow = array_merge($allow, array('zoeken', 'autocomplete',
-				'boek', 'recensie'
-			));
-			if ($this->getMethod() == 'POST') {
-				$allow = array_merge($allow,
-					['verwijderboek',
-						'verwijderbeschrijving',
-						'exemplaar',
-						'addexemplaar', 'verwijderexemplaar',
-						'exemplaarlenen', 'exemplaarteruggegeven', 'exemplaarterugontvangen', 'exemplaarvermist', 'exemplaargevonden', 'import', 'nieuwRecensie']);
-			}
-		}
-		if (!in_array($action, $allow)) {
-			$this->action = 'catalogustonen';
-		}
-		return true;
-	}
-
-
-	public function recensie(Boek $boek) {
-		$recensie = BoekRecensieModel::get($boek->id, LoginModel::getUid());
+	public function recensie($boek_id) {
+		$recensie = $this->boekRecensieModel->get($boek_id, LoginModel::getUid());
 		$formulier = new RecensieFormulier($recensie);
 		if ($formulier->validate()) {
 			if (!$recensie->magBewerken()) {
 				throw new CsrToegangException("Mag recensie niet bewerken", 403);
 			} else {
 				$recensie->bewerkdatum = getDateTime();
-				BoekRecensieModel::instance()->updateOrCreate($recensie);
+				$this->boekRecensieModel->updateOrCreate($recensie);
 				setMelding("Recensie opgeslagen", 0);
 			}
 		}
-		redirect("/bibliotheek/boek/$boek->id");
+		redirect("/bibliotheek/boek/$boek_id");
 	}
 
 	public function rubrieken() {
-		$this->view = new CmsPaginaView(CmsPaginaModel::get('rubrieken'));
+		return view('default', ['content' => new CmsPaginaView(CmsPaginaModel::get('rubrieken'))]);
 	}
 
 	public function wenslijst() {
-		$this->view = new CmsPaginaView(CmsPaginaModel::get('wenslijst'));
+		return view('default', ['content' => new CmsPaginaView(CmsPaginaModel::get('wenslijst'))]);
 	}
 
-	/**
-	 * Catalogus tonen
-	 *
-	 * /[filters]
-	 *
-	 */
-	protected function catalogustonen() {
-		$this->view = new BibliotheekCatalogusDatatable();
+	public function catalogustonen() {
+		return view('default', ['content' => new BibliotheekCatalogusDatatable()]);
 	}
 
 	/**
 	 * Inhoud voor tabel op de cataloguspagina ophalen
 	 */
-	protected function catalogusdata() {
+	public function catalogusdata() {
 		/**
 		 * @var Boek[] $data
 		 */
@@ -151,16 +86,20 @@ class BibliotheekController extends Controller {
 		} else {
 			$results = $data;
 		}
-		$this->view = new BibliotheekCatalogusDatatableResponse($results);
-		$this->view->view();
-		exit;
+		return new BibliotheekCatalogusDatatableResponse($results);
 	}
 
 	/**
 	 * Boek weergeven
-	 * @param Boek $boek
+	 * @param $boek_id
+	 * @return TemplateView
 	 */
-	protected function boek(Boek $boek) {
+	public function boek($boek_id = null) {
+		if ($boek_id == null) {
+			$boek = new Boek();
+		} else {
+			$boek = BoekModel::instance()->get($boek_id);
+		}
 		$boekForm = new BoekFormulier($boek);
 
 		if ($boekForm->validate()) {
@@ -192,27 +131,29 @@ class BibliotheekController extends Controller {
 
 		}
 		$recensieForm = new RecensieFormulier($mijnRecensie);
-		$this->view = new BibliotheekBoekView($boek, $boekForm, $andereRecensies, $recensieForm, $exemplaarFormulieren);
+		return view('default', ['content' => new BibliotheekBoekView($boek, $boekForm, $andereRecensies, $recensieForm, $exemplaarFormulieren)]);
 	}
 
-	protected function import(Boek $boek) {
+	public function import($boek_id) {
+		$boek = $this->model->get($boek_id);
 		if (!$boek->isEigenaar()) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		} else {
 			$importer = new BoekImporter();
 			$importer->import($boek);
-			BoekModel::instance()->update($boek);
+			$this->model->update($boek);
 			redirect("/bibliotheek/boek/$boek->id");
 		}
 	}
 
 
-	protected function verwijderbeschrijving(BoekRecensie $recensie) {
+	public function verwijderbeschrijving($boek_id, $uid) {
+		$recensie = $this->boekRecensieModel->get($boek_id, $uid);
 		if (!$recensie->magVerwijderen()) {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		} else {
-			BoekRecensieModel::instance()->delete($recensie);
+			$this->boekRecensieModel->delete($recensie);
 			setMelding('Recensie met succes verwijderd.', 1);
 
 		}
@@ -223,8 +164,10 @@ class BibliotheekController extends Controller {
 	 * Verwijder boek
 	 *
 	 * /verwijderboek/id
+	 * @param $boek_id
 	 */
-	protected function verwijderboek(Boek $boek) {
+	public function verwijderboek($boek_id) {
+		$boek = $this->model->get($boek_id);
 
 		if (!$boek->magVerwijderen()) {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addbeschrijving', -1);
@@ -235,13 +178,15 @@ class BibliotheekController extends Controller {
 			redirect('/bibliotheek/');
 		}
 	}
-	protected function exemplaar (BoekExemplaar $exemplaar) {
+
+	public function exemplaar($exemplaar_id) {
+		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
 		if (!$exemplaar->magBewerken()) {
 			throw new CsrToegangException("Mag exemplaar niet bewerken", 403);
 		}
 		$form = new BoekExemplaarFormulier($exemplaar);
-		if($form->validate()) {
-			BoekExemplaarModel::instance()->update($exemplaar);
+		if ($form->validate()) {
+			$this->boekExemplaarModel->update($exemplaar);
 		}
 		redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->id);
 	}
@@ -249,21 +194,22 @@ class BibliotheekController extends Controller {
 	/**
 	 * Exemplaar toevoegen
 	 * /addexemplaar/$boekid[/$eigenaarid]
+	 * @param string $boek_id
+	 * @param string|null $uid
 	 */
-	protected function addexemplaar(Boek $boek) {
+	public function addexemplaar($boek_id, $uid = null) {
+		$boek = $this->model->get($boek_id);
 		if (!$boek->magBekijken()) {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addexemplaar()', -1);
 			redirect('/bibliotheek/boek/' . $boek->id);
 		}
-		if ($this->hasParam(4)) {
-			$eigenaar = $this->getParam(4);
-		} else {
-			$eigenaar = LoginModel::getUid();
+		if ($uid == null) {
+			$uid = LoginModel::getUid();
 		}
-		if ($eigenaar != LoginModel::getUid() && !($eigenaar == 'x222' && LoginModel::mag(P_BIEB_MOD))) {
+		if ($uid != LoginModel::getUid() && !($uid == 'x222' && LoginModel::mag(P_BIEB_MOD))) {
 			throw new CsrToegangException('Mag deze eigenaar niet kiezen');
 		}
-		BoekExemplaarModel::addExemplaar($boek, $eigenaar);
+		$this->boekExemplaarModel->addExemplaar($boek, $uid);
 
 		setMelding('Exemplaar met succes toegevoegd.', 1);
 		redirect('/bibliotheek/boek/' . $boek->id);
@@ -272,10 +218,12 @@ class BibliotheekController extends Controller {
 	/**
 	 * Exemplaar verwijderen
 	 * /deleteexemplaar/$exemplaarid
+	 * @param $exemplaar_id
 	 */
-	protected function verwijderexemplaar(BoekExemplaar $exemplaar) {
+	public function verwijderexemplaar($exemplaar_id) {
+		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
 		if ($exemplaar->isEigenaar()) {
-			if (BoekExemplaarModel::instance()->delete($exemplaar)) {
+			if ($this->boekExemplaarModel->delete($exemplaar)) {
 				setMelding('Exemplaar met succes verwijderd.', 1);
 			} else {
 				setMelding('Exemplaar verwijderen mislukt. ', -1);
@@ -289,10 +237,13 @@ class BibliotheekController extends Controller {
 	/**
 	 * Exemplaar als vermist markeren
 	 * /exemplaarvermist/[id]
+	 * @param $exemplaar_id
 	 */
-	protected function exemplaarvermist(BoekExemplaar $exemplaar) {
+	public function exemplaarvermist($exemplaar_id) {
+		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
+
 		if ($exemplaar->isEigenaar()) {
-			if (BoekExemplaarModel::setVermist($exemplaar)) {
+			if ($this->boekExemplaarModel->setVermist($exemplaar)) {
 				setMelding('Exemplaar gemarkeerd als vermist.', 1);
 			} else {
 				setMelding('Exemplaar markeren als vermist mislukt. ', -1);
@@ -306,10 +257,13 @@ class BibliotheekController extends Controller {
 	/**
 	 * Exemplaar als vermist markeren
 	 * /exemplaargevonden/[id]
+	 * @param $exemplaar_id
+	 * @return JsonResponse
 	 */
-	protected function exemplaargevonden(BoekExemplaar $exemplaar) {
+	public function exemplaargevonden($exemplaar_id) {
+		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
 		if ($exemplaar->isEigenaar()) {
-			if (BoekExemplaarModel::setGevonden($exemplaar)) {
+			if ($this->boekExemplaarModel->setGevonden($exemplaar)) {
 				setMelding('Exemplaar gemarkeerd als gevonden.', 1);
 			} else {
 				setMelding('Exemplaar markeren als gevonden mislukt. ', -1);
@@ -317,20 +271,21 @@ class BibliotheekController extends Controller {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
-		$this->view = new JsonResponse('/bibliotheek/boek/' . $exemplaar->getBoek()->id);
-		exit;
+		return new JsonResponse('/bibliotheek/boek/' . $exemplaar->getBoek()->id);
 	}
 
 	/**
 	 * /exemplaaruitlenen/[exemplaarid]
+	 * @param $exemplaar_id
 	 */
-	protected function exemplaaruitlenen(BoekExemplaar $exemplaar) {
+	public function exemplaaruitlenen($exemplaar_id) {
+		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
 		$uid = filter_input(INPUT_POST, 'lener_uid', FILTER_SANITIZE_STRING);
 		if (!$exemplaar->isEigenaar()) {
 			setMelding('Alleen de eigenaar mag boeken uitlenen', -1);
 		} else if (!ProfielModel::existsUid($uid)) {
 			setMelding('Incorrecte lener', -1);
-		} else if (BoekExemplaarModel::leen($exemplaar, $uid)) {
+		} else if ($this->boekExemplaarModel->leen($exemplaar, $uid)) {
 			redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->getId() . '#exemplaren');
 		} else {
 			setMelding('Kan dit exemplaar niet lenen', -1);
@@ -340,9 +295,11 @@ class BibliotheekController extends Controller {
 
 	/**
 	 * /exemplaarlenen/[exemplaarid]
+	 * @param $exemplaar_id
 	 */
-	protected function exemplaarlenen(BoekExemplaar $exemplaar) {
-		if (BoekExemplaarModel::leen($exemplaar, LoginModel::getUid())) {
+	public function exemplaarlenen($exemplaar_id) {
+		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
+		if ($this->boekExemplaarModel->leen($exemplaar, LoginModel::getUid())) {
 			redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->getId() . '#exemplaren');
 		} else {
 			setMelding('Kan dit exemplaar niet lenen', -1);
@@ -355,10 +312,13 @@ class BibliotheekController extends Controller {
 	 * Alleen door lener
 	 *
 	 * /exemplaarteruggegeven/[exemplaarid]
+	 * @param $exemplaar_id
+	 * @return JsonResponse
 	 */
-	protected function exemplaarteruggegeven(BoekExemplaar $exemplaar) {
+	public function exemplaarteruggegeven($exemplaar_id) {
+		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
 		if ($exemplaar->isUitgeleend() && $exemplaar->uitgeleend_uid == LoginModel::getUid()) {
-			if (BoekExemplaarModel::terugGegeven($exemplaar)) {
+			if ($this->boekExemplaarModel->terugGegeven($exemplaar)) {
 				setMelding('Exemplaar is teruggegeven.', 1);
 			} else {
 				setMelding('Teruggave van exemplaar melden is mislukt. ', -1);
@@ -366,8 +326,7 @@ class BibliotheekController extends Controller {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie. ', -1);
 		}
-		$this->view = new JsonResponse('/bibliotheek/boek/' . $exemplaar->getBoek()->getId());
-		exit;
+		return new JsonResponse('/bibliotheek/boek/' . $exemplaar->getBoek()->getId());
 	}
 
 	/**
@@ -375,10 +334,13 @@ class BibliotheekController extends Controller {
 	 * Alleen door eigenaar
 	 *
 	 * /exemplaarterugontvangen/exemplaarid
+	 * @param $exemplaar_id
+	 * @return JsonResponse
 	 */
-	protected function exemplaarterugontvangen(BoekExemplaar $exemplaar) {
+	public function exemplaarterugontvangen($exemplaar_id) {
+		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
 		if ($exemplaar->isEigenaar() && ($exemplaar->isUitgeleend() || $exemplaar->isTeruggegeven())) {
-			if (BoekExemplaarModel::terugOntvangen($exemplaar)) {
+			if ($this->boekExemplaarModel->terugOntvangen($exemplaar)) {
 				setMelding('Exemplaar terugontvangen.', 1);
 			} else {
 				setMelding('Exemplaar terugontvangen melden is mislukt. ', -1);
@@ -386,8 +348,7 @@ class BibliotheekController extends Controller {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::exemplaarterugontvangen()', -1);
 		}
-		$this->view = new JsonResponse('/bibliotheek/boek/' . $exemplaar->getBoek()->getId());
-		exit;
+		return new JsonResponse('/bibliotheek/boek/' . $exemplaar->getBoek()->getId());
 	}
 
 
@@ -395,52 +356,38 @@ class BibliotheekController extends Controller {
 	 * Genereert suggesties voor jquery-autocomplete
 	 *
 	 * /autocomplete/auteur
-	 *
+	 * @param $zoekveld
+	 * @return JsonResponse
 	 */
-	protected function autocomplete() {
-		if ($this->hasParam(3) AND isset($_GET['q'])) {
-
+	public function autocomplete($zoekveld) {
+		if (isset($_GET['q'])) {
 			$zoekterm = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
 
-			$categorie = 0;
-			if ($this->hasParam(4)) {
-				$categorie = (int)$this->getParam(4);
-			}
-			$results = BoekModel::autocompleteProperty($this->getParam(3), $zoekterm);
+			$results = $this->model->autocompleteProperty($zoekveld, $zoekterm);
 			$data = [];
 			foreach ($results as $result) {
-				$data[] = ['data' => [$result], 'value' => $result->{$this->getParam(3)}, 'id' => $result->id];
+				$data[] = ['data' => [$result], 'value' => $result->{$zoekveld}, 'id' => $result->id];
 			}
-			$this->view = new JsonResponse($data);
+			return new JsonResponse($data);
 		} else {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 	}
 
-	protected function zoeken() {
+	public function zoeken() {
 		if (!$this->hasParam('q')) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$zoekterm = $this->getParam('q');
-		$categorie = 0;
-		if ($this->hasParam('cat')) {
-			$categorie = (int)$this->getParam('cat');
-		}
-		$limit = 5;
-		if ($this->hasParam('limit')) {
-			$limit = (int)$this->getParam('limit');
-		}
 		$result = array();
-		foreach (BoekModel::autocompleteBoek($zoekterm) as $boek) {
+		foreach ($this->model->autocompleteBoek($zoekterm) as $boek) {
 			$result[] = array(
 				'url' => '/bibliotheek/boek/' . $boek->id,
 				'label' => $boek->auteur,
 				'value' => $boek->titel
 			);
 		}
-		$this->view = new JsonResponse($result);
-		$this->view->view();
-		exit;
+		return new JsonResponse($result);
 	}
 
 

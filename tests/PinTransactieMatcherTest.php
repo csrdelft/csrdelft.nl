@@ -42,19 +42,41 @@ final class PinTransactieMatcherTest extends TestCase {
 
 	public function testMatchDifferentLength() {
 		$transacties = [
-			$this->trans(0, 100)
+			$this->trans(1, 100)
 		];
 
 		$bestellingen = [
-			$this->best(100, 100),
+			$this->best(100, 27), #missende transactie
+			$this->best(101, 100),
 			$this->best(105, 20) #missende transactie
 		];
 
 		$matcher = new PinTransactieMatcher($transacties, $bestellingen);
 		$matcher->match();
 		$matches = $matcher->getMatches();
-		$this->assertTrue($this->hasMatch($matches, 0, 100, PinTransactieMatchStatusEnum::STATUS_MATCH));
+		$this->assertTrue($this->hasMatch($matches, 1, 101, PinTransactieMatchStatusEnum::STATUS_MATCH));
 		$this->assertTrue($this->hasMatch($matches, null, 105, PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE));
+		$this->assertTrue($this->hasMatch($matches, null, 100, PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE));
+
+	}
+
+	public function testMatchDifferentLength2() {
+		$transacties = [
+			$this->trans(0, 170), # missende bestelling
+			$this->trans(1, 100),
+			$this->trans(2, 200), # missende bestelling
+		];
+
+		$bestellingen = [
+			$this->best(101, 100)
+		];
+
+		$matcher = new PinTransactieMatcher($transacties, $bestellingen);
+		$matcher->match();
+		$matches = $matcher->getMatches();
+		$this->assertTrue($this->hasMatch($matches, 1, 101, PinTransactieMatchStatusEnum::STATUS_MATCH));
+		$this->assertTrue($this->hasMatch($matches, 0, null, PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING));
+		$this->assertTrue($this->hasMatch($matches, 2, null, PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING));
 
 	}
 

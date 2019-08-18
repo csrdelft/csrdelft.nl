@@ -1,3 +1,4 @@
+import axios from 'axios';
 import $ from 'jquery';
 import {ajaxRequest} from './ajax';
 import {bbCodeSet} from './bbcode-set';
@@ -208,6 +209,7 @@ export function formCancel(event: Event) {
 	}
 	if (form.hasClass('ModalForm')) {
 		event.preventDefault();
+		axios.get(source.attr('href')!);
 		if (!formIsChanged(form) || confirm('Sluiten zonder wijzigingen op te slaan?')) {
 			modalClose();
 		}
