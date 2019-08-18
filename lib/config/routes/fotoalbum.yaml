@@ -30,7 +30,8 @@ fotoalbum-toevoegen:
   path: /fotoalbum/toevoegen/{dir}
   controller: CsrDelft\controller\FotoAlbumController::toevoegen
   methods: POST
-  requirements: { dir: ".+" }
+  requirements: { dir: ".*" }
+  defaults: { dir: "" }
   options: { mag: "P_ALBUM_ADD|P_ALBUM_PUBLIC_ADD" }
 
 fotoalbum-verwerk:

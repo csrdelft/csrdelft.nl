@@ -70,7 +70,7 @@ class FotoAlbumController {
 	}
 
 	public function toevoegen($dir) {
-		$album = $this->model->getFotoAlbum($dir);
+		$album = new FotoAlbum($dir);
 		if (!$album->magToevoegen()) {
 			throw new CsrToegangException();
 		}
@@ -199,7 +199,7 @@ class FotoAlbumController {
 		if (!$album->magAanpassen()) {
 			throw new CsrToegangException();
 		}
-		$naam = filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING);
+		$naam = trim(filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING));
 		if ($album !== null) {
 			try {
 				$this->model->hernoemAlbum($album, $naam);
