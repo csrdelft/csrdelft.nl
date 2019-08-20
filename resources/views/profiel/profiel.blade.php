@@ -226,7 +226,7 @@
 				<div class="col-md-6">
 					@php($patroon = \CsrDelft\model\ProfielModel::get($profiel->patroon))
 					@if($patroon || $profiel->hasKinderen())
-						<a class="float-right lichtgrijs fa fa-tree fa-3x" href="/leden/stamboom/{{$profiel->uid}}"
+						<a class="float-right lichtgrijs fa fa-tree fa-3x" href="/profiel/{{$profiel->uid}}/stamboom"
 							 title="Stamboom van {{$profiel->getNaam()}}"></a>
 					@endif
 					@if($patroon)
