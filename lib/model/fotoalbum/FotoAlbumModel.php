@@ -81,9 +81,6 @@ class FotoAlbumModel extends PersistenceModel {
 	}
 
 	public function getFotoAlbum($path) {
-		if (strpos($path, '/_') !== false) {
-			throw new ResourceNotFoundException();
-		}
 		if (AccountModel::isValidUid($path) AND ProfielModel::existsUid($path)) {
 			$album = new FotoTagAlbum($path);
 		} else {
