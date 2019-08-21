@@ -45,12 +45,12 @@
 					<div class="knopjes">
 						{{--{*<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>*}--}}
 						@if($profiel->isInGoogleContacts())
-							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts/" class="btn btn-light"
+							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts" class="btn btn-light"
 								 title="Dit profiel opdateren in mijn google adresboek">
 								<img src="/images/google.ico" width="16" height="16" alt="opdateren in Google contacts"/>
 							</a>
 						@else
-							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts/" class="btn btn-light"
+							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts" class="btn btn-light"
 								 title="Dit profiel toevoegen aan mijn google adresboek">
 								<img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts"/>
 							</a>
