@@ -11,6 +11,7 @@
 			<th>Achternaam</th>
 			<th>Mobiel</th>
 			<th>Studie</th>
+			<th>Nanoviet</th>
 		</tr>
 		@foreach($novieten as $noviet)
 			<tr>
@@ -20,6 +21,7 @@
 				<td>{{$noviet['achternaam']}}</td>
 				<td>{{$noviet['mobiel']}}</td>
 				<td>{{$noviet['studie']}}</td>
+				<td>@if($noviet['novietSoort'] == '1') @icon('tick') @else @icon('cross') @endif </td>
 			</tr>
 		@endforeach
 	</table>
