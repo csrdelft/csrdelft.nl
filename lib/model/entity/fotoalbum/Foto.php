@@ -88,7 +88,7 @@ class Foto extends Afbeelding {
 		return direncode(join_paths(self::FOTOALBUM_ROOT, $this->subdir));
 	}
 	public function getAlbum() {
-		return new FotoAlbum($this->directory);
+		return new FotoAlbum($this->subdir);
 	}
 	public function getFullUrl() {
 		return direncode(join_paths(self::FOTOALBUM_ROOT, $this->subdir, $this->filename));
