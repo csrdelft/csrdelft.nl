@@ -5,6 +5,11 @@ namespace CsrDelft\view\fotoalbum;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\view\SmartyTemplateView;
 
+/**
+ * Class FotoBBView
+ * @package CsrDelft\view\fotoalbum
+ * @property Foto $model
+ */
 class FotoBBView extends SmartyTemplateView {
 
 	private $groot;
