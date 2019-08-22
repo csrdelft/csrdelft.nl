@@ -95,7 +95,7 @@
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic02.jpg"
 								 data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic02.jpg"
-										 src="/plaetjes/Publiek/Voorpagina/_resized/pic02.jpg">
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic02.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic03.jpg"
 								 data-lightbox="page-lightbox">
