@@ -7,6 +7,7 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\ProfielService;
@@ -312,5 +313,14 @@ class ToolsController {
 		} else {
 			return new PlainView(CsrBB::parse($string));
 		}
+	}
+
+	/**
+	 * Voor patronaat 2019 kan september 2019 verwijderd worden.
+	 *
+	 * @return View
+	 */
+	public function patronaat() {
+		return view('patronaat', ['groep' => ActiviteitenModel::get(1754)]);
 	}
 }
