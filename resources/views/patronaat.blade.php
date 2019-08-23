@@ -33,6 +33,9 @@
 												<dt>Studie</dt>
 												<dd>{{$lid->studie}}</dd>
 											</dl>
+											@if($deelnemer->opmerking2[5]->selectie == false)
+												<div class="text-muted small">Niet aanwezig op startkamp</div>
+												@endif
 										</div>
 									</div>
 								</div>
