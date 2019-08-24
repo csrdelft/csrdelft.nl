@@ -2,7 +2,11 @@
 	<v-date-picker
 		v-model="enteredDate"
 		v-on:input="update"
-		:key="name + '-dateInput'"></v-date-picker>
+		:key="name + '-dateInput'" class="datePicker"
+		:input-props='{
+			placeholder: "dd-mm-jjjj"
+		}'>
+	</v-date-picker>
 </template>
 
 <script>
@@ -34,7 +38,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.errorMessage {
 		font-size: 14px;
 		font-weight: 400;
@@ -63,7 +67,7 @@
 		top: -9px;
 	}
 
-	input {
+	.datePicker >>> input {
 		border: 1px solid #cccccc;
 		border-radius: 3px;
 		padding: 10px 15px;

@@ -19,13 +19,21 @@ Vue.use(BootstrapVue);
 Vue.use(VCalendar, {
 	firstDayOfWeek: 1,
 	locale: 'nl-NL',
+	masks: {
+		L: 'DD-MM-YYYY',
+		weekdays: 'WW',
+		dayPopover: 'WWW, D MMM YYYY',
+		input: ['L', 'DD-MM-YYYY', 'DD-MM-YYYY'],
+		data: ['L', 'DD-MM-YYYY', 'DD-MM-YYYY'],
+	},
 	locales: {
 		'nl-NL': {
 			masks: {
 				L: 'DD-MM-YYYY',
 				weekdays: 'WW',
 				dayPopover: 'WWW, D MMM YYYY',
-				input: 'DD-MM-YYYY',
+				input: ['L', 'DD-MM-YYYY', 'DD-MM-YYYY'],
+				data: ['L', 'DD-MM-YYYY', 'DD-MM-YYYY'],
 			},
 			dayNames: ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'],
 			dayNamesShort: ['zon', 'maa', 'din', 'woe', 'don', 'vri', 'zat'],
@@ -36,5 +44,4 @@ Vue.use(VCalendar, {
 			monthNamesShort: ['jan', 'feb', 'maa', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
 		},
 	},
-
 });

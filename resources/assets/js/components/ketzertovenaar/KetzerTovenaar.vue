@@ -73,33 +73,6 @@
 				is-inline
 				is-expanded
 			></v-date-picker>
-
-			<!--			<functional-calendar-->
-			<!--				v-if="!event.multipleDays"-->
-			<!--				v-on:input="event.calendarData && event.calendarData.selectedDate !== false ? gotoStep(5, true) : null"-->
-			<!--				key="singleDaySelector"-->
-			<!--				:change-month-function="true"-->
-			<!--				:change-year-function="true"-->
-			<!--				v-model="event.calendarData"-->
-			<!--				:date-format="'dd-mm-yyyy'"-->
-			<!--				:is-date-picker="true"-->
-			<!--				:day-names="['Zo','Ma','Di','Wo','Do','Vr','Za']"-->
-			<!--				:month-names="['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']">-->
-			<!--			</functional-calendar>-->
-
-			<!--			<functional-calendar-->
-			<!--				v-else-->
-			<!--				v-on:input="event.calendarData.dateRange.dateRange && event.calendarData.dateRange.dateRange.end !== false ? gotoStep(5, true) : null"-->
-			<!--				key="multipleDaySelector"-->
-			<!--				:change-month-function="true"-->
-			<!--				:change-year-function="true"-->
-			<!--				v-model="event.calendarData"-->
-			<!--				:date-format="'dd-mm-yyyy'"-->
-			<!--				:is-date-range="true"-->
-			<!--				:day-names="['Zo','Ma','Di','Wo','Do','Vr','Za']"-->
-			<!--				:month-names="['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']">-->
-			<!--			</functional-calendar>-->
-
 		</Stap>
 
 		<Stap
