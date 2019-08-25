@@ -115,7 +115,7 @@ class LedenMemoryController {
 		$profielen = $profielmodel->find("status IN ({$toegestaan})")->fetchAll();
 
 		// Bouw infostructuur.
-		$map = array_map(function($profiel) {
+		$leden = array_map(function($profiel) {
 			/** @var $profiel Profiel */
 			return [
 				'uid' => $profiel->uid,
@@ -133,8 +133,10 @@ class LedenMemoryController {
 				is_zichtbaar($profiel, 'profielfoto', 'intern') &&
 				$path !== null;
 		}));
-		var_dump($map);
 
 		// Laad Vue app.
+		return view('namenleren', [
+			'leden' => json_encode($leden),
+		]);
 	}
 }
