@@ -275,7 +275,6 @@ class LidZoeker {
 			$query .= $this->defaultSearch($this->query);
 		}
 		$query .= $this->getFilterSQL();
-		$query .= ' AND uid NOT LIKE "19%" ';
 		$query .= ' ORDER BY ' . implode($this->sort) . ';';
 
 
