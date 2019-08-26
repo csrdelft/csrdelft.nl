@@ -123,7 +123,7 @@ class LedenMemoryController {
 				'tussenvoegsel' => $profiel->tussenvoegsel,
 				'achternaam' => $profiel->achternaam,
 				'lichting' => $profiel->lidjaar,
-				'verticale' => $profiel->getVerticale()->naam,
+				'verticale' => $profiel->verticale ? $profiel->getVerticale()->naam : 'Geen',
 				'geslacht' => $profiel->geslacht,
 				'studie' => $profiel->studie,
 			];
