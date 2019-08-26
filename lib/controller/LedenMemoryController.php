@@ -7,6 +7,7 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
@@ -103,5 +104,40 @@ class LedenMemoryController {
 			$data = LedenMemoryScoresModel::instance()->getAllTopScores();
 		}
 		return new LedenMemoryScoreResponse($data);
+	}
+
+	public function namenleren() {
+		// Haal alle (adspirant-/gast-)leden op.
+		$profielmodel = ProfielModel::instance();
+		$toegestaan = implode(', ', array_map(function ($status) {
+			return "'{$status}'";
+		}, LidStatus::getLidLike()));
+		$profielen = $profielmodel->find("status IN ({$toegestaan})")->fetchAll();
+
+		// Bouw infostructuur.
+		$leden = array_map(function($profiel) {
+			/** @var $profiel Profiel */
+			return [
+				'uid' => $profiel->uid,
+				'voornaam' => $profiel->voornaam,
+				'tussenvoegsel' => $profiel->tussenvoegsel,
+				'achternaam' => $profiel->achternaam,
+				'lichting' => $profiel->lidjaar,
+				'verticale' => $profiel->getVerticale()->naam,
+				'geslacht' => $profiel->geslacht,
+				'studie' => $profiel->studie,
+			];
+		}, array_filter($profielen, function($profiel) {
+			/** @var $profiel Profiel */
+			$path = $profiel->getPasfotoInternalPath();
+			return
+				is_zichtbaar($profiel, 'profielfoto', 'intern') &&
+				$path !== null;
+		}));
+
+		// Laad Vue app.
+		return view('namenleren', [
+			'leden' => json_encode($leden),
+		]);
 	}
 }

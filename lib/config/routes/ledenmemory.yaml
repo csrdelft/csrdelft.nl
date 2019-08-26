@@ -18,4 +18,8 @@ ledenmemory-scores:
   defaults: { groep: null}
   options: { mag: P_OUDLEDEN_READ }
 
-
+namen-leren:
+  path: /leden/namen-leren
+  controller: CsrDelft\controller\LedenMemoryController::namenleren
+  methods: GET
+  options: { mag: P_LEDEN_READ }
