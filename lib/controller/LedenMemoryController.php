@@ -125,6 +125,7 @@ class LedenMemoryController {
 				'lichting' => $profiel->lidjaar,
 				'verticale' => $profiel->getVerticale()->naam,
 				'geslacht' => $profiel->geslacht,
+				'studie' => $profiel->studie,
 			];
 		}, array_filter($profielen, function($profiel) {
 			/** @var $profiel Profiel */
