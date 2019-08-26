@@ -68,7 +68,10 @@
 			<b v-if="antwoordMethode === 'voornaam'" class="mb-1 block">Voornaam:</b>
 			<b v-if="antwoordMethode === 'achternaam'" class="mb-1 block">Achternaam:</b>
 			<b v-if="antwoordMethode === 'combi'" class="mb-1 block">Voor- en achtenraam:</b>
-			<input type="text" class="form-control" v-model="ingevuld" @keydown.enter="controleer" autofocus>
+			<input type="text" class="form-control"
+						 v-bind:value="ingevuld"
+						 v-on:input="ingevuld = $event.target.value"
+						 @keydown.enter="controleer" autofocus>
 		</div>
 	</div>
 </template>
