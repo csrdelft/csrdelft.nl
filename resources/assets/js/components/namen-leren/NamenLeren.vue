@@ -32,6 +32,13 @@
 					</div>
 				</div>
 			</div>
+			<div>
+				<b class="mb-1 block">Onderkant verbergen</b>
+				<div>
+					<input type="checkbox" id="verbergOnderkant" v-model="verbergOnderkant">
+					<label for="verbergOnderkant">Voorkom leesbare namen op foto's</label>
+				</div>
+			</div>
 			<b class="mt-3 mb-1 block">Antwoordmethode</b>
 			<select v-model="antwoordMethode" class="form-control">
 				<option value="voornaam">Voornaam</option>
@@ -62,7 +69,7 @@
 				<i class="fa fa-check" v-if="laatsteGoed"></i>
 				<i class="fa fa-times" v-else></i>
 			</div>
-			<div class="pasfotoContainer">
+			<div class="pasfotoContainer" :class="{'onderkantVerbergen': verbergOnderkant}">
 				<div :style="{'background-image': 'url(/profiel/pasfoto/' + huidig.uid + '.jpg)'}" class="pasfoto"></div>
 			</div>
 			<b v-if="antwoordMethode === 'voornaam'" class="mb-1 block">Voornaam:</b>
@@ -121,6 +128,7 @@
 			aantalPerKeer: 5,
 
 			// Game state
+			verbergOnderkant: true,
 			started: false,
 			finished: false,
 			goed: [],
@@ -297,6 +305,11 @@
 		height: 170px;
 		margin: 30px auto;
 		background: url('/dist/images/loading.gif') no-repeat center center #ccc;
+		overflow: hidden;
+	}
+
+	.pasfotoContainer.onderkantVerbergen {
+		height: 140px;
 	}
 
 	.pasfotoContainer .pasfoto {
