@@ -13,8 +13,6 @@
 			<img src="/images/logo-light-it-up.png" alt="Logo Light It Up">
 		</div>
 		<div style="margin-top:40px" class="inner">
-			<a href="/plaetjes/OWee 2019 programmaposter.jpg" rel="noreferrer" target="_blank"
-				 class="special lightbox-link" data-lightbox="page-lightbox">Owee programma 2019</a>
 			<a href="https://www.youtube.com/watch?v=a7hhtoo_kzY&list=PLXBOhyG24-WnNgg2RloapxC5X73J1Zxvi" rel="noreferrer" target="_blank"
 				 class="special">Video: Delft - studie is maar de helft</a>
 		</div>
