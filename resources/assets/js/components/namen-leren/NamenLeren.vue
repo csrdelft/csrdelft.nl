@@ -68,7 +68,7 @@
 			<b v-if="antwoordMethode === 'voornaam'" class="mb-1 block">Voornaam:</b>
 			<b v-if="antwoordMethode === 'achternaam'" class="mb-1 block">Achternaam:</b>
 			<b v-if="antwoordMethode === 'combi'" class="mb-1 block">Voor- en achtenraam:</b>
-			<input type="text" class="form-control" v-model="ingevuld" @keydown.enter="controleer">
+			<input type="text" class="form-control" v-model="ingevuld" @keydown.enter="controleer" autofocus>
 		</div>
 	</div>
 </template>
@@ -177,6 +177,7 @@
 				this.volgende();
 				this.titel = this.bouwTitel();
 				document.title = "C.S.R. Delft - Namen " + this.titel + " leren";
+				window.scrollTo(0, 0);
 			},
 			volgende() {
 				let choice = this.fout.concat(this.todo.slice(0, Math.max(this.aantalPerKeer - this.fout.length, 0)));
@@ -331,15 +332,16 @@
 
 	.laatste .info {
 		display: inline-block;
-		padding: 22px 15px 0;
-		vertical-align: top;
-		max-width: calc(100% - 60px - 90px);
-		box-sizing: border-box;
+    padding: 29px 0 0 15px;
+    vertical-align: top;
+    max-width: calc(100% - 123px);
+    box-sizing: border-box;
 	}
 
 	.laatste .info .naam {
 		font-size: 19px;
 		font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+		line-height: 19px;
 	}
 
 	.laatste .info .naam .bold {
@@ -349,7 +351,7 @@
 	.laatste .info .tekst {
 		font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
 		font-size: 15px;
-		line-height: 15px;
+		line-height: 24px;
 	}
 
 	.laatste .info .tekst span {
