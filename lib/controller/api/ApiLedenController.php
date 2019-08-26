@@ -71,7 +71,7 @@ class ApiLedenController {
 				'sinds' => $profiel->studiejaar
 			),
 			'lichting' => $profiel->lidjaar,
-			'verticale' => $profiel->getVerticale()->naam,
+			'verticale' => $profiel->getVerticale() === false ? null : $profiel->getVerticale()->naam,
 		);
 
 		return array('data' => $lid);
