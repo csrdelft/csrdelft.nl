@@ -48,8 +48,8 @@ class IsHetAlView implements View {
 				break;
 
 			case 'dies' :
-				$begin = strtotime('2019-02-12');
-				$einde = strtotime('2019-02-22');
+				$begin = strtotime('2020-02-11');
+				$einde = strtotime('2020-02-21');
 				$nu = strtotime(date('Y-m-d'));
 				if ($nu > $einde) {
 					$begin = strtotime('+1 year', $begin);
