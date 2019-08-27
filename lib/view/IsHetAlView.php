@@ -49,7 +49,7 @@ class IsHetAlView implements View {
 
 			case 'dies' :
 				$begin = strtotime('2020-02-11');
-				$einde = strtotime('2020-02-21');
+				$einde = strtotime('2020-02-22');
 				$nu = strtotime(date('Y-m-d'));
 				if ($nu > $einde) {
 					$begin = strtotime('+1 year', $begin);
