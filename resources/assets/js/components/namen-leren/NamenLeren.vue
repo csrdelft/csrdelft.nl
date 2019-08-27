@@ -301,20 +301,20 @@
 	}
 
 	.pasfotoContainer {
-		width: 114px;
-		height: 170px;
-		margin: 30px auto;
-		background: url('/dist/images/loading.gif') no-repeat center center #ccc;
+		width: 170px;
+		height: 255px;
+		margin: 15px auto;
+		background: url('/dist/images/loading.gif') no-repeat center center white;
 		overflow: hidden;
 	}
 
 	.pasfotoContainer.onderkantVerbergen {
-		height: 140px;
+		height: 200px;
 	}
 
 	.pasfotoContainer .pasfoto {
-		width: 114px;
-		height: 170px;
+		width: 170px;
+		height: 255px;
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center center;
