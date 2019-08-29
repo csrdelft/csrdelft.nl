@@ -111,7 +111,8 @@ class LLLijst extends LLWeergave {
 					break;
 
 				case 'verticale':
-					echo htmlspecialchars($profiel->getVerticale()->naam);
+					if ($profiel->getVerticale() !== false)
+						echo htmlspecialchars($profiel->getVerticale()->naam);
 					break;
 
 				case 'woonoord':
