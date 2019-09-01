@@ -491,6 +491,9 @@ class GoogleSync {
 
 		$path = $profiel->getPasfotoInternalPath(true);
 
+		if ($path === null)
+			return;
+
 		$headers = array('GData-Version' => '3.0', 'Content-Type' => "image/*");
 
 		if ($contact['photo']['etag'] != '') {
