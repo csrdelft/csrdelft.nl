@@ -6,9 +6,10 @@ account-aanvragen:
   options: { mag: P_PUBLIC }
 
 account-aanmaken:
-  path: /account/aanmaken
+  path: /account/{uid}/aanmaken
   controller: CsrDelft\controller\AccountController::aanmaken
   methods: [GET,POST]
+  requirements: { uid: '.{4}' }
   options: { mag: P_ADMIN }
 
 account-bewerken:
