@@ -330,10 +330,7 @@ class ForumController {
 		$deel = $this->forumDelenModel->nieuwForumDeel();
 		$form = new ForumDeelForm($deel, true); // fetches POST values itself
 		if ($form->validate()) {
-			$rowCount = $this->forumDelenModel->create($deel);
-			if ($rowCount !== 1) {
-				throw new CsrGebruikerException('Forum aanmaken mislukt!');
-			}
+			$this->forumDelenModel->create($deel);
 			return new JsonResponse(true);
 		} else {
 			return $form;

@@ -22,7 +22,7 @@ class ForumDeelForm extends ModalForm {
 	 */
 	public function __construct(ForumDeel $deel, bool $aanmaken = false) {
 		$action = $aanmaken ? 'aanmaken' : 'beheren';
-		parent::__construct($deel, '/forum/' . $action . '/' . $deel->forum_id);
+		parent::__construct($deel, '/forum/' . $action . ($deel->forum_id ? '/' . $deel->forum_id : ''));
 		$this->titel = 'Deelforum ' . $action;
 		$this->css_classes[] = 'ReloadPage';
 		$this->css_classes[] = 'PreventUnchanged';
