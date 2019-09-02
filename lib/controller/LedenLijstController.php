@@ -62,7 +62,7 @@ class LedenLijstController {
 
 				setMelding(
 					'<h3>Google-sync-resultaat:</h3>' . $message . '<br />' .
-					'<a href="/ledenlijst?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 0);
+					'<a href="/ledenlijst?q=' . htmlspecialchars($_GET['q'] ?? '') . '">Terug naar de ledenlijst...</a>', 0);
 
 				if (LoginModel::mag(P_ADMIN)) {
 					setMelding('Tijd nodig voor deze sync: ' . $elapsed . 's', 0);
