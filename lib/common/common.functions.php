@@ -1135,5 +1135,5 @@ function path_valid($prefix, $path) {
 }
 
 function triggerExceptionAsWarning(Exception $e) {
-	ShutdownHandler::slackHandler($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+	ShutdownHandler::slackHandler($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine(), true);
 }
