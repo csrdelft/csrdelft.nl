@@ -86,6 +86,12 @@ instellingen:
       opties: ['nee', 'willekeurig']
       default: 'nee'
       beschrijving: 'Tjoek tjoek!'
+    raket:
+      titel: 'Raket'
+      type: Enumeration
+      opties: ['2019', 'nee']
+      default: 'nee'
+      beschrijving: 'Laat lichting 2019 opstijgen als een raket.'
   forum:
     draden_per_pagina:
       titel: 'Draadjes per pagina'
