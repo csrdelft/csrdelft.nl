@@ -1,3 +1,9 @@
+agenda-feed:
+  path: /agenda/feed
+  controller: CsrDelft\controller\AgendaController::feed
+  methods: GET
+  options: { mag: P_LOGGED_IN }
+
 agenda-thuis:
   path: /agenda/{jaar}/{maand}
   controller: CsrDelft\controller\AgendaController::maand

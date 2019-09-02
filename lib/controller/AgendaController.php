@@ -9,6 +9,10 @@ use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\agenda\AgendaVerbergenModel;
 use CsrDelft\model\entity\agenda\AgendaItem;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\entity\groepen\Activiteit;
+use CsrDelft\model\entity\groepen\Ketzer;
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
@@ -203,6 +207,41 @@ class AgendaController {
 		$agendaitem = $item;
 		AgendaVerbergenModel::instance()->toggleVerbergen($agendaitem);
 		return view('agenda.maand_item', ['item' => $item]);
+	}
+
+	public function feed() {
+		$startMoment = strtotime(filter_input(INPUT_GET, 'start'));
+		$eindMoment = strtotime(filter_input(INPUT_GET, 'end'));
+		$events = $this->model->getAllAgendeerbaar($startMoment, $eindMoment);
+
+		$eventsJson = [];
+		foreach ($events as $event) {
+
+			$backgroundColor = '#214AB0';
+			if ($event instanceof Profiel) {
+				$backgroundColor = '#BD135E';
+			} else if ($event instanceof Maaltijd) {
+				$backgroundColor = '#731CC7';
+			} else if ($event instanceof Activiteit) {
+				$backgroundColor = '#1CC7BC';
+			} else if ($event instanceof Ketzer) {
+				$backgroundColor = '#1ABD2C';
+			}
+
+			$eventsJson[] = [
+				'title' => $event->getTitel(),
+				'start' => date('c', $event->getBeginMoment()),
+				'end' => date('c', $event->getEindMoment()),
+				'allDay' => $event instanceof Profiel,
+				'url' => $event->getUrl() ? $event->getUrl() : '',
+				'id' => $event->getUUID(),
+				'textColor' => '#fff',
+				'backgroundColor' => $backgroundColor,
+				'borderColor' => $backgroundColor,
+			];
+		}
+
+		return new JsonResponse($eventsJson);
 	}
 
 }

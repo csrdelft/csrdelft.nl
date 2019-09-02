@@ -18,6 +18,7 @@
 
 @section('content')
 	@yield('navlinks')
+	<div id="agenda"></div>
 	<table class="agenda" id="maand">
 		<tr>
 			<th class="weeknr"></th>
