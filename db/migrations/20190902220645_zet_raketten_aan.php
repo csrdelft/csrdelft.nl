@@ -19,7 +19,7 @@ SQL
 		$this->query(<<<SQL
 DELETE FROM lidinstellingen
     WHERE module = 'layout'
-    OR instelling_id = 'raket'
+    AND instelling_id = 'raket'
 SQL
 		);
 	}
