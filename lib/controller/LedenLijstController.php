@@ -69,9 +69,7 @@ class LedenLijstController {
 					setMelding('Tijd nodig voor deze sync: ' . $elapsed . 's', 0);
 				}
 			} catch (CsrGebruikerException $e) {
-				$m = $e->getMessage();
-				$title = substr($m, strpos($m, '<title>') + 7, strpos($m, '</title>'));
-				setMelding($title, -1);
+				setMelding($e->getMessage(), -1);
 			}
 		} else {
 

@@ -5,6 +5,7 @@
 # common.functions.php
 # -------------------------------------------------------------------
 use CsrDelft\common\MijnSqli;
+use CsrDelft\common\ShutdownHandler;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\instellingen\InstellingenModel;
 use CsrDelft\model\instellingen\LidInstellingenModel;
@@ -1131,4 +1132,8 @@ function join_paths(...$args) {
  */
 function path_valid($prefix, $path) {
 	return startsWith(realpathunix(join_paths($prefix, $path)), realpathunix($prefix));
+}
+
+function triggerExceptionAsWarning(Exception $e) {
+	ShutdownHandler::slackHandler($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 }
