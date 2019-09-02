@@ -49,10 +49,10 @@ profiel-stamboom:
   options: { mag: P_OUDLEDEN_READ }
 
 profiel-saldo:
-  path: /profiel/{uid}/saldo
+  path: /profiel/{uid}/saldo/{timespan}
   controller: CsrDelft\controller\ProfielController::saldo
   methods: POST
-  requirements: { uid: '.{4}' }
+  requirements: { uid: '.{4}', timespan: '\d+' }
   options: { mag: P_LEDEN_READ }
 
 profiel-pasfoto-default:

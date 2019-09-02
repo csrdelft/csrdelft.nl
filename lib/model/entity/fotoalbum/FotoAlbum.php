@@ -155,7 +155,7 @@ class FotoAlbum extends Map {
 				return false;
 			}
 			foreach ($scan as $entry) {
-				if (substr($entry, 0, 1) !== '.' && is_dir(join_paths($this->path, $entry))) {
+				if (substr($entry, 0, 1) !== '.' && substr($entry, 0, 1) !== '_' && is_dir(join_paths($this->path, $entry))) {
 					$subalbum = FotoAlbumModel::instance()->getFotoAlbum(join_paths($this->subdir, $entry));
 					if ($subalbum) {
 						$this->subalbums[] = $subalbum;
