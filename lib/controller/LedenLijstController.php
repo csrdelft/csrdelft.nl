@@ -4,6 +4,7 @@
 namespace CsrDelft\controller;
 
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\GoogleSync;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\LidZoeker;
@@ -67,7 +68,7 @@ class LedenLijstController {
 				if (LoginModel::mag(P_ADMIN)) {
 					setMelding('Tijd nodig voor deze sync: ' . $elapsed . 's', 0);
 				}
-			} catch (Exception $e) {
+			} catch (CsrGebruikerException $e) {
 				$m = $e->getMessage();
 				$title = substr($m, strpos($m, '<title>') + 7, strpos($m, '</title>'));
 				setMelding($title, -1);

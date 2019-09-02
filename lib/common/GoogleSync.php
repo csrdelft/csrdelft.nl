@@ -111,8 +111,8 @@ class GoogleSync {
 			//then load the contacts for this group.
 			$this->loadContactsForGroup($this->groupid);
 		} catch (CsrException $ex) {
-			setMelding("Verbinding met Google verbroken." . $ex->getMessage(), 2);
 			GoogleTokenModel::instance()->delete($google_token);
+			throw new CsrGebruikerException("Verbinding met Google verbroken.");
 		}
 	}
 
@@ -123,7 +123,7 @@ class GoogleSync {
 		$httpClient = $this->client->authorize();
 		$response = $httpClient->request('GET', GOOGLE_GROUPS_URL);
 		if ($response->getStatusCode() === 401) {
-			throw new CsrException();
+			throw new CsrException("Code 401 response on GOOGLE_GROUPS_URL");
 		}
 		$this->groupFeed = GoogleSync::loadXmlString($response->getBody())->entry;
 	}
@@ -702,7 +702,7 @@ class GoogleSync {
 		$prev = libxml_use_internal_errors(false);
 		$data = simplexml_load_string($xml);
 		if ($data === false) {
-			throw new \Exception("Error parsing xml. Content was: ".substr ( $xml, 0, 100)."...");
+			throw new CsrException("Error parsing xml. Content was: ".substr ( $xml, 0, 100)."...");
 		}
 		libxml_use_internal_errors($prev);
 		return $data;
