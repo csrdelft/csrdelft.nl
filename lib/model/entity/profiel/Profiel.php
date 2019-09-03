@@ -301,11 +301,12 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	/**
-	 * Vervormt kommagescheiden opties naar lijst
-	 * en voegt verjaardag toe indien van toepassing.
+	 * Vervormt kommagescheiden opties naar lijst,
+	 * voegt lichting toe en voegt verjaardag toe indien van toepassing.
 	 */
 	public function getProfielOpties() {
 		$opties = $this->profielOpties ? array_map(function($a) { return trim($a); }, explode(',', $this->profielOpties)) : [];
+		$opties[] = "lichting-{$this->lidjaar}";
 		if ($this->isJarig()) {
 			$opties[] = 'jarig';
 		}

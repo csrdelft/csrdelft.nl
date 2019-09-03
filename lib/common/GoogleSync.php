@@ -110,9 +110,10 @@ class GoogleSync {
 
 			//then load the contacts for this group.
 			$this->loadContactsForGroup($this->groupid);
-		} catch (CsrException $ex) {
+		} catch (CsrException $e) {
+			triggerExceptionAsWarning($e);
 			GoogleTokenModel::instance()->delete($google_token);
-			throw new CsrGebruikerException("Verbinding met Google verbroken.");
+			throw new CsrGebruikerException("Google synchronisatie mislukt");
 		}
 	}
 

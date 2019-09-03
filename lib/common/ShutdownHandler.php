@@ -92,7 +92,14 @@ final class ShutdownHandler {
 	 * Runt in Productie mode.
 	 */
 	public static function slackHandler($errno, $errstr, $errfile, $errline) {
-		if (!(error_reporting() & $errno)) {
+		ShutdownHandler::triggerSlackMessage($errno, $errstr, $errfile, $errline, false);
+	}
+
+	/**
+	 * Stuur een schop naar de PubCie Slack.
+	 */
+	public static function triggerSlackMessage($errno, $errstr, $errfile, $errline, $force=false) {
+		if (!$force && !(error_reporting() & $errno)) {
 			// Deze error is gesuppressed.
 			return;
 		}

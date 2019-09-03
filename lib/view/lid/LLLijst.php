@@ -116,7 +116,10 @@ class LLLijst extends LLWeergave {
 					break;
 
 				case 'woonoord':
-					echo $profiel->getWoonoord()->naam;
+					$woonoord = $profiel->getWoonoord();
+					if ($woonoord) {
+						echo $woonoord;
+					}
 					break;
 
 				case 'linkedin':

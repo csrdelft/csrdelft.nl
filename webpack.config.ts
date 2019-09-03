@@ -20,6 +20,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		'fxclouds': './js/effect/fxclouds.ts',
 		'fxonontdekt': './js/effect/fxonontdekt.ts',
 		'fxtrein': './js/effect/fxtrein.ts',
+		'fxraket': './js/effect/fxraket.ts',
 		'fxminion': './js/effect/minion.ts',
 		'fxclippy': './js/effect/fxclippy.ts',
 		'extern': ['./js/extern.ts', './sass/extern.scss'],
