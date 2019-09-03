@@ -31,6 +31,12 @@ instellingen:
       opties: ['iedereen', 'eigen', 'nee']
       default: 'eigen'
       beschrijving: 'Geef corvee weer in de agenda, geldt ook voor de agenda ge&iuml;mporteerd in je eigen systeem.'
+    weergave:
+      titel: 'Standaard weergave agenda'
+      type: Enumeration
+      opties: ['maand', 'week', 'dag', 'agenda']
+      default: 'maand'
+      beschrijving: 'De standaard weergave van de agenda, bij het bezoeken van de agenda kun je altijd tussen deze opties kiezen'
   layout:
     toegankelijk:
       titel: 'Leesbaarheid'

@@ -20,16 +20,29 @@ if (calendarEl == null) {
 	throw new Error('Agenda element niet gevonden');
 }
 
+const {jaar, maand, weergave} = calendarEl.dataset;
+
+if (jaar == null || maand == null || weergave == null) {
+	throw new Error('Agenda opties niet gezet');
+}
+
+const defaultView = {
+	maand: 'dayGridMonth',
+	week: 'timeGridWeek',
+	dag: 'timeGridDay',
+	agenda: 'listWeek',
+}[weergave];
+
 const calendar = new Calendar(calendarEl, {
 	plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interaction],
-	defaultView: 'dayGridMonth',
+	defaultView,
 	locale: nlLocale,
 	header: {
 		left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
 		center: 'title',
 		right: 'prevYear,prev,next,nextYear',
 	},
-	defaultDate: new Date(Number(calendarEl.dataset.jaar), Number(calendarEl.dataset.maand) - 1),
+	defaultDate: new Date(Number(jaar), Number(maand) - 1),
 	firstDay: 0,
 	events: '/agenda/feed',
 	selectable: true,
