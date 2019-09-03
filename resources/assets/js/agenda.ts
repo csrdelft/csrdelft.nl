@@ -29,6 +29,7 @@ const calendar = new Calendar(calendarEl, {
 		center: 'title',
 		right: 'prevYear,prev,next,nextYear',
 	},
+	defaultDate: new Date(Number(calendarEl.dataset.jaar), Number(calendarEl.dataset.maand) - 1),
 	events: '/agenda/feed',
 	selectable: true,
 	select: (selectionInfo) => {
