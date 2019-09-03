@@ -117,7 +117,7 @@ class AgendaController {
 				$item->item_id = null;
 				return new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
 			} else {
-				return view('agenda.maand_item', ['item' => $item]);
+				return new JsonResponse(true);
 			}
 		} else {
 			return $form;
@@ -132,7 +132,7 @@ class AgendaController {
 		$form = new AgendaItemForm($item, 'bewerken'); // fetches POST values itself
 		if ($form->validate()) {
 			$this->model->update($item);
-			return view('agenda.maand_item', ['item' => $item]);
+			return new JsonResponse(true);
 		} else {
 			return $form;
 		}
@@ -144,7 +144,7 @@ class AgendaController {
 			throw new CsrToegangException();
 		}
 		$this->model->delete($item);
-		return view('agenda.delete', ['uuid' => $item->getUUID()]);
+		return new JsonResponse(true);
 	}
 
 	public function verbergen($refuuid = null) {
@@ -153,7 +153,7 @@ class AgendaController {
 			throw new CsrToegangException();
 		}
 		AgendaVerbergenModel::instance()->toggleVerbergen($item);
-		return view('agenda.maand_item', ['item' => $item]);
+		return new JsonResponse(true);
 	}
 
 	/**
