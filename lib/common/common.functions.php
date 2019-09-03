@@ -892,6 +892,7 @@ function checkMimetype($filename, $mime) {
 		'audio/midi' => ['mid', 'midi'],
 		'video/quicktime' => ['mov', 'qt'],
 		'audio/mpeg' => 'mp3',
+		'audio/mp3' => 'mp3',
 		'video/mpeg' => ['mpe', 'mpeg', 'mpg'],
 		'audio/ogg' => ['oga', 'ogg', 'ogv'],
 		'application/ogg' => 'ogx',
