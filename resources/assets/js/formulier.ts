@@ -209,7 +209,10 @@ export function formCancel(event: Event) {
 	}
 	if (form.hasClass('ModalForm')) {
 		event.preventDefault();
-		axios.get(source.attr('href')!);
+		const href = source.attr('href');
+		if (href) {
+			axios.get(href);
+		}
 		if (!formIsChanged(form) || confirm('Sluiten zonder wijzigingen op te slaan?')) {
 			modalClose();
 		}
