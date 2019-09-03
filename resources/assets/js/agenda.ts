@@ -47,7 +47,7 @@ const calendar = new Calendar(calendarEl, {
 			ctx.init(card);
 
 			// tslint:disable-next-line:no-unused-expression
-			new Popper(info.el, card, {placement: 'right'});
+			new Popper(info.el, card, {placement: 'bottom'});
 
 			// Na deze klik een event listener
 			setTimeout(() => {
