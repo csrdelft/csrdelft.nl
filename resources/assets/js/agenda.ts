@@ -36,6 +36,7 @@ const defaultView = {
 const calendar = new Calendar(calendarEl, {
 	plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interaction],
 	height: 'auto',
+	nowIndicator: true,
 	defaultView,
 	locale: nlLocale,
 	header: {
