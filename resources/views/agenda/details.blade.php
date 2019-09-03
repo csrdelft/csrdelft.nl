@@ -30,7 +30,7 @@
 				<a href="/agenda/bewerken/{{$item->item_id}}" class="btn beheren post popup" title="Dit agenda-item bewerken">
 					@icon('bewerken')
 				</a>
-				<a href="/agenda/verwijderen/{{$item->item_id}}" class="btn beheren post confirm"
+				<a href="/agenda/verwijderen/{{$item->item_id}}" class="btn beheren post confirm ReloadAgenda"
 					 title="Dit agenda-item definitief verwijderen">
 					@icon('verwijderen')
 				</a>

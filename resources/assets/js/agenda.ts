@@ -65,4 +65,7 @@ const calendar = new Calendar(calendarEl, {
 });
 calendar.render();
 
+ctx.addHandler('.ReloadAgenda',
+	(el) => el.addEventListener('click', () => setTimeout(() => calendar.refetchEvents())));
+
 $(document.body).on('modalClose', () => calendar.refetchEvents());
