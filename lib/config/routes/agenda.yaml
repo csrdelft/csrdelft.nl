@@ -1,3 +1,9 @@
+agenda-details:
+  path: /agenda/details/{uuid}
+  controller: CsrDelft\controller\AgendaController::details
+  methods: GET
+  options: { mag: P_LOGGED_IN }
+
 agenda-feed:
   path: /agenda/feed
   controller: CsrDelft\controller\AgendaController::feed
@@ -63,3 +69,4 @@ agenda-verbergen:
   methods: POST
   defaults: { refuuid: null }
   options: { mag: P_LOGGED_IN }
+

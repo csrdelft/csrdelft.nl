@@ -5,9 +5,14 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interaction from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import axios from 'axios';
+import $ from 'jquery';
 import moment from 'moment';
+import Popper from 'popper.js';
 import {ajaxRequest} from './ajax';
 import {domUpdate} from './context';
+import ctx from './ctx';
+import {htmlParse} from './util';
 
 const calendarEl = document.getElementById('agenda');
 
@@ -28,14 +33,36 @@ const calendar = new Calendar(calendarEl, {
 	selectable: true,
 	select: (selectionInfo) => {
 		ajaxRequest('POST', '/agenda/toevoegen', {
-			begin_moment: moment(selectionInfo.start).format('YYYY-MM-DD hh:mm:ss'),
-			eind_moment: moment(selectionInfo.end).format('YYYY-MM-DD hh:mm:ss'),
-		}, false, domUpdate, alert);
+			begin_moment: moment(selectionInfo.start).format('YYYY-MM-DD HH:mm:ss'),
+			eind_moment: moment(selectionInfo.end).format('YYYY-MM-DD HH:mm:ss'),
+		}, false, domUpdate);
 	},
 	eventClick: (info) => {
-		if (!info.event.url) {
-			ajaxRequest('POST', `/agenda/bewerken/${info.event.id.split('@')[0]}`, {}, false, domUpdate, alert);
-		}
+		axios.get(`/agenda/details/${info.event.id}`).then((response) => {
+			const card = htmlParse(response.data)[0] as HTMLElement;
+			card.style.zIndex = '100';
+			card.style.position = 'absolute';
+
+			document.body.append(card);
+			ctx.init(card);
+
+			// tslint:disable-next-line:no-unused-expression
+			new Popper(info.el, card, {placement: 'right'});
+
+			// Na deze klik een event listener
+			setTimeout(() => {
+				const clickListener = (e: Event) => {
+					if (!card.contains(e.target as Node)) {
+						card.remove();
+						document.body.removeEventListener('click', clickListener);
+					}
+				};
+
+				document.body.addEventListener('click', clickListener);
+			});
+		});
 	},
 });
 calendar.render();
+
+$(document.body).on('modalClose', () => calendar.refetchEvents());
