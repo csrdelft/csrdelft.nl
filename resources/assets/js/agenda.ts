@@ -42,7 +42,7 @@ const calendar = new Calendar(calendarEl, {
 	header: {
 		left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
 		center: 'title',
-		right: 'prevYear,prev,next,nextYear',
+		right: 'today prevYear,prev,next,nextYear',
 	},
 	defaultDate: new Date(Number(jaar), Number(maand) - 1),
 	firstDay: 0,
