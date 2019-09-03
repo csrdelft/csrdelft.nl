@@ -24,6 +24,10 @@
 @import "module/menubeheer";
 @import "module/profiel";
 @import "module/stamboom";
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+@import '~@fullcalendar/list/main.css';
 
 /* Standaard Kleuren */
 .overflow-x-hidden {

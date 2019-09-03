@@ -9,6 +9,10 @@ use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\agenda\AgendaVerbergenModel;
 use CsrDelft\model\entity\agenda\AgendaItem;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\model\entity\groepen\Activiteit;
+use CsrDelft\model\entity\groepen\Ketzer;
+use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
@@ -47,33 +51,10 @@ class AgendaController {
 		if ($maand < 1 || $maand > 12) {
 			$maand = date('n');
 		}
-		$datum = strtotime($jaar . '-' . $maand . '-01');
-
-		// URL voor vorige maand
-		$urlVorige = '/agenda/maand/';
-		if ($maand == 1) {
-			$urlVorige .= ($jaar - 1) . '/12';
-		} else {
-			$urlVorige .= $jaar . '/' . ($maand - 1);
-		}
-
-		// URL voor volgende maand
-		$urlVolgende = '/agenda/maand/';
-		if ($maand == 12) {
-			$urlVolgende .= ($jaar + 1) . '/1';
-		} else {
-			$urlVolgende .= $jaar . '/' . ($maand + 1);
-		}
 
 		return view('agenda.maand', [
-			'datum' => $datum,
 			'maand' => $maand,
 			'jaar' => $jaar,
-			'weken' => $this->model->getItemsByMaand($jaar, $maand),
-			'urlVorige' => $urlVorige,
-			'prevMaand' => strftime('%B', strtotime('-1 Month', $datum)),
-			'urlVolgende' => $urlVolgende,
-			'nextMaand' => strftime('%B', strtotime('+1 Month', $datum)),
 		]);
 	}
 
@@ -136,7 +117,7 @@ class AgendaController {
 				$item->item_id = null;
 				return new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
 			} else {
-				return view('agenda.maand_item', ['item' => $item]);
+				return new JsonResponse(true);
 			}
 		} else {
 			return $form;
@@ -151,7 +132,7 @@ class AgendaController {
 		$form = new AgendaItemForm($item, 'bewerken'); // fetches POST values itself
 		if ($form->validate()) {
 			$this->model->update($item);
-			return view('agenda.maand_item', ['item' => $item]);
+			return new JsonResponse(true);
 		} else {
 			return $form;
 		}
@@ -163,10 +144,23 @@ class AgendaController {
 			throw new CsrToegangException();
 		}
 		$this->model->delete($item);
-		return view('agenda.delete', ['uuid' => $item->getUUID()]);
+		return new JsonResponse(true);
 	}
 
 	public function verbergen($refuuid = null) {
+		$item = $this->getAgendaItemByUuid($refuuid);
+		if (!$item) {
+			throw new CsrToegangException();
+		}
+		AgendaVerbergenModel::instance()->toggleVerbergen($item);
+		return new JsonResponse(true);
+	}
+
+	/**
+	 * @param $refuuid
+	 * @return Agendeerbaar|false
+	 */
+	private function getAgendaItemByUuid($refuuid) {
 		$parts = explode('@', $refuuid, 2);
 		$module = explode('.', $parts[1], 2);
 		switch ($module[0]) {
@@ -194,15 +188,47 @@ class AgendaController {
 			default:
 				throw new CsrException('invalid UUID');
 		}
-		if (!$item) {
-			throw new CsrToegangException();
+		return $item;
+	}
+
+	public function feed() {
+		$startMoment = strtotime(filter_input(INPUT_GET, 'start'));
+		$eindMoment = strtotime(filter_input(INPUT_GET, 'end'));
+		$events = $this->model->getAllAgendeerbaar($startMoment, $eindMoment);
+
+		$eventsJson = [];
+		foreach ($events as $event) {
+
+			$backgroundColor = '#214AB0';
+			if ($event instanceof Profiel) {
+				$backgroundColor = '#BD135E';
+			} else if ($event instanceof Maaltijd) {
+				$backgroundColor = '#731CC7';
+			} else if ($event instanceof Activiteit) {
+				$backgroundColor = '#1CC7BC';
+			} else if ($event instanceof Ketzer) {
+				$backgroundColor = '#1ABD2C';
+			}
+
+			$eventsJson[] = [
+				'title' => $event->getTitel(),
+				'start' => date('c', $event->getBeginMoment()),
+				'end' => date('c', $event->getEindMoment()),
+				'allDay' => $event->isHeledag(),
+				'id' => $event->getUUID(),
+				'textColor' => '#fff',
+				'backgroundColor' => $backgroundColor,
+				'borderColor' => $backgroundColor,
+				'description' => $event->getBeschrijving(),
+				'location' => $event->getLocatie(),
+			];
 		}
-		/**
-		 * @var Agendeerbaar $agendaitem
-		 */
-		$agendaitem = $item;
-		AgendaVerbergenModel::instance()->toggleVerbergen($agendaitem);
-		return view('agenda.maand_item', ['item' => $item]);
+
+		return new JsonResponse($eventsJson);
+	}
+
+	public function details($uuid) {
+		return view('agenda.details', ['item' => $this->getAgendaItemByUuid($uuid)]);
 	}
 
 }
