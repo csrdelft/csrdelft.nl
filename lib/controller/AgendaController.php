@@ -17,6 +17,7 @@ use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\agenda\AgendaItemForm;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\View;
@@ -55,6 +56,7 @@ class AgendaController {
 		return view('agenda.maand', [
 			'maand' => $maand,
 			'jaar' => $jaar,
+			'creator' => LoginModel::mag(P_AGENDA_ADD) || LoginModel::getProfiel()->verticaleleider,
 		]);
 	}
 
@@ -107,9 +109,19 @@ class AgendaController {
 	}
 
 	public function toevoegen($datum = null) {
+		if (!LoginModel::mag(P_AGENDA_ADD) && !LoginModel::getProfiel()->verticaleleider) {
+			throw new CsrToegangException('Mag geen gebeurtenis toevoegen.');
+		}
+
 		$item = $this->model->nieuw($datum);
+		if (LoginModel::getProfiel()->verticaleleider && !LoginModel::mag(P_AGENDA_ADD)) {
+			$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
+		}
 		$form = new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
 		if ($form->validate()) {
+			if (LoginModel::getProfiel()->verticaleleider && !LoginModel::mag(P_AGENDA_ADD)) {
+				$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
+			}
 			$item->item_id = (int)$this->model->create($item);
 			if ($datum === 'doorgaan') {
 				$_POST = []; // clear post values of previous input

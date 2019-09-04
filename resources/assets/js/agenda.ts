@@ -1,6 +1,7 @@
 import {Calendar} from '@fullcalendar/core';
 // @ts-ignore
 import nlLocale from '@fullcalendar/core/locales/nl';
+import {OptionsInput, ToolbarInput} from '@fullcalendar/core/types/input-types';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interaction from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
@@ -20,9 +21,9 @@ if (calendarEl == null) {
 	throw new Error('Agenda element niet gevonden');
 }
 
-const {jaar, maand, weergave} = calendarEl.dataset;
+const {jaar, maand, weergave, creator} = calendarEl.dataset;
 
-if (jaar == null || maand == null || weergave == null) {
+if (jaar == null || maand == null || weergave == null || creator == null) {
 	throw new Error('Agenda opties niet gezet');
 }
 
@@ -30,17 +31,29 @@ const defaultView = {
 	maand: 'dayGridMonth',
 	week: 'timeGridWeek',
 	dag: 'timeGridDay',
-	agenda: 'listWeek',
+	agenda: 'listMonth',
 }[weergave];
 
-const calendar = new Calendar(calendarEl, {
+const options: OptionsInput = {
 	plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interaction],
 	height: 'auto',
 	nowIndicator: true,
 	defaultView,
 	locale: nlLocale,
+	customButtons: {
+		nieuw: {
+			text: 'Nieuw',
+			click: () => {
+				const datum = moment(calendar.getDate()).format('YYYY-MM-DD HH:mm:ss');
+				ajaxRequest('POST', '/agenda/toevoegen', {
+					begin_moment: datum,
+					eind_moment: datum,
+				}, false, domUpdate);
+			},
+		},
+	},
 	header: {
-		left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+		left: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
 		center: 'title',
 		right: 'today prevYear,prev,next,nextYear',
 	},
@@ -59,6 +72,8 @@ const calendar = new Calendar(calendarEl, {
 			const card = htmlParse(response.data)[0] as HTMLElement;
 			card.style.zIndex = '100';
 			card.style.position = 'absolute';
+
+			card.querySelector('.close')!.addEventListener('click', () => card.remove());
 
 			document.body.append(card);
 			ctx.init(card);
@@ -79,7 +94,15 @@ const calendar = new Calendar(calendarEl, {
 			});
 		});
 	},
-});
+};
+
+// Creator krijgt nieuw knop
+if (creator === 'true') {
+	const header = options.header as ToolbarInput;
+	header.right = 'nieuw ' + header.right;
+}
+
+const calendar = new Calendar(calendarEl, options);
 calendar.render();
 
 ctx.addHandler('.ReloadAgenda',

@@ -47,14 +47,14 @@ agenda-toevoegen:
   controller: CsrDelft\controller\AgendaController::toevoegen
   methods: POST
   defaults: { datum: null }
-  options: { mag: P_AGENDA_ADD }
+  options: { mag: P_LOGGED_IN } # controller checkt rechten
 
 agenda-bewerken:
   path: /agenda/bewerken/{aid}
   controller: CsrDelft\controller\AgendaController::bewerken
   methods: POST
   requirements: { aid: '\d+'}
-  options: { mag: P_AGENDA_ADD }
+  options: { mag: P_LOGGED_IN } # controller checkt rechten
 
 agenda-verwijderen:
   path: /agenda/verwijderen/{aid}

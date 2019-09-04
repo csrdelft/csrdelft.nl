@@ -9,7 +9,11 @@
 @endsection
 
 @section('content')
-	<div id="agenda" data-maand="{{$maand}}" data-jaar="{{$jaar}}" data-weergave="{{lid_instelling('agenda', 'weergave')}}"></div>
+	<div id="agenda"
+			 data-maand="{{$maand}}"
+			 data-jaar="{{$jaar}}"
+			 data-weergave="{{lid_instelling('agenda', 'weergave')}}"
+			 data-creator="{{$creator ? "true" : "false"}}"></div>
 	<div id="ICAL" class="input-group mt-2" title="Houd deze url privé!&#013;Nieuwe aanvragen: zie je profiel">
 		<div class="input-group-prepend">
 			<label class="input-group-text" for="ical-link"><img src="/images/ical.gif" alt="ICAL"/></label>
