@@ -4,7 +4,7 @@ PRODID:-//C.S.R. Delft//C.S.R. agenda//NL
 VERSION:2.0
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-X-ORIGINAL-URL:{{CSR_ROOT}}/agenda/
+X-ORIGINAL-URL:{!!CSR_ROOT!!}/agenda/
 X-WR-CALNAME:C.S.R. agenda
 X-WR-TIMEZONE:Europe/Amsterdam
 X-WR-CALDESC:
@@ -29,24 +29,24 @@ END:VTIMEZONE
 @foreach($items as $item)
 BEGIN:VEVENT
 @if($item->isHeledag())
-DTSTART;VALUE=DATE:{{escape_ical(strftime("%Y%m%d", $item->getBeginMoment()), 19)}}
+DTSTART;VALUE=DATE:{!!escape_ical(strftime("%Y%m%d", $item->getBeginMoment()), 19)!!}
 @else
-DTSTART;TZID=Europe/Amsterdam:{{escape_ical(strftime("%Y%m%dT%H%M%S", $item->getBeginMoment()), 30)}}
+DTSTART;TZID=Europe/Amsterdam:{!!escape_ical(strftime("%Y%m%dT%H%M%S", $item->getBeginMoment()), 30)!!}
 @endif
 @if($item->isHeledag())
-DTEND;VALUE=DATE:{{escape_ical(strftime("%Y%m%d", $item->getEindMoment()), 17)}}
+DTEND;VALUE=DATE:{!!escape_ical(strftime("%Y%m%d", $item->getEindMoment()), 17)!!}
 @else
-DTEND;TZID=Europe/Amsterdam:{{escape_ical(strftime("%Y%m%dT%H%M%S", $item->getEindMoment()), 28)}}
+DTEND;TZID=Europe/Amsterdam:{!!escape_ical(strftime("%Y%m%dT%H%M%S", $item->getEindMoment()), 28)!!}
 @endif
-DTSTAMP:{{$published}}
-UID:{{escape_ical($item->getUUID(), 4)}}
-CREATED:{{$published}}
-DESCRIPTION:{{escape_ical($item->getBeschrijving(), 12)}}
-LAST-MODIFIED:{{$published}}
-LOCATION:{{escape_ical($item->getLocatie(), 9)}}
+DTSTAMP:{!!$published!!}
+UID:{!!escape_ical($item->getUUID(), 4)!!}
+CREATED:{!!$published!!}
+DESCRIPTION:{!!escape_ical($item->getBeschrijving(), 12)!!}
+LAST-MODIFIED:{!!$published!!}
+LOCATION:{!!escape_ical($item->getLocatie(), 9)!!}
 SEQUENCE:0
 STATUS:CONFIRMED
-SUMMARY:{{escape_ical($item->getTitel(), 8)}}
+SUMMARY:{!!escape_ical($item->getTitel(), 8)!!}
 TRANSP:TRANSPARENT
 END:VEVENT
 @endforeach
