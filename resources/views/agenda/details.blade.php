@@ -36,11 +36,11 @@
 			<div class="col-auto">
 				<div class="btn-group btn-group-sm">
 					@if($verborgen)
-						<a href="/agenda/verbergen/{{$item->getUUID()}}" class="btn beheren post" title="Toon dit agenda item">
+						<a href="/agenda/verbergen/{{$item->getUUID()}}" class="btn beheren post" title="Toon dit agenda item in ical">
 							@icon('shading')
 						</a>
 					@else
-						<a href="/agenda/verbergen/{{$item->getUUID()}}" class="btn beheren post" title="Verberg dit agenda item">
+						<a href="/agenda/verbergen/{{$item->getUUID()}}" class="btn beheren post" title="Verberg dit agenda item in ical">
 							@icon('eye')
 						</a>
 					@endif
