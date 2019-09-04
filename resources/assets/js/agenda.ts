@@ -77,7 +77,10 @@ const options: OptionsInput = {
 			card.style.zIndex = '100';
 			card.style.position = 'absolute';
 
-			card.querySelector('.close')!.addEventListener('click', () => card.remove());
+			card.querySelector('.close')!.addEventListener('click', () => {
+				card.remove();
+				return false;
+			});
 
 			document.body.append(card);
 			ctx.init(card);
