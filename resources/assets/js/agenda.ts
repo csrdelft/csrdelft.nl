@@ -60,7 +60,7 @@ const options: OptionsInput = {
 	defaultDate: new Date(Number(jaar), Number(maand) - 1),
 	firstDay: 0,
 	events: '/agenda/feed',
-	selectable: true,
+	selectable: creator === 'true',
 	select: (selectionInfo) => {
 		ajaxRequest('POST', '/agenda/toevoegen', {
 			begin_moment: moment(selectionInfo.start).format('YYYY-MM-DD HH:mm:ss'),
