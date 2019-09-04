@@ -10,6 +10,12 @@ agenda-feed:
   methods: GET
   options: { mag: P_LOGGED_IN }
 
+agenda-verplaatsen:
+  path: /agenda/verplaatsen/{uuid}
+  controller: CsrDelft\controller\AgendaController::verplaatsen
+  methods: POST
+  options: { mag: P_LOGGED_IN } # controller checkt rechten
+
 agenda-thuis:
   path: /agenda/{jaar}/{maand}
   controller: CsrDelft\controller\AgendaController::maand

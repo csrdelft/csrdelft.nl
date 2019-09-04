@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\agenda\AgendaModel;
@@ -150,6 +151,21 @@ class AgendaController {
 		}
 	}
 
+	public function verplaatsen($uuid) {
+		$item = $this->getAgendaItemByUuid($uuid);
+
+		if (!$item || !$item instanceof AgendaItem) throw new CsrGebruikerException('Kan alleen AgendaItem verplaatsen');
+
+		if (!$item->magBeheren()) throw new CsrToegangException();
+
+		$item->begin_moment = $this->getPost('begin_moment');
+		$item->eind_moment = $this->getPost('eind_moment');
+
+		$this->model->update($item);
+
+		return new JsonResponse(true);
+	}
+
 	public function verwijderen($aid) {
 		$item = $this->model->getAgendaItem((int)$aid);
 		if (!$item || !$item->magBeheren()) {
@@ -233,6 +249,7 @@ class AgendaController {
 				'borderColor' => $backgroundColor,
 				'description' => $event->getBeschrijving(),
 				'location' => $event->getLocatie(),
+				'editable' => $event instanceof AgendaItem && $event->magBeheren(),
 			];
 		}
 

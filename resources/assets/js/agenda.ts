@@ -1,4 +1,4 @@
-import {Calendar} from '@fullcalendar/core';
+import {Calendar, Duration, EventApi, View} from '@fullcalendar/core';
 // @ts-ignore
 import nlLocale from '@fullcalendar/core/locales/nl';
 import {OptionsInput, ToolbarInput} from '@fullcalendar/core/types/input-types';
@@ -14,6 +14,10 @@ import {ajaxRequest} from './ajax';
 import {domUpdate} from './context';
 import ctx from './ctx';
 import {htmlParse} from './util';
+
+const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss';
+
+const fmt = (date: Date) => moment(date).format(dateTimeFormat);
 
 const calendarEl = document.getElementById('agenda');
 
@@ -44,7 +48,7 @@ const options: OptionsInput = {
 		nieuw: {
 			text: 'Nieuw',
 			click: () => {
-				const datum = moment(calendar.getDate()).format('YYYY-MM-DD HH:mm:ss');
+				const datum = fmt(calendar.getDate());
 				ajaxRequest('POST', '/agenda/toevoegen', {
 					begin_moment: datum,
 					eind_moment: datum,
@@ -63,8 +67,8 @@ const options: OptionsInput = {
 	selectable: creator === 'true',
 	select: (selectionInfo) => {
 		ajaxRequest('POST', '/agenda/toevoegen', {
-			begin_moment: moment(selectionInfo.start).format('YYYY-MM-DD HH:mm:ss'),
-			eind_moment: moment(selectionInfo.end).format('YYYY-MM-DD HH:mm:ss'),
+			begin_moment: fmt(selectionInfo.start),
+			eind_moment: fmt(selectionInfo.end),
 		}, false, domUpdate);
 	},
 	eventClick: (info) => {
@@ -93,6 +97,18 @@ const options: OptionsInput = {
 				document.body.addEventListener('click', clickListener);
 			});
 		});
+	},
+	eventDrop(dropInfo) {
+		axios.post(`/agenda/verplaatsen/${dropInfo.event.id}`, {
+			begin_moment: fmt(dropInfo.event.start!),
+			eind_moment: fmt(dropInfo.event.end!),
+		}).then(() => calendar.refetchEvents());
+	},
+	eventResize(resizeInfo) {
+		axios.post(`/agenda/verplaatsen/${resizeInfo.event.id}`, {
+			begin_moment: fmt(resizeInfo.event.start!),
+			eind_moment: fmt(resizeInfo.event.end!),
+		}).then(() => calendar.refetchEvents());
 	},
 };
 
