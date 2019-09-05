@@ -46,6 +46,7 @@ class PinTransactieDownloader
 	const DATE_START_HOURS = '12';
 	const DATE_START_MINUTES = '00';
 	const DURATION_DAY = '0';
+	const POST_FIELD_NUM_ROWS = 'select.num_rows';
 
 	public static function download($settings, $moment)
 	{
@@ -83,6 +84,7 @@ class PinTransactieDownloader
 			self::POST_FIELD_PERIOD_FROM_DATE_HOURS => self::DATE_START_HOURS,
 			self::POST_FIELD_PERIOD_FROM_DATE_MINUTES => self::DATE_START_MINUTES,
 			self::POST_FIELD_PERIOD_DURATION => self::DURATION_DAY,
+			self::POST_FIELD_NUM_ROWS => 2,
 			self::POST_FIELD_STORE => $settings[self::SETTINGS_STORE],
 		];
 		$result = self::postPage(url2absolute($baseUrl, $searchUrl), $postFields, $sessionCookie);
