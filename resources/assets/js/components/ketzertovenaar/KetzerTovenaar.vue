@@ -299,7 +299,7 @@
 				enterEnd: false,
 				enterEndMoment: null,
 				enterEndMomentTime: '',
-				canExit: true,
+				canExit: false,
 				exitEnd: false,
 				exitEndMoment: null,
 				exitEndMomentTime: '',
@@ -376,22 +376,18 @@
 			},
 			prepareEnterEnd() {
 				if (this.event.enterEnd) {
-					const start = this.event.multipleDays ? this.event.calendarData.dateRange.start : this.event.calendarData.selectedDate;
-					if (start && start.length > 0) {
-						this.$nextTick(function () {
-							this.$refs.enterEndmoment.$children[0].ChooseDate(start);
-						});
+					const start = this.event.multipleDays ? this.event.calendarData.start : this.event.calendarData;
+					if (start) {
+						this.event.enterEndMoment = start;
 					}
 					this.event.enterEndMomentTime = this.event.startTime;
 				}
 			},
 			prepareExitEnd() {
 				if (this.event.exitEnd) {
-					const start = this.event.multipleDays ? this.event.calendarData.dateRange.start : this.event.calendarData.selectedDate;
-					if (start && start.length > 0) {
-						this.$nextTick(function () {
-							this.$refs.exitEndMoment.$children[0].ChooseDate(start);
-						});
+					const start = this.event.multipleDays ? this.event.calendarData.start : this.event.calendarData;
+					if (start) {
+						this.event.exitEndMoment = start;
 					}
 					this.event.exitEndMomentTime = this.event.startTime;
 				}
@@ -412,6 +408,10 @@
 	.vfc-styles-conditional-class .vfc-main-container {
 		font-size: 18px;
 		font-family: 'Source Sans Pro', sans-serif !important;
+	}
+
+	.c-pane-container + .next {
+		margin-top: 20px;
 	}
 
 	.c-day {

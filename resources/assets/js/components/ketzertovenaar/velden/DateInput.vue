@@ -17,7 +17,7 @@
 		components: {},
 		props: {
 			name: {type: String, required: true},
-			value: Object,
+			value: Object|Date,
 		},
 		data: () => ({
 			enteredDate: null,
