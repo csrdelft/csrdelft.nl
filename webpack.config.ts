@@ -21,6 +21,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		'fxclippy': './js/entry/fxclippy.ts',
 		'fxspace': './js/entry/fxspace.ts',
 		'extern': ['./js/entry/extern.ts', './sass/extern.scss'],
+		'bar': './sass/bar.scss',
 		'bredeletters': './sass/bredeletters.scss',
 		'common': './sass/common.scss',
 		'extern-forum': './sass/extern-forum.scss',
