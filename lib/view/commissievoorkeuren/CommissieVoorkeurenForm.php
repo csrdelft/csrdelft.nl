@@ -2,13 +2,10 @@
 
 namespace CsrDelft\view\commissievoorkeuren;
 
-use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurenModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
-use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieCategorieModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
-use CsrDelft\model\entity\commissievoorkeuren\VoorkeurVoorkeur;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\elementen\Subkopje;
