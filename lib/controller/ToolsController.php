@@ -7,6 +7,7 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\ProfielModel;
@@ -228,7 +229,7 @@ class ToolsController {
 		if (isset($_GET['q'])) {
 			$query = $_GET['q'];
 		}
-		$limiet = 5;
+		$limiet = 20;
 		if (isset($_GET['limit'])) {
 			$limiet = (int)$_GET['limit'];
 		}
@@ -241,26 +242,39 @@ class ToolsController {
 
 		$profielen = ProfielService::instance()->zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $limiet);
 
+		$scoredProfielen = [];
+ 		foreach ($profielen as $profiel) {
+ 			$score = 0;
+
+ 			// Beste match start met de zoekterm
+ 			if (startsWith(strtolower($profiel->getNaam('volledig')), strtolower($query))) {
+ 				$score += 100;
+			}
+
+ 			// Zoek meest lijkende match
+ 			$score -= levenshtein($query, $profiel->getNaam());
+
+ 			$scoredProfielen[] = [
+ 				'profiel' => $profiel,
+				'score' => $score,
+			];
+		}
+
+ 		usort($scoredProfielen, function ($a, $b) { return $b['score'] - $a['score']; });
+
+ 		$scoredProfielen = array_slice($scoredProfielen, 0, 5);
+
 		$result = array();
-		foreach ($profielen as $profiel) {
-			$tussenvoegsel = ($profiel->tussenvoegsel != '') ? $profiel->tussenvoegsel . ' ' : '';
-			$fullname = $profiel->voornaam . ' ' . $tussenvoegsel . $profiel->achternaam;
+		foreach ($scoredProfielen as $scoredProfiel) {
+			/** @var Profiel $profiel */
+			$profiel = $scoredProfiel['profiel'];
 
 			$result[] = array(
 				'url' => '/profiel/' . $profiel->uid,
 				'label' => $profiel->uid,
-				'value' => $profiel->getNaam($vorm)
+				'value' => $profiel->getNaam($vorm),
 			);
 		}
-		/*
-      if (empty($result)) {
-      $result[] = array(
-      'url' => '/ledenlijst?status=LEDEN|OUDLEDEN&q=' . urlencode($query),
-      'label' => 'Zoeken in <span class="dikgedrukt">leden & oudleden</span>',
-      'value' => htmlspecialchars($query)
-      );
-      }
-     */
 
 		return new JsonResponse($result);
 	}
