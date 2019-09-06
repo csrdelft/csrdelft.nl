@@ -21,7 +21,7 @@
 		<ul>
 			<li>
 				@php($patroonNaam = \CsrDelft\model\ProfielModel::getNaam($profiel->patroon))
-				<a href="/leden/stamboom/{{$profiel->patroon}}" title="Bekijk het nageslacht van {{$patroonNaam}}">&uArr; {{$patroonNaam}}</a>
+				<a href="/profiel/{{$profiel->patroon}}/stamboom" title="Bekijk het nageslacht van {{$patroonNaam}}">&uArr; {{$patroonNaam}}</a>
 				<ul>
 					@include('profiel.stamboom_node', ['profiel' => $profiel])
 				</ul>

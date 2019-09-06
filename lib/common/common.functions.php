@@ -5,6 +5,7 @@
 # common.functions.php
 # -------------------------------------------------------------------
 use CsrDelft\common\MijnSqli;
+use CsrDelft\common\ShutdownHandler;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\instellingen\InstellingenModel;
 use CsrDelft\model\instellingen\LidInstellingenModel;
@@ -891,6 +892,7 @@ function checkMimetype($filename, $mime) {
 		'audio/midi' => ['mid', 'midi'],
 		'video/quicktime' => ['mov', 'qt'],
 		'audio/mpeg' => 'mp3',
+		'audio/mp3' => 'mp3',
 		'video/mpeg' => ['mpe', 'mpeg', 'mpg'],
 		'audio/ogg' => ['oga', 'ogg', 'ogv'],
 		'application/ogg' => 'ogx',
@@ -1131,4 +1133,8 @@ function join_paths(...$args) {
  */
 function path_valid($prefix, $path) {
 	return startsWith(realpathunix(join_paths($prefix, $path)), realpathunix($prefix));
+}
+
+function triggerExceptionAsWarning(Exception $e) {
+	ShutdownHandler::triggerSlackMessage($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine(), true);
 }

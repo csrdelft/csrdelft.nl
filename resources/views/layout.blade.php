@@ -68,6 +68,9 @@
 @if(lid_instelling('layout', 'trein') !== 'nee')
 	@include('effect.trein')
 @endif
+@if(lid_instelling('layout', 'raket') !== 'nee')
+	@include('effect.raket')
+@endif
 @if(lid_instelling('layout', 'assistent') !== 'nee')
 	<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css">
 	<script type="application/javascript">

@@ -1,3 +1,21 @@
+agenda-details:
+  path: /agenda/details/{uuid}
+  controller: CsrDelft\controller\AgendaController::details
+  methods: GET
+  options: { mag: P_LOGGED_IN }
+
+agenda-feed:
+  path: /agenda/feed
+  controller: CsrDelft\controller\AgendaController::feed
+  methods: GET
+  options: { mag: P_LOGGED_IN }
+
+agenda-verplaatsen:
+  path: /agenda/verplaatsen/{uuid}
+  controller: CsrDelft\controller\AgendaController::verplaatsen
+  methods: POST
+  options: { mag: P_LOGGED_IN } # controller checkt rechten
+
 agenda-thuis:
   path: /agenda/{jaar}/{maand}
   controller: CsrDelft\controller\AgendaController::maand
@@ -35,14 +53,14 @@ agenda-toevoegen:
   controller: CsrDelft\controller\AgendaController::toevoegen
   methods: POST
   defaults: { datum: null }
-  options: { mag: P_AGENDA_ADD }
+  options: { mag: P_LOGGED_IN } # controller checkt rechten
 
 agenda-bewerken:
   path: /agenda/bewerken/{aid}
   controller: CsrDelft\controller\AgendaController::bewerken
   methods: POST
   requirements: { aid: '\d+'}
-  options: { mag: P_AGENDA_ADD }
+  options: { mag: P_LOGGED_IN } # controller checkt rechten
 
 agenda-verwijderen:
   path: /agenda/verwijderen/{aid}
@@ -57,3 +75,4 @@ agenda-verbergen:
   methods: POST
   defaults: { refuuid: null }
   options: { mag: P_LOGGED_IN }
+

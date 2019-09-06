@@ -4,6 +4,7 @@
 namespace CsrDelft\controller;
 
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\GoogleSync;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\LidZoeker;
@@ -62,15 +63,13 @@ class LedenLijstController {
 
 				setMelding(
 					'<h3>Google-sync-resultaat:</h3>' . $message . '<br />' .
-					'<a href="/ledenlijst?q=' . htmlspecialchars($_GET['q']) . '">Terug naar de ledenlijst...</a>', 0);
+					'<a href="/ledenlijst?q=' . htmlspecialchars($_GET['q'] ?? '') . '">Terug naar de ledenlijst...</a>', 0);
 
 				if (LoginModel::mag(P_ADMIN)) {
 					setMelding('Tijd nodig voor deze sync: ' . $elapsed . 's', 0);
 				}
-			} catch (Exception $e) {
-				$m = $e->getMessage();
-				$title = substr($m, strpos($m, '<title>') + 7, strpos($m, '</title>'));
-				setMelding($title, -1);
+			} catch (CsrGebruikerException $e) {
+				setMelding($e->getMessage(), -1);
 			}
 		} else {
 

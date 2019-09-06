@@ -45,12 +45,12 @@
 					<div class="knopjes">
 						{{--{*<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>*}--}}
 						@if($profiel->isInGoogleContacts())
-							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts/" class="btn btn-light"
+							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts" class="btn btn-light"
 								 title="Dit profiel opdateren in mijn google adresboek">
 								<img src="/images/google.ico" width="16" height="16" alt="opdateren in Google contacts"/>
 							</a>
 						@else
-							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts/" class="btn btn-light"
+							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts" class="btn btn-light"
 								 title="Dit profiel toevoegen aan mijn google adresboek">
 								<img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts"/>
 							</a>
@@ -226,7 +226,7 @@
 				<div class="col-md-6">
 					@php($patroon = \CsrDelft\model\ProfielModel::get($profiel->patroon))
 					@if($patroon || $profiel->hasKinderen())
-						<a class="float-right lichtgrijs fa fa-tree fa-3x" href="/leden/stamboom/{{$profiel->uid}}"
+						<a class="float-right lichtgrijs fa fa-tree fa-3x" href="/profiel/{{$profiel->uid}}/stamboom"
 							 title="Stamboom van {{$profiel->getNaam()}}"></a>
 					@endif
 					@if($patroon)

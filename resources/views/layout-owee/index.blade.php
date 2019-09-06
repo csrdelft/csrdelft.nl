@@ -13,8 +13,6 @@
 			<img src="/images/logo-light-it-up.png" alt="Logo Light It Up">
 		</div>
 		<div style="margin-top:40px" class="inner">
-			<a href="/plaetjes/OWee 2019 programmaposter.jpg" rel="noreferrer" target="_blank"
-				 class="special lightbox-link" data-lightbox="page-lightbox">Owee programma 2019</a>
 			<a href="https://www.youtube.com/watch?v=a7hhtoo_kzY&list=PLXBOhyG24-WnNgg2RloapxC5X73J1Zxvi" rel="noreferrer" target="_blank"
 				 class="special">Video: Delft - studie is maar de helft</a>
 		</div>
@@ -88,49 +86,49 @@
 					<h2 class="major">Foto's</h2>
 					<noscript class="lazy-load">
 						<div class="grid">
-							<a class="lightbox-link" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic01.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic01.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="" src="/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic01.jpg"/>
+								<img class="bb-img" alt="" src="/fotoalbum/Publiek/Voorpagina/_resized/pic01.jpg"/>
 							</a>
-							<a class="lightbox-link" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic02.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic02.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/plaetjes/fotoalbum/Publiek/Voorpagina/pic02.jpg"
-										 src="/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic02.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic02.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic02.jpg">
 							</a>
-							<a class="lightbox-link" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic03.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic03.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/plaetjes/fotoalbum/Publiek/Voorpagina/pic03.jpg"
-										 src="/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic03.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic03.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic03.jpg">
 							</a>
-							<a class="lightbox-link" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic04.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic04.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/plaetjes/fotoalbum/Publiek/Voorpagina/pic04.jpg"
-										 src="/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic04.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic04.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic04.jpg">
 							</a>
-							<a class="lightbox-link" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic05.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic05.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/plaetjes/fotoalbum/Publiek/Voorpagina/pic05.jpg"
-										 src="/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic05.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic05.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic05.jpg">
 							</a>
-							<a class="lightbox-link" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic06.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic06.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/plaetjes/fotoalbum/Publiek/Voorpagina/pic06.jpg"
-										 src="/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic06.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic06.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic06.jpg">
 							</a>
-							<a class="lightbox-link" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic07.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic07.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/plaetjes/fotoalbum/Publiek/Voorpagina/pic07.jpg"
-										 src="/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic07.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic07.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic07.jpg">
 							</a>
-							<a class="lightbox-link" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic08.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic08.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/plaetjes/fotoalbum/Publiek/Voorpagina/pic08.jpg"
-										 src="/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic08.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic08.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic08.jpg">
 							</a>
-							<a class="lightbox-link" href="/plaetjes/fotoalbum/Publiek/Voorpagina/pic09.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic09.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/plaetjes/fotoalbum/Publiek/Voorpagina/pic09.jpg"
-										 src="/plaetjes/fotoalbum/Publiek/Voorpagina/_resized/pic09.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic09.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic09.jpg">
 							</a>
 						</div>
 					</noscript>

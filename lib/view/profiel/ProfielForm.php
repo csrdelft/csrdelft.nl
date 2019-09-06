@@ -190,7 +190,7 @@ class ProfielForm extends Formulier {
 		$fields['bankrekening'] = new IBANField('bankrekening', $profiel->bankrekening, 'Bankrekening', 34);
 		$fields['bankrekening']->required = $inschrijven || $profiel->isLid();
 
-		if ($admin) {
+		if ($admin && !$inschrijven) {
 			$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
 		}
 
@@ -238,6 +238,11 @@ class ProfielForm extends Formulier {
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
 		if (($admin OR LoginModel::mag('commissie:NovCie')) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
 			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);
+
+			if ($inschrijven) {
+				// Alleen als inschrijven, anders bovenin voor admin
+				$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
+			}
 
 			$fields['novitiaat'] = new TextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht Noviet van novitiaat?');
 			$fields['novitiaat']->required = $inschrijven;

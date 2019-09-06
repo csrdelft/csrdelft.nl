@@ -1,102 +1,15 @@
-table.agenda {
-	border-collapse: collapse;
-	border: 1px solid #ccc;
-	width: 100%;
-	background: white;
-	color: black;
-
-	a {
-		color: black;
+@include media-breakpoint-down(sm) {
+	.fc-toolbar {
+		flex-direction: column;
+		align-items: center;
 	}
 }
-table.agenda td {
-	padding: 3px;
-	border: 1px solid;
-	width: 160px;
-}
-table.agenda td hr {
-	margin: 5px -3px 5px -3px;
-}
-table.agenda th {
-	padding: 3px;
-	border: 1px solid;
-	text-align: center;
-	vertical-align: top;
-	background-color: #dddddd;
-}
-table.agenda th.weeknr {
-	width: 25px;
+
+.agenda-card {
+	width: 600px;
+	max-width: 90%;
 }
 
-/*** MAAND ***************************/
-div.maandnavigatie {
-	padding: 15px 0;
-	text-align: center;
-}
-div.maandnavigatie h1 {
-	display: inline;
-}
-table#maand {
-	clear: both;
-}
-table#maand tr th { 
-	background-color: #eee;
-	border: 1px solid #ccc;
-}
-table#maand tr td {
-	height: 100px;
-	border: 1px solid #ddd;
-}
-table#maand tr td.dag {
-	padding: 0;
-	text-align: left;
-}
-table#maand tr td.dag a.beheren {
-	float: right;
-	display: none;
-	margin-left: 5px;
-}
-table#maand tr td.dag:hover a.beheren {
-	display: inline-block;
-}
-table#maand td div.meta {
-	padding: 3px 4px;
-	border-bottom: 1px solid #eee;
-	background-color: #f9f9f9;
-	line-height: 1.4em;
-}
-table#maand td.anderemaand {
-	/* De dagen die van andere maanden in de maand-tabel vallen doorzichtig maken */
-	opacity: 0.4;
-	filter: alpha(opacity=40);
-}
-table#maand tr#dezeweek td.dag {
-	background-color: #fffff0;
-}
-table#maand tr td.vandaag {
-	background-color: #ffffd0 !important;
-}
-table#maand tr td:hover {
-	background-color: #fafafa ;
-}
-table#maand tr td#vandaag div.meta { 
-	font-weight: bold;
-}
-table#maand td ul {
-	clear: both;
-	list-style-type: none;
-	margin: 0; padding: 0;
-}
-table#maand td ul li {
-	margin: 0;
-	padding: 4px 4px;
-}
-table#maand td ul li:nth-child(even) {
-	background-color: #efefef;
-}
-table#maand td ul li .tijd {
-	color: #777;
-}
-table#maand td ul li img.icon {
-	float: right;
+.fc-list-empty-wrap2 {
+	position: relative;
 }

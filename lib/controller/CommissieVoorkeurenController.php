@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieCategorieModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
@@ -12,9 +13,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\view\commissievoorkeuren\AddCategorieFormulier;
 use CsrDelft\view\commissievoorkeuren\AddCommissieFormulier;
 use CsrDelft\view\commissievoorkeuren\CommissieFormulier;
-use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenOverzicht;
-use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenProfielView;
-use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenView;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurPraesesOpmerkingForm;
 
 
@@ -28,14 +26,21 @@ use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurPraesesOpmerkingForm;
  */
 class CommissieVoorkeurenController {
 	public function overzicht() {
-		return view('default', [
-			'content' => new CommissieVoorkeurenOverzicht(VoorkeurCommissieModel::instance()->getByCategorie())
+		return view('commissievoorkeuren.overzicht', [
+			'categorien' => VoorkeurCommissieModel::instance()->getByCategorie(),
+			'commissieFormulier' => new AddCommissieFormulier(new VoorkeurCommissie()),
+			'categorieFormulier' => new AddCategorieFormulier(new VoorkeurCommissieCategorie()),
 		]);
 	}
 
 	public function commissie($commissieId) {
-		return view('default', [
-			'content' => new CommissieVoorkeurenView(VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId)),
+		/** @var VoorkeurCommissie $commissie */
+		$commissie = VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId);
+
+		return view('commissievoorkeuren.commissie', [
+			'voorkeuren' => CommissieVoorkeurModel::instance()->getVoorkeurenVoorCommissie($commissie),
+			'commissie' => $commissie,
+			'commissieFormulier' => new CommissieFormulier($commissie),
 		]);
 	}
 
@@ -58,8 +63,10 @@ class CommissieVoorkeurenController {
 			redirect('/commissievoorkeuren/overzicht/' . $id);
 		}
 
-		return view('default', [
-			'content' => new CommissieVoorkeurenOverzicht(VoorkeurCommissieModel::instance()->getByCategorie(), $form, null),
+		return view('commissievoorkeuren.overzicht', [
+			'categorien' => VoorkeurCommissieModel::instance()->getByCategorie(),
+			'commissieFormulier' => $form,
+			'categorieFormulier' => new AddCategorieFormulier(new VoorkeurCommissieCategorie()),
 		]);
 	}
 
@@ -70,8 +77,11 @@ class CommissieVoorkeurenController {
 			VoorkeurCommissieCategorieModel::instance()->create($model);
 			redirect('/commissievoorkeuren'); // Prevent resubmit
 		}
-		return view('default', [
-			'content' => new CommissieVoorkeurenOverzicht(VoorkeurCommissieModel::instance()->getByCategorie(), null, $form),
+
+		return view('commissievoorkeuren.overzicht', [
+			'categorien' => VoorkeurCommissieModel::instance()->getByCategorie(),
+			'commissieFormulier' => new AddCommissieFormulier(new VoorkeurCommissie()),
+			'categorieFormulier' => $form,
 		]);
 	}
 
@@ -94,8 +104,26 @@ class CommissieVoorkeurenController {
 			throw new CsrToegangException();
 		}
 
-		return view('default', [
-			'content' => new CommissieVoorkeurenProfielView(ProfielModel::get($uid)),
+		$profiel = ProfielModel::get($uid);
+
+		$voorkeuren = CommissieVoorkeurModel::instance()->getVoorkeurenVoorLid($profiel);
+		$voorkeurenMap = [];
+		$commissies = VoorkeurCommissieModel::instance()->find('zichtbaar = 1')->fetchAll();
+		foreach ($commissies as $commissie) {
+			$voorkeurenMap[$commissie->id] = null;
+		}
+		foreach ($voorkeuren as $voorkeur) {
+			$voorkeurenMap[$voorkeur->cid] = $voorkeur;
+		}
+
+		$opmerking = VoorkeurOpmerkingModel::instance()->getOpmerkingVoorLid($profiel);
+
+		return view('commissievoorkeuren.profiel', [
+			'profiel' => $profiel,
+			'voorkeuren' => $voorkeurenMap,
+			'commissies' => $commissies,
+			'lidOpmerking' => $opmerking->lidOpmerking,
+			'opmerkingForm' => new CommissieVoorkeurPraesesOpmerkingForm($opmerking)
 		]);
 	}
 

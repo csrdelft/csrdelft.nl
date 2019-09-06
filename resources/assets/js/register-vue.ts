@@ -7,6 +7,7 @@ import 'v-calendar/lib/v-calendar.min.css';
 
 import Groep from './components/groep/Groep.vue';
 import KetzerTovenaar from './components/ketzertovenaar/KetzerTovenaar';
+import NamenLeren from './components/namen-leren/NamenLeren.vue';
 import Peiling from './components/peilingen/Peiling.vue';
 import PeilingOptie from './components/peilingen/PeilingOptie.vue';
 
@@ -14,6 +15,7 @@ Vue.component('peiling', Peiling);
 Vue.component('peilingoptie', PeilingOptie);
 Vue.component('ketzertovenaar', KetzerTovenaar);
 Vue.component('groep', Groep);
+Vue.component('namenleren', NamenLeren);
 Vue.use(ToggleButton);
 Vue.use(BootstrapVue);
 Vue.use(VCalendar, {

@@ -75,3 +75,9 @@ tools-syncldap:
   controller: CsrDelft\controller\ToolsController::syncldap
   methods: GET
   options: { mag: P_PUBLIC }
+
+tools-patronaat:
+  path: /tools/patronaat
+  controller: CsrDelft\controller\ToolsController::patronaat
+  methods: GET
+  options: { mag: P_LOGGED_IN }
