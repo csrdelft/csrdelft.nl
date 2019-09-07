@@ -1,4 +1,5 @@
 cms-routes: { resource: routes/cms.yaml }
+courant-routes: { resource: routes/courant.yaml }
 forum-routes: { resource: routes/forum.yaml }
 eetplan-routes: { resource: routes/eetplan.yaml }
 documenten-routes: { resource: routes/documenten.yaml }

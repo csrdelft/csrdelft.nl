@@ -23,7 +23,6 @@ RewriteRule ^mededelingen       index.php?c=Mededelingen [QSA,L]
 RewriteRule ^groepen			index.php?c=GroepenRouter [L]
 RewriteRule ^maaltijden			index.php?c=MaalcieRouter [L]
 RewriteRule ^corvee				index.php?c=MaalcieRouter [L]
-RewriteRule ^courant			index.php?c=Courant [L]
 RewriteRule ^geolocation		index.php?c=GeoLocation [L]
 RewriteRule ^rechten			index.php?c=Rechten [L]
 
