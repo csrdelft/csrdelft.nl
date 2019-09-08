@@ -1,4 +1,4 @@
-import {Calendar, Duration, EventApi, View} from '@fullcalendar/core';
+import {Calendar} from '@fullcalendar/core';
 // @ts-ignore
 import nlLocale from '@fullcalendar/core/locales/nl';
 import {OptionsInput, ToolbarInput} from '@fullcalendar/core/types/input-types';
@@ -38,6 +38,8 @@ const defaultView = {
 	agenda: 'listMonth',
 }[weergave];
 
+let editable = false;
+
 const options: OptionsInput = {
 	plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interaction],
 	height: 'auto',
@@ -45,7 +47,7 @@ const options: OptionsInput = {
 	defaultView,
 	locale: nlLocale,
 	customButtons: {
-		nieuw: {
+		nieuw: { // Alleen zichtbaar als je mag bewerken
 			text: 'Nieuw',
 			click: () => {
 				const datum = fmt(calendar.getDate());
@@ -55,6 +57,34 @@ const options: OptionsInput = {
 				}, false, domUpdate);
 			},
 		},
+		bewerken: { // Alleen zichtbaar als je mag bewerken
+			text: 'Bewerken',
+			click(this: HTMLElement) {
+				editable = !editable;
+
+				calendar.setOption('editable', editable);
+				calendar.setOption('selectable', editable);
+
+				calendar.refetchEvents();
+
+				// De button wordt ververst door fullcalendar, zorg ervoor dat de laatste wordt gepakt.
+				setTimeout(() => {
+					const button = calendarEl.querySelector('.fc-bewerken-button')!;
+					if (editable) {
+						button.classList.add('fc-button-active');
+					} else {
+						button.classList.remove('fc-button-active');
+					}
+				});
+			},
+		},
+	},
+	eventDataTransform: (event) => {
+		if (event.editable === true) {
+			event.editable = editable;
+		}
+
+		return event;
 	},
 	header: {
 		left: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
@@ -64,7 +94,7 @@ const options: OptionsInput = {
 	defaultDate: new Date(Number(jaar), Number(maand) - 1),
 	firstDay: 0,
 	events: '/agenda/feed',
-	selectable: creator === 'true',
+	selectable: editable && creator === 'true',
 	select: (selectionInfo) => {
 		ajaxRequest('POST', '/agenda/toevoegen', {
 			begin_moment: fmt(selectionInfo.start),
@@ -115,10 +145,10 @@ const options: OptionsInput = {
 	},
 };
 
-// Creator krijgt nieuw knop
+// Creator krijgt nieuw knoppen
 if (creator === 'true') {
 	const header = options.header as ToolbarInput;
-	header.right = 'nieuw ' + header.right;
+	header.right = 'bewerken,nieuw ' + header.right;
 }
 
 const calendar = new Calendar(calendarEl, options);
