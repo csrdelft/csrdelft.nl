@@ -137,8 +137,8 @@ function knopGet(event: Event) {
 	return false;
 }
 
-function knopVergroot(event: Event) {
-	const knop = $(event.target!);
+function knopVergroot(this: HTMLElement, event: Event) {
+	const knop = $(this);
 	const id = knop.attr('data-vergroot')!;
 	const oud = knop.attr('data-vergroot-oud')!;
 
