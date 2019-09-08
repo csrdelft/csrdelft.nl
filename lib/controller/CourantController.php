@@ -2,124 +2,92 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\controller\framework\AclController;
+use CsrDelft\common\CsrToegangException;
+use CsrDelft\common\Ini;
+use CsrDelft\controller\framework\QueryParamTrait;
+use CsrDelft\model\CourantBerichtModel;
 use CsrDelft\model\CourantModel;
-use CsrDelft\view\courant\CourantArchiefView;
-use CsrDelft\view\courant\CourantBeheerView;
+use CsrDelft\model\entity\courant\CourantBericht;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\view\courant\CourantBerichtFormulier;
 use CsrDelft\view\courant\CourantView;
-use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\PlainView;
 
 
 /**
- * CourantController.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Controller van de courant.
- *
- * @property CourantModel $model
  */
-class CourantController extends AclController {
+class CourantController {
+	use QueryParamTrait;
 
-	public function __construct($query) {
-		parent::__construct($query, new CourantModel());
-		if ($this->getMethod() == 'GET') {
-			$this->acl = array(
-				'archief' => P_LEDEN_READ,
-				'bekijken' => P_LEDEN_READ,
-				'toevoegen' => P_MAIL_POST,
-				'bewerken' => P_MAIL_POST,
-				'verwijderen' => P_MAIL_POST,
-				'verzenden' => P_MAIL_SEND
-			);
-		} else {
-			$this->acl = array(
-				'toevoegen' => P_MAIL_POST,
-				'bewerken' => P_MAIL_COMPOSE
-			);
-		}
-	}
+	private $courantModel;
+	private $courantBerichtModel;
 
-	public function performAction(array $args = array()) {
-		$this->action = 'toevoegen';
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		}
-		if ($this->hasParam(3)) {
-			if ($this->action === 'archief' OR $this->action === 'bekijken') {
-				$id = (int)$this->getParam(3);
-			} else {
-				$id = 0;
-			}
-			$success = $this->model->load((int)$id);
-			if ($this->action === 'archief') {
-				if ($success) {
-					$this->action = 'bekijken';
-				} else {
-					$this->exit_http(403);
-				}
-			}
-		}
-		parent::performAction($this->getParams(3));
+	public function __construct() {
+		$this->courantModel = CourantModel::instance();
+		$this->courantBerichtModel = CourantBerichtModel::instance();
 	}
 
 	public function archief() {
-		$body = new CourantArchiefView($this->model);
-		$this->view = new CsrLayoutPage($body);
+		return view('courant.archief', [
+			'couranten' => $this->courantModel->find(),
+		]);
 	}
 
-	public function bekijken() {
-		$this->view = new CourantView($this->model);
+	public function bekijken($id) {
+		$courant = $this->courantModel->get($id);
+		return new CourantView($courant);
+	}
+
+	public function voorbeeld() {
+		$courant = $this->courantModel->nieuwCourant();
+		return new CourantView($courant);
 	}
 
 	public function toevoegen() {
-		if ($this->getMethod() == 'POST') {
-			if ($this->model->valideerBerichtInvoer()) {
-				$success = $this->model->addBericht($_POST['titel'], $_POST['categorie'], $_POST['bericht']);
-				if ($success) {
-					setMelding('Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
-					if (isset($_SESSION['compose_snapshot'])) {
-						$_SESSION['compose_snapshot'] = null;
-					}
-					redirect("/courant");
-				} else {
-					setMelding('Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.', -1);
-				}
-			} else {
-				setMelding($this->model->getError(), -1);
-			}
+		$bericht = new CourantBericht();
+		$bericht->volgorde = 0;
+		$bericht->datumTijd = getDateTime();
+		$bericht->uid = LoginModel::getUid();
+		$form = new CourantBerichtFormulier($bericht, '/courant');
+		if ($form->isPosted() && $form->validate()) {
+			$this->courantBerichtModel->create($bericht);
+			setMelding('Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
+			redirect("/courant");
 		}
-		$body = new CourantBeheerView($this->model);
-		$this->view = new CsrLayoutPage($body);
+		return view('courant.beheer', [
+			'courant' => $this->courantModel,
+			'berichten' => $this->courantBerichtModel->getBerichtenVoorGebruiker(),
+			'form' => $form,
+		]);
 	}
 
-	public function bewerken($iBerichtID) {
-		$bericht = $this->model->getBericht($iBerichtID);
-		if (!$bericht OR !isset($bericht['uid']) OR !$this->model->magBeheren($bericht['uid'])) {
-			$this->exit_http(403);
+	public function bewerken($id) {
+		$bericht = $this->courantBerichtModel->get($id);
+		$form = new CourantBerichtFormulier($bericht, '/courant/bewerken/' . $id);
+
+		if ($form->isPosted() && $form->validate()) {
+			$this->courantBerichtModel->update($bericht);
+			setMelding('Bericht is bewerkt', 1);
+			redirect('/courant');
 		}
-		if ($this->getMethod() == 'POST') {
-			$success = $this->model->bewerkBericht($iBerichtID, $_POST['titel'], $_POST['categorie'], $_POST['bericht']);
-			if ($success) {
-				setMelding('Uw bewerkte bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
-				if (isset($_SESSION['compose_snapshot'])) {
-					$_SESSION['compose_snapshot'] = null;
-				}
-			} else {
-				setMelding('Er ging iets mis met het invoeren van uw bericht. Probeer opnieuw, of stuur uw bericht in een mail naar <a href="mailto:pubcie@csrdelft.nl">pubcie@csrdelft.nl</a>.', -1);
-			}
-		}
-		$body = new CourantBeheerView($this->model);
-		$body->edit($iBerichtID);
-		$this->view = new CsrLayoutPage($body);
+
+		return view('courant.beheer', [
+			'courant' => $this->courantModel,
+			'berichten' => $this->courantBerichtModel->getBerichtenVoorGebruiker(),
+			'form' => $form,
+		]);
 	}
 
-	public function verwijderen($iBerichtID) {
-		$bericht = $this->model->getBericht($iBerichtID);
-		if (!$bericht OR !isset($bericht['uid']) OR !$this->model->magBeheren($bericht['uid'])) {
-			$this->exit_http(403);
+	public function verwijderen($id) {
+		$bericht = $this->courantBerichtModel->get($id);
+		if (!$bericht || !$this->courantModel->magBeheren($bericht->uid)) {
+			throw new CsrToegangException();
 		}
-		if ($this->model->verwijderBericht($iBerichtID)) {
+		if ($this->courantBerichtModel->delete($bericht)) {
 			setMelding('Uw bericht is verwijderd.', 1);
 		} else {
 			setMelding('Uw bericht is niet verwijderd.', -1);
@@ -128,20 +96,32 @@ class CourantController extends AclController {
 	}
 
 	public function verzenden($iedereen = null) {
-		if ($this->model->getBerichtenCount() < 1) {
+		if ($this->courantBerichtModel->getNieuweBerichten() < 1) {
 			setMelding('Lege courant kan niet worden verzonden', 0);
 			redirect('/courant');
 		}
-		$courant = new CourantView($this->model);
-		if ($iedereen === 'iedereen') {
-			$courant->verzenden('csrmail@lists.knorrie.org');
-			$this->model->leegCache();
-			echo 'aan iedereen verzonden';
-		} else {
-			$courant->verzenden('pubcie@csrdelft.nl');
-			echo '<a href="/courant/verzenden/iedereen">aan iedereen verzenden</a>';
-		}
-		exit;
-	}
 
+		$courant = $this->courantModel->nieuwCourant();
+
+		$courantView = new CourantView($courant);
+		if ($iedereen === 'iedereen') {
+			$this->courantModel->verzenden(Ini::lees(Ini::EMAILS, 'leden'), $courantView);
+
+			Database::transaction(function () use ($courant) {
+				$courant->id = $this->courantModel->create($courant);
+				$berichten = $this->courantBerichtModel->getNieuweBerichten();
+				foreach ($berichten as $bericht) {
+					$bericht->courantId = $courant->id;
+					$this->courantBerichtModel->update($bericht);
+				}
+				setMelding('De courant is verzonden naar iedereen', 1);
+			});
+
+			return new PlainView('<div id="courantKnoppenContainer">' . getMelding() . '<strong>Aan iedereen verzonden</strong></div>');
+		} else {
+			$this->courantModel->verzenden(Ini::lees(Ini::EMAILS, 'pubcie'), $courantView);
+			setMelding('Verzonden naar de PubCie', 1);
+			return new PlainView('<div id="courantKnoppenContainer">'. getMelding() . '<a class="btn btn-primary post confirm" title="Courant aan iedereen verzenden" href="/courant/verzenden/iedereen">Aan iedereen verzenden</a></div>');
+		}
+	}
 }
