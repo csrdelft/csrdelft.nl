@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('titel', 'Inzendingen C.S.R.-courant')
+
 @section('breadcrumbs')
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>
