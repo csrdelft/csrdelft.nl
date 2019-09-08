@@ -7,15 +7,11 @@ use CsrDelft\common\Ini;
 use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\CourantBerichtModel;
 use CsrDelft\model\CourantModel;
-use CsrDelft\model\entity\courant\Courant;
 use CsrDelft\model\entity\courant\CourantBericht;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\courant\CourantArchiefView;
-use CsrDelft\view\courant\CourantBeheerView;
 use CsrDelft\view\courant\CourantBerichtFormulier;
 use CsrDelft\view\courant\CourantView;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\PlainView;
 
 
@@ -36,7 +32,9 @@ class CourantController {
 	}
 
 	public function archief() {
-		return new CsrLayoutPage(new CourantArchiefView($this->courantModel->find()));
+		return view('courant.archief', [
+			'couranten' => $this->courantModel->find(),
+		]);
 	}
 
 	public function bekijken($id) {
@@ -60,7 +58,11 @@ class CourantController {
 			setMelding('Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
 			redirect("/courant");
 		}
-		return new CsrLayoutPage(new CourantBeheerView($this->courantModel, $form));
+		return view('courant.beheer', [
+			'courant' => $this->courantModel,
+			'berichten' => $this->courantBerichtModel->getBerichtenVoorGebruiker(),
+			'form' => $form,
+		]);
 	}
 
 	public function bewerken($id) {
@@ -73,7 +75,11 @@ class CourantController {
 			redirect('/courant');
 		}
 
-		return new CsrLayoutPage(new CourantBeheerView($this->courantModel, $form));
+		return view('courant.beheer', [
+			'courant' => $this->courantModel,
+			'berichten' => $this->courantBerichtModel->getBerichtenVoorGebruiker(),
+			'form' => $form,
+		]);
 	}
 
 	public function verwijderen($id) {
