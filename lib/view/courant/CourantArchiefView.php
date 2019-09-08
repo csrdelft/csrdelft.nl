@@ -42,15 +42,15 @@ class CourantArchiefView implements View {
 
 	public function view() {
 		?>
-		<ul class="horizontal nobullets">
-			<li>
-				<a href="/courant" title="Courantinzendingen">Courantinzendingen</a>
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a href="/courant" class="nav-link">Courantinzendingen</a>
 			</li>
-			<li class="active">
-				<a href="/courant/archief" title="Archief">Archief</a>
+			<li class="nav-item">
+				<a href="/courant/archief" class="nav-link active">Archief</a>
 			</li>
 		</ul>
-		<hr/>
+
 		<?php
 		echo '<h1>' . $this->getTitel() . '</h1>';
 		$jaar = 0;

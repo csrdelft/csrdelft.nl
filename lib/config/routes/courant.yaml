@@ -16,6 +16,12 @@ courant-bekijken:
   methods: GET
   options: { mag: P_LEDEN_READ }
 
+courant-voorbeeld:
+  path: /courant/voorbeeld
+  controller: CsrDelft\controller\CourantController::voorbeeld
+  methods: GET
+  options: { mag: P_LEDEN_READ }
+
 courant-bewerken:
   path: /courant/bewerken/{id}
   controller: CsrDelft\controller\CourantController::bewerken

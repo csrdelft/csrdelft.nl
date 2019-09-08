@@ -44,8 +44,12 @@ class CourantView extends SmartyTemplateView {
 	public function getHtml($headers = false) {
 		$this->smarty->assign('instellingen', $this->instellingen);
 		$this->smarty->assign('courant', $this->model);
-		$this->smarty->assign('catNames', CourantCategorie::getTypeOptions());
+		$this->smarty->assign('catNames', CourantCategorie::getSelectOptions());
 		$this->smarty->assign('headers', $headers);
+
+		if (!file_exists(SMARTY_TEMPLATE_DIR . 'courant/mail/' . $this->model->template)) {
+			$this->model->template = 'courant.tpl';
+		}
 
 		return $this->smarty->fetch('courant/mail/' . $this->model->template);
 	}

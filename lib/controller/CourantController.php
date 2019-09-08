@@ -44,6 +44,11 @@ class CourantController {
 		return new CourantView($courant);
 	}
 
+	public function voorbeeld() {
+		$courant = $this->courantModel->nieuwCourant();
+		return new CourantView($courant);
+	}
+
 	public function toevoegen() {
 		$bericht = new CourantBericht();
 		$bericht->volgorde = 0;
@@ -90,10 +95,7 @@ class CourantController {
 			redirect('/courant');
 		}
 
-		$courant = new Courant();
-		$courant->template = 'courant.tpl';
-		$courant->verzendMoment = getDateTime();
-		$courant->verzender = LoginModel::getUid();
+		$courant = $this->courantModel->nieuwCourant();
 
 		$courantView = new CourantView($courant);
 		if ($iedereen === 'iedereen') {
@@ -106,12 +108,14 @@ class CourantController {
 					$bericht->courantId = $courant->id;
 					$this->courantBerichtModel->update($bericht);
 				}
+				setMelding('De courant is verzonden naar iedereen', 1);
 			});
 
-			return new PlainView('aan iedereen verzonden');
+			return new PlainView('<div id="courantKnoppenContainer">' . getMelding() . '<strong>Aan iedereen verzonden</strong></div>');
 		} else {
 			$this->courantModel->verzenden(Ini::lees(Ini::EMAILS, 'pubcie'), $courantView);
-			return new PlainView('<a href="/courant/verzenden/iedereen">aan iedereen verzenden</a>');
+			setMelding('Verzonden naar de PubCie', 1);
+			return new PlainView('<div id="courantKnoppenContainer">'. getMelding() . '<a class="btn btn-primary post confirm" title="Courant aan iedereen verzenden" href="/courant/verzenden/iedereen">Aan iedereen verzenden</a></div>');
 		}
 	}
 }

@@ -6,11 +6,13 @@ namespace CsrDelft\view\courant;
 
 use CsrDelft\model\entity\courant\CourantBericht;
 use CsrDelft\model\entity\courant\CourantCategorie;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\invoervelden\BBCodeField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
-use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredBBCodeField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
 class CourantBerichtFormulier extends Formulier {
@@ -24,9 +26,26 @@ class CourantBerichtFormulier extends Formulier {
 
 		$fields = [];
 
-		$fields[] = new TextField('titel', $model->titel, 'Titel');
-		$fields[] = new SelectField('cat', $model->cat, 'Categorie', CourantCategorie::getSelectOptions());
-		$fields[] = new BBCodeField('bericht', $model->bericht, 'Bericht');
+		$fields[] = new RequiredTextField('titel', $model->titel, 'Titel');
+		$fields['cat'] = new RequiredSelectField('cat', $model->cat, 'Categorie', CourantCategorie::getSelectOptions());
+		$fields['cat']->title = '
+		Selecteer hier een categorie. Uw invoer is enkel een voorstel.
+		<em>Aankondigingen over kamers te huur komen in <strong>overig</strong> terecht! C.S.R. is bedoeld voor
+			activiteiten van C.S.R.-commissies en andere verenigingsactiviteiten.</em>';
+		$fields['bb'] = new RequiredBBCodeField('bericht', $model->bericht, 'Bericht');
+
+		$bbId = $fields['bb']->getId();
+		$sponsorlink = 'https://www.csrdelft.nl/plaetjes/banners/' . instelling('courant', 'sponsor');
+
+		if (LoginModel::mag(P_MAIL_COMPOSE)) {
+			$fields[] = new HtmlComment(<<<HTML
+<div class="btn-group">
+	<input type="button" value="Importeer agenda" onclick="window.courant.importAgenda('${bbId}');" class="btn btn-primary" />
+	<input type="button" value="Importeer sponsor" onclick="document.getElementById('${bbId}').value += '[img]${sponsorlink}[/img]'" class="btn btn-primary" />
+</div>
+HTML
+);
+		}
 		$fields[] = new HiddenField('volgorde', $model->volgorde, '');
 
 		$this->addFields($fields);
