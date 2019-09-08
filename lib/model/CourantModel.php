@@ -40,7 +40,7 @@ class CourantModel extends PersistenceModel {
 	 */
 	public function get($id) {
 		$courant = $this->retrieveByPrimaryKey([$id]);
-		if ($courant == false) {
+		if (!$courant) {
 			throw new ResourceNotFoundException();
 		}
 

@@ -84,7 +84,7 @@ class CourantController {
 
 	public function verwijderen($id) {
 		$bericht = $this->courantBerichtModel->get($id);
-		if (!$bericht OR !$this->courantModel->magBeheren($bericht->uid)) {
+		if (!$bericht || !$this->courantModel->magBeheren($bericht->uid)) {
 			throw new CsrToegangException();
 		}
 		if ($this->courantBerichtModel->delete($bericht)) {

@@ -29,7 +29,7 @@ class CourantBerichtModel extends PersistenceModel {
 
 	public function getBerichtenVoorGebruiker() {
 		//mods en bestuur zien alle berichten
-		if ($this->magBeheren() OR LoginModel::mag('bestuur')) {
+		if ($this->magBeheren() || LoginModel::mag('bestuur')) {
 			return $this->getNieuweBerichten();
 		} else {
 			return $this->find('courantID IS NULL AND uid = ?', [LoginModel::getUid()]);
@@ -37,6 +37,6 @@ class CourantBerichtModel extends PersistenceModel {
 	}
 
 	public function magBeheren($uid = null) {
-		return LoginModel::mag(P_MAIL_COMPOSE) OR LoginModel::mag($uid);
+		return LoginModel::mag(P_MAIL_COMPOSE) || LoginModel::mag($uid);
 	}
 }
