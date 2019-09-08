@@ -8,7 +8,6 @@ menubeheer-toevoegen:
   path: /menubeheer/toevoegen/{parent_id}
   controller: CsrDelft\controller\MenuBeheerController::toevoegen
   methods: POST
-  requirements: { parent_id: '\d+' }
   options: { mag: P_LOGGED_IN }
 
 menubeheer-bewerken:
