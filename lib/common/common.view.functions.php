@@ -1,8 +1,10 @@
 <?php
 
+use CsrDelft\common\CRLFView;
 use CsrDelft\model\MenuModel;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\renderer\TemplateView;
+use CsrDelft\view\View;
 
 /**
  * Hulpmethodes die gebruikt worden in views.
@@ -28,6 +30,16 @@ function view(string $template, array $variables = []) {
  */
 function display(string $template, array $variables = []) {
 	(new TemplateView($template, $variables))->view();
+}
+
+/**
+ * Zorgt dat line endings CRLF zijn voor ical.
+ *
+ * @param View $view
+ * @return CRLFView
+ */
+function fix_ical(View $view) {
+	return new CRLFView($view);
 }
 
 /**

@@ -63,18 +63,18 @@ class AgendaController {
 
 	public function ical() {
 		header('Content-Type: text/calendar; charset=UTF-8');
-		return view('agenda.icalendar', [
+		return fix_ical(view('agenda.icalendar', [
 			'items' => $this->model->getICalendarItems(),
 			'published' => $this->icalDate(),
-		]);
+		]));
 	}
 
 	public function export($uuid) {
 		header('Content-Type: text/calendar; charset=UTF-8');
-		return view('agenda.icalendar', [
-			'items' => [$this->getAgendaItemByUuid($uuid)],
+		return fix_ical(view('agenda.icalendar_export', [
+			'item' => $this->getAgendaItemByUuid($uuid),
 			'published' => $this->icalDate(),
-		]);
+		]));
 	}
 
 	public function zoeken() {

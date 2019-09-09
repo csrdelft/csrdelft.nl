@@ -5,7 +5,6 @@ VERSION:2.0
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-ORIGINAL-URL:{!!CSR_ROOT!!}/agenda
-X-WR-CALNAME:C.S.R. agenda
 X-WR-TIMEZONE:Europe/Amsterdam
 X-WR-CALDESC:
 BEGIN:VTIMEZONE
@@ -26,7 +25,6 @@ DTSTART:19701025T030000
 RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
 END:STANDARD
 END:VTIMEZONE
-@foreach($items as $item)
 BEGIN:VEVENT
 @if($item->isHeledag())
 DTSTART;VALUE=DATE:{!!escape_ical(strftime("%Y%m%d", $item->getBeginMoment()), 19)!!}
@@ -49,5 +47,4 @@ STATUS:CONFIRMED
 SUMMARY:{!!escape_ical($item->getTitel(), 8)!!}
 TRANSP:TRANSPARENT
 END:VEVENT
-@endforeach
 END:VCALENDAR
