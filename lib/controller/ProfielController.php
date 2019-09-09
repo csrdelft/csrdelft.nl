@@ -275,7 +275,7 @@ class ProfielController {
 			throw new ResourceNotFoundException();
 		}
 
-		header('Content-Type: text/vcard; charset=UTF-8');
+		header('Content-Type: text/x-vcard; charset=UTF-8');
 		return crlf_endings(view('profiel.vcard', [
 			'profiel' => $profiel,
 		]));
