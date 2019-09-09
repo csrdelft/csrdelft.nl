@@ -44,7 +44,7 @@
 			@foreach($berichten as $bericht)
 				<dt>
 					<span
-						class="onderstreept">{{$bericht->categorie ? CsrDelft\model\entity\courant\CourantCategorie::getDescription($bericht->categorie) : 'Geen categorie'}}</span>
+						class="onderstreept">{{$bericht->cat ? CsrDelft\model\entity\courant\CourantCategorie::getDescription($bericht->cat) : 'Geen categorie'}}</span>
 					@if($courant->magBeheren())
 						{!! CsrDelft\model\ProfielModel::getLink($bericht->uid, 'civitas') !!}
 					@endif
