@@ -45,6 +45,10 @@
 						</a>
 					@endif
 
+					<a href="/agenda/export/{{$item->getUUID()}}.ics" class="btn" title="Exporteer dit agenda item">
+						@icon('date_go')
+					</a>
+
 					@if($item instanceof \CsrDelft\model\entity\groepen\AbstractGroep && $item->mag(\CsrDelft\model\entity\security\AccessAction::Wijzigen))
 						<a href="{{$item->getUrl()}}wijzigen" class="beheren btn" title="Wijzig {{$item->naam}}">
 							@icon('bewerken')

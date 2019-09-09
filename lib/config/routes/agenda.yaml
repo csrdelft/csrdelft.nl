@@ -16,6 +16,13 @@ agenda-verplaatsen:
   methods: POST
   options: { mag: P_LOGGED_IN } # controller checkt rechten
 
+agenda-ics-item:
+  path: /agenda/export/{uuid}.ics
+  controller: CsrDelft\controller\AgendaController::export
+  methods: GET
+  requirements: { uuid: '.+' }
+  options: { mag: P_LOGGED_IN }
+
 agenda-thuis:
   path: /agenda/{jaar}/{maand}
   controller: CsrDelft\controller\AgendaController::maand
