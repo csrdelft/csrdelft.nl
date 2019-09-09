@@ -33,12 +33,12 @@ function display(string $template, array $variables = []) {
 }
 
 /**
- * Zorgt dat line endings CRLF zijn voor ical.
+ * Zorgt dat line endings CRLF zijn voor ical en vcard.
  *
  * @param View $view
  * @return CRLFView
  */
-function fix_ical(View $view) {
+function crlf_endings(View $view) {
 	return new CRLFView($view);
 }
 

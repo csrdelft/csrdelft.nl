@@ -63,7 +63,7 @@ class AgendaController {
 
 	public function ical() {
 		header('Content-Type: text/calendar; charset=UTF-8');
-		return fix_ical(view('agenda.icalendar', [
+		return crlf_endings(view('agenda.icalendar', [
 			'items' => $this->model->getICalendarItems(),
 			'published' => $this->icalDate(),
 		]));
@@ -71,7 +71,7 @@ class AgendaController {
 
 	public function export($uuid) {
 		header('Content-Type: text/calendar; charset=UTF-8');
-		return fix_ical(view('agenda.icalendar_export', [
+		return crlf_endings(view('agenda.icalendar_export', [
 			'item' => $this->getAgendaItemByUuid($uuid),
 			'published' => $this->icalDate(),
 		]));

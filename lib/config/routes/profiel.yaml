@@ -69,3 +69,10 @@ profiel-pasfoto:
   requirements: { uid: '.{4}' }
   defaults: { type: 'civitas' }
   options: { mag: P_LEDEN_READ }
+
+profiel-vcard:
+  path: /profiel/{uid}.vcf
+  controller: CsrDelft\controller\ProfielController::vcard
+  methods: GET
+  requirements: { uid: '.{4}' }
+  options: { mag: P_LEDEN_READ }

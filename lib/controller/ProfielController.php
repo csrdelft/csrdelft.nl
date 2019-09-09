@@ -267,4 +267,17 @@ class ProfielController {
 		$image->serve();
 		exit;
 	}
+
+	public function vcard($uid) {
+		$profiel = ProfielModel::get($uid);
+
+		if (!$profiel) {
+			throw new ResourceNotFoundException();
+		}
+
+		header('Content-Type: text/vcard; charset=UTF-8');
+		return crlf_endings(view('profiel.vcard', [
+			'profiel' => $profiel,
+		]));
+	}
 }
