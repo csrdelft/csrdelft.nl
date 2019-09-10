@@ -17,10 +17,11 @@ class EetplanBekendeHuizenTable extends DataTable {
 		$this->hideColumn('avond');
 		$this->hideColumn('woonoord_id');
 		$this->hideColumn('uid');
-		$this->addColumn('woonoord');
-		$this->addColumn('naam');
+		$this->addColumn('naam', 'opmerking');
+		$this->addColumn('woonoord', 'naam');
 
 		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $this->dataUrl . '/toevoegen', 'Toevoegen', 'Bekende toevoegen', 'toevoegen'));
 		$this->addRowKnop(new DataTableRowKnop($this->dataUrl . '/verwijderen', 'Bekende verwijderen', 'verwijderen'));
+		$this->addRowKnop(new DataTableRowKnop($this->dataUrl . '/bewerken', 'Opmerking bewerken', 'pencil'));
 	}
 }
