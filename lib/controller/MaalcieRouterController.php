@@ -87,29 +87,6 @@ class MaalcieRouterController extends AclController {
 		return $this->maaltijdenketzer();
 	}
 
-	public function maaltijdenbeheer() {
-		return new BeheerMaaltijdenController($this->model);
-	}
-
-	public function maaltijdenfiscaat() {
-		return new MaaltijdenFiscaatController($this->model);
-	}
-
-	public function maaltijdenrepetities() {
-		return new MaaltijdRepetitiesController($this->model);
-	}
-
-	public function maaltijdenabonnementen() {
-		return new MijnAbonnementenController($this->model);
-	}
-
-	public function maaltijdenabonnementenbeheer() {
-		return new BeheerAbonnementenController($this->model);
-	}
-
-	public function maaltijdenboekjaar() {
-		return new MaalCieBoekjaarController($this->model);
-	}
 
 	public function corveemijn() {
 		return new MijnCorveeController($this->model);

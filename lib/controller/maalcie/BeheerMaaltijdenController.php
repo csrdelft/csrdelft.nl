@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\controller\framework\AclController;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\ArchiefMaaltijdModel;
@@ -25,6 +25,7 @@ use CsrDelft\view\maalcie\beheer\PrullenbakMaaltijdenTable;
 use CsrDelft\view\maalcie\forms\AanmeldingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdForm;
 use CsrDelft\view\maalcie\forms\RepetitieMaaltijdenForm;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * BeheerMaaltijdenController.class.php
@@ -34,60 +35,21 @@ use CsrDelft\view\maalcie\forms\RepetitieMaaltijdenForm;
  * @property MaaltijdenModel $model
  *
  */
-class BeheerMaaltijdenController extends AclController {
+class BeheerMaaltijdenController {
+	use QueryParamTrait;
 
-	public function __construct($query) {
-		parent::__construct($query, MaaltijdenModel::instance());
-		if ($this->getMethod() == 'GET') {
-			$this->acl = array(
-				'beheer' => P_MAAL_MOD,
-				'prullenbak' => P_MAAL_MOD,
-				//'leegmaken' => P_MAAL_MOD,
-				'archief' => P_MAAL_MOD,
-				'onverwerkt' => P_MAAL_MOD,
-				'beoordelingen' => P_MAAL_MOD,
-			);
-		} else {
-			$this->acl = array(
-				'beheer' => P_MAAL_MOD,
-				'prullenbak' => P_MAAL_MOD,
-				'archief' => P_MAAL_MOD,
-				'beoordelingen' => P_MAAL_MOD,
-				'sluit' => P_MAAL_MOD,
-				'open' => P_MAAL_MOD,
-				'toggle' => P_MAAL_MOD,
-				'nieuw' => P_MAAL_MOD,
-				'bewerk' => P_MAAL_MOD,
-				'verwijder' => P_MAAL_MOD,
-				'herstel' => P_MAAL_MOD,
-				'aanmelden' => P_MAAL_MOD,
-				'afmelden' => P_MAAL_MOD,
-				'aanmaken' => P_MAAL_MOD,
-				'verwerk' => P_MAAL_MOD
-			);
-		}
+	public function __construct() {
+		$this->model = MaaltijdenModel::instance();
 	}
 
-	public function performAction(array $args = array()) {
-		$this->action = 'beheer';
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		}
-		$mid = null;
-		if ($this->hasParam(3)) {
-			$mid = (int)$this->getParam(3);
-		}
-		parent::performAction(array($mid));
+	public function GET_prullenbak() {
+		$body = new BeheerMaaltijdenView(new PrullenbakMaaltijdenTable(), 'Prullenbak maaltijdenbeheer');
+		return new CsrLayoutPage($body);
 	}
 
-	public function prullenbak() {
-		if ($this->getMethod() == 'POST') {
-			$data = $this->model->find('verwijderd = true');
-			$this->view = new BeheerMaaltijdenLijst($data);
-		} else {
-			$body = new BeheerMaaltijdenView(new PrullenbakMaaltijdenTable(), 'Prullenbak maaltijdenbeheer');
-			$this->view = new CsrLayoutPage($body);
-		}
+	public function POST_prullenbak() {
+		$data = $this->model->find('verwijderd = true');
+		return new BeheerMaaltijdenLijst($data);
 	}
 
 	public function POST_beheer() {
@@ -108,32 +70,30 @@ class BeheerMaaltijdenController extends AclController {
 				break;
 		}
 
-		$this->view = new BeheerMaaltijdenLijst($data);
+		return new BeheerMaaltijdenLijst($data);
 	}
 
 	public function GET_beheer($mid = null) {
 		$modal = null;
 		if ($mid !== null) {
-			$this->bewerk($mid);
-			$modal = $this->view;
+			$modal = $this->bewerk($mid);
 		} elseif ($mid === 0) {
-			$this->nieuw();
-			$modal = $this->view;
+			$modal = $this->nieuw();
 		}
 		/** @var MaaltijdRepetitie[] $repetities */
 		$repetities = MaaltijdRepetitiesModel::instance()->find();
 		$body = new BeheerMaaltijdenView(new BeheerMaaltijdenTable($repetities), 'Maaltijdenbeheer');
-		$this->view = new CsrLayoutPage($body, array(), $modal);
+		return new CsrLayoutPage($body, array(), $modal);
 	}
 
-	public function archief() {
-		if ($this->getMethod() == 'POST') {
-			$data = ArchiefMaaltijdModel::instance()->find();
-			$this->view = new BeheerMaaltijdenLijst($data);
-		} else {
-			$body = new BeheerMaaltijdenView(new ArchiefMaaltijdenTable(), 'Archief maaltijdenbeheer');
-			$this->view = new CsrLayoutPage($body);
-		}
+	public function GET_archief() {
+		$body = new BeheerMaaltijdenView(new ArchiefMaaltijdenTable(), 'Archief maaltijdenbeheer');
+		return new CsrLayoutPage($body);
+	}
+
+	public function POST_archief() {
+		$data = ArchiefMaaltijdModel::instance()->find();
+		return new BeheerMaaltijdenLijst($data);
 	}
 
 	public function toggle($mid) {
@@ -149,7 +109,7 @@ class BeheerMaaltijdenController extends AclController {
 			$this->model->sluitMaaltijd($maaltijd);
 		}
 
-		$this->view = new BeheerMaaltijdenLijst(array($maaltijd));
+		return new BeheerMaaltijdenLijst(array($maaltijd));
 	}
 
 	public function nieuw() {
@@ -158,16 +118,16 @@ class BeheerMaaltijdenController extends AclController {
 
 		if ($form->validate()) {
 			$maaltijd_aanmeldingen = $this->model->saveMaaltijd($maaltijd);
-			$this->view = new BeheerMaaltijdenLijst(array($maaltijd_aanmeldingen[0]));
 			if ($maaltijd_aanmeldingen[1] > 0) {
 				setMelding($maaltijd_aanmeldingen[1] . ' aanmelding' . ($maaltijd_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd_aanmeldingen[0]->aanmeld_filter, 2);
 			}
+			return new BeheerMaaltijdenLijst(array($maaltijd_aanmeldingen[0]));
 		} elseif ($this->hasParam('mrid')) {
 			$mrid = $this->getParam('mrid');
 			$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
 			$beginDatum = $repetitie->getFirstOccurrence();
 			if ($repetitie->periode_in_dagen > 0) {
-				$this->view = new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
+				return new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 			} else {
 				$maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
 				$maaltijd->product_id = $repetitie->product_id;
@@ -175,10 +135,10 @@ class BeheerMaaltijdenController extends AclController {
 				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
 				$maaltijd->tijd = $repetitie->standaard_tijd;
 				$maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
-				$this->view = new MaaltijdForm($maaltijd, 'nieuw');
+				return new MaaltijdForm($maaltijd, 'nieuw');
 			}
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 
 	}
@@ -187,7 +147,7 @@ class BeheerMaaltijdenController extends AclController {
 		if ($mid === null) {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			if (empty($selection)) {
-				$this->exit_http(404);
+				throw new ResourceNotFoundException();
 			}
 			$mid = $selection[0];
 		}
@@ -197,9 +157,9 @@ class BeheerMaaltijdenController extends AclController {
 		$form = new MaaltijdForm($maaltijd, 'bewerk');
 		if ($form->validate()) {
 			$this->model->update($maaltijd);
-			$this->view = new BeheerMaaltijdenLijst(array($maaltijd));
+			return new BeheerMaaltijdenLijst(array($maaltijd));
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 
@@ -215,7 +175,7 @@ class BeheerMaaltijdenController extends AclController {
 			$this->model->update($maaltijd);
 		}
 
-		$this->view = new RemoveRowsResponse(array($maaltijd));
+		return new RemoveRowsResponse(array($maaltijd));
 	}
 
 	public function herstel() {
@@ -225,7 +185,7 @@ class BeheerMaaltijdenController extends AclController {
 
 		$maaltijd->verwijderd = false;
 		$this->model->update($maaltijd);
-		$this->view = new RemoveRowsResponse(array($maaltijd)); // Verwijder uit prullenbak
+		return new RemoveRowsResponse(array($maaltijd)); // Verwijder uit prullenbak
 	}
 
 	public function aanmelden() {
@@ -236,9 +196,9 @@ class BeheerMaaltijdenController extends AclController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($maaltijd, $values['voor_lid'], LoginModel::getUid(), $values['aantal_gasten'], true);
-			$this->view = new BeheerMaaltijdenLijst(array($maaltijd));
+			return new BeheerMaaltijdenLijst(array($maaltijd));
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 
@@ -250,28 +210,28 @@ class BeheerMaaltijdenController extends AclController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($maaltijd, $values['voor_lid'], true);
-			$this->view = new BeheerMaaltijdenLijst(array($maaltijd));
+			return new BeheerMaaltijdenLijst(array($maaltijd));
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 
 	public function leegmaken() {
 		$aantal = $this->model->prullenbakLeegmaken();
 		setMelding($aantal . ($aantal === 1 ? ' maaltijd' : ' maaltijden') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
-		redirect(maalcieUrl . '/prullenbak');
+		redirect('/maaltijden/beheer/prullenbak');
 	}
 
 	public function GET_beoordelingen() {
         $body = new BeheerMaaltijdenBeoordelingenView(
             new BeheerMaaltijdenBeoordelingenTable(), 'Maaltijdbeoordelingen'
         );
-        $this->view = new CsrLayoutPage($body);
+        return new CsrLayoutPage($body);
 	}
 
 	public function POST_beoordelingen() {
         $maaltijden = $this->model->getMaaltijden('datum <= CURDATE()');
-        $this->view = new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
+        return new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
 	}
 
 	// Repetitie-Maaltijden ############################################################
@@ -285,20 +245,16 @@ class BeheerMaaltijdenController extends AclController {
 			if (empty($maaltijden)) {
 				throw new CsrGebruikerException('Geen nieuwe maaltijden aangemaakt.');
 			}
-			$this->view = new BeheerMaaltijdenLijst($maaltijden);
+			return new BeheerMaaltijdenLijst($maaltijden);
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 
 	// Maalcie-fiscaat
 
 	public function onverwerkt() {
-		if ($this->getAction() == "POST") {
-
-		} else {
-			$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
-			$this->view = new CsrLayoutPage($body);
-		}
+		$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
+		return new CsrLayoutPage($body);
 	}
 }

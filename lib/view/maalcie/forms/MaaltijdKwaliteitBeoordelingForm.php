@@ -17,7 +17,7 @@ class MaaltijdKwaliteitBeoordelingForm extends InlineForm {
 		$field->click_submit = true;
 		$field->readonly = $maaltijd->getBeginMoment() < strtotime(instelling('maaltijden', 'beoordeling_periode'));
 
-		parent::__construct($beoordeling, maalcieUrl . '/beoordeling/' . $beoordeling->maaltijd_id, $field, false);
+		parent::__construct($beoordeling, '/maaltijden/ketzer/beoordeling/' . $beoordeling->maaltijd_id, $field, false);
 		$this->css_classes[] = 'noanim';
 	}
 

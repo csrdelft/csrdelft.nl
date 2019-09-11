@@ -22,6 +22,13 @@ ledenmemory-routes: { resource: routes/ledenmemory.yaml }
 profiel-routes: { resource: routes/profiel.yaml }
 toestemming-routes: { resource: routes/toestemming.yaml }
 fotoalbum-routes: { resource: routes/fotoalbum.yaml }
+maaltijden-abonnementen: { resource: routes/maaltijden_abonnementen.yaml }
+maaltijden-abonnementen-beheer: { resource: routes/maaltijden_abonnementen_beheer.yaml }
+maaltijden-beheer: { resource: routes/maaltijden_beheer.yaml }
+maaltijden-boekjaar: { resource: routes/maaltijden_boekjaar.yaml }
+maaltijden-fiscaat: { resource: routes/maaltijden_fiscaat.yaml }
+maaltijden-ketzer: { resource: routes/maaltijden_ketzer.yaml }
+maaltijden-repetities: { resource: routes/maaltijden_repetities.yaml }
 
 logger:
   path: /logger/log

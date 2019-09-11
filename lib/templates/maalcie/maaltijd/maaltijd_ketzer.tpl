@@ -7,14 +7,14 @@
 				{if !$maaltijd->gesloten && CsrDelft\model\security\LoginModel::mag(P_MAAL_IK)}
 
 					{if $aanmelding}
-						<a onclick="window.ketzerAjax('/maaltijdenketzer/afmelden/{$maaltijd->maaltijd_id}', '.maaltijdketzer-{$maaltijd->maaltijd_id}');" class="btn maaltijd-aangemeld" tabindex="0"><input type="checkbox" checked="checked" /> Ja</a>
+						<a onclick="window.ketzerAjax('/maaltijden/ketzer/afmelden/{$maaltijd->maaltijd_id}', '.maaltijdketzer-{$maaltijd->maaltijd_id}');" class="btn maaltijd-aangemeld" tabindex="0"><input type="checkbox" checked="checked" /> Ja</a>
 
 					{elseif $maaltijd->getAantalAanmeldingen() >= $maaltijd->aanmeld_limiet}
 						{icon get="stop" title="Maaltijd is vol"}&nbsp;
 						<span class="maaltijd-afgemeld">Nee</span>
 
 					{else}
-						<a onclick="window.ketzerAjax('/maaltijdenketzer/aanmelden/{$maaltijd->maaltijd_id}', '.maaltijdketzer-{$maaltijd->maaltijd_id}');" class="btn maaltijd-afgemeld" tabindex="0"><input type="checkbox" /> Nee</a>
+						<a onclick="window.ketzerAjax('/maaltijden/ketzer/aanmelden/{$maaltijd->maaltijd_id}', '.maaltijdketzer-{$maaltijd->maaltijd_id}');" class="btn maaltijd-afgemeld" tabindex="0"><input type="checkbox" /> Nee</a>
 
 					{/if}
 
@@ -45,7 +45,7 @@
 		{/toegang}
 		<div class="maaltijdgegevens">
 			<div class="titel">
-				<a href="/maaltijdenketzer">{$maaltijd->titel}</a>
+				<a href="/maaltijden/ketzer">{$maaltijd->titel}</a>
 				{if $maaltijd->getPrijs() !== $standaardprijs}
 					&nbsp; (&euro; {$maaltijd->getPrijsFloat()|string_format:"%.2f"})
 				{/if}
@@ -58,7 +58,7 @@
 			{/if}
 			<div class="small">
 				{if $maaltijd->magSluiten(CsrDelft\model\security\LoginModel::getUid())}
-					<a href="/maaltijdenlijst/{$maaltijd->maaltijd_id}" title="Toon maaltijdlijst">
+					<a href="/maaltijden/lijst/{$maaltijd->maaltijd_id}" title="Toon maaltijdlijst">
 				{/if}
 				Inschrijvingen: <em>{$maaltijd->getAantalAanmeldingen()}</em> van <em>{$maaltijd->aanmeld_limiet}</em>
 				{if $maaltijd->magSluiten(CsrDelft\model\security\LoginModel::getUid())}
