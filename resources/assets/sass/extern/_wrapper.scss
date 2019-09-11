@@ -31,13 +31,12 @@
 	}
 }
 
-.wrapper-img {
-	img {
-		margin: -6em 0;
-		height: calc(500px + 12em);
-		object-fit: cover;
-		width: 100%;
-	}
+
+.wrapper-img img {
+	margin: -6.5em 0;
+	height: calc(500px + 6.5em * 2);
+	object-fit: cover;
+	width: 100%;
 }
 
 .wrapper {
@@ -129,6 +128,10 @@
 
 @media screen and (max-width: $scherm-breed) {
 
+	.wrapper-img img {
+		margin: -5em 0;
+		height: calc(500px + 4.75em * 2);
+	}
 	.wrapper {
 		margin: 4.75em 0;
 
@@ -159,6 +162,10 @@
 
 @media screen and (max-width: $scherm-middel) {
 
+	.wrapper-img img {
+		margin: -3em 0;
+		height: calc(500px + 2.5em * 2);
+	}
 	.wrapper {
 		margin: 2.5em 0;
 
