@@ -22,6 +22,14 @@ ledenmemory-routes: { resource: routes/ledenmemory.yaml }
 profiel-routes: { resource: routes/profiel.yaml }
 toestemming-routes: { resource: routes/toestemming.yaml }
 fotoalbum-routes: { resource: routes/fotoalbum.yaml }
+corvee-beheer: { resource: routes/corvee_beheer.yaml }
+corvee-functies: { resource: routes/corvee_beheer.yaml }
+corvee-mijn: { resource: routes/corvee_beheer.yaml }
+corvee-punten: { resource: routes/corvee_beheer.yaml }
+corvee-repetities: { resource: routes/corvee_beheer.yaml }
+corvee-voorkeuren: { resource: routes/corvee_beheer.yaml }
+corvee-voorkeuren_beheer: { resource: routes/corvee_beheer.yaml }
+corvee-vrijstellingen: { resource: routes/corvee_beheer.yaml }
 maaltijden-abonnementen: { resource: routes/maaltijden_abonnementen.yaml }
 maaltijden-abonnementen-beheer: { resource: routes/maaltijden_abonnementen_beheer.yaml }
 maaltijden-beheer: { resource: routes/maaltijden_beheer.yaml }

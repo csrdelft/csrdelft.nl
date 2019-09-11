@@ -72,7 +72,7 @@ class BeheerTakenController {
 		} else {
 			setMelding('Geen herinneringen verstuurd.', 0);
 		}
-		redirect(maalcieUrl);
+		redirect('/corvee/beheer');
 	}
 
 	public function nieuw($mid = null) {
@@ -117,7 +117,7 @@ class BeheerTakenController {
 			$values = $view->getModel();
 			$taak = $this->model->saveTaak((int)$tid, (int)$values->functie_id, $values->uid, $values->crv_repetitie_id, $values->maaltijd_id, $values->datum, $values->punten, $values->bonus_malus);
 			$maaltijd = null;
-			if (endsWith($_SERVER['HTTP_REFERER'], maalcieUrl . '/maaltijd/' . $values->maaltijd_id)) { // state of gui
+			if (endsWith($_SERVER['HTTP_REFERER'], '/corvee/beheer/maaltijd/' . $values->maaltijd_id)) { // state of gui
 				$maaltijd = MaaltijdenModel::instance()->getMaaltijd($values->maaltijd_id);
 			}
 			return new BeheerTaakView($taak, $maaltijd);
@@ -172,7 +172,7 @@ class BeheerTakenController {
 	public function leegmaken() {
 		$aantal = $this->model->prullenbakLeegmaken();
 		setMelding($aantal . ($aantal === 1 ? ' taak' : ' taken') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
-		redirect(maalcieUrl . '/prullenbak');
+		redirect('/corvee/beheer/prullenbak');
 	}
 
 	// Repetitie-Taken ############################################################

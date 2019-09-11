@@ -1,0 +1,51 @@
+corvee-repetities:
+  path: /corvee/repetities/{crid}/{mrid}
+  controller: CsrDelft\controller\maalcie\CorveeRepetitiesController::beheer
+  methods: GET
+  defaults: { crid: null, mrid: null }
+  requirements: { crid: '\d+', mrid: '\d+' }
+  options: { mag: P_CORVEE_MOD }
+
+corvee-repetities-maaltijd:
+  path: /corvee/repetities/maaltijd/{mrid}
+  controller: CsrDelft\controller\maalcie\CorveeRepetitiesController::maaltijd
+  methods: GET
+  requirements: { crid: '\d+' }
+  options: { mag: P_CORVEE_MOD }
+
+corvee-repetities-nieuw:
+  path: /corvee/repetities/nieuw/{mrid}
+  controller: CsrDelft\controller\maalcie\CorveeRepetitiesController::nieuw
+  methods: POST
+  defaults: { mrid: null }
+  requirements: { mrid: '\d+' }
+  options: { mag: P_CORVEE_MOD }
+
+corvee-repetities-bewerk:
+  path: /corvee/repetities/bewerk/{crid}
+  controller: CsrDelft\controller\maalcie\CorveeRepetitiesController::bewerk
+  methods: POST
+  requirements: { crid: '\d+' }
+  options: { mag: P_CORVEE_MOD }
+
+corvee-repetities-opslaan:
+  path: /corvee/repetities/opslaan/{crid}
+  controller: CsrDelft\controller\maalcie\CorveeRepetitiesController::opslaan
+  methods: POST
+  requirements: { crid: '\d+' }
+  options: { mag: P_CORVEE_MOD }
+
+corvee-repetities-verwijder:
+  path: /corvee/repetities/verwijder/{crid}
+  controller: CsrDelft\controller\maalcie\CorveeRepetitiesController::verwijder
+  methods: POST
+  requirements: { crid: '\d+' }
+  options: { mag: P_CORVEE_MOD }
+
+corvee-repetities-bijwerken:
+  path: /corvee/repetities/bijwerken/{crid}
+  controller: CsrDelft\controller\maalcie\CorveeRepetitiesController::bijwerken
+  methods: POST
+  requirements: { crid: '\d+' }
+  options: { mag: P_CORVEE_MOD }
+

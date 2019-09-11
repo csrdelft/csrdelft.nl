@@ -424,7 +424,7 @@
 						-
 					@endif
 					@if(is_ingelogd_account($profiel->uid))
-						<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren"
+						<div class="inline" style="position: absolute;"><a href="/corvee/voorkeuren" title="Bewerk voorkeuren"
 																															 class="btn">@icon('pencil')</a></div>
 					@endif
 				</div>

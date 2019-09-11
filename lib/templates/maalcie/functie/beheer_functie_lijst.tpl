@@ -3,7 +3,7 @@
 *}
 <tr id="corveefunctie-row-{$functie->functie_id}">
 	<td>
-		<a href="{$smarty.const.maalcieUrl}/bewerken/{$functie->functie_id}" title="Functie wijzigen" class="btn post popup">{icon get="pencil"}</a>
+		<a href="/corvee/functies/bewerken/{$functie->functie_id}" title="Functie wijzigen" class="btn post popup">{icon get="pencil"}</a>
 	</td>
 	<td>{$functie->afkorting}</td>
 	<td>{$functie->naam}</td>
@@ -11,7 +11,7 @@
 	<td title="{$functie->email_bericht}">{if strlen($functie->email_bericht) > 0}{icon get="email"}{/if}</td>
 	<td>
 		{if $functie->kwalificatie_benodigd}
-			<div class="float-left"><a href="{$smarty.const.maalcieUrl}/kwalificeer/{$functie->functie_id}" title="Kwalificatie toewijzen" class="btn post popup">{icon get="vcard_add"} Kwalificeer</a></div>
+			<div class="float-left"><a href="/corvee/functies/kwalificeer/{$functie->functie_id}" title="Kwalificatie toewijzen" class="btn post popup">{icon get="vcard_add"} Kwalificeer</a></div>
 		{/if}
 		{if $functie->hasKwalificaties()}
 			<div class="kwali"><a title="Toon oudleden" class="btn" onclick="$('div.kwali').toggle();">{icon get="eye"} Toon oudleden</a></div>
@@ -19,7 +19,7 @@
 		{/if}
 		{foreach from=$functie->getKwalificaties() item=kwali}
 			<div class="kwali{if CsrDelft\model\ProfielModel::get($kwali->uid)->isOudlid()} verborgen{/if}">
-				<a href="{$smarty.const.maalcieUrl}/dekwalificeer/{$functie->functie_id}/{$kwali->uid}" title="Kwalificatie intrekken" class="btn post">{icon get="vcard_delete"}</a>
+				<a href="/corvee/functies/dekwalificeer/{$functie->functie_id}/{$kwali->uid}" title="Kwalificatie intrekken" class="btn post">{icon get="vcard_delete"}</a>
 				&nbsp;{CsrDelft\model\ProfielModel::get($kwali->uid)->getNaam(instelling('corvee', 'weergave_ledennamen_beheer'))}
 				<span class="lichtgrijs"> (sinds {$kwali->wanneer_toegewezen})</span>
 			</div>
@@ -27,6 +27,6 @@
 	</td>
 	<td title="Mag maaltijden sluiten">{if $functie->maaltijden_sluiten}{icon get="lock_add"}{/if}</td>
 	<td class="col-del">
-		<a href="{$smarty.const.maalcieUrl}/verwijderen/{$functie->functie_id}" title="Functie definitief verwijderen" class="btn post confirm">{icon get="cross"}</a>
+		<a href="/corvee/functies/verwijderen/{$functie->functie_id}" title="Functie definitief verwijderen" class="btn post confirm">{icon get="cross"}</a>
 	</td>
 </tr>

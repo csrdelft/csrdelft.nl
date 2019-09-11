@@ -25,7 +25,7 @@ use CsrDelft\view\formulier\ModalForm;
 class TaakForm extends ModalForm {
 
 	public function __construct(CorveeTaak $taak, $action) {
-		parent::__construct($taak, maalcieUrl . '/' . $action);
+		parent::__construct($taak, '/corvee/beheer/' . $action);
 
 		if ($taak->taak_id === null) {
 			$this->titel = 'Corveetaak aanmaken';
