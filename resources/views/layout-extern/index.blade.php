@@ -1,4 +1,4 @@
-@extends('layout-owee.layout')
+@extends('layout-extern.layout')
 
 @section('titel', $titel)
 
@@ -140,7 +140,7 @@
 		<section id="footer">
 			<div class="inner">
 				<h2 class="major">Interesseformulier</h2>
-				@include('layout-owee.form')
+				@include('layout-extern.form')
 				<ul class="contact">
 					<li class="fa-home">
 						Soci&euml;teit Confide <br/>
