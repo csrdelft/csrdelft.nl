@@ -10,8 +10,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\cms\CmsPaginaForm;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\cms\CmsPaginaZijbalkView;
-use CsrDelft\view\CsrLayoutExternPage;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
 
 /**

@@ -10,7 +10,6 @@ use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\security\OneTimeTokensModel;
-use CsrDelft\view\CsrLayoutExternPage;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
