@@ -66,7 +66,7 @@
 	<!-- Banner -->
 		<section id="banner-small">
 			<div class="inner">
-				<a href="/"><img src="/images/logo-light-it-up.png" alt="Logo Steek Het Aan" height="140"></a>
+				<a href="/"><img src="/images/c.s.r.logo.svg" alt="Beeldmerk van de vereniging" height="140"></a>
 			</div>
 		</section>
 

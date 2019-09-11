@@ -164,7 +164,6 @@ p {
 }
 
 h1, h2, h3, h4, h5, h6 {
-	color: #ffffff;
 	font-family: Raleway, Helvetica, sans-serif;
 	font-weight: 700;
 	letter-spacing: 0.1em;
@@ -182,7 +181,7 @@ h1, h2, h3, h4, h5, h6 {
 
 	&.major {
 		padding-bottom: 1em;
-		border-bottom: solid 2px rgba(255, 255, 255, 0.5);
+		border-bottom: solid 4px $geel;
 	}
 }
 

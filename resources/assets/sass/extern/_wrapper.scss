@@ -23,6 +23,14 @@
 	}
 }
 
+@mixin angle-edge-bordered($bg-kleur, $fg-kleur, $border-kleur) {
+	color: $fg-kleur;
+	background-color: $bg-kleur;
+	&:before, &:after {
+		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='110' viewBox='0 -5 100 110' preserveAspectRatio='none'%3E%3Cpolygon points='-10,110 110,-10 110,110' style='fill:#{escape-color($bg-kleur)};stroke:#{escape-color($border-kleur)};stroke-width:3;stroke-location:inside' /%3E%3C/svg%3E");
+	}
+}
+
 .wrapper {
 	background-color: #001e62;
 	margin: 6.5em 0;
@@ -77,19 +85,19 @@
 	}
 
 	&.kleur1 {
-		@include angle-edge($kleur1)
+		@include angle-edge-bordered($kleur1, $text, $geel)
 	}
 
 	&.kleur2 {
-		@include angle-edge($kleur2);
+		@include angle-edge-bordered($kleur2, $text, $geel);
 	}
 
 	&.kleur3 {
-		@include angle-edge($kleur3);
+		@include angle-edge-bordered($kleur3, $text, $geel);
 	}
 
 	&.kleur4 {
-		@include angle-edge($kleur4);
+		@include angle-edge-bordered($kleur4, $text, $geel);
 	}
 
 	.image {

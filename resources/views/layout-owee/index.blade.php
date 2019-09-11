@@ -10,12 +10,11 @@
 	<!-- Banner -->
 	<section id="banner">
 		<div class="inner">
-			<img src="/images/logo-light-it-up.png" alt="Logo Light It Up">
+			<img src="/images/c.s.r.logo.svg" alt="Beeldmerk van de vereniging">
 		</div>
-		<div style="margin-top:40px" class="inner">
-			<a href="https://www.youtube.com/watch?v=a7hhtoo_kzY&list=PLXBOhyG24-WnNgg2RloapxC5X73J1Zxvi" rel="noreferrer" target="_blank"
-				 class="special">Video: Delft - studie is maar de helft</a>
-		</div>
+		<h1 class="inner">
+			C.S.R. Delft
+		</h1>
 	</section>
 
 	<!-- Wrapper -->
