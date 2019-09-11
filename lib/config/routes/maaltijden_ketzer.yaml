@@ -21,14 +21,14 @@ maalcie-maaltijden-ketzer-sluit:
 maalcie-maaltijden-ketzer-aanmelden:
   path: /maaltijden/ketzer/aanmelden/{mid}
   controller: CsrDelft\controller\maalcie\MijnMaaltijdenController::aanmelden
-  methods: POST
+  methods: [GET,POST]
   requirements: { mid: '\d+' }
   options: { mag: P_MAAL_IK }
 
 maalcie-maaltijden-ketzer-afmelden:
   path: /maaltijden/ketzer/afmelden/{mid}
   controller: CsrDelft\controller\maalcie\MijnMaaltijdenController::afmelden
-  methods: POST
+  methods: [GET,POST]
   requirements: { mid: '\d+' }
   options: { mag: P_MAAL_IK }
 

@@ -32,18 +32,9 @@ use CsrDelft\view\CsrLayoutPage;
 class MaalcieRouterController extends AclController {
 
 	public function __construct($query) {
-		$query = str_replace('maaltijden/', 'maaltijden', $query);
 		$query = str_replace('corvee/', 'corvee', $query);
 		parent::__construct($query, $query); // use model to pass through query
 		$this->acl = array(
-			'maaltijdenketzer' => P_MAAL_IK,
-			'maaltijdenlijst' => P_MAAL_IK, // shortcut
-			'maaltijdenbeheer' => P_MAAL_MOD,
-			'maaltijdenfiscaat' => P_MAAL_MOD,
-			'maaltijdenrepetities' => P_MAAL_MOD,
-			'maaltijdenabonnementen' => P_MAAL_IK,
-			'maaltijdenabonnementenbeheer' => P_MAAL_MOD,
-			'maaltijdenboekjaar' => P_MAAL_SALDI,
 			'corveemijn' => P_CORVEE_IK,
 			'corveerooster' => P_CORVEE_IK, // shortcut
 			'corveebeheer' => P_CORVEE_MOD,
@@ -76,17 +67,6 @@ class MaalcieRouterController extends AclController {
 			$this->view = $controller->getView();
 		}
 	}
-
-	public function maaltijdenketzer() {
-		return new MijnMaaltijdenController($this->model);
-	}
-
-	public function maaltijdenlijst() {
-		$this->model = str_replace('lijst/', 'ketzer/lijst/', $this->model);
-		$this->model = str_replace('lijst/sluit/', 'sluit/', $this->model);
-		return $this->maaltijdenketzer();
-	}
-
 
 	public function corveemijn() {
 		return new MijnCorveeController($this->model);
