@@ -47,7 +47,11 @@ LOCATION:{!!escape_ical($item->getLocatie(), 9)!!}
 SEQUENCE:0
 STATUS:CONFIRMED
 SUMMARY:{!!escape_ical($item->getTitel(), 8)!!}
-TRANSP:TRANSPARENT
+@if($item->isTransparant())
+	TRANSP:TRANSPARENT
+@else
+	TRANS:OPAQUE
+@endif
 END:VEVENT
 @endforeach
 END:VCALENDAR

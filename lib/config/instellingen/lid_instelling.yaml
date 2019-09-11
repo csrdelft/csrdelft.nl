@@ -19,6 +19,12 @@ instellingen:
       opties: ['ja', 'nee']
       default: 'ja'
       beschrijving: 'Geef verjaardagen weer in de ge&iuml;mporteerde agenda (iCal) in je eigen systeem.'
+    transparantICal:
+      titel: 'iCal tonen als vrij'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'nee'
+      beschrijving: 'Toon alle agenda-items als vrij.'
     toonMaaltijden:
       titel: 'Maaltijden weergeven'
       type: Enumeration

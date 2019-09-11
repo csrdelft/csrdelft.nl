@@ -142,4 +142,10 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 		return $begin == '00:00' AND ($eind == '23:59' OR $eind == '00:00');
 	}
 
+	public function isTransparant() {
+		// Toon als transparant (vrij) als lid dat wil, activiteit hele dag(en) duurt of lid niet ingeketzt is
+		return lid_instelling('agenda', 'transparantICal') === 'ja' ||
+			$this->isHeledag() ||
+			$this->getLid(LoginModel::getUid()) === false;
+	}
 }
