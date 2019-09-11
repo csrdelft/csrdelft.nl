@@ -25,7 +25,8 @@ class EetplanBekendeHuizenForm extends ModalForm {
 	public function __construct($model, $action, $update = false) {
 		parent::__construct($model, $action, 'Noviet die een huis kent toevoegen', true);
 		$fields['uid'] = new RequiredLidField('uid', $model->uid, 'Noviet', 'novieten');
-		$fields['woonoord'] = new RequiredEntityField('woonoord', 'naam', 'Woonoord', WoonoordenModel::instance(), '/eetplan/bekendehuizen/zoeken?q=', $model->getWoonoord());
+		$woonoord = $model->getWoonoord() ? $model->getWoonoord() : null;
+		$fields['woonoord'] = new RequiredEntityField('woonoord', 'naam', 'Woonoord', WoonoordenModel::instance(), '/eetplan/bekendehuizen/zoeken?q=', $woonoord);
 		$fields[] = new TextareaField('opmerking', $model->opmerking, 'Opmerking');
 
 		if ($update) {
