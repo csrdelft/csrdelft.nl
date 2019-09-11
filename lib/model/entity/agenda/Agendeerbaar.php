@@ -33,4 +33,6 @@ interface Agendeerbaar {
 	public function getUrl();
 
 	public function isHeledag();
+
+	public function isTransparant();
 }

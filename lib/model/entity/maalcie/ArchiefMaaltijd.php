@@ -83,6 +83,10 @@ class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
 		return false;
 	}
 
+	public function isTransparant() {
+		return true;
+	}
+
 	protected static $table_name = 'mlt_archief';
 	protected static $persistent_attributes = array(
 		'maaltijd_id' => array(T::Integer, false, 'auto_increment'),
@@ -100,5 +104,4 @@ class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
 		$json['aanmeldingen'] = count($this->getAanmeldingenArray());
 		return $json;
 	}
-
 }

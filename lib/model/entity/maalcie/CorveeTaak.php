@@ -191,6 +191,10 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 		return true;
 	}
 
+	public function isTransparant() {
+		return true;
+	}
+
 	protected static $table_name = 'crv_taken';
 	protected static $persistent_attributes = array(
 		'taak_id' => array(T::Integer, false, 'auto_increment'),

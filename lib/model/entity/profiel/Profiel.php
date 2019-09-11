@@ -468,6 +468,10 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		return $l . $naam . '</a>';
 	}
 
+	public function isTransparant() {
+		return true;
+	}
+
 	//einde implements Agendeerbaar
 
 	/**
