@@ -56,6 +56,12 @@
 			</div>
 		</section>
 
+		<!--
+		<section id="two" class="wrapper-img">
+			<img src="/images/vereniging.jpg"/>
+		</section>
+		-->
+
 		<!-- Three -->
 		<section id="three" class="wrapper kleur3">
 			<div class="inner">

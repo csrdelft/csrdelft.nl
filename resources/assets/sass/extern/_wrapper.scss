@@ -31,6 +31,15 @@
 	}
 }
 
+.wrapper-img {
+	img {
+		margin: -6em 0;
+		height: calc(500px + 12em);
+		object-fit: cover;
+		width: 100%;
+	}
+}
+
 .wrapper {
 	background-color: #001e62;
 	margin: 6.5em 0;
