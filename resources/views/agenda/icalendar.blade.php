@@ -48,9 +48,9 @@ SEQUENCE:0
 STATUS:CONFIRMED
 SUMMARY:{!!escape_ical($item->getTitel(), 8)!!}
 @if($item->isTransparant())
-	TRANSP:TRANSPARENT
+TRANSP:TRANSPARENT
 @else
-	TRANS:OPAQUE
+TRANS:OPAQUE
 @endif
 END:VEVENT
 @endforeach
