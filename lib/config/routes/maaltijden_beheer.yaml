@@ -3,6 +3,7 @@ maalcie-beheer-maaltijden-beheer:
   controller: CsrDelft\controller\maalcie\BeheerMaaltijdenController::GET_beheer
   methods: GET
   defaults: { mid: null }
+  requirements: { mid: '\d+' }
   options: { mag: P_MAAL_MOD }
 
 maalcie-beheer-maaltijden-beheer-data:
@@ -69,6 +70,7 @@ maalcie-beheer-maaltijden-bewerk:
   path: /maaltijden/beheer/bewerk/{mid}
   controller: CsrDelft\controller\maalcie\BeheerMaaltijdenController::bewerk
   defaults: { mid: null }
+  requirements: { mid: '\d+' }
   methods: POST
   options: { mag: P_MAAL_MOD }
 
@@ -100,4 +102,5 @@ maalcie-beheer-maaltijden-aanmaken:
   path: /maaltijden/beheer/aanmaken/{mrid}
   controller: CsrDelft\controller\maalcie\BeheerMaaltijdenController::aanmaken
   methods: POST
+  requirements: { mrid: '\d+' }
   options: { mag: P_MAAL_MOD }

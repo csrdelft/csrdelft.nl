@@ -4,7 +4,7 @@
 <tr id="repetitie-row-{$repetitie->crv_repetitie_id}">
 	<td>{strip}
 		<a href="/corvee/repetities/bewerk/{$repetitie->crv_repetitie_id}" title="Corveerepetitie wijzigen" class="btn post popup">{icon get="pencil"}</a>
-		<a href="/corvee/functies/beheer/{$repetitie->functie_id}" title="Wijzig onderliggende functie" class="btn popup">{icon get="cog_edit"}</a>
+		<a href="/corvee/functies/{$repetitie->functie_id}" title="Wijzig onderliggende functie" class="btn popup">{icon get="cog_edit"}</a>
 {if !isset($maaltijdrepetitie) and $repetitie->mlt_repetitie_id}
 		<a href="/corvee/repetities/maaltijd/{$repetitie->mlt_repetitie_id}" title="Corveebeheer maaltijdrepetitie" class="btn">{icon get="calendar_link"}</a>
 {/if}

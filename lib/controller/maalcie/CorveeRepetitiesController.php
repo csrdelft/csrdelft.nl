@@ -37,7 +37,7 @@ class CorveeRepetitiesController {
 	}
 
 	public function maaltijd($mrid) {
-		$this->beheer(null, $mrid);
+		return $this->beheer(null, $mrid);
 	}
 
 	public function nieuw($mrid = null) {
