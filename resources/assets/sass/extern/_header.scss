@@ -110,21 +110,11 @@
         &[href="#menu"] {
           box-shadow: none;
           padding: 0 1em;
-          border-radius: 0;
-
-          &:hover, &:active {
-            background-color: inherit;
-          }
         }
 
         &.inloggen {
           box-shadow: none;
           padding: 0 1em;
-          border-radius: 0;
-        }
-
-        &.inloggen:hover, &[href="https://csrdelft.nl/inloggen"]:active {
-          background-color: inherit;
         }
       }
     }
