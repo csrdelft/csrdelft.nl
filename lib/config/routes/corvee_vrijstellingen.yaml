@@ -7,7 +7,7 @@ corvee-vrijstellingen:
 corvee-vrijstellingen-nieuw:
   path: /corvee/vrijstellingen/nieuw
   controller: CsrDelft\controller\maalcie\BeheerVrijstellingenController::nieuw
-  methods: GET
+  methods: POST
   options: { mag: P_CORVEE_MOD }
 
 corvee-vrijstellingen-beheer-bewerk:
