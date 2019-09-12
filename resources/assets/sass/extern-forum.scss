@@ -41,6 +41,7 @@
 
 .forumdeel {
   background-color: $basiskleur;
+	color: black;
   box-shadow: none;
 }
 
@@ -76,6 +77,7 @@
   }
 
   #berichtPreview {
+		background-color: white;
     color: black;
     strong {
       color: black;
@@ -343,9 +345,6 @@ span.curpage {
 
 	h3 {
 
-		a {
-			color: #000;
-		}
 		a:hover {
 			text-decoration: none;
 			cursor: default;
