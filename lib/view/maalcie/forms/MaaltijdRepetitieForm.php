@@ -32,7 +32,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 	 * @param $model MaaltijdRepetitie
 	 */
 	public function __construct($model, $verplaats = null) {
-		parent::__construct($model, maalcieUrl . '/opslaan/' . $model->mlt_repetitie_id);
+		parent::__construct($model, '/maaltijden/repetities/opslaan/' . $model->mlt_repetitie_id);
 
 		if ($model->mlt_repetitie_id === null) {
 			$this->titel = 'Maaltijdrepetitie aanmaken';
@@ -60,7 +60,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 		$fields[] = new IntField('standaard_limiet', $model->standaard_limiet, 'Standaard limiet', 0, 200);
 		$fields[] = new RechtenField('abonnement_filter', $model->abonnement_filter, 'Aanmeldrestrictie');
 
-		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $model->mlt_repetitie_id, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', 'disk_multiple');
+		$bijwerken = new FormulierKnop('/maaltijden/repetities/bijwerken/' . $model->mlt_repetitie_id, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', 'disk_multiple');
 
 		if ($model->mlt_repetitie_id !== 0) {
 			$fields['ver'] = new CheckboxField('verplaats_dag', $verplaats, 'Verplaatsen');

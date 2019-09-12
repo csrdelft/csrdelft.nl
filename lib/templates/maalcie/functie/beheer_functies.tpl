@@ -9,7 +9,7 @@ Ook kunt u aangeven of er een kwalificatie benodigd is en een kwalificatie toewi
 <p>
 N.B. Voordat een corveefunctie verwijderd kan worden moeten eerst alle bijbehorende corveetaken en alle bijbehorende corveerepetities definitief zijn verwijderd.
 </p>
-<div class="float-right"><a href="{$smarty.const.maalcieUrl}/toevoegen" class="btn post popup">{icon get="add"} Nieuwe functie</a></div>
+<div class="float-right"><a href="/corvee/functies/toevoegen" class="btn post popup">{icon get="add"} Nieuwe functie</a></div>
 <table id="maalcie-tabel" class="maalcie-tabel">
 	<thead>
 		<tr>

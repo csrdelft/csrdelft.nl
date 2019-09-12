@@ -4,7 +4,7 @@
 {strip}
 	{if $toonverleden}
 		<div class="float-right">
-			<a href="{$smarty.const.maalcieUrl}/verleden" title="Taken in het verleden tonen" class="btn">{icon get="time"} Toon verleden</a>
+			<a href="/corvee/rooster/verleden" title="Taken in het verleden tonen" class="btn">{icon get="time"} Toon verleden</a>
 		</div>
 	{/if}
 	<table id="maalcie-tabel" class="maalcie-tabel">

@@ -21,8 +21,6 @@ RewriteRule ^agenda/ical/([0-9a-zA-Z]*)/csrdelft.ics	index.php?private_token=$1 
 
 RewriteRule ^mededelingen       index.php?c=Mededelingen [QSA,L]
 RewriteRule ^groepen			index.php?c=GroepenRouter [L]
-RewriteRule ^maaltijden			index.php?c=MaalcieRouter [L]
-RewriteRule ^corvee				index.php?c=MaalcieRouter [L]
 RewriteRule ^geolocation		index.php?c=GeoLocation [L]
 RewriteRule ^rechten			index.php?c=Rechten [L]
 

@@ -17,7 +17,7 @@
 					<option value="/maaltijden/beheer/beoordelingen">Beoordelingen</option>
 					<option value="/maaltijden/repetities">Repetities</option>
 					<option value="/instellingenbeheer/module/maaltijden">Instellingen</option>
-					<option value="/maaltijden/abonnementenbeheer">Abonnementen</option>
+					<option value="/maaltijden/abonnementen/beheer">Abonnementen</option>
 				</optgroup>
 				<optgroup label="Fiscaat">
 					<option value="/fiscaat/producten">Productbeheer</option>
@@ -29,8 +29,8 @@
 					<option value="/corvee/beheer">Beheer</option>
 					<option value="/corvee/functies">Functies & kwalificaties</option>
 					<option value="/instellingenbeheer/module/corvee">Instellingen</option>
-					<option value="/corvee/puntenbeheer">Punten</option>
-					<option value="/corvee/voorkeurenbeheer">Voorkeuren</option>
+					<option value="/corvee/punten/beheer">Punten</option>
+					<option value="/corvee/voorkeuren/beheer">Voorkeuren</option>
 					<option value="/corvee/vrijstellingen">Vrijstellingen</option>
 				</optgroup>
 			</select>

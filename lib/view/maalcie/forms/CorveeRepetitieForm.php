@@ -25,7 +25,7 @@ use CsrDelft\view\formulier\ModalForm;
 class CorveeRepetitieForm extends ModalForm {
 
 	public function __construct(CorveeRepetitie $repetitie) {
-		parent::__construct($repetitie, maalcieUrl . '/opslaan/' . $repetitie->crv_repetitie_id);
+		parent::__construct($repetitie, '/corvee/repetities/opslaan/' . $repetitie->crv_repetitie_id);
 
 		if ($repetitie->crv_repetitie_id === 0) {
 			$this->titel = 'Corveerepetitie aanmaken';
@@ -64,7 +64,7 @@ class CorveeRepetitieForm extends ModalForm {
 		$fields[] = new IntField('standaard_punten', $repetitie->standaard_punten, 'Standaard punten', 0, 10);
 		$fields[] = new IntField('standaard_aantal', $repetitie->standaard_aantal, 'Aantal corveeërs', 1, 10);
 
-		$bijwerken = new FormulierKnop(maalcieUrl . '/bijwerken/' . $repetitie->crv_repetitie_id, 'submit', 'Alles bijwerken', 'Opslaan & alle taken bijwerken', 'disk_multiple');
+		$bijwerken = new FormulierKnop('/corvee/repetities/bijwerken/' . $repetitie->crv_repetitie_id, 'submit', 'Alles bijwerken', 'Opslaan & alle taken bijwerken', 'disk_multiple');
 
 		if ($repetitie->crv_repetitie_id !== 0) {
 			$fields['ver'] = new CheckboxField('verplaats_dag', false, 'Verplaatsen');

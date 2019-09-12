@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
@@ -23,52 +22,27 @@ use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
  * MaaltijdenFiscaatController.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @property MaaltijdenModel $model
- *
  */
-class MaaltijdenFiscaatController extends AclController {
+class MaaltijdenFiscaatController {
+	private $model;
 
-	public function __construct($query) {
-		parent::__construct($query, CiviProductModel::instance());
-		if ($this->getMethod() == 'GET') {
-			$this->acl = array(
-				'onverwerkt' => P_MAAL_MOD,
-				'overzicht' => P_MAAL_MOD
-			);
-		} else {
-			$this->acl = array(
-				'verwerk' => P_MAAL_MOD,
-				'overzicht' => P_MAAL_MOD
-			);
-		}
-	}
-
-	public function performAction(array $args = array()) {
-		$this->action = 'onverwerkt';
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		}
-		$mid = null;
-		if ($this->hasParam(3)) {
-			$mid = (int)$this->getParam(3);
-		}
-		parent::performAction(array($mid));
+	public function __construct() {
+		$this->model = CiviProductModel::instance();
 	}
 
 	public function GET_overzicht() {
 		$body = new BeheerMaaltijdenView(new FiscaatMaaltijdenOverzichtTable(), 'Overzicht verwerkte maaltijden');
-		$this->view = new CsrLayoutPage($body);
+		return new CsrLayoutPage($body);
 	}
 
 	public function POST_overzicht() {
 		$data = MaaltijdenModel::instance()->find('verwerkt = true');
-		$this->view = new FiscaatMaaltijdenOverzichtResponse($data);
+		return new FiscaatMaaltijdenOverzichtResponse($data);
 	}
 
 	public function GET_onverwerkt() {
 		$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
-		$this->view = new CsrLayoutPage($body);
+		return new CsrLayoutPage($body);
 	}
 
 	public function POST_verwerk() {
@@ -111,7 +85,7 @@ class MaaltijdenFiscaatController extends AclController {
 			return array($maaltijd);
 		});
 
-		$this->view = new RemoveRowsResponse($maaltijden);
+		return new RemoveRowsResponse($maaltijden);
 	}
 
 }
