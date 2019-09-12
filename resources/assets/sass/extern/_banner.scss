@@ -9,31 +9,44 @@
   }
 
   a {
+		color: black;
     z-index: 9999;
     position: relative;
     border-bottom: none;
     display: inline-block;
+
+		&:hover {
+			color: $donkerblauw;
+		}
   }
 
   img {
-		filter: drop-shadow(5px 5px 2px rgba(0, 0, 0, 0.3));
-    margin: 1em;
+    margin: 1em 1em 0 1em;
   }
+
+	h2 {
+		font-size: 1em;
+	}
 }
 
 #banner {
+	color: black;
+	a {
+		color: black;
+		&:hover {
+			color: $tekstdonker;
+		}
+	}
   padding: 7em 0 2em 0;
   margin-bottom: -2em;
   /* 		max-height: 20em; */
   .inner {
     margin: 0 auto;
-    width: 55em;
     text-align: center;
   }
 
   img {
-    filter: drop-shadow(10px 10px 4px rgba(0, 0, 0, 0.3));
-    width: 24em;
+    width: 14em;
     max-width: 100%;
     max-height: 60%;
     margin-top: -4em;

@@ -1,13 +1,23 @@
-$basiskleur: #0f8c72;
+$donkerblauw: #05131E;
+$lichtblauw: #11273A;
+$geel: #E59200;
+$grijs: #E8E8E8;
 
-$headerkleur: rgba(15, 140, 114, 0.95);
+$basiskleur: $grijs;
+
+$headerkleur: $lichtblauw;
 $loginkleur: rgba(34, 35, 72, 0.4);
 
-$kleur1: darken(#f0a700, 3%);
-$kleur2: darken(#f0a700, 6%);
-$kleur3: darken(#f0a700, 10%);
-$kleur4: darken(#f0a700, 6%);
+$text: #fff;
 
+$kleur1: $donkerblauw;
+$kleur2: $lichtblauw;
+$kleur3: $donkerblauw;
+$kleur4: $lichtblauw;
+
+$menu-bg: $lichtblauw;
+$button-bg: $donkerblauw;
+$button-bg-hover: $lichtblauw;
 $tekstlicht: #FFFFFF;
 $tekstdonker: #353670;
 
