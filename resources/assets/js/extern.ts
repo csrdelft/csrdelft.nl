@@ -25,7 +25,7 @@ window.docReady = (fn) => {
 window.formulier = {formSubmit: (event) => (event.target as HTMLFormElement).form.submit()};
 
 window.docReady(() => {
-	document.body.classList.remove('is-loading');
+	setTimeout(() => document.body.classList.remove('is-loading'));
 	import('jquery').then(($) => {
 		window.$ = window.jQuery = $.default;
 
