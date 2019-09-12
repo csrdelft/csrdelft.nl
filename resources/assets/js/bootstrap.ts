@@ -65,6 +65,13 @@ require('corejs-typeahead/dist/typeahead.jquery.js');
 $.extend(window, {
 	Bloodhound,
 	Dropzone,
+	docReady: (fn: () => void) => {
+			if (document.readyState === 'complete') {
+				fn();
+			} else {
+				document.addEventListener('DOMContentLoaded', fn);
+			}
+	},
 	bbcode: {
 		// See view/formulier/invoervelden/BBCodeField.class.php
 		// See templates/mededelingen/mededeling.tpl

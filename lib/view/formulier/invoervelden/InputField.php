@@ -453,7 +453,7 @@ JS;
 		if ($this->onchange !== null) {
 			$js .= <<<JS
 
-$('#{$this->getId()}').change(function(event) {
+document.getElementById('{$this->getId()}').addEventListener('change', function(event) {
 	{$this->onchange}
 });
 JS;
@@ -461,7 +461,7 @@ JS;
 		if ($this->onclick !== null) {
 			$js .= <<<JS
 
-$('#{$this->getId()}').click(function(event) {
+document.getElementById('{$this->getId()}').addEventListener('click', function(event) {
 	{$this->onclick}
 });
 JS;
@@ -469,7 +469,7 @@ JS;
 		if ($this->onkeydown !== null) {
 			$js .= <<<JS
 
-$('#{$this->getId()}').keydown(function(event) {
+document.getElementById('{$this->getId()}').addEventListener('keydown', function(event) {
 	{$this->onkeydown}
 });
 JS;
@@ -477,7 +477,7 @@ JS;
 		if ($this->onkeyup !== null) {
 			$js .= <<<JS
 
-$('#{$this->getId()}').keyup(function(event) {
+document.getElementById('{$this->getId()}').addEventListener('keyup', function(event) {
 	{$this->onkeyup}
 });
 JS;
