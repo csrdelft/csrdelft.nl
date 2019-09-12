@@ -28,14 +28,22 @@
 .breadcrumbs {
   display: flex;
   align-items: baseline;
-  justify-content: flex-end;
 
-  >* {
-    margin: 1ex;
-  }
+	.breadcrumb {
+		margin: 0.5rem;
+		display: flex;
+		list-style: none;
+		padding: 0;
+		align-items: center;
+
+		.breadcrumb-item {
+			margin-right: 1em;
+		}
+	}
 
   select {
     width: auto;
+		margin: 0;
   }
 }
 
