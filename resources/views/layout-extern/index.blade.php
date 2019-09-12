@@ -85,7 +85,7 @@
 		</section>
 
 		<!-- Four -->
-		<section id="four" class="wrapper alt kleur1">
+		<section id="four" class="wrapper alt kleur4">
 			<div class="inner">
 				<div class="content">
 					<h2 class="major">Foto's</h2>

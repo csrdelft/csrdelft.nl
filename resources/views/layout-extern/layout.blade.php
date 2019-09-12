@@ -66,7 +66,8 @@
 	<!-- Banner -->
 		<section id="banner-small">
 			<div class="inner">
-				<a href="/"><img src="/images/c.s.r.logo.svg" alt="Beeldmerk van de vereniging" height="140"></a>
+				<a href="/"><img src="/images/c.s.r.logo.svg" alt="Beeldmerk van de vereniging" height="140">
+				<h2>C.S.R. Delft</h2></a>
 			</div>
 		</section>
 

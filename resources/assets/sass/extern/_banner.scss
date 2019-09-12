@@ -9,15 +9,24 @@
   }
 
   a {
+		color: black;
     z-index: 9999;
     position: relative;
     border-bottom: none;
     display: inline-block;
+
+		&:hover {
+			color: $donkerblauw;
+		}
   }
 
   img {
-    margin: 1em;
+    margin: 1em 1em 0 1em;
   }
+
+	h2 {
+		font-size: 1em;
+	}
 }
 
 #banner {
