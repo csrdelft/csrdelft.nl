@@ -290,7 +290,7 @@ class CorveeTakenModel extends PersistenceModel {
 	 * @throws CsrGebruikerException
 	 */
 	public function getTakenVoorMaaltijd($mid, $verwijderd = false) {
-		if (!is_int($mid) || $mid <= 0) {
+		if ($mid <= 0) {
 			throw new CsrGebruikerException('Load taken voor maaltijd faalt: Invalid $mid =' . $mid);
 		}
 		if ($verwijderd) {
