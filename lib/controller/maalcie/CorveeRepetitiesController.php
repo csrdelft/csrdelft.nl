@@ -23,10 +23,10 @@ class CorveeRepetitiesController {
 	public function beheer($crid = null, $mrid = null) {
 		$modal = null;
 		$maaltijdrepetitie = null;
-		if (is_int($crid) && $crid > 0) {
+		if (is_numeric($crid) && $crid > 0) {
 			$modal = $this->bewerk($crid);
 			$repetities = $this->model->getAlleRepetities();
-		} elseif (is_int($mrid) && $mrid > 0) {
+		} elseif (is_numeric($mrid) && $mrid > 0) {
 			$repetities = $this->model->getRepetitiesVoorMaaltijdRepetitie($mrid);
 			$maaltijdrepetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
 		} else {

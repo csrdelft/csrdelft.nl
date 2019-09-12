@@ -24,7 +24,7 @@ class MaaltijdRepetitiesController {
 
 	public function beheer($mrid = null) {
 		$modal = null;
-		if (is_int($mrid) && $mrid > 0) {
+		if (is_numeric($mrid) && $mrid > 0) {
 			$modal = $this->bewerk($mrid);
 		}
 		$view = new MaaltijdRepetitiesView($this->model->getAlleRepetities());

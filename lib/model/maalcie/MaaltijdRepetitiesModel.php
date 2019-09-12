@@ -80,7 +80,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 	}
 
 	public function verwijderRepetitie($mrid) {
-		if (!is_int($mrid) || $mrid <= 0) {
+		if (!is_numeric($mrid) || $mrid <= 0) {
 			throw new CsrGebruikerException('Verwijder maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);
 		}
 		if (CorveeRepetitiesModel::instance()->existMaaltijdRepetitieCorvee($mrid)) {

@@ -67,7 +67,7 @@ class TaakForm extends ModalForm {
 	public function validate() {
 		$valid = parent::validate();
 		$fields = $this->getFields();
-		if (is_int($fields['mid']->getValue())) {
+		if (is_numeric($fields['mid']->getValue())) {
 			try {
 				MaaltijdenModel::instance()->getMaaltijd($fields['mid']->getValue(), true);
 			} catch (CsrGebruikerException $e) {

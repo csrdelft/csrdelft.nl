@@ -30,9 +30,9 @@ class BeheerTakenController {
 
 	public function beheer($tid = null, $mid = null) {
 		$modal = null;
-		if (is_int($tid) && $tid > 0) {
+		if (is_numeric($tid) && $tid > 0) {
 			$modal = $this->bewerk($tid);
-		} elseif (is_int($mid) && $mid > 0) {
+		} elseif (is_numeric($mid) && $mid > 0) {
 			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid, true);
 			$taken = $this->model->getTakenVoorMaaltijd($mid, true);
 		} else {

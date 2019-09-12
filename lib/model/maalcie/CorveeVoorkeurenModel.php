@@ -125,7 +125,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	}
 
 	public function getVoorkeurenVoorRepetitie($crid) {
-		if (!is_int($crid) || $crid <= 0) {
+		if (!is_numeric($crid) || $crid <= 0) {
 			throw new CsrGebruikerException('Get voorkeuren voor repetitie faalt: Invalid $crid = ' . $crid);
 		}
 		return $this->find('crv_repetitie_id = ?', array($crid));
