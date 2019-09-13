@@ -1,4 +1,5 @@
 import './ajax-csrf';
+import {docReady} from './util';
 
 declare global {
 	interface Window {
@@ -13,13 +14,7 @@ declare global {
 	}
 }
 
-window.docReady = (fn) => {
-	if (document.readyState === 'complete') {
-		fn();
-	} else {
-		document.addEventListener('DOMContentLoaded', fn);
-	}
-};
+window.docReady = docReady;
 
 // Versimpelde versie van formSubmit in formulier.js
 window.formulier = {formSubmit: (event) => (event.target as HTMLFormElement).form.submit()};

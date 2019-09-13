@@ -13,6 +13,7 @@ import ctx, {init} from './ctx';
 import {formCancel, formInlineToggle, formSubmit} from './formulier';
 import {forumBewerken, saveConceptForumBericht} from './forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';
+import {docReady} from './util';
 
 declare global {
 	interface JQueryStatic {
@@ -62,13 +63,7 @@ require('corejs-typeahead/dist/typeahead.jquery.js');
 $.extend(window, {
 	Bloodhound,
 	Dropzone,
-	docReady: (fn: () => void) => {
-			if (document.readyState === 'complete') {
-				fn();
-			} else {
-				document.addEventListener('DOMContentLoaded', fn);
-			}
-	},
+	docReady,
 	bbcode: {
 		// See view/formulier/invoervelden/BBCodeField.class.php
 		// See templates/mededelingen/mededeling.tpl

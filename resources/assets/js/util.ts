@@ -7,7 +7,7 @@ import {domUpdate} from './context';
  * @see templates/fotoalbum/album.tpl
  */
 export function selectText(elmnt: HTMLElement) {
-	const selection = window.getSelection();
+	const selection = window.getSelection()!;
 	const range = document.createRange();
 	range.selectNodeContents(elmnt);
 	selection.removeAllRanges();
@@ -195,7 +195,7 @@ export function htmlEncode(str: string) {
 
 export function ontstuiter(func: any, wait: number, immediate: boolean) {
 	let timeout: number | undefined;
-	return function () {
+	return function (this: any) {
 		const context = this;
 		const args = arguments;
 		const later = () => {
@@ -211,4 +211,12 @@ export function ontstuiter(func: any, wait: number, immediate: boolean) {
 			func.apply(context, args);
 		}
 	};
+}
+
+export function docReady(fn: () => void): void {
+	if (document.readyState === 'complete') {
+		fn();
+	} else {
+		document.addEventListener('DOMContentLoaded', fn);
+	}
 }
