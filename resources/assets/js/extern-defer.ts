@@ -13,8 +13,6 @@ require('./lib/jquery.markitup');
 require('jquery-ui/ui/widgets/tooltip');
 require('jquery-hoverintent');
 
-$.widget.bridge('uitooltip', $.ui.tooltip);
-
 require('timeago');
 
 declare global {

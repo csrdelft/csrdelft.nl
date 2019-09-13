@@ -22,7 +22,6 @@ declare global {
 	interface JQuery {
 		timeago: () => void;
 		markItUp: (arg: any) => any;
-		uitooltip: (arg: any) => any;
 		hoverIntent: (arg: any, arg1?: any) => any;
 		autosize: () => void;
 		scrollTo: (arg: any) => void;
@@ -44,7 +43,6 @@ require('jquery-ui/ui/effects/effect-highlight');
 require('jquery-ui/ui/effects/effect-fade');
 require('jquery-ui/ui/widgets/datepicker');
 require('jquery-ui/ui/widgets/slider');
-require('jquery-ui/ui/widgets/tooltip');
 require('./lib/jquery.markitup');
 require('./lib/jquery.contextMenu');
 require('timeago');
@@ -122,8 +120,6 @@ $.extend(window, {
 });
 
 Dropzone.autoDiscover = false;
-
-$.widget.bridge('uitooltip', $.ui.tooltip);
 
 $.timeago.settings.strings = {
 	day: '1 dag',
