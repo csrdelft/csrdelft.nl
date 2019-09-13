@@ -45,7 +45,6 @@ require('jquery-ui/ui/effects/effect-fade');
 require('jquery-ui/ui/widgets/datepicker');
 require('jquery-ui/ui/widgets/slider');
 require('jquery-ui/ui/widgets/tooltip');
-require('jquery-ui/ui/widgets/tabs');
 require('./lib/jquery.markitup');
 require('./lib/jquery.contextMenu');
 require('timeago');
