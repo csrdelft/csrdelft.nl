@@ -617,11 +617,18 @@ abstract class AbstractGroepenController extends Controller {
 		} // beheren
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-			if (empty($selection)) {
+			if ($selection) {
+				/** @var AbstractGroepLid $lid */
+				$lid = $model->retrieveByUUID($selection[0]);
+			} else {
+				$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+				$uid = filter_input(INPUT_POST, 'uid', FILTER_SANITIZE_STRING);
+				$lid = $model->get($id, $uid);
+			}
+
+			if (!$lid) {
 				$this->exit_http(403);
 			}
-			/** @var AbstractGroepLid $lid */
-			$lid = $model->retrieveByUUID($selection[0]);
 			if (!$groep->mag(AccessAction::Beheren)) {
 				$this->exit_http(403);
 			}
