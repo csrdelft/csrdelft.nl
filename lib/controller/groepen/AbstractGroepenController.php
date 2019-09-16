@@ -381,7 +381,7 @@ abstract class AbstractGroepenController extends Controller {
 			if (!$groep OR !$groep->mag(AccessAction::Wijzigen)) {
 				$this->exit_http(403);
 			}
-			$form = new GroepForm($groep, $this->model->getUrl() . $this->action, AccessAction::Wijzigen); // checks rechten wijzigen
+			$form = new GroepForm($groep, $groep->getUrl() . $this->action, AccessAction::Wijzigen); // checks rechten wijzigen
 			if ($form->validate()) {
 				ChangeLogModel::instance()->logChanges($form->diff());
 				$this->model->update($groep);
