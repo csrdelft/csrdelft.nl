@@ -131,4 +131,9 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 		}
 		return false;
 	}
+
+	public function isTransparant() {
+		// Toon als transparant (vrij) als lid dat wil of activiteit hele dag(en) duurt
+		return lid_instelling('agenda', 'transparantICal') === 'ja' || $this->isHeledag();
+	}
 }

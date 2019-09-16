@@ -47,6 +47,9 @@ class BbPeiling extends BbTag {
 	 * @throws BbException
 	 */
 	private function getPeiling($peiling_id): Peiling {
+		if (!LoginModel::mag(P_LOGGED_IN)) {
+			throw new BbException('');
+		}
 		$peiling = PeilingenModel::instance()->getPeilingById($peiling_id);
 		if ($peiling === false) {
 			throw new BbException('[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')');

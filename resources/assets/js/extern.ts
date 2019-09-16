@@ -1,11 +1,12 @@
-import $ from 'jquery';
-require('./ajax-csrf');
+import './ajax-csrf';
+import {docReady} from './util';
 
 declare global {
 	interface Window {
 		$: JQueryStatic;
 		jQuery: JQueryStatic;
 		formulier: Formulier;
+		docReady: (fn: () => void) => void;
 	}
 
 	interface Formulier {
@@ -13,13 +14,16 @@ declare global {
 	}
 }
 
-window.$ = window.jQuery = $;
+window.docReady = docReady;
 
 // Versimpelde versie van formSubmit in formulier.js
 window.formulier = {formSubmit: (event) => (event.target as HTMLFormElement).form.submit()};
 
-$(() => {
-	$('body').removeClass('is-loading');
+window.docReady(() => {
+	setTimeout(() => document.body.classList.remove('is-loading'));
+	import('jquery').then(($) => {
+		window.$ = window.jQuery = $.default;
 
-	import(/* webpackChunkName: "extern-defer" */ './extern-defer');
+		import(/* webpackChunkName: "extern-defer" */ './extern-defer');
+	});
 });

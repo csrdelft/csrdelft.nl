@@ -1,6 +1,6 @@
 import {EventEmitter} from 'events';
 
-import 'jgallery/dist/js/jgallery';
+require('jgallery/dist/js/jgallery');
 import $ from 'jquery';
 import {basename, dirname, redirect, reload, selectText} from '../util';
 

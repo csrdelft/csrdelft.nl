@@ -381,7 +381,7 @@ abstract class AbstractGroepenController extends Controller {
 			if (!$groep OR !$groep->mag(AccessAction::Wijzigen)) {
 				$this->exit_http(403);
 			}
-			$form = new GroepForm($groep, $this->model->getUrl() . $this->action, AccessAction::Wijzigen); // checks rechten wijzigen
+			$form = new GroepForm($groep, $groep->getUrl() . $this->action, AccessAction::Wijzigen); // checks rechten wijzigen
 			if ($form->validate()) {
 				ChangeLogModel::instance()->logChanges($form->diff());
 				$this->model->update($groep);
@@ -617,11 +617,18 @@ abstract class AbstractGroepenController extends Controller {
 		} // beheren
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-			if (empty($selection)) {
+			if ($selection) {
+				/** @var AbstractGroepLid $lid */
+				$lid = $model->retrieveByUUID($selection[0]);
+			} else {
+				$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+				$uid = filter_input(INPUT_POST, 'uid', FILTER_SANITIZE_STRING);
+				$lid = $model->get($id, $uid);
+			}
+
+			if (!$lid) {
 				$this->exit_http(403);
 			}
-			/** @var AbstractGroepLid $lid */
-			$lid = $model->retrieveByUUID($selection[0]);
 			if (!$groep->mag(AccessAction::Beheren)) {
 				$this->exit_http(403);
 			}

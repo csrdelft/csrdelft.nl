@@ -14,9 +14,9 @@ Daarnaast blijven bij het verwijderen eventuele gekoppelde corveerepetities best
 </p>
 <p>
 N.B. Pas na het definitief verwijderen van de bijbehorende maaltijden zal de maaltijdrepetitie verwijderd kunnen worden.
-Dan pas zullen ook alle abonnementen op deze maaltijdrepetitie automatisch worden uitgeschakeld en verwijderd. 
+Dan pas zullen ook alle abonnementen op deze maaltijdrepetitie automatisch worden uitgeschakeld en verwijderd.
 </p>
-<div class="float-right"><a href="{$smarty.const.maalcieUrl}/nieuw" class="btn post popup">{icon get="add"} Nieuwe repetitie</a></div>
+<div class="float-right"><a href="/maaltijden/repetities/nieuw" class="btn post popup">{icon get="add"} Nieuwe repetitie</a></div>
 <table id="maalcie-tabel" class="maalcie-tabel">
 	<thead>
 		<tr>

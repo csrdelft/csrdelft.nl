@@ -20,7 +20,7 @@ use CsrDelft\view\formulier\ModalForm;
 class VrijstellingForm extends ModalForm {
 
 	public function __construct(CorveeVrijstelling $vrijstelling) {
-		parent::__construct($vrijstelling, maalcieUrl . '/opslaan' . ($vrijstelling->uid === null ? '' : '/' . $vrijstelling->uid));
+		parent::__construct($vrijstelling, '/corvee/vrijstellingen/opslaan' . ($vrijstelling->uid === null ? '' : '/' . $vrijstelling->uid));
 
 		if ($vrijstelling->uid === null) {
 			$this->titel = 'Vrijstelling aanmaken';

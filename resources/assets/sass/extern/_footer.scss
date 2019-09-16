@@ -2,7 +2,7 @@
 
 #footer {
   .inner, h2, a, label {
-    color: $tekstlicht;
+    color: black;
   }
 
   a {
@@ -18,8 +18,8 @@
     width: 100%;
   }
 
-  input {
-    color: $tekstlicht !important;
+  input,textarea {
+    color: $tekstdonker!important;
   }
 
   .inner {
@@ -44,7 +44,7 @@
     }
 
     .copyright,.sponsors {
-      border-top: solid 2px $tekstdonker;
+      border-top: solid 2px $geel;
       list-style: none;
       margin: 2em 0 1em 0;
       padding: 2em 0 0 0;
@@ -52,7 +52,6 @@
       text-align: center;
 
       li {
-        color: $tekstlicht;
         display: block;
         font-size: 0.9em;
         line-height: 1;

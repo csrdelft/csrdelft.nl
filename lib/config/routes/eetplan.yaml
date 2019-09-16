@@ -24,18 +24,60 @@ eetplan-beheer:
   methods: [GET,POST]
   options: { mag: "P_ADMIN,commissie:NovCie" }
 
+eetplan-bekendehuizen-toevoegen:
+  path: /eetplan/bekendehuizen/toevoegen
+  controller: CsrDelft\controller\EetplanController::bekendehuizen_toevoegen
+  methods: POST
+  options: { mag: "P_ADMIN,commissie:NovCie" }
+
+eetplan-bekendehuizen-verwijderen:
+  path: /eetplan/bekendehuizen/verwijderen
+  controller: CsrDelft\controller\EetplanController::bekendehuizen_verwijderen
+  methods: POST
+  options: { mag: "P_ADMIN,commissie:NovCie" }
+
+eetplan-bekendehuizen-zoeken:
+  path: /eetplan/bekendehuizen/zoeken
+  controller: CsrDelft\controller\EetplanController::bekendehuizen_zoeken
+  methods: GET
+  options: { mag: "P_ADMIN,commissie:NovCie" }
+
+eetplan-bekendehuizen-bewerken:
+  path: /eetplan/bekendehuizen/bewerken/{uuid}
+  controller: CsrDelft\controller\EetplanController::bekendehuizen_bewerken
+  methods: POST
+  defaults: { uuid: null }
+  options: { mag: "P_ADMIN,commissie:NovCie" }
+
 eetplan-bekendehuizen:
-  path: /eetplan/bekendehuizen/{actie}
+  path: /eetplan/bekendehuizen
   controller: CsrDelft\controller\EetplanController::bekendehuizen
-  methods: [GET,POST]
-  defaults: { actie: null }
+  methods: POST
   options: { mag: "P_ADMIN,commissie:NovCie" }
 
 eetplan-novietrelatie:
-  path: /eetplan/novietrelatie/{actie}
+  path: /eetplan/novietrelatie
   controller: CsrDelft\controller\EetplanController::novietrelatie
   methods: POST
-  defaults: { actie: null }
+  options: { mag: "P_ADMIN,commissie:NovCie" }
+
+eetplan-novietrelatie-toevoegen:
+  path: /eetplan/novietrelatie/toevoegen
+  controller: CsrDelft\controller\EetplanController::novietrelatie_toevoegen
+  methods: POST
+  options: { mag: "P_ADMIN,commissie:NovCie" }
+
+eetplan-novietrelatie-bewerken:
+  path: /eetplan/novietrelatie/bewerken/{uuid}
+  controller: CsrDelft\controller\EetplanController::novietrelatie_bewerken
+  methods: POST
+  defaults: { uuid: null }
+  options: { mag: "P_ADMIN,commissie:NovCie" }
+
+eetplan-novietrelatie-verwijderen:
+  path: /eetplan/novietrelatie/verwijderen
+  controller: CsrDelft\controller\EetplanController::novietrelatie_verwijderen
+  methods: POST
   options: { mag: "P_ADMIN,commissie:NovCie" }
 
 eetplan-woonoord:

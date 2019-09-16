@@ -1,0 +1,25 @@
+corvee-voorkeuren:
+  path: /corvee/voorkeuren
+  controller: CsrDelft\controller\maalcie\MijnVoorkeurenController::mijn
+  methods: GET
+  options: { mag: P_CORVEE_IK }
+
+corvee-voorkeuren-inschakelen:
+  path: /corvee/voorkeuren/inschakelen/{crid}
+  controller: CsrDelft\controller\maalcie\MijnVoorkeurenController::inschakelen
+  methods: POST
+  requirements: { crid: '\d+' }
+  options: { mag: P_CORVEE_IK }
+
+corvee-voorkeuren-uitschakelen:
+  path: /corvee/voorkeuren/uitschakelen/{crid}
+  controller: CsrDelft\controller\maalcie\MijnVoorkeurenController::uitschakelen
+  methods: POST
+  requirements: { crid: '\d+' }
+  options: { mag: P_CORVEE_IK }
+
+corvee-voorkeuren-eetwens:
+  path: /corvee/voorkeuren/eetwens
+  controller: CsrDelft\controller\maalcie\MijnVoorkeurenController::eetwens
+  methods: POST
+  options: { mag: P_CORVEE_IK }

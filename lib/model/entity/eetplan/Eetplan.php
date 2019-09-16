@@ -26,6 +26,13 @@ class Eetplan extends PersistentEntity {
 	public $avond;
 
 	/**
+	 * Specifiek bedoelt voor bekende huizen.
+	 *
+	 * @var string
+	 */
+	public $opmerking;
+
+	/**
 	 * @return Woonoord|false|mixed
 	 */
 	public function getWoonoord() {
@@ -50,7 +57,8 @@ class Eetplan extends PersistentEntity {
 	protected static $persistent_attributes = [
 		'uid' => [T::UID, false],
 		'woonoord_id' => [T::Integer, false],
-		'avond' => [T::Date, false]
+		'avond' => [T::Date, false],
+		'opmerking' => [T::String, true],
 	];
 
 	/**

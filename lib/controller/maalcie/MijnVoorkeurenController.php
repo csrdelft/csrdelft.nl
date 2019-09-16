@@ -2,7 +2,6 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\security\LoginModel;
@@ -13,46 +12,19 @@ use CsrDelft\view\maalcie\persoonlijk\voorkeuren\MijnVoorkeurView;
 
 
 /**
- * MijnVoorkeurenController.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @property CorveeVoorkeurenModel $model
- *
  */
-class MijnVoorkeurenController extends AclController {
+class MijnVoorkeurenController {
+	private $model;
 
-	public function __construct($query) {
-		parent::__construct($query, CorveeVoorkeurenModel::instance());
-		if ($this->getMethod() == 'GET') {
-			$this->acl = array(
-				'mijn' => P_CORVEE_IK
-			);
-		} else {
-			$this->acl = array(
-				'inschakelen' => P_CORVEE_IK,
-				'uitschakelen' => P_CORVEE_IK,
-				'eetwens' => P_CORVEE_IK
-			);
-		}
-	}
-
-	public function performAction(array $args = array()) {
-		$this->action = 'mijn';
-		if ($this->hasParam(2)) {
-			$this->action = $this->getParam(2);
-		}
-		$crid = null;
-		if ($this->hasParam(3)) {
-			$crid = intval($this->getParam(3));
-		}
-		parent::performAction(array($crid));
+	public function __construct() {
+		$this->model = CorveeVoorkeurenModel::instance();
 	}
 
 	public function mijn() {
 		$voorkeuren = $this->model->getVoorkeurenVoorLid(LoginModel::getUid(), true);
-		$this->view = new MijnVoorkeurenView($voorkeuren);
-		$this->view = new CsrLayoutPage($this->view);
+		$view = new MijnVoorkeurenView($voorkeuren);
+		return new CsrLayoutPage($view);
 	}
 
 	public function inschakelen($crid) {
@@ -60,7 +32,7 @@ class MijnVoorkeurenController extends AclController {
 		$voorkeur->crv_repetitie_id = $crid;
 		$voorkeur->uid = LoginModel::getUid();
 		$voorkeur = $this->model->inschakelenVoorkeur($voorkeur);
-		$this->view = new MijnVoorkeurView($voorkeur);
+		return new MijnVoorkeurView($voorkeur);
 	}
 
 	public function uitschakelen($crid) {
@@ -68,7 +40,7 @@ class MijnVoorkeurenController extends AclController {
 		$voorkeur->crv_repetitie_id = $crid;
 		$voorkeur->uid = LoginModel::getUid();
 		$voorkeur = $this->model->uitschakelenVoorkeur($voorkeur);
-		$this->view = new MijnVoorkeurView($voorkeur);
+		return new MijnVoorkeurView($voorkeur);
 	}
 
 	public function eetwens() {
@@ -76,7 +48,7 @@ class MijnVoorkeurenController extends AclController {
 		if ($form->validate()) {
 			$this->model->setEetwens(LoginModel::getProfiel(), $form->getField()->getValue());
 		}
-		$this->view = $form;
+		return $form;
 	}
 
 }

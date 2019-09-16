@@ -1,0 +1,12 @@
+corvee-mijn:
+  path: /corvee
+  controller: CsrDelft\controller\maalcie\MijnCorveeController::mijn
+  methods: GET
+  options: { mag: P_CORVEE_IK }
+
+corvee-rooster:
+  path: /corvee/rooster/{toonverleden}
+  controller: CsrDelft\controller\maalcie\MijnCorveeController::rooster
+  methods: GET
+  defaults: { toonverleden: null }
+  options: { mag: P_CORVEE_IK }

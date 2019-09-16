@@ -1,6 +1,6 @@
 <div class="zijbalk_forum">
 	<div class="zijbalk-kopje">
-		<a href="/profiel/{{\CsrDelft\model\security\LoginModel::getUid()}}/#forum">Forum (zelf gepost)</a>
+		<a href="/profiel/{{\CsrDelft\model\security\LoginModel::getUid()}}#forum">Forum (zelf gepost)</a>
 	</div>
 	@foreach($posts as $post)
 		@php($timestamp = strtotime($post->datum_tijd))

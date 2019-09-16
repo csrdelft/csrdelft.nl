@@ -25,7 +25,7 @@ use CsrDelft\view\formulier\ModalForm;
 class TaakForm extends ModalForm {
 
 	public function __construct(CorveeTaak $taak, $action) {
-		parent::__construct($taak, maalcieUrl . '/' . $action);
+		parent::__construct($taak, '/corvee/beheer/' . $action);
 
 		if ($taak->taak_id === null) {
 			$this->titel = 'Corveetaak aanmaken';
@@ -67,7 +67,7 @@ class TaakForm extends ModalForm {
 	public function validate() {
 		$valid = parent::validate();
 		$fields = $this->getFields();
-		if (is_int($fields['mid']->getValue())) {
+		if (is_numeric($fields['mid']->getValue())) {
 			try {
 				MaaltijdenModel::instance()->getMaaltijd($fields['mid']->getValue(), true);
 			} catch (CsrGebruikerException $e) {

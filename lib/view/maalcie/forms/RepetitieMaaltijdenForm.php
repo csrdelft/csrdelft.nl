@@ -19,7 +19,7 @@ use CsrDelft\view\formulier\ModalForm;
 class RepetitieMaaltijdenForm extends ModalForm {
 
 	public function __construct(MaaltijdRepetitie $repetitie, $beginDatum = null, $eindDatum = null) {
-		parent::__construct(null, maalcieUrl . '/aanmaken/' . $repetitie->mlt_repetitie_id);
+		parent::__construct(null, '/maaltijden/beheer/aanmaken/' . $repetitie->mlt_repetitie_id);
 		$this->titel = 'Periodieke maaltijden aanmaken';
 
 		$fields = [];

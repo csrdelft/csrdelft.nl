@@ -63,10 +63,18 @@ class AgendaController {
 
 	public function ical() {
 		header('Content-Type: text/calendar; charset=UTF-8');
-		return view('agenda.icalendar', [
+		return crlf_endings(view('agenda.icalendar', [
 			'items' => $this->model->getICalendarItems(),
-			'published' => str_replace('-', '', str_replace(':', '', str_replace('+00:00', 'Z', gmdate('c')))),
-		]);
+			'published' => $this->icalDate(),
+		]));
+	}
+
+	public function export($uuid) {
+		header('Content-Type: text/calendar; charset=UTF-8');
+		return crlf_endings(view('agenda.icalendar_export', [
+			'item' => $this->getAgendaItemByUuid($uuid),
+			'published' => $this->icalDate(),
+		]));
 	}
 
 	public function zoeken() {
@@ -258,6 +266,13 @@ class AgendaController {
 
 	public function details($uuid) {
 		return view('agenda.details', ['item' => $this->getAgendaItemByUuid($uuid)]);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function icalDate() {
+		return str_replace('-', '', str_replace(':', '', str_replace('+00:00', 'Z', gmdate('c'))));
 	}
 
 }

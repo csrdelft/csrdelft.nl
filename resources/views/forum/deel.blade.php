@@ -8,7 +8,7 @@
 		<li class="breadcrumb-item"><a href="/forum">Forum</a></li>
 		<li class="breadcrumb-item active"><select name="forum_id" class="form-control form-control-sm"
 							onchange="if (this.value.substr(0,4) === 'http') { window.open(this.value); } else { window.location.href = this.value; }">
-			<option value="/forum/recent/belangrijk"
+			<option value="/forum/belangrijk"
 							@if($deel->titel === 'Belangrijk recent gewijzigd')selected="selected"@endif>
 				Belangrijk recent gewijzigd
 			</option>

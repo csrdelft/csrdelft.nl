@@ -13,7 +13,7 @@ use CsrDelft\view\formulier\ModalForm;
 class KwalificatieForm extends ModalForm {
 
 	public function __construct(CorveeKwalificatie $kwalificatie) {
-		parent::__construct($kwalificatie, maalcieUrl . '/kwalificeer/' . $kwalificatie->functie_id);
+		parent::__construct($kwalificatie, '/corvee/functies/kwalificeer/' . $kwalificatie->functie_id);
 		$this->titel = 'Kwalificatie toewijzen';
 		$this->css_classes[] = 'PreventUnchanged';
 

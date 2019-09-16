@@ -143,7 +143,7 @@ class EetplanModel extends PersistenceModel {
 	 * @return Eetplan[]
 	 */
 	public function getBekendeHuizen($lichting) {
-		return $this->find('uid LIKE ? AND avond = DATE(0)', array($lichting . "%"))->fetchAll();
+		return $this->find('uid LIKE ? AND avond = "0000-00-00"', array($lichting . "%"))->fetchAll();
 	}
 
 	/**

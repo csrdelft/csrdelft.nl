@@ -50,6 +50,7 @@
         border-radius: 5px;
         box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5);
         padding: 0 1.35em;
+				background: $button-bg;
       }
 
       &[href="#menu"] {
@@ -57,6 +58,7 @@
         border-radius: 5px;
         box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5);
         padding: 0 1.35em;
+				background: $button-bg;
 
         &:before {
           -moz-osx-font-smoothing: grayscale;
@@ -69,11 +71,11 @@
         }
 
         &:hover {
-          background-color: rgba(255, 255, 255, 0.025);
+          background-color: $button-bg-hover;
         }
 
         &:active {
-          background-color: rgba(255, 255, 255, 0.075);
+          background-color: $button-bg-hover;
         }
       }
     }
@@ -108,21 +110,11 @@
         &[href="#menu"] {
           box-shadow: none;
           padding: 0 1em;
-          border-radius: 0;
-
-          &:hover, &:active {
-            background-color: inherit;
-          }
         }
 
         &.inloggen {
           box-shadow: none;
           padding: 0 1em;
-          border-radius: 0;
-        }
-
-        &.inloggen:hover, &[href="https://csrdelft.nl/inloggen"]:active {
-          background-color: inherit;
         }
       }
     }

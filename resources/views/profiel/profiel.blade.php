@@ -40,9 +40,9 @@
 	<div id="profiel" class="{{$profiel->getProfielClasses()}}">
 		<div id="profielregel">
 			<div class="naam">
-				<div class="float-right">
-					<div class="pasfoto float-left">{!! $profiel->getPasfotoTag('') !!}</div>
-					<div class="knopjes">
+				<div class="float-right d-flex align-items-center">
+					<div class="btn-toolbar flex-column">
+						<div class="btn-group-vertical mb-2">
 						{{--{*<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>*}--}}
 						@if($profiel->isInGoogleContacts())
 							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts" class="btn btn-light"
@@ -55,6 +55,12 @@
 								<img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts"/>
 							</a>
 						@endif
+							<a href="/profiel/{{$profiel->uid}}.vcf" class="btn btn-light"
+								 title="Dit profiel opslaan in lokaal adresboek">
+								@icon('vcard_add')
+							</a>
+						</div>
+						<div class="btn-group-vertical">
 						@if($profiel->magBewerken())
 							<a href="/profiel/{{$profiel->uid}}/bewerken" class="btn btn-light"
 								 title="Bewerk dit profiel">@icon('pencil')</a>
@@ -76,8 +82,10 @@
 								<a href="/tools/stats?uid={{$profiel->uid}}" class="btn btn-light"
 									 title="Toon bezoeklog">@icon('server_chart')</a>
 							@endcan
+						</div>
 						@endif
 					</div>
+					<div class="pasfoto float-left">{!! $profiel->getPasfotoTag('') !!}</div>
 					@if(in_array('banaan', $profiel->getProfielOpties()))
 						<img src="/dist/images/banaan.gif" alt="Dansende banaan" class="banaan clear">
 					@endif
@@ -416,7 +424,7 @@
 						-
 					@endif
 					@if(is_ingelogd_account($profiel->uid))
-						<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren"
+						<div class="inline" style="position: absolute;"><a href="/corvee/voorkeuren" title="Bewerk voorkeuren"
 																															 class="btn">@icon('pencil')</a></div>
 					@endif
 				</div>

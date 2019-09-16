@@ -2,14 +2,20 @@
 
 namespace CsrDelft\view\courant;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\common\Ini;
 use CsrDelft\model\CourantModel;
+use CsrDelft\model\entity\courant\Courant;
+use CsrDelft\model\entity\courant\CourantCategorie;
 use CsrDelft\view\SmartyTemplateView;
+use Exception;
+use SmartyException;
 
 /**
  * CourantView.class.php
  *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @property Courant $model
  *
  */
 class CourantView extends SmartyTemplateView {
@@ -18,10 +24,10 @@ class CourantView extends SmartyTemplateView {
 
 	/**
 	 * CourantView constructor.
-	 * @param CourantModel $courant
-	 * @throws \CsrDelft\common\CsrException
+	 * @param Courant $courant
+	 * @throws CsrException
 	 */
-	public function __construct(CourantModel $courant) {
+	public function __construct(Courant $courant) {
 		parent::__construct($courant);
 		setlocale(LC_ALL, 'nl_NL@euro');
 		$this->instellingen = Ini::lees(Ini::CSRMAIL);
@@ -32,50 +38,23 @@ class CourantView extends SmartyTemplateView {
 	}
 
 	public function getVerzendMoment() {
-		return strftime('%d %B %Y', strtotime($this->model->getVerzendmoment()));
+		return strftime('%d %B %Y', strtotime($this->model->verzendMoment));
 	}
 
 	public function getHtml($headers = false) {
 		$this->smarty->assign('instellingen', $this->instellingen);
 		$this->smarty->assign('courant', $this->model);
-
-		$this->smarty->assign('indexCats', $this->model->getCats());
-		$this->smarty->assign('catNames', $this->model->getCats(true));
-
+		$this->smarty->assign('catNames', CourantCategorie::getSelectOptions());
 		$this->smarty->assign('headers', $headers);
 
-		return $this->smarty->fetch($this->model->getTemplatePath());
+		if (!file_exists(SMARTY_TEMPLATE_DIR . 'courant/mail/' . $this->model->template)) {
+			$this->model->template = 'courant.tpl';
+		}
+
+		return $this->smarty->fetch('courant/mail/' . $this->model->template);
 	}
 
 	public function view() {
 		echo $this->getHtml();
 	}
-
-	public function verzenden($sEmailAan) {
-		$sMail = $this->getHtml(true);
-
-		$smtp = fsockopen('localhost', 25, $feut, $fout);
-		echo 'Zo, mail verzenden naar ' . $sEmailAan . '.<pre>';
-		echo fread($smtp, 1024);
-		fwrite($smtp, "HELO localhost\r\n");
-		echo "HELO localhost\r\n";
-		echo fread($smtp, 1024);
-		fwrite($smtp, "MAIL FROM:<pubcie@csrdelft.nl>\r\n");
-		echo htmlspecialchars("MAIL FROM:<pubcie@csrdelft.nl>\r\n");
-		echo fread($smtp, 1024);
-		fwrite($smtp, "RCPT TO:<" . $sEmailAan . ">\r\n");
-		echo htmlspecialchars("RCPT TO:<" . $sEmailAan . ">\r\n");
-		echo fread($smtp, 1024);
-		fwrite($smtp, "DATA\r\n");
-		echo htmlspecialchars("DATA\r\n");
-		echo fread($smtp, 1024);
-
-		fwrite($smtp, $sMail . "\r\n");
-		echo htmlspecialchars("[mail hier]\r\n");
-		fwrite($smtp, "\r\n.\r\n");
-		echo htmlspecialchars("\r\n.\r\n");
-		echo fread($smtp, 1024);
-		echo '</pre>';
-	}
-
 }

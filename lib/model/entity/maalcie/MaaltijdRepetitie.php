@@ -62,7 +62,6 @@ class MaaltijdRepetitie extends PersistentEntity {
 	protected static $primary_key = array('mlt_repetitie_id');
 
 	public function getStandaardPrijs() {
-		require_once 'model/fiscaat/CiviProductModel.class.php';
 		return CiviProductModel::instance()->getPrijs(CiviProductModel::instance()->getProduct($this->product_id))->prijs;
 	}
 

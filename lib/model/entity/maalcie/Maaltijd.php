@@ -11,6 +11,7 @@ use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -156,6 +157,12 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar, HeeftAanmeldLim
 
 	public function isHeledag() {
 		return false;
+	}
+
+	public function isTransparant() {
+		// Toon als transparant (vrij) als lid dat wil of lid niet ingeketzt is
+		$aangemeld = MaaltijdAanmeldingenModel::instance()->getIsAangemeld($this->maaltijd_id, LoginModel::getUid());
+		return lid_instelling('agenda', 'transparantICal') === 'ja' || !$aangemeld;
 	}
 
 	// Controller ############################################################

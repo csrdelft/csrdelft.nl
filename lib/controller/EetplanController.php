@@ -106,78 +106,106 @@ class EetplanController {
 	}
 
 	/**
-	 * @param null $actie
 	 * @return View
 	 * @throws CsrToegangException
 	 */
-	public function bekendehuizen($actie = null) {
-		if ($this->getMethod() == 'POST') {
-			if ($actie == 'toevoegen') {
-				$eetplan = new Eetplan();
-				$eetplan->avond = '0000-00-00';
-				$form = new EetplanBekendeHuizenForm($eetplan);
-				if (!$form->validate()) {
-					return $form;
-				} elseif ($this->eetplanModel->exists($eetplan)) {
-					setMelding('Deze noviet is al eens op dit huis geweest', -1);
-					return $form;
-				} else {
-					$this->eetplanModel->create($eetplan);
-					return new EetplanBekendeHuizenResponse($this->eetplanModel->getBekendeHuizen($this->lichting));
-				}
-			} elseif ($actie == 'verwijderen') {
-				$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-				$verwijderd = array();
-				if ($selection !== false) {
-					foreach ($selection as $uuid) {
-						$eetplan = $this->eetplanModel->retrieveByUUID($uuid);
-						if ($eetplan === false) continue;
-						$this->eetplanModel->delete($eetplan);
-						$verwijderd[] = $eetplan;
-					}
-				}
-				return new RemoveRowsResponse($verwijderd);
-			} else {
-				return new EetplanBekendeHuizenResponse($this->eetplanModel->getBekendeHuizen($this->lichting));
-			}
+	public function bekendehuizen() {
+		return new EetplanBekendeHuizenResponse($this->eetplanModel->getBekendeHuizen($this->lichting));
+	}
+
+	public function bekendehuizen_toevoegen() {
+		$eetplan = new Eetplan();
+		$eetplan->avond = '0000-00-00';
+		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/toevoegen');
+		if (!$form->validate()) {
+			return $form;
+		} elseif ($this->eetplanModel->exists($eetplan)) {
+			setMelding('Deze noviet is al eens op dit huis geweest', -1);
+			return $form;
 		} else {
-			if ($actie == 'zoeken') {
-				$huisnaam = filter_input(INPUT_GET, 'q');
-				$huisnaam = '%' . $huisnaam . '%';
-				$woonoorden = $this->woonoordenModel->find('status = ? AND naam LIKE ?', array(GroepStatus::HT, $huisnaam))->fetchAll();
-				return new EetplanHuizenZoekenResponse($woonoorden);
-			} else {
-				throw new CsrToegangException('Mag alleen bekende huizen zoeken', 403);
-			}
+			$this->eetplanModel->create($eetplan);
+			return new EetplanBekendeHuizenResponse($this->eetplanModel->getBekendeHuizen($this->lichting));
 		}
 	}
 
+	public function bekendehuizen_bewerken($uuid = null) {
+		if (!$uuid) {
+			$uuid = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY)[0];
+		}
+
+		$eetplan = $this->eetplanModel->retrieveByUUID($uuid);
+		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/bewerken/' . $uuid, true);
+		if ($form->isPosted() && $form->validate()) {
+			$this->eetplanModel->update($eetplan);
+			return new EetplanBekendeHuizenResponse($this->eetplanModel->getBekendeHuizen($this->lichting));
+		} else {
+			return $form;
+		}
+	}
+
+	public function bekendehuizen_verwijderen() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$verwijderd = array();
+		if ($selection !== false) {
+			foreach ($selection as $uuid) {
+				$eetplan = $this->eetplanModel->retrieveByUUID($uuid);
+				if ($eetplan === false) continue;
+				$this->eetplanModel->delete($eetplan);
+				$verwijderd[] = $eetplan;
+			}
+		}
+		return new RemoveRowsResponse($verwijderd);
+	}
+
+	public function bekendehuizen_zoeken() {
+		$huisnaam = filter_input(INPUT_GET, 'q');
+		$huisnaam = '%' . $huisnaam . '%';
+		$woonoorden = $this->woonoordenModel->find('status = ? AND naam LIKE ?', array(GroepStatus::HT, $huisnaam))->fetchAll();
+		return new EetplanHuizenZoekenResponse($woonoorden);
+	}
 
 	public function novietrelatie($actie = null) {
-		if ($actie == 'toevoegen') {
-			$eetplanbekenden = new EetplanBekenden();
-			$form = new EetplanBekendenForm($eetplanbekenden);
-			if (!$form->validate()) {
-				return $form;
-			} elseif ($this->eetplanBekendenModel->exists($eetplanbekenden)) {
-				setMelding('Bekenden bestaan al', -1);
-				return $form;
-			} else {
-				$this->eetplanBekendenModel->create($eetplanbekenden);
-				return new EetplanRelatieResponse($this->eetplanBekendenModel->getBekenden($this->lichting));
-			}
-		} elseif ($actie == 'verwijderen') {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-			$verwijderd = array();
-			foreach ($selection as $uuid) {
-				$bekenden = $this->eetplanBekendenModel->retrieveByUUID($uuid);
-				$this->eetplanBekendenModel->delete($bekenden);
-				$verwijderd[] = $bekenden;
-			}
-			return new RemoveRowsResponse($verwijderd);
+		return new EetplanRelatieResponse($this->eetplanBekendenModel->getBekenden($this->lichting));
+	}
+
+	public function novietrelatie_toevoegen() {
+		$eetplanbekenden = new EetplanBekenden();
+		$form = new EetplanBekendenForm($eetplanbekenden, '/eetplan/novietrelatie/toevoegen');
+		if (!$form->validate()) {
+			return $form;
+		} elseif ($this->eetplanBekendenModel->exists($eetplanbekenden)) {
+			setMelding('Bekenden bestaan al', -1);
+			return $form;
 		} else {
+			$this->eetplanBekendenModel->create($eetplanbekenden);
 			return new EetplanRelatieResponse($this->eetplanBekendenModel->getBekenden($this->lichting));
 		}
+	}
+
+	public function novietrelatie_bewerken($uuid) {
+		if (!$uuid) {
+			$uuid = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY)[0];
+		}
+
+		$eetplanbekenden = $this->eetplanBekendenModel->retrieveByUUID($uuid);
+		$form = new EetplanBekendenForm($eetplanbekenden, '/eetplan/novietrelatie/bewerken/' . $uuid, true);
+		if ($form->isPosted() && $form->validate()) {
+			$this->eetplanBekendenModel->update($eetplanbekenden);
+			return new EetplanRelatieResponse($this->eetplanBekendenModel->getBekenden($this->lichting));
+		} else {
+			return $form;
+		}
+	}
+
+	public function novietrelatie_verwijderen() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$verwijderd = array();
+		foreach ($selection as $uuid) {
+			$bekenden = $this->eetplanBekendenModel->retrieveByUUID($uuid);
+			$this->eetplanBekendenModel->delete($bekenden);
+			$verwijderd[] = $bekenden;
+		}
+		return new RemoveRowsResponse($verwijderd);
 	}
 
 	/**

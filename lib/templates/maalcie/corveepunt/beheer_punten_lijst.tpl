@@ -22,7 +22,7 @@
 	<td>
 		<div class="InlineForm">
 			<div class="InlineFormToggle">{$puntenlijst.puntenTotaal}</div>
-			<form action="{$smarty.const.maalcieUrl}/wijzigpunten/{$puntenlijst.lid->uid}" method="post" class="Formulier InlineForm ToggleForm">
+			<form action="/corvee/punten/wijzigpunten/{$puntenlijst.lid->uid}" method="post" class="Formulier InlineForm ToggleForm">
 				{printCsrfField()}
 				<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" origvalue="{$puntenlijst.puntenTotaal}" class="FormElement" maxlength="4" size="4" />
 				<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
@@ -33,7 +33,7 @@
 	<td>
 		<div class="InlineForm">
 			<div class="InlineFormToggle">{$puntenlijst.bonusTotaal}</div>
-			<form action="{$smarty.const.maalcieUrl}/wijzigbonus/{$puntenlijst.lid->uid}" method="post" class="Formulier InlineForm ToggleForm">
+			<form action="/corvee/punten/wijzigbonus/{$puntenlijst.lid->uid}" method="post" class="Formulier InlineForm ToggleForm">
 				{printCsrfField()}
 				<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" origvalue="{$puntenlijst.bonusTotaal}" class="FormElement" maxlength="4" size="4" />
 				<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>

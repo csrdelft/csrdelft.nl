@@ -2,7 +2,7 @@
 	@extends('layout')
 @endauth
 @guest
-	@extends('layout-owee.layout')
+	@extends('layout-extern.layout')
 
 @section('styles')
 	@stylesheet('extern.css')

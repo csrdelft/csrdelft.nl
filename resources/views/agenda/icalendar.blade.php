@@ -4,7 +4,7 @@ PRODID:-//C.S.R. Delft//C.S.R. agenda//NL
 VERSION:2.0
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-X-ORIGINAL-URL:{!!CSR_ROOT!!}/agenda/
+X-ORIGINAL-URL:{!!CSR_ROOT!!}/agenda
 X-WR-CALNAME:C.S.R. agenda
 X-WR-TIMEZONE:Europe/Amsterdam
 X-WR-CALDESC:
@@ -47,7 +47,11 @@ LOCATION:{!!escape_ical($item->getLocatie(), 9)!!}
 SEQUENCE:0
 STATUS:CONFIRMED
 SUMMARY:{!!escape_ical($item->getTitel(), 8)!!}
+@if($item->isTransparant())
 TRANSP:TRANSPARENT
+@else
+TRANS:OPAQUE
+@endif
 END:VEVENT
 @endforeach
 END:VCALENDAR

@@ -29,12 +29,6 @@ abstract class AccessRole extends PersistentEnum {
 	const Fiscaat = 'R_FISCAAT';
 
 	/**
-	 * Extra rechtenset voor Am. de Vlieger.
-	 * Een combinatie van BASFCie (archief) en MaalCie.
-	 */
-	const Vlieger = "R_VLIEGER";
-
-	/**
 	 * Extra rechtenset voor Forum Moderators.
 	 * Een combinatie van normaal lid en P_FORUM_MOD.
 	 */
@@ -53,7 +47,6 @@ abstract class AccessRole extends PersistentEnum {
 		self::Bestuur => self::Bestuur,
 		self::PubCie => self::PubCie,
 		self::Fiscaat => self::Fiscaat,
-		self::Vlieger => self::Vlieger,
 		self::ForumModerator => self::ForumModerator,
 	];
 
@@ -70,7 +63,6 @@ abstract class AccessRole extends PersistentEnum {
 		self::Bestuur => 'Bestuur-rechten',
 		self::PubCie => 'PubCie-rechten',
 		self::Fiscaat => 'Fiscaat-rechten',
-		self::Vlieger => 'Vlieger-rechten',
 		self::ForumModerator => 'ForumModerator-rechten',
 	];
 
@@ -87,7 +79,6 @@ abstract class AccessRole extends PersistentEnum {
 		self::Bestuur => 'B',
 		self::PubCie => 'P',
 		self::Fiscaat => 'F',
-		self::Vlieger => 'V',
 		self::ForumModerator => 'FM',
 	];
 
