@@ -1,5 +1,17 @@
 declaratie-aanmaken:
-  path: /declaratie/aanmaken
-  controller: CsrDelft\controller\DeclaratieController::aanmaken
+  path: /decla/nieuw
+  controller: CsrDelft\controller\DeclaratieController::nieuw
   methods: [GET,POST]
   options: { mag: P_LOGGED_IN }
+
+declaratie-overzicht:
+  path: /decla
+  controller: CsrDelft\controller\DeclaratieController::overzicht
+  methods: GET
+  options: { mag: P_FISCAAT_MOD }
+
+declaratie-data:
+  path: /decla
+  controller: CsrDelft\controller\DeclaratieController::data
+  methods: POST
+  options: { mag: P_FISCAAT_MOD }

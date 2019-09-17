@@ -12,13 +12,16 @@ use CsrDelft\Orm\Entity\T;
 class Declaratie extends PersistentEntity {
 	public $id;
 	public $commissie;
-	public $uid;
+	public $naam;
 	public $email;
 	public $datum;
 	public $datum_invullen;
 	public $iban;
 	public $opmerkingen;
 
+	/**
+	 * @var DeclaratieRegel[]
+	 */
 	public $declaratie_regels = [];
 
 
@@ -29,10 +32,10 @@ class Declaratie extends PersistentEntity {
 	protected static $persistent_attributes = [
 		'id' => [T::Integer, false, 'auto_increment'],
 		'commissie' => [T::String],
-		'uid' => [T::UID],
+		'naam' => [T::String],
 		'email' => [T::String],
 		'datum' => [T::Date],
-		'datum_invullen' => [T::DateTime],
+		'datum_invullen' => [T::Date],
 		'iban' => [T::String],
 		'opmerkingen' => [T::Text],
 	];

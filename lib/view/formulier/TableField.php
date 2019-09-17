@@ -86,7 +86,7 @@ class TableField implements FormElement, Validator, PostedValue {
 	public function isPosted() {
 		$input = filter_input(INPUT_POST, $this->name, FILTER_DEFAULT, FILTER_FORCE_ARRAY);
 
-		if (count($input) == 0) {
+		if (!$input || count($input) == 0) {
 			return $this->required;
 		}
 
@@ -116,6 +116,10 @@ class TableField implements FormElement, Validator, PostedValue {
 		return $values;
 	}
 
+	public function hideCol($attribute) {
+		$this->cols[$attribute] = ['hidden'];
+	}
+
 	public function changeCol($attribute, $definition) {
 		$this->cols[$attribute] = $definition;
 	}
@@ -140,20 +144,19 @@ class TableField implements FormElement, Validator, PostedValue {
 		$body = $this->createBody();
 		$footer = $this->createFooter();
 
-		return <<<HTML
-<table class="table">
-<thead>${head}</thead>
-<tbody>${body}${footer}</tbody>
-</table>
-HTML;
+		return sprintf('<TableField class="vue-context" :cols="%s" :data="%s"></TableField>', vue_encode($this->cols), vue_encode($this->model));
 	}
 
 	private function createHead() {
 		$head = '<tr>';
 
 		foreach ($this->cols as $name => $definition) {
-			$required = !isset($definition[1]) || !$definition[1];
-			$head .= '<th>' . preg_replace('/_/', ' ', ucfirst($name)) . ($required ? '<span class="field-required">*</span>' : '') . '</th>';
+			if ($definition[0] == 'hidden') {
+				$head .= '<th></th>';
+			} else {
+				$required = !isset($definition[1]) || !$definition[1];
+				$head .= '<th>' . preg_replace('/_/', ' ', ucfirst($name)) . ($required ? '<span class="field-required">*</span>' : '') . '</th>';
+			}
 		}
 
 		$head .= '<th></th>';
@@ -176,7 +179,7 @@ HTML;
 				$body .= '<td>' . $this->getTag($definition, $this->createName($this->name, $i, $name), $entity->$name) . '</td>';
 			}
 
-			$body .= '<td><a class="btn btn-sm" href="#"><span class="ico cross"></span></a></td>';
+			$body .= '<td><a class="btn btn-sm TableField-DeleteRow" href="#"><span class="ico cross"></span></a></td>';
 			$body .= '</tr>';
 		}
 
@@ -197,9 +200,10 @@ HTML;
 		}
 
 		switch ($definition[0]) {
-			case 'bedrag':
-				$return .= sprintf('<input type="text" class="form-control form-control-sm %s" value="%s" name="%s" data-mask="bedrag" />', implode(' ', $classList), $value, $name);
+			case 'hidden':
+				$return .= sprintf('<input type="hidden" value="%s" name="%s" />', $value, $name);
 				break;
+			case 'bedrag':
 			case T::String:
 			case T::StringKey:
 			case T::Date:
@@ -254,7 +258,7 @@ HTML;
 			}
 		}
 
-		$return .= '<td><a class="btn btn-sm" href="#"><span class="ico add"></span></a></td>';
+		$return .= '<td><a class="btn btn-sm TableField-AddRow" href="#"><span class="ico add"></span></a></td>';
 		$return .= '</tr>';
 		return $return;
 	}

@@ -15,6 +15,8 @@ use phpDocumentor\Reflection\Types\Integer;
 class DeclaratieRegel extends PersistentEntity {
 	/** @var integer */
 	public $id;
+	/** @var integer */
+	public $declaratie_id;
 	/** @var string */
 	public $datum;
 	/** @var string */
@@ -25,6 +27,9 @@ class DeclaratieRegel extends PersistentEntity {
 	public $btw_tarief;
 
 	public function getBtwBedrag() {
+		if (!$this->btw_tarief) {
+			return $this->bedrag;
+		}
 		$percentage = BtwTarieven::getPercentage($this->btw_tarief);
 
 		return round($this->bedrag / (100 + $percentage) * $percentage);
@@ -39,6 +44,7 @@ class DeclaratieRegel extends PersistentEntity {
 
 	protected static $persistent_attributes = [
 		'id' => [T::Integer, false, 'auto_increment'],
+		'declaratie_id' => [T::Integer],
 		'datum' => [T::Date],
 		'omschrijving' => [T::String],
 		'bedrag' => [T::String],

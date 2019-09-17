@@ -9,3 +9,4 @@ route('/documenten', () => import(/* webpackChunkName: "documenten" */ './docume
 route('/fotoalbum', () => import(/* webpackChunkName: "fotoalbum" */'./fotoalbum/FotoAlbum'));
 route('/bibliotheek', () => import(/* webpackChunkName: "bibliotheek" */'./bibliotheek'));
 route('/agenda', () => import(/* webpackChunkName: "agenda" */'./agenda'));
+route('/decla', () => import(/* webpackChunkName: "decla" */'./declaratie'));

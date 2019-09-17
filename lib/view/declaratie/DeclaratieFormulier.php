@@ -4,6 +4,7 @@ namespace CsrDelft\view\declaratie;
 
 use CsrDelft\model\entity\Declaratie;
 use CsrDelft\model\entity\DeclaratieRegel;
+use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
@@ -21,7 +22,7 @@ class DeclaratieFormulier extends Formulier {
 	 * @param Declaratie $model
 	 */
 	public function __construct($model) {
-		parent::__construct($model, '/declaratie/aanmaken', 'Nieuwe declaratie');
+		parent::__construct($model, '/decla/nieuw', 'Nieuwe declaratie');
 
 		$this->css_classes[] = 'container';
 
@@ -35,7 +36,7 @@ class DeclaratieFormulier extends Formulier {
 		$fields[] = new RequiredTextField('opmerkingen', $model->opmerkingen, 'Opmerkingen');
 
 		$fields['declaratie_regel'] = new TableField('declaratie_regel', $model->declaratie_regels, DeclaratieRegel::class, 'bedrag');
-		$fields['declaratie_regel']->changeCol('bedrag', ['bedrag']);
+		$fields['declaratie_regel']->hideCol('declaratie_id');
 
 		$this->addFields($fields);
 
