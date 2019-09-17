@@ -96,7 +96,7 @@ class CourantController {
 	}
 
 	public function verzenden($iedereen = null) {
-		if ($this->courantBerichtModel->getNieuweBerichten() < 1) {
+		if ($this->courantBerichtModel->getNieuweBerichten()->rowCount() < 1) {
 			setMelding('Lege courant kan niet worden verzonden', 0);
 			redirect('/courant');
 		}
